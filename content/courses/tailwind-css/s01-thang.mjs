@@ -1,3 +1,8 @@
+import G01_1 from './giang/twc-01-1.mjs';
+import G01_2 from './giang/twc-01-2.mjs';
+import G01_3 from './giang/twc-01-3.mjs';
+import G01_4 from './giang/twc-01-4.mjs';
+import G01_5 from './giang/twc-01-5.mjs';
 const REF = '?ref=%2Fcourses%2Ftailwind-css%2Flearn&reflabel=Tailwind%20CSS';
 /**
  * Tailwind CSS — Chương 1: Cái THANG, thứ đáng học thay vì tên lớp.
@@ -19,6 +24,7 @@ export default {
       type: 'VIDEO',
       description: 'Một luật duy nhất thay thế việc học thuộc 35 tên lớp: `p-4` = 16px vì 4 × 4 = 16. Trích thẳng từ resolveConfig của Tailwind, không đọc tài liệu mà đoán.',
       content: `
+${G01_1}
 <div class="ml-en">
 <span class="eyebrow">Chapter 1 · Lesson 1.1</span>
 <h2>Every spacing value is the number times 4px</h2>
@@ -41,30 +47,43 @@ for (const [k, v] of Object.entries(theme.spacing)) {
 </code></pre>
 
 <div class="out">$ node scale.mjs
-0     0px        0
-px    1px        1px
-0.5   0.125rem   2
+0     0px        0px
 1     0.25rem    4
-1.5   0.375rem   6
 2     0.5rem     8
-2.5   0.625rem   10
 3     0.75rem    12
-3.5   0.875rem   14
 4     1rem       16
 5     1.25rem    20
 6     1.5rem     24
+7     1.75rem    28
 8     2rem       32
+9     2.25rem    36
 10    2.5rem     40
+11    2.75rem    44
 12    3rem       48
+14    3.5rem     56
 16    4rem       64
 20    5rem       80
 24    6rem       96
+28    7rem       112
 32    8rem       128
-...
+36    9rem       144
+40    10rem      160
+44    11rem      176
+48    12rem      192
+52    13rem      208
+56    14rem      224
+60    15rem      240
+64    16rem      256
+72    18rem      288
+80    20rem      320
 96    24rem      384
-</div>
+px    1px        1px
+0.5   0.125rem   2
+1.5   0.375rem   6
+2.5   0.625rem   10
+3.5   0.875rem   14</div>
 
-<p>Read the last column down. 0, 1, 2, 4, 6, 8, 10, 12, 14, 16, 20, 24, 32, 40, 48… Every one is its key × 4. The rule holds across all <strong>35 entries</strong> without exception, including the fractional keys — <code>1.5</code> × 4 = 6px, <code>2.5</code> × 4 = 10px.</p>
+<p>Read the last column down (Tailwind 3.4.19, measured 14/11/2026 — JavaScript prints the integer keys first, then <code>px</code> and the halves). Every one is its key × 4. The rule holds across all <strong>35 entries</strong> without exception, including the fractional keys — <code>1.5</code> × 4 = 6px, <code>2.5</code> × 4 = 10px.</p>
 
 <div class="callout ok">
 <p><strong>Why 4px and not something else.</strong> 4 is the largest number that divides evenly into the common design increments (8, 12, 16, 24, 32, 48) while still being small enough for fine adjustments. It is the standard grid unit in most design systems for the same reason — the scale is not a Tailwind invention, it is Tailwind adopting a convention that predates it.</p>
@@ -97,7 +116,7 @@ padding: 16px;
 padding: 20px;
 </code></pre>
 
-<p>This is the accessibility argument for <code>rem</code>-based scales, and it is why hardcoding <code>p-[16px]</code> "because it is the same thing" is not the same thing. Chapter 10 returns to this with the full accessibility picture; for now the takeaway is that the scale is relative by design, and the pixel numbers in this lesson are a convenience for reasoning, not the truth on the wire.</p>
+<p>This is the accessibility argument for <code>rem</code>-based scales, and it is why hardcoding <code>p-[16px]</code> "because it is the same thing" is not the same thing. Chapter 9 returns to this with the full accessibility picture; for now the takeaway is that the scale is relative by design, and the pixel numbers in this lesson are a convenience for reasoning, not the truth on the wire.</p>
 
 <h3>What the rule buys you</h3>
 <p>Being able to derive means you can go in both directions, which is what actually speeds you up day to day:</p>
@@ -115,6 +134,97 @@ padding: 20px;
 <div class="callout">
 <p><strong>One sentence.</strong> There are not thousands of spacing classes to learn — there is one multiplication, <em>key × 4px</em>, holding across all 35 entries with two deliberate literals (<code>0</code> and <code>px</code>), and learning that one rule replaces every lookup you would otherwise make in both directions.</p>
 </div>
+
+<div class="callout">
+<p><strong>In Tailwind 4 (what <code>npm i tailwindcss</code> gives you today, 4.3.5).</strong> The 35-entry list is gone. There is <strong>one</strong> theme variable, <code>--spacing: 0.25rem</code>, and every spacing class is written as <code>calc(var(--spacing) * n)</code> — for <em>any</em> n in steps of 0.25. So <code>p-13</code> and <code>p-4.5</code> exist in Tailwind 4 and are <strong>nothing</strong> in Tailwind 3. <code>resolveConfig</code> does not exist in Tailwind 4; the scale lives in <code>node_modules/tailwindcss/theme.css</code>. The rule × 4 is now literally the code.</p>
+</div>
+<h3>🔬 Measured: Tailwind 3.4.19 (this site) vs Tailwind 4.3.5</h3>
+<p><strong>Tailwind 3 is a list.</strong> 35 keys, and between 1 and 24 eight integers are simply missing:</p>
+<div class="out">$ node scale.mjs | wc -l
+      35
+$ node -e "const t=require('tailwindcss/resolveConfig')({content:[]}).theme.spacing; console.log('vang 1..24:', Array.from({length:24},(_,i)=&gt;i+1).filter(n=&gt;!(n in t)).join(' '))"
+vang 1..24: 13 15 17 18 19 21 22 23</div>
+<p>The same page, <code>class="p-4 p-13 p-4.5 p-px p-[16px]"</code>, built by both versions (1 = a rule was written):</p>
+<div class="out">$ for c in '.p-4 {' '.p-13 {' '.p-4\\.5 {' '.p-px {' '.p-\\[16px\\] {'; do printf '%-16s %s\\n' "$c" "$(grep -cF "$c" out.css)"; done
+.p-4 {           1
+.p-13 {          0
+.p-4\\.5 {        0
+.p-px {          1
+.p-\\[16px\\] {    1</div>
+<div class="out">$ for c in '.p-4 {' '.p-13 {' '.p-4\\.5 {' '.p-1\\.3 {' '.p-px {' '.p-\\[16px\\] {'; do printf '%-16s %s\\n' "$c" "$(grep -cF "$c" out.css)"; done
+.p-4 {           1
+.p-13 {          1
+.p-4\\.5 {        1
+.p-1\\.3 {        0
+.p-px {          1
+.p-\\[16px\\] {    1
+$ grep -A1 -E '^ *\\.p-(4|13|4\\\\.5) \\{' out.css
+  .p-4 {
+    padding: calc(var(--spacing) * 4);
+--
+  .p-4\\.5 {
+    padding: calc(var(--spacing) * 4.5);
+--
+  .p-13 {
+    padding: calc(var(--spacing) * 13);
+$ grep -m1 -- '--spacing:' out.css
+    --spacing: 0.25rem;</div>
+<p><strong>This site's own code has the bug.</strong> The frontend runs Tailwind 3.4.19 and writes half keys 16 times in 7 files; its built CSS has <strong>0</strong> rules for them (and one file patched it with an inline style):</p>
+<div class="out">$ git grep -lwE '[wh]-[45]\\.5' -- 'src/*.tsx' | wc -l
+       7
+$ git grep -ohwE '[wh]-[45]\\.5' -- 'src/*.tsx' | sort | uniq -c
+   7 h-4.5
+   1 h-5.5
+   7 w-4.5
+   1 w-5.5
+$ git grep -lF 'w-4.5 h-4.5 text-neon-violet' -- 'src/*.tsx'
+src/components/shop/DigitalShopTermsGate.tsx
+$ git grep -hF 'w-4.5 h-4.5 text-neon-violet' -- 'src/*.tsx' | sed 's/^ *//'
+&lt;Icon className="w-4.5 h-4.5 text-neon-violet" style={{ width: 18, height: 18 }} /&gt;
+$ for c in '.w-4{' '.w-4\\.5{' '.h-4\\.5{' '.w-5\\.5{'; do printf '%-10s %s\\n' "$c" "$(cat .next/static/css/*.css | grep -cF "$c")"; done
+.w-4{      1
+.w-4\\.5{   0
+.h-4\\.5{   0
+.w-5\\.5{   0</div>
+<p>Reproduced in Chromium: an icon library writes <code>width="24"</code> on its SVG. With no rule for <code>w-4.5</code>, Tailwind 3 leaves it at 24px; Tailwind 4 writes 4.5 × 4 = 18px. No error, no warning:</p>
+<div class="out">$ grep -cF '.w-4\\.5' out.css
+0
+$ grep -A1 -F '.w-4\\.5' out.css
+  .w-4\\.5 {
+    width: calc(var(--spacing) * 4.5);</div>
+<div class="out">w-4 h-4       Tailwind 3.4.19: 16px   Tailwind 4.3.5: 16px
+w-4.5 h-4.5   Tailwind 3.4.19: 24px   Tailwind 4.3.5: 18px</div>
+<p><strong>Why rem matters, measured.</strong> <code>p-4</code> and <code>p-[16px]</code> at the default root, and after the user raises the root font size to 125%:</p>
+<div class="out">p-4       root 16px: 16px   root 20px: 20px
+p-[16px]  root 16px: 16px   root 20px: 16px</div>
+<h3>🔁 Run it yourself</h3>
+<pre><code class="language-bash">mkdir t3 t4 &amp;&amp; cd t3 &amp;&amp; npm i tailwindcss@3.4.19
+echo "module.exports = { content: ['./trang.html'] };" &gt; tailwind.config.js
+echo '@tailwind utilities;' &gt; nhap.css
+echo '&lt;div class="p-4 p-13 p-4.5 p-px p-[16px]"&gt;&lt;/div&gt;' &gt; trang.html
+npx tailwindcss -i nhap.css -o out.css
+grep -cF '.p-13 {' out.css      <span class="tok-comment">  # 0 — no key 13 in Tailwind 3</span>
+cd ../t4 &amp;&amp; npm i tailwindcss @tailwindcss/cli
+echo '@import "tailwindcss";' &gt; input.css &amp;&amp; cp ../t3/trang.html .
+npx @tailwindcss/cli -i input.css -o out.css
+grep -A1 -F '.p-13 {' out.css   <span class="tok-comment">  # calc(var(--spacing) * 13)</span></code></pre>
+<p>Then open a page with <code>p-4</code> and <code>p-[16px]</code>, set <code>html { font-size: 125% }</code>, and read <code>getComputedStyle(el).paddingTop</code> in DevTools. In your own project: <code>git grep -ohwE '[a-z]+-[0-9]+\\.5'</code> — does each key exist in <em>your</em> version?</p>
+<h3>🔗 Go deeper in other courses</h3>
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-3-2-box-model" target="_blank" rel="noopener"><span class="lc-ico">🌐</span><span class="lc-body"><span class="lc-title">Web Foundations · 3.2 — The box model</span><span class="lc-sub">Padding, margin and border: the scale decides the numbers, the box model decides what they do</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/nextjs/learn?lessonSlug=nextjs-13-2-tailwind-nen-tang" target="_blank" rel="noopener"><span class="lc-ico">▲</span><span class="lc-body"><span class="lc-title">Next.js · 13.2 — Tailwind fundamentals: utilities, responsive, states</span><span class="lc-sub">The same spacing classes inside a real Next.js app</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/tailwind-css/learn?lessonSlug=tw-1-2-thang-het" target="_blank" rel="noopener"><span class="lc-ico">💨</span><span class="lc-body"><span class="lc-title">Tailwind CSS · 1.2 — Where the scale runs out, measured</span><span class="lc-sub">Next lesson: the font-size scale and the counting rule</span></span></a>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">key × 4px rule</span><span class="v">Every spacing class value is its number key multiplied by 4px — <code>p-4</code> is 16px, <code>gap-6</code> is 24px.</span></div>
+  <div class="kv"><span class="k">Spacing scale</span><span class="v">Tailwind's 35 default spacing entries (<code>0.5</code>…<code>96</code> plus two literals).</span></div>
+  <div class="kv"><span class="k">The two literals</span><span class="v"><code>0</code> (no space) and <code>px</code> (exactly 1px) — the values the × 4 rule cannot produce.</span></div>
+  <div class="kv"><span class="k">rem vs px</span><span class="v">The scale emits <code>rem</code>, not <code>px</code>; 16px is the result at a 16px root, so the layout scales with the user's base font size.</span></div>
+  <div class="kv"><span class="k">resolveConfig</span><span class="v">Tailwind helper that returns the real theme object — read the scale from code, not a docs table.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>There is one rule, not thousands of classes: <em>key × 4px</em>, holding across all 35 spacing entries.</li><li>Two deliberate literals break the pattern: <code>0</code> (zero) and <code>px</code> (1px).</li><li>The scale stores <code>rem</code>, so a user's larger root font size scales the whole layout — hardcoding <code>p-[16px]</code> is not the same.</li><li>The rule works both directions: design number ÷ 4 gives the class, class × 4 gives the pixels.</li><li>A number that is not a multiple of 4 (e.g. 30px) is a signal to round to the grid or reach for an escape hatch.</li></ul>
 
 <h3>Sources</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Tailwind docs — Theme: spacing</span><span class="lc-sub">tailwindcss.com/docs/theme#spacing — the official table. Worth comparing against the <code>resolveConfig</code> output above; reading it from the code is how you stay right across version changes.</span></span></div>
@@ -145,30 +255,43 @@ for (const [k, v] of Object.entries(theme.spacing)) {
 </code></pre>
 
 <div class="out">$ node scale.mjs
-0     0px        0
-px    1px        1px
-0.5   0.125rem   2
+0     0px        0px
 1     0.25rem    4
-1.5   0.375rem   6
 2     0.5rem     8
-2.5   0.625rem   10
 3     0.75rem    12
-3.5   0.875rem   14
 4     1rem       16
 5     1.25rem    20
 6     1.5rem     24
+7     1.75rem    28
 8     2rem       32
+9     2.25rem    36
 10    2.5rem     40
+11    2.75rem    44
 12    3rem       48
+14    3.5rem     56
 16    4rem       64
 20    5rem       80
 24    6rem       96
+28    7rem       112
 32    8rem       128
-...
+36    9rem       144
+40    10rem      160
+44    11rem      176
+48    12rem      192
+52    13rem      208
+56    14rem      224
+60    15rem      240
+64    16rem      256
+72    18rem      288
+80    20rem      320
 96    24rem      384
-</div>
+px    1px        1px
+0.5   0.125rem   2
+1.5   0.375rem   6
+2.5   0.625rem   10
+3.5   0.875rem   14</div>
 
-<p>Đọc cột cuối từ trên xuống. 0, 1, 2, 4, 6, 8, 10, 12, 14, 16, 20, 24, 32, 40, 48… Mỗi cái là KHOÁ của nó × 4. Luật ĐÚNG trên cả <strong>35 mục</strong> không có ngoại lệ, kể cả các khoá phân số — <code>1.5</code> × 4 = 6px, <code>2.5</code> × 4 = 10px.</p>
+<p>Đọc cột cuối từ trên xuống (Tailwind 3.4.19, đo 14/11/2026 — JavaScript in các khoá số nguyên TRƯỚC, rồi mới tới <code>px</code> và các khoá nửa). Mỗi cái là KHOÁ của nó × 4. Luật ĐÚNG trên cả <strong>35 mục</strong> không có ngoại lệ, kể cả các khoá phân số — <code>1.5</code> × 4 = 6px, <code>2.5</code> × 4 = 10px.</p>
 
 <div class="callout ok">
 <p><strong>Vì sao 4px chứ không phải cái khác.</strong> 4 là số lớn nhất chia hết cho các mức tăng thiết kế thông dụng (8, 12, 16, 24, 32, 48) mà vẫn đủ nhỏ để tinh chỉnh. Nó là đơn vị lưới chuẩn trong hầu hết hệ thiết kế vì cùng lý do — cái thang KHÔNG phải phát minh của Tailwind, nó là Tailwind nhận lấy một quy ước có TRƯỚC nó.</p>
@@ -201,7 +324,7 @@ padding: 16px;
 padding: 20px;
 </code></pre>
 
-<p>Đây là lập luận về khả năng tiếp cận cho các thang dựa trên <code>rem</code>, và là lý do đóng cứng <code>p-[16px]</code> "vì nó cũng thế thôi" KHÔNG phải cũng thế thôi. Chương 10 quay lại chuyện này với bức tranh tiếp cận đầy đủ; giờ điều rút ra là cái thang TƯƠNG ĐỐI theo thiết kế, và các con số pixel trong bài này là tiện lợi để suy luận, không phải sự thật trên đường truyền.</p>
+<p>Đây là lập luận về khả năng tiếp cận cho các thang dựa trên <code>rem</code>, và là lý do đóng cứng <code>p-[16px]</code> "vì nó cũng thế thôi" KHÔNG phải cũng thế thôi. Chương 9 quay lại chuyện này với bức tranh tiếp cận đầy đủ; giờ điều rút ra là cái thang TƯƠNG ĐỐI theo thiết kế, và các con số pixel trong bài này là tiện lợi để suy luận, không phải sự thật trên đường truyền.</p>
 
 <h3>Cái luật mua cho bạn điều gì</h3>
 <p>Suy ra được nghĩa là bạn đi được CẢ HAI CHIỀU, và đó mới là thứ thật sự làm bạn nhanh lên hằng ngày:</p>
@@ -220,6 +343,97 @@ padding: 20px;
 <p><strong>Một câu.</strong> KHÔNG có hàng nghìn lớp khoảng cách phải học — có MỘT phép nhân, <em>khoá × 4px</em>, đúng trên cả 35 mục với hai chữ nguyên cố ý (<code>0</code> và <code>px</code>), và học một luật ấy thay thế mọi lần tra cứu bạn sẽ phải làm theo cả hai chiều.</p>
 </div>
 
+<div class="callout">
+<p><strong>Ở Tailwind 4 (thứ <code>npm i tailwindcss</code> cho bạn hôm nay, 4.3.5).</strong> Danh sách 35 mục KHÔNG còn. Chỉ có MỘT biến theme, <code>--spacing: 0.25rem</code>, và mọi lớp khoảng cách được viết thành <code>calc(var(--spacing) * n)</code> — với n BẤT KỲ theo bước 0,25. Nên <code>p-13</code> và <code>p-4.5</code> CÓ ở Tailwind 4 và là <strong>KHÔNG GÌ</strong> ở Tailwind 3. Tailwind 4 không còn <code>resolveConfig</code>; cái thang nằm ở <code>node_modules/tailwindcss/theme.css</code>. Luật × 4 giờ đúng nghĩa đen là mã.</p>
+</div>
+<h3>🔬 Đo thật: Tailwind 3.4.19 (trang này) vs Tailwind 4.3.5</h3>
+<p><strong>Tailwind 3 là một DANH SÁCH.</strong> 35 khoá, và từ 1 tới 24 có tám số nguyên đơn giản là VẮNG:</p>
+<div class="out">$ node scale.mjs | wc -l
+      35
+$ node -e "const t=require('tailwindcss/resolveConfig')({content:[]}).theme.spacing; console.log('vang 1..24:', Array.from({length:24},(_,i)=&gt;i+1).filter(n=&gt;!(n in t)).join(' '))"
+vang 1..24: 13 15 17 18 19 21 22 23</div>
+<p>Cùng một trang, <code>class="p-4 p-13 p-4.5 p-px p-[16px]"</code>, dựng bằng cả hai bản (1 = có luật được viết):</p>
+<div class="out">$ for c in '.p-4 {' '.p-13 {' '.p-4\\.5 {' '.p-px {' '.p-\\[16px\\] {'; do printf '%-16s %s\\n' "$c" "$(grep -cF "$c" out.css)"; done
+.p-4 {           1
+.p-13 {          0
+.p-4\\.5 {        0
+.p-px {          1
+.p-\\[16px\\] {    1</div>
+<div class="out">$ for c in '.p-4 {' '.p-13 {' '.p-4\\.5 {' '.p-1\\.3 {' '.p-px {' '.p-\\[16px\\] {'; do printf '%-16s %s\\n' "$c" "$(grep -cF "$c" out.css)"; done
+.p-4 {           1
+.p-13 {          1
+.p-4\\.5 {        1
+.p-1\\.3 {        0
+.p-px {          1
+.p-\\[16px\\] {    1
+$ grep -A1 -E '^ *\\.p-(4|13|4\\\\.5) \\{' out.css
+  .p-4 {
+    padding: calc(var(--spacing) * 4);
+--
+  .p-4\\.5 {
+    padding: calc(var(--spacing) * 4.5);
+--
+  .p-13 {
+    padding: calc(var(--spacing) * 13);
+$ grep -m1 -- '--spacing:' out.css
+    --spacing: 0.25rem;</div>
+<p><strong>Mã của chính trang này dính con bọ ấy.</strong> Frontend chạy Tailwind 3.4.19 và viết khoá rưỡi 16 lần trong 7 tệp; CSS đã dựng có <strong>0</strong> luật cho chúng (một tệp đã vá bằng style viết tay):</p>
+<div class="out">$ git grep -lwE '[wh]-[45]\\.5' -- 'src/*.tsx' | wc -l
+       7
+$ git grep -ohwE '[wh]-[45]\\.5' -- 'src/*.tsx' | sort | uniq -c
+   7 h-4.5
+   1 h-5.5
+   7 w-4.5
+   1 w-5.5
+$ git grep -lF 'w-4.5 h-4.5 text-neon-violet' -- 'src/*.tsx'
+src/components/shop/DigitalShopTermsGate.tsx
+$ git grep -hF 'w-4.5 h-4.5 text-neon-violet' -- 'src/*.tsx' | sed 's/^ *//'
+&lt;Icon className="w-4.5 h-4.5 text-neon-violet" style={{ width: 18, height: 18 }} /&gt;
+$ for c in '.w-4{' '.w-4\\.5{' '.h-4\\.5{' '.w-5\\.5{'; do printf '%-10s %s\\n' "$c" "$(cat .next/static/css/*.css | grep -cF "$c")"; done
+.w-4{      1
+.w-4\\.5{   0
+.h-4\\.5{   0
+.w-5\\.5{   0</div>
+<p>Tái hiện trong Chromium: thư viện icon ghi <code>width="24"</code> trên SVG. Không có luật cho <code>w-4.5</code>, Tailwind 3 để nguyên 24px; Tailwind 4 viết 4,5 × 4 = 18px. Không lỗi, không cảnh báo:</p>
+<div class="out">$ grep -cF '.w-4\\.5' out.css
+0
+$ grep -A1 -F '.w-4\\.5' out.css
+  .w-4\\.5 {
+    width: calc(var(--spacing) * 4.5);</div>
+<div class="out">w-4 h-4       Tailwind 3.4.19: 16px   Tailwind 4.3.5: 16px
+w-4.5 h-4.5   Tailwind 3.4.19: 24px   Tailwind 4.3.5: 18px</div>
+<p><strong>Vì sao rem quan trọng, đo thật.</strong> <code>p-4</code> và <code>p-[16px]</code> ở cỡ chữ gốc mặc định, và sau khi người dùng tăng cỡ chữ gốc lên 125%:</p>
+<div class="out">p-4       root 16px: 16px   root 20px: 20px
+p-[16px]  root 16px: 16px   root 20px: 16px</div>
+<h3>🔁 Tự chạy lại</h3>
+<pre><code class="language-bash">mkdir t3 t4 &amp;&amp; cd t3 &amp;&amp; npm i tailwindcss@3.4.19
+echo "module.exports = { content: ['./trang.html'] };" &gt; tailwind.config.js
+echo '@tailwind utilities;' &gt; nhap.css
+echo '&lt;div class="p-4 p-13 p-4.5 p-px p-[16px]"&gt;&lt;/div&gt;' &gt; trang.html
+npx tailwindcss -i nhap.css -o out.css
+grep -cF '.p-13 {' out.css      <span class="tok-comment">  # 0 — Tailwind 3 không có khoá 13</span>
+cd ../t4 &amp;&amp; npm i tailwindcss @tailwindcss/cli
+echo '@import "tailwindcss";' &gt; input.css &amp;&amp; cp ../t3/trang.html .
+npx @tailwindcss/cli -i input.css -o out.css
+grep -A1 -F '.p-13 {' out.css   <span class="tok-comment">  # calc(var(--spacing) * 13)</span></code></pre>
+<p>Rồi mở một trang có <code>p-4</code> và <code>p-[16px]</code>, đặt <code>html { font-size: 125% }</code>, đọc <code>getComputedStyle(el).paddingTop</code> trong DevTools. Trong dự án của bạn: <code>git grep -ohwE '[a-z]+-[0-9]+\\.5'</code> — mỗi khoá có thật trong phiên bản CỦA BẠN không?</p>
+<h3>🔗 Học sâu hơn ở khoá khác</h3>
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-3-2-box-model" target="_blank" rel="noopener"><span class="lc-ico">🌐</span><span class="lc-body"><span class="lc-title">Nền tảng Web · 3.2 — Mô hình hộp</span><span class="lc-sub">Padding, margin, viền: thang quyết định con số, mô hình hộp quyết định chúng làm gì</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/nextjs/learn?lessonSlug=nextjs-13-2-tailwind-nen-tang" target="_blank" rel="noopener"><span class="lc-ico">▲</span><span class="lc-body"><span class="lc-title">Next.js · 13.2 — Nền tảng Tailwind: utility, responsive, trạng thái</span><span class="lc-sub">Chính các lớp khoảng cách này trong một ứng dụng Next.js thật</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/tailwind-css/learn?lessonSlug=tw-1-2-thang-het" target="_blank" rel="noopener"><span class="lc-ico">💨</span><span class="lc-body"><span class="lc-title">Tailwind CSS · 1.2 — Chỗ cái thang HẾT, đo được</span><span class="lc-sub">Bài sau: thang cỡ chữ và luật đếm</span></span></a>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">key × 4px rule</span><span class="v">Luật khoá × 4px — mọi giá trị lớp khoảng cách là con số khoá nhân 4px: <code>p-4</code> là 16px, <code>gap-6</code> là 24px.</span></div>
+  <div class="kv"><span class="k">Spacing scale</span><span class="v">Thang khoảng cách — 35 mục mặc định của Tailwind (<code>0.5</code>…<code>96</code> cộng hai chữ nguyên).</span></div>
+  <div class="kv"><span class="k">The two literals</span><span class="v">Hai chữ nguyên — <code>0</code> (không khoảng cách) và <code>px</code> (đúng 1px), các giá trị luật × 4 không sinh ra được.</span></div>
+  <div class="kv"><span class="k">rem vs px</span><span class="v">Thang phát sinh <code>rem</code>, không phải <code>px</code>; 16px là kết quả ở gốc 16px, nên bố cục phóng theo cỡ chữ nền của người dùng.</span></div>
+  <div class="kv"><span class="k">resolveConfig</span><span class="v">Helper của Tailwind trả về object theme thật — đọc thang TỪ MÃ, không từ bảng tài liệu.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Có MỘT luật, không phải hàng nghìn lớp: <em>khoá × 4px</em>, đúng trên cả 35 mục khoảng cách.</li><li>Hai chữ nguyên cố ý phá khuôn: <code>0</code> (không) và <code>px</code> (1px).</li><li>Thang lưu <code>rem</code>, nên cỡ chữ gốc lớn hơn phóng toàn bộ bố cục — đóng cứng <code>p-[16px]</code> không giống thế.</li><li>Luật đi được cả hai chiều: số thiết kế ÷ 4 ra lớp, lớp × 4 ra pixel.</li><li>Một con số không chia hết cho 4 (vd 30px) là tín hiệu để làm tròn về lưới hoặc dùng cửa thoát.</li></ul>
+
 <h3>Nguồn</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Tailwind docs — Theme: spacing</span><span class="lc-sub">tailwindcss.com/docs/theme#spacing — bảng chính thức. Đáng đối chiếu với đầu ra <code>resolveConfig</code> bên trên; đọc nó TỪ MÃ là cách bạn giữ đúng qua các lần đổi phiên bản.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Tailwind source — theme mặc định</span><span class="lc-sub">github.com/tailwindlabs/tailwindcss/blob/main/stubs/config.full.js — chính cái object mà phép đo bên trên đọc. File này là sự thật gốc; tài liệu chỉ là một bản kết xuất của nó.</span></span></div>
@@ -236,6 +450,7 @@ padding: 20px;
       type: 'VIDEO',
       description: 'Thang chữ nhảy từ 12px thẳng lên 14px và KHÔNG có gì dưới 12px. Kho này cần 10px và 11px — nên nó thoát ra ngoài thang đúng 1.398 lần. Một lỗ hổng trong thang giải thích lớp tuỳ ý được dùng nhiều nhất của cả ứng dụng.',
       content: `
+${G01_2}
 <div class="ml-en">
 <span class="eyebrow">Chapter 1 · Lesson 1.2</span>
 <h2>Where the scale runs out, measured</h2>
@@ -275,20 +490,20 @@ text-9xl     8rem       128px
     | grep '\\[' | sort | uniq -c | sort -rn | head -8
 </code></pre>
 
-<div class="out">803 text-[11px]
-595 text-[10px]
-339 border-[var(--border-color)]
-281 text-[var(--text-secondary)]
-240 text-[13px]
-185 text-[12px]
-147 bg-[var(--bg-surface)]
-134 bg-white/[0.02]
-</div>
+<div class="out">1884 text-[var(--w-text-3)]
+1710 text-[12px]
+1453 text-[13px]
+1417 text-[11px]
+1208 text-[var(--w-text-2)]
+936 border-[var(--w-border)]
+797 text-[12.5px]
+632 text-[10px]
+# đo lại 14/11/2026 (frontend/, Tailwind 3.4.19) — lúc soạn bài: 803 text-[11px] · 595 text-[10px] · 240 text-[13px]</div>
 
-<p>The top two entries are <strong>1,398 uses of 10px and 11px text</strong> — sizes that do not exist on the scale at all. Add <code>text-[13px]</code> at 240 and you have <strong>1,638 escapes</strong> caused by exactly the two gaps identified above: nothing below 12px, and nothing between 12 and 14.</p>
+<p><code>text-[11px]</code> (1,417) and <code>text-[10px]</code> (632) are <strong>2,049 uses of sizes that do not exist on the scale at all</strong>. Add <code>text-[13px]</code> (1,453) and <code>text-[12.5px]</code> (797) and you have <strong>4,299 escapes</strong> caused by exactly the two gaps identified above: nothing below 12px, and nothing between 12 and 14. (When this lesson was written the same gaps held 1,638.) And one entry is <em>not</em> a gap: <code>text-[12px]</code>, 1,710 uses, is exactly <code>text-xs</code> — the scale had it; people did not use it. Counting finds habits as well as holes.</p>
 
 <div class="callout ok">
-<p><strong>Read this as data, not as failure.</strong> This is a dense information UI — badges, metadata rows, timestamps, table cells — and dense UIs legitimately need type below 12px. The scale's authors optimised for content sites, where 12px is a sensible floor. Neither party is wrong; the scale simply does not match this application's domain, and 1,638 arbitrary values is the measured size of that mismatch.</p>
+<p><strong>Read this as data, not as failure.</strong> This is a dense information UI — badges, metadata rows, timestamps, table cells — and dense UIs legitimately need type below 12px. The scale's authors optimised for content sites, where 12px is a sensible floor. Neither party is wrong; the scale simply does not match this application's domain, and 4,299 arbitrary values is the measured size of that mismatch.</p>
 </div>
 
 <h3>The three responses, and when each is right</h3>
@@ -303,7 +518,7 @@ text-9xl     8rem       128px
 </div>
 <div class="lz-stage lz-badge">
 <span class="lz-node"><span class="lz-ntitle">extend the scale</span><span class="lz-nsub">correct once the count passes ~10</span></span>
-<span class="lz-nbody">803 uses of <code>text-[11px]</code> is not a one-off; it is an unnamed part of the design system. Adding <code>xxs: '0.6875rem'</code> to <code>theme.extend.fontSize</code> turns 803 magic numbers into 803 uses of <code>text-xxs</code>. Chapter 5 does this properly.</span>
+<span class="lz-nbody">1,417 uses of <code>text-[11px]</code> is not a one-off; it is an unnamed part of the design system. Adding <code>xxs: '0.6875rem'</code> to <code>theme.extend.fontSize</code> turns 1,417 magic numbers into 1,417 uses of <code>text-xxs</code> (in Tailwind 4: <code>--text-xxs: 0.6875rem;</code> inside <code>@theme</code>). Chapter 5 does this properly.</span>
 </div>
 </div>
 
@@ -314,31 +529,118 @@ text-9xl     8rem       128px
 $ grep -rho 'text-\\[11px\\]' src --include="*.tsx" | wc -l
 </code></pre>
 
-<div class="out">803
+<div class="out">1544
 </div>
 
 <div class="lz-stack">
 <div class="lz-layer"><span class="lz-lname">1-3 uses</span><span class="lz-lnote">leave it arbitrary. Naming it costs more than it saves, and a name implies a design decision that has not actually been made</span></div>
 <div class="lz-layer"><span class="lz-lname">4-10 uses</span><span class="lz-lnote">judgement call. If the uses are all in one feature, leave it. If they are spread across features, it is becoming a system value — name it</span></div>
-<div class="lz-layer"><span class="lz-lname">10+ uses</span><span class="lz-lnote">extend the scale. At this point it IS part of your design system, it just does not have a name yet. The cost of not naming it is that changing it later means 803 find-and-replaces instead of one config line</span></div>
+<div class="lz-layer"><span class="lz-lname">10+ uses</span><span class="lz-lnote">extend the scale. At this point it IS part of your design system, it just does not have a name yet. The cost of not naming it is that changing it later means 1,544 find-and-replaces (529 files) instead of one config line</span></div>
 </div>
 
 <div class="callout warn">
-<p><strong>The cost of never crossing the threshold.</strong> Suppose the design team decides badge text should be 12px instead of 11px. With a named scale value that is one line in the config. With 803 arbitrary values it is a find-and-replace across 793 files — and a find-and-replace that cannot distinguish "11px because it is a badge" from "11px because of a one-off alignment". The 803 uses have lost the information about <em>why</em> they are 11px, and no tool can recover it.</p>
+<p><strong>The cost of never crossing the threshold.</strong> Suppose the design team decides badge text should be 12px instead of 11px. With a named scale value that is one line in the config. With 1,544 arbitrary values it is a find-and-replace across 529 files (measured 14/11/2026) — and a find-and-replace that cannot distinguish "11px because it is a badge" from "11px because of a one-off alignment". The 1,544 uses have lost the information about <em>why</em> they are 11px, and no tool can recover it.</p>
 </div>
 
 <h3>The same story in the colour column</h3>
-<p>Look again at entries 3, 4, 6 and 7 of the measurement: <code>border-[var(--border-color)]</code>, <code>text-[var(--text-secondary)]</code>, <code>bg-[var(--bg-surface)]</code>. These are arbitrary values whose contents are CSS variables — 339 + 281 + 147 = 767 uses reaching into a theme system that lives outside Tailwind's config.</p>
+<p>Look again at the measurement: <code>text-[var(--w-text-3)]</code> (1,884), <code>text-[var(--w-text-2)]</code> (1,208), <code>border-[var(--w-border)]</code> (936). These are arbitrary values whose contents are CSS variables — counted across the whole frontend, <strong>9,374</strong> classes reach into a theme system that lives outside Tailwind's config (the lesson was written at 767).</p>
 
-<p>That is a different kind of gap: not "the scale lacks a value" but "the value must be resolved at runtime, per theme, so it cannot be a build-time constant". Tailwind's answer is to put the variable <em>in the config</em> so the class name is clean, and this repo does exactly that elsewhere — <code>text-text-primary</code> (1,389 uses) is configured as <code>primary: "var(--text-primary)"</code>. Chapter 6 is entirely about this technique, and the 767 bracket-syntax uses above are the parts that have not been migrated to it yet.</p>
+<p>That is a different kind of gap: not "the scale lacks a value" but "the value must be resolved at runtime, per theme, so it cannot be a build-time constant". Tailwind's answer is to put the variable <em>in the config</em> so the class name is clean, and this repo does exactly that elsewhere — <code>text-text-primary</code> / <code>-secondary</code> / <code>-muted</code> (6,748 uses together) is configured as <code>primary: "var(--text-primary)"</code>. Chapter 6 is entirely about this technique, and the 9,374 bracket-syntax uses above are the parts that have not been migrated to it yet.</p>
 
 <div class="pitfall">
 <p><strong>Trap — treating arbitrary values as forbidden.</strong> The opposite error to over-using them is a team that bans them, and then rounds every value to the scale whether or not that is correct. That produces a codebase where a button is 2px off from the third-party widget it must align with, forever, because the scale had no 37px. The bracket syntax exists because escape hatches are necessary. The rule is not "never" — it is "count, and name the ones that recur".</p>
 </div>
 
 <div class="callout">
-<p><strong>One sentence.</strong> A scale encodes someone else's guess about which values you need, and where the guess is wrong your codebase records it as arbitrary values — so count them: one or two is a legitimate escape hatch, 803 is an unnamed part of your design system that should be a config line instead.</p>
+<p><strong>One sentence.</strong> A scale encodes someone else's guess about which values you need, and where the guess is wrong your codebase records it as arbitrary values — so count them: one or two is a legitimate escape hatch, 1,417 is an unnamed part of your design system that should be a config line instead.</p>
 </div>
+
+<div class="callout">
+<p><strong>In Tailwind 4 (4.3.5).</strong> The font-size scale is the same 13 sizes, stored as theme variables (<code>--text-xs: 0.75rem;</code> … <code>--text-9xl: 8rem;</code>) in <code>node_modules/tailwindcss/theme.css</code> — the 12px floor and the missing 13px are unchanged. Extending it needs no config file: one line <code>--text-xxs: 0.6875rem;</code> inside <code>@theme { }</code> in your CSS. A CSS variable can be written <code>text-(--w-text-3)</code> instead of <code>text-[var(--w-text-3)]</code> — shorter, still an arbitrary value.</p>
+</div>
+<h3>🔬 Measured: the scale in both versions, and naming 11px</h3>
+<p>The scale, read from Tailwind 3.4.19 (<code>resolveConfig</code>) and counted in Tailwind 4.3.5 (<code>theme.css</code>):</p>
+<div class="out">$ node co.mjs
+text-xs      0.75rem    12px
+text-sm      0.875rem   14px
+text-base    1rem       16px
+text-lg      1.125rem   18px
+text-xl      1.25rem    20px
+text-2xl     1.5rem     24px
+text-3xl     1.875rem   30px
+text-4xl     2.25rem    36px
+text-5xl     3rem       48px
+text-6xl     3.75rem    60px
+text-7xl     4.5rem     72px
+text-8xl     6rem       96px
+text-9xl     8rem       128px</div>
+<div class="out">$ grep -cE '^ *--text-[a-z0-9]+: ' node_modules/tailwindcss/theme.css
+13</div>
+<p>The counts behind this lesson, today (frontend/, 14/11/2026):</p>
+<div class="out">$ for c in 'text-[10px]' 'text-[11px]' 'text-[13px]' 'text-[12px]'; do printf '%-13s %s\\n' "$c" "$(grep -ho 'className="[^"]*"' -r src --include="*.tsx" | tr ' "' '\\n\\n' | grep -cxF "$c")"; done
+text-[10px]   632
+text-[11px]   1417
+text-[13px]   1453
+text-[12px]   1710
+$ grep -rho 'text-\\[11px\\]' src --include="*.tsx" | wc -l
+    1544
+$ git ls-files 'src/*.tsx' | xargs grep -l 'text-\\[11px\\]' | wc -l
+     529
+$ grep -ho 'className="[^"]*"' -r src --include="*.tsx" | tr ' "' '\\n\\n' | grep -cE '^[a-z-]+-\\[var\\(--'
+9374
+$ grep -ho 'className="[^"]*"' -r src --include="*.tsx" | tr ' "' '\\n\\n' | grep -cxE 'text-text-(primary|secondary|muted)'
+6748</div>
+<p>Naming 11px — Tailwind 3 (<code>theme.extend.fontSize.xxs</code>) and Tailwind 4 (<code>@theme</code>):</p>
+<div class="out">$ cat out.css
+.text-\\[11px\\] {
+  font-size: 11px
+}
+
+.text-xxs {
+  font-size: 0.6875rem
+}</div>
+<div class="out">$ grep -A3 -F '.text-xxs {' out.css
+  .text-xxs {
+    font-size: var(--text-xxs);
+  }
+  .font-semibold {
+$ grep -m1 -- '--text-xxs:' out.css
+    --text-xxs: 0.6875rem;</div>
+<p>Chromium, <code>getComputedStyle(el).fontSize</code> — the named value renders exactly like the escape:</p>
+<div class="out">text-[11px]   11px
+text-xxs      11px
+text-xs       12px</div>
+<h3>🔁 Run it yourself</h3>
+<pre><code class="language-bash"><span class="tok-comment"># Tailwind 4: name the value in your CSS, no config file</span>
+npm i tailwindcss @tailwindcss/cli
+cat &gt; input.css &lt;&lt;'EOF'
+@import "tailwindcss";
+@theme {
+  --text-xxs: 0.6875rem;
+}
+EOF
+echo '&lt;span class="text-[11px]"&gt;a&lt;/span&gt; &lt;span class="text-xxs"&gt;b&lt;/span&gt;' &gt; index.html
+npx @tailwindcss/cli -i input.css -o out.css
+grep -A1 -F '.text-xxs {' out.css    <span class="tok-comment">  # font-size: var(--text-xxs)</span>
+<span class="tok-comment"># your own project: which bracket values repeat?</span>
+grep -ho 'className="[^"]*"' -r src --include="*.tsx" | tr ' "' '\\n\\n' | grep '\\[' | sort | uniq -c | sort -rn | head</code></pre>
+<h3>🔗 Go deeper in other courses</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nextjs/learn?lessonSlug=nextjs-13-5-scale-va-bay-mau" target="_blank" rel="noopener"><span class="lc-ico">▲</span><span class="lc-body"><span class="lc-title">Next.js · 13.5 — Styling at scale, and the black-on-black trap</span><span class="lc-sub">Where magic numbers multiply in a real app</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/tailwind-css/learn?lessonSlug=tw-5-1-extend" target="_blank" rel="noopener"><span class="lc-ico">💨</span><span class="lc-body"><span class="lc-title">Tailwind CSS · 5.1 — extend ADDS; theme REPLACES</span><span class="lc-sub">Extending the scale properly</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/tailwind-css/learn?lessonSlug=tw-6-1-mot-lop" target="_blank" rel="noopener"><span class="lc-ico">💨</span><span class="lc-body"><span class="lc-title">Tailwind CSS · 6.1 — ONE class, right in BOTH themes</span><span class="lc-sub">The fix for the 9,374 [var(--…)] escapes</span></span></a>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">font-size scale</span><span class="v">The 13 named type sizes (<code>text-xs</code>…<code>text-9xl</code>); the floor is 12px, with no 13px step.</span></div>
+  <div class="kv"><span class="k">Arbitrary value</span><span class="v">Bracket syntax like <code>text-[11px]</code> for a value the scale lacks.</span></div>
+  <div class="kv"><span class="k">Escape hatch</span><span class="v">A one-off arbitrary value — legitimate when used a handful of times.</span></div>
+  <div class="kv"><span class="k">The counting rule</span><span class="v">1-3 uses: leave arbitrary; 4-10: judgement; 10+: extend the scale.</span></div>
+  <div class="kv"><span class="k">Extend the scale</span><span class="v">Add a named entry (e.g. <code>theme.extend.fontSize</code>) so one config line replaces hundreds of magic numbers.</span></div>
+  <div class="kv"><span class="k">CSS-variable arbitrary value</span><span class="v"><code>text-[var(--text-secondary)]</code> — a runtime, per-theme value that belongs in config as a clean class name.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>A scale is someone else's guess; where it is wrong the codebase records it as arbitrary values you can count.</li><li>The font-size scale bottoms out at 12px and skips 13px — this repo has 4,299 escapes from exactly those gaps (14/11/2026).</li><li>Three responses: round to the scale, use an arbitrary value, or extend the scale — chosen by counting, not taste.</li><li>10+ uses of the same arbitrary value means it is an unnamed system value and should be a config entry.</li><li>9,374 bracket uses hold CSS variables — those belong in config so the class name stays clean (Chapter 6).</li></ul>
 
 <h3>Sources</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Tailwind docs — Adding custom styles: arbitrary values</span><span class="lc-sub">tailwindcss.com/docs/adding-custom-styles#using-arbitrary-values — the bracket syntax, including the escaping rules for values containing spaces or slashes.</span></span></div>
@@ -386,20 +688,20 @@ text-9xl     8rem       128px
     | grep '\\[' | sort | uniq -c | sort -rn | head -8
 </code></pre>
 
-<div class="out">803 text-[11px]
-595 text-[10px]
-339 border-[var(--border-color)]
-281 text-[var(--text-secondary)]
-240 text-[13px]
-185 text-[12px]
-147 bg-[var(--bg-surface)]
-134 bg-white/[0.02]
-</div>
+<div class="out">1884 text-[var(--w-text-3)]
+1710 text-[12px]
+1453 text-[13px]
+1417 text-[11px]
+1208 text-[var(--w-text-2)]
+936 border-[var(--w-border)]
+797 text-[12.5px]
+632 text-[10px]
+# đo lại 14/11/2026 (frontend/, Tailwind 3.4.19) — lúc soạn bài: 803 text-[11px] · 595 text-[10px] · 240 text-[13px]</div>
 
-<p>Hai mục đầu là <strong>1.398 lượt dùng chữ 10px và 11px</strong> — những cỡ KHÔNG hề tồn tại trên thang. Cộng thêm <code>text-[13px]</code> ở mức 240 thì bạn có <strong>1.638 cú thoát</strong> gây ra bởi đúng hai lỗ hổng đã chỉ ra bên trên: không có gì dưới 12px, và không có gì giữa 12 và 14.</p>
+<p><code>text-[11px]</code> (1.417) và <code>text-[10px]</code> (632) là <strong>2.049 lượt dùng những cỡ KHÔNG hề tồn tại trên thang</strong>. Cộng thêm <code>text-[13px]</code> (1.453) và <code>text-[12.5px]</code> (797) thì bạn có <strong>4.299 cú thoát</strong> gây ra bởi đúng hai lỗ hổng đã chỉ ra bên trên: không có gì dưới 12px, và không có gì giữa 12 và 14. (Lúc soạn bài, cũng hai khe ấy chứa 1.638.) Và có một mục KHÔNG phải lỗ: <code>text-[12px]</code>, 1.710 lượt, chính là <code>text-xs</code> — thang CÓ sẵn, người ta không dùng. Đếm tìm ra cả THÓI QUEN lẫn lỗ hổng.</p>
 
 <div class="callout ok">
-<p><strong>Hãy đọc cái này như DỮ LIỆU, không phải như thất bại.</strong> Đây là một giao diện thông tin DÀY ĐẶC — huy hiệu, hàng siêu dữ liệu, dấu thời gian, ô bảng — và giao diện dày đặc CHÍNH ĐÁNG cần chữ dưới 12px. Tác giả cái thang tối ưu cho trang nội dung, nơi 12px là một cái sàn hợp lý. Không bên nào sai; cái thang đơn giản là KHÔNG khớp lĩnh vực của ứng dụng này, và 1.638 giá trị tuỳ ý là ĐỘ LỚN ĐO ĐƯỢC của sự lệch ấy.</p>
+<p><strong>Hãy đọc cái này như DỮ LIỆU, không phải như thất bại.</strong> Đây là một giao diện thông tin DÀY ĐẶC — huy hiệu, hàng siêu dữ liệu, dấu thời gian, ô bảng — và giao diện dày đặc CHÍNH ĐÁNG cần chữ dưới 12px. Tác giả cái thang tối ưu cho trang nội dung, nơi 12px là một cái sàn hợp lý. Không bên nào sai; cái thang đơn giản là KHÔNG khớp lĩnh vực của ứng dụng này, và 4.299 giá trị tuỳ ý là ĐỘ LỚN ĐO ĐƯỢC của sự lệch ấy.</p>
 </div>
 
 <h3>Ba cách đáp lại, và khi nào cái nào đúng</h3>
@@ -414,7 +716,7 @@ text-9xl     8rem       128px
 </div>
 <div class="lz-stage lz-badge">
 <span class="lz-node"><span class="lz-ntitle">MỞ RỘNG cái thang</span><span class="lz-nsub">đúng một khi số đếm vượt ~10</span></span>
-<span class="lz-nbody">803 lượt <code>text-[11px]</code> KHÔNG phải một-lần; nó là một phần CHƯA CÓ TÊN của hệ thiết kế. Thêm <code>xxs: '0.6875rem'</code> vào <code>theme.extend.fontSize</code> biến 803 con số ma thuật thành 803 lượt dùng <code>text-xxs</code>. Chương 5 làm việc này cho tử tế.</span>
+<span class="lz-nbody">1.417 lượt <code>text-[11px]</code> KHÔNG phải một-lần; nó là một phần CHƯA CÓ TÊN của hệ thiết kế. Thêm <code>xxs: '0.6875rem'</code> vào <code>theme.extend.fontSize</code> biến 1.417 con số ma thuật thành 1.417 lượt dùng <code>text-xxs</code> (ở Tailwind 4: <code>--text-xxs: 0.6875rem;</code> trong <code>@theme</code>). Chương 5 làm việc này cho tử tế.</span>
 </div>
 </div>
 
@@ -425,31 +727,118 @@ text-9xl     8rem       128px
 $ grep -rho 'text-\\[11px\\]' src --include="*.tsx" | wc -l
 </code></pre>
 
-<div class="out">803
+<div class="out">1544
 </div>
 
 <div class="lz-stack">
 <div class="lz-layer"><span class="lz-lname">1-3 lượt</span><span class="lz-lnote">để tuỳ ý. Đặt tên tốn hơn cái nó tiết kiệm, và một cái tên ngụ ý một quyết định thiết kế mà thực ra chưa ai ra</span></div>
 <div class="lz-layer"><span class="lz-lname">4-10 lượt</span><span class="lz-lnote">tuỳ phán đoán. Nếu các lượt dùng đều trong MỘT tính năng, để nguyên. Nếu chúng trải qua nhiều tính năng, nó đang thành một giá trị HỆ THỐNG — hãy đặt tên</span></div>
-<div class="lz-layer"><span class="lz-lname">10+ lượt</span><span class="lz-lnote">mở rộng thang. Tới đây nó ĐÃ LÀ một phần hệ thiết kế của bạn, chỉ là chưa có tên. Cái giá của việc không đặt tên là đổi nó về sau nghĩa là 803 lần tìm-và-thay thay vì MỘT dòng config</span></div>
+<div class="lz-layer"><span class="lz-lname">10+ lượt</span><span class="lz-lnote">mở rộng thang. Tới đây nó ĐÃ LÀ một phần hệ thiết kế của bạn, chỉ là chưa có tên. Cái giá của việc không đặt tên là đổi nó về sau nghĩa là 1.544 lần tìm-và-thay (529 tệp) thay vì MỘT dòng config</span></div>
 </div>
 
 <div class="callout warn">
-<p><strong>Cái giá của việc không bao giờ vượt ngưỡng.</strong> Giả sử đội thiết kế quyết chữ huy hiệu nên là 12px thay vì 11px. Với một giá trị thang CÓ TÊN thì đó là MỘT dòng trong config. Với 803 giá trị tuỳ ý thì đó là một cú tìm-và-thay xuyên 793 file — và một cú tìm-và-thay KHÔNG phân biệt được "11px vì nó là huy hiệu" với "11px vì một cú canh một-lần". 803 lượt dùng đã ĐÁNH MẤT thông tin về <em>VÌ SAO</em> chúng là 11px, và không công cụ nào phục hồi được.</p>
+<p><strong>Cái giá của việc không bao giờ vượt ngưỡng.</strong> Giả sử đội thiết kế quyết chữ huy hiệu nên là 12px thay vì 11px. Với một giá trị thang CÓ TÊN thì đó là MỘT dòng trong config. Với 1.544 giá trị tuỳ ý thì đó là một cú tìm-và-thay xuyên 529 tệp (đo 14/11/2026) — và một cú tìm-và-thay KHÔNG phân biệt được "11px vì nó là huy hiệu" với "11px vì một cú canh một-lần". 1.544 lượt dùng đã ĐÁNH MẤT thông tin về <em>VÌ SAO</em> chúng là 11px, và không công cụ nào phục hồi được.</p>
 </div>
 
 <h3>Cùng câu chuyện ở cột MÀU</h3>
-<p>Nhìn lại mục 3, 4, 6 và 7 của phép đo: <code>border-[var(--border-color)]</code>, <code>text-[var(--text-secondary)]</code>, <code>bg-[var(--bg-surface)]</code>. Đây là các giá trị tuỳ ý mà nội dung là BIẾN CSS — 339 + 281 + 147 = 767 lượt với tay vào một hệ theme sống NGOÀI config của Tailwind.</p>
+<p>Nhìn lại phép đo: <code>text-[var(--w-text-3)]</code> (1.884), <code>text-[var(--w-text-2)]</code> (1.208), <code>border-[var(--w-border)]</code> (936). Đây là các giá trị tuỳ ý mà nội dung là BIẾN CSS — đếm trên cả frontend, <strong>9.374</strong> lớp với tay vào một hệ theme sống NGOÀI config của Tailwind (lúc soạn bài: 767).</p>
 
-<p>Đó là một loại lỗ hổng KHÁC: không phải "thang thiếu một giá trị" mà "giá trị phải được phân giải LÚC CHẠY, theo từng theme, nên nó không thể là hằng số lúc dựng". Câu trả lời của Tailwind là đặt cái biến <em>VÀO CONFIG</em> để tên lớp sạch sẽ, và kho này làm ĐÚNG thế ở chỗ khác — <code>text-text-primary</code> (1.389 lượt) được cấu hình là <code>primary: "var(--text-primary)"</code>. Chương 6 dành trọn cho kỹ thuật này, và 767 lượt dùng cú pháp ngoặc bên trên là những phần CHƯA được chuyển sang nó.</p>
+<p>Đó là một loại lỗ hổng KHÁC: không phải "thang thiếu một giá trị" mà "giá trị phải được phân giải LÚC CHẠY, theo từng theme, nên nó không thể là hằng số lúc dựng". Câu trả lời của Tailwind là đặt cái biến <em>VÀO CONFIG</em> để tên lớp sạch sẽ, và kho này làm ĐÚNG thế ở chỗ khác — <code>text-text-primary</code> / <code>-secondary</code> / <code>-muted</code> (cộng lại 6.748 lượt) được cấu hình là <code>primary: "var(--text-primary)"</code>. Chương 6 dành trọn cho kỹ thuật này, và 9.374 lượt dùng cú pháp ngoặc bên trên là những phần CHƯA được chuyển sang nó.</p>
 
 <div class="pitfall">
 <p><strong>Bẫy — coi giá trị tuỳ ý là CẤM.</strong> Lỗi ngược với lạm dụng chúng là một đội CẤM chúng, rồi làm tròn mọi giá trị về thang bất kể điều đó có đúng hay không. Nó đẻ ra một kho mã nơi một cái nút lệch 2px so với widget bên thứ ba mà nó phải canh cùng, MÃI MÃI, vì thang không có 37px. Cú pháp ngoặc tồn tại vì cửa thoát là CẦN THIẾT. Luật KHÔNG phải "không bao giờ" — nó là "ĐẾM, và đặt tên cho những cái LẶP LẠI".</p>
 </div>
 
 <div class="callout">
-<p><strong>Một câu.</strong> Một cái thang mã hoá phỏng đoán của người khác về những giá trị bạn cần, và chỗ phỏng đoán ấy sai thì kho mã của bạn GHI LẠI dưới dạng giá trị tuỳ ý — nên hãy ĐẾM chúng: một hai cái là cửa thoát chính đáng, 803 cái là một phần CHƯA CÓ TÊN của hệ thiết kế mà lẽ ra phải là một dòng config.</p>
+<p><strong>Một câu.</strong> Một cái thang mã hoá phỏng đoán của người khác về những giá trị bạn cần, và chỗ phỏng đoán ấy sai thì kho mã của bạn GHI LẠI dưới dạng giá trị tuỳ ý — nên hãy ĐẾM chúng: một hai cái là cửa thoát chính đáng, 1.417 cái là một phần CHƯA CÓ TÊN của hệ thiết kế mà lẽ ra phải là một dòng config.</p>
 </div>
+
+<div class="callout">
+<p><strong>Ở Tailwind 4 (4.3.5).</strong> Thang cỡ chữ vẫn đúng 13 cỡ, lưu thành biến theme (<code>--text-xs: 0.75rem;</code> … <code>--text-9xl: 8rem;</code>) trong <code>node_modules/tailwindcss/theme.css</code> — đáy 12px và việc thiếu 13px KHÔNG đổi. Mở rộng không cần tệp cấu hình: một dòng <code>--text-xxs: 0.6875rem;</code> trong <code>@theme { }</code> ngay trong tệp CSS. Một biến CSS viết được thành <code>text-(--w-text-3)</code> thay cho <code>text-[var(--w-text-3)]</code> — ngắn hơn, vẫn là giá trị tuỳ ý.</p>
+</div>
+<h3>🔬 Đo thật: cái thang ở cả hai bản, và đặt tên cho 11px</h3>
+<p>Cái thang, đọc từ Tailwind 3.4.19 (<code>resolveConfig</code>) và đếm trong Tailwind 4.3.5 (<code>theme.css</code>):</p>
+<div class="out">$ node co.mjs
+text-xs      0.75rem    12px
+text-sm      0.875rem   14px
+text-base    1rem       16px
+text-lg      1.125rem   18px
+text-xl      1.25rem    20px
+text-2xl     1.5rem     24px
+text-3xl     1.875rem   30px
+text-4xl     2.25rem    36px
+text-5xl     3rem       48px
+text-6xl     3.75rem    60px
+text-7xl     4.5rem     72px
+text-8xl     6rem       96px
+text-9xl     8rem       128px</div>
+<div class="out">$ grep -cE '^ *--text-[a-z0-9]+: ' node_modules/tailwindcss/theme.css
+13</div>
+<p>Các con số của bài này, đo hôm nay (frontend/, 14/11/2026):</p>
+<div class="out">$ for c in 'text-[10px]' 'text-[11px]' 'text-[13px]' 'text-[12px]'; do printf '%-13s %s\\n' "$c" "$(grep -ho 'className="[^"]*"' -r src --include="*.tsx" | tr ' "' '\\n\\n' | grep -cxF "$c")"; done
+text-[10px]   632
+text-[11px]   1417
+text-[13px]   1453
+text-[12px]   1710
+$ grep -rho 'text-\\[11px\\]' src --include="*.tsx" | wc -l
+    1544
+$ git ls-files 'src/*.tsx' | xargs grep -l 'text-\\[11px\\]' | wc -l
+     529
+$ grep -ho 'className="[^"]*"' -r src --include="*.tsx" | tr ' "' '\\n\\n' | grep -cE '^[a-z-]+-\\[var\\(--'
+9374
+$ grep -ho 'className="[^"]*"' -r src --include="*.tsx" | tr ' "' '\\n\\n' | grep -cxE 'text-text-(primary|secondary|muted)'
+6748</div>
+<p>Đặt tên cho 11px — Tailwind 3 (<code>theme.extend.fontSize.xxs</code>) và Tailwind 4 (<code>@theme</code>):</p>
+<div class="out">$ cat out.css
+.text-\\[11px\\] {
+  font-size: 11px
+}
+
+.text-xxs {
+  font-size: 0.6875rem
+}</div>
+<div class="out">$ grep -A3 -F '.text-xxs {' out.css
+  .text-xxs {
+    font-size: var(--text-xxs);
+  }
+  .font-semibold {
+$ grep -m1 -- '--text-xxs:' out.css
+    --text-xxs: 0.6875rem;</div>
+<p>Chromium, <code>getComputedStyle(el).fontSize</code> — giá trị có tên hiện ra y hệt cửa thoát:</p>
+<div class="out">text-[11px]   11px
+text-xxs      11px
+text-xs       12px</div>
+<h3>🔁 Tự chạy lại</h3>
+<pre><code class="language-bash"><span class="tok-comment"># Tailwind 4: đặt tên giá trị ngay trong CSS, không tệp cấu hình</span>
+npm i tailwindcss @tailwindcss/cli
+cat &gt; input.css &lt;&lt;'EOF'
+@import "tailwindcss";
+@theme {
+  --text-xxs: 0.6875rem;
+}
+EOF
+echo '&lt;span class="text-[11px]"&gt;a&lt;/span&gt; &lt;span class="text-xxs"&gt;b&lt;/span&gt;' &gt; index.html
+npx @tailwindcss/cli -i input.css -o out.css
+grep -A1 -F '.text-xxs {' out.css    <span class="tok-comment">  # font-size: var(--text-xxs)</span>
+<span class="tok-comment"># dự án của bạn: giá trị ngoặc nào LẶP LẠI?</span>
+grep -ho 'className="[^"]*"' -r src --include="*.tsx" | tr ' "' '\\n\\n' | grep '\\[' | sort | uniq -c | sort -rn | head</code></pre>
+<h3>🔗 Học sâu hơn ở khoá khác</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nextjs/learn?lessonSlug=nextjs-13-5-scale-va-bay-mau" target="_blank" rel="noopener"><span class="lc-ico">▲</span><span class="lc-body"><span class="lc-title">Next.js · 13.5 — Style ở quy mô lớn, và bẫy chữ đen trên nền đen</span><span class="lc-sub">Chỗ các con số ma sinh sôi trong một ứng dụng thật</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/tailwind-css/learn?lessonSlug=tw-5-1-extend" target="_blank" rel="noopener"><span class="lc-ico">💨</span><span class="lc-body"><span class="lc-title">Tailwind CSS · 5.1 — extend THÊM VÀO; theme THAY THẾ</span><span class="lc-sub">Mở rộng thang cho tử tế</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/tailwind-css/learn?lessonSlug=tw-6-1-mot-lop" target="_blank" rel="noopener"><span class="lc-ico">💨</span><span class="lc-body"><span class="lc-title">Tailwind CSS · 6.1 — MỘT lớp, đúng ở CẢ hai theme</span><span class="lc-sub">Cách vá 9.374 cửa thoát [var(--…)]</span></span></a>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">font-size scale</span><span class="v">Thang cỡ chữ — 13 cỡ có tên (<code>text-xs</code>…<code>text-9xl</code>); sàn là 12px, không có bậc 13px.</span></div>
+  <div class="kv"><span class="k">Arbitrary value</span><span class="v">Giá trị tuỳ ý — cú pháp ngoặc vuông như <code>text-[11px]</code> cho giá trị thang thiếu.</span></div>
+  <div class="kv"><span class="k">Escape hatch</span><span class="v">Cửa thoát — một giá trị tuỳ ý dùng vài lần; chính đáng khi dùng ít.</span></div>
+  <div class="kv"><span class="k">The counting rule</span><span class="v">Luật đếm — 1-3 lần: để tuỳ ý; 4-10: cân nhắc; 10+: mở rộng thang.</span></div>
+  <div class="kv"><span class="k">Extend the scale</span><span class="v">Mở rộng thang — thêm mục có tên (vd <code>theme.extend.fontSize</code>) để một dòng config thay hàng trăm số ma.</span></div>
+  <div class="kv"><span class="k">CSS-variable arbitrary value</span><span class="v">Giá trị tuỳ ý chứa biến CSS — <code>text-[var(--text-secondary)]</code>, giá trị theo theme ở runtime, nên đưa vào config.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Một thang là phỏng đoán của người khác; chỗ nó sai, kho mã ghi lại thành giá trị tuỳ ý mà bạn đếm được.</li><li>Thang cỡ chữ chạm đáy ở 12px và bỏ 13px — kho này có 4.299 cửa thoát đúng từ hai khe đó (đo 14/11/2026).</li><li>Ba phản ứng: làm tròn về thang, dùng giá trị tuỳ ý, hoặc mở rộng thang — chọn bằng cách đếm, không theo gu.</li><li>10+ lần dùng cùng một giá trị tuỳ ý nghĩa là nó là giá trị hệ thống chưa đặt tên, nên thành mục config.</li><li>9.374 lần dùng ngoặc chứa biến CSS — thuộc về config để tên lớp sạch (Chương 6).</li></ul>
 
 <h3>Nguồn</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Tailwind docs — Adding custom styles: arbitrary values</span><span class="lc-sub">tailwindcss.com/docs/adding-custom-styles#using-arbitrary-values — cú pháp ngoặc, gồm cả luật thoát ký tự cho giá trị chứa khoảng trắng hay dấu gạch chéo.</span></span></div>
@@ -467,6 +856,7 @@ $ grep -rho 'text-\\[11px\\]' src --include="*.tsx" | wc -l
       type: 'VIDEO',
       description: '22 họ màu × 11 bậc, và một số đo quyết định: `slate-400` trên nền trắng cho tỉ lệ tương phản 2,56 — TRƯỢT WCAG AA. `slate-500` cho 4,76 — vừa đủ ĐẠT. Bậc 500 là cái sàn, và đó là một con số chứ không phải một cảm giác.',
       content: `
+${G01_3}
 <div class="ml-en">
 <span class="eyebrow">Chapter 1 · Lesson 1.3</span>
 <h2>The colour scale, and the step where contrast passes</h2>
@@ -478,6 +868,7 @@ const { theme } = resolveConfig({ content: [] });
 const families = Object.entries(theme.colors).filter(([, v]) =&gt; typeof v === 'object');
 console.log('families:', families.length);
 console.log('steps   :', Object.keys(theme.colors.slate).join(' '));
+console.log('flat    :', Object.entries(theme.colors).filter(([, v]) =&gt; typeof v !== 'object').map(([k]) =&gt; k).join(' '));
 </code></pre>
 
 <div class="out">families: 22
@@ -534,7 +925,7 @@ slate-700 on white: 10.35   ← DAT, kem ca AAA (7.0)
 <h3>The rule that falls out</h3>
 <div class="lz-stack">
 <div class="lz-layer"><span class="lz-lname">body text on white</span><span class="lz-lnote"><code>-500</code> is the floor and it is a tight pass; <code>-600</code> or darker is the safe default. Anything <code>-400</code> or lighter is decorative only</span></div>
-<div class="lz-layer"><span class="lz-lname">large text (18.66px bold, or 24px)</span><span class="lz-lnote">AA drops to 3:1, so <code>-400</code> becomes legal for headings. This is why a light-grey heading can be fine while light-grey body text is not</span></div>
+<div class="lz-layer"><span class="lz-lname">large text (18.66px bold, or 24px)</span><span class="lz-lnote">AA drops to 3:1 — but <code>slate-400</code> on white measures 2.56 (Tailwind 3) / 2.63 (Tailwind 4), so it <strong>still fails</strong>; a light-grey heading needs <code>-500</code>. (Corrected 14/11/2026: the lesson used to say <code>-400</code> becomes legal for headings.)</span></div>
 <div class="lz-layer"><span class="lz-lname">text on a dark background</span><span class="lz-lnote">the arithmetic mirrors: <code>-400</code> and lighter pass on <code>-900</code>, and the mid steps (<code>-500</code>, <code>-600</code>) are the dangerous ones because they are far from both ends</span></div>
 <div class="lz-layer"><span class="lz-lname">borders and dividers</span><span class="lz-lnote">not text, so 4.5 does not apply. WCAG 1.4.11 asks 3:1 for meaningful UI boundaries; purely decorative rules have no requirement — which is why <code>border-slate-200</code> is fine</span></div>
 </div>
@@ -542,9 +933,10 @@ slate-700 on white: 10.35   ← DAT, kem ca AAA (7.0)
 <h3>What this repository did instead</h3>
 <p>Notice that the repo's own most-used text classes are not scale steps at all:</p>
 
-<div class="out">2114 text-text-muted
-1389 text-text-primary
- 801 text-text-secondary
+<div class="out">2962 text-text-muted
+2290 text-text-primary
+1496 text-text-secondary
+# đo lại 14/11/2026 (frontend/) — lúc soạn bài: 2114 / 1389 / 801
 </div>
 
 <p>Those come from config entries pointing at CSS variables — <code>primary: "var(--text-primary)"</code>. The reason is in the config's own comment: a hardcoded light-theme hex made <code>text-text-primary</code> render near-black on a dark background, i.e. invisible text. The fix was to make the value resolve per theme rather than per class. Chapter 6 covers the technique; the point here is that a three-step semantic scale (primary / secondary / muted) can be a better interface than eleven numeric steps, because it encodes the <em>decision</em> rather than the pigment.</p>
@@ -556,17 +948,97 @@ slate-700 on white: 10.35   ← DAT, kem ca AAA (7.0)
 </div>
 <div class="lz-stage lz-badge">
 <span class="lz-node"><span class="lz-ntitle">semantic names</span><span class="lz-nsub"><code>text-text-muted</code></span></span>
-<span class="lz-nbody">Says what the colour is FOR. The contrast decision is made once, in config, by someone who computed it. 2,114 uses inherit that decision instead of re-making it.</span>
+<span class="lz-nbody">Says what the colour is FOR. The contrast decision is made once, in config, by someone who computed it. 2,962 uses (14/11/2026) inherit that decision instead of re-making it.</span>
 </div>
 </div>
 
 <div class="pitfall">
-<p><strong>Trap — assuming the same step is safe across families.</strong> The ratios above are for <code>slate</code>. Luminance depends on hue: <code>yellow-500</code> is far brighter than <code>blue-500</code> because the green channel dominates the luminance formula (0.7152 weight versus 0.0722 for blue). <code>text-yellow-500</code> on white is unreadable while <code>text-blue-500</code> on white is fine, and both are "step 500". Compute per family; never generalise a step number across hues.</p>
+<p><strong>Trap — assuming the same step is safe across families.</strong> The ratios above are for <code>slate</code>. Luminance depends on hue: <code>yellow-500</code> is far brighter than <code>blue-500</code> because the green channel dominates the luminance formula (0.7152 weight versus 0.0722 for blue). <code>text-yellow-500</code> on white measures 1.92:1 (unreadable) and <code>text-blue-500</code> 3.68:1 (Tailwind 3) / 3.76:1 (Tailwind 4) — <strong>both fail</strong> AA for body text, blue passes only for large text, and both are "step 500". (Corrected 14/11/2026: the lesson used to call blue-500 on white "fine".) Compute per family; never generalise a step number across hues.</p>
 </div>
 
 <div class="callout">
 <p><strong>One sentence.</strong> The colour scale is 22 families × 11 steps where higher means darker, and the only step number worth memorising is that <strong>500 is roughly where text on white starts passing WCAG AA</strong> — but that boundary shifts with hue, so compute the ratio rather than trusting the number, and prefer semantic names so the computation happens once instead of at every call site.</p>
 </div>
+
+<div class="callout">
+<p><strong>In Tailwind 4 (4.3.5).</strong> There are <strong>26</strong> families (four new neutrals: <code>mauve</code>, <code>olive</code>, <code>mist</code>, <code>taupe</code>), and every value is <strong>oklch</strong> instead of hex: <code>--color-slate-500: oklch(55.4% 0.046 257.417)</code>. A class compiles to <code>color: var(--color-slate-500)</code> instead of Tailwind 3's <code>rgb(100 116 139 / var(--tw-text-opacity, 1))</code>. The pixels moved slightly — and the 500 boundary on white did not.</p>
+</div>
+<h3>🔬 Measured: contrast on white, Tailwind 3.4.19 vs 4.3.5 (Chromium)</h3>
+<p>Each colour drawn by Chromium on a 1×1 canvas, read back as sRGB, then the WCAG formula — hex, luminance, ratio on white:</p>
+<p><strong>Tailwind 3.4.19 (hex)</strong></p>
+<div class="out">slate-50    #f8fafc  L=0.9536   1.05:1
+slate-100   #f1f5f9  L=0.9085    1.1:1
+slate-200   #e2e8f0  L=0.8017   1.23:1
+slate-300   #cbd5e1  L=0.6572   1.48:1
+slate-400   #94a3b8  L=0.3595   2.56:1
+slate-500   #64748b  L=0.1706   4.76:1
+slate-600   #475569  L=0.0886   7.58:1
+slate-700   #334155  L=0.0514  10.35:1
+slate-800   #1e293b  L=0.0218  14.63:1
+slate-900   #0f172a  L=0.0088  17.85:1
+slate-950   #020617  L=0.0021  20.17:1
+yellow-500  #eab308  L=0.4975   1.92:1
+blue-500    #3b82f6  L=0.2355   3.68:1</div>
+<p><strong>Tailwind 4.3.5 (oklch, rendered)</strong></p>
+<div class="out">slate-50    #f8fafc  L=0.9536   1.05:1
+slate-100   #f1f5f9  L=0.9085    1.1:1
+slate-200   #e2e8f0  L=0.8017   1.23:1
+slate-300   #cad5e2  L=0.6564   1.49:1
+slate-400   #90a1b9  L=0.3492   2.63:1
+slate-500   #62748e  L=0.1704   4.76:1
+slate-600   #45556c  L=0.0884   7.58:1
+slate-700   #314158  L=0.0514  10.36:1
+slate-800   #1d293d  L=0.0218  14.62:1
+slate-900   #0f172b  L=0.0089  17.83:1
+slate-950   #020618  L=0.0021  20.16:1
+yellow-500  #f0b100  L=0.4997   1.91:1
+blue-500    #2b7fff  L=0.2291   3.76:1</div>
+<div class="out">$ grep -oE -- '--color-[a-z]+-500' node_modules/tailwindcss/theme.css | wc -l
+      26
+$ grep -oE -- '--color-[a-z]+-500' node_modules/tailwindcss/theme.css | sed 's/--color-//; s/-500//' | tr '\\n' ' '; echo
+red orange amber yellow lime green emerald teal cyan sky blue indigo violet purple fuchsia pink rose slate gray zinc neutral stone mauve olive mist taupe 
+$ grep -E -- '--color-slate-(400|500|600):' node_modules/tailwindcss/theme.css
+  --color-slate-400: oklch(70.4% 0.04 256.788);
+  --color-slate-500: oklch(55.4% 0.046 257.417);
+  --color-slate-600: oklch(44.6% 0.043 257.281);</div>
+<div class="out">$ grep -A2 -F '.text-slate-500 {' ../mau3/out.css | head -3
+.text-slate-500 {
+  --tw-text-opacity: 1;
+  color: rgb(100 116 139 / var(--tw-text-opacity, 1));
+$ grep -A1 -F '.text-slate-500 {' out.css
+  .text-slate-500 {
+    color: var(--color-slate-500);</div>
+<p>This site today (frontend/): <code>text-slate-400</code> still appears 224 times — fine on a dark surface, 2.6:1 on white. The class alone cannot tell you which; Chapter 9 audits it.</p>
+<div class="out">$ for c in text-slate-400 text-gray-400 text-slate-500 text-gray-500; do printf '%-16s %s\\n' $c "$(grep -ho 'className="[^"]*"' -r src --include="*.tsx" | tr ' "' '\\n\\n' | grep -cx $c)"; done
+text-slate-400   224
+text-gray-400    33
+text-slate-500   293
+text-gray-500    18</div>
+<h3>🔁 Run it yourself</h3>
+<pre><code class="language-javascript"><span class="tok-comment">// DevTools console, on any page: the real pixel colour + the WCAG ratio on white</span>
+const c = document.createElement('canvas').getContext('2d');
+const rgb = (col) =&gt; { c.fillStyle = '#fff'; c.fillRect(0, 0, 1, 1); c.fillStyle = col; c.fillRect(0, 0, 1, 1); return [...c.getImageData(0, 0, 1, 1).data].slice(0, 3); };
+const L = (p) =&gt; { const [r, g, b] = p.map((v) =&gt; { v /= 255; return v &lt;= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4; }); return 0.2126 * r + 0.7152 * g + 0.0722 * b; };
+const ratio = (col) =&gt; (1.05 / (L(rgb(col)) + 0.05)).toFixed(2);
+ratio(getComputedStyle(document.querySelector('.text-slate-400')).color); <span class="tok-comment">  // '2.63' on Tailwind 4</span></code></pre>
+<p>Or: DevTools → select an element → click the colour swatch of <code>color</code>; the picker shows the contrast ratio and the AA/AAA lines.</p>
+<h3>🔗 Go deeper in other courses</h3>
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-2-5-tables-media-a11y" target="_blank" rel="noopener"><span class="lc-ico">🌐</span><span class="lc-body"><span class="lc-title">Web Foundations · 2.5 — Tables, media and accessibility</span><span class="lc-sub">Accessibility from the HTML side</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/nextjs/learn?lessonSlug=nextjs-13-5-scale-va-bay-mau" target="_blank" rel="noopener"><span class="lc-ico">▲</span><span class="lc-body"><span class="lc-title">Next.js · 13.5 — Styling at scale, and the black-on-black trap</span><span class="lc-sub">The invisible-text incident behind text-text-primary</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/tailwind-css/learn?lessonSlug=tw-9-1-tuong-phan" target="_blank" rel="noopener"><span class="lc-ico">💨</span><span class="lc-body"><span class="lc-title">Tailwind CSS · 9.1 — Auditing contrast on the REAL palette</span><span class="lc-sub">This lesson's measurement, run over the whole site</span></span></a>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Colour scale</span><span class="v">22 families × 11 steps (<code>50</code>, <code>100</code>-<code>900</code>, <code>950</code>); higher number = darker.</span></div>
+  <div class="kv"><span class="k">Relative luminance</span><span class="v">A WCAG-defined measure of how light a colour is — computed, not eyeballed.</span></div>
+  <div class="kv"><span class="k">Contrast ratio</span><span class="v"><code>(L_lighter + 0.05) / (L_darker + 0.05)</code>; AA needs ≥ 4.5:1 for body text.</span></div>
+  <div class="kv"><span class="k">The 500 boundary</span><span class="v"><code>slate-500</code> is the first step passing AA on white (4.76); <code>-400</code> fails (2.56).</span></div>
+  <div class="kv"><span class="k">Hue dependence</span><span class="v">The same step number differs by hue — <code>yellow-500</code> is far brighter than <code>blue-500</code>.</span></div>
+  <div class="kv"><span class="k">Semantic vs numeric</span><span class="v"><code>text-text-muted</code> encodes the decision once; <code>text-slate-600</code> re-decides contrast every call site.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>The scale is 22 families × 11 steps where higher means darker; 50 and 950 were added for real UI range.</li><li>Luminance drops non-linearly to match logarithmic human brightness perception.</li><li>For body text on white, 500 is the tight floor and 600+ is the safe default; 400 and lighter are decorative.</li><li>The boundary shifts with hue and with text size (large text drops to 3:1) — compute the ratio, do not trust the number.</li><li>Prefer semantic names so the contrast decision is made once in config, not at every call site.</li></ul>
 
 <h3>Sources</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">WCAG 2.1 — Contrast (Minimum), 1.4.3</span><span class="lc-sub">w3.org/WAI/WCAG21/Understanding/contrast-minimum — the 4.5:1 and 3:1 thresholds, and the exact definition of "large text" that moves the boundary.</span></span></div>
@@ -586,6 +1058,7 @@ const { theme } = resolveConfig({ content: [] });
 const families = Object.entries(theme.colors).filter(([, v]) =&gt; typeof v === 'object');
 console.log('families:', families.length);
 console.log('steps   :', Object.keys(theme.colors.slate).join(' '));
+console.log('flat    :', Object.entries(theme.colors).filter(([, v]) =&gt; typeof v !== 'object').map(([k]) =&gt; k).join(' '));
 </code></pre>
 
 <div class="out">families: 22
@@ -642,7 +1115,7 @@ slate-700 on white: 10.35   ← DAT, kem ca AAA (7.0)
 <h3>Cái luật rơi ra</h3>
 <div class="lz-stack">
 <div class="lz-layer"><span class="lz-lname">chữ thân bài trên trắng</span><span class="lz-lnote"><code>-500</code> là cái SÀN và nó đạt sát nút; <code>-600</code> hoặc tối hơn là mặc định AN TOÀN. Bất cứ thứ gì <code>-400</code> hoặc nhạt hơn chỉ dùng để TRANG TRÍ</span></div>
-<div class="lz-layer"><span class="lz-lname">chữ lớn (18,66px đậm, hoặc 24px)</span><span class="lz-lnote">AA hạ xuống 3:1, nên <code>-400</code> trở thành hợp lệ cho tiêu đề. Đây là lý do một tiêu đề xám nhạt có thể ổn trong khi chữ thân bài xám nhạt thì không</span></div>
+<div class="lz-layer"><span class="lz-lname">chữ lớn (18,66px đậm, hoặc 24px)</span><span class="lz-lnote">AA hạ xuống 3:1 — nhưng <code>slate-400</code> trên trắng đo được 2,56 (Tailwind 3) / 2,63 (Tailwind 4), nên nó <strong>VẪN TRƯỢT</strong>; tiêu đề xám nhạt cần <code>-500</code>. (Sửa 14/11/2026: bài cũ nói <code>-400</code> trở thành hợp lệ cho tiêu đề.)</span></div>
 <div class="lz-layer"><span class="lz-lname">chữ trên nền TỐI</span><span class="lz-lnote">số học phản chiếu: <code>-400</code> và nhạt hơn ĐẠT trên nền <code>-900</code>, và các bậc GIỮA (<code>-500</code>, <code>-600</code>) mới là nguy hiểm vì chúng xa cả hai đầu</span></div>
 <div class="lz-layer"><span class="lz-lname">viền và đường phân cách</span><span class="lz-lnote">không phải chữ, nên 4,5 không áp. WCAG 1.4.11 đòi 3:1 cho ranh giới giao diện CÓ NGHĨA; đường thuần trang trí không có yêu cầu — đó là lý do <code>border-slate-200</code> ổn</span></div>
 </div>
@@ -650,9 +1123,10 @@ slate-700 on white: 10.35   ← DAT, kem ca AAA (7.0)
 <h3>Kho này đã làm gì thay vào đó</h3>
 <p>Để ý rằng những lớp chữ được dùng nhiều nhất của chính kho này KHÔNG phải bậc thang gì cả:</p>
 
-<div class="out">2114 text-text-muted
-1389 text-text-primary
- 801 text-text-secondary
+<div class="out">2962 text-text-muted
+2290 text-text-primary
+1496 text-text-secondary
+# đo lại 14/11/2026 (frontend/) — lúc soạn bài: 2114 / 1389 / 801
 </div>
 
 <p>Chúng đến từ các mục config trỏ vào BIẾN CSS — <code>primary: "var(--text-primary)"</code>. Lý do nằm trong chính comment của config: một mã hex theme sáng đóng cứng đã làm <code>text-text-primary</code> hiện ra gần-đen trên nền tối, tức chữ VÔ HÌNH. Cách vá là làm giá trị phân giải THEO TỪNG THEME chứ không theo từng lớp. Chương 6 bao kỹ thuật ấy; điểm ở đây là một thang NGỮ NGHĨA ba bậc (primary / secondary / muted) có thể là giao diện TỐT HƠN mười một bậc số, vì nó mã hoá <em>QUYẾT ĐỊNH</em> chứ không mã hoá SẮC TỐ.</p>
@@ -664,17 +1138,97 @@ slate-700 on white: 10.35   ← DAT, kem ca AAA (7.0)
 </div>
 <div class="lz-stage lz-badge">
 <span class="lz-node"><span class="lz-ntitle">tên NGỮ NGHĨA</span><span class="lz-nsub"><code>text-text-muted</code></span></span>
-<span class="lz-nbody">Nói màu ấy ĐỂ LÀM GÌ. Quyết định tương phản được ra MỘT lần, trong config, bởi người đã TÍNH nó. 2.114 lượt dùng THỪA HƯỞNG quyết định ấy thay vì tự ra lại.</span>
+<span class="lz-nbody">Nói màu ấy ĐỂ LÀM GÌ. Quyết định tương phản được ra MỘT lần, trong config, bởi người đã TÍNH nó. 2.962 lượt dùng (đo 14/11/2026) THỪA HƯỞNG quyết định ấy thay vì tự ra lại.</span>
 </div>
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — cho rằng cùng một bậc thì an toàn ở mọi họ màu.</strong> Các tỉ số bên trên là cho <code>slate</code>. Độ chói phụ thuộc SẮC: <code>yellow-500</code> sáng hơn <code>blue-500</code> rất nhiều vì kênh lục chi phối công thức độ chói (trọng số 0,7152 đối lập 0,0722 cho lam). <code>text-yellow-500</code> trên trắng không đọc nổi trong khi <code>text-blue-500</code> trên trắng thì ổn, và cả hai đều là "bậc 500". Hãy TÍNH theo từng họ; đừng bao giờ tổng quát hoá một con số bậc qua các sắc.</p>
+<p><strong>Bẫy — cho rằng cùng một bậc thì an toàn ở mọi họ màu.</strong> Các tỉ số bên trên là cho <code>slate</code>. Độ chói phụ thuộc SẮC: <code>yellow-500</code> sáng hơn <code>blue-500</code> rất nhiều vì kênh lục chi phối công thức độ chói (trọng số 0,7152 đối lập 0,0722 cho lam). <code>text-yellow-500</code> trên trắng đo được 1,92:1 (không đọc nổi) và <code>text-blue-500</code> 3,68:1 (Tailwind 3) / 3,76:1 (Tailwind 4) — <strong>CẢ HAI TRƯỢT</strong> AA cho chữ thân bài, xanh chỉ đạt cho chữ lớn, và cả hai đều là "bậc 500". (Sửa 14/11/2026: bài cũ gọi blue-500 trên trắng là "ổn".) Hãy TÍNH theo từng họ; đừng bao giờ tổng quát hoá một con số bậc qua các sắc.</p>
 </div>
 
 <div class="callout">
 <p><strong>Một câu.</strong> Thang màu là 22 họ × 11 bậc trong đó cao hơn nghĩa là tối hơn, và con số bậc DUY NHẤT đáng thuộc là <strong>500 xấp xỉ là chỗ chữ trên nền trắng bắt đầu ĐẠT WCAG AA</strong> — nhưng ranh giới ấy DỊCH theo sắc, nên hãy TÍNH tỉ số thay vì tin con số, và ưu tiên tên ngữ nghĩa để phép tính xảy ra MỘT lần thay vì ở mọi chỗ gọi.</p>
 </div>
+
+<div class="callout">
+<p><strong>Ở Tailwind 4 (4.3.5).</strong> Có <strong>26</strong> họ màu (thêm bốn họ xám mới: <code>mauve</code>, <code>olive</code>, <code>mist</code>, <code>taupe</code>), và mọi giá trị là <strong>oklch</strong> thay cho hex: <code>--color-slate-500: oklch(55.4% 0.046 257.417)</code>. Một lớp biên dịch ra <code>color: var(--color-slate-500)</code> thay cho <code>rgb(100 116 139 / var(--tw-text-opacity, 1))</code> của Tailwind 3. Điểm ảnh dịch đi chút ít — còn ranh giới 500 trên nền trắng thì KHÔNG dịch.</p>
+</div>
+<h3>🔬 Đo thật: tương phản trên trắng, Tailwind 3.4.19 vs 4.3.5 (Chromium)</h3>
+<p>Mỗi màu được Chromium vẽ lên canvas 1×1, đọc lại thành sRGB, rồi áp công thức WCAG — mã hex, độ chói, tỉ lệ trên trắng:</p>
+<p><strong>Tailwind 3.4.19 (hex)</strong></p>
+<div class="out">slate-50    #f8fafc  L=0.9536   1.05:1
+slate-100   #f1f5f9  L=0.9085    1.1:1
+slate-200   #e2e8f0  L=0.8017   1.23:1
+slate-300   #cbd5e1  L=0.6572   1.48:1
+slate-400   #94a3b8  L=0.3595   2.56:1
+slate-500   #64748b  L=0.1706   4.76:1
+slate-600   #475569  L=0.0886   7.58:1
+slate-700   #334155  L=0.0514  10.35:1
+slate-800   #1e293b  L=0.0218  14.63:1
+slate-900   #0f172a  L=0.0088  17.85:1
+slate-950   #020617  L=0.0021  20.17:1
+yellow-500  #eab308  L=0.4975   1.92:1
+blue-500    #3b82f6  L=0.2355   3.68:1</div>
+<p><strong>Tailwind 4.3.5 (oklch, đã vẽ)</strong></p>
+<div class="out">slate-50    #f8fafc  L=0.9536   1.05:1
+slate-100   #f1f5f9  L=0.9085    1.1:1
+slate-200   #e2e8f0  L=0.8017   1.23:1
+slate-300   #cad5e2  L=0.6564   1.49:1
+slate-400   #90a1b9  L=0.3492   2.63:1
+slate-500   #62748e  L=0.1704   4.76:1
+slate-600   #45556c  L=0.0884   7.58:1
+slate-700   #314158  L=0.0514  10.36:1
+slate-800   #1d293d  L=0.0218  14.62:1
+slate-900   #0f172b  L=0.0089  17.83:1
+slate-950   #020618  L=0.0021  20.16:1
+yellow-500  #f0b100  L=0.4997   1.91:1
+blue-500    #2b7fff  L=0.2291   3.76:1</div>
+<div class="out">$ grep -oE -- '--color-[a-z]+-500' node_modules/tailwindcss/theme.css | wc -l
+      26
+$ grep -oE -- '--color-[a-z]+-500' node_modules/tailwindcss/theme.css | sed 's/--color-//; s/-500//' | tr '\\n' ' '; echo
+red orange amber yellow lime green emerald teal cyan sky blue indigo violet purple fuchsia pink rose slate gray zinc neutral stone mauve olive mist taupe 
+$ grep -E -- '--color-slate-(400|500|600):' node_modules/tailwindcss/theme.css
+  --color-slate-400: oklch(70.4% 0.04 256.788);
+  --color-slate-500: oklch(55.4% 0.046 257.417);
+  --color-slate-600: oklch(44.6% 0.043 257.281);</div>
+<div class="out">$ grep -A2 -F '.text-slate-500 {' ../mau3/out.css | head -3
+.text-slate-500 {
+  --tw-text-opacity: 1;
+  color: rgb(100 116 139 / var(--tw-text-opacity, 1));
+$ grep -A1 -F '.text-slate-500 {' out.css
+  .text-slate-500 {
+    color: var(--color-slate-500);</div>
+<p>Trang này hôm nay (frontend/): <code>text-slate-400</code> vẫn còn 224 lượt — ổn trên nền tối, 2,6:1 trên nền trắng. Chỉ nhìn tên lớp không biết được; Chương 9 sẽ soát.</p>
+<div class="out">$ for c in text-slate-400 text-gray-400 text-slate-500 text-gray-500; do printf '%-16s %s\\n' $c "$(grep -ho 'className="[^"]*"' -r src --include="*.tsx" | tr ' "' '\\n\\n' | grep -cx $c)"; done
+text-slate-400   224
+text-gray-400    33
+text-slate-500   293
+text-gray-500    18</div>
+<h3>🔁 Tự chạy lại</h3>
+<pre><code class="language-javascript"><span class="tok-comment">// console DevTools, trên trang bất kỳ: màu điểm ảnh thật + tỉ lệ WCAG trên trắng</span>
+const c = document.createElement('canvas').getContext('2d');
+const rgb = (col) =&gt; { c.fillStyle = '#fff'; c.fillRect(0, 0, 1, 1); c.fillStyle = col; c.fillRect(0, 0, 1, 1); return [...c.getImageData(0, 0, 1, 1).data].slice(0, 3); };
+const L = (p) =&gt; { const [r, g, b] = p.map((v) =&gt; { v /= 255; return v &lt;= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4; }); return 0.2126 * r + 0.7152 * g + 0.0722 * b; };
+const ratio = (col) =&gt; (1.05 / (L(rgb(col)) + 0.05)).toFixed(2);
+ratio(getComputedStyle(document.querySelector('.text-slate-400')).color); <span class="tok-comment">  // '2.63' ở Tailwind 4</span></code></pre>
+<p>Hoặc: DevTools → chọn phần tử → bấm ô màu của <code>color</code>; bảng chọn màu hiện tỉ lệ tương phản và hai vạch AA/AAA.</p>
+<h3>🔗 Học sâu hơn ở khoá khác</h3>
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-2-5-tables-media-a11y" target="_blank" rel="noopener"><span class="lc-ico">🌐</span><span class="lc-body"><span class="lc-title">Nền tảng Web · 2.5 — Bảng, media và khả năng tiếp cận</span><span class="lc-sub">Khả năng tiếp cận từ phía HTML</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/nextjs/learn?lessonSlug=nextjs-13-5-scale-va-bay-mau" target="_blank" rel="noopener"><span class="lc-ico">▲</span><span class="lc-body"><span class="lc-title">Next.js · 13.5 — Style ở quy mô lớn, và bẫy chữ đen trên nền đen</span><span class="lc-sub">Sự cố chữ vô hình đằng sau text-text-primary</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/tailwind-css/learn?lessonSlug=tw-9-1-tuong-phan" target="_blank" rel="noopener"><span class="lc-ico">💨</span><span class="lc-body"><span class="lc-title">Tailwind CSS · 9.1 — Soát tương phản trên bảng màu THẬT</span><span class="lc-sub">Phép đo của bài này, chạy trên cả trang</span></span></a>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Colour scale</span><span class="v">Thang màu — 22 họ × 11 bậc (<code>50</code>, <code>100</code>-<code>900</code>, <code>950</code>); số càng cao càng tối.</span></div>
+  <div class="kv"><span class="k">Relative luminance</span><span class="v">Độ sáng tương đối — thước đo WCAG về độ sáng của màu, tính ra chứ không nhìn đoán.</span></div>
+  <div class="kv"><span class="k">Contrast ratio</span><span class="v">Tỉ lệ tương phản — <code>(L_sáng + 0,05) / (L_tối + 0,05)</code>; AA cần ≥ 4,5:1 cho chữ thân bài.</span></div>
+  <div class="kv"><span class="k">The 500 boundary</span><span class="v">Ranh giới 500 — <code>slate-500</code> là bậc đầu ĐẠT AA trên nền trắng (4,76); <code>-400</code> trượt (2,56).</span></div>
+  <div class="kv"><span class="k">Hue dependence</span><span class="v">Phụ thuộc sắc — cùng số bậc khác nhau theo sắc màu: <code>yellow-500</code> sáng hơn nhiều <code>blue-500</code>.</span></div>
+  <div class="kv"><span class="k">Semantic vs numeric</span><span class="v">Tên ngữ nghĩa vs tên số — <code>text-text-muted</code> chốt quyết định một lần; <code>text-slate-600</code> quyết lại tương phản ở mỗi chỗ gọi.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Thang là 22 họ × 11 bậc, số cao hơn nghĩa là tối hơn; 50 và 950 thêm vào cho đủ dải UI thật.</li><li>Độ sáng giảm phi tuyến để khớp cảm nhận độ sáng kiểu logarit của con người.</li><li>Chữ thân bài trên nền trắng: 500 là sàn vừa đủ, 600+ là mặc định an toàn; 400 trở xuống chỉ để trang trí.</li><li>Ranh giới dịch theo sắc và theo cỡ chữ (chữ lớn hạ còn 3:1) — tính tỉ lệ, đừng tin con số.</li><li>Ưu tiên tên ngữ nghĩa để quyết định tương phản làm một lần trong config, không phải ở mỗi chỗ gọi.</li></ul>
 
 <h3>Nguồn</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">WCAG 2.1 — Contrast (Minimum), 1.4.3</span><span class="lc-sub">w3.org/WAI/WCAG21/Understanding/contrast-minimum — các ngưỡng 4,5:1 và 3:1, và định nghĩa CHÍNH XÁC của "chữ lớn" thứ làm dịch ranh giới.</span></span></div>
@@ -690,11 +1244,12 @@ slate-700 on white: 10.35   ← DAT, kem ca AAA (7.0)
       title: '1.4 — Layout: why flex outnumbers grid 9.7 to 1|||1.4 — Bố cục: vì sao flex nhiều hơn grid 9,7 lần',
       slug: 'tw-1-4-bo-cuc',
       type: 'VIDEO',
-      description: 'Đo thật: `flex` 5.295 lượt, `grid` 547 lượt. Và 69% số thẻ có `flex` cũng có `items-center`. Hai con số ấy nói cho bạn biết bố cục giao diện thật SỰ trông ra sao — và vì sao một cặp lớp lại chiếm ưu thế đến vậy.',
+      description: 'Đo thật (14/11/2026): `flex` 9.107 lượt, `grid` 1.173 lượt. Và 62% số thẻ có `flex` cũng có `items-center`. Hai con số ấy nói cho bạn biết bố cục giao diện thật SỰ trông ra sao — và vì sao một cặp lớp lại chiếm ưu thế đến vậy.',
       content: `
+${G01_4}
 <div class="ml-en">
 <span class="eyebrow">Chapter 1 · Lesson 1.4</span>
-<h2>Layout: why flex outnumbers grid 9.7 to 1</h2>
+<h2>Layout: why flex outnumbers grid 9.7 to 1 <small>(7.8 to 1 re-measured 14/11/2026)</small></h2>
 <p class="lead">Tailwind's layout utilities are a thin renaming of CSS flexbox and grid — <code>flex</code> is <code>display: flex</code> and nothing more. What is worth learning is not the renaming but the <em>usage distribution</em>, because it tells you which four or five classes carry almost all the weight.</p>
 
 <h3>The distribution</h3>
@@ -704,27 +1259,27 @@ slate-700 on white: 10.35   ← DAT, kem ca AAA (7.0)
   done
 </code></pre>
 
-<div class="out">flex             5295
-inline-flex      1010
-absolute          830
-relative          614
-grid              547
-block             416
-hidden            250
-</div>
+<div class="out">flex             9107
+grid             1173
+inline-flex      1645
+block            1019
+hidden            412
+absolute         1107
+relative          826
+# đo lại 14/11/2026 (frontend/) — lúc soạn bài: flex 5295 · grid 547</div>
 
-<p><strong><code>flex</code> beats <code>grid</code> 5,295 to 547</strong> — a ratio of 9.7 to 1. That is not because grid is worse. It is because most of what an interface does is arrange a <em>few</em> items along <em>one</em> axis: an icon next to a label, a title with a button pushed to the right, a row of tags. Grid earns its keep on two-dimensional page-level layouts, and a typical app has a handful of those and many thousands of one-dimensional rows.</p>
+<p><strong><code>flex</code> beats <code>grid</code> 9,107 to 1,173</strong> — a ratio of 7.8 to 1 (measured 14/11/2026; the lesson was written at 5,295 to 547, 9.7 to 1). That is not because grid is worse. It is because most of what an interface does is arrange a <em>few</em> items along <em>one</em> axis: an icon next to a label, a title with a button pushed to the right, a row of tags. Grid earns its keep on two-dimensional page-level layouts, and a typical app has a handful of those and many thousands of one-dimensional rows.</p>
 
 <h3>The pairing that dominates everything</h3>
 <pre><code class="language-bash">$ grep -ho 'className="[^"]*"' -r src --include="*.tsx" | grep -c 'flex'
 $ grep -ho 'className="[^"]*"' -r src --include="*.tsx" | grep 'flex' | grep -c 'items-center'
 </code></pre>
 
-<div class="out">7172    # thuoc tinh class co nhac 'flex'
-4955    # trong so do, cung co 'items-center'  => 69,1%
+<div class="out">12547   # thuoc tinh class co nhac 'flex'   (do 14/11/2026; luc soan: 7172)
+7772    # trong so do, cung co 'items-center'  => 61,9%   (luc soan: 4955 => 69,1%)
 </div>
 
-<p>Sixty-nine percent. Recall from Section 0 that <code>flex</code> (5,295) and <code>items-center</code> (4,924) are the two most-used classes in the entire application, ahead of every colour, size and spacing class. They are effectively one idiom that happens to be spelled as two words.</p>
+<p>Sixty-two percent today (69% when the lesson was written). <code>flex</code> (9,107) and <code>items-center</code> (7,739) are the two most-used layout classes in the application. They are effectively one idiom that happens to be spelled as two words.</p>
 
 <div class="callout ok">
 <p><strong>Why the pair is so common.</strong> <code>display: flex</code> alone stretches children to equal height (<code>align-items: stretch</code> is the default). That is almost never what you want when placing an icon beside text — the icon's box grows to the text's height and the icon floats at the top. <code>items-center</code> is the fix, and because the problem is universal so is the fix. If you write <code>flex</code> and the layout looks subtly off, the missing <code>items-center</code> is the first thing to check.</p>
@@ -734,16 +1289,16 @@ $ grep -ho 'className="[^"]*"' -r src --include="*.tsx" | grep 'flex' | grep -c 
 <p>Given the distribution, the honest short list is small. These are worth knowing cold; everything else you can derive or look up:</p>
 
 <div class="lz-stack">
-<div class="lz-layer"><span class="lz-lname"><code>flex</code> + <code>items-center</code></span><span class="lz-lnote">the base idiom. Horizontal row, children vertically centred. 4,955 elements in this app</span></div>
-<div class="lz-layer"><span class="lz-lname"><code>gap-2</code> / <code>gap-3</code></span><span class="lz-lnote">space between flex children. Replaces the old margin-on-every-child-but-the-last trick entirely — 2,111 + 880 uses here. Prefer it over margins; it cannot leave a stray edge margin</span></div>
-<div class="lz-layer"><span class="lz-lname"><code>justify-between</code></span><span class="lz-lnote">660 uses. Title on the left, action on the right, space distributed between. The single most useful justify value in app UI</span></div>
-<div class="lz-layer"><span class="lz-lname"><code>flex-1</code></span><span class="lz-lnote">887 uses. "This child takes the remaining space". The workhorse for a content area beside a fixed sidebar</span></div>
-<div class="lz-layer"><span class="lz-lname"><code>shrink-0</code></span><span class="lz-lnote">987 uses — more than <code>grid</code>. Stops a flex child from being squeezed below its natural size. Almost always applied to icons, because a squashed icon is the classic flex bug</span></div>
-<div class="lz-layer"><span class="lz-lname"><code>flex-wrap</code></span><span class="lz-lnote">646 uses. Lets a row become several rows. Without it, a long list of tags overflows its container instead of wrapping</span></div>
+<div class="lz-layer"><span class="lz-lname"><code>flex</code> + <code>items-center</code></span><span class="lz-lnote">the base idiom. Horizontal row, children vertically centred. 7,772 elements in this app</span></div>
+<div class="lz-layer"><span class="lz-lname"><code>gap-2</code> / <code>gap-3</code></span><span class="lz-lnote">space between flex children. Replaces the old margin-on-every-child-but-the-last trick entirely — 3,805 + 1,378 uses here. Prefer it over margins; it cannot leave a stray edge margin</span></div>
+<div class="lz-layer"><span class="lz-lname"><code>justify-between</code></span><span class="lz-lnote">853 uses. Title on the left, action on the right, space distributed between. The single most useful justify value in app UI</span></div>
+<div class="lz-layer"><span class="lz-lname"><code>flex-1</code></span><span class="lz-lnote">1,882 uses. "This child takes the remaining space". The workhorse for a content area beside a fixed sidebar</span></div>
+<div class="lz-layer"><span class="lz-lname"><code>shrink-0</code></span><span class="lz-lnote">2,188 uses — almost twice <code>grid</code>. Stops a flex child from being squeezed below its natural size. Almost always applied to icons, because a squashed icon is the classic flex bug</span></div>
+<div class="lz-layer"><span class="lz-lname"><code>flex-wrap</code></span><span class="lz-lnote">1,657 uses. Lets a row become several rows. Without it, a long list of tags overflows its container instead of wrapping</span></div>
 </div>
 
-<h3>Reading <code>shrink-0</code>'s 987 uses as a bug report</h3>
-<p>That number is worth pausing on. <code>shrink-0</code> is used more often than <code>grid</code>, <code>block</code> and <code>hidden</code> combined. It exists because flexbox's default is <code>flex-shrink: 1</code> — every child may be compressed below its content size when space is tight. For text that is usually fine. For a 16×16 icon it produces a squashed oval, and the failure only appears at narrow widths, which is why it survives desktop testing and shows up on phones.</p>
+<h3>Reading <code>shrink-0</code>'s 2,188 uses as a bug report</h3>
+<p>That number is worth pausing on. <code>shrink-0</code> is used almost twice as often as <code>grid</code> (2,188 vs 1,173). (Corrected 14/11/2026: the lesson used to say "more than grid, block and hidden combined" — today those three add up to 2,604.) It exists because flexbox's default is <code>flex-shrink: 1</code> — every child may be compressed below its content size when space is tight. For text that is usually fine. For a 16×16 icon it produces a squashed oval, and the failure only appears at narrow widths, which is why it survives desktop testing and shows up on phones.</p>
 
 <pre><code class="language-jsx">{/* BUG: at narrow widths the icon compresses to an oval */}
 &lt;div className="flex items-center gap-2"&gt;
@@ -761,12 +1316,12 @@ $ grep -ho 'className="[^"]*"' -r src --include="*.tsx" | grep 'flex' | grep -c 
 <p>Note that <code>h-4 w-4</code> does <em>not</em> prevent the shrink. Width is a starting size, not a floor — flexbox is explicitly allowed to go below it. Only <code>shrink-0</code> (or a <code>min-w-</code>) makes it a floor. This surprises people the first time because "I set the width" feels like it should be binding, and it is not.</p>
 
 <h3>Where grid is the right answer</h3>
-<p>The 9.7:1 ratio is a description, not a recommendation. Grid wins whenever the two-dimensional relationship is the point:</p>
+<p>The 7.8:1 ratio is a description, not a recommendation. Grid wins whenever the two-dimensional relationship is the point:</p>
 
 <div class="lz-map">
 <div class="lz-stage lz-badge">
 <span class="lz-node"><span class="lz-ntitle">reach for flex</span><span class="lz-nsub">one axis, content-sized items</span></span>
-<span class="lz-nbody">Rows, toolbars, an icon beside a label, a stack of cards. The item sizes come from their content and you are arranging along a line. This is 90% of app UI, hence 5,295 uses.</span>
+<span class="lz-nbody">Rows, toolbars, an icon beside a label, a stack of cards. The item sizes come from their content and you are arranging along a line. This is 90% of app UI, hence 9,107 uses.</span>
 </div>
 <div class="lz-stage lz-badge">
 <span class="lz-node"><span class="lz-ntitle">reach for grid</span><span class="lz-nsub">two axes, or alignment ACROSS rows</span></span>
@@ -779,11 +1334,65 @@ $ grep -ho 'className="[^"]*"' -r src --include="*.tsx" | grep 'flex' | grep -c 
 </div>
 
 <div class="callout">
-<p><strong>One sentence.</strong> Layout utilities are a direct renaming of CSS, so what is worth learning is the distribution rather than the list — <code>flex</code> plus <code>items-center</code> is one idiom covering the majority of real UI, <code>shrink-0</code>'s 987 uses record that flex children compress below their set width by default, and grid earns its place exactly when things in different rows must align.</p>
+<p><strong>One sentence.</strong> Layout utilities are a direct renaming of CSS, so what is worth learning is the distribution rather than the list — <code>flex</code> plus <code>items-center</code> is one idiom covering the majority of real UI, <code>shrink-0</code>'s 2,188 uses record that flex children compress below their set width by default, and grid earns its place exactly when things in different rows must align.</p>
 </div>
 
+<h3>🔬 Measured: the vocabulary today, and three bugs in Chromium (Tailwind 4.3.5)</h3>
+<p>The short vocabulary, counted on this site's frontend (14/11/2026):</p>
+<div class="out">$ for c in items-center gap-2 gap-3 justify-between flex-1 shrink-0 flex-wrap; do printf "%-16s %6d\\n" "$c" "$(grep -ho 'className="[^"]*"' -r src --include="*.tsx" | sed 's/className="//;s/"$//' | tr ' ' '\\n' | grep -cx "$c")"; done
+items-center       7739
+gap-2              3805
+gap-3              1378
+justify-between     853
+flex-1             1882
+shrink-0           2188
+flex-wrap          1657</div>
+<p>The layout classes are plain CSS in Tailwind 3 and 4 alike:</p>
+<div class="out">$ grep -A1 -E '^ *\\.(flex|items-center|shrink-0) \\{' out.css
+  .flex {
+    display: flex;
+--
+  .shrink-0 {
+    flex-shrink: 0;
+--
+  .items-center {
+    align-items: center;</div>
+<p><strong>1 — <code>flex</code> alone stretches.</strong> A 24px icon box next to a two-line label:</p>
+<div class="out">mb-3 flex           icon box 24 × 48px
+flex items-center   icon box 24 × 24px</div>
+<p><strong>2 — width is not a floor.</strong> A <code>w-56</code> (224px) row whose label is one long word: the icon with <code>h-4 w-4</code> is squeezed to <strong>0px</strong> and disappears; with <code>shrink-0</code> (and <code>truncate</code> on the label) it keeps 16px:</p>
+<div class="out">h-4 w-4             icon 0px × 16px
+h-4 w-4 shrink-0    icon 16px × 16px</div>
+<p><strong>3 — a table from flex rows.</strong> Each row computes its own columns; grid shares one coordinate system:</p>
+<div class="out">flex rows:  column 2 starts at x = 58px (row 1)  /  169px (row 2)
+grid:       column 2 starts at x = 169px (row 1)  /  169px (row 2)</div>
+<h3>🔁 Run it yourself</h3>
+<pre><code class="language-html">&lt;!-- Tailwind 4: npm i tailwindcss @tailwindcss/cli · input.css: @import "tailwindcss"; --&gt;
+&lt;div class="flex w-56 items-center gap-2 bg-slate-100 p-2"&gt;
+  &lt;span id="i1" class="h-4 w-4 rounded-full bg-cyan-600"&gt;&lt;/span&gt;
+  &lt;span&gt;Mộtcáinhãnrấtdàichiếmhếtchỗ&lt;/span&gt;&lt;/div&gt;
+&lt;!-- DevTools console: document.getElementById('i1').getBoundingClientRect().width  // 0 --&gt;
+&lt;!-- then add shrink-0 to the icon and truncate to the label: 16 --&gt;</code></pre>
+<h3>🔗 Go deeper in other courses</h3>
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-3-3-flexbox" target="_blank" rel="noopener"><span class="lc-ico">🌐</span><span class="lc-body"><span class="lc-title">Web Foundations · 3.3 — Flexbox: one-dimensional layout</span><span class="lc-sub">flex-shrink, align-items: stretch and gap, in plain CSS</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-3-4-css-grid" target="_blank" rel="noopener"><span class="lc-ico">🌐</span><span class="lc-body"><span class="lc-title">Web Foundations · 3.4 — CSS Grid: two-dimensional layout</span><span class="lc-sub">The shared coordinate system that flex rows lack</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/tailwind-css/learn?lessonSlug=tw-1-5-dinh-co" target="_blank" rel="noopener"><span class="lc-ico">💨</span><span class="lc-body"><span class="lc-title">Tailwind CSS · 1.5 — Sizing</span><span class="lc-sub">Next lesson: the sizing scale and what is NOT a length</span></span></a>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">flex vs grid</span><span class="v">Layout utilities renaming CSS; <code>flex</code> outnumbers <code>grid</code> 7.8:1 (14/11/2026) because most UI is one-axis.</span></div>
+  <div class="kv"><span class="k"><code>flex items-center</code></span><span class="v">The dominant idiom — a horizontal row with children vertically centred (62% of flex uses, 14/11/2026).</span></div>
+  <div class="kv"><span class="k"><code>gap-*</code></span><span class="v">Space between flex children; replaces margin-on-every-child and leaves no stray edge margin.</span></div>
+  <div class="kv"><span class="k"><code>shrink-0</code></span><span class="v">Stops a flex child compressing below its size — the fix for squashed icons (2,188 uses here, 14/11/2026).</span></div>
+  <div class="kv"><span class="k"><code>flex-1</code> / <code>justify-between</code></span><span class="v">"Take remaining space" / push items apart — the workhorses of row layout.</span></div>
+  <div class="kv"><span class="k">Cross-row alignment</span><span class="v">Lining up items in different rows needs a shared grid; flex rows cannot do it.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>Layout utilities are a direct renaming of CSS — learn the usage distribution, not the full list.</li><li><code>flex</code> + <code>items-center</code> is effectively one idiom and the most-used pair in the whole app.</li><li>Flex children shrink below their set width by default; <code>h-4 w-4</code> is a start size, only <code>shrink-0</code> makes it a floor.</li><li>Use <code>gap-*</code> over margins for spacing between children.</li><li>Reach for grid when the layout is two-dimensional or items across different rows must align.</li></ul>
+
 <h3>Sources</h3>
-<div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">MDN — Basic concepts of flexbox</span><span class="lc-sub">developer.mozilla.org/en-US/docs/Web/CSS/CSS_flexible_box_layout/Basic_concepts_of_flexbox — the model Tailwind renames. The section on <code>flex-shrink</code> defaulting to 1 is the whole explanation for <code>shrink-0</code>'s 987 uses.</span></span></div>
+<div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">MDN — Basic concepts of flexbox</span><span class="lc-sub">developer.mozilla.org/en-US/docs/Web/CSS/CSS_flexible_box_layout/Basic_concepts_of_flexbox — the model Tailwind renames. The section on <code>flex-shrink</code> defaulting to 1 is the whole explanation for <code>shrink-0</code>'s 2,188 uses.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">CSS Tricks — A Complete Guide to Flexbox</span><span class="lc-sub">css-tricks.com/snippets/css/a-guide-to-flexbox — the reference chart worth keeping open for a week. Every property on it maps to a Tailwind class by an obvious renaming.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Tailwind docs — Flex &amp; Grid</span><span class="lc-sub">tailwindcss.com/docs/flex-basis — the utility list. Skim rather than read; the distribution above says which entries you will actually use.</span></span></div>
 <div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Web Foundations — flexbox and grid from first principles</span><span class="lc-sub">/courses/web-foundations/learn${REF} — the layout algorithms themselves, including why flex sizing is a negotiation between basis, grow and shrink rather than a fixed assignment.</span></span></div>
@@ -791,7 +1400,7 @@ $ grep -ho 'className="[^"]*"' -r src --include="*.tsx" | grep 'flex' | grep -c 
 
 <div class="ml-vi">
 <span class="eyebrow">Chương 1 · Bài 1.4</span>
-<h2>Bố cục: vì sao flex nhiều hơn grid 9,7 lần</h2>
+<h2>Bố cục: vì sao flex nhiều hơn grid 9,7 lần <small>(đo lại 14/11/2026: 7,8 lần)</small></h2>
 <p class="lead">Các tiện ích bố cục của Tailwind là một cú ĐỔI TÊN mỏng của flexbox và grid trong CSS — <code>flex</code> là <code>display: flex</code> và không gì hơn. Thứ đáng học KHÔNG phải cú đổi tên mà là <em>PHÂN BỐ SỬ DỤNG</em>, vì nó nói cho bạn biết bốn năm lớp nào gánh gần như toàn bộ sức nặng.</p>
 
 <h3>Phân bố</h3>
@@ -801,27 +1410,27 @@ $ grep -ho 'className="[^"]*"' -r src --include="*.tsx" | grep 'flex' | grep -c 
   done
 </code></pre>
 
-<div class="out">flex             5295
-inline-flex      1010
-absolute          830
-relative          614
-grid              547
-block             416
-hidden            250
-</div>
+<div class="out">flex             9107
+grid             1173
+inline-flex      1645
+block            1019
+hidden            412
+absolute         1107
+relative          826
+# đo lại 14/11/2026 (frontend/) — lúc soạn bài: flex 5295 · grid 547</div>
 
-<p><strong><code>flex</code> thắng <code>grid</code> 5.295 đối 547</strong> — tỉ lệ 9,7 trên 1. Đó KHÔNG phải vì grid tệ hơn. Đó là vì phần lớn cái một giao diện làm là sắp <em>VÀI</em> món dọc <em>MỘT</em> trục: một biểu tượng cạnh một nhãn, một tiêu đề với một nút bị đẩy sang phải, một hàng thẻ. Grid xứng đáng chỗ đứng ở các bố cục HAI CHIỀU cấp trang, và một ứng dụng điển hình có một nhúm cái đó và hàng nghìn hàng một-chiều.</p>
+<p><strong><code>flex</code> thắng <code>grid</code> 9.107 đối 1.173</strong> — tỉ lệ 7,8 trên 1 (đo 14/11/2026; lúc soạn bài: 5.295 đối 547, 9,7 trên 1). Đó KHÔNG phải vì grid tệ hơn. Đó là vì phần lớn cái một giao diện làm là sắp <em>VÀI</em> món dọc <em>MỘT</em> trục: một biểu tượng cạnh một nhãn, một tiêu đề với một nút bị đẩy sang phải, một hàng thẻ. Grid xứng đáng chỗ đứng ở các bố cục HAI CHIỀU cấp trang, và một ứng dụng điển hình có một nhúm cái đó và hàng nghìn hàng một-chiều.</p>
 
 <h3>Cái CẶP chi phối mọi thứ</h3>
 <pre><code class="language-bash">$ grep -ho 'className="[^"]*"' -r src --include="*.tsx" | grep -c 'flex'
 $ grep -ho 'className="[^"]*"' -r src --include="*.tsx" | grep 'flex' | grep -c 'items-center'
 </code></pre>
 
-<div class="out">7172    # thuoc tinh class co nhac 'flex'
-4955    # trong so do, cung co 'items-center'  => 69,1%
+<div class="out">12547   # thuoc tinh class co nhac 'flex'   (do 14/11/2026; luc soan: 7172)
+7772    # trong so do, cung co 'items-center'  => 61,9%   (luc soan: 4955 => 69,1%)
 </div>
 
-<p>Sáu mươi chín phần trăm. Nhớ lại từ Mục 0 rằng <code>flex</code> (5.295) và <code>items-center</code> (4.924) là hai lớp được dùng nhiều nhất trong TOÀN BỘ ứng dụng, vượt trên mọi lớp màu, cỡ và khoảng cách. Chúng thực chất là MỘT thành ngữ tình cờ được viết thành hai từ.</p>
+<p>Sáu mươi hai phần trăm hôm nay (lúc soạn bài là 69%). <code>flex</code> (9.107) và <code>items-center</code> (7.739) là hai lớp BỐ CỤC được dùng nhiều nhất trong ứng dụng. Chúng thực chất là MỘT thành ngữ tình cờ được viết thành hai từ.</p>
 
 <div class="callout ok">
 <p><strong>Vì sao cái cặp ấy phổ biến đến thế.</strong> Chỉ mình <code>display: flex</code> sẽ KÉO GIÃN các con tới chiều cao bằng nhau (<code>align-items: stretch</code> là mặc định). Đó gần như không bao giờ là cái bạn muốn khi đặt một biểu tượng cạnh chữ — cái hộp của biểu tượng nở tới chiều cao của chữ và biểu tượng trôi lên trên cùng. <code>items-center</code> là cú vá, và vì vấn đề PHỔ QUÁT nên cú vá cũng vậy. Nếu bạn viết <code>flex</code> mà bố cục trông lệch lệch, thiếu <code>items-center</code> là thứ đầu tiên cần kiểm.</p>
@@ -831,16 +1440,16 @@ $ grep -ho 'className="[^"]*"' -r src --include="*.tsx" | grep 'flex' | grep -c 
 <p>Với phân bố ấy, danh sách ngắn trung thực rất nhỏ. Chừng này đáng thuộc nằm lòng; còn lại bạn suy ra hoặc tra được:</p>
 
 <div class="lz-stack">
-<div class="lz-layer"><span class="lz-lname"><code>flex</code> + <code>items-center</code></span><span class="lz-lnote">thành ngữ nền. Hàng ngang, các con căn giữa theo chiều dọc. 4.955 thẻ trong ứng dụng này</span></div>
-<div class="lz-layer"><span class="lz-lname"><code>gap-2</code> / <code>gap-3</code></span><span class="lz-lnote">khoảng cách giữa các con flex. Thay thế HOÀN TOÀN mẹo cũ margin-cho-mọi-con-trừ-cái-cuối — 2.111 + 880 lượt ở đây. Ưu tiên nó hơn margin; nó KHÔNG thể để sót một margin mép thừa</span></div>
-<div class="lz-layer"><span class="lz-lname"><code>justify-between</code></span><span class="lz-lnote">660 lượt. Tiêu đề bên trái, hành động bên phải, khoảng trống chia đều ở giữa. Giá trị justify hữu ích nhất trong giao diện ứng dụng</span></div>
-<div class="lz-layer"><span class="lz-lname"><code>flex-1</code></span><span class="lz-lnote">887 lượt. "Đứa con này lấy phần không gian còn lại". Con ngựa thồ cho một vùng nội dung cạnh một thanh bên cố định</span></div>
-<div class="lz-layer"><span class="lz-lname"><code>shrink-0</code></span><span class="lz-lnote">987 lượt — NHIỀU HƠN <code>grid</code>. Chặn một con flex bị bóp xuống dưới kích thước tự nhiên. Gần như luôn áp lên biểu tượng, vì một biểu tượng bị bẹp là con bọ flex kinh điển</span></div>
-<div class="lz-layer"><span class="lz-lname"><code>flex-wrap</code></span><span class="lz-lnote">646 lượt. Cho phép một hàng trở thành nhiều hàng. Không có nó, một danh sách thẻ dài sẽ TRÀN ra khỏi vật chứa thay vì xuống dòng</span></div>
+<div class="lz-layer"><span class="lz-lname"><code>flex</code> + <code>items-center</code></span><span class="lz-lnote">thành ngữ nền. Hàng ngang, các con căn giữa theo chiều dọc. 7.772 thẻ trong ứng dụng này</span></div>
+<div class="lz-layer"><span class="lz-lname"><code>gap-2</code> / <code>gap-3</code></span><span class="lz-lnote">khoảng cách giữa các con flex. Thay thế HOÀN TOÀN mẹo cũ margin-cho-mọi-con-trừ-cái-cuối — 3.805 + 1.378 lượt ở đây. Ưu tiên nó hơn margin; nó KHÔNG thể để sót một margin mép thừa</span></div>
+<div class="lz-layer"><span class="lz-lname"><code>justify-between</code></span><span class="lz-lnote">853 lượt. Tiêu đề bên trái, hành động bên phải, khoảng trống chia đều ở giữa. Giá trị justify hữu ích nhất trong giao diện ứng dụng</span></div>
+<div class="lz-layer"><span class="lz-lname"><code>flex-1</code></span><span class="lz-lnote">1.882 lượt. "Đứa con này lấy phần không gian còn lại". Con ngựa thồ cho một vùng nội dung cạnh một thanh bên cố định</span></div>
+<div class="lz-layer"><span class="lz-lname"><code>shrink-0</code></span><span class="lz-lnote">2.188 lượt — GẦN GẤP ĐÔI <code>grid</code>. Chặn một con flex bị bóp xuống dưới kích thước tự nhiên. Gần như luôn áp lên biểu tượng, vì một biểu tượng bị bẹp là con bọ flex kinh điển</span></div>
+<div class="lz-layer"><span class="lz-lname"><code>flex-wrap</code></span><span class="lz-lnote">1.657 lượt. Cho phép một hàng trở thành nhiều hàng. Không có nó, một danh sách thẻ dài sẽ TRÀN ra khỏi vật chứa thay vì xuống dòng</span></div>
 </div>
 
-<h3>Đọc 987 lượt của <code>shrink-0</code> như một BÁO CÁO LỖI</h3>
-<p>Con số ấy đáng dừng lại. <code>shrink-0</code> được dùng nhiều hơn <code>grid</code>, <code>block</code> và <code>hidden</code> CỘNG LẠI. Nó tồn tại vì mặc định của flexbox là <code>flex-shrink: 1</code> — mọi đứa con ĐỀU CÓ THỂ bị nén xuống dưới kích thước nội dung khi chật chỗ. Với chữ thì thường ổn. Với một biểu tượng 16×16 nó đẻ ra một hình bầu dục bẹp, và cú hỏng CHỈ hiện ra ở bề ngang hẹp, đó là lý do nó sống sót qua thử nghiệm trên desktop và hiện ra trên điện thoại.</p>
+<h3>Đọc 2.188 lượt của <code>shrink-0</code> như một BÁO CÁO LỖI</h3>
+<p>Con số ấy đáng dừng lại. <code>shrink-0</code> được dùng gần GẤP ĐÔI <code>grid</code> (2.188 so với 1.173). (Sửa 14/11/2026: bài cũ nói "nhiều hơn grid, block và hidden CỘNG LẠI" — hôm nay ba lớp đó cộng lại là 2.604.) Nó tồn tại vì mặc định của flexbox là <code>flex-shrink: 1</code> — mọi đứa con ĐỀU CÓ THỂ bị nén xuống dưới kích thước nội dung khi chật chỗ. Với chữ thì thường ổn. Với một biểu tượng 16×16 nó đẻ ra một hình bầu dục bẹp, và cú hỏng CHỈ hiện ra ở bề ngang hẹp, đó là lý do nó sống sót qua thử nghiệm trên desktop và hiện ra trên điện thoại.</p>
 
 <pre><code class="language-jsx">{/* BO: o be ngang hep bieu tuong bi nen thanh hinh bau duc */}
 &lt;div className="flex items-center gap-2"&gt;
@@ -858,12 +1467,12 @@ $ grep -ho 'className="[^"]*"' -r src --include="*.tsx" | grep 'flex' | grep -c 
 <p>Để ý rằng <code>h-4 w-4</code> <em>KHÔNG</em> ngăn được cú co lại. Chiều rộng là kích thước KHỞI ĐIỂM, không phải một cái SÀN — flexbox được PHÉP tường minh đi xuống dưới nó. Chỉ <code>shrink-0</code> (hoặc một <code>min-w-</code>) mới biến nó thành sàn. Chuyện này làm người ta bất ngờ lần đầu vì "tôi ĐÃ đặt chiều rộng rồi" có cảm giác phải là ràng buộc, mà nó không phải.</p>
 
 <h3>Chỗ grid MỚI là câu trả lời đúng</h3>
-<p>Tỉ lệ 9,7:1 là một MÔ TẢ, không phải một lời khuyên. Grid thắng bất cứ khi nào quan hệ HAI CHIỀU mới là trọng tâm:</p>
+<p>Tỉ lệ 7,8:1 là một MÔ TẢ, không phải một lời khuyên. Grid thắng bất cứ khi nào quan hệ HAI CHIỀU mới là trọng tâm:</p>
 
 <div class="lz-map">
 <div class="lz-stage lz-badge">
 <span class="lz-node"><span class="lz-ntitle">với tay tới flex</span><span class="lz-nsub">một trục, món cỡ-theo-nội-dung</span></span>
-<span class="lz-nbody">Hàng, thanh công cụ, một biểu tượng cạnh nhãn, một chồng thẻ. Kích thước món đến TỪ nội dung của chúng và bạn đang sắp dọc một đường. Đây là 90% giao diện ứng dụng, nên mới có 5.295 lượt.</span>
+<span class="lz-nbody">Hàng, thanh công cụ, một biểu tượng cạnh nhãn, một chồng thẻ. Kích thước món đến TỪ nội dung của chúng và bạn đang sắp dọc một đường. Đây là 90% giao diện ứng dụng, nên mới có 9.107 lượt.</span>
 </div>
 <div class="lz-stage lz-badge">
 <span class="lz-node"><span class="lz-ntitle">với tay tới grid</span><span class="lz-nsub">hai trục, hoặc canh hàng XUYÊN QUA các hàng</span></span>
@@ -876,11 +1485,65 @@ $ grep -ho 'className="[^"]*"' -r src --include="*.tsx" | grep 'flex' | grep -c 
 </div>
 
 <div class="callout">
-<p><strong>Một câu.</strong> Tiện ích bố cục là một cú đổi tên trực tiếp của CSS, nên thứ đáng học là PHÂN BỐ chứ không phải danh sách — <code>flex</code> cộng <code>items-center</code> là MỘT thành ngữ bao phần lớn giao diện thật, 987 lượt của <code>shrink-0</code> GHI LẠI chuyện con flex mặc định co xuống dưới chiều rộng đã đặt, và grid giành được chỗ đứng đúng khi những thứ ở các hàng khác nhau phải thẳng hàng.</p>
+<p><strong>Một câu.</strong> Tiện ích bố cục là một cú đổi tên trực tiếp của CSS, nên thứ đáng học là PHÂN BỐ chứ không phải danh sách — <code>flex</code> cộng <code>items-center</code> là MỘT thành ngữ bao phần lớn giao diện thật, 2.188 lượt của <code>shrink-0</code> GHI LẠI chuyện con flex mặc định co xuống dưới chiều rộng đã đặt, và grid giành được chỗ đứng đúng khi những thứ ở các hàng khác nhau phải thẳng hàng.</p>
 </div>
 
+<h3>🔬 Đo thật: vốn từ hôm nay, và ba con bọ trong Chromium (Tailwind 4.3.5)</h3>
+<p>Vốn từ ngắn, đếm trên frontend của trang này (14/11/2026):</p>
+<div class="out">$ for c in items-center gap-2 gap-3 justify-between flex-1 shrink-0 flex-wrap; do printf "%-16s %6d\\n" "$c" "$(grep -ho 'className="[^"]*"' -r src --include="*.tsx" | sed 's/className="//;s/"$//' | tr ' ' '\\n' | grep -cx "$c")"; done
+items-center       7739
+gap-2              3805
+gap-3              1378
+justify-between     853
+flex-1             1882
+shrink-0           2188
+flex-wrap          1657</div>
+<p>Các lớp bố cục là CSS thuần, ở Tailwind 3 lẫn 4:</p>
+<div class="out">$ grep -A1 -E '^ *\\.(flex|items-center|shrink-0) \\{' out.css
+  .flex {
+    display: flex;
+--
+  .shrink-0 {
+    flex-shrink: 0;
+--
+  .items-center {
+    align-items: center;</div>
+<p><strong>1 — chỉ <code>flex</code> thì bị kéo giãn.</strong> Một hộp icon 24px cạnh một nhãn hai dòng:</p>
+<div class="out">mb-3 flex           icon box 24 × 48px
+flex items-center   icon box 24 × 24px</div>
+<p><strong>2 — chiều rộng không phải cái sàn.</strong> Một hàng <code>w-56</code> (224px) có nhãn là một từ dài: icon mang <code>h-4 w-4</code> bị bóp còn <strong>0px</strong> và biến mất; thêm <code>shrink-0</code> (và <code>truncate</code> cho nhãn) thì giữ 16px:</p>
+<div class="out">h-4 w-4             icon 0px × 16px
+h-4 w-4 shrink-0    icon 16px × 16px</div>
+<p><strong>3 — bảng dựng từ hàng flex.</strong> Mỗi hàng tự tính cột; grid dùng chung một hệ toạ độ:</p>
+<div class="out">flex rows:  column 2 starts at x = 58px (row 1)  /  169px (row 2)
+grid:       column 2 starts at x = 169px (row 1)  /  169px (row 2)</div>
+<h3>🔁 Tự chạy lại</h3>
+<pre><code class="language-html">&lt;!-- Tailwind 4: npm i tailwindcss @tailwindcss/cli · input.css: @import "tailwindcss"; --&gt;
+&lt;div class="flex w-56 items-center gap-2 bg-slate-100 p-2"&gt;
+  &lt;span id="i1" class="h-4 w-4 rounded-full bg-cyan-600"&gt;&lt;/span&gt;
+  &lt;span&gt;Mộtcáinhãnrấtdàichiếmhếtchỗ&lt;/span&gt;&lt;/div&gt;
+&lt;!-- DevTools console: document.getElementById('i1').getBoundingClientRect().width  // 0 --&gt;
+&lt;!-- rồi thêm shrink-0 cho icon và truncate cho nhãn: 16 --&gt;</code></pre>
+<h3>🔗 Học sâu hơn ở khoá khác</h3>
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-3-3-flexbox" target="_blank" rel="noopener"><span class="lc-ico">🌐</span><span class="lc-body"><span class="lc-title">Nền tảng Web · 3.3 — Flexbox: bố cục một chiều</span><span class="lc-sub">flex-shrink, align-items: stretch và gap, bằng CSS thuần</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-3-4-css-grid" target="_blank" rel="noopener"><span class="lc-ico">🌐</span><span class="lc-body"><span class="lc-title">Nền tảng Web · 3.4 — CSS Grid: bố cục hai chiều</span><span class="lc-sub">Hệ toạ độ chung mà các hàng flex không có</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/tailwind-css/learn?lessonSlug=tw-1-5-dinh-co" target="_blank" rel="noopener"><span class="lc-ico">💨</span><span class="lc-body"><span class="lc-title">Tailwind CSS · 1.5 — Định cỡ</span><span class="lc-sub">Bài sau: thang định cỡ và những thứ KHÔNG phải độ dài</span></span></a>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">flex vs grid</span><span class="v">Tiện ích bố cục đổi tên CSS; <code>flex</code> nhiều hơn <code>grid</code> 7,8:1 (đo 14/11/2026) vì hầu hết UI là một trục.</span></div>
+  <div class="kv"><span class="k"><code>flex items-center</code></span><span class="v">Thành ngữ thống trị — một hàng ngang với con căn giữa theo chiều dọc (62% lần dùng flex, đo 14/11/2026).</span></div>
+  <div class="kv"><span class="k"><code>gap-*</code></span><span class="v">Khoảng cách giữa các con flex; thay trò margin-mọi-con và không để lại margin mép thừa.</span></div>
+  <div class="kv"><span class="k"><code>shrink-0</code></span><span class="v">Chặn con flex co nhỏ dưới kích thước của nó — bản vá cho icon bị bóp méo (2.188 lần ở đây, đo 14/11/2026).</span></div>
+  <div class="kv"><span class="k"><code>flex-1</code> / <code>justify-between</code></span><span class="v">"Lấy phần không gian còn lại" / đẩy các mục ra hai bên — ngựa thồ của bố cục hàng.</span></div>
+  <div class="kv"><span class="k">Cross-row alignment</span><span class="v">Căn hàng chéo — xếp thẳng các mục ở những hàng khác nhau cần lưới chung; flex hàng không làm được.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Tiện ích bố cục là đổi tên trực tiếp của CSS — học phân bố dùng thực tế, không phải cả danh sách.</li><li><code>flex</code> + <code>items-center</code> gần như là một thành ngữ và là cặp dùng nhiều nhất cả ứng dụng.</li><li>Con flex mặc định co dưới kích thước đặt; <code>h-4 w-4</code> là cỡ khởi đầu, chỉ <code>shrink-0</code> mới biến nó thành sàn.</li><li>Dùng <code>gap-*</code> thay margin cho khoảng cách giữa các con.</li><li>Dùng grid khi bố cục hai chiều hoặc khi các mục ở hàng khác nhau phải căn thẳng.</li></ul>
+
 <h3>Nguồn</h3>
-<div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">MDN — Basic concepts of flexbox</span><span class="lc-sub">developer.mozilla.org/en-US/docs/Web/CSS/CSS_flexible_box_layout/Basic_concepts_of_flexbox — cái mô hình mà Tailwind đổi tên. Mục về <code>flex-shrink</code> mặc định bằng 1 là toàn bộ lời giải thích cho 987 lượt của <code>shrink-0</code>.</span></span></div>
+<div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">MDN — Basic concepts of flexbox</span><span class="lc-sub">developer.mozilla.org/en-US/docs/Web/CSS/CSS_flexible_box_layout/Basic_concepts_of_flexbox — cái mô hình mà Tailwind đổi tên. Mục về <code>flex-shrink</code> mặc định bằng 1 là toàn bộ lời giải thích cho 2.188 lượt của <code>shrink-0</code>.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">CSS Tricks — A Complete Guide to Flexbox</span><span class="lc-sub">css-tricks.com/snippets/css/a-guide-to-flexbox — bảng tra đáng mở suốt một tuần. Mọi thuộc tính trên đó ánh xạ sang một lớp Tailwind bằng một cú đổi tên hiển nhiên.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Tailwind docs — Flex &amp; Grid</span><span class="lc-sub">tailwindcss.com/docs/flex-basis — danh sách tiện ích. LƯỚT chứ đừng đọc; phân bố bên trên đã nói mục nào bạn thật sự sẽ dùng.</span></span></div>
 <div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Web Foundations — flexbox và grid từ nguyên lý đầu</span><span class="lc-sub">/courses/web-foundations/learn${REF} — chính các thuật toán bố cục, gồm cả vì sao định cỡ flex là một cuộc THƯƠNG LƯỢNG giữa basis, grow và shrink chứ không phải một phép gán cố định.</span></span></div>
@@ -895,6 +1558,7 @@ $ grep -ho 'className="[^"]*"' -r src --include="*.tsx" | grep 'flex' | grep -c 
       type: 'VIDEO',
       description: '`width` có 70 khoá: 35 khoá khoảng cách quen thuộc, cộng 35 khoá KHÁC HẲN — phân số, `full`, `screen`, `min`/`max`/`fit`. Nhóm thứ hai mới là nhóm quan trọng, vì chúng KHÔNG phải con số và không tuân luật nhân-bốn.',
       content: `
+${G01_5}
 <div class="ml-en">
 <span class="eyebrow">Chapter 1 · Lesson 1.5</span>
 <h2>Sizing: the scale plus 35 things that are not lengths</h2>
@@ -975,7 +1639,7 @@ full screen svw lvw dvw min max fit
 lg=0.5rem  xl=0.75rem  2xl=1rem  3xl=1.5rem  full=9999px
 </div>
 
-<p>Note that plain <code>rounded</code> is 4px — quite subtle. This application's actual usage skews far larger: <code>rounded-xl</code> 1,579 uses, <code>rounded-lg</code> 1,500, <code>rounded-full</code> 1,208, <code>rounded-2xl</code> 815, while bare <code>rounded</code> barely registers. That is a house style visible in the numbers: this is a soft, heavily-rounded interface, and the default of 4px belongs to an earlier design era. Worth knowing because it means copying a snippet from the docs will produce corners noticeably sharper than the surrounding UI.</p>
+<p>Note that plain <code>rounded</code> is 4px — quite subtle. This application's actual usage skews far larger: <code>rounded-xl</code> 1,863 uses, <code>rounded-lg</code> 1,830, <code>rounded-full</code> 1,690, <code>rounded-2xl</code> 962 (measured 14/11/2026). Bare <code>rounded</code> has 677 — far fewer, though no longer "barely registers" as when the lesson was written. That is a house style visible in the numbers: this is a soft, heavily-rounded interface, and the default of 4px belongs to an earlier design era. Worth knowing because it means copying a snippet from the docs will produce corners noticeably sharper than the surrounding UI.</p>
 
 <div class="pitfall">
 <p><strong>Trap — using <code>h-screen</code> for a full-height app shell.</strong> It is the obvious choice and it is wrong twice: it breaks on mobile as described above, and it forces exactly the viewport height even when content is longer, so content is clipped rather than scrolled. For an app shell you usually want <code>min-h-screen</code> (at least full height, grows with content) or <code>h-dvh</code> for a genuinely fixed-height scrolling pane. The difference between <code>h-</code> and <code>min-h-</code> here is the difference between clipped content and correct content.</p>
@@ -984,6 +1648,84 @@ lg=0.5rem  xl=0.75rem  2xl=1rem  3xl=1.5rem  full=9999px
 <div class="callout">
 <p><strong>One sentence.</strong> Sizing reuses the ×4 spacing scale for half its keys and adds 35 that are <em>not lengths</em> — fractions of the parent, units of the viewport, and content-driven values — and most sizing bugs come from confusing which reference frame a value resolves against, with <code>w-screen</code> inside a container and <code>h-screen</code> on mobile being the two classic cases.</p>
 </div>
+
+<div class="callout">
+<p><strong>In Tailwind 4 (4.3.5).</strong> There is no width list: any fraction is computed (<code>w-7/13</code> ⇒ <code>calc(7 / 13 * 100%)</code>), and a new <strong>container scale</strong> gives <code>w-xs</code> = <code>var(--container-xs)</code> = 20rem. Breakpoints are stored in <strong>rem</strong> (<code>--breakpoint-sm: 40rem</code> = 640px at a 16px root) and are still min-width. And the radius scale was <strong>renamed</strong>: <code>rounded-sm</code> is 0.125rem in Tailwind 3 but <code>var(--radius-sm)</code> = 0.25rem in Tailwind 4 (<code>rounded-xs</code> is the old <code>rounded-sm</code>) — grep for it before upgrading.</p>
+</div>
+<h3>🔬 Measured: Tailwind 3.4.19 vs 4.3.5, and the three reference frames in Chromium</h3>
+<p>The same classes, built by both versions (the first declaration of each rule):</p>
+<div class="out">$ for c in 'w-1\\/2' 'w-7\\/13' 'w-xs' 'w-dvw' 'w-fit' 'max-w-prose' 'h-dvh' 'rounded' 'rounded-sm' 'rounded-xs'; do printf '%-13s v3: %-38s v4: %s\\n' "$(echo $c | tr -d '\\\\')" "$(grep -A1 -F ".$c {" out.css | tail -1 | tr -s ' ' | sed 's/^ //;s/;$//')" "$(grep -A1 -F ".$c {" ../dinh4/out.css | tail -1 | tr -s ' ' | sed 's/^ //;s/;$//')"; done
+w-1/2         v3: width: 50%                             v4: width: calc(1 / 2 * 100%)
+w-7/13        v3:                                        v4: width: calc(7 / 13 * 100%)
+w-xs          v3:                                        v4: width: var(--container-xs)
+w-dvw         v3: width: 100dvw                          v4: width: 100dvw
+w-fit         v3: width: -moz-fit-content                v4: width: fit-content
+max-w-prose   v3: max-width: 65ch                        v4: max-width: 65ch
+h-dvh         v3: height: 100dvh                         v4: height: 100dvh
+rounded       v3: border-radius: 0.25rem                 v4: border-radius: 0.25rem
+rounded-sm    v3: border-radius: 0.125rem                v4: border-radius: var(--radius-sm)
+rounded-xs    v3:                                        v4: border-radius: var(--radius-xs)</div>
+<div class="out">$ grep -E -- '--(breakpoint|container)-(sm|md|lg|xs):' node_modules/tailwindcss/theme.css
+  --breakpoint-sm: 40rem;
+  --breakpoint-md: 48rem;
+  --breakpoint-lg: 64rem;
+  --container-xs: 20rem;
+  --container-sm: 24rem;
+  --container-md: 28rem;
+  --container-lg: 32rem;
+$ grep -E -- '--radius-[a-z0-9]+:' node_modules/tailwindcss/theme.css | tr -s ' ' | tr '\\n' ' '; echo
+ --radius-xs: 0.125rem;  --radius-sm: 0.25rem;  --radius-md: 0.375rem;  --radius-lg: 0.5rem;  --radius-xl: 0.75rem;  --radius-2xl: 1rem;  --radius-3xl: 1.5rem;  --radius-4xl: 2rem; </div>
+<p>Chromium, window 1000px, a 400px sidebar with <code>overflow-hidden</code> — <code>getBoundingClientRect().width</code>:</p>
+<div class="out">w-100       400px
+w-full      376px
+w-screen    1000px
+w-fit       123px
+w-auto      376px
+max-w-prose 576px</div>
+<p><code>w-screen</code> measures the whole window (1000px) inside a 400px sidebar and is silently cut off; <code>w-fit</code> hugs its label; <code>w-auto</code> on a block fills the parent; <code>max-w-prose</code> (65ch) is 576px at 16px.</p>
+<p>This site (frontend/, 14/11/2026) — radius, and the full-height classes:</p>
+<div class="out">$ for c in rounded rounded-sm rounded-md rounded-lg rounded-xl rounded-2xl rounded-full; do printf "%-14s %6d\\n" "$c" "$(grep -ho 'className="[^"]*"' -r src --include="*.tsx" | sed 's/className="//;s/"$//' | tr ' ' '\\n' | grep -cx "$c")"; done
+rounded           677
+rounded-sm         21
+rounded-md        304
+rounded-lg       1830
+rounded-xl       1863
+rounded-2xl       962
+rounded-full     1690
+$ for c in w-screen h-screen min-h-screen h-dvh min-h-dvh w-fit max-w-prose; do printf "%-14s %6d\\n" "$c" "$(grep -ho 'className="[^"]*"' -r src --include="*.tsx" | sed 's/className="//;s/"$//' | tr ' ' '\\n' | grep -cx "$c")"; done
+w-screen            0
+h-screen            1
+min-h-screen      153
+h-dvh               2
+min-h-dvh           3
+w-fit              14
+max-w-prose         0</div>
+<h3>🔁 Run it yourself</h3>
+<pre><code class="language-html">&lt;!-- Tailwind 4 · window 1000px · open DevTools and read getBoundingClientRect().width --&gt;
+&lt;div class="flex"&gt;
+  &lt;aside class="w-100 shrink-0 overflow-hidden bg-slate-100 p-3"&gt;
+    &lt;div class="w-full bg-cyan-300"&gt;w-full&lt;/div&gt;       &lt;!-- 376 --&gt;
+    &lt;div class="w-screen bg-amber-300"&gt;w-screen&lt;/div&gt;   &lt;!-- 1000, cut off --&gt;
+    &lt;div class="w-fit bg-cyan-700 text-white"&gt;Lưu&lt;/div&gt; &lt;!-- hugs the label --&gt;
+  &lt;/aside&gt;
+  &lt;main class="p-3"&gt;&lt;p class="max-w-prose"&gt;…long text…&lt;/p&gt;&lt;/main&gt;  &lt;!-- 576 at 16px --&gt;
+&lt;/div&gt;</code></pre>
+<h3>🔗 Go deeper in other courses</h3>
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-3-5-responsive" target="_blank" rel="noopener"><span class="lc-ico">🌐</span><span class="lc-body"><span class="lc-title">Web Foundations · 3.5 — Responsive design: one page, every screen</span><span class="lc-sub">Viewport units and min-width media queries in plain CSS</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/tailwind-css/learn?lessonSlug=tw-2-3-diem-ngat" target="_blank" rel="noopener"><span class="lc-ico">💨</span><span class="lc-body"><span class="lc-title">Tailwind CSS · 2.3 — Breakpoints win by POSITION</span><span class="lc-sub">What md:flex compiles to, and why it wins</span></span></a>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Sizing scale</span><span class="v">70 width keys — half reuse the ×4 spacing scale, half are not lengths at all.</span></div>
+  <div class="kv"><span class="k">Fractions</span><span class="v"><code>w-1/2</code>…<code>w-11/12</code>, percentages of the <em>parent</em> (twelfths divide cleanly by 2/3/4/6).</span></div>
+  <div class="kv"><span class="k">Viewport units</span><span class="v"><code>screen</code>, <code>svw/lvw/dvw</code> — relative to the <em>window</em>; <code>dvh</code>/<code>svh</code> track mobile chrome.</span></div>
+  <div class="kv"><span class="k">Content-driven</span><span class="v"><code>w-fit</code>/<code>w-min</code>/<code>w-max</code>/<code>w-auto</code> — the browser sizes to the content.</span></div>
+  <div class="kv"><span class="k"><code>max-w-prose</code></span><span class="v"><code>65ch</code> — the comfortable reading line length, the one readability rule in the config.</span></div>
+  <div class="kv"><span class="k">Breakpoints are min-width</span><span class="v"><code>md:flex</code> means 768px <em>and above</em>; the system is mobile-first.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>Width reuses the ×4 spacing scale for half its 70 keys; the other half are fractions, viewport units and content-driven values.</li><li>Most sizing bugs come from confusing the reference frame: fractions resolve against the parent, viewport units against the window.</li><li><code>w-screen</code> inside a container and <code>h-screen</code> on mobile are the two classic cases — use <code>min-h-screen</code> or <code>h-dvh</code>.</li><li><code>max-w-prose</code> (65ch) is the correct default for long-form text columns.</li><li>Breakpoints are min-width, so <code>md:</code> also applies on larger screens — a major source of responsive bugs.</li></ul>
 
 <h3>Sources</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">MDN — CSS sizing: min-content, max-content, fit-content</span><span class="lc-sub">developer.mozilla.org/en-US/docs/Web/CSS/CSS_box_sizing — the precise definitions of the content-driven trio. These are CSS keywords Tailwind renames; understanding them is not a Tailwind skill.</span></span></div>
@@ -1072,7 +1814,7 @@ full screen svw lvw dvw min max fit
 lg=0.5rem  xl=0.75rem  2xl=1rem  3xl=1.5rem  full=9999px
 </div>
 
-<p>Để ý <code>rounded</code> trần là 4px — khá kín đáo. Cách dùng THẬT của ứng dụng này lệch sang phía LỚN hơn nhiều: <code>rounded-xl</code> 1.579 lượt, <code>rounded-lg</code> 1.500, <code>rounded-full</code> 1.208, <code>rounded-2xl</code> 815, trong khi <code>rounded</code> trần gần như không xuất hiện. Đó là một phong cách nhà nhìn thấy được trong con số: đây là một giao diện MỀM, bo nhiều, và mặc định 4px thuộc về một thời thiết kế trước đó. Đáng biết vì nó có nghĩa chép một đoạn mã từ tài liệu sẽ cho ra góc SẮC hơn hẳn giao diện xung quanh.</p>
+<p>Để ý <code>rounded</code> trần là 4px — khá kín đáo. Cách dùng THẬT của ứng dụng này lệch sang phía LỚN hơn nhiều: <code>rounded-xl</code> 1.863 lượt, <code>rounded-lg</code> 1.830, <code>rounded-full</code> 1.690, <code>rounded-2xl</code> 962 (đo 14/11/2026). <code>rounded</code> trần có 677 — ít hơn hẳn, dù không còn "gần như không xuất hiện" như lúc soạn bài. Đó là một phong cách nhà nhìn thấy được trong con số: đây là một giao diện MỀM, bo nhiều, và mặc định 4px thuộc về một thời thiết kế trước đó. Đáng biết vì nó có nghĩa chép một đoạn mã từ tài liệu sẽ cho ra góc SẮC hơn hẳn giao diện xung quanh.</p>
 
 <div class="pitfall">
 <p><strong>Bẫy — dùng <code>h-screen</code> cho khung vỏ ứng dụng cao toàn màn.</strong> Nó là lựa chọn hiển nhiên và nó SAI hai lần: nó vỡ trên di động như mô tả bên trên, VÀ nó ép ĐÚNG BẰNG chiều cao khung nhìn kể cả khi nội dung dài hơn, nên nội dung bị CẮT chứ không được cuộn. Với khung vỏ ứng dụng bạn thường muốn <code>min-h-screen</code> (ít nhất cao toàn màn, giãn theo nội dung) hoặc <code>h-dvh</code> cho một khoang cuộn chiều-cao-cố-định thật sự. Khác biệt giữa <code>h-</code> và <code>min-h-</code> ở đây là khác biệt giữa nội dung bị cắt và nội dung đúng.</p>
@@ -1081,6 +1823,84 @@ lg=0.5rem  xl=0.75rem  2xl=1rem  3xl=1.5rem  full=9999px
 <div class="callout">
 <p><strong>Một câu.</strong> Định cỡ dùng lại thang khoảng cách ×4 cho một nửa số khoá và thêm 35 khoá <em>KHÔNG phải độ dài</em> — phân số của thẻ cha, đơn vị của khung nhìn, và giá trị theo nội dung — và phần lớn bọ định cỡ đến từ việc lẫn lộn một giá trị phân giải theo HỆ QUY CHIẾU nào, với <code>w-screen</code> bên trong vật chứa và <code>h-screen</code> trên di động là hai ca kinh điển.</p>
 </div>
+
+<div class="callout">
+<p><strong>Ở Tailwind 4 (4.3.5).</strong> KHÔNG còn danh sách width: phân số nào cũng được tính (<code>w-7/13</code> ⇒ <code>calc(7 / 13 * 100%)</code>), và một <strong>thang container</strong> mới cho <code>w-xs</code> = <code>var(--container-xs)</code> = 20rem. Điểm ngắt lưu bằng <strong>rem</strong> (<code>--breakpoint-sm: 40rem</code> = 640px ở gốc 16px) và vẫn là min-width. Và thang bo góc bị <strong>ĐỔI TÊN</strong>: <code>rounded-sm</code> là 0.125rem ở Tailwind 3 nhưng là <code>var(--radius-sm)</code> = 0.25rem ở Tailwind 4 (<code>rounded-xs</code> mới là <code>rounded-sm</code> cũ) — grep nó trước khi nâng cấp.</p>
+</div>
+<h3>🔬 Đo thật: Tailwind 3.4.19 vs 4.3.5, và ba hệ quy chiếu trong Chromium</h3>
+<p>Cùng các lớp, dựng bằng cả hai bản (khai báo đầu tiên của mỗi luật):</p>
+<div class="out">$ for c in 'w-1\\/2' 'w-7\\/13' 'w-xs' 'w-dvw' 'w-fit' 'max-w-prose' 'h-dvh' 'rounded' 'rounded-sm' 'rounded-xs'; do printf '%-13s v3: %-38s v4: %s\\n' "$(echo $c | tr -d '\\\\')" "$(grep -A1 -F ".$c {" out.css | tail -1 | tr -s ' ' | sed 's/^ //;s/;$//')" "$(grep -A1 -F ".$c {" ../dinh4/out.css | tail -1 | tr -s ' ' | sed 's/^ //;s/;$//')"; done
+w-1/2         v3: width: 50%                             v4: width: calc(1 / 2 * 100%)
+w-7/13        v3:                                        v4: width: calc(7 / 13 * 100%)
+w-xs          v3:                                        v4: width: var(--container-xs)
+w-dvw         v3: width: 100dvw                          v4: width: 100dvw
+w-fit         v3: width: -moz-fit-content                v4: width: fit-content
+max-w-prose   v3: max-width: 65ch                        v4: max-width: 65ch
+h-dvh         v3: height: 100dvh                         v4: height: 100dvh
+rounded       v3: border-radius: 0.25rem                 v4: border-radius: 0.25rem
+rounded-sm    v3: border-radius: 0.125rem                v4: border-radius: var(--radius-sm)
+rounded-xs    v3:                                        v4: border-radius: var(--radius-xs)</div>
+<div class="out">$ grep -E -- '--(breakpoint|container)-(sm|md|lg|xs):' node_modules/tailwindcss/theme.css
+  --breakpoint-sm: 40rem;
+  --breakpoint-md: 48rem;
+  --breakpoint-lg: 64rem;
+  --container-xs: 20rem;
+  --container-sm: 24rem;
+  --container-md: 28rem;
+  --container-lg: 32rem;
+$ grep -E -- '--radius-[a-z0-9]+:' node_modules/tailwindcss/theme.css | tr -s ' ' | tr '\\n' ' '; echo
+ --radius-xs: 0.125rem;  --radius-sm: 0.25rem;  --radius-md: 0.375rem;  --radius-lg: 0.5rem;  --radius-xl: 0.75rem;  --radius-2xl: 1rem;  --radius-3xl: 1.5rem;  --radius-4xl: 2rem; </div>
+<p>Chromium, cửa sổ 1000px, thanh bên 400px có <code>overflow-hidden</code> — <code>getBoundingClientRect().width</code>:</p>
+<div class="out">w-100       400px
+w-full      376px
+w-screen    1000px
+w-fit       123px
+w-auto      376px
+max-w-prose 576px</div>
+<p><code>w-screen</code> đo được cả cửa sổ (1000px) bên trong thanh bên 400px và bị cắt âm thầm; <code>w-fit</code> ôm nhãn; <code>w-auto</code> trên thẻ block lấp đầy cha; <code>max-w-prose</code> (65ch) là 576px ở chữ 16px.</p>
+<p>Trang này (frontend/, 14/11/2026) — bo góc, và các lớp chiều cao toàn màn:</p>
+<div class="out">$ for c in rounded rounded-sm rounded-md rounded-lg rounded-xl rounded-2xl rounded-full; do printf "%-14s %6d\\n" "$c" "$(grep -ho 'className="[^"]*"' -r src --include="*.tsx" | sed 's/className="//;s/"$//' | tr ' ' '\\n' | grep -cx "$c")"; done
+rounded           677
+rounded-sm         21
+rounded-md        304
+rounded-lg       1830
+rounded-xl       1863
+rounded-2xl       962
+rounded-full     1690
+$ for c in w-screen h-screen min-h-screen h-dvh min-h-dvh w-fit max-w-prose; do printf "%-14s %6d\\n" "$c" "$(grep -ho 'className="[^"]*"' -r src --include="*.tsx" | sed 's/className="//;s/"$//' | tr ' ' '\\n' | grep -cx "$c")"; done
+w-screen            0
+h-screen            1
+min-h-screen      153
+h-dvh               2
+min-h-dvh           3
+w-fit              14
+max-w-prose         0</div>
+<h3>🔁 Tự chạy lại</h3>
+<pre><code class="language-html">&lt;!-- Tailwind 4 · window 1000px · mở DevTools đọc getBoundingClientRect().width --&gt;
+&lt;div class="flex"&gt;
+  &lt;aside class="w-100 shrink-0 overflow-hidden bg-slate-100 p-3"&gt;
+    &lt;div class="w-full bg-cyan-300"&gt;w-full&lt;/div&gt;       &lt;!-- 376 --&gt;
+    &lt;div class="w-screen bg-amber-300"&gt;w-screen&lt;/div&gt;   &lt;!-- 1000, bị cắt --&gt;
+    &lt;div class="w-fit bg-cyan-700 text-white"&gt;Lưu&lt;/div&gt; &lt;!-- ôm nhãn --&gt;
+  &lt;/aside&gt;
+  &lt;main class="p-3"&gt;&lt;p class="max-w-prose"&gt;…chữ dài…&lt;/p&gt;&lt;/main&gt;  &lt;!-- 576 ở chữ 16px --&gt;
+&lt;/div&gt;</code></pre>
+<h3>🔗 Học sâu hơn ở khoá khác</h3>
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-3-5-responsive" target="_blank" rel="noopener"><span class="lc-ico">🌐</span><span class="lc-body"><span class="lc-title">Nền tảng Web · 3.5 — Thiết kế responsive: một trang, mọi màn hình</span><span class="lc-sub">Đơn vị khung nhìn và media query min-width bằng CSS thuần</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/tailwind-css/learn?lessonSlug=tw-2-3-diem-ngat" target="_blank" rel="noopener"><span class="lc-ico">💨</span><span class="lc-body"><span class="lc-title">Tailwind CSS · 2.3 — Điểm ngắt thắng nhờ VỊ TRÍ</span><span class="lc-sub">md:flex biên dịch ra gì, và vì sao nó thắng</span></span></a>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Sizing scale</span><span class="v">Thang định cỡ — 70 khoá width, một nửa tái dùng thang khoảng cách ×4, nửa kia không phải độ dài.</span></div>
+  <div class="kv"><span class="k">Fractions</span><span class="v">Phân số — <code>w-1/2</code>…<code>w-11/12</code>, phần trăm của <em>cha</em> (phần mười hai chia chẵn cho 2/3/4/6).</span></div>
+  <div class="kv"><span class="k">Viewport units</span><span class="v">Đơn vị khung nhìn — <code>screen</code>, <code>svw/lvw/dvw</code>, so với <em>cửa sổ</em>; <code>dvh</code>/<code>svh</code> bám theo thanh trình duyệt di động.</span></div>
+  <div class="kv"><span class="k">Content-driven</span><span class="v">Theo nội dung — <code>w-fit</code>/<code>w-min</code>/<code>w-max</code>/<code>w-auto</code>, trình duyệt định cỡ theo nội dung.</span></div>
+  <div class="kv"><span class="k"><code>max-w-prose</code></span><span class="v"><code>65ch</code> — độ dài dòng đọc thoải mái, luật dễ đọc duy nhất trong config.</span></div>
+  <div class="kv"><span class="k">Breakpoints are min-width</span><span class="v">Điểm ngắt là min-width — <code>md:flex</code> nghĩa là từ 768px <em>trở lên</em>; hệ thống mobile-first.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Width tái dùng thang khoảng cách ×4 cho một nửa trong 70 khoá; nửa kia là phân số, đơn vị khung nhìn và giá trị theo nội dung.</li><li>Hầu hết lỗi định cỡ đến từ nhầm hệ quy chiếu: phân số so với cha, đơn vị khung nhìn so với cửa sổ.</li><li><code>w-screen</code> trong một container và <code>h-screen</code> trên di động là hai ca kinh điển — dùng <code>min-h-screen</code> hoặc <code>h-dvh</code>.</li><li><code>max-w-prose</code> (65ch) là mặc định đúng cho cột văn bản dài.</li><li>Điểm ngắt là min-width, nên <code>md:</code> cũng áp trên màn lớn hơn — một nguồn lỗi responsive lớn.</li></ul>
 
 <h3>Nguồn</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">MDN — CSS sizing: min-content, max-content, fit-content</span><span class="lc-sub">developer.mozilla.org/en-US/docs/Web/CSS/CSS_box_sizing — định nghĩa chính xác của bộ ba theo-nội-dung. Đây là các từ khoá CSS mà Tailwind đổi tên; hiểu chúng không phải một kỹ năng Tailwind.</span></span></div>
@@ -1096,7 +1916,7 @@ lg=0.5rem  xl=0.75rem  2xl=1rem  3xl=1.5rem  full=9999px
       title: '1.6 — Chapter 1 quiz|||1.6 — Kiểm tra Chương 1',
       slug: 'tw-1-6-quiz',
       type: 'QUIZ',
-      description: 'Tám câu, mười hai phút. Về cái thang: luật nhân bốn, chỗ thang hết và 1.638 cú thoát đo được, bậc màu nào ĐẠT tương phản, và 35 khoá định cỡ không phải độ dài.',
+      description: 'Tám câu, mười hai phút. Về cái thang: luật nhân bốn, chỗ thang hết và 4.299 cú thoát (đo 14/11/2026) đo được, bậc màu nào ĐẠT tương phản, và 35 khoá định cỡ không phải độ dài.',
       content: `
 <div class="ml-en">
 <span class="eyebrow">Chapter 1 · Quiz</span>
@@ -1104,9 +1924,9 @@ lg=0.5rem  xl=0.75rem  2xl=1rem  3xl=1.5rem  full=9999px
 <p class="lead">Eight questions, twelve minutes. Every answer is derivable from a scale you can read out of <code>resolveConfig</code> — none of it is memorisation, and if a question feels like recall you are approaching it the wrong way.</p>
 <div class="lz-stack">
 <div class="lz-layer"><span class="lz-lname">1.1 — × 4px</span><span class="lz-lnote">one multiplication covers 33 of 35 spacing keys; <code>0</code> and <code>px</code> are the deliberate literals. The emitted value is <code>rem</code>, which is why the scale respects user font-size settings</span></div>
-<div class="lz-layer"><span class="lz-lname">1.2 — where it runs out</span><span class="lz-lnote">no size below 12px and nothing between 12 and 14, so this app escaped 1,638 times. Count the uses: 1-3 leave arbitrary, 10+ name it in config</span></div>
+<div class="lz-layer"><span class="lz-lname">1.2 — where it runs out</span><span class="lz-lnote">no size below 12px and nothing between 12 and 14, so this app escaped 4,299 times (14/11/2026). Count the uses: 1-3 leave arbitrary, 10+ name it in config</span></div>
 <div class="lz-layer"><span class="lz-lname">1.3 — contrast</span><span class="lz-lnote"><code>slate-400</code> on white = 2.56, FAILS AA. <code>slate-500</code> = 4.76, passes narrowly. But luminance depends on hue, so never generalise a step across families</span></div>
-<div class="lz-layer"><span class="lz-lname">1.4 — layout</span><span class="lz-lnote">flex beats grid 9.7:1; 69% of flex elements carry <code>items-center</code>; <code>shrink-0</code>'s 987 uses record that width is a starting size, not a floor</span></div>
+<div class="lz-layer"><span class="lz-lname">1.4 — layout</span><span class="lz-lnote">flex beats grid 7.8:1 (14/11/2026); 62% of flex elements carry <code>items-center</code>; <code>shrink-0</code>'s 2,188 uses record that width is a starting size, not a floor</span></div>
 <div class="lz-layer"><span class="lz-lname">1.5 — sizing</span><span class="lz-lnote">70 width keys: 35 lengths + 35 that are not. Percentages resolve against the parent, viewport units against the window, and breakpoints are min-width</span></div>
 </div>
 </div>
@@ -1116,9 +1936,9 @@ lg=0.5rem  xl=0.75rem  2xl=1rem  3xl=1.5rem  full=9999px
 <p class="lead">Tám câu, mười hai phút. Mọi đáp án đều SUY RA được từ một cái thang bạn đọc ra từ <code>resolveConfig</code> — không có gì phải học thuộc, và nếu một câu có cảm giác phải NHỚ thì bạn đang tiếp cận nó sai cách.</p>
 <div class="lz-stack">
 <div class="lz-layer"><span class="lz-lname">1.1 — × 4px</span><span class="lz-lnote">một phép nhân bao 33 trên 35 khoá khoảng cách; <code>0</code> và <code>px</code> là hai chữ nguyên cố ý. Giá trị phát sinh là <code>rem</code>, đó là lý do cái thang TÔN TRỌNG thiết lập cỡ chữ của người dùng</span></div>
-<div class="lz-layer"><span class="lz-lname">1.2 — chỗ nó hết</span><span class="lz-lnote">không có cỡ nào dưới 12px và không có gì giữa 12 và 14, nên ứng dụng này thoát ra 1.638 lần. Hãy ĐẾM: 1-3 để tuỳ ý, 10+ đặt tên trong config</span></div>
+<div class="lz-layer"><span class="lz-lname">1.2 — chỗ nó hết</span><span class="lz-lnote">không có cỡ nào dưới 12px và không có gì giữa 12 và 14, nên ứng dụng này thoát ra 4.299 lần (đo 14/11/2026). Hãy ĐẾM: 1-3 để tuỳ ý, 10+ đặt tên trong config</span></div>
 <div class="lz-layer"><span class="lz-lname">1.3 — tương phản</span><span class="lz-lnote"><code>slate-400</code> trên trắng = 2,56, TRƯỢT AA. <code>slate-500</code> = 4,76, đạt sát nút. Nhưng độ chói phụ thuộc SẮC, nên đừng bao giờ tổng quát một bậc qua các họ</span></div>
-<div class="lz-layer"><span class="lz-lname">1.4 — bố cục</span><span class="lz-lnote">flex thắng grid 9,7:1; 69% thẻ flex mang <code>items-center</code>; 987 lượt <code>shrink-0</code> ghi lại rằng chiều rộng là kích thước KHỞI ĐIỂM, không phải cái sàn</span></div>
+<div class="lz-layer"><span class="lz-lname">1.4 — bố cục</span><span class="lz-lnote">flex thắng grid 7,8:1 (đo 14/11/2026); 62% thẻ flex mang <code>items-center</code>; 2.188 lượt <code>shrink-0</code> ghi lại rằng chiều rộng là kích thước KHỞI ĐIỂM, không phải cái sàn</span></div>
 <div class="lz-layer"><span class="lz-lname">1.5 — định cỡ</span><span class="lz-lnote">70 khoá width: 35 độ dài + 35 KHÔNG phải. Phần trăm phân giải theo thẻ cha, đơn vị khung nhìn theo cửa sổ, và điểm ngắt là min-width</span></div>
 </div>
 </div>
@@ -1149,10 +1969,10 @@ lg=0.5rem  xl=0.75rem  2xl=1rem  3xl=1.5rem  full=9999px
             points: 1,
           },
           {
-            question: 'This app uses <code>text-[11px]</code> 803 times. What does the counting rule say to do?|||Ứng dụng này dùng <code>text-[11px]</code> 803 lần. Luật ĐẾM bảo phải làm gì?',
+            question: 'This app uses <code>text-[11px]</code> 1417 times. What does the counting rule say to do?|||Ứng dụng này dùng <code>text-[11px]</code> 1417 lần. Luật ĐẾM bảo phải làm gì?',
             options: [
-              'Extend the scale — at 10+ uses it IS part of the design system without a name, and leaving it arbitrary means a future change is 803 find-and-replaces instead of one config line|||Mở rộng thang — ở mức 10+ lượt thì nó ĐÃ LÀ một phần hệ thiết kế mà chưa có tên, và để nó tuỳ ý nghĩa là một thay đổi tương lai tốn 803 lần tìm-và-thay thay vì một dòng config',
-              'Round all 803 to <code>text-xs</code> to keep the scale pure|||Làm tròn cả 803 về <code>text-xs</code> để giữ thang thuần khiết',
+              'Extend the scale — at 10+ uses it IS part of the design system without a name, and leaving it arbitrary means a future change is 1417 find-and-replaces instead of one config line|||Mở rộng thang — ở mức 10+ lượt thì nó ĐÃ LÀ một phần hệ thiết kế mà chưa có tên, và để nó tuỳ ý nghĩa là một thay đổi tương lai tốn 1417 lần tìm-và-thay thay vì một dòng config',
+              'Round all 1417 to <code>text-xs</code> to keep the scale pure|||Làm tròn cả 1417 về <code>text-xs</code> để giữ thang thuần khiết',
               'Leave it — arbitrary values are the intended escape hatch at any count|||Để nguyên — giá trị tuỳ ý là cửa thoát được thiết kế sẵn ở mọi số lượng',
               'Replace them with inline styles so they are not scanned|||Thay chúng bằng inline style để chúng không bị quét',
             ],
@@ -1184,7 +2004,7 @@ lg=0.5rem  xl=0.75rem  2xl=1rem  3xl=1.5rem  full=9999px
           {
             question: 'An icon with <code>h-4 w-4</code> inside a flex row squashes into an oval at narrow widths. Why does the set width not prevent it?|||Một biểu tượng có <code>h-4 w-4</code> bên trong một hàng flex bị bẹp thành hình bầu dục ở bề ngang hẹp. Vì sao chiều rộng đã đặt không ngăn được?',
             options: [
-              'flex-shrink defaults to 1, so width is a STARTING size the browser may compress below — <code>shrink-0</code> (987 uses here) is what makes it a floor|||flex-shrink mặc định bằng 1, nên chiều rộng là kích thước KHỞI ĐIỂM mà trình duyệt được phép nén xuống dưới — <code>shrink-0</code> (987 lượt ở đây) mới là thứ biến nó thành cái sàn',
+              'flex-shrink defaults to 1, so width is a STARTING size the browser may compress below — <code>shrink-0</code> (2,188 uses here) is what makes it a floor|||flex-shrink mặc định bằng 1, nên chiều rộng là kích thước KHỞI ĐIỂM mà trình duyệt được phép nén xuống dưới — <code>shrink-0</code> (2.188 lượt ở đây) mới là thứ biến nó thành cái sàn',
               'The icon SVG has no intrinsic aspect ratio|||SVG của biểu tượng không có tỉ lệ khung hình nội tại',
               '<code>h-4 w-4</code> sets max dimensions, not fixed ones|||<code>h-4 w-4</code> đặt kích thước TỐI ĐA, không phải cố định',
               '<code>items-center</code> is missing from the parent|||Thẻ cha thiếu <code>items-center</code>',

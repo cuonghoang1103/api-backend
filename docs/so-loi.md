@@ -18,6 +18,13 @@ Mẫu một mục:
 
 ---
 
+### 14/11/2026 — App CT Language (đọc to) — Chạm từ / chữ cái / bài đọc phải chờ 3–5 giây mới nghe
+- **Triệu chứng:** chạm loa ở từ điển, bảng chữ cái, thẻ ôn, bài học ⇒ im 3–5 s rồi mới đọc, người dùng tưởng hỏng.
+- **Nguyên nhân:** `ios-app/…/Shared/SachHoc/GiongSachHoc.swift` mỗi lần bấm làm HAI vòng mạng nối tiếp: `POST /ielts/doc` (máy chủ tổng hợp Azure + lưu R2 nếu chưa có) rồi AVPlayer tải mp3 từ CDN; chỉ nhớ URL trong RAM, không lưu tệp, không tải trước; giọng trong máy chỉ dùng khi lỗi.
+- **Cách sửa:** lưu tệp tiếng trên máy (Caches/giong-sach-hoc, theo băm giọng|tốc|chữ) ⇒ lần sau phát tức thì cả khi offline; `napTruoc` tải sẵn khi nút loa/ô chữ/thẻ hiện ra (hàng đợi 3 lượt); chưa có tệp thì chờ tối đa 0,6 s (chuỗi 1,2 s) rồi đọc ngay bằng giọng iPhone, tệp vẫn tải tiếp; làm nóng AVSpeechSynthesizer bằng một câu câm.
+- **Ảnh hưởng:** mọi nút đọc của app CT Language và khoá kiểu sách của app CuongThai, từ khi có giọng máy chủ.
+- **Bài học:** âm thanh "bấm là kêu" không được đi mạng trên đường bấm — tải trước + đệm trên máy + đường lùi tức thì; đo bằng tay trên 4G thật, không trên Wi-Fi nhà.
+
 ### 14/11/2026 — App CT Language (gọi CuongMini) — Gọi lần đầu kẹt, nghe ra "Thank you for watching", giọng Việt lơ lớ
 - **Triệu chứng:** (1) bấm gọi có lúc kẹt "Đang gọi CuongMini…" mãi, phải tắt gọi lại; khi đã báo lỗi thì nút mic bị khoá dù chữ bảo "bấm mic để thử lại". (2) Nói tiếng Nhật mà máy ghi ra tiếng Anh, hoặc ra "Thank you for watching." (3) Phần tiếng Việt hướng dẫn nghe như người Tây đọc.
 - **Nguyên nhân:** (1) `GoiCuongMiniCTL.swift` hỏi đồng ý AI + quyền micro trong `.task` của màn toàn hình đang trượt lên — hộp thoại có lúc không hiện, lời chờ không trả về; `.disabled` của mic không gồm `.loi`. (2) `troChuyenLuong.service.ts` gọi Whisper `language: ''` (tự dò) ⇒ giọng Nhật của người Việt bị dò thành tiếng Anh; ghi âm im lặng (phiên âm thanh bị "Nghe lại"/hiệu ứng đổi sang `.ambient`) ⇒ Whisper bịa câu phụ đề YouTube. (3) Giọng mặc định `en-GB-AdaMultilingualNeural` đọc cả tiếng Việt.

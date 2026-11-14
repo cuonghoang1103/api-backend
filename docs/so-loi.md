@@ -277,3 +277,10 @@ Mẫu một mục:
 - **Cách sửa:** `trongTuan()` trả `{ gte: thứ Hai 00:00 VN, lt: thứ Hai kế }`, dùng ở cả `deDaThiTuanNay` lẫn `danhMuc`; `thi.db.test.ts` có ca "tuần sau có lượt mới".
 - **Ảnh hưởng:** chưa lên prod (bắt trong test trước khi commit).
 - **Bài học:** "trong tuần/ngày này" là một KHOẢNG hai đầu — viết luôn cả `gte` lẫn `lt`, và test bằng `bayGio` tiêm vào chứ không dựa `new Date()`.
+
+### 14/11/2026 — Hạ tầng (nginx) — 404 của tệp tĩnh bị dán lệnh cache 1 năm (immutable)
+- **Triệu chứng:** xin một chunk `/_next/static/...` không tồn tại ⇒ 404 KÈM `Cache-Control: public, max-age=31536000, immutable` (đo thật trên cuongthai.com, bắt khi soạn khoá Next.js 20.4). Trình duyệt/CDN có thể giữ 404 đó cả năm — nếu một lần deploy lệch nhịp làm chunk tạm thiếu, người dùng kẹt trang hỏng tới khi xoá cache.
+- **Nguyên nhân:** `nginx/nginx.conf:228`, `:453`, `:510` — `add_header Cache-Control "… immutable" always;` — cờ `always` dán header cho MỌI mã trạng thái, kể cả 4xx/5xx.
+- **Cách sửa:** bỏ `always` ở 3 dòng đó (nginx mặc định chỉ thêm header cho 200/201/204/206/301/302/303/304/307/308). Kiểm cú pháp bằng `nginx -t` trong container (chỉ còn lỗi thiếu chứng chỉ — bình thường ngoài VPS); deploy-nha bước 6c tự `nginx -t` trên VPS và trả bản cũ nếu hỏng.
+- **Ảnh hưởng:** mọi người dùng tải tệp tĩnh `/_next/static`, ảnh/tài nguyên bất biến.
+- **Bài học:** `always` chỉ dùng cho header phải có ở cả trang lỗi (CORS, bảo mật); header cache dài hạn tuyệt đối không `always`. Kiểm bằng `curl -I` một URL 404, đừng chỉ kiểm URL 200.

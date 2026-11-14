@@ -41,6 +41,9 @@ jobs:
       - name: Install deps
         run: npm ci --no-audit --no-fund
       - name: TypeScript type-check (required)
+        # 14/11/2026: cần ~4,1 GB, sát trần heap mặc định của Node ⇒ nới (Dockerfile.backend đã đặt 6144).
+        env:
+          NODE_OPTIONS: --max-old-space-size=6144
         run: npx tsc --noEmit
       - name: Interview grader eval — golden set (required)
         # STATIC eval: pure, no DB, no LLM key. Fails the build if the grader

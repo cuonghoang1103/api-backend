@@ -134,7 +134,8 @@ else
 fi
 
 # ─── 3. Đúng thứ tự + đúng lệnh các bước (required) của ci-lint.yml ───
-chay_kiem "backend tsc"     ./node_modules/.bin/tsc --noEmit
+# 14/11/2026: backend tsc cần ~4,1 GB — sát trần heap mặc định của Node (~4 GB) ⇒ OOM ngẫu nhiên. Nới như frontend.
+chay_kiem "backend tsc"     env NODE_OPTIONS=--max-old-space-size=8192 ./node_modules/.bin/tsc --noEmit
 chay_kiem "eval:grader"     npm run --silent eval:grader
 chay_kiem "eval:cv-linter"  npm run --silent eval:cv-linter
 # Redis: CI có dịch vụ redis:7-alpine; máy local mà Redis TẮT thì getRedis() (MFA, CRM, ép 2FA…) CHỜ MÃI —

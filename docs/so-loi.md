@@ -18,6 +18,13 @@ Mẫu một mục:
 
 ---
 
+### 14/11/2026 — Hạ tầng (CI) — backend `tsc --noEmit` hết bộ nhớ ngẫu nhiên
+- **Triệu chứng:** `npx tsc --noEmit` chết "Reached heap limit / allocation failure" sau ~58 s, không có lỗi kiểu nào; lượt khác cùng mã lại qua.
+- **Nguyên nhân:** backend 3.5k tệp cần ~4,1 GB heap — sát trần mặc định của Node (~4 GB). `Dockerfile.backend` đã đặt 6144 từ 22/10, nhưng `scripts/kiem-ci-truoc-push.sh` (bước kiểm của deploy-nha) và `ci-lint.yml` chạy không nới.
+- **Cách sửa:** `NODE_OPTIONS=--max-old-space-size=8192` cho bước backend tsc trong script kiểm (như frontend), 6144 cho bước tương ứng của `ci-lint.yml`.
+- **Ảnh hưởng:** chưa chặn deploy nào (lượt 14/11 qua sát nút), nhưng sẽ làm đỏ CI / bỏ push ngẫu nhiên.
+- **Bài học:** trần heap phải đặt ĐỒNG BỘ ở mọi chỗ chạy cùng một lệnh (Docker, script kiểm, CI) — đặt một chỗ thì chỗ kia hỏng sau.
+
 ### 14/11/2026 — App CT Language — Bấm loa / mở trang từ / màn thi treo hàng chục giây trên máy vừa cài
 - **Triệu chứng:** máy ảo mới (và có thể máy thật vừa cài): mở trang từ trắng >30 s; màn thi đứng hình khi tự phát bài nghe.
 - **Nguyên nhân:** `Shared/NgonNgu/CaiDatGiong.swift › giongTuDong` gọi `AVSpeechSynthesisVoice.speechVoices()` ĐỒNG BỘ trên luồng chính mỗi lần đọc; lần đầu dịch vụ TTS của iOS chưa thức ⇒ treo. Bản làm nóng mới (`GiongSachHoc.lamNongGiongMay`) còn gọi đúng hàm đó.

@@ -74,7 +74,7 @@ const TOI_DA_KY_TU = 1500;
 const TRAN_SINH_MOI_NGAY = 400;
 const daSinh = new Map<string, number>();
 
-function demSinh(userId: number): boolean {
+function demSinh(userId: number | string): boolean {
   const k = `${userId}:${new Date().toISOString().slice(0, 10)}`;
   const n = (daSinh.get(k) ?? 0) + 1;
   if (n > TRAN_SINH_MOI_NGAY) return false;
@@ -151,7 +151,7 @@ async function coSan(key: string): Promise<boolean> {
   return ok;
 }
 
-export async function docTo(userId: number, b: { text?: unknown; giong?: unknown; toc?: unknown; kieu?: unknown }) {
+export async function docTo(userId: number | string, b: { text?: unknown; giong?: unknown; toc?: unknown; kieu?: unknown }) {
   const text = String(b.text ?? '').trim();
   if (!text) throw new BadRequestError('Thiếu chữ để đọc');
   if (text.length > TOI_DA_KY_TU) throw new BadRequestError(`Tối đa ${TOI_DA_KY_TU} ký tự mỗi lần`);

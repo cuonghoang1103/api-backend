@@ -23,7 +23,7 @@
 import { prisma } from '../../../config/database.js';
 import { logger } from '../../../utils/logger.js';
 import { isAiAvailable, llmComplete } from '../../interview/llm/index.js';
-import { transcribeWithGroq } from '../../interview/voice/stt.js';
+import { ngheHocVien } from './ngheHocVien.js';
 import { coKeyKhaDung } from '../../agent/anthropicChinhHang/khoKey.js';
 import { goiVanBanChinhHang } from '../../agent/anthropicChinhHang/dinhTuyen.js';
 import { dauNgayVn } from '../../agent/anthropicChinhHang/hanMuc.js';
@@ -167,7 +167,7 @@ export function cauHoiGanNhat(ls: { ai: boolean; text: string }[]): string {
 
 /** Các phụ thuộc ra ngoài (mạng, CSDL) — test thay bằng bản giả để kiểm định tuyến/lùi/trần mà không tốn tiền. */
 export interface PhuThuocTC {
-  stt: (audio: Buffer, ten: string, mime: string, hints: string) => Promise<string>;
+  stt: (audio: Buffer, ten: string, mime: string, hints: string, nn: NgonNguTC) => Promise<string>;
   tts: (text: string, giong: GiongGoi, nn: NgonNguTC) => Promise<{ audioUrls: string[]; giongThat: GiongGoi }>;
   chinhHang: (o: Parameters<typeof goiVanBanChinhHang>[0]) => Promise<{ usd: number }>;
   duPhong: (o: Parameters<typeof llmComplete>[0]) => Promise<unknown>;
@@ -177,10 +177,8 @@ export interface PhuThuocTC {
   aiSan: () => boolean;
 }
 const THAT: PhuThuocTC = {
-  stt: async (audio, ten, mime, hints) => {
-    const tr = await transcribeWithGroq(audio, ten, mime, { language: '', ...(hints ? { hints } : {}) });
-    return String((tr as { text?: string } | null)?.text ?? '');
-  },
+  // Tự dò → ép đúng ngoại ngữ khi dò lệch → lọc câu Whisper bịa (ngheHocVien.ts, 14/11/2026).
+  stt: (audio, ten, mime, hints, nn) => ngheHocVien(audio, ten, mime, hints, nn),
   tts: docCau,
   chinhHang: goiVanBanChinhHang,
   duPhong: llmComplete,
@@ -199,9 +197,12 @@ export async function chayLuot(userId: number, v: VaoLuot, gui: (e: SuKienTC) =>
   const moc: MocTC = {};
   const nn = docNN(v.ngonNgu);
   const giong = docGiong(v.giong);
+  // `giong: 'may'` (app CT Language, 14/11/2026): người dùng chọn GIỌNG IPHONE ⇒ app tự đọc bằng AVSpeechSynthesizer,
+  // máy chủ khỏi tổng hợp (không tốn Azure, câu đến nhanh hơn). Sự kiện `cau` vẫn gửi, chỉ `audioUrls` rỗng.
+  const khongDoc = v.giong === 'may';
   const chuDe = timChuDe(nn, v.chuDeId, String(v.tenBai ?? ''));
   // Chuẩn hoá thẻ ngoại ngữ NGAY ở đây: web tô đậm + lưu lịch sử đúng, "tiếp tục buổi trước" tìm đúng câu hỏi.
-  const hang = new HangDoc((t) => pt.tts(t, giong, nn), gui, t0, (t) => boSungTheNN(t, nn));
+  const hang = new HangDoc((t) => (khongDoc ? Promise.resolve({ audioUrls: [] as string[], giongThat: giong }) : pt.tts(t, giong, nn)), gui, t0, (t) => boSungTheNN(t, nn));
 
   if (!demLuot(userId)) { gui({ type: 'loi', lyDo: 'het_luot_ngay', message: 'Hôm nay bạn đã trò chuyện hết số lượt — mai mình nói tiếp nhé.' }); return; }
 
@@ -223,7 +224,7 @@ export async function chayLuot(userId: number, v: VaoLuot, gui: (e: SuKienTC) =>
   const cauHoiCuoi = cauHoiGanNhat(lichSu);
   const mime = String(v.mime || 'audio/wav');
   const duoi = /mp4|m4a|aac/.test(mime) ? 'mp4' : /ogg/.test(mime) ? 'ogg' : /webm/.test(mime) ? 'webm' : 'wav';
-  const nghe = (await pt.stt(v.audio, `noi.${duoi}`, mime, cauHoiCuoi.slice(0, 200)).catch((e) => {
+  const nghe = (await pt.stt(v.audio, `noi.${duoi}`, mime, cauHoiCuoi.slice(0, 200), nn).catch((e) => {
     logger.warn('[tro-chuyen] Whisper lỗi', { error: (e as Error).message });
     return '';
   })).trim().slice(0, 600);

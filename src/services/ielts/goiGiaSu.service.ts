@@ -429,12 +429,55 @@ export async function docGiaSu(noi: string, nn: NgonNgu = 'en'): Promise<string 
  * NGAY giọng mặc định (người dùng dặn: đừng để ảnh hưởng trải nghiệm) và nghỉ thử
  * máy nhà 2 phút — để các lượt sau không phải chờ hạn thêm lần nào nữa.
  */
-export type GiongGoi = 'mac-dinh' | 'khanh-linh' | 'cuong';
-const GIONG_NHA: Record<Exclude<GiongGoi, 'mac-dinh'>, string> = { 'khanh-linh': 'f5-khanh-linh', cuong: 'f5-cuong-nghiem' };
+export type GiongGoi = 'mac-dinh' | 'khanh-linh' | 'cuong' | 'hoai-my' | 'nam-minh';
+type GiongNha = 'khanh-linh' | 'cuong';
+const GIONG_NHA: Record<GiongNha, string> = { 'khanh-linh': 'f5-khanh-linh', cuong: 'f5-cuong-nghiem' };
 let nhaNghiDen = 0;
 
+/* ── Giọng Việt BẢN XỨ của Azure (14/11/2026 — app CT Language, user: "giọng tiếng Việt hướng dẫn nghe không hay") ──
+ * Giọng mặc định là `en-GB-AdaMultilingualNeural`: MỘT giọng Anh đọc cả tiếng Việt qua `<lang>` ⇒ tiếng Việt lơ lớ
+ * giọng Tây. Hai giọng này đọc phần tiếng Việt bằng giọng Việt thật (Hoài My nữ · Nam Minh nam) và phần ngoại ngữ
+ * bằng giọng bản xứ của khoá (Sonia/Nanami/Xiaoxiao) — NHIỀU `<voice>` trong CÙNG một SSML ⇒ vẫn một tệp mp3/câu,
+ * không thêm độ trễ. Không cần máy nhà, không đổi gì với web (web chưa gửi hai mã này). */
+const GIONG_VIET: Record<'hoai-my' | 'nam-minh', string> = { 'hoai-my': 'vi-VN-HoaiMyNeural', 'nam-minh': 'vi-VN-NamMinhNeural' };
+/** Giọng Việt bản xứ đọc nhanh hơn Ada ⇒ chậm lại ít hơn. */
+const TOC_VIET_BAN_XU = '-6%';
+
 export function docGiong(x: unknown): GiongGoi {
-  return x === 'khanh-linh' || x === 'cuong' ? x : 'mac-dinh';
+  return x === 'khanh-linh' || x === 'cuong' || x === 'hoai-my' || x === 'nam-minh' ? x : 'mac-dinh';
+}
+
+/** SSML nhiều giọng: tiếng Việt = giọng Việt bản xứ, `[en]…[/en]` = giọng bản xứ của ngoại ngữ. Thuần — test được. */
+export function ssmlGiongViet(noi: string, giong: 'hoai-my' | 'nam-minh', nn: NgonNgu): string {
+  const body = tachDoan(noi)
+    .map((d) => `<voice name="${d.en ? GIONG_NGOAI[nn] : GIONG_VIET[giong]}">${khoiSsml(d.t, null, d.en ? TOC_NGOAI : TOC_VIET_BAN_XU)}<break time="300ms"/></voice>`)
+    .join('');
+  return `<speak version="1.0" xmlns="http://www.w3.org/2001/10/synthesis" xml:lang="vi-VN">${body}</speak>`;
+}
+
+async function docGiaSuGiongViet(noi: string, giong: 'hoai-my' | 'nam-minh', nn: NgonNgu): Promise<string | null> {
+  const key = process.env.AZURE_SPEECH_KEY;
+  const region = process.env.AZURE_SPEECH_REGION || 'eastasia';
+  if (!key) return null;
+  const r2 = `ielts/audio/giasu/${crypto.createHash('sha1').update(`${GIONG_VIET[giong]}|${NHIP}|${nn}|${noi}`).digest('hex')}.mp3`;
+  const dang = dangTao.get(r2);
+  if (dang) return dang;
+  const p = (async () => {
+    if (await objectExists(r2)) return buildPublicUrl(r2);
+    const res = await fetch(`https://${region}.tts.speech.microsoft.com/cognitiveservices/v1`, {
+      method: 'POST',
+      headers: { 'Ocp-Apim-Subscription-Key': key, 'Content-Type': 'application/ssml+xml', 'X-Microsoft-OutputFormat': 'audio-24khz-48kbitrate-mono-mp3', 'User-Agent': 'cuongthai-ielts-goi' },
+      signal: AbortSignal.timeout(20_000),
+      body: ssmlGiongViet(noi, giong, nn),
+    });
+    if (!res.ok) {
+      logger.warn('[ielts/goi] Azure giọng Việt bản xứ', { status: res.status, loi: (await res.text().catch(() => '')).slice(0, 160) });
+      return null;
+    }
+    return (await putObject(r2, Buffer.from(await res.arrayBuffer()), 'audio/mpeg')).url;
+  })();
+  dangTao.set(r2, p);
+  try { return await p; } catch { return null; } finally { dangTao.delete(r2); }
 }
 
 /** Một đoạn ngoại ngữ (Anh: Sonia · Nhật: Nanami · Trung: Xiaoxiao) → URL mp3 (lưu R2 theo băm). */
@@ -473,6 +516,11 @@ async function docDoanNha(t: string, voice: string, hanMs: number): Promise<stri
  */
 export async function docGiaSuTheoGiong(noi: string, giong: GiongGoi, nn: NgonNgu = 'en'): Promise<{ audioUrl: string | null; audioUrls?: string[]; giongThat: GiongGoi }> {
   noi = boSungTheNN(noi, nn);
+  if (giong === 'hoai-my' || giong === 'nam-minh') {
+    const u = await docGiaSuGiongViet(noi, giong, nn);
+    // Azure từ chối giọng Việt (vùng không có, hết hạn mức) ⇒ lùi về giọng mặc định — cuộc gọi không bao giờ câm.
+    return u ? { audioUrl: u, giongThat: giong } : { audioUrl: await docGiaSu(noi, nn), giongThat: 'mac-dinh' };
+  }
   if (giong === 'mac-dinh' || Date.now() < nhaNghiDen) return { audioUrl: await docGiaSu(noi, nn), giongThat: 'mac-dinh' };
   const doan = tachDoan(noi);
   const tongViet = doan.filter((d) => !d.en).reduce((n, d) => n + d.t.length, 0);

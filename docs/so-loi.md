@@ -18,6 +18,13 @@ Mẫu một mục:
 
 ---
 
+### 14/11/2026 — App CT Language (gọi CuongMini) — Gọi lần đầu kẹt, nghe ra "Thank you for watching", giọng Việt lơ lớ
+- **Triệu chứng:** (1) bấm gọi có lúc kẹt "Đang gọi CuongMini…" mãi, phải tắt gọi lại; khi đã báo lỗi thì nút mic bị khoá dù chữ bảo "bấm mic để thử lại". (2) Nói tiếng Nhật mà máy ghi ra tiếng Anh, hoặc ra "Thank you for watching." (3) Phần tiếng Việt hướng dẫn nghe như người Tây đọc.
+- **Nguyên nhân:** (1) `GoiCuongMiniCTL.swift` hỏi đồng ý AI + quyền micro trong `.task` của màn toàn hình đang trượt lên — hộp thoại có lúc không hiện, lời chờ không trả về; `.disabled` của mic không gồm `.loi`. (2) `troChuyenLuong.service.ts` gọi Whisper `language: ''` (tự dò) ⇒ giọng Nhật của người Việt bị dò thành tiếng Anh; ghi âm im lặng (phiên âm thanh bị "Nghe lại"/hiệu ứng đổi sang `.ambient`) ⇒ Whisper bịa câu phụ đề YouTube. (3) Giọng mặc định `en-GB-AdaMultilingualNeural` đọc cả tiếng Việt.
+- **Cách sửa:** app hỏi quyền TRƯỚC khi mở màn gọi, canh 25 s tự gọi lại câu mở đầu, mic dùng được ở trạng thái lỗi, đặt lại phiên `.playAndRecord` trước mỗi lượt ghi, không gửi bản ghi im lặng (đỉnh < −42 dB); máy chủ `ngheHocVien.ts`: tự dò → dò lệch thì ép `language` = ngoại ngữ đang học → lọc câu bịa (mẫu phụ đề 4 thứ tiếng + `no_speech_prob`); giọng mới `hoai-my`/`nam-minh` (giọng Việt bản xứ Azure, nhiều `<voice>` trong một SSML) + "Giọng iPhone" (`giong: 'may'`, máy chủ không đọc, app đọc giọng tốt nhất đã tải).
+- **Ảnh hưởng:** mọi người dùng gọi CuongMini trên app CT Language từ bản đầu (13/11); phần STT cũng áp cho phòng trò chuyện của web.
+- **Bài học:** Whisper không bao giờ nói "không nghe thấy" — luôn kiểm ngôn ngữ dò được + mẫu câu bịa trước khi tin chữ; hộp thoại hệ thống không hỏi lúc màn đang chuyển cảnh; chữ hướng dẫn "bấm X" phải đi kèm X bấm được.
+
 ### 14/11/2026 — Web (SEO) — Trang khoá học /courses/[slug] trả HTML không có nội dung khoá
 - **Triệu chứng:** `curl -s https://cuongthai.com/courses/nextjs -A Googlebot | grep -c '<h1'` ⇒ 0. Máy tìm kiếm / bot xem trước link / AI đọc trang chỉ thấy spinner: không tên khoá trong thân trang, không mô tả, không mục lục (chỉ có `<title>`/og/JSON-LD trong `<head>`). Áp cho MỌI khoá Courses + Academy.
 - **Nguyên nhân:** `frontend/src/app/courses/[slug]/page.tsx` ĐÃ tải khoá phía server (cho `generateMetadata` + JSON-LD) nhưng vứt đi, trả `<CoursePageClient />` không props; `CoursePageClient.tsx` khởi đầu `loading = true` và vẽ spinner cho tới khi JS tự gọi `GET /courses/:slug?gon=1` — `<h1>` chỉ có sau khi JS chạy.

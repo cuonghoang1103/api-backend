@@ -389,3 +389,10 @@ Mẫu một mục:
 - **Cách sửa:** agent dựng + chạy test vào `-derivedDataPath` RIÊNG trong thư mục tạm của mình (xong thì xoá); bản cài để soi vẫn lấy đúng sản phẩm vừa dựng (`ls -l` nhị phân trước khi cài — luật C1).
 - **Ảnh hưởng:** chỉ làm chậm phiên dựng; mã không lỗi.
 - **Bài học:** DerivedData dùng chung là tài nguyên chung như git index — phiên song song phải tách đường dẫn dựng, đừng đọc lỗi "exit code 0" như lỗi mã.
+
+### 15/11/2026 — Git — commit theo pathspec kéo theo dòng của phiên song song trong `src/index.ts`
+- **Triệu chứng:** commit luyện phát âm (4bedd513d, chưa push) mang theo 5 dòng gắn router `ctlanguage.soTu` / `soChuyenNganh` của agent sổ tay — hai tệp route đó CHƯA commit ⇒ HEAD khởi động sẽ chết ở `await import(...)` (tsc không bắt vì đường dẫn động).
+- **Nguyên nhân:** `git commit -- src/index.ts` lấy NGUYÊN tệp trong cây làm việc; agent kia sửa `index.ts` trong khoảng giữa lúc kiểm `git diff --numstat` (3 dòng) và lúc commit (8 dòng).
+- **Cách sửa:** dựng lại commit bằng chỉ mục tạm (`GIT_INDEX_FILE`: HEAD~1 + đúng 3 dòng của mình) ⇒ `commit-tree` + `update-ref` có kiểm giá trị cũ ⇒ c393136d8; trả mục `src/index.ts` của chỉ mục chung về HEAD (dòng của agent kia vẫn nằm nguyên trong cây làm việc).
+- **Ảnh hưởng:** không — bắt bằng `git show --stat` ngay sau commit, trước mọi push/deploy.
+- **Bài học:** tệp chung đang có phiên khác sửa thì kiểm diff NGAY trong cùng lệnh commit và đọc `git show --stat HEAD` sau commit; số dòng lệch là dấu hiệu đã kéo theo đồ của người khác.

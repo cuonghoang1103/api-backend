@@ -1,3 +1,4 @@
+import { BO_TINH_CACH_SAN } from './boTinhCachSan.js';
 import { CHE_DO, laCheDo, type CheDo } from './cheDo.js';
 import { laNao, type Nao } from './nao.js';
 import { chuanKhoTinhCach, type KhoTinhCach } from './tinhCach.js';
@@ -328,8 +329,8 @@ export async function loadPersona(projectId: number): Promise<PersonaConfig> {
       cheDo: 'vi',
       giongTheoCheDo: null,
       viTri: null,
-      khoTinhCach: null,
-      tinhCachDangDung: null,
+      khoTinhCach: { ...BO_TINH_CACH_SAN },
+      tinhCachDangDung: 'ban-than',
       amLuong: 50,
       nao: null,
       // Mặc định phổ thông: đây là bản dùng khi CHƯA có persona trong DB,
@@ -399,10 +400,12 @@ export async function loadPersona(projectId: number): Promise<PersonaConfig> {
       const v = (row.traits as { viTri?: unknown } | null)?.viTri;
       return typeof v === 'string' && v.trim() ? v.trim().slice(0, 120) : null;
     })(),
-    khoTinhCach: chuanKhoTinhCach((row.traits as { boTinhCach?: unknown } | null)?.boTinhCach),
+    // Bộ có sẵn trong mã (boTinhCachSan.ts) luôn có mặt; bộ người dùng sửa trên web cùng khoá thì ĐÈ lên.
+    khoTinhCach: { ...BO_TINH_CACH_SAN, ...(chuanKhoTinhCach((row.traits as { boTinhCach?: unknown } | null)?.boTinhCach) ?? {}) },
     tinhCachDangDung: (() => {
       const v = (row.traits as { tinhCachDangDung?: unknown } | null)?.tinhCachDangDung;
-      return typeof v === 'string' && v.trim() ? v.trim().slice(0, 40) : null;
+      // Chưa từng chọn bộ nào ⇒ mặc định "Bạn thân" (chủ robot chọn phong cách này 15/11/2026).
+      return typeof v === 'string' && v.trim() ? v.trim().slice(0, 40) : 'ban-than';
     })(),
     nao: laNao((row.traits as { nao?: unknown } | null)?.nao)
       ? ((row.traits as { nao: Nao }).nao)

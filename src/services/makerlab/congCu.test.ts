@@ -26,3 +26,16 @@ test('công cụ lạ / thiếu tham số / không phải admin ⇒ trả chữ 
   assert.match(r, /Chỉ chủ web/);
   assert.match(r, /chưa có chủ/);
 });
+
+test('bộ tính cách Bạn thân: tự đủ, ≤ 20 mẫu, không có ngoặc kép trong lời robot, đổi được bằng giọng', async () => {
+  const { BO_TINH_CACH_SAN } = await import('./boTinhCachSan.js');
+  const { chuanKhoTinhCach, khopDoiTinhCach } = await import('./tinhCach.js');
+  const bo = BO_TINH_CACH_SAN['ban-than'];
+  assert.ok(bo.systemPrompt && bo.sampleDialogues && bo.sampleDialogues.length >= 15 && bo.sampleDialogues.length <= 20);
+  for (const m of bo.sampleDialogues!) assert.ok(!m.bot.includes('"'), m.bot.slice(0, 40));
+  const dai = bo.sampleDialogues!.map((m) => m.bot.length);
+  assert.ok(Math.min(...dai) < 80 && Math.max(...dai) > 200, 'mẫu phải lúc ngắn lúc dài');
+  const kho = chuanKhoTinhCach(BO_TINH_CACH_SAN)!;
+  assert.equal(kho['ban-than'].sampleDialogues!.length, bo.sampleDialogues!.length, 'qua được bộ chuẩn hoá của web');
+  assert.equal(khopDoiTinhCach('đổi tính cách sang bạn thân', kho), 'ban-than');
+});

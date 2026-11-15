@@ -55,12 +55,13 @@ export async function authenticate(
     if (!dbUser) throw new UnauthorizedError('User not found');
     if (!dbUser.enabled) throw new ForbiddenError('Account is disabled');
     if (!dbUser.accountNonLocked) throw new ForbiddenError('Account is locked');
+    // CT Work AI agent (CTW-28): JWT nào còn sót của tài khoản đã chuyển thành agent (bot fp_* cũ) chết ngay — agent
+    // chỉ xác thực bằng token ctw_ (apiTokenAuth, chạy TRƯỚC middleware này trên router CT Work). Kiểm TRƯỚC phép so
+    // roleVersion: convert sang agent cũng tăng roleVersion, mà lỗi AGENT_NO_LOGIN nói rõ lý do hơn SESSION_REVOKED.
+    if (dbUser.kind === 'AGENT') throw new AppError('AI agents cannot sign in. Use the agent\'s CT Work API token.', 403, 'AGENT_NO_LOGIN');
     // Thu hồi phiên (15/11/2026): đổi/đặt lại mật khẩu, "đăng xuất mọi thiết bị", đổi vai trò, xoá dữ liệu… đều tăng
     // roleVersion — trước đây không ai so ⇒ JWT cũ trên máy khác vẫn dùng (và /auth/refresh gia hạn) tới 30 ngày.
     if (!phienConHieuLuc(decoded.roleVersion, dbUser.roleVersion)) throw loiPhienThuHoi();
-    // CT Work AI agent (CTW-28): JWT nào còn sót của tài khoản đã chuyển thành agent (bot fp_* cũ) chết ngay — agent
-    // chỉ xác thực bằng token ctw_ (apiTokenAuth, chạy TRƯỚC middleware này trên router CT Work).
-    if (dbUser.kind === 'AGENT') throw new AppError('AI agents cannot sign in. Use the agent\'s CT Work API token.', 403, 'AGENT_NO_LOGIN');
 
     next();
   } catch (error) {

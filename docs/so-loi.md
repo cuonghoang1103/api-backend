@@ -18,6 +18,20 @@ Mẫu một mục:
 
 ---
 
+### 15/11/2026 — CT Language iOS (khối bài học chưa hỗ trợ + chân mục lục) — còn nút "Làm phần này trên web" mở Safari tới cuongthai.com
+- **Triệu chứng:** (soát trước khi nộp App Store, chưa ai báo) khối bài học app chưa hiểu (`.chuaBiet`) hiện nhãn "Sắp có trên app" + nút "Làm phần này trên web" mở Safari tới cuongthai.com — nơi có bán Pro; chân mục lục khoá ghi "Nội dung giống hệt bản web (cuongthai.com/…)".
+- **Nguyên nhân:** `ios-app/CuongThaiApp/Shared/SachHoc/KhoiTuongTacSH.swift › DotHaiSH` (~dòng 630) và `MucLucSachHocView.swift › chanTrang` viết cho app CuongThai chính (có web đi kèm) rồi được kéo nguyên sang CT Language qua `Shared/SachHoc`.
+- **Cách sửa:** trong `#if CTLANGUAGE_APP`: bỏ nút ra web, nhãn "Cần cập nhật app", lời "cập nhật app lên bản mới nhất trong App Store"; chân mục lục bỏ nhắc web. App chính giữ nguyên (ios-app `aec5867`).
+- **Ảnh hưởng:** chỉ hiện khi máy chủ xuất loại khối mới hơn app (hôm nay 0 khối như vậy trong 5 khoá) — nhưng reviewer gặp là dính 3.1.1 (dẫn ra kênh mua ngoài IAP); chân mục lục hiện ở mọi khoá.
+- **Bài học:** mã `Shared/` kéo sang app mới phải grep lại mọi chữ "web"/"cuongthai.com"/`openURL` theo luật của app MỚI — lưới đỡ ít khi hiện chính là chỗ reviewer hay vấp mà không ai thấy khi chạy thử.
+
+### 15/11/2026 — CT Language iOS (bố cục iPhone SE) — tiêu đề bị cắt "Bảng ch…", chữ đầu trang từ bẻ "食べ / る", ô Thi thử cắt chữ, dải công cụ cắt ngang
+- **Triệu chứng:** trên iPhone SE (375 pt): thẻ đầu tab Học hiện "Bảng ch…"/"Pinyin & / thanh / điệu" vì chip "Học trước tiên" chiếm chỗ; trang từ điển bẻ 食べる thành hai dòng và 3 chip (Hán Việt/Phồn thể/Thông dụng) vỡ chữ; Thi thử hiện "Vinh danh t…/Điểm cao 7 n…"; dải công cụ Từ điển bị cắt ở lề trong như nút vỡ; tiêu đề "Đọc báo · trang web" bị nhãn MỚI bẻ đôi; nút Gấu nổi che thẻ "Bài tiếp" cuối bài học.
+- **Nguyên nhân:** `HStack` cứng chữ + chip/nút ở `HocCTL.theChuNen`, `ChiTietTuCTL.dau`, `TrungTamDichCTL.theDocWeb`; `lineLimit(1)` ở `PhongThiCTL.oNho`; `ScrollView(.horizontal)` nằm trong khung có lề 18 ở `TuDienCTL.congCu`; đệm đáy 60 ở `BaiSachHocView` < chiều cao nút Gấu (~84). Chỉ từng QA trên Pro Max.
+- **Cách sửa:** `ViewThatFits` (không vừa ⇒ chip/nút xuống dòng), chip trang từ dùng `DongTuXuong`, ô Thi thử cho 2 dòng + cao bằng nhau, dải công cụ bù lề `-18` để cuộn tới mép màn, đệm đáy bài 110 (ios-app `2d4afd2`).
+- **Ảnh hưởng:** mọi iPhone hẹp (SE 2/3, mini ở cỡ chữ lớn) ở cả 3 ngôn ngữ; chưa phát hành.
+- **Bài học:** QA giao diện phải chạy cả máy HẸP NHẤT đang hỗ trợ, không chỉ máy to — và hàng có chip/nút cạnh tiêu đề nên dựng sẵn bằng `ViewThatFits` thay vì `HStack` + `lineLimit`.
+
 ### 15/11/2026 — CT Language + app CuongThai iOS (giọng đọc trong máy, vá nốt sau 0e4b5ca) — còn 11 chỗ gọi API giọng trên luồng chính lúc danh sách giọng đang nạp ⇒ cùng kiểu khoá chết
 - **Triệu chứng:** (chưa ai báo — rà mã sau vụ đứng hình ở game) cùng kịch bản app treo vĩnh viễn nếu trong vài giây đầu sau khi mở app người dùng nghe Gấu khen (`CoVuGau`), gọi thoại CuongMini đọc bằng giọng máy, bấm loa ở từ điển/thẻ (`DocTu`), Máy nghe, Dịch văn bản, hay mở màn Chọn giọng.
 - **Nguyên nhân:** `ios-app/CuongThaiApp/Shared/NgonNgu/CaiDatGiong.swift › giongTuDong` tự gọi `napNen()` rồi trả NGAY `AVSpeechSynthesisVoice(language:)` trên luồng chính (chính là thế khoá chết); `luaChon()` ⇒ `danhSach()` ⇒ `speechVoices()` đồng bộ trên luồng chính mỗi khi người dùng đã chọn giọng; `DocTu.doDuoc` (chạy trong `body`), `DocTu.doc/docThu`, `GiongGau.noi`, `PhienGoiCTL.giongTrenMay`, `MayNgheCTL.docTu`, `DocMayDichCTL.batTat`, `ChonGiongView.danhSach` gọi thẳng `(language:)`/`(identifier:)`/`speechVoices()`; bản vá 0e4b5ca ở `GiongSachHoc` còn sót `(identifier:)` trên luồng chính trước khi nạp xong.

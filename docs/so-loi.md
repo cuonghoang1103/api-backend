@@ -39,6 +39,13 @@ Mẫu một mục:
 - **Ảnh hưởng:** mọi lượt `nhanh` chạy Sonnet 5.5 — Luyện nói (từ 13/11, khi đổi Haiku → Sonnet), CT Work, chấm thi.
 - **Bài học:** đổi model trong chuỗi "nói nhanh" thì soi lại bảng thinking theo model; lưới đỡ "gửi lại bản tối giản" che lỗi khỏi người dùng nhưng cũng che khỏi người vận hành — đếm số lần nó bật trong log.
 
+### 15/11/2026 — CT Language (Hỏi Gấu đợt 4 — đọc ảnh, bắt khi đang làm) — model tin đáp án in sẵn trong ảnh + trần ra thiếu loại "đọc ảnh"
+- **Triệu chứng:** (1) đo thật với ảnh bài tập giả có dòng "こたえ" in sẵn: model chép đúng chữ nhưng khen "bạn làm đúng cả 3 câu" theo đáp án in sẵn (câu 1 chưa chuẩn); (2) `tsc` báo `TRAN_RA` thiếu khoá `doc-anh` — test vẫn xanh vì so `maxTokens` với chính `TRAN_RA['doc-anh']` (cả hai `undefined`) ⇒ lượt có ảnh chạy trần mặc định 1500.
+- **Nguyên nhân:** (1) khung `doc-anh` (`src/services/ctlanguage/hoiGau.ts › KHUNG`) chưa dặn tự kiểm lời giải có sẵn; (2) thêm khoá vào `KIEU_CAU` mà sót bảng `TRAN_RA`, và test đối chiếu với chính hằng số đang kiểm.
+- **Cách sửa:** (1) thêm dòng "đáp án in sẵn có thể sai — TỰ KIỂM; không thấy bài làm thì đừng nói bạn làm đúng" (đo lại: model sửa câu 1 và nói rõ đáp án in sẵn sai); (2) thêm `'doc-anh': 2600`, test so với số cụ thể (commit đợt 4).
+- **Ảnh hưởng:** không ai — chưa deploy.
+- **Bài học:** test so với chính hằng số đang kiểm là test rỗng (undefined === undefined) — so với GIÁ TRỊ cụ thể. Lời nhắc đọc ảnh phải tính tới chữ trong ảnh là DỮ LIỆU có thể sai, không phải sự thật.
+
 ### 15/11/2026 — CT Language (Hỏi Gấu đợt 3 — stream, bắt khi đang làm) — nháp đang viết chỉ hiện khối đầu tiên
 - **Triệu chứng:** màn xem thử giả lập stream (`CT_XEM_MAN=tro-ly-luong`) hiện thẻ câu trả lời TRỐNG dù nháp đã 700 ký tự; với luồng thật sẽ chỉ thấy đúng số khối của mẩu đầu tiên tới khi xong.
 - **Nguyên nhân:** `TraLoiGauView` (`ios-app …/TroLyGau/TraLoiGauCTL.swift`) cắt khối theo `@State soHien`; `State(initialValue:)` chỉ có tác dụng LẦN DỰNG ĐẦU — nháp lớn dần (cùng view, `hienDan = false`) vẫn bị cắt theo số khối lúc nháp còn rỗng.
@@ -537,3 +544,10 @@ Mẫu một mục:
 - **Cách sửa:** `if (pref?.deletedAt) continue;` trong vòng đẩy — cùng commit với tính năng lời mời nhắn tin (`loiMoiTinNhan.ts`, tuyến `POST /messages/threads/:id/accept`).
 - **Ảnh hưởng:** mọi người dùng app iOS chính đã xoá một cuộc trò chuyện mà người kia còn nhắn; không mất dữ liệu.
 - **Bài học:** "ẩn khỏi danh sách" có ba đường đọc (danh sách, huy hiệu, đẩy) — thêm một cờ ẩn thì soát cả ba, như bài học huy hiệu 09/09 đã nói cho đường thứ hai.
+
+### 15/11/2026 — CT Language iOS (game "Gấu Câu Chữ" + "Bếp Gấu", ngay sau commit đầu) — lớp game đứng hình: không thấy cá, không thấy khách
+- **Triệu chứng:** điểm, đề, giỏ cá trên HUD vẫn chạy (người máy câu được), nhưng cá dưới hồ không bao giờ hiện, dây câu đứng yên, hạt nổ không có; ở Bếp không thấy khách ở quầy dù bong bóng gọi món đổi liên tục.
+- **Nguyên nhân:** `ios-app/…/TroChoi/CauChu/CauChuCTL.swift › LopGameCauChuCTL` (và `LopKhachBepCTL`, `LopKhayBepCTL`, `ThanhGioCauCTL`) viết `let _ = dc.khung` trong `body` rồi `Canvas { … }` chỉ bắt `dc` (cùng một tham chiếu) ⇒ mỗi khung SwiftUI dựng lại body nhưng closure của Canvas giống hệt lần trước nên nó KHÔNG vẽ lại — lớp game giữ mãi khung đầu tiên.
+- **Cách sửa:** `let khung = dc.khung` và `_ = khung` NGAY TRONG closure Canvas (closure khác nhau mỗi khung ⇒ Canvas vẽ lại) — ios-app b0774c9.
+- **Ảnh hưởng:** chỉ bản trong cây (a03c020, 0e4b5ca), chưa phát hành; bắt được khi chụp máy ảo đủ 3 ngôn ngữ.
+- **Bài học:** Canvas điều khiển bằng bộ đếm khung phải BẮT giá trị đếm vào closure (như "Gấu Canh Trời" đọc `dc.khung` bên trong Canvas); đọc ở `body` rồi bỏ đi không đủ. Ảnh "HUD chạy mà cảnh đứng" ⇒ nghi Canvas không vẽ lại trước khi nghi động cơ.

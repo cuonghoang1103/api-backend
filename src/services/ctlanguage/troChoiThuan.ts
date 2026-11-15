@@ -35,6 +35,10 @@ export const GAME_CTL: Record<string, LuatGame> = {
   // Bút Thần Gấu: chữ trôi xuống, VIẾT TAY đúng chữ để Gấu vung bút hạ. 12 + combo×2 (trần +10) + 5 nửa trên + 5 "ngay đầu"
   // + 4 mỗi chữ thêm của từ nhiều chữ (trần +8). Viết tay chậm hơn gõ nhiều ⇒ trần tốc độ thấp.
   'but-than': { ten: 'Bút Thần Gấu', diemMoiCau: 40, thuongChang: 20, cauMoiGiay: 1.2, cheDo: CHE_DO },
+  // Gấu Chạy Ghép Câu: Gấu chạy, nhảy/lướt giữa 3 làn ăn đúng MẢNH tiếp theo của câu. Mỗi MẢNH ăn đúng là một câu:
+  // 10 + combo×2 (trần +10) + 5 khi cả câu ghép xong + 5 nếu câu đó không trượt mảnh nào ⇒ tối đa 30/mảnh.
+  // Mảnh tới theo đợt (≥ 0,6 s/đợt lúc nhanh nhất, chưa kể lúc qua cổng) ⇒ trần 2 mảnh/giây là lỏng tay.
+  'chay-ghep-cau': { ten: 'Gấu Chạy Ghép Câu', diemMoiCau: 30, thuongChang: 20, cauMoiGiay: 2, cheDo: CHE_DO },
 };
 
 /** Khung tên (vật phẩm tủ đồ) hiện được trên bảng xếp hạng — mã lạ ⇒ bỏ (không lưu chuỗi tuỳ ý của app). */

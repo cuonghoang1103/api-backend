@@ -114,3 +114,20 @@ test('game Câu Chữ + Bếp Gấu: có luật, trần điểm theo câu, trầ
   loi(() => kiemDiem(van({ game: 'bep-gau', cheDo: 'vuot-chang', chang: 2, dung: 12, diem: 12 * 35 + 61, thoiGianMs: 80_000 })), 'CTL_TC_DIEM');
   assert.equal(kiemThachDau({ game: 'bep-gau', nn: 'en', seed: 7, de: ['a', 'b', 'c', 'd'].map((c, i) => ({ id: i, chu: c, nghia: 'x' })) }).game, 'bep-gau');
 });
+
+test('game Chạy Ghép Câu: 30 điểm/mảnh, trần 2 mảnh/giây, đề thách đấu là câu ngắn (≤ 40 ký tự)', () => {
+  const l = GAME_CTL['chay-ghep-cau'];
+  assert.ok(l);
+  assert.equal(diemToiDa(l, 10, 0), 300);
+  kiemDiem(van({ game: 'chay-ghep-cau', dung: 10, diem: 300, thoiGianMs: 30_000 }));
+  loi(() => kiemDiem(van({ game: 'chay-ghep-cau', dung: 10, diem: 301, thoiGianMs: 30_000 })), 'CTL_TC_DIEM');
+  // 60 s ⇒ ≤ 123 mảnh.
+  kiemDiem(van({ game: 'chay-ghep-cau', dung: 123, diem: 0, thoiGianMs: 60_000 }));
+  loi(() => kiemDiem(van({ game: 'chay-ghep-cau', dung: 124, diem: 0, thoiGianMs: 60_000 })), 'CTL_TC_NHANH');
+  kiemDiem(van({ game: 'chay-ghep-cau', cheDo: 'vuot-chang', chang: 3, dung: 30, diem: 30 * 30 + 120, thoiGianMs: 120_000 }));
+  loi(() => kiemDiem(van({ game: 'chay-ghep-cau', cheDo: 'vuot-chang', chang: 3, dung: 30, diem: 30 * 30 + 121, thoiGianMs: 120_000 })), 'CTL_TC_DIEM');
+  // Đề là câu (dữ liệu giả): giữ nguyên câu ≤ 40 ký tự, nghĩa ≤ 60.
+  const cau = ['I like green tea.', 'She reads a book.', 'We walk to school.', 'They play in the park.'];
+  const t = kiemThachDau({ game: 'chay-ghep-cau', nn: 'en', cachHien: 'nghia', seed: 5, de: cau.map((c, i) => ({ id: -i - 1, chu: c, nghia: `câu thử ${i}` })) });
+  assert.deepEqual(t.de.map((m) => m.chu), cau);
+});

@@ -52,6 +52,20 @@ export function dsCongCu(laAdmin: boolean): LLMTool[] {
       },
     },
     {
+      name: 'bat_dau_hoc',
+      description:
+        'Bắt đầu buổi GIA SƯ ngoại ngữ cho chủ robot, dùng từ vựng và lịch ôn thật của họ trên web: ôn tập từ đến ' +
+        'hạn (on), học từ mới (moi), luyện nói (noi). Dùng khi người dùng muốn học/ôn/luyện tiếng Anh, Nhật, Trung.',
+      parameters: {
+        type: 'object',
+        properties: {
+          ngon_ngu: { type: 'string', enum: ['en', 'ja', 'zh'] },
+          kieu: { type: 'string', enum: ['on', 'moi', 'noi', 'tu_dong'] },
+        },
+        required: ['ngon_ngu', 'kieu'],
+      },
+    },
+    {
       name: 'lich_hom_nay',
       description: 'Xem các việc trong kế hoạch hôm nay của chủ robot: giờ, tên việc, đã xong/chưa.',
       parameters: { type: 'object', properties: {} },
@@ -141,6 +155,18 @@ async function chayMot(c: LLMToolCall, ng: NguCanhCongCu): Promise<string> {
         projectId: ng.projectId,
       });
       return `Đã thêm kế hoạch #${p.id}: "${p.title}" lúc ${String(a.gio)} (${String(a.lap)}).`;
+    }
+    case 'bat_dau_hoc': {
+      if (!ng.ownerId) return 'Robot chưa có chủ nên không mở được buổi học.';
+      const nn = String(a.ngon_ngu);
+      if (!['en', 'ja', 'zh'].includes(nn)) return 'Chỉ dạy được tiếng Anh, Nhật, Trung.';
+      const k = String(a.kieu);
+      const { batDauHoc } = await import('./giaSu.js');
+      const cau = await batDauHoc({
+        deviceId: ng.deviceId, userId: ng.ownerId, nn: nn as 'en' | 'ja' | 'zh',
+        kieu: k === 'on' || k === 'moi' || k === 'noi' ? k : 'tu-dong',
+      });
+      return `Buổi học đã mở. Trong "say", đọc NGUYÊN VĂN câu sau, không thêm bớt: ${cau}`;
     }
     case 'he_thong': {
       if (!ng.laAdmin) return 'Chỉ chủ web mới hỏi được số liệu hệ thống.';

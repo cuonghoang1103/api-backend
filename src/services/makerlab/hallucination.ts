@@ -144,11 +144,13 @@ export function checkHeardSpeech(
     avgLogprob?: number;
     /** Độ dài đoạn tiếng đã gửi đi nhận dạng, tính bằng giây. */
     audioSec?: number;
+    /** Đè ngưỡng độ dài tối thiểu (buổi học tiếng Nhật/Trung: đáp án 1 chữ CJK là hợp lệ). */
+    minChars?: number;
   } = {},
 ): SpeechCheck {
   const t = text.trim();
 
-  if (t.length < MIN_CHARS) return { ok: false, reason: `quá ngắn (${t.length} ký tự)` };
+  if (t.length < (stats.minChars ?? MIN_CHARS)) return { ok: false, reason: `quá ngắn (${t.length} ký tự)` };
 
   // ── Tầng 1: bất khả thi vật lý ──
   //

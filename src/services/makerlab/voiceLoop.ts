@@ -96,6 +96,7 @@ import { khopDoiNao, khopNaoTuDong, CHAO_DOI_NAO, CHAO_TU_DONG, type Nao } from 
 import { phanLoaiCau, loiDanDoDai, type DoDai, type LoaiCau } from './chonNao.js';
 import { NHAN_CHINH_HANG, chinhHangSanSang, modelRobotChinhHang, luongChinhHang, chuThietBi } from './naoChinhHang.js';
 import { dsCongCu, chayCacCongCu, NHAC_CONG_CU, type NguCanhCongCu } from './congCu.js';
+import { dangHoc, ngonNguDangHoc, goiYNgheGiaSu, xuLyGiaSu } from './giaSu.js';
 import type { LLMToolCall } from '../interview/llm/index.js';
 import { chonLoaiDem, layCauDem } from './cauDem.js';
 
@@ -913,13 +914,16 @@ export async function runVoiceTurn(input: VoiceTurnInput): Promise<VoiceTurnResu
     // không phải "sai ngôn ngữ", nên rất khó lần ra.
     // `null` = để Whisper tự nhận. Groq nhận `language` rỗng nghĩa là
     // tự dò, nên chỉ truyền khi chế độ thật sự muốn ép.
-    const lang = CHE_DO[persona0.cheDo].stt ?? '';
+    // Đang trong buổi học ngoại ngữ (giaSu.ts) ⇒ để Whisper TỰ NHẬN: người học trả lời bằng tiếng Nhật/Trung/Anh.
+    const nnHoc = ngonNguDangHoc(input.deviceId);
+    const lang = nnHoc ? '' : (CHE_DO[persona0.cheDo].stt ?? '');
     const tr = await transcribeWithGroq(wav, 'turn.wav', 'audio/wav', {
       language: lang,
       // Mồi vốn từ cho Whisper — tên riêng người dùng tự dạy, từ điều
       // khiển, thuật ngữ công nghệ. Không tốn thêm gì, và nó chữa đúng
       // loại lỗi khó chịu nhất: nghe sai TÊN và THUẬT NGỮ.
       hints: catGoiY([
+        goiYNgheGiaSu(input.deviceId),
         goiYNghe(persona0.cheDo, persona0.knowledge, persona0.name, persona0.wakeWord),
         // ⚠️ ĐÂY MỚI LÀ CHỖ CHỮA "ROBOT KHÔNG HIỂU GIỌNG MIỀN TRUNG".
         //
@@ -959,6 +963,9 @@ export async function runVoiceTurn(input: VoiceTurnInput): Promise<VoiceTurnResu
     const tiengNhanRa = String(tr.language || '').toLowerCase();
     tiengWhisper = tiengNhanRa || null;
     const CHO_PHEP = new Set(['vi', 'vietnamese', 'en', 'english', '']);
+    // Buổi học tiếng Nhật/Trung: KHÔNG vứt câu trả lời bằng chính thứ tiếng đang học.
+    if (nnHoc === 'ja') { CHO_PHEP.add('ja'); CHO_PHEP.add('japanese'); }
+    if (nnHoc === 'zh') { CHO_PHEP.add('zh'); CHO_PHEP.add('chinese'); }
     if (heard && tiengNhanRa && !CHO_PHEP.has(tiengNhanRa)) {
       logger.info('MakerLab bỏ qua — Whisper nhận ra ngôn ngữ lạ', {
         deviceId: input.deviceId,
@@ -975,7 +982,9 @@ export async function runVoiceTurn(input: VoiceTurnInput): Promise<VoiceTurnResu
     // Độ dài đoạn tiếng là bằng chứng mạnh nhất chống lại chuyện bịa —
     // xem hallucination.ts. Không truyền xuống thì tầng lọc đó tắt câm.
     const audioSec = input.pcm16.length / 2 / PCM_SAMPLE_RATE;
-    const check = checkHeardSpeech(heard, { ...tr, audioSec });
+    // Đáp án tiếng Nhật/Trung có khi chỉ 1–2 chữ ("猫") — trong buổi học hạ ngưỡng độ dài cho chữ CJK.
+    const coCjk = !!nnHoc && /[\u3040-\u30ff\u3400-\u9fff]/.test(heard);
+    const check = checkHeardSpeech(heard, { ...tr, audioSec, ...(coCjk ? { minChars: 1 } : {}) });
     if (!check.ok) {
       // Báo cho bo biết là KHÔNG hiểu, để nó bíp hai nốt đi xuống.
       //
@@ -1075,7 +1084,7 @@ export async function runVoiceTurn(input: VoiceTurnInput): Promise<VoiceTurnResu
       // Cắt tên ra khỏi câu lệnh. Để nguyên "Odin đi tới đây" thì model
       // coi tên là một phần yêu cầu và hay chào lại thay vì đi.
       heard = goi.conLai;
-    } else if (input.cham || dangThuc(input.deviceId)) {
+    } else if (input.cham || dangThuc(input.deviceId) || dangHoc(input.deviceId)) {
       // Đang trong cuộc nói chuyện — mỗi lượt đẩy hạn ra xa, nên không
       // phải gọi tên lại giữa chừng. Lượt mở bằng CHẠM cũng vào đây:
       // chạm là đã gọi rồi.
@@ -1118,6 +1127,26 @@ export async function runVoiceTurn(input: VoiceTurnInput): Promise<VoiceTurnResu
   if (overDailyCap(input.deviceId)) {
     timing.total = Date.now() - started;
     return { heard, said: '', actions: [], spoken: false, ms: timing };
+  }
+
+  // ── GIA SƯ NGOẠI NGỮ (giaSu.ts): bắt đầu / đang trong buổi học — trước cả đổi chế độ tiếng, vì câu "luyện nói
+  // tiếng Anh" có chữ "nói tiếng Anh" mà khopDoiCheDo sẽ hiểu thành lệnh đổi tiếng.
+  let doanGiaSu = '';
+  if (input.speak !== false) {
+    const uid = await chuThietBi(input.deviceId);
+    const hoc = uid ? await xuLyGiaSu({ deviceId: input.deviceId, userId: uid, heard }).catch((err) => {
+      logger.warn('MakerLab gia sư hỏng', { deviceId: input.deviceId, error: (err as Error).message });
+      return null;
+    }) : null;
+    if (hoc?.noi) {
+      const noiDuoc = await speakOnce(persona, hoc.noi, input.deviceId);
+      emitTranscript(input.deviceId, 'bot', hoc.noi);
+      pushHistory(input.deviceId, { role: 'user', content: heard }, { role: 'assistant', content: JSON.stringify({ say: hoc.noi, actions: [] }) });
+      if (noiDuoc) giuThucHoiThoai(input.deviceId, persona.giayThucGiac);
+      timing.total = Date.now() - started;
+      return { heard, said: hoc.noi, actions: [], spoken: noiDuoc, ms: timing };
+    }
+    if (hoc?.nhacLlm) doanGiaSu = hoc.nhacLlm;
   }
 
   // ── Đổi chế độ tiếng: xử lý TRƯỚC mọi thứ khác ──
@@ -1628,14 +1657,14 @@ export async function runVoiceTurn(input: VoiceTurnInput): Promise<VoiceTurnResu
       nao: persona.nao ?? 'tu-dong',
     });
     const r = await thinkAndSpeak(
-      persona, heard, input.deviceId, ctx, timing, doanHeThong || doanTraCuu, loai, moDau,
+      persona, heard, input.deviceId, ctx, timing, [doanGiaSu, doanHeThong || doanTraCuu].filter(Boolean).join('\n\n'), loai, moDau,
     );
     reply = r.reply;
     spoken = r.spoken;
     timing.llm = r.llmMs;
   } else {
     await dongMoDau(); // không bao giờ mở ở nhánh này — chỉ để chắc
-    reply = await think(persona, heard, input.deviceId, ctx, doanHeThong || doanTraCuu);
+    reply = await think(persona, heard, input.deviceId, ctx, [doanGiaSu, doanHeThong || doanTraCuu].filter(Boolean).join('\n\n'));
     timing.llm = Date.now() - t1;
   }
 

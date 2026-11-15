@@ -27,6 +27,9 @@ export interface LuatGame {
 export const GAME_CTL: Record<string, LuatGame> = {
   // Gấu Canh Trời: chữ rơi, gõ cách đọc để Gấu bắn hạ. 10 + combo×2 (trần +10) + 5 hạ ở nửa trên + 10 hạ "ngay đầu".
   'canh-troi': { ten: 'Gấu Canh Trời', diemMoiCau: 35, thuongChang: 20, cauMoiGiay: 2.5, cheDo: CHE_DO },
+  // Bút Thần Gấu: chữ trôi xuống, VIẾT TAY đúng chữ để Gấu vung bút hạ. 12 + combo×2 (trần +10) + 5 nửa trên + 5 "ngay đầu"
+  // + 4 mỗi chữ thêm của từ nhiều chữ (trần +8). Viết tay chậm hơn gõ nhiều ⇒ trần tốc độ thấp.
+  'but-than': { ten: 'Bút Thần Gấu', diemMoiCau: 40, thuongChang: 20, cauMoiGiay: 1.2, cheDo: CHE_DO },
 };
 
 /** Khung tên (vật phẩm tủ đồ) hiện được trên bảng xếp hạng — mã lạ ⇒ bỏ (không lưu chuỗi tuỳ ý của app). */

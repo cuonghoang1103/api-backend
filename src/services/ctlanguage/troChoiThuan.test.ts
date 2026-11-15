@@ -29,6 +29,19 @@ test('kiemDiem: điểm vượt trần theo số câu đúng ⇒ chặn', () => 
   loi(() => kiemDiem(van({ cheDo: 'vuot-chang', chang: 3, diem: 20 * 35 + 121, thoiGianMs: 90_000 })), 'CTL_TC_DIEM');
 });
 
+test('kiemDiem: Bút Thần Gấu (viết tay) — trần 40 điểm/chữ, trần tốc độ viết thấp hơn game gõ', () => {
+  const l = GAME_CTL['but-than'];
+  assert.ok(l);
+  assert.equal(diemToiDa(l, 10, 0), 400);
+  kiemDiem(van({ game: 'but-than', dung: 10, diem: 400 }));
+  loi(() => kiemDiem(van({ game: 'but-than', dung: 10, diem: 401 })), 'CTL_TC_DIEM');
+  // 60 giây × 1,2 + 3 = 75 chữ là trần; 76 ⇒ quá nhanh (game gõ thì 20 chữ/60 s vẫn qua dễ).
+  kiemDiem(van({ game: 'but-than', dung: 75, diem: 100 }));
+  loi(() => kiemDiem(van({ game: 'but-than', dung: 76, diem: 100 })), 'CTL_TC_NHANH');
+  kiemDiem(van({ game: 'but-than', cheDo: 'vuot-chang', chang: 2, dung: 9, diem: 9 * 40 + 60, thoiGianMs: 120_000 }));
+  loi(() => kiemDiem(van({ game: 'but-than', cheDo: 'vuot-chang', chang: 2, dung: 9, diem: 9 * 40 + 61, thoiGianMs: 120_000 })), 'CTL_TC_DIEM');
+});
+
 test('kiemDiem: quá nhanh, ván 60 giây kéo dài, chặng trong ván tính giờ ⇒ chặn', () => {
   loi(() => kiemDiem(van({ dung: 200, diem: 100 })), 'CTL_TC_NHANH');
   loi(() => kiemDiem(van({ thoiGianMs: 90_000 })), 'CTL_TC_GIO');

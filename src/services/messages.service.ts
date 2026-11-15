@@ -32,6 +32,7 @@ import { chanNoiDungXau } from './locNoiDung.js';
 import { getStorageProvider } from '../storage/StorageProvider.js';
 import { damBaoMfaAdmin, type MfaClaims } from './mfa/adminMfa.js';
 import { loadPresenceViewer, presenceFor, type PresenceViewer } from './presencePrivacy.js';
+import { coLoiMoiCho } from './loiMoiTinNhan.js';
 
 const MAX_CONTENT_LENGTH = 4000;
 const MAX_ATTACHMENTS_PER_MESSAGE = 5;
@@ -58,6 +59,8 @@ export interface ThreadPreference {
   archivedAt?: string;     // ISO timestamp; hide from default inbox
   markedUnreadAt?: string; // ISO timestamp; "Mark as unread" badge
   deletedAt?: string;      // ISO timestamp; hard-delete from viewer's sidebar
+  /** ISO timestamp; người xem bấm "Chấp nhận" một lời mời nhắn tin (loiMoiTinNhan.ts) ⇒ vào hộp chính. */
+  acceptedAt?: string;
 }
 
 type ThreadPreferencesMap = Record<string, ThreadPreference>;
@@ -375,6 +378,16 @@ export class MessagesService {
       filtered.map((t) => this.serializeThreadAsync(t, userId, nicknameByThreadAndPeer, presenceViewer)),
     );
 
+    // Lời mời nhắn tin (người lạ nhắn tới, mình chưa trả lời/chấp nhận) — luật ở loiMoiTinNhan.ts. Chỉ THÊM cờ `laLoiMoi`;
+    // hội thoại vẫn nằm trong danh sách như cũ (web chưa đọc cờ này), app CT Language tách nó sang tab "Lời mời".
+    const loiMoi = await coLoiMoiCho(
+      userId,
+      filtered,
+      (t) => (t.userAId === userId ? t.userBId : t.userAId),
+      (t) => !!this.getPreferenceForViewer(t.preferences, userId)?.acceptedAt,
+      (t) => t.messages.length > 0,
+    );
+
     return filtered.map((t, idx) => {
       const lastMsg = t.messages[0] ?? null;
       const lastRead = readMap.get(t.id) ?? new Date(0);
@@ -389,6 +402,7 @@ export class MessagesService {
         lastMessage: lastMsg ? this.serializeMessagePreview(lastMsg) : null,
         unreadCount: unread,
         preferences: this.getPreferenceForViewer(t.preferences, userId),
+        laLoiMoi: loiMoi.get(t.id) ?? false,
       };
     });
   }
@@ -833,6 +847,9 @@ export class MessagesService {
         const pref = this.getPreferenceForViewer((thread as { preferences?: unknown }).preferences, uid);
         const tatToi = pref?.mutedUntil ? new Date(pref.mutedUntil) : null;
         if (tatToi && tatToi > new Date()) continue;
+        // "Xoá cho riêng tôi" / Từ chối lời mời ⇒ hội thoại không còn trong hộp thư của họ (tin mới KHÔNG đưa nó về) —
+        // vẫn đẩy thông báo thì máy kêu về một cuộc trò chuyện họ không mở được.
+        if (pref?.deletedAt) continue;
 
         const chuaDoc = await this.getUnreadCount(uid).catch(() => 0);
         // 21/10/2026: đồng nghiệp CT Work nhắn nhau ⇒ tới app CT Work (nếu người nhận đã cài; không bắn đôi sang app
@@ -904,6 +921,28 @@ export class MessagesService {
   }
 
   async getUnreadCount(userId: number) {
+    return (await this.demChuaDoc(userId)).length;
+  }
+
+  /**
+   * Số hội thoại chưa đọc, tách hộp chính / lời mời (app CT Language: huy hiệu nút Tin nhắn chỉ đếm hộp chính — lời mời
+   * của người lạ không được "réo" người dùng; tab Lời mời có số riêng). `count` = tổng, y như `getUnreadCount`.
+   */
+  async getUnreadSplit(userId: number): Promise<{ count: number; hopChinh: number; loiMoi: number }> {
+    const ds = await this.demChuaDoc(userId);
+    const co = await coLoiMoiCho(
+      userId,
+      ds,
+      (t) => (t.userAId === userId ? t.userBId : t.userAId),
+      (t) => !!this.getPreferenceForViewer(t.preferences, userId)?.acceptedAt,
+      () => true,
+    );
+    const loiMoi = ds.filter((t) => co.get(t.id)).length;
+    return { count: ds.length, hopChinh: ds.length - loiMoi, loiMoi };
+  }
+
+  /** Hội thoại người xem NHÌN THẤY và đang có tin chưa đọc (cùng bộ lọc với `listThreadsForUser`). */
+  private async demChuaDoc(userId: number) {
     const threads = await prisma.messageThread.findMany({
       where: {
         OR: [
@@ -956,14 +995,12 @@ export class MessagesService {
     });
     const readMap = new Map(reads.map((r) => [r.threadId, r.lastReadAt]));
 
-    let count = 0;
-    for (const t of nhinThay) {
+    return nhinThay.filter((t) => {
       const last = t.messages[0];
-      if (!last) continue;
+      if (!last) return false;
       const lastRead = readMap.get(t.id) ?? new Date(0);
-      if (last.senderId !== userId && last.createdAt > lastRead) count += 1;
-    }
-    return count;
+      return last.senderId !== userId && last.createdAt > lastRead;
+    });
   }
 
   /**
@@ -1364,6 +1401,27 @@ export class MessagesService {
     });
 
     this.emitThreadUpdated(thread, { preferenceChanged: { userId, slot: 'deletedAt', value: null } });
+    return this.getPreferenceForViewer(next, userId);
+  }
+
+  /**
+   * Chấp nhận một lời mời nhắn tin (loiMoiTinNhan.ts) ⇒ hội thoại vào hộp chính của người xem. Không báo người kia
+   * (giống các app lớn: người gửi chỉ biết khi được trả lời). Gỡ luôn "xoá cho riêng tôi" nếu trước đó lỡ bấm Từ chối.
+   */
+  async acceptRequest(threadId: number, userId: number) {
+    const thread = await prisma.messageThread.findUnique({ where: { id: threadId } });
+    if (!thread) throw new AppError('Thread not found', 404, 'THREAD_NOT_FOUND');
+    this.assertParticipant(thread, userId);
+    if (thread.type !== 'USER') throw new AppError('Chỉ hội thoại giữa hai người mới có lời mời', 400, 'NOT_A_REQUEST');
+
+    const current = (thread.preferences ?? {}) as ThreadPreferencesMap;
+    const mine = { ...(current[String(userId)] ?? {}) };
+    mine.acceptedAt = new Date().toISOString();
+    delete mine.deletedAt;
+    delete mine.archivedAt;
+    const next: ThreadPreferencesMap = { ...current, [String(userId)]: mine };
+    await prisma.messageThread.update({ where: { id: threadId }, data: { preferences: next as any } });
+    this.emitThreadUpdated(thread, { preferenceChanged: { userId, slot: 'acceptedAt', value: mine.acceptedAt } });
     return this.getPreferenceForViewer(next, userId);
   }
 

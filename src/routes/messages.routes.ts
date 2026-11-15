@@ -12,7 +12,8 @@
  *   POST   /api/v1/messages/threads/:id/messages          — Send a message
  *   PATCH  /api/v1/messages/threads/:id/read              — Mark thread as read
  *   DELETE /api/v1/messages/messages/:id                  — Soft-delete a message
- *   GET    /api/v1/messages/unread-count                  — Total unread across all threads
+ *   GET    /api/v1/messages/unread-count                  — Total unread across all threads (+ hopChinh / loiMoi)
+ *   POST   /api/v1/messages/threads/:id/accept            — Accept a message request (stranger ⇒ main inbox)
  *   POST   /api/v1/messages/upload                        — Upload a chat attachment (10MB cap)
  *
  *   GET    /api/v1/admin/messages/threads                 — Admin inbox (all admin-threads)
@@ -61,10 +62,12 @@ function chatUploadSingle(req: Request, res: Response, next: NextFunction) {
 router.use(authenticate);
 
 // ─── GET /api/v1/messages/unread-count ─────────────────
-router.get('/unread-count', async (req: Request, res: Response<ApiResponse<{ count: number }>>, next: NextFunction) => {
+// `count` = tổng như trước (web, app chính). `hopChinh` / `loiMoi` (15/11/2026, app CT Language): tách số của hộp chính và
+// của lời mời nhắn tin từ người lạ (loiMoiTinNhan.ts) — huy hiệu không "réo" vì tin của người lạ.
+router.get('/unread-count', async (req: Request, res: Response<ApiResponse<{ count: number; hopChinh: number; loiMoi: number }>>, next: NextFunction) => {
   try {
-    const count = await messagesService.getUnreadCount(req.userId!);
-    res.json({ success: true, data: { count } });
+    const data = await messagesService.getUnreadSplit(req.userId!);
+    res.json({ success: true, data });
   } catch (error) {
     next(error);
   }
@@ -490,6 +493,20 @@ router.post('/threads/:id/unarchive', async (req: Request, res: Response, next: 
     const id = parseInt(req.params.id, 10);
     if (isNaN(id)) throw new AppError('Invalid thread ID', 400, 'INVALID_ID');
     const preferences = await messagesService.unarchiveThread(id, req.userId!);
+    res.json({ success: true, data: { preferences } });
+  } catch (error) {
+    next(error);
+  }
+});
+
+// ─── POST /api/v1/messages/threads/:id/accept ───────────
+// Chấp nhận lời mời nhắn tin (người lạ nhắn tới) ⇒ vào hộp chính. Từ chối = DELETE /threads/:id/hard (xoá cho riêng
+// mình, khôi phục được ở "Đã xoá"); chặn = POST /blocks/:userId. Luật lời mời: services/loiMoiTinNhan.ts.
+router.post('/threads/:id/accept', async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const id = parseInt(req.params.id, 10);
+    if (isNaN(id)) throw new AppError('Invalid thread ID', 400, 'INVALID_ID');
+    const preferences = await messagesService.acceptRequest(id, req.userId!);
     res.json({ success: true, data: { preferences } });
   } catch (error) {
     next(error);

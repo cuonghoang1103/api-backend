@@ -12,8 +12,9 @@
  *   3. người xem cũng BẬT (luật đối ứng kiểu Messenger: tắt của mình thì không thấy của ai);
  *   4. không ai chặn ai (bất kỳ chiều);
  *   5. không phải AI agent;
- *   6. hai người có QUAN HỆ: bạn bè (đã chấp nhận), đã có cuộc trò chuyện riêng, hoặc cùng một không gian CT Work
- *      (không tính vai khách cổng — GUEST). Người lạ không thấy trạng thái của nhau.
+ *   6. hai người có QUAN HỆ: bạn bè (đã chấp nhận), đã có cuộc trò chuyện riêng, cùng một không gian CT Work
+ *      (không tính vai khách cổng — GUEST), hoặc THEO DÕI NHAU (hai chiều) trong cộng đồng CT Language (15/11/2026 —
+ *      dải "Đang trực tuyến" của app CT Language). Người lạ không thấy trạng thái của nhau; theo dõi MỘT chiều không đủ.
  * Xem chính mình thì luôn thấy.
  */
 
@@ -73,12 +74,13 @@ export function presenceFor(
 
 /**
  * Ai trong `targetIds` có quan hệ với `viewerId`: bạn bè đã chấp nhận ∪ người đã có cuộc trò chuyện (USER hoặc ADMIN)
- * ∪ người cùng không gian CT Work (cả hai không phải GUEST, không gian chưa xoá). Ba truy vấn cho cả danh sách.
+ * ∪ người cùng không gian CT Work (cả hai không phải GUEST, không gian chưa xoá) ∪ theo dõi nhau ở cộng đồng CT Language.
+ * Năm truy vấn cho cả danh sách.
  */
 export async function presenceCircle(viewerId: number, targetIds: number[]): Promise<Set<number>> {
   const ids = [...new Set(targetIds.filter((id) => id !== viewerId))];
   if (!ids.length) return new Set();
-  const [ban, chuyen, cungKg] = await Promise.all([
+  const [ban, chuyen, cungKg, ctlToiTheo, ctlTheoToi] = await Promise.all([
     prisma.friendship.findMany({
       where: {
         status: 'ACCEPTED',
@@ -108,9 +110,14 @@ export async function presenceCircle(viewerId: number, targetIds: number[]): Pro
       },
       select: { userId: true },
     }),
+    // Cộng đồng CT Language: chỉ tính khi theo dõi NHAU (giao của hai chiều, ghép ở dưới).
+    prisma.ctlTheoDoi.findMany({ where: { nguoiId: viewerId, duocId: { in: ids } }, select: { duocId: true } }),
+    prisma.ctlTheoDoi.findMany({ where: { duocId: viewerId, nguoiId: { in: ids } }, select: { nguoiId: true } }),
   ]);
   const out = new Set<number>();
   for (const f of ban) out.add(f.requesterId === viewerId ? f.addresseeId : f.requesterId);
+  const theoToi = new Set(ctlTheoToi.map((r) => r.nguoiId));
+  for (const r of ctlToiTheo) if (theoToi.has(r.duocId)) out.add(r.duocId);
   for (const t of chuyen) {
     for (const p of [t.userId, t.adminUserId, t.userAId, t.userBId]) if (typeof p === 'number' && p !== viewerId) out.add(p);
   }

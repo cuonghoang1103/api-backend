@@ -150,10 +150,10 @@ export default function Page() {
       <ul>
         <li><b>Hiển thị gì:</b> chấm xanh “đang hoạt động” khi Quý khách đang kết nối, và “hoạt động N phút trước” dựa trên mốc hoạt động gần nhất (<i>lastActiveAt</i>).
           Khi mở, ứng dụng gửi tín hiệu định kỳ tới máy chủ để cập nhật mốc này.</li>
-        <li><b>Ai thấy:</b> chỉ người dùng đã đăng nhập <b>có quan hệ với Quý khách</b>: bạn bè, người đã có cuộc trò chuyện với Quý khách, và thành viên cùng không gian làm việc
-          CT Work (không tính khách của cổng khách hàng). Khách chưa đăng nhập và người lạ không thấy trạng thái của Quý khách ở bất kỳ đâu — trang cá nhân, danh sách
+        <li><b>Ai thấy:</b> chỉ người dùng đã đăng nhập <b>có quan hệ với Quý khách</b>: bạn bè, người đã có cuộc trò chuyện với Quý khách, thành viên cùng không gian làm việc
+          CT Work (không tính khách của cổng khách hàng), và người <b>theo dõi nhau</b> (cả hai chiều) với Quý khách trong cộng đồng CT Language — theo dõi một chiều không đủ. Khách chưa đăng nhập và người lạ không thấy trạng thái của Quý khách ở bất kỳ đâu — trang cá nhân, danh sách
           người theo dõi/bạn bè, Tin nhắn, danh sách Thành viên CT Work hay danh sách “Đang online” (danh sách này chỉ gồm những người có quan hệ với người xem).</li>
-        <li><b>Tắt trạng thái hoạt động:</b> tắt “Hiển thị trạng thái hoạt động” (trong phần chỉnh sửa hồ sơ của ứng dụng, hoặc phần trạng thái hoạt động của CT Work).
+        <li><b>Tắt trạng thái hoạt động:</b> tắt “Hiển thị trạng thái hoạt động” (trong phần chỉnh sửa hồ sơ của ứng dụng, phần trạng thái hoạt động của CT Work, hoặc Tin nhắn › Cài đặt của ứng dụng CT Language).
           Khi tắt, chấm xanh và thời điểm hoạt động của Quý khách không được gửi tới bất kỳ ai, ở mọi nơi kể trên. Các danh sách áp dụng ngay; tín hiệu trực tiếp
           (chấm xanh bật/tắt theo thời gian thực) áp dụng đầy đủ từ lần ứng dụng kết nối lại.</li>
         <li><b>Luật đối ứng:</b> nếu Quý khách tắt trạng thái của mình thì Quý khách cũng không thấy trạng thái của người khác, ở mọi nơi kể trên.</li>

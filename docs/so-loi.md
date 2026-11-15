@@ -530,3 +530,10 @@ Mẫu một mục:
 - **Cách sửa:** danh sách giọng chưa nạp xong ⇒ dựng giọng vùng trong `Task.detached` rồi `await` (luồng chính rảnh, nạp nền chạy xong); đã nạp thì như cũ (ios-app 0e4b5ca).
 - **Ảnh hưởng:** mọi chỗ đọc to qua `DocToCTL`/`GiongSachHoc` trong vài giây đầu sau khi mở app lần đầu (game, từ điển); chưa rõ máy thật có dính không — máy ảo dính 3/3 lần. Các chỗ khác còn gọi `giongTuDong … ?? AVSpeechSynthesisVoice(language:)` trên luồng chính (`CoVuGau`, `GoiCuongMiniCTL`, `DocTu`) CHƯA vá.
 - **Bài học:** "đưa việc chậm ra nền" chưa đủ khi API kia cũng có bản đồng bộ trên luồng chính dùng chung khoá nội bộ — mọi lời gọi `AVSpeechSynthesisVoice` lúc danh sách giọng đang nạp phải ở nền; ảnh màn "đứng im" thì `sample <pid>` trước, đừng đoán do vẽ.
+
+### 15/11/2026 — Tin nhắn (backend, lộ ra khi làm "Lời mời" cho app CT Language) — vẫn đẩy thông báo cho hội thoại người nhận đã "Xoá cho riêng tôi"
+- **Triệu chứng:** xoá một cuộc trò chuyện (hoặc nay: Từ chối lời mời của người lạ), người kia nhắn tiếp ⇒ máy vẫn kêu + hiện thông báo, chạm vào không mở được gì vì hội thoại không còn trong hộp thư (tin mới KHÔNG đưa nó về).
+- **Nguyên nhân:** `src/services/messages.service.ts › dayThongBaoTinMoi` chỉ bỏ người đã tắt tiếng (`mutedUntil`), không nhìn `preferences[người nhận].deletedAt` — trong khi `listThreadsForUser` / `getUnreadCount` đã lọc `deletedAt` từ 09/09.
+- **Cách sửa:** `if (pref?.deletedAt) continue;` trong vòng đẩy — cùng commit với tính năng lời mời nhắn tin (`loiMoiTinNhan.ts`, tuyến `POST /messages/threads/:id/accept`).
+- **Ảnh hưởng:** mọi người dùng app iOS chính đã xoá một cuộc trò chuyện mà người kia còn nhắn; không mất dữ liệu.
+- **Bài học:** "ẩn khỏi danh sách" có ba đường đọc (danh sách, huy hiệu, đẩy) — thêm một cờ ẩn thì soát cả ba, như bài học huy hiệu 09/09 đã nói cho đường thứ hai.

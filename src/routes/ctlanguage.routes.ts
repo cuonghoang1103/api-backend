@@ -21,6 +21,7 @@ import {
 } from '../services/ctlanguage/congDong.js';
 import { docThongBao, dsTheoDoi, dsThongBao, hoSoNguoi, soChuaDoc, theoDoi, xepHang } from '../services/ctlanguage/congDongNguoi.js';
 import { luotGau, nhoGauTraLoi } from '../services/ctlanguage/congDongGau.js';
+import { timNguoi, trucTuyen } from '../services/ctlanguage/tinNhanCTL.js';
 import { ANH_BYTE_TOI_DA, taiAnh } from '../services/ctlanguage/congDongAnh.js';
 import { chamBuoiGoi, chayLuotGoi, luotGoi } from '../services/ctlanguage/goiCuongMini.js';
 import { demCuocGoi, ghiLuotTra } from '../services/ctlanguage/khamPha.js';
@@ -123,6 +124,20 @@ router.get('/cong-dong/thong-bao', authenticate, async (req: Request, res: Respo
 });
 router.get('/cong-dong/thong-bao/chua-doc', authenticate, async (req: Request, res: Response<ApiResponse>, next) => {
   try { res.json({ success: true, data: await soChuaDoc(req.userId!) }); } catch (e) { next(e); }
+});
+/**
+ * Tin nhắn của app CT Language (15/11/2026) — services/ctlanguage/tinNhanCTL.ts. Nhắn tin thật đi `/api/v1/messages/*`.
+ *   tim-nguoi  — nút "+": tìm người theo tên TRONG cộng đồng (không phải danh bạ toàn web); `q` rỗng ⇒ người mình theo dõi.
+ *   truc-tuyen — dải "Đang trực tuyến": người đã nhắn với mình ∪ theo dõi nhau, đang online, được phép thấy.
+ */
+router.get('/cong-dong/tin-nhan/tim-nguoi', gioiHanTra, authenticate, async (req: Request, res: Response<ApiResponse>, next) => {
+  try { res.json({ success: true, data: { items: await timNguoi(req.userId!, req.query.q) } }); } catch (e) { next(e); }
+});
+router.get('/cong-dong/tin-nhan/truc-tuyen', gioiHanTra, authenticate, async (req: Request, res: Response<ApiResponse>, next) => {
+  try {
+    const { getOnlineUserIds } = await import('../socket/messaging.socket.js');
+    res.json({ success: true, data: { items: await trucTuyen(req.userId!, getOnlineUserIds()) } });
+  } catch (e) { next(e); }
 });
 /** Lượt "Nhờ Gấu" còn lại hôm nay (không gửi gì tới AI — cố ý KHÔNG nằm dưới `/ai/`). */
 router.get('/cong-dong/luot-gau', authenticate, async (req: Request, res: Response<ApiResponse>, next) => {

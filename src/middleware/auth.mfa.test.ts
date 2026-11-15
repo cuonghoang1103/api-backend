@@ -79,3 +79,9 @@ test('ADMIN_MFA_ENFORCE=true, admin chưa bật ⇒ 403 MFA_SETUP_REQUIRED', asy
 test('không phải admin ⇒ 403 FORBIDDEN (không lộ chuyện MFA)', async () => {
   assert.deepEqual(await chay(userGia({ admin: false, mfaEnabled: true })), { status: 403, code: 'FORBIDDEN' });
 });
+
+test('token mang roleVersion CŨ (đã đổi mật khẩu / đăng xuất mọi thiết bị) ⇒ 401 SESSION_REVOKED', async () => {
+  const loi = await chay({ ...userGia({}), roleVersion: 1n }, {});
+  assert.ok(loi, 'phải bị chặn');
+  assert.equal((loi as { code?: string }).code, 'SESSION_REVOKED');
+});

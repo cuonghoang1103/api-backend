@@ -28,6 +28,7 @@
 
 import { Router, type Request, type Response, type NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
+import { phienConHieuLuc, loiPhienThuHoi } from '../services/phienDangNhap.js';
 import {
  listJobs,
  getJobStats,
@@ -99,6 +100,7 @@ async function requireAdminInline(
  accountNonLocked: true,
  mfaEnabled: true,
  mfaEnabledAt: true,
+ roleVersion: true,
  roles: {
  select: {
  role: { select: { name: true } },
@@ -110,6 +112,7 @@ async function requireAdminInline(
  if (!user) throw new UnauthorizedError('User not found');
  if (!user.enabled) throw new ForbiddenError('Account is disabled');
  if (!user.accountNonLocked) throw new ForbiddenError('Account is locked');
+ if (!phienConHieuLuc(decoded.roleVersion, user.roleVersion)) throw loiPhienThuHoi();
 
  const isAdmin = user.roles.some((ur) => {
  const name = (ur.role?.name ?? '').toUpperCase();

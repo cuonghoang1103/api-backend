@@ -10,6 +10,7 @@ import { generateOtp, verifyOtp, getOtpTtl, type OtpType } from './otp.service.j
 import { logger } from '../utils/logger.js';
 import { putObject } from '../config/r2.js';
 import { mfaAtConHieuLuc } from './mfa/adminMfa.js';
+import { phienConHieuLuc, loiPhienThuHoi } from './phienDangNhap.js';
 import { taoTenDangNhapDep } from './doiTenDangNhap.service.js';
 import { chanNoiDungXau } from './locNoiDung.js';
 
@@ -1020,6 +1021,9 @@ export class AuthService {
     if (!user) throw new AppError('User not found', 401, 'USER_NOT_FOUND');
     if (!user.enabled) throw new AppError('Account is disabled', 403, 'ACCOUNT_DISABLED');
     if (!user.accountNonLocked) throw new AppError('Account is locked', 403, 'ACCOUNT_LOCKED');
+    // Phiên đã bị thu hồi (đổi mật khẩu / đăng xuất mọi thiết bị / đổi vai trò) ⇒ KHÔNG làm mới — trước 15/11/2026 đường
+    // này gia hạn được token cũ tới 30 ngày sau khi chủ tài khoản đã đổi mật khẩu.
+    if (!phienConHieuLuc(decoded.roleVersion, user.roleVersion)) throw loiPhienThuHoi();
 
     // Mang claim MFA sang token mới NẾU còn hạn (tính từ mốc xác minh gốc,
     // không phải từ lúc refresh) và không cũ hơn lần bật MFA gần nhất.
@@ -1028,6 +1032,22 @@ export class AuthService {
       ? decoded.mfaAt
       : undefined;
 
+    return this.buildAuthResponse(user, mfaAt);
+  }
+
+  /**
+   * "Đăng xuất mọi thiết bị" (15/11/2026): tăng roleVersion ⇒ mọi JWT đang có (máy khác, token lộ) chết ở `authenticate`
+   * và `/auth/refresh`; trả cặp token MỚI cho chính máy đang bấm để nó không bị đăng xuất theo. Giữ claim MFA nếu còn hạn.
+   */
+  async dangXuatMoiThietBi(userId: number, mfaAtCu?: number): Promise<AuthResponse> {
+    const user = await prisma.user.update({
+      where: { id: userId },
+      data: { roleVersion: { increment: 1 } },
+      include: { roles: { include: { role: true } } },
+    });
+    if (!user.enabled) throw new AppError('Account is disabled', 403, 'ACCOUNT_DISABLED');
+    if (!user.accountNonLocked) throw new AppError('Account is locked', 403, 'ACCOUNT_LOCKED');
+    const mfaAt = user.mfaEnabled && mfaAtConHieuLuc(mfaAtCu, { enabledAt: user.mfaEnabledAt }) ? mfaAtCu : undefined;
     return this.buildAuthResponse(user, mfaAt);
   }
 

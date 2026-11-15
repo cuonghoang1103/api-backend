@@ -4,6 +4,9 @@ import { config } from '../config/env.js';
 import { prisma } from '../config/database.js';
 import { AppError, UnauthorizedError, ForbiddenError } from './errorHandler.js';
 import { quyetDinhMfaAdmin, loiMfa } from '../services/mfa/adminMfa.js';
+import { phienConHieuLuc, loiPhienThuHoi } from '../services/phienDangNhap.js';
+
+export { phienConHieuLuc, loiPhienThuHoi };
 
 export interface JwtPayload {
   userId: number;
@@ -46,12 +49,15 @@ export async function authenticate(
     // the JWT alone is not enough because it has a long TTL.
     const dbUser = await prisma.user.findUnique({
       where: { id: decoded.userId },
-      select: { enabled: true, accountNonLocked: true, kind: true },
+      select: { enabled: true, accountNonLocked: true, kind: true, roleVersion: true },
     });
 
     if (!dbUser) throw new UnauthorizedError('User not found');
     if (!dbUser.enabled) throw new ForbiddenError('Account is disabled');
     if (!dbUser.accountNonLocked) throw new ForbiddenError('Account is locked');
+    // Thu hồi phiên (15/11/2026): đổi/đặt lại mật khẩu, "đăng xuất mọi thiết bị", đổi vai trò, xoá dữ liệu… đều tăng
+    // roleVersion — trước đây không ai so ⇒ JWT cũ trên máy khác vẫn dùng (và /auth/refresh gia hạn) tới 30 ngày.
+    if (!phienConHieuLuc(decoded.roleVersion, dbUser.roleVersion)) throw loiPhienThuHoi();
     // CT Work AI agent (CTW-28): JWT nào còn sót của tài khoản đã chuyển thành agent (bot fp_* cũ) chết ngay — agent
     // chỉ xác thực bằng token ctw_ (apiTokenAuth, chạy TRƯỚC middleware này trên router CT Work).
     if (dbUser.kind === 'AGENT') throw new AppError('AI agents cannot sign in. Use the agent\'s CT Work API token.', 403, 'AGENT_NO_LOGIN');
@@ -197,6 +203,8 @@ export function taoRequireAdmin(role: string, taiUser: TaiUserCoVaiTro) {
       if (!user.accountNonLocked) {
         throw new ForbiddenError('Account is locked');
       }
+
+      if (!phienConHieuLuc(decoded.roleVersion, user.roleVersion)) throw loiPhienThuHoi();
 
       const userRoles = user.roles.map((ur) => ur.role.name.toUpperCase().replace('ROLE_', ''));
       const hasRole = userRoles.includes(role.toUpperCase().replace('ROLE_', ''));

@@ -462,4 +462,16 @@ router.post('/logout', (_req: Request, res: Response) => {
   res.json({ success: true, message: 'Logged out successfully.' });
 });
 
+// ─── POST /api/v1/auth/logout-all (15/11/2026) ──────────
+// "Đăng xuất mọi thiết bị khác": tăng roleVersion ⇒ mọi JWT khác chết ngay (authenticate + /auth/refresh so phiên bản);
+// máy đang bấm nhận cặp token MỚI trong `data` để ở lại. Client không lưu token mới thì cũng bị đăng xuất — an toàn.
+router.post('/logout-all', authenticate, async (req: Request, res: Response<ApiResponse>, next: NextFunction) => {
+  try {
+    const data = await authService.dangXuatMoiThietBi(req.userId!, req.user?.mfaAt);
+    res.json({ success: true, message: 'Đã đăng xuất mọi thiết bị khác.', data });
+  } catch (error) {
+    next(error);
+  }
+});
+
 export default router;

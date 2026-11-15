@@ -18,6 +18,13 @@ Mẫu một mục:
 
 ---
 
+### 15/11/2026 — CT Language iOS (khoá học + Phát âm) — câu lỗi kỹ thuật lộ ra người học
+- **Triệu chứng:** máy chủ không trả được mục lục khoá ⇒ màn học hiện "Máy chủ trả 404 cho index.json"; Phát âm khi chưa cắm khoá Azure hiện "Máy chủ chưa bật chấm phát âm"; ôn thẻ thiếu bộ thẻ nói "sau khi web cập nhật".
+- **Nguyên nhân:** `ios-app/CuongThaiApp/Shared/SachHoc/KhoSachHoc.swift › taiNguon` dựng câu lỗi cho người lập trình (mã HTTP + tên tệp); `CTLanguageApp/Modules/PhatAm/*` và `Shared/SachHoc/OnTheSH.swift` viết theo góc nhìn máy chủ/web.
+- **Cách sửa:** câu cho người học ("Chưa tải được nội dung khoá học lúc này… (mã N)", "Chấm phát âm đang tạm nghỉ…", "Bộ thẻ … chưa sẵn sàng"), test `LuyenPhatAmTests` cập nhật (ios-app `934f256`, `4ffd592`). Câu `thongBao` của backend (`src/services/ctlanguage/phatAm.ts:30`) vẫn thắng câu app khi có — chưa đổi.
+- **Ảnh hưởng:** chỉ hiện khi máy chủ/khoá AI trục trặc; chưa phát hành.
+- **Bài học:** mọi `throw ….hong("…")` trong mã giao diện là câu NGƯỜI DÙNG đọc — viết cho họ, để chi tiết kỹ thuật (mã) ở cuối trong ngoặc.
+
 ### 15/11/2026 — CT Language iOS (khối bài học chưa hỗ trợ + chân mục lục) — còn nút "Làm phần này trên web" mở Safari tới cuongthai.com
 - **Triệu chứng:** (soát trước khi nộp App Store, chưa ai báo) khối bài học app chưa hiểu (`.chuaBiet`) hiện nhãn "Sắp có trên app" + nút "Làm phần này trên web" mở Safari tới cuongthai.com — nơi có bán Pro; chân mục lục khoá ghi "Nội dung giống hệt bản web (cuongthai.com/…)".
 - **Nguyên nhân:** `ios-app/CuongThaiApp/Shared/SachHoc/KhoiTuongTacSH.swift › DotHaiSH` (~dòng 630) và `MucLucSachHocView.swift › chanTrang` viết cho app CuongThai chính (có web đi kèm) rồi được kéo nguyên sang CT Language qua `Shared/SachHoc`.

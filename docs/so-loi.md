@@ -502,3 +502,10 @@ Mẫu một mục:
 - **Cách sửa:** bỏ hẳn đường "đổ cả trang thô vào ô nhập" — "Liên kết" nay mở màn Đọc trang web (`DocLinkCTL` + bộ rút bài `RutBaiWebCTL`), gom khoảng trắng bằng mẫu ICU đúng `[ \t\r\n 　]+` + test `RutBaiWebTests.testThucTheVaKhoangTrang` (ios-app c54ab21).
 - **Ảnh hưởng:** người dùng CT Language iOS dùng Dịch › Liên kết từ đợt D (14/11) — chưa phát hành App Store, chỉ TestFlight.
 - **Bài học:** trong chuỗi thô `#"…"#` của Swift, ký tự Unicode trong regex phải viết kiểu ICU (`\uXXXX` / `\x{…}`); regex sai không ném lỗi với `replacingOccurrences` — mỗi regex cần một test có dữ liệu thật đi qua.
+
+### 15/11/2026 — Video bài giảng (máy thuê vast4, 48 làn render) — hơn 1 giờ không ra tập nào, rồi 14 tập LOI vì font quá hạn
+- **Triệu chứng:** dựng vast4 (EPYC ~61 nhân) + bật 48 làn t1–t48: 70 phút sau `/tmp/r-<id>.log` vẫn rỗng, không có tiến trình `remotion render`, load 103; sau khi sửa thì 14 tập LOI với `delayRender() "Fetching Mona Sans font" … not cleared after 58000ms`.
+- **Nguyên nhân:** (1) `video-bai-giang/xuat/lam-bai.mts:22` luôn chạy `xuat/dang-ky.mts` (nạp lại ~3.700 kịch bản để sinh `_danhSach.ts`) trước mỗi render — 48 làn chung `~/vbg` cùng chạy ⇒ 96 tiến trình giành CPU, mỗi lượt > 20 phút, trong khi render đi qua `src/_vao/<id>.ts` (một bài) không cần `_danhSach` mới; (2) 48 làn × `LAM_BAI_CONC=12` tab Chrome ⇒ load 180–190 trên 61 nhân, Chrome không tải xong font trong 58 s.
+- **Cách sửa:** `LAM_BAI_BO_DANG_KY=1` (đặt trong `xuat/lam-bai-nen.sh`, chỉ máy thuê) ⇒ `lam-bai.mts` bỏ `dang-ky` khi `_danhSach.ts` đã có; giảm còn 24 làn (cờ `hang-render.dung-linux-t25..48`), trả 24 tập LOI về hàng.
+- **Ảnh hưởng:** ~1,5 giờ thuê vast4 (~0,3 $) không ra video; 14 tập phải render lại. Không lỗi nội dung.
+- **Bài học:** bước "chuẩn bị chung" chạy lại trong MỖI việc là vô hại khi 1–16 làn nhưng thành bão khi 48 làn chung một thư mục — tăng làn phải tăng dần và đo (CPU cgroup + log có tiến) sau mỗi nấc, không nhảy thẳng lên mức "theo số nhân".

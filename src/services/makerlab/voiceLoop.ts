@@ -735,6 +735,11 @@ export function parseRobotReply(raw: string): RobotReply {
       const say = String(obj.say ?? obj.text ?? '').trim();
       if (!say) continue;
       const actions: ValidatedCommand[] = [];
+      // "camXuc" (15/11/2026) đứng đầu JSON ⇒ mặt đổi lúc bắt đầu nói; vẫn trả thành lệnh face cho đường cũ.
+      if (typeof obj.camXuc === 'string') {
+        const f = validateCommand('face', { emotion: obj.camXuc, ms: 3000 }, { llmOnly: true });
+        if (f) actions.push(f);
+      }
       if (Array.isArray(obj.actions)) {
         for (const a of obj.actions.slice(0, 3)) {
           if (!a || typeof a !== 'object') continue;
@@ -832,7 +837,9 @@ function henNguLai(deviceId: number, giay: number): void {
   clearTimeout(_henNgu.get(deviceId));
   const t = setTimeout(() => {
     _henNgu.delete(deviceId);
-    baoMat(deviceId, 'sleepy', 0);
+    // 15/11/2026: hết giờ thức ⇒ về mặt BÌNH THƯỜNG (firmware tự đảo mắt nhìn quanh, tự ngủ sau 5 phút rảnh).
+    // Bản cũ đặt lim dim ⇒ log 74/110 lệnh mặt là "sleepy", người dùng thấy robot "nhạt và chán".
+    baoMat(deviceId, 'neutral', 0);
   }, giay * 1000 + 500);
   t.unref?.();
   _henNgu.set(deviceId, t);
@@ -1091,7 +1098,8 @@ export async function runVoiceTurn(input: VoiceTurnInput): Promise<VoiceTurnResu
       moCong(input.deviceId, persona.giayThucGiac);
       henNguLai(input.deviceId, persona.giayThucGiac);
     } else {
-      baoMat(input.deviceId, 'sleepy', 0);
+      // KHÔNG đổi mặt (15/11/2026): phần lớn lượt này là tiếng ồn quán / bàn bên — bản cũ đặt lim dim mỗi lần
+      // ⇒ robot trông uể oải cả buổi. Firmware nhận `nak` là đủ biết lượt bị bỏ.
       logger.info('MakerLab bỏ lượt: chưa gọi tên', {
         deviceId: input.deviceId,
         heard: heard.slice(0, 80),
@@ -2158,6 +2166,7 @@ async function thinkAndSpeakLoi(
     const gomToiThieu = () => (mauTruoc ? Math.min(mauTruoc * 2, TRAN_MAU) : TRAN_MAU);
     const cho: string[] = [];
     let daGuiMauDau = false;
+    let daBaoMatSom = false;
     let vongCc = 0;
     let sayTruoc = '';
     const hanhDongTruoc: ValidatedCommand[] = [];
@@ -2165,6 +2174,13 @@ async function thinkAndSpeakLoi(
     for (;;) {
     for await (const chunk of stream) {
       raw += chunk.choices[0]?.delta?.content ?? '';
+      if (!daBaoMatSom) {
+        const cx = raw.match(/"camXuc"\s*:\s*"([a-z]+)"/);
+        if (cx) {
+          daBaoMatSom = true;
+          baoMat(deviceId, cx[1], 0);
+        }
+      }
       const say = partialSay(raw);
       if (say.length <= emitted) continue;
 

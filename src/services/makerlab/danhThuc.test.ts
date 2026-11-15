@@ -62,3 +62,12 @@ test('đổi tiếng: câu dài có ĐỘNG TỪ ĐỔI rõ ràng thì nhận; c
   assert.equal(khopDoiCheDo('nói tiếng Việt đi'), 'vi');
   assert.equal(khopDoiCheDo('tiếng Anh'), 'en');
 });
+
+test('camXuc đứng đầu JSON ⇒ thành lệnh face; tên lạ bị bỏ', async () => {
+  const { parseRobotReply } = await import('./voiceLoop.js');
+  const r = parseRobotReply('{"camXuc":"suspicious","say":"Mày lại định làm gì đấy","actions":[]}');
+  assert.equal(r.say, 'Mày lại định làm gì đấy');
+  assert.equal(r.actions[0]?.type, 'face');
+  assert.equal((r.actions[0]?.payload as { emotion: string }).emotion, 'suspicious');
+  assert.equal(parseRobotReply('{"camXuc":"lol","say":"x","actions":[]}').actions.length, 0);
+});

@@ -725,10 +725,11 @@ export function buildSystemPrompt(
    diễn thuyết. Luật dài chỉ bật khi người ta nói rõ là muốn dài; nó không
    phải giấy phép để câu nào cũng nói tràng giang.`,
     `\nTrả lời BẮT BUỘC bằng JSON đúng một dòng, không bọc trong markdown:
-{"say":"<câu bạn nói>","actions":[{"type":"face","payload":{"emotion":"happy","ms":2000}}]}
+{"camXuc":"<cảm xúc>","say":"<câu bạn nói>","actions":[]}
+- "camXuc": VIẾT ĐẦU TIÊN, trước "say" — robot đổi nét mặt ngay lúc bắt đầu nói và giữ suốt câu. Chọn đúng sắc thái của câu: happy, excited, love, proud, shy, curious, thinking, confused, surprised, suspicious, sad, scared, annoyed, angry, bored, dizzy, wink (nháy mắt khi đùa/cà khịa). Đổi đa dạng theo câu, ĐỪNG lần nào cũng happy/neutral; neutral chỉ khi câu thật sự không có cảm xúc.
 - "say": lời thoại thuần, không ký tự đặc biệt. Bắt buộc có.
 - TRONG "say" KHÔNG dùng dấu ngoặc kép ("). Cần trích tên/câu thì dùng ngoặc đơn ' ' hoặc « ».
-- "actions": 1 đến 3 lệnh. LUÔN có đúng MỘT lệnh "face" mang cảm xúc của chính câu bạn nói — mắt là chỗ người ta nhìn vào khi nói chuyện với bạn, mắt đứng yên là bạn thành cái loa. Chọn "emotion" hợp với câu: happy, excited, love, proud, shy, curious, thinking, confused, surprised, suspicious, sad, scared, annoyed, angry, bored, sleepy, dizzy, wink (nháy mắt khi đùa), neutral (chỉ khi câu thật sự không có cảm xúc nào). Thêm lệnh cử động khác nếu câu chuyện gọi tới.
+- "actions": 0 đến 3 lệnh cử động khi câu chuyện gọi tới (nhìn, gật đầu, vẫy tay, nhạc…). Nét mặt đã nằm ở "camXuc", không cần lệnh "face".
 Không viết gì ngoài JSON đó.`,
     /**
      * ⚠️ MỌI THỨ ĐỔI MỖI LƯỢT PHẢI NẰM CUỐI PROMPT.

@@ -1,0 +1,6 @@
+Stack      prints [1, 2, 3]   peek = 3
+ArrayDeque prints [3, 2, 1]   peek = 3
+Stack.get(0) = 1  <- index access breaks the LIFO idea
+ArrayDeque.pop() on empty -> NoSuchElementException
+Stack.pop() on empty -> EmptyStackException
+ArrayDeque.peek() on empty -> null

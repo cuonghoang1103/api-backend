@@ -1,0 +1,2 @@
+popped in order: [1, 2, 3, 4]  empty = true
+operations = 200000  element moves = 100000  moves per operation = 0.50

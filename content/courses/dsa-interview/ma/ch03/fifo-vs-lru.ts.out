@@ -1,0 +1,5 @@
+requests = 6000 (hot = 3000), capacity = 6
+FIFO hits = 1500
+LRU  hits = 2997
+hot keys right after warm-up:        LRU hits 3/3
+hot keys right after a 6-key scan:   LRU hits 0/3

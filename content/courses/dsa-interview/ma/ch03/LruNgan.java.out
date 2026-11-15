@@ -1,0 +1,1 @@
+get(1)=1 then put(3): keys oldest->newest = [1 3], get(2)=-1

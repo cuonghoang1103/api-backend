@@ -1,0 +1,7 @@
+  4,000 elements:    0.14 ms total,    36 ns per shift()
+  8,000 elements:    0.25 ms total,    31 ns per shift()
+ 12,000 elements:    0.36 ms total,    30 ns per shift()
+ 16,000 elements:   18.54 ms total,  1159 ns per shift()
+ 20,000 elements:   27.90 ms total,  1395 ns per shift()
+ 40,000 elements:  137.67 ms total,  3442 ns per shift()
+node v26.8.1 · arm64

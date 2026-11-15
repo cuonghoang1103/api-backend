@@ -1,0 +1,7 @@
+isValid("()[]{}") = true   buggy = true
+isValid("{[()]}") = true   buggy = true
+isValid("([)]") = false   buggy = false
+isValid("(]") = false   buggy = false
+isValid("]") = false   buggy = false
+isValid("((") = false   buggy = true
+isValid("") = true   buggy = true

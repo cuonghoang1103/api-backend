@@ -1,0 +1,4 @@
+enQueue 1,2,3,4 -> true,true,true,false
+Rear=3 isFull=true
+deQueue -> true  enQueue 4 -> true  Front=2 Rear=4
+deQueue x3 -> true,true,true  deQueue again -> false  isEmpty=true Front=-1

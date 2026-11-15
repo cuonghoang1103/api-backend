@@ -1,0 +1,3 @@
+1->2->3->4->5  iterative -> 5->4->3->2->1  recursive -> 5->4->3->2->1
+1->2  iterative -> 2->1  recursive -> 2->1
+null  iterative -> null  recursive -> null

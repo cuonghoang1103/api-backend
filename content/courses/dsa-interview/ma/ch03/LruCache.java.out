@@ -1,0 +1,7 @@
+put(1,1)   order=[1]
+put(2,2)   order=[2 1]
+get(1)=1   order=[1 2]
+put(3,3)   order=[3 1]  (2 evicted)
+get(2)=-1  order=[3 1]
+put(4,4)   order=[4 3]  (1 evicted)
+get(1)=-1 get(3)=3 get(4)=4  order=[4 3]

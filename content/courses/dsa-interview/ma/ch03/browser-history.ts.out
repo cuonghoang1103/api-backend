@@ -1,0 +1,5 @@
+back(1) = /courses/dsa-interview
+back(1) = /courses
+forward(1) = /courses/dsa-interview
+forward(2) = /roadmap (forward history was cleared by visit)
+back(7) = cuongthai.com (stops at the first page)

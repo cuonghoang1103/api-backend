@@ -1,0 +1,4 @@
+1->2->2->1 -> true  (list after: 1->2->2->1)
+1->2->3->2->1 -> true  (list after: 1->2->3->2->1)
+1->2 -> false  (list after: 1->2)
+7 -> true  (list after: 7)

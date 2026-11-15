@@ -1,0 +1,5 @@
+merge 1->2->4 + 1->3->4 = 1->1->2->3->4->4
+merge null + 0 = 0
+remove 2nd from end of 1->2->3->4->5 = 1->2->3->5
+remove 1st from end of 1 = null
+remove 2nd from end of 1->2 = 2

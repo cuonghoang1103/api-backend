@@ -1,0 +1,6 @@
+push 1,2,3 then poll x3 -> 3,2,1   (LIFO! poll = pollFirst)
+offer 1,2,3 then poll x3 -> 1,2,3   (FIFO)
+ArrayDeque.offer(null) -> NullPointerException
+LinkedList accepts null: poll() = null, and poll() on empty = null  <- you cannot tell them apart
+list.remove(1) on [10, 20, 1, 30] -> [10, 1, 30]
+list.remove(Integer.valueOf(1)) -> [10, 30]

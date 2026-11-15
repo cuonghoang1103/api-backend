@@ -1,0 +1,9 @@
+push 5 -> min 5
+push 3 -> min 3
+push 7 -> min 3
+push 3 -> min 3
+push 1 -> min 1
+pop -> top 3 min 3
+pop -> top 7 min 3
+pop -> top 3 min 3
+pop -> top 5 min 5

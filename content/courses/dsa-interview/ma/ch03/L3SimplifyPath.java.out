@@ -1,0 +1,6 @@
+/home/ -> /home
+/home//foo/ -> /home/foo
+/a/./b/../../c/ -> /c
+/../ -> /
+/.../a/../b -> /.../b
+/uploads/../../etc/passwd -> /etc/passwd

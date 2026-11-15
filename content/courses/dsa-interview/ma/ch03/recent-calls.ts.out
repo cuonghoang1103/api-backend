@@ -1,0 +1,2 @@
+ping 1, 100, 3001, 3002 -> [1,2,3,3]
+limiter(3 per 1000 ms) at t = 0,100,200,300,999,1000,1101 -> [true,true,true,false,false,true,true]

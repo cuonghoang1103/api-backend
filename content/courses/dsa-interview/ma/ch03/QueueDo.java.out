@@ -1,0 +1,8 @@
+         n |  ArrayList rm(0) |   LinkedList |   ArrayDeque
+     1,000 |          0.14 ms |      0.11 ms |      0.11 ms
+    10,000 |          4.92 ms |      0.39 ms |      0.44 ms
+    20,000 |         17.78 ms |      0.51 ms |      0.44 ms
+   100,000 |        512.76 ms |      1.60 ms |      1.07 ms
+   200,000 |       2269.70 ms |      1.66 ms |      1.61 ms
+ 1,000,000 |          skipped |     13.53 ms |      5.29 ms
+java 21.0.9 · aarch64

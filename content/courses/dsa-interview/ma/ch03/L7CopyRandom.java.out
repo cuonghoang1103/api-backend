@@ -1,0 +1,3 @@
+original: [7,null] [13,0] [11,4] [10,2] [1,0]
+copy:     [7,null] [13,0] [11,4] [10,2] [1,0]
+copy shares any node with the original: false

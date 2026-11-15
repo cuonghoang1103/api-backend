@@ -1,0 +1,3 @@
+reverse with the lines in the wrong order: 1->2->3->4 -> 1
+n = 1,000: recursive -> head = 999   iterative -> head = 999
+n = 100,000: recursive -> RangeError: Maximum call stack size exceeded   iterative -> head = 99999

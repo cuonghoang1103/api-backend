@@ -1,0 +1,12 @@
+'😀'.length                        2
+[...'😀'].length                   1
+'😀'.split('').reverse().join('')  "\ude00\ud83d"
+'Á' === 'Á' (NFC vs NFD)           false
+' a '.trim().length                1
+0.1 + 0.2 === 0.3                  false
+2 ** 53 + 1 === 2 ** 53            true
+7 / 0                              Infinity
+-7 % 2                             -1
+Math.trunc(-7 / 2)                 -3
+(2147483647 + 1) | 0               -2147483648
+Math.max()                         -Infinity

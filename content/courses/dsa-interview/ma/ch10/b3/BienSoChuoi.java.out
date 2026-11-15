@@ -1,0 +1,11 @@
+"😀".length()                      2
+"😀".codePointCount(0, 2)          1
+Integer.MAX_VALUE + 1              -2147483648
+Math.abs(Integer.MIN_VALUE)        -2147483648
+(long) Integer.MAX_VALUE + 1       2147483648
+-7 / 2                             -3
+-7 % 2                             -1
+Math.floorMod(-7, 2)               1
+7.0 / 0                            Infinity
+0.1 + 0.2 == 0.3                   false
+7 / 0                              ArithmeticException: / by zero

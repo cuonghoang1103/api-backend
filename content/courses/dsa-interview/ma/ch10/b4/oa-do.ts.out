@@ -1,0 +1,29 @@
+READ n integers from stdin (ms, whole process, best of 3)
+program                        |   n=100,000 | n=1,000,000
+start-up only: node            |          47 |
+start-up only: java            |          46 |
+node fs.readFileSync(0)        |          58 |         179
+node readline                  |          71 |         184
+node HackerRank boilerplate    |          63 |         200
+java Scanner                   |         169 |         446
+java BufferedReader+split      |         103 |         167
+java BufferedReader+StringTok  |         104 |         158
+java StreamTokenizer           |          82 |         213
+java DataInputStream (bytes)   |          61 |          96
+all readers print the same answer for n=10^6: yes (sum=-62759213215731 max=999998925)
+
+WRITE the numbers 1..n, one per line, stdout to a file (ms, whole process, best of 3)
+program                        |   n=100,000 | n=1,000,000
+node console.log per line      |         448 |        3927
+node one write(join)           |          48 |          87
+java System.out.println        |         363 |        2878
+java PrintWriter + flush       |          80 |         137
+
+READ n numbers AND print the running sum after each (n lines out) — a typical OA task (ms, best of 3)
+program                        |   n=100,000 | n=1,000,000
+node readline + console.log    |         493 |        4080
+node readFileSync + one write  |          62 |         229
+java Scanner + println         |         430 |        3709
+java Tokenizer + PrintWriter   |         111 |         326
+all four print the same last line for n=10^6: yes (-62759213215731)
+node v26.8.1 · openjdk version "21.0.9" 2025-10-21 · arm64

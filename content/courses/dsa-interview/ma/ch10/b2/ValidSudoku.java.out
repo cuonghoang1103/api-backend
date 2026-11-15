@@ -1,0 +1,4 @@
+valid board  -> true
+clash in box -> false
+clash in col -> false
+boxIndex(4, 7) = 5

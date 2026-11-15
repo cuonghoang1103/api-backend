@@ -1,0 +1,9 @@
+1) Integer == : 127 -> true, 128 -> false | equals: true
+2) String == : false | equals: true
+3) 7 / 2 = 3 | (double) 7 / 2 = 3.5 | 7 / 2.0 = 3.5
+4) (lo + hi) / 2 = -97483648 | lo + (hi - lo) / 2 = 2050000000 | (lo + hi) >>> 1 = 2050000000
+5) Math.abs(Integer.MIN_VALUE) = -2147483648 | Math.abs((long) MIN) = 2147483648
+6) sum of 100,000 x 100,000: int -> 1410065408 | long -> 10000000000
+7) 'a' + 1 = 98 | (char) ('a' + 1) = b | "" + 'a' + 1 = a1
+8) Arrays.asList(int[]).size() = 1 | Arrays.asList(Integer[]).size() = 3
+9) static counter: test 1 -> 2 (want 2), test 2 -> 3 (want 1)

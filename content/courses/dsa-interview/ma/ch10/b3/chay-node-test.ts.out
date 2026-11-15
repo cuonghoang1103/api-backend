@@ -1,0 +1,27 @@
+$ node --test --test-reporter=tap cua-so.test.ts
+ok 1 - normal example: [2,1,5,1,3,2], k=3 -> 9
+ok 2 - edge: the best window is the last one
+ok 3 - edge: one element, k = 1
+ok 4 - edge: k = n, a single window
+ok 5 - edge: every window is negative (best must not start at 0)
+ok 6 - edge: all equal
+# tests 6
+# pass 6
+# fail 0
+exit code 0
+
+$ BAN=loi node --test --test-reporter=tap cua-so.test.ts
+ok 1 - normal example: [2,1,5,1,3,2], k=3 -> 9
+not ok 2 - edge: the best window is the last one
+    expected: 5
+    actual: 3
+ok 3 - edge: one element, k = 1
+ok 4 - edge: k = n, a single window
+not ok 5 - edge: every window is negative (best must not start at 0)
+    expected: -3
+    actual: -4
+ok 6 - edge: all equal
+# tests 6
+# pass 4
+# fail 2
+exit code 1

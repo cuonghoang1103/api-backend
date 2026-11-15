@@ -1,0 +1,9 @@
+1) == coerces types: true true true || === does not: false
+2) closures over var: [ 3, 3, 3 ] | over let: [ 0, 1, 2 ]
+3) any lets "5" + 1 through: "51"
+4) sort() without comparator: [1,10,100,9] | with (a, b) => a - b: [1,9,10,100]
+5) medianBad = 5 — caller array is now [2,4,5,7,9]
+   median    = 5 — caller array stays [7,2,9,4,5]
+6) Math.max(...big) threw RangeError: Maximum call stack size exceeded
+   a plain loop gives 999999 | and Math.max() of nothing is -Infinity
+7) 2^53 + 1 = 9007199254740992 | 0.1 + 0.2 = 0.30000000000000004 | BigInt: 9007199254740993

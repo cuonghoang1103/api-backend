@@ -1,0 +1,1 @@
+dirty f([]) threw java.lang.ArrayIndexOutOfBoundsException: Index 0 out of bounds for length 0

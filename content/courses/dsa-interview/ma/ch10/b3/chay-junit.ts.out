@@ -1,0 +1,17 @@
+$ java -Dban=dung JUnitChay
+  PASS  normal example: [2,1,5,1,3,2], k=3 -> 9
+  PASS  edge: the best window is the last one
+  PASS  edge: one element, k = 1
+  PASS  edge: k = n, a single window
+  PASS  edge: every window is negative (best must not start at 0)
+  PASS  edge: all equal
+6 tests, 6 passed, 0 failed
+
+$ java -Dban=loi JUnitChay
+  PASS  normal example: [2,1,5,1,3,2], k=3 -> 9
+  FAIL  edge: the best window is the last one  ->  expected: <5> but was: <3>
+  PASS  edge: one element, k = 1
+  PASS  edge: k = n, a single window
+  FAIL  edge: every window is negative (best must not start at 0)  ->  expected: <-3> but was: <-4>
+  PASS  edge: all equal
+6 tests, 4 passed, 2 failed

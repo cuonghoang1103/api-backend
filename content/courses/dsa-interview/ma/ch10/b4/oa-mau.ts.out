@@ -1,0 +1,39 @@
+== input A clean: "5\n3 -1 4 1 5\n"
+  node doc-tach-cach.js    -> sum=12 max=5
+  node doc-fs.js           -> sum=12 max=5
+  node doc-readline.js     -> sum=12 max=5
+  node doc-hackerrank.js   -> sum=12 max=5
+  java DocScanner          -> sum=12 max=5
+  java DocSplit            -> sum=12 max=5
+  java DocTokenizer        -> sum=12 max=5
+  java DocStream           -> sum=12 max=5
+  java DocNhanh            -> sum=12 max=5
+== input B CRLF + extra spaces: "5\r\n3  -1 4 1 5 \r\n"
+  node doc-tach-cach.js    -> sum=7 max=4
+  node doc-fs.js           -> sum=12 max=5
+  node doc-readline.js     -> sum=12 max=5
+  node doc-hackerrank.js   -> sum=12 max=5
+  java DocScanner          -> sum=12 max=5
+  java DocSplit            -> CRASH NumberFormatException: For input string: ""
+  java DocTokenizer        -> sum=12 max=5
+  java DocStream           -> sum=12 max=5
+  java DocNhanh            -> sum=12 max=5
+== input C numbers over 3 lines: "5\n3 -1\n4 1\n5\n"
+  node doc-tach-cach.js    -> sum=NaN max=3
+  node doc-fs.js           -> sum=12 max=5
+  node doc-readline.js     -> sum=12 max=5
+  node doc-hackerrank.js   -> sum=12 max=5
+  java DocScanner          -> sum=12 max=5
+  java DocSplit            -> CRASH ArrayIndexOutOfBoundsException: Index 2 out of bounds for length 2
+  java DocTokenizer        -> sum=12 max=5
+  java DocStream           -> sum=12 max=5
+  java DocNhanh            -> sum=12 max=5
+== output of "print 1..3"
+  node ghi-log.js 3        -> "1\n2\n3\n"  (exit 0)
+  node ghi-join.js 3       -> "1\n2\n3\n"  (exit 0)
+  java GhiPrintln 3        -> "1\n2\n3\n"  (exit 0)
+  java GhiPrintWriter 3    -> "1\n2\n3\n"  (exit 0)
+  java GhiQuenFlush 3      -> ""  (exit 0)
+== input "20\nNguyen Van An\n"
+  java BayNextLine         -> wrong: age=20 name=""
+  java SuaNextLine         -> fixed: age=20 name="Nguyen Van An"

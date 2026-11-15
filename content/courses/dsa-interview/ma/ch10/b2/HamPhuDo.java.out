@@ -1,0 +1,5 @@
+       cells |     inline |     helper | DIRECTIONS
+     100,000 |    0.32 ms |    0.41 ms |    0.39 ms
+   1,000,000 |    0.32 ms |    0.94 ms |    3.27 ms
+  10,000,000 |    3.23 ms |    9.61 ms |   33.57 ms
+java 21.0.9 · aarch64

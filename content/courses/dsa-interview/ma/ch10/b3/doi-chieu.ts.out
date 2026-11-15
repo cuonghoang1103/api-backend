@@ -1,0 +1,4 @@
+buggy: 398 of 2000 random tests disagree with brute force
+  first failure -> seed 2: nums=[0,-4,4] k=2 fast=-4 brute=0
+fixed: 0 of 2000 random tests disagree with brute force
+smallest failing input: seed 13: nums=[-1,1] k=1 buggy=-1 brute=1

@@ -1,0 +1,6 @@
+normal example: [2,1,5,1,3,2] k=3 -> buggy 9 | fixed 9 | brute 9 | ok
+best window is the LAST one: [1,2,3] k=2 -> buggy 3 | fixed 5 | brute 5 | BUGGY WRONG
+one element: [7] k=1 -> buggy 7 | fixed 7 | brute 7 | ok
+k = n (one window): [4,-1,2] k=3 -> buggy 5 | fixed 5 | brute 5 | ok
+all negative: [-3,-1,-2] k=2 -> buggy -4 | fixed -3 | brute -3 | BUGGY WRONG
+all equal: [5,5,5,5] k=2 -> buggy 10 | fixed 10 | brute 10 | ok

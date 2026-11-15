@@ -43,9 +43,10 @@ async function bang(where: Prisma.CtlTroChoiDiemWhereInput, take: number) {
   const ids = nhom.map((x) => x.userId);
   const [us, khung] = await Promise.all([
     prisma.user.findMany({ where: { id: { in: ids } }, select: TAC_GIA }),
-    prisma.ctlTroChoiDiem.findMany({ where: { userId: { in: ids } }, orderBy: { createdAt: 'desc' }, distinct: ['userId'], select: { userId: true, khung: true } }),
+    prisma.ctlTroChoiDiem.findMany({ where: { ...where, userId: { in: ids } }, orderBy: { createdAt: 'desc' }, distinct: ['userId'], select: { userId: true, khung: true } }),
   ]);
   const theoId = new Map(us.map((u) => [u.id, u]));
+  // Khung = khung của ván mới nhất TRONG bảng này (game × chế độ × ngôn ngữ × kỳ).
   const kh = new Map(khung.map((k) => [k.userId, k.khung]));
   let hang = 0;
   return nhom.filter((x) => theoId.has(x.userId)).map((x) => ({

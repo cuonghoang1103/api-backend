@@ -18,6 +18,13 @@ Mẫu một mục:
 
 ---
 
+### 16/11/2026 — CT Language (khung game + "Gấu Canh Trời", bắt khi đang làm — chưa lên người dùng) — pinyin sai thanh vẫn "đúng" + chữ rơi chui dưới thanh điểm
+- **Triệu chứng:** (1) test `TroChoiKhungTests` — gõ `xue3` cho 学习 (xue2 xi2) được nhận là đang đúng; (2) ảnh máy ảo: chữ mới mọc nằm dưới thanh điểm/tim + tai thỏ vài giây, không đọc được.
+- **Nguyên nhân:** (1) `DapAnGoCTL.swift` luôn thêm một dãy "chữ trơn bỏ số" làm lưới đỡ — dãy đó nuốt luôn số thanh SAI dù đã tách được âm tiết; (2) `CanhTroiCTL.swift` đọc `g.safeAreaInsets.top` trong GeometryReader đã `.ignoresSafeArea(edges: .top)` ⇒ luôn 0, HUD + điểm mọc chữ lọt dưới tai thỏ.
+- **Cách sửa:** (1) chỉ thêm dãy chữ trơn khi KHÔNG tách được âm tiết; (2) đọc vùng an toàn từ GeometryReader NGOÀI (không bỏ vùng an toàn), chữ mọc ở `tren + 74` (ios-app 28d1798, 8838ff0).
+- **Ảnh hưởng:** không ai — bắt trước khi commit đầu tiên lên TestFlight.
+- **Bài học:** lưới đỡ "khớp lỏng" phải chỉ bật khi đường chặt không dùng được, không thì nó âm thầm nới luật; GeometryReader đã bỏ vùng an toàn thì `safeAreaInsets` của chính nó là 0 — lấy từ khung cha.
+
 ### 15/11/2026 — Cổng Anthropic chính hãng — lượt "nói nhanh" của Sonnet 5.5 gửi `thinking: disabled` (API trả 400)
 - **Triệu chứng:** không ai thấy lỗi — CT Work / Luyện nói vẫn trả lời, chỉ chậm hơn một vòng mạng mỗi lượt Sonnet 5.5 (suy từ tài liệu API, CHƯA đối chiếu log prod).
 - **Nguyên nhân:** `goiVanBanChinhHang` (`src/services/agent/anthropicChinhHang/dinhTuyen.ts`) đặt cứng `thinking: {type:'disabled'}` cho mọi model ở chế độ `nhanh`; Sonnet 5.5 từ chối `disabled` (phải `between_tools`), Opus 5.5 không tắt được thinking ⇒ 400 ⇒ `banAnToan` gửi lại bằng adaptive.

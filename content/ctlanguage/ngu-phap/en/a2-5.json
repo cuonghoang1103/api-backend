@@ -1,0 +1,618 @@
+{
+  "nn": "en",
+  "cap": "A2",
+  "diem": [
+    {
+      "id": "en-a2-goi-y-de-nghi",
+      "nhom": "Lời mời – gợi ý",
+      "tieuDe": "Gợi ý: How about / What about + V-ing? · Why don't we…?",
+      "mau": "How about / What about + V-ing / N? · Why don't we / you + V? · Let's + V",
+      "nghia": "hay là ~ nhé? / sao mình không ~?",
+      "giaiThich": "Đây là các cách rủ rê, đưa ra gợi ý trong hội thoại hằng ngày. How about / What about đi với V-ing hoặc danh từ. Why don't we + V nguyên mẫu nghe như câu hỏi nhưng thật ra là lời gợi ý ('sao mình không… nhỉ'). Let's + V là cách gợi ý trực tiếp nhất. Đáp lại: Good idea! / Sounds great! / I'd rather not.",
+      "cachGhep": [
+        "How about / What about + V-ing: How about going to the cinema?",
+        "How about / What about + danh từ: What about pizza tonight?",
+        "Why don't we + V? (rủ cả mình) · Why don't you + V? (khuyên người kia)",
+        "Let's + V / Let's not + V",
+        "Đáp lại: That's a good idea. · Sounds good! · Sorry, I can't. · I'd rather stay at home."
+      ],
+      "viDu": [
+        {
+          "c": "How about having dinner at my place?",
+          "v": "Hay là ăn tối ở nhà mình nhé?"
+        },
+        {
+          "c": "What about a walk in the park?",
+          "v": "Đi dạo trong công viên nhé?"
+        },
+        {
+          "c": "Why don't we take a taxi? It's raining.",
+          "v": "Sao mình không đi taxi nhỉ? Trời đang mưa mà."
+        },
+        {
+          "c": "You look tired. Why don't you go to bed early?",
+          "v": "Trông bạn mệt quá. Sao bạn không đi ngủ sớm?"
+        },
+        {
+          "c": "It's hot. Let's go swimming!",
+          "v": "Trời nóng quá. Đi bơi thôi!"
+        }
+      ],
+      "luuY": [
+        "Lỗi người Việt hay mắc: dùng động từ nguyên mẫu sau How about → sai: How about go out? Đúng: How about going out?",
+        "Ngược lại, sau Why don't we và Let's là động từ nguyên mẫu, không -ing: sai Why don't we going…? / Let's going…",
+        "Why don't we…? là lời gợi ý, không phải hỏi lý do — đừng trả lời bằng Because…"
+      ],
+      "soSanh": [
+        "en-a1-lets",
+        "en-a2-shall",
+        "en-a1-would-like"
+      ],
+      "tuKhoa": [
+        "how about",
+        "what about",
+        "why don't we",
+        "why don't you",
+        "gợi ý",
+        "rủ",
+        "đề nghị"
+      ],
+      "quiz": [
+        {
+          "h": "How about ___ to the beach this weekend?",
+          "lc": [
+            "went",
+            "to go",
+            "go",
+            "going"
+          ],
+          "da": 3,
+          "gt": "How about / What about + V-ing: How about going…?"
+        },
+        {
+          "h": "Why don't we ___ a pizza tonight?",
+          "lc": [
+            "order",
+            "ordered",
+            "to order",
+            "ordering"
+          ],
+          "da": 0,
+          "gt": "Sau Why don't we là động từ nguyên mẫu không to: Why don't we order…?"
+        },
+        {
+          "h": "A: Why don't we watch a film? - B: ___",
+          "lc": [
+            "No, we watch.",
+            "Good idea!",
+            "Because I'm tired.",
+            "Yes, we don't."
+          ],
+          "da": 1,
+          "gt": "Why don't we…? là lời rủ, nên đáp bằng đồng ý / từ chối (Good idea!), không giải thích lý do bằng Because."
+        }
+      ]
+    },
+    {
+      "id": "en-a2-what-like",
+      "nhom": "Câu hỏi",
+      "tieuDe": "What is … like? · What does … look like?",
+      "mau": "What + be + S + like? · What + do / does + S + look like?",
+      "nghia": "~ như thế nào? (tính cách, đặc điểm) · trông ~ ra sao? (ngoại hình)",
+      "giaiThich": "What… like? hỏi về đặc điểm, tính chất của người, vật, nơi chốn (người đó thế nào, thời tiết ra sao, món đó ngon không). What… look like? chỉ hỏi về VẺ BỀ NGOÀI. Ở đây like là giới từ (= giống như), không phải động từ 'thích', nên không chia và không đổi thành likes.",
+      "cachGhep": [
+        "Tính cách / đặc điểm: What is she like? - She's friendly and funny.",
+        "Nơi chốn, thời tiết, đồ vật: What's the weather like? · What was the hotel like?",
+        "Ngoại hình: What does he look like? - He's tall with short black hair.",
+        "Khác hẳn sở thích: What does she like? = Cô ấy thích gì? (like là động từ)"
+      ],
+      "viDu": [
+        {
+          "c": "What's your new teacher like? - She's kind but strict.",
+          "v": "Cô giáo mới của bạn thế nào? - Cô hiền nhưng nghiêm."
+        },
+        {
+          "c": "What was the weather like in Sa Pa?",
+          "v": "Thời tiết ở Sa Pa thế nào?"
+        },
+        {
+          "c": "What does your brother look like? - He's tall and wears glasses.",
+          "v": "Anh trai bạn trông như thế nào? - Anh ấy cao và đeo kính."
+        },
+        {
+          "c": "What's the food like in that restaurant?",
+          "v": "Đồ ăn ở nhà hàng đó thế nào?"
+        }
+      ],
+      "luuY": [
+        "Lỗi người Việt hay mắc: dịch 'trông anh ấy thế nào' thành 'How does he look like?' → đúng: What does he look like? (How does he look? lại hỏi trông anh ấy có khoẻ / có vui không).",
+        "What is she like? ≠ What does she like? — một bên hỏi cô ấy là người thế nào, một bên hỏi cô ấy thích gì.",
+        "Đừng quên like ở cuối: 'What is your city?' không có nghĩa là 'thành phố bạn thế nào'."
+      ],
+      "soSanh": [
+        "en-a1-cau-hoi-wh",
+        "en-b2-like-vs-as"
+      ],
+      "tuKhoa": [
+        "what is like",
+        "what does look like",
+        "look like",
+        "như thế nào",
+        "trông ra sao",
+        "ngoại hình",
+        "tính cách"
+      ],
+      "quiz": [
+        {
+          "h": "A: What ___ your sister look like? - B: She has long hair and big eyes.",
+          "lc": [
+            "has",
+            "does",
+            "is",
+            "do"
+          ],
+          "da": 1,
+          "gt": "Hỏi ngoại hình dùng What does + S + look like? với động từ thường look; chủ ngữ ngôi ba nên does."
+        },
+        {
+          "h": "A: What's Hanoi like in winter? - B: ___",
+          "lc": [
+            "Yes, I like it.",
+            "I like pho.",
+            "It's cold and a bit foggy.",
+            "It likes winter."
+          ],
+          "da": 2,
+          "gt": "What's… like? hỏi đặc điểm nên trả lời bằng mô tả (lạnh, có sương mù), không trả lời về sở thích."
+        },
+        {
+          "h": "Câu nào hỏi về NGOẠI HÌNH của Tom?",
+          "lc": [
+            "How does Tom like?",
+            "What is Tom liking?",
+            "What does Tom like?",
+            "What does Tom look like?"
+          ],
+          "da": 3,
+          "gt": "Ngoại hình: What does Tom look like? Còn What does Tom like? hỏi Tom thích gì."
+        }
+      ]
+    },
+    {
+      "id": "en-a2-it-takes",
+      "nhom": "Cấu trúc câu",
+      "tieuDe": "It takes (sb) + thời gian + to V · How long does it take…?",
+      "mau": "It takes / took + (sb) + thời gian + to + V · How long does it take (sb) to + V?",
+      "nghia": "(ai) mất bao lâu để làm ~",
+      "giaiThich": "Tiếng Anh nói thời gian cần để làm một việc bằng chủ ngữ giả It + take. Người làm việc (nếu có) đứng ngay sau takes dưới dạng tân ngữ (me, him, us…), tiếp theo là khoảng thời gian, cuối cùng là to + V. take chia theo thì: takes (hiện tại), took (quá khứ), will take (tương lai).",
+      "cachGhep": [
+        "It takes + thời gian + to V: It takes ten minutes to walk there.",
+        "It takes + tân ngữ + thời gian + to V: It takes me an hour to get to work.",
+        "Quá khứ / tương lai: It took us three days… · It will take you two hours…",
+        "Câu hỏi: How long does it take (you) to + V? · How long did it take…?"
+      ],
+      "viDu": [
+        {
+          "c": "It takes me twenty minutes to get to school.",
+          "v": "Tôi mất hai mươi phút để đến trường."
+        },
+        {
+          "c": "How long does it take to fly from Hanoi to Ho Chi Minh City?",
+          "v": "Bay từ Hà Nội vào Thành phố Hồ Chí Minh mất bao lâu?"
+        },
+        {
+          "c": "It took them two years to build the bridge.",
+          "v": "Họ mất hai năm để xây cây cầu."
+        },
+        {
+          "c": "It won't take long to fix your bike.",
+          "v": "Sửa xe đạp cho bạn sẽ không mất nhiều thời gian đâu."
+        }
+      ],
+      "luuY": [
+        "Lỗi người Việt hay mắc: dịch 'tôi mất 20 phút' thành 'I lose 20 minutes' hoặc 'I take 20 minutes to…' (câu sau đôi khi gặp nhưng không tự nhiên bằng). Mẫu chuẩn: It takes me 20 minutes to…",
+        "Người làm việc là TÂN NGỮ: It takes me / him / them… (không nói It takes I…).",
+        "Sau thời gian là to + V nguyên mẫu, không phải V-ing: sai It takes an hour cooking dinner → It takes an hour to cook dinner."
+      ],
+      "soSanh": [
+        "en-a1-it-chu-ngu-gia",
+        "en-a1-how-tinh-tu"
+      ],
+      "tuKhoa": [
+        "it takes",
+        "how long does it take",
+        "mất bao lâu",
+        "it took me",
+        "take time"
+      ],
+      "quiz": [
+        {
+          "h": "It ___ me two hours to finish my homework yesterday.",
+          "lc": [
+            "takes",
+            "took",
+            "take",
+            "was taking"
+          ],
+          "da": 1,
+          "gt": "Yesterday là quá khứ ⇒ It took me… (take → took)."
+        },
+        {
+          "h": "How long does it take ___ to walk to the market?",
+          "lc": [
+            "your",
+            "you're",
+            "you",
+            "yours"
+          ],
+          "da": 2,
+          "gt": "Người làm việc đứng sau take ở dạng tân ngữ: you (him, me, them…)."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "It takes about an hour for drive there.",
+            "It takes about an hour driving there.",
+            "It is taking about an hour drive there.",
+            "It takes about an hour to drive there."
+          ],
+          "da": 3,
+          "gt": "Mẫu chuẩn: It takes + thời gian + to + V nguyên mẫu."
+        }
+      ]
+    },
+    {
+      "id": "en-a2-another-other",
+      "nhom": "Đại từ",
+      "tieuDe": "another / other / the other / others / the others",
+      "mau": "another + N số ít · other + N số nhiều / không đếm được · the other (+ N) · others · the others",
+      "nghia": "một ~ khác · những ~ khác · cái / người còn lại",
+      "giaiThich": "Năm từ này đều có nghĩa 'khác' nhưng khác nhau ở số ít / số nhiều và ở chỗ đã xác định hay chưa. another = an + other: MỘT cái nữa, một cái khác bất kỳ (số ít). other + danh từ số nhiều = những cái khác nói chung. the other = cái còn lại (khi chỉ có hai) hoặc những cái còn lại (khi có danh từ số nhiều đi sau). others và the others là đại từ, đứng một mình không có danh từ sau.",
+      "cachGhep": [
+        "another + N số ít: another cup, another day (một cái nữa / một cái khác)",
+        "other + N số nhiều / không đếm được: other people, other information",
+        "the other + N số ít (cái còn lại trong hai) · the other + N số nhiều (những cái còn lại)",
+        "others = other + N số nhiều (không xác định): Some people like tea; others prefer coffee.",
+        "the others = những cái / người còn lại (xác định): Lan is here, but where are the others?"
+      ],
+      "viDu": [
+        {
+          "c": "Can I have another cup of tea?",
+          "v": "Cho tôi thêm một tách trà nữa được không?"
+        },
+        {
+          "c": "I have two brothers. One is a doctor, and the other is a teacher.",
+          "v": "Tôi có hai anh trai. Một người là bác sĩ, người còn lại là giáo viên."
+        },
+        {
+          "c": "Some students walk to school; others go by bike.",
+          "v": "Có học sinh đi bộ đến trường, có học sinh khác đi xe đạp."
+        },
+        {
+          "c": "Only Nam came on time. The others were late.",
+          "v": "Chỉ có Nam đến đúng giờ. Những người còn lại đều đến muộn."
+        },
+        {
+          "c": "Do you know any other good restaurants near here?",
+          "v": "Bạn có biết nhà hàng ngon nào khác ở gần đây không?"
+        }
+      ],
+      "luuY": [
+        "Lỗi người Việt hay mắc: 'another + danh từ số nhiều' → sai: another books. Đúng: other books (hoặc another two books khi có số đếm).",
+        "others đã là đại từ nên không thêm danh từ: sai 'others people' → other people.",
+        "'Cái kia' trong hai cái là the other, không phải another: I lost one shoe and can't find the other."
+      ],
+      "soSanh": [
+        "en-a2-one-ones",
+        "en-a2-both-either-neither",
+        "en-a2-dai-tu-bat-dinh"
+      ],
+      "tuKhoa": [
+        "another",
+        "other",
+        "the other",
+        "others",
+        "the others",
+        "khác",
+        "còn lại"
+      ],
+      "quiz": [
+        {
+          "h": "This shirt is too small. Can I try ___ one?",
+          "lc": [
+            "other",
+            "others",
+            "the others",
+            "another"
+          ],
+          "da": 3,
+          "gt": "Một cái khác (số ít, chưa xác định) ⇒ another + one."
+        },
+        {
+          "h": "I have two cats. One is black and ___ is white.",
+          "lc": [
+            "the other",
+            "another",
+            "other",
+            "others"
+          ],
+          "da": 0,
+          "gt": "Chỉ có hai con, con còn lại đã xác định ⇒ the other."
+        },
+        {
+          "h": "Some people like the city; ___ prefer the countryside.",
+          "lc": [
+            "the other",
+            "others",
+            "other",
+            "another"
+          ],
+          "da": 1,
+          "gt": "Đứng một mình, nghĩa 'những người khác' (không xác định, số nhiều) ⇒ others."
+        }
+      ]
+    },
+    {
+      "id": "en-a2-each-other",
+      "nhom": "Đại từ",
+      "tieuDe": "each other / one another (nhau)",
+      "mau": "S (số nhiều) + V + each other / one another",
+      "nghia": "(làm gì) với nhau, lẫn nhau",
+      "giaiThich": "each other diễn tả hành động qua lại giữa hai (hay nhiều) người: A làm với B và B làm với A — tức 'nhau' trong tiếng Việt. Chủ ngữ phải là số nhiều. one another nghĩa giống hệt, hơi trang trọng hơn. Khác với đại từ phản thân: themselves là mỗi người tự làm với chính mình.",
+      "cachGhep": [
+        "S số nhiều + V + each other: They love each other.",
+        "Có giới từ: talk to each other · look at each other · help each other",
+        "Sở hữu: each other's + N (They wear each other's clothes.)",
+        "Phân biệt: They looked at themselves (mỗi người tự nhìn mình) ↔ They looked at each other (nhìn nhau)."
+      ],
+      "viDu": [
+        {
+          "c": "Lan and Mai have known each other since primary school.",
+          "v": "Lan và Mai quen nhau từ hồi tiểu học."
+        },
+        {
+          "c": "We often help each other with homework.",
+          "v": "Chúng tôi hay giúp nhau làm bài tập."
+        },
+        {
+          "c": "The two teams didn't talk to each other after the match.",
+          "v": "Sau trận đấu hai đội không nói chuyện với nhau."
+        },
+        {
+          "c": "They often borrow each other's clothes.",
+          "v": "Họ hay mượn quần áo của nhau."
+        }
+      ],
+      "luuY": [
+        "Lỗi người Việt hay mắc: dịch 'yêu nhau' thành 'love together' hoặc 'love themselves' → đúng: love each other.",
+        "Nhiều động từ cần giới từ trước each other: talk TO each other, look AT each other, agree WITH each other.",
+        "'Gặp nhau' thường chỉ cần meet: We met at the café (không cần thêm each other)."
+      ],
+      "soSanh": [
+        "en-a2-dai-tu-phan-than",
+        "en-a1-dai-tu-tan-ngu"
+      ],
+      "tuKhoa": [
+        "each other",
+        "one another",
+        "nhau",
+        "lẫn nhau",
+        "reciprocal pronoun"
+      ],
+      "quiz": [
+        {
+          "h": "My parents love ___ very much.",
+          "lc": [
+            "them",
+            "theirs",
+            "themselves",
+            "each other"
+          ],
+          "da": 3,
+          "gt": "Bố yêu mẹ và mẹ yêu bố — hành động qua lại ⇒ each other. Themselves là mỗi người tự yêu bản thân."
+        },
+        {
+          "h": "The children looked ___ and laughed.",
+          "lc": [
+            "at each other",
+            "each other",
+            "at themself",
+            "to each other"
+          ],
+          "da": 0,
+          "gt": "look cần giới từ at: look at each other (nhìn nhau)."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "We send together messages every day.",
+            "We send each other messages every day.",
+            "We send ourself messages every day.",
+            "We each other send messages every day."
+          ],
+          "da": 1,
+          "gt": "Gửi tin nhắn cho nhau ⇒ send each other messages. Together không thay được 'nhau', ourself sai cả hình thức."
+        }
+      ]
+    },
+    {
+      "id": "en-a2-hai-tan-ngu",
+      "nhom": "Cấu trúc câu",
+      "tieuDe": "Động từ có hai tân ngữ: give sb sth / give sth to sb",
+      "mau": "S + V + người + vật · S + V + vật + to / for + người",
+      "nghia": "đưa / tặng / gửi / mua… cái gì cho ai",
+      "giaiThich": "Một số động từ như give, send, show, lend, buy, make… có hai tân ngữ: người nhận và vật. Có hai cách xếp: (1) người trước, vật sau, không cần giới từ: give my mum a present; (2) vật trước, người sau, thêm to hoặc for: give a present to my mum. Dùng to khi vật được chuyển tới người (give, send, lend, show, tell); dùng for khi làm việc gì đó giúp / vì người đó (buy, make, cook, get).",
+      "cachGhep": [
+        "V + người + vật: She gave me a book. · Can you send us the file?",
+        "V + vật + to + người: give, send, lend, show, pass, sell, write, teach",
+        "V + vật + for + người: buy, make, cook, get, find, book",
+        "Vật là đại từ (it / them) ⇒ dùng cách (2): Give it to me. (không nói Give me it — thân mật Anh–Anh có gặp nhưng nên tránh)"
+      ],
+      "viDu": [
+        {
+          "c": "My uncle gave me a new bike.",
+          "v": "Chú tôi tặng tôi một chiếc xe đạp mới."
+        },
+        {
+          "c": "Please send the report to Mr Hung.",
+          "v": "Làm ơn gửi bản báo cáo cho anh Hùng."
+        },
+        {
+          "c": "She made a cake for her son's birthday.",
+          "v": "Cô ấy làm một chiếc bánh cho sinh nhật con trai."
+        },
+        {
+          "c": "Could you lend me your pen?",
+          "v": "Bạn cho mình mượn cây bút được không?"
+        },
+        {
+          "c": "I bought these flowers for you.",
+          "v": "Mình mua những bông hoa này tặng bạn."
+        }
+      ],
+      "luuY": [
+        "Lỗi người Việt hay mắc: thêm to khi người đứng TRƯỚC vật → sai: She gave to me a book. Đúng: She gave me a book / She gave a book to me.",
+        "Nhầm to và for: sai I bought a gift to her → I bought a gift for her (buy dùng for).",
+        "explain và say không theo mẫu 'người + vật': sai Explain me the rule → Explain the rule to me."
+      ],
+      "soSanh": [
+        "en-a1-trat-tu-svo",
+        "en-a1-dai-tu-tan-ngu",
+        "en-b2-passive-two-objects"
+      ],
+      "tuKhoa": [
+        "give sb sth",
+        "give sth to sb",
+        "buy sth for sb",
+        "indirect object",
+        "tân ngữ gián tiếp",
+        "hai tân ngữ"
+      ],
+      "quiz": [
+        {
+          "h": "Can you show ___ your new phone?",
+          "lc": [
+            "me",
+            "my",
+            "to me",
+            "for me"
+          ],
+          "da": 0,
+          "gt": "Người đứng trước vật thì không cần giới từ: show me your new phone."
+        },
+        {
+          "h": "Grandma cooked a big dinner ___ us.",
+          "lc": [
+            "with",
+            "for",
+            "at",
+            "to"
+          ],
+          "da": 1,
+          "gt": "cook là làm việc giúp / vì người khác ⇒ vật + for + người."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "Please explain me the problem.",
+            "Please explain me about the problem.",
+            "Please explain the problem to me.",
+            "Please explain for me the problem."
+          ],
+          "da": 2,
+          "gt": "explain không đi theo mẫu 'người + vật'; phải là explain + vật + to + người."
+        }
+      ]
+    },
+    {
+      "id": "en-a2-cau-cam-than",
+      "nhom": "Cấu trúc câu",
+      "tieuDe": "Câu cảm thán: What a…! / What + N! / How + adj!",
+      "mau": "What + a / an + (adj) + N số ít! · What + (adj) + N số nhiều / không đếm được! · How + adj / adv!",
+      "nghia": "… quá! / thật là …!",
+      "giaiThich": "Dùng để bộc lộ cảm xúc mạnh (ngạc nhiên, khen, chê). What đi với một CỤM DANH TỪ: có a / an nếu danh từ số ít đếm được, không có a / an nếu số nhiều hoặc không đếm được. How đi với một tính từ hoặc trạng từ đứng một mình. Phần chủ ngữ + động từ phía sau có thể thêm hoặc bỏ.",
+      "cachGhep": [
+        "What + a / an + adj + N số ít: What a beautiful day!",
+        "What + adj + N số nhiều: What lovely flowers!",
+        "What + adj + N không đếm được: What terrible weather!",
+        "How + adj / adv (+ S + V): How tall you are! · How fast he runs!",
+        "Thêm S + V vào sau, KHÔNG đảo: What a nice house you have! (không nói …do you have!)"
+      ],
+      "viDu": [
+        {
+          "c": "What a beautiful view!",
+          "v": "Cảnh đẹp quá!"
+        },
+        {
+          "c": "What delicious food! Who cooked it?",
+          "v": "Đồ ăn ngon quá! Ai nấu thế?"
+        },
+        {
+          "c": "How cold it is today!",
+          "v": "Hôm nay lạnh quá!"
+        },
+        {
+          "c": "What a pity you can't come!",
+          "v": "Tiếc quá, bạn không đến được!"
+        },
+        {
+          "c": "How well she sings!",
+          "v": "Cô ấy hát hay quá!"
+        }
+      ],
+      "luuY": [
+        "Lỗi người Việt hay mắc: quên a / an với danh từ số ít → sai: What beautiful day! Đúng: What a beautiful day!",
+        "Thêm a với danh từ không đếm được → sai: What a terrible weather! Đúng: What terrible weather!",
+        "How + tính từ đứng một mình, không có danh từ sau: sai How beautiful dress! → What a beautiful dress! / How beautiful the dress is!"
+      ],
+      "soSanh": [
+        "en-a1-very-too",
+        "en-a1-a-an",
+        "en-b1-so-such-that"
+      ],
+      "tuKhoa": [
+        "what a",
+        "how beautiful",
+        "exclamation",
+        "câu cảm thán",
+        "quá",
+        "thật là"
+      ],
+      "quiz": [
+        {
+          "h": "___ lovely garden you have!",
+          "lc": [
+            "How a",
+            "How",
+            "What a",
+            "What"
+          ],
+          "da": 2,
+          "gt": "Garden là danh từ số ít đếm được, có tính từ lovely đi kèm ⇒ What a + adj + N."
+        },
+        {
+          "h": "___ interesting the film was!",
+          "lc": [
+            "What",
+            "How an",
+            "What an",
+            "How"
+          ],
+          "da": 3,
+          "gt": "Sau chỗ trống là tính từ đứng một mình (interesting) rồi đến S + V ⇒ How + adj."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "What awful weather!",
+            "How awful weather!",
+            "What an awful weather!",
+            "What a awful weather!"
+          ],
+          "da": 0,
+          "gt": "Weather không đếm được ⇒ What + adj + N, không có a / an."
+        }
+      ]
+    }
+  ]
+}

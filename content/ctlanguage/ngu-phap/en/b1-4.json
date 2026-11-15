@@ -1,0 +1,719 @@
+{
+  "nn": "en",
+  "cap": "B1",
+  "diem": [
+    {
+      "id": "en-b1-would-you-mind",
+      "nhom": "Câu hỏi",
+      "tieuDe": "Would you mind + V-ing? · Do you mind if I…?",
+      "mau": "Would you mind + V-ing? · Do you mind if I + V hiện tại? · Would you mind if I + V quá khứ?",
+      "nghia": "phiền bạn ~ được không? · tôi ~ có phiền không?",
+      "giaiThich": "Hai mẫu nhờ vả / xin phép rất lịch sự. Would you mind + V-ing = nhờ NGƯỜI KIA làm gì. Do / Would you mind if I… = xin phép cho MÌNH làm gì; sau Would you mind if I động từ lùi về quá khứ, lịch sự hơn nữa. Vì mind nghĩa là 'thấy phiền', câu trả lời đồng ý là PHỦ ĐỊNH: No, not at all / Of course not / Go ahead.",
+      "cachGhep": [
+        "Nhờ người khác: Would you mind + V-ing? (Would you mind closing the door?)",
+        "Nhờ đừng làm: Would you mind not + V-ing? (Would you mind not smoking here?)",
+        "Xin phép: Do you mind if I + V hiện tại? · Would you mind if I + V quá khứ?",
+        "Đồng ý: No, not at all. / Of course not. / Go ahead. / No problem.",
+        "Từ chối nhẹ: I'm sorry, but… / Actually, I'd rather you didn't."
+      ],
+      "viDu": [
+        {
+          "c": "Would you mind opening the window? It's very hot.",
+          "v": "Phiền bạn mở cửa sổ giúp được không? Nóng quá."
+        },
+        {
+          "c": "Do you mind if I sit here? - No, not at all.",
+          "v": "Tôi ngồi đây có phiền không? - Không, không sao đâu."
+        },
+        {
+          "c": "Would you mind if I borrowed your charger?",
+          "v": "Tôi mượn cục sạc của bạn có được không?"
+        },
+        {
+          "c": "Would you mind not playing music so loudly?",
+          "v": "Phiền bạn đừng mở nhạc to như vậy được không?"
+        }
+      ],
+      "luuY": [
+        "Lỗi người Việt hay mắc: dùng to V sau mind → sai: Would you mind to help me? Đúng: Would you mind helping me?",
+        "Trả lời 'Yes' nghĩa là 'Có, tôi thấy phiền' = từ chối! Muốn đồng ý nói No, not at all / Of course not.",
+        "Không trộn hai mẫu: sai 'Would you mind if you closed the door?' khi nhờ người kia → Would you mind closing the door?"
+      ],
+      "soSanh": [
+        "en-a2-could",
+        "en-a2-to-inf-vs-ving",
+        "en-a2-goi-y-de-nghi"
+      ],
+      "tuKhoa": [
+        "would you mind",
+        "do you mind if",
+        "mind doing",
+        "phiền bạn",
+        "có phiền không",
+        "polite request",
+        "nhờ lịch sự"
+      ],
+      "quiz": [
+        {
+          "h": "Would you mind ___ me with this box?",
+          "lc": [
+            "to help",
+            "helping",
+            "helped",
+            "help"
+          ],
+          "da": 1,
+          "gt": "Sau mind là V-ing: Would you mind helping…?"
+        },
+        {
+          "h": "A: Do you mind if I open the window? - B: ___ (đồng ý)",
+          "lc": [
+            "Yes, open it.",
+            "Yes, I do.",
+            "No, go ahead.",
+            "No, I mind."
+          ],
+          "da": 2,
+          "gt": "Mind = thấy phiền, nên đồng ý phải trả lời phủ định: No, go ahead / Not at all. 'Yes, I do' là từ chối."
+        },
+        {
+          "h": "Would you mind if I ___ a bit early today?",
+          "lc": [
+            "to leave",
+            "leave",
+            "leaving",
+            "left"
+          ],
+          "da": 3,
+          "gt": "Sau Would you mind if I dùng động từ quá khứ để lịch sự hơn: left. (Với Do you mind if I thì dùng leave.)"
+        }
+      ]
+    },
+    {
+      "id": "en-b1-cau-hoi-gioi-tu-cuoi",
+      "nhom": "Câu hỏi",
+      "tieuDe": "Câu hỏi có giới từ ở cuối: Who are you talking to? What is it for?",
+      "mau": "Wh- + trợ động từ + S + V + giới từ? · (trang trọng) Giới từ + whom / which + trợ động từ + S + V?",
+      "nghia": "đang nói chuyện với ai? · cái đó để làm gì? · bạn đến từ đâu?",
+      "giaiThich": "Khi động từ đi với một giới từ cố định (talk to, look at, wait for, come from, think about), câu hỏi Wh- giữ giới từ ở CUỐI câu chứ không bỏ đi. Đây là cách nói tự nhiên trong tiếng Anh hằng ngày. Kiểu đưa giới từ lên đầu (To whom…?, About what…?) chỉ dùng trong văn rất trang trọng.",
+      "cachGhep": [
+        "Who + trợ động từ + S + V + giới từ?: Who are you waiting for?",
+        "What + trợ động từ + S + V + giới từ?: What are you looking at? · What are you talking about?",
+        "Where + … + from?: Where do you come from?",
+        "What… for? = để làm gì / vì sao: What is this button for? · What did you do that for?",
+        "Trang trọng: With whom did you travel? (thường nói: Who did you travel with?)"
+      ],
+      "viDu": [
+        {
+          "c": "Who are you talking to?",
+          "v": "Bạn đang nói chuyện với ai đấy?"
+        },
+        {
+          "c": "What are you worried about?",
+          "v": "Bạn đang lo lắng về chuyện gì?"
+        },
+        {
+          "c": "Which hotel did you stay at?",
+          "v": "Bạn đã ở khách sạn nào?"
+        },
+        {
+          "c": "What is this tool for?",
+          "v": "Cái dụng cụ này dùng để làm gì?"
+        },
+        {
+          "c": "Who did you go to the cinema with?",
+          "v": "Bạn đi xem phim với ai?"
+        }
+      ],
+      "luuY": [
+        "Lỗi người Việt hay mắc: bỏ mất giới từ vì tiếng Việt không cần → sai: Who are you waiting? / What are you looking? Đúng: Who are you waiting for? / What are you looking at?",
+        "Không lặp giới từ hai lần: sai 'With who did you go with?'.",
+        "Giới từ đứng đầu thì phải dùng whom, không dùng who: To whom… (không nói To who…)."
+      ],
+      "soSanh": [
+        "en-a1-cau-hoi-wh",
+        "en-a2-cau-hoi-chu-ngu",
+        "en-b2-relative-preposition"
+      ],
+      "tuKhoa": [
+        "preposition at the end",
+        "who are you talking to",
+        "what for",
+        "giới từ cuối câu",
+        "câu hỏi với giới từ"
+      ],
+      "quiz": [
+        {
+          "h": "What are you listening ___ ?",
+          "lc": [
+            "for",
+            "to",
+            "at",
+            "—"
+          ],
+          "da": 1,
+          "gt": "listen đi với to: listen to ⇒ What are you listening to?"
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "Who are you waiting?",
+            "Who you are waiting for?",
+            "Who are you waiting for?",
+            "For who are you waiting for?"
+          ],
+          "da": 2,
+          "gt": "wait for giữ giới từ ở cuối; trợ động từ are đứng trước chủ ngữ; không lặp giới từ."
+        },
+        {
+          "h": "A: What did you buy that for? - B: ___",
+          "lc": [
+            "In the shop.",
+            "With my friend.",
+            "Yesterday.",
+            "For my sister's birthday."
+          ],
+          "da": 3,
+          "gt": "What… for? hỏi mục đích / lý do ('mua cái đó để làm gì'), nên trả lời bằng mục đích."
+        }
+      ]
+    },
+    {
+      "id": "en-b1-for-during-while",
+      "nhom": "Giới từ",
+      "tieuDe": "for / during / while",
+      "mau": "for + khoảng thời gian · during + N (sự kiện / giai đoạn) · while + S + V",
+      "nghia": "trong (bao lâu) · trong suốt (sự kiện nào) · trong khi (đang làm gì)",
+      "giaiThich": "Cả ba đều dịch là 'trong', nhưng đi với loại từ khác nhau. for trả lời câu hỏi 'bao lâu' và đi với một khoảng thời gian (for two hours). during trả lời 'vào lúc nào' và đi với một danh từ chỉ sự kiện hoặc giai đoạn (during the meeting, during the summer). while là liên từ, theo sau là một mệnh đề có chủ ngữ và động từ.",
+      "cachGhep": [
+        "for + khoảng thời gian: for ten minutes, for three weeks, for ages",
+        "during + danh từ: during the film, during the night, during my holiday",
+        "while + S + V: while I was cooking, while you are waiting",
+        "during không đi với khoảng thời gian chỉ con số: sai during two hours → for two hours",
+        "while có thể rút gọn: while waiting (= while I was waiting)"
+      ],
+      "viDu": [
+        {
+          "c": "I lived in Japan for three years.",
+          "v": "Tôi đã sống ở Nhật ba năm."
+        },
+        {
+          "c": "Please turn off your phone during the meeting.",
+          "v": "Vui lòng tắt điện thoại trong suốt cuộc họp."
+        },
+        {
+          "c": "Someone called while you were in the shower.",
+          "v": "Có người gọi trong lúc bạn đang tắm."
+        },
+        {
+          "c": "It rained heavily during the night.",
+          "v": "Trong đêm trời mưa rất to."
+        },
+        {
+          "c": "I fell asleep for a few minutes during the lecture.",
+          "v": "Tôi ngủ gật vài phút trong buổi giảng."
+        }
+      ],
+      "luuY": [
+        "Lỗi người Việt hay mắc: dùng during với con số thời gian → sai: during two weeks. Đúng: for two weeks.",
+        "Dùng during với mệnh đề → sai: during I was sleeping. Đúng: while I was sleeping / during my sleep.",
+        "for trả lời 'bao lâu' (how long), during trả lời 'lúc nào' (when): I slept for two hours during the flight."
+      ],
+      "soSanh": [
+        "en-a2-for-since",
+        "en-a2-past-continuous",
+        "en-a1-gioi-tu-thoi-gian"
+      ],
+      "tuKhoa": [
+        "for during while",
+        "during",
+        "while",
+        "trong suốt",
+        "trong khi",
+        "in khoảng thời gian"
+      ],
+      "quiz": [
+        {
+          "h": "We stayed in Nha Trang ___ a week.",
+          "lc": [
+            "for",
+            "during",
+            "while",
+            "since"
+          ],
+          "da": 0,
+          "gt": "A week là khoảng thời gian trả lời 'bao lâu' ⇒ for."
+        },
+        {
+          "h": "Nobody spoke ___ the film.",
+          "lc": [
+            "since",
+            "during",
+            "while",
+            "for"
+          ],
+          "da": 1,
+          "gt": "The film là danh từ chỉ sự kiện ⇒ during. While cần mệnh đề có chủ ngữ + động từ."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "I hurt my leg during I was playing football.",
+            "I hurt my leg for I was playing football.",
+            "I hurt my leg while I was playing football.",
+            "I hurt my leg during playing football I was."
+          ],
+          "da": 2,
+          "gt": "Sau chỗ đó là mệnh đề (I was playing) ⇒ dùng liên từ while."
+        }
+      ]
+    },
+    {
+      "id": "en-b1-until-by",
+      "nhom": "Giới từ",
+      "tieuDe": "until / by (thời hạn)",
+      "mau": "until + mốc (kéo dài đến) · by + mốc (không muộn hơn)",
+      "nghia": "cho đến (tận) lúc ~ · trước / chậm nhất là lúc ~",
+      "giaiThich": "until (till) nói một tình trạng hay hành động KÉO DÀI liên tục cho tới một mốc rồi mới dừng: I'll wait until six. by nói một việc phải xảy ra hoặc xong KHÔNG MUỘN HƠN một mốc, có thể sớm hơn: Send it by Friday. Mẹo: hỏi 'việc này kéo dài đến lúc đó, hay chỉ cần xong trước lúc đó?'.",
+      "cachGhep": [
+        "until / till + mốc: stay until midnight, work until 5 p.m., wait until Monday",
+        "not… until = mãi đến … mới: The shop doesn't open until 10.",
+        "by + mốc (hạn chót): finish by Friday, be back by 9 p.m., arrive by noon",
+        "until còn là liên từ: Wait until I come back. (by không dùng như vậy; nói by the time + mệnh đề)"
+      ],
+      "viDu": [
+        {
+          "c": "The library is open until 9 p.m.",
+          "v": "Thư viện mở cửa đến 9 giờ tối."
+        },
+        {
+          "c": "Please send me the report by Friday.",
+          "v": "Vui lòng gửi tôi bản báo cáo chậm nhất là thứ Sáu."
+        },
+        {
+          "c": "I didn't know the truth until yesterday.",
+          "v": "Mãi đến hôm qua tôi mới biết sự thật."
+        },
+        {
+          "c": "You must be home by ten o'clock.",
+          "v": "Con phải về nhà trước mười giờ."
+        },
+        {
+          "c": "Let's wait here until the rain stops.",
+          "v": "Mình đợi ở đây cho đến khi tạnh mưa nhé."
+        }
+      ],
+      "luuY": [
+        "Lỗi người Việt hay mắc: dùng until cho hạn chót → sai: Finish the essay until Monday. Đúng: Finish the essay by Monday.",
+        "'Mãi đến… mới' dùng not… until, động từ phủ định: He didn't arrive until 11 p.m.",
+        "by + mốc giờ không đi với mệnh đề: sai 'by I come back' → by the time I come back."
+      ],
+      "soSanh": [
+        "en-b1-for-during-while",
+        "en-b1-future-time-clauses",
+        "en-c1-time-clauses-advanced"
+      ],
+      "tuKhoa": [
+        "until",
+        "till",
+        "by deadline",
+        "not until",
+        "cho đến khi",
+        "hạn chót",
+        "chậm nhất"
+      ],
+      "quiz": [
+        {
+          "h": "The assignment must be submitted ___ 5 p.m. on Thursday.",
+          "lc": [
+            "until",
+            "by",
+            "for",
+            "since"
+          ],
+          "da": 1,
+          "gt": "Đây là hạn chót (nộp không muộn hơn 5 giờ) ⇒ by."
+        },
+        {
+          "h": "I'll stay at the office ___ the work is finished.",
+          "lc": [
+            "during",
+            "by",
+            "until",
+            "since"
+          ],
+          "da": 2,
+          "gt": "Ở lại liên tục cho đến khi xong việc, theo sau là mệnh đề ⇒ until."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "We didn't leave by midnight until.",
+            "We left until midnight.",
+            "We didn't leave by until midnight.",
+            "We didn't leave until midnight."
+          ],
+          "da": 3,
+          "gt": "'Mãi đến nửa đêm mới về' ⇒ not… until. 'We left until midnight' sai vì rời đi là hành động tức thời, không kéo dài."
+        }
+      ]
+    },
+    {
+      "id": "en-b1-on-time-in-time",
+      "nhom": "Giới từ",
+      "tieuDe": "on time / in time · at the end / in the end",
+      "mau": "on time · in time (for + N / to + V) · at the end (of + N) · in the end",
+      "nghia": "đúng giờ / kịp lúc · ở cuối (cái gì) / rốt cuộc, cuối cùng thì",
+      "giaiThich": "Hai cặp cụm cố định hay bị nhầm vì chỉ khác giới từ. on time = đúng giờ theo lịch, không trễ; in time = kịp, còn đủ thời gian trước khi quá muộn (thường có for / to). at the end (of) = ở phần cuối, điểm kết của một cái gì đó (cuối tháng, cuối phim); in the end = rốt cuộc, sau tất cả mọi chuyện (kết quả cuối cùng), đứng một mình.",
+      "cachGhep": [
+        "on time: The train left on time. · Please be on time.",
+        "in time (for + N / to + V): We got there in time for dinner. · just in time",
+        "at the end of + N: at the end of the month / the film / the street",
+        "in the end (= finally, eventually): In the end, we decided to stay at home.",
+        "Ngược nghĩa: late (trễ) ↔ on time; too late (không kịp) ↔ in time"
+      ],
+      "viDu": [
+        {
+          "c": "The meeting started on time.",
+          "v": "Cuộc họp bắt đầu đúng giờ."
+        },
+        {
+          "c": "We arrived just in time to catch the last bus.",
+          "v": "Chúng tôi đến vừa kịp bắt chuyến xe buýt cuối."
+        },
+        {
+          "c": "Pay the rent at the end of each month.",
+          "v": "Trả tiền nhà vào cuối mỗi tháng."
+        },
+        {
+          "c": "We argued for an hour, but in the end we agreed.",
+          "v": "Chúng tôi tranh luận cả tiếng, nhưng rốt cuộc cũng đồng ý."
+        }
+      ],
+      "luuY": [
+        "Lỗi người Việt hay mắc: dùng in the end of → sai: in the end of the film. Đúng: at the end of the film.",
+        "in the end không đi với of; nó nghĩa là 'rốt cuộc' (finally), đứng đầu hoặc cuối câu.",
+        "Nhầm on time / in time: 'đến kịp ăn tối' là in time for dinner, không phải on time for dinner (on time chỉ đúng lịch hẹn)."
+      ],
+      "soSanh": [
+        "en-a1-gioi-tu-thoi-gian",
+        "en-a2-tu-noi-trinh-tu",
+        "en-b1-until-by"
+      ],
+      "tuKhoa": [
+        "on time",
+        "in time",
+        "at the end",
+        "in the end",
+        "đúng giờ",
+        "kịp",
+        "rốt cuộc",
+        "cuối cùng"
+      ],
+      "quiz": [
+        {
+          "h": "If we hurry, we'll be home ___ to watch the match.",
+          "lc": [
+            "on time",
+            "by the time",
+            "in time",
+            "at time"
+          ],
+          "da": 2,
+          "gt": "Về KỊP để xem trận đấu (to + V) ⇒ in time."
+        },
+        {
+          "h": "Turn left ___ of this street.",
+          "lc": [
+            "in the end",
+            "by the end",
+            "on the end",
+            "at the end"
+          ],
+          "da": 3,
+          "gt": "Ở cuối con phố (vị trí cụ thể, có of) ⇒ at the end of."
+        },
+        {
+          "h": "He looked at many cars, and ___ he bought the cheapest one.",
+          "lc": [
+            "in the end",
+            "on time",
+            "at end",
+            "at the end"
+          ],
+          "da": 0,
+          "gt": "'Rốt cuộc' (kết quả sau tất cả) ⇒ in the end, đứng một mình không có of."
+        }
+      ]
+    },
+    {
+      "id": "en-b1-still-any-more",
+      "nhom": "Tính từ – trạng từ",
+      "tieuDe": "still / not… any more / no longer",
+      "mau": "S + still + V (vẫn) · S + V phủ định + any more / any longer · S + no longer + V",
+      "nghia": "vẫn còn ~ · không còn ~ nữa",
+      "giaiThich": "still nói một việc VẪN tiếp tục, chưa dừng (có khi bất ngờ vì đáng lẽ đã dừng). not… any more / not… any longer và no longer nói một việc ĐÃ DỪNG, không còn nữa. any more / any longer đứng cuối câu phủ định; no longer đứng giữa câu (trước động từ thường, sau to be), mang sắc thái trang trọng hơn.",
+      "cachGhep": [
+        "still: trước động từ thường (She still lives here) · sau to be (He is still asleep)",
+        "still trong câu phủ định nhấn mạnh 'vẫn chưa': I still haven't finished.",
+        "not… any more (Anh–Anh hay viết anymore): I don't smoke any more.",
+        "no longer + V (trang trọng): He no longer works here. · This model is no longer available."
+      ],
+      "viDu": [
+        {
+          "c": "Is it still raining?",
+          "v": "Trời vẫn còn mưa à?"
+        },
+        {
+          "c": "My grandmother is 85, but she still rides a bike.",
+          "v": "Bà tôi 85 tuổi mà vẫn đạp xe."
+        },
+        {
+          "c": "I don't play computer games any more.",
+          "v": "Tôi không chơi điện tử nữa."
+        },
+        {
+          "c": "Mr Tuan no longer works for this company.",
+          "v": "Anh Tuấn không còn làm cho công ty này nữa."
+        },
+        {
+          "c": "I've been waiting for an hour and he still hasn't called.",
+          "v": "Tôi chờ cả tiếng rồi mà anh ấy vẫn chưa gọi."
+        }
+      ],
+      "luuY": [
+        "Lỗi người Việt hay mắc: thêm not với no longer → sai: He doesn't no longer live here. Đúng: He no longer lives here / He doesn't live here any more.",
+        "any more đứng cuối câu phủ định, không dùng trong câu khẳng định với nghĩa 'không còn': sai 'I play games any more'.",
+        "still đứng trước động từ thường nhưng SAU to be: sai 'She still is tired' (văn nói có gặp khi nhấn mạnh) → She is still tired."
+      ],
+      "soSanh": [
+        "en-a2-present-perfect-just-already-yet",
+        "en-a2-used-to",
+        "en-a2-also-too-either"
+      ],
+      "tuKhoa": [
+        "still",
+        "any more",
+        "anymore",
+        "no longer",
+        "any longer",
+        "vẫn",
+        "không còn nữa"
+      ],
+      "quiz": [
+        {
+          "h": "We moved away, so we don't see our old neighbours ___ .",
+          "lc": [
+            "yet",
+            "still",
+            "any more",
+            "no longer"
+          ],
+          "da": 2,
+          "gt": "Câu đã phủ định (don't see) + 'không còn nữa' ⇒ any more ở cuối câu."
+        },
+        {
+          "h": "It's midnight, and the baby is ___ awake.",
+          "lc": [
+            "no longer",
+            "already not",
+            "any more",
+            "still"
+          ],
+          "da": 3,
+          "gt": "Việc vẫn đang tiếp tục (vẫn còn thức) ⇒ still, đứng sau to be."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "She no longer eats meat.",
+            "She eats no longer meat any more.",
+            "She doesn't no longer eat meat.",
+            "She no longer doesn't eat meat."
+          ],
+          "da": 0,
+          "gt": "no longer đã mang nghĩa phủ định, đứng trước động từ thường, không thêm not hay any more."
+        }
+      ]
+    },
+    {
+      "id": "en-b1-ving-expressions",
+      "nhom": "Danh động từ – động từ nguyên mẫu",
+      "tieuDe": "Cụm + V-ing: spend time doing, be busy doing, it's worth doing, there's no point in doing",
+      "mau": "spend / waste + time / money + V-ing · be busy + V-ing · It's (not) worth + V-ing · There's no point (in) + V-ing · have difficulty / trouble (in) + V-ing",
+      "nghia": "dành thời gian làm ~, bận làm ~, đáng làm ~, làm ~ cũng vô ích, khó khăn khi ~",
+      "giaiThich": "Một nhóm cụm cố định luôn đi với V-ing, không đi với to V. Chúng rất hay gặp khi nói về thời gian, công sức và việc có đáng làm hay không. Học thuộc cả cụm như một khối sẽ dễ dùng đúng hơn là phân tích từng từ.",
+      "cachGhep": [
+        "spend + thời gian / tiền + V-ing: I spent two hours cleaning the house.",
+        "waste + thời gian / tiền + V-ing: Don't waste time worrying.",
+        "be busy + V-ing: She's busy preparing for the exam.",
+        "It's (not) worth + V-ing: The film is worth watching.",
+        "There's no point (in) + V-ing · have difficulty / trouble / a hard time + V-ing"
+      ],
+      "viDu": [
+        {
+          "c": "I spent the whole weekend studying for the test.",
+          "v": "Tôi dành cả cuối tuần để ôn thi."
+        },
+        {
+          "c": "He's busy fixing his motorbike.",
+          "v": "Anh ấy đang bận sửa xe máy."
+        },
+        {
+          "c": "This museum is really worth visiting.",
+          "v": "Bảo tàng này thật sự đáng ghé thăm."
+        },
+        {
+          "c": "There's no point in arguing with him.",
+          "v": "Cãi nhau với anh ta cũng chẳng ích gì."
+        },
+        {
+          "c": "Many students have difficulty understanding native speakers.",
+          "v": "Nhiều sinh viên gặp khó khăn khi nghe hiểu người bản xứ."
+        }
+      ],
+      "luuY": [
+        "Lỗi người Việt hay mắc: dùng to V theo phản xạ → sai: spend time to read / busy to work / worth to visit. Đúng: spend time reading / busy working / worth visiting.",
+        "have difficulty + V-ing, không phải + to V: sai 'I have difficulty to sleep' → I have difficulty sleeping.",
+        "worth đứng sau to be; với 'đáng' + danh từ dùng worth + N: The trip was worth the money."
+      ],
+      "soSanh": [
+        "en-a2-to-inf-vs-ving",
+        "en-b1-gerund-vs-infinitive",
+        "en-c1-verb-patterns-advanced"
+      ],
+      "tuKhoa": [
+        "spend time doing",
+        "busy doing",
+        "worth doing",
+        "no point in",
+        "have difficulty doing",
+        "waste time",
+        "đáng làm",
+        "vô ích"
+      ],
+      "quiz": [
+        {
+          "h": "Don't waste your money ___ things you don't need.",
+          "lc": [
+            "buy",
+            "bought",
+            "to buy",
+            "buying"
+          ],
+          "da": 3,
+          "gt": "waste + tiền / thời gian + V-ing."
+        },
+        {
+          "h": "The book is long, but it's worth ___ .",
+          "lc": [
+            "reading",
+            "being read it",
+            "to read",
+            "read"
+          ],
+          "da": 0,
+          "gt": "It's worth + V-ing: worth reading (đáng đọc)."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "I had trouble for finding the hotel.",
+            "I had trouble finding the hotel.",
+            "I had trouble find the hotel.",
+            "I had trouble to find the hotel."
+          ],
+          "da": 1,
+          "gt": "have trouble / difficulty + V-ing (không dùng to V hay for)."
+        }
+      ]
+    },
+    {
+      "id": "en-b1-wh-to-infinitive",
+      "nhom": "Danh động từ – động từ nguyên mẫu",
+      "tieuDe": "Từ để hỏi + to V: how to / what to / where to / whether to",
+      "mau": "V (know, decide, learn, tell, show, ask…) + how / what / where / when / which / whether + to V",
+      "nghia": "(biết / quyết định / chỉ) cách làm ~, nên làm gì, nên đi đâu…",
+      "giaiThich": "Sau một số động từ như know, decide, learn, show, tell, explain, ask, wonder, có thể đặt từ để hỏi + to V để nói 'nên / có thể làm gì'. Cụm này là cách rút gọn của một câu hỏi gián tiếp có should / can: I don't know what to say = I don't know what I should say. Dùng được với mọi từ để hỏi trừ why.",
+      "cachGhep": [
+        "how to + V: Can you show me how to use this app?",
+        "what / which + (N) + to V: I don't know what to cook. · I can't decide which dress to wear.",
+        "where / when + to V: Tell me where to put it. · We need to know when to start.",
+        "whether + to V (+ or not): She's wondering whether to accept the offer.",
+        "Có tân ngữ người: show / tell / teach + sb + how to V"
+      ],
+      "viDu": [
+        {
+          "c": "I don't know what to say.",
+          "v": "Tôi không biết phải nói gì."
+        },
+        {
+          "c": "Can you show me how to make pho?",
+          "v": "Bạn chỉ cho tôi cách nấu phở được không?"
+        },
+        {
+          "c": "We couldn't decide where to go for our holiday.",
+          "v": "Chúng tôi không quyết được nên đi nghỉ ở đâu."
+        },
+        {
+          "c": "He's not sure whether to buy a new laptop or fix the old one.",
+          "v": "Anh ấy chưa chắc nên mua máy tính mới hay sửa cái cũ."
+        }
+      ],
+      "luuY": [
+        "Lỗi người Việt hay mắc: dịch 'cách làm' thành 'the way to' rồi bỏ to, hoặc thêm chủ ngữ → sai: I don't know how I do it (khi muốn hỏi cách) / I don't know how do it. Đúng: I don't know how to do it.",
+        "Không dùng why + to V: sai 'I don't know why to go' → I don't know why I should go.",
+        "Sau if không dùng to V: sai 'I'm not sure if to go' → whether to go."
+      ],
+      "soSanh": [
+        "en-b1-indirect-questions",
+        "en-a1-want-need-to",
+        "en-b2-whether-if-noun-clauses"
+      ],
+      "tuKhoa": [
+        "how to",
+        "what to do",
+        "where to go",
+        "whether to",
+        "cách làm",
+        "nên làm gì",
+        "question word infinitive"
+      ],
+      "quiz": [
+        {
+          "h": "My grandmother is learning ___ use a smartphone.",
+          "lc": [
+            "how to",
+            "to how",
+            "how she",
+            "how"
+          ],
+          "da": 0,
+          "gt": "learn + how to + V: learning how to use…"
+        },
+        {
+          "h": "I can't decide ___ to invite to my party.",
+          "lc": [
+            "if",
+            "who",
+            "that",
+            "why"
+          ],
+          "da": 1,
+          "gt": "Không biết nên mời AI ⇒ who + to V. Why và if không đi với to V; that không phải từ để hỏi."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "She asked me where to parking the car.",
+            "She asked me where park the car.",
+            "She asked me where to park the car.",
+            "She asked me where to I park the car."
+          ],
+          "da": 2,
+          "gt": "Mẫu: asked + sb + where + to + V nguyên mẫu."
+        }
+      ]
+    }
+  ]
+}

@@ -719,3 +719,10 @@ Mẫu một mục:
 - **Cách sửa:** `ManProCTL.giaMoiThang` tự dựng `Decimal.FormatStyle.Currency` theo mã tiền + locale của gói, làm tròn theo số lẻ của loại tiền, và với tiền 0 số lẻ thì tin số trong `displayPrice` khi nó lớn hơn hẳn `price`; test `ProCTLTests.testGiaQuyRaThang` + kiểm trong `testNapGoiVaCauGia`; ảnh duyệt 2 gói thuê bao đã chụp lại + tải lại lên ASC (ios-app 61582f7).
 - **Ảnh hưởng:** chưa lên người dùng (bắt được khi tạo gói thuê bao trên App Store Connect trước lần nộp đầu).
 - **Bài học:** đừng tin `Product.price` của StoreKit thử nghiệm với tiền không có phần lẻ; con số hiển thị trên màn mua phải có test so với chuỗi `displayPrice`.
+
+### 15/11/2026 — CT Language (từ vựng chủ đề tiếng Nhật) — 真面目 đọc sai thành しんめんもく
+- **Triệu chứng:** chủ đề "Tính cách" tiếng Nhật hiện 真面目 với cách đọc しんめんもく; người học sẽ đọc/nghe sai một từ N5 rất thông dụng.
+- **Nguyên nhân:** `content/ctlanguage/chu-de-tu/ja/tinh-cach.json:4` ghi `"doc":"しんめんもく"` (đọc âm On từng chữ), đúng phải là まじめ (jukujikun).
+- **Cách sửa:** đổi `doc` thành まじめ; `npx tsx --test src/services/ctlanguage/*.test.ts` 152/152 (cùng commit bổ sung nội dung 15/11).
+- **Ảnh hưởng:** người dùng app CT Language đã thấy cách đọc sai ở chủ đề Tính cách (web không dùng tệp này).
+- **Bài học:** từ đọc kiểu jukujikun (真面目, 今日, 大人…) không suy được từ âm của từng chữ — bộ kiểm chủ đề nên đối chiếu `doc` với từ điển `ctl_tu` (`scripts/ctlanguage-kiem-chu-de-tu.mts ja`) trước khi đẩy.

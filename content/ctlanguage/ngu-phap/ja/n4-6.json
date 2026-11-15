@@ -1,0 +1,950 @@
+{
+  "nn": "ja",
+  "cap": "N4",
+  "diem": [
+    {
+      "id": "ja-n4-made-ni",
+      "nhom": "Thời điểm",
+      "tieuDe": "〜までに",
+      "mau": "N（thời điểm）/ V-る + までに",
+      "nghia": "trước ~, chậm nhất là ~ (hạn chót)",
+      "giaiThich": "までに chỉ hạn chót: việc phải xong vào một lúc nào đó TRƯỚC hoặc ĐÚNG thời điểm đã nêu. Khác まで (làm liên tục cho tới thời điểm đó). Động từ đi sau までに là việc xảy ra một lần (出す, 帰る, 終わる); động từ đi sau まで là việc kéo dài (待つ, 働く, 寝る).",
+      "cachGhep": [
+        "Danh từ thời gian + までに: 金曜日までに, 5時までに",
+        "V thể từ điển + までに: 先生が来るまでに",
+        "Hỏi hạn: いつまでに + V-ますか"
+      ],
+      "viDu": [
+        {
+          "c": "レポートは金曜日までに出してください。",
+          "d": "レポートは きんようびまでに だして ください。",
+          "v": "Hãy nộp báo cáo chậm nhất là thứ Sáu."
+        },
+        {
+          "c": "夜10時までに家に帰ります。",
+          "d": "よる じゅうじまでに いえに かえります。",
+          "v": "Tôi về nhà trước 10 giờ tối."
+        },
+        {
+          "c": "母が帰ってくるまでに、部屋を掃除しておきます。",
+          "d": "ははが かえって くるまでに、へやを そうじして おきます。",
+          "v": "Tôi sẽ dọn phòng xong trước khi mẹ về."
+        },
+        {
+          "c": "いつまでに返事をすればいいですか。",
+          "d": "いつまでに へんじを すれば いいですか。",
+          "v": "Tôi nên trả lời trước khi nào thì được ạ?"
+        }
+      ],
+      "luuY": [
+        "まで (liên tục đến lúc) ≠ までに (hạn chót): 5時まで待ちます = chờ suốt tới 5 giờ; 5時までに来てください = hãy đến trước 5 giờ.",
+        "Người Việt hay dịch \"nộp trước thứ Sáu\" thành 金曜日の前に出す — với hạn nộp, nói 金曜日までに出す mới tự nhiên."
+      ],
+      "soSanh": [
+        "ja-n5-kara-made",
+        "ja-n5-mae-ni"
+      ],
+      "tuKhoa": [
+        "made ni",
+        "madeni",
+        "hạn chót",
+        "chậm nhất",
+        "trước khi",
+        "deadline"
+      ],
+      "quiz": [
+        {
+          "h": "この本は来週の月曜日（　）返してください。",
+          "lc": [
+            "まで",
+            "までに",
+            "で",
+            "から"
+          ],
+          "da": 1,
+          "gt": "Trả sách là việc một lần, phải xong trước hạn ⇒ までに. まで dùng cho việc kéo dài liên tục tới mốc đó."
+        },
+        {
+          "h": "私は毎日6時（　）会社で働いています。",
+          "lc": [
+            "より",
+            "に",
+            "まで",
+            "までに"
+          ],
+          "da": 2,
+          "gt": "働く là việc kéo dài liên tục tới 6 giờ ⇒ まで. までに chỉ hạn chót cho một việc xảy ra một lần."
+        },
+        {
+          "h": "Câu nào có nghĩa \"Hãy đến trước 9 giờ\"?",
+          "lc": [
+            "9時ごろ来てください。",
+            "9時から来てください。",
+            "9時まで来てください。",
+            "9時までに来てください。"
+          ],
+          "da": 3,
+          "gt": "Hạn chót ⇒ までに. 来る là việc xảy ra một lần nên không đi với まで; から là \"từ 9 giờ\", ごろ là \"khoảng 9 giờ\"."
+        }
+      ]
+    },
+    {
+      "id": "ja-n4-zutsu",
+      "nhom": "Mức độ – trạng thái",
+      "tieuDe": "〜ずつ",
+      "mau": "Số lượng + trợ số từ + ずつ",
+      "nghia": "mỗi ~ (chia đều); từng ~ một, dần dần",
+      "giaiThich": "ずつ đứng sau từ chỉ số lượng để nói mỗi người / mỗi lần nhận hoặc làm một lượng như nhau, hoặc làm dần dần từng chút. Hay gặp: 一人ずつ (từng người một), 一つずつ (từng cái một), 少しずつ (từng chút một).",
+      "cachGhep": [
+        "Số + trợ số từ + ずつ: 2つずつ, 3人ずつ, 1ページずつ",
+        "少し + ずつ: từng chút một",
+        "N(người) + に + số lượng + ずつ: 子どもに 二つずつ あげる"
+      ],
+      "viDu": [
+        {
+          "c": "子どもたちにりんごを二つずつあげました。",
+          "d": "こどもたちに りんごを ふたつずつ あげました。",
+          "v": "Tôi cho mỗi đứa trẻ hai quả táo."
+        },
+        {
+          "c": "毎日、漢字を五つずつ覚えています。",
+          "d": "まいにち、かんじを いつつずつ おぼえて います。",
+          "v": "Mỗi ngày tôi học thuộc năm chữ Hán."
+        },
+        {
+          "c": "日本語が少しずつわかるようになりました。",
+          "d": "にほんごが すこしずつ わかるように なりました。",
+          "v": "Tôi đã dần dần hiểu được tiếng Nhật."
+        },
+        {
+          "c": "一人ずつ部屋に入ってください。",
+          "d": "ひとりずつ へやに はいって ください。",
+          "v": "Mời từng người một vào phòng."
+        }
+      ],
+      "luuY": [
+        "ずつ đứng SAU số lượng, không đứng sau danh từ: りんごを二つずつ (không nói りんごずつ二つ).",
+        "Không ghép với từ chỉ toàn bộ như 全部, みんな: 全部ずつ ✗.",
+        "Tiếng Việt nói \"mỗi người hai quả\" — tiếng Nhật đảo lại thành 一人に二つずつ; đừng dịch \"mỗi\" thành 毎."
+      ],
+      "soSanh": [
+        "ja-n5-tro-so-tu"
+      ],
+      "tuKhoa": [
+        "zutsu",
+        "từng cái một",
+        "mỗi người",
+        "chia đều",
+        "dần dần",
+        "sukoshi zutsu"
+      ],
+      "quiz": [
+        {
+          "h": "クッキーをみんなに三つ（　）配りました。",
+          "lc": [
+            "しか",
+            "まで",
+            "ごろ",
+            "ずつ"
+          ],
+          "da": 3,
+          "gt": "Chia đều cho mỗi người ba cái ⇒ 三つずつ. しか cần động từ phủ định; ごろ chỉ thời điểm khoảng chừng."
+        },
+        {
+          "h": "一人（　）名前を呼びますから、呼ばれたら前に来てください。",
+          "lc": [
+            "ずつ",
+            "より",
+            "まで",
+            "しか"
+          ],
+          "da": 0,
+          "gt": "一人ずつ = gọi lần lượt từng người một. しか phải đi với phủ định; まで và より không hợp nghĩa."
+        },
+        {
+          "h": "「少しずつ上手になります」nghĩa là gì?",
+          "lc": [
+            "Chỉ giỏi một chút thôi",
+            "Giỏi lên từng chút một",
+            "Không giỏi lên chút nào",
+            "Giỏi hơn người khác một chút"
+          ],
+          "da": 1,
+          "gt": "少しずつ = từng chút một, dần dần ⇒ tiến bộ đều đặn theo thời gian. \"Chỉ một chút\" là 少しだけ."
+        }
+      ]
+    },
+    {
+      "id": "ja-n4-koto-ga-aru",
+      "nhom": "Mức độ – trạng thái",
+      "tieuDe": "〜ことがあります（thỉnh thoảng có khi）",
+      "mau": "V-る / V-ない + ことがあります",
+      "nghia": "thỉnh thoảng có lúc ~, đôi khi ~",
+      "giaiThich": "V thể từ điển (hoặc thể ない) + ことがあります nói một việc thỉnh thoảng xảy ra, không thường xuyên. Khác hẳn V-たことがあります (đã từng ~, nói về kinh nghiệm). Hay đi với ときどき, たまに.",
+      "cachGhep": [
+        "V thể từ điển + ことがあります: 遅れることがあります",
+        "V thể ない + ことがあります: 朝ご飯を食べないことがあります",
+        "Tính từ đuôi い + ことがあります: 六月でも寒いことがあります"
+      ],
+      "viDu": [
+        {
+          "c": "電車が遅れることがありますから、早めに家を出ます。",
+          "d": "でんしゃが おくれる ことが ありますから、はやめに いえを でます。",
+          "v": "Tàu thỉnh thoảng bị trễ nên tôi ra khỏi nhà sớm một chút."
+        },
+        {
+          "c": "忙しいときは、昼ご飯を食べないことがあります。",
+          "d": "いそがしい ときは、ひるごはんを たべない ことが あります。",
+          "v": "Lúc bận, có khi tôi không ăn trưa."
+        },
+        {
+          "c": "父はたまにカラオケで歌うことがあります。",
+          "d": "ちちは たまに カラオケで うたう ことが あります。",
+          "v": "Bố tôi thỉnh thoảng có đi hát karaoke."
+        },
+        {
+          "c": "この町は夏でも涼しいことがあります。",
+          "d": "この まちは なつでも すずしい ことが あります。",
+          "v": "Thị trấn này có khi mát cả vào mùa hè."
+        }
+      ],
+      "luuY": [
+        "V-る ことがある (thỉnh thoảng) ≠ V-た ことがある (đã từng): 日本へ行くことがあります = thỉnh thoảng có đi Nhật; 日本へ行ったことがあります = đã từng đi Nhật.",
+        "Việc xảy ra đều đặn thì không dùng mẫu này, mà nói よく〜ます / いつも〜ます."
+      ],
+      "soSanh": [
+        "ja-n5-ta-koto-ga-arimasu"
+      ],
+      "tuKhoa": [
+        "koto ga aru",
+        "kotogaaru",
+        "thỉnh thoảng",
+        "đôi khi",
+        "có khi"
+      ],
+      "quiz": [
+        {
+          "h": "私はときどき寝坊して、会社に遅れる（　）。",
+          "lc": [
+            "ことにします",
+            "ことがあります",
+            "ことができます",
+            "ことになります"
+          ],
+          "da": 1,
+          "gt": "ときどき + V-る ことがあります = thỉnh thoảng có khi. ことにします là tự quyết định, ことができます là có thể, ことになります là được quyết định — đều không hợp với \"ngủ quên đi trễ\"."
+        },
+        {
+          "h": "Câu nào có nghĩa \"Tôi đã từng ăn sushi\"?",
+          "lc": [
+            "すしを食べることにします。",
+            "すしを食べることがあります。",
+            "すしを食べたことがあります。",
+            "すしを食べてもいいです。"
+          ],
+          "da": 2,
+          "gt": "\"Đã từng\" ⇒ V-た ことがあります. V-る ことがあります là \"thỉnh thoảng có ăn\"."
+        },
+        {
+          "h": "Câu nào có nghĩa \"Thỉnh thoảng tôi không ăn sáng\"?",
+          "lc": [
+            "ときどき朝ご飯を食べなくてもいいです。",
+            "ときどき朝ご飯を食べなかったことがあります。",
+            "ときどき朝ご飯を食べないでください。",
+            "ときどき朝ご飯を食べないことがあります。"
+          ],
+          "da": 3,
+          "gt": "Thỉnh thoảng KHÔNG làm ⇒ V-ない + ことがあります. ないでください là lời đề nghị, なくてもいい là \"không cần\"."
+        }
+      ]
+    },
+    {
+      "id": "ja-n4-ba-ii",
+      "nhom": "Lời khuyên – mệnh lệnh",
+      "tieuDe": "〜ばいいですか／〜たらいいですか",
+      "mau": "Từ để hỏi + V-ば / V-たら + いいですか",
+      "nghia": "nên làm ~ thì được?; (trả lời) chỉ cần ~ là được",
+      "giaiThich": "Dùng để xin lời khuyên, hỏi cách làm: どうすればいいですか (tôi nên làm thế nào?). Khi trả lời, 〜ばいいです / 〜たらいいです nghĩa là \"chỉ cần làm ~ là được\". ば và たら ở đây gần như cùng nghĩa; たら nghe thân mật hơn một chút.",
+      "cachGhep": [
+        "Từ để hỏi + V-ば + いいですか: どうすればいいですか, どこで買えばいいですか",
+        "Từ để hỏi + V-たら + いいですか: 何を持っていったらいいですか",
+        "Trả lời: V-ば / V-たら + いいです (chỉ cần ~)"
+      ],
+      "viDu": [
+        {
+          "c": "駅へ行きたいんですが、どう行けばいいですか。",
+          "d": "えきへ いきたいんですが、どう いけば いいですか。",
+          "v": "Tôi muốn đến ga, đi thế nào thì được ạ?"
+        },
+        {
+          "c": "このボタンを押せばいいですよ。",
+          "d": "この ボタンを おせば いいですよ。",
+          "v": "Chỉ cần bấm cái nút này là được."
+        },
+        {
+          "c": "パーティーに何を持っていったらいいですか。",
+          "d": "パーティーに なにを もって いったら いいですか。",
+          "v": "Tôi nên mang gì đến bữa tiệc thì được?"
+        },
+        {
+          "c": "わからないときは、先生に聞けばいいです。",
+          "d": "わからない ときは、せんせいに きけば いいです。",
+          "v": "Khi không hiểu thì cứ hỏi thầy cô là được."
+        }
+      ],
+      "luuY": [
+        "Xin lời khuyên phải dùng từ để hỏi + ば/たら + いいですか. Người Việt hay hỏi どうしますか — câu đó nghĩa là \"anh sẽ làm gì?\", khác hẳn.",
+        "Khác 〜たほうがいいです (khuyên làm gì thì có lợi hơn): 〜ばいいです chỉ nói \"làm vậy là đủ\".",
+        "Chia thể ば cẩn thận: 行く→行けば, する→すれば, 来る→来れば."
+      ],
+      "soSanh": [
+        "ja-n4-ba",
+        "ja-n4-tara-dou",
+        "ja-n4-hou-ga-ii"
+      ],
+      "tuKhoa": [
+        "ba ii",
+        "tara ii",
+        "dou sureba ii",
+        "nên làm thế nào",
+        "xin lời khuyên",
+        "chỉ cần"
+      ],
+      "quiz": [
+        {
+          "h": "すみません、この漢字はどう（　）いいですか。",
+          "lc": [
+            "読む",
+            "読もう",
+            "読めば",
+            "読んで"
+          ],
+          "da": 2,
+          "gt": "Hỏi cách làm: どう + V-ば + いいですか ⇒ 読めばいいですか."
+        },
+        {
+          "h": "A「切符はどこで買えばいいですか。」B「あそこの機械で（　）いいですよ。」",
+          "lc": [
+            "買いに",
+            "買うのに",
+            "買うから",
+            "買えば"
+          ],
+          "da": 3,
+          "gt": "Trả lời \"chỉ cần mua ở máy kia là được\" ⇒ V-ば + いいです."
+        },
+        {
+          "h": "Câu nào dùng để xin lời khuyên \"Tôi nên làm thế nào?\"",
+          "lc": [
+            "どうすればいいですか。",
+            "どうでしたか。",
+            "どうしますか。",
+            "どうしてですか。"
+          ],
+          "da": 0,
+          "gt": "どうすればいいですか = nên làm thế nào. どうしますか = sẽ làm gì; どうしてですか = tại sao; どうでしたか = thế nào (đã qua)."
+        }
+      ]
+    },
+    {
+      "id": "ja-n4-te-mo-kamawanai",
+      "nhom": "Thể て mở rộng",
+      "tieuDe": "〜てもかまいません",
+      "mau": "V-て / A-くて / Na・N + で + もかまいません",
+      "nghia": "~ cũng không sao, ~ cũng được (lịch sự hơn てもいい)",
+      "giaiThich": "Nghĩa giống 〜てもいいです: cho phép, hoặc nói việc đó không thành vấn đề. かまいません lịch sự và trang trọng hơn một chút, hay nghe ở quầy giao dịch, văn phòng. Hỏi xin phép: 〜てもかまいませんか. \"Không ~ cũng được\": 〜なくてもかまいません.",
+      "cachGhep": [
+        "V-て + もかまいません: 座ってもかまいません",
+        "V-ない → なくて + もかまいません: 来なくてもかまいません",
+        "Tính từ / danh từ: 高くても / 不便でも / 明日でも + かまいません"
+      ],
+      "viDu": [
+        {
+          "c": "ここに荷物を置いてもかまいませんか。",
+          "d": "ここに にもつを おいても かまいませんか。",
+          "v": "Tôi để hành lý ở đây có được không ạ?"
+        },
+        {
+          "c": "書類は明日出してもかまいません。",
+          "d": "しょるいは あした だしても かまいません。",
+          "v": "Giấy tờ nộp vào ngày mai cũng được."
+        },
+        {
+          "c": "少し高くてもかまいませんから、静かな部屋がいいです。",
+          "d": "すこし たかくても かまいませんから、しずかな へやが いいです。",
+          "v": "Đắt một chút cũng không sao, tôi muốn phòng yên tĩnh."
+        },
+        {
+          "c": "忙しかったら、来なくてもかまいませんよ。",
+          "d": "いそがしかったら、こなくても かまいませんよ。",
+          "v": "Nếu bận thì không đến cũng được mà."
+        }
+      ],
+      "luuY": [
+        "かまいません là thể lịch sự của かまわない (かまう = bận tâm); khẳng định かまいます gần như không dùng theo nghĩa này.",
+        "Danh từ dùng でも: 明日でもかまいません (không nói 明日てもかまいません).",
+        "Người trên hỏi 〜てもかまいませんか: đồng ý nói ええ、どうぞ / はい、かまいません; từ chối mềm: すみません、ちょっと…"
+      ],
+      "soSanh": [
+        "ja-n5-te-mo-ii",
+        "ja-n5-nakutemo-ii"
+      ],
+      "tuKhoa": [
+        "te mo kamaimasen",
+        "kamawanai",
+        "temokamawanai",
+        "không sao",
+        "cũng được",
+        "cho phép"
+      ],
+      "quiz": [
+        {
+          "h": "急いでいませんから、返事は来週で（　）。",
+          "lc": [
+            "はかまいません",
+            "もかまいません",
+            "もかまいます",
+            "をかまいません"
+          ],
+          "da": 1,
+          "gt": "Danh từ + でもかまいません = ~ cũng được. Dạng đúng luôn là も + かまいません (phủ định)."
+        },
+        {
+          "h": "Câu nào có nghĩa \"Không đến cũng không sao\"?",
+          "lc": [
+            "来なくてもかまいます。",
+            "来てもかまいません。",
+            "来なくてもかまいません。",
+            "来てはかまいません。"
+          ],
+          "da": 2,
+          "gt": "\"Không làm cũng được\" ⇒ V-なくて + もかまいません. 来てもかまいません là \"đến cũng được\"."
+        },
+        {
+          "h": "この仕事は経験が（　）かまいません。",
+          "lc": [
+            "なければ",
+            "なくて",
+            "ないと",
+            "なくても"
+          ],
+          "da": 3,
+          "gt": "Phải có も: なくてもかまいません = không có kinh nghiệm cũng không sao."
+        }
+      ]
+    },
+    {
+      "id": "ja-n4-nakute-wa-ikenai",
+      "nhom": "Lời khuyên – mệnh lệnh",
+      "tieuDe": "〜なくてはいけません／〜ないといけません",
+      "mau": "V-ない bỏ い + くてはいけません / V-ない + といけません",
+      "nghia": "phải ~ (văn nói, cùng nghĩa なければなりません)",
+      "giaiThich": "Cùng nghĩa \"phải làm\" với 〜なければなりません (N5) nhưng mềm hơn và hay dùng trong hội thoại. 〜ないといけません rất phổ biến khi nói về việc mình phải làm. Nói chuyện thân mật còn rút gọn thành 〜なくちゃ / 〜ないと.",
+      "cachGhep": [
+        "V-ない → bỏ い + くてはいけません: 行かなくてはいけません",
+        "V-ない + といけません: 行かないといけません",
+        "Tính từ đuôi な / danh từ + でないと / でなくては + いけません: 二十歳以上でないといけません"
+      ],
+      "viDu": [
+        {
+          "c": "明日は早く起きなくてはいけません。",
+          "d": "あしたは はやく おきなくては いけません。",
+          "v": "Mai tôi phải dậy sớm."
+        },
+        {
+          "c": "もう遅いから、帰らないといけません。",
+          "d": "もう おそいから、かえらないと いけません。",
+          "v": "Muộn rồi, tôi phải về thôi."
+        },
+        {
+          "c": "薬は毎日飲まなくてはいけませんか。",
+          "d": "くすりは まいにち のまなくては いけませんか。",
+          "v": "Thuốc có phải uống mỗi ngày không ạ?"
+        },
+        {
+          "c": "この仕事は日本語が上手でないといけません。",
+          "d": "この しごとは にほんごが じょうずで ないと いけません。",
+          "v": "Công việc này phải giỏi tiếng Nhật."
+        }
+      ],
+      "luuY": [
+        "Đừng quên ない: 行くといけない nghĩa là \"đi thì không hay\" — ngược hẳn với 行かないといけない (phải đi).",
+        "\"Không cần làm\" là 〜なくてもいいです, không phải 〜なくてはいけなくないです.",
+        "Với lời khuyên cho người khác nên dùng 〜たほうがいいです; 〜ないといけません nghe như ép buộc."
+      ],
+      "soSanh": [
+        "ja-n5-nakereba-narimasen",
+        "ja-n5-nakutemo-ii",
+        "ja-n3-nakucha"
+      ],
+      "tuKhoa": [
+        "nakute wa ikenai",
+        "nai to ikenai",
+        "naito",
+        "phải làm",
+        "bắt buộc"
+      ],
+      "quiz": [
+        {
+          "h": "もう9時だ。会社に（　）といけません。",
+          "lc": [
+            "行く",
+            "行かない",
+            "行った",
+            "行って"
+          ],
+          "da": 1,
+          "gt": "\"Phải đi\" ⇒ V-ない + といけません. 行くといけません là \"đi thì không hay\", trái nghĩa."
+        },
+        {
+          "h": "明日テストがあるので、今晩は勉強し（　）いけません。",
+          "lc": [
+            "ないで",
+            "なくても",
+            "なくては",
+            "なくて"
+          ],
+          "da": 2,
+          "gt": "Mẫu \"phải\" là V-なくて + は + いけません. Thiếu は (なくていけません) hoặc dùng も, ないで đều sai."
+        },
+        {
+          "h": "Câu nào có nghĩa \"Không cần phải đặt chỗ\"?",
+          "lc": [
+            "予約してはいけません。",
+            "予約しないといけません。",
+            "予約しなくてはいけません。",
+            "予約しなくてもいいです。"
+          ],
+          "da": 3,
+          "gt": "\"Không cần\" ⇒ 〜なくてもいいです. 〜なくてはいけません / 〜ないといけません là \"phải\"; 〜てはいけません là \"không được\"."
+        }
+      ]
+    },
+    {
+      "id": "ja-n4-kata",
+      "nhom": "Danh từ hoá – từ để hỏi",
+      "tieuDe": "〜方（かた）",
+      "mau": "V-ます bỏ ます + 方",
+      "nghia": "cách làm ~",
+      "giaiThich": "Gắn 方 (かた) vào thân động từ (bỏ ます) để tạo danh từ \"cách ~\": 読み方 (cách đọc), 使い方 (cách dùng). Vì cả cụm đã là danh từ nên tân ngữ đi với の chứ không đi với を: 漢字の読み方.",
+      "cachGhep": [
+        "V-ます bỏ ます + 方: 書きます → 書き方, 使います → 使い方",
+        "N + の + V方: この機械の使い方",
+        "N します → N の し方: 勉強のし方"
+      ],
+      "viDu": [
+        {
+          "c": "この漢字の読み方を教えてください。",
+          "d": "この かんじの よみかたを おしえて ください。",
+          "v": "Hãy chỉ tôi cách đọc chữ Hán này."
+        },
+        {
+          "c": "駅までの行き方がわかりません。",
+          "d": "えきまでの いきかたが わかりません。",
+          "v": "Tôi không biết đường đi tới ga."
+        },
+        {
+          "c": "母においしいカレーの作り方を習いました。",
+          "d": "ははに おいしい カレーの つくりかたを ならいました。",
+          "v": "Tôi học mẹ cách nấu cà ri ngon."
+        },
+        {
+          "c": "勉強のし方は人によって違います。",
+          "d": "べんきょうの しかたは ひとに よって ちがいます。",
+          "v": "Cách học mỗi người mỗi khác."
+        }
+      ],
+      "luuY": [
+        "Tân ngữ đi với の, không đi với を: 漢字の読み方 (không nói 漢字を読み方).",
+        "方 ở đây đọc かた; đừng nhầm với 方（ほう）trong 〜ほうがいい.",
+        "Ghép với thân ます, không ghép với thể từ điển: 使い方 (không nói 使う方 theo nghĩa \"cách dùng\")."
+      ],
+      "soSanh": [
+        "ja-n4-hou-ga-ii"
+      ],
+      "tuKhoa": [
+        "kata",
+        "yomikata",
+        "tsukaikata",
+        "cách làm",
+        "cách dùng",
+        "cách đọc"
+      ],
+      "quiz": [
+        {
+          "h": "このパソコンの（　）がわかりません。",
+          "lc": [
+            "使った方",
+            "使って方",
+            "使う方",
+            "使い方"
+          ],
+          "da": 3,
+          "gt": "\"Cách dùng\" = thân ます + 方 ⇒ 使い方."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "はしの持ち方を練習しています。",
+            "はしの持つ方を練習しています。",
+            "はしの持ち方に練習しています。",
+            "はしを持ち方を練習しています。"
+          ],
+          "da": 0,
+          "gt": "持ち方 là danh từ nên đi với の: はしの持ち方; tân ngữ của 練習する dùng を."
+        },
+        {
+          "h": "「書き方」の「方」はどう読みますか。",
+          "lc": [
+            "まち",
+            "かた",
+            "ほう",
+            "がた"
+          ],
+          "da": 1,
+          "gt": "V-ます bỏ ます + 方 đọc là かた: かきかた."
+        }
+      ]
+    },
+    {
+      "id": "ja-n4-to-iu-n",
+      "nhom": "Danh từ hoá – từ để hỏi",
+      "tieuDe": "〜という N",
+      "mau": "N1（tên）+ という + N2",
+      "nghia": "N2 tên là / gọi là N1",
+      "giaiThich": "Dùng khi giới thiệu tên người, đồ vật, địa danh mà người nghe có thể chưa biết: \"một N2 tên là N1\". Hỏi tên: 何という N ですか. Văn nói thân mật thường nói 〜っていう.",
+      "cachGhep": [
+        "Tên + という + danh từ chung: 「さくら」という店",
+        "Hỏi: 何という + N + ですか: これは何という花ですか",
+        "Thân mật: 〜っていう N"
+      ],
+      "viDu": [
+        {
+          "c": "昨日、「さくら」という店でご飯を食べました。",
+          "d": "きのう、「さくら」という みせで ごはんを たべました。",
+          "v": "Hôm qua tôi ăn ở một quán tên là \"Sakura\"."
+        },
+        {
+          "c": "これは何という花ですか。",
+          "d": "これは なんという はなですか。",
+          "v": "Đây là hoa gì vậy?"
+        },
+        {
+          "c": "田中さんという人から電話がありました。",
+          "d": "たなかさんという ひとから でんわが ありました。",
+          "v": "Có người tên là Tanaka gọi điện đến."
+        },
+        {
+          "c": "ハノイの近くにあるバッチャンという村を知っていますか。",
+          "d": "ハノイの ちかくに ある バッチャンという むらを しって いますか。",
+          "v": "Bạn có biết làng Bát Tràng gần Hà Nội không?"
+        }
+      ],
+      "luuY": [
+        "Dùng khi tên có thể lạ với người nghe; với tên ai cũng biết (東京, 富士山) thì không cần という.",
+        "Hỏi tên đồ vật dùng 何という, không nói だれという hay 何の名前の."
+      ],
+      "soSanh": [
+        "ja-n4-tte"
+      ],
+      "tuKhoa": [
+        "to iu",
+        "toiu",
+        "tên là",
+        "gọi là",
+        "nan to iu"
+      ],
+      "quiz": [
+        {
+          "h": "「ドラえもん」（　）アニメを見たことがありますか。",
+          "lc": [
+            "として",
+            "という",
+            "に",
+            "とも"
+          ],
+          "da": 1,
+          "gt": "Giới thiệu tên ⇒ Tên + という + N: 「ドラえもん」というアニメ."
+        },
+        {
+          "h": "これは日本語で何（　）料理ですか。",
+          "lc": [
+            "が",
+            "も",
+            "という",
+            "を"
+          ],
+          "da": 2,
+          "gt": "Hỏi tên ⇒ 何という + N. Các trợ từ còn lại không ghép được với 何 + danh từ ở đây."
+        },
+        {
+          "h": "Câu nào có nghĩa \"Có người tên là Lan đã đến\"?",
+          "lc": [
+            "ランさんという来ました。",
+            "ランさんの人が来ました。",
+            "ランさんと人が来ました。",
+            "ランさんという人が来ました。"
+          ],
+          "da": 3,
+          "gt": "Tên + という + 人: ランさんという人. Thiếu いう hoặc thiếu danh từ 人 đều sai."
+        }
+      ]
+    },
+    {
+      "id": "ja-n4-juu-chuu",
+      "nhom": "Thời điểm",
+      "tieuDe": "〜中（じゅう／ちゅう）",
+      "mau": "N + 中（じゅう）/ N + 中（ちゅう）",
+      "nghia": "じゅう: suốt, khắp cả ~ · ちゅう: đang trong lúc ~",
+      "giaiThich": "中 sau danh từ có hai cách đọc. じゅう: suốt cả khoảng thời gian hoặc khắp cả nơi chốn (一日中, 世界中). ちゅう: đang trong quá trình làm việc gì (会議中, 授業中, 電話中). Một số từ chỉ mốc \"trong vòng ~ (trước khi hết)\": 今日中（きょうじゅう）, 今週中（こんしゅうちゅう）, 午前中（ごぜんちゅう）.",
+      "cachGhep": [
+        "Thời gian / nơi chốn + 中（じゅう）: 一日中, 一年中, 世界中, 町中",
+        "Danh từ hành động + 中（ちゅう）: 会議中, 授業中, 電話中, 食事中",
+        "Mốc thời hạn: 今日中に, 今週中に, 午前中に"
+      ],
+      "viDu": [
+        {
+          "c": "昨日は一日中雨が降っていました。",
+          "d": "きのうは いちにちじゅう あめが ふって いました。",
+          "v": "Hôm qua mưa suốt cả ngày."
+        },
+        {
+          "c": "部長は今、会議中です。",
+          "d": "ぶちょうは いま、かいぎちゅうです。",
+          "v": "Trưởng phòng bây giờ đang họp."
+        },
+        {
+          "c": "この歌は世界中で人気があります。",
+          "d": "この うたは せかいじゅうで にんきが あります。",
+          "v": "Bài hát này được yêu thích khắp thế giới."
+        },
+        {
+          "c": "このレポートは今日中に出してください。",
+          "d": "この レポートは きょうじゅうに だして ください。",
+          "v": "Hãy nộp báo cáo này trong hôm nay."
+        }
+      ],
+      "luuY": [
+        "Đọc theo từng từ, nên học thuộc: 一日中・世界中・今日中 đọc じゅう; 会議中・授業中・午前中・今週中 đọc ちゅう.",
+        "Người Việt hay dịch \"suốt ngày\" thành 毎日 — sai: 毎日 = mỗi ngày, 一日中 = suốt cả một ngày."
+      ],
+      "soSanh": [
+        "ja-n3-saichuu-ni"
+      ],
+      "tuKhoa": [
+        "juu",
+        "chuu",
+        "ichinichijuu",
+        "kaigichuu",
+        "suốt",
+        "khắp",
+        "đang"
+      ],
+      "quiz": [
+        {
+          "h": "「授業中」の読み方は？",
+          "lc": [
+            "じゅぎょうじゅう",
+            "じゅぎょうなか",
+            "じゅぎょうちゅう",
+            "じゅぎょうぢゅう"
+          ],
+          "da": 2,
+          "gt": "Danh từ hành động + 中 chỉ \"đang ~\" đọc ちゅう: じゅぎょうちゅう."
+        },
+        {
+          "h": "週末は（　）家で寝ていました。",
+          "lc": [
+            "今週中",
+            "授業中",
+            "電話中",
+            "一日中"
+          ],
+          "da": 3,
+          "gt": "\"Suốt cả ngày\" ⇒ 一日中（いちにちじゅう）. Các từ còn lại là \"đang học\", \"đang gọi điện\", \"trong tuần này\"."
+        },
+        {
+          "h": "Câu nào có nghĩa \"Bây giờ anh ấy đang nghe điện thoại\"?",
+          "lc": [
+            "彼は今、電話中です。",
+            "彼は今、電話じゅうです。",
+            "彼は一日中、電話をかけます。",
+            "彼は今日中、電話です。"
+          ],
+          "da": 0,
+          "gt": "\"Đang gọi điện\" ⇒ 電話中（でんわちゅう）です."
+        }
+      ]
+    },
+    {
+      "id": "ja-n4-hodo-nai",
+      "nhom": "Mức độ – trạng thái",
+      "tieuDe": "〜は〜ほど〜ない",
+      "mau": "N1 は N2 ほど + thể phủ định",
+      "nghia": "N1 không ~ bằng N2",
+      "giaiThich": "Mẫu so sánh kém: N1 không đạt tới mức của N2. Sau ほど bắt buộc là thể phủ định. Cách nói này nhẹ nhàng hơn việc nói thẳng \"N1 kém hơn\": 今年の夏は去年ほど暑くない (hè năm nay không nóng bằng năm ngoái).",
+      "cachGhep": [
+        "N1 + は + N2 + ほど + A-くない: 東京ほど寒くない",
+        "N1 + は + N2 + ほど + Na + じゃない: 前ほど静かじゃない",
+        "N1 + は + N2 + ほど + V-ない: 兄ほど食べない"
+      ],
+      "viDu": [
+        {
+          "c": "今年の夏は去年ほど暑くないです。",
+          "d": "ことしの なつは きょねんほど あつくないです。",
+          "v": "Hè năm nay không nóng bằng năm ngoái."
+        },
+        {
+          "c": "私の町は東京ほどにぎやかじゃありません。",
+          "d": "わたしの まちは とうきょうほど にぎやかじゃ ありません。",
+          "v": "Thị trấn của tôi không nhộn nhịp bằng Tokyo."
+        },
+        {
+          "c": "弟は私ほど本を読みません。",
+          "d": "おとうとは わたしほど ほんを よみません。",
+          "v": "Em trai tôi không đọc sách nhiều bằng tôi."
+        },
+        {
+          "c": "日本語は思うほど難しくないですよ。",
+          "d": "にほんごは おもうほど むずかしくないですよ。",
+          "v": "Tiếng Nhật không khó như bạn nghĩ đâu."
+        }
+      ],
+      "luuY": [
+        "Sau ほど phải là phủ định: 東京ほど寒いです ✗. Muốn nói \"lạnh bằng\" thì dùng 同じぐらい寒い.",
+        "Mốc cao hơn (N2) đứng trước ほど: \"Hà Nội không lạnh bằng Sapporo\" = ハノイは札幌ほど寒くない — đừng đảo hai vế."
+      ],
+      "soSanh": [
+        "ja-n5-yori",
+        "ja-n3-hodo-wa-nai"
+      ],
+      "tuKhoa": [
+        "hodo nai",
+        "hodo ~ nai",
+        "không bằng",
+        "so sánh kém"
+      ],
+      "quiz": [
+        {
+          "h": "このかばんは、あのかばんほど（　）。",
+          "lc": [
+            "高いです",
+            "高くないです",
+            "高かったです",
+            "高くなります"
+          ],
+          "da": 1,
+          "gt": "Sau ほど phải là thể phủ định ⇒ 高くないです."
+        },
+        {
+          "h": "Câu nào có nghĩa \"Tiếng Anh không khó bằng tiếng Nhật\"?",
+          "lc": [
+            "日本語は英語ほど難しくない。",
+            "英語は日本語より難しい。",
+            "英語は日本語ほど難しくない。",
+            "英語は日本語ほど難しい。"
+          ],
+          "da": 2,
+          "gt": "Chủ đề (英語) は + mốc (日本語) ほど + phủ định. Đảo hai vế thì nghĩa ngược lại."
+        },
+        {
+          "h": "今日は昨日（　）寒くありません。",
+          "lc": [
+            "から",
+            "まで",
+            "しか",
+            "ほど"
+          ],
+          "da": 3,
+          "gt": "N ほど + phủ định = không ~ bằng N. しか + phủ định là \"chỉ\"; から, まで không hợp nghĩa."
+        }
+      ]
+    },
+    {
+      "id": "ja-n4-suuryou-mo",
+      "nhom": "Mức độ – trạng thái",
+      "tieuDe": "Số lượng + も（nhấn mạnh nhiều）",
+      "mau": "Số + trợ số từ + も",
+      "nghia": "những ~, tới tận ~ (người nói thấy là nhiều)",
+      "giaiThich": "も đứng sau số lượng để nhấn mạnh người nói thấy con số đó NHIỀU, vượt dự đoán: 3時間も待った (chờ những 3 tiếng). Ngược lại, thấy ÍT thì dùng しか〜ない. 一 + trợ số từ + も + phủ định nghĩa là \"không một ~ nào\": 一度も〜ない (chưa một lần nào).",
+      "cachGhep": [
+        "Số lượng + も + khẳng định (thấy nhiều): 5杯も飲んだ",
+        "一 + trợ số từ + も + phủ định (hoàn toàn không): 一人も来なかった, 一度も行ったことがない",
+        "Đối lập: số lượng + しか + phủ định (thấy ít)"
+      ],
+      "viDu": [
+        {
+          "c": "駅で1時間も友達を待ちました。",
+          "d": "えきで いちじかんも ともだちを まちました。",
+          "v": "Tôi đã đợi bạn ở ga những một tiếng."
+        },
+        {
+          "c": "彼はビールを10杯も飲みました。",
+          "d": "かれは ビールを じゅっぱいも のみました。",
+          "v": "Anh ấy uống tới tận mười cốc bia."
+        },
+        {
+          "c": "雨の日だったので、店に客が一人も来ませんでした。",
+          "d": "あめの ひだったので、みせに きゃくが ひとりも きませんでした。",
+          "v": "Vì hôm đó mưa nên không có một vị khách nào đến cửa hàng."
+        },
+        {
+          "c": "富士山には一度も登ったことがありません。",
+          "d": "ふじさんには いちども のぼった ことが ありません。",
+          "v": "Tôi chưa leo núi Phú Sĩ lần nào."
+        }
+      ],
+      "luuY": [
+        "Bỏ も thì câu vẫn đúng nhưng mất sắc thái \"tận những\": 1時間待ちました chỉ là \"đã đợi một tiếng\".",
+        "一人も / 一度も / 一つも luôn đi với thể phủ định: 一人も来ました ✗."
+      ],
+      "soSanh": [
+        "ja-n5-dake-shika",
+        "ja-n5-mo"
+      ],
+      "tuKhoa": [
+        "mo nhấn mạnh",
+        "những",
+        "tới tận",
+        "ichido mo",
+        "hitori mo",
+        "không một"
+      ],
+      "quiz": [
+        {
+          "h": "店がとても混んでいて、2時間（　）並びました。",
+          "lc": [
+            "しか",
+            "も",
+            "ごろ",
+            "ずつ"
+          ],
+          "da": 1,
+          "gt": "Thấy thời gian xếp hàng nhiều ⇒ 2時間も. しか cần phủ định; ごろ chỉ thời điểm; ずつ là chia đều."
+        },
+        {
+          "h": "Câu nào có nghĩa \"Trong lớp không có học sinh nào\"?",
+          "lc": [
+            "教室に学生が一人しかいません。",
+            "教室に学生が一人ずついます。",
+            "教室に学生が一人もいません。",
+            "教室に学生が一人だけいます。"
+          ],
+          "da": 2,
+          "gt": "\"Không một ai\" ⇒ 一人も + phủ định. 一人しかいません / 一人だけいます là \"chỉ có một người\"."
+        },
+        {
+          "h": "Câu nào cho thấy người nói nghĩ 5 cốc là NHIỀU?",
+          "lc": [
+            "コーヒーを5杯ぐらい飲みました。",
+            "コーヒーを5杯しか飲みませんでした。",
+            "コーヒーを5杯ずつ飲みました。",
+            "コーヒーを5杯も飲みました。"
+          ],
+          "da": 3,
+          "gt": "Số lượng + も = nhấn mạnh nhiều. しか〜ない = thấy ít; ずつ = mỗi người; ぐらい = khoảng."
+        }
+      ]
+    }
+  ]
+}

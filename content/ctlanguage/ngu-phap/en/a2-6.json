@@ -1,0 +1,523 @@
+{
+  "nn": "en",
+  "cap": "A2",
+  "diem": [
+    {
+      "id": "en-a2-tu-noi-trinh-tu",
+      "nhom": "Liên từ – câu phức",
+      "tieuDe": "Từ nối trình tự: first, then, next, after that, finally",
+      "mau": "First, … Then / Next, … After that, … Finally, …",
+      "nghia": "đầu tiên…, sau đó…, tiếp theo…, cuối cùng…",
+      "giaiThich": "Khi kể lại một chuỗi việc (một ngày của mình, một chuyến đi) hoặc hướng dẫn các bước (nấu ăn, chỉ đường), dùng các từ này ở đầu câu để người nghe theo dõi thứ tự. First mở đầu, then / next / after that nối các bước giữa, finally hoặc in the end kết thúc. Sau first, after that, finally thường có dấu phẩy.",
+      "cachGhep": [
+        "Mở đầu: First, … / First of all, … / To begin with, …",
+        "Giữa: Then … / Next, … / After that, … / After + V-ing / N, …",
+        "Kết thúc: Finally, … (bước cuối) / In the end, … (kết quả sau cùng của câu chuyện)",
+        "after là giới từ / liên từ, không đứng một mình đầu câu: sai 'After, we went home.' → After that, we went home."
+      ],
+      "viDu": [
+        {
+          "c": "First, wash the rice. Then, put it in the cooker.",
+          "v": "Đầu tiên, vo gạo. Sau đó cho gạo vào nồi cơm."
+        },
+        {
+          "c": "We visited the museum first. After that, we had lunch by the lake.",
+          "v": "Đầu tiên chúng tôi đi thăm bảo tàng. Sau đó chúng tôi ăn trưa bên hồ."
+        },
+        {
+          "c": "Next, turn left at the traffic lights.",
+          "v": "Tiếp theo, rẽ trái ở chỗ đèn giao thông."
+        },
+        {
+          "c": "Finally, click 'Save' and close the file.",
+          "v": "Cuối cùng, bấm 'Save' rồi đóng tệp lại."
+        }
+      ],
+      "luuY": [
+        "Lỗi người Việt hay mắc: dịch 'sau đó' thành 'After,' đứng một mình → đúng: After that, … hoặc Then, …",
+        "Finally dùng cho bước cuối của một danh sách; at last nhấn mạnh 'cuối cùng thì cũng (sau khi chờ lâu)': At last, the bus came!",
+        "Đừng lạm dụng and then ở mọi câu; đổi xen kẽ then, next, after that để bài nói tự nhiên hơn."
+      ],
+      "soSanh": [
+        "en-a1-and-but-or-because",
+        "en-a2-menh-de-thoi-gian"
+      ],
+      "tuKhoa": [
+        "first then next",
+        "after that",
+        "finally",
+        "sequencing words",
+        "từ nối trình tự",
+        "đầu tiên",
+        "sau đó",
+        "cuối cùng"
+      ],
+      "quiz": [
+        {
+          "h": "We had dinner. ___, we watched a film.",
+          "lc": [
+            "Firstly of all",
+            "After that",
+            "At first of",
+            "After"
+          ],
+          "da": 1,
+          "gt": "Sau đó (đứng đầu câu, có dấu phẩy) là After that; after một mình không đứng như trạng từ ở đây."
+        },
+        {
+          "h": "___, cut the onions. Then, fry them in a little oil.",
+          "lc": [
+            "At last",
+            "In the end",
+            "First",
+            "Finally"
+          ],
+          "da": 2,
+          "gt": "Bước đầu tiên của hướng dẫn ⇒ First."
+        },
+        {
+          "h": "We waited for two hours. ___ the bus arrived!",
+          "lc": [
+            "Next",
+            "To begin with",
+            "First",
+            "At last"
+          ],
+          "da": 3,
+          "gt": "At last nhấn mạnh 'cuối cùng thì cũng…' sau khi chờ lâu."
+        }
+      ]
+    },
+    {
+      "id": "en-a2-no-none",
+      "nhom": "Danh từ – mạo từ",
+      "tieuDe": "no / none / not any",
+      "mau": "no + N · not + any + N · none (of + the / my / them…)",
+      "nghia": "không có ~ nào",
+      "giaiThich": "Ba cách nói 'không có chút nào'. no đứng ngay trước danh từ, động từ ở dạng KHẲNG ĐỊNH: There is no milk. not… any dùng động từ phủ định + any + danh từ: There isn't any milk. none là đại từ, đứng một mình (không có danh từ ngay sau) hoặc với of: None of my friends came. Nghĩa của ba cách gần như nhau; no và none nghe mạnh hơn.",
+      "cachGhep": [
+        "no + danh từ (động từ khẳng định): I have no money. · There are no buses today.",
+        "not + any + danh từ: I don't have any money. · There aren't any buses today.",
+        "none (đứng một mình): How many eggs are there? - None.",
+        "none of + the / my / these + N / none of + us / them"
+      ],
+      "viDu": [
+        {
+          "c": "There's no sugar in my coffee.",
+          "v": "Cà phê của tôi không có đường."
+        },
+        {
+          "c": "I don't have any brothers or sisters.",
+          "v": "Tôi không có anh chị em nào."
+        },
+        {
+          "c": "How much bread is left? - None. We ate it all.",
+          "v": "Còn bao nhiêu bánh mì? - Hết sạch rồi. Chúng mình ăn hết rồi."
+        },
+        {
+          "c": "None of my classmates live near me.",
+          "v": "Không bạn cùng lớp nào của tôi sống gần nhà tôi cả."
+        }
+      ],
+      "luuY": [
+        "Lỗi người Việt hay mắc: dùng hai phủ định → sai: I don't have no money. Đúng: I don't have any money / I have no money.",
+        "none không đi thẳng với danh từ: sai 'None students came' → No students came / None of the students came.",
+        "no đi với danh từ, không đi với tính từ đứng một mình: sai 'I am no tired' → I am not tired."
+      ],
+      "soSanh": [
+        "en-a1-some-any",
+        "en-a2-dai-tu-bat-dinh",
+        "en-b1-quantifiers"
+      ],
+      "tuKhoa": [
+        "no",
+        "none",
+        "not any",
+        "none of",
+        "không có",
+        "double negative",
+        "phủ định kép"
+      ],
+      "quiz": [
+        {
+          "h": "Sorry, there are ___ tickets left for tonight.",
+          "lc": [
+            "any",
+            "none",
+            "not",
+            "no"
+          ],
+          "da": 3,
+          "gt": "Động từ khẳng định (are) + danh từ ⇒ dùng no trước danh từ: no tickets."
+        },
+        {
+          "h": "I looked for my keys, but I couldn't find ___ .",
+          "lc": [
+            "any",
+            "no",
+            "none of",
+            "some no"
+          ],
+          "da": 0,
+          "gt": "Động từ đã phủ định (couldn't) ⇒ dùng any, không thêm phủ định thứ hai."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "None shops were open.",
+            "None of the shops were open.",
+            "Not any of shops were open.",
+            "No of the shops were open."
+          ],
+          "da": 1,
+          "gt": "none of + the + danh từ: None of the shops… Không nói None shops / No of the."
+        }
+      ]
+    },
+    {
+      "id": "en-a2-danh-tu-ghep",
+      "nhom": "Danh từ – mạo từ",
+      "tieuDe": "Danh từ ghép: a bus stop, a coffee cup, a car park",
+      "mau": "N1 (bổ nghĩa, số ít) + N2 (danh từ chính)",
+      "nghia": "danh từ đứng trước bổ nghĩa cho danh từ sau (trạm xe buýt, cốc cà phê…)",
+      "giaiThich": "Tiếng Anh hay ghép hai danh từ để tạo một danh từ mới. Danh từ CHÍNH đứng SAU, danh từ đứng trước chỉ loại, mục đích hoặc chất liệu — ngược với tiếng Việt (trạm xe buýt = bus stop: stop là trạm, bus nói trạm của gì). Danh từ đứng trước thường để ở số ít, kể cả khi nghĩa là số nhiều.",
+      "cachGhep": [
+        "Mục đích / loại: a bus stop, a tennis court, a toothbrush, a phone charger",
+        "Chất liệu: a plastic bag, a gold ring, a paper cup",
+        "Nơi chốn / thời gian: a city centre, a summer holiday, the kitchen table",
+        "Số nhiều chỉ thêm -s vào danh từ chính: two bus stops, three coffee cups",
+        "N1 thường số ít: a shoe shop (không nói a shoes shop), a ten-minute walk"
+      ],
+      "viDu": [
+        {
+          "c": "The bus stop is in front of the bank.",
+          "v": "Trạm xe buýt ở trước cửa ngân hàng."
+        },
+        {
+          "c": "I forgot my phone charger at home.",
+          "v": "Tôi để quên cục sạc điện thoại ở nhà."
+        },
+        {
+          "c": "There is a new shoe shop in the city centre.",
+          "v": "Ở trung tâm thành phố có một cửa hàng giày mới."
+        },
+        {
+          "c": "Can you put the plates on the kitchen table?",
+          "v": "Bạn để mấy cái đĩa lên bàn bếp được không?"
+        }
+      ],
+      "luuY": [
+        "Lỗi người Việt hay mắc: xếp theo trật tự tiếng Việt → sai: a stop bus, a cup coffee. Đúng: a bus stop, a coffee cup.",
+        "a coffee cup (cái cốc dùng để uống cà phê, có thể đang rỗng) khác a cup of coffee (một cốc có cà phê bên trong).",
+        "Không thêm -s vào danh từ đứng trước: sai a books shop, a two-hours film → a bookshop, a two-hour film."
+      ],
+      "soSanh": [
+        "en-a1-vi-tri-tinh-tu",
+        "en-a1-cum-chi-luong",
+        "en-a1-so-huu-cach"
+      ],
+      "tuKhoa": [
+        "compound noun",
+        "noun noun",
+        "bus stop",
+        "danh từ ghép",
+        "coffee cup"
+      ],
+      "quiz": [
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "Let's meet at the buses stop.",
+            "Let's meet at the bus stop.",
+            "Let's meet at the stop bus.",
+            "Let's meet at the stop of bus."
+          ],
+          "da": 1,
+          "gt": "Danh từ chính (stop) đứng sau, danh từ bổ nghĩa (bus) đứng trước và ở số ít."
+        },
+        {
+          "h": "I need to buy two new ___ .",
+          "lc": [
+            "toothsbrush",
+            "teethbrushes",
+            "toothbrushes",
+            "teethbrush"
+          ],
+          "da": 2,
+          "gt": "Số nhiều chỉ thêm -es vào danh từ chính (brush); phần trước giữ số ít tooth."
+        },
+        {
+          "h": "'Một cái cốc giấy' nói thế nào?",
+          "lc": [
+            "a cup paper",
+            "a cup of paper",
+            "a papers cup",
+            "a paper cup"
+          ],
+          "da": 3,
+          "gt": "Chất liệu (paper) đứng trước danh từ chính (cup). A cup of paper lại có nghĩa là một cốc đựng giấy."
+        }
+      ]
+    },
+    {
+      "id": "en-a2-so-sanh-trang-tu",
+      "nhom": "So sánh",
+      "tieuDe": "So sánh của trạng từ: faster, more carefully, better, the hardest",
+      "mau": "V + adv-er / more + adv + than · V + (the) adv-est / the most + adv",
+      "nghia": "(làm gì) nhanh hơn, cẩn thận hơn, giỏi hơn… / nhất",
+      "giaiThich": "Trạng từ bổ nghĩa cho động từ cũng so sánh được. Trạng từ cùng hình thức với tính từ (fast, hard, late, early) thêm -er / -est; trạng từ có đuôi -ly dùng more / most (more slowly, most carefully); bất quy tắc: well → better → best, badly → worse → worst. Vị trí: sau động từ hoặc sau tân ngữ.",
+      "cachGhep": [
+        "Trạng từ ngắn: fast → faster → the fastest · hard → harder · early → earlier",
+        "Trạng từ -ly: carefully → more carefully → the most carefully",
+        "Bất quy tắc: well → better → best · badly → worse → worst · far → farther / further",
+        "Mẫu: S + V + adv so sánh hơn + than + …: She runs faster than me.",
+        "Nhấn mạnh: much / a lot / a bit + so sánh hơn: He drives much more carefully now."
+      ],
+      "viDu": [
+        {
+          "c": "My sister runs faster than me.",
+          "v": "Chị tôi chạy nhanh hơn tôi."
+        },
+        {
+          "c": "Could you speak more slowly, please?",
+          "v": "Bạn nói chậm hơn được không?"
+        },
+        {
+          "c": "Nam plays the guitar better than his brother.",
+          "v": "Nam chơi ghi-ta giỏi hơn anh trai."
+        },
+        {
+          "c": "Who works the hardest in your team?",
+          "v": "Trong nhóm bạn ai làm việc chăm chỉ nhất?"
+        }
+      ],
+      "luuY": [
+        "Lỗi người Việt hay mắc: dùng tính từ thay trạng từ → sai: speak more slow. Đúng: speak more slowly.",
+        "Không nói more fast / more well / gooder: đúng là faster, better.",
+        "Trạng từ -ly không thêm -er: sai quicklier → more quickly (riêng early → earlier vì early không phải tính từ + ly)."
+      ],
+      "soSanh": [
+        "en-a2-so-sanh-hon",
+        "en-a2-trang-tu-cach-thuc",
+        "en-a2-so-sanh-nhat"
+      ],
+      "tuKhoa": [
+        "comparative adverbs",
+        "more slowly",
+        "faster than",
+        "better than",
+        "so sánh trạng từ",
+        "nói chậm hơn"
+      ],
+      "quiz": [
+        {
+          "h": "Can you drive ___? I feel sick.",
+          "lc": [
+            "slowlier",
+            "more slowly",
+            "slower than slowly",
+            "more slow"
+          ],
+          "da": 1,
+          "gt": "Slowly là trạng từ -ly ⇒ so sánh hơn là more slowly."
+        },
+        {
+          "h": "Mai sings ___ than anyone in our class.",
+          "lc": [
+            "more well",
+            "gooder",
+            "better",
+            "more good"
+          ],
+          "da": 2,
+          "gt": "Trạng từ well có dạng so sánh hơn bất quy tắc là better."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "He arrived more earlier than us.",
+            "He arrived earlilier than us.",
+            "He arrived more early than us.",
+            "He arrived earlier than us."
+          ],
+          "da": 3,
+          "gt": "Early (trạng từ một từ, đuôi y) ⇒ earlier; không dùng more cùng -er."
+        }
+      ]
+    },
+    {
+      "id": "en-a2-same-similar-different",
+      "nhom": "So sánh",
+      "tieuDe": "the same (as) / similar (to) / different (from) / like",
+      "mau": "the same + (N) + as · similar to · different from · like + N",
+      "nghia": "giống hệt ~ · giống ~ · khác ~ · giống như ~",
+      "giaiThich": "Dùng khi so hai thứ có giống nhau hay không, không cần đổi tính từ sang -er. the same… as = giống hệt; similar to = gần giống; different from = khác; like (giới từ) = giống như. Mỗi từ đi với một giới từ cố định — đây là chỗ người học hay sai nhất.",
+      "cachGhep": [
+        "the same + (N) + as: My bag is the same as yours. · She is the same age as me.",
+        "Không có vế sau: Our phones are the same.",
+        "similar to: Your idea is similar to mine.",
+        "different from (Anh–Mỹ đều dùng; different to là Anh–Anh thân mật): Life here is different from life in the city.",
+        "like + N / đại từ: She looks like her mother. · It tastes like chicken."
+      ],
+      "viDu": [
+        {
+          "c": "We are in the same class as last year.",
+          "v": "Chúng tôi học cùng lớp như năm ngoái."
+        },
+        {
+          "c": "Her dress is similar to mine, but the colour is different.",
+          "v": "Váy của cô ấy gần giống của tôi, nhưng màu thì khác."
+        },
+        {
+          "c": "Vietnamese coffee is very different from Italian coffee.",
+          "v": "Cà phê Việt Nam rất khác cà phê Ý."
+        },
+        {
+          "c": "You look like your dad.",
+          "v": "Bạn trông giống bố bạn."
+        }
+      ],
+      "luuY": [
+        "Lỗi người Việt hay mắc: sai giới từ → sai: the same with, similar with, different with. Đúng: the same as, similar to, different from.",
+        "Luôn có the trước same: sai 'My phone is same as yours' → the same as.",
+        "like là giới từ ở đây, không chia: sai 'She looks likes her mum' → looks like."
+      ],
+      "soSanh": [
+        "en-a2-as-as",
+        "en-b2-like-vs-as",
+        "en-a2-so-sanh-hon"
+      ],
+      "tuKhoa": [
+        "the same as",
+        "similar to",
+        "different from",
+        "look like",
+        "giống",
+        "khác",
+        "giống hệt"
+      ],
+      "quiz": [
+        {
+          "h": "My answer is the same ___ yours.",
+          "lc": [
+            "like",
+            "with",
+            "to",
+            "as"
+          ],
+          "da": 3,
+          "gt": "Cụm cố định: the same as."
+        },
+        {
+          "h": "This city is very different ___ my hometown.",
+          "lc": [
+            "from",
+            "as",
+            "of",
+            "with"
+          ],
+          "da": 0,
+          "gt": "different from (khác với). Different with không phải cách nói chuẩn."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "His new car is similar as my car.",
+            "His new car is similar to my car.",
+            "His new car is similar with my car.",
+            "His new car is same as my car."
+          ],
+          "da": 1,
+          "gt": "similar đi với to; same phải có the đi trước."
+        }
+      ]
+    },
+    {
+      "id": "en-a2-also-too-either",
+      "nhom": "Tính từ – trạng từ",
+      "tieuDe": "also / too / as well / either (cũng)",
+      "mau": "S + also + V · S + V + … + too / as well · S + V phủ định + … + either",
+      "nghia": "cũng (khẳng định) · cũng không (phủ định)",
+      "giaiThich": "Bốn từ cùng có nghĩa 'cũng' nhưng khác vị trí. also đứng GIỮA câu: trước động từ thường, sau to be / trợ động từ. too và as well đứng CUỐI câu khẳng định. Trong câu PHỦ ĐỊNH, 'cũng không' phải dùng either ở cuối câu, không dùng too.",
+      "cachGhep": [
+        "also: trước động từ thường (I also like tea) · sau to be (She is also a doctor) · sau trợ động từ / modal (I can also swim)",
+        "too / as well: cuối câu khẳng định (I like tea too / as well.)",
+        "either: cuối câu phủ định (I don't like coffee either.)",
+        "Đáp nhanh: Me too. (đồng ý khẳng định) · Me neither. (đồng ý phủ định)"
+      ],
+      "viDu": [
+        {
+          "c": "Lan speaks English. She also speaks a little Japanese.",
+          "v": "Lan nói tiếng Anh. Cô ấy cũng nói được một chút tiếng Nhật."
+        },
+        {
+          "c": "I'm hungry. - I'm hungry too.",
+          "v": "Tôi đói. - Tôi cũng đói."
+        },
+        {
+          "c": "We visited Hoi An and Hue as well.",
+          "v": "Chúng tôi cũng đi thăm Hội An và Huế nữa."
+        },
+        {
+          "c": "Tom can't swim, and his sister can't swim either.",
+          "v": "Tom không biết bơi, và em gái cậu ấy cũng không biết bơi."
+        }
+      ],
+      "luuY": [
+        "Lỗi người Việt hay mắc: dùng too trong câu phủ định → sai: I don't like it too. Đúng: I don't like it either.",
+        "Sai vị trí also: sai 'I like also football' / 'Also I like football' (văn nói có gặp nhưng nên tránh) → I also like football.",
+        "Đáp 'tôi cũng không' là Me neither, không nói Me too khi người kia nói câu phủ định."
+      ],
+      "soSanh": [
+        "en-b1-so-neither",
+        "en-a1-trang-tu-tan-suat",
+        "en-a2-both-either-neither"
+      ],
+      "tuKhoa": [
+        "also",
+        "too",
+        "as well",
+        "either",
+        "me too",
+        "me neither",
+        "cũng",
+        "cũng không"
+      ],
+      "quiz": [
+        {
+          "h": "My brother doesn't eat meat, and I don't eat meat ___ .",
+          "lc": [
+            "also",
+            "either",
+            "as well",
+            "too"
+          ],
+          "da": 1,
+          "gt": "Câu phủ định (don't eat) ⇒ 'cũng không' là either ở cuối câu."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "Also she is a good too cook.",
+            "She also is a good cook.",
+            "She is also a good cook.",
+            "She is a good also cook."
+          ],
+          "da": 2,
+          "gt": "also đứng sau to be: She is also…"
+        },
+        {
+          "h": "A: I love this song. - B: ___",
+          "lc": [
+            "Me either.",
+            "Me neither.",
+            "I too not.",
+            "Me too."
+          ],
+          "da": 3,
+          "gt": "Đồng ý với một câu khẳng định ⇒ Me too. Me neither chỉ dùng khi câu trước phủ định."
+        }
+      ]
+    }
+  ]
+}

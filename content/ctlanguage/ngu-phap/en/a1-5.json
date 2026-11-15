@@ -1,0 +1,370 @@
+{
+  "nn": "en",
+  "cap": "A1",
+  "diem": [
+    {
+      "id": "en-a1-how-tinh-tu",
+      "nhom": "Câu hỏi",
+      "tieuDe": "How + tính từ / trạng từ: How old / How tall / How far / How long…?",
+      "mau": "How + adj / adv + to be / do / does + S (+ V)?",
+      "nghia": "bao nhiêu tuổi, cao bao nhiêu, xa bao nhiêu, bao lâu, bao lâu một lần…",
+      "giaiThich": "Ghép How với một tính từ hoặc trạng từ để hỏi về MỨC ĐỘ của một thứ: tuổi, chiều cao, khoảng cách, thời gian, tần suất. Cả cụm How + tính từ đứng đầu câu như một từ để hỏi, sau đó là to be hoặc do / does rồi mới đến chủ ngữ. Tiếng Việt để 'bao nhiêu' ở cuối câu, tiếng Anh đưa cả cụm lên đầu.",
+      "cachGhep": [
+        "How old (bao nhiêu tuổi) · How tall (cao bao nhiêu) · How big (to cỡ nào)",
+        "How far (xa bao nhiêu) · How long (bao lâu / dài bao nhiêu) · How often (bao lâu một lần)",
+        "Với to be: How + adj + am / is / are + S? (How old is your sister?)",
+        "Với động từ thường: How + adv + do / does + S + V? (How often do you go swimming?)",
+        "Trả lời: She's ten (years old). · It's about two kilometres. · Twice a week."
+      ],
+      "viDu": [
+        {
+          "c": "How old is your brother? - He's twelve.",
+          "v": "Em trai bạn bao nhiêu tuổi? - Nó mười hai tuổi."
+        },
+        {
+          "c": "How tall are you?",
+          "v": "Bạn cao bao nhiêu?"
+        },
+        {
+          "c": "How far is the station from here?",
+          "v": "Ga tàu cách đây bao xa?"
+        },
+        {
+          "c": "How often do you play football? - Every Sunday.",
+          "v": "Bạn chơi bóng đá bao lâu một lần? - Chủ nhật nào cũng chơi."
+        },
+        {
+          "c": "How long is the film?",
+          "v": "Bộ phim dài bao lâu?"
+        }
+      ],
+      "luuY": [
+        "Lỗi người Việt hay mắc: dịch thẳng 'bạn bao nhiêu tuổi' thành 'How many years old are you?' hoặc 'You are how old?'. Đúng: How old are you?",
+        "Trả lời tuổi dùng to be, không dùng have: 'I have twelve years' là sai → I'm twelve (years old).",
+        "How long hỏi thời gian (bao lâu) hoặc chiều dài; How often hỏi số lần (bao lâu MỘT LẦN) — đừng lẫn hai câu này."
+      ],
+      "soSanh": [
+        "en-a1-cau-hoi-wh",
+        "en-a1-how-much-many",
+        "en-a1-trang-tu-tan-suat"
+      ],
+      "tuKhoa": [
+        "how old",
+        "how tall",
+        "how far",
+        "how long",
+        "how often",
+        "how big",
+        "bao nhiêu tuổi",
+        "bao xa",
+        "bao lâu một lần"
+      ],
+      "quiz": [
+        {
+          "h": "___ is your house from the school? - About one kilometre.",
+          "lc": [
+            "How much",
+            "How often",
+            "How far",
+            "How long"
+          ],
+          "da": 2,
+          "gt": "Câu trả lời là một khoảng cách (one kilometre) nên hỏi How far. How long hỏi thời gian, How often hỏi số lần, How much hỏi giá hoặc lượng."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "How many years old are you?",
+            "You are how old?",
+            "How old do you have?",
+            "How old are you?"
+          ],
+          "da": 3,
+          "gt": "Hỏi tuổi: How old + to be + S? Không dịch 'bao nhiêu năm tuổi', không để từ hỏi ở cuối, và không dùng have với tuổi."
+        },
+        {
+          "h": "___ do you visit your grandparents? - Once a month.",
+          "lc": [
+            "How often",
+            "How old",
+            "How far",
+            "How long"
+          ],
+          "da": 0,
+          "gt": "Once a month (mỗi tháng một lần) trả lời cho câu hỏi tần suất How often."
+        }
+      ]
+    },
+    {
+      "id": "en-a1-gioi-tu-phuong-tien",
+      "nhom": "Giới từ",
+      "tieuDe": "Phương tiện đi lại: by bus / by car / on foot / in a taxi",
+      "mau": "go / travel / come + by + phương tiện · on foot · in / on + a / my / the + phương tiện",
+      "nghia": "đi bằng (xe buýt, ô tô…), đi bộ",
+      "giaiThich": "Để nói đi lại BẰNG phương tiện gì, dùng by + tên phương tiện, KHÔNG có mạo từ: by bus, by train, by plane. Riêng đi bộ là on foot. Khi có a, the, my… trước phương tiện thì đổi giới từ: xe nhỏ ngồi bên trong (car, taxi) dùng in, xe lớn hoặc xe mình ngồi trên (bus, train, bike) dùng on.",
+      "cachGhep": [
+        "by + phương tiện (không mạo từ): by bus · by car · by train · by plane · by bike · by motorbike · by boat",
+        "Đi bộ: on foot (hoặc dùng động từ walk: I walk to school.)",
+        "Có mạo từ / sở hữu: in my car · in a taxi · on the bus · on my bike · on the train",
+        "Hỏi: How do you get to work? - By bus."
+      ],
+      "viDu": [
+        {
+          "c": "I go to work by bus.",
+          "v": "Tôi đi làm bằng xe buýt."
+        },
+        {
+          "c": "She goes to school on foot.",
+          "v": "Cô bé đi bộ đến trường."
+        },
+        {
+          "c": "We went to Da Lat by plane.",
+          "v": "Chúng tôi đi Đà Lạt bằng máy bay."
+        },
+        {
+          "c": "He came in his father's car.",
+          "v": "Anh ấy đến bằng xe ô tô của bố."
+        },
+        {
+          "c": "How do you get to the office? - By motorbike.",
+          "v": "Bạn đến văn phòng bằng gì? - Bằng xe máy."
+        }
+      ],
+      "luuY": [
+        "Lỗi người Việt hay mắc: 'by foot' hoặc 'go by walk' → đúng là on foot hoặc I walk.",
+        "Sau by không thêm mạo từ: 'by a bus', 'by the car' là sai. Có mạo từ thì đổi giới từ: on the bus, in the car.",
+        "Không dịch 'đi bằng xe máy' thành 'go with motorbike' → go by motorbike / ride my motorbike."
+      ],
+      "soSanh": [
+        "en-a1-gioi-tu-noi-chon",
+        "en-a2-gioi-tu-chuyen-dong"
+      ],
+      "tuKhoa": [
+        "by bus",
+        "by car",
+        "on foot",
+        "in a taxi",
+        "on the bus",
+        "đi bằng",
+        "phương tiện",
+        "đi bộ"
+      ],
+      "quiz": [
+        {
+          "h": "I usually go to school ___ foot.",
+          "lc": [
+            "in",
+            "on",
+            "by",
+            "with"
+          ],
+          "da": 1,
+          "gt": "Đi bộ là cụm cố định on foot; 'by foot' không phải cách nói chuẩn."
+        },
+        {
+          "h": "They travelled to Hue ___ train.",
+          "lc": [
+            "with",
+            "in",
+            "by",
+            "on"
+          ],
+          "da": 2,
+          "gt": "Phương tiện không có mạo từ đi với by: by train. Nếu có the thì mới nói on the train."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "She got there on a taxi.",
+            "She got there by a taxi.",
+            "She got there with taxi.",
+            "She got there in a taxi."
+          ],
+          "da": 3,
+          "gt": "Có mạo từ a trước taxi nên không dùng by; taxi là xe nhỏ, ngồi bên trong ⇒ in a taxi."
+        }
+      ]
+    },
+    {
+      "id": "en-a1-want-need-to",
+      "nhom": "Danh động từ – động từ nguyên mẫu",
+      "tieuDe": "want / need + to V · want / need + danh từ",
+      "mau": "S + want(s) / need(s) + to + V · S + want(s) / need(s) + N",
+      "nghia": "muốn làm ~, cần làm ~ · muốn / cần cái gì",
+      "giaiThich": "want (muốn) và need (cần) là động từ thường. Khi theo sau là một hành động thì dùng to + động từ nguyên mẫu; khi là một vật thì dùng thẳng danh từ. Ở hiện tại đơn, ngôi ba số ít thêm -s (wants, needs), phủ định và câu hỏi dùng do / does như mọi động từ thường.",
+      "cachGhep": [
+        "want / need + to + V: I want to sleep. · She needs to study.",
+        "want / need + danh từ: I want a coffee. · We need some milk.",
+        "Phủ định: don't / doesn't + want / need + to V",
+        "Câu hỏi: Do / Does + S + want / need + to V?",
+        "want + người + to V (muốn ai làm gì): My mum wants me to come home early."
+      ],
+      "viDu": [
+        {
+          "c": "I want to learn English.",
+          "v": "Tôi muốn học tiếng Anh."
+        },
+        {
+          "c": "She needs to see a doctor.",
+          "v": "Cô ấy cần đi khám bác sĩ."
+        },
+        {
+          "c": "We don't need to hurry. We have time.",
+          "v": "Chúng ta không cần vội. Còn thời gian mà."
+        },
+        {
+          "c": "Do you want a glass of water?",
+          "v": "Bạn có muốn một cốc nước không?"
+        },
+        {
+          "c": "He wants a new phone for his birthday.",
+          "v": "Cậu ấy muốn có một chiếc điện thoại mới vào dịp sinh nhật."
+        }
+      ],
+      "luuY": [
+        "Lỗi người Việt hay mắc: bỏ to → sai: I want go home / She needs study. Đúng: I want to go home / She needs to study.",
+        "Ngôi ba số ít phải thêm -s: He wants…, She needs… (không nói He want…).",
+        "'Muốn ai làm gì' là want + người + to V, không dùng that: sai 'I want that you come'. Đúng: I want you to come."
+      ],
+      "soSanh": [
+        "en-a1-would-like",
+        "en-a2-to-inf-vs-ving",
+        "en-a1-like-ving"
+      ],
+      "tuKhoa": [
+        "want to",
+        "need to",
+        "muốn",
+        "cần",
+        "want sb to"
+      ],
+      "quiz": [
+        {
+          "h": "I'm hungry. I want ___ something.",
+          "lc": [
+            "eating",
+            "eats",
+            "eat",
+            "to eat"
+          ],
+          "da": 3,
+          "gt": "Sau want là to + động từ nguyên mẫu: want to eat."
+        },
+        {
+          "h": "My brother ___ to buy a new laptop.",
+          "lc": [
+            "needs",
+            "needing",
+            "is need",
+            "need"
+          ],
+          "da": 0,
+          "gt": "Chủ ngữ my brother là ngôi ba số ít, need là động từ thường nên thêm -s: needs."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "My teacher wants that we read this book.",
+            "My teacher wants us to read this book.",
+            "My teacher wants us read this book.",
+            "My teacher wants we read this book."
+          ],
+          "da": 1,
+          "gt": "Muốn ai làm gì: want + tân ngữ + to V. Không dùng that hay bỏ to."
+        }
+      ]
+    },
+    {
+      "id": "en-a1-cum-chi-luong",
+      "nhom": "Danh từ – mạo từ",
+      "tieuDe": "Cụm chỉ lượng: a cup of / a bottle of / a kilo of / a slice of",
+      "mau": "a / an / số + đơn vị (cup, bottle, glass, kilo, slice…) + of + N",
+      "nghia": "một cốc ~, một chai ~, một cân ~, một lát ~",
+      "giaiThich": "Danh từ không đếm được (water, rice, bread, milk) không đi thẳng với a hay con số. Muốn đếm, đặt trước nó một đơn vị đếm được + of: a bottle of water, two kilos of rice. Khi số lượng nhiều hơn một, chỉ đơn vị thêm -s (two cups of tea), danh từ phía sau giữ nguyên.",
+      "cachGhep": [
+        "Đồ uống: a cup of tea / coffee · a glass of water / juice · a bottle of milk · a can of cola",
+        "Đồ ăn: a slice of bread / cake · a piece of cheese · a bowl of rice / soup · a loaf of bread",
+        "Đo lường: a kilo of rice · a litre of oil · 200 grams of sugar",
+        "Hộp, gói: a box of chocolates · a packet of biscuits · a bar of chocolate",
+        "Số nhiều: số + đơn vị-s + of + N (three bottles of water)"
+      ],
+      "viDu": [
+        {
+          "c": "Could I have a glass of orange juice, please?",
+          "v": "Cho tôi xin một cốc nước cam được không?"
+        },
+        {
+          "c": "I eat two slices of bread for breakfast.",
+          "v": "Bữa sáng tôi ăn hai lát bánh mì."
+        },
+        {
+          "c": "We need a kilo of rice and a bottle of fish sauce.",
+          "v": "Chúng ta cần một cân gạo và một chai nước mắm."
+        },
+        {
+          "c": "She drinks three cups of coffee a day.",
+          "v": "Cô ấy uống ba cốc cà phê mỗi ngày."
+        },
+        {
+          "c": "He bought a box of chocolates for his mum.",
+          "v": "Anh ấy mua một hộp sô-cô-la cho mẹ."
+        }
+      ],
+      "luuY": [
+        "Lỗi người Việt hay mắc: 'two waters', 'a bread', 'three rices' → two bottles of water, a slice / loaf of bread, three kilos of rice.",
+        "Số nhiều thêm -s vào ĐƠN VỊ, không thêm vào danh từ không đếm được: two cups of tea (không nói two cup of teas).",
+        "Trong quán, người bản xứ vẫn nói tắt 'Two coffees, please' (= hai cốc cà phê) — đó là cách gọi món, còn khi viết hay nói chung hãy dùng đủ cụm."
+      ],
+      "soSanh": [
+        "en-a1-dem-duoc-khong-dem-duoc",
+        "en-b2-uncountable-advanced",
+        "en-a1-some-any"
+      ],
+      "tuKhoa": [
+        "a cup of",
+        "a glass of",
+        "a bottle of",
+        "a kilo of",
+        "a slice of",
+        "partitive",
+        "đơn vị đếm",
+        "cụm chỉ lượng"
+      ],
+      "quiz": [
+        {
+          "h": "Could I have ___, please?",
+          "lc": [
+            "a glass of milk",
+            "a glass milk",
+            "milks",
+            "a milk"
+          ],
+          "da": 0,
+          "gt": "Milk không đếm được; muốn nói 'một' phải dùng đơn vị: a glass of milk (đủ cả of)."
+        },
+        {
+          "h": "Mum bought two ___ of orange juice.",
+          "lc": [
+            "bottle",
+            "bottles",
+            "bottle's",
+            "bottling"
+          ],
+          "da": 1,
+          "gt": "Hai đơn vị ⇒ đơn vị thêm -s: two bottles of juice."
+        },
+        {
+          "h": "Câu nào đúng?",
+          "lc": [
+            "I'd like two slice of cakes.",
+            "I'd like two cakes slices.",
+            "I'd like two slices of cake.",
+            "I'd like two slices cake."
+          ],
+          "da": 2,
+          "gt": "Mẫu số + đơn vị-s + of + danh từ: two slices of cake. Không bỏ of và không thêm -s sai chỗ."
+        }
+      ]
+    }
+  ]
+}

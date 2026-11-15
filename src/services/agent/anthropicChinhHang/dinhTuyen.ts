@@ -169,6 +169,20 @@ export function modelFreeChoApp(): ModelChinhHang {
 }
 
 /**
+ * Kiểu `thinking` cho lượt NÓI NHANH, theo model (15/11/2026). THUẦN — test đọc.
+ *
+ * `{type:'disabled'}` chỉ hợp lệ với một số model: Sonnet 5.5 trả 400 (phải gửi
+ * `between_tools`, không kèm trường nào khác), Opus 5.5 / Fable thì không tắt được
+ * (bỏ trường ⇒ adaptive, đè độ sâu bằng `effort`). Trước bản này mọi lượt nhanh của
+ * Sonnet 5.5 (CT Work, Luyện nói) ăn một lần 400 rồi mới gửi lại bằng adaptive.
+ */
+export function thinkingNhanh(model: string): { type: 'disabled' | 'between_tools' } | null {
+  if (/sonnet-5-5/.test(model)) return { type: 'between_tools' };
+  if (/opus-5-5|fable|mythos/.test(model)) return null;
+  return { type: 'disabled' };
+}
+
+/**
  * Một lời gọi VĂN BẢN có stream (không tool) — cho CuongMini trong thi.
  * Tự chuyển key, tự ghi sổ. Ném `CongAnthropicLoi` khi hết key.
  */
@@ -203,7 +217,8 @@ export async function goiVanBanChinhHang(o: {
   };
   let beta: string[] = [];
   if (o.nhanh) {
-    body.thinking = { type: 'disabled' };
+    const tk = thinkingNhanh(o.model);
+    if (tk) body.thinking = tk;
     body.output_config = { effort: o.nhanh.effort };
     ganCache(body);
   } else {

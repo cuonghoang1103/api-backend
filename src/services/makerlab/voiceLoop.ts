@@ -94,6 +94,11 @@ import {
 } from './lechTieng.js';
 import { khopDoiNao, khopNaoTuDong, CHAO_DOI_NAO, CHAO_TU_DONG, type Nao } from './nao.js';
 import { phanLoaiCau, loiDanDoDai, type DoDai, type LoaiCau } from './chonNao.js';
+import { NHAN_CHINH_HANG, chinhHangSanSang, modelRobotChinhHang, luongChinhHang } from './naoChinhHang.js';
+import { chonLoaiDem, layCauDem } from './cauDem.js';
+
+/** Luồng tiếng đã MỞ sẵn bằng câu đệm — câu trả lời nối tiếp trên CÙNG luồng (`cauDem.ts`). */
+interface MoDauNoi { seq: number; cho: Promise<boolean> }
 
 // ─── Conversation memory ───────────────────────────────────
 //
@@ -521,6 +526,15 @@ function dangChet(label: string): boolean {
 export function baoNhaHong(label: string, err: unknown): void {
   // Cổng và Groq là lưới đỡ CUỐI — đánh dấu chúng chết thì không còn gì
   // để tụt xuống nữa, tức là biến một lỗi tạm thành robot câm.
+  if (label === NHAN_CHINH_HANG) {
+    // Cổng chính hãng hỏng ⇒ nghỉ 60 s, chuỗi cũ (máy nhà → cổng → Groq) đỡ trong lúc đó.
+    _nhaChet.set(label, Date.now() + NGHI_MS);
+    logger.warn('MakerLab tạm bỏ qua cổng Anthropic chính hãng', {
+      nghiGiay: NGHI_MS / 1000,
+      error: err instanceof Error ? err.message : String(err),
+    });
+    return;
+  }
   if (label !== 'may-nha') return;
   _nhaChet.set(label, Date.now() + NGHI_MS);
   logger.warn('MakerLab tạm bỏ qua máy nhà, chuyển sang cổng', {
@@ -544,8 +558,15 @@ export function trangThaiNao(): { mayNhaChet: boolean; conNghiGiay: number } {
  * trường. Groq miễn phí nên nó là cái lưới đỡ phía dưới — chậm hơn,
  * kém hơn, nhưng còn nói được.
  */
-function llmChain(nao: Nao | null = null, boQuaMayNha = false): LlmProvider[] {
+function llmChain(nao: Nao | null = null, boQuaMayNha = false, coChinhHang = false): LlmProvider[] {
   const chain: LlmProvider[] = [];
+
+  // ── Cổng Anthropic CHÍNH HÃNG đứng ĐẦU (15/11/2026, xem `naoChinhHang.ts`) ──
+  // Trừ khi người dùng GHIM máy nhà ("đổi sang não ở nhà") — ghim thì nghe ghim.
+  // `coChinhHang` do nơi gọi hỏi trước (async: còn key, còn trần ngày, không nghỉ).
+  if (coChinhHang && nao !== 'may-nha') {
+    chain.push({ baseURL: 'anthropic-chinh-hang', key: 'kho-key', label: NHAN_CHINH_HANG });
+  }
 
   // ── Người dùng GHIM não nào thì nghe người dùng ──
   //
@@ -1442,31 +1463,69 @@ export async function runVoiceTurn(input: VoiceTurnInput): Promise<VoiceTurnResu
   // model nhận về mấy trang chẳng liên quan đè lên số liệu thật.
   let doanHeThong = '';
   const chuDeHeThong = canHeThong(heard);
-  if (chuDeHeThong.length && (await chuLaAdmin(input.deviceId))) {
-    const t = Date.now();
-    doanHeThong = await khoiHeThong(chuDeHeThong);
-    logger.info('MakerLab đọc số liệu hệ thống', {
-      deviceId: input.deviceId,
-      chuDe: chuDeHeThong,
-      ms: Date.now() - t,
+  const laHeThong = chuDeHeThong.length > 0 && (await chuLaAdmin(input.deviceId));
+
+  // ── CÂU ĐỆM: câu khó / cần tra ⇒ nói NGAY "để mình tra xíu nhé…" (cauDem.ts) ──
+  //
+  // Phát TRƯỚC khi tra web / đọc số liệu (mấy việc đó tốn vài giây), trên một
+  // luồng tiếng mở sẵn — câu trả lời nối tiếp trên CÙNG luồng, nên giữa hai câu
+  // bo không mở mic lại để bắt nhầm tiếng phòng thành một lượt mới.
+  let moDau: MoDauNoi | null = null;
+  if (input.speak !== false && persona.voiceProvider === 'cuongmini' && persona.cheDo === 'vi') {
+    const loaiDem = chonLoaiDem({
+      heThong: laHeThong,
+      tra: !laHeThong && !!canTraCuu(heard),
+      kho: phanLoaiCau(heard).kho,
     });
+    const dem = loaiDem ? layCauDem(CHE_DO[persona.cheDo].giong ?? persona.voiceId, loaiDem) : null;
+    if (dem) {
+      const gw = await import('../../socket/device.gateway.js');
+      const { PCM_SAMPLE_RATE } = await import('./audio.js');
+      const seq = gw.speakStreamBegin(input.deviceId, PCM_SAMPLE_RATE);
+      if (seq !== null) {
+        moDau = { seq, cho: gw.speakStreamPushPcm(input.deviceId, dem.pcm, seq) };
+        logger.info('MakerLab câu đệm', { deviceId: input.deviceId, loai: loaiDem, cau: dem.id, chu: dem.chu });
+      }
+    }
   }
+  const dongMoDau = async () => {
+    if (!moDau) return;
+    const gw = await import('../../socket/device.gateway.js');
+    await moDau.cho.catch(() => false);
+    gw.speakStreamEnd(input.deviceId, moDau.seq);
+  };
 
   let doanTraCuu = '';
-  const kieuTra = doanHeThong ? null : canTraCuu(heard);
-  if (kieuTra) {
-    const t = Date.now();
-    const muc =
-      kieuTra === 'tim'
-        ? await timTrenWeb(themViTri(heard, persona.viTri), 5)
-        : await tinMoiNhat(8, kieuTra === 'tin-cong-nghe');
-    doanTraCuu = dungDoanTraCuu(muc, kieuTra);
-    logger.info('MakerLab tra internet', {
-      deviceId: input.deviceId,
-      kieu: kieuTra,
-      soMuc: muc.length,
-      ms: Date.now() - t,
-    });
+  try {
+    if (laHeThong) {
+      const t = Date.now();
+      doanHeThong = await khoiHeThong(chuDeHeThong);
+      logger.info('MakerLab đọc số liệu hệ thống', {
+        deviceId: input.deviceId,
+        chuDe: chuDeHeThong,
+        ms: Date.now() - t,
+      });
+    }
+
+    const kieuTra = doanHeThong ? null : canTraCuu(heard);
+    if (kieuTra) {
+      const t = Date.now();
+      const muc =
+        kieuTra === 'tim'
+          ? await timTrenWeb(themViTri(heard, persona.viTri), 5)
+          : await tinMoiNhat(8, kieuTra === 'tin-cong-nghe');
+      doanTraCuu = dungDoanTraCuu(muc, kieuTra);
+      logger.info('MakerLab tra internet', {
+        deviceId: input.deviceId,
+        kieu: kieuTra,
+        soMuc: muc.length,
+        ms: Date.now() - t,
+      });
+    }
+  } catch (err) {
+    // Tra cứu hỏng giữa chừng ⇒ đóng luồng câu đệm, đừng để bo đứng "ĐANG NÓI" mãi.
+    await dongMoDau();
+    throw err;
   }
 
   const t1 = Date.now();
@@ -1496,12 +1555,13 @@ export async function runVoiceTurn(input: VoiceTurnInput): Promise<VoiceTurnResu
       nao: persona.nao ?? 'tu-dong',
     });
     const r = await thinkAndSpeak(
-      persona, heard, input.deviceId, ctx, timing, doanHeThong || doanTraCuu, loai,
+      persona, heard, input.deviceId, ctx, timing, doanHeThong || doanTraCuu, loai, moDau,
     );
     reply = r.reply;
     spoken = r.spoken;
     timing.llm = r.llmMs;
   } else {
+    await dongMoDau(); // không bao giờ mở ở nhánh này — chỉ để chắc
     reply = await think(persona, heard, input.deviceId, ctx, doanHeThong || doanTraCuu);
     timing.llm = Date.now() - t1;
   }
@@ -1612,14 +1672,18 @@ async function thinkAndSpeak(
   timing: { tts: number },
   doanTraCuu = '',
   loai?: LoaiCau,
+  moDau: MoDauNoi | null = null,
 ): Promise<{ reply: RobotReply; spoken: boolean; llmMs: number }> {
   // Chế độ TỰ ĐỘNG (`nao = null`) mà câu khó ⇒ lên cổng thẳng, bỏ máy nhà.
   // Người dùng GHIM não nào thì vẫn nghe người dùng — ghim máy nhà để khỏi
   // tốn tiền mà câu khó lại lén lên cổng thì ghim để làm gì.
   const lenCong = persona.nao === null && !!loai?.kho;
+  // Cổng trả tiền theo token ⇒ CHỈ robot của admin (chủ web) — không trần tiền, nên phải có rào ai được dùng.
+  const coChinhHang = persona.nao !== 'may-nha' && !dangChet(NHAN_CHINH_HANG)
+    && (await chinhHangSanSang()) && (await chuLaAdmin(deviceId));
   // Chỉ xin vé khi máy nhà thật sự là đích đến — hỏi hàng đợi trong lúc
   // robot đang ghim 'cong' là tự bịa ra một phép chờ vô nghĩa.
-  const diMayNha = !lenCong && llmChain(persona.nao)[0]?.label === 'may-nha';
+  const diMayNha = !lenCong && llmChain(persona.nao, false, coChinhHang)[0]?.label === 'may-nha';
   const ve = diMayNha ? await xinSlot('robot') : null;
   if (ve && !ve.duoc) {
     logger.warn('MakerLab máy nhà kẹt, robot nói bằng cổng lượt này', {
@@ -1630,7 +1694,7 @@ async function thinkAndSpeak(
   }
   try {
     return await thinkAndSpeakLoi(
-      persona, heard, deviceId, ctx, timing, doanTraCuu, lenCong || (!!ve && !ve.duoc), loai,
+      persona, heard, deviceId, ctx, timing, doanTraCuu, lenCong || (!!ve && !ve.duoc), loai, coChinhHang, moDau,
     );
   } finally {
     // ⚠️ `finally`, không phải cuối thân hàm: đường này có `return` ở cả
@@ -1648,6 +1712,8 @@ async function thinkAndSpeakLoi(
   doanTraCuu = '',
   boQuaMayNha = false,
   loai?: LoaiCau,
+  coChinhHang = false,
+  moDau: MoDauNoi | null = null,
 ): Promise<{ reply: RobotReply; spoken: boolean; llmMs: number }> {
   const started = Date.now();
   const gw = await import('../../socket/device.gateway.js');
@@ -1655,12 +1721,16 @@ async function thinkAndSpeakLoi(
 
   const messages = await dungMessages(persona, ctx, deviceId, heard, doanTraCuu, loai?.doDai);
 
-  const chain = llmChain(persona.nao, boQuaMayNha);
+  const chain = llmChain(persona.nao, boQuaMayNha, coChinhHang);
   const p = chain[0];
   // Câu khó mà đi cổng thì dùng model "nghĩ kỹ" — xem `modelKho()`.
-  const model = loai?.kho && p.label !== 'may-nha' ? modelKho() : robotModel(p);
+  // Cổng chính hãng: Haiku 5.5 cho câu thường, Sonnet 5.5 cho câu khó (`naoChinhHang.ts`).
+  const model = p.label === NHAN_CHINH_HANG
+    ? modelRobotChinhHang(!!loai?.kho)
+    : loai?.kho && p.label !== 'may-nha' ? modelKho() : robotModel(p);
 
-  let seq: number | null = null;
+  // Câu đệm đã mở luồng ⇒ nối tiếp trên đúng luồng đó (không `speakStreamBegin` lần nữa).
+  let seq: number | null = moDau?.seq ?? null;
   let spoken = false;
   let firstAudioMs = 0;
 
@@ -1716,7 +1786,7 @@ async function thinkAndSpeakLoi(
    * giây tiếng) là ~5,7 MB — không đáng kể, và nó đổi lấy việc bo không
    * bao giờ phải ngồi chờ.
    */
-  let chuoiDay: Promise<boolean> = Promise.resolve(true);
+  let chuoiDay: Promise<boolean> = moDau ? moDau.cho.catch(() => false) : Promise.resolve(true);
   const noiVaoChuoi = (pcm: Buffer) => {
     chuoiDay = chuoiDay.then(async (con) => {
       if (!con || seq === null) return false;
@@ -1818,16 +1888,20 @@ async function thinkAndSpeakLoi(
   let emitted = 0;
 
   try {
-    if (noJsonMode.has(model)) throw new Error('model không nhận json_object — dùng đường cũ');
+    if (p.label !== NHAN_CHINH_HANG && noJsonMode.has(model)) throw new Error('model không nhận json_object — dùng đường cũ');
 
-    const stream = await clientFor(p).chat.completions.create({
-      model,
-      messages,
-      temperature: persona.temperature,
-      max_tokens: persona.maxTokens,
-      response_format: { type: 'json_object' },
-      stream: true,
-    });
+    // Cổng chính hãng không có `response_format` — prompt đã đòi JSON, `partialSay` /
+    // `parseRobotReply` vớt được cả khi model bọc trong ```json.
+    const stream = p.label === NHAN_CHINH_HANG
+      ? luongChinhHang({ tin: messages, model, maxTokens: persona.maxTokens, deviceId })
+      : await clientFor(p).chat.completions.create({
+          model,
+          messages,
+          temperature: persona.temperature,
+          max_tokens: persona.maxTokens,
+          response_format: { type: 'json_object' },
+          stream: true,
+        });
 
     /**
      * Gom câu trước khi gọi TTS — xem ghi chú dài ở vòng lặp dưới.

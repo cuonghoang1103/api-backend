@@ -18,6 +18,13 @@ Mẫu một mục:
 
 ---
 
+### 15/11/2026 — Cổng Anthropic chính hãng — lượt "nói nhanh" của Sonnet 5.5 gửi `thinking: disabled` (API trả 400)
+- **Triệu chứng:** không ai thấy lỗi — CT Work / Luyện nói vẫn trả lời, chỉ chậm hơn một vòng mạng mỗi lượt Sonnet 5.5 (suy từ tài liệu API, CHƯA đối chiếu log prod).
+- **Nguyên nhân:** `goiVanBanChinhHang` (`src/services/agent/anthropicChinhHang/dinhTuyen.ts`) đặt cứng `thinking: {type:'disabled'}` cho mọi model ở chế độ `nhanh`; Sonnet 5.5 từ chối `disabled` (phải `between_tools`), Opus 5.5 không tắt được thinking ⇒ 400 ⇒ `banAnToan` gửi lại bằng adaptive.
+- **Cách sửa:** `thinkingNhanh(model)`: Sonnet 5.5 ⇒ `between_tools`, Opus 5.5/Fable ⇒ bỏ trường, còn lại `disabled` (commit cùng bản não Odin chính hãng).
+- **Ảnh hưởng:** mọi lượt `nhanh` chạy Sonnet 5.5 — Luyện nói (từ 13/11, khi đổi Haiku → Sonnet), CT Work, chấm thi.
+- **Bài học:** đổi model trong chuỗi "nói nhanh" thì soi lại bảng thinking theo model; lưới đỡ "gửi lại bản tối giản" che lỗi khỏi người dùng nhưng cũng che khỏi người vận hành — đếm số lần nó bật trong log.
+
 ### 15/11/2026 — CT Language (Hỏi Gấu / CuongMini) — câu trả lời "thô, khó nhìn, ngắn quá" (chữ trắng trơn, không tiêu đề, không màu)
 - **Triệu chứng:** bấm "Tóm tắt bài này" ở Dekiru Bài 1 ⇒ một khối chữ trơn vài gạch "•", không đậm, không tiêu đề, không phân biệt chữ Nhật với chữ Việt, cụt ở ~200 chữ.
 - **Nguyên nhân:** bốn chỗ cùng chặn: (1) lời nhắc `nhacHoiGau` (`src/services/ctlanguage/hoiGau.ts`) đòi "tối đa khoảng 200 chữ" và CẤM tiêu đề/**đậm**/bảng; (2) `lamSachGau` (`congDongGau.ts:57`) xoá `**`/`#` còn sót và cắt 2000 ký tự; (3) `maxTokens: 900`; (4) app vẽ `Text(t.noiDung)` trơn (`TroLyGauCTL.swift › bongTin`). Thêm: ngữ cảnh bài cắt 3000 ký tự và `NguCanhGau.baiSach` dùng `PhanTichChuSH.tron` ⇒ model mất furigana của mọi kanji trong bài.

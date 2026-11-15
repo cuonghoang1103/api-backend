@@ -579,6 +579,11 @@ const GAIN_DB: Record<string, number> = {
   google: Number(process.env.MAKERLAB_GAIN_GOOGLE ?? 0),
 };
 
+/** Gain (dB) của một giọng — cho tiếng làm sẵn (câu đệm, `cauDem.ts`) to bằng tiếng sinh lúc chạy. */
+export function gainDbChoGiong(provider: string, voice?: string | null): number {
+  return GAIN_DB[khoaGain(provider, voice)] ?? 0;
+}
+
 /** Giọng này thuộc máy đọc nào — quyết định lấy gain nào. */
 export function khoaGain(provider: string, voice?: string | null): string {
   if (provider !== 'cuongmini') return provider;

@@ -1045,6 +1045,22 @@ export async function runVoiceTurn(input: VoiceTurnInput): Promise<VoiceTurnResu
   // mà không ai biết: ở quán cà phê robot trả lời cả "Cô ơi" của bàn bên.
   // Có tên mặc định thì vẫn gọi được robot, nên chốt hãm không còn cần.
   const tuDanhThuc = persona.wakeWord?.trim() || TU_DANH_THUC_MAC_DINH;
+  // ── BÁO THỨC đang reo (chuDong.ts): nói bất cứ gì / chạm màn ⇒ tắt (hoặc "5 phút nữa" ⇒ hoãn), rồi bản tin
+  // sáng. Đứng TRƯỚC cổng gọi tên — người vừa ngủ dậy không ai nhớ gọi "Odin".
+  if (input.speak !== false && heard) {
+    const bt = await import('./chuDong.js');
+    if (bt.dangBaoThuc(input.deviceId)) {
+      const cau = await bt.xuLyLuotBaoThuc(input.deviceId, heard);
+      if (cau) {
+        const noiDuoc = await speakOnce(persona, cau, input.deviceId);
+        emitTranscript(input.deviceId, 'bot', cau);
+        if (noiDuoc) giuThucHoiThoai(input.deviceId, persona.giayThucGiac);
+        timing.total = Date.now() - started;
+        return { heard, said: cau, actions: [], spoken: noiDuoc, ms: timing };
+      }
+    }
+  }
+
   const gacCong = persona.congDanhThuc && input.speak !== false && !input.heThong;
 
   if (gacCong) {

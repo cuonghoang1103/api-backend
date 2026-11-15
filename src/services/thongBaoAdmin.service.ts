@@ -172,7 +172,12 @@ export async function baoAdmin(tb: ThongBaoAdmin): Promise<{ id: number } | null
     });
 
     // Hai kênh phụ chạy song song và KHÔNG chặn nơi gọi.
-    void Promise.allSettled([banSocket(row), guiTelegram(tb)]);
+    void Promise.allSettled([
+      banSocket(row),
+      guiTelegram(tb),
+      // Robot Odin của admin đọc lên (15/11/2026) — nhả nhịp + giờ yên tĩnh nằm trong chuDong.ts.
+      import('./makerlab/chuDong.js').then((m) => m.baoSuKienChoRobot(tb.tieuDe)),
+    ]);
     return { id: row.id };
   } catch (err) {
     // Kể cả P2002 (hai lượt webhook chạy song song cùng lọt qua bước kiểm

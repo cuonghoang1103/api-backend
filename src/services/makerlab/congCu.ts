@@ -66,6 +66,60 @@ export function dsCongCu(laAdmin: boolean): LLMTool[] {
       },
     },
     {
+      name: 'dat_bao_thuc',
+      description: 'Đặt BÁO THỨC (gọi dậy bằng giọng + bật nhạc, gọi lại tới khi dậy, xong thì đọc bản tin sáng).',
+      parameters: {
+        type: 'object',
+        properties: {
+          gio: { type: 'string', description: 'HH:MM, 24 giờ' },
+          lap: { type: 'string', enum: ['mot_lan', 'hang_ngay', 'ngay_thuong'] },
+          ngay: { type: 'string', description: 'YYYY-MM-DD khi lap = mot_lan (bỏ trống = lần tới của giờ đó)' },
+          nhac: { type: 'string', description: 'Nhạc muốn nghe khi dậy (ca sĩ/bài/kiểu), bỏ trống = nhạc sôi động' },
+        },
+        required: ['gio', 'lap'],
+      },
+    },
+    {
+      name: 'hen_gio',
+      description: 'Hẹn giờ ngắn / pomodoro: sau N phút robot nhắc (ví dụ tập trung 25 phút, luộc trứng 7 phút).',
+      parameters: {
+        type: 'object',
+        properties: { phut: { type: 'integer', minimum: 1, maximum: 600 }, viec: { type: 'string' } },
+        required: ['phut', 'viec'],
+      },
+    },
+    {
+      name: 'ghi_nho',
+      description:
+        'Ghi NHỚ LÂU DÀI một điều về chủ robot (sở thích, người thân, mục tiêu, ngày quan trọng, chuyện đã kể) để lần sau ' +
+        'nhắc lại / trêu đúng chỗ. Dùng khi họ kể điều đáng nhớ hoặc bảo "nhớ giùm tao…".',
+      parameters: {
+        type: 'object',
+        properties: { chu_de: { type: 'string', description: 'Nhãn ngắn, ví dụ "Món thích ăn"' }, noi_dung: { type: 'string' } },
+        required: ['chu_de', 'noi_dung'],
+      },
+    },
+    {
+      name: 'ban_tin',
+      description: 'Đọc BẢN TIN ngay: thời tiết, lịch hôm nay, từ đến hạn ôn, tin công nghệ, (admin) tình hình web.',
+      parameters: { type: 'object', properties: {} },
+    },
+    {
+      name: 'cai_dat_chu_dong',
+      description:
+        'Chỉnh việc robot TỰ nói theo giờ: banTin (bản tin sáng), onTu (mời ôn từ), hoiHan (hỏi han buổi tối), chucNgu ' +
+        '(chúc ngủ ngon) — giờ HH:MM hoặc null để tắt; yenTinhTu/yenTinhDen (giờ yên tĩnh); bat (bật/tắt tất cả); ' +
+        'baoSuKien (đọc sự kiện web/hệ thống).',
+      parameters: {
+        type: 'object',
+        properties: {
+          bat: { type: 'boolean' }, banTin: { type: ['string', 'null'] }, onTu: { type: ['string', 'null'] },
+          hoiHan: { type: ['string', 'null'] }, chucNgu: { type: ['string', 'null'] },
+          yenTinhTu: { type: 'string' }, yenTinhDen: { type: 'string' }, baoSuKien: { type: 'boolean' },
+        },
+      },
+    },
+    {
       name: 'lich_hom_nay',
       description: 'Xem các việc trong kế hoạch hôm nay của chủ robot: giờ, tên việc, đã xong/chưa.',
       parameters: { type: 'object', properties: {} },
@@ -167,6 +221,55 @@ async function chayMot(c: LLMToolCall, ng: NguCanhCongCu): Promise<string> {
         kieu: k === 'on' || k === 'moi' || k === 'noi' ? k : 'tu-dong',
       });
       return `Buổi học đã mở. Trong "say", đọc NGUYÊN VĂN câu sau, không thêm bớt: ${cau}`;
+    }
+    case 'dat_bao_thuc': {
+      if (!ng.ownerId) return 'Robot chưa có chủ nên không đặt được báo thức.';
+      const { taoKeHoach } = await import('./keHoachService.js');
+      const lap = String(a.lap);
+      let ngay = a.ngay ? String(a.ngay) : null;
+      if (lap === 'mot_lan' && !ngay) {
+        const { gioVn } = await import('./chuDong.js');
+        const g = gioVn(new Date());
+        const [h, m] = String(a.gio ?? '').split(':').map(Number);
+        const quaRoi = h * 60 + m <= g.phut;
+        ngay = quaRoi ? new Date(Date.parse(`${g.ngay}T00:00:00Z`) + 86_400_000).toISOString().slice(0, 10) : g.ngay;
+      }
+      const p = await taoKeHoach(ng.ownerId, {
+        title: 'Báo thức', gio: String(a.gio ?? ''), kind: KIND[lap] ?? 'DAILY',
+        ...(ngay ? { ngayMot: ngay } : {}), ...(a.nhac ? { huongDan: `nhạc: ${String(a.nhac).slice(0, 80)}` } : {}),
+        projectId: ng.projectId,
+      });
+      return `Đã đặt báo thức #${p.id} lúc ${String(a.gio)} (${lap}${ngay ? ` ngày ${ngay}` : ''}).`;
+    }
+    case 'hen_gio': {
+      if (!ng.ownerId) return 'Robot chưa có chủ nên không hẹn giờ được.';
+      const phut = Math.min(600, Math.max(1, Math.round(Number(a.phut) || 0)));
+      const { gioVn } = await import('./chuDong.js');
+      const g = gioVn(new Date(Date.now() + phut * 60_000));
+      const { taoKeHoach } = await import('./keHoachService.js');
+      const p = await taoKeHoach(ng.ownerId, {
+        title: `hết ${phut} phút ${String(a.viec ?? '').slice(0, 80)}`.trim(), gio: g.hhmm, kind: 'ONCE', ngayMot: g.ngay, projectId: ng.projectId,
+      });
+      return `Đã hẹn giờ #${p.id}: ${phut} phút nữa (lúc ${g.hhmm}) sẽ nhắc.`;
+    }
+    case 'ghi_nho': {
+      const { saveAnswer } = await import('./training.js');
+      const cd = String(a.chu_de ?? '').slice(0, 120);
+      const nd = String(a.noi_dung ?? '').slice(0, 500);
+      if (!cd || !nd) return 'Thiếu chủ đề hoặc nội dung cần nhớ.';
+      const ds = await saveAnswer(ng.projectId, cd, nd);
+      return `Đã nhớ "${cd}" (${ds.length}/40 điều đang nhớ).`;
+    }
+    case 'ban_tin': {
+      if (!ng.ownerId) return 'Robot chưa có chủ.';
+      const { soanBanTin } = await import('./chuDong.js');
+      const bt = await soanBanTin({ deviceId: ng.deviceId, ownerId: ng.ownerId, projectId: ng.projectId });
+      return bt ? `Trong "say", đọc NGUYÊN VĂN bản tin sau: ${bt}` : 'Chưa gom được số liệu cho bản tin.';
+    }
+    case 'cai_dat_chu_dong': {
+      const { luuChuDong } = await import('./chuDong.js');
+      const cd = await luuChuDong(ng.projectId, a as never);
+      return `Đã lưu. Bản tin ${cd.banTin ?? 'tắt'} · mời ôn ${cd.onTu ?? 'tắt'} · hỏi han ${cd.hoiHan ?? 'tắt'} · chúc ngủ ${cd.chucNgu ?? 'tắt'} · yên tĩnh ${cd.yenTinhTu}–${cd.yenTinhDen} · ${cd.bat ? 'đang bật' : 'đang TẮT hết'}.`;
     }
     case 'he_thong': {
       if (!ng.laAdmin) return 'Chỉ chủ web mới hỏi được số liệu hệ thống.';

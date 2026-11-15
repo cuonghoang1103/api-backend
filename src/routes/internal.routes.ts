@@ -63,6 +63,22 @@ function chiNoiBo(req: Request, res: Response, next: NextFunction): void {
 router.use(chiNoiBo);
 
 /**
+ * POST /api/v1/internal/odin/bao — { noiDung, gap? } (15/11/2026)
+ * Cho script ngoài (deploy-nha.sh, phiên điều phối train giọng, render) nhờ robot Odin của admin đọc một câu báo.
+ */
+router.post('/odin/bao', async (req: Request, res: Response<ApiResponse>, next) => {
+  try {
+    const noiDung = String((req.body as { noiDung?: unknown })?.noiDung ?? '').slice(0, 300);
+    if (!noiDung.trim()) { res.status(400).json({ success: false, message: 'Thiếu noiDung' }); return; }
+    const { baoSuKienChoRobot } = await import('../services/makerlab/chuDong.js');
+    const daNoi = await baoSuKienChoRobot(noiDung, { gap: (req.body as { gap?: unknown })?.gap === true });
+    res.json({ success: true, data: { daNoi } });
+  } catch (err) {
+    next(err);
+  }
+});
+
+/**
  * POST /api/v1/internal/ai-code-usage
  * Body: { keys: string[] }  →  { [key]: { userId, daTieuUsd, tranUsd, hetHanLuc, gopVi } }
  *

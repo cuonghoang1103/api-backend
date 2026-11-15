@@ -69,6 +69,8 @@ export async function nhipNhacViec(luc: Date = new Date()): Promise<number> {
     logger.error('MakerLab quét kế hoạch thất bại', { err: String(e) });
     return 0;
   }
+  // Odin chủ động (bản tin, mời ôn, hỏi han, chúc ngủ ngon, gọi lại báo thức) — cùng nhịp mỗi phút.
+  void import('./chuDong.js').then((m) => m.nhipChuDong(luc)).catch((e) => logger.warn('MakerLab nhịp chủ động lỗi', { err: String(e) }));
   if (!toiHan.length) return 0;
 
   for (const { plan, run, laHoan } of toiHan) {
@@ -88,12 +90,16 @@ export async function nhipNhacViec(luc: Date = new Date()): Promise<number> {
         continue; // KHÔNG ghi `nhacLuc`: ân xá còn thì còn thử lại
       }
 
+      // BÁO THỨC (chuDong.ts): gọi dậy + bật nhạc, chưa dậy thì nhịp sau gọi lại.
+      const { laBaoThuc, batDauBaoThuc } = await import('./chuDong.js');
       const persona = await loadPersona(dev.projectId);
-      const noiDuoc = await speakOnce(
-        persona,
-        cauNhac(plan.title, plan.gio, plan.huongDan, laHoan),
-        dev.id,
-      );
+      const noiDuoc = laBaoThuc(plan.title)
+        ? await batDauBaoThuc({ deviceId: dev.id, projectId: dev.projectId, ownerId: plan.ownerId, runId: run.id, huongDan: plan.huongDan })
+        : await speakOnce(
+            persona,
+            cauNhac(plan.title, plan.gio, plan.huongDan, laHoan),
+            dev.id,
+          );
       if (!noiDuoc) {
         logger.info('MakerLab gửi tiếng không xong — để nhịp sau', { planId: plan.id });
         continue;

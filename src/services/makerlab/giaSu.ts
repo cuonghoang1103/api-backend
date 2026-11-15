@@ -53,6 +53,12 @@ const SO_THE = 8;
 const SO_TU_MOI = 5;
 const _phien = new Map<number, PhienHoc>();
 
+/** Lời mời ôn của robot (chuDong.ts lúc 20:00) — người dùng nói "ừ" trong 2 phút ⇒ vào bài. */
+const _moi = new Map<number, { nn: NN; den: number }>();
+export function moiHoc(deviceId: number, nn: NN): void {
+  _moi.set(deviceId, { nn, den: Date.now() + 120_000 });
+}
+
 export function dangHoc(deviceId: number): PhienHoc | null {
   const p = _phien.get(deviceId);
   if (!p) return null;
@@ -312,6 +318,14 @@ function sangCauSau(p: PhienHoc, deviceId: number): string {
 export async function xuLyGiaSu(o: { deviceId: number; userId: number; heard: string }): Promise<{ noi?: string; nhacLlm?: string } | null> {
   const p = dangHoc(o.deviceId);
   if (!p) {
+    const moi = _moi.get(o.deviceId);
+    if (moi) {
+      _moi.delete(o.deviceId);
+      const s = khongDau(o.heard);
+      if (moi.den > Date.now() && s.length <= 30 && /\b(u|uh|uhm|ok|oke|okay|co|duoc|vao|on di|thi on|chien|let s go|yes)\b/.test(s) && !/\b(khong|thoi|de sau|mai)\b/.test(s)) {
+        return { noi: await batDauHoc({ deviceId: o.deviceId, userId: o.userId, nn: moi.nn, kieu: 'on' }) };
+      }
+    }
     const bd = khopBatDauHoc(o.heard);
     if (!bd) return null;
     return { noi: await batDauHoc({ deviceId: o.deviceId, userId: o.userId, nn: bd.nn, kieu: bd.kieu }) };

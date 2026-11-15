@@ -1,7 +1,7 @@
 /**
  * CT Language — KHÁM PHÁ ở tab Hôm nay (Đợt C, 14/11/2026 — docs/ct-language-khao-sat-hanzii.md mục 3).
  *
- *   · Từ vựng theo chủ đề — nội dung tĩnh `chuDeTu.ts`, gắn id mục từ điển thật khi khớp chữ.
+ *   · Từ vựng theo chủ đề — nội dung tĩnh `content/ctlanguage/chu-de-tu` (`chuDeTu.ts`), gắn id mục từ điển thật khi khớp chữ.
  *   · Từ được tra nhiều — đếm lượt MỞ mục từ điển (`GET /tu-dien/muc/:id`) ẨN DANH theo (ngôn ngữ, chữ, ngày); gom trong
  *     RAM rồi ghi dồn mỗi 30 giây (`xaLuotTra`) — một lượt tra không tốn một câu ghi CSDL. Top 20 của 7 ngày gần nhất.
  *   · Phút học hôm nay + xếp hạng ngày/tuần — app đo thời gian ở màn học/luyện, gửi TỔNG của ngày (máy chủ giữ GREATEST).
@@ -14,46 +14,73 @@ import { NotFoundError } from '../../middleware/errorHandler.js';
 import { logger } from '../../utils/logger.js';
 import { kiemNoiDung } from '../locNoiDung.js';
 import { dsChan, TAC_GIA, TAC_GIA_SONG, tacGiaGon } from './congDong.js';
-import { CHU_DE_TU, idAm, type NnChuDe } from './chuDeTu.js';
+import { chuDeCua, idAm, khoChuDe, type NnChuDe } from './chuDeTu.js';
+import { NHAN_LOAI, docBoLoc, locVaCatTrang, tomTatChuDe, urlAnh } from './chuDeTuThuan.js';
 import { congNgay, docNgay, kiemHoatDong, ngayVn, type NnKP } from './khamPhaThuan.js';
 import { kiemNn } from './tuDien.js';
 
 // ─── Từ vựng theo chủ đề ─────────────────────────────────────────────────────────────────────────────────────────
+// Nội dung: content/ctlanguage/chu-de-tu (chuDeTu.ts nạp, chuDeTuThuan.ts kiểm). Khuôn trả về GIỮ các trường của đợt C
+// (`items[].ma/ten/bieuTuong/soTu/mau`, chi tiết `ma/ten/bieuTuong/tu[].id/chu/doc/hanViet/nghiaVi`) — app cũ đọc được.
 export function dsChuDe(nnGoc: string) {
   const nn = kiemNn(nnGoc) as NnChuDe;
-  return { items: CHU_DE_TU.map((c) => ({ ma: c.ma, ten: c.ten, bieuTuong: c.bieuTuong, soTu: c.tu[nn].length, mau: c.tu[nn].slice(0, 3).map((t) => t[0]) })) };
+  const ds = chuDeCua(nn);
+  const dm = khoChuDe().danhMuc;
+  const items = ds.map(({ c, tep }) => tomTatChuDe(c, tep, dm));
+  const nhomLon = dm.nhomLon
+    .map((n) => ({ ...n, chuDe: items.filter((i) => i.nhomLon === n.ma).map((i) => i.ma) }))
+    .filter((n) => n.chuDe.length);
+  return { items, nhomLon, tongTu: items.reduce((s, i) => s + i.soTu, 0) };
 }
 
-const DEM_CHU_DE = new Map<string, { luc: number; v: unknown }>();
+type TuPhucVu = {
+  id: number; chu: string; doc: string | null; hanViet: string | null; nghiaVi: string; coTrongTuDien: boolean;
+  loai: string | null; nhanLoai: string | null; cap: string | null; capUoc: boolean; nhom: string;
+  viDu: string | null; viDuDoc: string | null; viDuNghia: string | null; anh: string | null; anhUrl: string | null;
+};
+const DEM_CHU_DE = new Map<string, { luc: number; v: TuPhucVu[] }>();
 
-export async function chuDe(nnGoc: string, ma: string) {
+/** Chi tiết chủ đề. Không `trang` ⇒ trả CẢ chủ đề (app cũ, game). Lọc: `?cap=HSK1,HSK2&nhom=…&trang=1&kichThuoc=40`. */
+export async function chuDe(nnGoc: string, ma: string, q: Record<string, unknown> = {}) {
   const nn = kiemNn(nnGoc) as NnChuDe;
-  const c = CHU_DE_TU.find((x) => x.ma === ma);
-  if (!c) throw new NotFoundError('Không có chủ đề này.');
+  const muc = chuDeCua(nn).find((x) => x.c.ma === ma);
+  if (!muc) throw new NotFoundError('Không có chủ đề này.');
+  const { c, tep } = muc;
   const k = `${nn}:${ma}`, dem = DEM_CHU_DE.get(k);
-  if (dem && Date.now() - dem.luc < 6 * 3600_000) return dem.v;
-  const ds = c.tu[nn];
-  const muc = await prisma.ctlTu.findMany({
-    where: { nn, chu: { in: ds.map((t) => t[0]) } }, orderBy: { uuTien: 'desc' },
-    select: { id: true, chu: true, doc: true, hanViet: true, nghiaVi: true },
-  });
-  const theoChu = new Map<string, (typeof muc)[number]>();
-  for (const m of muc) if (!theoChu.has(m.chu)) theoChu.set(m.chu, m);
-  const v = {
-    ma: c.ma, ten: c.ten, bieuTuong: c.bieuTuong,
-    tu: ds.map(([chu, doc, nghia]) => {
-      const m = theoChu.get(chu);
+  let tu: TuPhucVu[];
+  if (dem && Date.now() - dem.luc < 6 * 3600_000) tu = dem.v;
+  else {
+    let theoChu = new Map<string, { id: number; doc: string | null; hanViet: string | null }>();
+    try {
+      const ds = await prisma.ctlTu.findMany({
+        where: { nn, chu: { in: tep.tu.map((t) => t.chu) } }, orderBy: { uuTien: 'desc' },
+        select: { id: true, chu: true, doc: true, hanViet: true },
+      });
+      for (const m of ds) if (!theoChu.has(m.chu)) theoChu.set(m.chu, m);
+    } catch (e) {
+      // CSDL hỏng ⇒ vẫn phục vụ chủ đề (id âm), không nhớ đệm kết quả thiếu.
+      logger.warn('[ctl-kham-pha] không gắn được id từ điển cho chủ đề', { ma, error: (e as Error).message });
+      theoChu = new Map();
+    }
+    tu = tep.tu.map((t) => {
+      const m = theoChu.get(t.chu);
       return {
-        id: m?.id ?? idAm(nn, chu), chu,
-        // zh: pinyin chuẩn của từ điển thắng bản soạn tay · en: IPA của từ điển · ja: kana soạn tay (từ điển có thể ghi katakana).
-        doc: (nn === 'ja' ? doc : m?.doc) || doc || null,
+        id: m?.id ?? idAm(nn, t.chu), chu: t.chu,
+        // Cách đọc trong tệp đã đối chiếu từ điển lúc dựng; en thiếu IPA ⇒ lấy của từ điển.
+        doc: t.doc || m?.doc || null,
         hanViet: m?.hanViet ?? null,
-        nghiaVi: nghia,
+        nghiaVi: t.nghia, coTrongTuDien: !!m,
+        loai: t.loai ?? null, nhanLoai: t.loai ? NHAN_LOAI[t.loai] : null,
+        cap: t.cap ?? null, capUoc: !!t.capUoc, nhom: t.nhom,
+        viDu: t.viDu ?? null, viDuDoc: t.viDuDoc ?? null, viDuNghia: t.viDuNghia ?? null,
+        anh: t.anh ?? null, anhUrl: urlAnh(t.anh),
       };
-    }),
-  };
-  DEM_CHU_DE.set(k, { luc: Date.now(), v });
-  return v;
+    });
+    if (theoChu.size || !tep.tu.length) DEM_CHU_DE.set(k, { luc: Date.now(), v: tu });
+  }
+  const tom = tomTatChuDe(c, tep, khoChuDe().danhMuc);
+  const loc = locVaCatTrang(tu, docBoLoc(q, nn));
+  return { ...tom, tong: loc.tong, trang: loc.trang, soTrang: loc.soTrang, tu: loc.tu };
 }
 
 // ─── Từ được tra nhiều (ẩn danh) ─────────────────────────────────────────────────────────────────────────────────

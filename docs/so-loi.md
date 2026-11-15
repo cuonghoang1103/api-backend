@@ -25,6 +25,20 @@ Mẫu một mục:
 - **Ảnh hưởng:** thẻ ôn tạo từ câu trả lời CuongMini; bố cục tab Cộng đồng.
 - **Bài học:** dữ liệu trích từ câu văn của AI cần ranh giới chặt hơn "hết dòng" — model không viết theo dòng.
 
+### 15/11/2026 — CT Language iOS (sảnh game › Chọn bộ từ) — chủ đề hiện TÊN SF Symbol thay vì biểu tượng
+- **Triệu chứng:** mục "Theo chủ đề" trong sheet chọn bộ từ của game ghi chữ "person.3.fill  Gia đình", "fork.knife  Ăn uống"….
+- **Nguyên nhân:** `ios-app/…/TroChoi/Khung/SanhGameCTL.swift › ChonBoTuGameCTL` dựng nhãn bằng `"\(c.bieuTuong ?? "📚")  \(c.ten)"` — tưởng `bieuTuong` là emoji, thật ra máy chủ (`khamPha.ts › dsChuDe`) gửi TÊN SF Symbol.
+- **Cách sửa:** truyền `bieuTuong` làm icon của hàng (`Image(systemName:)`), dòng phụ thêm tên nhóm lớn + số từ (ios-app, commit "chủ đề từ vựng mở rộng").
+- **Ảnh hưởng:** mọi người mở Chọn bộ từ của game từ khi có khung game (bản nội bộ); chưa phát hành.
+- **Bài học:** một trường tên `bieuTuong` có hai nghĩa trong app (emoji ở chỗ này, SF Symbol ở chỗ kia) — đọc khuôn của MÁY CHỦ trước khi hiển thị, và nhìn màn thật.
+
+### 15/11/2026 — Bộ từ theo cấp của web (`/my-language/<nn>/vocab`) — cách đọc / nghĩa / cấp sai lẫn trong dữ liệu
+- **Triệu chứng:** (phát hiện khi dựng chủ đề từ vựng CT Language, chưa ai báo) ja: 失礼します=しつれします, 化粧水=かせん, 筆箱=ふでざっぽ, 解凍=げとう, 末っ子=まっこ, ペンギン=ぺんぎん; zh: 室友=shǒuyǒu; nghĩa lẫn chữ Hán ("dù sao thì,无论如何"); 手帕/抹布 xếp HSK1.
+- **Nguyên nhân:** dữ liệu `lang_vocab_words` soạn hàng loạt (AI) không đối chiếu từ điển; cấp gán theo NHÓM ("HSK1 · Đồ dùng cá nhân") chứ không theo từ.
+- **Cách sửa:** chưa sửa nguồn web. Chủ đề CT Language (`scripts/ctlanguage/sinh-chu-de-tu.mts`) không tin cách đọc của web: có mục `ctl_tu` thì lấy cách đọc từ điển gần nhất; nghĩa do AI viết lại ngắn + chặn chữ Hán trong nghĩa (`chuDeTuThuan.ts › kiemTu`); cấp có SÀN theo cấp chữ Hán (`data/hanzi-levels.json.gz`) ⇒ `capUoc`. Kiểm: `scripts/ctlanguage-kiem-chu-de-tu.mts` (báo số từ đọc khác từ điển).
+- **Ảnh hưởng:** người học bộ từ theo cấp trên web + gói `Resources/CapTu` của app (lấy cùng nguồn) — chưa đo bao nhiêu mục sai.
+- **Bài học:** dữ liệu soạn hàng loạt phải đi qua phép đối chiếu với nguồn chuẩn (từ điển) TRƯỚC khi dùng lại; việc tiếp: chạy phép đối chiếu đó trên cả `lang_vocab_words` rồi sửa nguồn.
+
 ### 15/11/2026 — CT Language iOS (mọi màn) — lỗi máy chủ hiện nguyên văn "Route GET /api/v1/… not found"
 - **Triệu chứng:** màn "Nhắn tin mới" hiện "Route GET /api/v1/ctlanguage/cong-dong/tin-nhan/tim-nguoi not found" (app mới hơn máy chủ); tương tự "Internal Server Error", "Too many requests…", "password: Password must be at least 12 characters".
 - **Nguyên nhân:** `ios-app/CuongThaiApp/Shared/Network/APIClient.swift › errorDescription` + các hàm `DangNhapCTL.cauLoi`, `loiTN`, `cauLoiMatKhau`… trả thẳng `message` của máy chủ; `errorHandler.notFoundHandler` và express-validator trả câu tiếng Anh.

@@ -3,8 +3,9 @@
  * gắn TRƯỚC `/api/v1/ctlanguage` (router kia có `router.use(authenticate)` + `/:nn` nuốt đường của khách).
  *
  * Công khai (khách xem được; có token thì ẩn người đã chặn nhau + kèm hạng/tiến độ của mình):
- *   GET  /:nn/chu-de              — lưới chủ đề từ vựng
- *   GET  /:nn/chu-de/:ma          — từ của một chủ đề (gắn id mục từ điển)
+ *   GET  /:nn/chu-de              — lưới chủ đề từ vựng (items + nhomLon; nội dung content/ctlanguage/chu-de-tu)
+ *   GET  /:nn/chu-de/:ma          — từ của một chủ đề (gắn id mục từ điển); ?cap=HSK1,HSK2&nhom=…&trang=&kichThuoc=
+ *                                   (không trang ⇒ cả chủ đề — app cũ / game)
  *   GET  /:nn/tra-nhieu           — top 20 từ được mở nhiều nhất 7 ngày (đếm ẩn danh)
  *   GET  /:nn/xep-hang-phut?ky=ngay|tuan — xếp hạng phút học (+ hạng của tôi)
  *   GET  /su-kien?nn=             — sự kiện đang chạy + trạm + tiến độ của tôi
@@ -84,7 +85,7 @@ router.get('/:nn/chu-de', gioiHanDoc, (req: Request, res: Response<ApiResponse>,
   try { res.setHeader('Cache-Control', 'public, max-age=3600'); res.json({ success: true, data: dsChuDe(req.params.nn) }); } catch (e) { next(e); }
 });
 router.get('/:nn/chu-de/:ma', gioiHanDoc, async (req: Request, res: Response<ApiResponse>, next) => {
-  try { res.setHeader('Cache-Control', 'public, max-age=3600'); res.json({ success: true, data: await chuDe(req.params.nn, req.params.ma) }); } catch (e) { next(e); }
+  try { res.setHeader('Cache-Control', 'public, max-age=3600'); res.json({ success: true, data: await chuDe(req.params.nn, req.params.ma, req.query as Record<string, unknown>) }); } catch (e) { next(e); }
 });
 router.get('/:nn/tra-nhieu', gioiHanDoc, async (req: Request, res: Response<ApiResponse>, next) => {
   try { res.setHeader('Cache-Control', 'public, max-age=300'); res.json({ success: true, data: await traNhieu(req.params.nn) }); } catch (e) { next(e); }

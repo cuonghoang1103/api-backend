@@ -111,11 +111,18 @@ t('lượt tra ẩn danh: gom RAM, ghi dồn một câu, top theo tổng 7 ngày
   }
 });
 
-t('chủ đề: 14 chủ đề, từ gắn id (thật hoặc âm), nghĩa Việt soạn tay', async () => {
-  assert.equal(kp.dsChuDe('ja').items.length, 14);
-  const cd = await kp.chuDe('zh', 'an-uong') as { tu: { id: number; chu: string; nghiaVi: string; doc: string | null }[] };
-  assert.equal(cd.tu.length, 12);
-  assert.ok(cd.tu.every((x) => x.id !== 0 && x.nghiaVi && x.doc));
+t('chủ đề: ≥ 40 chủ đề theo nhóm lớn, từ gắn id (thật hoặc âm), lọc cấp + phân trang, mã cũ còn', async () => {
+  const ds = kp.dsChuDe('ja');
+  assert.ok(ds.items.length >= 40, `mới ${ds.items.length} chủ đề`);
+  assert.ok(ds.nhomLon.length >= 6 && ds.nhomLon.every((n) => n.chuDe.length > 0));
+  assert.ok(ds.items.some((i) => i.ma === 'an-uong'));
+  const cd = await kp.chuDe('zh', 'an-uong') as { tong: number; tu: { id: number; chu: string; nghiaVi: string; doc: string | null; nhom: string; cap: string | null }[] };
+  assert.ok(cd.tu.length >= 60 && cd.tu.length === cd.tong, 'không trang ⇒ cả chủ đề (app cũ)');
+  assert.ok(cd.tu.every((x) => x.id !== 0 && x.nghiaVi && x.doc && x.nhom));
+  assert.ok(cd.tu.some((x) => x.id > 0), 'có từ khớp mục từ điển thật');
+  const trang = await kp.chuDe('zh', 'an-uong', { trang: '2', kichThuoc: '10', cap: 'HSK1,HSK2' }) as { tong: number; trang: number; soTrang: number; tu: { cap: string | null }[] };
+  assert.equal(trang.trang, 2);
+  assert.ok(trang.tu.length <= 10 && trang.tu.every((x) => x.cap === 'HSK1' || x.cap === 'HSK2'));
   await assert.rejects(kp.chuDe('zh', 'khong-co'));
 });
 

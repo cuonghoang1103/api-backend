@@ -4,7 +4,7 @@
  */
 import { strict as assert } from 'node:assert';
 import { test } from 'node:test';
-import { CHU_DE_TU, idAm } from './chuDeTu.js';
+import { idAm } from './chuDeTu.js';
 import {
   chuoiDaiNhat, congNgay, docNgay, kiemHoatDong, kiemSuKienAdmin, kiemTram, ngayVn, suKienMacDinh, tinhTram, TRAN_NGAY,
 } from './khamPhaThuan.js';
@@ -95,21 +95,7 @@ test('kiemSuKienAdmin: đủ trường khi tạo, sửa một phần, chặn tra
   assert.deepEqual(kiemSuKienAdmin({ bat: false }, true), { bat: false });
 });
 
-test('bộ chủ đề: 14 chủ đề, mỗi ngôn ngữ ≥ 12 từ, không trùng chữ, đủ nghĩa; id âm ổn định', () => {
-  assert.equal(CHU_DE_TU.length, 14);
-  for (const c of CHU_DE_TU) {
-    for (const nn of ['en', 'ja', 'zh'] as const) {
-      const ds = c.tu[nn];
-      assert.ok(ds.length >= 12, `${c.ma}/${nn}`);
-      assert.equal(new Set(ds.map((t) => t[0])).size, ds.length, `${c.ma}/${nn} trùng chữ`);
-      for (const [chu, doc, nghia] of ds) {
-        assert.ok(chu && nghia, `${c.ma}/${nn} thiếu`);
-        if (nn !== 'en') assert.ok(doc, `${c.ma}/${nn}/${chu} thiếu cách đọc`);
-        if (nn === 'ja') assert.ok(/^[぀-ヿ ー]+$/.test(doc), `${chu}: cách đọc phải là kana (${doc})`);
-        if (nn === 'zh') assert.ok(!/[一-鿿]/.test(doc), `${chu}: pinyin lẫn chữ Hán`);
-      }
-    }
-  }
+test('id âm ổn định (chủ đề / sổ chuyên ngành dùng chung) — nội dung chủ đề kiểm ở chuDeTu.test.ts', () => {
   assert.equal(idAm('zh', '你好'), idAm('zh', '你好'));
   assert.ok(idAm('zh', '你好') < -99_999_999);
   assert.notEqual(idAm('zh', '你好'), idAm('ja', '你好'));

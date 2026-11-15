@@ -99,3 +99,18 @@ test('tên hiện: tên bị bộ lọc chặn hoặc trống ⇒ "Người họ
   assert.equal(tenHien('xấu', 7, () => true), 'Người học #7');
   assert.equal(tenHien('  ', 9, () => false), 'Người học #9');
 });
+
+test('game Câu Chữ + Bếp Gấu: có luật, trần điểm theo câu, trần tốc độ riêng', () => {
+  const cc = GAME_CTL['cau-chu'], bg = GAME_CTL['bep-gau'];
+  assert.ok(cc && bg);
+  assert.equal(diemToiDa(cc, 10, 0), 400);
+  kiemDiem(van({ game: 'cau-chu', dung: 10, diem: 400, thoiGianMs: 30_000 }));
+  loi(() => kiemDiem(van({ game: 'cau-chu', dung: 10, diem: 401, thoiGianMs: 30_000 })), 'CTL_TC_DIEM');
+  // Câu cá: 2 con/giây là trần (60 s ⇒ ≤ 123 con).
+  loi(() => kiemDiem(van({ game: 'cau-chu', dung: 124, diem: 0, thoiGianMs: 60_000 })), 'CTL_TC_NHANH');
+  // Bếp: kéo món nhanh hơn ⇒ trần 3 món/giây; vượt chặng cộng thưởng chặng.
+  kiemDiem(van({ game: 'bep-gau', dung: 150, diem: 150 * 35, thoiGianMs: 60_000 }));
+  kiemDiem(van({ game: 'bep-gau', cheDo: 'vuot-chang', chang: 2, dung: 12, diem: 12 * 35 + 60, thoiGianMs: 80_000 }));
+  loi(() => kiemDiem(van({ game: 'bep-gau', cheDo: 'vuot-chang', chang: 2, dung: 12, diem: 12 * 35 + 61, thoiGianMs: 80_000 })), 'CTL_TC_DIEM');
+  assert.equal(kiemThachDau({ game: 'bep-gau', nn: 'en', seed: 7, de: ['a', 'b', 'c', 'd'].map((c, i) => ({ id: i, chu: c, nghia: 'x' })) }).game, 'bep-gau');
+});

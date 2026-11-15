@@ -27,6 +27,11 @@ export interface LuatGame {
 export const GAME_CTL: Record<string, LuatGame> = {
   // Gấu Canh Trời: chữ rơi, gõ cách đọc để Gấu bắn hạ. 10 + combo×2 (trần +10) + 5 hạ ở nửa trên + 10 hạ "ngay đầu".
   'canh-troi': { ten: 'Gấu Canh Trời', diemMoiCau: 35, thuongChang: 20, cauMoiGiay: 2.5, cheDo: CHE_DO },
+  // Gấu Câu Chữ: cá mang chữ bơi dưới hồ, thả câu đúng con cá của đề. 10 + combo×2 (trần +10) + 5 câu nhanh + 15 cá vàng.
+  'cau-chu': { ten: 'Gấu Câu Chữ', diemMoiCau: 40, thuongChang: 20, cauMoiGiay: 2, cheDo: CHE_DO },
+  // Bếp Gấu Bận Rộn: khách gọi món bằng ngoại ngữ, kéo đúng món vào khay. Mỗi MÓN đặt đúng là một câu:
+  // 10 + combo×2 (trần +10) + kiên nhẫn còn lại (≤ 10) + 5 khi đủ một đơn nhiều món.
+  'bep-gau': { ten: 'Bếp Gấu Bận Rộn', diemMoiCau: 35, thuongChang: 20, cauMoiGiay: 3, cheDo: CHE_DO },
   // Bút Thần Gấu: chữ trôi xuống, VIẾT TAY đúng chữ để Gấu vung bút hạ. 12 + combo×2 (trần +10) + 5 nửa trên + 5 "ngay đầu"
   // + 4 mỗi chữ thêm của từ nhiều chữ (trần +8). Viết tay chậm hơn gõ nhiều ⇒ trần tốc độ thấp.
   'but-than': { ten: 'Bút Thần Gấu', diemMoiCau: 40, thuongChang: 20, cauMoiGiay: 1.2, cheDo: CHE_DO },

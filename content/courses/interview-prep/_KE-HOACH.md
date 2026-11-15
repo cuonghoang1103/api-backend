@@ -94,8 +94,24 @@ DBI202 `introduction-to-databases` · FER202 `front-end-web-development-with-rea
 | Ch5 | ✅ xong (6 bài, 166k) | c103b65c9 | 5 video YT; cố ý không ghi số giây timeout 524 của Cloudflare (sổ có 100 vs 125 s) |
 | Ch6 | ✅ xong (6 bài, 179k) | 6b5e03708 | 5 video YT |
 | Ch7 | ✅ xong (6 bài, 191k) | 27b89c4e2 | 5 video YT; code mẫu 7.1 + 7.5 đã chạy thật (node, javac/java) |
-| Ch8–Ch10 | đang soạn (nhánh D) | — | Ch10 là chương MỚI ⇒ thêm vào manifest |
+| Ch8 | ✅ xong (6 bài, 118k) | 9d6af51b6 | bảng 50 từ kỹ thuật có IPA + cách đọc kiểu Việt |
+| Ch9 | ✅ xong (6 bài, 108k) | 5b9074461 | số liệu VN có nguồn (11/2026): giảm trừ 15,5tr/6,2tr (NQ 110/2025/UBTVQH15), BHXH NLĐ 10,5%, thử việc BLLĐ 2019 Đ25–26; KHÔNG ghi biểu thuế luỹ tiến (Luật TNCN 2025 có thể đổi từ 7/2026 — chưa kiểm) |
+| Ch10 (MỚI) | ✅ xong (5 bài, 103k) | b269c1d22 | kiểm tra cuối khoá 20 câu (5/5/5/5); lời giải bài code 10.4 đã chạy 5 test |
 
-Manifest `interview-prep.mjs`: chương đã soạn thay vào mảng khung THEO VỊ TRÍ (`((K) => [s00, s01, ...K.slice(2)])(khung(...))`);
-khi đủ 10 chương cũ thì bỏ hẳn `khung()` và thêm s10. Công cụ kiểm phụ (ngoài repo, trong `$TMPDIR/pv-nhap/`):
+Manifest `interview-prep.mjs` (15/11 tối): `sections: [s00 … s10]`, ĐÃ bỏ `khung()`; so với khung gốc không mất slug nào (40/40), title chương 0–9 không đổi. Công cụ kiểm phụ (ngoài repo, trong `$TMPDIR/pv-nhap/`):
 `kiem-link.mjs` (liên kết nội bộ + slug trùng + video trùng), `ytok.mjs` (video sống/nhúng/phụ đề), `sua-dong-dong.py` (tách dòng đóng template).
+
+## 7. Kết quả 15/11/2026 + việc còn lại
+
+- **XONG trọn khoá**: 11 phần · 66 bài (55 bài dạy/lab + 11 quiz, 120 câu) · ~1,57 triệu ký tự · TB 23,7k/bài.
+  `course-content-check` sạch, `course-depth-audit` đạt mọi sàn (144 sơ đồ, 110 bẫy, 385 thẻ nguồn), 84 liên kết nội bộ 0 hỏng,
+  58 video YT không trùng, mọi bài dạy có ≥1 sơ đồ + ≥1 bẫy + ≥1 video.
+- **Việc của người điều phối (ngoài phạm vi tệp khoá):**
+  1. Gắn luồng video YT: tạo `content/course-videos/interview-prep.mjs` từ `_video-yt.tsv` (55 dòng, credit lấy từ oEmbed) rồi
+     `node scripts/verify-youtube-videos.mjs --file ./content/course-videos/interview-prep.mjs`.
+  2. Seed/deploy khi chủ kênh duyệt (khoá đang PUBLISHED, bài thay nội dung "Đang soạn").
+- **Chưa chắc / nên soát khi rảnh:** title 5 bài Ch8–10 dài 157–212 ký tự (dưới 255, trên mức 180 của hợp đồng Docker);
+  khối VI 9.2, 9.5, 10.1 ~6,7k (hơi dưới 7k); output EXPLAIN/docker ở Ch4–5 là minh hoạ (đã ghi rõ); câu "mentor không sửa code đồ án"
+  (2.1, 3.3) lấy từ memory LabFlow; Samsung hạn chế AI 2023 ghi "theo Bloomberg" không link (bài trả phí).
+- **Lưu ý người học**: STAR mẫu kể sự cố cuongthai.com ở ngôi "em"; khoá dạy kể đúng vai trò thật khi làm cùng AI (3.3, 1.2) —
+  khi dùng mẫu, chủ kênh tự chỉnh phần Hành động cho đúng phần mình thật sự làm.

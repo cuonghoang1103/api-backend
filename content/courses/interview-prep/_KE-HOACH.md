@@ -88,7 +88,8 @@ DBI202 `introduction-to-databases` · FER202 `front-end-web-development-with-rea
 |---|---|---|---|
 | Mục 0 | ✅ xong (6 bài, 110k ký tự, audit đạt) | 857f6f07d | 6 video YT đã kiểm OK/embed/cc=en |
 | Ch1 | ✅ xong (6 bài, 126k ký tự, audit đạt) | e959cb865 | 5 video YT |
-| Ch2–Ch3 | đang soạn (nhánh A) | — | |
+| Ch2 | ✅ xong (6 bài, 109k) | ed00b1afb | 5 video YT |
+| Ch3 | ✅ xong (6 bài, 125k) | dcf10b9a5 | 5 video YT; câu "mentor không sửa code đồ án" lấy từ memory LabFlow — luật đổi thì sửa 2.1 + 3.3 |
 | Ch4–Ch5 | đang soạn (nhánh B) | — | |
 | Ch6–Ch7 | đang soạn (nhánh C) | — | |
 | Ch8–Ch10 | đang soạn (nhánh D) | — | Ch10 là chương MỚI ⇒ thêm vào manifest |

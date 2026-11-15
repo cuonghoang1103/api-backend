@@ -32,9 +32,9 @@ export const GAME_CTL: Record<string, LuatGame> = {
   // Bếp Gấu Bận Rộn: khách gọi món bằng ngoại ngữ, kéo đúng món vào khay. Mỗi MÓN đặt đúng là một câu:
   // 10 + combo×2 (trần +10) + kiên nhẫn còn lại (≤ 10) + 5 khi đủ một đơn nhiều món.
   'bep-gau': { ten: 'Bếp Gấu Bận Rộn', diemMoiCau: 35, thuongChang: 20, cauMoiGiay: 3, cheDo: CHE_DO },
-  // Bút Thần Gấu: chữ trôi xuống, VIẾT TAY đúng chữ để Gấu vung bút hạ. 12 + combo×2 (trần +10) + 5 nửa trên + 5 "ngay đầu"
+  // Gấu Thư Pháp: chữ trôi xuống, VIẾT TAY đúng chữ để Gấu vung bút hạ. 12 + combo×2 (trần +10) + 5 nửa trên + 5 "ngay đầu"
   // + 4 mỗi chữ thêm của từ nhiều chữ (trần +8). Viết tay chậm hơn gõ nhiều ⇒ trần tốc độ thấp.
-  'but-than': { ten: 'Bút Thần Gấu', diemMoiCau: 40, thuongChang: 20, cauMoiGiay: 1.2, cheDo: CHE_DO },
+  'viet-tay': { ten: 'Gấu Thư Pháp', diemMoiCau: 40, thuongChang: 20, cauMoiGiay: 1.2, cheDo: CHE_DO },
   // Gấu Chạy Ghép Câu: Gấu chạy, nhảy/lướt giữa 3 làn ăn đúng MẢNH tiếp theo của câu. Mỗi MẢNH ăn đúng là một câu:
   // 10 + combo×2 (trần +10) + 5 khi cả câu ghép xong + 5 nếu câu đó không trượt mảnh nào ⇒ tối đa 30/mảnh.
   // Mảnh tới theo đợt (≥ 0,6 s/đợt lúc nhanh nhất, chưa kể lúc qua cổng) ⇒ trần 2 mảnh/giây là lỏng tay.

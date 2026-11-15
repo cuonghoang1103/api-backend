@@ -1,0 +1,4 @@
+containsDuplicate([1,2,3,1]) = true
+containsDuplicate([1,2,3,4]) = false
+isAnagram("anagram","nagaram") = true
+isAnagram("rat","car") = false

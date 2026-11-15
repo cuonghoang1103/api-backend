@@ -3,8 +3,20 @@
  * sau. Bổ trợ môn CSD201 (DSA) ở Academy: khoá này thiên về MẪU BÀI + cách trình bày khi phỏng vấn. Xem _chung/khung.mjs.
  */
 import { khung } from './_chung/khung.mjs';
+import s01 from './dsa-interview/s01-mang-bam.mjs';
+import s00 from './dsa-interview/s00-bat-dau.mjs';
+import s02 from './dsa-interview/s02-hai-con-tro.mjs';
+import s03 from './dsa-interview/s03-stack-queue-list.mjs';
+import s04 from './dsa-interview/s04-nhi-phan.mjs';
+import s05 from './dsa-interview/s05-cay.mjs';
+import s06 from './dsa-interview/s06-heap-khoang.mjs';
+import s07 from './dsa-interview/s07-do-thi.mjs';
+import s08 from './dsa-interview/s08-quay-lui.mjs';
+import s09 from './dsa-interview/s09-quy-hoach-dong.mjs';
+import s10 from './dsa-interview/s10-the-hien.mjs';
+import s11 from './dsa-interview/s11-phong-van-thu.mjs';
 
-export default {
+const KHOA = {
   category: { slug: 'languages', name: 'Ngôn ngữ lập trình', icon: 'Code2', sortOrder: 0 },
   course: {
     slug: 'dsa-interview',
@@ -21,7 +33,11 @@ export default {
     requirements: 'Biết một ngôn ngữ lập trình (JavaScript/TypeScript hoặc Java) và cấu trúc dữ liệu cơ bản (mảng, danh sách, cây) — môn CSD201 ở Academy là nền tốt.',
     documentsNote: 'Tài liệu chính: leetcode.com • neetcode.io • "Cracking the Coding Interview" (Gayle Laakmann McDowell) • visualgo.net • bigocheatsheet.com.',
   },
-  sections: khung('dsa', [
+  sections: [],
+};
+
+/* Khung gốc 24/09/2026 — GIỮ NGUYÊN tiêu đề chương + slug bài (đã công khai). Chương đã soạn thay vào qua SOAN. */
+const KHUNG = [
     ['Section 0 — How coding interviews work', 'Mục 0 — Vòng phỏng vấn coding diễn ra thế nào', 'Luật chơi và cách luyện không nản.', [
       ['bat-dau-tai-day', 'Start here (1/2) — What the coding round tests, and why companies still use it', 'Bắt đầu tại đây (1/2) — Vòng coding kiểm tra gì, và vì sao công ty vẫn dùng', 'Các dạng vòng: online test, live coding, take-home · Người phỏng vấn chấm gì · Lịch sử và tranh cãi quanh LeetCode'],
       ['bat-dau-khi-khong-co', 'Start here (2/2) — Why people fail it, and a practice plan that sticks', 'Bắt đầu tại đây (2/2) — Vì sao người ta trượt, và lộ trình luyện bền', 'Học thuộc đề · Im lặng khi code · Lộ trình 6 tuần · Cách không nản'],
@@ -94,5 +110,23 @@ export default {
       ['thu-2', 'Mock interview 2: medium/hard', 'Phỏng vấn thử 2: vừa/khó', 'Đề + chấm theo tiêu chí người phỏng vấn'],
       ['tong-ket', 'After the interview', 'Sau buổi phỏng vấn', 'Ghi lại đề · Rút kinh nghiệm · Checklist'],
     ]],
-  ]),
-};
+];
+
+/** Chương đã soạn: số chương → module chương (s<NN>-*.mjs). Phần tử chuỗi trong lessons = "dùng bài khung có slug này". */
+const SOAN = [s00, s01, s02, s03, s04, s05, s06, s07, s08, s09, s10, s11];
+
+function ghep(k, m) {
+  if (!m) return k;
+  if (!m.description) m = { ...m, description: k.description };
+  if (m.title !== k.title) throw new Error(`dsa-interview: tiêu đề chương đổi — "${m.title}" ≠ "${k.title}"`);
+  const cu = new Map(k.lessons.map((l) => [l.slug, l]));
+  return { ...m, lessons: m.lessons.map((l) => {
+    if (typeof l !== 'string') return l;
+    if (!cu.has(l)) throw new Error(`dsa-interview: khung không có bài ${l}`);
+    return cu.get(l);
+  }) };
+}
+
+KHOA.sections = khung('dsa', KHUNG).map((k, i) => ghep(k, SOAN[i]));
+
+export default KHOA;

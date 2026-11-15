@@ -1,0 +1,110 @@
+[
+ {
+  "title": "Section 0 — How coding interviews work|||Mục 0 — Vòng phỏng vấn coding diễn ra thế nào",
+  "lessons": [
+   "dsa-0-8-bat-dau-tai-day",
+   "dsa-0-9-bat-dau-khi-khong-co",
+   "dsa-0-1-big-o",
+   "dsa-0-2-khung"
+  ]
+ },
+ {
+  "title": "Chapter 1 — Arrays and hashing|||Chương 1 — Mảng và băm",
+  "lessons": [
+   "dsa-1-1-hash-map",
+   "dsa-1-2-prefix-sum",
+   "dsa-1-3-sap-xep",
+   "dsa-1-4-luyen"
+  ]
+ },
+ {
+  "title": "Chapter 2 — Two pointers and sliding window|||Chương 2 — Hai con trỏ và cửa sổ trượt",
+  "lessons": [
+   "dsa-2-1-hai-con-tro",
+   "dsa-2-2-cua-so",
+   "dsa-2-3-nhanh-cham",
+   "dsa-2-4-luyen"
+  ]
+ },
+ {
+  "title": "Chapter 3 — Stacks, queues and linked lists|||Chương 3 — Stack, queue và danh sách liên kết",
+  "lessons": [
+   "dsa-3-1-stack",
+   "dsa-3-2-queue",
+   "dsa-3-3-linked-list",
+   "dsa-3-4-luyen"
+  ]
+ },
+ {
+  "title": "Chapter 4 — Binary search|||Chương 4 — Tìm kiếm nhị phân",
+  "lessons": [
+   "dsa-4-1-co-ban",
+   "dsa-4-2-xoay",
+   "dsa-4-3-khong-gian-dap-an",
+   "dsa-4-4-luyen"
+  ]
+ },
+ {
+  "title": "Chapter 5 — Trees|||Chương 5 — Cây",
+  "lessons": [
+   "dsa-5-1-duyet",
+   "dsa-5-2-de-quy",
+   "dsa-5-3-bst",
+   "dsa-5-4-luyen"
+  ]
+ },
+ {
+  "title": "Chapter 6 — Heaps and intervals|||Chương 6 — Heap và khoảng",
+  "lessons": [
+   "dsa-6-1-heap",
+   "dsa-6-2-trung-vi",
+   "dsa-6-3-khoang",
+   "dsa-6-4-luyen"
+  ]
+ },
+ {
+  "title": "Chapter 7 — Graphs|||Chương 7 — Đồ thị",
+  "lessons": [
+   "dsa-7-1-bieu-dien",
+   "dsa-7-2-bfs-dfs",
+   "dsa-7-3-topo",
+   "dsa-7-4-dijkstra"
+  ]
+ },
+ {
+  "title": "Chapter 8 — Backtracking|||Chương 8 — Quay lui",
+  "lessons": [
+   "dsa-8-1-mau",
+   "dsa-8-2-to-hop",
+   "dsa-8-3-cat-nhanh",
+   "dsa-8-4-luyen"
+  ]
+ },
+ {
+  "title": "Chapter 9 — Dynamic programming|||Chương 9 — Quy hoạch động",
+  "lessons": [
+   "dsa-9-1-nhap-mon",
+   "dsa-9-2-mot-chieu",
+   "dsa-9-3-hai-chieu",
+   "dsa-9-4-nhan-dien"
+  ]
+ },
+ {
+  "title": "Chapter 10 — Performing in the interview|||Chương 10 — Thể hiện trong buổi phỏng vấn",
+  "lessons": [
+   "dsa-10-1-noi",
+   "dsa-10-2-code-sach",
+   "dsa-10-3-test",
+   "dsa-10-4-online"
+  ]
+ },
+ {
+  "title": "Chapter 11 — Mock interviews and the 6-week plan|||Chương 11 — Phỏng vấn thử và lộ trình 6 tuần",
+  "lessons": [
+   "dsa-11-1-lo-trinh",
+   "dsa-11-2-thu-1",
+   "dsa-11-3-thu-2",
+   "dsa-11-4-tong-ket"
+  ]
+ }
+]

@@ -1,19 +1,75 @@
 {
-  "_ghiChu": "Câu đệm robot Odin (15/11/2026): phát NGAY khi câu hỏi khó / cần tra cứu, trong lúc não + giọng chạy phía sau. Sửa câu ⇒ chạy lại `node scripts/makerlab-dung-cau-dem.mjs`. File PCM 16 kHz mono 16-bit: <giọng>/<id>.pcm.",
-  "giong": ["f5-cuong-nghe", "f5-cuong"],
+  "_ghiChu": "Câu đệm robot Odin (15/11/2026): phát NGAY khi câu hỏi khó / cần tra cứu, trong lúc não + giọng chạy phía sau. Sửa câu ⇒ chạy lại `node scripts/makerlab-dung-cau-dem.mjs`. File PCM 16 kHz mono 16-bit: <giọng>/<id>.pcm. Giọng ElevenLabs: `node scripts/makerlab-dung-cau-dem.mjs --el <voiceId>`.",
+  "giong": [
+    "f5-cuong-nghe",
+    "f5-cuong",
+    "kK6QTa6Vk6FobFWlp343"
+  ],
   "cau": [
-    { "id": "nghi-1", "loai": "nghi", "chu": "Ừm, câu này hay đấy, để mình nghĩ chút nhé." },
-    { "id": "nghi-2", "loai": "nghi", "chu": "Để mình nghĩ một xíu nha." },
-    { "id": "nghi-3", "loai": "nghi", "chu": "À, câu này phải nghĩ kỹ chút, bạn đợi mình nhé." },
-    { "id": "nghi-4", "loai": "nghi", "chu": "Hừm, để mình sắp xếp lại ý đã." },
-    { "id": "nghi-5", "loai": "nghi", "chu": "Được, để mình nghĩ cho kỹ rồi nói nhé." },
-    { "id": "tra-1", "loai": "tra", "chu": "Để mình tra thông tin xíu nhé." },
-    { "id": "tra-2", "loai": "tra", "chu": "Đợi mình chút, mình tìm thông tin cho bạn." },
-    { "id": "tra-3", "loai": "tra", "chu": "Để mình lên mạng xem thử nhé." },
-    { "id": "tra-4", "loai": "tra", "chu": "Được, mình tìm ngay đây, đợi xíu nha." },
-    { "id": "tra-5", "loai": "tra", "chu": "Để mình xem tin mới nhất đã nhé." },
-    { "id": "hethong-1", "loai": "heThong", "chu": "Để mình xem số liệu hệ thống chút nhé." },
-    { "id": "hethong-2", "loai": "heThong", "chu": "Đợi mình kiểm tra máy chủ một xíu." },
-    { "id": "hethong-3", "loai": "heThong", "chu": "Được, để mình xem lại số liệu đã." }
+    {
+      "id": "nghi-1",
+      "loai": "nghi",
+      "chu": "Ừm, câu này hay đấy, để mình nghĩ chút nhé."
+    },
+    {
+      "id": "nghi-2",
+      "loai": "nghi",
+      "chu": "Để mình nghĩ một xíu nha."
+    },
+    {
+      "id": "nghi-3",
+      "loai": "nghi",
+      "chu": "À, câu này phải nghĩ kỹ chút, bạn đợi mình nhé."
+    },
+    {
+      "id": "nghi-4",
+      "loai": "nghi",
+      "chu": "Hừm, để mình sắp xếp lại ý đã."
+    },
+    {
+      "id": "nghi-5",
+      "loai": "nghi",
+      "chu": "Được, để mình nghĩ cho kỹ rồi nói nhé."
+    },
+    {
+      "id": "tra-1",
+      "loai": "tra",
+      "chu": "Để mình tra thông tin xíu nhé."
+    },
+    {
+      "id": "tra-2",
+      "loai": "tra",
+      "chu": "Đợi mình chút, mình tìm thông tin cho bạn."
+    },
+    {
+      "id": "tra-3",
+      "loai": "tra",
+      "chu": "Để mình lên mạng xem thử nhé."
+    },
+    {
+      "id": "tra-4",
+      "loai": "tra",
+      "chu": "Được, mình tìm ngay đây, đợi xíu nha."
+    },
+    {
+      "id": "tra-5",
+      "loai": "tra",
+      "chu": "Để mình xem tin mới nhất đã nhé."
+    },
+    {
+      "id": "hethong-1",
+      "loai": "heThong",
+      "chu": "Để mình xem số liệu hệ thống chút nhé."
+    },
+    {
+      "id": "hethong-2",
+      "loai": "heThong",
+      "chu": "Đợi mình kiểm tra máy chủ một xíu."
+    },
+    {
+      "id": "hethong-3",
+      "loai": "heThong",
+      "chu": "Được, để mình xem lại số liệu đã."
+    }
   ]
 }

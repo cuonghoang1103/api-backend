@@ -58,14 +58,15 @@ export function apGain(pcm: Buffer, db: number): Buffer {
   return ra;
 }
 
-function napGiong(giong: string): KhoGiong | null {
+function napGiong(giong: string, provider: string): KhoGiong | null {
   if (_kho.has(giong)) return _kho.get(giong) ?? null;
   let kho: KhoGiong | null = null;
   try {
     const cfg = JSON.parse(fs.readFileSync(path.join(THU_MUC(), 'cau.json'), 'utf8')) as {
       cau: Array<{ id: string; loai: LoaiDem; chu: string }>;
     };
-    const db = gainDbChoGiong('cuongmini', giong);
+    // Câu đệm phải to bằng câu trả lời ngay sau nó ⇒ cùng gain với đường sống của chính nhà cung cấp đó.
+    const db = provider === 'elevenlabs' ? Number(process.env.MAKERLAB_GAIN_ELEVENLABS ?? 0) || 0 : gainDbChoGiong(provider, giong);
     const m: KhoGiong = new Map();
     for (const c of cfg.cau) {
       const f = path.join(THU_MUC(), giong, `${c.id}.pcm`);
@@ -88,9 +89,13 @@ function napGiong(giong: string): KhoGiong | null {
 const _lanTruoc = new Map<string, string>();
 
 /** Lấy một câu đệm, không lặp lại đúng câu vừa nói. Không có ⇒ null. */
-export function layCauDem(giong: string | null | undefined, loai: LoaiDem): { id: string; chu: string; pcm: Buffer } | null {
+export function layCauDem(
+  giong: string | null | undefined,
+  loai: LoaiDem,
+  provider = 'cuongmini',
+): { id: string; chu: string; pcm: Buffer } | null {
   if (!cauDemBat() || !giong) return null;
-  const ds = napGiong(giong)?.get(loai);
+  const ds = napGiong(giong, provider)?.get(loai);
   if (!ds?.length) return null;
   const khoa = `${giong}:${loai}`;
   const truoc = _lanTruoc.get(khoa);

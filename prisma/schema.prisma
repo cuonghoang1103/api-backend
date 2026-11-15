@@ -18319,3 +18319,24 @@ model CtlThachDau {
   @@index([userId, createdAt], name: "idx_ctl_thach_dau_nguoi")
   @@map("ctl_thach_dau")
 }
+
+/// Mỗi lượt đọc giọng qua ElevenLabs (robot Odin + web) — cho trang admin thống kê + trần Pro/ngày (15/11/2026, `services/giong/elevenlabs.ts`).
+/// `credit` = số credit ElevenLabs ƯỚC theo hệ số model (0,5/ký tự với v4_turbo); lượt lấy từ cache R2 ghi `cache = true`, `credit = 0`.
+model GiongElDung {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now()) @map("created_at")
+  userId    Int?     @map("user_id")
+  /// robot · phong_van · gia_su · ai_chat · ngoai_ngu · khac
+  viec      String   @db.VarChar(20)
+  kyTu      Int      @map("ky_tu")
+  credit    Int      @default(0)
+  cache     Boolean  @default(false)
+  ms        Int      @default(0)
+  ok        Boolean  @default(true)
+  loi       String?  @db.VarChar(200)
+
+  @@index([createdAt])
+  @@index([userId, createdAt])
+  @@index([viec, createdAt])
+  @@map("giong_el_dung")
+}

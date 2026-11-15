@@ -288,6 +288,11 @@ function apCheDo(p: PersonaConfig): PersonaConfig {
   // Thứ tự ưu tiên: giọng người dùng chọn RIÊNG cho chế độ này → giọng
   // mặc định của chế độ → giọng chung trong persona.
   const rieng = p.giongTheoCheDo?.[p.cheDo] || null;
+  // ElevenLabs (15/11/2026) nói mọi thứ tiếng bằng CHÍNH giọng nhân bản, đọc từ tiếng Anh bằng âm gốc ⇒
+  // chế độ Việt/Anh giữ nguyên nhà cung cấp + giọng; chỉ chế độ "robot" vẫn là hiệu ứng WALL-E ở máy đọc riêng.
+  if (p.voiceProvider === 'elevenlabs' && p.cheDo !== 'robot') {
+    return { ...p, voiceId: rieng ?? p.voiceId, language: cf.ngonNgu ?? p.language };
+  }
   const giong = rieng ?? cf.giong ?? p.voiceId;
   if (!giong && !cf.nhaCungCap && !cf.ngonNgu) return p;
   return {

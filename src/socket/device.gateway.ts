@@ -798,6 +798,8 @@ async function onMessage(conn: DeviceConn, raw: RawData, isBinary: boolean): Pro
       conn.audioChunks = [];
       conn.audioBytes = 0;
       conn.turnCham = msg.cham === true;
+      // Người dùng vừa mở miệng ⇒ nạp sẵn giọng ElevenLabs trong lúc nghe + nghĩ (giongEl.ts, nhả nhịp 2 phút).
+      void import('../services/makerlab/giongEl.js').then((m) => m.lamAmRobot(conn.projectId)).catch(() => {});
       break;
     case 'am_luong': {
       // Âm lượng đổi bằng tay ngay trên robot (vuốt dải dưới màn ngực).

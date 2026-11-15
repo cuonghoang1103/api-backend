@@ -1471,13 +1471,19 @@ export async function runVoiceTurn(input: VoiceTurnInput): Promise<VoiceTurnResu
   // luồng tiếng mở sẵn — câu trả lời nối tiếp trên CÙNG luồng, nên giữa hai câu
   // bo không mở mic lại để bắt nhầm tiếng phòng thành một lượt mới.
   let moDau: MoDauNoi | null = null;
-  if (input.speak !== false && persona.voiceProvider === 'cuongmini' && persona.cheDo === 'vi') {
+  if (input.speak !== false && (persona.voiceProvider === 'cuongmini' || persona.voiceProvider === 'elevenlabs') && persona.cheDo === 'vi') {
     const loaiDem = chonLoaiDem({
       heThong: laHeThong,
       tra: !laHeThong && !!canTraCuu(heard),
       kho: phanLoaiCau(heard).kho,
     });
-    const dem = loaiDem ? layCauDem(CHE_DO[persona.cheDo].giong ?? persona.voiceId, loaiDem) : null;
+    const dem = loaiDem
+      ? layCauDem(
+          persona.voiceProvider === 'elevenlabs' ? persona.voiceId : (CHE_DO[persona.cheDo].giong ?? persona.voiceId),
+          loaiDem,
+          persona.voiceProvider,
+        )
+      : null;
     if (dem) {
       const gw = await import('../../socket/device.gateway.js');
       const { PCM_SAMPLE_RATE } = await import('./audio.js');
@@ -1737,7 +1743,9 @@ async function thinkAndSpeakLoi(
   // TẦNG MIỆNG: chế độ tiếng Anh dùng giọng riêng của nó. Giọng nhân bản
   // của chủ là giọng VIỆT — bắt nó đọc tiếng Anh là quay lại đúng lỗi
   // "file → phi lê" vừa chữa xong, chỉ khác là cả câu đều sai.
-  const giongCheDo = CHE_DO[persona.cheDo].giong ?? persona.voiceId;
+  // ElevenLabs (15/11/2026): một giọng nhân bản nói được cả Việt lẫn Anh — `apCheDo` đã giữ nó ở mọi chế độ trừ "robot".
+  const laEl = persona.voiceProvider === 'elevenlabs';
+  const giongCheDo = laEl ? persona.voiceId : (CHE_DO[persona.cheDo].giong ?? persona.voiceId);
 
   // ⚠️ GIỌNG RỖNG PHẢI KÊU NGAY, đừng đợi máy đọc báo lỗi.
   //
@@ -1819,13 +1827,38 @@ async function thinkAndSpeakLoi(
     //
     // Hỏng thì rơi xuống đường thường ngay dưới: máy ở nhà có thể đang
     // tắt, và robot mất giọng riêng vẫn hơn robot câm.
-    if (persona.voiceProvider === 'cuongmini') {
+    //
+    // ── ElevenLabs trước (giongEl.ts) ── tắt / hết quỹ / hỏng trước byte đầu ⇒ lùi F5 máy nhà
+    // (`MAKERLAB_GIONG_LUI_EL`, mặc định f5-cuong-nghe) ⇒ cuối cùng Google.
+    if (laEl) {
+      try {
+        const { docElChoRobot } = await import('./giongEl.js');
+        const byte = await docElChoRobot({
+          text: piece,
+          giong: giongCheDo,
+          tocDo: persona.speechRate,
+          deviceId,
+          projectId: persona.projectId,
+          onPcm: (pcm) => noiVaoChuoi(pcm),
+        });
+        if (byte > 0) {
+          timing.tts += Date.now() - t;
+          return;
+        }
+      } catch (err) {
+        logger.warn('MakerLab ElevenLabs hỏng — lùi về F5 máy nhà', {
+          deviceId,
+          error: err instanceof Error ? err.message : String(err),
+        });
+      }
+    }
+    if (persona.voiceProvider === 'cuongmini' || laEl) {
       try {
         const { streamCuongMini } = await import('./tts.js');
         const byte = await streamCuongMini(
           piece,
           {
-            voice: giongCheDo ?? undefined,
+            voice: (laEl ? process.env.MAKERLAB_GIONG_LUI_EL || 'f5-cuong-nghe' : giongCheDo) ?? undefined,
             speakingRate: persona.speechRate,
             // Chế độ tiếng Anh KHÔNG phiên âm: ở đó chính tả gốc mới
             // đúng, đổi "deploy" thành "đi-pờ-loi" là biến nó thành từ vô
@@ -1868,8 +1901,9 @@ async function thinkAndSpeakLoi(
     }
 
     const tts = await synthesizeSpeech(piece, {
-      provider: persona.voiceProvider as never,
-      voice: persona.voiceId ?? undefined,
+      // ElevenLabs + F5 đều hỏng rồi ⇒ đừng gọi lại ElevenLabs ở đường thường, đi thẳng Google.
+      provider: (laEl ? 'google' : persona.voiceProvider) as never,
+      voice: laEl ? undefined : persona.voiceId ?? undefined,
       language: persona.language,
       speakingRate: persona.speechRate,
     });

@@ -235,7 +235,8 @@ export async function synthesizeSpeech(text: string, opts: TtsOptions = {}): Pro
   // một giọng Việt tử tế vẫn hơn rơi thẳng xuống translate_tts. Còn
   // `google` giữ vị trí cuối vì nó không cần khoá — một cái sàn không
   // bao giờ thủng.
-  const chain: TtsProvider[] = [first, 'edge', 'openai', 'elevenlabs', 'fptai', 'google'].filter(
+  // ElevenLabs KHÔNG nằm trong lưới đỡ chung (15/11/2026): nó tiêu credit trả tiền, chỉ chạy khi được chọn rõ.
+  const chain: TtsProvider[] = [first, 'edge', 'openai', 'fptai', 'google'].filter(
     (p, i, arr) => arr.indexOf(p) === i,
   ) as TtsProvider[];
 
@@ -1013,28 +1014,22 @@ async function synthesizeOpenAI(text: string, voice: string): Promise<Buffer> {
 // ─── ElevenLabs (voice cloning) ────────────────────────────
 
 async function synthesizeElevenLabs(text: string, voiceId: string): Promise<Buffer> {
-  const key = process.env.ELEVENLABS_API_KEY;
-  if (!key) throw new Error('ELEVENLABS_API_KEY missing');
-  const id = voiceId || process.env.MAKERLAB_TTS_VOICE;
-  if (!id) throw new Error('elevenlabs voice id missing');
-
-  const res = await fetch(
-    `https://api.elevenlabs.io/v1/text-to-speech/${encodeURIComponent(id)}?output_format=mp3_22050_32`,
-    {
-      method: 'POST',
-      headers: { 'xi-api-key': key, 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        text,
-        // v2.5 flash is the low-latency multilingual model — the right
-        // trade-off for a robot that has to answer in about a second.
-        model_id: process.env.MAKERLAB_ELEVEN_MODEL || 'eleven_flash_v2_5',
-        voice_settings: { stability: 0.45, similarity_boost: 0.85, style: 0.2 },
-      }),
-    },
-  );
-  if (!res.ok)
-    throw new Error(`elevenlabs HTTP ${res.status} ${(await res.text()).slice(0, 120)}`);
-  return Buffer.from(await res.arrayBuffer());
+  // 15/11/2026: qua cửa chung (`services/giong/elevenlabs.ts`) — đúng model đang chọn ở admin
+  // (`eleven_v4_turbo`), kiểm công tắc/quỹ, ghi sổ `giong_el_dung`. Đường chảy dần của robot: `giongEl.ts`.
+  const el = await import('../giong/elevenlabs.js');
+  const q = await el.quyenEl({ viec: 'robot', kyTu: text.length });
+  if (!q.duoc) throw new Error(`elevenlabs không dùng được: ${q.lyDo}`);
+  const giong = voiceId && /^[A-Za-z0-9]{10,40}$/.test(voiceId) ? voiceId : q.giong;
+  const t = Date.now();
+  try {
+    const res = await el.moLuongEl({ text, giong, model: q.model, dinhDang: 'mp3_22050_32', signal: AbortSignal.timeout(30_000) });
+    const b = Buffer.from(await res.arrayBuffer());
+    await el.ghiDungEl({ viec: 'robot', kyTu: text.length, model: q.model, ms: Date.now() - t, ok: true });
+    return b;
+  } catch (err) {
+    await el.ghiDungEl({ viec: 'robot', kyTu: text.length, model: q.model, ms: Date.now() - t, ok: false, loi: (err as Error).message });
+    throw err;
+  }
 }
 
 // ─── FPT.AI (giọng Việt, đăng ký không cần thẻ) ────────────

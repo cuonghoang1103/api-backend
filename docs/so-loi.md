@@ -726,3 +726,10 @@ Mẫu một mục:
 - **Cách sửa:** đổi `doc` thành まじめ; `npx tsx --test src/services/ctlanguage/*.test.ts` 152/152 (cùng commit bổ sung nội dung 15/11).
 - **Ảnh hưởng:** người dùng app CT Language đã thấy cách đọc sai ở chủ đề Tính cách (web không dùng tệp này).
 - **Bài học:** từ đọc kiểu jukujikun (真面目, 今日, 大人…) không suy được từ âm của từng chữ — bộ kiểm chủ đề nên đối chiếu `doc` với từ điển `ctl_tu` (`scripts/ctlanguage-kiem-chu-de-tu.mts ja`) trước khi đẩy.
+
+### 16/11/2026 — CT Work OKR — dashboard mất tuần hiện tại từ 0h tới 7h sáng thứ Hai
+- **Triệu chứng:** deploy 4fd1eb26a (00:44 16/11) bỏ push vì `work.ctw7a.db.test.ts` O4 đỏ: `dashboard.weeks.at(-1).actual` = null dù vừa check-in; chạy riêng vẫn đỏ (không phải chập chờn).
+- **Nguyên nhân:** `src/services/work/okr.service.ts:380` dừng vòng tuần bằng `t > now` với `t` = 00:00Z thứ Hai (= 07:00 giờ VN), còn check-in lưu `weekStartVN(now)` ⇒ trong 7 giờ đầu tuần, tuần của check-in chưa có trên biểu đồ.
+- **Cách sửa:** so theo ngày VN: `if (w > weekStartVN(now)) break;` — test ctw7a xanh lại lúc 01:00 thứ Hai.
+- **Ảnh hưởng:** biểu đồ tiến độ OKR thiếu cột tuần mới mỗi sáng thứ Hai 0h–7h; dữ liệu không mất.
+- **Bài học:** ranh giới tuần/ngày phải so cùng một múi giờ — trộn mili-giây UTC với ngày VN là lỗi chỉ hiện ở vài giờ trong tuần, test xanh cả tuần rồi đỏ đúng đêm Chủ nhật.

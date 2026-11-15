@@ -377,7 +377,8 @@ function dashboard(objs: DashObj[], cycle: { startDate: Date; endDate: Date } | 
     const end = Math.min(cycle.endDate.getTime(), now.getTime());
     for (let t = new Date(`${weekStartVN(cycle.startDate)}T00:00:00Z`).getTime(); t <= end + 7 * 86_400_000 && weeks.length < 60; t += 7 * 86_400_000) {
       const w = new Date(t).toISOString().slice(0, 10);
-      if (t > now.getTime()) break;
+      // So theo NGÀY giờ VN: t là 00:00Z của thứ Hai (= 07:00 VN) ⇒ so mili-giây thì 0h–7h sáng thứ Hai mất tuần hiện tại.
+      if (w > weekStartVN(now)) break;
       const last = krs.map((k) => k.checkins.filter((c) => c.weekStart <= w).sort((a, b) => (a.weekStart < b.weekStart ? 1 : -1))[0] ?? null);
       const prog = last.filter((x): x is NonNullable<typeof x> => !!x);
       weeks.push({

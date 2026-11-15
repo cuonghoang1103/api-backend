@@ -105,6 +105,18 @@ const PHIEN_AM_THEM: Record<string, string[]> = {
 };
 
 /**
+ * Cách Whisper nghe SAI tên ở QUÁN ỒN (đo thật 15/11/2026: "Hey Odin" ⇒ "Hồ Đình", "Hi, Hồ Linh", "All in!").
+ *
+ * ⚠️ KHÔNG thả vào `PHIEN_AM_THEM`: "Hồ Đình", "Hồ Linh" là TÊN NGƯỜI, "all in" là tiếng lóng thật —
+ * nhận ở mọi vị trí là robot tưởng bị gọi mỗi khi bàn bên nhắc tới ai đó. Chỉ nhận khi:
+ *   (a) đứng NGAY SAU một từ chào ("hey/hi/ê/này… Hồ Đình"), hoặc
+ *   (b) CẢ CÂU chỉ có đúng chừng đó (gọi suông: "Hồ Đình!", "All in!").
+ */
+const PHIEN_AM_CAN_CHAO: Record<string, string[]> = {
+  odin: ['hodinh', 'hodin', 'holinh', 'holin', 'allin', 'audinh'],
+};
+
+/**
  * Bỏ dấu tiếng Việt, hạ chữ thường, vứt mọi thứ không phải chữ/số.
  *
  * ⚠️ `đ` KHÔNG rụng dấu qua NFD — nó là một ký tự riêng trong Unicode,
@@ -224,6 +236,7 @@ export function timDanhThuc(text: string, tuDanhThuc: string | null): KetQuaDanh
 
   const bienThe = bienTheTen(tuDanhThuc);
   if (!bienThe.length) return truot;
+  const canChao = PHIEN_AM_CAN_CHAO[chuanHoaTu(tuDanhThuc.trim().split(/\s+/).pop() ?? '')] ?? [];
 
   const goc = text.trim().split(/\s+/).filter(Boolean);
   if (!goc.length) return truot;
@@ -243,7 +256,10 @@ export function timDanhThuc(text: string, tuDanhThuc: string | null): KetQuaDanh
       ghep += chuan[dau + n];
       if (!ghep) continue;
 
-      const trung = khopBienThe(ghep, bienThe);
+      // Biến thể "cần chào" chỉ tính khi có từ chào đứng trước (dau > 0), hoặc khi nó là CẢ câu.
+      const caCau = dau === 0 && dau + n + 1 === goc.length;
+      const trung = khopBienThe(ghep, bienThe)
+        || ((dau > 0 || caCau) && canChao.includes(ghep) ? ghep : '');
       if (!trung) {
         // Ghi lại ứng viên gần nhất để log. Chỉ lấy cái ĐẦU TIÊN gặp:
         // ứng viên ngắn nhất ở vị trí sớm nhất là thứ giống một lời gọi

@@ -1631,6 +1631,7 @@ void setup() {
 
 void loop() {
   gLoops++;
+  net::lenhUsb();   // cáp USB: đổi WiFi khi mạng quán vào được mà không có internet
 
   gStage = "ws";
   ws.loop();

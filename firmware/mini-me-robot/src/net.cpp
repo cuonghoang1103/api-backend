@@ -375,6 +375,53 @@ TrangThai vaoMang(void (*veUi)()) {
 
 void moCongNgay() { moCong(); }
 
+// ─── Lệnh qua cáp USB (15/11/2026) ───────────────────────────
+//
+// Quán cà phê có WiFi VÀO ĐƯỢC nhưng KHÔNG có internet ⇒ bo nối thành công,
+// không bao giờ thử mạng khác, cũng không mở Odin-Setup — và lệnh
+// "wifi_portal" từ máy chủ thì không tới được vì chính cái mạng hỏng đó.
+// Cắm cáp vào máy tính là đường thoát:
+//   wifi <tên>|<mật khẩu>   lưu mạng, đặt làm mạng thử ĐẦU TIÊN, khởi động lại
+//   wifi-cong               mở cổng Odin-Setup ngay
+void lenhUsb() {
+  static String dong;
+  while (Serial.available()) {
+    const char c = (char)Serial.read();
+    if (c == '\r') continue;
+    if (c != '\n') { if (dong.length() < 200) dong += c; continue; }
+    String l = dong;
+    dong = "";
+    l.trim();
+    if (l == "wifi-quet") {
+      // Liệt kê mọi mạng chip NHÌN THẤY (chỉ 2,4 GHz) — để biết vì sao NO_AP_FOUND.
+      const int16_t n = WiFi.scanNetworks(false, true);
+      Serial.printf("[usb] quet thay %d mang:\n", n);
+      for (int16_t i = 0; i < n; i++) {
+        Serial.printf("[usb]   '%s'  rssi=%d  kenh=%d\n", WiFi.SSID(i).c_str(), WiFi.RSSI(i), WiFi.channel(i));
+      }
+      WiFi.scanDelete();
+    } else if (l == "wifi-cong") {
+      Serial.println("[usb] mo cong Odin-Setup");
+      moCong();
+    } else if (l.startsWith("wifi ")) {
+      const String r = l.substring(5);
+      const int g = r.indexOf('|');
+      const String ssid = g >= 0 ? r.substring(0, g) : r;
+      const String pass = g >= 0 ? r.substring(g + 1) : "";
+      if (luuMang(ssid, pass)) {
+        nhoMangGanNhat(ssid);
+        Serial.printf("[usb] da luu '%s' — khoi dong lai de vao mang nay truoc\n", ssid.c_str());
+        delay(400);
+        ESP.restart();
+      } else {
+        Serial.println("[usb] ten mang khong hop le");
+      }
+    } else if (l.length()) {
+      Serial.println("[usb] lenh: 'wifi <ten>|<mat khau>' · 'wifi-quet' · 'wifi-cong'");
+    }
+  }
+}
+
 /** Số điện thoại đang nối vào WiFi của robot. Main dùng để biết khi nào
  *  người dùng đã quay lại, rồi mới thôi hiện thông báo lỗi. */
 uint8_t soDienThoaiNoi() { return congDangMo ? WiFi.softAPgetStationNum() : 0; }

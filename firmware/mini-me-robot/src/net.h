@@ -85,6 +85,9 @@ bool dangMoCong();
  */
 void moCongNgay();
 
+/** Đọc lệnh qua cáp USB: `wifi <tên>|<mật khẩu>` (lưu + vào mạng đó trước, khởi động lại) · `wifi-cong`. Gọi mỗi vòng loop. */
+void lenhUsb();
+
 /**
  * Có cần kêu một tiếng báo cài WiFi xong không. Đọc một lần rồi tự xoá.
  *

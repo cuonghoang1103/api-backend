@@ -76,6 +76,10 @@ export function goiYNghe(
   const vi = cheDo === 'vi';
   const phan: string[] = [];
 
+  // 15/11/2026: Whisper bám gợi ý tốt nhất khi nó trông như CÂU VỪA NÓI, không phải một từ trơn giữa danh
+  // sách. Ở quán ồn nó chép "Hey Odin" thành "Hồ Đình" / "Hi, Hồ Linh" / "All in!" dù "Odin" đã có trong
+  // danh sách ⇒ đặt một câu gọi mẫu lên ĐẦU.
+  if (tuDanhThuc) phan.push(vi ? `Hey ${tuDanhThuc}, ${tuDanhThuc} ơi` : `Hey ${tuDanhThuc}`);
   if (tenRobot) phan.push(tenRobot);
   if (tuDanhThuc) phan.push(tuDanhThuc);
 

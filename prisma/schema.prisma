@@ -532,6 +532,9 @@ model User {
   ctlBaiAi                 CtlBaiAi[]                @relation("CtlBaiAiNguoiTao")
   ctlBaiAiHoc              CtlBaiAiHoc[]             @relation("CtlBaiAiHocNguoi")
   ctlSuKienThuong          CtlSuKienThuong[]         @relation("CtlSuKienThuongNguoi")
+  // CT Language — trò chơi (16/11/2026): điểm từng ván (bảng xếp hạng) + thách đấu bạn bè đã tạo
+  ctlTroChoiDiem           CtlTroChoiDiem[]          @relation("CtlTroChoiDiemNguoi")
+  ctlThachDau              CtlThachDau[]             @relation("CtlThachDauNguoiTao")
 
   @@index([email], name: "idx_users_email")
   @@map("users")
@@ -18260,4 +18263,59 @@ model CtlSuKienThuong {
   @@id([suKienId, userId])
   @@index([userId], name: "idx_ctl_su_kien_thuong_user")
   @@map("ctl_su_kien_thuong")
+}
+
+/// CT Language — TRÒ CHƠI (16/11/2026): một VÁN đã chơi xong (người đã đăng nhập). Bảng xếp hạng = điểm CAO NHẤT mỗi
+/// người theo (game, chế độ, ngôn ngữ), "tuần này" lọc `created_at`. Luật kiểm điểm: `src/services/ctlanguage/troChoiThuan.ts`.
+/// `ma_van` do app sinh mỗi ván ⇒ gửi lại (mạng chập chờn) không thành hai dòng.
+model CtlTroChoiDiem {
+  id         Int      @id @default(autoincrement())
+  userId     Int      @map("user_id")
+  /// Mã game: `canh-troi`… (GAME_CTL)
+  game       String   @db.VarChar(24)
+  /// vuot-chang | 60-giay | thach-dau
+  cheDo      String   @map("che_do") @db.VarChar(12)
+  nn         String   @db.VarChar(2)
+  diem       Int
+  dung       Int      @default(0)
+  sai        Int      @default(0)
+  chang      Int      @default(0)
+  thoiGianMs Int      @default(0) @map("thoi_gian_ms")
+  maVan      String   @map("ma_van") @db.VarChar(40)
+  thachDauId Int?     @map("thach_dau_id")
+  /// Khung tên đang đeo lúc chơi (mã trong KHUNG_TEN) — bảng xếp hạng vẽ khung quanh tên.
+  khung      String?  @db.VarChar(24)
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  user     User         @relation("CtlTroChoiDiemNguoi", fields: [userId], references: [id], onDelete: Cascade)
+  thachDau CtlThachDau? @relation("CtlThachDauDiem", fields: [thachDauId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, maVan], name: "uk_ctl_tro_choi_van")
+  @@index([game, cheDo, nn, createdAt], name: "idx_ctl_tro_choi_bang")
+  @@index([thachDauId], name: "idx_ctl_tro_choi_thach_dau")
+  @@map("ctl_tro_choi_diem")
+}
+
+/// Thách đấu BẤT ĐỒNG BỘ: người tạo chốt một bộ đề (≤ 80 từ) + seed ⇒ mã 6 ký tự. Ai có mã chơi đúng bộ đề + thứ tự
+/// đó rồi so điểm trên bảng riêng của thách đấu. Hết hạn sau 30 ngày (tuyến đọc trả 404).
+model CtlThachDau {
+  id        Int      @id @default(autoincrement())
+  ma        String   @unique @db.VarChar(8)
+  userId    Int      @map("user_id")
+  game      String   @db.VarChar(24)
+  nn        String   @db.VarChar(2)
+  /// chu-doc | chu | doc | nghia
+  cachHien  String   @map("cach_hien") @db.VarChar(8)
+  seed      Int
+  tenBo     String   @map("ten_bo") @db.VarChar(60)
+  /// [{id, chu, doc, docLatin, hanViet, nghia}]
+  de        Json
+  hetHan    DateTime @map("het_han")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  user User             @relation("CtlThachDauNguoiTao", fields: [userId], references: [id], onDelete: Cascade)
+  diem CtlTroChoiDiem[] @relation("CtlThachDauDiem")
+
+  @@index([userId, createdAt], name: "idx_ctl_thach_dau_nguoi")
+  @@map("ctl_thach_dau")
 }

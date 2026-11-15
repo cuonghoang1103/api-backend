@@ -1027,6 +1027,7 @@ for route in \
     ctlanguage/so-tu/trang-thai \
     ctlanguage/so-chuyen-nganh \
     ctlanguage/phat-am/luot \
+    ctlanguage/tro-choi/danh-muc \
     xuong-3d/bo-phan \
     gifs \
     toc-do-mang/ping \

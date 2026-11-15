@@ -39,3 +39,16 @@ test('gợi ý Whisper: câu gọi mẫu đứng ĐẦU', () => {
   const g = goiYNghe('vi', [], 'Odin', 'Odin');
   assert.ok(g.startsWith('Hey Odin, Odin ơi'), g.slice(0, 60));
 });
+
+test('JSON có ngoặc kép chưa thoát trong say ⇒ vớt đúng say + actions, không đọc to "actions"', async () => {
+  const { parseRobotReply } = await import('./voiceLoop.js');
+  const raw = '{"say":"Bạn thấy cái tên "Bậm Trợn" có hợp không?","actions":[{"type":"face","payload":{"emotion":"curious","ms":2000}}]}';
+  const r = parseRobotReply(raw);
+  assert.equal(r.say, 'Bạn thấy cái tên "Bậm Trợn" có hợp không?');
+  assert.ok(!/actions/.test(r.say));
+  assert.equal(r.actions.length, 1);
+  // JSON chuẩn vẫn như cũ
+  assert.equal(parseRobotReply('{"say":"Chào bạn","actions":[]}').say, 'Chào bạn');
+  // fenced
+  assert.equal(parseRobotReply('```json\n{"say":"Xin chào","actions":[]}\n```').say, 'Xin chào');
+});

@@ -746,11 +746,38 @@ export function parseRobotReply(raw: string): RobotReply {
     }
   }
 
+  // JSON HỎNG vì ngoặc kép KHÔNG thoát bên trong câu nói (15/11/2026, Claude: `"say":"…cái tên "Bậm Trợn"…"`).
+  // Trước đây rơi xuống dòng dưới ⇒ robot đọc to cả "say : … , actions : type : face…". Vớt `say` từ
+  // `"say":"` tới dấu `"` CUỐI đứng ngay trước `,"actions"` hoặc `}` kết — ngoặc bên trong giữ nguyên.
+  const vot = votSayHong(text);
+  if (vot) return vot;
+
   // Not JSON at all — strip any braces and speak whatever is left.
   return {
     say: text.replace(/[{}[\]"]/g, ' ').replace(/\s+/g, ' ').trim().slice(0, MAX_SAY_CHARS),
     actions: [],
   };
+}
+
+/** Vớt `say` (+ `actions` nếu đọc được) từ JSON có ngoặc kép chưa thoát. THUẦN — test đọc. */
+export function votSayHong(text: string): RobotReply | null {
+  const m = text.match(/"say"\s*:\s*"([\s\S]*)"\s*(?:,\s*"actions"\s*:\s*(\[[\s\S]*\])\s*)?\}?\s*(?:```)?\s*$/);
+  if (!m) return null;
+  const say = m[1].replace(/\\"/g, '"').replace(/\\n/g, ' ').replace(/\s+/g, ' ').trim();
+  if (!say) return null;
+  const actions: ValidatedCommand[] = [];
+  if (m[2]) {
+    try {
+      const arr = JSON.parse(m[2]) as unknown[];
+      for (const a of arr.slice(0, 3)) {
+        if (!a || typeof a !== 'object') continue;
+        const rec = a as Record<string, unknown>;
+        const cmd = validateCommand(String(rec.type ?? ''), rec.payload, { llmOnly: true });
+        if (cmd) actions.push(cmd);
+      }
+    } catch { /* actions hỏng thì bỏ — câu nói mới là thứ quan trọng */ }
+  }
+  return { say: say.slice(0, MAX_SAY_CHARS), actions };
 }
 
 // ─── Báo trạng thái cổng đánh thức bằng MẮT ────────────────
@@ -789,6 +816,15 @@ function baoMat(deviceId: number, emotion: string, ms: number): void {
  * hình ảnh, và lượt nói kế tiếp sẽ dựng lại đúng trạng thái.
  */
 const _henNgu = new Map<number, NodeJS.Timeout>();
+/** Sau mỗi câu robot TRẢ LỜI xong: thức ít nhất chừng này giây để hỏi tiếp không cần gọi tên. */
+const GIAY_THUC_HOI_THOAI = Number(process.env.MAKERLAB_GIAY_THUC_HOI_THOAI) || 30;
+
+function giuThucHoiThoai(deviceId: number, giayPersona: number): void {
+  const g = Math.max(giayPersona, GIAY_THUC_HOI_THOAI);
+  moCong(deviceId, g);
+  henNguLai(deviceId, g);
+}
+
 function henNguLai(deviceId: number, giay: number): void {
   clearTimeout(_henNgu.get(deviceId));
   const t = setTimeout(() => {
@@ -1402,6 +1438,7 @@ export async function runVoiceTurn(input: VoiceTurnInput): Promise<VoiceTurnResu
         { role: 'assistant', content: JSON.stringify({ say: nhanh.say, actions: nhanh.actions }) },
       );
       for (const a of nhanh.actions) await dispatchAction(input.deviceId, a);
+      if (gacCong && spokenNhanh) giuThucHoiThoai(input.deviceId, persona.giayThucGiac);
       logger.info('MakerLab lệnh nhanh (bỏ qua LLM)', {
         deviceId: input.deviceId,
         heard,
@@ -1585,6 +1622,11 @@ export async function runVoiceTurn(input: VoiceTurnInput): Promise<VoiceTurnResu
   }
 
   if (!spoken) emitTranscript(input.deviceId, 'bot', reply.say);
+
+  // HỘI THOẠI (15/11/2026): robot NÓI XONG mới tính giờ thức, và ít nhất `GIAY_THUC_HOI_THOAI`. Trước đây cửa
+  // sổ 10 s tính từ lúc gọi tên ⇒ trôi hết trong lúc robot đang nói câu trả lời 7 s ⇒ câu hỏi thứ hai không
+  // có "Odin" bị bỏ (người dùng: "lần đầu oke, hỏi thêm 2-3 câu thì không được").
+  if (gacCong && spoken) giuThucHoiThoai(input.deviceId, persona.giayThucGiac);
 
   timing.total = Date.now() - started;
   logger.info('MakerLab voice turn', {

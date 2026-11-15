@@ -31,7 +31,7 @@ public class PvIslandSau {
     }
 
     public static void main(String[] args) throws InterruptedException {
-        for (int n : new int[]{50, 100, 300, 1000}) {
+        for (int n : new int[]{50, 60, 300, 1000}) {
             System.out.println(n + "x" + n + " all land, 1 MB stack: recursive -> " + run(n));
         }
     }

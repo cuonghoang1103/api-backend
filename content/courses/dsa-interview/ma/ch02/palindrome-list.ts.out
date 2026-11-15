@@ -1,0 +1,5 @@
+isPalindrome([1,2,2,1]) = true   list afterwards = [1,2,2,1]
+isPalindrome([1,2]) = false   list afterwards = [1,2]
+isPalindrome([1,2,3,2,1]) = true   list afterwards = [1,2,3,2,1]
+isPalindrome([1]) = true   list afterwards = [1]
+isPalindrome([1,2,3,1]) = false   list afterwards = [1,2,3,1]

@@ -1,0 +1,4 @@
+findAnagrams("cbaebabacd", "abc") = [0, 6]
+findAnagrams("abab", "ab") = [0, 1, 2]
+findAnagrams("a", "ab") = []
+findAnagrams("aaaaa", "aa") = [0, 1, 2, 3]

@@ -1,0 +1,4 @@
+threeSumClosest([-1, 2, 1, -4], 1) = 2
+threeSumClosest([0, 0, 0], 1) = 0
+threeSumClosest([1, 1, 1, 0], -100) = 2
+threeSumClosest([4, 0, 5, -5, 3, 3, 0, -4, -5], -2) = -2

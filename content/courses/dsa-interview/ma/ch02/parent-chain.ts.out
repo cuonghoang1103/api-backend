@@ -1,0 +1,6 @@
+move 2 under 3 : OK
+move 2 under 5 : PARENT_CYCLE (5 is a grandchild of 2)
+move 4 under 4 : SELF_PARENT
+ring above 5 in the healthy tree : false
+ring above 5 in the corrupted one: true
+ring above 3 in the corrupted one: false (3 -> 1 -> root, untouched)

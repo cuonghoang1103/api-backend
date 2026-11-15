@@ -1,0 +1,6 @@
+isPalindrome("A man, a plan, a canal: Panama") = true
+isPalindrome("race a car") = false
+isPalindrome(" ") = true
+isPalindrome("0P") = false
+isPalindrome(".,") = true
+isPalindrome("ab_a") = true

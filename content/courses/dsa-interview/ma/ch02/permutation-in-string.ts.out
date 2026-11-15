@@ -1,0 +1,4 @@
+checkInclusion("ab", "eidbaooo") = true
+checkInclusion("ab", "eidboaoo") = false
+checkInclusion("adc", "dcda") = true
+checkInclusion("hello", "ooolleoooleh") = false

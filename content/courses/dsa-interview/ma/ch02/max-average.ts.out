@@ -1,0 +1,4 @@
+findMaxAverage([1,12,-5,-6,50,3], 4) = 12.75000   brute = 12.75000
+findMaxAverage([5], 1) = 5.00000   brute = 5.00000
+findMaxAverage([0,4,0,3,2], 1) = 4.00000   brute = 4.00000
+findMaxAverage([-1,-2,-3], 2) = -1.50000   brute = -1.50000

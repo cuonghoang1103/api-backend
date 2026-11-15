@@ -1,0 +1,4 @@
+maxArea([1, 8, 6, 2, 5, 4, 8, 3, 7]) = 49   brute = 49
+maxArea([1, 1]) = 1   brute = 1
+maxArea([4, 3, 2, 1, 4]) = 16   brute = 16
+maxArea([1, 2, 4, 3]) = 4   brute = 4

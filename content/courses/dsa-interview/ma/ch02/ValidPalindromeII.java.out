@@ -1,0 +1,6 @@
+validPalindrome("aba") = true   left-only = true
+validPalindrome("abca") = true   left-only = true
+validPalindrome("abc") = false   left-only = false
+validPalindrome("cbbcc") = true   left-only = false
+validPalindrome("a") = true   left-only = true
+validPalindrome("deeee") = true   left-only = true

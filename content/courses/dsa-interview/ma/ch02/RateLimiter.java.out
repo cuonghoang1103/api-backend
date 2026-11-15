@@ -1,0 +1,16 @@
+rule: at most 10 requests per 60000 ms
+A. normal user: one request every 7 s for 2 minutes
+  fixed window (clock-aligned)   accepted 18 of 18, 18 of them inside [0, 120000) ms
+  fixed window (from first hit)  accepted 18 of 18, 18 of them inside [0, 120000) ms
+  sliding window log             accepted 18 of 18, 18 of them inside [0, 120000) ms
+  sliding window counter         accepted 18 of 18, 18 of them inside [0, 120000) ms
+B. attacker bursts across the clock minute (10 at 59.90-59.99 s, 10 at 60.00-60.09 s)
+  fixed window (clock-aligned)   accepted 20 of 20, 20 of them inside [59900, 60100) ms
+  fixed window (from first hit)  accepted 10 of 20, 10 of them inside [59900, 60100) ms
+  sliding window log             accepted 10 of 20, 10 of them inside [59900, 60100) ms
+  sliding window counter         accepted 11 of 20, 11 of them inside [59900, 60100) ms
+C. attacker opens its own window at t=0, waits, then the same burst
+  fixed window (clock-aligned)   accepted 20 of 20, 19 of them inside [59900, 60100) ms
+  fixed window (from first hit)  accepted 20 of 20, 19 of them inside [59900, 60100) ms
+  sliding window log             accepted 11 of 20, 10 of them inside [59900, 60100) ms
+  sliding window counter         accepted 11 of 20, 10 of them inside [59900, 60100) ms

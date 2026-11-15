@@ -1,0 +1,4 @@
+[1,2,3,4,5]: middleNode = 3, firstMiddle = 3
+[1,2,3,4,5,6]: middleNode = 4, firstMiddle = 3
+[7]: middleNode = 7, firstMiddle = 7
+[7,8]: middleNode = 8, firstMiddle = 7

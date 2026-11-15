@@ -1,0 +1,4 @@
+minWindow("ADOBECODEBANC", "ABC") = "BANC"
+minWindow("a", "a") = "a"
+minWindow("a", "aa") = ""
+minWindow("aaflslflsldkalskaaa", "aaa") = "aaa"

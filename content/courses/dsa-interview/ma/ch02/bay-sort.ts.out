@@ -1,0 +1,4 @@
+a.sort()              -> [-1,-4,1,10,2,9]
+a.sort((x, y) => x - y) -> [-4,-1,1,2,9,10]
+pair with sum -3, string-sorted  -> []
+pair with sum -3, numeric-sorted -> [-4,1]

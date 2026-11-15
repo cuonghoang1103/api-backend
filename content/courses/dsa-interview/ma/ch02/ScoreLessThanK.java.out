@@ -1,0 +1,4 @@
+countSubarrays([2, 1, 4, 3, 5], 10) = 6
+countSubarrays([1, 1, 1], 5) = 5
+countSubarrays([10], 5) = 0
+countSubarrays([1, 2, 3, 4], 100) = 10

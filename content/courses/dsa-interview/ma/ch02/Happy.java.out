@@ -1,0 +1,5 @@
+isHappy(19) = true   chain: 19 -> 82 -> 68 -> 100 -> 1 -> 1
+isHappy(2) = false   chain: 2 -> 4 -> 16 -> 37 -> 58 -> 89 -> 145 -> 42 -> 20 -> 4
+isHappy(7) = true   chain: 7 -> 49 -> 97 -> 130 -> 10 -> 1 -> 1
+isHappy(1) = true   chain: 1 -> 1
+isHappy(1111111) = true   chain: 1111111 -> 7 -> 49 -> 97 -> 130 -> 10 -> 1 -> 1

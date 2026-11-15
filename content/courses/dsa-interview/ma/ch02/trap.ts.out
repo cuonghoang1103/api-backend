@@ -1,0 +1,4 @@
+trap([0,1,0,2,1,0,1,3,2,1,2,1]) = 6   arrays = 6
+trap([4,2,0,3,2,5]) = 9   arrays = 9
+trap([3,2,1]) = 0   arrays = 0
+trap([5]) = 0   arrays = 0

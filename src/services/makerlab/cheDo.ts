@@ -157,7 +157,7 @@ function khongDau(s: string): string {
  */
 export function khopDoiCheDo(heard: string): CheDo | null {
   const s = khongDau(heard);
-  if (!s || s.length > 40) return null;
+  if (!s || s.length > 140) return null;
 
   const tenNgonNgu =
     /(giong robot|robot mode|robot voice|kieu robot)/.test(s)
@@ -181,6 +181,17 @@ export function khopDoiCheDo(heard: string): CheDo | null {
    */
   const DONG_TU = 'noi|chuyen|doi|switch|speak|change|talk|use|xai|dung';
   const TEN = 'tieng anh|english|tieng my|tieng viet|vietnamese|viet nam|giong robot|robot mode|robot voice|kieu robot';
+
+  /**
+   * CÂU DÀI (15/11/2026): "Ý tôi nói là bạn có thể ĐỔI SANG tiếng Việt để nói với tôi" — bản cũ chặn mọi câu
+   * > 40 ký tự ⇒ robot kẹt ở tiếng Anh. Câu dài chỉ nhận ĐỘNG TỪ ĐỔI rõ ràng (đổi/chuyển/switch/change)
+   * — KHÔNG nhận "nói" ("tôi đang học nói tiếng Anh ở trường" là câu kể, không phải lệnh).
+   */
+  if (s.length > 40) {
+    return new RegExp(`(doi|chuyen|switch|change)(\\s+(sang|qua|ve|lai|to|into|back|over)){0,2}(\\s+(che do|ngon ngu|giong))?\\s+(${TEN})`).test(s)
+      ? (tenNgonNgu as CheDo)
+      : null;
+  }
   if (new RegExp(`(${DONG_TU})(\\s+\\S+){0,2}\\s+(${TEN})`).test(s)) {
     return tenNgonNgu as CheDo;
   }

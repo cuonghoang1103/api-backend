@@ -52,3 +52,13 @@ test('JSON có ngoặc kép chưa thoát trong say ⇒ vớt đúng say + action
   // fenced
   assert.equal(parseRobotReply('```json\n{"say":"Xin chào","actions":[]}\n```').say, 'Xin chào');
 });
+
+test('đổi tiếng: câu dài có ĐỘNG TỪ ĐỔI rõ ràng thì nhận; câu kể có "nói tiếng Anh" thì không', async () => {
+  const { khopDoiCheDo } = await import('./cheDo.js');
+  assert.equal(khopDoiCheDo('Ý tôi nói là bạn có thể đổi sang tiếng Việt để nói với tôi.'), 'vi');
+  assert.equal(khopDoiCheDo('Odin ơi chuyển qua tiếng Anh giúp mình với nhé bạn'), 'en');
+  assert.equal(khopDoiCheDo('Can you please switch back to Vietnamese now?'), 'vi');
+  assert.equal(khopDoiCheDo('tôi đang học nói tiếng Anh ở trường mỗi buổi chiều'), null);
+  assert.equal(khopDoiCheDo('nói tiếng Việt đi'), 'vi');
+  assert.equal(khopDoiCheDo('tiếng Anh'), 'en');
+});

@@ -1133,8 +1133,20 @@ static void pumpMic() {
 
     // Tiếng GỬI ĐI — lọc nhẹ, giữ thanh điệu cho Whisper.
     int32_t v = locGui(s0) >> (MIC_GAIN_SHIFT - 8);
-    if (v > 32767) { v = 32767; xenSamples++; }
-    else if (v < -32768) { v = -32768; xenSamples++; }
+    // NÉN ĐỈNH MỀM (15/11/2026) thay cho cắt phẳng: người dùng nói sát mic ở quán ⇒ cắt phẳng làm méo
+    // (log: Whisper chép "Zest"). Dưới NGUONG_NEN giữ nguyên tuyệt đối; trên đó nén dần, KHÔNG BAO GIỜ
+    // chạm trần ⇒ tiếng to vẫn trong. `xenSamples` vẫn đếm mẫu LẼ RA đã bị cắt — để soi trong log.
+    {
+      constexpr int32_t NGUONG_NEN = 20000;
+      constexpr int32_t DU = 32767 - NGUONG_NEN;
+      const int32_t a = v < 0 ? -v : v;
+      if (a > NGUONG_NEN) {
+        if (a > 32767) xenSamples++;
+        const int32_t vuot = a - NGUONG_NEN;
+        const int32_t nen = NGUONG_NEN + (int32_t)((int64_t)vuot * DU / (vuot + DU));
+        v = v < 0 ? -nen : nen;
+      }
+    }
     pcmBlock[i] = (int16_t)v;
   }
   micLevel = (int32_t)(sum / n);

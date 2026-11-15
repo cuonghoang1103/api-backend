@@ -1134,12 +1134,12 @@ export async function runVoiceTurn(input: VoiceTurnInput): Promise<VoiceTurnResu
         {
           ...persona,
           cheDo: moi,
-          voiceId: cf.giong ?? persona.voiceId,
+          voiceId: persona.voiceProvider === 'elevenlabs' && moi !== 'robot' ? persona.voiceId : (cf.giong ?? persona.voiceId),
           // Đổi tên giọng mà quên nhà cung cấp = gửi `robot-walle` cho
           // Google. Nó không biết tên đó, hỏng, rơi xuống giọng dự
           // phòng — và người dùng nghe câu chào bằng giọng cũ nên tưởng
           // lệnh đổi chưa ăn.
-          voiceProvider: cf.nhaCungCap ?? persona.voiceProvider,
+          voiceProvider: persona.voiceProvider === 'elevenlabs' && moi !== 'robot' ? persona.voiceProvider : (cf.nhaCungCap ?? persona.voiceProvider),
         },
         cf.chaoDoi,
         input.deviceId,
@@ -1298,8 +1298,8 @@ export async function runVoiceTurn(input: VoiceTurnInput): Promise<VoiceTurnResu
           {
             ...persona,
             cheDo: sangCheDo,
-            voiceId: cfMoi.giong ?? persona.voiceId,
-            voiceProvider: cfMoi.nhaCungCap ?? persona.voiceProvider,
+            voiceId: persona.voiceProvider === 'elevenlabs' ? persona.voiceId : (cfMoi.giong ?? persona.voiceId),
+            voiceProvider: persona.voiceProvider === 'elevenlabs' ? persona.voiceProvider : (cfMoi.nhaCungCap ?? persona.voiceProvider),
             language: cfMoi.ngonNgu ?? persona.language,
           },
           cfMoi.chaoDoi,
@@ -1326,6 +1326,32 @@ export async function runVoiceTurn(input: VoiceTurnInput): Promise<VoiceTurnResu
     const doDuoc = doTieng(heard, tiengWhisper);
     if (doDuoc.tieng && doDuoc.tieng !== tiengDangBat) {
       const lanThu = (dangCho?.nhac ?? 0) + 1;
+
+      // ⚠️ HAI LƯỢT LIỀN nói thứ tiếng kia ⇒ TỰ ĐỔI (15/11/2026). Bản cũ hỏi "Do you want me to switch?" rồi
+      // BỎ IM mọi lượt sau cho tới khi nghe đúng chữ "yes/có" ⇒ người dùng nói câu khác là kẹt vĩnh viễn ở
+      // tiếng Anh (log 18:37–18:40: hỏi lại 3 lần, bỏ im các lượt giữa). Người đã nói tiếng Việt hai câu liền
+      // thì rõ là muốn tiếng Việt.
+      if (dangCho && lanThu >= 2 && dangCho.sang === doDuoc.tieng) {
+        const sangCheDo: CheDo = doDuoc.tieng === 'vi' ? 'vi' : 'en';
+        await luuCheDo(input.projectId, sangCheDo);
+        await luuChoXacNhan(input.projectId, null);
+        const cfMoi = CHE_DO[sangCheDo];
+        const noiDuoc = await speakOnce(
+          {
+            ...persona,
+            cheDo: sangCheDo,
+            voiceId: persona.voiceProvider === 'elevenlabs' ? persona.voiceId : (cfMoi.giong ?? persona.voiceId),
+            voiceProvider: persona.voiceProvider === 'elevenlabs' ? persona.voiceProvider : (cfMoi.nhaCungCap ?? persona.voiceProvider),
+            language: cfMoi.ngonNgu ?? persona.language,
+          },
+          cfMoi.chaoDoi,
+          input.deviceId,
+        );
+        emitTranscript(input.deviceId, 'bot', cfMoi.chaoDoi);
+        logger.info('MakerLab tự đổi tiếng: hai lượt liền nói tiếng kia', { deviceId: input.deviceId, sang: sangCheDo });
+        timing.total = Date.now() - started;
+        return { heard, said: cfMoi.chaoDoi, actions: [], spoken: noiDuoc, ms: timing };
+      }
       await luuChoXacNhan(input.projectId, {
         sang: doDuoc.tieng,
         luc: Date.now(),

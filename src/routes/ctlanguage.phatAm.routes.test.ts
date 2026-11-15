@@ -80,7 +80,7 @@ test('multipart thật (CSDL local): thiếu khoá ⇒ chua_co_khoa; quá cỡ /
     const j = await r.json() as { data: { ketQua: unknown; lyDo: string; thongBao: string } };
     assert.equal(j.data.ketQua, null);
     assert.equal(j.data.lyDo, 'chua_co_khoa');
-    assert.match(j.data.thongBao, /chưa bật chấm phát âm/);
+    assert.match(j.data.thongBao, /Chấm phát âm đang tạm nghỉ/);
     const qua = await gui(wav(20));
     assert.equal(qua.status, 400);
     assert.equal(((await qua.json()) as { code: string }).code, 'CTL_PHAT_AM_AUDIO');

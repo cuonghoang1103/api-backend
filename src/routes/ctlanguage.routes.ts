@@ -9,7 +9,7 @@ import { RedisStore } from 'rate-limit-redis';
 import { getRedis } from '../config/redis.js';
 import multer from 'multer';
 import { authenticate, optionalAuth, requireAdmin } from '../middleware/auth.js';
-import { BadRequestError } from '../middleware/errorHandler.js';
+import { AppError, BadRequestError } from '../middleware/errorHandler.js';
 import { logger } from '../utils/logger.js';
 import { isProEffective } from '../services/pro.service.js';
 import type { ApiResponse } from '../types/index.js';
@@ -333,7 +333,11 @@ router.post('/ai/goi/luong', audioGoi.single('audio'), async (req: Request, res)
     if (!req.file && !(Array.isArray(tt.lichSu) && tt.lichSu.length)) void demCuocGoi(req.userId!, tt.nn);
     await chayLuotGoi(req.userId!, { audio: req.file?.buffer, mime: req.file?.mimetype, ...tt }, gui, ctl.signal);
   } catch (e) {
-    gui({ type: 'loi', lyDo: 'loi', message: (e as Error)?.message?.slice(0, 200) || 'Có lỗi, bạn thử lại nhé.' });
+    // Chỉ lỗi CÓ CHỦ Ý (AppError, 4xx) mới đưa câu của nó ra app; lỗi bất ngờ (Prisma, TypeError…) có câu kỹ thuật
+    // tiếng Anh ⇒ không lộ cho người dùng (như errorHandler giấu 5xx) — 15/11/2026.
+    const coY = e instanceof AppError && e.statusCode < 500;
+    if (!coY) logger.error('ctl goi luong', { error: (e as Error)?.message });
+    gui({ type: 'loi', lyDo: 'loi', message: coY ? (e as Error).message.slice(0, 200) : 'CuongMini đang gặp trục trặc — bạn thử lại sau ít phút nhé.' });
   } finally {
     clearInterval(keepalive);
     if (!res.writableEnded) res.end();

@@ -63,7 +63,7 @@ test('thiếu khoá Azure ⇒ chua_co_khoa + câu rõ ràng, KHÔNG gọi chấm
   const r = await luyenPhatAm(2, { audio: wav(2), cau: 'hello', nn: 'en' }, g.pt);
   assert.equal(r.ketQua, null);
   assert.equal(r.lyDo, 'chua_co_khoa');
-  assert.match(r.thongBao!, /chưa bật chấm phát âm/);
+  assert.match(r.thongBao!, /Chấm phát âm đang tạm nghỉ/);
   assert.equal(g.goi.length, 0);
   assert.equal(r.luot.batChua, false);
   assert.equal(r.luot.conLai, LUOT_FREE);

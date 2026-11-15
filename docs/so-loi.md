@@ -18,6 +18,55 @@ Mẫu một mục:
 
 ---
 
+### 15/11/2026 — CT Language iOS (mọi màn) — lỗi máy chủ hiện nguyên văn "Route GET /api/v1/… not found"
+- **Triệu chứng:** màn "Nhắn tin mới" hiện "Route GET /api/v1/ctlanguage/cong-dong/tin-nhan/tim-nguoi not found" (app mới hơn máy chủ); tương tự "Internal Server Error", "Too many requests…", "password: Password must be at least 12 characters".
+- **Nguyên nhân:** `ios-app/CuongThaiApp/Shared/Network/APIClient.swift › errorDescription` + các hàm `DangNhapCTL.cauLoi`, `loiTN`, `cauLoiMatKhau`… trả thẳng `message` của máy chủ; `errorHandler.notFoundHandler` và express-validator trả câu tiếng Anh.
+- **Cách sửa:** `APIError.cauTiengViet` + móc `cauHienThi` (CT Language gắn lúc khởi động) chỉ đổi CHỮ HIỆN RA, giá trị trong `case` giữ câu gốc vì Vở/CT Work phân nhánh theo nó; các hàm rút `m` đi qua `APIError.docDuoc` (ios-app `c5b3dbf`, test `TinNhanTNTests.testCauLoiMayChuThanhTiengViet`).
+- **Ảnh hưởng:** mọi màn CT Language khi máy chủ lỗi/chưa deploy tuyến; chưa phát hành.
+- **Bài học:** sửa câu lỗi ở CHỖ HIỂN THỊ chung, đừng đổi giá trị lỗi — đã có mã phân nhánh theo câu gốc ("not found", "404").
+
+### 15/11/2026 — CT Language iOS (sheet + nền động) — trăng/hạt của nền "Đêm sao" vẽ đè tiêu đề "Nhắn tin mới"
+- **Triệu chứng:** trong sheet, trăng khuyết + sao nằm ngay sau dòng tiêu đề; iPhone SE cũng dính ở thanh tiêu đề màn chính.
+- **Nguyên nhân:** `CTLanguageApp/GiaoDien/NenDongCTL.swift › VeNenCTL.demSao` đặt trăng cố định y = 30 (tính cho thanh trạng thái màn đầy); trong sheet y = 30 chính là dải tiêu đề. Đèn lồng, cành anh đào cùng kiểu.
+- **Cách sửa:** che (mask) lớp động trên dải safe-area phía trên trừ phần thanh trạng thái thật của cửa sổ; trang trí treo mép trên chỉ vẽ khi vùng thanh trạng thái ≥ 44 pt; 4 mùa tắt trang trí dải trên (ios-app `c5b3dbf`).
+- **Ảnh hưởng:** mọi sheet/màn dùng `NenGiay` với nền động khác "Giấy chấm".
+- **Bài học:** toạ độ "mép trên" trong nền là toạ độ của KHUNG, không phải của màn — sheet có mép trên riêng.
+
+### 15/11/2026 — CT Language iOS (CuongMini, màn Pro) — "Đăng nhập để hỏi", "Nâng cấp Pro để hỏi thêm", "Đăng nhập để đăng ký" bấm không ra gì
+- **Triệu chứng:** nút trong sheet đặt `app.hienDangNhap` / `app.hienPro` = true nhưng không màn nào hiện.
+- **Nguyên nhân:** hai cờ chỉ nối `.fullScreenCover`/`.sheet` ở GỐC (`App/CTLanguageAppMain.swift › GocCTL`); gốc đang trình bày sheet CuongMini/Pro nên UIKit từ chối trình bày thêm.
+- **Cách sửa:** `TrinhBayNoiCTL` (`App/AppStateCTL.swift`): gốc rảnh ⇒ SwiftUI như cũ; gốc bận ⇒ trình bày UIHostingController lên màn trên cùng; nút Đóng hạ cờ (ios-app `c5b3dbf`). Thử máy ảo: khách mở CuongMini ⇒ "Đăng nhập để hỏi" hiện màn đăng nhập, đóng/mở lại được.
+- **Ảnh hưởng:** khách và người dùng Free bấm từ trong sheet — đúng kiểu nút reviewer bấm thử.
+- **Bài học:** một cờ "mở màn X từ bất cứ đâu" mà chỉ có một nơi trình bày ở gốc là nút chết ngay khi được bật từ trong sheet.
+
+### 15/11/2026 — CT Language iOS (Đăng ký) — form cho gửi mật khẩu 8 ký tự, máy chủ đòi 12 + hoa/thường/số/ký hiệu
+- **Triệu chứng:** nút "Tạo tài khoản" sáng với mật khẩu 8 ký tự, gửi đi nhận câu tiếng Anh "password: Password must contain…".
+- **Nguyên nhân:** `CTLanguageApp/Modules/DangNhap/DangNhapCTL.swift › hopLe` chỉ kiểm `count >= 8`, gợi ý ghi "ít nhất 8 ký tự"; luật thật ở `auth.routes.ts /register`.
+- **Cách sửa:** dùng `TaiKhoanThuan.matKhauDat` (đã chép luật máy chủ) + danh sách điều còn thiếu dưới ô; Return chuyển ô/gửi (ios-app `c5b3dbf`).
+- **Ảnh hưởng:** mọi người tạo tài khoản bằng email trong app (reviewer hay thử luồng này).
+- **Bài học:** luật kiểm hợp lệ có hai bản (app/máy chủ) thì app phải gọi đúng một hàm đã chép luật, không tự đặt ngưỡng.
+
+### 15/11/2026 — CT Language (Gọi CuongMini) — đứng mãi "Đang kết nối" khi máy chủ trả lỗi thường; luồng lộ câu lỗi kỹ thuật
+- **Triệu chứng:** 429/404/413/5xx trả JSON/chữ thay vì SSE ⇒ vòng đọc không thấy `data:` ⇒ màn gọi treo; lỗi bất ngờ ở máy chủ gửi nguyên `e.message` (tiếng Anh, có thể là câu Prisma) xuống app.
+- **Nguyên nhân:** `CTLanguageApp/Modules/CuongMini/GoiCuongMiniCTL.swift › docLuong` không xét mã HTTP/Content-Type; `src/routes/ctlanguage.routes.ts` (`/ai/goi/luong`, khối catch) gửi `(e as Error).message`.
+- **Cách sửa:** app đọc thân lỗi, báo `.loi(...)` qua `APIError.docDuoc` (ios-app `c5b3dbf`); máy chủ chỉ đưa câu của `AppError` 4xx, còn lại câu chung + log (commit backend này, chưa deploy).
+- **Ảnh hưởng:** người gọi CuongMini khi máy chủ quá tải/lỗi.
+- **Bài học:** đường SSE phải xử lý cả trường hợp máy chủ KHÔNG trả SSE — middleware (rate limit, multer, 404) trả JSON.
+
+### 15/11/2026 — CT Language iOS (nhỏ) — "Pro tới ngày ngày 15 tháng 12", bài vừa đăng "sau 0 giây nữa", socket ghim production
+- **Triệu chứng:** màn Pro lặp chữ "ngày"; bài cộng đồng vừa đăng hiện "sau 0 giây nữa"; bản DEBUG trỏ máy chủ local thì tin nhắn realtime không tới.
+- **Nguyên nhân:** `Pro/ManProCTL.swift › hanPro` ghép "ngày" với `.formatted(date: .long)` (tiếng Việt đã có "ngày"); `CongDong/MoHinhCD.swift › ngayNgan` dùng RelativeDateTimeFormatter khi đồng hồ máy chủ nhanh hơn máy; `Shared/Realtime/RealtimeClient.swift` ghim "https://cuongthai.com".
+- **Cách sửa:** ngày dạng số vi_VN; < 1 phút hoặc tương lai ⇒ "vừa xong"; socket dùng `APIClient.diaChiGoc` (ios-app `c5b3dbf`, `2eb125a`, `5bbcf51`).
+- **Ảnh hưởng:** hiển thị; realtime chỉ ảnh hưởng thử local.
+- **Bài học:** đọc lại chuỗi ghép với ngày đã định dạng theo locale; mốc thời gian máy chủ có thể "ở tương lai" vài giây.
+
+### 15/11/2026 — CT Language (hồ sơ App Store) — hộp đồng ý AI liệt kê việc của app CuongThai, chỉ sai chỗ thu hồi
+- **Triệu chứng:** hộp "Cho phép gửi dữ liệu tới AI?" trong CT Language kể Vở, AI Tiền, CV, mã nguồn… và bảo "Bật lại trong Cài đặt → Chính sách bảo mật" (CT Language không có đường đó).
+- **Nguyên nhân:** `Shared/AI/DongYChiaSeAI.swift › tomTat/loiTuChoi` dùng chung cho mọi app.
+- **Cách sửa:** `#if CTLANGUAGE_APP` bản riêng (CuongMini hỏi/ảnh/đọc chính tả, gọi thoại, chấm phát âm/nói/thi nói, sửa bài, Nhờ Gấu, từ điển/bài học AI; thu hồi ở Tôi › CuongMini · AI); kèm chuỗi quyền micro/speech, một địa chỉ liên hệ, PrivacyInfo thêm GameplayContent + SearchHistory, Pro bỏ "không giới hạn" + bỏ nhắc web (ios-app `2eb125a`, `70285b0`); trang chính sách mục 14 viết lại (`3bb71643f`); câu `chua_co_khoa` Phát âm thân thiện (commit backend này).
+- **Ảnh hưởng:** mục 5.1.2(i)/2.3.1/3.1.1 khi duyệt; chưa nộp.
+- **Bài học:** văn bản công bố trong `Shared/` phải có biến thể theo app (cờ biên dịch), như bảng màu.
+
 ### 15/11/2026 — CT Language iOS (khoá học + Phát âm) — câu lỗi kỹ thuật lộ ra người học
 - **Triệu chứng:** máy chủ không trả được mục lục khoá ⇒ màn học hiện "Máy chủ trả 404 cho index.json"; Phát âm khi chưa cắm khoá Azure hiện "Máy chủ chưa bật chấm phát âm"; ôn thẻ thiếu bộ thẻ nói "sau khi web cập nhật".
 - **Nguyên nhân:** `ios-app/CuongThaiApp/Shared/SachHoc/KhoSachHoc.swift › taiNguon` dựng câu lỗi cho người lập trình (mã HTTP + tên tệp); `CTLanguageApp/Modules/PhatAm/*` và `Shared/SachHoc/OnTheSH.swift` viết theo góc nhìn máy chủ/web.

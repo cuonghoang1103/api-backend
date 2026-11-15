@@ -9,7 +9,7 @@
  * Giống các tính năng AI khác của CT Language (`hoiGau.ts`):
  *   · Lượt/ngày (giờ VN) đếm trong RAM: free `LUOT_FREE`, Pro `LUOT_PRO`. Chỉ trừ khi CHẤM ĐƯỢC (thiếu khoá, không nghe
  *     thấy, Azure lỗi/hết hạn mức tháng ⇒ không mất lượt).
- *   · Thiếu `AZURE_SPEECH_KEY` ⇒ `lyDo: 'chua_co_khoa'` + câu "chưa bật chấm phát âm" — KHÔNG ném lỗi, app hiện trạng thái.
+ *   · Thiếu `AZURE_SPEECH_KEY` ⇒ `lyDo: 'chua_co_khoa'` + câu "Chấm phát âm đang tạm nghỉ…" — KHÔNG ném lỗi, app hiện trạng thái.
  * ⚠️ AUDIO KHÔNG ĐƯỢC LƯU: multer memoryStorage ⇒ RAM ⇒ Azure ⇒ bỏ (giọng nói là dữ liệu sinh trắc).
  * App: đường có `/ai/` ⇒ app gọi `DongYChiaSeAI.batBuoc()` trước khi gửi (App Store 5.1.2(i) — Azure đã có trong công bố).
  */
@@ -27,7 +27,8 @@ export const TOI_DA_KY_TU = 120;
 export const TOI_DA_BYTE = 600 * 1024;
 
 export const THONG_BAO: Record<LyDoPhatAm, string> = {
-  chua_co_khoa: 'Máy chủ chưa bật chấm phát âm. Bạn vẫn nghe mẫu và tự ghi âm để so được.',
+  // Câu người dùng đọc (thắng câu của app) — không nói chuyện "máy chủ chưa bật" (15/11/2026). Thiếu AZURE_SPEECH_KEY/REGION.
+  chua_co_khoa: 'Chấm phát âm đang tạm nghỉ, bạn thử lại sau nhé. Bạn vẫn nghe mẫu và tự ghi âm để so được.',
   het_luot_ngay: 'Hôm nay bạn đã dùng hết lượt chấm phát âm.',
   het_luot_thang: 'Máy chấm phát âm đã hết hạn mức của tháng này — thử lại sau nhé.',
   khong_nghe_thay: 'Chưa nghe rõ — đọc to, gần micro hơn và đọc đúng câu mẫu.',

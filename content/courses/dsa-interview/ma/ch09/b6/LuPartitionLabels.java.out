@@ -1,0 +1,6 @@
+partitionLabels("abacdcdefe") = [3, 4, 3]
+partitionLabels("aaaa") = [4]
+partitionLabels("abc") = [1, 1, 1]
+partitionLabels("abca") = [4]
+partitionLabels("caedbdedda") = [1, 9]
+random self-test vs 2^(n-1) brute force: 1500 strings, 0 mismatches

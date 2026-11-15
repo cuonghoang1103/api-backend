@@ -1,0 +1,13 @@
+"Bgu" vs "Bug": Levenshtein = 2, with swaps (jql.ts) = 1
+"stauts" vs "status": Levenshtein = 2, with swaps (jql.ts) = 1
+"asignee" vs "assignee": Levenshtein = 1, with swaps (jql.ts) = 1
+"tip" vs "type": Levenshtein = 2, with swaps (jql.ts) = 2
+typed "asignee" -> assignee
+typed "stauts" -> status
+typed "In Prog" -> In Progress
+typed "prio" -> priority
+typed "tpye" -> type
+typed "tip" -> (no suggestion)
+typed "xyzzy" -> (no suggestion)
+login "cuonghoag" (unsafe: candidates = every account) -> Did you mean cuonghoang?
+login "giangvien0" (unsafe) -> Did you mean giangvien01?

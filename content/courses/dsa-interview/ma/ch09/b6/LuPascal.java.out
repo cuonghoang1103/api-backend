@@ -1,0 +1,4 @@
+generate(5) = [[1], [1, 1], [1, 2, 1], [1, 3, 3, 1], [1, 4, 6, 4, 1]]
+generate(1) = [[1]]
+row 29 (the 30th row), middle cell = 77558760   biggest number LeetCode can ask for
+self-test vs C(r, c): 465 cells, 0 mismatches

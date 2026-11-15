@@ -1,0 +1,8 @@
+isMatch("abbb", "ab*") = true
+isMatch("ac", "a.c") = false
+isMatch("", "x*y*") = true
+isMatch("xyz", ".*z") = true
+isMatch("aaa", "a*a") = true
+isMatch("ab", ".*c") = false
+isMatch("caab", "c*a*b") = true
+random self-test vs the built-in regex engine: 3000 cases (875 match), 0 mismatches

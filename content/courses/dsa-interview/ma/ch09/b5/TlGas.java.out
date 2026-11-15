@@ -1,0 +1,5 @@
+gas=[1, 2, 3, 4, 5] cost=[3, 4, 5, 1, 2] -> greedy 3, brute 3, forgot-total 3
+gas=[2, 3, 4] cost=[3, 4, 3] -> greedy -1, brute -1, forgot-total 2
+gas=[5, 1, 2, 3, 4] cost=[4, 4, 1, 5, 1] -> greedy 4, brute 4, forgot-total 4
+gas=[3, 1, 1] cost=[1, 2, 2] -> greedy 0, brute 0, forgot-total 0
+random check vs brute force: 3000 cases, greedy 0 mismatches, forgot-total 581 mismatches

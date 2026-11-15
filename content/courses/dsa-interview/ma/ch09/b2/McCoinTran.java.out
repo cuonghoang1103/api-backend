@@ -1,0 +1,5 @@
+Integer.MAX_VALUE + 1 = -2147483648
+coins=[2] amount=3   wrong=-2147483648   right=-1
+coins=[5, 10] amount=3   wrong=-1   right=-1
+coins=[1, 2, 5] amount=11   wrong=3   right=3
+coins=[3, 7] amount=5   wrong=-2147483648   right=-1

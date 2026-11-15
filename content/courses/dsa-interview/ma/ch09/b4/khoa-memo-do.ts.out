@@ -1,0 +1,5 @@
+    L |    states |  Map<string> |  Map<number> |  Int32Array |     table | LCS
+  250 |    63,001 |      12.7 ms |       4.7 ms |      1.0 ms |    0.4 ms | 162
+  500 |   251,001 |      71.9 ms |      20.1 ms |      4.5 ms |    1.8 ms | 319
+ 1000 | 1,002,001 |     412.0 ms |     107.5 ms |     16.8 ms |    3.3 ms | 643
+node v26.8.1 · arm64

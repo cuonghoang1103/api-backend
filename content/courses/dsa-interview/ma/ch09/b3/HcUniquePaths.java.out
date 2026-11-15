@@ -1,0 +1,5 @@
+uniquePaths(3, 7) = 28   one-row = 28
+uniquePaths(3, 4) = 10   one-row = 10
+uniquePaths(1, 1) = 1   uniquePaths(10, 10) = 48620
+withObstacles([[0,0,0],[0,1,0],[0,0,0]]) = 2
+withObstacles([[0,1],[0,0]]) = 1   withObstacles([[1]]) = 0

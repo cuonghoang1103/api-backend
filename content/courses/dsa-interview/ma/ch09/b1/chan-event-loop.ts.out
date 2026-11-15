@@ -1,0 +1,5 @@
+n=25: the 10 ms timer fired after    11 ms with naive fib, 12 ms with the loop
+n=30: the 10 ms timer fired after    11 ms with naive fib, 11 ms with the loop
+n=35: the 10 ms timer fired after    94 ms with naive fib, 11 ms with the loop
+n=40: the 10 ms timer fired after  1757 ms with naive fib, 11 ms with the loop
+node v26.8.1 · arm64

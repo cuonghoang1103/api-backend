@@ -1,0 +1,6 @@
+Integer.MAX_VALUE = 2147483647
+int ways(45) = 1836311903
+int ways(46) = -1323752223   <- silent overflow, no exception
+long fib(92) = 7540113804746346429
+long fib(93) = -6246583658587674878   <- long overflows too
+Math.addExact(1836311903, 1134903170) -> ArithmeticException: integer overflow

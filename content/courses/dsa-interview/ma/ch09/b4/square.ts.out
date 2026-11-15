@@ -1,0 +1,4 @@
+maximalSquare(["1101","1111","0111","1111"]) = 9
+maximalSquare(["01","10"]) = 1   maximalSquare(["0"]) = 0
+minimumTotal([[5],[9,6],[4,6,8],[0,7,1,5]]) = 18
+minimumTotal([[-3],[2,-1],[4,1,-9]]) = -13

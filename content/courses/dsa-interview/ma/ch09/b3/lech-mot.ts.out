@@ -1,0 +1,4 @@
+lcsOffByOne("abcde", "ace") = 3
+lcsOffByOne("abc", "def") = 1
+lcsOffByOne("xa", "ya") = 2
+why: "abc"[3] = undefined, "def"[3] = undefined, and undefined === undefined is true

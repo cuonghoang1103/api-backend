@@ -1,0 +1,12 @@
+rob([2, 7, 9, 3, 1]) = 12   robLine = 12
+rob([1, 2, 3, 1]) = 4   robLine = 4
+rob([5, 1, 1, 5]) = 10   robLine = 10
+rob([2, 1, 1, 2]) = 4   robLine = 4
+rob([4]) = 4   robLine = 4
+rob([3, 10]) = 10   robLine = 10
+robCircle([2, 3, 2]) = 3
+robCircle([1, 2, 3, 1]) = 4
+robCircle([1, 2, 3]) = 3
+robCircle([5, 1, 1, 5]) = 6
+robCircle([4]) = 4
+robCircle([200, 3, 140, 20, 10]) = 340

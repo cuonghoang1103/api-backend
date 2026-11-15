@@ -1,0 +1,2 @@
+first counterexample -> trial 1: coins [1, 6, 13], amount 18: greedy 6, DP 3
+500 random systems {1,a,b}: greedy fails on 267, correct on 233

@@ -1,0 +1,5 @@
+    L |    states | HashMap<String> | HashMap<Long> |   int[][] |     table | LCS
+  250 |    63,001 |         12.1 ms |        5.7 ms |    1.8 ms |    1.0 ms | 162
+  500 |   251,001 |         30.4 ms |       12.8 ms |    2.5 ms |    0.7 ms | 319
+ 1000 | 1,002,001 |         98.4 ms |       40.1 ms |    9.6 ms |    2.6 ms | 643
+java 21.0.9 · aarch64

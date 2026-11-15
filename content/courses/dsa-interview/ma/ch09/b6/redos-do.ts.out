@@ -1,0 +1,19 @@
+A) /^(a+)+$/.test("a".repeat(n) + "!")  — V8 backtracking engine
+  n = 18       1.8 ms
+  n = 19       3.5 ms   x2.0 vs n-1
+  n = 20       7.0 ms   x2.0 vs n-1
+  n = 21      13.8 ms   x2.0 vs n-1
+  n = 22      27.8 ms   x2.0 vs n-1
+  n = 23      55.7 ms   x2.0 vs n-1
+  n = 24     113.3 ms   x2.0 vs n-1
+  n = 25     228.8 ms   x2.0 vs n-1
+  n = 26     454.9 ms   x2.0 vs n-1
+  n = 27     908.7 ms   x2.0 vs n-1
+B) LC 10, p = "a*a*a*a*a*a*a*a*b", s = "a".repeat(n)
+     n |  naive calls |  naive ms | DP cells |   DP ms
+    10 |      119,339 |       0.9 |      198 |   0.011
+    15 |    1,225,784 |      11.0 |      288 |   0.004
+    20 |    7,400,249 |      69.1 |      378 |   0.004
+    25 |   32,040,359 |     322.7 |      468 |   0.005
+    30 |  110,427,239 |    1070.4 |      558 |   0.006
+node v26.8.1 · arm64

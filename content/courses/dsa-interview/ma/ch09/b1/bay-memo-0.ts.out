@@ -1,0 +1,4 @@
+n=21: answer 0 / 0   calls: if (memo[n]) -> 465   !== undefined -> 23
+n=41: answer 0 / 0   calls: if (memo[n]) -> 57,313   !== undefined -> 43
+n=61: answer 0 / 0   calls: if (memo[n]) -> 7,049,155   !== undefined -> 63
+n=60: answer 1346269 / 1346269   calls: if (memo[n]) -> 61   !== undefined -> 61

@@ -1,0 +1,5 @@
+git diff --no-index (Myers): -A  B +D  C +A  B -D  A
+  kept lines: 4
+LCS table diff:              -A  B +D  C +A  B -D  A
+  kept lines: 4
+git 2.51.1

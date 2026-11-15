@@ -1,0 +1,11 @@
+canJump([2,3,1,1,4]) = true   DP = true
+canJump([3,2,1,0,4]) = false   DP = false
+canJump([0]) = true   DP = true
+canJump([2,0,0]) = true   DP = true
+canJump([1,0,1]) = false   DP = false
+jump([2,3,1,1,4]) = 2   wrong loop (i < n) = 3
+jump([2,3,0,1,4]) = 2   wrong loop (i < n) = 3
+jump([0]) = 0   wrong loop (i < n) = 1
+jump([1,2]) = 1   wrong loop (i < n) = 2
+jump([1,1,1,1]) = 3   wrong loop (i < n) = 4
+random check canJump vs DP: 2000 arrays, 0 mismatches

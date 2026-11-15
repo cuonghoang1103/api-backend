@@ -1,0 +1,4 @@
+target = 20 points
+rank order, skip if it overflows: CT-1 + CT-2 + CT-4 = 19 points
+knapsack (fill as much as possible): CT-3 + CT-5 + CT-6 = 20 points
+top-3 by rank left out by the knapsack plan: CT-1, CT-2

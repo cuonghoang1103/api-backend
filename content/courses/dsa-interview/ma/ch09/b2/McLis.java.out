@@ -1,0 +1,8 @@
+LIS([10, 9, 2, 5, 3, 7, 101, 18]) = 4 (O(n²))  4 (O(n log n))
+LIS([0, 1, 0, 3, 2, 3]) = 4 (O(n²))  4 (O(n log n))
+LIS([7, 7, 7, 7]) = 1 (O(n²))  1 (O(n log n))
+LIS([5]) = 1 (O(n²))  1 (O(n log n))
+LIS([1, 2, 3, 4, 5]) = 5 (O(n²))  5 (O(n log n))
+LIS([5, 4, 3, 2, 1]) = 1 (O(n²))  1 (O(n log n))
+LIS([3, 5, 6, 2, 5, 4, 19, 5, 6, 7, 12]) = 6 (O(n²))  6 (O(n log n))
+random self-test O(n log n) vs O(n²): 2000 cases, 0 mismatches

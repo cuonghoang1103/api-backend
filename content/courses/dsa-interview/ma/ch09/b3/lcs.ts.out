@@ -1,0 +1,5 @@
+lcs("ABCBDA", "BDCABA") = 4  one answer = "BCBA"  two-rows = 4
+lcs("abcde", "ace") = 3  one answer = "ace"  two-rows = 3
+lcs("abc", "def") = 0  one answer = ""  two-rows = 0
+lcs("", "abc") = 0  one answer = ""  two-rows = 0
+lcs("dynamic", "dynamo") = 5  one answer = "dynam"  two-rows = 5

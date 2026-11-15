@@ -1,0 +1,7 @@
+numSquares(12) = 3   greedy = 4
+numSquares(13) = 2   greedy = 2
+numSquares(1) = 1   greedy = 1
+numSquares(43) = 3   greedy = 5
+numSquares(7) = 4   greedy = 4
+numSquares(10000) = 1   greedy = 1
+n = 1..10000: 1665 numbers need 4 squares, 0 disagree with Legendre, greedy wrong on 6440

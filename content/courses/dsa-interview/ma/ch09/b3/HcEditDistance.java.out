@@ -1,0 +1,6 @@
+minDistance("horse", "ros") = 3  two-rows = 3  edits = ["replace h->r at 0","delete r at 2","delete e at 4"]
+minDistance("intention", "execution") = 5  two-rows = 5  edits = ["replace i->e at 0","replace n->x at 1","replace t->e at 2","replace e->c at 3","replace n->u at 4"]
+minDistance("", "abc") = 3  two-rows = 3  edits = ["insert a at 0","insert b at 0","insert c at 0"]
+minDistance("kitten", "sitting") = 3  two-rows = 3  edits = ["replace k->s at 0","replace e->i at 4","insert g at 6"]
+minDistance("nha", "nhaf") = 1  two-rows = 1  edits = ["insert f at 3"]
+minDistance("Bgu", "Bug") = 2  two-rows = 2  edits = ["replace g->u at 1","replace u->g at 2"]

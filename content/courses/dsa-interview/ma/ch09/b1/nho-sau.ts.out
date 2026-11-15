@@ -1,0 +1,3 @@
+n = 1,000:  memo -> 107579939  |  table -> 107579939
+n = 100,000:  memo -> RangeError: Maximum call stack size exceeded  |  table -> 967618232
+n = 1,000,000:  memo -> RangeError: Maximum call stack size exceeded  |  table -> 534400663

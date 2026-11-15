@@ -1,0 +1,16 @@
+Worst case for plain recursion: a uses letters "abcd", b uses "wxyz" (no common letter).
+  n |     plain calls |       plain |      memo |     table | answer
+  6 |          13,483 |      0.1 ms |  0.002 ms |  0.001 ms | 6
+  7 |          72,958 |      0.1 ms |  0.001 ms |  0.001 ms | 7
+  8 |         398,593 |      0.7 ms |  0.001 ms |  0.001 ms | 8
+  9 |       2,193,844 |      3.7 ms |  0.001 ms |  0.002 ms | 9
+ 10 |      12,146,179 |     20.5 ms |  0.001 ms |  0.002 ms | 10
+ 11 |      67,570,078 |    113.9 ms |  0.001 ms |  0.000 ms | 11
+ 12 |     377,393,953 |    649.7 ms |  0.001 ms |  0.001 ms | 12
+ 13 |   2,114,900,428 |   3641.0 ms |  0.002 ms |  0.001 ms | 13
+Random words over "acgt", table vs memo:
+n =   100  cells =     10,000  table    0.2 ms  memo    0.2 ms  answer = 55
+n = 1,000  cells =  1,000,000  table    2.6 ms  memo    9.2 ms  answer = 534
+n = 2,000  cells =  4,000,000  table    9.5 ms  memo   37.7 ms  answer = 1049
+n = 5,000  cells = 25,000,000  table   83.2 ms  memo  269.7 ms  answer = 2600
+java 21.0.9 · aarch64

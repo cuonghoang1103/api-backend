@@ -1,0 +1,6 @@
+"cabbad": table = "abba"  centre = "abba"
+"babad": table = "bab"  centre = "bab"
+"racecar": table = "racecar"  centre = "racecar"
+"a": table = "a"  centre = "a"
+"ab": table = "a"  centre = "a"
+"abacdfgdcaba": table = "aba"  centre = "aba"

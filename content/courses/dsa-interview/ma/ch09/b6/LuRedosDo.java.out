@@ -1,0 +1,27 @@
+A) Pattern "(a+)+" matches "a".repeat(n) + "!"  — java.util.regex
+  n = 18     0.076 ms
+  n = 19     0.040 ms
+  n = 20     0.029 ms
+  n = 21     0.031 ms
+  n = 22     0.032 ms
+  n = 23     0.034 ms
+  n = 24     0.039 ms
+  n = 25     0.040 ms
+  n = 26     0.042 ms
+  n = 27     0.018 ms
+A2) Pattern "(.*a){12}" matches "a".repeat(n) + "!"
+  n = 16       5.3 ms
+  n = 18       4.3 ms   x0.8 vs n-2
+  n = 20      15.4 ms   x3.6 vs n-2
+  n = 22      50.2 ms   x3.3 vs n-2
+  n = 24     152.2 ms   x3.0 vs n-2
+  n = 26     432.5 ms   x2.8 vs n-2
+  n = 28    1132.6 ms   x2.6 vs n-2
+B) LC 10, p = "a*a*a*a*a*a*a*a*b", s = "a".repeat(n)
+     n |  naive calls |  naive ms | DP cells |   DP ms
+    10 |      119,339 |       0.7 |      198 |   0.011
+    15 |    1,225,784 |       4.0 |      288 |   0.016
+    20 |    7,400,249 |      25.0 |      378 |   0.021
+    25 |   32,040,359 |     113.8 |      468 |   0.025
+    30 |  110,427,239 |     401.3 |      558 |   0.030
+java 21.0.9 · aarch64

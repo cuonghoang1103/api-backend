@@ -1,0 +1,6 @@
+wordBreak("leetcode", [leet, code]) = true
+wordBreak("applepenapple", [apple, pen]) = true
+wordBreak("catsandog", [cats, dog, sand, and, cat]) = false
+wordBreak("aaaaaaab", [a, aa, aaa]) = false
+segment("thanhtoanthatbai", [thanh, toan, that, bai, thanhtoan]) = thanhtoan that bai
+segment("ilovecoding", [i, love, cod, coding, ing]) = i love coding

@@ -1,0 +1,3 @@
+target 20 points
+greedy by rank : CTW-1(8) CTW-3(5) CTW-4(3) CTW-5(2) CTW-6(1) = 19 pts
+knapsack (max) : CTW-2(13) CTW-3(5) CTW-5(2) = 20 pts

@@ -1,0 +1,7 @@
+[2,3,-2,4]           maxProduct = 6   only-max version = 6
+[-2,3,-4]            maxProduct = 24   only-max version = 3
+[-2,0,-1]            maxProduct = 0   only-max version = 0
+[-3]                 maxProduct = -3   only-max version = -3
+[-1,-2,-3,0,2]       maxProduct = 6   only-max version = 2
+[0,2]                maxProduct = 2   only-max version = 2
+random self-test: 3000 arrays, two-state 0 mismatches, only-max 1040 mismatches

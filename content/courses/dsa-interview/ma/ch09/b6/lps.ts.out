@@ -1,0 +1,6 @@
+"agbcba": interval DP = 5   LCS(s, reverse) = 5
+"banana": interval DP = 5   LCS(s, reverse) = 5
+"aabaa": interval DP = 5   LCS(s, reverse) = 5
+"abcd": interval DP = 1   LCS(s, reverse) = 1
+"a": interval DP = 1   LCS(s, reverse) = 1
+random self-test (interval DP = LCS trick = 2^n brute force): 1500 strings, 0 mismatches

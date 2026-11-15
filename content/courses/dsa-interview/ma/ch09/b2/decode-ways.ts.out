@@ -1,0 +1,9 @@
+"12": right = 2   wrong = 2
+"226": right = 3   wrong = 3
+"06": right = 0   wrong = 2
+"10": right = 1   wrong = 2
+"2101": right = 1   wrong = 5
+"11106": right = 2   wrong = 8
+"27": right = 1   wrong = 1
+"100": right = 0   wrong = 3
+"1111111111": right = 89   wrong = 89

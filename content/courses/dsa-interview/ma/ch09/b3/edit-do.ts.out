@@ -1,0 +1,18 @@
+Worst case for plain recursion: a uses letters "abcd", b uses "wxyz" (no common letter). Length n = |a| = |b|.
+  n |     plain calls |       plain |      memo |     table | answer
+  6 |          13,483 |      0.1 ms |  0.010 ms |  0.005 ms | 6
+  7 |          72,958 |      0.4 ms |  0.008 ms |  0.004 ms | 7
+  8 |         398,593 |      2.2 ms |  0.003 ms |  0.005 ms | 8
+  9 |       2,193,844 |     13.6 ms |  0.003 ms |  0.006 ms | 9
+ 10 |      12,146,179 |     74.4 ms |  0.004 ms |  0.007 ms | 10
+ 11 |      67,570,078 |    401.1 ms |  0.005 ms |  0.001 ms | 11
+ 12 |     377,393,953 |   2259.9 ms |  0.005 ms |  0.002 ms | 12
+ 13 |   2,114,900,428 |  22797.7 ms |  0.006 ms |  0.002 ms | 13
+ 14 |  11,885,772,379 | not run (×5.6 the calls of n = 13)
+counted calls match the recurrence for n = 6..13: true
+Random words over "acgt" (like DNA), table only (memo shown while recursion depth allows):
+n =   100  cells =     10,000  table    0.1 ms  memo 0.5 ms  answer = 55
+n = 1,000  cells =  1,000,000  table    3.6 ms  memo 24.8 ms  answer = 534
+n = 2,000  cells =  4,000,000  table   19.7 ms  memo 108.8 ms  answer = 1049
+n = 5,000  cells = 25,000,000  table  118.5 ms  memo 657.0 ms  answer = 2600
+node v26.8.1 · arm64

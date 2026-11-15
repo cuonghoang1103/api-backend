@@ -1,0 +1,3 @@
+Infinity + 1 = Infinity   Math.min(Infinity, Infinity + 1) = Infinity
+Number.MAX_SAFE_INTEGER + 2 = 9007199254740992   (precision is lost, but no wrap-around)
+(2 ** 31 - 1) + 1 = 2147483648   but ((2 ** 31 - 1) + 1) | 0 = -2147483648   (the | 0 trick forces 32-bit int)

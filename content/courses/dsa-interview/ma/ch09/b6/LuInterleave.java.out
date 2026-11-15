@@ -1,0 +1,6 @@
+isInterleave("ab", "cd", "acbd") = true
+isInterleave("ab", "cd", "adbc") = false
+isInterleave("aab", "ab", "abaab") = true
+isInterleave("", "xy", "xy") = true
+isInterleave("a", "b", "abc") = false
+random self-test vs brute force: 3000 cases (634 true), 0 mismatches

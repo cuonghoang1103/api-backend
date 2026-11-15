@@ -1,0 +1,5 @@
+[1, 2, 3, 0, 2]: with cooldown 3, forgetting it 4
+[1]: with cooldown 0, forgetting it 0
+[5, 4, 3, 2, 1]: with cooldown 0, forgetting it 0
+[2, 1, 4, 5, 2, 9, 7]: with cooldown 10, forgetting it 11
+random self-test vs brute force: 2000 cases, 0 mismatches

@@ -18,6 +18,13 @@ Mẫu một mục:
 
 ---
 
+### 15/11/2026 — CT Language + app CuongThai iOS (giọng đọc trong máy, vá nốt sau 0e4b5ca) — còn 11 chỗ gọi API giọng trên luồng chính lúc danh sách giọng đang nạp ⇒ cùng kiểu khoá chết
+- **Triệu chứng:** (chưa ai báo — rà mã sau vụ đứng hình ở game) cùng kịch bản app treo vĩnh viễn nếu trong vài giây đầu sau khi mở app người dùng nghe Gấu khen (`CoVuGau`), gọi thoại CuongMini đọc bằng giọng máy, bấm loa ở từ điển/thẻ (`DocTu`), Máy nghe, Dịch văn bản, hay mở màn Chọn giọng.
+- **Nguyên nhân:** `ios-app/CuongThaiApp/Shared/NgonNgu/CaiDatGiong.swift › giongTuDong` tự gọi `napNen()` rồi trả NGAY `AVSpeechSynthesisVoice(language:)` trên luồng chính (chính là thế khoá chết); `luaChon()` ⇒ `danhSach()` ⇒ `speechVoices()` đồng bộ trên luồng chính mỗi khi người dùng đã chọn giọng; `DocTu.doDuoc` (chạy trong `body`), `DocTu.doc/docThu`, `GiongGau.noi`, `PhienGoiCTL.giongTrenMay`, `MayNgheCTL.docTu`, `DocMayDichCTL.batTat`, `ChonGiongView.danhSach` gọi thẳng `(language:)`/`(identifier:)`/`speechVoices()`; bản vá 0e4b5ca ở `GiongSachHoc` còn sót `(identifier:)` trên luồng chính trước khi nạp xong.
+- **Cách sửa:** một cửa chung `KhoGiongMay.voiGiong` / `giongDeNoi` (đã nạp ⇒ chọn ngay như cũ; chưa ⇒ chọn giọng trên hàng đợi nền nối tiếp SAU khi nạp, rồi mới về luồng chính nói, kèm bộ đếm lượt để câu cũ không nói đè), mọi lượt nạp đi qua cùng một hàng đợi; `giongTuDong` chưa nạp ⇒ `nil`; `luaChon` chưa nạp ⇒ dựng từ id đã lưu; `doDuoc` chưa nạp ⇒ tạm `true`; Chọn giọng chờ `choNap()` ở `.task` (ios-app — xem `git log -S voiGiong`).
+- **Ảnh hưởng:** cả CT Language lẫn app CuongThai chính (dùng chung `Shared/NgonNgu`), chỉ trong cửa sổ vài giây lúc danh sách giọng đang nạp lần đầu; chưa kiểm trên máy ảo — mới dựng xanh cả hai scheme.
+- **Bài học:** vá một chỗ thì phải `grep` TẤT CẢ lời gọi cùng API ngay lúc đó — và soi cả hàm tiện ích "an toàn" (ở đây `giongTuDong` chính là thủ phạm gốc); với API có khoá nội bộ, gom về MỘT cửa có luật rõ (chưa nạp ⇒ không chạm trên luồng chính) thay vì vá từng nơi gọi.
+
 ### 16/11/2026 — Quy trình git (game viết tay "Gấu Thư Pháp", bắt ngay sau commit) — commit bằng chỉ mục tạm để lại chỉ mục CHUNG "đang xoá" commit vừa làm
 - **Triệu chứng:** sau khi commit `troChoiThuan.ts` + test bằng `GIT_INDEX_FILE` tạm (vì chỉ mục chung có `CLAUDE.md` của phiên khác đang stage), `git status` hiện `MM` cho đúng hai tệp vừa commit.
 - **Nguyên nhân:** chỉ mục chung vẫn giữ blob CŨ của hai tệp ⇒ so với HEAD mới, nó chính là một thay đổi đã stage HOÀN TÁC commit của mình; phiên khác chạy `git commit` (không pathspec) là đẩy luôn bản hoàn tác đó lên.
@@ -558,3 +565,10 @@ Mẫu một mục:
 - **Cách sửa:** tải xong (`daTai`) ⇒ chờ một nhịp bố cục (80 ms) rồi `scrollTo("day", anchor: .bottom)` — cùng commit tính năng Tin nhắn của app CT Language.
 - **Ảnh hưởng:** không ai dùng phải — chụp màn trên máy ảo trước khi commit.
 - **Bài học:** `defaultScrollAnchor(.bottom)` với `LazyVStack` không đủ cho khung chat — luôn cuộn tay xuống đáy sau lần tải đầu, và chụp cả ca hội thoại NGẮN lẫn DÀI.
+
+### 15/11/2026 — Web (đăng nhập OAuth) — kẻ xấu đăng ký trước bằng email người khác rồi dùng được mật khẩu của hắn sau khi chủ email đăng nhập Google
+- **Triệu chứng:** (chưa xảy ra thật — agent soạn khoá dsa-interview đọc mã và phát hiện) tài khoản lập bằng email + mật khẩu, CHƯA xác thực email (login bị chặn `EMAIL_NOT_VERIFIED`); khi chủ thật của email đó đăng nhập Google/Facebook/Apple thì tài khoản được gộp, đánh dấu đã xác thực, và mật khẩu của người lập trước bỗng đăng nhập được.
+- **Nguyên nhân:** `src/services/auth.service.ts › oauthRegister` (~dòng 520) gộp OAuth vào user cùng email, đặt `emailVerified: true` nhưng GIỮ `password` cũ, không phân biệt tài khoản đã hay chưa xác thực (kiểu tấn công "pre-account hijacking"). Kèm lỗi nhỏ: route `/role` (`src/routes/auth.routes.ts` ~318) so `X-Internal-Token` bằng `===` (lộ secret dần qua thời gian phản hồi).
+- **Cách sửa:** gộp vào tài khoản CHƯA xác thực ⇒ `password: null` (chủ thật muốn mật khẩu thì đặt lại qua email); tài khoản đã xác thực giữ nguyên. `/role` so bằng `timingSafeEqual` (so độ dài byte trước). Test `src/routes/auth.oauthGop.db.test.ts` (2 ca, CSDL thật).
+- **Ảnh hưởng:** mọi tài khoản web có email từng bị người khác đăng ký mà chưa xác thực, từ khi có đăng nhập OAuth; không thấy dấu hiệu bị khai thác (chưa kiểm log).
+- **Bài học:** "nhà cung cấp OAuth đã xác thực email" chỉ chứng minh người ĐANG đăng nhập sở hữu email — không chứng minh mọi thứ gắn sẵn vào tài khoản cùng email (mật khẩu, phiên) là của họ; gộp tài khoản thì phải coi dữ liệu xác thực cũ của tài khoản chưa xác thực là của người lạ.

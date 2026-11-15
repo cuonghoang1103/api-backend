@@ -1,3 +1,4 @@
+import { timingSafeEqual } from 'node:crypto';
 import { Router, type Response, type Request, type NextFunction } from 'express';
 import { body } from 'express-validator';
 import { authService } from '../services/auth.service.js';
@@ -315,7 +316,10 @@ router.get(
       // là no-op ⇒ bất kỳ ai cũng tra được role/roleVersion của một email. Nay nhận một trong hai:
       // chữ ký HMAC x-cuongthai-noi-bo (máy chủ Next luôn gửi — lib/auth.ts) hoặc X-Internal-Token khớp secret.
       const secret = process.env.INTERNAL_API_SECRET;
-      const quaSecret = !!secret && req.headers['x-internal-token'] === secret;
+      // 15/11/2026: so bằng timingSafeEqual (không `===`) — `===` dừng ở ký tự lệch đầu tiên, lộ dần secret qua thời gian phản hồi.
+      const tok = req.headers['x-internal-token'];
+      const a = typeof tok === 'string' ? Buffer.from(tok) : null; const b = secret ? Buffer.from(secret) : null;
+      const quaSecret = !!a && !!b && a.length === b.length && timingSafeEqual(a, b);
       if (!quaSecret && !laLoiGoiNoiBo(req.headers as Record<string, unknown>)) {
         res.status(401).json({ success: false, message: 'Unauthorized' });
         return;

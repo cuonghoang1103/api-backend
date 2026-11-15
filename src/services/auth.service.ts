@@ -525,11 +525,17 @@ export class AuthService {
       // người dùng tự chọn. Đăng nhập lại bằng Google mà mất ảnh vừa đổi hôm
       // qua thì đó là mất dữ liệu, dù không có lỗi nào hiện ra.
       const anhMoi = user.avatarUrl ? null : await this.luuAnhOAuth(data);
+      // 15/11/2026 — chặn chiếm tài khoản đăng ký trước (pre-account hijacking): tài khoản CHƯA xác thực email
+      // có thể do kẻ khác lập bằng email của nạn nhân với mật khẩu của hắn (login chặn nó vì chưa xác thực).
+      // Nạn nhân đăng nhập Google ⇒ dòng dưới đặt emailVerified = true ⇒ mật khẩu của kẻ đó bỗng dùng được.
+      // Nên khi gộp vào tài khoản chưa xác thực: XOÁ mật khẩu cũ — chủ email thật muốn mật khẩu thì đặt lại qua email.
+      const chuaXacThuc = !user.emailVerified;
       user = await prisma.user.update({
         where: { id: user.id },
         data: {
           provider: data.provider,
           providerId: data.providerId,
+          ...(chuaXacThuc ? { password: null } : {}),
           emailVerified: true, // OAuth provider đã verify email
           emailVerifiedAt: user.emailVerifiedAt ?? new Date(),
           ...(data.fullName && !user.fullName ? { fullName: data.fullName } : {}),

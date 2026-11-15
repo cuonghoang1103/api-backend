@@ -28,7 +28,7 @@
 import { prisma } from '../../config/database.js';
 import { logger } from '../../utils/logger.js';
 
-export type ChuDe = 'vps' | 'may-nha' | 'web' | 'ai' | 'deploy' | 'luu-tru' | 'app';
+export type ChuDe = 'vps' | 'may-nha' | 'web' | 'ai' | 'deploy' | 'luu-tru' | 'app' | 'train';
 
 function khongDau(s: string): string {
   return s
@@ -59,6 +59,7 @@ const LUAT: Array<[ChuDe, RegExp[]]> = [
   ['deploy', [/\b(deploy|trien khai)\b/, /\b(ban|phien ban) (moi nhat|dang chay)\b/, /\bcap nhat (luc nao|gan nhat)\b/]],
   ['luu-tru', [/\b(r2|luu tru|bo nho luu tru)\b/, /\b(co so du lieu|database|csdl|redis)\b/]],
   ['app', [/\b(app|ung dung) (desktop|may tinh|iphone|ios|android|cua toi|cua minh)\b/, /\btestflight\b/, /\bban app\b/]],
+  ['train', [/\b(train|tren|huan luyen|day) giong\b/, /\bgiong (f5|video|khoa hoc|moi)\b/, /\b(tien do|vong) train\b/, /\bcuong ?[3-9]\b/, /\bcheckpoint\b/]],
 ];
 
 /** Câu hỏi chung chung về hệ thống ⇒ một bản tóm tắt ba chủ đề chính. */
@@ -233,6 +234,19 @@ async function app(): Promise<string> {
   return chu + ' App iPhone: chưa có số liệu (TestFlight không nối vào máy chủ).';
 }
 
+/**
+ * Tiến độ train giọng F5 (15/11/2026). Phiên điều phối train đẩy một câu tóm tắt qua
+ * `POST /internal/odin/trang-thai` ⇒ app_settings `odin_trang_thai_train` {chu, luc}. Robot đọc kèm "cập nhật N phút trước".
+ */
+export const KHOA_TRAIN = 'odin_trang_thai_train';
+async function train(): Promise<string> {
+  const r = await prisma.appSetting.findUnique({ where: { key: KHOA_TRAIN } });
+  if (!r?.value) return 'Train giọng: chưa có báo cáo tiến độ nào (phiên điều phối chưa gửi).';
+  const v = JSON.parse(String(r.value)) as { chu?: string; luc?: number };
+  const phut = v.luc ? Math.round((Date.now() - v.luc) / 60_000) : null;
+  return `Train giọng (cập nhật ${phut === null ? 'không rõ lúc nào' : phut < 1 ? 'vừa xong' : `${phut} phút trước`}): ${String(v.chu ?? '').slice(0, 600)}`;
+}
+
 const LAM: Record<ChuDe, () => Promise<string>> = {
   vps,
   'may-nha': mayNha,
@@ -241,6 +255,7 @@ const LAM: Record<ChuDe, () => Promise<string>> = {
   deploy,
   'luu-tru': luuTru,
   app,
+  train,
 };
 
 /**

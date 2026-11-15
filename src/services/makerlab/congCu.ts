@@ -26,7 +26,7 @@ export interface NguCanhCongCu {
   viTri: string | null;
 }
 
-const CHU_DE_HE_THONG = ['vps', 'may-nha', 'web', 'ai', 'deploy', 'luu-tru', 'app'] as const;
+const CHU_DE_HE_THONG = ['vps', 'may-nha', 'web', 'ai', 'deploy', 'luu-tru', 'app', 'train'] as const;
 
 /** Danh sách công cụ cho một robot. Công cụ admin chỉ hiện với robot của admin. THUẦN. */
 export function dsCongCu(laAdmin: boolean): LLMTool[] {

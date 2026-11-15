@@ -45,3 +45,10 @@ test('mở trò chơi bằng giọng', () => {
   assert.deepEqual(khopBatDauHoc('chơi nối từ tiếng Nhật đi'), { nn: 'ja', kieu: 'noi-tu' });
   assert.deepEqual(khopBatDauHoc('chơi đố vui đi'), { nn: 'en', kieu: 'do-vui' });
 });
+
+test('hỏi tiến độ train giọng ⇒ chủ đề train', async () => {
+  const { canHeThong } = await import('./heThong.js');
+  assert.ok(canHeThong('train giọng tới đâu rồi').includes('train'));
+  assert.ok(canHeThong('cuong6 xong chưa').includes('train'));
+  assert.deepEqual(canHeThong('kể chuyện cười đi'), []);
+});

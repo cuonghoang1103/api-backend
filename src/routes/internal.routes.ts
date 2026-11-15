@@ -66,6 +66,23 @@ router.use(chiNoiBo);
  * POST /api/v1/internal/odin/bao — { noiDung, gap? } (15/11/2026)
  * Cho script ngoài (deploy-nha.sh, phiên điều phối train giọng, render) nhờ robot Odin của admin đọc một câu báo.
  */
+/**
+ * POST /api/v1/internal/odin/trang-thai — { chu } (15/11/2026)
+ * Phiên điều phối train giọng đẩy câu tóm tắt tiến độ; robot đọc khi chủ hỏi "train giọng tới đâu rồi".
+ */
+router.post('/odin/trang-thai', async (req: Request, res: Response<ApiResponse>, next) => {
+  try {
+    const chu = String((req.body as { chu?: unknown })?.chu ?? '').trim().slice(0, 600);
+    if (!chu) { res.status(400).json({ success: false, message: 'Thiếu chu' }); return; }
+    const { KHOA_TRAIN } = await import('../services/makerlab/heThong.js');
+    const value = JSON.stringify({ chu, luc: Date.now() });
+    await prisma.appSetting.upsert({ where: { key: KHOA_TRAIN }, create: { key: KHOA_TRAIN, value }, update: { value } });
+    res.json({ success: true, data: { luu: true } });
+  } catch (err) {
+    next(err);
+  }
+});
+
 router.post('/odin/bao', async (req: Request, res: Response<ApiResponse>, next) => {
   try {
     const noiDung = String((req.body as { noiDung?: unknown })?.noiDung ?? '').slice(0, 300);

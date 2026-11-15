@@ -18,6 +18,48 @@ Mẫu một mục:
 
 ---
 
+### 15/11/2026 — Robot Odin (nhạc) — nói "bật bài Baby rồi" bốn lần mà không phát gì
+- **Triệu chứng:** xin "bật bài gì của Justin Bieber", robot đáp đã bật, âm lượng 30/60%, rồi trách người dùng không bật loa — loa im (log robot 20:39–20:41).
+- **Nguyên nhân:** bật nhạc trông HOÀN TOÀN vào việc model nhớ kèm lệnh `play_music` trong `actions` (`voiceLoop.ts › dispatchAction`); model quên lệnh nhưng vẫn nói như đã làm, và lệnh nhanh `phanXa.ts` chỉ bắt "bài tiếp/phát tiếp".
+- **Cách sửa:** `musicTim.ts › khopXinNhac` (server tự bắt câu xin nhạc, tách tên bài/ca sĩ, bỏ qua "nhắc… học bài", "bài học", "tắt nhạc") + `music.playMusicOn({truocKhiPhat})` chỉ nói tên bài khi đã có bài; bài ngoài thư viện ⇒ "đợi tao tải" (commit e49645186).
+- **Ảnh hưởng:** mọi lần xin nhạc mà model không kèm lệnh — từ khi có robot.
+- **Bài học:** hành động có hậu quả thật (phát nhạc, đặt giờ, deploy) đừng để model "hứa bằng lời" — server bắt ý định chắc chắn và tự làm, lời nói phải đi SAU kết quả thật.
+
+### 15/11/2026 — Robot Odin (lời nói) — robot đọc to cả "say : … actions : type : face…"
+- **Triệu chứng:** thỉnh thoảng robot đọc thành tiếng nguyên khối JSON.
+- **Nguyên nhân:** Claude viết ngoặc kép KHÔNG thoát trong câu nói (`"say":"…cái tên "Bậm Trợn"…"`) ⇒ `JSON.parse` hỏng ⇒ `parseRobotReply` rơi xuống nhánh "đọc hết chữ còn lại".
+- **Cách sửa:** `votSayHong` vớt `say` tới dấu `"` cuối trước `,"actions"`; hợp đồng trong `persona.ts` cấm ngoặc kép trong "say" (dùng ' ' hoặc « »); test `danhThuc.test.ts`.
+- **Ảnh hưởng:** câu trả lời có trích tên/câu nói.
+- **Bài học:** đầu ra máy đọc từ model phải có đường vớt khi hỏng, và nói rõ ký tự cấm ngay trong hợp đồng.
+
+### 15/11/2026 — Robot Odin (cổng gọi tên) — gọi "Hey Odin" không thưa; hỏi câu thứ hai bị bỏ
+- **Triệu chứng:** nhiều lần gọi tên robot im; lần đầu trả lời được, hỏi thêm 2–3 câu thì không đáp.
+- **Nguyên nhân:** Whisper nghe "Odin" thành "Hồ Đình/Hô Linh/Allin" ⇒ `danhThuc.ts` không khớp; cửa sổ thức 10 s tính từ lúc gọi tên trôi hết trong lúc robot đang nói câu trả lời dài.
+- **Cách sửa:** `PHIEN_AM_CAN_CHAO` (chấp nhận các phiên âm đó khi đi sau lời chào hoặc đứng một mình); `giuThucHoiThoai` tính giờ từ lúc NÓI XONG, tối thiểu 30 s.
+- **Ảnh hưởng:** mọi hội thoại bằng giọng với robot.
+- **Bài học:** đo bằng chữ Whisper THẬT trong log trước khi đoán; mốc thời gian phải tính từ lúc người dùng có thể nói, không phải từ lúc bắt đầu lượt.
+
+### 15/11/2026 — Robot Odin (chế độ) — kẹt ở chế độ tiếng Anh, nói gì cũng bị đổi chế độ
+- **Triệu chứng:** robot chuyển sang tiếng Anh rồi không về được; câu dài có chữ "tiếng Anh" bị coi là lệnh đổi chế độ.
+- **Nguyên nhân:** `cheDo.ts › khopDoiCheDo` khớp từ khoá trong câu dài bất kỳ; dò lệch tiếng không có đường tự về.
+- **Cách sửa:** câu > ngắn chỉ nhận khi có động từ đổi (đổi/chuyển/switch/change); lệch tiếng 2 lượt liền ⇒ tự đổi chế độ; giữ giọng ElevenLabs khi đổi.
+- **Ảnh hưởng:** người dùng nói lẫn Anh–Việt.
+- **Bài học:** lệnh đổi trạng thái bằng giọng cần cả ý định (động từ) lẫn đối tượng, không chỉ từ khoá.
+
+### 15/11/2026 — Robot Odin (mặt) — biểu cảm nhạt, 74/110 lượt là lim dim, mặt đổi SAU khi nói xong
+- **Triệu chứng:** robot gần như lúc nào cũng mặt buồn ngủ; cảm xúc hiện ra khi câu đã nói xong.
+- **Nguyên nhân:** `henNguLai` đặt mặt sleepy mỗi lần hết cửa sổ thức; lệnh `face` nằm trong `actions` ở CUỐI JSON nên chỉ tới khi model viết xong.
+- **Cách sửa:** trường `camXuc` đứng ĐẦU JSON + bắt sớm bằng regex trong luồng chữ (`daBaoMatSom`), 17 cảm xúc, hết thức về `neutral` (commit 0af363ada).
+- **Ảnh hưởng:** toàn bộ biểu cảm robot.
+- **Bài học:** thứ tự trường trong JSON chảy dần quyết định độ trễ — thứ cần sớm phải viết trước.
+
+### 15/11/2026 — Deploy (deploy-nha) — treo 20 phút ở "Gửi mã sang máy nhà" rồi FAIL
+- **Triệu chứng:** `git push linux-nha:…/repo.git` đứng yên 20 phút (pack-objects 0% CPU), rồi bước 3 báo thất bại; production giữ bản cũ.
+- **Nguyên nhân:** đường SSH qua đường hầm VPS tới máy nhà kẹt tạm thời (đo lại ngay sau: ssh 0,6 s, ls-remote 0,5 s); đổi mới chỉ 1,4 MB nên không phải do dung lượng.
+- **Cách sửa:** chạy lại `deploy-nha.sh --khong-lui` khi không có lượt nào khác — qua bình thường (bd29a6e79 lên 21:24).
+- **Ảnh hưởng:** lượt deploy 20:48 của phiên khác; trễ ~40 phút.
+- **Bài học:** đẩy mã sang máy nhà nên có hạn giờ (vd. `timeout 300 git push`) để hỏng nhanh thay vì treo 20 phút; trước khi đổ cho mạng, đo kích thước gói và CPU của pack-objects.
+
 ### 15/11/2026 — CT Language iOS (CuongMini · Tạo thẻ ôn) — nghĩa thẻ dính câu giảng; Cộng đồng hai nút Gấu chồng nhau
 - **Triệu chứng:** "Tạo thẻ ôn" ra thẻ `yesterday` — "hôm qua, hãy dùng quá khứ đơn. Vì vậy,"; màn Cộng đồng có nút trợ lý nổi toàn app nằm ngay trên nút Gấu "Đặt câu hỏi".
 - **Nguyên nhân:** `ios-app/CuongThaiApp/CTLanguageApp/Modules/TroLyGau/TraLoiGauCTL.swift › DongChuGau.tachGoc` lấy nghĩa "từ — nghĩa" tới hết DÒNG, mà model hay giảng tiếp trên cùng dòng; `Modules/CongDong/CongDongCTL.swift` chưa đăng ký `DemNutGauRieng` như Tôi/hộp thư.

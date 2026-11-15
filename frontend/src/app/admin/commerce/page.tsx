@@ -19,7 +19,7 @@ import {
 } from 'recharts';
 import {
   TrendingUp, Wallet, ShoppingBag, Crown, Loader2, RefreshCw, AlertCircle,
-  Landmark, KeyRound, Clock, Check, X, Settings, ArrowLeft, Info, Terminal, Sparkles, ShieldBan,
+  Landmark, KeyRound, Clock, Check, X, Settings, ArrowLeft, Info, Terminal, Sparkles, ShieldBan, Mic,
 } from 'lucide-react';
 import {
   commerceAdminApi,
@@ -27,12 +27,13 @@ import {
 } from '@/lib/api';
 import CongAnthropicAdmin from '@/components/admin/CongAnthropicAdmin';
 import ChanCuongMiniAdmin from '@/components/admin/ChanCuongMiniAdmin';
+import GiongElAdmin from '@/components/admin/GiongElAdmin';
 
 const dongVN = (n: number) => `${Math.round(n).toLocaleString('vi-VN')} đ`;
 const gonVN = (n: number) =>
   n >= 1_000_000 ? `${(n / 1_000_000).toFixed(1)}tr` : n >= 1_000 ? `${Math.round(n / 1_000)}k` : String(n);
 
-type Tab = 'doanhthu' | 'chuyenkhoan' | 'doikey' | 'llmkey' | 'fable' | 'anthropic' | 'chan' | 'caidat';
+type Tab = 'doanhthu' | 'chuyenkhoan' | 'doikey' | 'llmkey' | 'fable' | 'anthropic' | 'giong' | 'chan' | 'caidat';
 
 export default function AdminCommercePage() {
   // Mở đúng tab theo `?tab=` trên URL.
@@ -46,7 +47,7 @@ export default function AdminCommercePage() {
   const [tab, setTab] = useState<Tab>(() => {
     if (typeof window === 'undefined') return 'doanhthu';
     const t = new URLSearchParams(window.location.search).get('tab');
-    const hopLe: Tab[] = ['doanhthu', 'chuyenkhoan', 'doikey', 'llmkey', 'fable', 'anthropic', 'chan', 'caidat'];
+    const hopLe: Tab[] = ['doanhthu', 'chuyenkhoan', 'doikey', 'llmkey', 'fable', 'anthropic', 'giong', 'chan', 'caidat'];
     return hopLe.includes(t as Tab) ? (t as Tab) : 'doanhthu';
   });
   const [soNgay, setSoNgay] = useState(30);
@@ -126,6 +127,7 @@ export default function AdminCommercePage() {
             { id: 'llmkey' as const, ten: 'Key terminal', Icon: Terminal, badge: 0 },
             { id: 'fable' as const, ten: 'Cuong Fable', Icon: Sparkles, badge: 0 },
             { id: 'anthropic' as const, ten: 'CuongMini · model & khoá', Icon: KeyRound, badge: 0 },
+            { id: 'giong' as const, ten: 'Giọng ElevenLabs', Icon: Mic, badge: 0 },
             { id: 'chan' as const, ten: 'Chặn CuongMini', Icon: ShieldBan, badge: 0 },
             { id: 'caidat' as const, ten: 'Cài đặt', Icon: Settings, badge: 0 },
           ]).map((t) => (
@@ -150,6 +152,7 @@ export default function AdminCommercePage() {
         {tab === 'llmkey' && <TabKeyOpenCode />}
         {tab === 'fable' && <TabFable />}
         {tab === 'anthropic' && <CongAnthropicAdmin />}
+        {tab === 'giong' && <GiongElAdmin />}
         {tab === 'chan' && <ChanCuongMiniAdmin />}
         {tab === 'caidat' && <TabCaiDat />}
       </div>

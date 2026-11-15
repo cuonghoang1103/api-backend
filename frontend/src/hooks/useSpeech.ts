@@ -14,6 +14,7 @@
  * typing if a mic/API/voice is unavailable.
  */
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { phatEl, dungEl } from '@/lib/giongEl';
 
 type Lang = 'VI' | 'EN';
 const LOCALE: Record<Lang, string> = { VI: 'vi-VN', EN: 'en-US' };
@@ -129,12 +130,14 @@ export function useSpeech() {
    * Returns true whenever TTS will be attempted (kept sync for existing callers).
    */
   const speak = useCallback((text: string, lang: Lang = 'VI'): boolean => {
-    if (!ttsSupported) return false;
+    const coAudio = typeof window !== 'undefined' && typeof Audio !== 'undefined';
+    if (!ttsSupported && !coAudio) return false;
     const plain = toPlain(text);
     if (!plain) return false;
-    const synth = window.speechSynthesis;
+    const synth = ttsSupported ? window.speechSynthesis : null;
 
     const run = (voices: SpeechSynthesisVoice[]): void => {
+      if (!synth) { setSpeaking(false); return; }
       // One voice for the entire passage.
       const voice = pickVoice(voices, lang) || pickVoice(voices, lang === 'VI' ? 'EN' : 'VI');
       const chunks = splitSentences(plain);
@@ -154,13 +157,24 @@ export function useSpeech() {
       }
     };
 
-    const cached = synth.getVoices();
-    if (cached.length) run(cached);
-    else void loadVoices().then(run); // first click before voices load: wait, then speak
+    const browser = (): void => {
+      if (!synth) { setSpeaking(false); return; }
+      const cached = synth.getVoices();
+      if (cached.length) run(cached);
+      else void loadVoices().then(run); // first click before voices load: wait, then speak
+    };
+
+    // 15/11/2026: giọng ElevenLabs (admin + Pro, lib/giongEl.ts) TRƯỚC — tự nhiên, đọc đúng cả tiếng Anh xen kẽ.
+    // Không được dùng / hỏng mẩu đầu ⇒ giọng trình duyệt như cũ. `speaking` giữ TRUE suốt (kể cả lúc chuyển sang
+    // đường lùi) — gọi thoại bám lượt true→false để mở mic lại, tắt giữa chừng là nó nghe chính cái loa.
+    synth?.cancel();
+    setSpeaking(true);
+    void phatEl(plain, { lang: LOCALE[lang], onXong: () => setSpeaking(false) }).then((ok) => { if (!ok) browser(); });
     return true;
   }, [ttsSupported]);
 
   const stopSpeak = useCallback(() => {
+    dungEl();
     if (ttsSupported) window.speechSynthesis.cancel();
     setSpeaking(false);
   }, [ttsSupported]);

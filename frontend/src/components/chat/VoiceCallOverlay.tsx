@@ -29,6 +29,7 @@ import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { Mic, MicOff, PhoneOff, Volume2, VolumeX, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 import { useSpeech } from '@/hooks/useSpeech';
+import { dangPhatEl } from '@/lib/giongEl';
 import { useMicLevel } from '@/hooks/useMicLevel';
 import type { ChatSkin } from '@/store/chatSkinStore';
 
@@ -152,7 +153,7 @@ export default function VoiceCallOverlay({
     if (!sttSupported) { setPhase('idle'); return; } // đường lùi: nút "Giữ để nói"
     // Đang nghĩ, hoặc loa còn đang đọc ⇒ KHÔNG mở nghe (nó sẽ nghe chính câu trả lời). Đọc xong, effect bên dưới tự gọi lại.
     if (phaseRef.current === 'thinking') return;
-    if (typeof window !== 'undefined' && window.speechSynthesis?.speaking) return;
+    if (typeof window !== 'undefined' && (window.speechSynthesis?.speaking || dangPhatEl())) return;
     clearTimeout(henNgheLai.current);
     stopListen();   // lượt nhận dạng đang chạy (nếu có) phải dừng trước — không để hai lượt cùng nghe
     const toi = ++luotNghe.current;

@@ -136,8 +136,8 @@ const VOICES: VoiceOption[] = [
     provider: 'elevenlabs',
     label: 'ElevenLabs (nhân bản giọng CỦA BẠN)',
     voices: [],
-    status: 'need-key',
-    note: 'Thu 3 phút giọng bạn, tạo voice trên elevenlabs.io, rồi dán voice id vào ô dưới. Đây là con đường duy nhất để robot nói bằng chính giọng bạn. Cần ELEVENLABS_API_KEY trong .env của VPS.',
+    status: 'ok',
+    note: 'Giọng nhân bản "Cuong - Odin" (eleven_v4_turbo) — nhanh nhất (~0,4–0,6 s), đọc đúng cả tiếng Anh xen kẽ, không phụ thuộc máy nhà. Để TRỐNG ô Voice ID là dùng giọng mặc định ở Admin → Thương mại → Giọng ElevenLabs. Hỏng / hết quỹ ⇒ tự lùi về F5 máy nhà rồi Google.',
   },
 ];
 
@@ -1024,12 +1024,12 @@ export default function PersonaEditor({ projectId, persona, devices, accent }: P
         {current.provider === 'elevenlabs' && (
           <div className="mt-4">
             <label className="text-sm font-medium" style={{ color: 'var(--text-primary)' }}>
-              Voice ID (lấy trên elevenlabs.io)
+              Voice ID (tuỳ chọn — để trống dùng giọng mặc định)
             </label>
             <input
               value={voiceId}
               onChange={(e) => setVoiceId(e.target.value)}
-              placeholder="e.g. 21m00Tcm4TlvDq8ikWAM"
+              placeholder="để trống = Cuong - Odin (kK6QTa6Vk6FobFWlp343)"
               className="mt-1.5 w-full rounded-lg border px-3 py-2 font-mono text-sm"
               style={{
                 borderColor: 'var(--border-color)',

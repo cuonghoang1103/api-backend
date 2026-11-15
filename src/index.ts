@@ -149,6 +149,7 @@ const {
 } = (await import(path.join(__dirname, 'routes', 'games.routes.js')));
 const { router: messagesRoutes, adminRouter: adminMessagesRoutes } = (await import(path.join(__dirname, 'routes', 'messages.routes.js')));
 const gifsRoutes = (await import(path.join(__dirname, 'routes', 'gifs.routes.js'))).default;
+const giongRoutes = (await import(path.join(__dirname, 'routes', 'giong.routes.js'))).default;
 const tocDoMangRoutes = (await import(path.join(__dirname, 'routes', 'tocDoMang.routes.js'))).default;
 const voiceMiniRoutes = (await import(path.join(__dirname, 'routes', 'voiceMini.routes.js'))).default;
 // Công cụ tài liệu: ảnh trang bài giảng/đề bài → chữ + công thức → file Word
@@ -753,6 +754,8 @@ app.use('/api/v1/maker-lab', makerLabRoutes);
 app.use('/api/v1/admin/maker-lab', makerLabAdminRoutes);
 app.use('/api/v1/messages', messagesRoutes);
 app.use('/api/v1/gifs', gifsRoutes);
+// Giọng ElevenLabs cho web + thống kê admin (15/11/2026) — services/giong/elevenlabs.ts
+app.use('/api/v1/giong', giongRoutes);
 app.use('/api/v1/toc-do-mang', tocDoMangRoutes);
 // Voice CuongMini. KHÔNG phải '/api/v1/voice' — chỗ đó là Voice Hub.
 app.use('/api/v1/voice-mini', voiceMiniRoutes);

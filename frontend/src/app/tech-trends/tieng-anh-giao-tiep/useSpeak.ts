@@ -14,6 +14,7 @@
  *     hoàn toàn và dạy sai phát âm — thà báo không hỗ trợ còn hơn.
  */
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { phatEl, dungEl } from '@/lib/giongEl';
 
 let cachedVoices: SpeechSynthesisVoice[] = [];
 
@@ -64,6 +65,18 @@ export function useSpeak() {
   }, []);
 
   const speak = useCallback(async (text: string, rate = 0.9) => {
+    // 15/11/2026: giọng ElevenLabs (admin + Pro) trước — đọc tiếng Anh tự nhiên; không được ⇒ giọng trình duyệt.
+    try { window.speechSynthesis?.cancel(); } catch { /* */ }
+    setSpeaking(true);
+    setCurrent(text);
+    const ok = await phatEl(text, {
+      lang: 'en-US',
+      viec: 'ngoai_ngu',
+      onXong: () => { if (mounted.current) { setSpeaking(false); setCurrent(null); } },
+    });
+    if (ok) return;
+    setSpeaking(false);
+    setCurrent(null);
     if (typeof window === 'undefined' || !('speechSynthesis' in window)) {
       setSupported(false);
       return;
@@ -103,6 +116,7 @@ export function useSpeak() {
   }, []);
 
   const stop = useCallback(() => {
+    dungEl();
     try {
       window.speechSynthesis?.cancel();
     } catch {

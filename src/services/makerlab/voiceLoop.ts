@@ -1479,7 +1479,9 @@ export async function runVoiceTurn(input: VoiceTurnInput): Promise<VoiceTurnResu
     });
     const dem = loaiDem
       ? layCauDem(
-          persona.voiceProvider === 'elevenlabs' ? persona.voiceId : (CHE_DO[persona.cheDo].giong ?? persona.voiceId),
+          persona.voiceProvider === 'elevenlabs'
+            ? persona.voiceId || (await (await import('../giong/elevenlabs.js')).caiDatGiong()).giongMacDinh
+            : (CHE_DO[persona.cheDo].giong ?? persona.voiceId),
           loaiDem,
           persona.voiceProvider,
         )

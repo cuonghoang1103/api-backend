@@ -18,6 +18,9 @@ import fs from 'node:fs';
 import path from 'node:path';
 import os from 'node:os';
 import { fileURLToPath, pathToFileURL } from 'node:url';
+import dns from 'node:dns';
+
+dns.setDefaultResultOrder('ipv4first');   // LeetCode qua IPv6 hay treo (agent Ch3 gặp 15/11)
 
 const DIR = path.dirname(fileURLToPath(import.meta.url));
 const REPO = path.resolve(DIR, '../../..');
@@ -120,11 +123,19 @@ if (MANG) {
   for (const [slug, d] of deLc) {
     let q = cache.lc[slug];
     if (!q) {
-      const r = await fetch('https://leetcode.com/graphql', {
-        method: 'POST', headers: { 'Content-Type': 'application/json', Referer: 'https://leetcode.com' },
-        body: JSON.stringify({ query: 'query q($s:String!){question(titleSlug:$s){questionFrontendId title difficulty isPaidOnly}}', variables: { s: slug } }),
-      });
-      q = (await r.json())?.data?.question ?? null;
+      let mangLoi = null;
+      for (let lan = 0; lan < 3 && !q; lan++) {
+        try {
+          const r = await fetch('https://leetcode.com/graphql', {
+            method: 'POST', headers: { 'Content-Type': 'application/json', Referer: 'https://leetcode.com' },
+            body: JSON.stringify({ query: 'query q($s:String!){question(titleSlug:$s){questionFrontendId title difficulty isPaidOnly}}', variables: { s: slug } }),
+            signal: AbortSignal.timeout(20000),
+          });
+          q = (await r.json())?.data?.question ?? null;
+          if (!q) break;
+        } catch (e) { mangLoi = e; await new Promise((ok) => setTimeout(ok, 1500)); }
+      }
+      if (!q && mangLoi) { bao(`${d.o}: không hỏi được LeetCode cho "${slug}" (${mangLoi.message}) — chạy lại`); continue; }
       if (q) cache.lc[slug] = q;
       await new Promise((ok) => setTimeout(ok, 250));
     }

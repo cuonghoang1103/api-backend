@@ -36,7 +36,9 @@ export interface ChuDeTin { tra: string; ten: string }
 export function chuDeTin(heard: string): ChuDeTin | null {
   const s = khongDau(heard);
   for (const [re, tra, ten] of AI) if (re.test(s)) return { tra: `tin tức mới nhất ${tra}`, ten };
-  const m = s.match(/\btin (?:tuc )?(?:ve |cua |moi ve |nong ve )?([a-z0-9 ]{3,40}?)(?: di| nhe| khong| moi nhat| hom nay| voi)?$/);
+  // Phải là "tin tức / tin về / tin mới / tin nóng" — "tin" một mình còn là tin tưởng, tin nhắn, tin học (review 15/11).
+  if (/\btin (nhan|hoc|tuong|tao|may|minh|toi|em|anh|nguoi)\b/.test(s)) return null;
+  const m = s.match(/\btin (?:tuc (?:ve |cua )?|ve |moi (?:ve )?|nong (?:ve )?)([a-z0-9 ]{3,40}?)(?: di| nhe| khong| moi nhat| hom nay| voi)?$/);
   if (m) {
     const t = m[1].trim();
     if (t && !/^(gi|moi|tuc|nao|khac|hom nay|nong|chung|gi moi|tuc moi)$/.test(t)) return { tra: `tin tức mới nhất ${t}`, ten: t };
@@ -56,6 +58,7 @@ export type TraLoiTin = 'khong' | 'co' | 'co-chu-de' | 'khac';
 export function phanLoaiTraLoi(heard: string): TraLoiTin {
   const s = khongDau(heard);
   if (chuDeTin(heard)) return 'co-chu-de';
+  if (s.length <= 25 && /^(co|u|uh|ok|oke|duoc|muon|doc di|yes)\b/.test(s) && !/\b(tin khac|cai khac)\b/.test(s)) return 'co';
   if (/\b(khong|thoi|tin khac|cai khac|chan|khong can|nghe tin khac)\b/.test(s)) return 'khong';
   if (s.length <= 25 && /\b(co|u|uh|ok|oke|duoc|nghe|muon|doc di|yes)\b/.test(s)) return 'co';
   return 'khac';

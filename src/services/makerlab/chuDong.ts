@@ -86,8 +86,14 @@ export async function docChuDong(projectId: number): Promise<CaiDatChuDong> {
 
 export async function luuChuDong(projectId: number, sua: Partial<CaiDatChuDong>): Promise<CaiDatChuDong> {
   const r = await prisma.makerPersona.findUnique({ where: { projectId }, select: { traits: true } });
-  const traits = ((r?.traits as Record<string, unknown> | null) ?? {}) as Record<string, unknown>;
-  const moi = chuanChuDong({ ...(traits.chuDong as object | undefined), ...sua });
+  if (!r) throw new Error('Robot chưa có hồ sơ tính cách trên web — mở trang Maker Lab lưu tính cách một lần trước đã.');
+  const traits = ((r.traits as Record<string, unknown> | null) ?? {}) as Record<string, unknown>;
+  // Giờ sai định dạng ("7 giờ tối") ⇒ BỎ khoá đó, giữ giá trị đang lưu (trước đây rơi về mặc định nhà máy).
+  const sach = Object.fromEntries(
+    Object.entries(sua).filter(([k, v]) =>
+      !['banTin', 'onTu', 'hoiHan', 'chucNgu', 'yenTinhTu', 'yenTinhDen'].includes(k) || v === null || (typeof v === 'string' && GIO.test(v.trim()))),
+  );
+  const moi = chuanChuDong({ ...(traits.chuDong as object | undefined), ...sach });
   await prisma.makerPersona.update({ where: { projectId }, data: { traits: { ...traits, chuDong: moi } as object } });
   return moi;
 }

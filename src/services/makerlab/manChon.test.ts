@@ -52,3 +52,29 @@ test('hỏi tiến độ train giọng ⇒ chủ đề train', async () => {
   assert.ok(canHeThong('cuong6 xong chưa').includes('train'));
   assert.deepEqual(canHeThong('kể chuyện cười đi'), []);
 });
+
+test('review 15/11: câu đời thường không còn bị bắt nhầm', async () => {
+  const { khopXinNhac } = await import('./musicTim.js');
+  for (const c of ['Đừng mở nhạc nữa', 'Tao không muốn nghe nhạc', 'Hôm nay tao không nghe nhạc', 'Tao muốn nghe mày giảng lại bài này',
+    'bật đèn lên với, bài này khó quá', 'mở bài 5 trong sách ra', 'Phần mở bài nên viết như thế nào', 'bật nhạc nhỏ lại', 'bật nhạc to lên',
+    'bật nhạc lại', 'bật bài tiếp']) assert.equal(khopXinNhac(c), null, c);
+  assert.equal(khopXinNhac('bật cho tao một bài nhạc đi'), '');
+  assert.equal(khopXinNhac('Bật bài gì của Justin Bieber ấy'), 'justin bieber');
+  assert.equal(khopXinNhac('tao không nghe thấy nhạc'), '');
+
+  const yn = ['Có', 'Không'];
+  assert.equal(khopChon('Cô ơi cho cháu ly cà phê', yn), -1);
+  assert.equal(khopChon('có chứ sao không', yn), 0);
+  assert.equal(khopChon('À thôi khỏi', yn), -1);
+  const abcd = ['táo', 'chuối', 'cam', 'xoài'];
+  assert.equal(khopChon('À, để tao nghĩ cái', abcd), -1);
+  assert.equal(khopChon('cái tủ', abcd), -1);
+  assert.equal(khopChon('bà', abcd), -1);
+  assert.equal(khopChon('a', abcd), 0);
+  assert.equal(khopChon('câu b', abcd), 1);
+
+  for (const c of ['Mày có tin tao không', 'tao tin mày đó', 'đọc tin nhắn đi', 'tin học khó quá']) assert.equal(chuDeTin(c), null, c);
+  assert.equal(chuDeTin('tin về Honda')?.ten, 'honda');
+  assert.equal(phanLoaiTraLoi('có chứ sao không'), 'co');
+  assert.equal(phanLoaiTraLoi('thôi tin khác đi'), 'khong');
+});

@@ -1052,7 +1052,7 @@ export async function runVoiceTurn(input: VoiceTurnInput): Promise<VoiceTurnResu
   const tuDanhThuc = persona.wakeWord?.trim() || TU_DANH_THUC_MAC_DINH;
   // ── BÁO THỨC đang reo (chuDong.ts): nói bất cứ gì / chạm màn ⇒ tắt (hoặc "5 phút nữa" ⇒ hoãn), rồi bản tin
   // sáng. Đứng TRƯỚC cổng gọi tên — người vừa ngủ dậy không ai nhớ gọi "Odin".
-  if (input.speak !== false && heard) {
+  if (input.speak !== false && heard && !input.heThong) {
     const bt = await import('./chuDong.js');
     if (bt.dangBaoThuc(input.deviceId)) {
       const cau = await bt.xuLyLuotBaoThuc(input.deviceId, heard);

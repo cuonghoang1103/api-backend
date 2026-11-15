@@ -47,34 +47,43 @@ function khongDau(s: string): string {
 export function khopChon(heard: string, luaChon: string[]): number {
   const s = khongDau(heard);
   if (!s || s.length > 80) return -1;
-  // "A", "câu B", "đáp án c", "chọn d", "bê", "xê"
-  const chu = s.match(/^(?:(?:cau|dap an|chon|phuong an|la|toi chon|tao chon)\s+)?([abcd])(?:\s|$)/)
-    ?? s.match(/\b(?:cau|dap an|chon|phuong an)\s+([abcd])\b/);
-  const doc: Record<string, number> = { a: 0, b: 1, be: 1, bi: 1, c: 2, xe: 2, xi: 2, si: 2, d: 3, de: 3, di: 3, dê: 3 };
+  // Giữ DẤU để phân biệt "có"/"cô", "à"/"A" (review 15/11: "Cô ơi cho cháu ly cà phê" từng thành Có).
+  const g = heard.toLowerCase().normalize('NFC').replace(/[^\p{L}\p{N}\s]/gu, ' ').replace(/\s+/g, ' ').trim();
+  const doc: Record<string, number> = { a: 0, b: 1, 'bê': 1, c: 2, 'xê': 2, d: 3, 'đê': 3 };
+  // Chữ cái đứng MỘT MÌNH (cả câu) hoặc sau câu/chọn/đáp án.
+  const chu = g.match(/^(?:(?:câu|đáp án|chọn|phương án|tao chọn|tôi chọn|chọn câu)\s+)?(a|b|c|d|bê|xê|đê)$/)
+    ?? g.match(/(?:^|\s)(?:câu|đáp án|chọn|phương án)\s+(a|b|c|d|bê|xê|đê)(?=\s|$)/);
   if (chu && doc[chu[1]] !== undefined && doc[chu[1]] < luaChon.length) return doc[chu[1]];
-  const docChu = s.match(/^(?:cau |dap an |chon )?(be|xe|de|bi|xi|di)$/);
-  if (docChu && doc[docChu[1]] < luaChon.length) return doc[docChu[1]];
-  const so = s.match(/\b(?:cau|so|phuong an|dap an|cai)\s+(mot|hai|ba|bon|tu|1|2|3|4)\b/) ?? s.match(/^(mot|hai|ba|bon|1|2|3|4)$/);
-  const soMap: Record<string, number> = { mot: 0, '1': 0, hai: 1, '2': 1, ba: 2, '3': 2, bon: 3, tu: 3, '4': 3 };
+  // Số thứ tự — so trên chữ CÓ DẤU: "bà" ≠ "ba", "cái tủ" ≠ "cái tư".
+  const so = g.match(/(?:^|\s)(?:câu|số|phương án|đáp án|cái)\s+(một|hai|ba|bốn|tư|1|2|3|4)(?=\s|$)/) ?? g.match(/^(một|hai|ba|bốn|1|2|3|4)$/);
+  const soMap: Record<string, number> = { 'một': 0, '1': 0, hai: 1, '2': 1, ba: 2, '3': 2, 'bốn': 3, 'tư': 3, '4': 3 };
   if (so && soMap[so[1]] < luaChon.length) return soMap[so[1]];
-  // Nói đúng nội dung đáp án (dài nhất khớp trước để "không" không ăn "không chắc").
-  const nd = luaChon.map((x, i) => ({ i, k: khongDau(x) })).filter((x) => x.k.length >= 1).sort((a, b) => b.k.length - a.k.length);
-  for (const x of nd) {
-    if (s === x.k || (x.k.length >= 3 && (` ${s} `).includes(` ${x.k} `))) return x.i;
-  }
-  // Có / Không dạng nói tự nhiên.
+  // Có / Không dạng nói tự nhiên — so trên chữ CÓ DẤU, câu ngắn.
   const co = luaChon.findIndex((x) => /^(co|yes|dong y|ok)$/.test(khongDau(x)));
   const khong = luaChon.findIndex((x) => /^(khong|no|thoi)$/.test(khongDau(x)));
-  if (khong >= 0 && /\b(khong|thoi|no|khoi)\b/.test(s)) return khong;
-  if (co >= 0 && /\b(co|u|uh|ok|oke|yes|duoc|dong y)\b/.test(s)) return co;
+  if (g.split(' ').length <= 6) {
+  // ⚠️ Không dùng \b với chữ có dấu: JS coi "ừ", "ó" là ký tự không-thuộc-từ.
+  if (co >= 0 && /^(có|ừ|ừm|ok|oke|okay|yes|được|đồng ý)(?=\s|$)/.test(g)) return co;   // "có chứ sao không" ⇒ Có
+  if (khong >= 0 && /^(không|thôi|no|khỏi|chưa)(?=\s|$)/.test(g)) return khong;
+  }
+  // Nói đúng nội dung đáp án (dài nhất khớp trước để "không" không ăn "không chắc").
+  // So CÓ DẤU ("táo" ≠ "tao"); bỏ dấu chỉ khi đáp án vốn không dấu (từ tiếng Anh) — Whisper hay mất dấu tiếng Việt chứ không thêm dấu vào từ Anh.
+  const chuanCoDau = (x: string) => x.toLowerCase().normalize('NFC').replace(/[^\p{L}\p{N}\s]/gu, ' ').replace(/\s+/g, ' ').trim();
+  const nd = luaChon
+    .map((x, i) => { const k = chuanCoDau(x); return { i, k, ascii: k === khongDau(x) }; })
+    .filter((x) => x.k.length >= 1).sort((a, b) => b.k.length - a.k.length);
+  for (const x of nd) {
+    const nguon = x.ascii ? s : g;
+    if (nguon === x.k || (x.k.length >= 3 && (` ${nguon} `).includes(` ${x.k} `))) return x.i;
+  }
   return -1;
 }
 
 export async function hoiChon(deviceId: number, projectId: number, c: CauChon, msHan = 45_000): Promise<number | null> {
   const { notifyDevice } = await import('../../socket/device.gateway.js');
   const id = _id++;
-  const o = c.luaChon.map((x, i) => (c.luaChon.length > 2 || /^[A-D][.)]/.test(x) ? `${CHU[i]}. ${x.replace(/^[A-D][.)]\s*/, '')}` : x));
-  const ok = notifyDevice(deviceId, { t: 'chon_mo', id, q: c.hoi, o, ms: msHan });
+  const o = c.luaChon.map((x, i) => catByte(c.luaChon.length > 2 || /^[A-D][.)]/.test(x) ? `${CHU[i]}. ${x.replace(/^[A-D][.)]\s*/, '')}` : x, 57));
+  const ok = notifyDevice(deviceId, { t: 'chon_mo', id, q: catByte(c.hoi, 137), o, ms: msHan });
   if (!ok) return null;
   _dang.set(deviceId, { ...c, id, den: Date.now() + msHan, projectId });
   return id;
@@ -120,10 +129,23 @@ export async function khopChonBangGiong(deviceId: number, heard: string): Promis
   if (d.den < Date.now()) { _dang.delete(deviceId); return null; }
   const i = khopChon(heard, d.luaChon);
   if (i >= 0) return chot(deviceId, d, i, 'giong');
-  _dang.delete(deviceId);
-  const { notifyDevice } = await import('../../socket/device.gateway.js');
-  notifyDevice(deviceId, { t: 'chon_dong' });
+  // Không khớp ⇒ GIỮ khung (tiếng người bên cạnh / TV không được đóng nó); hết hạn thì bo tự đóng.
   return null;
+}
+
+/** Bo vừa nối lại / rớt mạng ⇒ khung trên màn đã mất, quên luôn phía server (review 15/11). */
+export function quenChon(deviceId: number): void {
+  _dang.delete(deviceId);
+}
+
+/** Cắt theo BYTE UTF-8 ở ranh giới ký tự — firmware giới hạn bằng byte (chon.cpp). */
+function catByte(s: string, toiDa: number): string {
+  let ra = '';
+  for (const ch of s) {
+    if (Buffer.byteLength(ra + ch) > toiDa) return ra.trimEnd() + '…';
+    ra += ch;
+  }
+  return ra;
 }
 
 /** Lời dặn thêm vào hợp đồng JSON (persona.ts). */

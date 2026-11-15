@@ -62,11 +62,15 @@ const BAT_KY = /^(random|any|anything|bat ky|bat cu|gi cung duoc|tuy|gi do|ngau 
 export function khopXinNhac(heard: string): string | null {
   const s = heard.toLowerCase().normalize('NFC').replace(/\s+/g, ' ').trim();
   if (!s || s.length > 200) return null;
-  if (/(tắt|dừng|ngừng|thôi|đừng)\s+(bật\s+)?(nhạc|bài)/.test(s)) return null;
-  if (/bài\s+(học|tập|giảng|kiểm tra|thi|đọc|viết|văn|toán|báo|thơ)/.test(s)) return null;
-  // Than chưa nghe thấy nhạc ⇒ bật lại (bài bất kỳ nếu chưa có gì).
-  if (/(không|chưa|chả|chẳng)\s+(nghe|thấy)\s+(thấy\s+)?(gì\s+)?(nhạc|bài)|nhạc đâu|bật nhạc chưa|nhạc chưa/.test(s)) return '';
-  const m = s.match(/(?:^|[\s,.!?])(bật|mở|phát|play|cho\s+(?:tao|tôi|tui|mình|em|anh)?\s*nghe|muốn\s+nghe|^nghe)\s+([^?.!]*?(?:nhạc|bài hát|bài|bản nhạc|ca khúc|song|music|playlist)[^?.!]*)/);
+  if (/(tắt|dừng|ngừng|thôi|đừng)\s+(bật\s+|mở\s+|phát\s+)?(nhạc|bài)/.test(s)) return null;
+  if (/(phần|đoạn|cách|viết)\s+mở bài|mở bài\s+(nên|là|cần|phải|gồm|như|thế|sao|ra sao|hay)/.test(s)) return null;
+  if (/bài\s+(học|tập|giảng|kiểm tra|thi|đọc|viết|văn|toán|báo|thơ|này|kia|đó|ấy|trước|sau|số|\d)/.test(s)) return null;
+  // Than chưa nghe THẤY nhạc ⇒ bật lại. Phải có "thấy" — "tao không nghe nhạc" là kể chuyện, không phải than.
+  if (/(không|chưa|chả|chẳng)\s+nghe\s+thấy\s+(gì\s+)?(nhạc|bài)|nhạc đâu|bật nhạc chưa/.test(s)) return '';
+  // Phủ định trước động từ ("đừng mở nhạc", "không muốn nghe nhạc") ⇒ không phải xin.
+  if (/(không|chả|chẳng|đừng|khỏi|chưa)\s+(\S+\s+){0,2}(bật|mở|phát|nghe)\b/.test(s)) return null;
+  // Động từ rồi NGAY SAU (≤ 4 chữ đệm) là nhạc/bài — "bật đèn lên với, bài này" không còn khớp.
+  const m = s.match(/(?:^|[\s,.!?])(bật|mở|phát|play|cho\s+(?:tao|tôi|tui|mình|em|anh)?\s*nghe|muốn\s+nghe|^nghe)\s+((?:(?:cho|tao|tôi|tui|mình|em|anh|một|cái|vài|mấy|đi)\s+){0,4}(?:nhạc|bài hát|bài|bản nhạc|ca khúc|song|music|playlist)\b[^?.!]*)/);
   if (!m) return null;
   let q = m[2];
   // Lấy phần sau chữ "nhạc / bài" — đó là tên bài hoặc ca sĩ.
@@ -74,6 +78,8 @@ export function khopXinNhac(heard: string): string | null {
   q = q.replace(/^((gì|nào|đó|hay|nữa|của|cho|tao|tôi|tui|mình|nghe|đi|với|đây|kia|nhạc|bài|hát|một|bản)(\s+|$))+/, '');
   q = q.replace(/(\s+(đi|nhé|nha|ấy|đó|với|giùm|giúp|coi|xem|nào|chưa|đi mà|mày|nữa|được không|không|thử|đây|cái|đã))+\s*$/, '');
   q = q.replace(/^(đi|nhé|nha|ấy|chưa|nữa|đây|được không|không|với)$/, '').trim();
+  // Lệnh nhanh sẵn có (âm lượng, phát lại, bài tiếp) ⇒ nhường phanXa.khopLenhNhanh.
+  if (/^(nhỏ|to|lớn|bé)( lại| lên| hơn)?|^(lại|tiếp|tiếp theo|khác|sau)$/.test(q)) return null;
   return q.slice(0, 80);
 }
 

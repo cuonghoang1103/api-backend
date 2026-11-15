@@ -571,6 +571,8 @@ async function guiLaiCaiDat(conn: DeviceConn): Promise<void> {
 }
 
 async function handleHello(conn: DeviceConn, msg: Record<string, unknown>): Promise<void> {
+  // Bo vừa khởi động / nối lại ⇒ khung chọn đáp án trên màn đã mất (review 15/11).
+  void import('../services/makerlab/manChon.js').then((m) => m.quenChon(conn.deviceId)).catch(() => {});
   const data: Record<string, unknown> = {
     status: MakerDeviceStatus.ONLINE,
     lastSeenAt: new Date(),

@@ -119,7 +119,8 @@ export async function saveAnswer(
     list.push({ q, a });
   }
 
-  const trimmed = list.slice(0, 40);
+  // Giữ 40 mục MỚI NHẤT — `slice(0, 40)` cắt đúng mục vừa thêm khi đã đủ 40 (review 15/11: robot báo "đã nhớ" mà mất).
+  const trimmed = list.slice(-40);
   await prisma.makerPersona.update({
     where: { projectId },
     data: { traits: { ...traits, knowledge: trimmed } as object },

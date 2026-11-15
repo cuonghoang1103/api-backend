@@ -25,6 +25,13 @@ Mẫu một mục:
 - **Ảnh hưởng:** mọi lượt `nhanh` chạy Sonnet 5.5 — Luyện nói (từ 13/11, khi đổi Haiku → Sonnet), CT Work, chấm thi.
 - **Bài học:** đổi model trong chuỗi "nói nhanh" thì soi lại bảng thinking theo model; lưới đỡ "gửi lại bản tối giản" che lỗi khỏi người dùng nhưng cũng che khỏi người vận hành — đếm số lần nó bật trong log.
 
+### 15/11/2026 — CT Language (Hỏi Gấu đợt 2/2b, bắt khi đang làm — chưa lên người dùng) — regex ICU sập app + tổng thời gian chờ vượt mức Cloudflare
+- **Triệu chứng:** (1) test iOS `TroLyGauTests` sập `Fatal error: 'try!' … NSCocoaErrorDomain 2048` ngay khi vẽ câu trả lời đầu tiên; (2) đo thật một lượt "dịch & phân tích" mất 116 s.
+- **Nguyên nhân:** (1) `TraLoiGauCTL.swift` viết `\u{00A0}` trong chuỗi thô `#"…"#` cho `NSRegularExpression` — đó là cú pháp Swift, ICU chỉ hiểu `\x{00A0}`/`\u00A0` ⇒ `try!` sập; (2) `hoiGau.ts` đặt `timeoutMs 75 s` + `maxRetries 1` cho tuyến KHÔNG stream ⇒ tối đa ~150 s, quá 125 s Cloudflare cắt (524).
+- **Cách sửa:** (1) đổi sang `\x{00A0}`; (2) 55 s × 2 lần ≈ 110 s, ghi chú ngay chỗ đặt (cùng commit đợt 2b).
+- **Ảnh hưởng:** không ai — bắt bằng test + đo thật trước khi commit.
+- **Bài học:** regex trong chuỗi thô Swift là cú pháp ICU, không phải Swift; mọi `try! NSRegularExpression` phải có ít nhất một test chạm tới. Tuyến AI không stream: tính `timeout × số lần thử` so với 125 s mỗi khi nâng trần token.
+
 ### 15/11/2026 — CT Language (Hỏi Gấu / CuongMini) — câu trả lời "thô, khó nhìn, ngắn quá" (chữ trắng trơn, không tiêu đề, không màu)
 - **Triệu chứng:** bấm "Tóm tắt bài này" ở Dekiru Bài 1 ⇒ một khối chữ trơn vài gạch "•", không đậm, không tiêu đề, không phân biệt chữ Nhật với chữ Việt, cụt ở ~200 chữ.
 - **Nguyên nhân:** bốn chỗ cùng chặn: (1) lời nhắc `nhacHoiGau` (`src/services/ctlanguage/hoiGau.ts`) đòi "tối đa khoảng 200 chữ" và CẤM tiêu đề/**đậm**/bảng; (2) `lamSachGau` (`congDongGau.ts:57`) xoá `**`/`#` còn sót và cắt 2000 ký tự; (3) `maxTokens: 900`; (4) app vẽ `Text(t.noiDung)` trơn (`TroLyGauCTL.swift › bongTin`). Thêm: ngữ cảnh bài cắt 3000 ký tự và `NguCanhGau.baiSach` dùng `PhanTichChuSH.tron` ⇒ model mất furigana của mọi kanji trong bài.

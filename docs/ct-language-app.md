@@ -416,6 +416,18 @@ Câu hỏi cho user: Pro của CT Language có **dùng chung** với Pro web cuo
     (app cũ, vẽ `Text` trơn) ⇒ y nguyên đường cũ. App: bộ vẽ `Modules/TroLyGau/TraLoiGauCTL.swift` (xem đầu tệp), `NguCanhGau.baiSach`
     giữ furigana (`choAI`), màn xem thử `CT_XEM_MAN=hoi-gau-mau` (+ `CT_GAU_THO=1` vẽ kiểu cũ, `CT_GAU_CUON=dau`). Đo thật 15/11
     (gpt-6-sol, effort low, ngữ cảnh bài giả): "Tóm tắt bài này" 2.105 ký tự, ~20 s, đúng khung + cú pháp.
+    **Đợt 2b — Trợ lý CuongMini (15/11/2026):** máy chủ thêm `tinhCach` (DANH SÁCH TRẮNG `TINH_CACH`: ban-hoc · co-giao · hlv ·
+    ban-than · chuyen-gia · thi-cu · ke-chuyen · luyen-noi — app chỉ gửi mã, mã lạ ⇒ ban-hoc, KHÔNG nhận lời nhắc tự do), loại màn
+    `tro-ly` (ngữ cảnh = hồ sơ học) + `on-tu` (CHỈ danh sách từ đến hạn: chữ · cách đọc · nghĩa · số lần quên), loại câu `dich`
+    (bảng phân tích) + `ke-hoach` (kế hoạch ôn). Timeout 55 s × 2 lần (< 125 s Cloudflare — không stream). App:
+    `Modules/TroLyGau/TroLyCuongMiniCTL.swift` — màn trợ lý = `KhungHoiGauCTL(cheDo: .troLy)` (lối vào: thẻ "Trợ lý CuongMini" tab
+    Luyện): Gấu to mặc trang phục theo tính cách + lời chào theo ngôn ngữ + lượt, chip cuộn ngang (`GoiYTroLy`), mic đọc chính tả
+    (SFSpeechRecognizer, tiếng Việt / ngôn ngữ học), nút gọi thoại ⇒ `ChonChuDeGoiCTL` sẵn có; sheet Tính cách (lưới thẻ Gấu
+    pixel), Lịch sử (`KhoLichSuGau` — JSON trên máy, 60 cuộc × 80 tin, không sao lưu iCloud, CHƯA đồng bộ tài khoản), Hướng dẫn
+    (ⓘ, câu hỏi mẫu bấm hỏi ngay); trong câu trả lời: chạm từ ⇒ thẻ từ (tra từ điển, nghe, Lưu vào sổ "Từ CuongMini", trang từ
+    điển, dịch & phân tích), "Tạo thẻ ôn (n)" ⇒ từ có nghĩa ⇒ `KhoSoTu.themNhieu` (giới hạn 200 bản free), chip "Từ cần ôn hôm
+    nay" (không có từ đến hạn ⇒ trả lời tại chỗ, không tốn lượt). Màn xem thử `CT_XEM_MAN=tro-ly | tro-ly-mau | tro-ly-tinh-cach |
+    tro-ly-lich-su | tro-ly-huong-dan | tro-ly-the-tu | tro-ly-tao-the`. Lượt dùng chung trần Hỏi Gấu (free 8 · Pro 80/ngày).
     Smoke-test deploy.sh thêm `ctlanguage/hoi-gau/luot` (401). Đo local 15/11: câu "Giải thích từ này" (学习) trả lời đúng, có pinyin.
     App: `Modules/TroLyGau/TroLyGauCTL.swift` (+ `NguCanhGauCTL.swift` dựng ngữ cảnh). **Gắn vào một màn = một dòng:**
     `.troLyGau(NguCanhGau(loai: .nguPhap, nn: nn, tieuDe: …, noiDung: "…chữ của màn…", goiY: [...]))` — `nil` ⇒ ẩn; `canhDuoi:` đẩy nút

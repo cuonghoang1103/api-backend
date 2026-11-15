@@ -73,8 +73,8 @@ const NEN = {
   ok: 'rgba(47,158,107,.55)',   // đáp án
   mo: 'rgba(127,127,127,.12)',  // đã bỏ qua
 };
-const O = 'display:inline-block;min-width:1.9em;text-align:center;border:1px solid var(--border-color);' +
-  'padding:1px 4px;margin:1px;border-radius:5px;font-family:var(--font-mono,monospace);font-size:.86rem;line-height:1.5';
+// Ngắn có chủ đích: style lặp ở MỌI ô của mọi bảng vết (Ch2/Ch3 đo: phần lớn độ dài content là chuỗi này).
+const O = 'display:inline-block;min-width:1.8em;text-align:center;border:1px solid var(--border-color);padding:0 4px;margin:1px;border-radius:4px;font-family:monospace';
 
 /**
  * Vẽ một mảng thành hàng ô. to = { [chỉSố]: 'cs'|'l'|'r'|'x'|'ok'|'mo' } (màu nền), nhan = { [chỉSố]: 'L' } (chữ nhỏ trên số).
@@ -84,10 +84,10 @@ export function oMang(arr, { to = {}, nhan = {}, tu = null, den = null, chiSo = 
   return arr.map((v, i) => {
     let mau = to[i];
     if (!mau && tu !== null && i >= tu && i <= den) mau = 'cs';
-    const bg = mau ? `background:${NEN[mau]};` : '';
+    const bg = mau ? `;background:${NEN[mau]}` : '';
     const sup = nhan[i] ? `<sup>${esc(nhan[i])}</sup>` : '';
     const idx = chiSo ? `<sub>${i}</sub>` : '';
-    return `<span style="${O};${bg}">${esc(v)}${sup}${idx}</span>`;
+    return `<span style="${O}${bg}">${esc(v)}${sup}${idx}</span>`;
   }).join('');
 }
 

@@ -1,0 +1,5 @@
+twoCitySchedCost([[50, 30],[20, 80],[60, 70],[40, 10]]) = 120   brute = 120
+twoCitySchedCost([[5, 9],[8, 2],[7, 7],[1, 6],[4, 4],[9, 3]]) = 22   brute = 22
+twoCitySchedCost([[100, 1],[100, 2],[3, 100],[4, 100]]) = 10   brute = 10
+twoCitySchedCost([[10, 10],[10, 10]]) = 20   brute = 20
+sorted by a-b: [[20, 80],[60, 70],[50, 30],[40, 10]]  diffs = [-60, -10, 20, 30]

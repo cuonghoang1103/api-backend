@@ -1,0 +1,6 @@
+checkSubarraySum([2, 5, 3, 0, 4], 6) = true
+checkSubarraySum([2, 4], 6) = true
+checkSubarraySum([5, 0, 0, 0], 3) = true
+checkSubarraySum([0], 1) = false
+checkSubarraySum([1, 0], 2) = false
+checkSubarraySum([7, 3, 1], 5) = true

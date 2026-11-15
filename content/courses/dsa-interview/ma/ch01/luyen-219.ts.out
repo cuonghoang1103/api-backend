@@ -1,0 +1,6 @@
+containsNearbyDuplicate([4,9,2,4], 3) = true
+containsNearbyDuplicate([4,9,2,4], 2) = false
+containsNearbyDuplicate([7,1,7,7], 1) = true
+containsNearbyDuplicate([1,2,1,3,1], 1) = false
+containsNearbyDuplicate([5], 0) = false
+containsNearbyDuplicate([6,6], 0) = false

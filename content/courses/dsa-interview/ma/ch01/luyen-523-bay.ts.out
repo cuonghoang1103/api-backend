@@ -1,0 +1,5 @@
+input            | correct | overwrite | no {0:-1}
+[5,0,0,0] k=3    | true    | false     | true
+[2,4] k=6        | true    | true      | false
+[1,2,3] k=6      | true    | true      | false
+[2,5,3,0,4] k=6  | true    | true      | true

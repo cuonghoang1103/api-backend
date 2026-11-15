@@ -1,0 +1,5 @@
+guess 000000: naive 1 steps (false), constant-time 6 steps (false)
+guess 400000: naive 2 steps (false), constant-time 6 steps (false)
+guess 490000: naive 3 steps (false), constant-time 6 steps (false)
+guess 493000: naive 4 steps (false), constant-time 6 steps (false)
+guess 493817: naive 6 steps (true), constant-time 6 steps (true)

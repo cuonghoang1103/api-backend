@@ -1,0 +1,4 @@
+numSubmatrixSumTarget([[1,2,-1],[-1,0,2],[3,-2,1]], 2) = 10   brute = 10
+numSubmatrixSumTarget([[2,-2],[-2,2]], 0) = 5   brute = 5
+numSubmatrixSumTarget([[5]], 5) = 1   brute = 1
+numSubmatrixSumTarget([[1,1,1],[1,1,1]], 2) = 7   brute = 7

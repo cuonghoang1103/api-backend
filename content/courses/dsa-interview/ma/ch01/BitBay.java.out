@@ -1,0 +1,10 @@
+1 << 31   = -2147483648
+1 << 32   = 1
+1L << 32  = 4294967296
+-1 >>> 28 = 15
+-7 >> 1 = -4,  -7 / 2 = -3
+Integer.bitCount(-1) = 32,  bitCount(52) = 3
+int  n * (n + 1) / 2 = 705082704
+long n * (n + 1) / 2 = 5000050000
+popcount with >>  on -1: still running after 100 loops, n = -1
+popcount with >>> on -1: 32

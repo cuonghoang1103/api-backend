@@ -1,0 +1,6 @@
+Arrays.sort(int[])          = [1, 9, 10]
+Integer[] reverseOrder()    = [10, 9, 1]
+comparator p - q            = [2000000000, -2000000000, 0]
+Integer.compare(p, q)       = [-2000000000, 0, 2000000000]
+2_000_000_000 - (-2_000_000_000) as int = -294967296
+int[][] by start            = [[1, 3], [2, 4], [5, 6]]

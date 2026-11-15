@@ -1,0 +1,4 @@
+by name          : An:8 Bao:8 Chi:9 Duc:7 Lan:7 Minh:8
+then by score    : Chi:9 An:8 Bao:8 Minh:8 Duc:7 Lan:7
+two-key compare  : Chi:9 An:8 Bao:8 Minh:8 Duc:7 Lan:7
+selection sort   : Chi:9 Bao:8 An:8 Minh:8 Lan:7 Duc:7

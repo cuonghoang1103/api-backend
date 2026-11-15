@@ -1,0 +1,7 @@
+pivotIndex([1,7,3,6,5,6]) = 3
+pivotIndex([1,2,3]) = -1
+pivotIndex([2,1,-1]) = 0
+findMaxLength([0,1,1,1,0,0,1]) = 6
+findMaxLength([0,0,0]) = 0
+subarraysDivByK([4,5,0,-2,-3,1], 5) = 7
+subarraysDivByK([-1,2,9], 2) = 2

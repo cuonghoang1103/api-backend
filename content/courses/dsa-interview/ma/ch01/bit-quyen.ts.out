@@ -1,0 +1,9 @@
+mode(rwx, r-x, r-x) = 0o755 = 111101101 = rwxr-xr-x
+0o777 & ~0o022 = 0o755 = rwxr-xr-x
+group may write? false | owner may execute? true
+chmod g+w  -> rwxrwxr-x | chmod o-rx -> rwxr-x---
+flags = 101 | beta? false | checkout? true
+flags = 011 | beta? true | checkout? false
+mask    = 11111111111111110000000000000000 = 4294901760
+ip & mask          = -881786880  === network 3413180416 ? false
+(ip & mask) >>> 0  = 3413180416  === network 3413180416 ? true

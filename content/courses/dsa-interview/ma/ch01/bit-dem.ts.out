@@ -1,0 +1,9 @@
+hammingWeight(11) = 3 = 3
+hammingWeight(128) = 1 = 1
+hammingWeight(2147483645) = 30 = 30
+isPowerOfTwo [1, 16, 6, 0, -8] = [true,true,false,false,false]
+countBits(5) = [0,1,1,2,1,2]
+countBits(16) = [0,1,1,2,1,2,2,3,1,2,2,3,2,3,3,4,1]
+loops for 52: kernighan 3, shift 6
+loops for 1073741824: kernighan 1, shift 31
+loops for 2147483647: kernighan 31, shift 31

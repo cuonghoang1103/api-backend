@@ -1,0 +1,11 @@
+2 ** 31 | 0       = -2147483648
+(2 ** 32 + 5) | 0 = 5
+1 << 31           = -2147483648
+1 << 32           = 1
+-1 >>> 0          = 4294967295
+(2 ** 32 + 4) >> 1 = 2  vs Math.floor((2 ** 32 + 4) / 2) = 2147483650
+popcount with >>  on 11 : 3 (4 loops)
+popcount with >>  on -1 : still running after 100 loops, n = -1
+popcount with >>> on -1 : 32 (32 loops)
+swapXor([5, 9], 0, 1) -> [9,5]
+swapXor([5, 9], 0, 0) -> [0,9]  (i === j: the value XORs itself to 0)

@@ -1,0 +1,5 @@
+findTheDifference("abcd", "dbcea") = e   count = e
+findTheDifference("", "z") = z   count = z
+findTheDifference("aab", "abab") = b   count = b
+findTheDifference("xyz", "zyxx") = x   count = x
+XOR of "abcd" = 4 (binary 00000100)

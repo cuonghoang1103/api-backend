@@ -1,0 +1,6 @@
+nums = [-2,0,3,-5,2,-1]
+pre  = [0,-2,-2,1,-4,-2,-3]
+sumRange(0, 2) = pre[3] - pre[0] = 1
+sumRange(2, 5) = pre[6] - pre[2] = -1
+sumRange(0, 5) = pre[6] - pre[0] = -3
+sumRange(3, 3) = pre[4] - pre[3] = -5

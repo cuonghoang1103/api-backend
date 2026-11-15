@@ -1,0 +1,6 @@
+int  prefix = [0, 2000000000, -294967296, -1294967296]
+long prefix = [0, 2000000000, 4000000000, 3000000000]
+sum(0..1) with int  = -294967296   with long = 4000000000
+Math.addExact(2e9, 2e9) -> ArithmeticException: integer overflow
+-7 % 5               = -2
+Math.floorMod(-7, 5) = 3

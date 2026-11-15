@@ -1,0 +1,5 @@
+subarraySum([1,2,-1,3,-2,2], 3) = 4   brute = 4
+subarraySum([1,1,1], 2) = 2   brute = 2
+subarraySum([1,2,3], 3) = 2   brute = 2
+subarraySum([0,0,0], 0) = 6   brute = 6
+subarraySum([5], 7) = 0   brute = 0

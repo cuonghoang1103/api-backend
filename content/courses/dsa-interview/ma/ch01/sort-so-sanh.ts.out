@@ -1,0 +1,8 @@
+[10, 9, 1].sort()               = [1,10,9]
+[10, 9, 1].sort((a, b) => a - b) = [1,9,10]
+[-1, -2, 3, -10].sort()          = [-1,-10,-2,3]
+descending (a, b) => b - a      = [10,9,1]
+sort((a, b) => a > b)           = [5,1,4,2,3]
+toSorted copy = [1,2,3]  sort() returned the same array: true
+names.sort()                     = ["An","Bình","Chi","Cường","Ánh","Đức"]
+localeCompare(b, 'vi')           = ["An","Ánh","Bình","Chi","Cường","Đức"]

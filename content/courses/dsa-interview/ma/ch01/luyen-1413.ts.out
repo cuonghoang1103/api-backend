@@ -1,0 +1,5 @@
+minStartValue([-3,2,-3,4,2]) = 5   brute = 5
+minStartValue([2,3]) = 1   brute = 1
+minStartValue([1,-2,-3]) = 5   brute = 5
+minStartValue([-5]) = 6   brute = 6
+minStartValue([0,0,0]) = 1   brute = 1

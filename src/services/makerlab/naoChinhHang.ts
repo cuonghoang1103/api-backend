@@ -20,6 +20,7 @@
  * `MAKERLAB_CHINH_HANG_USD_NGAY` > 0 (giờ VN). Hỏng / chạm trần ⇒ chuỗi cũ đỡ ngay trong lượt.
  */
 import { prisma } from '../../config/database.js';
+import type { LLMTool, LLMToolCall } from '../interview/llm/index.js';
 import { logger } from '../../utils/logger.js';
 
 export const NHAN_CHINH_HANG = 'anthropic';
@@ -137,9 +138,15 @@ export async function* luongChinhHang(o: {
   model: string;
   maxTokens: number;
   deviceId: number;
+  /** Công cụ (`congCu.ts`) — model gọi thì `ketQua.toolCalls` có giá trị sau khi luồng chảy hết. */
+  tools?: LLMTool[];
+  themSystem?: string;
+  ketQua?: { toolCalls?: LLMToolCall[] };
 }): AsyncGenerator<MauLuong, void, unknown> {
   const { goiVanBanChinhHang } = await import('../agent/anthropicChinhHang/dinhTuyen.js');
-  const { system, messages } = chuyenTin(o.tin);
+  const ct = chuyenTin(o.tin);
+  const system = o.themSystem ? `${ct.system}\n\n${o.themSystem}` : ct.system;
+  const { messages } = ct;
   const userId = await chuThietBi(o.deviceId);
   const batDau = Date.now();
   let chuDauMs = 0;
@@ -166,13 +173,14 @@ export async function* luongChinhHang(o: {
     viec: 'robot_voice',
     nhanh: { effort: 'low' },
     signal: ctl.signal,
+    ...(o.tools?.length ? { tools: o.tools } : {}),
     onToken: (d) => {
       if (!chuDauMs) chuDauMs = Date.now() - batDau;
       hangDoi.push(d);
       bao();
     },
   })
-    .then((r) => { usd = r.usd; })
+    .then((r) => { usd = r.usd; if (o.ketQua) o.ketQua.toolCalls = r.toolCalls; })
     .catch((e) => { loi = e; })
     .finally(() => { xong = true; bao(); });
 

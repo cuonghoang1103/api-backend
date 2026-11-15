@@ -1,0 +1,6 @@
+java 21.0.9 aarch64
+n=1,000  linear scan: 1.0 ms   binary search: 1.7 ms   answer=211688
+n=10,000  linear scan: 7.0 ms   binary search: 5.4 ms   answer=675611
+n=50,000  linear scan: 119.5 ms   binary search: 36.1 ms   answer=1562572
+n=200,000  linear scan: skipped   binary search: 70.8 ms   answer=3030539
+n=1,000,000  linear scan: skipped   binary search: 615.5 ms   answer=6929497

@@ -1,0 +1,4 @@
+50x50 all land, 1 MB stack: recursive -> 2500 (max depth 2500)
+100x100 all land, 1 MB stack: recursive -> 10000 (max depth 10000)
+300x300 all land, 1 MB stack: recursive -> StackOverflowError
+1000x1000 all land, 1 MB stack: recursive -> StackOverflowError

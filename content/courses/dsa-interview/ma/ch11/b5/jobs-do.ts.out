@@ -1,0 +1,6 @@
+node v26.8.1 arm64
+n=1,000  linear scan: 0.6 ms   binary search: 0.3 ms   answer=211688
+n=10,000  linear scan: 19.7 ms   binary search: 3.4 ms   answer=675611
+n=50,000  linear scan: 649.3 ms   binary search: 16.8 ms   answer=1562572
+n=200,000  linear scan: skipped   binary search: 94.1 ms   answer=3030539
+n=1,000,000  linear scan: skipped   binary search: 863.3 ms   answer=6929497

@@ -1,0 +1,10 @@
+sort(): [1,10,2,9]  sort((a,b)=>a-b): [1,2,9,10]
+-8 >> 1 = -4   -8 >>> 1 = 2147483644
+2^53 === 2^53 + 1 ? true   0.1 + 0.2 === 0.3 ? false
+LC3 "abcabcbb": correct=3 withoutMax=3
+LC3 "abba": correct=2 withoutMax=3
+LC3 "tmmzuxt": correct=5 withoutMax=6
+jobs 1-2,2-3,3-4 (profit 1 each): with > : 3  with >= : 2
+vote([1,1,2,2,3]) = 3  vote([3,3,4]) = 3
+steps {2,4}, n=31: calls with if (memo[n]) = 5167, with !== undefined = 33
+swapped twoSum([3,3], 6) = [0,0]   swapped twoSum([3], 6) = [0,0]

@@ -1,0 +1,9 @@
+"lab(o(r)a)tory)" -> stack="lab(o(r)a)tory" twoPass="lab(o(r)a)tory" valid=true removed=1/1
+"a)b(c)d" -> stack="ab(c)d" twoPass="ab(c)d" valid=true removed=1/1
+"))((" -> stack="" twoPass="" valid=true removed=4/4
+"(a(b(c)d)" -> stack="a(b(c)d)" twoPass="(a(bc)d)" valid=true removed=1/1
+"" -> stack="" twoPass="" valid=true removed=0/0
+"xyz" -> stack="xyz" twoPass="xyz" valid=true removed=0/0
+"())()(((" -> stack="()()" twoPass="()()" valid=true removed=4/4
+"((x)" -> stack="(x)" twoPass="(x)" valid=true removed=1/1
+big input n=100000: removed=1

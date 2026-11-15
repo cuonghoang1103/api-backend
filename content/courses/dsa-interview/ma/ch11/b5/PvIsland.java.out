@@ -1,0 +1,6 @@
+[[1, 1, 0, 0, 0],[1, 1, 0, 1, 1],[0, 0, 0, 1, 0],[0, 1, 0, 1, 1]] -> recursive=5 iterative=5
+[[0, 0, 0],[0, 0, 0]] -> recursive=0 iterative=0
+[[1]] -> recursive=1 iterative=1
+[[1, 0, 1],[0, 1, 0],[1, 0, 1]] -> recursive=1 iterative=1
+[[1, 1, 1],[1, 0, 1],[1, 1, 1]] -> recursive=8 iterative=8
+50x50 all land -> recursive=2500 iterative=2500

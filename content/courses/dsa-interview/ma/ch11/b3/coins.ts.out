@@ -1,0 +1,11 @@
+[3,0,0] -> moves=2
+[0,3,0] -> moves=3
+[1,0,2] -> moves=2
+[1] -> moves=0
+[0,0,null,3] -> moves=3
+[0,0,0,0,0,0,7] -> moves=16
+[5,0,null,0,null,0,null,0] -> moves=10
+-- total coins != nodes (follow-up) --
+[2,0,0] -> -1
+[1,1,1] -> 0
+[0,0,1] -> -1

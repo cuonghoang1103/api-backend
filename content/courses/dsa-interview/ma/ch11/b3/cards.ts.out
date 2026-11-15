@@ -1,0 +1,8 @@
+[1,2,3,4,5,6,1] k=3 -> slide=12 window=12 brute=12 greedy=6
+[2,2,2] k=2 -> slide=4 window=4 brute=4 greedy=4
+[9,7,7,9,7,7,9] k=7 -> slide=55 window=55 brute=55 greedy=55
+[1,1000,1] k=1 -> slide=1 window=1 brute=1 greedy=1
+[1,79,80,1,1,1,200,1] k=3 -> slide=202 window=202 brute=202 greedy=160
+[5] k=1 -> slide=5 window=5 brute=5 greedy=5
+[1,100,1,1,1,2] k=2 -> slide=101 window=101 brute=101 greedy=3
+random: 300/300 match brute force; greedy wrong on 60/300

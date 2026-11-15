@@ -1,0 +1,5 @@
+java 21.0.9 aarch64
+n=10,000  String += : 7.1 ms   StringBuilder: 0.44 ms
+n=50,000  String += : 125.0 ms   StringBuilder: 0.61 ms
+n=100,000  String += : 275.7 ms   StringBuilder: 0.33 ms
+n=200,000  String += : 971.6 ms   StringBuilder: 0.40 ms

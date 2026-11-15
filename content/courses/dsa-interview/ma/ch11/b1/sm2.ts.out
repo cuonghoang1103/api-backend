@@ -1,0 +1,5 @@
+always easy (q=5)                  +1d (q=5, ease 2.60) -> +6d (q=5, ease 2.70) -> +16d (q=5, ease 2.80) -> +45d (q=5, ease 2.90)  | last review on day 68
+always fine (q=4)                  +1d (q=4, ease 2.50) -> +6d (q=4, ease 2.50) -> +15d (q=4, ease 2.50) -> +38d (q=4, ease 2.50)  | last review on day 60
+always hard but correct (q=3)      +1d (q=3, ease 2.36) -> +6d (q=3, ease 2.22) -> +13d (q=3, ease 2.08) -> +27d (q=3, ease 1.94)  | last review on day 47
+fine, then FAILED once (q=2), fine +1d (q=4, ease 2.50) -> +6d (q=4, ease 2.50) -> +1d (q=2, ease 2.18) -> +1d (q=4, ease 2.18) -> +6d (q=4, ease 2.18)  | last review on day 15
+fixed ladder (lesson 0.9)          +1d -> +3d -> +7d -> +14d  | last review on day 25

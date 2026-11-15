@@ -1,0 +1,4 @@
+50x50 all land: recursive -> 2500 (max depth 2500) | explicit stack -> 2500
+100x100 all land: recursive -> RangeError: Maximum call stack size exceeded | explicit stack -> 10000
+300x300 all land: recursive -> RangeError: Maximum call stack size exceeded | explicit stack -> 90000
+1000x1000 all land: recursive -> RangeError: Maximum call stack size exceeded | explicit stack -> 1000000

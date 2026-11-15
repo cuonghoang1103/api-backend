@@ -1,0 +1,5 @@
+exist("ABCCED") = true   board restored: true
+exist("SEE") = true   board restored: true
+exist("ABCB") = false   board restored: true
+exist("ASADFBCCEESE") = true   board restored: true
+exist("Z") = false   board restored: true

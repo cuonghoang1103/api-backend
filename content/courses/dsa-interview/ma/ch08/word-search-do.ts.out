@@ -1,0 +1,10 @@
+6x6 all 'A', word A*9+B, plain               | false |      299,156 calls |      2.5 ms
+6x6 all 'A', word A*9+B, rarer end first     | false |           36 calls |      0.0 ms
+6x6 all 'A', word A*9+B, count letters       | false |            0 calls |      0.0 ms
+6x6 all 'A', word A*12+B, plain              | false |    2,502,164 calls |     26.1 ms
+6x6 all 'A', word A*12+B, rarer end first    | false |           36 calls |      0.0 ms
+6x6 all 'A', word A*12+B, count letters      | false |            0 calls |      0.0 ms
+6x6 all 'A', word A*14+B, plain              | false |    9,030,868 calls |     95.2 ms
+6x6 all 'A', word A*14+B, rarer end first    | false |           36 calls |      0.0 ms
+6x6 all 'A', word A*14+B, count letters      | false |            0 calls |      0.0 ms
+node v26.8.1 · arm64

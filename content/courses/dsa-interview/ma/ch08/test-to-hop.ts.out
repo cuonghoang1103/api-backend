@@ -1,0 +1,9 @@
+exhaustive test cases: 54 (3 * 3 * 3 * 2)
+  Chrome | Windows | Student | vi
+  Chrome | Windows | Student | en
+  Chrome | Windows | Teacher | vi
+  Chrome | Windows | Teacher | en
+  ...
+value pairs a pairwise suite must cover: 45 (each test case covers 6 of them)
+lower bound for pairwise: at least 9 cases (browser x os alone has 9 pairs)
+10 on/off switches, exhaustive: 1024 cases

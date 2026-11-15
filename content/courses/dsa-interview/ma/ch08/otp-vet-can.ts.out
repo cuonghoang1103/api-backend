@@ -1,0 +1,6 @@
+space 10^6 =     1,000,000 | found "999999" after 1,000,000 guesses | 166.7 ms | 5,997,460 guesses/s
+space 26^5 =    11,881,376 | found "zzzzz" after 11,881,376 guesses | 1462.7 ms | 8,122,979 guesses/s
+26^8 = 208,827,064,576 → at 10^7 guesses/s ≈ 5.8 hours
+26^12 = 9.54e+16 → at 10^7 guesses/s ≈ 303 years
+10^6 OTP online, 10 requests/min/IP → 69 days for one IP to try them all
+node v26.8.1 · arm64

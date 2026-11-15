@@ -1,0 +1,4 @@
+partition("aab")  = [["a","a","b"],["aa","b"]]
+partition("a")    = [["a"]]
+partition("abba") = [["a","b","b","a"],["a","bb","a"],["abba"]]
+partition("aaaaaaaaaaaaaaaa") has 32768 partitions (2^15 = 32768)

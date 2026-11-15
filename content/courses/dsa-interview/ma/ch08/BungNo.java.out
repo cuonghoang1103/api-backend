@@ -1,0 +1,19 @@
+subsets, store       n = 10 |         1,024 answers |      0.1 ms
+subsets, store       n = 14 |        16,384 answers |      1.7 ms
+subsets, store       n = 16 |        65,536 answers |      2.1 ms
+subsets, store       n = 18 |       262,144 answers |      4.9 ms
+subsets, store       n = 20 |     1,048,576 answers |     19.0 ms
+subsets, walk        n = 20 |     1,048,576 answers |      1.7 ms
+subsets, walk        n = 22 |     4,194,304 answers |      7.1 ms
+subsets, walk        n = 24 |    16,777,216 answers |     27.8 ms
+subsets, walk        n = 26 |    67,108,864 answers |    113.0 ms
+permutations, store  n =  6 |           720 answers |      0.1 ms
+permutations, store  n =  7 |         5,040 answers |      0.4 ms
+permutations, store  n =  8 |        40,320 answers |      3.4 ms
+permutations, store  n =  9 |       362,880 answers |     12.4 ms
+permutations, store  n = 10 |     3,628,800 answers |    177.8 ms
+permutations, walk   n =  9 |       362,880 answers |      4.9 ms
+permutations, walk   n = 10 |     3,628,800 answers |     52.6 ms
+permutations, walk   n = 11 |    39,916,800 answers |    583.9 ms
+permutations, walk   n = 12 |   479,001,600 answers |   7797.9 ms
+java 21.0.9 · aarch64

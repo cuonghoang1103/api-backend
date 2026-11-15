@@ -1,0 +1,5 @@
+"ababccc" -> 5
+"aba" -> 2
+"aa" -> 1
+"wwwzfvedwfvhsww" -> 11
+"abcdefghijklmnop": answer 16 | calls without bound = 65536 | with bound = 137

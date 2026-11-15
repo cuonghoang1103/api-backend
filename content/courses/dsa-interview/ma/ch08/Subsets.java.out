@@ -1,0 +1,9 @@
+subsets([1,2,3])       = [[], [1], [1, 2], [1, 2, 3], [1, 3], [2], [2, 3], [3]]
+subsetsBinary([1,2,3]) = [[1, 2, 3], [1, 2], [1, 3], [1], [2, 3], [2], [3], []]
+subsets([])            = [[]]
+n = 1: answers = 2, calls = 2, 2^n = 2
+n = 2: answers = 4, calls = 4, 2^n = 4
+n = 3: answers = 8, calls = 8, 2^n = 8
+n = 4: answers = 16, calls = 16, 2^n = 16
+n = 10: answers = 1024, calls = 1024, 2^n = 1024
+n = 20: answers = 1048576, calls = 1048576, 2^n = 1048576

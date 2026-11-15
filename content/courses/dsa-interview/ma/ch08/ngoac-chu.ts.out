@@ -1,0 +1,15 @@
+generateParenthesis(3) = ["((()))","(()())","(())()","()(())","()()()"]
+letterCombinations("23") = ["ad","ae","af","bd","be","bf","cd","ce","cf"]
+letterCombinations("") = []
+letterCombinations("79") has 16 strings (4 * 4)
+ n | answers | nodes, filter at the end | nodes, pruned
+ 1 |       1 |                        7 |             3
+ 2 |       2 |                       31 |             8
+ 3 |       5 |                      127 |            22
+ 4 |      14 |                      511 |            64
+ 5 |      42 |                     2047 |           196
+ 6 |     132 |                     8191 |           625
+ 7 |     429 |                    32767 |          2055
+ 8 |    1430 |                   131071 |          6917
+ 9 |    4862 |                   524287 |         23713
+10 |   16796 |                  2097151 |         82499

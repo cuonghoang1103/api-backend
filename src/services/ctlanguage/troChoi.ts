@@ -149,6 +149,8 @@ export async function xemThachDau(maGoc: string, xem: number | null) {
     where: { ma }, include: { user: { select: TAC_GIA } },
   });
   if (!td || td.hetHan < new Date()) throw new NotFoundError('Thách đấu không còn (sai mã hoặc đã hết hạn).');
+  // Hai người chặn nhau ⇒ không mở được thách đấu của nhau (như trang người dùng).
+  if (xem && (await dsChan(xem)).includes(td.userId)) throw new NotFoundError('Thách đấu không còn (sai mã hoặc đã hết hạn).');
   const where: Prisma.CtlTroChoiDiemWhereInput = { thachDauId: td.id, ...(await dieuKienChung(xem)) };
   const items = await bang(where, 50);
   const cuaToi = xem ? await hangCuaToi(where, xem, items) : null;

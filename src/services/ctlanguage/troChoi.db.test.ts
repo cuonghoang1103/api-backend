@@ -106,6 +106,10 @@ t('thách đấu: tạo ⇒ mã; bạn xem được bộ đề + seed; gửi đi
   assert.equal(bang60.find((x) => x.nguoi.id === b)!.diem, 300);
 
   await assert.rejects(tc.guiDiem(b, van({ cheDo: 'thach-dau', maThachDau: ma, nn: 'ja' })), /không khớp/);
+  // Chặn người tạo ⇒ không mở được thách đấu của họ.
+  await prisma.userBlock.create({ data: { blockerId: c, blockedId: a } });
+  await assert.rejects(tc.xemThachDau(ma, c), /không còn/);
+  await prisma.userBlock.deleteMany({ where: { blockerId: c } });
   await prisma.ctlThachDau.update({ where: { ma }, data: { hetHan: new Date(Date.now() - 1000) } });
   await assert.rejects(tc.xemThachDau(ma, null), /không còn/);
 });

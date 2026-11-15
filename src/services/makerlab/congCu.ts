@@ -47,7 +47,10 @@ export function dsCongCu(laAdmin: boolean): LLMTool[] {
       description: 'Lấy các tin mới nhất hôm nay (tin chung hoặc tin công nghệ) để kể lại cho người dùng.',
       parameters: {
         type: 'object',
-        properties: { loai: { type: 'string', enum: ['chung', 'cong_nghe'] } },
+        properties: {
+          loai: { type: 'string', enum: ['chung', 'cong_nghe'] },
+          chu_de: { type: 'string', description: 'Chủ đề cụ thể nếu người dùng nêu (Anthropic, Gemini, Honda, bóng đá…)' },
+        },
         required: ['loai'],
       },
     },
@@ -60,7 +63,7 @@ export function dsCongCu(laAdmin: boolean): LLMTool[] {
         type: 'object',
         properties: {
           ngon_ngu: { type: 'string', enum: ['en', 'ja', 'zh'] },
-          kieu: { type: 'string', enum: ['on', 'moi', 'noi', 'tu_dong'] },
+          kieu: { type: 'string', enum: ['on', 'moi', 'noi', 'tu_dong', 'noi_tu', 'do_vui'] },
         },
         required: ['ngon_ngu', 'kieu'],
       },
@@ -118,6 +121,34 @@ export function dsCongCu(laAdmin: boolean): LLMTool[] {
           yenTinhTu: { type: 'string' }, yenTinhDen: { type: 'string' }, baoSuKien: { type: 'boolean' },
         },
       },
+    },
+    {
+      name: 'ds_ke_hoach',
+      description: 'Liệt kê MỌI kế hoạch / báo thức / nhắc việc đang bật của chủ robot (kèm id để sửa hoặc xoá).',
+      parameters: { type: 'object', properties: {} },
+    },
+    {
+      name: 'sua_ke_hoach',
+      description: 'Sửa một kế hoạch/báo thức theo id (lấy id bằng ds_ke_hoach): đổi giờ, tên, kiểu lặp, lời dặn, hoặc tắt/bật.',
+      parameters: {
+        type: 'object',
+        properties: {
+          id: { type: 'integer' },
+          viec: { type: 'string' },
+          gio: { type: 'string', description: 'HH:MM' },
+          lap: { type: 'string', enum: ['mot_lan', 'hang_ngay', 'ngay_thuong', 'hang_tuan'] },
+          ngay: { type: 'string' },
+          thu: { type: 'array', items: { type: 'integer', minimum: 0, maximum: 6 } },
+          huong_dan: { type: 'string' },
+          bat: { type: 'boolean', description: 'false = tắt (xoá khỏi lịch nhắc), true = bật lại' },
+        },
+        required: ['id'],
+      },
+    },
+    {
+      name: 'lich_thi',
+      description: 'Lịch THI sắp tới của chủ robot (từ trang học tập): môn, loại PE/FE…, ngày, giờ, phòng, số báo danh.',
+      parameters: { type: 'object', properties: { so_ngay: { type: 'integer', minimum: 1, maximum: 120 } } },
     },
     {
       name: 'lich_hom_nay',
@@ -180,10 +211,12 @@ async function chayMot(c: LLMToolCall, ng: NguCanhCongCu): Promise<string> {
       return muc.length ? dungDoanTraCuu(muc, 'tim') : 'Không tìm thấy kết quả nào.';
     }
     case 'tin_tuc': {
-      const { tinMoiNhat, dungDoanTraCuu } = await import('./web.js');
+      const { tinMoiNhat, timTrenWeb, dungDoanTraCuu } = await import('./web.js');
+      const { LOI_DAN_TIN } = await import('./tinTuc.js');
       const cn = a.loai === 'cong_nghe';
-      const muc = await tinMoiNhat(8, cn);
-      return muc.length ? dungDoanTraCuu(muc, cn ? 'tin-cong-nghe' : 'tin') : 'Chưa lấy được tin nào.';
+      const cd = String(a.chu_de ?? '').trim();
+      const muc = cd ? await timTrenWeb(`tin tức mới nhất ${cd.slice(0, 80)}`, 6) : await tinMoiNhat(8, cn);
+      return muc.length ? `${dungDoanTraCuu(muc, cd ? 'tim' : cn ? 'tin-cong-nghe' : 'tin')}\n${LOI_DAN_TIN}` : 'Chưa lấy được tin nào.';
     }
     case 'lich_hom_nay': {
       if (!ng.ownerId) return 'Robot chưa có chủ nên không có lịch.';
@@ -218,7 +251,7 @@ async function chayMot(c: LLMToolCall, ng: NguCanhCongCu): Promise<string> {
       const { batDauHoc } = await import('./giaSu.js');
       const cau = await batDauHoc({
         deviceId: ng.deviceId, userId: ng.ownerId, nn: nn as 'en' | 'ja' | 'zh',
-        kieu: k === 'on' || k === 'moi' || k === 'noi' ? k : 'tu-dong',
+        kieu: k === 'on' || k === 'moi' || k === 'noi' ? k : k === 'noi_tu' ? 'noi-tu' : k === 'do_vui' ? 'do-vui' : 'tu-dong',
       });
       return `Buổi học đã mở. Trong "say", đọc NGUYÊN VĂN câu sau, không thêm bớt: ${cau}`;
     }
@@ -270,6 +303,36 @@ async function chayMot(c: LLMToolCall, ng: NguCanhCongCu): Promise<string> {
       const { luuChuDong } = await import('./chuDong.js');
       const cd = await luuChuDong(ng.projectId, a as never);
       return `Đã lưu. Bản tin ${cd.banTin ?? 'tắt'} · mời ôn ${cd.onTu ?? 'tắt'} · hỏi han ${cd.hoiHan ?? 'tắt'} · chúc ngủ ${cd.chucNgu ?? 'tắt'} · yên tĩnh ${cd.yenTinhTu}–${cd.yenTinhDen} · ${cd.bat ? 'đang bật' : 'đang TẮT hết'}.`;
+    }
+    case 'ds_ke_hoach': {
+      if (!ng.ownerId) return 'Robot chưa có chủ.';
+      const { prisma } = await import('../../config/database.js');
+      const { docGio } = await import('./keHoach.js');
+      const ds = await prisma.makerPlan.findMany({ where: { ownerId: ng.ownerId, active: true }, orderBy: { gio: 'asc' }, take: 40 });
+      if (!ds.length) return 'Chưa có kế hoạch nào đang bật.';
+      const lap: Record<string, string> = { ONCE: 'một lần', DAILY: 'hằng ngày', WEEKDAYS: 'ngày thường', WEEKLY: 'hằng tuần' };
+      return ds.map((p) => `#${p.id} ${docGio(p.gio)} ${p.title} (${lap[p.kind] ?? p.kind}${p.ngayMot ? ` ${p.ngayMot}` : ''})`).join('\n');
+    }
+    case 'sua_ke_hoach': {
+      if (!ng.ownerId) return 'Robot chưa có chủ.';
+      const { suaKeHoach } = await import('./keHoachService.js');
+      const id = Math.round(Number(a.id));
+      const p = await suaKeHoach(ng.ownerId, id, {
+        ...(a.viec !== undefined ? { title: String(a.viec) } : {}),
+        ...(a.gio !== undefined ? { gio: String(a.gio) } : {}),
+        ...(a.lap !== undefined ? { kind: KIND[String(a.lap)] ?? 'DAILY' } : {}),
+        ...(a.ngay !== undefined ? { ngayMot: String(a.ngay) } : {}),
+        ...(Array.isArray(a.thu) ? { thu: a.thu as number[] } : {}),
+        ...(a.huong_dan !== undefined ? { huongDan: String(a.huong_dan) } : {}),
+        ...(typeof a.bat === 'boolean' ? { active: a.bat } : {}),
+      });
+      return `Đã sửa kế hoạch #${p.id}: "${p.title}"${p.active ? '' : ' (đã TẮT)'}.`;
+    }
+    case 'lich_thi': {
+      if (!ng.ownerId) return 'Robot chưa có chủ.';
+      const { lichThiSapToi, moTaMonThi } = await import('./chuDong.js');
+      const ds = await lichThiSapToi(ng.ownerId, Math.min(120, Math.max(1, Number(a.so_ngay) || 30)));
+      return ds.length ? ds.map((t) => `${t.ngay}: ${moTaMonThi(t)}`).join('\n') : 'Không có lịch thi nào trong khoảng này (hoặc chưa nhập lịch thi trên trang học tập).';
     }
     case 'he_thong': {
       if (!ng.laAdmin) return 'Chỉ chủ web mới hỏi được số liệu hệ thống.';

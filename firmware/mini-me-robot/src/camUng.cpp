@@ -49,6 +49,9 @@ static void (*suKienDat)() = nullptr;
 static void (*suKienGiu)() = nullptr;
 static void (*suKienNha)(bool) = nullptr;
 static void (*suKienAmLuong)(int) = nullptr;
+static bool (*suKienMat)(int, int) = nullptr;
+static bool daNuot = false;
+void datSuKienMat(bool (*k)(int, int)) { suKienMat = k; }
 
 uint32_t chamLanCuoi() { return chamLuc; }
 
@@ -136,6 +139,19 @@ void tick() {
     if (++nhipHut < 2) return;
   } else {
     nhipHut = 0;
+  }
+
+  // Cú chạm đã bị khung chọn đáp án dùng ⇒ chờ nhấc tay, không làm cử chỉ nào.
+  if (daNuot) {
+    if (!co) { dangCham = false; daNuot = false; }
+    return;
+  }
+
+  if (co && !dangCham && sy < DAI_Y && suKienMat && suKienMat(sx, sy)) {
+    dangCham = true;
+    daNuot = true;
+    chamLuc = now;
+    return;
   }
 
   if (co && !dangCham) {

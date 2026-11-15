@@ -20,7 +20,8 @@ import { prisma } from '../../config/database.js';
 import { logger } from '../../utils/logger.js';
 
 export type NN = 'en' | 'ja' | 'zh';
-export type KieuHoc = 'on' | 'moi' | 'noi';
+export type KieuHoc = 'on' | 'moi' | 'noi' | 'noi-tu' | 'do-vui';
+/* 'noi', 'noi-tu', 'do-vui' do LLM dẫn (server giữ phiên + chèn luật vào prompt); 'on', 'moi' server tự chấm. */
 export const TEN_NN: Record<NN, string> = { en: 'tiếng Anh', ja: 'tiếng Nhật', zh: 'tiếng Trung' };
 
 export interface TheHoc {
@@ -98,6 +99,9 @@ function nnTrongCau(s: string): NN | null {
 export function khopBatDauHoc(heard: string): { nn: NN; kieu: KieuHoc | 'tu-dong' } | null {
   const s = khongDau(heard);
   if (!s || s.length > 90) return null;
+  // Trò chơi: không nêu tiếng thì mặc định tiếng Anh.
+  const tro = /\b(noi tu|choi noi tu|shiritori|word chain)\b/.test(s) ? 'noi-tu' : /\b(do vui|choi do|do tao|quiz|cau do)\b/.test(s) ? 'do-vui' : null;
+  if (tro && /\b(choi|do|noi tu|shiritori|quiz|word chain)\b/.test(s)) return { nn: nnTrongCau(s) ?? 'en', kieu: tro };
   const nn = nnTrongCau(s);
   if (!nn) return null;
   if (/\b(luyen noi|noi chuyen bang|giao tiep|tap noi|hoi thoai)\b/.test(s)) return { nn, kieu: 'noi' };
@@ -261,6 +265,17 @@ function tongKet(p: PhienHoc): string {
 
 /** Bắt đầu buổi học. Trả câu robot nói (gồm luôn câu hỏi đầu tiên). */
 export async function batDauHoc(o: { deviceId: number; userId: number; nn: NN; kieu: KieuHoc | 'tu-dong' }): Promise<string> {
+  if (o.kieu === 'noi-tu' || o.kieu === 'do-vui') {
+    _phien.set(o.deviceId, { userId: o.userId, nn: o.nn, kieu: o.kieu, the: [], i: 0, buoc: 'hoi', vongKiem: false, lanThu: 0, dung: 0, sai: 0, capNhat: Date.now(), cauCuoi: '' });
+    if (o.kieu === 'noi-tu') {
+      return o.nn === 'ja'
+        ? 'Chơi shiritori tiếng Nhật nhé! Từ sau bắt đầu bằng âm cuối của từ trước, từ nào kết thúc bằng ん là thua. Tao mở màn: りんご, ringo, quả táo. Âm cuối là ご, tới mày.'
+        : o.nn === 'zh'
+          ? 'Chơi nối chữ tiếng Trung nhé! Từ sau bắt đầu bằng chữ cuối của từ trước. Tao mở màn: 学生, xuéshēng, học sinh. Chữ cuối là 生, tới mày.'
+          : 'Chơi nối từ tiếng Anh nhé! Từ sau bắt đầu bằng chữ cái cuối của từ trước, không lặp từ. Tao mở màn: apple. Chữ cuối là E, tới mày.';
+    }
+    return `Chơi đố vui ${TEN_NN[o.nn]}! Tao hỏi, mày trả lời, đúng một câu một điểm, nói dừng học là nghỉ. Câu đầu nè, sẵn sàng chưa?`;
+  }
   if (o.kieu === 'noi') {
     _phien.set(o.deviceId, { userId: o.userId, nn: o.nn, kieu: 'noi', the: [], i: 0, buoc: 'hoi', vongKiem: false, lanThu: 0, dung: 0, sai: 0, capNhat: Date.now(), cauCuoi: '' });
     return o.nn === 'en'
@@ -334,9 +349,29 @@ export async function xuLyGiaSu(o: { deviceId: number; userId: number; heard: st
   const lenh = khopLenhTrongBai(o.heard);
   if (lenh === 'dung') {
     _phien.delete(o.deviceId);
+    if (p.kieu === 'noi-tu' || p.kieu === 'do-vui') return { noi: 'Thôi nghỉ chơi. Ván này coi như tao thắng nha, đừng cãi.' };
     return { noi: p.kieu === 'noi' ? `Ok, dừng luyện nói ${TEN_NN[p.nn]}. Hay lắm đấy.` : tongKet(p) };
   }
 
+  if (p.kieu === 'noi-tu') {
+    return {
+      nhacLlm:
+        `[TRÒ CHƠI — nối từ ${TEN_NN[p.nn]}] Luật: ${p.nn === 'ja' ? 'shiritori — từ sau bắt đầu bằng ÂM KANA cuối của từ trước, từ kết thúc bằng ん là thua; luôn đọc kèm hiragana + romaji + nghĩa Việt' : p.nn === 'zh' ? 'từ sau bắt đầu bằng CHỮ HÁN cuối của từ trước; luôn đọc kèm pinyin + nghĩa Việt' : 'từ sau bắt đầu bằng CHỮ CÁI cuối của từ trước; kèm nghĩa Việt ngắn'}; ` +
+        'không lặp từ đã dùng trong cuộc trò chuyện. Kiểm từ người chơi vừa nói (nghe chữ có thể sai chính tả — đoán từ gần nhất hợp lý): ' +
+        'hợp lệ ⇒ khen/cà khịa ngắn rồi nói TỪ TIẾP của mày theo đúng luật và báo âm/chữ cuối để họ nối; sai luật ⇒ cà khịa, cộng ' +
+        'điểm cho mày, nêu từ đúng làm ví dụ rồi chơi tiếp. Giữ tỉ số trong đầu, thỉnh thoảng báo tỉ số. Ngắn gọn, 2–3 câu.',
+    };
+  }
+  if (p.kieu === 'do-vui') {
+    return {
+      nhacLlm:
+        `[TRÒ CHƠI — đố vui ${TEN_NN[p.nn]}] Mỗi lượt: chấm câu trả lời của câu đố trước (đúng ⇒ khen + điểm; sai ⇒ cà khịa + đáp án ` +
+        `+ giải thích MỘT câu) rồi ra CÂU ĐỐ MỚI ngắn về từ vựng, ngữ pháp, cách nói thông dụng hoặc văn hoá ${TEN_NN[p.nn]} ` +
+        '(trình độ sơ–trung cấp, đa dạng, không lặp). Phần lớn câu đố là TRẮC NGHIỆM: luôn kèm trường "chon" ' +
+        '{"hoi","luaChon" 3–4 đáp án, "dung"} để màn hiện nút A/B/C/D; thỉnh thoảng một câu tự trả lời bằng miệng (không "chon"). ' +
+        `Giữ tỉ số, báo mỗi 3 câu. Ngắn gọn.${p.nn === 'ja' ? ' Đọc kèm hiragana cho kanji.' : p.nn === 'zh' ? ' Đọc kèm pinyin.' : ''}`,
+    };
+  }
   if (p.kieu === 'noi') {
     return {
       nhacLlm:

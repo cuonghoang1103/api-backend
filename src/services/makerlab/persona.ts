@@ -1,3 +1,4 @@
+import { LUAT_CHON } from './manChon.js';
 import { BO_TINH_CACH_SAN } from './boTinhCachSan.js';
 import { CHE_DO, laCheDo, type CheDo } from './cheDo.js';
 import { laNao, type Nao } from './nao.js';
@@ -730,6 +731,7 @@ export function buildSystemPrompt(
 - "say": lời thoại thuần, không ký tự đặc biệt. Bắt buộc có.
 - TRONG "say" KHÔNG dùng dấu ngoặc kép ("). Cần trích tên/câu thì dùng ngoặc đơn ' ' hoặc « ».
 - "actions": 0 đến 3 lệnh cử động khi câu chuyện gọi tới (nhìn, gật đầu, vẫy tay, nhạc…). Nét mặt đã nằm ở "camXuc", không cần lệnh "face".
+${LUAT_CHON}
 Không viết gì ngoài JSON đó.`,
     /**
      * ⚠️ MỌI THỨ ĐỔI MỖI LƯỢT PHẢI NẰM CUỐI PROMPT.

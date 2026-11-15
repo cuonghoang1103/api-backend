@@ -42,6 +42,7 @@
 #include "ota.h"
 #include "config.h"
 #include "songDong.h"
+#include "chon.h"
 #include "secrets.h"
 
 // Màn NGỰC. Ba màn (ngực + hai mắt) dựng chung trong `man_hinh.h` vì
@@ -743,6 +744,19 @@ static bool chamNayMoLuot = false;
 static bool chamChoNgat = false;
 
 /** Đặt ngón xuống dải: đang nghe sau một cú chạm thì GỬI; không thì nghe. */
+// Khung chọn đáp án (chon.h): chạm nút ⇒ báo server, server chấm rồi trả chon_ket.
+static bool khiChamMat(int x, int y) {
+  if (!chon::dangMo()) return false;
+  const int i = chon::cham(x, y);
+  if (i >= 0 && st.wsUp) {
+    char buf[64];
+    snprintf(buf, sizeof buf, "{\"t\":\"chon\",\"id\":%lu,\"i\":%d}", (unsigned long)chon::idHienTai(), i);
+    ws.sendTXT(buf);
+    songDong::coNguoi();
+  }
+  return true;  // khung đang mở thì mọi cú chạm vùng mắt thuộc về nó
+}
+
 static void khiDatDai() {
   chamNayMoLuot = false;
   chamChoNgat = false;
@@ -1173,7 +1187,7 @@ static void onWsEvent(WStype_t type, uint8_t* payload, size_t len) {
       break;
 
     case WStype_TEXT: {
-      StaticJsonDocument<1024> doc;
+      StaticJsonDocument<1536> doc;  // chon_mo: câu hỏi + 4 nút tiếng Việt
       if (deserializeJson(doc, payload, len)) return;
       const char* t = doc["t"] | "";
       if (!strcmp(t, "cmd")) {
@@ -1204,6 +1218,18 @@ static void onWsEvent(WStype_t type, uint8_t* payload, size_t len) {
       } else if (!strcmp(t, "phu_de")) {
         const char* chu = doc["text"] | "";
         if (HIEN_PHU_DE_LOI_NOI && *chu && !audio::luotChamDangMo()) xepPhuDe(chu);
+      } else if (!strcmp(t, "chon_mo")) {
+        const char* ds[4];
+        int n = 0;
+        for (JsonVariant v : doc["o"].as<JsonArray>()) {
+          if (n >= 4) break;
+          ds[n++] = v.as<const char*>() ? v.as<const char*>() : "";
+        }
+        chon::mo(doc["id"] | 0u, doc["q"] | "", ds, n, doc["ms"] | 30000u);
+      } else if (!strcmp(t, "chon_ket")) {
+        chon::ketQua(doc["id"] | 0u, doc["dung"] | -1, doc["chon"] | -1, doc["mat"] | "");
+      } else if (!strcmp(t, "chon_dong")) {
+        chon::dong();
       } else if (!strcmp(t, "nak")) {
         // Server nghe thành tiếng ồn chứ không ra câu nào. Báo bằng
         // hai nốt ĐI XUỐNG để bạn biết ngay là phải nói lại — thay vì
@@ -1497,6 +1523,8 @@ void setup() {
   // FT6336U thì robot vẫn chạy đủ, chỉ không phản ứng với ngón tay.
   camUng::begin(tft.width(), tft.height());
   camUng::datSuKien(khiDatDai, khiGiuDai, khiNhaDai, khiDoiAmLuong);
+  camUng::datSuKienMat(khiChamMat);
+  chon::begin(&tft, MAT_Y, DAI_Y - MAT_Y);
 #endif
 
   // Cảm biến chạm TTP223: ngõ ra push-pull, tự kéo về mức thấp khi
@@ -1918,9 +1946,14 @@ void loop() {
       chamDaBiet = ch;
       songDong::coNguoi();
     }
-    songDong::tick(tt == face::RANH, audio::level(), audio::noise());
+    songDong::tick(tt == face::RANH && !chon::dangMo(), audio::level(), audio::noise());
   }
-  eyes::loop();
+  // Khung chọn đáp án che vùng mắt ⇒ mắt nghỉ vẽ; đóng xong thì vẽ lại trọn + biểu cảm vui/tức server gửi.
+  if (chon::tick()) {
+    eyes::invalidate();
+    if (*chon::matSauKhiDong()) eyes::setByName(chon::matSauKhiDong(), 3500);
+  }
+  if (!chon::dangMo()) eyes::loop();
 
   // ── BÁNH XE ──
   // Rẻ (vài phép tính + một lần đọc I2C), nhưng PHẢI chạy mỗi vòng:

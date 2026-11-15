@@ -76,4 +76,8 @@ void datSuKien(void (*khiDat)(), void (*khiGiu)(), void (*khiNha)(bool daGiu),
  *  `main.cpp` biết có người thật đang ở đây (xem songDong). */
 uint32_t chamLanCuoi();
 
+/** Chạm VÙNG MẮT: hỏi `khiChamMat(x, y)` trước — trả true = đã dùng cú chạm (khung chọn đáp án, chon.h),
+ *  cử chỉ mắt (nhìn theo, vuốt ve, nháy) bỏ qua cho tới lúc nhấc tay. */
+void datSuKienMat(bool (*khiChamMat)(int x, int y));
+
 }  // namespace camUng

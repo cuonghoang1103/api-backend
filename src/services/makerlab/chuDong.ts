@@ -182,17 +182,19 @@ export async function soanBanTin(o: { deviceId: number; ownerId: number; project
   const { homNay } = await import('./keHoach.js');
   const { chuLaAdmin, khoiHeThong } = await import('./heThong.js');
   const laAdmin = await chuLaAdmin(o.deviceId);
-  const [thoiTiet, lich, tin, heThong, onTu] = await Promise.all([
+  const [thoiTiet, lich, tin, heThong, onTu, thi] = await Promise.all([
     chayHan(timTrenWeb(`thời tiết hôm nay ${persona.viTri ?? 'Hà Nội'}`, 3), 8_000),
     chayHan(homNay(o.ownerId), 5_000),
     chayHan(tinMoiNhat(4, true), 8_000),
     laAdmin ? chayHan(khoiHeThong(['web', 'ai']), 6_000) : Promise.resolve(null),
     chayHan(demTuDenHan(o.ownerId), 5_000),
+    chayHan(lichThiSapToi(o.ownerId, 3), 4_000),
   ]);
   const du: string[] = [];
   if (thoiTiet?.length) du.push(`THỜI TIẾT:\n${thoiTiet.map((m) => `- ${m.tieuDe}: ${m.tomTat}`).join('\n')}`);
   if (lich) du.push(`LỊCH HÔM NAY: ${lich.length ? lich.map((m) => `${m.gioChu} ${m.title}`).join('; ') : 'trống'}`);
   if (onTu) du.push(`TỪ ĐẾN HẠN ÔN: ${onTu}`);
+  if (thi?.length) du.push(`LỊCH THI 3 NGÀY TỚI (nhắc trước tiên, quan trọng): ${thi.map((t) => `${t.ngay} ${moTaMonThi(t)}`).join('; ')}`);
   if (tin?.length) du.push(`TIN CÔNG NGHỆ:\n${tin.slice(0, 3).map((m) => `- ${m.tieuDe}`).join('\n')}`);
   if (heThong) du.push(`WEB CỦA CHỦ:\n${heThong.slice(0, 1200)}`);
   if (!du.length) return '';
@@ -220,6 +222,39 @@ export async function demTuDenHan(userId: number): Promise<string> {
     if (n) ra.push(`${n} từ ${ten[nn]}`);
   }
   return ra.join(', ');
+}
+
+// ─── Có người trước robot không ─────────────────────────────────────────
+// Lần cuối nghe thấy người thật (lượt nói được nhận / chạm màn). Việc chủ động chỉ nói khi có người gần đây —
+// tới giờ mà phòng trống thì GIỮ LẠI, nói khi người xuất hiện (trong cửa sổ 3 giờ).
+const _coNguoi = new Map<number, number>();
+const _noiCuoi = new Map<number, number>();
+export function ghiCoNguoi(deviceId: number): void {
+  _coNguoi.set(deviceId, Date.now());
+}
+export function coNguoiGanDay(deviceId: number, phut = 20): boolean {
+  return Date.now() - (_coNguoi.get(deviceId) ?? 0) < phut * 60_000;
+}
+
+// ─── Lịch thi (trang học tập, bảng lich_thi) ────────────────────────────
+
+export interface MonThi { id: number; monHoc: string; loai: string; ngay: string; batDau: string; phong: string | null; soBaoDanh: string | null; nhacTruoc: number }
+
+export async function lichThiSapToi(userId: number, soNgay: number, tuNgay = gioVn(new Date()).ngay): Promise<MonThi[]> {
+  const tu = new Date(`${tuNgay}T00:00:00Z`);
+  const den = new Date(tu.getTime() + soNgay * 86_400_000);
+  const ds = await prisma.lichThi.findMany({
+    where: { userId, ngay: { gte: tu, lte: den } },
+    orderBy: [{ ngay: 'asc' }, { batDau: 'asc' }],
+    select: { id: true, monHoc: true, loai: true, ngay: true, batDau: true, phong: true, soBaoDanh: true, nhacTruoc: true },
+  });
+  return ds.map((t) => ({ ...t, ngay: t.ngay.toISOString().slice(0, 10) }));
+}
+
+/** "thi FE môn SWT301 lúc 07:30 phòng 304, số báo danh 12". THUẦN. */
+export function moTaMonThi(t: Pick<MonThi, 'monHoc' | 'loai' | 'batDau' | 'phong' | 'soBaoDanh'>): string {
+  const loai = ({ PE: 'thi thực hành PE', FE: 'thi cuối kỳ FE', PT: 'thi tiến độ PT', ME: 'thi giữa kỳ', NOI: 'thi nói', NGHE: 'thi nghe', VIET: 'thi viết' } as Record<string, string>)[t.loai] ?? 'thi';
+  return `${loai} môn ${t.monHoc} lúc ${t.batDau}${t.phong ? ` phòng ${t.phong}` : ''}${t.soBaoDanh ? `, số báo danh ${t.soBaoDanh}` : ''}`;
 }
 
 // ─── Nhịp mỗi phút ──────────────────────────────────────────────────────
@@ -260,22 +295,53 @@ export async function nhipChuDong(luc: Date = new Date()): Promise<void> {
   for (const d of ds) {
     try {
       const cd = await docChuDong(d.projectId);
-      if (!cd.bat || trongYenTinh(cd, g.phut) || _baoThuc.has(d.id)) continue;
-      if (cd.banTin === g.hhmm && lanDauHomNay(d.id, 'banTin', g.ngay)) {
-        const bt = await soanBanTin({ deviceId: d.id, ownerId: d.ownerId, projectId: d.projectId });
-        if (bt) await noi(d.id, d.projectId, bt, 60);
+      if (!cd.bat || _baoThuc.has(d.id)) continue;
+
+      // ── Nhắc THI (quan trọng như báo thức: không chờ có người, bỏ qua giờ yên tĩnh) ──
+      const thiHomNay = await lichThiSapToi(d.ownerId, 0, g.ngay).catch(() => []);
+      for (const t of thiHomNay) {
+        const mocNhac = phutCua(t.batDau) - (t.nhacTruoc || 60);
+        if (g.phut >= mocNhac && g.phut < phutCua(t.batDau) && lanDauHomNay(d.id, `thi-sang-${t.id}`, g.ngay)) {
+          const con = phutCua(t.batDau) - g.phut;
+          await noi(d.id, d.projectId, `Ê, còn ${con} phút nữa là ${moTaMonThi(t)}. Mang thẻ sinh viên chưa? Đi sớm đi, đừng để tao lo.`, 60);
+        }
       }
-      if (cd.onTu === g.hhmm && lanDauHomNay(d.id, 'onTu', g.ngay)) {
+
+      // Còn lại: tôn trọng giờ yên tĩnh, CHỈ nói khi có người gần đây, nói chậm nhất 3 giờ sau giờ hẹn.
+      if (trongYenTinh(cd, g.phut) || !coNguoiGanDay(d.id, 20)) continue;
+      if (Date.now() - (_noiCuoi.get(d.id) ?? 0) < 60_000) continue;
+      const toiGio = (hhmm: string | null, cua = 180) => !!hhmm && g.phut >= phutCua(hhmm) && g.phut <= phutCua(hhmm) + cua;
+      const daNoi = () => _noiCuoi.set(d.id, Date.now());
+
+      if (toiGio('20:30', 150)) {
+        const mai = new Date(Date.parse(`${g.ngay}T00:00:00Z`) + 86_400_000).toISOString().slice(0, 10);
+        const thiMai = await lichThiSapToi(d.ownerId, 0, mai).catch(() => []);
+        if (thiMai.length && lanDauHomNay(d.id, 'thi-toi-truoc', g.ngay)) {
+          await noi(d.id, d.projectId, `Mai mày ${thiMai.map(moTaMonThi).join(', rồi ')}. Ôn tới đâu rồi, khai thật đi. Cần tao kiểm tra bài thì bảo.`, 90);
+          daNoi();
+          continue;
+        }
+      }
+      if (toiGio(cd.banTin) && lanDauHomNay(d.id, 'banTin', g.ngay)) {
+        const bt = await soanBanTin({ deviceId: d.id, ownerId: d.ownerId, projectId: d.projectId });
+        if (bt) { await noi(d.id, d.projectId, bt, 60); daNoi(); continue; }
+      }
+      if (toiGio(cd.onTu) && lanDauHomNay(d.id, 'onTu', g.ngay)) {
         const dem = await demTuDenHan(d.ownerId);
         if (dem) {
           const { moiHoc } = await import('./giaSu.js');
           const nn = /Nhật/.test(dem) ? 'ja' : /Trung/.test(dem) ? 'zh' : 'en';
           moiHoc(d.id, nn);
-          await noi(d.id, d.projectId, `Ê, có ${dem} đến hạn ôn rồi. Ôn năm phút với tao không? Nói ừ là vào bài luôn.`, 90);
+          if (await noi(d.id, d.projectId, `Ê, có ${dem} đến hạn ôn rồi. Ôn năm phút với tao không? Nói ừ là vào bài luôn.`, 90)) {
+            const { hoiChon } = await import('./manChon.js');
+            await hoiChon(d.id, d.projectId, { hoi: 'Ôn từ 5 phút?', luaChon: ['Có', 'Không'] }, 110_000).catch(() => null);
+          }
+          daNoi();
+          continue;
         }
       }
-      if (cd.hoiHan === g.hhmm && lanDauHomNay(d.id, 'hoiHan', g.ngay)) await noi(d.id, d.projectId, chon(CAU_HOI_HAN), 90);
-      if (cd.chucNgu === g.hhmm && lanDauHomNay(d.id, 'chucNgu', g.ngay)) await noi(d.id, d.projectId, chon(CAU_CHUC_NGU));
+      if (toiGio(cd.hoiHan) && lanDauHomNay(d.id, 'hoiHan', g.ngay)) { await noi(d.id, d.projectId, chon(CAU_HOI_HAN), 90); daNoi(); continue; }
+      if (toiGio(cd.chucNgu, 60) && lanDauHomNay(d.id, 'chucNgu', g.ngay)) { await noi(d.id, d.projectId, chon(CAU_CHUC_NGU)); daNoi(); }
     } catch (err) {
       logger.warn('MakerLab chủ động lỗi', { deviceId: d.id, error: (err as Error).message });
     }

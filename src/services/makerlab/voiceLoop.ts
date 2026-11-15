@@ -97,6 +97,8 @@ import { phanLoaiCau, loiDanDoDai, type DoDai, type LoaiCau } from './chonNao.js
 import { NHAN_CHINH_HANG, chinhHangSanSang, modelRobotChinhHang, luongChinhHang, chuThietBi } from './naoChinhHang.js';
 import { dsCongCu, chayCacCongCu, NHAC_CONG_CU, type NguCanhCongCu } from './congCu.js';
 import { dangHoc, ngonNguDangHoc, goiYNgheGiaSu, xuLyGiaSu } from './giaSu.js';
+import { xuLyTinTuc, LOI_DAN_TIN } from './tinTuc.js';
+import { chuanCauChon, hoiChon, khopChonBangGiong, type CauChon } from './manChon.js';
 import type { LLMToolCall } from '../interview/llm/index.js';
 import { chonLoaiDem, layCauDem } from './cauDem.js';
 
@@ -696,6 +698,8 @@ export function pcmToWav(pcm: Buffer, sampleRate = 16_000, channels = 1, bits = 
 export interface RobotReply {
   say: string;
   actions: ValidatedCommand[];
+  /** Khung chọn đáp án trên màn ngực (manChon.ts). */
+  chon?: CauChon;
 }
 
 /**
@@ -748,7 +752,8 @@ export function parseRobotReply(raw: string): RobotReply {
           if (cmd) actions.push(cmd);
         }
       }
-      return { say: say.slice(0, MAX_SAY_CHARS), actions };
+      const chon = chuanCauChon(obj.chon);
+      return { say: say.slice(0, MAX_SAY_CHARS), actions, ...(chon ? { chon } : {}) };
     } catch {
       /* try the next candidate */
     }
@@ -1061,12 +1066,21 @@ export async function runVoiceTurn(input: VoiceTurnInput): Promise<VoiceTurnResu
     }
   }
 
-  const gacCong = persona.congDanhThuc && input.speak !== false && !input.heThong;
+  // ── KHUNG CHỌN đang mở trên màn (manChon.ts): nói "B" / "câu hai" / "có" / nội dung đáp án ⇒ chấm như chạm.
+  // Đứng trước cổng gọi tên — đang trả lời câu đố thì không ai gọi "Odin" trước mỗi đáp án.
+  let daChonGiong = false;
+  if (input.speak !== false && heard && !input.cham) {
+    const thay = await khopChonBangGiong(input.deviceId, heard).catch(() => null);
+    if (thay) { heard = thay; daChonGiong = true; }
+  }
+
+  const gacCong = persona.congDanhThuc && input.speak !== false && !input.heThong && !daChonGiong;
 
   if (gacCong) {
     const goi = timDanhThuc(heard, tuDanhThuc);
 
     if (goi.trung) {
+      void import('./chuDong.js').then((m) => m.ghiCoNguoi(input.deviceId)).catch(() => undefined);
       moCong(input.deviceId, persona.giayThucGiac);
       henNguLai(input.deviceId, persona.giayThucGiac);
       // Mắt mở bừng — ĐÂY LÀ TOÀN BỘ tín hiệu "tôi nghe đây". Cố ý
@@ -1108,6 +1122,7 @@ export async function runVoiceTurn(input: VoiceTurnInput): Promise<VoiceTurnResu
       // coi tên là một phần yêu cầu và hay chào lại thay vì đi.
       heard = goi.conLai;
     } else if (input.cham || dangThuc(input.deviceId) || dangHoc(input.deviceId)) {
+      void import('./chuDong.js').then((m) => m.ghiCoNguoi(input.deviceId)).catch(() => undefined);
       // Đang trong cuộc nói chuyện — mỗi lượt đẩy hạn ra xa, nên không
       // phải gọi tên lại giữa chừng. Lượt mở bằng CHẠM cũng vào đây:
       // chạm là đã gọi rồi.
@@ -1583,6 +1598,22 @@ export async function runVoiceTurn(input: VoiceTurnInput): Promise<VoiceTurnResu
   const chuDeHeThong = canHeThong(heard);
   const laHeThong = chuDeHeThong.length > 0 && (await chuLaAdmin(input.deviceId));
 
+  // ── TIN TỨC kiểu bạn thân (tinTuc.ts): hỏi chung ⇒ robot hỏi lại (AI hay tin khác); trả lời ⇒ dữ liệu tin cho LLM.
+  let doanTin = '';
+  if (input.speak !== false) {
+    const tt = await xuLyTinTuc(input.deviceId, heard).catch(() => null);
+    if (tt?.noi) {
+      const noiDuoc = await speakOnce(persona, tt.noi, input.deviceId);
+      emitTranscript(input.deviceId, 'bot', tt.noi);
+      pushHistory(input.deviceId, { role: 'user', content: heard }, { role: 'assistant', content: JSON.stringify({ say: tt.noi, actions: [] }) });
+      if (tt.chon) await hoiChon(input.deviceId, input.projectId, tt.chon).catch(() => null);
+      if (noiDuoc) giuThucHoiThoai(input.deviceId, persona.giayThucGiac);
+      timing.total = Date.now() - started;
+      return { heard, said: tt.noi, actions: [], spoken: noiDuoc, ms: timing };
+    }
+    if (tt?.doan) doanTin = tt.doan;
+  }
+
   // ── CÂU ĐỆM: câu khó / cần tra ⇒ nói NGAY "để mình tra xíu nhé…" (cauDem.ts) ──
   //
   // Phát TRƯỚC khi tra web / đọc số liệu (mấy việc đó tốn vài giây), trên một
@@ -1592,7 +1623,7 @@ export async function runVoiceTurn(input: VoiceTurnInput): Promise<VoiceTurnResu
   if (input.speak !== false && (persona.voiceProvider === 'cuongmini' || persona.voiceProvider === 'elevenlabs') && persona.cheDo === 'vi') {
     const loaiDem = chonLoaiDem({
       heThong: laHeThong,
-      tra: !laHeThong && !!canTraCuu(heard),
+      tra: !laHeThong && (!!doanTin || !!canTraCuu(heard)),
       kho: phanLoaiCau(heard).kho,
     });
     const dem = loaiDem
@@ -1621,7 +1652,7 @@ export async function runVoiceTurn(input: VoiceTurnInput): Promise<VoiceTurnResu
     gw.speakStreamEnd(input.deviceId, moDau.seq);
   };
 
-  let doanTraCuu = '';
+  let doanTraCuu = doanTin;
   try {
     if (laHeThong) {
       const t = Date.now();
@@ -1633,14 +1664,14 @@ export async function runVoiceTurn(input: VoiceTurnInput): Promise<VoiceTurnResu
       });
     }
 
-    const kieuTra = doanHeThong ? null : canTraCuu(heard);
+    const kieuTra = doanHeThong || doanTin ? null : canTraCuu(heard);
     if (kieuTra) {
       const t = Date.now();
       const muc =
         kieuTra === 'tim'
           ? await timTrenWeb(themViTri(heard, persona.viTri), 5)
           : await tinMoiNhat(8, kieuTra === 'tin-cong-nghe');
-      doanTraCuu = dungDoanTraCuu(muc, kieuTra);
+      doanTraCuu = dungDoanTraCuu(muc, kieuTra) + (kieuTra === 'tim' ? '' : `\n${LOI_DAN_TIN}`);
       logger.info('MakerLab tra internet', {
         deviceId: input.deviceId,
         kieu: kieuTra,
@@ -1700,6 +1731,11 @@ export async function runVoiceTurn(input: VoiceTurnInput): Promise<VoiceTurnResu
 
   for (const action of reply.actions) {
     void dispatchAction(input.deviceId, action);
+  }
+  if (reply.chon && input.speak !== false) {
+    const id = await hoiChon(input.deviceId, input.projectId, reply.chon).catch(() => null);
+    // Người ta sẽ trả lời (chạm hoặc nói) ⇒ giữ tai mở dù chưa gọi tên.
+    if (id) giuThucHoiThoai(input.deviceId, Math.max(persona.giayThucGiac ?? 0, 45));
   }
 
   if (!spoken) emitTranscript(input.deviceId, 'bot', reply.say);
@@ -2307,7 +2343,9 @@ async function thinkAndSpeakLoi(
     // càng dễ còn dư cả hai phần, nên câu ngắn không thấy mà câu dài
     // thì lần nào cũng thấy.
     const tail = parsed0.say.slice(emitted).trim();
-    const parsed: RobotReply = { say: `${sayTruoc}${parsed0.say}`.trim(), actions: [...hanhDongTruoc, ...parsed0.actions] };
+    const parsed: RobotReply = {
+      say: `${sayTruoc}${parsed0.say}`.trim(), actions: [...hanhDongTruoc, ...parsed0.actions], ...(parsed0.chon ? { chon: parsed0.chon } : {}),
+    };
     const conLai = [...cho, tail].filter(Boolean).join(' ');
     cho.length = 0;
     if (conLai) {

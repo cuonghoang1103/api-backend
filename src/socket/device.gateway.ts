@@ -800,6 +800,8 @@ async function onMessage(conn: DeviceConn, raw: RawData, isBinary: boolean): Pro
       conn.turnCham = msg.cham === true;
       // Người dùng vừa mở miệng ⇒ nạp sẵn giọng ElevenLabs trong lúc nghe + nghĩ (giongEl.ts, nhả nhịp 2 phút).
       void import('../services/makerlab/giongEl.js').then((m) => m.lamAmRobot(conn.projectId)).catch(() => {});
+      // Chạm màn = chắc chắn có người (chuDong.ts chỉ chủ động khi có người gần đây).
+      if (conn.turnCham) void import('../services/makerlab/chuDong.js').then((m) => m.ghiCoNguoi(conn.deviceId)).catch(() => {});
       break;
     case 'am_luong': {
       // Âm lượng đổi bằng tay ngay trên robot (vuốt dải dưới màn ngực).
@@ -832,6 +834,15 @@ async function onMessage(conn: DeviceConn, raw: RawData, isBinary: boolean): Pro
     case 'text':
       await handleText(conn, msg);
       break;
+    case 'chon': {
+      // Chạm một nút của khung chọn đáp án (firmware chon.cpp ⇒ manChon.ts).
+      conn.turnSeq += 1;
+      void import('../services/makerlab/chuDong.js').then((m) => m.ghiCoNguoi(conn.deviceId)).catch(() => {});
+      const { xuLyChamChon } = await import('../services/makerlab/manChon.js');
+      await xuLyChamChon(conn.deviceId, Number(msg.id), Number(msg.i)).catch((err) =>
+        logger.warn('MakerLab chọn đáp án lỗi', { deviceId: conn.deviceId, error: String(err) }));
+      break;
+    }
     case 'pong':
       break;
     default:

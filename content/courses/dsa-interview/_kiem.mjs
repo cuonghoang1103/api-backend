@@ -64,6 +64,22 @@ async function slugCuaKhoa(k) {
   khoaKhac.set(k, set);
   return set;
 }
+const monAcademy = new Map();
+async function slugAcademy(k) {
+  if (monAcademy.has(k)) return monAcademy.get(k);
+  let set = null;
+  const dir = path.join(REPO, 'content/academy');
+  for (const f of fs.readdirSync(dir).filter((x) => x.endsWith('.mjs'))) {
+    const src = fs.readFileSync(path.join(dir, f), 'utf8');
+    if (!new RegExp(`slug:\\s*'${k}'`).test(src.slice(0, 4000))) continue;
+    const m = (await import(pathToFileURL(path.join(dir, f)))).default;
+    if (m.course?.slug !== k) continue;
+    set = new Set(m.sections.flatMap((s) => s.lessons.map((l) => l.slug)));
+    break;
+  }
+  monAcademy.set(k, set);
+  return set;
+}
 const ngoai = new Map();     // url → slug bài đầu tiên chứa nó
 const deLc = new Map();      // slug LC → { id, ten, doKho, premium, o }
 for (const l of bai) {
@@ -77,7 +93,12 @@ for (const l of bai) {
   for (const m of c.matchAll(/href="\/academy\/courses\/data-structures-and-algorithms\/learn\?lessonSlug=([a-z0-9-]+)"/g)) {
     if (!csdSlugs.has(m[1])) bao(`${l.slug}: CSD201 không có bài ${m[1]}`);
   }
-  for (const m of c.matchAll(/href="\/(?!courses\/|academy\/courses\/data-structures-and-algorithms\/|algorithms\?)([^"]*)"/g)) {
+  for (const m of c.matchAll(/href="\/academy\/courses\/(?!data-structures-and-algorithms\/)([a-z0-9-]+)\/learn\?lessonSlug=([a-z0-9-]+)"/g)) {
+    const set = await slugAcademy(m[1]);
+    if (!set) bao(`${l.slug}: không tìm thấy môn Academy có slug ${m[1]} trong content/academy/`);
+    else if (!set.has(m[2])) bao(`${l.slug}: môn Academy ${m[1]} không có bài ${m[2]}`);
+  }
+  for (const m of c.matchAll(/href="\/(?!courses\/|academy\/courses\/|algorithms\?)([^"]*)"/g)) {
     if (!/^(algorithms|code-lab\/|exam|so-tay|roadmap)/.test(m[1])) console.log(`⚠️  ${l.slug}: link nội bộ chưa kiểm được: /${m[1].slice(0, 80)}`);
   }
   for (const m of c.matchAll(/<a class="lc" href="https:\/\/leetcode\.com\/problems\/([a-z0-9-]+)\/"[^>]*>LC (\d+) · ([^<]+)<\/a> <small>\((Easy|Medium|Hard)( · 🔒 Premium)?\)<\/small>/g)) {

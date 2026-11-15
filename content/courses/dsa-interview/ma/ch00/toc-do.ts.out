@@ -1,0 +1,7 @@
+10^8 simple loop steps: 397 ms  => about 252 million steps/second
+          n |       O(n) |  O(n log n) sort |       O(n^2)
+      1,000 |    0.00 ms |           0.2 ms |         4 ms
+     10,000 |    0.04 ms |           2.2 ms |       401 ms
+    100,000 |    0.39 ms |          26.6 ms | ~40 s (est.)
+  1,000,000 |    3.82 ms |         302.0 ms | ~4372 s (est.)
+node v26.8.1 · arm64

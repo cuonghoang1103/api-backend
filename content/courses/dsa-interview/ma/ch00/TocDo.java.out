@@ -1,0 +1,7 @@
+10^8 simple loop steps: 354 ms  => about 283 million steps/second
+          n |       O(n) |  O(n log n) sort |       O(n^2)
+      1,000 |    0.00 ms |           0.2 ms |         4 ms
+     10,000 |    0.04 ms |           1.7 ms |       353 ms
+    100,000 |    0.42 ms |           5.0 ms | ~37 s (est.)
+  1,000,000 |    4.11 ms |          55.6 ms | ~3558 s (est.)
+java 21.0.9 · aarch64

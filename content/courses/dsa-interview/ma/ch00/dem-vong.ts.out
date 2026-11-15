@@ -1,0 +1,5 @@
+n=16: linear=16 nested=256 triangle=120 halving=4 nlogn=64 twoLoops(n,n)=32
+n=32: linear=32 nested=1024 triangle=496 halving=5 nlogn=160 twoLoops(n,n)=64
+fib(10)=55 calls=177
+fib(20)=6765 calls=21891
+fib(30)=832040 calls=2692537

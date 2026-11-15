@@ -13,9 +13,13 @@
 | Chương | Trạng thái | Ghi chú |
 |---|---|---|
 | 0 | ✅ XONG 438303a7d | 2 bài Bắt đầu + 0.1 Big-O + 0.2 khung + 0.3 quiz (153k ký tự) |
-| 1 | 1.1 xong (5dc576dc0); 1.2–1.6 agent đang soạn | |
-| 2–5 | agent đang soạn (đợt 1) | |
-| 6–11 | chờ đợt 2 | |
+| 1 | ✅ XONG 5dc576dc0 + 80e75afed | 1.1 hash map · 1.2 prefix sum · 1.3 sắp xếp · ★1.4 bit (dsa-1-5-bit) · 1.5 bộ luyện · ★1.6 quiz |
+| 2 | ✅ XONG 9f49fa7e1 | hai con trỏ · cửa sổ trượt (rate limiter thật trong repo) · nhanh-chậm · bộ luyện · quiz |
+| 3 | ✅ XONG a0ff5aaf0 | stack/monotonic · queue/deque · linked list + LRU · bộ luyện · quiz |
+| 4 | ✅ XONG 967a1f967 | MỘT khuôn firstTrue · mảng xoay · nhị phân trên đáp án (git bisect thật) · bộ luyện · quiz |
+| 5 | ✅ XONG 26c35baf1 | duyệt · đệ quy trên cây · BST · ★trie (dsa-5-5-trie) · bộ luyện · quiz |
+| 6–10 | agent đang soạn | |
+| 11 | chờ (soạn cuối, cần cả khoá) | |
 
 ## Việc tiếp theo (chưa làm)
 - Code Lab: máy chấm `js` (Worker) hợp với đề DSA, nhưng track mới phải đăng ký 1 dòng ở `src/services/codeLab.practice.ts`

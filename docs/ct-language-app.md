@@ -428,6 +428,16 @@ Câu hỏi cho user: Pro của CT Language có **dùng chung** với Pro web cuo
     điển, dịch & phân tích), "Tạo thẻ ôn (n)" ⇒ từ có nghĩa ⇒ `KhoSoTu.themNhieu` (giới hạn 200 bản free), chip "Từ cần ôn hôm
     nay" (không có từ đến hạn ⇒ trả lời tại chỗ, không tốn lượt). Màn xem thử `CT_XEM_MAN=tro-ly | tro-ly-mau | tro-ly-tinh-cach |
     tro-ly-lich-su | tro-ly-huong-dan | tro-ly-the-tu | tro-ly-tao-the`. Lượt dùng chung trần Hỏi Gấu (free 8 · Pro 80/ngày).
+    **Đợt 3 — stream (15/11/2026):** `POST /hoi-gau/ai/hoi/luong` (SSE, luôn định dạng giàu): `delta {text}` · `reset {}` · `done
+    {id, traLoi, goiY, kieu, luot}` (bản chuẩn — thay nháp) · `error {code, message, status}`; `: ping` mỗi 15 s; lỗi trước khi mở
+    luồng (đầu vào/hết lượt/lọc) ⇒ JSON thường. `LocLuongGau` giữ lại khối `[[goi-y]]` (đi ở `done`) + chạy bộ lọc nội dung mỗi
+    ~200 ký tự. Stream ⇒ `timeoutMs` là hẹn giờ IM LẶNG 45 s. nginx `/api/v1/` đã `proxy_buffering off` (không sửa nginx). Đo thật
+    (gpt-6-sol, cùng câu "Giải thích mẫu N1 は N2 です"): chữ đầu 9,6 s (chờ trọn câu) ⇒ 2,5 s (stream, tổng 6,9 s). App: `hoiLuong`
+    (404 ⇒ lùi `hoi` cho backend chưa deploy), nháp qua `PhanTichTraLoiGau.banNhap` (ẩn hàng bảng/khối viết dở, bỏ dấu cú pháp lẻ),
+    cập nhật ≤ ~12 lần/giây, nút Dừng (giữ phần đã viết; lượt vẫn tính vì máy chủ không huỷ được lời gọi model đang chạy).
+    Thanh công cụ màn trợ lý: Lịch sử + menu "…" (cuộc mới · tính cách · hướng dẫn). **Nhờ Gấu (Cộng đồng)** cùng lời nhắc giàu
+    (1600 token, 55 s × 2), lưu Markdown; API trả `noiDung` = `tronGau(...)` (trơn — app cũ) + `noiDungGiau` (app mới vẽ
+    `TraLoiGauView`). Lượt giữ free 2 · Pro 15.
     Smoke-test deploy.sh thêm `ctlanguage/hoi-gau/luot` (401). Đo local 15/11: câu "Giải thích từ này" (学习) trả lời đúng, có pinyin.
     App: `Modules/TroLyGau/TroLyGauCTL.swift` (+ `NguCanhGauCTL.swift` dựng ngữ cảnh). **Gắn vào một màn = một dòng:**
     `.troLyGau(NguCanhGau(loai: .nguPhap, nn: nn, tieuDe: …, noiDung: "…chữ của màn…", goiY: [...]))` — `nil` ⇒ ẩn; `canhDuoi:` đẩy nút

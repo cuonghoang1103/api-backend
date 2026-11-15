@@ -32,6 +32,13 @@ Mẫu một mục:
 - **Ảnh hưởng:** mọi lượt `nhanh` chạy Sonnet 5.5 — Luyện nói (từ 13/11, khi đổi Haiku → Sonnet), CT Work, chấm thi.
 - **Bài học:** đổi model trong chuỗi "nói nhanh" thì soi lại bảng thinking theo model; lưới đỡ "gửi lại bản tối giản" che lỗi khỏi người dùng nhưng cũng che khỏi người vận hành — đếm số lần nó bật trong log.
 
+### 15/11/2026 — CT Language (Hỏi Gấu đợt 3 — stream, bắt khi đang làm) — nháp đang viết chỉ hiện khối đầu tiên
+- **Triệu chứng:** màn xem thử giả lập stream (`CT_XEM_MAN=tro-ly-luong`) hiện thẻ câu trả lời TRỐNG dù nháp đã 700 ký tự; với luồng thật sẽ chỉ thấy đúng số khối của mẩu đầu tiên tới khi xong.
+- **Nguyên nhân:** `TraLoiGauView` (`ios-app …/TroLyGau/TraLoiGauCTL.swift`) cắt khối theo `@State soHien`; `State(initialValue:)` chỉ có tác dụng LẦN DỰNG ĐẦU — nháp lớn dần (cùng view, `hienDan = false`) vẫn bị cắt theo số khối lúc nháp còn rỗng.
+- **Cách sửa:** chỉ dùng `soHien` khi `hienDan`; còn lại hiện mọi khối (commit đợt 3).
+- **Ảnh hưởng:** không ai — chưa lên app.
+- **Bài học:** `@State` khởi tạo từ tham số init là "ảnh chụp lần đầu"; view có dữ liệu đổi liên tục (stream) phải tự tính từ tham số. Một màn xem thử giả lập luồng bắt lỗi mà test thuần không thấy.
+
 ### 15/11/2026 — CT Language (Hỏi Gấu đợt 2/2b, bắt khi đang làm — chưa lên người dùng) — regex ICU sập app + tổng thời gian chờ vượt mức Cloudflare
 - **Triệu chứng:** (1) test iOS `TroLyGauTests` sập `Fatal error: 'try!' … NSCocoaErrorDomain 2048` ngay khi vẽ câu trả lời đầu tiên; (2) đo thật một lượt "dịch & phân tích" mất 116 s.
 - **Nguyên nhân:** (1) `TraLoiGauCTL.swift` viết `\u{00A0}` trong chuỗi thô `#"…"#` cho `NSRegularExpression` — đó là cú pháp Swift, ICU chỉ hiểu `\x{00A0}`/`\u00A0` ⇒ `try!` sập; (2) `hoiGau.ts` đặt `timeoutMs 75 s` + `maxRetries 1` cho tuyến KHÔNG stream ⇒ tối đa ~150 s, quá 125 s Cloudflare cắt (524).
@@ -488,3 +495,10 @@ Mẫu một mục:
 - **Cách sửa:** máy chủ nhận id tới `Number.MAX_SAFE_INTEGER` (khoá 16 chữ số) + test; app một lần đưa lại vào hàng chờ mọi thẻ id vượt trần cũ (`GopSoTu.dayLaiIdNgoai`), chỉ đánh dấu xong khi lô đẩy về `soLoi == 0` (máy chủ chưa deploy ⇒ lần sau thử lại) + test `DongBoSoTuTests`.
 - **Ảnh hưởng:** mọi người dùng CT Language đăng nhập có từ lưu từ Dịch/Chia sẻ, từ khi có đồng bộ (deploy f2944c174, 15/11) tới bản sửa; không mất dữ liệu trên máy.
 - **Bài học:** hai đầu cấp id phải dùng chung một khoảng có test giữ; bên nhận lô mà "bỏ bản sai, nhận bản đúng" thì bên gửi phải đọc số lỗi trả về, không được coi `success` là đã nhận đủ.
+
+### 15/11/2026 — CT Language iOS (màn Dịch, nguồn "Liên kết") — gom khoảng trắng của trang web không bao giờ chạy
+- **Triệu chứng:** chữ tải từ một liên kết (Dịch văn bản › Liên kết) giữ nguyên chuỗi dấu cách, `&nbsp;`, dấu cách toàn khổ `　` giữa các từ — ô nhập đầy khoảng trống, đoạn dịch bị ngắt lạ.
+- **Nguyên nhân:** `ios-app/CuongThaiApp/CTLanguageApp/Modules/Dich/DichVanBanCTL.swift:536` (`boThe`) dùng biểu thức `#"[ \u{00A0}\u{3000}]+"#` — `\u{…}` là cú pháp chuỗi Swift, KHÔNG phải ICU regex; trong chuỗi thô nó thành mẫu sai ⇒ `replacingOccurrences(.regularExpression)` lặng lẽ trả nguyên chuỗi (đo: "a \u{00A0}\u{3000} b" ra y nguyên, kể cả dấu cách thường).
+- **Cách sửa:** bỏ hẳn đường "đổ cả trang thô vào ô nhập" — "Liên kết" nay mở màn Đọc trang web (`DocLinkCTL` + bộ rút bài `RutBaiWebCTL`), gom khoảng trắng bằng mẫu ICU đúng `[ \t\r\n 　]+` + test `RutBaiWebTests.testThucTheVaKhoangTrang` (commit feat(ctlanguage) đọc link web).
+- **Ảnh hưởng:** người dùng CT Language iOS dùng Dịch › Liên kết từ đợt D (14/11) — chưa phát hành App Store, chỉ TestFlight.
+- **Bài học:** trong chuỗi thô `#"…"#` của Swift, ký tự Unicode trong regex phải viết kiểu ICU (`\uXXXX` / `\x{…}`); regex sai không ném lỗi với `replacingOccurrences` — mỗi regex cần một test có dữ liệu thật đi qua.

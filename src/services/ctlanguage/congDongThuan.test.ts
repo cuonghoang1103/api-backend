@@ -64,3 +64,10 @@ test('đoạn trích: cắt ở ranh giới từ, gộp khoảng trắng', () =>
   assert.ok(t.length <= 51 && t.endsWith('…'));
   assert.ok(!t.includes('  '));
 });
+
+test('tronGau: Markdown giàu của Gấu ⇒ chữ trơn cho app cũ; chữ vốn trơn không đổi', async () => {
+  const { tronGau } = await import('./congDongGau.js');
+  const md = '## 🎯 Ý nghĩa\n**Mẫu** `{私|わたし}は` — tôi\n\n| Phần | Nghĩa |\n|---|---|\n| `は` | chủ đề |\n> 💡 Mẹo: nhớ nhé\n- `A` — a';
+  assert.equal(tronGau(md), '🎯 Ý nghĩa\nMẫu 私（わたし）は — tôi\n\nPhần · Nghĩa\nは · chủ đề\n💡 Mẹo: nhớ nhé\n• A — a');
+  assert.equal(tronGau('Câu trả lời cũ • ví dụ'), 'Câu trả lời cũ • ví dụ');
+});

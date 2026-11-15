@@ -182,7 +182,7 @@ t('🐻 Nhờ Gấu: chỉ bài Hỏi, một lần/bài, lượt free/ngày, l�
       goiLan++;
       assert.ok(system.includes('tiếng Nhật') && user.includes('Câu hỏi:'));
       if (hong) throw new Error('cổng sập');
-      return '**Gợi ý**: は nêu chủ đề • が nhấn chủ ngữ. Ví dụ: 私は学生です (watashi wa gakusei desu).';
+      return '**Gợi ý**: は nêu chủ đề • が nhấn chủ ngữ. Ví dụ: 私は学生です (watashi wa gakusei desu).\n[[goi-y]]\n- Thêm';
     },
   });
   const chiaSe = await cd.dangBai(a, 'ja', { noiDung: 'Chia sẻ tài liệu', loai: 'chia-se' });
@@ -193,7 +193,9 @@ t('🐻 Nhờ Gấu: chỉ bài Hỏi, một lần/bài, lượt free/ngày, l�
   assert.equal((await cd.chiTietBai(hoi.id, b)).coTheNhoGau, true, 'AI lỗi ⇒ trả chỗ');
   const r = await gau.nhoGauTraLoi(b, hoi.id, gia());
   const ai = r.traLoi.find((x) => x.laAi)!;
-  assert.ok(ai && !ai.noiDung.includes('**'), 'có câu AI, đã bỏ in đậm');
+  assert.ok(ai && !ai.noiDung.includes('**'), 'có câu AI, noiDung trơn cho app cũ');
+  assert.ok((ai as { noiDungGiau?: string }).noiDungGiau?.includes('**'), 'noiDungGiau giữ Markdown cho app mới');
+  assert.ok(!(ai as { noiDungGiau?: string }).noiDungGiau?.includes('[[goi-y]]'), 'câu công khai không mang khối gợi ý');
   assert.equal(ai.tacGia.id, 0);
   assert.equal(ai.nhoBoi, 'Người 1');
   assert.equal(r.coTheNhoGau, false);

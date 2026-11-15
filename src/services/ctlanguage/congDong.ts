@@ -15,6 +15,7 @@
  *   4. Người viết bị khoá / vô hiệu ⇒ bài + trả lời ẩn theo (lọc `enabled` + `accountNonLocked` lúc đọc).
  * 15/11/2026: ẢNH trong bài (≤ 4) + câu trả lời (≤ 2) — `congDongAnh.ts`; báo cáo được từng ảnh, xoá bài ⇒ xoá ảnh.
  */
+import { tronGau } from './congDongGau.js';
 import { createHash } from 'node:crypto';
 import type { Prisma } from '@prisma/client';
 import { prisma } from '../../config/database.js';
@@ -248,7 +249,9 @@ export async function chiTietBai(id: number, xem: number | null, opt: { khoaXem?
   const st = new Set(thichTl.map((x) => x.traLoiId));
   const traLoi = tl
     .map(({ user: u, hayNhatLuc, laAi, ...t }) => ({
-      ...t, laAi, laHayNhat: !!hayNhatLuc, daThich: st.has(t.id),
+      // Câu AI lưu Markdown giàu (đợt 3): `noiDung` trơn cho app cũ, `noiDungGiau` cho bộ vẽ của app mới (congDongGau.ts).
+      ...t, ...(laAi ? { noiDung: tronGau(t.noiDung), noiDungGiau: t.noiDung } : {}),
+      laAi, laHayNhat: !!hayNhatLuc, daThich: st.has(t.id),
       tacGia: laAi ? { ...TAC_GIA_GAU, huyHieu: null } : { ...tacGiaGon(u), huyHieu: hh.get(u.id)?.[0] ?? null },
       nhoBoi: laAi ? tacGiaGon(u).ten : null,
       cuaToi: !laAi && u.id === xem,

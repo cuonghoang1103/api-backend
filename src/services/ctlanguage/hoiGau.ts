@@ -104,23 +104,27 @@ export const TRAN_RA: Record<KieuCau, number> = {
 /** Phụ thuộc ra ngoài — test thay bằng bản giả (không gọi AI, không đọc CSDL). */
 export interface PhuThuocHoi {
   laPro: (userId: number) => Promise<boolean>;
-  /** Trả văn bản câu trả lời (chuỗi, hoặc `{text, biCat}` khi chạm trần token). Ném lỗi khi AI hỏng. */
-  goi: (o: { system: string; messages: { role: 'user' | 'assistant'; content: string }[]; userId: number; maxTokens: number }) =>
-    Promise<string | { text: string; biCat?: boolean }>;
+  /** Trả văn bản câu trả lời (chuỗi, hoặc `{text, biCat}` khi chạm trần token). Ném lỗi khi AI hỏng.
+   *  `onToken` có mặt ⇒ stream (đợt 3): từng mẩu thô; `onRestart` = cổng thử lại từ đầu ⇒ bỏ phần đã phát. */
+  goi: (o: {
+    system: string; messages: { role: 'user' | 'assistant'; content: string }[]; userId: number; maxTokens: number;
+    onToken?: (t: string) => void; onRestart?: () => void;
+  }) => Promise<string | { text: string; biCat?: boolean }>;
   baoAdmin: (tb: { tieuDe: string; noiDung: string; userId: number; khoaChongTrung: string }) => Promise<unknown>;
   bayGio: () => Date;
 }
 
 const THAT: PhuThuocHoi = {
   laPro: isProEffective,
-  goi: async ({ system, messages, userId, maxTokens }) => {
+  goi: async ({ system, messages, userId, maxTokens, onToken, onRestart }) => {
     const { llmComplete, isAiAvailable } = await import('../interview/llm/index.js');
     if (!isAiAvailable('language')) throw new AppError('AI đang tạm nghỉ, bạn thử lại sau ít phút nhé.', 503, 'CTL_HOI_AI_NGHI');
     const r = await llmComplete({
       // ⚠️ Không stream ⇒ tổng (timeout × số lần thử) phải < 125 s Cloudflare cắt (524). Đo 15/11: một lượt "dịch & phân
       // tích" mất 116 s lúc cổng chậm (thường ~20 s) ⇒ 55 s × 2 lần ≈ 110 s.
       step: 'generation', purpose: 'language_tutor', feature: 'language', userId, maxTokens, maxRetries: 1,
-      timeoutMs: maxTokens > 900 ? 55_000 : 45_000, system, messages,
+      // Stream (đợt 3): `timeoutMs` thành hẹn giờ IM LẶNG (đặt lại mỗi mẩu) — chữ đầu phải tới trong 45 s.
+      timeoutMs: onToken ? 45_000 : maxTokens > 900 ? 55_000 : 45_000, system, messages, onToken, onRestart,
     });
     return { text: r.text ?? '', biCat: r.biCat };
   },
@@ -372,6 +376,48 @@ export function lamSachTraLoiGiau(s: string): { than: string; goiY: string[] } {
   return { than: t, goiY };
 }
 
+// ─── Stream (đợt 3) ──────────────────────────────────────────────────────────────────────────────────────────────────
+
+/** Nơi nhận luồng của route SSE. `batDau` gọi đúng MỘT lần, sau khi đã kiểm đầu vào + trừ lượt (lỗi trước đó ⇒ JSON thường). */
+export interface LuongHoi { batDau: () => void; delta: (text: string) => void; reset: () => void }
+
+/**
+ * Lọc luồng chữ thô của model trước khi phát cho app. THUẦN — test đọc.
+ *   · Khối gợi ý cuối (`[[goi-y]]` / "Gợi ý hỏi tiếp:") KHÔNG bao giờ phát — nó đi ở sự kiện `done` (`goiY`).
+ *   · Dòng cuối đang viết dở mà có thể là đầu khối đó ("[", "[[go", "Gợi ý h…") ⇒ GIỮ LẠI tới khi rõ.
+ *   · Bộ lọc nội dung chạy mỗi ~200 ký tự mới: lọt từ xấu ⇒ ngừng phát (`biChan`), câu cuối bị chặn như đường thường.
+ */
+export class LocLuongGau {
+  private raw = '';
+  private daGui = 0;
+  private kiemDen = 0;
+  dung = false;
+  biChan = false;
+
+  them(t: string): string {
+    if (this.dung || !t) return '';
+    this.raw += t;
+    if (this.raw.length - this.kiemDen >= 200) {
+      this.kiemDen = this.raw.length;
+      if (kiemNoiDung(this.raw).chan) { this.dung = true; this.biChan = true; return ''; }
+    }
+    let cat = this.raw.length;
+    const m = /(^|\n)[ \t]*(?:\[\[\s*go|\*{0,2}g[ợo]i ý hỏi tiếp)/i.exec(this.raw);
+    if (m) { cat = m.index; this.dung = true; }
+    else {
+      const nl = this.raw.lastIndexOf('\n');
+      const duoi = this.raw.slice(nl + 1).replace(/^[ \t*]+/, '').toLowerCase();
+      if (duoi && (duoi.startsWith('[') || 'gợi ý hỏi tiếp'.startsWith(duoi))) cat = nl + 1;
+    }
+    if (cat <= this.daGui) return '';
+    const ra = this.raw.slice(this.daGui, cat);
+    this.daGui = cat;
+    return ra;
+  }
+
+  reset() { this.raw = ''; this.daGui = 0; this.kiemDen = 0; this.dung = false; this.biChan = false; }
+}
+
 // ─── Kết quả gần đây (cho báo cáo) ─────────────────────────────────────────────────────────────────────────────────
 interface DaTra { userId: number; luc: number; nn: NnHoi; nguCanh: NguCanhHoi; cau: string; traLoi: string }
 const DA_TRA = new Map<string, DaTra>();
@@ -391,6 +437,8 @@ export async function hoiGau(
   userId: number,
   b: { nn?: unknown; banDongHanh?: unknown; nguCanh?: unknown; lichSu?: unknown; cau?: unknown; dinhDang?: unknown; tinhCach?: unknown },
   pt: PhuThuocHoi = THAT,
+  /** Đợt 3: có ⇒ stream (chỉ áp cho định dạng giàu). */
+  luong?: LuongHoi,
 ): Promise<KetQuaHoi> {
   const nn = docNnHoi(b.nn);
   const cau = chuoi(b.cau, CAU_TOI_DA + 1);
@@ -425,10 +473,17 @@ export async function hoiGau(
   ];
   let traLoi = '';
   let goiY: string[] = [];
+  const loc = new LocLuongGau();
+  const coLuong = giau && !!luong;
+  if (coLuong) luong!.batDau();
   try {
     const r = await pt.goi({
       system: giau ? nhacHoiGauGiau(nn, ban, nguCanh, kieu, docTinhCach(b.tinhCach)) : nhacHoiGau(nn, ban, nguCanh),
       messages, userId, maxTokens: giau ? TRAN_RA[kieu] : 900,
+      ...(coLuong ? {
+        onToken: (t: string) => { const ra = loc.them(t); if (ra) luong!.delta(ra); },
+        onRestart: () => { loc.reset(); luong!.reset(); },
+      } : {}),
     });
     const tho = typeof r === 'string' ? r : r.text;
     const biCat = typeof r !== 'string' && !!r.biCat;
@@ -448,7 +503,7 @@ export async function hoiGau(
     logger.warn('[ctl-hoi-gau] AI lỗi — hoàn lượt', { userId, nn, loai: nguCanh.loai, kieu, loi: (e as Error)?.message });
     throw new AppError('Mình chưa trả lời được. Bạn thử lại sau ít phút nhé (lượt chưa bị trừ).', 503, 'CTL_HOI_AI_LOI');
   }
-  if (kiemNoiDung(traLoi).chan || goiY.some((g) => kiemNoiDung(g).chan)) {
+  if (loc.biChan || kiemNoiDung(traLoi).chan || goiY.some((g) => kiemNoiDung(g).chan)) {
     hoan();
     throw new AppError('Câu trả lời có nội dung không phù hợp nên đã bị chặn. Bạn hỏi cách khác nhé.', 422, 'CTL_HOI_NOI_DUNG');
   }

@@ -8,6 +8,10 @@
  *   · Gọi cổng LLM chung của web (`llmComplete`, purpose `language_tutor`) — trần $/ngày + bảo trì CuongMini áp sẵn.
  *   · Câu AI viết cũng đi qua `kiemNoiDung` (lọt từ xấu ⇒ bỏ, trả chỗ).
  * App: đường có `/ai/` ⇒ app gọi `DongYChiaSeAI.batBuoc()` trước khi gửi (App Store 5.1.2(i)).
+ *
+ * ── Đợt 3 (15/11/2026): câu AI viết theo ĐỊNH DẠNG GIÀU như Hỏi Gấu (`hoiGau.ts › nhacHoiGauGiau`, khung theo loại câu,
+ * 1600 token, `lamSachTraLoiGiau`) và LƯU nguyên Markdown. Câu trả lời công khai ⇒ mọi bản app đọc nó: API trả `noiDung` =
+ * `tronGau(...)` (chữ trơn — app cũ vẽ `Text`) + `noiDungGiau` = bản gốc cho app mới (`TraLoiGauView`) — xem `congDong.ts`.
  */
 import { prisma } from '../../config/database.js';
 import { AppError } from '../../middleware/errorHandler.js';
@@ -33,7 +37,8 @@ const THAT: PhuThuocGau = {
   goi: async ({ system, user, userId }) => {
     const { llmComplete } = await import('../interview/llm/index.js');
     const r = await llmComplete({
-      step: 'generation', purpose: 'language_tutor', feature: 'language', userId, maxTokens: 900, maxRetries: 1, timeoutMs: 45_000,
+      // 55 s × 2 lần ≈ 110 s < 125 s Cloudflare (tuyến không stream).
+      step: 'generation', purpose: 'language_tutor', feature: 'language', userId, maxTokens: 1600, maxRetries: 1, timeoutMs: 55_000,
       system, messages: [{ role: 'user', content: user }],
     });
     return r.text ?? '';
@@ -51,6 +56,23 @@ export function nhacGau(nn: NnTuDien): string {
     'Định dạng chữ thường: được dùng gạch đầu dòng "•", KHÔNG dùng bảng, tiêu đề #, hay **in đậm**. Không chào hỏi dài dòng.',
     'Câu hỏi không liên quan tới học ngôn ngữ hoặc có nội dung không phù hợp ⇒ lịch sự từ chối trong một câu.',
   ].join('\n');
+}
+
+/**
+ * Markdown giàu ⇒ chữ trơn đọc được cho bản app CŨ (vẽ `Text`): bỏ tiêu đề/đậm/backtick, furigana ⇒ 漢字（かな）, hộp `>` ⇒ dòng
+ * thường, gạch đầu dòng ⇒ "•", bảng ⇒ "ô · ô", "Đáp án:" giữ nguyên. Chữ vốn trơn đi qua không đổi. THUẦN — test đọc.
+ */
+export function tronGau(s: string): string {
+  return s
+    .replace(/\{([^|}\n]+)\|([^}\n]+)\}/g, '$1（$2）')
+    .replace(/^[ \t]*\|?[ \t]*:?-{2,}:?[ \t]*(\|[ \t]*:?-{2,}:?[ \t]*)*\|?[ \t]*$\n?/gm, '')
+    .replace(/^[ \t]*\|(.*)\|[ \t]*$/gm, (_, o: string) => o.split('|').map((x) => x.trim()).join(' · '))
+    .replace(/^#{1,6}[ \t]+/gm, '')
+    .replace(/^>[ \t]?/gm, '')
+    .replace(/^([ \t]*)[-*][ \t]+/gm, '$1• ')
+    .replace(/\*\*|==|~~|`/g, '')
+    .replace(/\n{3,}/g, '\n\n')
+    .trim();
 }
 
 /** Bỏ đánh dấu Markdown nặng mà app không vẽ (in đậm, tiêu đề). */
@@ -86,7 +108,11 @@ export async function nhoGauTraLoi(userId: number, baiId: number, pt: PhuThuocGa
   const user = [b.tieuDe && `Tiêu đề: ${b.tieuDe}`, tenThe.length && `Chủ đề: ${tenThe.join(', ')}`, `Câu hỏi: ${b.noiDung}`].filter(Boolean).join('\n');
   let text = '';
   try {
-    text = lamSachGau(await pt.goi({ system: nhacGau(nn), user, userId }));
+    // Đợt 3: cùng lời nhắc giàu của Hỏi Gấu (màn `bai-cd`), giọng Gấu CuongMini mặc định; câu công khai ⇒ không có khối gợi ý.
+    const { nhacHoiGauGiau, lamSachTraLoiGiau, phanLoaiCau } = await import('./hoiGau.js');
+    const system = `${nhacHoiGauGiau(nn, 'gau', { loai: 'bai-cd', tieuDe: b.tieuDe ?? '', noiDung: tenThe.length ? `Chủ đề: ${tenThe.join(', ')}` : '' },
+      phanLoaiCau(b.noiDung, 'bai-cd'))}\n\nRIÊNG LẦN NÀY: đây là câu trả lời CÔNG KHAI dưới một bài "Hỏi" trong cộng đồng (nhiều người đọc) — trả lời đúng câu hỏi trong tin nhắn, không hỏi lại, KHÔNG viết khối [[goi-y]].`;
+    text = lamSachTraLoiGiau(await pt.goi({ system, user, userId })).than;
     if (text.length < 2) throw new Error('AI trả rỗng');
     if (kiemNoiDung(text).chan) throw new Error('AI viết lọt từ bị chặn');
   } catch (e) {

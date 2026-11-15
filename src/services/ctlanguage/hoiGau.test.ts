@@ -8,7 +8,7 @@ import { beforeEach, test } from 'node:test';
 import {
   __datLaiHoiGau, baoCaoHoiGau, docLichSu, docNguCanh, GOI_Y_MAC_DINH, hoiGau, lamSachTraLoiGiau, LICH_SU_TOI_DA, LUOT_HOI_FREE,
   LUOT_HOI_PRO, luotHoiGau, nhacHoiGau, nhacHoiGauGiau, NGU_CANH_TOI_DA, phanLoaiCau, TINH_CACH, docTinhCach, TRAN_RA, TRA_LOI_TOI_DA,
-  type PhuThuocHoi,
+  LocLuongGau, type LuongHoi, type PhuThuocHoi,
 } from './hoiGau.js';
 
 type Goi = Parameters<PhuThuocHoi['goi']>[0];
@@ -214,4 +214,47 @@ test('loại câu đợt 2b: dịch + phân tích, kế hoạch ôn; loại màn
   assert.equal(docNguCanh({ loai: 'on-tu' }).loai, 'on-tu');
   assert.match(nhacHoiGauGiau('ja', undefined, docNguCanh({ loai: 'on-tu', noiDung: 'x' }), 'ke-hoach'), /ĐẾN HẠN ÔN/);
   assert.match(nhacHoiGauGiau('ja', undefined, docNguCanh({ loai: 'tro-ly' }), 'dich'), /DỊCH \+ PHÂN TÍCH/);
+});
+
+// ─── Đợt 3: stream ─────────────────────────────────────────────────────────────────────────────────────────────────
+
+test('lọc luồng: phát dần, giữ dòng có thể là [[goi-y]], dừng hẳn khi gặp khối gợi ý', () => {
+  const l = new LocLuongGau();
+  assert.equal(l.them('## Ý'), '## Ý');
+  assert.equal(l.them(' nghĩa\nCâu một.'), ' nghĩa\nCâu một.');
+  assert.equal(l.them('\n['), '\n', 'dòng mới bắt đầu bằng "[" ⇒ giữ lại');
+  assert.equal(l.them('[goi'), '');
+  assert.equal(l.them('-y]]\n- Cho thêm ví dụ'), '', 'gặp [[goi-y]] ⇒ không phát nữa');
+  assert.ok(l.dung);
+  const g = new LocLuongGau();
+  assert.equal(g.them('A\nGợi'), 'A\n');
+  assert.equal(g.them(' ý: dùng mẫu này'), 'Gợi ý: dùng mẫu này', '"Gợi ý:" không phải khối gợi ý ⇒ phát');
+  const k = new LocLuongGau();
+  k.them('x'.repeat(10)); k.reset();
+  assert.equal(k.them('mới'), 'mới', 'reset ⇒ bắt đầu lại');
+});
+
+test('stream: batDau sau khi kiểm + trừ lượt, delta nối lại đúng bản chuẩn (không có khối gợi ý), reset khi cổng thử lại', async () => {
+  const su: string[] = [];
+  let nhap = '';
+  const luong: LuongHoi = { batDau: () => su.push('batDau'), delta: (t) => { nhap += t; su.push('delta'); }, reset: () => { nhap = ''; su.push('reset'); } };
+  const pt: PhuThuocHoi = {
+    laPro: async () => false,
+    goi: async ({ onToken, onRestart }) => {
+      onToken!('nháp hỏng'); onRestart!();
+      const manh = ['## Kết', ' quả\n', 'Đúng **rồi**.\n', '[[goi-y]]\n', '- Cho thêm ví dụ'];
+      for (const m of manh) onToken!(m);
+      return manh.join('');
+    },
+    baoAdmin: async () => ({}), bayGio: () => new Date('2026-11-15T03:00:00Z'),
+  };
+  const r = await hoiGau(30, { nn: 'en', nguCanh: nguCanhTu, cau: 'Giải thích', dinhDang: 2 }, pt, luong);
+  assert.equal(su[0], 'batDau');
+  assert.ok(su.includes('reset'));
+  assert.equal(nhap.trimEnd(), r.traLoi, 'nháp cuối = bản chuẩn');
+  assert.deepEqual(r.goiY, ['Cho thêm ví dụ']);
+  // Lỗi đầu vào ⇒ KHÔNG mở luồng (route trả JSON thường).
+  const su2: string[] = [];
+  await assert.rejects(hoiGau(31, { nn: 'xx', cau: 'Hỏi' }, pt, { batDau: () => su2.push('b'), delta: () => {}, reset: () => {} }));
+  assert.equal(su2.length, 0);
 });

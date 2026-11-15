@@ -564,8 +564,18 @@ sshnha "mkdir -p ${THU_MUC_NHA} && [ -d \$HOME/${KHO_TUONG_DOI} ] || git init --
 # trên mọi bản bash.
 TUY_CHON_DAY=()
 [ "$CHO_LUI" = true ] && TUY_CHON_DAY=(--push-option=cho-lui)
-if ! git push --quiet --force ${TUY_CHON_DAY[@]+"${TUY_CHON_DAY[@]}"} "${MAY_NHA}:${KHO_TUONG_DOI}" "${SHA_DU}:refs/heads/deploy"; then
-    lui_ve_vps "Đẩy mã sang máy nhà thất bại"
+# ⏱ HẠN GIỜ (15/11/2026): lượt deploy 20:48 treo 20 PHÚT ở đúng dòng này (pack-objects 0% CPU, đổi mới chỉ
+# 1,4 MB — đường hầm SSH kẹt, đo lại ngay sau đó 0,6 s). Giờ: SSH tự cắt khi im 30 s, mỗi lần đẩy tối đa
+# 5 phút, hỏng thì thử lại MỘT lần. Đổi hạn: DAY_NHA_TRAN=<giây>.
+_day_nha() {
+    GIT_SSH_COMMAND="ssh -o ServerAliveInterval=10 -o ServerAliveCountMax=3" \
+        timeout "${DAY_NHA_TRAN:-300}" git push --quiet --force ${TUY_CHON_DAY[@]+"${TUY_CHON_DAY[@]}"} \
+        "${MAY_NHA}:${KHO_TUONG_DOI}" "${SHA_DU}:refs/heads/deploy"
+}
+if ! _day_nha; then
+    warn "Đẩy mã sang máy nhà hỏng/quá hạn — thử lại một lần sau 5 giây..."
+    sleep 5
+    _day_nha || lui_ve_vps "Đẩy mã sang máy nhà thất bại (2 lần, mỗi lần ≤ ${DAY_NHA_TRAN:-300} s)"
 fi
 if ! sshnha "rm -rf ${DICH} && mkdir -p ${DICH} && git --git-dir=\$HOME/${KHO_TUONG_DOI} archive ${SHA} | tar x -C ${DICH}"; then
     lui_ve_vps "Bung mã ở máy nhà thất bại"

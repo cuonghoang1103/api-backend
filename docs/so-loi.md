@@ -18,6 +18,13 @@ Mẫu một mục:
 
 ---
 
+### 15/11/2026 — CT Language (Hỏi Gấu / CuongMini) — câu trả lời "thô, khó nhìn, ngắn quá" (chữ trắng trơn, không tiêu đề, không màu)
+- **Triệu chứng:** bấm "Tóm tắt bài này" ở Dekiru Bài 1 ⇒ một khối chữ trơn vài gạch "•", không đậm, không tiêu đề, không phân biệt chữ Nhật với chữ Việt, cụt ở ~200 chữ.
+- **Nguyên nhân:** bốn chỗ cùng chặn: (1) lời nhắc `nhacHoiGau` (`src/services/ctlanguage/hoiGau.ts`) đòi "tối đa khoảng 200 chữ" và CẤM tiêu đề/**đậm**/bảng; (2) `lamSachGau` (`congDongGau.ts:57`) xoá `**`/`#` còn sót và cắt 2000 ký tự; (3) `maxTokens: 900`; (4) app vẽ `Text(t.noiDung)` trơn (`TroLyGauCTL.swift › bongTin`). Thêm: ngữ cảnh bài cắt 3000 ký tự và `NguCanhGau.baiSach` dùng `PhanTichChuSH.tron` ⇒ model mất furigana của mọi kanji trong bài.
+- **Cách sửa:** app gửi `dinhDang: 2` ⇒ lời nhắc theo loại câu (`phanLoaiCau`: tóm tắt/ngữ pháp/từ/chữa câu/đố/ví dụ/câu thi/tự do) + cú pháp hiển thị (`##`, `` `từ` ``, `{漢字|かな}`, hộp `> 💡/⚠️/✅`, `Đáp án:` ẩn), trần ra 1600–2600 theo loại, ngữ cảnh 6000 giữ furigana, khối `[[goi-y]]` ⇒ chip hỏi tiếp; app có bộ vẽ `TraLoiGauCTL.swift` (màu ngôn ngữ, furigana ruby, chạm từ để nghe, bảng, hộp màu, hiện dần). App cũ không gửi `dinhDang` ⇒ giữ đường cũ. Trong lúc làm, test bắt `/\bđố\b/` không bao giờ khớp "Đố mình" (`\b` của JS chỉ ASCII) ⇒ đổi `(?<!\p{L})…(?!\p{L})` + cờ `u`.
+- **Ảnh hưởng:** mọi câu Hỏi Gấu của app CT Language từ khi ra tính năng (15/11) tới bản này; câu trả lời vẫn đúng, chỉ khó đọc và thiếu.
+- **Bài học:** lời nhắc "ngắn gọn, đừng định dạng" là quyết định của TẦNG HIỂN THỊ — khi app chỉ có `Text` trơn thì đúng, nhưng phải sửa cùng lúc cả ba tầng (lời nhắc · làm sạch · bộ vẽ) và gắn cờ phiên bản (`dinhDang`) để app cũ không thấy cú pháp thô. Ngữ cảnh đưa AI phải giữ thông tin (cách đọc), không dùng hàm "chữ trơn để so đáp án".
+
 ### 15/11/2026 — App iOS CT Language (SachHoc) — thiếu 6 loại khối web đã có ⇒ thẻ "chưa hỗ trợ · Làm phần này trên web"
 - **Triệu chứng:** mở Dekiru Bài 1 trên iPhone thấy hàng loạt thẻ "Khối “hinh” — Bản app này chưa hiểu loại nội dung này — Làm phần này trên web"; các bài có slide, sơ đồ, hình Writing Task 1 và Luyện bảng chữ (Bài 0) cũng vậy.
 - **Nguyên nhân:** web thêm `hinh/canh/slides/sodo/figure/luyenKana` (09–12/11, `frontend/src/components/sach-hoc/types.ts`) và `sach-hoc-xuat.mts` gửi nguyên `blocks` cho app, nhưng bộ giải mã app (`ios-app/CuongThaiApp/Shared/SachHoc/MoHinhSachHoc.swift` › `KhoiBoc.giai`) dừng ở 27 loại ⇒ `default: .chuaBiet(t)`. Kèm theo: app bỏ qua `vocab.anh`, `onthe.bai`, `dictation.alt`.

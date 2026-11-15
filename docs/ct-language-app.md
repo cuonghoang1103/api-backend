@@ -408,6 +408,14 @@ Câu hỏi cho user: Pro của CT Language có **dùng chung** với Pro web cuo
     `POST /hoi-gau/bao-cao-ai` (4.7). `llmComplete` purpose `language_tutor`, 900 token. Free 8 · Pro 80 câu/ngày (RAM, trừ trước,
     hoàn khi AI lỗi — như `suaBai.ts`), 10 câu/phút. Lọc `kiemNoiDung` câu hỏi + lượt cũ của người dùng + câu AI. Nhắc model nói bằng
     tên + tính cách bạn đồng hành (`BAN_DONG_HANH`, khớp `LinhVatCTL`). Ngữ cảnh ≤ 3000 ký tự (app cắt + máy chủ cắt), coi là DỮ LIỆU.
+    **Đợt 2 — định dạng giàu (15/11/2026):** app mới gửi `dinhDang: 2` ⇒ `nhacHoiGauGiau` (khung theo loại câu `phanLoaiCau`: tom-tat ·
+    ngu-phap · tu · chua-cau · do-vui · vi-du · cau-thi · tu-do; cú pháp `## tiêu đề` · **đậm** · ==tô sáng== · `` `từ ngoại ngữ` ``
+    (cách đọc) — nghĩa · furigana `{漢字|かな}` · bảng · hộp `> 💡 Mẹo:` / `> ⚠️ Lỗi hay gặp:` / `> ✅ Tự kiểm tra:` + `> Đáp án:` ·
+    `[[goi-y]]` cuối), trần ra `TRAN_RA` 1600–2600 (thay 900; chạm trần ⇒ ghi chú + chip "Viết tiếp phần còn lại"), ngữ cảnh 6000,
+    lịch sử 3500/lượt, `lamSachTraLoiGiau` giữ Markdown + tách `goiY` ⇒ trả `{id, traLoi, goiY, kieu, luot}`. Không gửi `dinhDang`
+    (app cũ, vẽ `Text` trơn) ⇒ y nguyên đường cũ. App: bộ vẽ `Modules/TroLyGau/TraLoiGauCTL.swift` (xem đầu tệp), `NguCanhGau.baiSach`
+    giữ furigana (`choAI`), màn xem thử `CT_XEM_MAN=hoi-gau-mau` (+ `CT_GAU_THO=1` vẽ kiểu cũ, `CT_GAU_CUON=dau`). Đo thật 15/11
+    (gpt-6-sol, effort low, ngữ cảnh bài giả): "Tóm tắt bài này" 2.105 ký tự, ~20 s, đúng khung + cú pháp.
     Smoke-test deploy.sh thêm `ctlanguage/hoi-gau/luot` (401). Đo local 15/11: câu "Giải thích từ này" (学习) trả lời đúng, có pinyin.
     App: `Modules/TroLyGau/TroLyGauCTL.swift` (+ `NguCanhGauCTL.swift` dựng ngữ cảnh). **Gắn vào một màn = một dòng:**
     `.troLyGau(NguCanhGau(loai: .nguPhap, nn: nn, tieuDe: …, noiDung: "…chữ của màn…", goiY: [...]))` — `nil` ⇒ ẩn; `canhDuoi:` đẩy nút

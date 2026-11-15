@@ -523,3 +523,10 @@ Mẫu một mục:
 - **Cách sửa:** lớp cuộn nằm trong `Color.clear.overlay(alignment: .topLeading) { … }.clipped()` (không nong khung cha), ZStack màn chơi `.frame(width:height:)` theo GeometryReader, combo thành huy hiệu dính góc điểm — trước commit đầu của game (ios-app 160c118).
 - **Ảnh hưởng:** không ai dùng phải — bắt được trên máy ảo trước khi commit.
 - **Bài học:** trong SwiftUI một view con rộng hơn màn (dải ảnh cuộn, HStack lặp) làm cả `ZStack` cha rộng theo — nội dung cuộn/tràn phải nằm trong `overlay`/`background` hoặc khung cố định; và luôn chụp màn trên máy ảo trước khi tin bố cục.
+
+### 15/11/2026 — CT Language iOS (giọng đọc trong máy, lộ ra ở game "Bếp Gấu" / "Gấu Câu Chữ") — app đứng hình vĩnh viễn ngay câu đọc to đầu tiên
+- **Triệu chứng:** cài mới trên máy ảo iOS 27, mở game, vài giây sau màn chơi đóng băng (khách chưa kịp vào quầy / cá chưa hiện), không chạm được gì, không crash; `sample` thấy luồng chính kẹt mãi ở `semaphore_wait_trap`.
+- **Nguyên nhân:** `ios-app/CuongThaiApp/Shared/SachHoc/GiongSachHoc.swift › noiTrongMay` gọi `CaiDatGiong.giongTuDong` ⇒ `AVSpeechSynthesisVoice(language:)` TRÊN LUỒNG CHÍNH đúng lúc `KhoGiongMay.napNen()` đang chạy `speechVoices()` ở nền — TextToSpeech `axUnsafeForcedSync` ở hai đầu chờ nhau ⇒ khoá chết (giọng Azure của máy chủ chưa về kịp nên rơi xuống giọng trong máy ngay câu đầu).
+- **Cách sửa:** danh sách giọng chưa nạp xong ⇒ dựng giọng vùng trong `Task.detached` rồi `await` (luồng chính rảnh, nạp nền chạy xong); đã nạp thì như cũ (ios-app 0e4b5ca).
+- **Ảnh hưởng:** mọi chỗ đọc to qua `DocToCTL`/`GiongSachHoc` trong vài giây đầu sau khi mở app lần đầu (game, từ điển); chưa rõ máy thật có dính không — máy ảo dính 3/3 lần. Các chỗ khác còn gọi `giongTuDong … ?? AVSpeechSynthesisVoice(language:)` trên luồng chính (`CoVuGau`, `GoiCuongMiniCTL`, `DocTu`) CHƯA vá.
+- **Bài học:** "đưa việc chậm ra nền" chưa đủ khi API kia cũng có bản đồng bộ trên luồng chính dùng chung khoá nội bộ — mọi lời gọi `AVSpeechSynthesisVoice` lúc danh sách giọng đang nạp phải ở nền; ảnh màn "đứng im" thì `sample <pid>` trước, đừng đoán do vẽ.

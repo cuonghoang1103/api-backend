@@ -90,7 +90,8 @@ DBI202 `introduction-to-databases` · FER202 `front-end-web-development-with-rea
 | Ch1 | ✅ xong (6 bài, 126k ký tự, audit đạt) | e959cb865 | 5 video YT |
 | Ch2 | ✅ xong (6 bài, 109k) | ed00b1afb | 5 video YT |
 | Ch3 | ✅ xong (6 bài, 125k) | dcf10b9a5 | 5 video YT; câu "mentor không sửa code đồ án" lấy từ memory LabFlow — luật đổi thì sửa 2.1 + 3.3 |
-| Ch4–Ch5 | đang soạn (nhánh B) | — | |
+| Ch4 | ✅ xong (7 bài, 230k) | 39a277cce | 7 video YT (4.5 có 2); output EXPLAIN/docker trong khối minh hoạ là dựng lại, đã ghi rõ |
+| Ch5 | ✅ xong (6 bài, 166k) | c103b65c9 | 5 video YT; cố ý không ghi số giây timeout 524 của Cloudflare (sổ có 100 vs 125 s) |
 | Ch6 | ✅ xong (6 bài, 179k) | 6b5e03708 | 5 video YT |
 | Ch7 | ✅ xong (6 bài, 191k) | 27b89c4e2 | 5 video YT; code mẫu 7.1 + 7.5 đã chạy thật (node, javac/java) |
 | Ch8–Ch10 | đang soạn (nhánh D) | — | Ch10 là chương MỚI ⇒ thêm vào manifest |

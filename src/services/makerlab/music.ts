@@ -245,7 +245,7 @@ function chayHang(deviceId: number, hang: BaiTrongKho[], tu: number): void {
 export async function playMusicOn(
   deviceId: number,
   query: string,
-  opts: { allowFetch?: boolean; ownerId?: number } = {},
+  opts: { allowFetch?: boolean; ownerId?: number; truocKhiPhat?: (cau: string) => Promise<unknown> } = {},
 ): Promise<string> {
   if (query === '__tiep__' || query === '__lai__') {
     const dang = sessions.get(deviceId);
@@ -287,14 +287,18 @@ export async function playMusicOn(
     stopMusicOn(deviceId);
     await new Promise((r) => setTimeout(r, 250));
   }
-  chayHang(deviceId, hang, 0);
-  logger.info('MakerLab hàng đợi nhạc', { deviceId, query, theo, soBai: hang.length, dau: hang[0].title });
-
   const b = hang[0];
-  if (theo === 'ca-si') return `Mở nhạc của ${b.artist}, ${hang.length} bài, bắt đầu với "${b.title}".`;
-  if (theo === 'ten') return `Mở "${b.title}" của ${b.artist} đây.`;
   const loai = yc.remix ? 'remix ' : yc.ngonNgu === 'en' ? 'tiếng Anh ' : yc.ngonNgu === 'zh' ? 'tiếng Trung ' : yc.ngonNgu === 'vi' ? 'Việt ' : '';
-  return `Mở nhạc ${loai}ngẫu nhiên, bài đầu là "${b.title}" của ${b.artist}.`;
+  const note = theo === 'ca-si'
+    ? `Mở nhạc của ${b.artist}, ${hang.length} bài, bắt đầu với "${b.title}".`
+    : theo === 'ten'
+      ? `Mở "${b.title}" của ${b.artist} đây.`
+      : `Mở nhạc ${loai}ngẫu nhiên, bài đầu là "${b.title}" của ${b.artist}.`;
+  // Nói tên bài TRƯỚC rồi mới phát — robot chỉ báo "bật rồi" khi đã chắc có bài (15/11/2026).
+  if (opts.truocKhiPhat) await opts.truocKhiPhat(note).catch(() => undefined);
+  chayHang(deviceId, hang, 0);
+  logger.info('MakerLab hàng đợi nhạc', { deviceId, query, theo, soBai: hang.length, dau: b.title });
+  return note;
 }
 
 // ─── Tìm nhạc ngoài thư viện (YouTube → R2 → thư viện) ─────

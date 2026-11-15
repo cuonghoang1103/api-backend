@@ -1520,6 +1520,40 @@ export async function runVoiceTurn(input: VoiceTurnInput): Promise<VoiceTurnResu
   // Đặt SAU `loadPersona` để lời đáp vẫn đọc bằng giọng riêng, và SAU bộ
   // lọc "Whisper bịa" ở trên — nếu không thì một câu bịa có chứa "dừng
   // lại" sẽ thành lệnh thật.
+  // ── XIN NHẠC: server tự bắt và tự phát (musicTim.khopXinNhac), không trông model nhớ kèm `play_music`.
+  // Robot chỉ nói tên bài khi ĐÃ có bài trong tay (truocKhiPhat), không bao giờ "bật rồi" suông.
+  if (input.speak !== false && !dangHoc(input.deviceId)) {
+    const { khopXinNhac } = await import('./musicTim.js');
+    const qn = khopXinNhac(heard);
+    const music = await import('./music.js');
+    if (qn !== null && !(qn === '' && music.isPlayingMusic(input.deviceId))) {
+      let choTai: Promise<unknown> | null = null;
+      const hen = setTimeout(() => {
+        choTai = speakOnce(persona, 'Bài này chưa có sẵn, đợi tao tải về chút nhé.', input.deviceId).catch(() => false);
+      }, 2500);
+      let daPhat = false;
+      const note = await music.playMusicOn(input.deviceId, qn || 'bất kỳ', {
+        truocKhiPhat: async (cau) => {
+          clearTimeout(hen);
+          if (choTai) await choTai;
+          daPhat = true;
+          await speakOnce(persona, cau, input.deviceId);
+          emitTranscript(input.deviceId, 'bot', cau);
+        },
+      }).catch((e) => `Lỗi mở nhạc: ${(e as Error).message}`.slice(0, 120));
+      clearTimeout(hen);
+      if (!daPhat) {
+        if (choTai) await choTai;
+        await speakOnce(persona, note, input.deviceId);
+        emitTranscript(input.deviceId, 'bot', note);
+      }
+      pushHistory(input.deviceId, { role: 'user', content: heard }, { role: 'assistant', content: JSON.stringify({ say: note, actions: [] }) });
+      logger.info('MakerLab xin nhạc (server tự bắt)', { deviceId: input.deviceId, heard: heard.slice(0, 80), query: qn, daPhat });
+      timing.total = Date.now() - started;
+      return { heard, said: note, actions: [], spoken: true, ms: timing };
+    }
+  }
+
   if (input.speak !== false) {
     const nhanh = khopLenhNhanh(heard);
     if (nhanh) {

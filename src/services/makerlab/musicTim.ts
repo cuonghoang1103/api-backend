@@ -54,6 +54,29 @@ const CUM_DEM = /\s(bai hat|ca si|nhac si|ban nhac|mot bai|vai bai|may bai|cho t
 
 const BAT_KY = /^(random|any|anything|bat ky|bat cu|gi cung duoc|tuy|gi do|ngau nhien|tuy y)$/;
 
+/**
+ * Câu nói có phải XIN BẬT NHẠC không (15/11/2026). Trả từ khoá bài/ca sĩ ('' = bài bất kỳ), null = không phải.
+ * Có vì trước đây bật nhạc trông hoàn toàn vào việc model nhớ kèm lệnh `play_music` — log 15/11 20:39–20:41:
+ * robot nói "bật bài Baby rồi" bốn lần mà không lần nào gửi lệnh. Giờ server tự bắt câu xin nhạc. THUẦN.
+ */
+export function khopXinNhac(heard: string): string | null {
+  const s = heard.toLowerCase().normalize('NFC').replace(/\s+/g, ' ').trim();
+  if (!s || s.length > 200) return null;
+  if (/(tắt|dừng|ngừng|thôi|đừng)\s+(bật\s+)?(nhạc|bài)/.test(s)) return null;
+  if (/bài\s+(học|tập|giảng|kiểm tra|thi|đọc|viết|văn|toán|báo|thơ)/.test(s)) return null;
+  // Than chưa nghe thấy nhạc ⇒ bật lại (bài bất kỳ nếu chưa có gì).
+  if (/(không|chưa|chả|chẳng)\s+(nghe|thấy)\s+(thấy\s+)?(gì\s+)?(nhạc|bài)|nhạc đâu|bật nhạc chưa|nhạc chưa/.test(s)) return '';
+  const m = s.match(/(?:^|[\s,.!?])(bật|mở|phát|play|cho\s+(?:tao|tôi|tui|mình|em|anh)?\s*nghe|muốn\s+nghe|^nghe)\s+([^?.!]*?(?:nhạc|bài hát|bài|bản nhạc|ca khúc|song|music|playlist)[^?.!]*)/);
+  if (!m) return null;
+  let q = m[2];
+  // Lấy phần sau chữ "nhạc / bài" — đó là tên bài hoặc ca sĩ.
+  q = q.replace(/^.*?(?:bản nhạc|bài hát|ca khúc|nhạc|bài|song|music|playlist)\s*/, '');
+  q = q.replace(/^((gì|nào|đó|hay|nữa|của|cho|tao|tôi|tui|mình|nghe|đi|với|đây|kia|nhạc|bài|hát|một|bản)(\s+|$))+/, '');
+  q = q.replace(/(\s+(đi|nhé|nha|ấy|đó|với|giùm|giúp|coi|xem|nào|chưa|đi mà|mày|nữa|được không|không|thử|đây|cái|đã))+\s*$/, '');
+  q = q.replace(/^(đi|nhé|nha|ấy|chưa|nữa|đây|được không|không|với)$/, '').trim();
+  return q.slice(0, 80);
+}
+
 /** Hiểu lời xin nhạc. THUẦN. */
 export function hieuYeuCau(query: string): YeuCauNhac {
   let q = ` ${chuan(query)} `;

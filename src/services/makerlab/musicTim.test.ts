@@ -57,3 +57,15 @@ test('tên bài ⇒ bài đó trước rồi nối bài cùng ca sĩ', () => {
   assert.ok([3, 4].includes(hang[0].id));
   assert.ok(hang.some((x) => x.id === 2));
 });
+
+test('server tự bắt câu xin nhạc (log 15/11: model nói "bật rồi" mà không gửi lệnh)', async () => {
+  const { khopXinNhac } = await import('./musicTim.js');
+  assert.equal(khopXinNhac('Bật bài gì của Justin Bieber ấy'), 'justin bieber');
+  assert.equal(khopXinNhac('bật cho tao một bài nhạc đi'), '');
+  assert.equal(khopXinNhac('mở nhạc Sơn Tùng'), 'sơn tùng');
+  assert.equal(khopXinNhac('Máy bật nhạc chưa? Sao tao không nghe thấy gì?'), '');
+  assert.equal(khopXinNhac('tắt nhạc đi'), null);
+  assert.equal(khopXinNhac('nhắc tao học bài lúc 8 giờ'), null);
+  assert.equal(khopXinNhac('mở bài học tiếng Nhật'), null);
+  assert.equal(khopXinNhac('kể chuyện cười đi'), null);
+});

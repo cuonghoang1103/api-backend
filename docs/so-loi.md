@@ -18,6 +18,13 @@ Mẫu một mục:
 
 ---
 
+### 15/11/2026 — CT Language iOS (CuongMini · Tạo thẻ ôn) — nghĩa thẻ dính câu giảng; Cộng đồng hai nút Gấu chồng nhau
+- **Triệu chứng:** "Tạo thẻ ôn" ra thẻ `yesterday` — "hôm qua, hãy dùng quá khứ đơn. Vì vậy,"; màn Cộng đồng có nút trợ lý nổi toàn app nằm ngay trên nút Gấu "Đặt câu hỏi".
+- **Nguyên nhân:** `ios-app/CuongThaiApp/CTLanguageApp/Modules/TroLyGau/TraLoiGauCTL.swift › DongChuGau.tachGoc` lấy nghĩa "từ — nghĩa" tới hết DÒNG, mà model hay giảng tiếp trên cùng dòng; `Modules/CongDong/CongDongCTL.swift` chưa đăng ký `DemNutGauRieng` như Tôi/hộp thư.
+- **Cách sửa:** `DongChuGau.gonNghia` cắt ở cuối câu đầu, từ ngắn cắt thêm ở dấu phẩy trước mệnh đề ≥ 4 chữ (câu dịch giữ nguyên) + test `testNghiaTheOnCatCauGiang`; Cộng đồng ẩn nút nổi (ios-app `60617c3`, kiểm SE + Pro Max).
+- **Ảnh hưởng:** thẻ ôn tạo từ câu trả lời CuongMini; bố cục tab Cộng đồng.
+- **Bài học:** dữ liệu trích từ câu văn của AI cần ranh giới chặt hơn "hết dòng" — model không viết theo dòng.
+
 ### 15/11/2026 — CT Language iOS (mọi màn) — lỗi máy chủ hiện nguyên văn "Route GET /api/v1/… not found"
 - **Triệu chứng:** màn "Nhắn tin mới" hiện "Route GET /api/v1/ctlanguage/cong-dong/tin-nhan/tim-nguoi not found" (app mới hơn máy chủ); tương tự "Internal Server Error", "Too many requests…", "password: Password must be at least 12 characters".
 - **Nguyên nhân:** `ios-app/CuongThaiApp/Shared/Network/APIClient.swift › errorDescription` + các hàm `DangNhapCTL.cauLoi`, `loiTN`, `cauLoiMatKhau`… trả thẳng `message` của máy chủ; `errorHandler.notFoundHandler` và express-validator trả câu tiếng Anh.

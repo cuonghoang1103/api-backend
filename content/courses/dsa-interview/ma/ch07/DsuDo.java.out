@@ -1,0 +1,7 @@
+        n |                    naive |              size only |       compression only |                   both
+    1,000 |        10.5 ms / 999,000 |         0.1 ms / 1,997 |         0.1 ms / 1,998 |         0.1 ms / 1,997
+   10,000 |    311.7 ms / 99,990,000 |        0.9 ms / 19,997 |        0.8 ms / 19,998 |        0.2 ms / 19,997
+  100,000 |                  skipped |       1.4 ms / 199,997 |       2.3 ms / 199,998 |       2.1 ms / 199,997
+1,000,000 |                  skipped |     7.3 ms / 1,999,997 |    11.3 ms / 1,999,998 |     6.1 ms / 1,999,997
+cells: time / pointer hops
+java 21.0.9 · aarch64

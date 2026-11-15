@@ -1,0 +1,7 @@
+        V | matrix cells | list cells |      matrix |      list
+    1,000 |        1.0e6 |      5.0e3 |      1.1 ms |    0.7 ms
+    4,000 |        1.6e7 |      2.0e4 |      7.1 ms |    0.8 ms
+   16,000 |        2.6e8 |      8.0e4 |    115.2 ms |    2.4 ms
+  100,000 |       1.0e10 |      5.0e5 |     skipped |   14.8 ms
+1,000,000 |       1.0e12 |      5.0e6 |     skipped |  244.8 ms
+java 21.0.9 · aarch64

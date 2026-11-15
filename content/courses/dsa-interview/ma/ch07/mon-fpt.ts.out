@@ -1,0 +1,6 @@
+term 1: DBI202, JPD113, PRF192, WED201c
+term 2: FER202, JPD123, PRO192
+term 3: CSD201, LAB211, MMA301, PRJ301, PRN212, SDN302, SWE201c
+term 4: SWP391, SWR302, SWT301
+subjects: 17, minimum terms: 4, stuck: []
+with the typo: 8 subjects placed, stuck: ["CSD201","LAB211","PRJ301","PRN212","PRO192","SWE201c","SWP391","SWR302","SWT301"]

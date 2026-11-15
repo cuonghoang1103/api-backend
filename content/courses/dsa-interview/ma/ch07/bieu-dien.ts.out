@@ -1,0 +1,11 @@
+edge list   : [[0,1],[0,2],[1,2],[1,3],[3,4]]
+adj list    : [[1,2],[0,2,3],[0,1],[1,4],[3]]
+degree      : [2,3,2,2,1]  sum = 10 = 2·E
+matrix row 0: [0,1,1,0,0]
+matrix row 1: [1,0,1,1,0]
+matrix row 2: [1,1,0,0,0]
+matrix row 3: [0,1,0,0,1]
+matrix row 4: [0,0,0,1,0]
+is 1-3 an edge? list: true  matrix: true
+directed adj: [[1,2],[2,3],[],[4],[]]
+out-degree  : [2,2,0,1,0]  in-degree: [0,1,2,1,1]

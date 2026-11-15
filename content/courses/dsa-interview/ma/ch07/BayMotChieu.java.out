@@ -1,0 +1,2 @@
+one arc  : 0 → 2 ? true   2 → 0 ? false
+two arcs : 0 → 2 ? true   2 → 0 ? true

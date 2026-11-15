@@ -1,0 +1,8 @@
+grid 1000 x 1000 = 1,000,000 land cells
+    512 KB thread stack: StackOverflowError at depth 3,153
+  2,048 KB thread stack: StackOverflowError at depth 24,706
+  8,192 KB thread stack: StackOverflowError at depth 172,248
+ 65,536 KB thread stack: ok, depth 1,000,000
+262,144 KB thread stack: ok, depth 1,000,000
+iterative DFS (own stack): 1,000,000 cells in 4.9 ms
+java 21.0.9 · aarch64

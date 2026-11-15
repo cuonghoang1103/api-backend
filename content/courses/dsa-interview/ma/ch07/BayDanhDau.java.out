@@ -1,0 +1,3 @@
+N=10: mark on enqueue -> visited 100, enqueued 100, max queue 10 | mark on dequeue -> visited 100, enqueued 181, max queue 19
+N=100: mark on enqueue -> visited 10000, enqueued 10000, max queue 100 | mark on dequeue -> visited 10000, enqueued 19801, max queue 199
+N=1000: mark on enqueue -> visited 1000000, enqueued 1000000, max queue 1000 | mark on dequeue -> visited 1000000, enqueued 1998001, max queue 1999

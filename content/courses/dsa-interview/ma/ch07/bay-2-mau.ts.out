@@ -1,0 +1,2 @@
+diamond: two-colour says true | three-colour says false
+ring   : two-colour says true | three-colour says true

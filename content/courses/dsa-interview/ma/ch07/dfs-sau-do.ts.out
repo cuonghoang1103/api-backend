@@ -1,0 +1,6 @@
+grid 1000 x 1000 = 1,000,000 land cells
+recursive DFS, 1st call: RangeError at depth 8,109
+recursive DFS, 2nd call: RangeError at depth 8,883
+iterative DFS (own stack): 1,000,000 cells in 14.4 ms
+BFS (head index)         : 1,000,000 cells in 11.7 ms
+node v26.8.1 · arm64

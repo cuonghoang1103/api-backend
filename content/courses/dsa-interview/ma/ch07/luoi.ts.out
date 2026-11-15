@@ -1,0 +1,7 @@
+4-dir neighbours of (0,0): [[1,0],[0,1]]
+8-dir neighbours of (0,0): [[1,0],[0,1],[1,1]]
+8-dir neighbours of (1,1): 8
+cell (2,1) as a node id r*cols+c = 7  back: r = 2 c = 1
+perimeter = 16
+perimeter = 4
+perimeter = 4

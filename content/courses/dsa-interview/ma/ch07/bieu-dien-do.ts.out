@@ -1,0 +1,7 @@
+        V | matrix cells | list cells |      matrix |      list
+    1,000 |        1.0e6 |      5.0e3 |      1.1 ms |    0.1 ms
+    4,000 |        1.6e7 |      2.0e4 |     17.5 ms |    0.5 ms
+   16,000 |        2.6e8 |      8.0e4 |    282.0 ms |    1.7 ms
+  100,000 |       1.0e10 |      5.0e5 |     skipped |   13.7 ms
+1,000,000 |       1.0e12 |      5.0e6 |     skipped |  261.1 ms
+node v26.8.1 · arm64

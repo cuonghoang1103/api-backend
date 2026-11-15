@@ -86,4 +86,13 @@ DBI202 `introduction-to-databases` · FER202 `front-end-web-development-with-rea
 
 | Chương | Trạng thái | Commit | Ghi chú |
 |---|---|---|---|
-| Mục 0 | đang soạn | — | |
+| Mục 0 | ✅ xong (6 bài, 110k ký tự, audit đạt) | 857f6f07d | 6 video YT đã kiểm OK/embed/cc=en |
+| Ch1 | ✅ xong (6 bài, 126k ký tự, audit đạt) | e959cb865 | 5 video YT |
+| Ch2–Ch3 | đang soạn (nhánh A) | — | |
+| Ch4–Ch5 | đang soạn (nhánh B) | — | |
+| Ch6–Ch7 | đang soạn (nhánh C) | — | |
+| Ch8–Ch10 | đang soạn (nhánh D) | — | Ch10 là chương MỚI ⇒ thêm vào manifest |
+
+Manifest `interview-prep.mjs`: chương đã soạn thay vào mảng khung THEO VỊ TRÍ (`((K) => [s00, s01, ...K.slice(2)])(khung(...))`);
+khi đủ 10 chương cũ thì bỏ hẳn `khung()` và thêm s10. Công cụ kiểm phụ (ngoài repo, trong `$TMPDIR/pv-nhap/`):
+`kiem-link.mjs` (liên kết nội bộ + slug trùng + video trùng), `ytok.mjs` (video sống/nhúng/phụ đề), `sua-dong-dong.py` (tách dòng đóng template).

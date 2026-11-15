@@ -1,0 +1,5 @@
+distanceK(target=5, k=2) = [1, 4, 7]
+distanceK(target=5, k=0) = [5]
+distanceK(target=7, k=3) = [3, 6]
+distanceK(target=3, k=3) = [4, 7]
+distanceK(target=8, k=5) = [4, 7]

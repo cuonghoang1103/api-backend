@@ -1,0 +1,9 @@
+search("apple") = true
+search("app") = false
+startsWith("app") = true
+after insert("app"): search("app") = true
+8 words, 31 letters, 15 trie nodes (root included)
+suggest("car", 3) = ["car","card","care"]
+suggest("ca", 3) = ["car","card","care"]
+suggest("do", 3) = ["dog","dot"]
+suggest("x", 3) = []

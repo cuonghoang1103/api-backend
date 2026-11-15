@@ -1,0 +1,8 @@
+search("pad") = false   (visited 1 nodes)
+search("bad") = true   (visited 4 nodes)
+search(".ad") = true   (visited 4 nodes)
+search("b..") = true   (visited 4 nodes)
+search("...") = true   (visited 4 nodes)
+search("....") = false   (visited 12 nodes)
+search("m.d") = true   (visited 4 nodes)
+search(".e.") = true   (visited 4 nodes)

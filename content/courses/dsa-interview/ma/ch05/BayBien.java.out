@@ -1,0 +1,3 @@
+[2, 1, 3]: int sentinels = true, long bounds = true
+[2147483647]: int sentinels = false, long bounds = true
+[-2147483648, null, 2147483647]: int sentinels = false, long bounds = true

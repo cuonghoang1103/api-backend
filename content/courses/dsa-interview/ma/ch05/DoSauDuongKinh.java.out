@@ -1,0 +1,5 @@
+[3, 9, 20, null, null, 15, 7]: maxDepth = 3 (top-down 3), diameter = 3
+[1, 2, 3, 4, 5, null, 6]: maxDepth = 3 (top-down 3), diameter = 4
+[1, 2]: maxDepth = 2 (top-down 2), diameter = 1
+[1, 2, null, 3, 4, 5, null, null, 6, 7, null, null, 8]: maxDepth = 5 (top-down 5), diameter = 6
+[]: maxDepth = 0 (top-down 0), diameter = 0

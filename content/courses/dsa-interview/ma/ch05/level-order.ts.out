@@ -1,0 +1,4 @@
+levelOrder([3,9,20,null,null,15,7]) = [[3],[9,20],[15,7]]
+levelOrder([1,2,3,4,5,null,6]) = [[1],[2,3],[4,5,6]]
+levelOrder([1]) = [[1]]
+levelOrder([]) = []

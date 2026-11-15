@@ -1,0 +1,5 @@
+"apple": wrong = true, right = true
+"app": wrong = true, right = false
+"appl": wrong = true, right = false
+"application": wrong = true, right = true
+"apply": wrong = false, right = false

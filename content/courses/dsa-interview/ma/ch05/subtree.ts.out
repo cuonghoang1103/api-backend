@@ -1,0 +1,4 @@
+isSubtree([3,4,5,1,2], [4,1,2]) = true   string, no delimiter = true   string, delimiter = true
+isSubtree([3,4,5,1,2,null,null,null,null,0], [4,1,2]) = false   string, no delimiter = false   string, delimiter = false
+isSubtree([1,1], [1]) = true   string, no delimiter = true   string, delimiter = true
+isSubtree([12], [2]) = false   string, no delimiter = true   string, delimiter = false

@@ -1,0 +1,9 @@
+chain of 1,000,000 nodes
+2048 KB stack, 1st call (cold) : StackOverflowError at depth 20,100
+  512 KB stack, after warm-up : StackOverflowError at depth 12,611
+ 1024 KB stack, after warm-up : StackOverflowError at depth 28,995
+ 2048 KB stack, after warm-up : StackOverflowError at depth 61,763
+ 8192 KB stack, after warm-up : StackOverflowError at depth 258,371
+65536 KB stack, after warm-up : ok, height = 1000000
+iterative height: 1,000,000 in 14.0 ms
+java 21.0.9 · aarch64

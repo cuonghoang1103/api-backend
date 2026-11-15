@@ -1,0 +1,4 @@
+goodNodes([3, 1, 4, 3, null, 1, 5]) = 4
+goodNodes([3, 3, null, 4, 2]) = 3
+goodNodes([1]) = 1
+goodNodes([-1, -2, -3]) = 1

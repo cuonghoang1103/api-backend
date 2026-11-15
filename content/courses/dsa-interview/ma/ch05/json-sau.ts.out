@@ -1,0 +1,6 @@
+body = 2,000,000 bytes; '10mb' limit = 10,485,760 bytes
+JSON.parse(body): ok
+depthRec: RangeError: Maximum call stack size exceeded
+depthIter: 1,000,000
+depthGuarded: rejected (nesting deeper than 1000) — answer 400, not 500
+depthGuarded on a normal document [[1,[2]],[3]]: 3

@@ -1,0 +1,4 @@
+target 22 on [5, 4, 8, 11, null, 13, 4, 7, 2, null, null, 5, 1]: hasPathSum = true, paths = [[5, 4, 11, 2], [5, 8, 4, 5]]
+target 5 on [1, 2, 3]: hasPathSum = false, paths = []
+target 1 on [1, 2]: hasPathSum = false, paths = []
+target 0 on []: hasPathSum = false, paths = []

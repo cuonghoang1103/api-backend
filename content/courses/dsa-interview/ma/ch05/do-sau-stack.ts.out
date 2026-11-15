@@ -1,0 +1,6 @@
+chain of 1,000,000 nodes
+recursive height, 1st call (cold): RangeError at depth 6,881
+recursive height, 2nd call       : RangeError at depth 8,882
+recursive height, after warm-up  : RangeError at depth 10,366
+iterative height: 1,000,000 in 12.7 ms
+node v26.8.1 · arm64

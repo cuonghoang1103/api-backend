@@ -1,0 +1,3 @@
+findWords(board 4x4, ["oath","pea","eat","rain"]) = ["eat","oath"]   dfs calls = 9
+findWords([[a,b],[c,d]], ["abcb"]) = []   dfs calls = 2
+findWords([[a,a]], ["aaa","a","aa"]) = ["a","aa"]   dfs calls = 4

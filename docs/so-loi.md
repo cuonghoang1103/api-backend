@@ -18,6 +18,13 @@ Mẫu một mục:
 
 ---
 
+### 15/11/2026 — App iOS CT Language (SachHoc) — thiếu 6 loại khối web đã có ⇒ thẻ "chưa hỗ trợ · Làm phần này trên web"
+- **Triệu chứng:** mở Dekiru Bài 1 trên iPhone thấy hàng loạt thẻ "Khối “hinh” — Bản app này chưa hiểu loại nội dung này — Làm phần này trên web"; các bài có slide, sơ đồ, hình Writing Task 1 và Luyện bảng chữ (Bài 0) cũng vậy.
+- **Nguyên nhân:** web thêm `hinh/canh/slides/sodo/figure/luyenKana` (09–12/11, `frontend/src/components/sach-hoc/types.ts`) và `sach-hoc-xuat.mts` gửi nguyên `blocks` cho app, nhưng bộ giải mã app (`ios-app/CuongThaiApp/Shared/SachHoc/MoHinhSachHoc.swift` › `KhoiBoc.giai`) dừng ở 27 loại ⇒ `default: .chuaBiet(t)`. Kèm theo: app bỏ qua `vocab.anh`, `onthe.bai`, `dictation.alt`.
+- **Cách sửa:** vẽ native cả 6 loại (KhoiHinhSH · SoDoSH · LuyenKanaSH), kho hình đệm đĩa + tải sẵn khi mở buổi / "Tải hết để học ngoại tuyến" (AnhSachHoc), đọc thêm 3 trường bị bỏ, test `KhoiSachHocDuTests` quét toàn bộ bản xuất mọi khoá ⇒ 0 `.chuaBiet`/`.loi` (ios-app commit 08afee8).
+- **Ảnh hưởng:** người học app CT Language/CuongThai ở 5 khoá kiểu sách (~970 khối) từ khi web thêm các khối này tới 15/11; nội dung vẫn đúng trên web.
+- **Bài học:** thêm loại khối ở web là thay đổi HỢP ĐỒNG với app — phải có phép kiểm quét bản xuất thật bên app (giờ là `KhoiSachHocDuTests.testQuetToanBoNoiDung`) chứ không chỉ lưới đỡ `.chuaBiet` lặng lẽ.
+
 ### 15/11/2026 — Xoá tài khoản — hồ sơ học CT Language không bị xoá dù màn Xoá tài khoản của app hứa xoá
 - **Triệu chứng:** app CT Language (Tôi › Xoá tài khoản) ghi "Dữ liệu cá nhân bị xoá: … hồ sơ học, tiến độ, sổ từ", nhưng sau khi yêu cầu có hiệu lực dòng `ctlanguage_profiles` của người đó vẫn còn.
 - **Nguyên nhân:** `anonymizeAccount` (`src/services/dataRights.service.ts`) chỉ ẩn danh hoá user (không xoá hàng `users`) ⇒ mọi FK `onDelete: Cascade` KHÔNG chạy; bảng nào không được liệt kê `deleteMany` trong giao dịch thì nằm lại. `ctlanguage_profiles` còn không có FK.

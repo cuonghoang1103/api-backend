@@ -520,6 +520,6 @@ Mẫu một mục:
 ### 15/11/2026 — CT Language iOS (game "Gấu Chạy Ghép Câu", lúc soạn) — HUD + nút làn bị đẩy tràn mép phải
 - **Triệu chứng:** ảnh chụp máy ảo đầu tiên: thẻ nghĩa, thanh câu cắt ở mép phải; tim, đồng hồ/chặng và nút ⬆︎ biến mất; mọi thứ lệch trái ~12 điểm.
 - **Nguyên nhân:** `ios-app/…/Modules/TroChoi/ChayGhepCau/CanhNenChayCTL.swift` (`LopCuonChayCTL`) đặt dải ảnh parallax (HStack nhiều bản ảnh, rộng > màn) TRỰC TIẾP trong `ZStack` ⇒ ZStack nhận bề rộng của con rộng nhất, cả màn chơi (HUD, thanh câu, nút) dàn theo bề rộng đó rồi bị cắt; thêm vào đó hàng HUD 6 món vượt 375 điểm.
-- **Cách sửa:** lớp cuộn nằm trong `Color.clear.overlay(alignment: .topLeading) { … }.clipped()` (không nong khung cha), ZStack màn chơi `.frame(width:height:)` theo GeometryReader, combo thành huy hiệu dính góc điểm — trước commit đầu của game (ios-app, commit game 5).
+- **Cách sửa:** lớp cuộn nằm trong `Color.clear.overlay(alignment: .topLeading) { … }.clipped()` (không nong khung cha), ZStack màn chơi `.frame(width:height:)` theo GeometryReader, combo thành huy hiệu dính góc điểm — trước commit đầu của game (ios-app 160c118).
 - **Ảnh hưởng:** không ai dùng phải — bắt được trên máy ảo trước khi commit.
 - **Bài học:** trong SwiftUI một view con rộng hơn màn (dải ảnh cuộn, HStack lặp) làm cả `ZStack` cha rộng theo — nội dung cuộn/tràn phải nằm trong `overlay`/`background` hoặc khung cố định; và luôn chụp màn trên máy ảo trước khi tin bố cục.

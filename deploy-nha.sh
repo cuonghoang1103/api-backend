@@ -1334,3 +1334,12 @@ else
     ok "XONG — production đang chạy commit ${SHA}"
 fi
 echo ""
+
+# Robot Odin đọc lên loa (15/11/2026, /internal/odin/bao — chuDong.ts lo giờ yên tĩnh). Không chặn, hỏng thì thôi.
+if [ -s "$HOME/.config/cuongthai/internal-api-token" ]; then
+    _MSG_ODIN=$(git log -1 --format='%s' "$SHA" 2>/dev/null | cut -c1-90)
+    curl -s -m 8 -o /dev/null -X POST "https://cuongthai.com/api/v1/internal/odin/bao" \
+        -H "x-internal-token: $(cat "$HOME/.config/cuongthai/internal-api-token")" -H 'Content-Type: application/json' \
+        --data "$(python3 -c 'import json,sys; print(json.dumps({"noiDung": "Deploy xong rồi, production đang chạy bản mới: " + sys.argv[1]}))' "$_MSG_ODIN")" \
+        >/dev/null 2>&1 || true
+fi

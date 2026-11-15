@@ -39,7 +39,7 @@ export default {
     'ga-1-2-kich-hoat': { yt: '3tC42nIui6A', credit: "Testing Mini Bytes — Part 3 - Workflow Triggers | Different Types of Triggers in Github Actions | Scheduling Workflow |" },
     'ga-1-3-lich-cron': { yt: 'kh7piyS2XeE', credit: "Talking tech with Techielass — Schedule GitHub Actions Using Cron Expressions" },
     'ga-1-4-merge-commit': { yt: 'z68feG_L4yE', credit: "OpenSSF — Securing Your GitHub Actions - Jaroslav Lobacevski, GitHub" },
-    'ga-1-5-bo-loc': { yt: 'KF5GtYZUtys', credit: "Coding with Mat — Controlling When Pipeline Workflows Run with Triggers - Github Actions" },
+    'ga-1-5-bo-loc': { yt: 'KF5GtYZUtys', credit: "Coding with Mat — Controlling When Pipeline Workflows Run with Triggers - Github Actions", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/github-actions/01-tep-workflow/01-06-bo-loc-0267111f.mp4' }, defaultVideoTrack: 'VI'},
 
     /* ── Chương 2 — Job, runner, và những cỗ máy ngồi chờ ── */
     'ga-2-0-slides': { yt: '4A1g8tyKPi4', credit: "Mickey Gousset — Introduction to GitHub Actions - Part 2 - Chaining Jobs Together In A Workflow" },
@@ -76,7 +76,7 @@ export default {
     /* ── Chương 6 — Bí mật, quyền, và cái token ── */
     'ga-6-0-slides': { yt: 'MpTqyYyvHk0', credit: "semgrep — Common Vulnerabilities in GitHub Actions - And How to Protect Against Them" },
     'ga-6-1-che-bi-mat': { yt: 'TLB5MY9BBa4', credit: "CoderDave — GitHub Actions Tutorial | From Zero to Hero in 90 minutes (Environments, Secrets, Runners, etc)", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/github-actions/06-bi-mat-quyen-token/06-02-che-bi-mat-5cd7d656.mp4' }, defaultVideoTrack: 'VI'},
-    'ga-6-2-token': { yt: 'jEK07KPEjnY', credit: "CoderDave — GitHub Actions: GITHUB_TOKEN Explained | How it works, Change Permissions, Customizations" },
+    'ga-6-2-token': { yt: 'jEK07KPEjnY', credit: "CoderDave — GitHub Actions: GITHUB_TOKEN Explained | How it works, Change Permissions, Customizations", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/github-actions/06-bi-mat-quyen-token/06-03-token-40e3223b.mp4' }, defaultVideoTrack: 'VI'},
     'ga-6-3-oidc': { yt: 'Sdzd4N6L5Hg', credit: "Integrations Ninjas — Authenticate GitHub Actions with AWS Using OIDC — No Secrets Needed", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/github-actions/06-bi-mat-quyen-token/06-04-oidc-4983eb04.mp4' }, defaultVideoTrack: 'VI'},
     'ga-6-4-be-mat': { yt: '4dnniFk5i2Q', credit: "Mickey Gousset — GitHub Actions Policy Update: Blocking & SHA Pinning Explained!", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/github-actions/06-bi-mat-quyen-token/06-05-be-mat-981721af.mp4' }, defaultVideoTrack: 'VI'},
     'ga-6-5-soat': { yt: 'ntZwaRzhVSA', credit: "HashiCorp, an IBM Company — Building Scalable Enterprise Secrets Management with GitHub OIDC and HashiCorp Vault", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/github-actions/06-bi-mat-quyen-token/06-06-soat-47d80a16.mp4' }, defaultVideoTrack: 'VI'},
@@ -119,10 +119,10 @@ export default {
 
     /* ── Chương 12 — Tái sử dụng ở quy mô đội: workflow dùng lại, composite action & action tự viết ── */
     'ga-12-0-slides': { yt: 'zc19mR3O4a4', credit: "CoderDave — Composite Actions VS Reusable Workflows in GitHub Actions [2023 Update]" },
-    'ga-12-1-reusable-workflow': { yt: 'gDBZGCGSs6E', credit: "Mickey Gousset — Create Your First Reusable Workflow" },
+    'ga-12-1-reusable-workflow': { yt: 'gDBZGCGSs6E', credit: "Mickey Gousset — Create Your First Reusable Workflow", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/github-actions/12-tai-su-dung/12-02-reusable-workflow-10e8a866.mp4' }, defaultVideoTrack: 'VI'},
     'ga-12-2-composite-action': { yt: 'w8ZALhqoHgs', credit: "Yankee Maharjan — Ultimate Guide to GitHub Composite Actions (Complete Walkthrough!)" },
     'ga-12-3-action-js-docker': { yt: 'sjSmSzMJL5s', credit: "Cloud With VarJosh — GitHub JavaScript & Docker Actions Explained | Hands-on Demos" },
-    'ga-12-4-mau-cho-to-chuc': { yt: 'Imv7zzJmpwU', credit: "TechTrapture — Creating Starter Workflow in GitHub Actions" },
+    'ga-12-4-mau-cho-to-chuc': { yt: 'Imv7zzJmpwU', credit: "TechTrapture — Creating Starter Workflow in GitHub Actions", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/github-actions/12-tai-su-dung/12-05-mau-cho-to-chuc-6e259c36.mp4' }, defaultVideoTrack: 'VI'},
 
     /* ── Chương 13 — Runner của riêng bạn: self-hosted, container & mở rộng ── */
     'ga-13-0-slides': { yt: '2wJU225zKOw', credit: "TechTrapture — GitHub Actions Runners: Understanding GitHub Hosted and Self hosted runners" },

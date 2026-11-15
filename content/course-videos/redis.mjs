@@ -101,7 +101,7 @@ export default {
 
     /* ── Chương 11 — Mở rộng: nhân bản, Sentinel và Cluster ── */
     'rd-11-1-nhan-ban': { yt: 'rwoMTa0Kx-c', credit: 'Geeky Shows — Redis Replication Master Slave | Redis High Availability' },           // Redis Replication Master Slave | Redis High Availability
-    'rd-11-2-gioi-han-nhan-ban': { yt: 'p8mK8GBCARE', credit: 'Hussein Nasser — Replication and Clustering in Redis' },  // Replication and Clustering in Redis
+    'rd-11-2-gioi-han-nhan-ban': { yt: 'p8mK8GBCARE', credit: 'Hussein Nasser — Replication and Clustering in Redis', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/redis/11-nhan-ban-sentinel-cluster/11-02-gioi-han-nhan-ban-5676e77d.mp4' }, defaultVideoTrack: 'VI'},  // Replication and Clustering in Redis
     'rd-11-3-sentinel': { yt: 'fBDRO-d6cZQ', credit: 'ZG9ub3R0cnVzdGJlYX VqYW1pc29yY29sdGVy — Demo: How Redis Sentinel Failover Works' },           // Demo: How Redis Sentinel Failover Works
     'rd-11-4-cluster': { yt: 'GEg7s3i6Jak', credit: 'That DevOps Guy — Redis: How to setup a cluster - for beginners' },            // Redis: How to setup a cluster - for beginners
     'rd-11-5-chon-kien-truc': { yt: '-a07Ief51H4', credit: 'Code Academia — Redis and Redis Sentinel Crash Course - Redis Commands and High Availability tutorial' },     // Redis and Redis Sentinel Crash Course - Redis Commands and High Availability tutorial

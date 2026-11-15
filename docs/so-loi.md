@@ -551,3 +551,10 @@ Mẫu một mục:
 - **Cách sửa:** `let khung = dc.khung` và `_ = khung` NGAY TRONG closure Canvas (closure khác nhau mỗi khung ⇒ Canvas vẽ lại) — ios-app b0774c9.
 - **Ảnh hưởng:** chỉ bản trong cây (a03c020, 0e4b5ca), chưa phát hành; bắt được khi chụp máy ảo đủ 3 ngôn ngữ.
 - **Bài học:** Canvas điều khiển bằng bộ đếm khung phải BẮT giá trị đếm vào closure (như "Gấu Canh Trời" đọc `dc.khung` bên trong Canvas); đọc ở `body` rồi bỏ đi không đủ. Ảnh "HUD chạy mà cảnh đứng" ⇒ nghi Canvas không vẽ lại trước khi nghi động cơ.
+
+### 15/11/2026 — CT Language iOS (Tin nhắn, bắt trên máy ảo trước commit) — hội thoại ngắn mở ra không thấy tin nào, chỉ thấy ảnh đại diện người kia
+- **Triệu chứng:** màn trò chuyện của một lời mời (2 tin) hiện ảnh đại diện + "Hôm nay" giữa màn, hai tin nằm khuất dưới thanh Chấp nhận / Từ chối; hội thoại dài thì bình thường.
+- **Nguyên nhân:** `ios-app/…/CTLanguageApp/Modules/TinNhan/TroChuyenTN.swift › khungTin` dùng `ScrollView` + `LazyVStack` + `.defaultScrollAnchor(.bottom)`: lần dựng đầu SwiftUI tính vị trí đáy theo chiều cao ƯỚC LƯỢNG của hàng lười ⇒ nội dung ngắn bị ghim lệch; `onChange(of: tin.last?.id)` bắn trước khi bố cục xong nên không cứu được.
+- **Cách sửa:** tải xong (`daTai`) ⇒ chờ một nhịp bố cục (80 ms) rồi `scrollTo("day", anchor: .bottom)` — cùng commit tính năng Tin nhắn của app CT Language.
+- **Ảnh hưởng:** không ai dùng phải — chụp màn trên máy ảo trước khi commit.
+- **Bài học:** `defaultScrollAnchor(.bottom)` với `LazyVStack` không đủ cho khung chat — luôn cuộn tay xuống đáy sau lần tải đầu, và chụp cả ca hội thoại NGẮN lẫn DÀI.

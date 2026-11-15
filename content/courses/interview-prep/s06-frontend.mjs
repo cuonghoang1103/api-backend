@@ -287,6 +287,14 @@ ${bang(['Strategy', 'When HTML is produced', 'Good for', 'Cost'], [
   ['ISR (incremental static regeneration)', 'At build, then regenerated in the background after N seconds or on demand', 'Product pages, course pages', 'Some users see slightly old data'],
 ])}
 
+<h3>One request through the App Router</h3>
+${flow([
+  ['1 · Request', 'the browser asks for /courses/react', 'Middleware runs first (redirects, auth checks on cookies) — it sees every request.'],
+  ['2 · Server Components', 'the page and layouts render on the server', 'They can await data directly; their code never ships to the browser.'],
+  ['3 · HTML + RSC payload', 'streamed to the browser', 'HTML for a fast first paint, plus a compact description of the component tree; Suspense boundaries stream in as data arrives.'],
+  ['4 · Hydration', 'only Client Components ("use client") get JavaScript', 'Buttons, forms and state come alive; the rest stays plain HTML.'],
+])}
+<p>If you can tell this story in four steps, most Next.js questions become variations of it: "where does this code run?", "when is this HTML made?", "what reaches the browser?".</p>
 <h3>Ten questions</h3>
 ${qa('en', { so: '6.2-1', q: 'What does Next.js add on top of React?', chu: 'whether you know what a framework is for.',
   a: '<p>React is a library for building UI out of components; it does not decide routing, data loading, rendering on the server or bundling. Next.js is a framework around React that does: file-based routing (the <code>app</code> folder), server rendering and static generation, Server Components, data fetching with caching, image and font optimisation, route handlers for small APIs, and a production build. In short: React draws the UI; Next.js decides where and when that UI is produced and delivered.</p>',
@@ -380,6 +388,14 @@ ${bang(['Cách', 'HTML được tạo lúc nào', 'Hợp với', 'Cái giá'], [
   ['ISR (tái sinh tĩnh dần)', 'Lúc build, rồi tái sinh ngầm sau N giây hoặc khi được gọi', 'Trang sản phẩm, trang khoá học', 'Một số người thấy dữ liệu hơi cũ'],
 ])}
 
+<h3>Một request đi qua App Router</h3>
+${flow([
+  ['1 · Request', 'trình duyệt xin /courses/react', 'Middleware chạy trước tiên (chuyển hướng, kiểm cookie đăng nhập) — nó thấy mọi request.'],
+  ['2 · Server Component', 'trang và layout render trên máy chủ', 'Chúng await dữ liệu trực tiếp được; mã của chúng không bao giờ gửi xuống trình duyệt.'],
+  ['3 · HTML + RSC payload', 'truyền dần (stream) xuống trình duyệt', 'HTML để hiện nhanh lần đầu, kèm một bản mô tả gọn cây component; các vùng Suspense chảy xuống dần khi dữ liệu tới.'],
+  ['4 · Hydration (gắn tương tác)', 'chỉ Client Component ("use client") mới nhận JavaScript', 'Nút bấm, form và state sống dậy; phần còn lại vẫn là HTML thường.'],
+])}
+<p>Nếu bạn kể được câu chuyện bốn bước này, phần lớn câu hỏi Next.js chỉ là biến thể của nó: "đoạn mã này chạy ở đâu?", "HTML này được làm lúc nào?", "cái gì xuống tới trình duyệt?".</p>
 <h3>Mười câu hỏi</h3>
 ${qa('vi', { so: '6.2-1', q: 'Next.js thêm gì lên trên React?', chu: 'bạn có biết framework sinh ra để làm gì.',
   a: '<p>React là thư viện dựng giao diện từ các component; nó không quyết định định tuyến, nạp dữ liệu, render trên máy chủ hay đóng gói. Next.js là một framework quanh React làm những việc đó: định tuyến theo thư mục (thư mục <code>app</code>), render trên máy chủ và sinh tĩnh, Server Component, gọi dữ liệu có cache, tối ưu ảnh và font, route handler cho API nhỏ, và một bản build production. Nói gọn: React vẽ giao diện; Next.js quyết định giao diện được làm ra và giao đi ở đâu, lúc nào.</p>',

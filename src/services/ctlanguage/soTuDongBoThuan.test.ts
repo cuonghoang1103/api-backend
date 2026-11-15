@@ -40,6 +40,16 @@ test('thẻ id âm (từ ngoài từ điển) hợp lệ', () => {
   assert.ok('capNhat' in b);
 });
 
+test('thẻ id âm lớn: từ lưu từ màn Dịch (−2e12…) và từ Chia sẻ (−1e12…) phải được nhận', () => {
+  for (const id of [-2_000_000_000_123, -1_999_999_999_999, -1_000_000_000_001, -9_007_199_254_740_991]) {
+    const b = chuanBanGhi({ ...the(id), khoa: `ja-${id}` }, BAY_GIO);
+    assert.ok('capNhat' in b, `id ${id} bị từ chối: ${(b as { ly?: string }).ly}`);
+  }
+  // Quá số nguyên an toàn ⇒ vẫn từ chối (JSON không giữ đúng giá trị).
+  const qua = chuanBanGhi({ ...the(-9_007_199_254_740_993), khoa: 'ja--9007199254740993' }, BAY_GIO);
+  assert.ok(!('capNhat' in qua));
+});
+
 test('sổ + ngày + bia mộ', () => {
   const s = chuanBanGhi({ loai: 'so', khoa: 'A1B2-C3', capNhat: '2026-11-15T09:00:00Z', duLieu: { ten: '  Từ khó  ', nn: 'zh', taoLuc: '2026-11-10T00:00:00Z' } }, BAY_GIO);
   assert.ok('capNhat' in s && (s.duLieu as any).ten === 'Từ khó' && (s.duLieu as any).nguon === null);

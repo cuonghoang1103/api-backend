@@ -61,7 +61,7 @@ function chuanThe(khoa: string, d: Record<string, unknown>): Record<string, unkn
   const m = d.muc;
   if (!m || typeof m !== 'object' || Array.isArray(m)) return 'thiếu muc';
   const mm = m as Record<string, unknown>;
-  if (!laNguyen(mm.id, -9_999_999_999, 9_999_999_999)) return 'muc.id sai';
+  if (!laNguyen(mm.id, -Number.MAX_SAFE_INTEGER, Number.MAX_SAFE_INTEGER)) return 'muc.id sai';
   if (khoa !== `${nn}-${mm.id}`) return 'khoa phải là <nn>-<muc.id>';
   if (typeof mm.chu !== 'string' || !mm.chu.trim() || mm.chu.length > 160) return 'muc.chu sai';
   const muc: Record<string, unknown> = { id: mm.id, chu: mm.chu };
@@ -108,7 +108,9 @@ function chuanSo(d: Record<string, unknown>): Record<string, unknown> | string {
 }
 
 const KHOA_SO = /^[A-Za-z0-9-]{1,64}$/;
-const KHOA_THE = /^(en|ja|zh)--?\d{1,10}$/;
+// id thẻ đến hết số nguyên an toàn của JSON (16 chữ số). Trước 15/11/2026 trần là 10 chữ số ⇒ từ lưu từ màn Dịch
+// (−2e12…) và từ nhận qua Chia sẻ (−1e12…) bị từ chối câm, không bao giờ lên tài khoản (docs/so-loi.md).
+const KHOA_THE = /^(en|ja|zh)--?\d{1,16}$/;
 const KHOA_NGAY = /^(20[2-9]\d|2[1]\d\d)-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/;
 
 /**

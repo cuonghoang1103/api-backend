@@ -453,3 +453,10 @@ Mẫu một mục:
 - **Cách sửa:** lam-bai chạy TÁCH khỏi ssh trên máy thuê (`xuat/lam-bai-nen.sh`: setsid, log `/tmp/r-<id>.log` + pid; đang chạy hoặc đã xong ⇒ không chạy lại), `render_thue` chỉ hỏi log mỗi phút (trần 7 h), chờ máy tối đa 3 h khi proxy rớt (`cho_may`) và thử lại các bước đẩy — sửa cả bản Mac `~/Documents/video-bai-giang/dieu-phoi-linux/render.sh` vì cầu đồng bộ đẩy đè sang Linux; thay tệp nguyên khối để không phá làn đang chạy. Sáng 15/11 proxy ssh8.vast.ai của vast3 rớt nhiều lần ⇒ 28 tập LOI trong 20 phút, trả lại hàng. Kéo tay 5 video về + ghi `ok`; giết cả cây tiến trình theo `pgrep -P`; vast1 đã trả.
 - **Ảnh hưởng:** chỉ hệ thống làm video (5 video trễ ~16 giờ, máy thuê trả tiền cho CPU chạy việc vô ích); không đụng web/prod.
 - **Bài học:** mọi lệnh chờ máy từ xa phải có trần thời gian; "gỡ" một việc phải giết cả cây tiến trình và kiểm lại bằng `ps` — tiến trình mồ côi không báo lỗi, chỉ lặng lẽ ăn tài nguyên.
+
+### 15/11/2026 — CT Language (đồng bộ sổ tay) — từ lưu từ màn Dịch / nút Chia sẻ không bao giờ lên tài khoản
+- **Triệu chứng:** thẻ từ lưu từ màn Dịch hoặc gửi vào qua Chia sẻ chỉ nằm trên một máy; máy khác cùng tài khoản không thấy, app không báo lỗi gì.
+- **Nguyên nhân:** `src/services/ctlanguage/soTuDongBoThuan.ts:111` (`KHOA_THE` tối đa 10 chữ số) + `:64` (`muc.id` trong ±9.999.999.999) — app cấp id −2e12… (`BoDichCTL.swift:160`) và −1e12… (`NhanChiaSeCTL.swift:126`) ⇒ máy chủ bỏ bản ghi; app (`DongBoSoTuCTL.swift › xongDay`) vẫn xoá chúng khỏi hàng chờ vì chỉ xem `success`.
+- **Cách sửa:** máy chủ nhận id tới `Number.MAX_SAFE_INTEGER` (khoá 16 chữ số) + test; app một lần đưa lại vào hàng chờ mọi thẻ id vượt trần cũ (`GopSoTu.dayLaiIdNgoai`), chỉ đánh dấu xong khi lô đẩy về `soLoi == 0` (máy chủ chưa deploy ⇒ lần sau thử lại) + test `DongBoSoTuTests`.
+- **Ảnh hưởng:** mọi người dùng CT Language đăng nhập có từ lưu từ Dịch/Chia sẻ, từ khi có đồng bộ (deploy f2944c174, 15/11) tới bản sửa; không mất dữ liệu trên máy.
+- **Bài học:** hai đầu cấp id phải dùng chung một khoảng có test giữ; bên nhận lô mà "bỏ bản sai, nhận bản đúng" thì bên gửi phải đọc số lỗi trả về, không được coi `success` là đã nhận đủ.

@@ -499,6 +499,6 @@ Mẫu một mục:
 ### 15/11/2026 — CT Language iOS (màn Dịch, nguồn "Liên kết") — gom khoảng trắng của trang web không bao giờ chạy
 - **Triệu chứng:** chữ tải từ một liên kết (Dịch văn bản › Liên kết) giữ nguyên chuỗi dấu cách, `&nbsp;`, dấu cách toàn khổ `　` giữa các từ — ô nhập đầy khoảng trống, đoạn dịch bị ngắt lạ.
 - **Nguyên nhân:** `ios-app/CuongThaiApp/CTLanguageApp/Modules/Dich/DichVanBanCTL.swift:536` (`boThe`) dùng biểu thức `#"[ \u{00A0}\u{3000}]+"#` — `\u{…}` là cú pháp chuỗi Swift, KHÔNG phải ICU regex; trong chuỗi thô nó thành mẫu sai ⇒ `replacingOccurrences(.regularExpression)` lặng lẽ trả nguyên chuỗi (đo: "a \u{00A0}\u{3000} b" ra y nguyên, kể cả dấu cách thường).
-- **Cách sửa:** bỏ hẳn đường "đổ cả trang thô vào ô nhập" — "Liên kết" nay mở màn Đọc trang web (`DocLinkCTL` + bộ rút bài `RutBaiWebCTL`), gom khoảng trắng bằng mẫu ICU đúng `[ \t\r\n 　]+` + test `RutBaiWebTests.testThucTheVaKhoangTrang` (commit feat(ctlanguage) đọc link web).
+- **Cách sửa:** bỏ hẳn đường "đổ cả trang thô vào ô nhập" — "Liên kết" nay mở màn Đọc trang web (`DocLinkCTL` + bộ rút bài `RutBaiWebCTL`), gom khoảng trắng bằng mẫu ICU đúng `[ \t\r\n 　]+` + test `RutBaiWebTests.testThucTheVaKhoangTrang` (ios-app c54ab21).
 - **Ảnh hưởng:** người dùng CT Language iOS dùng Dịch › Liên kết từ đợt D (14/11) — chưa phát hành App Store, chỉ TestFlight.
 - **Bài học:** trong chuỗi thô `#"…"#` của Swift, ký tự Unicode trong regex phải viết kiểu ICU (`\uXXXX` / `\x{…}`); regex sai không ném lỗi với `replacingOccurrences` — mỗi regex cần một test có dữ liệu thật đi qua.

@@ -670,3 +670,10 @@ Mẫu một mục:
 - **Cách sửa:** `services/phienDangNhap.ts` (`phienConHieuLuc` + 401 `SESSION_REVOKED`) gắn vào 4 chỗ trên; thêm `POST /auth/logout-all` (tăng phiên bản, trả cặp token mới cho máy đang bấm); app CT Language: nút "Đăng xuất mọi thiết bị khác" + tự đăng nhập lại bằng mật khẩu mới sau khi đổi; test `phienDangNhap.test.ts`, `auth.mfa.test.ts`, `auth.thuHoiPhien.db.test.ts`.
 - **Ảnh hưởng:** mọi tài khoản trên web cuongthai.com, app CuongThai, CT Language, CT Work từ trước tới bản sửa; sau deploy, ai đã đổi mật khẩu mà còn token cũ ở máy khác sẽ bị đăng xuất một lần (đúng ý).
 - **Bài học:** "đã tăng số phiên bản" chưa phải "đã thu hồi" — phải có chỗ ĐỌC số đó trên đường đi của mọi request (và đường làm mới token), kèm test CSDL chứng minh token cũ chết.
+
+### 15/11/2026 — CT Language iOS (màn Pro) — gói năm quy ra tháng hiện "≈ 33 ₫/tháng" thay vì 33.250 ₫
+- **Triệu chứng:** thẻ "Gói năm" ở màn Pro ghi "7 ngày miễn phí · ≈ 33 ₫/tháng" (đúng phải ~33.250 ₫); ảnh duyệt IAP gửi Apple mang con số sai — rủi ro 3.1.2 (giá trên màn mua sai).
+- **Nguyên nhân:** `ios-app/CuongThaiApp/CTLanguageApp/Pro/ManProCTL.swift › dongPhu` tính `sp.price / 12` rồi định dạng bằng `priceFormatStyle.precision(.fractionLength(0))`; StoreKit thử nghiệm (máy ảo/test, storefront VNM) trả `price = 399` cho gói hiển thị "399.000 ₫" với tiền 0 số lẻ.
+- **Cách sửa:** `ManProCTL.giaMoiThang` tự dựng `Decimal.FormatStyle.Currency` theo mã tiền + locale của gói, làm tròn theo số lẻ của loại tiền, và với tiền 0 số lẻ thì tin số trong `displayPrice` khi nó lớn hơn hẳn `price`; test `ProCTLTests.testGiaQuyRaThang` + kiểm trong `testNapGoiVaCauGia`; ảnh duyệt 2 gói thuê bao đã chụp lại + tải lại lên ASC (ios-app 61582f7).
+- **Ảnh hưởng:** chưa lên người dùng (bắt được khi tạo gói thuê bao trên App Store Connect trước lần nộp đầu).
+- **Bài học:** đừng tin `Product.price` của StoreKit thử nghiệm với tiền không có phần lẻ; con số hiển thị trên màn mua phải có test so với chuỗi `displayPrice`.

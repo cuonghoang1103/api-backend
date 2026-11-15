@@ -29,21 +29,7 @@ import { spawn } from 'child_process';
 import { prisma } from '../../config/database.js';
 import { logger } from '../../utils/logger.js';
 import { PCM_SAMPLE_RATE } from './audio.js';
-
-/**
- * Chữ đệm trong câu nói, bỏ khi dò từng chữ.
- *
- * Người ta nói "bật cho tôi bài nhạc nào đó của Sơn Tùng" — chữ mang
- * thông tin chỉ là "Sơn Tùng". Không lọc thì "nhac" khớp vào nửa thư
- * viện và robot bật bừa một bài.
- */
-const FILLER = new Set([
-  'nhac', 'nhạc', 'bai', 'bài', 'hat', 'hát', 'mo', 'mở', 'bat', 'bật',
-  'cho', 'toi', 'tôi', 'minh', 'mình', 'giup', 'giúp', 'nghe', 'len', 'lên',
-  'nao', 'nào', 'khac', 'khác', 'gi', 'gì', 'day', 'đây', 'voi', 'với',
-  'cua', 'của', 'mot', 'một', 'ten', 'tên', 'thich', 'thích', 'muon', 'muốn',
-  'song', 'play', 'music', 'nay', 'này', 'kia', 'do', 'đó', 'duoc', 'được',
-]);
+import { dungHangDoi, hieuYeuCau, type BaiTrongKho } from './musicTim.js';
 
 export interface FoundTrack {
   id: number;
@@ -51,117 +37,6 @@ export interface FoundTrack {
   artist: string;
   url: string;
   durationSeconds: number | null;
-}
-
-/**
- * Dò bài theo lời người nói.
- *
- * Người ta không đọc đúng tên bài trong cơ sở dữ liệu — họ nói "bật
- * bài Chưa Bao Giờ của Trung Quân" hoặc chỉ "mở nhạc Sơn Tùng". Nên
- * dò theo cả tên bài lẫn tên ca sĩ, không phân biệt hoa thường, và
- * chấp nhận khớp một phần.
- */
-/**
- * Người ta nói "bật một bài bất kỳ" thì LLM gửi xuống `query: "random"`
- * — và đi tìm bài TÊN LÀ "random" thì tất nhiên không có. Đây là lỗi
- * thật đã gặp: robot bảo "bật rồi" mà loa im.
- *
- * Những chữ này nghĩa là "chọn giùm tôi", không phải tên bài.
- */
-const ANY_SONG = new Set([
-  'random', 'any', 'anything', 'bất kỳ', 'bat ky', 'bất cứ', 'gì cũng được',
-  'gi cung duoc', 'tuỳ', 'tùy', 'tuy', 'gì đó', 'gi do', 'nhạc', 'nhac',
-  'một bài bất kỳ', 'mot bai bat ky', 'ngẫu nhiên', 'ngau nhien',
-]);
-
-/** Bốc một bài bất kỳ trong thư viện. */
-async function anyTrack(): Promise<FoundTrack | null> {
-  const rows = await prisma.$queryRaw<
-    Array<{ id: number; title: string; artist: string; audio_url: string; duration_seconds: number | null }>
-  >`SELECT id, title, artist, audio_url, duration_seconds
-      FROM music_tracks
-     WHERE active = true AND category = 'NORMAL' AND audio_url IS NOT NULL
-     ORDER BY random() LIMIT 1`;
-  const t = rows[0];
-  if (!t) return null;
-  return {
-    id: t.id,
-    title: t.title,
-    artist: t.artist,
-    url: absolute(t.audio_url),
-    durationSeconds: t.duration_seconds,
-  };
-}
-
-export async function findTrack(query: string): Promise<FoundTrack | null> {
-  const q = query.trim();
-  if (!q) return anyTrack();
-  if (ANY_SONG.has(q.toLowerCase())) return anyTrack();
-
-  const rows = await prisma.musicTrack.findMany({
-    where: {
-      active: true,
-      category: 'NORMAL',
-      audioUrl: { not: null },
-      OR: [
-        { title: { contains: q, mode: 'insensitive' } },
-        { artist: { contains: q, mode: 'insensitive' } },
-      ],
-    },
-    select: { id: true, title: true, artist: true, audioUrl: true, durationSeconds: true },
-    take: 5,
-  });
-
-  if (!rows.length) {
-    // Không khớp cả cụm thì thử từng chữ — "nhạc Sơn Tùng buồn" vẫn
-    // nên ra được bài của Sơn Tùng.
-    //
-    // ⚠️ Chữ phải ĐỦ DÀI và không phải chữ đệm. Thử lần đầu để lọt
-    // chữ 2 ký tự, và câu vô nghĩa "zzz khong co bai nao ten nay" ra
-    // được bài "NCS Best of 2020" — vì "co" nằm trong
-    // "NoCopyrightSounds". Dò lỏng còn tệ hơn không dò: robot tự tin
-    // bật nhầm một bài rồi bảo "mở bài này đây".
-    const words = q
-      .split(/\s+/)
-      .map((w) => w.replace(/[^\p{L}\p{N}]/gu, ''))
-      .filter((w) => w.length >= 4 && !FILLER.has(w.toLowerCase()));
-    for (const w of words) {
-      const hit = await prisma.musicTrack.findFirst({
-        where: {
-          active: true,
-          category: 'NORMAL',
-          audioUrl: { not: null },
-          OR: [
-            { title: { contains: w, mode: 'insensitive' } },
-            { artist: { contains: w, mode: 'insensitive' } },
-          ],
-        },
-        select: { id: true, title: true, artist: true, audioUrl: true, durationSeconds: true },
-      });
-      if (hit?.audioUrl)
-        return {
-          id: hit.id,
-          title: hit.title,
-          artist: hit.artist,
-          url: absolute(hit.audioUrl),
-          durationSeconds: hit.durationSeconds,
-        };
-    }
-    // Không dò ra gì cả — nhưng người ta ĐANG muốn nghe nhạc. Bốc đại
-    // một bài còn hơn im lặng rồi bảo "không tìm thấy": họ nói "bật
-    // nhạc đi" chứ có phải đang tra cứu thư viện đâu.
-    return anyTrack();
-  }
-
-  const t = rows[0];
-  if (!t.audioUrl) return null;
-  return {
-    id: t.id,
-    title: t.title,
-    artist: t.artist,
-    url: absolute(t.audioUrl),
-    durationSeconds: t.durationSeconds,
-  };
 }
 
 /** Bản ghi cũ lưu key R2 trần, bản mới lưu URL đầy đủ — chịu cả hai. */
@@ -291,7 +166,10 @@ export async function streamTrackAsPcm(
  * Không có chỗ chung để đặt cờ thì lệnh tắt không với tới được vòng
  * lặp đang chảy.
  */
-const sessions = new Map<number, { stop: boolean; title: string }>();
+const sessions = new Map<number, { stop: boolean; boQua: boolean; title: string }>();
+
+/** Hàng đợi vừa phát của từng thiết bị — để "bài tiếp" / "phát tiếp nhạc" chạy được cả SAU khi nhạc đã dừng. */
+const _hangCuoi = new Map<number, { hang: BaiTrongKho[]; i: number }>();
 
 export function isPlayingMusic(deviceId: number): boolean {
   return sessions.has(deviceId);
@@ -304,67 +182,119 @@ export function stopMusicOn(deviceId: number): boolean {
   return true;
 }
 
+// ─── Kho nhạc nạp sẵn (15/11/2026) ─────────────────────────
+// Cả thư viện /music (cả mục REMIX), nhớ 5 phút — dò không dấu trong bộ nhớ thay vì `contains` phân biệt dấu.
+let _kho: { den: number; ds: BaiTrongKho[] } | null = null;
+async function khoNhac(): Promise<BaiTrongKho[]> {
+  if (_kho && _kho.den > Date.now()) return _kho.ds;
+  const rows = await prisma.musicTrack.findMany({
+    where: { active: true, audioUrl: { not: null } },
+    select: { id: true, title: true, artist: true, audioUrl: true, durationSeconds: true, category: true, language: true },
+  });
+  const ds = rows.map((r) => ({
+    id: r.id, title: r.title, artist: r.artist, url: absolute(r.audioUrl!), durationSeconds: r.durationSeconds,
+    category: r.category, language: r.language,
+  }));
+  _kho = { den: Date.now() + 5 * 60_000, ds };
+  return ds;
+}
+
+/** Phát hàng đợi từ vị trí `tu`, nối bài liền nhau. Người dùng mở miệng (đổi lượt) ⇒ dừng cả hàng. */
+function chayHang(deviceId: number, hang: BaiTrongKho[], tu: number): void {
+  const session = { stop: false, boQua: false, title: hang[tu]?.title ?? '' };
+  sessions.set(deviceId, session);
+  _hangCuoi.set(deviceId, { hang, i: tu });
+  void (async () => {
+    const gw = await import('../../socket/device.gateway.js');
+    try {
+      for (let i = tu; i < hang.length && !session.stop; i++) {
+        const bai = hang[i];
+        session.title = bai.title;
+        session.boQua = false;
+        _hangCuoi.set(deviceId, { hang, i });
+        const seq = gw.speakStreamBegin(deviceId, PCM_SAMPLE_RATE);
+        if (seq === null) return;
+        let ok = true;
+        try {
+          await streamTrackAsPcm(bai.url, async (pcm) => {
+            if (session.stop || session.boQua) return false;
+            ok = await gw.speakStreamPushPcm(deviceId, pcm, seq);
+            return ok;
+          });
+        } catch (err) {
+          logger.warn('MakerLab phát nhạc hỏng một bài — sang bài sau', {
+            deviceId, title: bai.title, error: err instanceof Error ? err.message : String(err),
+          });
+        }
+        gw.speakStreamEnd(deviceId, seq);
+        // Bo từ chối khung tiếng mà không phải do "bài tiếp" ⇒ người dùng vừa nói / lượt khác chen ⇒ dừng hàng.
+        if (!ok && !session.boQua) session.stop = true;
+        if (!session.stop) await new Promise((r) => setTimeout(r, 400));
+      }
+    } finally {
+      if (sessions.get(deviceId) === session) sessions.delete(deviceId);
+    }
+  })();
+}
+
 /**
- * Tìm bài rồi phát ra loa robot.
- *
- * Trả về câu ngắn để robot nói trước khi nhạc nổi lên — người dùng cần
- * biết nó tìm thấy bài gì, nhất là khi tên nghe nhầm.
+ * Tìm bài rồi phát ra loa robot — cả HÀNG ĐỢI, không chỉ một bài.
+ * `query` đặc biệt: `__tiep__` (bài tiếp), `__lai__` (phát tiếp từ bài vừa dừng).
+ * Trả câu ngắn để robot nói trước khi nhạc nổi lên.
  */
 export async function playMusicOn(
   deviceId: number,
   query: string,
   opts: { allowFetch?: boolean; ownerId?: number } = {},
 ): Promise<string> {
-  let track = await findTrack(query);
-
-  // Không có trong thư viện → đi tìm ngoài YouTube, tải về, thêm vào
-  // thư viện rồi phát. Lần sau gọi lại là có sẵn.
-  if (!track && opts.allowFetch !== false && query.trim()) {
-    try {
-      track = await fetchFromYoutube(query, opts.ownerId);
-    } catch (err) {
-      logger.warn('MakerLab tải nhạc ngoài hỏng', {
-        query,
-        error: err instanceof Error ? err.message : String(err),
-      });
-    }
+  if (query === '__tiep__' || query === '__lai__') {
+    const dang = sessions.get(deviceId);
+    const cuoi = _hangCuoi.get(deviceId);
+    if (dang && query === '__tiep__') { dang.boQua = true; return 'Chuyển bài nhé.'; }
+    if (!cuoi) return 'Mình chưa phát bài nào để tiếp tục.';
+    const tu = query === '__tiep__' ? cuoi.i + 1 : cuoi.i;
+    if (tu >= cuoi.hang.length) return 'Hết danh sách rồi, bạn muốn nghe gì nữa?';
+    if (dang) { stopMusicOn(deviceId); await new Promise((r) => setTimeout(r, 250)); }
+    chayHang(deviceId, cuoi.hang, tu);
+    const b = cuoi.hang[tu];
+    return `Mở "${b.title}" của ${b.artist}.`;
   }
 
-  if (!track) return 'Thư viện nhạc đang trống, chưa có bài nào để bật.';
+  const yc = hieuYeuCau(query);
+  const kho = await khoNhac();
+  let { hang, theo } = dungHangDoi(kho, yc);
 
-  // Đang phát bài khác thì dừng bài cũ trước, đợi nó nhả ra.
+  // Không có trong thư viện ⇒ đi tìm ngoài YouTube, tải về R2, thêm vào thư viện rồi phát.
+  if (!hang.length && yc.kieu === 'tim' && opts.allowFetch !== false) {
+    try {
+      const t = await fetchFromYoutube(query, opts.ownerId);
+      if (t) {
+        _kho = null;
+        hang = [{ id: t.id, title: t.title, artist: t.artist, url: t.url, durationSeconds: t.durationSeconds, category: 'NORMAL', language: null }];
+        theo = 'ten';
+      }
+    } catch (err) {
+      logger.warn('MakerLab tải nhạc ngoài hỏng', { query, error: err instanceof Error ? err.message : String(err) });
+    }
+  }
+  if (!hang.length) {
+    return yc.kieu === 'tim'
+      ? `Mình không tìm thấy bài "${yc.tuKhoa}" trong thư viện, trên mạng cũng chưa tải được.`
+      : 'Thư viện nhạc đang trống, chưa có bài nào để bật.';
+  }
+
   if (sessions.has(deviceId)) {
     stopMusicOn(deviceId);
     await new Promise((r) => setTimeout(r, 250));
   }
+  chayHang(deviceId, hang, 0);
+  logger.info('MakerLab hàng đợi nhạc', { deviceId, query, theo, soBai: hang.length, dau: hang[0].title });
 
-  const gw = await import('../../socket/device.gateway.js');
-  const session = { stop: false, title: track.title };
-  sessions.set(deviceId, session);
-
-  void (async () => {
-    try {
-      const seq = gw.speakStreamBegin(deviceId, PCM_SAMPLE_RATE);
-      if (seq === null) return;
-
-      await streamTrackAsPcm(track.url, async (pcm) => {
-        if (session.stop) return false;
-        return await gw.speakStreamPushPcm(deviceId, pcm, seq);
-      });
-
-      gw.speakStreamEnd(deviceId, seq);
-    } catch (err) {
-      logger.warn('MakerLab phát nhạc hỏng', {
-        deviceId,
-        title: track.title,
-        error: err instanceof Error ? err.message : String(err),
-      });
-    } finally {
-      sessions.delete(deviceId);
-    }
-  })();
-
-  return `Mở "${track.title}" của ${track.artist} đây.`;
+  const b = hang[0];
+  if (theo === 'ca-si') return `Mở nhạc của ${b.artist}, ${hang.length} bài, bắt đầu với "${b.title}".`;
+  if (theo === 'ten') return `Mở "${b.title}" của ${b.artist} đây.`;
+  const loai = yc.remix ? 'remix ' : yc.ngonNgu === 'en' ? 'tiếng Anh ' : yc.ngonNgu === 'zh' ? 'tiếng Trung ' : yc.ngonNgu === 'vi' ? 'Việt ' : '';
+  return `Mở nhạc ${loai}ngẫu nhiên, bài đầu là "${b.title}" của ${b.artist}.`;
 }
 
 // ─── Tìm nhạc ngoài thư viện (YouTube → R2 → thư viện) ─────

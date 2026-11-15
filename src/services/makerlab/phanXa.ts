@@ -104,6 +104,12 @@ export function khopLenhNhanh(heard: string): LenhNhanh | null {
   if (/(tat nhac|dung nhac|ngung nhac|tat bai nay|dung bai nay)/.test(s)) {
     return lam('Dạ, em tắt nhạc.', 'stop_music', {});
   }
+  if (/^(bai tiep|bai tiep theo|chuyen bai|bai khac|qua bai|next|doi bai|bai sau)( di| nhe| nha)?$/.test(s)) {
+    return lam('Dạ.', 'play_music', { query: '__tiep__' });
+  }
+  if (/^(phat tiep|bat lai nhac|mo lai nhac|tiep tuc nhac|nghe tiep|phat tiep nhac|bat nhac lai)( di| nhe| nha)?$/.test(s)) {
+    return lam('Dạ.', 'play_music', { query: '__lai__' });
+  }
 
   // ── Dừng chuyển động ──
   if (/^(dung lai|dung|dung ngay|dung het|stop|khoan)$/.test(s)) {

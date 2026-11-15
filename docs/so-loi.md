@@ -18,6 +18,13 @@ Mẫu một mục:
 
 ---
 
+### 16/11/2026 — Quy trình git (game viết tay "Gấu Thư Pháp", bắt ngay sau commit) — commit bằng chỉ mục tạm để lại chỉ mục CHUNG "đang xoá" commit vừa làm
+- **Triệu chứng:** sau khi commit `troChoiThuan.ts` + test bằng `GIT_INDEX_FILE` tạm (vì chỉ mục chung có `CLAUDE.md` của phiên khác đang stage), `git status` hiện `MM` cho đúng hai tệp vừa commit.
+- **Nguyên nhân:** chỉ mục chung vẫn giữ blob CŨ của hai tệp ⇒ so với HEAD mới, nó chính là một thay đổi đã stage HOÀN TÁC commit của mình; phiên khác chạy `git commit` (không pathspec) là đẩy luôn bản hoàn tác đó lên.
+- **Cách sửa:** ngay sau commit bằng chỉ mục tạm, `git reset -q HEAD -- <đúng các tệp vừa commit>` cho chỉ mục chung (api-backend 137210a64 / 89eabf22a, ios-app 064c8bf — tệp có đồ dở của phiên khác thì dựng blob từ `git show HEAD:<tệp>` + `hash-object`, không add cả tệp).
+- **Ảnh hưởng:** không ai — bắt ngay ở `git status` sau commit.
+- **Bài học:** commit bằng chỉ mục tạm KHÔNG xong ở `git commit`: phải đồng bộ lại mục của những tệp đó trong chỉ mục chung, rồi `git status` phải sạch hai cột cho đúng các tệp ấy.
+
 ### 16/11/2026 — CT Language (khung game + "Gấu Canh Trời", bắt khi đang làm — chưa lên người dùng) — pinyin sai thanh vẫn "đúng" + chữ rơi chui dưới thanh điểm
 - **Triệu chứng:** (1) test `TroChoiKhungTests` — gõ `xue3` cho 学习 (xue2 xi2) được nhận là đang đúng; (2) ảnh máy ảo: chữ mới mọc nằm dưới thanh điểm/tim + tai thỏ vài giây, không đọc được.
 - **Nguyên nhân:** (1) `DapAnGoCTL.swift` luôn thêm một dãy "chữ trơn bỏ số" làm lưới đỡ — dãy đó nuốt luôn số thanh SAI dù đã tách được âm tiết; (2) `CanhTroiCTL.swift` đọc `g.safeAreaInsets.top` trong GeometryReader đã `.ignoresSafeArea(edges: .top)` ⇒ luôn 0, HUD + điểm mọc chữ lọt dưới tai thỏ.
@@ -509,3 +516,10 @@ Mẫu một mục:
 - **Cách sửa:** `LAM_BAI_BO_DANG_KY=1` (đặt trong `xuat/lam-bai-nen.sh`, chỉ máy thuê) ⇒ `lam-bai.mts` bỏ `dang-ky` khi `_danhSach.ts` đã có; giảm còn 24 làn (cờ `hang-render.dung-linux-t25..48`), trả 24 tập LOI về hàng.
 - **Ảnh hưởng:** ~1,5 giờ thuê vast4 (~0,3 $) không ra video; 14 tập phải render lại. Không lỗi nội dung.
 - **Bài học:** bước "chuẩn bị chung" chạy lại trong MỖI việc là vô hại khi 1–16 làn nhưng thành bão khi 48 làn chung một thư mục — tăng làn phải tăng dần và đo (CPU cgroup + log có tiến) sau mỗi nấc, không nhảy thẳng lên mức "theo số nhân".
+
+### 15/11/2026 — CT Language iOS (game "Gấu Chạy Ghép Câu", lúc soạn) — HUD + nút làn bị đẩy tràn mép phải
+- **Triệu chứng:** ảnh chụp máy ảo đầu tiên: thẻ nghĩa, thanh câu cắt ở mép phải; tim, đồng hồ/chặng và nút ⬆︎ biến mất; mọi thứ lệch trái ~12 điểm.
+- **Nguyên nhân:** `ios-app/…/Modules/TroChoi/ChayGhepCau/CanhNenChayCTL.swift` (`LopCuonChayCTL`) đặt dải ảnh parallax (HStack nhiều bản ảnh, rộng > màn) TRỰC TIẾP trong `ZStack` ⇒ ZStack nhận bề rộng của con rộng nhất, cả màn chơi (HUD, thanh câu, nút) dàn theo bề rộng đó rồi bị cắt; thêm vào đó hàng HUD 6 món vượt 375 điểm.
+- **Cách sửa:** lớp cuộn nằm trong `Color.clear.overlay(alignment: .topLeading) { … }.clipped()` (không nong khung cha), ZStack màn chơi `.frame(width:height:)` theo GeometryReader, combo thành huy hiệu dính góc điểm — trước commit đầu của game (ios-app, commit game 5).
+- **Ảnh hưởng:** không ai dùng phải — bắt được trên máy ảo trước khi commit.
+- **Bài học:** trong SwiftUI một view con rộng hơn màn (dải ảnh cuộn, HStack lặp) làm cả `ZStack` cha rộng theo — nội dung cuộn/tràn phải nằm trong `overlay`/`background` hoặc khung cố định; và luôn chụp màn trên máy ảo trước khi tin bố cục.

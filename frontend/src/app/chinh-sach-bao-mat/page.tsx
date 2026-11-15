@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 
 export default function Page() {
   return (
-    <LegalShell title="Chính sách bảo mật" activeHref="/chinh-sach-bao-mat" updated="2026-11-13">
+    <LegalShell title="Chính sách bảo mật" activeHref="/chinh-sach-bao-mat" updated="2026-11-15">
       <p>
         CuongThai tôn trọng và bảo vệ thông tin cá nhân của người dùng, tuân thủ
         <b> Luật Bảo vệ dữ liệu cá nhân số 91/2025/QH15</b> và <b>Nghị định 356/2025/NĐ-CP</b> (hiệu lực từ 01/01/2026, thay thế Nghị định 13/2023/NĐ-CP). Chính sách này
@@ -397,40 +397,51 @@ export default function Page() {
 
       <h2 id="ct-language">14. Ứng dụng CT Language (học tiếng Anh, Nhật, Trung trên iOS)</h2>
       <ul>
-        <li><b>Không cần tài khoản</b> để học bài và tra từ điển. Sổ từ, lịch ôn, chuỗi ngày học, kỷ lục trò chơi, lịch sử tra và gói từ điển ngoại tuyến
-          được lưu <b>trên máy</b> của Quý khách (widget đọc một bản sao nhỏ qua nhóm ứng dụng trên chính máy đó) và không gửi về máy chủ.</li>
-        <li><b>Khi đăng nhập</b> (tài khoản CuongThai hoặc Đăng nhập bằng Apple): máy chủ lưu hồ sơ học (ngôn ngữ đang học, trình độ, mục tiêu, số phút mỗi ngày,
-          giờ nhắc) và tiến độ bài học để đồng bộ với cuongthai.com.</li>
-        <li><b>Micro</b> chỉ bật khi Quý khách bấm nút micro:
-          (a) <b>tra từ bằng giọng nói</b> — xử lý bằng dịch vụ nhận giọng nói của Apple (trên máy nếu máy hỗ trợ);
-          (b) <b>gọi CuongMini luyện nói</b> và <b>chấm phát âm</b> trong bài — bản ghi được gửi qua máy chủ CuongThai tới Groq (chuyển giọng nói thành chữ)
-          và Microsoft Azure Speech (chấm phát âm); bản chữ cùng vài lượt hội thoại gần nhất được gửi tới nhà cung cấp AI (Anthropic, OpenAI qua cổng modelapi.vn /
-          rambo.ai.vn) để tạo câu trả lời, câu trả lời được đọc thành tiếng bằng Microsoft Azure. <b>Bản ghi âm không được lưu</b> trên máy chủ; ứng dụng hỏi ý kiến
-          đồng ý trước lần gửi dữ liệu tới AI đầu tiên và Quý khách rút lại được trong Tôi › CuongMini · AI.</li>
-        <li><b>Máy ảnh</b> chỉ dùng khi Quý khách bấm "Chụp ảnh" để tra chữ; ảnh được đọc ngay trên máy (Apple Vision), không gửi đi.
-          <b>Viết tay</b> chữ Hán/kana: chỉ toạ độ các nét được gửi tới máy chủ để so với dữ liệu nét chữ, không lưu.</li>
-        <li><b>Cộng đồng hỏi đáp</b>: câu hỏi và trả lời Quý khách đăng hiển thị công khai với người dùng ứng dụng (kể cả khách chưa đăng nhập) kèm tên hiển thị.
-          Nội dung có từ ngữ xúc phạm bị chặn lúc đăng; báo cáo được gửi tới đội kiểm duyệt và xử lý trong 24 giờ; danh sách người Quý khách chặn được lưu để ẩn nội dung
-          hai chiều. Quý khách xoá được bài của mình bất cứ lúc nào; xoá tài khoản thì bài và trả lời bị xoá theo.</li>
-        <li><b>Mua Pro</b>: Apple xử lý thanh toán — chúng tôi không nhận thông tin thẻ. Máy chủ nhận thông tin giao dịch đã ký của Apple (mã giao dịch, gói, ngày bắt đầu/hết hạn,
-          hoàn tiền) để bật hoặc thu hồi quyền Pro.</li>
-        <li>Nhắc học là <b>thông báo cục bộ</b> do máy tự đặt theo giờ Quý khách chọn. Ứng dụng <b>không có quảng cáo</b> và <b>không theo dõi</b> Quý khách qua ứng dụng
-          hay website của bên khác.</li>
-        <li>Xoá tài khoản ngay trong ứng dụng: Tôi › Xoá tài khoản (giống mục 5).</li>
+        <li><b>Không cần tài khoản</b> để học bài, tra từ điển, dịch và chơi trò chơi. Khi chưa đăng nhập, sổ từ, lịch ôn, chuỗi ngày học, lịch sử tra/dịch,
+          kỷ lục trò chơi và gói từ điển ngoại tuyến chỉ nằm <b>trên máy</b> của Quý khách (widget và nút Chia sẻ đọc/ghi một bản sao nhỏ qua nhóm ứng dụng trên
+          chính máy đó).</li>
+        <li><b>Khi đăng nhập</b> (tài khoản CuongThai hoặc Đăng nhập bằng Apple), máy chủ lưu: hồ sơ học (ngôn ngữ, trình độ, mục tiêu, số phút mỗi ngày, giờ nhắc),
+          tiến độ bài học, sổ từ và sổ tay (để đồng bộ giữa các máy và cuongthai.com), số phút học mỗi ngày (bảng xếp hạng — có thể ẩn tên), điểm trò chơi (bảng xếp
+          hạng, thách đấu) và kết quả thi thử.</li>
+        <li><b>Trí tuệ nhân tạo (CuongMini).</b> Khi Quý khách hỏi CuongMini, nhờ sửa bài viết, tạo bài học AI, chấm bài viết/bài nói hoặc gọi thoại luyện nói, nội
+          dung Quý khách gửi (câu hỏi, chữ của màn đang mở, tối đa 3 ảnh mỗi câu, bài viết, bản ghi âm) đi qua máy chủ CuongThai tới: nhà cung cấp mô hình AI
+          (Anthropic, OpenAI — trực tiếp hoặc qua cổng modelapi.vn / rambo.ai.vn), Groq (chuyển giọng nói thành chữ) và Microsoft Azure Speech (chấm phát âm, đọc câu
+          trả lời thành tiếng). <b>Bản ghi âm không được lưu</b> trên máy chủ. Ứng dụng hỏi ý kiến đồng ý trước lần gửi dữ liệu tới AI đầu tiên; Quý khách rút lại
+          được trong Tôi › CuongMini · AI. Câu trả lời của AI có thể sai và đều có nút báo cáo.</li>
+        <li><b>Xử lý ngay trên máy, không gửi đi:</b> dịch văn bản/tài liệu/camera/hội thoại (Apple Translation), đọc chữ trong ảnh/camera để tra (Apple Vision), tra
+          bằng giọng nói (nhận giọng nói của Apple — trên máy nếu máy hỗ trợ, không thì do Apple xử lý). <b>Viết tay</b> chữ Hán/kana được so ngay trên máy; nếu
+          không được, chỉ toạ độ các nét được gửi tới máy chủ CuongThai để so, không lưu.</li>
+        <li><b>Đọc link:</b> khi Quý khách dán một địa chỉ trang web, máy của Quý khách tải trực tiếp trang đó (trang web thấy địa chỉ IP như khi mở bằng trình duyệt),
+          không kèm cookie hay thông tin đăng nhập, không qua máy chủ CuongThai. Máy chủ chỉ cộng dồn số lượt tra theo chữ cho mục “Từ được tra nhiều”, không gắn
+          với tài khoản.</li>
+        <li><b>Cộng đồng và tin nhắn.</b> Bài hỏi đáp, trả lời và ảnh Quý khách đăng hiển thị công khai với người dùng ứng dụng kèm tên hiển thị và ảnh đại diện;
+          thông tin vị trí trong ảnh (EXIF) bị gỡ trên máy chủ. Tin nhắn (chữ, ảnh) chỉ người trong cuộc trò chuyện thấy; tin từ người Quý khách chưa theo dõi vào
+          mục Lời mời; trạng thái “đang hoạt động” tắt được trong cài đặt. Nội dung có từ ngữ xúc phạm bị chặn lúc đăng/gửi; mọi bài, ảnh, tin nhắn và hồ sơ đều báo
+          cáo được, đội kiểm duyệt xử lý trong 24 giờ; danh sách người bị chặn được lưu để ẩn hai chiều. Xoá bài bất cứ lúc nào; xoá tài khoản thì bài, trả lời và
+          ảnh bị xoá theo.</li>
+        <li><b>Mua Pro</b>: Apple xử lý thanh toán — chúng tôi không nhận thông tin thẻ. Máy chủ nhận thông tin giao dịch đã ký của Apple (mã giao dịch, gói, ngày bắt
+          đầu/hết hạn, hoàn tiền) để bật hoặc thu hồi quyền Pro.</li>
+        <li>Nhắc học là <b>thông báo cục bộ</b> do máy tự đặt. Ứng dụng <b>không có quảng cáo</b> và <b>không theo dõi</b> Quý khách qua ứng dụng hay website của bên
+          khác. <b>Xoá tài khoản ngay trong ứng dụng:</b> Tôi › Xoá tài khoản (hoàn tất sau 72 giờ, huỷ được trong thời gian đó — mục 5).</li>
       </ul>
       <div lang="en">
         <p><b>CT Language (iOS) — English summary.</b></p>
         <ul>
-          <li>Lessons and the dictionary work without an account. Your word notebook, review schedule, streak, game records, search history and offline dictionary packs stay
-            on your device. Signed in, we store your learning profile (languages, level, goal, minutes per day, reminder time) and lesson progress to sync with cuongthai.com.</li>
-          <li>The microphone is used only when you tap it: voice lookup uses Apple speech recognition; CuongMini voice practice and pronunciation scoring send the recording
-            through our server to Groq (speech-to-text) and Microsoft Azure Speech, and the transcript with recent turns to an AI provider (Anthropic, OpenAI via modelapi.vn /
-            rambo.ai.vn); replies are voiced by Microsoft Azure. Recordings are not stored. The app asks for consent before the first AI request; you can withdraw it in
-            Me › CuongMini · AI.</li>
-          <li>Camera lookup is processed on device (Apple Vision) and never uploaded. Handwriting lookup sends stroke coordinates only, which are not stored.</li>
-          <li>Community Q&amp;A posts and replies are public to app users with your display name; abusive words are blocked, reports are reviewed within 24 hours, and you can block
-            users, delete your posts, or delete your account (which deletes them).</li>
-          <li>Purchases are processed by Apple; we receive Apple-signed transaction details to grant or revoke Pro. Reminders are local notifications. No ads, no tracking.</li>
+          <li>Lessons, the dictionary, translation and games work without an account; signed out, your notebook, review schedule, streak, search/translation history,
+            game records and offline packs stay on your device. Signed in, we store your learning profile, lesson progress, word notebook (synced across devices and
+            cuongthai.com), daily study minutes (leaderboard, name can be hidden), game scores (leaderboards, challenges) and mock-test results.</li>
+          <li>AI (CuongMini): when you ask CuongMini, request a writing correction, create an AI lesson, get writing/speaking scored or practise by voice call, what you
+            send (question, text of the open screen, up to 3 images per question, essay, recording) goes through our server to AI model providers (Anthropic, OpenAI —
+            directly or via modelapi.vn / rambo.ai.vn), Groq (speech-to-text) and Microsoft Azure Speech (pronunciation scoring, read-aloud). Recordings are not stored.
+            The app asks for consent before the first AI request; withdraw it in Me › CuongMini · AI. AI answers may be wrong and can be reported.</li>
+          <li>On device, never uploaded: translation (Apple Translation), camera/photo text lookup (Apple Vision), voice lookup (Apple speech recognition). Handwriting
+            is matched on device; otherwise only stroke coordinates are sent, not stored. Link reading fetches the page directly from your device, not through our
+            server. Our server only counts lookups per word for “Most looked-up words”, not linked to your account.</li>
+          <li>Community posts, replies and photos are public to app users with your display name and avatar (photo location data is stripped). Messages are visible only
+            to the people in the conversation; messages from people you don’t follow land in Requests; online status can be turned off. Abusive words are blocked,
+            every post, photo, message and profile can be reported (reviewed within 24 hours), and you can block users, delete posts or delete your account.</li>
+          <li>Purchases are processed by Apple; we receive Apple-signed transaction details to grant or revoke Pro. Reminders are local notifications. No ads, no
+            tracking. Delete your account in the app: Me › Delete account (completes after 72 hours, can be cancelled meanwhile — section 5).</li>
         </ul>
       </div>
 

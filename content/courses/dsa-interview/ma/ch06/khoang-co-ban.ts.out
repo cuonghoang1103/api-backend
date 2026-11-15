@@ -1,0 +1,6 @@
+[9,11] & [11,13]: half-open=false closed=true
+[9,12] & [10,11]: half-open=true closed=true
+[9,10] & [11,12]: half-open=false closed=false
+[13,15] & [9,14]: half-open=true closed=true
+canAttend [[9,10],[13,14],[10,12]] = true
+canAttend [[9,11],[13,14],[10,12]] = false

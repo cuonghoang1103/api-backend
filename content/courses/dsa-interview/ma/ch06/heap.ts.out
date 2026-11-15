@@ -1,0 +1,13 @@
+push 5 -> array [5]
+push 3 -> array [3,5]
+push 8 -> array [3,5,8]
+push 1 -> array [1,3,8,5]
+push 9 -> array [1,3,8,5,9]
+push 2 -> array [1,3,2,5,9,8]
+peek = 1, size = 6
+pop 1 -> array [2,3,8,5,9]
+pop 2 -> array [3,5,8,9]
+all pops = [1,2,3,5,8,9]
+max-heap pops = [9,8,5,3,2,1]
+tasks = ["alert:1","build:2","deploy:2","backup:3","report:3"]
+pop on empty = null

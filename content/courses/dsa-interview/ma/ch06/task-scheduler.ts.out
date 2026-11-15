@@ -1,0 +1,5 @@
+tasks=AAABBC n=2: heap=7 formula=7
+tasks=AAAABBBB n=1: heap=8 formula=8
+tasks=CCCDD n=0: heap=5 formula=5
+tasks=ABCDEFA n=2: heap=7 formula=7
+tasks=AAAAAABCDEFG n=2: heap=16 formula=16

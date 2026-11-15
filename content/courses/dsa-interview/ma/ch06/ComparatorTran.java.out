@@ -1,0 +1,6 @@
+(a, b) -> a - b          : [-7, 0, -2000000000, 5, 2000000000]
+Integer.compare(a, b)    : [-2000000000, -7, 0, 5, 2000000000]
+2_000_000_000 - (-2_000_000_000) as int = -294967296
+(int) (a - b) runs first : attacker (in 30 days)
+comparingLong runs first : send-otp (due now)
+(int) (30 days in ms) = -1702967296   (int) (7 days in ms) = 604800000

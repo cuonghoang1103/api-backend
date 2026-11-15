@@ -1,0 +1,6 @@
+        n | copy+sort each time | sorted array+splice |  two heaps
+    1,000 |             63.3 ms |              0.1 ms |     0.8 ms
+   10,000 |          11630.0 ms |              3.9 ms |     1.6 ms
+  100,000 |             skipped |            427.9 ms |    16.6 ms
+1,000,000 |             skipped |             skipped |   142.8 ms
+node v26.8.1 · arm64

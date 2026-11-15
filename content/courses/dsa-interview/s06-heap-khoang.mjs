@@ -1,15 +1,15 @@
 /**
- * Chương 6 — Heap và khoảng — tệp chương (GIỮ CHỖ 15/11/2026: mọi bài còn là bài khung).
- * Agent soạn chương thay từng chuỗi slug bằng bài thật (import từ ./ch06/bK-*.mjs). Xem _HOP-DONG.md mục 2–3.
- * Chuỗi slug = "dùng bài khung có slug này" (dsa-interview.mjs › ghep). GIỮ NGUYÊN title chương.
+ * Chương 6 — Heap và khoảng. Mọi mã/output trong chương đọc từ ./ma/ch06 (chạy thật: _chay.mjs).
+ * GIỮ NGUYÊN title chương (bộ seed neo chương bằng nó) và bài đầu dsa-6-1-heap.
  */
+import b1 from './ch06/b1-heap.mjs';
+import b2 from './ch06/b2-trung-vi.mjs';
+import b3 from './ch06/b3-khoang.mjs';
+import b4 from './ch06/b4-luyen.mjs';
+import b5 from './ch06/b5-quiz.mjs';
+
 export default {
   title: 'Chapter 6 — Heaps and intervals|||Chương 6 — Heap và khoảng',
-  description: '',
-  lessons: [
-    'dsa-6-1-heap',
-    'dsa-6-2-trung-vi',
-    'dsa-6-3-khoang',
-    'dsa-6-4-luyen',
-  ],
+  description: 'Heap 25 dòng tự viết cho JS và PriorityQueue của Java (bẫy comparator tràn số), top-k đo thật sort vs heap vs quickselect, gộp k danh sách, hai heap trung vị động, bài toán khoảng (nửa mở/đóng, tham lam theo điểm cuối, số phòng họp bằng heap và đường quét), bộ luyện 8 đề.',
+  lessons: [b1, b2, b3, b4, b5],
 };

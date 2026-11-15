@@ -1,0 +1,12 @@
+        n |       k |       sort |  heap of k | quickselect
+   10,000 |      10 |     1.8 ms |     0.3 ms |      0.5 ms
+   10,000 |   5,000 |     1.8 ms |     0.8 ms |      0.1 ms
+  100,000 |      10 |    21.4 ms |     2.5 ms |      3.0 ms
+  100,000 |  50,000 |    21.2 ms |     9.4 ms |      1.7 ms
+1,000,000 |      10 |   224.9 ms |    15.8 ms |     14.2 ms
+1,000,000 | 500,000 |   225.8 ms |   122.1 ms |     16.4 ms
+all values equal (k = n/2):
+   10,000 | 2-way Lomuto    30.5 ms | 3-way   0.0 ms
+   20,000 | 2-way Lomuto   115.0 ms | 3-way   0.0 ms
+   40,000 | 2-way Lomuto   386.4 ms | 3-way   0.1 ms
+node v26.8.1 · arm64

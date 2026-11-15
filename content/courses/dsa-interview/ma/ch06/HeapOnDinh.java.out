@@ -1,0 +1,3 @@
+arrival order          : [u1, u2, u3, u4, u5, u6, u7]
+prio only (unstable)   : [u2, u5, u6, u1, u4, u3, u7]
+prio, then seq (FIFO)  : [u2, u5, u1, u3, u4, u6, u7]

@@ -1,0 +1,6 @@
+lab bookings [[9, 11],[10, 12],[11, 13],[13, 14],[9, 10]]
+  half-open (meeting rooms): heap=2 sweep=2
+  closed (LC 2406 groups)  : heap=3 sweep=3
+[[1, 3],[5, 6],[8, 10],[11, 13]]: closed heap=1 sweep=1
+[[1, 5],[2, 6],[3, 7]]: closed heap=3 sweep=3
+[[4, 4],[4, 4]]: closed heap=2 sweep=2

@@ -1,0 +1,3 @@
+compare as strings : B(10) D(100) C(2) A(9)
+compare as numbers : C(2) A(9) B(10) D(100)
+"10" < "9" is true;  Number("1e3") = 1000;  Number("abc") = NaN

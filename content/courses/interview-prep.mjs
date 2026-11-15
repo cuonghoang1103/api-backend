@@ -7,6 +7,8 @@ import s00 from './interview-prep/s00-intro.mjs';
 import s01 from './interview-prep/s01-ho-so.mjs';
 import s02 from './interview-prep/s02-cau-chuyen.mjs';
 import s03 from './interview-prep/s03-hanh-vi.mjs';
+import s04 from './interview-prep/s04-backend.mjs';
+import s05 from './interview-prep/s05-devops.mjs';
 import s06 from './interview-prep/s06-frontend.mjs';
 import s07 from './interview-prep/s07-coding-sd.mjs';
 
@@ -28,7 +30,7 @@ export default {
     documentsNote: 'Tài liệu chính: techinterviewhandbook.org • "Cracking the Coding Interview" • các khoá kỹ thuật trên cuongthai.com • khoá Luyện phỏng vấn thuật toán, API & System Design.',
   },
   // Chương chưa soạn trọn vẫn lấy từ khung (giữ đúng chỉ số chương ⇒ đúng slug); chương đã soạn thay vào theo vị trí.
-  sections: ((K) => [s00, s01, s02, s03, K[4], K[5], s06, s07, K[8], K[9]])(khung('pv', [
+  sections: ((K) => [s00, s01, s02, s03, s04, s05, s06, s07, K[8], K[9]])(khung('pv', [
     ['Section 0 — How tech hiring works', 'Mục 0 — Tuyển dụng IT diễn ra thế nào', 'Quy trình tuyển dụng và kế hoạch chuẩn bị.', [
       ['bat-dau-tai-day', 'Start here (1/2) — How tech hiring works, and what interviewers look for', 'Bắt đầu tại đây (1/2) — Tuyển dụng IT ở Việt Nam và nước ngoài diễn ra thế nào, người phỏng vấn tìm gì', 'Các vòng: lọc CV, test online, kỹ thuật, văn hoá · Thực tập vs fresher · Người phỏng vấn chấm gì'],
       ['bat-dau-khi-khong-co', 'Start here (2/2) — Why good students fail interviews, and a 4-week plan', 'Bắt đầu tại đây (2/2) — Vì sao sinh viên giỏi vẫn trượt phỏng vấn, và kế hoạch 4 tuần', 'Sai lầm phổ biến · Kế hoạch 4 tuần · Theo dõi đơn ứng tuyển'],

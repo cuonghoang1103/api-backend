@@ -1,0 +1,7 @@
+k=1  int hours = -294967296  long hours = 4000000000  canFinish: int says true, truth false
+k=2  int hours = 2000000000  long hours = 2000000000  canFinish: int says false, truth false
+k=3  int hours = 1333333336  long hours = 1333333336  canFinish: int says false, truth false
+k=4  int hours = 1000000000  long hours = 1000000000  canFinish: int says true, truth true
+answer with int  sum: 4
+answer with long sum: 4
+linear scan k = 1, 2, ... with int sum: 1   <- the lie at k = 1 is now the answer

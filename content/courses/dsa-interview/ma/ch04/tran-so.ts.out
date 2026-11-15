@@ -1,0 +1,9 @@
+lo = 1500000000, hi = 2000000000, 2^31 - 1 = 2147483647
+(lo + hi) >> 1             = -397483648
+(lo + hi) >>> 1            = 1750000000
+Math.floor((lo + hi) / 2)  = 1750000000
+lo + Math.floor((hi-lo)/2) = 1750000000
+LC 278, n = 2^31 - 1, first bad = 2000000000
+  lo + Math.floor((hi - lo) / 2) : 2000000000 (31 calls)
+  (lo + hi) >> 1                 : STUCK after 100 loops, lo=715827883 hi=2147483647 (100 calls)
+  (lo + hi) >>> 1                : 2000000000 (31 calls)

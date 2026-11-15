@@ -1,0 +1,6 @@
+median([1, 4, 9], [2, 3]) = 3.0
+median([1, 4], [2, 3]) = 2.5
+median([], [5]) = 5.0
+median([7, 8, 9], [1, 2]) = 7.0
+median([-5, 3, 6, 12, 15], [-12, -10, -6, -3, 4, 10]) = 3.0
+self-test vs merge-and-sort: 3000 cases, 0 mismatches

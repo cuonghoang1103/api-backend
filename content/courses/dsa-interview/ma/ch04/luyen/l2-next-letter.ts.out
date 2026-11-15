@@ -1,0 +1,8 @@
+letters = ["b","e","e","h","q"]
+target 'a' -> 'b'
+target 'b' -> 'e'
+target 'd' -> 'e'
+target 'e' -> 'h'
+target 'p' -> 'q'
+target 'q' -> 'b'
+target 'z' -> 'b'

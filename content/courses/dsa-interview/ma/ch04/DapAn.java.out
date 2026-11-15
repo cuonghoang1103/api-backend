@@ -1,0 +1,13 @@
+ship [3, 8, 2, 7, 5, 4, 6, 1] in 1 days -> capacity 36 (4 checks)
+ship [3, 8, 2, 7, 5, 4, 6, 1] in 3 days -> capacity 13 (5 checks)
+ship [3, 8, 2, 7, 5, 4, 6, 1] in 4 days -> capacity 11 (5 checks)
+ship [3, 8, 2, 7, 5, 4, 6, 1] in 8 days -> capacity 8 (5 checks)
+bouquets m=2 k=2 from [7, 2, 9, 3, 3, 8, 1, 4] -> day 4 (3 checks)
+bouquets m=3 k=2 from [7, 2, 9, 3, 3, 8, 1, 4] -> day 7 (3 checks)
+bouquets m=1 k=8 from [7, 2, 9, 3, 3, 8, 1, 4] -> day 9 (3 checks)
+bouquets m=5 k=2 from [7, 2, 9, 3, 3, 8, 1, 4] -> day -1 (0 checks)
+split [9, 2, 6, 4, 11, 3, 5] into 1 -> largest piece 40 (4 checks)
+split [9, 2, 6, 4, 11, 3, 5] into 2 -> largest piece 21 (5 checks)
+split [9, 2, 6, 4, 11, 3, 5] into 3 -> largest piece 17 (5 checks)
+split [9, 2, 6, 4, 11, 3, 5] into 7 -> largest piece 11 (5 checks)
+self-test split/ship vs brute force: 500 cases, 0 mismatches

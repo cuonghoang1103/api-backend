@@ -1,0 +1,9 @@
+piles = [4,11,20,23,30], h = 8
+row canFinish(k), k = 1..30: FFFFFFFFFFFFFFTTTTTTTTTTTTTTTT
+hours at k = 14, 15, 16: 9, 8, 8
+minEatingSpeed = 15 after 4 checks (trying k = 1, 2, 3, ... would need 15)
+piles=[5,9,13,2] h=7 -> 5 (4 checks)
+piles=[25,7,18] h=3 -> 25 (4 checks)
+piles=[25,7,18] h=4 -> 18 (5 checks)
+piles=[1000000000] h=2 -> 500000000 (29 checks)
+piles=[312884470] h=312884469 -> 2 (29 checks)

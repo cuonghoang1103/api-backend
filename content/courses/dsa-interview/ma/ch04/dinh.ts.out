@@ -1,0 +1,10 @@
+nums = [2,4,3,1,5,7,6]  peak index = 5  (all peaks: [1,5])  ok row = FTTFFT
+nums = [1,3,2,4,1]  peak index = 3  (all peaks: [1,3])  ok row = FTFT
+nums = [5]  peak index = 0  (all peaks: [0])  ok row =
+nums = [1,2]  peak index = 1  (all peaks: [1])  ok row = F
+nums = [2,1]  peak index = 0  (all peaks: [0])  ok row = T
+nums = [1,2,3,4]  peak index = 3  (all peaks: [3])  ok row = FFF
+nums = [0,3,8,9,6,2]  peak index = 3  (all peaks: [3])  ok row = FFFTT
+best concurrency = 16 (7905 req/s) after 12 load tests instead of 64
+check by trying all 64: best = 16
+self-test: 3000 random arrays (neighbours distinct), 0 non-peaks returned

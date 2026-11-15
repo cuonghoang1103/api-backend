@@ -1,0 +1,5 @@
+positions=[2,3,5,9,10] m=3 -> 3 (3 checks)
+positions=[10,1,6,15,3] m=2 -> 14 (3 checks)
+positions=[10,1,6,15,3] m=3 -> 5 (4 checks)
+positions=[10,1,6,15,3] m=5 -> 2 (4 checks)
+positions=[1,1000000000] m=2 -> 999999999 (29 checks)

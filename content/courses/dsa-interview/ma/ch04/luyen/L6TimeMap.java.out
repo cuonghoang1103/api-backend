@@ -1,0 +1,7 @@
+get(price, 5) = ""
+get(price, 10) = "100k"
+get(price, 19) = "100k"
+get(price, 20) = "120k"
+get(price, 34) = "120k"
+get(price, 99) = "90k"
+get(stock, 50) = ""

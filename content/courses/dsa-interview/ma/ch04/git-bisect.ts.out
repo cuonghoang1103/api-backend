@@ -1,0 +1,34 @@
+$ git bisect start HEAD <commit #1>
+Bisecting: 49 revisions left to test after this (roughly 6 steps)
+[dc5ca5811c6daf08a80c04dd86061c4270f5ec13] commit #50
+$ git bisect run sh ../test.sh
+running 'sh' '../test.sh'
+Bisecting: 24 revisions left to test after this (roughly 5 steps)
+[d2e0137c5f05a0bc43db1b592423f1c7ca13a515] commit #75
+running 'sh' '../test.sh'
+Bisecting: 12 revisions left to test after this (roughly 4 steps)
+[f65eac361f113315ac3f0531ca9aa24ba036e052] commit #62
+running 'sh' '../test.sh'
+Bisecting: 6 revisions left to test after this (roughly 3 steps)
+[5bc0737de04c4db8984aad59a65fd286b7364479] commit #68
+running 'sh' '../test.sh'
+Bisecting: 3 revisions left to test after this (roughly 2 steps)
+[f0e74e33432d718d8bfdabfe1c9cbbde53ca0b98] commit #71
+running 'sh' '../test.sh'
+Bisecting: 1 revision left to test after this (roughly 1 step)
+[cd4a5fedcb3efad9869ce800f4f6af051cb37d9f] commit #73
+running 'sh' '../test.sh'
+Bisecting: 0 revisions left to test after this (roughly 0 steps)
+[38189a1cc0c566c3700a24e70c6105a69581396d] commit #72
+running 'sh' '../test.sh'
+cd4a5fedcb3efad9869ce800f4f6af051cb37d9f is the first bad commit
+commit cd4a5fedcb3efad9869ce800f4f6af051cb37d9f
+Author: Cuong <cuong@example.com>
+Date:   Sun Nov 1 01:13:00 2026 +0000
+
+    commit #73
+
+ config.txt | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+bisect found first bad commit
+-- commits tested by bisect: 7  (a linear walk #2, #3, ... would need 72 test runs)

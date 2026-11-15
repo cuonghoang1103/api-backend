@@ -1,0 +1,11 @@
+lo = 1500000000, hi = 2000000000, Integer.MAX_VALUE = 2147483647
+(lo + hi) / 2      = -397483648
+lo + (hi - lo) / 2 = 1750000000
+(lo + hi) >>> 1    = 1750000000
+LC 278, n = 2^31 - 1, first bad = 2000000000
+  lo + (hi - lo) / 2 : 2000000000 (31 calls)
+  (lo + hi) / 2      : STUCK after 100 loops, lo=715827883 hi=2147483647 (100 calls)
+byte[1100000000], search for the 1 at index 1099999999
+  old JDK search  : ArrayIndexOutOfBoundsException: Index -1064671148 out of bounds for length 1100000000
+  Arrays.binarySearch (fixed JDK): 1099999999
+java 21.0.9

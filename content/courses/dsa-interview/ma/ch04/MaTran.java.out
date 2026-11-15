@@ -1,0 +1,10 @@
+LC 74  target=7: true (4 probes of 12 cells)
+LC 74  target=13: false (4 probes of 12 cells)
+LC 74  target=44: true (4 probes of 12 cells)
+LC 74  target=0: false (4 probes of 12 cells)
+LC 74  target=50: false (3 probes of 12 cells)
+LC 240 target=8: true (5 steps of 16 cells)
+LC 240 target=12: false (7 steps of 16 cells)
+LC 240 target=25: true (4 steps of 16 cells)
+LC 240 target=1: true (4 steps of 16 cells)
+LC 240 matrix read row by row = [1, 5, 9, 14, 3, 6, 11, 17, 4, 8, 13, 20, 10, 15, 19, 25]  -> sorted? false

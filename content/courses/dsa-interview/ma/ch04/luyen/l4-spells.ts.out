@@ -1,0 +1,3 @@
+spells=[4,1,7] potions=[2,9,5,1,6] success=20 -> [3,0,3]
+brute force                                  -> [3,0,3]
+big values: spell 100000, potion 100000, success 10000000000 -> [1]

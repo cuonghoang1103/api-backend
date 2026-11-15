@@ -1,0 +1,8 @@
+nums = [6, 8, 9, 12, 1, 3, 4]  minIndex = 4  findMin = 1  (rotated 4 times)
+search for [1,3,4,6,8,9,12,5,13] -> [4, 5, 6, 0, 1, 2, 3, -1, -1]
+nums = [1]  findMin = 1  search(2) = -1
+nums = [2, 1]  findMin = 1  search(2) = 0
+nums = [1, 2, 3]  findMin = 1  search(2) = 1
+nums = [3, 1, 2]  findMin = 1  search(2) = 2
+ring buffer: oldest entry at slot 4 (t=980), newest at slot 3 (t=1020)
+self-test vs indexOf: 63558 searches, 0 mismatches

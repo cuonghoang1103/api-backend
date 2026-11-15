@@ -1,0 +1,6 @@
+n=6 firstBad=4 -> 4 (3 calls to isBadVersion)
+n=1 firstBad=1 -> 1 (0 calls to isBadVersion)
+n=10 firstBad=1 -> 1 (4 calls to isBadVersion)
+n=10 firstBad=10 -> 10 (3 calls to isBadVersion)
+n=2147483647 firstBad=2147483647 -> 2147483647 (30 calls to isBadVersion)
+n=2147483647 firstBad=1702766719 -> 1702766719 (31 calls to isBadVersion)

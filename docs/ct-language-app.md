@@ -438,6 +438,16 @@ Câu hỏi cho user: Pro của CT Language có **dùng chung** với Pro web cuo
     Thanh công cụ màn trợ lý: Lịch sử + menu "…" (cuộc mới · tính cách · hướng dẫn). **Nhờ Gấu (Cộng đồng)** cùng lời nhắc giàu
     (1600 token, 55 s × 2), lưu Markdown; API trả `noiDung` = `tronGau(...)` (trơn — app cũ) + `noiDungGiau` (app mới vẽ
     `TraLoiGauView`). Lượt giữ free 2 · Pro 15.
+    **Đợt 4 — gửi ảnh (15/11/2026):** cả hai tuyến hỏi nhận `anh: [base64]` (≤ 3 ảnh, ≤ 2 MB/ảnh sau giải mã; chỉ khi định dạng
+    giàu). `docAnh` kiểm số lượng/kích thước/base64 TRƯỚC khi trừ lượt, `chuanHoaAnh` (sharp — định dạng thật theo byte, xoay EXIF,
+    bỏ metadata, ≤ 1600 px JPEG); ảnh chỉ ở RAM của lượt (không đĩa, không R2; báo cáo AI chỉ ghi "kèm N ảnh"). Câu có ảnh ⇒ việc
+    `chat_vision` (gpt-6-sol, không bao giờ đi máy nhà) + loại câu `doc-anh` (chép chữ giữ furigana/pinyin → làm đúng việc xin:
+    dịch / giải thích / chữa bài / hướng dẫn giải gợi ý trước, đáp án trong hộp ✅; TỰ KIỂM đáp án in sẵn trong ảnh; từ chối ảnh
+    người lớn/bạo lực/giấy tờ cá nhân). Tính 1 lượt. Đo thật (ảnh bài tập giả 900×420, gpt-6-sol): token vào 1.904–1.972 vs 1.207
+    không ảnh (+~700 token/ảnh), token ra tương đương; chữ đầu 8,0 s / 35,6 s (chat_vision không đặt effort ⇒ nghĩ lâu hơn) vs
+    4,4 s không ảnh. App: nút ảnh cạnh ô nhập (Chụp / Thư viện, `NenAnhGau` ≤ 1600 px ≤ 1,5 MB JPEG 0,75→0,3), dải chờ + bỏ, chip
+    "Dịch ảnh này / Giải thích từ khó / Chữa bài giúp mình", ảnh thu nhỏ (≤ 360 px) trong bong bóng + lịch sử trên máy; lượt cũ
+    gửi lại chỉ ghi "[kèm N ảnh]". Xem thử `CT_XEM_MAN=tro-ly-anh | tro-ly-anh-cho`.
     Smoke-test deploy.sh thêm `ctlanguage/hoi-gau/luot` (401). Đo local 15/11: câu "Giải thích từ này" (学习) trả lời đúng, có pinyin.
     App: `Modules/TroLyGau/TroLyGauCTL.swift` (+ `NguCanhGauCTL.swift` dựng ngữ cảnh). **Gắn vào một màn = một dòng:**
     `.troLyGau(NguCanhGau(loai: .nguPhap, nn: nn, tieuDe: …, noiDung: "…chữ của màn…", goiY: [...]))` — `nil` ⇒ ẩn; `canhDuoi:` đẩy nút

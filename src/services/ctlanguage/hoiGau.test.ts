@@ -8,7 +8,7 @@ import { beforeEach, test } from 'node:test';
 import {
   __datLaiHoiGau, baoCaoHoiGau, docLichSu, docNguCanh, GOI_Y_MAC_DINH, hoiGau, lamSachTraLoiGiau, LICH_SU_TOI_DA, LUOT_HOI_FREE,
   LUOT_HOI_PRO, luotHoiGau, nhacHoiGau, nhacHoiGauGiau, NGU_CANH_TOI_DA, phanLoaiCau, TINH_CACH, docTinhCach, TRAN_RA, TRA_LOI_TOI_DA,
-  LocLuongGau, type LuongHoi, type PhuThuocHoi,
+  LocLuongGau, docAnh, ANH_TOI_DA, type LuongHoi, type PhuThuocHoi,
 } from './hoiGau.js';
 
 type Goi = Parameters<PhuThuocHoi['goi']>[0];
@@ -257,4 +257,46 @@ test('stream: batDau sau khi kiểm + trừ lượt, delta nối lại đúng b�
   const su2: string[] = [];
   await assert.rejects(hoiGau(31, { nn: 'xx', cau: 'Hỏi' }, pt, { batDau: () => su2.push('b'), delta: () => {}, reset: () => {} }));
   assert.equal(su2.length, 0);
+});
+
+// ─── Đợt 4: ảnh đính kèm ───────────────────────────────────────────────────────────────────────────────────────────
+
+test('docAnh: kiểm số lượng / kích thước / base64, định dạng THẬT qua sharp (chữ giả đuôi .png bị từ chối)', async () => {
+  const { chuanHoaAnh } = await import('./congDongAnh.js');
+  const nen = async (b: Buffer) => (await chuanHoaAnh(b)).jpg;
+  const sharp = (await import('sharp')).default;
+  const png = await sharp({ create: { width: 64, height: 40, channels: 3, background: '#ffffff' } }).png().toBuffer();
+  const ra = await docAnh([`data:image/png;base64,${png.toString('base64')}`], nen);
+  assert.equal(ra.length, 1);
+  assert.equal(ra[0][0], 0xff, 'chuẩn hoá ra JPEG');
+  assert.equal(ra[0][1], 0xd8);
+  assert.deepEqual(await docAnh(undefined, nen), []);
+  const loi = (code: string) => (e: { code?: string }) => e.code === code;
+  await assert.rejects(docAnh(Array(ANH_TOI_DA + 1).fill(png.toString('base64')), nen), loi('CTL_HOI_ANH_NHIEU'));
+  await assert.rejects(docAnh([Buffer.from('<?php echo 1; ?> giả làm png').toString('base64')], nen), loi('CTL_HOI_ANH_SAI'));
+  await assert.rejects(docAnh(['không phải base64!!'], nen), loi('CTL_HOI_ANH_SAI'));
+  await assert.rejects(docAnh(['A'.repeat(3 * 1024 * 1024)], nen), loi('CTL_HOI_ANH_LON'));
+  await assert.rejects(docAnh('chuỗi', nen), loi('CTL_HOI_ANH_SAI'));
+});
+
+test('hỏi kèm ảnh: loại đọc-ảnh, gửi khối ảnh + chữ, cờ coAnh; ảnh hỏng ⇒ 400 KHÔNG trừ lượt; app cũ bỏ qua ảnh', async () => {
+  const g = gia({ tra: '## Chữ trong ảnh\nx' });
+  g.pt.nenAnh = async (b) => b;
+  const anh = Buffer.from([0xff, 0xd8, 0xff, 1, 2, 3]).toString('base64');
+  const r = await hoiGau(40, { nn: 'ja', nguCanh: nguCanhTu, cau: 'Dịch ảnh này', dinhDang: 2, anh: [anh, anh] }, g.pt);
+  assert.equal(r.kieu, 'doc-anh');
+  assert.equal(g.goi[0].coAnh, true);
+  assert.equal(g.goi[0].maxTokens, 2600, 'trần ra loại đọc ảnh');
+  const cuoi = g.goi[0].messages.at(-1)!.content as { type: string }[];
+  assert.deepEqual(cuoi.map((c) => c.type), ['image', 'image', 'text']);
+  assert.match(g.goi[0].system, /ĐỌC ẢNH/);
+  assert.match(g.goi[0].system, /CCCD/, 'dặn từ chối giấy tờ cá nhân');
+  const hong = gia();
+  hong.pt.nenAnh = async () => { throw new Error('không phải ảnh'); };
+  await assert.rejects(hoiGau(41, { nn: 'ja', nguCanh: nguCanhTu, cau: 'Dịch', dinhDang: 2, anh: [anh] }, hong.pt),
+    (e: { code?: string }) => e.code === 'CTL_HOI_ANH_SAI');
+  assert.equal((await luotHoiGau(41, hong.pt)).conLai, LUOT_HOI_FREE, 'ảnh hỏng không mất lượt');
+  const cu = gia();
+  await hoiGau(42, { nn: 'ja', nguCanh: nguCanhTu, cau: 'Dịch', anh: [anh] }, cu.pt);
+  assert.equal(typeof cu.goi[0].messages.at(-1)!.content, 'string', 'không dinhDang ⇒ không đọc ảnh');
 });

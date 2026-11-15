@@ -9,6 +9,8 @@
  *                          nháp — cổng thử lại) · `done {id, traLoi, goiY, kieu, luot}` (thay nháp bằng bản chuẩn) · `error
  *                          {code, message, status}`. `: ping` mỗi 15 s giữ kết nối (Cloudflare cắt sau 125 s im lặng);
  *                          nginx `/api/v1/` đã `proxy_buffering off`. Client ngắt giữa chừng ⇒ ngừng ghi (lượt vẫn tính).
+ *   Đợt 4: cả hai tuyến hỏi nhận `anh: [base64…]` (≤ 3 ảnh, ≤ 2 MB/ảnh; chỉ khi định dạng giàu) — kiểm định dạng thật
+ *          + chuẩn hoá bằng sharp, chỉ ở RAM của lượt rồi bỏ; câu có ảnh đi việc `chat_vision` (gpt-6-sol). Thân JSON chung 10 MB.
  *   POST /bao-cao-ai     — {id, lyDo, chiTiet?, trich?} báo cáo câu trả lời AI (App Store 4.7) ⇒ hộp thư admin
  * Service: src/services/ctlanguage/hoiGau.ts.
  */

@@ -28,6 +28,7 @@ import { dauNgayVn } from '../agent/anthropicChinhHang/hanMuc.js';
 import { kiemNoiDung } from '../locNoiDung.js';
 import { logger } from '../../utils/logger.js';
 import { lamSachGau } from './congDongGau.js';
+import type { ClaudeContentBlock } from '../claudeChat.js';
 
 export const LUOT_HOI_FREE = 8;
 export const LUOT_HOI_PRO = 80;
@@ -92,13 +93,18 @@ export interface KetQuaHoi {
 }
 
 /** Loại CÂU HỎI (khác loại MÀN) — quyết định khung câu trả lời + trần token ra. */
-export const KIEU_CAU = ['tom-tat', 'ngu-phap', 'tu', 'chua-cau', 'do-vui', 'vi-du', 'cau-thi', 'dich', 'ke-hoach', 'tu-do'] as const;
+export const KIEU_CAU = ['tom-tat', 'ngu-phap', 'tu', 'chua-cau', 'do-vui', 'vi-du', 'cau-thi', 'dich', 'ke-hoach', 'doc-anh', 'tu-do'] as const;
+
+/** Đợt 4 — ảnh đính kèm: tối đa 3 ảnh/câu, mỗi ảnh (sau giải base64) ≤ 2 MB (app nén ≤ 1,5 MB). CHỈ giữ trong RAM của lượt
+ *  này rồi bỏ — không ghi đĩa, không R2, không vào `DA_TRA` (báo cáo chỉ ghi "kèm N ảnh"). */
+export const ANH_TOI_DA = 3;
+export const ANH_BYTE_TOI_DA = 2 * 1024 * 1024;
 export type KieuCau = (typeof KIEU_CAU)[number];
 
 /** Trần token RA theo loại câu (gpt-6-sol effort low ⇒ suy luận ít; 900 cũ làm câu "tóm tắt" cụt). */
 export const TRAN_RA: Record<KieuCau, number> = {
   'tom-tat': 2600, 'ngu-phap': 2200, tu: 1800, 'chua-cau': 1600, 'do-vui': 1800, 'vi-du': 1600, 'cau-thi': 1700, dich: 1800,
-  'ke-hoach': 2200, 'tu-do': 1600,
+  'ke-hoach': 2200, 'doc-anh': 2600, 'tu-do': 1600,
 };
 
 /** Phụ thuộc ra ngoài — test thay bằng bản giả (không gọi AI, không đọc CSDL). */
@@ -107,27 +113,32 @@ export interface PhuThuocHoi {
   /** Trả văn bản câu trả lời (chuỗi, hoặc `{text, biCat}` khi chạm trần token). Ném lỗi khi AI hỏng.
    *  `onToken` có mặt ⇒ stream (đợt 3): từng mẩu thô; `onRestart` = cổng thử lại từ đầu ⇒ bỏ phần đã phát. */
   goi: (o: {
-    system: string; messages: { role: 'user' | 'assistant'; content: string }[]; userId: number; maxTokens: number;
+    system: string; messages: { role: 'user' | 'assistant'; content: string | ClaudeContentBlock[] }[]; userId: number; maxTokens: number;
     onToken?: (t: string) => void; onRestart?: () => void;
+    /** Có ảnh ⇒ việc `chat_vision` (luôn model NHÌN được ảnh — `gpt-6-sol`; không bao giờ đi máy nhà). */
+    coAnh?: boolean;
   }) => Promise<string | { text: string; biCat?: boolean }>;
+  /** Kiểm định dạng THẬT (sharp đọc byte đầu tệp — không tin đuôi/MIME khai báo), xoay EXIF, bỏ metadata, ≤ 1600 px ⇒ JPEG. */
+  nenAnh?: (b: Buffer) => Promise<Buffer>;
   baoAdmin: (tb: { tieuDe: string; noiDung: string; userId: number; khoaChongTrung: string }) => Promise<unknown>;
   bayGio: () => Date;
 }
 
 const THAT: PhuThuocHoi = {
   laPro: isProEffective,
-  goi: async ({ system, messages, userId, maxTokens, onToken, onRestart }) => {
+  goi: async ({ system, messages, userId, maxTokens, onToken, onRestart, coAnh }) => {
     const { llmComplete, isAiAvailable } = await import('../interview/llm/index.js');
     if (!isAiAvailable('language')) throw new AppError('AI đang tạm nghỉ, bạn thử lại sau ít phút nhé.', 503, 'CTL_HOI_AI_NGHI');
     const r = await llmComplete({
       // ⚠️ Không stream ⇒ tổng (timeout × số lần thử) phải < 125 s Cloudflare cắt (524). Đo 15/11: một lượt "dịch & phân
       // tích" mất 116 s lúc cổng chậm (thường ~20 s) ⇒ 55 s × 2 lần ≈ 110 s.
-      step: 'generation', purpose: 'language_tutor', feature: 'language', userId, maxTokens, maxRetries: 1,
+      step: 'generation', purpose: coAnh ? 'chat_vision' : 'language_tutor', feature: 'language', userId, maxTokens, maxRetries: 1,
       // Stream (đợt 3): `timeoutMs` thành hẹn giờ IM LẶNG (đặt lại mỗi mẩu) — chữ đầu phải tới trong 45 s.
       timeoutMs: onToken ? 45_000 : maxTokens > 900 ? 55_000 : 45_000, system, messages, onToken, onRestart,
     });
     return { text: r.text ?? '', biCat: r.biCat };
   },
+  nenAnh: async (b) => (await (await import('./congDongAnh.js')).chuanHoaAnh(b)).jpg,
   baoAdmin: async (tb) => {
     const { baoAdmin } = await import('../thongBaoAdmin.service.js');
     return baoAdmin({ loai: 'BAO_CAO', mucDo: 'can_xu_ly', ...tb });
@@ -174,6 +185,28 @@ export function docLichSu(v: unknown, tran = 2000): LuotChat[] {
   // Model cần lượt đầu là của người dùng.
   while (cuoi.length && cuoi[0].vai === 'gau') cuoi.shift();
   return cuoi;
+}
+
+/**
+ * Ảnh app gửi: mảng chuỗi base64 (có thể kèm tiền tố `data:image/...;base64,`). Kiểm số lượng + kích thước TRƯỚC khi giải mã
+ * hết; định dạng thật kiểm ở `nenAnh` (sharp). Sai ⇒ 400 (chưa trừ lượt). THUẦN trừ `nenAnh`.
+ */
+export async function docAnh(v: unknown, nenAnh: (b: Buffer) => Promise<Buffer>): Promise<Buffer[]> {
+  if (v == null) return [];
+  if (!Array.isArray(v)) throw new BadRequestError('Ảnh gửi kèm không hợp lệ.', 'CTL_HOI_ANH_SAI');
+  if (v.length > ANH_TOI_DA) throw new BadRequestError(`Mỗi câu gửi tối đa ${ANH_TOI_DA} ảnh.`, 'CTL_HOI_ANH_NHIEU');
+  const ra: Buffer[] = [];
+  for (const x of v) {
+    const s = typeof x === 'string' ? x.replace(/^data:[^;,]*;base64,/, '') : '';
+    if (!s || !/^[A-Za-z0-9+/=\s]+$/.test(s)) throw new BadRequestError('Ảnh gửi kèm không hợp lệ.', 'CTL_HOI_ANH_SAI');
+    if (s.length * 0.75 > ANH_BYTE_TOI_DA + 1024) throw new BadRequestError('Ảnh quá lớn (tối đa 2 MB mỗi ảnh).', 'CTL_HOI_ANH_LON');
+    const b = Buffer.from(s, 'base64');
+    if (b.length > ANH_BYTE_TOI_DA) throw new BadRequestError('Ảnh quá lớn (tối đa 2 MB mỗi ảnh).', 'CTL_HOI_ANH_LON');
+    try { ra.push(await nenAnh(b)); } catch (e) {
+      throw e instanceof AppError ? new BadRequestError(e.message, 'CTL_HOI_ANH_SAI') : new BadRequestError('Chỉ nhận ảnh JPEG, PNG hoặc WebP.', 'CTL_HOI_ANH_SAI');
+    }
+  }
+  return ra;
 }
 
 export function nhacHoiGau(nn: NnHoi, ban: string | undefined, nc: NguCanhHoi): string {
@@ -231,6 +264,7 @@ export const GOI_Y_MAC_DINH: Record<KieuCau, string[]> = {
   'cau-thi': ['Mẹo làm dạng câu này', 'Cho câu tương tự để luyện', 'Giải thích kỹ hơn'],
   dich: ['Giải thích từng từ', 'Cho câu tương tự', 'Kiểm tra mình 3 câu'],
   'ke-hoach': ['Đố mình các từ này', 'Mẹo nhớ từ khó nhất', 'Đặt câu với các từ này'],
+  'doc-anh': ['Giải thích từ khó', 'Cho câu tương tự để luyện', 'Kiểm tra mình 3 câu'],
   'tu-do': ['Giải thích kỹ hơn', 'Cho thêm ví dụ', 'Kiểm tra mình 3 câu'],
 };
 
@@ -296,6 +330,14 @@ const KHUNG: Record<KieuCau, string> = {
     '## Cách ôn 15 phút — 3–4 bước cụ thể có thời lượng (vd đọc to, đặt câu, tự kiểm tra, ôn lại từ quên).',
     'Hộp > 💡 Mẹo nhớ cho 1–2 từ khó nhất (dựa vào số lần quên nếu có). Hộp > ✅ Tự kiểm tra 3 câu với các từ đó (có > Đáp án:).',
     'Ngữ cảnh là hồ sơ học ⇒ kế hoạch theo trình độ + phút/ngày (bảng | Ngày | Việc | Phút | nếu hỏi theo tuần).',
+  ].join('\n'),
+  'doc-anh': [
+    'LOẠI CÂU: ĐỌC ẢNH người học gửi kèm (ảnh trang sách, biển hiệu, bài làm, bài tập…). Khung:',
+    '## Chữ trong ảnh — chép lại NGUYÊN VĂN phần chữ ngoại ngữ (đúng thứ tự dòng; giữ furigana/pinyin nếu ảnh có — tiếng Nhật ghi {漢字|かな}). Chữ mờ/không chắc ⇒ ghi (không rõ), KHÔNG đoán bừa. Ảnh dài ⇒ chỉ chép phần liên quan câu hỏi.',
+    'Rồi làm ĐÚNG việc người học xin: dịch (## Nghĩa, câu tự nhiên) · giải thích từ/ngữ pháp (danh sách `từ` (đọc) — nghĩa, mẫu **công thức**) · chữa BÀI LÀM trong ảnh (chỗ đúng trước, ~~sai~~ → `đúng`, vì sao) · bài tập chưa làm ⇒ HƯỚNG DẪN: gợi ý từng bước trước, đáp án để trong hộp > ✅ với dòng > Đáp án: (app ẩn tới khi bấm) — không đưa đáp án trần ngay đầu.',
+    'Đáp án / lời giải CÓ SẴN trong ảnh có thể sai — TỰ KIỂM lại từng câu, sai thì nói rõ và sửa (đo 15/11: model từng tin theo đáp án in sẵn). Không thấy bài làm của người học thì đừng nói "bạn làm đúng".',
+    'Không nói rõ muốn gì ⇒ chép chữ + dịch + 3–5 từ/mẫu đáng học. Kết bằng hộp > 💡 Mẹo.',
+    'AN TOÀN: ảnh có nội dung người lớn, bạo lực, hoặc giấy tờ/thông tin cá nhân nhạy cảm (CCCD, thẻ ngân hàng, mật khẩu, mã OTP…) ⇒ KHÔNG chép, KHÔNG mô tả chi tiết; lịch sự từ chối một câu và nhắc che thông tin cá nhân. Ảnh không có chữ/không liên quan học ngôn ngữ ⇒ nói ngắn gọn và gợi ý gửi ảnh có chữ.',
   ].join('\n'),
   'tu-do': [
     'LOẠI CÂU: HỎI TỰ DO. Trả lời THẲNG câu hỏi ở câu đầu tiên, rồi mới giải thích. Độ dài theo câu hỏi: câu ngắn/đơn giản ⇒',
@@ -435,7 +477,7 @@ const loiChan = () => new AppError('Câu hỏi có từ ngữ không được ph
 // ─── Hỏi ───────────────────────────────────────────────────────────────────────────────────────────────────────────
 export async function hoiGau(
   userId: number,
-  b: { nn?: unknown; banDongHanh?: unknown; nguCanh?: unknown; lichSu?: unknown; cau?: unknown; dinhDang?: unknown; tinhCach?: unknown },
+  b: { nn?: unknown; banDongHanh?: unknown; nguCanh?: unknown; lichSu?: unknown; cau?: unknown; dinhDang?: unknown; tinhCach?: unknown; anh?: unknown },
   pt: PhuThuocHoi = THAT,
   /** Đợt 3: có ⇒ stream (chỉ áp cho định dạng giàu). */
   luong?: LuongHoi,
@@ -449,7 +491,9 @@ export async function hoiGau(
   const nguCanh = docNguCanh(b.nguCanh);
   if (!giau) nguCanh.noiDung = nguCanh.noiDung.slice(0, 3000);
   const lichSu = docLichSu(b.lichSu, giau ? LUOT_LICH_SU_TOI_DA : 2000);
-  const kieu = phanLoaiCau(cau, nguCanh.loai);
+  // Ảnh chỉ nhận ở định dạng giàu (app mới); kiểm TRƯỚC khi trừ lượt.
+  const anh = giau ? await docAnh(b.anh, pt.nenAnh ?? THAT.nenAnh!) : [];
+  const kieu = anh.length ? 'doc-anh' : phanLoaiCau(cau, nguCanh.loai);
   // Luật chung: MỌI chữ người dùng gõ đi qua bộ lọc (câu mới + các lượt cũ của người dùng — app gửi lại được sửa tay).
   if (kiemNoiDung(cau).chan || lichSu.some((l) => l.vai === 'nguoi' && kiemNoiDung(l.noiDung).chan)) throw loiChan();
 
@@ -467,9 +511,15 @@ export async function hoiGau(
   const hoan = () => dem.set(k, Math.max(0, (dem.get(k) ?? 1) - 1));
 
   const ban = typeof b.banDongHanh === 'string' ? b.banDongHanh : undefined;
-  const messages = [
+  const messages: { role: 'user' | 'assistant'; content: string | ClaudeContentBlock[] }[] = [
     ...lichSu.map((l) => ({ role: l.vai === 'gau' ? ('assistant' as const) : ('user' as const), content: l.noiDung })),
-    { role: 'user' as const, content: cau },
+    {
+      role: 'user' as const,
+      content: anh.length
+        ? [...anh.map((a): ClaudeContentBlock => ({ type: 'image', source: { type: 'base64', media_type: 'image/jpeg', data: a.toString('base64') } })),
+          { type: 'text', text: cau }]
+        : cau,
+    },
   ];
   let traLoi = '';
   let goiY: string[] = [];
@@ -479,7 +529,7 @@ export async function hoiGau(
   try {
     const r = await pt.goi({
       system: giau ? nhacHoiGauGiau(nn, ban, nguCanh, kieu, docTinhCach(b.tinhCach)) : nhacHoiGau(nn, ban, nguCanh),
-      messages, userId, maxTokens: giau ? TRAN_RA[kieu] : 900,
+      messages, userId, maxTokens: giau ? TRAN_RA[kieu] : 900, coAnh: anh.length > 0,
       ...(coLuong ? {
         onToken: (t: string) => { const ra = loc.them(t); if (ra) luong!.delta(ra); },
         onRestart: () => { loc.reset(); luong!.reset(); },
@@ -508,7 +558,7 @@ export async function hoiGau(
     throw new AppError('Câu trả lời có nội dung không phù hợp nên đã bị chặn. Bạn hỏi cách khác nhé.', 422, 'CTL_HOI_NOI_DUNG');
   }
   const id = randomUUID();
-  nhoKetQua(id, { userId, luc: Date.now(), nn, nguCanh, cau, traLoi });
+  nhoKetQua(id, { userId, luc: Date.now(), nn, nguCanh, cau: anh.length ? `${cau} [kèm ${anh.length} ảnh — không lưu]` : cau, traLoi });
   const conLai = { ...luot, conLai: Math.max(0, luot.conLai - 1) };
   return giau ? { id, traLoi, goiY, kieu, luot: conLai } : { id, traLoi, luot: conLai };
 }

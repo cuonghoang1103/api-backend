@@ -1,0 +1,139 @@
+{
+  "groupSlug": "cuongthai",
+  "slug": "dsa-interview-practice",
+  "name": "Coding Interview Prep — Luyện tập",
+  "language": "javascript",
+  "color": "#7c3aed",
+  "docsUrl": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map",
+  "status": "PUBLISHED",
+  "level": "INTERMEDIATE",
+  "description": "Bộ luyện chấm tự động đi kèm khoá Coding Interview Prep: mỗi bài dạy một mẫu (hash map, tổng tiền tố, sắp xếp, hai con trỏ, cửa sổ trượt, stack/queue, danh sách liên kết, tìm nhị phân, cây, heap, khoảng, BFS/DFS, tô-pô, quay lui, quy hoạch động) có 3–4 đề TỰ SOẠN từ dễ đến khó, bối cảnh đời thật (phòng lab FPT, đơn hàng shop, log request, lịch họp…), đề tiếng Anh có bản tiếng Việt. Viết một hàm JavaScript, máy chấm chạy thật trong trình duyệt: so sâu kết quả, có ca ẩn và một kiểm hiệu năng với đầu vào lớn — lời giải O(n²) khi đề đòi O(n) sẽ trượt.",
+  "modules": [
+    {
+      "slug": "dsa-1-1-hash-map",
+      "name": "1.1 Hash map & set: trade memory for time",
+      "level": "BEGINNER",
+      "description": "Luyện: Lab check-in: the first student who scans twice · Voucher pairs: how many item pairs hit the exact total · Lab PCs with the exact same software · Cash drawer audit: pair every entry into multiples of k"
+    },
+    {
+      "slug": "dsa-1-2-prefix-sum",
+      "name": "1.2 Prefix sums & difference arrays",
+      "level": "BEGINNER",
+      "description": "Luyện: Attendance log: absences in any range of slots · Lab booking: the busiest hour of the week · Shop ledger: the longest break-even period · Equipment desk: the longest window where every item was borrowed an even number of times"
+    },
+    {
+      "slug": "dsa-1-3-sap-xep",
+      "name": "1.3 Sorting as a tool: comparators, stability, top-k",
+      "level": "BEGINNER",
+      "description": "Luyện: Code Lab leaderboard: rank by score, keep submission order on ties · Weekly backup jobs: the smallest gap, including over the weekend · Warehouse picking: sort items by the aisle walking route · Student portal: top k search keywords with a tie-break"
+    },
+    {
+      "slug": "dsa-2-1-hai-con-tro",
+      "name": "2.1 Two pointers: one pass instead of two nested loops",
+      "level": "BEGINNER",
+      "description": "Luyện: Roll call: who on the roster did not show up · Moving day: the fewest elevator trips, two boxes at a time · Teachers' Day gift: two items, as close to the budget as possible · Merged lab groups: count pairs whose size fits the room"
+    },
+    {
+      "slug": "dsa-2-2-cua-so",
+      "name": "2.2 Sliding window: fixed and variable size",
+      "level": "BEGINNER",
+      "description": "Luyện: Sleep tracker: how many k-day stretches met the target · Rate-limit audit: the longest stretch where nobody exceeds the quota · Round table: the fewest swaps to seat the FPT team together · CPU monitor: count time ranges with at least k overload samples"
+    },
+    {
+      "slug": "dsa-2-3-nhanh-cham",
+      "name": "2.3 Fast and slow pointers: cycles, middles, hidden lists",
+      "level": "BEGINNER",
+      "description": "Luyện: Print queue: the k-th job from the end, in one pass · Two lab assistants: split the queue into halves · Photo line-up: remove the student standing in the middle · Redirect chain: how far until the loop, and how long is it"
+    },
+    {
+      "slug": "dsa-3-1-stack",
+      "name": "3.1 Stack: matching, monotonic stack, undo",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Editor lint: the first bracket to underline · Traffic spikes: the previous busier minute · Shopping cart with undo: the priciest item, instantly · Capacity planning: the bottleneck of every stretch of days"
+    },
+    {
+      "slug": "dsa-3-2-queue",
+      "name": "3.2 Queue & deque: rate limits, round-robin, window extremes",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Login rate limiter: accept or reject each attempt · Library printer: who finishes first under round-robin · Server room sensor: temperature swing in every k-minute window"
+    },
+    {
+      "slug": "dsa-3-3-linked-list",
+      "name": "3.3 Linked list: dummy nodes, cut & glue, merge sort",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Exam registration: insert into a sorted linked list · Playlist: move the last k songs to the front · Help desk: urgent tickets first, order kept · Lab logs: sort a linked list of timestamps"
+    },
+    {
+      "slug": "dsa-4-1-co-ban",
+      "name": "4.1 Binary search: one first-true template",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Exam results: how many students reached at least x · Lab timetable: which slot is running at time t · Cloud drive: the first day a quota is exceeded · Incident review: the k log entries nearest to the alert"
+    },
+    {
+      "slug": "dsa-4-3-khong-gian-dap-an",
+      "name": "4.3 Binary search on the answer",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Volunteer kitchen: the biggest equal portion for everyone · Lecture videos: cut so the longest segment is as short as possible · Network lab: the k-th smallest latency gap between two PCs"
+    },
+    {
+      "slug": "dsa-5-1-duyet",
+      "name": "5.1 Tree traversal: DFS orders and BFS by level",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Org chart budget: total salary per management level · Mentoring tree: same-cohort peers with a different mentor · Wall chart: print the tree column by column"
+    },
+    {
+      "slug": "dsa-5-2-de-quy",
+      "name": "5.2 Recursion on trees: what do you return to the parent?",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Department headcount: replace every node by its subtree total · Release tree: the longest chain of consecutive versions · Network closet: the longest cable path on one firmware version · Security cameras on a lab corridor tree: the minimum number"
+    },
+    {
+      "slug": "dsa-5-3-bst",
+      "name": "5.3 Binary search trees: prune, floor/ceil, in-order",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Grade index: count the scores inside a range · Locker desk: nearest free locker below and above · Data-entry slip: find the two swapped keys in a BST"
+    },
+    {
+      "slug": "dsa-6-1-heap",
+      "name": "6.1 Heaps and priority queues: top-k, greedy merging, scheduling",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Go-kart club: the k fastest lap times · Log rotation: merge all log files at minimum cost · IT help desk: the order tickets get served"
+    },
+    {
+      "slug": "dsa-6-3-khoang",
+      "name": "6.3 Intervals: merge, free slots, scheduling",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Lab usage report: total minutes the room was booked · SWP391 team: find common free slots for a meeting · Online exam proctoring: supervise as many sessions as possible"
+    },
+    {
+      "slug": "dsa-7-2-bfs-dfs",
+      "name": "7.2 BFS & DFS: layers, flood fill, implicit graphs",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Mesh Wi-Fi: devices within k hops of the router · Floor plan: the largest connected room · Campus shuttles: the fewest rides between two stops"
+    },
+    {
+      "slug": "dsa-7-3-topo",
+      "name": "7.3 Topological sort: verify, layer, order",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: CI pipeline: does this run order respect every dependency? · Study plan: the minimum number of semesters · Release checklist: the alphabetically smallest valid order"
+    },
+    {
+      "slug": "dsa-8-1-mau",
+      "name": "8.1 Backtracking template: choose, explore, un-choose",
+      "level": "ADVANCED",
+      "description": "Luyện: Forgot my password: every candidate from what I remember · Campus tour: every route that fits the time budget · Exam timetable: the earliest-slot assignment with no clashes"
+    },
+    {
+      "slug": "dsa-9-2-mot-chieu",
+      "name": "9.2 1D dynamic programming: count, extra state, sorted DP",
+      "level": "ADVANCED",
+      "description": "Luyện: Wet stairs: count the safe ways up · Part-time shifts: never three days in a row · Meeting room: accept the bookings that earn the most"
+    },
+    {
+      "slug": "dsa-9-3-hai-chieu",
+      "name": "9.3 2D dynamic programming: tables, knapsack, diff",
+      "level": "ADVANCED",
+      "description": "Luyện: Job fair: colour the booths, neighbours must differ · Two request logs: the longest identical stretch · Soft-skill workshops: the most credits within your free hours · Mini git diff: line changes from the LCS table"
+    }
+  ]
+}

@@ -1,0 +1,720 @@
+{
+  "trackSlug": "dsa-interview-practice",
+  "moduleSlug": "dsa-9-3-hai-chieu",
+  "lesson": {
+    "course": "dsa-interview",
+    "slug": "dsa-9-3-hai-chieu"
+  },
+  "exercises": [
+    {
+      "title": "Job fair: colour the booths, neighbours must differ",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 15,
+      "points": 10,
+      "concepts": [
+        "2D DP (n × k)",
+        "rolling row"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dsa-interview",
+        "coding-interview"
+      ],
+      "problemHtml": "<p>At the FPT job fair the booths stand in one long row. Each booth gets a banner in one of three colours — red, green or blue — and two <b>adjacent</b> booths must not have the same colour, so visitors can tell companies apart. Printing prices differ per booth (sizes differ): <code>costs[i] = [red, green, blue]</code> in thousand VND.</p>\n<p>Write <code>boothColors(costs)</code> returning the minimum total printing cost. With no booths the cost is 0.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Write the function in <code>solution.js</code> and <b>return</b> the answer — do not print it.</li>\n  <li>Do not modify the input arrays/objects.</li>\n  <li>Mind the constraints: one check runs on a large input and every check has a 4-second limit, so an O(n²) loop fails it.</li>\n</ul>",
+      "problemHtmlVi": "<p>Ở ngày hội việc làm FPT, các gian hàng xếp thành một hàng dài. Mỗi gian nhận một băng rôn màu đỏ, xanh lá hoặc xanh dương, và hai gian <b>liền kề</b> không được cùng màu để khách dễ phân biệt công ty. Giá in khác nhau theo gian (kích thước khác nhau): <code>costs[i] = [đỏ, xanh lá, xanh dương]</code> tính bằng nghìn đồng.</p>\n<p>Viết <code>boothColors(costs)</code> trả về tổng chi phí in nhỏ nhất. Không có gian nào thì chi phí là 0.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Viết hàm trong <code>solution.js</code> và <b>trả về</b> kết quả — đừng in ra.</li>\n  <li>Không sửa mảng/object đầu vào.</li>\n  <li>Để ý ràng buộc: một kiểm chạy trên đầu vào lớn và mỗi kiểm có trần 4 giây, nên vòng lặp O(n²) sẽ trượt kiểm đó.</li>\n</ul>",
+      "inputSpec": "costs — array of [red, green, blue] non-negative integers.|||costs — mảng [đỏ, xanh lá, xanh dương] số nguyên không âm.",
+      "outputSpec": "A number — the minimum total cost.|||Một số — tổng chi phí nhỏ nhất.",
+      "constraints": "0 ≤ costs.length ≤ 100 000; 0 ≤ costs[i][c] ≤ 10⁴.\nTarget: O(n · 3) time, O(1) extra memory.|||0 ≤ costs.length ≤ 100 000; 0 ≤ costs[i][c] ≤ 10⁴.\nMục tiêu: O(n · 3) thời gian, O(1) bộ nhớ phụ.",
+      "examplesJson": [
+        {
+          "input": "boothColors([[17,2,17],[16,16,5],[14,3,19]])",
+          "output": "10",
+          "explanation": "The first sample case (Run executes every visible case; hidden cases only run on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy mọi ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Picking the cheapest colour for each booth greedily breaks the rule or misses cheaper combinations. The decision for booth i depends on the colour of booth i − 1 — make that colour part of the state.|||Chọn màu rẻ nhất cho từng gian theo kiểu tham lam sẽ phạm luật hoặc bỏ sót tổ hợp rẻ hơn. Quyết định ở gian i phụ thuộc màu gian i − 1 — đưa màu đó vào trạng thái.",
+        "<code>dp[i][c]</code> = cheapest cost of booths 0..i with booth i in colour c = <code>costs[i][c] + min(dp[i−1][other two colours])</code>. Keep one row.|||<code>dp[i][c]</code> = chi phí rẻ nhất cho gian 0..i khi gian i màu c = <code>costs[i][c] + min(dp[i−1][hai màu còn lại])</code>. Chỉ giữ một hàng."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "solution.js",
+          "language": "javascript",
+          "code": "/**\n * costs: [red, green, blue][] — printing cost of each booth in each colour\n * returns the minimum total cost so that adjacent booths have different colours\n */\nfunction boothColors(costs) {\n  // Write your solution here\n  var total = 0;\n  for (var i = 0; i < costs.length; i++) total += Math.min(costs[i][0], costs[i][1], costs[i][2]);\n  return total;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "solution.js",
+          "language": "javascript",
+          "code": "// Reference solution — n × 3 table, one rolling row: dp[i][c] = costs[i][c] + min(dp[i-1][other colours]).\nfunction boothColors(costs) {\n  // best[c] = cheapest way to paint booths 0..i with booth i in colour c — one row of the n × 3 table\n  var best = [0, 0, 0];\n  for (var i = 0; i < costs.length; i++) {\n    var b = best;\n    best = [\n      costs[i][0] + Math.min(b[1], b[2]), // booth i red ⇒ booth i-1 green or blue\n      costs[i][1] + Math.min(b[0], b[2]),\n      costs[i][2] + Math.min(b[0], b[1]),\n    ];\n  }\n  return Math.min(best[0], best[1], best[2]); // for 0 booths every entry is 0\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The table has n rows and 3 columns; cell (i, c) depends only on the two other cells of row i − 1, because the only constraint linking booth i to the past is the colour of booth i − 1. Taking the minimum of the last row covers every valid colouring exactly once ⇒ exact answer. Work: 3 cells per booth, each O(1) ⇒ O(n) time; one row ⇒ O(1) memory. The empty input falls out naturally: the initial row [0, 0, 0] is never updated.</p>",
+      "solutionExplanationHtmlVi": "<p>Bảng có n hàng và 3 cột; ô (i, c) chỉ phụ thuộc hai ô còn lại của hàng i − 1, vì ràng buộc duy nhất nối gian i với quá khứ là màu của gian i − 1. Lấy min của hàng cuối phủ mọi cách tô hợp lệ đúng một lần ⇒ đáp án chính xác. Khối lượng: 3 ô mỗi gian, mỗi ô O(1) ⇒ O(n) thời gian; một hàng ⇒ O(1) bộ nhớ. Đầu vào rỗng tự đúng: hàng đầu [0, 0, 0] không bị cập nhật lần nào.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "solution.js",
+        "tepNap": [
+          "solution.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "green, blue, green ⇒ 10",
+              "vi": "xanh lá, xanh dương, xanh lá ⇒ 10"
+            },
+            "goi": "boothColors([[17,2,17],[16,16,5],[14,3,19]])",
+            "mongDoi": 10
+          },
+          {
+            "moTa": {
+              "en": "Greedy trap ⇒ 6",
+              "vi": "Bẫy tham lam ⇒ 6"
+            },
+            "goi": "boothColors([[1,5,9],[1,100,100]])",
+            "mongDoi": 6
+          },
+          {
+            "moTa": {
+              "en": "No booths ⇒ 0",
+              "vi": "Không có gian ⇒ 0"
+            },
+            "goi": "boothColors([])",
+            "mongDoi": 0
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "boothColors([[7,3,8]])",
+            "mongDoi": 3,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "boothColors([[1,1,1],[1,1,1],[1,1,1],[1,1,1]])",
+            "mongDoi": 4,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "boothColors([[5,8,6],[19,14,13],[7,5,12],[14,15,17],[3,20,10]])",
+            "mongDoi": 43,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Red is free but cannot be used twice in a row",
+              "vi": "Đỏ miễn phí nhưng không được dùng hai gian liền"
+            },
+            "goi": "boothColors([[0,10,10],[0,10,10],[0,10,10],[0,10,10],[0,10,10],[0,10,10]])",
+            "mongDoi": 30,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Performance: 100 000 booths (trying every colouring is exponential)",
+              "vi": "Hiệu năng: 100 000 gian (thử mọi cách tô là hàm mũ)"
+            },
+            "goi": "(function () {\nfunction __cay(a) { if (!a.length || a[0] == null) return null; var root = { val: a[0], left: null, right: null }, q = [root], h = 0, i = 1;\n  while (i < a.length) { var n = q[h++]; if (a[i] != null) { n.left = { val: a[i], left: null, right: null }; q.push(n.left); } i++;\n    if (i < a.length && a[i] != null) { n.right = { val: a[i], left: null, right: null }; q.push(n.right); } i++; } return root; }\nfunction __raCay(r) { var out = [], q = [r], h = 0; while (h < q.length) { var n = q[h++]; if (n == null) { out.push(null); continue; } out.push(n.val); q.push(n.left == null ? null : n.left, n.right == null ? null : n.right); }\n  while (out.length && out[out.length - 1] === null) out.pop(); return out; }\nfunction __ds(a) { var head = null; for (var i = a.length - 1; i >= 0; i--) head = { val: a[i], next: head }; return head; }\nfunction __raDs(h) { var out = []; while (h && out.length < 1000000) { out.push(h.val); h = h.next; } return out; }\nvar __s = 20261115; function R(m) { __s = (__s * 48271) % 2147483647; return __s % m; }\nvar n = 100000, c = new Array(n); for (var i = 0; i < n; i++) c[i] = [R(10001), R(10001), R(10001)]; return boothColors(c);\n})()",
+            "mongDoi": 301481089
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Greedy \"cheapest colour different from the previous booth\": <code>[[1, 5, 9], [1, 100, 100]]</code> forces 1 + 100 instead of 5 + 1.|||Tham lam \"màu rẻ nhất khác gian trước\": <code>[[1, 5, 9], [1, 100, 100]]</code> buộc 1 + 100 thay vì 5 + 1."
+        },
+        {
+          "loi": "Trying all 3 · 2ⁿ⁻¹ colourings recursively: fine for 10 booths, hopeless for 100 000.|||Thử đệ quy cả 3 · 2ⁿ⁻¹ cách tô: ổn với 10 gian, vô vọng với 100 000."
+        },
+        {
+          "loi": "Overwriting the row while computing it (<code>best[1]</code> then reads the new <code>best[0]</code>).|||Ghi đè hàng trong lúc đang tính (<code>best[1]</code> đọc nhầm <code>best[0]</code> mới)."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "adjacent",
+          "vi": "liền kề"
+        },
+        {
+          "en": "rolling row",
+          "vi": "hàng cuốn",
+          "giaiThich": "chỉ giữ hàng trước của bảng."
+        },
+        {
+          "en": "greedy",
+          "vi": "tham lam"
+        }
+      ]
+    },
+    {
+      "title": "Two request logs: the longest identical stretch",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 20,
+      "points": 20,
+      "concepts": [
+        "2D DP",
+        "longest common substring"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dsa-interview",
+        "coding-interview"
+      ],
+      "problemHtml": "<p>An on-call engineer suspects that two servers replayed the same traffic. <code>a</code> and <code>b</code> are their request logs, each entry an endpoint code (a number). Write <code>longestCommonStreak(a, b)</code> returning the length of the longest <b>contiguous</b> run of entries that appears in both logs, in the same order and without gaps.</p>\n<p>This is not the longest common <i>subsequence</i>: <code>[1, 2, 3]</code> and <code>[1, 9, 2, 3]</code> share the subsequence 1, 2, 3, but the longest common contiguous run is <code>[2, 3]</code> ⇒ 2.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Write the function in <code>solution.js</code> and <b>return</b> the answer — do not print it.</li>\n  <li>Do not modify the input arrays/objects.</li>\n  <li>Mind the constraints: one check runs on a large input and every check has a 4-second limit, so an O(n²) loop fails it.</li>\n</ul>",
+      "problemHtmlVi": "<p>Một kỹ sư trực sự cố nghi hai máy chủ đã phát lại cùng một luồng truy cập. <code>a</code> và <code>b</code> là log request của chúng, mỗi mục là mã endpoint (một số). Viết <code>longestCommonStreak(a, b)</code> trả về độ dài đoạn <b>liên tiếp</b> dài nhất xuất hiện trong cả hai log, cùng thứ tự và không có khoảng hở.</p>\n<p>Đây không phải dãy con chung dài nhất (<i>subsequence</i>): <code>[1, 2, 3]</code> và <code>[1, 9, 2, 3]</code> có chung dãy con 1, 2, 3, nhưng đoạn liên tiếp chung dài nhất là <code>[2, 3]</code> ⇒ 2.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Viết hàm trong <code>solution.js</code> và <b>trả về</b> kết quả — đừng in ra.</li>\n  <li>Không sửa mảng/object đầu vào.</li>\n  <li>Để ý ràng buộc: một kiểm chạy trên đầu vào lớn và mỗi kiểm có trần 4 giây, nên vòng lặp O(n²) sẽ trượt kiểm đó.</li>\n</ul>",
+      "inputSpec": "a, b — arrays of integers.|||a, b — mảng số nguyên.",
+      "outputSpec": "A number — the length of the longest common contiguous run (0 if none).|||Một số — độ dài đoạn liên tiếp chung dài nhất (0 nếu không có).",
+      "constraints": "0 ≤ a.length, b.length ≤ 3 000.\nTarget: O(|a| · |b|) time, O(|b|) memory.|||0 ≤ a.length, b.length ≤ 3 000.\nMục tiêu: O(|a| · |b|) thời gian, O(|b|) bộ nhớ.",
+      "examplesJson": [
+        {
+          "input": "longestCommonStreak([1,2,3,2,1], [3,2,1,4,7])",
+          "output": "3",
+          "explanation": "The first sample case (Run executes every visible case; hidden cases only run on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy mọi ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Fix where the run ENDS: at <code>a[i−1]</code> and <code>b[j−1]</code>. Its length is 0 if those differ, otherwise 1 + the run ending one step earlier in both.|||Cố định nơi đoạn KẾT THÚC: tại <code>a[i−1]</code> và <code>b[j−1]</code>. Độ dài là 0 nếu hai phần tử khác nhau, ngược lại 1 + đoạn kết thúc sớm hơn một bước ở cả hai.",
+        "So <code>dp[i][j] = a[i−1] === b[j−1] ? dp[i−1][j−1] + 1 : 0</code>, and the answer is the maximum over the whole table (not the last cell). Two rows are enough.|||Vậy <code>dp[i][j] = a[i−1] === b[j−1] ? dp[i−1][j−1] + 1 : 0</code>, và đáp án là giá trị lớn nhất trên cả bảng (không phải ô cuối). Hai hàng là đủ."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "solution.js",
+          "language": "javascript",
+          "code": "/**\n * a, b: number[] — two request logs\n * returns the length of the longest contiguous run present in both\n */\nfunction longestCommonStreak(a, b) {\n  // Write your solution here\n  return 0;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "solution.js",
+          "language": "javascript",
+          "code": "// Reference solution — dp[i][j] = length of the common run ending at a[i-1], b[j-1]; two rolling rows, max over all cells.\nfunction longestCommonStreak(a, b) {\n  // cur[j] = length of the common run ENDING at a[i-1] and b[j-1]; a run breaks on any mismatch, so it is 0 there\n  var prev = new Int32Array(b.length + 1), cur = new Int32Array(b.length + 1), best = 0;\n  for (var i = 1; i <= a.length; i++) {\n    for (var j = 1; j <= b.length; j++) {\n      cur[j] = a[i - 1] === b[j - 1] ? prev[j - 1] + 1 : 0;\n      if (cur[j] > best) best = cur[j];\n    }\n    var t = prev; prev = cur; cur = t; // swap rows (cur[0] stays 0)\n  }\n  return best;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Every common run ends at some pair (i, j), and dp[i][j] is exactly the longest run ending there — a mismatch resets it to 0, which is what forbids gaps. Taking the maximum over all cells therefore gives the answer. Each of the n · m cells is O(1) ⇒ 9·10⁶ steps for 3 000 × 3 000; row i only reads row i − 1, so two typed arrays of length m + 1 suffice. The brute force repeats the same comparisons for every starting pair along a diagonal, which is the work the table shares.</p>",
+      "solutionExplanationHtmlVi": "<p>Mọi đoạn chung đều kết thúc ở một cặp (i, j), và dp[i][j] đúng là đoạn dài nhất kết thúc ở đó — khác nhau thì đặt lại 0, chính điều này cấm khoảng hở. Lấy max trên mọi ô vì vậy cho đáp án. Mỗi ô trong n · m ô tốn O(1) ⇒ 9·10⁶ bước cho 3 000 × 3 000; hàng i chỉ đọc hàng i − 1, nên hai mảng kiểu dài m + 1 là đủ. Vét cạn lặp lại cùng các phép so cho mọi cặp điểm đầu dọc một đường chéo — đúng phần việc mà bảng dùng chung.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "solution.js",
+        "tepNap": [
+          "solution.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "[3, 2, 1] ⇒ 3",
+              "vi": "[3, 2, 1] ⇒ 3"
+            },
+            "goi": "longestCommonStreak([1,2,3,2,1], [3,2,1,4,7])",
+            "mongDoi": 3
+          },
+          {
+            "moTa": {
+              "en": "Gaps are not allowed ⇒ 2",
+              "vi": "Không cho phép khoảng hở ⇒ 2"
+            },
+            "goi": "longestCommonStreak([1,2,3], [1,9,2,3])",
+            "mongDoi": 2
+          },
+          {
+            "moTa": {
+              "en": "Nothing in common ⇒ 0",
+              "vi": "Không có gì chung ⇒ 0"
+            },
+            "goi": "longestCommonStreak([5,5], [6,6])",
+            "mongDoi": 0
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "longestCommonStreak([], [1,2])",
+            "mongDoi": 0,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "longestCommonStreak([0,0,0,0,0], [0,0,0])",
+            "mongDoi": 3,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "The best run is not at the end of either log",
+              "vi": "Đoạn tốt nhất không nằm ở cuối log nào"
+            },
+            "goi": "longestCommonStreak([7,8,9,1,2], [1,2,7,8,9])",
+            "mongDoi": 3,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "longestCommonStreak([4,1,4,1,4,1], [1,4,1,4])",
+            "mongDoi": 4,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Performance: two 3 000-entry logs that are almost identical (brute-force extension is O(n·m·L) ⇒ times out)",
+              "vi": "Hiệu năng: hai log 3 000 mục gần giống hệt nhau (vét cạn kéo dài là O(n·m·L) ⇒ hết giờ)"
+            },
+            "goi": "(function () {\nfunction __cay(a) { if (!a.length || a[0] == null) return null; var root = { val: a[0], left: null, right: null }, q = [root], h = 0, i = 1;\n  while (i < a.length) { var n = q[h++]; if (a[i] != null) { n.left = { val: a[i], left: null, right: null }; q.push(n.left); } i++;\n    if (i < a.length && a[i] != null) { n.right = { val: a[i], left: null, right: null }; q.push(n.right); } i++; } return root; }\nfunction __raCay(r) { var out = [], q = [r], h = 0; while (h < q.length) { var n = q[h++]; if (n == null) { out.push(null); continue; } out.push(n.val); q.push(n.left == null ? null : n.left, n.right == null ? null : n.right); }\n  while (out.length && out[out.length - 1] === null) out.pop(); return out; }\nfunction __ds(a) { var head = null; for (var i = a.length - 1; i >= 0; i--) head = { val: a[i], next: head }; return head; }\nfunction __raDs(h) { var out = []; while (h && out.length < 1000000) { out.push(h.val); h = h.next; } return out; }\nvar __s = 20261115; function R(m) { __s = (__s * 48271) % 2147483647; return __s % m; }\nvar a = new Array(3000).fill(0), b = new Array(3000).fill(0); b[0] = 5; a[2999 - R(3)] = 7; return longestCommonStreak(a, b);\n})()",
+            "mongDoi": 2998
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Using the LCS recurrence <code>max(dp[i−1][j], dp[i][j−1])</code> on a mismatch: that allows gaps and answers the subsequence question.|||Dùng công thức LCS <code>max(dp[i−1][j], dp[i][j−1])</code> khi khác nhau: công thức đó cho phép khoảng hở và trả lời câu hỏi dãy con."
+        },
+        {
+          "loi": "Returning <code>dp[n][m]</code>: the longest run can end anywhere, not necessarily at the last entries.|||Trả <code>dp[n][m]</code>: đoạn dài nhất có thể kết thúc ở bất kỳ đâu, không nhất thiết ở mục cuối."
+        },
+        {
+          "loi": "Brute force — for every pair of start positions extend while equal: O(n · m · L), which is about 9·10⁹ steps when both logs are almost the same.|||Vét cạn — với mỗi cặp vị trí bắt đầu kéo dài khi còn bằng nhau: O(n · m · L), tức khoảng 9·10⁹ bước khi hai log gần giống hệt nhau."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "contiguous",
+          "vi": "liên tiếp"
+        },
+        {
+          "en": "subsequence",
+          "vi": "dãy con (được bỏ phần tử)"
+        },
+        {
+          "en": "substring / subarray",
+          "vi": "chuỗi con / mảng con liên tiếp"
+        },
+        {
+          "en": "diagonal",
+          "vi": "đường chéo"
+        }
+      ]
+    },
+    {
+      "title": "Soft-skill workshops: the most credits within your free hours",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 25,
+      "points": 20,
+      "concepts": [
+        "0/1 knapsack",
+        "2D DP compressed to 1D"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dsa-interview",
+        "coding-interview"
+      ],
+      "problemHtml": "<p>The student affairs office offers optional workshops this semester. Workshop <code>i</code> takes <code>hours[i]</code> hours and is worth <code>credits[i]</code> soft-skill points. A student has <code>limit</code> free hours and can attend each workshop <b>at most once</b>.</p>\n<p>Write <code>bestWorkshops(hours, credits, limit)</code> returning the maximum total points of a set of workshops whose total hours do not exceed <code>limit</code>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Write the function in <code>solution.js</code> and <b>return</b> the answer — do not print it.</li>\n  <li>Do not modify the input arrays/objects.</li>\n  <li>Mind the constraints: one check runs on a large input and every check has a 4-second limit, so an O(n²) loop fails it.</li>\n</ul>",
+      "problemHtmlVi": "<p>Phòng công tác sinh viên mở các buổi workshop tự chọn trong kỳ. Workshop <code>i</code> kéo dài <code>hours[i]</code> giờ và đáng <code>credits[i]</code> điểm kỹ năng mềm. Một sinh viên có <code>limit</code> giờ rảnh và mỗi workshop chỉ dự <b>tối đa một lần</b>.</p>\n<p>Viết <code>bestWorkshops(hours, credits, limit)</code> trả về tổng điểm lớn nhất của một tập workshop có tổng số giờ không vượt <code>limit</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Viết hàm trong <code>solution.js</code> và <b>trả về</b> kết quả — đừng in ra.</li>\n  <li>Không sửa mảng/object đầu vào.</li>\n  <li>Để ý ràng buộc: một kiểm chạy trên đầu vào lớn và mỗi kiểm có trần 4 giây, nên vòng lặp O(n²) sẽ trượt kiểm đó.</li>\n</ul>",
+      "inputSpec": "hours, credits — arrays of positive integers of equal length; limit — integer ≥ 0.|||hours, credits — hai mảng số nguyên dương cùng độ dài; limit — số nguyên ≥ 0.",
+      "outputSpec": "A number — the maximum total credits.|||Một số — tổng điểm lớn nhất.",
+      "constraints": "0 ≤ n ≤ 200; 1 ≤ hours[i] ≤ 500; 0 ≤ limit ≤ 10 000; 1 ≤ credits[i] ≤ 10⁴.\nTarget: O(n · limit) time, O(limit) memory.|||0 ≤ n ≤ 200; 1 ≤ hours[i] ≤ 500; 0 ≤ limit ≤ 10 000; 1 ≤ credits[i] ≤ 10⁴.\nMục tiêu: O(n · limit) thời gian, O(limit) bộ nhớ.",
+      "examplesJson": [
+        {
+          "input": "bestWorkshops([2,3,4], [3,4,5], 5)",
+          "output": "7",
+          "explanation": "The first sample case (Run executes every visible case; hidden cases only run on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy mọi ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Two numbers describe a subproblem: how many workshops you have considered, and how many hours are still available. <code>dp[i][c]</code> = best points using the first i workshops within c hours.|||Hai con số mô tả một bài toán con: đã xét bao nhiêu workshop, và còn bao nhiêu giờ. <code>dp[i][c]</code> = điểm tốt nhất dùng i workshop đầu trong c giờ.",
+        "<code>dp[i][c] = max(dp[i−1][c], dp[i−1][c − hours] + credits)</code>. To use one array, loop c from <code>limit</code> DOWN to <code>hours[i]</code> — going up would let a workshop be taken twice.|||<code>dp[i][c] = max(dp[i−1][c], dp[i−1][c − giờ] + điểm)</code>. Muốn dùng một mảng thì cho c chạy từ <code>limit</code> XUỐNG <code>hours[i]</code> — chạy lên sẽ cho một workshop được lấy hai lần."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "solution.js",
+          "language": "javascript",
+          "code": "/**\n * hours: number[], credits: number[], limit: number\n * returns the maximum total credits of workshops (each at most once) within limit hours\n */\nfunction bestWorkshops(hours, credits, limit) {\n  // Write your solution here\n  return 0;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "solution.js",
+          "language": "javascript",
+          "code": "// Reference solution — 0/1 knapsack in one array, capacity loop going DOWN.\nfunction bestWorkshops(hours, credits, limit) {\n  // best[c] = max credits using the workshops seen so far with total hours <= c (row i of the items × capacity table)\n  var best = new Array(limit + 1).fill(0);\n  for (var i = 0; i < hours.length; i++) {\n    for (var c = limit; c >= hours[i]; c--) { // DOWNWARD: best[c - hours[i]] still belongs to row i-1 ⇒ each workshop used at most once\n      var take = best[c - hours[i]] + credits[i];\n      if (take > best[c]) best[c] = take;\n    }\n  }\n  return best[limit];\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>For each workshop and each capacity there are only two choices — skip it or take it — and either choice leaves a smaller subproblem of the same shape, so the (item, capacity) table covers every subset exactly. The table has (n + 1) × (limit + 1) cells of O(1) each ⇒ 200 · 10 001 ≈ 2·10⁶ steps. Row i only reads row i − 1 at capacities ≤ c, so iterating c downward lets one array hold both rows: when we write best[c], best[c − h] has not been overwritten yet and still means \"without workshop i\".</p>",
+      "solutionExplanationHtmlVi": "<p>Với mỗi workshop và mỗi sức chứa chỉ có hai lựa chọn — bỏ hoặc lấy — và lựa chọn nào cũng để lại một bài toán con nhỏ hơn cùng dạng, nên bảng (món, sức chứa) phủ đúng mọi tập con. Bảng có (n + 1) × (limit + 1) ô, mỗi ô O(1) ⇒ 200 · 10 001 ≈ 2·10⁶ bước. Hàng i chỉ đọc hàng i − 1 ở sức chứa ≤ c, nên cho c chạy xuống thì một mảng giữ được cả hai hàng: lúc ghi best[c], best[c − h] chưa bị ghi đè và vẫn nghĩa là \"không có workshop i\".</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "solution.js",
+        "tepNap": [
+          "solution.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "2 h + 3 h ⇒ 7 points",
+              "vi": "2 giờ + 3 giờ ⇒ 7 điểm"
+            },
+            "goi": "bestWorkshops([2,3,4], [3,4,5], 5)",
+            "mongDoi": 7
+          },
+          {
+            "moTa": {
+              "en": "Points per hour misleads ⇒ 18",
+              "vi": "Điểm mỗi giờ đánh lừa ⇒ 18"
+            },
+            "goi": "bestWorkshops([6,5,5], [12,9,9], 10)",
+            "mongDoi": 18
+          },
+          {
+            "moTa": {
+              "en": "Each workshop at most once ⇒ 10",
+              "vi": "Mỗi workshop tối đa một lần ⇒ 10"
+            },
+            "goi": "bestWorkshops([2], [10], 10)",
+            "mongDoi": 10
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "bestWorkshops([], [], 8)",
+            "mongDoi": 0,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "No free time ⇒ 0",
+              "vi": "Không có giờ rảnh ⇒ 0"
+            },
+            "goi": "bestWorkshops([3,4], [5,6], 0)",
+            "mongDoi": 0,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "bestWorkshops([1,1,1,1], [1,2,3,4], 2)",
+            "mongDoi": 7,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "bestWorkshops([5,4,6,3], [10,40,30,50], 10)",
+            "mongDoi": 90,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 8",
+              "vi": "Ca ẩn 8"
+            },
+            "goi": "bestWorkshops([12,7,11,8,9,6,10,5,13,4,3,14,2,15], [24,13,23,15,16,11,19,8,27,7,5,26,3,30], 26)",
+            "mongDoi": 53,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Performance: 200 workshops, 10 000 free hours (2²⁰⁰ subsets — take/skip recursion never finishes)",
+              "vi": "Hiệu năng: 200 workshop, 10 000 giờ rảnh (2²⁰⁰ tập con — đệ quy lấy/bỏ không bao giờ xong)"
+            },
+            "goi": "(function () {\nfunction __cay(a) { if (!a.length || a[0] == null) return null; var root = { val: a[0], left: null, right: null }, q = [root], h = 0, i = 1;\n  while (i < a.length) { var n = q[h++]; if (a[i] != null) { n.left = { val: a[i], left: null, right: null }; q.push(n.left); } i++;\n    if (i < a.length && a[i] != null) { n.right = { val: a[i], left: null, right: null }; q.push(n.right); } i++; } return root; }\nfunction __raCay(r) { var out = [], q = [r], h = 0; while (h < q.length) { var n = q[h++]; if (n == null) { out.push(null); continue; } out.push(n.val); q.push(n.left == null ? null : n.left, n.right == null ? null : n.right); }\n  while (out.length && out[out.length - 1] === null) out.pop(); return out; }\nfunction __ds(a) { var head = null; for (var i = a.length - 1; i >= 0; i--) head = { val: a[i], next: head }; return head; }\nfunction __raDs(h) { var out = []; while (h && out.length < 1000000) { out.push(h.val); h = h.next; } return out; }\nvar __s = 20261115; function R(m) { __s = (__s * 48271) % 2147483647; return __s % m; }\nvar n = 200, h = [], c = []; for (var i = 0; i < n; i++) { h.push(1 + R(500)); c.push(1 + R(10000)); } return [bestWorkshops(h, c, 10000), bestWorkshops(h, c, 777)];\n})()",
+            "mongDoi": [
+              515316,
+              144277
+            ]
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "One-array knapsack with the capacity loop going UP: it silently becomes the unbounded knapsack (a 2-hour workshop counted five times in 10 hours).|||Cái túi một mảng với vòng sức chứa chạy LÊN: âm thầm biến thành cái túi không giới hạn (workshop 2 giờ được đếm năm lần trong 10 giờ)."
+        },
+        {
+          "loi": "Greedy by points per hour: <code>hours [6, 5, 5]</code>, <code>credits [12, 9, 9]</code>, limit 10 — greedy takes the 6-hour one (2 points/h) and gets 12, the answer is 18.|||Tham lam theo điểm mỗi giờ: <code>hours [6, 5, 5]</code>, <code>credits [12, 9, 9]</code>, limit 10 — tham lam lấy buổi 6 giờ (2 điểm/giờ) được 12, đáp án là 18."
+        },
+        {
+          "loi": "Take/skip recursion without memo: 2ⁿ calls — fine for 15 workshops, impossible for 200.|||Đệ quy lấy/bỏ không nhớ: 2ⁿ lời gọi — ổn với 15 workshop, không thể với 200."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "0/1 knapsack",
+          "vi": "cái túi 0/1",
+          "giaiThich": "mỗi món lấy hoặc không, tối đa một lần."
+        },
+        {
+          "en": "unbounded knapsack",
+          "vi": "cái túi không giới hạn"
+        },
+        {
+          "en": "capacity",
+          "vi": "sức chứa"
+        },
+        {
+          "en": "space optimisation",
+          "vi": "tối ưu bộ nhớ"
+        }
+      ]
+    },
+    {
+      "title": "Mini git diff: line changes from the LCS table",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 40,
+      "points": 30,
+      "concepts": [
+        "longest common subsequence",
+        "2D DP",
+        "reconstructing a solution"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dsa-interview",
+        "coding-interview"
+      ],
+      "problemHtml": "<p>Build the heart of a code-review tool: turn the old version <code>a</code> of a file (array of lines) into the new version <code>b</code> with as few changed lines as possible. Unchanged lines are exactly a <b>longest common subsequence</b> of the two files.</p>\n<p>Write <code>lineDiff(a, b)</code> returning the diff as an array of strings: <code>\"  \" + line</code> for an unchanged line, <code>\"- \" + line</code> for a deleted line of <code>a</code>, <code>\"+ \" + line</code> for an inserted line of <code>b</code>. Because many minimal diffs exist, follow this exact rule. Let <code>L(i, j)</code> be the LCS length of the suffixes <code>a[i…]</code> and <code>b[j…]</code>. Start at <code>i = j = 0</code>:</p>\n<ol><li>if <code>a[i] === b[j]</code>: output unchanged, move both;</li>\n<li>else if <code>L(i+1, j) ≥ L(i, j+1)</code>: output <code>- a[i]</code>, move i;</li>\n<li>else: output <code>+ b[j]</code>, move j;</li>\n<li>when one file runs out, output the rest of <code>a</code> as deletions, then the rest of <code>b</code> as insertions.</li></ol>\n<h4>Requirements</h4>\n<ul>\n  <li>Write the function in <code>solution.js</code> and <b>return</b> the answer — do not print it.</li>\n  <li>Do not modify the input arrays/objects.</li>\n  <li>Mind the constraints: one check runs on a large input and every check has a 4-second limit, so an O(n²) loop fails it.</li>\n</ul>",
+      "problemHtmlVi": "<p>Dựng lõi của một công cụ review code: biến bản cũ <code>a</code> của một tệp (mảng dòng) thành bản mới <code>b</code> với ít dòng thay đổi nhất. Các dòng giữ nguyên chính là một <b>dãy con chung dài nhất</b> (LCS) của hai tệp.</p>\n<p>Viết <code>lineDiff(a, b)</code> trả về diff dạng mảng chuỗi: <code>\"  \" + dòng</code> cho dòng giữ nguyên, <code>\"- \" + dòng</code> cho dòng của <code>a</code> bị xoá, <code>\"+ \" + dòng</code> cho dòng của <code>b</code> được thêm. Vì có nhiều diff tối thiểu, hãy theo đúng luật này. Gọi <code>L(i, j)</code> là độ dài LCS của hai hậu tố <code>a[i…]</code> và <code>b[j…]</code>. Bắt đầu ở <code>i = j = 0</code>:</p>\n<ol><li>nếu <code>a[i] === b[j]</code>: ghi dòng giữ nguyên, tiến cả hai;</li>\n<li>ngược lại nếu <code>L(i+1, j) ≥ L(i, j+1)</code>: ghi <code>- a[i]</code>, tiến i;</li>\n<li>ngược lại: ghi <code>+ b[j]</code>, tiến j;</li>\n<li>khi một tệp hết dòng, ghi phần còn lại của <code>a</code> là xoá, rồi phần còn lại của <code>b</code> là thêm.</li></ol>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Viết hàm trong <code>solution.js</code> và <b>trả về</b> kết quả — đừng in ra.</li>\n  <li>Không sửa mảng/object đầu vào.</li>\n  <li>Để ý ràng buộc: một kiểm chạy trên đầu vào lớn và mỗi kiểm có trần 4 giây, nên vòng lặp O(n²) sẽ trượt kiểm đó.</li>\n</ul>",
+      "inputSpec": "a, b — arrays of strings (lines).|||a, b — mảng chuỗi (các dòng).",
+      "outputSpec": "string[] — the diff, following the rule above.|||string[] — diff, theo đúng luật trên.",
+      "constraints": "0 ≤ a.length, b.length ≤ 1 500.\nTarget: O(|a| · |b|) time and memory (a typed array of 2.25·10⁶ cells is fine).|||0 ≤ a.length, b.length ≤ 1 500.\nMục tiêu: O(|a| · |b|) thời gian và bộ nhớ (một mảng kiểu 2,25·10⁶ ô là ổn).",
+      "examplesJson": [
+        {
+          "input": "lineDiff([\"import x\",\"const a = 1\",\"log(a)\"], [\"import x\",\"const a = 2\",\"log(a)\"])",
+          "output": "[\"  import x\",\"- const a = 1\",\"+ const a = 2\",\"  log(a)\"]",
+          "explanation": "The first sample case (Run executes every visible case; hidden cases only run on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy mọi ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "The rule needs <code>L(i+1, j)</code> and <code>L(i, j+1)</code> for arbitrary i, j — so compute the whole suffix table first, then walk it once from (0, 0).|||Luật cần <code>L(i+1, j)</code> và <code>L(i, j+1)</code> với i, j bất kỳ — nên tính trọn bảng hậu tố trước, rồi đi qua nó một lần từ (0, 0).",
+        "Suffix LCS recurrence: <code>L(i, j) = a[i] === b[j] ? 1 + L(i+1, j+1) : max(L(i+1, j), L(i, j+1))</code>, with <code>L(n, ·) = L(·, m) = 0</code>. Fill i from n−1 down to 0 and j from m−1 down to 0.|||Công thức LCS hậu tố: <code>L(i, j) = a[i] === b[j] ? 1 + L(i+1, j+1) : max(L(i+1, j), L(i, j+1))</code>, với <code>L(n, ·) = L(·, m) = 0</code>. Điền i từ n−1 về 0 và j từ m−1 về 0.",
+        "Store the table in one <code>Int32Array((n+1)·(m+1))</code> indexed <code>i·(m+1) + j</code> — 1 500 × 1 500 arrays of arrays are slower and heavier.|||Lưu bảng trong một <code>Int32Array((n+1)·(m+1))</code> đánh chỉ số <code>i·(m+1) + j</code> — mảng của mảng 1 500 × 1 500 chậm và nặng hơn."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "solution.js",
+          "language": "javascript",
+          "code": "/**\n * a: string[] (old lines), b: string[] (new lines)\n * returns the diff lines \"  x\" / \"- x\" / \"+ x\" following the tie-break rule in the statement\n */\nfunction lineDiff(a, b) {\n  // Write your solution here\n  return a.map(function (x) { return '- ' + x; }).concat(b.map(function (x) { return '+ ' + x; }));\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "solution.js",
+          "language": "javascript",
+          "code": "// Reference solution — suffix LCS table in one Int32Array, then one forward walk with the fixed tie-break.\nfunction lineDiff(a, b) {\n  var n = a.length, m = b.length, W = m + 1;\n  // L[i*W + j] = LCS length of the SUFFIXES a[i..] and b[j..]; filled from the bottom-right corner\n  var L = new Int32Array((n + 1) * W);\n  for (var i = n - 1; i >= 0; i--) for (var j = m - 1; j >= 0; j--) {\n    L[i * W + j] = a[i] === b[j] ? L[(i + 1) * W + j + 1] + 1 : Math.max(L[(i + 1) * W + j], L[i * W + j + 1]);\n  }\n  var out = [], x = 0, y = 0;\n  while (x < n && y < m) {\n    if (a[x] === b[y]) { out.push('  ' + a[x]); x++; y++; }               // part of the LCS: unchanged line\n    else if (L[(x + 1) * W + y] >= L[x * W + y + 1]) { out.push('- ' + a[x]); x++; } // tie ⇒ delete first (the rule)\n    else { out.push('+ ' + b[y]); y++; }\n  }\n  while (x < n) out.push('- ' + a[x++]);\n  while (y < m) out.push('+ ' + b[y++]);\n  return out;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>L(i, j) is the classic LCS recurrence written on suffixes, so the table is filled from the bottom-right corner. Walking from (0, 0): equal lines are always safe to keep (some LCS of the suffixes starts with them), and otherwise we move in the direction that keeps the remaining LCS as long as possible, so the number of unchanged lines equals L(0, 0) and the diff is minimal. The fixed tie-break (delete before insert, like git's default output) makes the result unique so it can be compared. Cost: (n+1)(m+1) cells ⇒ O(n·m) time and memory, plus an O(n + m) walk.</p>",
+      "solutionExplanationHtmlVi": "<p>L(i, j) là công thức LCS kinh điển viết trên hậu tố, nên bảng được điền từ góc dưới phải. Đi từ (0, 0): dòng bằng nhau luôn giữ được (một LCS của hai hậu tố bắt đầu bằng chúng), còn lại ta đi theo hướng giữ LCS còn lại dài nhất, nên số dòng giữ nguyên bằng L(0, 0) và diff là tối thiểu. Luật phá hoà cố định (xoá trước thêm, như output mặc định của git) làm kết quả duy nhất để so được. Chi phí: (n+1)(m+1) ô ⇒ O(n·m) thời gian và bộ nhớ, cộng một lượt đi O(n + m).</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "solution.js",
+        "tepNap": [
+          "solution.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "One changed line = delete + insert",
+              "vi": "Một dòng sửa = xoá + thêm"
+            },
+            "goi": "lineDiff([\"import x\",\"const a = 1\",\"log(a)\"], [\"import x\",\"const a = 2\",\"log(a)\"])",
+            "mongDoi": [
+              "  import x",
+              "- const a = 1",
+              "+ const a = 2",
+              "  log(a)"
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Delete A, keep B C, then D ⇒ E",
+              "vi": "Xoá A, giữ B C, rồi D ⇒ E"
+            },
+            "goi": "lineDiff([\"A\",\"B\",\"C\",\"D\"], [\"B\",\"C\",\"E\"])",
+            "mongDoi": [
+              "- A",
+              "  B",
+              "  C",
+              "- D",
+              "+ E"
+            ]
+          },
+          {
+            "moTa": {
+              "en": "New file ⇒ one insertion",
+              "vi": "Tệp mới ⇒ một dòng thêm"
+            },
+            "goi": "lineDiff([], [\"hello\"])",
+            "mongDoi": [
+              "+ hello"
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "lineDiff([\"x\"], [])",
+            "mongDoi": [
+              "- x"
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Tie: delete first",
+              "vi": "Hoà: xoá trước"
+            },
+            "goi": "lineDiff([\"a\",\"b\"], [\"b\",\"a\"])",
+            "mongDoi": [
+              "- a",
+              "  b",
+              "+ a"
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "lineDiff([\"same\",\"same\"], [\"same\",\"same\"])",
+            "mongDoi": [
+              "  same",
+              "  same"
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "lineDiff([\"p\",\"q\",\"r\",\"s\",\"t\"], [\"q\",\"x\",\"s\",\"p\",\"t\"])",
+            "mongDoi": [
+              "- p",
+              "  q",
+              "- r",
+              "+ x",
+              "  s",
+              "+ p",
+              "  t"
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Repeated lines",
+              "vi": "Dòng lặp lại"
+            },
+            "goi": "lineDiff([\"}\",\"}\",\"return 0\",\"}\"], [\"}\",\"return 1\",\"}\",\"}\"])",
+            "mongDoi": [
+              "  }",
+              "+ return 1",
+              "  }",
+              "- return 0",
+              "  }"
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Performance: two 1 500-line files with ~10 % of lines edited (recursive LCS never finishes)",
+              "vi": "Hiệu năng: hai tệp 1 500 dòng, khoảng 10 % dòng bị sửa (LCS đệ quy không bao giờ xong)"
+            },
+            "goi": "(function () {\nfunction __cay(a) { if (!a.length || a[0] == null) return null; var root = { val: a[0], left: null, right: null }, q = [root], h = 0, i = 1;\n  while (i < a.length) { var n = q[h++]; if (a[i] != null) { n.left = { val: a[i], left: null, right: null }; q.push(n.left); } i++;\n    if (i < a.length && a[i] != null) { n.right = { val: a[i], left: null, right: null }; q.push(n.right); } i++; } return root; }\nfunction __raCay(r) { var out = [], q = [r], h = 0; while (h < q.length) { var n = q[h++]; if (n == null) { out.push(null); continue; } out.push(n.val); q.push(n.left == null ? null : n.left, n.right == null ? null : n.right); }\n  while (out.length && out[out.length - 1] === null) out.pop(); return out; }\nfunction __ds(a) { var head = null; for (var i = a.length - 1; i >= 0; i--) head = { val: a[i], next: head }; return head; }\nfunction __raDs(h) { var out = []; while (h && out.length < 1000000) { out.push(h.val); h = h.next; } return out; }\nvar __s = 20261115; function R(m) { __s = (__s * 48271) % 2147483647; return __s % m; }\nvar a = [], b = []; for (var i = 0; i < 1500; i++) a.push(\"line \" + R(300)); for (var j = 0; j < 1500; j++) { var k = R(10); if (k === 0) b.push(\"new \" + j); else if (k === 1) b.push(a[(j + 1) % 1500]); else b.push(a[j]); } var d = lineDiff(a, b), keep = 0, del = 0, ins = 0; for (var t = 0; t < d.length; t++) { if (d[t][0] === \" \") keep++; else if (d[t][0] === \"-\") del++; else ins++; } return { length: d.length, keep: keep, del: del, ins: ins, head: d.slice(0, 4), tail: d.slice(-3) };\n})()",
+            "mongDoi": {
+              "length": 1757,
+              "keep": 1243,
+              "del": 257,
+              "ins": 257,
+              "head": [
+                "- line 280",
+                "+ new 0",
+                "  line 66",
+                "  line 12"
+              ],
+              "tail": [
+                "- line 34",
+                "+ new 1498",
+                "  line 240"
+              ]
+            }
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Recursive LCS without memo to decide each step: exponential — fine on 6 lines, never finishes on 1 500.|||LCS đệ quy không nhớ để quyết định từng bước: hàm mũ — ổn với 6 dòng, không bao giờ xong với 1 500."
+        },
+        {
+          "loi": "Breaking ties the other way (insert first): still a minimal diff, but not the one the rule asks for — every reviewer would see a different diff.|||Phá hoà theo hướng ngược (thêm trước): vẫn là diff tối thiểu, nhưng không phải diff luật yêu cầu — mỗi người review sẽ thấy một diff khác."
+        },
+        {
+          "loi": "Using the usual prefix table <code>dp[i][j]</code> (first i, first j) with this forward walk: the forward walk needs information about what comes AFTER, i.e. suffixes.|||Dùng bảng tiền tố quen thuộc <code>dp[i][j]</code> (i dòng đầu, j dòng đầu) với lượt đi xuôi này: đi xuôi cần thông tin về phần PHÍA SAU, tức hậu tố."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "longest common subsequence (LCS)",
+          "vi": "dãy con chung dài nhất"
+        },
+        {
+          "en": "suffix",
+          "vi": "hậu tố"
+        },
+        {
+          "en": "tie-break",
+          "vi": "luật phá hoà"
+        },
+        {
+          "en": "reconstruction",
+          "vi": "dựng lại lời giải",
+          "giaiThich": "đi ngược/xuôi trên bảng để lấy ra các bước."
+        }
+      ]
+    }
+  ]
+}

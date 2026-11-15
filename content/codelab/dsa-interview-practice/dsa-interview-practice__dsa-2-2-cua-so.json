@@ -1,0 +1,640 @@
+{
+  "trackSlug": "dsa-interview-practice",
+  "moduleSlug": "dsa-2-2-cua-so",
+  "lesson": {
+    "course": "dsa-interview",
+    "slug": "dsa-2-2-cua-so"
+  },
+  "exercises": [
+    {
+      "title": "Sleep tracker: how many k-day stretches met the target",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "fixed sliding window",
+        "running sum"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dsa-interview",
+        "coding-interview"
+      ],
+      "problemHtml": "<p>A wellbeing app for FPT students records how many <b>minutes</b> the user slept each night, <code>minutes[i]</code>. Its weekly report asks: among all stretches of <code>k</code> consecutive nights, how many have an <b>average</b> of at least <code>target</code> minutes?</p>\n<p>Write <code>countRestedWindows(minutes, k, target)</code> returning that count. If there are fewer than k nights, the answer is 0.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Write the function in <code>solution.js</code> and <b>return</b> the answer — do not print it.</li>\n  <li>Do not modify the input arrays/objects.</li>\n  <li>Mind the constraints: one check runs on a large input and every check has a 4-second limit, so an O(n²) loop fails it.</li>\n</ul>",
+      "problemHtmlVi": "<p>Một app sức khoẻ cho sinh viên FPT ghi số <b>phút</b> người dùng ngủ mỗi đêm, <code>minutes[i]</code>. Báo cáo tuần hỏi: trong mọi chuỗi <code>k</code> đêm liên tiếp, có bao nhiêu chuỗi có <b>trung bình</b> ít nhất <code>target</code> phút?</p>\n<p>Viết <code>countRestedWindows(minutes, k, target)</code> trả về số đó. Ít hơn k đêm thì đáp án là 0.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Viết hàm trong <code>solution.js</code> và <b>trả về</b> kết quả — đừng in ra.</li>\n  <li>Không sửa mảng/object đầu vào.</li>\n  <li>Để ý ràng buộc: một kiểm chạy trên đầu vào lớn và mỗi kiểm có trần 4 giây, nên vòng lặp O(n²) sẽ trượt kiểm đó.</li>\n</ul>",
+      "inputSpec": "minutes — array of non-negative integers; k ≥ 1; target ≥ 0.|||minutes — mảng số nguyên không âm; k ≥ 1; target ≥ 0.",
+      "outputSpec": "number — how many windows qualify.|||number — số cửa sổ đạt.",
+      "constraints": "0 ≤ minutes.length ≤ 200 000; 1 ≤ k ≤ 200 000; minutes[i] ≤ 1440.\nTarget: O(n).|||0 ≤ minutes.length ≤ 200 000; 1 ≤ k ≤ 200 000; minutes[i] ≤ 1440.\nMục tiêu: O(n).",
+      "examplesJson": [
+        {
+          "input": "countRestedWindows([420,360,480,450,300], 3, 420)",
+          "output": "2",
+          "explanation": "The first sample case (Run executes every visible case; hidden cases only run on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy mọi ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Two neighbouring windows share k − 1 nights. Recomputing each window from scratch costs O(k) — reuse the previous sum instead.|||Hai cửa sổ kề nhau chung k − 1 đêm. Tính lại từng cửa sổ từ đầu tốn O(k) — hãy dùng lại tổng của cửa sổ trước.",
+        "Keep <code>sum</code>; when the window moves right by one, <code>sum += minutes[r] − minutes[r − k]</code>. Compare <code>sum ≥ target · k</code> instead of dividing.|||Giữ <code>sum</code>; khi cửa sổ dịch phải một, <code>sum += minutes[r] − minutes[r − k]</code>. So <code>sum ≥ target · k</code> thay vì chia."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "solution.js",
+          "language": "javascript",
+          "code": "/**\n * minutes: number[] — minutes slept per night, k: window length, target: minimum average\n * returns how many windows of k consecutive nights have average >= target\n */\nfunction countRestedWindows(minutes, k, target) {\n  // Write your solution here\n  return 0;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "solution.js",
+          "language": "javascript",
+          "code": "// Reference solution — one running sum slid across the array.\nfunction countRestedWindows(minutes, k, target) {\n  if (k > minutes.length) return 0;\n  var sum = 0;\n  for (var i = 0; i < k; i++) sum += minutes[i];   // the first window [0, k-1]\n  var good = sum >= target * k ? 1 : 0;           // compare totals, not averages: no floating-point division\n  for (var r = k; r < minutes.length; r++) {\n    sum += minutes[r] - minutes[r - k];            // slide by one: add the new day, drop the oldest\n    if (sum >= target * k) good++;\n  }\n  return good;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>A fixed window moves by one element at a time, so its sum changes by exactly \"new element − element that left\": O(1) per step after an O(k) start ⇒ O(n) total, O(1) memory. Comparing <code>sum ≥ target·k</code> is the same test as <code>average ≥ target</code> but stays in integers.</p>",
+      "solutionExplanationHtmlVi": "<p>Cửa sổ cố định dịch từng phần tử một, nên tổng của nó đổi đúng bằng \"phần tử mới − phần tử vừa rời\": O(1) mỗi bước sau O(k) khởi đầu ⇒ tổng O(n), bộ nhớ O(1). So <code>sum ≥ target·k</code> là cùng phép thử với <code>trung bình ≥ target</code> nhưng giữ nguyên số nguyên.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "solution.js",
+        "tepNap": [
+          "solution.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Windows 420/360/480, 360/480/450, 480/450/300 ⇒ 2",
+              "vi": "Ba cửa sổ ⇒ 2 đạt"
+            },
+            "goi": "countRestedWindows([420,360,480,450,300], 3, 420)",
+            "mongDoi": 2
+          },
+          {
+            "moTa": {
+              "en": "Fewer nights than k ⇒ 0",
+              "vi": "Ít đêm hơn k ⇒ 0"
+            },
+            "goi": "countRestedWindows([400,500], 3, 300)",
+            "mongDoi": 0
+          },
+          {
+            "moTa": {
+              "en": "Exactly the target counts",
+              "vi": "Đúng bằng mục tiêu cũng tính"
+            },
+            "goi": "countRestedWindows([480,480,480], 3, 480)",
+            "mongDoi": 1
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "countRestedWindows([], 1, 0)",
+            "mongDoi": 0,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "countRestedWindows([300,600,300,600,300], 2, 450)",
+            "mongDoi": 4,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "countRestedWindows([0,0,0,1440], 1, 1)",
+            "mongDoi": 1,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "countRestedWindows([420,410,430,400,440,450,390], 7, 420)",
+            "mongDoi": 1,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Performance: 200 000 nights, k = 100 000 (re-summing every window times out)",
+              "vi": "Hiệu năng: 200 000 đêm, k = 100 000 (cộng lại từng cửa sổ hết giờ)"
+            },
+            "goi": "(function () {\nfunction __cay(a) { if (!a.length || a[0] == null) return null; var root = { val: a[0], left: null, right: null }, q = [root], h = 0, i = 1;\n  while (i < a.length) { var n = q[h++]; if (a[i] != null) { n.left = { val: a[i], left: null, right: null }; q.push(n.left); } i++;\n    if (i < a.length && a[i] != null) { n.right = { val: a[i], left: null, right: null }; q.push(n.right); } i++; } return root; }\nfunction __raCay(r) { var out = [], q = [r], h = 0; while (h < q.length) { var n = q[h++]; if (n == null) { out.push(null); continue; } out.push(n.val); q.push(n.left == null ? null : n.left, n.right == null ? null : n.right); }\n  while (out.length && out[out.length - 1] === null) out.pop(); return out; }\nfunction __ds(a) { var head = null; for (var i = a.length - 1; i >= 0; i--) head = { val: a[i], next: head }; return head; }\nfunction __raDs(h) { var out = []; while (h && out.length < 1000000) { out.push(h.val); h = h.next; } return out; }\nvar __s = 20261115; function R(m) { __s = (__s * 48271) % 2147483647; return __s % m; }\nvar a = []; for (var i = 0; i < 200000; i++) a.push(300 + R(241)); return countRestedWindows(a, 100000, 420);\n})()",
+            "mongDoi": 80227
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Off-by-one in the number of windows: there are <code>n − k + 1</code> of them, not <code>n − k</code> — the last window is often forgotten.|||Lệch một ở số cửa sổ: có <code>n − k + 1</code> cửa sổ, không phải <code>n − k</code> — cửa sổ cuối hay bị quên."
+        },
+        {
+          "loi": "Recomputing every window with an inner loop or <code>slice().reduce()</code>: O(n·k), the 200 000-night check with k = 100 000 times out.|||Tính lại từng cửa sổ bằng vòng trong hay <code>slice().reduce()</code>: O(n·k), kiểm 200 000 đêm với k = 100 000 hết giờ."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "sliding window",
+          "vi": "cửa sổ trượt"
+        },
+        {
+          "en": "fixed-size window",
+          "vi": "cửa sổ kích thước cố định"
+        },
+        {
+          "en": "average",
+          "vi": "trung bình"
+        }
+      ]
+    },
+    {
+      "title": "Rate-limit audit: the longest stretch where nobody exceeds the quota",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 20,
+      "points": 20,
+      "concepts": [
+        "variable sliding window",
+        "amortised analysis"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dsa-interview",
+        "coding-interview"
+      ],
+      "problemHtml": "<p>The LMS gateway writes the user ID of every request into <code>users</code>, in arrival order. To tune the rate limiter, the team wants the longest contiguous stretch of the log in which <b>no single user appears more than <code>maxPer</code> times</b>.</p>\n<p>Write <code>longestFairStretch(users, maxPer)</code> returning the length of that stretch (0 for an empty log).</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Write the function in <code>solution.js</code> and <b>return</b> the answer — do not print it.</li>\n  <li>Do not modify the input arrays/objects.</li>\n  <li>Mind the constraints: one check runs on a large input and every check has a 4-second limit, so an O(n²) loop fails it.</li>\n</ul>",
+      "problemHtmlVi": "<p>Cổng LMS ghi mã người dùng của mọi request vào <code>users</code>, theo thứ tự đến. Để chỉnh bộ giới hạn tần suất, đội vận hành muốn đoạn log liên tiếp dài nhất trong đó <b>không người dùng nào xuất hiện quá <code>maxPer</code> lần</b>.</p>\n<p>Viết <code>longestFairStretch(users, maxPer)</code> trả về độ dài đoạn đó (log rỗng thì 0).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Viết hàm trong <code>solution.js</code> và <b>trả về</b> kết quả — đừng in ra.</li>\n  <li>Không sửa mảng/object đầu vào.</li>\n  <li>Để ý ràng buộc: một kiểm chạy trên đầu vào lớn và mỗi kiểm có trần 4 giây, nên vòng lặp O(n²) sẽ trượt kiểm đó.</li>\n</ul>",
+      "inputSpec": "users — array of strings; maxPer — integer ≥ 1.|||users — mảng chuỗi; maxPer — số nguyên ≥ 1.",
+      "outputSpec": "number — length of the longest valid stretch.|||number — độ dài đoạn hợp lệ dài nhất.",
+      "constraints": "0 ≤ users.length ≤ 200 000; 1 ≤ maxPer ≤ 1000.\nTarget: O(n).|||0 ≤ users.length ≤ 200 000; 1 ≤ maxPer ≤ 1000.\nMục tiêu: O(n).",
+      "examplesJson": [
+        {
+          "input": "longestFairStretch([\"an\",\"binh\",\"an\",\"an\",\"chi\",\"binh\"], 2)",
+          "output": "5",
+          "explanation": "The first sample case (Run executes every visible case; hidden cases only run on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy mọi ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "If a stretch is valid, every shorter stretch inside it is valid too. That monotonicity is the signal for a variable-size window: grow on the right, shrink on the left.|||Nếu một đoạn hợp lệ thì mọi đoạn ngắn hơn nằm trong nó cũng hợp lệ. Tính đơn điệu đó là tín hiệu của cửa sổ co giãn: nới bên phải, co bên trái.",
+        "Keep a Map of counts for the window. After adding <code>users[r]</code>, only that user can be over the quota — move <code>l</code> right <b>while</b> its count is above <code>maxPer</code>.|||Giữ Map số đếm của cửa sổ. Sau khi thêm <code>users[r]</code>, chỉ người đó có thể vượt hạn mức — dời <code>l</code> sang phải <b>chừng nào</b> số đếm của nó còn trên <code>maxPer</code>."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "solution.js",
+          "language": "javascript",
+          "code": "/**\n * users: string[] — user id of each request, maxPer: number\n * returns the length of the longest stretch where no user appears more than maxPer times\n */\nfunction longestFairStretch(users, maxPer) {\n  // Write your solution here\n  return users.length;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "solution.js",
+          "language": "javascript",
+          "code": "// Reference solution — variable window, Map of counts, shrink WHILE the newest user is over quota.\nfunction longestFairStretch(users, maxPer) {\n  var cnt = new Map();     // user -> occurrences inside the current window [l, r]\n  var l = 0, best = 0;\n  for (var r = 0; r < users.length; r++) {\n    var u = users[r];\n    cnt.set(u, (cnt.get(u) || 0) + 1);\n    // only u can have become too frequent; shrink from the left until it is fine again (WHILE, not if)\n    while (cnt.get(u) > maxPer) {\n      cnt.set(users[l], cnt.get(users[l]) - 1);\n      l++;\n    }\n    if (r - l + 1 > best) best = r - l + 1;\n  }\n  return best;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Each index enters the window once (r) and leaves at most once (l), so the two pointers move at most 2n steps in total ⇒ O(n) time even though there is a loop inside a loop; the Map holds at most the distinct users of the window. The window is always valid after the inner loop, and for each r it is the longest valid window ending at r, so the maximum over r is the answer.</p>",
+      "solutionExplanationHtmlVi": "<p>Mỗi chỉ số vào cửa sổ một lần (r) và rời nhiều nhất một lần (l), nên hai con trỏ đi tổng cộng tối đa 2n bước ⇒ O(n) thời gian dù có vòng lặp trong vòng lặp; Map chứa tối đa số người dùng khác nhau của cửa sổ. Sau vòng trong cửa sổ luôn hợp lệ, và với mỗi r nó là cửa sổ hợp lệ dài nhất kết thúc ở r, nên cực đại theo r là đáp án.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "solution.js",
+        "tepNap": [
+          "solution.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "\"binh an an chi binh\" ⇒ 5",
+              "vi": "\"binh an an chi binh\" ⇒ 5"
+            },
+            "goi": "longestFairStretch([\"an\",\"binh\",\"an\",\"an\",\"chi\",\"binh\"], 2)",
+            "mongDoi": 5
+          },
+          {
+            "moTa": {
+              "en": "Every request by the same user, quota 1 ⇒ 1",
+              "vi": "Cùng một người, hạn mức 1 ⇒ 1"
+            },
+            "goi": "longestFairStretch([\"u1\",\"u1\",\"u1\"], 1)",
+            "mongDoi": 1
+          },
+          {
+            "moTa": {
+              "en": "Case 3: longestFairStretch([], 3)",
+              "vi": "Ca 3"
+            },
+            "goi": "longestFairStretch([], 3)",
+            "mongDoi": 0
+          },
+          {
+            "moTa": {
+              "en": "Nobody over quota ⇒ whole log",
+              "vi": "Không ai vượt ⇒ cả log"
+            },
+            "goi": "longestFairStretch([\"a\",\"b\",\"c\",\"a\",\"b\",\"c\"], 2)",
+            "mongDoi": 6,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "longestFairStretch([\"x\",\"y\",\"x\",\"z\",\"y\",\"x\",\"y\",\"z\",\"z\"], 1)",
+            "mongDoi": 3,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "The extra copy is deep inside the window",
+              "vi": "Bản thừa nằm sâu trong cửa sổ"
+            },
+            "goi": "longestFairStretch([\"a\",\"b\",\"b\",\"c\",\"a\",\"a\",\"d\",\"a\"], 2)",
+            "mongDoi": 6,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "longestFairStretch([\"p\"], 5)",
+            "mongDoi": 1,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Performance: 200 000 requests (restarting from every start times out)",
+              "vi": "Hiệu năng: 200 000 request (đếm lại từ mỗi điểm bắt đầu hết giờ)"
+            },
+            "goi": "(function () {\nfunction __cay(a) { if (!a.length || a[0] == null) return null; var root = { val: a[0], left: null, right: null }, q = [root], h = 0, i = 1;\n  while (i < a.length) { var n = q[h++]; if (a[i] != null) { n.left = { val: a[i], left: null, right: null }; q.push(n.left); } i++;\n    if (i < a.length && a[i] != null) { n.right = { val: a[i], left: null, right: null }; q.push(n.right); } i++; } return root; }\nfunction __raCay(r) { var out = [], q = [r], h = 0; while (h < q.length) { var n = q[h++]; if (n == null) { out.push(null); continue; } out.push(n.val); q.push(n.left == null ? null : n.left, n.right == null ? null : n.right); }\n  while (out.length && out[out.length - 1] === null) out.pop(); return out; }\nfunction __ds(a) { var head = null; for (var i = a.length - 1; i >= 0; i--) head = { val: a[i], next: head }; return head; }\nfunction __raDs(h) { var out = []; while (h && out.length < 1000000) { out.push(h.val); h = h.next; } return out; }\nvar __s = 20261115; function R(m) { __s = (__s * 48271) % 2147483647; return __s % m; }\nvar a = []; for (var i = 0; i < 200000; i++) a.push(\"u\" + R(20000)); return longestFairStretch(a, 3);\n})()",
+            "mongDoi": 6500
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Shrinking with <code>if</code> instead of <code>while</code>: one step left is not always enough (the extra copy of u can be far inside the window).|||Co bằng <code>if</code> thay vì <code>while</code>: lùi một bước không phải lúc nào cũng đủ (bản thừa của u có thể nằm sâu trong cửa sổ)."
+        },
+        {
+          "loi": "Jumping <code>l = r</code> when the quota breaks: valid stretches that still contain earlier requests are lost.|||Nhảy <code>l = r</code> khi vượt hạn mức: mất các đoạn hợp lệ vẫn còn chứa request trước đó."
+        },
+        {
+          "loi": "Restarting a fresh count from every start position: O(n²), times out on 200 000 requests.|||Đếm lại từ đầu cho mỗi vị trí bắt đầu: O(n²), hết giờ với 200 000 request."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "variable-size window",
+          "vi": "cửa sổ co giãn"
+        },
+        {
+          "en": "amortised O(n)",
+          "vi": "O(n) khấu hao",
+          "giaiThich": "tổng số bước của cả hai con trỏ ≤ 2n."
+        },
+        {
+          "en": "quota",
+          "vi": "hạn mức"
+        }
+      ]
+    },
+    {
+      "title": "Round table: the fewest swaps to seat the FPT team together",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 20,
+      "points": 20,
+      "concepts": [
+        "fixed sliding window",
+        "circular array"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dsa-interview",
+        "coding-interview"
+      ],
+      "problemHtml": "<p>At a job fair dinner the guests sit around a <b>round</b> table. <code>seats[i]</code> is <code>1</code> if seat <code>i</code> is taken by an FPT student and <code>0</code> otherwise; seat <code>n − 1</code> is next to seat <code>0</code>. The organiser wants all FPT students in one contiguous block of seats (it may wrap past seat 0). One <b>swap</b> exchanges the people in two seats.</p>\n<p>Write <code>minSeatSwaps(seats)</code> returning the minimum number of swaps.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Write the function in <code>solution.js</code> and <b>return</b> the answer — do not print it.</li>\n  <li>Do not modify the input arrays/objects.</li>\n  <li>Mind the constraints: one check runs on a large input and every check has a 4-second limit, so an O(n²) loop fails it.</li>\n</ul>",
+      "problemHtmlVi": "<p>Ở buổi tối ngày hội việc làm, khách ngồi quanh một bàn <b>tròn</b>. <code>seats[i]</code> là <code>1</code> nếu ghế <code>i</code> là sinh viên FPT, ngược lại <code>0</code>; ghế <code>n − 1</code> sát ghế <code>0</code>. Ban tổ chức muốn mọi sinh viên FPT ngồi thành một dãy ghế liền nhau (dãy có thể vòng qua ghế 0). Một lần <b>đổi chỗ</b> hoán đổi người ở hai ghế.</p>\n<p>Viết <code>minSeatSwaps(seats)</code> trả về số lần đổi chỗ ít nhất.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Viết hàm trong <code>solution.js</code> và <b>trả về</b> kết quả — đừng in ra.</li>\n  <li>Không sửa mảng/object đầu vào.</li>\n  <li>Để ý ràng buộc: một kiểm chạy trên đầu vào lớn và mỗi kiểm có trần 4 giây, nên vòng lặp O(n²) sẽ trượt kiểm đó.</li>\n</ul>",
+      "inputSpec": "seats — array of 0/1 (the table is circular).|||seats — mảng 0/1 (bàn tròn).",
+      "outputSpec": "number — minimum swaps.|||number — số lần đổi ít nhất.",
+      "constraints": "1 ≤ seats.length ≤ 200 000.\nTarget: O(n).|||1 ≤ seats.length ≤ 200 000.\nMục tiêu: O(n).",
+      "examplesJson": [
+        {
+          "input": "minSeatSwaps([1,0,1,0,1])",
+          "output": "1",
+          "explanation": "The first sample case (Run executes every visible case; hidden cases only run on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy mọi ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Let k = number of 1s. In the final arrangement they occupy SOME k consecutive seats. For a given block of k seats, how many swaps does it cost? Exactly the number of 0s inside it.|||Gọi k = số chữ 1. Ở cuối, chúng chiếm MỘT dãy k ghế liên tiếp nào đó. Với một dãy k ghế cho trước, tốn bao nhiêu lần đổi? Đúng bằng số chữ 0 trong dãy.",
+        "So find the window of size k (going round the circle: index <code>% n</code>) containing the most 1s, with a fixed sliding window. Answer = k − that maximum.|||Vậy tìm cửa sổ kích thước k (đi vòng quanh bàn: chỉ số <code>% n</code>) chứa nhiều chữ 1 nhất, bằng cửa sổ trượt cố định. Đáp án = k − cực đại đó."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "solution.js",
+          "language": "javascript",
+          "code": "/**\n * seats: number[] of 0/1 around a ROUND table\n * returns the minimum number of swaps so that all 1s sit in one contiguous (circular) block\n */\nfunction minSeatSwaps(seats) {\n  // Write your solution here\n  return 0;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "solution.js",
+          "language": "javascript",
+          "code": "// Reference solution — window of size k = number of 1s, slid all the way round with % n.\nfunction minSeatSwaps(seats) {\n  var n = seats.length, k = 0;\n  for (var i = 0; i < n; i++) k += seats[i];      // window size = number of FPT students\n  if (k === 0 || k === n) return 0;\n  var inWin = 0;\n  for (var j = 0; j < k; j++) inWin += seats[j];  // window over seats 0..k-1\n  var best = inWin;\n  // slide the window all the way round the table: index (s + k - 1) % n wraps past the last seat\n  for (var s = 1; s < n; s++) {\n    inWin += seats[(s + k - 1) % n] - seats[s - 1];\n    if (inWin > best) best = inWin;\n  }\n  return k - best; // every outsider inside the best window must swap with a student outside it\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Fix the block of k seats the team will end up in: every outsider inside it must leave and every student outside must come in, and one swap does both, so the cost is the number of 0s in the block = k − (1s in the block). Minimising the cost = maximising the 1s in a size-k window. On a circle there are n such windows; using index <code>(s + k − 1) % n</code> slides through all of them in O(n) with O(1) memory.</p>",
+      "solutionExplanationHtmlVi": "<p>Cố định dãy k ghế mà cả đội sẽ ngồi: mọi người ngoài đang ở trong dãy phải ra và mọi sinh viên ngoài dãy phải vào, một lần đổi làm được cả hai, nên chi phí là số chữ 0 trong dãy = k − (số chữ 1 trong dãy). Cực tiểu chi phí = cực đại số chữ 1 trong cửa sổ kích thước k. Trên vòng tròn có n cửa sổ như vậy; dùng chỉ số <code>(s + k − 1) % n</code> trượt qua hết trong O(n), bộ nhớ O(1).</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "solution.js",
+        "tepNap": [
+          "solution.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Seats 4, 0 form a block across the wrap ⇒ 1 swap",
+              "vi": "Ghế 4, 0 liền nhau qua chỗ vòng ⇒ 1 lần"
+            },
+            "goi": "minSeatSwaps([1,0,1,0,1])",
+            "mongDoi": 1
+          },
+          {
+            "moTa": {
+              "en": "Case 2: minSeatSwaps([0,1,0,1,1,0,0])",
+              "vi": "Ca 2"
+            },
+            "goi": "minSeatSwaps([0,1,0,1,1,0,0])",
+            "mongDoi": 1
+          },
+          {
+            "moTa": {
+              "en": "No FPT student ⇒ 0",
+              "vi": "Không có sinh viên FPT ⇒ 0"
+            },
+            "goi": "minSeatSwaps([0,0,0])",
+            "mongDoi": 0
+          },
+          {
+            "moTa": {
+              "en": "Already together across seat 0",
+              "vi": "Đã liền nhau qua ghế 0"
+            },
+            "goi": "minSeatSwaps([1,1,0,0,1])",
+            "mongDoi": 0,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "minSeatSwaps([1])",
+            "mongDoi": 0,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "minSeatSwaps([1,0,0,1,0,1,1,0,1,0])",
+            "mongDoi": 2,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "minSeatSwaps([0,1,1,1,0,0,1,1,0,1,0,0])",
+            "mongDoi": 2,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Performance: 200 000 seats, ~100 000 FPT students (counting each window times out)",
+              "vi": "Hiệu năng: 200 000 ghế, ~100 000 sinh viên FPT (đếm lại từng cửa sổ hết giờ)"
+            },
+            "goi": "(function () {\nfunction __cay(a) { if (!a.length || a[0] == null) return null; var root = { val: a[0], left: null, right: null }, q = [root], h = 0, i = 1;\n  while (i < a.length) { var n = q[h++]; if (a[i] != null) { n.left = { val: a[i], left: null, right: null }; q.push(n.left); } i++;\n    if (i < a.length && a[i] != null) { n.right = { val: a[i], left: null, right: null }; q.push(n.right); } i++; } return root; }\nfunction __raCay(r) { var out = [], q = [r], h = 0; while (h < q.length) { var n = q[h++]; if (n == null) { out.push(null); continue; } out.push(n.val); q.push(n.left == null ? null : n.left, n.right == null ? null : n.right); }\n  while (out.length && out[out.length - 1] === null) out.pop(); return out; }\nfunction __ds(a) { var head = null; for (var i = a.length - 1; i >= 0; i--) head = { val: a[i], next: head }; return head; }\nfunction __raDs(h) { var out = []; while (h && out.length < 1000000) { out.push(h.val); h = h.next; } return out; }\nvar __s = 20261115; function R(m) { __s = (__s * 48271) % 2147483647; return __s % m; }\nvar a = []; for (var i = 0; i < 200000; i++) a.push(R(2)); return minSeatSwaps(a);\n})()",
+            "mongDoi": 49778
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Sliding only over the straight array: a block that wraps from the last seat to seat 0 is never tried.|||Chỉ trượt trên mảng thẳng: dãy vòng từ ghế cuối sang ghế 0 không bao giờ được thử."
+        },
+        {
+          "loi": "Counting the 0s in a block, then the 1s outside, and adding both — each swap fixes one of each, so that double-counts.|||Đếm số 0 trong dãy rồi số 1 ngoài dãy và cộng cả hai — mỗi lần đổi sửa một cái mỗi loại, nên bị đếm hai lần."
+        },
+        {
+          "loi": "Counting each window from scratch: O(n·k), the 200 000-seat check times out.|||Đếm lại từng cửa sổ: O(n·k), kiểm 200 000 ghế hết giờ."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "circular array",
+          "vi": "mảng vòng",
+          "giaiThich": "phần tử cuối nối với phần tử đầu."
+        },
+        {
+          "en": "swap",
+          "vi": "hoán đổi"
+        },
+        {
+          "en": "modulo index",
+          "vi": "chỉ số lấy dư",
+          "giaiThich": "i % n đưa chỉ số vượt cuối về đầu."
+        }
+      ]
+    },
+    {
+      "title": "CPU monitor: count time ranges with at least k overload samples",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 25,
+      "points": 30,
+      "concepts": [
+        "counting subarrays with a sliding window",
+        "monotone condition"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dsa-interview",
+        "coding-interview"
+      ],
+      "problemHtml": "<p>A monitoring agent on the CT Work server records CPU load every second in <code>samples</code>. The <b>overload level</b> is the maximum value of the whole recording. An alert fires for a time range (a contiguous subarray) if the overload level occurs in it <b>at least <code>k</code> times</b>.</p>\n<p>Write <code>countHotRanges(samples, k)</code> returning how many contiguous ranges would fire the alert. The answer can be large (up to about n²/2).</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Write the function in <code>solution.js</code> and <b>return</b> the answer — do not print it.</li>\n  <li>Do not modify the input arrays/objects.</li>\n  <li>Mind the constraints: one check runs on a large input and every check has a 4-second limit, so an O(n²) loop fails it.</li>\n</ul>",
+      "problemHtmlVi": "<p>Một agent giám sát trên máy chủ CT Work ghi tải CPU mỗi giây vào <code>samples</code>. <b>Mức quá tải</b> là giá trị lớn nhất của cả bản ghi. Cảnh báo bật cho một khoảng thời gian (mảng con liên tiếp) nếu mức quá tải xuất hiện trong đó <b>ít nhất <code>k</code> lần</b>.</p>\n<p>Viết <code>countHotRanges(samples, k)</code> trả về số khoảng liên tiếp sẽ bật cảnh báo. Đáp án có thể lớn (tới khoảng n²/2).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Viết hàm trong <code>solution.js</code> và <b>trả về</b> kết quả — đừng in ra.</li>\n  <li>Không sửa mảng/object đầu vào.</li>\n  <li>Để ý ràng buộc: một kiểm chạy trên đầu vào lớn và mỗi kiểm có trần 4 giây, nên vòng lặp O(n²) sẽ trượt kiểm đó.</li>\n</ul>",
+      "inputSpec": "samples — array of integers (0–100); k — integer ≥ 1.|||samples — mảng số nguyên (0–100); k — số nguyên ≥ 1.",
+      "outputSpec": "number — count of ranges.|||number — số khoảng.",
+      "constraints": "0 ≤ samples.length ≤ 200 000; 1 ≤ k ≤ 200 000.\nTarget: O(n).|||0 ≤ samples.length ≤ 200 000; 1 ≤ k ≤ 200 000.\nMục tiêu: O(n).",
+      "examplesJson": [
+        {
+          "input": "countHotRanges([40,95,60,95,95], 2)",
+          "output": "6",
+          "explanation": "The first sample case (Run executes every visible case; hidden cases only run on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy mọi ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "The overload level is a fixed number (the global max), so the question becomes \"count subarrays containing at least k copies of one value\". If [l, r] qualifies, so does every [l', r] with l' &lt; l.|||Mức quá tải là một số cố định (cực đại toàn cục), nên câu hỏi thành \"đếm mảng con chứa ít nhất k bản của một giá trị\". Nếu [l, r] đạt thì mọi [l', r] với l' &lt; l cũng đạt.",
+        "For each right end r, push l right while the window [l, r] still has ≥ k peaks. Then exactly the starts 0..l−1 work for this r: add <code>l</code>.|||Với mỗi đầu phải r, đẩy l sang phải chừng nào cửa sổ [l, r] còn ≥ k đỉnh. Khi đó đúng các điểm bắt đầu 0..l−1 hợp lệ với r này: cộng <code>l</code>."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "solution.js",
+          "language": "javascript",
+          "code": "/**\n * samples: number[] — CPU load per second, k: number\n * returns how many contiguous ranges contain the global maximum at least k times\n */\nfunction countHotRanges(samples, k) {\n  // Write your solution here\n  return 0;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "solution.js",
+          "language": "javascript",
+          "code": "// Reference solution — global peak, then a window that is pushed while it still has >= k peaks; add l per r.\nfunction countHotRanges(samples, k) {\n  var peak = -Infinity;\n  for (var i = 0; i < samples.length; i++) if (samples[i] > peak) peak = samples[i]; // the GLOBAL maximum\n  var l = 0, inWin = 0, total = 0;\n  for (var r = 0; r < samples.length; r++) {\n    if (samples[r] === peak) inWin++;\n    // shrink while [l, r] still has >= k peaks; afterwards every start 0..l-1 gives a valid range ending at r\n    while (inWin >= k) {\n      if (samples[l] === peak) inWin--;\n      l++;\n    }\n    total += l; // ranges [0..l-1, r] all contain at least k peaks\n  }\n  return total;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>\"At least k peaks\" is monotone in the start: moving the start left only adds samples. So for each r the valid starts form a prefix 0..l−1, and after the inner loop l is exactly the first start that is NOT valid. l never moves back ⇒ both pointers move at most n steps ⇒ O(n) time, O(1) memory. The total can reach ~2·10¹⁰ — still exact in a JS number (Java: <code>long</code>).</p>",
+      "solutionExplanationHtmlVi": "<p>\"Ít nhất k đỉnh\" đơn điệu theo điểm bắt đầu: dời điểm bắt đầu sang trái chỉ thêm mẫu. Nên với mỗi r, các điểm bắt đầu hợp lệ là một đoạn đầu 0..l−1, và sau vòng trong l đúng là điểm bắt đầu đầu tiên KHÔNG hợp lệ. l không bao giờ lùi ⇒ cả hai con trỏ đi tối đa n bước ⇒ O(n) thời gian, O(1) bộ nhớ. Tổng có thể tới ~2·10¹⁰ — số JS vẫn giữ chính xác (Java: <code>long</code>).</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "solution.js",
+        "tepNap": [
+          "solution.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Peak 95; ranges with ≥ 2 of them",
+              "vi": "Đỉnh 95; các khoảng có ≥ 2 lần"
+            },
+            "goi": "countHotRanges([40,95,60,95,95], 2)",
+            "mongDoi": 6
+          },
+          {
+            "moTa": {
+              "en": "The peak occurs once ⇒ 0",
+              "vi": "Đỉnh chỉ xuất hiện một lần ⇒ 0"
+            },
+            "goi": "countHotRanges([70,80,70], 2)",
+            "mongDoi": 0
+          },
+          {
+            "moTa": {
+              "en": "Every range qualifies ⇒ 6",
+              "vi": "Mọi khoảng đều đạt ⇒ 6"
+            },
+            "goi": "countHotRanges([50,50,50], 1)",
+            "mongDoi": 6
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "countHotRanges([], 1)",
+            "mongDoi": 0,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "countHotRanges([10,100,10,10,100,10,100], 2)",
+            "mongDoi": 9,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "countHotRanges([5,1,5,1,1,5], 3)",
+            "mongDoi": 1,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "countHotRanges([90,90,10,20,90], 1)",
+            "mongDoi": 12,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "k larger than the number of peaks ⇒ 0",
+              "vi": "k lớn hơn số đỉnh ⇒ 0"
+            },
+            "goi": "countHotRanges([30,60,30,60], 3)",
+            "mongDoi": 0,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Performance: 200 000 samples with rare peaks, k = 150 (scanning from every start times out)",
+              "vi": "Hiệu năng: 200 000 mẫu, đỉnh hiếm, k = 150 (quét từ mỗi điểm bắt đầu hết giờ)"
+            },
+            "goi": "(function () {\nfunction __cay(a) { if (!a.length || a[0] == null) return null; var root = { val: a[0], left: null, right: null }, q = [root], h = 0, i = 1;\n  while (i < a.length) { var n = q[h++]; if (a[i] != null) { n.left = { val: a[i], left: null, right: null }; q.push(n.left); } i++;\n    if (i < a.length && a[i] != null) { n.right = { val: a[i], left: null, right: null }; q.push(n.right); } i++; } return root; }\nfunction __raCay(r) { var out = [], q = [r], h = 0; while (h < q.length) { var n = q[h++]; if (n == null) { out.push(null); continue; } out.push(n.val); q.push(n.left == null ? null : n.left, n.right == null ? null : n.right); }\n  while (out.length && out[out.length - 1] === null) out.pop(); return out; }\nfunction __ds(a) { var head = null; for (var i = a.length - 1; i >= 0; i--) head = { val: a[i], next: head }; return head; }\nfunction __raDs(h) { var out = []; while (h && out.length < 1000000) { out.push(h.val); h = h.next; } return out; }\nvar __s = 20261115; function R(m) { __s = (__s * 48271) % 2147483647; return __s % m; }\nvar a = []; for (var i = 0; i < 200000; i++) a.push(R(1000) === 0 ? 100 : R(100)); return countHotRanges(a, 150);\n})()",
+            "mongDoi": 1238389190
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Using the maximum of each window instead of the global maximum: a range of low values has its own \"max\" but is not an overload.|||Dùng cực đại của từng cửa sổ thay vì cực đại toàn cục: một khoảng toàn giá trị thấp có \"max\" riêng nhưng không phải quá tải."
+        },
+        {
+          "loi": "Adding 1 per valid window instead of counting all valid starts for each r: you count windows found, not ranges.|||Cộng 1 cho mỗi cửa sổ hợp lệ thay vì đếm mọi điểm bắt đầu hợp lệ cho mỗi r: bạn đếm số cửa sổ tìm được, không phải số khoảng."
+        },
+        {
+          "loi": "For each start, scanning right until k peaks are seen: O(n²) when peaks are rare — the large check times out.|||Với mỗi điểm bắt đầu, quét sang phải tới khi thấy k đỉnh: O(n²) khi đỉnh hiếm — kiểm lớn hết giờ."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "count subarrays",
+          "vi": "đếm mảng con"
+        },
+        {
+          "en": "global maximum",
+          "vi": "cực đại toàn cục"
+        },
+        {
+          "en": "monotone",
+          "vi": "đơn điệu",
+          "giaiThich": "nới đoạn không làm điều kiện từ đúng thành sai."
+        }
+      ]
+    }
+  ]
+}

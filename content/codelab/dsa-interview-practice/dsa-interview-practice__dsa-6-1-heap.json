@@ -1,0 +1,554 @@
+{
+  "trackSlug": "dsa-interview-practice",
+  "moduleSlug": "dsa-6-1-heap",
+  "lesson": {
+    "course": "dsa-interview",
+    "slug": "dsa-6-1-heap"
+  },
+  "exercises": [
+    {
+      "title": "Go-kart club: the k fastest lap times",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 15,
+      "points": 10,
+      "concepts": [
+        "heap",
+        "top-k"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dsa-interview",
+        "coding-interview"
+      ],
+      "problemHtml": "<p>The FPTU go-kart club logs every lap time (in milliseconds) of a race day in <code>times</code>. The leaderboard screen shows the <code>k</code> fastest laps, fastest first.</p>\n<p>Write <code>fastestLaps(times, k)</code> returning the <code>k</code> smallest values in ascending order (duplicates are separate laps and are kept). If there are fewer than <code>k</code> laps, return them all, sorted. <b>Do not modify</b> <code>times</code> — the timing system still uses it.</p><p><b>Note:</b> JavaScript has no built-in priority queue. Write a small binary heap yourself (the 25-line one from lesson 6.1 is enough) — or any other approach that meets the complexity target.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Write the function in <code>solution.js</code> and <b>return</b> the answer — do not print it.</li>\n  <li>Do not modify the input arrays/objects.</li>\n  <li>Mind the constraints: one check runs on a large input and every check has a 4-second limit, so an O(n²) loop fails it.</li>\n</ul>",
+      "problemHtmlVi": "<p>Câu lạc bộ go-kart FPTU ghi mọi thời gian vòng chạy (mili giây) của một ngày đua vào <code>times</code>. Màn hình bảng xếp hạng hiện <code>k</code> vòng nhanh nhất, nhanh nhất trước.</p>\n<p>Viết <code>fastestLaps(times, k)</code> trả về <code>k</code> giá trị nhỏ nhất theo thứ tự tăng dần (giá trị trùng là các vòng khác nhau, giữ cả). Nếu ít hơn <code>k</code> vòng, trả hết, đã sắp. <b>Không sửa</b> <code>times</code> — hệ thống bấm giờ vẫn dùng nó.</p><p><b>Lưu ý:</b> JavaScript không có sẵn hàng đợi ưu tiên. Hãy tự viết một heap nhị phân nhỏ (bản 25 dòng của bài 6.1 là đủ) — hoặc cách khác bất kỳ đạt mục tiêu độ phức tạp.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Viết hàm trong <code>solution.js</code> và <b>trả về</b> kết quả — đừng in ra.</li>\n  <li>Không sửa mảng/object đầu vào.</li>\n  <li>Để ý ràng buộc: một kiểm chạy trên đầu vào lớn và mỗi kiểm có trần 4 giây, nên vòng lặp O(n²) sẽ trượt kiểm đó.</li>\n</ul>",
+      "inputSpec": "times — array of positive integers; k — integer ≥ 0.|||times — mảng số nguyên dương; k — số nguyên ≥ 0.",
+      "outputSpec": "number[] — at most k values, ascending.|||number[] — tối đa k giá trị, tăng dần.",
+      "constraints": "0 ≤ times.length ≤ 2·10⁵; 0 ≤ k ≤ 2·10⁵; times[i] ≤ 10⁷.\nTarget: O(n log k) (a copy + numeric sort, O(n log n), is also accepted).|||0 ≤ times.length ≤ 2·10⁵; 0 ≤ k ≤ 2·10⁵; times[i] ≤ 10⁷.\nMục tiêu: O(n log k) (sao chép + sắp theo số, O(n log n), cũng được chấp nhận).",
+      "examplesJson": [
+        {
+          "input": "fastestLaps([61200,59800,60500,58900,62000], 3)",
+          "output": "[58900,59800,60500]",
+          "explanation": "The first sample case (Run executes every visible case; hidden cases only run on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy mọi ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Keep only the best k candidates. Which one is the first to be pushed out when a faster lap arrives? The SLOWEST of them — so you want fast access to the maximum.|||Chỉ giữ k ứng viên tốt nhất. Khi có vòng nhanh hơn tới, ai bị đẩy ra trước? Vòng CHẬM NHẤT trong số đó — nên cần lấy nhanh phần tử lớn nhất.",
+        "A max-heap of size k: push while size &lt; k; afterwards, if the new time beats the top, pop the top and push the new one. At the end pop everything and reverse.|||Heap lớn (max-heap) cỡ k: đẩy vào khi size &lt; k; sau đó, nếu thời gian mới tốt hơn đỉnh thì bỏ đỉnh và đẩy cái mới vào. Cuối cùng lấy hết ra rồi đảo ngược."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "solution.js",
+          "language": "javascript",
+          "code": "// JavaScript has no PriorityQueue: write a small heap here (push / pop / peek / size),\n// e.g. class Heap { constructor(before) { ... } push(x) { ... } pop() { ... } }\n\n/**\n * times: number[] (lap times, ms), k: number\n * returns the k smallest times, ascending (times must not be modified)\n */\nfunction fastestLaps(times, k) {\n  // Write your solution here\n  return times.slice(0, k);\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "solution.js",
+          "language": "javascript",
+          "code": "// Reference solution — max-heap of size k (its top is the slowest lap kept).\n// A binary heap: before(a, b) === true means a must come out before b.\nclass Heap {\n  constructor(before) { this.a = []; this.before = before; }\n  size() { return this.a.length; }\n  peek() { return this.a[0]; }\n  push(x) {\n    const a = this.a; a.push(x);\n    let i = a.length - 1;\n    while (i > 0) {                       // sift up: swap with the parent while we beat it\n      const p = (i - 1) >> 1;\n      if (!this.before(a[i], a[p])) break;\n      [a[i], a[p]] = [a[p], a[i]]; i = p;\n    }\n  }\n  pop() {\n    const a = this.a, top = a[0], last = a.pop();\n    if (a.length) {\n      a[0] = last;\n      let i = 0;\n      for (;;) {                          // sift down: swap with the better child while it beats us\n        const l = 2 * i + 1, r = l + 1; let m = i;\n        if (l < a.length && this.before(a[l], a[m])) m = l;\n        if (r < a.length && this.before(a[r], a[m])) m = r;\n        if (m === i) break;\n        [a[i], a[m]] = [a[m], a[i]]; i = m;\n      }\n    }\n    return top;\n  }\n}\n\nfunction fastestLaps(times, k) {\n  // keep the k fastest seen so far in a MAX-heap: its top is the slowest of them, the one to evict\n  const h = new Heap((a, b) => a > b);\n  for (const t of times) {\n    if (h.size() < k) h.push(t);\n    else if (k > 0 && t < h.peek()) { h.pop(); h.push(t); }\n  }\n  const out = [];\n  while (h.size()) out.push(h.pop()); // slowest first …\n  return out.reverse();               // … so reverse for ascending order\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The max-heap always holds the k fastest laps seen so far, with the slowest of them on top, so deciding whether a new lap enters costs one comparison and at most one pop + push, O(log k). Total O(n log k) time and O(k) memory; the final drain is O(k log k). A copy followed by <code>sort((a, b) =&gt; a - b)</code> is O(n log n) and also fine here — what fails is the O(n·k) repeated minimum.</p>",
+      "solutionExplanationHtmlVi": "<p>Heap lớn luôn giữ k vòng nhanh nhất đã gặp, vòng chậm nhất trong đó nằm ở đỉnh, nên quyết định một vòng mới có vào hay không tốn một phép so và tối đa một pop + push, O(log k). Tổng O(n log k) thời gian, O(k) bộ nhớ; lấy hết ở cuối O(k log k). Sao chép rồi <code>sort((a, b) =&gt; a - b)</code> là O(n log n) cũng ổn ở đây — thứ trượt là O(n·k) tìm nhỏ nhất lặp lại.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "solution.js",
+        "tepNap": [
+          "solution.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Three fastest of five",
+              "vi": "Ba vòng nhanh nhất trong năm"
+            },
+            "goi": "fastestLaps([61200,59800,60500,58900,62000], 3)",
+            "mongDoi": [
+              58900,
+              59800,
+              60500
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Numbers, not strings: 8000, 9000",
+              "vi": "So theo số, không theo chuỗi: 8000, 9000"
+            },
+            "goi": "fastestLaps([9000,10000,9500,8000], 2)",
+            "mongDoi": [
+              8000,
+              9000
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Fewer laps than k",
+              "vi": "Ít vòng hơn k"
+            },
+            "goi": "fastestLaps([70000,65000], 5)",
+            "mongDoi": [
+              65000,
+              70000
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "fastestLaps([], 3)",
+            "mongDoi": [],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "k = 0",
+              "vi": "k = 0"
+            },
+            "goi": "fastestLaps([5,1,4], 0)",
+            "mongDoi": [],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Duplicates are separate laps",
+              "vi": "Giá trị trùng là các vòng riêng"
+            },
+            "goi": "fastestLaps([7,7,3,7,3], 4)",
+            "mongDoi": [
+              3,
+              3,
+              7,
+              7
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "The input array must be unchanged",
+              "vi": "Mảng đầu vào phải giữ nguyên"
+            },
+            "goi": "(function () { var a = [900, 100, 500, 300]; fastestLaps(a, 2); return a; })()",
+            "mongDoi": [
+              900,
+              100,
+              500,
+              300
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Performance: 200 000 laps, k = 100 000 (repeated minimum search times out)",
+              "vi": "Hiệu năng: 200 000 vòng, k = 100 000 (tìm nhỏ nhất lặp lại thì hết giờ)"
+            },
+            "goi": "(function () {\nfunction __cay(a) { if (!a.length || a[0] == null) return null; var root = { val: a[0], left: null, right: null }, q = [root], h = 0, i = 1;\n  while (i < a.length) { var n = q[h++]; if (a[i] != null) { n.left = { val: a[i], left: null, right: null }; q.push(n.left); } i++;\n    if (i < a.length && a[i] != null) { n.right = { val: a[i], left: null, right: null }; q.push(n.right); } i++; } return root; }\nfunction __raCay(r) { var out = [], q = [r], h = 0; while (h < q.length) { var n = q[h++]; if (n == null) { out.push(null); continue; } out.push(n.val); q.push(n.left == null ? null : n.left, n.right == null ? null : n.right); }\n  while (out.length && out[out.length - 1] === null) out.pop(); return out; }\nfunction __ds(a) { var head = null; for (var i = a.length - 1; i >= 0; i--) head = { val: a[i], next: head }; return head; }\nfunction __raDs(h) { var out = []; while (h && out.length < 1000000) { out.push(h.val); h = h.next; } return out; }\nvar __s = 20261115; function R(m) { __s = (__s * 48271) % 2147483647; return __s % m; }\nvar n = 200000, a = new Array(n); for (var i = 0; i < n; i++) a[i] = 50000 + R(30000); var r = fastestLaps(a, 100000); var s = 0; for (var j = 0; j < r.length; j++) s += r[j]; return { len: r.length, first: r.slice(0, 3), last: r.slice(-3), sum: s };\n})()",
+            "mongDoi": {
+              "len": 100000,
+              "first": [
+                50000,
+                50000,
+                50000
+              ],
+              "last": [
+                65002,
+                65002,
+                65002
+              ],
+              "sum": 5750193793
+            }
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "<code>times.sort()</code> with no comparator sorts as STRINGS (<code>10000</code> before <code>9000</code>) and sorts the input in place.|||<code>times.sort()</code> không comparator sắp như CHUỖI (<code>10000</code> trước <code>9000</code>) và sắp luôn mảng đầu vào."
+        },
+        {
+          "loi": "Finding and removing the minimum k times with a linear scan + <code>splice</code>: O(n·k) ⇒ times out with k = 10⁵.|||Tìm và xoá phần tử nhỏ nhất k lần bằng quét tuyến tính + <code>splice</code>: O(n·k) ⇒ hết giờ khi k = 10⁵."
+        },
+        {
+          "loi": "Using a MIN-heap of size k: its top is the fastest lap, the one you must keep.|||Dùng heap NHỎ cỡ k: đỉnh là vòng nhanh nhất — đúng cái phải giữ lại."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "max-heap",
+          "vi": "heap lớn (đỉnh là phần tử lớn nhất)"
+        },
+        {
+          "en": "top-k",
+          "vi": "k phần tử tốt nhất"
+        },
+        {
+          "en": "evict",
+          "vi": "đẩy ra (loại khỏi tập giữ lại)"
+        }
+      ]
+    },
+    {
+      "title": "Log rotation: merge all log files at minimum cost",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 20,
+      "points": 20,
+      "concepts": [
+        "heap",
+        "greedy",
+        "Huffman"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dsa-interview",
+        "coding-interview"
+      ],
+      "problemHtml": "<p>Every night the server keeps one log file per service, with sizes <code>sizes</code> (MB). The archiver can only merge <b>two files at a time</b>, and merging files of sizes <code>a</code> and <code>b</code> costs <code>a + b</code> (it reads both and writes the result, which is a file of size <code>a + b</code>). Files can be merged in any order until one file is left.</p>\n<p>Write <code>mergeLogsCost(sizes)</code> returning the minimum total cost. Zero or one file costs <code>0</code>.</p><p><b>Note:</b> JavaScript has no built-in priority queue. Write a small binary heap yourself (the 25-line one from lesson 6.1 is enough) — or any other approach that meets the complexity target.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Write the function in <code>solution.js</code> and <b>return</b> the answer — do not print it.</li>\n  <li>Do not modify the input arrays/objects.</li>\n  <li>Mind the constraints: one check runs on a large input and every check has a 4-second limit, so an O(n²) loop fails it.</li>\n</ul>",
+      "problemHtmlVi": "<p>Mỗi đêm máy chủ giữ một tệp log cho mỗi dịch vụ, kích thước <code>sizes</code> (MB). Bộ lưu trữ chỉ gộp được <b>hai tệp một lúc</b>, và gộp hai tệp cỡ <code>a</code> và <code>b</code> tốn <code>a + b</code> (đọc cả hai và ghi kết quả là một tệp cỡ <code>a + b</code>). Có thể gộp theo thứ tự bất kỳ cho tới khi còn một tệp.</p>\n<p>Viết <code>mergeLogsCost(sizes)</code> trả về tổng chi phí nhỏ nhất. Không tệp hoặc một tệp thì tốn <code>0</code>.</p><p><b>Lưu ý:</b> JavaScript không có sẵn hàng đợi ưu tiên. Hãy tự viết một heap nhị phân nhỏ (bản 25 dòng của bài 6.1 là đủ) — hoặc cách khác bất kỳ đạt mục tiêu độ phức tạp.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Viết hàm trong <code>solution.js</code> và <b>trả về</b> kết quả — đừng in ra.</li>\n  <li>Không sửa mảng/object đầu vào.</li>\n  <li>Để ý ràng buộc: một kiểm chạy trên đầu vào lớn và mỗi kiểm có trần 4 giây, nên vòng lặp O(n²) sẽ trượt kiểm đó.</li>\n</ul>",
+      "inputSpec": "sizes — array of positive integers.|||sizes — mảng số nguyên dương.",
+      "outputSpec": "number — minimum total cost.|||number — tổng chi phí nhỏ nhất.",
+      "constraints": "0 ≤ sizes.length ≤ 10⁵; 1 ≤ sizes[i] ≤ 10⁴.\nTarget: O(n log n).|||0 ≤ sizes.length ≤ 10⁵; 1 ≤ sizes[i] ≤ 10⁴.\nMục tiêu: O(n log n).",
+      "examplesJson": [
+        {
+          "input": "mergeLogsCost([4,3,2,6])",
+          "output": "29",
+          "explanation": "The first sample case (Run executes every visible case; hidden cases only run on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy mọi ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "A file's size is paid once for every merge it takes part in, so the largest files should be merged as few times as possible — i.e. as late as possible.|||Kích thước một tệp bị trả lại mỗi lần nó tham gia một lần gộp, nên tệp to nên bị gộp càng ít lần càng tốt — tức là càng muộn càng tốt.",
+        "Greedy: always merge the two smallest files currently available, and put the result back. \"Repeatedly take the smallest two, insert one\" = a min-heap.|||Tham lam: luôn gộp hai tệp nhỏ nhất đang có, rồi bỏ kết quả trở lại. \"Lặp lại: lấy hai cái nhỏ nhất, chèn một cái\" = heap nhỏ (min-heap)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "solution.js",
+          "language": "javascript",
+          "code": "// JavaScript has no PriorityQueue: write a small heap here (push / pop / peek / size),\n// e.g. class Heap { constructor(before) { ... } push(x) { ... } pop() { ... } }\n\n/**\n * sizes: number[] — file sizes (MB); merging a and b costs a + b and yields a file of size a + b\n * returns the minimum total cost to end with one file\n */\nfunction mergeLogsCost(sizes) {\n  // Write your solution here\n  return 0;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "solution.js",
+          "language": "javascript",
+          "code": "// Reference solution — Huffman greedy with a min-heap: always merge the two smallest.\n// A binary heap: before(a, b) === true means a must come out before b.\nclass Heap {\n  constructor(before) { this.a = []; this.before = before; }\n  size() { return this.a.length; }\n  peek() { return this.a[0]; }\n  push(x) {\n    const a = this.a; a.push(x);\n    let i = a.length - 1;\n    while (i > 0) {                       // sift up: swap with the parent while we beat it\n      const p = (i - 1) >> 1;\n      if (!this.before(a[i], a[p])) break;\n      [a[i], a[p]] = [a[p], a[i]]; i = p;\n    }\n  }\n  pop() {\n    const a = this.a, top = a[0], last = a.pop();\n    if (a.length) {\n      a[0] = last;\n      let i = 0;\n      for (;;) {                          // sift down: swap with the better child while it beats us\n        const l = 2 * i + 1, r = l + 1; let m = i;\n        if (l < a.length && this.before(a[l], a[m])) m = l;\n        if (r < a.length && this.before(a[r], a[m])) m = r;\n        if (m === i) break;\n        [a[i], a[m]] = [a[m], a[i]]; i = m;\n      }\n    }\n    return top;\n  }\n}\n\nfunction mergeLogsCost(sizes) {\n  const h = new Heap((a, b) => a < b); // min-heap: always merge the two smallest files\n  for (const s of sizes) h.push(s);\n  let cost = 0;\n  while (h.size() > 1) {\n    const merged = h.pop() + h.pop();\n    cost += merged;   // reading both and writing the result costs their total size\n    h.push(merged);   // the merged file goes BACK in: it may be small enough to be merged early again\n  }\n  return cost;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>This is Huffman's algorithm: the total cost equals Σ size × (number of merges the file is part of), and an exchange argument shows the two smallest files can always be merged first in some optimal plan. The heap makes each \"take two smallest, insert one\" O(log n): n − 1 rounds ⇒ O(n log n) time, O(n) memory. The answer can reach about 10⁴ × 10⁵ × 17 ≈ 1.7·10¹⁰ — fine for a JS number, <code>long</code> in Java.</p>",
+      "solutionExplanationHtmlVi": "<p>Đây là thuật toán Huffman: tổng chi phí bằng Σ kích thước × (số lần gộp mà tệp tham gia), và lập luận hoán đổi cho thấy luôn có một phương án tối ưu gộp hai tệp nhỏ nhất trước. Heap làm mỗi lượt \"lấy hai cái nhỏ nhất, chèn một\" là O(log n): n − 1 lượt ⇒ O(n log n) thời gian, O(n) bộ nhớ. Đáp án có thể tới khoảng 10⁴ × 10⁵ × 17 ≈ 1,7·10¹⁰ — số JS chứa được, Java dùng <code>long</code>.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "solution.js",
+        "tepNap": [
+          "solution.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "2+3=5, 4+5=9, 6+9=15 ⇒ 29",
+              "vi": "2+3=5, 4+5=9, 6+9=15 ⇒ 29"
+            },
+            "goi": "mergeLogsCost([4,3,2,6])",
+            "mongDoi": 29
+          },
+          {
+            "moTa": {
+              "en": "(1+1) + (1+1) + (2+2) = 8, not 9",
+              "vi": "(1+1) + (1+1) + (2+2) = 8, không phải 9"
+            },
+            "goi": "mergeLogsCost([1,1,1,1])",
+            "mongDoi": 8
+          },
+          {
+            "moTa": {
+              "en": "Case 3: mergeLogsCost([42])",
+              "vi": "Ca 3"
+            },
+            "goi": "mergeLogsCost([42])",
+            "mongDoi": 0
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "mergeLogsCost([])",
+            "mongDoi": 0,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "mergeLogsCost([5,5])",
+            "mongDoi": 10,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "mergeLogsCost([10,1,1,1,1,1])",
+            "mongDoi": 27,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "mergeLogsCost([20,4,8,2,1,7,3,9])",
+            "mongDoi": 141,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Performance: 100 000 files (re-sorting after every merge times out)",
+              "vi": "Hiệu năng: 100 000 tệp (sắp lại sau mỗi lần gộp thì hết giờ)"
+            },
+            "goi": "(function () {\nfunction __cay(a) { if (!a.length || a[0] == null) return null; var root = { val: a[0], left: null, right: null }, q = [root], h = 0, i = 1;\n  while (i < a.length) { var n = q[h++]; if (a[i] != null) { n.left = { val: a[i], left: null, right: null }; q.push(n.left); } i++;\n    if (i < a.length && a[i] != null) { n.right = { val: a[i], left: null, right: null }; q.push(n.right); } i++; } return root; }\nfunction __raCay(r) { var out = [], q = [r], h = 0; while (h < q.length) { var n = q[h++]; if (n == null) { out.push(null); continue; } out.push(n.val); q.push(n.left == null ? null : n.left, n.right == null ? null : n.right); }\n  while (out.length && out[out.length - 1] === null) out.pop(); return out; }\nfunction __ds(a) { var head = null; for (var i = a.length - 1; i >= 0; i--) head = { val: a[i], next: head }; return head; }\nfunction __raDs(h) { var out = []; while (h && out.length < 1000000) { out.push(h.val); h = h.next; } return out; }\nvar __s = 20261115; function R(m) { __s = (__s * 48271) % 2147483647; return __s % m; }\nvar n = 100000, a = new Array(n); for (var i = 0; i < n; i++) a[i] = 1 + R(10000); return mergeLogsCost(a);\n})()",
+            "mongDoi": 8185108182
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Sorting once and merging left to right (running total): the merged file is not always among the two smallest — <code>[1, 1, 1, 1]</code> costs 9 that way, the optimum is 8.|||Sắp một lần rồi gộp trái sang phải (cộng dồn): tệp vừa gộp không phải lúc nào cũng nằm trong hai tệp nhỏ nhất — <code>[1, 1, 1, 1]</code> theo cách đó tốn 9, tối ưu là 8."
+        },
+        {
+          "loi": "Re-sorting the whole array after every merge: correct, but O(n² log n) ⇒ the 10⁵-file check times out.|||Sắp lại cả mảng sau mỗi lần gộp: đúng, nhưng O(n² log n) ⇒ kiểm 10⁵ tệp hết giờ."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "min-heap",
+          "vi": "heap nhỏ (đỉnh là phần tử nhỏ nhất)"
+        },
+        {
+          "en": "greedy choice",
+          "vi": "lựa chọn tham lam"
+        },
+        {
+          "en": "Huffman coding",
+          "vi": "mã Huffman",
+          "giaiThich": "cùng thuật toán: gộp hai tần suất nhỏ nhất."
+        }
+      ]
+    },
+    {
+      "title": "IT help desk: the order tickets get served",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 30,
+      "points": 30,
+      "concepts": [
+        "heap",
+        "event simulation"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dsa-interview",
+        "coding-interview"
+      ],
+      "problemHtml": "<p>The campus IT help desk has <b>one</b> agent. Each ticket is <code>{ id, arrive, minutes, priority }</code>: it shows up at minute <code>arrive</code>, takes <code>minutes</code> to handle, and a larger <code>priority</code> is more urgent. Whenever the agent is free, they take the waiting ticket with the <b>highest priority</b>; ties go to the earlier <code>arrive</code>, then to the smaller <code>id</code>. A ticket that is being handled is never interrupted. If nobody is waiting, the agent waits for the next arrival. A ticket arriving exactly when the agent becomes free is already waiting.</p>\n<p>Write <code>helpDeskOrder(tickets)</code> returning the ids in the order they are served. The input may be in any order and must not be modified.</p><p><b>Note:</b> JavaScript has no built-in priority queue. Write a small binary heap yourself (the 25-line one from lesson 6.1 is enough) — or any other approach that meets the complexity target.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Write the function in <code>solution.js</code> and <b>return</b> the answer — do not print it.</li>\n  <li>Do not modify the input arrays/objects.</li>\n  <li>Mind the constraints: one check runs on a large input and every check has a 4-second limit, so an O(n²) loop fails it.</li>\n</ul>",
+      "problemHtmlVi": "<p>Quầy hỗ trợ IT của trường có <b>một</b> nhân viên. Mỗi phiếu là <code>{ id, arrive, minutes, priority }</code>: tới ở phút <code>arrive</code>, xử lý mất <code>minutes</code> phút, <code>priority</code> lớn hơn là gấp hơn. Mỗi khi rảnh, nhân viên lấy phiếu đang chờ có <b>độ ưu tiên cao nhất</b>; hoà thì phiếu tới sớm hơn trước, rồi tới <code>id</code> nhỏ hơn. Phiếu đang xử lý không bao giờ bị ngắt. Không ai chờ thì nhân viên đợi phiếu kế tiếp tới. Phiếu tới đúng lúc nhân viên vừa rảnh coi như đã đang chờ.</p>\n<p>Viết <code>helpDeskOrder(tickets)</code> trả về các id theo thứ tự được phục vụ. Đầu vào có thể ở thứ tự bất kỳ và không được sửa.</p><p><b>Lưu ý:</b> JavaScript không có sẵn hàng đợi ưu tiên. Hãy tự viết một heap nhị phân nhỏ (bản 25 dòng của bài 6.1 là đủ) — hoặc cách khác bất kỳ đạt mục tiêu độ phức tạp.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Viết hàm trong <code>solution.js</code> và <b>trả về</b> kết quả — đừng in ra.</li>\n  <li>Không sửa mảng/object đầu vào.</li>\n  <li>Để ý ràng buộc: một kiểm chạy trên đầu vào lớn và mỗi kiểm có trần 4 giây, nên vòng lặp O(n²) sẽ trượt kiểm đó.</li>\n</ul>",
+      "inputSpec": "tickets — array of { id, arrive, minutes, priority } (integers, ids distinct, minutes ≥ 1).|||tickets — mảng { id, arrive, minutes, priority } (số nguyên, id khác nhau, minutes ≥ 1).",
+      "outputSpec": "number[] — ids in serving order.|||number[] — các id theo thứ tự phục vụ.",
+      "constraints": "0 ≤ tickets.length ≤ 10⁵; 0 ≤ arrive ≤ 10⁹.\nTarget: O(n log n).|||0 ≤ tickets.length ≤ 10⁵; 0 ≤ arrive ≤ 10⁹.\nMục tiêu: O(n log n).",
+      "examplesJson": [
+        {
+          "input": "helpDeskOrder([{\"id\":1,\"arrive\":0,\"minutes\":10,\"priority\":1},{\"id\":2,\"arrive\":2,\"minutes\":5,\"priority\":1},{\"id\":3,\"arrive\":3,\"minutes\":4,\"priority\":5}])",
+          "output": "[1,3,2]",
+          "explanation": "The first sample case (Run executes every visible case; hidden cases only run on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy mọi ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Two orders are involved: tickets ENTER the waiting room by arrival time (sort once), and LEAVE it by priority (a heap with a three-level comparator).|||Có hai thứ tự: phiếu VÀO phòng chờ theo thời gian tới (sắp một lần), và RA khỏi phòng chờ theo ưu tiên (heap với comparator ba tầng).",
+        "Loop: if the heap is empty, jump the clock to the next arrival; push every ticket with <code>arrive ≤ t</code>; pop the best, record it, advance <code>t</code> by its minutes.|||Vòng lặp: nếu heap rỗng, nhảy đồng hồ tới lần tới kế tiếp; đẩy mọi phiếu có <code>arrive ≤ t</code>; lấy phiếu tốt nhất, ghi lại, tăng <code>t</code> thêm số phút của nó."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "solution.js",
+          "language": "javascript",
+          "code": "// JavaScript has no PriorityQueue: write a small heap here (push / pop / peek / size),\n// e.g. class Heap { constructor(before) { ... } push(x) { ... } pop() { ... } }\n\n/**\n * tickets: { id, arrive, minutes, priority }[] — one agent, non-preemptive\n * returns ids in serving order (highest priority first; ties: earlier arrive, then smaller id)\n */\nfunction helpDeskOrder(tickets) {\n  // Write your solution here\n  return tickets.map(t => t.id);\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "solution.js",
+          "language": "javascript",
+          "code": "// Reference solution — sort by arrival once, a heap of waiting tickets ordered by (priority, arrive, id).\n// A binary heap: before(a, b) === true means a must come out before b.\nclass Heap {\n  constructor(before) { this.a = []; this.before = before; }\n  size() { return this.a.length; }\n  peek() { return this.a[0]; }\n  push(x) {\n    const a = this.a; a.push(x);\n    let i = a.length - 1;\n    while (i > 0) {                       // sift up: swap with the parent while we beat it\n      const p = (i - 1) >> 1;\n      if (!this.before(a[i], a[p])) break;\n      [a[i], a[p]] = [a[p], a[i]]; i = p;\n    }\n  }\n  pop() {\n    const a = this.a, top = a[0], last = a.pop();\n    if (a.length) {\n      a[0] = last;\n      let i = 0;\n      for (;;) {                          // sift down: swap with the better child while it beats us\n        const l = 2 * i + 1, r = l + 1; let m = i;\n        if (l < a.length && this.before(a[l], a[m])) m = l;\n        if (r < a.length && this.before(a[r], a[m])) m = r;\n        if (m === i) break;\n        [a[i], a[m]] = [a[m], a[i]]; i = m;\n      }\n    }\n    return top;\n  }\n}\n\nfunction helpDeskOrder(tickets) {\n  const byArrival = tickets.slice().sort((a, b) => a.arrive - b.arrive || a.id - b.id); // copy: do not touch the input\n  // most urgent first; ties: earlier arrival, then smaller id\n  const h = new Heap((a, b) => a.priority !== b.priority ? a.priority > b.priority\n    : a.arrive !== b.arrive ? a.arrive < b.arrive : a.id < b.id);\n  const out = [];\n  let t = 0, i = 0;\n  while (out.length < tickets.length) {\n    if (h.size() === 0 && t < byArrival[i].arrive) t = byArrival[i].arrive; // idle: jump to the next arrival\n    while (i < byArrival.length && byArrival[i].arrive <= t) h.push(byArrival[i++]); // everyone who is waiting now\n    const job = h.pop();\n    out.push(job.id);\n    t += job.minutes; // nobody is interrupted: the agent finishes the ticket first\n  }\n  return out;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Sorting by arrival lets a single pointer feed the waiting room in time order; the heap answers \"most urgent waiting ticket\" in O(log n) with the three-level tie-break written into its comparator. Each ticket is pushed and popped once ⇒ O(n log n) total (sort + heap), O(n) memory. Jumping the clock when the heap is empty keeps the loop independent of the size of the time values.</p>",
+      "solutionExplanationHtmlVi": "<p>Sắp theo thời gian tới cho phép một con trỏ đưa phiếu vào phòng chờ đúng thứ tự thời gian; heap trả lời \"phiếu chờ gấp nhất\" trong O(log n) với luật hoà ba tầng viết trong comparator. Mỗi phiếu vào và ra heap một lần ⇒ tổng O(n log n) (sắp + heap), O(n) bộ nhớ. Nhảy đồng hồ khi heap rỗng giữ vòng lặp không phụ thuộc vào độ lớn của mốc thời gian.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "solution.js",
+        "tepNap": [
+          "solution.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Ticket 1 is not interrupted; then urgent 3 jumps ahead of 2",
+              "vi": "Phiếu 1 không bị ngắt; rồi phiếu gấp 3 chen trước 2"
+            },
+            "goi": "helpDeskOrder([{\"id\":1,\"arrive\":0,\"minutes\":10,\"priority\":1},{\"id\":2,\"arrive\":2,\"minutes\":5,\"priority\":1},{\"id\":3,\"arrive\":3,\"minutes\":4,\"priority\":5}])",
+            "mongDoi": [
+              1,
+              3,
+              2
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Idle gap: jump to minute 100",
+              "vi": "Thời gian rảnh: nhảy tới phút 100"
+            },
+            "goi": "helpDeskOrder([{\"id\":7,\"arrive\":100,\"minutes\":1,\"priority\":0},{\"id\":4,\"arrive\":0,\"minutes\":3,\"priority\":2}])",
+            "mongDoi": [
+              4,
+              7
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Case 3: helpDeskOrder([])",
+              "vi": "Ca 3"
+            },
+            "goi": "helpDeskOrder([])",
+            "mongDoi": []
+          },
+          {
+            "moTa": {
+              "en": "Ties: arrival, then id",
+              "vi": "Hoà: theo giờ tới, rồi id"
+            },
+            "goi": "helpDeskOrder([{\"id\":5,\"arrive\":0,\"minutes\":2,\"priority\":3},{\"id\":2,\"arrive\":0,\"minutes\":2,\"priority\":3},{\"id\":9,\"arrive\":1,\"minutes\":2,\"priority\":3}])",
+            "mongDoi": [
+              2,
+              5,
+              9
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Arriving exactly when the agent frees up counts as waiting",
+              "vi": "Tới đúng lúc nhân viên rảnh coi như đang chờ"
+            },
+            "goi": "helpDeskOrder([{\"id\":1,\"arrive\":0,\"minutes\":5,\"priority\":0},{\"id\":2,\"arrive\":5,\"minutes\":1,\"priority\":9},{\"id\":3,\"arrive\":4,\"minutes\":1,\"priority\":1}])",
+            "mongDoi": [
+              1,
+              2,
+              3
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Huge gaps between arrivals",
+              "vi": "Các lần tới cách nhau rất xa"
+            },
+            "goi": "helpDeskOrder([{\"id\":3,\"arrive\":1000000000,\"minutes\":1,\"priority\":1},{\"id\":1,\"arrive\":0,\"minutes\":1,\"priority\":1},{\"id\":2,\"arrive\":500000000,\"minutes\":1,\"priority\":1}])",
+            "mongDoi": [
+              1,
+              2,
+              3
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "helpDeskOrder([{\"id\":1,\"arrive\":0,\"minutes\":4,\"priority\":1},{\"id\":2,\"arrive\":1,\"minutes\":1,\"priority\":2},{\"id\":3,\"arrive\":1,\"minutes\":1,\"priority\":3},{\"id\":4,\"arrive\":6,\"minutes\":1,\"priority\":0},{\"id\":5,\"arrive\":2,\"minutes\":9,\"priority\":0}])",
+            "mongDoi": [
+              1,
+              3,
+              2,
+              5,
+              4
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Performance: 100 000 tickets in the first 1000 minutes — thousands wait at once (a linear scan per pick times out)",
+              "vi": "Hiệu năng: 100 000 phiếu trong 1000 phút đầu — hàng nghìn phiếu cùng chờ (quét tuyến tính mỗi lần chọn thì hết giờ)"
+            },
+            "goi": "(function () {\nfunction __cay(a) { if (!a.length || a[0] == null) return null; var root = { val: a[0], left: null, right: null }, q = [root], h = 0, i = 1;\n  while (i < a.length) { var n = q[h++]; if (a[i] != null) { n.left = { val: a[i], left: null, right: null }; q.push(n.left); } i++;\n    if (i < a.length && a[i] != null) { n.right = { val: a[i], left: null, right: null }; q.push(n.right); } i++; } return root; }\nfunction __raCay(r) { var out = [], q = [r], h = 0; while (h < q.length) { var n = q[h++]; if (n == null) { out.push(null); continue; } out.push(n.val); q.push(n.left == null ? null : n.left, n.right == null ? null : n.right); }\n  while (out.length && out[out.length - 1] === null) out.pop(); return out; }\nfunction __ds(a) { var head = null; for (var i = a.length - 1; i >= 0; i--) head = { val: a[i], next: head }; return head; }\nfunction __raDs(h) { var out = []; while (h && out.length < 1000000) { out.push(h.val); h = h.next; } return out; }\nvar __s = 20261115; function R(m) { __s = (__s * 48271) % 2147483647; return __s % m; }\nvar n = 100000, a = []; for (var i = 0; i < n; i++) a.push({ id: i, arrive: R(1000), minutes: 1 + R(5), priority: R(5) }); var r = helpDeskOrder(a); var h = 0; for (var j = 0; j < r.length; j++) h = (h * 31 + r[j]) % 1000000007; return { count: r.length, first: r.slice(0, 5), last: r.slice(-5), hash: h };\n})()",
+            "mongDoi": {
+              "count": 100000,
+              "first": [
+                5616,
+                11536,
+                13565,
+                14817,
+                19016
+              ],
+              "last": [
+                70358,
+                73233,
+                74860,
+                82623,
+                89760
+              ],
+              "hash": 198043102
+            }
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Scanning the whole waiting list for the best ticket each time: O(n²) when many tickets wait — the 10⁵-ticket check times out.|||Quét cả danh sách chờ để tìm phiếu tốt nhất mỗi lần: O(n²) khi nhiều phiếu cùng chờ — kiểm 10⁵ phiếu hết giờ."
+        },
+        {
+          "loi": "Advancing the clock by 1 minute when idle: arrivals can be 10⁹ minutes apart. Jump straight to the next arrival.|||Tăng đồng hồ từng phút khi rảnh: hai lần tới có thể cách nhau 10⁹ phút. Hãy nhảy thẳng tới lần tới kế tiếp."
+        },
+        {
+          "loi": "Pushing only tickets with <code>arrive &lt; t</code>: a ticket arriving exactly at <code>t</code> is already waiting.|||Chỉ đẩy phiếu có <code>arrive &lt; t</code>: phiếu tới đúng phút <code>t</code> đã đang chờ."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "priority queue",
+          "vi": "hàng đợi ưu tiên"
+        },
+        {
+          "en": "tie-break",
+          "vi": "luật phân xử khi hoà"
+        },
+        {
+          "en": "simulation",
+          "vi": "mô phỏng"
+        },
+        {
+          "en": "non-preemptive",
+          "vi": "không ngắt ngang",
+          "giaiThich": "việc đang làm không bị việc gấp hơn chen vào."
+        }
+      ]
+    }
+  ]
+}

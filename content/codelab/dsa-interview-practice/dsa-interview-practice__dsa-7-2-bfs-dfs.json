@@ -1,0 +1,504 @@
+{
+  "trackSlug": "dsa-interview-practice",
+  "moduleSlug": "dsa-7-2-bfs-dfs",
+  "lesson": {
+    "course": "dsa-interview",
+    "slug": "dsa-7-2-bfs-dfs"
+  },
+  "exercises": [
+    {
+      "title": "Mesh Wi-Fi: devices within k hops of the router",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 15,
+      "points": 10,
+      "concepts": [
+        "BFS",
+        "shortest path in unweighted graph"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dsa-interview",
+        "coding-interview"
+      ],
+      "problemHtml": "<p>The dormitory runs a mesh Wi-Fi network: <code>n</code> access points numbered <code>0 … n−1</code>, and <code>links</code> lists the pairs that can talk to each other directly (both ways). Each hop adds latency, so the support team only guarantees a good connection to access points at most <code>k</code> hops away from the main router <code>start</code>.</p>\n<p>Write <code>devicesWithinHops(n, links, start, k)</code> that returns how many access points <b>other than the router itself</b> are reachable from <code>start</code> using at most <code>k</code> links. The network may be disconnected, and the same link may be listed twice.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Write the function in <code>solution.js</code> and <b>return</b> the answer — do not print it.</li>\n  <li>Do not modify the input arrays/objects.</li>\n  <li>Mind the constraints: one check runs on a large input and every check has a 4-second limit, so an O(n²) loop fails it.</li>\n</ul>",
+      "problemHtmlVi": "<p>Ký túc xá chạy mạng Wi-Fi mesh: <code>n</code> điểm phát số <code>0 … n−1</code>, và <code>links</code> liệt kê các cặp nói chuyện trực tiếp được với nhau (cả hai chiều). Mỗi bước nhảy (hop) thêm độ trễ, nên đội hỗ trợ chỉ cam kết kết nối tốt tới các điểm phát cách router chính <code>start</code> tối đa <code>k</code> bước.</p>\n<p>Viết <code>devicesWithinHops(n, links, start, k)</code> trả về số điểm phát <b>khác chính router</b> tới được từ <code>start</code> bằng tối đa <code>k</code> liên kết. Mạng có thể không liên thông, và một liên kết có thể bị liệt kê hai lần.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Viết hàm trong <code>solution.js</code> và <b>trả về</b> kết quả — đừng in ra.</li>\n  <li>Không sửa mảng/object đầu vào.</li>\n  <li>Để ý ràng buộc: một kiểm chạy trên đầu vào lớn và mỗi kiểm có trần 4 giây, nên vòng lặp O(n²) sẽ trượt kiểm đó.</li>\n</ul>",
+      "inputSpec": "n — number of access points; links — array of [a, b]; start — router id; k — max hops (≥ 0).|||n — số điểm phát; links — mảng [a, b]; start — id router; k — số bước tối đa (≥ 0).",
+      "outputSpec": "A number.|||Một số.",
+      "constraints": "1 ≤ n ≤ 200 000; 0 ≤ links.length ≤ 300 000; 0 ≤ k ≤ n.\nTarget: O(n + links) time.|||1 ≤ n ≤ 200 000; 0 ≤ links.length ≤ 300 000; 0 ≤ k ≤ n.\nMục tiêu: O(n + links) thời gian.",
+      "examplesJson": [
+        {
+          "input": "devicesWithinHops(6, [[0,1],[1,2],[2,3],[0,4],[4,5]], 0, 2)",
+          "output": "4",
+          "explanation": "The first sample case (Run executes every visible case; hidden cases only run on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy mọi ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "\"Within k steps\" is a question about shortest distance in an unweighted graph — that is exactly what BFS computes, layer by layer.|||\"Trong k bước\" là câu hỏi về khoảng cách ngắn nhất trên đồ thị không trọng số — đúng thứ BFS tính, từng tầng một.",
+        "Build an adjacency list once (both directions). Keep <code>dist[]</code> initialised to −1; set <code>dist[v]</code> the moment you push v, and do not expand a node whose distance is already k.|||Dựng danh sách kề một lần (cả hai chiều). Giữ <code>dist[]</code> khởi tạo −1; gán <code>dist[v]</code> ngay lúc đẩy v vào hàng đợi, và đừng mở rộng nút đã cách k bước."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "solution.js",
+          "language": "javascript",
+          "code": "/**\n * n: number, links: [a, b][], start: number, k: number\n * returns how many access points (other than start) are at most k hops away\n */\nfunction devicesWithinHops(n, links, start, k) {\n  // Write your solution here\n  return 0;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "solution.js",
+          "language": "javascript",
+          "code": "// Reference solution — BFS with an adjacency list, dist[] set at enqueue time, head index as the queue front.\nfunction devicesWithinHops(n, links, start, k) {\n  var adj = [];\n  for (var i = 0; i < n; i++) adj.push([]);\n  for (var e = 0; e < links.length; e++) { adj[links[e][0]].push(links[e][1]); adj[links[e][1]].push(links[e][0]); } // undirected\n  var dist = new Array(n).fill(-1);\n  dist[start] = 0;\n  var queue = [start], head = 0, count = 0; // head index instead of queue.shift(): O(1) dequeue\n  while (head < queue.length) {\n    var u = queue[head++];\n    if (dist[u] === k) continue; // neighbours would be k + 1 hops away\n    for (var j = 0; j < adj[u].length; j++) {\n      var v = adj[u][j];\n      if (dist[v] !== -1) continue;\n      dist[v] = dist[u] + 1; // mark when ENQUEUED, so no device enters the queue twice\n      count++;\n      queue.push(v);\n    }\n  }\n  return count;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>BFS visits nodes in order of distance from <code>start</code>, so the first time we reach a node we know its shortest hop count. Setting <code>dist</code> at enqueue time guarantees every node is pushed at most once ⇒ each node and each adjacency entry is processed once: O(n + links) time, O(n + links) memory for the adjacency list. Stopping the expansion at distance k is what turns \"reachable\" into \"reachable within k\".</p>",
+      "solutionExplanationHtmlVi": "<p>BFS thăm các nút theo thứ tự khoảng cách tới <code>start</code>, nên lần đầu chạm tới một nút ta biết luôn số bước ngắn nhất của nó. Gán <code>dist</code> lúc đẩy vào bảo đảm mỗi nút vào hàng đợi tối đa một lần ⇒ mỗi nút và mỗi mục kề xử lý một lần: O(n + links) thời gian, O(n + links) bộ nhớ cho danh sách kề. Dừng mở rộng ở khoảng cách k là thứ biến \"tới được\" thành \"tới được trong k bước\".</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "solution.js",
+        "tepNap": [
+          "solution.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "1, 4 (1 hop) and 2, 5 (2 hops) ⇒ 4",
+              "vi": "1, 4 (1 bước) và 2, 5 (2 bước) ⇒ 4"
+            },
+            "goi": "devicesWithinHops(6, [[0,1],[1,2],[2,3],[0,4],[4,5]], 0, 2)",
+            "mongDoi": 4
+          },
+          {
+            "moTa": {
+              "en": "Triangle: each neighbour counted once ⇒ 2",
+              "vi": "Tam giác: mỗi hàng xóm đếm một lần ⇒ 2"
+            },
+            "goi": "devicesWithinHops(3, [[0,1],[1,2],[0,2]], 0, 1)",
+            "mongDoi": 2
+          },
+          {
+            "moTa": {
+              "en": "Disconnected network ⇒ 1",
+              "vi": "Mạng không liên thông ⇒ 1"
+            },
+            "goi": "devicesWithinHops(4, [[0,1],[2,3]], 0, 5)",
+            "mongDoi": 1
+          },
+          {
+            "moTa": {
+              "en": "k = 0 ⇒ 0",
+              "vi": "k = 0 ⇒ 0"
+            },
+            "goi": "devicesWithinHops(5, [[0,1],[1,2]], 2, 0)",
+            "mongDoi": 0,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "devicesWithinHops(1, [], 0, 3)",
+            "mongDoi": 0,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Duplicate links",
+              "vi": "Liên kết lặp"
+            },
+            "goi": "devicesWithinHops(5, [[0,1],[0,1],[1,0],[1,2],[2,3],[3,4]], 1, 2)",
+            "mongDoi": 3,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "devicesWithinHops(7, [[3,0],[3,1],[3,2],[0,4],[1,4],[2,5],[5,6],[4,6]], 3, 2)",
+            "mongDoi": 5,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Performance: 150 000 access points, 200 000 links, k = 40 (scanning all links per node times out)",
+              "vi": "Hiệu năng: 150 000 điểm phát, 200 000 liên kết, k = 40 (quét mọi liên kết cho mỗi nút hết giờ)"
+            },
+            "goi": "(function () {\nfunction __cay(a) { if (!a.length || a[0] == null) return null; var root = { val: a[0], left: null, right: null }, q = [root], h = 0, i = 1;\n  while (i < a.length) { var n = q[h++]; if (a[i] != null) { n.left = { val: a[i], left: null, right: null }; q.push(n.left); } i++;\n    if (i < a.length && a[i] != null) { n.right = { val: a[i], left: null, right: null }; q.push(n.right); } i++; } return root; }\nfunction __raCay(r) { var out = [], q = [r], h = 0; while (h < q.length) { var n = q[h++]; if (n == null) { out.push(null); continue; } out.push(n.val); q.push(n.left == null ? null : n.left, n.right == null ? null : n.right); }\n  while (out.length && out[out.length - 1] === null) out.pop(); return out; }\nfunction __ds(a) { var head = null; for (var i = a.length - 1; i >= 0; i--) head = { val: a[i], next: head }; return head; }\nfunction __raDs(h) { var out = []; while (h && out.length < 1000000) { out.push(h.val); h = h.next; } return out; }\nvar __s = 20261115; function R(m) { __s = (__s * 48271) % 2147483647; return __s % m; }\nvar n = 150000, L = []; for (var i = 1; i < n; i++) L.push([i, R(i)]); for (var j = 0; j < 50000; j++) L.push([R(n), R(n)]); return devicesWithinHops(n, L, 7, 40);\n})()",
+            "mongDoi": 149999
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Finding neighbours by scanning the whole <code>links</code> array for every dequeued node: correct, but O(n · links) — the 150 000-node check times out.|||Tìm hàng xóm bằng cách quét cả mảng <code>links</code> cho mỗi nút lấy ra: đúng, nhưng O(n · links) — kiểm 150 000 nút hết giờ."
+        },
+        {
+          "loi": "Marking visited when a node is DEQUEUED instead of enqueued: a node can enter the queue several times and gets counted twice (fails the triangle case).|||Đánh dấu đã thăm lúc LẤY RA thay vì lúc ĐẨY VÀO: một nút có thể vào hàng đợi nhiều lần và bị đếm hai lần (trượt ca tam giác)."
+        },
+        {
+          "loi": "Using <code>queue.shift()</code> on a huge array: in the worst case each shift moves the whole array; prefer a head index.|||Dùng <code>queue.shift()</code> trên mảng rất lớn: trường hợp xấu mỗi lần shift dời cả mảng; nên dùng chỉ số đầu hàng (head)."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "breadth-first search (BFS)",
+          "vi": "tìm kiếm theo chiều rộng"
+        },
+        {
+          "en": "adjacency list",
+          "vi": "danh sách kề"
+        },
+        {
+          "en": "hop",
+          "vi": "bước nhảy",
+          "giaiThich": "một cạnh trên đường đi."
+        },
+        {
+          "en": "layer",
+          "vi": "tầng",
+          "giaiThich": "các nút cùng khoảng cách tới nguồn."
+        }
+      ]
+    },
+    {
+      "title": "Floor plan: the largest connected room",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 20,
+      "points": 20,
+      "concepts": [
+        "DFS",
+        "flood fill",
+        "connected components on a grid"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dsa-interview",
+        "coding-interview"
+      ],
+      "problemHtml": "<p>The facilities office scanned the floor plan of the new Beta building into a grid of strings: <code>'.'</code> is floor, <code>'#'</code> is a wall. Two floor cells belong to the same room when they touch <b>horizontally or vertically</b> (diagonal touching does not count — you cannot walk through the corner of two walls).</p>\n<p>Write <code>largestRoom(plan)</code> that returns the number of floor cells in the largest room, or 0 if there is no floor at all.</p>\n<p><b>Size warning:</b> plans go up to 700 × 700, and one corridor-shaped room can contain about 250 000 cells. A recursive DFS goes that many calls deep and overflows the call stack (<code>RangeError: Maximum call stack size exceeded</code>) — use an explicit stack or a queue.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Write the function in <code>solution.js</code> and <b>return</b> the answer — do not print it.</li>\n  <li>Do not modify the input arrays/objects.</li>\n  <li>Mind the constraints: one check runs on a large input and every check has a 4-second limit, so an O(n²) loop fails it.</li>\n</ul>",
+      "problemHtmlVi": "<p>Phòng hành chính quét sơ đồ tầng toà Beta mới thành lưới chuỗi: <code>'.'</code> là sàn, <code>'#'</code> là tường. Hai ô sàn thuộc cùng một phòng khi chúng chạm nhau <b>theo hàng ngang hoặc hàng dọc</b> (chạm chéo không tính — không ai đi xuyên qua góc giữa hai bức tường).</p>\n<p>Viết <code>largestRoom(plan)</code> trả về số ô sàn của phòng lớn nhất, hoặc 0 nếu không có ô sàn nào.</p>\n<p><b>Cảnh báo kích thước:</b> sơ đồ tới 700 × 700, và một phòng hình hành lang có thể chứa khoảng 250 000 ô. DFS đệ quy sẽ lồng sâu ngần ấy lời gọi và tràn ngăn xếp gọi hàm (<code>RangeError: Maximum call stack size exceeded</code>) — hãy dùng stack tường minh hoặc hàng đợi.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Viết hàm trong <code>solution.js</code> và <b>trả về</b> kết quả — đừng in ra.</li>\n  <li>Không sửa mảng/object đầu vào.</li>\n  <li>Để ý ràng buộc: một kiểm chạy trên đầu vào lớn và mỗi kiểm có trần 4 giây, nên vòng lặp O(n²) sẽ trượt kiểm đó.</li>\n</ul>",
+      "inputSpec": "plan — array of equal-length strings made of \".\" and \"#\".|||plan — mảng chuỗi cùng độ dài gồm \".\" và \"#\".",
+      "outputSpec": "A number — the size of the largest room.|||Một số — kích thước phòng lớn nhất.",
+      "constraints": "0 ≤ rows, cols ≤ 700.\nTarget: O(rows · cols) time; no recursion deeper than a few thousand calls.|||0 ≤ số hàng, số cột ≤ 700.\nMục tiêu: O(hàng · cột) thời gian; không đệ quy sâu quá vài nghìn lời gọi.",
+      "examplesJson": [
+        {
+          "input": "largestRoom([\"..#..\",\"..#..\",\"###..\",\"#....\"])",
+          "output": "10",
+          "explanation": "The first sample case (Run executes every visible case; hidden cases only run on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy mọi ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Every floor cell belongs to exactly one room. Loop over all cells; each unvisited floor cell starts a flood fill that counts its room.|||Mỗi ô sàn thuộc đúng một phòng. Duyệt mọi ô; mỗi ô sàn chưa thăm bắt đầu một lượt loang (flood fill) đếm phòng của nó.",
+        "Do the flood fill with your own array as a stack: push the start cell, then pop → count → push its unvisited floor neighbours. Mark a cell when you push it.|||Làm loang bằng một mảng tự quản làm stack: đẩy ô đầu, rồi lấy ra → đếm → đẩy các hàng xóm là sàn chưa thăm. Đánh dấu ô lúc đẩy vào."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "solution.js",
+          "language": "javascript",
+          "code": "/**\n * plan: string[] — \".\" floor, \"#\" wall\n * returns the number of cells in the largest 4-directionally connected room (0 if none)\n */\nfunction largestRoom(plan) {\n  // Write your solution here\n  return 0;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "solution.js",
+          "language": "javascript",
+          "code": "// Reference solution — flood fill with an explicit stack (no recursion), cells encoded as r * C + c.\nfunction largestRoom(plan) {\n  var R = plan.length, C = R ? plan[0].length : 0;\n  var seen = new Uint8Array(R * C); // cell (r, c) -> index r * C + c\n  var best = 0, stack = [];\n  for (var r0 = 0; r0 < R; r0++) for (var c0 = 0; c0 < C; c0++) {\n    if (plan[r0][c0] !== '.' || seen[r0 * C + c0]) continue;\n    var area = 0;\n    seen[r0 * C + c0] = 1; stack.push(r0 * C + c0);\n    while (stack.length) { // explicit stack: no recursion, so a 250 000-cell room cannot overflow the call stack\n      var id = stack.pop(), r = (id / C) | 0, c = id % C;\n      area++;\n      var nb = [[r - 1, c], [r + 1, c], [r, c - 1], [r, c + 1]];\n      for (var t = 0; t < 4; t++) {\n        var rr = nb[t][0], cc = nb[t][1];\n        if (rr < 0 || cc < 0 || rr >= R || cc >= C) continue;\n        if (plan[rr][cc] !== '.' || seen[rr * C + cc]) continue;\n        seen[rr * C + cc] = 1; // mark when pushed\n        stack.push(rr * C + cc);\n      }\n    }\n    if (area > best) best = area;\n  }\n  return best;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Each floor cell is pushed exactly once (it is marked at push time) and popped once, and each pop looks at 4 neighbours ⇒ O(rows · cols) time and O(rows · cols) memory for the visited array and the stack. An explicit stack keeps the same DFS order without using the engine's call stack, whose depth limit (roughly 10⁴ frames) is far below the 2.5·10⁵ cells of the longest room. Encoding a cell as <code>r * cols + c</code> avoids allocating a pair per cell.</p>",
+      "solutionExplanationHtmlVi": "<p>Mỗi ô sàn được đẩy đúng một lần (đánh dấu lúc đẩy) và lấy ra một lần, mỗi lần lấy ra xét 4 hàng xóm ⇒ O(hàng · cột) thời gian và O(hàng · cột) bộ nhớ cho mảng đã thăm và stack. Stack tường minh giữ đúng thứ tự DFS mà không dùng ngăn xếp gọi hàm của engine, vốn chỉ sâu cỡ 10⁴ khung — kém xa 2,5·10⁵ ô của phòng dài nhất. Mã hoá ô thành <code>r * cols + c</code> tránh phải tạo một cặp cho mỗi ô.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "solution.js",
+        "tepNap": [
+          "solution.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Two rooms: 4 cells and 9 cells ⇒ 9",
+              "vi": "Hai phòng: 4 ô và 9 ô ⇒ 9"
+            },
+            "goi": "largestRoom([\"..#..\",\"..#..\",\"###..\",\"#....\"])",
+            "mongDoi": 10
+          },
+          {
+            "moTa": {
+              "en": "Diagonal touching is not a connection ⇒ 1",
+              "vi": "Chạm chéo không tính là nối ⇒ 1"
+            },
+            "goi": "largestRoom([\".#\",\"#.\"])",
+            "mongDoi": 1
+          },
+          {
+            "moTa": {
+              "en": "No floor ⇒ 0",
+              "vi": "Không có sàn ⇒ 0"
+            },
+            "goi": "largestRoom([\"###\",\"###\"])",
+            "mongDoi": 0
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "largestRoom([])",
+            "mongDoi": 0,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "largestRoom([\".\"])",
+            "mongDoi": 1,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "A ring around a 1-cell room ⇒ 16",
+              "vi": "Vòng bao quanh phòng 1 ô ⇒ 16"
+            },
+            "goi": "largestRoom([\".....\",\".###.\",\".#.#.\",\".###.\",\".....\"])",
+            "mongDoi": 16,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "largestRoom([\"..#...#..\",\"#.#.#.#.#\",\"..#.#....\"])",
+            "mongDoi": 13,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Performance: 700 × 700 snake corridor of ~245 000 cells (recursive DFS overflows the stack)",
+              "vi": "Hiệu năng: hành lang hình rắn 700 × 700 khoảng 245 000 ô (DFS đệ quy tràn ngăn xếp)"
+            },
+            "goi": "(function () {\nfunction __cay(a) { if (!a.length || a[0] == null) return null; var root = { val: a[0], left: null, right: null }, q = [root], h = 0, i = 1;\n  while (i < a.length) { var n = q[h++]; if (a[i] != null) { n.left = { val: a[i], left: null, right: null }; q.push(n.left); } i++;\n    if (i < a.length && a[i] != null) { n.right = { val: a[i], left: null, right: null }; q.push(n.right); } i++; } return root; }\nfunction __raCay(r) { var out = [], q = [r], h = 0; while (h < q.length) { var n = q[h++]; if (n == null) { out.push(null); continue; } out.push(n.val); q.push(n.left == null ? null : n.left, n.right == null ? null : n.right); }\n  while (out.length && out[out.length - 1] === null) out.pop(); return out; }\nfunction __ds(a) { var head = null; for (var i = a.length - 1; i >= 0; i--) head = { val: a[i], next: head }; return head; }\nfunction __raDs(h) { var out = []; while (h && out.length < 1000000) { out.push(h.val); h = h.next; } return out; }\nvar __s = 20261115; function R(m) { __s = (__s * 48271) % 2147483647; return __s % m; }\nvar N = 700, rows = []; for (var r = 0; r < N; r++) { if (r % 2 === 0) rows.push(\".\".repeat(N)); else { var gap = (r % 4 === 1) ? N - 1 : 0; var s = \"\"; for (var c = 0; c < N; c++) s += c === gap ? \".\" : \"#\"; rows.push(s); } } var small = []; for (var i = 0; i < 60; i++) { var t = \"\"; for (var j = 0; j < 60; j++) t += R(3) ? \".\" : \"#\"; small.push(t); } return [largestRoom(rows), largestRoom(small)];\n})()",
+            "mongDoi": [
+              245350,
+              2301
+            ]
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Recursive DFS: fine on small plans, but the 700 × 700 snake-shaped corridor needs ~250 000 nested calls ⇒ stack overflow.|||DFS đệ quy: ổn với sơ đồ nhỏ, nhưng hành lang ngoằn ngoèo 700 × 700 cần ~250 000 lời gọi lồng nhau ⇒ tràn ngăn xếp."
+        },
+        {
+          "loi": "Counting diagonal neighbours: two rooms that only touch at a corner get merged.|||Tính cả hàng xóm chéo: hai phòng chỉ chạm nhau ở góc bị gộp làm một."
+        },
+        {
+          "loi": "Marking a cell visited only when it is popped: the same cell can be pushed by two neighbours and counted twice.|||Chỉ đánh dấu khi lấy ra: cùng một ô có thể bị hai hàng xóm đẩy vào và đếm hai lần."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "flood fill",
+          "vi": "loang",
+          "giaiThich": "tô hết vùng liên thông từ một ô."
+        },
+        {
+          "en": "connected component",
+          "vi": "thành phần liên thông"
+        },
+        {
+          "en": "call stack",
+          "vi": "ngăn xếp gọi hàm"
+        },
+        {
+          "en": "stack overflow",
+          "vi": "tràn ngăn xếp"
+        }
+      ]
+    },
+    {
+      "title": "Campus shuttles: the fewest rides between two stops",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 30,
+      "points": 30,
+      "concepts": [
+        "BFS",
+        "graph modelling",
+        "shortest path on an implicit graph"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dsa-interview",
+        "coding-interview"
+      ],
+      "problemHtml": "<p>FPT's shuttle buses run fixed loops: <code>routes[i]</code> is the list of stops (numbers) bus line <code>i</code> visits, and a bus goes back and forth along its line forever, so you can ride it between any two of its stops. You can change lines at any stop that both lines serve.</p>\n<p>Write <code>fewestShuttles(routes, from, to)</code>: the minimum number of <b>buses you have to board</b> to travel from stop <code>from</code> to stop <code>to</code>. Return 0 when <code>from === to</code> and −1 when it is impossible. Walking is not allowed.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Write the function in <code>solution.js</code> and <b>return</b> the answer — do not print it.</li>\n  <li>Do not modify the input arrays/objects.</li>\n  <li>Mind the constraints: one check runs on a large input and every check has a 4-second limit, so an O(n²) loop fails it.</li>\n</ul>",
+      "problemHtmlVi": "<p>Xe đưa đón của FPT chạy các tuyến cố định: <code>routes[i]</code> là danh sách trạm (số) mà tuyến <code>i</code> đi qua, và xe chạy đi chạy lại mãi trên tuyến, nên bạn đi được giữa hai trạm bất kỳ của tuyến đó. Bạn đổi tuyến được ở trạm mà cả hai tuyến cùng dừng.</p>\n<p>Viết <code>fewestShuttles(routes, from, to)</code>: số <b>chuyến xe ít nhất phải lên</b> để đi từ trạm <code>from</code> tới trạm <code>to</code>. Trả 0 khi <code>from === to</code> và −1 khi không thể. Không được đi bộ.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Viết hàm trong <code>solution.js</code> và <b>trả về</b> kết quả — đừng in ra.</li>\n  <li>Không sửa mảng/object đầu vào.</li>\n  <li>Để ý ràng buộc: một kiểm chạy trên đầu vào lớn và mỗi kiểm có trần 4 giây, nên vòng lặp O(n²) sẽ trượt kiểm đó.</li>\n</ul>",
+      "inputSpec": "routes — array of arrays of stop numbers (no duplicate stop inside one route); from, to — stop numbers.|||routes — mảng các mảng số trạm (trong một tuyến không lặp trạm); from, to — số trạm.",
+      "outputSpec": "The number of buses, 0, or −1.|||Số chuyến xe, 0, hoặc −1.",
+      "constraints": "1 ≤ routes.length ≤ 500; total number of stop entries ≤ 600 000; stop numbers up to 10⁹.\nTarget: O(total stop entries).|||1 ≤ routes.length ≤ 500; tổng số mục trạm ≤ 600 000; số trạm tới 10⁹.\nMục tiêu: O(tổng số mục trạm).",
+      "examplesJson": [
+        {
+          "input": "fewestShuttles([[1,2,7],[3,6,7]], 1, 6)",
+          "output": "2",
+          "explanation": "The first sample case (Run executes every visible case; hidden cases only run on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy mọi ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "The answer counts <i>buses</i>, not stops. Think of each route as a node: two routes are adjacent when they share a stop. Then it is a shortest path in an unweighted graph ⇒ BFS.|||Đáp án đếm <i>chuyến xe</i>, không đếm trạm. Coi mỗi tuyến là một nút: hai tuyến kề nhau khi có chung một trạm. Khi đó là đường ngắn nhất trên đồ thị không trọng số ⇒ BFS.",
+        "Do not build route–route edges pairwise. Keep <code>stop → routes</code> in a Map; BFS over routes layer by layer, and when you expand a route walk its stops, enqueuing the not-yet-used routes of each new stop. Mark both routes and stops so each is expanded once.|||Đừng dựng cạnh tuyến–tuyến theo từng cặp. Giữ Map <code>trạm → các tuyến</code>; BFS trên tuyến theo từng tầng, mở rộng một tuyến thì đi qua các trạm của nó, đẩy các tuyến chưa dùng của mỗi trạm mới. Đánh dấu cả tuyến lẫn trạm để mỗi thứ chỉ mở rộng một lần."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "solution.js",
+          "language": "javascript",
+          "code": "/**\n * routes: number[][] — stops of each bus line; from, to: stop numbers\n * returns the minimum number of buses to board, 0 if from === to, -1 if impossible\n */\nfunction fewestShuttles(routes, from, to) {\n  // Write your solution here\n  return -1;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "solution.js",
+          "language": "javascript",
+          "code": "// Reference solution — BFS whose nodes are ROUTES; stop -> routes map; each route and each stop expanded once.\nfunction fewestShuttles(routes, from, to) {\n  if (from === to) return 0;\n  var byStop = new Map(); // stop -> indexes of routes that stop there\n  for (var i = 0; i < routes.length; i++) for (var j = 0; j < routes[i].length; j++) {\n    var s = routes[i][j];\n    if (!byStop.has(s)) byStop.set(s, []);\n    byStop.get(s).push(i);\n  }\n  var usedRoute = new Uint8Array(routes.length), seenStop = new Set([from]);\n  var queue = (byStop.get(from) || []).slice(), head = 0, level = 1;\n  for (var q = 0; q < queue.length; q++) usedRoute[queue[q]] = 1;\n  while (head < queue.length) {\n    var end = queue.length; // one BFS layer = all routes reachable with `level` rides\n    for (; head < end; head++) {\n      var stops = routes[queue[head]];\n      for (var k = 0; k < stops.length; k++) {\n        var st = stops[k];\n        if (st === to) return level;\n        if (seenStop.has(st)) continue;\n        seenStop.add(st);\n        var rs = byStop.get(st);\n        for (var t = 0; t < rs.length; t++) if (!usedRoute[rs[t]]) { usedRoute[rs[t]] = 1; queue.push(rs[t]); } // each route expanded ONCE\n      }\n    }\n    level++;\n  }\n  return -1;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Modelling matters more than the search: the cost is \"number of boardings\", so the nodes of the BFS are routes. Layer 1 is every route through <code>from</code>; a route in layer d is reached with d rides. Because each route is enqueued once (<code>usedRoute</code>) and each stop is expanded once (<code>seenStop</code>), every stop entry is touched a constant number of times ⇒ O(total stop entries) time and memory. Building explicit route–route edges would cost O(routes² · length) just to compare lines.</p>",
+      "solutionExplanationHtmlVi": "<p>Mô hình hoá quan trọng hơn thuật toán tìm: chi phí là \"số lần lên xe\", nên nút của BFS là tuyến. Tầng 1 là mọi tuyến qua <code>from</code>; tuyến ở tầng d tới được bằng d chuyến. Vì mỗi tuyến vào hàng đợi một lần (<code>usedRoute</code>) và mỗi trạm mở rộng một lần (<code>seenStop</code>), mỗi mục trạm chỉ bị chạm hằng số lần ⇒ O(tổng số mục trạm) thời gian và bộ nhớ. Dựng cạnh tuyến–tuyến tường minh sẽ tốn O(tuyến² · độ dài) chỉ để so các tuyến.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "solution.js",
+        "tepNap": [
+          "solution.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Ride line 0 to stop 7, change to line 1 ⇒ 2",
+              "vi": "Đi tuyến 0 tới trạm 7, đổi sang tuyến 1 ⇒ 2"
+            },
+            "goi": "fewestShuttles([[1,2,7],[3,6,7]], 1, 6)",
+            "mongDoi": 2
+          },
+          {
+            "moTa": {
+              "en": "Same bus all the way ⇒ 1",
+              "vi": "Một xe đi suốt ⇒ 1"
+            },
+            "goi": "fewestShuttles([[1,2,3,4,5]], 1, 5)",
+            "mongDoi": 1
+          },
+          {
+            "moTa": {
+              "en": "No shared stop ⇒ −1",
+              "vi": "Không có trạm chung ⇒ −1"
+            },
+            "goi": "fewestShuttles([[1,2],[3,4]], 1, 4)",
+            "mongDoi": -1
+          },
+          {
+            "moTa": {
+              "en": "from === to ⇒ 0",
+              "vi": "from === to ⇒ 0"
+            },
+            "goi": "fewestShuttles([[1,2]], 9, 9)",
+            "mongDoi": 0,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Start stop served by no line ⇒ −1",
+              "vi": "Trạm xuất phát không có tuyến nào ⇒ −1"
+            },
+            "goi": "fewestShuttles([[1,2]], 9, 2)",
+            "mongDoi": -1,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "fewestShuttles([[7,12],[4,5,15],[6],[15,19],[9,12,13]], 15, 12)",
+            "mongDoi": -1,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "A shortcut line beats the long chain ⇒ 2",
+              "vi": "Tuyến tắt thắng chuỗi dài ⇒ 2"
+            },
+            "goi": "fewestShuttles([[1,10],[10,20],[20,30],[30,40],[1,40]], 1, 30)",
+            "mongDoi": 2,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 8",
+              "vi": "Ca ẩn 8"
+            },
+            "goi": "fewestShuttles([[1,2,3],[3,4,5],[5,6,1]], 2, 6)",
+            "mongDoi": 2,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Performance: 200 lines × 1 500 stops chained end to end (re-scanning a line per stop times out)",
+              "vi": "Hiệu năng: 200 tuyến × 1 500 trạm nối nối tiếp (quét lại cả tuyến cho mỗi trạm hết giờ)"
+            },
+            "goi": "(function () {\nfunction __cay(a) { if (!a.length || a[0] == null) return null; var root = { val: a[0], left: null, right: null }, q = [root], h = 0, i = 1;\n  while (i < a.length) { var n = q[h++]; if (a[i] != null) { n.left = { val: a[i], left: null, right: null }; q.push(n.left); } i++;\n    if (i < a.length && a[i] != null) { n.right = { val: a[i], left: null, right: null }; q.push(n.right); } i++; } return root; }\nfunction __raCay(r) { var out = [], q = [r], h = 0; while (h < q.length) { var n = q[h++]; if (n == null) { out.push(null); continue; } out.push(n.val); q.push(n.left == null ? null : n.left, n.right == null ? null : n.right); }\n  while (out.length && out[out.length - 1] === null) out.pop(); return out; }\nfunction __ds(a) { var head = null; for (var i = a.length - 1; i >= 0; i--) head = { val: a[i], next: head }; return head; }\nfunction __raDs(h) { var out = []; while (h && out.length < 1000000) { out.push(h.val); h = h.next; } return out; }\nvar __s = 20261115; function R(m) { __s = (__s * 48271) % 2147483647; return __s % m; }\nvar routes = []; for (var i = 0; i < 200; i++) { var r = [i, i + 1]; for (var j = 0; j < 1498; j++) r.push(1000 + i * 100000 + j * 37 + R(30)); routes.push(r); } return [fewestShuttles(routes, 0, 200), fewestShuttles(routes, 0, 999999999)];\n})()",
+            "mongDoi": [
+              200,
+              -1
+            ]
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "BFS over stops where every stop re-reads all stops of all its routes: the same long route is scanned once per stop ⇒ O(Σ len²), too slow for 1 500-stop lines.|||BFS trên trạm mà mỗi trạm đọc lại mọi trạm của mọi tuyến của nó: cùng một tuyến dài bị quét một lần cho mỗi trạm ⇒ O(Σ độ dài²), quá chậm với tuyến 1 500 trạm."
+        },
+        {
+          "loi": "Counting stops (or edges between stops) instead of boardings: riding three stops on the same bus is still ONE bus.|||Đếm trạm (hoặc cạnh giữa trạm) thay vì số lần lên xe: đi ba trạm trên cùng một xe vẫn là MỘT chuyến."
+        },
+        {
+          "loi": "Forgetting <code>from === to</code> ⇒ 0, or crashing when <code>from</code> is not served by any route (should return −1).|||Quên <code>from === to</code> ⇒ 0, hoặc lỗi khi <code>from</code> không có tuyến nào dừng (phải trả −1)."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "implicit graph",
+          "vi": "đồ thị ngầm",
+          "giaiThich": "đồ thị không cho sẵn cạnh, phải tự suy ra."
+        },
+        {
+          "en": "boarding",
+          "vi": "lần lên xe"
+        },
+        {
+          "en": "layer-by-layer BFS",
+          "vi": "BFS theo từng tầng"
+        }
+      ]
+    }
+  ]
+}

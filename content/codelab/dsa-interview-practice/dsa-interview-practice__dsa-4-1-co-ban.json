@@ -1,0 +1,810 @@
+{
+  "trackSlug": "dsa-interview-practice",
+  "moduleSlug": "dsa-4-1-co-ban",
+  "lesson": {
+    "course": "dsa-interview",
+    "slug": "dsa-4-1-co-ban"
+  },
+  "exercises": [
+    {
+      "title": "Exam results: how many students reached at least x",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 15,
+      "points": 10,
+      "concepts": [
+        "binary search",
+        "lower bound"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dsa-interview",
+        "coding-interview"
+      ],
+      "problemHtml": "<p>The training office has the final scores of a cohort, already <b>sorted ascending</b> (scores × 10, so 8.5 is 85). Different scholarships have different thresholds, and the dashboard asks many questions of the form \"how many students scored <b>at least</b> <code>x</code>?\".</p>\n<p>Write <code>countAtLeast(scores, queries)</code> returning, for each <code>x</code> in <code>queries</code>, the number of scores <code>≥ x</code>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Write the function in <code>solution.js</code> and <b>return</b> the answer — do not print it.</li>\n  <li>Do not modify the input arrays/objects.</li>\n  <li>Mind the constraints: one check runs on a large input and every check has a 4-second limit, so an O(n²) loop fails it.</li>\n</ul>",
+      "problemHtmlVi": "<p>Phòng đào tạo có điểm tổng kết của một khoá, đã <b>sắp tăng dần</b> (điểm × 10, nên 8.5 là 85). Mỗi học bổng có ngưỡng riêng, và trang tổng quan hỏi rất nhiều câu dạng \"bao nhiêu sinh viên đạt <b>ít nhất</b> <code>x</code>?\".</p>\n<p>Viết <code>countAtLeast(scores, queries)</code> trả về, với mỗi <code>x</code> trong <code>queries</code>, số điểm <code>≥ x</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Viết hàm trong <code>solution.js</code> và <b>trả về</b> kết quả — đừng in ra.</li>\n  <li>Không sửa mảng/object đầu vào.</li>\n  <li>Để ý ràng buộc: một kiểm chạy trên đầu vào lớn và mỗi kiểm có trần 4 giây, nên vòng lặp O(n²) sẽ trượt kiểm đó.</li>\n</ul>",
+      "inputSpec": "scores — sorted ascending integers (duplicates allowed); queries — integers.|||scores — số nguyên sắp tăng dần (có thể trùng); queries — số nguyên.",
+      "outputSpec": "number[] — one count per query.|||number[] — mỗi truy vấn một số đếm.",
+      "constraints": "0 ≤ scores.length, queries.length ≤ 200 000; 0 ≤ values ≤ 100.\nTarget: O(log n) per query.|||0 ≤ scores.length, queries.length ≤ 200 000; 0 ≤ giá trị ≤ 100.\nMục tiêu: O(log n) mỗi truy vấn.",
+      "examplesJson": [
+        {
+          "input": "countAtLeast([55,62,70,70,85,91], [70,80,50])",
+          "output": "[4,2,6]",
+          "explanation": "The first sample case (Run executes every visible case; hidden cases only run on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy mọi ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Because the array is sorted, the predicate <code>scores[i] &gt;= x</code> is false … false true … true. You need the index of the FIRST true.|||Vì mảng đã sắp, mệnh đề <code>scores[i] &gt;= x</code> là false … false true … true. Cần chỉ số của true ĐẦU TIÊN.",
+        "Search on the half-open range <code>[0, n)</code>: <code>hi = n</code> means \"no true at all\". If <code>a[mid] &gt;= x</code> set <code>hi = mid</code>, else <code>lo = mid + 1</code>. Then the count is <code>n − lo</code>.|||Tìm trên khoảng nửa mở <code>[0, n)</code>: <code>hi = n</code> nghĩa là \"không có true nào\". Nếu <code>a[mid] &gt;= x</code> thì <code>hi = mid</code>, ngược lại <code>lo = mid + 1</code>. Khi đó số đếm là <code>n − lo</code>."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "solution.js",
+          "language": "javascript",
+          "code": "/**\n * scores: number[] (sorted ascending), queries: number[]\n * returns, for each x, how many scores are >= x\n */\nfunction countAtLeast(scores, queries) {\n  // Write your solution here\n  return queries.map(function () { return 0; });\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "solution.js",
+          "language": "javascript",
+          "code": "// Reference solution — \"first true\" binary search on [0, n), then n - index.\nfunction firstAtLeast(a, x) {\n  var lo = 0, hi = a.length;               // answer lives in [lo, hi]; hi = a.length means \"none\"\n  while (lo < hi) {\n    var mid = lo + ((hi - lo) >> 1);       // never (lo + hi) / 2 in Java — it overflows\n    if (a[mid] >= x) hi = mid;             // predicate true ⇒ the first true is at mid or to its left\n    else lo = mid + 1;                     // false ⇒ strictly to the right\n  }\n  return lo;\n}\n\nfunction countAtLeast(scores, queries) {\n  var n = scores.length;\n  // scores is sorted ascending ⇒ everything from the first index with score >= x to the end qualifies\n  return queries.map(function (x) { return n - firstAtLeast(scores, x); });\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The invariant of the template: everything left of <code>lo</code> is false, everything from <code>hi</code> on is true. Each round halves <code>hi − lo</code> and keeps the invariant, so when <code>lo === hi</code> it is exactly the first true (or n if none). Then all of <code>[lo, n)</code> qualifies. O(log n) per query ⇒ O(q log n) total, O(1) extra memory besides the output.</p>",
+      "solutionExplanationHtmlVi": "<p>Bất biến của khuôn: mọi thứ bên trái <code>lo</code> là false, mọi thứ từ <code>hi</code> trở đi là true. Mỗi vòng chia đôi <code>hi − lo</code> và giữ bất biến, nên khi <code>lo === hi</code> nó chính là true đầu tiên (hoặc n nếu không có). Khi đó cả đoạn <code>[lo, n)</code> đạt. O(log n) mỗi truy vấn ⇒ tổng O(q log n), O(1) bộ nhớ phụ ngoài kết quả.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "solution.js",
+        "tepNap": [
+          "solution.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: countAtLeast([55,62,70,70,85,91], [70,80,50])",
+              "vi": "Ca 1"
+            },
+            "goi": "countAtLeast([55,62,70,70,85,91], [70,80,50])",
+            "mongDoi": [
+              4,
+              2,
+              6
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Exactly the threshold counts",
+              "vi": "Đúng bằng ngưỡng vẫn được tính"
+            },
+            "goi": "countAtLeast([60,60,60], [60,61])",
+            "mongDoi": [
+              3,
+              0
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "countAtLeast([], [10])",
+            "mongDoi": [
+              0
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "countAtLeast([10,20,30], [0,100,30,31,10])",
+            "mongDoi": [
+              3,
+              0,
+              1,
+              0,
+              3
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "countAtLeast([50], [49,50,51])",
+            "mongDoi": [
+              1,
+              1,
+              0
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "countAtLeast([1,1,2,2,2,3,3,3,3], [2,3,4,1])",
+            "mongDoi": [
+              7,
+              4,
+              0,
+              9
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Performance: 200 000 scores × 200 000 queries (scanning per query is 4·10¹⁰ steps)",
+              "vi": "Hiệu năng: 200 000 điểm × 200 000 truy vấn (quét mỗi truy vấn là 4·10¹⁰ bước)"
+            },
+            "goi": "(function () {\nfunction __cay(a) { if (!a.length || a[0] == null) return null; var root = { val: a[0], left: null, right: null }, q = [root], h = 0, i = 1;\n  while (i < a.length) { var n = q[h++]; if (a[i] != null) { n.left = { val: a[i], left: null, right: null }; q.push(n.left); } i++;\n    if (i < a.length && a[i] != null) { n.right = { val: a[i], left: null, right: null }; q.push(n.right); } i++; } return root; }\nfunction __raCay(r) { var out = [], q = [r], h = 0; while (h < q.length) { var n = q[h++]; if (n == null) { out.push(null); continue; } out.push(n.val); q.push(n.left == null ? null : n.left, n.right == null ? null : n.right); }\n  while (out.length && out[out.length - 1] === null) out.pop(); return out; }\nfunction __ds(a) { var head = null; for (var i = a.length - 1; i >= 0; i--) head = { val: a[i], next: head }; return head; }\nfunction __raDs(h) { var out = []; while (h && out.length < 1000000) { out.push(h.val); h = h.next; } return out; }\nvar __s = 20261115; function R(m) { __s = (__s * 48271) % 2147483647; return __s % m; }\nvar n = 200000, a = new Array(n), q = new Array(n); for (var i = 0; i < n; i++) { a[i] = R(101); q[i] = R(102); } a.sort(function (x, y) { return x - y; }); var r = countAtLeast(a, q), s = 0; for (var j = 0; j < n; j++) s += r[j]; return { answers: r.length, sum: s, first: r.slice(0, 3) };\n})()",
+            "mongDoi": {
+              "answers": 200000,
+              "sum": 20014262703,
+              "first": [
+                45356,
+                59274,
+                31427
+              ]
+            }
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Using <code>&gt;</code> instead of <code>&gt;=</code>: students who scored exactly the threshold are not counted.|||Dùng <code>&gt;</code> thay vì <code>&gt;=</code>: sinh viên đạt đúng ngưỡng không được đếm."
+        },
+        {
+          "loi": "Starting with <code>hi = n − 1</code>: when nobody reaches x the search still returns the last index and the count becomes 1 instead of 0.|||Bắt đầu với <code>hi = n − 1</code>: khi không ai đạt x, phép tìm vẫn trả chỉ số cuối và số đếm thành 1 thay vì 0."
+        },
+        {
+          "loi": "Scanning (or <code>filter</code>) per query: O(n·q) = 4·10¹⁰ for 200 000 × 200 000.|||Quét (hoặc <code>filter</code>) cho mỗi truy vấn: O(n·q) = 4·10¹⁰ với 200 000 × 200 000."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "lower bound",
+          "vi": "cận dưới",
+          "giaiThich": "chỉ số đầu tiên có giá trị ≥ x."
+        },
+        {
+          "en": "half-open range [lo, hi)",
+          "vi": "khoảng nửa mở"
+        },
+        {
+          "en": "invariant",
+          "vi": "bất biến",
+          "giaiThich": "điều luôn đúng sau mỗi vòng lặp."
+        },
+        {
+          "en": "predicate",
+          "vi": "mệnh đề (điều kiện đúng/sai)"
+        }
+      ]
+    },
+    {
+      "title": "Lab timetable: which slot is running at time t",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 20,
+      "points": 20,
+      "concepts": [
+        "binary search",
+        "upper bound",
+        "intervals"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dsa-interview",
+        "coding-interview"
+      ],
+      "problemHtml": "<p>Room AL-L102 has a timetable of non-overlapping slots sorted by start time: slot <code>i</code> runs on the half-open interval <code>[starts[i], ends[i])</code> (minutes since midnight). There can be gaps between slots — breaks, lunch. The door screen receives many timestamps and must show which slot is running.</p>\n<p>Write <code>slotOf(starts, ends, times)</code> returning, for each <code>t</code>, the index of the slot that contains <code>t</code>, or <code>-1</code> if the room is free at <code>t</code>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Write the function in <code>solution.js</code> and <b>return</b> the answer — do not print it.</li>\n  <li>Do not modify the input arrays/objects.</li>\n  <li>Mind the constraints: one check runs on a large input and every check has a 4-second limit, so an O(n²) loop fails it.</li>\n</ul>",
+      "problemHtmlVi": "<p>Phòng AL-L102 có thời khoá biểu gồm các ca không chồng nhau, sắp theo giờ bắt đầu: ca <code>i</code> chạy trên khoảng nửa mở <code>[starts[i], ends[i])</code> (phút tính từ nửa đêm). Giữa các ca có thể có khoảng trống — giải lao, ăn trưa. Màn hình ở cửa nhận rất nhiều mốc thời gian và phải hiện ca nào đang diễn ra.</p>\n<p>Viết <code>slotOf(starts, ends, times)</code> trả về, với mỗi <code>t</code>, chỉ số ca chứa <code>t</code>, hoặc <code>-1</code> nếu phòng trống lúc <code>t</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Viết hàm trong <code>solution.js</code> và <b>trả về</b> kết quả — đừng in ra.</li>\n  <li>Không sửa mảng/object đầu vào.</li>\n  <li>Để ý ràng buộc: một kiểm chạy trên đầu vào lớn và mỗi kiểm có trần 4 giây, nên vòng lặp O(n²) sẽ trượt kiểm đó.</li>\n</ul>",
+      "inputSpec": "starts, ends — same length, starts strictly increasing, starts[i] < ends[i] ≤ starts[i+1]; times — integers.|||starts, ends — cùng độ dài, starts tăng ngặt, starts[i] < ends[i] ≤ starts[i+1]; times — số nguyên.",
+      "outputSpec": "number[] — a slot index or -1 per time.|||number[] — chỉ số ca hoặc -1 cho mỗi mốc.",
+      "constraints": "0 ≤ slots, times ≤ 200 000; 0 ≤ values ≤ 10⁹.\nTarget: O(log n) per time.|||0 ≤ số ca, số mốc ≤ 200 000; 0 ≤ giá trị ≤ 10⁹.\nMục tiêu: O(log n) mỗi mốc.",
+      "examplesJson": [
+        {
+          "input": "slotOf([450,555,660,780], [540,645,750,870], [460,545,555,900])",
+          "output": "[0,-1,1,-1]",
+          "explanation": "The first sample case (Run executes every visible case; hidden cases only run on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy mọi ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Only one slot can contain t: the LAST one that starts at or before t. Any earlier slot has already ended, any later one has not started.|||Chỉ một ca có thể chứa t: ca CUỐI CÙNG bắt đầu không muộn hơn t. Mọi ca trước đó đã kết thúc, mọi ca sau chưa bắt đầu.",
+        "\"Last start ≤ t\" = (first start &gt; t) − 1 — reuse the same first-true template with the predicate <code>starts[mid] &gt; t</code>. Then check <code>t &lt; ends[i]</code> for the gap case.|||\"Start cuối ≤ t\" = (start đầu tiên &gt; t) − 1 — dùng lại đúng khuôn true-đầu-tiên với mệnh đề <code>starts[mid] &gt; t</code>. Rồi kiểm <code>t &lt; ends[i]</code> cho trường hợp rơi vào khoảng trống."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "solution.js",
+          "language": "javascript",
+          "code": "/**\n * starts, ends: number[] — slot i is [starts[i], ends[i]), sorted, non-overlapping\n * times: number[]\n * returns for each t the index of the slot containing t, or -1\n */\nfunction slotOf(starts, ends, times) {\n  // Write your solution here\n  return times.map(function () { return -1; });\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "solution.js",
+          "language": "javascript",
+          "code": "// Reference solution — last start <= t = (first start > t) - 1, then check the end.\nfunction slotOf(starts, ends, times) {\n  return times.map(function (t) {\n    // first index whose start is > t …\n    var lo = 0, hi = starts.length;\n    while (lo < hi) { var mid = lo + ((hi - lo) >> 1); if (starts[mid] > t) hi = mid; else lo = mid + 1; }\n    var i = lo - 1;                          // … so lo - 1 is the LAST slot starting at or before t\n    return i >= 0 && t < ends[i] ? i : -1;   // slots are half-open [start, end): t === end is already outside\n  });\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Starts are sorted, so \"starts[i] &gt; t\" is false…false true…true; its first true index minus one is the last slot that has started by t. Because slots do not overlap, that slot is the only candidate, and a single comparison with its end decides between \"running\" and \"gap\". One binary search per time ⇒ O(q log n), O(1) extra memory. Deriving the \"last\" answer from the \"first\" template avoids the classic infinite loop of a hand-written second template.</p>",
+      "solutionExplanationHtmlVi": "<p>Starts đã sắp, nên \"starts[i] &gt; t\" là false…false true…true; chỉ số true đầu tiên trừ một là ca cuối đã bắt đầu tính tới t. Vì các ca không chồng nhau, đó là ứng viên duy nhất, và một phép so với end của nó quyết định \"đang học\" hay \"khoảng trống\". Mỗi mốc một lần tìm nhị phân ⇒ O(q log n), O(1) bộ nhớ phụ. Suy câu trả lời \"cuối\" từ khuôn \"đầu\" tránh được vòng lặp vô hạn kinh điển của khuôn thứ hai viết tay.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "solution.js",
+        "tepNap": [
+          "solution.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "In a slot, in a break, at a start, after the last slot",
+              "vi": "Trong ca, giờ nghỉ, đúng giờ bắt đầu, sau ca cuối"
+            },
+            "goi": "slotOf([450,555,660,780], [540,645,750,870], [460,545,555,900])",
+            "mongDoi": [
+              0,
+              -1,
+              1,
+              -1
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Back-to-back: at 540 the second slot is running",
+              "vi": "Nối tiếp: lúc 540 là ca thứ hai"
+            },
+            "goi": "slotOf([450,540], [540,630], [540])",
+            "mongDoi": [
+              1
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "slotOf([], [], [100])",
+            "mongDoi": [
+              -1
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "slotOf([100], [200], [99,100,199,200])",
+            "mongDoi": [
+              -1,
+              0,
+              0,
+              -1
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "slotOf([0,10,20,30], [5,15,25,35], [4,5,9,10,34,35,-1])",
+            "mongDoi": [
+              0,
+              -1,
+              -1,
+              1,
+              3,
+              -1,
+              -1
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "slotOf([1,2,3,4,5], [2,3,4,5,6], [3,1,5,6])",
+            "mongDoi": [
+              2,
+              0,
+              4,
+              -1
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Performance: 200 000 slots × 200 000 timestamps (a linear scan per timestamp times out)",
+              "vi": "Hiệu năng: 200 000 ca × 200 000 mốc (quét tuyến tính mỗi mốc hết giờ)"
+            },
+            "goi": "(function () {\nfunction __cay(a) { if (!a.length || a[0] == null) return null; var root = { val: a[0], left: null, right: null }, q = [root], h = 0, i = 1;\n  while (i < a.length) { var n = q[h++]; if (a[i] != null) { n.left = { val: a[i], left: null, right: null }; q.push(n.left); } i++;\n    if (i < a.length && a[i] != null) { n.right = { val: a[i], left: null, right: null }; q.push(n.right); } i++; } return root; }\nfunction __raCay(r) { var out = [], q = [r], h = 0; while (h < q.length) { var n = q[h++]; if (n == null) { out.push(null); continue; } out.push(n.val); q.push(n.left == null ? null : n.left, n.right == null ? null : n.right); }\n  while (out.length && out[out.length - 1] === null) out.pop(); return out; }\nfunction __ds(a) { var head = null; for (var i = a.length - 1; i >= 0; i--) head = { val: a[i], next: head }; return head; }\nfunction __raDs(h) { var out = []; while (h && out.length < 1000000) { out.push(h.val); h = h.next; } return out; }\nvar __s = 20261115; function R(m) { __s = (__s * 48271) % 2147483647; return __s % m; }\nvar n = 200000, s = new Array(n), e = new Array(n), x = 0; for (var i = 0; i < n; i++) { x += R(5); s[i] = x; x += 1 + R(10); e[i] = x; } var q = new Array(n); for (var j = 0; j < n; j++) q[j] = R(x + 10); var r = slotOf(s, e, q), free = 0, sum = 0; for (var k = 0; k < n; k++) { if (r[k] < 0) free++; else sum += r[k]; } return { free: free, sumOfIndexes: sum };\n})()",
+            "mongDoi": {
+              "free": 53105,
+              "sumOfIndexes": 14707260917
+            }
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Treating slots as closed <code>[start, end]</code>: at exactly 09:30 when one class ends and the next starts, the screen shows the class that just finished.|||Coi ca là đoạn đóng <code>[start, end]</code>: đúng 09:30 khi một ca kết thúc và ca sau bắt đầu, màn hình lại hiện ca vừa xong."
+        },
+        {
+          "loi": "Returning the last slot with start ≤ t without checking its end: during lunch the screen claims the morning class is still on.|||Trả ca cuối có start ≤ t mà không kiểm end: giờ ăn trưa màn hình vẫn báo ca sáng đang học."
+        },
+        {
+          "loi": "Writing a second \"last true\" template with <code>lo = mid</code>: with <code>mid</code> rounded down it loops forever when <code>hi = lo + 1</code>. Derive \"last\" from \"first\" instead.|||Viết thêm khuôn \"true cuối\" với <code>lo = mid</code>: khi <code>mid</code> làm tròn xuống nó lặp mãi lúc <code>hi = lo + 1</code>. Hãy suy \"cuối\" từ \"đầu\"."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "upper bound",
+          "vi": "cận trên",
+          "giaiThich": "chỉ số đầu tiên có giá trị > x."
+        },
+        {
+          "en": "last true",
+          "vi": "true cuối cùng"
+        },
+        {
+          "en": "half-open interval",
+          "vi": "khoảng nửa mở",
+          "giaiThich": "[start, end): gồm start, không gồm end."
+        }
+      ]
+    },
+    {
+      "title": "Cloud drive: the first day a quota is exceeded",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 20,
+      "points": 20,
+      "concepts": [
+        "binary search",
+        "prefix sum"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dsa-interview",
+        "coding-interview"
+      ],
+      "problemHtml": "<p>A student club shares one cloud drive. Nothing is ever deleted, and <code>dailyMB[d]</code> is how many MB were uploaded on day <code>d</code> (possibly 0). The admin compares several storage plans: for a plan with quota <code>q</code> MB, on which day does the total usage first go <b>strictly over</b> <code>q</code>?</p>\n<p>Write <code>firstDayOver(dailyMB, quotas)</code> returning, for each quota, the first day index <code>d</code> with <code>dailyMB[0] + … + dailyMB[d] &gt; q</code>, or <code>-1</code> if usage never exceeds it.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Write the function in <code>solution.js</code> and <b>return</b> the answer — do not print it.</li>\n  <li>Do not modify the input arrays/objects.</li>\n  <li>Mind the constraints: one check runs on a large input and every check has a 4-second limit, so an O(n²) loop fails it.</li>\n</ul>",
+      "problemHtmlVi": "<p>Một câu lạc bộ sinh viên dùng chung một ổ đám mây. Không bao giờ xoá gì, và <code>dailyMB[d]</code> là số MB được tải lên ở ngày <code>d</code> (có thể bằng 0). Quản trị viên so vài gói lưu trữ: với gói hạn mức <code>q</code> MB, ngày nào tổng dung lượng lần đầu <b>vượt hẳn</b> <code>q</code>?</p>\n<p>Viết <code>firstDayOver(dailyMB, quotas)</code> trả về, với mỗi hạn mức, chỉ số ngày đầu tiên <code>d</code> có <code>dailyMB[0] + … + dailyMB[d] &gt; q</code>, hoặc <code>-1</code> nếu không bao giờ vượt.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Viết hàm trong <code>solution.js</code> và <b>trả về</b> kết quả — đừng in ra.</li>\n  <li>Không sửa mảng/object đầu vào.</li>\n  <li>Để ý ràng buộc: một kiểm chạy trên đầu vào lớn và mỗi kiểm có trần 4 giây, nên vòng lặp O(n²) sẽ trượt kiểm đó.</li>\n</ul>",
+      "inputSpec": "dailyMB — non-negative integers; quotas — non-negative integers.|||dailyMB — số nguyên không âm; quotas — số nguyên không âm.",
+      "outputSpec": "number[] — a day index or -1 per quota.|||number[] — chỉ số ngày hoặc -1 cho mỗi hạn mức.",
+      "constraints": "0 ≤ days, quotas ≤ 200 000; 0 ≤ dailyMB[d] ≤ 10⁴; 0 ≤ q ≤ 2·10⁹.\nTarget: O(n + q log n).|||0 ≤ số ngày, số hạn mức ≤ 200 000; 0 ≤ dailyMB[d] ≤ 10⁴; 0 ≤ q ≤ 2·10⁹.\nMục tiêu: O(n + q log n).",
+      "examplesJson": [
+        {
+          "input": "firstDayOver([300,0,500,200,0,1000], [700,799,1000,5000])",
+          "output": "[2,2,5,-1]",
+          "explanation": "The first sample case (Run executes every visible case; hidden cases only run on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy mọi ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "The array itself is not sorted, but the running total is — uploads are never negative. Precompute the prefix sums once.|||Bản thân mảng không sắp, nhưng tổng tích luỹ thì có — lượng tải lên không bao giờ âm. Tính mảng tổng tiền tố một lần.",
+        "Now each quota is a \"first true\" search on the prefix array with the predicate <code>pre[d] &gt; q</code> (strictly over).|||Giờ mỗi hạn mức là một phép tìm \"true đầu tiên\" trên mảng tiền tố với mệnh đề <code>pre[d] &gt; q</code> (vượt hẳn)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "solution.js",
+          "language": "javascript",
+          "code": "/**\n * dailyMB: number[] (>= 0), quotas: number[]\n * returns for each quota the first day where the running total is > quota, or -1\n */\nfunction firstDayOver(dailyMB, quotas) {\n  // Write your solution here\n  return quotas.map(function () { return -1; });\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "solution.js",
+          "language": "javascript",
+          "code": "// Reference solution — prefix sums are sorted ⇒ first-true binary search per quota.\nfunction firstDayOver(dailyMB, quotas) {\n  var pre = new Array(dailyMB.length), run = 0;\n  for (var i = 0; i < dailyMB.length; i++) { run += dailyMB[i]; pre[i] = run; } // usage never decreases ⇒ pre is sorted\n  return quotas.map(function (q) {\n    var lo = 0, hi = pre.length;\n    while (lo < hi) { var mid = lo + ((hi - lo) >> 1); if (pre[mid] > q) hi = mid; else lo = mid + 1; } // first day strictly OVER\n    return lo < pre.length ? lo : -1;\n  });\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Non-negative daily uploads make the prefix sums non-decreasing, which is exactly what binary search needs: \"pre[d] &gt; q\" is false…false true…true. Building the prefix array is O(n); each quota is then one O(log n) search ⇒ O(n + q log n) time, O(n) memory. Zero-upload days create equal neighbours in the prefix array, which the first-true template handles without any special case.</p>",
+      "solutionExplanationHtmlVi": "<p>Lượng tải mỗi ngày không âm làm tổng tiền tố không giảm, đúng điều tìm nhị phân cần: \"pre[d] &gt; q\" là false…false true…true. Dựng mảng tiền tố O(n); mỗi hạn mức là một lần tìm O(log n) ⇒ O(n + q log n) thời gian, O(n) bộ nhớ. Những ngày không tải gì tạo ra các phần tử bằng nhau liền kề trong mảng tiền tố, khuôn true-đầu-tiên xử lý chúng không cần trường hợp đặc biệt.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "solution.js",
+        "tepNap": [
+          "solution.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: firstDayOver([300,0,500,200,0,1000], [700,799,1000,5000])",
+              "vi": "Ca 1"
+            },
+            "goi": "firstDayOver([300,0,500,200,0,1000], [700,799,1000,5000])",
+            "mongDoi": [
+              2,
+              2,
+              5,
+              -1
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Reaching the quota exactly is not over",
+              "vi": "Chạm đúng hạn mức chưa phải vượt"
+            },
+            "goi": "firstDayOver([100,100], [200,199])",
+            "mongDoi": [
+              -1,
+              1
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "firstDayOver([], [0])",
+            "mongDoi": [
+              -1
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "firstDayOver([0,0,5], [0,4,5])",
+            "mongDoi": [
+              2,
+              2,
+              -1
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "firstDayOver([7], [6,7,0])",
+            "mongDoi": [
+              0,
+              -1,
+              0
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "firstDayOver([1,2,3,4,5,6,7,8,9,10], [10,15,54,55,1])",
+            "mongDoi": [
+              4,
+              5,
+              9,
+              -1,
+              1
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Performance: 200 000 days × 200 000 quotas (re-adding per quota is O(n·q))",
+              "vi": "Hiệu năng: 200 000 ngày × 200 000 hạn mức (cộng lại cho mỗi hạn mức là O(n·q))"
+            },
+            "goi": "(function () {\nfunction __cay(a) { if (!a.length || a[0] == null) return null; var root = { val: a[0], left: null, right: null }, q = [root], h = 0, i = 1;\n  while (i < a.length) { var n = q[h++]; if (a[i] != null) { n.left = { val: a[i], left: null, right: null }; q.push(n.left); } i++;\n    if (i < a.length && a[i] != null) { n.right = { val: a[i], left: null, right: null }; q.push(n.right); } i++; } return root; }\nfunction __raCay(r) { var out = [], q = [r], h = 0; while (h < q.length) { var n = q[h++]; if (n == null) { out.push(null); continue; } out.push(n.val); q.push(n.left == null ? null : n.left, n.right == null ? null : n.right); }\n  while (out.length && out[out.length - 1] === null) out.pop(); return out; }\nfunction __ds(a) { var head = null; for (var i = a.length - 1; i >= 0; i--) head = { val: a[i], next: head }; return head; }\nfunction __raDs(h) { var out = []; while (h && out.length < 1000000) { out.push(h.val); h = h.next; } return out; }\nvar __s = 20261115; function R(m) { __s = (__s * 48271) % 2147483647; return __s % m; }\nvar n = 200000, d = new Array(n), q = new Array(n); for (var i = 0; i < n; i++) d[i] = R(4) ? R(10001) : 0; for (var j = 0; j < n; j++) q[j] = R(1100000000); var r = firstDayOver(d, q), never = 0, s = 0; for (var k = 0; k < n; k++) { if (r[k] < 0) never++; else s += r[k]; } return { never: never, sumOfDays: s };\n})()",
+            "mongDoi": {
+              "never": 59923,
+              "sumOfDays": 14027567514
+            }
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Binary-searching <code>dailyMB</code> directly: it is not sorted, so the answer is garbage.|||Tìm nhị phân thẳng trên <code>dailyMB</code>: mảng không sắp, nên kết quả là rác."
+        },
+        {
+          "loi": "Using <code>&gt;=</code>: reaching exactly the quota is still within the plan.|||Dùng <code>&gt;=</code>: chạm đúng hạn mức vẫn nằm trong gói."
+        },
+        {
+          "loi": "Re-adding the days for every quota: O(n·q) — the 200 000 × 200 000 check times out.|||Cộng lại các ngày cho mỗi hạn mức: O(n·q) — kiểm 200 000 × 200 000 hết giờ."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "prefix sum",
+          "vi": "tổng tiền tố"
+        },
+        {
+          "en": "monotonic",
+          "vi": "đơn điệu",
+          "giaiThich": "không giảm (hoặc không tăng) dọc theo mảng."
+        },
+        {
+          "en": "quota",
+          "vi": "hạn mức"
+        }
+      ]
+    },
+    {
+      "title": "Incident review: the k log entries nearest to the alert",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 30,
+      "points": 30,
+      "concepts": [
+        "binary search",
+        "search on window start"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dsa-interview",
+        "coding-interview"
+      ],
+      "problemHtml": "<p>When the monitoring system fires an alert at time <code>t</code>, the on-call dashboard shows the <code>k</code> log entries whose timestamps are <b>closest</b> to <code>t</code>. <code>times</code> is sorted ascending (it may contain duplicates). Distance is <code>|times[i] − t|</code>; when two entries are equally close, the <b>earlier</b> (smaller) one wins.</p>\n<p>Write <code>nearestLogs(times, k, incidents)</code> returning, for each incident time, the chosen <code>k</code> timestamps in ascending order. It is guaranteed that <code>1 ≤ k ≤ times.length</code>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Write the function in <code>solution.js</code> and <b>return</b> the answer — do not print it.</li>\n  <li>Do not modify the input arrays/objects.</li>\n  <li>Mind the constraints: one check runs on a large input and every check has a 4-second limit, so an O(n²) loop fails it.</li>\n</ul>",
+      "problemHtmlVi": "<p>Khi hệ thống giám sát báo động ở thời điểm <code>t</code>, bảng trực hiện <code>k</code> dòng log có mốc thời gian <b>gần</b> <code>t</code> nhất. <code>times</code> đã sắp tăng dần (có thể trùng). Khoảng cách là <code>|times[i] − t|</code>; khi hai dòng gần như nhau, dòng <b>sớm hơn</b> (nhỏ hơn) thắng.</p>\n<p>Viết <code>nearestLogs(times, k, incidents)</code> trả về, với mỗi thời điểm sự cố, <code>k</code> mốc được chọn theo thứ tự tăng dần. Bảo đảm <code>1 ≤ k ≤ times.length</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Viết hàm trong <code>solution.js</code> và <b>trả về</b> kết quả — đừng in ra.</li>\n  <li>Không sửa mảng/object đầu vào.</li>\n  <li>Để ý ràng buộc: một kiểm chạy trên đầu vào lớn và mỗi kiểm có trần 4 giây, nên vòng lặp O(n²) sẽ trượt kiểm đó.</li>\n</ul>",
+      "inputSpec": "times — sorted integers; k — 1 ≤ k ≤ n; incidents — integers (may lie outside the log range).|||times — số nguyên đã sắp; k — 1 ≤ k ≤ n; incidents — số nguyên (có thể nằm ngoài khoảng log).",
+      "outputSpec": "number[][] — k timestamps per incident, ascending.|||number[][] — k mốc cho mỗi sự cố, tăng dần.",
+      "constraints": "1 ≤ n ≤ 200 000; 1 ≤ k ≤ n; 0 ≤ incidents ≤ 100 000.\nTarget: O(log(n − k) + k) per incident.|||1 ≤ n ≤ 200 000; 1 ≤ k ≤ n; 0 ≤ số sự cố ≤ 100 000.\nMục tiêu: O(log(n − k) + k) mỗi sự cố.",
+      "examplesJson": [
+        {
+          "input": "nearestLogs([100,140,150,152,190,300], 3, [151,0,1000])",
+          "output": "[[140,150,152],[100,140,150],[152,190,300]]",
+          "explanation": "The first sample case (Run executes every visible case; hidden cases only run on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy mọi ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "The answer is always a contiguous window <code>times[s .. s+k−1]</code> of the sorted array. So you only need its start <code>s</code>, which lies in <code>[0, n − k]</code>.|||Đáp án luôn là một cửa sổ liền nhau <code>times[s .. s+k−1]</code> của mảng đã sắp. Nên chỉ cần điểm bắt đầu <code>s</code>, nằm trong <code>[0, n − k]</code>.",
+        "For a candidate start <code>mid</code> compare <code>times[mid]</code> (would be dropped if we slide right) with <code>times[mid + k]</code> (would be added). If <code>t − times[mid] &gt; times[mid + k] − t</code>, sliding right is better ⇒ <code>lo = mid + 1</code>; otherwise <code>hi = mid</code>. Do not use <code>Math.abs</code> here — the signed form also handles t outside the window and duplicates.|||Với điểm bắt đầu thử <code>mid</code>, so <code>times[mid]</code> (sẽ bị bỏ nếu trượt sang phải) với <code>times[mid + k]</code> (sẽ được thêm). Nếu <code>t − times[mid] &gt; times[mid + k] − t</code>, trượt phải tốt hơn ⇒ <code>lo = mid + 1</code>; ngược lại <code>hi = mid</code>. Đừng dùng <code>Math.abs</code> ở đây — dạng có dấu xử lý được cả t nằm ngoài cửa sổ lẫn giá trị trùng."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "solution.js",
+          "language": "javascript",
+          "code": "/**\n * times: number[] (sorted), k: number, incidents: number[]\n * returns for each incident the k closest timestamps, ascending (ties -> the smaller one)\n */\nfunction nearestLogs(times, k, incidents) {\n  // Write your solution here\n  return incidents.map(function () { return times.slice(0, k); });\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "solution.js",
+          "language": "javascript",
+          "code": "// Reference solution — binary search on the START of the k-window over [0, n - k].\nfunction closestWindow(a, k, t) {\n  // the answer is a window a[lo .. lo+k-1]; search its START in [0, n-k]\n  var lo = 0, hi = a.length - k;\n  while (lo < hi) {\n    var mid = lo + ((hi - lo) >> 1);\n    // compare the element just left of the window's right side with the one just past it:\n    // if a[mid] is farther from t than a[mid+k], the window must start after mid (ties keep the smaller value ⇒ strict >)\n    if (t - a[mid] > a[mid + k] - t) lo = mid + 1;\n    else hi = mid;\n  }\n  return a.slice(lo, lo + k);\n}\n\nfunction nearestLogs(times, k, incidents) {\n  return incidents.map(function (t) { return closestWindow(times, k, t); });\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Let f(s) = \"window starting at s+1 is at least as good as window starting at s\", i.e. <code>t − a[s] &gt; a[s+k] − t</code>. Because the array is sorted, f is true…true false…false along s (once the dropped element is no farther than the added one, it stays so for every later start), so the best start is the first s where f is false — a first-true search on the negation, over <code>[0, n−k]</code>. Strict <code>&gt;</code> keeps the left (smaller) element on ties. O(log(n−k)) to find the start plus O(k) to copy the window per incident; the brute force that shrinks from both ends costs O(n − k) per incident.</p>",
+      "solutionExplanationHtmlVi": "<p>Gọi f(s) = \"cửa sổ bắt đầu ở s+1 tốt ít nhất bằng cửa sổ bắt đầu ở s\", tức <code>t − a[s] &gt; a[s+k] − t</code>. Vì mảng đã sắp, f là true…true false…false theo s (một khi phần tử bị bỏ không xa hơn phần tử được thêm thì điều đó còn đúng với mọi điểm bắt đầu sau), nên điểm bắt đầu tốt nhất là s đầu tiên mà f sai — một phép tìm true-đầu-tiên trên mệnh đề phủ định, trên <code>[0, n−k]</code>. Dấu <code>&gt;</code> ngặt giữ phần tử bên trái (nhỏ hơn) khi hoà. O(log(n−k)) để tìm điểm bắt đầu cộng O(k) để chép cửa sổ mỗi sự cố; vét cạn thu từ hai đầu tốn O(n − k) mỗi sự cố.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "solution.js",
+        "tepNap": [
+          "solution.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: nearestLogs([100,140,150,152,190,300], 3, [151,0,1000])",
+              "vi": "Ca 1"
+            },
+            "goi": "nearestLogs([100,140,150,152,190,300], 3, [151,0,1000])",
+            "mongDoi": [
+              [
+                140,
+                150,
+                152
+              ],
+              [
+                100,
+                140,
+                150
+              ],
+              [
+                152,
+                190,
+                300
+              ]
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Tie: 2 and 4 are equally close ⇒ keep 2",
+              "vi": "Hoà: 2 và 4 gần như nhau ⇒ giữ 2"
+            },
+            "goi": "nearestLogs([1,2,3,4,5], 2, [3])",
+            "mongDoi": [
+              [
+                2,
+                3
+              ]
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "nearestLogs([10], 1, [5,10,15])",
+            "mongDoi": [
+              [
+                10
+              ],
+              [
+                10
+              ],
+              [
+                10
+              ]
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Duplicates",
+              "vi": "Giá trị trùng"
+            },
+            "goi": "nearestLogs([1,1,2,2,2,2,2,3,3], 3, [3,1,2])",
+            "mongDoi": [
+              [
+                2,
+                3,
+                3
+              ],
+              [
+                1,
+                1,
+                2
+              ],
+              [
+                2,
+                2,
+                2
+              ]
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "k = n",
+              "vi": "k = n"
+            },
+            "goi": "nearestLogs([1,3,5,7,9], 5, [4])",
+            "mongDoi": [
+              [
+                1,
+                3,
+                5,
+                7,
+                9
+              ]
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "nearestLogs([0,10,20,30,40], 2, [15,25,35,-5,45])",
+            "mongDoi": [
+              [
+                10,
+                20
+              ],
+              [
+                20,
+                30
+              ],
+              [
+                30,
+                40
+              ],
+              [
+                0,
+                10
+              ],
+              [
+                30,
+                40
+              ]
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "nearestLogs([1,2,3,4,5], 4, [-1,6])",
+            "mongDoi": [
+              [
+                1,
+                2,
+                3,
+                4
+              ],
+              [
+                2,
+                3,
+                4,
+                5
+              ]
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Performance: 200 000 timestamps, k = 5, 100 000 incidents (shrinking from both ends is O(n) per incident)",
+              "vi": "Hiệu năng: 200 000 mốc, k = 5, 100 000 sự cố (thu từ hai đầu là O(n) mỗi sự cố)"
+            },
+            "goi": "(function () {\nfunction __cay(a) { if (!a.length || a[0] == null) return null; var root = { val: a[0], left: null, right: null }, q = [root], h = 0, i = 1;\n  while (i < a.length) { var n = q[h++]; if (a[i] != null) { n.left = { val: a[i], left: null, right: null }; q.push(n.left); } i++;\n    if (i < a.length && a[i] != null) { n.right = { val: a[i], left: null, right: null }; q.push(n.right); } i++; } return root; }\nfunction __raCay(r) { var out = [], q = [r], h = 0; while (h < q.length) { var n = q[h++]; if (n == null) { out.push(null); continue; } out.push(n.val); q.push(n.left == null ? null : n.left, n.right == null ? null : n.right); }\n  while (out.length && out[out.length - 1] === null) out.pop(); return out; }\nfunction __ds(a) { var head = null; for (var i = a.length - 1; i >= 0; i--) head = { val: a[i], next: head }; return head; }\nfunction __raDs(h) { var out = []; while (h && out.length < 1000000) { out.push(h.val); h = h.next; } return out; }\nvar __s = 20261115; function R(m) { __s = (__s * 48271) % 2147483647; return __s % m; }\nvar n = 200000, a = new Array(n), x = 0; for (var i = 0; i < n; i++) { x += R(7); a[i] = x; } var q = new Array(100000); for (var j = 0; j < q.length; j++) q[j] = R(x + 50) - 25; var r = nearestLogs(a, 5, q), s = 0; for (var k = 0; k < r.length; k++) s = (s + r[k][0] * 7 + r[k][4]) % 1000000007; return { answers: r.length, checksum: s, first: r[0] };\n})()",
+            "mongDoi": {
+              "answers": 100000,
+              "checksum": 858562388,
+              "first": [
+                466712,
+                466715,
+                466717,
+                466717,
+                466720
+              ]
+            }
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Breaking ties the wrong way (<code>&gt;=</code>): for times <code>[1, 2, 3, 4, 5]</code>, k = 2, t = 3 you return <code>[3, 4]</code> instead of <code>[2, 3]</code>.|||Phá hoà sai chiều (<code>&gt;=</code>): với times <code>[1, 2, 3, 4, 5]</code>, k = 2, t = 3 ra <code>[3, 4]</code> thay vì <code>[2, 3]</code>."
+        },
+        {
+          "loi": "Comparing with <code>Math.abs(times[mid] − t) &gt; Math.abs(times[mid+k] − t)</code>: with duplicates like <code>[1, 1, 2, 2, 2, 2, 2, 3, 3]</code>, k = 3, t = 3 the window can stop in the wrong place.|||So bằng <code>Math.abs(times[mid] − t) &gt; Math.abs(times[mid+k] − t)</code>: với giá trị trùng như <code>[1, 1, 2, 2, 2, 2, 2, 3, 3]</code>, k = 3, t = 3 cửa sổ có thể dừng sai chỗ."
+        },
+        {
+          "loi": "Shrinking a window from both ends (or sorting by distance) for every incident: O(n) or O(n log n) per incident — the 100 000-incident check times out.|||Thu cửa sổ từ hai đầu (hoặc sắp theo khoảng cách) cho mỗi sự cố: O(n) hoặc O(n log n) mỗi sự cố — kiểm 100 000 sự cố hết giờ."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "window start",
+          "vi": "điểm bắt đầu cửa sổ"
+        },
+        {
+          "en": "tie-breaking",
+          "vi": "phá hoà"
+        },
+        {
+          "en": "contiguous",
+          "vi": "liền nhau"
+        },
+        {
+          "en": "search space",
+          "vi": "không gian tìm kiếm",
+          "giaiThich": "tập giá trị mà phép tìm nhị phân chạy trên đó (ở đây là [0, n−k])."
+        }
+      ]
+    }
+  ]
+}

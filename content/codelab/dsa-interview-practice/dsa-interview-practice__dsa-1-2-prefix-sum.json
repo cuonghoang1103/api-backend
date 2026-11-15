@@ -1,0 +1,715 @@
+{
+  "trackSlug": "dsa-interview-practice",
+  "moduleSlug": "dsa-1-2-prefix-sum",
+  "lesson": {
+    "course": "dsa-interview",
+    "slug": "dsa-1-2-prefix-sum"
+  },
+  "exercises": [
+    {
+      "title": "Attendance log: absences in any range of slots",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "prefix sum",
+        "range query"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dsa-interview",
+        "coding-interview"
+      ],
+      "problemHtml": "<p>FPT's attendance system stores one character per class slot for a student across the whole semester: <code>'P'</code> present, <code>'A'</code> absent, <code>'L'</code> late. The academic office then fires many questions like \"how many absences between slot 12 and slot 40?\" (both ends included).</p>\n<p>Write <code>absencesInRange(log, queries)</code> where <code>queries[i] = [l, r]</code>, returning an array with the number of <code>'A'</code> in <code>log[l..r]</code> for every query, in order.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Write the function in <code>solution.js</code> and <b>return</b> the answer — do not print it.</li>\n  <li>Do not modify the input arrays/objects.</li>\n  <li>Mind the constraints: one check runs on a large input and every check has a 4-second limit, so an O(n²) loop fails it.</li>\n</ul>",
+      "problemHtmlVi": "<p>Hệ thống điểm danh của FPT lưu mỗi slot học một ký tự cho một sinh viên suốt học kỳ: <code>'P'</code> có mặt, <code>'A'</code> vắng, <code>'L'</code> đi muộn. Phòng đào tạo bắn rất nhiều câu hỏi kiểu \"từ slot 12 tới slot 40 vắng bao nhiêu buổi?\" (tính cả hai đầu).</p>\n<p>Viết <code>absencesInRange(log, queries)</code> với <code>queries[i] = [l, r]</code>, trả về mảng số ký tự <code>'A'</code> trong <code>log[l..r]</code> cho từng truy vấn, đúng thứ tự.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Viết hàm trong <code>solution.js</code> và <b>trả về</b> kết quả — đừng in ra.</li>\n  <li>Không sửa mảng/object đầu vào.</li>\n  <li>Để ý ràng buộc: một kiểm chạy trên đầu vào lớn và mỗi kiểm có trần 4 giây, nên vòng lặp O(n²) sẽ trượt kiểm đó.</li>\n</ul>",
+      "inputSpec": "log — string of P/A/L; queries — array of [l, r] with 0 ≤ l ≤ r < log.length.|||log — chuỗi P/A/L; queries — mảng [l, r] với 0 ≤ l ≤ r < log.length.",
+      "outputSpec": "number[] — one count per query.|||number[] — mỗi truy vấn một số đếm.",
+      "constraints": "1 ≤ log.length ≤ 200 000; 0 ≤ queries.length ≤ 200 000.\nTarget: O(n + q).|||1 ≤ log.length ≤ 200 000; 0 ≤ queries.length ≤ 200 000.\nMục tiêu: O(n + q).",
+      "examplesJson": [
+        {
+          "input": "absencesInRange(\"PPAPALAP\", [[0,7],[2,4],[5,5]])",
+          "output": "[3,2,0]",
+          "explanation": "The first sample case (Run executes every visible case; hidden cases only run on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy mọi ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Counting inside every query costs O(length of range) — with 2·10⁵ long queries that is 4·10¹⁰ steps. Precompute something once.|||Đếm lại trong từng truy vấn tốn O(độ dài đoạn) — 2·10⁵ truy vấn dài là 4·10¹⁰ bước. Hãy tính trước một thứ, một lần.",
+        "Let <code>pre[i]</code> = number of A in the first i characters (so <code>pre[0] = 0</code>). Then the answer for [l, r] is <code>pre[r + 1] − pre[l]</code>.|||Đặt <code>pre[i]</code> = số chữ A trong i ký tự đầu (nên <code>pre[0] = 0</code>). Khi đó đáp án cho [l, r] là <code>pre[r + 1] − pre[l]</code>."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "solution.js",
+          "language": "javascript",
+          "code": "/**\n * log: string of 'P' | 'A' | 'L', queries: [l, r][] (inclusive)\n * returns the number of 'A' in log[l..r] for every query\n */\nfunction absencesInRange(log, queries) {\n  // Write your solution here\n  return queries.map(function () { return 0; });\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "solution.js",
+          "language": "javascript",
+          "code": "// Reference solution — prefix counts with a leading 0, then O(1) per query.\nfunction absencesInRange(log, queries) {\n  // pre[i] = number of 'A' in log[0 .. i-1]  (length n + 1, pre[0] = 0)\n  var pre = new Array(log.length + 1);\n  pre[0] = 0;\n  for (var i = 0; i < log.length; i++) pre[i + 1] = pre[i] + (log[i] === 'A' ? 1 : 0);\n  // a range [l, r] (inclusive) is pre[r + 1] - pre[l]: two lookups, no loop\n  return queries.map(function (q) { return pre[q[1] + 1] - pre[q[0]]; });\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Prefix counts turn \"how many in a range\" into the difference of two running totals, exactly like reading an electricity meter at two dates. Building <code>pre</code> is one pass O(n); each query is O(1) ⇒ O(n + q) time, O(n) memory. Using length n + 1 with <code>pre[0] = 0</code> makes l = 0 need no special case.</p>",
+      "solutionExplanationHtmlVi": "<p>Đếm tiền tố biến \"trong đoạn có bao nhiêu\" thành hiệu của hai tổng chạy, y như đọc công-tơ điện ở hai ngày. Dựng <code>pre</code> một lượt O(n); mỗi truy vấn O(1) ⇒ O(n + q) thời gian, O(n) bộ nhớ. Dùng độ dài n + 1 với <code>pre[0] = 0</code> nên l = 0 không phải xử lý riêng.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "solution.js",
+        "tepNap": [
+          "solution.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: absencesInRange(\"PPAPALAP\", [[0,7],[2,4],[5,5]])",
+              "vi": "Ca 1"
+            },
+            "goi": "absencesInRange(\"PPAPALAP\", [[0,7],[2,4],[5,5]])",
+            "mongDoi": [
+              3,
+              2,
+              0
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Ranges starting at 0 and ending at the last slot",
+              "vi": "Đoạn bắt đầu ở 0 và kết thúc ở slot cuối"
+            },
+            "goi": "absencesInRange(\"AAAA\", [[0,0],[1,3],[0,3]])",
+            "mongDoi": [
+              1,
+              3,
+              4
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Late is not absent",
+              "vi": "Đi muộn không phải vắng"
+            },
+            "goi": "absencesInRange(\"PLPL\", [[0,3]])",
+            "mongDoi": [
+              0
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "absencesInRange(\"A\", [[0,0]])",
+            "mongDoi": [
+              1
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "No queries ⇒ []",
+              "vi": "Không có truy vấn ⇒ []"
+            },
+            "goi": "absencesInRange(\"PAPAPAPAPA\", [])",
+            "mongDoi": [],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "absencesInRange(\"LAPAALPPAA\", [[9,9],[0,9],[3,6],[1,1],[6,8]])",
+            "mongDoi": [
+              1,
+              5,
+              2,
+              1,
+              1
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Performance: 200 000 slots × 200 000 wide queries (counting per query times out)",
+              "vi": "Hiệu năng: 200 000 slot × 200 000 truy vấn đoạn rộng (đếm lại từng truy vấn hết giờ)"
+            },
+            "goi": "(function () {\nfunction __cay(a) { if (!a.length || a[0] == null) return null; var root = { val: a[0], left: null, right: null }, q = [root], h = 0, i = 1;\n  while (i < a.length) { var n = q[h++]; if (a[i] != null) { n.left = { val: a[i], left: null, right: null }; q.push(n.left); } i++;\n    if (i < a.length && a[i] != null) { n.right = { val: a[i], left: null, right: null }; q.push(n.right); } i++; } return root; }\nfunction __raCay(r) { var out = [], q = [r], h = 0; while (h < q.length) { var n = q[h++]; if (n == null) { out.push(null); continue; } out.push(n.val); q.push(n.left == null ? null : n.left, n.right == null ? null : n.right); }\n  while (out.length && out[out.length - 1] === null) out.pop(); return out; }\nfunction __ds(a) { var head = null; for (var i = a.length - 1; i >= 0; i--) head = { val: a[i], next: head }; return head; }\nfunction __raDs(h) { var out = []; while (h && out.length < 1000000) { out.push(h.val); h = h.next; } return out; }\nvar __s = 20261115; function R(m) { __s = (__s * 48271) % 2147483647; return __s % m; }\nvar n = 200000, s = \"\"; var ch = \"PPPPALPA\"; var parts = []; for (var i = 0; i < n; i++) parts.push(ch[R(8)]); s = parts.join(\"\"); var qs = []; for (var j = 0; j < 200000; j++) { var l = R(1000), r = n - 1 - R(1000); qs.push([l, r]); } var out = absencesInRange(s, qs); var sum = 0; for (var t = 0; t < out.length; t++) sum += out[t]; return { count: out.length, sum: sum, first: out.slice(0, 3) };\n})()",
+            "mongDoi": {
+              "count": 200000,
+              "sum": 10002768343,
+              "first": [
+                50009,
+                50052,
+                49823
+              ]
+            }
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Off-by-one: <code>pre[r] − pre[l]</code> drops slot r; <code>pre[r + 1] − pre[l − 1]</code> crashes or reads <code>undefined</code> at l = 0. The extra leading 0 exists exactly to avoid that special case.|||Lệch một: <code>pre[r] − pre[l]</code> bỏ mất slot r; <code>pre[r + 1] − pre[l − 1]</code> đọc <code>undefined</code> khi l = 0. Số 0 thêm ở đầu tồn tại đúng để khỏi phải xử lý riêng trường hợp đó."
+        },
+        {
+          "loi": "Looping over <code>log.slice(l, r + 1)</code> per query: right answers, O(n·q) — the large check runs out of time.|||Lặp qua <code>log.slice(l, r + 1)</code> trong mỗi truy vấn: đúng kết quả, O(n·q) — kiểm lớn hết giờ."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "prefix sum",
+          "vi": "tổng tiền tố",
+          "giaiThich": "pre[i] = tổng i phần tử đầu."
+        },
+        {
+          "en": "range query",
+          "vi": "truy vấn đoạn"
+        },
+        {
+          "en": "off-by-one",
+          "vi": "lệch một đơn vị"
+        }
+      ]
+    },
+    {
+      "title": "Lab booking: the busiest hour of the week",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "difference array",
+        "sweep"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dsa-interview",
+        "coding-interview"
+      ],
+      "problemHtml": "<p>The lab booking system of building Alpha stores bookings as <code>[start, end, seats]</code>: the group uses <code>seats</code> seats during every hour <code>h</code> with <code>start ≤ h &lt; end</code> (hours are numbered from 0 at Monday 00:00; the end hour is free again). The facilities team wants the peak load to decide whether to open a second room.</p>\n<p>Write <code>peakOccupancy(bookings, hours)</code> returning <code>[peak, hour]</code>: the maximum total seats in use during any hour <code>0 ≤ h &lt; hours</code>, and the <b>earliest</b> hour where that peak happens. If nothing is ever booked, return <code>[0, 0]</code>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Write the function in <code>solution.js</code> and <b>return</b> the answer — do not print it.</li>\n  <li>Do not modify the input arrays/objects.</li>\n  <li>Mind the constraints: one check runs on a large input and every check has a 4-second limit, so an O(n²) loop fails it.</li>\n</ul>",
+      "problemHtmlVi": "<p>Hệ thống đặt phòng lab toà Alpha lưu mỗi lượt đặt dạng <code>[start, end, seats]</code>: nhóm dùng <code>seats</code> chỗ trong mọi giờ <code>h</code> với <code>start ≤ h &lt; end</code> (giờ đánh số từ 0 lúc 00:00 thứ Hai; giờ end đã trống lại). Đội cơ sở vật chất cần biết tải đỉnh để quyết định có mở phòng thứ hai không.</p>\n<p>Viết <code>peakOccupancy(bookings, hours)</code> trả về <code>[peak, hour]</code>: tổng số chỗ đang dùng lớn nhất trong một giờ bất kỳ <code>0 ≤ h &lt; hours</code>, và giờ <b>sớm nhất</b> đạt đỉnh đó. Không ai đặt gì thì trả <code>[0, 0]</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Viết hàm trong <code>solution.js</code> và <b>trả về</b> kết quả — đừng in ra.</li>\n  <li>Không sửa mảng/object đầu vào.</li>\n  <li>Để ý ràng buộc: một kiểm chạy trên đầu vào lớn và mỗi kiểm có trần 4 giây, nên vòng lặp O(n²) sẽ trượt kiểm đó.</li>\n</ul>",
+      "inputSpec": "bookings — array of [start, end, seats] with 0 ≤ start &lt; end ≤ hours, seats ≥ 1; hours — number of hours in the timeline.|||bookings — mảng [start, end, seats] với 0 ≤ start &lt; end ≤ hours, seats ≥ 1; hours — số giờ của trục thời gian.",
+      "outputSpec": "[peak, hour]",
+      "constraints": "0 ≤ bookings.length ≤ 200 000; 1 ≤ hours ≤ 10⁶; seats ≤ 100.\nTarget: O(n + hours).|||0 ≤ bookings.length ≤ 200 000; 1 ≤ hours ≤ 10⁶; seats ≤ 100.\nMục tiêu: O(n + hours).",
+      "examplesJson": [
+        {
+          "input": "peakOccupancy([[8,10,30],[9,12,20],[10,11,25]], 24)",
+          "output": "[50,9]",
+          "explanation": "The first sample case (Run executes every visible case; hidden cases only run on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy mọi ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Adding <code>seats</code> to every hour of every booking costs the total booked length — up to 2·10⁵ × 10⁵. You only need to record where the load <i>changes</i>.|||Cộng <code>seats</code> vào từng giờ của từng lượt đặt tốn tổng độ dài đã đặt — tới 2·10⁵ × 10⁵. Bạn chỉ cần ghi lại chỗ tải <i>thay đổi</i>.",
+        "Difference array: <code>diff[start] += seats</code>, <code>diff[end] −= seats</code>. A running sum over <code>diff</code> gives the load of each hour; track the maximum with a strict <code>&gt;</code>.|||Mảng hiệu: <code>diff[start] += seats</code>, <code>diff[end] −= seats</code>. Tổng chạy trên <code>diff</code> cho tải của từng giờ; theo dõi cực đại bằng phép <code>&gt;</code> chặt."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "solution.js",
+          "language": "javascript",
+          "code": "/**\n * bookings: [start, end, seats][] (half-open: start <= h < end), hours: number\n * returns [peak, earliestHourOfPeak]\n */\nfunction peakOccupancy(bookings, hours) {\n  // Write your solution here\n  return [0, 0];\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "solution.js",
+          "language": "javascript",
+          "code": "// Reference solution — difference array + one running sum.\nfunction peakOccupancy(bookings, hours) {\n  // diff[h] = change in seats used at the START of hour h; a booking [s, e) adds at s and removes at e\n  var diff = new Array(hours + 1).fill(0);\n  for (var i = 0; i < bookings.length; i++) {\n    diff[bookings[i][0]] += bookings[i][2];\n    diff[bookings[i][1]] -= bookings[i][2];\n  }\n  var cur = 0, best = 0, at = 0;\n  for (var h = 0; h < hours; h++) {\n    cur += diff[h];                           // running sum of the difference array = seats in use during hour h\n    if (cur > best) { best = cur; at = h; }   // strict > keeps the EARLIEST hour among ties\n  }\n  return [best, at];\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The difference array is the inverse of a prefix sum: we store only the changes (+seats when a booking starts, −seats when it ends) and one running sum rebuilds the full load curve. Each booking costs O(1) no matter how long it is, then one pass over the timeline ⇒ O(n + hours) time, O(hours) memory. Half-open intervals make \"ends at 10, starts at 10\" share no hour, which is what a real booking system wants.</p>",
+      "solutionExplanationHtmlVi": "<p>Mảng hiệu là phép ngược của tổng tiền tố: chỉ lưu chỗ thay đổi (+seats khi lượt đặt bắt đầu, −seats khi kết thúc) và một tổng chạy dựng lại toàn bộ đường tải. Mỗi lượt đặt tốn O(1) bất kể dài bao nhiêu, rồi một lượt qua trục thời gian ⇒ O(n + hours) thời gian, O(hours) bộ nhớ. Khoảng nửa mở làm \"kết thúc lúc 10, bắt đầu lúc 10\" không chung giờ nào — đúng điều hệ thống đặt phòng thật cần.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "solution.js",
+        "tepNap": [
+          "solution.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Peak 50 at hour 9",
+              "vi": "Đỉnh 50 lúc giờ 9"
+            },
+            "goi": "peakOccupancy([[8,10,30],[9,12,20],[10,11,25]], 24)",
+            "mongDoi": [
+              50,
+              9
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Back-to-back bookings do not overlap",
+              "vi": "Hai lượt nối tiếp không chồng nhau"
+            },
+            "goi": "peakOccupancy([[8,10,30],[10,12,30]], 24)",
+            "mongDoi": [
+              30,
+              8
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Nothing booked ⇒ [0, 0]",
+              "vi": "Không ai đặt ⇒ [0, 0]"
+            },
+            "goi": "peakOccupancy([], 168)",
+            "mongDoi": [
+              0,
+              0
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Ties ⇒ earliest hour",
+              "vi": "Hoà ⇒ giờ sớm nhất"
+            },
+            "goi": "peakOccupancy([[0,1,5],[167,168,5]], 168)",
+            "mongDoi": [
+              5,
+              0
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "peakOccupancy([[2,6,10],[3,5,10],[4,8,10],[5,6,1]], 10)",
+            "mongDoi": [
+              30,
+              4
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "peakOccupancy([[0,168,40]], 168)",
+            "mongDoi": [
+              40,
+              0
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "peakOccupancy([[5,9,3],[1,4,7],[3,7,2],[6,8,9]], 12)",
+            "mongDoi": [
+              14,
+              6
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Performance: 200 000 long bookings on a 10⁶-hour timeline (filling hour by hour times out)",
+              "vi": "Hiệu năng: 200 000 lượt đặt dài trên trục 10⁶ giờ (tô từng giờ hết giờ)"
+            },
+            "goi": "(function () {\nfunction __cay(a) { if (!a.length || a[0] == null) return null; var root = { val: a[0], left: null, right: null }, q = [root], h = 0, i = 1;\n  while (i < a.length) { var n = q[h++]; if (a[i] != null) { n.left = { val: a[i], left: null, right: null }; q.push(n.left); } i++;\n    if (i < a.length && a[i] != null) { n.right = { val: a[i], left: null, right: null }; q.push(n.right); } i++; } return root; }\nfunction __raCay(r) { var out = [], q = [r], h = 0; while (h < q.length) { var n = q[h++]; if (n == null) { out.push(null); continue; } out.push(n.val); q.push(n.left == null ? null : n.left, n.right == null ? null : n.right); }\n  while (out.length && out[out.length - 1] === null) out.pop(); return out; }\nfunction __ds(a) { var head = null; for (var i = a.length - 1; i >= 0; i--) head = { val: a[i], next: head }; return head; }\nfunction __raDs(h) { var out = []; while (h && out.length < 1000000) { out.push(h.val); h = h.next; } return out; }\nvar __s = 20261115; function R(m) { __s = (__s * 48271) % 2147483647; return __s % m; }\nvar H = 1000000, b = []; for (var i = 0; i < 200000; i++) { var s = R(H - 100000), len = 50000 + R(50000); b.push([s, s + len, 1 + R(100)]); } return peakOccupancy(b, H);\n})()",
+            "mongDoi": [
+              857889,
+              606070
+            ]
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Subtracting at <code>end + 1</code> (treating end as included): a booking [8, 10) would still occupy hour 10, so back-to-back bookings look like a clash.|||Trừ ở <code>end + 1</code> (coi end là thuộc lượt đặt): lượt [8, 10) vẫn chiếm giờ 10, nên hai lượt nối tiếp nhau trông như chồng."
+        },
+        {
+          "loi": "Using <code>&gt;=</code> when updating the peak returns the LAST hour with the peak, not the earliest.|||Dùng <code>&gt;=</code> khi cập nhật đỉnh sẽ trả giờ CUỐI cùng đạt đỉnh, không phải giờ sớm nhất."
+        },
+        {
+          "loi": "Filling every hour of every booking: O(total length), the 10⁶-hour check times out.|||Tô từng giờ của từng lượt đặt: O(tổng độ dài), kiểm 10⁶ giờ hết giờ."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "difference array",
+          "vi": "mảng hiệu",
+          "giaiThich": "lưu mức thay đổi; tổng tiền tố của nó là giá trị thật."
+        },
+        {
+          "en": "half-open interval",
+          "vi": "khoảng nửa mở",
+          "giaiThich": "[start, end): gồm start, không gồm end."
+        },
+        {
+          "en": "peak load",
+          "vi": "tải đỉnh"
+        }
+      ]
+    },
+    {
+      "title": "Shop ledger: the longest break-even period",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 20,
+      "points": 20,
+      "concepts": [
+        "prefix sum + hash map",
+        "zero-sum subarray"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dsa-interview",
+        "coding-interview"
+      ],
+      "problemHtml": "<p>A small shop near campus logs its daily <b>net</b> result <code>net[i]</code> (profit positive, loss negative, in thousand VND). The owner asks: what is the longest run of consecutive days whose results add up to <b>exactly 0</b> — a period where the shop \"only broke even\"?</p>\n<p>Write <code>longestBreakEven(net)</code> returning <code>[start, end]</code> (inclusive day indexes) of the longest such run. If several runs have the same maximum length, return the one that starts earliest. If no run sums to 0, return <code>[]</code>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Write the function in <code>solution.js</code> and <b>return</b> the answer — do not print it.</li>\n  <li>Do not modify the input arrays/objects.</li>\n  <li>Mind the constraints: one check runs on a large input and every check has a 4-second limit, so an O(n²) loop fails it.</li>\n</ul>",
+      "problemHtmlVi": "<p>Một quán nhỏ gần trường ghi kết quả <b>ròng</b> mỗi ngày <code>net[i]</code> (lãi dương, lỗ âm, nghìn đồng). Chủ quán hỏi: chuỗi ngày liên tiếp dài nhất có tổng kết quả <b>đúng bằng 0</b> — giai đoạn quán \"chỉ hoà vốn\" — là chuỗi nào?</p>\n<p>Viết <code>longestBreakEven(net)</code> trả về <code>[start, end]</code> (chỉ số ngày, tính cả hai đầu) của chuỗi dài nhất như vậy. Nhiều chuỗi cùng dài nhất thì trả chuỗi bắt đầu sớm nhất. Không chuỗi nào có tổng 0 thì trả <code>[]</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Viết hàm trong <code>solution.js</code> và <b>trả về</b> kết quả — đừng in ra.</li>\n  <li>Không sửa mảng/object đầu vào.</li>\n  <li>Để ý ràng buộc: một kiểm chạy trên đầu vào lớn và mỗi kiểm có trần 4 giây, nên vòng lặp O(n²) sẽ trượt kiểm đó.</li>\n</ul>",
+      "inputSpec": "net — array of integers (positive, negative or zero).|||net — mảng số nguyên (dương, âm hoặc 0).",
+      "outputSpec": "[start, end] or [].|||[start, end] hoặc [].",
+      "constraints": "0 ≤ net.length ≤ 200 000; |net[i]| ≤ 10⁴.\nTarget: O(n).|||0 ≤ net.length ≤ 200 000; |net[i]| ≤ 10⁴.\nMục tiêu: O(n).",
+      "examplesJson": [
+        {
+          "input": "longestBreakEven([5,-2,-3,4,1,-5])",
+          "output": "[0,5]",
+          "explanation": "The first sample case (Run executes every visible case; hidden cases only run on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy mọi ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Days i+1..j sum to 0 exactly when the running total after day i equals the running total after day j.|||Các ngày i+1..j có tổng 0 đúng khi tổng chạy sau ngày i bằng tổng chạy sau ngày j.",
+        "Map each running total to the FIRST index where it appeared; seed it with total 0 at index −1. At each j, the window from that first index + 1 to j is the longest zero-sum run ending at j.|||Map mỗi tổng chạy tới chỉ số ĐẦU TIÊN nó xuất hiện; gieo sẵn tổng 0 ở chỉ số −1. Tại mỗi j, đoạn từ chỉ số đầu đó + 1 tới j là đoạn tổng 0 dài nhất kết thúc ở j."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "solution.js",
+          "language": "javascript",
+          "code": "/**\n * net: number[] — daily profit (+) / loss (-)\n * returns [start, end] of the longest run summing to exactly 0 (earliest on ties), or []\n */\nfunction longestBreakEven(net) {\n  // Write your solution here\n  return [];\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "solution.js",
+          "language": "javascript",
+          "code": "// Reference solution — prefix totals mapped to their FIRST index, seeded with 0 -> -1.\nfunction longestBreakEven(net) {\n  var firstAt = new Map(); // prefix total -> FIRST index where it appeared\n  firstAt.set(0, -1);      // the empty prefix: total 0 \"before day 0\"\n  var sum = 0, bestLen = 0, bestStart = -1;\n  for (var j = 0; j < net.length; j++) {\n    sum += net[j];\n    if (firstAt.has(sum)) {\n      // equal prefix totals at i and j ⇒ days i+1..j add up to exactly 0\n      var len = j - firstAt.get(sum);\n      if (len > bestLen) { bestLen = len; bestStart = firstAt.get(sum) + 1; }\n    } else {\n      firstAt.set(sum, j); // keep only the first index: it gives the longest window ending later\n    }\n  }\n  return bestLen === 0 ? [] : [bestStart, bestStart + bestLen - 1];\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>sum(i+1..j) = P(j) − P(i), so a zero-sum run is a pair of equal prefix totals. For a fixed right end j the longest run uses the earliest i with P(i) = P(j), which is why the map stores only first occurrences (and why the empty prefix P(−1) = 0 must be there). Scanning j left to right and updating only on a strictly longer run keeps the earliest start among ties. One pass, O(1) average per day ⇒ O(n) time and O(n) memory; the brute force over all (i, j) is O(n²).</p>",
+      "solutionExplanationHtmlVi": "<p>sum(i+1..j) = P(j) − P(i), nên một đoạn tổng 0 là một cặp tổng tiền tố bằng nhau. Với đầu phải j cố định, đoạn dài nhất dùng i sớm nhất có P(i) = P(j) — vì vậy map chỉ lưu lần xuất hiện ĐẦU (và tiền tố rỗng P(−1) = 0 phải có sẵn). Quét j từ trái sang và chỉ cập nhật khi dài hơn HẲN thì giữ được chuỗi bắt đầu sớm nhất khi hoà. Một lượt, trung bình O(1) mỗi ngày ⇒ O(n) thời gian, O(n) bộ nhớ; vét cạn mọi (i, j) là O(n²).</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "solution.js",
+        "tepNap": [
+          "solution.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Days 0..2 and 1..5 — the second is longer",
+              "vi": "Ngày 0..2 và 1..5 — đoạn sau dài hơn"
+            },
+            "goi": "longestBreakEven([5,-2,-3,4,1,-5])",
+            "mongDoi": [
+              0,
+              5
+            ]
+          },
+          {
+            "moTa": {
+              "en": "The run starts on day 0",
+              "vi": "Chuỗi bắt đầu từ ngày 0"
+            },
+            "goi": "longestBreakEven([3,-3])",
+            "mongDoi": [
+              0,
+              1
+            ]
+          },
+          {
+            "moTa": {
+              "en": "No break-even run ⇒ []",
+              "vi": "Không có chuỗi hoà vốn ⇒ []"
+            },
+            "goi": "longestBreakEven([2,4,1])",
+            "mongDoi": []
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "longestBreakEven([])",
+            "mongDoi": [],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Days with result 0 count",
+              "vi": "Ngày kết quả 0 cũng tính"
+            },
+            "goi": "longestBreakEven([0,0,0])",
+            "mongDoi": [
+              0,
+              2
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Whole ledger sums to 0",
+              "vi": "Cả sổ có tổng 0"
+            },
+            "goi": "longestBreakEven([1,-1,2,-2])",
+            "mongDoi": [
+              0,
+              3
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Two runs of length 2 ⇒ earliest",
+              "vi": "Hai chuỗi dài 2 ⇒ chuỗi sớm nhất"
+            },
+            "goi": "longestBreakEven([4,-4,7,3,-3,9])",
+            "mongDoi": [
+              0,
+              1
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 8",
+              "vi": "Ca ẩn 8"
+            },
+            "goi": "longestBreakEven([-1,2,-1,5,-3,-2,1])",
+            "mongDoi": [
+              0,
+              5
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Performance: 200 000 days (checking every pair of days times out)",
+              "vi": "Hiệu năng: 200 000 ngày (thử mọi cặp ngày hết giờ)"
+            },
+            "goi": "(function () {\nfunction __cay(a) { if (!a.length || a[0] == null) return null; var root = { val: a[0], left: null, right: null }, q = [root], h = 0, i = 1;\n  while (i < a.length) { var n = q[h++]; if (a[i] != null) { n.left = { val: a[i], left: null, right: null }; q.push(n.left); } i++;\n    if (i < a.length && a[i] != null) { n.right = { val: a[i], left: null, right: null }; q.push(n.right); } i++; } return root; }\nfunction __raCay(r) { var out = [], q = [r], h = 0; while (h < q.length) { var n = q[h++]; if (n == null) { out.push(null); continue; } out.push(n.val); q.push(n.left == null ? null : n.left, n.right == null ? null : n.right); }\n  while (out.length && out[out.length - 1] === null) out.pop(); return out; }\nfunction __ds(a) { var head = null; for (var i = a.length - 1; i >= 0; i--) head = { val: a[i], next: head }; return head; }\nfunction __raDs(h) { var out = []; while (h && out.length < 1000000) { out.push(h.val); h = h.next; } return out; }\nvar __s = 20261115; function R(m) { __s = (__s * 48271) % 2147483647; return __s % m; }\nvar n = 200000, a = new Array(n); for (var i = 0; i < n; i++) a[i] = R(2001) - 1000 + (i % 3 === 0 ? 1 : 0); return longestBreakEven(a);\n})()",
+            "mongDoi": [
+              408,
+              196634
+            ]
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Forgetting the seed <code>0 → −1</code>: a run that starts on day 0 (e.g. <code>[3, −3]</code>) is never found.|||Quên gieo <code>0 → −1</code>: chuỗi bắt đầu từ ngày 0 (vd <code>[3, −3]</code>) không bao giờ được tìm thấy."
+        },
+        {
+          "loi": "Overwriting the map with the latest index of each total: the windows become SHORTER, not longer.|||Ghi đè map bằng chỉ số MỚI NHẤT của mỗi tổng: các đoạn tìm được NGẮN đi chứ không dài ra."
+        },
+        {
+          "loi": "Trying a sliding window: with negative numbers the window sum is not monotone, so shrinking from the left gives wrong answers.|||Thử cửa sổ trượt: có số âm thì tổng cửa sổ không đơn điệu, co từ trái cho kết quả sai."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "running total",
+          "vi": "tổng chạy",
+          "giaiThich": "tổng cộng dồn tới vị trí hiện tại."
+        },
+        {
+          "en": "first occurrence",
+          "vi": "lần xuất hiện đầu"
+        },
+        {
+          "en": "subarray",
+          "vi": "mảng con liên tiếp"
+        }
+      ]
+    },
+    {
+      "title": "Equipment desk: the longest window where every item was borrowed an even number of times",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 25,
+      "points": 30,
+      "concepts": [
+        "prefix parity",
+        "bitmask",
+        "XOR"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dsa-interview",
+        "coding-interview"
+      ],
+      "problemHtml": "<p>The equipment desk of the IoT lab lends five kinds of items, logged by one letter each: <code>A</code> Arduino kit, <code>B</code> breadboard, <code>C</code> camera module, <code>D</code> DHT sensor, <code>E</code> ESP32. Other characters in the log (<code>x</code> for \"desk closed\", <code>-</code> for \"returned\") are noise and do not count. The auditor suspects items are being borrowed in pairs and wants the length of the longest contiguous part of the log in which <b>each of A, B, C, D, E appears an even number of times</b> (zero counts as even).</p>\n<p>Write <code>longestEvenWindow(log)</code> returning that length (0 if no such non-empty window exists).</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Write the function in <code>solution.js</code> and <b>return</b> the answer — do not print it.</li>\n  <li>Do not modify the input arrays/objects.</li>\n  <li>Mind the constraints: one check runs on a large input and every check has a 4-second limit, so an O(n²) loop fails it.</li>\n</ul>",
+      "problemHtmlVi": "<p>Quầy thiết bị của phòng lab IoT cho mượn năm loại đồ, mỗi loại ghi bằng một chữ cái: <code>A</code> bộ Arduino, <code>B</code> breadboard, <code>C</code> module camera, <code>D</code> cảm biến DHT, <code>E</code> ESP32. Các ký tự khác trong log (<code>x</code> là \"quầy đóng\", <code>-</code> là \"đã trả\") là nhiễu, không tính. Người kiểm toán nghi đồ bị mượn theo cặp và muốn biết độ dài đoạn log liên tiếp dài nhất trong đó <b>mỗi chữ A, B, C, D, E xuất hiện một số CHẴN lần</b> (0 lần cũng là chẵn).</p>\n<p>Viết <code>longestEvenWindow(log)</code> trả về độ dài đó (0 nếu không có đoạn khác rỗng nào như vậy).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Viết hàm trong <code>solution.js</code> và <b>trả về</b> kết quả — đừng in ra.</li>\n  <li>Không sửa mảng/object đầu vào.</li>\n  <li>Để ý ràng buộc: một kiểm chạy trên đầu vào lớn và mỗi kiểm có trần 4 giây, nên vòng lặp O(n²) sẽ trượt kiểm đó.</li>\n</ul>",
+      "inputSpec": "log — string of letters A–E plus noise characters.|||log — chuỗi chữ A–E kèm ký tự nhiễu.",
+      "outputSpec": "number — the length of the longest valid window.|||number — độ dài đoạn hợp lệ dài nhất.",
+      "constraints": "0 ≤ log.length ≤ 200 000.\nTarget: O(n) time, O(1) extra memory (32 states).|||0 ≤ log.length ≤ 200 000.\nMục tiêu: O(n) thời gian, O(1) bộ nhớ phụ (32 trạng thái).",
+      "examplesJson": [
+        {
+          "input": "longestEvenWindow(\"ABBA\")",
+          "output": "4",
+          "explanation": "The first sample case (Run executes every visible case; hidden cases only run on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy mọi ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "You do not need the counts, only whether each one is even or odd — 5 yes/no values. Pack them into a 5-bit number and flip a bit with XOR on every letter.|||Không cần số đếm, chỉ cần mỗi số chẵn hay lẻ — 5 giá trị có/không. Gói chúng vào một số 5 bit và lật bit bằng XOR ở mỗi chữ cái.",
+        "A window (i, j] is valid exactly when the mask after i equals the mask after j — the same trick as \"equal prefix sums\" in the previous task. Store the first index of each of the 32 masks (mask 0 at index −1).|||Đoạn (i, j] hợp lệ đúng khi mask sau i bằng mask sau j — cùng mẹo \"tổng tiền tố bằng nhau\" của đề trước. Lưu chỉ số đầu tiên của mỗi mask trong 32 mask (mask 0 ở chỉ số −1)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "solution.js",
+          "language": "javascript",
+          "code": "/**\n * log: string — letters A..E are borrowings, every other character is noise\n * returns the length of the longest window where each of A..E occurs an even number of times\n */\nfunction longestEvenWindow(log) {\n  // Write your solution here\n  return 0;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "solution.js",
+          "language": "javascript",
+          "code": "// Reference solution — 5-bit parity mask as a prefix, first index of each of the 32 masks.\nfunction longestEvenWindow(log) {\n  // bit t of the mask = parity (odd/even) of how many times item 'A'+t was borrowed so far\n  var firstAt = new Array(32).fill(-2); // -2 = this mask has not appeared yet\n  firstAt[0] = -1;                      // empty prefix: every count is 0 (even)\n  var mask = 0, best = 0;\n  for (var j = 0; j < log.length; j++) {\n    var t = log.charCodeAt(j) - 65;     // 'A'..'E' -> 0..4, anything else does not change parity\n    if (t >= 0 && t < 5) mask ^= 1 << t;\n    // same mask at i and j ⇒ every item was borrowed an even number of times in (i, j]\n    if (firstAt[mask] !== -2) { if (j - firstAt[mask] > best) best = j - firstAt[mask]; }\n    else firstAt[mask] = j;\n  }\n  return best;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Parity of a count is a prefix property: parity in (i, j] = parity after j XOR parity after i. With five items the whole state is a 5-bit mask, so \"every item even in (i, j]\" ⇔ mask(i) = mask(j). As with zero-sum runs we keep the first index of each mask (there are only 32, so a small array replaces the hash map) and seed mask 0 at −1. One pass ⇒ O(n) time, O(32) = O(1) memory, versus O(n²) for checking all windows.</p>",
+      "solutionExplanationHtmlVi": "<p>Chẵn lẻ của số đếm là tính chất tiền tố: chẵn lẻ trong (i, j] = chẵn lẻ sau j XOR chẵn lẻ sau i. Năm loại đồ thì toàn bộ trạng thái là mask 5 bit, nên \"mọi loại chẵn trong (i, j]\" ⇔ mask(i) = mask(j). Như đề chuỗi tổng 0, ta giữ chỉ số đầu của mỗi mask (chỉ có 32 mask, nên một mảng nhỏ thay cho hash map) và gieo mask 0 ở −1. Một lượt ⇒ O(n) thời gian, O(32) = O(1) bộ nhớ, so với O(n²) khi soát mọi đoạn.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "solution.js",
+        "tepNap": [
+          "solution.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "A twice, B twice ⇒ whole log",
+              "vi": "A hai lần, B hai lần ⇒ cả log"
+            },
+            "goi": "longestEvenWindow(\"ABBA\")",
+            "mongDoi": 4
+          },
+          {
+            "moTa": {
+              "en": "Noise inside the window is ignored ⇒ \"xABAyB\"",
+              "vi": "Nhiễu trong đoạn bị bỏ qua ⇒ \"xABAyB\""
+            },
+            "goi": "longestEvenWindow(\"CxABAyB\")",
+            "mongDoi": 6
+          },
+          {
+            "moTa": {
+              "en": "Every letter once ⇒ 0",
+              "vi": "Mỗi chữ một lần ⇒ 0"
+            },
+            "goi": "longestEvenWindow(\"ABCDE\")",
+            "mongDoi": 0
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "longestEvenWindow(\"\")",
+            "mongDoi": 0,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Only noise ⇒ the whole log is valid",
+              "vi": "Chỉ có nhiễu ⇒ cả log hợp lệ"
+            },
+            "goi": "longestEvenWindow(\"xx-x\")",
+            "mongDoi": 4,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "longestEvenWindow(\"AxAyBzB\")",
+            "mongDoi": 7,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "longestEvenWindow(\"EAEBDDBCC\")",
+            "mongDoi": 6,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 8",
+              "vi": "Ca ẩn 8"
+            },
+            "goi": "longestEvenWindow(\"DABCDEEAC-B\")",
+            "mongDoi": 11,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Performance: 200 000 log characters (checking every window times out)",
+              "vi": "Hiệu năng: 200 000 ký tự log (soát mọi đoạn hết giờ)"
+            },
+            "goi": "(function () {\nfunction __cay(a) { if (!a.length || a[0] == null) return null; var root = { val: a[0], left: null, right: null }, q = [root], h = 0, i = 1;\n  while (i < a.length) { var n = q[h++]; if (a[i] != null) { n.left = { val: a[i], left: null, right: null }; q.push(n.left); } i++;\n    if (i < a.length && a[i] != null) { n.right = { val: a[i], left: null, right: null }; q.push(n.right); } i++; } return root; }\nfunction __raCay(r) { var out = [], q = [r], h = 0; while (h < q.length) { var n = q[h++]; if (n == null) { out.push(null); continue; } out.push(n.val); q.push(n.left == null ? null : n.left, n.right == null ? null : n.right); }\n  while (out.length && out[out.length - 1] === null) out.pop(); return out; }\nfunction __ds(a) { var head = null; for (var i = a.length - 1; i >= 0; i--) head = { val: a[i], next: head }; return head; }\nfunction __raDs(h) { var out = []; while (h && out.length < 1000000) { out.push(h.val); h = h.next; } return out; }\nvar __s = 20261115; function R(m) { __s = (__s * 48271) % 2147483647; return __s % m; }\nvar ch = \"ABCDEABCDEx-\", p = []; for (var i = 0; i < 200000; i++) p.push(ch[R(12)]); return longestEvenWindow(p.join(\"\"));\n})()",
+            "mongDoi": 199979
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Counting the noise characters (or the position of every character) into the parity — <code>\"xx\"</code> is a valid window of length 2.|||Tính cả ký tự nhiễu vào chẵn lẻ — <code>\"xx\"</code> là một đoạn hợp lệ dài 2."
+        },
+        {
+          "loi": "Initialising the \"first seen\" table with 0 or −1 for every mask instead of \"not seen\": every mask then looks like it appeared at the start.|||Khởi tạo bảng \"lần đầu gặp\" bằng 0 hay −1 cho MỌI mask thay vì \"chưa gặp\": mask nào cũng trông như đã xuất hiện từ đầu."
+        },
+        {
+          "loi": "Recomputing counts for every pair (i, j): O(n²) — the 200 000-character check times out.|||Đếm lại cho mọi cặp (i, j): O(n²) — kiểm 200 000 ký tự hết giờ."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "parity",
+          "vi": "tính chẵn lẻ"
+        },
+        {
+          "en": "bitmask",
+          "vi": "mặt nạ bit",
+          "giaiThich": "một số nguyên mà mỗi bit là một cờ có/không."
+        },
+        {
+          "en": "XOR",
+          "vi": "phép XOR (hoặc loại trừ)",
+          "giaiThich": "lật bit: 0 ⇄ 1."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,574 @@
+{
+  "trackSlug": "dsa-interview-practice",
+  "moduleSlug": "dsa-3-2-queue",
+  "lesson": {
+    "course": "dsa-interview",
+    "slug": "dsa-3-2-queue"
+  },
+  "exercises": [
+    {
+      "title": "Login rate limiter: accept or reject each attempt",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 15,
+      "points": 10,
+      "concepts": [
+        "queue",
+        "sliding-window rate limiting"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dsa-interview",
+        "coding-interview"
+      ],
+      "problemHtml": "<p>To slow down password guessing, the FAP-style login endpoint accepts at most <code>limit</code> attempts per account in any sliding window of <code>windowMs</code> milliseconds. An attempt at time <code>t</code> is <b>accepted</b> if fewer than <code>limit</code> <b>accepted</b> attempts happened in the window <code>(t − windowMs, t]</code>; otherwise it is rejected — and a rejected attempt does <b>not</b> use up a slot.</p>\n<p>Write <code>allowRequests(times, limit, windowMs)</code>. <code>times</code> is sorted in non-decreasing order. Return an array of booleans, one per attempt.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Write the function in <code>solution.js</code> and <b>return</b> the answer — do not print it.</li>\n  <li>Do not modify the input arrays/objects.</li>\n  <li>Mind the constraints: one check runs on a large input and every check has a 4-second limit, so an O(n²) loop fails it.</li>\n</ul>",
+      "problemHtmlVi": "<p>Để làm chậm việc dò mật khẩu, endpoint đăng nhập kiểu FAP nhận tối đa <code>limit</code> lần thử mỗi tài khoản trong bất kỳ cửa sổ trượt <code>windowMs</code> mili giây nào. Lần thử ở thời điểm <code>t</code> được <b>nhận</b> nếu trong cửa sổ <code>(t − windowMs, t]</code> có ít hơn <code>limit</code> lần thử <b>đã được nhận</b>; ngược lại bị từ chối — và lần bị từ chối <b>không</b> chiếm chỗ.</p>\n<p>Viết <code>allowRequests(times, limit, windowMs)</code>. <code>times</code> đã sắp không giảm. Trả về mảng boolean, mỗi lần thử một phần tử.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Viết hàm trong <code>solution.js</code> và <b>trả về</b> kết quả — đừng in ra.</li>\n  <li>Không sửa mảng/object đầu vào.</li>\n  <li>Để ý ràng buộc: một kiểm chạy trên đầu vào lớn và mỗi kiểm có trần 4 giây, nên vòng lặp O(n²) sẽ trượt kiểm đó.</li>\n</ul>",
+      "inputSpec": "times — sorted timestamps (ms); limit ≥ 1; windowMs ≥ 1.|||times — mốc thời gian đã sắp (ms); limit ≥ 1; windowMs ≥ 1.",
+      "outputSpec": "boolean[] of the same length.|||boolean[] cùng độ dài.",
+      "constraints": "0 ≤ times.length ≤ 200 000; 1 ≤ limit ≤ 10⁵; 1 ≤ windowMs ≤ 10⁹.\nTarget: O(n) total.|||0 ≤ times.length ≤ 200 000; 1 ≤ limit ≤ 10⁵; 1 ≤ windowMs ≤ 10⁹.\nMục tiêu: tổng O(n).",
+      "examplesJson": [
+        {
+          "input": "allowRequests([0,100,200,300,1000,1001], 3, 1000)",
+          "output": "[true,true,true,false,true,false]",
+          "explanation": "The first sample case (Run executes every visible case; hidden cases only run on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy mọi ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Accepted attempts leave the window in the same order they entered it — oldest first. That is a queue.|||Các lần được nhận rời cửa sổ đúng thứ tự chúng vào — cũ nhất ra trước. Đó là một hàng đợi.",
+        "Before deciding on time t, pop from the front every accepted time ≤ t − windowMs. Then the queue length is exactly \"accepted attempts in the window\". Push t only if you accept it.|||Trước khi quyết định ở thời điểm t, lấy khỏi đầu hàng mọi mốc đã nhận ≤ t − windowMs. Khi đó độ dài hàng đợi đúng bằng \"số lần đã nhận trong cửa sổ\". Chỉ đẩy t vào nếu nhận nó."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "solution.js",
+          "language": "javascript",
+          "code": "/**\n * times: number[] (sorted), limit: number, windowMs: number\n * returns one boolean per attempt: accepted or rejected\n */\nfunction allowRequests(times, limit, windowMs) {\n  // Write your solution here\n  return times.map(function () { return true; });\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "solution.js",
+          "language": "javascript",
+          "code": "// Reference solution — a queue (array + head index) of ACCEPTED timestamps.\nfunction allowRequests(times, limit, windowMs) {\n  var q = [], head = 0; // timestamps of ACCEPTED requests; q[head..] are the ones still inside the window\n  var out = new Array(times.length);\n  for (var i = 0; i < times.length; i++) {\n    var t = times[i];\n    // the window is (t - windowMs, t]: anything at or before t - windowMs has expired — drop it from the FRONT\n    while (head < q.length && q[head] <= t - windowMs) head++;\n    if (q.length - head < limit) { q.push(t); out[i] = true; } // only accepted requests occupy the window\n    else out[i] = false;\n  }\n  return out;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Because times arrive sorted, the accepted timestamps inside the window always form a contiguous suffix of \"everything accepted so far\": once an old one expires it never comes back. A queue with a moving <code>head</code> index represents that suffix; each accepted timestamp is pushed once and dropped once ⇒ O(n) total, O(n) memory (O(limit) if you compact the array). Using a head index instead of <code>shift()</code> keeps every pop O(1) regardless of engine.</p>",
+      "solutionExplanationHtmlVi": "<p>Vì mốc thời gian đến theo thứ tự, các mốc đã nhận nằm trong cửa sổ luôn là một đoạn cuối liền nhau của \"mọi thứ đã nhận\": mốc cũ đã hết hạn thì không bao giờ quay lại. Một hàng đợi với chỉ số <code>head</code> di chuyển biểu diễn đoạn đó; mỗi mốc được đẩy một lần và bỏ một lần ⇒ tổng O(n), bộ nhớ O(n) (O(limit) nếu dồn mảng). Dùng chỉ số head thay cho <code>shift()</code> giữ mỗi lần lấy ra là O(1) trên mọi engine.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "solution.js",
+        "tepNap": [
+          "solution.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "4th attempt rejected; at 1000 the attempt at 0 has expired",
+              "vi": "Lần thứ 4 bị từ chối; tới 1000 thì lần ở 0 đã hết hạn"
+            },
+            "goi": "allowRequests([0,100,200,300,1000,1001], 3, 1000)",
+            "mongDoi": [
+              true,
+              true,
+              true,
+              false,
+              true,
+              false
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Same millisecond",
+              "vi": "Cùng một mili giây"
+            },
+            "goi": "allowRequests([5,5,5,5], 2, 10)",
+            "mongDoi": [
+              true,
+              true,
+              false,
+              false
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "allowRequests([], 3, 1000)",
+            "mongDoi": [],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Rejected attempts do not occupy a slot",
+              "vi": "Lần bị từ chối không chiếm chỗ"
+            },
+            "goi": "allowRequests([0,10,20,30,40,50], 1, 25)",
+            "mongDoi": [
+              true,
+              false,
+              false,
+              true,
+              false,
+              false
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Exactly windowMs ago has expired",
+              "vi": "Cách đúng windowMs là đã hết hạn"
+            },
+            "goi": "allowRequests([0,999,1000,1999,2000], 1, 1000)",
+            "mongDoi": [
+              true,
+              false,
+              true,
+              false,
+              true
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "allowRequests([1,2,3,4,5,6,7,8], 3, 4)",
+            "mongDoi": [
+              true,
+              true,
+              true,
+              false,
+              true,
+              true,
+              true,
+              false
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Performance: 200 000 attempts, limit 50 000, a long window (re-counting the history is O(n²))",
+              "vi": "Hiệu năng: 200 000 lần thử, limit 50 000, cửa sổ dài (đếm lại lịch sử là O(n²))"
+            },
+            "goi": "(function () {\nfunction __cay(a) { if (!a.length || a[0] == null) return null; var root = { val: a[0], left: null, right: null }, q = [root], h = 0, i = 1;\n  while (i < a.length) { var n = q[h++]; if (a[i] != null) { n.left = { val: a[i], left: null, right: null }; q.push(n.left); } i++;\n    if (i < a.length && a[i] != null) { n.right = { val: a[i], left: null, right: null }; q.push(n.right); } i++; } return root; }\nfunction __raCay(r) { var out = [], q = [r], h = 0; while (h < q.length) { var n = q[h++]; if (n == null) { out.push(null); continue; } out.push(n.val); q.push(n.left == null ? null : n.left, n.right == null ? null : n.right); }\n  while (out.length && out[out.length - 1] === null) out.pop(); return out; }\nfunction __ds(a) { var head = null; for (var i = a.length - 1; i >= 0; i--) head = { val: a[i], next: head }; return head; }\nfunction __raDs(h) { var out = []; while (h && out.length < 1000000) { out.push(h.val); h = h.next; } return out; }\nvar __s = 20261115; function R(m) { __s = (__s * 48271) % 2147483647; return __s % m; }\nvar n = 200000, t = [], x = 0; for (var i = 0; i < n; i++) { x += R(3); t.push(x); } var r = allowRequests(t, 50000, 150000), ok = 0, s = 0; for (var j = 0; j < n; j++) if (r[j]) { ok++; s = (s + j) % 1000000007; } return { accepted: ok, indexChecksum: s };\n})()",
+            "mongDoi": {
+              "accepted": 99833,
+              "indexChecksum": 973984847
+            }
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Pushing every attempt, rejected ones too: a bot that keeps hammering stays blocked forever, and the count no longer matches the rule.|||Đẩy mọi lần thử, kể cả lần bị từ chối: bot cứ gõ liên tục sẽ bị chặn mãi, và số đếm không còn khớp luật."
+        },
+        {
+          "loi": "Off-by-one on the boundary: the window is <code>(t − windowMs, t]</code>, so an attempt exactly <code>windowMs</code> ago has already expired (use <code>&lt;=</code> when dropping).|||Lệch một ở biên: cửa sổ là <code>(t − windowMs, t]</code>, nên lần thử cách đúng <code>windowMs</code> đã hết hạn (bỏ ra bằng <code>&lt;=</code>)."
+        },
+        {
+          "loi": "Re-counting the whole history with <code>filter</code> for every attempt: O(n²) — the 200 000-attempt check times out.|||Đếm lại cả lịch sử bằng <code>filter</code> cho mỗi lần thử: O(n²) — kiểm 200 000 lần thử hết giờ."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "rate limiter",
+          "vi": "bộ giới hạn tần suất"
+        },
+        {
+          "en": "sliding window log",
+          "vi": "nhật ký cửa sổ trượt",
+          "giaiThich": "lưu mốc thời gian từng request trong cửa sổ."
+        },
+        {
+          "en": "FIFO — first in, first out",
+          "vi": "vào trước, ra trước"
+        }
+      ]
+    },
+    {
+      "title": "Library printer: who finishes first under round-robin",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 20,
+      "points": 20,
+      "concepts": [
+        "queue",
+        "round-robin scheduling",
+        "simulation"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dsa-interview",
+        "coding-interview"
+      ],
+      "problemHtml": "<p>The shared printer in the FPT library is fair: it takes the job at the front of the queue, prints at most <code>quantum</code> pages of it, and if the job still has pages left it goes to the <b>back</b> of the queue. A 300-page thesis therefore cannot block a student who only needs a 2-page form.</p>\n<p>Write <code>printOrder(jobs, quantum)</code>: <code>jobs</code> is the initial queue (front first) of <code>{ id, pages }</code>. Return the job ids in the order they <b>finish</b>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Write the function in <code>solution.js</code> and <b>return</b> the answer — do not print it.</li>\n  <li>Do not modify the input arrays/objects.</li>\n  <li>Mind the constraints: one check runs on a large input and every check has a 4-second limit, so an O(n²) loop fails it.</li>\n</ul>",
+      "problemHtmlVi": "<p>Máy in chung ở thư viện FPT rất công bằng: nó lấy lệnh in ở đầu hàng, in tối đa <code>quantum</code> trang của lệnh đó, và nếu lệnh còn trang thì xếp xuống <b>cuối</b> hàng. Nhờ vậy một quyển khoá luận 300 trang không chặn được bạn chỉ cần in tờ đơn 2 trang.</p>\n<p>Viết <code>printOrder(jobs, quantum)</code>: <code>jobs</code> là hàng đợi ban đầu (đầu hàng trước) gồm <code>{ id, pages }</code>. Trả về các id theo thứ tự <b>in xong</b>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Viết hàm trong <code>solution.js</code> và <b>trả về</b> kết quả — đừng in ra.</li>\n  <li>Không sửa mảng/object đầu vào.</li>\n  <li>Để ý ràng buộc: một kiểm chạy trên đầu vào lớn và mỗi kiểm có trần 4 giây, nên vòng lặp O(n²) sẽ trượt kiểm đó.</li>\n</ul>",
+      "inputSpec": "jobs — array of { id: string, pages: positive integer }; quantum — positive integer.|||jobs — mảng { id: string, pages: số nguyên dương }; quantum — số nguyên dương.",
+      "outputSpec": "string[] — ids in finishing order.|||string[] — id theo thứ tự in xong.",
+      "constraints": "0 ≤ jobs.length ≤ 100 000; total number of turns ≤ 10⁶.\nTarget: O(1) per turn.|||0 ≤ jobs.length ≤ 100 000; tổng số lượt ≤ 10⁶.\nMục tiêu: O(1) mỗi lượt.",
+      "examplesJson": [
+        {
+          "input": "printOrder([{\"id\":\"thesis\",\"pages\":7},{\"id\":\"form\",\"pages\":2},{\"id\":\"slides\",\"pages\":4}], 3)",
+          "output": "[\"form\",\"slides\",\"thesis\"]",
+          "explanation": "The first sample case (Run executes every visible case; hidden cases only run on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy mọi ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Just simulate — the rules ARE a queue: take from the front, maybe add to the back.|||Cứ mô phỏng — luật chính là một hàng đợi: lấy ở đầu, có thể thêm vào cuối.",
+        "Make every queue operation O(1): keep a <code>head</code> index into an array (or write a small ring buffer). Rebuilding the array with <code>slice(1)</code> or <code>[...q.slice(1), job]</code> each turn copies the whole queue.|||Cho mọi thao tác hàng đợi O(1): giữ chỉ số <code>head</code> trên mảng (hoặc tự viết ring buffer nhỏ). Dựng lại mảng bằng <code>slice(1)</code> hay <code>[...q.slice(1), job]</code> mỗi lượt là chép cả hàng đợi."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "solution.js",
+          "language": "javascript",
+          "code": "/**\n * jobs: { id: string, pages: number }[] (front of the queue first), quantum: number\n * returns the ids in the order the jobs finish\n */\nfunction printOrder(jobs, quantum) {\n  // Write your solution here\n  return jobs.map(function (j) { return j.id; });\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "solution.js",
+          "language": "javascript",
+          "code": "// Reference solution — simulate the queue with an array + head index (O(1) per turn).\nfunction printOrder(jobs, quantum) {\n  var q = [], head = 0, done = [];\n  for (var i = 0; i < jobs.length; i++) q.push([jobs[i].id, jobs[i].pages]); // copy: never modify the input\n  while (head < q.length) {\n    var job = q[head++];                     // take the job at the FRONT\n    var left = job[1] - quantum;             // it prints up to `quantum` pages this turn\n    if (left <= 0) done.push(job[0]);        // finished during this turn\n    else q.push([job[0], left]);             // otherwise it goes to the BACK with the pages it still has\n  }\n  return done;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The printer policy is literally a FIFO queue with re-enqueueing, so a faithful simulation is correct by construction. The cost is one O(1) dequeue + at most one O(1) enqueue per turn ⇒ O(T) for T turns (here ≤ 10⁶) and O(n) live memory. The array-with-head trick grows the array by one entry per re-queue (≤ T entries); a ring buffer of size n would cap memory at O(n) — the lesson's circular-queue design.</p>",
+      "solutionExplanationHtmlVi": "<p>Chính sách của máy in đúng nghĩa đen là hàng đợi FIFO có xếp lại cuối hàng, nên mô phỏng trung thực là đúng theo cách dựng. Chi phí là một lần lấy O(1) + tối đa một lần thêm O(1) mỗi lượt ⇒ O(T) với T lượt (ở đây ≤ 10⁶) và O(n) bộ nhớ đang dùng. Mẹo mảng + head làm mảng dài thêm một phần tử mỗi lần xếp lại (≤ T phần tử); một ring buffer cỡ n giữ bộ nhớ ở O(n) — đúng thiết kế hàng đợi vòng của bài.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "solution.js",
+        "tepNap": [
+          "solution.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "The 2-page form finishes first",
+              "vi": "Tờ đơn 2 trang in xong trước"
+            },
+            "goi": "printOrder([{\"id\":\"thesis\",\"pages\":7},{\"id\":\"form\",\"pages\":2},{\"id\":\"slides\",\"pages\":4}], 3)",
+            "mongDoi": [
+              "form",
+              "slides",
+              "thesis"
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Exactly quantum pages ⇒ finishes in its first turn",
+              "vi": "Đúng quantum trang ⇒ xong ngay lượt đầu"
+            },
+            "goi": "printOrder([{\"id\":\"a\",\"pages\":3},{\"id\":\"b\",\"pages\":3}], 3)",
+            "mongDoi": [
+              "a",
+              "b"
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "printOrder([], 5)",
+            "mongDoi": [],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "printOrder([{\"id\":\"x\",\"pages\":10}], 1)",
+            "mongDoi": [
+              "x"
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "printOrder([{\"id\":\"p1\",\"pages\":5},{\"id\":\"p2\",\"pages\":1},{\"id\":\"p3\",\"pages\":9},{\"id\":\"p4\",\"pages\":5},{\"id\":\"p5\",\"pages\":2}], 2)",
+            "mongDoi": [
+              "p2",
+              "p5",
+              "p1",
+              "p4",
+              "p3"
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Huge quantum ⇒ plain FIFO",
+              "vi": "Quantum rất lớn ⇒ FIFO thường"
+            },
+            "goi": "printOrder([{\"id\":\"big\",\"pages\":100},{\"id\":\"small\",\"pages\":1}], 1000)",
+            "mongDoi": [
+              "big",
+              "small"
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Performance: 100 000 jobs, ~10⁶ turns (rebuilding the array every turn is far too slow)",
+              "vi": "Hiệu năng: 100 000 lệnh in, ~10⁶ lượt (dựng lại mảng mỗi lượt là quá chậm)"
+            },
+            "goi": "(function () {\nfunction __cay(a) { if (!a.length || a[0] == null) return null; var root = { val: a[0], left: null, right: null }, q = [root], h = 0, i = 1;\n  while (i < a.length) { var n = q[h++]; if (a[i] != null) { n.left = { val: a[i], left: null, right: null }; q.push(n.left); } i++;\n    if (i < a.length && a[i] != null) { n.right = { val: a[i], left: null, right: null }; q.push(n.right); } i++; } return root; }\nfunction __raCay(r) { var out = [], q = [r], h = 0; while (h < q.length) { var n = q[h++]; if (n == null) { out.push(null); continue; } out.push(n.val); q.push(n.left == null ? null : n.left, n.right == null ? null : n.right); }\n  while (out.length && out[out.length - 1] === null) out.pop(); return out; }\nfunction __ds(a) { var head = null; for (var i = a.length - 1; i >= 0; i--) head = { val: a[i], next: head }; return head; }\nfunction __raDs(h) { var out = []; while (h && out.length < 1000000) { out.push(h.val); h = h.next; } return out; }\nvar __s = 20261115; function R(m) { __s = (__s * 48271) % 2147483647; return __s % m; }\nvar jobs = []; for (var i = 0; i < 100000; i++) jobs.push({ id: \"J\" + i, pages: 1 + R(200) }); var r = printOrder(jobs, 10), s = 0; for (var j = 0; j < r.length; j += 997) s = (s * 31 + Number(r[j].slice(1))) % 1000000007; return { finished: r.length, first: r.slice(0, 3), last: r[r.length - 1], sample: s, inputUntouched: jobs[0].pages + jobs[99999].pages };\n})()",
+            "mongDoi": {
+              "finished": 100000,
+              "first": [
+                "J26",
+                "J35",
+                "J36"
+              ],
+              "last": "J99960",
+              "sample": 752906948,
+              "inputUntouched": 246
+            }
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Decreasing <code>pages</code> on the input objects: the caller's data is destroyed (and the next run gives different results). Copy first.|||Trừ <code>pages</code> thẳng trên object đầu vào: dữ liệu của người gọi bị phá (và lần chạy sau ra kết quả khác). Chép ra trước."
+        },
+        {
+          "loi": "Putting an unfinished job back at the FRONT (or re-inserting it at its old position): that is \"finish the current job first\", not round-robin.|||Đặt lệnh chưa xong lại ĐẦU hàng (hoặc chèn về vị trí cũ): đó là \"in xong lệnh hiện tại trước\", không phải xoay vòng."
+        },
+        {
+          "loi": "<code>q = q.slice(1).concat([job])</code> every turn: correct, but O(queue length) per turn ⇒ ~10¹¹ steps on the large check.|||<code>q = q.slice(1).concat([job])</code> mỗi lượt: đúng, nhưng O(độ dài hàng) mỗi lượt ⇒ ~10¹¹ bước ở kiểm lớn."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "round-robin",
+          "vi": "xoay vòng",
+          "giaiThich": "mỗi việc được một lượt ngắn rồi xuống cuối hàng."
+        },
+        {
+          "en": "quantum / time slice",
+          "vi": "lượng tử / lát thời gian"
+        },
+        {
+          "en": "enqueue / dequeue",
+          "vi": "thêm vào hàng / lấy ra khỏi hàng"
+        }
+      ]
+    },
+    {
+      "title": "Server room sensor: temperature swing in every k-minute window",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 30,
+      "points": 30,
+      "concepts": [
+        "monotonic deque",
+        "sliding window maximum/minimum"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dsa-interview",
+        "coding-interview"
+      ],
+      "problemHtml": "<p>A sensor in the server room of the Hoa Lac campus logs one temperature per minute: <code>temps[i]</code> (tenths of a degree, integers). A swing — max minus min — larger than 30 inside any 10-minute window suggests the air conditioner is cycling badly, so the facility team wants the swing of <b>every</b> window of <code>k</code> consecutive minutes.</p>\n<p>Write <code>windowSwing(temps, k)</code> returning an array of length <code>n − k + 1</code> whose element <code>i</code> is <code>max(temps[i..i+k−1]) − min(temps[i..i+k−1])</code>. If <code>k &gt; n</code> return <code>[]</code>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Write the function in <code>solution.js</code> and <b>return</b> the answer — do not print it.</li>\n  <li>Do not modify the input arrays/objects.</li>\n  <li>Mind the constraints: one check runs on a large input and every check has a 4-second limit, so an O(n²) loop fails it.</li>\n</ul>",
+      "problemHtmlVi": "<p>Cảm biến trong phòng máy chủ cơ sở Hoà Lạc ghi mỗi phút một nhiệt độ: <code>temps[i]</code> (phần mười độ, số nguyên). Biên độ — max trừ min — lớn hơn 30 trong bất kỳ cửa sổ 10 phút nào cho thấy điều hoà bật tắt thất thường, nên đội cơ sở vật chất muốn biên độ của <b>mọi</b> cửa sổ <code>k</code> phút liên tiếp.</p>\n<p>Viết <code>windowSwing(temps, k)</code> trả về mảng độ dài <code>n − k + 1</code> mà phần tử <code>i</code> là <code>max(temps[i..i+k−1]) − min(temps[i..i+k−1])</code>. Nếu <code>k &gt; n</code> trả <code>[]</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Viết hàm trong <code>solution.js</code> và <b>trả về</b> kết quả — đừng in ra.</li>\n  <li>Không sửa mảng/object đầu vào.</li>\n  <li>Để ý ràng buộc: một kiểm chạy trên đầu vào lớn và mỗi kiểm có trần 4 giây, nên vòng lặp O(n²) sẽ trượt kiểm đó.</li>\n</ul>",
+      "inputSpec": "temps — array of integers (may be negative); k ≥ 1.|||temps — mảng số nguyên (có thể âm); k ≥ 1.",
+      "outputSpec": "number[] of length max(0, n − k + 1).|||number[] độ dài max(0, n − k + 1).",
+      "constraints": "0 ≤ n ≤ 200 000; 1 ≤ k ≤ 200 000; −10⁶ ≤ temps[i] ≤ 10⁶.\nTarget: O(n), independent of k.|||0 ≤ n ≤ 200 000; 1 ≤ k ≤ 200 000; −10⁶ ≤ temps[i] ≤ 10⁶.\nMục tiêu: O(n), không phụ thuộc k.",
+      "examplesJson": [
+        {
+          "input": "windowSwing([250,262,241,270,255,258], 3)",
+          "output": "[21,29,29,15]",
+          "explanation": "The first sample case (Run executes every visible case; hidden cases only run on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy mọi ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Max and min are two independent questions. Solve \"max of every window\" in O(n) first — then do the mirror image for the min.|||Max và min là hai câu hỏi độc lập. Giải \"max của mọi cửa sổ\" trong O(n) trước — rồi làm bản đối xứng cho min.",
+        "For the max keep a deque of INDEXES whose temperatures decrease from front to back: before pushing i, pop from the back everything ≤ temps[i]; drop the front when its index leaves the window. The front is the max. Store indexes, not values — you need them to know when an element expires.|||Cho max, giữ một deque CHỈ SỐ mà nhiệt độ giảm dần từ đầu về cuối: trước khi đẩy i, lấy ra từ cuối mọi phần tử ≤ temps[i]; bỏ phần tử đầu khi chỉ số của nó rời cửa sổ. Phần tử đầu là max. Lưu chỉ số, không lưu giá trị — cần chúng để biết khi nào phần tử hết hạn."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "solution.js",
+          "language": "javascript",
+          "code": "/**\n * temps: number[], k: number\n * returns max - min of every window of k consecutive values\n */\nfunction windowSwing(temps, k) {\n  // Write your solution here\n  return [];\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "solution.js",
+          "language": "javascript",
+          "code": "// Reference solution — two monotonic deques of indexes (max: decreasing, min: increasing), O(n).\nfunction windowSwing(temps, k) {\n  var out = [];\n  if (k > temps.length) return out;\n  var mx = [], hx = 0; // indexes, temps DECREASING from head ⇒ temps[mx[hx]] is the window max\n  var mn = [], hn = 0; // indexes, temps INCREASING from head ⇒ temps[mn[hn]] is the window min\n  for (var i = 0; i < temps.length; i++) {\n    while (mx.length > hx && temps[mx[mx.length - 1]] <= temps[i]) mx.pop(); // smaller & older can never be the max again\n    mx.push(i);\n    while (mn.length > hn && temps[mn[mn.length - 1]] >= temps[i]) mn.pop(); // larger & older can never be the min again\n    mn.push(i);\n    if (mx[hx] <= i - k) hx++; // the front fell out of the window [i-k+1, i]\n    if (mn[hn] <= i - k) hn++;\n    if (i >= k - 1) out.push(temps[mx[hx]] - temps[mn[hn]]);\n  }\n  return out;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>In the max deque an element is removed from the back as soon as a newer element is at least as warm — it can never be the maximum of any window that still contains the newer one. What remains is decreasing, so the front is the max of the current window once expired fronts are dropped. The min deque is the mirror image. Every index enters and leaves each deque at most once ⇒ O(n) total no matter how large k is, O(k) live memory. The brute force recomputes every window: O(n·k).</p>",
+      "solutionExplanationHtmlVi": "<p>Trong deque max, một phần tử bị lấy ra từ cuối ngay khi có phần tử mới hơn ấm ít nhất bằng nó — nó không bao giờ còn là max của cửa sổ nào vẫn chứa phần tử mới. Phần còn lại giảm dần, nên phần tử đầu là max của cửa sổ hiện tại sau khi bỏ những phần tử đầu đã hết hạn. Deque min là bản đối xứng. Mỗi chỉ số vào và ra mỗi deque tối đa một lần ⇒ tổng O(n) bất kể k lớn bao nhiêu, O(k) bộ nhớ đang dùng. Vét cạn tính lại từng cửa sổ: O(n·k).</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "solution.js",
+        "tepNap": [
+          "solution.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Windows of 3 minutes",
+              "vi": "Cửa sổ 3 phút"
+            },
+            "goi": "windowSwing([250,262,241,270,255,258], 3)",
+            "mongDoi": [
+              21,
+              29,
+              29,
+              15
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Constant temperature ⇒ swing 0",
+              "vi": "Nhiệt độ không đổi ⇒ biên độ 0"
+            },
+            "goi": "windowSwing([5,5,5,5], 2)",
+            "mongDoi": [
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "moTa": {
+              "en": "k > n ⇒ []",
+              "vi": "k > n ⇒ []"
+            },
+            "goi": "windowSwing([1,2,3], 5)",
+            "mongDoi": []
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "windowSwing([], 1)",
+            "mongDoi": [],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "k = 1 ⇒ every swing is 0",
+              "vi": "k = 1 ⇒ mọi biên độ là 0"
+            },
+            "goi": "windowSwing([7,-3,4], 1)",
+            "mongDoi": [
+              0,
+              0,
+              0
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "windowSwing([1,9,2,8,3,7,4,6,5], 4)",
+            "mongDoi": [
+              8,
+              7,
+              6,
+              5,
+              4,
+              3
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "The old max must expire on time",
+              "vi": "Max cũ phải hết hạn đúng lúc"
+            },
+            "goi": "windowSwing([10,1,1,1,1,10], 3)",
+            "mongDoi": [
+              9,
+              0,
+              0,
+              9
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 8",
+              "vi": "Ca ẩn 8"
+            },
+            "goi": "windowSwing([-5,-1,-9,-2], 4)",
+            "mongDoi": [
+              8
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Performance: n = 200 000, k = 100 000 (recomputing each window is O(n·k) = 10¹⁰)",
+              "vi": "Hiệu năng: n = 200 000, k = 100 000 (tính lại từng cửa sổ là O(n·k) = 10¹⁰)"
+            },
+            "goi": "(function () {\nfunction __cay(a) { if (!a.length || a[0] == null) return null; var root = { val: a[0], left: null, right: null }, q = [root], h = 0, i = 1;\n  while (i < a.length) { var n = q[h++]; if (a[i] != null) { n.left = { val: a[i], left: null, right: null }; q.push(n.left); } i++;\n    if (i < a.length && a[i] != null) { n.right = { val: a[i], left: null, right: null }; q.push(n.right); } i++; } return root; }\nfunction __raCay(r) { var out = [], q = [r], h = 0; while (h < q.length) { var n = q[h++]; if (n == null) { out.push(null); continue; } out.push(n.val); q.push(n.left == null ? null : n.left, n.right == null ? null : n.right); }\n  while (out.length && out[out.length - 1] === null) out.pop(); return out; }\nfunction __ds(a) { var head = null; for (var i = a.length - 1; i >= 0; i--) head = { val: a[i], next: head }; return head; }\nfunction __raDs(h) { var out = []; while (h && out.length < 1000000) { out.push(h.val); h = h.next; } return out; }\nvar __s = 20261115; function R(m) { __s = (__s * 48271) % 2147483647; return __s % m; }\nvar n = 200000, a = new Array(n), x = 0; for (var i = 0; i < n; i++) { x += R(21) - 10; a[i] = x; } var r = windowSwing(a, 100000), s = 0, m = 0; for (var j = 0; j < r.length; j++) { s += r[j]; if (r[j] > m) m = r[j]; } return { windows: r.length, sum: s, maxSwing: m, first: r[0], last: r[r.length - 1] };\n})()",
+            "mongDoi": {
+              "windows": 100001,
+              "sum": 244071399,
+              "maxSwing": 3131,
+              "first": 2046,
+              "last": 2866
+            }
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Off-by-one when expiring: the window ending at i is <code>[i − k + 1, i]</code>, so the front must go when its index is <code>≤ i − k</code>. Using <code>&lt; i − k</code> silently computes windows of size k + 1.|||Lệch một khi cho hết hạn: cửa sổ kết thúc ở i là <code>[i − k + 1, i]</code>, nên phần tử đầu phải ra khi chỉ số <code>≤ i − k</code>. Dùng <code>&lt; i − k</code> là âm thầm tính cửa sổ cỡ k + 1."
+        },
+        {
+          "loi": "<code>Math.max(...temps.slice(i, i + k))</code> per window: O(n·k) = 10¹⁰ for n = 2·10⁵, k = 10⁵ (and the spread can overflow the call stack).|||<code>Math.max(...temps.slice(i, i + k))</code> cho mỗi cửa sổ: O(n·k) = 10¹⁰ với n = 2·10⁵, k = 10⁵ (và spread còn có thể tràn call stack)."
+        },
+        {
+          "loi": "Using <code>shift()</code> to drop the front on a deque of 10⁵ elements: depending on the engine each shift can cost O(length). A head index is always O(1).|||Dùng <code>shift()</code> để bỏ phần tử đầu trên deque 10⁵ phần tử: tuỳ engine mỗi lần shift có thể tốn O(độ dài). Chỉ số head luôn O(1)."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "deque (double-ended queue)",
+          "vi": "hàng đợi hai đầu"
+        },
+        {
+          "en": "monotonic deque",
+          "vi": "deque đơn điệu",
+          "giaiThich": "giá trị luôn tăng hoặc giảm từ đầu về cuối."
+        },
+        {
+          "en": "expire",
+          "vi": "hết hạn (rời cửa sổ)"
+        },
+        {
+          "en": "swing / range",
+          "vi": "biên độ (max − min)"
+        }
+      ]
+    }
+  ]
+}

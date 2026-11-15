@@ -1,0 +1,566 @@
+{
+  "trackSlug": "dsa-interview-practice",
+  "moduleSlug": "dsa-6-3-khoang",
+  "lesson": {
+    "course": "dsa-interview",
+    "slug": "dsa-6-3-khoang"
+  },
+  "exercises": [
+    {
+      "title": "Lab usage report: total minutes the room was booked",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 15,
+      "points": 10,
+      "concepts": [
+        "intervals",
+        "merge intervals",
+        "sorting"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dsa-interview",
+        "coding-interview"
+      ],
+      "problemHtml": "<p>Room AL-L301 is booked through an online form, and the form does not stop overlapping requests, so <code>bookings</code> is a messy list of half-open intervals <code>[start, end)</code> in minutes since the start of the semester. For the facility report, the department needs the <b>number of minutes during which the room was booked by at least one person</b>.</p>\n<p>Write <code>busyMinutes(bookings)</code> returning the total length of the union of all intervals. Overlapping minutes are counted once. Do not modify the input.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Write the function in <code>solution.js</code> and <b>return</b> the answer — do not print it.</li>\n  <li>Do not modify the input arrays/objects.</li>\n  <li>Mind the constraints: one check runs on a large input and every check has a 4-second limit, so an O(n²) loop fails it.</li>\n</ul>",
+      "problemHtmlVi": "<p>Phòng AL-L301 được đặt qua một form trực tuyến, và form không chặn các yêu cầu chồng giờ, nên <code>bookings</code> là danh sách lộn xộn các khoảng nửa mở <code>[start, end)</code>, tính bằng phút kể từ đầu học kỳ. Để làm báo cáo cơ sở vật chất, khoa cần <b>số phút mà phòng có ít nhất một người đặt</b>.</p>\n<p>Viết <code>busyMinutes(bookings)</code> trả về tổng độ dài của hợp mọi khoảng. Phút bị chồng chỉ tính một lần. Không sửa đầu vào.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Viết hàm trong <code>solution.js</code> và <b>trả về</b> kết quả — đừng in ra.</li>\n  <li>Không sửa mảng/object đầu vào.</li>\n  <li>Để ý ràng buộc: một kiểm chạy trên đầu vào lớn và mỗi kiểm có trần 4 giây, nên vòng lặp O(n²) sẽ trượt kiểm đó.</li>\n</ul>",
+      "inputSpec": "bookings — array of [start, end] with start < end (integers), any order.|||bookings — mảng [start, end] với start < end (số nguyên), thứ tự bất kỳ.",
+      "outputSpec": "number — total booked minutes.|||number — tổng số phút có người đặt.",
+      "constraints": "0 ≤ bookings.length ≤ 2·10⁵; 0 ≤ start < end ≤ 10⁹.\nTarget: O(n log n).|||0 ≤ bookings.length ≤ 2·10⁵; 0 ≤ start < end ≤ 10⁹.\nMục tiêu: O(n log n).",
+      "examplesJson": [
+        {
+          "input": "busyMinutes([[60,120],[0,90],[200,230]])",
+          "output": "150",
+          "explanation": "The first sample case (Run executes every visible case; hidden cases only run on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy mọi ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Summing <code>end − start</code> double-counts overlaps. Turn the list into disjoint blocks first — the \"merge intervals\" family: sort by start.|||Cộng <code>end − start</code> sẽ đếm trùng phần chồng. Hãy biến danh sách thành các khối rời nhau trước — họ bài \"gộp khoảng\": sắp theo điểm đầu.",
+        "Walk the sorted list keeping one open block <code>[curS, curE)</code>: if the next start is beyond <code>curE</code>, close the block (add its length) and open a new one; otherwise extend <code>curE</code>. You never need to store the merged list.|||Đi qua danh sách đã sắp, giữ một khối đang mở <code>[curS, curE)</code>: nếu điểm đầu kế tiếp vượt quá <code>curE</code> thì đóng khối (cộng độ dài) và mở khối mới; ngược lại kéo dài <code>curE</code>. Không cần lưu danh sách đã gộp."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "solution.js",
+          "language": "javascript",
+          "code": "/**\n * bookings: [start, end][] — half-open, possibly overlapping, any order\n * returns the total number of minutes covered by at least one booking\n */\nfunction busyMinutes(bookings) {\n  // Write your solution here\n  let total = 0;\n  for (const [s, e] of bookings) total += e - s;\n  return total;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "solution.js",
+          "language": "javascript",
+          "code": "// Reference solution — sort by start, sweep with one open block, add each block when it closes.\nfunction busyMinutes(bookings) {\n  const s = bookings.slice().sort((a, b) => a[0] - b[0]); // copy, then sort by START\n  let total = 0, curS = null, curE = null;\n  for (const [a, b] of s) {\n    if (curE === null || a > curE) {          // a gap (a === curE just touches: same block, no gap)\n      if (curE !== null) total += curE - curS;\n      curS = a; curE = b;                       // open a new merged block\n    } else if (b > curE) curE = b;              // overlaps: extend the current block\n  }\n  if (curE !== null) total += curE - curS;\n  return total;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>After sorting by start, intervals that overlap are consecutive in the list, so one pass with a single open block builds the disjoint union; adding each block's length when it closes counts every booked minute exactly once. O(n log n) for the sort + O(n) for the pass, O(n) memory for the sorted copy. Touching blocks (<code>[0, 30)</code> and <code>[30, 60)</code>) may be merged or not — the total is the same.</p>",
+      "solutionExplanationHtmlVi": "<p>Sau khi sắp theo điểm đầu, các khoảng chồng nhau nằm liền nhau trong danh sách, nên một lượt với một khối đang mở dựng được hợp rời nhau; cộng độ dài mỗi khối lúc đóng đếm mỗi phút có người đặt đúng một lần. O(n log n) cho sắp + O(n) cho lượt quét, O(n) bộ nhớ cho bản sao đã sắp. Hai khối chạm nhau (<code>[0, 30)</code> và <code>[30, 60)</code>) gộp hay không cũng ra cùng tổng.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "solution.js",
+        "tepNap": [
+          "solution.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "[0,120) + [200,230) = 150",
+              "vi": "[0,120) + [200,230) = 150"
+            },
+            "goi": "busyMinutes([[60,120],[0,90],[200,230]])",
+            "mongDoi": 150
+          },
+          {
+            "moTa": {
+              "en": "Touching bookings: 60",
+              "vi": "Hai lượt chạm nhau: 60"
+            },
+            "goi": "busyMinutes([[0,30],[30,60]])",
+            "mongDoi": 60
+          },
+          {
+            "moTa": {
+              "en": "Case 3: busyMinutes([])",
+              "vi": "Ca 3"
+            },
+            "goi": "busyMinutes([])",
+            "mongDoi": 0
+          },
+          {
+            "moTa": {
+              "en": "Short bookings inside a long one",
+              "vi": "Lượt ngắn nằm trong lượt dài"
+            },
+            "goi": "busyMinutes([[0,600],[100,120],[300,310]])",
+            "mongDoi": 600,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Duplicate bookings",
+              "vi": "Đặt trùng hệt nhau"
+            },
+            "goi": "busyMinutes([[5,10],[5,10],[5,10]])",
+            "mongDoi": 5,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "busyMinutes([[900,1000],[0,1],[500,950],[2,3]])",
+            "mongDoi": 502,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "busyMinutes([[0,1000000000],[999999999,1000000000]])",
+            "mongDoi": 1000000000,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Performance: 200 000 mostly disjoint bookings (scanning the merged list for every booking times out)",
+              "vi": "Hiệu năng: 200 000 lượt đặt phần lớn rời nhau (quét danh sách đã gộp cho mỗi lượt thì hết giờ)"
+            },
+            "goi": "(function () {\nfunction __cay(a) { if (!a.length || a[0] == null) return null; var root = { val: a[0], left: null, right: null }, q = [root], h = 0, i = 1;\n  while (i < a.length) { var n = q[h++]; if (a[i] != null) { n.left = { val: a[i], left: null, right: null }; q.push(n.left); } i++;\n    if (i < a.length && a[i] != null) { n.right = { val: a[i], left: null, right: null }; q.push(n.right); } i++; } return root; }\nfunction __raCay(r) { var out = [], q = [r], h = 0; while (h < q.length) { var n = q[h++]; if (n == null) { out.push(null); continue; } out.push(n.val); q.push(n.left == null ? null : n.left, n.right == null ? null : n.right); }\n  while (out.length && out[out.length - 1] === null) out.pop(); return out; }\nfunction __ds(a) { var head = null; for (var i = a.length - 1; i >= 0; i--) head = { val: a[i], next: head }; return head; }\nfunction __raDs(h) { var out = []; while (h && out.length < 1000000) { out.push(h.val); h = h.next; } return out; }\nvar __s = 20261115; function R(m) { __s = (__s * 48271) % 2147483647; return __s % m; }\nvar n = 200000, a = new Array(n); for (var i = 0; i < n; i++) { var s = R(1000000000 - 1000); a[i] = [s, s + 1 + R(1000)]; } return busyMinutes(a);\n})()",
+            "mongDoi": 94873982
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Adding up <code>end − start</code> of every booking: overlapping minutes are counted two or three times.|||Cộng <code>end − start</code> của mọi lượt đặt: phút chồng bị tính hai, ba lần."
+        },
+        {
+          "loi": "Extending with <code>curE = b</code> instead of <code>max(curE, b)</code>: a short booking inside a long one cuts the block short.|||Kéo dài bằng <code>curE = b</code> thay vì <code>max(curE, b)</code>: một lượt đặt ngắn nằm trong lượt dài làm khối bị cắt cụt."
+        },
+        {
+          "loi": "Inserting each booking into a list of merged blocks by scanning the list: correct, but O(n²) when most bookings are disjoint.|||Chèn từng lượt đặt vào danh sách khối đã gộp bằng cách quét cả danh sách: đúng, nhưng O(n²) khi phần lớn lượt đặt rời nhau."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "half-open interval",
+          "vi": "khoảng nửa mở",
+          "giaiThich": "[start, end): gồm start, không gồm end."
+        },
+        {
+          "en": "union",
+          "vi": "hợp (của các khoảng)"
+        },
+        {
+          "en": "disjoint",
+          "vi": "rời nhau"
+        }
+      ]
+    },
+    {
+      "title": "SWP391 team: find common free slots for a meeting",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 25,
+      "points": 20,
+      "concepts": [
+        "intervals",
+        "sweep",
+        "complement of a union"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dsa-interview",
+        "coding-interview"
+      ],
+      "problemHtml": "<p>A five-person SWP391 team wants to meet. Each member exported their busy times for the day: <code>calendars[p]</code> is a list of half-open intervals <code>[start, end)</code> in minutes after midnight (a person's own intervals may overlap and are not sorted).</p>\n<p>Write <code>commonFreeSlots(calendars, dayStart, dayEnd, minLen)</code> returning every maximal interval inside <code>[dayStart, dayEnd)</code> when <b>nobody</b> is busy and that is at least <code>minLen</code> minutes long, as <code>[start, end]</code> pairs in time order. Busy intervals may stick out before <code>dayStart</code> or after <code>dayEnd</code>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Write the function in <code>solution.js</code> and <b>return</b> the answer — do not print it.</li>\n  <li>Do not modify the input arrays/objects.</li>\n</ul>",
+      "problemHtmlVi": "<p>Một nhóm SWP391 năm người muốn họp. Mỗi thành viên xuất giờ bận trong ngày: <code>calendars[p]</code> là danh sách khoảng nửa mở <code>[start, end)</code> tính bằng phút sau nửa đêm (các khoảng của cùng một người có thể chồng nhau và không được sắp).</p>\n<p>Viết <code>commonFreeSlots(calendars, dayStart, dayEnd, minLen)</code> trả về mọi khoảng lớn nhất nằm trong <code>[dayStart, dayEnd)</code> mà <b>không ai</b> bận và dài ít nhất <code>minLen</code> phút, dạng cặp <code>[start, end]</code> theo thứ tự thời gian. Khoảng bận có thể chìa ra trước <code>dayStart</code> hoặc sau <code>dayEnd</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Viết hàm trong <code>solution.js</code> và <b>trả về</b> kết quả — đừng in ra.</li>\n  <li>Không sửa mảng/object đầu vào.</li>\n</ul>",
+      "inputSpec": "calendars — array (one per person) of [start, end] lists; dayStart < dayEnd; minLen ≥ 1.|||calendars — mảng (mỗi người một phần tử) các danh sách [start, end]; dayStart < dayEnd; minLen ≥ 1.",
+      "outputSpec": "[start, end][] — free slots, in time order.|||[start, end][] — các khe rảnh, theo thứ tự thời gian.",
+      "constraints": "Up to 50 people and 2·10⁴ busy intervals in total; 0 ≤ times ≤ 1440.\nTarget: O(N log N), N = total busy intervals.|||Tối đa 50 người và tổng 2·10⁴ khoảng bận; 0 ≤ mốc giờ ≤ 1440.\nMục tiêu: O(N log N), N = tổng số khoảng bận.",
+      "examplesJson": [
+        {
+          "input": "commonFreeSlots([[[480,570],[720,780]],[[540,600],[840,900]]], 480, 1020, 30)",
+          "output": "[[600,720],[780,840],[900,1020]]",
+          "explanation": "The first sample case (Run executes every visible case; hidden cases only run on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy mọi ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Who is busy does not matter, only WHEN someone is busy: pour all intervals of all people into one list.|||Ai bận không quan trọng, chỉ cần BIẾT LÚC NÀO có người bận: đổ mọi khoảng của mọi người vào một danh sách.",
+        "Sort by start and keep <code>free</code> = the end of everything busy so far (starting at <code>dayStart</code>). A start greater than <code>free</code> reveals a gap <code>[free, start)</code>; clip it to the day and keep it if it is long enough. Do not forget the gap after the last busy interval.|||Sắp theo điểm đầu và giữ <code>free</code> = điểm cuối của mọi thứ đã bận tới giờ (bắt đầu từ <code>dayStart</code>). Một điểm đầu lớn hơn <code>free</code> lộ ra khe <code>[free, start)</code>; cắt theo ngày rồi giữ nếu đủ dài. Đừng quên khe sau khoảng bận cuối cùng."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "solution.js",
+          "language": "javascript",
+          "code": "/**\n * calendars: [start, end][][] — busy times per person (half-open, minutes after midnight)\n * returns every free slot [start, end] inside [dayStart, dayEnd) of length >= minLen, in time order\n */\nfunction commonFreeSlots(calendars, dayStart, dayEnd, minLen) {\n  // Write your solution here\n  return [[dayStart, dayEnd]];\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "solution.js",
+          "language": "javascript",
+          "code": "// Reference solution — one combined list of busy intervals, sort by start, sweep a \"free from\" pointer.\nfunction commonFreeSlots(calendars, dayStart, dayEnd, minLen) {\n  const busy = [];\n  for (const person of calendars) for (const iv of person) busy.push(iv); // everyone's busy time in ONE list\n  busy.sort((a, b) => a[0] - b[0]);\n  const out = [];\n  let free = dayStart; // the earliest minute nobody has claimed yet\n  for (const [s, e] of busy) {\n    if (s > free) {                                   // a gap between `free` and the next busy start\n      const gs = free, ge = Math.min(s, dayEnd);\n      if (ge - gs >= minLen) out.push([gs, ge]);\n    }\n    if (e > free) free = e;                           // busy until at least e\n    if (free >= dayEnd) break;\n  }\n  if (dayEnd - free >= minLen) out.push([free, dayEnd]); // the tail of the day\n  return out;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Merging all busy intervals of all people gives the times when at least one person is busy; the complement of that union inside the day is exactly the common free time. Sorting the N intervals and sweeping with a single \"free from\" pointer finds every gap in one pass: O(N log N) time, O(N) memory. Clipping with <code>dayStart</code> as the initial pointer and <code>min(s, dayEnd)</code> / the tail check keeps the slots inside the day.</p>",
+      "solutionExplanationHtmlVi": "<p>Gộp mọi khoảng bận của mọi người cho ra những lúc có ít nhất một người bận; phần bù của hợp đó trong ngày chính là thời gian rảnh chung. Sắp N khoảng rồi quét với một con trỏ \"rảnh từ\" tìm mọi khe trong một lượt: O(N log N) thời gian, O(N) bộ nhớ. Dùng <code>dayStart</code> làm giá trị đầu của con trỏ, <code>min(s, dayEnd)</code> và phép kiểm phần đuôi giữ các khe nằm trong ngày.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "solution.js",
+        "tepNap": [
+          "solution.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Two people, 08:00–17:00, at least 30 minutes",
+              "vi": "Hai người, 08:00–17:00, ít nhất 30 phút"
+            },
+            "goi": "commonFreeSlots([[[480,570],[720,780]],[[540,600],[840,900]]], 480, 1020, 30)",
+            "mongDoi": [
+              [
+                600,
+                720
+              ],
+              [
+                780,
+                840
+              ],
+              [
+                900,
+                1020
+              ]
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Free at the start of the day; 20 minutes at the end is too short",
+              "vi": "Rảnh đầu ngày; 20 phút cuối là quá ngắn"
+            },
+            "goi": "commonFreeSlots([[[600,660]],[[630,700]],[]], 480, 720, 60)",
+            "mongDoi": [
+              [
+                480,
+                600
+              ]
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Someone is busy all day",
+              "vi": "Có người bận cả ngày"
+            },
+            "goi": "commonFreeSlots([[[0,1440]]], 480, 1020, 1)",
+            "mongDoi": []
+          },
+          {
+            "moTa": {
+              "en": "Nobody has anything ⇒ the whole window",
+              "vi": "Không ai có lịch ⇒ cả khung"
+            },
+            "goi": "commonFreeSlots([], 480, 600, 15)",
+            "mongDoi": [
+              [
+                480,
+                600
+              ]
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Short meetings inside a long one",
+              "vi": "Họp ngắn nằm trong họp dài"
+            },
+            "goi": "commonFreeSlots([[[500,900],[520,540]],[[600,610]]], 480, 1000, 10)",
+            "mongDoi": [
+              [
+                480,
+                500
+              ],
+              [
+                900,
+                1000
+              ]
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Busy intervals stick out of the day",
+              "vi": "Khoảng bận chìa ra ngoài ngày"
+            },
+            "goi": "commonFreeSlots([[[400,500],[1000,1100]],[[700,730]]], 480, 1020, 30)",
+            "mongDoi": [
+              [
+                500,
+                700
+              ],
+              [
+                730,
+                1000
+              ]
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Back-to-back meetings leave no gap",
+              "vi": "Họp nối tiếp không để lại khe"
+            },
+            "goi": "commonFreeSlots([[[480,540]],[[540,600]],[[630,660]]], 480, 720, 30)",
+            "mongDoi": [
+              [
+                600,
+                630
+              ],
+              [
+                660,
+                720
+              ]
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 8",
+              "vi": "Ca ẩn 8"
+            },
+            "goi": "commonFreeSlots([[[700,720],[600,650]],[[650,700],[480,490]]], 480, 760, 5)",
+            "mongDoi": [
+              [
+                490,
+                600
+              ],
+              [
+                720,
+                760
+              ]
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Starting the sweep at the first busy interval instead of <code>dayStart</code>: the free time at the beginning of the day disappears.|||Bắt đầu quét từ khoảng bận đầu tiên thay vì <code>dayStart</code>: thời gian rảnh đầu ngày biến mất."
+        },
+        {
+          "loi": "Setting <code>free = e</code> instead of <code>max(free, e)</code>: a short meeting inside a long one creates a fake gap.|||Gán <code>free = e</code> thay vì <code>max(free, e)</code>: một cuộc họp ngắn nằm trong cuộc dài tạo ra khe giả."
+        },
+        {
+          "loi": "Not clipping to <code>[dayStart, dayEnd)</code>: a slot before 08:00 or one running past the end of the day is returned.|||Không cắt theo <code>[dayStart, dayEnd)</code>: trả cả khe trước 08:00 hoặc khe chạy quá cuối ngày."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "free slot",
+          "vi": "khe rảnh"
+        },
+        {
+          "en": "complement",
+          "vi": "phần bù"
+        },
+        {
+          "en": "clip",
+          "vi": "cắt theo biên"
+        },
+        {
+          "en": "maximal",
+          "vi": "lớn nhất (không mở rộng thêm được)"
+        }
+      ]
+    },
+    {
+      "title": "Online exam proctoring: supervise as many sessions as possible",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 35,
+      "points": 30,
+      "concepts": [
+        "intervals",
+        "greedy",
+        "binary search"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dsa-interview",
+        "coding-interview"
+      ],
+      "problemHtml": "<p>During the FE week the testing centre runs many online exam sessions; session <code>i</code> is the half-open interval <code>sessions[i] = [start, end)</code> in minutes. There are <code>k</code> proctors. A proctor watches <b>one whole session at a time</b> and can start a new one at the minute the previous one ends. A session is valid only if one proctor watches it from start to end.</p>\n<p>Write <code>maxProctored(sessions, k)</code> returning the maximum number of sessions that can be fully proctored.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Write the function in <code>solution.js</code> and <b>return</b> the answer — do not print it.</li>\n  <li>Do not modify the input arrays/objects.</li>\n  <li>Mind the constraints: one check runs on a large input and every check has a 4-second limit, so an O(n²) loop fails it.</li>\n</ul>",
+      "problemHtmlVi": "<p>Trong tuần thi FE, trung tâm khảo thí chạy nhiều ca thi trực tuyến; ca <code>i</code> là khoảng nửa mở <code>sessions[i] = [start, end)</code> tính bằng phút. Có <code>k</code> giám thị. Một giám thị coi <b>trọn một ca tại một thời điểm</b> và có thể bắt đầu ca mới đúng phút ca trước kết thúc. Một ca chỉ hợp lệ nếu có một giám thị coi từ đầu tới cuối.</p>\n<p>Viết <code>maxProctored(sessions, k)</code> trả về số ca nhiều nhất có thể được coi trọn.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Viết hàm trong <code>solution.js</code> và <b>trả về</b> kết quả — đừng in ra.</li>\n  <li>Không sửa mảng/object đầu vào.</li>\n  <li>Để ý ràng buộc: một kiểm chạy trên đầu vào lớn và mỗi kiểm có trần 4 giây, nên vòng lặp O(n²) sẽ trượt kiểm đó.</li>\n</ul>",
+      "inputSpec": "sessions — array of [start, end] with start < end; k — integer ≥ 1.|||sessions — mảng [start, end] với start < end; k — số nguyên ≥ 1.",
+      "outputSpec": "number — maximum sessions proctored.|||number — số ca nhiều nhất được coi.",
+      "constraints": "0 ≤ sessions.length ≤ 10⁵; 1 ≤ k ≤ 200; 0 ≤ start < end ≤ 10⁹.\nTarget: O(n log n + n·k) or better.|||0 ≤ sessions.length ≤ 10⁵; 1 ≤ k ≤ 200; 0 ≤ start < end ≤ 10⁹.\nMục tiêu: O(n log n + n·k) hoặc tốt hơn.",
+      "examplesJson": [
+        {
+          "input": "maxProctored([[0,10],[12,20],[3,25]], 2)",
+          "output": "3",
+          "explanation": "The first sample case (Run executes every visible case; hidden cases only run on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy mọi ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "With k = 1 this is the \"choose the most non-overlapping intervals\" family of the lesson: sort by END and take a session whenever it fits.|||Với k = 1 đây là họ bài \"chọn nhiều khoảng không chồng nhất\" của bài học: sắp theo điểm CUỐI và nhận một ca mỗi khi nó vừa.",
+        "With k proctors, process sessions by end time; a session fits if some proctor is free by its start. Which free proctor should take it? The one who became free the LATEST (but ≤ start) — keep the early-free ones for sessions that start early.|||Với k giám thị, xử lý các ca theo thời điểm kết thúc; một ca vừa nếu có giám thị rảnh trước giờ bắt đầu của nó. Ai nên nhận? Người rảnh MUỘN nhất (nhưng ≤ start) — giữ những người rảnh sớm cho các ca bắt đầu sớm.",
+        "Keep the proctors' free times in a sorted array: binary search for the last value ≤ start, remove it, insert <code>end</code> in order.|||Giữ thời điểm rảnh của các giám thị trong một mảng đã sắp: tìm nhị phân giá trị cuối cùng ≤ start, xoá nó, chèn <code>end</code> đúng thứ tự."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "solution.js",
+          "language": "javascript",
+          "code": "/**\n * sessions: [start, end][] (half-open), k: number of proctors\n * returns the maximum number of sessions that can each be watched start-to-end by one proctor\n */\nfunction maxProctored(sessions, k) {\n  // Write your solution here\n  return Math.min(sessions.length, k);\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "solution.js",
+          "language": "javascript",
+          "code": "// Reference solution — sort by end; give each session to the proctor free the latest but still in time.\nfunction maxProctored(sessions, k) {\n  const s = sessions.slice().sort((a, b) => a[1] - b[1] || a[0] - b[0]); // earliest END first\n  const freeAt = new Array(k).fill(-Infinity); // when each proctor becomes free, kept SORTED ascending\n  let count = 0;\n  for (const [start, end] of s) {\n    // binary search: the proctor who became free LATEST but still not after `start`\n    let lo = 0, hi = freeAt.length - 1, best = -1;\n    while (lo <= hi) {\n      const mid = (lo + hi) >> 1;\n      if (freeAt[mid] <= start) { best = mid; lo = mid + 1; } else hi = mid - 1;\n    }\n    if (best === -1) continue;   // nobody can take it: skip this session\n    freeAt.splice(best, 1);      // that proctor is now busy until `end` …\n    let i = best;                // … reinsert `end` keeping the array sorted (O(k))\n    while (i < freeAt.length && freeAt[i] <= end) i++;\n    freeAt.splice(i, 0, end);\n    count++;\n  }\n  return count;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Processing by end time is the classic interval-scheduling greedy: a session that ends earlier never blocks more future sessions than one that ends later. With several proctors, assigning the session to the proctor whose free time is the largest value ≤ start is the \"best fit\": an exchange argument shows any optimal schedule can be rearranged to make the same choice, because proctors free earlier are strictly more useful later. Sorting is O(n log n); each session does an O(log k) search plus an O(k) array shift ⇒ O(n log n + n·k) time, O(n + k) memory (a balanced BST/TreeMap makes it O(n log n) — in Java use <code>TreeMap.floorKey</code>).</p>",
+      "solutionExplanationHtmlVi": "<p>Xử lý theo thời điểm kết thúc là tham lam xếp lịch kinh điển: ca kết thúc sớm không bao giờ chặn nhiều ca tương lai hơn ca kết thúc muộn. Với nhiều giám thị, giao ca cho người có giờ rảnh là giá trị lớn nhất ≤ start là \"vừa khít nhất\": lập luận hoán đổi cho thấy mọi lịch tối ưu đều sắp lại được để chọn giống vậy, vì người rảnh sớm hơn luôn hữu ích hơn về sau. Sắp O(n log n); mỗi ca một lần tìm O(log k) cộng một lần dời mảng O(k) ⇒ O(n log n + n·k) thời gian, O(n + k) bộ nhớ (cây BST cân bằng/TreeMap cho O(n log n) — Java dùng <code>TreeMap.floorKey</code>).</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "solution.js",
+        "tepNap": [
+          "solution.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Best fit keeps the 0-free proctor for [3,25) ⇒ 3",
+              "vi": "Vừa khít giữ người rảnh từ 0 cho [3,25) ⇒ 3"
+            },
+            "goi": "maxProctored([[0,10],[12,20],[3,25]], 2)",
+            "mongDoi": 3
+          },
+          {
+            "moTa": {
+              "en": "Best fit: 12:00 goes to the proctor free since 10 ⇒ 4",
+              "vi": "Vừa khít: ca 12:00 cho người rảnh từ phút 10 ⇒ 4"
+            },
+            "goi": "maxProctored([[0,5],[0,10],[12,20],[6,30]], 2)",
+            "mongDoi": 4
+          },
+          {
+            "moTa": {
+              "en": "One proctor, touching sessions ⇒ 2",
+              "vi": "Một giám thị, hai ca chạm nhau ⇒ 2"
+            },
+            "goi": "maxProctored([[0,60],[60,120],[30,90]], 1)",
+            "mongDoi": 2
+          },
+          {
+            "moTa": {
+              "en": "Case 4: maxProctored([], 3)",
+              "vi": "Ca 4"
+            },
+            "goi": "maxProctored([], 3)",
+            "mongDoi": 0
+          },
+          {
+            "moTa": {
+              "en": "End order beats start order",
+              "vi": "Theo điểm cuối thắng theo điểm đầu"
+            },
+            "goi": "maxProctored([[0,100],[10,20],[20,30],[30,40]], 1)",
+            "mongDoi": 3,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "maxProctored([[0,5],[0,5],[0,5],[0,5]], 3)",
+            "mongDoi": 3,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "maxProctored([[1,4],[2,5],[3,6],[4,7],[5,8],[6,9]], 2)",
+            "mongDoi": 4,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 8",
+              "vi": "Ca ẩn 8"
+            },
+            "goi": "maxProctored([[0,10],[5,15],[10,20],[15,25],[9,11],[0,30]], 2)",
+            "mongDoi": 4,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 9",
+              "vi": "Ca ẩn 9"
+            },
+            "goi": "maxProctored([[0,1000000000]], 1)",
+            "mongDoi": 1,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Performance: 100 000 sessions, 100 proctors",
+              "vi": "Hiệu năng: 100 000 ca, 100 giám thị"
+            },
+            "goi": "(function () {\nfunction __cay(a) { if (!a.length || a[0] == null) return null; var root = { val: a[0], left: null, right: null }, q = [root], h = 0, i = 1;\n  while (i < a.length) { var n = q[h++]; if (a[i] != null) { n.left = { val: a[i], left: null, right: null }; q.push(n.left); } i++;\n    if (i < a.length && a[i] != null) { n.right = { val: a[i], left: null, right: null }; q.push(n.right); } i++; } return root; }\nfunction __raCay(r) { var out = [], q = [r], h = 0; while (h < q.length) { var n = q[h++]; if (n == null) { out.push(null); continue; } out.push(n.val); q.push(n.left == null ? null : n.left, n.right == null ? null : n.right); }\n  while (out.length && out[out.length - 1] === null) out.pop(); return out; }\nfunction __ds(a) { var head = null; for (var i = a.length - 1; i >= 0; i--) head = { val: a[i], next: head }; return head; }\nfunction __raDs(h) { var out = []; while (h && out.length < 1000000) { out.push(h.val); h = h.next; } return out; }\nvar __s = 20261115; function R(m) { __s = (__s * 48271) % 2147483647; return __s % m; }\nvar n = 100000, a = new Array(n); for (var i = 0; i < n; i++) { var s = R(1000000); a[i] = [s, s + 1 + R(5000)]; } return maxProctored(a, 100);\n})()",
+            "mongDoi": 60255
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Giving the session to ANY free proctor (the first one in the list, or the one free the longest): with <code>[[0,5],[0,10],[12,20],[6,30]]</code>, k = 2 the proctor free since minute 5 is spent on the 12:00 session, and <code>[6, 30)</code> is lost — 3 instead of 4.|||Giao ca cho BẤT KỲ giám thị rảnh nào (người đầu danh sách, hay người rảnh lâu nhất): với <code>[[0,5],[0,10],[12,20],[6,30]]</code>, k = 2 người rảnh từ phút 5 bị dùng cho ca 12:00, và mất ca <code>[6, 30)</code> — ra 3 thay vì 4."
+        },
+        {
+          "loi": "Sorting by start time (or by length): the greedy is only correct in END order.|||Sắp theo giờ bắt đầu (hoặc theo độ dài): tham lam chỉ đúng khi đi theo thứ tự điểm CUỐI."
+        },
+        {
+          "loi": "Treating touching sessions as overlapping: a proctor finishing at minute 60 can start a session at minute 60.|||Coi hai ca chạm nhau là chồng: giám thị xong lúc phút 60 vẫn bắt đầu được ca phút 60."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "interval scheduling",
+          "vi": "xếp lịch khoảng"
+        },
+        {
+          "en": "best fit",
+          "vi": "vừa khít nhất"
+        },
+        {
+          "en": "floor",
+          "vi": "cận dưới",
+          "giaiThich": "giá trị lớn nhất ≤ x."
+        },
+        {
+          "en": "exchange argument",
+          "vi": "lập luận hoán đổi"
+        }
+      ]
+    }
+  ]
+}

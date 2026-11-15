@@ -1,0 +1,669 @@
+{
+  "trackSlug": "dsa-interview-practice",
+  "moduleSlug": "dsa-2-1-hai-con-tro",
+  "lesson": {
+    "course": "dsa-interview",
+    "slug": "dsa-2-1-hai-con-tro"
+  },
+  "exercises": [
+    {
+      "title": "Roll call: who on the roster did not show up",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "two pointers (same direction)",
+        "merge-like scan"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dsa-interview",
+        "coding-interview"
+      ],
+      "problemHtml": "<p>For every slot, FAP exports two lists of student numbers, both <b>sorted ascending</b>: <code>roster</code> (everybody enrolled in the class, no duplicates) and <code>present</code> (the cards that were scanned — may contain IDs of students from other classes, but no duplicates).</p>\n<p>Write <code>missingStudents(roster, present)</code> returning, in ascending order, the roster IDs that do not appear in <code>present</code>. Aim for one pass over both lists and O(1) extra memory besides the output.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Write the function in <code>solution.js</code> and <b>return</b> the answer — do not print it.</li>\n  <li>Do not modify the input arrays/objects.</li>\n  <li>Mind the constraints: one check runs on a large input and every check has a 4-second limit, so an O(n²) loop fails it.</li>\n</ul>",
+      "problemHtmlVi": "<p>Mỗi slot, FAP xuất hai danh sách mã số sinh viên, cả hai <b>đã sắp tăng dần</b>: <code>roster</code> (mọi người đăng ký lớp, không trùng) và <code>present</code> (các thẻ đã quẹt — có thể có mã sinh viên lớp khác, không trùng).</p>\n<p>Viết <code>missingStudents(roster, present)</code> trả về, theo thứ tự tăng dần, các mã trong roster không xuất hiện trong <code>present</code>. Cố gắng đi một lượt qua cả hai danh sách và O(1) bộ nhớ phụ ngoài kết quả.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Viết hàm trong <code>solution.js</code> và <b>trả về</b> kết quả — đừng in ra.</li>\n  <li>Không sửa mảng/object đầu vào.</li>\n  <li>Để ý ràng buộc: một kiểm chạy trên đầu vào lớn và mỗi kiểm có trần 4 giây, nên vòng lặp O(n²) sẽ trượt kiểm đó.</li>\n</ul>",
+      "inputSpec": "roster, present — sorted arrays of distinct positive integers.|||roster, present — mảng số nguyên dương khác nhau, đã sắp tăng.",
+      "outputSpec": "number[] — absent IDs, ascending.|||number[] — mã vắng, tăng dần.",
+      "constraints": "0 ≤ roster.length, present.length ≤ 200 000.\nTarget: O(n + m) time, O(1) extra memory.|||0 ≤ roster.length, present.length ≤ 200 000.\nMục tiêu: O(n + m) thời gian, O(1) bộ nhớ phụ.",
+      "examplesJson": [
+        {
+          "input": "missingStudents([101,102,105,109], [102,109])",
+          "output": "[101,105]",
+          "explanation": "The first sample case (Run executes every visible case; hidden cases only run on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy mọi ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "<code>present.includes(id)</code> for every roster ID re-scans the whole list each time. But both lists are sorted — what does that let you skip?|||<code>present.includes(id)</code> cho từng mã trong roster quét lại cả danh sách mỗi lần. Nhưng cả hai đã sắp — điều đó cho phép bỏ qua gì?",
+        "Keep a pointer j in <code>present</code> that never moves back: advance it while <code>present[j] &lt; roster[i]</code>; then either it points at roster[i] (present) or past it (absent).|||Giữ con trỏ j trong <code>present</code> không bao giờ lùi: tiến nó khi <code>present[j] &lt; roster[i]</code>; khi đó hoặc nó trỏ đúng roster[i] (có mặt) hoặc đã vượt qua (vắng)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "solution.js",
+          "language": "javascript",
+          "code": "/**\n * roster, present: sorted ascending arrays of distinct numbers\n * returns roster IDs that are not in present, ascending\n */\nfunction missingStudents(roster, present) {\n  // Write your solution here\n  return [];\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "solution.js",
+          "language": "javascript",
+          "code": "// Reference solution — one forward-only pointer into `present`.\nfunction missingStudents(roster, present) {\n  var out = [];\n  var j = 0; // pointer into `present`; both arrays are sorted ascending, so it only moves forward\n  for (var i = 0; i < roster.length; i++) {\n    while (j < present.length && present[j] < roster[i]) j++; // skip scans of IDs smaller than roster[i]\n    if (j < present.length && present[j] === roster[i]) j++;  // found: this student was present\n    else out.push(roster[i]);                                  // not in `present` ⇒ absent\n  }\n  return out;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Because both lists are sorted, the pointer j into <code>present</code> only ever moves forward: every element of each list is passed once ⇒ O(n + m) time, and only two indexes ⇒ O(1) extra memory. A Set would also be O(n + m) time but O(m) memory; the nested <code>includes</code> is O(n·m).</p>",
+      "solutionExplanationHtmlVi": "<p>Vì cả hai danh sách đã sắp, con trỏ j trong <code>present</code> chỉ tiến về trước: mỗi phần tử của mỗi danh sách được đi qua một lần ⇒ O(n + m) thời gian, và chỉ có hai chỉ số ⇒ O(1) bộ nhớ phụ. Dùng Set cũng O(n + m) thời gian nhưng O(m) bộ nhớ; <code>includes</code> lồng trong vòng lặp là O(n·m).</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "solution.js",
+        "tepNap": [
+          "solution.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: missingStudents([101,102,105,109], [102,109])",
+              "vi": "Ca 1"
+            },
+            "goi": "missingStudents([101,102,105,109], [102,109])",
+            "mongDoi": [
+              101,
+              105
+            ]
+          },
+          {
+            "moTa": {
+              "en": "present contains IDs from other classes",
+              "vi": "present có mã của lớp khác"
+            },
+            "goi": "missingStudents([101,102,105], [100,101,103,105,200])",
+            "mongDoi": [
+              102
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Nobody scanned ⇒ everyone absent",
+              "vi": "Không ai quẹt ⇒ vắng hết"
+            },
+            "goi": "missingStudents([1,2,3], [])",
+            "mongDoi": [
+              1,
+              2,
+              3
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "missingStudents([], [5,6])",
+            "mongDoi": [],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "IDs after present runs out",
+              "vi": "Các mã sau khi present đã hết"
+            },
+            "goi": "missingStudents([4,8,15,16,23,42], [1,2,3,4,8,15])",
+            "mongDoi": [
+              16,
+              23,
+              42
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "missingStudents([10,20,30], [10,20,30])",
+            "mongDoi": [],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "missingStudents([7,70,700], [8,80,800])",
+            "mongDoi": [
+              7,
+              70,
+              700
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Performance: 200 000 enrolled, 200 000 scans (includes() per student times out)",
+              "vi": "Hiệu năng: 200 000 đăng ký, 200 000 lượt quẹt (includes() cho từng người hết giờ)"
+            },
+            "goi": "(function () {\nfunction __cay(a) { if (!a.length || a[0] == null) return null; var root = { val: a[0], left: null, right: null }, q = [root], h = 0, i = 1;\n  while (i < a.length) { var n = q[h++]; if (a[i] != null) { n.left = { val: a[i], left: null, right: null }; q.push(n.left); } i++;\n    if (i < a.length && a[i] != null) { n.right = { val: a[i], left: null, right: null }; q.push(n.right); } i++; } return root; }\nfunction __raCay(r) { var out = [], q = [r], h = 0; while (h < q.length) { var n = q[h++]; if (n == null) { out.push(null); continue; } out.push(n.val); q.push(n.left == null ? null : n.left, n.right == null ? null : n.right); }\n  while (out.length && out[out.length - 1] === null) out.pop(); return out; }\nfunction __ds(a) { var head = null; for (var i = a.length - 1; i >= 0; i--) head = { val: a[i], next: head }; return head; }\nfunction __raDs(h) { var out = []; while (h && out.length < 1000000) { out.push(h.val); h = h.next; } return out; }\nvar __s = 20261115; function R(m) { __s = (__s * 48271) % 2147483647; return __s % m; }\nvar a = [], b = [], x = 1000, y = 1000; for (var i = 0; i < 200000; i++) { x += 1 + R(3); a.push(x); y += 1 + R(3); b.push(y); } var r = missingStudents(a, b); var s = 0; for (var t = 0; t < r.length; t++) s = (s + r[t]) % 1000000007; return { count: r.length, checksum: s, first: r.slice(0, 3) };\n})()",
+            "mongDoi": {
+              "count": 99975,
+              "checksum": 110478796,
+              "first": [
+                1002,
+                1003,
+                1008
+              ]
+            }
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Using <code>includes</code>/<code>indexOf</code> inside the loop: O(n·m) — the 200 000-student check times out.|||Dùng <code>includes</code>/<code>indexOf</code> trong vòng lặp: O(n·m) — kiểm 200 000 sinh viên hết giờ."
+        },
+        {
+          "loi": "Advancing both pointers on every step (like a zip): an ID of another class in <code>present</code> shifts everything by one.|||Tiến cả hai con trỏ ở mỗi bước (như ghép khoá kéo): một mã của lớp khác trong <code>present</code> làm lệch mọi thứ một vị trí."
+        },
+        {
+          "loi": "Forgetting the roster IDs after <code>present</code> runs out — they are all absent.|||Quên các mã roster còn lại khi <code>present</code> đã hết — tất cả đều vắng."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "two pointers",
+          "vi": "hai con trỏ"
+        },
+        {
+          "en": "sorted",
+          "vi": "đã sắp xếp"
+        },
+        {
+          "en": "set difference",
+          "vi": "hiệu hai tập",
+          "giaiThich": "phần tử có ở A mà không có ở B."
+        }
+      ]
+    },
+    {
+      "title": "Moving day: the fewest elevator trips, two boxes at a time",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "two pointers (opposite ends)",
+        "greedy pairing"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dsa-interview",
+        "coding-interview"
+      ],
+      "problemHtml": "<p>The lab is moving from building Alpha to Beta. The service elevator carries <b>at most two boxes</b> per trip and their total weight must not exceed <code>limit</code> kg. Every single box weighs at most <code>limit</code>.</p>\n<p>Write <code>minTrips(weights, limit)</code> returning the minimum number of trips needed to move every box. Do not modify <code>weights</code>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Write the function in <code>solution.js</code> and <b>return</b> the answer — do not print it.</li>\n  <li>Do not modify the input arrays/objects.</li>\n  <li>Mind the constraints: one check runs on a large input and every check has a 4-second limit, so an O(n²) loop fails it.</li>\n</ul>",
+      "problemHtmlVi": "<p>Phòng lab chuyển từ toà Alpha sang toà Beta. Thang máy chở hàng mang <b>tối đa hai thùng</b> mỗi chuyến và tổng khối lượng không vượt quá <code>limit</code> kg. Mỗi thùng riêng lẻ nặng không quá <code>limit</code>.</p>\n<p>Viết <code>minTrips(weights, limit)</code> trả về số chuyến ít nhất để chở hết các thùng. Không sửa <code>weights</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Viết hàm trong <code>solution.js</code> và <b>trả về</b> kết quả — đừng in ra.</li>\n  <li>Không sửa mảng/object đầu vào.</li>\n  <li>Để ý ràng buộc: một kiểm chạy trên đầu vào lớn và mỗi kiểm có trần 4 giây, nên vòng lặp O(n²) sẽ trượt kiểm đó.</li>\n</ul>",
+      "inputSpec": "weights — array of positive integers ≤ limit; limit — positive integer.|||weights — mảng số nguyên dương ≤ limit; limit — số nguyên dương.",
+      "outputSpec": "number — minimum trips.|||number — số chuyến ít nhất.",
+      "constraints": "0 ≤ weights.length ≤ 200 000; 1 ≤ limit ≤ 10⁵.\nTarget: O(n log n).|||0 ≤ weights.length ≤ 200 000; 1 ≤ limit ≤ 10⁵.\nMục tiêu: O(n log n).",
+      "examplesJson": [
+        {
+          "input": "minTrips([1,2,3,4], 5)",
+          "output": "2",
+          "explanation": "The first sample case (Run executes every visible case; hidden cases only run on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy mọi ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "The heaviest box must go on some trip. Who is the best partner for it? The lightest box — if even the lightest does not fit, nothing does.|||Thùng nặng nhất kiểu gì cũng phải đi một chuyến. Bạn đồng hành tốt nhất của nó là ai? Thùng nhẹ nhất — nếu thùng nhẹ nhất cũng không vừa thì không thùng nào vừa.",
+        "Sort, put <code>lo</code> at the lightest and <code>hi</code> at the heaviest. Each trip takes <code>hi</code>; it also takes <code>lo</code> when <code>w[lo] + w[hi] ≤ limit</code>. Stop when the pointers cross.|||Sắp xếp, đặt <code>lo</code> ở thùng nhẹ nhất và <code>hi</code> ở thùng nặng nhất. Mỗi chuyến mang <code>hi</code>; mang thêm <code>lo</code> khi <code>w[lo] + w[hi] ≤ limit</code>. Dừng khi hai con trỏ vượt nhau."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "solution.js",
+          "language": "javascript",
+          "code": "/**\n * weights: number[] (each <= limit), limit: number — at most two boxes per trip\n * returns the minimum number of trips\n */\nfunction minTrips(weights, limit) {\n  // Write your solution here\n  return weights.length;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "solution.js",
+          "language": "javascript",
+          "code": "// Reference solution — sort, heaviest goes every trip, takes the lightest if it fits.\nfunction minTrips(weights, limit) {\n  var w = weights.slice().sort(function (a, b) { return a - b; });\n  var lo = 0, hi = w.length - 1, trips = 0;\n  while (lo <= hi) {\n    // the heaviest box always goes now; it takes the lightest box along if both fit\n    if (lo < hi && w[lo] + w[hi] <= limit) lo++;\n    hi--;\n    trips++;\n  }\n  return trips;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Exchange argument: in an optimal plan the heaviest box H rides with someone or alone. If the lightest box L fits with H, swapping L into H's trip never makes the plan worse; if L does not fit, H must ride alone. So \"heaviest with lightest-if-it-fits\" is safe at every step, and each step removes one or two boxes. Sorting is O(n log n), the two-pointer walk O(n).</p>",
+      "solutionExplanationHtmlVi": "<p>Lập luận hoán đổi: trong một phương án tối ưu, thùng nặng nhất H đi cùng ai đó hoặc đi một mình. Nếu thùng nhẹ nhất L vừa với H, đổi L vào chuyến của H không bao giờ làm phương án tệ đi; nếu L không vừa, H buộc phải đi một mình. Vậy \"nặng nhất đi với nhẹ nhất nếu vừa\" an toàn ở mọi bước, và mỗi bước bớt một hoặc hai thùng. Sắp xếp O(n log n), đi hai con trỏ O(n).</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "solution.js",
+        "tepNap": [
+          "solution.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "1+4 and 2+3 ⇒ 2 trips",
+              "vi": "1+4 và 2+3 ⇒ 2 chuyến"
+            },
+            "goi": "minTrips([1,2,3,4], 5)",
+            "mongDoi": 2
+          },
+          {
+            "moTa": {
+              "en": "Nothing pairs ⇒ 3",
+              "vi": "Không ghép được ⇒ 3"
+            },
+            "goi": "minTrips([50,60,70], 100)",
+            "mongDoi": 3
+          },
+          {
+            "moTa": {
+              "en": "A single box",
+              "vi": "Một thùng duy nhất"
+            },
+            "goi": "minTrips([30], 100)",
+            "mongDoi": 1
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "minTrips([], 100)",
+            "mongDoi": 0,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Odd count: the middle box rides alone",
+              "vi": "Số lẻ: thùng giữa đi một mình"
+            },
+            "goi": "minTrips([40,60,40,60,50], 100)",
+            "mongDoi": 3,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "minTrips([3,5,3,4], 5)",
+            "mongDoi": 4,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "minTrips([10,10,10,10], 20)",
+            "mongDoi": 2,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 8",
+              "vi": "Ca ẩn 8"
+            },
+            "goi": "minTrips([90,15,80,20,5,85], 100)",
+            "mongDoi": 3,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Performance: 200 000 boxes (nested-loop partner search times out)",
+              "vi": "Hiệu năng: 200 000 thùng (tìm bạn ghép bằng vòng lồng hết giờ)"
+            },
+            "goi": "(function () {\nfunction __cay(a) { if (!a.length || a[0] == null) return null; var root = { val: a[0], left: null, right: null }, q = [root], h = 0, i = 1;\n  while (i < a.length) { var n = q[h++]; if (a[i] != null) { n.left = { val: a[i], left: null, right: null }; q.push(n.left); } i++;\n    if (i < a.length && a[i] != null) { n.right = { val: a[i], left: null, right: null }; q.push(n.right); } i++; } return root; }\nfunction __raCay(r) { var out = [], q = [r], h = 0; while (h < q.length) { var n = q[h++]; if (n == null) { out.push(null); continue; } out.push(n.val); q.push(n.left == null ? null : n.left, n.right == null ? null : n.right); }\n  while (out.length && out[out.length - 1] === null) out.pop(); return out; }\nfunction __ds(a) { var head = null; for (var i = a.length - 1; i >= 0; i--) head = { val: a[i], next: head }; return head; }\nfunction __raDs(h) { var out = []; while (h && out.length < 1000000) { out.push(h.val); h = h.next; } return out; }\nvar __s = 20261115; function R(m) { __s = (__s * 48271) % 2147483647; return __s % m; }\nvar a = []; for (var i = 0; i < 200000; i++) a.push(1 + R(100000)); return minTrips(a, 100000);\n})()",
+            "mongDoi": 100093
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "<code>while (lo &lt; hi)</code>: the last single box in the middle is never counted.|||<code>while (lo &lt; hi)</code>: thùng lẻ cuối cùng ở giữa không bao giờ được đếm."
+        },
+        {
+          "loi": "Pairing the two lightest boxes first (\"fill trips with small ones\"): <code>[1, 2, 3, 4]</code>, limit 5 ⇒ 1+2, 3, 4 = 3 trips, but 1+4, 2+3 = 2.|||Ghép hai thùng nhẹ nhất trước (\"lấp chuyến bằng thùng nhỏ\"): <code>[1, 2, 3, 4]</code>, limit 5 ⇒ 1+2, 3, 4 = 3 chuyến, trong khi 1+4, 2+3 = 2."
+        },
+        {
+          "loi": "Searching a partner with a nested loop and a \"used\" flag array: correct, O(n²) — the 200 000-box check times out.|||Tìm bạn ghép bằng vòng lồng và mảng cờ \"đã dùng\": đúng, O(n²) — kiểm 200 000 thùng hết giờ."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "opposite-end pointers",
+          "vi": "hai con trỏ ở hai đầu"
+        },
+        {
+          "en": "exchange argument",
+          "vi": "lập luận hoán đổi",
+          "giaiThich": "chứng minh một lựa chọn tham lam không làm hỏng phương án tối ưu."
+        },
+        {
+          "en": "greedy",
+          "vi": "tham lam"
+        }
+      ]
+    },
+    {
+      "title": "Teachers' Day gift: two items, as close to the budget as possible",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "two pointers (opposite ends)",
+        "pair sum ≤ budget"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dsa-interview",
+        "coding-interview"
+      ],
+      "problemHtml": "<p>For Vietnamese Teachers' Day (20/11) the class fund buys <b>two different items</b> from the campus shop for their lecturer. They want to spend as much of the fund as possible without going over: the largest total <code>prices[i] + prices[j]</code> (<code>i ≠ j</code>) that is <code>≤ budget</code>.</p>\n<p>Write <code>bestGiftPair(prices, budget)</code> returning that total, or <code>-1</code> if no two items fit. Do not modify <code>prices</code>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Write the function in <code>solution.js</code> and <b>return</b> the answer — do not print it.</li>\n  <li>Do not modify the input arrays/objects.</li>\n  <li>Mind the constraints: one check runs on a large input and every check has a 4-second limit, so an O(n²) loop fails it.</li>\n</ul>",
+      "problemHtmlVi": "<p>Ngày Nhà giáo Việt Nam (20/11), quỹ lớp mua <b>hai món khác nhau</b> ở cửa hàng trong trường tặng giảng viên. Lớp muốn tiêu càng nhiều tiền quỹ càng tốt mà không vượt: tổng lớn nhất <code>prices[i] + prices[j]</code> (<code>i ≠ j</code>) mà <code>≤ budget</code>.</p>\n<p>Viết <code>bestGiftPair(prices, budget)</code> trả về tổng đó, hoặc <code>-1</code> nếu không có hai món nào vừa. Không sửa <code>prices</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Viết hàm trong <code>solution.js</code> và <b>trả về</b> kết quả — đừng in ra.</li>\n  <li>Không sửa mảng/object đầu vào.</li>\n  <li>Để ý ràng buộc: một kiểm chạy trên đầu vào lớn và mỗi kiểm có trần 4 giây, nên vòng lặp O(n²) sẽ trượt kiểm đó.</li>\n</ul>",
+      "inputSpec": "prices — array of positive integers (thousand VND); budget — positive integer.|||prices — mảng số nguyên dương (nghìn đồng); budget — số nguyên dương.",
+      "outputSpec": "number — the best total, or -1.|||number — tổng tốt nhất, hoặc -1.",
+      "constraints": "0 ≤ prices.length ≤ 200 000; 1 ≤ prices[i], budget ≤ 10⁹.\nTarget: O(n log n).|||0 ≤ prices.length ≤ 200 000; 1 ≤ prices[i], budget ≤ 10⁹.\nMục tiêu: O(n log n).",
+      "examplesJson": [
+        {
+          "input": "bestGiftPair([120,350,80,260,410], 500)",
+          "output": "490",
+          "explanation": "The first sample case (Run executes every visible case; hidden cases only run on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy mọi ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "After sorting, look at the cheapest and the priciest item. If their sum is over budget, can the priciest item be part of ANY valid pair?|||Sau khi sắp, nhìn món rẻ nhất và món đắt nhất. Nếu tổng của chúng vượt ngân sách, món đắt nhất còn nằm trong cặp hợp lệ NÀO được không?",
+        "Over budget ⇒ <code>hi−−</code>. Within budget ⇒ record it and <code>lo++</code> (a pricier partner for hi might still fit). Loop while <code>lo &lt; hi</code>.|||Vượt ngân sách ⇒ <code>hi−−</code>. Trong ngân sách ⇒ ghi nhận rồi <code>lo++</code> (một bạn đắt hơn cho hi có thể vẫn vừa). Lặp khi <code>lo &lt; hi</code>."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "solution.js",
+          "language": "javascript",
+          "code": "/**\n * prices: number[], budget: number\n * returns the largest prices[i] + prices[j] (i != j) that is <= budget, or -1\n */\nfunction bestGiftPair(prices, budget) {\n  // Write your solution here\n  return -1;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "solution.js",
+          "language": "javascript",
+          "code": "// Reference solution — sort a copy, shrink from both ends.\nfunction bestGiftPair(prices, budget) {\n  var p = prices.slice().sort(function (a, b) { return a - b; });\n  var lo = 0, hi = p.length - 1, best = -1;\n  while (lo < hi) {             // lo < hi: two DIFFERENT items\n    var s = p[lo] + p[hi];\n    if (s <= budget) {\n      if (s > best) best = s;   // feasible: remember it, then try a more expensive cheap item\n      lo++;\n    } else {\n      hi--;                     // too expensive: the priciest item cannot pair with anything left\n    }\n  }\n  return best;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>In sorted order, if p[lo] + p[hi] &gt; budget then p[hi] plus any remaining item is even larger, so hi can be discarded; if it fits, p[lo] paired with anything smaller than p[hi] is worse, so lo is done after we record the sum. Every step discards one item and never discards the optimum ⇒ O(n) after an O(n log n) sort.</p>",
+      "solutionExplanationHtmlVi": "<p>Theo thứ tự đã sắp, nếu p[lo] + p[hi] &gt; budget thì p[hi] cộng với món nào còn lại cũng lớn hơn nữa, nên bỏ được hi; nếu vừa, p[lo] ghép với món nào rẻ hơn p[hi] đều tệ hơn, nên ghi tổng rồi xong với lo. Mỗi bước loại một món và không bao giờ loại mất đáp án ⇒ O(n) sau phép sắp O(n log n).</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "solution.js",
+        "tepNap": [
+          "solution.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "80 + 410 = 490",
+              "vi": "80 + 410 = 490"
+            },
+            "goi": "bestGiftPair([120,350,80,260,410], 500)",
+            "mongDoi": 490
+          },
+          {
+            "moTa": {
+              "en": "Nothing fits ⇒ −1",
+              "vi": "Không cặp nào vừa ⇒ −1"
+            },
+            "goi": "bestGiftPair([300,400], 500)",
+            "mongDoi": -1
+          },
+          {
+            "moTa": {
+              "en": "Two items with the same price are still two items",
+              "vi": "Hai món cùng giá vẫn là hai món"
+            },
+            "goi": "bestGiftPair([250,250,100], 500)",
+            "mongDoi": 500
+          },
+          {
+            "moTa": {
+              "en": "One item cannot be bought twice",
+              "vi": "Không mua một món hai lần"
+            },
+            "goi": "bestGiftPair([40], 100)",
+            "mongDoi": -1,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "bestGiftPair([], 100)",
+            "mongDoi": -1,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "bestGiftPair([5,15,25,35,45], 59)",
+            "mongDoi": 50,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "bestGiftPair([100,1,99,2,98], 100)",
+            "mongDoi": 100,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Performance: 200 000 items (trying every pair times out)",
+              "vi": "Hiệu năng: 200 000 món (thử mọi cặp hết giờ)"
+            },
+            "goi": "(function () {\nfunction __cay(a) { if (!a.length || a[0] == null) return null; var root = { val: a[0], left: null, right: null }, q = [root], h = 0, i = 1;\n  while (i < a.length) { var n = q[h++]; if (a[i] != null) { n.left = { val: a[i], left: null, right: null }; q.push(n.left); } i++;\n    if (i < a.length && a[i] != null) { n.right = { val: a[i], left: null, right: null }; q.push(n.right); } i++; } return root; }\nfunction __raCay(r) { var out = [], q = [r], h = 0; while (h < q.length) { var n = q[h++]; if (n == null) { out.push(null); continue; } out.push(n.val); q.push(n.left == null ? null : n.left, n.right == null ? null : n.right); }\n  while (out.length && out[out.length - 1] === null) out.pop(); return out; }\nfunction __ds(a) { var head = null; for (var i = a.length - 1; i >= 0; i--) head = { val: a[i], next: head }; return head; }\nfunction __raDs(h) { var out = []; while (h && out.length < 1000000) { out.push(h.val); h = h.next; } return out; }\nvar __s = 20261115; function R(m) { __s = (__s * 48271) % 2147483647; return __s % m; }\nvar a = []; for (var i = 0; i < 200000; i++) a.push(2 * (1 + R(400000000))); return bestGiftPair(a, 800000001);\n})()",
+            "mongDoi": 800000000
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "<code>while (lo &lt;= hi)</code> buys the same item twice: <code>[40]</code>, budget 100 would give 80.|||<code>while (lo &lt;= hi)</code> mua cùng một món hai lần: <code>[40]</code>, budget 100 sẽ ra 80."
+        },
+        {
+          "loi": "Stopping at the first pair that fits — the first feasible sum is not necessarily the largest.|||Dừng ở cặp vừa đầu tiên — tổng vừa đầu tiên chưa chắc lớn nhất."
+        },
+        {
+          "loi": "Trying all pairs: O(n²), times out on 200 000 items.|||Thử mọi cặp: O(n²), hết giờ với 200 000 món."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "budget",
+          "vi": "ngân sách"
+        },
+        {
+          "en": "feasible",
+          "vi": "khả thi",
+          "giaiThich": "thoả ràng buộc (ở đây: ≤ budget)."
+        },
+        {
+          "en": "discard",
+          "vi": "loại bỏ"
+        }
+      ]
+    },
+    {
+      "title": "Merged lab groups: count pairs whose size fits the room",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 25,
+      "points": 30,
+      "concepts": [
+        "two pointers counting",
+        "range = atMost(hi) − atMost(lo − 1)"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dsa-interview",
+        "coding-interview"
+      ],
+      "problemHtml": "<p>For the hackathon the organisers merge study groups two by two. A merged pair is usable only if its total size fits a hackathon room: at least <code>lo</code> people (otherwise the room is wasted) and at most <code>hi</code> (fire safety). Given the group sizes, how many different pairs of groups are usable?</p>\n<p>Write <code>countFittingPairs(sizes, lo, hi)</code>: the number of index pairs <code>i &lt; j</code> with <code>lo ≤ sizes[i] + sizes[j] ≤ hi</code>. Do not modify <code>sizes</code>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Write the function in <code>solution.js</code> and <b>return</b> the answer — do not print it.</li>\n  <li>Do not modify the input arrays/objects.</li>\n  <li>Mind the constraints: one check runs on a large input and every check has a 4-second limit, so an O(n²) loop fails it.</li>\n</ul>",
+      "problemHtmlVi": "<p>Cho hackathon, ban tổ chức gộp các nhóm học hai nhóm một. Một cặp gộp chỉ dùng được nếu tổng số người vừa một phòng thi: ít nhất <code>lo</code> người (không thì phí phòng) và nhiều nhất <code>hi</code> (an toàn cháy nổ). Cho kích thước các nhóm, có bao nhiêu cặp nhóm khác nhau dùng được?</p>\n<p>Viết <code>countFittingPairs(sizes, lo, hi)</code>: số cặp chỉ số <code>i &lt; j</code> với <code>lo ≤ sizes[i] + sizes[j] ≤ hi</code>. Không sửa <code>sizes</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Viết hàm trong <code>solution.js</code> và <b>trả về</b> kết quả — đừng in ra.</li>\n  <li>Không sửa mảng/object đầu vào.</li>\n  <li>Để ý ràng buộc: một kiểm chạy trên đầu vào lớn và mỗi kiểm có trần 4 giây, nên vòng lặp O(n²) sẽ trượt kiểm đó.</li>\n</ul>",
+      "inputSpec": "sizes — array of positive integers; lo ≤ hi — integers.|||sizes — mảng số nguyên dương; lo ≤ hi — số nguyên.",
+      "outputSpec": "number — count of pairs (may exceed 2³¹).|||number — số cặp (có thể vượt 2³¹).",
+      "constraints": "0 ≤ sizes.length ≤ 200 000; 1 ≤ sizes[i] ≤ 10⁶; 0 ≤ lo ≤ hi ≤ 2·10⁶.\nTarget: O(n log n).|||0 ≤ sizes.length ≤ 200 000; 1 ≤ sizes[i] ≤ 10⁶; 0 ≤ lo ≤ hi ≤ 2·10⁶.\nMục tiêu: O(n log n).",
+      "examplesJson": [
+        {
+          "input": "countFittingPairs([3,5,8,2], 7, 10)",
+          "output": "3",
+          "explanation": "The first sample case (Run executes every visible case; hidden cases only run on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy mọi ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Counting pairs \"between lo and hi\" directly is awkward. Counting pairs with sum \"at most X\" is easy with two pointers — and between = atMost(hi) − atMost(lo − 1).|||Đếm thẳng cặp \"trong khoảng lo..hi\" thì khó. Đếm cặp có tổng \"không quá X\" thì dễ với hai con trỏ — và trong khoảng = atMost(hi) − atMost(lo − 1).",
+        "atMost(X) on a sorted array: with l at the left and r at the right, if <code>s[l] + s[r] ≤ X</code> then s[l] pairs with every index l+1..r — add <code>r − l</code> at once and move l; otherwise move r.|||atMost(X) trên mảng đã sắp: l ở trái, r ở phải, nếu <code>s[l] + s[r] ≤ X</code> thì s[l] ghép được với MỌI chỉ số l+1..r — cộng ngay <code>r − l</code> rồi tiến l; ngược lại lùi r."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "solution.js",
+          "language": "javascript",
+          "code": "/**\n * sizes: number[], lo <= hi\n * returns the number of pairs i < j with lo <= sizes[i] + sizes[j] <= hi\n */\nfunction countFittingPairs(sizes, lo, hi) {\n  // Write your solution here\n  return 0;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "solution.js",
+          "language": "javascript",
+          "code": "// Reference solution — atMost(hi) - atMost(lo - 1), each counted with two pointers on a sorted copy.\nfunction countAtMost(sorted, cap) {\n  // number of pairs i < j with sorted[i] + sorted[j] <= cap, in O(n)\n  var l = 0, r = sorted.length - 1, c = 0;\n  while (l < r) {\n    if (sorted[l] + sorted[r] <= cap) { c += r - l; l++; } // sorted[l] fits with EVERY index l+1..r\n    else r--;\n  }\n  return c;\n}\n\nfunction countFittingPairs(sizes, lo, hi) {\n  var s = sizes.slice().sort(function (a, b) { return a - b; });\n  return countAtMost(s, hi) - countAtMost(s, lo - 1); // \"between\" = \"at most hi\" minus \"at most lo-1\"\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>In sorted order, if s[l] + s[r] ≤ X then s[l] + s[k] ≤ X for every k in (l, r], so all r − l pairs starting at l are counted in one step and l is finished; otherwise s[r] is too big for every remaining partner, so r is finished. Each step finishes one index ⇒ atMost is O(n). The range count is the difference of two prefix-style counts, the same \"between = at most hi − at most lo−1\" trick used with prefix sums. Total O(n log n) for the sort.</p>",
+      "solutionExplanationHtmlVi": "<p>Theo thứ tự đã sắp, nếu s[l] + s[r] ≤ X thì s[l] + s[k] ≤ X với mọi k trong (l, r], nên cả r − l cặp bắt đầu từ l được đếm trong một bước và xong l; ngược lại s[r] quá lớn với mọi bạn ghép còn lại, nên xong r. Mỗi bước xong một chỉ số ⇒ atMost là O(n). Số đếm trong khoảng là hiệu của hai số đếm kiểu tiền tố — cùng mẹo \"trong khoảng = không quá hi − không quá lo−1\" của tổng tiền tố. Tổng cộng O(n log n) cho phép sắp.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "solution.js",
+        "tepNap": [
+          "solution.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "3+5, 5+2 and 8+2 fit ⇒ 3 pairs",
+              "vi": "3+5, 5+2 và 8+2 vừa ⇒ 3 cặp"
+            },
+            "goi": "countFittingPairs([3,5,8,2], 7, 10)",
+            "mongDoi": 3
+          },
+          {
+            "moTa": {
+              "en": "Three equal groups ⇒ 3 pairs",
+              "vi": "Ba nhóm bằng nhau ⇒ 3 cặp"
+            },
+            "goi": "countFittingPairs([4,4,4], 8, 8)",
+            "mongDoi": 3
+          },
+          {
+            "moTa": {
+              "en": "Too small ⇒ 0",
+              "vi": "Quá nhỏ ⇒ 0"
+            },
+            "goi": "countFittingPairs([1,2], 10, 20)",
+            "mongDoi": 0
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "countFittingPairs([], 0, 5)",
+            "mongDoi": 0,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Sum exactly lo = hi",
+              "vi": "Tổng đúng bằng lo = hi"
+            },
+            "goi": "countFittingPairs([6,1,9,3,7,2], 9, 9)",
+            "mongDoi": 2,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Every pair fits ⇒ n(n−1)/2",
+              "vi": "Mọi cặp đều vừa ⇒ n(n−1)/2"
+            },
+            "goi": "countFittingPairs([10,20,30,40,50], 0, 1000)",
+            "mongDoi": 10,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "countFittingPairs([5,5,5,5,6,6], 10, 11)",
+            "mongDoi": 14,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Performance: 200 000 groups (checking every pair times out)",
+              "vi": "Hiệu năng: 200 000 nhóm (soát mọi cặp hết giờ)"
+            },
+            "goi": "(function () {\nfunction __cay(a) { if (!a.length || a[0] == null) return null; var root = { val: a[0], left: null, right: null }, q = [root], h = 0, i = 1;\n  while (i < a.length) { var n = q[h++]; if (a[i] != null) { n.left = { val: a[i], left: null, right: null }; q.push(n.left); } i++;\n    if (i < a.length && a[i] != null) { n.right = { val: a[i], left: null, right: null }; q.push(n.right); } i++; } return root; }\nfunction __raCay(r) { var out = [], q = [r], h = 0; while (h < q.length) { var n = q[h++]; if (n == null) { out.push(null); continue; } out.push(n.val); q.push(n.left == null ? null : n.left, n.right == null ? null : n.right); }\n  while (out.length && out[out.length - 1] === null) out.pop(); return out; }\nfunction __ds(a) { var head = null; for (var i = a.length - 1; i >= 0; i--) head = { val: a[i], next: head }; return head; }\nfunction __raDs(h) { var out = []; while (h && out.length < 1000000) { out.push(h.val); h = h.next; } return out; }\nvar __s = 20261115; function R(m) { __s = (__s * 48271) % 2147483647; return __s % m; }\nvar a = []; for (var i = 0; i < 200000; i++) a.push(1 + R(1000000)); return countFittingPairs(a, 700000, 1300000);\n})()",
+            "mongDoi": 10199444357
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Adding 1 instead of <code>r − l</code> when the pair fits: you count one pair where there are many.|||Cộng 1 thay vì <code>r − l</code> khi cặp vừa: đếm một cặp trong khi có rất nhiều."
+        },
+        {
+          "loi": "Subtracting <code>atMost(lo)</code> instead of <code>atMost(lo − 1)</code>: pairs whose sum is exactly lo disappear.|||Trừ <code>atMost(lo)</code> thay vì <code>atMost(lo − 1)</code>: các cặp có tổng đúng bằng lo biến mất."
+        },
+        {
+          "loi": "Checking every pair: O(n²), times out on 200 000 groups.|||Soát mọi cặp: O(n²), hết giờ với 200 000 nhóm."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "count in bulk",
+          "vi": "đếm theo lô",
+          "giaiThich": "cộng r − l cặp một lần thay vì từng cặp."
+        },
+        {
+          "en": "inclusive range",
+          "vi": "khoảng đóng",
+          "giaiThich": "gồm cả hai đầu."
+        },
+        {
+          "en": "at most",
+          "vi": "không quá (≤)"
+        }
+      ]
+    }
+  ]
+}

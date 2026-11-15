@@ -1,0 +1,519 @@
+{
+  "trackSlug": "dsa-interview-practice",
+  "moduleSlug": "dsa-4-3-khong-gian-dap-an",
+  "lesson": {
+    "course": "dsa-interview",
+    "slug": "dsa-4-3-khong-gian-dap-an"
+  },
+  "exercises": [
+    {
+      "title": "Volunteer kitchen: the biggest equal portion for everyone",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 20,
+      "points": 10,
+      "concepts": [
+        "binary search on the answer",
+        "maximise with a feasibility check"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dsa-interview",
+        "coding-interview"
+      ],
+      "problemHtml": "<p>The student union's charity kitchen received bags of rice of different weights, <code>bags[i]</code> grams. Every one of the <code>students</code> volunteers' families must receive <b>one portion of the same weight</b> <code>x</code> (a whole number of grams). A portion has to come from a single bag — you cannot combine two half-empty bags — and leftovers smaller than <code>x</code> stay in the kitchen.</p>\n<p>Write <code>maxPortion(bags, students)</code> returning the largest possible <code>x</code>, or <code>0</code> if even 1-gram portions are not enough.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Write the function in <code>solution.js</code> and <b>return</b> the answer — do not print it.</li>\n  <li>Do not modify the input arrays/objects.</li>\n  <li>Mind the constraints: one check runs on a large input and every check has a 4-second limit, so an O(n²) loop fails it.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bếp từ thiện của hội sinh viên nhận các bao gạo nặng khác nhau, <code>bags[i]</code> gam. Mỗi gia đình trong số <code>students</code> gia đình được nhận <b>một phần cùng khối lượng</b> <code>x</code> (số gam nguyên). Một phần phải lấy từ một bao duy nhất — không được gộp hai bao vơi — và phần dư nhỏ hơn <code>x</code> ở lại bếp.</p>\n<p>Viết <code>maxPortion(bags, students)</code> trả về <code>x</code> lớn nhất có thể, hoặc <code>0</code> nếu ngay cả phần 1 gam cũng không đủ.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Viết hàm trong <code>solution.js</code> và <b>trả về</b> kết quả — đừng in ra.</li>\n  <li>Không sửa mảng/object đầu vào.</li>\n  <li>Để ý ràng buộc: một kiểm chạy trên đầu vào lớn và mỗi kiểm có trần 4 giây, nên vòng lặp O(n²) sẽ trượt kiểm đó.</li>\n</ul>",
+      "inputSpec": "bags — positive integers; students — positive integer.|||bags — số nguyên dương; students — số nguyên dương.",
+      "outputSpec": "The largest x, or 0.|||x lớn nhất, hoặc 0.",
+      "constraints": "1 ≤ bags.length ≤ 100 000; 1 ≤ bags[i] ≤ 10⁷; 1 ≤ students ≤ 10¹².\nTarget: O(n log(max bag)).|||1 ≤ bags.length ≤ 100 000; 1 ≤ bags[i] ≤ 10⁷; 1 ≤ students ≤ 10¹².\nMục tiêu: O(n log(bao lớn nhất)).",
+      "examplesJson": [
+        {
+          "input": "maxPortion([5000,8000,3000], 5)",
+          "output": "2666",
+          "explanation": "The first sample case (Run executes every visible case; hidden cases only run on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy mọi ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Do not search the bags — search the ANSWER. For a fixed x, checking \"is x enough?\" is easy: <code>Σ floor(bags[i] / x) ≥ students</code>.|||Đừng tìm trên các bao — tìm trên ĐÁP ÁN. Với một x cố định, kiểm \"x có đủ không?\" rất dễ: <code>Σ floor(bags[i] / x) ≥ students</code>.",
+        "Bigger portions mean fewer of them, so \"enough\" is true…true false…false. Find the first x that is NOT enough on <code>[1, max + 1)</code> and answer one less — the \"last true\" without a second template.|||Phần càng lớn thì càng ít phần, nên \"đủ\" là true…true false…false. Tìm x đầu tiên KHÔNG đủ trên <code>[1, max + 1)</code> rồi trả bớt một — \"true cuối\" mà không cần khuôn thứ hai."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "solution.js",
+          "language": "javascript",
+          "code": "/**\n * bags: number[] (grams), students: number\n * returns the largest whole x such that every student can get one x-gram portion from a single bag (0 if impossible)\n */\nfunction maxPortion(bags, students) {\n  // Write your solution here\n  var total = 0;\n  for (var b of bags) total += b;\n  return Math.floor(total / students);\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "solution.js",
+          "language": "javascript",
+          "code": "// Reference solution — binary search on x; answer = first x that is NOT enough, minus one.\nfunction maxPortion(bags, students) {\n  function enough(x) { // can every student get a portion of exactly x grams?\n    var count = 0;\n    for (var i = 0; i < bags.length; i++) { count += Math.floor(bags[i] / x); if (count >= students) return true; }\n    return false;\n  }\n  // enough(x) is true … true false … false as x grows ⇒ find the FIRST false in [1, max+1), the answer is one less\n  var lo = 1, hi = 1;\n  for (var j = 0; j < bags.length; j++) if (bags[j] + 1 > hi) hi = bags[j] + 1; // x = max+1 is always \"not enough\"\n  while (lo < hi) {\n    var mid = lo + ((hi - lo) >> 1);\n    if (!enough(mid)) hi = mid; else lo = mid + 1;\n  }\n  return lo - 1; // 0 when even 1-gram portions are not enough\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Feasibility is monotone in x: if portions of x grams are enough, any smaller portion is too (every bag yields at least as many). So we binary-search x itself, from 1 to max+1 (max+1 is never feasible because no bag can give such a portion). Each check is O(n) with an early exit, and there are O(log max) ≈ 24 checks ⇒ O(n log max). The answer is (first infeasible) − 1, which is naturally 0 when even x = 1 fails.</p>",
+      "solutionExplanationHtmlVi": "<p>Tính khả thi đơn điệu theo x: nếu phần x gam đủ thì mọi phần nhỏ hơn cũng đủ (mỗi bao cho ít nhất bằng số phần đó). Vì vậy ta tìm nhị phân trên chính x, từ 1 tới max+1 (max+1 không bao giờ khả thi vì không bao nào cho được phần như thế). Mỗi lần kiểm O(n) có thoát sớm, và có O(log max) ≈ 24 lần kiểm ⇒ O(n log max). Đáp án là (x không khả thi đầu tiên) − 1, tự nhiên bằng 0 khi ngay cả x = 1 cũng hỏng.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "solution.js",
+        "tepNap": [
+          "solution.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "2 666 g: 1 + 3 + 1 = 5 portions",
+              "vi": "2 666 g: 1 + 3 + 1 = 5 phần"
+            },
+            "goi": "maxPortion([5000,8000,3000], 5)",
+            "mongDoi": 2666
+          },
+          {
+            "moTa": {
+              "en": "Bags cannot be combined ⇒ 4",
+              "vi": "Không gộp được bao ⇒ 4"
+            },
+            "goi": "maxPortion([9,1], 2)",
+            "mongDoi": 4
+          },
+          {
+            "moTa": {
+              "en": "Not even 1 gram each ⇒ 0",
+              "vi": "Không đủ cả 1 gam mỗi phần ⇒ 0"
+            },
+            "goi": "maxPortion([2,3], 6)",
+            "mongDoi": 0
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "maxPortion([10000000], 1)",
+            "mongDoi": 10000000,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "maxPortion([7,7,7], 3)",
+            "mongDoi": 7,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "maxPortion([1,1,1], 3)",
+            "mongDoi": 1,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "maxPortion([100,1,1,1], 4)",
+            "mongDoi": 25,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Huge number of students",
+              "vi": "Số gia đình rất lớn"
+            },
+            "goi": "maxPortion([10000000,10000000], 1000000000000)",
+            "mongDoi": 0,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Performance: 100 000 bags up to 10⁷ g, 50 families (trying x = 1, 2, 3 … takes ~10¹² steps)",
+              "vi": "Hiệu năng: 100 000 bao tới 10⁷ g, 50 gia đình (thử x = 1, 2, 3 … tốn ~10¹² bước)"
+            },
+            "goi": "(function () {\nfunction __cay(a) { if (!a.length || a[0] == null) return null; var root = { val: a[0], left: null, right: null }, q = [root], h = 0, i = 1;\n  while (i < a.length) { var n = q[h++]; if (a[i] != null) { n.left = { val: a[i], left: null, right: null }; q.push(n.left); } i++;\n    if (i < a.length && a[i] != null) { n.right = { val: a[i], left: null, right: null }; q.push(n.right); } i++; } return root; }\nfunction __raCay(r) { var out = [], q = [r], h = 0; while (h < q.length) { var n = q[h++]; if (n == null) { out.push(null); continue; } out.push(n.val); q.push(n.left == null ? null : n.left, n.right == null ? null : n.right); }\n  while (out.length && out[out.length - 1] === null) out.pop(); return out; }\nfunction __ds(a) { var head = null; for (var i = a.length - 1; i >= 0; i--) head = { val: a[i], next: head }; return head; }\nfunction __raDs(h) { var out = []; while (h && out.length < 1000000) { out.push(h.val); h = h.next; } return out; }\nvar __s = 20261115; function R(m) { __s = (__s * 48271) % 2147483647; return __s % m; }\nvar a = new Array(100000); for (var i = 0; i < a.length; i++) a[i] = 1 + R(10000000); return [maxPortion(a, 50), maxPortion(a, 123456789)];\n})()",
+            "mongDoi": [
+              9994403,
+              4043
+            ]
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Searching on <code>[1, max]</code> and returning <code>lo</code>: when even 1 gram is not enough you answer 1 instead of 0.|||Tìm trên <code>[1, max]</code> rồi trả <code>lo</code>: khi ngay cả 1 gam cũng không đủ thì trả 1 thay vì 0."
+        },
+        {
+          "loi": "Using <code>sum(bags) / students</code>: portions cannot be combined across bags (<code>[9, 1]</code>, 2 families ⇒ 4, not 5).|||Dùng <code>sum(bags) / students</code>: không được gộp phần giữa các bao (<code>[9, 1]</code>, 2 gia đình ⇒ 4, không phải 5)."
+        },
+        {
+          "loi": "Trying x = 1, 2, 3, … until it fails: O(answer · n) — with 50 families and 10⁷-gram bags that is 10¹² steps.|||Thử x = 1, 2, 3, … tới khi hỏng: O(đáp án · n) — với 50 gia đình và bao 10⁷ gam là 10¹² bước."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "search on the answer",
+          "vi": "tìm nhị phân trên không gian đáp án"
+        },
+        {
+          "en": "feasibility check",
+          "vi": "hàm kiểm khả thi",
+          "giaiThich": "trả lời \"x có làm được không?\"."
+        },
+        {
+          "en": "monotone predicate",
+          "vi": "mệnh đề đơn điệu"
+        }
+      ]
+    },
+    {
+      "title": "Lecture videos: cut so the longest segment is as short as possible",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 25,
+      "points": 20,
+      "concepts": [
+        "binary search on the answer",
+        "minimise the maximum"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dsa-interview",
+        "coding-interview"
+      ],
+      "problemHtml": "<p>The course team uploads recorded lectures to a platform that works best with short segments. <code>lengths[i]</code> is the length of video <code>i</code> in seconds. The editor can make at most <code>maxCuts</code> cuts <b>in total</b>; each cut splits one segment into two at any whole second. Videos are never joined.</p>\n<p>Write <code>shortestLongestSegment(lengths, maxCuts)</code> returning the smallest possible length of the <b>longest</b> segment after cutting.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Write the function in <code>solution.js</code> and <b>return</b> the answer — do not print it.</li>\n  <li>Do not modify the input arrays/objects.</li>\n  <li>Mind the constraints: one check runs on a large input and every check has a 4-second limit, so an O(n²) loop fails it.</li>\n</ul>",
+      "problemHtmlVi": "<p>Nhóm làm khoá học tải bài giảng quay sẵn lên một nền tảng chạy tốt nhất với đoạn ngắn. <code>lengths[i]</code> là độ dài video <code>i</code> tính bằng giây. Người dựng được cắt tối đa <code>maxCuts</code> nhát <b>tổng cộng</b>; mỗi nhát chia một đoạn thành hai ở một giây nguyên bất kỳ. Không bao giờ ghép các video với nhau.</p>\n<p>Viết <code>shortestLongestSegment(lengths, maxCuts)</code> trả về độ dài nhỏ nhất có thể của đoạn <b>dài nhất</b> sau khi cắt.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Viết hàm trong <code>solution.js</code> và <b>trả về</b> kết quả — đừng in ra.</li>\n  <li>Không sửa mảng/object đầu vào.</li>\n  <li>Để ý ràng buộc: một kiểm chạy trên đầu vào lớn và mỗi kiểm có trần 4 giây, nên vòng lặp O(n²) sẽ trượt kiểm đó.</li>\n</ul>",
+      "inputSpec": "lengths — positive integers; maxCuts — integer ≥ 0.|||lengths — số nguyên dương; maxCuts — số nguyên ≥ 0.",
+      "outputSpec": "The minimal possible longest-segment length.|||Độ dài nhỏ nhất có thể của đoạn dài nhất.",
+      "constraints": "1 ≤ lengths.length ≤ 100 000; 1 ≤ lengths[i] ≤ 10⁹; 0 ≤ maxCuts ≤ 10⁹.\nTarget: O(n log(max length)).|||1 ≤ lengths.length ≤ 100 000; 1 ≤ lengths[i] ≤ 10⁹; 0 ≤ maxCuts ≤ 10⁹.\nMục tiêu: O(n log(độ dài lớn nhất)).",
+      "examplesJson": [
+        {
+          "input": "shortestLongestSegment([9], 2)",
+          "output": "3",
+          "explanation": "The first sample case (Run executes every visible case; hidden cases only run on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy mọi ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Fix a target x for the longest segment. How many cuts does a video of length L need so that every piece is ≤ x? <code>ceil(L / x) − 1</code> — and the videos are independent.|||Cố định một mục tiêu x cho đoạn dài nhất. Video dài L cần bao nhiêu nhát để mọi mảnh ≤ x? <code>ceil(L / x) − 1</code> — và các video độc lập với nhau.",
+        "Larger x needs fewer cuts, so \"cutsNeeded(x) ≤ maxCuts\" is false…false true…true on <code>[1, max]</code>. Binary-search the first true.|||x càng lớn càng cần ít nhát, nên \"cutsNeeded(x) ≤ maxCuts\" là false…false true…true trên <code>[1, max]</code>. Tìm nhị phân true đầu tiên."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "solution.js",
+          "language": "javascript",
+          "code": "/**\n * lengths: number[] (seconds), maxCuts: number\n * returns the smallest possible length of the longest segment\n */\nfunction shortestLongestSegment(lengths, maxCuts) {\n  // Write your solution here\n  var longest = 0;\n  for (var L of lengths) if (L > longest) longest = L;\n  return longest;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "solution.js",
+          "language": "javascript",
+          "code": "// Reference solution — binary search on x: first x with sum(ceil(L/x) - 1) <= maxCuts.\nfunction shortestLongestSegment(lengths, maxCuts) {\n  function cutsNeeded(x) { // cuts so that no segment is longer than x\n    var cuts = 0;\n    for (var i = 0; i < lengths.length; i++) cuts += Math.ceil(lengths[i] / x) - 1; // a video of L needs ceil(L/x) pieces\n    return cuts;\n  }\n  var lo = 1, hi = 1;\n  for (var j = 0; j < lengths.length; j++) if (lengths[j] > hi) hi = lengths[j]; // x = max needs 0 cuts ⇒ always feasible\n  while (lo < hi) {                       // first x with cutsNeeded(x) <= maxCuts (false … false true … true)\n    var mid = lo + ((hi - lo) >> 1);\n    if (cutsNeeded(mid) <= maxCuts) hi = mid; else lo = mid + 1;\n  }\n  return lo;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>For a target x the cheapest way to make every piece of a video ≤ x uses exactly <code>ceil(L/x) − 1</code> cuts, and the videos do not interact, so the total is a sum. That total never increases as x grows, which makes \"x is achievable with maxCuts cuts\" monotone — binary search on x over [1, max] (x = max needs no cut, so a true always exists). O(n) per check × O(log max) ≈ 30 checks ⇒ O(n log max). Greedy halving looks natural but splits unevenly; the answer-space search never has to decide where to cut.</p>",
+      "solutionExplanationHtmlVi": "<p>Với mục tiêu x, cách rẻ nhất để mọi mảnh của một video ≤ x dùng đúng <code>ceil(L/x) − 1</code> nhát, và các video không ảnh hưởng nhau, nên tổng là một phép cộng. Tổng đó không bao giờ tăng khi x tăng, nên \"x làm được với maxCuts nhát\" là đơn điệu — tìm nhị phân trên x trong [1, max] (x = max không cần nhát nào, nên luôn có một true). O(n) mỗi lần kiểm × O(log max) ≈ 30 lần ⇒ O(n log max). Cắt đôi tham lam trông tự nhiên nhưng chia không đều; tìm trên không gian đáp án không bao giờ phải quyết định cắt ở đâu.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "solution.js",
+        "tepNap": [
+          "solution.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "3 + 3 + 3 (halving greedily gives 4)",
+              "vi": "3 + 3 + 3 (cắt đôi tham lam ra 4)"
+            },
+            "goi": "shortestLongestSegment([9], 2)",
+            "mongDoi": 3
+          },
+          {
+            "moTa": {
+              "en": "Case 2: shortestLongestSegment([2700,1800,600], 4)",
+              "vi": "Ca 2"
+            },
+            "goi": "shortestLongestSegment([2700,1800,600], 4)",
+            "mongDoi": 900
+          },
+          {
+            "moTa": {
+              "en": "No cuts ⇒ the longest video",
+              "vi": "Không cắt ⇒ video dài nhất"
+            },
+            "goi": "shortestLongestSegment([500,300], 0)",
+            "mongDoi": 500
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "shortestLongestSegment([1,1,1], 100)",
+            "mongDoi": 1,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Exact division: 10 = 5 + 5 needs one cut each",
+              "vi": "Chia hết: 10 = 5 + 5 cần một nhát mỗi video"
+            },
+            "goi": "shortestLongestSegment([10,10], 2)",
+            "mongDoi": 5,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "shortestLongestSegment([1000000000], 999999999)",
+            "mongDoi": 1,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "shortestLongestSegment([7,17,4,9], 5)",
+            "mongDoi": 5,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 8",
+              "vi": "Ca ẩn 8"
+            },
+            "goi": "shortestLongestSegment([1000000000,1], 3)",
+            "mongDoi": 250000000,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Performance: 100 000 videos up to 10⁹ s, 1 000 cuts (trying x = 1, 2, 3 … never finishes)",
+              "vi": "Hiệu năng: 100 000 video tới 10⁹ giây, 1 000 nhát (thử x = 1, 2, 3 … không bao giờ xong)"
+            },
+            "goi": "(function () {\nfunction __cay(a) { if (!a.length || a[0] == null) return null; var root = { val: a[0], left: null, right: null }, q = [root], h = 0, i = 1;\n  while (i < a.length) { var n = q[h++]; if (a[i] != null) { n.left = { val: a[i], left: null, right: null }; q.push(n.left); } i++;\n    if (i < a.length && a[i] != null) { n.right = { val: a[i], left: null, right: null }; q.push(n.right); } i++; } return root; }\nfunction __raCay(r) { var out = [], q = [r], h = 0; while (h < q.length) { var n = q[h++]; if (n == null) { out.push(null); continue; } out.push(n.val); q.push(n.left == null ? null : n.left, n.right == null ? null : n.right); }\n  while (out.length && out[out.length - 1] === null) out.pop(); return out; }\nfunction __ds(a) { var head = null; for (var i = a.length - 1; i >= 0; i--) head = { val: a[i], next: head }; return head; }\nfunction __raDs(h) { var out = []; while (h && out.length < 1000000) { out.push(h.val); h = h.next; } return out; }\nvar __s = 20261115; function R(m) { __s = (__s * 48271) % 2147483647; return __s % m; }\nvar a = new Array(100000); for (var i = 0; i < a.length; i++) a[i] = 1 + R(1000000000); return shortestLongestSegment(a, 1000);\n})()",
+            "mongDoi": 989003143
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Greedy \"always cut the longest segment in half\": <code>[9]</code> with 2 cuts gives 9 → 5 + 4 → 3 + 2 + 4 ⇒ 4, but 3 + 3 + 3 ⇒ 3 is possible.|||Tham lam \"luôn cắt đôi đoạn dài nhất\": <code>[9]</code> với 2 nhát ra 9 → 5 + 4 → 3 + 2 + 4 ⇒ 4, trong khi 3 + 3 + 3 ⇒ 3 làm được."
+        },
+        {
+          "loi": "Counting <code>Math.floor(L / x)</code> cuts: a video of exactly 2x needs one cut, not two (off by one whenever x divides L).|||Đếm <code>Math.floor(L / x)</code> nhát: video dài đúng 2x chỉ cần một nhát, không phải hai (lệch một mỗi khi x chia hết L)."
+        },
+        {
+          "loi": "Trying x = 1, 2, 3 … until it fits: with 10⁹-second videos and few cuts that is ~10⁹ checks.|||Thử x = 1, 2, 3 … tới khi vừa: với video 10⁹ giây và ít nhát cắt là ~10⁹ lần kiểm."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "minimise the maximum",
+          "vi": "tối thiểu hoá giá trị lớn nhất"
+        },
+        {
+          "en": "ceiling division",
+          "vi": "chia làm tròn lên",
+          "giaiThich": "ceil(L / x)."
+        },
+        {
+          "en": "greedy",
+          "vi": "tham lam"
+        }
+      ]
+    },
+    {
+      "title": "Network lab: the k-th smallest latency gap between two PCs",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 35,
+      "points": 30,
+      "concepts": [
+        "binary search on the answer",
+        "two pointers",
+        "counting"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dsa-interview",
+        "coding-interview"
+      ],
+      "problemHtml": "<p>The networking lab measured the ping latency of every PC to the gateway, <code>latencies[i]</code> in microseconds. To pick a threshold for \"these two PCs behave alike\", the instructor wants the <code>k</code>-th smallest value among the gaps <code>|latencies[i] − latencies[j]|</code> over all pairs <code>i &lt; j</code> (1-indexed, gaps counted with multiplicity).</p>\n<p>Write <code>kthSmallestGap(latencies, k)</code>. With 100 000 PCs there are about 5·10⁹ pairs — you cannot list them.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Write the function in <code>solution.js</code> and <b>return</b> the answer — do not print it.</li>\n  <li>Do not modify the input arrays/objects.</li>\n  <li>Mind the constraints: one check runs on a large input and every check has a 4-second limit, so an O(n²) loop fails it.</li>\n</ul>",
+      "problemHtmlVi": "<p>Phòng lab mạng đo độ trễ ping của mọi máy tới gateway, <code>latencies[i]</code> micro giây. Để chọn ngưỡng \"hai máy này giống nhau\", giảng viên muốn giá trị nhỏ thứ <code>k</code> trong các khoảng cách <code>|latencies[i] − latencies[j]|</code> của mọi cặp <code>i &lt; j</code> (đếm từ 1, khoảng cách trùng được đếm đủ lần).</p>\n<p>Viết <code>kthSmallestGap(latencies, k)</code>. Với 100 000 máy có khoảng 5·10⁹ cặp — không thể liệt kê hết.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Viết hàm trong <code>solution.js</code> và <b>trả về</b> kết quả — đừng in ra.</li>\n  <li>Không sửa mảng/object đầu vào.</li>\n  <li>Để ý ràng buộc: một kiểm chạy trên đầu vào lớn và mỗi kiểm có trần 4 giây, nên vòng lặp O(n²) sẽ trượt kiểm đó.</li>\n</ul>",
+      "inputSpec": "latencies — non-negative integers, n ≥ 2; 1 ≤ k ≤ n(n−1)/2.|||latencies — số nguyên không âm, n ≥ 2; 1 ≤ k ≤ n(n−1)/2.",
+      "outputSpec": "The k-th smallest pair gap.|||Khoảng cách cặp nhỏ thứ k.",
+      "constraints": "2 ≤ n ≤ 100 000; 0 ≤ latencies[i] ≤ 10⁹.\nTarget: O(n log n + n log W), W = max − min.|||2 ≤ n ≤ 100 000; 0 ≤ latencies[i] ≤ 10⁹.\nMục tiêu: O(n log n + n log W), W = max − min.",
+      "examplesJson": [
+        {
+          "input": "kthSmallestGap([120,90,135,100], 2)",
+          "output": "15",
+          "explanation": "The first sample case (Run executes every visible case; hidden cases only run on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy mọi ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Search the ANSWER d in <code>[0, max − min]</code>. \"At least k pairs have gap ≤ d\" is false…false true…true in d; the first true is the k-th smallest gap.|||Tìm trên ĐÁP ÁN d trong <code>[0, max − min]</code>. \"Có ít nhất k cặp có khoảng cách ≤ d\" là false…false true…true theo d; true đầu tiên chính là khoảng cách nhỏ thứ k.",
+        "After sorting, count pairs with gap ≤ d in O(n) with two pointers: for each right end j move i forward while <code>a[j] − a[i] &gt; d</code>; then j − i partners lie in the window.|||Sau khi sắp, đếm số cặp có khoảng cách ≤ d trong O(n) bằng hai con trỏ: với mỗi đầu phải j đẩy i lên khi <code>a[j] − a[i] &gt; d</code>; khi đó có j − i bạn ghép nằm trong cửa sổ.",
+        "Sort numerically on a copy: <code>slice().sort((x, y) =&gt; x − y)</code>. The default <code>sort()</code> compares strings (\"100\" &lt; \"9\").|||Sắp theo số trên một bản sao: <code>slice().sort((x, y) =&gt; x − y)</code>. <code>sort()</code> mặc định so chuỗi (\"100\" &lt; \"9\")."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "solution.js",
+          "language": "javascript",
+          "code": "/**\n * latencies: number[], k: number (1-indexed)\n * returns the k-th smallest |latencies[i] - latencies[j]| over all pairs i < j\n */\nfunction kthSmallestGap(latencies, k) {\n  // Write your solution here\n  return 0;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "solution.js",
+          "language": "javascript",
+          "code": "// Reference solution — binary search on the gap d; count pairs <= d with two pointers on the sorted copy.\nfunction kthSmallestGap(latencies, k) {\n  var a = latencies.slice().sort(function (x, y) { return x - y; }); // numeric sort on a COPY\n  function pairsWithin(d) { // number of pairs i < j with a[j] - a[i] <= d — two pointers, O(n)\n    var count = 0, i = 0;\n    for (var j = 0; j < a.length; j++) {\n      while (a[j] - a[i] > d) i++;\n      count += j - i; // every i' in [i, j) pairs with j\n    }\n    return count;\n  }\n  var lo = 0, hi = a[a.length - 1] - a[0];  // the answer is a gap value in [0, max - min]\n  while (lo < hi) {                          // first d with at least k pairs within d\n    var mid = lo + Math.floor((hi - lo) / 2);\n    if (pairsWithin(mid) >= k) hi = mid; else lo = mid + 1;\n  }\n  return lo;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Let C(d) = number of pairs with gap ≤ d. C is non-decreasing in d, and the k-th smallest gap g is exactly the smallest d with C(d) ≥ k (C(g−1) &lt; k ≤ C(g)), so a first-true search over [0, W] finds it — and the result is always a real gap. After an O(n log n) sort, C(d) takes O(n) with two pointers because i only moves forward as j moves forward. With ≈ 30 values of d that is O(n log n + n log W) time and O(n) memory, instead of materialising ~5·10⁹ gaps.</p>",
+      "solutionExplanationHtmlVi": "<p>Gọi C(d) = số cặp có khoảng cách ≤ d. C không giảm theo d, và khoảng cách nhỏ thứ k là g đúng bằng d nhỏ nhất có C(d) ≥ k (C(g−1) &lt; k ≤ C(g)), nên phép tìm true-đầu-tiên trên [0, W] tìm ra nó — và kết quả luôn là một khoảng cách có thật. Sau khi sắp O(n log n), C(d) tốn O(n) bằng hai con trỏ vì i chỉ tiến khi j tiến. Với ≈ 30 giá trị d là O(n log n + n log W) thời gian và O(n) bộ nhớ, thay vì dựng ra ~5·10⁹ khoảng cách.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "solution.js",
+        "tepNap": [
+          "solution.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Gaps 10, 15, 20, 30, 35, 45 ⇒ 2nd is 15",
+              "vi": "Khoảng cách 10, 15, 20, 30, 35, 45 ⇒ thứ 2 là 15"
+            },
+            "goi": "kthSmallestGap([120,90,135,100], 2)",
+            "mongDoi": 15
+          },
+          {
+            "moTa": {
+              "en": "All gaps are 0",
+              "vi": "Mọi khoảng cách là 0"
+            },
+            "goi": "kthSmallestGap([5,5,5], 3)",
+            "mongDoi": 0
+          },
+          {
+            "moTa": {
+              "en": "Numeric sort, not string sort",
+              "vi": "Sắp theo số, không theo chuỗi"
+            },
+            "goi": "kthSmallestGap([9,100], 1)",
+            "mongDoi": 91
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "kthSmallestGap([1,3,1], 1)",
+            "mongDoi": 0,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "kthSmallestGap([1,3,1], 3)",
+            "mongDoi": 2,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "kthSmallestGap([10,2,33,4,1000,7], 7)",
+            "mongDoi": 23,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "kthSmallestGap([0,1000000000], 1)",
+            "mongDoi": 1000000000,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "k = n(n−1)/2 ⇒ max − min",
+              "vi": "k = n(n−1)/2 ⇒ max − min"
+            },
+            "goi": "kthSmallestGap([1,2,3,4,5,6], 15)",
+            "mongDoi": 5,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Performance: 100 000 PCs (~5·10⁹ pairs; counting with nested loops times out)",
+              "vi": "Hiệu năng: 100 000 máy (~5·10⁹ cặp; đếm bằng vòng lồng hết giờ)"
+            },
+            "goi": "(function () {\nfunction __cay(a) { if (!a.length || a[0] == null) return null; var root = { val: a[0], left: null, right: null }, q = [root], h = 0, i = 1;\n  while (i < a.length) { var n = q[h++]; if (a[i] != null) { n.left = { val: a[i], left: null, right: null }; q.push(n.left); } i++;\n    if (i < a.length && a[i] != null) { n.right = { val: a[i], left: null, right: null }; q.push(n.right); } i++; } return root; }\nfunction __raCay(r) { var out = [], q = [r], h = 0; while (h < q.length) { var n = q[h++]; if (n == null) { out.push(null); continue; } out.push(n.val); q.push(n.left == null ? null : n.left, n.right == null ? null : n.right); }\n  while (out.length && out[out.length - 1] === null) out.pop(); return out; }\nfunction __ds(a) { var head = null; for (var i = a.length - 1; i >= 0; i--) head = { val: a[i], next: head }; return head; }\nfunction __raDs(h) { var out = []; while (h && out.length < 1000000) { out.push(h.val); h = h.next; } return out; }\nvar __s = 20261115; function R(m) { __s = (__s * 48271) % 2147483647; return __s % m; }\nvar n = 100000, a = new Array(n); for (var i = 0; i < n; i++) a[i] = R(1000000000); var before = a[0] + a[n - 1]; return [kthSmallestGap(a, 1), kthSmallestGap(a, 2500000000), before === a[0] + a[n - 1]];\n})()",
+            "mongDoi": [
+              0,
+              304074287,
+              true
+            ]
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Calling <code>sort()</code> without a comparator: latencies of different digit counts end up in string order and the two-pointer count is wrong.|||Gọi <code>sort()</code> không có hàm so sánh: độ trễ khác số chữ số bị xếp theo thứ tự chuỗi và phép đếm hai con trỏ sai."
+        },
+        {
+          "loi": "Searching for \"the first d with exactly k pairs\": counts jump over k when several pairs share a gap, so no d has exactly k. Use \"at least k\".|||Tìm \"d đầu tiên có đúng k cặp\": số đếm nhảy qua k khi nhiều cặp cùng khoảng cách, nên không d nào có đúng k. Dùng \"ít nhất k\"."
+        },
+        {
+          "loi": "Counting pairs ≤ d with two nested loops: O(n²) per check — 5·10⁹ × 30 steps.|||Đếm cặp ≤ d bằng hai vòng lồng: O(n²) mỗi lần kiểm — 5·10⁹ × 30 bước."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "k-th smallest",
+          "vi": "nhỏ thứ k"
+        },
+        {
+          "en": "counting function",
+          "vi": "hàm đếm",
+          "giaiThich": "C(d): có bao nhiêu thứ ≤ d."
+        },
+        {
+          "en": "with multiplicity",
+          "vi": "đếm cả lặp",
+          "giaiThich": "giá trị trùng được tính đủ số lần."
+        },
+        {
+          "en": "comparator",
+          "vi": "hàm so sánh"
+        }
+      ]
+    }
+  ]
+}

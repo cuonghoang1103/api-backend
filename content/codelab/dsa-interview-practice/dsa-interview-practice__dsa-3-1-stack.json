@@ -1,0 +1,715 @@
+{
+  "trackSlug": "dsa-interview-practice",
+  "moduleSlug": "dsa-3-1-stack",
+  "lesson": {
+    "course": "dsa-interview",
+    "slug": "dsa-3-1-stack"
+  },
+  "exercises": [
+    {
+      "title": "Editor lint: the first bracket to underline",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 15,
+      "points": 10,
+      "concepts": [
+        "stack",
+        "bracket matching"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dsa-interview",
+        "coding-interview"
+      ],
+      "problemHtml": "<p>The code editor in CT Work's snippet box underlines the <b>first</b> bracket that breaks the structure, so a student sees where their <code>if</code> block went wrong before pressing Run. Brackets are <code>()</code>, <code>[]</code> and <code>{}</code>; every other character is ignored.</p>\n<p>Write <code>firstBadBracket(code)</code> returning the index to underline:</p>\n<ul><li>scanning left to right, the first <b>closing</b> bracket that has no opener waiting, or whose most recent unclosed opener is of a different kind ⇒ its index;</li>\n<li>if the scan ends cleanly but some openers were never closed ⇒ the index of the <b>earliest</b> unclosed opener;</li>\n<li>a perfectly balanced snippet ⇒ <code>-1</code>.</li></ul>\n<h4>Requirements</h4>\n<ul>\n  <li>Write the function in <code>solution.js</code> and <b>return</b> the answer — do not print it.</li>\n  <li>Do not modify the input arrays/objects.</li>\n  <li>Mind the constraints: one check runs on a large input and every check has a 4-second limit, so an O(n²) loop fails it.</li>\n</ul>",
+      "problemHtmlVi": "<p>Trình soạn thảo trong ô đoạn mã của CT Work gạch chân ngoặc <b>đầu tiên</b> làm vỡ cấu trúc, để sinh viên thấy khối <code>if</code> sai ở đâu trước khi bấm Chạy. Ngoặc gồm <code>()</code>, <code>[]</code>, <code>{}</code>; mọi ký tự khác bỏ qua.</p>\n<p>Viết <code>firstBadBracket(code)</code> trả về chỉ số cần gạch chân:</p>\n<ul><li>quét trái sang phải, ngoặc <b>đóng</b> đầu tiên mà không có ngoặc mở nào đang chờ, hoặc ngoặc mở chưa đóng gần nhất lại khác loại ⇒ chỉ số của nó;</li>\n<li>nếu quét hết êm nhưng còn ngoặc mở chưa đóng ⇒ chỉ số ngoặc mở chưa đóng <b>sớm nhất</b>;</li>\n<li>đoạn mã cân bằng hoàn toàn ⇒ <code>-1</code>.</li></ul>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Viết hàm trong <code>solution.js</code> và <b>trả về</b> kết quả — đừng in ra.</li>\n  <li>Không sửa mảng/object đầu vào.</li>\n  <li>Để ý ràng buộc: một kiểm chạy trên đầu vào lớn và mỗi kiểm có trần 4 giây, nên vòng lặp O(n²) sẽ trượt kiểm đó.</li>\n</ul>",
+      "inputSpec": "code — a string (0 ≤ length ≤ 2·10⁵).|||code — một chuỗi (0 ≤ độ dài ≤ 2·10⁵).",
+      "outputSpec": "An index, or -1.|||Một chỉ số, hoặc -1.",
+      "constraints": "0 ≤ code.length ≤ 200 000.\nTarget: O(n) time, O(n) memory.|||0 ≤ code.length ≤ 200 000.\nMục tiêu: O(n) thời gian, O(n) bộ nhớ.",
+      "examplesJson": [
+        {
+          "input": "firstBadBracket(\"if (a[i] > 0) { sum += a[i]; }\")",
+          "output": "-1",
+          "explanation": "The first sample case (Run executes every visible case; hidden cases only run on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy mọi ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "A closing bracket must match the opener that was opened LAST and is still open — \"last in, first out\" is a stack.|||Ngoặc đóng phải khớp ngoặc mở được mở SAU CÙNG mà vẫn còn mở — \"vào sau, ra trước\" chính là stack.",
+        "Push the <b>index</b> of each opener, not the character: you can still read the character with <code>code[index]</code>, and at the end <code>stack[0]</code> is the earliest unclosed one.|||Đẩy <b>chỉ số</b> của ngoặc mở, không đẩy ký tự: vẫn đọc được ký tự bằng <code>code[index]</code>, và cuối cùng <code>stack[0]</code> là ngoặc chưa đóng sớm nhất."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "solution.js",
+          "language": "javascript",
+          "code": "/**\n * code: string\n * returns the index of the first bracket to underline, or -1 if balanced\n */\nfunction firstBadBracket(code) {\n  // Write your solution here\n  return -1;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "solution.js",
+          "language": "javascript",
+          "code": "// Reference solution — a stack of opener INDEXES.\nfunction firstBadBracket(code) {\n  var OPEN = { ')': '(', ']': '[', '}': '{' }; // closing -> the opener it needs\n  var stack = []; // INDEXES of openers still waiting for their partner\n  for (var i = 0; i < code.length; i++) {\n    var ch = code[i];\n    if (ch === '(' || ch === '[' || ch === '{') stack.push(i);\n    else if (OPEN[ch]) {\n      // a closer must match the MOST RECENT unclosed opener — that is the top of the stack\n      if (!stack.length || code[stack[stack.length - 1]] !== OPEN[ch]) return i;\n      stack.pop();\n    }\n    // every other character (letters, quotes, spaces) is ignored\n  }\n  // leftovers: the earliest unclosed opener sits at the BOTTOM of the stack\n  return stack.length ? stack[0] : -1;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Brackets nest, so the only opener a closer may match is the most recent one still open — exactly the top of a stack. Storing indexes keeps both facts we need: the kind (via <code>code[idx]</code>) and the position for the underline. The first violation while scanning is a closer that finds an empty stack or the wrong kind on top; if none happens, the leftovers are in opening order, so the bottom <code>stack[0]</code> is the earliest. Each character is pushed and popped at most once ⇒ O(n) time, O(n) memory in the worst case (all openers).</p>",
+      "solutionExplanationHtmlVi": "<p>Ngoặc lồng nhau, nên ngoặc đóng chỉ được khớp với ngoặc mở gần nhất còn đang mở — đúng là đỉnh stack. Lưu chỉ số giữ được cả hai điều cần: loại ngoặc (qua <code>code[idx]</code>) và vị trí để gạch chân. Lỗi đầu tiên khi quét là một ngoặc đóng gặp stack rỗng hoặc đỉnh sai loại; nếu không có, phần còn lại nằm theo thứ tự mở, nên đáy <code>stack[0]</code> là sớm nhất. Mỗi ký tự được đẩy và lấy ra tối đa một lần ⇒ O(n) thời gian, O(n) bộ nhớ trường hợp xấu nhất (toàn ngoặc mở).</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "solution.js",
+        "tepNap": [
+          "solution.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Balanced ⇒ -1",
+              "vi": "Cân bằng ⇒ -1"
+            },
+            "goi": "firstBadBracket(\"if (a[i] > 0) { sum += a[i]; }\")",
+            "mongDoi": -1
+          },
+          {
+            "moTa": {
+              "en": "\")\" closes a \"[\" ⇒ 2",
+              "vi": "\")\" đóng một \"[\" ⇒ 2"
+            },
+            "goi": "firstBadBracket(\"([)]\")",
+            "mongDoi": 2
+          },
+          {
+            "moTa": {
+              "en": "Two openers never closed: report the earliest ⇒ 0",
+              "vi": "Hai ngoặc mở bị bỏ dở: báo cái sớm nhất ⇒ 0"
+            },
+            "goi": "firstBadBracket(\"((x)(\")",
+            "mongDoi": 0
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "firstBadBracket(\"\")",
+            "mongDoi": -1,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Closer with nothing open ⇒ 0",
+              "vi": "Ngoặc đóng khi chưa mở gì ⇒ 0"
+            },
+            "goi": "firstBadBracket(\"}\")",
+            "mongDoi": 0,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "firstBadBracket(\"for (i = 0; i < n; i++) { if (a[i]) { x(); } \")",
+            "mongDoi": 24,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "firstBadBracket(\"{[()()]}{\")",
+            "mongDoi": 8,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 8",
+              "vi": "Ca ẩn 8"
+            },
+            "goi": "firstBadBracket(\"a(b[c]d)e]f\")",
+            "mongDoi": 9,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Brackets inside quotes still count",
+              "vi": "Ngoặc trong nháy vẫn tính"
+            },
+            "goi": "firstBadBracket(\"\\\"(\\\" + \\\")\\\"\")",
+            "mongDoi": -1,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Performance: a 200 000-character snippet with one unclosed opener",
+              "vi": "Hiệu năng: đoạn mã 200 000 ký tự có một ngoặc mở bị bỏ dở"
+            },
+            "goi": "(function () {\nfunction __cay(a) { if (!a.length || a[0] == null) return null; var root = { val: a[0], left: null, right: null }, q = [root], h = 0, i = 1;\n  while (i < a.length) { var n = q[h++]; if (a[i] != null) { n.left = { val: a[i], left: null, right: null }; q.push(n.left); } i++;\n    if (i < a.length && a[i] != null) { n.right = { val: a[i], left: null, right: null }; q.push(n.right); } i++; } return root; }\nfunction __raCay(r) { var out = [], q = [r], h = 0; while (h < q.length) { var n = q[h++]; if (n == null) { out.push(null); continue; } out.push(n.val); q.push(n.left == null ? null : n.left, n.right == null ? null : n.right); }\n  while (out.length && out[out.length - 1] === null) out.pop(); return out; }\nfunction __ds(a) { var head = null; for (var i = a.length - 1; i >= 0; i--) head = { val: a[i], next: head }; return head; }\nfunction __raDs(h) { var out = []; while (h && out.length < 1000000) { out.push(h.val); h = h.next; } return out; }\nvar __s = 20261115; function R(m) { __s = (__s * 48271) % 2147483647; return __s % m; }\nvar P = \"([{\", Q = \")]}\", out = [], st = []; while (out.length < 199990) { var r = R(10); if (r < 4 || !st.length) { var k = R(3); st.push(k); out.push(P[k]); } else if (r < 8) out.push(Q[st.pop()]); else out.push(\"x\"); } while (st.length) out.push(Q[st.pop()]); var p = R(out.length); out.splice(p, 0, \"(\"); return firstBadBracket(out.join(\"\"));\n})()",
+            "mongDoi": 12128
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Counting each bracket type separately: <code>\"([)]\"</code> has one of each pair and looks balanced, but the <code>)</code> at index 2 closes a <code>[</code>.|||Đếm riêng từng loại ngoặc: <code>\"([)]\"</code> có đủ mỗi cặp một cái nên trông cân bằng, nhưng <code>)</code> ở chỉ số 2 lại đóng một <code>[</code>."
+        },
+        {
+          "loi": "Reporting the top of the stack at the end: for <code>\"((\"</code> that is index 1, but the bracket that was never closed FIRST is index 0.|||Báo đỉnh stack ở cuối: với <code>\"((\"</code> đó là chỉ số 1, nhưng ngoặc bị bỏ dở SỚM NHẤT là chỉ số 0."
+        },
+        {
+          "loi": "Calling <code>stack[stack.length - 1]</code> on an empty stack for an input like <code>\")\"</code> — check emptiness first.|||Đọc <code>stack[stack.length - 1]</code> khi stack rỗng với đầu vào như <code>\")\"</code> — kiểm rỗng trước."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "stack",
+          "vi": "ngăn xếp",
+          "giaiThich": "vào sau ra trước (LIFO)."
+        },
+        {
+          "en": "LIFO — last in, first out",
+          "vi": "vào sau, ra trước"
+        },
+        {
+          "en": "opener / closer",
+          "vi": "ngoặc mở / ngoặc đóng"
+        }
+      ]
+    },
+    {
+      "title": "Traffic spikes: the previous busier minute",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 20,
+      "points": 20,
+      "concepts": [
+        "monotonic stack",
+        "previous greater element"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dsa-interview",
+        "coding-interview"
+      ],
+      "problemHtml": "<p>The API gateway of the FPT course portal stores <code>counts[i]</code> = number of requests in minute <code>i</code>. When a minute looks busy, the on-call engineer asks: \"when was the last minute that was even <b>busier</b>?\" — that tells them whether this is a new peak or just a small wave.</p>\n<p>Write <code>previousHigher(counts)</code> returning an array <code>res</code> where <code>res[i]</code> is the largest index <code>j &lt; i</code> with <code>counts[j] &gt; counts[i]</code> (strictly greater), or <code>-1</code> if there is none.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Write the function in <code>solution.js</code> and <b>return</b> the answer — do not print it.</li>\n  <li>Do not modify the input arrays/objects.</li>\n  <li>Mind the constraints: one check runs on a large input and every check has a 4-second limit, so an O(n²) loop fails it.</li>\n</ul>",
+      "problemHtmlVi": "<p>Cổng API của cổng học tập FPT lưu <code>counts[i]</code> = số request trong phút <code>i</code>. Khi một phút trông đông, kỹ sư trực hỏi: \"lần gần nhất có phút còn <b>đông hơn</b> là khi nào?\" — để biết đây là đỉnh mới hay chỉ một gợn sóng nhỏ.</p>\n<p>Viết <code>previousHigher(counts)</code> trả về mảng <code>res</code> với <code>res[i]</code> là chỉ số lớn nhất <code>j &lt; i</code> có <code>counts[j] &gt; counts[i]</code> (lớn hơn hẳn), hoặc <code>-1</code> nếu không có.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Viết hàm trong <code>solution.js</code> và <b>trả về</b> kết quả — đừng in ra.</li>\n  <li>Không sửa mảng/object đầu vào.</li>\n  <li>Để ý ràng buộc: một kiểm chạy trên đầu vào lớn và mỗi kiểm có trần 4 giây, nên vòng lặp O(n²) sẽ trượt kiểm đó.</li>\n</ul>",
+      "inputSpec": "counts — array of non-negative integers.|||counts — mảng số nguyên không âm.",
+      "outputSpec": "number[] of the same length.|||number[] cùng độ dài.",
+      "constraints": "0 ≤ counts.length ≤ 200 000; 0 ≤ counts[i] ≤ 10⁹.\nTarget: O(n) time.|||0 ≤ counts.length ≤ 200 000; 0 ≤ counts[i] ≤ 10⁹.\nMục tiêu: O(n) thời gian.",
+      "examplesJson": [
+        {
+          "input": "previousHigher([120,80,95,60,200,150])",
+          "output": "[-1,0,0,2,-1,4]",
+          "explanation": "The first sample case (Run executes every visible case; hidden cases only run on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy mọi ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Walking backwards from i works, but a steadily growing traffic curve makes every walk go all the way back: O(n²). What can you forget forever?|||Đi lùi từ i thì đúng, nhưng một đường lưu lượng tăng đều làm mọi lần đi lùi chạy tới đầu mảng: O(n²). Cái gì có thể quên vĩnh viễn?",
+        "If an earlier minute j has <code>counts[j] ≤ counts[i]</code>, minute i is both later and at least as busy — j can never be the answer for anyone after i. Pop such j from a stack; the top that survives is the answer.|||Nếu phút j trước đó có <code>counts[j] ≤ counts[i]</code>, phút i vừa muộn hơn vừa đông ít nhất bằng — j không bao giờ là đáp án cho ai sau i nữa. Lấy những j đó khỏi stack; đỉnh còn lại chính là đáp án."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "solution.js",
+          "language": "javascript",
+          "code": "/**\n * counts: number[] — requests per minute\n * returns res[i] = latest j < i with counts[j] > counts[i], or -1\n */\nfunction previousHigher(counts) {\n  // Write your solution here\n  return counts.map(function () { return -1; });\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "solution.js",
+          "language": "javascript",
+          "code": "// Reference solution — monotonic (strictly decreasing) stack of indexes.\nfunction previousHigher(counts) {\n  var res = new Array(counts.length);\n  var stack = []; // indexes; their counts are strictly DECREASING from bottom to top\n  for (var i = 0; i < counts.length; i++) {\n    // anything not higher than counts[i] can never be \"the previous higher\" for i or anyone after i\n    while (stack.length && counts[stack[stack.length - 1]] <= counts[i]) stack.pop();\n    res[i] = stack.length ? stack[stack.length - 1] : -1;\n    stack.push(i);\n  }\n  return res;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The stack keeps only the minutes that can still be somebody's answer: going from bottom to top they are later and strictly less busy, so the counts are strictly decreasing — a <b>monotonic stack</b>. For minute i we pop everything not higher than it (those are dominated by i forever), and whatever is left on top is the latest strictly-higher minute. Each index is pushed once and popped at most once, so all the while-loops together run at most n times ⇒ O(n) amortised time, O(n) memory.</p>",
+      "solutionExplanationHtmlVi": "<p>Stack chỉ giữ những phút còn có thể là đáp án của ai đó: từ đáy lên đỉnh chúng muộn dần và ít đông hơn hẳn, nên số đếm giảm ngặt — một <b>monotonic stack (ngăn xếp đơn điệu)</b>. Với phút i ta lấy ra mọi phút không cao hơn nó (chúng bị i lấn át mãi mãi), cái còn lại trên đỉnh là phút gần nhất cao hơn hẳn. Mỗi chỉ số vào một lần, ra tối đa một lần, nên tất cả vòng while cộng lại chạy tối đa n lần ⇒ O(n) khấu hao, O(n) bộ nhớ.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "solution.js",
+        "tepNap": [
+          "solution.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: previousHigher([120,80,95,60,200,150])",
+              "vi": "Ca 1"
+            },
+            "goi": "previousHigher([120,80,95,60,200,150])",
+            "mongDoi": [
+              -1,
+              0,
+              0,
+              2,
+              -1,
+              4
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Equal is not busier ⇒ all -1",
+              "vi": "Bằng nhau không phải đông hơn ⇒ toàn -1"
+            },
+            "goi": "previousHigher([5,5,5])",
+            "mongDoi": [
+              -1,
+              -1,
+              -1
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "previousHigher([])",
+            "mongDoi": [],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "previousHigher([9,7,5,3,1])",
+            "mongDoi": [
+              -1,
+              0,
+              1,
+              2,
+              3
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "previousHigher([1,2,3,4,5])",
+            "mongDoi": [
+              -1,
+              -1,
+              -1,
+              -1,
+              -1
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "previousHigher([50,10,50,20,40,30,60,0])",
+            "mongDoi": [
+              -1,
+              0,
+              -1,
+              2,
+              2,
+              4,
+              -1,
+              6
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "previousHigher([0])",
+            "mongDoi": [
+              -1
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Performance: 200 000 minutes of steadily rising traffic (walking back each time is O(n²))",
+              "vi": "Hiệu năng: 200 000 phút lưu lượng tăng đều (mỗi lần đi lùi là O(n²))"
+            },
+            "goi": "(function () {\nfunction __cay(a) { if (!a.length || a[0] == null) return null; var root = { val: a[0], left: null, right: null }, q = [root], h = 0, i = 1;\n  while (i < a.length) { var n = q[h++]; if (a[i] != null) { n.left = { val: a[i], left: null, right: null }; q.push(n.left); } i++;\n    if (i < a.length && a[i] != null) { n.right = { val: a[i], left: null, right: null }; q.push(n.right); } i++; } return root; }\nfunction __raCay(r) { var out = [], q = [r], h = 0; while (h < q.length) { var n = q[h++]; if (n == null) { out.push(null); continue; } out.push(n.val); q.push(n.left == null ? null : n.left, n.right == null ? null : n.right); }\n  while (out.length && out[out.length - 1] === null) out.pop(); return out; }\nfunction __ds(a) { var head = null; for (var i = a.length - 1; i >= 0; i--) head = { val: a[i], next: head }; return head; }\nfunction __raDs(h) { var out = []; while (h && out.length < 1000000) { out.push(h.val); h = h.next; } return out; }\nvar __s = 20261115; function R(m) { __s = (__s * 48271) % 2147483647; return __s % m; }\nvar n = 200000, a = new Array(n); for (var i = 0; i < n; i++) a[i] = 3 * i + R(5); var r = previousHigher(a), s = 0, neg = 0; for (var j = 0; j < n; j++) { if (r[j] < 0) neg++; else s += r[j]; } return { length: r.length, minusOnes: neg, sumOfIndexes: s, last: r[n - 1] };\n})()",
+            "mongDoi": {
+              "length": 200000,
+              "minusOnes": 191874,
+              "sumOfIndexes": 813269043,
+              "last": -1
+            }
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Popping with <code>&lt;</code> instead of <code>&lt;=</code>: an equal minute stays on the stack and is reported as \"busier\" (for <code>[5, 5]</code> you would answer <code>[-1, 0]</code> instead of <code>[-1, -1]</code>).|||Lấy ra với <code>&lt;</code> thay vì <code>&lt;=</code>: phút bằng nhau còn nằm trên stack và bị báo là \"đông hơn\" (với <code>[5, 5]</code> sẽ ra <code>[-1, 0]</code> thay vì <code>[-1, -1]</code>)."
+        },
+        {
+          "loi": "Pushing the count instead of the index: you then know <i>how busy</i> the previous peak was but not <i>when</i>.|||Đẩy số đếm thay vì chỉ số: khi đó biết đỉnh trước <i>đông bao nhiêu</i> nhưng không biết <i>khi nào</i>."
+        },
+        {
+          "loi": "Walking backwards for every minute: fine on random data, O(n²) on a rising curve — the large check is exactly that.|||Đi lùi cho mỗi phút: ổn với dữ liệu ngẫu nhiên, O(n²) với đường tăng dần — kiểm lớn chính là trường hợp đó."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "monotonic stack",
+          "vi": "ngăn xếp đơn điệu",
+          "giaiThich": "stack mà giá trị luôn tăng (hoặc giảm) từ đáy lên đỉnh."
+        },
+        {
+          "en": "dominated",
+          "vi": "bị lấn át",
+          "giaiThich": "không bao giờ còn là đáp án tốt hơn."
+        },
+        {
+          "en": "amortised O(n)",
+          "vi": "O(n) khấu hao",
+          "giaiThich": "tổng chi phí cả lượt là O(n) dù một bước có thể tốn nhiều."
+        }
+      ]
+    },
+    {
+      "title": "Shopping cart with undo: the priciest item, instantly",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 20,
+      "points": 20,
+      "concepts": [
+        "stack",
+        "augmented stack"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dsa-interview",
+        "coding-interview"
+      ],
+      "problemHtml": "<p>The campus shop app has a cart where the only way to remove items is <b>Undo</b> (it removes the most recently added item that is still in the cart). The header shows the price of the most expensive item in the cart and must refresh instantly, even for students who build carts of thousands of stationery items.</p>\n<p>Write <code>cartMax(ops)</code>. Each op is one of <code>\"add &lt;price&gt;\"</code>, <code>\"undo\"</code> (does nothing if the cart is empty) or <code>\"max\"</code>. Return the array of answers to the <code>\"max\"</code> ops, in order — the highest price currently in the cart, or <code>null</code> if the cart is empty.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Write the function in <code>solution.js</code> and <b>return</b> the answer — do not print it.</li>\n  <li>Do not modify the input arrays/objects.</li>\n  <li>Mind the constraints: one check runs on a large input and every check has a 4-second limit, so an O(n²) loop fails it.</li>\n</ul>",
+      "problemHtmlVi": "<p>App căng-tin trường có giỏ hàng mà cách duy nhất để bỏ món là <b>Hoàn tác</b> (bỏ món được thêm gần nhất còn trong giỏ). Đầu trang hiện giá món đắt nhất trong giỏ và phải cập nhật tức thì, kể cả với sinh viên dồn hàng nghìn món văn phòng phẩm.</p>\n<p>Viết <code>cartMax(ops)</code>. Mỗi thao tác là <code>\"add &lt;giá&gt;\"</code>, <code>\"undo\"</code> (giỏ rỗng thì không làm gì) hoặc <code>\"max\"</code>. Trả về mảng câu trả lời của các thao tác <code>\"max\"</code>, theo thứ tự — giá cao nhất đang có trong giỏ, hoặc <code>null</code> nếu giỏ rỗng.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Viết hàm trong <code>solution.js</code> và <b>trả về</b> kết quả — đừng in ra.</li>\n  <li>Không sửa mảng/object đầu vào.</li>\n  <li>Để ý ràng buộc: một kiểm chạy trên đầu vào lớn và mỗi kiểm có trần 4 giây, nên vòng lặp O(n²) sẽ trượt kiểm đó.</li>\n</ul>",
+      "inputSpec": "ops — array of strings \"add P\" (P integer), \"undo\", \"max\".|||ops — mảng chuỗi \"add P\" (P nguyên), \"undo\", \"max\".",
+      "outputSpec": "(number | null)[] — one entry per \"max\".|||(number | null)[] — mỗi \"max\" một phần tử.",
+      "constraints": "0 ≤ ops.length ≤ 200 000; 1 ≤ P ≤ 10⁷.\nTarget: O(1) per op.|||0 ≤ ops.length ≤ 200 000; 1 ≤ P ≤ 10⁷.\nMục tiêu: O(1) mỗi thao tác.",
+      "examplesJson": [
+        {
+          "input": "cartMax([\"add 15000\",\"add 90000\",\"add 32000\",\"max\",\"undo\",\"max\",\"undo\",\"max\"])",
+          "output": "[90000,90000,15000]",
+          "explanation": "The first sample case (Run executes every visible case; hidden cases only run on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy mọi ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Undo always removes the LAST added item — the cart is a stack. The hard part is \"max\" after an undo: the old maximum might be the item that just left.|||Hoàn tác luôn bỏ món thêm SAU CÙNG — giỏ là một stack. Phần khó là \"max\" sau khi hoàn tác: giá cao nhất cũ có thể chính là món vừa bị bỏ.",
+        "While an item sits on top, everything below it never changes. So when you push an item, also store \"max of the cart including this item\" next to it. Undo pops both; \"max\" reads the top.|||Khi một món nằm trên đỉnh, mọi thứ bên dưới không đổi. Nên khi đẩy một món, lưu luôn \"max của giỏ tính cả món này\" bên cạnh. Hoàn tác lấy ra cả hai; \"max\" đọc đỉnh."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "solution.js",
+          "language": "javascript",
+          "code": "/**\n * ops: string[] — \"add <price>\", \"undo\", \"max\"\n * returns the answers of the \"max\" ops (null when the cart is empty)\n */\nfunction cartMax(ops) {\n  // Write your solution here\n  var best = null, out = [];\n  for (var op of ops) {\n    if (op.startsWith('add ')) best = Math.max(best || 0, Number(op.slice(4)));\n    else if (op === 'max') out.push(best);\n  }\n  return out;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "solution.js",
+          "language": "javascript",
+          "code": "// Reference solution — every stack level stores (price, max up to this level).\nfunction cartMax(ops) {\n  var stack = []; // each entry: [price, the max price of the cart at the moment this item was added]\n  var out = [];\n  for (var i = 0; i < ops.length; i++) {\n    var op = ops[i];\n    if (op === 'undo') { if (stack.length) stack.pop(); }          // undo on an empty cart does nothing\n    else if (op === 'max') out.push(stack.length ? stack[stack.length - 1][1] : null);\n    else {                                                         // \"add <price>\"\n      var price = Number(op.slice(4));\n      var best = stack.length ? Math.max(price, stack[stack.length - 1][1]) : price;\n      stack.push([price, best]); // the max BELOW never changes while this item is on top ⇒ remember it now\n    }\n  }\n  return out;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The max of a stack only changes at the top, so it can be stored per level: entry k remembers the max of entries 0..k. Push computes it from the previous level in O(1), pop simply discards the level and the level below already holds the right answer, and \"max\" reads the top. Every op is O(1), O(n) memory for the stack. This is the \"stack remembers extra facts\" pattern of the lesson (Min Stack) in a different shell.</p>",
+      "solutionExplanationHtmlVi": "<p>Max của một stack chỉ đổi ở đỉnh, nên lưu được theo từng tầng: phần tử k nhớ max của các phần tử 0..k. Đẩy tính nó từ tầng trước trong O(1), lấy ra chỉ việc bỏ tầng đó và tầng dưới đã giữ sẵn đáp án đúng, còn \"max\" đọc đỉnh. Mọi thao tác O(1), O(n) bộ nhớ cho stack. Đây là mẫu \"stack nhớ thêm thông tin\" của bài (Min Stack) trong một vỏ khác.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "solution.js",
+        "tepNap": [
+          "solution.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Undo the 90 000 item ⇒ max falls back",
+              "vi": "Hoàn tác món 90 000 ⇒ max tụt về"
+            },
+            "goi": "cartMax([\"add 15000\",\"add 90000\",\"add 32000\",\"max\",\"undo\",\"max\",\"undo\",\"max\"])",
+            "mongDoi": [
+              90000,
+              90000,
+              15000
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Empty cart ⇒ null; undo on empty does nothing",
+              "vi": "Giỏ rỗng ⇒ null; hoàn tác khi rỗng không làm gì"
+            },
+            "goi": "cartMax([\"max\",\"undo\",\"add 7000\",\"max\"])",
+            "mongDoi": [
+              null,
+              7000
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "cartMax([])",
+            "mongDoi": [],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Numbers, not strings",
+              "vi": "So số, không so chuỗi"
+            },
+            "goi": "cartMax([\"add 9\",\"add 10\",\"max\",\"undo\",\"max\"])",
+            "mongDoi": [
+              10,
+              9
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "cartMax([\"add 50\",\"add 50\",\"undo\",\"max\",\"undo\",\"max\",\"undo\",\"max\"])",
+            "mongDoi": [
+              50,
+              null,
+              null
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "cartMax([\"add 1\",\"add 2\",\"add 3\",\"undo\",\"undo\",\"add 1\",\"max\",\"add 5\",\"max\",\"undo\",\"undo\",\"undo\",\"max\"])",
+            "mongDoi": [
+              1,
+              5,
+              null
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Performance: 100 000 adds then 100 000 \"max\" queries (rescanning the cart is O(n) per query)",
+              "vi": "Hiệu năng: 100 000 lần thêm rồi 100 000 truy vấn \"max\" (quét lại giỏ là O(n) mỗi truy vấn)"
+            },
+            "goi": "(function () {\nfunction __cay(a) { if (!a.length || a[0] == null) return null; var root = { val: a[0], left: null, right: null }, q = [root], h = 0, i = 1;\n  while (i < a.length) { var n = q[h++]; if (a[i] != null) { n.left = { val: a[i], left: null, right: null }; q.push(n.left); } i++;\n    if (i < a.length && a[i] != null) { n.right = { val: a[i], left: null, right: null }; q.push(n.right); } i++; } return root; }\nfunction __raCay(r) { var out = [], q = [r], h = 0; while (h < q.length) { var n = q[h++]; if (n == null) { out.push(null); continue; } out.push(n.val); q.push(n.left == null ? null : n.left, n.right == null ? null : n.right); }\n  while (out.length && out[out.length - 1] === null) out.pop(); return out; }\nfunction __ds(a) { var head = null; for (var i = a.length - 1; i >= 0; i--) head = { val: a[i], next: head }; return head; }\nfunction __raDs(h) { var out = []; while (h && out.length < 1000000) { out.push(h.val); h = h.next; } return out; }\nvar __s = 20261115; function R(m) { __s = (__s * 48271) % 2147483647; return __s % m; }\nvar ops = []; for (var i = 0; i < 100000; i++) ops.push(\"add \" + (1 + R(10000000))); for (var j = 0; j < 100000; j++) ops.push(j % 50 === 49 ? \"undo\" : \"max\"); var r = cartMax(ops), s = 0; for (var k = 0; k < r.length; k++) s += r[k]; return { answers: r.length, sum: s, last: r[r.length - 1] };\n})()",
+            "mongDoi": {
+              "answers": 98000,
+              "sum": 979998530000,
+              "last": 9999985
+            }
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Keeping a single variable <code>maxSoFar</code>: after undoing the 90 000₫ item the header still shows 90 000₫.|||Giữ một biến <code>maxSoFar</code> duy nhất: sau khi hoàn tác món 90 000₫ đầu trang vẫn hiện 90 000₫."
+        },
+        {
+          "loi": "Recomputing <code>Math.max(...cart)</code> on every \"max\": correct, but O(n) per query — and the spread of 100 000 numbers can even throw <code>RangeError</code>.|||Tính lại <code>Math.max(...cart)</code> ở mỗi \"max\": đúng, nhưng O(n) mỗi truy vấn — và spread 100 000 số còn có thể ném <code>RangeError</code>."
+        },
+        {
+          "loi": "Comparing prices as strings: <code>\"9\" &gt; \"10\"</code>. Convert with <code>Number()</code>.|||So giá dạng chuỗi: <code>\"9\" &gt; \"10\"</code>. Đổi bằng <code>Number()</code>."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "augmented stack",
+          "vi": "stack mang thêm thông tin",
+          "giaiThich": "mỗi tầng lưu thêm một giá trị tổng hợp như max/min."
+        },
+        {
+          "en": "undo",
+          "vi": "hoàn tác"
+        },
+        {
+          "en": "O(1) per operation",
+          "vi": "O(1) mỗi thao tác"
+        }
+      ]
+    },
+    {
+      "title": "Capacity planning: the bottleneck of every stretch of days",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 35,
+      "points": 30,
+      "concepts": [
+        "monotonic stack",
+        "contribution technique"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dsa-interview",
+        "coding-interview"
+      ],
+      "problemHtml": "<p>The exam server's capacity forecast gives <code>caps[i]</code> = how many concurrent students it can serve on day <code>i</code>. A booking of the server for a <b>contiguous stretch</b> of days can only promise the <b>smallest</b> capacity in that stretch (its bottleneck). The planning team wants one number to compare forecasts: the sum of the bottleneck over <b>all</b> contiguous stretches.</p>\n<p>Write <code>sumOfBottlenecks(caps)</code> returning <code>Σ min(caps[l..r])</code> over all <code>0 ≤ l ≤ r &lt; n</code>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Write the function in <code>solution.js</code> and <b>return</b> the answer — do not print it.</li>\n  <li>Do not modify the input arrays/objects.</li>\n  <li>Mind the constraints: one check runs on a large input and every check has a 4-second limit, so an O(n²) loop fails it.</li>\n</ul>",
+      "problemHtmlVi": "<p>Dự báo sức chứa của máy chủ thi cho <code>caps[i]</code> = số sinh viên đồng thời phục vụ được ở ngày <code>i</code>. Một lần đặt máy chủ cho một <b>chuỗi ngày liên tiếp</b> chỉ hứa được sức chứa <b>nhỏ nhất</b> trong chuỗi đó (nút cổ chai). Nhóm kế hoạch muốn một con số để so các bản dự báo: tổng nút cổ chai của <b>mọi</b> chuỗi ngày liên tiếp.</p>\n<p>Viết <code>sumOfBottlenecks(caps)</code> trả về <code>Σ min(caps[l..r])</code> với mọi <code>0 ≤ l ≤ r &lt; n</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Viết hàm trong <code>solution.js</code> và <b>trả về</b> kết quả — đừng in ra.</li>\n  <li>Không sửa mảng/object đầu vào.</li>\n  <li>Để ý ràng buộc: một kiểm chạy trên đầu vào lớn và mỗi kiểm có trần 4 giây, nên vòng lặp O(n²) sẽ trượt kiểm đó.</li>\n</ul>",
+      "inputSpec": "caps — array of positive integers.|||caps — mảng số nguyên dương.",
+      "outputSpec": "A number (it fits exactly in a JS number for these limits).|||Một số (với giới hạn này vừa chính xác trong số JS).",
+      "constraints": "0 ≤ caps.length ≤ 200 000; 1 ≤ caps[i] ≤ 10⁴ (the answer stays below 2⁵³).\nTarget: O(n).|||0 ≤ caps.length ≤ 200 000; 1 ≤ caps[i] ≤ 10⁴ (đáp án luôn dưới 2⁵³).\nMục tiêu: O(n).",
+      "examplesJson": [
+        {
+          "input": "sumOfBottlenecks([3,1,2,4])",
+          "output": "17",
+          "explanation": "The first sample case (Run executes every visible case; hidden cases only run on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy mọi ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Turn the question around: instead of \"what is the min of each stretch\", ask \"for how many stretches is <code>caps[i]</code> the min?\" Then the answer is <code>Σ caps[i] × count(i)</code>.|||Lật câu hỏi: thay vì \"min của từng chuỗi là gì\", hỏi \"<code>caps[i]</code> là min của bao nhiêu chuỗi?\" Khi đó đáp án là <code>Σ caps[i] × count(i)</code>.",
+        "caps[i] is the min of [l..r] when l lies after the previous smaller value and r before the next smaller value. A monotonic stack finds both boundaries in O(n): count(i) = (i − prevSmaller) × (nextSmaller − i).|||caps[i] là min của [l..r] khi l nằm sau giá trị nhỏ hơn đứng trước và r nằm trước giá trị nhỏ hơn đứng sau. Monotonic stack tìm cả hai biên trong O(n): count(i) = (i − prevSmaller) × (nextSmaller − i).",
+        "Ties: with <code>[2, 2]</code> the stretch [0..1] must be counted ONCE. Make one side strict (&lt;) and the other non-strict (≤).|||Giá trị bằng nhau: với <code>[2, 2]</code> chuỗi [0..1] chỉ được đếm MỘT lần. Cho một phía so ngặt (&lt;), phía kia không ngặt (≤)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "solution.js",
+          "language": "javascript",
+          "code": "/**\n * caps: number[] — capacity per day\n * returns the sum of min(caps[l..r]) over all contiguous stretches l..r\n */\nfunction sumOfBottlenecks(caps) {\n  // Write your solution here\n  var total = 0;\n  for (var i = 0; i < caps.length; i++) total += caps[i];\n  return total;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "solution.js",
+          "language": "javascript",
+          "code": "// Reference solution — contribution counting with two monotonic-stack passes (ties: strict left, non-strict right).\nfunction sumOfBottlenecks(caps) {\n  var n = caps.length;\n  var left = new Array(n), right = new Array(n), st = [];\n  // left[i]: how many start positions make caps[i] the min — stop at the previous STRICTLY smaller value\n  for (var i = 0; i < n; i++) {\n    while (st.length && caps[st[st.length - 1]] >= caps[i]) st.pop();\n    left[i] = i - (st.length ? st[st.length - 1] : -1);\n    st.push(i);\n  }\n  st = [];\n  // right[i]: how many end positions — stop at the next smaller OR EQUAL value (ties belong to the leftmost one)\n  for (var j = n - 1; j >= 0; j--) {\n    while (st.length && caps[st[st.length - 1]] > caps[j]) st.pop();\n    right[j] = (st.length ? st[st.length - 1] : n) - j;\n    st.push(j);\n  }\n  var total = 0;\n  for (var k = 0; k < n; k++) total += caps[k] * left[k] * right[k]; // caps[k] is the min of left*right ranges\n  return total;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Contribution counting: every stretch has exactly one \"owner\" of its minimum if ties are broken consistently (here: the leftmost equal value owns it, because the left scan stops at a strictly smaller value and the right scan stops at a smaller-or-equal one). The owner i can start anywhere in (prevSmaller, i] and end anywhere in [i, nextSmallerOrEqual), so it owns left[i] × right[i] stretches. Both boundary arrays come from one monotonic-stack pass each — every index pushed and popped at most once ⇒ O(n) time, O(n) memory. The largest possible answer is 10⁴ × n(n+1)/2 ≈ 2·10¹⁴, below 2⁵³, so plain numbers are exact (Java: <code>long</code>).</p>",
+      "solutionExplanationHtmlVi": "<p>Đếm đóng góp: mỗi chuỗi có đúng một \"chủ\" của giá trị min nếu phá hoà nhất quán (ở đây: giá trị bằng nhau đứng trái nhất làm chủ, vì lượt quét trái dừng ở giá trị nhỏ hơn hẳn còn lượt quét phải dừng ở giá trị nhỏ hơn hoặc bằng). Chủ i có thể bắt đầu bất cứ đâu trong (prevSmaller, i] và kết thúc bất cứ đâu trong [i, nextSmallerOrEqual), nên nó làm chủ left[i] × right[i] chuỗi. Mỗi mảng biên lấy từ một lượt monotonic stack — mỗi chỉ số vào/ra tối đa một lần ⇒ O(n) thời gian, O(n) bộ nhớ. Đáp án lớn nhất là 10⁴ × n(n+1)/2 ≈ 2·10¹⁴, dưới 2⁵³, nên số thường là chính xác (Java: <code>long</code>).</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "solution.js",
+        "tepNap": [
+          "solution.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "10 stretches, bottlenecks sum to 17",
+              "vi": "10 chuỗi, tổng nút cổ chai 17"
+            },
+            "goi": "sumOfBottlenecks([3,1,2,4])",
+            "mongDoi": 17
+          },
+          {
+            "moTa": {
+              "en": "Ties: [2], [2], [2,2] ⇒ 6",
+              "vi": "Bằng nhau: [2], [2], [2,2] ⇒ 6"
+            },
+            "goi": "sumOfBottlenecks([2,2])",
+            "mongDoi": 6
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "sumOfBottlenecks([])",
+            "mongDoi": 0,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "sumOfBottlenecks([5])",
+            "mongDoi": 5,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "sumOfBottlenecks([1,2,3,4,5])",
+            "mongDoi": 35,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "sumOfBottlenecks([4,4,4,4])",
+            "mongDoi": 40,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "sumOfBottlenecks([7,3,7,3,7,1,9])",
+            "mongDoi": 78,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Performance: 200 000 days (two nested loops = 2·10¹⁰ steps)",
+              "vi": "Hiệu năng: 200 000 ngày (hai vòng lồng = 2·10¹⁰ bước)"
+            },
+            "goi": "(function () {\nfunction __cay(a) { if (!a.length || a[0] == null) return null; var root = { val: a[0], left: null, right: null }, q = [root], h = 0, i = 1;\n  while (i < a.length) { var n = q[h++]; if (a[i] != null) { n.left = { val: a[i], left: null, right: null }; q.push(n.left); } i++;\n    if (i < a.length && a[i] != null) { n.right = { val: a[i], left: null, right: null }; q.push(n.right); } i++; } return root; }\nfunction __raCay(r) { var out = [], q = [r], h = 0; while (h < q.length) { var n = q[h++]; if (n == null) { out.push(null); continue; } out.push(n.val); q.push(n.left == null ? null : n.left, n.right == null ? null : n.right); }\n  while (out.length && out[out.length - 1] === null) out.pop(); return out; }\nfunction __ds(a) { var head = null; for (var i = a.length - 1; i >= 0; i--) head = { val: a[i], next: head }; return head; }\nfunction __raDs(h) { var out = []; while (h && out.length < 1000000) { out.push(h.val); h = h.next; } return out; }\nvar __s = 20261115; function R(m) { __s = (__s * 48271) % 2147483647; return __s % m; }\nvar n = 200000, a = new Array(n); for (var i = 0; i < n; i++) a[i] = 1 + R(10000); return sumOfBottlenecks(a);\n})()",
+            "mongDoi": 38465291028
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Strict on both sides: every stretch whose minimum appears twice is counted twice (<code>[2, 2]</code> gives 8 instead of 6).|||Ngặt cả hai phía: mọi chuỗi có giá trị min xuất hiện hai lần bị đếm hai lần (<code>[2, 2]</code> ra 8 thay vì 6)."
+        },
+        {
+          "loi": "Two loops with a running minimum: O(n²) = 2·10¹⁰ steps for 200 000 days.|||Hai vòng với min chạy: O(n²) = 2·10¹⁰ bước với 200 000 ngày."
+        },
+        {
+          "loi": "Taking the result modulo 10⁹+7 out of habit from LeetCode — this task asks for the exact sum.|||Theo thói quen LeetCode mà lấy dư 10⁹+7 — đề này hỏi tổng chính xác."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "contribution technique",
+          "vi": "kỹ thuật đếm đóng góp",
+          "giaiThich": "đổi \"tổng theo đoạn\" thành \"mỗi phần tử góp bao nhiêu\"."
+        },
+        {
+          "en": "bottleneck",
+          "vi": "nút cổ chai"
+        },
+        {
+          "en": "tie-breaking",
+          "vi": "phá hoà",
+          "giaiThich": "quy tắc chọn một khi hai giá trị bằng nhau."
+        },
+        {
+          "en": "next smaller element",
+          "vi": "phần tử nhỏ hơn kế tiếp"
+        }
+      ]
+    }
+  ]
+}

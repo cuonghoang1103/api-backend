@@ -1,0 +1,781 @@
+{
+  "trackSlug": "dsa-interview-practice",
+  "moduleSlug": "dsa-3-3-linked-list",
+  "lesson": {
+    "course": "dsa-interview",
+    "slug": "dsa-3-3-linked-list"
+  },
+  "exercises": [
+    {
+      "title": "Exam registration: insert into a sorted linked list",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 15,
+      "points": 10,
+      "concepts": [
+        "linked list",
+        "dummy node"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dsa-interview",
+        "coding-interview"
+      ],
+      "problemHtml": "<p>The exam office keeps re-take registrations as a singly linked list ordered by registration number (ascending). Late registrations arrive one at a time and must be inserted <b>in place</b>, keeping the order; if the number already exists, the new node goes <b>after</b> the existing ones.</p>\n<p>Write <code>insertSorted(head, val)</code> that inserts a new node with value <code>val</code> and returns the head of the list (which changes when the new value is the smallest).</p><p>A node is <code>{ val, next }</code>; the list ends with <code>next === null</code>, and an empty list is <code>null</code>. The grader builds the list from an array, calls your function, and reads the returned list back into an array.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Write the function in <code>solution.js</code> and <b>return</b> the answer — do not print it.</li>\n  <li>Do not modify the input arrays/objects.</li>\n</ul>",
+      "problemHtmlVi": "<p>Phòng khảo thí giữ danh sách đăng ký thi lại dưới dạng danh sách liên kết đơn sắp theo số đăng ký (tăng dần). Đăng ký muộn đến từng cái một và phải được chèn <b>tại chỗ</b>, giữ thứ tự; nếu số đó đã có, nút mới đứng <b>sau</b> các nút sẵn có.</p>\n<p>Viết <code>insertSorted(head, val)</code> chèn một nút mới giá trị <code>val</code> và trả về đầu danh sách (đầu đổi khi giá trị mới là nhỏ nhất).</p><p>Một nút là <code>{ val, next }</code>; danh sách kết thúc khi <code>next === null</code>, danh sách rỗng là <code>null</code>. Máy chấm dựng danh sách từ một mảng, gọi hàm của bạn, rồi đọc danh sách trả về thành mảng.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Viết hàm trong <code>solution.js</code> và <b>trả về</b> kết quả — đừng in ra.</li>\n  <li>Không sửa mảng/object đầu vào.</li>\n</ul>",
+      "inputSpec": "head — a sorted list (or null); val — an integer.|||head — danh sách đã sắp (hoặc null); val — số nguyên.",
+      "outputSpec": "The head of the list after insertion.|||Đầu danh sách sau khi chèn.",
+      "constraints": "0 ≤ length ≤ 10⁴.\nO(n) time, O(1) extra memory — do not copy into an array.|||0 ≤ độ dài ≤ 10⁴.\nO(n) thời gian, O(1) bộ nhớ phụ — đừng chép ra mảng.",
+      "examplesJson": [
+        {
+          "input": "insertSorted(list [101,105,110], 107)",
+          "output": "[101,105,107,110]",
+          "explanation": "The first sample case (Run executes every visible case; hidden cases only run on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy mọi ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "There are three cases: empty list, insert before the head, insert somewhere after it. A <b>dummy node</b> in front of the head turns them into one case.|||Có ba trường hợp: danh sách rỗng, chèn trước đầu, chèn đâu đó phía sau. Một <b>nút giả</b> đặt trước đầu biến chúng thành một trường hợp.",
+        "Walk a pointer <code>prev</code> from the dummy while <code>prev.next.val &lt;= val</code>; then link the new node between <code>prev</code> and <code>prev.next</code>; return <code>dummy.next</code>.|||Đi con trỏ <code>prev</code> từ nút giả khi <code>prev.next.val &lt;= val</code>; rồi nối nút mới giữa <code>prev</code> và <code>prev.next</code>; trả về <code>dummy.next</code>."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "solution.js",
+          "language": "javascript",
+          "code": "/**\n * head: { val, next } | null — sorted ascending; val: number\n * returns the head after inserting a new node with value val (after any equal values)\n */\nfunction insertSorted(head, val) {\n  // Write your solution here\n  return head;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "solution.js",
+          "language": "javascript",
+          "code": "// Reference solution — dummy node, one walk.\nfunction insertSorted(head, val) {\n  var dummy = { val: 0, next: head }; // a fake node BEFORE the head: inserting at the front is no longer a special case\n  var prev = dummy;\n  // walk while the next node is <= val, so equal values keep their order (the new one goes after them)\n  while (prev.next !== null && prev.next.val <= val) prev = prev.next;\n  prev.next = { val: val, next: prev.next };\n  return dummy.next; // the head may have changed\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The dummy node guarantees every real node, including the head, has a predecessor, so \"insert after prev\" covers all positions. The loop stops at the last node whose value is ≤ val, which puts duplicates in arrival order. One walk ⇒ O(n) time, O(1) extra memory (one new node).</p>",
+      "solutionExplanationHtmlVi": "<p>Nút giả bảo đảm mọi nút thật, kể cả đầu, đều có nút đứng trước, nên \"chèn sau prev\" phủ mọi vị trí. Vòng lặp dừng ở nút cuối cùng có giá trị ≤ val, nên giá trị trùng đứng theo thứ tự đến. Một lượt đi ⇒ O(n) thời gian, O(1) bộ nhớ phụ (một nút mới).</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "solution.js",
+        "tepNap": [
+          "solution.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: insertSorted(list [101,105,110], 107)",
+              "vi": "Ca 1"
+            },
+            "goi": "(function () {\nfunction __cay(a) { if (!a.length || a[0] == null) return null; var root = { val: a[0], left: null, right: null }, q = [root], h = 0, i = 1;\n  while (i < a.length) { var n = q[h++]; if (a[i] != null) { n.left = { val: a[i], left: null, right: null }; q.push(n.left); } i++;\n    if (i < a.length && a[i] != null) { n.right = { val: a[i], left: null, right: null }; q.push(n.right); } i++; } return root; }\nfunction __raCay(r) { var out = [], q = [r], h = 0; while (h < q.length) { var n = q[h++]; if (n == null) { out.push(null); continue; } out.push(n.val); q.push(n.left == null ? null : n.left, n.right == null ? null : n.right); }\n  while (out.length && out[out.length - 1] === null) out.pop(); return out; }\nfunction __ds(a) { var head = null; for (var i = a.length - 1; i >= 0; i--) head = { val: a[i], next: head }; return head; }\nfunction __raDs(h) { var out = []; while (h && out.length < 1000000) { out.push(h.val); h = h.next; } return out; }\nreturn (__raDs(insertSorted(__ds([101,105,110]), 107)));\n})()",
+            "mongDoi": [
+              101,
+              105,
+              107,
+              110
+            ]
+          },
+          {
+            "moTa": {
+              "en": "New smallest value ⇒ new head",
+              "vi": "Giá trị nhỏ nhất mới ⇒ đầu mới"
+            },
+            "goi": "(function () {\nfunction __cay(a) { if (!a.length || a[0] == null) return null; var root = { val: a[0], left: null, right: null }, q = [root], h = 0, i = 1;\n  while (i < a.length) { var n = q[h++]; if (a[i] != null) { n.left = { val: a[i], left: null, right: null }; q.push(n.left); } i++;\n    if (i < a.length && a[i] != null) { n.right = { val: a[i], left: null, right: null }; q.push(n.right); } i++; } return root; }\nfunction __raCay(r) { var out = [], q = [r], h = 0; while (h < q.length) { var n = q[h++]; if (n == null) { out.push(null); continue; } out.push(n.val); q.push(n.left == null ? null : n.left, n.right == null ? null : n.right); }\n  while (out.length && out[out.length - 1] === null) out.pop(); return out; }\nfunction __ds(a) { var head = null; for (var i = a.length - 1; i >= 0; i--) head = { val: a[i], next: head }; return head; }\nfunction __raDs(h) { var out = []; while (h && out.length < 1000000) { out.push(h.val); h = h.next; } return out; }\nreturn (__raDs(insertSorted(__ds([101,105]), 99)));\n})()",
+            "mongDoi": [
+              99,
+              101,
+              105
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Empty list",
+              "vi": "Danh sách rỗng"
+            },
+            "goi": "(function () {\nfunction __cay(a) { if (!a.length || a[0] == null) return null; var root = { val: a[0], left: null, right: null }, q = [root], h = 0, i = 1;\n  while (i < a.length) { var n = q[h++]; if (a[i] != null) { n.left = { val: a[i], left: null, right: null }; q.push(n.left); } i++;\n    if (i < a.length && a[i] != null) { n.right = { val: a[i], left: null, right: null }; q.push(n.right); } i++; } return root; }\nfunction __raCay(r) { var out = [], q = [r], h = 0; while (h < q.length) { var n = q[h++]; if (n == null) { out.push(null); continue; } out.push(n.val); q.push(n.left == null ? null : n.left, n.right == null ? null : n.right); }\n  while (out.length && out[out.length - 1] === null) out.pop(); return out; }\nfunction __ds(a) { var head = null; for (var i = a.length - 1; i >= 0; i--) head = { val: a[i], next: head }; return head; }\nfunction __raDs(h) { var out = []; while (h && out.length < 1000000) { out.push(h.val); h = h.next; } return out; }\nreturn (__raDs(insertSorted(__ds([]), 5)));\n})()",
+            "mongDoi": [
+              5
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Insert at the end",
+              "vi": "Chèn ở cuối"
+            },
+            "goi": "(function () {\nfunction __cay(a) { if (!a.length || a[0] == null) return null; var root = { val: a[0], left: null, right: null }, q = [root], h = 0, i = 1;\n  while (i < a.length) { var n = q[h++]; if (a[i] != null) { n.left = { val: a[i], left: null, right: null }; q.push(n.left); } i++;\n    if (i < a.length && a[i] != null) { n.right = { val: a[i], left: null, right: null }; q.push(n.right); } i++; } return root; }\nfunction __raCay(r) { var out = [], q = [r], h = 0; while (h < q.length) { var n = q[h++]; if (n == null) { out.push(null); continue; } out.push(n.val); q.push(n.left == null ? null : n.left, n.right == null ? null : n.right); }\n  while (out.length && out[out.length - 1] === null) out.pop(); return out; }\nfunction __ds(a) { var head = null; for (var i = a.length - 1; i >= 0; i--) head = { val: a[i], next: head }; return head; }\nfunction __raDs(h) { var out = []; while (h && out.length < 1000000) { out.push(h.val); h = h.next; } return out; }\nreturn (__raDs(insertSorted(__ds([1,2,3]), 9)));\n})()",
+            "mongDoi": [
+              1,
+              2,
+              3,
+              9
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "(function () {\nfunction __cay(a) { if (!a.length || a[0] == null) return null; var root = { val: a[0], left: null, right: null }, q = [root], h = 0, i = 1;\n  while (i < a.length) { var n = q[h++]; if (a[i] != null) { n.left = { val: a[i], left: null, right: null }; q.push(n.left); } i++;\n    if (i < a.length && a[i] != null) { n.right = { val: a[i], left: null, right: null }; q.push(n.right); } i++; } return root; }\nfunction __raCay(r) { var out = [], q = [r], h = 0; while (h < q.length) { var n = q[h++]; if (n == null) { out.push(null); continue; } out.push(n.val); q.push(n.left == null ? null : n.left, n.right == null ? null : n.right); }\n  while (out.length && out[out.length - 1] === null) out.pop(); return out; }\nfunction __ds(a) { var head = null; for (var i = a.length - 1; i >= 0; i--) head = { val: a[i], next: head }; return head; }\nfunction __raDs(h) { var out = []; while (h && out.length < 1000000) { out.push(h.val); h = h.next; } return out; }\nreturn (__raDs(insertSorted(__ds([4,4,4]), 4)));\n})()",
+            "mongDoi": [
+              4,
+              4,
+              4,
+              4
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "(function () {\nfunction __cay(a) { if (!a.length || a[0] == null) return null; var root = { val: a[0], left: null, right: null }, q = [root], h = 0, i = 1;\n  while (i < a.length) { var n = q[h++]; if (a[i] != null) { n.left = { val: a[i], left: null, right: null }; q.push(n.left); } i++;\n    if (i < a.length && a[i] != null) { n.right = { val: a[i], left: null, right: null }; q.push(n.right); } i++; } return root; }\nfunction __raCay(r) { var out = [], q = [r], h = 0; while (h < q.length) { var n = q[h++]; if (n == null) { out.push(null); continue; } out.push(n.val); q.push(n.left == null ? null : n.left, n.right == null ? null : n.right); }\n  while (out.length && out[out.length - 1] === null) out.pop(); return out; }\nfunction __ds(a) { var head = null; for (var i = a.length - 1; i >= 0; i--) head = { val: a[i], next: head }; return head; }\nfunction __raDs(h) { var out = []; while (h && out.length < 1000000) { out.push(h.val); h = h.next; } return out; }\nreturn (__raDs(insertSorted(__ds([-5,0,5]), -1)));\n})()",
+            "mongDoi": [
+              -5,
+              -1,
+              0,
+              5
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "(function () {\nfunction __cay(a) { if (!a.length || a[0] == null) return null; var root = { val: a[0], left: null, right: null }, q = [root], h = 0, i = 1;\n  while (i < a.length) { var n = q[h++]; if (a[i] != null) { n.left = { val: a[i], left: null, right: null }; q.push(n.left); } i++;\n    if (i < a.length && a[i] != null) { n.right = { val: a[i], left: null, right: null }; q.push(n.right); } i++; } return root; }\nfunction __raCay(r) { var out = [], q = [r], h = 0; while (h < q.length) { var n = q[h++]; if (n == null) { out.push(null); continue; } out.push(n.val); q.push(n.left == null ? null : n.left, n.right == null ? null : n.right); }\n  while (out.length && out[out.length - 1] === null) out.pop(); return out; }\nfunction __ds(a) { var head = null; for (var i = a.length - 1; i >= 0; i--) head = { val: a[i], next: head }; return head; }\nfunction __raDs(h) { var out = []; while (h && out.length < 1000000) { out.push(h.val); h = h.next; } return out; }\nreturn (__raDs(insertSorted(__ds([7]), 7)));\n})()",
+            "mongDoi": [
+              7,
+              7
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Returning the old <code>head</code> unconditionally: when <code>val</code> is the smallest the new node is lost.|||Luôn trả về <code>head</code> cũ: khi <code>val</code> nhỏ nhất thì nút mới bị mất."
+        },
+        {
+          "loi": "Reading <code>cur.next.val</code> without checking <code>cur.next !== null</code> ⇒ <code>TypeError</code> when inserting at the end or into an empty list.|||Đọc <code>cur.next.val</code> mà không kiểm <code>cur.next !== null</code> ⇒ <code>TypeError</code> khi chèn ở cuối hoặc vào danh sách rỗng."
+        },
+        {
+          "loi": "Overwriting <code>prev.next</code> before saving it: the rest of the list is cut off. Create the node as <code>{ val, next: prev.next }</code> first.|||Ghi đè <code>prev.next</code> trước khi giữ lại nó: phần còn lại của danh sách bị cắt mất. Tạo nút <code>{ val, next: prev.next }</code> trước."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "dummy (sentinel) node",
+          "vi": "nút giả (lính canh)",
+          "giaiThich": "nút đặt trước đầu để mọi nút đều có nút đứng trước."
+        },
+        {
+          "en": "singly linked list",
+          "vi": "danh sách liên kết đơn"
+        },
+        {
+          "en": "in place",
+          "vi": "tại chỗ",
+          "giaiThich": "sửa liên kết, không dựng cấu trúc mới."
+        }
+      ]
+    },
+    {
+      "title": "Playlist: move the last k songs to the front",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 20,
+      "points": 20,
+      "concepts": [
+        "linked list",
+        "rotation"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dsa-interview",
+        "coding-interview"
+      ],
+      "problemHtml": "<p>The campus radio stores tonight's playlist as a singly linked list. The DJ wants the last <code>k</code> songs moved to the front, in the same order (a \"rotation\"). <code>k</code> comes from a slider and can be much larger than the playlist — rotating by the list length gives the same playlist back.</p>\n<p>Write <code>moveLastToFront(head, k)</code> that does this by <b>relinking</b> nodes and returns the new head.</p><p>A node is <code>{ val, next }</code>; the list ends with <code>next === null</code>, and an empty list is <code>null</code>. The grader builds the list from an array, calls your function, and reads the returned list back into an array.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Write the function in <code>solution.js</code> and <b>return</b> the answer — do not print it.</li>\n  <li>Do not modify the input arrays/objects.</li>\n  <li>Mind the constraints: one check runs on a large input and every check has a 4-second limit, so an O(n²) loop fails it.</li>\n</ul>",
+      "problemHtmlVi": "<p>Đài phát thanh của trường lưu playlist tối nay dưới dạng danh sách liên kết đơn. DJ muốn đưa <code>k</code> bài cuối lên đầu, giữ nguyên thứ tự (một phép \"xoay\"). <code>k</code> lấy từ một thanh trượt và có thể lớn hơn nhiều so với playlist — xoay đúng bằng độ dài danh sách thì ra lại playlist cũ.</p>\n<p>Viết <code>moveLastToFront(head, k)</code> làm việc đó bằng cách <b>nối lại</b> các nút và trả về đầu mới.</p><p>Một nút là <code>{ val, next }</code>; danh sách kết thúc khi <code>next === null</code>, danh sách rỗng là <code>null</code>. Máy chấm dựng danh sách từ một mảng, gọi hàm của bạn, rồi đọc danh sách trả về thành mảng.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Viết hàm trong <code>solution.js</code> và <b>trả về</b> kết quả — đừng in ra.</li>\n  <li>Không sửa mảng/object đầu vào.</li>\n  <li>Để ý ràng buộc: một kiểm chạy trên đầu vào lớn và mỗi kiểm có trần 4 giây, nên vòng lặp O(n²) sẽ trượt kiểm đó.</li>\n</ul>",
+      "inputSpec": "head — a list (or null); k — integer ≥ 0.|||head — danh sách (hoặc null); k — số nguyên ≥ 0.",
+      "outputSpec": "The new head.|||Đầu mới.",
+      "constraints": "0 ≤ length ≤ 200 000; 0 ≤ k ≤ 2·10⁹.\nTarget: O(n) time, O(1) extra memory.|||0 ≤ độ dài ≤ 200 000; 0 ≤ k ≤ 2·10⁹.\nMục tiêu: O(n) thời gian, O(1) bộ nhớ phụ.",
+      "examplesJson": [
+        {
+          "input": "moveLastToFront(list [\"intro\",\"song A\",\"song B\",\"song C\",\"outro\"], 2)",
+          "output": "[\"song C\",\"outro\",\"intro\",\"song A\",\"song B\"]",
+          "explanation": "The first sample case (Run executes every visible case; hidden cases only run on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy mọi ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Rotating one song at a time is k walks to the tail. Instead: how many songs stay at the back? <code>n − (k mod n)</code>.|||Xoay từng bài một là k lần đi tới đuôi. Thay vào đó: bao nhiêu bài ở lại phía sau? <code>n − (k mod n)</code>.",
+        "One pass finds n and the tail. Reduce <code>k %= n</code> (0 ⇒ unchanged). Walk to node number n − k: it becomes the new tail, its <code>next</code> is the new head; cut there and attach the old tail to the old head.|||Một lượt tìm n và đuôi. Rút gọn <code>k %= n</code> (0 ⇒ giữ nguyên). Đi tới nút thứ n − k: nó thành đuôi mới, <code>next</code> của nó là đầu mới; cắt ở đó và nối đuôi cũ vào đầu cũ."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "solution.js",
+          "language": "javascript",
+          "code": "/**\n * head: { val, next } | null, k: number\n * returns the new head after moving the last k nodes to the front\n */\nfunction moveLastToFront(head, k) {\n  // Write your solution here\n  return head;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "solution.js",
+          "language": "javascript",
+          "code": "// Reference solution — length + tail in one pass, k %= n, cut once, glue once.\nfunction moveLastToFront(head, k) {\n  if (head === null) return null;\n  var n = 1, tail = head;\n  while (tail.next !== null) { tail = tail.next; n++; } // one pass: length + tail\n  k = k % n;                                           // k may be far larger than the list\n  if (k === 0) return head;\n  var newTail = head;\n  for (var i = 1; i < n - k; i++) newTail = newTail.next; // the (n-k)-th node becomes the new tail\n  var newHead = newTail.next;\n  newTail.next = null; // cut…\n  tail.next = head;    // …and glue the old tail to the old head\n  return newHead;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>A rotation by k is one cut and one glue: the last k nodes keep their order and the first n − k keep theirs. After reducing k modulo n (rotating by n is the identity) we need the node at position n − k, which takes at most one more walk. Total two passes ⇒ O(n) time, O(1) extra memory, no node is copied. The step-by-step version costs O(n) per song moved ⇒ O(n·k).</p>",
+      "solutionExplanationHtmlVi": "<p>Xoay k là một lần cắt và một lần nối: k nút cuối giữ thứ tự của chúng, n − k nút đầu giữ thứ tự của chúng. Sau khi rút k modulo n (xoay n là giữ nguyên) ta cần nút ở vị trí n − k, tốn thêm tối đa một lượt đi. Tổng hai lượt ⇒ O(n) thời gian, O(1) bộ nhớ phụ, không chép nút nào. Bản xoay từng bước tốn O(n) cho mỗi bài được chuyển ⇒ O(n·k).</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "solution.js",
+        "tepNap": [
+          "solution.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: moveLastToFront(list [\"intro\",\"song A\",\"song B\",\"song C\",\"outro\"], 2)",
+              "vi": "Ca 1"
+            },
+            "goi": "(function () {\nfunction __cay(a) { if (!a.length || a[0] == null) return null; var root = { val: a[0], left: null, right: null }, q = [root], h = 0, i = 1;\n  while (i < a.length) { var n = q[h++]; if (a[i] != null) { n.left = { val: a[i], left: null, right: null }; q.push(n.left); } i++;\n    if (i < a.length && a[i] != null) { n.right = { val: a[i], left: null, right: null }; q.push(n.right); } i++; } return root; }\nfunction __raCay(r) { var out = [], q = [r], h = 0; while (h < q.length) { var n = q[h++]; if (n == null) { out.push(null); continue; } out.push(n.val); q.push(n.left == null ? null : n.left, n.right == null ? null : n.right); }\n  while (out.length && out[out.length - 1] === null) out.pop(); return out; }\nfunction __ds(a) { var head = null; for (var i = a.length - 1; i >= 0; i--) head = { val: a[i], next: head }; return head; }\nfunction __raDs(h) { var out = []; while (h && out.length < 1000000) { out.push(h.val); h = h.next; } return out; }\nreturn (__raDs(moveLastToFront(__ds([\"intro\",\"song A\",\"song B\",\"song C\",\"outro\"]), 2)));\n})()",
+            "mongDoi": [
+              "song C",
+              "outro",
+              "intro",
+              "song A",
+              "song B"
+            ]
+          },
+          {
+            "moTa": {
+              "en": "k larger than the playlist (7 % 3 = 1)",
+              "vi": "k lớn hơn playlist (7 % 3 = 1)"
+            },
+            "goi": "(function () {\nfunction __cay(a) { if (!a.length || a[0] == null) return null; var root = { val: a[0], left: null, right: null }, q = [root], h = 0, i = 1;\n  while (i < a.length) { var n = q[h++]; if (a[i] != null) { n.left = { val: a[i], left: null, right: null }; q.push(n.left); } i++;\n    if (i < a.length && a[i] != null) { n.right = { val: a[i], left: null, right: null }; q.push(n.right); } i++; } return root; }\nfunction __raCay(r) { var out = [], q = [r], h = 0; while (h < q.length) { var n = q[h++]; if (n == null) { out.push(null); continue; } out.push(n.val); q.push(n.left == null ? null : n.left, n.right == null ? null : n.right); }\n  while (out.length && out[out.length - 1] === null) out.pop(); return out; }\nfunction __ds(a) { var head = null; for (var i = a.length - 1; i >= 0; i--) head = { val: a[i], next: head }; return head; }\nfunction __raDs(h) { var out = []; while (h && out.length < 1000000) { out.push(h.val); h = h.next; } return out; }\nreturn (__raDs(moveLastToFront(__ds([1,2,3]), 7)));\n})()",
+            "mongDoi": [
+              3,
+              1,
+              2
+            ]
+          },
+          {
+            "moTa": {
+              "en": "k = 0 ⇒ unchanged",
+              "vi": "k = 0 ⇒ giữ nguyên"
+            },
+            "goi": "(function () {\nfunction __cay(a) { if (!a.length || a[0] == null) return null; var root = { val: a[0], left: null, right: null }, q = [root], h = 0, i = 1;\n  while (i < a.length) { var n = q[h++]; if (a[i] != null) { n.left = { val: a[i], left: null, right: null }; q.push(n.left); } i++;\n    if (i < a.length && a[i] != null) { n.right = { val: a[i], left: null, right: null }; q.push(n.right); } i++; } return root; }\nfunction __raCay(r) { var out = [], q = [r], h = 0; while (h < q.length) { var n = q[h++]; if (n == null) { out.push(null); continue; } out.push(n.val); q.push(n.left == null ? null : n.left, n.right == null ? null : n.right); }\n  while (out.length && out[out.length - 1] === null) out.pop(); return out; }\nfunction __ds(a) { var head = null; for (var i = a.length - 1; i >= 0; i--) head = { val: a[i], next: head }; return head; }\nfunction __raDs(h) { var out = []; while (h && out.length < 1000000) { out.push(h.val); h = h.next; } return out; }\nreturn (__raDs(moveLastToFront(__ds([1,2,3]), 0)));\n})()",
+            "mongDoi": [
+              1,
+              2,
+              3
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "(function () {\nfunction __cay(a) { if (!a.length || a[0] == null) return null; var root = { val: a[0], left: null, right: null }, q = [root], h = 0, i = 1;\n  while (i < a.length) { var n = q[h++]; if (a[i] != null) { n.left = { val: a[i], left: null, right: null }; q.push(n.left); } i++;\n    if (i < a.length && a[i] != null) { n.right = { val: a[i], left: null, right: null }; q.push(n.right); } i++; } return root; }\nfunction __raCay(r) { var out = [], q = [r], h = 0; while (h < q.length) { var n = q[h++]; if (n == null) { out.push(null); continue; } out.push(n.val); q.push(n.left == null ? null : n.left, n.right == null ? null : n.right); }\n  while (out.length && out[out.length - 1] === null) out.pop(); return out; }\nfunction __ds(a) { var head = null; for (var i = a.length - 1; i >= 0; i--) head = { val: a[i], next: head }; return head; }\nfunction __raDs(h) { var out = []; while (h && out.length < 1000000) { out.push(h.val); h = h.next; } return out; }\nreturn (__raDs(moveLastToFront(__ds([]), 5)));\n})()",
+            "mongDoi": [],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "k = n ⇒ unchanged",
+              "vi": "k = n ⇒ giữ nguyên"
+            },
+            "goi": "(function () {\nfunction __cay(a) { if (!a.length || a[0] == null) return null; var root = { val: a[0], left: null, right: null }, q = [root], h = 0, i = 1;\n  while (i < a.length) { var n = q[h++]; if (a[i] != null) { n.left = { val: a[i], left: null, right: null }; q.push(n.left); } i++;\n    if (i < a.length && a[i] != null) { n.right = { val: a[i], left: null, right: null }; q.push(n.right); } i++; } return root; }\nfunction __raCay(r) { var out = [], q = [r], h = 0; while (h < q.length) { var n = q[h++]; if (n == null) { out.push(null); continue; } out.push(n.val); q.push(n.left == null ? null : n.left, n.right == null ? null : n.right); }\n  while (out.length && out[out.length - 1] === null) out.pop(); return out; }\nfunction __ds(a) { var head = null; for (var i = a.length - 1; i >= 0; i--) head = { val: a[i], next: head }; return head; }\nfunction __raDs(h) { var out = []; while (h && out.length < 1000000) { out.push(h.val); h = h.next; } return out; }\nreturn (__raDs(moveLastToFront(__ds([1,2,3,4]), 4)));\n})()",
+            "mongDoi": [
+              1,
+              2,
+              3,
+              4
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "(function () {\nfunction __cay(a) { if (!a.length || a[0] == null) return null; var root = { val: a[0], left: null, right: null }, q = [root], h = 0, i = 1;\n  while (i < a.length) { var n = q[h++]; if (a[i] != null) { n.left = { val: a[i], left: null, right: null }; q.push(n.left); } i++;\n    if (i < a.length && a[i] != null) { n.right = { val: a[i], left: null, right: null }; q.push(n.right); } i++; } return root; }\nfunction __raCay(r) { var out = [], q = [r], h = 0; while (h < q.length) { var n = q[h++]; if (n == null) { out.push(null); continue; } out.push(n.val); q.push(n.left == null ? null : n.left, n.right == null ? null : n.right); }\n  while (out.length && out[out.length - 1] === null) out.pop(); return out; }\nfunction __ds(a) { var head = null; for (var i = a.length - 1; i >= 0; i--) head = { val: a[i], next: head }; return head; }\nfunction __raDs(h) { var out = []; while (h && out.length < 1000000) { out.push(h.val); h = h.next; } return out; }\nreturn (__raDs(moveLastToFront(__ds([9]), 1000000000)));\n})()",
+            "mongDoi": [
+              9
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Huge k",
+              "vi": "k rất lớn"
+            },
+            "goi": "(function () {\nfunction __cay(a) { if (!a.length || a[0] == null) return null; var root = { val: a[0], left: null, right: null }, q = [root], h = 0, i = 1;\n  while (i < a.length) { var n = q[h++]; if (a[i] != null) { n.left = { val: a[i], left: null, right: null }; q.push(n.left); } i++;\n    if (i < a.length && a[i] != null) { n.right = { val: a[i], left: null, right: null }; q.push(n.right); } i++; } return root; }\nfunction __raCay(r) { var out = [], q = [r], h = 0; while (h < q.length) { var n = q[h++]; if (n == null) { out.push(null); continue; } out.push(n.val); q.push(n.left == null ? null : n.left, n.right == null ? null : n.right); }\n  while (out.length && out[out.length - 1] === null) out.pop(); return out; }\nfunction __ds(a) { var head = null; for (var i = a.length - 1; i >= 0; i--) head = { val: a[i], next: head }; return head; }\nfunction __raDs(h) { var out = []; while (h && out.length < 1000000) { out.push(h.val); h = h.next; } return out; }\nreturn (__raDs(moveLastToFront(__ds([1,2,3,4,5,6]), 2000000001)));\n})()",
+            "mongDoi": [
+              4,
+              5,
+              6,
+              1,
+              2,
+              3
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 8",
+              "vi": "Ca ẩn 8"
+            },
+            "goi": "(function () {\nfunction __cay(a) { if (!a.length || a[0] == null) return null; var root = { val: a[0], left: null, right: null }, q = [root], h = 0, i = 1;\n  while (i < a.length) { var n = q[h++]; if (a[i] != null) { n.left = { val: a[i], left: null, right: null }; q.push(n.left); } i++;\n    if (i < a.length && a[i] != null) { n.right = { val: a[i], left: null, right: null }; q.push(n.right); } i++; } return root; }\nfunction __raCay(r) { var out = [], q = [r], h = 0; while (h < q.length) { var n = q[h++]; if (n == null) { out.push(null); continue; } out.push(n.val); q.push(n.left == null ? null : n.left, n.right == null ? null : n.right); }\n  while (out.length && out[out.length - 1] === null) out.pop(); return out; }\nfunction __ds(a) { var head = null; for (var i = a.length - 1; i >= 0; i--) head = { val: a[i], next: head }; return head; }\nfunction __raDs(h) { var out = []; while (h && out.length < 1000000) { out.push(h.val); h = h.next; } return out; }\nreturn (__raDs(moveLastToFront(__ds([1,2]), 1)));\n})()",
+            "mongDoi": [
+              2,
+              1
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Performance: 200 000 songs, k = 100 000 (rotating one song at a time is O(n·k))",
+              "vi": "Hiệu năng: 200 000 bài, k = 100 000 (xoay từng bài là O(n·k))"
+            },
+            "goi": "(function () {\nfunction __cay(a) { if (!a.length || a[0] == null) return null; var root = { val: a[0], left: null, right: null }, q = [root], h = 0, i = 1;\n  while (i < a.length) { var n = q[h++]; if (a[i] != null) { n.left = { val: a[i], left: null, right: null }; q.push(n.left); } i++;\n    if (i < a.length && a[i] != null) { n.right = { val: a[i], left: null, right: null }; q.push(n.right); } i++; } return root; }\nfunction __raCay(r) { var out = [], q = [r], h = 0; while (h < q.length) { var n = q[h++]; if (n == null) { out.push(null); continue; } out.push(n.val); q.push(n.left == null ? null : n.left, n.right == null ? null : n.right); }\n  while (out.length && out[out.length - 1] === null) out.pop(); return out; }\nfunction __ds(a) { var head = null; for (var i = a.length - 1; i >= 0; i--) head = { val: a[i], next: head }; return head; }\nfunction __raDs(h) { var out = []; while (h && out.length < 1000000) { out.push(h.val); h = h.next; } return out; }\nvar __s = 20261115; function R(m) { __s = (__s * 48271) % 2147483647; return __s % m; }\nvar n = 200000, a = new Array(n); for (var i = 0; i < n; i++) a[i] = i; var r = __raDs(moveLastToFront(__ds(a), 100000 + 3 * n)), s = 0; for (var j = 0; j < r.length; j += 1000) s += r[j] * (j + 1); return { length: r.length, first: r.slice(0, 3), last: r[r.length - 1], checksum: s };\n})()",
+            "mongDoi": {
+              "length": 200000,
+              "first": [
+                100000,
+                100001,
+                100002
+              ],
+              "last": 99999,
+              "checksum": 1646719900000
+            }
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Forgetting <code>k %= n</code>: with k = 2·10⁹ the \"walk n − k steps\" goes negative, or a step-by-step loop runs two billion times.|||Quên <code>k %= n</code>: với k = 2·10⁹ thì \"đi n − k bước\" thành số âm, hoặc vòng xoay từng bước chạy hai tỉ lần."
+        },
+        {
+          "loi": "Not cutting <code>newTail.next = null</code>: the list becomes a cycle and anything that walks it never ends.|||Không cắt <code>newTail.next = null</code>: danh sách thành vòng và mọi thứ đi trên nó chạy mãi."
+        },
+        {
+          "loi": "Off-by-one when walking to the new tail (n − k nodes, i.e. n − k − 1 steps from the head): the playlist is rotated by k ± 1.|||Lệch một khi đi tới đuôi mới (n − k nút, tức n − k − 1 bước từ đầu): playlist bị xoay k ± 1."
+        },
+        {
+          "loi": "Rotating one song per step (walk to the tail, move it to the front) k mod n times: O(n·k) — the 200 000-song check times out.|||Xoay từng bài (đi tới đuôi, đưa lên đầu) k mod n lần: O(n·k) — kiểm 200 000 bài hết giờ."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "rotate",
+          "vi": "xoay"
+        },
+        {
+          "en": "tail",
+          "vi": "đuôi (nút cuối)"
+        },
+        {
+          "en": "relink",
+          "vi": "nối lại liên kết"
+        },
+        {
+          "en": "cycle",
+          "vi": "vòng (chu trình)"
+        }
+      ]
+    },
+    {
+      "title": "Help desk: urgent tickets first, order kept",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 20,
+      "points": 20,
+      "concepts": [
+        "linked list",
+        "stable partition",
+        "dummy node"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dsa-interview",
+        "coding-interview"
+      ],
+      "problemHtml": "<p>The IT help desk queue is a linked list of ticket priority numbers (smaller = more urgent). Before the morning stand-up, every ticket with priority <b>below</b> <code>x</code> must move ahead of the others. Inside each part the original order must stay the same — people who reported first are served first.</p>\n<p>Write <code>priorityFirst(head, x)</code> that rearranges the <b>existing nodes</b> and returns the new head.</p><p>A node is <code>{ val, next }</code>; the list ends with <code>next === null</code>, and an empty list is <code>null</code>. The grader builds the list from an array, calls your function, and reads the returned list back into an array.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Write the function in <code>solution.js</code> and <b>return</b> the answer — do not print it.</li>\n  <li>Do not modify the input arrays/objects.</li>\n</ul>",
+      "problemHtmlVi": "<p>Hàng đợi bộ phận hỗ trợ IT là danh sách liên kết các số ưu tiên của phiếu (số nhỏ = gấp hơn). Trước buổi họp sáng, mọi phiếu có ưu tiên <b>nhỏ hơn</b> <code>x</code> phải lên trước các phiếu còn lại. Trong mỗi phần, thứ tự ban đầu giữ nguyên — ai báo trước được xử lý trước.</p>\n<p>Viết <code>priorityFirst(head, x)</code> sắp lại <b>các nút có sẵn</b> và trả về đầu mới.</p><p>Một nút là <code>{ val, next }</code>; danh sách kết thúc khi <code>next === null</code>, danh sách rỗng là <code>null</code>. Máy chấm dựng danh sách từ một mảng, gọi hàm của bạn, rồi đọc danh sách trả về thành mảng.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Viết hàm trong <code>solution.js</code> và <b>trả về</b> kết quả — đừng in ra.</li>\n  <li>Không sửa mảng/object đầu vào.</li>\n</ul>",
+      "inputSpec": "head — a list (or null); x — an integer.|||head — danh sách (hoặc null); x — số nguyên.",
+      "outputSpec": "The new head.|||Đầu mới.",
+      "constraints": "0 ≤ length ≤ 200 000.\nO(n) time, O(1) extra memory.|||0 ≤ độ dài ≤ 200 000.\nO(n) thời gian, O(1) bộ nhớ phụ.",
+      "examplesJson": [
+        {
+          "input": "priorityFirst(list [4,1,3,2,5,2], 3)",
+          "output": "[1,2,2,4,3,5]",
+          "explanation": "The first sample case (Run executes every visible case; hidden cases only run on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy mọi ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Build two separate lists while you walk: \"urgent\" and \"the rest\". Two dummy heads make the first append easy.|||Vừa đi vừa dựng hai danh sách riêng: \"gấp\" và \"còn lại\". Hai nút giả làm lần thêm đầu tiên dễ dàng.",
+        "Always append at the TAIL of each list (keep a tail pointer) — that is what keeps the order. At the end set the last node of \"the rest\" to <code>null</code> and glue the two lists.|||Luôn thêm vào ĐUÔI mỗi danh sách (giữ con trỏ đuôi) — chính điều đó giữ thứ tự. Cuối cùng đặt nút cuối của \"còn lại\" trỏ <code>null</code> rồi nối hai danh sách."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "solution.js",
+          "language": "javascript",
+          "code": "/**\n * head: { val, next } | null, x: number\n * returns the head after moving every node with val < x before the others (stable)\n */\nfunction priorityFirst(head, x) {\n  // Write your solution here\n  return head;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "solution.js",
+          "language": "javascript",
+          "code": "// Reference solution — two dummy-headed lists appended at the tail, then glued.\nfunction priorityFirst(head, x) {\n  var lowDummy = { val: 0, next: null }, highDummy = { val: 0, next: null };\n  var low = lowDummy, high = highDummy; // tails of the two lists being built\n  for (var cur = head; cur !== null; cur = cur.next) {\n    if (cur.val < x) { low.next = cur; low = cur; }   // append at the TAIL ⇒ relative order is kept\n    else { high.next = cur; high = cur; }\n  }\n  high.next = null;         // the last \"high\" node may still point into the old list — cut it, or you get a cycle\n  low.next = highDummy.next; // glue: all urgent tickets, then the rest\n  return lowDummy.next;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Every node is visited once and appended to the tail of exactly one of two lists, so each list keeps the original relative order (a stable partition). The dummies remove the \"first node of a list\" special case; cutting the tail of the second list prevents a cycle, because that node's old <code>next</code> may point to a node that moved. O(n) time, O(1) extra memory — no new nodes.</p>",
+      "solutionExplanationHtmlVi": "<p>Mỗi nút được thăm một lần và gắn vào đuôi đúng một trong hai danh sách, nên mỗi danh sách giữ thứ tự tương đối ban đầu (tách ổn định). Nút giả bỏ trường hợp đặc biệt \"nút đầu của danh sách\"; cắt đuôi danh sách thứ hai chặn vòng lặp, vì <code>next</code> cũ của nút đó có thể trỏ tới một nút đã bị chuyển đi. O(n) thời gian, O(1) bộ nhớ phụ — không tạo nút mới.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "solution.js",
+        "tepNap": [
+          "solution.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: priorityFirst(list [4,1,3,2,5,2], 3)",
+              "vi": "Ca 1"
+            },
+            "goi": "(function () {\nfunction __cay(a) { if (!a.length || a[0] == null) return null; var root = { val: a[0], left: null, right: null }, q = [root], h = 0, i = 1;\n  while (i < a.length) { var n = q[h++]; if (a[i] != null) { n.left = { val: a[i], left: null, right: null }; q.push(n.left); } i++;\n    if (i < a.length && a[i] != null) { n.right = { val: a[i], left: null, right: null }; q.push(n.right); } i++; } return root; }\nfunction __raCay(r) { var out = [], q = [r], h = 0; while (h < q.length) { var n = q[h++]; if (n == null) { out.push(null); continue; } out.push(n.val); q.push(n.left == null ? null : n.left, n.right == null ? null : n.right); }\n  while (out.length && out[out.length - 1] === null) out.pop(); return out; }\nfunction __ds(a) { var head = null; for (var i = a.length - 1; i >= 0; i--) head = { val: a[i], next: head }; return head; }\nfunction __raDs(h) { var out = []; while (h && out.length < 1000000) { out.push(h.val); h = h.next; } return out; }\nreturn (__raDs(priorityFirst(__ds([4,1,3,2,5,2]), 3)));\n})()",
+            "mongDoi": [
+              1,
+              2,
+              2,
+              4,
+              3,
+              5
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Order inside each part is kept",
+              "vi": "Thứ tự trong mỗi phần giữ nguyên"
+            },
+            "goi": "(function () {\nfunction __cay(a) { if (!a.length || a[0] == null) return null; var root = { val: a[0], left: null, right: null }, q = [root], h = 0, i = 1;\n  while (i < a.length) { var n = q[h++]; if (a[i] != null) { n.left = { val: a[i], left: null, right: null }; q.push(n.left); } i++;\n    if (i < a.length && a[i] != null) { n.right = { val: a[i], left: null, right: null }; q.push(n.right); } i++; } return root; }\nfunction __raCay(r) { var out = [], q = [r], h = 0; while (h < q.length) { var n = q[h++]; if (n == null) { out.push(null); continue; } out.push(n.val); q.push(n.left == null ? null : n.left, n.right == null ? null : n.right); }\n  while (out.length && out[out.length - 1] === null) out.pop(); return out; }\nfunction __ds(a) { var head = null; for (var i = a.length - 1; i >= 0; i--) head = { val: a[i], next: head }; return head; }\nfunction __raDs(h) { var out = []; while (h && out.length < 1000000) { out.push(h.val); h = h.next; } return out; }\nreturn (__raDs(priorityFirst(__ds([5,1,2]), 3)));\n})()",
+            "mongDoi": [
+              1,
+              2,
+              5
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "(function () {\nfunction __cay(a) { if (!a.length || a[0] == null) return null; var root = { val: a[0], left: null, right: null }, q = [root], h = 0, i = 1;\n  while (i < a.length) { var n = q[h++]; if (a[i] != null) { n.left = { val: a[i], left: null, right: null }; q.push(n.left); } i++;\n    if (i < a.length && a[i] != null) { n.right = { val: a[i], left: null, right: null }; q.push(n.right); } i++; } return root; }\nfunction __raCay(r) { var out = [], q = [r], h = 0; while (h < q.length) { var n = q[h++]; if (n == null) { out.push(null); continue; } out.push(n.val); q.push(n.left == null ? null : n.left, n.right == null ? null : n.right); }\n  while (out.length && out[out.length - 1] === null) out.pop(); return out; }\nfunction __ds(a) { var head = null; for (var i = a.length - 1; i >= 0; i--) head = { val: a[i], next: head }; return head; }\nfunction __raDs(h) { var out = []; while (h && out.length < 1000000) { out.push(h.val); h = h.next; } return out; }\nreturn (__raDs(priorityFirst(__ds([]), 3)));\n})()",
+            "mongDoi": [],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Everything urgent",
+              "vi": "Tất cả đều gấp"
+            },
+            "goi": "(function () {\nfunction __cay(a) { if (!a.length || a[0] == null) return null; var root = { val: a[0], left: null, right: null }, q = [root], h = 0, i = 1;\n  while (i < a.length) { var n = q[h++]; if (a[i] != null) { n.left = { val: a[i], left: null, right: null }; q.push(n.left); } i++;\n    if (i < a.length && a[i] != null) { n.right = { val: a[i], left: null, right: null }; q.push(n.right); } i++; } return root; }\nfunction __raCay(r) { var out = [], q = [r], h = 0; while (h < q.length) { var n = q[h++]; if (n == null) { out.push(null); continue; } out.push(n.val); q.push(n.left == null ? null : n.left, n.right == null ? null : n.right); }\n  while (out.length && out[out.length - 1] === null) out.pop(); return out; }\nfunction __ds(a) { var head = null; for (var i = a.length - 1; i >= 0; i--) head = { val: a[i], next: head }; return head; }\nfunction __raDs(h) { var out = []; while (h && out.length < 1000000) { out.push(h.val); h = h.next; } return out; }\nreturn (__raDs(priorityFirst(__ds([1,2,1]), 9)));\n})()",
+            "mongDoi": [
+              1,
+              2,
+              1
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Nothing urgent",
+              "vi": "Không có gì gấp"
+            },
+            "goi": "(function () {\nfunction __cay(a) { if (!a.length || a[0] == null) return null; var root = { val: a[0], left: null, right: null }, q = [root], h = 0, i = 1;\n  while (i < a.length) { var n = q[h++]; if (a[i] != null) { n.left = { val: a[i], left: null, right: null }; q.push(n.left); } i++;\n    if (i < a.length && a[i] != null) { n.right = { val: a[i], left: null, right: null }; q.push(n.right); } i++; } return root; }\nfunction __raCay(r) { var out = [], q = [r], h = 0; while (h < q.length) { var n = q[h++]; if (n == null) { out.push(null); continue; } out.push(n.val); q.push(n.left == null ? null : n.left, n.right == null ? null : n.right); }\n  while (out.length && out[out.length - 1] === null) out.pop(); return out; }\nfunction __ds(a) { var head = null; for (var i = a.length - 1; i >= 0; i--) head = { val: a[i], next: head }; return head; }\nfunction __raDs(h) { var out = []; while (h && out.length < 1000000) { out.push(h.val); h = h.next; } return out; }\nreturn (__raDs(priorityFirst(__ds([7,8,9]), 1)));\n})()",
+            "mongDoi": [
+              7,
+              8,
+              9
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Priority equal to x is not urgent",
+              "vi": "Ưu tiên bằng x không gấp"
+            },
+            "goi": "(function () {\nfunction __cay(a) { if (!a.length || a[0] == null) return null; var root = { val: a[0], left: null, right: null }, q = [root], h = 0, i = 1;\n  while (i < a.length) { var n = q[h++]; if (a[i] != null) { n.left = { val: a[i], left: null, right: null }; q.push(n.left); } i++;\n    if (i < a.length && a[i] != null) { n.right = { val: a[i], left: null, right: null }; q.push(n.right); } i++; } return root; }\nfunction __raCay(r) { var out = [], q = [r], h = 0; while (h < q.length) { var n = q[h++]; if (n == null) { out.push(null); continue; } out.push(n.val); q.push(n.left == null ? null : n.left, n.right == null ? null : n.right); }\n  while (out.length && out[out.length - 1] === null) out.pop(); return out; }\nfunction __ds(a) { var head = null; for (var i = a.length - 1; i >= 0; i--) head = { val: a[i], next: head }; return head; }\nfunction __raDs(h) { var out = []; while (h && out.length < 1000000) { out.push(h.val); h = h.next; } return out; }\nreturn (__raDs(priorityFirst(__ds([3,3,2,3,1]), 3)));\n})()",
+            "mongDoi": [
+              2,
+              1,
+              3,
+              3,
+              3
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "The last node is urgent (cycle trap)",
+              "vi": "Nút cuối là gấp (bẫy thành vòng)"
+            },
+            "goi": "(function () {\nfunction __cay(a) { if (!a.length || a[0] == null) return null; var root = { val: a[0], left: null, right: null }, q = [root], h = 0, i = 1;\n  while (i < a.length) { var n = q[h++]; if (a[i] != null) { n.left = { val: a[i], left: null, right: null }; q.push(n.left); } i++;\n    if (i < a.length && a[i] != null) { n.right = { val: a[i], left: null, right: null }; q.push(n.right); } i++; } return root; }\nfunction __raCay(r) { var out = [], q = [r], h = 0; while (h < q.length) { var n = q[h++]; if (n == null) { out.push(null); continue; } out.push(n.val); q.push(n.left == null ? null : n.left, n.right == null ? null : n.right); }\n  while (out.length && out[out.length - 1] === null) out.pop(); return out; }\nfunction __ds(a) { var head = null; for (var i = a.length - 1; i >= 0; i--) head = { val: a[i], next: head }; return head; }\nfunction __raDs(h) { var out = []; while (h && out.length < 1000000) { out.push(h.val); h = h.next; } return out; }\nreturn (__raDs(priorityFirst(__ds([6,7,1]), 5)));\n})()",
+            "mongDoi": [
+              1,
+              6,
+              7
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Moving urgent nodes to the FRONT of the list one by one: they end up in reverse order (<code>[5, 1, 2]</code>, x = 3 gives <code>[2, 1, 5]</code>).|||Đưa từng nút gấp lên ĐẦU danh sách: chúng bị đảo ngược thứ tự (<code>[5, 1, 2]</code>, x = 3 ra <code>[2, 1, 5]</code>)."
+        },
+        {
+          "loi": "Forgetting <code>high.next = null</code>: the last \"rest\" node still points to an urgent node behind it ⇒ a cycle.|||Quên <code>high.next = null</code>: nút \"còn lại\" cuối vẫn trỏ tới một nút gấp phía sau nó ⇒ thành vòng."
+        },
+        {
+          "loi": "Using <code>&lt;=</code>: priority exactly <code>x</code> is not urgent.|||Dùng <code>&lt;=</code>: ưu tiên đúng bằng <code>x</code> không phải gấp."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "stable partition",
+          "vi": "tách ổn định",
+          "giaiThich": "chia hai nhóm mà giữ thứ tự trong mỗi nhóm."
+        },
+        {
+          "en": "tail pointer",
+          "vi": "con trỏ đuôi"
+        },
+        {
+          "en": "cycle",
+          "vi": "vòng (chu trình)"
+        }
+      ]
+    },
+    {
+      "title": "Lab logs: sort a linked list of timestamps",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 35,
+      "points": 30,
+      "concepts": [
+        "linked list",
+        "merge sort",
+        "slow/fast pointers"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dsa-interview",
+        "coding-interview"
+      ],
+      "problemHtml": "<p>Each PC in a lab streams its log lines into one shared singly linked list, so the timestamps (seconds, integers) arrive out of order. Write <code>sortLog(head)</code> that sorts the list ascending by <b>relinking nodes</b> and returns the new head. Equal timestamps must keep their original relative order.</p>\n<p>The list can hold 200 000 lines. Interview follow-up you should be ready for: \"now do it without copying the values into an array\".</p><p>A node is <code>{ val, next }</code>; the list ends with <code>next === null</code>, and an empty list is <code>null</code>. The grader builds the list from an array, calls your function, and reads the returned list back into an array.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Write the function in <code>solution.js</code> and <b>return</b> the answer — do not print it.</li>\n  <li>Do not modify the input arrays/objects.</li>\n  <li>Mind the constraints: one check runs on a large input and every check has a 4-second limit, so an O(n²) loop fails it.</li>\n</ul>",
+      "problemHtmlVi": "<p>Mỗi máy trong phòng lab đẩy dòng log vào một danh sách liên kết đơn dùng chung, nên các mốc thời gian (giây, số nguyên) đến lộn xộn. Viết <code>sortLog(head)</code> sắp danh sách tăng dần bằng cách <b>nối lại các nút</b> và trả về đầu mới. Mốc bằng nhau phải giữ thứ tự tương đối ban đầu.</p>\n<p>Danh sách có thể dài 200 000 dòng. Câu hỏi nối tiếp nên chuẩn bị: \"giờ làm mà không chép giá trị ra mảng\".</p><p>Một nút là <code>{ val, next }</code>; danh sách kết thúc khi <code>next === null</code>, danh sách rỗng là <code>null</code>. Máy chấm dựng danh sách từ một mảng, gọi hàm của bạn, rồi đọc danh sách trả về thành mảng.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Viết hàm trong <code>solution.js</code> và <b>trả về</b> kết quả — đừng in ra.</li>\n  <li>Không sửa mảng/object đầu vào.</li>\n  <li>Để ý ràng buộc: một kiểm chạy trên đầu vào lớn và mỗi kiểm có trần 4 giây, nên vòng lặp O(n²) sẽ trượt kiểm đó.</li>\n</ul>",
+      "inputSpec": "head — a list (or null).|||head — danh sách (hoặc null).",
+      "outputSpec": "The head of the sorted list.|||Đầu danh sách đã sắp.",
+      "constraints": "0 ≤ length ≤ 200 000; 0 ≤ val ≤ 10⁹.\nTarget: O(n log n) time; recursion depth must stay small.|||0 ≤ độ dài ≤ 200 000; 0 ≤ val ≤ 10⁹.\nMục tiêu: O(n log n) thời gian; độ sâu đệ quy phải nhỏ.",
+      "examplesJson": [
+        {
+          "input": "sortLog(list [1730,1712,1745,1700,1712])",
+          "output": "[1700,1712,1712,1730,1745]",
+          "explanation": "The first sample case (Run executes every visible case; hidden cases only run on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy mọi ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Insertion sort is natural on a list but O(n²). Merge sort only needs \"split in half\" and \"merge two sorted lists\" — both are cheap on linked lists (no random access needed).|||Sắp xếp chèn rất tự nhiên trên danh sách nhưng O(n²). Merge sort chỉ cần \"chia đôi\" và \"trộn hai danh sách đã sắp\" — cả hai đều rẻ trên danh sách liên kết (không cần truy cập ngẫu nhiên).",
+        "Split with slow/fast pointers (start fast one node ahead so slow stops at the end of the left half), cut, sort both halves recursively (depth log n), then merge with a dummy node.|||Chia bằng con trỏ chậm/nhanh (cho nhanh đi trước một nút để chậm dừng ở cuối nửa trái), cắt, sắp hai nửa bằng đệ quy (sâu log n), rồi trộn với nút giả.",
+        "Write the MERGE as a loop. A recursive merge goes one frame deeper per node: 200 000 frames overflow the call stack.|||Viết bước TRỘN bằng vòng lặp. Trộn đệ quy sâu thêm một tầng mỗi nút: 200 000 tầng làm tràn call stack."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "solution.js",
+          "language": "javascript",
+          "code": "/**\n * head: { val, next } | null\n * returns the head of the list sorted ascending (stable), by relinking nodes\n */\nfunction sortLog(head) {\n  // Write your solution here\n  return head;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "solution.js",
+          "language": "javascript",
+          "code": "// Reference solution — top-down merge sort: split with slow/fast, ITERATIVE stable merge.\nfunction mergeLists(a, b) {\n  var dummy = { val: 0, next: null }, tail = dummy;\n  while (a !== null && b !== null) {      // ITERATIVE merge: a recursive one is n frames deep\n    if (a.val <= b.val) { tail.next = a; a = a.next; } // <= keeps equal timestamps in their original order (stable)\n    else { tail.next = b; b = b.next; }\n    tail = tail.next;\n  }\n  tail.next = a !== null ? a : b;\n  return dummy.next;\n}\n\nfunction sortLog(head) {\n  if (head === null || head.next === null) return head;\n  var slow = head, fast = head.next;      // fast starts one ahead ⇒ slow stops at the END of the left half\n  while (fast !== null && fast.next !== null) { slow = slow.next; fast = fast.next.next; }\n  var right = slow.next;\n  slow.next = null;                        // split into two lists\n  return mergeLists(sortLog(head), sortLog(right)); // recursion depth is only log2(n)\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Top-down merge sort: each level of recursion splits every sublist in half with slow/fast pointers (O(n) per level) and merges pairs back (O(n) per level); there are ⌈log₂ n⌉ levels ⇒ O(n log n) time. Recursion depth is log₂ n ≈ 18 for 200 000 nodes, and the merge is a loop, so the call stack stays tiny; extra memory is O(log n). Taking from the left list on ties (<code>&lt;=</code>) makes it stable. (Bottom-up merge sort reaches O(1) extra memory — a good follow-up answer.)</p>",
+      "solutionExplanationHtmlVi": "<p>Merge sort từ trên xuống: mỗi tầng đệ quy chia mọi danh sách con làm đôi bằng con trỏ chậm/nhanh (O(n) mỗi tầng) rồi trộn lại từng cặp (O(n) mỗi tầng); có ⌈log₂ n⌉ tầng ⇒ O(n log n) thời gian. Độ sâu đệ quy là log₂ n ≈ 18 với 200 000 nút, và bước trộn là vòng lặp, nên call stack rất nhỏ; bộ nhớ phụ O(log n). Lấy từ danh sách trái khi bằng nhau (<code>&lt;=</code>) làm phép sắp ổn định. (Merge sort từ dưới lên đạt O(1) bộ nhớ phụ — một câu trả lời tốt cho câu hỏi nối tiếp.)</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "solution.js",
+        "tepNap": [
+          "solution.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: sortLog(list [1730,1712,1745,1700,1712])",
+              "vi": "Ca 1"
+            },
+            "goi": "(function () {\nfunction __cay(a) { if (!a.length || a[0] == null) return null; var root = { val: a[0], left: null, right: null }, q = [root], h = 0, i = 1;\n  while (i < a.length) { var n = q[h++]; if (a[i] != null) { n.left = { val: a[i], left: null, right: null }; q.push(n.left); } i++;\n    if (i < a.length && a[i] != null) { n.right = { val: a[i], left: null, right: null }; q.push(n.right); } i++; } return root; }\nfunction __raCay(r) { var out = [], q = [r], h = 0; while (h < q.length) { var n = q[h++]; if (n == null) { out.push(null); continue; } out.push(n.val); q.push(n.left == null ? null : n.left, n.right == null ? null : n.right); }\n  while (out.length && out[out.length - 1] === null) out.pop(); return out; }\nfunction __ds(a) { var head = null; for (var i = a.length - 1; i >= 0; i--) head = { val: a[i], next: head }; return head; }\nfunction __raDs(h) { var out = []; while (h && out.length < 1000000) { out.push(h.val); h = h.next; } return out; }\nreturn (__raDs(sortLog(__ds([1730,1712,1745,1700,1712]))));\n})()",
+            "mongDoi": [
+              1700,
+              1712,
+              1712,
+              1730,
+              1745
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Already sorted",
+              "vi": "Đã sắp sẵn"
+            },
+            "goi": "(function () {\nfunction __cay(a) { if (!a.length || a[0] == null) return null; var root = { val: a[0], left: null, right: null }, q = [root], h = 0, i = 1;\n  while (i < a.length) { var n = q[h++]; if (a[i] != null) { n.left = { val: a[i], left: null, right: null }; q.push(n.left); } i++;\n    if (i < a.length && a[i] != null) { n.right = { val: a[i], left: null, right: null }; q.push(n.right); } i++; } return root; }\nfunction __raCay(r) { var out = [], q = [r], h = 0; while (h < q.length) { var n = q[h++]; if (n == null) { out.push(null); continue; } out.push(n.val); q.push(n.left == null ? null : n.left, n.right == null ? null : n.right); }\n  while (out.length && out[out.length - 1] === null) out.pop(); return out; }\nfunction __ds(a) { var head = null; for (var i = a.length - 1; i >= 0; i--) head = { val: a[i], next: head }; return head; }\nfunction __raDs(h) { var out = []; while (h && out.length < 1000000) { out.push(h.val); h = h.next; } return out; }\nreturn (__raDs(sortLog(__ds([1,2,3,4]))));\n})()",
+            "mongDoi": [
+              1,
+              2,
+              3,
+              4
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "(function () {\nfunction __cay(a) { if (!a.length || a[0] == null) return null; var root = { val: a[0], left: null, right: null }, q = [root], h = 0, i = 1;\n  while (i < a.length) { var n = q[h++]; if (a[i] != null) { n.left = { val: a[i], left: null, right: null }; q.push(n.left); } i++;\n    if (i < a.length && a[i] != null) { n.right = { val: a[i], left: null, right: null }; q.push(n.right); } i++; } return root; }\nfunction __raCay(r) { var out = [], q = [r], h = 0; while (h < q.length) { var n = q[h++]; if (n == null) { out.push(null); continue; } out.push(n.val); q.push(n.left == null ? null : n.left, n.right == null ? null : n.right); }\n  while (out.length && out[out.length - 1] === null) out.pop(); return out; }\nfunction __ds(a) { var head = null; for (var i = a.length - 1; i >= 0; i--) head = { val: a[i], next: head }; return head; }\nfunction __raDs(h) { var out = []; while (h && out.length < 1000000) { out.push(h.val); h = h.next; } return out; }\nreturn (__raDs(sortLog(__ds([]))));\n})()",
+            "mongDoi": [],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "(function () {\nfunction __cay(a) { if (!a.length || a[0] == null) return null; var root = { val: a[0], left: null, right: null }, q = [root], h = 0, i = 1;\n  while (i < a.length) { var n = q[h++]; if (a[i] != null) { n.left = { val: a[i], left: null, right: null }; q.push(n.left); } i++;\n    if (i < a.length && a[i] != null) { n.right = { val: a[i], left: null, right: null }; q.push(n.right); } i++; } return root; }\nfunction __raCay(r) { var out = [], q = [r], h = 0; while (h < q.length) { var n = q[h++]; if (n == null) { out.push(null); continue; } out.push(n.val); q.push(n.left == null ? null : n.left, n.right == null ? null : n.right); }\n  while (out.length && out[out.length - 1] === null) out.pop(); return out; }\nfunction __ds(a) { var head = null; for (var i = a.length - 1; i >= 0; i--) head = { val: a[i], next: head }; return head; }\nfunction __raDs(h) { var out = []; while (h && out.length < 1000000) { out.push(h.val); h = h.next; } return out; }\nreturn (__raDs(sortLog(__ds([42]))));\n})()",
+            "mongDoi": [
+              42
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Two nodes (split trap)",
+              "vi": "Hai nút (bẫy khi chia)"
+            },
+            "goi": "(function () {\nfunction __cay(a) { if (!a.length || a[0] == null) return null; var root = { val: a[0], left: null, right: null }, q = [root], h = 0, i = 1;\n  while (i < a.length) { var n = q[h++]; if (a[i] != null) { n.left = { val: a[i], left: null, right: null }; q.push(n.left); } i++;\n    if (i < a.length && a[i] != null) { n.right = { val: a[i], left: null, right: null }; q.push(n.right); } i++; } return root; }\nfunction __raCay(r) { var out = [], q = [r], h = 0; while (h < q.length) { var n = q[h++]; if (n == null) { out.push(null); continue; } out.push(n.val); q.push(n.left == null ? null : n.left, n.right == null ? null : n.right); }\n  while (out.length && out[out.length - 1] === null) out.pop(); return out; }\nfunction __ds(a) { var head = null; for (var i = a.length - 1; i >= 0; i--) head = { val: a[i], next: head }; return head; }\nfunction __raDs(h) { var out = []; while (h && out.length < 1000000) { out.push(h.val); h = h.next; } return out; }\nreturn (__raDs(sortLog(__ds([9,3]))));\n})()",
+            "mongDoi": [
+              3,
+              9
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "(function () {\nfunction __cay(a) { if (!a.length || a[0] == null) return null; var root = { val: a[0], left: null, right: null }, q = [root], h = 0, i = 1;\n  while (i < a.length) { var n = q[h++]; if (a[i] != null) { n.left = { val: a[i], left: null, right: null }; q.push(n.left); } i++;\n    if (i < a.length && a[i] != null) { n.right = { val: a[i], left: null, right: null }; q.push(n.right); } i++; } return root; }\nfunction __raCay(r) { var out = [], q = [r], h = 0; while (h < q.length) { var n = q[h++]; if (n == null) { out.push(null); continue; } out.push(n.val); q.push(n.left == null ? null : n.left, n.right == null ? null : n.right); }\n  while (out.length && out[out.length - 1] === null) out.pop(); return out; }\nfunction __ds(a) { var head = null; for (var i = a.length - 1; i >= 0; i--) head = { val: a[i], next: head }; return head; }\nfunction __raDs(h) { var out = []; while (h && out.length < 1000000) { out.push(h.val); h = h.next; } return out; }\nreturn (__raDs(sortLog(__ds([5,4,3,2,1,0]))));\n})()",
+            "mongDoi": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "(function () {\nfunction __cay(a) { if (!a.length || a[0] == null) return null; var root = { val: a[0], left: null, right: null }, q = [root], h = 0, i = 1;\n  while (i < a.length) { var n = q[h++]; if (a[i] != null) { n.left = { val: a[i], left: null, right: null }; q.push(n.left); } i++;\n    if (i < a.length && a[i] != null) { n.right = { val: a[i], left: null, right: null }; q.push(n.right); } i++; } return root; }\nfunction __raCay(r) { var out = [], q = [r], h = 0; while (h < q.length) { var n = q[h++]; if (n == null) { out.push(null); continue; } out.push(n.val); q.push(n.left == null ? null : n.left, n.right == null ? null : n.right); }\n  while (out.length && out[out.length - 1] === null) out.pop(); return out; }\nfunction __ds(a) { var head = null; for (var i = a.length - 1; i >= 0; i--) head = { val: a[i], next: head }; return head; }\nfunction __raDs(h) { var out = []; while (h && out.length < 1000000) { out.push(h.val); h = h.next; } return out; }\nreturn (__raDs(sortLog(__ds([7,7,1,7,1,0,7]))));\n})()",
+            "mongDoi": [
+              0,
+              1,
+              1,
+              7,
+              7,
+              7,
+              7
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Performance: 200 000 log lines (insertion sort is O(n²); a recursive merge overflows the stack)",
+              "vi": "Hiệu năng: 200 000 dòng log (sắp chèn là O(n²); trộn đệ quy làm tràn stack)"
+            },
+            "goi": "(function () {\nfunction __cay(a) { if (!a.length || a[0] == null) return null; var root = { val: a[0], left: null, right: null }, q = [root], h = 0, i = 1;\n  while (i < a.length) { var n = q[h++]; if (a[i] != null) { n.left = { val: a[i], left: null, right: null }; q.push(n.left); } i++;\n    if (i < a.length && a[i] != null) { n.right = { val: a[i], left: null, right: null }; q.push(n.right); } i++; } return root; }\nfunction __raCay(r) { var out = [], q = [r], h = 0; while (h < q.length) { var n = q[h++]; if (n == null) { out.push(null); continue; } out.push(n.val); q.push(n.left == null ? null : n.left, n.right == null ? null : n.right); }\n  while (out.length && out[out.length - 1] === null) out.pop(); return out; }\nfunction __ds(a) { var head = null; for (var i = a.length - 1; i >= 0; i--) head = { val: a[i], next: head }; return head; }\nfunction __raDs(h) { var out = []; while (h && out.length < 1000000) { out.push(h.val); h = h.next; } return out; }\nvar __s = 20261115; function R(m) { __s = (__s * 48271) % 2147483647; return __s % m; }\nvar n = 200000, a = new Array(n); for (var i = 0; i < n; i++) a[i] = R(1000000000); var r = __raDs(sortLog(__ds(a))), ok = r.length === n, s = 0; for (var j = 1; j < r.length; j++) if (r[j - 1] > r[j]) ok = false; for (var k = 0; k < r.length; k += 1000) s = (s + r[k]) % 1000000007; return { length: r.length, sorted: ok, first: r[0], last: r[r.length - 1], checksum: s };\n})()",
+            "mongDoi": {
+              "length": 200000,
+              "sorted": true,
+              "first": 562,
+              "last": 999999878,
+              "checksum": 599360550
+            }
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Recursive <code>merge(a, b)</code>: correct and pretty, but its depth is the length of the result — <code>RangeError: Maximum call stack size exceeded</code> on the 200 000-line check.|||<code>merge(a, b)</code> đệ quy: đúng và đẹp, nhưng độ sâu bằng độ dài kết quả — <code>RangeError: Maximum call stack size exceeded</code> ở kiểm 200 000 dòng."
+        },
+        {
+          "loi": "Splitting with slow = fast = head on a 2-node list: slow ends on the 2nd node, the \"left half\" is the whole list ⇒ infinite recursion. Start <code>fast = head.next</code>.|||Chia với slow = fast = head trên danh sách 2 nút: slow dừng ở nút thứ 2, \"nửa trái\" là cả danh sách ⇒ đệ quy vô hạn. Bắt đầu <code>fast = head.next</code>."
+        },
+        {
+          "loi": "Merging with <code>&lt;</code> instead of <code>&lt;=</code>: equal timestamps from the right half jump ahead — the sort is no longer stable.|||Trộn bằng <code>&lt;</code> thay vì <code>&lt;=</code>: mốc bằng nhau ở nửa phải nhảy lên trước — phép sắp không còn ổn định."
+        },
+        {
+          "loi": "Insertion sort: O(n²) ≈ 10¹⁰ steps for 200 000 lines.|||Sắp xếp chèn: O(n²) ≈ 10¹⁰ bước với 200 000 dòng."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "merge sort",
+          "vi": "sắp xếp trộn"
+        },
+        {
+          "en": "stable sort",
+          "vi": "sắp xếp ổn định",
+          "giaiThich": "phần tử bằng nhau giữ thứ tự ban đầu."
+        },
+        {
+          "en": "call stack overflow",
+          "vi": "tràn ngăn xếp lời gọi"
+        },
+        {
+          "en": "slow/fast pointers",
+          "vi": "con trỏ chậm/nhanh"
+        }
+      ]
+    }
+  ]
+}

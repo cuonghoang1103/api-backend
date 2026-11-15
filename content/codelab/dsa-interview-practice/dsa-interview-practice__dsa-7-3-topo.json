@@ -1,0 +1,537 @@
+{
+  "trackSlug": "dsa-interview-practice",
+  "moduleSlug": "dsa-7-3-topo",
+  "lesson": {
+    "course": "dsa-interview",
+    "slug": "dsa-7-3-topo"
+  },
+  "exercises": [
+    {
+      "title": "CI pipeline: does this run order respect every dependency?",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "topological order",
+        "verification"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dsa-interview",
+        "coding-interview"
+      ],
+      "problemHtml": "<p>The CI server of the SWP391 team runs build jobs one at a time. A teammate hand-wrote the run order <code>order</code> (job names), and the pipeline config lists <code>deps</code>: each pair <code>[a, b]</code> means job <code>a</code> must <b>finish before</b> job <code>b</code> starts.</p>\n<p>Write <code>respectsDeps(order, deps)</code> returning <code>true</code> if the order satisfies every dependency, <code>false</code> otherwise. A dependency that mentions a job missing from <code>order</code> makes the order invalid.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Write the function in <code>solution.js</code> and <b>return</b> the answer — do not print it.</li>\n  <li>Do not modify the input arrays/objects.</li>\n  <li>Mind the constraints: one check runs on a large input and every check has a 4-second limit, so an O(n²) loop fails it.</li>\n</ul>",
+      "problemHtmlVi": "<p>Máy chủ CI của nhóm SWP391 chạy các job build lần lượt từng cái. Một bạn trong nhóm tự viết tay thứ tự chạy <code>order</code> (tên job), còn cấu hình pipeline có <code>deps</code>: mỗi cặp <code>[a, b]</code> nghĩa là job <code>a</code> phải <b>xong trước</b> khi job <code>b</code> bắt đầu.</p>\n<p>Viết <code>respectsDeps(order, deps)</code> trả về <code>true</code> nếu thứ tự thoả mọi phụ thuộc, ngược lại <code>false</code>. Một phụ thuộc nhắc tới job không có trong <code>order</code> làm thứ tự không hợp lệ.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Viết hàm trong <code>solution.js</code> và <b>trả về</b> kết quả — đừng in ra.</li>\n  <li>Không sửa mảng/object đầu vào.</li>\n  <li>Để ý ràng buộc: một kiểm chạy trên đầu vào lớn và mỗi kiểm có trần 4 giây, nên vòng lặp O(n²) sẽ trượt kiểm đó.</li>\n</ul>",
+      "inputSpec": "order — array of distinct job names; deps — array of [a, b].|||order — mảng tên job không trùng; deps — mảng [a, b].",
+      "outputSpec": "true / false",
+      "constraints": "0 ≤ order.length, deps.length ≤ 200 000.\nTarget: O(order + deps).|||0 ≤ order.length, deps.length ≤ 200 000.\nMục tiêu: O(order + deps).",
+      "examplesJson": [
+        {
+          "input": "respectsDeps([\"lint\",\"test\",\"build\",\"deploy\"], [[\"lint\",\"build\"],[\"test\",\"build\"],[\"build\",\"deploy\"]])",
+          "output": "true",
+          "explanation": "The first sample case (Run executes every visible case; hidden cases only run on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy mọi ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "An order is a valid topological order exactly when every edge goes \"forward\" in it.|||Một thứ tự là thứ tự tô-pô hợp lệ đúng khi mọi cạnh đều đi \"về phía trước\" trong nó.",
+        "Precompute <code>position[job]</code> once in a Map, then each dependency is a single comparison.|||Tính sẵn <code>position[job]</code> một lần trong Map, rồi mỗi phụ thuộc chỉ là một phép so sánh."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "solution.js",
+          "language": "javascript",
+          "code": "/**\n * order: string[] — proposed run order; deps: [a, b][] — a must run before b\n * returns true if every dependency is respected\n */\nfunction respectsDeps(order, deps) {\n  // Write your solution here\n  return true;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "solution.js",
+          "language": "javascript",
+          "code": "// Reference solution — position map, then one comparison per dependency.\nfunction respectsDeps(order, deps) {\n  var pos = new Map(); // job -> its position in the proposed order, O(1) lookup\n  for (var i = 0; i < order.length; i++) pos.set(order[i], i);\n  for (var j = 0; j < deps.length; j++) {\n    var a = deps[j][0], b = deps[j][1];\n    if (!pos.has(a) || !pos.has(b)) return false; // a job that never runs cannot satisfy anything\n    if (pos.get(a) >= pos.get(b)) return false;  // `a` must run strictly before `b`\n  }\n  return true;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Checking a topological order does not need any graph algorithm: an order is valid iff every edge (a, b) has pos(a) &lt; pos(b). Building the position map is O(n) and each dependency is O(1) on average ⇒ O(n + m) time, O(n) memory. This is also how you test your own topological sort in an interview: generate an order, then verify it this way.</p>",
+      "solutionExplanationHtmlVi": "<p>Soát một thứ tự tô-pô không cần thuật toán đồ thị nào: thứ tự hợp lệ khi và chỉ khi mọi cạnh (a, b) có pos(a) &lt; pos(b). Dựng map vị trí tốn O(n) và mỗi phụ thuộc trung bình O(1) ⇒ O(n + m) thời gian, O(n) bộ nhớ. Đây cũng là cách tự kiểm hàm sắp tô-pô của mình khi phỏng vấn: sinh một thứ tự rồi soát theo cách này.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "solution.js",
+        "tepNap": [
+          "solution.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Valid order ⇒ true",
+              "vi": "Thứ tự hợp lệ ⇒ true"
+            },
+            "goi": "respectsDeps([\"lint\",\"test\",\"build\",\"deploy\"], [[\"lint\",\"build\"],[\"test\",\"build\"],[\"build\",\"deploy\"]])",
+            "mongDoi": true
+          },
+          {
+            "moTa": {
+              "en": "build runs before lint ⇒ false",
+              "vi": "build chạy trước lint ⇒ false"
+            },
+            "goi": "respectsDeps([\"build\",\"lint\",\"deploy\"], [[\"lint\",\"build\"]])",
+            "mongDoi": false
+          },
+          {
+            "moTa": {
+              "en": "build never runs ⇒ false",
+              "vi": "build không bao giờ chạy ⇒ false"
+            },
+            "goi": "respectsDeps([\"lint\",\"deploy\"], [[\"build\",\"deploy\"]])",
+            "mongDoi": false
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "respectsDeps([], [])",
+            "mongDoi": true,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "A job that depends on itself ⇒ false",
+              "vi": "Job phụ thuộc chính nó ⇒ false"
+            },
+            "goi": "respectsDeps([\"a\",\"b\"], [[\"a\",\"a\"]])",
+            "mongDoi": false,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "respectsDeps([\"x\",\"y\",\"z\"], [])",
+            "mongDoi": true,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "respectsDeps([\"a\",\"b\",\"c\",\"d\"], [[\"a\",\"d\"],[\"b\",\"c\"],[\"c\",\"d\"],[\"a\",\"c\"],[\"d\",\"b\"]])",
+            "mongDoi": false,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Performance: 150 000 jobs, 150 000 dependencies, the only violation is the last one (indexOf per dependency times out)",
+              "vi": "Hiệu năng: 150 000 job, 150 000 phụ thuộc, vi phạm duy nhất nằm cuối (indexOf cho mỗi phụ thuộc hết giờ)"
+            },
+            "goi": "(function () {\nfunction __cay(a) { if (!a.length || a[0] == null) return null; var root = { val: a[0], left: null, right: null }, q = [root], h = 0, i = 1;\n  while (i < a.length) { var n = q[h++]; if (a[i] != null) { n.left = { val: a[i], left: null, right: null }; q.push(n.left); } i++;\n    if (i < a.length && a[i] != null) { n.right = { val: a[i], left: null, right: null }; q.push(n.right); } i++; } return root; }\nfunction __raCay(r) { var out = [], q = [r], h = 0; while (h < q.length) { var n = q[h++]; if (n == null) { out.push(null); continue; } out.push(n.val); q.push(n.left == null ? null : n.left, n.right == null ? null : n.right); }\n  while (out.length && out[out.length - 1] === null) out.pop(); return out; }\nfunction __ds(a) { var head = null; for (var i = a.length - 1; i >= 0; i--) head = { val: a[i], next: head }; return head; }\nfunction __raDs(h) { var out = []; while (h && out.length < 1000000) { out.push(h.val); h = h.next; } return out; }\nvar __s = 20261115; function R(m) { __s = (__s * 48271) % 2147483647; return __s % m; }\nvar n = 150000, o = new Array(n); for (var i = 0; i < n; i++) o[i] = \"job-\" + i; var d = []; for (var j = 0; j < 150000; j++) { var a = R(n - 1); d.push([o[a], o[a + 1 + R(n - 1 - a)]]); } d.push([o[n - 1], o[R(n - 1)]]); return respectsDeps(o, d);\n})()",
+            "mongDoi": false
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Calling <code>order.indexOf(a)</code> for every dependency: O(order · deps) — the 150 000 × 150 000 check times out.|||Gọi <code>order.indexOf(a)</code> cho mỗi phụ thuộc: O(order · deps) — kiểm 150 000 × 150 000 hết giờ."
+        },
+        {
+          "loi": "Treating a missing job as \"fine\": <code>indexOf</code> returns −1, and −1 &lt; anything looks like \"runs first\".|||Coi job vắng mặt là \"ổn\": <code>indexOf</code> trả −1, mà −1 &lt; mọi thứ nên trông như \"chạy trước\"."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "topological order",
+          "vi": "thứ tự tô-pô",
+          "giaiThich": "thứ tự mà mọi cạnh đều đi từ trước ra sau."
+        },
+        {
+          "en": "dependency",
+          "vi": "phụ thuộc"
+        },
+        {
+          "en": "pipeline",
+          "vi": "dây chuyền build/CI"
+        }
+      ]
+    },
+    {
+      "title": "Study plan: the minimum number of semesters",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 20,
+      "points": 20,
+      "concepts": [
+        "Kahn's algorithm",
+        "longest path in a DAG",
+        "cycle detection"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dsa-interview",
+        "coding-interview"
+      ],
+      "problemHtml": "<p>A curriculum has <code>n</code> courses numbered <code>0 … n−1</code>. Each pair <code>[a, b]</code> in <code>prereqs</code> means course <code>a</code> must be <b>passed in an earlier semester</b> than course <code>b</code>. Suppose a student may take any number of courses in one semester and passes everything.</p>\n<p>Write <code>minSemesters(n, prereqs)</code> that returns the minimum number of semesters needed to finish all courses, or <code>−1</code> if the prerequisites contain a cycle (the curriculum can never be finished). With <code>n = 0</code> the answer is 0.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Write the function in <code>solution.js</code> and <b>return</b> the answer — do not print it.</li>\n  <li>Do not modify the input arrays/objects.</li>\n  <li>Mind the constraints: one check runs on a large input and every check has a 4-second limit, so an O(n²) loop fails it.</li>\n</ul>",
+      "problemHtmlVi": "<p>Một chương trình học có <code>n</code> môn đánh số <code>0 … n−1</code>. Mỗi cặp <code>[a, b]</code> trong <code>prereqs</code> nghĩa là môn <code>a</code> phải <b>qua ở một học kỳ trước</b> môn <code>b</code>. Giả sử sinh viên được học bao nhiêu môn một kỳ cũng được và qua hết.</p>\n<p>Viết <code>minSemesters(n, prereqs)</code> trả về số học kỳ tối thiểu để học xong mọi môn, hoặc <code>−1</code> nếu các điều kiện tiên quyết có chu trình (không bao giờ học xong được). Với <code>n = 0</code> đáp án là 0.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Viết hàm trong <code>solution.js</code> và <b>trả về</b> kết quả — đừng in ra.</li>\n  <li>Không sửa mảng/object đầu vào.</li>\n  <li>Để ý ràng buộc: một kiểm chạy trên đầu vào lớn và mỗi kiểm có trần 4 giây, nên vòng lặp O(n²) sẽ trượt kiểm đó.</li>\n</ul>",
+      "inputSpec": "n — number of courses; prereqs — array of [a, b].|||n — số môn; prereqs — mảng [a, b].",
+      "outputSpec": "A number (semesters) or −1.|||Một số (học kỳ) hoặc −1.",
+      "constraints": "0 ≤ n ≤ 200 000; 0 ≤ prereqs.length ≤ 300 000; pairs may repeat.\nTarget: O(n + prereqs). Chains can be 200 000 courses long — avoid deep recursion.|||0 ≤ n ≤ 200 000; 0 ≤ prereqs.length ≤ 300 000; cặp có thể lặp.\nMục tiêu: O(n + prereqs). Chuỗi có thể dài 200 000 môn — tránh đệ quy sâu.",
+      "examplesJson": [
+        {
+          "input": "minSemesters(4, [[0,1],[0,2],[1,3],[2,3]])",
+          "output": "3",
+          "explanation": "The first sample case (Run executes every visible case; hidden cases only run on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy mọi ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Semester 1 contains every course with no prerequisite. Removing them may free new courses — those are semester 2. That is Kahn's algorithm, processed layer by layer.|||Kỳ 1 gồm mọi môn không có tiên quyết. Bỏ chúng đi có thể \"mở khoá\" môn mới — đó là kỳ 2. Đó chính là thuật toán Kahn, xử lý theo từng tầng.",
+        "Keep in-degrees. When you process a layer, decrement the in-degree of each successor; a course whose in-degree hits 0 goes into the NEXT layer. Count the layers; if fewer than n courses were ever taken, there is a cycle.|||Giữ bậc vào. Khi xử lý một tầng, giảm bậc vào của từng môn kế tiếp; môn có bậc vào về 0 vào tầng KẾ TIẾP. Đếm số tầng; nếu số môn đã học ít hơn n thì có chu trình."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "solution.js",
+          "language": "javascript",
+          "code": "/**\n * n: number of courses (0..n-1), prereqs: [a, b][] — a before b\n * returns the minimum number of semesters, or -1 if there is a cycle\n */\nfunction minSemesters(n, prereqs) {\n  // Write your solution here\n  return n;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "solution.js",
+          "language": "javascript",
+          "code": "// Reference solution — Kahn's algorithm layer by layer; layers = semesters.\nfunction minSemesters(n, prereqs) {\n  var adj = [], indeg = new Array(n).fill(0);\n  for (var i = 0; i < n; i++) adj.push([]);\n  for (var e = 0; e < prereqs.length; e++) { adj[prereqs[e][0]].push(prereqs[e][1]); indeg[prereqs[e][1]]++; }\n  var layer = [];\n  for (var c = 0; c < n; c++) if (indeg[c] === 0) layer.push(c); // semester 1: everything with no prerequisite\n  var semesters = 0, taken = 0;\n  while (layer.length) {\n    semesters++;\n    taken += layer.length;\n    var next = [];\n    for (var k = 0; k < layer.length; k++) {\n      var u = layer[k];\n      for (var t = 0; t < adj[u].length; t++) if (--indeg[adj[u][t]] === 0) next.push(adj[u][t]); // last prerequisite just passed\n    }\n    layer = next;\n  }\n  return taken === n ? semesters : -1; // courses left over ⇒ they sit on a cycle\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>A course in layer d has a prerequisite chain of length d − 1 ending at it and cannot be taken earlier, and Kahn puts it in the first semester where all its prerequisites are done — so the number of layers is exactly the length of the longest chain. Each course enters a layer once and each edge decrements one in-degree once ⇒ O(n + m) time and memory. Duplicate pairs are harmless: they add 1 to the in-degree and are subtracted once each. A cycle leaves its courses with in-degree > 0 forever, which <code>taken &lt; n</code> detects.</p>",
+      "solutionExplanationHtmlVi": "<p>Môn ở tầng d có một chuỗi tiên quyết dài d − 1 kết thúc ở nó nên không thể học sớm hơn, và Kahn đặt nó vào kỳ đầu tiên mà mọi tiên quyết đã xong — nên số tầng đúng bằng độ dài chuỗi dài nhất. Mỗi môn vào một tầng một lần và mỗi cạnh giảm một bậc vào một lần ⇒ O(n + m) thời gian và bộ nhớ. Cặp lặp vô hại: cộng 1 vào bậc vào và được trừ mỗi lần một. Chu trình làm các môn của nó mãi có bậc vào > 0, phép thử <code>taken &lt; n</code> bắt được.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "solution.js",
+        "tepNap": [
+          "solution.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "0 → {1, 2} → 3 ⇒ 3 semesters",
+              "vi": "0 → {1, 2} → 3 ⇒ 3 kỳ"
+            },
+            "goi": "minSemesters(4, [[0,1],[0,2],[1,3],[2,3]])",
+            "mongDoi": 3
+          },
+          {
+            "moTa": {
+              "en": "No prerequisites ⇒ 1 semester",
+              "vi": "Không có tiên quyết ⇒ 1 kỳ"
+            },
+            "goi": "minSemesters(3, [])",
+            "mongDoi": 1
+          },
+          {
+            "moTa": {
+              "en": "Cycle ⇒ −1",
+              "vi": "Chu trình ⇒ −1"
+            },
+            "goi": "minSemesters(3, [[0,1],[1,2],[2,0]])",
+            "mongDoi": -1
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "minSemesters(0, [])",
+            "mongDoi": 0,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Duplicate pair",
+              "vi": "Cặp lặp"
+            },
+            "goi": "minSemesters(5, [[0,1],[0,1],[1,2],[3,4]])",
+            "mongDoi": 3,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Self-loop ⇒ −1",
+              "vi": "Tự vòng ⇒ −1"
+            },
+            "goi": "minSemesters(6, [[0,1],[1,2],[3,4],[4,4],[2,5]])",
+            "mongDoi": -1,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "minSemesters(6, [[5,4],[4,3],[3,2],[2,1],[1,0],[5,0]])",
+            "mongDoi": 6,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 8",
+              "vi": "Ca ẩn 8"
+            },
+            "goi": "minSemesters(7, [[0,3],[1,3],[2,4],[3,5],[4,5],[5,6],[1,6]])",
+            "mongDoi": 4,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Performance: 200 000 courses with a chain of length 200 000 (rescanning every semester times out; recursion overflows)",
+              "vi": "Hiệu năng: 200 000 môn có một chuỗi dài 200 000 (quét lại mỗi kỳ hết giờ; đệ quy tràn ngăn xếp)"
+            },
+            "goi": "(function () {\nfunction __cay(a) { if (!a.length || a[0] == null) return null; var root = { val: a[0], left: null, right: null }, q = [root], h = 0, i = 1;\n  while (i < a.length) { var n = q[h++]; if (a[i] != null) { n.left = { val: a[i], left: null, right: null }; q.push(n.left); } i++;\n    if (i < a.length && a[i] != null) { n.right = { val: a[i], left: null, right: null }; q.push(n.right); } i++; } return root; }\nfunction __raCay(r) { var out = [], q = [r], h = 0; while (h < q.length) { var n = q[h++]; if (n == null) { out.push(null); continue; } out.push(n.val); q.push(n.left == null ? null : n.left, n.right == null ? null : n.right); }\n  while (out.length && out[out.length - 1] === null) out.pop(); return out; }\nfunction __ds(a) { var head = null; for (var i = a.length - 1; i >= 0; i--) head = { val: a[i], next: head }; return head; }\nfunction __raDs(h) { var out = []; while (h && out.length < 1000000) { out.push(h.val); h = h.next; } return out; }\nvar __s = 20261115; function R(m) { __s = (__s * 48271) % 2147483647; return __s % m; }\nvar n = 200000, p = []; for (var i = 0; i + 1 < n; i++) p.push([i, i + 1]); for (var j = 0; j < 100000; j++) { var a = R(n - 1); p.push([a, a + 1 + R(n - 1 - a)]); } return minSemesters(n, p);\n})()",
+            "mongDoi": 200000
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Rescanning all n courses every semester to find the ones that became available: O(n · semesters) = O(n²) on a long chain.|||Quét lại cả n môn mỗi học kỳ để tìm môn vừa được mở: O(n · số kỳ) = O(n²) với chuỗi dài."
+        },
+        {
+          "loi": "Returning the number of layers even when some courses were never taken — a cycle must give −1.|||Trả số tầng kể cả khi có môn chưa từng học — có chu trình phải trả −1."
+        },
+        {
+          "loi": "Recursive DFS for the longest path: correct, but a 200 000-course chain overflows the call stack.|||DFS đệ quy tìm đường dài nhất: đúng, nhưng chuỗi 200 000 môn tràn ngăn xếp gọi hàm."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "in-degree",
+          "vi": "bậc vào",
+          "giaiThich": "số cạnh đi vào một nút."
+        },
+        {
+          "en": "DAG (directed acyclic graph)",
+          "vi": "đồ thị có hướng không chu trình"
+        },
+        {
+          "en": "prerequisite",
+          "vi": "môn tiên quyết"
+        },
+        {
+          "en": "layer",
+          "vi": "tầng"
+        }
+      ]
+    },
+    {
+      "title": "Release checklist: the alphabetically smallest valid order",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 35,
+      "points": 30,
+      "concepts": [
+        "Kahn's algorithm",
+        "binary heap",
+        "lexicographic order"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dsa-interview",
+        "coding-interview"
+      ],
+      "problemHtml": "<p>The release manager prints the deployment checklist for the night shift. <code>tasks</code> are task names, <code>deps</code> pairs <code>[a, b]</code> mean <code>a</code> must be done before <code>b</code>. Many orders are valid, so to make every printout identical the team agreed on one rule: among all valid orders, print the <b>lexicographically smallest</b> one — at every step, do the smallest-named task that is ready.</p>\n<p>Write <code>smallestOrder(tasks, deps)</code> returning that order as an array, or <code>[]</code> if the dependencies contain a cycle. Compare names with plain JavaScript string comparison (<code>a &lt; b</code>, i.e. UTF-16 code units — <code>\"Z\" &lt; \"a\"</code>).</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Write the function in <code>solution.js</code> and <b>return</b> the answer — do not print it.</li>\n  <li>Do not modify the input arrays/objects.</li>\n  <li>Mind the constraints: one check runs on a large input and every check has a 4-second limit, so an O(n²) loop fails it.</li>\n</ul>",
+      "problemHtmlVi": "<p>Người quản lý phát hành in danh sách việc triển khai cho ca đêm. <code>tasks</code> là tên các việc, cặp <code>[a, b]</code> trong <code>deps</code> nghĩa là <code>a</code> phải làm trước <code>b</code>. Có nhiều thứ tự hợp lệ, nên để mọi bản in giống hệt nhau, nhóm thống nhất một luật: trong mọi thứ tự hợp lệ, in thứ tự <b>nhỏ nhất theo từ điển</b> — ở mỗi bước, làm việc có tên nhỏ nhất trong số việc đã sẵn sàng.</p>\n<p>Viết <code>smallestOrder(tasks, deps)</code> trả về thứ tự đó dạng mảng, hoặc <code>[]</code> nếu phụ thuộc có chu trình. So tên bằng phép so chuỗi thường của JavaScript (<code>a &lt; b</code>, tức theo đơn vị mã UTF-16 — <code>\"Z\" &lt; \"a\"</code>).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Viết hàm trong <code>solution.js</code> và <b>trả về</b> kết quả — đừng in ra.</li>\n  <li>Không sửa mảng/object đầu vào.</li>\n  <li>Để ý ràng buộc: một kiểm chạy trên đầu vào lớn và mỗi kiểm có trần 4 giây, nên vòng lặp O(n²) sẽ trượt kiểm đó.</li>\n</ul>",
+      "inputSpec": "tasks — array of distinct names; deps — array of [a, b] using names from tasks.|||tasks — mảng tên không trùng; deps — mảng [a, b] dùng tên trong tasks.",
+      "outputSpec": "string[] — the order, or [] on a cycle.|||string[] — thứ tự, hoặc [] khi có chu trình.",
+      "constraints": "0 ≤ tasks.length ≤ 100 000; 0 ≤ deps.length ≤ 200 000.\nTarget: O((n + m) log n). JavaScript has no built-in priority queue — write a small binary heap.|||0 ≤ tasks.length ≤ 100 000; 0 ≤ deps.length ≤ 200 000.\nMục tiêu: O((n + m) log n). JavaScript không có hàng đợi ưu tiên dựng sẵn — tự viết một heap nhị phân nhỏ.",
+      "examplesJson": [
+        {
+          "input": "smallestOrder([\"migrate-db\",\"build\",\"backup\",\"smoke-test\"], [[\"backup\",\"migrate-db\"],[\"build\",\"smoke-test\"],[\"migrate-db\",\"smoke-test\"]])",
+          "output": "[\"backup\",\"build\",\"migrate-db\",\"smoke-test\"]",
+          "explanation": "The first sample case (Run executes every visible case; hidden cases only run on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy mọi ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Kahn's algorithm already gives you the set of tasks that are ready. \"Smallest valid order\" just means: always take the smallest name from that set.|||Thuật toán Kahn đã cho bạn tập các việc đang sẵn sàng. \"Thứ tự hợp lệ nhỏ nhất\" chỉ có nghĩa: luôn lấy tên nhỏ nhất trong tập đó.",
+        "You need \"insert\" and \"remove the minimum\" many times ⇒ a min-heap. Scanning the ready list or re-sorting it each step is O(n²) when most tasks are ready at once.|||Bạn cần \"thêm\" và \"lấy nhỏ nhất\" rất nhiều lần ⇒ min-heap. Quét danh sách sẵn sàng hay sắp lại nó mỗi bước là O(n²) khi phần lớn việc sẵn sàng cùng lúc.",
+        "Heap in an array: children of k are 2k+1 and 2k+2, parent is (k−1)>>1. Push = append then sift up; pop = move the last element to the root then sift down.|||Heap trong mảng: con của k là 2k+1 và 2k+2, cha là (k−1)>>1. Push = thêm cuối rồi đẩy lên; pop = đưa phần tử cuối lên gốc rồi đẩy xuống."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "solution.js",
+          "language": "javascript",
+          "code": "/**\n * tasks: string[], deps: [a, b][] — a before b\n * returns the lexicographically smallest valid order, or [] if there is a cycle\n */\nfunction smallestOrder(tasks, deps) {\n  // Write your solution here\n  return tasks.slice().sort();\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "solution.js",
+          "language": "javascript",
+          "code": "// Reference solution — Kahn's algorithm with a hand-written binary min-heap of ready task names.\nfunction smallestOrder(tasks, deps) {\n  var idx = new Map();\n  for (var i = 0; i < tasks.length; i++) idx.set(tasks[i], i);\n  var adj = tasks.map(function () { return []; }), indeg = new Array(tasks.length).fill(0);\n  for (var e = 0; e < deps.length; e++) { var a = idx.get(deps[e][0]), b = idx.get(deps[e][1]); adj[a].push(b); indeg[b]++; }\n  // binary min-heap of task names: push/pop O(log n)\n  var heap = [];\n  function push(x) {\n    heap.push(x);\n    var k = heap.length - 1;\n    while (k > 0) { var p = (k - 1) >> 1; if (heap[p] <= x) break; heap[k] = heap[p]; k = p; }\n    heap[k] = x;\n  }\n  function pop() {\n    var top = heap[0], last = heap.pop();\n    if (heap.length) {\n      var k = 0, n = heap.length;\n      for (;;) {\n        var l = 2 * k + 1, r = l + 1, m = k;\n        var best = last;\n        if (l < n && heap[l] < best) { m = l; best = heap[l]; }\n        if (r < n && heap[r] < best) { m = r; best = heap[r]; }\n        if (m === k) break;\n        heap[k] = heap[m]; k = m;\n      }\n      heap[k] = last;\n    }\n    return top;\n  }\n  for (var c = 0; c < tasks.length; c++) if (indeg[c] === 0) push(tasks[c]);\n  var out = [];\n  while (heap.length) {\n    var name = pop(); // the smallest name among the tasks that are ready RIGHT NOW\n    out.push(name);\n    var u = idx.get(name);\n    for (var t = 0; t < adj[u].length; t++) if (--indeg[adj[u][t]] === 0) push(tasks[adj[u][t]]);\n  }\n  return out.length === tasks.length ? out : []; // a cycle leaves tasks behind\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Greedy is correct here: at any moment, the first task of the lexicographically smallest order must be ready, and choosing the smallest ready task never blocks anything (it only frees more tasks). Kahn + min-heap does exactly that: each task is pushed and popped once (O(log n) each) and each edge is processed once ⇒ O((n + m) log n) time, O(n + m) memory. The FIFO version is a valid order but not the smallest, because readiness and alphabetical order are independent.</p>",
+      "solutionExplanationHtmlVi": "<p>Tham lam đúng ở đây: tại mọi thời điểm, việc đầu tiên của thứ tự nhỏ nhất theo từ điển phải đang sẵn sàng, và chọn việc sẵn sàng nhỏ nhất không bao giờ chặn gì (nó chỉ mở thêm việc). Kahn + min-heap làm đúng điều đó: mỗi việc được push và pop một lần (mỗi lần O(log n)) và mỗi cạnh xử lý một lần ⇒ O((n + m) log n) thời gian, O(n + m) bộ nhớ. Bản FIFO cho thứ tự hợp lệ nhưng không nhỏ nhất, vì \"sẵn sàng\" và \"thứ tự chữ cái\" độc lập với nhau.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "solution.js",
+        "tepNap": [
+          "solution.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "backup, build, migrate-db, smoke-test",
+              "vi": "backup, build, migrate-db, smoke-test"
+            },
+            "goi": "smallestOrder([\"migrate-db\",\"build\",\"backup\",\"smoke-test\"], [[\"backup\",\"migrate-db\"],[\"build\",\"smoke-test\"],[\"migrate-db\",\"smoke-test\"]])",
+            "mongDoi": [
+              "backup",
+              "build",
+              "migrate-db",
+              "smoke-test"
+            ]
+          },
+          {
+            "moTa": {
+              "en": "\"a\" waits for \"c\": b, c, a",
+              "vi": "\"a\" phải chờ \"c\": b, c, a"
+            },
+            "goi": "smallestOrder([\"c\",\"b\",\"a\"], [[\"c\",\"a\"]])",
+            "mongDoi": [
+              "b",
+              "c",
+              "a"
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Cycle ⇒ []",
+              "vi": "Chu trình ⇒ []"
+            },
+            "goi": "smallestOrder([\"x\",\"y\"], [[\"x\",\"y\"],[\"y\",\"x\"]])",
+            "mongDoi": []
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "smallestOrder([], [])",
+            "mongDoi": [],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Code-unit order: uppercase first",
+              "vi": "Theo đơn vị mã: chữ hoa trước"
+            },
+            "goi": "smallestOrder([\"beta\",\"Alpha\",\"alpha\"], [])",
+            "mongDoi": [
+              "Alpha",
+              "alpha",
+              "beta"
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Freed tasks can jump ahead of waiting ones",
+              "vi": "Việc vừa mở có thể vượt việc đang chờ"
+            },
+            "goi": "smallestOrder([\"d\",\"a\",\"c\",\"b\",\"e\"], [[\"d\",\"a\"],[\"e\",\"b\"],[\"c\",\"e\"]])",
+            "mongDoi": [
+              "c",
+              "d",
+              "a",
+              "e",
+              "b"
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "smallestOrder([\"t1\",\"t2\",\"t3\",\"t4\"], [[\"t4\",\"t3\"],[\"t3\",\"t2\"],[\"t2\",\"t1\"],[\"t4\",\"t1\"]])",
+            "mongDoi": [
+              "t4",
+              "t3",
+              "t2",
+              "t1"
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Cycle not involving the first task ⇒ []",
+              "vi": "Chu trình không chứa việc đầu ⇒ []"
+            },
+            "goi": "smallestOrder([\"a\",\"b\",\"c\"], [[\"a\",\"b\"],[\"b\",\"c\"],[\"c\",\"b\"]])",
+            "mongDoi": [],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Performance: 80 000 tasks, 40 000 dependencies, most tasks ready at once (linear-scan minimum times out)",
+              "vi": "Hiệu năng: 80 000 việc, 40 000 phụ thuộc, phần lớn việc sẵn sàng cùng lúc (quét tìm nhỏ nhất hết giờ)"
+            },
+            "goi": "(function () {\nfunction __cay(a) { if (!a.length || a[0] == null) return null; var root = { val: a[0], left: null, right: null }, q = [root], h = 0, i = 1;\n  while (i < a.length) { var n = q[h++]; if (a[i] != null) { n.left = { val: a[i], left: null, right: null }; q.push(n.left); } i++;\n    if (i < a.length && a[i] != null) { n.right = { val: a[i], left: null, right: null }; q.push(n.right); } i++; } return root; }\nfunction __raCay(r) { var out = [], q = [r], h = 0; while (h < q.length) { var n = q[h++]; if (n == null) { out.push(null); continue; } out.push(n.val); q.push(n.left == null ? null : n.left, n.right == null ? null : n.right); }\n  while (out.length && out[out.length - 1] === null) out.pop(); return out; }\nfunction __ds(a) { var head = null; for (var i = a.length - 1; i >= 0; i--) head = { val: a[i], next: head }; return head; }\nfunction __raDs(h) { var out = []; while (h && out.length < 1000000) { out.push(h.val); h = h.next; } return out; }\nvar __s = 20261115; function R(m) { __s = (__s * 48271) % 2147483647; return __s % m; }\nvar n = 80000, t = []; for (var i = 0; i < n; i++) t.push((R(1679616) + 1679616).toString(36) + \"-\" + i); var d = []; for (var j = 0; j < 40000; j++) { var a = R(n - 1); d.push([t[a], t[a + 1 + R(Math.min(50, n - 1 - a))]]); } var o = smallestOrder(t, d); return { length: o.length, first: o.slice(0, 3), last: o[o.length - 1], at40000: o[40000] };\n})()",
+            "mongDoi": {
+              "length": 80000,
+              "first": [
+                "1000g-70790",
+                "1000l-16101",
+                "1001j-7997"
+              ],
+              "last": "1fbik-46915",
+              "at40000": "1mz8l-39142"
+            }
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Picking the minimum with a linear scan (or <code>ready.sort()</code>) every step: correct, but O(n²) with tens of thousands of ready tasks.|||Lấy nhỏ nhất bằng cách quét tuyến tính (hoặc <code>ready.sort()</code>) mỗi bước: đúng, nhưng O(n²) với hàng chục nghìn việc sẵn sàng."
+        },
+        {
+          "loi": "Sorting the tasks first and then running plain Kahn with a FIFO queue: the result is valid but not the smallest (a task freed later can be smaller than one already waiting).|||Sắp xếp các việc trước rồi chạy Kahn thường với hàng đợi FIFO: kết quả hợp lệ nhưng không nhỏ nhất (việc được mở sau có thể nhỏ hơn việc đang chờ)."
+        },
+        {
+          "loi": "Using <code>localeCompare</code> instead of <code>&lt;</code>: it orders \"Z\" after \"a\" and disagrees with the specified comparison.|||Dùng <code>localeCompare</code> thay cho <code>&lt;</code>: nó xếp \"Z\" sau \"a\" và khác với phép so mà đề quy định."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "lexicographically smallest",
+          "vi": "nhỏ nhất theo từ điển"
+        },
+        {
+          "en": "min-heap",
+          "vi": "đống nhỏ nhất",
+          "giaiThich": "cây nhị phân trong mảng, gốc luôn là phần tử nhỏ nhất."
+        },
+        {
+          "en": "sift up / sift down",
+          "vi": "đẩy lên / đẩy xuống"
+        },
+        {
+          "en": "priority queue",
+          "vi": "hàng đợi ưu tiên"
+        }
+      ]
+    }
+  ]
+}

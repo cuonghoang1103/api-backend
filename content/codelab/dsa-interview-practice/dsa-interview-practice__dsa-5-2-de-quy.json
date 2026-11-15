@@ -1,0 +1,656 @@
+{
+  "trackSlug": "dsa-interview-practice",
+  "moduleSlug": "dsa-5-2-de-quy",
+  "lesson": {
+    "course": "dsa-interview",
+    "slug": "dsa-5-2-de-quy"
+  },
+  "exercises": [
+    {
+      "title": "Department headcount: replace every node by its subtree total",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 15,
+      "points": 10,
+      "concepts": [
+        "tree recursion",
+        "post-order"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dsa-interview",
+        "coding-interview"
+      ],
+      "problemHtml": "<p>A company stores its departments as a binary tree: <code>node.val</code> is the number of people working <i>directly</i> in that department, and the children are its sub-departments. For the yearly report, every department must show its <b>total</b> headcount — itself plus everything below it.</p>\n<p>Write <code>subtreeTotals(root)</code> that returns the root of a <b>new</b> tree with the same shape, where each node's value is the sum of its whole subtree in the original. <b>Do not modify the input tree</b> — the original numbers are still needed by payroll. The grader prints your tree in level-order form.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Write the function in <code>solution.js</code> and <b>return</b> the answer — do not print it.</li>\n  <li>Do not modify the input arrays/objects.</li>\n</ul>",
+      "problemHtmlVi": "<p>Một công ty lưu các phòng ban dạng cây nhị phân: <code>node.val</code> là số người làm <i>trực tiếp</i> ở phòng đó, các con là phòng ban cấp dưới. Trong báo cáo năm, mỗi phòng phải ghi <b>tổng</b> quân số — chính nó cộng mọi thứ bên dưới.</p>\n<p>Viết <code>subtreeTotals(root)</code> trả về gốc của một cây <b>mới</b> cùng hình dạng, giá trị mỗi nút là tổng cả cây con của nó trong cây gốc. <b>Không được sửa cây đầu vào</b> — phòng lương vẫn cần số gốc. Máy chấm in cây của bạn theo dạng mảng theo tầng.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Viết hàm trong <code>solution.js</code> và <b>trả về</b> kết quả — đừng in ra.</li>\n  <li>Không sửa mảng/object đầu vào.</li>\n</ul>",
+      "inputSpec": "root — tree node or null.|||root — nút cây hoặc null.",
+      "outputSpec": "The root of a new tree (or null).|||Gốc của cây mới (hoặc null).",
+      "constraints": "0 ≤ nodes ≤ 10⁴; depth ≤ 1000; 0 ≤ val ≤ 1000.|||0 ≤ số nút ≤ 10⁴; độ sâu ≤ 1000; 0 ≤ val ≤ 1000.",
+      "examplesJson": [
+        {
+          "input": "subtreeTotals([5,3,8,1,2])  →  as level-order array",
+          "output": "[19,6,8,1,2]",
+          "explanation": "The first sample case (Run executes every visible case; hidden cases only run on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy mọi ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Ask the template question: what should the call on a child hand back to its parent? Here: the new child node, already carrying the child's total.|||Hỏi câu của khuôn: lời gọi trên con nên trả gì cho cha? Ở đây: nút con MỚI, đã mang sẵn tổng của con.",
+        "Post-order: build the left and right results first, then <code>total = root.val + left.val + right.val</code>, then create <code>{ val: total, left, right }</code>.|||Hậu thứ tự (post-order): dựng kết quả trái và phải trước, rồi <code>total = root.val + left.val + right.val</code>, rồi tạo <code>{ val: total, left, right }</code>."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "solution.js",
+          "language": "javascript",
+          "code": "/**\n * root: { val, left, right } | null\n * returns a NEW tree of the same shape, each val = total of that subtree (input unchanged)\n */\nfunction subtreeTotals(root) {\n  // Write your solution here\n  return root;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "solution.js",
+          "language": "javascript",
+          "code": "// Reference solution — post-order: children return their new node (carrying their total).\nfunction subtreeTotals(root) {\n  // returns a NEW node whose val = total of the subtree; the input tree is left untouched\n  if (root === null) return null;\n  var left = subtreeTotals(root.left);\n  var right = subtreeTotals(root.right);\n  var total = root.val + (left ? left.val : 0) + (right ? right.val : 0); // children already hold THEIR totals\n  return { val: total, left: left, right: right };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The return value does double duty: it is the piece of the new tree <i>and</i> it carries the child's total, so the parent gets everything it needs in O(1). Each original node is visited once ⇒ O(n) time; the recursion is as deep as the tree ⇒ O(h) stack, plus O(n) for the new nodes. Creating new nodes instead of writing into <code>root.val</code> is what keeps the caller's data intact — \"do not mutate the input\" is a normal requirement in real code reviews.</p>",
+      "solutionExplanationHtmlVi": "<p>Giá trị trả về làm hai việc: nó là một mảnh của cây mới <i>và</i> mang tổng của con, nên cha có đủ thứ cần trong O(1). Mỗi nút gốc được thăm một lần ⇒ O(n) thời gian; đệ quy sâu bằng chiều cao cây ⇒ O(h) ngăn xếp, cộng O(n) cho các nút mới. Tạo nút mới thay vì ghi vào <code>root.val</code> giữ nguyên dữ liệu của bên gọi — \"không sửa đầu vào\" là yêu cầu bình thường khi review code thật.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "solution.js",
+        "tepNap": [
+          "solution.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Root total 5+3+8+1+2 = 19",
+              "vi": "Tổng ở gốc 5+3+8+1+2 = 19"
+            },
+            "goi": "(function () {\nfunction __cay(a) { if (!a.length || a[0] == null) return null; var root = { val: a[0], left: null, right: null }, q = [root], h = 0, i = 1;\n  while (i < a.length) { var n = q[h++]; if (a[i] != null) { n.left = { val: a[i], left: null, right: null }; q.push(n.left); } i++;\n    if (i < a.length && a[i] != null) { n.right = { val: a[i], left: null, right: null }; q.push(n.right); } i++; } return root; }\nfunction __raCay(r) { var out = [], q = [r], h = 0; while (h < q.length) { var n = q[h++]; if (n == null) { out.push(null); continue; } out.push(n.val); q.push(n.left == null ? null : n.left, n.right == null ? null : n.right); }\n  while (out.length && out[out.length - 1] === null) out.pop(); return out; }\nfunction __ds(a) { var head = null; for (var i = a.length - 1; i >= 0; i--) head = { val: a[i], next: head }; return head; }\nfunction __raDs(h) { var out = []; while (h && out.length < 1000000) { out.push(h.val); h = h.next; } return out; }\nreturn (__raCay(subtreeTotals(__cay([5,3,8,1,2]))));\n})()",
+            "mongDoi": [
+              19,
+              6,
+              8,
+              1,
+              2
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Case 2: subtreeTotals([4,null,6,2])  →  as level-order array",
+              "vi": "Ca 2"
+            },
+            "goi": "(function () {\nfunction __cay(a) { if (!a.length || a[0] == null) return null; var root = { val: a[0], left: null, right: null }, q = [root], h = 0, i = 1;\n  while (i < a.length) { var n = q[h++]; if (a[i] != null) { n.left = { val: a[i], left: null, right: null }; q.push(n.left); } i++;\n    if (i < a.length && a[i] != null) { n.right = { val: a[i], left: null, right: null }; q.push(n.right); } i++; } return root; }\nfunction __raCay(r) { var out = [], q = [r], h = 0; while (h < q.length) { var n = q[h++]; if (n == null) { out.push(null); continue; } out.push(n.val); q.push(n.left == null ? null : n.left, n.right == null ? null : n.right); }\n  while (out.length && out[out.length - 1] === null) out.pop(); return out; }\nfunction __ds(a) { var head = null; for (var i = a.length - 1; i >= 0; i--) head = { val: a[i], next: head }; return head; }\nfunction __raDs(h) { var out = []; while (h && out.length < 1000000) { out.push(h.val); h = h.next; } return out; }\nreturn (__raCay(subtreeTotals(__cay([4,null,6,2]))));\n})()",
+            "mongDoi": [
+              12,
+              null,
+              8,
+              2
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Empty tree ⇒ null ⇒ []",
+              "vi": "Cây rỗng ⇒ null ⇒ []"
+            },
+            "goi": "(function () {\nfunction __cay(a) { if (!a.length || a[0] == null) return null; var root = { val: a[0], left: null, right: null }, q = [root], h = 0, i = 1;\n  while (i < a.length) { var n = q[h++]; if (a[i] != null) { n.left = { val: a[i], left: null, right: null }; q.push(n.left); } i++;\n    if (i < a.length && a[i] != null) { n.right = { val: a[i], left: null, right: null }; q.push(n.right); } i++; } return root; }\nfunction __raCay(r) { var out = [], q = [r], h = 0; while (h < q.length) { var n = q[h++]; if (n == null) { out.push(null); continue; } out.push(n.val); q.push(n.left == null ? null : n.left, n.right == null ? null : n.right); }\n  while (out.length && out[out.length - 1] === null) out.pop(); return out; }\nfunction __ds(a) { var head = null; for (var i = a.length - 1; i >= 0; i--) head = { val: a[i], next: head }; return head; }\nfunction __raDs(h) { var out = []; while (h && out.length < 1000000) { out.push(h.val); h = h.next; } return out; }\nreturn (__raCay(subtreeTotals(__cay([]))));\n})()",
+            "mongDoi": []
+          },
+          {
+            "moTa": {
+              "en": "The input tree must be unchanged after the call",
+              "vi": "Cây đầu vào phải giữ nguyên sau khi gọi"
+            },
+            "goi": "(function () {\nfunction __cay(a) { if (!a.length || a[0] == null) return null; var root = { val: a[0], left: null, right: null }, q = [root], h = 0, i = 1;\n  while (i < a.length) { var n = q[h++]; if (a[i] != null) { n.left = { val: a[i], left: null, right: null }; q.push(n.left); } i++;\n    if (i < a.length && a[i] != null) { n.right = { val: a[i], left: null, right: null }; q.push(n.right); } i++; } return root; }\nfunction __raCay(r) { var out = [], q = [r], h = 0; while (h < q.length) { var n = q[h++]; if (n == null) { out.push(null); continue; } out.push(n.val); q.push(n.left == null ? null : n.left, n.right == null ? null : n.right); }\n  while (out.length && out[out.length - 1] === null) out.pop(); return out; }\nfunction __ds(a) { var head = null; for (var i = a.length - 1; i >= 0; i--) head = { val: a[i], next: head }; return head; }\nfunction __raDs(h) { var out = []; while (h && out.length < 1000000) { out.push(h.val); h = h.next; } return out; }\nreturn ((function () { var t = __cay([5, 3, 8, 1, 2]); subtreeTotals(t); return __raCay(t); })());\n})()",
+            "mongDoi": [
+              5,
+              3,
+              8,
+              1,
+              2
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "(function () {\nfunction __cay(a) { if (!a.length || a[0] == null) return null; var root = { val: a[0], left: null, right: null }, q = [root], h = 0, i = 1;\n  while (i < a.length) { var n = q[h++]; if (a[i] != null) { n.left = { val: a[i], left: null, right: null }; q.push(n.left); } i++;\n    if (i < a.length && a[i] != null) { n.right = { val: a[i], left: null, right: null }; q.push(n.right); } i++; } return root; }\nfunction __raCay(r) { var out = [], q = [r], h = 0; while (h < q.length) { var n = q[h++]; if (n == null) { out.push(null); continue; } out.push(n.val); q.push(n.left == null ? null : n.left, n.right == null ? null : n.right); }\n  while (out.length && out[out.length - 1] === null) out.pop(); return out; }\nfunction __ds(a) { var head = null; for (var i = a.length - 1; i >= 0; i--) head = { val: a[i], next: head }; return head; }\nfunction __raDs(h) { var out = []; while (h && out.length < 1000000) { out.push(h.val); h = h.next; } return out; }\nreturn (__raCay(subtreeTotals(__cay([7]))));\n})()",
+            "mongDoi": [
+              7
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "(function () {\nfunction __cay(a) { if (!a.length || a[0] == null) return null; var root = { val: a[0], left: null, right: null }, q = [root], h = 0, i = 1;\n  while (i < a.length) { var n = q[h++]; if (a[i] != null) { n.left = { val: a[i], left: null, right: null }; q.push(n.left); } i++;\n    if (i < a.length && a[i] != null) { n.right = { val: a[i], left: null, right: null }; q.push(n.right); } i++; } return root; }\nfunction __raCay(r) { var out = [], q = [r], h = 0; while (h < q.length) { var n = q[h++]; if (n == null) { out.push(null); continue; } out.push(n.val); q.push(n.left == null ? null : n.left, n.right == null ? null : n.right); }\n  while (out.length && out[out.length - 1] === null) out.pop(); return out; }\nfunction __ds(a) { var head = null; for (var i = a.length - 1; i >= 0; i--) head = { val: a[i], next: head }; return head; }\nfunction __raDs(h) { var out = []; while (h && out.length < 1000000) { out.push(h.val); h = h.next; } return out; }\nreturn (__raCay(subtreeTotals(__cay([0,0,0,0,null,null,0]))));\n})()",
+            "mongDoi": [
+              0,
+              0,
+              0,
+              0,
+              null,
+              null,
+              0
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Depth 1000 chain of ones ⇒ 1000, 999, 998, …",
+              "vi": "Chuỗi 1000 số 1 ⇒ 1000, 999, 998, …"
+            },
+            "goi": "(function () {\nfunction __cay(a) { if (!a.length || a[0] == null) return null; var root = { val: a[0], left: null, right: null }, q = [root], h = 0, i = 1;\n  while (i < a.length) { var n = q[h++]; if (a[i] != null) { n.left = { val: a[i], left: null, right: null }; q.push(n.left); } i++;\n    if (i < a.length && a[i] != null) { n.right = { val: a[i], left: null, right: null }; q.push(n.right); } i++; } return root; }\nfunction __raCay(r) { var out = [], q = [r], h = 0; while (h < q.length) { var n = q[h++]; if (n == null) { out.push(null); continue; } out.push(n.val); q.push(n.left == null ? null : n.left, n.right == null ? null : n.right); }\n  while (out.length && out[out.length - 1] === null) out.pop(); return out; }\nfunction __ds(a) { var head = null; for (var i = a.length - 1; i >= 0; i--) head = { val: a[i], next: head }; return head; }\nfunction __raDs(h) { var out = []; while (h && out.length < 1000000) { out.push(h.val); h = h.next; } return out; }\nreturn ((function () { var r = subtreeTotals(__cay((function () { var a = [1]; for (var i = 1; i < 1000; i++) a.push(null, 1); return a; })())); var d = 0, s = []; while (r && d < 3) { s.push(r.val); r = r.right; d++; } return s; })());\n})()",
+            "mongDoi": [
+              1000,
+              999,
+              998
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Overwriting <code>root.val</code> in place and returning <code>root</code>: the output is right but the input tree is destroyed (a hidden check reads the original tree after your call).|||Ghi đè <code>root.val</code> tại chỗ rồi trả <code>root</code>: đầu ra đúng nhưng cây đầu vào bị phá (một ca ẩn đọc lại cây gốc sau khi gọi hàm của bạn)."
+        },
+        {
+          "loi": "Calling a separate <code>sum(node)</code> helper for every node: correct but O(n·h) — each node is re-added once per ancestor.|||Gọi riêng hàm <code>sum(node)</code> cho từng nút: đúng nhưng O(n·h) — mỗi nút bị cộng lại một lần cho mỗi tổ tiên."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "post-order",
+          "vi": "hậu thứ tự (con trước, cha sau)"
+        },
+        {
+          "en": "subtree",
+          "vi": "cây con"
+        },
+        {
+          "en": "mutate",
+          "vi": "sửa tại chỗ (làm thay đổi đối tượng)"
+        }
+      ]
+    },
+    {
+      "title": "Release tree: the longest chain of consecutive versions",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 20,
+      "points": 20,
+      "concepts": [
+        "tree recursion",
+        "top-down state"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dsa-interview",
+        "coding-interview"
+      ],
+      "problemHtml": "<p>An internal tool records how builds were forked: each build is a node, its children are builds created from it, and <code>node.val</code> is the build number. A <b>clean upgrade chain</b> is a downward path (parent → child → grandchild …) where every next build number is exactly one more than the previous: 41 → 42 → 43.</p>\n<p>Write <code>longestStepChain(root)</code> returning the number of nodes on the longest clean upgrade chain. The chain may start at any node, not only at the root. Empty tree ⇒ <code>0</code>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Write the function in <code>solution.js</code> and <b>return</b> the answer — do not print it.</li>\n  <li>Do not modify the input arrays/objects.</li>\n</ul>",
+      "problemHtmlVi": "<p>Một công cụ nội bộ ghi lại cách các bản build được rẽ nhánh: mỗi build là một nút, con của nó là các build tạo ra từ nó, <code>node.val</code> là số hiệu build. Một <b>chuỗi nâng cấp sạch</b> là đường đi xuống (cha → con → cháu …) mà số hiệu sau luôn lớn hơn số trước đúng 1: 41 → 42 → 43.</p>\n<p>Viết <code>longestStepChain(root)</code> trả về số nút trên chuỗi nâng cấp sạch dài nhất. Chuỗi có thể bắt đầu ở bất kỳ nút nào, không nhất thiết ở gốc. Cây rỗng ⇒ <code>0</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Viết hàm trong <code>solution.js</code> và <b>trả về</b> kết quả — đừng in ra.</li>\n  <li>Không sửa mảng/object đầu vào.</li>\n</ul>",
+      "inputSpec": "root — tree node or null; values are integers (may repeat).|||root — nút cây hoặc null; giá trị là số nguyên (có thể trùng).",
+      "outputSpec": "number — nodes on the longest chain.|||number — số nút trên chuỗi dài nhất.",
+      "constraints": "0 ≤ nodes ≤ 10⁵; depth ≤ 1000.\nTarget: O(n).|||0 ≤ số nút ≤ 10⁵; độ sâu ≤ 1000.\nMục tiêu: O(n).",
+      "examplesJson": [
+        {
+          "input": "longestStepChain([41,42,50,43,null,null,51])",
+          "output": "3",
+          "explanation": "The first sample case (Run executes every visible case; hidden cases only run on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy mọi ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Information flows DOWN here: whether a node extends a chain depends on its parent. Pass the parent's value and the current chain length as parameters.|||Ở đây thông tin chảy XUỐNG: một nút có nối dài chuỗi hay không phụ thuộc vào cha. Truyền giá trị của cha và độ dài chuỗi hiện tại làm tham số.",
+        "At each node: <code>run = (val === parentVal + 1) ? run + 1 : 1</code>, update a global best, recurse into both children with the new run.|||Ở mỗi nút: <code>run = (val === parentVal + 1) ? run + 1 : 1</code>, cập nhật biến best chung, đệ quy xuống cả hai con với run mới."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "solution.js",
+          "language": "javascript",
+          "code": "/**\n * root: { val, left, right } | null\n * returns the number of nodes on the longest downward path where each child = parent + 1\n */\nfunction longestStepChain(root) {\n  // Write your solution here\n  return root ? 1 : 0;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "solution.js",
+          "language": "javascript",
+          "code": "// Reference solution — pass (parent value, current run) down; restart the run when it breaks.\nfunction longestStepChain(root) {\n  var best = 0;\n  // run = length of the consecutive chain that ENDS at `node` (passed DOWN from the parent)\n  function go(node, parentVal, run) {\n    if (node === null) return;\n    run = (parentVal !== null && node.val === parentVal + 1) ? run + 1 : 1; // extend or restart here\n    if (run > best) best = run;\n    go(node.left, node.val, run);\n    go(node.right, node.val, run);\n  }\n  go(root, null, 0);\n  return best;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The length of the best chain that ends at a node depends only on its parent (extend by one, or restart at 1), so we compute it on the way down and keep the maximum. Every node is visited once ⇒ O(n) time, O(h) recursion stack. This is the \"pass information down\" half of the template; the next two problems use the \"return information up\" half.</p>",
+      "solutionExplanationHtmlVi": "<p>Độ dài chuỗi tốt nhất kết thúc tại một nút chỉ phụ thuộc vào cha (nối thêm một, hoặc bắt đầu lại từ 1), nên ta tính nó trên đường đi xuống và giữ giá trị lớn nhất. Mỗi nút thăm một lần ⇒ O(n) thời gian, O(h) ngăn xếp đệ quy. Đây là nửa \"truyền thông tin xuống\" của khuôn; hai đề sau dùng nửa \"trả thông tin lên\".</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "solution.js",
+        "tepNap": [
+          "solution.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "41 → 42 → 43",
+              "vi": "41 → 42 → 43"
+            },
+            "goi": "(function () {\nfunction __cay(a) { if (!a.length || a[0] == null) return null; var root = { val: a[0], left: null, right: null }, q = [root], h = 0, i = 1;\n  while (i < a.length) { var n = q[h++]; if (a[i] != null) { n.left = { val: a[i], left: null, right: null }; q.push(n.left); } i++;\n    if (i < a.length && a[i] != null) { n.right = { val: a[i], left: null, right: null }; q.push(n.right); } i++; } return root; }\nfunction __raCay(r) { var out = [], q = [r], h = 0; while (h < q.length) { var n = q[h++]; if (n == null) { out.push(null); continue; } out.push(n.val); q.push(n.left == null ? null : n.left, n.right == null ? null : n.right); }\n  while (out.length && out[out.length - 1] === null) out.pop(); return out; }\nfunction __ds(a) { var head = null; for (var i = a.length - 1; i >= 0; i--) head = { val: a[i], next: head }; return head; }\nfunction __raDs(h) { var out = []; while (h && out.length < 1000000) { out.push(h.val); h = h.next; } return out; }\nreturn (longestStepChain(__cay([41,42,50,43,null,null,51])));\n})()",
+            "mongDoi": 3
+          },
+          {
+            "moTa": {
+              "en": "Chain 5 → 6 → 7 → 8 does not start at the root",
+              "vi": "Chuỗi 5 → 6 → 7 → 8 không bắt đầu ở gốc"
+            },
+            "goi": "(function () {\nfunction __cay(a) { if (!a.length || a[0] == null) return null; var root = { val: a[0], left: null, right: null }, q = [root], h = 0, i = 1;\n  while (i < a.length) { var n = q[h++]; if (a[i] != null) { n.left = { val: a[i], left: null, right: null }; q.push(n.left); } i++;\n    if (i < a.length && a[i] != null) { n.right = { val: a[i], left: null, right: null }; q.push(n.right); } i++; } return root; }\nfunction __raCay(r) { var out = [], q = [r], h = 0; while (h < q.length) { var n = q[h++]; if (n == null) { out.push(null); continue; } out.push(n.val); q.push(n.left == null ? null : n.left, n.right == null ? null : n.right); }\n  while (out.length && out[out.length - 1] === null) out.pop(); return out; }\nfunction __ds(a) { var head = null; for (var i = a.length - 1; i >= 0; i--) head = { val: a[i], next: head }; return head; }\nfunction __raDs(h) { var out = []; while (h && out.length < 1000000) { out.push(h.val); h = h.next; } return out; }\nreturn (longestStepChain(__cay([1,5,null,6,null,7,null,8])));\n})()",
+            "mongDoi": 4
+          },
+          {
+            "moTa": {
+              "en": "Empty ⇒ 0",
+              "vi": "Rỗng ⇒ 0"
+            },
+            "goi": "(function () {\nfunction __cay(a) { if (!a.length || a[0] == null) return null; var root = { val: a[0], left: null, right: null }, q = [root], h = 0, i = 1;\n  while (i < a.length) { var n = q[h++]; if (a[i] != null) { n.left = { val: a[i], left: null, right: null }; q.push(n.left); } i++;\n    if (i < a.length && a[i] != null) { n.right = { val: a[i], left: null, right: null }; q.push(n.right); } i++; } return root; }\nfunction __raCay(r) { var out = [], q = [r], h = 0; while (h < q.length) { var n = q[h++]; if (n == null) { out.push(null); continue; } out.push(n.val); q.push(n.left == null ? null : n.left, n.right == null ? null : n.right); }\n  while (out.length && out[out.length - 1] === null) out.pop(); return out; }\nfunction __ds(a) { var head = null; for (var i = a.length - 1; i >= 0; i--) head = { val: a[i], next: head }; return head; }\nfunction __raDs(h) { var out = []; while (h && out.length < 1000000) { out.push(h.val); h = h.next; } return out; }\nreturn (longestStepChain(__cay([])));\n})()",
+            "mongDoi": 0
+          },
+          {
+            "moTa": {
+              "en": "Going down by one does not count",
+              "vi": "Giảm dần không tính"
+            },
+            "goi": "(function () {\nfunction __cay(a) { if (!a.length || a[0] == null) return null; var root = { val: a[0], left: null, right: null }, q = [root], h = 0, i = 1;\n  while (i < a.length) { var n = q[h++]; if (a[i] != null) { n.left = { val: a[i], left: null, right: null }; q.push(n.left); } i++;\n    if (i < a.length && a[i] != null) { n.right = { val: a[i], left: null, right: null }; q.push(n.right); } i++; } return root; }\nfunction __raCay(r) { var out = [], q = [r], h = 0; while (h < q.length) { var n = q[h++]; if (n == null) { out.push(null); continue; } out.push(n.val); q.push(n.left == null ? null : n.left, n.right == null ? null : n.right); }\n  while (out.length && out[out.length - 1] === null) out.pop(); return out; }\nfunction __ds(a) { var head = null; for (var i = a.length - 1; i >= 0; i--) head = { val: a[i], next: head }; return head; }\nfunction __raDs(h) { var out = []; while (h && out.length < 1000000) { out.push(h.val); h = h.next; } return out; }\nreturn (longestStepChain(__cay([3,2,4,1,null,null,5])));\n})()",
+            "mongDoi": 3,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Equal values break the chain",
+              "vi": "Giá trị bằng nhau làm đứt chuỗi"
+            },
+            "goi": "(function () {\nfunction __cay(a) { if (!a.length || a[0] == null) return null; var root = { val: a[0], left: null, right: null }, q = [root], h = 0, i = 1;\n  while (i < a.length) { var n = q[h++]; if (a[i] != null) { n.left = { val: a[i], left: null, right: null }; q.push(n.left); } i++;\n    if (i < a.length && a[i] != null) { n.right = { val: a[i], left: null, right: null }; q.push(n.right); } i++; } return root; }\nfunction __raCay(r) { var out = [], q = [r], h = 0; while (h < q.length) { var n = q[h++]; if (n == null) { out.push(null); continue; } out.push(n.val); q.push(n.left == null ? null : n.left, n.right == null ? null : n.right); }\n  while (out.length && out[out.length - 1] === null) out.pop(); return out; }\nfunction __ds(a) { var head = null; for (var i = a.length - 1; i >= 0; i--) head = { val: a[i], next: head }; return head; }\nfunction __raDs(h) { var out = []; while (h && out.length < 1000000) { out.push(h.val); h = h.next; } return out; }\nreturn (longestStepChain(__cay([2,2,2,3])));\n})()",
+            "mongDoi": 2,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "(function () {\nfunction __cay(a) { if (!a.length || a[0] == null) return null; var root = { val: a[0], left: null, right: null }, q = [root], h = 0, i = 1;\n  while (i < a.length) { var n = q[h++]; if (a[i] != null) { n.left = { val: a[i], left: null, right: null }; q.push(n.left); } i++;\n    if (i < a.length && a[i] != null) { n.right = { val: a[i], left: null, right: null }; q.push(n.right); } i++; } return root; }\nfunction __raCay(r) { var out = [], q = [r], h = 0; while (h < q.length) { var n = q[h++]; if (n == null) { out.push(null); continue; } out.push(n.val); q.push(n.left == null ? null : n.left, n.right == null ? null : n.right); }\n  while (out.length && out[out.length - 1] === null) out.pop(); return out; }\nfunction __ds(a) { var head = null; for (var i = a.length - 1; i >= 0; i--) head = { val: a[i], next: head }; return head; }\nfunction __raDs(h) { var out = []; while (h && out.length < 1000000) { out.push(h.val); h = h.next; } return out; }\nreturn (longestStepChain(__cay([10,11,11,12,9,12,13,null,null,null,null,null,null,14])));\n})()",
+            "mongDoi": 3,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Negative build numbers",
+              "vi": "Số hiệu âm"
+            },
+            "goi": "(function () {\nfunction __cay(a) { if (!a.length || a[0] == null) return null; var root = { val: a[0], left: null, right: null }, q = [root], h = 0, i = 1;\n  while (i < a.length) { var n = q[h++]; if (a[i] != null) { n.left = { val: a[i], left: null, right: null }; q.push(n.left); } i++;\n    if (i < a.length && a[i] != null) { n.right = { val: a[i], left: null, right: null }; q.push(n.right); } i++; } return root; }\nfunction __raCay(r) { var out = [], q = [r], h = 0; while (h < q.length) { var n = q[h++]; if (n == null) { out.push(null); continue; } out.push(n.val); q.push(n.left == null ? null : n.left, n.right == null ? null : n.right); }\n  while (out.length && out[out.length - 1] === null) out.pop(); return out; }\nfunction __ds(a) { var head = null; for (var i = a.length - 1; i >= 0; i--) head = { val: a[i], next: head }; return head; }\nfunction __raDs(h) { var out = []; while (h && out.length < 1000000) { out.push(h.val); h = h.next; } return out; }\nreturn (longestStepChain(__cay([-2,-1,null,0,null,1])));\n})()",
+            "mongDoi": 4,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "0 → 1 → … → 999 (depth 1000)",
+              "vi": "0 → 1 → … → 999 (sâu 1000)"
+            },
+            "goi": "(function () {\nfunction __cay(a) { if (!a.length || a[0] == null) return null; var root = { val: a[0], left: null, right: null }, q = [root], h = 0, i = 1;\n  while (i < a.length) { var n = q[h++]; if (a[i] != null) { n.left = { val: a[i], left: null, right: null }; q.push(n.left); } i++;\n    if (i < a.length && a[i] != null) { n.right = { val: a[i], left: null, right: null }; q.push(n.right); } i++; } return root; }\nfunction __raCay(r) { var out = [], q = [r], h = 0; while (h < q.length) { var n = q[h++]; if (n == null) { out.push(null); continue; } out.push(n.val); q.push(n.left == null ? null : n.left, n.right == null ? null : n.right); }\n  while (out.length && out[out.length - 1] === null) out.pop(); return out; }\nfunction __ds(a) { var head = null; for (var i = a.length - 1; i >= 0; i--) head = { val: a[i], next: head }; return head; }\nfunction __raDs(h) { var out = []; while (h && out.length < 1000000) { out.push(h.val); h = h.next; } return out; }\nreturn (longestStepChain(__cay((function () { var a = [0]; for (var i = 1; i < 1000; i++) a.push(null, i); return a; })())));\n})()",
+            "mongDoi": 1000,
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Only counting chains that start at the root: when the chain breaks you must <b>restart at 1</b>, not stop.|||Chỉ đếm chuỗi bắt đầu từ gốc: khi chuỗi đứt phải <b>bắt đầu lại từ 1</b>, không phải dừng."
+        },
+        {
+          "loi": "Accepting <code>child.val === parent.val</code> or <code>parent.val − 1</code>: the chain must go up by exactly one, downward.|||Chấp nhận <code>child.val === parent.val</code> hay <code>parent.val − 1</code>: chuỗi phải tăng đúng 1, theo chiều đi xuống."
+        },
+        {
+          "loi": "Starting a fresh search from every node: O(n·h) — fine on small trees, wasteful in general.|||Bắt đầu tìm lại từ mỗi nút: O(n·h) — ổn với cây nhỏ, lãng phí nói chung."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "downward path",
+          "vi": "đường đi xuống",
+          "giaiThich": "từ cha tới con, không quay lên."
+        },
+        {
+          "en": "top-down",
+          "vi": "từ trên xuống",
+          "giaiThich": "thông tin truyền qua tham số."
+        },
+        {
+          "en": "global best",
+          "vi": "biến kết quả chung"
+        }
+      ]
+    },
+    {
+      "title": "Network closet: the longest cable path on one firmware version",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 25,
+      "points": 20,
+      "concepts": [
+        "tree recursion",
+        "diameter pattern"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dsa-interview",
+        "coding-interview"
+      ],
+      "problemHtml": "<p>The switches of a campus building are wired as a binary tree, and <code>node.val</code> is the firmware version installed on each switch. Before an upgrade window, the network team wants the longest stretch of cable where <b>every switch on the path runs the same version</b>, so they can test a broadcast storm on it.</p>\n<p>Write <code>longestSameFirmware(root)</code> returning the length of the longest such path, counted in <b>edges</b> (cables). The path may go up through a switch and down the other side — it does not have to pass through the root. Empty tree or a single switch ⇒ <code>0</code>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Write the function in <code>solution.js</code> and <b>return</b> the answer — do not print it.</li>\n  <li>Do not modify the input arrays/objects.</li>\n</ul>",
+      "problemHtmlVi": "<p>Các switch của một toà nhà trong trường được nối thành cây nhị phân, <code>node.val</code> là phiên bản firmware cài trên mỗi switch. Trước đợt nâng cấp, đội mạng muốn tìm đoạn cáp dài nhất mà <b>mọi switch trên đường đi đều chạy cùng một phiên bản</b>, để thử bão broadcast trên đó.</p>\n<p>Viết <code>longestSameFirmware(root)</code> trả về độ dài đường đi dài nhất như vậy, tính bằng <b>số cạnh</b> (số đoạn cáp). Đường đi có thể đi lên qua một switch rồi xuống phía bên kia — không bắt buộc đi qua gốc. Cây rỗng hoặc một switch ⇒ <code>0</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Viết hàm trong <code>solution.js</code> và <b>trả về</b> kết quả — đừng in ra.</li>\n  <li>Không sửa mảng/object đầu vào.</li>\n</ul>",
+      "inputSpec": "root — tree node or null.|||root — nút cây hoặc null.",
+      "outputSpec": "number — edges on the longest same-value path.|||number — số cạnh trên đường cùng giá trị dài nhất.",
+      "constraints": "0 ≤ nodes ≤ 10⁵; depth ≤ 1000.\nTarget: O(n).|||0 ≤ số nút ≤ 10⁵; độ sâu ≤ 1000.\nMục tiêu: O(n).",
+      "examplesJson": [
+        {
+          "input": "longestSameFirmware([5,4,5,1,1,null,5])",
+          "output": "2",
+          "explanation": "The first sample case (Run executes every visible case; hidden cases only run on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy mọi ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Same shape as the diameter problem of the lesson: the answer path has a highest node where it bends. At that node it uses a left arm and a right arm.|||Cùng dạng với bài đường kính trong bài học: đường đáp án có một nút cao nhất nơi nó gập lại. Tại nút đó nó dùng một cánh tay trái và một cánh tay phải.",
+        "Let <code>arm(node)</code> return the longest same-value path going DOWN from node, in edges. An arm only extends into a child with the same value. Update <code>best</code> with <code>left arm + right arm</code>, return <code>max(left arm, right arm)</code>.|||Cho <code>arm(node)</code> trả về đường cùng giá trị dài nhất đi XUỐNG từ node, tính bằng cạnh. Cánh tay chỉ kéo dài vào con có cùng giá trị. Cập nhật <code>best</code> bằng <code>tay trái + tay phải</code>, trả về <code>max(tay trái, tay phải)</code>."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "solution.js",
+          "language": "javascript",
+          "code": "/**\n * root: { val, left, right } | null — val = firmware version\n * returns the number of EDGES on the longest path whose nodes all have the same value\n */\nfunction longestSameFirmware(root) {\n  // Write your solution here\n  return 0;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "solution.js",
+          "language": "javascript",
+          "code": "// Reference solution — arm(node) returns the longer arm; best records left arm + right arm.\nfunction longestSameFirmware(root) {\n  var best = 0; // in EDGES\n  // arm(node) = longest downward path (in edges) starting at node where every node has node.val\n  function arm(node) {\n    if (node === null) return 0;\n    var l = arm(node.left), r = arm(node.right);\n    var goLeft = (node.left && node.left.val === node.val) ? l + 1 : 0;\n    var goRight = (node.right && node.right.val === node.val) ? r + 1 : 0;\n    if (goLeft + goRight > best) best = goLeft + goRight; // a path may bend here: use BOTH arms\n    return Math.max(goLeft, goRight);                      // but the parent can only continue ONE arm\n  }\n  arm(root);\n  return best;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Every path has a unique highest node; at that node it is \"left arm + right arm\". So one post-order pass that, at every node, combines the two arms into a candidate answer, and returns only the longer arm upward (because a parent can extend a single direction), sees every possible path exactly once. O(n) time, O(h) stack. This \"return one thing, record another\" split is the same as in Diameter and Maximum Path Sum.</p>",
+      "solutionExplanationHtmlVi": "<p>Mỗi đường đi có duy nhất một nút cao nhất; tại đó nó là \"tay trái + tay phải\". Nên một lượt hậu thứ tự, ở mỗi nút ghép hai cánh tay thành ứng viên đáp án, và chỉ trả cánh tay dài hơn lên trên (vì cha chỉ nối được một hướng), sẽ thấy mọi đường đi đúng một lần. O(n) thời gian, O(h) ngăn xếp. Cách tách \"trả về một thứ, ghi nhận thứ khác\" này giống hệt Diameter và Maximum Path Sum.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "solution.js",
+        "tepNap": [
+          "solution.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "5 → 5 → 5 on the right: 2 edges",
+              "vi": "5 → 5 → 5 bên phải: 2 cạnh"
+            },
+            "goi": "(function () {\nfunction __cay(a) { if (!a.length || a[0] == null) return null; var root = { val: a[0], left: null, right: null }, q = [root], h = 0, i = 1;\n  while (i < a.length) { var n = q[h++]; if (a[i] != null) { n.left = { val: a[i], left: null, right: null }; q.push(n.left); } i++;\n    if (i < a.length && a[i] != null) { n.right = { val: a[i], left: null, right: null }; q.push(n.right); } i++; } return root; }\nfunction __raCay(r) { var out = [], q = [r], h = 0; while (h < q.length) { var n = q[h++]; if (n == null) { out.push(null); continue; } out.push(n.val); q.push(n.left == null ? null : n.left, n.right == null ? null : n.right); }\n  while (out.length && out[out.length - 1] === null) out.pop(); return out; }\nfunction __ds(a) { var head = null; for (var i = a.length - 1; i >= 0; i--) head = { val: a[i], next: head }; return head; }\nfunction __raDs(h) { var out = []; while (h && out.length < 1000000) { out.push(h.val); h = h.next; } return out; }\nreturn (longestSameFirmware(__cay([5,4,5,1,1,null,5])));\n})()",
+            "mongDoi": 2
+          },
+          {
+            "moTa": {
+              "en": "4 – 4 – 4 bends at the left child: 2 edges",
+              "vi": "4 – 4 – 4 gập ở con trái: 2 cạnh"
+            },
+            "goi": "(function () {\nfunction __cay(a) { if (!a.length || a[0] == null) return null; var root = { val: a[0], left: null, right: null }, q = [root], h = 0, i = 1;\n  while (i < a.length) { var n = q[h++]; if (a[i] != null) { n.left = { val: a[i], left: null, right: null }; q.push(n.left); } i++;\n    if (i < a.length && a[i] != null) { n.right = { val: a[i], left: null, right: null }; q.push(n.right); } i++; } return root; }\nfunction __raCay(r) { var out = [], q = [r], h = 0; while (h < q.length) { var n = q[h++]; if (n == null) { out.push(null); continue; } out.push(n.val); q.push(n.left == null ? null : n.left, n.right == null ? null : n.right); }\n  while (out.length && out[out.length - 1] === null) out.pop(); return out; }\nfunction __ds(a) { var head = null; for (var i = a.length - 1; i >= 0; i--) head = { val: a[i], next: head }; return head; }\nfunction __raDs(h) { var out = []; while (h && out.length < 1000000) { out.push(h.val); h = h.next; } return out; }\nreturn (longestSameFirmware(__cay([1,4,5,4,4,null,5])));\n})()",
+            "mongDoi": 2
+          },
+          {
+            "moTa": {
+              "en": "One switch ⇒ 0",
+              "vi": "Một switch ⇒ 0"
+            },
+            "goi": "(function () {\nfunction __cay(a) { if (!a.length || a[0] == null) return null; var root = { val: a[0], left: null, right: null }, q = [root], h = 0, i = 1;\n  while (i < a.length) { var n = q[h++]; if (a[i] != null) { n.left = { val: a[i], left: null, right: null }; q.push(n.left); } i++;\n    if (i < a.length && a[i] != null) { n.right = { val: a[i], left: null, right: null }; q.push(n.right); } i++; } return root; }\nfunction __raCay(r) { var out = [], q = [r], h = 0; while (h < q.length) { var n = q[h++]; if (n == null) { out.push(null); continue; } out.push(n.val); q.push(n.left == null ? null : n.left, n.right == null ? null : n.right); }\n  while (out.length && out[out.length - 1] === null) out.pop(); return out; }\nfunction __ds(a) { var head = null; for (var i = a.length - 1; i >= 0; i--) head = { val: a[i], next: head }; return head; }\nfunction __raDs(h) { var out = []; while (h && out.length < 1000000) { out.push(h.val); h = h.next; } return out; }\nreturn (longestSameFirmware(__cay([7])));\n})()",
+            "mongDoi": 0
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "(function () {\nfunction __cay(a) { if (!a.length || a[0] == null) return null; var root = { val: a[0], left: null, right: null }, q = [root], h = 0, i = 1;\n  while (i < a.length) { var n = q[h++]; if (a[i] != null) { n.left = { val: a[i], left: null, right: null }; q.push(n.left); } i++;\n    if (i < a.length && a[i] != null) { n.right = { val: a[i], left: null, right: null }; q.push(n.right); } i++; } return root; }\nfunction __raCay(r) { var out = [], q = [r], h = 0; while (h < q.length) { var n = q[h++]; if (n == null) { out.push(null); continue; } out.push(n.val); q.push(n.left == null ? null : n.left, n.right == null ? null : n.right); }\n  while (out.length && out[out.length - 1] === null) out.pop(); return out; }\nfunction __ds(a) { var head = null; for (var i = a.length - 1; i >= 0; i--) head = { val: a[i], next: head }; return head; }\nfunction __raDs(h) { var out = []; while (h && out.length < 1000000) { out.push(h.val); h = h.next; } return out; }\nreturn (longestSameFirmware(__cay([])));\n})()",
+            "mongDoi": 0,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "All equal: the best path bends at the root (4 edges)",
+              "vi": "Tất cả bằng nhau: đường tốt nhất gập ở gốc (4 cạnh)"
+            },
+            "goi": "(function () {\nfunction __cay(a) { if (!a.length || a[0] == null) return null; var root = { val: a[0], left: null, right: null }, q = [root], h = 0, i = 1;\n  while (i < a.length) { var n = q[h++]; if (a[i] != null) { n.left = { val: a[i], left: null, right: null }; q.push(n.left); } i++;\n    if (i < a.length && a[i] != null) { n.right = { val: a[i], left: null, right: null }; q.push(n.right); } i++; } return root; }\nfunction __raCay(r) { var out = [], q = [r], h = 0; while (h < q.length) { var n = q[h++]; if (n == null) { out.push(null); continue; } out.push(n.val); q.push(n.left == null ? null : n.left, n.right == null ? null : n.right); }\n  while (out.length && out[out.length - 1] === null) out.pop(); return out; }\nfunction __ds(a) { var head = null; for (var i = a.length - 1; i >= 0; i--) head = { val: a[i], next: head }; return head; }\nfunction __raDs(h) { var out = []; while (h && out.length < 1000000) { out.push(h.val); h = h.next; } return out; }\nreturn (longestSameFirmware(__cay([2,2,2,2,2,2,2])));\n})()",
+            "mongDoi": 4,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "The bend is below the root",
+              "vi": "Điểm gập nằm dưới gốc"
+            },
+            "goi": "(function () {\nfunction __cay(a) { if (!a.length || a[0] == null) return null; var root = { val: a[0], left: null, right: null }, q = [root], h = 0, i = 1;\n  while (i < a.length) { var n = q[h++]; if (a[i] != null) { n.left = { val: a[i], left: null, right: null }; q.push(n.left); } i++;\n    if (i < a.length && a[i] != null) { n.right = { val: a[i], left: null, right: null }; q.push(n.right); } i++; } return root; }\nfunction __raCay(r) { var out = [], q = [r], h = 0; while (h < q.length) { var n = q[h++]; if (n == null) { out.push(null); continue; } out.push(n.val); q.push(n.left == null ? null : n.left, n.right == null ? null : n.right); }\n  while (out.length && out[out.length - 1] === null) out.pop(); return out; }\nfunction __ds(a) { var head = null; for (var i = a.length - 1; i >= 0; i--) head = { val: a[i], next: head }; return head; }\nfunction __raDs(h) { var out = []; while (h && out.length < 1000000) { out.push(h.val); h = h.next; } return out; }\nreturn (longestSameFirmware(__cay([1,1,3,1,1,null,null,1,null,null,1])));\n})()",
+            "mongDoi": 4,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "A child with another value resets the arm",
+              "vi": "Con khác giá trị làm cánh tay về 0"
+            },
+            "goi": "(function () {\nfunction __cay(a) { if (!a.length || a[0] == null) return null; var root = { val: a[0], left: null, right: null }, q = [root], h = 0, i = 1;\n  while (i < a.length) { var n = q[h++]; if (a[i] != null) { n.left = { val: a[i], left: null, right: null }; q.push(n.left); } i++;\n    if (i < a.length && a[i] != null) { n.right = { val: a[i], left: null, right: null }; q.push(n.right); } i++; } return root; }\nfunction __raCay(r) { var out = [], q = [r], h = 0; while (h < q.length) { var n = q[h++]; if (n == null) { out.push(null); continue; } out.push(n.val); q.push(n.left == null ? null : n.left, n.right == null ? null : n.right); }\n  while (out.length && out[out.length - 1] === null) out.pop(); return out; }\nfunction __ds(a) { var head = null; for (var i = a.length - 1; i >= 0; i--) head = { val: a[i], next: head }; return head; }\nfunction __raDs(h) { var out = []; while (h && out.length < 1000000) { out.push(h.val); h = h.next; } return out; }\nreturn (longestSameFirmware(__cay([3,9,3,9,9,3])));\n})()",
+            "mongDoi": 2,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Depth 1000, all 8 ⇒ 999 edges",
+              "vi": "Sâu 1000, toàn số 8 ⇒ 999 cạnh"
+            },
+            "goi": "(function () {\nfunction __cay(a) { if (!a.length || a[0] == null) return null; var root = { val: a[0], left: null, right: null }, q = [root], h = 0, i = 1;\n  while (i < a.length) { var n = q[h++]; if (a[i] != null) { n.left = { val: a[i], left: null, right: null }; q.push(n.left); } i++;\n    if (i < a.length && a[i] != null) { n.right = { val: a[i], left: null, right: null }; q.push(n.right); } i++; } return root; }\nfunction __raCay(r) { var out = [], q = [r], h = 0; while (h < q.length) { var n = q[h++]; if (n == null) { out.push(null); continue; } out.push(n.val); q.push(n.left == null ? null : n.left, n.right == null ? null : n.right); }\n  while (out.length && out[out.length - 1] === null) out.pop(); return out; }\nfunction __ds(a) { var head = null; for (var i = a.length - 1; i >= 0; i--) head = { val: a[i], next: head }; return head; }\nfunction __raDs(h) { var out = []; while (h && out.length < 1000000) { out.push(h.val); h = h.next; } return out; }\nreturn (longestSameFirmware(__cay((function () { var a = [8]; for (var i = 1; i < 1000; i++) a.push(null, 8); return a; })())));\n})()",
+            "mongDoi": 999,
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Returning <code>left + right</code> to the parent: a path cannot fork, so the parent may extend only ONE of the two arms — the answer comes out too long.|||Trả <code>left + right</code> cho cha: đường đi không thể rẽ đôi, nên cha chỉ được nối MỘT trong hai cánh tay — đáp án ra dài quá."
+        },
+        {
+          "loi": "Counting nodes instead of edges (off by one), or forgetting that a child with a different value resets its arm to 0 for this parent even if the child has a long arm of its own.|||Đếm nút thay vì cạnh (lệch một), hoặc quên rằng con khác giá trị thì cánh tay về 0 đối với cha này, dù bản thân con có cánh tay dài."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "arm",
+          "vi": "cánh tay (đường đi xuống từ một nút)"
+        },
+        {
+          "en": "edge",
+          "vi": "cạnh"
+        },
+        {
+          "en": "bend",
+          "vi": "điểm gập",
+          "giaiThich": "nút cao nhất của một đường đi."
+        }
+      ]
+    },
+    {
+      "title": "Security cameras on a lab corridor tree: the minimum number",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 35,
+      "points": 30,
+      "concepts": [
+        "tree recursion",
+        "greedy on trees",
+        "state machine"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dsa-interview",
+        "coding-interview"
+      ],
+      "problemHtml": "<p>The rooms of a new lab building are connected by corridors that form a binary tree (each node is a room; values do not matter). A camera installed in a room watches <b>that room, its parent room and its child rooms</b>. The facility manager wants every room watched using as few cameras as possible.</p>\n<p>Write <code>minCameras(root)</code> returning the minimum number of cameras. An empty building needs <code>0</code>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Write the function in <code>solution.js</code> and <b>return</b> the answer — do not print it.</li>\n  <li>Do not modify the input arrays/objects.</li>\n</ul>",
+      "problemHtmlVi": "<p>Các phòng của một toà lab mới nối với nhau bằng hành lang tạo thành cây nhị phân (mỗi nút là một phòng; giá trị không quan trọng). Một camera lắp trong một phòng quan sát được <b>phòng đó, phòng cha và các phòng con</b>. Quản lý toà nhà muốn mọi phòng đều được quan sát với ít camera nhất.</p>\n<p>Viết <code>minCameras(root)</code> trả về số camera ít nhất. Toà nhà rỗng cần <code>0</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Viết hàm trong <code>solution.js</code> và <b>trả về</b> kết quả — đừng in ra.</li>\n  <li>Không sửa mảng/object đầu vào.</li>\n</ul>",
+      "inputSpec": "root — tree node or null.|||root — nút cây hoặc null.",
+      "outputSpec": "number — minimum cameras.|||number — số camera ít nhất.",
+      "constraints": "0 ≤ nodes ≤ 10⁵; depth ≤ 1000.\nTarget: O(n).|||0 ≤ số nút ≤ 10⁵; độ sâu ≤ 1000.\nMục tiêu: O(n).",
+      "examplesJson": [
+        {
+          "input": "minCameras([0,0,null,0,0])",
+          "output": "1",
+          "explanation": "The first sample case (Run executes every visible case; hidden cases only run on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy mọi ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Never put a camera on a leaf: its parent covers the leaf AND more. Work bottom-up and decide each room only after its children have answered.|||Đừng bao giờ đặt camera ở lá: phòng cha phủ được lá VÀ nhiều hơn. Làm từ dưới lên, chỉ quyết định cho một phòng sau khi các con đã trả lời.",
+        "Let each call return one of three states to its parent: NEED (I am not covered), HAS_CAM (I hold a camera), COVERED (covered, no camera). An empty child counts as COVERED.|||Cho mỗi lời gọi trả về cho cha một trong ba trạng thái: NEED (tôi chưa được phủ), HAS_CAM (tôi có camera), COVERED (đã phủ, không camera). Con rỗng tính là COVERED.",
+        "Rules: any child NEED ⇒ camera here (return HAS_CAM); else any child HAS_CAM ⇒ COVERED; else NEED. After the walk, if the root says NEED, add one more camera.|||Luật: có con NEED ⇒ đặt camera ở đây (trả HAS_CAM); ngược lại có con HAS_CAM ⇒ COVERED; còn lại NEED. Sau khi duyệt, nếu gốc báo NEED thì thêm một camera."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "solution.js",
+          "language": "javascript",
+          "code": "/**\n * root: { val, left, right } | null — rooms; a camera watches its room, the parent and the children\n * returns the minimum number of cameras so that every room is watched\n */\nfunction minCameras(root) {\n  // Write your solution here\n  return 0;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "solution.js",
+          "language": "javascript",
+          "code": "// Reference solution — post-order with three states: NEED / HAS_CAM / COVERED.\nfunction minCameras(root) {\n  var NEED = 0, HAS_CAM = 1, COVERED = 2; // what a node tells its parent\n  var cams = 0;\n  function go(node) {\n    if (node === null) return COVERED;    // an empty spot needs nothing and offers nothing\n    var l = go(node.left), r = go(node.right);\n    if (l === NEED || r === NEED) { cams++; return HAS_CAM; } // a child is uncovered: only a camera HERE can see it\n    if (l === HAS_CAM || r === HAS_CAM) return COVERED;       // a child's camera sees me\n    return NEED;                                               // let my parent cover me (greedy: cameras as high as possible)\n  }\n  if (go(root) === NEED) cams++; // the root has no parent to rely on\n  return cams;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Greedy bottom-up: a leaf is best covered by its parent, because a camera there also covers the grandparent side; so we postpone every decision as high as possible. Each node reports one of three states, and the three rules place a camera only when a child would otherwise stay uncovered — an exchange argument shows no solution can use fewer. One post-order pass ⇒ O(n) time, O(h) stack. The interview lesson: when two values (\"covered or not\") are not enough for the parent to decide, return a richer state.</p>",
+      "solutionExplanationHtmlVi": "<p>Tham lam từ dưới lên: lá được phủ tốt nhất bởi cha, vì camera ở đó còn phủ được cả phía ông; nên ta hoãn mọi quyết định lên cao nhất có thể. Mỗi nút báo một trong ba trạng thái, và ba luật chỉ đặt camera khi một con sẽ bị bỏ trống nếu không đặt — lập luận hoán đổi cho thấy không lời giải nào dùng ít hơn. Một lượt hậu thứ tự ⇒ O(n) thời gian, O(h) ngăn xếp. Bài học phỏng vấn: khi hai giá trị (\"được phủ hay không\") không đủ để cha quyết định, hãy trả về một trạng thái giàu hơn.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "solution.js",
+        "tepNap": [
+          "solution.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "One camera in the middle room",
+              "vi": "Một camera ở phòng giữa"
+            },
+            "goi": "(function () {\nfunction __cay(a) { if (!a.length || a[0] == null) return null; var root = { val: a[0], left: null, right: null }, q = [root], h = 0, i = 1;\n  while (i < a.length) { var n = q[h++]; if (a[i] != null) { n.left = { val: a[i], left: null, right: null }; q.push(n.left); } i++;\n    if (i < a.length && a[i] != null) { n.right = { val: a[i], left: null, right: null }; q.push(n.right); } i++; } return root; }\nfunction __raCay(r) { var out = [], q = [r], h = 0; while (h < q.length) { var n = q[h++]; if (n == null) { out.push(null); continue; } out.push(n.val); q.push(n.left == null ? null : n.left, n.right == null ? null : n.right); }\n  while (out.length && out[out.length - 1] === null) out.pop(); return out; }\nfunction __ds(a) { var head = null; for (var i = a.length - 1; i >= 0; i--) head = { val: a[i], next: head }; return head; }\nfunction __raDs(h) { var out = []; while (h && out.length < 1000000) { out.push(h.val); h = h.next; } return out; }\nreturn (minCameras(__cay([0,0,null,0,0])));\n})()",
+            "mongDoi": 1
+          },
+          {
+            "moTa": {
+              "en": "A corridor of 5 rooms ⇒ 2",
+              "vi": "Hành lang 5 phòng ⇒ 2"
+            },
+            "goi": "(function () {\nfunction __cay(a) { if (!a.length || a[0] == null) return null; var root = { val: a[0], left: null, right: null }, q = [root], h = 0, i = 1;\n  while (i < a.length) { var n = q[h++]; if (a[i] != null) { n.left = { val: a[i], left: null, right: null }; q.push(n.left); } i++;\n    if (i < a.length && a[i] != null) { n.right = { val: a[i], left: null, right: null }; q.push(n.right); } i++; } return root; }\nfunction __raCay(r) { var out = [], q = [r], h = 0; while (h < q.length) { var n = q[h++]; if (n == null) { out.push(null); continue; } out.push(n.val); q.push(n.left == null ? null : n.left, n.right == null ? null : n.right); }\n  while (out.length && out[out.length - 1] === null) out.pop(); return out; }\nfunction __ds(a) { var head = null; for (var i = a.length - 1; i >= 0; i--) head = { val: a[i], next: head }; return head; }\nfunction __raDs(h) { var out = []; while (h && out.length < 1000000) { out.push(h.val); h = h.next; } return out; }\nreturn (minCameras(__cay([0,0,null,0,null,0,null,null,0])));\n})()",
+            "mongDoi": 2
+          },
+          {
+            "moTa": {
+              "en": "A single room still needs one",
+              "vi": "Một phòng vẫn cần một camera"
+            },
+            "goi": "(function () {\nfunction __cay(a) { if (!a.length || a[0] == null) return null; var root = { val: a[0], left: null, right: null }, q = [root], h = 0, i = 1;\n  while (i < a.length) { var n = q[h++]; if (a[i] != null) { n.left = { val: a[i], left: null, right: null }; q.push(n.left); } i++;\n    if (i < a.length && a[i] != null) { n.right = { val: a[i], left: null, right: null }; q.push(n.right); } i++; } return root; }\nfunction __raCay(r) { var out = [], q = [r], h = 0; while (h < q.length) { var n = q[h++]; if (n == null) { out.push(null); continue; } out.push(n.val); q.push(n.left == null ? null : n.left, n.right == null ? null : n.right); }\n  while (out.length && out[out.length - 1] === null) out.pop(); return out; }\nfunction __ds(a) { var head = null; for (var i = a.length - 1; i >= 0; i--) head = { val: a[i], next: head }; return head; }\nfunction __raDs(h) { var out = []; while (h && out.length < 1000000) { out.push(h.val); h = h.next; } return out; }\nreturn (minCameras(__cay([0])));\n})()",
+            "mongDoi": 1
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "(function () {\nfunction __cay(a) { if (!a.length || a[0] == null) return null; var root = { val: a[0], left: null, right: null }, q = [root], h = 0, i = 1;\n  while (i < a.length) { var n = q[h++]; if (a[i] != null) { n.left = { val: a[i], left: null, right: null }; q.push(n.left); } i++;\n    if (i < a.length && a[i] != null) { n.right = { val: a[i], left: null, right: null }; q.push(n.right); } i++; } return root; }\nfunction __raCay(r) { var out = [], q = [r], h = 0; while (h < q.length) { var n = q[h++]; if (n == null) { out.push(null); continue; } out.push(n.val); q.push(n.left == null ? null : n.left, n.right == null ? null : n.right); }\n  while (out.length && out[out.length - 1] === null) out.pop(); return out; }\nfunction __ds(a) { var head = null; for (var i = a.length - 1; i >= 0; i--) head = { val: a[i], next: head }; return head; }\nfunction __raDs(h) { var out = []; while (h && out.length < 1000000) { out.push(h.val); h = h.next; } return out; }\nreturn (minCameras(__cay([])));\n})()",
+            "mongDoi": 0,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "The root is left uncovered by the children",
+              "vi": "Gốc không được các con phủ"
+            },
+            "goi": "(function () {\nfunction __cay(a) { if (!a.length || a[0] == null) return null; var root = { val: a[0], left: null, right: null }, q = [root], h = 0, i = 1;\n  while (i < a.length) { var n = q[h++]; if (a[i] != null) { n.left = { val: a[i], left: null, right: null }; q.push(n.left); } i++;\n    if (i < a.length && a[i] != null) { n.right = { val: a[i], left: null, right: null }; q.push(n.right); } i++; } return root; }\nfunction __raCay(r) { var out = [], q = [r], h = 0; while (h < q.length) { var n = q[h++]; if (n == null) { out.push(null); continue; } out.push(n.val); q.push(n.left == null ? null : n.left, n.right == null ? null : n.right); }\n  while (out.length && out[out.length - 1] === null) out.pop(); return out; }\nfunction __ds(a) { var head = null; for (var i = a.length - 1; i >= 0; i--) head = { val: a[i], next: head }; return head; }\nfunction __raDs(h) { var out = []; while (h && out.length < 1000000) { out.push(h.val); h = h.next; } return out; }\nreturn (minCameras(__cay([0,0,0,0])));\n})()",
+            "mongDoi": 2,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "(function () {\nfunction __cay(a) { if (!a.length || a[0] == null) return null; var root = { val: a[0], left: null, right: null }, q = [root], h = 0, i = 1;\n  while (i < a.length) { var n = q[h++]; if (a[i] != null) { n.left = { val: a[i], left: null, right: null }; q.push(n.left); } i++;\n    if (i < a.length && a[i] != null) { n.right = { val: a[i], left: null, right: null }; q.push(n.right); } i++; } return root; }\nfunction __raCay(r) { var out = [], q = [r], h = 0; while (h < q.length) { var n = q[h++]; if (n == null) { out.push(null); continue; } out.push(n.val); q.push(n.left == null ? null : n.left, n.right == null ? null : n.right); }\n  while (out.length && out[out.length - 1] === null) out.pop(); return out; }\nfunction __ds(a) { var head = null; for (var i = a.length - 1; i >= 0; i--) head = { val: a[i], next: head }; return head; }\nfunction __raDs(h) { var out = []; while (h && out.length < 1000000) { out.push(h.val); h = h.next; } return out; }\nreturn (minCameras(__cay([0,0,0,0,0,0,0])));\n})()",
+            "mongDoi": 2,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "(function () {\nfunction __cay(a) { if (!a.length || a[0] == null) return null; var root = { val: a[0], left: null, right: null }, q = [root], h = 0, i = 1;\n  while (i < a.length) { var n = q[h++]; if (a[i] != null) { n.left = { val: a[i], left: null, right: null }; q.push(n.left); } i++;\n    if (i < a.length && a[i] != null) { n.right = { val: a[i], left: null, right: null }; q.push(n.right); } i++; } return root; }\nfunction __raCay(r) { var out = [], q = [r], h = 0; while (h < q.length) { var n = q[h++]; if (n == null) { out.push(null); continue; } out.push(n.val); q.push(n.left == null ? null : n.left, n.right == null ? null : n.right); }\n  while (out.length && out[out.length - 1] === null) out.pop(); return out; }\nfunction __ds(a) { var head = null; for (var i = a.length - 1; i >= 0; i--) head = { val: a[i], next: head }; return head; }\nfunction __raDs(h) { var out = []; while (h && out.length < 1000000) { out.push(h.val); h = h.next; } return out; }\nreturn (minCameras(__cay([0,0,0,null,0,0,null,0,null,null,0])));\n})()",
+            "mongDoi": 3,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Corridor of 1000 rooms ⇒ 334",
+              "vi": "Hành lang 1000 phòng ⇒ 334"
+            },
+            "goi": "(function () {\nfunction __cay(a) { if (!a.length || a[0] == null) return null; var root = { val: a[0], left: null, right: null }, q = [root], h = 0, i = 1;\n  while (i < a.length) { var n = q[h++]; if (a[i] != null) { n.left = { val: a[i], left: null, right: null }; q.push(n.left); } i++;\n    if (i < a.length && a[i] != null) { n.right = { val: a[i], left: null, right: null }; q.push(n.right); } i++; } return root; }\nfunction __raCay(r) { var out = [], q = [r], h = 0; while (h < q.length) { var n = q[h++]; if (n == null) { out.push(null); continue; } out.push(n.val); q.push(n.left == null ? null : n.left, n.right == null ? null : n.right); }\n  while (out.length && out[out.length - 1] === null) out.pop(); return out; }\nfunction __ds(a) { var head = null; for (var i = a.length - 1; i >= 0; i--) head = { val: a[i], next: head }; return head; }\nfunction __raDs(h) { var out = []; while (h && out.length < 1000000) { out.push(h.val); h = h.next; } return out; }\nreturn (minCameras(__cay((function () { var a = [0]; for (var i = 1; i < 1000; i++) a.push(null, 0); return a; })())));\n})()",
+            "mongDoi": 334,
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Forgetting the root at the end: <code>[0]</code> (one room) or <code>[0, 0, 0, 0]</code> leave the root in state NEED with nobody above to cover it.|||Quên gốc ở cuối: <code>[0]</code> (một phòng) hay <code>[0, 0, 0, 0]</code> để gốc ở trạng thái NEED mà không còn ai bên trên phủ nó."
+        },
+        {
+          "loi": "Treating an empty child as NEED: every leaf would then get a camera.|||Coi con rỗng là NEED: thế là lá nào cũng bị gắn camera."
+        },
+        {
+          "loi": "Alternating levels (camera on every other level): looks plausible, but is not minimal on unbalanced trees.|||Đặt xen kẽ theo tầng (camera mỗi tầng cách một): trông hợp lý nhưng không tối thiểu với cây lệch."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "state",
+          "vi": "trạng thái"
+        },
+        {
+          "en": "greedy",
+          "vi": "tham lam"
+        },
+        {
+          "en": "exchange argument",
+          "vi": "lập luận hoán đổi",
+          "giaiThich": "chứng minh thay lựa chọn tối ưu bằng lựa chọn tham lam không làm tệ hơn."
+        }
+      ]
+    }
+  ]
+}

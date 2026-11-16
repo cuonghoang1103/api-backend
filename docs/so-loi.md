@@ -18,6 +18,13 @@ Mẫu một mục:
 
 ---
 
+### 16/11/2026 — Video (điều phối) — đưa 432 tập về lồng tiếng giọng mới nhưng 5 tập vẫn render bằng giọng cũ
+- **Triệu chứng:** gỡ dấu "ok" giọng cũ của 432 tập (đã lồng tiếng, chưa render) để đọc lại bằng giọng cuong6; 20 phút sau máy thuê render xong 5 tập (pro-lpe3-3, node-4-3, dkr-9-2, dkr-12-3, gha-14-1) bằng giọng CŨ, 400 dấu cũ đã quay lại `hang-giong-xong.txt` trên linux-nha.
+- **Nguyên nhân:** dọn linux-nha TRƯỚC rồi mới dọn Mac; giữa hai bước `scratchpad/dong-bo-linux.sh` (chạy liên tục) gộp các dòng `hang-giong-xong` còn trên Mac (`.dp/keo-*` + bản Mac) sang lại Linux ⇒ làn render thấy "giọng ok" và render luôn.
+- **Cách sửa:** dừng làn render, dọn lại cả hai bên (giữ dòng giọng mới ngày 16/11), canh 4 phút xác nhận dòng cũ không quay lại rồi mới bật làn; 5 tập lỡ render cũ đưa về hàng giọng (script `don-lai.sh` trong scratchpad phiên).
+- **Ảnh hưởng:** 5 tập render thừa (~1 giờ máy thuê), không lên web.
+- **Bài học:** sửa trạng thái hàng đợi trên NHIỀU máy có cầu đồng bộ ⇒ dọn nguồn mà cầu kéo từ đó (Mac) TRƯỚC, hoặc dừng cầu trong lúc sửa; xong phải kiểm lại sau ≥1 vòng đồng bộ, đừng tin "awk chạy xong".
+
 ### 15/11/2026 — Robot Odin (nhạc) — nói "bật bài Baby rồi" bốn lần mà không phát gì
 - **Triệu chứng:** xin "bật bài gì của Justin Bieber", robot đáp đã bật, âm lượng 30/60%, rồi trách người dùng không bật loa — loa im (log robot 20:39–20:41).
 - **Nguyên nhân:** bật nhạc trông HOÀN TOÀN vào việc model nhớ kèm lệnh `play_music` trong `actions` (`voiceLoop.ts › dispatchAction`); model quên lệnh nhưng vẫn nói như đã làm, và lệnh nhanh `phanXa.ts` chỉ bắt "bài tiếp/phát tiếp".

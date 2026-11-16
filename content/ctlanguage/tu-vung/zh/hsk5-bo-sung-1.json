@@ -1183,7 +1183,8 @@
         "寻找答案",
         "寻找失物"
       ],
-      "ghiChu": "寻找 trang trọng hơn 找."
+      "ghiChu": "寻找 trang trọng hơn 找.",
+      "anh": "magnifying-glass-tilted-left"
     },
     {
       "chu": "应付",
@@ -1734,7 +1735,8 @@
         "庆祝生日",
         "庆祝胜利",
         "庆祝活动"
-      ]
+      ],
+      "anh": "party-popper"
     },
     {
       "chu": "招待",

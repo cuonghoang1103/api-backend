@@ -19,7 +19,8 @@
         "AI-powered",
         "the rise of artificial intelligence"
       ],
-      "ghiChu": "Viết tắt AI; lần đầu trong bài viết nên ghi đầy đủ."
+      "ghiChu": "Viết tắt AI; lần đầu trong bài viết nên ghi đầy đủ.",
+      "anh": "robot"
     },
     {
       "chu": "chatbot",
@@ -32,7 +33,8 @@
       "cumTu": [
         "an AI chatbot",
         "talk to a chatbot"
-      ]
+      ],
+      "anh": "robot"
     },
     {
       "chu": "automation",
@@ -50,7 +52,8 @@
       "hoTu": [
         "automate (v)",
         "automated (adj)"
-      ]
+      ],
+      "anh": "mechanical-arm"
     },
     {
       "chu": "robotics",
@@ -67,7 +70,8 @@
       "hoTu": [
         "robot (n)",
         "robotic (adj)"
-      ]
+      ],
+      "anh": "robot"
     },
     {
       "chu": "cutting-edge",
@@ -471,7 +475,8 @@
       "cumTu": [
         "the rise of e-commerce",
         "e-commerce platforms"
-      ]
+      ],
+      "anh": "shopping-cart"
     },
     {
       "chu": "streaming",
@@ -501,7 +506,8 @@
       "cumTu": [
         "move to cloud computing",
         "cloud computing services"
-      ]
+      ],
+      "anh": "cloud"
     },
     {
       "chu": "broadband",
@@ -640,7 +646,8 @@
         "fund space exploration",
         "the cost of space exploration"
       ],
-      "ghiChu": "Đề Task 2 kinh điển: chi tiền cho vũ trụ hay vấn đề trên Trái Đất."
+      "ghiChu": "Đề Task 2 kinh điển: chi tiền cho vũ trụ hay vấn đề trên Trái Đất.",
+      "anh": "rocket"
     },
     {
       "chu": "labour-saving",

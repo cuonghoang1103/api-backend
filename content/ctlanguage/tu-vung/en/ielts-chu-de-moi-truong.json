@@ -72,7 +72,8 @@
         "reliance on fossil fuels",
         "phase out fossil fuels"
       ],
-      "ghiChu": "Than, dầu mỏ, khí đốt — đối lập với renewable energy."
+      "ghiChu": "Than, dầu mỏ, khí đốt — đối lập với renewable energy.",
+      "anh": "oil-drum"
     },
     {
       "chu": "carbon footprint",
@@ -247,7 +248,8 @@
       ],
       "hoTu": [
         "nuclear (adj)"
-      ]
+      ],
+      "anh": "radioactive"
     },
     {
       "chu": "hydroelectric",

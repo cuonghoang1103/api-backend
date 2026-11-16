@@ -59,7 +59,8 @@
       "cumTu": [
         "cut down on junk food",
         "junk food advertising"
-      ]
+      ],
+      "anh": "hamburger"
     },
     {
       "chu": "processed food",
@@ -85,7 +86,8 @@
       "cumTu": [
         "a tax on sugary drinks",
         "consumption of sugary drinks"
-      ]
+      ],
+      "anh": "cup-with-straw"
     },
     {
       "chu": "nutrition",
@@ -258,7 +260,8 @@
       "hoTu": [
         "epidemiology (n)"
       ],
-      "ghiChu": "\"pandemic\" = đại dịch lan khắp nhiều nước."
+      "ghiChu": "\"pandemic\" = đại dịch lan khắp nhiều nước.",
+      "anh": "microbe"
     },
     {
       "chu": "pandemic",
@@ -271,7 +274,8 @@
       "cumTu": [
         "a global pandemic",
         "during the pandemic"
-      ]
+      ],
+      "anh": "microbe"
     },
     {
       "chu": "outbreak",
@@ -304,7 +308,8 @@
       "hoTu": [
         "infection (n)",
         "infect (v)"
-      ]
+      ],
+      "anh": "microbe"
     },
     {
       "chu": "contagious",
@@ -366,7 +371,8 @@
       "cumTu": [
         "have a medical check-up",
         "an annual check-up"
-      ]
+      ],
+      "anh": "stethoscope"
     },
     {
       "chu": "diagnose",
@@ -647,7 +653,8 @@
         "see a general practitioner",
         "register with a GP"
       ],
-      "ghiChu": "Viết tắt GP (Anh)."
+      "ghiChu": "Viết tắt GP (Anh).",
+      "anh": "health-worker"
     },
     {
       "chu": "life-threatening",

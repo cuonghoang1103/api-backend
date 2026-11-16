@@ -1,5 +1,5 @@
 {"ma":"chao-hoi","nn":"zh","tu":[
-    {"chu":"你好","doc":"nǐ hǎo","nghia":"xin chào","loai":"phr","cap":"HSK1","nhom":"Chào hỏi","viDu":"你好！我叫小明。","viDuNghia":"Xin chào! Tôi tên là Tiểu Minh."},
+    {"chu":"你好","doc":"nǐ hǎo","nghia":"xin chào","loai":"phr","cap":"HSK1","nhom":"Chào hỏi","viDu":"你好！我叫小明。","viDuNghia":"Xin chào! Tôi tên là Tiểu Minh.","anh":"waving-hand"},
     {"chu":"您好","doc":"nín hǎo","nghia":"xin chào ạ","loai":"phr","cap":"HSK1","nhom":"Chào hỏi","viDu":"您好，我是老师。","viDuNghia":"Xin chào, tôi là giáo viên."},
     {"chu":"早","doc":"zǎo","nghia":"chào buổi sáng","loai":"intj","cap":"HSK1","nhom":"Chào hỏi","viDu":"早，今天来得真早！","viDuNghia":"Chào, hôm nay bạn đến sớm thật!"},
     {"chu":"早上好","doc":"zǎoshanghǎo","nghia":"chào buổi sáng","loai":"phr","cap":"HSK1","nhom":"Chào hỏi","viDu":"早上好，老师。","viDuNghia":"Chào buổi sáng, thầy ơi."},
@@ -9,7 +9,7 @@
     {"chu":"喂","doc":"wèi","nghia":"a lô","loai":"intj","cap":"HSK1","nhom":"Chào hỏi","viDu":"喂，你好！","viDuNghia":"A lô, xin chào!"},
     {"chu":"欢迎","doc":"huān yíng","nghia":"chào mừng","loai":"v","cap":"HSK1","nhom":"Chào hỏi","viDu":"欢迎你来中国！","viDuNghia":"Chào mừng bạn đến Trung Quốc!"},
     {"chu":"欢迎光临","doc":"huān yíng guāng lín","nghia":"chào mừng quý khách","loai":"phr","cap":"HSK4","capUoc":true,"nhom":"Chào hỏi","viDu":"欢迎光临！","viDuNghia":"Chào mừng quý khách đến!"},
-    {"chu":"打招呼","doc":"dǎzhāohu","nghia":"chào hỏi","loai":"v","cap":"HSK4","capUoc":true,"nhom":"Chào hỏi","viDu":"见面要打招呼。","viDuNghia":"Gặp nhau phải chào hỏi."},
+    {"chu":"打招呼","doc":"dǎzhāohu","nghia":"chào hỏi","loai":"v","cap":"HSK4","capUoc":true,"nhom":"Chào hỏi","viDu":"见面要打招呼。","viDuNghia":"Gặp nhau phải chào hỏi.","anh":"waving-hand"},
     {"chu":"好久不见","doc":"hǎojiǔbujiàn","nghia":"lâu rồi không gặp","loai":"phr","cap":"HSK1","nhom":"Chào hỏi","viDu":"好久不见，你好吗？","viDuNghia":"Lâu rồi không gặp, bạn khỏe không?"},
     {"chu":"再见","doc":"zài jiàn","nghia":"tạm biệt","loai":"phr","cap":"HSK1","nhom":"Chào hỏi","viDu":"再见，明天见！","viDuNghia":"Tạm biệt, ngày mai gặp lại!"},
     {"chu":"拜拜","doc":"bàibai","nghia":"bái bai","loai":"phr","cap":"HSK5","capUoc":true,"nhom":"Chào hỏi","viDu":"拜拜，明天见！","viDuNghia":"Bye bye, hẹn gặp lại ngày mai!"},
@@ -18,10 +18,10 @@
     {"chu":"回头见","doc":"huí tóu jiàn","nghia":"gặp lại sau","loai":"phr","cap":"HSK1","nhom":"Chào hỏi","viDu":"我回头见你。","viDuNghia":"Tôi gặp lại cậu sau nhé."},
     {"chu":"晚安","doc":"wǎn ān","nghia":"chúc ngủ ngon","loai":"phr","cap":"HSK1","nhom":"Chào hỏi","viDu":"晚安，明天见","viDuNghia":"Chúc ngủ ngon, ngày mai gặp lại"},
     {"chu":"保重","doc":"bǎo zhòng","nghia":"giữ gìn sức khỏe","loai":"phr","cap":"HSK3","capUoc":true,"nhom":"Chào hỏi","viDu":"路上小心，多保重！","viDuNghia":"Đi đường cẩn thận, giữ gìn sức khỏe nhé!"},
-    {"chu":"谢谢","doc":"xiè xie","nghia":"cảm ơn","loai":"phr","cap":"HSK1","nhom":"Cảm ơn & xin lỗi","viDu":"谢谢你的帮助。","viDuNghia":"Cảm ơn sự giúp đỡ của bạn."},
+    {"chu":"谢谢","doc":"xiè xie","nghia":"cảm ơn","loai":"phr","cap":"HSK1","nhom":"Cảm ơn & xin lỗi","viDu":"谢谢你的帮助。","viDuNghia":"Cảm ơn sự giúp đỡ của bạn.","anh":"folded-hands"},
     {"chu":"谢谢啊","doc":"xiè xiè a","nghia":"cảm ơn nhé","loai":"phr","cap":"HSK1","nhom":"Cảm ơn & xin lỗi","viDu":"谢谢啊，你真好！","viDuNghia":"Cảm ơn nha, bạn tốt quá!"},
     {"chu":"多谢","doc":"duōxiè","nghia":"cảm ơn nhiều","loai":"phr","cap":"HSK5","nhom":"Cảm ơn & xin lỗi","viDu":"多谢您上次的帮助。","viDuNghia":"Cảm ơn nhiều vì sự giúp đỡ của bạn lần trước."},
-    {"chu":"感谢","doc":"gǎn xiè","nghia":"cảm ơn","loai":"v","cap":"HSK3","nhom":"Cảm ơn & xin lỗi","viDu":"我很感谢你对我的帮助。","viDuNghia":"Tôi rất cảm ơn sự giúp đỡ của bạn."},
+    {"chu":"感谢","doc":"gǎn xiè","nghia":"cảm ơn","loai":"v","cap":"HSK3","nhom":"Cảm ơn & xin lỗi","viDu":"我很感谢你对我的帮助。","viDuNghia":"Tôi rất cảm ơn sự giúp đỡ của bạn.","anh":"folded-hands"},
     {"chu":"不客气","doc":"bù kè qi","nghia":"không có gì","loai":"phr","cap":"HSK1","nhom":"Cảm ơn & xin lỗi","viDu":"A: 谢谢你！B: 不客气。","viDuNghia":"A: Cảm ơn bạn! B: Không có gì."},
     {"chu":"不用谢","doc":"bù yòng xiè","nghia":"không có gì","loai":"phr","cap":"HSK2","nhom":"Cảm ơn & xin lỗi","viDu":"A: 谢谢！B: 不用谢。","viDuNghia":"A: Cảm ơn! B: Không có gì."},
     {"chu":"别客气","doc":"bié kè qi","nghia":"đừng khách sáo","loai":"phr","cap":"HSK1","nhom":"Cảm ơn & xin lỗi","viDu":"别客气，随便坐！","viDuNghia":"Khỏi phải khách, ngồi tự nhiên đi!"},
@@ -48,7 +48,7 @@
     {"chu":"哪里","doc":"nǎlǐ","nghia":"ở đâu","loai":"pron","cap":"HSK1","nhom":"Giới thiệu bản thân","viDu":"请问，厕所在哪里？","viDuNghia":"Cho tôi hỏi, nhà vệ sinh ở đâu?"},
     {"chu":"多大","doc":"duōdà","nghia":"bao nhiêu tuổi","loai":"phr","cap":"HSK1","nhom":"Giới thiệu bản thân","viDu":"你多大了？","viDuNghia":"Bạn bao nhiêu tuổi?"},
     {"chu":"岁","doc":"suì","nghia":"tuổi","loai":"mw","cap":"HSK1","nhom":"Giới thiệu bản thân","viDu":"我今年二十岁。","viDuNghia":"Năm nay tôi hai mươi tuổi."},
-    {"chu":"学生","doc":"xuésheng","nghia":"học sinh, sinh viên","loai":"n","cap":"HSK1","nhom":"Giới thiệu bản thân","viDu":"我是大学生。","viDuNghia":"Tôi là sinh viên đại học."},
+    {"chu":"学生","doc":"xuésheng","nghia":"học sinh, sinh viên","loai":"n","cap":"HSK1","nhom":"Giới thiệu bản thân","viDu":"我是大学生。","viDuNghia":"Tôi là sinh viên đại học.","anh":"student"},
     {"chu":"介绍","doc":"jiè shào","nghia":"giới thiệu","loai":"v","cap":"HSK2","nhom":"Giới thiệu bản thân","viDu":"我来介绍一下我的朋友。","viDuNghia":"Tôi xin giới thiệu một chút về bạn của tôi."},
     {"chu":"认识","doc":"rènshi","nghia":"quen biết","loai":"v","cap":"HSK1","nhom":"Giới thiệu bản thân","viDu":"认识你很高兴。","viDuNghia":"Rất vui được làm quen với bạn."},
     {"chu":"很高兴认识你","doc":"hěn gāo xìng rèn shi nǐ","nghia":"rất vui được biết bạn","loai":"phr","cap":"HSK1","nhom":"Giới thiệu bản thân","viDu":"你好，我叫小明，很高兴认识你。","viDuNghia":"Xin chào, tôi tên Tiểu Minh, rất vui được biết bạn."},
@@ -81,5 +81,5 @@
     {"chu":"等一下","doc":"děng yī xià","nghia":"đợi một chút","loai":"phr","cap":"HSK1","nhom":"Câu nói hằng ngày","viDu":"等一下，我去拿东西。","viDuNghia":"Đợi một chút, tôi đi lấy đồ."},
     {"chu":"先走了","doc":"xiān zǒu le","nghia":"tôi đi trước đây","loai":"phr","cap":"HSK1","nhom":"Câu nói hằng ngày","viDu":"我还有事，先走了。","viDuNghia":"Tôi còn có việc, tôi đi trước đây."},
     {"chu":"加油","doc":"jiā yóu","nghia":"cố lên","loai":"phr","cap":"HSK1","nhom":"Câu nói hằng ngày","viDu":"加油！","viDuNghia":"Cố lên! Gắng sức lên!"},
-    {"chu":"恭喜","doc":"gōng xǐ","nghia":"chúc mừng","loai":"v","cap":"HSK1","nhom":"Câu nói hằng ngày","viDu":"恭喜恭喜！祝你们新婚快乐！","viDuNghia":"Chúc mừng chúc mừng! Chúc hai bạn hạnh phúc nhé!"}
+    {"chu":"恭喜","doc":"gōng xǐ","nghia":"chúc mừng","loai":"v","cap":"HSK1","nhom":"Câu nói hằng ngày","viDu":"恭喜恭喜！祝你们新婚快乐！","viDuNghia":"Chúc mừng chúc mừng! Chúc hai bạn hạnh phúc nhé!","anh":"party-popper"}
   ]}

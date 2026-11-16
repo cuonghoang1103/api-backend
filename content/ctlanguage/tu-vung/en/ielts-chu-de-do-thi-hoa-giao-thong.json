@@ -79,7 +79,8 @@
       ],
       "hoTu": [
         "metropolitan (adj)"
-      ]
+      ],
+      "anh": "cityscape"
     },
     {
       "chu": "megacity",
@@ -92,7 +93,8 @@
       "cumTu": [
         "Asian megacities",
         "the growth of megacities"
-      ]
+      ],
+      "anh": "cityscape"
     },
     {
       "chu": "satellite town",
@@ -258,7 +260,8 @@
       "cumTu": [
         "live in a concrete jungle"
       ],
-      "ghiChu": "Thành ngữ hay cho Speaking."
+      "ghiChu": "Thành ngữ hay cho Speaking.",
+      "anh": "cityscape"
     },
     {
       "chu": "housing shortage",
@@ -557,7 +560,8 @@
       "cumTu": [
         "a high-speed rail line",
         "build high-speed rail"
-      ]
+      ],
+      "anh": "high-speed-train"
     },
     {
       "chu": "transport hub",
@@ -582,7 +586,8 @@
       "cumTu": [
         "a separate cycle lane",
         "build cycle lanes"
-      ]
+      ],
+      "anh": "bicycle"
     },
     {
       "chu": "pedestrianise",

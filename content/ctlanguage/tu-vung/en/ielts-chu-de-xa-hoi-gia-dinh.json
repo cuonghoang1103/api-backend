@@ -259,7 +259,8 @@
       "cumTu": [
         "share household chores",
         "do household chores"
-      ]
+      ],
+      "anh": "broom"
     },
     {
       "chu": "gender equality",
@@ -343,7 +344,8 @@
       "cumTu": [
         "discounts for senior citizens"
       ],
-      "ghiChu": "Cách nói lịch sự hơn \"old people\"."
+      "ghiChu": "Cách nói lịch sự hơn \"old people\".",
+      "anh": "older-person"
     },
     {
       "chu": "elderly care",

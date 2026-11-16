@@ -106,7 +106,8 @@
         "tabloid newspapers",
         "the tabloid press"
       ],
-      "ghiChu": "Đối lập: broadsheet (báo nghiêm túc)."
+      "ghiChu": "Đối lập: broadsheet (báo nghiêm túc).",
+      "anh": "newspaper"
     },
     {
       "chu": "front page",
@@ -119,7 +120,8 @@
       "cumTu": [
         "make the front page",
         "front-page news"
-      ]
+      ],
+      "anh": "newspaper"
     },
     {
       "chu": "current affairs",
@@ -258,7 +260,8 @@
       ],
       "hoTu": [
         "paparazzo (n, số ít)"
-      ]
+      ],
+      "anh": "camera-with-flash"
     },
     {
       "chu": "invasion of privacy",

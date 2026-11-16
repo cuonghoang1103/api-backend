@@ -25,6 +25,8 @@ export interface TuBoSung {
   hoTu?: string[];
   /** Ghi chú dùng (dễ nhầm, sắc thái, IELTS Writing/Speaking). */
   ghiChu?: string;
+  /** Ảnh minh hoạ: slug Fluent Emoji (`scripts/hinh/fluent-catalog.json`), phục vụ ở `hoc/hinh/<slug>.webp` — giống kho chủ đề. */
+  anh?: string;
 }
 
 export interface BoTuBoSung {
@@ -40,8 +42,10 @@ export interface BoTuBoSung {
 }
 
 const MA = /^[a-z0-9]+(-[a-z0-9]+)*$/;
+const SLUG = MA;
 
-export function kiemBoTu(b: BoTuBoSung): string[] {
+/** `tenAnhCo` (tuỳ chọn) = tập slug có thật — có thì slug lạ bị báo như kho chủ đề. */
+export function kiemBoTu(b: BoTuBoSung, tenAnhCo?: ReadonlySet<string>): string[] {
   const loi: string[] = [];
   if (!b || typeof b !== 'object') return ['không phải object'];
   if (!['en', 'ja', 'zh'].includes(b.nn)) return [`nn lạ: ${String(b.nn)}`];
@@ -72,6 +76,10 @@ export function kiemBoTu(b: BoTuBoSung): string[] {
     for (const f of ['cumTu', 'hoTu'] as const) {
       const v = t?.[f];
       if (v !== undefined && (!Array.isArray(v) || v.some((x) => typeof x !== 'string' || !x.trim()))) loi.push(`${o}: ${f} phải là mảng chuỗi`);
+    }
+    if (t?.anh !== undefined) {
+      if (typeof t.anh !== 'string' || !SLUG.test(t.anh)) loi.push(`${o}: anh sai`);
+      else if (tenAnhCo && !tenAnhCo.has(t.anh)) loi.push(`${o}: ảnh "${t.anh}" chưa có trên R2`);
     }
   });
   return loi;

@@ -491,6 +491,14 @@ for (const nn of chiNn.length ? chiNn : NN_CDT) {
     if (fs.existsSync(tep) && !ghiDe) return;
     try {
       const tu = await dungChuDe(bc, c);
+      // --ghi-de: giữ ảnh đã gắn tay (16/11/2026) — từ cùng chữ trong tệp cũ mà bản mới chưa có ảnh thì mang ảnh cũ sang.
+      if (fs.existsSync(tep)) {
+        try {
+          const anhCu = new Map((JSON.parse(fs.readFileSync(tep, 'utf8')) as { tu: TuChuDe[] }).tu
+            .filter((t) => t.anh).map((t) => [khoaTrung(t.chu), t.anh!]));
+          for (const t of tu) if (!t.anh && anhCu.has(khoaTrung(t.chu))) t.anh = anhCu.get(khoaTrung(t.chu));
+        } catch { /* tệp cũ hỏng ⇒ bỏ qua */ }
+      }
       if (tu.length < SO_TU_TOI_THIEU) { hong++; console.error(`✗ ${nn}/${c.ma}: chỉ ${tu.length} từ — chưa ghi`); return; }
       fs.writeFileSync(tep, `${JSON.stringify({ ma: c.ma, nn, tu }, null, 0).replace(/\{"chu"/g, '\n    {"chu"').replace(/\]\}$/, '\n  ]}\n')}`);
       console.log(`✓ ${nn}/${c.ma}: ${tu.length} từ · ${tu.filter((t) => t.viDu).length} ví dụ · ${tu.filter((t) => t.anh).length} ảnh · ${tu.filter((t) => t.capUoc).length} cấp ước lượng`);

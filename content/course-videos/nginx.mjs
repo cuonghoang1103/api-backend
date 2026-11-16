@@ -72,8 +72,8 @@ export default {
     'nginx-6-5-chuyen-huong-va-hsts': { yt: 'dAV3z2O7ghY', credit: 'Tony Teaches Tech — How to Enable HSTS for your Nginx and Apache Websites', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nginx/06-tls-va-http2/06-05-chuyen-huong-va-hsts-44a0a41d.mp4' }, defaultVideoTrack: 'VI'},  // How to Enable HSTS for your Nginx and Apache Websites
 
     /* ── Chương 7 — Giới hạn: tốc độ, kết nối, kích thước ── */
-    'nginx-7-1-limit-req': { yt: 'MrBpOzlDLXM', credit: 'Logan Lee — Nginx rate limiting' },          // Nginx rate limiting
-    'nginx-7-2-khoa-gioi-han': { yt: 'FlJbXsUx5Wo', credit: 'F5 DevCentral Community — Advanced Rate Limiting with NGINX Plus Ingress Controller' },      // Advanced Rate Limiting with NGINX Plus Ingress Controller
+    'nginx-7-1-limit-req': { yt: 'MrBpOzlDLXM', credit: 'Logan Lee — Nginx rate limiting', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nginx/07-gioi-han/07-01-limit-req-d781db97.mp4' }, defaultVideoTrack: 'VI'},          // Nginx rate limiting
+    'nginx-7-2-khoa-gioi-han': { yt: 'FlJbXsUx5Wo', credit: 'F5 DevCentral Community — Advanced Rate Limiting with NGINX Plus Ingress Controller', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nginx/07-gioi-han/07-02-khoa-gioi-han-2c547525.mp4' }, defaultVideoTrack: 'VI'},      // Advanced Rate Limiting with NGINX Plus Ingress Controller
     'nginx-7-3-limit-conn': { yt: 'GVtyccGECNk', credit: 'Coder In Boots — How to Limit the Request Rate in Nginx | Block DDoS attack | Prevent DDoS Attack | Prevent Botnets' },         // How to Limit the Request Rate in Nginx | Block DDoS attack
     'nginx-7-4-kich-thuoc-request': { yt: 'SMWvp4WcXBc', credit: 'Coder In Boots — How to control the Request Payload Size in Nginx | Client Max Body Size | Request Entity Too Large' }, // How to control the Request Payload Size in Nginx | Client Max Body Size
     'nginx-7-5-lop-phong-thu': { yt: 'gR4w9trH9pA', credit: 'Saturday Morning Productions — SaturdayMP Show #14: Rate Limiting with NGINX and Fail2Ban' },      // SaturdayMP Show #14: Rate Limiting with NGINX and Fail2Ban

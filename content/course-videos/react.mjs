@@ -70,15 +70,15 @@ export default {
 
     /* ── Chương 7 — Định tuyến và cấu trúc ── */
     'rx-7-0-slides': { yt: 'NVuxUktUvxc', credit: "Maximilian Schwarzmüller — React Router 7 is amazing - despite it's confusing docs!" },
-    'rx-7-1-router': { yt: 'oTIJunBa6MA', credit: "Cosden Solutions — React Router - Complete Tutorial" },
-    'rx-7-2-layout': { yt: 'l8CS9AMBSIQ', credit: "Net Ninja — React Router in Depth #4 - Nested Routes & Layouts" },
-    'rx-7-3-cau-truc': { yt: 'xyxrB2Aa7KE', credit: "Web Dev Simplified — This Folder Structure Makes Me 100% More Productive" },
-    'rx-7-4-sang-nextjs': { yt: 'AdkNcFUsRQQ', credit: "Vercel — Using React 19 with Vite and Next.js" },
-    'rx-7-5-du-an': { yt: 'oUZjO00NkhY', credit: "Dave Gray — React Protected Routes | Role-Based Authorization | React Router v6" },
+    'rx-7-1-router': { yt: 'oTIJunBa6MA', credit: "Cosden Solutions — React Router - Complete Tutorial", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/react/07-dinh-tuyen-va-cau-truc/07-02-router-af67c20d.mp4' }, defaultVideoTrack: 'VI'},
+    'rx-7-2-layout': { yt: 'l8CS9AMBSIQ', credit: "Net Ninja — React Router in Depth #4 - Nested Routes & Layouts", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/react/07-dinh-tuyen-va-cau-truc/07-03-layout-043a571a.mp4' }, defaultVideoTrack: 'VI'},
+    'rx-7-3-cau-truc': { yt: 'xyxrB2Aa7KE', credit: "Web Dev Simplified — This Folder Structure Makes Me 100% More Productive", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/react/07-dinh-tuyen-va-cau-truc/07-04-cau-truc-8e8023d1.mp4' }, defaultVideoTrack: 'VI'},
+    'rx-7-4-sang-nextjs': { yt: 'AdkNcFUsRQQ', credit: "Vercel — Using React 19 with Vite and Next.js", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/react/07-dinh-tuyen-va-cau-truc/07-05-sang-nextjs-11e40fdb.mp4' }, defaultVideoTrack: 'VI'},
+    'rx-7-5-du-an': { yt: 'oUZjO00NkhY', credit: "Dave Gray — React Protected Routes | Role-Based Authorization | React Router v6", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/react/07-dinh-tuyen-va-cau-truc/07-06-du-an-7de49d96.mp4' }, defaultVideoTrack: 'VI'},
 
     /* ── Chương 8 — Hiệu năng và khả năng tiếp cận ── */
     'rx-8-0-slides': { yt: 'uAmRtE52mYk', credit: "React Conf — Exploring React Performance" },
-    'rx-8-1-do': { yt: 'CclO4tPoebs', credit: "React Conf — Profiling with React Performance tracks" },
+    'rx-8-1-do': { yt: 'CclO4tPoebs', credit: "React Conf — Profiling with React Performance tracks", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/react/08-hieu-nang-va-tiep-can/08-02-do-4955bb35.mp4' }, defaultVideoTrack: 'VI'},
     'rx-8-2-memo': { yt: 'huBxeruVnAM', credit: "Developer Way — Mastering memoization in React - Advanced React course, Episode 5" },
     'rx-8-3-lazy': { yt: 'JU6sl_yyZqs', credit: "Web Dev Simplified — Speed Up Your React Apps With Code Splitting" },
     'rx-8-4-a11y': { yt: 'UHjt2A6CS6A', credit: "React Conf — Demystifying accessibility in React apps | Kateryna Porshnieva" },
@@ -87,7 +87,7 @@ export default {
     'rx-9-0-slides': { yt: '6dOpQIwyV6g', credit: "RoadsideCoder — React Testing Full Course 2026 | Vitest and React Testing Library Tutorial" },
     'rx-9-1-testing-library': { yt: 'CxSL0knFxAs', credit: "PedroTech — React Vite Testing Tutorial For Beginners - Vitest Testing Crash Course" },
     'rx-9-2-async': { yt: 'pP8FQnv6o7A', credit: "Anson — Mock Service Worker with React" },
-    'rx-9-3-hook': { yt: 'bvdHVxqjv80', credit: "Jack Herrington — TypeScript/React Testing: Components, Hooks, Custom Hooks, Redux and Zustand" },
+    'rx-9-3-hook': { yt: 'bvdHVxqjv80', credit: "Jack Herrington — TypeScript/React Testing: Components, Hooks, Custom Hooks, Redux and Zustand", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/react/09-test-react/09-04-hook-2c57a0f1.mp4' }, defaultVideoTrack: 'VI'},
     'rx-9-4-phong-van': { yt: 'Fha2bVoC8SE', credit: "Paul Dowman's tech events and interviews — Kent C. Dodds – Write tests. Not too many. Mostly integration." },
 
     /* ── Chương 10 — Dự án giữa khoá: giao diện đặt lịch ── */

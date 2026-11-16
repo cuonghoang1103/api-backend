@@ -16,7 +16,7 @@ export default {
     "prj301-el": { yt: "KmREMEhj5eE", credit: "Telusko — JSTL Tutorial part 1 EL", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/java-web-application-development/03-jsp-el-jstl/03-09-expression-language-day-du-f1150401.mp4' }, defaultVideoTrack: 'VI'},
     "prj301-jstl": { yt: "R0EnI9_ZMA0", credit: "Telusko — JSTL Tutorial part 2 Core Tags", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/java-web-application-development/03-jsp-el-jstl/03-10-jstl-core-dinh-dang-ham-3cb87ca4.mp4' }, defaultVideoTrack: 'VI'},
     "prj301-cookie-session": { yt: "5tLGwdyPGRY", credit: "Telusko — #10 Servlet and JSP Tutorial | HttpSession | Cookie", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/java-web-application-development/04-bon-pham-vi-scope/04-03-cookie-session-thuc-te-183bf2b6.mp4' }, defaultVideoTrack: 'VI'},
-    "prj301-jdbc-dao": { yt: "y_YxwyYRJek", credit: "Telusko — 16.1  JDBC | Java Database Connectivity Theory Tutorial" },
+    "prj301-jdbc-dao": { yt: "y_YxwyYRJek", credit: "Telusko — 16.1  JDBC | Java Database Connectivity Theory Tutorial", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/java-web-application-development/05-jdbc-mau-dao/05-03-ket-noi-csdl-an-toan-55e33fe4.mp4' }, defaultVideoTrack: 'VI'},
     "prj301-jdbc-driver": { yt: "xiVmv75Dug0", credit: "Telusko — Java Database Connectivity  JDBC  Practical Tutorial" },
     "prj301-jdbc-crud": { yt: "7v2OnUti2eM", credit: "Telusko — Java Database Connectivity | JDBC" },
     "prj301-mvc": { yt: "MDHj4vgKY6Q", credit: "Telusko — MVC using Servlet and JSP" },
@@ -92,5 +92,6 @@ export default {
     'prj301-hoc-the-nao': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/java-web-application-development/00-gioi-thieu-huong-dan-hoc/00-02-hoc-prj301-the-nao-ff527251.mp4' }, defaultVideoTrack: 'VI'},
     'prj301-dieu-kien-qua-mon': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/java-web-application-development/00-gioi-thieu-huong-dan-hoc/00-07-dieu-kien-qua-mon-bcef847b.mp4' }, defaultVideoTrack: 'VI'},
     'prj301-slide-prj7-2': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/java-web-application-development/03-jsp-el-jstl/03-05-slide-prj7-2-jstl-url-fmt-fn-326c71f9.mp4' }, defaultVideoTrack: 'VI'},
+    'prj301-on-ch3': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/java-web-application-development/03-jsp-el-jstl/03-12-thuc-hanh-chuong-3-30a8c280.mp4' }, defaultVideoTrack: 'VI' },
   },
 };

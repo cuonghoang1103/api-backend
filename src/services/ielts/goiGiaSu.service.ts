@@ -448,18 +448,18 @@ export function docGiong(x: unknown): GiongGoi {
 }
 
 /** SSML nhiều giọng: tiếng Việt = giọng Việt bản xứ, `[en]…[/en]` = giọng bản xứ của ngoại ngữ. Thuần — test được. */
-export function ssmlGiongViet(noi: string, giong: 'hoai-my' | 'nam-minh', nn: NgonNgu): string {
+export function ssmlGiongViet(noi: string, giong: 'hoai-my' | 'nam-minh', nn: NgonNgu, ngoai?: string): string {
   const body = tachDoan(noi)
-    .map((d) => `<voice name="${d.en ? GIONG_NGOAI[nn] : GIONG_VIET[giong]}">${khoiSsml(d.t, null, d.en ? TOC_NGOAI : TOC_VIET_BAN_XU)}<break time="300ms"/></voice>`)
+    .map((d) => `<voice name="${d.en ? (ngoai ?? GIONG_NGOAI[nn]) : GIONG_VIET[giong]}">${khoiSsml(d.t, null, d.en ? TOC_NGOAI : TOC_VIET_BAN_XU)}<break time="300ms"/></voice>`)
     .join('');
   return `<speak version="1.0" xmlns="http://www.w3.org/2001/10/synthesis" xml:lang="vi-VN">${body}</speak>`;
 }
 
-async function docGiaSuGiongViet(noi: string, giong: 'hoai-my' | 'nam-minh', nn: NgonNgu): Promise<string | null> {
+async function docGiaSuGiongViet(noi: string, giong: 'hoai-my' | 'nam-minh', nn: NgonNgu, ngoai?: string): Promise<string | null> {
   const key = process.env.AZURE_SPEECH_KEY;
   const region = process.env.AZURE_SPEECH_REGION || 'eastasia';
   if (!key) return null;
-  const r2 = `ielts/audio/giasu/${crypto.createHash('sha1').update(`${GIONG_VIET[giong]}|${NHIP}|${nn}|${noi}`).digest('hex')}.mp3`;
+  const r2 = `ielts/audio/giasu/${crypto.createHash('sha1').update(`${GIONG_VIET[giong]}|${NHIP}|${nn}${ngoai ? `|${ngoai}` : ''}|${noi}`).digest('hex')}.mp3`;
   const dang = dangTao.get(r2);
   if (dang) return dang;
   const p = (async () => {
@@ -468,7 +468,7 @@ async function docGiaSuGiongViet(noi: string, giong: 'hoai-my' | 'nam-minh', nn:
       method: 'POST',
       headers: { 'Ocp-Apim-Subscription-Key': key, 'Content-Type': 'application/ssml+xml', 'X-Microsoft-OutputFormat': 'audio-24khz-48kbitrate-mono-mp3', 'User-Agent': 'cuongthai-ielts-goi' },
       signal: AbortSignal.timeout(20_000),
-      body: ssmlGiongViet(noi, giong, nn),
+      body: ssmlGiongViet(noi, giong, nn, ngoai),
     });
     if (!res.ok) {
       logger.warn('[ielts/goi] Azure giọng Việt bản xứ', { status: res.status, loi: (await res.text().catch(() => '')).slice(0, 160) });
@@ -481,8 +481,8 @@ async function docGiaSuGiongViet(noi: string, giong: 'hoai-my' | 'nam-minh', nn:
 }
 
 /** Một đoạn ngoại ngữ (Anh: Sonia · Nhật: Nanami · Trung: Xiaoxiao) → URL mp3 (lưu R2 theo băm). */
-async function docDoanAnh(t: string, nn: NgonNgu = 'en'): Promise<string | null> {
-  const GIONG_ANH = GIONG_NGOAI[nn];
+async function docDoanAnh(t: string, nn: NgonNgu = 'en', ngoai?: string): Promise<string | null> {
+  const GIONG_ANH = ngoai ?? GIONG_NGOAI[nn];
   const key = process.env.AZURE_SPEECH_KEY;
   const region = process.env.AZURE_SPEECH_REGION || 'eastasia';
   if (!key) return null;
@@ -492,7 +492,7 @@ async function docDoanAnh(t: string, nn: NgonNgu = 'en'): Promise<string | null>
     method: 'POST',
     headers: { 'Ocp-Apim-Subscription-Key': key, 'Content-Type': 'application/ssml+xml', 'X-Microsoft-OutputFormat': 'audio-24khz-48kbitrate-mono-mp3', 'User-Agent': 'cuongthai-ielts-goi' },
     signal: AbortSignal.timeout(15_000),
-    body: `<speak version="1.0" xmlns="http://www.w3.org/2001/10/synthesis" xml:lang="${LOCALE[nn]}"><voice name="${GIONG_ANH}">${khoiSsml(t, null, TOC_NGOAI)}</voice></speak>`,
+    body: `<speak version="1.0" xmlns="http://www.w3.org/2001/10/synthesis" xml:lang="${ngoai ? GIONG_ANH.slice(0, 5) : LOCALE[nn]}"><voice name="${GIONG_ANH}">${khoiSsml(t, null, TOC_NGOAI)}</voice></speak>`,
   });
   if (!res.ok) return null;
   return (await putObject(r2, Buffer.from(await res.arrayBuffer()), 'audio/mpeg')).url;
@@ -514,10 +514,10 @@ async function docDoanNha(t: string, voice: string, hanMs: number): Promise<stri
  * Đọc lời gia sư theo giọng người dùng chọn. Luôn trả được tiếng (trừ khi cả Azure
  * hỏng): giọng máy nhà hỏng thì `giongThat` = 'mac-dinh' để web báo nhẹ một dòng.
  */
-export async function docGiaSuTheoGiong(noi: string, giong: GiongGoi, nn: NgonNgu = 'en'): Promise<{ audioUrl: string | null; audioUrls?: string[]; giongThat: GiongGoi }> {
+export async function docGiaSuTheoGiong(noi: string, giong: GiongGoi, nn: NgonNgu = 'en', ngoai?: string): Promise<{ audioUrl: string | null; audioUrls?: string[]; giongThat: GiongGoi }> {
   noi = boSungTheNN(noi, nn);
   if (giong === 'hoai-my' || giong === 'nam-minh') {
-    const u = await docGiaSuGiongViet(noi, giong, nn);
+    const u = await docGiaSuGiongViet(noi, giong, nn, ngoai);
     // Azure từ chối giọng Việt (vùng không có, hết hạn mức) ⇒ lùi về giọng mặc định — cuộc gọi không bao giờ câm.
     return u ? { audioUrl: u, giongThat: giong } : { audioUrl: await docGiaSu(noi, nn), giongThat: 'mac-dinh' };
   }
@@ -532,7 +532,7 @@ export async function docGiaSuTheoGiong(noi: string, giong: GiongGoi, nn: NgonNg
     const doanCau = doan.flatMap((d) => (d.en ? [d] : tachCau(d.t).map((t) => ({ en: false, t }))));
     const urls = await Promise.all(doanCau.map(async (d) => {
       if (d.en) {
-        const u = await docDoanAnh(d.t, nn);
+        const u = await docDoanAnh(d.t, nn, ngoai);
         if (!u) throw new Error('Azure giọng ngoại ngữ hỏng');
         return u;
       }

@@ -28,6 +28,7 @@ import { coKeyKhaDung } from '../../agent/anthropicChinhHang/khoKey.js';
 import { goiVanBanChinhHang } from '../../agent/anthropicChinhHang/dinhTuyen.js';
 import { dauNgayVn } from '../../agent/anthropicChinhHang/hanMuc.js';
 import { docGiaSuTheoGiong, docGiong, type GiongGoi } from '../goiGiaSu.service.js';
+import { azureNgoai } from '../docTo.service.js';
 import { boSungTheNN } from '../theNgoaiNgu.js';
 import { cauMoDau, docNN, timChuDe, type NgonNguTC } from './chuDe.js';
 import {
@@ -118,8 +119,8 @@ export type SuKienTC =
   | { type: 'loi'; lyDo: string; message: string };
 
 /** Một câu ⇒ dãy tệp âm thanh (giọng máy nhà trả nhiều tệp). */
-async function docCau(text: string, giong: GiongGoi, nn: NgonNguTC) {
-  const r = await docGiaSuTheoGiong(text, giong, nn);
+async function docCau(text: string, giong: GiongGoi, nn: NgonNguTC, ngoai?: string) {
+  const r = await docGiaSuTheoGiong(text, giong, nn, ngoai);
   return { audioUrls: r.audioUrls?.length ? r.audioUrls : r.audioUrl ? [r.audioUrl] : [], giongThat: r.giongThat };
 }
 
@@ -154,6 +155,8 @@ export interface VaoLuot {
   chuDeId?: unknown;
   tenBai?: unknown;
   giong?: unknown;
+  /** Giọng phần NGOẠI NGỮ (mã `GIONG` của docTo: us-nam, uk-nu, ja-nam…) — app CT Language gửi theo giọng người học chọn. */
+  giongNgoai?: unknown;
   lichSu?: unknown;
   /** Mở lại buổi đã lưu ⇒ câu mở là "quay lại rồi, nói tiếp câu lúc nãy" (không chào lại từ đầu). */
   tiepTuc?: unknown;
@@ -174,7 +177,7 @@ export function cauHoiGanNhat(ls: { ai: boolean; text: string }[]): string {
 /** Các phụ thuộc ra ngoài (mạng, CSDL) — test thay bằng bản giả để kiểm định tuyến/lùi/trần mà không tốn tiền. */
 export interface PhuThuocTC {
   stt: (audio: Buffer, ten: string, mime: string, hints: string, nn: NgonNguTC) => Promise<string>;
-  tts: (text: string, giong: GiongGoi, nn: NgonNguTC) => Promise<{ audioUrls: string[]; giongThat: GiongGoi }>;
+  tts: (text: string, giong: GiongGoi, nn: NgonNguTC, ngoai?: string) => Promise<{ audioUrls: string[]; giongThat: GiongGoi }>;
   chinhHang: (o: Parameters<typeof goiVanBanChinhHang>[0]) => Promise<{ usd: number }>;
   duPhong: (o: Parameters<typeof llmComplete>[0]) => Promise<unknown>;
   caiDat: () => Promise<{ bat: boolean; tranNgayUsd: number }>;
@@ -206,9 +209,10 @@ export async function chayLuot(userId: number, v: VaoLuot, gui: (e: SuKienTC) =>
   // `giong: 'may'` (app CT Language, 14/11/2026): người dùng chọn GIỌNG IPHONE ⇒ app tự đọc bằng AVSpeechSynthesizer,
   // máy chủ khỏi tổng hợp (không tốn Azure, câu đến nhanh hơn). Sự kiện `cau` vẫn gửi, chỉ `audioUrls` rỗng.
   const khongDoc = v.giong === 'may';
+  const ngoai = azureNgoai(v.giongNgoai, nn);
   const chuDe = timChuDe(nn, v.chuDeId, String(v.tenBai ?? ''));
   // Chuẩn hoá thẻ ngoại ngữ NGAY ở đây: web tô đậm + lưu lịch sử đúng, "tiếp tục buổi trước" tìm đúng câu hỏi.
-  const hang = new HangDoc((t) => (khongDoc ? Promise.resolve({ audioUrls: [] as string[], giongThat: giong }) : pt.tts(t, giong, nn)), gui, t0, (t) => boSungTheNN(t, nn));
+  const hang = new HangDoc((t) => (khongDoc ? Promise.resolve({ audioUrls: [] as string[], giongThat: giong }) : pt.tts(t, giong, nn, ngoai)), gui, t0, (t) => boSungTheNN(t, nn));
 
   if (!demLuot(userId)) { gui({ type: 'loi', lyDo: 'het_luot_ngay', message: 'Hôm nay bạn đã trò chuyện hết số lượt — mai mình nói tiếp nhé.' }); return; }
 

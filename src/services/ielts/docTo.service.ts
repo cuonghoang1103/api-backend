@@ -69,6 +69,16 @@ const GIONG_AZURE: Record<Giong, string> = {
   dan: 'en-GB-LibbyNeural',
 };
 
+/**
+ * Giọng Azure cho phần NGOẠI NGỮ của CuongMini theo giọng người học chọn ở app (16/11/2026). Chỉ nhận mã trong
+ * `GIONG` và đúng ngôn ngữ (Anh: us/uk/au · Nhật: ja/ja2 · Trung: zh) — sai/không có ⇒ undefined (giữ giọng mặc định).
+ */
+export function azureNgoai(g: unknown, nn: 'en' | 'ja' | 'zh'): string | undefined {
+  if (typeof g !== 'string' || !Object.hasOwn(GIONG_AZURE, g) || g === 'dan') return undefined;
+  const dung = nn === 'ja' ? /^ja2?-/ : nn === 'zh' ? /^zh-/ : /^(us|uk|au)-/;
+  return dung.test(g) ? GIONG_AZURE[g as Giong] : undefined;
+}
+
 const TOI_DA_KY_TU = 1500;
 /** Trần số lần SINH MỚI mỗi người mỗi ngày (file đã có thì không tính). */
 const TRAN_SINH_MOI_NGAY = 400;

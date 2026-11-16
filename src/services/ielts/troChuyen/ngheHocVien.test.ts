@@ -2,6 +2,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { canEpNgonNgu, laCauBia, maNgonNgu, ngheHocVien } from './ngheHocVien.js';
 import { ssmlGiongViet } from '../goiGiaSu.service.js';
+import { azureNgoai } from '../docTo.service.js';
 
 test('câu phụ đề Whisper bịa ra bị loại, câu thật giữ lại', () => {
   for (const t of ['Thank you for watching.', 'Thanks for watching!', 'ご視聴ありがとうございました', 'チャンネル登録よろしくお願いします',
@@ -46,4 +47,16 @@ test('SSML giọng Việt bản xứ: phần Việt = Hoài My, phần ngoại n
   assert.match(s, /Thử nào &lt;3/);
   assert.equal((s.match(/<voice /g) ?? []).length, 3);
   assert.match(ssmlGiongViet('Chào bạn', 'nam-minh', 'zh'), /vi-VN-NamMinhNeural/);
+});
+
+test('giọng ngoại ngữ người học chọn (app CT Language): chỉ nhận mã đúng ngôn ngữ, sai ⇒ giữ giọng mặc định', () => {
+  assert.equal(azureNgoai('us-nam', 'en'), 'en-US-AndrewNeural');
+  assert.equal(azureNgoai('au-nu', 'en'), 'en-AU-NatashaNeural');
+  assert.equal(azureNgoai('ja2-nam', 'ja'), 'ja-JP-DaichiNeural');
+  assert.equal(azureNgoai('zh-nam', 'zh'), 'zh-CN-YunxiNeural');
+  for (const [g, nn] of [['ja-nu', 'en'], ['us-nu', 'zh'], ['dan', 'en'], ['toString', 'en'], [undefined, 'ja'], [42, 'en']] as const)
+    assert.equal(azureNgoai(g, nn), undefined, String(g));
+  const s = ssmlGiongViet('Nghe nè: [en]Hello there.[/en]', 'hoai-my', 'en', azureNgoai('us-nam', 'en'));
+  assert.match(s, /<voice name="en-US-AndrewNeural">.*Hello there\./);
+  assert.doesNotMatch(s, /SoniaNeural/);
 });

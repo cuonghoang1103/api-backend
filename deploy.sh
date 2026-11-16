@@ -1029,6 +1029,7 @@ for route in \
     ctlanguage/podcast \
     ctlanguage/phat-am/luot \
     ctlanguage/tro-choi/danh-muc \
+    ctlanguage/vong-quay \
     xuong-3d/bo-phan \
     gifs \
     toc-do-mang/ping \

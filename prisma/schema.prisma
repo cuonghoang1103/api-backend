@@ -535,6 +535,8 @@ model User {
   // CT Language — trò chơi (16/11/2026): điểm từng ván (bảng xếp hạng) + thách đấu bạn bè đã tạo
   ctlTroChoiDiem           CtlTroChoiDiem[]          @relation("CtlTroChoiDiemNguoi")
   ctlThachDau              CtlThachDau[]             @relation("CtlThachDauNguoiTao")
+  // CT Language — vòng quay may mắn (16/11/2026): lượt đã quay + quà
+  ctlVongQuay              CtlVongQuay[]             @relation("CtlVongQuayNguoi")
 
   @@index([email], name: "idx_users_email")
   @@map("users")
@@ -18318,6 +18320,29 @@ model CtlThachDau {
 
   @@index([userId, createdAt], name: "idx_ctl_thach_dau_nguoi")
   @@map("ctl_thach_dau")
+}
+
+/// CT Language — VÒNG QUAY MAY MẮN (16/11/2026). Một dòng = một lượt đã quay. Quà CHỈ là đồ trong app (xu Tủ đồ, x2 xu
+/// trò chơi cả ngày, món đồ bất ngờ, thêm lượt) — không tiền, không giảm giá Pro, không bán lượt. `nguon`: ngay (1/ngày) ·
+/// muc-tieu (đạt phút mục tiêu) · chuoi-7 (chuỗi chạm mốc 7/14/…) · thuong (ô "Thêm 1 lượt", `stt` 1–2). `ngay` = ngày giờ VN.
+/// Unique (user, ngày, nguồn, stt) ⇒ bấm hai lần cùng lúc không thành hai lượt. Luật: `services/ctlanguage/vongQuayThuan.ts`.
+model CtlVongQuay {
+  id        Int      @id @default(autoincrement())
+  userId    Int      @map("user_id")
+  ngay      DateTime @db.Date
+  nguon     String   @db.VarChar(12)
+  stt       Int      @default(1) @db.SmallInt
+  /// Mã ô (QUA_VONG_QUAY): xu-10 · x2-xu · xu-20 · do · xu-50 · them-luot · xu-100 · may-man
+  qua       String   @db.VarChar(16)
+  xu        Int      @default(0)
+  createdAt DateTime @default(now()) @map("created_at")
+
+  user User @relation("CtlVongQuayNguoi", fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, ngay, nguon, stt], name: "uk_ctl_vong_quay_luot", map: "uk_ctl_vong_quay_luot")
+  @@index([userId, createdAt], name: "idx_ctl_vong_quay_nguoi")
+  @@index([createdAt], name: "idx_ctl_vong_quay_moi")
+  @@map("ctl_vong_quay")
 }
 
 /// Mỗi lượt đọc giọng qua ElevenLabs (robot Odin + web) — cho trang admin thống kê + trần Pro/ngày (15/11/2026, `services/giong/elevenlabs.ts`).

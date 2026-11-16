@@ -120,6 +120,8 @@ export async function anonymizeAccount(userId: number): Promise<{ anonymized: tr
     // Trò chơi: điểm từng ván + thách đấu đã tạo (bộ đề do họ gửi). Điểm của NGƯỜI KHÁC trong thách đấu đó xoá theo (CASCADE).
     prisma.ctlTroChoiDiem.deleteMany({ where: { userId } }),
     prisma.ctlThachDau.deleteMany({ where: { userId } }),
+    // Vòng quay may mắn: lịch sử lượt quay + quà.
+    prisma.ctlVongQuay.deleteMany({ where: { userId } }),
     prisma.ctLanguageProfile.deleteMany({ where: { userId } }),
     // Hội thoại AI CT Work "Riêng tư" do họ tạo — chỉ họ đọc được, nên xoá mềm (như nút Xoá hội thoại).
     prisma.workAiThread.updateMany({

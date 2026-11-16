@@ -18,6 +18,27 @@ Mẫu một mục:
 
 ---
 
+### 16/11/2026 — Giọng video (dữ liệu train) — ElevenLabs đọc số/ký hiệu KHÁC chữ ghi kèm ⇒ giọng học đọc số sai, khựng quanh số
+- **Triệu chứng:** giọng cuong6 đọc "2026" thiếu "không trăm", khựng/chậm bất thường quanh số, gạch nối; ~1/3 dữ liệu train có chữ số.
+- **Nguyên nhân:** sinh dữ liệu đưa EL câu GỐC ("12.24", "x86-64", "F03", "fe80::1") còn chữ train là `chuDocGoc` ("mười hai chấm hai mươi tư"…); nghe lại bằng Whisper: EL đọc "phẩy hai bốn", đọc cả "gạch nối", đọc số 0 đầu, địa chỉ IPv6 thì loạn ⇒ cặp chữ–tiếng lệch.
+- **Cách sửa:** `giong/phienAmBai.ts` thêm `chuNoiEL` (chữ đưa EL: số/ký hiệu viết thành lời sẵn, từ Anh giữ nguyên), `chuDocGoc2` (luật số v2: mã môn đọc từng số, số 0 đầu, thập phân, %, gạch nối kề số), `sachEL` (bỏ câu ký hiệu khó); đọc lại mọi câu có số; loại 1.427 đoạn cũ khỏi train. Luật v2 bật ở làn giọng bằng `giong/LUAT_SO=2` cùng lúc đổi giọng vòng 5.
+- **Ảnh hưởng:** mọi giọng train từ dữ liệu EL (cuong4–6).
+- **Bài học:** dữ liệu TTS: chữ ghi kèm phải là ĐÚNG lời được nói — kiểm bằng cách nghe lại mẫu có số/ký hiệu trước khi train, đừng tin "EL chắc đọc giống mình viết".
+
+### 16/11/2026 — Giọng video (bảng đọc riêng) — chữ "constructor", "toString" bị đưa cho giọng thành `function Object() { [native code] }`
+- **Triệu chứng:** soi đoạn train bị bộ lọc nhịp đánh dấu thì thấy chữ train có "function toString() { [native code] }"; tập pro-lpe3-3 lồng sáng 16/11 dính 2 câu.
+- **Nguyên nhân:** `giong/phienAmBai.ts › chuDocGoc`: `DOC_RIENG[w] ?? w` với DOC_RIENG là object thường ⇒ `DOC_RIENG['constructor']` trả HÀM của Object.prototype.
+- **Cách sửa:** `Object.hasOwn(DOC_RIENG, w) ? DOC_RIENG[w] : w`; đọc lại pro-lpe3-3 (`dp-lam-lai.sh … giong`); dựng lại metadata train.
+- **Ảnh hưởng:** 1 tập đã render (làm lại), mọi câu có constructor/toString/valueOf từ 16/11 01:00 tới 15:00; nếu không bắt thì vào cả chữ train vòng 5.
+- **Bài học:** tra bảng bằng object thường với khoá là CHỮ NGƯỜI DÙNG ⇒ luôn `Object.hasOwn`/`Map`; soi mẫu ngoại lệ của bộ lọc trước khi tin bộ lọc.
+
+### 16/11/2026 — Video (điều phối) — bản sửa "kéo video gốc sau" làm 9 tập render 2 lần rồi bị đánh LOI
+- **Triệu chứng:** 13:47–14:50 không tập nào "ok"; 9 tập (rds-1-4, dkr-3-3, rds-2-1…) LOI dù video đã lên R2.
+- **Nguyên nhân:** `dieu-phoi-linux/render.sh`: nhánh mới của `render_thue` in "✓ id ⇒ đường (video gốc kéo sau)" và không kéo video.mp4, nhưng vòng chính vẫn tách đường từ dòng ✓ (dính cả chú thích) rồi đòi `[ -f "$thu/video.mp4" ]` ⇒ thất bại ⇒ render lần 2 ⇒ LOI.
+- **Cách sửa:** dòng ✓ chỉ in đường; vòng chính nhận "ok" khi có video.mp4 HOẶC thong-tin.json có r2Url; `keo-video-sau.sh` bỏ dòng trùng; 8 tập đổi LOI→ok, dkr-5-3 render lại.
+- **Ảnh hưởng:** ~1 giờ, 9 lượt render thừa trên máy thuê (~$0,4).
+- **Bài học:** sửa một hàm thì đọc CẢ chỗ gọi nó dùng kết quả thế nào; sau khi đổi luồng sản xuất phải canh tập đầu tiên chạy hết vòng (▶ … ■ ok) rồi mới rời đi.
+
 ### 16/11/2026 — Agent máy nhà (giám sát) — môn soạn xong vẫn mở phiên Claude rỗng 48 lần/ngày
 - **Triệu chứng:** CSX và CEA201 đã soạn xong, hôm nay mỗi môn vẫn bị mở phiên mới ~15 phút/lần (48 lần) chỉ để kiểm rồi thoát; MMA301 25 phiên rỗng chờ trả lời câu hỏi — tốn hạn mức Claude Max.
 - **Nguyên nhân:** `~/agent-nha/giam-sat.sh` chỉ nhận "môn xong" khi báo cáo có dòng tiêu đề `# XONG KHOÁ`; agent viết "phiên kiểm sau XONG KHOÁ" / "Khoá đã XONG" ⇒ không khớp; câu hỏi §13 của MMA không ai trả lời.

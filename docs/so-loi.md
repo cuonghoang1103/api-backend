@@ -32,6 +32,13 @@ Mẫu một mục:
 - **Ảnh hưởng:** không — phát hiện khi kiểm trên backend cục bộ.
 - **Bài học:** thay chữ hàng loạt trên dữ liệu thì kiểm trên DỮ LIỆU THẬT trước (grep mọi chỗ khớp và đọc ngữ cảnh), không chỉ trên câu mẫu tự nghĩ.
 
+### 16/11/2026 — Máy nhà (đĩa) — ổ chính tụt còn 25 GB, sát ngưỡng làn render tự dừng
+- **Triệu chứng:** 21:40 `df /` còn 25 GB (render.sh dừng nhận tập khi < 25 GB — `DP_DIA_TOI_THIEU`).
+- **Nguyên nhân:** ảnh Docker của MỖI lượt deploy-nha (`ghcr.io/cuonghoang1103/api-backend-{backend,frontend}:<sha>`, ~5,5 GB/lượt) nằm lại máy nhà mãi — 68 ảnh cũ ≈ 64 GB; cộng build cache.
+- **Cách sửa:** `docker builder prune -af` + `docker rmi` các ảnh ghcr cũ (giữ 3 bản mới nhất mỗi loại; ảnh đã nằm trên GHCR) ⇒ còn trống 102 GB. Kho video đã chuyển sang Kioxia (symlink ~/Videos/CuongThai-KhoaHoc) chiều nay.
+- **Ảnh hưởng:** chưa dừng làn nào (bắt kịp trước ngưỡng).
+- **Bài học:** deploy-nha nên tự dọn ảnh cũ sau khi đẩy GHCR; tạm thời kiểm `df` máy nhà mỗi giờ và dọn khi < 40 GB.
+
 ### 16/11/2026 — Web (video khoá học) — khoá Authentication gắn nhãn DONE nhưng bài chỉ có video YouTube, "VN sắp có"
 - **Triệu chứng:** user mở /courses/authentication/learn: bài nào cũng chỉ có tab YT; 77 video tiếng Việt đã ở R2 và có trong `content/course-videos/authentication.mjs` từ đầu tháng 11.
 - **Nguyên nhân:** `scripts/course-video-seed.mjs` (dòng ~76) chặn CẢ bản đồ khi có entry `yt` mà `credit` rỗng; 7 bài lab (auth-6-7…auth-12-7) thêm 04/11 để `credit: ''` ⇒ mỗi lần deploy bước seed bỏ qua toàn bộ khoá, chỉ in một dòng WARN "Course video-track seed reported errors (rc=1)" giữa log deploy — không ai đọc; `kiem-video-web.mjs` chỉ so mã nguồn nên báo 77/77.

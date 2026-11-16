@@ -18,6 +18,13 @@ Mẫu một mục:
 
 ---
 
+### 16/11/2026 — Web (video khoá học) — khoá Authentication gắn nhãn DONE nhưng bài chỉ có video YouTube, "VN sắp có"
+- **Triệu chứng:** user mở /courses/authentication/learn: bài nào cũng chỉ có tab YT; 77 video tiếng Việt đã ở R2 và có trong `content/course-videos/authentication.mjs` từ đầu tháng 11.
+- **Nguyên nhân:** `scripts/course-video-seed.mjs` (dòng ~76) chặn CẢ bản đồ khi có entry `yt` mà `credit` rỗng; 7 bài lab (auth-6-7…auth-12-7) thêm 04/11 để `credit: ''` ⇒ mỗi lần deploy bước seed bỏ qua toàn bộ khoá, chỉ in một dòng WARN "Course video-track seed reported errors (rc=1)" giữa log deploy — không ai đọc; `kiem-video-web.mjs` chỉ so mã nguồn nên báo 77/77.
+- **Cách sửa:** `node scripts/verify-youtube-videos.mjs --file content/course-videos/authentication.mjs --fix-credits` (điền 7 credit) + deploy (3dcc5aa0e).
+- **Ảnh hưởng:** cả khoá Authentication không có video tiếng Việt trên prod ~12 ngày.
+- **Bài học:** sau MỖI deploy grep log tìm `WARN|✗` (nhất là "video-track seed") và đọc `/home/deployer/repo/.deploy-logs/seed-course-videos.log`; "đã gắn trong mã" ≠ "đã có trên prod" — kiểm bằng trang thật/API prod; thêm entry `yt` thì chạy verify --fix-credits ngay.
+
 ### 16/11/2026 — Giọng video — chữ đầu câu đọc sai phụ âm ("Xoá" ⇒ "Đoá", "Dừng" ⇒ "Đừng", "Khi" ⇒ "Đi")
 - **Triệu chứng:** user nghe video: từ ĐẦU câu hay sai phụ âm đầu. Đo 10.920 câu lồng 16/11 (so chữ đầu Whisper nghe với kịch bản, vần giữ nguyên): "D" hoa đầu câu ⇒ "Đ" 71% (giữa câu 3,8%), "X" hoa 25% (giữa câu 2,5%), chữ khác ~1%.
 - **Nguyên nhân:** `chuDocGoc` giữ chữ HOA đầu câu; trong bài giảng chữ D/X/K… hoa gần như chỉ mở đầu từ tiếng Anh (Docker, Database, XML) ⇒ giọng F5 học "D hoa = đờ". Thử 10 câu × 3 seed cùng giọng: viết hoa đúng 5/30, viết thường 27/30.

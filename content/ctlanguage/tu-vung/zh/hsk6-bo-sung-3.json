@@ -1,0 +1,894 @@
+{
+  "ma": "hsk6-bo-sung-3",
+  "nn": "zh",
+  "ten": "HSK6 bổ sung 3 — Thành ngữ bốn chữ thông dụng",
+  "moTa": "60 thành ngữ (成语) HSK6 mang sắc thái tích cực hoặc trung tính, hay gặp trong bài đọc, bài viết và lời nói trang trọng: 众所周知, 实事求是, 精益求精, 循序渐进, 相辅相成, 当务之急… Mỗi thành ngữ có câu ví dụ đời thường, cụm hay dùng và lưu ý vị trí trong câu; pinyin câu đã biến điệu 一/不 (一丝不苟 yìsī-bùgǒu, 坚持不懈 jiānchí-búxiè).",
+  "nhom": "hsk",
+  "cap": "HSK6",
+  "tu": [
+    {
+      "chu": "与日俱增",
+      "doc": "yǔrì-jùzēng",
+      "loai": "phr",
+      "nghia": "tăng lên từng ngày",
+      "cap": "HSK6",
+      "viDu": "随着年龄的增长，他对家乡的思念与日俱增。",
+      "viDuDoc": "Suízhe niánlíng de zēngzhǎng, tā duì jiāxiāng de sīniàn yǔrì-jùzēng.",
+      "viDuNghia": "Tuổi càng cao, nỗi nhớ quê của ông ấy càng tăng lên từng ngày.",
+      "cumTu": [
+        "需求与日俱增",
+        "压力与日俱增",
+        "与日俱增的影响"
+      ],
+      "ghiChu": "Thường làm vị ngữ; chủ ngữ là số lượng, nhu cầu, tình cảm."
+    },
+    {
+      "chu": "日新月异",
+      "doc": "rìxīn-yuèyì",
+      "loai": "phr",
+      "nghia": "thay đổi từng ngày, đổi mới không ngừng",
+      "cap": "HSK6",
+      "viDu": "科技发展日新月异，手机每年都有新功能。",
+      "viDuDoc": "Kējì fāzhǎn rìxīn-yuèyì, shǒujī měi nián dōu yǒu xīn gōngnéng.",
+      "viDuNghia": "Khoa học công nghệ đổi mới từng ngày, năm nào điện thoại cũng có tính năng mới.",
+      "cumTu": [
+        "日新月异的变化",
+        "科技日新月异",
+        "城市面貌日新月异"
+      ]
+    },
+    {
+      "chu": "举足轻重",
+      "doc": "jǔzú-qīngzhòng",
+      "loai": "phr",
+      "nghia": "giữ vai trò then chốt, có sức nặng",
+      "cap": "HSK6",
+      "viDu": "中国在世界经济中具有举足轻重的地位。",
+      "viDuDoc": "Zhōngguó zài shìjiè jīngjì zhōng jùyǒu jǔzú-qīngzhòng de dìwèi.",
+      "viDuNghia": "Trung Quốc có vị thế then chốt trong nền kinh tế thế giới.",
+      "cumTu": [
+        "举足轻重的地位",
+        "举足轻重的作用",
+        "举足轻重的人物"
+      ],
+      "ghiChu": "重 ở đây đọc zhòng (nặng), không phải chóng."
+    },
+    {
+      "chu": "众所周知",
+      "doc": "zhòngsuǒ-zhōuzhī",
+      "loai": "phr",
+      "nghia": "như mọi người đều biết",
+      "cap": "HSK6",
+      "viDu": "众所周知，吸烟对健康有害。",
+      "viDuDoc": "Zhòngsuǒ-zhōuzhī, xīyān duì jiànkāng yǒuhài.",
+      "viDuNghia": "Như mọi người đều biết, hút thuốc có hại cho sức khoẻ.",
+      "cumTu": [
+        "众所周知的事实",
+        "众所周知，…"
+      ],
+      "ghiChu": "Hay đứng đầu câu trong bài luận, sau đó là dấu phẩy."
+    },
+    {
+      "chu": "名副其实",
+      "doc": "míngfù-qíshí",
+      "loai": "phr",
+      "nghia": "danh xứng với thực",
+      "cap": "HSK6",
+      "viDu": "杭州是一座名副其实的美丽城市。",
+      "viDuDoc": "Hángzhōu shì yí zuò míngfù-qíshí de měilì chéngshì.",
+      "viDuNghia": "Hàng Châu là một thành phố đẹp đúng như danh tiếng.",
+      "cumTu": [
+        "名副其实的专家",
+        "名副其实的冠军"
+      ],
+      "ghiChu": "Trái nghĩa: 名不副实 (hữu danh vô thực). Chữ 副 hay bị viết nhầm thành 符."
+    },
+    {
+      "chu": "实事求是",
+      "doc": "shíshì-qiúshì",
+      "loai": "phr",
+      "nghia": "thực sự cầu thị, tôn trọng sự thật",
+      "cap": "HSK6",
+      "viDu": "写报告要实事求是，不能夸大成绩。",
+      "viDuDoc": "Xiě bàogào yào shíshì-qiúshì, bù néng kuādà chéngjì.",
+      "viDuNghia": "Viết báo cáo phải tôn trọng sự thật, không được thổi phồng thành tích.",
+      "cumTu": [
+        "实事求是的态度",
+        "坚持实事求是",
+        "实事求是地说"
+      ]
+    },
+    {
+      "chu": "脚踏实地",
+      "doc": "jiǎotà-shídì",
+      "loai": "phr",
+      "nghia": "chắc chân, làm việc thực tế vững vàng",
+      "cap": "HSK6",
+      "viDu": "成功没有捷径，只能脚踏实地地努力。",
+      "viDuDoc": "Chénggōng méiyǒu jiéjìng, zhǐ néng jiǎotà-shídì de nǔlì.",
+      "viDuNghia": "Thành công không có đường tắt, chỉ có thể cố gắng một cách vững vàng, thực tế.",
+      "cumTu": [
+        "脚踏实地地工作",
+        "做人要脚踏实地"
+      ],
+      "ghiChu": "踏 ở đây đọc tà (giẫm); khác 踏实 tāshi."
+    },
+    {
+      "chu": "全力以赴",
+      "doc": "quánlì-yǐfù",
+      "loai": "phr",
+      "nghia": "dốc toàn lực",
+      "cap": "HSK6",
+      "viDu": "为了这次比赛，全队都在全力以赴地训练。",
+      "viDuDoc": "Wèile zhè cì bǐsài, quán duì dōu zài quánlì-yǐfù de xùnliàn.",
+      "viDuNghia": "Vì trận đấu này, cả đội đang dốc toàn lực tập luyện.",
+      "cumTu": [
+        "全力以赴地准备",
+        "我们会全力以赴"
+      ]
+    },
+    {
+      "chu": "精益求精",
+      "doc": "jīngyì-qiújīng",
+      "loai": "phr",
+      "nghia": "đã tốt còn muốn tốt hơn",
+      "cap": "HSK6",
+      "viDu": "他对每件作品都精益求精。",
+      "viDuDoc": "Tā duì měi jiàn zuòpǐn dōu jīngyì-qiújīng.",
+      "viDuNghia": "Anh ấy luôn trau chuốt từng tác phẩm để ngày càng hoàn thiện.",
+      "cumTu": [
+        "精益求精的精神",
+        "对工作精益求精"
+      ],
+      "ghiChu": "Hay dùng trong thư xin việc để nói về thái độ làm việc."
+    },
+    {
+      "chu": "一丝不苟",
+      "doc": "yīsī-bùgǒu",
+      "loai": "phr",
+      "nghia": "cẩn thận tỉ mỉ, không chút cẩu thả",
+      "cap": "HSK6",
+      "viDu": "王老师批改作业总是一丝不苟。",
+      "viDuDoc": "Wáng lǎoshī pīgǎi zuòyè zǒngshì yìsī-bùgǒu.",
+      "viDuNghia": "Thầy Vương chấm bài lúc nào cũng tỉ mỉ, không chút cẩu thả.",
+      "cumTu": [
+        "一丝不苟地工作",
+        "一丝不苟的态度"
+      ],
+      "ghiChu": "Trong câu 一 biến điệu thành yì (trước thanh 1)."
+    },
+    {
+      "chu": "坚持不懈",
+      "doc": "jiānchí-bùxiè",
+      "loai": "phr",
+      "nghia": "kiên trì bền bỉ, không lơi lỏng",
+      "cap": "HSK6",
+      "viDu": "只要坚持不懈，你的汉语一定会进步。",
+      "viDuDoc": "Zhǐyào jiānchí-búxiè, nǐ de Hànyǔ yídìng huì jìnbù.",
+      "viDuNghia": "Chỉ cần kiên trì không ngừng, tiếng Trung của bạn nhất định sẽ tiến bộ.",
+      "cumTu": [
+        "坚持不懈地努力",
+        "坚持不懈的精神"
+      ],
+      "ghiChu": "Trong câu 不 biến điệu thành bú (trước thanh 4 懈)."
+    },
+    {
+      "chu": "持之以恒",
+      "doc": "chízhī-yǐhéng",
+      "loai": "phr",
+      "nghia": "bền bỉ lâu dài",
+      "cap": "HSK6",
+      "viDu": "锻炼身体贵在持之以恒。",
+      "viDuDoc": "Duànliàn shēntǐ guì zài chízhī-yǐhéng.",
+      "viDuNghia": "Rèn luyện thân thể quý ở chỗ bền bỉ lâu dài.",
+      "cumTu": [
+        "贵在持之以恒",
+        "持之以恒地学习"
+      ],
+      "ghiChu": "Mẫu hay gặp: …贵在持之以恒 (… quý ở sự bền bỉ)."
+    },
+    {
+      "chu": "锲而不舍",
+      "doc": "qiè'ér-bùshě",
+      "loai": "phr",
+      "nghia": "kiên trì không bỏ cuộc",
+      "cap": "HSK6",
+      "viDu": "经过十年锲而不舍的研究，他终于成功了。",
+      "viDuDoc": "Jīngguò shí nián qiè'ér-bùshě de yánjiū, tā zhōngyú chénggōng le.",
+      "viDuNghia": "Sau mười năm nghiên cứu kiên trì không bỏ cuộc, cuối cùng ông ấy đã thành công.",
+      "cumTu": [
+        "锲而不舍的精神",
+        "锲而不舍地追求"
+      ],
+      "ghiChu": "锲 đọc qiè; 舍 ở đây đọc shě (bỏ), khác 宿舍 shè."
+    },
+    {
+      "chu": "循序渐进",
+      "doc": "xúnxù-jiànjìn",
+      "loai": "phr",
+      "nghia": "tuần tự tiến dần, từng bước một",
+      "cap": "HSK6",
+      "viDu": "学外语要循序渐进，不能急于求成。",
+      "viDuDoc": "Xué wàiyǔ yào xúnxù-jiànjìn, bù néng jíyú-qiúchéng.",
+      "viDuNghia": "Học ngoại ngữ phải đi từng bước, không thể nóng vội.",
+      "cumTu": [
+        "循序渐进地学习",
+        "循序渐进的过程"
+      ]
+    },
+    {
+      "chu": "因材施教",
+      "doc": "yīncái-shījiào",
+      "loai": "phr",
+      "nghia": "dạy theo năng lực từng người",
+      "cap": "HSK6",
+      "viDu": "好老师懂得因材施教。",
+      "viDuDoc": "Hǎo lǎoshī dǒngde yīncái-shījiào.",
+      "viDuNghia": "Giáo viên giỏi biết dạy tuỳ theo năng lực của từng học sinh.",
+      "cumTu": [
+        "因材施教的原则",
+        "做到因材施教"
+      ],
+      "ghiChu": "教 ở đây đọc jiào (danh từ hoá: việc dạy)."
+    },
+    {
+      "chu": "举一反三",
+      "doc": "jǔyī-fǎnsān",
+      "loai": "phr",
+      "nghia": "biết một suy ra ba, học một hiểu mười",
+      "cap": "HSK6",
+      "viDu": "学数学要学会举一反三。",
+      "viDuDoc": "Xué shùxué yào xuéhuì jǔyī-fǎnsān.",
+      "viDuNghia": "Học toán phải biết từ một bài suy ra nhiều bài.",
+      "cumTu": [
+        "学会举一反三",
+        "举一反三的能力"
+      ]
+    },
+    {
+      "chu": "理所当然",
+      "doc": "lǐsuǒ-dāngrán",
+      "loai": "phr",
+      "nghia": "lẽ đương nhiên",
+      "cap": "HSK6",
+      "viDu": "很多人把父母的付出看作理所当然的事。",
+      "viDuDoc": "Hěn duō rén bǎ fùmǔ de fùchū kànzuò lǐsuǒ-dāngrán de shì.",
+      "viDuNghia": "Nhiều người coi sự hy sinh của cha mẹ là chuyện đương nhiên.",
+      "cumTu": [
+        "理所当然地认为",
+        "视为理所当然"
+      ],
+      "ghiChu": "当 ở đây đọc dāng."
+    },
+    {
+      "chu": "不言而喻",
+      "doc": "bùyán-éryù",
+      "loai": "phr",
+      "nghia": "không cần nói cũng hiểu",
+      "cap": "HSK6",
+      "viDu": "健康的重要性是不言而喻的。",
+      "viDuDoc": "Jiànkāng de zhòngyàoxìng shì bùyán-éryù de.",
+      "viDuNghia": "Tầm quan trọng của sức khoẻ thì không cần nói cũng rõ.",
+      "cumTu": [
+        "是不言而喻的",
+        "不言而喻的道理"
+      ],
+      "ghiChu": "Mẫu câu bài luận: …的重要性是不言而喻的."
+    },
+    {
+      "chu": "显而易见",
+      "doc": "xiǎn'ér-yìjiàn",
+      "loai": "phr",
+      "nghia": "rõ ràng dễ thấy",
+      "cap": "HSK6",
+      "viDu": "这个方法的好处是显而易见的。",
+      "viDuDoc": "Zhège fāngfǎ de hǎochù shì xiǎn'ér-yìjiàn de.",
+      "viDuNghia": "Lợi ích của phương pháp này thì rõ ràng dễ thấy.",
+      "cumTu": [
+        "显而易见的事实",
+        "很显而易见"
+      ],
+      "ghiChu": "易 đọc yì (dễ)."
+    },
+    {
+      "chu": "一目了然",
+      "doc": "yīmù-liǎorán",
+      "loai": "phr",
+      "nghia": "nhìn qua là hiểu ngay",
+      "cap": "HSK6",
+      "viDu": "用表格整理数据，结果一目了然。",
+      "viDuDoc": "Yòng biǎogé zhěnglǐ shùjù, jiéguǒ yímù-liǎorán.",
+      "viDuNghia": "Dùng bảng để sắp xếp số liệu thì kết quả nhìn qua là rõ.",
+      "cumTu": [
+        "一目了然的图表",
+        "让人一目了然"
+      ],
+      "ghiChu": "了 ở đây đọc liǎo (không phải le)."
+    },
+    {
+      "chu": "层出不穷",
+      "doc": "céngchū-bùqióng",
+      "loai": "phr",
+      "nghia": "liên tiếp xuất hiện, nhiều không kể xiết",
+      "cap": "HSK6",
+      "viDu": "网上的新词层出不穷。",
+      "viDuDoc": "Wǎngshàng de xīn cí céngchū-bùqióng.",
+      "viDuNghia": "Từ mới trên mạng liên tục xuất hiện không ngớt.",
+      "cumTu": [
+        "新产品层出不穷",
+        "问题层出不穷"
+      ]
+    },
+    {
+      "chu": "千方百计",
+      "doc": "qiānfāng-bǎijì",
+      "loai": "phr",
+      "nghia": "trăm phương nghìn kế",
+      "cap": "HSK6",
+      "viDu": "父母千方百计地为孩子创造好的学习条件。",
+      "viDuDoc": "Fùmǔ qiānfāng-bǎijì de wèi háizi chuàngzào hǎo de xuéxí tiáojiàn.",
+      "viDuNghia": "Cha mẹ tìm mọi cách tạo điều kiện học tập tốt cho con.",
+      "cumTu": [
+        "千方百计地",
+        "千方百计想办法"
+      ],
+      "ghiChu": "Thường làm trạng ngữ trước động từ, có 地."
+    },
+    {
+      "chu": "齐心协力",
+      "doc": "qíxīn-xiélì",
+      "loai": "phr",
+      "nghia": "đồng lòng hợp sức",
+      "cap": "HSK6",
+      "viDu": "只要大家齐心协力，就没有完成不了的任务。",
+      "viDuDoc": "Zhǐyào dàjiā qíxīn-xiélì, jiù méiyǒu wánchéng bu liǎo de rènwu.",
+      "viDuNghia": "Chỉ cần mọi người đồng lòng hợp sức thì không có nhiệm vụ nào không hoàn thành được.",
+      "cumTu": [
+        "齐心协力地工作",
+        "全家齐心协力"
+      ],
+      "ghiChu": "Gần nghĩa: 同心协力, 团结一致."
+    },
+    {
+      "chu": "取长补短",
+      "doc": "qǔcháng-bǔduǎn",
+      "loai": "phr",
+      "nghia": "lấy sở trường bù sở đoản, học hỏi lẫn nhau",
+      "cap": "HSK6",
+      "viDu": "同学之间应该互相学习，取长补短。",
+      "viDuDoc": "Tóngxué zhījiān yīnggāi hùxiāng xuéxí, qǔcháng-bǔduǎn.",
+      "viDuNghia": "Bạn học với nhau nên học hỏi lẫn nhau, bù trừ cho nhau.",
+      "cumTu": [
+        "互相取长补短",
+        "取长补短，共同进步"
+      ],
+      "ghiChu": "长 ở đây đọc cháng (sở trường), không phải zhǎng."
+    },
+    {
+      "chu": "相辅相成",
+      "doc": "xiāngfǔ-xiāngchéng",
+      "loai": "phr",
+      "nghia": "bổ trợ cho nhau",
+      "cap": "HSK6",
+      "viDu": "理论和实践是相辅相成的。",
+      "viDuDoc": "Lǐlùn hé shíjiàn shì xiāngfǔ-xiāngchéng de.",
+      "viDuNghia": "Lý thuyết và thực hành bổ trợ cho nhau.",
+      "cumTu": [
+        "是相辅相成的",
+        "相辅相成的关系"
+      ],
+      "ghiChu": "Chủ ngữ phải là hai sự vật (A 和 B 是相辅相成的)."
+    },
+    {
+      "chu": "息息相关",
+      "doc": "xīxī-xiāngguān",
+      "loai": "phr",
+      "nghia": "liên quan mật thiết",
+      "cap": "HSK6",
+      "viDu": "环境问题和每个人的生活息息相关。",
+      "viDuDoc": "Huánjìng wèntí hé měi ge rén de shēnghuó xīxī-xiāngguān.",
+      "viDuNghia": "Vấn đề môi trường liên quan mật thiết đến cuộc sống của mỗi người.",
+      "cumTu": [
+        "与…息息相关",
+        "息息相关的问题"
+      ],
+      "ghiChu": "Mẫu: A 与/和 B 息息相关."
+    },
+    {
+      "chu": "不可思议",
+      "doc": "bùkě-sīyì",
+      "loai": "phr",
+      "nghia": "không thể tưởng tượng nổi, khó tin",
+      "cap": "HSK6",
+      "viDu": "他一个月就学会了游泳，真是不可思议。",
+      "viDuDoc": "Tā yí ge yuè jiù xuéhuì le yóuyǒng, zhēn shì bùkě-sīyì.",
+      "viDuNghia": "Chỉ một tháng anh ấy đã biết bơi, thật khó tin.",
+      "cumTu": [
+        "简直不可思议",
+        "不可思议的事情"
+      ]
+    },
+    {
+      "chu": "独一无二",
+      "doc": "dúyī-wú'èr",
+      "loai": "phr",
+      "nghia": "độc nhất vô nhị",
+      "cap": "HSK6",
+      "viDu": "每个人都是独一无二的。",
+      "viDuDoc": "Měi ge rén dōu shì dúyī-wú'èr de.",
+      "viDuNghia": "Mỗi người đều là độc nhất vô nhị.",
+      "cumTu": [
+        "独一无二的设计",
+        "独一无二的机会"
+      ],
+      "ghiChu": "一 ở đây giữ thanh 1 (yī) vì mang nghĩa \"một duy nhất\"."
+    },
+    {
+      "chu": "丰富多彩",
+      "doc": "fēngfù-duōcǎi",
+      "loai": "phr",
+      "nghia": "phong phú đa dạng, muôn màu muôn vẻ",
+      "cap": "HSK6",
+      "viDu": "大学生的课余生活丰富多彩。",
+      "viDuDoc": "Dàxuéshēng de kèyú shēnghuó fēngfù-duōcǎi.",
+      "viDuNghia": "Đời sống ngoài giờ học của sinh viên rất phong phú.",
+      "cumTu": [
+        "丰富多彩的活动",
+        "丰富多彩的生活"
+      ]
+    },
+    {
+      "chu": "应有尽有",
+      "doc": "yīngyǒu-jìnyǒu",
+      "loai": "phr",
+      "nghia": "cái gì cần có đều có",
+      "cap": "HSK6",
+      "viDu": "这家超市商品齐全，应有尽有。",
+      "viDuDoc": "Zhè jiā chāoshì shāngpǐn qíquán, yīngyǒu-jìnyǒu.",
+      "viDuNghia": "Siêu thị này hàng hoá đầy đủ, thứ gì cũng có.",
+      "cumTu": [
+        "商品应有尽有",
+        "应有尽有的商场"
+      ],
+      "ghiChu": "应 ở đây đọc yīng (nên, cần), khác 应对 yìngduì."
+    },
+    {
+      "chu": "无微不至",
+      "doc": "wúwēi-bùzhì",
+      "loai": "phr",
+      "nghia": "chu đáo từng li từng tí",
+      "cap": "HSK6",
+      "viDu": "妈妈对我的照顾无微不至。",
+      "viDuDoc": "Māma duì wǒ de zhàogù wúwēi-búzhì.",
+      "viDuNghia": "Mẹ chăm sóc tôi chu đáo từng li từng tí.",
+      "cumTu": [
+        "无微不至的关怀",
+        "照顾得无微不至"
+      ],
+      "ghiChu": "Chỉ dùng cho sự chăm sóc, quan tâm (关心, 照顾, 关怀)."
+    },
+    {
+      "chu": "津津有味",
+      "doc": "jīnjīn-yǒuwèi",
+      "loai": "phr",
+      "nghia": "say sưa, ngon lành, thích thú",
+      "cap": "HSK6",
+      "viDu": "孩子们津津有味地听老师讲故事。",
+      "viDuDoc": "Háizimen jīnjīn-yǒuwèi de tīng lǎoshī jiǎng gùshi.",
+      "viDuNghia": "Bọn trẻ say sưa nghe cô giáo kể chuyện.",
+      "cumTu": [
+        "吃得津津有味",
+        "看得津津有味",
+        "津津有味地听"
+      ]
+    },
+    {
+      "chu": "兴高采烈",
+      "doc": "xìnggāo-cǎiliè",
+      "loai": "phr",
+      "nghia": "hớn hở, vui mừng phấn khởi",
+      "cap": "HSK6",
+      "viDu": "听说要去旅行，孩子们兴高采烈。",
+      "viDuDoc": "Tīngshuō yào qù lǚxíng, háizimen xìnggāo-cǎiliè.",
+      "viDuNghia": "Nghe nói sắp đi du lịch, bọn trẻ vui mừng hớn hở.",
+      "cumTu": [
+        "兴高采烈地",
+        "兴高采烈的样子"
+      ],
+      "ghiChu": "兴 ở đây đọc xìng (hứng), không phải xīng."
+    },
+    {
+      "chu": "恍然大悟",
+      "doc": "huǎngrán-dàwù",
+      "loai": "phr",
+      "nghia": "chợt hiểu ra",
+      "cap": "HSK6",
+      "viDu": "听了老师的解释，我才恍然大悟。",
+      "viDuDoc": "Tīng le lǎoshī de jiěshì, wǒ cái huǎngrán-dàwù.",
+      "viDuNghia": "Nghe thầy giải thích, tôi mới chợt vỡ lẽ.",
+      "cumTu": [
+        "这才恍然大悟",
+        "恍然大悟地说"
+      ]
+    },
+    {
+      "chu": "迫不及待",
+      "doc": "pòbù-jídài",
+      "loai": "phr",
+      "nghia": "nóng lòng, không chờ được nữa",
+      "cap": "HSK6",
+      "viDu": "一放假，他就迫不及待地回家了。",
+      "viDuDoc": "Yí fàngjià, tā jiù pòbù-jídài de huí jiā le.",
+      "viDuNghia": "Vừa được nghỉ, anh ấy đã nóng lòng về nhà ngay.",
+      "cumTu": [
+        "迫不及待地打开",
+        "迫不及待地想知道"
+      ]
+    },
+    {
+      "chu": "小心翼翼",
+      "doc": "xiǎoxīn-yìyì",
+      "loai": "phr",
+      "nghia": "thận trọng từng li, nhẹ nhàng cẩn thận",
+      "cap": "HSK6",
+      "viDu": "她小心翼翼地把花瓶放在桌子上。",
+      "viDuDoc": "Tā xiǎoxīn-yìyì de bǎ huāpíng fàng zài zhuōzi shàng.",
+      "viDuNghia": "Cô ấy cẩn thận đặt chiếc bình hoa lên bàn.",
+      "cumTu": [
+        "小心翼翼地拿着",
+        "小心翼翼的样子"
+      ]
+    },
+    {
+      "chu": "当务之急",
+      "doc": "dāngwù-zhījí",
+      "loai": "phr",
+      "nghia": "việc cấp bách trước mắt",
+      "cap": "HSK6",
+      "viDu": "现在的当务之急是找到解决问题的办法。",
+      "viDuDoc": "Xiànzài de dāngwù-zhījí shì zhǎodào jiějué wèntí de bànfǎ.",
+      "viDuNghia": "Việc cấp bách trước mắt là tìm ra cách giải quyết vấn đề.",
+      "cumTu": [
+        "当前的当务之急",
+        "…是当务之急"
+      ],
+      "ghiChu": "Làm danh từ (chủ ngữ hoặc tân ngữ của 是). 当 đọc dāng."
+    },
+    {
+      "chu": "刻不容缓",
+      "doc": "kèbù-rónghuǎn",
+      "loai": "phr",
+      "nghia": "không thể chậm trễ một khắc",
+      "cap": "HSK6",
+      "viDu": "保护濒危动物已经刻不容缓。",
+      "viDuDoc": "Bǎohù bīnwēi dòngwù yǐjīng kèbù-rónghuǎn.",
+      "viDuNghia": "Việc bảo vệ động vật có nguy cơ tuyệt chủng không thể chậm trễ thêm nữa.",
+      "cumTu": [
+        "刻不容缓的任务",
+        "已经刻不容缓"
+      ],
+      "ghiChu": "Gần nghĩa 迫在眉睫; hay dùng trong bài luận về môi trường, xã hội."
+    },
+    {
+      "chu": "因地制宜",
+      "doc": "yīndì-zhìyí",
+      "loai": "phr",
+      "nghia": "tuỳ theo điều kiện từng nơi mà làm cho thích hợp",
+      "cap": "HSK6",
+      "viDu": "发展农业要因地制宜。",
+      "viDuDoc": "Fāzhǎn nóngyè yào yīndì-zhìyí.",
+      "viDuNghia": "Phát triển nông nghiệp phải phù hợp với điều kiện từng địa phương.",
+      "cumTu": [
+        "因地制宜地发展",
+        "因地制宜，因时制宜"
+      ]
+    },
+    {
+      "chu": "井井有条",
+      "doc": "jǐngjǐng-yǒutiáo",
+      "loai": "phr",
+      "nghia": "ngăn nắp, đâu ra đấy",
+      "cap": "HSK6",
+      "viDu": "她把房间收拾得井井有条。",
+      "viDuDoc": "Tā bǎ fángjiān shōushi de jǐngjǐng-yǒutiáo.",
+      "viDuNghia": "Cô ấy dọn phòng ngăn nắp đâu ra đấy.",
+      "cumTu": [
+        "收拾得井井有条",
+        "安排得井井有条"
+      ],
+      "ghiChu": "Gần nghĩa: 有条不紊 (làm việc có trình tự, không rối)."
+    },
+    {
+      "chu": "一举两得",
+      "doc": "yījǔ-liǎngdé",
+      "loai": "phr",
+      "nghia": "một công đôi việc",
+      "cap": "HSK6",
+      "viDu": "骑自行车上班既锻炼身体又省钱，一举两得。",
+      "viDuDoc": "Qí zìxíngchē shàngbān jì duànliàn shēntǐ yòu shěng qián, yìjǔ-liǎngdé.",
+      "viDuNghia": "Đạp xe đi làm vừa rèn luyện sức khoẻ vừa tiết kiệm tiền, một công đôi việc.",
+      "cumTu": [
+        "真是一举两得",
+        "一举两得的办法"
+      ],
+      "ghiChu": "Gần nghĩa: 一箭双雕."
+    },
+    {
+      "chu": "事半功倍",
+      "doc": "shìbàn-gōngbèi",
+      "loai": "phr",
+      "nghia": "làm ít được nhiều, hiệu quả gấp bội",
+      "cap": "HSK6",
+      "viDu": "方法对了，学习就会事半功倍。",
+      "viDuDoc": "Fāngfǎ duì le, xuéxí jiù huì shìbàn-gōngbèi.",
+      "viDuNghia": "Đúng phương pháp thì học sẽ đạt hiệu quả gấp bội.",
+      "cumTu": [
+        "收到事半功倍的效果",
+        "事半功倍"
+      ],
+      "ghiChu": "Trái nghĩa: 事倍功半 (làm nhiều mà được ít)."
+    },
+    {
+      "chu": "得天独厚",
+      "doc": "détiān-dúhòu",
+      "loai": "phr",
+      "nghia": "được trời phú cho điều kiện đặc biệt thuận lợi",
+      "cap": "HSK6",
+      "viDu": "这里有得天独厚的自然条件，适合发展旅游。",
+      "viDuDoc": "Zhèlǐ yǒu détiān-dúhòu de zìrán tiáojiàn, shìhé fāzhǎn lǚyóu.",
+      "viDuNghia": "Nơi đây có điều kiện tự nhiên thuận lợi đặc biệt, thích hợp phát triển du lịch.",
+      "cumTu": [
+        "得天独厚的条件",
+        "得天独厚的优势"
+      ]
+    },
+    {
+      "chu": "随机应变",
+      "doc": "suíjī-yìngbiàn",
+      "loai": "phr",
+      "nghia": "tuỳ cơ ứng biến",
+      "cap": "HSK6",
+      "viDu": "面试时遇到难题，要学会随机应变。",
+      "viDuDoc": "Miànshì shí yùdào nántí, yào xuéhuì suíjī-yìngbiàn.",
+      "viDuNghia": "Khi phỏng vấn gặp câu hỏi khó, phải biết tuỳ cơ ứng biến.",
+      "cumTu": [
+        "学会随机应变",
+        "随机应变的能力"
+      ],
+      "ghiChu": "应 ở đây đọc yìng."
+    },
+    {
+      "chu": "博大精深",
+      "doc": "bódà-jīngshēn",
+      "loai": "phr",
+      "nghia": "uyên bác sâu rộng",
+      "cap": "HSK6",
+      "viDu": "中国文化博大精深。",
+      "viDuDoc": "Zhōngguó wénhuà bódà-jīngshēn.",
+      "viDuNghia": "Văn hoá Trung Hoa sâu rộng uyên bác.",
+      "cumTu": [
+        "博大精深的文化",
+        "中医博大精深"
+      ],
+      "ghiChu": "Thường dùng cho văn hoá, học thuật, tư tưởng."
+    },
+    {
+      "chu": "源远流长",
+      "doc": "yuányuǎn-liúcháng",
+      "loai": "phr",
+      "nghia": "lâu đời, có nguồn gốc xa xưa",
+      "cap": "HSK6",
+      "viDu": "中越两国的友谊源远流长。",
+      "viDuDoc": "Zhōng-Yuè liǎng guó de yǒuyì yuányuǎn-liúcháng.",
+      "viDuNghia": "Tình hữu nghị giữa hai nước Trung – Việt có từ lâu đời.",
+      "cumTu": [
+        "历史源远流长",
+        "源远流长的文化"
+      ]
+    },
+    {
+      "chu": "家喻户晓",
+      "doc": "jiāyù-hùxiǎo",
+      "loai": "phr",
+      "nghia": "nhà nhà đều biết",
+      "cap": "HSK6",
+      "viDu": "这个故事在中国家喻户晓。",
+      "viDuDoc": "Zhège gùshi zài Zhōngguó jiāyù-hùxiǎo.",
+      "viDuNghia": "Câu chuyện này ở Trung Quốc nhà nhà đều biết.",
+      "cumTu": [
+        "家喻户晓的人物",
+        "家喻户晓的故事"
+      ]
+    },
+    {
+      "chu": "截然不同",
+      "doc": "jiérán-bùtóng",
+      "loai": "phr",
+      "nghia": "hoàn toàn khác nhau",
+      "cap": "HSK6",
+      "viDu": "这两个人的性格截然不同。",
+      "viDuDoc": "Zhè liǎng ge rén de xìnggé jiérán-bùtóng.",
+      "viDuNghia": "Tính cách của hai người này hoàn toàn khác nhau.",
+      "cumTu": [
+        "截然不同的结果",
+        "截然不同的观点"
+      ],
+      "ghiChu": "Mạnh hơn 完全不同; hay dùng khi so sánh trong bài viết."
+    },
+    {
+      "chu": "大同小异",
+      "doc": "dàtóng-xiǎoyì",
+      "loai": "phr",
+      "nghia": "giống nhau phần lớn, khác chút ít",
+      "cap": "HSK6",
+      "viDu": "这几家手机的功能大同小异。",
+      "viDuDoc": "Zhè jǐ jiā shǒujī de gōngnéng dàtóng-xiǎoyì.",
+      "viDuNghia": "Chức năng điện thoại của mấy hãng này đại đồng tiểu dị.",
+      "cumTu": [
+        "内容大同小异",
+        "大同小异的方案"
+      ]
+    },
+    {
+      "chu": "供不应求",
+      "doc": "gōngbù-yìngqiú",
+      "loai": "phr",
+      "nghia": "cung không đủ cầu",
+      "cap": "HSK6",
+      "viDu": "新款手机一上市就供不应求。",
+      "viDuDoc": "Xīnkuǎn shǒujī yí shàngshì jiù gōngbù-yìngqiú.",
+      "viDuNghia": "Mẫu điện thoại mới vừa ra mắt đã cháy hàng.",
+      "cumTu": [
+        "产品供不应求",
+        "出现供不应求的情况"
+      ],
+      "ghiChu": "供 đọc gōng (cung cấp), 应 đọc yìng. Trái nghĩa: 供过于求 (cung vượt cầu)."
+    },
+    {
+      "chu": "前所未有",
+      "doc": "qiánsuǒ-wèiyǒu",
+      "loai": "phr",
+      "nghia": "chưa từng có",
+      "cap": "HSK6",
+      "viDu": "人工智能给教育带来了前所未有的变化。",
+      "viDuDoc": "Réngōng zhìnéng gěi jiàoyù dài lái le qiánsuǒ-wèiyǒu de biànhuà.",
+      "viDuNghia": "Trí tuệ nhân tạo mang lại cho giáo dục những thay đổi chưa từng có.",
+      "cumTu": [
+        "前所未有的挑战",
+        "前所未有的机遇"
+      ]
+    },
+    {
+      "chu": "竭尽全力",
+      "doc": "jiéjìn-quánlì",
+      "loai": "phr",
+      "nghia": "dốc hết sức lực",
+      "cap": "HSK6",
+      "viDu": "医生们竭尽全力抢救病人。",
+      "viDuDoc": "Yīshēngmen jiéjìn-quánlì qiǎngjiù bìngrén.",
+      "viDuNghia": "Các bác sĩ dốc hết sức cấp cứu bệnh nhân.",
+      "cumTu": [
+        "竭尽全力地帮助",
+        "我会竭尽全力"
+      ],
+      "ghiChu": "尽 ở đây đọc jìn (hết), khác 尽量 jǐnliàng."
+    },
+    {
+      "chu": "一如既往",
+      "doc": "yīrú-jìwǎng",
+      "loai": "phr",
+      "nghia": "vẫn như trước đây, trước sau như một",
+      "cap": "HSK6",
+      "viDu": "我们会一如既往地支持你。",
+      "viDuDoc": "Wǒmen huì yìrú-jìwǎng de zhīchí nǐ.",
+      "viDuNghia": "Chúng tôi sẽ vẫn ủng hộ bạn như trước giờ.",
+      "cumTu": [
+        "一如既往地支持",
+        "一如既往的热情"
+      ],
+      "ghiChu": "Hay dùng trong lời cảm ơn, phát biểu: 感谢大家一如既往的支持."
+    },
+    {
+      "chu": "各抒己见",
+      "doc": "gèshū-jǐjiàn",
+      "loai": "phr",
+      "nghia": "mỗi người nói lên ý kiến của mình",
+      "cap": "HSK6",
+      "viDu": "会上大家各抒己见，讨论得很热烈。",
+      "viDuDoc": "Huì shàng dàjiā gèshū-jǐjiàn, tǎolùn de hěn rèliè.",
+      "viDuNghia": "Trong cuộc họp mọi người đều nêu ý kiến, thảo luận rất sôi nổi.",
+      "cumTu": [
+        "大家各抒己见",
+        "各抒己见，畅所欲言"
+      ],
+      "ghiChu": "己 là 自己 (jǐ), đừng nhầm với 已 (yǐ, đã)."
+    },
+    {
+      "chu": "集思广益",
+      "doc": "jísī-guǎngyì",
+      "loai": "phr",
+      "nghia": "tập hợp trí tuệ của nhiều người",
+      "cap": "HSK6",
+      "viDu": "这个问题需要大家集思广益，共同解决。",
+      "viDuDoc": "Zhège wèntí xūyào dàjiā jísī-guǎngyì, gòngtóng jiějué.",
+      "viDuNghia": "Vấn đề này cần mọi người cùng góp ý để giải quyết.",
+      "cumTu": [
+        "集思广益，共同…",
+        "通过集思广益"
+      ]
+    },
+    {
+      "chu": "深入浅出",
+      "doc": "shēnrù-qiǎnchū",
+      "loai": "phr",
+      "nghia": "nội dung sâu sắc mà diễn đạt dễ hiểu",
+      "cap": "HSK6",
+      "viDu": "这位教授讲课深入浅出，学生都很喜欢。",
+      "viDuDoc": "Zhè wèi jiàoshòu jiǎngkè shēnrù-qiǎnchū, xuésheng dōu hěn xǐhuan.",
+      "viDuNghia": "Vị giáo sư này giảng bài sâu mà dễ hiểu, sinh viên đều rất thích.",
+      "cumTu": [
+        "深入浅出地讲解",
+        "深入浅出的文章"
+      ],
+      "ghiChu": "Lời khen cho bài giảng, cuốn sách."
+    },
+    {
+      "chu": "引人注目",
+      "doc": "yǐnrén-zhùmù",
+      "loai": "phr",
+      "nghia": "thu hút sự chú ý",
+      "cap": "HSK6",
+      "viDu": "她今天的打扮非常引人注目。",
+      "viDuDoc": "Tā jīntiān de dǎban fēicháng yǐnrén-zhùmù.",
+      "viDuNghia": "Cách ăn mặc hôm nay của cô ấy rất thu hút sự chú ý.",
+      "cumTu": [
+        "引人注目的成就",
+        "格外引人注目"
+      ],
+      "ghiChu": "Gần nghĩa: 引人入胜 (hấp dẫn, lôi cuốn — dùng cho câu chuyện, phong cảnh)."
+    },
+    {
+      "chu": "不相上下",
+      "doc": "bùxiāng-shàngxià",
+      "loai": "phr",
+      "nghia": "ngang ngửa, không hơn kém nhau",
+      "cap": "HSK6",
+      "viDu": "两个队的实力不相上下。",
+      "viDuDoc": "Liǎng ge duì de shílì bùxiāng-shàngxià.",
+      "viDuNghia": "Thực lực của hai đội ngang ngửa nhau.",
+      "cumTu": [
+        "水平不相上下",
+        "成绩不相上下"
+      ]
+    },
+    {
+      "chu": "不由自主",
+      "doc": "bùyóu-zìzhǔ",
+      "loai": "phr",
+      "nghia": "bất giác, không tự chủ được",
+      "cap": "HSK6",
+      "viDu": "听到这首歌，我不由自主地跟着唱了起来。",
+      "viDuDoc": "Tīngdào zhè shǒu gē, wǒ bùyóu-zìzhǔ de gēnzhe chàng le qǐlái.",
+      "viDuNghia": "Nghe bài hát này, tôi bất giác hát theo.",
+      "cumTu": [
+        "不由自主地笑了",
+        "不由自主地想起"
+      ]
+    },
+    {
+      "chu": "与时俱进",
+      "doc": "yǔshí-jùjìn",
+      "loai": "phr",
+      "nghia": "tiến bước cùng thời đại",
+      "cap": "HSK6",
+      "viDu": "教育观念也要与时俱进。",
+      "viDuDoc": "Jiàoyù guānniàn yě yào yǔshí-jùjìn.",
+      "viDuNghia": "Quan niệm giáo dục cũng phải theo kịp thời đại.",
+      "cumTu": [
+        "与时俱进的精神",
+        "不断与时俱进"
+      ],
+      "ghiChu": "Đừng nhầm với 与日俱增 (tăng từng ngày)."
+    }
+  ]
+}

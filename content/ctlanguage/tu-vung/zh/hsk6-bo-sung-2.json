@@ -1,0 +1,2037 @@
+{
+  "ma": "hsk6-bo-sung-2",
+  "nn": "zh",
+  "ten": "HSK6 bổ sung 2 — Tính từ đánh giá & danh từ trừu tượng",
+  "moTa": "132 từ HSK6 dùng để đánh giá và lập luận: tính từ miêu tả mức độ, phẩm chất, cách làm việc (显著, 严谨, 务实, 妥善…) và danh từ trừu tượng hay gặp trong báo chí, bài luận, công sở (理念, 机制, 前景, 共识, 瓶颈…). Có ghi chú phân biệt 精确/准确, 效益/效率, 策略/战略, 动力/动机 và chữ đa âm (模式 mó, 曲折 qū, 草率 shuài).",
+  "nhom": "hsk",
+  "cap": "HSK6",
+  "tu": [
+    {
+      "chu": "显著",
+      "doc": "xiǎnzhù",
+      "loai": "adj",
+      "nghia": "rõ rệt, đáng kể",
+      "cap": "HSK6",
+      "viDu": "采用新方法以后，学生的成绩有了显著提高。",
+      "viDuDoc": "Cǎiyòng xīn fāngfǎ yǐhòu, xuésheng de chéngjì yǒu le xiǎnzhù tígāo.",
+      "viDuNghia": "Sau khi áp dụng phương pháp mới, thành tích của học sinh đã tăng rõ rệt.",
+      "cumTu": [
+        "显著提高",
+        "显著变化",
+        "效果显著"
+      ],
+      "ghiChu": "明显 (HSK5) dùng rộng; 显著 trang trọng hơn, hay đi với 提高, 成效, 变化 trong văn viết."
+    },
+    {
+      "chu": "卓越",
+      "doc": "zhuóyuè",
+      "loai": "adj",
+      "nghia": "xuất sắc, vượt trội",
+      "cap": "HSK6",
+      "viDu": "她为医学研究做出了卓越的贡献。",
+      "viDuDoc": "Tā wèi yīxué yánjiū zuòchū le zhuóyuè de gòngxiàn.",
+      "viDuNghia": "Bà ấy đã có những đóng góp xuất sắc cho nghiên cứu y học.",
+      "cumTu": [
+        "卓越贡献",
+        "卓越成就",
+        "追求卓越"
+      ]
+    },
+    {
+      "chu": "杰出",
+      "doc": "jiéchū",
+      "loai": "adj",
+      "nghia": "kiệt xuất, lỗi lạc",
+      "cap": "HSK6",
+      "viDu": "他是一位杰出的科学家。",
+      "viDuDoc": "Tā shì yí wèi jiéchū de kēxuéjiā.",
+      "viDuNghia": "Ông ấy là một nhà khoa học kiệt xuất.",
+      "cumTu": [
+        "杰出人才",
+        "杰出代表",
+        "表现杰出"
+      ],
+      "ghiChu": "杰出 thường bổ nghĩa cho người (人才, 人物); 卓越 hay đi với thành tựu, đóng góp."
+    },
+    {
+      "chu": "优越",
+      "doc": "yōuyuè",
+      "loai": "adj",
+      "nghia": "ưu việt, thuận lợi hơn hẳn",
+      "cap": "HSK6",
+      "viDu": "这里地理位置优越，交通非常方便。",
+      "viDuDoc": "Zhèlǐ dìlǐ wèizhì yōuyuè, jiāotōng fēicháng fāngbiàn.",
+      "viDuNghia": "Nơi đây có vị trí địa lý thuận lợi, giao thông rất tiện.",
+      "cumTu": [
+        "条件优越",
+        "优越感",
+        "优越的环境"
+      ],
+      "ghiChu": "优越感 = cảm giác mình hơn người (thường chê)."
+    },
+    {
+      "chu": "精湛",
+      "doc": "jīngzhàn",
+      "loai": "adj",
+      "nghia": "điêu luyện, tinh xảo (tay nghề)",
+      "cap": "HSK6",
+      "viDu": "这位老师傅的手艺十分精湛。",
+      "viDuDoc": "Zhè wèi lǎo shīfu de shǒuyì shífēn jīngzhàn.",
+      "viDuNghia": "Tay nghề của bác thợ cả này hết sức điêu luyện.",
+      "cumTu": [
+        "技艺精湛",
+        "医术精湛",
+        "精湛的表演"
+      ]
+    },
+    {
+      "chu": "敏锐",
+      "doc": "mǐnruì",
+      "loai": "adj",
+      "nghia": "nhạy bén, sắc sảo",
+      "cap": "HSK6",
+      "viDu": "记者需要有敏锐的观察力。",
+      "viDuDoc": "Jìzhě xūyào yǒu mǐnruì de guānchálì.",
+      "viDuNghia": "Phóng viên cần có khả năng quan sát nhạy bén.",
+      "cumTu": [
+        "目光敏锐",
+        "敏锐的洞察力",
+        "感觉敏锐"
+      ]
+    },
+    {
+      "chu": "果断",
+      "doc": "guǒduàn",
+      "loai": "adj",
+      "nghia": "quả quyết, dứt khoát",
+      "cap": "HSK6",
+      "viDu": "遇到紧急情况，他总能果断地做出决定。",
+      "viDuDoc": "Yùdào jǐnjí qíngkuàng, tā zǒng néng guǒduàn de zuòchū juédìng.",
+      "viDuNghia": "Gặp tình huống khẩn cấp, anh ấy luôn dứt khoát đưa ra quyết định.",
+      "cumTu": [
+        "果断决定",
+        "处事果断",
+        "果断处理"
+      ]
+    },
+    {
+      "chu": "坚韧",
+      "doc": "jiānrèn",
+      "loai": "adj",
+      "nghia": "kiên cường, bền bỉ",
+      "cap": "HSK6",
+      "viDu": "她用坚韧的毅力完成了学业。",
+      "viDuDoc": "Tā yòng jiānrèn de yìlì wánchéng le xuéyè.",
+      "viDuNghia": "Cô ấy đã hoàn thành việc học bằng nghị lực bền bỉ.",
+      "cumTu": [
+        "坚韧不拔",
+        "性格坚韧",
+        "坚韧的精神"
+      ]
+    },
+    {
+      "chu": "顽强",
+      "doc": "wánqiáng",
+      "loai": "adj",
+      "nghia": "ngoan cường",
+      "cap": "HSK6",
+      "viDu": "队员们顽强拼搏，最后赢得了比赛。",
+      "viDuDoc": "Duìyuánmen wánqiáng pīnbó, zuìhòu yíngdé le bǐsài.",
+      "viDuNghia": "Các cầu thủ chiến đấu ngoan cường và cuối cùng đã thắng trận.",
+      "cumTu": [
+        "顽强拼搏",
+        "顽强的生命力",
+        "意志顽强"
+      ]
+    },
+    {
+      "chu": "执着",
+      "doc": "zhízhuó",
+      "loai": "adj",
+      "nghia": "kiên trì theo đuổi; cố chấp",
+      "cap": "HSK6",
+      "viDu": "他对音乐的执着让人感动。",
+      "viDuDoc": "Tā duì yīnyuè de zhízhuó ràng rén gǎndòng.",
+      "viDuNghia": "Sự kiên trì theo đuổi âm nhạc của anh ấy khiến người ta cảm động.",
+      "cumTu": [
+        "执着追求",
+        "执着于",
+        "过于执着"
+      ],
+      "ghiChu": "着 ở đây đọc zhuó. Khen (kiên trì) hay chê (cố chấp) tuỳ ngữ cảnh: 别太执着了."
+    },
+    {
+      "chu": "踏实",
+      "doc": "tāshi",
+      "loai": "adj",
+      "nghia": "chăm chỉ, chắc chắn; yên tâm",
+      "cap": "HSK6",
+      "viDu": "他工作很踏实，领导很放心。",
+      "viDuDoc": "Tā gōngzuò hěn tāshi, lǐngdǎo hěn fàngxīn.",
+      "viDuNghia": "Anh ấy làm việc rất chắc chắn, lãnh đạo rất yên tâm.",
+      "cumTu": [
+        "踏实肯干",
+        "心里踏实",
+        "踏踏实实"
+      ],
+      "ghiChu": "踏 ở đây đọc tā, chữ 实 đọc nhẹ. Nghĩa thứ hai: 心里不踏实 = trong lòng không yên."
+    },
+    {
+      "chu": "务实",
+      "doc": "wùshí",
+      "loai": "adj",
+      "nghia": "thực tế, thiết thực",
+      "cap": "HSK6",
+      "viDu": "我们需要更加务实的解决办法。",
+      "viDuDoc": "Wǒmen xūyào gèngjiā wùshí de jiějué bànfǎ.",
+      "viDuNghia": "Chúng ta cần cách giải quyết thiết thực hơn.",
+      "cumTu": [
+        "务实精神",
+        "求真务实",
+        "作风务实"
+      ]
+    },
+    {
+      "chu": "严谨",
+      "doc": "yánjǐn",
+      "loai": "adj",
+      "nghia": "chặt chẽ, nghiêm cẩn",
+      "cap": "HSK6",
+      "viDu": "做学问一定要态度严谨。",
+      "viDuDoc": "Zuò xuéwen yídìng yào tàidù yánjǐn.",
+      "viDuNghia": "Làm học thuật nhất định phải có thái độ nghiêm cẩn.",
+      "cumTu": [
+        "结构严谨",
+        "严谨的态度",
+        "治学严谨"
+      ],
+      "ghiChu": "谨慎 (HSK5) = thận trọng khi hành động; 严谨 = chặt chẽ, không sơ hở (lập luận, học thuật)."
+    },
+    {
+      "chu": "周密",
+      "doc": "zhōumì",
+      "loai": "adj",
+      "nghia": "chu đáo, kỹ lưỡng (kế hoạch)",
+      "cap": "HSK6",
+      "viDu": "这次旅行他做了周密的安排。",
+      "viDuDoc": "Zhè cì lǚxíng tā zuò le zhōumì de ānpái.",
+      "viDuNghia": "Chuyến đi lần này anh ấy đã sắp xếp hết sức chu đáo.",
+      "cumTu": [
+        "周密的计划",
+        "考虑周密",
+        "周密安排"
+      ]
+    },
+    {
+      "chu": "细致",
+      "doc": "xìzhì",
+      "loai": "adj",
+      "nghia": "tỉ mỉ, kỹ càng",
+      "cap": "HSK6",
+      "viDu": "护士对病人的照顾非常细致。",
+      "viDuDoc": "Hùshi duì bìngrén de zhàogù fēicháng xìzhì.",
+      "viDuNghia": "Y tá chăm sóc bệnh nhân hết sức tỉ mỉ.",
+      "cumTu": [
+        "细致入微",
+        "工作细致",
+        "细致的分析"
+      ]
+    },
+    {
+      "chu": "精确",
+      "doc": "jīngquè",
+      "loai": "adj",
+      "nghia": "chính xác (cao), chuẩn xác",
+      "cap": "HSK6",
+      "viDu": "这台仪器可以精确地测量温度。",
+      "viDuDoc": "Zhè tái yíqì kěyǐ jīngquè de cèliáng wēndù.",
+      "viDuNghia": "Thiết bị này có thể đo nhiệt độ một cách chuẩn xác.",
+      "cumTu": [
+        "精确计算",
+        "精确度",
+        "精确的数据"
+      ],
+      "ghiChu": "准确 = đúng, không sai; 精确 = chính xác tới từng chi tiết nhỏ (số đo, tính toán)."
+    },
+    {
+      "chu": "确切",
+      "doc": "quèqiè",
+      "loai": "adj",
+      "nghia": "xác thực, chính xác (thông tin)",
+      "cap": "HSK6",
+      "viDu": "我们还没有得到确切的消息。",
+      "viDuDoc": "Wǒmen hái méiyǒu dédào quèqiè de xiāoxi.",
+      "viDuNghia": "Chúng tôi vẫn chưa nhận được tin tức xác thực.",
+      "cumTu": [
+        "确切的消息",
+        "确切地说",
+        "确切时间"
+      ],
+      "ghiChu": "切 ở đây đọc qiè (không phải qiē = cắt)."
+    },
+    {
+      "chu": "适宜",
+      "doc": "shìyí",
+      "loai": "adj",
+      "nghia": "thích hợp, phù hợp",
+      "cap": "HSK6",
+      "viDu": "这里的气候适宜种茶。",
+      "viDuDoc": "Zhèlǐ de qìhòu shìyí zhòng chá.",
+      "viDuNghia": "Khí hậu ở đây thích hợp để trồng chè.",
+      "cumTu": [
+        "适宜居住",
+        "温度适宜",
+        "不宜"
+      ],
+      "ghiChu": "种 ở đây là động từ, đọc zhòng."
+    },
+    {
+      "chu": "妥善",
+      "doc": "tuǒshàn",
+      "loai": "adj",
+      "nghia": "thoả đáng, chu toàn",
+      "cap": "HSK6",
+      "viDu": "请妥善保管好你的护照。",
+      "viDuDoc": "Qǐng tuǒshàn bǎoguǎn hǎo nǐ de hùzhào.",
+      "viDuNghia": "Hãy giữ gìn hộ chiếu của bạn cẩn thận.",
+      "cumTu": [
+        "妥善处理",
+        "妥善保管",
+        "妥善安排"
+      ]
+    },
+    {
+      "chu": "得体",
+      "doc": "détǐ",
+      "loai": "adj",
+      "nghia": "đúng mực, phù hợp hoàn cảnh",
+      "cap": "HSK6",
+      "viDu": "参加面试要穿得大方得体。",
+      "viDuDoc": "Cānjiā miànshì yào chuān de dàfang détǐ.",
+      "viDuNghia": "Đi phỏng vấn phải ăn mặc lịch sự, phù hợp.",
+      "cumTu": [
+        "穿着得体",
+        "言行得体",
+        "得体的回答"
+      ],
+      "ghiChu": "得 ở đây đọc dé."
+    },
+    {
+      "chu": "繁琐",
+      "doc": "fánsuǒ",
+      "loai": "adj",
+      "nghia": "rườm rà, phiền phức",
+      "cap": "HSK6",
+      "viDu": "办理签证的手续太繁琐了。",
+      "viDuDoc": "Bànlǐ qiānzhèng de shǒuxù tài fánsuǒ le.",
+      "viDuNghia": "Thủ tục làm thị thực quá rườm rà.",
+      "cumTu": [
+        "手续繁琐",
+        "繁琐的程序",
+        "简化繁琐流程"
+      ]
+    },
+    {
+      "chu": "简洁",
+      "doc": "jiǎnjié",
+      "loai": "adj",
+      "nghia": "ngắn gọn, súc tích",
+      "cap": "HSK6",
+      "viDu": "她的回答简洁明了。",
+      "viDuDoc": "Tā de huídá jiǎnjié míngliǎo.",
+      "viDuNghia": "Câu trả lời của cô ấy ngắn gọn, rõ ràng.",
+      "cumTu": [
+        "简洁明了",
+        "语言简洁",
+        "设计简洁"
+      ]
+    },
+    {
+      "chu": "通俗",
+      "doc": "tōngsú",
+      "loai": "adj",
+      "nghia": "dễ hiểu, bình dân, phổ thông",
+      "cap": "HSK6",
+      "viDu": "这本书用通俗的语言介绍了经济学。",
+      "viDuDoc": "Zhè běn shū yòng tōngsú de yǔyán jièshào le jīngjìxué.",
+      "viDuNghia": "Cuốn sách này giới thiệu kinh tế học bằng ngôn ngữ dễ hiểu.",
+      "cumTu": [
+        "通俗易懂",
+        "通俗文学",
+        "通俗地说"
+      ]
+    },
+    {
+      "chu": "深奥",
+      "doc": "shēn'ào",
+      "loai": "adj",
+      "nghia": "sâu xa, khó hiểu",
+      "cap": "HSK6",
+      "viDu": "这个理论太深奥了，我看不懂。",
+      "viDuDoc": "Zhège lǐlùn tài shēn'ào le, wǒ kàn bu dǒng.",
+      "viDuNghia": "Lý thuyết này quá cao siêu, tôi đọc không hiểu.",
+      "cumTu": [
+        "深奥的道理",
+        "内容深奥",
+        "深奥难懂"
+      ]
+    },
+    {
+      "chu": "直观",
+      "doc": "zhíguān",
+      "loai": "adj",
+      "nghia": "trực quan",
+      "cap": "HSK6",
+      "viDu": "用图表说明数据更加直观。",
+      "viDuDoc": "Yòng túbiǎo shuōmíng shùjù gèngjiā zhíguān.",
+      "viDuNghia": "Dùng biểu đồ để trình bày số liệu sẽ trực quan hơn.",
+      "cumTu": [
+        "直观印象",
+        "形象直观",
+        "直观地展示"
+      ]
+    },
+    {
+      "chu": "宏观",
+      "doc": "hóngguān",
+      "loai": "adj",
+      "nghia": "vĩ mô",
+      "cap": "HSK6",
+      "viDu": "政府通过宏观调控稳定物价。",
+      "viDuDoc": "Zhèngfǔ tōngguò hóngguān tiáokòng wěndìng wùjià.",
+      "viDuNghia": "Chính phủ ổn định giá cả bằng điều tiết vĩ mô.",
+      "cumTu": [
+        "宏观经济",
+        "宏观调控",
+        "从宏观上看"
+      ]
+    },
+    {
+      "chu": "微观",
+      "doc": "wēiguān",
+      "loai": "adj",
+      "nghia": "vi mô",
+      "cap": "HSK6",
+      "viDu": "这本书从微观的角度分析了企业行为。",
+      "viDuDoc": "Zhè běn shū cóng wēiguān de jiǎodù fēnxī le qǐyè xíngwéi.",
+      "viDuNghia": "Cuốn sách này phân tích hành vi doanh nghiệp từ góc độ vi mô.",
+      "cumTu": [
+        "微观经济",
+        "微观世界",
+        "微观层面"
+      ]
+    },
+    {
+      "chu": "庞大",
+      "doc": "pángdà",
+      "loai": "adj",
+      "nghia": "đồ sộ, khổng lồ",
+      "cap": "HSK6",
+      "viDu": "这个项目需要一笔庞大的资金。",
+      "viDuDoc": "Zhège xiàngmù xūyào yì bǐ pángdà de zījīn.",
+      "viDuNghia": "Dự án này cần một khoản vốn khổng lồ.",
+      "cumTu": [
+        "规模庞大",
+        "机构庞大",
+        "庞大的数字"
+      ],
+      "ghiChu": "巨大 (HSK5) dùng cho kích thước, ảnh hưởng; 庞大 nhấn quy mô, số lượng, tổ chức đồ sộ (đôi khi chê cồng kềnh)."
+    },
+    {
+      "chu": "雄厚",
+      "doc": "xiónghòu",
+      "loai": "adj",
+      "nghia": "hùng hậu, dồi dào (vốn, lực lượng)",
+      "cap": "HSK6",
+      "viDu": "这家公司资金雄厚，技术先进。",
+      "viDuDoc": "Zhè jiā gōngsī zījīn xiónghòu, jìshù xiānjìn.",
+      "viDuNghia": "Công ty này vốn liếng hùng hậu, công nghệ tiên tiến.",
+      "cumTu": [
+        "实力雄厚",
+        "资金雄厚",
+        "基础雄厚"
+      ]
+    },
+    {
+      "chu": "充沛",
+      "doc": "chōngpèi",
+      "loai": "adj",
+      "nghia": "dồi dào (sức lực, mưa)",
+      "cap": "HSK6",
+      "viDu": "运动员们个个精力充沛。",
+      "viDuDoc": "Yùndòngyuánmen gègè jīnglì chōngpèi.",
+      "viDuNghia": "Các vận động viên ai nấy đều tràn đầy sức lực.",
+      "cumTu": [
+        "精力充沛",
+        "雨水充沛",
+        "感情充沛"
+      ]
+    },
+    {
+      "chu": "匮乏",
+      "doc": "kuìfá",
+      "loai": "adj",
+      "nghia": "thiếu thốn, cạn kiệt",
+      "cap": "HSK6",
+      "viDu": "那个地区医疗资源十分匮乏。",
+      "viDuDoc": "Nàge dìqū yīliáo zīyuán shífēn kuìfá.",
+      "viDuNghia": "Khu vực đó rất thiếu thốn tài nguyên y tế.",
+      "cumTu": [
+        "资源匮乏",
+        "物质匮乏",
+        "精神匮乏"
+      ]
+    },
+    {
+      "chu": "短缺",
+      "doc": "duǎnquē",
+      "loai": "adj",
+      "nghia": "thiếu hụt",
+      "cap": "HSK6",
+      "viDu": "夏天用电多，有些地方出现了电力短缺。",
+      "viDuDoc": "Xiàtiān yòng diàn duō, yǒuxiē dìfang chūxiàn le diànlì duǎnquē.",
+      "viDuNghia": "Mùa hè dùng điện nhiều, một số nơi đã xảy ra thiếu hụt điện.",
+      "cumTu": [
+        "人才短缺",
+        "资金短缺",
+        "供应短缺"
+      ]
+    },
+    {
+      "chu": "紧迫",
+      "doc": "jǐnpò",
+      "loai": "adj",
+      "nghia": "cấp bách, gấp gáp",
+      "cap": "HSK6",
+      "viDu": "时间很紧迫，我们必须马上出发。",
+      "viDuDoc": "Shíjiān hěn jǐnpò, wǒmen bìxū mǎshàng chūfā.",
+      "viDuNghia": "Thời gian rất gấp, chúng ta phải xuất phát ngay.",
+      "cumTu": [
+        "时间紧迫",
+        "紧迫感",
+        "紧迫的任务"
+      ]
+    },
+    {
+      "chu": "急剧",
+      "doc": "jíjù",
+      "loai": "adj",
+      "nghia": "nhanh và mạnh, đột ngột (thay đổi)",
+      "cap": "HSK6",
+      "viDu": "近十年，城市人口急剧增加。",
+      "viDuDoc": "Jìn shí nián, chéngshì rénkǒu jíjù zēngjiā.",
+      "viDuNghia": "Mười năm gần đây, dân số đô thị tăng vọt.",
+      "cumTu": [
+        "急剧增加",
+        "急剧下降",
+        "急剧变化"
+      ],
+      "ghiChu": "Hay dùng khi mô tả biểu đồ: 急剧上升 / 急剧下降."
+    },
+    {
+      "chu": "惊人",
+      "doc": "jīngrén",
+      "loai": "adj",
+      "nghia": "kinh người, đáng kinh ngạc",
+      "cap": "HSK6",
+      "viDu": "这个孩子的记忆力惊人。",
+      "viDuDoc": "Zhège háizi de jìyìlì jīngrén.",
+      "viDuNghia": "Trí nhớ của đứa trẻ này thật đáng kinh ngạc.",
+      "cumTu": [
+        "惊人的速度",
+        "数量惊人",
+        "惊人的变化"
+      ]
+    },
+    {
+      "chu": "鲜明",
+      "doc": "xiānmíng",
+      "loai": "adj",
+      "nghia": "rõ nét, nổi bật",
+      "cap": "HSK6",
+      "viDu": "这两种观点形成了鲜明的对比。",
+      "viDuDoc": "Zhè liǎng zhǒng guāndiǎn xíngchéng le xiānmíng de duìbǐ.",
+      "viDuNghia": "Hai quan điểm này tạo thành sự đối lập rõ nét.",
+      "cumTu": [
+        "鲜明对比",
+        "特色鲜明",
+        "立场鲜明"
+      ]
+    },
+    {
+      "chu": "清晰",
+      "doc": "qīngxī",
+      "loai": "adj",
+      "nghia": "rõ ràng, rành mạch",
+      "cap": "HSK6",
+      "viDu": "他说话条理清晰，很有说服力。",
+      "viDuDoc": "Tā shuōhuà tiáolǐ qīngxī, hěn yǒu shuōfúlì.",
+      "viDuNghia": "Anh ấy nói năng mạch lạc rõ ràng, rất có sức thuyết phục.",
+      "cumTu": [
+        "思路清晰",
+        "画面清晰",
+        "清晰可见"
+      ],
+      "ghiChu": "晰 đọc xī (thanh 1)."
+    },
+    {
+      "chu": "规范",
+      "doc": "guīfàn",
+      "loai": "adj",
+      "nghia": "chuẩn mực, đúng quy chuẩn",
+      "cap": "HSK6",
+      "viDu": "写论文要使用规范的格式。",
+      "viDuDoc": "Xiě lùnwén yào shǐyòng guīfàn de géshì.",
+      "viDuNghia": "Viết luận văn phải dùng định dạng đúng quy chuẩn.",
+      "cumTu": [
+        "行为规范",
+        "规范管理",
+        "不规范"
+      ],
+      "ghiChu": "Cũng là danh từ (quy phạm) và động từ (规范市场 = chuẩn hoá thị trường)."
+    },
+    {
+      "chu": "融洽",
+      "doc": "róngqià",
+      "loai": "adj",
+      "nghia": "hoà hợp, hoà thuận",
+      "cap": "HSK6",
+      "viDu": "同事之间的关系很融洽。",
+      "viDuDoc": "Tóngshì zhījiān de guānxi hěn róngqià.",
+      "viDuNghia": "Quan hệ giữa các đồng nghiệp rất hoà hợp.",
+      "cumTu": [
+        "关系融洽",
+        "气氛融洽",
+        "相处融洽"
+      ],
+      "ghiChu": "洽 đọc qià."
+    },
+    {
+      "chu": "和蔼",
+      "doc": "hé'ǎi",
+      "loai": "adj",
+      "nghia": "hiền hậu, hoà nhã",
+      "cap": "HSK6",
+      "viDu": "老教授待人非常和蔼。",
+      "viDuDoc": "Lǎo jiàoshòu dài rén fēicháng hé'ǎi.",
+      "viDuNghia": "Vị giáo sư già đối xử với mọi người rất hiền hậu.",
+      "cumTu": [
+        "和蔼可亲",
+        "态度和蔼",
+        "和蔼的笑容"
+      ]
+    },
+    {
+      "chu": "慷慨",
+      "doc": "kāngkǎi",
+      "loai": "adj",
+      "nghia": "hào phóng, rộng rãi",
+      "cap": "HSK6",
+      "viDu": "他很慷慨，经常帮助有困难的人。",
+      "viDuDoc": "Tā hěn kāngkǎi, jīngcháng bāngzhù yǒu kùnnan de rén.",
+      "viDuNghia": "Anh ấy rất hào phóng, thường giúp đỡ người gặp khó khăn.",
+      "cumTu": [
+        "慷慨解囊",
+        "慷慨大方",
+        "为人慷慨"
+      ]
+    },
+    {
+      "chu": "谦逊",
+      "doc": "qiānxùn",
+      "loai": "adj",
+      "nghia": "khiêm nhường",
+      "cap": "HSK6",
+      "viDu": "虽然很有名，他依然十分谦逊。",
+      "viDuDoc": "Suīrán hěn yǒumíng, tā yīrán shífēn qiānxùn.",
+      "viDuNghia": "Dù rất nổi tiếng, ông ấy vẫn hết sức khiêm nhường.",
+      "cumTu": [
+        "谦逊有礼",
+        "态度谦逊",
+        "谦逊的品质"
+      ]
+    },
+    {
+      "chu": "傲慢",
+      "doc": "àomàn",
+      "loai": "adj",
+      "nghia": "kiêu ngạo, ngạo mạn",
+      "cap": "HSK6",
+      "viDu": "他说话的态度很傲慢，让人不舒服。",
+      "viDuDoc": "Tā shuōhuà de tàidù hěn àomàn, ràng rén bù shūfu.",
+      "viDuNghia": "Thái độ nói chuyện của anh ta rất ngạo mạn, khiến người khác khó chịu.",
+      "cumTu": [
+        "傲慢无礼",
+        "态度傲慢",
+        "傲慢与偏见"
+      ]
+    },
+    {
+      "chu": "忠诚",
+      "doc": "zhōngchéng",
+      "loai": "adj",
+      "nghia": "trung thành",
+      "cap": "HSK6",
+      "viDu": "狗是人类忠诚的朋友。",
+      "viDuDoc": "Gǒu shì rénlèi zhōngchéng de péngyou.",
+      "viDuNghia": "Chó là người bạn trung thành của loài người.",
+      "cumTu": [
+        "忠诚可靠",
+        "对…忠诚",
+        "客户忠诚度"
+      ]
+    },
+    {
+      "chu": "可行",
+      "doc": "kěxíng",
+      "loai": "adj",
+      "nghia": "khả thi",
+      "cap": "HSK6",
+      "viDu": "这个方案在技术上是可行的。",
+      "viDuDoc": "Zhège fāng'àn zài jìshù shàng shì kěxíng de.",
+      "viDuNghia": "Phương án này khả thi về mặt kỹ thuật.",
+      "cumTu": [
+        "切实可行",
+        "可行性",
+        "是否可行"
+      ],
+      "ghiChu": "可行性报告 = báo cáo nghiên cứu khả thi."
+    },
+    {
+      "chu": "繁忙",
+      "doc": "fánmáng",
+      "loai": "adj",
+      "nghia": "bận rộn, tấp nập",
+      "cap": "HSK6",
+      "viDu": "早上是地铁最繁忙的时候。",
+      "viDuDoc": "Zǎoshang shì dìtiě zuì fánmáng de shíhou.",
+      "viDuNghia": "Buổi sáng là lúc tàu điện ngầm đông đúc tấp nập nhất.",
+      "cumTu": [
+        "工作繁忙",
+        "交通繁忙",
+        "繁忙的港口"
+      ],
+      "ghiChu": "忙 dùng cho người; 繁忙 dùng được cho cả nơi chốn, giao thông (繁忙的机场)."
+    },
+    {
+      "chu": "艰难",
+      "doc": "jiānnán",
+      "loai": "adj",
+      "nghia": "gian nan, khó khăn",
+      "cap": "HSK6",
+      "viDu": "创业初期，他们的生活非常艰难。",
+      "viDuDoc": "Chuàngyè chūqī, tāmen de shēnghuó fēicháng jiānnán.",
+      "viDuNghia": "Thời kỳ đầu khởi nghiệp, cuộc sống của họ rất gian nan.",
+      "cumTu": [
+        "艰难的选择",
+        "步履艰难",
+        "艰难时期"
+      ]
+    },
+    {
+      "chu": "曲折",
+      "doc": "qūzhé",
+      "loai": "adj",
+      "nghia": "quanh co, khúc khuỷu; nhiều trắc trở",
+      "cap": "HSK6",
+      "viDu": "这条山路弯弯曲曲，非常曲折。",
+      "viDuDoc": "Zhè tiáo shānlù wānwān-qūqū, fēicháng qūzhé.",
+      "viDuNghia": "Con đường núi này ngoằn ngoèo, rất khúc khuỷu.",
+      "cumTu": [
+        "曲折的经历",
+        "道路曲折",
+        "情节曲折"
+      ],
+      "ghiChu": "曲 ở đây đọc qū (cong); trong 歌曲 đọc qǔ."
+    },
+    {
+      "chu": "流畅",
+      "doc": "liúchàng",
+      "loai": "adj",
+      "nghia": "trôi chảy, lưu loát",
+      "cap": "HSK6",
+      "viDu": "她的中文说得非常流畅。",
+      "viDuDoc": "Tā de Zhōngwén shuō de fēicháng liúchàng.",
+      "viDuNghia": "Cô ấy nói tiếng Trung rất trôi chảy.",
+      "cumTu": [
+        "语言流畅",
+        "流畅自然",
+        "运行流畅"
+      ],
+      "ghiChu": "流利 dùng cho nói, đọc ngoại ngữ; 流畅 rộng hơn: văn viết, nét vẽ, phần mềm chạy mượt."
+    },
+    {
+      "chu": "崭新",
+      "doc": "zhǎnxīn",
+      "loai": "adj",
+      "nghia": "mới tinh, hoàn toàn mới",
+      "cap": "HSK6",
+      "viDu": "毕业以后，他开始了崭新的生活。",
+      "viDuDoc": "Bìyè yǐhòu, tā kāishǐ le zhǎnxīn de shēnghuó.",
+      "viDuNghia": "Sau khi tốt nghiệp, anh ấy bắt đầu một cuộc sống hoàn toàn mới.",
+      "cumTu": [
+        "崭新的面貌",
+        "崭新的阶段",
+        "崭新的衣服"
+      ]
+    },
+    {
+      "chu": "新颖",
+      "doc": "xīnyǐng",
+      "loai": "adj",
+      "nghia": "mới lạ, độc đáo",
+      "cap": "HSK6",
+      "viDu": "这家餐厅的设计很新颖。",
+      "viDuDoc": "Zhè jiā cāntīng de shèjì hěn xīnyǐng.",
+      "viDuNghia": "Thiết kế của nhà hàng này rất mới lạ.",
+      "cumTu": [
+        "构思新颖",
+        "形式新颖",
+        "新颖独特"
+      ]
+    },
+    {
+      "chu": "壮观",
+      "doc": "zhuàngguān",
+      "loai": "adj",
+      "nghia": "hùng vĩ, tráng lệ",
+      "cap": "HSK6",
+      "viDu": "山顶上看日出的景色非常壮观。",
+      "viDuDoc": "Shāndǐng shàng kàn rìchū de jǐngsè fēicháng zhuàngguān.",
+      "viDuNghia": "Cảnh ngắm mặt trời mọc trên đỉnh núi vô cùng hùng vĩ.",
+      "cumTu": [
+        "景色壮观",
+        "壮观的场面",
+        "十分壮观"
+      ]
+    },
+    {
+      "chu": "隆重",
+      "doc": "lóngzhòng",
+      "loai": "adj",
+      "nghia": "trọng thể, long trọng",
+      "cap": "HSK6",
+      "viDu": "学校举行了隆重的毕业典礼。",
+      "viDuDoc": "Xuéxiào jǔxíng le lóngzhòng de bìyè diǎnlǐ.",
+      "viDuNghia": "Nhà trường đã tổ chức lễ tốt nghiệp trọng thể.",
+      "cumTu": [
+        "隆重举行",
+        "隆重的仪式",
+        "隆重庆祝"
+      ]
+    },
+    {
+      "chu": "盲目",
+      "doc": "mángmù",
+      "loai": "adj",
+      "nghia": "mù quáng",
+      "cap": "HSK6",
+      "viDu": "不要盲目跟风购买理财产品。",
+      "viDuDoc": "Búyào mángmù gēnfēng gòumǎi lǐcái chǎnpǐn.",
+      "viDuNghia": "Đừng mù quáng chạy theo đám đông mua sản phẩm tài chính.",
+      "cumTu": [
+        "盲目跟风",
+        "盲目乐观",
+        "盲目追求"
+      ]
+    },
+    {
+      "chu": "狭隘",
+      "doc": "xiá'ài",
+      "loai": "adj",
+      "nghia": "hẹp hòi, thiển cận",
+      "cap": "HSK6",
+      "viDu": "看问题不能太狭隘。",
+      "viDuDoc": "Kàn wèntí bù néng tài xiá'ài.",
+      "viDuNghia": "Nhìn nhận vấn đề không được quá hẹp hòi.",
+      "cumTu": [
+        "心胸狭隘",
+        "狭隘的观念",
+        "眼光狭隘"
+      ],
+      "ghiChu": "狭窄 = chật hẹp (đường, phòng); 狭隘 thường nói tầm nhìn, lòng dạ."
+    },
+    {
+      "chu": "严峻",
+      "doc": "yánjùn",
+      "loai": "adj",
+      "nghia": "nghiêm trọng, gay gắt (tình hình)",
+      "cap": "HSK6",
+      "viDu": "气候变化是人类面临的严峻挑战。",
+      "viDuDoc": "Qìhòu biànhuà shì rénlèi miànlín de yánjùn tiǎozhàn.",
+      "viDuNghia": "Biến đổi khí hậu là thách thức nghiêm trọng mà nhân loại đang đối mặt.",
+      "cumTu": [
+        "形势严峻",
+        "严峻的考验",
+        "严峻的挑战"
+      ],
+      "ghiChu": "严重 dùng cho hậu quả, bệnh tình; 严峻 dùng cho tình hình, thử thách, thách thức."
+    },
+    {
+      "chu": "可观",
+      "doc": "kěguān",
+      "loai": "adj",
+      "nghia": "đáng kể, khá lớn (số lượng)",
+      "cap": "HSK6",
+      "viDu": "这份兼职的收入相当可观。",
+      "viDuDoc": "Zhè fèn jiānzhí de shōurù xiāngdāng kěguān.",
+      "viDuNghia": "Thu nhập từ công việc bán thời gian này khá đáng kể.",
+      "cumTu": [
+        "收入可观",
+        "数量可观",
+        "相当可观"
+      ]
+    },
+    {
+      "chu": "微妙",
+      "doc": "wēimiào",
+      "loai": "adj",
+      "nghia": "tế nhị, vi diệu, khó nói",
+      "cap": "HSK6",
+      "viDu": "他们两个人的关系有点儿微妙。",
+      "viDuDoc": "Tāmen liǎng ge rén de guānxi yǒudiǎnr wēimiào.",
+      "viDuNghia": "Quan hệ giữa hai người họ có phần tế nhị.",
+      "cumTu": [
+        "微妙的关系",
+        "微妙的变化",
+        "十分微妙"
+      ]
+    },
+    {
+      "chu": "巧妙",
+      "doc": "qiǎomiào",
+      "loai": "adj",
+      "nghia": "khéo léo, tài tình",
+      "cap": "HSK6",
+      "viDu": "他巧妙地回避了记者的问题。",
+      "viDuDoc": "Tā qiǎomiào de huíbì le jìzhě de wèntí.",
+      "viDuNghia": "Anh ấy đã khéo léo né câu hỏi của phóng viên.",
+      "cumTu": [
+        "构思巧妙",
+        "巧妙地",
+        "方法巧妙"
+      ]
+    },
+    {
+      "chu": "荒谬",
+      "doc": "huāngmiù",
+      "loai": "adj",
+      "nghia": "hoang đường, vô lý",
+      "cap": "HSK6",
+      "viDu": "这种说法简直太荒谬了。",
+      "viDuDoc": "Zhè zhǒng shuōfǎ jiǎnzhí tài huāngmiù le.",
+      "viDuNghia": "Kiểu nói này quả thực quá vô lý.",
+      "cumTu": [
+        "荒谬的观点",
+        "荒谬可笑",
+        "极其荒谬"
+      ]
+    },
+    {
+      "chu": "草率",
+      "doc": "cǎoshuài",
+      "loai": "adj",
+      "nghia": "qua loa, cẩu thả",
+      "cap": "HSK6",
+      "viDu": "这么重要的决定不能草率。",
+      "viDuDoc": "Zhème zhòngyào de juédìng bù néng cǎoshuài.",
+      "viDuNghia": "Quyết định quan trọng như vậy không thể qua loa.",
+      "cumTu": [
+        "草率决定",
+        "草率行事",
+        "草率了事"
+      ],
+      "ghiChu": "率 ở đây đọc shuài (như 轻率, 坦率); trong 效率 đọc lǜ."
+    },
+    {
+      "chu": "理智",
+      "doc": "lǐzhì",
+      "loai": "adj",
+      "nghia": "lý trí, tỉnh táo",
+      "cap": "HSK6",
+      "viDu": "遇到矛盾时，我们应该保持理智。",
+      "viDuDoc": "Yùdào máodùn shí, wǒmen yīnggāi bǎochí lǐzhì.",
+      "viDuNghia": "Khi gặp mâu thuẫn, chúng ta nên giữ lý trí.",
+      "cumTu": [
+        "保持理智",
+        "失去理智",
+        "理智地处理"
+      ],
+      "ghiChu": "Cũng là danh từ: 失去理智 (mất lý trí)."
+    },
+    {
+      "chu": "稳妥",
+      "doc": "wěntuǒ",
+      "loai": "adj",
+      "nghia": "chắc chắn, an toàn (cách làm)",
+      "cap": "HSK6",
+      "viDu": "为了稳妥起见，我们还是再检查一遍吧。",
+      "viDuDoc": "Wèile wěntuǒ qǐjiàn, wǒmen háishi zài jiǎnchá yí biàn ba.",
+      "viDuNghia": "Để cho chắc ăn, chúng ta hãy kiểm tra lại một lượt nữa.",
+      "cumTu": [
+        "稳妥的办法",
+        "稳妥起见",
+        "比较稳妥"
+      ]
+    },
+    {
+      "chu": "理念",
+      "doc": "lǐniàn",
+      "loai": "n",
+      "nghia": "triết lý, quan niệm (hành động)",
+      "cap": "HSK6",
+      "viDu": "这家公司的经营理念是“顾客第一”。",
+      "viDuDoc": "Zhè jiā gōngsī de jīngyíng lǐniàn shì \"gùkè dì-yī\".",
+      "viDuNghia": "Triết lý kinh doanh của công ty này là \"khách hàng là trên hết\".",
+      "cumTu": [
+        "教育理念",
+        "经营理念",
+        "设计理念"
+      ],
+      "ghiChu": "观念 (HSK5) = quan niệm chung trong đầu; 理念 = triết lý chỉ đạo việc làm (kinh doanh, giáo dục)."
+    },
+    {
+      "chu": "宗旨",
+      "doc": "zōngzhǐ",
+      "loai": "n",
+      "nghia": "tôn chỉ, mục đích",
+      "cap": "HSK6",
+      "viDu": "本协会的宗旨是帮助留学生适应新生活。",
+      "viDuDoc": "Běn xiéhuì de zōngzhǐ shì bāngzhù liúxuéshēng shìyìng xīn shēnghuó.",
+      "viDuNghia": "Tôn chỉ của hội là giúp du học sinh thích nghi với cuộc sống mới.",
+      "cumTu": [
+        "服务宗旨",
+        "办学宗旨",
+        "以…为宗旨"
+      ]
+    },
+    {
+      "chu": "方针",
+      "doc": "fāngzhēn",
+      "loai": "n",
+      "nghia": "phương châm, đường lối",
+      "cap": "HSK6",
+      "viDu": "学校坚持“以学生为中心”的方针。",
+      "viDuDoc": "Xuéxiào jiānchí \"yǐ xuésheng wéi zhōngxīn\" de fāngzhēn.",
+      "viDuNghia": "Nhà trường kiên trì phương châm \"lấy học sinh làm trung tâm\".",
+      "cumTu": [
+        "方针政策",
+        "基本方针",
+        "指导方针"
+      ]
+    },
+    {
+      "chu": "策略",
+      "doc": "cèlüè",
+      "loai": "n",
+      "nghia": "sách lược, chiến thuật",
+      "cap": "HSK6",
+      "viDu": "我们需要调整一下营销策略。",
+      "viDuDoc": "Wǒmen xūyào tiáozhěng yíxià yíngxiāo cèlüè.",
+      "viDuNghia": "Chúng ta cần điều chỉnh lại chiến lược tiếp thị một chút.",
+      "cumTu": [
+        "营销策略",
+        "学习策略",
+        "讲究策略"
+      ],
+      "ghiChu": "战略 = chiến lược tổng thể, dài hạn; 策略 = cách làm cụ thể, linh hoạt để đạt mục tiêu."
+    },
+    {
+      "chu": "战略",
+      "doc": "zhànlüè",
+      "loai": "n",
+      "nghia": "chiến lược",
+      "cap": "HSK6",
+      "viDu": "公司制定了未来十年的发展战略。",
+      "viDuDoc": "Gōngsī zhìdìng le wèilái shí nián de fāzhǎn zhànlüè.",
+      "viDuNghia": "Công ty đã đề ra chiến lược phát triển mười năm tới.",
+      "cumTu": [
+        "发展战略",
+        "战略目标",
+        "战略合作"
+      ],
+      "ghiChu": "略 đọc lüè (gõ lve)."
+    },
+    {
+      "chu": "举措",
+      "doc": "jǔcuò",
+      "loai": "n",
+      "nghia": "biện pháp, hành động (cụ thể)",
+      "cap": "HSK6",
+      "viDu": "这是保护环境的一项重要举措。",
+      "viDuDoc": "Zhè shì bǎohù huánjìng de yí xiàng zhòngyào jǔcuò.",
+      "viDuNghia": "Đây là một biện pháp quan trọng để bảo vệ môi trường.",
+      "cumTu": [
+        "重大举措",
+        "新举措",
+        "一系列举措"
+      ],
+      "ghiChu": "措施 (HSK5) = biện pháp nói chung; 举措 trang trọng, nhấn hành động đã/sẽ được thực hiện."
+    },
+    {
+      "chu": "机制",
+      "doc": "jīzhì",
+      "loai": "n",
+      "nghia": "cơ chế",
+      "cap": "HSK6",
+      "viDu": "公司建立了完善的奖励机制。",
+      "viDuDoc": "Gōngsī jiànlì le wánshàn de jiǎnglì jīzhì.",
+      "viDuNghia": "Công ty đã xây dựng cơ chế khen thưởng hoàn thiện.",
+      "cumTu": [
+        "激励机制",
+        "运行机制",
+        "市场机制"
+      ]
+    },
+    {
+      "chu": "体制",
+      "doc": "tǐzhì",
+      "loai": "n",
+      "nghia": "thể chế, chế độ tổ chức",
+      "cap": "HSK6",
+      "viDu": "这个国家正在进行教育体制改革。",
+      "viDuDoc": "Zhège guójiā zhèngzài jìnxíng jiàoyù tǐzhì gǎigé.",
+      "viDuNghia": "Nước này đang cải cách thể chế giáo dục.",
+      "cumTu": [
+        "管理体制",
+        "经济体制",
+        "体制改革"
+      ]
+    },
+    {
+      "chu": "体系",
+      "doc": "tǐxì",
+      "loai": "n",
+      "nghia": "hệ thống",
+      "cap": "HSK6",
+      "viDu": "这所大学有一套完整的课程体系。",
+      "viDuDoc": "Zhè suǒ dàxué yǒu yí tào wánzhěng de kèchéng tǐxì.",
+      "viDuNghia": "Trường đại học này có một hệ thống chương trình học hoàn chỉnh.",
+      "cumTu": [
+        "知识体系",
+        "体系完整",
+        "建立体系"
+      ],
+      "ghiChu": "系统 = hệ thống (máy móc, phần mềm, cơ thể); 体系 = hệ thống tri thức, tư tưởng, tổ chức."
+    },
+    {
+      "chu": "模式",
+      "doc": "móshì",
+      "loai": "n",
+      "nghia": "mô hình, kiểu mẫu",
+      "cap": "HSK6",
+      "viDu": "网上购物改变了传统的消费模式。",
+      "viDuDoc": "Wǎngshàng gòuwù gǎibiàn le chuántǒng de xiāofèi móshì.",
+      "viDuNghia": "Mua sắm trực tuyến đã thay đổi mô hình tiêu dùng truyền thống.",
+      "cumTu": [
+        "商业模式",
+        "思维模式",
+        "发展模式"
+      ],
+      "ghiChu": "模 ở đây đọc mó; trong 模样, 模板 đọc mú."
+    },
+    {
+      "chu": "格局",
+      "doc": "géjú",
+      "loai": "n",
+      "nghia": "cục diện, bố cục",
+      "cap": "HSK6",
+      "viDu": "新技术改变了整个行业的格局。",
+      "viDuDoc": "Xīn jìshù gǎibiàn le zhěnggè hángyè de géjú.",
+      "viDuNghia": "Công nghệ mới đã thay đổi cục diện của cả ngành.",
+      "cumTu": [
+        "市场格局",
+        "世界格局",
+        "房间格局"
+      ]
+    },
+    {
+      "chu": "局面",
+      "doc": "júmiàn",
+      "loai": "n",
+      "nghia": "cục diện, tình thế",
+      "cap": "HSK6",
+      "viDu": "双方的合作打开了新的局面。",
+      "viDuDoc": "Shuāngfāng de hézuò dǎkāi le xīn de júmiàn.",
+      "viDuNghia": "Sự hợp tác của hai bên đã mở ra cục diện mới.",
+      "cumTu": [
+        "打开局面",
+        "局面紧张",
+        "扭转局面"
+      ]
+    },
+    {
+      "chu": "前景",
+      "doc": "qiánjǐng",
+      "loai": "n",
+      "nghia": "triển vọng, viễn cảnh",
+      "cap": "HSK6",
+      "viDu": "人工智能行业的发展前景很好。",
+      "viDuDoc": "Réngōng zhìnéng hángyè de fāzhǎn qiánjǐng hěn hǎo.",
+      "viDuNghia": "Triển vọng phát triển của ngành trí tuệ nhân tạo rất tốt.",
+      "cumTu": [
+        "发展前景",
+        "前景广阔",
+        "市场前景"
+      ],
+      "ghiChu": "前途 (HSK5) thường nói tương lai của người; 前景 nói triển vọng của ngành, thị trường, dự án."
+    },
+    {
+      "chu": "使命",
+      "doc": "shǐmìng",
+      "loai": "n",
+      "nghia": "sứ mệnh",
+      "cap": "HSK6",
+      "viDu": "教育的使命是培养有用的人才。",
+      "viDuDoc": "Jiàoyù de shǐmìng shì péiyǎng yǒuyòng de réncái.",
+      "viDuNghia": "Sứ mệnh của giáo dục là đào tạo nhân tài có ích.",
+      "cumTu": [
+        "历史使命",
+        "使命感",
+        "肩负使命"
+      ]
+    },
+    {
+      "chu": "权益",
+      "doc": "quányì",
+      "loai": "n",
+      "nghia": "quyền lợi",
+      "cap": "HSK6",
+      "viDu": "消费者要学会保护自己的权益。",
+      "viDuDoc": "Xiāofèizhě yào xuéhuì bǎohù zìjǐ de quányì.",
+      "viDuNghia": "Người tiêu dùng cần biết bảo vệ quyền lợi của mình.",
+      "cumTu": [
+        "合法权益",
+        "维护权益",
+        "消费者权益"
+      ]
+    },
+    {
+      "chu": "权威",
+      "doc": "quánwēi",
+      "loai": "n",
+      "nghia": "uy tín chuyên môn, người có thẩm quyền",
+      "cap": "HSK6",
+      "viDu": "他是这个领域的权威。",
+      "viDuDoc": "Tā shì zhège lǐngyù de quánwēi.",
+      "viDuNghia": "Ông ấy là người có tiếng nói nhất trong lĩnh vực này.",
+      "cumTu": [
+        "权威人士",
+        "权威机构",
+        "具有权威性"
+      ],
+      "ghiChu": "Cũng là tính từ: 权威的数据 (số liệu có độ tin cậy cao)."
+    },
+    {
+      "chu": "声誉",
+      "doc": "shēngyù",
+      "loai": "n",
+      "nghia": "danh tiếng, tiếng tăm",
+      "cap": "HSK6",
+      "viDu": "这所大学在国际上享有很高的声誉。",
+      "viDuDoc": "Zhè suǒ dàxué zài guójì shàng xiǎngyǒu hěn gāo de shēngyù.",
+      "viDuNghia": "Trường đại học này có danh tiếng cao trên trường quốc tế.",
+      "cumTu": [
+        "享有声誉",
+        "良好声誉",
+        "损害声誉"
+      ]
+    },
+    {
+      "chu": "口碑",
+      "doc": "kǒubēi",
+      "loai": "n",
+      "nghia": "tiếng tăm truyền miệng, đánh giá của mọi người",
+      "cap": "HSK6",
+      "viDu": "这家店的口碑很好，回头客很多。",
+      "viDuDoc": "Zhè jiā diàn de kǒubēi hěn hǎo, huítóukè hěn duō.",
+      "viDuNghia": "Quán này được khen nhiều, khách quay lại rất đông.",
+      "cumTu": [
+        "口碑好",
+        "良好口碑",
+        "口碑营销"
+      ]
+    },
+    {
+      "chu": "效益",
+      "doc": "xiàoyì",
+      "loai": "n",
+      "nghia": "lợi ích, hiệu quả (kinh tế, xã hội)",
+      "cap": "HSK6",
+      "viDu": "这个项目既有经济效益，也有社会效益。",
+      "viDuDoc": "Zhège xiàngmù jì yǒu jīngjì xiàoyì, yě yǒu shèhuì xiàoyì.",
+      "viDuNghia": "Dự án này vừa có hiệu quả kinh tế vừa có hiệu quả xã hội.",
+      "cumTu": [
+        "经济效益",
+        "社会效益",
+        "提高效益"
+      ],
+      "ghiChu": "效率 = năng suất (làm nhanh hay chậm); 效益 = lợi ích thu được (lãi, giá trị)."
+    },
+    {
+      "chu": "效应",
+      "doc": "xiàoyìng",
+      "loai": "n",
+      "nghia": "hiệu ứng",
+      "cap": "HSK6",
+      "viDu": "名人效应让这款产品很快火了起来。",
+      "viDuDoc": "Míngrén xiàoyìng ràng zhè kuǎn chǎnpǐn hěn kuài huǒ le qǐlái.",
+      "viDuNghia": "Hiệu ứng người nổi tiếng khiến sản phẩm này nhanh chóng nổi đình nổi đám.",
+      "cumTu": [
+        "温室效应",
+        "名人效应",
+        "连锁效应"
+      ],
+      "ghiChu": "应 ở đây đọc yìng."
+    },
+    {
+      "chu": "收益",
+      "doc": "shōuyì",
+      "loai": "n",
+      "nghia": "thu nhập, lợi nhuận (thu về)",
+      "cap": "HSK6",
+      "viDu": "这笔投资的收益比预期高。",
+      "viDuDoc": "Zhè bǐ tóuzī de shōuyì bǐ yùqī gāo.",
+      "viDuNghia": "Lợi nhuận của khoản đầu tư này cao hơn dự kiến.",
+      "cumTu": [
+        "投资收益",
+        "收益率",
+        "获得收益"
+      ]
+    },
+    {
+      "chu": "成本",
+      "doc": "chéngběn",
+      "loai": "n",
+      "nghia": "chi phí, giá thành",
+      "cap": "HSK6",
+      "viDu": "使用新技术可以降低生产成本。",
+      "viDuDoc": "Shǐyòng xīn jìshù kěyǐ jiàngdī shēngchǎn chéngběn.",
+      "viDuNghia": "Dùng công nghệ mới có thể giảm chi phí sản xuất.",
+      "cumTu": [
+        "降低成本",
+        "生产成本",
+        "时间成本"
+      ]
+    },
+    {
+      "chu": "素质",
+      "doc": "sùzhì",
+      "loai": "n",
+      "nghia": "tố chất, phẩm chất, trình độ (con người)",
+      "cap": "HSK6",
+      "viDu": "提高国民素质需要发展教育。",
+      "viDuDoc": "Tígāo guómín sùzhì xūyào fāzhǎn jiàoyù.",
+      "viDuNghia": "Nâng cao dân trí cần phát triển giáo dục.",
+      "cumTu": [
+        "综合素质",
+        "心理素质",
+        "身体素质"
+      ],
+      "ghiChu": "Câu chê hay gặp: 没素质 (thiếu văn hoá, vô ý thức)."
+    },
+    {
+      "chu": "修养",
+      "doc": "xiūyǎng",
+      "loai": "n",
+      "nghia": "tu dưỡng, sự trau dồi (văn hoá, đạo đức)",
+      "cap": "HSK6",
+      "viDu": "他是一个很有修养的人。",
+      "viDuDoc": "Tā shì yí ge hěn yǒu xiūyǎng de rén.",
+      "viDuNghia": "Anh ấy là người rất có giáo dưỡng.",
+      "cumTu": [
+        "文化修养",
+        "艺术修养",
+        "有修养"
+      ]
+    },
+    {
+      "chu": "天赋",
+      "doc": "tiānfù",
+      "loai": "n",
+      "nghia": "thiên phú, năng khiếu bẩm sinh",
+      "cap": "HSK6",
+      "viDu": "这个孩子很有音乐天赋。",
+      "viDuDoc": "Zhège háizi hěn yǒu yīnyuè tiānfù.",
+      "viDuNghia": "Đứa trẻ này rất có năng khiếu âm nhạc.",
+      "cumTu": [
+        "有天赋",
+        "天赋异禀",
+        "语言天赋"
+      ]
+    },
+    {
+      "chu": "实力",
+      "doc": "shílì",
+      "loai": "n",
+      "nghia": "thực lực",
+      "cap": "HSK6",
+      "viDu": "这支球队的实力非常强。",
+      "viDuDoc": "Zhè zhī qiúduì de shílì fēicháng qiáng.",
+      "viDuNghia": "Thực lực của đội bóng này rất mạnh.",
+      "cumTu": [
+        "经济实力",
+        "综合实力",
+        "凭实力"
+      ]
+    },
+    {
+      "chu": "才华",
+      "doc": "cáihuá",
+      "loai": "n",
+      "nghia": "tài hoa, tài năng",
+      "cap": "HSK6",
+      "viDu": "这位年轻导演很有才华。",
+      "viDuDoc": "Zhè wèi niánqīng dǎoyǎn hěn yǒu cáihuá.",
+      "viDuNghia": "Vị đạo diễn trẻ này rất tài hoa.",
+      "cumTu": [
+        "才华横溢",
+        "展现才华",
+        "有才华"
+      ]
+    },
+    {
+      "chu": "见解",
+      "doc": "jiànjiě",
+      "loai": "n",
+      "nghia": "kiến giải, nhận định riêng",
+      "cap": "HSK6",
+      "viDu": "他对这个问题有独到的见解。",
+      "viDuDoc": "Tā duì zhège wèntí yǒu dúdào de jiànjiě.",
+      "viDuNghia": "Anh ấy có nhận định độc đáo về vấn đề này.",
+      "cumTu": [
+        "独到的见解",
+        "发表见解",
+        "个人见解"
+      ]
+    },
+    {
+      "chu": "视野",
+      "doc": "shìyě",
+      "loai": "n",
+      "nghia": "tầm nhìn, tầm mắt",
+      "cap": "HSK6",
+      "viDu": "出国留学可以开阔视野。",
+      "viDuDoc": "Chūguó liúxué kěyǐ kāikuò shìyě.",
+      "viDuNghia": "Du học có thể mở rộng tầm nhìn.",
+      "cumTu": [
+        "开阔视野",
+        "国际视野",
+        "视野狭窄"
+      ]
+    },
+    {
+      "chu": "思维",
+      "doc": "sīwéi",
+      "loai": "n",
+      "nghia": "tư duy",
+      "cap": "HSK6",
+      "viDu": "学习编程能锻炼逻辑思维。",
+      "viDuDoc": "Xuéxí biānchéng néng duànliàn luójí sīwéi.",
+      "viDuNghia": "Học lập trình có thể rèn luyện tư duy logic.",
+      "cumTu": [
+        "逻辑思维",
+        "思维方式",
+        "创新思维"
+      ]
+    },
+    {
+      "chu": "思路",
+      "doc": "sīlù",
+      "loai": "n",
+      "nghia": "mạch suy nghĩ, hướng giải quyết",
+      "cap": "HSK6",
+      "viDu": "你的思路很清晰，就按这个写吧。",
+      "viDuDoc": "Nǐ de sīlù hěn qīngxī, jiù àn zhège xiě ba.",
+      "viDuNghia": "Mạch suy nghĩ của bạn rất rõ ràng, cứ viết theo hướng này đi.",
+      "cumTu": [
+        "思路清晰",
+        "打开思路",
+        "解题思路"
+      ]
+    },
+    {
+      "chu": "灵感",
+      "doc": "línggǎn",
+      "loai": "n",
+      "nghia": "cảm hứng, linh cảm (sáng tác)",
+      "cap": "HSK6",
+      "viDu": "这首歌的灵感来自一次旅行。",
+      "viDuDoc": "Zhè shǒu gē de línggǎn láizì yí cì lǚxíng.",
+      "viDuNghia": "Cảm hứng cho bài hát này đến từ một chuyến du lịch.",
+      "cumTu": [
+        "获得灵感",
+        "灵感来源",
+        "激发灵感"
+      ]
+    },
+    {
+      "chu": "创意",
+      "doc": "chuàngyì",
+      "loai": "n",
+      "nghia": "ý tưởng sáng tạo",
+      "cap": "HSK6",
+      "viDu": "这个广告很有创意。",
+      "viDuDoc": "Zhège guǎnggào hěn yǒu chuàngyì.",
+      "viDuNghia": "Quảng cáo này rất sáng tạo.",
+      "cumTu": [
+        "有创意",
+        "创意产业",
+        "好的创意"
+      ],
+      "ghiChu": "创 ở đây đọc chuàng (thanh 4)."
+    },
+    {
+      "chu": "前提",
+      "doc": "qiántí",
+      "loai": "n",
+      "nghia": "tiền đề, điều kiện tiên quyết",
+      "cap": "HSK6",
+      "viDu": "身体健康是做好一切事情的前提。",
+      "viDuDoc": "Shēntǐ jiànkāng shì zuò hǎo yíqiè shìqing de qiántí.",
+      "viDuNghia": "Sức khoẻ là tiền đề để làm tốt mọi việc.",
+      "cumTu": [
+        "前提条件",
+        "在…的前提下",
+        "基本前提"
+      ],
+      "ghiChu": "Mẫu câu: 在保证质量的前提下 (với điều kiện bảo đảm chất lượng)."
+    },
+    {
+      "chu": "论点",
+      "doc": "lùndiǎn",
+      "loai": "n",
+      "nghia": "luận điểm",
+      "cap": "HSK6",
+      "viDu": "每一段都要有一个明确的论点。",
+      "viDuDoc": "Měi yí duàn dōu yào yǒu yí ge míngquè de lùndiǎn.",
+      "viDuNghia": "Mỗi đoạn đều phải có một luận điểm rõ ràng.",
+      "cumTu": [
+        "中心论点",
+        "论点明确",
+        "支持论点"
+      ]
+    },
+    {
+      "chu": "要素",
+      "doc": "yàosù",
+      "loai": "n",
+      "nghia": "yếu tố cấu thành, yếu tố then chốt",
+      "cap": "HSK6",
+      "viDu": "时间、地点和人物是新闻的基本要素。",
+      "viDuDoc": "Shíjiān, dìdiǎn hé rénwù shì xīnwén de jīběn yàosù.",
+      "viDuNghia": "Thời gian, địa điểm và nhân vật là các yếu tố cơ bản của tin tức.",
+      "cumTu": [
+        "基本要素",
+        "构成要素",
+        "生产要素"
+      ],
+      "ghiChu": "因素 (HSK5) = nhân tố ảnh hưởng; 要素 = thành phần bắt buộc phải có."
+    },
+    {
+      "chu": "焦点",
+      "doc": "jiāodiǎn",
+      "loai": "n",
+      "nghia": "tiêu điểm, trọng tâm",
+      "cap": "HSK6",
+      "viDu": "房价问题成了大家关注的焦点。",
+      "viDuDoc": "Fángjià wèntí chéng le dàjiā guānzhù de jiāodiǎn.",
+      "viDuNghia": "Vấn đề giá nhà đã trở thành tiêu điểm được mọi người quan tâm.",
+      "cumTu": [
+        "焦点问题",
+        "关注的焦点",
+        "成为焦点"
+      ]
+    },
+    {
+      "chu": "弊端",
+      "doc": "bìduān",
+      "loai": "n",
+      "nghia": "tệ hại, mặt trái, nhược điểm (của chế độ, cách làm)",
+      "cap": "HSK6",
+      "viDu": "这种管理方法存在不少弊端。",
+      "viDuDoc": "Zhè zhǒng guǎnlǐ fāngfǎ cúnzài bù shǎo bìduān.",
+      "viDuNghia": "Cách quản lý này tồn tại không ít mặt trái.",
+      "cumTu": [
+        "消除弊端",
+        "弊端很多",
+        "利与弊"
+      ],
+      "ghiChu": "Bài luận hay dùng cặp 利弊 / 好处与弊端 (ưu và nhược điểm)."
+    },
+    {
+      "chu": "漏洞",
+      "doc": "lòudòng",
+      "loai": "n",
+      "nghia": "lỗ hổng, kẽ hở",
+      "cap": "HSK6",
+      "viDu": "安全专家发现了系统的一个漏洞。",
+      "viDuDoc": "Ānquán zhuānjiā fāxiàn le xìtǒng de yí ge lòudòng.",
+      "viDuNghia": "Chuyên gia bảo mật đã phát hiện một lỗ hổng của hệ thống.",
+      "cumTu": [
+        "安全漏洞",
+        "法律漏洞",
+        "堵塞漏洞"
+      ]
+    },
+    {
+      "chu": "隐患",
+      "doc": "yǐnhuàn",
+      "loai": "n",
+      "nghia": "mối nguy tiềm ẩn",
+      "cap": "HSK6",
+      "viDu": "电线老化是很大的安全隐患。",
+      "viDuDoc": "Diànxiàn lǎohuà shì hěn dà de ānquán yǐnhuàn.",
+      "viDuNghia": "Dây điện bị lão hoá là mối nguy an toàn tiềm ẩn rất lớn.",
+      "cumTu": [
+        "安全隐患",
+        "消除隐患",
+        "存在隐患"
+      ]
+    },
+    {
+      "chu": "机遇",
+      "doc": "jīyù",
+      "loai": "n",
+      "nghia": "thời cơ, cơ hội (lớn)",
+      "cap": "HSK6",
+      "viDu": "挑战和机遇总是同时存在的。",
+      "viDuDoc": "Tiǎozhàn hé jīyù zǒngshì tóngshí cúnzài de.",
+      "viDuNghia": "Thách thức và thời cơ luôn tồn tại song song.",
+      "cumTu": [
+        "抓住机遇",
+        "历史机遇",
+        "机遇与挑战"
+      ],
+      "ghiChu": "机会 dùng thường ngày; 机遇 trang trọng, chỉ thời cơ lớn mang tính bước ngoặt."
+    },
+    {
+      "chu": "瓶颈",
+      "doc": "píngjǐng",
+      "loai": "n",
+      "nghia": "nút thắt cổ chai, điểm nghẽn",
+      "cap": "HSK6",
+      "viDu": "公司的发展遇到了瓶颈。",
+      "viDuDoc": "Gōngsī de fāzhǎn yùdào le píngjǐng.",
+      "viDuNghia": "Sự phát triển của công ty đã gặp phải điểm nghẽn.",
+      "cumTu": [
+        "遇到瓶颈",
+        "突破瓶颈",
+        "瓶颈期"
+      ],
+      "ghiChu": "颈 ở đây đọc jǐng; trong 脖颈儿 đọc gěng."
+    },
+    {
+      "chu": "障碍",
+      "doc": "zhàng'ài",
+      "loai": "n",
+      "nghia": "trở ngại, chướng ngại",
+      "cap": "HSK6",
+      "viDu": "语言是留学生遇到的第一个障碍。",
+      "viDuDoc": "Yǔyán shì liúxuéshēng yùdào de dì-yī ge zhàng'ài.",
+      "viDuNghia": "Ngôn ngữ là trở ngại đầu tiên mà du học sinh gặp phải.",
+      "cumTu": [
+        "克服障碍",
+        "心理障碍",
+        "语言障碍"
+      ]
+    },
+    {
+      "chu": "动力",
+      "doc": "dònglì",
+      "loai": "n",
+      "nghia": "động lực",
+      "cap": "HSK6",
+      "viDu": "家人的支持是我前进的动力。",
+      "viDuDoc": "Jiārén de zhīchí shì wǒ qiánjìn de dònglì.",
+      "viDuNghia": "Sự ủng hộ của gia đình là động lực để tôi tiến lên.",
+      "cumTu": [
+        "学习动力",
+        "动力十足",
+        "提供动力"
+      ],
+      "ghiChu": "动机 = động cơ, ý đồ bên trong (làm vì sao); 动力 = sức đẩy khiến mình cố gắng."
+    },
+    {
+      "chu": "动机",
+      "doc": "dòngjī",
+      "loai": "n",
+      "nghia": "động cơ (hành động)",
+      "cap": "HSK6",
+      "viDu": "警察正在调查他的作案动机。",
+      "viDuDoc": "Jǐngchá zhèngzài diàochá tā de zuò'àn dòngjī.",
+      "viDuNghia": "Cảnh sát đang điều tra động cơ gây án của hắn.",
+      "cumTu": [
+        "学习动机",
+        "动机不纯",
+        "真实动机"
+      ]
+    },
+    {
+      "chu": "指标",
+      "doc": "zhǐbiāo",
+      "loai": "n",
+      "nghia": "chỉ tiêu, chỉ số",
+      "cap": "HSK6",
+      "viDu": "今年的各项经济指标都完成了。",
+      "viDuDoc": "Jīnnián de gè xiàng jīngjì zhǐbiāo dōu wánchéng le.",
+      "viDuNghia": "Các chỉ tiêu kinh tế năm nay đều đã hoàn thành.",
+      "cumTu": [
+        "经济指标",
+        "健康指标",
+        "完成指标"
+      ]
+    },
+    {
+      "chu": "舆论",
+      "doc": "yúlùn",
+      "loai": "n",
+      "nghia": "dư luận",
+      "cap": "HSK6",
+      "viDu": "这件事引起了社会舆论的广泛关注。",
+      "viDuDoc": "Zhè jiàn shì yǐnqǐ le shèhuì yúlùn de guǎngfàn guānzhù.",
+      "viDuNghia": "Việc này đã thu hút sự quan tâm rộng rãi của dư luận xã hội.",
+      "cumTu": [
+        "社会舆论",
+        "舆论压力",
+        "引导舆论"
+      ]
+    },
+    {
+      "chu": "渠道",
+      "doc": "qúdào",
+      "loai": "n",
+      "nghia": "kênh, con đường (thông tin, phân phối)",
+      "cap": "HSK6",
+      "viDu": "年轻人主要通过网络渠道获取新闻。",
+      "viDuDoc": "Niánqīngrén zhǔyào tōngguò wǎngluò qúdào huòqǔ xīnwén.",
+      "viDuNghia": "Người trẻ chủ yếu tiếp nhận tin tức qua kênh trực tuyến.",
+      "cumTu": [
+        "销售渠道",
+        "沟通渠道",
+        "正规渠道"
+      ]
+    },
+    {
+      "chu": "途径",
+      "doc": "tújìng",
+      "loai": "n",
+      "nghia": "con đường, cách thức",
+      "cap": "HSK6",
+      "viDu": "阅读是获取知识的重要途径。",
+      "viDuDoc": "Yuèdú shì huòqǔ zhīshi de zhòngyào tújìng.",
+      "viDuNghia": "Đọc sách là con đường quan trọng để tiếp thu kiến thức.",
+      "cumTu": [
+        "主要途径",
+        "有效途径",
+        "通过…途径"
+      ]
+    },
+    {
+      "chu": "平台",
+      "doc": "píngtái",
+      "loai": "n",
+      "nghia": "nền tảng, sàn (trực tuyến); sân chơi",
+      "cap": "HSK6",
+      "viDu": "这个平台为年轻人提供了展示自己的机会。",
+      "viDuDoc": "Zhège píngtái wèi niánqīngrén tígōng le zhǎnshì zìjǐ de jīhuì.",
+      "viDuNghia": "Nền tảng này mang lại cho người trẻ cơ hội thể hiện bản thân.",
+      "cumTu": [
+        "网络平台",
+        "交流平台",
+        "电商平台"
+      ]
+    },
+    {
+      "chu": "产业",
+      "doc": "chǎnyè",
+      "loai": "n",
+      "nghia": "ngành sản xuất, ngành công nghiệp",
+      "cap": "HSK6",
+      "viDu": "旅游业已经成为当地的支柱产业。",
+      "viDuDoc": "Lǚyóuyè yǐjīng chéngwéi dāngdì de zhīzhù chǎnyè.",
+      "viDuNghia": "Du lịch đã trở thành ngành kinh tế mũi nhọn của địa phương.",
+      "cumTu": [
+        "支柱产业",
+        "文化产业",
+        "新兴产业"
+      ],
+      "ghiChu": "行业 (hángyè) = ngành nghề nói chung; 产业 = ngành sản xuất, khu vực kinh tế ở tầm vĩ mô."
+    },
+    {
+      "chu": "岗位",
+      "doc": "gǎngwèi",
+      "loai": "n",
+      "nghia": "vị trí công tác, cương vị",
+      "cap": "HSK6",
+      "viDu": "他在这个岗位上工作了二十年。",
+      "viDuDoc": "Tā zài zhège gǎngwèi shàng gōngzuò le èrshí nián.",
+      "viDuNghia": "Ông ấy đã làm ở vị trí này hai mươi năm.",
+      "cumTu": [
+        "工作岗位",
+        "岗位职责",
+        "坚守岗位"
+      ]
+    },
+    {
+      "chu": "就业",
+      "doc": "jiùyè",
+      "loai": "v",
+      "nghia": "có việc làm, đi làm",
+      "cap": "HSK6",
+      "viDu": "大学毕业生的就业压力越来越大。",
+      "viDuDoc": "Dàxué bìyèshēng de jiùyè yālì yuè lái yuè dà.",
+      "viDuNghia": "Áp lực tìm việc của sinh viên tốt nghiệp ngày càng lớn.",
+      "cumTu": [
+        "就业机会",
+        "就业率",
+        "促进就业"
+      ],
+      "ghiChu": "Đối lập: 失业 (thất nghiệp)."
+    },
+    {
+      "chu": "老龄化",
+      "doc": "lǎolínghuà",
+      "loai": "n",
+      "nghia": "già hoá (dân số)",
+      "cap": "HSK6",
+      "viDu": "人口老龄化给社会带来了很多问题。",
+      "viDuDoc": "Rénkǒu lǎolínghuà gěi shèhuì dài lái le hěn duō wèntí.",
+      "viDuNghia": "Già hoá dân số mang lại nhiều vấn đề cho xã hội.",
+      "cumTu": [
+        "人口老龄化",
+        "老龄化社会",
+        "老龄化加剧"
+      ]
+    },
+    {
+      "chu": "全球化",
+      "doc": "quánqiúhuà",
+      "loai": "n",
+      "nghia": "toàn cầu hoá",
+      "cap": "HSK6",
+      "viDu": "在全球化时代，学好外语非常重要。",
+      "viDuDoc": "Zài quánqiúhuà shídài, xué hǎo wàiyǔ fēicháng zhòngyào.",
+      "viDuNghia": "Trong thời đại toàn cầu hoá, học giỏi ngoại ngữ rất quan trọng.",
+      "cumTu": [
+        "经济全球化",
+        "全球化时代",
+        "全球化进程"
+      ]
+    },
+    {
+      "chu": "可持续发展",
+      "doc": "kěchíxù fāzhǎn",
+      "loai": "phr",
+      "nghia": "phát triển bền vững",
+      "cap": "HSK6",
+      "viDu": "保护环境是实现可持续发展的关键。",
+      "viDuDoc": "Bǎohù huánjìng shì shíxiàn kěchíxù fāzhǎn de guānjiàn.",
+      "viDuNghia": "Bảo vệ môi trường là chìa khoá để phát triển bền vững.",
+      "cumTu": [
+        "实现可持续发展",
+        "可持续发展战略",
+        "可持续发展目标"
+      ]
+    },
+    {
+      "chu": "基础设施",
+      "doc": "jīchǔ shèshī",
+      "loai": "n",
+      "nghia": "cơ sở hạ tầng",
+      "cap": "HSK6",
+      "viDu": "政府加大了对农村基础设施的投资。",
+      "viDuDoc": "Zhèngfǔ jiādà le duì nóngcūn jīchǔ shèshī de tóuzī.",
+      "viDuNghia": "Chính phủ tăng cường đầu tư vào cơ sở hạ tầng nông thôn.",
+      "cumTu": [
+        "基础设施建设",
+        "完善基础设施",
+        "公共基础设施"
+      ]
+    },
+    {
+      "chu": "共识",
+      "doc": "gòngshí",
+      "loai": "n",
+      "nghia": "nhận thức chung, đồng thuận",
+      "cap": "HSK6",
+      "viDu": "经过讨论，大家达成了共识。",
+      "viDuDoc": "Jīngguò tǎolùn, dàjiā dáchéng le gòngshí.",
+      "viDuNghia": "Sau khi thảo luận, mọi người đã đạt được đồng thuận.",
+      "cumTu": [
+        "达成共识",
+        "形成共识",
+        "社会共识"
+      ]
+    },
+    {
+      "chu": "分歧",
+      "doc": "fēnqí",
+      "loai": "n",
+      "nghia": "bất đồng, khác biệt (ý kiến)",
+      "cap": "HSK6",
+      "viDu": "双方在价格问题上存在分歧。",
+      "viDuDoc": "Shuāngfāng zài jiàgé wèntí shàng cúnzài fēnqí.",
+      "viDuNghia": "Hai bên còn bất đồng về vấn đề giá cả.",
+      "cumTu": [
+        "意见分歧",
+        "产生分歧",
+        "消除分歧"
+      ]
+    },
+    {
+      "chu": "纠纷",
+      "doc": "jiūfēn",
+      "loai": "n",
+      "nghia": "tranh chấp",
+      "cap": "HSK6",
+      "viDu": "他们因为房子的问题发生了纠纷。",
+      "viDuDoc": "Tāmen yīnwèi fángzi de wèntí fāshēng le jiūfēn.",
+      "viDuNghia": "Họ đã xảy ra tranh chấp vì chuyện nhà cửa.",
+      "cumTu": [
+        "经济纠纷",
+        "解决纠纷",
+        "劳动纠纷"
+      ]
+    },
+    {
+      "chu": "隔阂",
+      "doc": "géhé",
+      "loai": "n",
+      "nghia": "khoảng cách, sự xa cách (tình cảm, hiểu biết)",
+      "cap": "HSK6",
+      "viDu": "多沟通可以消除父母和孩子之间的隔阂。",
+      "viDuDoc": "Duō gōutōng kěyǐ xiāochú fùmǔ hé háizi zhījiān de géhé.",
+      "viDuNghia": "Giao tiếp nhiều có thể xoá bỏ khoảng cách giữa cha mẹ và con cái.",
+      "cumTu": [
+        "产生隔阂",
+        "消除隔阂",
+        "文化隔阂"
+      ],
+      "ghiChu": "阂 đọc hé."
+    },
+    {
+      "chu": "真相",
+      "doc": "zhēnxiàng",
+      "loai": "n",
+      "nghia": "chân tướng, sự thật",
+      "cap": "HSK6",
+      "viDu": "事情的真相终于大白了。",
+      "viDuDoc": "Shìqing de zhēnxiàng zhōngyú dàbái le.",
+      "viDuNghia": "Sự thật của vụ việc cuối cùng đã được làm sáng tỏ.",
+      "cumTu": [
+        "事实真相",
+        "真相大白",
+        "了解真相"
+      ],
+      "ghiChu": "相 ở đây đọc xiàng (bộ dạng), không phải xiāng."
+    },
+    {
+      "chu": "实质",
+      "doc": "shízhì",
+      "loai": "n",
+      "nghia": "thực chất, bản chất",
+      "cap": "HSK6",
+      "viDu": "我们要透过现象看实质。",
+      "viDuDoc": "Wǒmen yào tòuguò xiànxiàng kàn shízhì.",
+      "viDuNghia": "Chúng ta phải nhìn xuyên qua hiện tượng để thấy thực chất.",
+      "cumTu": [
+        "实质问题",
+        "实质性",
+        "问题的实质"
+      ],
+      "ghiChu": "本质 (HSK5) thiên về triết học; 实质 hay dùng trong bàn luận thực tế: 实质性进展 (tiến triển thực chất)."
+    },
+    {
+      "chu": "内涵",
+      "doc": "nèihán",
+      "loai": "n",
+      "nghia": "nội hàm, chiều sâu (ý nghĩa)",
+      "cap": "HSK6",
+      "viDu": "这部电影很有内涵，值得多看几遍。",
+      "viDuDoc": "Zhè bù diànyǐng hěn yǒu nèihán, zhíde duō kàn jǐ biàn.",
+      "viDuNghia": "Bộ phim này có chiều sâu, đáng xem nhiều lần.",
+      "cumTu": [
+        "文化内涵",
+        "有内涵",
+        "丰富的内涵"
+      ]
+    },
+    {
+      "chu": "立场",
+      "doc": "lìchǎng",
+      "loai": "n",
+      "nghia": "lập trường",
+      "cap": "HSK6",
+      "viDu": "在这个问题上，我们的立场很明确。",
+      "viDuDoc": "Zài zhège wèntí shàng, wǒmen de lìchǎng hěn míngquè.",
+      "viDuNghia": "Về vấn đề này, lập trường của chúng tôi rất rõ ràng.",
+      "cumTu": [
+        "立场坚定",
+        "站在…的立场",
+        "表明立场"
+      ]
+    },
+    {
+      "chu": "心态",
+      "doc": "xīntài",
+      "loai": "n",
+      "nghia": "tâm thế, trạng thái tâm lý",
+      "cap": "HSK6",
+      "viDu": "面对失败，保持良好的心态很重要。",
+      "viDuDoc": "Miànduì shībài, bǎochí liánghǎo de xīntài hěn zhòngyào.",
+      "viDuNghia": "Đối mặt thất bại, giữ được tâm thế tốt là điều rất quan trọng.",
+      "cumTu": [
+        "心态好",
+        "调整心态",
+        "积极的心态"
+      ]
+    },
+    {
+      "chu": "毅力",
+      "doc": "yìlì",
+      "loai": "n",
+      "nghia": "nghị lực",
+      "cap": "HSK6",
+      "viDu": "学好一门外语需要很大的毅力。",
+      "viDuDoc": "Xué hǎo yì mén wàiyǔ xūyào hěn dà de yìlì.",
+      "viDuNghia": "Học giỏi một ngoại ngữ cần nghị lực rất lớn.",
+      "cumTu": [
+        "坚强的毅力",
+        "有毅力",
+        "靠毅力"
+      ]
+    },
+    {
+      "chu": "信念",
+      "doc": "xìnniàn",
+      "loai": "n",
+      "nghia": "niềm tin, tín niệm",
+      "cap": "HSK6",
+      "viDu": "他始终坚持自己的信念。",
+      "viDuDoc": "Tā shǐzhōng jiānchí zìjǐ de xìnniàn.",
+      "viDuNghia": "Anh ấy luôn kiên trì giữ vững niềm tin của mình.",
+      "cumTu": [
+        "坚定信念",
+        "理想信念",
+        "失去信念"
+      ]
+    },
+    {
+      "chu": "抱负",
+      "doc": "bàofù",
+      "loai": "n",
+      "nghia": "hoài bão",
+      "cap": "HSK6",
+      "viDu": "她是一个有理想、有抱负的年轻人。",
+      "viDuDoc": "Tā shì yí ge yǒu lǐxiǎng, yǒu bàofù de niánqīngrén.",
+      "viDuNghia": "Cô ấy là một người trẻ có lý tưởng, có hoài bão.",
+      "cumTu": [
+        "远大抱负",
+        "有抱负",
+        "实现抱负"
+      ],
+      "ghiChu": "负 ở đây đọc fù."
+    }
+  ]
+}

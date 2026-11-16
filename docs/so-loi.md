@@ -873,3 +873,24 @@ Mẫu một mục:
 - **Cách sửa:** bản lên nhầm đã qua kiểm cú pháp và chạy đúng (theo dõi các tập sau 00:02 không lỗi) nên giữ; đặt `anh-kho.txt` vào bản gốc Mac `giong/` để cầu đồng bộ tự mang sang; đo trên 2 tập thật: từ Anh trượt 23 ⇒ 13, thêm ~34% lượt đọc.
 - **Ảnh hưởng:** ~12 phút các tập mới chạy cổng từ Anh khi chưa có danh sách từ khó (đọc lại thừa vài câu/tập); không tập nào hỏng.
 - **Bài học:** thư mục Mac của video-bai-giang LÀ sản xuất — thử nghiệm phải làm trên bản sao tên khác ĐẶT Ở MAC (hoặc ngoài cây đồng bộ như `/tmp`), và tệp dữ liệu mới phải tạo ở Mac, không tạo trên máy nhà.
+
+### 17/11/2026 — video bài giảng (làn giọng máy thuê) — GPU máy thuê ngồi 0% vì chờ kéo wav về nhà
+- **Triệu chứng:** kiểm hằng giờ thấy vast6 GPU 0% gần suốt 30 giây lấy mẫu dù 6 làn đang "chạy"; số tập lồng tiếng tụt 25–27 ⇒ ~22 tập/giờ; mỗi làn nằm 150–440 giây (có lượt 22 phút) ở bước `scp` sau mỗi vòng đọc.
+- **Nguyên nhân:** `video-bai-giang/giong/lam-giong.mts` (`docLo`, dòng `scp -q '…/lo-<bài>/*.wav'`) kéo từng wav PCM qua proxy ssh của Vast; đường này chỉ ~1 MB/s cho MỌI luồng cộng lại (đo: 1 luồng 176–312 KB/s, 6 luồng song song vẫn tổng ~1 MB/s; mạng nhà tải CDN 5–6 MB/s) và còn chia với `keo-video-sau.sh`.
+- **Cách sửa:** máy thuê nén FLAC (không mất mát, còn ~45%) rồi kéo MỘT luồng `tar`, nhà giải nén về wav y cũ (so 85 tệp: giống từng byte; lô 214 câu 72 MB: 113 giây thay cho >10 phút mới được 27 MB). Hỏng 2 lần ⇒ tự về `scp`; tắt bằng `GIONG_KEO_FLAC=0`. Sửa ở bản gốc Mac (kho video-bai-giang, ngoài repo này).
+- **Ảnh hưởng:** từ khi thuê vast5/vast6 (15–16/11) GPU thuê chạy dưới công suất, trả tiền giờ máy cho thời gian chờ mạng; không tập nào sai nội dung.
+- **Bài học:** máy "đang chạy" + làn "active" chưa nói gì — phải nhìn GPU nhiều mẫu VÀ xem tiến trình đang đứng ở bước nào (`ps … etime`); nghẽn mạng chung thì thêm luồng song song chỉ giành phần của nhau, phải giảm byte (nén) hoặc đổi đường.
+
+### 17/11/2026 — video bài giảng (kéo video gốc từ máy thuê) — hàng `keo-video-sau` không bao giờ cạn
+- **Triệu chứng:** `scratchpad/keo-video-sau.txt` dồn 220 dòng (233 tệp, 22,8 GB trên vast5 + vast6) sau 9,5 giờ chạy; một tệp ~66 MB mất ~11 phút.
+- **Nguyên nhân:** `video-bai-giang/dieu-phoi-linux/keo-video-sau.sh:19` kéo bằng `rsync --bwlimit=100` qua cùng đường proxy ssh ~1 MB/s; máy thuê render ~20 tập/giờ ≈ 2 GB/giờ ≈ 550 KB/s ⇒ vào nhanh hơn ra, kể cả khi bỏ giới hạn.
+- **Cách sửa:** đi vòng R2: máy thuê `xuat/r2-ky.py put` lên khoá tạm `tam-goc/<mã ngẫu nhiên>/…` (19 MB/s), nhà `curl` từ CDN (giới hạn 3 MB/s), so kích thước + sha1, `r2-ky.py delete` khoá tạm rồi mới xoá bên máy thuê; R2 lỗi ở tệp nào thì tệp đó về rsync cũ; tắt bằng `touch scratchpad/keo-sau-r2.tat`. Đo: 66 MB trong 50 giây, sha1 khớp, xoá khoá trả 204.
+- **Ảnh hưởng:** nếu trả máy thuê lúc hết credit (~55 giờ nữa) thì hơn 200 video GỐC mất (bản web vẫn trên R2); đường kéo còn ăn bớt băng thông của làn giọng.
+- **Bài học:** hàng đợi nền phải có phép tính vào/ra ngay lúc dựng (GB/giờ sinh ra so với GB/giờ kéo được); "đang chạy" 9 giờ mà số dòng vẫn tăng là hỏng thiết kế, không phải chậm.
+
+### 17/11/2026 — video bài giảng (so giọng cuong6 ↔ cuong8 trên tập thật) — qua nửa đêm đếm nhầm tập về giọng cũ
+- **Triệu chứng:** `so-giong.py` chạy lúc 00:14 xếp các tập lồng tiếng sau 00:00 ngày 17/11 vào nhóm cuong6 dù chúng đọc bằng cuong8 (đổi giọng 23:30 ngày 16/11).
+- **Nguyên nhân:** bản đầu của `video-bai-giang/giong/train-f5/phuong-an-1/so-giong.py` so mốc đổi giọng bằng chuỗi giờ `HH:MM` của nhật ký làn ⇒ "00:07" < "23:30".
+- **Cách sửa:** đổi sang mốc thời gian đầy đủ (dòng 6: `ts(d, h)` ghép ngày/tháng của dòng nhật ký với giờ rồi `mktime`); chạy lại ra 8 tập cuong8: từ Anh đúng 93,9% so 87,0% của cuong6.
+- **Ảnh hưởng:** chỉ một bảng số nội bộ sai trong vài phút, chưa báo ra ngoài.
+- **Bài học:** nhật ký chỉ in `dd/mm HH:MM` thì mọi phép so trước/sau phải ghép đủ ngày; đo quanh nửa đêm là lúc lộ.

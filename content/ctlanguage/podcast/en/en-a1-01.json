@@ -1,0 +1,54 @@
+{
+  "id": "en-a1-01",
+  "nn": "en",
+  "cap": "A1",
+  "so": 1,
+  "tieuDe": "Hello, My Name Is Lan",
+  "tieuDeViet": "Xin chào, mình là Lan",
+  "moTa": "Lan đến lớp tiếng Anh ngày đầu tiên và làm quen với Ben. Cách chào hỏi, giới thiệu tên, quê và công việc.",
+  "chuDe": "Làm quen",
+  "bieuTuong": "hand.wave.fill",
+  "nguoi": [
+    { "ma": "L", "ten": "Lan", "giong": "us-nu", "vai": "sinh viên mới" },
+    { "ma": "B", "ten": "Ben", "giong": "uk-nam", "vai": "bạn cùng lớp" }
+  ],
+  "loi": [
+    { "ai": "B", "t": "Hi! Is this seat free?", "v": "Chào bạn! Ghế này còn trống không?" },
+    { "ai": "L", "t": "Yes, it is. Please sit down.", "v": "Có đấy. Bạn ngồi đi." },
+    { "ai": "B", "t": "Thanks. I'm Ben. What's your name?", "v": "Cảm ơn. Mình là Ben. Bạn tên gì?" },
+    { "ai": "L", "t": "My name is Lan. Nice to meet you, Ben.", "v": "Mình tên là Lan. Rất vui được gặp bạn, Ben." },
+    { "ai": "B", "t": "Nice to meet you too. Where are you from, Lan?", "v": "Mình cũng rất vui được gặp bạn. Bạn đến từ đâu vậy, Lan?" },
+    { "ai": "L", "t": "I'm from Vietnam. I live in Hanoi.", "v": "Mình đến từ Việt Nam. Mình sống ở Hà Nội." },
+    { "ai": "B", "t": "Oh, cool! I'm from London. It's my first day here.", "v": "Ồ, hay quá! Mình đến từ London. Hôm nay là ngày đầu tiên của mình ở đây." },
+    { "ai": "L", "t": "Me too! I'm a little nervous.", "v": "Mình cũng vậy! Mình hơi hồi hộp." },
+    { "ai": "B", "t": "Don't worry. Everyone is new today. What do you do?", "v": "Đừng lo. Hôm nay ai cũng mới cả. Bạn làm nghề gì?" },
+    { "ai": "L", "t": "I'm a student. I study computer science.", "v": "Mình là sinh viên. Mình học khoa học máy tính." },
+    { "ai": "B", "t": "Great! I'm a cook. I work in a small restaurant.", "v": "Tuyệt! Mình là đầu bếp. Mình làm ở một nhà hàng nhỏ." },
+    { "ai": "L", "t": "Really? I love cooking, but I'm not very good.", "v": "Thật à? Mình thích nấu ăn, nhưng mình nấu không giỏi lắm." },
+    { "ai": "B", "t": "That's okay. Practice makes perfect — in cooking and in English!", "v": "Không sao đâu. Có công mài sắt có ngày nên kim — nấu ăn hay tiếng Anh cũng vậy!" },
+    { "ai": "L", "t": "Ha ha, you're right. Let's practice together.", "v": "Ha ha, bạn nói đúng. Mình cùng luyện nhé." },
+    { "ai": "B", "t": "Deal! See you after class, Lan.", "v": "Chốt nhé! Hẹn gặp lại sau giờ học, Lan." },
+    { "ai": "L", "t": "See you, Ben. Have a good day!", "v": "Gặp lại sau nhé, Ben. Chúc bạn một ngày tốt lành!" }
+  ],
+  "tuVung": [
+    { "chu": "seat", "doc": "/siːt/", "nghia": "chỗ ngồi, ghế", "vd": "Is this seat free?" },
+    { "chu": "free", "doc": "/friː/", "nghia": "trống, rảnh; miễn phí", "vd": "Are you free tonight?" },
+    { "chu": "Nice to meet you", "doc": "/naɪs tə miːt juː/", "nghia": "rất vui được gặp bạn (lần đầu gặp)", "vd": "Hi, I'm Ben. Nice to meet you." },
+    { "chu": "Where are you from", "doc": "/weər ɑː juː frɒm/", "nghia": "bạn đến từ đâu", "vd": "Where are you from? — I'm from Vietnam." },
+    { "chu": "nervous", "doc": "/ˈnɜːvəs/", "nghia": "hồi hộp, lo lắng", "vd": "I'm nervous before the test." },
+    { "chu": "student", "doc": "/ˈstjuːdənt/", "nghia": "học sinh, sinh viên", "vd": "She is a student at FPT University." },
+    { "chu": "cook", "doc": "/kʊk/", "nghia": "đầu bếp; nấu ăn", "vd": "My father is a good cook." },
+    { "chu": "Practice makes perfect", "doc": "/ˈpræktɪs meɪks ˈpɜːfɪkt/", "nghia": "luyện nhiều sẽ giỏi (có công mài sắt có ngày nên kim)", "vd": "Don't give up — practice makes perfect." }
+  ],
+  "yNghia": "Ngày đầu ở chỗ mới ai cũng hồi hộp — và người bên cạnh bạn rất có thể cũng đang hồi hộp y như vậy. Một câu chào đơn giản \"Hi! I'm…\" là đủ để bắt đầu một tình bạn, và luyện cùng ai đó luôn dễ hơn luyện một mình.",
+  "meo": [
+    "Giới thiệu tên: \"I'm Lan.\" (thân mật) hoặc \"My name is Lan.\" (trang trọng hơn một chút).",
+    "Hỏi quê: \"Where are you from?\" → trả lời \"I'm from + nước/thành phố.\"",
+    "Hỏi nghề: \"What do you do?\" (không phải \"What are you doing?\" — câu đó là \"bạn đang làm gì?\")."
+  ],
+  "cauHoi": [
+    { "hoi": "Lan đến từ đâu?", "chon": ["London", "Hà Nội, Việt Nam", "Tokyo"], "dung": 1, "giai": "Lan nói: \"I'm from Vietnam. I live in Hanoi.\"" },
+    { "hoi": "Ben làm nghề gì?", "chon": ["Sinh viên", "Giáo viên", "Đầu bếp"], "dung": 2, "giai": "Ben nói: \"I'm a cook. I work in a small restaurant.\"" },
+    { "hoi": "Câu nào dùng để hỏi nghề nghiệp?", "chon": ["What do you do?", "What are you doing?", "Where do you work at?"], "dung": 0, "giai": "\"What do you do?\" hỏi nghề; \"What are you doing?\" hỏi việc đang làm lúc này." }
+  ]
+}

@@ -1,0 +1,62 @@
+{
+  "id": "en-a2-02",
+  "nn": "en",
+  "cap": "A2",
+  "so": 2,
+  "tieuDe": "Just One More Episode",
+  "tieuDeViet": "Thêm một tập nữa thôi",
+  "moTa": "Huy thức đến 3 giờ sáng xem phim bộ ngay trước bài kiểm tra. Linh, bạn cùng phòng, kể vì sao giấc ngủ quan trọng với việc học và thói quen giúp cô ngủ đúng giờ.",
+  "chuDe": "Giấc ngủ & sức khoẻ",
+  "bieuTuong": "moon.zzz.fill",
+  "nguoi": [
+    { "ma": "L", "ten": "Linh", "giong": "uk-nu", "vai": "bạn cùng phòng" },
+    { "ma": "H", "ten": "Huy", "giong": "au-nam", "vai": "sinh viên" }
+  ],
+  "loi": [
+    { "ai": "L", "t": "Morning, Huy. Wow, you look really tired.", "v": "Chào buổi sáng, Huy. Trời, trông cậu mệt thật đấy." },
+    { "ai": "H", "t": "I am. I went to bed at three o'clock.", "v": "Mệt thật. Tớ đi ngủ lúc ba giờ sáng." },
+    { "ai": "L", "t": "Three? Were you studying for the test?", "v": "Ba giờ? Cậu ôn bài kiểm tra à?" },
+    { "ai": "H", "t": "No... I was watching a series. I said \"just one more episode\" five times.", "v": "Không... Tớ xem phim bộ. Tớ nói \"thêm một tập nữa thôi\" năm lần liền." },
+    { "ai": "L", "t": "Ha ha, I know that feeling. But the test is at nine, right?", "v": "Ha ha, tớ hiểu cảm giác đó. Nhưng chín giờ là kiểm tra rồi, đúng không?" },
+    { "ai": "H", "t": "Yes, and I can't remember anything. My head feels heavy.", "v": "Ừ, mà tớ chẳng nhớ gì cả. Đầu tớ nặng trĩu." },
+    { "ai": "L", "t": "That makes sense. Your brain needs sleep to save new information.", "v": "Thế cũng dễ hiểu. Não cần ngủ để lưu thông tin mới mà." },
+    { "ai": "H", "t": "Really? I thought sleep was just... rest.", "v": "Thật à? Tớ tưởng ngủ chỉ là... nghỉ ngơi." },
+    { "ai": "L", "t": "No, it's more than that. When you sleep, your brain sorts out what you learned during the day.", "v": "Không, hơn thế nhiều. Khi cậu ngủ, não sắp xếp lại những gì cậu học được trong ngày." },
+    { "ai": "H", "t": "So is it a bad idea to stay up late and study too?", "v": "Vậy thức khuya để học cũng là ý tồi à?" },
+    { "ai": "L", "t": "Usually, yes. I used to do it all the time, and my grades got worse.", "v": "Thường là vậy. Tớ từng làm thế suốt, và điểm của tớ còn tệ đi." },
+    { "ai": "H", "t": "What do you do now?", "v": "Giờ cậu làm thế nào?" },
+    { "ai": "L", "t": "At eleven, I put my phone on the other side of the room. No screens in bed.", "v": "Mười một giờ là tớ để điện thoại ở đầu bên kia phòng. Không màn hình trên giường." },
+    { "ai": "H", "t": "That sounds hard. I always scroll on my phone before I fall asleep.", "v": "Nghe khó quá. Tớ lúc nào cũng lướt điện thoại trước khi ngủ." },
+    { "ai": "L", "t": "It was hard for the first week. Now I fall asleep faster and wake up with more energy.", "v": "Tuần đầu thì khó thật. Giờ tớ ngủ nhanh hơn và thức dậy khoẻ khoắn hơn." },
+    { "ai": "H", "t": "Okay, I'll try it tonight. But first, I need to survive this test.", "v": "Được, tối nay tớ thử. Nhưng trước hết, tớ phải sống sót qua bài kiểm tra này đã." },
+    { "ai": "L", "t": "Drink some water, eat a proper breakfast, and read your notes once more.", "v": "Uống chút nước, ăn sáng cho đàng hoàng, và đọc lại ghi chú thêm một lần." },
+    { "ai": "H", "t": "Thanks, Linh. You sound like my mum.", "v": "Cảm ơn Linh. Cậu nói y như mẹ tớ." },
+    { "ai": "L", "t": "Then your mum is very clever! Good luck!", "v": "Vậy thì mẹ cậu thông minh lắm đấy! Chúc may mắn!" }
+  ],
+  "tuVung": [
+    { "chu": "tired", "doc": "/ˈtaɪəd/", "nghia": "mệt", "vd": "I'm too tired to cook tonight." },
+    { "chu": "episode", "doc": "/ˈepɪsəʊd/", "nghia": "tập (phim, podcast)", "vd": "The new episode comes out on Friday." },
+    { "chu": "information", "doc": "/ˌɪnfəˈmeɪʃn/", "nghia": "thông tin (không đếm được)", "vd": "I need more information about the course." },
+    { "chu": "sorts out", "doc": "/sɔːts aʊt/", "nghia": "sắp xếp, giải quyết (sort out)", "vd": "She sorts out her desk every Friday." },
+    { "chu": "stay up late", "doc": "/steɪ ʌp leɪt/", "nghia": "thức khuya", "vd": "Don't stay up late before an exam." },
+    { "chu": "grades", "doc": "/ɡreɪdz/", "nghia": "điểm số", "vd": "His grades are getting better." },
+    { "chu": "screens", "doc": "/skriːnz/", "nghia": "màn hình (điện thoại, máy tính, TV)", "vd": "Kids spend a lot of time in front of screens." },
+    { "chu": "scroll", "doc": "/skrəʊl/", "nghia": "lướt (màn hình)", "vd": "I scroll through the news in the morning." },
+    { "chu": "fall asleep", "doc": "/fɔːl əˈsliːp/", "nghia": "chìm vào giấc ngủ, ngủ thiếp đi", "vd": "I fell asleep during the film." },
+    { "chu": "energy", "doc": "/ˈenədʒi/", "nghia": "năng lượng, sức lực", "vd": "Breakfast gives you energy." },
+    { "chu": "proper", "doc": "/ˈprɒpə(r)/", "nghia": "đàng hoàng, đúng nghĩa", "vd": "You need a proper meal, not just snacks." }
+  ],
+  "yNghia": "Ngủ không phải là thời gian bị lãng phí — đó là lúc não cất giữ những gì bạn đã học. \"Thêm một tập nữa thôi\" nghe vô hại, nhưng giấc ngủ đêm nay quyết định ngày mai bạn tỉnh táo đến đâu.",
+  "meo": [
+    "\"I used to + động từ nguyên mẫu\" = trước đây từng (giờ không còn): \"I used to stay up late.\"",
+    "\"I thought…\" = tớ tưởng (nhưng hoá ra không phải): \"I thought sleep was just rest.\"",
+    "\"go to bed\" là lên giường đi ngủ; \"fall asleep\" là thật sự chìm vào giấc ngủ.",
+    "\"You look + tính từ\" để nhận xét vẻ ngoài: \"You look tired / happy.\""
+  ],
+  "cauHoi": [
+    { "hoi": "Vì sao Huy thức đến ba giờ sáng?", "chon": ["Ôn bài kiểm tra", "Chơi game", "Xem phim bộ"], "dung": 2, "giai": "\"I was watching a series.\"" },
+    { "hoi": "Theo Linh, khi ngủ não làm gì?", "chon": ["Nghỉ hoàn toàn, không làm gì", "Sắp xếp và lưu lại những gì học được trong ngày", "Xoá hết thông tin cũ"], "dung": 1, "giai": "\"Your brain sorts out what you learned during the day.\"" },
+    { "hoi": "Thói quen mới của Linh là gì?", "chon": ["Để điện thoại ở đầu kia phòng lúc 11 giờ", "Uống cà phê trước khi ngủ", "Ngủ trưa hai tiếng"], "dung": 0, "giai": "\"At eleven, I put my phone on the other side of the room.\"" },
+    { "hoi": "\"I used to do it all the time\" nghĩa là gì?", "chon": ["Tớ vẫn luôn làm thế", "Trước đây tớ từng làm thế suốt", "Tớ sẽ làm thế mãi"], "dung": 1, "giai": "\"used to\" nói về thói quen trong quá khứ, nay không còn." }
+  ]
+}

@@ -1,0 +1,61 @@
+{
+  "id": "en-a2-03",
+  "nn": "en",
+  "cap": "A2",
+  "so": 3,
+  "tieuDe": "A Weekend in Da Lat",
+  "tieuDeViet": "Cuối tuần ở Đà Lạt",
+  "moTa": "Trang và Nam lên kế hoạch đi Đà Lạt bằng xe khách đêm: đặt vé, chọn chỗ ở, nên mang gì — và vì sao mười hai địa điểm trong hai ngày là quá nhiều.",
+  "chuDe": "Du lịch",
+  "bieuTuong": "bus.fill",
+  "nguoi": [
+    { "ma": "T", "ten": "Trang", "giong": "us-nu", "vai": "sinh viên" },
+    { "ma": "N", "ten": "Nam", "giong": "uk-nam", "vai": "bạn thân" }
+  ],
+  "loi": [
+    { "ai": "T", "t": "Nam, are you free next weekend? Let's go to Da Lat!", "v": "Nam ơi, cuối tuần sau cậu rảnh không? Mình đi Đà Lạt đi!" },
+    { "ai": "N", "t": "Da Lat? That sounds great. How are we going to get there?", "v": "Đà Lạt à? Nghe hay đấy. Mình sẽ đi bằng gì?" },
+    { "ai": "T", "t": "By night bus. It leaves at ten p.m. and arrives at five in the morning.", "v": "Đi xe khách đêm. Xe chạy lúc mười giờ tối và tới nơi lúc năm giờ sáng." },
+    { "ai": "N", "t": "And it's cheaper than flying, right?", "v": "Và rẻ hơn đi máy bay, đúng không?" },
+    { "ai": "T", "t": "Much cheaper. A ticket is about three hundred thousand dong.", "v": "Rẻ hơn nhiều. Một vé khoảng ba trăm nghìn đồng." },
+    { "ai": "N", "t": "Perfect. Where are we going to stay?", "v": "Tuyệt. Mình sẽ ở đâu?" },
+    { "ai": "T", "t": "I found a small homestay near the lake. It has a garden and free breakfast.", "v": "Mình tìm được một homestay nhỏ gần hồ. Có vườn và bữa sáng miễn phí." },
+    { "ai": "N", "t": "Nice. Let's book it today before it's full.", "v": "Hay đấy. Đặt ngay hôm nay đi kẻo hết phòng." },
+    { "ai": "T", "t": "Okay. I also made a plan: twelve places in two days!", "v": "Được. Mình còn lập kế hoạch rồi: mười hai địa điểm trong hai ngày!" },
+    { "ai": "N", "t": "Twelve? Trang, that's too many. We'll spend all our time on the road.", "v": "Mười hai á? Trang ơi, nhiều quá. Mình sẽ mất hết thời gian ngồi trên đường mất." },
+    { "ai": "T", "t": "But I want to take photos everywhere.", "v": "Nhưng mình muốn chụp ảnh ở khắp nơi." },
+    { "ai": "N", "t": "Last year I went to Hoi An with a list like that. I have a hundred photos, but I don't remember much.", "v": "Năm ngoái mình đi Hội An với một danh sách y như vậy. Mình có cả trăm tấm ảnh, nhưng chẳng nhớ được bao nhiêu." },
+    { "ai": "T", "t": "Hmm, that's a bit sad.", "v": "Hừm, nghe hơi buồn nhỉ." },
+    { "ai": "N", "t": "Let's choose four or five places and stay longer at each one.", "v": "Mình chọn bốn, năm chỗ thôi và ở lâu hơn ở mỗi chỗ." },
+    { "ai": "T", "t": "Okay, deal. What should we pack? It's cold there at night.", "v": "Được, chốt. Mình nên mang theo gì? Ở đó ban đêm lạnh." },
+    { "ai": "N", "t": "A warm jacket, a raincoat and comfortable shoes. It often rains in the afternoon.", "v": "Một áo khoác ấm, áo mưa và giày đi cho thoải mái. Ở đó chiều hay mưa." },
+    { "ai": "T", "t": "Good point. And snacks for the bus!", "v": "Ý hay. Và đồ ăn vặt để ăn trên xe!" },
+    { "ai": "N", "t": "Of course. The most important thing!", "v": "Tất nhiên rồi. Thứ quan trọng nhất mà!" },
+    { "ai": "T", "t": "Ha ha. Okay, I'll book the tickets tonight.", "v": "Ha ha. Được rồi, tối nay mình đặt vé." }
+  ],
+  "tuVung": [
+    { "chu": "night bus", "doc": "/naɪt bʌs/", "nghia": "xe khách đêm", "vd": "We took the night bus to Sa Pa." },
+    { "chu": "cheaper than", "doc": "/ˈtʃiːpə ðæn/", "nghia": "rẻ hơn (so sánh hơn của cheap)", "vd": "The train is cheaper than the plane." },
+    { "chu": "ticket", "doc": "/ˈtɪkɪt/", "nghia": "vé", "vd": "I bought two tickets online." },
+    { "chu": "homestay", "doc": "/ˈhəʊmsteɪ/", "nghia": "nhà nghỉ kiểu ở cùng/ở như nhà dân", "vd": "The homestay owner cooked dinner for us." },
+    { "chu": "book", "doc": "/bʊk/", "nghia": "đặt (chỗ, vé, phòng)", "vd": "Can I book a table for four?" },
+    { "chu": "too many", "doc": "/tuː ˈmeni/", "nghia": "quá nhiều (danh từ đếm được)", "vd": "There are too many people here." },
+    { "chu": "pack", "doc": "/pæk/", "nghia": "xếp đồ, chuẩn bị hành lý", "vd": "Don't forget to pack your charger." },
+    { "chu": "raincoat", "doc": "/ˈreɪnkəʊt/", "nghia": "áo mưa", "vd": "Take a raincoat — it might rain." },
+    { "chu": "comfortable", "doc": "/ˈkʌmftəbl/", "nghia": "thoải mái, dễ chịu", "vd": "These shoes are very comfortable." },
+    { "chu": "snacks", "doc": "/snæks/", "nghia": "đồ ăn vặt", "vd": "We bought some snacks for the trip." }
+  ],
+  "yNghia": "Một chuyến đi đáng nhớ không đo bằng số điểm check-in hay số ảnh chụp được. Đi ít chỗ hơn nhưng ở lâu hơn, bạn mới thật sự cảm nhận được nơi mình đến — và nhớ được nó rất lâu sau đó.",
+  "meo": [
+    "So sánh hơn: tính từ ngắn thêm -er + than (cheap → cheaper than); tính từ dài dùng more (more comfortable than).",
+    "\"be going to + động từ\" cho kế hoạch đã định: \"Where are we going to stay?\"",
+    "\"book\" làm động từ = đặt trước: book a ticket, book a room, book a table.",
+    "\"too many + danh từ đếm được\" (too many places), \"too much + không đếm được\" (too much money)."
+  ],
+  "cauHoi": [
+    { "hoi": "Hai bạn đi Đà Lạt bằng gì?", "chon": ["Máy bay", "Xe khách đêm", "Xe máy"], "dung": 1, "giai": "\"By night bus. It leaves at ten p.m.\"" },
+    { "hoi": "Vì sao Nam muốn bớt địa điểm?", "chon": ["Để ở lâu hơn mỗi nơi và nhớ được nhiều hơn", "Vì hết tiền", "Vì trời mưa"], "dung": 0, "giai": "Nam đi Hội An với danh sách dài, có trăm tấm ảnh nhưng \"I don't remember much\"." },
+    { "hoi": "Buổi chiều ở Đà Lạt thường thế nào?", "chon": ["Nắng gắt", "Rất nóng", "Hay mưa"], "dung": 2, "giai": "\"It often rains in the afternoon.\"" },
+    { "hoi": "Trong câu \"Let's book it today\", \"book\" nghĩa là gì?", "chon": ["Quyển sách", "Đặt chỗ", "Đọc sách"], "dung": 1, "giai": "\"book\" ở đây là động từ: đặt trước (phòng, vé)." }
+  ]
+}

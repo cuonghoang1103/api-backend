@@ -1,0 +1,56 @@
+{
+  "id": "zh-hsk1-02",
+  "nn": "zh",
+  "cap": "HSK1",
+  "so": 2,
+  "tieuDe": "你是哪国人？",
+  "tieuDeViet": "Bạn là người nước nào?",
+  "moTa": "Ngày đầu ở ký túc xá, Minh gặp Lý Nguyệt ở phòng bên cạnh. Hỏi tên, quốc tịch, sở thích — và một lời mời ăn món Việt.",
+  "chuDe": "Bạn bè",
+  "bieuTuong": "person.2.fill",
+  "nguoi": [
+    { "ma": "Y", "ten": "Lý Nguyệt", "giong": "zh-nu", "vai": "sinh viên Trung Quốc" },
+    { "ma": "M", "ten": "Minh", "giong": "zh-nam", "vai": "sinh viên Việt Nam mới đến" }
+  ],
+  "loi": [
+    { "ai": "Y", "t": "你好！你是新同学吗？", "doc": "Nǐ hǎo! Nǐ shì xīn tóngxué ma?", "v": "Chào bạn! Bạn là bạn học mới à?" },
+    { "ai": "M", "t": "是。我叫阿明。你叫什么名字？", "doc": "Shì. Wǒ jiào Ā Míng. Nǐ jiào shénme míngzi?", "v": "Ừ. Mình tên là Minh. Bạn tên là gì?" },
+    { "ai": "Y", "t": "我叫李月。你是哪国人？", "doc": "Wǒ jiào Lǐ Yuè. Nǐ shì nǎ guó rén?", "v": "Mình tên là Lý Nguyệt. Bạn là người nước nào?" },
+    { "ai": "M", "t": "我是越南人。我家在河内。", "doc": "Wǒ shì Yuènán rén. Wǒ jiā zài Hénèi.", "v": "Mình là người Việt Nam. Nhà mình ở Hà Nội." },
+    { "ai": "Y", "t": "认识你很高兴！", "doc": "Rènshi nǐ hěn gāoxìng!", "v": "Rất vui được làm quen với bạn!" },
+    { "ai": "M", "t": "我也很高兴。你也住这儿吗？", "doc": "Wǒ yě hěn gāoxìng. Nǐ yě zhù zhèr ma?", "v": "Mình cũng rất vui. Bạn cũng ở đây à?" },
+    { "ai": "Y", "t": "是，我住你旁边。", "doc": "Shì, wǒ zhù nǐ pángbiān.", "v": "Ừ, mình ở ngay phòng bên cạnh bạn." },
+    { "ai": "M", "t": "太好了！你喜欢做什么？", "doc": "Tài hǎo le! Nǐ xǐhuan zuò shénme?", "v": "Hay quá! Bạn thích làm gì?" },
+    { "ai": "Y", "t": "我喜欢看电影。你呢？", "doc": "Wǒ xǐhuan kàn diànyǐng. Nǐ ne?", "v": "Mình thích xem phim. Còn bạn?" },
+    { "ai": "M", "t": "我喜欢做饭。我会做越南菜。", "doc": "Wǒ xǐhuan zuò fàn. Wǒ huì zuò Yuènán cài.", "v": "Mình thích nấu ăn. Mình biết nấu món Việt." },
+    { "ai": "Y", "t": "真的吗？我很想吃！", "doc": "Zhēn de ma? Wǒ hěn xiǎng chī!", "v": "Thật á? Mình rất muốn ăn thử!" },
+    { "ai": "M", "t": "明天中午你来我这儿吃饭，好吗？", "doc": "Míngtiān zhōngwǔ nǐ lái wǒ zhèr chī fàn, hǎo ma?", "v": "Trưa mai bạn sang chỗ mình ăn cơm nhé, được không?" },
+    { "ai": "Y", "t": "好啊！下午我请你看电影。", "doc": "Hǎo a! Xiàwǔ wǒ qǐng nǐ kàn diànyǐng.", "v": "Được chứ! Buổi chiều mình mời bạn đi xem phim." },
+    { "ai": "M", "t": "好！明天见！", "doc": "Hǎo! Míngtiān jiàn!", "v": "Ok! Mai gặp nhé!" }
+  ],
+  "tuVung": [
+    { "chu": "同学", "doc": "tóngxué", "nghia": "bạn học (đồng học)", "vd": "他是我的同学。" },
+    { "chu": "名字", "doc": "míngzi", "nghia": "tên (danh tự)", "vd": "你叫什么名字？" },
+    { "chu": "哪国人", "doc": "nǎ guó rén", "nghia": "người nước nào", "vd": "你是哪国人？— 我是越南人。" },
+    { "chu": "认识", "doc": "rènshi", "nghia": "quen biết, làm quen (nhận thức)", "vd": "认识你很高兴。" },
+    { "chu": "高兴", "doc": "gāoxìng", "nghia": "vui (cao hứng)", "vd": "今天我很高兴。" },
+    { "chu": "住", "doc": "zhù", "nghia": "ở, sống (trú)", "vd": "你住哪儿？" },
+    { "chu": "喜欢", "doc": "xǐhuan", "nghia": "thích (hỉ hoan)", "vd": "我喜欢喝茶。" },
+    { "chu": "电影", "doc": "diànyǐng", "nghia": "phim, điện ảnh", "vd": "我们去看电影吧。" },
+    { "chu": "会", "doc": "huì", "nghia": "biết (làm việc gì nhờ học mà có)", "vd": "我会说汉语。" },
+    { "chu": "请", "doc": "qǐng", "nghia": "mời; xin mời (thỉnh)", "vd": "我请你吃饭。" }
+  ],
+  "yNghia": "Ở nơi đất khách, món ăn quê nhà là \"tấm danh thiếp\" ấm áp nhất. Minh không có gì nhiều để giới thiệu về mình — nhưng một bữa cơm Việt mời người hàng xóm mới đủ để biến người lạ thành bạn.",
+  "meo": [
+    "你呢？ = \"Còn bạn thì sao?\" — hỏi lại đúng câu vừa nói mà không phải lặp cả câu.",
+    "会 + động từ = biết làm (kỹ năng phải học mới có): 我会做越南菜, 我会说汉语.",
+    "Hỏi quốc tịch: 你是哪国人？ → trả lời: 我是 + tên nước + 人 (我是越南人).",
+    "请 vừa là \"mời\" (请坐 — mời ngồi) vừa là \"mời, bao\" (我请你看电影 — mình mời bạn xem phim, mình trả tiền)."
+  ],
+  "cauHoi": [
+    { "hoi": "Nhà Minh ở đâu?", "chon": ["Hà Nội", "Bắc Kinh", "Thành phố Hồ Chí Minh"], "dung": 0, "giai": "Minh nói: 我家在河内 — nhà mình ở Hà Nội." },
+    { "hoi": "Lý Nguyệt thích làm gì?", "chon": ["Nấu ăn", "Học tiếng Việt", "Xem phim"], "dung": 2, "giai": "Lý Nguyệt nói: 我喜欢看电影 — mình thích xem phim." },
+    { "hoi": "Trưa mai hai người sẽ làm gì?", "chon": ["Đi xem phim", "Ăn món Việt ở chỗ Minh", "Đi mua hoa quả"], "dung": 1, "giai": "Minh mời: 明天中午你来我这儿吃饭; xem phim là buổi chiều (下午)." },
+    { "hoi": "\"我会做越南菜\" nghĩa là gì?", "chon": ["Mình sẽ đi Việt Nam", "Mình thích ăn món Việt", "Mình biết nấu món Việt"], "dung": 2, "giai": "会 + động từ = biết làm; 做菜 = nấu món ăn." }
+  ]
+}

@@ -1,0 +1,72 @@
+{
+  "id": "zh-hsk4-02",
+  "nn": "zh",
+  "cap": "HSK4",
+  "so": 2,
+  "tieuDe": "报价单发错了",
+  "tieuDeViet": "Gửi nhầm bảng báo giá",
+  "moTa": "Mới vào làm ở một công ty Trung Quốc được hai tháng, Anh lỡ gửi cho khách bảng báo giá cũ. Cô quyết định báo ngay cho giám đốc Trương — và nghe ông kể về sai lầm của chính mình hồi mới đi làm.",
+  "chuDe": "Công sở",
+  "bieuTuong": "doc.text.magnifyingglass",
+  "nguoi": [
+    { "ma": "Y", "ten": "Anh", "giong": "zh-nu", "vai": "trợ lý kinh doanh người Việt" },
+    { "ma": "Z", "ten": "Giám đốc Trương", "giong": "zh-nam", "vai": "quản lý trực tiếp" }
+  ],
+  "loi": [
+    { "ai": "Y", "t": "张经理，您现在有空吗？我有件事想跟您说。", "doc": "Zhāng jīnglǐ, nín xiànzài yǒu kòng ma? Wǒ yǒu jiàn shì xiǎng gēn nín shuō.", "v": "Giám đốc Trương, bây giờ anh có rảnh không ạ? Em có việc muốn báo với anh." },
+    { "ai": "Z", "t": "有，坐吧。怎么了？你脸色不太好。", "doc": "Yǒu, zuò ba. Zěnme le? Nǐ liǎnsè bú tài hǎo.", "v": "Rảnh, ngồi đi. Sao thế? Sắc mặt em không tốt lắm." },
+    { "ai": "Y", "t": "对不起，我犯了一个错误。今天上午发给客户的报价单，被我发错了。", "doc": "Duìbuqǐ, wǒ fàn le yí ge cuòwù. Jīntiān shàngwǔ fā gěi kèhù de bàojiàdān, bèi wǒ fā cuò le.", "v": "Em xin lỗi, em đã mắc lỗi. Bảng báo giá gửi cho khách sáng nay, em gửi nhầm rồi." },
+    { "ai": "Z", "t": "发错了？是哪里错了？", "doc": "Fā cuò le? Shì nǎlǐ cuò le?", "v": "Gửi nhầm à? Nhầm ở chỗ nào?" },
+    { "ai": "Y", "t": "我发的是上个月的旧版本，价格比新的低百分之五。", "doc": "Wǒ fā de shì shàng ge yuè de jiù bǎnběn, jiàgé bǐ xīn de dī bǎi fēn zhī wǔ.", "v": "Em gửi bản cũ của tháng trước, giá thấp hơn bản mới năm phần trăm." },
+    { "ai": "Z", "t": "客户回复了吗？", "doc": "Kèhù huífù le ma?", "v": "Khách đã trả lời chưa?" },
+    { "ai": "Y", "t": "还没有。我是十分钟前才发现的，就马上来找您了。", "doc": "Hái méiyǒu. Wǒ shì shí fēnzhōng qián cái fāxiàn de, jiù mǎshàng lái zhǎo nín le.", "v": "Chưa ạ. Mười phút trước em mới phát hiện ra, nên đến gặp anh ngay." },
+    { "ai": "Z", "t": "好，幸亏你发现得早。别着急，我们一起想办法。", "doc": "Hǎo, xìngkuī nǐ fāxiàn de zǎo. Bié zháojí, wǒmen yìqǐ xiǎng bànfǎ.", "v": "Được, may mà em phát hiện sớm. Đừng cuống, chúng ta cùng nghĩ cách." },
+    { "ai": "Y", "t": "我真的很担心。刚来公司两个月就出这种问题……", "doc": "Wǒ zhēn de hěn dānxīn. Gāng lái gōngsī liǎng ge yuè jiù chū zhè zhǒng wèntí……", "v": "Em lo lắm. Mới vào công ty hai tháng đã gây ra chuyện thế này…" },
+    { "ai": "Z", "t": "说实话，我刚工作的时候，犯过比这个大得多的错误。", "doc": "Shuō shíhuà, wǒ gāng gōngzuò de shíhou, fàn guo bǐ zhège dà de duō de cuòwù.", "v": "Nói thật, hồi mới đi làm anh từng mắc lỗi còn lớn hơn thế này nhiều." },
+    { "ai": "Y", "t": "真的吗？", "doc": "Zhēn de ma?", "v": "Thật ạ?" },
+    { "ai": "Z", "t": "真的。我把一份合同寄到了别的公司，而且三天以后才告诉经理。", "doc": "Zhēn de. Wǒ bǎ yí fèn hétong jì dào le bié de gōngsī, érqiě sān tiān yǐhòu cái gàosu jīnglǐ.", "v": "Thật. Anh gửi nhầm một bản hợp đồng sang công ty khác, mà ba ngày sau mới báo cho sếp." },
+    { "ai": "Y", "t": "三天？为什么等那么久？", "doc": "Sān tiān? Wèishénme děng nàme jiǔ?", "v": "Ba ngày ạ? Sao anh đợi lâu thế?" },
+    { "ai": "Z", "t": "因为我害怕，总想自己偷偷解决。结果问题越来越大，最后差点儿丢了那个客户。", "doc": "Yīnwèi wǒ hàipà, zǒng xiǎng zìjǐ tōutōu jiějué. Jiéguǒ wèntí yuè lái yuè dà, zuìhòu chàdiǎnr diū le nàge kèhù.", "v": "Vì anh sợ, cứ muốn tự mình lặng lẽ giải quyết. Kết quả là chuyện ngày càng to, cuối cùng suýt mất luôn khách hàng đó." },
+    { "ai": "Y", "t": "原来经理也有这样的经历。", "doc": "Yuánlái jīnglǐ yě yǒu zhèyàng de jīnglì.", "v": "Hóa ra giám đốc cũng từng trải qua chuyện như vậy." },
+    { "ai": "Z", "t": "所以你今天马上来告诉我，我觉得你做得很对。错误本身并不可怕，可怕的是不说。", "doc": "Suǒyǐ nǐ jīntiān mǎshàng lái gàosu wǒ, wǒ juéde nǐ zuò de hěn duì. Cuòwù běnshēn bìng bù kěpà, kěpà de shì bù shuō.", "v": "Cho nên hôm nay em đến báo anh ngay, anh thấy em làm rất đúng. Bản thân sai lầm không đáng sợ, đáng sợ là không nói ra." },
+    { "ai": "Y", "t": "那我现在应该怎么做？", "doc": "Nà wǒ xiànzài yīnggāi zěnme zuò?", "v": "Vậy bây giờ em nên làm gì ạ?" },
+    { "ai": "Z", "t": "第一，马上给客户打电话，说明情况，并且道歉。", "doc": "Dì yī, mǎshàng gěi kèhù dǎ diànhuà, shuōmíng qíngkuàng, bìngqiě dàoqiàn.", "v": "Thứ nhất, gọi điện ngay cho khách, giải thích tình hình và xin lỗi." },
+    { "ai": "Z", "t": "第二，把正确的报价单重新发一遍，在邮件里写清楚哪个是新版本。", "doc": "Dì èr, bǎ zhèngquè de bàojiàdān chóngxīn fā yí biàn, zài yóujiàn li xiě qīngchu nǎge shì xīn bǎnběn.", "v": "Thứ hai, gửi lại bảng báo giá đúng một lần nữa, trong email ghi rõ bản nào là bản mới." },
+    { "ai": "Y", "t": "好的。如果客户坚持要按旧价格呢？", "doc": "Hǎo de. Rúguǒ kèhù jiānchí yào àn jiù jiàgé ne?", "v": "Vâng. Nếu khách nhất quyết đòi theo giá cũ thì sao ạ?" },
+    { "ai": "Z", "t": "那就由我来跟他们谈。他们是我们的老客户，大家互相理解，问题不大。", "doc": "Nà jiù yóu wǒ lái gēn tāmen tán. Tāmen shì wǒmen de lǎo kèhù, dàjiā hùxiāng lǐjiě, wèntí bú dà.", "v": "Thì để anh nói chuyện với họ. Họ là khách quen của mình, hai bên hiểu nhau, không có gì to tát." },
+    { "ai": "Y", "t": "谢谢您，张经理。以后发文件以前，我一定先检查两遍。", "doc": "Xièxie nín, Zhāng jīnglǐ. Yǐhòu fā wénjiàn yǐqián, wǒ yídìng xiān jiǎnchá liǎng biàn.", "v": "Em cảm ơn anh. Sau này trước khi gửi tài liệu, em nhất định kiểm tra hai lần." },
+    { "ai": "Z", "t": "好习惯。另外，你可以在文件名里加上日期，这样就不容易弄错了。", "doc": "Hǎo xíguàn. Lìngwài, nǐ kěyǐ zài wénjiàn míng li jiā shang rìqī, zhèyàng jiù bù róngyì nòng cuò le.", "v": "Thói quen tốt. Ngoài ra, em có thể thêm ngày tháng vào tên tệp, như vậy sẽ khó nhầm hơn." },
+    { "ai": "Y", "t": "好主意！我现在就去打电话。", "doc": "Hǎo zhǔyi! Wǒ xiànzài jiù qù dǎ diànhuà.", "v": "Ý hay quá! Em đi gọi điện ngay đây." },
+    { "ai": "Z", "t": "去吧。记住，说的时候要冷静，不用一直说对不起。", "doc": "Qù ba. Jìzhù, shuō de shíhou yào lěngjìng, bú yòng yìzhí shuō duìbuqǐ.", "v": "Đi đi. Nhớ nhé, lúc nói phải bình tĩnh, không cần cứ xin lỗi mãi." },
+    { "ai": "Y", "t": "明白！我会先说清楚情况，然后告诉他们我们打算怎么解决。", "doc": "Míngbai! Wǒ huì xiān shuō qīngchu qíngkuàng, ránhòu gàosu tāmen wǒmen dǎsuàn zěnme jiějué.", "v": "Em hiểu rồi! Em sẽ nói rõ tình hình trước, rồi cho họ biết mình định giải quyết thế nào." }
+  ],
+  "tuVung": [
+    { "chu": "错误", "doc": "cuòwù", "nghia": "sai lầm, lỗi (thác ngộ); 犯错误 = mắc lỗi", "vd": "每个人都会犯错误。" },
+    { "chu": "报价单", "doc": "bàojiàdān", "nghia": "bảng báo giá (báo giá đơn)", "vd": "请把报价单发给我。" },
+    { "chu": "被我发错了", "doc": "bèi wǒ fā cuò le", "nghia": "bị tôi gửi nhầm (câu bị động với 被: B 被 A + động từ + kết quả)", "vd": "我的蛋糕被弟弟吃了。" },
+    { "chu": "幸亏", "doc": "xìngkuī", "nghia": "may mà, may sao (hạnh khuy)", "vd": "幸亏你提醒我，不然我就忘了。" },
+    { "chu": "偷偷", "doc": "tōutōu", "nghia": "lén lút, lặng lẽ (thâu thâu)", "vd": "他偷偷地哭了。" },
+    { "chu": "越来越", "doc": "yuè lái yuè", "nghia": "ngày càng, càng ngày càng", "vd": "天气越来越冷了。" },
+    { "chu": "经历", "doc": "jīnglì", "nghia": "trải nghiệm, từng trải (kinh lịch) — khác 经理 jīnglǐ (giám đốc)", "vd": "这是一次难忘的经历。" },
+    { "chu": "并不", "doc": "bìng bù", "nghia": "hoàn toàn không, chẳng hề (nhấn mạnh phủ định)", "vd": "这个问题并不难。" },
+    { "chu": "道歉", "doc": "dàoqiàn", "nghia": "xin lỗi (đạo khiểm)", "vd": "你应该向他道歉。" },
+    { "chu": "重新", "doc": "chóngxīn", "nghia": "lại, làm lại từ đầu (重 ở đây đọc chóng)", "vd": "我们重新开始吧。" },
+    { "chu": "坚持", "doc": "jiānchí", "nghia": "kiên trì; khăng khăng (kiên trì)", "vd": "他坚持要自己付钱。" },
+    { "chu": "冷静", "doc": "lěngjìng", "nghia": "bình tĩnh (lãnh tĩnh)", "vd": "遇到问题要冷静。" }
+  ],
+  "yNghia": "Lỗi nhỏ nói ra sớm chỉ là một việc cần sửa; lỗi giấu đi mới thành chuyện lớn. Người quản lý tốt không đòi nhân viên không bao giờ sai — họ cần biết sớm để cùng sửa. Can đảm nhận lỗi cũng là một kỹ năng nghề nghiệp.",
+  "meo": [
+    "被 (bị động): chủ thể chịu tác động + 被 + người làm + động từ + kết quả: 报价单被我发错了. Nói \"被我…\" là cách nhận trách nhiệm rõ ràng.",
+    "才 vs 就: 十分钟前才发现 (mới phát hiện — muộn), 就马上来找您了 (thì đến ngay — nhanh).",
+    "越来越 + tính từ = ngày càng…: 问题越来越大. 并不 + tính từ = chẳng hề…: 并不可怕 (nhấn mạnh hơn 不).",
+    "Lượng từ cho số lần làm trọn vẹn: 一遍 / 两遍 (发一遍, 检查两遍). 一 đọc yí trước thanh 4: yí biàn.",
+    "Chữ đa âm/dễ nhầm: 重新 chóngxīn ≠ 重要 zhòngyào; 有空 yǒu kòng ≠ 空气 kōngqì; 经理 jīnglǐ (giám đốc) ≠ 经历 jīnglì (trải nghiệm)."
+  ],
+  "cauHoi": [
+    { "hoi": "Anh đã gửi nhầm thứ gì cho khách?", "chon": ["Hợp đồng của công ty khác", "Bảng báo giá cũ, giá thấp hơn 5%", "Email riêng tư"], "dung": 1, "giai": "我发的是上个月的旧版本，价格比新的低百分之五." },
+    { "hoi": "Hồi mới đi làm, giám đốc Trương đã làm gì sai?", "chon": ["Gửi hợp đồng sang công ty khác, ba ngày sau mới báo sếp", "Đi làm muộn ba ngày", "Báo sai giá cho khách"], "dung": 0, "giai": "我把一份合同寄到了别的公司，而且三天以后才告诉经理." },
+    { "hoi": "Theo giám đốc Trương, điều gì mới thật sự đáng sợ?", "chon": ["Bị khách phàn nàn", "Gửi email muộn", "Mắc lỗi mà không nói ra"], "dung": 2, "giai": "错误本身并不可怕，可怕的是不说." },
+    { "hoi": "Ông gợi ý cách nào để khỏi nhầm tệp lần sau?", "chon": ["Chỉ gửi tệp vào buổi sáng", "Thêm ngày tháng vào tên tệp", "Nhờ đồng nghiệp gửi giúp"], "dung": 1, "giai": "你可以在文件名里加上日期，这样就不容易弄错了." },
+    { "hoi": "Trong 重新, chữ 重 đọc là gì?", "chon": ["zhòng", "chóng", "zhǒng"], "dung": 1, "giai": "重新 chóngxīn (lại từ đầu); 重 đọc zhòng khi nghĩa là \"nặng, quan trọng\"." }
+  ]
+}

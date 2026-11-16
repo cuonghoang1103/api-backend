@@ -210,6 +210,7 @@ const ctLanguageDocRoutes = (await import(path.join(__dirname, 'routes', 'ctlang
 // CT Language — đồng bộ sổ tay theo tài khoản + sổ tay chuyên ngành (15/11/2026) — cũng gắn TRƯỚC /ctlanguage
 const ctLanguageSoTuRoutes = (await import(path.join(__dirname, 'routes', 'ctlanguage.soTu.routes.js'))).default;
 const ctLanguageSoChuyenNganhRoutes = (await import(path.join(__dirname, 'routes', 'ctlanguage.soChuyenNganh.routes.js'))).default;
+const ctLanguagePodcastRoutes = (await import(path.join(__dirname, 'routes', 'ctlanguage.podcast.routes.js'))).default;
 // CT Language — luyện phát âm chấm bằng Azure (15/11/2026) — cũng gắn TRƯỚC /ctlanguage
 const ctLanguagePhatAmRoutes = (await import(path.join(__dirname, 'routes', 'ctlanguage.phatAm.routes.js'))).default;
 // CT Language — trò chơi: bảng xếp hạng + thách đấu bạn bè (16/11/2026) — cũng gắn TRƯỚC /ctlanguage
@@ -738,6 +739,7 @@ app.use('/api/v1/ctlanguage/hoi-gau', ctLanguageHoiGauRoutes);
 app.use('/api/v1/ctlanguage/doc', ctLanguageDocRoutes);
 app.use('/api/v1/ctlanguage/so-tu', ctLanguageSoTuRoutes);
 app.use('/api/v1/ctlanguage/so-chuyen-nganh', ctLanguageSoChuyenNganhRoutes);
+app.use('/api/v1/ctlanguage/podcast', ctLanguagePodcastRoutes);
 app.use('/api/v1/ctlanguage/phat-am', ctLanguagePhatAmRoutes);
 app.use('/api/v1/ctlanguage/tro-choi', ctLanguageTroChoiRoutes);
 // PHẢI đứng TRƯỚC router chung: router chung có `router.use(authenticate)` chặn mọi đường không khớp của khách.

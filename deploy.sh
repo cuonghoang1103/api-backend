@@ -1026,6 +1026,7 @@ for route in \
     ctlanguage/hoi-gau/luot \
     ctlanguage/so-tu/trang-thai \
     ctlanguage/so-chuyen-nganh \
+    ctlanguage/podcast \
     ctlanguage/phat-am/luot \
     ctlanguage/tro-choi/danh-muc \
     xuong-3d/bo-phan \

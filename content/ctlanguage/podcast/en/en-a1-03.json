@@ -1,0 +1,58 @@
+{
+  "id": "en-a1-03",
+  "nn": "en",
+  "cap": "A1",
+  "so": 3,
+  "tieuDe": "This Is My Family",
+  "tieuDeViet": "Đây là gia đình mình",
+  "moTa": "Minh cho Sophie xem ảnh gia đình chụp dịp Tết. Cách giới thiệu người thân, nghề nghiệp và tính cách đơn giản.",
+  "chuDe": "Gia đình",
+  "bieuTuong": "house.fill",
+  "nguoi": [
+    { "ma": "S", "ten": "Sophie", "giong": "us-nu", "vai": "bạn cùng lớp" },
+    { "ma": "M", "ten": "Minh", "giong": "uk-nam", "vai": "sinh viên" }
+  ],
+  "loi": [
+    { "ai": "S", "t": "Minh, who is in this photo?", "v": "Minh ơi, ai trong ảnh này vậy?" },
+    { "ai": "M", "t": "That's my family. It's from Tet, our New Year.", "v": "Đó là gia đình mình. Ảnh chụp dịp Tết, năm mới của người Việt." },
+    { "ai": "S", "t": "Oh, nice! Who is this man?", "v": "Ồ, đẹp quá! Người đàn ông này là ai?" },
+    { "ai": "M", "t": "That's my dad. He is a farmer. He is very kind.", "v": "Đó là bố mình. Bố là nông dân. Bố hiền lắm." },
+    { "ai": "S", "t": "And the woman next to him?", "v": "Còn người phụ nữ đứng cạnh bác?" },
+    { "ai": "M", "t": "That's my mum. She is a teacher. She is very funny.", "v": "Đó là mẹ mình. Mẹ là giáo viên. Mẹ vui tính lắm." },
+    { "ai": "S", "t": "Who are the two kids?", "v": "Hai đứa nhỏ là ai vậy?" },
+    { "ai": "M", "t": "My little sister and my little brother. She is ten, and he is six.", "v": "Em gái và em trai mình. Em gái mười tuổi, em trai sáu tuổi." },
+    { "ai": "S", "t": "They look happy! And this old lady?", "v": "Trông tụi nhỏ vui ghê! Còn bà cụ này?" },
+    { "ai": "M", "t": "That's my grandma. She lives with us. She cooks the best food.", "v": "Đó là bà mình. Bà sống cùng nhà mình. Bà nấu ăn ngon nhất." },
+    { "ai": "S", "t": "You have a big family. I only have my mum.", "v": "Nhà bạn đông người ghê. Mình chỉ có mẹ thôi." },
+    { "ai": "M", "t": "Do you miss her?", "v": "Bạn có nhớ mẹ không?" },
+    { "ai": "S", "t": "Yes, a lot. But we talk every Sunday.", "v": "Có, nhớ lắm. Nhưng Chủ nhật nào hai mẹ con cũng nói chuyện." },
+    { "ai": "M", "t": "That's nice. I don't call my family very often.", "v": "Hay thật. Mình không hay gọi điện về nhà lắm." },
+    { "ai": "S", "t": "Why not? It's only five minutes.", "v": "Sao vậy? Chỉ mất năm phút thôi mà." },
+    { "ai": "M", "t": "You're right. I can call them tonight.", "v": "Bạn nói đúng. Tối nay mình sẽ gọi về nhà." },
+    { "ai": "S", "t": "Good idea! Say hello to your grandma for me.", "v": "Ý hay đó! Gửi lời chào bà giúp mình nhé." }
+  ],
+  "tuVung": [
+    { "chu": "family", "doc": "/ˈfæməli/", "nghia": "gia đình", "vd": "I love my family." },
+    { "chu": "farmer", "doc": "/ˈfɑːmə(r)/", "nghia": "nông dân", "vd": "My uncle is a farmer." },
+    { "chu": "kind", "doc": "/kaɪnd/", "nghia": "tốt bụng, hiền", "vd": "Our teacher is very kind." },
+    { "chu": "funny", "doc": "/ˈfʌni/", "nghia": "vui tính, buồn cười", "vd": "My brother is so funny." },
+    { "chu": "next to", "doc": "/nekst tuː/", "nghia": "bên cạnh", "vd": "The bank is next to the school." },
+    { "chu": "little sister", "doc": "/ˈlɪtl ˈsɪstə(r)/", "nghia": "em gái", "vd": "My little sister is five." },
+    { "chu": "grandma", "doc": "/ˈɡrænmɑː/", "nghia": "bà (cách gọi thân mật)", "vd": "My grandma lives in Hue." },
+    { "chu": "miss", "doc": "/mɪs/", "nghia": "nhớ (ai đó)", "vd": "I miss my parents." },
+    { "chu": "often", "doc": "/ˈɒfn/", "nghia": "thường xuyên", "vd": "How often do you call home?" }
+  ],
+  "yNghia": "Một cuộc gọi năm phút chẳng tốn bao nhiêu, nhưng với người thân ở xa lại là cả một niềm vui. Đừng đợi đến Tết mới hỏi thăm gia đình — \"tối nay\" luôn là lúc thích hợp.",
+  "meo": [
+    "Giới thiệu người trong ảnh: \"That's my dad.\" / \"This is my mum.\" — hỏi lại: \"Who is this?\" (một người), \"Who are they?\" (nhiều người).",
+    "Nói nghề nhớ có \"a/an\": \"He is a farmer.\" \"She is a teacher.\" — không nói \"She is teacher.\"",
+    "Em gái/em trai: \"little/younger sister, little/younger brother\"; chị/anh: \"older sister, older brother\".",
+    "Người Anh viết \"mum\", người Mỹ viết \"mom\" — cùng nghĩa là mẹ."
+  ],
+  "cauHoi": [
+    { "hoi": "Bố của Minh làm nghề gì?", "chon": ["Giáo viên", "Nông dân", "Đầu bếp"], "dung": 1, "giai": "\"That's my dad. He is a farmer.\"" },
+    { "hoi": "Ai sống cùng nhà với gia đình Minh?", "chon": ["Bà của Minh", "Dì của Minh", "Sophie"], "dung": 0, "giai": "\"That's my grandma. She lives with us.\"" },
+    { "hoi": "Sophie nói chuyện với mẹ khi nào?", "chon": ["Mỗi tối", "Mỗi dịp Tết", "Mỗi Chủ nhật"], "dung": 2, "giai": "\"We talk every Sunday.\"" },
+    { "hoi": "\"Do you miss her?\" nghĩa là gì?", "chon": ["Bạn có gặp mẹ không?", "Bạn có nhớ mẹ không?", "Bạn có gọi cho mẹ không?"], "dung": 1, "giai": "\"miss someone\" = nhớ ai đó." }
+  ]
+}

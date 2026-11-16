@@ -1,0 +1,71 @@
+{
+  "id": "ja-n3-01",
+  "nn": "ja",
+  "cap": "N3",
+  "so": 1,
+  "tieuDe": "下の部屋からの手紙",
+  "tieuDeViet": "Lá thư từ phòng tầng dưới",
+  "moTa": "Thảo nhận được một lá thư than phiền tiếng ồn ban đêm từ phòng tầng dưới. Bà chủ nhà khuyên Thảo xuống gặp trực tiếp. Học cách xin lỗi hàng xóm, nói về thói quen sẽ thay đổi, và cách người Nhật nói “đôi bên cùng thông cảm”.",
+  "chuDe": "Nhà trọ & hàng xóm",
+  "bieuTuong": "house.fill",
+  "nguoi": [
+    { "ma": "T", "ten": "タオ", "giong": "ja-nu", "vai": "du học sinh, sống ở căn hộ tầng 2" },
+    { "ma": "O", "ten": "大家さん", "giong": "ja2-nu", "vai": "bà chủ nhà" },
+    { "ma": "M", "ten": "森さん", "giong": "ja-nam", "vai": "hàng xóm tầng 1, làm ở tiệm bánh mì" }
+  ],
+  "loi": [
+    { "ai": "O", "t": "タオさん、ちょっといい？ポストにこれが入っていたんだけど。", "doc": "タオさん、ちょっといい？ポストにこれがはいっていたんだけど。", "v": "Thảo ơi, bác hỏi chút được không? Có cái này trong hòm thư." },
+    { "ai": "T", "t": "手紙ですか。……「夜遅く、足音と話し声がうるさいです。下の部屋の者より」。", "doc": "てがみですか。……「よるおそく、あしおととはなしごえがうるさいです。したのへやのものより」。", "v": "Thư ạ? …“Đêm khuya tiếng bước chân và tiếng nói chuyện rất ồn. Người ở phòng dưới.”" },
+    { "ai": "T", "t": "えっ、私の部屋のことですか。全然気づきませんでした。", "doc": "えっ、わたしのへやのことですか。ぜんぜんきづきませんでした。", "v": "Ơ, là nói phòng cháu ạ? Cháu hoàn toàn không để ý." },
+    { "ai": "O", "t": "日本のアパートは壁も床も薄いから、思ったより音が響くのよ。", "doc": "にほんのアパートはかべもゆかもうすいから、おもったよりおとがひびくのよ。", "v": "Căn hộ ở Nhật tường với sàn đều mỏng, nên tiếng vọng xuống nhiều hơn cháu nghĩ đấy." },
+    { "ai": "T", "t": "そういえば、毎晩アルバイトから帰ってから、11時過ぎに家族とビデオ通話しているんです。", "doc": "そういえば、まいばんアルバイトからかえってから、じゅういちじすぎにかぞくとビデオつうわしているんです。", "v": "Nghĩ lại thì tối nào đi làm thêm về, cháu cũng gọi video cho gia đình lúc hơn 11 giờ." },
+    { "ai": "O", "t": "それに、話しながら部屋の中を歩き回ったりしてない？", "doc": "それに、はなしながらへやのなかをあるきまわったりしてない？", "v": "Với lại, cháu có vừa nói vừa đi lại trong phòng không?" },
+    { "ai": "T", "t": "してます……。話しながら、料理したり片付けたり。", "doc": "してます……。はなしながら、りょうりしたりかたづけたり。", "v": "Có ạ… Vừa nói vừa nấu ăn, dọn dẹp." },
+    { "ai": "O", "t": "怒っているというより、困っているんだと思う。一度、直接謝りに行ってみたら？", "doc": "おこっているというより、こまっているんだとおもう。いちど、ちょくせつあやまりにいってみたら？", "v": "Bác nghĩ người ta không phải giận mà là đang khổ sở thôi. Cháu thử xuống xin lỗi trực tiếp một lần xem?" },
+    { "ai": "T", "t": "直接ですか。怖いなあ……。でも、そうします。", "doc": "ちょくせつですか。こわいなあ……。でも、そうします。", "v": "Trực tiếp ạ? Sợ quá… Nhưng cháu sẽ làm vậy." },
+    { "ai": "M", "t": "はい……どちら様ですか。", "doc": "はい……どちらさまですか。", "v": "Vâng… ai đấy ạ?" },
+    { "ai": "T", "t": "上の部屋のタオと申します。お手紙を読みました。夜うるさくして、本当に申し訳ありませんでした。", "doc": "うえのへやのタオともうします。おてがみをよみました。よるうるさくして、ほんとうにもうしわけありませんでした。", "v": "Tôi là Thảo ở phòng trên. Tôi đã đọc thư của anh. Thật sự xin lỗi vì buổi tối đã làm ồn." },
+    { "ai": "M", "t": "ああ……わざわざ来てくれたんですか。こちらこそ、手紙なんかで、すみません。", "doc": "ああ……わざわざきてくれたんですか。こちらこそ、てがみなんかで、すみません。", "v": "À… cô cất công xuống tận đây sao. Tôi mới phải xin lỗi vì chỉ viết thư." },
+    { "ai": "M", "t": "実は僕、パン屋で働いていて、朝4時に起きなきゃいけないんです。だから、夜は10時には寝るようにしていて。", "doc": "じつはぼく、パンやではたらいていて、あさよじにおきなきゃいけないんです。だから、よるはじゅうじにはねるようにしていて。", "v": "Thật ra tôi làm ở tiệm bánh mì, phải dậy lúc 4 giờ sáng. Nên tôi cố gắng đi ngủ lúc 10 giờ tối." },
+    { "ai": "T", "t": "そうだったんですか。知らずに、ご迷惑をおかけしてしまって……。", "doc": "そうだったんですか。しらずに、ごめいわくをおかけしてしまって……。", "v": "Ra là vậy. Tôi không biết nên đã làm phiền anh…" },
+    { "ai": "T", "t": "これからは、10時を過ぎたら、イヤホンを使って小さい声で話すようにします。", "doc": "これからは、じゅうじをすぎたら、イヤホンをつかってちいさいこえではなすようにします。", "v": "Từ giờ, sau 10 giờ tôi sẽ cố dùng tai nghe và nói nhỏ." },
+    { "ai": "T", "t": "それから、部屋にラグを敷くことにしました。足音が少しは小さくなると思います。", "doc": "それから、へやにラグをしくことにしました。あしおとがすこしはちいさくなるとおもいます。", "v": "Thêm nữa, tôi đã quyết định trải thảm trong phòng. Chắc tiếng bước chân sẽ nhỏ đi phần nào." },
+    { "ai": "M", "t": "そこまでしてくれるんですか。助かります。", "doc": "そこまでしてくれるんですか。たすかります。", "v": "Cô làm đến mức đó luôn sao. Vậy thì tốt cho tôi quá." },
+    { "ai": "M", "t": "僕も、朝早く出る時のドアの音がうるさかったら、言ってくださいね。お互い様ですから。", "doc": "ぼくも、あさはやくでるときのドアのおとがうるさかったら、いってくださいね。おたがいさまですから。", "v": "Còn tôi, nếu tiếng cửa lúc sáng sớm tôi đi làm có ồn thì cô cứ nói nhé. Đôi bên như nhau cả mà." },
+    { "ai": "T", "t": "ありがとうございます。あの、ベトナムのコーヒーなんですが、よかったらどうぞ。", "doc": "ありがとうございます。あの、ベトナムのコーヒーなんですが、よかったらどうぞ。", "v": "Cảm ơn anh. À, đây là cà phê Việt Nam, nếu anh không chê thì nhận giúp tôi." },
+    { "ai": "M", "t": "えっ、いいんですか。じゃあ今度、うちの店のパンを持っていきますよ。", "doc": "えっ、いいんですか。じゃあこんど、うちのみせのパンをもっていきますよ。", "v": "Ơ, được sao? Vậy lần tới tôi mang bánh mì của tiệm lên cho cô." },
+    { "ai": "O", "t": "どうだった？", "doc": "どうだった？", "v": "Sao rồi cháu?" },
+    { "ai": "T", "t": "森さん、すごくいい人でした。手紙だけ読んで、怖い人だと思い込んでいました。", "doc": "もりさん、すごくいいひとでした。てがみだけよんで、こわいひとだとおもいこんでいました。", "v": "Anh Mori tốt lắm bác ạ. Chỉ đọc mỗi lá thư mà cháu cứ đinh ninh là người đáng sợ." },
+    { "ai": "O", "t": "顔を見て話すと、たいていのことはうまくいくものよ。", "doc": "かおをみてはなすと、たいていのことはうまくいくものよ。", "v": "Gặp mặt mà nói chuyện thì phần lớn mọi việc đều êm cả thôi." },
+    { "ai": "T", "t": "はい。来週、パンをもらう約束までしちゃいました。", "doc": "はい。らいしゅう、パンをもらうやくそくまでしちゃいました。", "v": "Vâng. Cháu còn được hẹn tuần sau nhận bánh mì nữa." }
+  ],
+  "tuVung": [
+    { "chu": "足音", "doc": "あしおと", "nghia": "tiếng bước chân (túc âm)", "vd": "廊下で足音が聞こえた。" },
+    { "chu": "気づきませんでした", "doc": "きづきませんでした", "nghia": "đã không nhận ra (気づく: nhận ra, để ý)", "vd": "メールに気づきませんでした。" },
+    { "chu": "響く", "doc": "ひびく", "nghia": "vang, dội (âm thanh lan ra)", "vd": "夜は小さい音もよく響く。" },
+    { "chu": "歩き回ったり", "doc": "あるきまわったり", "nghia": "đi đi lại lại (歩き回る) — mẫu 〜たり〜たり", "vd": "考えながら部屋を歩き回った。" },
+    { "chu": "直接", "doc": "ちょくせつ", "nghia": "trực tiếp", "vd": "直接会って話したい。" },
+    { "chu": "寝るようにしていて", "doc": "ねるようにしていて", "nghia": "đang cố duy trì việc đi ngủ (〜ようにしている: cố tạo thói quen)", "vd": "毎日野菜を食べるようにしている。" },
+    { "chu": "知らずに", "doc": "しらずに", "nghia": "mà không biết (= 知らないで, văn viết/trang trọng hơn)", "vd": "ルールを知らずに出してしまった。" },
+    { "chu": "ご迷惑をおかけ", "doc": "ごめいわくをおかけ", "nghia": "gây phiền cho (khiêm nhường: ご迷惑をおかけしました)", "vd": "ご迷惑をおかけして、すみません。" },
+    { "chu": "敷くことにしました", "doc": "しくことにしました", "nghia": "đã quyết định trải (〜ことにする: tự mình quyết định)", "vd": "来年から一人で住むことにしました。" },
+    { "chu": "助かります", "doc": "たすかります", "nghia": "giúp ích cho tôi quá, đỡ cho tôi quá", "vd": "手伝ってくれて、助かります。" },
+    { "chu": "お互い様", "doc": "おたがいさま", "nghia": "đôi bên như nhau, ai cũng có lúc phiền người khác", "vd": "困った時はお互い様です。" },
+    { "chu": "思い込んで", "doc": "おもいこんで", "nghia": "đinh ninh, cứ tưởng chắc (思い込む)", "vd": "今日は休みだと思い込んでいた。" }
+  ],
+  "yNghia": "Một lá thư không có gương mặt dễ khiến ta tưởng tượng ra một người đáng sợ. Gặp nhau rồi mới biết bên kia chỉ là một người phải dậy lúc 4 giờ sáng. Khi hiểu hoàn cảnh của nhau, cơn bực bội nhỏ đi rất nhiều — và “お互い様” là cách người Nhật nói: ai sống cạnh ai cũng có lúc làm phiền nhau.",
+  "meo": [
+    "〜ようにする = cố gắng tạo thói quen/thay đổi hành vi: 「小さい声で話すようにします」; đang duy trì: 「10時には寝るようにしている」.",
+    "〜ことにする = TỰ MÌNH quyết định: 「ラグを敷くことにしました」. Phân biệt 〜ことになる = được quyết định (bởi hoàn cảnh/người khác).",
+    "〜ずに = 〜ないで (văn trang trọng hơn): 知らずに, 何も言わずに. Ngoại lệ: する → せずに.",
+    "〜というより = nói là … thì đúng hơn là …: 「怒っているというより、困っている」.",
+    "Xin lỗi hàng xóm: 「〜と申します」(tự giới thiệu khiêm nhường) + 「ご迷惑をおかけして、申し訳ありませんでした」. Kèm món quà nhỏ là văn hoá rất được quý."
+  ],
+  "cauHoi": [
+    { "hoi": "Lá thư than phiền về điều gì?", "chon": ["Rác đổ sai ngày", "Tiếng bước chân và tiếng nói ban đêm", "Mùi nấu ăn", "Xe đạp để sai chỗ"], "dung": 1, "giai": "「夜遅く、足音と話し声がうるさいです」." },
+    { "hoi": "Vì sao anh Mori đi ngủ sớm?", "chon": ["Vì anh bị ốm", "Vì anh làm ca đêm", "Vì anh phải dậy lúc 4 giờ sáng để làm ở tiệm bánh mì", "Vì anh có con nhỏ"], "dung": 2, "giai": "「パン屋で働いていて、朝4時に起きなきゃいけないんです」." },
+    { "hoi": "Thảo quyết định làm gì?", "chon": ["Sau 10 giờ dùng tai nghe, nói nhỏ và trải thảm", "Chuyển sang căn hộ khác", "Không gọi điện cho gia đình nữa"], "dung": 0, "giai": "「イヤホンを使って小さい声で話すようにします」「ラグを敷くことにしました」." },
+    { "hoi": "「お互い様」 thể hiện ý gì?", "chon": ["Tôi không có lỗi gì", "Cô phải xin lỗi tôi", "Hàng xóm phải giúp nhau tiền bạc", "Ai cũng có lúc làm phiền người khác, đôi bên thông cảm"], "dung": 3, "giai": "Mori nói nếu tiếng cửa buổi sáng của anh ồn thì cứ nói — hai bên như nhau." },
+    { "hoi": "Mẫu nào diễn tả “tự mình quyết định”?", "chon": ["〜ことになる", "〜ことにする", "〜ようになる"], "dung": 1, "giai": "〜ことにする: người nói tự quyết; 〜ことになる: được quyết định bởi hoàn cảnh/người khác." }
+  ]
+}

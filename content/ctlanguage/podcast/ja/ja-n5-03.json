@@ -1,0 +1,60 @@
+{
+  "id": "ja-n5-03",
+  "nn": "ja",
+  "cap": "N5",
+  "so": 3,
+  "tieuDe": "どの電車に乗りますか",
+  "tieuDeViet": "Lên chuyến tàu nào đây?",
+  "moTa": "Ngày thứ hai ở Nhật, Tuấn đi thử đường tới trường. Tàu tốc hành đang vào ga, Tuấn định nhảy lên thì nhân viên ga ngăn lại. Học cách hỏi sân ga, số ga, thời gian đi tàu.",
+  "chuDe": "Tàu điện",
+  "bieuTuong": "tram.fill",
+  "nguoi": [
+    { "ma": "A", "ten": "トゥアン", "giong": "ja-nam", "vai": "du học sinh mới sang" },
+    { "ma": "E", "ten": "駅員", "giong": "ja2-nam", "vai": "nhân viên nhà ga" }
+  ],
+  "loi": [
+    { "ai": "A", "t": "すみません、ちょっといいですか。", "doc": "すみません、ちょっといいですか。", "v": "Xin lỗi, cho tôi hỏi một chút được không ạ?" },
+    { "ai": "E", "t": "はい、どうしましたか。", "doc": "はい、どうしましたか。", "v": "Vâng, có chuyện gì vậy anh?" },
+    { "ai": "A", "t": "さくら駅へ行きたいです。何番線ですか。", "doc": "さくらえきへいきたいです。なんばんせんですか。", "v": "Tôi muốn đến ga Sakura. Tàu ở sân ga số mấy ạ?" },
+    { "ai": "E", "t": "さくら駅ですね。3番線です。あの階段を上がってください。", "doc": "さくらえきですね。さんばんせんです。あのかいだんをあがってください。", "v": "Ga Sakura nhỉ. Sân ga số 3. Anh đi lên cầu thang kia nhé." },
+    { "ai": "A", "t": "ありがとうございます。いま来る電車に乗ってもいいですか。", "doc": "ありがとうございます。いまくるでんしゃにのってもいいですか。", "v": "Cảm ơn anh. Tôi lên chuyến tàu đang tới này được không ạ?" },
+    { "ai": "E", "t": "いいえ、あれは急行です。さくら駅には止まりません。", "doc": "いいえ、あれはきゅうこうです。さくらえきにはとまりません。", "v": "Không, đó là tàu tốc hành. Nó không dừng ở ga Sakura." },
+    { "ai": "A", "t": "でも、急行は速いですよね。", "doc": "でも、きゅうこうははやいですよね。", "v": "Nhưng tàu tốc hành thì nhanh mà, đúng không ạ?" },
+    { "ai": "E", "t": "はい、とても速いです。でも、さくら駅には着きませんよ。", "doc": "はい、とてもはやいです。でも、さくらえきにはつきませんよ。", "v": "Vâng, nhanh lắm. Nhưng nó không đưa anh tới ga Sakura đâu." },
+    { "ai": "A", "t": "あ、そうですね。じゃあ、どの電車に乗りますか。", "doc": "あ、そうですね。じゃあ、どのでんしゃにのりますか。", "v": "À, đúng nhỉ. Vậy tôi lên chuyến nào ạ?" },
+    { "ai": "E", "t": "つぎの「普通」に乗ってください。10時15分です。", "doc": "つぎの「ふつう」にのってください。じゅうじじゅうごふんです。", "v": "Anh lên chuyến “tàu thường” tiếp theo nhé. Lúc 10 giờ 15." },
+    { "ai": "A", "t": "10時15分……あと5分ですね。", "doc": "じゅうじじゅうごふん……あとごふんですね。", "v": "10 giờ 15… còn 5 phút nữa nhỉ." },
+    { "ai": "E", "t": "はい。さくら駅は、四つ目の駅です。", "doc": "はい。さくらえきは、よっつめのえきです。", "v": "Vâng. Ga Sakura là ga thứ tư." },
+    { "ai": "A", "t": "四つ目ですね。時間はどのぐらいかかりますか。", "doc": "よっつめですね。じかんはどのぐらいかかりますか。", "v": "Ga thứ tư nhỉ. Mất khoảng bao lâu ạ?" },
+    { "ai": "E", "t": "12分ぐらいです。日本の電車は初めてですか。", "doc": "じゅうにふんぐらいです。にほんのでんしゃははじめてですか。", "v": "Khoảng 12 phút. Anh đi tàu ở Nhật lần đầu à?" },
+    { "ai": "A", "t": "はい。きのう日本に来ました。あしたから大学です。", "doc": "はい。きのうにほんにきました。あしたからだいがくです。", "v": "Vâng. Hôm qua tôi mới đến Nhật. Từ mai tôi bắt đầu học đại học." },
+    { "ai": "E", "t": "そうですか。いそがなくても、だいじょうぶですよ。ゆっくり行ってください。", "doc": "そうですか。いそがなくても、だいじょうぶですよ。ゆっくりいってください。", "v": "Vậy à. Không cần vội đâu. Anh cứ thong thả mà đi." },
+    { "ai": "A", "t": "はい。速い電車より、正しい電車ですね。", "doc": "はい。はやいでんしゃより、ただしいでんしゃですね。", "v": "Vâng. Tàu đúng quan trọng hơn tàu nhanh nhỉ." },
+    { "ai": "E", "t": "ははは、そのとおりです。いってらっしゃい。", "doc": "ははは、そのとおりです。いってらっしゃい。", "v": "Ha ha, đúng thế. Anh đi nhé." }
+  ],
+  "tuVung": [
+    { "chu": "駅", "doc": "えき", "nghia": "nhà ga (dịch)", "vd": "駅はどこですか。" },
+    { "chu": "何番線", "doc": "なんばんせん", "nghia": "sân ga (đường ray) số mấy", "vd": "東京行きは何番線ですか。" },
+    { "chu": "階段", "doc": "かいだん", "nghia": "cầu thang (giai đoạn)", "vd": "階段を上がってください。" },
+    { "chu": "乗って", "doc": "のって", "nghia": "lên (xe, tàu) — thể て của 乗る", "vd": "バスに乗ってください。" },
+    { "chu": "急行", "doc": "きゅうこう", "nghia": "tàu tốc hành (cấp hành) — chỉ dừng ga lớn", "vd": "急行は速いです。" },
+    { "chu": "止まりません", "doc": "とまりません", "nghia": "không dừng (止まる: dừng lại)", "vd": "この電車はつぎの駅に止まりません。" },
+    { "chu": "普通", "doc": "ふつう", "nghia": "tàu thường (dừng mọi ga); bình thường", "vd": "普通に乗ります。" },
+    { "chu": "四つ目", "doc": "よっつめ", "nghia": "cái thứ tư", "vd": "四つ目の駅でおります。" },
+    { "chu": "かかります", "doc": "かかります", "nghia": "mất, tốn (thời gian, tiền)", "vd": "大学まで30分かかります。" },
+    { "chu": "初めて", "doc": "はじめて", "nghia": "lần đầu tiên", "vd": "日本は初めてです。" }
+  ],
+  "yNghia": "Chuyến tàu nhanh nhất chưa chắc đưa bạn tới nơi bạn cần đến. Những ngày đầu ở xứ người, đi chậm mà đúng hướng vẫn hơn chạy theo người khác — và cứ hỏi, nhân viên ga luôn sẵn lòng chỉ cho bạn chuyến tàu của mình.",
+  "meo": [
+    "Muốn đi đâu: 「〜へ行きたいです」. Trợ từ へ (đọc là “e”) chỉ hướng đi.",
+    "Xin phép: động từ thể て + もいいですか — 「乗ってもいいですか」 = tôi lên được không?",
+    "Hỏi thời gian: 「どのぐらいかかりますか」 → 「12分ぐらいです」 (ぐらい = khoảng).",
+    "Ở Nhật, 普通/各駅停車 dừng mọi ga; 急行・快速・特急 bỏ qua nhiều ga — luôn xem bảng trước khi lên tàu."
+  ],
+  "cauHoi": [
+    { "hoi": "Tàu đi ga Sakura ở sân ga số mấy?", "chon": ["Số 1", "Số 3", "Số 4"], "dung": 1, "giai": "「3番線です」." },
+    { "hoi": "Vì sao Tuấn không nên lên tàu tốc hành?", "chon": ["Tàu đầy người", "Phải mua vé đắt", "Tàu không dừng ở ga Sakura", "Tàu chạy đến muộn"], "dung": 2, "giai": "「あれは急行です。さくら駅には止まりません」." },
+    { "hoi": "Đi đến ga Sakura mất khoảng bao lâu?", "chon": ["Khoảng 12 phút", "Khoảng 5 phút", "Khoảng 15 phút"], "dung": 0, "giai": "「12分ぐらいです」. 5 phút là thời gian chờ tàu, 10:15 là giờ tàu chạy." },
+    { "hoi": "Câu 「乗ってもいいですか」 dùng để làm gì?", "chon": ["Rủ ai đó đi cùng", "Ra lệnh", "Nói mình đã lên tàu", "Xin phép được lên tàu"], "dung": 3, "giai": "〜てもいいですか = “… có được không?” — mẫu xin phép." }
+  ]
+}

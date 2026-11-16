@@ -1,0 +1,58 @@
+{
+  "id": "zh-hsk1-01",
+  "nn": "zh",
+  "cap": "HSK1",
+  "so": 1,
+  "tieuDe": "苹果多少钱？",
+  "tieuDeViet": "Táo bao nhiêu tiền?",
+  "moTa": "Mai — sinh viên Việt Nam ở Bắc Kinh — ra sạp hoa quả mua táo và thử mặc cả lần đầu. Hỏi giá, đếm số lượng, nói đắt quá và cảm ơn.",
+  "chuDe": "Mua sắm",
+  "bieuTuong": "basket.fill",
+  "nguoi": [
+    { "ma": "M", "ten": "Mai", "giong": "zh-nu", "vai": "sinh viên Việt Nam" },
+    { "ma": "B", "ten": "Chú bán hoa quả", "giong": "zh-nam", "vai": "người bán hàng" }
+  ],
+  "loi": [
+    { "ai": "B", "t": "你好！你想买什么？", "doc": "Nǐ hǎo! Nǐ xiǎng mǎi shénme?", "v": "Chào cháu! Cháu muốn mua gì?" },
+    { "ai": "M", "t": "你好！我想买水果。", "doc": "Nǐ hǎo! Wǒ xiǎng mǎi shuǐguǒ.", "v": "Cháu chào chú! Cháu muốn mua hoa quả." },
+    { "ai": "B", "t": "这些苹果很好吃。", "doc": "Zhèxiē píngguǒ hěn hǎochī.", "v": "Mấy quả táo này ngon lắm." },
+    { "ai": "M", "t": "苹果多少钱？", "doc": "Píngguǒ duōshao qián?", "v": "Táo bao nhiêu tiền ạ?" },
+    { "ai": "B", "t": "一个三块。", "doc": "Yí ge sān kuài.", "v": "Ba tệ một quả." },
+    { "ai": "M", "t": "三块？太贵了！", "doc": "Sān kuài? Tài guì le!", "v": "Ba tệ ạ? Đắt quá!" },
+    { "ai": "B", "t": "你买几个？", "doc": "Nǐ mǎi jǐ ge?", "v": "Cháu mua mấy quả?" },
+    { "ai": "M", "t": "我买十个。", "doc": "Wǒ mǎi shí ge.", "v": "Cháu mua mười quả." },
+    { "ai": "B", "t": "好，十个二十五块。", "doc": "Hǎo, shí ge èrshíwǔ kuài.", "v": "Được, mười quả hai mươi lăm tệ." },
+    { "ai": "M", "t": "二十块，可以吗？", "doc": "Èrshí kuài, kěyǐ ma?", "v": "Hai mươi tệ được không chú?" },
+    { "ai": "B", "t": "你是学生吗？", "doc": "Nǐ shì xuésheng ma?", "v": "Cháu là sinh viên à?" },
+    { "ai": "M", "t": "是，我是越南学生。我在北京学习汉语。", "doc": "Shì, wǒ shì Yuènán xuésheng. Wǒ zài Běijīng xuéxí Hànyǔ.", "v": "Vâng, cháu là sinh viên Việt Nam. Cháu học tiếng Trung ở Bắc Kinh." },
+    { "ai": "B", "t": "你的汉语很好！二十块，好！", "doc": "Nǐ de Hànyǔ hěn hǎo! Èrshí kuài, hǎo!", "v": "Tiếng Trung của cháu giỏi đấy! Hai mươi tệ, được!" },
+    { "ai": "M", "t": "太好了！谢谢你！", "doc": "Tài hǎo le! Xièxie nǐ!", "v": "Tuyệt quá! Cháu cảm ơn chú!" },
+    { "ai": "B", "t": "不客气。明天再来！", "doc": "Bú kèqi. Míngtiān zài lái!", "v": "Không có gì. Mai lại đến nhé!" },
+    { "ai": "M", "t": "好，再见！", "doc": "Hǎo, zàijiàn!", "v": "Vâng, chào chú ạ!" }
+  ],
+  "tuVung": [
+    { "chu": "买", "doc": "mǎi", "nghia": "mua (Hán Việt: mãi). Đừng nhầm với 卖 mài = bán", "vd": "我想买水果。" },
+    { "chu": "水果", "doc": "shuǐguǒ", "nghia": "hoa quả, trái cây (thủy quả)", "vd": "你喜欢什么水果？" },
+    { "chu": "苹果", "doc": "píngguǒ", "nghia": "quả táo (bình quả)", "vd": "这个苹果很好吃。" },
+    { "chu": "多少钱", "doc": "duōshao qián", "nghia": "bao nhiêu tiền", "vd": "这个多少钱？" },
+    { "chu": "块", "doc": "kuài", "nghia": "tệ, đồng (cách nói khẩu ngữ của 元 yuán)", "vd": "一个三块。" },
+    { "chu": "太贵了", "doc": "tài guì le", "nghia": "đắt quá", "vd": "十块？太贵了！" },
+    { "chu": "可以吗", "doc": "kěyǐ ma", "nghia": "được không?", "vd": "我坐这儿，可以吗？" },
+    { "chu": "学习", "doc": "xuéxí", "nghia": "học, học tập (học tập)", "vd": "我在北京学习汉语。" },
+    { "chu": "不客气", "doc": "bú kèqi", "nghia": "không có gì, đừng khách sáo (đáp lại 谢谢)", "vd": "谢谢你！— 不客气。" },
+    { "chu": "再见", "doc": "zàijiàn", "nghia": "tạm biệt (tái kiến)", "vd": "老师，再见！" }
+  ],
+  "yNghia": "Mai chỉ được bớt năm tệ, nhưng thứ cô nhận về lớn hơn nhiều: một nụ cười và lời mời \"mai lại đến\". Khi bạn cố nói tiếng của người ta, dù mới vài câu, người nghe cảm nhận được sự tôn trọng — và cánh cửa tự mở ra.",
+  "meo": [
+    "太 + tính từ + 了 = \"… quá\": 太贵了 (đắt quá), 太好了 (tuyệt quá). Đừng quên chữ 了 ở cuối.",
+    "Đếm đồ vật cần lượng từ: số + 个 + danh từ (一个苹果, 十个苹果). Hỏi số lượng nhỏ dùng 几: 你买几个？",
+    "Thêm 吗 vào cuối câu kể để thành câu hỏi có/không: 你是学生 → 你是学生吗？",
+    "一 đọc thanh 2 (yí) trước thanh 4: 一个 yí ge; 不 cũng vậy: 不客气 bú kèqi. Trong tập này pinyin ghi theo cách đọc thực tế."
+  ],
+  "cauHoi": [
+    { "hoi": "Lúc đầu chú bán hàng nói một quả táo giá bao nhiêu?", "chon": ["Hai tệ", "Ba tệ", "Năm tệ"], "dung": 1, "giai": "Chú nói: 一个三块 — ba tệ một quả." },
+    { "hoi": "Cuối cùng Mai trả bao nhiêu cho mười quả táo?", "chon": ["Hai mươi lăm tệ", "Ba mươi tệ", "Hai mươi tệ"], "dung": 2, "giai": "Mai hỏi 二十块，可以吗？ và chú đồng ý: 二十块，好！" },
+    { "hoi": "Vì sao chú bán hàng vui vẻ bớt giá?", "chon": ["Mai là sinh viên và nói tiếng Trung tốt", "Táo sắp hỏng", "Mai mua hết cả sạp"], "dung": 0, "giai": "Chú hỏi Mai có phải sinh viên không, rồi khen 你的汉语很好！ trước khi đồng ý." },
+    { "hoi": "Câu nào dùng để nói \"đắt quá\"?", "chon": ["很好吃", "太贵了", "不客气"], "dung": 1, "giai": "太贵了 = đắt quá; 很好吃 = rất ngon; 不客气 = không có gì." }
+  ]
+}

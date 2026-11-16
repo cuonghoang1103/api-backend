@@ -1,0 +1,68 @@
+{
+  "id": "en-b1-02",
+  "nn": "en",
+  "cap": "B1",
+  "so": 2,
+  "tieuDe": "The Missing Part",
+  "tieuDeViet": "Phần việc còn thiếu",
+  "moTa": "Còn ba ngày nữa là thuyết trình nhóm mà Bảo vẫn chưa nộp phần của mình. Tuấn muốn báo thầy, Phương muốn hỏi chuyện trước — và câu trả lời khiến cả nhóm nhìn lại.",
+  "chuDe": "Làm việc nhóm",
+  "bieuTuong": "person.3.fill",
+  "nguoi": [
+    { "ma": "P", "ten": "Phương", "giong": "uk-nu", "vai": "nhóm trưởng" },
+    { "ma": "T", "ten": "Tuấn", "giong": "us-nam", "vai": "thành viên" },
+    { "ma": "B", "ten": "Bảo", "giong": "au-nam", "vai": "thành viên" }
+  ],
+  "loi": [
+    { "ai": "T", "t": "Phuong, the presentation is on Friday and Bao still hasn't sent his part.", "v": "Phương ơi, thứ Sáu thuyết trình rồi mà Bảo vẫn chưa gửi phần của cậu ấy." },
+    { "ai": "P", "t": "I know. I sent him two messages yesterday, but he didn't reply.", "v": "Mình biết. Hôm qua mình nhắn cậu ấy hai tin rồi, nhưng cậu ấy không trả lời." },
+    { "ai": "T", "t": "Honestly, I'm fed up. This is the third time. Let's just tell the teacher and take his name off the slides.", "v": "Thật lòng mà nói, mình chán lắm rồi. Đây là lần thứ ba. Cứ báo thầy rồi gạch tên cậu ấy khỏi slide đi." },
+    { "ai": "P", "t": "I understand why you're angry, but let's talk to him first. Maybe something's going on.", "v": "Mình hiểu vì sao cậu bực, nhưng mình nói chuyện với cậu ấy trước đã. Có khi có chuyện gì đó." },
+    { "ai": "T", "t": "Fine. But if he doesn't have a good reason, I'm not doing his work again.", "v": "Được thôi. Nhưng nếu cậu ấy không có lý do chính đáng thì mình không làm hộ nữa đâu." },
+    { "ai": "B", "t": "Hey guys, sorry I'm late. You wanted to see me?", "v": "Chào hai cậu, xin lỗi mình đến muộn. Các cậu muốn gặp mình à?" },
+    { "ai": "P", "t": "Yes. We're a bit worried, Bao. Your part was due on Monday. Is everything okay?", "v": "Ừ. Bọn mình hơi lo, Bảo à. Phần của cậu hạn là thứ Hai. Mọi chuyện ổn chứ?" },
+    { "ai": "B", "t": "Not really, to be honest. My dad has been in hospital for two weeks, so I've been working extra shifts at the restaurant.", "v": "Thật ra là không ổn lắm. Bố mình nằm viện hai tuần nay, nên mình phải làm thêm ca ở nhà hàng." },
+    { "ai": "T", "t": "Oh... I had no idea. Why didn't you tell us?", "v": "Ồ... mình không hề biết. Sao cậu không nói với bọn mình?" },
+    { "ai": "B", "t": "I didn't want to make excuses. I kept thinking I could finish it at night, but I'm exhausted.", "v": "Mình không muốn viện cớ. Mình cứ nghĩ tối về làm cho xong được, nhưng mình kiệt sức rồi." },
+    { "ai": "P", "t": "It's not an excuse, Bao. It's a real problem, and we're a team.", "v": "Đó không phải viện cớ đâu, Bảo. Đó là chuyện thật, và bọn mình là một nhóm mà." },
+    { "ai": "T", "t": "Yeah. I'm sorry. I was about to complain to the teacher. I assumed you just didn't care.", "v": "Ừ. Mình xin lỗi. Mình đã định đi báo thầy. Mình cứ tưởng cậu chẳng quan tâm." },
+    { "ai": "B", "t": "I get it. From the outside, it looked that way.", "v": "Mình hiểu mà. Nhìn từ ngoài vào thì đúng là trông như vậy." },
+    { "ai": "P", "t": "Okay, let's be practical. How much of your part is done?", "v": "Được rồi, mình tính chuyện thực tế nhé. Phần của cậu xong được bao nhiêu rồi?" },
+    { "ai": "B", "t": "I've collected all the data, but I haven't made the charts or the slides yet.", "v": "Mình đã thu thập xong hết số liệu, nhưng chưa làm biểu đồ và slide." },
+    { "ai": "T", "t": "I'm good at charts. Send me the data tonight and I'll make them tomorrow.", "v": "Mình làm biểu đồ giỏi. Tối nay cậu gửi số liệu cho mình, mai mình làm." },
+    { "ai": "P", "t": "And I'll put everything into the slides. Bao, could you write the speaking notes? You can do that on your phone during breaks.", "v": "Còn mình sẽ ghép tất cả vào slide. Bảo, cậu viết phần ghi chú để nói được không? Cậu có thể làm trên điện thoại lúc nghỉ giữa ca." },
+    { "ai": "B", "t": "Definitely. That's much more manageable. Thank you both, really.", "v": "Chắc chắn rồi. Thế thì dễ xoay xở hơn nhiều. Cảm ơn hai cậu, thật đấy." },
+    { "ai": "P", "t": "One more thing. Next time, just send a short message, even \"I'm stuck, can we talk?\"", "v": "Thêm một điều nữa. Lần sau cứ nhắn một tin ngắn thôi, kể cả chỉ là \"Mình đang kẹt, nói chuyện chút được không?\"" },
+    { "ai": "B", "t": "Deal. I'll do that.", "v": "Chốt. Mình sẽ làm vậy." },
+    { "ai": "T", "t": "And let's set a new deadline: everything ready by eight p.m. on Thursday, so we can rehearse.", "v": "Và mình đặt hạn mới nhé: mọi thứ xong trước tám giờ tối thứ Năm để còn tập dượt." },
+    { "ai": "P", "t": "Perfect. And Bao, I hope your dad gets better soon.", "v": "Tuyệt. Và Bảo này, mong bố cậu sớm khoẻ lại." },
+    { "ai": "B", "t": "Thanks. That means a lot.", "v": "Cảm ơn cậu. Điều đó có ý nghĩa với mình lắm." }
+  ],
+  "tuVung": [
+    { "chu": "presentation", "doc": "/ˌpreznˈteɪʃn/", "nghia": "bài thuyết trình", "vd": "Our presentation is only ten minutes long." },
+    { "chu": "fed up", "doc": "/fed ʌp/", "nghia": "chán ngấy, hết chịu nổi", "vd": "I'm fed up with waiting." },
+    { "chu": "going on", "doc": "/ˈɡəʊɪŋ ɒn/", "nghia": "đang xảy ra (What's going on?)", "vd": "What's going on? Why is everyone outside?" },
+    { "chu": "due", "doc": "/djuː/", "nghia": "đến hạn (nộp, trả)", "vd": "The essay is due next Monday." },
+    { "chu": "extra shifts", "doc": "/ˈekstrə ʃɪfts/", "nghia": "ca làm thêm", "vd": "She works extra shifts before Tet." },
+    { "chu": "make excuses", "doc": "/meɪk ɪkˈskjuːsɪz/", "nghia": "viện cớ, bào chữa", "vd": "Stop making excuses and start working." },
+    { "chu": "exhausted", "doc": "/ɪɡˈzɔːstɪd/", "nghia": "kiệt sức", "vd": "After the night shift, I was exhausted." },
+    { "chu": "assumed", "doc": "/əˈsjuːmd/", "nghia": "cho là, đoán (mà không kiểm tra)", "vd": "I assumed the shop was open on Sunday." },
+    { "chu": "practical", "doc": "/ˈpræktɪkl/", "nghia": "thực tế, thiết thực", "vd": "Let's find a practical solution." },
+    { "chu": "manageable", "doc": "/ˈmænɪdʒəbl/", "nghia": "có thể xoay xở được, vừa sức", "vd": "Breaking the task into steps makes it manageable." },
+    { "chu": "stuck", "doc": "/stʌk/", "nghia": "bị kẹt, bế tắc", "vd": "I'm stuck on question five." },
+    { "chu": "rehearse", "doc": "/rɪˈhɜːs/", "nghia": "tập dượt", "vd": "We rehearsed the speech three times." }
+  ],
+  "yNghia": "Trước khi kết luận ai đó \"lười\" hay \"không quan tâm\", hãy hỏi một câu đơn giản: \"Mọi chuyện ổn chứ?\". Làm việc nhóm tốt không phải là không có vấn đề, mà là dám nói ra sớm và cùng nhau chia lại việc.",
+  "meo": [
+    "Hiện tại hoàn thành (tiếp diễn) cho việc bắt đầu trong quá khứ và vẫn còn: \"My dad has been in hospital for two weeks\", \"I've been working extra shifts\".",
+    "\"be due\" = đến hạn: \"Your part was due on Monday.\"",
+    "\"I had no idea.\" = mình không hề biết — mạnh hơn \"I didn't know.\"",
+    "\"I was about to + động từ\" = mình đã định làm (ngay lúc đó) thì…"
+  ],
+  "cauHoi": [
+    { "hoi": "Vì sao Bảo chậm nộp phần việc?", "chon": ["Cậu ấy không quan tâm đến bài", "Bố nằm viện nên cậu phải làm thêm ca", "Cậu ấy quên hạn nộp"], "dung": 1, "giai": "\"My dad has been in hospital for two weeks, so I've been working extra shifts.\"" },
+    { "hoi": "Ban đầu Tuấn muốn làm gì?", "chon": ["Đổi sang nhóm khác", "Làm hộ phần của Bảo", "Báo thầy và gạch tên Bảo khỏi slide"], "dung": 2, "giai": "\"Let's just tell the teacher and take his name off the slides.\"" },
+    { "hoi": "Cả nhóm chia lại việc thế nào?", "chon": ["Tuấn làm biểu đồ, Phương ghép slide, Bảo viết ghi chú để nói", "Phương làm hết mọi thứ", "Bảo làm biểu đồ, Tuấn viết ghi chú"], "dung": 0, "giai": "Tuấn: \"I'm good at charts.\" Phương: \"I'll put everything into the slides.\" Bảo viết \"speaking notes\"." },
+    { "hoi": "Câu \"I assumed you just didn't care\" cho thấy điều gì?", "chon": ["Tuấn đã hỏi kỹ trước khi kết luận", "Tuấn đã đoán sai về Bảo mà không hỏi", "Bảo thừa nhận mình không quan tâm"], "dung": 1, "giai": "\"assume\" = cho là đúng mà không kiểm tra — và Tuấn đã đoán sai." }
+  ]
+}

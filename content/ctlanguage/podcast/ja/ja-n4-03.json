@@ -1,0 +1,67 @@
+{
+  "id": "ja-n4-03",
+  "nn": "ja",
+  "cap": "N4",
+  "so": 3,
+  "tieuDe": "桜の下で",
+  "tieuDeViet": "Dưới tán hoa anh đào",
+  "moTa": "Kenta rủ Linh đi ngắm hoa anh đào. Linh lần đầu biết chuyện “giữ chỗ”, mang nem rán đi picnic, rồi chợt nhớ hoa đào ngày Tết ở quê. Bạn bè nói chuyện bằng thể thường.",
+  "chuDe": "Mùa hoa anh đào",
+  "bieuTuong": "camera.macro",
+  "nguoi": [
+    { "ma": "L", "ten": "リン", "giong": "ja-nu", "vai": "du học sinh năm hai" },
+    { "ma": "K", "ten": "健太", "giong": "ja-nam", "vai": "bạn cùng lớp người Nhật" }
+  ],
+  "loi": [
+    { "ai": "K", "t": "リンさん、来週の土曜日、お花見に行かない？", "doc": "リンさん、らいしゅうのどようび、おはなみにいかない？", "v": "Linh ơi, thứ Bảy tuần sau đi ngắm hoa không?" },
+    { "ai": "L", "t": "お花見？行きたい！桜を見ながら、ご飯を食べるんでしょう？", "doc": "おはなみ？いきたい！さくらをみながら、ごはんをたべるんでしょう？", "v": "Ngắm hoa á? Muốn đi! Là vừa ngắm hoa anh đào vừa ăn uống đúng không?" },
+    { "ai": "K", "t": "そう。川の近くの公園がきれいなんだ。朝早く行って、場所を取ろうと思ってる。", "doc": "そう。かわのちかくのこうえんがきれいなんだ。あさはやくいって、ばしょをとろうとおもってる。", "v": "Đúng rồi. Công viên gần bờ sông đẹp lắm. Tớ định đi sớm để giữ chỗ." },
+    { "ai": "L", "t": "場所を取る？", "doc": "ばしょをとる？", "v": "Giữ chỗ á?" },
+    { "ai": "K", "t": "うん。人が多いから、シートを敷いて、先に場所を決めておくんだ。", "doc": "うん。ひとがおおいから、シートをしいて、さきにばしょをきめておくんだ。", "v": "Ừ. Đông người lắm nên phải trải tấm bạt ra, chiếm chỗ trước." },
+    { "ai": "L", "t": "へえ、おもしろい。じゃあ、私は春巻きを作って持っていくね。", "doc": "へえ、おもしろい。じゃあ、わたしははるまきをつくってもっていくね。", "v": "Ồ, hay nhỉ. Vậy tớ làm nem rán mang theo nhé." },
+    { "ai": "K", "t": "やった！ベトナムの春巻き、食べてみたかったんだ。", "doc": "やった！ベトナムのはるまき、たべてみたかったんだ。", "v": "Tuyệt! Tớ muốn ăn thử nem rán Việt Nam lâu rồi." },
+    { "ai": "L", "t": "わあ……。写真で見たより、ずっときれい。", "doc": "わあ……。しゃしんでみたより、ずっときれい。", "v": "Oa… Đẹp hơn trong ảnh nhiều." },
+    { "ai": "K", "t": "今年は暖かかったから、少し早く咲いたんだ。来週はもう散ってしまうかもしれない。", "doc": "ことしはあたたかかったから、すこしはやくさいたんだ。らいしゅうはもうちってしまうかもしれない。", "v": "Năm nay trời ấm nên hoa nở sớm một chút. Tuần sau có khi rụng hết rồi." },
+    { "ai": "L", "t": "え、そんなに短いの？", "doc": "え、そんなにみじかいの？", "v": "Hả, ngắn vậy sao?" },
+    { "ai": "K", "t": "うん、一週間ぐらいかな。だから、みんな忙しくても見に来るんだよ。", "doc": "うん、いっしゅうかんぐらいかな。だから、みんないそがしくてもみにくるんだよ。", "v": "Ừ, chắc tầm một tuần. Nên dù bận mọi người vẫn đến ngắm đấy." },
+    { "ai": "L", "t": "ベトナムにも「ホアダオ」っていう花があるよ。テトのころに咲く、ピンクの花。", "doc": "ベトナムにも「ホアダオ」っていうはながあるよ。テトのころにさく、ピンクのはな。", "v": "Việt Nam cũng có hoa gọi là “hoa đào” đấy. Hoa màu hồng nở vào dịp Tết." },
+    { "ai": "K", "t": "テトって、ベトナムのお正月だよね。", "doc": "テトって、ベトナムのおしょうがつだよね。", "v": "Tết là năm mới của Việt Nam nhỉ." },
+    { "ai": "L", "t": "そう。家族みんなで花を飾って、新しい年を待つの。……ちょっと思い出しちゃった。", "doc": "そう。かぞくみんなではなをかざって、あたらしいとしをまつの。……ちょっとおもいだしちゃった。", "v": "Ừ. Cả nhà cùng cắm hoa, chờ năm mới. …Tự nhiên tớ nhớ nhà rồi." },
+    { "ai": "K", "t": "帰りたくなった？", "doc": "かえりたくなった？", "v": "Thấy muốn về rồi à?" },
+    { "ai": "L", "t": "少しね。でも、ここで桜を見られて、よかった。", "doc": "すこしね。でも、ここでさくらをみられて、よかった。", "v": "Một chút. Nhưng được ngắm hoa anh đào ở đây, tớ thấy vui lắm." },
+    { "ai": "K", "t": "来年ベトナムに帰ったら、今度はホアダオの写真を送ってよ。", "doc": "らいねんベトナムにかえったら、こんどはホアダオのしゃしんをおくってよ。", "v": "Sang năm về Việt Nam thì lần này gửi ảnh hoa đào cho tớ nhé." },
+    { "ai": "L", "t": "いいよ。そのかわり、健太くんは毎年、桜の写真を送ってね。", "doc": "いいよ。そのかわり、けんたくんはまいとし、さくらのしゃしんをおくってね。", "v": "Được. Đổi lại, năm nào Kenta cũng phải gửi ảnh hoa anh đào cho tớ đấy." },
+    { "ai": "K", "t": "約束。あ、風が吹いてきた。", "doc": "やくそく。あ、かぜがふいてきた。", "v": "Hứa đấy. À, gió nổi lên rồi." },
+    { "ai": "L", "t": "花びらが、雪みたい……。", "doc": "はなびらが、ゆきみたい……。", "v": "Cánh hoa bay như tuyết vậy…" },
+    { "ai": "K", "t": "さあ、帰る前にゴミを全部集めよう。お花見のルールだから。", "doc": "さあ、かえるまえにごみをぜんぶあつめよう。おはなみのルールだから。", "v": "Nào, trước khi về mình gom hết rác nhé. Đó là luật của đi ngắm hoa." },
+    { "ai": "L", "t": "うん。来た時よりきれいにして帰ろうね。", "doc": "うん。きたときよりきれいにしてかえろうね。", "v": "Ừ. Mình để chỗ này sạch hơn lúc mới đến rồi hẵng về nhé." }
+  ],
+  "tuVung": [
+    { "chu": "お花見", "doc": "おはなみ", "nghia": "đi ngắm hoa (anh đào)", "vd": "週末、お花見に行きます。" },
+    { "chu": "桜", "doc": "さくら", "nghia": "hoa anh đào", "vd": "桜がきれいに咲いています。" },
+    { "chu": "場所を取ろう", "doc": "ばしょをとろう", "nghia": "giữ chỗ, chiếm chỗ (thể ý chí của 場所を取る)", "vd": "早く行って、場所を取ろう。" },
+    { "chu": "敷いて", "doc": "しいて", "nghia": "trải ra (thể て của 敷く)", "vd": "シートを敷いて座ります。" },
+    { "chu": "決めておく", "doc": "きめておく", "nghia": "quyết định sẵn trước (〜ておく: làm sẵn)", "vd": "旅行の日を決めておく。" },
+    { "chu": "咲いた", "doc": "さいた", "nghia": "đã nở (咲く: hoa nở)", "vd": "花が咲いた。" },
+    { "chu": "散ってしまう", "doc": "ちってしまう", "nghia": "rụng mất (散る: hoa rụng, tản ra)", "vd": "雨で花が散ってしまった。" },
+    { "chu": "かもしれない", "doc": "かもしれない", "nghia": "có lẽ, không chừng", "vd": "明日は雨かもしれない。" },
+    { "chu": "飾って", "doc": "かざって", "nghia": "trang trí, bày (thể て của 飾る)", "vd": "部屋に花を飾ります。" },
+    { "chu": "思い出しちゃった", "doc": "おもいだしちゃった", "nghia": "tự dưng nhớ ra/nhớ lại mất rồi (= 思い出してしまった, văn nói)", "vd": "昔のことを思い出しちゃった。" },
+    { "chu": "約束", "doc": "やくそく", "nghia": "lời hứa; hứa (ước thúc)", "vd": "約束は守ります。" },
+    { "chu": "花びら", "doc": "はなびら", "nghia": "cánh hoa", "vd": "花びらが風で飛びます。" }
+  ],
+  "yNghia": "Hoa anh đào chỉ nở chừng một tuần, nên người Nhật bỏ cả việc bận để đi ngắm — vì để “lúc khác” thì hoa đã rụng. Những khoảnh khắc đẹp bên bạn bè ở xứ người cũng vậy: nhớ nhà không sao cả, nhưng đừng để nỗi nhớ làm bạn lỡ mất mùa hoa ngay trước mắt.",
+  "meo": [
+    "Dự định: thể ý chí + と思っている — 「場所を取ろうと思ってる」 (văn nói rút ている → てる).",
+    "〜ておく = làm sẵn để chuẩn bị: 「先に場所を決めておく」.",
+    "〜かもしれない = có lẽ, có thể: 「散ってしまうかもしれない」.",
+    "〜たら = khi/nếu (sau khi việc A xảy ra): 「ベトナムに帰ったら、写真を送って」.",
+    "Thể thường giữa bạn bè: 行かない？ (rủ rê), 〜んだ, 〜ね, 〜よ; 〜てしまった nói gọn thành 〜ちゃった."
+  ],
+  "cauHoi": [
+    { "hoi": "Vì sao Kenta muốn đi thật sớm?", "chon": ["Để ngắm mặt trời mọc", "Để giữ chỗ vì đông người", "Vì chiều trời mưa"], "dung": 1, "giai": "「朝早く行って、場所を取ろうと思ってる」「人が多いから」." },
+    { "hoi": "Linh mang món gì đi?", "chon": ["Nem rán", "Bánh chưng", "Phở", "Cơm nắm"], "dung": 0, "giai": "「春巻きを作って持っていくね」." },
+    { "hoi": "Vì sao năm nay hoa nở sớm?", "chon": ["Vì mưa nhiều", "Vì gió to", "Vì trời ấm", "Vì trồng giống mới"], "dung": 2, "giai": "「今年は暖かかったから、少し早く咲いたんだ」." },
+    { "hoi": "Hai người hứa với nhau điều gì?", "chon": ["Năm sau lại cùng đi ngắm hoa", "Cùng về Việt Nam ăn Tết", "Cùng học nấu ăn", "Gửi cho nhau ảnh hoa của nước mình"], "dung": 3, "giai": "Kenta xin ảnh hoa đào, Linh xin ảnh hoa anh đào mỗi năm — 「約束」." }
+  ]
+}

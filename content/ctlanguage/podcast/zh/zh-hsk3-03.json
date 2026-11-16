@@ -1,0 +1,68 @@
+{
+  "id": "zh-hsk3-03",
+  "nn": "zh",
+  "cap": "HSK3",
+  "so": 3,
+  "tieuDe": "同一个月亮",
+  "tieuDeViet": "Cùng một vầng trăng",
+  "moTa": "Trung thu đầu tiên xa nhà, Thu ở Hàng Châu không về Việt Nam được. Đồng nghiệp Tiểu Chu hỏi chuyện Trung thu Việt Nam — rước đèn, múa lân, bánh dẻo — và mời cô về nhà mình đón Tết.",
+  "chuDe": "Tết Trung thu",
+  "bieuTuong": "moon.stars.fill",
+  "nguoi": [
+    { "ma": "Q", "ten": "Thu", "giong": "zh-nu", "vai": "nhân viên người Việt ở Hàng Châu" },
+    { "ma": "Z", "ten": "Tiểu Chu", "giong": "zh-nam", "vai": "đồng nghiệp người Trung Quốc" }
+  ],
+  "loi": [
+    { "ai": "Z", "t": "阿秋，明天就是中秋节了，你回越南吗？", "doc": "Ā Qiū, míngtiān jiù shì Zhōngqiū Jié le, nǐ huí Yuènán ma?", "v": "Thu ơi, mai là Trung thu rồi, cậu có về Việt Nam không?" },
+    { "ai": "Q", "t": "不回了。只放一天假，机票又太贵。", "doc": "Bù huí le. Zhǐ fàng yì tiān jià, jīpiào yòu tài guì.", "v": "Không về đâu. Chỉ được nghỉ một ngày, vé máy bay lại đắt quá." },
+    { "ai": "Z", "t": "那你一个人过节吗？", "doc": "Nà nǐ yí ge rén guò jié ma?", "v": "Vậy cậu đón Tết một mình à?" },
+    { "ai": "Q", "t": "是啊。离中秋越近，我就越想家。", "doc": "Shì a. Lí Zhōngqiū yuè jìn, wǒ jiù yuè xiǎng jiā.", "v": "Ừ. Càng gần Trung thu mình càng nhớ nhà." },
+    { "ai": "Z", "t": "我明白。越南也过中秋节吗？", "doc": "Wǒ míngbai. Yuènán yě guò Zhōngqiū Jié ma?", "v": "Mình hiểu. Việt Nam cũng ăn Tết Trung thu à?" },
+    { "ai": "Q", "t": "过啊！在越南，中秋节是孩子们的节日。", "doc": "Guò a! Zài Yuènán, Zhōngqiū Jié shì háizimen de jiérì.", "v": "Có chứ! Ở Việt Nam, Trung thu là Tết của trẻ con." },
+    { "ai": "Z", "t": "是吗？孩子们怎么过？", "doc": "Shì ma? Háizimen zěnme guò?", "v": "Thế à? Trẻ con đón thế nào?" },
+    { "ai": "Q", "t": "晚上，他们一边提着灯笼在街上走，一边唱歌。还有人表演舞狮。", "doc": "Wǎnshang, tāmen yìbiān tízhe dēnglong zài jiē shang zǒu, yìbiān chàng gē. Hái yǒu rén biǎoyǎn wǔshī.", "v": "Buổi tối, bọn trẻ vừa xách đèn lồng đi khắp phố vừa hát. Còn có người múa lân nữa." },
+    { "ai": "Z", "t": "听起来真热闹！在中国，中秋节最重要的是一家人团圆。", "doc": "Tīng qǐlai zhēn rènao! Zài Zhōngguó, Zhōngqiū Jié zuì zhòngyào de shì yì jiā rén tuányuán.", "v": "Nghe náo nhiệt thật! Ở Trung Quốc, điều quan trọng nhất của Trung thu là cả nhà đoàn viên." },
+    { "ai": "Q", "t": "“团圆”是什么意思？", "doc": "“Tuányuán” shì shénme yìsi?", "v": "\"Đoàn viên\" nghĩa là gì?" },
+    { "ai": "Z", "t": "就是家里人都回家，坐在一起吃饭、吃月饼、看月亮。", "doc": "Jiù shì jiā li rén dōu huí jiā, zuò zài yìqǐ chī fàn, chī yuèbǐng, kàn yuèliang.", "v": "Tức là người trong nhà đều về, ngồi quây quần ăn cơm, ăn bánh trung thu, ngắm trăng." },
+    { "ai": "Q", "t": "越南也有月饼，不过有很多种。我最喜欢的是用糯米做的。", "doc": "Yuènán yě yǒu yuèbǐng, búguò yǒu hěn duō zhǒng. Wǒ zuì xǐhuan de shì yòng nuòmǐ zuò de.", "v": "Việt Nam cũng có bánh trung thu, nhưng có nhiều loại lắm. Mình thích nhất loại làm bằng gạo nếp." },
+    { "ai": "Z", "t": "我还没吃过越南月饼呢！", "doc": "Wǒ hái méi chī guo Yuènán yuèbǐng ne!", "v": "Mình chưa ăn bánh trung thu Việt Nam bao giờ!" },
+    { "ai": "Q", "t": "我妈妈上个星期给我寄来了一盒，我明天带给你尝尝。", "doc": "Wǒ māma shàng ge xīngqī gěi wǒ jì lái le yì hé, wǒ míngtiān dài gěi nǐ chángchang.", "v": "Tuần trước mẹ mình gửi sang cho mình một hộp, mai mình mang cho cậu nếm thử." },
+    { "ai": "Z", "t": "太好了！那这样吧：明天晚上你来我家过节。我爸妈做菜，我们一起赏月。", "doc": "Tài hǎo le! Nà zhèyàng ba: míngtiān wǎnshang nǐ lái wǒ jiā guò jié. Wǒ bà mā zuò cài, wǒmen yìqǐ shǎng yuè.", "v": "Tuyệt! Vậy thế này nhé: tối mai cậu đến nhà mình đón Tết. Bố mẹ mình nấu cơm, chúng ta cùng ngắm trăng." },
+    { "ai": "Q", "t": "这样会不会太打扰你家人了？", "doc": "Zhèyàng huì bu huì tài dǎrǎo nǐ jiārén le?", "v": "Như vậy có làm phiền gia đình cậu quá không?" },
+    { "ai": "Z", "t": "不会！我妈妈最喜欢热闹，人越多越好。", "doc": "Bú huì! Wǒ māma zuì xǐhuan rènao, rén yuè duō yuè hǎo.", "v": "Không đâu! Mẹ mình thích đông vui nhất, càng đông càng tốt." },
+    { "ai": "Q", "t": "那我就不客气了。谢谢你，小周！", "doc": "Nà wǒ jiù bú kèqi le. Xièxie nǐ, Xiǎo Zhōu!", "v": "Vậy mình không khách sáo nữa nhé. Cảm ơn cậu, Tiểu Chu!" },
+    { "ai": "Z", "t": "对了，吃完饭你可以跟家里人视频，让他们也看看杭州的月亮。", "doc": "Duì le, chī wán fàn nǐ kěyǐ gēn jiā li rén shìpín, ràng tāmen yě kànkan Hángzhōu de yuèliang.", "v": "À, ăn cơm xong cậu có thể gọi video cho gia đình, để mọi người cũng ngắm trăng Hàng Châu." },
+    { "ai": "Q", "t": "好主意！虽然我们不在一起，但是看的是同一个月亮。", "doc": "Hǎo zhǔyi! Suīrán wǒmen bú zài yìqǐ, dànshì kàn de shì tóng yí ge yuèliang.", "v": "Ý hay đấy! Tuy không ở cạnh nhau, nhưng cả nhà cùng ngắm chung một vầng trăng." },
+    { "ai": "Z", "t": "中国有一句老话：“月是故乡明。”", "doc": "Zhōngguó yǒu yí jù lǎohuà: “Yuè shì gùxiāng míng.”", "v": "Trung Quốc có câu nói xưa: \"Trăng quê nhà sáng nhất.\"" },
+    { "ai": "Q", "t": "我懂。不过我觉得，今年杭州的月亮也会很亮，因为有朋友在。", "doc": "Wǒ dǒng. Búguò wǒ juéde, jīnnián Hángzhōu de yuèliang yě huì hěn liàng, yīnwèi yǒu péngyou zài.", "v": "Mình hiểu. Nhưng mình nghĩ năm nay trăng Hàng Châu cũng sẽ rất sáng, vì có bạn bè ở đây." }
+  ],
+  "tuVung": [
+    { "chu": "中秋节", "doc": "Zhōngqiū Jié", "nghia": "Tết Trung thu (trung thu tiết), rằm tháng Tám âm lịch", "vd": "中秋节快乐！" },
+    { "chu": "越多越好", "doc": "yuè duō yuè hǎo", "nghia": "càng nhiều càng tốt (mẫu 越A越B: càng A càng B)", "vd": "朋友越多越好。" },
+    { "chu": "灯笼", "doc": "dēnglong", "nghia": "đèn lồng (đăng lung)", "vd": "孩子们提着灯笼。" },
+    { "chu": "热闹", "doc": "rènao", "nghia": "náo nhiệt, đông vui (nhiệt náo)", "vd": "春节的时候，街上很热闹。" },
+    { "chu": "团圆", "doc": "tuányuán", "nghia": "đoàn viên, sum họp", "vd": "过年的时候，一家人要团圆。" },
+    { "chu": "月饼", "doc": "yuèbǐng", "nghia": "bánh trung thu (nguyệt bính)", "vd": "你喜欢吃什么月饼？" },
+    { "chu": "月亮", "doc": "yuèliang", "nghia": "mặt trăng", "vd": "今天的月亮又大又圆。" },
+    { "chu": "赏月", "doc": "shǎng yuè", "nghia": "ngắm trăng (thưởng nguyệt)", "vd": "中秋节晚上，我们一起赏月。" },
+    { "chu": "尝尝", "doc": "chángchang", "nghia": "nếm thử (thường)", "vd": "这是我做的菜，你尝尝。" },
+    { "chu": "打扰", "doc": "dǎrǎo", "nghia": "làm phiền (đả nhiễu)", "vd": "对不起，打扰一下。" },
+    { "chu": "虽然", "doc": "suīrán", "nghia": "tuy, mặc dù (thường đi với 但是)", "vd": "虽然很累，但是我很开心。" },
+    { "chu": "故乡", "doc": "gùxiāng", "nghia": "quê hương, cố hương", "vd": "我很想念故乡。" }
+  ],
+  "yNghia": "Xa nhà vào ngày đoàn viên là lúc nỗi nhớ rõ nhất. Nhưng \"nhà\" không chỉ là một nơi chốn: nó còn là những người sẵn lòng kéo thêm một chiếc ghế cho bạn ngồi. Cùng một vầng trăng, ở đâu có người thương thì ở đó cũng sáng.",
+  "meo": [
+    "越A越B = càng A càng B: 人越多越好. Mở rộng: 离中秋越近，我就越想家 (càng gần Trung thu càng nhớ nhà).",
+    "一边…一边… = vừa… vừa… (hai việc cùng lúc): 一边提着灯笼走，一边唱歌.",
+    "虽然…但是… = tuy… nhưng…: 虽然我们不在一起，但是看的是同一个月亮.",
+    "还没 + động từ + 过 + …呢 = chưa từng… bao giờ: 我还没吃过越南月饼呢！",
+    "种 là chữ đa âm: zhǒng (loại: 很多种) và zhòng (trồng: 种花). Nhiều từ có thanh nhẹ: 月亮 yuèliang, 热闹 rènao, 灯笼 dēnglong."
+  ],
+  "cauHoi": [
+    { "hoi": "Vì sao Thu không về Việt Nam dịp Trung thu?", "chon": ["Cô phải làm thêm giờ", "Chỉ được nghỉ một ngày và vé máy bay đắt", "Gia đình cô đang ở Trung Quốc"], "dung": 1, "giai": "Thu nói: 只放一天假，机票又太贵." },
+    { "hoi": "Theo Thu, Trung thu ở Việt Nam đặc biệt dành cho ai?", "chon": ["Người già", "Các cặp đôi", "Trẻ em"], "dung": 2, "giai": "在越南，中秋节是孩子们的节日." },
+    { "hoi": "Ở Trung Quốc, điều quan trọng nhất của Trung thu là gì?", "chon": ["Cả nhà đoàn viên", "Múa lân", "Tặng quà cho sếp"], "dung": 0, "giai": "Tiểu Chu nói: 中秋节最重要的是一家人团圆." },
+    { "hoi": "Tiểu Chu gợi ý Thu làm gì sau bữa cơm?", "chon": ["Đi rước đèn", "Gọi video để gia đình cũng ngắm trăng Hàng Châu", "Về ký túc xá nghỉ sớm"], "dung": 1, "giai": "吃完饭你可以跟家里人视频，让他们也看看杭州的月亮." },
+    { "hoi": "\"人越多越好\" nghĩa là gì?", "chon": ["Càng đông càng vui/tốt", "Người đông quá không tốt", "Càng ít người càng tốt"], "dung": 0, "giai": "越A越B = càng A càng B." }
+  ]
+}

@@ -1,0 +1,73 @@
+{
+  "id": "zh-hsk5-01",
+  "nn": "zh",
+  "cap": "HSK5",
+  "so": 1,
+  "tieuDe": "合作的第一杯咖啡",
+  "tieuDeViet": "Ly cà phê hợp tác đầu tiên",
+  "moTa": "Ông Phạm, giám đốc bán hàng một công ty cà phê Tây Nguyên, đàm phán với bà Chu — người phụ trách thu mua của một chuỗi cửa hàng Trung Quốc. Bà muốn giảm 15%; ông không hạ chất lượng mà tìm thứ khác để đổi.",
+  "chuDe": "Đàm phán kinh doanh",
+  "bieuTuong": "briefcase.fill",
+  "nguoi": [
+    { "ma": "Z", "ten": "Bà Chu", "giong": "zh-nu", "vai": "giám đốc thu mua chuỗi cửa hàng" },
+    { "ma": "F", "ten": "Ông Phạm", "giong": "zh-nam", "vai": "giám đốc bán hàng công ty cà phê Việt Nam" }
+  ],
+  "loi": [
+    { "ai": "Z", "t": "范先生，您的样品我们都试过了，味道确实不错。", "doc": "Fàn xiānsheng, nín de yàngpǐn wǒmen dōu shì guo le, wèidào quèshí búcuò.", "v": "Ông Phạm, mẫu thử của ông chúng tôi đều đã dùng qua, hương vị quả thật không tồi." },
+    { "ai": "F", "t": "谢谢周女士。这批咖啡豆都来自越南西原，是今年刚收的。", "doc": "Xièxie Zhōu nǚshì. Zhè pī kāfēi dòu dōu láizì Yuènán Xīyuán, shì jīnnián gāng shōu de.", "v": "Cảm ơn bà Chu. Lô cà phê hạt này đều từ Tây Nguyên, Việt Nam, vừa thu hoạch năm nay." },
+    { "ai": "Z", "t": "不过说实话，您的报价比我们预期的高了不少。", "doc": "Búguò shuō shíhuà, nín de bàojià bǐ wǒmen yùqī de gāo le bù shǎo.", "v": "Có điều nói thật, giá ông chào cao hơn dự tính của chúng tôi khá nhiều." },
+    { "ai": "F", "t": "我能理解。那您心里的价格是多少呢？", "doc": "Wǒ néng lǐjiě. Nà nín xīnli de jiàgé shì duōshao ne?", "v": "Tôi hiểu. Vậy mức giá trong lòng bà là bao nhiêu?" },
+    { "ai": "Z", "t": "如果能降百分之十五，我们今天就可以签合同。", "doc": "Rúguǒ néng jiàng bǎi fēn zhī shíwǔ, wǒmen jīntiān jiù kěyǐ qiān hétong.", "v": "Nếu giảm được mười lăm phần trăm, hôm nay chúng ta có thể ký hợp đồng luôn." },
+    { "ai": "F", "t": "百分之十五恐怕不行。说句实在话，降这么多，我们就只能换便宜的豆子，质量难免会下降。", "doc": "Bǎi fēn zhī shíwǔ kǒngpà bù xíng. Shuō jù shízài huà, jiàng zhème duō, wǒmen jiù zhǐ néng huàn piányi de dòuzi, zhìliàng nánmiǎn huì xiàjiàng.", "v": "Mười lăm phần trăm e là không được. Nói thật lòng, giảm nhiều như vậy thì chúng tôi chỉ còn cách đổi sang hạt rẻ hơn, chất lượng khó tránh khỏi đi xuống." },
+    { "ai": "Z", "t": "可是其他供应商的价格确实比你们低。", "doc": "Kěshì qítā gōngyìngshāng de jiàgé quèshí bǐ nǐmen dī.", "v": "Nhưng giá của các nhà cung cấp khác đúng là thấp hơn bên ông." },
+    { "ai": "F", "t": "这一点我不否认。不过与其只比较价格，不如比较一下：客人喝完以后，会不会再来。", "doc": "Zhè yì diǎn wǒ bù fǒurèn. Búguò yǔqí zhǐ bǐjiào jiàgé, bùrú bǐjiào yíxià: kèrén hē wán yǐhòu, huì bu huì zài lái.", "v": "Điểm này tôi không phủ nhận. Nhưng thay vì chỉ so giá, chi bằng so xem: khách uống xong rồi có quay lại hay không." },
+    { "ai": "Z", "t": "这个道理我明白。但我们是连锁店，成本控制得很严。", "doc": "Zhège dàolǐ wǒ míngbai. Dàn wǒmen shì liánsuǒ diàn, chéngběn kòngzhì de hěn yán.", "v": "Lý lẽ đó tôi hiểu. Nhưng chúng tôi là chuỗi cửa hàng, chi phí bị kiểm soát rất chặt." },
+    { "ai": "F", "t": "那我们换个思路，好不好？如果贵公司一年的订货量能从二十吨增加到五十吨，我们可以降百分之八。", "doc": "Nà wǒmen huàn ge sīlù, hǎo bu hǎo? Rúguǒ guì gōngsī yì nián de dìnghuò liàng néng cóng èrshí dūn zēngjiā dào wǔshí dūn, wǒmen kěyǐ jiàng bǎi fēn zhī bā.", "v": "Vậy chúng ta đổi hướng suy nghĩ nhé? Nếu lượng đặt hàng một năm của quý công ty tăng từ hai mươi tấn lên năm mươi tấn, chúng tôi có thể giảm tám phần trăm." },
+    { "ai": "Z", "t": "五十吨？一下子订这么多，风险太大了。万一卖得不好呢？", "doc": "Wǔshí dūn? Yíxiàzi dìng zhème duō, fēngxiǎn tài dà le. Wànyī mài de bù hǎo ne?", "v": "Năm mươi tấn? Đặt một lúc nhiều thế, rủi ro lớn quá. Lỡ bán không chạy thì sao?" },
+    { "ai": "F", "t": "您的担心很合理。所以不必一次到货，可以分四次发货，每个季度一次，货款也分四次付。", "doc": "Nín de dānxīn hěn hélǐ. Suǒyǐ búbì yí cì dào huò, kěyǐ fēn sì cì fā huò, měi ge jìdù yí cì, huòkuǎn yě fēn sì cì fù.", "v": "Lo lắng của bà rất hợp lý. Vì vậy không cần giao một lần, có thể chia làm bốn đợt, mỗi quý một đợt, tiền hàng cũng trả làm bốn lần." },
+    { "ai": "Z", "t": "这样压力确实小多了。那质量怎么保证？毕竟第一批和最后一批隔了将近一年。", "doc": "Zhèyàng yālì quèshí xiǎo duō le. Nà zhìliàng zěnme bǎozhèng? Bìjìng dì yī pī hé zuìhòu yì pī gé le jiāngjìn yì nián.", "v": "Như vậy áp lực quả là nhẹ hơn nhiều. Thế chất lượng đảm bảo thế nào? Dù sao lô đầu và lô cuối cách nhau gần một năm." },
+    { "ai": "F", "t": "每批货发出之前，我们都会先寄样品给您确认。一旦质量跟合同不符，您有权退货。", "doc": "Měi pī huò fāchū zhīqián, wǒmen dōu huì xiān jì yàngpǐn gěi nín quèrèn. Yídàn zhìliàng gēn hétong bù fú, nín yǒu quán tuì huò.", "v": "Trước khi gửi mỗi lô hàng, chúng tôi đều gửi mẫu cho bà xác nhận trước. Một khi chất lượng không khớp với hợp đồng, bà có quyền trả hàng." },
+    { "ai": "Z", "t": "您对自己的产品很有信心啊。", "doc": "Nín duì zìjǐ de chǎnpǐn hěn yǒu xìnxīn a.", "v": "Ông rất tự tin vào sản phẩm của mình nhỉ." },
+    { "ai": "F", "t": "因为这些咖啡树是我们看着长大的。我父母就是种咖啡的，我从小在咖啡园里长大。", "doc": "Yīnwèi zhèxiē kāfēi shù shì wǒmen kànzhe zhǎng dà de. Wǒ fùmǔ jiù shì zhòng kāfēi de, wǒ cóngxiǎo zài kāfēi yuán li zhǎng dà.", "v": "Vì những cây cà phê này là do chúng tôi nhìn chúng lớn lên. Bố mẹ tôi là người trồng cà phê, tôi lớn lên trong vườn cà phê từ bé." },
+    { "ai": "Z", "t": "原来是这样。难怪您一说起咖啡来，眼睛都在发光。", "doc": "Yuánlái shì zhèyàng. Nánguài nín yì shuō qǐ kāfēi lái, yǎnjing dōu zài fāguāng.", "v": "Hóa ra là vậy. Thảo nào cứ nhắc đến cà phê là mắt ông sáng rực lên." },
+    { "ai": "F", "t": "哈哈，被您看出来了。如果您有时间，欢迎明年春天来西原看看，那时候正好是咖啡开花的季节。", "doc": "Hāha, bèi nín kàn chūlai le. Rúguǒ nín yǒu shíjiān, huānyíng míngnián chūntiān lái Xīyuán kànkan, nà shíhou zhènghǎo shì kāfēi kāi huā de jìjié.", "v": "Haha, bị bà nhìn ra rồi. Nếu bà có thời gian, mời bà mùa xuân năm sau đến Tây Nguyên xem, lúc đó đúng mùa hoa cà phê nở." },
+    { "ai": "Z", "t": "听起来很吸引人。不过价格的事，我还得再争取一下：百分之十，怎么样？", "doc": "Tīng qǐlai hěn xīyǐn rén. Búguò jiàgé de shì, wǒ hái děi zài zhēngqǔ yíxià: bǎi fēn zhī shí, zěnmeyàng?", "v": "Nghe hấp dẫn đấy. Nhưng chuyện giá cả, tôi vẫn phải cố thêm một chút: mười phần trăm, thế nào?" },
+    { "ai": "F", "t": "我们宁可少赚一点儿，也不愿意在质量上让步。这样吧，百分之十可以，但合同要签两年。", "doc": "Wǒmen nìngkě shǎo zhuàn yìdiǎnr, yě bú yuànyì zài zhìliàng shang ràngbù. Zhèyàng ba, bǎi fēn zhī shí kěyǐ, dàn hétong yào qiān liǎng nián.", "v": "Chúng tôi thà lãi ít một chút, chứ không muốn nhượng bộ về chất lượng. Thế này nhé: mười phần trăm cũng được, nhưng hợp đồng phải ký hai năm." },
+    { "ai": "Z", "t": "两年……您这是用时间换价格啊。", "doc": "Liǎng nián…… nín zhè shì yòng shíjiān huàn jiàgé a.", "v": "Hai năm… ông đang lấy thời gian đổi lấy giá đấy à." },
+    { "ai": "F", "t": "也可以说是用信任换稳定。对我们来说，一个长期的伙伴比一张大订单更重要。", "doc": "Yě kěyǐ shuō shì yòng xìnrèn huàn wěndìng. Duì wǒmen lái shuō, yí ge chángqī de huǒbàn bǐ yì zhāng dà dìngdān gèng zhòngyào.", "v": "Cũng có thể nói là lấy lòng tin đổi lấy sự ổn định. Với chúng tôi, một đối tác lâu dài quan trọng hơn một đơn hàng lớn." },
+    { "ai": "Z", "t": "这句话我同意。不过我得先跟总部汇报，下周给您正式答复。", "doc": "Zhè jù huà wǒ tóngyì. Búguò wǒ děi xiān gēn zǒngbù huìbào, xià zhōu gěi nín zhèngshì dáfù.", "v": "Câu này tôi đồng ý. Nhưng tôi phải báo cáo tổng bộ trước, tuần sau sẽ trả lời ông chính thức." },
+    { "ai": "F", "t": "没问题。为了让您汇报得顺利一点儿，我今晚就把新方案整理好发给您。", "doc": "Méi wèntí. Wèile ràng nín huìbào de shùnlì yìdiǎnr, wǒ jīn wǎn jiù bǎ xīn fāng'àn zhěnglǐ hǎo fā gěi nín.", "v": "Không vấn đề gì. Để bà báo cáo được suôn sẻ hơn, tối nay tôi sẽ soạn xong phương án mới gửi bà." },
+    { "ai": "Z", "t": "范先生，您真是一个难对付的谈判对手。", "doc": "Fàn xiānsheng, nín zhēn shì yí ge nán duìfu de tánpàn duìshǒu.", "v": "Ông Phạm, ông đúng là một đối thủ đàm phán khó đối phó." },
+    { "ai": "F", "t": "希望以后我们不是对手，而是合作伙伴。", "doc": "Xīwàng yǐhòu wǒmen bú shì duìshǒu, ér shì hézuò huǒbàn.", "v": "Mong rằng sau này chúng ta không phải đối thủ, mà là đối tác." },
+    { "ai": "Z", "t": "哈哈，那今天这杯咖啡，就算是我们合作的第一杯吧。", "doc": "Hāha, nà jīntiān zhè bēi kāfēi, jiù suàn shì wǒmen hézuò de dì yī bēi ba.", "v": "Haha, vậy ly cà phê hôm nay coi như ly đầu tiên của sự hợp tác giữa chúng ta nhé." }
+  ],
+  "tuVung": [
+    { "chu": "样品", "doc": "yàngpǐn", "nghia": "hàng mẫu (dạng phẩm)", "vd": "能先寄一些样品吗？" },
+    { "chu": "报价", "doc": "bàojià", "nghia": "báo giá, giá chào", "vd": "他们的报价太高了。" },
+    { "chu": "难免", "doc": "nánmiǎn", "nghia": "khó tránh khỏi (nan miễn)", "vd": "第一次做，难免会出错。" },
+    { "chu": "供应商", "doc": "gōngyìngshāng", "nghia": "nhà cung cấp (cung ứng thương) — 应 ở đây đọc yìng", "vd": "我们换了一家供应商。" },
+    { "chu": "与其", "doc": "yǔqí", "nghia": "thay vì, cùng với việc (dữ kỳ) — 与其A，不如B: thay vì A chi bằng B", "vd": "与其等他，不如我们先走。" },
+    { "chu": "成本", "doc": "chéngběn", "nghia": "giá thành, chi phí (thành bản)", "vd": "这个月的成本增加了。" },
+    { "chu": "万一", "doc": "wànyī", "nghia": "lỡ như, nhỡ (vạn nhất)", "vd": "带把伞吧，万一下雨呢？" },
+    { "chu": "毕竟", "doc": "bìjìng", "nghia": "dù sao thì, rốt cuộc (tất cánh)", "vd": "别怪他，他毕竟还是个孩子。" },
+    { "chu": "一旦", "doc": "yídàn", "nghia": "một khi, hễ mà (nhất đán)", "vd": "一旦决定了，就不要后悔。" },
+    { "chu": "难怪", "doc": "nánguài", "nghia": "thảo nào, hèn chi (nan quái)", "vd": "他在中国住了十年，难怪汉语这么好。" },
+    { "chu": "宁可", "doc": "nìngkě", "nghia": "thà… (ninh khả) — 宁可A，也不B: thà A chứ không B", "vd": "我宁可走路，也不想挤公交车。" },
+    { "chu": "让步", "doc": "ràngbù", "nghia": "nhượng bộ", "vd": "双方都让了一步。" }
+  ],
+  "yNghia": "Đàm phán giỏi không phải là ép đối phương xuống tận đáy, mà là biết rõ điều mình không bao giờ nhượng (chất lượng), rồi tìm thứ khác để trao đổi — số lượng, thời gian, sự an tâm. Và thứ người mua nhớ lâu nhất thường không phải con số, mà là câu chuyện thật đằng sau sản phẩm.",
+  "meo": [
+    "与其A，不如B = thay vì A, chi bằng B: 与其只比较价格，不如比较一下客人会不会再来.",
+    "宁可A，也不B = thà A chứ không B (chấp nhận thiệt để giữ điều quan trọng hơn): 宁可少赚一点儿，也不愿意在质量上让步.",
+    "一旦…(就)… = một khi… thì…; 万一 = lỡ như (điều không mong muốn); 毕竟 = dù sao thì (nêu lý do gốc rễ).",
+    "难免 = khó tránh khỏi: 质量难免会下降. 难怪 = thảo nào (vỡ lẽ sau khi biết lý do): 难怪您一说起咖啡来，眼睛都在发光.",
+    "Chữ đa âm trong bài: 长 zhǎng (lớn lên: 长大) ↔ cháng (dài: 长期); 种 zhòng (trồng) ↔ zhǒng (loại); 宁 nìng (宁可) ↔ níng (安宁); 应 yìng (供应) ↔ yīng (应该)."
+  ],
+  "cauHoi": [
+    { "hoi": "Lúc đầu bà Chu muốn giảm giá bao nhiêu?", "chon": ["8%", "10%", "15%"], "dung": 2, "giai": "如果能降百分之十五，我们今天就可以签合同." },
+    { "hoi": "Vì sao ông Phạm từ chối giảm 15%?", "chon": ["Vì phải đổi sang hạt rẻ, chất lượng sẽ giảm", "Vì công ty ông không cần đơn hàng này", "Vì luật Việt Nam không cho phép"], "dung": 0, "giai": "降这么多，我们就只能换便宜的豆子，质量难免会下降." },
+    { "hoi": "Để giảm rủi ro cho đơn 50 tấn, ông Phạm đề xuất gì?", "chon": ["Giao hết một lần để rẻ hơn", "Chia bốn đợt mỗi quý, tiền hàng trả bốn lần", "Bà Chu trả trước toàn bộ"], "dung": 1, "giai": "可以分四次发货，每个季度一次，货款也分四次付." },
+    { "hoi": "Thỏa thuận cuối cùng ông Phạm đưa ra là gì?", "chon": ["Giảm 15%, hợp đồng một năm", "Giữ nguyên giá, tặng thêm hàng mẫu", "Giảm 10% nhưng hợp đồng hai năm"], "dung": 2, "giai": "百分之十可以，但合同要签两年." },
+    { "hoi": "\"宁可少赚一点儿，也不愿意在质量上让步\" thể hiện điều gì?", "chon": ["Họ thà lãi ít chứ không hạ chất lượng", "Họ muốn lãi thật nhiều", "Họ sẵn sàng hạ chất lượng để bán rẻ"], "dung": 0, "giai": "宁可A，也不B = thà A chứ không B." }
+  ]
+}

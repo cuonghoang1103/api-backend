@@ -1,6 +1,7 @@
 {
   "id": "ja-n5-01",
   "nn": "ja",
+  "danhMuc": "doi-song",
   "cap": "N5",
   "so": 1,
   "tieuDe": "コンビニで",
@@ -9,40 +10,334 @@
   "chuDe": "Mua sắm",
   "bieuTuong": "cart.fill",
   "nguoi": [
-    { "ma": "R", "ten": "ラン", "giong": "ja-nu", "vai": "du học sinh mới sang" },
-    { "ma": "T", "ten": "店員", "giong": "ja-nam", "vai": "nhân viên cửa hàng" }
+    {
+      "ma": "R",
+      "ten": "ラン",
+      "giong": "ja-nu",
+      "vai": "du học sinh mới sang"
+    },
+    {
+      "ma": "T",
+      "ten": "店員",
+      "giong": "ja-nam",
+      "vai": "nhân viên cửa hàng"
+    }
   ],
   "loi": [
-    { "ai": "T", "t": "いらっしゃいませ。", "doc": "いらっしゃいませ。", "v": "Xin mời quý khách." },
-    { "ai": "R", "t": "すみません、お弁当はどこですか。", "doc": "すみません、おべんとうはどこですか。", "v": "Xin lỗi, cơm hộp ở đâu ạ?" },
-    { "ai": "T", "t": "お弁当はあちらです。飲み物のとなりです。", "doc": "おべんとうはあちらです。のみもののとなりです。", "v": "Cơm hộp ở đằng kia ạ. Bên cạnh chỗ đồ uống." },
-    { "ai": "R", "t": "ありがとうございます。……これとお茶をください。", "doc": "ありがとうございます。……これとおちゃをください。", "v": "Cảm ơn anh. …Cho tôi cái này và chai trà." },
-    { "ai": "T", "t": "はい。お弁当は温めますか。", "doc": "はい。おべんとうはあたためますか。", "v": "Vâng. Cơm hộp có cần hâm nóng không ạ?" },
-    { "ai": "R", "t": "はい、お願いします。", "doc": "はい、おねがいします。", "v": "Vâng, nhờ anh ạ." },
-    { "ai": "T", "t": "袋はいりますか。", "doc": "ふくろはいりますか。", "v": "Chị có cần túi không ạ?" },
-    { "ai": "R", "t": "いいえ、いりません。かばんがあります。", "doc": "いいえ、いりません。かばんがあります。", "v": "Không, tôi không cần. Tôi có túi xách rồi." },
-    { "ai": "T", "t": "ポイントカードはお持ちですか。", "doc": "ポイントカードはおもちですか。", "v": "Chị có thẻ tích điểm không ạ?" },
-    { "ai": "R", "t": "えっと……すみません、もう一度お願いします。", "doc": "えっと……すみません、もういちどおねがいします。", "v": "Ờ… xin lỗi, anh nói lại lần nữa được không ạ?" },
-    { "ai": "T", "t": "ポイントカードです。カード、ありますか。", "doc": "ポイントカードです。カード、ありますか。", "v": "Thẻ tích điểm ạ. Chị có thẻ không?" },
-    { "ai": "R", "t": "あ、ありません。すみません。", "doc": "あ、ありません。すみません。", "v": "À, tôi không có. Xin lỗi anh." },
-    { "ai": "T", "t": "だいじょうぶですよ。全部で650円です。", "doc": "だいじょうぶですよ。ぜんぶでろっぴゃくごじゅうえんです。", "v": "Không sao đâu ạ. Tổng cộng 650 yên." },
-    { "ai": "R", "t": "はい、1000円でお願いします。", "doc": "はい、せんえんでおねがいします。", "v": "Vâng, tôi trả tờ 1000 yên." },
-    { "ai": "T", "t": "350円のおつりです。お弁当は熱いですから、気をつけてください。", "doc": "さんびゃくごじゅうえんのおつりです。おべんとうはあついですから、きをつけてください。", "v": "Tiền thừa của chị 350 yên. Cơm hộp nóng đấy, chị cẩn thận nhé." },
-    { "ai": "R", "t": "ありがとうございます。", "doc": "ありがとうございます。", "v": "Cảm ơn anh." },
-    { "ai": "T", "t": "ありがとうございました。またお越しくださいませ。", "doc": "ありがとうございました。またおこしくださいませ。", "v": "Cảm ơn quý khách. Hẹn gặp lại quý khách." },
-    { "ai": "R", "t": "よかった。「もう一度お願いします」は、べんりですね。", "doc": "よかった。「もういちどおねがいします」は、べんりですね。", "v": "May quá. Câu “Anh nói lại lần nữa giúp tôi” tiện thật đấy." }
+    {
+      "ai": "T",
+      "t": "いらっしゃいませ。",
+      "doc": "いらっしゃいませ。",
+      "v": "Xin mời quý khách."
+    },
+    {
+      "ai": "R",
+      "t": "すみません、お弁当はどこですか。",
+      "doc": "すみません、おべんとうはどこですか。",
+      "v": "Xin lỗi, cơm hộp ở đâu ạ?",
+      "khac": [
+        {
+          "kieu": "lịch sự",
+          "t": "すみません、お弁当はどちらですか。",
+          "doc": "すみません、おべんとうはどちらですか。",
+          "v": "Xin lỗi, cơm hộp ở phía nào ạ?",
+          "ghiChu": "どちら lịch sự hơn どこ — hay dùng với nhân viên, người lạ."
+        },
+        {
+          "kieu": "thân mật",
+          "t": "お弁当、どこ？",
+          "doc": "おべんとう、どこ？",
+          "v": "Cơm hộp ở đâu?",
+          "ghiChu": "Hỏi bạn bè, người nhà."
+        }
+      ],
+      "np": [
+        {
+          "mau": "N はどこですか",
+          "giai": "Hỏi vị trí: N + は + どこですか. Trả lời: ここ／そこ／あそこ です (lịch sự: こちら／そちら／あちら).",
+          "vd": "トイレはどこですか。",
+          "vdDoc": "トイレはどこですか。",
+          "vdV": "Nhà vệ sinh ở đâu ạ?"
+        }
+      ]
+    },
+    {
+      "ai": "T",
+      "t": "お弁当はあちらです。飲み物のとなりです。",
+      "doc": "おべんとうはあちらです。のみもののとなりです。",
+      "v": "Cơm hộp ở đằng kia ạ. Bên cạnh chỗ đồ uống."
+    },
+    {
+      "ai": "R",
+      "t": "ありがとうございます。……これとお茶をください。",
+      "doc": "ありがとうございます。……これとおちゃをください。",
+      "v": "Cảm ơn anh. …Cho tôi cái này và chai trà.",
+      "khac": [
+        {
+          "kieu": "lịch sự",
+          "t": "これとお茶をお願いします。",
+          "doc": "これとおちゃをおねがいします。",
+          "v": "Cho tôi cái này và chai trà ạ.",
+          "ghiChu": "お願いします nghe mềm hơn ください."
+        }
+      ],
+      "np": [
+        {
+          "mau": "N と N を ください",
+          "giai": "と nối hai danh từ (“và” — chỉ dùng cho danh từ). を chỉ thứ mình muốn lấy.",
+          "vd": "パンと牛乳をください。",
+          "vdDoc": "パンとぎゅうにゅうをください。",
+          "vdV": "Cho tôi bánh mì và sữa."
+        }
+      ]
+    },
+    {
+      "ai": "T",
+      "t": "はい。お弁当は温めますか。",
+      "doc": "はい。おべんとうはあたためますか。",
+      "v": "Vâng. Cơm hộp có cần hâm nóng không ạ?"
+    },
+    {
+      "ai": "R",
+      "t": "はい、お願いします。",
+      "doc": "はい、おねがいします。",
+      "v": "Vâng, nhờ anh ạ."
+    },
+    {
+      "ai": "T",
+      "t": "袋はいりますか。",
+      "doc": "ふくろはいりますか。",
+      "v": "Chị có cần túi không ạ?"
+    },
+    {
+      "ai": "R",
+      "t": "いいえ、いりません。かばんがあります。",
+      "doc": "いいえ、いりません。かばんがあります。",
+      "v": "Không, tôi không cần. Tôi có túi xách rồi.",
+      "khac": [
+        {
+          "kieu": "tự nhiên hơn",
+          "t": "大丈夫です。",
+          "doc": "だいじょうぶです。",
+          "v": "Không cần đâu ạ.",
+          "ghiChu": "Người Nhật rất hay dùng 大丈夫です để từ chối nhẹ (= không cần)."
+        },
+        {
+          "kieu": "lịch sự",
+          "t": "いいえ、結構です。",
+          "doc": "いいえ、けっこうです。",
+          "v": "Dạ thôi, không cần ạ.",
+          "ghiChu": "Lịch sự nhưng hơi cứng; nên nói nhẹ nhàng, kèm nụ cười."
+        }
+      ],
+      "np": [
+        {
+          "mau": "いります／いりません",
+          "giai": "いる (要る) = cần: いります = cần, いりません = không cần. Đừng nhầm với いる (居る) = có (người, con vật).",
+          "vd": "レシートはいりません。",
+          "vdDoc": "レシートはいりません。",
+          "vdV": "Tôi không cần hoá đơn."
+        }
+      ]
+    },
+    {
+      "ai": "T",
+      "t": "ポイントカードはお持ちですか。",
+      "doc": "ポイントカードはおもちですか。",
+      "v": "Chị có thẻ tích điểm không ạ?"
+    },
+    {
+      "ai": "R",
+      "t": "えっと……すみません、もう一度お願いします。",
+      "doc": "えっと……すみません、もういちどおねがいします。",
+      "v": "Ờ… xin lỗi, anh nói lại lần nữa được không ạ?",
+      "khac": [
+        {
+          "kieu": "lịch sự",
+          "t": "すみません、もう一度言っていただけますか。",
+          "doc": "すみません、もういちどいっていただけますか。",
+          "v": "Xin lỗi, anh nói lại giúp tôi một lần nữa được không ạ?"
+        },
+        {
+          "kieu": "thân mật",
+          "t": "え、もう一回言って？",
+          "doc": "え、もういっかいいって？",
+          "v": "Hả, nói lại lần nữa đi?",
+          "ghiChu": "Chỉ dùng với bạn bè."
+        }
+      ],
+      "np": [
+        {
+          "mau": "〜お願いします (nhờ ngắn gọn)",
+          "giai": "お願いします đi sau một từ/cụm từ để nhờ thật gọn: もう一度お願いします (nói lại giúp), ゆっくりお願いします (nói chậm giúp).",
+          "vd": "ゆっくりお願いします。",
+          "vdDoc": "ゆっくりおねがいします。",
+          "vdV": "Anh nói chậm giúp tôi."
+        }
+      ]
+    },
+    {
+      "ai": "T",
+      "t": "ポイントカードです。カード、ありますか。",
+      "doc": "ポイントカードです。カード、ありますか。",
+      "v": "Thẻ tích điểm ạ. Chị có thẻ không?"
+    },
+    {
+      "ai": "R",
+      "t": "あ、ありません。すみません。",
+      "doc": "あ、ありません。すみません。",
+      "v": "À, tôi không có. Xin lỗi anh.",
+      "khac": [
+        {
+          "kieu": "tự nhiên hơn",
+          "t": "あ、持っていません。すみません。",
+          "doc": "あ、もっていません。すみません。",
+          "v": "À, tôi không có. Xin lỗi anh.",
+          "ghiChu": "持っていません = không có (không mang/sở hữu) — tự nhiên khi nói về thẻ, đồ mang theo."
+        }
+      ]
+    },
+    {
+      "ai": "T",
+      "t": "だいじょうぶですよ。全部で650円です。",
+      "doc": "だいじょうぶですよ。ぜんぶでろっぴゃくごじゅうえんです。",
+      "v": "Không sao đâu ạ. Tổng cộng 650 yên."
+    },
+    {
+      "ai": "R",
+      "t": "はい、1000円でお願いします。",
+      "doc": "はい、せんえんでおねがいします。",
+      "v": "Vâng, tôi trả tờ 1000 yên.",
+      "khac": [
+        {
+          "kieu": "ngắn gọn",
+          "t": "1000円で。",
+          "doc": "せんえんで。",
+          "v": "Tôi trả 1000 yên.",
+          "ghiChu": "Vừa đưa tiền vừa nói."
+        }
+      ],
+      "np": [
+        {
+          "mau": "N で (bằng)",
+          "giai": "で chỉ phương tiện, cách thức: 1000円で (trả bằng tờ 1000 yên), カードで (bằng thẻ), 電車で (bằng tàu).",
+          "vd": "カードでお願いします。",
+          "vdDoc": "カードでおねがいします。",
+          "vdV": "Cho tôi trả bằng thẻ."
+        }
+      ]
+    },
+    {
+      "ai": "T",
+      "t": "350円のおつりです。お弁当は熱いですから、気をつけてください。",
+      "doc": "さんびゃくごじゅうえんのおつりです。おべんとうはあついですから、きをつけてください。",
+      "v": "Tiền thừa của chị 350 yên. Cơm hộp nóng đấy, chị cẩn thận nhé.",
+      "np": [
+        {
+          "mau": "〜ですから、〜てください",
+          "giai": "から nêu lý do ở vế trước: 熱いですから、気をつけてください = vì nóng nên hãy cẩn thận. Lý do trước, lời dặn sau.",
+          "vd": "今日は寒いですから、コートを着てください。",
+          "vdDoc": "きょうはさむいですから、コートをきてください。",
+          "vdV": "Hôm nay lạnh nên hãy mặc áo khoác."
+        }
+      ]
+    },
+    {
+      "ai": "R",
+      "t": "ありがとうございます。",
+      "doc": "ありがとうございます。",
+      "v": "Cảm ơn anh.",
+      "khac": [
+        {
+          "kieu": "thân mật",
+          "t": "ありがとう。",
+          "doc": "ありがとう。",
+          "v": "Cảm ơn.",
+          "ghiChu": "Với bạn bè, người nhỏ tuổi hơn."
+        },
+        {
+          "kieu": "ngắn gọn",
+          "t": "どうも。",
+          "doc": "どうも。",
+          "v": "Cảm ơn nhé.",
+          "ghiChu": "Nói nhanh khi nhận đồ ở cửa hàng; hơi suồng sã."
+        }
+      ]
+    },
+    {
+      "ai": "T",
+      "t": "ありがとうございました。またお越しくださいませ。",
+      "doc": "ありがとうございました。またおこしくださいませ。",
+      "v": "Cảm ơn quý khách. Hẹn gặp lại quý khách."
+    },
+    {
+      "ai": "R",
+      "t": "よかった。「もう一度お願いします」は、べんりですね。",
+      "doc": "よかった。「もういちどおねがいします」は、べんりですね。",
+      "v": "May quá. Câu “Anh nói lại lần nữa giúp tôi” tiện thật đấy."
+    }
   ],
   "tuVung": [
-    { "chu": "お弁当", "doc": "おべんとう", "nghia": "cơm hộp (bento)", "vd": "お弁当を食べます。" },
-    { "chu": "飲み物", "doc": "のみもの", "nghia": "đồ uống", "vd": "飲み物はなにがいいですか。" },
-    { "chu": "温めます", "doc": "あたためます", "nghia": "hâm nóng (ôn)", "vd": "ごはんを温めます。" },
-    { "chu": "袋", "doc": "ふくろ", "nghia": "túi (đựng đồ)", "vd": "袋をください。" },
-    { "chu": "いりません", "doc": "いりません", "nghia": "không cần (phủ định của いります: cần)", "vd": "はしはいりません。" },
-    { "chu": "ポイントカード", "doc": "ポイントカード", "nghia": "thẻ tích điểm", "vd": "ポイントカードはありません。" },
-    { "chu": "もう一度", "doc": "もういちど", "nghia": "thêm một lần nữa", "vd": "もう一度お願いします。" },
-    { "chu": "全部で", "doc": "ぜんぶで", "nghia": "tổng cộng, tất cả là", "vd": "全部で300円です。" },
-    { "chu": "おつり", "doc": "おつり", "nghia": "tiền thừa (tiền thối lại)", "vd": "おつりは50円です。" },
-    { "chu": "気をつけて", "doc": "きをつけて", "nghia": "cẩn thận, chú ý", "vd": "車に気をつけてください。" }
+    {
+      "chu": "お弁当",
+      "doc": "おべんとう",
+      "nghia": "cơm hộp (bento)",
+      "vd": "お弁当を食べます。"
+    },
+    {
+      "chu": "飲み物",
+      "doc": "のみもの",
+      "nghia": "đồ uống",
+      "vd": "飲み物はなにがいいですか。"
+    },
+    {
+      "chu": "温めます",
+      "doc": "あたためます",
+      "nghia": "hâm nóng (ôn)",
+      "vd": "ごはんを温めます。"
+    },
+    {
+      "chu": "袋",
+      "doc": "ふくろ",
+      "nghia": "túi (đựng đồ)",
+      "vd": "袋をください。"
+    },
+    {
+      "chu": "いりません",
+      "doc": "いりません",
+      "nghia": "không cần (phủ định của いります: cần)",
+      "vd": "はしはいりません。"
+    },
+    {
+      "chu": "ポイントカード",
+      "doc": "ポイントカード",
+      "nghia": "thẻ tích điểm",
+      "vd": "ポイントカードはありません。"
+    },
+    {
+      "chu": "もう一度",
+      "doc": "もういちど",
+      "nghia": "thêm một lần nữa",
+      "vd": "もう一度お願いします。"
+    },
+    {
+      "chu": "全部で",
+      "doc": "ぜんぶで",
+      "nghia": "tổng cộng, tất cả là",
+      "vd": "全部で300円です。"
+    },
+    {
+      "chu": "おつり",
+      "doc": "おつり",
+      "nghia": "tiền thừa (tiền thối lại)",
+      "vd": "おつりは50円です。"
+    },
+    {
+      "chu": "気をつけて",
+      "doc": "きをつけて",
+      "nghia": "cẩn thận, chú ý",
+      "vd": "車に気をつけてください。"
+    }
   ],
   "yNghia": "Ở nơi mới, không nghe kịp là chuyện bình thường — người lạ không chê bạn, họ chỉ chờ bạn hỏi lại. Một câu “もう一度お願いします” nhỏ xíu có thể biến một khoảnh khắc lúng túng thành một lần học thêm được một từ mới.",
   "meo": [
@@ -52,9 +347,47 @@
     "Trả bằng tờ tiền nào: 「1000円でお願いします」 — trợ từ で ở đây nghĩa là “bằng”."
   ],
   "cauHoi": [
-    { "hoi": "Lan mua những gì?", "chon": ["Cơm nắm và cà phê", "Cơm hộp và trà", "Bánh mì và nước"], "dung": 1, "giai": "Lan nói 「これとお茶をください」 sau khi lấy cơm hộp (お弁当)." },
-    { "hoi": "Vì sao Lan không lấy túi?", "chon": ["Túi phải trả tiền", "Cửa hàng hết túi", "Lan đã có túi xách", "Lan quên"], "dung": 2, "giai": "「いいえ、いりません。かばんがあります。」" },
-    { "hoi": "Lan nhận lại bao nhiêu tiền thừa?", "chon": ["350 yên", "650 yên", "150 yên"], "dung": 0, "giai": "1000 − 650 = 350: 「350円のおつりです」." },
-    { "hoi": "Khi không nghe kịp, Lan nói câu gì?", "chon": ["わかりません。", "いりません。", "だいじょうぶです。", "もう一度お願いします。"], "dung": 3, "giai": "「もう一度お願いします」 = xin nói lại lần nữa — câu cứu cánh của người mới học." }
+    {
+      "hoi": "Lan mua những gì?",
+      "chon": [
+        "Cơm nắm và cà phê",
+        "Cơm hộp và trà",
+        "Bánh mì và nước"
+      ],
+      "dung": 1,
+      "giai": "Lan nói 「これとお茶をください」 sau khi lấy cơm hộp (お弁当)."
+    },
+    {
+      "hoi": "Vì sao Lan không lấy túi?",
+      "chon": [
+        "Túi phải trả tiền",
+        "Cửa hàng hết túi",
+        "Lan đã có túi xách",
+        "Lan quên"
+      ],
+      "dung": 2,
+      "giai": "「いいえ、いりません。かばんがあります。」"
+    },
+    {
+      "hoi": "Lan nhận lại bao nhiêu tiền thừa?",
+      "chon": [
+        "350 yên",
+        "650 yên",
+        "150 yên"
+      ],
+      "dung": 0,
+      "giai": "1000 − 650 = 350: 「350円のおつりです」."
+    },
+    {
+      "hoi": "Khi không nghe kịp, Lan nói câu gì?",
+      "chon": [
+        "わかりません。",
+        "いりません。",
+        "だいじょうぶです。",
+        "もう一度お願いします。"
+      ],
+      "dung": 3,
+      "giai": "「もう一度お願いします」 = xin nói lại lần nữa — câu cứu cánh của người mới học."
+    }
   ]
 }

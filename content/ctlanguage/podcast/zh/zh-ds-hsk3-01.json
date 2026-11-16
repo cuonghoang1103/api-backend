@@ -1,0 +1,471 @@
+{
+  "id": "zh-ds-hsk3-01",
+  "nn": "zh",
+  "danhMuc": "doi-song",
+  "cap": "HSK3",
+  "so": 4,
+  "tieuDe": "空调好像坏了",
+  "tieuDeViet": "Hình như điều hòa hỏng rồi",
+  "moTa": "Anh Quang nhận phòng khách sạn: báo đặt phòng, đưa hộ chiếu, hỏi giờ ăn sáng và mật khẩu mạng. Lên phòng thì điều hòa thổi gió nóng, đèn nhà tắm không sáng — anh gọi lễ tân báo hỏng, đề nghị đổi phòng và được giải quyết gọn gàng.",
+  "chuDe": "Khách sạn",
+  "bieuTuong": "bed.double.fill",
+  "nguoi": [
+    {
+      "ma": "Q",
+      "ten": "Anh Quang",
+      "giong": "zh-nam",
+      "vai": "khách người Việt"
+    },
+    {
+      "ma": "R",
+      "ten": "Lễ tân",
+      "giong": "zh-nu",
+      "vai": "nhân viên lễ tân khách sạn"
+    }
+  ],
+  "loi": [
+    {
+      "ai": "R",
+      "t": "您好，欢迎光临！请问有预订吗？",
+      "doc": "Nín hǎo, huānyíng guānglín! Qǐngwèn yǒu yùdìng ma?",
+      "v": "Xin chào, chào mừng quý khách! Anh có đặt phòng trước không ạ?"
+    },
+    {
+      "ai": "Q",
+      "t": "有，我在网上订了一个大床房，住三个晚上。",
+      "doc": "Yǒu, wǒ zài wǎng shang dìng le yí ge dàchuángfáng, zhù sān ge wǎnshang.",
+      "v": "Có, tôi đặt trên mạng một phòng giường đôi, ở ba đêm.",
+      "khac": [
+        {
+          "kieu": "ngắn gọn",
+          "t": "我订了房间，名字是陈文光。",
+          "doc": "Wǒ dìng le fángjiān, míngzi shì Chén Wénguāng.",
+          "v": "Tôi đã đặt phòng, tên là Trần Văn Quang."
+        },
+        {
+          "kieu": "lịch sự",
+          "t": "您好，我有预订，麻烦帮我办一下入住。",
+          "doc": "Nín hǎo, wǒ yǒu yùdìng, máfan bāng wǒ bàn yíxià rùzhù.",
+          "v": "Chào chị, tôi có đặt trước, phiền chị làm thủ tục nhận phòng giúp."
+        }
+      ],
+      "np": [
+        {
+          "mau": "V + 了 + số lượng + O",
+          "giai": "了 ngay sau động từ báo hành động đã hoàn thành, thường đi với tân ngữ có số lượng: 订了一个房间, 买了两本书.",
+          "vd": "我昨天买了一张火车票。",
+          "vdDoc": "Wǒ zuótiān mǎi le yì zhāng huǒchē piào.",
+          "vdV": "Hôm qua tôi đã mua một vé tàu."
+        },
+        {
+          "mau": "V + thời lượng",
+          "giai": "Thời lượng (bao lâu) đứng SAU động từ: 住三个晚上, 学了两年. Còn thời điểm (lúc nào) đứng TRƯỚC động từ.",
+          "vd": "我在北京住了一年。",
+          "vdDoc": "Wǒ zài Běijīng zhù le yì nián.",
+          "vdV": "Tôi đã sống ở Bắc Kinh một năm."
+        }
+      ]
+    },
+    {
+      "ai": "R",
+      "t": "好的，请出示一下您的护照。",
+      "doc": "Hǎo de, qǐng chūshì yíxià nín de hùzhào.",
+      "v": "Vâng, anh vui lòng cho xem hộ chiếu ạ."
+    },
+    {
+      "ai": "Q",
+      "t": "给您。",
+      "doc": "Gěi nín.",
+      "v": "Gửi chị."
+    },
+    {
+      "ai": "R",
+      "t": "陈先生，您的房间是八零六，在八楼。早饭在二楼，从六点半到九点半。",
+      "doc": "Chén xiānsheng, nín de fángjiān shì bā líng liù, zài bā lóu. Zǎofàn zài èr lóu, cóng liù diǎn bàn dào jiǔ diǎn bàn.",
+      "v": "Anh Trần, phòng của anh là 806, ở tầng tám. Bữa sáng ở tầng hai, từ sáu rưỡi đến chín rưỡi.",
+      "np": [
+        {
+          "mau": "从……到……",
+          "giai": "从 A 到 B = từ A đến B, dùng cho thời gian và nơi chốn: 从六点半到九点半, 从北京到上海.",
+          "vd": "我从星期一到星期五上班。",
+          "vdDoc": "Wǒ cóng xīngqīyī dào xīngqīwǔ shàngbān.",
+          "vdV": "Tôi đi làm từ thứ Hai đến thứ Sáu."
+        }
+      ]
+    },
+    {
+      "ai": "Q",
+      "t": "好的。房间里能上网吗？密码是多少？",
+      "doc": "Hǎo de. Fángjiān li néng shàngwǎng ma? Mìmǎ shì duōshao?",
+      "v": "Vâng. Trong phòng có mạng không? Mật khẩu là gì ạ?",
+      "khac": [
+        {
+          "kieu": "ngắn gọn",
+          "t": "无线网密码是多少？",
+          "doc": "Wúxiànwǎng mìmǎ shì duōshao?",
+          "v": "Mật khẩu wifi là gì?"
+        }
+      ],
+      "np": [
+        {
+          "mau": "……是多少？ (hỏi dãy số)",
+          "giai": "Hỏi số điện thoại, mật khẩu, số phòng dùng 多少, không dùng 什么: 密码是多少？ 你的电话是多少？",
+          "vd": "你的手机号是多少？",
+          "vdDoc": "Nǐ de shǒujī hào shì duōshao?",
+          "vdV": "Số điện thoại của bạn là bao nhiêu?"
+        }
+      ]
+    },
+    {
+      "ai": "R",
+      "t": "能，密码写在房卡的袋子上。电梯在您右手边。",
+      "doc": "Néng, mìmǎ xiě zài fángkǎ de dàizi shang. Diàntī zài nín yòushǒu biān.",
+      "v": "Có ạ, mật khẩu ghi trên bao đựng thẻ phòng. Thang máy ở phía tay phải anh.",
+      "np": [
+        {
+          "mau": "V + 在 + nơi chốn",
+          "giai": "Động từ + 在 + nơi chốn = kết quả là vật ở chỗ đó: 写在袋子上 (ghi trên bao), 放在桌子上 (để trên bàn), 住在八楼.",
+          "vd": "你把手机放在桌子上吧。",
+          "vdDoc": "Nǐ bǎ shǒujī fàng zài zhuōzi shang ba.",
+          "vdV": "Bạn để điện thoại trên bàn đi."
+        }
+      ]
+    },
+    {
+      "ai": "Q",
+      "t": "喂，你好，是前台吗？我是八零六的客人。",
+      "doc": "Wéi, nǐ hǎo, shì qiántái ma? Wǒ shì bā líng liù de kèrén.",
+      "v": "A lô, chào chị, lễ tân phải không? Tôi là khách phòng 806.",
+      "khac": [
+        {
+          "kieu": "lịch sự",
+          "t": "您好，我是八零六房间的，想麻烦您一件事。",
+          "doc": "Nín hǎo, wǒ shì bā líng liù fángjiān de, xiǎng máfan nín yí jiàn shì.",
+          "v": "Chào chị, tôi ở phòng 806, muốn nhờ chị một việc."
+        }
+      ],
+      "np": [
+        {
+          "mau": "喂 (wéi) khi nghe/gọi điện",
+          "giai": "喂 là \"a lô\". Khi nghe điện thoại hầu hết người Trung đọc thanh 2 (wéi) cho mềm; đọc thanh 4 (wèi) là gọi giật giọng \"này!\", dễ nghe như cáu.",
+          "vd": "喂，你在哪儿？",
+          "vdDoc": "Wéi, nǐ zài nǎr?",
+          "vdV": "A lô, bạn đang ở đâu?"
+        }
+      ]
+    },
+    {
+      "ai": "R",
+      "t": "您好，陈先生，有什么可以帮您？",
+      "doc": "Nín hǎo, Chén xiānsheng, yǒu shénme kěyǐ bāng nín?",
+      "v": "Chào anh Trần, em có thể giúp gì cho anh ạ?"
+    },
+    {
+      "ai": "Q",
+      "t": "房间的空调好像坏了，开了半个小时还是不凉。",
+      "doc": "Fángjiān de kōngtiáo hǎoxiàng huài le, kāi le bàn ge xiǎoshí háishi bù liáng.",
+      "v": "Điều hòa trong phòng hình như hỏng rồi, bật nửa tiếng rồi mà vẫn không mát.",
+      "khac": [
+        {
+          "kieu": "mềm mỏng",
+          "t": "不好意思，房间的空调好像有点儿问题。",
+          "doc": "Bù hǎoyìsi, fángjiān de kōngtiáo hǎoxiàng yǒudiǎnr wèntí.",
+          "v": "Xin lỗi, điều hòa trong phòng hình như có chút vấn đề.",
+          "ghiChu": "mở lời nhẹ nhàng, rồi mới tả cụ thể"
+        },
+        {
+          "kieu": "ngắn gọn",
+          "t": "空调坏了。",
+          "doc": "Kōngtiáo huài le.",
+          "v": "Điều hòa hỏng rồi.",
+          "ghiChu": "thẳng, đủ ý — nhưng với người lạ nên thêm 你好/不好意思 ở đầu"
+        }
+      ],
+      "np": [
+        {
+          "mau": "V + 了 + thời lượng + 还是……",
+          "giai": "\"Đã làm… (bao lâu) mà vẫn…\": 开了半个小时还是不凉. 还是 ở đây = vẫn (không phải \"hay là\").",
+          "vd": "我等了一个小时，他还是没来。",
+          "vdDoc": "Wǒ děng le yí ge xiǎoshí, tā háishi méi lái.",
+          "vdV": "Tôi đợi một tiếng rồi mà anh ấy vẫn chưa đến."
+        }
+      ]
+    },
+    {
+      "ai": "R",
+      "t": "真不好意思！您试过遥控器上的“制冷”吗？",
+      "doc": "Zhēn bù hǎoyìsi! Nín shì guo yáokòngqì shang de “zhìlěng” ma?",
+      "v": "Thật ngại quá! Anh đã thử nút \"làm lạnh\" trên điều khiển chưa ạ?",
+      "np": [
+        {
+          "mau": "V + 过",
+          "giai": "过 sau động từ = đã từng làm (kinh nghiệm): 试过 (đã thử), 去过 (đã từng đi). Phủ định: 没 + V + 过.",
+          "vd": "你吃过北京烤鸭吗？",
+          "vdDoc": "Nǐ chī guo Běijīng kǎoyā ma?",
+          "vdV": "Bạn đã từng ăn vịt quay Bắc Kinh chưa?"
+        }
+      ]
+    },
+    {
+      "ai": "Q",
+      "t": "试过了，还是吹热风。还有，卫生间的灯也不亮。",
+      "doc": "Shì guo le, háishi chuī rè fēng. Hái yǒu, wèishēngjiān de dēng yě bú liàng.",
+      "v": "Thử rồi, vẫn thổi gió nóng. Còn nữa, đèn nhà vệ sinh cũng không sáng."
+    },
+    {
+      "ai": "R",
+      "t": "我马上让师傅上去看看，大概十分钟。",
+      "doc": "Wǒ mǎshàng ràng shīfu shàngqu kànkan, dàgài shí fēnzhōng.",
+      "v": "Em cho thợ lên xem ngay, khoảng mười phút ạ.",
+      "np": [
+        {
+          "mau": "让 + người + V",
+          "giai": "让 = bảo, để cho (ai làm gì): 让师傅上去看看 = bảo thợ lên xem. Cũng dùng cho cảm xúc: 让我很高兴.",
+          "vd": "妈妈让我早点儿回家。",
+          "vdDoc": "Māma ràng wǒ zǎo diǎnr huí jiā.",
+          "vdV": "Mẹ bảo tôi về nhà sớm."
+        }
+      ]
+    },
+    {
+      "ai": "Q",
+      "t": "好的。如果今天修不好，能不能给我换一个房间？",
+      "doc": "Hǎo de. Rúguǒ jīntiān xiū bu hǎo, néng bu néng gěi wǒ huàn yí ge fángjiān?",
+      "v": "Được. Nếu hôm nay không sửa được thì có thể đổi cho tôi phòng khác không?",
+      "khac": [
+        {
+          "kieu": "lịch sự",
+          "t": "修不好的话，麻烦您给我换个房间。",
+          "doc": "Xiū bu hǎo dehuà, máfan nín gěi wǒ huàn ge fángjiān.",
+          "v": "Nếu không sửa được thì phiền chị đổi phòng khác cho tôi."
+        },
+        {
+          "kieu": "văn nói",
+          "t": "要是修不好，就给我换间房吧。",
+          "doc": "Yàoshi xiū bu hǎo, jiù gěi wǒ huàn jiān fáng ba.",
+          "v": "Nếu không sửa được thì đổi phòng cho tôi nhé."
+        }
+      ],
+      "np": [
+        {
+          "mau": "V + 不好 / V + 得好 (bổ ngữ khả năng)",
+          "giai": "修不好 = không sửa (cho tốt) được; 修得好 = sửa được. Chèn 得/不 vào giữa động từ và bổ ngữ kết quả.",
+          "vd": "这个问题我回答不好。",
+          "vdDoc": "Zhège wèntí wǒ huídá bu hǎo.",
+          "vdV": "Câu hỏi này tôi không trả lời tốt được."
+        }
+      ]
+    },
+    {
+      "ai": "R",
+      "t": "当然可以。给您添麻烦了。",
+      "doc": "Dāngrán kěyǐ. Gěi nín tiān máfan le.",
+      "v": "Tất nhiên được ạ. Đã làm phiền anh rồi."
+    },
+    {
+      "ai": "R",
+      "t": "陈先生，师傅说空调需要换零件，今天晚上修不好。",
+      "doc": "Chén xiānsheng, shīfu shuō kōngtiáo xūyào huàn língjiàn, jīntiān wǎnshang xiū bu hǎo.",
+      "v": "Anh Trần, thợ nói điều hòa phải thay linh kiện, tối nay không sửa xong được."
+    },
+    {
+      "ai": "R",
+      "t": "我们给您换到十楼的一个房间，比现在这间大一点儿，价格不变。",
+      "doc": "Wǒmen gěi nín huàn dào shí lóu de yí ge fángjiān, bǐ xiànzài zhè jiān dà yìdiǎnr, jiàgé bú biàn.",
+      "v": "Chúng em đổi cho anh sang một phòng ở tầng mười, rộng hơn phòng hiện tại một chút, giá không đổi.",
+      "np": [
+        {
+          "mau": "A 比 B + tính từ + 一点儿",
+          "giai": "So sánh hơn một chút: tính từ + 一点儿 đứng sau. Hơn nhiều: + 得多 / 多了.",
+          "vd": "这件比那件便宜一点儿。",
+          "vdDoc": "Zhè jiàn bǐ nà jiàn piányi yìdiǎnr.",
+          "vdV": "Cái này rẻ hơn cái kia một chút."
+        }
+      ]
+    },
+    {
+      "ai": "Q",
+      "t": "太好了！我现在把行李拿下来。",
+      "doc": "Tài hǎo le! Wǒ xiànzài bǎ xíngli ná xiàlai.",
+      "v": "Tốt quá! Giờ tôi mang hành lý xuống.",
+      "np": [
+        {
+          "mau": "把 + O + V + bổ ngữ hướng",
+          "giai": "Câu 把 đưa tân ngữ lên trước động từ để nói mình XỬ LÝ nó thế nào: 把行李拿下来 = mang hành lý xuống. Động từ sau 把 phải có thành phần đi kèm (下来, 好, 在…).",
+          "vd": "请把门关上。",
+          "vdDoc": "Qǐng bǎ mén guān shang.",
+          "vdV": "Làm ơn đóng cửa lại."
+        }
+      ]
+    },
+    {
+      "ai": "R",
+      "t": "不用，我们让服务员上去帮您拿。",
+      "doc": "Bú yòng, wǒmen ràng fúwùyuán shàngqu bāng nín ná.",
+      "v": "Không cần đâu ạ, chúng em cho nhân viên lên mang giúp anh."
+    },
+    {
+      "ai": "Q",
+      "t": "你们服务真好。对了，退房是几点？",
+      "doc": "Nǐmen fúwù zhēn hǎo. Duì le, tuì fáng shì jǐ diǎn?",
+      "v": "Các chị phục vụ tốt thật. À phải rồi, trả phòng lúc mấy giờ?",
+      "khac": [
+        {
+          "kieu": "lịch sự",
+          "t": "请问最晚几点退房？",
+          "doc": "Qǐngwèn zuì wǎn jǐ diǎn tuì fáng?",
+          "v": "Cho hỏi muộn nhất mấy giờ phải trả phòng?"
+        }
+      ]
+    },
+    {
+      "ai": "R",
+      "t": "中午十二点以前。如果您需要晚一点儿，可以提前跟我们说。",
+      "doc": "Zhōngwǔ shí'èr diǎn yǐqián. Rúguǒ nín xūyào wǎn yìdiǎnr, kěyǐ tíqián gēn wǒmen shuō.",
+      "v": "Trước mười hai giờ trưa ạ. Nếu anh cần muộn hơn một chút, có thể báo trước với chúng em."
+    },
+    {
+      "ai": "Q",
+      "t": "好的，辛苦你们了！",
+      "doc": "Hǎo de, xīnkǔ nǐmen le!",
+      "v": "Được, các chị vất vả rồi!",
+      "khac": [
+        {
+          "kieu": "tự nhiên hơn",
+          "t": "好的，谢谢你们！",
+          "doc": "Hǎo de, xièxie nǐmen!",
+          "v": "Được, cảm ơn các chị!"
+        }
+      ]
+    },
+    {
+      "ai": "R",
+      "t": "不客气，祝您住得愉快！",
+      "doc": "Bú kèqi, zhù nín zhù de yúkuài!",
+      "v": "Không có gì, chúc anh có kỳ nghỉ vui vẻ!"
+    }
+  ],
+  "tuVung": [
+    {
+      "chu": "预订",
+      "doc": "yùdìng",
+      "nghia": "đặt trước (phòng, bàn, vé)",
+      "vd": "我预订了一个房间。"
+    },
+    {
+      "chu": "护照",
+      "doc": "hùzhào",
+      "nghia": "hộ chiếu",
+      "vd": "请出示护照。"
+    },
+    {
+      "chu": "密码",
+      "doc": "mìmǎ",
+      "nghia": "mật khẩu, mật mã",
+      "vd": "密码是多少？"
+    },
+    {
+      "chu": "电梯",
+      "doc": "diàntī",
+      "nghia": "thang máy",
+      "vd": "电梯在哪儿？"
+    },
+    {
+      "chu": "前台",
+      "doc": "qiántái",
+      "nghia": "quầy lễ tân",
+      "vd": "有问题请找前台。"
+    },
+    {
+      "chu": "空调",
+      "doc": "kōngtiáo",
+      "nghia": "điều hòa (调 đọc tiáo, không đọc diào)",
+      "vd": "请把空调打开。"
+    },
+    {
+      "chu": "坏",
+      "doc": "huài",
+      "nghia": "hỏng; xấu",
+      "vd": "我的手机坏了。"
+    },
+    {
+      "chu": "修",
+      "doc": "xiū",
+      "nghia": "sửa",
+      "vd": "师傅明天来修。"
+    },
+    {
+      "chu": "换",
+      "doc": "huàn",
+      "nghia": "đổi",
+      "vd": "我想换一个房间。"
+    },
+    {
+      "chu": "行李",
+      "doc": "xíngli",
+      "nghia": "hành lý",
+      "vd": "你的行李多吗？"
+    },
+    {
+      "chu": "退房",
+      "doc": "tuì fáng",
+      "nghia": "trả phòng (入住 = nhận phòng)",
+      "vd": "几点退房？"
+    },
+    {
+      "chu": "辛苦",
+      "doc": "xīnkǔ",
+      "nghia": "vất vả (辛苦了 = cảm ơn vì đã vất vả)",
+      "vd": "大家辛苦了！"
+    }
+  ],
+  "yNghia": "Gặp phòng hỏng, nhiều người im lặng chịu đựng vì ngại nói. Anh Quang làm đúng ba việc: báo sớm, tả cụ thể (bật nửa tiếng vẫn không mát, thổi gió nóng, đèn không sáng), và đề xuất cách giải quyết (sửa không được thì đổi phòng). Lịch sự không có nghĩa là im lặng — mà là nói rõ ràng, nhẹ nhàng.",
+  "meo": [
+    "Báo hỏng: (đồ vật) + 好像坏了 + mô tả cụ thể. 好像 làm câu nhẹ đi, mô tả cụ thể giúp người ta sửa nhanh.",
+    "V + 了 + thời lượng + 还是… = đã… mà vẫn… (开了半个小时还是不凉).",
+    "Bổ ngữ khả năng: 修不好 (không sửa được), 吃不完 (ăn không hết), 听不懂 (nghe không hiểu).",
+    "Đọc số phòng, số điện thoại: từng chữ số một, 0 = 零 (806 = 八零六). Số 1 trong dãy số thường đọc yāo để khỏi nhầm với 七."
+  ],
+  "cauHoi": [
+    {
+      "hoi": "Anh Quang đặt phòng gì và ở bao lâu?",
+      "chon": [
+        "Phòng hai giường, hai đêm",
+        "Phòng giường đôi, ba đêm",
+        "Phòng giường đôi, một tuần"
+      ],
+      "dung": 1,
+      "giai": "订了一个大床房，住三个晚上。"
+    },
+    {
+      "hoi": "Trong phòng có những vấn đề gì?",
+      "chon": [
+        "Không có mạng và nước nóng",
+        "Điều hòa thổi gió nóng và đèn nhà vệ sinh không sáng",
+        "Điều hòa ồn và cửa không khóa được"
+      ],
+      "dung": 1,
+      "giai": "还是吹热风。还有，卫生间的灯也不亮。"
+    },
+    {
+      "hoi": "Cuối cùng khách sạn giải quyết thế nào?",
+      "chon": [
+        "Giảm giá phòng một nửa",
+        "Sửa xong ngay trong tối",
+        "Đổi sang phòng tầng mười rộng hơn, giá không đổi"
+      ],
+      "dung": 2,
+      "giai": "换到十楼的一个房间，比现在这间大一点儿，价格不变。"
+    },
+    {
+      "hoi": "\"辛苦你们了\" dùng để làm gì?",
+      "chon": [
+        "Phàn nàn rằng mình rất vất vả",
+        "Cảm ơn người đã làm việc vất vả vì mình",
+        "Xin lỗi vì làm phiền"
+      ],
+      "dung": 1,
+      "giai": "辛苦了 là lời cảm ơn, ghi nhận công sức của người khác."
+    }
+  ]
+}

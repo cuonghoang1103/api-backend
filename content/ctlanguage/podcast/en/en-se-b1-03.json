@@ -1,0 +1,94 @@
+{
+  "id": "en-se-b1-03",
+  "nn": "en",
+  "danhMuc": "phan-mem",
+  "cap": "B1",
+  "so": 3,
+  "tieuDe": "Help! I Have a Merge Conflict",
+  "tieuDeViet": "Cứu với! Em bị merge conflict",
+  "moTa": "An, thực tập sinh, kẹt một tiếng với merge conflict mà ngại hỏi. Anh Daniel vừa giúp gỡ, vừa giải thích quy trình Git của nhóm: nhánh chính, nhánh tính năng, pull request, merge — và luật \"kẹt 15 phút thì hỏi\".",
+  "chuDe": "Git & nhờ giúp đỡ",
+  "bieuTuong": "arrow.triangle.branch",
+  "nguoi": [
+    { "ma": "A", "ten": "An", "giong": "us-nu", "vai": "thực tập sinh" },
+    { "ma": "D", "ten": "Daniel", "giong": "au-nam", "vai": "lập trình viên lâu năm (senior)" }
+  ],
+  "loi": [
+    { "ai": "A", "t": "Hi Daniel, sorry to bother you. Are you busy right now?", "v": "Chào anh Daniel, xin lỗi làm phiền anh. Giờ anh có bận không ạ?",
+      "khac": [
+        { "kieu": "lịch sự", "t": "Hi Daniel, do you have five minutes? I could use some help.", "v": "Chào anh Daniel, anh có năm phút không ạ? Em đang cần giúp một chút.", "ghiChu": "\"I could use some help\" = em đang cần giúp, nghe khiêm tốn mà rõ ràng" },
+        { "kieu": "thân mật", "t": "Hey, got a sec?", "v": "Anh ơi, rảnh tí không?", "ghiChu": "khi đã quen thân" }
+      ] },
+    { "ai": "D", "t": "Not too busy. What's up?", "v": "Không bận lắm. Có chuyện gì thế?" },
+    { "ai": "A", "t": "I'm trying to merge my branch, and Git says there's a merge conflict. I've been stuck for about an hour.", "v": "Em đang cố merge nhánh của em, mà Git báo có merge conflict. Em kẹt khoảng một tiếng rồi.",
+      "np": [{ "mau": "have been + tính từ + for + thời gian", "giai": "Hiện tại hoàn thành với \"be\": trạng thái bắt đầu trong quá khứ và vẫn kéo dài tới giờ. \"I've been stuck for an hour\" = em kẹt từ một tiếng trước tới giờ.", "vd": "She's been sick since Monday.", "vdV": "Cô ấy ốm từ thứ Hai tới giờ." }],
+      "khac": [
+        { "kieu": "mềm mỏng", "t": "I think I've messed something up with my branch. Could you take a look?", "v": "Hình như em làm rối nhánh của em rồi. Anh xem giúp em được không?" }
+      ] },
+    { "ai": "D", "t": "An hour? Next time, ask me after fifteen minutes. That's the rule on this team.", "v": "Một tiếng á? Lần sau, kẹt mười lăm phút là hỏi anh. Đó là luật của nhóm này." },
+    { "ai": "A", "t": "I didn't want to waste your time.", "v": "Em không muốn làm mất thời gian của anh.",
+      "np": [{ "mau": "didn't want to + V", "giai": "Phủ định quá khứ của \"want to\". Sau didn't động từ trở về nguyên mẫu: didn't want (không phải didn't wanted).", "vd": "I didn't want to interrupt the meeting.", "vdV": "Mình không muốn cắt ngang buổi họp." }] },
+    { "ai": "D", "t": "You're not wasting it. Helping you is part of my job.", "v": "Em không làm mất gì cả. Giúp em là một phần công việc của anh.",
+      "np": [{ "mau": "V-ing làm chủ ngữ", "giai": "Danh động từ (V-ing) có thể đứng đầu câu làm chủ ngữ: Helping you is…, Learning Git takes time. Động từ chia số ít.", "vd": "Writing tests saves a lot of time later.", "vdV": "Viết test giúp tiết kiệm nhiều thời gian về sau." }] },
+    { "ai": "D", "t": "Okay, before we fix it, let me explain how our workflow works, so the conflict makes sense.", "v": "Rồi, trước khi sửa, để anh giải thích quy trình làm việc của nhóm, để em hiểu vì sao có conflict.",
+      "np": [{ "mau": "let me + V", "giai": "\"Để tôi…\" — xin phép một cách tự nhiên để làm gì đó cho người nghe.", "vd": "Let me check my calendar.", "vdV": "Để mình xem lịch đã." }] },
+    { "ai": "A", "t": "That would be great.", "v": "Vậy thì tốt quá ạ." },
+    { "ai": "D", "t": "The main branch is the code that's running for real users. Nobody writes code directly on it.", "v": "Nhánh main là phần code đang chạy cho người dùng thật. Không ai viết code thẳng lên đó.",
+      "np": [{ "mau": "N + that + mệnh đề (mệnh đề quan hệ)", "giai": "\"the code that's running…\" — that thay cho danh từ đứng trước, giúp mô tả nó rõ hơn. Với vật dùng that/which.", "vd": "This is the server that stores our photos.", "vdV": "Đây là máy chủ lưu ảnh của bọn mình." }] },
+    { "ai": "D", "t": "When you start a task, you create your own branch from main. It's like a copy where you can work safely.", "v": "Khi bắt đầu một việc, em tạo nhánh riêng từ main. Nó giống như một bản sao mà em có thể làm việc an toàn trên đó.",
+      "np": [{ "mau": "N + where + mệnh đề", "giai": "\"where\" mở đầu mệnh đề mô tả một nơi chốn (kể cả nơi \"ảo\" như bản sao, trang web).", "vd": "This is the page where users change their password.", "vdV": "Đây là trang nơi người dùng đổi mật khẩu." }] },
+    { "ai": "A", "t": "Right, I did that on Monday. My branch is called \"feature user profile\".", "v": "Vâng, em làm vậy hôm thứ Hai. Nhánh của em tên là \"feature user profile\"." },
+    { "ai": "D", "t": "Good. When you finish, you push your branch and open a pull request.", "v": "Tốt. Làm xong thì em push nhánh lên và mở pull request." },
+    { "ai": "D", "t": "That's you asking the team, \"Please review my changes and add them to main.\"", "v": "Tức là em nhờ cả nhóm: \"Mọi người xem giúp thay đổi của em rồi gộp vào main nhé.\"" },
+    { "ai": "A", "t": "And the merge is when my changes actually go into main?", "v": "Còn merge là lúc thay đổi của em thật sự vào main ạ?" },
+    { "ai": "D", "t": "Exactly. A merge conflict happens when two people change the same lines in the same file, and Git doesn't know which version to keep.", "v": "Chính xác. Merge conflict xảy ra khi hai người sửa cùng những dòng trong cùng một file, và Git không biết nên giữ bản nào.",
+      "np": [{ "mau": "which + N + to V", "giai": "\"không biết nên… cái nào\": which version to keep, what to say, where to go. Gọn hơn \"which version it should keep\".", "vd": "I don't know which library to use.", "vdV": "Mình không biết nên dùng thư viện nào." }] },
+    { "ai": "A", "t": "So someone else changed the same file as me?", "v": "Vậy là có người khác cũng sửa đúng file của em?" },
+    { "ai": "D", "t": "Probably. Let's look. Yes, Minh updated the header file yesterday, and so did you.", "v": "Chắc vậy. Để xem. Đúng rồi, hôm qua Minh sửa file header, và em cũng thế.",
+      "np": [{ "mau": "…, and so did + S", "giai": "\"…và ai đó cũng vậy\" cho câu khẳng định quá khứ. Hiện tại: so do I; phủ định: neither did I.", "vd": "Linh finished early, and so did I.", "vdV": "Linh xong sớm, và mình cũng vậy." }] },
+    { "ai": "A", "t": "What are these strange lines with arrows and equal signs?", "v": "Mấy dòng lạ có mũi tên với dấu bằng này là gì vậy anh?" },
+    { "ai": "D", "t": "Those are conflict markers. The top part is your version, and the bottom part is the version from main. You have to decide what the final code should look like.", "v": "Đó là dấu đánh dấu conflict. Phần trên là bản của em, phần dưới là bản từ main. Em phải quyết định code cuối cùng sẽ trông thế nào." },
+    { "ai": "A", "t": "I think we need both. He added a search bar, and I added a profile picture.", "v": "Em nghĩ cần cả hai. Anh ấy thêm thanh tìm kiếm, còn em thêm ảnh đại diện." },
+    { "ai": "D", "t": "Then keep both, delete the markers, and run the app to make sure it still works.", "v": "Vậy giữ cả hai, xoá mấy dấu đánh dấu, rồi chạy app để chắc chắn là nó vẫn chạy." },
+    { "ai": "A", "t": "It works! Now what?", "v": "Chạy rồi! Giờ làm gì tiếp ạ?" },
+    { "ai": "D", "t": "Commit the fix, push again, and the pull request will update automatically.", "v": "Commit bản sửa, push lại, rồi pull request sẽ tự cập nhật." },
+    { "ai": "A", "t": "Thank you so much. That was much easier than I expected.", "v": "Cảm ơn anh nhiều lắm. Dễ hơn em tưởng nhiều.",
+      "np": [{ "mau": "much + so sánh hơn + than I expected", "giai": "\"much\" đứng trước so sánh hơn để nhấn mạnh (much easier = dễ hơn nhiều). \"than I expected\" = hơn mình tưởng.", "vd": "The exam was much harder than I expected.", "vdV": "Bài thi khó hơn mình tưởng nhiều." }],
+      "khac": [
+        { "kieu": "chuyên nghiệp", "t": "Thanks, I really appreciate you taking the time to walk me through it.", "v": "Cảm ơn anh, em rất cảm kích vì anh đã dành thời gian hướng dẫn em từng bước." },
+        { "kieu": "thân mật", "t": "Thanks a ton, you're a lifesaver!", "v": "Cảm ơn anh nhiều nha, anh đúng là cứu tinh!" }
+      ] },
+    { "ai": "D", "t": "One tip: pull the latest main into your branch every morning. Small, frequent updates mean small conflicts.", "v": "Một mẹo: mỗi sáng kéo bản main mới nhất vào nhánh của em. Cập nhật nhỏ và thường xuyên thì conflict cũng nhỏ." },
+    { "ai": "A", "t": "Got it. And next time, I'll ask after fifteen minutes, not an hour.", "v": "Em nhớ rồi. Và lần sau em sẽ hỏi sau mười lăm phút, không phải một tiếng.",
+      "khac": [
+        { "kieu": "ngắn gọn", "t": "Got it. Fifteen minutes, then I ask.", "v": "Em nhớ rồi. Mười lăm phút, rồi hỏi." }
+      ] },
+    { "ai": "D", "t": "Deal.", "v": "Chốt vậy nhé." }
+  ],
+  "tuVung": [
+    { "chu": "sorry to bother you", "doc": "/ˈsɒri tə ˈbɒðə juː/", "nghia": "xin lỗi đã làm phiền", "vd": "Sorry to bother you, but the printer isn't working." },
+    { "chu": "merge conflict", "doc": "/mɜːdʒ ˈkɒnflɪkt/", "nghia": "xung đột khi gộp code (hai người sửa cùng chỗ)", "vd": "I spent the morning fixing a merge conflict." },
+    { "chu": "branch", "doc": "/brɑːntʃ/", "nghia": "nhánh (trong Git)", "vd": "Create a new branch for each task." },
+    { "chu": "stuck", "doc": "/stʌk/", "nghia": "bị kẹt, bí, không làm tiếp được", "vd": "I'm stuck on this error." },
+    { "chu": "workflow", "doc": "/ˈwɜːkfləʊ/", "nghia": "quy trình làm việc", "vd": "Our workflow is simple: branch, pull request, review, merge." },
+    { "chu": "push", "doc": "/pʊʃ/", "nghia": "đẩy code lên kho mã chung", "vd": "Don't forget to push your changes." },
+    { "chu": "pull request", "doc": "/ˈpʊl rɪˌkwest/", "nghia": "yêu cầu nhóm xem và gộp code của mình", "vd": "My pull request has two comments." },
+    { "chu": "conflict markers", "doc": "/ˈkɒnflɪkt ˈmɑːkəz/", "nghia": "các dấu Git chèn vào file để đánh dấu chỗ xung đột", "vd": "Remove the conflict markers before you commit." },
+    { "chu": "make sure", "doc": "/meɪk ʃʊə/", "nghia": "đảm bảo, chắc chắn", "vd": "Make sure the tests pass." },
+    { "chu": "Commit", "doc": "/kəˈmɪt/", "nghia": "lưu một bộ thay đổi vào lịch sử Git", "vd": "Commit often with clear messages." },
+    { "chu": "frequent", "doc": "/ˈfriːkwənt/", "nghia": "thường xuyên", "vd": "Frequent breaks help you focus." }
+  ],
+  "yNghia": "Hỏi sớm không phải làm phiền — kẹt một mình cả tiếng mới là lãng phí thời gian của cả nhóm. Người giỏi giúp bạn không chỉ gỡ lỗi mà còn giải thích vì sao lỗi xảy ra, để lần sau bạn tự làm được.",
+  "meo": [
+    "Mở lời nhờ giúp: \"Sorry to bother you…\" / \"Do you have five minutes?\" / \"I could use some help.\"",
+    "\"I've been stuck for an hour\" — hiện tại hoàn thành cho trạng thái kéo dài tới giờ.",
+    "\"which version to keep\", \"what to do\" — từ để hỏi + to V gọn và tự nhiên.",
+    "\"and so did I\" (khẳng định) / \"and neither did I\" (phủ định) để nói \"tôi cũng vậy\"."
+  ],
+  "cauHoi": [
+    { "hoi": "Luật của nhóm Daniel là gì?", "chon": ["Không bao giờ hỏi trong giờ làm", "Kẹt mười lăm phút thì hỏi", "Chỉ hỏi qua email"], "dung": 1, "giai": "\"Next time, ask me after fifteen minutes. That's the rule on this team.\"" },
+    { "hoi": "Merge conflict xảy ra khi nào?", "chon": ["Khi hai người sửa cùng những dòng trong cùng một file", "Khi quên push code", "Khi nhánh có tên sai"], "dung": 0, "giai": "\"…when two people change the same lines in the same file…\"" },
+    { "hoi": "An và Minh đã thêm gì vào file header?", "chon": ["Cả hai cùng thêm thanh tìm kiếm", "Minh xoá ảnh đại diện của An", "Minh thêm thanh tìm kiếm, An thêm ảnh đại diện"], "dung": 2, "giai": "\"He added a search bar, and I added a profile picture.\"" },
+    { "hoi": "Mẹo của Daniel để có conflict nhỏ là gì?", "chon": ["Làm việc thẳng trên nhánh main", "Mỗi sáng kéo bản main mới nhất vào nhánh của mình", "Mỗi tuần chỉ merge một lần"], "dung": 1, "giai": "\"Pull the latest main into your branch every morning.\"" }
+  ]
+}

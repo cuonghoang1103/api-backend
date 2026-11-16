@@ -1,0 +1,93 @@
+{
+  "id": "en-se-b2-02",
+  "nn": "en",
+  "danhMuc": "phan-mem",
+  "cap": "B2",
+  "so": 2,
+  "tieuDe": "We Can't Do All of It by the Twenty-Eighth",
+  "tieuDeViet": "Chúng tôi không thể làm hết trước ngày 28",
+  "moTa": "Buổi lập kế hoạch sprint: quản lý sản phẩm muốn có tính năng chat cho buổi demo với khách. Nhóm ước lượng bằng planning poker, đối chiếu năng lực, rồi trưởng nhóm kỹ thuật nói \"không\" — bằng ba phương án để chọn.",
+  "chuDe": "Lập kế hoạch sprint",
+  "bieuTuong": "calendar.badge.clock",
+  "nguoi": [
+    { "ma": "M", "ten": "Mark", "giong": "us-nam", "vai": "quản lý sản phẩm (product manager)" },
+    { "ma": "T", "ten": "Thu", "giong": "uk-nu", "vai": "trưởng nhóm kỹ thuật (tech lead)" },
+    { "ma": "C", "ten": "Chloe", "giong": "au-nu", "vai": "lập trình viên" }
+  ],
+  "loi": [
+    { "ai": "M", "t": "Okay, everyone, the big item this sprint: the client wants in-app chat, and they'd like to see it at the demo on the twenty-eighth.", "v": "Rồi mọi người, việc lớn của sprint này: khách muốn có chat trong ứng dụng, và họ muốn xem nó ở buổi demo ngày 28." },
+    { "ai": "T", "t": "Before we commit to anything, let's agree on the scope and estimate it properly. Chloe, can you open the planning poker cards?", "v": "Trước khi cam kết điều gì, mình thống nhất phạm vi và ước lượng cho đàng hoàng đã. Chloe, em mở bộ bài planning poker được không?",
+      "np": [{ "mau": "commit to + N / V-ing", "giai": "\"cam kết làm…\" — to ở đây là giới từ, nên sau nó là danh từ hoặc V-ing, không phải động từ nguyên mẫu.", "vd": "We can't commit to delivering it this week.", "vdV": "Chúng tôi không thể cam kết giao nó trong tuần này." }],
+      "khac": [
+        { "kieu": "chuyên nghiệp", "t": "Before we make any commitments, let's size this properly.", "v": "Trước khi đưa ra cam kết nào, mình ước lượng việc này cho chuẩn đã.", "ghiChu": "\"size\" = ước lượng độ lớn, từ hay dùng trong Agile" }
+      ] },
+    { "ai": "C", "t": "Sure. Everyone, pick a number for the full chat feature: sending messages, notifications, file uploads and message history.", "v": "Vâng. Mọi người chọn một con số cho toàn bộ tính năng chat: gửi tin nhắn, thông báo, tải tệp lên và lịch sử tin nhắn." },
+    { "ai": "T", "t": "Okay, reveal. I've got eight, Chloe has thirteen, and Mark, you put three?", "v": "Rồi, lật bài. Chị chọn tám, Chloe mười ba, còn Mark, anh chọn ba à?" },
+    { "ai": "M", "t": "I'm not an engineer, but it's just messages, isn't it? How hard can it be?", "v": "Tôi không phải kỹ sư, nhưng chỉ là tin nhắn thôi mà, đúng không? Khó tới mức nào được?",
+      "np": [{ "mau": "câu hỏi đuôi: it's…, isn't it?", "giai": "Câu khẳng định + đuôi phủ định để tìm sự đồng tình. \"How hard can it be?\" là câu hỏi tu từ: \"Có gì khó đâu\" — câu nổi tiếng là hay đánh giá thấp công việc.", "vd": "It's a small change, isn't it?", "vdV": "Thay đổi nhỏ thôi, phải không?" }] },
+    { "ai": "C", "t": "That's what everyone thinks. The messages are the easy part. Real-time delivery, storing history and handling files safely: that's where the time goes.", "v": "Ai cũng nghĩ vậy. Phần tin nhắn là phần dễ. Gửi theo thời gian thực, lưu lịch sử và xử lý tệp an toàn — thời gian nằm ở đó." },
+    { "ai": "T", "t": "Chloe, why thirteen rather than eight?", "v": "Chloe, sao lại mười ba mà không phải tám?" },
+    { "ai": "C", "t": "File uploads. We'd need virus scanning and storage limits, and we've never built that before. Whenever we do something new, it takes longer than we think.", "v": "Tải tệp lên. Mình sẽ cần quét virus và giới hạn dung lượng, mà mình chưa từng làm cái đó. Hễ làm gì mới là lại lâu hơn mình nghĩ.",
+      "np": [{ "mau": "Whenever + hiện tại đơn, hiện tại đơn", "giai": "\"Bất cứ khi nào…\" — nêu một quy luật lặp lại, mạnh hơn \"when\".", "vd": "Whenever we skip testing, something breaks.", "vdV": "Hễ bỏ qua test là lại có gì đó hỏng." }] },
+    { "ai": "T", "t": "Fair point. Let's go with thirteen. Now, our capacity this sprint is about twenty points, and we've already committed twelve to bug fixes.", "v": "Có lý. Mình chọn mười ba. Giờ, năng lực của sprint này khoảng hai mươi điểm, và mình đã dành mười hai điểm cho việc sửa lỗi." },
+    { "ai": "M", "t": "So is that a yes?", "v": "Vậy là được chứ?" },
+    { "ai": "T", "t": "I'm afraid it's not a yes as it stands. If we took on all thirteen, we'd have to drop the bug fixes, and two of them affect paying customers.", "v": "Tôi e là với tình hình hiện tại thì chưa thể. Nếu nhận cả mười ba điểm, mình sẽ phải bỏ phần sửa lỗi, mà hai lỗi trong đó ảnh hưởng tới khách đang trả tiền.",
+      "np": [{ "mau": "If + quá khứ đơn, would + V (điều kiện loại 2)", "giai": "Nói về một khả năng giả định, không định làm: \"Nếu mình nhận hết thì sẽ phải…\". Giúp từ chối mà vẫn cho thấy cái giá của lựa chọn.", "vd": "If we added another feature, we would miss the deadline.", "vdV": "Nếu thêm một tính năng nữa thì mình sẽ trễ hạn." }],
+      "khac": [
+        { "kieu": "mềm mỏng", "t": "I'd love to say yes, but realistically we can't fit all of it in.", "v": "Tôi rất muốn đồng ý, nhưng thực tế mà nói thì mình không nhét vừa hết được." },
+        { "kieu": "chuyên nghiệp", "t": "Based on our capacity, we can't commit to the full scope by the twenty-eighth.", "v": "Dựa trên năng lực hiện có, chúng tôi không thể cam kết toàn bộ phạm vi trước ngày 28." }
+      ] },
+    { "ai": "M", "t": "I understand, but the client is really pushing for this. I can't go back and just say no.", "v": "Tôi hiểu, nhưng khách đang thúc rất mạnh vụ này. Tôi không thể quay lại và chỉ nói không được." },
+    { "ai": "T", "t": "I'm not asking you to say no. I'm suggesting we offer them a choice. Let me put three options on the table.", "v": "Tôi không bảo anh nói không. Tôi đề nghị mình đưa cho họ một lựa chọn. Để tôi đặt ra ba phương án.",
+      "np": [{ "mau": "suggest (that) + S + V nguyên mẫu", "giai": "Sau suggest có thể là một mệnh đề, động từ để nguyên mẫu (we offer, he offer — không thêm s). Có thể bỏ that.", "vd": "I suggest he talk to the client directly.", "vdV": "Tôi đề nghị anh ấy nói chuyện thẳng với khách." }] },
+    { "ai": "T", "t": "Option one: we build a smaller first version, with text messages and history only, no file uploads. That's about five points, and it fits comfortably.", "v": "Phương án một: mình làm phiên bản đầu nhỏ hơn, chỉ có tin nhắn chữ và lịch sử, không tải tệp. Khoảng năm điểm, vừa thoải mái." },
+    { "ai": "C", "t": "And honestly, that's what they'll use ninety percent of the time.", "v": "Và thật lòng mà nói, đó là thứ họ sẽ dùng chín mươi phần trăm thời gian." },
+    { "ai": "T", "t": "Option two: they get the full feature, but two weeks later. Option three: they get it on the twenty-eighth, but we pause the bug fixes, and they accept the risk.", "v": "Phương án hai: họ có đủ tính năng, nhưng trễ hai tuần. Phương án ba: họ có nó vào ngày 28, nhưng mình tạm dừng sửa lỗi, và họ chấp nhận rủi ro." },
+    { "ai": "M", "t": "When you put it like that, option one sounds like the obvious choice.", "v": "Nói như vậy thì phương án một nghe như lựa chọn hiển nhiên rồi." },
+    { "ai": "C", "t": "Can I add one condition? We should only show it at the demo provided that it's been tested on real phones, not just our laptops.", "v": "Em thêm một điều kiện được không? Mình chỉ nên đem nó ra demo với điều kiện là nó đã được test trên điện thoại thật, không chỉ trên laptop.",
+      "np": [{ "mau": "provided that + mệnh đề", "giai": "\"với điều kiện là\" — trang trọng hơn \"if\", hay dùng khi đặt điều kiện trong thoả thuận.", "vd": "You can work from home, provided that you join the morning meeting.", "vdV": "Bạn được làm ở nhà, miễn là bạn vào họp buổi sáng." }] },
+    { "ai": "M", "t": "Agreed. I'd rather show something small that works than something big that crashes.", "v": "Đồng ý. Tôi thà trình diễn một thứ nhỏ mà chạy được còn hơn một thứ lớn mà sập.",
+      "np": [{ "mau": "would rather + V + than + V", "giai": "\"thà… còn hơn…\" — hai động từ đều ở dạng nguyên mẫu không to.", "vd": "I'd rather work late today than come in on Saturday.", "vdV": "Tôi thà hôm nay làm muộn còn hơn thứ Bảy phải đi làm." }] },
+    { "ai": "T", "t": "Exactly. A demo that crashes costs more trust than a feature that arrives two weeks late.", "v": "Chính xác. Một buổi demo bị sập làm mất lòng tin nhiều hơn một tính năng đến trễ hai tuần." },
+    { "ai": "M", "t": "Can you help me write the message to the client? I don't want it to sound like we're making excuses.", "v": "Chị giúp tôi viết tin nhắn gửi khách được không? Tôi không muốn nó nghe như mình đang viện cớ.",
+      "np": [{ "mau": "sound like + mệnh đề", "giai": "\"nghe như là…\": sau sound like có thể là danh từ (sounds like a plan) hoặc cả mệnh đề (sounds like we're making excuses).", "vd": "It sounds like the server is down again.", "vdV": "Nghe như máy chủ lại sập rồi." }] },
+    { "ai": "T", "t": "Of course. We won't say \"we can't\". We'll say, \"Here's what we can deliver on the twenty-eighth, and here's what comes next.\"", "v": "Tất nhiên. Mình sẽ không nói \"chúng tôi không làm được\". Mình sẽ nói: \"Đây là những gì chúng tôi giao được vào ngày 28, và đây là phần tiếp theo.\"",
+      "khac": [
+        { "kieu": "văn viết", "t": "To ensure a reliable demo on the twenty-eighth, we propose delivering the chat feature in two phases.", "v": "Để đảm bảo buổi demo ngày 28 diễn ra ổn định, chúng tôi đề xuất giao tính năng chat theo hai giai đoạn.", "ghiChu": "câu mở đầu email gửi khách" }
+      ] },
+    { "ai": "M", "t": "Sounds good. Honestly, I expected a fight today.", "v": "Nghe được đấy. Thật lòng là tôi tưởng hôm nay sẽ cãi nhau." },
+    { "ai": "C", "t": "No fight. We just don't like promising things we know we can't deliver.", "v": "Không cãi gì cả. Chỉ là bọn em không thích hứa những thứ mình biết là không giao được.",
+      "khac": [
+        { "kieu": "chuyên nghiệp", "t": "We'd just rather not over-promise and under-deliver.", "v": "Chỉ là bọn em không muốn hứa nhiều mà làm được ít.", "ghiChu": "\"over-promise and under-deliver\" — cụm quen thuộc ở công sở" }
+      ] },
+    { "ai": "T", "t": "Okay, let's update the board: chat version one, five points; bug fixes, twelve. That leaves three points of buffer for surprises.", "v": "Rồi, cập nhật bảng nhé: chat phiên bản một, năm điểm; sửa lỗi, mười hai. Còn dư ba điểm làm vùng đệm cho chuyện bất ngờ." },
+    { "ai": "M", "t": "\"Buffer for surprises.\" I'm going to start using that phrase with my boss.", "v": "\"Vùng đệm cho chuyện bất ngờ.\" Tôi sẽ bắt đầu dùng câu đó với sếp tôi." }
+  ],
+  "tuVung": [
+    { "chu": "commit to", "doc": "/kəˈmɪt tuː/", "nghia": "cam kết (làm gì)", "vd": "Don't commit to a date you can't meet." },
+    { "chu": "scope", "doc": "/skəʊp/", "nghia": "phạm vi công việc", "vd": "Let's reduce the scope of the first version." },
+    { "chu": "estimate", "doc": "/ˈestɪmeɪt/", "nghia": "ước lượng", "vd": "Can you estimate how long it will take?" },
+    { "chu": "planning poker", "doc": "/ˈplænɪŋ ˈpəʊkə/", "nghia": "cách cả nhóm cùng ước lượng bằng thẻ số", "vd": "We use planning poker every sprint." },
+    { "chu": "capacity", "doc": "/kəˈpæsəti/", "nghia": "năng lực (lượng việc nhóm làm được trong sprint)", "vd": "Our capacity is lower this sprint because of the holiday." },
+    { "chu": "as it stands", "doc": "/æz ɪt stændz/", "nghia": "với tình hình hiện tại", "vd": "As it stands, we'll finish on Friday." },
+    { "chu": "took on", "doc": "/tʊk ɒn/", "nghia": "nhận (thêm việc) — take on", "vd": "She took on too many projects last year." },
+    { "chu": "pushing for", "doc": "/ˈpʊʃɪŋ fɔː/", "nghia": "thúc ép, đòi cho bằng được", "vd": "The team is pushing for a four-day week." },
+    { "chu": "on the table", "doc": "/ɒn ðə ˈteɪbl/", "nghia": "đưa ra để bàn", "vd": "All options are on the table." },
+    { "chu": "provided that", "doc": "/prəˈvaɪdɪd ðæt/", "nghia": "với điều kiện là", "vd": "We'll launch on Monday, provided that the tests pass." },
+    { "chu": "making excuses", "doc": "/ˈmeɪkɪŋ ɪkˈskjuːsɪz/", "nghia": "viện cớ, bào chữa", "vd": "Stop making excuses and fix it." },
+    { "chu": "buffer", "doc": "/ˈbʌfə/", "nghia": "khoảng đệm, phần dư phòng hờ", "vd": "Always leave a buffer in your plan." }
+  ],
+  "yNghia": "Nói \"không\" với một hạn chót phi lý không phải là thiếu tinh thần đồng đội — hứa điều mình biết không làm được mới là. Cách từ chối hay nhất là biến \"không\" thành các lựa chọn: phạm vi nhỏ hơn, thời gian dài hơn, hoặc chấp nhận rủi ro rõ ràng.",
+  "meo": [
+    "Đừng nói \"We can't\". Hãy nói \"Here's what we can deliver by…, and here's what comes next.\"",
+    "Từ chối mềm: \"I'm afraid…\" · \"I'd love to say yes, but realistically…\" · \"as it stands…\"",
+    "Điều kiện loại 2 để chỉ ra cái giá: \"If we took this on, we'd have to drop…\"",
+    "commit to + V-ing, suggest (that) + S + V nguyên mẫu, would rather + V + than + V."
+  ],
+  "cauHoi": [
+    { "hoi": "Vì sao Chloe ước lượng mười ba điểm?", "chon": ["Vì cô ấy không thích tính năng chat", "Vì phần tải tệp lên là việc mới, cần quét virus và giới hạn dung lượng", "Vì nhóm thiếu người"], "dung": 1, "giai": "\"File uploads. We'd need virus scanning and storage limits, and we've never built that before.\"" },
+    { "hoi": "Vì sao không thể nhận hết mười ba điểm?", "chon": ["Năng lực khoảng 20 điểm và đã dành 12 cho sửa lỗi", "Khách hàng đổi ý", "Mark không đồng ý"], "dung": 0, "giai": "\"Our capacity this sprint is about twenty points, and we've already committed twelve to bug fixes.\"" },
+    { "hoi": "Phương án một là gì?", "chon": ["Hoãn buổi demo", "Đủ tính năng nhưng dừng sửa lỗi", "Phiên bản nhỏ: chỉ tin nhắn chữ và lịch sử, không tải tệp"], "dung": 2, "giai": "\"…text messages and history only, no file uploads. That's about five points.\"" },
+    { "hoi": "Điều kiện Chloe thêm vào là gì?", "chon": ["Chỉ demo nếu đã test trên điện thoại thật", "Khách phải trả thêm tiền", "Phải có thêm một lập trình viên"], "dung": 0, "giai": "\"…provided that it's been tested on real phones, not just our laptops.\"" }
+  ]
+}

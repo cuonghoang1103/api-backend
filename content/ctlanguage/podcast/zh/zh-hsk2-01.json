@@ -1,6 +1,7 @@
 {
   "id": "zh-hsk2-01",
   "nn": "zh",
+  "danhMuc": "doi-song",
   "cap": "HSK2",
   "so": 1,
   "tieuDe": "有点儿辣",
@@ -9,41 +10,330 @@
   "chuDe": "Ăn uống",
   "bieuTuong": "fork.knife",
   "nguoi": [
-    { "ma": "L", "ten": "Lan", "giong": "zh-nu", "vai": "du học sinh Việt Nam" },
-    { "ma": "F", "ten": "Anh phục vụ", "giong": "zh-nam", "vai": "nhân viên quán mì" }
+    {
+      "ma": "L",
+      "ten": "Lan",
+      "giong": "zh-nu",
+      "vai": "du học sinh Việt Nam"
+    },
+    {
+      "ma": "F",
+      "ten": "Anh phục vụ",
+      "giong": "zh-nam",
+      "vai": "nhân viên quán mì"
+    }
   ],
   "loi": [
-    { "ai": "F", "t": "欢迎！您几位？", "doc": "Huānyíng! Nín jǐ wèi?", "v": "Xin chào quý khách! Chị đi mấy người ạ?" },
-    { "ai": "L", "t": "就我一个人。", "doc": "Jiù wǒ yí ge rén.", "v": "Chỉ mình tôi thôi." },
-    { "ai": "F", "t": "这边请坐。这是菜单。", "doc": "Zhèbiān qǐng zuò. Zhè shì càidān.", "v": "Mời chị ngồi bên này. Đây là thực đơn." },
-    { "ai": "L", "t": "谢谢。你们这儿什么最好吃？", "doc": "Xièxie. Nǐmen zhèr shénme zuì hǎochī?", "v": "Cảm ơn. Ở quán mình món gì ngon nhất?" },
-    { "ai": "F", "t": "牛肉面卖得最好，很多客人每天都来吃。", "doc": "Niúròu miàn mài de zuì hǎo, hěn duō kèrén měi tiān dōu lái chī.", "v": "Mì bò bán chạy nhất, nhiều khách ngày nào cũng đến ăn." },
-    { "ai": "L", "t": "牛肉面辣不辣？我不太能吃辣的。", "doc": "Niúròu miàn là bu là? Wǒ bú tài néng chī là de.", "v": "Mì bò có cay không? Tôi không ăn cay giỏi lắm." },
-    { "ai": "F", "t": "有点儿辣。我们也可以做得不辣。", "doc": "Yǒudiǎnr là. Wǒmen yě kěyǐ zuò de bú là.", "v": "Hơi cay một chút. Bọn em cũng có thể làm không cay." },
-    { "ai": "L", "t": "我想试试，少放一点儿辣吧。", "doc": "Wǒ xiǎng shìshi, shǎo fàng yìdiǎnr là ba.", "v": "Tôi muốn thử, cho ít cay một chút nhé." },
-    { "ai": "F", "t": "好的。还要别的吗？喝点儿什么？", "doc": "Hǎo de. Hái yào bié de ma? Hē diǎnr shénme?", "v": "Vâng ạ. Chị gọi thêm gì không? Uống gì ạ?" },
-    { "ai": "L", "t": "来一杯热茶吧。", "doc": "Lái yì bēi rè chá ba.", "v": "Cho tôi một cốc trà nóng nhé." },
-    { "ai": "F", "t": "好，请您等一下。", "doc": "Hǎo, qǐng nín děng yíxià.", "v": "Vâng, chị chờ một chút ạ." },
-    { "ai": "F", "t": "您的牛肉面来了。小心，很热。", "doc": "Nín de niúròu miàn lái le. Xiǎoxīn, hěn rè.", "v": "Mì bò của chị đây ạ. Cẩn thận, nóng lắm." },
-    { "ai": "L", "t": "哇，真香！好吃！一点儿也不辣！", "doc": "Wa, zhēn xiāng! Hǎochī! Yìdiǎnr yě bú là!", "v": "Oa, thơm quá! Ngon! Chẳng cay chút nào!" },
-    { "ai": "F", "t": "那下次您可以试试我们的辣牛肉面。", "doc": "Nà xià cì nín kěyǐ shìshi wǒmen de là niúròu miàn.", "v": "Vậy lần sau chị có thể thử mì bò cay của quán." },
-    { "ai": "L", "t": "我以前觉得我不能吃辣的，现在我想再试一次。", "doc": "Wǒ yǐqián juéde wǒ bù néng chī là de, xiànzài wǒ xiǎng zài shì yí cì.", "v": "Trước đây tôi cứ nghĩ mình không ăn được cay, giờ tôi muốn thử thêm lần nữa." },
-    { "ai": "F", "t": "哈哈，很多人都是这样开始吃辣的。", "doc": "Hāha, hěn duō rén dōu shì zhèyàng kāishǐ chī là de.", "v": "Haha, nhiều người cũng bắt đầu ăn cay đúng kiểu này đấy." },
-    { "ai": "L", "t": "谢谢你的介绍。我明天还来！", "doc": "Xièxie nǐ de jièshào. Wǒ míngtiān hái lái!", "v": "Cảm ơn em đã giới thiệu. Mai tôi lại đến!" },
-    { "ai": "F", "t": "欢迎再来！", "doc": "Huānyíng zài lái!", "v": "Hẹn gặp lại chị!" }
+    {
+      "ai": "F",
+      "t": "欢迎！您几位？",
+      "doc": "Huānyíng! Nín jǐ wèi?",
+      "v": "Xin chào quý khách! Chị đi mấy người ạ?",
+      "np": [
+        {
+          "mau": "几位？",
+          "giai": "位 là lượng từ lịch sự cho người, nhân viên dùng khi hỏi khách: 您几位？ Mình tự nói thì dùng 个 cũng được: 我们三个人.",
+          "vd": "请问几位？— 两位。",
+          "vdDoc": "Qǐngwèn jǐ wèi? — Liǎng wèi.",
+          "vdV": "Cho hỏi mấy người ạ? — Hai người."
+        }
+      ]
+    },
+    {
+      "ai": "L",
+      "t": "就我一个人。",
+      "doc": "Jiù wǒ yí ge rén.",
+      "v": "Chỉ mình tôi thôi.",
+      "khac": [
+        {
+          "kieu": "ngắn gọn",
+          "t": "一位。",
+          "doc": "Yí wèi.",
+          "v": "Một người."
+        }
+      ],
+      "np": [
+        {
+          "mau": "就 = chỉ",
+          "giai": "就 trước danh từ/đại từ = chỉ, chỉ có: 就我一个人 = chỉ mình tôi.",
+          "vd": "就剩一个了。",
+          "vdDoc": "Jiù shèng yí ge le.",
+          "vdV": "Chỉ còn lại một cái thôi."
+        }
+      ]
+    },
+    {
+      "ai": "F",
+      "t": "这边请坐。这是菜单。",
+      "doc": "Zhèbiān qǐng zuò. Zhè shì càidān.",
+      "v": "Mời chị ngồi bên này. Đây là thực đơn."
+    },
+    {
+      "ai": "L",
+      "t": "谢谢。你们这儿什么最好吃？",
+      "doc": "Xièxie. Nǐmen zhèr shénme zuì hǎochī?",
+      "v": "Cảm ơn. Ở quán mình món gì ngon nhất?",
+      "khac": [
+        {
+          "kieu": "tự nhiên hơn",
+          "t": "你们的招牌菜是什么？",
+          "doc": "Nǐmen de zhāopái cài shì shénme?",
+          "v": "Món đặc trưng của quán là gì?",
+          "ghiChu": "招牌菜 = món tủ, món làm nên tên tuổi quán"
+        },
+        {
+          "kieu": "lịch sự",
+          "t": "有什么推荐的吗？",
+          "doc": "Yǒu shénme tuījiàn de ma?",
+          "v": "Có món nào gợi ý không em?"
+        }
+      ],
+      "np": [
+        {
+          "mau": "最 + tính từ",
+          "giai": "最 = nhất, đứng TRƯỚC tính từ: 最好吃 (ngon nhất), 最便宜 (rẻ nhất).",
+          "vd": "这家店的饺子最有名。",
+          "vdDoc": "Zhè jiā diàn de jiǎozi zuì yǒumíng.",
+          "vdV": "Sủi cảo của quán này nổi tiếng nhất."
+        }
+      ]
+    },
+    {
+      "ai": "F",
+      "t": "牛肉面卖得最好，很多客人每天都来吃。",
+      "doc": "Niúròu miàn mài de zuì hǎo, hěn duō kèrén měi tiān dōu lái chī.",
+      "v": "Mì bò bán chạy nhất, nhiều khách ngày nào cũng đến ăn.",
+      "np": [
+        {
+          "mau": "V + 得 + 最好/很好",
+          "giai": "Bổ ngữ trạng thái: 卖得最好 = bán chạy nhất (bán một cách tốt nhất). Mẫu: V + 得 + (mức độ) + tính từ.",
+          "vd": "他汉语说得很好。",
+          "vdDoc": "Tā Hànyǔ shuō de hěn hǎo.",
+          "vdV": "Anh ấy nói tiếng Trung rất giỏi."
+        }
+      ]
+    },
+    {
+      "ai": "L",
+      "t": "牛肉面辣不辣？我不太能吃辣的。",
+      "doc": "Niúròu miàn là bu là? Wǒ bú tài néng chī là de.",
+      "v": "Mì bò có cay không? Tôi không ăn cay giỏi lắm.",
+      "khac": [
+        {
+          "kieu": "ngắn gọn",
+          "t": "牛肉面辣吗？",
+          "doc": "Niúròu miàn là ma?",
+          "v": "Mì bò có cay không?"
+        }
+      ],
+      "np": [
+        {
+          "mau": "Tính từ + 不 + tính từ？",
+          "giai": "Câu hỏi chính phản với tính từ: 辣不辣？ = có cay không? Giống 辣吗？ nhưng tự nhiên, khẩu ngữ hơn. Không thêm 吗.",
+          "vd": "这个贵不贵？",
+          "vdDoc": "Zhège guì bu guì?",
+          "vdV": "Cái này có đắt không?"
+        }
+      ]
+    },
+    {
+      "ai": "F",
+      "t": "有点儿辣。我们也可以做得不辣。",
+      "doc": "Yǒudiǎnr là. Wǒmen yě kěyǐ zuò de bú là.",
+      "v": "Hơi cay một chút. Bọn em cũng có thể làm không cay."
+    },
+    {
+      "ai": "L",
+      "t": "我想试试，少放一点儿辣吧。",
+      "doc": "Wǒ xiǎng shìshi, shǎo fàng yìdiǎnr là ba.",
+      "v": "Tôi muốn thử, cho ít cay một chút nhé.",
+      "khac": [
+        {
+          "kieu": "ngắn gọn",
+          "t": "微辣就行。",
+          "doc": "Wēi là jiù xíng.",
+          "v": "Cay ít thôi là được.",
+          "ghiChu": "nhiều quán cho chọn độ cay: 微辣 (ít) · 中辣 (vừa) · 特辣 (rất cay)"
+        },
+        {
+          "kieu": "lịch sự",
+          "t": "麻烦少放点儿辣椒。",
+          "doc": "Máfan shǎo fàng diǎnr làjiāo.",
+          "v": "Phiền em cho ít ớt thôi."
+        }
+      ],
+      "np": [
+        {
+          "mau": "少 + V + 一点儿",
+          "giai": "少/多 đứng TRƯỚC động từ: 少放一点儿 = bỏ ít đi chút, 多放一点儿 = bỏ nhiều thêm chút.",
+          "vd": "多放一点儿糖。",
+          "vdDoc": "Duō fàng yìdiǎnr táng.",
+          "vdV": "Cho thêm chút đường."
+        }
+      ]
+    },
+    {
+      "ai": "F",
+      "t": "好的。还要别的吗？喝点儿什么？",
+      "doc": "Hǎo de. Hái yào bié de ma? Hē diǎnr shénme?",
+      "v": "Vâng ạ. Chị gọi thêm gì không? Uống gì ạ?"
+    },
+    {
+      "ai": "L",
+      "t": "来一杯热茶吧。",
+      "doc": "Lái yì bēi rè chá ba.",
+      "v": "Cho tôi một cốc trà nóng nhé.",
+      "khac": [
+        {
+          "kieu": "lịch sự",
+          "t": "麻烦给我一杯热茶，谢谢。",
+          "doc": "Máfan gěi wǒ yì bēi rè chá, xièxie.",
+          "v": "Phiền em cho tôi một cốc trà nóng, cảm ơn."
+        }
+      ]
+    },
+    {
+      "ai": "F",
+      "t": "好，请您等一下。",
+      "doc": "Hǎo, qǐng nín děng yíxià.",
+      "v": "Vâng, chị chờ một chút ạ."
+    },
+    {
+      "ai": "F",
+      "t": "您的牛肉面来了。小心，很热。",
+      "doc": "Nín de niúròu miàn lái le. Xiǎoxīn, hěn rè.",
+      "v": "Mì bò của chị đây ạ. Cẩn thận, nóng lắm."
+    },
+    {
+      "ai": "L",
+      "t": "哇，真香！好吃！一点儿也不辣！",
+      "doc": "Wa, zhēn xiāng! Hǎochī! Yìdiǎnr yě bú là!",
+      "v": "Oa, thơm quá! Ngon! Chẳng cay chút nào!",
+      "np": [
+        {
+          "mau": "一点儿也不 + tính từ",
+          "giai": "\"Chẳng… chút nào\": 一点儿也不辣. Cũng nói 一点儿都不. Nhấn mạnh phủ định hoàn toàn.",
+          "vd": "这个问题一点儿也不难。",
+          "vdDoc": "Zhège wèntí yìdiǎnr yě bù nán.",
+          "vdV": "Câu hỏi này chẳng khó chút nào."
+        }
+      ]
+    },
+    {
+      "ai": "F",
+      "t": "那下次您可以试试我们的辣牛肉面。",
+      "doc": "Nà xià cì nín kěyǐ shìshi wǒmen de là niúròu miàn.",
+      "v": "Vậy lần sau chị có thể thử mì bò cay của quán."
+    },
+    {
+      "ai": "L",
+      "t": "我以前觉得我不能吃辣的，现在我想再试一次。",
+      "doc": "Wǒ yǐqián juéde wǒ bù néng chī là de, xiànzài wǒ xiǎng zài shì yí cì.",
+      "v": "Trước đây tôi cứ nghĩ mình không ăn được cay, giờ tôi muốn thử thêm lần nữa.",
+      "np": [
+        {
+          "mau": "再 + V + 一次",
+          "giai": "再…一次 = làm lại một lần nữa (sắp làm). 以前…现在… đối chiếu trước đây và bây giờ.",
+          "vd": "我没听清楚，你再说一次。",
+          "vdDoc": "Wǒ méi tīng qīngchu, nǐ zài shuō yí cì.",
+          "vdV": "Tôi nghe chưa rõ, bạn nói lại lần nữa."
+        }
+      ]
+    },
+    {
+      "ai": "F",
+      "t": "哈哈，很多人都是这样开始吃辣的。",
+      "doc": "Hāha, hěn duō rén dōu shì zhèyàng kāishǐ chī là de.",
+      "v": "Haha, nhiều người cũng bắt đầu ăn cay đúng kiểu này đấy."
+    },
+    {
+      "ai": "L",
+      "t": "谢谢你的介绍。我明天还来！",
+      "doc": "Xièxie nǐ de jièshào. Wǒ míngtiān hái lái!",
+      "v": "Cảm ơn em đã giới thiệu. Mai tôi lại đến!",
+      "khac": [
+        {
+          "kieu": "ngắn gọn",
+          "t": "谢谢推荐，下次还来！",
+          "doc": "Xièxie tuījiàn, xià cì hái lái!",
+          "v": "Cảm ơn đã giới thiệu, lần sau lại đến!"
+        }
+      ]
+    },
+    {
+      "ai": "F",
+      "t": "欢迎再来！",
+      "doc": "Huānyíng zài lái!",
+      "v": "Hẹn gặp lại chị!"
+    }
   ],
   "tuVung": [
-    { "chu": "菜单", "doc": "càidān", "nghia": "thực đơn (thái đơn)", "vd": "服务员，请给我菜单。" },
-    { "chu": "牛肉面", "doc": "niúròu miàn", "nghia": "mì bò (ngưu nhục diện)", "vd": "我要一碗牛肉面。" },
-    { "chu": "辣", "doc": "là", "nghia": "cay (lạt)", "vd": "这个菜很辣。" },
-    { "chu": "有点儿", "doc": "yǒudiǎnr", "nghia": "hơi…, có chút… (thường dùng cho điều không như ý)", "vd": "今天有点儿冷。" },
-    { "chu": "一点儿", "doc": "yìdiǎnr", "nghia": "một chút, một ít", "vd": "请说慢一点儿。" },
-    { "chu": "试试", "doc": "shìshi", "nghia": "thử xem, thử một chút (thí)", "vd": "这件衣服你试试。" },
-    { "chu": "别的", "doc": "bié de", "nghia": "cái khác, thứ khác", "vd": "还要别的吗？" },
-    { "chu": "等一下", "doc": "děng yíxià", "nghia": "chờ một chút", "vd": "请等一下，我马上来。" },
-    { "chu": "香", "doc": "xiāng", "nghia": "thơm (hương)", "vd": "这杯茶真香。" },
-    { "chu": "介绍", "doc": "jièshào", "nghia": "giới thiệu", "vd": "我介绍一下，这是我朋友。" },
-    { "chu": "欢迎", "doc": "huānyíng", "nghia": "hoan nghênh, chào mừng", "vd": "欢迎你来越南！" }
+    {
+      "chu": "菜单",
+      "doc": "càidān",
+      "nghia": "thực đơn (thái đơn)",
+      "vd": "服务员，请给我菜单。"
+    },
+    {
+      "chu": "牛肉面",
+      "doc": "niúròu miàn",
+      "nghia": "mì bò (ngưu nhục diện)",
+      "vd": "我要一碗牛肉面。"
+    },
+    {
+      "chu": "辣",
+      "doc": "là",
+      "nghia": "cay (lạt)",
+      "vd": "这个菜很辣。"
+    },
+    {
+      "chu": "有点儿",
+      "doc": "yǒudiǎnr",
+      "nghia": "hơi…, có chút… (thường dùng cho điều không như ý)",
+      "vd": "今天有点儿冷。"
+    },
+    {
+      "chu": "一点儿",
+      "doc": "yìdiǎnr",
+      "nghia": "một chút, một ít",
+      "vd": "请说慢一点儿。"
+    },
+    {
+      "chu": "试试",
+      "doc": "shìshi",
+      "nghia": "thử xem, thử một chút (thí)",
+      "vd": "这件衣服你试试。"
+    },
+    {
+      "chu": "别的",
+      "doc": "bié de",
+      "nghia": "cái khác, thứ khác",
+      "vd": "还要别的吗？"
+    },
+    {
+      "chu": "等一下",
+      "doc": "děng yíxià",
+      "nghia": "chờ một chút",
+      "vd": "请等一下，我马上来。"
+    },
+    {
+      "chu": "香",
+      "doc": "xiāng",
+      "nghia": "thơm (hương)",
+      "vd": "这杯茶真香。"
+    },
+    {
+      "chu": "介绍",
+      "doc": "jièshào",
+      "nghia": "giới thiệu",
+      "vd": "我介绍一下，这是我朋友。"
+    },
+    {
+      "chu": "欢迎",
+      "doc": "huānyíng",
+      "nghia": "hoan nghênh, chào mừng",
+      "vd": "欢迎你来越南！"
+    }
   ],
   "yNghia": "Lan không nhảy ngay vào bát mì cay nhất — cô chỉ \"thử một chút\". Học gì cũng vậy, kể cả tiếng Trung: không cần dũng cảm cùng lúc, chỉ cần mỗi lần dám thêm một chút. Đến khi nhìn lại, điều từng thấy \"không thể\" đã thành điều mình thích.",
   "meo": [
@@ -53,9 +343,45 @@
     "Câu hỏi chính phản: tính từ + 不 + tính từ: 辣不辣？ = 辣吗？ Lặp động từ (试试, 看看) làm câu nhẹ nhàng: \"thử xem\"."
   ],
   "cauHoi": [
-    { "hoi": "Theo anh phục vụ, món nào bán chạy nhất?", "chon": ["Cơm rang", "Mì bò", "Trà nóng"], "dung": 1, "giai": "Anh nói: 牛肉面卖得最好." },
-    { "hoi": "Lan dặn làm mì thế nào?", "chon": ["Cho ít cay một chút", "Thật cay", "Không cho thịt bò"], "dung": 0, "giai": "Lan nói: 少放一点儿辣吧 — cho ít cay một chút." },
-    { "hoi": "Ăn xong Lan thấy thế nào?", "chon": ["Cay quá, không ăn nổi", "Hơi mặn", "Thơm, ngon, chẳng cay chút nào"], "dung": 2, "giai": "Lan nói: 真香！好吃！一点儿也不辣！" },
-    { "hoi": "Câu nào nói đúng \"hôm nay hơi lạnh\"?", "chon": ["今天一点儿冷。", "今天有点儿冷。", "今天冷有点儿。"], "dung": 1, "giai": "\"Hơi + tính từ\" dùng 有点儿 đứng trước tính từ: 有点儿冷." }
+    {
+      "hoi": "Theo anh phục vụ, món nào bán chạy nhất?",
+      "chon": [
+        "Cơm rang",
+        "Mì bò",
+        "Trà nóng"
+      ],
+      "dung": 1,
+      "giai": "Anh nói: 牛肉面卖得最好."
+    },
+    {
+      "hoi": "Lan dặn làm mì thế nào?",
+      "chon": [
+        "Cho ít cay một chút",
+        "Thật cay",
+        "Không cho thịt bò"
+      ],
+      "dung": 0,
+      "giai": "Lan nói: 少放一点儿辣吧 — cho ít cay một chút."
+    },
+    {
+      "hoi": "Ăn xong Lan thấy thế nào?",
+      "chon": [
+        "Cay quá, không ăn nổi",
+        "Hơi mặn",
+        "Thơm, ngon, chẳng cay chút nào"
+      ],
+      "dung": 2,
+      "giai": "Lan nói: 真香！好吃！一点儿也不辣！"
+    },
+    {
+      "hoi": "Câu nào nói đúng \"hôm nay hơi lạnh\"?",
+      "chon": [
+        "今天一点儿冷。",
+        "今天有点儿冷。",
+        "今天冷有点儿。"
+      ],
+      "dung": 1,
+      "giai": "\"Hơi + tính từ\" dùng 有点儿 đứng trước tính từ: 有点儿冷."
+    }
   ]
 }

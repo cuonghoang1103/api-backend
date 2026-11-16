@@ -1,0 +1,488 @@
+{
+  "id": "ja-se-n2-03",
+  "nn": "ja",
+  "danhMuc": "phan-mem",
+  "cap": "N2",
+  "so": 3,
+  "tieuDe": "「できます」と言う前に",
+  "tieuDeViet": "Trước khi nói “làm được”",
+  "moTa": "Khách muốn ra chức năng tích điểm trong hai tuần. Trưởng nhóm kỹ thuật Phúc không trả lời ngay mà xin một ngày để ước lượng: bốn tuần. Anh không chỉ nói \"không\", mà đề xuất chia hai giai đoạn, giải thích vì sao thêm người không nhanh hơn. Học cách 見積もり và đàm phán lịch với khách: 結論から申し上げますと, その上で, その代わり.",
+  "chuDe": "Ước lượng, đàm phán lịch",
+  "bieuTuong": "calendar.badge.clock",
+  "nguoi": [
+    {
+      "ma": "M",
+      "ten": "前田",
+      "giong": "ja-nu",
+      "vai": "quản lý dự án (PM)"
+    },
+    {
+      "ma": "P",
+      "ten": "フック",
+      "giong": "ja-nam",
+      "vai": "trưởng nhóm kỹ thuật người Việt"
+    },
+    {
+      "ma": "O",
+      "ten": "岡本",
+      "giong": "ja2-nam",
+      "vai": "người phụ trách phía khách hàng"
+    }
+  ],
+  "loi": [
+    {
+      "ai": "M",
+      "t": "フックさん、岡本様から、ポイント機能を二週間で出してほしいと言われているんだけど、いけそう？",
+      "doc": "フックさん、おかもとさまから、ポイントきのうをにしゅうかんでだしてほしいといわれているんだけど、いけそう？",
+      "v": "Phúc ơi, anh Okamoto bên khách muốn ra chức năng tích điểm trong hai tuần, em thấy kịp không?"
+    },
+    {
+      "ai": "P",
+      "t": "二週間ですか……。即答はできないので、一日いただけますか。きちんと見積もってからお返事したいです。",
+      "doc": "にしゅうかんですか……。そくとうはできないので、いちにちいただけますか。きちんとみつもってからおへんじしたいです。",
+      "v": "Hai tuần ạ… Em không trả lời ngay được, chị cho em một ngày được không? Em muốn ước lượng cẩn thận rồi mới trả lời.",
+      "khac": [
+        {
+          "kieu": "lịch sự",
+          "t": "持ち帰って検討させていただけますでしょうか。明日中に見積もりをお出しします。",
+          "doc": "もちかえってけんとうさせていただけますでしょうか。あしたじゅうにみつもりをおだしします。",
+          "v": "Cho phép tôi mang về xem xét được không ạ? Trong ngày mai tôi sẽ gửi bản ước lượng.",
+          "ghiChu": "nói với khách; 持ち帰る = mang về bàn nội bộ, câu chuẩn khi chưa muốn trả lời ngay"
+        }
+      ]
+    },
+    {
+      "ai": "M",
+      "t": "助かる。お客様の前で「できます」って言っちゃうと、後から引けなくなるからね。",
+      "doc": "たすかる。おきゃくさまのまえで「できます」っていっちゃうと、あとからひけなくなるからね。",
+      "v": "Tốt quá. Lỡ nói “làm được” trước mặt khách thì sau này không rút lại được đâu."
+    },
+    {
+      "ai": "P",
+      "t": "岡本様、ポイント機能の見積もりがまとまりましたので、ご説明させていただきます。",
+      "doc": "おかもとさま、ポイントきのうのみつもりがまとまりましたので、ごせつめいさせていただきます。",
+      "v": "Anh Okamoto, bản ước lượng cho chức năng tích điểm đã xong, tôi xin phép trình bày."
+    },
+    {
+      "ai": "P",
+      "t": "結論から申し上げますと、ご要望の機能をすべて実装する場合、テストを含めて四週間が必要です。",
+      "doc": "けつろんからもうしあげますと、ごようぼうのきのうをすべてじっそうするばあい、テストをふくめてよんしゅうかんがひつようです。",
+      "v": "Nói kết luận trước: nếu triển khai toàn bộ chức năng anh yêu cầu thì cần bốn tuần, tính cả kiểm thử.",
+      "np": [
+        {
+          "mau": "結論から申し上げますと",
+          "giai": "Mở đầu bằng kết luận (khiêm nhường). Người Nhật trong công việc rất chuộng \"kết luận trước, lý do sau\".",
+          "vd": "結論から申し上げますと、予算内で可能です。",
+          "vdDoc": "けつろんからもうしあげますと、よさんないでかのうです。",
+          "vdV": "Nói kết luận trước: làm được trong ngân sách."
+        }
+      ]
+    },
+    {
+      "ai": "O",
+      "t": "四週間？倍じゃないですか。来月のキャンペーンに間に合わないと意味がないんですよ。",
+      "doc": "よんしゅうかん？ばいじゃないですか。らいげつのキャンペーンにまにあわないといみがないんですよ。",
+      "v": "Bốn tuần? Gấp đôi còn gì. Không kịp chiến dịch tháng sau thì chẳng có ý nghĩa gì cả."
+    },
+    {
+      "ai": "P",
+      "t": "キャンペーンの日程が動かせないことは、十分承知しております。",
+      "doc": "キャンペーンのにっていがうごかせないことは、じゅうぶんしょうちしております。",
+      "v": "Chúng tôi hoàn toàn hiểu là lịch chiến dịch không thể dời."
+    },
+    {
+      "ai": "P",
+      "t": "その上で、ご提案があります。機能を二段階に分けて、キャンペーンに必要な部分を先にリリースするのはいかがでしょうか。",
+      "doc": "そのうえで、ごていあんがあります。きのうをにだんかいにわけて、キャンペーンにひつようなぶぶんをさきにリリースするのはいかがでしょうか。",
+      "v": "Trên cơ sở đó, tôi có một đề xuất: chia chức năng làm hai giai đoạn, phát hành trước phần cần cho chiến dịch thì anh thấy thế nào?",
+      "khac": [
+        {
+          "kieu": "mềm mỏng",
+          "t": "もしよろしければ、一つ別の進め方をご提案させていただいてもよろしいでしょうか。",
+          "doc": "もしよろしければ、ひとつべつのすすめかたをごていあんさせていただいてもよろしいでしょうか。",
+          "v": "Nếu anh cho phép, tôi xin đề xuất một cách triển khai khác được không ạ?"
+        }
+      ],
+      "np": [
+        {
+          "mau": "その上で",
+          "giai": "Trên cơ sở đó, sau khi đã (công nhận/hiểu) điều trên thì … Dùng để chuyển từ công nhận sang đề xuất.",
+          "vd": "ご意見は理解しました。その上で、一つ質問があります。",
+          "vdDoc": "ごいけんはりかいしました。そのうえで、ひとつしつもんがあります。",
+          "vdV": "Tôi đã hiểu ý anh. Trên cơ sở đó, tôi có một câu hỏi."
+        }
+      ]
+    },
+    {
+      "ai": "O",
+      "t": "必要な部分、というと？",
+      "doc": "ひつようなぶぶん、というと？",
+      "v": "Phần cần thiết là phần nào?"
+    },
+    {
+      "ai": "P",
+      "t": "ポイントを貯める機能と、残高を表示する機能です。これなら二週間でリリースできます。",
+      "doc": "ポイントをためるきのうと、ざんだかをひょうじするきのうです。これならにしゅうかんでリリースできます。",
+      "v": "Là chức năng tích điểm và hiển thị số điểm hiện có. Phần này thì hai tuần là phát hành được."
+    },
+    {
+      "ai": "P",
+      "t": "ポイントを商品と交換する機能や、有効期限の管理は、キャンペーン開始後の二週間で追加いたします。",
+      "doc": "ポイントをしょうひんとこうかんするきのうや、ゆうこうきげんのかんりは、キャンペーンかいしごのにしゅうかんでついかいたします。",
+      "v": "Chức năng đổi điểm lấy quà và quản lý hạn dùng điểm sẽ được bổ sung trong hai tuần sau khi chiến dịch bắt đầu."
+    },
+    {
+      "ai": "O",
+      "t": "でも、貯めたポイントが使えないと、お客さんに文句を言われませんか。",
+      "doc": "でも、ためたポイントがつかえないと、おきゃくさんにもんくをいわれませんか。",
+      "v": "Nhưng tích điểm mà không dùng được thì khách có phàn nàn không?"
+    },
+    {
+      "ai": "P",
+      "t": "ポイントの交換は、そもそも一定のポイントが貯まらないことには始まりません。",
+      "doc": "ポイントのこうかんは、そもそもいっていのポイントがたまらないことにははじまりません。",
+      "v": "Việc đổi điểm thì vốn dĩ phải tích đủ một số điểm nhất định mới bắt đầu được.",
+      "np": [
+        {
+          "mau": "〜ないことには〜ない",
+          "giai": "Nếu không A thì B không thể xảy ra (A là điều kiện bắt buộc).",
+          "vd": "実際に使ってみないことには、よさはわからない。",
+          "vdDoc": "じっさいにつかってみないことには、よさはわからない。",
+          "vdV": "Không dùng thử thì không biết được nó tốt thế nào."
+        }
+      ]
+    },
+    {
+      "ai": "P",
+      "t": "最初の二週間で交換できるほど貯まるお客様は、ほとんどいらっしゃらないと見込んでおります。",
+      "doc": "さいしょのにしゅうかんでこうかんできるほどたまるおきゃくさまは、ほとんどいらっしゃらないとみこんでおります。",
+      "v": "Chúng tôi dự đoán hầu như không có khách nào tích đủ điểm để đổi trong hai tuần đầu.",
+      "np": [
+        {
+          "mau": "いらっしゃる (尊敬)",
+          "giai": "Tôn kính ngữ của いる / 行く / 来る. Dùng khi nói về khách hàng, người trên.",
+          "vd": "社長は会議室にいらっしゃいます。",
+          "vdDoc": "しゃちょうはかいぎしつにいらっしゃいます。",
+          "vdV": "Giám đốc đang ở phòng họp."
+        }
+      ]
+    },
+    {
+      "ai": "O",
+      "t": "なるほど……。人を増やして、全部二週間でやる、というのは無理なんですか。",
+      "doc": "なるほど……。ひとをふやして、ぜんぶにしゅうかんでやる、というのはむりなんですか。",
+      "v": "Ra vậy… Thêm người rồi làm hết trong hai tuần thì không được à?"
+    },
+    {
+      "ai": "P",
+      "t": "正直に申し上げると、難しいです。途中から人を増やしても、説明や調整に時間を取られて、かえって遅れることが多いんです。",
+      "doc": "しょうじきにもうしあげると、むずかしいです。とちゅうからひとをふやしても、せつめいやちょうせいにじかんをとられて、かえっておくれることがおおいんです。",
+      "v": "Nói thật là khó ạ. Thêm người giữa chừng thì mất thời gian giải thích và điều phối, nhiều khi lại chậm hơn.",
+      "khac": [
+        {
+          "kieu": "mềm mỏng",
+          "t": "ご期待に沿えず心苦しいのですが、人数を増やしても期間の短縮は難しいと考えております。",
+          "doc": "ごきたいにそえずこころぐるしいのですが、にんずうをふやしてもきかんのたんしゅくはむずかしいとかんがえております。",
+          "v": "Rất áy náy vì không đáp ứng được kỳ vọng của anh, nhưng chúng tôi cho rằng thêm người cũng khó rút ngắn thời gian."
+        },
+        {
+          "kieu": "thân mật",
+          "t": "人を足しても、たぶん逆に遅くなるよ。",
+          "doc": "ひとをたしても、たぶんぎゃくにおそくなるよ。",
+          "v": "Thêm người vào chắc lại chậm hơn đấy.",
+          "ghiChu": "nói trong nội bộ với đồng nghiệp"
+        }
+      ],
+      "np": [
+        {
+          "mau": "かえって",
+          "giai": "Ngược lại, trái lại (kết quả ngược với điều mong đợi).",
+          "vd": "タクシーで行ったら、かえって時間がかかった。",
+          "vdDoc": "タクシーでいったら、かえってじかんがかかった。",
+          "vdV": "Đi taxi lại còn mất thời gian hơn."
+        }
+      ]
+    },
+    {
+      "ai": "P",
+      "t": "無理に二週間で全部を出すとしても、テストを削らざるを得ず、品質を保証できません。",
+      "doc": "むりににしゅうかんでぜんぶをだすとしても、テストをけずらざるをえず、ひんしつをほしょうできません。",
+      "v": "Giả sử cố ép ra hết trong hai tuần, chúng tôi buộc phải cắt bớt kiểm thử và không thể đảm bảo chất lượng.",
+      "np": [
+        {
+          "mau": "〜としても",
+          "giai": "Giả sử … đi nữa (thì cũng …).",
+          "vd": "今から急いだとしても、間に合わないだろう。",
+          "vdDoc": "いまからいそいだとしても、まにあわないだろう。",
+          "vdV": "Giờ có vội thì chắc cũng không kịp."
+        }
+      ]
+    },
+    {
+      "ai": "P",
+      "t": "ポイントはお金と同じですので、計算の誤りだけは、絶対に出すわけにはいきません。",
+      "doc": "ポイントはおかねとおなじですので、けいさんのあやまりだけは、ぜったいにだすわけにはいきません。",
+      "v": "Điểm thưởng cũng như tiền, nên riêng lỗi tính toán thì tuyệt đối không thể để xảy ra.",
+      "np": [
+        {
+          "mau": "〜わけにはいかない",
+          "giai": "Không thể làm (vì trách nhiệm, đạo lý, hoàn cảnh) — khác できない (không có khả năng).",
+          "vd": "明日は試験だから、遊ぶわけにはいかない。",
+          "vdDoc": "あしたはしけんだから、あそぶわけにはいかない。",
+          "vdV": "Mai thi rồi nên không thể đi chơi được."
+        }
+      ]
+    },
+    {
+      "ai": "O",
+      "t": "……たしかに。ポイントの計算が間違っていたら、キャンペーンどころじゃないですね。",
+      "doc": "……たしかに。ポイントのけいさんがまちがっていたら、キャンペーンどころじゃないですね。",
+      "v": "…Đúng thật. Điểm mà tính sai thì còn nói gì đến chiến dịch nữa.",
+      "np": [
+        {
+          "mau": "〜どころじゃない",
+          "giai": "Không phải lúc để … (vì có chuyện nghiêm trọng hơn).",
+          "vd": "忙しくて、旅行どころじゃない。",
+          "vdDoc": "いそがしくて、りょこうどころじゃない。",
+          "vdV": "Bận quá, đâu phải lúc mà đi du lịch."
+        }
+      ]
+    },
+    {
+      "ai": "O",
+      "t": "わかりました。二段階で進めましょう。ただし、第一段階の日付だけは、絶対に守ってください。",
+      "doc": "わかりました。にだんかいですすめましょう。ただし、だいいちだんかいのひづけだけは、ぜったいにまもってください。",
+      "v": "Được rồi. Làm theo hai giai đoạn. Nhưng riêng ngày của giai đoạn một thì nhất định phải giữ."
+    },
+    {
+      "ai": "P",
+      "t": "承知いたしました。その代わり、仕様の変更があった場合は、その都度、スケジュールへの影響をご相談させてください。",
+      "doc": "しょうちいたしました。そのかわり、しようのへんこうがあったばあいは、そのつど、スケジュールへのえいきょうをごそうだんさせてください。",
+      "v": "Tôi đã rõ. Đổi lại, nếu có thay đổi đặc tả, xin cho phép chúng tôi bàn với anh mỗi lần về ảnh hưởng tới lịch.",
+      "khac": [
+        {
+          "kieu": "chuyên nghiệp",
+          "t": "なお、仕様変更が発生した際は、影響範囲と再見積もりをその都度ご提示いたします。",
+          "doc": "なお、しようへんこうがはっせいしたさいは、えいきょうはんいとさいみつもりをそのつどごていじいたします。",
+          "v": "Ngoài ra, khi phát sinh thay đổi đặc tả, mỗi lần chúng tôi sẽ đưa ra phạm vi ảnh hưởng và ước lượng lại.",
+          "ghiChu": "câu hay viết trong biên bản/hợp đồng"
+        }
+      ],
+      "np": [
+        {
+          "mau": "その代わり",
+          "giai": "Đổi lại (chấp nhận điều này nhưng kèm điều kiện kia).",
+          "vd": "手伝ってあげる。その代わり、昼ごはんをおごってね。",
+          "vdDoc": "てつだってあげる。そのかわり、ひるごはんをおごってね。",
+          "vdV": "Mình giúp cậu. Đổi lại, cậu khao bữa trưa nhé."
+        },
+        {
+          "mau": "その都度",
+          "giai": "Mỗi lần (việc đó xảy ra) là …",
+          "vd": "問題があれば、その都度連絡してください。",
+          "vdDoc": "もんだいがあれば、そのつどれんらくしてください。",
+          "vdV": "Có vấn đề gì thì mỗi lần hãy liên lạc."
+        }
+      ]
+    },
+    {
+      "ai": "O",
+      "t": "もちろんです。今日の内容、メールでまとめてもらえますか。",
+      "doc": "もちろんです。きょうのないよう、メールでまとめてもらえますか。",
+      "v": "Tất nhiên. Anh tóm tắt nội dung hôm nay qua email giúp tôi được không?"
+    },
+    {
+      "ai": "P",
+      "t": "はい、本日中にお送りいたします。",
+      "doc": "はい、ほんじつちゅうにおおくりいたします。",
+      "v": "Vâng, trong hôm nay tôi sẽ gửi.",
+      "khac": [
+        {
+          "kieu": "văn viết",
+          "t": "本日の打ち合わせ内容を、以下のとおりご報告いたします。",
+          "doc": "ほんじつのうちあわせないようを、いかのとおりごほうこくいたします。",
+          "v": "Tôi xin báo cáo nội dung buổi họp hôm nay như dưới đây.",
+          "ghiChu": "dòng mở đầu của chính email đó"
+        }
+      ]
+    },
+    {
+      "ai": "M",
+      "t": "お疲れさま。最初に四週間って聞いたときは、正直ひやっとしたよ。",
+      "doc": "おつかれさま。さいしょによんしゅうかんってきいたときは、しょうじきひやっとしたよ。",
+      "v": "Vất vả rồi. Lúc đầu nghe “bốn tuần”, thật lòng chị thót cả tim."
+    },
+    {
+      "ai": "P",
+      "t": "すみません。でも、できないことを「頑張ります」でごまかすわけにはいかないと思って。",
+      "doc": "すみません。でも、できないことを「がんばります」でごまかすわけにはいかないとおもって。",
+      "v": "Em xin lỗi. Nhưng em nghĩ không thể lấy câu “em sẽ cố gắng” để lấp liếm việc không làm được."
+    },
+    {
+      "ai": "M",
+      "t": "それでいいの。「できません」で終わらせずに、「こうすればできます」まで出したから、話が前に進んだんだよ。",
+      "doc": "それでいいの。「できません」でおわらせずに、「こうすればできます」までだしたから、はなしがまえにすすんだんだよ。",
+      "v": "Như vậy là đúng. Em không dừng ở “không làm được” mà đưa ra cả “làm thế này thì được”, nên câu chuyện mới tiến lên được.",
+      "np": [
+        {
+          "mau": "V-ない + ずに",
+          "giai": "Không làm V mà … (= 〜ないで, trang trọng hơn).",
+          "vd": "辞書を使わずに読めるようになった。",
+          "vdDoc": "じしょをつかわずによめるようになった。",
+          "vdV": "Tôi đã đọc được mà không cần từ điển."
+        }
+      ]
+    },
+    {
+      "ai": "P",
+      "t": "ベトナムで働いていたときは、お客様に「ノー」と言うのは失礼だと思っていました。",
+      "doc": "ベトナムではたらいていたときは、おきゃくさまに「ノー」というのはしつれいだとおもっていました。",
+      "v": "Hồi làm ở Việt Nam, em cứ nghĩ nói “không” với khách là thất lễ."
+    },
+    {
+      "ai": "M",
+      "t": "本当に失礼なのは、守れない約束をすることだよ。見積もりは、お客様との信頼の約束なんだから。",
+      "doc": "ほんとうにしつれいなのは、まもれないやくそくをすることだよ。みつもりは、おきゃくさまとのしんらいのやくそくなんだから。",
+      "v": "Thật sự thất lễ là hứa điều mình không giữ được. Bản ước lượng chính là lời hứa về sự tin cậy với khách hàng."
+    }
+  ],
+  "tuVung": [
+    {
+      "chu": "見積もり",
+      "doc": "みつもり",
+      "nghia": "ước lượng (thời gian, chi phí), báo giá",
+      "vd": "見積もりを出してください。"
+    },
+    {
+      "chu": "即答",
+      "doc": "そくとう",
+      "nghia": "trả lời ngay lập tức",
+      "vd": "その質問には即答できません。"
+    },
+    {
+      "chu": "実装",
+      "doc": "じっそう",
+      "nghia": "triển khai, lập trình (chức năng)",
+      "vd": "ログイン機能を実装した。"
+    },
+    {
+      "chu": "結論",
+      "doc": "けつろん",
+      "nghia": "kết luận",
+      "vd": "まだ結論は出ていない。"
+    },
+    {
+      "chu": "二段階",
+      "doc": "にだんかい",
+      "nghia": "hai giai đoạn",
+      "vd": "計画を二段階に分けた。"
+    },
+    {
+      "chu": "残高",
+      "doc": "ざんだか",
+      "nghia": "số dư (tiền, điểm)",
+      "vd": "口座の残高を確認する。"
+    },
+    {
+      "chu": "有効期限",
+      "doc": "ゆうこうきげん",
+      "nghia": "hạn sử dụng, thời hạn hiệu lực",
+      "vd": "クーポンの有効期限は今月末です。"
+    },
+    {
+      "chu": "調整",
+      "doc": "ちょうせい",
+      "nghia": "điều phối, điều chỉnh",
+      "vd": "日程を調整します。"
+    },
+    {
+      "chu": "品質",
+      "doc": "ひんしつ",
+      "nghia": "chất lượng",
+      "vd": "品質を第一に考える。"
+    },
+    {
+      "chu": "保証",
+      "doc": "ほしょう",
+      "nghia": "bảo đảm, bảo hành",
+      "vd": "品質を保証します。"
+    },
+    {
+      "chu": "その都度",
+      "doc": "そのつど",
+      "nghia": "mỗi lần (việc đó xảy ra)",
+      "vd": "変更はその都度知らせてください。"
+    },
+    {
+      "chu": "ごまかす",
+      "doc": "ごまかす",
+      "nghia": "lấp liếm, che đậy, đánh trống lảng",
+      "vd": "失敗を笑ってごまかした。"
+    }
+  ],
+  "yNghia": "Nói \"được\" để khách vui hôm nay là vay nợ lòng tin của ngày mai. Ước lượng trung thực, rồi đưa ra một con đường khả thi — chia nhỏ phạm vi, làm cái quan trọng trước — mới là cách tôn trọng khách. Một chữ \"không\" kèm \"nhưng làm thế này thì được\" thường đưa câu chuyện đi xa hơn một chữ \"vâng\".",
+  "meo": [
+    "Chưa trả lời ngay được: 「一日いただけますか」 / với khách: 「持ち帰って検討させていただけますでしょうか」.",
+    "Báo tin khó: 「結論から申し上げますと」 → con số → 「その上で、ご提案があります」 → phương án.",
+    "Đàm phán phạm vi: tách phần bắt buộc (làm trước) và phần có thể sau — đó là tư duy MVP.",
+    "〜ないことには〜ない = không A thì B không bắt đầu được; 〜わけにはいかない = không thể (vì trách nhiệm).",
+    "その代わり = đổi lại — dùng khi chấp nhận yêu cầu kèm một điều kiện của mình."
+  ],
+  "cauHoi": [
+    {
+      "hoi": "Phúc ước lượng làm đủ toàn bộ chức năng cần bao lâu?",
+      "chon": [
+        "Hai tuần",
+        "Bốn tuần, tính cả kiểm thử",
+        "Một tháng rưỡi",
+        "Một tuần"
+      ],
+      "dung": 1,
+      "giai": "「テストを含めて四週間が必要です」."
+    },
+    {
+      "hoi": "Phần nào được phát hành trước trong hai tuần?",
+      "chon": [
+        "Tích điểm và hiển thị số điểm",
+        "Đổi điểm lấy quà",
+        "Quản lý hạn dùng điểm",
+        "Toàn bộ chức năng"
+      ],
+      "dung": 0,
+      "giai": "「ポイントを貯める機能と、残高を表示する機能です」."
+    },
+    {
+      "hoi": "Vì sao không thể thêm người để kịp hai tuần?",
+      "chon": [
+        "Vì không có ngân sách",
+        "Vì khách không cho",
+        "Vì thêm người giữa chừng mất thời gian giải thích, điều phối, nhiều khi chậm hơn",
+        "Vì công ty hết người"
+      ],
+      "dung": 2,
+      "giai": "「説明や調整に時間を取られて、かえって遅れることが多いんです」."
+    },
+    {
+      "hoi": "Đổi lại, Phúc xin khách điều gì?",
+      "chon": [
+        "Tăng giá hợp đồng",
+        "Dời ngày chiến dịch",
+        "Bỏ kiểm thử",
+        "Mỗi lần đổi đặc tả thì cùng bàn ảnh hưởng tới lịch"
+      ],
+      "dung": 3,
+      "giai": "「仕様の変更があった場合は、その都度、スケジュールへの影響をご相談させてください」."
+    },
+    {
+      "hoi": "Theo chị Maeda, điều thật sự thất lễ là gì?",
+      "chon": [
+        "Nói \"không\" với khách",
+        "Hứa điều mình không giữ được",
+        "Trả lời chậm một ngày",
+        "Gửi email dài"
+      ],
+      "dung": 1,
+      "giai": "「本当に失礼なのは、守れない約束をすることだよ」."
+    }
+  ]
+}

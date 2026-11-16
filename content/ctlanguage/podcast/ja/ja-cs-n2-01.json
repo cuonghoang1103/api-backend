@@ -1,0 +1,487 @@
+{
+  "id": "ja-cs-n2-01",
+  "nn": "ja",
+  "danhMuc": "chia-se",
+  "cap": "N2",
+  "so": 1,
+  "tieuDe": "五分だけ、待ってもらえませんか",
+  "tieuDeViet": "Đợi tôi năm phút được không?",
+  "moTa": "Hồi du học, Tín làm thêm ở một công ty chuyển nhà chỉ vì lương giờ cao. Một ngày, ông cụ ngoài tám mươi tuổi rời căn nhà đã sống năm mươi năm xin \"đợi năm phút\", và những vạch đo chiều cao trên cây cột đã thay đổi cách Tín làm việc. Học 〜に過ぎない, 〜っぱなし, 〜ずにはいられない, 〜をきっかけに, 〜て初めて.",
+  "chuDe": "Việc làm thêm đáng nhớ",
+  "bieuTuong": "shippingbox.fill",
+  "nguoi": [
+    {
+      "ma": "N",
+      "ten": "中島",
+      "giong": "ja2-nu",
+      "vai": "người dẫn chương trình"
+    },
+    {
+      "ma": "T",
+      "ten": "ティン",
+      "giong": "ja-nam",
+      "vai": "người Việt, nay làm ở khách sạn tại Nhật"
+    }
+  ],
+  "loi": [
+    {
+      "ai": "N",
+      "t": "今夜のゲストは、大学時代に引っ越しのアルバイトをしていたというティンさんです。",
+      "doc": "こんやのゲストは、だいがくじだいにひっこしのアルバイトをしていたというティンさんです。",
+      "v": "Khách mời đêm nay là anh Tín, người từng làm thêm ở công ty chuyển nhà hồi đại học.",
+      "np": [
+        {
+          "mau": "〜という + N",
+          "giai": "Nối thông tin nghe được/giới thiệu vào danh từ: \"người (được biết là) đã …\".",
+          "vd": "昔ここに城があったという話を聞いた。",
+          "vdDoc": "むかしここにしろがあったというはなしをきいた。",
+          "vdV": "Tôi nghe chuyện ngày xưa ở đây từng có lâu đài."
+        }
+      ]
+    },
+    {
+      "ai": "T",
+      "t": "よろしくお願いします。もう十年も前の話なんですけどね。",
+      "doc": "よろしくおねがいします。もうじゅうねんもまえのはなしなんですけどね。",
+      "v": "Rất vui được góp mặt. Chuyện cũng đã mười năm rồi đấy."
+    },
+    {
+      "ai": "N",
+      "t": "引っ越しって、かなり体力を使う仕事ですよね。どうしてそれを選んだんですか。",
+      "doc": "ひっこしって、かなりたいりょくをつかうしごとですよね。どうしてそれをえらんだんですか。",
+      "v": "Chuyển nhà là công việc khá tốn sức nhỉ. Sao anh lại chọn việc đó?"
+    },
+    {
+      "ai": "T",
+      "t": "時給がよかったからに過ぎません。留学生で、とにかくお金がなかったので。",
+      "doc": "じきゅうがよかったからにすぎません。りゅうがくせいで、とにかくおかねがなかったので。",
+      "v": "Chỉ đơn giản vì lương giờ cao thôi. Hồi đó là du học sinh, nói chung là không có tiền.",
+      "khac": [
+        {
+          "kieu": "tự nhiên hơn",
+          "t": "正直、時給がよかったから、それだけです。",
+          "doc": "しょうじき、じきゅうがよかったから、それだけです。",
+          "v": "Nói thật, vì lương giờ cao, chỉ vậy thôi."
+        },
+        {
+          "kieu": "thân mật",
+          "t": "ぶっちゃけ、時給がいいからってだけ。",
+          "doc": "ぶっちゃけ、じきゅうがいいからってだけ。",
+          "v": "Nói thẳng ra là chỉ vì lương giờ ngon thôi.",
+          "ghiChu": "ぶっちゃけ: rất suồng sã, giữa bạn bè trẻ"
+        }
+      ],
+      "np": [
+        {
+          "mau": "〜に過ぎない",
+          "giai": "Chỉ là … mà thôi (hạ thấp mức độ, không có gì to tát hơn).",
+          "vd": "それは噂に過ぎない。",
+          "vdDoc": "それはうわさにすぎない。",
+          "vdV": "Đó chỉ là tin đồn mà thôi."
+        }
+      ]
+    },
+    {
+      "ai": "T",
+      "t": "最初の一か月は、筋肉痛でベッドから起き上がれない日が続きました。",
+      "doc": "さいしょのいっかげつは、きんにくつうでベッドからおきあがれないひがつづきました。",
+      "v": "Tháng đầu tiên, có những ngày đau cơ tới mức không ngồi dậy khỏi giường nổi."
+    },
+    {
+      "ai": "T",
+      "t": "しかも、日本語の敬語がまだ不十分だったので、お客さんの前ではほとんど黙りっぱなしでした。",
+      "doc": "しかも、にほんごのけいごがまだふじゅうぶんだったので、おきゃくさんのまえではほとんどだまりっぱなしでした。",
+      "v": "Hơn nữa, kính ngữ tiếng Nhật của tôi còn kém, nên trước mặt khách tôi gần như im lặng suốt.",
+      "np": [
+        {
+          "mau": "V-ます + っぱなし",
+          "giai": "Để nguyên một trạng thái suốt (thường mang ý tiêu cực, không như lẽ ra phải thế).",
+          "vd": "窓を開けっぱなしで出かけてしまった。",
+          "vdDoc": "まどをあけっぱなしででかけてしまった。",
+          "vdV": "Tôi lỡ ra ngoài mà để cửa sổ mở nguyên."
+        }
+      ]
+    },
+    {
+      "ai": "N",
+      "t": "それは大変でしたね。一番印象に残っている現場はありますか。",
+      "doc": "それはたいへんでしたね。いちばんいんしょうにのこっているげんばはありますか。",
+      "v": "Vất vả quá nhỉ. Có lần làm việc nào anh nhớ nhất không?",
+      "khac": [
+        {
+          "kieu": "lịch sự",
+          "t": "差し支えなければ、一番印象に残っているお仕事について伺えますか。",
+          "doc": "さしつかえなければ、いちばんいんしょうにのこっているおしごとについてうかがえますか。",
+          "v": "Nếu không phiền, anh có thể kể về công việc anh nhớ nhất không ạ?",
+          "ghiChu": "phỏng vấn trang trọng; 差し支えなければ = nếu không có gì trở ngại"
+        }
+      ]
+    },
+    {
+      "ai": "T",
+      "t": "あります。八十代のおじいさんが、五十年住んだ一軒家から、娘さんの近くのマンションに移るという引っ越しでした。",
+      "doc": "あります。はちじゅうだいのおじいさんが、ごじゅうねんすんだいっけんやから、むすめさんのちかくのマンションにうつるというひっこしでした。",
+      "v": "Có ạ. Đó là lần chuyển nhà của một ông cụ ngoài tám mươi, rời căn nhà riêng đã ở năm mươi năm để dọn tới căn hộ gần nhà con gái."
+    },
+    {
+      "ai": "T",
+      "t": "荷物は多いし、階段は狭いし、正直、早く終わらせることしか考えていませんでした。",
+      "doc": "にもつはおおいし、かいだんはせまいし、しょうじき、はやくおわらせることしかかんがえていませんでした。",
+      "v": "Đồ thì nhiều, cầu thang thì hẹp, nói thật tôi chỉ nghĩ làm sao cho xong nhanh.",
+      "np": [
+        {
+          "mau": "〜し、〜し",
+          "giai": "Liệt kê nhiều lý do/đặc điểm (… nữa, … nữa), thường để dẫn tới một kết luận.",
+          "vd": "この店は安いし、おいしいし、よく来ます。",
+          "vdDoc": "このみせはやすいし、おいしいし、よくきます。",
+          "vdV": "Quán này vừa rẻ vừa ngon, nên tôi hay đến."
+        }
+      ]
+    },
+    {
+      "ai": "T",
+      "t": "ところが、最後の段ボールをトラックに積み終わったとき、おじいさんが「五分だけ、待ってもらえませんか」と言ったんです。",
+      "doc": "ところが、さいごのだんボールをトラックにつみおわったとき、おじいさんが「ごふんだけ、まってもらえませんか」といったんです。",
+      "v": "Vậy mà, khi chúng tôi chất xong thùng các-tông cuối cùng lên xe, ông cụ nói: “Đợi tôi năm phút thôi, được không?”",
+      "np": [
+        {
+          "mau": "V-ます + 終わる",
+          "giai": "Làm xong V (hoàn tất hành động).",
+          "vd": "この本はもう読み終わりました。",
+          "vdDoc": "このほんはもうよみおわりました。",
+          "vdV": "Cuốn sách này tôi đọc xong rồi."
+        }
+      ]
+    },
+    {
+      "ai": "N",
+      "t": "五分、ですか。",
+      "doc": "ごふん、ですか。",
+      "v": "Năm phút ạ?"
+    },
+    {
+      "ai": "T",
+      "t": "はい。次の現場もあったので、リーダーは困った顔をしていました。",
+      "doc": "はい。つぎのげんばもあったので、リーダーはこまったかおをしていました。",
+      "v": "Vâng. Vì còn ca kế tiếp nên trưởng nhóm có vẻ khó xử."
+    },
+    {
+      "ai": "T",
+      "t": "それでも、「どうぞ、ごゆっくり」と言って、僕たちはトラックの横で待つことにしました。",
+      "doc": "それでも、「どうぞ、ごゆっくり」といって、ぼくたちはトラックのよこでまつことにしました。",
+      "v": "Dù vậy, anh ấy vẫn nói “Xin cứ thong thả”, và chúng tôi quyết định đứng đợi cạnh xe tải."
+    },
+    {
+      "ai": "T",
+      "t": "窓から見ていると、おじいさんは空っぽになった部屋を一つずつ回って、柱に手を当てていました。",
+      "doc": "まどからみていると、おじいさんはからっぽになったへやをひとつずつまわって、はしらにてをあてていました。",
+      "v": "Nhìn qua cửa sổ, tôi thấy ông đi qua từng căn phòng đã trống trơn, rồi đặt tay lên cây cột."
+    },
+    {
+      "ai": "T",
+      "t": "その柱には、子どもの背の高さを測った線が、何本も残っていたんです。",
+      "doc": "そのはしらには、こどものせのたかさをはかったせんが、なんぼんものこっていたんです。",
+      "v": "Trên cây cột đó vẫn còn rất nhiều vạch đo chiều cao của con cái."
+    },
+    {
+      "ai": "N",
+      "t": "……娘さんの成長の記録ですね。",
+      "doc": "……むすめさんのせいちょうのきろくですね。",
+      "v": "…Là dấu vết lớn lên của cô con gái nhỉ."
+    },
+    {
+      "ai": "T",
+      "t": "ええ。それを見たとき、僕はベトナムの実家のことを思い出さずにはいられませんでした。",
+      "doc": "ええ。それをみたとき、ぼくはベトナムのじっかのことをおもいださずにはいられませんでした。",
+      "v": "Vâng. Nhìn thấy cảnh đó, tôi không sao không nhớ tới nhà mình ở Việt Nam.",
+      "np": [
+        {
+          "mau": "V-ない + ずにはいられない",
+          "giai": "Không thể không V, không kìm được (cảm xúc tự trào lên). する → せずにはいられない.",
+          "vd": "その映画を見て、泣かずにはいられなかった。",
+          "vdDoc": "そのえいがをみて、なかずにはいられなかった。",
+          "vdV": "Xem bộ phim đó, tôi không thể không khóc."
+        }
+      ]
+    },
+    {
+      "ai": "T",
+      "t": "実家の台所の壁にも、母が付けた同じような線があるんです。",
+      "doc": "じっかのだいどころのかべにも、ははがつけたおなじようなせんがあるんです。",
+      "v": "Trên tường bếp nhà tôi cũng có những vạch giống vậy mẹ tôi đã kẻ."
+    },
+    {
+      "ai": "T",
+      "t": "僕にとっては段ボールを運ぶだけの仕事でも、おじいさんにとっては、五十年の人生を運ぶ日だったんですよね。",
+      "doc": "ぼくにとってはだんボールをはこぶだけのしごとでも、おじいさんにとっては、ごじゅうねんのじんせいをはこぶひだったんですよね。",
+      "v": "Với tôi đó chỉ là công việc khuân thùng các-tông, nhưng với ông cụ, đó là ngày chuyển đi năm mươi năm cuộc đời.",
+      "np": [
+        {
+          "mau": "N + にとって",
+          "giai": "Đối với N, đứng ở vị trí của N mà nói.",
+          "vd": "学生にとって、時間は一番大切なものだ。",
+          "vdDoc": "がくせいにとって、じかんはいちばんたいせつなものだ。",
+          "vdV": "Đối với sinh viên, thời gian là thứ quý nhất."
+        }
+      ]
+    },
+    {
+      "ai": "N",
+      "t": "おじいさんは、何か言っていましたか。",
+      "doc": "おじいさんは、なにかいっていましたか。",
+      "v": "Ông cụ có nói gì không?"
+    },
+    {
+      "ai": "T",
+      "t": "戻ってくると、僕たちに深く頭を下げて、「待っていただいて、ありがとうございました。もう思い残すことはありません」と。",
+      "doc": "もどってくると、ぼくたちにふかくあたまをさげて、「まっていただいて、ありがとうございました。もうおもいのこすことはありません」と。",
+      "v": "Quay ra, ông cúi đầu thật sâu với chúng tôi: “Cảm ơn các cậu đã đợi. Tôi không còn gì phải luyến tiếc nữa.”"
+    },
+    {
+      "ai": "T",
+      "t": "その日をきっかけに、僕の仕事のやり方は変わりました。",
+      "doc": "そのひをきっかけに、ぼくのしごとのやりかたはかわりました。",
+      "v": "Từ hôm đó, cách làm việc của tôi đã thay đổi.",
+      "np": [
+        {
+          "mau": "〜をきっかけに",
+          "giai": "Nhân (sự kiện) …, bắt đầu từ … mà (có thay đổi).",
+          "vd": "留学をきっかけに、料理を始めた。",
+          "vdDoc": "りゅうがくをきっかけに、りょうりをはじめた。",
+          "vdV": "Nhân dịp đi du học, tôi bắt đầu nấu ăn."
+        }
+      ]
+    },
+    {
+      "ai": "T",
+      "t": "荷物を運ぶ前に、「これは特に大事なものですか」と一言聞くようにしたんです。",
+      "doc": "にもつをはこぶまえに、「これはとくにだいじなものですか」とひとこときくようにしたんです。",
+      "v": "Trước khi khuân đồ, tôi tập thói quen hỏi một câu: “Món này có phải đồ đặc biệt quan trọng không ạ?”",
+      "khac": [
+        {
+          "kieu": "lịch sự",
+          "t": "荷物を運ぶ前に、「特に大切なお品物はございますか」と伺うようにしたんです。",
+          "doc": "にもつをはこぶまえに、「とくにたいせつなおしなものはございますか」とうかがうようにしたんです。",
+          "v": "Trước khi khuân đồ, tôi tập hỏi: “Có món đồ nào quý vị đặc biệt trân trọng không ạ?”",
+          "ghiChu": "cách hỏi chuẩn của nhân viên dịch vụ với khách"
+        }
+      ]
+    },
+    {
+      "ai": "T",
+      "t": "すると不思議なことに、お客さんとの会話が増えて、敬語も自然と身についていきました。",
+      "doc": "するとふしぎなことに、おきゃくさんとのかいわがふえて、けいごもしぜんとみについていきました。",
+      "v": "Thế rồi lạ thay, tôi nói chuyện với khách nhiều hơn, và kính ngữ cũng tự nhiên mà thấm vào người.",
+      "np": [
+        {
+          "mau": "〜ことに",
+          "giai": "Đặt trước câu để bày tỏ cảm xúc của người nói về sự việc: 不思議なことに = lạ thay, 残念なことに = đáng tiếc là.",
+          "vd": "残念なことに、その店はもう閉まっていた。",
+          "vdDoc": "ざんねんなことに、そのみせはもうしまっていた。",
+          "vdV": "Đáng tiếc là cửa hàng đó đã đóng cửa rồi."
+        }
+      ]
+    },
+    {
+      "ai": "N",
+      "t": "黙りっぱなしだったティンさんが、ですか。",
+      "doc": "だまりっぱなしだったティンさんが、ですか。",
+      "v": "Anh Tín vốn im lặng suốt mà lại thế ạ?"
+    },
+    {
+      "ai": "T",
+      "t": "はい。言葉って、伝えたいことができて初めて、出てくるものなんだと思います。",
+      "doc": "はい。ことばって、つたえたいことができてはじめて、でてくるものなんだとおもいます。",
+      "v": "Vâng. Tôi nghĩ lời nói chỉ bật ra khi mình có điều muốn truyền đạt.",
+      "khac": [
+        {
+          "kieu": "văn viết",
+          "t": "言葉とは、伝えたいことが生まれて初めて出てくるものなのだろう。",
+          "doc": "ことばとは、つたえたいことがうまれてはじめてでてくるものなのだろう。",
+          "v": "Có lẽ lời nói là thứ chỉ xuất hiện khi điều muốn truyền đạt ra đời.",
+          "ghiChu": "văn viết, giọng suy ngẫm"
+        }
+      ],
+      "np": [
+        {
+          "mau": "V-て + 初めて",
+          "giai": "Phải (sau khi) V rồi mới (nhận ra/có được) ….",
+          "vd": "病気になって初めて、健康の大切さがわかった。",
+          "vdDoc": "びょうきになってはじめて、けんこうのたいせつさがわかった。",
+          "vdV": "Phải ốm rồi mới hiểu sức khoẻ quý thế nào."
+        }
+      ]
+    },
+    {
+      "ai": "N",
+      "t": "今のお仕事にも、その経験は生きていますか。",
+      "doc": "いまのおしごとにも、そのけいけんはいきていますか。",
+      "v": "Trải nghiệm đó có còn giúp ích cho công việc hiện tại của anh không?"
+    },
+    {
+      "ai": "T",
+      "t": "生きていますね。今はホテルで働いているんですが、お客様にとって今日がどんな日なのか、想像するようにしています。",
+      "doc": "いきていますね。いまはホテルではたらいているんですが、おきゃくさまにとってきょうがどんなひなのか、そうぞうするようにしています。",
+      "v": "Có chứ. Giờ tôi làm ở khách sạn, và tôi luôn cố hình dung xem hôm nay là ngày thế nào với vị khách trước mặt."
+    },
+    {
+      "ai": "T",
+      "t": "同じ仕事でも、そう思うだけで、手の動かし方が変わるんですよ。",
+      "doc": "おなじしごとでも、そうおもうだけで、てのうごかしかたがかわるんですよ。",
+      "v": "Cùng một công việc, chỉ cần nghĩ như vậy thôi là đôi tay đã làm khác đi rồi."
+    },
+    {
+      "ai": "N",
+      "t": "ティンさん、すてきなお話をありがとうございました。",
+      "doc": "ティンさん、すてきなおはなしをありがとうございました。",
+      "v": "Anh Tín, cảm ơn anh vì câu chuyện thật đẹp.",
+      "khac": [
+        {
+          "kieu": "trang trọng",
+          "t": "本日は貴重なお話を聞かせていただき、ありがとうございました。",
+          "doc": "ほんじつはきちょうなおはなしをきかせていただき、ありがとうございました。",
+          "v": "Cảm ơn anh đã cho chúng tôi nghe câu chuyện quý giá hôm nay."
+        }
+      ]
+    }
+  ],
+  "tuVung": [
+    {
+      "chu": "時給",
+      "doc": "じきゅう",
+      "nghia": "lương theo giờ",
+      "vd": "このアルバイトは時給が高い。"
+    },
+    {
+      "chu": "筋肉痛",
+      "doc": "きんにくつう",
+      "nghia": "đau cơ",
+      "vd": "運動しすぎて筋肉痛になった。"
+    },
+    {
+      "chu": "黙りっぱなし",
+      "doc": "だまりっぱなし",
+      "nghia": "im lặng suốt",
+      "vd": "会議の間、彼は黙りっぱなしだった。"
+    },
+    {
+      "chu": "印象に残って",
+      "doc": "いんしょうにのこって",
+      "nghia": "để lại ấn tượng, nhớ mãi (印象に残る)",
+      "vd": "その言葉が印象に残っている。"
+    },
+    {
+      "chu": "一軒家",
+      "doc": "いっけんや",
+      "nghia": "nhà riêng (nhà độc lập, không phải căn hộ)",
+      "vd": "郊外の一軒家に住んでいる。"
+    },
+    {
+      "chu": "段ボール",
+      "doc": "だんボール",
+      "nghia": "thùng các-tông",
+      "vd": "本を段ボールに詰めた。"
+    },
+    {
+      "chu": "空っぽ",
+      "doc": "からっぽ",
+      "nghia": "trống rỗng, trống trơn",
+      "vd": "冷蔵庫が空っぽだ。"
+    },
+    {
+      "chu": "柱",
+      "doc": "はしら",
+      "nghia": "cột nhà",
+      "vd": "古い家の柱に傷がある。"
+    },
+    {
+      "chu": "実家",
+      "doc": "じっか",
+      "nghia": "nhà bố mẹ, nhà nơi mình lớn lên",
+      "vd": "正月は実家に帰ります。"
+    },
+    {
+      "chu": "思い残す",
+      "doc": "おもいのこす",
+      "nghia": "còn luyến tiếc, còn điều chưa trọn",
+      "vd": "もう思い残すことはない。"
+    },
+    {
+      "chu": "きっかけ",
+      "doc": "きっかけ",
+      "nghia": "cơ duyên, dịp khởi đầu",
+      "vd": "日本語を始めたきっかけは何ですか。"
+    },
+    {
+      "chu": "身について",
+      "doc": "みについて",
+      "nghia": "thấm vào người, thành kỹ năng của mình (身につく)",
+      "vd": "毎日練習すれば、自然と身につく。"
+    }
+  ],
+  "yNghia": "Cùng một công việc, có người chỉ thấy những thùng các-tông, có người thấy cả một đời người đang được chuyển đi. Khi bắt đầu tự hỏi \"hôm nay là ngày gì với người trước mặt\", đôi tay ta làm khác đi — và lời nói, kể cả bằng tiếng nước ngoài, tự khắc tìm được đường đến.",
+  "meo": [
+    "〜っぱなし = để nguyên trạng thái suốt (thường tiêu cực): 黙りっぱなし, 開けっぱなし, 出しっぱなし.",
+    "〜に過ぎない = chỉ là … mà thôi (hạ thấp lý do, mức độ).",
+    "〜ずにはいられない = không thể không … (cảm xúc tự trào lên).",
+    "〜をきっかけに = nhân dịp/bắt đầu từ …; 〜て初めて = phải … rồi mới ….",
+    "Nhờ người khác đợi: 「五分だけ、待ってもらえませんか」 → trang trọng hơn 「少々お待ちいただけますでしょうか」."
+  ],
+  "cauHoi": [
+    {
+      "hoi": "Vì sao Tín chọn làm thêm ở công ty chuyển nhà?",
+      "chon": [
+        "Vì thích vận động",
+        "Vì lương giờ cao",
+        "Vì gần trường",
+        "Vì bạn rủ"
+      ],
+      "dung": 1,
+      "giai": "「時給がよかったからに過ぎません」."
+    },
+    {
+      "hoi": "Ông cụ đã xin điều gì?",
+      "chon": [
+        "Chuyển giúp một món đồ quý",
+        "Giảm giá",
+        "Đợi năm phút",
+        "Đi cùng xe tải"
+      ],
+      "dung": 2,
+      "giai": "「五分だけ、待ってもらえませんか」."
+    },
+    {
+      "hoi": "Trên cây cột có gì?",
+      "chon": [
+        "Những vạch đo chiều cao của con cái",
+        "Ảnh gia đình",
+        "Một bức thư",
+        "Tên của ông cụ"
+      ],
+      "dung": 0,
+      "giai": "「子どもの背の高さを測った線が、何本も残っていた」."
+    },
+    {
+      "hoi": "Sau hôm đó, Tín thay đổi gì trong công việc?",
+      "chon": [
+        "Làm nhanh hơn",
+        "Nghỉ việc",
+        "Đổi sang làm khách sạn ngay",
+        "Trước khi khuân đồ, hỏi món nào đặc biệt quan trọng"
+      ],
+      "dung": 3,
+      "giai": "「「これは特に大事なものですか」と一言聞くようにしたんです」."
+    },
+    {
+      "hoi": "Theo Tín, lời nói bật ra khi nào?",
+      "chon": [
+        "Khi học thuộc kính ngữ",
+        "Khi có điều mình muốn truyền đạt",
+        "Khi được trả lương cao",
+        "Khi khách hỏi trước"
+      ],
+      "dung": 1,
+      "giai": "「伝えたいことができて初めて、出てくるもの」."
+    }
+  ]
+}

@@ -1,6 +1,7 @@
 {
   "id": "en-b1-01",
   "nn": "en",
+  "danhMuc": "doi-song",
   "cap": "B1",
   "so": 1,
   "tieuDe": "My First Salary",
@@ -9,46 +10,308 @@
   "chuDe": "Quản lý tiền",
   "bieuTuong": "dollarsign.circle.fill",
   "nguoi": [
-    { "ma": "H", "ten": "Hà", "giong": "au-nu", "vai": "thực tập sinh" },
-    { "ma": "L", "ten": "Long", "giong": "us-nam", "vai": "anh họ, đi làm vài năm" }
+    {
+      "ma": "H",
+      "ten": "Hà",
+      "giong": "au-nu",
+      "vai": "thực tập sinh"
+    },
+    {
+      "ma": "L",
+      "ten": "Long",
+      "giong": "us-nam",
+      "vai": "anh họ, đi làm vài năm"
+    }
   ],
   "loi": [
-    { "ai": "H", "t": "Long, guess what? I got my first salary from the internship today!", "v": "Anh Long, đoán xem? Hôm nay em nhận lương đầu tiên từ kỳ thực tập rồi!" },
-    { "ai": "L", "t": "Congratulations! How does it feel?", "v": "Chúc mừng em! Cảm giác thế nào?" },
-    { "ai": "H", "t": "Amazing. I've already got a list of things I want to buy: new headphones, a jacket, maybe even a new phone.", "v": "Tuyệt vời. Em đã có sẵn danh sách những thứ muốn mua: tai nghe mới, áo khoác, có khi cả điện thoại mới nữa." },
-    { "ai": "L", "t": "Ha ha, I remember that feeling. My first salary was gone in about ten days.", "v": "Ha ha, anh nhớ cảm giác đó. Lương đầu tiên của anh bay sạch trong khoảng mười ngày." },
-    { "ai": "H", "t": "Ten days? What did you spend it on?", "v": "Mười ngày á? Anh tiêu vào gì vậy?" },
-    { "ai": "L", "t": "Honestly, I can't even remember. Eating out, a few clothes, gifts for friends. By the end of the month I was living on instant noodles.", "v": "Thật lòng thì anh còn chẳng nhớ nổi. Ăn ngoài, vài bộ quần áo, quà cho bạn bè. Đến cuối tháng anh sống nhờ mì gói." },
-    { "ai": "H", "t": "That sounds terrible. So what do you do now?", "v": "Nghe kinh khủng thật. Vậy giờ anh làm thế nào?" },
-    { "ai": "L", "t": "I follow a simple rule. As soon as I get paid, I move twenty percent into a savings account.", "v": "Anh theo một quy tắc đơn giản. Vừa nhận lương là anh chuyển ngay hai mươi phần trăm vào tài khoản tiết kiệm." },
-    { "ai": "H", "t": "Before you spend anything?", "v": "Trước khi tiêu bất cứ thứ gì ạ?" },
-    { "ai": "L", "t": "Exactly. If I wait until the end of the month, there's never anything left to save.", "v": "Đúng vậy. Nếu đợi tới cuối tháng thì chẳng bao giờ còn gì để tiết kiệm cả." },
-    { "ai": "H", "t": "That makes sense. What about the rest?", "v": "Hợp lý thật. Còn phần còn lại thì sao?" },
-    { "ai": "L", "t": "I split it into needs and wants. Rent, food and transport come first. Then I can enjoy the rest without feeling guilty.", "v": "Anh chia thành thứ cần và thứ muốn. Tiền nhà, ăn uống, đi lại ưu tiên trước. Sau đó anh thoải mái tiêu phần còn lại mà không thấy áy náy." },
-    { "ai": "H", "t": "I've never thought about it like that. Is a new phone a need or a want?", "v": "Em chưa bao giờ nghĩ theo cách đó. Điện thoại mới là thứ cần hay thứ muốn ạ?" },
-    { "ai": "L", "t": "Is your current phone broken?", "v": "Điện thoại hiện tại của em hỏng à?" },
-    { "ai": "H", "t": "Well... no. It just looks a bit old.", "v": "À... không ạ. Chỉ là trông hơi cũ." },
-    { "ai": "L", "t": "Then it's a want. That's fine, but maybe save up for it instead of buying it now.", "v": "Vậy là thứ muốn rồi. Không sao cả, nhưng có lẽ em nên dành dụm để mua thay vì mua ngay bây giờ." },
-    { "ai": "H", "t": "My friends say I should pay in installments. It's only a small amount each month.", "v": "Bạn em bảo nên mua trả góp. Mỗi tháng chỉ một khoản nhỏ thôi mà." },
-    { "ai": "L", "t": "Small amounts add up. And if you lose your job or get sick, you still have to pay.", "v": "Khoản nhỏ cộng lại cũng thành lớn. Mà lỡ em mất việc hay ốm đau thì vẫn phải trả." },
-    { "ai": "H", "t": "Hmm, you're right. So should I buy nothing for myself?", "v": "Hừm, anh nói đúng. Vậy em không nên mua gì cho bản thân à?" },
-    { "ai": "L", "t": "No way! It's your first salary, so celebrate a little. Buy the headphones, and maybe treat your parents to dinner.", "v": "Không đời nào! Lương đầu tiên mà, ăn mừng một chút đi. Mua tai nghe, và có lẽ mời bố mẹ một bữa tối." },
-    { "ai": "H", "t": "I love that idea. Mum has always paid for everything. It's my turn now.", "v": "Em thích ý đó lắm. Mẹ lúc nào cũng trả tiền mọi thứ. Giờ đến lượt em." },
-    { "ai": "L", "t": "Exactly. Money is a tool. Use it for things that actually matter to you.", "v": "Chính xác. Tiền là công cụ. Hãy dùng nó cho những thứ thật sự có ý nghĩa với em." },
-    { "ai": "H", "t": "Twenty percent first, then needs, then a little fun. I think I can do that.", "v": "Hai mươi phần trăm trước, rồi đến thứ cần, rồi một chút vui vẻ. Em nghĩ em làm được." }
+    {
+      "ai": "H",
+      "t": "Long, guess what? I got my first salary from the internship today!",
+      "v": "Anh Long, đoán xem? Hôm nay em nhận lương đầu tiên từ kỳ thực tập rồi!",
+      "khac": [
+        {
+          "kieu": "tự nhiên hơn",
+          "t": "Guess what, Long? I just got paid for my internship — my first salary ever!",
+          "v": "Đoán xem, anh Long? Em vừa nhận lương thực tập — tháng lương đầu tiên trong đời!"
+        }
+      ]
+    },
+    {
+      "ai": "L",
+      "t": "Congratulations! How does it feel?",
+      "v": "Chúc mừng em! Cảm giác thế nào?",
+      "khac": [
+        {
+          "kieu": "thân mật",
+          "t": "Congrats! So how does it feel to get paid?",
+          "v": "Chúc mừng nhé! Cầm lương thấy sao?"
+        }
+      ]
+    },
+    {
+      "ai": "H",
+      "t": "Amazing. I've already got a list of things I want to buy: new headphones, a jacket, maybe even a new phone.",
+      "v": "Tuyệt vời. Em đã có sẵn danh sách những thứ muốn mua: tai nghe mới, áo khoác, có khi cả điện thoại mới nữa."
+    },
+    {
+      "ai": "L",
+      "t": "Ha ha, I remember that feeling. My first salary was gone in about ten days.",
+      "v": "Ha ha, anh nhớ cảm giác đó. Lương đầu tiên của anh bay sạch trong khoảng mười ngày."
+    },
+    {
+      "ai": "H",
+      "t": "Ten days? What did you spend it on?",
+      "v": "Mười ngày á? Anh tiêu vào gì vậy?",
+      "np": [
+        {
+          "mau": "spend + tiền/thời gian + on + N",
+          "giai": "Tiêu tiền vào cái gì. Câu hỏi để giới từ \"on\" ở cuối: What did you spend it on?",
+          "vd": "I spend too much money on coffee.",
+          "vdV": "Tôi tiêu quá nhiều tiền vào cà phê."
+        }
+      ]
+    },
+    {
+      "ai": "L",
+      "t": "Honestly, I can't even remember. Eating out, a few clothes, gifts for friends. By the end of the month I was living on instant noodles.",
+      "v": "Thật lòng thì anh còn chẳng nhớ nổi. Ăn ngoài, vài bộ quần áo, quà cho bạn bè. Đến cuối tháng anh sống nhờ mì gói."
+    },
+    {
+      "ai": "H",
+      "t": "That sounds terrible. So what do you do now?",
+      "v": "Nghe kinh khủng thật. Vậy giờ anh làm thế nào?",
+      "khac": [
+        {
+          "kieu": "tự nhiên hơn",
+          "t": "Ouch. So how do you handle it now?",
+          "v": "Ui. Vậy giờ anh xoay xở thế nào?"
+        }
+      ]
+    },
+    {
+      "ai": "L",
+      "t": "I follow a simple rule. As soon as I get paid, I move twenty percent into a savings account.",
+      "v": "Anh theo một quy tắc đơn giản. Vừa nhận lương là anh chuyển ngay hai mươi phần trăm vào tài khoản tiết kiệm.",
+      "np": [
+        {
+          "mau": "as soon as + hiện tại",
+          "giai": "Ngay khi. Diễn tả thói quen hoặc tương lai, vế sau \"as soon as\" vẫn dùng hiện tại.",
+          "vd": "I'll call you as soon as I arrive.",
+          "vdV": "Tôi sẽ gọi bạn ngay khi tới nơi."
+        }
+      ]
+    },
+    {
+      "ai": "H",
+      "t": "Before you spend anything?",
+      "v": "Trước khi tiêu bất cứ thứ gì ạ?"
+    },
+    {
+      "ai": "L",
+      "t": "Exactly. If I wait until the end of the month, there's never anything left to save.",
+      "v": "Đúng vậy. Nếu đợi tới cuối tháng thì chẳng bao giờ còn gì để tiết kiệm cả.",
+      "np": [
+        {
+          "mau": "anything left (to V)",
+          "giai": "\"left\" = còn lại. there's nothing/anything left = không còn gì.",
+          "vd": "There isn't any cake left.",
+          "vdV": "Không còn chút bánh nào."
+        }
+      ]
+    },
+    {
+      "ai": "H",
+      "t": "That makes sense. What about the rest?",
+      "v": "Hợp lý thật. Còn phần còn lại thì sao?",
+      "khac": [
+        {
+          "kieu": "ngắn gọn",
+          "t": "Makes sense. And the rest?",
+          "v": "Hợp lý. Còn phần còn lại?"
+        }
+      ]
+    },
+    {
+      "ai": "L",
+      "t": "I split it into needs and wants. Rent, food and transport come first. Then I can enjoy the rest without feeling guilty.",
+      "v": "Anh chia thành thứ cần và thứ muốn. Tiền nhà, ăn uống, đi lại ưu tiên trước. Sau đó anh thoải mái tiêu phần còn lại mà không thấy áy náy.",
+      "np": [
+        {
+          "mau": "without + V-ing",
+          "giai": "\"without feeling guilty\" = mà không thấy áy náy. Sau giới từ dùng V-ing.",
+          "vd": "He left without saying goodbye.",
+          "vdV": "Anh ấy đi mà không chào."
+        }
+      ]
+    },
+    {
+      "ai": "H",
+      "t": "I've never thought about it like that. Is a new phone a need or a want?",
+      "v": "Em chưa bao giờ nghĩ theo cách đó. Điện thoại mới là thứ cần hay thứ muốn ạ?"
+    },
+    {
+      "ai": "L",
+      "t": "Is your current phone broken?",
+      "v": "Điện thoại hiện tại của em hỏng à?",
+      "khac": [
+        {
+          "kieu": "mềm mỏng",
+          "t": "Is there anything actually wrong with your current phone?",
+          "v": "Cái điện thoại hiện tại của em có thật sự bị gì không?"
+        }
+      ]
+    },
+    {
+      "ai": "H",
+      "t": "Well... no. It just looks a bit old.",
+      "v": "À... không ạ. Chỉ là trông hơi cũ."
+    },
+    {
+      "ai": "L",
+      "t": "Then it's a want. That's fine, but maybe save up for it instead of buying it now.",
+      "v": "Vậy là thứ muốn rồi. Không sao cả, nhưng có lẽ em nên dành dụm để mua thay vì mua ngay bây giờ.",
+      "khac": [
+        {
+          "kieu": "mềm mỏng",
+          "t": "Then it's a want. There's nothing wrong with that, but you might want to save up for it first.",
+          "v": "Vậy là thứ muốn. Không có gì sai cả, nhưng có lẽ em nên dành dụm trước đã."
+        }
+      ],
+      "np": [
+        {
+          "mau": "instead of + V-ing",
+          "giai": "Thay vì làm gì.",
+          "vd": "Why not walk instead of taking a taxi?",
+          "vdV": "Sao không đi bộ thay vì đi taxi?"
+        }
+      ]
+    },
+    {
+      "ai": "H",
+      "t": "My friends say I should pay in installments. It's only a small amount each month.",
+      "v": "Bạn em bảo nên mua trả góp. Mỗi tháng chỉ một khoản nhỏ thôi mà."
+    },
+    {
+      "ai": "L",
+      "t": "Small amounts add up. And if you lose your job or get sick, you still have to pay.",
+      "v": "Khoản nhỏ cộng lại cũng thành lớn. Mà lỡ em mất việc hay ốm đau thì vẫn phải trả."
+    },
+    {
+      "ai": "H",
+      "t": "Hmm, you're right. So should I buy nothing for myself?",
+      "v": "Hừm, anh nói đúng. Vậy em không nên mua gì cho bản thân à?"
+    },
+    {
+      "ai": "L",
+      "t": "No way! It's your first salary, so celebrate a little. Buy the headphones, and maybe treat your parents to dinner.",
+      "v": "Không đời nào! Lương đầu tiên mà, ăn mừng một chút đi. Mua tai nghe, và có lẽ mời bố mẹ một bữa tối.",
+      "khac": [
+        {
+          "kieu": "nhấn mạnh",
+          "t": "Of course not! It's your first salary — you deserve to celebrate a little. Get the headphones, and why not take your parents out for dinner?",
+          "v": "Dĩ nhiên là không! Lương đầu tiên mà — em xứng đáng ăn mừng một chút. Mua tai nghe đi, và sao không đưa bố mẹ đi ăn tối?"
+        }
+      ],
+      "np": [
+        {
+          "mau": "treat + sb + to + sth",
+          "giai": "Mời, đãi ai cái gì (mình trả tiền).",
+          "vd": "Let me treat you to lunch.",
+          "vdV": "Để tôi mời bạn bữa trưa."
+        }
+      ]
+    },
+    {
+      "ai": "H",
+      "t": "I love that idea. Mum has always paid for everything. It's my turn now.",
+      "v": "Em thích ý đó lắm. Mẹ lúc nào cũng trả tiền mọi thứ. Giờ đến lượt em.",
+      "np": [
+        {
+          "mau": "has always + V3",
+          "giai": "Hiện tại hoàn thành với \"always\": việc luôn đúng từ trước tới nay.",
+          "vd": "She has always wanted to visit Japan.",
+          "vdV": "Cô ấy luôn muốn đến Nhật."
+        }
+      ]
+    },
+    {
+      "ai": "L",
+      "t": "Exactly. Money is a tool. Use it for things that actually matter to you.",
+      "v": "Chính xác. Tiền là công cụ. Hãy dùng nó cho những thứ thật sự có ý nghĩa với em."
+    },
+    {
+      "ai": "H",
+      "t": "Twenty percent first, then needs, then a little fun. I think I can do that.",
+      "v": "Hai mươi phần trăm trước, rồi đến thứ cần, rồi một chút vui vẻ. Em nghĩ em làm được."
+    }
   ],
   "tuVung": [
-    { "chu": "salary", "doc": "/ˈsæləri/", "nghia": "lương (thường trả theo tháng)", "vd": "Her salary is paid on the 5th of every month." },
-    { "chu": "internship", "doc": "/ˈɪntɜːnʃɪp/", "nghia": "kỳ thực tập", "vd": "He did a three-month internship at a bank." },
-    { "chu": "spend it on", "doc": "/spend ɪt ɒn/", "nghia": "tiêu (tiền) vào…", "vd": "I spend most of my money on food." },
-    { "chu": "get paid", "doc": "/ɡet peɪd/", "nghia": "được trả lương, nhận lương", "vd": "We get paid at the end of the month." },
-    { "chu": "savings account", "doc": "/ˈseɪvɪŋz əˌkaʊnt/", "nghia": "tài khoản tiết kiệm", "vd": "She opened a savings account for her travel fund." },
-    { "chu": "needs and wants", "doc": "/niːdz ən wɒnts/", "nghia": "thứ cần (thiết yếu) và thứ muốn", "vd": "A budget starts with knowing your needs and wants." },
-    { "chu": "guilty", "doc": "/ˈɡɪlti/", "nghia": "áy náy, cảm thấy có lỗi", "vd": "I feel guilty about eating the whole cake." },
-    { "chu": "save up", "doc": "/seɪv ʌp/", "nghia": "dành dụm (để mua gì đó)", "vd": "I'm saving up for a laptop." },
-    { "chu": "installments", "doc": "/ɪnˈstɔːlmənts/", "nghia": "trả góp (từng đợt)", "vd": "You can pay for the TV in twelve installments." },
-    { "chu": "add up", "doc": "/æd ʌp/", "nghia": "cộng dồn lại (thành nhiều)", "vd": "Small coffees every day really add up." },
-    { "chu": "treat", "doc": "/triːt/", "nghia": "khao, mời (treat someone to something)", "vd": "Let me treat you to lunch." }
+    {
+      "chu": "salary",
+      "doc": "/ˈsæləri/",
+      "nghia": "lương (thường trả theo tháng)",
+      "vd": "Her salary is paid on the 5th of every month."
+    },
+    {
+      "chu": "internship",
+      "doc": "/ˈɪntɜːnʃɪp/",
+      "nghia": "kỳ thực tập",
+      "vd": "He did a three-month internship at a bank."
+    },
+    {
+      "chu": "spend it on",
+      "doc": "/spend ɪt ɒn/",
+      "nghia": "tiêu (tiền) vào…",
+      "vd": "I spend most of my money on food."
+    },
+    {
+      "chu": "get paid",
+      "doc": "/ɡet peɪd/",
+      "nghia": "được trả lương, nhận lương",
+      "vd": "We get paid at the end of the month."
+    },
+    {
+      "chu": "savings account",
+      "doc": "/ˈseɪvɪŋz əˌkaʊnt/",
+      "nghia": "tài khoản tiết kiệm",
+      "vd": "She opened a savings account for her travel fund."
+    },
+    {
+      "chu": "needs and wants",
+      "doc": "/niːdz ən wɒnts/",
+      "nghia": "thứ cần (thiết yếu) và thứ muốn",
+      "vd": "A budget starts with knowing your needs and wants."
+    },
+    {
+      "chu": "guilty",
+      "doc": "/ˈɡɪlti/",
+      "nghia": "áy náy, cảm thấy có lỗi",
+      "vd": "I feel guilty about eating the whole cake."
+    },
+    {
+      "chu": "save up",
+      "doc": "/seɪv ʌp/",
+      "nghia": "dành dụm (để mua gì đó)",
+      "vd": "I'm saving up for a laptop."
+    },
+    {
+      "chu": "installments",
+      "doc": "/ɪnˈstɔːlmənts/",
+      "nghia": "trả góp (từng đợt)",
+      "vd": "You can pay for the TV in twelve installments."
+    },
+    {
+      "chu": "add up",
+      "doc": "/æd ʌp/",
+      "nghia": "cộng dồn lại (thành nhiều)",
+      "vd": "Small coffees every day really add up."
+    },
+    {
+      "chu": "treat",
+      "doc": "/triːt/",
+      "nghia": "khao, mời (treat someone to something)",
+      "vd": "Let me treat you to lunch."
+    }
   ],
   "yNghia": "Tiết kiệm không phải là nhịn hết mọi thứ — mà là trả cho tương lai của mình TRƯỚC, rồi mới tiêu. Và một phần tháng lương đầu tiên dành để cảm ơn người đã nuôi mình lớn luôn là khoản chi xứng đáng nhất.",
   "meo": [
@@ -58,10 +321,55 @@
     "\"treat someone to something\" = khao/mời ai cái gì: \"treat your parents to dinner\"."
   ],
   "cauHoi": [
-    { "hoi": "Lương đầu tiên của Long hết sau bao lâu?", "chon": ["Khoảng mười ngày", "Một tuần", "Cả tháng"], "dung": 0, "giai": "\"My first salary was gone in about ten days.\"" },
-    { "hoi": "Quy tắc của Long khi nhận lương là gì?", "chon": ["Tiêu trước, cuối tháng còn bao nhiêu mới tiết kiệm", "Chuyển ngay 20% vào tài khoản tiết kiệm", "Đưa hết cho bố mẹ giữ"], "dung": 1, "giai": "\"As soon as I get paid, I move twenty percent into a savings account.\"" },
-    { "hoi": "Vì sao điện thoại mới là \"a want\"?", "chon": ["Vì nó quá đắt", "Vì Hà không dùng điện thoại", "Vì điện thoại cũ vẫn dùng được, chỉ trông hơi cũ"], "dung": 2, "giai": "Điện thoại cũ không hỏng — \"It just looks a bit old.\"" },
-    { "hoi": "Long nghĩ gì về việc mua trả góp?", "chon": ["Khoản nhỏ cộng dồn lại, lỡ mất việc vẫn phải trả", "Nên mua vì mỗi tháng trả ít", "Chỉ nên trả góp quần áo"], "dung": 0, "giai": "\"Small amounts add up. And if you lose your job or get sick, you still have to pay.\"" },
-    { "hoi": "\"Treat your parents to dinner\" nghĩa là gì?", "chon": ["Nấu bữa tối cho bố mẹ", "Mời (khao) bố mẹ một bữa tối", "Ăn tối cùng bố mẹ ở nhà"], "dung": 1, "giai": "\"treat someone to something\" = khao, trả tiền mời ai." }
+    {
+      "hoi": "Lương đầu tiên của Long hết sau bao lâu?",
+      "chon": [
+        "Khoảng mười ngày",
+        "Một tuần",
+        "Cả tháng"
+      ],
+      "dung": 0,
+      "giai": "\"My first salary was gone in about ten days.\""
+    },
+    {
+      "hoi": "Quy tắc của Long khi nhận lương là gì?",
+      "chon": [
+        "Tiêu trước, cuối tháng còn bao nhiêu mới tiết kiệm",
+        "Chuyển ngay 20% vào tài khoản tiết kiệm",
+        "Đưa hết cho bố mẹ giữ"
+      ],
+      "dung": 1,
+      "giai": "\"As soon as I get paid, I move twenty percent into a savings account.\""
+    },
+    {
+      "hoi": "Vì sao điện thoại mới là \"a want\"?",
+      "chon": [
+        "Vì nó quá đắt",
+        "Vì Hà không dùng điện thoại",
+        "Vì điện thoại cũ vẫn dùng được, chỉ trông hơi cũ"
+      ],
+      "dung": 2,
+      "giai": "Điện thoại cũ không hỏng — \"It just looks a bit old.\""
+    },
+    {
+      "hoi": "Long nghĩ gì về việc mua trả góp?",
+      "chon": [
+        "Khoản nhỏ cộng dồn lại, lỡ mất việc vẫn phải trả",
+        "Nên mua vì mỗi tháng trả ít",
+        "Chỉ nên trả góp quần áo"
+      ],
+      "dung": 0,
+      "giai": "\"Small amounts add up. And if you lose your job or get sick, you still have to pay.\""
+    },
+    {
+      "hoi": "\"Treat your parents to dinner\" nghĩa là gì?",
+      "chon": [
+        "Nấu bữa tối cho bố mẹ",
+        "Mời (khao) bố mẹ một bữa tối",
+        "Ăn tối cùng bố mẹ ở nhà"
+      ],
+      "dung": 1,
+      "giai": "\"treat someone to something\" = khao, trả tiền mời ai."
+    }
   ]
 }

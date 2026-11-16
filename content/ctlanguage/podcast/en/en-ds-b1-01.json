@@ -1,0 +1,426 @@
+{
+  "id": "en-ds-b1-01",
+  "nn": "en",
+  "danhMuc": "doi-song",
+  "cap": "B1",
+  "so": 4,
+  "tieuDe": "This Isn't What We Ordered",
+  "tieuDeViet": "Đây không phải món chúng tôi gọi",
+  "moTa": "An và Tom đợi bốn mươi phút, nhận sai món, rồi món lại nguội. Họ phàn nàn ba lần mà không lần nào nặng lời — và nhận được lời xin lỗi lẫn ưu đãi. Công thức: nói rõ vấn đề, nói điều mình muốn, cứng rắn với vấn đề nhưng tử tế với con người.",
+  "chuDe": "Phàn nàn",
+  "bieuTuong": "exclamationmark.bubble.fill",
+  "nguoi": [
+    {
+      "ma": "A",
+      "ten": "An",
+      "giong": "au-nu",
+      "vai": "khách"
+    },
+    {
+      "ma": "T",
+      "ten": "Tom",
+      "giong": "us-nam",
+      "vai": "bạn của An"
+    },
+    {
+      "ma": "W",
+      "ten": "Oliver",
+      "giong": "uk-nam",
+      "vai": "nhân viên phục vụ"
+    }
+  ],
+  "loi": [
+    {
+      "ai": "T",
+      "t": "We've been waiting for almost forty minutes. Should we say something?",
+      "v": "Chúng ta đợi gần bốn mươi phút rồi. Có nên nói gì không nhỉ?",
+      "np": [
+        {
+          "mau": "have been + V-ing + for",
+          "giai": "Hiện tại hoàn thành tiếp diễn: việc bắt đầu trong quá khứ, vẫn đang tiếp diễn, nhấn mạnh thời gian kéo dài.",
+          "vd": "I've been standing in this queue for half an hour.",
+          "vdV": "Tôi đứng xếp hàng này nửa tiếng rồi."
+        }
+      ]
+    },
+    {
+      "ai": "A",
+      "t": "Yes, let's ask. Excuse me! Sorry to bother you.",
+      "v": "Ừ, hỏi đi. Anh ơi! Xin lỗi làm phiền anh.",
+      "khac": [
+        {
+          "kieu": "lịch sự",
+          "t": "Excuse me, sorry to interrupt.",
+          "v": "Anh ơi, xin lỗi cắt ngang.",
+          "ghiChu": "khi nhân viên đang bận việc khác"
+        },
+        {
+          "kieu": "ngắn gọn",
+          "t": "Excuse me!",
+          "v": "Anh ơi!",
+          "ghiChu": "giơ tay, nhìn vào mắt — không vẫy gọi hay huýt sáo"
+        }
+      ]
+    },
+    {
+      "ai": "W",
+      "t": "Yes? How can I help?",
+      "v": "Vâng? Tôi giúp gì được ạ?"
+    },
+    {
+      "ai": "A",
+      "t": "We ordered about forty minutes ago, and our food hasn't arrived yet. Could you check on it for us?",
+      "v": "Chúng tôi gọi món khoảng bốn mươi phút trước mà đồ ăn vẫn chưa ra. Anh kiểm tra giúp chúng tôi được không?",
+      "khac": [
+        {
+          "kieu": "mềm mỏng",
+          "t": "I'm sorry, but we've been waiting quite a while. Is our order on its way?",
+          "v": "Xin lỗi anh, chúng tôi đợi khá lâu rồi. Món của chúng tôi sắp ra chưa ạ?"
+        },
+        {
+          "kieu": "ngắn gọn",
+          "t": "Hi, we're still waiting for our food. Could you check, please?",
+          "v": "Anh ơi, chúng tôi vẫn đang đợi món. Anh xem giúp được không?"
+        }
+      ],
+      "np": [
+        {
+          "mau": "hasn't + V3 + yet",
+          "giai": "Hiện tại hoàn thành phủ định với \"yet\": việc mong đợi mà tới giờ chưa xảy ra.",
+          "vd": "My package hasn't arrived yet.",
+          "vdV": "Gói hàng của tôi vẫn chưa tới."
+        }
+      ]
+    },
+    {
+      "ai": "W",
+      "t": "I'm so sorry. The kitchen is really busy tonight. Let me find out.",
+      "v": "Tôi rất xin lỗi. Tối nay bếp rất đông. Để tôi đi hỏi."
+    },
+    {
+      "ai": "W",
+      "t": "Here you are — two beef noodle soups.",
+      "v": "Đây ạ — hai tô phở bò."
+    },
+    {
+      "ai": "T",
+      "t": "Um, sorry, I think there's been a mistake. We ordered one beef and one chicken.",
+      "v": "Ừm, xin lỗi, hình như có nhầm lẫn. Chúng tôi gọi một bò một gà.",
+      "khac": [
+        {
+          "kieu": "mềm mỏng",
+          "t": "Sorry, I don't think this is what we ordered.",
+          "v": "Xin lỗi, tôi nghĩ đây không phải món chúng tôi gọi."
+        },
+        {
+          "kieu": "trang trọng",
+          "t": "Excuse me, I believe there has been a mix-up with our order.",
+          "v": "Xin lỗi, tôi e là đơn của chúng tôi bị nhầm."
+        }
+      ],
+      "np": [
+        {
+          "mau": "I think there's been a mistake",
+          "giai": "\"I think\" làm câu phàn nàn nhẹ đi; \"there's been\" = there has been (hiện tại hoàn thành) — lỗi vừa xảy ra.",
+          "vd": "I think there's been a problem with my booking.",
+          "vdV": "Hình như đặt phòng của tôi có vấn đề."
+        }
+      ]
+    },
+    {
+      "ai": "W",
+      "t": "Oh no, you're right. I'm terribly sorry. I'll change it right away.",
+      "v": "Ôi, đúng rồi. Tôi vô cùng xin lỗi. Tôi đổi ngay ạ."
+    },
+    {
+      "ai": "A",
+      "t": "Thanks. Also, could we have some more napkins?",
+      "v": "Cảm ơn anh. Cho chúng tôi xin thêm khăn giấy được không?",
+      "khac": [
+        {
+          "kieu": "lịch sự",
+          "t": "Would you mind bringing us a few more napkins?",
+          "v": "Anh có phiền mang thêm cho chúng tôi vài tờ khăn giấy không?"
+        }
+      ]
+    },
+    {
+      "ai": "W",
+      "t": "Of course.",
+      "v": "Tất nhiên ạ."
+    },
+    {
+      "ai": "T",
+      "t": "Hmm, the chicken soup is only warm, not hot. Should we complain again?",
+      "v": "Hừm, tô gà chỉ âm ấm, không nóng. Mình có nên phàn nàn nữa không?"
+    },
+    {
+      "ai": "A",
+      "t": "I don't know. I don't want to sound rude.",
+      "v": "Mình không biết. Mình không muốn tỏ ra bất lịch sự.",
+      "np": [
+        {
+          "mau": "sound + adj",
+          "giai": "Nghe có vẻ, tỏ ra (qua lời nói): sound rude, sound angry, sound interesting.",
+          "vd": "Your plan sounds great.",
+          "vdV": "Kế hoạch của bạn nghe hay đấy."
+        }
+      ]
+    },
+    {
+      "ai": "T",
+      "t": "It's not rude if we're polite about it. Explain the problem, then say what you'd like.",
+      "v": "Không bất lịch sự nếu mình nói nhã nhặn. Giải thích vấn đề, rồi nói mình muốn gì.",
+      "np": [
+        {
+          "mau": "what you would like",
+          "giai": "Mệnh đề danh từ \"what + S + V\" làm tân ngữ: say what you'd like, tell me what you need.",
+          "vd": "Just tell me what you need.",
+          "vdV": "Cứ nói tôi biết bạn cần gì."
+        }
+      ]
+    },
+    {
+      "ai": "T",
+      "t": "Excuse me. I'm sorry to complain again, but this soup isn't very hot. Would you mind heating it up?",
+      "v": "Anh ơi. Xin lỗi lại phàn nàn tiếp, nhưng tô này không nóng lắm. Anh hâm nóng lại giúp được không?",
+      "khac": [
+        {
+          "kieu": "mềm mỏng",
+          "t": "I hate to be a pain, but could this be heated up a little?",
+          "v": "Tôi không muốn làm phiền đâu, nhưng có thể hâm nóng lại một chút không?",
+          "ghiChu": "người Anh hay dùng để giảm nhẹ lời phàn nàn"
+        },
+        {
+          "kieu": "ngắn gọn",
+          "t": "Could you heat this up, please? It's gone a bit cold.",
+          "v": "Anh hâm lại giúp được không? Nó hơi nguội rồi."
+        }
+      ],
+      "np": [
+        {
+          "mau": "Would you mind + V-ing?",
+          "giai": "Nhờ rất lịch sự. Đồng ý thì đáp \"Not at all / Of course not\" (= không phiền đâu).",
+          "vd": "Would you mind closing the window?",
+          "vdV": "Anh có phiền đóng cửa sổ giúp không?"
+        }
+      ]
+    },
+    {
+      "ai": "W",
+      "t": "Not at all. I'm really sorry about tonight.",
+      "v": "Không phiền gì ạ. Tôi thật sự xin lỗi về tối nay."
+    },
+    {
+      "ai": "W",
+      "t": "I've spoken to the manager. Your drinks are free tonight, and there's ten percent off your bill.",
+      "v": "Tôi đã nói với quản lý. Đồ uống tối nay miễn phí, và hoá đơn được giảm mười phần trăm.",
+      "np": [
+        {
+          "mau": "ten percent off",
+          "giai": "\"X percent off\" = giảm X phần trăm. \"There's 20% off everything\" = mọi thứ giảm 20%.",
+          "vd": "There's thirty percent off all shoes this week.",
+          "vdV": "Tuần này giày giảm ba mươi phần trăm."
+        }
+      ]
+    },
+    {
+      "ai": "A",
+      "t": "That's very kind of you. Thank you.",
+      "v": "Anh thật chu đáo. Cảm ơn anh.",
+      "khac": [
+        {
+          "kieu": "trang trọng",
+          "t": "We really appreciate that, thank you.",
+          "v": "Chúng tôi thật sự cảm kích, cảm ơn anh."
+        },
+        {
+          "kieu": "thân mật",
+          "t": "Oh, that's so nice of you!",
+          "v": "Ôi, anh tốt quá!"
+        }
+      ]
+    },
+    {
+      "ai": "T",
+      "t": "We know it's a busy night. It's not your fault.",
+      "v": "Chúng tôi biết tối nay đông khách. Không phải lỗi của anh đâu.",
+      "khac": [
+        {
+          "kieu": "mềm mỏng",
+          "t": "Don't worry, we can see how busy you are.",
+          "v": "Đừng lo, chúng tôi thấy các anh bận thế nào mà."
+        }
+      ]
+    },
+    {
+      "ai": "W",
+      "t": "Thank you for being so understanding.",
+      "v": "Cảm ơn anh chị đã thông cảm.",
+      "np": [
+        {
+          "mau": "Thank you for + V-ing",
+          "giai": "Cảm ơn vì đã làm gì: Thank you for waiting / for being patient.",
+          "vd": "Thank you for waiting.",
+          "vdV": "Cảm ơn quý khách đã chờ."
+        }
+      ]
+    },
+    {
+      "ai": "A",
+      "t": "I'm glad you spoke up. I usually just eat it and never come back.",
+      "v": "May mà cậu lên tiếng. Mình thường cứ ăn cho xong rồi không bao giờ quay lại."
+    },
+    {
+      "ai": "T",
+      "t": "I used to do that too. But a calm complaint gives them a chance to fix it.",
+      "v": "Mình cũng từng vậy. Nhưng phàn nàn bình tĩnh là cho họ cơ hội sửa sai.",
+      "np": [
+        {
+          "mau": "used to + V",
+          "giai": "Thói quen trong quá khứ, nay không còn.",
+          "vd": "I used to drink a lot of coffee.",
+          "vdV": "Trước đây tôi uống rất nhiều cà phê."
+        }
+      ]
+    },
+    {
+      "ai": "A",
+      "t": "And being nice to Oliver helped. It wasn't his fault the kitchen was slow.",
+      "v": "Mà đối xử tử tế với Oliver cũng có tác dụng. Bếp chậm đâu phải lỗi của anh ấy."
+    },
+    {
+      "ai": "T",
+      "t": "Exactly. Be firm about the problem, but kind to the person.",
+      "v": "Chính xác. Cứng rắn với vấn đề, nhưng tử tế với con người."
+    },
+    {
+      "ai": "A",
+      "t": "Firm about the problem, kind to the person. I'll remember that.",
+      "v": "Cứng rắn với vấn đề, tử tế với con người. Mình sẽ nhớ câu đó."
+    }
+  ],
+  "tuVung": [
+    {
+      "chu": "been waiting",
+      "doc": "/biːn ˈweɪtɪŋ/",
+      "nghia": "đã đợi (và vẫn đang đợi)",
+      "vd": "We've been waiting for an hour."
+    },
+    {
+      "chu": "check on",
+      "doc": "/tʃek ɒn/",
+      "nghia": "kiểm tra (tình trạng của)",
+      "vd": "Could you check on my order?"
+    },
+    {
+      "chu": "mistake",
+      "doc": "/mɪˈsteɪk/",
+      "nghia": "sự nhầm lẫn, lỗi",
+      "vd": "Sorry, there's a mistake on the bill."
+    },
+    {
+      "chu": "napkins",
+      "doc": "/ˈnæpkɪnz/",
+      "nghia": "khăn ăn, khăn giấy",
+      "vd": "Can I have some napkins?"
+    },
+    {
+      "chu": "complain",
+      "doc": "/kəmˈpleɪn/",
+      "nghia": "phàn nàn",
+      "vd": "I want to complain about the service."
+    },
+    {
+      "chu": "rude",
+      "doc": "/ruːd/",
+      "nghia": "bất lịch sự, thô lỗ",
+      "vd": "Don't be rude to the waiter."
+    },
+    {
+      "chu": "heating it up",
+      "doc": "/ˈhiːtɪŋ ɪt ʌp/",
+      "nghia": "hâm nóng nó (heat up)",
+      "vd": "Could you heat it up, please?"
+    },
+    {
+      "chu": "percent off",
+      "doc": "/pəˈsent ɒf/",
+      "nghia": "giảm … phần trăm",
+      "vd": "Everything is fifty percent off."
+    },
+    {
+      "chu": "fault",
+      "doc": "/fɔːlt/",
+      "nghia": "lỗi (trách nhiệm)",
+      "vd": "It's not my fault."
+    },
+    {
+      "chu": "understanding",
+      "doc": "/ˌʌndəˈstændɪŋ/",
+      "nghia": "thông cảm, biết thông cảm",
+      "vd": "Thank you for being so understanding."
+    },
+    {
+      "chu": "spoke up",
+      "doc": "/spəʊk ʌp/",
+      "nghia": "lên tiếng (speak up)",
+      "vd": "If you have a problem, speak up."
+    },
+    {
+      "chu": "firm",
+      "doc": "/fɜːm/",
+      "nghia": "cứng rắn, kiên quyết",
+      "vd": "Be firm but polite."
+    }
+  ],
+  "yNghia": "Im lặng rồi không bao giờ quay lại thì không ai được gì. Một lời phàn nàn bình tĩnh — nói rõ vấn đề, nói điều mình muốn — cho người ta cơ hội sửa sai. Cứng rắn với vấn đề, nhưng tử tế với con người: người phục vụ không phải là cái bếp chậm.",
+  "meo": [
+    "Công thức phàn nàn lịch sự: mở lời (\"Excuse me, sorry to bother you\") → nói vấn đề (\"I think there's been a mistake\") → nói điều mình muốn (\"Could you…? / Would you mind…?\").",
+    "Làm nhẹ câu: thêm \"I think\", \"a bit\", \"I'm sorry, but…\". Ví dụ \"This soup isn't very hot\" nhẹ hơn \"This soup is cold\".",
+    "Ở cửa hàng: \"I'd like to return this. It doesn't work.\" / \"Could I get a refund or an exchange?\" / \"Here's the receipt.\"",
+    "\"Would you mind + V-ing?\" — đáp đồng ý là \"Not at all\" (không phiền), đừng đáp \"Yes\"."
+  ],
+  "cauHoi": [
+    {
+      "hoi": "Vấn đề đầu tiên của An và Tom là gì?",
+      "chon": [
+        "Món quá cay",
+        "Đợi gần bốn mươi phút chưa có đồ ăn",
+        "Hoá đơn sai"
+      ],
+      "dung": 1,
+      "giai": "\"We've been waiting for almost forty minutes.\""
+    },
+    {
+      "hoi": "Nhà hàng bù đắp thế nào?",
+      "chon": [
+        "Miễn phí cả bữa",
+        "Tặng món tráng miệng",
+        "Miễn phí đồ uống và giảm 10% hoá đơn"
+      ],
+      "dung": 2,
+      "giai": "\"Your drinks are free tonight, and there's ten percent off your bill.\""
+    },
+    {
+      "hoi": "Ai đó hỏi \"Would you mind heating it up?\", bạn đồng ý thì đáp:",
+      "chon": [
+        "Yes, I mind.",
+        "Not at all.",
+        "Yes, I would."
+      ],
+      "dung": 1,
+      "giai": "\"Not at all\" = không phiền gì, tôi làm ngay."
+    },
+    {
+      "hoi": "Bài học Tom nói là gì?",
+      "chon": [
+        "Đừng bao giờ phàn nàn",
+        "Cứng rắn với vấn đề, tử tế với con người",
+        "Phàn nàn càng to càng hiệu quả"
+      ],
+      "dung": 1,
+      "giai": "\"Be firm about the problem, but kind to the person.\""
+    }
+  ]
+}

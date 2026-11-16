@@ -1,0 +1,257 @@
+{
+  "id": "zh-se-hsk4-03",
+  "nn": "zh",
+  "danhMuc": "phan-mem",
+  "cap": "HSK4",
+  "so": 3,
+  "tieuDe": "代码评审：对事不对人",
+  "tieuDeViet": "Review code: góp ý việc, không nhắm người",
+  "moTa": "Phương mới vào ba tháng đã được giao review code của anh Chu — người làm lâu năm. Cô ngại góp ý, rồi đến lượt mình bị góp ý. Hai người cùng luyện cách nói: hỏi thay vì kết luận, ghi rõ \"gợi ý\" hay \"bắt buộc sửa\", và bất đồng mà vẫn lịch sự.",
+  "chuDe": "Code review",
+  "bieuTuong": "text.bubble.fill",
+  "nguoi": [
+    { "ma": "F", "ten": "Phương", "giong": "zh-nu", "vai": "lập trình viên người Việt, vào được ba tháng" },
+    { "ma": "Z", "ten": "Anh Chu", "giong": "zh-nam", "vai": "lập trình viên lâu năm" }
+  ],
+  "loi": [
+    {
+      "ai": "F",
+      "t": "周哥，你昨天提交的代码，组长让我帮你评审。可是我才来三个月，有点儿不敢提意见。",
+      "doc": "Zhōu gē, nǐ zuótiān tíjiāo de dàimǎ, zǔzhǎng ràng wǒ bāng nǐ píngshěn. Kěshì wǒ cái lái sān ge yuè, yǒudiǎnr bù gǎn tí yìjiàn.",
+      "v": "Anh Chu, code anh nộp hôm qua, trưởng nhóm bảo em review giúp. Nhưng em mới đến ba tháng, hơi ngại góp ý.",
+      "np": [
+        { "mau": "才 + V + thời gian", "giai": "才 trước động từ + khoảng thời gian = \"mới chỉ\", nhấn mạnh thời gian ngắn/ít.", "vd": "他才学了半年中文。", "vdDoc": "Tā cái xué le bàn nián Zhōngwén.", "vdV": "Anh ấy mới học tiếng Trung có nửa năm." }
+      ]
+    },
+    {
+      "ai": "Z",
+      "t": "哈哈，代码评审不看谁来得早。你发现了问题，就是帮了我。",
+      "doc": "Hāhā, dàimǎ píngshěn bú kàn shéi lái de zǎo. Nǐ fāxiàn le wèntí, jiù shì bāng le wǒ.",
+      "v": "Haha, review code không xét ai đến trước. Em tìm ra lỗi là đã giúp anh rồi."
+    },
+    {
+      "ai": "F",
+      "t": "那我就直说了。第四十行这里，查询放在了循环里面，数据多的时候会不会很慢？",
+      "doc": "Nà wǒ jiù zhí shuō le. Dì sìshí háng zhèlǐ, cháxún fàng zài le xúnhuán lǐmiàn, shùjù duō de shíhou huì bu huì hěn màn?",
+      "v": "Vậy em nói thẳng nhé. Ở dòng 40, câu truy vấn đặt trong vòng lặp, khi dữ liệu nhiều có bị chậm không ạ?",
+      "khac": [
+        { "kieu": "mềm mỏng", "t": "第四十行这里，我理解得对不对：每次循环都会查一次数据库？", "doc": "Dì sìshí háng zhèlǐ, wǒ lǐjiě de duì bu duì: měi cì xúnhuán dōu huì chá yí cì shùjùkù?", "v": "Ở dòng 40, em hiểu thế này có đúng không: mỗi vòng lặp đều truy vấn database một lần?", "ghiChu": "hỏi để xác nhận thay vì khẳng định người khác sai" },
+        { "kieu": "ngắn gọn", "t": "第四十行：循环里有查询，可能有性能问题。", "doc": "Dì sìshí háng: xúnhuán li yǒu cháxún, kěnéng yǒu xìngnéng wèntí.", "v": "Dòng 40: có truy vấn trong vòng lặp, có thể gây vấn đề hiệu năng.", "ghiChu": "kiểu viết bình luận trên hệ thống review" }
+      ],
+      "np": [
+        { "mau": "会不会 + adj/V？", "giai": "Hỏi khả năng \"liệu có… không\" — nghe như đang cùng suy nghĩ chứ không phán xét, rất hợp khi góp ý.", "vd": "这样改会不会影响别的功能？", "vdDoc": "Zhèyàng gǎi huì bu huì yǐngxiǎng bié de gōngnéng?", "vdV": "Sửa thế này liệu có ảnh hưởng chức năng khác không?" }
+      ]
+    },
+    {
+      "ai": "Z",
+      "t": "你说得对，这是我写得太急了。可以先一次查出来，然后在循环里直接用。",
+      "doc": "Nǐ shuō de duì, zhè shì wǒ xiě de tài jí le. Kěyǐ xiān yí cì chá chūlai, ránhòu zài xúnhuán li zhíjiē yòng.",
+      "v": "Em nói đúng, chỗ này anh viết vội quá. Có thể truy vấn một lần lấy hết ra trước, rồi trong vòng lặp dùng luôn."
+    },
+    {
+      "ai": "Z",
+      "t": "你看，你刚才用的是问句，“会不会很慢”，而不是“你写错了”，这样就很好。",
+      "doc": "Nǐ kàn, nǐ gāngcái yòng de shì wènjù, “huì bu huì hěn màn”, ér bú shì “nǐ xiě cuò le”, zhèyàng jiù hěn hǎo.",
+      "v": "Em thấy không, vừa rồi em dùng câu hỏi \"có chậm không\" chứ không phải \"anh viết sai rồi\", như thế là rất tốt.",
+      "np": [
+        { "mau": "A，而不是 B", "giai": "\"Là A chứ không phải B\" — nhấn mạnh lựa chọn đúng, gạt bỏ cái kia.", "vd": "我们需要的是质量，而不是速度。", "vdDoc": "Wǒmen xūyào de shì zhìliàng, ér bú shì sùdù.", "vdV": "Thứ chúng ta cần là chất lượng chứ không phải tốc độ." }
+      ]
+    },
+    {
+      "ai": "F",
+      "t": "为什么问句比较好？",
+      "doc": "Wèishénme wènjù bǐjiào hǎo?",
+      "v": "Sao câu hỏi lại tốt hơn ạ?"
+    },
+    {
+      "ai": "Z",
+      "t": "因为你不一定知道作者的全部想法。也许他那样写有原因，问一下，就给了对方解释的机会。",
+      "doc": "Yīnwèi nǐ bù yídìng zhīdào zuòzhě de quánbù xiǎngfǎ. Yěxǔ tā nàyàng xiě yǒu yuányīn, wèn yíxià, jiù gěi le duìfāng jiěshì de jīhuì.",
+      "v": "Vì em chưa chắc đã biết hết suy nghĩ của người viết. Có thể họ viết vậy là có lý do, hỏi một câu là cho đối phương cơ hội giải thích."
+    },
+    {
+      "ai": "Z",
+      "t": "还有，评论的时候要对事不对人。说“这段代码”，不说“你这个人总是……”。",
+      "doc": "Hái yǒu, pínglùn de shíhou yào duì shì bú duì rén. Shuō “zhè duàn dàimǎ”, bù shuō “nǐ zhège rén zǒngshì……”.",
+      "v": "Còn nữa, khi bình luận phải nhắm vào việc chứ không nhắm vào người. Nói \"đoạn code này\", chứ không nói \"cái anh này lúc nào cũng…\".",
+      "np": [
+        { "mau": "对事不对人", "giai": "Thành ngữ công sở: góp ý về việc, không công kích con người. Cấu trúc 对A不对B = nhắm vào A chứ không nhắm vào B.", "vd": "开会讨论要对事不对人。", "vdDoc": "Kāihuì tǎolùn yào duì shì bú duì rén.", "vdV": "Họp bàn thì phải nói về việc, đừng nhắm vào người." }
+      ]
+    },
+    {
+      "ai": "F",
+      "t": "明白了。那如果只是一个小建议，不改也没关系呢？",
+      "doc": "Míngbai le. Nà rúguǒ zhǐ shì yí ge xiǎo jiànyì, bù gǎi yě méi guānxi ne?",
+      "v": "Em hiểu rồi. Thế nếu chỉ là một gợi ý nhỏ, không sửa cũng không sao thì sao ạ?"
+    },
+    {
+      "ai": "Z",
+      "t": "那就在前面写上“建议”或者“小问题”，让对方知道这不是必须改的。",
+      "doc": "Nà jiù zài qiánmiàn xiě shang “jiànyì” huòzhě “xiǎo wèntí”, ràng duìfāng zhīdào zhè bú shì bìxū gǎi de.",
+      "v": "Thì ghi ở đầu là \"gợi ý\" hoặc \"lỗi nhỏ\", để đối phương biết đây không phải chỗ bắt buộc sửa."
+    },
+    {
+      "ai": "F",
+      "t": "好，我试试：小问题，这个变量名叫“data2”，是不是可以改成更清楚的名字？",
+      "doc": "Hǎo, wǒ shìshi: xiǎo wèntí, zhège biànliàng míng jiào “data2”, shì bu shì kěyǐ gǎi chéng gèng qīngchu de míngzi?",
+      "v": "Vâng, em thử nhé: lỗi nhỏ, biến này tên là \"data2\", có thể đổi sang tên rõ nghĩa hơn được không ạ?",
+      "khac": [
+        { "kieu": "chuyên nghiệp", "t": "建议：把“data2”改成能看出意思的名字，比如“orderList”。", "doc": "Jiànyì: bǎ “data2” gǎi chéng néng kàn chū yìsi de míngzi, bǐrú “orderList”.", "v": "Gợi ý: đổi \"data2\" thành tên nhìn là hiểu, ví dụ \"orderList\".", "ghiChu": "kèm ví dụ cụ thể giúp người nhận sửa nhanh" }
+      ],
+      "np": [
+        { "mau": "是不是可以 + V？", "giai": "Đề nghị rất mềm: \"liệu có thể… không?\". Lịch sự hơn 你应该… (anh nên…).", "vd": "是不是可以晚一点儿开会？", "vdDoc": "Shì bu shì kěyǐ wǎn yìdiǎnr kāihuì?", "vdV": "Liệu có thể họp muộn hơn một chút không?" }
+      ]
+    },
+    {
+      "ai": "Z",
+      "t": "非常好，我马上改。好了，现在轮到我看你的代码了。",
+      "doc": "Fēicháng hǎo, wǒ mǎshàng gǎi. Hǎo le, xiànzài lún dào wǒ kàn nǐ de dàimǎ le.",
+      "v": "Rất tốt, anh sửa ngay. Được rồi, giờ đến lượt anh xem code của em.",
+      "np": [
+        { "mau": "轮到 + ai + V", "giai": "轮到 = đến lượt (ai đó làm gì).", "vd": "下一个轮到你了。", "vdDoc": "Xià yí ge lún dào nǐ le.", "vdV": "Người tiếp theo đến lượt bạn rồi." }
+      ]
+    },
+    {
+      "ai": "F",
+      "t": "啊，我有点儿紧张。",
+      "doc": "À, wǒ yǒudiǎnr jǐnzhāng.",
+      "v": "Ôi, em hơi hồi hộp."
+    },
+    {
+      "ai": "Z",
+      "t": "别紧张。你的逻辑很清楚，只有两个地方我觉得可以更好。",
+      "doc": "Bié jǐnzhāng. Nǐ de luójí hěn qīngchu, zhǐyǒu liǎng ge dìfang wǒ juéde kěyǐ gèng hǎo.",
+      "v": "Đừng lo. Logic của em rất rõ ràng, chỉ có hai chỗ anh thấy có thể tốt hơn.",
+      "khac": [
+        { "kieu": "chuyên nghiệp", "t": "整体写得不错，有两点建议供你参考。", "doc": "Zhěngtǐ xiě de búcuò, yǒu liǎng diǎn jiànyì gōng nǐ cānkǎo.", "v": "Nhìn chung viết tốt, có hai gợi ý để em tham khảo.", "ghiChu": "供你参考 = để bạn tham khảo, câu góp ý rất chuẩn mực" }
+      ]
+    },
+    {
+      "ai": "Z",
+      "t": "第一，这两个函数差不多一样，能不能把相同的部分提出来，写成一个公共的函数？",
+      "doc": "Dì yī, zhè liǎng ge hánshù chàbuduō yíyàng, néng bu néng bǎ xiāngtóng de bùfen tí chūlai, xiě chéng yí ge gōnggòng de hánshù?",
+      "v": "Thứ nhất, hai hàm này gần như giống nhau, có thể tách phần giống nhau ra, viết thành một hàm dùng chung không?",
+      "np": [
+        { "mau": "把 + O + V + 出来", "giai": "出来 làm bổ ngữ = lấy ra, tách ra, làm cho lộ ra: 提出来 (tách ra), 找出来 (tìm ra).", "vd": "请把重要的地方标出来。", "vdDoc": "Qǐng bǎ zhòngyào de dìfang biāo chūlai.", "vdV": "Hãy đánh dấu những chỗ quan trọng ra." }
+      ]
+    },
+    {
+      "ai": "F",
+      "t": "好的，我改一下。",
+      "doc": "Hǎo de, wǒ gǎi yíxià.",
+      "v": "Vâng, em sửa ạ.",
+      "khac": [
+        { "kieu": "ngắn gọn", "t": "收到，我这就改。", "doc": "Shōudào, wǒ zhè jiù gǎi.", "v": "Đã nhận, em sửa ngay đây.", "ghiChu": "收到 = đã nhận (thông tin), rất hay dùng trong chat công việc" },
+        { "kieu": "lịch sự", "t": "谢谢提醒，这个我确实没注意到。", "doc": "Xièxie tíxǐng, zhège wǒ quèshí méi zhùyì dào.", "v": "Cảm ơn anh nhắc, chỗ này em đúng là không để ý.", "ghiChu": "nhận góp ý kèm lời cảm ơn" }
+      ]
+    },
+    {
+      "ai": "Z",
+      "t": "第二，这里写了一个数字“86400”，别人看了不知道是什么意思。",
+      "doc": "Dì èr, zhèlǐ xiě le yí ge shùzì “86400”, biérén kàn le bù zhīdào shì shénme yìsi.",
+      "v": "Thứ hai, ở đây em viết con số \"86400\", người khác đọc vào không biết nghĩa là gì."
+    },
+    {
+      "ai": "F",
+      "t": "那是一天的秒数。不过我这样写是有原因的：这个文件里别的地方也是这么写的，我想跟原来的风格保持一致。",
+      "doc": "Nà shì yì tiān de miǎo shù. Búguò wǒ zhèyàng xiě shì yǒu yuányīn de: zhège wénjiàn li bié de dìfang yě shì zhème xiě de, wǒ xiǎng gēn yuánlái de fēnggé bǎochí yízhì.",
+      "v": "Đó là số giây của một ngày. Nhưng em viết vậy là có lý do: những chỗ khác trong file này cũng viết như thế, em muốn giữ cho thống nhất với phong cách cũ.",
+      "khac": [
+        { "kieu": "mềm mỏng", "t": "我理解你的意思，不过我当时是这么考虑的……", "doc": "Wǒ lǐjiě nǐ de yìsi, búguò wǒ dāngshí shì zhème kǎolǜ de……", "v": "Em hiểu ý anh, nhưng lúc đó em đã cân nhắc thế này…", "ghiChu": "mở lời bất đồng mà không phủ nhận người góp ý" }
+      ],
+      "np": [
+        { "mau": "跟 A 保持一致", "giai": "Giữ thống nhất/nhất quán với A. Hay dùng khi nói về phong cách, dữ liệu, quan điểm.", "vd": "新页面要跟旧页面保持一致。", "vdDoc": "Xīn yèmiàn yào gēn jiù yèmiàn bǎochí yízhì.", "vdV": "Trang mới phải thống nhất với trang cũ." }
+      ]
+    },
+    {
+      "ai": "Z",
+      "t": "原来是这样，你的考虑有道理。那我们另外开一个任务，把整个文件都改成常量，好不好？",
+      "doc": "Yuánlái shì zhèyàng, nǐ de kǎolǜ yǒu dàolǐ. Nà wǒmen lìngwài kāi yí ge rènwù, bǎ zhěnggè wénjiàn dōu gǎi chéng chángliàng, hǎo bu hǎo?",
+      "v": "Hoá ra là vậy, em cân nhắc có lý. Thế mình mở riêng một task, đổi cả file sang dùng hằng số, được không?"
+    },
+    {
+      "ai": "F",
+      "t": "好主意。我还以为接受评审，就是别人说什么，我就改什么。",
+      "doc": "Hǎo zhǔyi. Wǒ hái yǐwéi jiēshòu píngshěn, jiù shì biérén shuō shénme, wǒ jiù gǎi shénme.",
+      "v": "Ý hay ạ. Em cứ tưởng nhận review là người ta nói gì thì mình sửa nấy.",
+      "np": [
+        { "mau": "还以为…", "giai": "以为 = tưởng (mà thực tế không phải vậy). 还以为 nhấn mạnh \"cứ tưởng\". Khác 认为 (cho rằng — quan điểm).", "vd": "我还以为你今天不来呢。", "vdDoc": "Wǒ hái yǐwéi nǐ jīntiān bù lái ne.", "vdV": "Tôi cứ tưởng hôm nay bạn không đến cơ." },
+        { "mau": "Từ để hỏi lặp: 说什么…改什么", "giai": "Hai từ để hỏi giống nhau ở hai vế = \"…gì thì…nấy\": 想去哪儿就去哪儿.", "vd": "你想吃什么就点什么。", "vdDoc": "Nǐ xiǎng chī shénme jiù diǎn shénme.", "vdV": "Bạn muốn ăn gì thì gọi nấy." }
+      ]
+    },
+    {
+      "ai": "Z",
+      "t": "不是的。同意就改，不同意就把理由说清楚。评审是讨论，不是命令。",
+      "doc": "Bú shì de. Tóngyì jiù gǎi, bù tóngyì jiù bǎ lǐyóu shuō qīngchu. Píngshěn shì tǎolùn, bú shì mìnglìng.",
+      "v": "Không phải đâu. Đồng ý thì sửa, không đồng ý thì nói rõ lý do. Review là thảo luận, không phải mệnh lệnh."
+    },
+    {
+      "ai": "Z",
+      "t": "最后，别忘了说一句“谢谢”。别人花时间看你的代码，也不容易。",
+      "doc": "Zuìhòu, bié wàng le shuō yí jù “xièxie”. Biérén huā shíjiān kàn nǐ de dàimǎ, yě bù róngyì.",
+      "v": "Cuối cùng, đừng quên nói một câu \"cảm ơn\". Người ta bỏ thời gian đọc code của mình cũng đâu dễ dàng."
+    },
+    {
+      "ai": "F",
+      "t": "那……谢谢周哥！",
+      "doc": "Nà…… xièxie Zhōu gē!",
+      "v": "Vậy thì… cảm ơn anh Chu!",
+      "khac": [
+        { "kieu": "lịch sự", "t": "谢谢您花时间帮我看代码！", "doc": "Xièxie nín huā shíjiān bāng wǒ kàn dàimǎ!", "v": "Cảm ơn anh đã bỏ thời gian xem code giúp em!", "ghiChu": "với người lớn hơn, cấp trên" }
+      ]
+    },
+    {
+      "ai": "Z",
+      "t": "也谢谢你帮我发现了那个慢查询。",
+      "doc": "Yě xièxie nǐ bāng wǒ fāxiàn le nàge màn cháxún.",
+      "v": "Anh cũng cảm ơn em đã giúp anh phát hiện câu truy vấn chậm đó."
+    }
+  ],
+  "tuVung": [
+    { "chu": "代码评审", "doc": "dàimǎ píngshěn", "nghia": "review code (đại mã bình thẩm)", "vd": "每次合并前都要代码评审。" },
+    { "chu": "提意见", "doc": "tí yìjiàn", "nghia": "góp ý, đưa ý kiến", "vd": "有什么意见可以随时提。" },
+    { "chu": "查询", "doc": "cháxún", "nghia": "truy vấn, tra cứu (tra tuân); 慢查询 = truy vấn chậm", "vd": "这个查询太慢了。" },
+    { "chu": "循环", "doc": "xúnhuán", "nghia": "vòng lặp (tuần hoàn)", "vd": "不要在循环里查数据库。" },
+    { "chu": "变量", "doc": "biànliàng", "nghia": "biến (biến lượng)", "vd": "变量名要清楚。" },
+    { "chu": "函数", "doc": "hánshù", "nghia": "hàm (hàm số)", "vd": "这个函数太长了。" },
+    { "chu": "常量", "doc": "chángliàng", "nghia": "hằng số (thường lượng)", "vd": "把数字改成常量。" },
+    { "chu": "逻辑", "doc": "luójí", "nghia": "logic (la tập)", "vd": "这段代码的逻辑很清楚。" },
+    { "chu": "对事不对人", "doc": "duì shì bú duì rén", "nghia": "góp ý việc chứ không nhắm vào người", "vd": "批评要对事不对人。" },
+    { "chu": "保持一致", "doc": "bǎochí yízhì", "nghia": "giữ nhất quán, thống nhất", "vd": "格式要保持一致。" },
+    { "chu": "风格", "doc": "fēnggé", "nghia": "phong cách (code style)", "vd": "我们的代码风格不太一样。" }
+  ],
+  "yNghia": "Review code là cuộc trò chuyện giữa hai người cùng muốn sản phẩm tốt hơn, không phải phiên toà. Người góp ý nên hỏi thay vì phán, ghi rõ mức độ; người nhận góp ý được phép bất đồng — miễn là nói rõ lý do. Và đừng quên câu \"cảm ơn\" ở cả hai phía.",
+  "meo": [
+    "Ba câu góp ý mềm: 会不会…? (liệu có… không) · 是不是可以…? (liệu có thể…) · 我理解得对不对：…? (em hiểu thế này đúng không).",
+    "Ghi mức độ ở đầu bình luận: 建议 / 小问题 (gợi ý, không bắt buộc) khác với 必须改 (bắt buộc sửa).",
+    "Nhận góp ý: 收到 / 谢谢提醒 / 我改一下. Bất đồng: 我理解你的意思，不过… + lý do.",
+    "以为 (tưởng — thường là sai) khác 认为 (cho rằng — quan điểm): 我还以为… = em cứ tưởng….",
+    "供你参考 (để bạn tham khảo) — cụm lịch sự đặt sau lời góp ý hoặc tài liệu gửi kèm."
+  ],
+  "cauHoi": [
+    {
+      "hoi": "Phương phát hiện vấn đề gì trong code của anh Chu?",
+      "chon": ["Truy vấn đặt trong vòng lặp, có thể chậm khi dữ liệu nhiều", "Thiếu unit test", "Sai tên file"],
+      "dung": 0,
+      "giai": "查询放在了循环里面，数据多的时候会不会很慢？"
+    },
+    {
+      "hoi": "Vì sao anh Chu khen Phương dùng câu hỏi khi góp ý?",
+      "chon": ["Vì câu hỏi ngắn hơn", "Vì người góp ý có thể chưa biết hết lý do, câu hỏi cho đối phương cơ hội giải thích", "Vì trưởng nhóm yêu cầu như vậy"],
+      "dung": 1,
+      "giai": "你不一定知道作者的全部想法…问一下，就给了对方解释的机会。"
+    },
+    {
+      "hoi": "Phương giải thích lý do viết số 86400 thế nào?",
+      "chon": ["Cô không biết cách đặt hằng số", "Cô viết vội", "Để thống nhất với cách viết sẵn có trong file"],
+      "dung": 2,
+      "giai": "这个文件里别的地方也是这么写的，我想跟原来的风格保持一致。"
+    },
+    {
+      "hoi": "Theo anh Chu, khi không đồng ý với góp ý thì nên làm gì?",
+      "chon": ["Im lặng và sửa theo", "Nói rõ lý do", "Báo trưởng nhóm"],
+      "dung": 1,
+      "giai": "不同意就把理由说清楚。评审是讨论，不是命令。"
+    }
+  ]
+}

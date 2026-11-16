@@ -1,0 +1,543 @@
+{
+  "id": "zh-ds-hsk4-02",
+  "nn": "zh",
+  "danhMuc": "doi-song",
+  "cap": "HSK4",
+  "so": 3,
+  "tieuDe": "房租能不能少涨一点儿？",
+  "tieuDeViet": "Tiền nhà tăng ít đi chút được không?",
+  "moTa": "Hợp đồng thuê nhà sắp hết hạn, cô chủ nhà họ Tôn muốn tăng năm trăm tệ mỗi tháng. Bảo — người thuê đã ở hai năm — thương lượng khéo: không phản đối thẳng mà đưa lý lẽ, đề xuất con số, đổi lấy hợp đồng dài hơn. Và một lần lỡ lời với con số \"250\".",
+  "chuDe": "Thuê nhà, thương lượng",
+  "bieuTuong": "key.fill",
+  "nguoi": [
+    {
+      "ma": "B",
+      "ten": "Bảo",
+      "giong": "zh-nam",
+      "vai": "người thuê nhà người Việt"
+    },
+    {
+      "ma": "S",
+      "ten": "Cô Tôn",
+      "giong": "zh-nu",
+      "vai": "chủ nhà"
+    }
+  ],
+  "loi": [
+    {
+      "ai": "S",
+      "t": "小黎，在家呢？我来跟你说说续租的事。",
+      "doc": "Xiǎo Lí, zài jiā ne? Wǒ lái gēn nǐ shuōshuo xùzū de shì.",
+      "v": "Tiểu Lê, có nhà không? Cô đến nói với cháu chuyện gia hạn thuê nhà."
+    },
+    {
+      "ai": "B",
+      "t": "孙阿姨好！快请进，您坐。我正想给您打电话呢。",
+      "doc": "Sūn āyí hǎo! Kuài qǐng jìn, nín zuò. Wǒ zhèng xiǎng gěi nín dǎ diànhuà ne.",
+      "v": "Cháu chào cô Tôn! Cô vào đi ạ, cô ngồi. Cháu đang định gọi điện cho cô đây.",
+      "khac": [
+        {
+          "kieu": "thân mật",
+          "t": "阿姨来啦！进来坐吧。",
+          "doc": "Āyí lái la! Jìnlai zuò ba.",
+          "v": "Cô đến rồi ạ! Vào ngồi đi cô.",
+          "ghiChu": "khi đã quen thân với chủ nhà"
+        }
+      ],
+      "np": [
+        {
+          "mau": "正 + V + 呢",
+          "giai": "正…呢 = đúng lúc đang…: 我正想给您打电话呢 = cháu đang định gọi cô thì cô đến. Nhấn mạnh sự trùng hợp, nghe thân thiện.",
+          "vd": "你来得正好，我正找你呢。",
+          "vdDoc": "Nǐ lái de zhènghǎo, wǒ zhèng zhǎo nǐ ne.",
+          "vdV": "Bạn đến đúng lúc, mình đang tìm bạn đây."
+        }
+      ]
+    },
+    {
+      "ai": "S",
+      "t": "下个月合同就到期了，你还打算继续住吗？",
+      "doc": "Xià ge yuè hétong jiù dào qī le, nǐ hái dǎsuàn jìxù zhù ma?",
+      "v": "Tháng sau hợp đồng hết hạn rồi, cháu còn định ở tiếp không?"
+    },
+    {
+      "ai": "B",
+      "t": "打算啊。这儿离公司近，邻居也好，我挺喜欢的。",
+      "doc": "Dǎsuàn a. Zhèr lí gōngsī jìn, línjū yě hǎo, wǒ tǐng xǐhuan de.",
+      "v": "Có chứ ạ. Ở đây gần công ty, hàng xóm cũng tốt, cháu thích lắm.",
+      "np": [
+        {
+          "mau": "挺 + tính từ + 的",
+          "giai": "挺…的 = khá, rất (văn nói), nhẹ và tự nhiên hơn 很. Thường có 的 ở cuối: 挺好的, 挺喜欢的.",
+          "vd": "这家饭馆挺不错的。",
+          "vdDoc": "Zhè jiā fànguǎn tǐng búcuò de.",
+          "vdV": "Quán ăn này khá được đấy."
+        },
+        {
+          "mau": "A 离 B + 近/远",
+          "giai": "离 dùng để nói khoảng cách: 这儿离公司近 = chỗ này gần công ty. Khác 从 (từ đâu, điểm xuất phát).",
+          "vd": "我家离地铁站很远。",
+          "vdDoc": "Wǒ jiā lí dìtiě zhàn hěn yuǎn.",
+          "vdV": "Nhà tôi cách ga tàu điện rất xa."
+        }
+      ]
+    },
+    {
+      "ai": "S",
+      "t": "那就好。不过……最近附近的房租都涨了，我想从下个月开始，每个月涨五百。",
+      "doc": "Nà jiù hǎo. Búguò…… zuìjìn fùjìn de fángzū dōu zhǎng le, wǒ xiǎng cóng xià ge yuè kāishǐ, měi ge yuè zhǎng wǔbǎi.",
+      "v": "Thế thì tốt. Có điều… dạo này tiền thuê quanh đây đều tăng, cô muốn từ tháng sau mỗi tháng tăng năm trăm."
+    },
+    {
+      "ai": "B",
+      "t": "五百？阿姨，一下子涨这么多，我的压力有点儿大。",
+      "doc": "Wǔbǎi? Āyí, yíxiàzi zhǎng zhème duō, wǒ de yālì yǒudiǎnr dà.",
+      "v": "Năm trăm ạ? Cô ơi, tăng một lúc nhiều thế, cháu hơi áp lực.",
+      "khac": [
+        {
+          "kieu": "mềm mỏng",
+          "t": "五百是不是有点儿多了？",
+          "doc": "Wǔbǎi shì bu shì yǒudiǎnr duō le?",
+          "v": "Năm trăm có phải hơi nhiều không cô?",
+          "ghiChu": "dùng câu hỏi thay cho câu khẳng định — người nghe không thấy bị phản đối"
+        },
+        {
+          "kieu": "thân mật",
+          "t": "五百？太多了吧！",
+          "doc": "Wǔbǎi? Tài duō le ba!",
+          "v": "Năm trăm á? Nhiều quá đi!",
+          "ghiChu": "thẳng — dễ làm chủ nhà phật ý, chỉ nên nói khi rất thân"
+        }
+      ],
+      "np": [
+        {
+          "mau": "一下子",
+          "giai": "一下子 = một phát, đột ngột, trong một lúc: 一下子涨这么多, 一下子就明白了. Đọc yíxiàzi.",
+          "vd": "天气一下子冷了。",
+          "vdDoc": "Tiānqì yíxiàzi lěng le.",
+          "vdV": "Trời đột nhiên lạnh hẳn."
+        }
+      ]
+    },
+    {
+      "ai": "S",
+      "t": "我也知道。可是你去网上看看，这个小区同样大的房子，现在都要四千多了。",
+      "doc": "Wǒ yě zhīdào. Kěshì nǐ qù wǎng shang kànkan, zhège xiǎoqū tóngyàng dà de fángzi, xiànzài dōu yào sìqiān duō le.",
+      "v": "Cô cũng biết. Nhưng cháu lên mạng xem đi, nhà rộng như vậy trong khu này giờ đều hơn bốn nghìn rồi."
+    },
+    {
+      "ai": "B",
+      "t": "我看过了，确实有四千多的。不过那些大多是新装修的，带新家具。",
+      "doc": "Wǒ kàn guo le, quèshí yǒu sìqiān duō de. Búguò nàxiē dàduō shì xīn zhuāngxiū de, dài xīn jiājù.",
+      "v": "Cháu xem rồi ạ, đúng là có căn hơn bốn nghìn. Nhưng mấy căn đó phần lớn mới sửa sang, có đồ nội thất mới.",
+      "np": [
+        {
+          "mau": "确实……，不过……",
+          "giai": "Công nhận ý người kia (确实 = đúng là) rồi mới đưa ý mình (不过 = có điều). Cách phản biện lịch sự nhất trong thương lượng.",
+          "vd": "这个方法确实快，不过有点儿贵。",
+          "vdDoc": "Zhège fāngfǎ quèshí kuài, búguò yǒudiǎnr guì.",
+          "vdV": "Cách này đúng là nhanh, có điều hơi đắt."
+        }
+      ]
+    },
+    {
+      "ai": "B",
+      "t": "咱们这套房子的洗衣机和冰箱都用了十年了，上个月洗衣机还是我自己花钱修的。",
+      "doc": "Zánmen zhè tào fángzi de xǐyījī hé bīngxiāng dōu yòng le shí nián le, shàng ge yuè xǐyījī hái shì wǒ zìjǐ huā qián xiū de.",
+      "v": "Máy giặt với tủ lạnh nhà mình đều dùng mười năm rồi, tháng trước máy giặt còn là cháu tự bỏ tiền sửa.",
+      "np": [
+        {
+          "mau": "咱们 ↔ 我们",
+          "giai": "咱们 (văn nói, phía Bắc) = \"chúng ta\" CÓ người nghe; 我们 có thể không gồm người nghe. Bảo nói 咱们这套房子 để tạo cảm giác \"chuyện chung của hai bên\".",
+          "vd": "咱们一起去吧。",
+          "vdDoc": "Zánmen yìqǐ qù ba.",
+          "vdV": "Chúng ta cùng đi nhé."
+        },
+        {
+          "mau": "V + 了 + thời lượng + 了",
+          "giai": "Hai chữ 了 = việc đã kéo dài tới giờ và còn tiếp diễn: 用了十年了 (dùng mười năm rồi, vẫn đang dùng). Chỉ một 了 thì có thể đã kết thúc.",
+          "vd": "我在这儿住了三年了。",
+          "vdDoc": "Wǒ zài zhèr zhù le sān nián le.",
+          "vdV": "Tôi sống ở đây ba năm rồi (vẫn đang sống)."
+        }
+      ]
+    },
+    {
+      "ai": "S",
+      "t": "洗衣机坏了？你怎么没告诉我？",
+      "doc": "Xǐyījī huài le? Nǐ zěnme méi gàosu wǒ?",
+      "v": "Máy giặt hỏng à? Sao cháu không báo cô?"
+    },
+    {
+      "ai": "B",
+      "t": "您那时候在老家，我不想麻烦您，就自己找人修了，花了三百。",
+      "doc": "Nín nà shíhou zài lǎojiā, wǒ bù xiǎng máfan nín, jiù zìjǐ zhǎo rén xiū le, huā le sānbǎi.",
+      "v": "Hồi đó cô đang ở quê, cháu không muốn làm phiền cô nên tự gọi người sửa, hết ba trăm."
+    },
+    {
+      "ai": "S",
+      "t": "你这孩子，太客气了。这个钱应该我出。",
+      "doc": "Nǐ zhè háizi, tài kèqi le. Zhège qián yīnggāi wǒ chū.",
+      "v": "Cháu này thật là, khách sáo quá. Khoản này lẽ ra cô phải trả."
+    },
+    {
+      "ai": "B",
+      "t": "没关系的。我想说的是，我住了两年，一直按时交房租，房子也一直很爱惜。",
+      "doc": "Méi guānxi de. Wǒ xiǎng shuō de shì, wǒ zhù le liǎng nián, yìzhí ànshí jiāo fángzū, fángzi yě yìzhí hěn àixī.",
+      "v": "Không sao đâu ạ. Ý cháu là, cháu ở hai năm, lúc nào cũng đóng tiền nhà đúng hạn, nhà cửa cũng luôn giữ gìn cẩn thận.",
+      "khac": [
+        {
+          "kieu": "mềm mỏng",
+          "t": "您也知道，这两年我从来没晚交过房租。",
+          "doc": "Nín yě zhīdào, zhè liǎng nián wǒ cónglái méi wǎn jiāo guo fángzū.",
+          "v": "Cô cũng biết đấy, hai năm nay cháu chưa bao giờ đóng tiền nhà muộn."
+        }
+      ],
+      "np": [
+        {
+          "mau": "我想说的是……",
+          "giai": "\"Điều tôi muốn nói là…\" — dẫn vào ý chính sau khi kể chuyện. Giúp người nghe biết bạn đang lập luận, không phải kể lể.",
+          "vd": "我想说的是，这件事不能只怪他。",
+          "vdDoc": "Wǒ xiǎng shuō de shì, zhè jiàn shì bù néng zhǐ guài tā.",
+          "vdV": "Điều tôi muốn nói là, chuyện này không thể chỉ trách anh ấy."
+        }
+      ]
+    },
+    {
+      "ai": "B",
+      "t": "换一个新租客，您还得花时间找人、带人看房，说不定房子还要空一两个月。",
+      "doc": "Huàn yí ge xīn zūkè, nín hái děi huā shíjiān zhǎo rén, dài rén kàn fáng, shuōbudìng fángzi hái yào kòng yì liǎng ge yuè.",
+      "v": "Đổi người thuê mới thì cô lại phải mất thời gian tìm người, dẫn người đi xem nhà, biết đâu nhà còn bỏ trống một hai tháng.",
+      "np": [
+        {
+          "mau": "说不定",
+          "giai": "说不定 = biết đâu, có khi, nói lên một khả năng chưa chắc. Dùng trong thương lượng để gợi rủi ro cho bên kia mà không đe dọa.",
+          "vd": "快走吧，说不定还能赶上车。",
+          "vdDoc": "Kuài zǒu ba, shuōbudìng hái néng gǎnshàng chē.",
+          "vdV": "Đi nhanh lên, biết đâu còn kịp xe."
+        },
+        {
+          "mau": "空 kòng (để trống)",
+          "giai": "空 đọc kòng khi là \"bỏ trống, để không\" (空一两个月, 空房间). Đọc kōng khi là \"rỗng, trống không\" (房子是空的).",
+          "vd": "楼上那套房子空了半年。",
+          "vdDoc": "Lóu shàng nà tào fángzi kòng le bàn nián.",
+          "vdV": "Căn hộ tầng trên bỏ trống nửa năm rồi."
+        }
+      ]
+    },
+    {
+      "ai": "S",
+      "t": "你说的也是实话。那你觉得涨多少合适？",
+      "doc": "Nǐ shuō de yě shì shíhuà. Nà nǐ juéde zhǎng duōshao héshì?",
+      "v": "Cháu nói cũng là sự thật. Vậy cháu thấy tăng bao nhiêu thì hợp lý?"
+    },
+    {
+      "ai": "B",
+      "t": "您看两百怎么样？",
+      "doc": "Nín kàn liǎngbǎi zěnmeyàng?",
+      "v": "Cô xem hai trăm thì thế nào ạ?",
+      "khac": [
+        {
+          "kieu": "văn nói",
+          "t": "涨两百，您看行不行？",
+          "doc": "Zhǎng liǎngbǎi, nín kàn xíng bu xíng?",
+          "v": "Tăng hai trăm, cô xem được không ạ?"
+        },
+        {
+          "kieu": "nhấn mạnh",
+          "t": "我最多能接受两百。",
+          "doc": "Wǒ zuìduō néng jiēshòu liǎngbǎi.",
+          "v": "Cháu chỉ chấp nhận được tối đa hai trăm.",
+          "ghiChu": "đặt giới hạn rõ ràng — dùng khi đã thương lượng một lúc"
+        }
+      ],
+      "np": [
+        {
+          "mau": "您看……怎么样？",
+          "giai": "您看 + đề xuất + 怎么样/行不行？ = \"cô/anh xem… thế nào?\" — trao quyền quyết định cho người kia, là cách đưa giá lịch sự nhất.",
+          "vd": "您看我们明天见面怎么样？",
+          "vdDoc": "Nín kàn wǒmen míngtiān jiànmiàn zěnmeyàng?",
+          "vdV": "Anh xem mai chúng ta gặp nhau thì thế nào?"
+        }
+      ]
+    },
+    {
+      "ai": "S",
+      "t": "两百太少了。这样吧，三百，修洗衣机的那三百块我还给你。",
+      "doc": "Liǎngbǎi tài shǎo le. Zhèyàng ba, sānbǎi, xiū xǐyījī de nà sānbǎi kuài wǒ huán gěi nǐ.",
+      "v": "Hai trăm ít quá. Thế này nhé, ba trăm, còn ba trăm tiền sửa máy giặt cô trả lại cháu.",
+      "np": [
+        {
+          "mau": "还 huán (trả lại) ↔ hái (còn)",
+          "giai": "还 đọc huán khi là \"trả lại\" (还钱, 还给你, 还书). Đọc hái khi là \"còn, vẫn\" (还有, 还没). Nghe kỹ động từ phía sau để phân biệt.",
+          "vd": "我明天把书还给你。",
+          "vdDoc": "Wǒ míngtiān bǎ shū huán gěi nǐ.",
+          "vdV": "Mai tôi trả sách cho bạn."
+        },
+        {
+          "mau": "这样吧，……",
+          "giai": "\"Thế này nhé\" — mở đầu một phương án thỏa hiệp. Nghe được câu này là biết bên kia đang nhượng bộ.",
+          "vd": "这样吧，我们一人一半。",
+          "vdDoc": "Zhèyàng ba, wǒmen yì rén yí bàn.",
+          "vdV": "Thế này nhé, mỗi người một nửa."
+        }
+      ]
+    },
+    {
+      "ai": "B",
+      "t": "阿姨，修洗衣机的钱就不用还了。如果您同意每个月涨两百五，我愿意签两年的合同。",
+      "doc": "Āyí, xiū xǐyījī de qián jiù bú yòng huán le. Rúguǒ nín tóngyì měi ge yuè zhǎng liǎngbǎi wǔ, wǒ yuànyì qiān liǎng nián de hétong.",
+      "v": "Cô ơi, tiền sửa máy giặt thì không cần trả đâu ạ. Nếu cô đồng ý mỗi tháng tăng hai trăm rưỡi, cháu sẵn sàng ký hợp đồng hai năm."
+    },
+    {
+      "ai": "S",
+      "t": "哈哈，两百五？这个数字在中国可不太好听。",
+      "doc": "Hāha, liǎngbǎi wǔ? Zhège shùzì zài Zhōngguó kě bú tài hǎotīng.",
+      "v": "Haha, hai trăm năm mươi á? Con số này ở Trung Quốc nghe không hay lắm đâu."
+    },
+    {
+      "ai": "B",
+      "t": "啊？为什么？",
+      "doc": "Á? Wèishénme?",
+      "v": "Hả? Sao vậy ạ?"
+    },
+    {
+      "ai": "S",
+      "t": "“二百五”是说一个人有点儿傻。没关系，我知道你不是这个意思。",
+      "doc": "“Èrbǎiwǔ” shì shuō yí ge rén yǒudiǎnr shǎ. Méi guānxi, wǒ zhīdào nǐ bú shì zhège yìsi.",
+      "v": "\"Hai trăm năm mươi\" là để chê ai đó hơi ngốc. Không sao, cô biết cháu không có ý đó."
+    },
+    {
+      "ai": "B",
+      "t": "原来是这样！那就两百六吧，六六大顺！",
+      "doc": "Yuánlái shì zhèyàng! Nà jiù liǎngbǎi liù ba, liù liù dà shùn!",
+      "v": "Ra là vậy! Thế thì hai trăm sáu mươi đi ạ, lục lục đại thuận!"
+    },
+    {
+      "ai": "S",
+      "t": "你这孩子，真会说话！行，就两百六，签两年。洗衣机的钱我还是要还给你。",
+      "doc": "Nǐ zhè háizi, zhēn huì shuōhuà! Xíng, jiù liǎngbǎi liù, qiān liǎng nián. Xǐyījī de qián wǒ háishi yào huán gěi nǐ.",
+      "v": "Cháu này, khéo ăn nói thật đấy! Được, hai trăm sáu, ký hai năm. Tiền máy giặt cô vẫn phải trả lại cháu.",
+      "np": [
+        {
+          "mau": "会 + V (giỏi, khéo)",
+          "giai": "会 ngoài nghĩa \"biết (làm)\" còn là \"giỏi, khéo\": 真会说话 = khéo ăn nói, 很会做菜 = nấu ăn giỏi.",
+          "vd": "她很会照顾人。",
+          "vdDoc": "Tā hěn huì zhàogù rén.",
+          "vdV": "Cô ấy rất biết chăm sóc người khác."
+        }
+      ]
+    },
+    {
+      "ai": "B",
+      "t": "那我就不客气了。还有一件事：合同里能不能写上，家电坏了由房东负责修？",
+      "doc": "Nà wǒ jiù bú kèqi le. Hái yǒu yí jiàn shì: hétong li néng bu néng xiě shang, jiādiàn huài le yóu fángdōng fùzé xiū?",
+      "v": "Vậy cháu xin nhận ạ. Còn một việc nữa: trong hợp đồng có thể ghi rõ là đồ điện hỏng thì chủ nhà chịu trách nhiệm sửa không ạ?",
+      "khac": [
+        {
+          "kieu": "mềm mỏng",
+          "t": "以后家电坏了，还是麻烦您来修，好吗？",
+          "doc": "Yǐhòu jiādiàn huài le, háishi máfan nín lái xiū, hǎo ma?",
+          "v": "Sau này đồ điện hỏng thì vẫn phiền cô lo sửa nhé, được không ạ?",
+          "ghiChu": "nói miệng, nhẹ nhàng; nhưng ghi vào hợp đồng vẫn chắc hơn"
+        },
+        {
+          "kieu": "trang trọng",
+          "t": "我建议在合同中注明：家电维修由房东负责。",
+          "doc": "Wǒ jiànyì zài hétong zhōng zhùmíng: jiādiàn wéixiū yóu fángdōng fùzé.",
+          "v": "Tôi đề nghị ghi rõ trong hợp đồng: việc sửa chữa đồ điện do chủ nhà chịu trách nhiệm.",
+          "ghiChu": "văn phong giấy tờ, làm việc qua môi giới"
+        }
+      ],
+      "np": [
+        {
+          "mau": "由 + người + 负责 + V",
+          "giai": "由 = do (ai đảm nhận) — văn phong trang trọng, hay gặp trong hợp đồng, thông báo: 由房东负责, 由公司支付.",
+          "vd": "这次会议由小王负责。",
+          "vdDoc": "Zhè cì huìyì yóu Xiǎo Wáng fùzé.",
+          "vdV": "Cuộc họp lần này do Tiểu Vương phụ trách."
+        }
+      ]
+    },
+    {
+      "ai": "S",
+      "t": "应该的，本来就是房东的事。下次再坏，你直接给我打电话。",
+      "doc": "Yīnggāi de, běnlái jiù shì fángdōng de shì. Xià cì zài huài, nǐ zhíjiē gěi wǒ dǎ diànhuà.",
+      "v": "Đương nhiên rồi, vốn là việc của chủ nhà mà. Lần sau lại hỏng thì cháu cứ gọi thẳng cho cô."
+    },
+    {
+      "ai": "B",
+      "t": "好的。那我们什么时候签新合同？",
+      "doc": "Hǎo de. Nà wǒmen shénme shíhou qiān xīn hétong?",
+      "v": "Vâng ạ. Vậy bao giờ mình ký hợp đồng mới ạ?"
+    },
+    {
+      "ai": "S",
+      "t": "这个周末吧，我把合同打印好带过来。",
+      "doc": "Zhège zhōumò ba, wǒ bǎ hétong dǎyìn hǎo dài guòlai.",
+      "v": "Cuối tuần này nhé, cô in hợp đồng xong rồi mang qua."
+    },
+    {
+      "ai": "B",
+      "t": "好，谢谢阿姨！您慢走。",
+      "doc": "Hǎo, xièxie āyí! Nín màn zǒu.",
+      "v": "Vâng, cháu cảm ơn cô! Cô về cẩn thận ạ.",
+      "khac": [
+        {
+          "kieu": "thân mật",
+          "t": "阿姨再见，路上小心！",
+          "doc": "Āyí zàijiàn, lùshang xiǎoxīn!",
+          "v": "Cháu chào cô, cô đi đường cẩn thận nhé!"
+        }
+      ],
+      "np": [
+        {
+          "mau": "慢走",
+          "giai": "慢走 = \"đi thong thả nhé\" — câu chủ nhà tiễn khách ra về. Khách KHÔNG nói câu này với chủ nhà.",
+          "vd": "谢谢您来，慢走！",
+          "vdDoc": "Xièxie nín lái, màn zǒu!",
+          "vdV": "Cảm ơn anh đã đến, đi thong thả nhé!"
+        }
+      ]
+    }
+  ],
+  "tuVung": [
+    {
+      "chu": "续租",
+      "doc": "xùzū",
+      "nghia": "gia hạn thuê, thuê tiếp",
+      "vd": "我想续租一年。"
+    },
+    {
+      "chu": "合同",
+      "doc": "hétong",
+      "nghia": "hợp đồng",
+      "vd": "我们签合同吧。"
+    },
+    {
+      "chu": "到期",
+      "doc": "dào qī",
+      "nghia": "đến hạn, hết hạn",
+      "vd": "护照快到期了。"
+    },
+    {
+      "chu": "房租",
+      "doc": "fángzū",
+      "nghia": "tiền thuê nhà",
+      "vd": "这儿的房租不便宜。"
+    },
+    {
+      "chu": "涨",
+      "doc": "zhǎng",
+      "nghia": "tăng (giá, nước)",
+      "vd": "菜价又涨了。"
+    },
+    {
+      "chu": "压力",
+      "doc": "yālì",
+      "nghia": "áp lực",
+      "vd": "最近工作压力很大。"
+    },
+    {
+      "chu": "装修",
+      "doc": "zhuāngxiū",
+      "nghia": "sửa sang, trang trí nội thất",
+      "vd": "新家正在装修。"
+    },
+    {
+      "chu": "按时",
+      "doc": "ànshí",
+      "nghia": "đúng hạn, đúng giờ",
+      "vd": "请按时交作业。"
+    },
+    {
+      "chu": "说不定",
+      "doc": "shuōbudìng",
+      "nghia": "biết đâu, có khi",
+      "vd": "说不定他已经到了。"
+    },
+    {
+      "chu": "合适",
+      "doc": "héshì",
+      "nghia": "phù hợp, hợp lý",
+      "vd": "这个价格很合适。"
+    },
+    {
+      "chu": "愿意",
+      "doc": "yuànyì",
+      "nghia": "sẵn lòng, bằng lòng",
+      "vd": "我愿意帮你。"
+    },
+    {
+      "chu": "负责",
+      "doc": "fùzé",
+      "nghia": "chịu trách nhiệm, phụ trách",
+      "vd": "谁负责这件事？"
+    },
+    {
+      "chu": "房东",
+      "doc": "fángdōng",
+      "nghia": "chủ nhà (cho thuê)",
+      "vd": "房东人很好。"
+    }
+  ],
+  "yNghia": "Thương lượng không phải là ai thắng ai. Bảo không cãi \"tăng thế là vô lý\", anh đưa lý lẽ cô chủ nhà không thể bác (đóng tiền đúng hạn, tự sửa máy giặt, rủi ro nhà bỏ trống) rồi đề xuất một con số kèm lợi ích cho bên kia (hợp đồng hai năm). Kết quả: mức tăng chỉ còn một nửa, quan hệ còn tốt hơn trước — và anh học thêm được một bài văn hóa về con số 250.",
+  "meo": [
+    "Thương lượng lịch sự: 确实…，不过… (công nhận rồi phản biện) và 您看…怎么样？ (đưa đề xuất).",
+    "Đừng đưa con số 250 (二百五 = đồ ngốc) khi mặc cả hay tặng tiền! Số được ưa: 6 (六六大顺), 8 (phát), tránh 4 (âm gần 死).",
+    "Chữ đa âm: 还 huán (trả lại) ↔ hái (còn); 空 kòng (bỏ trống) ↔ kōng (rỗng); 涨 zhǎng (giá tăng).",
+    "Ghi điều quan trọng vào hợp đồng: 合同里能不能写上…？ — lời hứa miệng tốt, giấy trắng mực đen còn tốt hơn."
+  ],
+  "cauHoi": [
+    {
+      "hoi": "Lúc đầu cô Tôn muốn tăng tiền nhà bao nhiêu mỗi tháng?",
+      "chon": [
+        "Hai trăm",
+        "Ba trăm",
+        "Năm trăm"
+      ],
+      "dung": 2,
+      "giai": "每个月涨五百。"
+    },
+    {
+      "hoi": "Lý lẽ nào Bảo KHÔNG dùng khi thương lượng?",
+      "chon": [
+        "Anh luôn đóng tiền đúng hạn",
+        "Nhà bên cạnh rẻ hơn nhiều",
+        "Nhà có thể bỏ trống một hai tháng nếu đổi người thuê"
+      ],
+      "dung": 1,
+      "giai": "Bảo còn thừa nhận nhà quanh đó có căn hơn bốn nghìn; anh nói về việc đóng tiền đúng hạn, tự sửa máy giặt và rủi ro nhà bỏ trống."
+    },
+    {
+      "hoi": "Vì sao cô Tôn bật cười khi nghe \"两百五\"?",
+      "chon": [
+        "Vì con số quá thấp",
+        "Vì 二百五 là tiếng lóng chê người ngốc",
+        "Vì cô nghe nhầm thành năm trăm"
+      ],
+      "dung": 1,
+      "giai": "“二百五”是说一个人有点儿傻。"
+    },
+    {
+      "hoi": "Kết quả cuối cùng là gì?",
+      "chon": [
+        "Tăng 260 tệ, ký hai năm, cô trả lại tiền sửa máy giặt",
+        "Tăng 300 tệ, ký một năm",
+        "Không tăng, ký hai năm"
+      ],
+      "dung": 0,
+      "giai": "就两百六，签两年。洗衣机的钱我还是要还给你。"
+    },
+    {
+      "hoi": "\"还给你\" trong câu của cô Tôn đọc thế nào?",
+      "chon": [
+        "hái gěi nǐ",
+        "huán gěi nǐ",
+        "hài gěi nǐ"
+      ],
+      "dung": 1,
+      "giai": "还 nghĩa \"trả lại\" đọc huán."
+    }
+  ]
+}

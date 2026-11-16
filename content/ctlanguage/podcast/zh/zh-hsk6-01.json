@@ -1,6 +1,7 @@
 {
   "id": "zh-hsk6-01",
   "nn": "zh",
+  "danhMuc": "chia-se",
   "cap": "HSK6",
   "so": 1,
   "tieuDe": "欲速则不达：一壶茶的道理",
@@ -9,59 +10,304 @@
   "chuDe": "Văn hoá trà",
   "bieuTuong": "cup.and.saucer.fill",
   "nguoi": [
-    { "ma": "N", "ten": "Dì Lâm", "giong": "zh-nu", "vai": "chủ quán trà" },
-    { "ma": "S", "ten": "Sơn", "giong": "zh-nam", "vai": "kỹ sư người Việt, trưởng dự án mới" }
+    {
+      "ma": "N",
+      "ten": "Dì Lâm",
+      "giong": "zh-nu",
+      "vai": "chủ quán trà"
+    },
+    {
+      "ma": "S",
+      "ten": "Sơn",
+      "giong": "zh-nam",
+      "vai": "kỹ sư người Việt, trưởng dự án mới"
+    }
   ],
   "loi": [
-    { "ai": "N", "t": "小黎，坐吧。今天想喝点儿什么？", "doc": "Xiǎo Lí, zuò ba. Jīntiān xiǎng hē diǎnr shénme?", "v": "Tiểu Lê, ngồi đi. Hôm nay muốn uống gì nào?" },
-    { "ai": "S", "t": "林姨，随便吧，越快越好，我半个小时后还有个视频会议。", "doc": "Lín yí, suíbiàn ba, yuè kuài yuè hǎo, wǒ bàn ge xiǎoshí hòu hái yǒu ge shìpín huìyì.", "v": "Dì Lâm, gì cũng được ạ, càng nhanh càng tốt, nửa tiếng nữa con còn một cuộc họp trực tuyến." },
-    { "ai": "N", "t": "喝茶还赶时间？那我给你泡一壶岩茶，不过得按我的规矩来。", "doc": "Hē chá hái gǎn shíjiān? Nà wǒ gěi nǐ pào yì hú yánchá, búguò děi àn wǒ de guīju lái.", "v": "Uống trà mà cũng vội à? Vậy dì pha cho con một ấm nham trà, nhưng phải theo quy tắc của dì." },
-    { "ai": "S", "t": "什么规矩？", "doc": "Shénme guīju?", "v": "Quy tắc gì ạ?" },
-    { "ai": "N", "t": "很简单：我泡茶的时候，你只管看，别催。", "doc": "Hěn jiǎndān: wǒ pào chá de shíhou, nǐ zhǐguǎn kàn, bié cuī.", "v": "Đơn giản thôi: lúc dì pha trà, con cứ việc ngồi xem, đừng giục." },
-    { "ai": "S", "t": "行，我不催。……咦，第一泡您怎么倒掉了？", "doc": "Xíng, wǒ bù cuī. …… Yí, dì yī pào nín zěnme dàodiào le?", "v": "Vâng, con không giục. …Ơ, sao nước đầu dì lại đổ đi ạ?" },
-    { "ai": "N", "t": "这叫“醒茶”。茶叶在罐子里睡了很久，得先用热水把它唤醒，香气才出得来。", "doc": "Zhè jiào “xǐng chá”. Cháyè zài guànzi li shuì le hěn jiǔ, děi xiān yòng rè shuǐ bǎ tā huànxǐng, xiāngqì cái chū de lái.", "v": "Cái này gọi là \"đánh thức trà\". Lá trà ngủ trong hũ lâu rồi, phải dùng nước nóng đánh thức nó trước, hương mới bung ra được." },
-    { "ai": "S", "t": "原来喝茶还有这么多讲究。在越南，我们喝茶可没这么复杂。", "doc": "Yuánlái hē chá hái yǒu zhème duō jiǎngjiu. Zài Yuènán, wǒmen hē chá kě méi zhème fùzá.", "v": "Hóa ra uống trà lại cầu kỳ đến thế. Ở Việt Nam, bọn con uống trà đâu có phức tạp vậy." },
-    { "ai": "N", "t": "哦？越南人怎么喝茶？", "doc": "Ò? Yuènán rén zěnme hē chá?", "v": "Ồ? Người Việt uống trà thế nào?" },
-    { "ai": "S", "t": "最常见的是路边的冰绿茶，便宜得很。大家坐在小板凳上，跟朋友一聊就是一下午。", "doc": "Zuì chángjiàn de shì lùbiān de bīng lǜchá, piányi de hěn. Dàjiā zuò zài xiǎo bǎndèng shang, gēn péngyou yì liáo jiù shì yí xiàwǔ.", "v": "Phổ biến nhất là trà đá vỉa hè, rẻ cực kỳ. Mọi người ngồi ghế nhựa thấp, tán chuyện với bạn bè một cái là hết cả buổi chiều." },
-    { "ai": "N", "t": "那不是跟我们一样吗？形式不同，可都是在“喝时间”。", "doc": "Nà bú shì gēn wǒmen yíyàng ma? Xíngshì bùtóng, kě dōu shì zài “hē shíjiān”.", "v": "Thế chẳng phải cũng giống bọn dì sao? Hình thức khác nhau, nhưng đều là đang \"uống thời gian\"." },
-    { "ai": "S", "t": "喝时间？", "doc": "Hē shíjiān?", "v": "Uống thời gian ạ?" },
-    { "ai": "N", "t": "是啊。茶本身未必有多珍贵，珍贵的是有人愿意坐下来，陪你慢慢喝的那段时间。", "doc": "Shì a. Chá běnshēn wèibì yǒu duō zhēnguì, zhēnguì de shì yǒu rén yuànyì zuò xiàlai, péi nǐ mànmàn hē de nà duàn shíjiān.", "v": "Ừ. Bản thân trà chưa chắc đã quý giá gì, quý là khoảng thời gian có người chịu ngồi xuống, cùng con chậm rãi uống." },
-    { "ai": "N", "t": "来，尝尝这一泡。别急着咽，让它在嘴里停一会儿。", "doc": "Lái, chángchang zhè yí pào. Bié jízhe yàn, ràng tā zài zuǐ li tíng yíhuìr.", "v": "Nào, nếm thử tuần trà này. Đừng vội nuốt, để nó đọng trong miệng một lúc." },
-    { "ai": "S", "t": "一开始有点儿苦……咦，过了几秒，嗓子里反而有一股甜味儿。", "doc": "Yì kāishǐ yǒudiǎnr kǔ…… Yí, guò le jǐ miǎo, sǎngzi li fǎn'ér yǒu yì gǔ tián wèir.", "v": "Lúc đầu hơi đắng… Ơ, vài giây sau, trong cổ họng lại có một vị ngọt." },
-    { "ai": "N", "t": "这就是“回甘”。好茶大多先苦后甜，急着喝的人往往尝不出来。", "doc": "Zhè jiù shì “huígān”. Hǎo chá dàduō xiān kǔ hòu tián, jízhe hē de rén wǎngwǎng cháng bu chūlai.", "v": "Đó chính là \"hồi cam\". Trà ngon phần nhiều đắng trước ngọt sau, người uống vội thường không nếm ra được." },
-    { "ai": "S", "t": "先苦后甜……这听起来不太像在说茶。", "doc": "Xiān kǔ hòu tián…… zhè tīng qǐlai bú tài xiàng zài shuō chá.", "v": "Đắng trước ngọt sau… nghe chẳng giống đang nói về trà lắm." },
-    { "ai": "N", "t": "你最近是不是遇到什么烦心事了？进门的时候，眉头一直皱着。", "doc": "Nǐ zuìjìn shì bu shì yùdào shénme fánxīn shì le? Jìn mén de shíhou, méitóu yìzhí zhòuzhe.", "v": "Dạo này con gặp chuyện gì phiền lòng phải không? Lúc vào cửa, mày con cứ nhíu lại." },
-    { "ai": "S", "t": "被您看出来了。公司让我负责一个新项目，我急于证明自己，天天催大家加快进度。结果团队里人人都很疲惫，项目反而慢了下来。", "doc": "Bèi nín kàn chūlai le. Gōngsī ràng wǒ fùzé yí ge xīn xiàngmù, wǒ jíyú zhèngmíng zìjǐ, tiāntiān cuī dàjiā jiākuài jìndù. Jiéguǒ tuánduì li rénrén dōu hěn píbèi, xiàngmù fǎn'ér màn le xiàlai.", "v": "Bị dì nhìn ra rồi. Công ty giao con phụ trách một dự án mới, con nóng lòng chứng tỏ bản thân, ngày nào cũng giục mọi người đẩy nhanh tiến độ. Kết quả cả nhóm ai cũng mệt mỏi, dự án lại chậm hẳn đi." },
-    { "ai": "N", "t": "古人说“欲速则不达”，泡茶也一样。泡得太久，茶就苦涩；出汤太急，味道又出不来。", "doc": "Gǔrén shuō “yù sù zé bù dá”, pào chá yě yíyàng. Pào de tài jiǔ, chá jiù kǔsè; chū tāng tài jí, wèidào yòu chū bu lái.", "v": "Người xưa nói \"dục tốc bất đạt\", pha trà cũng vậy. Ngâm lâu quá thì trà đắng chát; rót ra vội quá thì vị lại chưa ra." },
-    { "ai": "S", "t": "那怎么才算恰到好处呢？", "doc": "Nà zěnme cái suàn qiàdào hǎochù ne?", "v": "Vậy thế nào mới gọi là vừa khéo ạ?" },
-    { "ai": "N", "t": "没有标准答案，只能一泡一泡地试，慢慢积累手感。我泡了四十年，到现在还不敢说每一泡都完美。", "doc": "Méiyǒu biāozhǔn dá'àn, zhǐ néng yí pào yí pào de shì, mànmàn jīlěi shǒugǎn. Wǒ pào le sìshí nián, dào xiànzài hái bù gǎn shuō měi yí pào dōu wánměi.", "v": "Không có đáp án chuẩn, chỉ có thể thử từng tuần trà một, dần dần tích lũy cảm giác tay. Dì pha bốn mươi năm, đến giờ vẫn không dám nói tuần nào cũng hoàn hảo." },
-    { "ai": "S", "t": "您四十年都不敢说完美，我才工作五年，就想什么都一步到位。", "doc": "Nín sìshí nián dōu bù gǎn shuō wánměi, wǒ cái gōngzuò wǔ nián, jiù xiǎng shénme dōu yí bù dào wèi.", "v": "Dì bốn mươi năm còn không dám nói hoàn hảo, con mới đi làm năm năm đã muốn việc gì cũng một bước tới đích." },
-    { "ai": "N", "t": "年轻人有冲劲是好事。但带团队就像泡茶，你得了解每个人的脾气——有的人需要时间，有的人需要空间。", "doc": "Niánqīng rén yǒu chōngjìn shì hǎoshì. Dàn dài tuánduì jiù xiàng pào chá, nǐ děi liǎojiě měi ge rén de píqi —— yǒude rén xūyào shíjiān, yǒude rén xūyào kōngjiān.", "v": "Người trẻ có nhiệt huyết là chuyện tốt. Nhưng dẫn dắt một nhóm cũng như pha trà, con phải hiểu \"tính nết\" từng người — có người cần thời gian, có người cần không gian." },
-    { "ai": "S", "t": "您这么一说，我想起来了：组里有个同事，平时话不多，可每次她慢慢做出来的方案，都是最扎实的。", "doc": "Nín zhème yì shuō, wǒ xiǎng qǐlai le: zǔ li yǒu ge tóngshì, píngshí huà bù duō, kě měi cì tā mànmàn zuò chūlai de fāng'àn, dōu shì zuì zhāshi de.", "v": "Dì nói vậy con mới nhớ ra: trong nhóm có một chị đồng nghiệp, bình thường ít nói, nhưng lần nào phương án chị ấy chậm rãi làm ra cũng là chắc chắn nhất." },
-    { "ai": "N", "t": "可你天天催她，她还来得及“回甘”吗？", "doc": "Kě nǐ tiāntiān cuī tā, tā hái láidejí “huígān” ma?", "v": "Mà con ngày nào cũng giục, cô ấy còn kịp \"hồi cam\" không?" },
-    { "ai": "S", "t": "哈哈，看来我才是那壶泡得太急的茶。", "doc": "Hāha, kànlái wǒ cái shì nà hú pào de tài jí de chá.", "v": "Haha, xem ra con mới chính là ấm trà bị pha quá vội." },
-    { "ai": "N", "t": "来，再尝尝这一泡。你注意到没有？每一泡的味道都不太一样。", "doc": "Lái, zài chángchang zhè yí pào. Nǐ zhùyì dào méiyǒu? Měi yí pào de wèidào dōu bú tài yíyàng.", "v": "Nào, nếm thêm tuần này. Con có để ý không? Mỗi tuần trà vị đều hơi khác." },
-    { "ai": "S", "t": "确实。刚才那一泡香气浓，这一泡更柔和，回甘也更长。", "doc": "Quèshí. Gāngcái nà yí pào xiāngqì nóng, zhè yí pào gèng róuhé, huígān yě gèng cháng.", "v": "Đúng thật. Tuần lúc nãy hương đậm, tuần này êm hơn, hồi cam cũng dài hơn." },
-    { "ai": "N", "t": "人也一样，不同的阶段有不同的味道。别总拿现在的自己跟想象中的完美比，先把眼前这一泡喝好。", "doc": "Rén yě yíyàng, bùtóng de jiēduàn yǒu bùtóng de wèidào. Bié zǒng ná xiànzài de zìjǐ gēn xiǎngxiàng zhōng de wánměi bǐ, xiān bǎ yǎnqián zhè yí pào hē hǎo.", "v": "Con người cũng thế, mỗi giai đoạn có một vị riêng. Đừng lúc nào cũng đem mình bây giờ so với sự hoàn hảo trong tưởng tượng, trước hết hãy uống cho trọn tuần trà trước mắt." },
-    { "ai": "S", "t": "林姨，我在书上看过：别人给你倒茶的时候，用两根手指轻轻敲桌子，是表示感谢，对吗？", "doc": "Lín yí, wǒ zài shū shang kàn guo: biérén gěi nǐ dào chá de shíhou, yòng liǎng gēn shǒuzhǐ qīngqīng qiāo zhuōzi, shì biǎoshì gǎnxiè, duì ma?", "v": "Dì Lâm, con từng đọc trong sách: khi người khác rót trà cho mình, gõ nhẹ hai ngón tay xuống bàn là để cảm ơn, đúng không ạ?" },
-    { "ai": "N", "t": "对，这叫“叩指礼”，在南方很常见。看来你今天不光喝了茶，还学了规矩。", "doc": "Duì, zhè jiào “kòuzhǐ lǐ”, zài nánfāng hěn chángjiàn. Kànlái nǐ jīntiān bùguāng hē le chá, hái xué le guīju.", "v": "Đúng, cái đó gọi là \"khấu chỉ lễ\", ở miền Nam rất phổ biến. Xem ra hôm nay con không chỉ uống trà mà còn học được phép tắc." },
-    { "ai": "S", "t": "会议还有十分钟就开始了。不过这一次，我想先把这杯茶喝完。", "doc": "Huìyì hái yǒu shí fēnzhōng jiù kāishǐ le. Búguò zhè yí cì, wǒ xiǎng xiān bǎ zhè bēi chá hē wán.", "v": "Còn mười phút nữa là họp. Nhưng lần này, con muốn uống xong chén trà này đã." },
-    { "ai": "N", "t": "去吧。下次带上你那位同事，我给你们泡一壶，慢慢喝。", "doc": "Qù ba. Xià cì dài shang nǐ nà wèi tóngshì, wǒ gěi nǐmen pào yì hú, mànmàn hē.", "v": "Đi đi. Lần sau dẫn cả chị đồng nghiệp ấy theo, dì pha cho hai đứa một ấm, uống thong thả." },
-    { "ai": "S", "t": "一定。今天这壶茶，比我看过的所有管理书都管用。", "doc": "Yídìng. Jīntiān zhè hú chá, bǐ wǒ kàn guo de suǒyǒu guǎnlǐ shū dōu guǎnyòng.", "v": "Nhất định ạ. Ấm trà hôm nay còn hữu ích hơn mọi cuốn sách quản lý con từng đọc." }
+    {
+      "ai": "N",
+      "t": "小黎，坐吧。今天想喝点儿什么？",
+      "doc": "Xiǎo Lí, zuò ba. Jīntiān xiǎng hē diǎnr shénme?",
+      "v": "Tiểu Lê, ngồi đi. Hôm nay muốn uống gì nào?"
+    },
+    {
+      "ai": "S",
+      "t": "林姨，随便吧，越快越好，我半个小时后还有个视频会议。",
+      "doc": "Lín yí, suíbiàn ba, yuè kuài yuè hǎo, wǒ bàn ge xiǎoshí hòu hái yǒu ge shìpín huìyì.",
+      "v": "Dì Lâm, gì cũng được ạ, càng nhanh càng tốt, nửa tiếng nữa con còn một cuộc họp trực tuyến."
+    },
+    {
+      "ai": "N",
+      "t": "喝茶还赶时间？那我给你泡一壶岩茶，不过得按我的规矩来。",
+      "doc": "Hē chá hái gǎn shíjiān? Nà wǒ gěi nǐ pào yì hú yánchá, búguò děi àn wǒ de guīju lái.",
+      "v": "Uống trà mà cũng vội à? Vậy dì pha cho con một ấm nham trà, nhưng phải theo quy tắc của dì."
+    },
+    {
+      "ai": "S",
+      "t": "什么规矩？",
+      "doc": "Shénme guīju?",
+      "v": "Quy tắc gì ạ?"
+    },
+    {
+      "ai": "N",
+      "t": "很简单：我泡茶的时候，你只管看，别催。",
+      "doc": "Hěn jiǎndān: wǒ pào chá de shíhou, nǐ zhǐguǎn kàn, bié cuī.",
+      "v": "Đơn giản thôi: lúc dì pha trà, con cứ việc ngồi xem, đừng giục."
+    },
+    {
+      "ai": "S",
+      "t": "行，我不催。……咦，第一泡您怎么倒掉了？",
+      "doc": "Xíng, wǒ bù cuī. …… Yí, dì yī pào nín zěnme dàodiào le?",
+      "v": "Vâng, con không giục. …Ơ, sao nước đầu dì lại đổ đi ạ?"
+    },
+    {
+      "ai": "N",
+      "t": "这叫“醒茶”。茶叶在罐子里睡了很久，得先用热水把它唤醒，香气才出得来。",
+      "doc": "Zhè jiào “xǐng chá”. Cháyè zài guànzi li shuì le hěn jiǔ, děi xiān yòng rè shuǐ bǎ tā huànxǐng, xiāngqì cái chū de lái.",
+      "v": "Cái này gọi là \"đánh thức trà\". Lá trà ngủ trong hũ lâu rồi, phải dùng nước nóng đánh thức nó trước, hương mới bung ra được."
+    },
+    {
+      "ai": "S",
+      "t": "原来喝茶还有这么多讲究。在越南，我们喝茶可没这么复杂。",
+      "doc": "Yuánlái hē chá hái yǒu zhème duō jiǎngjiu. Zài Yuènán, wǒmen hē chá kě méi zhème fùzá.",
+      "v": "Hóa ra uống trà lại cầu kỳ đến thế. Ở Việt Nam, bọn con uống trà đâu có phức tạp vậy."
+    },
+    {
+      "ai": "N",
+      "t": "哦？越南人怎么喝茶？",
+      "doc": "Ò? Yuènán rén zěnme hē chá?",
+      "v": "Ồ? Người Việt uống trà thế nào?"
+    },
+    {
+      "ai": "S",
+      "t": "最常见的是路边的冰绿茶，便宜得很。大家坐在小板凳上，跟朋友一聊就是一下午。",
+      "doc": "Zuì chángjiàn de shì lùbiān de bīng lǜchá, piányi de hěn. Dàjiā zuò zài xiǎo bǎndèng shang, gēn péngyou yì liáo jiù shì yí xiàwǔ.",
+      "v": "Phổ biến nhất là trà đá vỉa hè, rẻ cực kỳ. Mọi người ngồi ghế nhựa thấp, tán chuyện với bạn bè một cái là hết cả buổi chiều."
+    },
+    {
+      "ai": "N",
+      "t": "那不是跟我们一样吗？形式不同，可都是在“喝时间”。",
+      "doc": "Nà bú shì gēn wǒmen yíyàng ma? Xíngshì bùtóng, kě dōu shì zài “hē shíjiān”.",
+      "v": "Thế chẳng phải cũng giống bọn dì sao? Hình thức khác nhau, nhưng đều là đang \"uống thời gian\"."
+    },
+    {
+      "ai": "S",
+      "t": "喝时间？",
+      "doc": "Hē shíjiān?",
+      "v": "Uống thời gian ạ?"
+    },
+    {
+      "ai": "N",
+      "t": "是啊。茶本身未必有多珍贵，珍贵的是有人愿意坐下来，陪你慢慢喝的那段时间。",
+      "doc": "Shì a. Chá běnshēn wèibì yǒu duō zhēnguì, zhēnguì de shì yǒu rén yuànyì zuò xiàlai, péi nǐ mànmàn hē de nà duàn shíjiān.",
+      "v": "Ừ. Bản thân trà chưa chắc đã quý giá gì, quý là khoảng thời gian có người chịu ngồi xuống, cùng con chậm rãi uống."
+    },
+    {
+      "ai": "N",
+      "t": "来，尝尝这一泡。别急着咽，让它在嘴里停一会儿。",
+      "doc": "Lái, chángchang zhè yí pào. Bié jízhe yàn, ràng tā zài zuǐ li tíng yíhuìr.",
+      "v": "Nào, nếm thử tuần trà này. Đừng vội nuốt, để nó đọng trong miệng một lúc."
+    },
+    {
+      "ai": "S",
+      "t": "一开始有点儿苦……咦，过了几秒，嗓子里反而有一股甜味儿。",
+      "doc": "Yì kāishǐ yǒudiǎnr kǔ…… Yí, guò le jǐ miǎo, sǎngzi li fǎn'ér yǒu yì gǔ tián wèir.",
+      "v": "Lúc đầu hơi đắng… Ơ, vài giây sau, trong cổ họng lại có một vị ngọt."
+    },
+    {
+      "ai": "N",
+      "t": "这就是“回甘”。好茶大多先苦后甜，急着喝的人往往尝不出来。",
+      "doc": "Zhè jiù shì “huígān”. Hǎo chá dàduō xiān kǔ hòu tián, jízhe hē de rén wǎngwǎng cháng bu chūlai.",
+      "v": "Đó chính là \"hồi cam\". Trà ngon phần nhiều đắng trước ngọt sau, người uống vội thường không nếm ra được."
+    },
+    {
+      "ai": "S",
+      "t": "先苦后甜……这听起来不太像在说茶。",
+      "doc": "Xiān kǔ hòu tián…… zhè tīng qǐlai bú tài xiàng zài shuō chá.",
+      "v": "Đắng trước ngọt sau… nghe chẳng giống đang nói về trà lắm."
+    },
+    {
+      "ai": "N",
+      "t": "你最近是不是遇到什么烦心事了？进门的时候，眉头一直皱着。",
+      "doc": "Nǐ zuìjìn shì bu shì yùdào shénme fánxīn shì le? Jìn mén de shíhou, méitóu yìzhí zhòuzhe.",
+      "v": "Dạo này con gặp chuyện gì phiền lòng phải không? Lúc vào cửa, mày con cứ nhíu lại."
+    },
+    {
+      "ai": "S",
+      "t": "被您看出来了。公司让我负责一个新项目，我急于证明自己，天天催大家加快进度。结果团队里人人都很疲惫，项目反而慢了下来。",
+      "doc": "Bèi nín kàn chūlai le. Gōngsī ràng wǒ fùzé yí ge xīn xiàngmù, wǒ jíyú zhèngmíng zìjǐ, tiāntiān cuī dàjiā jiākuài jìndù. Jiéguǒ tuánduì li rénrén dōu hěn píbèi, xiàngmù fǎn'ér màn le xiàlai.",
+      "v": "Bị dì nhìn ra rồi. Công ty giao con phụ trách một dự án mới, con nóng lòng chứng tỏ bản thân, ngày nào cũng giục mọi người đẩy nhanh tiến độ. Kết quả cả nhóm ai cũng mệt mỏi, dự án lại chậm hẳn đi."
+    },
+    {
+      "ai": "N",
+      "t": "古人说“欲速则不达”，泡茶也一样。泡得太久，茶就苦涩；出汤太急，味道又出不来。",
+      "doc": "Gǔrén shuō “yù sù zé bù dá”, pào chá yě yíyàng. Pào de tài jiǔ, chá jiù kǔsè; chū tāng tài jí, wèidào yòu chū bu lái.",
+      "v": "Người xưa nói \"dục tốc bất đạt\", pha trà cũng vậy. Ngâm lâu quá thì trà đắng chát; rót ra vội quá thì vị lại chưa ra."
+    },
+    {
+      "ai": "S",
+      "t": "那怎么才算恰到好处呢？",
+      "doc": "Nà zěnme cái suàn qiàdào hǎochù ne?",
+      "v": "Vậy thế nào mới gọi là vừa khéo ạ?"
+    },
+    {
+      "ai": "N",
+      "t": "没有标准答案，只能一泡一泡地试，慢慢积累手感。我泡了四十年，到现在还不敢说每一泡都完美。",
+      "doc": "Méiyǒu biāozhǔn dá'àn, zhǐ néng yí pào yí pào de shì, mànmàn jīlěi shǒugǎn. Wǒ pào le sìshí nián, dào xiànzài hái bù gǎn shuō měi yí pào dōu wánměi.",
+      "v": "Không có đáp án chuẩn, chỉ có thể thử từng tuần trà một, dần dần tích lũy cảm giác tay. Dì pha bốn mươi năm, đến giờ vẫn không dám nói tuần nào cũng hoàn hảo."
+    },
+    {
+      "ai": "S",
+      "t": "您四十年都不敢说完美，我才工作五年，就想什么都一步到位。",
+      "doc": "Nín sìshí nián dōu bù gǎn shuō wánměi, wǒ cái gōngzuò wǔ nián, jiù xiǎng shénme dōu yí bù dào wèi.",
+      "v": "Dì bốn mươi năm còn không dám nói hoàn hảo, con mới đi làm năm năm đã muốn việc gì cũng một bước tới đích."
+    },
+    {
+      "ai": "N",
+      "t": "年轻人有冲劲是好事。但带团队就像泡茶，你得了解每个人的脾气——有的人需要时间，有的人需要空间。",
+      "doc": "Niánqīng rén yǒu chōngjìn shì hǎoshì. Dàn dài tuánduì jiù xiàng pào chá, nǐ děi liǎojiě měi ge rén de píqi —— yǒude rén xūyào shíjiān, yǒude rén xūyào kōngjiān.",
+      "v": "Người trẻ có nhiệt huyết là chuyện tốt. Nhưng dẫn dắt một nhóm cũng như pha trà, con phải hiểu \"tính nết\" từng người — có người cần thời gian, có người cần không gian."
+    },
+    {
+      "ai": "S",
+      "t": "您这么一说，我想起来了：组里有个同事，平时话不多，可每次她慢慢做出来的方案，都是最扎实的。",
+      "doc": "Nín zhème yì shuō, wǒ xiǎng qǐlai le: zǔ li yǒu ge tóngshì, píngshí huà bù duō, kě měi cì tā mànmàn zuò chūlai de fāng'àn, dōu shì zuì zhāshi de.",
+      "v": "Dì nói vậy con mới nhớ ra: trong nhóm có một chị đồng nghiệp, bình thường ít nói, nhưng lần nào phương án chị ấy chậm rãi làm ra cũng là chắc chắn nhất."
+    },
+    {
+      "ai": "N",
+      "t": "可你天天催她，她还来得及“回甘”吗？",
+      "doc": "Kě nǐ tiāntiān cuī tā, tā hái láidejí “huígān” ma?",
+      "v": "Mà con ngày nào cũng giục, cô ấy còn kịp \"hồi cam\" không?"
+    },
+    {
+      "ai": "S",
+      "t": "哈哈，看来我才是那壶泡得太急的茶。",
+      "doc": "Hāha, kànlái wǒ cái shì nà hú pào de tài jí de chá.",
+      "v": "Haha, xem ra con mới chính là ấm trà bị pha quá vội."
+    },
+    {
+      "ai": "N",
+      "t": "来，再尝尝这一泡。你注意到没有？每一泡的味道都不太一样。",
+      "doc": "Lái, zài chángchang zhè yí pào. Nǐ zhùyì dào méiyǒu? Měi yí pào de wèidào dōu bú tài yíyàng.",
+      "v": "Nào, nếm thêm tuần này. Con có để ý không? Mỗi tuần trà vị đều hơi khác."
+    },
+    {
+      "ai": "S",
+      "t": "确实。刚才那一泡香气浓，这一泡更柔和，回甘也更长。",
+      "doc": "Quèshí. Gāngcái nà yí pào xiāngqì nóng, zhè yí pào gèng róuhé, huígān yě gèng cháng.",
+      "v": "Đúng thật. Tuần lúc nãy hương đậm, tuần này êm hơn, hồi cam cũng dài hơn."
+    },
+    {
+      "ai": "N",
+      "t": "人也一样，不同的阶段有不同的味道。别总拿现在的自己跟想象中的完美比，先把眼前这一泡喝好。",
+      "doc": "Rén yě yíyàng, bùtóng de jiēduàn yǒu bùtóng de wèidào. Bié zǒng ná xiànzài de zìjǐ gēn xiǎngxiàng zhōng de wánměi bǐ, xiān bǎ yǎnqián zhè yí pào hē hǎo.",
+      "v": "Con người cũng thế, mỗi giai đoạn có một vị riêng. Đừng lúc nào cũng đem mình bây giờ so với sự hoàn hảo trong tưởng tượng, trước hết hãy uống cho trọn tuần trà trước mắt."
+    },
+    {
+      "ai": "S",
+      "t": "林姨，我在书上看过：别人给你倒茶的时候，用两根手指轻轻敲桌子，是表示感谢，对吗？",
+      "doc": "Lín yí, wǒ zài shū shang kàn guo: biérén gěi nǐ dào chá de shíhou, yòng liǎng gēn shǒuzhǐ qīngqīng qiāo zhuōzi, shì biǎoshì gǎnxiè, duì ma?",
+      "v": "Dì Lâm, con từng đọc trong sách: khi người khác rót trà cho mình, gõ nhẹ hai ngón tay xuống bàn là để cảm ơn, đúng không ạ?"
+    },
+    {
+      "ai": "N",
+      "t": "对，这叫“叩指礼”，在南方很常见。看来你今天不光喝了茶，还学了规矩。",
+      "doc": "Duì, zhè jiào “kòuzhǐ lǐ”, zài nánfāng hěn chángjiàn. Kànlái nǐ jīntiān bùguāng hē le chá, hái xué le guīju.",
+      "v": "Đúng, cái đó gọi là \"khấu chỉ lễ\", ở miền Nam rất phổ biến. Xem ra hôm nay con không chỉ uống trà mà còn học được phép tắc."
+    },
+    {
+      "ai": "S",
+      "t": "会议还有十分钟就开始了。不过这一次，我想先把这杯茶喝完。",
+      "doc": "Huìyì hái yǒu shí fēnzhōng jiù kāishǐ le. Búguò zhè yí cì, wǒ xiǎng xiān bǎ zhè bēi chá hē wán.",
+      "v": "Còn mười phút nữa là họp. Nhưng lần này, con muốn uống xong chén trà này đã."
+    },
+    {
+      "ai": "N",
+      "t": "去吧。下次带上你那位同事，我给你们泡一壶，慢慢喝。",
+      "doc": "Qù ba. Xià cì dài shang nǐ nà wèi tóngshì, wǒ gěi nǐmen pào yì hú, mànmàn hē.",
+      "v": "Đi đi. Lần sau dẫn cả chị đồng nghiệp ấy theo, dì pha cho hai đứa một ấm, uống thong thả."
+    },
+    {
+      "ai": "S",
+      "t": "一定。今天这壶茶，比我看过的所有管理书都管用。",
+      "doc": "Yídìng. Jīntiān zhè hú chá, bǐ wǒ kàn guo de suǒyǒu guǎnlǐ shū dōu guǎnyòng.",
+      "v": "Nhất định ạ. Ấm trà hôm nay còn hữu ích hơn mọi cuốn sách quản lý con từng đọc."
+    }
   ],
   "tuVung": [
-    { "chu": "讲究", "doc": "jiǎngjiu", "nghia": "cầu kỳ, chú trọng; điều cần chú ý (giảng cứu)", "vd": "中国人吃饭很讲究。" },
-    { "chu": "规矩", "doc": "guīju", "nghia": "quy tắc, phép tắc (quy củ)", "vd": "每个地方都有自己的规矩。" },
-    { "chu": "倒掉", "doc": "dàodiào", "nghia": "đổ đi — 倒 đọc dào (rót, đổ; ngược), đọc dǎo (đổ ngã: 摔倒)", "vd": "剩下的汤别倒掉。" },
-    { "chu": "未必", "doc": "wèibì", "nghia": "chưa chắc, không hẳn (vị tất)", "vd": "贵的东西未必好。" },
-    { "chu": "回甘", "doc": "huígān", "nghia": "vị ngọt đọng lại sau khi uống trà (hồi cam)", "vd": "这茶回甘很明显。" },
-    { "chu": "急于", "doc": "jíyú", "nghia": "nóng lòng, vội (cấp ư) + động từ", "vd": "他急于找到工作。" },
-    { "chu": "欲速则不达", "doc": "yù sù zé bù dá", "nghia": "dục tốc bất đạt — muốn nhanh thì lại không tới được", "vd": "学语言要慢慢来，欲速则不达。" },
-    { "chu": "恰到好处", "doc": "qiàdào hǎochù", "nghia": "vừa khéo, đúng mức, vừa đến độ (kháp đáo hảo xứ)", "vd": "这道菜的咸淡恰到好处。" },
-    { "chu": "积累", "doc": "jīlěi", "nghia": "tích lũy (tích lũy)", "vd": "经验是慢慢积累的。" },
-    { "chu": "一步到位", "doc": "yí bù dào wèi", "nghia": "một bước tới đích, làm một lần là xong", "vd": "装修不一定要一步到位。" },
-    { "chu": "扎实", "doc": "zhāshi", "nghia": "chắc chắn, vững vàng (trát thực)", "vd": "他的基础很扎实。" },
-    { "chu": "叩指礼", "doc": "kòuzhǐ lǐ", "nghia": "\"khấu chỉ lễ\" — gõ nhẹ ngón tay xuống bàn để cảm ơn người rót trà", "vd": "朋友给我倒茶，我行了一个叩指礼。" }
+    {
+      "chu": "讲究",
+      "doc": "jiǎngjiu",
+      "nghia": "cầu kỳ, chú trọng; điều cần chú ý (giảng cứu)",
+      "vd": "中国人吃饭很讲究。"
+    },
+    {
+      "chu": "规矩",
+      "doc": "guīju",
+      "nghia": "quy tắc, phép tắc (quy củ)",
+      "vd": "每个地方都有自己的规矩。"
+    },
+    {
+      "chu": "倒掉",
+      "doc": "dàodiào",
+      "nghia": "đổ đi — 倒 đọc dào (rót, đổ; ngược), đọc dǎo (đổ ngã: 摔倒)",
+      "vd": "剩下的汤别倒掉。"
+    },
+    {
+      "chu": "未必",
+      "doc": "wèibì",
+      "nghia": "chưa chắc, không hẳn (vị tất)",
+      "vd": "贵的东西未必好。"
+    },
+    {
+      "chu": "回甘",
+      "doc": "huígān",
+      "nghia": "vị ngọt đọng lại sau khi uống trà (hồi cam)",
+      "vd": "这茶回甘很明显。"
+    },
+    {
+      "chu": "急于",
+      "doc": "jíyú",
+      "nghia": "nóng lòng, vội (cấp ư) + động từ",
+      "vd": "他急于找到工作。"
+    },
+    {
+      "chu": "欲速则不达",
+      "doc": "yù sù zé bù dá",
+      "nghia": "dục tốc bất đạt — muốn nhanh thì lại không tới được",
+      "vd": "学语言要慢慢来，欲速则不达。"
+    },
+    {
+      "chu": "恰到好处",
+      "doc": "qiàdào hǎochù",
+      "nghia": "vừa khéo, đúng mức, vừa đến độ (kháp đáo hảo xứ)",
+      "vd": "这道菜的咸淡恰到好处。"
+    },
+    {
+      "chu": "积累",
+      "doc": "jīlěi",
+      "nghia": "tích lũy (tích lũy)",
+      "vd": "经验是慢慢积累的。"
+    },
+    {
+      "chu": "一步到位",
+      "doc": "yí bù dào wèi",
+      "nghia": "một bước tới đích, làm một lần là xong",
+      "vd": "装修不一定要一步到位。"
+    },
+    {
+      "chu": "扎实",
+      "doc": "zhāshi",
+      "nghia": "chắc chắn, vững vàng (trát thực)",
+      "vd": "他的基础很扎实。"
+    },
+    {
+      "chu": "叩指礼",
+      "doc": "kòuzhǐ lǐ",
+      "nghia": "\"khấu chỉ lễ\" — gõ nhẹ ngón tay xuống bàn để cảm ơn người rót trà",
+      "vd": "朋友给我倒茶，我行了一个叩指礼。"
+    }
   ],
   "yNghia": "Trà không ngon hơn vì người pha sốt ruột, và con người cũng vậy. Có những thứ — một ấm trà, một tay nghề, một đội nhóm — chỉ đến độ khi được cho đủ thời gian. Nóng lòng muốn \"một bước tới đích\" thường khiến ta bỏ lỡ chính vị ngọt đang đọng lại sau cái đắng ban đầu.",
   "meo": [
@@ -72,10 +318,55 @@
     "Chữ đa âm trong bài: 倒 dào (倒茶, 倒掉) ↔ dǎo (倒下); 得 děi (得按我的规矩来) ↔ de (泡得太久); 咽 yàn (nuốt) ↔ yān (咽喉); 空 kōng (空间) ↔ kòng (有空); 长 cháng (回甘更长)."
   ],
   "cauHoi": [
-    { "hoi": "Vì sao dì Lâm đổ nước trà đầu tiên đi?", "chon": ["Vì nước bị bẩn", "Để \"đánh thức\" lá trà, cho hương bung ra", "Vì Sơn không thích trà đậm"], "dung": 1, "giai": "这叫醒茶……得先用热水把它唤醒，香气才出得来." },
-    { "hoi": "\"回甘\" là gì?", "chon": ["Vị đắng còn lại sau khi uống", "Cách rót trà lần thứ hai", "Vị ngọt đọng lại trong cổ sau vị đắng ban đầu"], "dung": 2, "giai": "Sơn tả: 一开始有点儿苦……嗓子里反而有一股甜味儿 — đó là 回甘." },
-    { "hoi": "Vấn đề của Sơn ở dự án mới là gì?", "chon": ["Anh giục cả nhóm quá gấp, mọi người mệt, dự án lại chậm đi", "Anh bị khách hàng trả hàng", "Nhóm của anh thiếu người"], "dung": 0, "giai": "天天催大家加快进度。结果团队里人人都很疲惫，项目反而慢了下来." },
-    { "hoi": "Dì Lâm so sánh việc dẫn dắt nhóm với điều gì?", "chon": ["Trồng cây trà", "Pha trà — phải hiểu \"tính nết\" từng người", "Mở quán trà"], "dung": 1, "giai": "带团队就像泡茶，你得了解每个人的脾气." },
-    { "hoi": "Gõ nhẹ hai ngón tay xuống bàn khi được rót trà nghĩa là gì?", "chon": ["Xin thêm trà", "Ra hiệu đã no", "Cảm ơn người rót trà"], "dung": 2, "giai": "这叫叩指礼 — cách cảm ơn khi người khác rót trà cho mình." }
+    {
+      "hoi": "Vì sao dì Lâm đổ nước trà đầu tiên đi?",
+      "chon": [
+        "Vì nước bị bẩn",
+        "Để \"đánh thức\" lá trà, cho hương bung ra",
+        "Vì Sơn không thích trà đậm"
+      ],
+      "dung": 1,
+      "giai": "这叫醒茶……得先用热水把它唤醒，香气才出得来."
+    },
+    {
+      "hoi": "\"回甘\" là gì?",
+      "chon": [
+        "Vị đắng còn lại sau khi uống",
+        "Cách rót trà lần thứ hai",
+        "Vị ngọt đọng lại trong cổ sau vị đắng ban đầu"
+      ],
+      "dung": 2,
+      "giai": "Sơn tả: 一开始有点儿苦……嗓子里反而有一股甜味儿 — đó là 回甘."
+    },
+    {
+      "hoi": "Vấn đề của Sơn ở dự án mới là gì?",
+      "chon": [
+        "Anh giục cả nhóm quá gấp, mọi người mệt, dự án lại chậm đi",
+        "Anh bị khách hàng trả hàng",
+        "Nhóm của anh thiếu người"
+      ],
+      "dung": 0,
+      "giai": "天天催大家加快进度。结果团队里人人都很疲惫，项目反而慢了下来."
+    },
+    {
+      "hoi": "Dì Lâm so sánh việc dẫn dắt nhóm với điều gì?",
+      "chon": [
+        "Trồng cây trà",
+        "Pha trà — phải hiểu \"tính nết\" từng người",
+        "Mở quán trà"
+      ],
+      "dung": 1,
+      "giai": "带团队就像泡茶，你得了解每个人的脾气."
+    },
+    {
+      "hoi": "Gõ nhẹ hai ngón tay xuống bàn khi được rót trà nghĩa là gì?",
+      "chon": [
+        "Xin thêm trà",
+        "Ra hiệu đã no",
+        "Cảm ơn người rót trà"
+      ],
+      "dung": 2,
+      "giai": "这叫叩指礼 — cách cảm ơn khi người khác rót trà cho mình."
+    }
   ]
 }

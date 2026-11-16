@@ -27,7 +27,7 @@ test('podcast: MỌI tệp nội dung đúng khuôn (tệp sai bị bỏ lúc ch
 test('podcast: không trùng id, không trùng (cấp, số) trong một ngôn ngữ', () => {
   const ds = napPodcast();
   assert.equal(new Set(ds.map((t) => t.id)).size, ds.length);
-  assert.equal(new Set(ds.map((t) => `${t.nn}|${t.cap}|${t.so}`)).size, ds.length);
+  assert.equal(new Set(ds.map((t) => `${t.nn}|${t.danhMuc ?? 'doi-song'}|${t.cap}|${t.so}`)).size, ds.length);
 });
 
 test('podcast: giọng khai trong luật là giọng máy chủ có thật', () => {
@@ -47,4 +47,22 @@ test('kiemTap bắt lỗi khuôn thường gặp', () => {
   const tt = tomTatTap(tot);
   assert.equal(tt.soDong, tot.loi.length);
   assert.ok(tt.phut >= 1);
+});
+
+test('danh sách theo danh mục: mặc định Đời sống, có bảng danh mục kèm số tập', async () => {
+  const { danhSachPodcast } = await import('./podcast.js');
+  const d = danhSachPodcast('en');
+  assert.equal(d.danhMucDangXem, 'doi-song');
+  assert.ok(d.danhMuc.some((x) => x.ma === 'doi-song'));
+  for (const g of d.cap) for (const t of g.tap) assert.equal(t.danhMuc, 'doi-song');
+  assert.equal(danhSachPodcast('en', 'khong-co').danhMucDangXem, 'doi-song');
+});
+
+test('kiemTap: cách nói khác đúng khuôn', () => {
+  const tot = napPodcast().find((t) => t.id === 'en-a1-01')!;
+  const loi0 = { ...tot.loi[0], khac: [{ kieu: 'lịch sự', t: 'Excuse me, is this seat taken?', v: 'Xin lỗi, ghế này có ai ngồi chưa ạ?' }] };
+  assert.deepEqual(kiemTap({ ...tot, loi: [loi0, ...tot.loi.slice(1)] }), []);
+  const sai = { ...tot.loi[0], khac: [{ kieu: 'bựa', t: 'x', v: 'y' }] };
+  assert.ok(kiemTap({ ...tot, loi: [sai, ...tot.loi.slice(1)] }).some((l) => l.includes('kieu lạ')));
+  assert.ok(kiemTap({ ...tot, danhMuc: 'xyz' as never }).some((l) => l.includes('danhMuc lạ')));
 });

@@ -1,0 +1,449 @@
+{
+  "id": "ja-se-n4-02",
+  "nn": "ja",
+  "danhMuc": "phan-mem",
+  "cap": "N4",
+  "so": 2,
+  "tieuDe": "朝会で言ってよかった",
+  "tieuDeViet": "May mà đã nói trong buổi họp sáng",
+  "moTa": "Buổi họp đứng mỗi sáng (朝会) của một nhóm phát triển: mỗi người nói ba điều — hôm qua làm gì, hôm nay làm gì, đang vướng gì. Linh không kết nối được DB test, và nhờ nói ra mà tìm được nguyên nhân chỉ sau một phút. Học khuôn câu báo cáo ngắn và cách nhận lời giúp đỡ.",
+  "chuDe": "Họp sáng (stand-up)",
+  "bieuTuong": "person.3.fill",
+  "nguoi": [
+    {
+      "ma": "Y",
+      "ten": "山本",
+      "giong": "ja-nam",
+      "vai": "trưởng nhóm"
+    },
+    {
+      "ma": "L",
+      "ten": "リン",
+      "giong": "ja2-nu",
+      "vai": "kỹ sư người Việt"
+    },
+    {
+      "ma": "K",
+      "ten": "木村",
+      "giong": "ja2-nam",
+      "vai": "kỹ sư cùng nhóm"
+    }
+  ],
+  "loi": [
+    {
+      "ai": "Y",
+      "t": "おはようございます。じゃあ、朝会を始めましょう。一人一分でお願いします。",
+      "doc": "おはようございます。じゃあ、ちょうかいをはじめましょう。ひとりいっぷんでおねがいします。",
+      "v": "Chào buổi sáng. Nào, bắt đầu họp sáng thôi. Mỗi người một phút nhé.",
+      "np": [
+        {
+          "mau": "V-ましょう",
+          "giai": "Rủ, đề nghị cùng làm (chúng ta hãy …). Người chủ trì hay dùng để bắt đầu việc chung.",
+          "vd": "そろそろ休憩しましょう。",
+          "vdDoc": "そろそろきゅうけいしましょう。",
+          "vdV": "Chúng ta nghỉ giải lao thôi."
+        }
+      ]
+    },
+    {
+      "ai": "Y",
+      "t": "リンさんから、昨日やったこと、今日やること、困っていることを話してください。",
+      "doc": "リンさんから、きのうやったこと、きょうやること、こまっていることをはなしてください。",
+      "v": "Bắt đầu từ Linh nhé: hôm qua đã làm gì, hôm nay sẽ làm gì, và đang vướng gì.",
+      "np": [
+        {
+          "mau": "V (thể thường) + こと",
+          "giai": "Biến cụm động từ thành danh từ: やったこと = việc đã làm, やること = việc sẽ làm.",
+          "vd": "週末にしたことを話してください。",
+          "vdDoc": "しゅうまつにしたことをはなしてください。",
+          "vdV": "Hãy kể việc bạn đã làm cuối tuần."
+        }
+      ]
+    },
+    {
+      "ai": "L",
+      "t": "はい。昨日はログイン画面のバグを直して、プルリクエストを出しました。",
+      "doc": "はい。きのうはログインがめんのバグをなおして、プルリクエストをだしました。",
+      "v": "Vâng. Hôm qua em sửa bug ở màn hình đăng nhập rồi gửi pull request.",
+      "khac": [
+        {
+          "kieu": "văn nói",
+          "t": "昨日はログイン画面のバグ直して、プルリク出しました。",
+          "doc": "きのうはログインがめんのバグなおして、プルリクだしました。",
+          "v": "Hôm qua em sửa bug màn đăng nhập, gửi PR rồi.",
+          "ghiChu": "プルリク = cách gọi tắt rất phổ biến trong nhóm"
+        }
+      ],
+      "np": [
+        {
+          "mau": "V-て、V-ました",
+          "giai": "Thể て nối các hành động theo thứ tự thời gian: làm A rồi làm B.",
+          "vd": "コードを書いて、テストしました。",
+          "vdDoc": "コードをかいて、テストしました。",
+          "vdV": "Tôi viết code rồi chạy test."
+        }
+      ]
+    },
+    {
+      "ai": "L",
+      "t": "今日は、レビューでもらったコメントを直してから、パスワード変更の機能を作る予定です。",
+      "doc": "きょうは、レビューでもらったコメントをなおしてから、パスワードへんこうのきのうをつくるよていです。",
+      "v": "Hôm nay em sẽ sửa theo comment nhận được khi review, xong rồi làm chức năng đổi mật khẩu.",
+      "np": [
+        {
+          "mau": "V-てから",
+          "giai": "Làm xong A rồi mới làm B — nhấn mạnh thứ tự (A phải xong trước).",
+          "vd": "会議が終わってから、電話します。",
+          "vdDoc": "かいぎがおわってから、でんわします。",
+          "vdV": "Họp xong tôi mới gọi điện."
+        },
+        {
+          "mau": "V-る + 予定です",
+          "giai": "Kế hoạch đã định sẵn (chắc chắn hơn 〜つもりです là ý định cá nhân).",
+          "vd": "来週、大阪に出張する予定です。",
+          "vdDoc": "らいしゅう、おおさかにしゅっちょうするよていです。",
+          "vdV": "Tuần sau tôi dự định đi công tác Ōsaka."
+        }
+      ]
+    },
+    {
+      "ai": "L",
+      "t": "困っていることが一つあります。テスト用のデータベースにつながらなくて、テストができません。",
+      "doc": "こまっていることがひとつあります。テストようのデータベースにつながらなくて、テストができません。",
+      "v": "Em đang vướng một chuyện. Em không kết nối được với cơ sở dữ liệu dùng để test, nên không test được.",
+      "khac": [
+        {
+          "kieu": "mềm mỏng",
+          "t": "一つ相談したいことがあるんですが……テスト用のデータベースにつながらないんです。",
+          "doc": "ひとつそうだんしたいことがあるんですが……テストようのデータベースにつながらないんです。",
+          "v": "Em có một chuyện muốn hỏi ý kiến… em không kết nối được DB test.",
+          "ghiChu": "mở lời nhẹ nhàng, không như đang than phiền"
+        },
+        {
+          "kieu": "ngắn gọn",
+          "t": "ブロッカーが一つあります。テスト用DBに接続できません。",
+          "doc": "ブロッカーがひとつあります。テストようディービーにせつぞくできません。",
+          "v": "Có một blocker: không kết nối được DB test.",
+          "ghiChu": "nhóm làm Scrum hay dùng từ ブロッカー"
+        }
+      ],
+      "np": [
+        {
+          "mau": "V-なくて",
+          "giai": "Vì không … nên … (nguyên nhân dẫn tới kết quả/cảm xúc). Vế sau không dùng mệnh lệnh, rủ rê.",
+          "vd": "電車が来なくて、遅刻しました。",
+          "vdDoc": "でんしゃがこなくて、ちこくしました。",
+          "vdV": "Tàu không đến nên tôi bị muộn."
+        }
+      ]
+    },
+    {
+      "ai": "Y",
+      "t": "いつからですか。",
+      "doc": "いつからですか。",
+      "v": "Từ khi nào vậy?"
+    },
+    {
+      "ai": "L",
+      "t": "昨日の夕方からです。設定は変えていないはずなんですが。",
+      "doc": "きのうのゆうがたからです。せっていはかえていないはずなんですが。",
+      "v": "Từ chiều tối hôm qua ạ. Em nghĩ chắc chắn là em không đổi cấu hình…",
+      "np": [
+        {
+          "mau": "〜はずです",
+          "giai": "Theo lý mà nói thì chắc chắn là … (người nói tin dựa trên căn cứ). 〜はずなんですが = đáng lẽ là vậy, nhưng…",
+          "vd": "会議は三時からのはずです。",
+          "vdDoc": "かいぎはさんじからのはずです。",
+          "vdV": "Cuộc họp đáng lẽ bắt đầu lúc ba giờ."
+        }
+      ]
+    },
+    {
+      "ai": "K",
+      "t": "あ、それ、たぶん僕のせいです。昨日、パスワードを変えたんです。すみません、連絡するのを忘れていました。",
+      "doc": "あ、それ、たぶんぼくのせいです。きのう、パスワードをかえたんです。すみません、れんらくするのをわすれていました。",
+      "v": "À, cái đó chắc là tại tôi. Hôm qua tôi đổi mật khẩu. Xin lỗi, tôi quên báo.",
+      "khac": [
+        {
+          "kieu": "trang trọng",
+          "t": "大変申し訳ありません。パスワードを変更した際、ご連絡するのを失念しておりました。",
+          "doc": "たいへんもうしわけありません。パスワードをへんこうしたさい、ごれんらくするのをしつねんしておりました。",
+          "v": "Thành thật xin lỗi. Khi đổi mật khẩu, tôi đã sơ ý quên báo.",
+          "ghiChu": "xin lỗi khách hàng hoặc cấp trên; 失念 = quên (trang trọng)"
+        }
+      ],
+      "np": [
+        {
+          "mau": "V-る + のを忘れる",
+          "giai": "Quên làm V. の biến động từ thành danh từ để làm tân ngữ của 忘れる.",
+          "vd": "傘を持ってくるのを忘れました。",
+          "vdDoc": "かさをもってくるのをわすれました。",
+          "vdV": "Tôi quên mang ô."
+        }
+      ]
+    },
+    {
+      "ai": "K",
+      "t": "朝会のあとで、新しいパスワードを送りますね。",
+      "doc": "ちょうかいのあとで、あたらしいパスワードをおくりますね。",
+      "v": "Họp xong tôi gửi mật khẩu mới nhé."
+    },
+    {
+      "ai": "L",
+      "t": "助かります。ありがとうございます。",
+      "doc": "たすかります。ありがとうございます。",
+      "v": "Đỡ cho em quá. Cảm ơn anh.",
+      "khac": [
+        {
+          "kieu": "lịch sự",
+          "t": "お手数をおかけします。よろしくお願いします。",
+          "doc": "おてすうをおかけします。よろしくおねがいします。",
+          "v": "Làm phiền anh rồi. Nhờ anh nhé.",
+          "ghiChu": "khi người khác phải bỏ công làm giúp mình"
+        },
+        {
+          "kieu": "thân mật",
+          "t": "助かる！ありがとう。",
+          "doc": "たすかる！ありがとう。",
+          "v": "Đỡ quá! Cảm ơn nhé.",
+          "ghiChu": "với đồng nghiệp cùng tuổi, đã thân"
+        }
+      ]
+    },
+    {
+      "ai": "Y",
+      "t": "詳しい話は朝会のあとにしましょう。朝会は短くするのが大事なので。",
+      "doc": "くわしいはなしはちょうかいのあとにしましょう。ちょうかいはみじかくするのがだいじなので。",
+      "v": "Chuyện chi tiết để sau buổi họp nhé. Họp sáng thì quan trọng là phải ngắn.",
+      "np": [
+        {
+          "mau": "A-く + する",
+          "giai": "Làm cho (cái gì) trở nên A. Tính từ い đổi い → く rồi thêm する. Tính từ な: 〜にする.",
+          "vd": "部屋を明るくしました。",
+          "vdDoc": "へやをあかるくしました。",
+          "vdV": "Tôi làm căn phòng sáng hơn."
+        }
+      ]
+    },
+    {
+      "ai": "Y",
+      "t": "じゃあ、次は木村さん、お願いします。",
+      "doc": "じゃあ、つぎはきむらさん、おねがいします。",
+      "v": "Rồi, tiếp theo là anh Kimura."
+    },
+    {
+      "ai": "K",
+      "t": "昨日は検索機能の速度を調べました。今日は原因がわかったので、直し始めます。",
+      "doc": "きのうはけんさくきのうのそくどをしらべました。きょうはげんいんがわかったので、なおしはじめます。",
+      "v": "Hôm qua tôi điều tra tốc độ của chức năng tìm kiếm. Hôm nay đã biết nguyên nhân nên tôi bắt đầu sửa.",
+      "np": [
+        {
+          "mau": "V-ます + 始める",
+          "giai": "Bắt đầu làm V. Ngược lại: V-ます + 終わる (làm xong).",
+          "vd": "雨が降り始めました。",
+          "vdDoc": "あめがふりはじめました。",
+          "vdV": "Trời bắt đầu mưa."
+        }
+      ]
+    },
+    {
+      "ai": "K",
+      "t": "困っていることは、特にありません。",
+      "doc": "こまっていることは、とくにありません。",
+      "v": "Tôi không có gì vướng mắc đặc biệt.",
+      "khac": [
+        {
+          "kieu": "tự nhiên hơn",
+          "t": "今のところ、問題ありません。",
+          "doc": "いまのところ、もんだいありません。",
+          "v": "Hiện tại thì không có vấn đề gì."
+        },
+        {
+          "kieu": "ngắn gọn",
+          "t": "ブロッカーはなしです。",
+          "doc": "ブロッカーはなしです。",
+          "v": "Không có blocker.",
+          "ghiChu": "nói nhanh trong họp đứng"
+        }
+      ]
+    },
+    {
+      "ai": "Y",
+      "t": "ありがとう。リンさん、パスワードが届いたら、テストを進められそうですか。",
+      "doc": "ありがとう。リンさん、パスワードがとどいたら、テストをすすめられそうですか。",
+      "v": "Cảm ơn. Linh này, khi nhận được mật khẩu thì em tiếp tục test được chứ?",
+      "np": [
+        {
+          "mau": "V-ます + そうです",
+          "giai": "Có vẻ sẽ … (dự đoán dựa trên tình hình). 進められそう = có vẻ tiếp tục được.",
+          "vd": "この仕事は今日中に終わりそうです。",
+          "vdDoc": "このしごとはきょうじゅうにおわりそうです。",
+          "vdV": "Việc này có vẻ sẽ xong trong hôm nay."
+        }
+      ]
+    },
+    {
+      "ai": "L",
+      "t": "はい、午前中に終わると思います。終わったらチャットで報告します。",
+      "doc": "はい、ごぜんちゅうにおわるとおもいます。おわったらチャットでほうこくします。",
+      "v": "Vâng, em nghĩ sẽ xong trong buổi sáng. Xong em sẽ báo qua chat.",
+      "khac": [
+        {
+          "kieu": "chuyên nghiệp",
+          "t": "午前中には完了する見込みです。完了しましたら、チャットでご報告いたします。",
+          "doc": "ごぜんちゅうにはかんりょうするみこみです。かんりょうしましたら、チャットでごほうこくいたします。",
+          "v": "Dự kiến sẽ hoàn thành trong buổi sáng. Khi xong tôi sẽ báo cáo qua chat.",
+          "ghiChu": "khi báo cho khách hàng hoặc cấp trên ngoài nhóm"
+        }
+      ]
+    },
+    {
+      "ai": "Y",
+      "t": "お願いします。では、今日も一日よろしくお願いします。",
+      "doc": "おねがいします。では、きょうもいちにちよろしくおねがいします。",
+      "v": "Nhờ em nhé. Vậy hôm nay cũng mong mọi người làm việc tốt."
+    },
+    {
+      "ai": "K",
+      "t": "リンさん、さっきは本当にごめんね。これからは、変えたらすぐ共有するよ。",
+      "doc": "リンさん、さっきはほんとうにごめんね。これからは、かえたらすぐきょうゆうするよ。",
+      "v": "Linh ơi, lúc nãy thật sự xin lỗi nhé. Từ giờ hễ đổi gì là tôi chia sẻ ngay."
+    },
+    {
+      "ai": "L",
+      "t": "いえいえ。早く原因がわかってよかったです。朝会で言ってよかった。",
+      "doc": "いえいえ。はやくげんいんがわかってよかったです。ちょうかいでいってよかった。",
+      "v": "Không sao ạ. May mà biết nguyên nhân sớm. May mà em nói ra trong buổi họp sáng.",
+      "np": [
+        {
+          "mau": "V-て + よかった",
+          "giai": "May mà đã …, thật tốt vì đã … (cảm giác nhẹ nhõm, hài lòng sau sự việc).",
+          "vd": "早く家を出てよかった。",
+          "vdDoc": "はやくいえをでてよかった。",
+          "vdV": "May mà tôi ra khỏi nhà sớm."
+        }
+      ]
+    }
+  ],
+  "tuVung": [
+    {
+      "chu": "朝会",
+      "doc": "ちょうかい",
+      "nghia": "họp đầu giờ sáng (stand-up)",
+      "vd": "朝会は九時からです。"
+    },
+    {
+      "chu": "プルリクエスト",
+      "doc": "プルリクエスト",
+      "nghia": "pull request — đề nghị gộp code (gọi tắt プルリク)",
+      "vd": "プルリクエストを出しました。"
+    },
+    {
+      "chu": "予定",
+      "doc": "よてい",
+      "nghia": "kế hoạch, dự định",
+      "vd": "午後は会議の予定です。"
+    },
+    {
+      "chu": "機能",
+      "doc": "きのう",
+      "nghia": "chức năng (đồng âm với 昨日 \"hôm qua\")",
+      "vd": "新しい機能を作ります。"
+    },
+    {
+      "chu": "データベース",
+      "doc": "データベース",
+      "nghia": "cơ sở dữ liệu",
+      "vd": "データベースが重いです。"
+    },
+    {
+      "chu": "設定",
+      "doc": "せってい",
+      "nghia": "cấu hình, thiết lập",
+      "vd": "アプリの設定を変えました。"
+    },
+    {
+      "chu": "連絡",
+      "doc": "れんらく",
+      "nghia": "liên lạc, báo cho biết",
+      "vd": "あとで連絡します。"
+    },
+    {
+      "chu": "助かります",
+      "doc": "たすかります",
+      "nghia": "đỡ quá, giúp tôi nhiều (câu cảm ơn khi được giúp)",
+      "vd": "手伝ってくれて助かります。"
+    },
+    {
+      "chu": "原因",
+      "doc": "げんいん",
+      "nghia": "nguyên nhân",
+      "vd": "原因を調べています。"
+    },
+    {
+      "chu": "報告",
+      "doc": "ほうこく",
+      "nghia": "báo cáo",
+      "vd": "結果を報告します。"
+    },
+    {
+      "chu": "共有",
+      "doc": "きょうゆう",
+      "nghia": "chia sẻ (thông tin cho cả nhóm)",
+      "vd": "資料をチームに共有しました。"
+    }
+  ],
+  "yNghia": "Họp sáng không phải để báo cáo cho trưởng nhóm nghe, mà để những chỗ vướng lộ ra thật sớm. Một câu \"em đang bị kẹt\" nói lúc chín giờ có thể cứu cả buổi chiều — vì người gỡ được nút thắt đôi khi đang đứng ngay cạnh bạn.",
+  "meo": [
+    "Khuôn ba câu của 朝会: 昨日は〜ました。/ 今日は〜予定です。/ 困っていることは〜(特にありません).",
+    "〜てから = làm xong A rồi mới B (nhấn thứ tự); 〜て chỉ nối hành động.",
+    "機能 (きのう, chức năng) và 昨日 (きのう, hôm qua) đồng âm — nghe theo ngữ cảnh.",
+    "助かります là câu cảm ơn rất hay dùng ở công sở khi ai đó làm giúp mình; lịch sự hơn: お手数をおかけします."
+  ],
+  "cauHoi": [
+    {
+      "hoi": "Hôm qua Linh đã làm gì?",
+      "chon": [
+        "Sửa bug màn hình đăng nhập và gửi pull request",
+        "Làm chức năng đổi mật khẩu",
+        "Điều tra tốc độ tìm kiếm",
+        "Đổi mật khẩu DB"
+      ],
+      "dung": 0,
+      "giai": "「ログイン画面のバグを直して、プルリクエストを出しました」."
+    },
+    {
+      "hoi": "Vì sao Linh không test được?",
+      "chon": [
+        "Máy tính hỏng",
+        "Không kết nối được DB test vì anh Kimura đổi mật khẩu mà quên báo",
+        "Chưa có tài khoản",
+        "Mạng công ty bị ngắt"
+      ],
+      "dung": 1,
+      "giai": "「昨日、パスワードを変えたんです。……連絡するのを忘れていました」."
+    },
+    {
+      "hoi": "Vì sao trưởng nhóm bảo để chuyện chi tiết sau buổi họp?",
+      "chon": [
+        "Vì anh ấy bận",
+        "Vì Kimura chưa đến",
+        "Vì họp sáng cần ngắn",
+        "Vì cần hỏi khách"
+      ],
+      "dung": 2,
+      "giai": "「朝会は短くするのが大事なので」."
+    },
+    {
+      "hoi": "「直し始めます」 nghĩa là gì?",
+      "chon": [
+        "Đã sửa xong",
+        "Không sửa nữa",
+        "Nhờ người khác sửa",
+        "Bắt đầu sửa"
+      ],
+      "dung": 3,
+      "giai": "V-ます + 始める = bắt đầu làm."
+    }
+  ]
+}

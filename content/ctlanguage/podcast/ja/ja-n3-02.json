@@ -1,6 +1,7 @@
 {
   "id": "ja-n3-02",
   "nn": "ja",
+  "danhMuc": "doi-song",
   "cap": "N3",
   "so": 2,
   "tieuDe": "ひとりのお昼ごはん",
@@ -9,50 +10,371 @@
   "chuDe": "Kết bạn xa nhà",
   "bieuTuong": "person.2.fill",
   "nguoi": [
-    { "ma": "Z", "ten": "ズン", "giong": "ja-nam", "vai": "du học sinh năm nhất" },
-    { "ma": "M", "ten": "美咲", "giong": "ja-nu", "vai": "bạn cùng lớp" },
-    { "ma": "S", "ten": "翔太", "giong": "ja2-nam", "vai": "trưởng câu lạc bộ cầu lông" }
+    {
+      "ma": "Z",
+      "ten": "ズン",
+      "giong": "ja-nam",
+      "vai": "du học sinh năm nhất"
+    },
+    {
+      "ma": "M",
+      "ten": "美咲",
+      "giong": "ja-nu",
+      "vai": "bạn cùng lớp"
+    },
+    {
+      "ma": "S",
+      "ten": "翔太",
+      "giong": "ja2-nam",
+      "vai": "trưởng câu lạc bộ cầu lông"
+    }
   ],
   "loi": [
-    { "ai": "M", "t": "ズンくん、また一人でお昼食べてるの？", "doc": "ズンくん、またひとりでおひるたべてるの？", "v": "Dũng, cậu lại ăn trưa một mình à?" },
-    { "ai": "Z", "t": "あ、美咲さん。うん……なんか、この時間が一番楽なんだ。", "doc": "あ、みさきさん。うん……なんか、このじかんがいちばんらくなんだ。", "v": "À, Misaki. Ừ… kiểu như, lúc này là thoải mái nhất." },
-    { "ai": "M", "t": "楽って顔じゃないけど。最近、元気ないみたいだよ。", "doc": "らくってかおじゃないけど。さいきん、げんきないみたいだよ。", "v": "Mặt cậu đâu có giống thoải mái. Dạo này trông cậu có vẻ không vui lắm." },
-    { "ai": "Z", "t": "……バレてた？実はさ、日本に来て半年なのに、まだ友達がほとんどいないんだ。", "doc": "……ばれてた？じつはさ、にほんにきてはんとしなのに、まだともだちがほとんどいないんだ。", "v": "…Bị lộ rồi à? Thật ra, sang Nhật nửa năm rồi mà tớ vẫn gần như chưa có bạn." },
-    { "ai": "Z", "t": "授業ではみんな優しいけど、終わったらすぐ解散でしょ。週末は誰とも話さない日もある。", "doc": "じゅぎょうではみんなやさしいけど、おわったらすぐかいさんでしょ。しゅうまつはだれともはなさないひもある。", "v": "Trong giờ học ai cũng hiền, nhưng học xong là giải tán ngay. Cuối tuần có hôm tớ chẳng nói chuyện với ai." },
-    { "ai": "M", "t": "そっか……。それ、けっこうつらいよね。", "doc": "そっか……。それ、けっこうつらいよね。", "v": "Vậy à… Thế thì cũng khổ thật nhỉ." },
-    { "ai": "Z", "t": "最初の頃、もっと自分から話しかければよかったんだけど。日本語を間違えるのが怖くて。", "doc": "さいしょのころ、もっとじぶんからはなしかければよかったんだけど。にほんごをまちがえるのがこわくて。", "v": "Hồi đầu, giá mà tớ chủ động bắt chuyện nhiều hơn. Tại tớ sợ nói sai tiếng Nhật." },
-    { "ai": "M", "t": "間違えたって、誰も気にしないよ。むしろ、話しかけてくれたらうれしいと思う。", "doc": "まちがえたって、だれもきにしないよ。むしろ、はなしかけてくれたらうれしいとおもう。", "v": "Có sai thì cũng chẳng ai để ý đâu. Ngược lại, cậu bắt chuyện thì mọi người còn vui ấy chứ." },
-    { "ai": "M", "t": "ねえ、私が入ってるバドミントンサークル、見学に来ない？今日の5時から体育館でやるんだ。", "doc": "ねえ、わたしがはいってるバドミントンサークル、けんがくにこない？きょうのごじからたいいくかんでやるんだ。", "v": "Này, đến xem câu lạc bộ cầu lông tớ đang tham gia không? Hôm nay 5 giờ tập ở nhà thể chất." },
-    { "ai": "Z", "t": "バドミントン？ベトナムではよく公園でやってたよ。", "doc": "バドミントン？ベトナムではよくこうえんでやってたよ。", "v": "Cầu lông á? Ở Việt Nam tớ hay chơi ở công viên lắm." },
-    { "ai": "M", "t": "え、本当？じゃあ、決まりね。", "doc": "え、ほんとう？じゃあ、きまりね。", "v": "Ơ, thật hả? Vậy chốt nhé." },
-    { "ai": "S", "t": "美咲、その人が言ってた留学生？はじめまして、部長の翔太です。", "doc": "みさき、そのひとがいってたりゅうがくせい？はじめまして、ぶちょうのしょうたです。", "v": "Misaki, đây là cậu du học sinh cậu kể à? Chào cậu, tớ là Shota, trưởng câu lạc bộ." },
-    { "ai": "Z", "t": "はじめまして、ズンです。日本語、まだ下手なんですけど、よろしくお願いします。", "doc": "はじめまして、ズンです。にほんご、まだへたなんですけど、よろしくおねがいします。", "v": "Chào anh, em là Dũng. Tiếng Nhật em còn kém, mong anh giúp đỡ." },
-    { "ai": "S", "t": "全然上手じゃん。てか、敬語じゃなくていいよ。同い年でしょ？", "doc": "ぜんぜんじょうずじゃん。てか、けいごじゃなくていいよ。おないどしでしょ？", "v": "Giỏi quá còn gì. Mà khỏi nói kính ngữ đi. Mình bằng tuổi mà, đúng không?" },
-    { "ai": "Z", "t": "あ、うん。じゃあ……よろしく！", "doc": "あ、うん。じゃあ……よろしく！", "v": "À, ừ. Vậy thì… rất vui được làm quen!" },
-    { "ai": "S", "t": "ズン、強すぎ！あのスマッシュ、どうやって打つの？", "doc": "ズン、つよすぎ！あのスマッシュ、どうやってうつの？", "v": "Dũng, cậu đỉnh quá! Cú đập đó đánh kiểu gì vậy?" },
-    { "ai": "Z", "t": "手首をこう……。あ、日本語で何て言えばいいかわからないから、見せるね。", "doc": "てくびをこう……。あ、にほんごでなんていえばいいかわからないから、みせるね。", "v": "Cổ tay thế này… À, tớ không biết nói bằng tiếng Nhật thế nào, để tớ làm mẫu nhé." },
-    { "ai": "S", "t": "それでいいよ。言葉より、見たほうが早いって。", "doc": "それでいいよ。ことばより、みたほうがはやいって。", "v": "Thế là được rồi. Nhìn còn nhanh hơn giải thích ấy chứ." },
-    { "ai": "M", "t": "ほら、ズンくん、もう先生みたいになってる。", "doc": "ほら、ズンくん、もうせんせいみたいになってる。", "v": "Thấy chưa, Dũng thành thầy giáo luôn rồi kìa." },
-    { "ai": "S", "t": "毎週火曜と金曜にやってるから、よかったら入ってよ。終わったらみんなでラーメン行くのが恒例なんだ。", "doc": "まいしゅうかようときんようにやってるから、よかったらはいってよ。おわったらみんなでラーメンいくのがこうれいなんだ。", "v": "Tụi tớ tập thứ Ba và thứ Sáu hằng tuần, thích thì vào nhé. Tập xong cả nhóm đi ăn ramen là lệ rồi." },
-    { "ai": "Z", "t": "行く行く！……なんか、久しぶりにこんなに笑った気がする。", "doc": "いくいく！……なんか、ひさしぶりにこんなにわらったきがする。", "v": "Đi chứ đi chứ! …Không hiểu sao, lâu lắm rồi tớ mới cười nhiều thế này." },
-    { "ai": "Z", "t": "美咲さん、今日は誘ってくれて、本当にありがとう。", "doc": "みさきさん、きょうはさそってくれて、ほんとうにありがとう。", "v": "Misaki, hôm nay cảm ơn cậu thật nhiều vì đã rủ tớ." },
-    { "ai": "M", "t": "どういたしまして。でもね、声をかけたのは私だけど、来るって決めたのはズンくんだよ。", "doc": "どういたしまして。でもね、こえをかけたのはわたしだけど、くるってきめたのはズンくんだよ。", "v": "Không có gì. Nhưng mà này, người rủ là tớ, còn người quyết định đến là cậu đấy." },
-    { "ai": "Z", "t": "……そうだね。次は僕が、一人でいる新入生に声をかけてみようかな。", "doc": "……そうだね。つぎはぼくが、ひとりでいるしんにゅうせいにこえをかけてみようかな。", "v": "…Ừ nhỉ. Lần tới chắc tớ sẽ thử bắt chuyện với mấy bạn năm nhất đang ngồi một mình." },
-    { "ai": "M", "t": "いいね、それ。寂しいって言えるのも、強さだと思うよ。", "doc": "いいね、それ。さびしいっていえるのも、つよさだとおもうよ。", "v": "Hay đấy. Tớ nghĩ dám nói ra “mình thấy lẻ loi” cũng là một kiểu mạnh mẽ." }
+    {
+      "ai": "M",
+      "t": "ズンくん、また一人でお昼食べてるの？",
+      "doc": "ズンくん、またひとりでおひるたべてるの？",
+      "v": "Dũng, cậu lại ăn trưa một mình à?"
+    },
+    {
+      "ai": "Z",
+      "t": "あ、美咲さん。うん……なんか、この時間が一番楽なんだ。",
+      "doc": "あ、みさきさん。うん……なんか、このじかんがいちばんらくなんだ。",
+      "v": "À, Misaki. Ừ… kiểu như, lúc này là thoải mái nhất."
+    },
+    {
+      "ai": "M",
+      "t": "楽って顔じゃないけど。最近、元気ないみたいだよ。",
+      "doc": "らくってかおじゃないけど。さいきん、げんきないみたいだよ。",
+      "v": "Mặt cậu đâu có giống thoải mái. Dạo này trông cậu có vẻ không vui lắm.",
+      "np": [
+        {
+          "mau": "〜みたい (có vẻ, hình như)",
+          "giai": "Văn nói của 〜ようだ: phán đoán dựa trên điều nhìn thấy. 元気ないみたい = trông có vẻ không vui.",
+          "vd": "外は雨みたいだね。",
+          "vdDoc": "そとはあめみたいだね。",
+          "vdV": "Hình như ngoài trời đang mưa nhỉ."
+        }
+      ]
+    },
+    {
+      "ai": "Z",
+      "t": "……バレてた？実はさ、日本に来て半年なのに、まだ友達がほとんどいないんだ。",
+      "doc": "……ばれてた？じつはさ、にほんにきてはんとしなのに、まだともだちがほとんどいないんだ。",
+      "v": "…Bị lộ rồi à? Thật ra, sang Nhật nửa năm rồi mà tớ vẫn gần như chưa có bạn.",
+      "np": [
+        {
+          "mau": "〜のに",
+          "giai": "… vậy mà …: 半年なのに = đã nửa năm rồi vậy mà. Danh từ／tính từ な + なのに.",
+          "vd": "日曜日なのに、仕事がある。",
+          "vdDoc": "にちようびなのに、しごとがある。",
+          "vdV": "Chủ nhật mà vẫn phải làm."
+        }
+      ]
+    },
+    {
+      "ai": "Z",
+      "t": "授業ではみんな優しいけど、終わったらすぐ解散でしょ。週末は誰とも話さない日もある。",
+      "doc": "じゅぎょうではみんなやさしいけど、おわったらすぐかいさんでしょ。しゅうまつはだれともはなさないひもある。",
+      "v": "Trong giờ học ai cũng hiền, nhưng học xong là giải tán ngay. Cuối tuần có hôm tớ chẳng nói chuyện với ai."
+    },
+    {
+      "ai": "M",
+      "t": "そっか……。それ、けっこうつらいよね。",
+      "doc": "そっか……。それ、けっこうつらいよね。",
+      "v": "Vậy à… Thế thì cũng khổ thật nhỉ."
+    },
+    {
+      "ai": "Z",
+      "t": "最初の頃、もっと自分から話しかければよかったんだけど。日本語を間違えるのが怖くて。",
+      "doc": "さいしょのころ、もっとじぶんからはなしかければよかったんだけど。にほんごをまちがえるのがこわくて。",
+      "v": "Hồi đầu, giá mà tớ chủ động bắt chuyện nhiều hơn. Tại tớ sợ nói sai tiếng Nhật.",
+      "np": [
+        {
+          "mau": "V ばよかった",
+          "giai": "Hối tiếc: giá mà đã … thì tốt. 話しかければよかった = giá mà mình chủ động bắt chuyện.",
+          "vd": "もっと早く来ればよかった。",
+          "vdDoc": "もっとはやくくればよかった。",
+          "vdV": "Giá mà đến sớm hơn."
+        }
+      ]
+    },
+    {
+      "ai": "M",
+      "t": "間違えたって、誰も気にしないよ。むしろ、話しかけてくれたらうれしいと思う。",
+      "doc": "まちがえたって、だれもきにしないよ。むしろ、はなしかけてくれたらうれしいとおもう。",
+      "v": "Có sai thì cũng chẳng ai để ý đâu. Ngược lại, cậu bắt chuyện thì mọi người còn vui ấy chứ.",
+      "np": [
+        {
+          "mau": "V たって",
+          "giai": "Văn nói của 〜ても: dù có … thì cũng. 間違えたって = dù có nói sai thì.",
+          "vd": "今から走ったって、間に合わないよ。",
+          "vdDoc": "いまからはしったって、まにあわないよ。",
+          "vdV": "Giờ có chạy thì cũng không kịp đâu."
+        }
+      ]
+    },
+    {
+      "ai": "M",
+      "t": "ねえ、私が入ってるバドミントンサークル、見学に来ない？今日の5時から体育館でやるんだ。",
+      "doc": "ねえ、わたしがはいってるバドミントンサークル、けんがくにこない？きょうのごじからたいいくかんでやるんだ。",
+      "v": "Này, đến xem câu lạc bộ cầu lông tớ đang tham gia không? Hôm nay 5 giờ tập ở nhà thể chất.",
+      "khac": [
+        {
+          "kieu": "lịch sự",
+          "t": "よかったら、私が入っているバドミントンサークルを見学しに来ませんか。",
+          "doc": "よかったら、わたしがはいっているバドミントンサークルをけんがくしにきませんか。",
+          "v": "Nếu được, bạn đến xem câu lạc bộ cầu lông tôi đang tham gia không?",
+          "ghiChu": "Mời người chưa thân."
+        }
+      ]
+    },
+    {
+      "ai": "Z",
+      "t": "バドミントン？ベトナムではよく公園でやってたよ。",
+      "doc": "バドミントン？ベトナムではよくこうえんでやってたよ。",
+      "v": "Cầu lông á? Ở Việt Nam tớ hay chơi ở công viên lắm."
+    },
+    {
+      "ai": "M",
+      "t": "え、本当？じゃあ、決まりね。",
+      "doc": "え、ほんとう？じゃあ、きまりね。",
+      "v": "Ơ, thật hả? Vậy chốt nhé."
+    },
+    {
+      "ai": "S",
+      "t": "美咲、その人が言ってた留学生？はじめまして、部長の翔太です。",
+      "doc": "みさき、そのひとがいってたりゅうがくせい？はじめまして、ぶちょうのしょうたです。",
+      "v": "Misaki, đây là cậu du học sinh cậu kể à? Chào cậu, tớ là Shota, trưởng câu lạc bộ."
+    },
+    {
+      "ai": "Z",
+      "t": "はじめまして、ズンです。日本語、まだ下手なんですけど、よろしくお願いします。",
+      "doc": "はじめまして、ズンです。にほんご、まだへたなんですけど、よろしくおねがいします。",
+      "v": "Chào anh, em là Dũng. Tiếng Nhật em còn kém, mong anh giúp đỡ.",
+      "khac": [
+        {
+          "kieu": "thân mật",
+          "t": "ズンです。よろしくね！",
+          "doc": "ズンです。よろしくね！",
+          "v": "Mình là Dũng. Làm quen nhé!",
+          "ghiChu": "Giữa bạn cùng tuổi."
+        },
+        {
+          "kieu": "trang trọng",
+          "t": "はじめまして、ズンと申します。日本語はまだ勉強中ですが、どうぞよろしくお願いいたします。",
+          "doc": "はじめまして、ズンともうします。にほんごはまだべんきょうちゅうですが、どうぞよろしくおねがいいたします。",
+          "v": "Xin chào, tôi tên là Dũng. Tiếng Nhật tôi vẫn đang học, rất mong được giúp đỡ."
+        }
+      ]
+    },
+    {
+      "ai": "S",
+      "t": "全然上手じゃん。てか、敬語じゃなくていいよ。同い年でしょ？",
+      "doc": "ぜんぜんじょうずじゃん。てか、けいごじゃなくていいよ。おないどしでしょ？",
+      "v": "Giỏi quá còn gì. Mà khỏi nói kính ngữ đi. Mình bằng tuổi mà, đúng không?",
+      "np": [
+        {
+          "mau": "〜じゃん／〜なくていい",
+          "giai": "じゃん = じゃない？ (văn nói, “còn gì!”). 敬語じゃなくていい = không cần kính ngữ cũng được; 〜なくていい = không cần ….",
+          "vd": "明日は来なくていいよ。",
+          "vdDoc": "あしたはこなくていいよ。",
+          "vdV": "Mai không cần đến đâu."
+        }
+      ]
+    },
+    {
+      "ai": "Z",
+      "t": "あ、うん。じゃあ……よろしく！",
+      "doc": "あ、うん。じゃあ……よろしく！",
+      "v": "À, ừ. Vậy thì… rất vui được làm quen!"
+    },
+    {
+      "ai": "S",
+      "t": "ズン、強すぎ！あのスマッシュ、どうやって打つの？",
+      "doc": "ズン、つよすぎ！あのスマッシュ、どうやってうつの？",
+      "v": "Dũng, cậu đỉnh quá! Cú đập đó đánh kiểu gì vậy?"
+    },
+    {
+      "ai": "Z",
+      "t": "手首をこう……。あ、日本語で何て言えばいいかわからないから、見せるね。",
+      "doc": "てくびをこう……。あ、にほんごでなんていえばいいかわからないから、みせるね。",
+      "v": "Cổ tay thế này… À, tớ không biết nói bằng tiếng Nhật thế nào, để tớ làm mẫu nhé.",
+      "np": [
+        {
+          "mau": "何て V ばいいか わからない",
+          "giai": "Không biết nên … thế nào: 何て言えばいいかわからない = không biết nói thế nào. 何て = 何と (văn nói).",
+          "vd": "どこから始めればいいかわからない。",
+          "vdDoc": "どこからはじめればいいかわからない。",
+          "vdV": "Không biết nên bắt đầu từ đâu."
+        }
+      ]
+    },
+    {
+      "ai": "S",
+      "t": "それでいいよ。言葉より、見たほうが早いって。",
+      "doc": "それでいいよ。ことばより、みたほうがはやいって。",
+      "v": "Thế là được rồi. Nhìn còn nhanh hơn giải thích ấy chứ."
+    },
+    {
+      "ai": "M",
+      "t": "ほら、ズンくん、もう先生みたいになってる。",
+      "doc": "ほら、ズンくん、もうせんせいみたいになってる。",
+      "v": "Thấy chưa, Dũng thành thầy giáo luôn rồi kìa."
+    },
+    {
+      "ai": "S",
+      "t": "毎週火曜と金曜にやってるから、よかったら入ってよ。終わったらみんなでラーメン行くのが恒例なんだ。",
+      "doc": "まいしゅうかようときんようにやってるから、よかったらはいってよ。おわったらみんなでラーメンいくのがこうれいなんだ。",
+      "v": "Tụi tớ tập thứ Ba và thứ Sáu hằng tuần, thích thì vào nhé. Tập xong cả nhóm đi ăn ramen là lệ rồi.",
+      "khac": [
+        {
+          "kieu": "lịch sự",
+          "t": "毎週火曜日と金曜日に練習しているので、よかったら、ぜひ入ってください。",
+          "doc": "まいしゅうかようびときんようびにれんしゅうしているので、よかったら、ぜひはいってください。",
+          "v": "Chúng tôi tập thứ Ba và thứ Sáu hằng tuần, nếu được thì mời bạn tham gia."
+        }
+      ]
+    },
+    {
+      "ai": "Z",
+      "t": "行く行く！……なんか、久しぶりにこんなに笑った気がする。",
+      "doc": "いくいく！……なんか、ひさしぶりにこんなにわらったきがする。",
+      "v": "Đi chứ đi chứ! …Không hiểu sao, lâu lắm rồi tớ mới cười nhiều thế này.",
+      "khac": [
+        {
+          "kieu": "lịch sự",
+          "t": "ぜひ行きたいです！……なんだか、久しぶりにこんなに笑った気がします。",
+          "doc": "ぜひいきたいです！……なんだか、ひさしぶりにこんなにわらったきがします。",
+          "v": "Tôi rất muốn đi! …Không hiểu sao, lâu lắm rồi tôi mới cười nhiều thế này."
+        }
+      ]
+    },
+    {
+      "ai": "Z",
+      "t": "美咲さん、今日は誘ってくれて、本当にありがとう。",
+      "doc": "みさきさん、きょうはさそってくれて、ほんとうにありがとう。",
+      "v": "Misaki, hôm nay cảm ơn cậu thật nhiều vì đã rủ tớ.",
+      "khac": [
+        {
+          "kieu": "lịch sự",
+          "t": "美咲さん、今日は誘ってくださって、本当にありがとうございました。",
+          "doc": "みさきさん、きょうはさそってくださって、ほんとうにありがとうございました。",
+          "v": "Misaki, hôm nay cảm ơn bạn rất nhiều vì đã rủ tôi.",
+          "ghiChu": "くださって = くれて ở dạng kính ngữ."
+        }
+      ],
+      "np": [
+        {
+          "mau": "V てくれて、ありがとう",
+          "giai": "Cảm ơn ai vì đã làm gì cho mình: thể て + くれて + ありがとう. Lịch sự hơn: 〜てくださって、ありがとうございます.",
+          "vd": "手伝ってくれて、ありがとう。",
+          "vdDoc": "てつだってくれて、ありがとう。",
+          "vdV": "Cảm ơn cậu đã giúp."
+        }
+      ]
+    },
+    {
+      "ai": "M",
+      "t": "どういたしまして。でもね、声をかけたのは私だけど、来るって決めたのはズンくんだよ。",
+      "doc": "どういたしまして。でもね、こえをかけたのはわたしだけど、くるってきめたのはズンくんだよ。",
+      "v": "Không có gì. Nhưng mà này, người rủ là tớ, còn người quyết định đến là cậu đấy."
+    },
+    {
+      "ai": "Z",
+      "t": "……そうだね。次は僕が、一人でいる新入生に声をかけてみようかな。",
+      "doc": "……そうだね。つぎはぼくが、ひとりでいるしんにゅうせいにこえをかけてみようかな。",
+      "v": "…Ừ nhỉ. Lần tới chắc tớ sẽ thử bắt chuyện với mấy bạn năm nhất đang ngồi một mình.",
+      "np": [
+        {
+          "mau": "V（よ）うかな",
+          "giai": "Tự hỏi, đang tính: “hay là mình … nhỉ”. 声をかけてみようかな = hay mình thử bắt chuyện xem.",
+          "vd": "今日は早く帰ろうかな。",
+          "vdDoc": "きょうははやくかえろうかな。",
+          "vdV": "Hôm nay hay là về sớm nhỉ."
+        }
+      ]
+    },
+    {
+      "ai": "M",
+      "t": "いいね、それ。寂しいって言えるのも、強さだと思うよ。",
+      "doc": "いいね、それ。さびしいっていえるのも、つよさだとおもうよ。",
+      "v": "Hay đấy. Tớ nghĩ dám nói ra “mình thấy lẻ loi” cũng là một kiểu mạnh mẽ."
+    }
   ],
   "tuVung": [
-    { "chu": "楽", "doc": "らく", "nghia": "thoải mái, nhàn, nhẹ nhõm (lạc)", "vd": "この椅子は楽だね。" },
-    { "chu": "元気ないみたい", "doc": "げんきないみたい", "nghia": "có vẻ không khoẻ/không vui (〜みたい: hình như, có vẻ)", "vd": "今日、先生は元気ないみたい。" },
-    { "chu": "半年", "doc": "はんとし", "nghia": "nửa năm (bán niên)", "vd": "日本に来て半年になる。" },
-    { "chu": "解散", "doc": "かいさん", "nghia": "giải tán, ai về nhà nấy", "vd": "今日はここで解散しよう。" },
-    { "chu": "話しかければよかった", "doc": "はなしかければよかった", "nghia": "giá mà đã bắt chuyện (〜ばよかった: tiếc nuối)", "vd": "もっと早く話しかければよかった。" },
-    { "chu": "気にしない", "doc": "きにしない", "nghia": "không để ý, không bận tâm", "vd": "小さいミスは気にしないで。" },
-    { "chu": "見学", "doc": "けんがく", "nghia": "đến xem, tham quan để tìm hiểu (kiến học)", "vd": "工場を見学しました。" },
-    { "chu": "同い年", "doc": "おないどし", "nghia": "bằng tuổi", "vd": "彼とは同い年です。" },
-    { "chu": "恒例", "doc": "こうれい", "nghia": "lệ thường, thông lệ (hằng lệ)", "vd": "年末のパーティーは恒例です。" },
-    { "chu": "誘って", "doc": "さそって", "nghia": "rủ, mời (thể て của 誘う)", "vd": "友達を映画に誘った。" },
-    { "chu": "声をかけて", "doc": "こえをかけて", "nghia": "bắt chuyện, gọi hỏi (声をかける)", "vd": "困っている人に声をかけた。" },
-    { "chu": "寂しい", "doc": "さびしい", "nghia": "buồn vì lẻ loi, nhớ người", "vd": "一人の夜は寂しい。" }
+    {
+      "chu": "楽",
+      "doc": "らく",
+      "nghia": "thoải mái, nhàn, nhẹ nhõm (lạc)",
+      "vd": "この椅子は楽だね。"
+    },
+    {
+      "chu": "元気ないみたい",
+      "doc": "げんきないみたい",
+      "nghia": "có vẻ không khoẻ/không vui (〜みたい: hình như, có vẻ)",
+      "vd": "今日、先生は元気ないみたい。"
+    },
+    {
+      "chu": "半年",
+      "doc": "はんとし",
+      "nghia": "nửa năm (bán niên)",
+      "vd": "日本に来て半年になる。"
+    },
+    {
+      "chu": "解散",
+      "doc": "かいさん",
+      "nghia": "giải tán, ai về nhà nấy",
+      "vd": "今日はここで解散しよう。"
+    },
+    {
+      "chu": "話しかければよかった",
+      "doc": "はなしかければよかった",
+      "nghia": "giá mà đã bắt chuyện (〜ばよかった: tiếc nuối)",
+      "vd": "もっと早く話しかければよかった。"
+    },
+    {
+      "chu": "気にしない",
+      "doc": "きにしない",
+      "nghia": "không để ý, không bận tâm",
+      "vd": "小さいミスは気にしないで。"
+    },
+    {
+      "chu": "見学",
+      "doc": "けんがく",
+      "nghia": "đến xem, tham quan để tìm hiểu (kiến học)",
+      "vd": "工場を見学しました。"
+    },
+    {
+      "chu": "同い年",
+      "doc": "おないどし",
+      "nghia": "bằng tuổi",
+      "vd": "彼とは同い年です。"
+    },
+    {
+      "chu": "恒例",
+      "doc": "こうれい",
+      "nghia": "lệ thường, thông lệ (hằng lệ)",
+      "vd": "年末のパーティーは恒例です。"
+    },
+    {
+      "chu": "誘って",
+      "doc": "さそって",
+      "nghia": "rủ, mời (thể て của 誘う)",
+      "vd": "友達を映画に誘った。"
+    },
+    {
+      "chu": "声をかけて",
+      "doc": "こえをかけて",
+      "nghia": "bắt chuyện, gọi hỏi (声をかける)",
+      "vd": "困っている人に声をかけた。"
+    },
+    {
+      "chu": "寂しい",
+      "doc": "さびしい",
+      "nghia": "buồn vì lẻ loi, nhớ người",
+      "vd": "一人の夜は寂しい。"
+    }
   ],
   "yNghia": "Thấy lẻ loi ở xứ người không phải lỗi của bạn, và nói ra điều đó không làm bạn yếu đi. Một người có thể rủ bạn, nhưng bước đến là do bạn chọn. Rồi một ngày, chính bạn sẽ là người bắt chuyện với ai đó đang ngồi một mình như bạn từng ngồi.",
   "meo": [
@@ -63,9 +385,48 @@
     "Người Nhật mới gặp thường dùng kính ngữ; khi đối phương nói 「敬語じゃなくていいよ」 thì chuyển sang thể thường là thân thiện, không phải vô lễ."
   ],
   "cauHoi": [
-    { "hoi": "Vì sao hồi đầu Dũng không chủ động bắt chuyện?", "chon": ["Vì bận làm thêm", "Vì sợ nói sai tiếng Nhật", "Vì không thích người Nhật", "Vì lớp học quá đông"], "dung": 1, "giai": "「日本語を間違えるのが怖くて」." },
-    { "hoi": "Câu lạc bộ cầu lông tập vào những ngày nào?", "chon": ["Thứ Ba và thứ Sáu", "Thứ Hai và thứ Năm", "Cuối tuần"], "dung": 0, "giai": "「毎週火曜と金曜にやってる」." },
-    { "hoi": "Vì sao Dũng làm mẫu cú đập thay vì giải thích?", "chon": ["Vì Shota muốn quay video", "Vì Dũng muốn khoe", "Vì Misaki nhờ", "Vì Dũng không biết nói bằng tiếng Nhật thế nào"], "dung": 3, "giai": "「日本語で何て言えばいいかわからないから、見せるね」." },
-    { "hoi": "Misaki muốn nhắn Dũng điều gì ở cuối tập?", "chon": ["Dũng nên học tiếng Nhật chăm hơn", "Dũng nên cảm ơn Shota", "Chính Dũng đã chọn đến, và dám nói ra cảm giác lẻ loi là mạnh mẽ", "Dũng nên làm trưởng câu lạc bộ"], "dung": 2, "giai": "「来るって決めたのはズンくんだよ」「寂しいって言えるのも、強さだと思うよ」." }
+    {
+      "hoi": "Vì sao hồi đầu Dũng không chủ động bắt chuyện?",
+      "chon": [
+        "Vì bận làm thêm",
+        "Vì sợ nói sai tiếng Nhật",
+        "Vì không thích người Nhật",
+        "Vì lớp học quá đông"
+      ],
+      "dung": 1,
+      "giai": "「日本語を間違えるのが怖くて」."
+    },
+    {
+      "hoi": "Câu lạc bộ cầu lông tập vào những ngày nào?",
+      "chon": [
+        "Thứ Ba và thứ Sáu",
+        "Thứ Hai và thứ Năm",
+        "Cuối tuần"
+      ],
+      "dung": 0,
+      "giai": "「毎週火曜と金曜にやってる」."
+    },
+    {
+      "hoi": "Vì sao Dũng làm mẫu cú đập thay vì giải thích?",
+      "chon": [
+        "Vì Shota muốn quay video",
+        "Vì Dũng muốn khoe",
+        "Vì Misaki nhờ",
+        "Vì Dũng không biết nói bằng tiếng Nhật thế nào"
+      ],
+      "dung": 3,
+      "giai": "「日本語で何て言えばいいかわからないから、見せるね」."
+    },
+    {
+      "hoi": "Misaki muốn nhắn Dũng điều gì ở cuối tập?",
+      "chon": [
+        "Dũng nên học tiếng Nhật chăm hơn",
+        "Dũng nên cảm ơn Shota",
+        "Chính Dũng đã chọn đến, và dám nói ra cảm giác lẻ loi là mạnh mẽ",
+        "Dũng nên làm trưởng câu lạc bộ"
+      ],
+      "dung": 2,
+      "giai": "「来るって決めたのはズンくんだよ」「寂しいって言えるのも、強さだと思うよ」."
+    }
   ]
 }

@@ -1,0 +1,526 @@
+{
+  "id": "en-ds-b2-01",
+  "nn": "en",
+  "danhMuc": "doi-song",
+  "cap": "B2",
+  "so": 1,
+  "tieuDe": "Is the Rent Negotiable?",
+  "tieuDeViet": "Giá thuê có thương lượng được không?",
+  "moTa": "Phong đi xem một căn hộ ở nước ngoài và thích ngay — nhưng giá vượt ngân sách. Anh hỏi rõ tiền điện nước, tiền cọc, sửa chữa, báo trước khi chuyển đi, rồi thương lượng giá một cách lịch sự mà chắc chắn, và đòi mọi điều khoản phải ghi vào hợp đồng.",
+  "chuDe": "Thuê nhà",
+  "bieuTuong": "key.fill",
+  "nguoi": [
+    {
+      "ma": "M",
+      "ten": "Margaret",
+      "giong": "uk-nu",
+      "vai": "chủ nhà"
+    },
+    {
+      "ma": "P",
+      "ten": "Phong",
+      "giong": "us-nam",
+      "vai": "người thuê"
+    }
+  ],
+  "loi": [
+    {
+      "ai": "M",
+      "t": "So, this is the living room. As you can see, it gets plenty of light in the morning.",
+      "v": "Đây là phòng khách. Như anh thấy đấy, buổi sáng phòng rất nhiều ánh sáng."
+    },
+    {
+      "ai": "P",
+      "t": "It's lovely. Much brighter than it looked in the photos.",
+      "v": "Đẹp quá. Sáng hơn nhiều so với trong ảnh.",
+      "np": [
+        {
+          "mau": "much + so sánh hơn + than",
+          "giai": "\"much / a lot / far\" đặt trước so sánh hơn để nhấn mạnh: much brighter, far cheaper.",
+          "vd": "This flat is far quieter than my old one.",
+          "vdV": "Căn hộ này yên tĩnh hơn hẳn căn cũ của tôi."
+        }
+      ]
+    },
+    {
+      "ai": "M",
+      "t": "And the bedroom's through here. All the furniture's included.",
+      "v": "Còn phòng ngủ ở lối này. Toàn bộ nội thất đã bao gồm."
+    },
+    {
+      "ai": "P",
+      "t": "Great. Can I ask what's included in the rent? Are the bills part of it?",
+      "v": "Tuyệt. Cho tôi hỏi giá thuê gồm những gì? Có gồm các hoá đơn không?",
+      "khac": [
+        {
+          "kieu": "chuyên nghiệp",
+          "t": "Could you tell me exactly what the rent covers?",
+          "v": "Chị cho tôi biết chính xác giá thuê bao gồm những gì?"
+        },
+        {
+          "kieu": "ngắn gọn",
+          "t": "Are bills included?",
+          "v": "Có gồm điện nước không?"
+        }
+      ],
+      "np": [
+        {
+          "mau": "Can I ask what's included…?",
+          "giai": "Câu hỏi gián tiếp sau \"Can I ask / Do you know\": giữ trật tự câu kể (what's included), không đảo trợ động từ.",
+          "vd": "Do you know when the contract starts?",
+          "vdV": "Chị có biết khi nào hợp đồng bắt đầu không?"
+        }
+      ]
+    },
+    {
+      "ai": "M",
+      "t": "Water and internet are included. Electricity and gas are separate.",
+      "v": "Nước và internet đã bao gồm. Điện và gas tính riêng."
+    },
+    {
+      "ai": "P",
+      "t": "I see. And roughly how much is electricity in summer, with the air conditioning on?",
+      "v": "Tôi hiểu. Vậy mùa hè bật máy lạnh thì tiền điện khoảng bao nhiêu?",
+      "khac": [
+        {
+          "kieu": "tự nhiên hơn",
+          "t": "Do you have a rough idea of the summer electricity bills?",
+          "v": "Chị có ước lượng tiền điện mùa hè không?"
+        }
+      ]
+    },
+    {
+      "ai": "M",
+      "t": "The last tenant paid around eighty a month.",
+      "v": "Người thuê trước trả khoảng tám mươi một tháng."
+    },
+    {
+      "ai": "P",
+      "t": "Okay. And the rent is twelve hundred a month, right?",
+      "v": "Vâng. Còn tiền thuê là một nghìn hai trăm mỗi tháng, đúng không?"
+    },
+    {
+      "ai": "M",
+      "t": "That's right. Plus a deposit of one month's rent.",
+      "v": "Đúng vậy. Cộng thêm tiền cọc bằng một tháng tiền nhà.",
+      "np": [
+        {
+          "mau": "one month's rent",
+          "giai": "Sở hữu cách với thời gian: a week's holiday, two days' work, one month's rent.",
+          "vd": "I need a week's notice.",
+          "vdV": "Tôi cần được báo trước một tuần."
+        }
+      ]
+    },
+    {
+      "ai": "P",
+      "t": "To be honest, that's a bit over my budget. Is there any flexibility on the price?",
+      "v": "Thật lòng thì mức đó hơi vượt ngân sách của tôi. Giá có thể linh động chút nào không?",
+      "khac": [
+        {
+          "kieu": "mềm mỏng",
+          "t": "I really like the place, but it's slightly more than I was hoping to pay. Is the rent negotiable at all?",
+          "v": "Tôi rất thích căn này, nhưng giá hơi cao hơn mức tôi dự tính. Giá thuê có thương lượng được chút nào không?"
+        },
+        {
+          "kieu": "ngắn gọn",
+          "t": "Is the rent negotiable?",
+          "v": "Giá thuê có thương lượng được không?"
+        },
+        {
+          "kieu": "chuyên nghiệp",
+          "t": "Would you consider a slightly lower rent?",
+          "v": "Chị có cân nhắc mức thuê thấp hơn một chút không?"
+        }
+      ],
+      "np": [
+        {
+          "mau": "be over (my) budget",
+          "giai": "Vượt ngân sách. Ngược lại: within budget, under budget.",
+          "vd": "The trip went over budget.",
+          "vdV": "Chuyến đi bị vượt ngân sách."
+        },
+        {
+          "mau": "Is there any flexibility on + N?",
+          "giai": "Hỏi lịch sự có thể linh động/giảm không — nhẹ hơn hỏi thẳng \"Can you lower the price?\".",
+          "vd": "Is there any flexibility on the start date?",
+          "vdV": "Ngày bắt đầu có linh động được không?"
+        }
+      ]
+    },
+    {
+      "ai": "M",
+      "t": "What did you have in mind?",
+      "v": "Anh định mức bao nhiêu?",
+      "khac": [
+        {
+          "kieu": "tự nhiên hơn",
+          "t": "What were you thinking?",
+          "v": "Anh nghĩ khoảng bao nhiêu?"
+        }
+      ],
+      "np": [
+        {
+          "mau": "have + sth + in mind",
+          "giai": "Đang nghĩ tới, đang dự tính điều gì.",
+          "vd": "Do you have a date in mind?",
+          "vdV": "Anh đã nghĩ tới ngày nào chưa?"
+        }
+      ]
+    },
+    {
+      "ai": "P",
+      "t": "Would you consider eleven hundred if I signed a twelve-month contract?",
+      "v": "Chị có cân nhắc mức một nghìn một trăm nếu tôi ký hợp đồng mười hai tháng không?",
+      "khac": [
+        {
+          "kieu": "lịch sự",
+          "t": "I was wondering if you'd accept eleven hundred for a one-year lease.",
+          "v": "Tôi đang nghĩ liệu chị có đồng ý một nghìn một trăm cho hợp đồng một năm không."
+        }
+      ],
+      "np": [
+        {
+          "mau": "Would you… if I + quá khứ?",
+          "giai": "Câu điều kiện loại 2 dùng để đề nghị giả định: mềm hơn, để người kia dễ từ chối mà không mất mặt.",
+          "vd": "Would you lower the price if I paid in cash?",
+          "vdV": "Chị có giảm giá nếu tôi trả tiền mặt không?"
+        }
+      ]
+    },
+    {
+      "ai": "M",
+      "t": "Eleven hundred is quite low for this area. Most flats on this street go for at least twelve.",
+      "v": "Một nghìn một trăm khá thấp cho khu này. Phần lớn căn hộ trên phố này đều cho thuê ít nhất một nghìn hai.",
+      "np": [
+        {
+          "mau": "go for + giá",
+          "giai": "Được bán/cho thuê với giá bao nhiêu (văn nói).",
+          "vd": "Houses here go for about half a million.",
+          "vdV": "Nhà ở đây được bán khoảng nửa triệu."
+        }
+      ]
+    },
+    {
+      "ai": "P",
+      "t": "I understand. But I'm a quiet tenant, I don't smoke, and I could pay three months in advance.",
+      "v": "Tôi hiểu. Nhưng tôi là người thuê yên tĩnh, không hút thuốc, và tôi có thể trả trước ba tháng.",
+      "np": [
+        {
+          "mau": "in advance",
+          "giai": "Trước (thời hạn): pay in advance, book in advance.",
+          "vd": "Please book in advance.",
+          "vdV": "Vui lòng đặt trước."
+        }
+      ]
+    },
+    {
+      "ai": "M",
+      "t": "Three months upfront... That does help. How about we meet halfway, at eleven fifty?",
+      "v": "Trả trước ba tháng... Cái đó đúng là có ích. Hay mình gặp nhau ở giữa, một nghìn một trăm năm mươi nhé?",
+      "np": [
+        {
+          "mau": "do / does + V (nhấn mạnh)",
+          "giai": "Thêm do/does trước động từ trong câu khẳng định để nhấn mạnh: \"That does help\" = cái đó thật sự có ích.",
+          "vd": "I do like your idea.",
+          "vdV": "Tôi thật sự thích ý của anh."
+        },
+        {
+          "mau": "meet halfway",
+          "giai": "Mỗi bên nhượng một nửa — thoả hiệp.",
+          "vd": "You want 10, I want 20 — let's meet halfway at 15.",
+          "vdV": "Anh muốn 10, tôi muốn 20 — mình chốt giữa, 15 nhé."
+        }
+      ]
+    },
+    {
+      "ai": "P",
+      "t": "Eleven fifty sounds fair. Could we go over a few other terms before I agree?",
+      "v": "Một nghìn một trăm năm mươi nghe hợp lý. Mình xem qua vài điều khoản khác trước khi tôi đồng ý được không?",
+      "khac": [
+        {
+          "kieu": "chuyên nghiệp",
+          "t": "That works for me in principle. Could we go through the other terms first?",
+          "v": "Về nguyên tắc thì tôi đồng ý. Mình xem qua các điều khoản khác trước nhé?"
+        }
+      ]
+    },
+    {
+      "ai": "M",
+      "t": "Of course. Go ahead.",
+      "v": "Tất nhiên. Anh cứ hỏi."
+    },
+    {
+      "ai": "P",
+      "t": "If something breaks — say, the washing machine — who's responsible for fixing it?",
+      "v": "Nếu có thứ gì hỏng — ví dụ máy giặt — ai chịu trách nhiệm sửa?",
+      "np": [
+        {
+          "mau": "say (= ví dụ)",
+          "giai": "Chen \"say\" giữa câu để đưa một ví dụ: \"say, the washing machine\".",
+          "vd": "Let's meet early — say, eight o'clock?",
+          "vdV": "Gặp sớm nhé — chẳng hạn tám giờ?"
+        },
+        {
+          "mau": "be responsible for + V-ing",
+          "giai": "Chịu trách nhiệm làm gì.",
+          "vd": "Who's responsible for cleaning the stairs?",
+          "vdV": "Ai chịu trách nhiệm lau cầu thang?"
+        }
+      ]
+    },
+    {
+      "ai": "M",
+      "t": "Anything that breaks through normal use, I'll fix. If it's damaged by the tenant, the tenant pays.",
+      "v": "Thứ gì hỏng do dùng bình thường thì tôi sửa. Nếu người thuê làm hỏng thì người thuê trả."
+    },
+    {
+      "ai": "P",
+      "t": "That's fair. And how much notice do I need to give if I want to move out?",
+      "v": "Hợp lý. Còn nếu tôi muốn chuyển đi thì phải báo trước bao lâu?",
+      "khac": [
+        {
+          "kieu": "trang trọng",
+          "t": "What's the notice period if I decide to move out?",
+          "v": "Thời hạn báo trước là bao lâu nếu tôi quyết định chuyển đi?"
+        }
+      ],
+      "np": [
+        {
+          "mau": "give notice",
+          "giai": "Báo trước (chấm dứt hợp đồng thuê, nghỉ việc). \"notice period\" = thời hạn báo trước.",
+          "vd": "I gave two weeks' notice at work.",
+          "vdV": "Tôi đã báo nghỉ việc trước hai tuần."
+        }
+      ]
+    },
+    {
+      "ai": "M",
+      "t": "One month's notice, in writing.",
+      "v": "Báo trước một tháng, bằng văn bản."
+    },
+    {
+      "ai": "P",
+      "t": "What about the deposit? When would I get it back?",
+      "v": "Còn tiền cọc thì sao? Khi nào tôi được nhận lại?"
+    },
+    {
+      "ai": "M",
+      "t": "Within two weeks of you moving out, as long as the flat's in good condition.",
+      "v": "Trong vòng hai tuần sau khi anh chuyển đi, miễn là căn hộ còn trong tình trạng tốt.",
+      "np": [
+        {
+          "mau": "as long as + mệnh đề",
+          "giai": "Miễn là, với điều kiện là.",
+          "vd": "You can borrow my car as long as you're careful.",
+          "vdV": "Anh mượn xe được, miễn là cẩn thận."
+        }
+      ]
+    },
+    {
+      "ai": "P",
+      "t": "Would you mind if I took photos of everything today, before I move in? Just so we both have a record.",
+      "v": "Chị có phiền không nếu hôm nay tôi chụp ảnh mọi thứ trước khi dọn vào? Để cả hai bên đều có bằng chứng.",
+      "khac": [
+        {
+          "kieu": "mềm mỏng",
+          "t": "I hope you don't mind, but I'd like to take a few photos before I move in — just for both our records.",
+          "v": "Mong chị không phiền, tôi muốn chụp vài tấm ảnh trước khi dọn vào — để hai bên cùng lưu."
+        }
+      ],
+      "np": [
+        {
+          "mau": "Would you mind if I + quá khứ?",
+          "giai": "Xin phép rất lịch sự. Dùng quá khứ (took) cho nhẹ nhàng hơn \"Do you mind if I take…\".",
+          "vd": "Would you mind if I opened the window?",
+          "vdV": "Chị có phiền nếu tôi mở cửa sổ không?"
+        }
+      ]
+    },
+    {
+      "ai": "M",
+      "t": "Not at all. That's actually very sensible.",
+      "v": "Không phiền gì. Thật ra làm vậy rất khôn ngoan."
+    },
+    {
+      "ai": "P",
+      "t": "And one last thing — I'd like everything we've agreed in the contract: the rent, the repairs, the notice period and the deposit.",
+      "v": "Và việc cuối cùng — tôi muốn mọi điều mình đã thống nhất đều ghi vào hợp đồng: tiền thuê, sửa chữa, thời hạn báo trước và tiền cọc.",
+      "khac": [
+        {
+          "kieu": "chuyên nghiệp",
+          "t": "Could we make sure all of that is written into the contract?",
+          "v": "Mình đảm bảo tất cả những điều đó được ghi vào hợp đồng nhé?"
+        },
+        {
+          "kieu": "mềm mỏng",
+          "t": "Would it be okay to put everything we've discussed in writing?",
+          "v": "Mình ghi lại mọi điều đã bàn thành văn bản có được không chị?"
+        }
+      ]
+    },
+    {
+      "ai": "M",
+      "t": "Of course. I'll send you a draft by Friday, so you can read it carefully before you sign.",
+      "v": "Tất nhiên. Tôi sẽ gửi bản nháp trước thứ Sáu để anh đọc kỹ trước khi ký."
+    },
+    {
+      "ai": "P",
+      "t": "Thank you. I really appreciate you being so flexible.",
+      "v": "Cảm ơn chị. Tôi thật sự cảm kích vì chị đã linh động như vậy.",
+      "khac": [
+        {
+          "kieu": "trang trọng",
+          "t": "Thank you for being so accommodating.",
+          "v": "Cảm ơn chị đã tạo điều kiện như vậy."
+        }
+      ],
+      "np": [
+        {
+          "mau": "appreciate + O + V-ing",
+          "giai": "Cảm kích việc ai đó làm gì: I appreciate you helping me.",
+          "vd": "I appreciate you calling me back.",
+          "vdV": "Cảm ơn anh đã gọi lại cho tôi."
+        }
+      ]
+    },
+    {
+      "ai": "M",
+      "t": "Well, a good tenant is worth more than fifty dollars a month.",
+      "v": "Chà, một người thuê tốt đáng giá hơn năm mươi đô một tháng."
+    }
+  ],
+  "tuVung": [
+    {
+      "chu": "bills",
+      "doc": "/bɪlz/",
+      "nghia": "hoá đơn (điện, nước…)",
+      "vd": "Bills are about $100 a month."
+    },
+    {
+      "chu": "tenant",
+      "doc": "/ˈtenənt/",
+      "nghia": "người thuê nhà",
+      "vd": "The tenant pays for electricity."
+    },
+    {
+      "chu": "deposit",
+      "doc": "/dɪˈpɒzɪt/",
+      "nghia": "tiền cọc",
+      "vd": "You will get your deposit back."
+    },
+    {
+      "chu": "over my budget",
+      "doc": "/ˈəʊvə maɪ ˈbʌdʒɪt/",
+      "nghia": "vượt ngân sách của tôi",
+      "vd": "That's a bit over my budget."
+    },
+    {
+      "chu": "flexibility",
+      "doc": "/ˌfleksəˈbɪləti/",
+      "nghia": "sự linh động",
+      "vd": "Is there any flexibility on the price?"
+    },
+    {
+      "chu": "in advance",
+      "doc": "/ɪn ədˈvɑːns/",
+      "nghia": "trước (thời hạn)",
+      "vd": "You need to pay in advance."
+    },
+    {
+      "chu": "upfront",
+      "doc": "/ˌʌpˈfrʌnt/",
+      "nghia": "trả trước",
+      "vd": "They want three months upfront."
+    },
+    {
+      "chu": "meet halfway",
+      "doc": "/miːt ˌhɑːfˈweɪ/",
+      "nghia": "thoả hiệp, mỗi bên nhường một nửa",
+      "vd": "Let's meet halfway."
+    },
+    {
+      "chu": "responsible for",
+      "doc": "/rɪˈspɒnsəbl fə(r)/",
+      "nghia": "chịu trách nhiệm về",
+      "vd": "Who's responsible for repairs?"
+    },
+    {
+      "chu": "notice",
+      "doc": "/ˈnəʊtɪs/",
+      "nghia": "sự báo trước",
+      "vd": "I gave one month's notice."
+    },
+    {
+      "chu": "as long as",
+      "doc": "/æz lɒŋ æz/",
+      "nghia": "miễn là",
+      "vd": "You can stay as long as you like."
+    },
+    {
+      "chu": "sensible",
+      "doc": "/ˈsensəbl/",
+      "nghia": "hợp lý, khôn ngoan",
+      "vd": "That's a sensible idea."
+    }
+  ],
+  "yNghia": "Thương lượng không phải là đòi hỏi — đó là cho người kia một lý do để nói \"có\". Phong không chỉ xin giảm giá mà đưa ra thứ chủ nhà cần: hợp đồng dài, trả trước, một người thuê đáng tin. Và lời hứa miệng dễ quên: điều gì đã thống nhất thì ghi vào hợp đồng.",
+  "meo": [
+    "Hỏi giá có giảm không mà vẫn lịch sự: \"Is there any flexibility on the price?\", \"Is the rent negotiable?\", \"Would you consider… if I…?\".",
+    "Câu điều kiện loại 2 (\"Would you… if I signed…?\") giúp đề nghị nghe như giả định, dễ chấp nhận và dễ từ chối.",
+    "Trước khi ký: hỏi rõ bills, deposit, repairs, notice period; chụp ảnh hiện trạng; \"I'd like everything in writing\".",
+    "Anh: flat, Mỹ: apartment. \"go for + giá\" = được cho thuê/bán với giá."
+  ],
+  "cauHoi": [
+    {
+      "hoi": "Giá thuê cuối cùng hai bên thống nhất là bao nhiêu?",
+      "chon": [
+        "1.100",
+        "1.150",
+        "1.200"
+      ],
+      "dung": 1,
+      "giai": "Chủ nhà đề nghị \"meet halfway, at eleven fifty\" và Phong đồng ý."
+    },
+    {
+      "hoi": "Phong đưa ra điều gì để thuyết phục chủ nhà?",
+      "chon": [
+        "Hứa sửa nhà miễn phí",
+        "Ký hợp đồng 12 tháng, trả trước ba tháng, không hút thuốc",
+        "Dọn vào ngay hôm nay"
+      ],
+      "dung": 1,
+      "giai": "Anh cho chủ nhà lý do để đồng ý."
+    },
+    {
+      "hoi": "Ai trả tiền khi đồ hỏng do dùng bình thường?",
+      "chon": [
+        "Người thuê",
+        "Chia đôi",
+        "Chủ nhà"
+      ],
+      "dung": 2,
+      "giai": "\"Anything that breaks through normal use, I'll fix.\""
+    },
+    {
+      "hoi": "Vì sao Phong muốn chụp ảnh căn hộ trước khi dọn vào?",
+      "chon": [
+        "Để đăng mạng",
+        "Để cả hai bên có bằng chứng về tình trạng ban đầu",
+        "Để gửi cho bố mẹ"
+      ],
+      "dung": 1,
+      "giai": "\"Just so we both have a record.\" — giúp lấy lại tiền cọc dễ dàng."
+    },
+    {
+      "hoi": "\"Would you consider eleven hundred if I signed a twelve-month contract?\" thuộc loại câu nào?",
+      "chon": [
+        "Điều kiện loại 1",
+        "Điều kiện loại 2",
+        "Câu bị động"
+      ],
+      "dung": 1,
+      "giai": "would + V… if + quá khứ = điều kiện loại 2, dùng để đề nghị mềm mỏng."
+    }
+  ]
+}

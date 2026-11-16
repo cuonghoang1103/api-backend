@@ -1,0 +1,302 @@
+{
+  "id": "zh-cs-hsk6-02",
+  "nn": "zh",
+  "danhMuc": "chia-se",
+  "cap": "HSK6",
+  "so": 2,
+  "tieuDe": "辞掉铁饭碗以后",
+  "tieuDeViet": "Sau khi bỏ \"bát cơm sắt\"",
+  "moTa": "Trình Viễn bỏ mười năm làm ngân hàng để làm nghề mộc. Anh không kể chuyện \"dũng cảm theo đuổi đam mê rồi thành công\", mà kể hai năm suýt cạn tiền, bước ngoặt tình cờ, và ba điều anh sẽ làm khác nếu được chọn lại.",
+  "chuDe": "Nghề nghiệp & đam mê",
+  "bieuTuong": "hammer.fill",
+  "nguoi": [
+    { "ma": "C", "ten": "Trình Viễn", "giong": "zh-nam", "vai": "người kể chuyện, thợ mộc, cựu nhân viên ngân hàng" }
+  ],
+  "loi": [
+    {
+      "ai": "C",
+      "t": "大家好，我是程远。三年前，我做了一个让身边几乎所有人都反对的决定：辞掉银行的工作，去做木工。",
+      "doc": "Dàjiā hǎo, wǒ shì Chéng Yuǎn. Sān nián qián, wǒ zuò le yí ge ràng shēnbiān jīhū suǒyǒu rén dōu fǎnduì de juédìng: cí diào yínháng de gōngzuò, qù zuò mùgōng.",
+      "v": "Chào mọi người, tôi là Trình Viễn. Ba năm trước, tôi đưa ra một quyết định mà gần như mọi người xung quanh đều phản đối: bỏ việc ở ngân hàng để đi làm thợ mộc."
+    },
+    {
+      "ai": "C",
+      "t": "今天这期节目，我不打算讲一个“勇敢追梦、最后成功”的故事，因为那样的故事未必是真实的全部。",
+      "doc": "Jīntiān zhè qī jiémù, wǒ bù dǎsuan jiǎng yí ge “yǒnggǎn zhuī mèng, zuìhòu chénggōng” de gùshi, yīnwèi nàyàng de gùshi wèibì shì zhēnshí de quánbù.",
+      "v": "Số này, tôi không định kể một câu chuyện kiểu \"dũng cảm theo đuổi ước mơ, cuối cùng thành công\", vì những câu chuyện như thế chưa chắc đã là toàn bộ sự thật.",
+      "np": [
+        { "mau": "未必", "giai": "未必 = chưa chắc, không hẳn — phủ định nhẹ, lịch sự hơn 不一定 một chút, hay gặp trong văn viết.", "vd": "贵的东西未必就好。", "vdDoc": "Guì de dōngxi wèibì jiù hǎo.", "vdV": "Đồ đắt chưa chắc đã tốt." }
+      ]
+    },
+    {
+      "ai": "C",
+      "t": "我在银行干了整整十年，收入稳定，福利也好，在父母眼里，这就是所谓的“铁饭碗”。",
+      "doc": "Wǒ zài yínháng gàn le zhěngzhěng shí nián, shōurù wěndìng, fúlì yě hǎo, zài fùmǔ yǎn li, zhè jiù shì suǒwèi de “tiě fànwǎn”.",
+      "v": "Tôi làm ở ngân hàng tròn mười năm, thu nhập ổn định, phúc lợi cũng tốt, trong mắt bố mẹ, đó chính là cái gọi là \"bát cơm sắt\".",
+      "np": [
+        { "mau": "所谓(的) + N", "giai": "所谓 = cái gọi là — dẫn ra một khái niệm/cách nói quen thuộc; đôi khi mang ý hoài nghi.", "vd": "这就是所谓的“熟能生巧”。", "vdDoc": "Zhè jiù shì suǒwèi de “shú néng shēng qiǎo”.", "vdV": "Đây chính là cái gọi là \"quen tay hay việc\"." }
+      ]
+    },
+    {
+      "ai": "C",
+      "t": "可是每天坐在电脑前审核贷款材料，我时常有一种说不出来的空虚感。",
+      "doc": "Kěshì měitiān zuò zài diànnǎo qián shěnhé dàikuǎn cáiliào, wǒ shícháng yǒu yì zhǒng shuō bu chūlai de kōngxū gǎn.",
+      "v": "Nhưng ngày nào cũng ngồi trước máy tính thẩm định hồ sơ vay, tôi thường có một cảm giác trống rỗng không nói thành lời."
+    },
+    {
+      "ai": "C",
+      "t": "唯一让我觉得时间过得飞快的，是周末在阳台上做木工。",
+      "doc": "Wéiyī ràng wǒ juéde shíjiān guò de fēikuài de, shì zhōumò zài yángtái shang zuò mùgōng.",
+      "v": "Điều duy nhất khiến tôi thấy thời gian trôi vèo vèo là cuối tuần làm đồ mộc ngoài ban công."
+    },
+    {
+      "ai": "C",
+      "t": "一块普通的木头，经过刨、锯、打磨，慢慢变成一把椅子。那种踏实感，是任何报表都给不了我的。",
+      "doc": "Yí kuài pǔtōng de mùtou, jīngguò bào, jù, dǎmó, mànmàn biàn chéng yì bǎ yǐzi. Nà zhǒng tāshi gǎn, shì rènhé bàobiǎo dōu gěi bu liǎo wǒ de.",
+      "v": "Một khúc gỗ bình thường, qua bào, cưa, đánh nhẵn, dần dần thành một chiếc ghế. Cảm giác vững chãi ấy, không bảng báo cáo nào cho tôi được.",
+      "np": [
+        { "mau": "任何 + N + 都 + (不) + V", "giai": "任何 = bất kỳ… nào; luôn đi với 都 phía sau: 任何人都可以, 任何报表都给不了.", "vd": "任何问题都可以问我。", "vdDoc": "Rènhé wèntí dōu kěyǐ wèn wǒ.", "vdV": "Bất kỳ câu hỏi nào cũng có thể hỏi tôi." }
+      ]
+    },
+    {
+      "ai": "C",
+      "t": "三十二岁那年，我终于递交了辞职信。",
+      "doc": "Sānshí'èr suì nà nián, wǒ zhōngyú dìjiāo le cízhí xìn.",
+      "v": "Năm ba mươi hai tuổi, cuối cùng tôi cũng nộp đơn xin nghỉ việc."
+    },
+    {
+      "ai": "C",
+      "t": "我母亲知道以后，整整一个星期没跟我说话。父亲倒是只问了一句：“你想清楚了吗？”",
+      "doc": "Wǒ mǔqīn zhīdào yǐhòu, zhěngzhěng yí ge xīngqī méi gēn wǒ shuōhuà. Fùqīn dàoshì zhǐ wèn le yí jù: “Nǐ xiǎng qīngchu le ma?”",
+      "v": "Mẹ tôi biết chuyện thì tròn một tuần không nói chuyện với tôi. Bố thì lại chỉ hỏi đúng một câu: \"Con nghĩ kỹ chưa?\"",
+      "khac": [
+        { "kieu": "văn nói", "t": "这事儿你想好了没有？", "doc": "Zhè shìr nǐ xiǎng hǎo le méiyǒu?", "v": "Chuyện này con nghĩ kỹ chưa đấy?", "ghiChu": "giọng bố mẹ miền Bắc, có 儿化" },
+        { "kieu": "trang trọng", "t": "你考虑清楚后果了吗？", "doc": "Nǐ kǎolǜ qīngchu hòuguǒ le ma?", "v": "Con đã cân nhắc kỹ hậu quả chưa?", "ghiChu": "nghiêm khắc hơn, nhấn vào hậu quả" }
+      ],
+      "np": [
+        { "mau": "倒是", "giai": "倒是 = còn… thì lại — đối chiếu với vế trước, chỉ một phản ứng khác hẳn, thường nhẹ nhàng hơn.", "vd": "哥哥很外向，弟弟倒是很安静。", "vdDoc": "Gēge hěn wàixiàng, dìdi dàoshì hěn ānjìng.", "vdV": "Anh trai rất hướng ngoại, em trai thì lại rất trầm." }
+      ]
+    },
+    {
+      "ai": "C",
+      "t": "说实话，我当时以为自己想清楚了，后来才发现，我只想清楚了“喜欢”，却没想清楚“生存”。",
+      "doc": "Shuō shíhuà, wǒ dāngshí yǐwéi zìjǐ xiǎng qīngchu le, hòulái cái fāxiàn, wǒ zhǐ xiǎng qīngchu le “xǐhuan”, què méi xiǎng qīngchu “shēngcún”.",
+      "v": "Nói thật, lúc đó tôi tưởng mình đã nghĩ kỹ, sau này mới phát hiện, tôi chỉ nghĩ kỹ chuyện \"thích\", mà chưa nghĩ kỹ chuyện \"sống được\"."
+    },
+    {
+      "ai": "C",
+      "t": "头一年，我做的家具一件比一件精致，可就是卖不出去。",
+      "doc": "Tóu yì nián, wǒ zuò de jiājù yí jiàn bǐ yí jiàn jīngzhì, kě jiù shì mài bu chūqu.",
+      "v": "Năm đầu, đồ gỗ tôi làm ra món sau tinh xảo hơn món trước, nhưng cứ thế là không bán được."
+    },
+    {
+      "ai": "C",
+      "t": "一张手工餐桌要做一个月，定价低了亏本，定价高了没人买。",
+      "doc": "Yì zhāng shǒugōng cānzhuō yào zuò yí ge yuè, dìngjià dī le kuīběn, dìngjià gāo le méi rén mǎi.",
+      "v": "Một chiếc bàn ăn làm tay mất một tháng, định giá thấp thì lỗ vốn, định giá cao thì không ai mua."
+    },
+    {
+      "ai": "C",
+      "t": "到了第二年年底，我的积蓄只剩下不到原来的五分之一，以至于连工作室的房租都快交不起了。",
+      "doc": "Dào le dì èr nián niándǐ, wǒ de jīxù zhǐ shèngxià bú dào yuánlái de wǔ fēn zhī yī, yǐzhìyú lián gōngzuòshì de fángzū dōu kuài jiāo bu qǐ le.",
+      "v": "Đến cuối năm thứ hai, tiền tích góp của tôi chỉ còn chưa tới một phần năm lúc đầu, đến mức tiền thuê xưởng cũng sắp không trả nổi.",
+      "np": [
+        { "mau": "…，以至于 + kết quả", "giai": "以至于 = đến nỗi, đến mức — dẫn tới một kết quả nghiêm trọng của tình huống trước đó.", "vd": "他太紧张了，以至于忘了要说什么。", "vdDoc": "Tā tài jǐnzhāng le, yǐzhìyú wàng le yào shuō shénme.", "vdV": "Anh ấy hồi hộp quá, đến mức quên mất định nói gì." }
+      ]
+    },
+    {
+      "ai": "C",
+      "t": "那段日子，我不止一次在深夜问自己：倘若当初没有辞职，现在的我会不会更幸福？",
+      "doc": "Nà duàn rìzi, wǒ bùzhǐ yí cì zài shēnyè wèn zìjǐ: tǎngruò dāngchū méiyǒu cízhí, xiànzài de wǒ huì bu huì gèng xìngfú?",
+      "v": "Những ngày đó, không chỉ một lần tôi tự hỏi lúc nửa đêm: giả như ngày ấy không nghỉ việc, liệu tôi bây giờ có hạnh phúc hơn không?",
+      "np": [
+        { "mau": "倘若…，(就)…", "giai": "倘若 = giả như, nếu như — văn viết, trang trọng hơn 如果/要是.", "vd": "倘若有机会，我还想再去一次。", "vdDoc": "Tǎngruò yǒu jīhuì, wǒ hái xiǎng zài qù yí cì.", "vdV": "Giả như có cơ hội, tôi vẫn muốn đi thêm lần nữa." },
+        { "mau": "不止 + số lượng", "giai": "不止 = không chỉ, hơn cả (con số đó): 不止一次 (không chỉ một lần), 不止十个人.", "vd": "这个问题我问过不止三次了。", "vdDoc": "Zhège wèntí wǒ wèn guo bùzhǐ sān cì le.", "vdV": "Câu này tôi hỏi không dưới ba lần rồi." }
+      ]
+    },
+    {
+      "ai": "C",
+      "t": "转机来得很偶然。有一位顾客问我，能不能教她的孩子做一个小木盒。",
+      "doc": "Zhuǎnjī lái de hěn ǒurán. Yǒu yí wèi gùkè wèn wǒ, néng bu néng jiāo tā de háizi zuò yí ge xiǎo mù hé.",
+      "v": "Bước ngoặt đến rất tình cờ. Có một vị khách hỏi tôi có thể dạy con chị ấy làm một chiếc hộp gỗ nhỏ không."
+    },
+    {
+      "ai": "C",
+      "t": "我姑且答应了下来。没想到那个周末，一下子来了五个家庭。",
+      "doc": "Wǒ gūqiě dāying le xiàlai. Méi xiǎngdào nàge zhōumò, yíxiàzi lái le wǔ ge jiātíng.",
+      "v": "Tôi tạm nhận lời. Không ngờ cuối tuần đó, một lúc có tới năm gia đình.",
+      "np": [
+        { "mau": "姑且 + V", "giai": "姑且 = tạm thời cứ…, thôi thì cứ… (chưa chắc chắn nhưng cứ làm thử).", "vd": "这个办法姑且试一试。", "vdDoc": "Zhège bànfǎ gūqiě shì yi shì.", "vdV": "Cách này cứ tạm thử xem." }
+      ]
+    },
+    {
+      "ai": "C",
+      "t": "看着孩子们拿着自己做的木盒，那种骄傲的表情，我不禁想起了第一次做成椅子的自己。",
+      "doc": "Kàn zhe háizimen ná zhe zìjǐ zuò de mù hé, nà zhǒng jiāo'ào de biǎoqíng, wǒ bùjīn xiǎngqǐ le dì yī cì zuò chéng yǐzi de zìjǐ.",
+      "v": "Nhìn bọn trẻ cầm chiếc hộp gỗ tự tay làm, với vẻ mặt tự hào ấy, tôi bất giác nhớ tới chính mình lần đầu làm xong chiếc ghế.",
+      "np": [
+        { "mau": "不禁 + V", "giai": "不禁 = bất giác, không kìm được (cảm xúc tự trào lên): 不禁笑了, 不禁想起.", "vd": "听到这个消息，她不禁哭了起来。", "vdDoc": "Tīngdào zhège xiāoxi, tā bùjīn kū le qǐlai.", "vdV": "Nghe tin này, cô ấy không kìm được mà bật khóc." }
+      ]
+    },
+    {
+      "ai": "C",
+      "t": "我这才意识到，人们愿意花钱买的，与其说是一件家具，不如说是“亲手做出一样东西”的体验。",
+      "doc": "Wǒ zhè cái yìshí dào, rénmen yuànyì huā qián mǎi de, yǔqí shuō shì yí jiàn jiājù, bùrú shuō shì “qīnshǒu zuò chū yí yàng dōngxi” de tǐyàn.",
+      "v": "Đến lúc ấy tôi mới nhận ra, thứ người ta sẵn lòng bỏ tiền ra mua, nói là một món đồ gỗ chi bằng nói là trải nghiệm \"tự tay làm ra một món đồ\".",
+      "np": [
+        { "mau": "与其说 A，不如说 B", "giai": "\"Nói là A chi bằng nói là B\" — gọi tên lại bản chất sự việc cho đúng hơn.", "vd": "这与其说是工作，不如说是爱好。", "vdDoc": "Zhè yǔqí shuō shì gōngzuò, bùrú shuō shì àihào.", "vdV": "Cái này nói là công việc chi bằng nói là sở thích." }
+      ]
+    },
+    {
+      "ai": "C",
+      "t": "于是我调整了方向：家具照样做，但主要收入来自周末的木工课。",
+      "doc": "Yúshì wǒ tiáozhěng le fāngxiàng: jiājù zhàoyàng zuò, dàn zhǔyào shōurù láizì zhōumò de mùgōng kè.",
+      "v": "Thế là tôi đổi hướng: đồ gỗ vẫn làm như cũ, nhưng thu nhập chính đến từ các lớp dạy mộc cuối tuần."
+    },
+    {
+      "ai": "C",
+      "t": "如今，工作室总算能养活自己了。不过我的收入，迄今仍然比在银行的时候少三分之一。",
+      "doc": "Rújīn, gōngzuòshì zǒngsuàn néng yǎnghuo zìjǐ le. Búguò wǒ de shōurù, qìjīn réngrán bǐ zài yínháng de shíhou shǎo sān fēn zhī yī.",
+      "v": "Giờ đây, xưởng cuối cùng cũng tự nuôi được mình. Nhưng thu nhập của tôi, cho đến nay vẫn ít hơn hồi làm ngân hàng một phần ba.",
+      "np": [
+        { "mau": "总算", "giai": "总算 = cuối cùng thì cũng (sau bao vất vả) — mang cảm giác nhẹ nhõm.", "vd": "等了一个小时，车总算来了。", "vdDoc": "Děng le yí ge xiǎoshí, chē zǒngsuàn lái le.", "vdV": "Đợi một tiếng, cuối cùng xe cũng đến." }
+      ]
+    },
+    {
+      "ai": "C",
+      "t": "有人问我，后悔吗？",
+      "doc": "Yǒu rén wèn wǒ, hòuhuǐ ma?",
+      "v": "Có người hỏi tôi, có hối hận không?",
+      "khac": [
+        { "kieu": "tự nhiên hơn", "t": "常有人问我：你后悔过吗？", "doc": "Cháng yǒu rén wèn wǒ: nǐ hòuhuǐ guo ma?", "v": "Hay có người hỏi tôi: anh đã bao giờ hối hận chưa?", "ghiChu": "V过 hỏi về trải nghiệm từng có" }
+      ]
+    },
+    {
+      "ai": "C",
+      "t": "我的回答是：不后悔，但如果能重来一次，我会用不同的方式辞职。",
+      "doc": "Wǒ de huídá shì: bú hòuhuǐ, dàn rúguǒ néng chóng lái yí cì, wǒ huì yòng bùtóng de fāngshì cízhí.",
+      "v": "Câu trả lời của tôi là: không hối hận, nhưng nếu được làm lại, tôi sẽ nghỉ việc theo một cách khác."
+    },
+    {
+      "ai": "C",
+      "t": "所以，假如你也在考虑放弃一份稳定的工作，我想分享三点经验，供你参考。",
+      "doc": "Suǒyǐ, jiǎrú nǐ yě zài kǎolǜ fàngqì yí fèn wěndìng de gōngzuò, wǒ xiǎng fēnxiǎng sān diǎn jīngyàn, gōng nǐ cānkǎo.",
+      "v": "Vì vậy, nếu bạn cũng đang cân nhắc từ bỏ một công việc ổn định, tôi muốn chia sẻ ba điều kinh nghiệm để bạn tham khảo.",
+      "khac": [
+        { "kieu": "văn nói", "t": "如果你也想辞职追梦，下面这几点也许对你有用。", "doc": "Rúguǒ nǐ yě xiǎng cízhí zhuī mèng, xiàmiàn zhè jǐ diǎn yěxǔ duì nǐ yǒuyòng.", "v": "Nếu bạn cũng muốn nghỉ việc theo đuổi ước mơ, mấy điều dưới đây có lẽ có ích cho bạn.", "ghiChu": "giọng trò chuyện, bớt trang trọng" }
+      ],
+      "np": [
+        { "mau": "供 + ai + 参考", "giai": "供 (gōng) = cung cấp cho, để ai đó dùng: 供你参考 (để bạn tham khảo), 供大家选择.", "vd": "这份资料供大家参考。", "vdDoc": "Zhè fèn zīliào gōng dàjiā cānkǎo.", "vdV": "Tài liệu này để mọi người tham khảo." }
+      ]
+    },
+    {
+      "ai": "C",
+      "t": "第一，别急着裸辞。先用业余时间试一试，看看有没有人真的愿意为你的热爱付钱。",
+      "doc": "Dì yī, bié jí zhe luǒcí. Xiān yòng yèyú shíjiān shì yi shì, kànkan yǒu méiyǒu rén zhēn de yuànyì wèi nǐ de rè'ài fù qián.",
+      "v": "Thứ nhất, đừng vội nghỉ việc khi chưa có đường lui. Hãy thử bằng thời gian rảnh trước, xem có ai thật sự sẵn lòng trả tiền cho đam mê của bạn không."
+    },
+    {
+      "ai": "C",
+      "t": "第二，给自己算一笔账：没有收入的情况下，你的积蓄能撑多久？至少留出一年半的生活费。",
+      "doc": "Dì èr, gěi zìjǐ suàn yì bǐ zhàng: méiyǒu shōurù de qíngkuàng xià, nǐ de jīxù néng chēng duō jiǔ? Zhìshǎo liú chū yì nián bàn de shēnghuó fèi.",
+      "v": "Thứ hai, tự tính một bài toán: trong trường hợp không có thu nhập, tiền tích góp của bạn cầm cự được bao lâu? Ít nhất để dành ra chi phí sinh hoạt một năm rưỡi."
+    },
+    {
+      "ai": "C",
+      "t": "第三，提前想好你对“成功”的定义。对我来说，成功不是赚得比以前多，而是每天早上醒来，愿意走进工作室。",
+      "doc": "Dì sān, tíqián xiǎng hǎo nǐ duì “chénggōng” de dìngyì. Duì wǒ lái shuō, chénggōng bú shì zhuàn de bǐ yǐqián duō, ér shì měitiān zǎoshang xǐnglái, yuànyì zǒu jìn gōngzuòshì.",
+      "v": "Thứ ba, nghĩ trước định nghĩa \"thành công\" của bạn. Với tôi, thành công không phải kiếm nhiều hơn trước, mà là mỗi sáng thức dậy, tôi muốn bước vào xưởng."
+    },
+    {
+      "ai": "C",
+      "t": "热爱固然重要，可热爱不能当饭吃。真正能让热爱长久的，恰恰是你愿意为它做的那些不那么浪漫的事：算账、营销、跟客户打交道。",
+      "doc": "Rè'ài gùrán zhòngyào, kě rè'ài bù néng dàng fàn chī. Zhēnzhèng néng ràng rè'ài chángjiǔ de, qiàqià shì nǐ yuànyì wèi tā zuò de nàxiē bú nàme làngmàn de shì: suànzhàng, yíngxiāo, gēn kèhù dǎ jiāodào.",
+      "v": "Đam mê đành là quan trọng, nhưng đam mê không ăn thay cơm được. Thứ thật sự giữ đam mê được lâu, lại chính là những việc chẳng mấy lãng mạn mà bạn sẵn lòng làm vì nó: tính toán sổ sách, tiếp thị, giao thiệp với khách.",
+      "np": [
+        { "mau": "A 固然…，可/但…", "giai": "固然 thừa nhận một sự thật/ưu điểm, vế sau chuyển ý bổ sung điều quan trọng hơn.", "vd": "经验固然重要，可态度更重要。", "vdDoc": "Jīngyàn gùrán zhòngyào, kě tàidu gèng zhòngyào.", "vdV": "Kinh nghiệm đành là quan trọng, nhưng thái độ còn quan trọng hơn." },
+        { "mau": "不能当饭吃", "giai": "Quán ngữ: \"không thể coi như cơm mà ăn\" — một thứ hay ho nhưng không nuôi sống được mình.", "vd": "面子不能当饭吃。", "vdDoc": "Miànzi bù néng dàng fàn chī.", "vdV": "Sĩ diện không ăn thay cơm được." }
+      ]
+    },
+    {
+      "ai": "C",
+      "t": "上个月，我母亲第一次来工作室，报名上了我的课。",
+      "doc": "Shàng ge yuè, wǒ mǔqīn dì yī cì lái gōngzuòshì, bàomíng shàng le wǒ de kè.",
+      "v": "Tháng trước, mẹ tôi lần đầu tiên đến xưởng, đăng ký học lớp của tôi."
+    },
+    {
+      "ai": "C",
+      "t": "她做了一个歪歪扭扭的小板凳，临走的时候说：“这个我要带回家，摆在客厅里。”",
+      "doc": "Tā zuò le yí ge wāiwāiniǔniǔ de xiǎo bǎndèng, lín zǒu de shíhou shuō: “Zhège wǒ yào dài huí jiā, bǎi zài kètīng li.”",
+      "v": "Bà làm một chiếc ghế đẩu nhỏ xiêu xiêu vẹo vẹo, lúc ra về bảo: \"Cái này mẹ mang về, đặt ở phòng khách.\""
+    },
+    {
+      "ai": "C",
+      "t": "那一刻我觉得，这三年所有的不确定，似乎都有了答案。",
+      "doc": "Nà yí kè wǒ juéde, zhè sān nián suǒyǒu de bú quèdìng, sìhū dōu yǒu le dá'àn.",
+      "v": "Khoảnh khắc ấy tôi thấy, mọi điều chưa chắc chắn của ba năm qua dường như đều đã có câu trả lời."
+    },
+    {
+      "ai": "C",
+      "t": "我是程远。愿你找到自己热爱的事，也找到养活这份热爱的办法。我们下期再见。",
+      "doc": "Wǒ shì Chéng Yuǎn. Yuàn nǐ zhǎodào zìjǐ rè'ài de shì, yě zhǎodào yǎnghuo zhè fèn rè'ài de bànfǎ. Wǒmen xià qī zàijiàn.",
+      "v": "Tôi là Trình Viễn. Mong bạn tìm được việc mình yêu thích, và cũng tìm được cách nuôi sống tình yêu ấy. Hẹn gặp lại số sau.",
+      "khac": [
+        { "kieu": "ngắn gọn", "t": "感谢收听，我们下期见。", "doc": "Gǎnxiè shōutīng, wǒmen xià qī jiàn.", "v": "Cảm ơn đã lắng nghe, hẹn gặp số sau.", "ghiChu": "câu kết podcast gọn nhất" }
+      ]
+    }
+  ],
+  "tuVung": [
+    { "chu": "铁饭碗", "doc": "tiě fànwǎn", "nghia": "\"bát cơm sắt\" — công việc ổn định suốt đời", "vd": "很多父母希望孩子找个铁饭碗。" },
+    { "chu": "辞职", "doc": "cízhí", "nghia": "nghỉ việc, từ chức", "vd": "他上个月辞职了。" },
+    { "chu": "裸辞", "doc": "luǒcí", "nghia": "nghỉ việc khi chưa có việc mới (\"nghỉ trần\")", "vd": "没有存款最好别裸辞。" },
+    { "chu": "空虚", "doc": "kōngxū", "nghia": "trống rỗng (tâm trạng)", "vd": "忙完以后反而觉得空虚。" },
+    { "chu": "踏实", "doc": "tāshi", "nghia": "vững vàng, yên tâm, chắc chắn", "vd": "把事情做完，心里才踏实。" },
+    { "chu": "积蓄", "doc": "jīxù", "nghia": "tiền tích góp", "vd": "他把积蓄都投进了工作室。" },
+    { "chu": "以至于", "doc": "yǐzhìyú", "nghia": "đến nỗi, đến mức", "vd": "雨太大了，以至于航班取消了。" },
+    { "chu": "转机", "doc": "zhuǎnjī", "nghia": "bước ngoặt (tốt lên)", "vd": "事情终于有了转机。" },
+    { "chu": "不禁", "doc": "bùjīn", "nghia": "bất giác, không kìm được", "vd": "他不禁笑了。" },
+    { "chu": "养活", "doc": "yǎnghuo", "nghia": "nuôi sống", "vd": "这份工作养活了一家人。" },
+    { "chu": "热爱", "doc": "rè'ài", "nghia": "say mê, yêu tha thiết; đam mê", "vd": "他热爱自己的工作。" },
+    { "chu": "固然", "doc": "gùrán", "nghia": "đành rằng, tất nhiên là", "vd": "钱固然重要，但不是一切。" }
+  ],
+  "yNghia": "Theo đuổi đam mê không phải là một cú nhảy liều, mà là một kế hoạch: thử trước bằng thời gian rảnh, tính xem tiền tích góp cầm cự được bao lâu, và tự định nghĩa thành công của mình. Đam mê không ăn thay cơm được — thứ giữ nó sống lâu là những việc chẳng lãng mạn như tính sổ, tiếp thị, giao thiệp với khách. Và đôi khi lời giải lại đến từ một hướng ta không ngờ.",
+  "meo": [
+    "Liên từ/phó từ HSK6 trong tập: 未必 (chưa chắc) · 所谓 (cái gọi là) · 以至于 (đến mức) · 倘若 (giả như) · 姑且 (tạm cứ) · 不禁 (bất giác) · 迄今 (cho đến nay) · 固然 (đành rằng).",
+    "Kể chuyện có \"cao trào\": 转机来得很偶然 (bước ngoặt đến rất tình cờ) → 我这才意识到… (đến lúc ấy tôi mới nhận ra…).",
+    "Từ thời sự hay gặp: 铁饭碗 (việc ổn định), 裸辞 (nghỉ khi chưa có việc mới), 追梦 (theo đuổi ước mơ), 业余时间 (thời gian rảnh ngoài giờ làm).",
+    "Chữ đa âm: 当饭吃 dàng (coi như) ≠ 当时 dāng; 刨 bào (bào gỗ) ≠ 刨 páo (đào bới); 养活 đọc yǎnghuo (thanh nhẹ).",
+    "Kết podcast: 我们下期再见 — 期 là \"số, kỳ\" của chương trình (这期节目 = số này)."
+  ],
+  "cauHoi": [
+    {
+      "hoi": "Vì sao Trình Viễn nói câu chuyện \"dũng cảm theo đuổi ước mơ rồi thành công\" chưa chắc là toàn bộ sự thật?",
+      "chon": ["Vì anh thất bại hoàn toàn", "Vì anh vẫn làm ở ngân hàng", "Vì anh đã trải qua hai năm suýt cạn tiền và thu nhập vẫn thấp hơn trước"],
+      "dung": 2,
+      "giai": "积蓄只剩下不到原来的五分之一… 收入迄今仍然比在银行的时候少三分之一。"
+    },
+    {
+      "hoi": "Bước ngoặt trong công việc của anh đến từ đâu?",
+      "chon": ["Một khách hàng nhờ dạy con làm hộp gỗ", "Một ngân hàng cho vay vốn", "Một cuộc thi đồ gỗ"],
+      "dung": 0,
+      "giai": "有一位顾客问我，能不能教她的孩子做一个小木盒。"
+    },
+    {
+      "hoi": "Anh nhận ra người ta thực sự trả tiền cho điều gì?",
+      "chon": ["Đồ gỗ giá rẻ", "Trải nghiệm tự tay làm ra một món đồ", "Gỗ quý hiếm"],
+      "dung": 1,
+      "giai": "与其说是一件家具，不如说是“亲手做出一样东西”的体验。"
+    },
+    {
+      "hoi": "Điều nào KHÔNG nằm trong ba lời khuyên của anh?",
+      "chon": ["Đừng vội nghỉ việc khi chưa thử bằng thời gian rảnh", "Để dành ít nhất một năm rưỡi chi phí sinh hoạt", "Vay ngân hàng để mở xưởng ngay"],
+      "dung": 2,
+      "giai": "Ba lời khuyên: 别急着裸辞 · 算一笔账（留出一年半的生活费）· 想好你对“成功”的定义."
+    },
+    {
+      "hoi": "\"热爱不能当饭吃\" có nghĩa là gì?",
+      "chon": ["Đam mê không nuôi sống mình nếu thiếu những việc thực tế đi kèm", "Đừng vừa ăn vừa làm việc", "Người có đam mê thường quên ăn"],
+      "dung": 0,
+      "giai": "Quán ngữ 不能当饭吃 = không ăn thay cơm được — hay nhưng không tự nuôi sống mình."
+    }
+  ]
+}

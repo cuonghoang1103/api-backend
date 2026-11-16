@@ -1,0 +1,321 @@
+{
+  "id": "zh-se-hsk6-01",
+  "nn": "zh",
+  "danhMuc": "phan-mem",
+  "cap": "HSK6",
+  "so": 1,
+  "tieuDe": "要不要拆成微服务？",
+  "tieuDeViet": "Có nên tách thành microservice không?",
+  "moTa": "Kiến trúc sư Hàn đề xuất tách hệ thống nguyên khối thành mười hai microservice. Kỹ sư Vũ Lan đồng ý với nỗi đau nhưng không đồng ý với lời giải — và cô bất đồng bằng số liệu, bằng phương án thay thế có thể kiểm chứng, không bằng cảm tính.",
+  "chuDe": "Kiến trúc hệ thống",
+  "bieuTuong": "square.stack.3d.up.fill",
+  "nguoi": [
+    { "ma": "H", "ten": "Anh Hàn", "giong": "zh-nam", "vai": "kiến trúc sư hệ thống" },
+    { "ma": "W", "ten": "Vũ Lan", "giong": "zh-nu", "vai": "kỹ sư cấp cao người Việt" }
+  ],
+  "loi": [
+    {
+      "ai": "H",
+      "t": "各位，关于下半年的架构调整，我的想法是：把现在的单体系统拆成微服务，大概十二个服务。",
+      "doc": "Gèwèi, guānyú xià bànnián de jiàgòu tiáozhěng, wǒ de xiǎngfǎ shì: bǎ xiànzài de dāntǐ xìtǒng chāi chéng wēi fúwù, dàgài shí'èr ge fúwù.",
+      "v": "Thưa mọi người, về việc điều chỉnh kiến trúc nửa cuối năm, ý tưởng của tôi là: tách hệ thống nguyên khối hiện tại thành microservice, khoảng mười hai service."
+    },
+    {
+      "ai": "H",
+      "t": "现在的代码库越来越臃肿，部署一次要四十分钟，改一个小功能，往往牵一发而动全身。",
+      "doc": "Xiànzài de dàimǎkù yuè lái yuè yōngzhǒng, bùshǔ yí cì yào sìshí fēnzhōng, gǎi yí ge xiǎo gōngnéng, wǎngwǎng qiān yí fà ér dòng quán shēn.",
+      "v": "Kho code hiện giờ ngày càng phình to, mỗi lần deploy mất bốn mươi phút, sửa một tính năng nhỏ thường động một chỗ ảnh hưởng toàn thân.",
+      "np": [
+        { "mau": "牵一发而动全身", "giai": "Thành ngữ: kéo một sợi tóc mà động cả người — thay đổi nhỏ kéo theo ảnh hưởng dây chuyền. Rất hợp để nói về hệ thống \"dính chùm\".", "vd": "这个模块牵一发而动全身，改的时候要特别小心。", "vdDoc": "Zhège mókuài qiān yí fà ér dòng quán shēn, gǎi de shíhou yào tèbié xiǎoxīn.", "vdV": "Module này động một chỗ ảnh hưởng toàn bộ, lúc sửa phải đặc biệt cẩn thận." }
+      ]
+    },
+    {
+      "ai": "W",
+      "t": "韩工，你提到的问题我完全认同，部署慢确实已经影响到了迭代速度。",
+      "doc": "Hán gōng, nǐ tí dào de wèntí wǒ wánquán rèntóng, bùshǔ màn quèshí yǐjīng yǐngxiǎng dào le diédài sùdù.",
+      "v": "Anh Hàn, vấn đề anh nêu tôi hoàn toàn đồng tình, deploy chậm đúng là đã ảnh hưởng tới tốc độ ra phiên bản.",
+      "khac": [
+        { "kieu": "tự nhiên hơn", "t": "你说的这几个痛点，我们组也深有体会。", "doc": "Nǐ shuō de zhè jǐ ge tòngdiǎn, wǒmen zǔ yě shēn yǒu tǐhuì.", "v": "Mấy điểm đau anh nói, nhóm chúng tôi cũng thấm thía.", "ghiChu": "khẳng định điểm chung trước khi bất đồng" }
+      ]
+    },
+    {
+      "ai": "W",
+      "t": "不过，对于“拆成十二个服务”这个方案，我有一些不同的看法，想提出来跟大家讨论。",
+      "doc": "Búguò, duìyú “chāi chéng shí'èr ge fúwù” zhège fāng'àn, wǒ yǒu yìxiē bùtóng de kànfǎ, xiǎng tí chūlai gēn dàjiā tǎolùn.",
+      "v": "Tuy nhiên, với phương án \"tách thành mười hai service\", tôi có vài quan điểm khác, muốn nêu ra để cùng mọi người thảo luận.",
+      "khac": [
+        { "kieu": "mềm mỏng", "t": "这个方案我有点儿保留意见。", "doc": "Zhège fāng'àn wǒ yǒudiǎnr bǎoliú yìjiàn.", "v": "Phương án này tôi hơi có ý kiến dè dặt.", "ghiChu": "保留意见 = chưa hoàn toàn đồng ý, cách nói tế nhị trong họp" },
+        { "kieu": "trang trọng", "t": "恕我直言，这个方案我不太赞成。", "doc": "Shù wǒ zhíyán, zhège fāng'àn wǒ bú tài zànchéng.", "v": "Xin thứ lỗi cho tôi nói thẳng, phương án này tôi không mấy tán thành.", "ghiChu": "恕我直言 — lời rào đón trang trọng trước khi phản đối" }
+      ]
+    },
+    {
+      "ai": "H",
+      "t": "请讲。",
+      "doc": "Qǐng jiǎng.",
+      "v": "Mời chị nói."
+    },
+    {
+      "ai": "W",
+      "t": "微服务固然能让各个模块独立部署，但它在解决问题的同时，也会带来新的问题。",
+      "doc": "Wēi fúwù gùrán néng ràng gège mókuài dúlì bùshǔ, dàn tā zài jiějué wèntí de tóngshí, yě huì dàilái xīn de wèntí.",
+      "v": "Microservice đúng là giúp từng module deploy độc lập, nhưng nó giải quyết vấn đề đồng thời cũng mang tới vấn đề mới.",
+      "np": [
+        { "mau": "A 固然…，但(是)…", "giai": "固然 = \"tất nhiên là, đành rằng\": thừa nhận ưu điểm của A trước, rồi chuyển ý bằng 但/可. Mềm hơn nói thẳng \"nhưng\".", "vd": "价格固然重要，但质量更重要。", "vdDoc": "Jiàgé gùrán zhòngyào, dàn zhìliàng gèng zhòngyào.", "vdV": "Giá cả đành là quan trọng, nhưng chất lượng còn quan trọng hơn." },
+        { "mau": "在 + V + 的同时", "giai": "\"Trong khi/đồng thời với việc…\" — hai việc song hành, thường dùng trong văn trang trọng.", "vd": "在提高速度的同时，也要保证安全。", "vdDoc": "Zài tígāo sùdù de tóngshí, yě yào bǎozhèng ānquán.", "vdV": "Đồng thời với việc tăng tốc độ, cũng phải đảm bảo an toàn." }
+      ]
+    },
+    {
+      "ai": "W",
+      "t": "原来一次函数调用就能完成的事，拆开以后变成了网络请求，要考虑超时、重试、服务发现，还有分布式事务。",
+      "doc": "Yuánlái yí cì hánshù diàoyòng jiù néng wánchéng de shì, chāi kāi yǐhòu biàn chéng le wǎngluò qǐngqiú, yào kǎolǜ chāoshí, chóngshì, fúwù fāxiàn, hái yǒu fēnbùshì shìwù.",
+      "v": "Việc trước đây gọi hàm một lần là xong, tách ra rồi thành request qua mạng, phải tính tới timeout, thử lại, service discovery, và cả giao dịch phân tán."
+    },
+    {
+      "ai": "W",
+      "t": "我们组一共只有八个人。就目前的人手而言，维护十二个服务，平均每人一个半，排查一个问题可能要跨好几个服务看日志。",
+      "doc": "Wǒmen zǔ yígòng zhǐyǒu bā ge rén. Jiù mùqián de rénshǒu ér yán, wéihù shí'èr ge fúwù, píngjūn měi rén yí ge bàn, páichá yí ge wèntí kěnéng yào kuà hǎo jǐ ge fúwù kàn rìzhì.",
+      "v": "Nhóm chúng ta tổng cộng chỉ có tám người. Xét về nhân lực hiện tại, duy trì mười hai service là trung bình mỗi người một cái rưỡi, tra một lỗi có khi phải xem log xuyên qua mấy service.",
+      "np": [
+        { "mau": "就 + N + 而言", "giai": "\"Xét về/riêng đối với N mà nói\" — giới hạn phạm vi nhận định. Văn viết, trang trọng hơn 对…来说.", "vd": "就价格而言，这个方案最便宜。", "vdDoc": "Jiù jiàgé ér yán, zhège fāng'àn zuì piányi.", "vdV": "Xét về giá, phương án này rẻ nhất." }
+      ]
+    },
+    {
+      "ai": "H",
+      "t": "这些问题业界都有成熟的方案，链路追踪、服务网格，工具都是现成的。",
+      "doc": "Zhèxiē wèntí yèjiè dōu yǒu chéngshú de fāng'àn, liànlù zhuīzōng, fúwù wǎnggé, gōngjù dōu shì xiànchéng de.",
+      "v": "Những vấn đề này trong ngành đều có giải pháp chín muồi rồi, distributed tracing, service mesh, công cụ đều có sẵn."
+    },
+    {
+      "ai": "W",
+      "t": "工具确实是现成的，可是会用和用好是两回事。每引入一套工具，就多了一套需要学习、监控、升级的东西。",
+      "doc": "Gōngjù quèshí shì xiànchéng de, kěshì huì yòng hé yòng hǎo shì liǎng huí shì. Měi yǐnrù yí tào gōngjù, jiù duō le yí tào xūyào xuéxí, jiānkòng, shēngjí de dōngxi.",
+      "v": "Công cụ đúng là có sẵn, nhưng biết dùng và dùng tốt là hai chuyện khác nhau. Mỗi lần đưa vào một bộ công cụ, là thêm một bộ thứ cần học, cần giám sát, cần nâng cấp.",
+      "np": [
+        { "mau": "A 和 B 是两回事", "giai": "\"A và B là hai chuyện khác nhau\" — tách hai khái niệm hay bị đánh đồng.", "vd": "知道和做到是两回事。", "vdDoc": "Zhīdào hé zuòdào shì liǎng huí shì.", "vdV": "Biết và làm được là hai chuyện khác nhau." },
+        { "mau": "每 + V…，就…", "giai": "\"Cứ mỗi lần… là…\" — quy luật lặp lại.", "vd": "他每说一句，大家就笑一次。", "vdDoc": "Tā měi shuō yí jù, dàjiā jiù xiào yí cì.", "vdV": "Anh ấy cứ nói một câu là mọi người lại cười." }
+      ]
+    },
+    {
+      "ai": "W",
+      "t": "另外，我想先确认一个事实：部署慢，到底是因为系统是单体，还是因为别的原因？",
+      "doc": "Lìngwài, wǒ xiǎng xiān quèrèn yí ge shìshí: bùshǔ màn, dàodǐ shì yīnwèi xìtǒng shì dāntǐ, háishi yīnwèi bié de yuányīn?",
+      "v": "Ngoài ra, tôi muốn xác nhận trước một sự thật: deploy chậm rốt cuộc là vì hệ thống nguyên khối, hay vì lý do khác?",
+      "khac": [
+        { "kieu": "mềm mỏng", "t": "在讨论方案之前，我们能不能先对一下数据？", "doc": "Zài tǎolùn fāng'àn zhīqián, wǒmen néng bu néng xiān duì yíxià shùjù?", "v": "Trước khi bàn phương án, chúng ta có thể đối chiếu số liệu trước được không?", "ghiChu": "kéo cuộc tranh luận về sự thật trước khi bàn ý kiến" }
+      ]
+    },
+    {
+      "ai": "H",
+      "t": "你的意思是？",
+      "doc": "Nǐ de yìsi shì?",
+      "v": "Ý chị là sao?"
+    },
+    {
+      "ai": "W",
+      "t": "我上周把流水线的耗时拆开看了一下：四十分钟里，有二十八分钟花在跑全量的集成测试上，真正构建和发布只要十二分钟。",
+      "doc": "Wǒ shàng zhōu bǎ liúshuǐxiàn de hàoshí chāi kāi kàn le yíxià: sìshí fēnzhōng li, yǒu èrshíbā fēnzhōng huā zài pǎo quánliàng de jíchéng cèshì shang, zhēnzhèng gòujiàn hé fābù zhǐ yào shí'èr fēnzhōng.",
+      "v": "Tuần trước tôi đã tách thời gian của pipeline ra xem: trong bốn mươi phút, có hai mươi tám phút dành để chạy toàn bộ integration test, build và phát hành thật sự chỉ mất mười hai phút."
+    },
+    {
+      "ai": "W",
+      "t": "换句话说，部署慢与其说是架构的问题，不如说是测试策略的问题。",
+      "doc": "Huàn jù huà shuō, bùshǔ màn yǔqí shuō shì jiàgòu de wèntí, bùrú shuō shì cèshì cèlüè de wèntí.",
+      "v": "Nói cách khác, deploy chậm, nói là vấn đề kiến trúc chi bằng nói là vấn đề chiến lược kiểm thử.",
+      "np": [
+        { "mau": "与其说 A，不如说 B", "giai": "\"Nói là A chi bằng nói là B\" — sửa lại cách gọi tên vấn đề cho chính xác hơn. Khác 与其A不如B (chọn hành động).", "vd": "与其说他聪明，不如说他努力。", "vdDoc": "Yǔqí shuō tā cōngming, bùrú shuō tā nǔlì.", "vdV": "Nói anh ấy thông minh chi bằng nói anh ấy chăm chỉ." },
+        { "mau": "换句话说", "giai": "\"Nói cách khác\" — diễn đạt lại ý vừa nói cho rõ hoặc rút ra kết luận.", "vd": "换句话说，我们还有一周时间。", "vdDoc": "Huàn jù huà shuō, wǒmen hái yǒu yì zhōu shíjiān.", "vdV": "Nói cách khác, chúng ta còn một tuần." }
+      ]
+    },
+    {
+      "ai": "H",
+      "t": "这个数据我倒是没注意到。不过即使测试优化了，模块之间耦合严重的问题依然存在。",
+      "doc": "Zhège shùjù wǒ dàoshì méi zhùyì dào. Búguò jíshǐ cèshì yōuhuà le, mókuài zhījiān ǒuhé yánzhòng de wèntí yīrán cúnzài.",
+      "v": "Số liệu này thì tôi lại không để ý. Nhưng dù tối ưu được test, vấn đề các module bị ràng buộc chặt vào nhau vẫn còn đó.",
+      "np": [
+        { "mau": "倒是", "giai": "倒是 = \"thì lại, ngược lại\" — thừa nhận một điều trái với điều mình định nói hoặc trái mong đợi, giọng nhẹ.", "vd": "东西不贵，质量倒是不错。", "vdDoc": "Dōngxi bú guì, zhìliàng dàoshì búcuò.", "vdV": "Đồ không đắt, chất lượng thì lại khá tốt." }
+      ]
+    },
+    {
+      "ai": "W",
+      "t": "这一点我同意。但耦合并非只能靠拆服务来解决。如果模块之间的边界本身就没划清楚，拆成服务以后，只会变成“分布式的单体”，问题恰恰更难处理。",
+      "doc": "Zhè yì diǎn wǒ tóngyì. Dàn ǒuhé bìngfēi zhǐ néng kào chāi fúwù lái jiějué. Rúguǒ mókuài zhījiān de biānjiè běnshēn jiù méi huà qīngchu, chāi chéng fúwù yǐhòu, zhǐ huì biàn chéng “fēnbùshì de dāntǐ”, wèntí qiàqià gèng nán chǔlǐ.",
+      "v": "Điểm này tôi đồng ý. Nhưng sự ràng buộc chặt không phải chỉ có thể giải quyết bằng cách tách service. Nếu bản thân ranh giới giữa các module chưa vạch rõ, tách thành service rồi cũng chỉ thành \"nguyên khối phân tán\", vấn đề lại càng khó xử lý.",
+      "np": [
+        { "mau": "并非", "giai": "并非 = hoàn toàn không phải (văn viết), mạnh hơn 不是. Hay dùng để bác một cách hiểu phổ biến.", "vd": "成功并非偶然。", "vdDoc": "Chénggōng bìngfēi ǒurán.", "vdV": "Thành công hoàn toàn không phải ngẫu nhiên." },
+        { "mau": "恰恰", "giai": "恰恰 = \"lại chính là, đúng là\" — nhấn mạnh kết quả trái ngược với mong đợi.", "vd": "你最担心的，恰恰是最不重要的。", "vdDoc": "Nǐ zuì dānxīn de, qiàqià shì zuì bú zhòngyào de.", "vdV": "Điều bạn lo nhất lại chính là điều ít quan trọng nhất." }
+      ]
+    },
+    {
+      "ai": "H",
+      "t": "那你的建议是什么？总不能一直维持现状吧。",
+      "doc": "Nà nǐ de jiànyì shì shénme? Zǒng bù néng yìzhí wéichí xiànzhuàng ba.",
+      "v": "Vậy đề xuất của chị là gì? Cũng đâu thể cứ giữ nguyên hiện trạng mãi được.",
+      "khac": [
+        { "kieu": "chuyên nghiệp", "t": "那你觉得比较可行的做法是什么？", "doc": "Nà nǐ juéde bǐjiào kěxíng de zuòfǎ shì shénme?", "v": "Vậy chị thấy cách làm khả thi hơn là gì?", "ghiChu": "mời đối phương đưa phương án thay thế thay vì chỉ phản bác" }
+      ],
+      "np": [
+        { "mau": "总不能…吧", "giai": "\"Đâu thể nào… được chứ\" — nêu một điều hiển nhiên không chấp nhận được để thúc đẩy hành động.", "vd": "总不能让客户一直等吧。", "vdDoc": "Zǒng bù néng ràng kèhù yìzhí děng ba.", "vdV": "Đâu thể bắt khách hàng chờ mãi được." }
+      ]
+    },
+    {
+      "ai": "W",
+      "t": "当然不能。我的建议分两步。第一步，先在单体内部做模块化：明确每个模块的边界，禁止跨模块直接访问数据库表。",
+      "doc": "Dāngrán bù néng. Wǒ de jiànyì fēn liǎng bù. Dì yī bù, xiān zài dāntǐ nèibù zuò mókuài huà: míngquè měi ge mókuài de biānjiè, jìnzhǐ kuà mókuài zhíjiē fǎngwèn shùjùkù biǎo.",
+      "v": "Tất nhiên là không. Đề xuất của tôi chia hai bước. Bước một, mô-đun hoá ngay bên trong hệ nguyên khối: xác định rõ ranh giới từng module, cấm truy cập thẳng bảng database của module khác."
+    },
+    {
+      "ai": "W",
+      "t": "第二步，挑一个边界最清楚、负载特点又跟其他模块差别最大的模块，比如搜索，先把它拆出去，当作试点。",
+      "doc": "Dì èr bù, tiāo yí ge biānjiè zuì qīngchu, fùzài tèdiǎn yòu gēn qítā mókuài chābié zuì dà de mókuài, bǐrú sōusuǒ, xiān bǎ tā chāi chūqu, dàngzuò shìdiǎn.",
+      "v": "Bước hai, chọn một module có ranh giới rõ nhất, đặc điểm tải lại khác các module còn lại nhiều nhất, ví dụ tìm kiếm, tách nó ra trước để làm thí điểm."
+    },
+    {
+      "ai": "H",
+      "t": "只拆一个，会不会太保守？等到真正需要拆的时候，可能已经来不及了。",
+      "doc": "Zhǐ chāi yí ge, huì bu huì tài bǎoshǒu? Děngdào zhēnzhèng xūyào chāi de shíhou, kěnéng yǐjīng láibují le.",
+      "v": "Chỉ tách một cái, có thận trọng quá không? Đợi đến lúc thật sự cần tách, có khi đã không kịp nữa."
+    },
+    {
+      "ai": "W",
+      "t": "你的担心有道理。所以我建议给试点定几个可以衡量的指标，比如部署时间、故障恢复时间，还有排查问题花的时间。",
+      "doc": "Nǐ de dānxīn yǒu dàolǐ. Suǒyǐ wǒ jiànyì gěi shìdiǎn dìng jǐ ge kěyǐ héngliáng de zhǐbiāo, bǐrú bùshǔ shíjiān, gùzhàng huīfù shíjiān, hái yǒu páichá wèntí huā de shíjiān.",
+      "v": "Anh lo cũng có lý. Vì vậy tôi đề nghị đặt cho dự án thí điểm vài chỉ số đo được, ví dụ thời gian deploy, thời gian khôi phục sự cố, và thời gian tra lỗi.",
+      "khac": [
+        { "kieu": "chuyên nghiệp", "t": "我理解你的顾虑，我们不妨用数据来说话。", "doc": "Wǒ lǐjiě nǐ de gùlǜ, wǒmen bùfáng yòng shùjù lái shuōhuà.", "v": "Tôi hiểu băn khoăn của anh, chúng ta cứ để số liệu lên tiếng.", "ghiChu": "不妨 = cứ thử, không ngại gì; 用数据说话 = để số liệu nói" }
+      ]
+    },
+    {
+      "ai": "W",
+      "t": "三个月以后，如果数据证明拆分确实有效，我们再按同样的方法拆下一个；如果效果不明显，损失也有限。",
+      "doc": "Sān ge yuè yǐhòu, rúguǒ shùjù zhèngmíng chāifēn quèshí yǒuxiào, wǒmen zài àn tóngyàng de fāngfǎ chāi xià yí ge; rúguǒ xiàoguǒ bù míngxiǎn, sǔnshī yě yǒuxiàn.",
+      "v": "Ba tháng sau, nếu số liệu chứng minh việc tách thật sự hiệu quả, chúng ta tách cái tiếp theo theo cùng cách; nếu hiệu quả không rõ, tổn thất cũng có hạn."
+    },
+    {
+      "ai": "H",
+      "t": "说实话，我当初提这个方案，多少也有点儿想尽快把新技术用起来的心思。",
+      "doc": "Shuō shíhuà, wǒ dāngchū tí zhège fāng'àn, duōshǎo yě yǒudiǎnr xiǎng jǐnkuài bǎ xīn jìshù yòng qǐlai de xīnsi.",
+      "v": "Nói thật, lúc đầu tôi đưa ra phương án này, ít nhiều cũng có chút ý muốn nhanh chóng đưa công nghệ mới vào dùng.",
+      "np": [
+        { "mau": "多少 (duōshǎo) = ít nhiều", "giai": "Đặt trước động từ/tính từ, 多少 không phải câu hỏi mà nghĩa \"ít nhiều, phần nào\": 多少有点儿….", "vd": "这件事他多少知道一点儿。", "vdDoc": "Zhè jiàn shì tā duōshǎo zhīdào yìdiǎnr.", "vdV": "Chuyện này anh ấy ít nhiều cũng biết chút ít." }
+      ]
+    },
+    {
+      "ai": "H",
+      "t": "不过技术本身无非是手段。归根结底，要看它能不能解决我们团队眼下的问题。",
+      "doc": "Búguò jìshù běnshēn wúfēi shì shǒuduàn. Guīgēn jiédǐ, yào kàn tā néng bu néng jiějué wǒmen tuánduì yǎnxià de wèntí.",
+      "v": "Nhưng bản thân công nghệ chẳng qua chỉ là phương tiện. Suy cho cùng, phải xem nó có giải quyết được vấn đề trước mắt của nhóm hay không.",
+      "np": [
+        { "mau": "无非(是)…", "giai": "无非 = chẳng qua chỉ là, không ngoài — hạ thấp tầm quan trọng của điều được nói.", "vd": "他说这么多，无非是想加工资。", "vdDoc": "Tā shuō zhème duō, wúfēi shì xiǎng jiā gōngzī.", "vdV": "Anh ta nói nhiều thế, chẳng qua là muốn tăng lương." },
+        { "mau": "归根结底", "giai": "\"Suy cho cùng, xét đến cùng\" — dẫn tới bản chất/kết luận cốt lõi.", "vd": "归根结底，还是沟通的问题。", "vdDoc": "Guīgēn jiédǐ, háishi gōutōng de wèntí.", "vdV": "Suy cho cùng, vẫn là vấn đề giao tiếp." }
+      ]
+    },
+    {
+      "ai": "W",
+      "t": "我也得承认，长远来看，如果团队扩大到三十人，微服务很可能是对的方向。我反对的不是微服务，而是现在就一步到位。",
+      "doc": "Wǒ yě děi chéngrèn, chángyuǎn lái kàn, rúguǒ tuánduì kuòdà dào sānshí rén, wēi fúwù hěn kěnéng shì duì de fāngxiàng. Wǒ fǎnduì de bú shì wēi fúwù, ér shì xiànzài jiù yí bù dào wèi.",
+      "v": "Tôi cũng phải thừa nhận, về lâu dài, nếu nhóm mở rộng lên ba mươi người, microservice rất có thể là hướng đúng. Điều tôi phản đối không phải microservice, mà là làm một bước tới đích ngay bây giờ.",
+      "np": [
+        { "mau": "一步到位", "giai": "\"Một bước tới đích\" — làm xong trọn vẹn ngay một lần, không qua giai đoạn trung gian.", "vd": "装修最好一步到位，免得以后再改。", "vdDoc": "Zhuāngxiū zuìhǎo yí bù dào wèi, miǎnde yǐhòu zài gǎi.", "vdV": "Sửa nhà tốt nhất làm một lần cho xong, kẻo sau lại phải sửa." }
+      ]
+    },
+    {
+      "ai": "H",
+      "t": "好，那我们这样定：第一步的模块化，由你牵头；搜索服务的试点，由我来负责设计。",
+      "doc": "Hǎo, nà wǒmen zhèyàng dìng: dì yī bù de mókuài huà, yóu nǐ qiāntóu; sōusuǒ fúwù de shìdiǎn, yóu wǒ lái fùzé shèjì.",
+      "v": "Được, vậy chúng ta chốt thế này: bước một mô-đun hoá do chị dẫn dắt; thí điểm service tìm kiếm do tôi phụ trách thiết kế.",
+      "np": [
+        { "mau": "由 + ai + (来) + V", "giai": "由 = do (ai đó đảm nhận). Văn phong phân công chính thức, hay gặp trong biên bản họp.", "vd": "这次会议由王经理主持。", "vdDoc": "Zhè cì huìyì yóu Wáng jīnglǐ zhǔchí.", "vdV": "Cuộc họp lần này do giám đốc Vương chủ trì." }
+      ]
+    },
+    {
+      "ai": "W",
+      "t": "没问题。另外，测试流水线的优化跟架构无关，可以马上开始，我建议先做这个，见效最快。",
+      "doc": "Méi wèntí. Lìngwài, cèshì liúshuǐxiàn de yōuhuà gēn jiàgòu wúguān, kěyǐ mǎshàng kāishǐ, wǒ jiànyì xiān zuò zhège, jiànxiào zuì kuài.",
+      "v": "Không vấn đề. Ngoài ra, tối ưu pipeline test không liên quan đến kiến trúc, có thể bắt đầu ngay, tôi đề nghị làm cái này trước, thấy hiệu quả nhanh nhất."
+    },
+    {
+      "ai": "H",
+      "t": "同意。会后我把今天的结论写成架构决策记录，大家有意见可以在文档里评论。",
+      "doc": "Tóngyì. Huì hòu wǒ bǎ jīntiān de jiélùn xiě chéng jiàgòu juécè jìlù, dàjiā yǒu yìjiàn kěyǐ zài wéndàng li pínglùn.",
+      "v": "Đồng ý. Sau buổi họp tôi viết kết luận hôm nay thành bản ghi quyết định kiến trúc (ADR), ai có ý kiến thì bình luận trong tài liệu."
+    },
+    {
+      "ai": "H",
+      "t": "小武，谢谢你今天提出反对意见。如果大家都只会点头，这个方案的问题要等到上线以后才会暴露出来。",
+      "doc": "Xiǎo Wǔ, xièxie nǐ jīntiān tíchū fǎnduì yìjiàn. Rúguǒ dàjiā dōu zhǐ huì diǎntóu, zhège fāng'àn de wèntí yào děngdào shàngxiàn yǐhòu cái huì bàolù chūlai.",
+      "v": "Vũ Lan, cảm ơn chị hôm nay đã nêu ý kiến phản đối. Nếu ai cũng chỉ biết gật đầu, vấn đề của phương án này phải đợi tới lúc lên bản mới lộ ra."
+    },
+    {
+      "ai": "W",
+      "t": "也谢谢你愿意听不同的声音。其实我准备数据的时候也挺紧张的，怕被理解成故意唱反调。",
+      "doc": "Yě xièxie nǐ yuànyì tīng bùtóng de shēngyīn. Qíshí wǒ zhǔnbèi shùjù de shíhou yě tǐng jǐnzhāng de, pà bèi lǐjiě chéng gùyì chàng fǎndiào.",
+      "v": "Cũng cảm ơn anh sẵn lòng nghe tiếng nói khác. Thật ra lúc chuẩn bị số liệu tôi cũng khá hồi hộp, sợ bị hiểu là cố tình nói ngược."
+    },
+    {
+      "ai": "H",
+      "t": "有数据、有替代方案的反对，从来都不是唱反调，而是在帮团队把关。",
+      "doc": "Yǒu shùjù, yǒu tìdài fāng'àn de fǎnduì, cónglái dōu bú shì chàng fǎndiào, ér shì zài bāng tuánduì bǎguān.",
+      "v": "Phản đối có số liệu, có phương án thay thế thì chưa bao giờ là nói ngược, mà là đang giúp nhóm gác cổng chất lượng."
+    },
+    {
+      "ai": "W",
+      "t": "那下次轮到我提方案的时候，也欢迎你来挑毛病。",
+      "doc": "Nà xià cì lún dào wǒ tí fāng'àn de shíhou, yě huānyíng nǐ lái tiāo máobìng.",
+      "v": "Vậy lần sau đến lượt tôi đề xuất phương án, cũng mời anh đến bắt lỗi nhé."
+    }
+  ],
+  "tuVung": [
+    { "chu": "架构", "doc": "jiàgòu", "nghia": "kiến trúc (hệ thống) (giá cấu)", "vd": "我们需要重新设计架构。" },
+    { "chu": "单体", "doc": "dāntǐ", "nghia": "nguyên khối, monolith (đơn thể)", "vd": "单体系统部署起来很慢。" },
+    { "chu": "微服务", "doc": "wēi fúwù", "nghia": "microservice (vi phục vụ)", "vd": "很多公司都在用微服务。" },
+    { "chu": "臃肿", "doc": "yōngzhǒng", "nghia": "phình to, cồng kềnh (ung thũng)", "vd": "代码越来越臃肿。" },
+    { "chu": "牵一发而动全身", "doc": "qiān yí fà ér dòng quán shēn", "nghia": "động một chỗ ảnh hưởng toàn bộ", "vd": "这个改动牵一发而动全身。" },
+    { "chu": "耦合", "doc": "ǒuhé", "nghia": "ràng buộc chặt, coupling (ngẫu hợp)", "vd": "两个模块耦合太紧。" },
+    { "chu": "边界", "doc": "biānjiè", "nghia": "ranh giới, boundary (biên giới)", "vd": "模块的边界要清楚。" },
+    { "chu": "流水线", "doc": "liúshuǐxiàn", "nghia": "dây chuyền; pipeline CI/CD (lưu thuỷ tuyến)", "vd": "流水线跑了四十分钟。" },
+    { "chu": "试点", "doc": "shìdiǎn", "nghia": "thí điểm, pilot", "vd": "先拿一个模块做试点。" },
+    { "chu": "指标", "doc": "zhǐbiāo", "nghia": "chỉ số, chỉ tiêu, metric", "vd": "我们用哪些指标来衡量？" },
+    { "chu": "唱反调", "doc": "chàng fǎndiào", "nghia": "hát ngược giọng — cố tình nói ngược, phản bác", "vd": "我不是要跟你唱反调。" },
+    { "chu": "一步到位", "doc": "yí bù dào wèi", "nghia": "làm một lần tới đích, xong trọn vẹn ngay", "vd": "这件事很难一步到位。" }
+  ],
+  "yNghia": "Kiến trúc tốt không phải thứ thời thượng nhất, mà là sự đánh đổi hợp với đội ngũ và vấn đề trước mắt. Bất đồng chuyên nghiệp có công thức: ghi nhận điểm đúng của người kia, tách sự thật khỏi ý kiến, mang số liệu, và đưa ra một phương án nhỏ có thể kiểm chứng thay cho \"tôi không đồng ý\". Người lãnh đạo giỏi thì cảm ơn người dám phản đối.",
+  "meo": [
+    "Công thức bất đồng trong họp: 你提到的问题我完全认同 (ghi nhận) → 不过…我有一些不同的看法 (chuyển ý) → 数据 (sự thật) → 我的建议是… (phương án thay thế).",
+    "Cặp dễ lẫn: 与其 A，不如 B (chọn hành động B thay A) vs 与其说 A，不如说 B (gọi tên lại: nói là A chi bằng nói là B).",
+    "Từ HSK6 tạo giọng trang trọng: 固然 · 并非 · 恰恰 · 无非 · 归根结底 · 就…而言 · 不妨.",
+    "Ở công ty Trung Quốc, gọi kỹ sư bằng 姓 + 工 (韩工, 张工) là cách xưng hô tôn trọng, phổ biến trong ngành kỹ thuật.",
+    "多少 đọc duōshǎo khi nghĩa \"ít nhiều\" (多少有点儿); khi hỏi số lượng thường đọc nhẹ duōshao (多少钱)."
+  ],
+  "cauHoi": [
+    {
+      "hoi": "Theo số liệu của Vũ Lan, deploy chậm chủ yếu vì đâu?",
+      "chon": ["Hệ thống là nguyên khối", "Chạy toàn bộ integration test chiếm 28/40 phút", "Máy chủ quá yếu"],
+      "dung": 1,
+      "giai": "四十分钟里，有二十八分钟花在跑全量的集成测试上。"
+    },
+    {
+      "hoi": "Vũ Lan lo ngại điều gì nếu tách service khi ranh giới module chưa rõ?",
+      "chon": ["Chi phí máy chủ tăng gấp đôi", "Nhân viên mới không hiểu code", "Hệ thống thành \"nguyên khối phân tán\", càng khó xử lý"],
+      "dung": 2,
+      "giai": "只会变成“分布式的单体”，问题恰恰更难处理。"
+    },
+    {
+      "hoi": "Đề xuất của Vũ Lan gồm những bước nào?",
+      "chon": ["Mô-đun hoá bên trong trước, rồi tách thử một module (tìm kiếm) có chỉ số đo được", "Tách ngay mười hai service", "Giữ nguyên hiện trạng"],
+      "dung": 0,
+      "giai": "第一步…模块化；第二步…比如搜索，先把它拆出去，当作试点。"
+    },
+    {
+      "hoi": "\"唱反调\" trong đoạn kết có nghĩa là gì?",
+      "chon": ["Hát karaoke sau giờ làm", "Cố tình nói ngược, phản đối cho có", "Đề xuất một phương án mới"],
+      "dung": 1,
+      "giai": "唱反调 = hát ngược giọng; anh Hàn khẳng định phản đối có số liệu không phải là 唱反调 mà là 把关."
+    },
+    {
+      "hoi": "Việc nào được đề nghị làm ngay vì \"见效最快\"?",
+      "chon": ["Viết ADR", "Thuê thêm người", "Tối ưu pipeline test"],
+      "dung": 2,
+      "giai": "测试流水线的优化跟架构无关，可以马上开始…见效最快。"
+    }
+  ]
+}

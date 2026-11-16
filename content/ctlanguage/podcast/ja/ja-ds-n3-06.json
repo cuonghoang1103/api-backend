@@ -1,0 +1,459 @@
+{
+  "id": "ja-ds-n3-06",
+  "nn": "ja",
+  "danhMuc": "doi-song",
+  "cap": "N3",
+  "so": 6,
+  "tieuDe": "前髪は眉の上で",
+  "tieuDeViet": "Mái để trên lông mày",
+  "moTa": "Lần đầu Mai đi tiệm làm tóc ở Nhật, vừa muốn cắt vừa muốn nhuộm. Học cách đưa ảnh mẫu, nói độ dài, mái, độ dày, màu nhuộm; trả lời những câu quen thuộc khi gội đầu; và dám nhờ sửa thêm khi chưa ưng ý.",
+  "chuDe": "Làm đẹp",
+  "bieuTuong": "scissors",
+  "nguoi": [
+    {
+      "ma": "M",
+      "ten": "マイ",
+      "giong": "ja-nu",
+      "vai": "du học sinh"
+    },
+    {
+      "ma": "B",
+      "ten": "美容師",
+      "giong": "ja2-nam",
+      "vai": "thợ làm tóc"
+    },
+    {
+      "ma": "A",
+      "ten": "アシスタント",
+      "giong": "ja2-nu",
+      "vai": "trợ lý gội đầu"
+    }
+  ],
+  "loi": [
+    {
+      "ai": "B",
+      "t": "いらっしゃいませ。ご予約のマイ様ですね。今日はどうなさいますか。",
+      "doc": "いらっしゃいませ。ごよやくのマイさまですね。きょうはどうなさいますか。",
+      "v": "Xin chào. Chị Mai đã đặt lịch phải không ạ. Hôm nay chị muốn làm gì ạ?"
+    },
+    {
+      "ai": "M",
+      "t": "カットとカラーをお願いしたいんですが。日本の美容院は初めてで、ちょっと緊張しています。",
+      "doc": "カットとカラーをおねがいしたいんですが。にほんのびよういんははじめてで、ちょっときんちょうしています。",
+      "v": "Tôi muốn cắt và nhuộm ạ. Lần đầu tôi đi tiệm tóc ở Nhật nên hơi hồi hộp.",
+      "khac": [
+        {
+          "kieu": "ngắn gọn",
+          "t": "カットとカラーでお願いします。",
+          "doc": "カットとカラーでおねがいします。",
+          "v": "Cắt và nhuộm giúp tôi ạ."
+        }
+      ],
+      "np": [
+        {
+          "mau": "N で、〜 (nối câu, chỉ lý do nhẹ)",
+          "giai": "初めてで = vì là lần đầu nên…. Danh từ／tính từ な + で nối sang vế sau, vừa nối câu vừa ngầm chỉ lý do.",
+          "vd": "今日は雨で、とても寒いです。",
+          "vdDoc": "きょうはあめで、とてもさむいです。",
+          "vdV": "Hôm nay mưa nên lạnh lắm."
+        }
+      ]
+    },
+    {
+      "ai": "B",
+      "t": "大丈夫ですよ。イメージに近い写真があれば、見せていただけますか。",
+      "doc": "だいじょうぶですよ。イメージにちかいしゃしんがあれば、みせていただけますか。",
+      "v": "Không sao đâu ạ. Nếu có ảnh gần với kiểu chị muốn, chị cho tôi xem được không?"
+    },
+    {
+      "ai": "M",
+      "t": "はい、こんな感じにしたいです。",
+      "doc": "はい、こんなかんじにしたいです。",
+      "v": "Vâng, tôi muốn làm kiểu như thế này.",
+      "khac": [
+        {
+          "kieu": "lịch sự",
+          "t": "この写真のような感じにしていただけますか。",
+          "doc": "このしゃしんのようなかんじにしていただけますか。",
+          "v": "Anh làm giúp tôi kiểu giống ảnh này được không ạ?"
+        },
+        {
+          "kieu": "tự nhiên hơn",
+          "t": "こういう感じでお願いします。",
+          "doc": "こういうかんじでおねがいします。",
+          "v": "Kiểu như thế này giúp tôi nhé."
+        }
+      ],
+      "np": [
+        {
+          "mau": "N に したい",
+          "giai": "N に する = làm cho thành N, chọn N; thêm たい = muốn. こんな感じにしたい = muốn làm thành kiểu này.",
+          "vd": "部屋を明るい色にしたいです。",
+          "vdDoc": "へやをあかるいいろにしたいです。",
+          "vdV": "Tôi muốn sơn phòng màu sáng."
+        }
+      ]
+    },
+    {
+      "ai": "B",
+      "t": "いいですね。今は胸くらいまでありますから、肩につくくらいまで切りましょうか。",
+      "doc": "いいですね。いまはむねくらいまでありますから、かたにつくくらいまできりましょうか。",
+      "v": "Đẹp đấy ạ. Giờ tóc dài tới ngực, mình cắt đến chạm vai nhé?"
+    },
+    {
+      "ai": "M",
+      "t": "うーん、短くしすぎるのはちょっと怖いので、まずは鎖骨くらいでお願いします。",
+      "doc": "うーん、みじかくしすぎるのはちょっとこわいので、まずはさこつくらいでおねがいします。",
+      "v": "Ừm, cắt ngắn quá tôi hơi sợ, nên trước mắt cắt đến xương quai xanh thôi ạ.",
+      "khac": [
+        {
+          "kieu": "ngắn gọn",
+          "t": "鎖骨くらいの長さでお願いします。",
+          "doc": "さこつくらいのながさでおねがいします。",
+          "v": "Cho tôi độ dài đến xương quai xanh ạ."
+        },
+        {
+          "kieu": "mềm mỏng",
+          "t": "短すぎるのは不安なので、少し長めに残していただけますか。",
+          "doc": "みじかすぎるのはふあんなので、すこしながめにのこしていただけますか。",
+          "v": "Ngắn quá tôi hơi lo, anh để dài hơn một chút giúp tôi được không?"
+        }
+      ],
+      "np": [
+        {
+          "mau": "〜すぎる",
+          "giai": "Gốc động từ／tính từ bỏ い + すぎる = quá mức: 短くしすぎる (cắt ngắn quá), 食べすぎる (ăn quá nhiều), 高すぎる (đắt quá).",
+          "vd": "昨日は飲みすぎました。",
+          "vdDoc": "きのうはのみすぎました。",
+          "vdV": "Hôm qua tôi uống quá chén."
+        }
+      ]
+    },
+    {
+      "ai": "B",
+      "t": "かしこまりました。前髪はどうしますか。",
+      "doc": "かしこまりました。まえがみはどうしますか。",
+      "v": "Vâng ạ. Phần mái thì chị muốn thế nào?"
+    },
+    {
+      "ai": "M",
+      "t": "前髪は眉の上で、まっすぐにそろえてください。あと、量が多いので、少しすいてもらえますか。",
+      "doc": "まえがみはまゆのうえで、まっすぐにそろえてください。あと、りょうがおおいので、すこしすいてもらえますか。",
+      "v": "Mái để trên lông mày, cắt thẳng đều giúp tôi. Với lại tóc tôi dày, anh tỉa mỏng bớt một chút được không?",
+      "khac": [
+        {
+          "kieu": "lịch sự",
+          "t": "毛の量が多いので、軽くしていただけますか。",
+          "doc": "けのりょうがおおいので、かるくしていただけますか。",
+          "v": "Tóc tôi dày, anh làm nhẹ bớt giúp tôi được không ạ?",
+          "ghiChu": "軽くする = làm tóc nhẹ, thoáng hơn — cách nói rất hay dùng ở tiệm."
+        }
+      ],
+      "np": [
+        {
+          "mau": "V てもらえますか",
+          "giai": "Nhờ người khác làm cho mình: “… giúp tôi được không?”. Lịch sự vừa; trang trọng hơn: 〜ていただけますか.",
+          "vd": "この荷物を持ってもらえますか。",
+          "vdDoc": "このにもつをもってもらえますか。",
+          "vdV": "Anh cầm giúp tôi cái túi này được không?"
+        }
+      ]
+    },
+    {
+      "ai": "B",
+      "t": "了解です。カラーは、どんな色にしますか。",
+      "doc": "りょうかいです。カラーは、どんないろにしますか。",
+      "v": "Rõ ạ. Còn màu nhuộm, chị chọn màu gì?"
+    },
+    {
+      "ai": "M",
+      "t": "少し明るめの茶色がいいんですが、学校があるので、派手すぎない感じで。",
+      "doc": "すこしあかるめのちゃいろがいいんですが、がっこうがあるので、はですぎないかんじで。",
+      "v": "Tôi thích màu nâu hơi sáng, nhưng vì còn đi học nên đừng nổi quá.",
+      "khac": [
+        {
+          "kieu": "mềm mỏng",
+          "t": "自然に見える、落ち着いた茶色でお願いします。",
+          "doc": "しぜんにみえる、おちついたちゃいろでおねがいします。",
+          "v": "Cho tôi màu nâu trầm, trông tự nhiên ạ."
+        }
+      ],
+      "np": [
+        {
+          "mau": "い-adj (bỏ い) + め",
+          "giai": "〜め = hơi …, …một chút: 明るめ (hơi sáng), 長め (hơi dài), 短め (hơi ngắn). Rất tiện khi gọi món, đặt kiểu tóc.",
+          "vd": "ご飯は少なめでお願いします。",
+          "vdDoc": "ごはんはすくなめでおねがいします。",
+          "vdV": "Cho tôi ít cơm thôi."
+        }
+      ]
+    },
+    {
+      "ai": "B",
+      "t": "では、このあたりの色はいかがでしょう。光に当たると、少し明るく見えます。",
+      "doc": "では、このあたりのいろはいかがでしょう。ひかりにあたると、すこしあかるくみえます。",
+      "v": "Vậy mấy màu khoảng này chị thấy sao? Khi gặp ánh sáng sẽ trông sáng hơn một chút."
+    },
+    {
+      "ai": "M",
+      "t": "いいですね。それでお願いします。",
+      "doc": "いいですね。それでおねがいします。",
+      "v": "Đẹp quá. Làm màu đó giúp tôi nhé."
+    },
+    {
+      "ai": "A",
+      "t": "お湯加減はいかがですか。",
+      "doc": "おゆかげんはいかがですか。",
+      "v": "Nước có vừa ấm không ạ?"
+    },
+    {
+      "ai": "M",
+      "t": "ちょうどいいです。",
+      "doc": "ちょうどいいです。",
+      "v": "Vừa lắm ạ."
+    },
+    {
+      "ai": "A",
+      "t": "かゆいところはございませんか。",
+      "doc": "かゆいところはございませんか。",
+      "v": "Chị có chỗ nào ngứa không ạ?"
+    },
+    {
+      "ai": "M",
+      "t": "大丈夫です。……これ、日本の美容院で必ず聞かれるって、本当だったんですね。",
+      "doc": "だいじょうぶです。……これ、にほんのびよういんでかならずきかれるって、ほんとうだったんですね。",
+      "v": "Không sao ạ. …Hoá ra chuyện ở tiệm tóc Nhật kiểu gì cũng bị hỏi câu này là thật.",
+      "np": [
+        {
+          "mau": "V られる (bị động) ＋ って",
+          "giai": "聞かれる là bị động của 聞く (bị hỏi). って ở đây = と聞いた: “nghe nói là …”.",
+          "vd": "このお店は人気だって、友だちに言われました。",
+          "vdDoc": "このおみせはにんきだって、ともだちにいわれました。",
+          "vdV": "Bạn tôi bảo là quán này đông khách lắm."
+        }
+      ]
+    },
+    {
+      "ai": "A",
+      "t": "ふふ、みなさんそうおっしゃいます。",
+      "doc": "ふふ、みなさんそうおっしゃいます。",
+      "v": "Hì hì, ai cũng nói vậy ạ."
+    },
+    {
+      "ai": "B",
+      "t": "お疲れさまでした。いかがでしょうか。後ろはこんな感じです。",
+      "doc": "おつかれさまでした。いかがでしょうか。うしろはこんなかんじです。",
+      "v": "Xong rồi ạ. Chị thấy thế nào? Phía sau như thế này."
+    },
+    {
+      "ai": "M",
+      "t": "わあ、いい感じです。ただ、前髪をもう少しだけ短くしてもらってもいいですか。",
+      "doc": "わあ、いいかんじです。ただ、まえがみをもうすこしだけみじかくしてもらってもいいですか。",
+      "v": "Oa, đẹp quá. Có điều, anh cắt mái ngắn thêm chút xíu nữa được không ạ?",
+      "khac": [
+        {
+          "kieu": "lịch sự",
+          "t": "前髪だけ、あと少し短くしていただけますか。",
+          "doc": "まえがみだけ、あとすこしみじかくしていただけますか。",
+          "v": "Riêng phần mái, anh cắt ngắn thêm một chút giúp tôi được không ạ?"
+        }
+      ],
+      "np": [
+        {
+          "mau": "V てもらってもいいですか",
+          "giai": "Nhờ rất mềm trong văn nói hiện đại: “anh … giúp tôi có được không?”. Ghép 〜てもらう (được làm cho) với 〜てもいいですか (xin phép).",
+          "vd": "ちょっと手伝ってもらってもいいですか。",
+          "vdDoc": "ちょっとてつだってもらってもいいですか。",
+          "vdV": "Anh giúp tôi một chút được không?"
+        }
+      ]
+    },
+    {
+      "ai": "B",
+      "t": "もちろんです。言いにくいことも、言ってもらえると助かります。",
+      "doc": "もちろんです。いいにくいことも、いってもらえるとたすかります。",
+      "v": "Tất nhiên ạ. Cả những điều khó nói, chị cứ nói ra thì tôi lại càng dễ làm.",
+      "np": [
+        {
+          "mau": "V-stem + にくい",
+          "giai": "Khó làm gì: 言いにくい (khó nói), 読みにくい (khó đọc). Ngược lại: 〜やすい (dễ).",
+          "vd": "この字は小さくて読みにくいです。",
+          "vdDoc": "このじはちいさくてよみにくいです。",
+          "vdV": "Chữ này nhỏ nên khó đọc."
+        }
+      ]
+    },
+    {
+      "ai": "M",
+      "t": "本当ですか。日本では遠慮して、何も言わないほうがいいのかと思っていました。",
+      "doc": "ほんとうですか。にほんではえんりょして、なにもいわないほうがいいのかとおもっていました。",
+      "v": "Thật ạ? Tôi cứ tưởng ở Nhật nên giữ ý, không nói gì thì hơn."
+    },
+    {
+      "ai": "B",
+      "t": "家に帰ってから「やっぱり違う」と思われるほうが、私たちは悲しいんですよ。",
+      "doc": "いえにかえってから「やっぱりちがう」とおもわれるほうが、わたしたちはかなしいんですよ。",
+      "v": "Khách về nhà rồi mới nghĩ “hoá ra không đúng ý” — chúng tôi còn buồn hơn ấy chứ."
+    },
+    {
+      "ai": "B",
+      "t": "家で乾かす時は、上から風を当てると、前髪がきれいにまとまりますよ。",
+      "doc": "いえでかわかすときは、うえからかぜをあてると、まえがみがきれいにまとまりますよ。",
+      "v": "Ở nhà khi sấy, chị thổi gió từ trên xuống thì mái sẽ vào nếp đẹp."
+    },
+    {
+      "ai": "M",
+      "t": "上から、ですね。……すごい、自分じゃないみたい。",
+      "doc": "うえから、ですね。……すごい、じぶんじゃないみたい。",
+      "v": "Từ trên xuống nhỉ. …Ghê thật, cứ như không phải mình vậy."
+    },
+    {
+      "ai": "B",
+      "t": "よくお似合いです。またいつでもいらしてください。",
+      "doc": "よくおにあいです。またいつでもいらしてください。",
+      "v": "Rất hợp với chị ạ. Lúc nào chị cũng có thể ghé lại nhé."
+    },
+    {
+      "ai": "M",
+      "t": "ありがとうございます。次は、もっとはっきり注文できそうです。",
+      "doc": "ありがとうございます。つぎは、もっとはっきりちゅうもんできそうです。",
+      "v": "Cảm ơn anh. Lần sau chắc tôi sẽ dám nói rõ mình muốn gì hơn.",
+      "khac": [
+        {
+          "kieu": "thân mật",
+          "t": "ありがとう！次はもっとちゃんと言えそう。",
+          "doc": "ありがとう！つぎはもっとちゃんといえそう。",
+          "v": "Cảm ơn nha! Lần sau chắc mình nói rõ được hơn.",
+          "ghiChu": "Khi đã quen thợ, nói chuyện thân như bạn."
+        }
+      ]
+    }
+  ],
+  "tuVung": [
+    {
+      "chu": "美容院",
+      "doc": "びよういん",
+      "nghia": "tiệm làm tóc (salon)",
+      "vd": "美容院を予約しました。"
+    },
+    {
+      "chu": "前髪",
+      "doc": "まえがみ",
+      "nghia": "tóc mái",
+      "vd": "前髪を切りました。"
+    },
+    {
+      "chu": "鎖骨",
+      "doc": "さこつ",
+      "nghia": "xương quai xanh",
+      "vd": "髪が鎖骨まで伸びました。"
+    },
+    {
+      "chu": "眉",
+      "doc": "まゆ",
+      "nghia": "lông mày",
+      "vd": "眉の形を整えます。"
+    },
+    {
+      "chu": "そろえて",
+      "doc": "そろえて",
+      "nghia": "cắt đều, làm cho bằng (thể て của そろえる)",
+      "vd": "毛先をそろえてください。"
+    },
+    {
+      "chu": "すいて",
+      "doc": "すいて",
+      "nghia": "tỉa mỏng tóc (thể て của すく)",
+      "vd": "後ろを少しすいてください。"
+    },
+    {
+      "chu": "明るめ",
+      "doc": "あかるめ",
+      "nghia": "hơi sáng (màu)",
+      "vd": "明るめのカラーにしました。"
+    },
+    {
+      "chu": "派手",
+      "doc": "はで",
+      "nghia": "loè loẹt, nổi bật",
+      "vd": "派手な服はあまり着ません。"
+    },
+    {
+      "chu": "お湯加減",
+      "doc": "おゆかげん",
+      "nghia": "độ nóng của nước",
+      "vd": "お風呂のお湯加減はどう？"
+    },
+    {
+      "chu": "言いにくい",
+      "doc": "いいにくい",
+      "nghia": "khó nói",
+      "vd": "言いにくいんですが、少し遅れます。"
+    },
+    {
+      "chu": "乾かす",
+      "doc": "かわかす",
+      "nghia": "làm khô, sấy",
+      "vd": "髪をよく乾かしてから寝ます。"
+    },
+    {
+      "chu": "お似合い",
+      "doc": "おにあい",
+      "nghia": "hợp, vừa (lời khen)",
+      "vd": "その帽子、よくお似合いですね。"
+    }
+  ],
+  "yNghia": "Giữ ý không phải lúc nào cũng là lịch sự. Ở tiệm tóc — và ở nhiều nơi khác — nói rõ điều mình muốn bằng một câu nhờ nhẹ nhàng là đang giúp người kia làm tốt việc của họ.",
+  "meo": [
+    "Mang ảnh mẫu và nói 「こんな感じにしたいです」 — thợ nào cũng hiểu ngay.",
+    "Nói độ dài bằng bộ phận cơ thể: 肩につくくらい (chạm vai), 鎖骨くらい (xương quai xanh), 眉の上 (trên lông mày).",
+    "〜め để nói “hơi …”: 明るめ, 暗め (くらめ), 長め, 短め. Muốn tỉa mỏng: 「すいてください」／「軽くしてください」.",
+    "Hai câu quen thuộc khi gội đầu: 「お湯加減はいかがですか」 và 「かゆいところはございませんか」 — đáp 「ちょうどいいです」／「大丈夫です」."
+  ],
+  "cauHoi": [
+    {
+      "hoi": "Mai muốn cắt tóc dài đến đâu?",
+      "chon": [
+        "Chạm vai",
+        "Xương quai xanh",
+        "Ngang ngực",
+        "Ngắn sát gáy"
+      ],
+      "dung": 1,
+      "giai": "「まずは鎖骨くらいでお願いします」 — thợ đề nghị chạm vai nhưng Mai sợ ngắn quá."
+    },
+    {
+      "hoi": "Vì sao Mai chọn màu không quá nổi?",
+      "chon": [
+        "Vì Mai không thích màu sáng",
+        "Vì Mai còn đi học",
+        "Vì màu sáng đắt hơn",
+        "Vì thợ khuyên vậy"
+      ],
+      "dung": 1,
+      "giai": "「学校があるので、派手すぎない感じで」."
+    },
+    {
+      "hoi": "「かゆいところはございませんか」 là hỏi gì?",
+      "chon": [
+        "Nước có nóng không",
+        "Có chỗ nào ngứa không",
+        "Có muốn gội thêm không",
+        "Có đau không"
+      ],
+      "dung": 1,
+      "giai": "Câu hỏi quen thuộc khi gội đầu ở Nhật."
+    },
+    {
+      "hoi": "Thợ tóc nói gì khi Mai xin cắt mái ngắn thêm?",
+      "chon": [
+        "Không sửa được nữa",
+        "Phải trả thêm tiền",
+        "Khách nói ra cả điều khó nói thì thợ càng dễ làm",
+        "Lần sau hãy nói"
+      ],
+      "dung": 2,
+      "giai": "「言いにくいことも、言ってもらえると助かります」."
+    }
+  ]
+}

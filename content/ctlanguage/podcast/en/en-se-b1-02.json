@@ -1,0 +1,97 @@
+{
+  "id": "en-se-b1-02",
+  "nn": "en",
+  "danhMuc": "phan-mem",
+  "cap": "B1",
+  "so": 2,
+  "tieuDe": "\"It Doesn't Work\" Is Not a Bug Report",
+  "tieuDeViet": "\"Nó không chạy\" chưa phải là báo lỗi",
+  "moTa": "Quân báo với chị trưởng nhóm kiểm thử rằng trang thanh toán \"bị hỏng\". Megan chỉ cách biến một câu than phiền thành một báo lỗi tử tế: các bước tái hiện, kết quả mong đợi và thực tế, môi trường, ảnh chụp, mức độ nghiêm trọng.",
+  "chuDe": "Báo lỗi",
+  "bieuTuong": "ladybug.fill",
+  "nguoi": [
+    { "ma": "Q", "ten": "Quân", "giong": "us-nam", "vai": "lập trình viên mới" },
+    { "ma": "M", "ten": "Megan", "giong": "uk-nu", "vai": "trưởng nhóm kiểm thử (QA lead)" }
+  ],
+  "loi": [
+    { "ai": "Q", "t": "Megan, have you got a minute?", "v": "Chị Megan, chị rảnh một phút không?",
+      "khac": [
+        { "kieu": "lịch sự", "t": "Sorry to bother you, Megan. Do you have a minute?", "v": "Xin lỗi làm phiền chị, chị Megan. Chị có một phút không ạ?" },
+        { "kieu": "thân mật", "t": "Got a sec?", "v": "Rảnh tí không?", "ghiChu": "với đồng nghiệp thân" }
+      ] },
+    { "ai": "Q", "t": "I think the checkout page is broken. It just doesn't work.", "v": "Em nghĩ trang thanh toán bị hỏng rồi. Nó không chạy.",
+      "khac": [
+        { "kieu": "chuyên nghiệp", "t": "I think I've found a bug on the checkout page.", "v": "Em nghĩ em vừa tìm ra một lỗi ở trang thanh toán.", "ghiChu": "nói rõ là \"một lỗi\", không phán \"hỏng cả trang\"" }
+      ] },
+    { "ai": "M", "t": "Okay. \"Doesn't work\" can mean a hundred things. What exactly happens?", "v": "Ừ. \"Không chạy\" có thể mang cả trăm nghĩa. Chính xác là chuyện gì xảy ra?",
+      "khac": [
+        { "kieu": "lịch sự", "t": "Could you walk me through exactly what happens?", "v": "Em kể chị nghe từng bước chuyện gì xảy ra được không?" }
+      ] },
+    { "ai": "Q", "t": "When I click \"Pay\", nothing happens. The button just spins forever.", "v": "Khi em bấm \"Thanh toán\" thì không có gì xảy ra. Cái nút cứ quay mãi.",
+      "np": [{ "mau": "When + hiện tại đơn, hiện tại đơn", "giai": "Diễn tả điều luôn xảy ra mỗi khi có một hành động: \"Hễ… thì…\". Cả hai vế đều dùng hiện tại đơn.", "vd": "When I open the app, it asks for my password.", "vdV": "Hễ mình mở app là nó hỏi mật khẩu." }] },
+    { "ai": "M", "t": "Does it happen every time, or only sometimes?", "v": "Lần nào cũng bị, hay chỉ thỉnh thoảng?" },
+    { "ai": "Q", "t": "Hmm, I'm not sure. I've only tried it twice.", "v": "Ừm, em không chắc. Em mới thử có hai lần.",
+      "np": [{ "mau": "have only + V3 + số lần", "giai": "Hiện tại hoàn thành + only + số lần: \"mới chỉ… có… lần\" tính đến bây giờ.", "vd": "I've only used this tool once.", "vdV": "Mình mới dùng công cụ này đúng một lần." }] },
+    { "ai": "M", "t": "Then let's find out. That's the first thing a developer will ask you. If they can't reproduce the bug, they can't fix it.", "v": "Vậy mình cùng tìm hiểu. Đó là điều đầu tiên lập trình viên sẽ hỏi em. Nếu họ không tái hiện được lỗi thì họ không sửa được.",
+      "np": [{ "mau": "If + hiện tại đơn, can't + V", "giai": "Câu điều kiện có thật: nêu một quy luật chắc chắn. Vế \"if\" dùng hiện tại đơn, không dùng will.", "vd": "If you don't save the file, you can't share it.", "vdV": "Không lưu file thì bạn không chia sẻ được." }] },
+    { "ai": "Q", "t": "Reproduce means make it happen again, right?", "v": "\"Reproduce\" nghĩa là làm cho nó xảy ra lại, đúng không chị?" },
+    { "ai": "M", "t": "Exactly. So we write the steps to reproduce: what you did, one step at a time, from the very beginning.", "v": "Chính xác. Nên mình viết các bước tái hiện: em đã làm gì, từng bước một, từ đầu tiên." },
+    { "ai": "Q", "t": "Okay. Step one: log in as a normal user. Step two: add any item to the cart. Step three: go to checkout and click \"Pay\".", "v": "Vâng. Bước một: đăng nhập bằng tài khoản người dùng thường. Bước hai: thêm một món bất kỳ vào giỏ. Bước ba: vào thanh toán và bấm \"Thanh toán\"." },
+    { "ai": "M", "t": "Good. Now try the same steps on your phone.", "v": "Tốt. Giờ thử đúng các bước đó trên điện thoại." },
+    { "ai": "Q", "t": "Wait, it works on my phone. The payment went through straight away.", "v": "Ơ, trên điện thoại thì chạy. Thanh toán qua được ngay.",
+      "np": [{ "mau": "go through (giao dịch)", "giai": "\"The payment went through\" = giao dịch đã được chấp nhận, đã thành công. Trái nghĩa: The payment didn't go through.", "vd": "My card payment didn't go through, so I paid in cash.", "vdV": "Thanh toán thẻ của mình không qua được nên mình trả tiền mặt." }] },
+    { "ai": "M", "t": "Interesting. So it's not every device. Which browser are you using on your laptop?", "v": "Thú vị đấy. Vậy là không phải thiết bị nào cũng bị. Em đang dùng trình duyệt nào trên laptop?" },
+    { "ai": "Q", "t": "Just the default one. I haven't updated it for months, actually.", "v": "Cái mặc định thôi. Thật ra mấy tháng rồi em chưa cập nhật nó.",
+      "np": [{ "mau": "haven't + V3 + for + khoảng thời gian", "giai": "\"for months\" = suốt mấy tháng nay. Dùng for + khoảng thời gian, since + mốc thời gian (since March).", "vd": "I haven't seen him since March.", "vdV": "Mình không gặp anh ấy từ tháng Ba." }] },
+    { "ai": "M", "t": "That might be the cause. We'll write that under \"environment\": device, operating system, browser and version.", "v": "Có thể đó là nguyên nhân. Mình ghi cái đó vào mục \"môi trường\": thiết bị, hệ điều hành, trình duyệt và phiên bản." },
+    { "ai": "Q", "t": "Got it. What else should a good report have?", "v": "Em hiểu rồi. Một báo lỗi tốt còn cần gì nữa ạ?" },
+    { "ai": "M", "t": "The two lines that matter most: the expected result and the actual result.", "v": "Hai dòng quan trọng nhất: kết quả mong đợi và kết quả thực tế." },
+    { "ai": "M", "t": "Expected: the payment is completed and you see a confirmation page. Actual: the button keeps spinning and nothing happens.", "v": "Mong đợi: thanh toán hoàn tất và em thấy trang xác nhận. Thực tế: cái nút cứ quay và không có gì xảy ra.",
+      "np": [{ "mau": "keep + V-ing", "giai": "\"cứ tiếp tục, cứ mãi…\" — rất hợp để tả một lỗi lặp đi lặp lại.", "vd": "The app keeps crashing when I upload a photo.", "vdV": "App cứ bị văng mỗi khi mình tải ảnh lên." }] },
+    { "ai": "Q", "t": "That's much clearer than \"it's broken\".", "v": "Rõ hơn \"nó hỏng rồi\" nhiều." },
+    { "ai": "M", "t": "Then attach a screenshot or a short screen recording, and copy any error from the console.", "v": "Rồi đính kèm một ảnh chụp màn hình hoặc một đoạn quay màn hình ngắn, và chép mọi lỗi trong console." },
+    { "ai": "Q", "t": "There is an error, actually. It says \"undefined is not a function\".", "v": "Có lỗi thật này chị. Nó ghi \"undefined is not a function\"." },
+    { "ai": "M", "t": "Perfect. Paste the whole message, not just part of it. Last thing: severity. Can users still pay another way?", "v": "Tuyệt. Dán nguyên cả thông báo, đừng cắt bớt. Điều cuối: mức độ nghiêm trọng. Người dùng có còn trả tiền bằng cách khác được không?" },
+    { "ai": "Q", "t": "Yes, on mobile it works fine. So it's high, but not critical?", "v": "Có, trên điện thoại vẫn chạy tốt. Vậy là mức cao, nhưng chưa nghiêm trọng nhất?",
+      "khac": [
+        { "kieu": "chuyên nghiệp", "t": "There's a workaround on mobile, so I'd say high severity rather than critical.", "v": "Có cách tạm vượt qua trên điện thoại, nên em đánh giá mức cao chứ chưa tới mức nghiêm trọng nhất.", "ghiChu": "workaround = cách tạm thời để tránh lỗi" }
+      ] },
+    { "ai": "M", "t": "I agree. Now give it a clear title, like \"Checkout: Pay button spins forever on an old desktop browser\".", "v": "Chị đồng ý. Giờ đặt một tiêu đề rõ ràng, kiểu \"Thanh toán: nút Pay quay mãi trên trình duyệt máy tính bản cũ\"." },
+    { "ai": "Q", "t": "And what if the developer says, \"It works on my machine\"?", "v": "Thế nếu lập trình viên bảo \"Máy em chạy bình thường mà\" thì sao?" },
+    { "ai": "M", "t": "Then your report has already answered that. They can see exactly which machine it doesn't work on.", "v": "Thì báo lỗi của em đã trả lời rồi. Họ thấy rõ nó không chạy trên máy nào." },
+    { "ai": "Q", "t": "I used to think bug reports were just boring paperwork.", "v": "Trước đây em cứ nghĩ báo lỗi chỉ là giấy tờ nhàm chán.",
+      "np": [{ "mau": "used to + V", "giai": "Thói quen hoặc suy nghĩ trong quá khứ, bây giờ KHÔNG còn nữa. Đừng nhầm với \"be used to + V-ing\" (quen với…).", "vd": "I used to write code without tests.", "vdV": "Trước đây mình viết code mà không có test." }] },
+    { "ai": "M", "t": "A good report can save someone a whole day. A bad one can waste a whole week.", "v": "Một báo lỗi tốt có thể tiết kiệm cho ai đó cả một ngày. Một báo lỗi tồi có thể làm phí cả một tuần." },
+    { "ai": "Q", "t": "Thanks, Megan. I'll send it to the team in five minutes.", "v": "Cảm ơn chị Megan. Năm phút nữa em gửi cho cả nhóm.",
+      "khac": [
+        { "kieu": "chuyên nghiệp", "t": "Thanks. I'll file the ticket and share it with the team shortly.", "v": "Cảm ơn chị. Em sẽ tạo ticket và gửi cho nhóm ngay.", "ghiChu": "\"file a ticket/bug\" = tạo phiếu báo lỗi" }
+      ] }
+  ],
+  "tuVung": [
+    { "chu": "checkout", "doc": "/ˈtʃekaʊt/", "nghia": "bước thanh toán (trên web bán hàng)", "vd": "Users leave at the checkout page." },
+    { "chu": "reproduce", "doc": "/ˌriːprəˈdjuːs/", "nghia": "tái hiện (làm lỗi xảy ra lại)", "vd": "I can't reproduce the bug on my laptop." },
+    { "chu": "steps to reproduce", "doc": "/steps tə ˌriːprəˈdjuːs/", "nghia": "các bước tái hiện lỗi", "vd": "Please add steps to reproduce to your report." },
+    { "chu": "went through", "doc": "/went θruː/", "nghia": "(giao dịch) được chấp nhận, thành công", "vd": "The payment went through at last." },
+    { "chu": "environment", "doc": "/ɪnˈvaɪrənmənt/", "nghia": "môi trường chạy (thiết bị, hệ điều hành, trình duyệt…)", "vd": "Which environment did you test it in?" },
+    { "chu": "expected result", "doc": "/ɪkˈspektɪd rɪˈzʌlt/", "nghia": "kết quả mong đợi", "vd": "The expected result is a confirmation email." },
+    { "chu": "actual result", "doc": "/ˈæktʃuəl rɪˈzʌlt/", "nghia": "kết quả thực tế", "vd": "The actual result is an error page." },
+    { "chu": "attach", "doc": "/əˈtætʃ/", "nghia": "đính kèm", "vd": "Please attach the log file." },
+    { "chu": "screenshot", "doc": "/ˈskriːnʃɒt/", "nghia": "ảnh chụp màn hình", "vd": "Can you send me a screenshot?" },
+    { "chu": "severity", "doc": "/sɪˈverəti/", "nghia": "mức độ nghiêm trọng (của lỗi)", "vd": "This bug has low severity." },
+    { "chu": "critical", "doc": "/ˈkrɪtɪkl/", "nghia": "nghiêm trọng nhất, phải sửa ngay", "vd": "Users can't log in. That's critical." },
+    { "chu": "paperwork", "doc": "/ˈpeɪpəwɜːk/", "nghia": "giấy tờ, thủ tục", "vd": "Starting a new job means a lot of paperwork." }
+  ],
+  "yNghia": "Báo lỗi tốt là một món quà cho người sửa: ai đọc cũng tái hiện được lỗi mà không phải hỏi lại. \"Nó không chạy\" chỉ là cảm xúc; các bước tái hiện, kết quả mong đợi và thực tế mới là thông tin. Viết rõ một lần có thể tiết kiệm cho cả nhóm một ngày.",
+  "meo": [
+    "Khung báo lỗi: Title · Steps to reproduce · Expected result · Actual result · Environment · Screenshot/logs · Severity.",
+    "\"When I click X, Y happens.\" — hai vế đều hiện tại đơn khi tả một lỗi luôn xảy ra.",
+    "\"keep + V-ing\" để tả lỗi lặp lại: \"It keeps crashing.\" / \"The button keeps spinning.\"",
+    "used to + V = trước kia (giờ không còn); be used to + V-ing = đã quen với."
+  ],
+  "cauHoi": [
+    { "hoi": "Theo Megan, vì sao các bước tái hiện quan trọng?", "chon": ["Vì sếp yêu cầu", "Vì không tái hiện được lỗi thì không sửa được", "Vì để ticket trông dài hơn"], "dung": 1, "giai": "\"If they can't reproduce the bug, they can't fix it.\"" },
+    { "hoi": "Khi thử trên điện thoại, chuyện gì xảy ra?", "chon": ["Thanh toán qua được ngay", "Nút cũng quay mãi", "App bị văng"], "dung": 0, "giai": "\"It works on my phone. The payment went through straight away.\"" },
+    { "hoi": "Nguyên nhân có thể của lỗi là gì?", "chon": ["Mạng của công ty chậm", "Giỏ hàng có quá nhiều món", "Trình duyệt trên laptop đã mấy tháng chưa cập nhật"], "dung": 2, "giai": "\"I haven't updated it for months, actually.\" — \"That might be the cause.\"" },
+    { "hoi": "Vì sao lỗi chỉ ở mức \"high\" chứ không \"critical\"?", "chon": ["Vì chỉ có một người gặp", "Vì người dùng vẫn trả tiền được trên điện thoại", "Vì đã có bản sửa"], "dung": 1, "giai": "\"Can users still pay another way?\" — \"Yes, on mobile it works fine.\"" }
+  ]
+}

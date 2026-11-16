@@ -1,6 +1,7 @@
 {
   "id": "ja-n5-02",
   "nn": "ja",
+  "danhMuc": "doi-song",
   "cap": "N5",
   "so": 2,
   "tieuDe": "ゴミの日",
@@ -9,40 +10,306 @@
   "chuDe": "Phân loại rác",
   "bieuTuong": "arrow.3.trianglepath",
   "nguoi": [
-    { "ma": "M", "ten": "ミン", "giong": "ja-nam", "vai": "du học sinh, mới chuyển đến" },
-    { "ma": "Y", "ten": "山田さん", "giong": "ja2-nu", "vai": "bác hàng xóm" }
+    {
+      "ma": "M",
+      "ten": "ミン",
+      "giong": "ja-nam",
+      "vai": "du học sinh, mới chuyển đến"
+    },
+    {
+      "ma": "Y",
+      "ten": "山田さん",
+      "giong": "ja2-nu",
+      "vai": "bác hàng xóm"
+    }
   ],
   "loi": [
-    { "ai": "Y", "t": "おはようございます。", "doc": "おはようございます。", "v": "Chào buổi sáng." },
-    { "ai": "M", "t": "あ、おはようございます。となりの部屋のミンです。", "doc": "あ、おはようございます。となりのへやのミンです。", "v": "À, chào bác buổi sáng. Cháu là Minh ở phòng bên cạnh." },
-    { "ai": "Y", "t": "ミンさん、そのゴミ、今日出しますか。", "doc": "ミンさん、そのごみ、きょうだしますか。", "v": "Cậu Minh này, túi rác đó, cậu định đổ hôm nay à?" },
-    { "ai": "M", "t": "はい。だめですか。", "doc": "はい。だめですか。", "v": "Vâng. Không được ạ?" },
-    { "ai": "Y", "t": "今日は燃えるゴミの日です。それはペットボトルですね。", "doc": "きょうはもえるごみのひです。それはペットボトルですね。", "v": "Hôm nay là ngày rác cháy được. Cái đó là chai nhựa mà." },
-    { "ai": "M", "t": "え、そうですか。ペットボトルは何曜日ですか。", "doc": "え、そうですか。ペットボトルはなんようびですか。", "v": "Ơ, vậy ạ. Chai nhựa thì vào thứ mấy ạ?" },
-    { "ai": "Y", "t": "水曜日です。毎週水曜日の朝、8時までに出してください。", "doc": "すいようびです。まいしゅうすいようびのあさ、はちじまでにだしてください。", "v": "Thứ Tư. Mỗi sáng thứ Tư hằng tuần, cậu mang ra trước 8 giờ nhé." },
-    { "ai": "M", "t": "わかりました。日本のゴミはむずかしいですね。", "doc": "わかりました。にほんのごみはむずかしいですね。", "v": "Cháu hiểu rồi. Rác ở Nhật khó thật ạ." },
-    { "ai": "Y", "t": "そうですね。わたしも最初はたくさんまちがえました。", "doc": "そうですね。わたしもさいしょはたくさんまちがえました。", "v": "Đúng vậy. Lúc đầu bác cũng nhầm nhiều lắm." },
-    { "ai": "M", "t": "本当ですか。", "doc": "ほんとうですか。", "v": "Thật ạ?" },
-    { "ai": "Y", "t": "はい。ボトルのキャップとラベルも取ってくださいね。", "doc": "はい。ボトルのキャップとラベルもとってくださいね。", "v": "Thật. À, nắp chai với nhãn dán cũng phải gỡ ra nhé." },
-    { "ai": "M", "t": "キャップもですか。ベトナムでは全部いっしょでした。", "doc": "キャップもですか。ベトナムではぜんぶいっしょでした。", "v": "Cả nắp nữa ạ? Ở Việt Nam thì bỏ chung hết." },
-    { "ai": "Y", "t": "ここに、ゴミのカレンダーがあります。どうぞ。", "doc": "ここに、ごみのカレンダーがあります。どうぞ。", "v": "Đây, bác có tờ lịch đổ rác. Cậu cầm lấy." },
-    { "ai": "M", "t": "わあ、ありがとうございます。部屋の壁にはります。", "doc": "わあ、ありがとうございます。へやのかべにはります。", "v": "Ôi, cháu cảm ơn bác. Cháu sẽ dán lên tường phòng." },
-    { "ai": "Y", "t": "わからないときは、いつでも聞いてくださいね。", "doc": "わからないときは、いつでもきいてくださいね。", "v": "Lúc nào không biết thì cứ hỏi bác nhé." },
-    { "ai": "M", "t": "ありがとうございます。山田さんは、やさしいですね。", "doc": "ありがとうございます。やまださんは、やさしいですね。", "v": "Cháu cảm ơn bác. Bác Yamada tốt bụng quá." },
-    { "ai": "Y", "t": "いいえ。となりですから。", "doc": "いいえ。となりですから。", "v": "Có gì đâu. Mình là hàng xóm mà." }
+    {
+      "ai": "Y",
+      "t": "おはようございます。",
+      "doc": "おはようございます。",
+      "v": "Chào buổi sáng.",
+      "khac": [
+        {
+          "kieu": "thân mật",
+          "t": "おはよう。",
+          "doc": "おはよう。",
+          "v": "Chào buổi sáng.",
+          "ghiChu": "Với bạn bè, người nhà; với hàng xóm lớn tuổi nên nói đủ おはようございます."
+        }
+      ]
+    },
+    {
+      "ai": "M",
+      "t": "あ、おはようございます。となりの部屋のミンです。",
+      "doc": "あ、おはようございます。となりのへやのミンです。",
+      "v": "À, chào bác buổi sáng. Cháu là Minh ở phòng bên cạnh.",
+      "khac": [
+        {
+          "kieu": "trang trọng",
+          "t": "おはようございます。となりの部屋に住んでいるミンと申します。",
+          "doc": "おはようございます。となりのへやにすんでいるミンともうします。",
+          "v": "Chào bác buổi sáng. Cháu là Minh, sống ở phòng bên cạnh ạ.",
+          "ghiChu": "Lần đầu chào hàng xóm lớn tuổi."
+        }
+      ],
+      "np": [
+        {
+          "mau": "N の N です (giới thiệu kèm nơi ở)",
+          "giai": "Đặt thông tin trước tên bằng の: となりの部屋のミン = Minh ở phòng bên cạnh.",
+          "vd": "三階の田中です。",
+          "vdDoc": "さんがいのたなかです。",
+          "vdV": "Tôi là Tanaka ở tầng ba."
+        }
+      ]
+    },
+    {
+      "ai": "Y",
+      "t": "ミンさん、そのゴミ、今日出しますか。",
+      "doc": "ミンさん、そのごみ、きょうだしますか。",
+      "v": "Cậu Minh này, túi rác đó, cậu định đổ hôm nay à?"
+    },
+    {
+      "ai": "M",
+      "t": "はい。だめですか。",
+      "doc": "はい。だめですか。",
+      "v": "Vâng. Không được ạ?",
+      "khac": [
+        {
+          "kieu": "mềm mỏng",
+          "t": "はい。……出してはいけませんか。",
+          "doc": "はい。……だしてはいけませんか。",
+          "v": "Vâng… Cháu không được đổ ạ?",
+          "ghiChu": "いけませんか lịch sự, nhẹ hơn だめですか."
+        }
+      ]
+    },
+    {
+      "ai": "Y",
+      "t": "今日は燃えるゴミの日です。それはペットボトルですね。",
+      "doc": "きょうはもえるごみのひです。それはペットボトルですね。",
+      "v": "Hôm nay là ngày rác cháy được. Cái đó là chai nhựa mà."
+    },
+    {
+      "ai": "M",
+      "t": "え、そうですか。ペットボトルは何曜日ですか。",
+      "doc": "え、そうですか。ペットボトルはなんようびですか。",
+      "v": "Ơ, vậy ạ. Chai nhựa thì vào thứ mấy ạ?",
+      "khac": [
+        {
+          "kieu": "lịch sự",
+          "t": "そうなんですか。ペットボトルは何曜日に出せばいいですか。",
+          "doc": "そうなんですか。ペットボトルはなんようびにだせばいいですか。",
+          "v": "Vậy ạ. Chai nhựa thì cháu nên đổ vào thứ mấy ạ?"
+        }
+      ],
+      "np": [
+        {
+          "mau": "何曜日ですか",
+          "giai": "Hỏi thứ: 何曜日 (なんようび). Các thứ: 月 げつ・火 か・水 すい・木 もく・金 きん・土 ど・日 にち + 曜日.",
+          "vd": "今日は何曜日ですか。",
+          "vdDoc": "きょうはなんようびですか。",
+          "vdV": "Hôm nay là thứ mấy?"
+        }
+      ]
+    },
+    {
+      "ai": "Y",
+      "t": "水曜日です。毎週水曜日の朝、8時までに出してください。",
+      "doc": "すいようびです。まいしゅうすいようびのあさ、はちじまでにだしてください。",
+      "v": "Thứ Tư. Mỗi sáng thứ Tư hằng tuần, cậu mang ra trước 8 giờ nhé.",
+      "np": [
+        {
+          "mau": "〜までに (trước hạn)",
+          "giai": "までに = trước (một mốc), làm xong trước lúc đó. Khác まで = cho đến (làm liên tục tới lúc đó): 8時まで寝る = ngủ đến 8 giờ.",
+          "vd": "金曜日までに宿題を出してください。",
+          "vdDoc": "きんようびまでにしゅくだいをだしてください。",
+          "vdV": "Hãy nộp bài tập trước thứ Sáu."
+        }
+      ]
+    },
+    {
+      "ai": "M",
+      "t": "わかりました。日本のゴミはむずかしいですね。",
+      "doc": "わかりました。にほんのごみはむずかしいですね。",
+      "v": "Cháu hiểu rồi. Rác ở Nhật khó thật ạ."
+    },
+    {
+      "ai": "Y",
+      "t": "そうですね。わたしも最初はたくさんまちがえました。",
+      "doc": "そうですね。わたしもさいしょはたくさんまちがえました。",
+      "v": "Đúng vậy. Lúc đầu bác cũng nhầm nhiều lắm."
+    },
+    {
+      "ai": "M",
+      "t": "本当ですか。",
+      "doc": "ほんとうですか。",
+      "v": "Thật ạ?"
+    },
+    {
+      "ai": "Y",
+      "t": "はい。ボトルのキャップとラベルも取ってくださいね。",
+      "doc": "はい。ボトルのキャップとラベルもとってくださいね。",
+      "v": "Thật. À, nắp chai với nhãn dán cũng phải gỡ ra nhé.",
+      "np": [
+        {
+          "mau": "〜も (cũng, cả)",
+          "giai": "も thay cho を／が／は để nói “cả … nữa”: キャップとラベルも取って = gỡ cả nắp lẫn nhãn.",
+          "vd": "わたしもコーヒーを飲みます。",
+          "vdDoc": "わたしもコーヒーをのみます。",
+          "vdV": "Tôi cũng uống cà phê."
+        }
+      ]
+    },
+    {
+      "ai": "M",
+      "t": "キャップもですか。ベトナムでは全部いっしょでした。",
+      "doc": "キャップもですか。ベトナムではぜんぶいっしょでした。",
+      "v": "Cả nắp nữa ạ? Ở Việt Nam thì bỏ chung hết."
+    },
+    {
+      "ai": "Y",
+      "t": "ここに、ゴミのカレンダーがあります。どうぞ。",
+      "doc": "ここに、ごみのカレンダーがあります。どうぞ。",
+      "v": "Đây, bác có tờ lịch đổ rác. Cậu cầm lấy."
+    },
+    {
+      "ai": "M",
+      "t": "わあ、ありがとうございます。部屋の壁にはります。",
+      "doc": "わあ、ありがとうございます。へやのかべにはります。",
+      "v": "Ôi, cháu cảm ơn bác. Cháu sẽ dán lên tường phòng."
+    },
+    {
+      "ai": "Y",
+      "t": "わからないときは、いつでも聞いてくださいね。",
+      "doc": "わからないときは、いつでもきいてくださいね。",
+      "v": "Lúc nào không biết thì cứ hỏi bác nhé.",
+      "khac": [
+        {
+          "kieu": "thân mật",
+          "t": "わからなかったら、いつでも聞いてね。",
+          "doc": "わからなかったら、いつでもきいてね。",
+          "v": "Không biết gì thì cứ hỏi bác nhé.",
+          "ghiChu": "Người lớn nói với người nhỏ tuổi, thân mật."
+        }
+      ],
+      "np": [
+        {
+          "mau": "〜とき (khi)",
+          "giai": "Thể thường + とき = khi …: わからないとき = khi không biết. Danh từ + の + とき: 子どものとき (hồi nhỏ).",
+          "vd": "ひまなとき、本を読みます。",
+          "vdDoc": "ひまなとき、ほんをよみます。",
+          "vdV": "Khi rảnh tôi đọc sách."
+        }
+      ]
+    },
+    {
+      "ai": "M",
+      "t": "ありがとうございます。山田さんは、やさしいですね。",
+      "doc": "ありがとうございます。やまださんは、やさしいですね。",
+      "v": "Cháu cảm ơn bác. Bác Yamada tốt bụng quá.",
+      "khac": [
+        {
+          "kieu": "lịch sự",
+          "t": "いろいろ教えてくださって、ありがとうございます。",
+          "doc": "いろいろおしえてくださって、ありがとうございます。",
+          "v": "Cảm ơn bác đã chỉ cho cháu nhiều điều.",
+          "ghiChu": "Cảm ơn người lớn tuổi đã chỉ bảo."
+        }
+      ]
+    },
+    {
+      "ai": "Y",
+      "t": "いいえ。となりですから。",
+      "doc": "いいえ。となりですから。",
+      "v": "Có gì đâu. Mình là hàng xóm mà.",
+      "khac": [
+        {
+          "kieu": "tự nhiên hơn",
+          "t": "いえいえ、お互いさまですよ。",
+          "doc": "いえいえ、おたがいさまですよ。",
+          "v": "Có gì đâu, hàng xóm giúp nhau mà.",
+          "ghiChu": "お互いさま = ai cũng có lúc cần đến nhau."
+        }
+      ],
+      "np": [
+        {
+          "mau": "N ですから (vì là N)",
+          "giai": "から ở cuối câu nêu lý do: となりですから = vì là hàng xóm (nên giúp là chuyện thường).",
+          "vd": "友だちですから。",
+          "vdDoc": "ともだちですから。",
+          "vdV": "Vì là bạn mà."
+        }
+      ]
+    }
   ],
   "tuVung": [
-    { "chu": "部屋", "doc": "へや", "nghia": "căn phòng", "vd": "わたしの部屋は2階です。" },
-    { "chu": "燃えるゴミ", "doc": "もえるごみ", "nghia": "rác cháy được (rác sinh hoạt: thức ăn thừa, giấy bẩn…)", "vd": "燃えるゴミは月曜日です。" },
-    { "chu": "何曜日", "doc": "なんようび", "nghia": "thứ mấy (trong tuần)", "vd": "今日は何曜日ですか。" },
-    { "chu": "毎週", "doc": "まいしゅう", "nghia": "mỗi tuần, hằng tuần", "vd": "毎週日本語を勉強します。" },
-    { "chu": "までに", "doc": "までに", "nghia": "trước (mốc thời gian), muộn nhất là", "vd": "5時までに来てください。" },
-    { "chu": "最初", "doc": "さいしょ", "nghia": "ban đầu, lúc đầu (tối sơ)", "vd": "最初はむずかしいです。" },
-    { "chu": "まちがえました", "doc": "まちがえました", "nghia": "đã nhầm, đã làm sai", "vd": "電車をまちがえました。" },
-    { "chu": "取って", "doc": "とって", "nghia": "gỡ ra, lấy (thể て của 取る)", "vd": "ぼうしを取ってください。" },
-    { "chu": "全部", "doc": "ぜんぶ", "nghia": "tất cả, toàn bộ", "vd": "全部食べました。" },
-    { "chu": "壁", "doc": "かべ", "nghia": "bức tường", "vd": "壁に写真をはります。" },
-    { "chu": "聞いて", "doc": "きいて", "nghia": "hỏi; nghe (thể て của 聞く)", "vd": "先生に聞いてください。" }
+    {
+      "chu": "部屋",
+      "doc": "へや",
+      "nghia": "căn phòng",
+      "vd": "わたしの部屋は2階です。"
+    },
+    {
+      "chu": "燃えるゴミ",
+      "doc": "もえるごみ",
+      "nghia": "rác cháy được (rác sinh hoạt: thức ăn thừa, giấy bẩn…)",
+      "vd": "燃えるゴミは月曜日です。"
+    },
+    {
+      "chu": "何曜日",
+      "doc": "なんようび",
+      "nghia": "thứ mấy (trong tuần)",
+      "vd": "今日は何曜日ですか。"
+    },
+    {
+      "chu": "毎週",
+      "doc": "まいしゅう",
+      "nghia": "mỗi tuần, hằng tuần",
+      "vd": "毎週日本語を勉強します。"
+    },
+    {
+      "chu": "までに",
+      "doc": "までに",
+      "nghia": "trước (mốc thời gian), muộn nhất là",
+      "vd": "5時までに来てください。"
+    },
+    {
+      "chu": "最初",
+      "doc": "さいしょ",
+      "nghia": "ban đầu, lúc đầu (tối sơ)",
+      "vd": "最初はむずかしいです。"
+    },
+    {
+      "chu": "まちがえました",
+      "doc": "まちがえました",
+      "nghia": "đã nhầm, đã làm sai",
+      "vd": "電車をまちがえました。"
+    },
+    {
+      "chu": "取って",
+      "doc": "とって",
+      "nghia": "gỡ ra, lấy (thể て của 取る)",
+      "vd": "ぼうしを取ってください。"
+    },
+    {
+      "chu": "全部",
+      "doc": "ぜんぶ",
+      "nghia": "tất cả, toàn bộ",
+      "vd": "全部食べました。"
+    },
+    {
+      "chu": "壁",
+      "doc": "かべ",
+      "nghia": "bức tường",
+      "vd": "壁に写真をはります。"
+    },
+    {
+      "chu": "聞いて",
+      "doc": "きいて",
+      "nghia": "hỏi; nghe (thể て của 聞く)",
+      "vd": "先生に聞いてください。"
+    }
   ],
   "yNghia": "Ở Nhật, đổ rác đúng ngày là một cách nói “tôi tôn trọng hàng xóm”. Nhưng chẳng ai đúng ngay từ đầu — kể cả người Nhật. Nhận sai một cách vui vẻ và hỏi người bên cạnh, nhiều khi bạn nhận lại cả một người hàng xóm tốt.",
   "meo": [
@@ -52,9 +319,47 @@
     "Trước khi đổ rác, nên hỏi ban quản lý hoặc toà thị chính xin “ゴミのカレンダー” vì mỗi khu có lịch khác nhau."
   ],
   "cauHoi": [
-    { "hoi": "Hôm nay là ngày đổ loại rác nào?", "chon": ["Chai nhựa", "Rác cháy được", "Lon và chai thuỷ tinh"], "dung": 1, "giai": "「今日は燃えるゴミの日です」." },
-    { "hoi": "Chai nhựa đổ vào lúc nào?", "chon": ["Sáng thứ Hai, trước 8 giờ", "Tối thứ Tư", "Sáng thứ Tư, trước 8 giờ", "Bất cứ lúc nào"], "dung": 2, "giai": "「毎週水曜日の朝、8時までに出してください」." },
-    { "hoi": "Ngoài chai, Minh còn phải làm gì?", "chon": ["Gỡ nắp và nhãn", "Rửa bằng xà phòng", "Cắt nhỏ chai"], "dung": 0, "giai": "「ボトルのキャップとラベルも取ってくださいね」." },
-    { "hoi": "「までに」 trong 「8時までに」 có nghĩa là gì?", "chon": ["Từ 8 giờ", "Đúng 8 giờ", "Sau 8 giờ", "Trước 8 giờ (muộn nhất là 8 giờ)"], "dung": 3, "giai": "までに chỉ hạn chót: phải xong trước mốc đó." }
+    {
+      "hoi": "Hôm nay là ngày đổ loại rác nào?",
+      "chon": [
+        "Chai nhựa",
+        "Rác cháy được",
+        "Lon và chai thuỷ tinh"
+      ],
+      "dung": 1,
+      "giai": "「今日は燃えるゴミの日です」."
+    },
+    {
+      "hoi": "Chai nhựa đổ vào lúc nào?",
+      "chon": [
+        "Sáng thứ Hai, trước 8 giờ",
+        "Tối thứ Tư",
+        "Sáng thứ Tư, trước 8 giờ",
+        "Bất cứ lúc nào"
+      ],
+      "dung": 2,
+      "giai": "「毎週水曜日の朝、8時までに出してください」."
+    },
+    {
+      "hoi": "Ngoài chai, Minh còn phải làm gì?",
+      "chon": [
+        "Gỡ nắp và nhãn",
+        "Rửa bằng xà phòng",
+        "Cắt nhỏ chai"
+      ],
+      "dung": 0,
+      "giai": "「ボトルのキャップとラベルも取ってくださいね」."
+    },
+    {
+      "hoi": "「までに」 trong 「8時までに」 có nghĩa là gì?",
+      "chon": [
+        "Từ 8 giờ",
+        "Đúng 8 giờ",
+        "Sau 8 giờ",
+        "Trước 8 giờ (muộn nhất là 8 giờ)"
+      ],
+      "dung": 3,
+      "giai": "までに chỉ hạn chót: phải xong trước mốc đó."
+    }
   ]
 }

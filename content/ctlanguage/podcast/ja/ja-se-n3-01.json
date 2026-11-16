@@ -1,0 +1,509 @@
+{
+  "id": "ja-se-n3-01",
+  "nn": "ja",
+  "danhMuc": "phan-mem",
+  "cap": "N3",
+  "so": 1,
+  "tieuDe": "リリース前日の小さな違和感",
+  "tieuDeViet": "Điều bất thường nhỏ trước ngày release",
+  "moTa": "Trước ngày release, Minh phát hiện một bug trong code do tiền bối Ishii viết, nhưng chần chừ nửa ngày vì sợ thất lễ. Chị Mori chỉ cho Minh cách 相談 (hỏi ý kiến), cách báo bug cho người viết code mà không đổ lỗi, và cách 連絡 cho những người liên quan. Học 報連相 trong tình huống IT thật.",
+  "chuDe": "Báo bug, hō-ren-sō",
+  "bieuTuong": "ladybug.fill",
+  "nguoi": [
+    {
+      "ma": "M",
+      "ten": "ミン",
+      "giong": "ja-nam",
+      "vai": "kỹ sư người Việt năm thứ nhất"
+    },
+    {
+      "ma": "R",
+      "ten": "森",
+      "giong": "ja-nu",
+      "vai": "trưởng nhóm"
+    },
+    {
+      "ma": "I",
+      "ten": "石井",
+      "giong": "ja2-nam",
+      "vai": "kỹ sư tiền bối, người viết đoạn code"
+    }
+  ],
+  "loi": [
+    {
+      "ai": "M",
+      "t": "森さん、今ちょっとよろしいですか。ご相談したいことがありまして。",
+      "doc": "もりさん、いまちょっとよろしいですか。ごそうだんしたいことがありまして。",
+      "v": "Chị Mori, bây giờ em xin chị chút thời gian được không ạ? Em có chuyện muốn hỏi ý kiến chị.",
+      "khac": [
+        {
+          "kieu": "trang trọng",
+          "t": "お忙しいところ恐れ入りますが、五分ほどお時間をいただけますでしょうか。",
+          "doc": "おいそがしいところおそれいりますが、ごふんほどおじかんをいただけますでしょうか。",
+          "v": "Xin lỗi chị đang bận, chị có thể cho em khoảng năm phút được không ạ?",
+          "ghiChu": "với cấp trên cao hơn, hoặc khách hàng"
+        },
+        {
+          "kieu": "thân mật",
+          "t": "ちょっと今いい？相談したいことがあって。",
+          "doc": "ちょっといまいい？そうだんしたいことがあって。",
+          "v": "Giờ rảnh chút không? Mình có chuyện muốn hỏi.",
+          "ghiChu": "với đồng nghiệp ngang hàng đã thân"
+        }
+      ],
+      "np": [
+        {
+          "mau": "〜がありまして",
+          "giai": "Bỏ lửng câu bằng thể て lịch sự (〜まして): nêu lý do rồi để người nghe tự hiểu phần sau. Nghe mềm, không đột ngột.",
+          "vd": "実は、お願いがありまして……。",
+          "vdDoc": "じつは、おねがいがありまして……。",
+          "vdV": "Thật ra em có việc muốn nhờ…"
+        }
+      ]
+    },
+    {
+      "ai": "R",
+      "t": "いいよ。どうしたの？",
+      "doc": "いいよ。どうしたの？",
+      "v": "Được chứ. Có chuyện gì thế?"
+    },
+    {
+      "ai": "M",
+      "t": "明日リリースする予約機能なんですが、テストしているうちに、少し気になることを見つけたんです。",
+      "doc": "あしたリリースするよやくきのうなんですが、テストしているうちに、すこしきになることをみつけたんです。",
+      "v": "Về chức năng đặt lịch sẽ release ngày mai ạ, trong lúc test em phát hiện một điểm hơi đáng lo.",
+      "np": [
+        {
+          "mau": "V-ている + うちに",
+          "giai": "Trong lúc đang V thì (một việc khác xảy ra, thường tự nhiên, không định trước).",
+          "vd": "話しているうちに、元気になりました。",
+          "vdDoc": "はなしているうちに、げんきになりました。",
+          "vdV": "Nói chuyện một lúc thì tôi khoẻ lại."
+        }
+      ]
+    },
+    {
+      "ai": "M",
+      "t": "日付をまたいで予約すると、終了時間が前の日になってしまうような気がするんです。",
+      "doc": "ひづけをまたいでよやくすると、しゅうりょうじかんがまえのひになってしまうようなきがするんです。",
+      "v": "Em có cảm giác là nếu đặt lịch vắt qua nửa đêm thì giờ kết thúc bị thành ngày hôm trước.",
+      "np": [
+        {
+          "mau": "〜ような気がする",
+          "giai": "Tôi có cảm giác là … (chưa chắc, cảm nhận chủ quan). Khi đã chắc chắn thì nói thẳng: 〜ます / 〜です.",
+          "vd": "前にどこかで会ったような気がします。",
+          "vdDoc": "まえにどこかであったようなきがします。",
+          "vdV": "Tôi có cảm giác đã gặp anh ở đâu rồi."
+        }
+      ]
+    },
+    {
+      "ai": "R",
+      "t": "気がする、というのは？再現はできた？",
+      "doc": "きがする、というのは？さいげんはできた？",
+      "v": "“Có cảm giác” là sao? Em tái hiện được chưa?"
+    },
+    {
+      "ai": "M",
+      "t": "はい、三回試して三回とも同じでした。手順はチケットにまとめておきました。",
+      "doc": "はい、さんかいためしてさんかいともおなじでした。てじゅんはチケットにまとめておきました。",
+      "v": "Rồi ạ, em thử ba lần, cả ba lần đều như nhau. Các bước em đã tóm tắt sẵn trong ticket.",
+      "np": [
+        {
+          "mau": "V-ておく",
+          "giai": "Làm sẵn trước để chuẩn bị cho sau này (hoặc để nguyên như vậy).",
+          "vd": "会議の前に資料を印刷しておきます。",
+          "vdDoc": "かいぎのまえにしりょうをいんさつしておきます。",
+          "vdV": "Tôi sẽ in sẵn tài liệu trước buổi họp."
+        }
+      ]
+    },
+    {
+      "ai": "R",
+      "t": "それなら、気がするじゃなくて、立派なバグだよ。",
+      "doc": "それなら、きがするじゃなくて、りっぱなバグだよ。",
+      "v": "Thế thì không phải “cảm giác” nữa, mà là một con bug đàng hoàng rồi."
+    },
+    {
+      "ai": "R",
+      "t": "でも、どうしてすぐ言わなかったの？見つけたのはいつ？",
+      "doc": "でも、どうしてすぐいわなかったの？みつけたのはいつ？",
+      "v": "Nhưng sao em không nói ngay? Em phát hiện lúc nào?"
+    },
+    {
+      "ai": "M",
+      "t": "午前中です。ただ、その部分は石井さんが書いたコードなので、勝手に言っていいのか迷ってしまって……。",
+      "doc": "ごぜんちゅうです。ただ、そのぶぶんはいしいさんがかいたコードなので、かってにいっていいのかまよってしまって……。",
+      "v": "Buổi sáng ạ. Có điều phần đó là code anh Ishii viết, nên em phân vân không biết tự ý nói ra có được không…",
+      "np": [
+        {
+          "mau": "〜ていいのか迷う",
+          "giai": "Phân vân không biết có nên làm … hay không. 〜か lồng một câu hỏi vào trong câu.",
+          "vd": "この服を買っていいのか迷っています。",
+          "vdDoc": "このふくをかっていいのかまよっています。",
+          "vdV": "Tôi đang phân vân có nên mua bộ đồ này không."
+        }
+      ]
+    },
+    {
+      "ai": "M",
+      "t": "先輩のミスを指摘するみたいで、失礼じゃないかと思ったんです。",
+      "doc": "せんぱいのミスをしてきするみたいで、しつれいじゃないかとおもったんです。",
+      "v": "Em sợ như thể đang chỉ ra lỗi của tiền bối, như vậy có thất lễ không.",
+      "np": [
+        {
+          "mau": "〜みたいで",
+          "giai": "Giống như là … nên … (văn nói của 〜ようで). Nêu ấn tượng dẫn tới cảm xúc phía sau.",
+          "vd": "子どもみたいで、恥ずかしいです。",
+          "vdDoc": "こどもみたいで、はずかしいです。",
+          "vdV": "Cứ như trẻ con, ngại quá."
+        }
+      ]
+    },
+    {
+      "ai": "R",
+      "t": "気持ちはわかる。でも、バグは誰のものでもなくて、チームの問題だから。",
+      "doc": "きもちはわかる。でも、バグはだれのものでもなくて、チームのもんだいだから。",
+      "v": "Chị hiểu cảm giác đó. Nhưng bug không phải của riêng ai, mà là vấn đề của cả nhóm."
+    },
+    {
+      "ai": "R",
+      "t": "誰が書いたかより、リリースまでに直せるかどうかのほうがずっと大事。",
+      "doc": "だれがかいたかより、リリースまでになおせるかどうかのほうがずっとだいじ。",
+      "v": "Ai viết ra nó không quan trọng bằng việc có sửa kịp trước release hay không.",
+      "np": [
+        {
+          "mau": "〜かどうか",
+          "giai": "\"Có … hay không\" — lồng câu hỏi có/không vào câu. Câu hỏi có từ để hỏi thì chỉ dùng 〜か (誰が書いたか).",
+          "vd": "明日来られるかどうか、教えてください。",
+          "vdDoc": "あしたこられるかどうか、おしえてください。",
+          "vdV": "Hãy cho tôi biết mai bạn đến được hay không."
+        },
+        {
+          "mau": "AよりBのほうが",
+          "giai": "So sánh: B hơn A. ずっと = hơn nhiều.",
+          "vd": "電車よりバスのほうが安いです。",
+          "vdDoc": "でんしゃよりバスのほうがやすいです。",
+          "vdV": "Xe buýt rẻ hơn tàu điện."
+        }
+      ]
+    },
+    {
+      "ai": "M",
+      "t": "そうですよね。半日、無駄にしてしまいました。",
+      "doc": "そうですよね。はんにち、むだにしてしまいました。",
+      "v": "Đúng vậy ạ. Em đã phí mất nửa ngày rồi.",
+      "np": [
+        {
+          "mau": "V-てしまう",
+          "giai": "Diễn tả sự tiếc nuối, lỡ làm điều không mong muốn (hoặc làm xong hẳn).",
+          "vd": "電車の中に傘を忘れてしまいました。",
+          "vdDoc": "でんしゃのなかにかさをわすれてしまいました。",
+          "vdV": "Tôi lỡ để quên ô trên tàu."
+        }
+      ]
+    },
+    {
+      "ai": "R",
+      "t": "まあ、リリース前に見つかったんだから、よかったよ。次からは、迷ったら迷っていることを相談して。",
+      "doc": "まあ、リリースまえにみつかったんだから、よかったよ。つぎからは、まよったらまよっていることをそうだんして。",
+      "v": "Thôi, phát hiện trước release là tốt rồi. Lần sau hễ phân vân thì cứ đem chính sự phân vân đó ra hỏi."
+    },
+    {
+      "ai": "R",
+      "t": "石井さん、今いいですか。ミンさんが予約機能でバグを見つけてくれたんです。",
+      "doc": "いしいさん、いまいいですか。ミンさんがよやくきのうでバグをみつけてくれたんです。",
+      "v": "Anh Ishii, giờ anh rảnh không? Minh vừa tìm ra giúp một bug ở chức năng đặt lịch.",
+      "np": [
+        {
+          "mau": "V-てくれる",
+          "giai": "Người khác làm V và việc đó có lợi cho mình/nhóm mình. Ở đây trưởng nhóm cố ý nói \"tìm ra giúp\" để ghi nhận Minh.",
+          "vd": "友だちが駅まで送ってくれました。",
+          "vdDoc": "ともだちがえきまでおくってくれました。",
+          "vdV": "Bạn tôi đưa tôi ra tận ga."
+        }
+      ]
+    },
+    {
+      "ai": "I",
+      "t": "え、本当？どんな現象？",
+      "doc": "え、ほんとう？どんなげんしょう？",
+      "v": "Hả, thật à? Hiện tượng thế nào?"
+    },
+    {
+      "ai": "M",
+      "t": "日付をまたぐ予約で、終了時間がずれるようです。もしかしたら、タイムゾーンの変換が原因かもしれません。",
+      "doc": "ひづけをまたぐよやくで、しゅうりょうじかんがずれるようです。もしかしたら、タイムゾーンのへんかんがげんいんかもしれません。",
+      "v": "Với lịch đặt vắt qua ngày, có vẻ giờ kết thúc bị lệch. Biết đâu nguyên nhân là phần chuyển đổi múi giờ.",
+      "khac": [
+        {
+          "kieu": "mềm mỏng",
+          "t": "私の見間違いかもしれないのですが、日付をまたぐと、終了時間がずれているように見えまして……。",
+          "doc": "わたしのみまちがいかもしれないのですが、ひづけをまたぐと、しゅうりょうじかんがずれているようにみえまして……。",
+          "v": "Có thể em nhìn nhầm, nhưng hình như khi vắt qua ngày thì giờ kết thúc bị lệch…",
+          "ghiChu": "khi báo lỗi trong code của người trên"
+        },
+        {
+          "kieu": "chuyên nghiệp",
+          "t": "再現手順はチケットに記載しております。日付をまたぐ予約で、終了時刻が一日前にずれます。",
+          "doc": "さいげんてじゅんはチケットにきさいしております。ひづけをまたぐよやくで、しゅうりょうじこくがいちにちまえにずれます。",
+          "v": "Các bước tái hiện em đã ghi trong ticket. Với lịch vắt qua ngày, giờ kết thúc bị lùi một ngày.",
+          "ghiChu": "báo cáo chính xác, đã chắc chắn"
+        }
+      ],
+      "np": [
+        {
+          "mau": "〜ようです",
+          "giai": "Có vẻ là … (phán đoán dựa trên điều mình quan sát được). Không khẳng định quá mạnh khi chưa biết nguyên nhân.",
+          "vd": "電車が遅れているようです。",
+          "vdDoc": "でんしゃがおくれているようです。",
+          "vdV": "Hình như tàu đang bị trễ."
+        },
+        {
+          "mau": "もしかしたら〜かもしれない",
+          "giai": "Biết đâu là …, có lẽ là … (khả năng thấp/chưa chắc).",
+          "vd": "もしかしたら、明日は雪かもしれません。",
+          "vdDoc": "もしかしたら、あしたはゆきかもしれません。",
+          "vdV": "Biết đâu mai có tuyết."
+        }
+      ]
+    },
+    {
+      "ai": "I",
+      "t": "あー、たしかに。そこ、日付の計算を急いで書いたところだ。助かったよ、ありがとう。",
+      "doc": "あー、たしかに。そこ、ひづけのけいさんをいそいでかいたところだ。たすかったよ、ありがとう。",
+      "v": "À, đúng thật. Chỗ đó là phần tính ngày tôi viết vội. May quá, cảm ơn em."
+    },
+    {
+      "ai": "I",
+      "t": "今日中に直すから、直したらもう一回テストしてもらえる？",
+      "doc": "きょうじゅうになおすから、なおしたらもういっかいテストしてもらえる？",
+      "v": "Trong hôm nay anh sửa, sửa xong em test lại giúp anh một lần nữa được không?",
+      "khac": [
+        {
+          "kieu": "lịch sự",
+          "t": "修正が終わりましたら、再テストをお願いできますか。",
+          "doc": "しゅうせいがおわりましたら、さいテストをおねがいできますか。",
+          "v": "Khi sửa xong, tôi có thể nhờ anh/chị test lại được không?",
+          "ghiChu": "nhờ người không thân hoặc bộ phận khác"
+        }
+      ],
+      "np": [
+        {
+          "mau": "V-てもらえる？",
+          "giai": "Nhờ ai làm giúp (thân mật). Lịch sự hơn: 〜てもらえますか → 〜ていただけますか.",
+          "vd": "ちょっと手伝ってもらえる？",
+          "vdDoc": "ちょっとてつだってもらえる？",
+          "vdV": "Giúp mình một chút được không?"
+        }
+      ]
+    },
+    {
+      "ai": "M",
+      "t": "もちろんです。修正が終わったら、声をかけてください。",
+      "doc": "もちろんです。しゅうせいがおわったら、こえをかけてください。",
+      "v": "Tất nhiên ạ. Sửa xong anh gọi em nhé.",
+      "khac": [
+        {
+          "kieu": "chuyên nghiệp",
+          "t": "承知しました。修正完了のご連絡をいただけましたら、すぐに確認いたします。",
+          "doc": "しょうちしました。しゅうせいかんりょうのごれんらくをいただけましたら、すぐにかくにんいたします。",
+          "v": "Em đã rõ. Khi nhận được thông báo sửa xong, em sẽ kiểm tra ngay.",
+          "ghiChu": "trong email hoặc chat với khách"
+        }
+      ]
+    },
+    {
+      "ai": "R",
+      "t": "あと、QAチームとお客様担当にも、リリースが少し遅れるかもしれないと連絡しておこう。",
+      "doc": "あと、キューエーチームとおきゃくさまたんとうにも、リリースがすこしおくれるかもしれないとれんらくしておこう。",
+      "v": "À, mình cũng báo trước cho nhóm QA và người phụ trách khách hàng là release có thể trễ một chút.",
+      "np": [
+        {
+          "mau": "V-ておこう",
+          "giai": "Thể ý chí của 〜ておく: \"mình làm sẵn … đi\". Hay dùng khi tự nhắc hoặc rủ nhóm chuẩn bị trước.",
+          "vd": "雨が降りそうだから、傘を持っておこう。",
+          "vdDoc": "あめがふりそうだから、かさをもっておこう。",
+          "vdV": "Trời sắp mưa, mang sẵn ô thôi."
+        }
+      ]
+    },
+    {
+      "ai": "M",
+      "t": "報告と連絡と相談……全部一度に使いましたね。",
+      "doc": "ほうこくとれんらくとそうだん……ぜんぶいちどにつかいましたね。",
+      "v": "Báo cáo, liên lạc, bàn bạc… mình dùng cả ba một lúc rồi chị nhỉ."
+    },
+    {
+      "ai": "R",
+      "t": "そう。報連相は、怒られないための技術じゃなくて、チームが同じ情報を持つための習慣なんだよ。",
+      "doc": "そう。ほうれんそうは、おこられないためのぎじゅつじゃなくて、チームがおなじじょうほうをもつためのしゅうかんなんだよ。",
+      "v": "Đúng. Hō-ren-sō không phải kỹ thuật để khỏi bị mắng, mà là thói quen để cả nhóm có cùng một thông tin.",
+      "np": [
+        {
+          "mau": "V-る + ための + N",
+          "giai": "N dùng để/nhằm mục đích V. Trước ため là thể từ điển hoặc thể ない.",
+          "vd": "これは留学生のための奨学金です。",
+          "vdDoc": "これはりゅうがくせいのためのしょうがくきんです。",
+          "vdV": "Đây là học bổng dành cho du học sinh."
+        }
+      ]
+    },
+    {
+      "ai": "M",
+      "t": "わかりました。これからは、迷う時間を短くするようにします。",
+      "doc": "わかりました。これからは、まようじかんをみじかくするようにします。",
+      "v": "Em hiểu rồi. Từ giờ em sẽ cố gắng rút ngắn thời gian phân vân.",
+      "khac": [
+        {
+          "kieu": "tự nhiên hơn",
+          "t": "次からは、迷ったらすぐ相談します。",
+          "doc": "つぎからは、まよったらすぐそうだんします。",
+          "v": "Lần sau hễ phân vân là em hỏi ngay."
+        }
+      ],
+      "np": [
+        {
+          "mau": "〜ようにする",
+          "giai": "Cố gắng tạo thói quen làm … (nỗ lực liên tục). Khác 〜ことにする là quyết định một lần.",
+          "vd": "毎日野菜を食べるようにしています。",
+          "vdDoc": "まいにちやさいをたべるようにしています。",
+          "vdV": "Tôi cố gắng ăn rau mỗi ngày."
+        }
+      ]
+    }
+  ],
+  "tuVung": [
+    {
+      "chu": "気になる",
+      "doc": "きになる",
+      "nghia": "thấy đáng lo, bận tâm, để ý",
+      "vd": "彼の言葉が気になります。"
+    },
+    {
+      "chu": "日付をまたぐ",
+      "doc": "ひづけをまたぐ",
+      "nghia": "vắt qua ngày (qua nửa đêm)",
+      "vd": "日付をまたぐ作業は大変です。"
+    },
+    {
+      "chu": "再現",
+      "doc": "さいげん",
+      "nghia": "tái hiện (làm lỗi xảy ra lại)",
+      "vd": "このバグは再現できません。"
+    },
+    {
+      "chu": "手順",
+      "doc": "てじゅん",
+      "nghia": "các bước, quy trình",
+      "vd": "手順を説明します。"
+    },
+    {
+      "chu": "指摘",
+      "doc": "してき",
+      "nghia": "chỉ ra (lỗi, vấn đề)",
+      "vd": "先生にミスを指摘されました。"
+    },
+    {
+      "chu": "迷う",
+      "doc": "まよう",
+      "nghia": "phân vân; lạc đường",
+      "vd": "どちらにするか迷う。"
+    },
+    {
+      "chu": "現象",
+      "doc": "げんしょう",
+      "nghia": "hiện tượng (điều quan sát được)",
+      "vd": "同じ現象が起きました。"
+    },
+    {
+      "chu": "タイムゾーン",
+      "doc": "タイムゾーン",
+      "nghia": "múi giờ",
+      "vd": "タイムゾーンを確認してください。"
+    },
+    {
+      "chu": "修正",
+      "doc": "しゅうせい",
+      "nghia": "sửa, chỉnh sửa",
+      "vd": "バグの修正が終わりました。"
+    },
+    {
+      "chu": "今日中",
+      "doc": "きょうじゅう",
+      "nghia": "trong hôm nay (trước khi hết ngày)",
+      "vd": "今日中に返事します。"
+    },
+    {
+      "chu": "習慣",
+      "doc": "しゅうかん",
+      "nghia": "thói quen, tập quán",
+      "vd": "早起きの習慣をつけたい。"
+    }
+  ],
+  "yNghia": "Phát hiện lỗi trong code của người khác không phải là \"bắt lỗi\" ai cả. Bug không thuộc về người viết ra nó, mà thuộc về cả nhóm. Điều đáng tiếc không phải là con bug, mà là nửa ngày chần chừ vì ngại. Khi phân vân, hãy đem chính sự phân vân đó ra hỏi.",
+  "meo": [
+    "Mở lời 相談: 「今ちょっとよろしいですか。ご相談したいことがありまして」 — bỏ lửng bằng 〜まして nghe mềm và lịch sự.",
+    "Báo bug cho người viết code: nói hiện tượng + các bước tái hiện, tránh nói \"anh sai rồi\". Dùng 〜ようです / 〜かもしれません khi chưa chắc nguyên nhân.",
+    "報告 = báo kết quả cho cấp trên · 連絡 = báo tin cho người liên quan · 相談 = hỏi ý kiến khi chưa quyết được.",
+    "〜ような気がする = mình có cảm giác (chưa chắc). Đã tái hiện được thì nói chắc: 「再現しました」.",
+    "〜ようにする = cố tạo thói quen; 〜ことにする = quyết định một lần."
+  ],
+  "cauHoi": [
+    {
+      "hoi": "Minh phát hiện lỗi gì?",
+      "chon": [
+        "Không đăng nhập được",
+        "Đặt lịch vắt qua ngày thì giờ kết thúc bị lùi về ngày hôm trước",
+        "Ứng dụng chạy chậm",
+        "Email xác nhận không gửi đi"
+      ],
+      "dung": 1,
+      "giai": "「日付をまたいで予約すると、終了時間が前の日になってしまう」."
+    },
+    {
+      "hoi": "Vì sao Minh không báo ngay?",
+      "chon": [
+        "Vì chưa tái hiện được",
+        "Vì chị Mori đi vắng",
+        "Vì đoạn code do tiền bối viết, Minh sợ thất lễ",
+        "Vì Minh muốn tự sửa"
+      ],
+      "dung": 2,
+      "giai": "「石井さんが書いたコードなので……失礼じゃないかと思ったんです」."
+    },
+    {
+      "hoi": "Theo chị Mori, điều gì quan trọng hơn chuyện ai viết code?",
+      "chon": [
+        "Có sửa kịp trước release hay không",
+        "Ai bị mắng",
+        "Ticket có đẹp không",
+        "Khách có biết không"
+      ],
+      "dung": 0,
+      "giai": "「リリースまでに直せるかどうかのほうがずっと大事」."
+    },
+    {
+      "hoi": "Ngoài anh Ishii, chị Mori bảo báo cho ai?",
+      "chon": [
+        "Giám đốc",
+        "Tất cả khách hàng",
+        "Phòng nhân sự",
+        "Nhóm QA và người phụ trách khách hàng"
+      ],
+      "dung": 3,
+      "giai": "「QAチームとお客様担当にも……連絡しておこう」."
+    },
+    {
+      "hoi": "Theo chị Mori, 報連相 là gì?",
+      "chon": [
+        "Kỹ thuật để khỏi bị mắng",
+        "Thói quen để cả nhóm có cùng một thông tin",
+        "Quy định bắt buộc của luật",
+        "Tên một loại rau"
+      ],
+      "dung": 1,
+      "giai": "「チームが同じ情報を持つための習慣なんだよ」."
+    }
+  ]
+}

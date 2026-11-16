@@ -1,0 +1,102 @@
+{
+  "id": "en-se-b2-01",
+  "nn": "en",
+  "danhMuc": "phan-mem",
+  "cap": "B2",
+  "so": 1,
+  "tieuDe": "Twenty-Three Comments on My Pull Request",
+  "tieuDeViet": "Hai mươi ba bình luận trên pull request của tôi",
+  "moTa": "Khoa thấy hai mươi ba bình luận review và chột dạ. Chị Rachel gọi điện cùng xem: phân biệt góp ý nhỏ (nit) với vấn đề chặn merge, góp ý bằng câu hỏi thay vì ra lệnh, và cách phản đối lại reviewer một cách lịch sự.",
+  "chuDe": "Code review",
+  "bieuTuong": "text.bubble.fill",
+  "nguoi": [
+    { "ma": "R", "ten": "Rachel", "giong": "uk-nu", "vai": "lập trình viên senior, người review" },
+    { "ma": "K", "ten": "Khoa", "giong": "us-nam", "vai": "lập trình viên, tác giả pull request" }
+  ],
+  "loi": [
+    { "ai": "R", "t": "Hi Khoa, thanks for jumping on a call. I left quite a few comments on your pull request, and I thought it'd be easier to go through them together.", "v": "Chào Khoa, cảm ơn em đã vào cuộc gọi. Chị để khá nhiều bình luận trên pull request của em, và chị nghĩ cùng nhau xem qua sẽ dễ hơn.",
+      "khac": [
+        { "kieu": "chuyên nghiệp", "t": "I've left some comments on your PR. Would you have fifteen minutes to go over them?", "v": "Chị đã để vài bình luận trên PR của em. Em có mười lăm phút để cùng xem qua không?" }
+      ] },
+    { "ai": "K", "t": "Sure. Honestly, when I saw twenty-three comments, my heart sank a little.", "v": "Vâng. Thật lòng mà nói, lúc thấy hai mươi ba bình luận, em hơi chột dạ.",
+      "np": [{ "mau": "when + quá khứ đơn, quá khứ đơn", "giai": "Hai hành động quá khứ nối tiếp nhau: thấy (saw) rồi phản ứng (sank). \"my heart sank\" = thấy hụt hẫng, lo lắng đột ngột.", "vd": "When I opened the email, my heart sank.", "vdV": "Lúc mở email ra, mình thấy hụt hẫng." }] },
+    { "ai": "R", "t": "I get that. But most of them are tiny. I've labelled them \"nit\". You can fix them or ignore them; they won't block the merge.", "v": "Chị hiểu. Nhưng phần lớn là chuyện rất nhỏ. Chị đã gắn nhãn \"nit\" cho chúng. Em sửa hay bỏ qua cũng được, chúng không chặn việc merge." },
+    { "ai": "K", "t": "Oh, that's a relief. So which ones actually matter?", "v": "Ồ, vậy em nhẹ cả người. Thế những cái nào thật sự quan trọng ạ?" },
+    { "ai": "R", "t": "Really just two. The first is in the payment service. You're calling the database inside a loop, once for every order.", "v": "Thật ra chỉ hai. Cái đầu nằm ở dịch vụ thanh toán. Em đang gọi cơ sở dữ liệu bên trong một vòng lặp, mỗi đơn hàng một lần." },
+    { "ai": "K", "t": "Right. I know it's not ideal, but it was the quickest way to get it working.", "v": "Vâng. Em biết là chưa tối ưu, nhưng đó là cách nhanh nhất để nó chạy được.",
+      "np": [{ "mau": "get + O + V-ing", "giai": "\"làm cho cái gì bắt đầu chạy/hoạt động\": get it working, get the server running.", "vd": "It took me an hour to get the printer working.", "vdV": "Mình mất một tiếng mới làm cho cái máy in chạy được." }] },
+    { "ai": "R", "t": "That's fair, and it's fine for ten orders. But have you considered what happens when a customer has five thousand?", "v": "Cũng hợp lý, và với mười đơn thì ổn. Nhưng em đã nghĩ tới chuyện gì xảy ra khi một khách có năm nghìn đơn chưa?",
+      "np": [{ "mau": "Have you considered + V-ing / what…?", "giai": "Góp ý dưới dạng câu hỏi — mềm hơn nhiều so với \"You should…\". Sau consider dùng V-ing hoặc một mệnh đề (what happens…).", "vd": "Have you considered using a queue for this?", "vdV": "Em đã nghĩ tới việc dùng hàng đợi cho chỗ này chưa?" }],
+      "khac": [
+        { "kieu": "mềm mỏng", "t": "I'm just wondering how this would behave with, say, five thousand orders.", "v": "Chị chỉ đang băn khoăn không biết đoạn này sẽ chạy thế nào với, ví dụ, năm nghìn đơn." },
+        { "kieu": "chuyên nghiệp", "t": "This could become a performance issue at scale. It might be worth loading the orders in a single query.", "v": "Chỗ này có thể thành vấn đề hiệu năng khi dữ liệu lớn. Có lẽ nên tải các đơn hàng trong một truy vấn duy nhất.", "ghiChu": "\"It might be worth + V-ing\" = có lẽ đáng để…" }
+      ] },
+    { "ai": "K", "t": "Ah. Five thousand queries. That would be painfully slow.", "v": "À. Năm nghìn truy vấn. Thế thì chậm khủng khiếp." },
+    { "ai": "R", "t": "Exactly. I'd suggest loading all the orders in one query and grouping them in memory. But I'm open to other ideas.", "v": "Đúng vậy. Chị gợi ý tải tất cả đơn hàng trong một truy vấn rồi nhóm chúng trong bộ nhớ. Nhưng chị sẵn sàng nghe ý khác.",
+      "np": [{ "mau": "suggest + V-ing (không phải suggest to V)", "giai": "Lỗi rất hay gặp: \"I suggest to load…\" là SAI. Đúng: suggest + V-ing, hoặc suggest (that) + S + V nguyên mẫu.", "vd": "I suggest (that) we test it on a real phone.", "vdV": "Mình đề nghị chúng ta test trên điện thoại thật." }] },
+    { "ai": "K", "t": "No, that makes sense. I'll change it this afternoon.", "v": "Không, vậy là hợp lý. Chiều nay em sửa." },
+    { "ai": "R", "t": "The second point is more of a question. Why did you write your own date formatting function instead of using the library we already have?", "v": "Điểm thứ hai giống một câu hỏi hơn. Sao em lại tự viết hàm định dạng ngày thay vì dùng thư viện mình đang có?",
+      "np": [{ "mau": "instead of + V-ing", "giai": "\"thay vì làm gì\" — sau giới từ of luôn là V-ing hoặc danh từ.", "vd": "Write a test instead of fixing it by hand every time.", "vdV": "Viết một test thay vì lần nào cũng sửa tay." }] },
+    { "ai": "K", "t": "Actually, I did that on purpose. The library handles the time zone wrongly for users in Vietnam, and it caused a bug last month.", "v": "Thật ra em cố ý làm vậy. Thư viện đó xử lý múi giờ sai với người dùng ở Việt Nam, và nó đã gây ra một lỗi hồi tháng trước." },
+    { "ai": "R", "t": "Oh, I didn't know that. Is that written down anywhere?", "v": "Ồ, chị không biết chuyện đó. Có ghi lại ở đâu không?" },
+    { "ai": "K", "t": "Not really. I should have added a comment explaining it.", "v": "Không hẳn ạ. Đáng lẽ em nên thêm một chú thích giải thích.",
+      "np": [{ "mau": "should have + V3", "giai": "\"Đáng lẽ nên… (nhưng đã không làm)\" — tự nhận một thiếu sót trong quá khứ một cách nhẹ nhàng.", "vd": "I should have backed up the database first.", "vdV": "Đáng lẽ mình nên sao lưu cơ sở dữ liệu trước." }] },
+    { "ai": "R", "t": "Yes, please do. Otherwise the next person will \"clean it up\" and bring the bug back.", "v": "Ừ, em thêm đi. Không thì người sau sẽ \"dọn dẹp\" nó và đem lỗi cũ quay lại." },
+    { "ai": "K", "t": "Good point. Can I push back on one of your smaller comments, though?", "v": "Ý hay ạ. Nhưng em có thể phản biện một bình luận nhỏ của chị được không?",
+      "khac": [
+        { "kieu": "mềm mỏng", "t": "I see where you're coming from, but could I explain my thinking on one of the smaller comments?", "v": "Em hiểu ý chị, nhưng em có thể giải thích suy nghĩ của em về một bình luận nhỏ không?", "ghiChu": "\"I see where you're coming from\" = tôi hiểu lý do bạn nói vậy" },
+        { "kieu": "lịch sự", "t": "Do you mind if I disagree with one of the smaller comments?", "v": "Chị có phiền không nếu em không đồng ý với một bình luận nhỏ?" }
+      ] },
+    { "ai": "R", "t": "Of course. Go ahead.", "v": "Tất nhiên. Em cứ nói." },
+    { "ai": "K", "t": "You suggested splitting the order page into three components. I agree in principle, but this pull request is already big. I'd rather do it in a separate one, so it's easier to review.", "v": "Chị gợi ý tách trang đơn hàng thành ba component. Về nguyên tắc em đồng ý, nhưng pull request này đã lớn rồi. Em muốn làm ở một cái riêng hơn, để dễ review.",
+      "np": [{ "mau": "I'd rather + V nguyên mẫu", "giai": "\"Tôi muốn… hơn\" — nói lựa chọn mình thích một cách lịch sự. Sau would rather KHÔNG có to.", "vd": "I'd rather fix it properly than quickly.", "vdV": "Mình thà sửa cho đúng còn hơn sửa cho nhanh." }],
+      "khac": [
+        { "kieu": "chuyên nghiệp", "t": "Could we track that as a follow-up ticket rather than include it in this PR?", "v": "Mình theo dõi việc đó bằng một ticket tiếp theo thay vì đưa vào PR này được không chị?" }
+      ] },
+    { "ai": "R", "t": "That's reasonable. Just create a follow-up ticket so we don't forget.", "v": "Hợp lý đấy. Chỉ cần tạo một ticket tiếp theo để mình khỏi quên." },
+    { "ai": "K", "t": "Will do. Can I ask you something more general? My review comments sometimes come across as rude. How do you write comments that don't sound harsh?", "v": "Em làm ngay. Em hỏi chị một chuyện chung hơn được không? Bình luận review của em đôi khi bị hiểu là thô lỗ. Chị viết thế nào để không nghe gay gắt?",
+      "np": [{ "mau": "come across as + tính từ/N", "giai": "\"bị/được người khác cảm nhận là…\" — nói về ấn tượng mình tạo ra, không phải ý định thật.", "vd": "He comes across as shy, but he's very funny.", "vdV": "Anh ấy trông có vẻ nhút nhát, nhưng thật ra rất vui tính." }] },
+    { "ai": "R", "t": "A few habits. I ask questions instead of giving orders: \"What do you think about…?\" rather than \"Change this.\"", "v": "Vài thói quen thôi. Chị hỏi thay vì ra lệnh: \"Em nghĩ sao về…?\" thay vì \"Sửa cái này đi.\"",
+      "khac": [
+        { "kieu": "mềm mỏng", "t": "What would you think about moving this into a helper function?", "v": "Em thấy sao nếu chuyển đoạn này vào một hàm phụ?", "ghiChu": "mẫu câu góp ý mềm, dùng được ngay trong review" }
+      ] },
+    { "ai": "R", "t": "I explain the reason, not just the rule. And I always mention something I liked. In your pull request, the tests were excellent, by the way.", "v": "Chị giải thích lý do, không chỉ nêu quy tắc. Và chị luôn nhắc tới một điều chị thích. Nhân tiện, trong pull request của em, phần test rất xuất sắc." },
+    { "ai": "K", "t": "Thanks. That actually means a lot.", "v": "Cảm ơn chị. Câu đó có ý nghĩa với em lắm." },
+    { "ai": "R", "t": "And when you receive feedback, remember it's about the code, not about you. Nobody writes perfect code on the first try, not even the people reviewing it.", "v": "Còn khi nhận góp ý, hãy nhớ nó nói về code, không nói về em. Không ai viết code hoàn hảo ngay lần đầu, kể cả những người đang review nó." },
+    { "ai": "K", "t": "Even you?", "v": "Kể cả chị ạ?" },
+    { "ai": "R", "t": "Especially me. Ask anyone who has reviewed my pull requests.", "v": "Nhất là chị. Cứ hỏi bất kỳ ai đã từng review pull request của chị." },
+    { "ai": "K", "t": "Ha! Okay, I'll fix the loop, add the comment and create the ticket. I'll ping you when it's ready for another look.", "v": "Ha! Vâng, em sẽ sửa vòng lặp, thêm chú thích và tạo ticket. Xong em nhắn chị xem lại nhé.",
+      "khac": [
+        { "kieu": "chuyên nghiệp", "t": "I'll address your comments and let you know once it's ready for re-review.", "v": "Em sẽ xử lý các góp ý của chị và báo chị ngay khi nó sẵn sàng để review lại." },
+        { "kieu": "thân mật", "t": "On it. I'll ping you when it's done.", "v": "Em làm liền. Xong em nhắn chị." }
+      ] }
+  ],
+  "tuVung": [
+    { "chu": "my heart sank", "doc": "/maɪ hɑːt sæŋk/", "nghia": "hụt hẫng, chột dạ", "vd": "My heart sank when I saw the error." },
+    { "chu": "nit", "doc": "/nɪt/", "nghia": "góp ý rất nhỏ, không bắt buộc sửa (từ \"nitpick\")", "vd": "Nit: this variable name could be clearer." },
+    { "chu": "block the merge", "doc": "/blɒk ðə mɜːdʒ/", "nghia": "chặn việc gộp code", "vd": "A failing test will block the merge." },
+    { "chu": "relief", "doc": "/rɪˈliːf/", "nghia": "sự nhẹ nhõm", "vd": "What a relief! The server is back." },
+    { "chu": "on purpose", "doc": "/ɒn ˈpɜːpəs/", "nghia": "cố ý", "vd": "I left that line empty on purpose." },
+    { "chu": "time zone", "doc": "/ˈtaɪm zəʊn/", "nghia": "múi giờ", "vd": "Our client is in a different time zone." },
+    { "chu": "push back on", "doc": "/pʊʃ bæk ɒn/", "nghia": "phản biện, không đồng ý (một cách xây dựng)", "vd": "It's okay to push back on unrealistic deadlines." },
+    { "chu": "in principle", "doc": "/ɪn ˈprɪnsəpl/", "nghia": "về nguyên tắc", "vd": "I agree in principle, but not right now." },
+    { "chu": "follow-up ticket", "doc": "/ˈfɒləʊ ʌp ˈtɪkɪt/", "nghia": "ticket làm tiếp sau, cho việc tách ra", "vd": "Let's open a follow-up ticket for the refactor." },
+    { "chu": "come across as", "doc": "/kʌm əˈkrɒs æz/", "nghia": "tạo ấn tượng là, bị hiểu là", "vd": "Short messages can come across as cold." },
+    { "chu": "harsh", "doc": "/hɑːʃ/", "nghia": "gay gắt, nặng nề", "vd": "His feedback was honest but not harsh." },
+    { "chu": "ping", "doc": "/pɪŋ/", "nghia": "nhắn nhanh cho ai (văn nói công sở)", "vd": "Ping me if you need anything." }
+  ],
+  "yNghia": "Review là về code, không phải về con người. Người review giỏi tách góp ý nhỏ khỏi vấn đề thật, góp ý bằng câu hỏi và luôn nói lý do. Người được review giỏi không phòng thủ, nhưng cũng dám phản biện lịch sự khi có lý do chính đáng.",
+  "meo": [
+    "Góp ý mềm: \"Have you considered + V-ing?\" · \"What do you think about…?\" · \"It might be worth + V-ing.\"",
+    "suggest + V-ing (I'd suggest loading…) — KHÔNG nói \"suggest to load\".",
+    "Phản đối lịch sự: \"I see where you're coming from, but…\" · \"I agree in principle, but…\" · \"I'd rather…\"",
+    "should have + V3 = đáng lẽ nên (tự nhận thiếu sót mà không tự trách quá mức)."
+  ],
+  "cauHoi": [
+    { "hoi": "Bình luận gắn nhãn \"nit\" nghĩa là gì?", "chon": ["Lỗi nghiêm trọng phải sửa ngay", "Góp ý rất nhỏ, không chặn việc merge", "Câu hỏi dành cho trưởng nhóm"], "dung": 1, "giai": "\"You can fix them or ignore them; they won't block the merge.\"" },
+    { "hoi": "Vấn đề đầu tiên Rachel chỉ ra là gì?", "chon": ["Gọi cơ sở dữ liệu trong vòng lặp, mỗi đơn hàng một lần", "Thiếu test", "Đặt tên biến không rõ"], "dung": 0, "giai": "\"You're calling the database inside a loop, once for every order.\"" },
+    { "hoi": "Vì sao Khoa tự viết hàm định dạng ngày?", "chon": ["Vì không biết có thư viện", "Vì thư viện chạy chậm", "Vì thư viện xử lý sai múi giờ cho người dùng ở Việt Nam"], "dung": 2, "giai": "\"The library handles the time zone wrongly for users in Vietnam.\"" },
+    { "hoi": "Khoa phản biện góp ý tách component bằng cách nào?", "chon": ["Đồng ý về nguyên tắc nhưng đề nghị làm ở một pull request riêng", "Từ chối thẳng", "Bỏ qua bình luận đó"], "dung": 0, "giai": "\"I agree in principle, but this pull request is already big. I'd rather do it in a separate one.\"" },
+    { "hoi": "Một thói quen giúp bình luận review không gay gắt là gì?", "chon": ["Viết càng ngắn càng tốt", "Đặt câu hỏi thay vì ra lệnh", "Chỉ bình luận khi có lỗi lớn"], "dung": 1, "giai": "\"I ask questions instead of giving orders.\"" }
+  ]
+}

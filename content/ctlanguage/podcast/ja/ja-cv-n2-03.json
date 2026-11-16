@@ -1,0 +1,509 @@
+{
+  "id": "ja-cv-n2-03",
+  "nn": "ja",
+  "danhMuc": "cong-viec",
+  "cap": "N2",
+  "so": 3,
+  "tieuDe": "黙っていたら、賛成になる",
+  "tieuDeViet": "Im lặng là thành đồng ý",
+  "moTa": "Trưởng phòng định áp dụng mẫu báo cáo tuần mới với rất nhiều mục. Nhân viên mới Hân ngại lên tiếng, nhưng đồng nghiệp Noguchi nhắc: im lặng sẽ bị coi là đồng ý. Trong cuộc họp, Hân đồng ý với mục đích, đưa ra con số thử nghiệm và đề xuất chạy thử một tháng. Học cách phát biểu ý kiến trong họp: 一点よろしいでしょうか, 〜という観点から, 〜てはどうか, 補足させていただくと.",
+  "chuDe": "Phát biểu ý kiến trong họp",
+  "bieuTuong": "hand.raised.fill",
+  "nguoi": [
+    {
+      "ma": "U",
+      "ten": "上田部長",
+      "giong": "ja-nam",
+      "vai": "trưởng phòng"
+    },
+    {
+      "ma": "H",
+      "ten": "ハン",
+      "giong": "ja2-nu",
+      "vai": "nhân viên mới người Việt"
+    },
+    {
+      "ma": "N",
+      "ten": "野口",
+      "giong": "ja2-nam",
+      "vai": "đồng nghiệp"
+    }
+  ],
+  "loi": [
+    {
+      "ai": "N",
+      "t": "ハンさん、さっきの資料、読んだ？来月から週報のフォーマットが変わるってやつ。",
+      "doc": "ハンさん、さっきのしりょう、よんだ？らいげつからしゅうほうのフォーマットがかわるってやつ。",
+      "v": "Hân ơi, đọc tài liệu lúc nãy chưa? Cái vụ từ tháng sau đổi mẫu báo cáo tuần ấy."
+    },
+    {
+      "ai": "H",
+      "t": "読みました。正直、項目が多すぎて、毎週書くのにかなり時間がかかりそうです。",
+      "doc": "よみました。しょうじき、こうもくがおおすぎて、まいしゅうかくのにかなりじかんがかかりそうです。",
+      "v": "Em đọc rồi. Nói thật là nhiều mục quá, chắc mỗi tuần viết mất khá nhiều thời gian."
+    },
+    {
+      "ai": "N",
+      "t": "じゃあ、今日の会議で言えばいいじゃない。",
+      "doc": "じゃあ、きょうのかいぎでいえばいいじゃない。",
+      "v": "Thế thì nói ra trong cuộc họp hôm nay là được mà."
+    },
+    {
+      "ai": "H",
+      "t": "でも、部長が決めたことに反対するのは、ちょっと……。新しく入った私が言うことでもないような気がして。",
+      "doc": "でも、ぶちょうがきめたことにはんたいするのは、ちょっと……。あたらしくはいったわたしがいうことでもないようなきがして。",
+      "v": "Nhưng phản đối việc trưởng phòng đã quyết thì hơi… Em thấy không phải chuyện người mới vào như em nên nói."
+    },
+    {
+      "ai": "N",
+      "t": "うちの部長は、反対されて怒るような人じゃないよ。それより、黙っていると、賛成したとみなされるからね。",
+      "doc": "うちのぶちょうは、はんたいされておこるようなひとじゃないよ。それより、だまっていると、さんせいしたとみなされるからね。",
+      "v": "Trưởng phòng mình không phải người bị phản đối là nổi giận đâu. Đáng ngại hơn là im lặng thì sẽ bị coi là đồng ý đấy.",
+      "np": [
+        {
+          "mau": "〜とみなされる",
+          "giai": "Bị coi là, bị xem như … (đánh giá từ bên ngoài, thường theo quy ước).",
+          "vd": "連絡なしで休むと、退職したとみなされる。",
+          "vdDoc": "れんらくなしでやすむと、たいしょくしたとみなされる。",
+          "vdV": "Nghỉ không báo thì sẽ bị coi là đã thôi việc."
+        }
+      ]
+    },
+    {
+      "ai": "N",
+      "t": "反対、というより「こうすればもっとよくなる」という形で言えばいいんだよ。",
+      "doc": "はんたい、というより「こうすればもっとよくなる」というかたちでいえばいいんだよ。",
+      "v": "Đừng coi là phản đối, mà hãy nói theo kiểu “làm thế này thì sẽ tốt hơn”.",
+      "np": [
+        {
+          "mau": "AというよりB",
+          "giai": "Nói là A thì không đúng lắm, đúng hơn là B.",
+          "vd": "彼は友だちというより家族のような存在だ。",
+          "vdDoc": "かれはともだちというよりかぞくのようなそんざいだ。",
+          "vdV": "Anh ấy đúng hơn là như người nhà chứ không chỉ là bạn."
+        }
+      ]
+    },
+    {
+      "ai": "U",
+      "t": "では、週報の新しいフォーマットについて、何か意見があればお願いします。",
+      "doc": "では、しゅうほうのあたらしいフォーマットについて、なにかいけんがあればおねがいします。",
+      "v": "Về mẫu báo cáo tuần mới, ai có ý kiến gì thì xin mời."
+    },
+    {
+      "ai": "H",
+      "t": "一点、よろしいでしょうか。",
+      "doc": "いってん、よろしいでしょうか。",
+      "v": "Em xin phép nói một điểm được không ạ?",
+      "khac": [
+        {
+          "kieu": "lịch sự",
+          "t": "すみません、少し発言させていただいてもよろしいですか。",
+          "doc": "すみません、すこしはつげんさせていただいてもよろしいですか。",
+          "v": "Xin lỗi, cho em phát biểu một chút được không ạ?"
+        },
+        {
+          "kieu": "ngắn gọn",
+          "t": "一つ、いいですか。",
+          "doc": "ひとつ、いいですか。",
+          "v": "Một ý được không ạ?",
+          "ghiChu": "họp nội bộ thoải mái"
+        }
+      ]
+    },
+    {
+      "ai": "U",
+      "t": "どうぞ、ハンさん。",
+      "doc": "どうぞ、ハンさん。",
+      "v": "Mời Hân."
+    },
+    {
+      "ai": "H",
+      "t": "まず、進捗を見える化するという目的には、私も大賛成です。",
+      "doc": "まず、しんちょくをみえるかするというもくてきには、わたしもだいさんせいです。",
+      "v": "Trước hết, với mục đích làm cho tiến độ “nhìn thấy được”, em hoàn toàn tán thành.",
+      "np": [
+        {
+          "mau": "N/V-る + 化 (する)",
+          "giai": "Biến thành, … hoá: 見える化 = làm cho nhìn thấy được, 自動化 = tự động hoá, 具体化 = cụ thể hoá.",
+          "vd": "作業を自動化して、時間を減らした。",
+          "vdDoc": "さぎょうをじどうかして、じかんをへらした。",
+          "vdV": "Tự động hoá công việc để giảm thời gian."
+        }
+      ]
+    },
+    {
+      "ai": "H",
+      "t": "そのうえで、作業時間という観点から、一つ気になった点があります。",
+      "doc": "そのうえで、さぎょうじかんというかんてんから、ひとつきになったてんがあります。",
+      "v": "Trên cơ sở đó, xét từ góc độ thời gian làm việc, em có một điểm băn khoăn.",
+      "khac": [
+        {
+          "kieu": "mềm mỏng",
+          "t": "細かいことで恐縮なのですが、少し気になった点がございまして……。",
+          "doc": "こまかいことできょうしゅくなのですが、すこしきになったてんがございまして……。",
+          "v": "Chuyện nhỏ thôi ạ, nhưng em có một điểm hơi băn khoăn…"
+        }
+      ],
+      "np": [
+        {
+          "mau": "〜という観点から",
+          "giai": "Xét từ góc độ/quan điểm …",
+          "vd": "安全という観点から、この計画には反対です。",
+          "vdDoc": "あんぜんというかんてんから、このけいかくにははんたいです。",
+          "vdV": "Xét về mặt an toàn, tôi phản đối kế hoạch này."
+        }
+      ]
+    },
+    {
+      "ai": "H",
+      "t": "試しに先週の分を新しいフォーマットで書いてみたところ、一時間半かかりました。",
+      "doc": "ためしにせんしゅうのぶんをあたらしいフォーマットでかいてみたところ、いちじかんはんかかりました。",
+      "v": "Em thử viết phần tuần trước theo mẫu mới thì mất một tiếng rưỡi.",
+      "np": [
+        {
+          "mau": "V-てみたところ",
+          "giai": "Thử làm V thì (kết quả/phát hiện) …",
+          "vd": "店に電話してみたところ、もう売り切れだった。",
+          "vdDoc": "みせにでんわしてみたところ、もううりきれだった。",
+          "vdV": "Thử gọi tới cửa hàng thì đã bán hết rồi."
+        }
+      ]
+    },
+    {
+      "ai": "H",
+      "t": "部全体の十二人が毎週同じだけかかるとすれば、月に七十時間以上になる計算です。",
+      "doc": "ぶぜんたいのじゅうににんがまいしゅうおなじだけかかるとすれば、つきにななじゅうじかんいじょうになるけいさんです。",
+      "v": "Nếu cả mười hai người trong phòng mỗi tuần đều mất chừng ấy, tính ra mỗi tháng sẽ hơn bảy mươi giờ.",
+      "np": [
+        {
+          "mau": "〜とすれば〜計算になる",
+          "giai": "Giả sử … thì tính ra là … (lập luận bằng con số).",
+          "vd": "一日千円使うとすれば、一か月で三万円の計算になる。",
+          "vdDoc": "いちにちせんえんつかうとすれば、いっかげつでさんまんえんのけいさんになる。",
+          "vdV": "Giả sử mỗi ngày tiêu 1.000 yên thì tính ra một tháng là 30.000 yên."
+        }
+      ]
+    },
+    {
+      "ai": "U",
+      "t": "七十時間……。そこまでは考えていなかったな。",
+      "doc": "ななじゅうじかん……。そこまではかんがえていなかったな。",
+      "v": "Bảy mươi giờ… Tôi chưa nghĩ tới mức đó."
+    },
+    {
+      "ai": "N",
+      "t": "補足させていただくと、項目の中には、すでにタスク管理ツールに入っている情報もあります。",
+      "doc": "ほそくさせていただくと、こうもくのなかには、すでにタスクかんりツールにはいっているじょうほうもあります。",
+      "v": "Xin bổ sung thêm: trong các mục đó, có những thông tin đã có sẵn trên công cụ quản lý công việc.",
+      "khac": [
+        {
+          "kieu": "tự nhiên hơn",
+          "t": "ハンさんの話に付け加えると、ツールと重複している項目もあるんです。",
+          "doc": "ハンさんのはなしにつけくわえると、ツールとちょうふくしているこうもくもあるんです。",
+          "v": "Thêm vào ý của Hân, có những mục bị trùng với công cụ.",
+          "ghiChu": "tiếp lời đồng nghiệp trong họp"
+        }
+      ]
+    },
+    {
+      "ai": "H",
+      "t": "はい。ですので、重複している項目はツールから自動で取り込むようにして、人が書くのは「課題」と「来週の予定」だけにしてはどうかと考えました。",
+      "doc": "はい。ですので、ちょうふくしているこうもくはツールからじどうでとりこむようにして、ひとがかくのは「かだい」と「らいしゅうのよてい」だけにしてはどうかとかんがえました。",
+      "v": "Vâng. Vì vậy em nghĩ, những mục trùng thì để tự động lấy từ công cụ, còn người chỉ cần viết “vấn đề” và “kế hoạch tuần sau” thì sao ạ.",
+      "khac": [
+        {
+          "kieu": "chuyên nghiệp",
+          "t": "重複項目を自動化し、記入項目を二つに絞ることをご提案いたします。",
+          "doc": "ちょうふくこうもくをじどうかし、きにゅうこうもくをふたつにしぼることをごていあんいたします。",
+          "v": "Tôi xin đề xuất tự động hoá các mục trùng lặp và thu gọn phần phải điền xuống còn hai mục.",
+          "ghiChu": "văn bản đề xuất, slide"
+        }
+      ],
+      "np": [
+        {
+          "mau": "V-てはどうか",
+          "giai": "Đề xuất: \"nếu làm … thì thế nào?\" (lịch sự: 〜てはいかがでしょうか).",
+          "vd": "一度、専門家に相談してはどうですか。",
+          "vdDoc": "いちど、せんもんかにそうだんしてはどうですか。",
+          "vdV": "Thử hỏi ý kiến chuyên gia một lần xem sao?"
+        }
+      ]
+    },
+    {
+      "ai": "U",
+      "t": "なるほど。ただ、書く量を減らしすぎると、肝心の中身が見えなくなるおそれもあるよね。",
+      "doc": "なるほど。ただ、かくりょうをへらしすぎると、かんじんのなかみがみえなくなるおそれもあるよね。",
+      "v": "Ra vậy. Có điều, giảm phần viết quá thì e là phần cốt lõi lại không thấy được.",
+      "np": [
+        {
+          "mau": "〜おそれがある",
+          "giai": "Có nguy cơ (điều xấu) xảy ra — văn trang trọng.",
+          "vd": "大雨で川があふれるおそれがある。",
+          "vdDoc": "おおあめでかわがあふれるおそれがある。",
+          "vdV": "Mưa lớn có nguy cơ làm sông tràn."
+        }
+      ]
+    },
+    {
+      "ai": "H",
+      "t": "おっしゃるとおりです。そこで、一か月だけ試験的に運用して、内容が十分かどうかを部長に判断していただくのはいかがでしょうか。",
+      "doc": "おっしゃるとおりです。そこで、いっかげつだけしけんてきにうんようして、ないようがじゅうぶんかどうかをぶちょうにはんだんしていただくのはいかがでしょうか。",
+      "v": "Đúng như anh nói. Vậy nên mình chạy thử một tháng, rồi để anh đánh giá xem nội dung đã đủ chưa, anh thấy sao ạ?",
+      "khac": [
+        {
+          "kieu": "mềm mỏng",
+          "t": "もしよろしければ、まずは一か月、試しにやってみる、というのはどうでしょうか。",
+          "doc": "もしよろしければ、まずはいっかげつ、ためしにやってみる、というのはどうでしょうか。",
+          "v": "Nếu được, trước mắt mình thử làm một tháng thì sao ạ?"
+        }
+      ]
+    },
+    {
+      "ai": "U",
+      "t": "試してみてだめなら戻す、か。それなら反対する理由はないね。",
+      "doc": "ためしてみてだめならもどす、か。それならはんたいするりゆうはないね。",
+      "v": "Thử rồi không ổn thì quay lại à. Vậy thì chẳng có lý do gì để phản đối."
+    },
+    {
+      "ai": "U",
+      "t": "正直に言うと、このフォーマットは、ほかの部のものをそのまま持ってきたんだ。現場の負担までは考えが及ばなかった。",
+      "doc": "しょうじきにいうと、このフォーマットは、ほかのぶのものをそのままもってきたんだ。げんばのふたんまではかんがえがおよばなかった。",
+      "v": "Nói thật, mẫu này tôi lấy nguyên của phòng khác. Tôi chưa nghĩ tới gánh nặng cho người làm thực tế.",
+      "np": [
+        {
+          "mau": "考えが及ばない",
+          "giai": "Không nghĩ tới, suy nghĩ chưa vươn tới (thường dùng để tự nhận thiếu sót một cách lịch sự).",
+          "vd": "そこまでは考えが及びませんでした。申し訳ありません。",
+          "vdDoc": "そこまではかんがえがおよびませんでした。もうしわけありません。",
+          "vdV": "Tôi đã không nghĩ tới mức đó. Xin lỗi."
+        }
+      ]
+    },
+    {
+      "ai": "U",
+      "t": "ハンさん、具体的な数字を出してくれて助かったよ。",
+      "doc": "ハンさん、ぐたいてきなすうじをだしてくれてたすかったよ。",
+      "v": "Hân, cảm ơn em đã đưa ra con số cụ thể."
+    },
+    {
+      "ai": "H",
+      "t": "いえ、こちらこそ、聞いていただいてありがとうございます。",
+      "doc": "いえ、こちらこそ、きいていただいてありがとうございます。",
+      "v": "Không ạ, em mới phải cảm ơn anh đã lắng nghe.",
+      "khac": [
+        {
+          "kieu": "trang trọng",
+          "t": "とんでもないです。ご検討いただき、ありがとうございます。",
+          "doc": "とんでもないです。ごけんとういただき、ありがとうございます。",
+          "v": "Không dám ạ. Cảm ơn anh đã xem xét."
+        }
+      ]
+    },
+    {
+      "ai": "U",
+      "t": "じゃあ、ハンさんと野口さんで、試験運用のフォーマット案を作ってもらえるかな。来週の会議で確認しよう。",
+      "doc": "じゃあ、ハンさんとのぐちさんで、しけんうんようのフォーマットあんをつくってもらえるかな。らいしゅうのかいぎでかくにんしよう。",
+      "v": "Vậy Hân và Noguchi làm giúp bản mẫu chạy thử nhé. Họp tuần sau mình xem lại."
+    },
+    {
+      "ai": "H",
+      "t": "承知しました。水曜日までに、案をお送りします。",
+      "doc": "しょうちしました。すいようびまでに、あんをおおくりします。",
+      "v": "Em đã rõ. Trước thứ Tư em sẽ gửi bản dự thảo."
+    },
+    {
+      "ai": "N",
+      "t": "ね、言ってよかったでしょ。",
+      "doc": "ね、いってよかったでしょ。",
+      "v": "Thấy chưa, nói ra là đúng mà."
+    },
+    {
+      "ai": "H",
+      "t": "はい。でも、もし数字を準備していなかったら、ただの文句に聞こえていたかもしれません。",
+      "doc": "はい。でも、もしすうじをじゅんびしていなかったら、ただのもんくにきこえていたかもしれません。",
+      "v": "Vâng. Nhưng nếu em không chuẩn bị con số, có khi nghe chỉ như lời phàn nàn."
+    },
+    {
+      "ai": "N",
+      "t": "そうだね。意見は「気持ち」だけだと流されがちだけど、「事実」と「提案」があれば、ちゃんと議論になる。",
+      "doc": "そうだね。いけんは「きもち」だけだとながされがちだけど、「じじつ」と「ていあん」があれば、ちゃんとぎろんになる。",
+      "v": "Đúng vậy. Ý kiến mà chỉ có “cảm giác” thì hay bị cho qua, còn có “sự thật” và “đề xuất” thì mới thành thảo luận thật sự.",
+      "np": [
+        {
+          "mau": "V-ます + がち",
+          "giai": "Hay bị, dễ có khuynh hướng (điều không tốt).",
+          "vd": "忙しいと、食事を抜きがちだ。",
+          "vdDoc": "いそがしいと、しょくじをぬきがちだ。",
+          "vdV": "Bận thì hay bỏ bữa."
+        }
+      ]
+    },
+    {
+      "ai": "H",
+      "t": "それに、最初に「目的には賛成です」と言えたのも、よかった気がします。",
+      "doc": "それに、さいしょに「もくてきにはさんせいです」といえたのも、よかったきがします。",
+      "v": "Hơn nữa, em thấy việc nói ngay từ đầu “em tán thành mục đích” cũng tốt."
+    },
+    {
+      "ai": "N",
+      "t": "うん。同じ方向を向いているって伝われば、相手も耳を傾けてくれるからね。",
+      "doc": "うん。おなじほうこうをむいているってつたわれば、あいてもみみをかたむけてくれるからね。",
+      "v": "Ừ. Khi người ta hiểu mình cùng hướng với họ, họ sẽ chịu lắng nghe."
+    },
+    {
+      "ai": "H",
+      "t": "黙っていたら、私の意見は、なかったことになっていたんですね。",
+      "doc": "だまっていたら、わたしのいけんは、なかったことになっていたんですね。",
+      "v": "Nếu em im lặng, ý kiến của em coi như chưa từng tồn tại nhỉ.",
+      "np": [
+        {
+          "mau": "〜ことになる",
+          "giai": "Kết quả là sẽ thành …, coi như … (hệ quả tất yếu).",
+          "vd": "このまま休むと、また一から始めることになる。",
+          "vdDoc": "このままやすむと、またいちからはじめることになる。",
+          "vdV": "Cứ nghỉ thế này thì lại phải bắt đầu từ đầu."
+        }
+      ]
+    }
+  ],
+  "tuVung": [
+    {
+      "chu": "週報",
+      "doc": "しゅうほう",
+      "nghia": "báo cáo tuần",
+      "vd": "週報は金曜日に出してください。"
+    },
+    {
+      "chu": "項目",
+      "doc": "こうもく",
+      "nghia": "mục, hạng mục",
+      "vd": "アンケートの項目が多い。"
+    },
+    {
+      "chu": "みなされる",
+      "doc": "みなされる",
+      "nghia": "bị coi là, bị xem như",
+      "vd": "欠席とみなされます。"
+    },
+    {
+      "chu": "見える化",
+      "doc": "みえるか",
+      "nghia": "làm cho nhìn thấy được (trực quan hoá)",
+      "vd": "課題を見える化しよう。"
+    },
+    {
+      "chu": "観点",
+      "doc": "かんてん",
+      "nghia": "góc độ, quan điểm",
+      "vd": "別の観点から考える。"
+    },
+    {
+      "chu": "補足",
+      "doc": "ほそく",
+      "nghia": "bổ sung (ý)",
+      "vd": "一つ補足させてください。"
+    },
+    {
+      "chu": "重複",
+      "doc": "ちょうふく",
+      "nghia": "trùng lặp",
+      "vd": "データが重複している。"
+    },
+    {
+      "chu": "肝心",
+      "doc": "かんじん",
+      "nghia": "cốt lõi, quan trọng nhất",
+      "vd": "肝心なことを忘れていた。"
+    },
+    {
+      "chu": "試験的",
+      "doc": "しけんてき",
+      "nghia": "mang tính thử nghiệm",
+      "vd": "新しい制度を試験的に導入する。"
+    },
+    {
+      "chu": "及ばなかった",
+      "doc": "およばなかった",
+      "nghia": "chưa vươn tới, chưa nghĩ tới (及ぶ)",
+      "vd": "私の力が及ばなかった。"
+    },
+    {
+      "chu": "流されがち",
+      "doc": "ながされがち",
+      "nghia": "hay bị cho qua, dễ bị cuốn theo",
+      "vd": "人の意見に流されがちだ。"
+    },
+    {
+      "chu": "耳を傾けて",
+      "doc": "みみをかたむけて",
+      "nghia": "lắng nghe chăm chú (耳を傾ける)",
+      "vd": "部下の声に耳を傾ける。"
+    }
+  ],
+  "yNghia": "Trong phòng họp ở Nhật, im lặng thường được hiểu là đồng ý. Muốn ý kiến của mình được lắng nghe, hãy bắt đầu từ điểm chung (đồng ý với mục đích), đưa ra con số cụ thể, rồi đề nghị một cách thử nhỏ có thể quay lại. Người mới không cần nói to — chỉ cần nói có căn cứ.",
+  "meo": [
+    "Xin lời: 「一点、よろしいでしょうか」; tiếp lời người khác: 「補足させていただくと」「〜さんの話に付け加えると」.",
+    "Khung phát biểu: đồng ý mục đích → 「そのうえで、〜という観点から気になった点があります」 → số liệu → đề xuất 〜てはどうか / 〜のはいかがでしょうか.",
+    "Đề xuất \"chạy thử một tháng\" (試験的に運用) dễ được chấp nhận hơn đổi hẳn.",
+    "〜とすれば〜計算になる = giả sử … thì tính ra …; 〜てみたところ = thử làm thì (phát hiện) ….",
+    "〜がち = hay bị (xu hướng không tốt): 流されがち, 忘れがち, 遅れがち."
+  ],
+  "cauHoi": [
+    {
+      "hoi": "Hân thử viết báo cáo theo mẫu mới mất bao lâu?",
+      "chon": [
+        "Ba mươi phút",
+        "Một tiếng rưỡi",
+        "Ba tiếng",
+        "Cả ngày"
+      ],
+      "dung": 1,
+      "giai": "「書いてみたところ、一時間半かかりました」."
+    },
+    {
+      "hoi": "Tính cho cả phòng, mỗi tháng tốn khoảng bao nhiêu giờ?",
+      "chon": [
+        "Hai mươi giờ",
+        "Bốn mươi giờ",
+        "Hơn bảy mươi giờ",
+        "Một trăm hai mươi giờ"
+      ],
+      "dung": 2,
+      "giai": "「月に七十時間以上になる計算です」."
+    },
+    {
+      "hoi": "Đề xuất của Hân là gì?",
+      "chon": [
+        "Mục trùng thì tự động lấy từ công cụ, người chỉ viết \"vấn đề\" và \"kế hoạch tuần sau\"",
+        "Bỏ hẳn báo cáo tuần",
+        "Viết báo cáo mỗi tháng một lần",
+        "Thuê người viết báo cáo"
+      ],
+      "dung": 0,
+      "giai": "「人が書くのは「課題」と「来週の予定」だけにしてはどうか」."
+    },
+    {
+      "hoi": "Trưởng phòng lo điều gì, và Hân trả lời thế nào?",
+      "chon": [
+        "Lo tốn tiền — Hân đề nghị mua công cụ",
+        "Lo nhân viên nghỉ — Hân hứa làm thêm",
+        "Lo khách phàn nàn — Hân đề nghị hỏi khách",
+        "Lo nội dung quá ít — Hân đề nghị chạy thử một tháng để trưởng phòng đánh giá"
+      ],
+      "dung": 3,
+      "giai": "「一か月だけ試験的に運用して……部長に判断していただく」."
+    },
+    {
+      "hoi": "Theo Noguchi, ý kiến chỉ có \"cảm giác\" thì sao?",
+      "chon": [
+        "Được khen",
+        "Hay bị cho qua",
+        "Bị phạt",
+        "Được ghi biên bản"
+      ],
+      "dung": 1,
+      "giai": "「「気持ち」だけだと流されがちだけど」."
+    }
+  ]
+}

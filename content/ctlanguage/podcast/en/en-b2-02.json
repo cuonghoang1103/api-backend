@@ -1,57 +1,228 @@
 {
   "id": "en-b2-02",
   "nn": "en",
+  "danhMuc": "chia-se",
   "cap": "B2",
-  "so": 2,
+  "so": 1,
   "tieuDe": "Does My Water Bottle Matter?",
   "tieuDeViet": "Bình nước của tôi có ý nghĩa gì không?",
   "moTa": "Một thính giả ở TP.HCM hỏi: mang bình nước riêng, từ chối túi ni-lông thì có thay đổi được gì không? Người dẫn Jack trò chuyện với Ellie, nhà nghiên cứu rác thải sinh hoạt, về thói quen xanh, cảm giác tội lỗi và những thay đổi thật sự có tác động.",
   "chuDe": "Môi trường",
   "bieuTuong": "leaf.fill",
   "nguoi": [
-    { "ma": "J", "ten": "Jack", "giong": "au-nam", "vai": "người dẫn podcast" },
-    { "ma": "E", "ten": "Ellie", "giong": "uk-nu", "vai": "khách mời, nhà nghiên cứu rác thải" }
+    {
+      "ma": "J",
+      "ten": "Jack",
+      "giong": "au-nam",
+      "vai": "người dẫn podcast"
+    },
+    {
+      "ma": "E",
+      "ten": "Ellie",
+      "giong": "uk-nu",
+      "vai": "khách mời, nhà nghiên cứu rác thải"
+    }
   ],
   "loi": [
-    { "ai": "J", "t": "Welcome back to Small Talk, Big Ideas, the show where we take everyday questions seriously. I'm Jack.", "v": "Chào mừng trở lại với Small Talk, Big Ideas, chương trình nghiêm túc với những câu hỏi đời thường. Tôi là Jack." },
-    { "ai": "J", "t": "Today's question comes from a listener in Ho Chi Minh City. She writes: \"I bring my own bottle and refuse plastic bags, but sometimes I wonder if it makes any difference at all.\"", "v": "Câu hỏi hôm nay đến từ một thính giả ở TP. Hồ Chí Minh. Cô ấy viết: \"Tôi mang bình nước riêng và từ chối túi ni-lông, nhưng đôi khi tôi tự hỏi việc đó có tạo ra khác biệt gì không.\"" },
-    { "ai": "J", "t": "My guest is Ellie, who researches household waste. Ellie, does it?", "v": "Khách mời của tôi là Ellie, người nghiên cứu về rác thải sinh hoạt. Ellie, có khác biệt không?" },
-    { "ai": "E", "t": "It's a fair question, and the honest answer is: yes, but probably not in the way she thinks.", "v": "Câu hỏi rất chính đáng, và câu trả lời thật lòng là: có, nhưng có lẽ không theo cách cô ấy nghĩ." },
-    { "ai": "J", "t": "Go on.", "v": "Chị nói tiếp đi." },
-    { "ai": "E", "t": "If you only look at the numbers, one person's plastic bags are a tiny drop in the ocean. Factories, energy and transport produce far more waste and emissions than any single household.", "v": "Nếu chỉ nhìn con số, túi ni-lông của một người chỉ là giọt nước giữa đại dương. Nhà máy, năng lượng và giao thông tạo ra lượng rác và khí thải lớn hơn rất nhiều so với bất kỳ hộ gia đình nào." },
-    { "ai": "J", "t": "So she might as well stop bothering?", "v": "Vậy cô ấy thôi khỏi bận tâm cho rồi?" },
-    { "ai": "E", "t": "Not at all. Habits are contagious. When people see a friend refuse a straw, or a market stall that gives a discount if you bring your own container, it slowly shifts what feels normal.", "v": "Hoàn toàn không. Thói quen có tính lây lan. Khi người ta thấy một người bạn từ chối ống hút, hay một sạp ở chợ giảm giá cho khách mang hộp riêng, điều đó dần dần thay đổi cái được coi là bình thường." },
-    { "ai": "J", "t": "So it's less about the bag itself and more about the signal it sends.", "v": "Vậy vấn đề không hẳn nằm ở cái túi, mà ở tín hiệu nó gửi đi." },
-    { "ai": "E", "t": "Exactly. And social norms are what eventually push companies and governments to change. Nobody bans plastic bags in a city where everyone still loves them.", "v": "Chính xác. Và chính chuẩn mực xã hội cuối cùng mới đẩy doanh nghiệp và chính quyền thay đổi. Chẳng ai cấm túi ni-lông ở một thành phố mà ai cũng còn mê nó." },
-    { "ai": "J", "t": "That's an interesting way to put it. But a lot of listeners tell us they feel guilty all the time — about delivery boxes, the air conditioning, the flight home at Tet.", "v": "Cách nói đó thú vị đấy. Nhưng nhiều thính giả bảo chúng tôi rằng họ lúc nào cũng thấy tội lỗi — vì hộp đồ ăn giao tận nơi, vì điều hoà, vì chuyến bay về quê dịp Tết." },
-    { "ai": "E", "t": "Guilt is a terrible motivator, though. It tends to make people either give up or become preachy, and neither of those helps.", "v": "Nhưng cảm giác tội lỗi là một động lực tồi. Nó thường khiến người ta hoặc bỏ cuộc, hoặc trở nên hay lên lớp người khác, mà cả hai đều chẳng giúp gì." },
-    { "ai": "J", "t": "Guilty as charged on the preachy part, by the way.", "v": "Nhân tiện, phần hay lên lớp thì tôi xin nhận tội." },
-    { "ai": "E", "t": "Ha! Most of us are. What I'd suggest instead is picking one or two changes with a big impact and making them automatic.", "v": "Ha! Phần lớn chúng ta đều vậy. Thay vào đó, tôi gợi ý chọn một hai thay đổi có tác động lớn và biến chúng thành việc làm tự động." },
-    { "ai": "J", "t": "Such as?", "v": "Ví dụ như?" },
-    { "ai": "E", "t": "Food waste is a big one. In many cities, a huge share of household rubbish is food that was bought and never eaten. Planning meals and buying less, more often, saves money as well as resources.", "v": "Lãng phí thức ăn là một vấn đề lớn. Ở nhiều thành phố, một phần rất lớn rác sinh hoạt là thức ăn đã mua mà không bao giờ được ăn. Lên kế hoạch bữa ăn, mua ít mà mua thường xuyên hơn, vừa tiết kiệm tiền vừa tiết kiệm tài nguyên." },
-    { "ai": "J", "t": "And saving money is a much easier sell than saving the planet.", "v": "Mà tiết kiệm tiền thì dễ thuyết phục hơn nhiều so với cứu hành tinh." },
-    { "ai": "E", "t": "Absolutely. Transport is the other one. If your city has a decent metro or bus network, taking it a few times a week really adds up over a year.", "v": "Đúng vậy. Cái còn lại là đi lại. Nếu thành phố của bạn có mạng lưới tàu điện hay xe buýt tạm ổn, đi vài lần mỗi tuần thì cộng dồn cả năm là đáng kể." },
-    { "ai": "J", "t": "What about our listener's water bottle, then? Should she keep it?", "v": "Vậy còn bình nước của thính giả kia? Cô ấy có nên giữ thói quen đó không?" },
-    { "ai": "E", "t": "Of course. Keep it, and keep refusing the bags. Just don't treat it as the finish line. Treat it as a starting point that tells you: I'm the kind of person who cares about this.", "v": "Tất nhiên. Cứ giữ nó, và cứ tiếp tục từ chối túi. Chỉ đừng coi đó là vạch đích. Hãy coi nó là điểm khởi đầu nhắc bạn rằng: mình là kiểu người quan tâm đến chuyện này." },
-    { "ai": "J", "t": "I like that — habits as a kind of identity.", "v": "Tôi thích ý đó — thói quen như một phần bản sắc." },
-    { "ai": "E", "t": "Right. And once you see yourself that way, the next step feels natural, whether that's supporting a refill shop, choosing an employer, or simply talking about it at dinner.", "v": "Đúng vậy. Và một khi bạn nhìn nhận bản thân như thế, bước tiếp theo sẽ đến tự nhiên, dù đó là ủng hộ một cửa hàng bán đồ không bao bì, chọn nơi làm việc, hay đơn giản là nói về chuyện này trong bữa tối." },
-    { "ai": "J", "t": "So if you had to sum it up for our listener in one sentence?", "v": "Vậy nếu phải tóm lại cho thính giả của chúng ta trong một câu?" },
-    { "ai": "E", "t": "Progress, not perfection — and bring a friend along.", "v": "Tiến bộ, chứ không phải hoàn hảo — và rủ thêm một người bạn cùng làm." },
-    { "ai": "J", "t": "Ellie, thank you so much. And to our listener in Ho Chi Minh City: your bottle matters more than you think.", "v": "Ellie, cảm ơn chị rất nhiều. Và gửi thính giả ở TP. Hồ Chí Minh: chiếc bình nước của bạn có ý nghĩa hơn bạn nghĩ đấy." }
+    {
+      "ai": "J",
+      "t": "Welcome back to Small Talk, Big Ideas, the show where we take everyday questions seriously. I'm Jack.",
+      "v": "Chào mừng trở lại với Small Talk, Big Ideas, chương trình nghiêm túc với những câu hỏi đời thường. Tôi là Jack."
+    },
+    {
+      "ai": "J",
+      "t": "Today's question comes from a listener in Ho Chi Minh City. She writes: \"I bring my own bottle and refuse plastic bags, but sometimes I wonder if it makes any difference at all.\"",
+      "v": "Câu hỏi hôm nay đến từ một thính giả ở TP. Hồ Chí Minh. Cô ấy viết: \"Tôi mang bình nước riêng và từ chối túi ni-lông, nhưng đôi khi tôi tự hỏi việc đó có tạo ra khác biệt gì không.\""
+    },
+    {
+      "ai": "J",
+      "t": "My guest is Ellie, who researches household waste. Ellie, does it?",
+      "v": "Khách mời của tôi là Ellie, người nghiên cứu về rác thải sinh hoạt. Ellie, có khác biệt không?"
+    },
+    {
+      "ai": "E",
+      "t": "It's a fair question, and the honest answer is: yes, but probably not in the way she thinks.",
+      "v": "Câu hỏi rất chính đáng, và câu trả lời thật lòng là: có, nhưng có lẽ không theo cách cô ấy nghĩ."
+    },
+    {
+      "ai": "J",
+      "t": "Go on.",
+      "v": "Chị nói tiếp đi."
+    },
+    {
+      "ai": "E",
+      "t": "If you only look at the numbers, one person's plastic bags are a tiny drop in the ocean. Factories, energy and transport produce far more waste and emissions than any single household.",
+      "v": "Nếu chỉ nhìn con số, túi ni-lông của một người chỉ là giọt nước giữa đại dương. Nhà máy, năng lượng và giao thông tạo ra lượng rác và khí thải lớn hơn rất nhiều so với bất kỳ hộ gia đình nào."
+    },
+    {
+      "ai": "J",
+      "t": "So she might as well stop bothering?",
+      "v": "Vậy cô ấy thôi khỏi bận tâm cho rồi?"
+    },
+    {
+      "ai": "E",
+      "t": "Not at all. Habits are contagious. When people see a friend refuse a straw, or a market stall that gives a discount if you bring your own container, it slowly shifts what feels normal.",
+      "v": "Hoàn toàn không. Thói quen có tính lây lan. Khi người ta thấy một người bạn từ chối ống hút, hay một sạp ở chợ giảm giá cho khách mang hộp riêng, điều đó dần dần thay đổi cái được coi là bình thường."
+    },
+    {
+      "ai": "J",
+      "t": "So it's less about the bag itself and more about the signal it sends.",
+      "v": "Vậy vấn đề không hẳn nằm ở cái túi, mà ở tín hiệu nó gửi đi."
+    },
+    {
+      "ai": "E",
+      "t": "Exactly. And social norms are what eventually push companies and governments to change. Nobody bans plastic bags in a city where everyone still loves them.",
+      "v": "Chính xác. Và chính chuẩn mực xã hội cuối cùng mới đẩy doanh nghiệp và chính quyền thay đổi. Chẳng ai cấm túi ni-lông ở một thành phố mà ai cũng còn mê nó."
+    },
+    {
+      "ai": "J",
+      "t": "That's an interesting way to put it. But a lot of listeners tell us they feel guilty all the time — about delivery boxes, the air conditioning, the flight home at Tet.",
+      "v": "Cách nói đó thú vị đấy. Nhưng nhiều thính giả bảo chúng tôi rằng họ lúc nào cũng thấy tội lỗi — vì hộp đồ ăn giao tận nơi, vì điều hoà, vì chuyến bay về quê dịp Tết."
+    },
+    {
+      "ai": "E",
+      "t": "Guilt is a terrible motivator, though. It tends to make people either give up or become preachy, and neither of those helps.",
+      "v": "Nhưng cảm giác tội lỗi là một động lực tồi. Nó thường khiến người ta hoặc bỏ cuộc, hoặc trở nên hay lên lớp người khác, mà cả hai đều chẳng giúp gì."
+    },
+    {
+      "ai": "J",
+      "t": "Guilty as charged on the preachy part, by the way.",
+      "v": "Nhân tiện, phần hay lên lớp thì tôi xin nhận tội."
+    },
+    {
+      "ai": "E",
+      "t": "Ha! Most of us are. What I'd suggest instead is picking one or two changes with a big impact and making them automatic.",
+      "v": "Ha! Phần lớn chúng ta đều vậy. Thay vào đó, tôi gợi ý chọn một hai thay đổi có tác động lớn và biến chúng thành việc làm tự động."
+    },
+    {
+      "ai": "J",
+      "t": "Such as?",
+      "v": "Ví dụ như?"
+    },
+    {
+      "ai": "E",
+      "t": "Food waste is a big one. In many cities, a huge share of household rubbish is food that was bought and never eaten. Planning meals and buying less, more often, saves money as well as resources.",
+      "v": "Lãng phí thức ăn là một vấn đề lớn. Ở nhiều thành phố, một phần rất lớn rác sinh hoạt là thức ăn đã mua mà không bao giờ được ăn. Lên kế hoạch bữa ăn, mua ít mà mua thường xuyên hơn, vừa tiết kiệm tiền vừa tiết kiệm tài nguyên."
+    },
+    {
+      "ai": "J",
+      "t": "And saving money is a much easier sell than saving the planet.",
+      "v": "Mà tiết kiệm tiền thì dễ thuyết phục hơn nhiều so với cứu hành tinh."
+    },
+    {
+      "ai": "E",
+      "t": "Absolutely. Transport is the other one. If your city has a decent metro or bus network, taking it a few times a week really adds up over a year.",
+      "v": "Đúng vậy. Cái còn lại là đi lại. Nếu thành phố của bạn có mạng lưới tàu điện hay xe buýt tạm ổn, đi vài lần mỗi tuần thì cộng dồn cả năm là đáng kể."
+    },
+    {
+      "ai": "J",
+      "t": "What about our listener's water bottle, then? Should she keep it?",
+      "v": "Vậy còn bình nước của thính giả kia? Cô ấy có nên giữ thói quen đó không?"
+    },
+    {
+      "ai": "E",
+      "t": "Of course. Keep it, and keep refusing the bags. Just don't treat it as the finish line. Treat it as a starting point that tells you: I'm the kind of person who cares about this.",
+      "v": "Tất nhiên. Cứ giữ nó, và cứ tiếp tục từ chối túi. Chỉ đừng coi đó là vạch đích. Hãy coi nó là điểm khởi đầu nhắc bạn rằng: mình là kiểu người quan tâm đến chuyện này."
+    },
+    {
+      "ai": "J",
+      "t": "I like that — habits as a kind of identity.",
+      "v": "Tôi thích ý đó — thói quen như một phần bản sắc."
+    },
+    {
+      "ai": "E",
+      "t": "Right. And once you see yourself that way, the next step feels natural, whether that's supporting a refill shop, choosing an employer, or simply talking about it at dinner.",
+      "v": "Đúng vậy. Và một khi bạn nhìn nhận bản thân như thế, bước tiếp theo sẽ đến tự nhiên, dù đó là ủng hộ một cửa hàng bán đồ không bao bì, chọn nơi làm việc, hay đơn giản là nói về chuyện này trong bữa tối."
+    },
+    {
+      "ai": "J",
+      "t": "So if you had to sum it up for our listener in one sentence?",
+      "v": "Vậy nếu phải tóm lại cho thính giả của chúng ta trong một câu?"
+    },
+    {
+      "ai": "E",
+      "t": "Progress, not perfection — and bring a friend along.",
+      "v": "Tiến bộ, chứ không phải hoàn hảo — và rủ thêm một người bạn cùng làm."
+    },
+    {
+      "ai": "J",
+      "t": "Ellie, thank you so much. And to our listener in Ho Chi Minh City: your bottle matters more than you think.",
+      "v": "Ellie, cảm ơn chị rất nhiều. Và gửi thính giả ở TP. Hồ Chí Minh: chiếc bình nước của bạn có ý nghĩa hơn bạn nghĩ đấy."
+    }
   ],
   "tuVung": [
-    { "chu": "drop in the ocean", "doc": "/drɒp ɪn ði ˈəʊʃn/", "nghia": "giọt nước giữa đại dương (quá nhỏ bé)", "vd": "My donation is just a drop in the ocean, but it helps." },
-    { "chu": "emissions", "doc": "/iˈmɪʃnz/", "nghia": "khí thải", "vd": "Cars are a major source of emissions in big cities." },
-    { "chu": "might as well", "doc": "/maɪt əz wel/", "nghia": "thôi thì cứ…, chẳng thà…", "vd": "The bus is late — we might as well walk." },
-    { "chu": "contagious", "doc": "/kənˈteɪdʒəs/", "nghia": "dễ lây lan", "vd": "Her laugh is contagious." },
-    { "chu": "norms", "doc": "/nɔːmz/", "nghia": "chuẩn mực (xã hội)", "vd": "Social norms change over time." },
-    { "chu": "motivator", "doc": "/ˈməʊtɪveɪtə(r)/", "nghia": "động lực, thứ thúc đẩy", "vd": "Fear is a poor motivator." },
-    { "chu": "preachy", "doc": "/ˈpriːtʃi/", "nghia": "hay lên lớp, giảng đạo", "vd": "I want to share tips without sounding preachy." },
-    { "chu": "Guilty as charged", "doc": "/ˈɡɪlti əz tʃɑːdʒd/", "nghia": "xin nhận tội (đùa: đúng là tôi vậy)", "vd": "\"You ate the last cake?\" — \"Guilty as charged.\"" },
-    { "chu": "food waste", "doc": "/fuːd weɪst/", "nghia": "lãng phí thức ăn, thức ăn bị bỏ đi", "vd": "Planning meals cuts food waste." },
-    { "chu": "adds up", "doc": "/ædz ʌp/", "nghia": "cộng dồn lại thành đáng kể", "vd": "Ten minutes a day really adds up." },
-    { "chu": "finish line", "doc": "/ˈfɪnɪʃ laɪn/", "nghia": "vạch đích", "vd": "Graduation isn't the finish line." },
-    { "chu": "sum it up", "doc": "/sʌm ɪt ʌp/", "nghia": "tóm lại", "vd": "To sum it up, we need more time." }
+    {
+      "chu": "drop in the ocean",
+      "doc": "/drɒp ɪn ði ˈəʊʃn/",
+      "nghia": "giọt nước giữa đại dương (quá nhỏ bé)",
+      "vd": "My donation is just a drop in the ocean, but it helps."
+    },
+    {
+      "chu": "emissions",
+      "doc": "/iˈmɪʃnz/",
+      "nghia": "khí thải",
+      "vd": "Cars are a major source of emissions in big cities."
+    },
+    {
+      "chu": "might as well",
+      "doc": "/maɪt əz wel/",
+      "nghia": "thôi thì cứ…, chẳng thà…",
+      "vd": "The bus is late — we might as well walk."
+    },
+    {
+      "chu": "contagious",
+      "doc": "/kənˈteɪdʒəs/",
+      "nghia": "dễ lây lan",
+      "vd": "Her laugh is contagious."
+    },
+    {
+      "chu": "norms",
+      "doc": "/nɔːmz/",
+      "nghia": "chuẩn mực (xã hội)",
+      "vd": "Social norms change over time."
+    },
+    {
+      "chu": "motivator",
+      "doc": "/ˈməʊtɪveɪtə(r)/",
+      "nghia": "động lực, thứ thúc đẩy",
+      "vd": "Fear is a poor motivator."
+    },
+    {
+      "chu": "preachy",
+      "doc": "/ˈpriːtʃi/",
+      "nghia": "hay lên lớp, giảng đạo",
+      "vd": "I want to share tips without sounding preachy."
+    },
+    {
+      "chu": "Guilty as charged",
+      "doc": "/ˈɡɪlti əz tʃɑːdʒd/",
+      "nghia": "xin nhận tội (đùa: đúng là tôi vậy)",
+      "vd": "\"You ate the last cake?\" — \"Guilty as charged.\""
+    },
+    {
+      "chu": "food waste",
+      "doc": "/fuːd weɪst/",
+      "nghia": "lãng phí thức ăn, thức ăn bị bỏ đi",
+      "vd": "Planning meals cuts food waste."
+    },
+    {
+      "chu": "adds up",
+      "doc": "/ædz ʌp/",
+      "nghia": "cộng dồn lại thành đáng kể",
+      "vd": "Ten minutes a day really adds up."
+    },
+    {
+      "chu": "finish line",
+      "doc": "/ˈfɪnɪʃ laɪn/",
+      "nghia": "vạch đích",
+      "vd": "Graduation isn't the finish line."
+    },
+    {
+      "chu": "sum it up",
+      "doc": "/sʌm ɪt ʌp/",
+      "nghia": "tóm lại",
+      "vd": "To sum it up, we need more time."
+    }
   ],
   "yNghia": "Một thói quen xanh nhỏ không cứu được hành tinh — nhưng nó cho thấy bạn là ai và lặng lẽ thay đổi điều mọi người coi là \"bình thường\". Đừng để cảm giác tội lỗi dẫn đường: tiến bộ, chứ không phải hoàn hảo — và rủ thêm một người bạn.",
   "meo": [
@@ -62,9 +233,45 @@
     "\"an easier sell\" (khẩu ngữ) = thứ dễ thuyết phục người khác chấp nhận hơn."
   ],
   "cauHoi": [
-    { "hoi": "Theo Ellie, thói quen xanh cá nhân quan trọng chủ yếu vì sao?", "chon": ["Vì nó giảm phần lớn rác của thành phố", "Vì nó lan sang người khác và dần thay đổi chuẩn mực xã hội", "Vì nó giúp tiết kiệm điện"], "dung": 1, "giai": "\"Habits are contagious… it slowly shifts what feels normal.\"" },
-    { "hoi": "Ellie nghĩ gì về cảm giác tội lỗi?", "chon": ["Chỉ người trẻ mới cảm thấy", "Là động lực tốt nhất để thay đổi", "Khiến người ta bỏ cuộc hoặc hay lên lớp người khác"], "dung": 2, "giai": "\"Guilt is a terrible motivator… make people either give up or become preachy.\"" },
-    { "hoi": "Hai thay đổi có tác động lớn mà Ellie gợi ý là gì?", "chon": ["Giảm lãng phí thức ăn và đi phương tiện công cộng", "Bỏ điều hoà và không đi máy bay", "Mua bình nước và túi vải"], "dung": 0, "giai": "Ellie nêu \"food waste\" và \"transport\" (tàu điện, xe buýt)." },
-    { "hoi": "\"Progress, not perfection\" nghĩa là gì?", "chon": ["Phải làm hoàn hảo ngay từ đầu", "Quan trọng là tiến bộ dần, không cần hoàn hảo", "Tiến bộ là điều không thể"], "dung": 1, "giai": "Ý chính của cả tập: làm dần, đều đặn, không tự dằn vặt vì chưa hoàn hảo." }
+    {
+      "hoi": "Theo Ellie, thói quen xanh cá nhân quan trọng chủ yếu vì sao?",
+      "chon": [
+        "Vì nó giảm phần lớn rác của thành phố",
+        "Vì nó lan sang người khác và dần thay đổi chuẩn mực xã hội",
+        "Vì nó giúp tiết kiệm điện"
+      ],
+      "dung": 1,
+      "giai": "\"Habits are contagious… it slowly shifts what feels normal.\""
+    },
+    {
+      "hoi": "Ellie nghĩ gì về cảm giác tội lỗi?",
+      "chon": [
+        "Chỉ người trẻ mới cảm thấy",
+        "Là động lực tốt nhất để thay đổi",
+        "Khiến người ta bỏ cuộc hoặc hay lên lớp người khác"
+      ],
+      "dung": 2,
+      "giai": "\"Guilt is a terrible motivator… make people either give up or become preachy.\""
+    },
+    {
+      "hoi": "Hai thay đổi có tác động lớn mà Ellie gợi ý là gì?",
+      "chon": [
+        "Giảm lãng phí thức ăn và đi phương tiện công cộng",
+        "Bỏ điều hoà và không đi máy bay",
+        "Mua bình nước và túi vải"
+      ],
+      "dung": 0,
+      "giai": "Ellie nêu \"food waste\" và \"transport\" (tàu điện, xe buýt)."
+    },
+    {
+      "hoi": "\"Progress, not perfection\" nghĩa là gì?",
+      "chon": [
+        "Phải làm hoàn hảo ngay từ đầu",
+        "Quan trọng là tiến bộ dần, không cần hoàn hảo",
+        "Tiến bộ là điều không thể"
+      ],
+      "dung": 1,
+      "giai": "Ý chính của cả tập: làm dần, đều đặn, không tự dằn vặt vì chưa hoàn hảo."
+    }
   ]
 }

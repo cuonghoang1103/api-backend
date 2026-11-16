@@ -1,58 +1,233 @@
 {
   "id": "en-b2-03",
   "nn": "en",
+  "danhMuc": "chia-se",
   "cap": "B2",
-  "so": 3,
+  "so": 2,
   "tieuDe": "The Year I Failed",
   "tieuDeViet": "Năm tôi thất bại",
   "moTa": "Hiếu trượt bốn trên sáu môn ở trường y mà bố mẹ chọn, thử lại rồi lại trượt. Một mùa hè phụ việc ở tiệm sửa đồ điện tử đã đổi hướng đời anh. Câu chuyện về thất bại như một thông tin, và khác biệt giữa kiên trì với cứng đầu.",
   "chuDe": "Thất bại & kiên trì",
   "bieuTuong": "mountain.2.fill",
   "nguoi": [
-    { "ma": "N", "ten": "Nora", "giong": "us-nu", "vai": "người dẫn podcast" },
-    { "ma": "H", "ten": "Hiếu", "giong": "au-nam", "vai": "khách mời, kỹ sư" }
+    {
+      "ma": "N",
+      "ten": "Nora",
+      "giong": "us-nu",
+      "vai": "người dẫn podcast"
+    },
+    {
+      "ma": "H",
+      "ten": "Hiếu",
+      "giong": "au-nam",
+      "vai": "khách mời, kỹ sư"
+    }
   ],
   "loi": [
-    { "ai": "N", "t": "Welcome to Second Chances, the podcast about moments that didn't go to plan. I'm Nora, and my guest today is Hieu, an engineer who designs low-cost solar lamps for rural schools. Welcome, Hieu.", "v": "Chào mừng đến với Second Chances, podcast về những khoảnh khắc không diễn ra như kế hoạch. Tôi là Nora, và khách mời hôm nay là Hiếu, kỹ sư thiết kế đèn năng lượng mặt trời giá rẻ cho các trường học vùng nông thôn. Chào mừng anh, Hiếu." },
-    { "ai": "H", "t": "Thanks for having me, Nora.", "v": "Cảm ơn chị đã mời tôi, Nora." },
-    { "ai": "N", "t": "You've told me your career started with what you call \"the year I failed.\" What happened?", "v": "Anh từng kể với tôi rằng sự nghiệp của anh bắt đầu từ cái mà anh gọi là \"năm tôi thất bại\". Chuyện gì đã xảy ra?" },
-    { "ai": "H", "t": "Well, my parents had always dreamed of me becoming a doctor, so I went to medical school. And within a year, I'd failed four out of six exams.", "v": "À, bố mẹ tôi luôn mơ tôi trở thành bác sĩ, nên tôi vào trường y. Và chỉ trong một năm, tôi đã trượt bốn trên sáu môn thi." },
-    { "ai": "N", "t": "Four out of six. How did that feel?", "v": "Bốn trên sáu. Cảm giác lúc đó thế nào?" },
-    { "ai": "H", "t": "Honestly, humiliating. I'd been the top student at my high school, and suddenly I was the guy who couldn't keep up. I stopped answering my friends' messages.", "v": "Thật lòng thì nhục nhã lắm. Tôi từng là học sinh giỏi nhất trường cấp ba, vậy mà bỗng dưng thành kẻ không theo kịp. Tôi thôi trả lời tin nhắn của bạn bè." },
-    { "ai": "N", "t": "Did you try again, or did you leave?", "v": "Anh có thử lại không, hay anh rời đi?" },
-    { "ai": "H", "t": "I tried again, and I failed again. That's the part people don't like to hear. Everyone loves the story where you keep going and eventually succeed. Mine wasn't like that.", "v": "Tôi thử lại, và lại trượt. Đó là phần người ta không thích nghe. Ai cũng thích câu chuyện cứ kiên trì rồi cuối cùng thành công. Chuyện của tôi không như thế." },
-    { "ai": "N", "t": "So what changed?", "v": "Vậy điều gì đã thay đổi?" },
-    { "ai": "H", "t": "That summer, I helped out at my uncle's electronics repair shop, mainly to avoid being at home. And I noticed something odd: I'd lose track of time. I'd spend four hours fixing an old radio and not even realise I'd skipped lunch.", "v": "Mùa hè năm đó, tôi phụ việc ở tiệm sửa đồ điện tử của chú, chủ yếu để khỏi phải ở nhà. Và tôi nhận ra một điều lạ: tôi quên cả thời gian. Tôi có thể ngồi bốn tiếng sửa một cái đài cũ mà không nhận ra mình đã bỏ bữa trưa." },
-    { "ai": "N", "t": "Whereas with medicine...?", "v": "Trong khi với ngành y thì...?" },
-    { "ai": "H", "t": "With medicine, I'd stare at the same page for an hour. I wasn't lazy; I just didn't care about it the way my classmates did. Failing those exams was painful, but it was also information.", "v": "Với ngành y, tôi nhìn chằm chằm một trang sách cả tiếng đồng hồ. Tôi không lười; chỉ là tôi không quan tâm đến nó như các bạn cùng lớp. Trượt những kỳ thi đó rất đau, nhưng đó cũng là thông tin." },
-    { "ai": "N", "t": "I love that framing: failure as information. But how do you tell the difference between giving up too early and recognising that something isn't right for you?", "v": "Tôi rất thích cách nhìn đó: thất bại là thông tin. Nhưng làm sao phân biệt giữa bỏ cuộc quá sớm và nhận ra một thứ không hợp với mình?" },
-    { "ai": "H", "t": "That's the hardest question, and I don't think there's a perfect rule. My test was: if I removed the pressure from other people, would I still want this? With medicine, the answer was a clear no. With engineering, it was yes, even on the bad days.", "v": "Đó là câu hỏi khó nhất, và tôi không nghĩ có quy tắc hoàn hảo nào. Phép thử của tôi là: nếu bỏ đi áp lực từ người khác, mình có còn muốn điều này không? Với ngành y, câu trả lời rõ ràng là không. Với kỹ thuật thì có, kể cả vào những ngày tồi tệ." },
-    { "ai": "N", "t": "And I assume there were bad days in engineering too.", "v": "Và tôi đoán ngành kỹ thuật cũng có những ngày tồi tệ." },
-    { "ai": "H", "t": "Plenty! My first lamp design overheated so badly it melted its own case. I failed a circuits course in my second year. But it felt completely different. When I failed, I wanted to understand why, rather than hide.", "v": "Nhiều lắm! Mẫu đèn đầu tiên của tôi nóng đến mức chảy cả vỏ. Năm hai tôi trượt môn mạch điện. Nhưng cảm giác hoàn toàn khác. Khi thất bại, tôi muốn hiểu vì sao, chứ không muốn trốn tránh." },
-    { "ai": "N", "t": "That's a really useful distinction. Persistence isn't just refusing to stop. It's choosing what's worth struggling for.", "v": "Đó là một phân biệt thật sự hữu ích. Kiên trì không chỉ là không chịu dừng lại. Mà là chọn điều gì đáng để mình vật lộn." },
-    { "ai": "H", "t": "Exactly. From the outside, stubbornness and persistence can look exactly the same.", "v": "Chính xác. Nhìn từ bên ngoài, cứng đầu và kiên trì có thể trông giống hệt nhau." },
-    { "ai": "N", "t": "How did your parents react when you switched?", "v": "Bố mẹ anh phản ứng thế nào khi anh chuyển ngành?" },
-    { "ai": "H", "t": "My dad barely spoke to me for about two months. That was tough. But a few years later, he visited a school where we'd installed our lamps, and he watched the kids doing homework after dark. On the way home, he said, \"Maybe this is a kind of medicine too.\"", "v": "Bố tôi gần như không nói chuyện với tôi suốt khoảng hai tháng. Giai đoạn đó khó khăn lắm. Nhưng vài năm sau, ông đến thăm một ngôi trường nơi chúng tôi đã lắp đèn, và nhìn bọn trẻ làm bài tập khi trời đã tối. Trên đường về, ông nói: \"Có lẽ đây cũng là một loại thuốc.\"" },
-    { "ai": "N", "t": "Oh, that gave me goosebumps.", "v": "Ôi, nghe mà tôi nổi da gà." },
-    { "ai": "H", "t": "Me too, at the time. I didn't say anything. I just looked out of the window for a long time.", "v": "Lúc đó tôi cũng vậy. Tôi không nói gì cả. Chỉ nhìn ra ngoài cửa sổ rất lâu." },
-    { "ai": "N", "t": "If a listener is going through their own \"year I failed\" right now, what would you tell them?", "v": "Nếu có thính giả nào đang trải qua \"năm thất bại\" của chính họ, anh sẽ nói gì với họ?" },
-    { "ai": "H", "t": "Don't only ask, \"How do I stop failing?\" Ask, \"What is this failure telling me?\" And please, keep answering your friends' messages. I wish I had.", "v": "Đừng chỉ hỏi \"Làm sao để mình thôi thất bại?\" Hãy hỏi \"Thất bại này đang nói gì với mình?\" Và làm ơn, cứ trả lời tin nhắn của bạn bè. Ước gì hồi đó tôi đã làm vậy." },
-    { "ai": "N", "t": "Hieu, thank you for being so open with us.", "v": "Hiếu, cảm ơn anh đã chia sẻ cởi mở như vậy." },
-    { "ai": "H", "t": "Thank you, Nora. It's been a pleasure.", "v": "Cảm ơn chị, Nora. Rất vui được trò chuyện." }
+    {
+      "ai": "N",
+      "t": "Welcome to Second Chances, the podcast about moments that didn't go to plan. I'm Nora, and my guest today is Hieu, an engineer who designs low-cost solar lamps for rural schools. Welcome, Hieu.",
+      "v": "Chào mừng đến với Second Chances, podcast về những khoảnh khắc không diễn ra như kế hoạch. Tôi là Nora, và khách mời hôm nay là Hiếu, kỹ sư thiết kế đèn năng lượng mặt trời giá rẻ cho các trường học vùng nông thôn. Chào mừng anh, Hiếu."
+    },
+    {
+      "ai": "H",
+      "t": "Thanks for having me, Nora.",
+      "v": "Cảm ơn chị đã mời tôi, Nora."
+    },
+    {
+      "ai": "N",
+      "t": "You've told me your career started with what you call \"the year I failed.\" What happened?",
+      "v": "Anh từng kể với tôi rằng sự nghiệp của anh bắt đầu từ cái mà anh gọi là \"năm tôi thất bại\". Chuyện gì đã xảy ra?"
+    },
+    {
+      "ai": "H",
+      "t": "Well, my parents had always dreamed of me becoming a doctor, so I went to medical school. And within a year, I'd failed four out of six exams.",
+      "v": "À, bố mẹ tôi luôn mơ tôi trở thành bác sĩ, nên tôi vào trường y. Và chỉ trong một năm, tôi đã trượt bốn trên sáu môn thi."
+    },
+    {
+      "ai": "N",
+      "t": "Four out of six. How did that feel?",
+      "v": "Bốn trên sáu. Cảm giác lúc đó thế nào?"
+    },
+    {
+      "ai": "H",
+      "t": "Honestly, humiliating. I'd been the top student at my high school, and suddenly I was the guy who couldn't keep up. I stopped answering my friends' messages.",
+      "v": "Thật lòng thì nhục nhã lắm. Tôi từng là học sinh giỏi nhất trường cấp ba, vậy mà bỗng dưng thành kẻ không theo kịp. Tôi thôi trả lời tin nhắn của bạn bè."
+    },
+    {
+      "ai": "N",
+      "t": "Did you try again, or did you leave?",
+      "v": "Anh có thử lại không, hay anh rời đi?"
+    },
+    {
+      "ai": "H",
+      "t": "I tried again, and I failed again. That's the part people don't like to hear. Everyone loves the story where you keep going and eventually succeed. Mine wasn't like that.",
+      "v": "Tôi thử lại, và lại trượt. Đó là phần người ta không thích nghe. Ai cũng thích câu chuyện cứ kiên trì rồi cuối cùng thành công. Chuyện của tôi không như thế."
+    },
+    {
+      "ai": "N",
+      "t": "So what changed?",
+      "v": "Vậy điều gì đã thay đổi?"
+    },
+    {
+      "ai": "H",
+      "t": "That summer, I helped out at my uncle's electronics repair shop, mainly to avoid being at home. And I noticed something odd: I'd lose track of time. I'd spend four hours fixing an old radio and not even realise I'd skipped lunch.",
+      "v": "Mùa hè năm đó, tôi phụ việc ở tiệm sửa đồ điện tử của chú, chủ yếu để khỏi phải ở nhà. Và tôi nhận ra một điều lạ: tôi quên cả thời gian. Tôi có thể ngồi bốn tiếng sửa một cái đài cũ mà không nhận ra mình đã bỏ bữa trưa."
+    },
+    {
+      "ai": "N",
+      "t": "Whereas with medicine...?",
+      "v": "Trong khi với ngành y thì...?"
+    },
+    {
+      "ai": "H",
+      "t": "With medicine, I'd stare at the same page for an hour. I wasn't lazy; I just didn't care about it the way my classmates did. Failing those exams was painful, but it was also information.",
+      "v": "Với ngành y, tôi nhìn chằm chằm một trang sách cả tiếng đồng hồ. Tôi không lười; chỉ là tôi không quan tâm đến nó như các bạn cùng lớp. Trượt những kỳ thi đó rất đau, nhưng đó cũng là thông tin."
+    },
+    {
+      "ai": "N",
+      "t": "I love that framing: failure as information. But how do you tell the difference between giving up too early and recognising that something isn't right for you?",
+      "v": "Tôi rất thích cách nhìn đó: thất bại là thông tin. Nhưng làm sao phân biệt giữa bỏ cuộc quá sớm và nhận ra một thứ không hợp với mình?"
+    },
+    {
+      "ai": "H",
+      "t": "That's the hardest question, and I don't think there's a perfect rule. My test was: if I removed the pressure from other people, would I still want this? With medicine, the answer was a clear no. With engineering, it was yes, even on the bad days.",
+      "v": "Đó là câu hỏi khó nhất, và tôi không nghĩ có quy tắc hoàn hảo nào. Phép thử của tôi là: nếu bỏ đi áp lực từ người khác, mình có còn muốn điều này không? Với ngành y, câu trả lời rõ ràng là không. Với kỹ thuật thì có, kể cả vào những ngày tồi tệ."
+    },
+    {
+      "ai": "N",
+      "t": "And I assume there were bad days in engineering too.",
+      "v": "Và tôi đoán ngành kỹ thuật cũng có những ngày tồi tệ."
+    },
+    {
+      "ai": "H",
+      "t": "Plenty! My first lamp design overheated so badly it melted its own case. I failed a circuits course in my second year. But it felt completely different. When I failed, I wanted to understand why, rather than hide.",
+      "v": "Nhiều lắm! Mẫu đèn đầu tiên của tôi nóng đến mức chảy cả vỏ. Năm hai tôi trượt môn mạch điện. Nhưng cảm giác hoàn toàn khác. Khi thất bại, tôi muốn hiểu vì sao, chứ không muốn trốn tránh."
+    },
+    {
+      "ai": "N",
+      "t": "That's a really useful distinction. Persistence isn't just refusing to stop. It's choosing what's worth struggling for.",
+      "v": "Đó là một phân biệt thật sự hữu ích. Kiên trì không chỉ là không chịu dừng lại. Mà là chọn điều gì đáng để mình vật lộn."
+    },
+    {
+      "ai": "H",
+      "t": "Exactly. From the outside, stubbornness and persistence can look exactly the same.",
+      "v": "Chính xác. Nhìn từ bên ngoài, cứng đầu và kiên trì có thể trông giống hệt nhau."
+    },
+    {
+      "ai": "N",
+      "t": "How did your parents react when you switched?",
+      "v": "Bố mẹ anh phản ứng thế nào khi anh chuyển ngành?"
+    },
+    {
+      "ai": "H",
+      "t": "My dad barely spoke to me for about two months. That was tough. But a few years later, he visited a school where we'd installed our lamps, and he watched the kids doing homework after dark. On the way home, he said, \"Maybe this is a kind of medicine too.\"",
+      "v": "Bố tôi gần như không nói chuyện với tôi suốt khoảng hai tháng. Giai đoạn đó khó khăn lắm. Nhưng vài năm sau, ông đến thăm một ngôi trường nơi chúng tôi đã lắp đèn, và nhìn bọn trẻ làm bài tập khi trời đã tối. Trên đường về, ông nói: \"Có lẽ đây cũng là một loại thuốc.\""
+    },
+    {
+      "ai": "N",
+      "t": "Oh, that gave me goosebumps.",
+      "v": "Ôi, nghe mà tôi nổi da gà."
+    },
+    {
+      "ai": "H",
+      "t": "Me too, at the time. I didn't say anything. I just looked out of the window for a long time.",
+      "v": "Lúc đó tôi cũng vậy. Tôi không nói gì cả. Chỉ nhìn ra ngoài cửa sổ rất lâu."
+    },
+    {
+      "ai": "N",
+      "t": "If a listener is going through their own \"year I failed\" right now, what would you tell them?",
+      "v": "Nếu có thính giả nào đang trải qua \"năm thất bại\" của chính họ, anh sẽ nói gì với họ?"
+    },
+    {
+      "ai": "H",
+      "t": "Don't only ask, \"How do I stop failing?\" Ask, \"What is this failure telling me?\" And please, keep answering your friends' messages. I wish I had.",
+      "v": "Đừng chỉ hỏi \"Làm sao để mình thôi thất bại?\" Hãy hỏi \"Thất bại này đang nói gì với mình?\" Và làm ơn, cứ trả lời tin nhắn của bạn bè. Ước gì hồi đó tôi đã làm vậy."
+    },
+    {
+      "ai": "N",
+      "t": "Hieu, thank you for being so open with us.",
+      "v": "Hiếu, cảm ơn anh đã chia sẻ cởi mở như vậy."
+    },
+    {
+      "ai": "H",
+      "t": "Thank you, Nora. It's been a pleasure.",
+      "v": "Cảm ơn chị, Nora. Rất vui được trò chuyện."
+    }
   ],
   "tuVung": [
-    { "chu": "humiliating", "doc": "/hjuːˈmɪlieɪtɪŋ/", "nghia": "nhục nhã, bẽ mặt", "vd": "Falling on stage was humiliating." },
-    { "chu": "keep up", "doc": "/kiːp ʌp/", "nghia": "theo kịp", "vd": "The class moves fast and I can't keep up." },
-    { "chu": "eventually", "doc": "/ɪˈventʃuəli/", "nghia": "cuối cùng (sau một thời gian dài)", "vd": "She eventually found a job she loved." },
-    { "chu": "lose track of time", "doc": "/luːz træk əv taɪm/", "nghia": "quên cả thời gian", "vd": "I lose track of time when I'm drawing." },
-    { "chu": "whereas", "doc": "/weərˈæz/", "nghia": "trong khi (đối lập)", "vd": "I love mornings, whereas my sister hates them." },
-    { "chu": "framing", "doc": "/ˈfreɪmɪŋ/", "nghia": "cách đặt vấn đề, góc nhìn", "vd": "The framing of a question can change the answer." },
-    { "chu": "giving up", "doc": "/ˈɡɪvɪŋ ʌp/", "nghia": "bỏ cuộc (give up)", "vd": "Giving up is easy; starting again is hard." },
-    { "chu": "overheated", "doc": "/ˌəʊvəˈhiːtɪd/", "nghia": "quá nóng (overheat)", "vd": "My laptop overheated during the game." },
-    { "chu": "distinction", "doc": "/dɪˈstɪŋkʃn/", "nghia": "sự phân biệt, điểm khác biệt", "vd": "There's a clear distinction between the two plans." },
-    { "chu": "Persistence", "doc": "/pəˈsɪstəns/", "nghia": "sự kiên trì", "vd": "Learning a language takes persistence." },
-    { "chu": "stubbornness", "doc": "/ˈstʌbənnəs/", "nghia": "sự cứng đầu, bướng bỉnh", "vd": "His stubbornness cost him the deal." },
-    { "chu": "goosebumps", "doc": "/ˈɡuːsbʌmps/", "nghia": "nổi da gà", "vd": "That song always gives me goosebumps." }
+    {
+      "chu": "humiliating",
+      "doc": "/hjuːˈmɪlieɪtɪŋ/",
+      "nghia": "nhục nhã, bẽ mặt",
+      "vd": "Falling on stage was humiliating."
+    },
+    {
+      "chu": "keep up",
+      "doc": "/kiːp ʌp/",
+      "nghia": "theo kịp",
+      "vd": "The class moves fast and I can't keep up."
+    },
+    {
+      "chu": "eventually",
+      "doc": "/ɪˈventʃuəli/",
+      "nghia": "cuối cùng (sau một thời gian dài)",
+      "vd": "She eventually found a job she loved."
+    },
+    {
+      "chu": "lose track of time",
+      "doc": "/luːz træk əv taɪm/",
+      "nghia": "quên cả thời gian",
+      "vd": "I lose track of time when I'm drawing."
+    },
+    {
+      "chu": "whereas",
+      "doc": "/weərˈæz/",
+      "nghia": "trong khi (đối lập)",
+      "vd": "I love mornings, whereas my sister hates them."
+    },
+    {
+      "chu": "framing",
+      "doc": "/ˈfreɪmɪŋ/",
+      "nghia": "cách đặt vấn đề, góc nhìn",
+      "vd": "The framing of a question can change the answer."
+    },
+    {
+      "chu": "giving up",
+      "doc": "/ˈɡɪvɪŋ ʌp/",
+      "nghia": "bỏ cuộc (give up)",
+      "vd": "Giving up is easy; starting again is hard."
+    },
+    {
+      "chu": "overheated",
+      "doc": "/ˌəʊvəˈhiːtɪd/",
+      "nghia": "quá nóng (overheat)",
+      "vd": "My laptop overheated during the game."
+    },
+    {
+      "chu": "distinction",
+      "doc": "/dɪˈstɪŋkʃn/",
+      "nghia": "sự phân biệt, điểm khác biệt",
+      "vd": "There's a clear distinction between the two plans."
+    },
+    {
+      "chu": "Persistence",
+      "doc": "/pəˈsɪstəns/",
+      "nghia": "sự kiên trì",
+      "vd": "Learning a language takes persistence."
+    },
+    {
+      "chu": "stubbornness",
+      "doc": "/ˈstʌbənnəs/",
+      "nghia": "sự cứng đầu, bướng bỉnh",
+      "vd": "His stubbornness cost him the deal."
+    },
+    {
+      "chu": "goosebumps",
+      "doc": "/ˈɡuːsbʌmps/",
+      "nghia": "nổi da gà",
+      "vd": "That song always gives me goosebumps."
+    }
   ],
   "yNghia": "Thất bại không phải lúc nào cũng là lời nhắc \"cố thêm nữa\" — đôi khi nó là thông tin cho biết bạn đang đi sai đường. Kiên trì thật sự là chọn đúng điều đáng để vật lộn. Và khi gục ngã, đừng cắt liên lạc với những người thương mình.",
   "meo": [
@@ -63,10 +238,55 @@
     "\"Thanks for having me.\" — câu khách mời quen dùng khi bắt đầu một chương trình."
   ],
   "cauHoi": [
-    { "hoi": "Vì sao Hiếu vào trường y?", "chon": ["Vì anh mê sinh học từ nhỏ", "Vì bố mẹ anh luôn mơ anh làm bác sĩ", "Vì bạn thân rủ"], "dung": 1, "giai": "\"My parents had always dreamed of me becoming a doctor.\"" },
-    { "hoi": "Điều gì giúp Hiếu nhận ra mình hợp với kỹ thuật?", "chon": ["Một thầy giáo khuyên anh", "Anh đọc một cuốn sách về năng lượng mặt trời", "Anh quên cả thời gian khi sửa đồ ở tiệm của chú"], "dung": 2, "giai": "\"I'd lose track of time… fixing an old radio.\"" },
-    { "hoi": "Phép thử của Hiếu để biết mình bỏ cuộc sớm hay thật sự không hợp là gì?", "chon": ["Nếu bỏ áp lực từ người khác, mình có còn muốn điều này không?", "Mình có giỏi nhất lớp không?", "Ngành này có lương cao không?"], "dung": 0, "giai": "\"If I removed the pressure from other people, would I still want this?\"" },
-    { "hoi": "Câu \"Maybe this is a kind of medicine too\" cho thấy điều gì?", "chon": ["Bố muốn Hiếu quay lại học y", "Bố đã hiểu và trân trọng công việc của Hiếu", "Bố đang bị ốm"], "dung": 1, "giai": "Bố thấy đèn của Hiếu giúp bọn trẻ học buổi tối — một cách \"chữa lành\" khác." },
-    { "hoi": "Theo tập này, kiên trì khác cứng đầu ở chỗ nào?", "chon": ["Kiên trì là không bao giờ dừng lại", "Hai thứ không khác gì nhau", "Kiên trì là chọn điều đáng để mình vật lộn"], "dung": 2, "giai": "\"Persistence isn't just refusing to stop. It's choosing what's worth struggling for.\"" }
+    {
+      "hoi": "Vì sao Hiếu vào trường y?",
+      "chon": [
+        "Vì anh mê sinh học từ nhỏ",
+        "Vì bố mẹ anh luôn mơ anh làm bác sĩ",
+        "Vì bạn thân rủ"
+      ],
+      "dung": 1,
+      "giai": "\"My parents had always dreamed of me becoming a doctor.\""
+    },
+    {
+      "hoi": "Điều gì giúp Hiếu nhận ra mình hợp với kỹ thuật?",
+      "chon": [
+        "Một thầy giáo khuyên anh",
+        "Anh đọc một cuốn sách về năng lượng mặt trời",
+        "Anh quên cả thời gian khi sửa đồ ở tiệm của chú"
+      ],
+      "dung": 2,
+      "giai": "\"I'd lose track of time… fixing an old radio.\""
+    },
+    {
+      "hoi": "Phép thử của Hiếu để biết mình bỏ cuộc sớm hay thật sự không hợp là gì?",
+      "chon": [
+        "Nếu bỏ áp lực từ người khác, mình có còn muốn điều này không?",
+        "Mình có giỏi nhất lớp không?",
+        "Ngành này có lương cao không?"
+      ],
+      "dung": 0,
+      "giai": "\"If I removed the pressure from other people, would I still want this?\""
+    },
+    {
+      "hoi": "Câu \"Maybe this is a kind of medicine too\" cho thấy điều gì?",
+      "chon": [
+        "Bố muốn Hiếu quay lại học y",
+        "Bố đã hiểu và trân trọng công việc của Hiếu",
+        "Bố đang bị ốm"
+      ],
+      "dung": 1,
+      "giai": "Bố thấy đèn của Hiếu giúp bọn trẻ học buổi tối — một cách \"chữa lành\" khác."
+    },
+    {
+      "hoi": "Theo tập này, kiên trì khác cứng đầu ở chỗ nào?",
+      "chon": [
+        "Kiên trì là không bao giờ dừng lại",
+        "Hai thứ không khác gì nhau",
+        "Kiên trì là chọn điều đáng để mình vật lộn"
+      ],
+      "dung": 2,
+      "giai": "\"Persistence isn't just refusing to stop. It's choosing what's worth struggling for.\""
+    }
   ]
 }

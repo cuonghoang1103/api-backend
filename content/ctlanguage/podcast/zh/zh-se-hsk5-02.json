@@ -1,0 +1,294 @@
+{
+  "id": "zh-se-hsk5-02",
+  "nn": "zh",
+  "danhMuc": "phan-mem",
+  "cap": "HSK5",
+  "so": 2,
+  "tieuDe": "故障复盘：问系统，不问罪人",
+  "tieuDeViet": "Họp rút kinh nghiệm sự cố: hỏi hệ thống, không đi tìm người có tội",
+  "moTa": "Tối thứ Sáu, một thay đổi cấu hình của Minh làm 15% người dùng không đặt được hàng trong 40 phút. Thứ Hai, chị Tống chủ trì buổi postmortem: dựng lại dòng thời gian, đo phạm vi ảnh hưởng, tìm nguyên nhân gốc — và từ chối biện pháp \"lần sau cẩn thận hơn\".",
+  "chuDe": "Rút kinh nghiệm sự cố",
+  "bieuTuong": "exclamationmark.triangle.fill",
+  "nguoi": [
+    { "ma": "S", "ten": "Chị Tống", "giong": "zh-nu", "vai": "trưởng nhóm vận hành (SRE)" },
+    { "ma": "M", "ten": "Minh", "giong": "zh-nam", "vai": "lập trình viên back-end" }
+  ],
+  "loi": [
+    {
+      "ai": "S",
+      "t": "人都到齐了，我们开始吧。今天是上周五订单故障的复盘会。",
+      "doc": "Rén dōu dào qí le, wǒmen kāishǐ ba. Jīntiān shì shàng zhōuwǔ dìngdān gùzhàng de fùpán huì.",
+      "v": "Mọi người đến đủ rồi, chúng ta bắt đầu nhé. Hôm nay là buổi rút kinh nghiệm sự cố đơn hàng hôm thứ Sáu tuần trước."
+    },
+    {
+      "ai": "S",
+      "t": "先说明一下：复盘的目的不是追究谁的责任，而是弄清楚问题是怎么发生的，以后怎么避免。",
+      "doc": "Xiān shuōmíng yíxià: fùpán de mùdì bú shì zhuījiū shéi de zérèn, ér shì nòng qīngchu wèntí shì zěnme fāshēng de, yǐhòu zěnme bìmiǎn.",
+      "v": "Nói rõ trước: mục đích của buổi rút kinh nghiệm không phải là truy cứu trách nhiệm ai, mà là làm rõ sự cố xảy ra thế nào, sau này tránh ra sao.",
+      "np": [
+        { "mau": "不是 A，而是 B", "giai": "Phủ định A để khẳng định B — \"không phải A mà là B\". Hay dùng khi muốn sửa một cách hiểu sai.", "vd": "他不是不想来，而是太忙了。", "vdDoc": "Tā bú shì bù xiǎng lái, ér shì tài máng le.", "vdV": "Anh ấy không phải không muốn đến, mà là bận quá." }
+      ]
+    },
+    {
+      "ai": "M",
+      "t": "我先说吧，因为这次故障跟我改的配置有直接关系。",
+      "doc": "Wǒ xiān shuō ba, yīnwèi zhè cì gùzhàng gēn wǒ gǎi de pèizhì yǒu zhíjiē guānxi.",
+      "v": "Để em nói trước, vì sự cố lần này liên quan trực tiếp đến cấu hình em sửa.",
+      "khac": [
+        { "kieu": "chuyên nghiệp", "t": "这次的问题主要出在我这边，我先来说明一下情况。", "doc": "Zhè cì de wèntí zhǔyào chū zài wǒ zhèbiān, wǒ xiān lái shuōmíng yíxià qíngkuàng.", "v": "Vấn đề lần này chủ yếu phát sinh từ phía em, em xin trình bày tình hình trước.", "ghiChu": "chủ động nhận phần của mình, giọng bình tĩnh" }
+      ],
+      "np": [
+        { "mau": "A 跟 B 有关系", "giai": "A liên quan đến B. Thêm 直接/很大 để nói mức độ; phủ định: 跟…没有关系.", "vd": "这个问题跟网络没有关系。", "vdDoc": "Zhège wèntí gēn wǎngluò méiyǒu guānxi.", "vdV": "Vấn đề này không liên quan đến mạng." }
+      ]
+    },
+    {
+      "ai": "S",
+      "t": "好，按时间顺序说，尽量具体到几点几分。",
+      "doc": "Hǎo, àn shíjiān shùnxù shuō, jǐnliàng jùtǐ dào jǐ diǎn jǐ fēn.",
+      "v": "Được, nói theo thứ tự thời gian, cố gắng cụ thể đến mấy giờ mấy phút.",
+      "np": [
+        { "mau": "尽量 + V/adj", "giai": "尽量 (jǐnliàng) = cố hết mức có thể. Khác 尽管 (cứ việc / mặc dù).", "vd": "请尽量早点儿回复。", "vdDoc": "Qǐng jǐnliàng zǎo diǎnr huífù.", "vdV": "Xin hãy cố gắng trả lời sớm." }
+      ]
+    },
+    {
+      "ai": "M",
+      "t": "周五晚上七点五十，我上线了一个配置修改，本来只是想调整日志的级别。",
+      "doc": "Zhōuwǔ wǎnshang qī diǎn wǔshí, wǒ shàngxiàn le yí ge pèizhì xiūgǎi, běnlái zhǐ shì xiǎng tiáozhěng rìzhì de jíbié.",
+      "v": "7 giờ 50 tối thứ Sáu, em đưa lên một thay đổi cấu hình, ban đầu chỉ định chỉnh mức log."
+    },
+    {
+      "ai": "M",
+      "t": "但是复制配置文件的时候，我不小心把数据库连接池的大小从五十改成了五。",
+      "doc": "Dànshì fùzhì pèizhì wénjiàn de shíhou, wǒ bù xiǎoxīn bǎ shùjùkù liánjiē chí de dàxiǎo cóng wǔshí gǎi chéng le wǔ.",
+      "v": "Nhưng lúc sao chép file cấu hình, em vô ý đổi kích thước connection pool của database từ 50 thành 5."
+    },
+    {
+      "ai": "M",
+      "t": "八点左右，晚高峰的订单一多，连接就不够用了，大量请求开始超时。",
+      "doc": "Bā diǎn zuǒyòu, wǎn gāofēng de dìngdān yì duō, liánjiē jiù bú gòu yòng le, dàliàng qǐngqiú kāishǐ chāoshí.",
+      "v": "Khoảng 8 giờ, đơn hàng giờ cao điểm buổi tối vừa tăng lên là kết nối không đủ dùng, rất nhiều request bắt đầu timeout.",
+      "np": [
+        { "mau": "A 一 + adj/V，B 就…", "giai": "\"A vừa… thì B liền…\" — kết quả xảy ra ngay khi điều kiện xuất hiện. Chủ ngữ hai vế có thể khác nhau.", "vd": "天一冷，我就感冒。", "vdDoc": "Tiān yì lěng, wǒ jiù gǎnmào.", "vdV": "Trời vừa lạnh là tôi bị cảm." }
+      ]
+    },
+    {
+      "ai": "S",
+      "t": "影响范围有多大？",
+      "doc": "Yǐngxiǎng fànwéi yǒu duō dà?",
+      "v": "Phạm vi ảnh hưởng lớn đến đâu?",
+      "khac": [
+        { "kieu": "tự nhiên hơn", "t": "这次一共影响了多少用户？", "doc": "Zhè cì yígòng yǐngxiǎng le duōshao yònghù?", "v": "Lần này tổng cộng ảnh hưởng bao nhiêu người dùng?", "ghiChu": "hỏi thẳng vào con số" }
+      ]
+    },
+    {
+      "ai": "M",
+      "t": "从八点到八点四十，大约百分之十五的用户下单失败，一共两千多笔订单。",
+      "doc": "Cóng bā diǎn dào bā diǎn sìshí, dàyuē bǎi fēn zhī shíwǔ de yònghù xiàdān shībài, yígòng liǎng qiān duō bǐ dìngdān.",
+      "v": "Từ 8 giờ đến 8 giờ 40, khoảng 15% người dùng đặt hàng thất bại, tổng cộng hơn hai nghìn đơn."
+    },
+    {
+      "ai": "S",
+      "t": "我们是怎么发现问题的？",
+      "doc": "Wǒmen shì zěnme fāxiàn wèntí de?",
+      "v": "Chúng ta phát hiện sự cố bằng cách nào?"
+    },
+    {
+      "ai": "M",
+      "t": "说起来有点儿惭愧，不是监控报警发现的，而是客服收到了很多投诉，才打电话给我。",
+      "doc": "Shuō qǐlai yǒudiǎnr cánkuì, bú shì jiānkòng bàojǐng fāxiàn de, ér shì kèfú shōudào le hěn duō tóusù, cái dǎ diànhuà gěi wǒ.",
+      "v": "Nói ra thì hơi xấu hổ, không phải hệ thống cảnh báo phát hiện, mà là chăm sóc khách hàng nhận được nhiều khiếu nại mới gọi điện cho em.",
+      "np": [
+        { "mau": "说起来…", "giai": "\"Nói ra thì…\" — mở đầu một lời thú nhận, nhận xét hoặc chuyện khó nói.", "vd": "说起来很简单，做起来很难。", "vdDoc": "Shuō qǐlai hěn jiǎndān, zuò qǐlai hěn nán.", "vdV": "Nói thì đơn giản, làm thì khó." }
+      ]
+    },
+    {
+      "ai": "S",
+      "t": "这就是第一个值得注意的地方：用户比我们先发现问题，说明我们的报警有漏洞。",
+      "doc": "Zhè jiù shì dì yī ge zhíde zhùyì de dìfang: yònghù bǐ wǒmen xiān fāxiàn wèntí, shuōmíng wǒmen de bàojǐng yǒu lòudòng.",
+      "v": "Đây chính là điểm đầu tiên đáng chú ý: người dùng phát hiện sự cố trước chúng ta, chứng tỏ hệ thống cảnh báo có lỗ hổng."
+    },
+    {
+      "ai": "M",
+      "t": "对，我们只监控了服务器有没有挂掉，没有监控下单的失败率。",
+      "doc": "Duì, wǒmen zhǐ jiānkòng le fúwùqì yǒu méiyǒu guà diào, méiyǒu jiānkòng xiàdān de shībài lǜ.",
+      "v": "Đúng, chúng ta chỉ giám sát máy chủ có sập hay không, chứ không giám sát tỉ lệ đặt hàng thất bại."
+    },
+    {
+      "ai": "S",
+      "t": "发现以后，为什么用了二十分钟才恢复？",
+      "doc": "Fāxiàn yǐhòu, wèishénme yòng le èrshí fēnzhōng cái huīfù?",
+      "v": "Phát hiện rồi, sao phải mất hai mươi phút mới khôi phục được?",
+      "khac": [
+        { "kieu": "mềm mỏng", "t": "从发现到恢复花了二十分钟，中间主要卡在哪儿了？", "doc": "Cóng fāxiàn dào huīfù huā le èrshí fēnzhōng, zhōngjiān zhǔyào kǎ zài nǎr le?", "v": "Từ lúc phát hiện đến lúc khôi phục mất hai mươi phút, ở giữa chủ yếu bị vướng ở đâu?", "ghiChu": "hỏi về quá trình, không mang giọng trách móc" }
+      ]
+    },
+    {
+      "ai": "M",
+      "t": "一开始我以为是数据库出了问题，花了十分钟查数据库，后来看了日志才想到是配置。",
+      "doc": "Yì kāishǐ wǒ yǐwéi shì shùjùkù chū le wèntí, huā le shí fēnzhōng chá shùjùkù, hòulái kàn le rìzhì cái xiǎngdào shì pèizhì.",
+      "v": "Lúc đầu em tưởng database có vấn đề, mất mười phút kiểm tra database, sau xem log mới nghĩ ra là do cấu hình."
+    },
+    {
+      "ai": "M",
+      "t": "想回滚的时候，又发现配置回滚没有现成的脚本，只能手动改，又耽误了几分钟。",
+      "doc": "Xiǎng huígǔn de shíhou, yòu fāxiàn pèizhì huígǔn méiyǒu xiànchéng de jiǎoběn, zhǐ néng shǒudòng gǎi, yòu dānwu le jǐ fēnzhōng.",
+      "v": "Lúc muốn rollback, lại phát hiện rollback cấu hình không có script sẵn, chỉ sửa tay được, lại mất thêm mấy phút."
+    },
+    {
+      "ai": "S",
+      "t": "好，时间线基本清楚了。那我们来分析一下根本原因。",
+      "doc": "Hǎo, shíjiān xiàn jīběn qīngchu le. Nà wǒmen lái fēnxī yíxià gēnběn yuányīn.",
+      "v": "Được, dòng thời gian cơ bản đã rõ. Vậy chúng ta phân tích nguyên nhân gốc."
+    },
+    {
+      "ai": "M",
+      "t": "根本原因就是我太粗心了。以后我一定会更仔细的。",
+      "doc": "Gēnběn yuányīn jiù shì wǒ tài cūxīn le. Yǐhòu wǒ yídìng huì gèng zǐxì de.",
+      "v": "Nguyên nhân gốc là em quá cẩu thả. Sau này em nhất định sẽ cẩn thận hơn."
+    },
+    {
+      "ai": "S",
+      "t": "我不同意。“更仔细”不是一个改进措施，因为谁都难免有粗心的时候。",
+      "doc": "Wǒ bù tóngyì. “Gèng zǐxì” bú shì yí ge gǎijìn cuòshī, yīnwèi shéi dōu nánmiǎn yǒu cūxīn de shíhou.",
+      "v": "Chị không đồng ý. \"Cẩn thận hơn\" không phải là một biện pháp cải tiến, vì ai cũng khó tránh lúc sơ ý.",
+      "khac": [
+        { "kieu": "mềm mỏng", "t": "我理解你的心情，不过“更仔细”可能很难算一个改进措施。", "doc": "Wǒ lǐjiě nǐ de xīnqíng, búguò “gèng zǐxì” kěnéng hěn nán suàn yí ge gǎijìn cuòshī.", "v": "Chị hiểu tâm trạng của em, nhưng \"cẩn thận hơn\" có lẽ khó tính là một biện pháp cải tiến.", "ghiChu": "bất đồng nhưng ghi nhận cảm xúc của người kia trước" }
+      ],
+      "np": [
+        { "mau": "难免 + V", "giai": "难免 = khó tránh khỏi (điều không mong muốn). Thường đi với 会/有: 难免会出错.", "vd": "第一次做，难免会紧张。", "vdDoc": "Dì yī cì zuò, nánmiǎn huì jǐnzhāng.", "vdV": "Lần đầu làm, khó tránh khỏi hồi hộp." }
+      ]
+    },
+    {
+      "ai": "S",
+      "t": "我们应该问的是：为什么一个人改错了一个数字，就能让整个系统出问题，而且没有任何环节拦住它？",
+      "doc": "Wǒmen yīnggāi wèn de shì: wèishénme yí ge rén gǎi cuò le yí ge shùzì, jiù néng ràng zhěnggè xìtǒng chū wèntí, érqiě méiyǒu rènhé huánjié lán zhù tā?",
+      "v": "Điều chúng ta nên hỏi là: vì sao một người sửa sai một con số mà có thể làm cả hệ thống gặp sự cố, mà không có khâu nào chặn lại?"
+    },
+    {
+      "ai": "M",
+      "t": "这么一想，确实有好几个环节：配置修改没有人审核，上线前也没有在测试环境验证。",
+      "doc": "Zhème yì xiǎng, quèshí yǒu hǎo jǐ ge huánjié: pèizhì xiūgǎi méiyǒu rén shěnhé, shàngxiàn qián yě méiyǒu zài cèshì huánjìng yànzhèng.",
+      "v": "Nghĩ như vậy thì đúng là có mấy khâu: thay đổi cấu hình không ai duyệt, trước khi lên cũng không kiểm chứng ở môi trường test.",
+      "np": [
+        { "mau": "这么一想 / 这么一说", "giai": "\"Nghĩ như vậy thì… / Nói như vậy thì…\" — dùng khi một góc nhìn mới khiến mình nhận ra điều gì đó.", "vd": "这么一想，他说得也有道理。", "vdDoc": "Zhème yì xiǎng, tā shuō de yě yǒu dàolǐ.", "vdV": "Nghĩ vậy thì anh ấy nói cũng có lý." }
+      ]
+    },
+    {
+      "ai": "S",
+      "t": "还有，配置是一次性推到所有机器上的。如果先灰度发布到一台机器，影响就会小得多。",
+      "doc": "Hái yǒu, pèizhì shì yícìxìng tuī dào suǒyǒu jīqì shang de. Rúguǒ xiān huīdù fābù dào yì tái jīqì, yǐngxiǎng jiù huì xiǎo de duō.",
+      "v": "Còn nữa, cấu hình bị đẩy một lượt lên tất cả các máy. Nếu phát hành thử (canary) lên một máy trước thì ảnh hưởng sẽ nhỏ hơn nhiều."
+    },
+    {
+      "ai": "S",
+      "t": "那我们把改进措施定下来，每一条都要有负责人和完成时间。",
+      "doc": "Nà wǒmen bǎ gǎijìn cuòshī dìng xiàlai, měi yì tiáo dōu yào yǒu fùzérén hé wánchéng shíjiān.",
+      "v": "Vậy chúng ta chốt các biện pháp cải tiến, mỗi mục đều phải có người phụ trách và thời hạn hoàn thành."
+    },
+    {
+      "ai": "M",
+      "t": "第一条，配置修改跟代码一样，必须经过评审才能上线。这个我来负责，本周五之前完成。",
+      "doc": "Dì yī tiáo, pèizhì xiūgǎi gēn dàimǎ yíyàng, bìxū jīngguò píngshěn cái néng shàngxiàn. Zhège wǒ lái fùzé, běn zhōuwǔ zhīqián wánchéng.",
+      "v": "Mục một: thay đổi cấu hình cũng như code, phải qua review mới được lên. Việc này em phụ trách, xong trước thứ Sáu tuần này.",
+      "khac": [
+        { "kieu": "chuyên nghiệp", "t": "这一项我来跟进，周五前给大家同步进度。", "doc": "Zhè yí xiàng wǒ lái gēnjìn, zhōuwǔ qián gěi dàjiā tóngbù jìndù.", "v": "Mục này em theo sát, trước thứ Sáu sẽ cập nhật tiến độ cho mọi người.", "ghiChu": "跟进 = theo dõi đến cùng; 同步 = cập nhật cho mọi người cùng biết" }
+      ],
+      "np": [
+        { "mau": "A 跟 B 一样", "giai": "A giống B. Thêm tính từ phía sau để so sánh ngang bằng: 跟他一样高.", "vd": "测试代码跟业务代码一样重要。", "vdDoc": "Cèshì dàimǎ gēn yèwù dàimǎ yíyàng zhòngyào.", "vdV": "Code test quan trọng như code nghiệp vụ." }
+      ]
+    },
+    {
+      "ai": "S",
+      "t": "第二条，给下单失败率加报警，超过百分之二就通知值班的人。这个我来。",
+      "doc": "Dì èr tiáo, gěi xiàdān shībài lǜ jiā bàojǐng, chāoguò bǎi fēn zhī èr jiù tōngzhī zhíbān de rén. Zhège wǒ lái.",
+      "v": "Mục hai: thêm cảnh báo cho tỉ lệ đặt hàng thất bại, vượt 2% thì báo ngay cho người trực. Việc này để chị."
+    },
+    {
+      "ai": "M",
+      "t": "第三条，写一个一键回滚的脚本，并且每个月演练一次，免得真出事的时候手忙脚乱。",
+      "doc": "Dì sān tiáo, xiě yí ge yí jiàn huígǔn de jiǎoběn, bìngqiě měi ge yuè yǎnliàn yí cì, miǎnde zhēn chū shì de shíhou shǒu máng jiǎo luàn.",
+      "v": "Mục ba: viết một script rollback một chạm, và mỗi tháng diễn tập một lần, kẻo khi có chuyện thật lại luống cuống tay chân.",
+      "np": [
+        { "mau": "…，免得 + kết quả xấu", "giai": "免得 = để khỏi, kẻo (điều không hay xảy ra). Đặt ở đầu vế sau.", "vd": "出门带把伞，免得被雨淋。", "vdDoc": "Chūmén dài bǎ sǎn, miǎnde bèi yǔ lín.", "vdV": "Ra ngoài mang theo ô, kẻo bị mưa ướt." }
+      ]
+    },
+    {
+      "ai": "S",
+      "t": "很好。最后，配置的灰度发布比较复杂，我们下次单独讨论。",
+      "doc": "Hěn hǎo. Zuìhòu, pèizhì de huīdù fābù bǐjiào fùzá, wǒmen xià cì dāndú tǎolùn.",
+      "v": "Rất tốt. Cuối cùng, phát hành thử cấu hình khá phức tạp, lần sau chúng ta bàn riêng."
+    },
+    {
+      "ai": "M",
+      "t": "宋姐，谢谢你。说实话，开会之前我一直很担心，怕大家都怪我。",
+      "doc": "Sòng jiě, xièxie nǐ. Shuō shíhuà, kāihuì zhīqián wǒ yìzhí hěn dānxīn, pà dàjiā dōu guài wǒ.",
+      "v": "Chị Tống, cảm ơn chị. Nói thật, trước buổi họp em lo suốt, sợ mọi người trách em."
+    },
+    {
+      "ai": "S",
+      "t": "你能主动把经过说得这么清楚，已经帮了大家一个大忙。",
+      "doc": "Nǐ néng zhǔdòng bǎ jīngguò shuō de zhème qīngchu, yǐjīng bāng le dàjiā yí ge dà máng.",
+      "v": "Em chủ động kể lại diễn biến rõ ràng như vậy là đã giúp mọi người một việc lớn rồi.",
+      "khac": [
+        { "kieu": "trang trọng", "t": "感谢你坦诚地说明了整个经过，这对大家很有帮助。", "doc": "Gǎnxiè nǐ tǎnchéng de shuōmíng le zhěnggè jīngguò, zhè duì dàjiā hěn yǒu bāngzhù.", "v": "Cảm ơn em đã thẳng thắn trình bày toàn bộ diễn biến, điều này rất có ích cho mọi người.", "ghiChu": "ghi nhận trước tập thể, giọng chính thức" }
+      ],
+      "np": [
+        { "mau": "帮 + ai + 一个(大)忙", "giai": "帮忙 là động từ ly hợp: người được giúp và lượng từ chen vào giữa — 帮了我一个大忙. Không nói *帮忙我*.", "vd": "你能帮我一个忙吗？", "vdDoc": "Nǐ néng bāng wǒ yí ge máng ma?", "vdV": "Bạn giúp tôi một việc được không?" }
+      ]
+    },
+    {
+      "ai": "S",
+      "t": "记住：人总会犯错。我们要做的，是让系统不怕人犯错。",
+      "doc": "Jìzhù: rén zǒng huì fàn cuò. Wǒmen yào zuò de, shì ràng xìtǒng bú pà rén fàn cuò.",
+      "v": "Hãy nhớ: con người rồi sẽ mắc lỗi. Việc của chúng ta là làm cho hệ thống không sợ con người mắc lỗi."
+    }
+  ],
+  "tuVung": [
+    { "chu": "故障", "doc": "gùzhàng", "nghia": "sự cố, trục trặc (cố chướng); 线上故障 = sự cố trên production", "vd": "昨晚出了一个故障。" },
+    { "chu": "复盘", "doc": "fùpán", "nghia": "rút kinh nghiệm, postmortem (phục bàn — vốn là \"bày lại thế cờ\")", "vd": "项目结束后要做复盘。" },
+    { "chu": "配置", "doc": "pèizhì", "nghia": "cấu hình, config (phối trí)", "vd": "配置文件在哪儿？" },
+    { "chu": "连接池", "doc": "liánjiē chí", "nghia": "connection pool (liên tiếp trì)", "vd": "连接池太小了。" },
+    { "chu": "报警", "doc": "bàojǐng", "nghia": "cảnh báo, alert (báo cảnh)", "vd": "半夜收到了报警。" },
+    { "chu": "回滚", "doc": "huígǔn", "nghia": "rollback, quay về bản cũ (hồi cổn)", "vd": "有问题就马上回滚。" },
+    { "chu": "根本原因", "doc": "gēnběn yuányīn", "nghia": "nguyên nhân gốc, root cause", "vd": "我们要找到根本原因。" },
+    { "chu": "改进措施", "doc": "gǎijìn cuòshī", "nghia": "biện pháp cải tiến, action items", "vd": "每个改进措施都要有负责人。" },
+    { "chu": "灰度发布", "doc": "huīdù fābù", "nghia": "phát hành thử từng phần, canary/gradual release (hôi độ phát bố)", "vd": "新版本先灰度发布。" },
+    { "chu": "环节", "doc": "huánjié", "nghia": "khâu, mắt xích (hoàn tiết)", "vd": "每个环节都很重要。" },
+    { "chu": "值班", "doc": "zhíbān", "nghia": "trực (ca), on-call (trị ban)", "vd": "今晚谁值班？" },
+    { "chu": "手忙脚乱", "doc": "shǒu máng jiǎo luàn", "nghia": "luống cuống tay chân", "vd": "第一次上线，大家手忙脚乱。" }
+  ],
+  "yNghia": "Một buổi rút kinh nghiệm tốt không kết thúc bằng câu \"lần sau tôi sẽ cẩn thận hơn\" — vì ai rồi cũng có lúc sơ ý. Nó kết thúc bằng những thay đổi cụ thể, có người phụ trách và thời hạn, để lần sau một con số gõ sai bị chặn lại trước khi chạm tới người dùng. Người dám kể thật diễn biến là người giúp cả nhóm nhiều nhất.",
+  "meo": [
+    "Khung postmortem: 时间线 (dòng thời gian) → 影响范围 (phạm vi ảnh hưởng) → 怎么发现的 → 为什么恢复慢 → 根本原因 → 改进措施 (mỗi mục có 负责人 + 完成时间).",
+    "Câu chủ động nhận phần của mình mà không tự hạ thấp: 这次的问题主要出在我这边，我先来说明一下情况。",
+    "尽量 (cố hết mức) ≠ 尽管 (cứ việc / mặc dù) — hai chữ đầu giống nhau nhưng nghĩa khác hẳn.",
+    "免得 / 以免 = kẻo, để khỏi; 难免 = khó tránh khỏi. Ba từ hay xuất hiện trong văn bản kỹ thuật tiếng Trung.",
+    "Đọc số phần trăm: 百分之十五 = 15% (bǎi fēn zhī shíwǔ) — mẫu số nói TRƯỚC, ngược với tiếng Việt."
+  ],
+  "cauHoi": [
+    {
+      "hoi": "Nguyên nhân trực tiếp của sự cố là gì?",
+      "chon": ["Database bị hỏng ổ cứng", "Kích thước connection pool bị sửa nhầm từ 50 thành 5", "Mức log quá cao"],
+      "dung": 1,
+      "giai": "我不小心把数据库连接池的大小从五十改成了五。"
+    },
+    {
+      "hoi": "Sự cố được phát hiện bằng cách nào?",
+      "chon": ["Bộ phận chăm sóc khách hàng nhận nhiều khiếu nại", "Hệ thống cảnh báo tự động", "Người trực nhìn thấy trên màn hình giám sát"],
+      "dung": 0,
+      "giai": "不是监控报警发现的，而是客服收到了很多投诉。"
+    },
+    {
+      "hoi": "Vì sao chị Tống không chấp nhận biện pháp \"cẩn thận hơn\"?",
+      "chon": ["Vì Minh không đủ kinh nghiệm", "Vì cần xử phạt người làm sai", "Vì ai cũng khó tránh lúc sơ ý, cần thay đổi ở hệ thống"],
+      "dung": 2,
+      "giai": "谁都难免有粗心的时候…为什么…没有任何环节拦住它？"
+    },
+    {
+      "hoi": "Biện pháp nào KHÔNG nằm trong danh sách cải tiến đã chốt?",
+      "chon": ["Review thay đổi cấu hình như review code", "Thêm cảnh báo tỉ lệ đặt hàng thất bại", "Cấm sửa cấu hình vào tối thứ Sáu"],
+      "dung": 2,
+      "giai": "Ba mục đã chốt: review cấu hình, cảnh báo tỉ lệ thất bại, script rollback một chạm + diễn tập hằng tháng."
+    }
+  ]
+}

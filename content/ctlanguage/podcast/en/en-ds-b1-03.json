@@ -1,0 +1,415 @@
+{
+  "id": "en-ds-b1-03",
+  "nn": "en",
+  "danhMuc": "doi-song",
+  "cap": "B1",
+  "so": 6,
+  "tieuDe": "My Bag Didn't Arrive",
+  "tieuDeViet": "Hành lý của tôi không tới",
+  "moTa": "Ngọc bay sang Úc thăm bạn: làm thủ tục ở quầy, trả lời hải quan và khai báo đồ ăn, rồi đứng chờ ở băng chuyền mãi mà vali không ra. Những câu cần nói ở sân bay — từ \"aisle or window?\" tới mẫu đơn báo thất lạc.",
+  "chuDe": "Sân bay",
+  "bieuTuong": "airplane.departure",
+  "nguoi": [
+    {
+      "ma": "N",
+      "ten": "Ngọc",
+      "giong": "us-nu",
+      "vai": "hành khách"
+    },
+    {
+      "ma": "S",
+      "ten": "James",
+      "giong": "uk-nam",
+      "vai": "nhân viên hãng bay"
+    },
+    {
+      "ma": "O",
+      "ten": "Karen",
+      "giong": "au-nu",
+      "vai": "nhân viên hải quan"
+    }
+  ],
+  "loi": [
+    {
+      "ai": "S",
+      "t": "Good morning. Where are you flying to today?",
+      "v": "Chào buổi sáng. Hôm nay chị bay đi đâu ạ?"
+    },
+    {
+      "ai": "N",
+      "t": "To Melbourne, via Singapore. Here's my passport.",
+      "v": "Đi Melbourne, nối chuyến ở Singapore. Hộ chiếu của tôi đây."
+    },
+    {
+      "ai": "S",
+      "t": "Thank you. Are you checking in any bags today?",
+      "v": "Cảm ơn chị. Hôm nay chị có ký gửi hành lý không?",
+      "np": [
+        {
+          "mau": "check in + bags",
+          "giai": "Ký gửi hành lý. \"Check in\" còn nghĩa làm thủ tục (sân bay, khách sạn).",
+          "vd": "I'd like to check in two bags.",
+          "vdV": "Tôi muốn ký gửi hai kiện hành lý."
+        }
+      ]
+    },
+    {
+      "ai": "N",
+      "t": "Just one suitcase. This backpack is my carry-on.",
+      "v": "Chỉ một vali thôi. Ba lô này là hành lý xách tay.",
+      "khac": [
+        {
+          "kieu": "ngắn gọn",
+          "t": "Just this one. The backpack comes with me.",
+          "v": "Chỉ cái này. Ba lô tôi mang lên máy bay."
+        }
+      ]
+    },
+    {
+      "ai": "S",
+      "t": "Could you put it on the scale, please? Twenty-three kilos — that's just right.",
+      "v": "Chị đặt lên cân giúp tôi. Hai mươi ba ký — vừa đúng."
+    },
+    {
+      "ai": "N",
+      "t": "Phew! Could I have a window seat, please?",
+      "v": "Phù! Cho tôi ghế cạnh cửa sổ được không ạ?",
+      "khac": [
+        {
+          "kieu": "lịch sự",
+          "t": "Is there any chance I could get a window seat?",
+          "v": "Liệu có còn ghế cửa sổ cho tôi không ạ?"
+        },
+        {
+          "kieu": "ngắn gọn",
+          "t": "Window seat, if possible.",
+          "v": "Ghế cửa sổ, nếu được."
+        }
+      ]
+    },
+    {
+      "ai": "S",
+      "t": "Let me see... Yes, 24A. Boarding starts at nine forty at Gate 12. Did you pack your bag yourself?",
+      "v": "Để tôi xem... Được, ghế 24A. Lên máy bay bắt đầu lúc chín giờ bốn mươi ở cổng 12. Chị tự xếp hành lý chứ?",
+      "np": [
+        {
+          "mau": "V + O + yourself",
+          "giai": "Đại từ phản thân nhấn mạnh \"tự mình làm\": Did you pack it yourself? I made it myself.",
+          "vd": "I fixed the bike myself.",
+          "vdV": "Tôi tự sửa xe đạp."
+        }
+      ]
+    },
+    {
+      "ai": "N",
+      "t": "Yes, I did.",
+      "v": "Vâng, tôi tự xếp."
+    },
+    {
+      "ai": "O",
+      "t": "Good evening. What's the purpose of your visit?",
+      "v": "Chào buổi tối. Mục đích chuyến đi của chị là gì?"
+    },
+    {
+      "ai": "N",
+      "t": "I'm here on holiday. I'm visiting a friend.",
+      "v": "Tôi đi du lịch. Tôi đến thăm một người bạn.",
+      "khac": [
+        {
+          "kieu": "trang trọng",
+          "t": "I'm here for tourism, and to visit a friend.",
+          "v": "Tôi đến để du lịch và thăm bạn."
+        }
+      ]
+    },
+    {
+      "ai": "O",
+      "t": "How long are you staying?",
+      "v": "Chị ở bao lâu?",
+      "np": [
+        {
+          "mau": "How long are you staying?",
+          "giai": "Hiện tại tiếp diễn cho kế hoạch đã định. Trả lời ngắn: \"Ten days / Until the twentieth\".",
+          "vd": "We're staying for a week.",
+          "vdV": "Chúng tôi ở một tuần."
+        }
+      ]
+    },
+    {
+      "ai": "N",
+      "t": "Ten days. I'm flying back on the twentieth.",
+      "v": "Mười ngày. Tôi bay về ngày hai mươi."
+    },
+    {
+      "ai": "O",
+      "t": "Do you have anything to declare? Any food, plants or medicine?",
+      "v": "Chị có gì cần khai báo không? Đồ ăn, cây cối hay thuốc men?"
+    },
+    {
+      "ai": "N",
+      "t": "I have some dried fruit and some medicine for my own use. Do I need to declare them?",
+      "v": "Tôi có ít trái cây sấy và thuốc để tự dùng. Tôi có cần khai báo không ạ?",
+      "khac": [
+        {
+          "kieu": "lịch sự",
+          "t": "I'm not sure if I need to declare these. Could you check for me?",
+          "v": "Tôi không chắc mấy thứ này có cần khai báo không. Chị kiểm tra giúp tôi được không?"
+        }
+      ],
+      "np": [
+        {
+          "mau": "Do I need to + V?",
+          "giai": "Hỏi có bắt buộc làm gì không. Đáp: \"Yes, you need to / No, you don't need to\".",
+          "vd": "Do I need to show my ticket?",
+          "vdV": "Tôi có cần đưa vé không?"
+        }
+      ]
+    },
+    {
+      "ai": "O",
+      "t": "Yes, all food must be declared. Let me have a look... This is fine. You can go ahead.",
+      "v": "Có, mọi đồ ăn đều phải khai báo. Để tôi xem... Cái này được. Chị đi tiếp đi.",
+      "np": [
+        {
+          "mau": "must be + V3",
+          "giai": "Bị động với \"must\": bắt buộc phải được làm. Hay gặp trên biển báo, quy định.",
+          "vd": "Passports must be shown at the gate.",
+          "vdV": "Phải xuất trình hộ chiếu ở cổng."
+        }
+      ]
+    },
+    {
+      "ai": "N",
+      "t": "Excuse me. I've been waiting at belt five for forty minutes, and my suitcase hasn't come out.",
+      "v": "Xin lỗi anh. Tôi đợi ở băng chuyền số năm bốn mươi phút rồi mà vali vẫn chưa ra.",
+      "khac": [
+        {
+          "kieu": "mềm mỏng",
+          "t": "Hi, sorry. I think my bag might be missing.",
+          "v": "Chào anh, xin lỗi. Hình như hành lý của tôi bị thất lạc."
+        },
+        {
+          "kieu": "ngắn gọn",
+          "t": "Hi, my bag didn't arrive.",
+          "v": "Chào anh, hành lý của tôi không tới."
+        }
+      ]
+    },
+    {
+      "ai": "S",
+      "t": "I'm sorry to hear that. Can I see your baggage tag? It's usually on your boarding pass.",
+      "v": "Rất tiếc về chuyện đó. Cho tôi xem thẻ hành lý của chị? Thường nó dán trên thẻ lên máy bay."
+    },
+    {
+      "ai": "N",
+      "t": "Here it is.",
+      "v": "Đây ạ."
+    },
+    {
+      "ai": "S",
+      "t": "Thank you... It looks like your bag is still in Singapore. It missed the connecting flight.",
+      "v": "Cảm ơn chị... Có vẻ hành lý của chị vẫn ở Singapore. Nó bị lỡ chuyến bay nối.",
+      "np": [
+        {
+          "mau": "It looks like + mệnh đề",
+          "giai": "Có vẻ như (dựa trên điều đang thấy). Văn nói rất hay dùng.",
+          "vd": "It looks like the shop is closed.",
+          "vdV": "Có vẻ cửa hàng đóng cửa rồi."
+        }
+      ]
+    },
+    {
+      "ai": "N",
+      "t": "Oh no. All my clothes are in there. What should I do?",
+      "v": "Ôi không. Tất cả quần áo của tôi ở trong đó. Tôi nên làm gì bây giờ?",
+      "khac": [
+        {
+          "kieu": "lịch sự",
+          "t": "Oh dear. What happens now?",
+          "v": "Ôi trời. Giờ sẽ thế nào ạ?"
+        }
+      ]
+    },
+    {
+      "ai": "S",
+      "t": "Don't worry. It'll come on tomorrow's flight, and we'll deliver it to your address. Could you fill in this form?",
+      "v": "Chị đừng lo. Nó sẽ theo chuyến bay ngày mai, và chúng tôi sẽ giao tới địa chỉ của chị. Chị điền giúp mẫu đơn này nhé?",
+      "np": [
+        {
+          "mau": "fill in (Anh) / fill out (Mỹ)",
+          "giai": "Điền (mẫu đơn). Cả hai đều đúng; người Anh hay nói \"fill in\", người Mỹ \"fill out\".",
+          "vd": "Please fill out this form.",
+          "vdV": "Vui lòng điền mẫu đơn này."
+        }
+      ]
+    },
+    {
+      "ai": "N",
+      "t": "Sure. Will the airline pay for a few things I need tonight?",
+      "v": "Vâng. Hãng bay có trả tiền cho vài thứ tôi cần tối nay không?",
+      "khac": [
+        {
+          "kieu": "trang trọng",
+          "t": "Will I be reimbursed for essential items?",
+          "v": "Tôi có được hoàn tiền cho những đồ dùng thiết yếu không?"
+        },
+        {
+          "kieu": "lịch sự",
+          "t": "Can I claim for basic things like a toothbrush?",
+          "v": "Tôi có thể đòi bồi hoàn cho đồ cơ bản như bàn chải không?"
+        }
+      ]
+    },
+    {
+      "ai": "S",
+      "t": "Yes, for basic things like a toothbrush and a T-shirt. Just keep the receipts.",
+      "v": "Có, cho những thứ cơ bản như bàn chải và áo thun. Chị nhớ giữ hoá đơn."
+    },
+    {
+      "ai": "N",
+      "t": "How will I know when it's coming?",
+      "v": "Làm sao tôi biết khi nào nó tới?"
+    },
+    {
+      "ai": "S",
+      "t": "We'll send you a text message. Here's your reference number — you can also track it online.",
+      "v": "Chúng tôi sẽ nhắn tin cho chị. Đây là mã số hồ sơ — chị cũng có thể theo dõi trên mạng."
+    },
+    {
+      "ai": "N",
+      "t": "Thanks for your help. I'll keep my fingers crossed.",
+      "v": "Cảm ơn anh đã giúp. Tôi sẽ cầu mong mọi thứ ổn.",
+      "np": [
+        {
+          "mau": "keep my fingers crossed",
+          "giai": "Thành ngữ: bắt chéo ngón tay = cầu mong may mắn.",
+          "vd": "Good luck with your exam! I'll keep my fingers crossed.",
+          "vdV": "Chúc thi tốt! Mình sẽ cầu may cho bạn."
+        }
+      ]
+    }
+  ],
+  "tuVung": [
+    {
+      "chu": "checking in",
+      "doc": "/ˈtʃekɪŋ ɪn/",
+      "nghia": "làm thủ tục; ký gửi (hành lý)",
+      "vd": "Are you checking in any bags?"
+    },
+    {
+      "chu": "carry-on",
+      "doc": "/ˈkæri ɒn/",
+      "nghia": "hành lý xách tay",
+      "vd": "My carry-on is under 7 kilos."
+    },
+    {
+      "chu": "scale",
+      "doc": "/skeɪl/",
+      "nghia": "cái cân",
+      "vd": "Put your bag on the scale."
+    },
+    {
+      "chu": "Boarding",
+      "doc": "/ˈbɔːdɪŋ/",
+      "nghia": "việc lên máy bay",
+      "vd": "Boarding starts at 9:40."
+    },
+    {
+      "chu": "purpose of your visit",
+      "doc": "/ˈpɜːpəs əv jɔː ˈvɪzɪt/",
+      "nghia": "mục đích chuyến đi",
+      "vd": "What is the purpose of your visit?"
+    },
+    {
+      "chu": "declare",
+      "doc": "/dɪˈkleə(r)/",
+      "nghia": "khai báo (hải quan)",
+      "vd": "You must declare all food."
+    },
+    {
+      "chu": "belt",
+      "doc": "/belt/",
+      "nghia": "băng chuyền hành lý",
+      "vd": "Your bags are on belt three."
+    },
+    {
+      "chu": "baggage tag",
+      "doc": "/ˈbæɡɪdʒ tæɡ/",
+      "nghia": "thẻ hành lý",
+      "vd": "Keep your baggage tag."
+    },
+    {
+      "chu": "connecting flight",
+      "doc": "/kəˈnektɪŋ flaɪt/",
+      "nghia": "chuyến bay nối",
+      "vd": "I almost missed my connecting flight."
+    },
+    {
+      "chu": "fill in",
+      "doc": "/fɪl ɪn/",
+      "nghia": "điền (mẫu đơn)",
+      "vd": "Please fill in this form."
+    },
+    {
+      "chu": "receipts",
+      "doc": "/rɪˈsiːts/",
+      "nghia": "hoá đơn, biên lai",
+      "vd": "Keep all your receipts."
+    },
+    {
+      "chu": "reference number",
+      "doc": "/ˈrefrəns ˈnʌmbə(r)/",
+      "nghia": "mã số hồ sơ",
+      "vd": "Here is your reference number."
+    }
+  ],
+  "yNghia": "Hành lý thất lạc nghe đáng sợ, nhưng thường chỉ là lỡ một chuyến bay nối và vài ngày sau sẽ tới. Bình tĩnh, giữ thẻ hành lý và hoá đơn, và luôn để những thứ không thể thiếu (thuốc, sạc, một bộ đồ) trong hành lý xách tay.",
+  "meo": [
+    "Quầy check-in: \"Are you checking in any bags?\", \"Aisle or window?\", \"Did you pack your bag yourself?\".",
+    "Hải quan: trả lời ngắn, thật: mục đích (\"I'm here on holiday\"), thời gian (\"Ten days\"). Có đồ ăn, thuốc thì khai báo — khai thừa không sao, giấu mới phiền.",
+    "Thất lạc hành lý: đến quầy \"Baggage Services / Lost Luggage\", đưa thẻ hành lý, điền đơn, giữ \"reference number\" và hoá đơn mua đồ thiết yếu.",
+    "Thành ngữ: \"keep my fingers crossed\" = cầu may."
+  ],
+  "cauHoi": [
+    {
+      "hoi": "Ngọc ký gửi bao nhiêu hành lý?",
+      "chon": [
+        "Không ký gửi",
+        "Một vali",
+        "Một vali và một ba lô"
+      ],
+      "dung": 1,
+      "giai": "\"Just one suitcase. This backpack is my carry-on.\""
+    },
+    {
+      "hoi": "Vì sao vali của Ngọc không tới?",
+      "chon": [
+        "Bị lấy nhầm",
+        "Bị lỡ chuyến bay nối ở Singapore",
+        "Quá cân nên bị giữ lại"
+      ],
+      "dung": 1,
+      "giai": "\"It missed the connecting flight.\""
+    },
+    {
+      "hoi": "Ở hải quan, Ngọc làm gì với trái cây sấy?",
+      "chon": [
+        "Giấu đi",
+        "Vứt bỏ",
+        "Hỏi có cần khai báo và được cho qua"
+      ],
+      "dung": 2,
+      "giai": "\"Do I need to declare them?\" — nhân viên xem và nói \"This is fine\"."
+    },
+    {
+      "hoi": "Hãng bay sẽ trả tiền cho thứ gì?",
+      "chon": [
+        "Quần áo hàng hiệu",
+        "Đồ cơ bản như bàn chải, áo thun",
+        "Vé máy bay mới"
+      ],
+      "dung": 1,
+      "giai": "\"for basic things like a toothbrush and a T-shirt.\""
+    }
+  ]
+}

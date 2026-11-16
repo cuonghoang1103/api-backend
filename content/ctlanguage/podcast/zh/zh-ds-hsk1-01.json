@@ -1,0 +1,494 @@
+{
+  "id": "zh-ds-hsk1-01",
+  "nn": "zh",
+  "danhMuc": "doi-song",
+  "cap": "HSK1",
+  "so": 3,
+  "tieuDe": "对不起！没关系！",
+  "tieuDeViet": "Xin lỗi! Không sao!",
+  "moTa": "Ngày đầu đi học ở Trung Quốc, Hà vội quá va phải một thầy giáo ngoài hành lang. Từ một câu xin lỗi thành buổi làm quen: chào hỏi, giới thiệu tên, cảm ơn, hỏi nhà vệ sinh — những câu cơ bản nhất ai cũng cần.",
+  "chuDe": "Chào hỏi",
+  "bieuTuong": "hand.wave.fill",
+  "nguoi": [
+    {
+      "ma": "H",
+      "ten": "Hà",
+      "giong": "zh-nu",
+      "vai": "sinh viên Việt Nam mới sang"
+    },
+    {
+      "ma": "Z",
+      "ten": "Thầy Trương",
+      "giong": "zh-nam",
+      "vai": "giáo viên tiếng Trung"
+    }
+  ],
+  "loi": [
+    {
+      "ai": "H",
+      "t": "啊！对不起！对不起！",
+      "doc": "À! Duìbuqǐ! Duìbuqǐ!",
+      "v": "Ối! Xin lỗi! Xin lỗi ạ!",
+      "khac": [
+        {
+          "kieu": "mềm mỏng",
+          "t": "不好意思！",
+          "doc": "Bù hǎoyìsi!",
+          "v": "Ngại quá! / Xin lỗi nhé!",
+          "ghiChu": "lỗi nhỏ: va nhẹ, chen qua, làm phiền ai — người Trung dùng câu này nhiều hơn 对不起"
+        },
+        {
+          "kieu": "nhấn mạnh",
+          "t": "真对不起！",
+          "doc": "Zhēn duìbuqǐ!",
+          "v": "Thật sự xin lỗi!",
+          "ghiChu": "khi mình gây phiền thật sự, muốn xin lỗi cho thành khẩn"
+        }
+      ]
+    },
+    {
+      "ai": "Z",
+      "t": "没关系。你没事吧？",
+      "doc": "Méi guānxi. Nǐ méi shì ba?",
+      "v": "Không sao. Em không sao chứ?",
+      "khac": [
+        {
+          "kieu": "thân mật",
+          "t": "没事儿，没事儿。",
+          "doc": "Méi shìr, méi shìr.",
+          "v": "Không sao đâu, không sao đâu.",
+          "ghiChu": "văn nói miền Bắc, rất hay nghe ngoài đường"
+        }
+      ],
+      "np": [
+        {
+          "mau": "……吧？",
+          "giai": "吧 cuối câu hỏi khi mình đã đoán được câu trả lời, muốn người kia xác nhận — giống \"…chứ?\", \"…phải không?\". Khác 吗 (hỏi thật, chưa biết).",
+          "vd": "你是新同学吧？",
+          "vdDoc": "Nǐ shì xīn tóngxué ba?",
+          "vdV": "Bạn là bạn học mới phải không?"
+        }
+      ]
+    },
+    {
+      "ai": "H",
+      "t": "我没事。老师，您好！",
+      "doc": "Wǒ méi shì. Lǎoshī, nín hǎo!",
+      "v": "Em không sao. Em chào thầy ạ!",
+      "khac": [
+        {
+          "kieu": "tự nhiên hơn",
+          "t": "老师好！",
+          "doc": "Lǎoshī hǎo!",
+          "v": "Em chào thầy!",
+          "ghiChu": "học sinh chào thầy cô hằng ngày: chức danh + 好"
+        },
+        {
+          "kieu": "thân mật",
+          "t": "你好！",
+          "doc": "Nǐ hǎo!",
+          "v": "Chào bạn!",
+          "ghiChu": "với bạn bè, người cùng tuổi — không dùng với thầy cô, người lớn tuổi"
+        }
+      ],
+      "np": [
+        {
+          "mau": "您 (kính) ↔ 你 (thường)",
+          "giai": "您 là \"ngài/ông/bà/thầy\" — dùng với người lớn tuổi, thầy cô, khách hàng. 你 dùng với bạn bè, người ngang hàng, trẻ hơn. Số nhiều của 您 vẫn là 你们 (ít nói 您们).",
+          "vd": "阿姨，您好！",
+          "vdDoc": "Āyí, nín hǎo!",
+          "vdV": "Cháu chào cô ạ!"
+        }
+      ]
+    },
+    {
+      "ai": "Z",
+      "t": "你好！你是新学生吗？",
+      "doc": "Nǐ hǎo! Nǐ shì xīn xuésheng ma?",
+      "v": "Chào em! Em là học sinh mới à?",
+      "np": [
+        {
+          "mau": "Câu kể + 吗？",
+          "giai": "Thêm 吗 vào cuối câu kể là thành câu hỏi có/không, không cần đảo trật tự từ. Trả lời \"có\" thường lặp lại động từ: 是 / 是的.",
+          "vd": "你是老师吗？",
+          "vdDoc": "Nǐ shì lǎoshī ma?",
+          "vdV": "Anh là giáo viên à?"
+        }
+      ]
+    },
+    {
+      "ai": "H",
+      "t": "是的。我叫阮秋河，您叫我小河吧。",
+      "doc": "Shì de. Wǒ jiào Ruǎn Qiūhé, nín jiào wǒ Xiǎo Hé ba.",
+      "v": "Vâng ạ. Em tên là Nguyễn Thu Hà, thầy cứ gọi em là Tiểu Hà ạ.",
+      "khac": [
+        {
+          "kieu": "trang trọng",
+          "t": "我姓阮，叫阮秋河。",
+          "doc": "Wǒ xìng Ruǎn, jiào Ruǎn Qiūhé.",
+          "v": "Em họ Nguyễn, tên là Nguyễn Thu Hà.",
+          "ghiChu": "giới thiệu ở chỗ làm thủ tục, lớp học, buổi gặp đầu tiên"
+        },
+        {
+          "kieu": "ngắn gọn",
+          "t": "我是小河。",
+          "doc": "Wǒ shì Xiǎo Hé.",
+          "v": "Mình là Tiểu Hà.",
+          "ghiChu": "giữa bạn bè, khi người kia đã biết mình là ai"
+        }
+      ],
+      "np": [
+        {
+          "mau": "叫 + tên",
+          "giai": "叫 = \"tên là\" (gọi là). Hỏi: 你叫什么名字？ Với người lớn, hỏi lịch sự hơn: 您贵姓？ (Ngài họ gì ạ?).",
+          "vd": "他叫大卫。",
+          "vdDoc": "Tā jiào Dàwèi.",
+          "vdV": "Anh ấy tên là David."
+        },
+        {
+          "mau": "小 + tên/họ",
+          "giai": "小 trước một chữ trong tên hoặc họ là cách gọi thân, thường cho người trẻ hơn mình (小王, 小河). Người lớn tuổi gọi bạn kiểu này là dấu hiệu thân thiện.",
+          "vd": "小王，你好！",
+          "vdDoc": "Xiǎo Wáng, nǐ hǎo!",
+          "vdV": "Chào Tiểu Vương!"
+        }
+      ]
+    },
+    {
+      "ai": "Z",
+      "t": "我姓张，是你们的汉语老师。",
+      "doc": "Wǒ xìng Zhāng, shì nǐmen de Hànyǔ lǎoshī.",
+      "v": "Thầy họ Trương, là thầy dạy tiếng Trung của các em.",
+      "np": [
+        {
+          "mau": "姓 + họ",
+          "giai": "姓 = \"họ là\". Người Trung hay giới thiệu họ trước, rồi người nghe gọi bằng họ + chức danh: 张老师, 王先生, 李阿姨.",
+          "vd": "我姓李，你叫我李阿姨吧。",
+          "vdDoc": "Wǒ xìng Lǐ, nǐ jiào wǒ Lǐ āyí ba.",
+          "vdV": "Cô họ Lý, cháu cứ gọi cô là cô Lý nhé."
+        }
+      ]
+    },
+    {
+      "ai": "H",
+      "t": "张老师好！认识您很高兴。",
+      "doc": "Zhāng lǎoshī hǎo! Rènshi nín hěn gāoxìng.",
+      "v": "Em chào thầy Trương! Rất vui được biết thầy.",
+      "khac": [
+        {
+          "kieu": "lịch sự",
+          "t": "很高兴认识您。",
+          "doc": "Hěn gāoxìng rènshi nín.",
+          "v": "Rất hân hạnh được làm quen với thầy.",
+          "ghiChu": "dùng được mọi nơi, với người lớn hoặc người mới gặp"
+        },
+        {
+          "kieu": "thân mật",
+          "t": "很高兴认识你！",
+          "doc": "Hěn gāoxìng rènshi nǐ!",
+          "v": "Vui được làm quen với bạn!",
+          "ghiChu": "với bạn bè, người cùng tuổi"
+        }
+      ]
+    },
+    {
+      "ai": "Z",
+      "t": "我也很高兴。你从哪儿来？",
+      "doc": "Wǒ yě hěn gāoxìng. Nǐ cóng nǎr lái?",
+      "v": "Thầy cũng rất vui. Em từ đâu đến?",
+      "np": [
+        {
+          "mau": "从 + nơi chốn + 来",
+          "giai": "从 = \"từ\". Nơi chốn đứng TRƯỚC động từ 来, khác tiếng Việt (\"đến từ…\"). Hỏi: 你从哪儿来？",
+          "vd": "我从河内来。",
+          "vdDoc": "Wǒ cóng Hénèi lái.",
+          "vdV": "Tôi đến từ Hà Nội."
+        }
+      ]
+    },
+    {
+      "ai": "H",
+      "t": "我从越南来，我是越南人。",
+      "doc": "Wǒ cóng Yuènán lái, wǒ shì Yuènán rén.",
+      "v": "Em đến từ Việt Nam, em là người Việt Nam."
+    },
+    {
+      "ai": "Z",
+      "t": "你的汉语很好！",
+      "doc": "Nǐ de Hànyǔ hěn hǎo!",
+      "v": "Tiếng Trung của em tốt lắm!"
+    },
+    {
+      "ai": "H",
+      "t": "谢谢老师！我的汉语不太好，我想多学习。",
+      "doc": "Xièxie lǎoshī! Wǒ de Hànyǔ bú tài hǎo, wǒ xiǎng duō xuéxí.",
+      "v": "Em cảm ơn thầy! Tiếng Trung của em chưa tốt lắm, em muốn học nhiều hơn.",
+      "khac": [
+        {
+          "kieu": "tự nhiên hơn",
+          "t": "没有没有，还差得远呢。",
+          "doc": "Méiyǒu méiyǒu, hái chà de yuǎn ne.",
+          "v": "Đâu có đâu có, em còn kém xa lắm.",
+          "ghiChu": "cách đáp lời khen phổ biến nhất hiện nay — khiêm tốn mà vẫn vui vẻ"
+        },
+        {
+          "kieu": "thân mật",
+          "t": "真的吗？谢谢！",
+          "doc": "Zhēn de ma? Xièxie!",
+          "v": "Thật á? Cảm ơn nha!",
+          "ghiChu": "giữa bạn bè, người trẻ — nhận lời khen thẳng cũng không sao"
+        }
+      ],
+      "np": [
+        {
+          "mau": "不太 + tính từ",
+          "giai": "不太 = \"không… lắm\", nhẹ hơn 不 (không). Nói về mình hoặc chê nhẹ thì dùng 不太 cho mềm.",
+          "vd": "今天不太冷。",
+          "vdDoc": "Jīntiān bú tài lěng.",
+          "vdV": "Hôm nay không lạnh lắm."
+        }
+      ]
+    },
+    {
+      "ai": "Z",
+      "t": "很好。上课了，我们去教室吧。",
+      "doc": "Hěn hǎo. Shàng kè le, wǒmen qù jiàoshì ba.",
+      "v": "Tốt lắm. Đến giờ học rồi, chúng ta vào lớp thôi.",
+      "np": [
+        {
+          "mau": "……了 (tình huống mới)",
+          "giai": "了 cuối câu báo một tình huống MỚI vừa xuất hiện: 上课了 = vào học rồi (trước đó chưa). Tương tự 下雨了 = trời mưa rồi.",
+          "vd": "八点了，我们走吧。",
+          "vdDoc": "Bā diǎn le, wǒmen zǒu ba.",
+          "vdV": "Tám giờ rồi, mình đi thôi."
+        },
+        {
+          "mau": "V + 吧 (rủ, đề nghị)",
+          "giai": "吧 sau câu đề nghị làm cho lời rủ nhẹ nhàng: 我们去吧 = mình đi nhé/thôi. Khác 吧 ở câu hỏi đoán.",
+          "vd": "我们喝茶吧。",
+          "vdDoc": "Wǒmen hē chá ba.",
+          "vdV": "Mình uống trà nhé."
+        }
+      ]
+    },
+    {
+      "ai": "H",
+      "t": "好的。老师，请问洗手间在哪儿？",
+      "doc": "Hǎo de. Lǎoshī, qǐngwèn xǐshǒujiān zài nǎr?",
+      "v": "Vâng ạ. Thầy ơi, cho em hỏi nhà vệ sinh ở đâu ạ?",
+      "khac": [
+        {
+          "kieu": "lịch sự",
+          "t": "不好意思，请问卫生间在哪里？",
+          "doc": "Bù hǎoyìsi, qǐngwèn wèishēngjiān zài nǎlǐ?",
+          "v": "Xin lỗi, cho hỏi nhà vệ sinh ở đâu ạ?",
+          "ghiChu": "hỏi nhân viên khách sạn, nhà hàng, người lạ"
+        },
+        {
+          "kieu": "văn nói",
+          "t": "厕所在哪儿？",
+          "doc": "Cèsuǒ zài nǎr?",
+          "v": "Nhà vệ sinh ở đâu?",
+          "ghiChu": "nói thẳng, rất bình thường với người quen; 厕所 là từ phổ thông nhất"
+        }
+      ],
+      "np": [
+        {
+          "mau": "请问 + câu hỏi",
+          "giai": "请问 = \"cho hỏi\", đặt đầu câu khi hỏi người khác — lịch sự mà không khách sáo quá. Câu hỏi nơi chốn: (cái gì) + 在哪儿？",
+          "vd": "请问，地铁站在哪儿？",
+          "vdDoc": "Qǐngwèn, dìtiě zhàn zài nǎr?",
+          "vdV": "Cho hỏi, ga tàu điện ngầm ở đâu?"
+        }
+      ]
+    },
+    {
+      "ai": "Z",
+      "t": "在那儿，教室旁边。",
+      "doc": "Zài nàr, jiàoshì pángbiān.",
+      "v": "Ở đằng kia, cạnh lớp học."
+    },
+    {
+      "ai": "H",
+      "t": "谢谢您！",
+      "doc": "Xièxie nín!",
+      "v": "Em cảm ơn thầy!",
+      "khac": [
+        {
+          "kieu": "nhấn mạnh",
+          "t": "太谢谢您了！",
+          "doc": "Tài xièxie nín le!",
+          "v": "Cảm ơn thầy nhiều lắm!",
+          "ghiChu": "khi người ta giúp mình việc lớn"
+        },
+        {
+          "kieu": "thân mật",
+          "t": "谢啦！",
+          "doc": "Xiè la!",
+          "v": "Cảm ơn nha!",
+          "ghiChu": "giữa bạn bè, nói nhanh"
+        }
+      ]
+    },
+    {
+      "ai": "Z",
+      "t": "不客气。快去吧，一会儿见！",
+      "doc": "Bú kèqi. Kuài qù ba, yíhuìr jiàn!",
+      "v": "Không có gì. Đi nhanh đi, lát nữa gặp!",
+      "khac": [
+        {
+          "kieu": "tự nhiên hơn",
+          "t": "不用谢。",
+          "doc": "Bú yòng xiè.",
+          "v": "Không cần cảm ơn đâu.",
+          "ghiChu": "đáp lời cảm ơn, dùng được với mọi người"
+        },
+        {
+          "kieu": "thân mật",
+          "t": "没事儿！",
+          "doc": "Méi shìr!",
+          "v": "Có gì đâu!",
+          "ghiChu": "giữa bạn bè"
+        }
+      ],
+      "np": [
+        {
+          "mau": "一会儿见 / 明天见",
+          "giai": "Thời điểm + 见 = \"hẹn gặp lúc…\": 一会儿见 (lát gặp), 明天见 (mai gặp), 下周见 (tuần sau gặp). Ngắn và tự nhiên hơn 再见 khi biết chắc sẽ gặp lại.",
+          "vd": "好，明天见！",
+          "vdDoc": "Hǎo, míngtiān jiàn!",
+          "vdV": "Ừ, mai gặp nhé!"
+        }
+      ]
+    },
+    {
+      "ai": "H",
+      "t": "好，一会儿见！",
+      "doc": "Hǎo, yíhuìr jiàn!",
+      "v": "Vâng, lát nữa gặp thầy ạ!"
+    }
+  ],
+  "tuVung": [
+    {
+      "chu": "对不起",
+      "doc": "duìbuqǐ",
+      "nghia": "xin lỗi (lỗi rõ ràng, nghiêm túc)",
+      "vd": "对不起，我来晚了。"
+    },
+    {
+      "chu": "没关系",
+      "doc": "méi guānxi",
+      "nghia": "không sao, không hề gì (đáp lại lời xin lỗi)",
+      "vd": "对不起！— 没关系。"
+    },
+    {
+      "chu": "您",
+      "doc": "nín",
+      "nghia": "ngài, ông, bà, thầy, cô — dạng kính trọng của 你",
+      "vd": "老师，您好！"
+    },
+    {
+      "chu": "姓",
+      "doc": "xìng",
+      "nghia": "họ; mang họ (tính)",
+      "vd": "我姓阮。"
+    },
+    {
+      "chu": "叫",
+      "doc": "jiào",
+      "nghia": "tên là; gọi (khiếu)",
+      "vd": "你叫什么名字？"
+    },
+    {
+      "chu": "认识",
+      "doc": "rènshi",
+      "nghia": "quen biết, làm quen (nhận thức)",
+      "vd": "认识你很高兴。"
+    },
+    {
+      "chu": "高兴",
+      "doc": "gāoxìng",
+      "nghia": "vui, vui mừng (cao hứng)",
+      "vd": "我今天很高兴。"
+    },
+    {
+      "chu": "请问",
+      "doc": "qǐngwèn",
+      "nghia": "xin hỏi, cho hỏi (thỉnh vấn)",
+      "vd": "请问，你是王老师吗？"
+    },
+    {
+      "chu": "洗手间",
+      "doc": "xǐshǒujiān",
+      "nghia": "nhà vệ sinh (lịch sự; nghĩa đen: phòng rửa tay)",
+      "vd": "洗手间在哪儿？"
+    },
+    {
+      "chu": "谢谢",
+      "doc": "xièxie",
+      "nghia": "cảm ơn (tạ tạ)",
+      "vd": "谢谢你！"
+    },
+    {
+      "chu": "不客气",
+      "doc": "bú kèqi",
+      "nghia": "không có gì, đừng khách sáo",
+      "vd": "谢谢！— 不客气。"
+    },
+    {
+      "chu": "一会儿",
+      "doc": "yíhuìr",
+      "nghia": "một lát, lát nữa",
+      "vd": "请等一会儿。"
+    }
+  ],
+  "yNghia": "Một cú va chạm nhỏ có thể làm ngày đầu tiên tệ đi — hoặc mở ra một lần làm quen. Hà chỉ dùng toàn câu cơ bản nhất: xin lỗi, chào, giới thiệu tên, cảm ơn. Nhưng nói đúng lúc và đúng người (您 với thầy, 你 với bạn), những câu đơn giản ấy là đủ để người ta nhớ đến bạn bằng thiện cảm.",
+  "meo": [
+    "对不起 cho lỗi rõ ràng; 不好意思 cho phiền nhỏ (va nhẹ, nhờ vả, đến muộn chút) — ngoài đường bạn sẽ nghe 不好意思 nhiều hơn.",
+    "Gặp thầy cô, người lớn: chức danh + 好 (老师好, 阿姨好) hoặc 您好. Với bạn bè: 你好, hay chỉ cần gọi tên + 嗨.",
+    "Đáp lời cảm ơn: 不客气 / 不用谢 / 没事儿. Đáp lời xin lỗi: 没关系 / 没事儿.",
+    "不 đọc thanh 2 (bú) khi đứng trước thanh 4: 不客气 bú kèqi, 不太 bú tài, 不用 bú yòng. 一 cũng vậy: 一会儿 yíhuìr."
+  ],
+  "cauHoi": [
+    {
+      "hoi": "Thầy giáo họ gì?",
+      "chon": [
+        "Họ Vương",
+        "Họ Trương",
+        "Họ Nguyễn"
+      ],
+      "dung": 1,
+      "giai": "Thầy nói: 我姓张 — thầy họ Trương."
+    },
+    {
+      "hoi": "Khi bạn lỡ va nhẹ vào người lạ ngoài đường, câu nào tự nhiên nhất?",
+      "chon": [
+        "不客气！",
+        "没关系！",
+        "不好意思！"
+      ],
+      "dung": 2,
+      "giai": "不好意思 dùng cho lỗi nhỏ, làm phiền nhẹ. 没关系 là câu ĐÁP lại lời xin lỗi; 不客气 đáp lại lời cảm ơn."
+    },
+    {
+      "hoi": "Vì sao Hà nói 您好 với thầy giáo mà không nói 你好?",
+      "chon": [
+        "Vì 您 là dạng kính trọng, dùng với thầy cô và người lớn",
+        "Vì 您 là số nhiều",
+        "Vì thầy là người Bắc Kinh"
+      ],
+      "dung": 0,
+      "giai": "您 là cách xưng hô kính trọng của 你."
+    },
+    {
+      "hoi": "Hà hỏi thầy điều gì trước khi vào lớp?",
+      "chon": [
+        "Lớp học ở tầng mấy",
+        "Nhà vệ sinh ở đâu",
+        "Mấy giờ vào học"
+      ],
+      "dung": 1,
+      "giai": "Hà hỏi: 请问洗手间在哪儿？ — cho em hỏi nhà vệ sinh ở đâu."
+    }
+  ]
+}

@@ -12,6 +12,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { logger } from '../../utils/logger.js';
 import { NN_CDT, kiemDanhMuc, kiemTep, type ChuDeDanhMuc, type DanhMucChuDe, type NnCdt, type TepChuDe } from './chuDeTuThuan.js';
+import { CAP_CUA } from './chuDeTuThuan.js';
 
 export type NnChuDe = NnCdt;
 
@@ -63,6 +64,26 @@ export function _datKhoChuDe(k: KhoChuDe | null) { khoCdt = k; }
 export function chuDeCua(nn: NnCdt): { c: ChuDeDanhMuc; tep: TepChuDe }[] {
   const k = khoChuDe();
   return k.danhMuc.chuDe.flatMap((c) => { const tep = k.tep[nn].get(c.ma); return tep ? [{ c, tep }] : []; });
+}
+
+/**
+ * Từ cho TRÒ CHƠI (16/11/2026): từ của kho chủ đề (soạn tay, có cấp) tới cấp trung cao (A1–B2 · N5–N2 · HSK1–4).
+ * User báo game hỏi "đường rhumb", "nghiên cứu và thiết kế huy hiệu" (rhumbline, heraldry) — bốc ngẫu nhiên cả kho
+ * 13k từ là dính từ hiếm người học chẳng bao giờ gặp. Nhớ theo ngôn ngữ (kho nạp một lần).
+ */
+const _tuChoi = new Map<string, string[]>();
+export function tuDeChoi(nn: NnCdt, capToiDa = 3): string[] {
+  const k = `${nn}|${capToiDa}`;
+  const co = _tuChoi.get(k);
+  if (co) return co;
+  const caps = CAP_CUA[nn].slice(0, capToiDa + 1);
+  const ds = new Set<string>();
+  for (const { tep } of chuDeCua(nn)) for (const t of tep.tu) {
+    if (!t.cap || caps.includes(t.cap)) ds.add(nn === 'en' ? t.chu.toLowerCase() : t.chu);
+  }
+  const ra = [...ds];
+  _tuChoi.set(k, ra);
+  return ra;
 }
 
 /** id ÂM ổn định cho từ không có trong từ điển (băm FNV-1a của "nn:chữ") — app tự tra lại theo chữ khi mở. */

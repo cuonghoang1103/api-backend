@@ -1,0 +1,275 @@
+{
+  "id": "zh-se-hsk5-03",
+  "nn": "zh",
+  "danhMuc": "phan-mem",
+  "cap": "HSK5",
+  "so": 3,
+  "tieuDe": "两周做得完吗？——排期与谈判",
+  "tieuDeViet": "Hai tuần có kịp không? — Lên lịch và thương lượng hạn chót",
+  "moTa": "Sếp muốn tính năng tích điểm thành viên lên kịp đợt khuyến mãi cuối tháng — chỉ còn hai tuần. Hải không nói \"không thể\", cũng không nói \"không vấn đề gì\": anh chia nhỏ công việc, ước lượng, rồi đưa ra ba phương án kèm cái giá của từng cái.",
+  "chuDe": "Ước lượng & hạn chót",
+  "bieuTuong": "calendar.badge.clock",
+  "nguoi": [
+    { "ma": "Z", "ten": "Chị Trịnh", "giong": "zh-nu", "vai": "quản lý dự án" },
+    { "ma": "H", "ten": "Hải", "giong": "zh-nam", "vai": "trưởng nhóm kỹ thuật người Việt" }
+  ],
+  "loi": [
+    {
+      "ai": "Z",
+      "t": "文海，月底有个促销活动，老板希望会员积分功能能在活动前上线。两个星期，够吗？",
+      "doc": "Wénhǎi, yuèdǐ yǒu ge cùxiāo huódòng, lǎobǎn xīwàng huìyuán jīfēn gōngnéng néng zài huódòng qián shàngxiàn. Liǎng ge xīngqī, gòu ma?",
+      "v": "Văn Hải, cuối tháng có đợt khuyến mãi, sếp muốn tính năng tích điểm thành viên lên trước đợt đó. Hai tuần, có đủ không?"
+    },
+    {
+      "ai": "H",
+      "t": "我先不直接回答够不够。我们一起把要做的事拆开看看，好吗？",
+      "doc": "Wǒ xiān bù zhíjiē huídá gòu bu gòu. Wǒmen yìqǐ bǎ yào zuò de shì chāi kāi kànkan, hǎo ma?",
+      "v": "Tôi chưa trả lời ngay là đủ hay không. Chúng ta cùng chia nhỏ những việc cần làm ra xem, được không?",
+      "khac": [
+        { "kieu": "chuyên nghiệp", "t": "这个我需要先评估一下，下午给你一个准确的答复。", "doc": "Zhège wǒ xūyào xiān pínggū yíxià, xiàwǔ gěi nǐ yí ge zhǔnquè de dáfù.", "v": "Việc này tôi cần đánh giá trước, chiều nay sẽ trả lời chị chính xác.", "ghiChu": "khi chưa đủ thông tin, đừng hứa ngay trong cuộc họp" }
+      ]
+    },
+    {
+      "ai": "Z",
+      "t": "行，你说。",
+      "doc": "Xíng, nǐ shuō.",
+      "v": "Được, anh nói đi."
+    },
+    {
+      "ai": "H",
+      "t": "根据需求文档，至少有五块：积分规则、积分账户、积分兑换、后台管理，还有测试。",
+      "doc": "Gēnjù xūqiú wéndàng, zhìshǎo yǒu wǔ kuài: jīfēn guīzé, jīfēn zhànghù, jīfēn duìhuàn, hòutái guǎnlǐ, hái yǒu cèshì.",
+      "v": "Theo tài liệu yêu cầu, ít nhất có năm mảng: quy tắc tích điểm, tài khoản điểm, đổi điểm, trang quản trị, và kiểm thử."
+    },
+    {
+      "ai": "H",
+      "t": "光是积分兑换，就要跟库存和支付打交道，我估计需要八到十个工作日。",
+      "doc": "Guāng shì jīfēn duìhuàn, jiù yào gēn kùcún hé zhīfù dǎ jiāodào, wǒ gūjì xūyào bā dào shí ge gōngzuòrì.",
+      "v": "Riêng phần đổi điểm đã phải làm việc với kho và thanh toán, tôi ước tính cần tám đến mười ngày làm việc.",
+      "np": [
+        { "mau": "光是 A，就 B", "giai": "\"Chỉ riêng A thôi đã B\" — nhấn mạnh A đã chiếm nhiều (thời gian, tiền…), chưa kể phần khác.", "vd": "光是房租，就占了工资的一半。", "vdDoc": "Guāng shì fángzū, jiù zhàn le gōngzī de yíbàn.", "vdV": "Riêng tiền nhà đã chiếm một nửa lương." },
+        { "mau": "跟 + ai/cái gì + 打交道", "giai": "Tiếp xúc, làm việc, giao thiệp với (người, hệ thống). 打交道 là cụm cố định, đọc dǎ jiāodào.", "vd": "做销售每天都要跟客户打交道。", "vdDoc": "Zuò xiāoshòu měitiān dōu yào gēn kèhù dǎ jiāodào.", "vdV": "Làm bán hàng ngày nào cũng phải giao thiệp với khách." }
+      ]
+    },
+    {
+      "ai": "Z",
+      "t": "全部加起来要多久？",
+      "doc": "Quánbù jiā qǐlai yào duō jiǔ?",
+      "v": "Cộng tất cả lại thì mất bao lâu?"
+    },
+    {
+      "ai": "H",
+      "t": "按两个后端、一个前端来算，大概四周。这还没算上线前联调和修bug的时间。",
+      "doc": "Àn liǎng ge hòuduān, yí ge qiánduān lái suàn, dàgài sì zhōu. Zhè hái méi suàn shàngxiàn qián liántiáo hé xiū bug de shíjiān.",
+      "v": "Tính theo hai back-end, một front-end thì khoảng bốn tuần. Đó là chưa tính thời gian ghép nối thử và sửa bug trước khi lên bản.",
+      "np": [
+        { "mau": "按 + điều kiện + 来算", "giai": "\"Tính theo…\": nêu giả định để ước lượng. 按…来说/来看 cũng dùng tương tự.", "vd": "按每天八个小时来算，要一个星期。", "vdDoc": "Àn měitiān bā ge xiǎoshí lái suàn, yào yí ge xīngqī.", "vdV": "Tính theo mỗi ngày tám tiếng thì mất một tuần." }
+      ]
+    },
+    {
+      "ai": "Z",
+      "t": "四周？那活动早就结束了。能不能加加班，压缩一下？",
+      "doc": "Sì zhōu? Nà huódòng zǎo jiù jiéshù le. Néng bu néng jiā jiā bān, yāsuō yíxià?",
+      "v": "Bốn tuần? Thế thì đợt khuyến mãi xong từ lâu rồi. Có thể tăng ca một chút để rút ngắn không?"
+    },
+    {
+      "ai": "H",
+      "t": "偶尔加班可以，但是连续两周天天加班，出错的概率会大大增加，到时候反而更慢。",
+      "doc": "Ǒu'ěr jiābān kěyǐ, dànshì liánxù liǎng zhōu tiāntiān jiābān, chūcuò de gàilǜ huì dàdà zēngjiā, dào shíhou fǎn'ér gèng màn.",
+      "v": "Thỉnh thoảng tăng ca thì được, nhưng liên tục hai tuần ngày nào cũng tăng ca thì xác suất sai sót tăng mạnh, đến lúc đó ngược lại còn chậm hơn.",
+      "khac": [
+        { "kieu": "mềm mỏng", "t": "加班我理解，不过连续加班的话，质量很难保证。", "doc": "Jiābān wǒ lǐjiě, búguò liánxù jiābān de huà, zhìliàng hěn nán bǎozhèng.", "v": "Tăng ca thì tôi hiểu, nhưng nếu tăng ca liên tục thì khó đảm bảo chất lượng.", "ghiChu": "ghi nhận đề nghị trước rồi mới nêu rủi ro" }
+      ],
+      "np": [
+        { "mau": "反而", "giai": "反而 = ngược lại, trái lại (kết quả trái với mong đợi). Đặt trước động từ/tính từ.", "vd": "吃了药，病反而更重了。", "vdDoc": "Chī le yào, bìng fǎn'ér gèng zhòng le.", "vdV": "Uống thuốc rồi, bệnh ngược lại còn nặng hơn." }
+      ]
+    },
+    {
+      "ai": "Z",
+      "t": "那再从别的组借两个人呢？",
+      "doc": "Nà zài cóng bié de zǔ jiè liǎng ge rén ne?",
+      "v": "Vậy mượn thêm hai người từ nhóm khác thì sao?"
+    },
+    {
+      "ai": "H",
+      "t": "新人加进来，要先熟悉代码，我们还得花时间带他们。短期内不一定能快多少。",
+      "doc": "Xīnrén jiā jìnlai, yào xiān shúxī dàimǎ, wǒmen hái děi huā shíjiān dài tāmen. Duǎnqī nèi bù yídìng néng kuài duōshao.",
+      "v": "Người mới vào phải làm quen code trước, chúng tôi còn phải mất thời gian kèm họ. Trong ngắn hạn chưa chắc nhanh hơn được bao nhiêu."
+    },
+    {
+      "ai": "Z",
+      "t": "听起来，你是在说做不到。",
+      "doc": "Tīng qǐlai, nǐ shì zài shuō zuò bu dào.",
+      "v": "Nghe thì có vẻ anh đang nói là không làm được."
+    },
+    {
+      "ai": "H",
+      "t": "不是做不到，而是不能什么都做。我想给你三个方案，你来选。",
+      "doc": "Bú shì zuò bu dào, ér shì bù néng shénme dōu zuò. Wǒ xiǎng gěi nǐ sān ge fāng'àn, nǐ lái xuǎn.",
+      "v": "Không phải không làm được, mà là không thể làm tất cả. Tôi muốn đưa chị ba phương án, chị chọn.",
+      "khac": [
+        { "kieu": "mềm mỏng", "t": "我不是说不行，是想跟你一起找个更现实的办法。", "doc": "Wǒ bú shì shuō bù xíng, shì xiǎng gēn nǐ yìqǐ zhǎo ge gèng xiànshí de bànfǎ.", "v": "Tôi không nói là không được, mà muốn cùng chị tìm một cách thực tế hơn.", "ghiChu": "chuyển từ thế đối đầu sang cùng giải quyết" }
+      ],
+      "np": [
+        { "mau": "什么都 + V / 什么都不 + V", "giai": "Từ để hỏi + 都 = \"mọi thứ, cái gì cũng\": 什么都做 (làm tất cả), 什么都不想吃 (không muốn ăn gì cả).", "vd": "他什么都会做。", "vdDoc": "Tā shénme dōu huì zuò.", "vdV": "Anh ấy cái gì cũng biết làm." }
+      ]
+    },
+    {
+      "ai": "H",
+      "t": "方案一：缩小范围。第一期只做“下单得积分”和“查看积分”，兑换功能放到第二期。两周可以完成。",
+      "doc": "Fāng'àn yī: suōxiǎo fànwéi. Dì yī qī zhǐ zuò “xiàdān dé jīfēn” hé “chákàn jīfēn”, duìhuàn gōngnéng fàng dào dì èr qī. Liǎng zhōu kěyǐ wánchéng.",
+      "v": "Phương án một: thu hẹp phạm vi. Giai đoạn một chỉ làm \"đặt hàng được điểm\" và \"xem điểm\", chức năng đổi điểm để sang giai đoạn hai. Hai tuần làm xong được."
+    },
+    {
+      "ai": "H",
+      "t": "方案二：功能全做，但是上线时间推迟到下个月中，活动可以先用优惠券代替。",
+      "doc": "Fāng'àn èr: gōngnéng quán zuò, dànshì shàngxiàn shíjiān tuīchí dào xià ge yuè zhōng, huódòng kěyǐ xiān yòng yōuhuìquàn dàitì.",
+      "v": "Phương án hai: làm đủ chức năng, nhưng lùi ngày lên bản tới giữa tháng sau, đợt khuyến mãi tạm dùng phiếu giảm giá thay thế."
+    },
+    {
+      "ai": "H",
+      "t": "方案三：两周内全做完，但是测试时间被压缩，上线以后出问题的风险很高，这个我不推荐。",
+      "doc": "Fāng'àn sān: liǎng zhōu nèi quán zuò wán, dànshì cèshì shíjiān bèi yāsuō, shàngxiàn yǐhòu chū wèntí de fēngxiǎn hěn gāo, zhège wǒ bù tuījiàn.",
+      "v": "Phương án ba: làm xong hết trong hai tuần, nhưng thời gian test bị ép lại, rủi ro lỗi sau khi lên bản rất cao — phương án này tôi không khuyến nghị."
+    },
+    {
+      "ai": "Z",
+      "t": "这样一比较，就清楚多了。只能攒积分、不能兑换，用户会不会觉得没意思？",
+      "doc": "Zhèyàng yì bǐjiào, jiù qīngchu duō le. Zhǐ néng zǎn jīfēn, bù néng duìhuàn, yònghù huì bu huì juéde méi yìsi?",
+      "v": "So sánh như vậy thì rõ hơn nhiều. Chỉ tích điểm được mà không đổi được, người dùng có thấy chán không?"
+    },
+    {
+      "ai": "H",
+      "t": "我们可以在页面上写“积分兑换下月开放”。这样用户先攒积分，下个月还会回来用。",
+      "doc": "Wǒmen kěyǐ zài yèmiàn shang xiě “jīfēn duìhuàn xià yuè kāifàng”. Zhèyàng yònghù xiān zǎn jīfēn, xià ge yuè hái huì huílai yòng.",
+      "v": "Chúng ta có thể ghi trên trang \"Đổi điểm mở vào tháng sau\". Như vậy người dùng tích điểm trước, tháng sau còn quay lại dùng."
+    },
+    {
+      "ai": "Z",
+      "t": "这个说法老板应该能接受。那就选方案一。",
+      "doc": "Zhège shuōfǎ lǎobǎn yīnggāi néng jiēshòu. Nà jiù xuǎn fāng'àn yī.",
+      "v": "Cách nói này sếp chắc chấp nhận được. Vậy chọn phương án một."
+    },
+    {
+      "ai": "H",
+      "t": "好。不过两周是在需求不再变的前提下。如果中间加新需求，时间就得重新评估。",
+      "doc": "Hǎo. Búguò liǎng zhōu shì zài xūqiú bú zài biàn de qiántí xià. Rúguǒ zhōngjiān jiā xīn xūqiú, shíjiān jiù děi chóngxīn pínggū.",
+      "v": "Được. Nhưng hai tuần là với điều kiện yêu cầu không thay đổi nữa. Nếu giữa chừng thêm yêu cầu mới thì phải đánh giá lại thời gian.",
+      "khac": [
+        { "kieu": "chuyên nghiệp", "t": "这里我想先说清楚：两周的前提是需求冻结。", "doc": "Zhèlǐ wǒ xiǎng xiān shuō qīngchu: liǎng zhōu de qiántí shì xūqiú dòngjié.", "v": "Chỗ này tôi muốn nói rõ trước: hai tuần với điều kiện yêu cầu được đóng băng.", "ghiChu": "需求冻结 = khoá phạm vi yêu cầu, từ chuyên ngành" }
+      ],
+      "np": [
+        { "mau": "在…的前提下", "giai": "\"Với điều kiện tiên quyết là…\" — nêu giả định mà kết luận phụ thuộc vào.", "vd": "在保证质量的前提下，越快越好。", "vdDoc": "Zài bǎozhèng zhìliàng de qiántí xià, yuè kuài yuè hǎo.", "vdV": "Với điều kiện đảm bảo chất lượng, càng nhanh càng tốt." }
+      ]
+    },
+    {
+      "ai": "Z",
+      "t": "我明白。可是老板临时有想法，我也很难拒绝啊。",
+      "doc": "Wǒ míngbai. Kěshì lǎobǎn línshí yǒu xiǎngfǎ, wǒ yě hěn nán jùjué a.",
+      "v": "Tôi hiểu. Nhưng sếp đột nhiên nảy ra ý tưởng thì tôi cũng khó mà từ chối."
+    },
+    {
+      "ai": "H",
+      "t": "不需要拒绝，只要把代价说清楚：加一个功能，就要推迟几天，或者拿掉另一个功能。",
+      "doc": "Bù xūyào jùjué, zhǐyào bǎ dàijià shuō qīngchu: jiā yí ge gōngnéng, jiù yào tuīchí jǐ tiān, huòzhě ná diào lìng yí ge gōngnéng.",
+      "v": "Không cần từ chối, chỉ cần nói rõ cái giá: thêm một chức năng thì phải lùi vài ngày, hoặc bỏ một chức năng khác."
+    },
+    {
+      "ai": "H",
+      "t": "另外，我会在计划里留两天缓冲，应付意外情况。",
+      "doc": "Lìngwài, wǒ huì zài jìhuà li liú liǎng tiān huǎnchōng, yìngfu yìwài qíngkuàng.",
+      "v": "Ngoài ra, tôi sẽ để hai ngày dự phòng trong kế hoạch để đối phó tình huống bất ngờ."
+    },
+    {
+      "ai": "Z",
+      "t": "两天缓冲？会不会太保守了？",
+      "doc": "Liǎng tiān huǎnchōng? Huì bu huì tài bǎoshǒu le?",
+      "v": "Hai ngày dự phòng? Có thận trọng quá không?"
+    },
+    {
+      "ai": "H",
+      "t": "从以往的经验来看，几乎每个项目都会碰到计划外的问题。与其到最后一天才说延期，不如一开始就把风险算进去。",
+      "doc": "Cóng yǐwǎng de jīngyàn lái kàn, jīhū měi ge xiàngmù dōu huì pèngdào jìhuà wài de wèntí. Yǔqí dào zuìhòu yì tiān cái shuō yánqī, bùrú yì kāishǐ jiù bǎ fēngxiǎn suàn jìnqu.",
+      "v": "Theo kinh nghiệm trước đây, gần như dự án nào cũng gặp vấn đề ngoài kế hoạch. Thay vì đến ngày cuối mới báo chậm tiến độ, chi bằng tính rủi ro vào ngay từ đầu.",
+      "np": [
+        { "mau": "从…来看", "giai": "\"Xét từ… (góc độ, kinh nghiệm, số liệu) mà nói\" — dẫn căn cứ cho nhận định.", "vd": "从数据来看，用户更喜欢新版本。", "vdDoc": "Cóng shùjù lái kàn, yònghù gèng xǐhuan xīn bǎnběn.", "vdV": "Xét theo số liệu, người dùng thích phiên bản mới hơn." },
+        { "mau": "与其 A，不如 B", "giai": "\"Thay vì A, chi bằng B\" — chọn B là cách tốt hơn A.", "vd": "与其抱怨，不如想办法。", "vdDoc": "Yǔqí bàoyuàn, bùrú xiǎng bànfǎ.", "vdV": "Thay vì than phiền, chi bằng nghĩ cách." }
+      ]
+    },
+    {
+      "ai": "Z",
+      "t": "有道理。那你把排期和拆分的任务整理一下，发到群里，我拿去跟老板确认。",
+      "doc": "Yǒu dàolǐ. Nà nǐ bǎ páiqī hé chāifēn de rènwù zhěnglǐ yíxià, fā dào qún li, wǒ ná qù gēn lǎobǎn quèrèn.",
+      "v": "Có lý. Vậy anh sắp xếp lại lịch và các task đã chia nhỏ, gửi vào nhóm, tôi mang đi xác nhận với sếp."
+    },
+    {
+      "ai": "H",
+      "t": "没问题，我下班前发给你。我们把今天说的范围和前提都写进去，免得以后有误会。",
+      "doc": "Méi wèntí, wǒ xiàbān qián fā gěi nǐ. Wǒmen bǎ jīntiān shuō de fànwéi hé qiántí dōu xiě jìnqu, miǎnde yǐhòu yǒu wùhuì.",
+      "v": "Không vấn đề, trước giờ tan làm tôi gửi chị. Mình ghi cả phạm vi và điều kiện đã nói hôm nay vào, kẻo sau này có hiểu lầm.",
+      "khac": [
+        { "kieu": "chuyên nghiệp", "t": "会后我发一份会议纪要，把范围和时间确认一下。", "doc": "Huì hòu wǒ fā yí fèn huìyì jìyào, bǎ fànwéi hé shíjiān quèrèn yíxià.", "v": "Sau buổi họp tôi gửi biên bản họp, xác nhận lại phạm vi và thời gian.", "ghiChu": "会议纪要 = biên bản họp — bằng chứng bằng chữ cho mọi thoả thuận" }
+      ]
+    },
+    {
+      "ai": "Z",
+      "t": "谢谢你，文海。说实话，我本来以为你会直接说“不可能”。",
+      "doc": "Xièxie nǐ, Wénhǎi. Shuō shíhuà, wǒ běnlái yǐwéi nǐ huì zhíjiē shuō “bù kěnéng”.",
+      "v": "Cảm ơn anh, Văn Hải. Nói thật, tôi cứ tưởng anh sẽ nói thẳng là \"không thể\"."
+    },
+    {
+      "ai": "H",
+      "t": "只说“不可能”，问题还在；只说“没问题”，问题会更大。把选择摆出来，大家才能一起做决定。",
+      "doc": "Zhǐ shuō “bù kěnéng”, wèntí hái zài; zhǐ shuō “méi wèntí”, wèntí huì gèng dà. Bǎ xuǎnzé bǎi chūlai, dàjiā cái néng yìqǐ zuò juédìng.",
+      "v": "Chỉ nói \"không thể\" thì vấn đề vẫn còn đó; chỉ nói \"không vấn đề gì\" thì vấn đề càng lớn. Bày các lựa chọn ra, mọi người mới cùng quyết định được."
+    }
+  ],
+  "tuVung": [
+    { "chu": "排期", "doc": "páiqī", "nghia": "lên lịch, xếp tiến độ (bài kỳ)", "vd": "这个需求排期到下个月。" },
+    { "chu": "评估", "doc": "pínggū", "nghia": "đánh giá, ước lượng (bình cổ)", "vd": "先评估一下工作量。" },
+    { "chu": "拆", "doc": "chāi", "nghia": "tháo, chia nhỏ; 拆分任务 = chia nhỏ task", "vd": "把大任务拆成小任务。" },
+    { "chu": "工作日", "doc": "gōngzuòrì", "nghia": "ngày làm việc", "vd": "大概需要五个工作日。" },
+    { "chu": "联调", "doc": "liántiáo", "nghia": "ghép nối và test chung giữa các bên (front-end + back-end…)", "vd": "明天前后端联调。" },
+    { "chu": "压缩", "doc": "yāsuō", "nghia": "nén, ép, rút ngắn (áp súc)", "vd": "时间不能再压缩了。" },
+    { "chu": "方案", "doc": "fāng'àn", "nghia": "phương án", "vd": "我准备了三个方案。" },
+    { "chu": "推迟", "doc": "tuīchí", "nghia": "lùi lại, hoãn (thôi trì)", "vd": "上线时间推迟一周。" },
+    { "chu": "风险", "doc": "fēngxiǎn", "nghia": "rủi ro (phong hiểm)", "vd": "这样做风险太大。" },
+    { "chu": "缓冲", "doc": "huǎnchōng", "nghia": "dự phòng, đệm (hoãn xung), buffer", "vd": "计划里要留一点儿缓冲。" },
+    { "chu": "前提", "doc": "qiántí", "nghia": "tiền đề, điều kiện tiên quyết", "vd": "前提是需求不变。" },
+    { "chu": "代价", "doc": "dàijià", "nghia": "cái giá phải trả (đại giá)", "vd": "加功能的代价是延期。" }
+  ],
+  "yNghia": "\"Không thể\" khép lại cuộc nói chuyện; \"không vấn đề gì\" chỉ đẩy vấn đề sang tuần sau, to hơn. Cách chuyên nghiệp là chia nhỏ việc, ước lượng có căn cứ, rồi bày ra các lựa chọn cùng cái giá của từng cái — phạm vi, thời gian hay chất lượng — để người có quyền quyết định thật sự được quyết định. Và ghi tất cả ra giấy.",
+  "meo": [
+    "Khung thương lượng hạn chót: 拆开看看 (chia nhỏ) → 估计… (ước lượng) → 我给你三个方案 → 我推荐… → 前提是… → 会后发会议纪要.",
+    "Ba \"núm vặn\" của mọi dự án: 范围 (phạm vi) · 时间 (thời gian) · 质量 (chất lượng). Muốn giữ một cái thì phải đổi cái khác — nói rõ 代价.",
+    "不是 A，而是 B: 不是做不到，而是不能什么都做 — câu chuyển thế đối đầu thành thế cùng giải quyết.",
+    "Liên từ HSK5 trong tập: 光是…就… · 反而 · 与其…不如… · 在…的前提下 · 从…来看 · 免得.",
+    "Dấu ' tách âm tiết: 方案 fāng'àn, 偶尔 ǒu'ěr, 反而 fǎn'ér — viết thiếu dễ đọc nhầm thành \"fan gan\"."
+  ],
+  "cauHoi": [
+    {
+      "hoi": "Hải ước tính làm đầy đủ tính năng mất bao lâu?",
+      "chon": ["Khoảng bốn tuần, chưa kể ghép nối và sửa bug", "Hai tuần", "Tám đến mười ngày"],
+      "dung": 0,
+      "giai": "按两个后端、一个前端来算，大概四周。这还没算上线前联调和修bug的时间。"
+    },
+    {
+      "hoi": "Vì sao Hải không muốn tăng ca liên tục hai tuần?",
+      "chon": ["Vì công ty không trả tiền tăng ca", "Vì xác suất sai sót tăng mạnh, rốt cuộc còn chậm hơn", "Vì nhóm sắp nghỉ phép"],
+      "dung": 1,
+      "giai": "出错的概率会大大增加，到时候反而更慢。"
+    },
+    {
+      "hoi": "Phương án được chọn cuối cùng là gì?",
+      "chon": ["Làm đủ, lùi tới giữa tháng sau", "Làm hết trong hai tuần, rút thời gian test", "Giai đoạn một chỉ làm tích điểm và xem điểm, đổi điểm để giai đoạn hai"],
+      "dung": 2,
+      "giai": "那就选方案一 — 第一期只做“下单得积分”和“查看积分”。"
+    },
+    {
+      "hoi": "Khi sếp muốn thêm yêu cầu giữa chừng, Hải khuyên chị Trịnh làm gì?",
+      "chon": ["Từ chối thẳng", "Nói rõ cái giá: lùi thêm vài ngày hoặc bỏ một chức năng khác", "Đồng ý rồi bảo nhóm tăng ca"],
+      "dung": 1,
+      "giai": "不需要拒绝，只要把代价说清楚。"
+    }
+  ]
+}

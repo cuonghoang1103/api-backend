@@ -1,0 +1,248 @@
+{
+  "id": "zh-cv-hsk4-03",
+  "nn": "zh",
+  "danhMuc": "cong-viec",
+  "cap": "HSK4",
+  "so": 2,
+  "tieuDe": "三分钟汇报",
+  "tieuDeViet": "Báo cáo trong ba phút",
+  "moTa": "Ngọc trình bày kết quả khảo sát khách hàng trước giám đốc Tiền: nói trước sẽ trình bày mấy ý, đưa số liệu, đề xuất. Rồi đến phần hỏi đáp: một câu cô chưa có số liệu, một câu cần hỏi lại cho rõ, và một câu buộc cô phải chọn.",
+  "chuDe": "Thuyết trình & hỏi đáp",
+  "bieuTuong": "chart.bar.fill",
+  "nguoi": [
+    { "ma": "Y", "ten": "Ngọc", "giong": "zh-nu", "vai": "chuyên viên thị trường người Việt" },
+    { "ma": "Q", "ten": "Giám đốc Tiền", "giong": "zh-nam", "vai": "giám đốc bộ phận" }
+  ],
+  "loi": [
+    {
+      "ai": "Q",
+      "t": "下一个议题。小范，你来汇报一下上个月的客户调查结果吧。",
+      "doc": "Xià yí ge yìtí. Xiǎo Fàn, nǐ lái huìbào yíxià shàng ge yuè de kèhù diàochá jiéguǒ ba.",
+      "v": "Nội dung tiếp theo. Ngọc, em báo cáo kết quả khảo sát khách hàng tháng trước nhé."
+    },
+    {
+      "ai": "Y",
+      "t": "好的。各位好，我用三分钟时间，主要说三点：调查的情况、发现的问题，还有我们的建议。",
+      "doc": "Hǎo de. Gèwèi hǎo, wǒ yòng sān fēnzhōng shíjiān, zhǔyào shuō sān diǎn: diàochá de qíngkuàng, fāxiàn de wèntí, hái yǒu wǒmen de jiànyì.",
+      "v": "Vâng. Chào mọi người, em xin dùng ba phút, chủ yếu nói ba ý: tình hình khảo sát, vấn đề phát hiện được, và đề xuất của nhóm.",
+      "khac": [
+        { "kieu": "trang trọng", "t": "大家好，接下来由我向大家汇报上个月的客户调查结果。", "doc": "Dàjiā hǎo, jiē xiàlai yóu wǒ xiàng dàjiā huìbào shàng ge yuè de kèhù diàochá jiéguǒ.", "v": "Chào mọi người, tiếp theo xin phép tôi báo cáo kết quả khảo sát khách hàng tháng trước.", "ghiChu": "mở đầu trang trọng trước lãnh đạo, hội nghị" }
+      ],
+      "np": [
+        { "mau": "主要说 + số + 点：…", "giai": "Báo trước số ý sẽ trình bày (三点) — người nghe biết khung, dễ theo dõi. 点 là lượng từ cho \"ý, điểm\".", "vd": "我想说两点。第一……第二……", "vdDoc": "Wǒ xiǎng shuō liǎng diǎn. Dì yī…… dì èr……", "vdV": "Tôi muốn nói hai ý. Thứ nhất… thứ hai…" }
+      ]
+    },
+    {
+      "ai": "Y",
+      "t": "先说情况。这次一共调查了五百二十位客户，其中百分之六十是老客户。",
+      "doc": "Xiān shuō qíngkuàng. Zhè cì yígòng diàochá le wǔbǎi èrshí wèi kèhù, qízhōng bǎi fēn zhī liùshí shì lǎo kèhù.",
+      "v": "Trước hết là tình hình. Lần này khảo sát tổng cộng 520 khách hàng, trong đó 60% là khách quen.",
+      "np": [
+        { "mau": "…，其中…", "giai": "其中 = trong đó (trong số vừa nói tới). Đứng đầu vế sau để tách ra một phần.", "vd": "我们班有三十个学生，其中十个是男生。", "vdDoc": "Wǒmen bān yǒu sānshí ge xuésheng, qízhōng shí ge shì nánshēng.", "vdV": "Lớp tôi có ba mươi học sinh, trong đó mười bạn là nam." }
+      ]
+    },
+    {
+      "ai": "Y",
+      "t": "第二，发现的问题。满意度整体不错，但是有一个地方明显比去年差，就是送货速度。",
+      "doc": "Dì èr, fāxiàn de wèntí. Mǎnyìdù zhěngtǐ búcuò, dànshì yǒu yí ge dìfang míngxiǎn bǐ qùnián chà, jiù shì sònghuò sùdù.",
+      "v": "Thứ hai, vấn đề phát hiện được. Mức độ hài lòng nhìn chung khá tốt, nhưng có một chỗ rõ ràng kém hơn năm ngoái, đó là tốc độ giao hàng."
+    },
+    {
+      "ai": "Y",
+      "t": "有百分之三十五的客户说，等货的时间超过了一个星期，比去年多了一倍。",
+      "doc": "Yǒu bǎi fēn zhī sānshíwǔ de kèhù shuō, děng huò de shíjiān chāoguò le yí ge xīngqī, bǐ qùnián duō le yí bèi.",
+      "v": "Có 35% khách hàng nói thời gian chờ hàng vượt quá một tuần, gấp đôi năm ngoái.",
+      "np": [
+        { "mau": "比 + B + 多了一倍", "giai": "多了一倍 = tăng thêm một lần nữa (tức là gấp đôi). 增加了两倍 = tăng gấp ba.", "vd": "今年的用户比去年多了一倍。", "vdDoc": "Jīnnián de yònghù bǐ qùnián duō le yí bèi.", "vdV": "Người dùng năm nay gấp đôi năm ngoái." }
+      ]
+    },
+    {
+      "ai": "Y",
+      "t": "第三，我们的建议：跟物流公司重新谈合同，同时在南方增加一个小仓库。",
+      "doc": "Dì sān, wǒmen de jiànyì: gēn wùliú gōngsī chóngxīn tán hétong, tóngshí zài nánfāng zēngjiā yí ge xiǎo cāngkù.",
+      "v": "Thứ ba, đề xuất của nhóm: đàm phán lại hợp đồng với công ty vận chuyển, đồng thời thêm một kho nhỏ ở miền Nam."
+    },
+    {
+      "ai": "Y",
+      "t": "我就汇报到这里，谢谢大家。大家有什么问题，可以随时提。",
+      "doc": "Wǒ jiù huìbào dào zhèlǐ, xièxie dàjiā. Dàjiā yǒu shénme wèntí, kěyǐ suíshí tí.",
+      "v": "Em xin báo cáo đến đây, cảm ơn mọi người. Mọi người có câu hỏi gì cứ đặt ra.",
+      "khac": [
+        { "kieu": "trang trọng", "t": "以上就是我的汇报，请各位领导指正。", "doc": "Yǐshàng jiù shì wǒ de huìbào, qǐng gèwèi lǐngdǎo zhǐzhèng.", "v": "Trên đây là báo cáo của tôi, kính mong các vị lãnh đạo góp ý.", "ghiChu": "câu kết báo cáo trước lãnh đạo, rất phổ biến ở công ty Trung Quốc" }
+      ]
+    },
+    {
+      "ai": "Q",
+      "t": "讲得很清楚，时间也控制得好。我有几个问题。",
+      "doc": "Jiǎng de hěn qīngchu, shíjiān yě kòngzhì de hǎo. Wǒ yǒu jǐ ge wèntí.",
+      "v": "Trình bày rất rõ, thời gian cũng kiểm soát tốt. Tôi có mấy câu hỏi."
+    },
+    {
+      "ai": "Q",
+      "t": "第一，送货慢，是物流公司的问题，还是我们自己仓库出货慢？",
+      "doc": "Dì yī, sònghuò màn, shì wùliú gōngsī de wèntí, háishi wǒmen zìjǐ cāngkù chūhuò màn?",
+      "v": "Thứ nhất, giao hàng chậm là do công ty vận chuyển, hay do kho của chúng ta xuất hàng chậm?"
+    },
+    {
+      "ai": "Y",
+      "t": "这个问题很重要。根据我们的记录，大部分订单当天就从仓库发出去了，主要是运输的时间变长了。",
+      "doc": "Zhège wèntí hěn zhòngyào. Gēnjù wǒmen de jìlù, dà bùfen dìngdān dàngtiān jiù cóng cāngkù fā chūqu le, zhǔyào shì yùnshū de shíjiān biàn cháng le.",
+      "v": "Câu hỏi này rất quan trọng. Theo ghi nhận của chúng tôi, phần lớn đơn hàng xuất kho ngay trong ngày, chủ yếu là thời gian vận chuyển dài ra.",
+      "khac": [
+        { "kieu": "chuyên nghiệp", "t": "您问到了关键。从数据来看，问题主要在运输环节。", "doc": "Nín wèn dào le guānjiàn. Cóng shùjù lái kàn, wèntí zhǔyào zài yùnshū huánjié.", "v": "Anh hỏi đúng điểm mấu chốt. Theo số liệu, vấn đề chủ yếu ở khâu vận chuyển.", "ghiChu": "ghi nhận câu hỏi trước khi trả lời" }
+      ],
+      "np": [
+        { "mau": "根据 + N，…", "giai": "根据 = căn cứ vào, theo (số liệu, quy định, ghi chép). Dùng khi đưa ra bằng chứng.", "vd": "根据天气预报，明天会下雨。", "vdDoc": "Gēnjù tiānqì yùbào, míngtiān huì xià yǔ.", "vdV": "Theo dự báo thời tiết, ngày mai sẽ mưa." }
+      ]
+    },
+    {
+      "ai": "Q",
+      "t": "第二，你说在南方增加仓库，大概需要多少钱？",
+      "doc": "Dì èr, nǐ shuō zài nánfāng zēngjiā cāngkù, dàgài xūyào duōshao qián?",
+      "v": "Thứ hai, em nói thêm kho ở miền Nam, khoảng cần bao nhiêu tiền?"
+    },
+    {
+      "ai": "Y",
+      "t": "不好意思，这个我现在没有准确的数字。会后我跟财务部确认一下，明天上午之前发邮件给您，可以吗？",
+      "doc": "Bù hǎoyìsi, zhège wǒ xiànzài méiyǒu zhǔnquè de shùzì. Huì hòu wǒ gēn cáiwù bù quèrèn yíxià, míngtiān shàngwǔ zhīqián fā yóujiàn gěi nín, kěyǐ ma?",
+      "v": "Xin lỗi anh, việc này hiện em chưa có con số chính xác. Sau buổi họp em xác nhận với phòng tài chính, trước trưa mai gửi email cho anh, được không ạ?",
+      "khac": [
+        { "kieu": "chuyên nghiệp", "t": "这个数据我需要再核实一下，会后第一时间发给您。", "doc": "Zhège shùjù wǒ xūyào zài héshí yíxià, huì hòu dì yī shíjiān fā gěi nín.", "v": "Số liệu này tôi cần kiểm tra lại, sau họp sẽ gửi anh ngay lập tức.", "ghiChu": "第一时间 = ngay khi có thể, cách nói rất hay gặp" },
+        { "kieu": "văn nói", "t": "这个我还真不清楚，我回头问问财务。", "doc": "Zhège wǒ hái zhēn bù qīngchu, wǒ huítóu wènwen cáiwù.", "v": "Cái này tôi đúng là chưa rõ, lát nữa tôi hỏi bên tài chính.", "ghiChu": "giữa đồng nghiệp, họp nội bộ không trang trọng" }
+      ]
+    },
+    {
+      "ai": "Q",
+      "t": "可以。不知道就说不知道，比随便说一个数字好。",
+      "doc": "Kěyǐ. Bù zhīdào jiù shuō bù zhīdào, bǐ suíbiàn shuō yí ge shùzì hǎo.",
+      "v": "Được. Không biết thì nói không biết, còn hơn là nói bừa một con số."
+    },
+    {
+      "ai": "Q",
+      "t": "最后一个问题：如果只能选一个办法，你选哪一个？",
+      "doc": "Zuìhòu yí ge wèntí: rúguǒ zhǐ néng xuǎn yí ge bànfǎ, nǐ xuǎn nǎ yí ge?",
+      "v": "Câu cuối: nếu chỉ được chọn một cách, em chọn cách nào?"
+    },
+    {
+      "ai": "Y",
+      "t": "您是指在“谈合同”和“加仓库”中间选一个，对吗？",
+      "doc": "Nín shì zhǐ zài “tán hétong” hé “jiā cāngkù” zhōngjiān xuǎn yí ge, duì ma?",
+      "v": "Ý anh là chọn một trong hai: \"đàm phán hợp đồng\" và \"thêm kho\", đúng không ạ?",
+      "khac": [
+        { "kieu": "chuyên nghiệp", "t": "我确认一下您的意思：是要在这两个办法里选一个吗？", "doc": "Wǒ quèrèn yíxià nín de yìsi: shì yào zài zhè liǎng ge bànfǎ li xuǎn yí ge ma?", "v": "Tôi xin xác nhận lại ý anh: là chọn một trong hai cách này phải không?", "ghiChu": "hỏi lại cho rõ trước khi trả lời — không đoán ý" }
+      ],
+      "np": [
+        { "mau": "您是指…，对吗？", "giai": "是指 = ý là, muốn nói đến. Dùng để xác nhận lại câu hỏi trước khi trả lời.", "vd": "你是指上周的会议吗？", "vdDoc": "Nǐ shì zhǐ shàng zhōu de huìyì ma?", "vdV": "Ý bạn là cuộc họp tuần trước à?" }
+      ]
+    },
+    {
+      "ai": "Q",
+      "t": "对。",
+      "doc": "Duì.",
+      "v": "Đúng."
+    },
+    {
+      "ai": "Y",
+      "t": "那我选先谈合同。因为它花的钱少，见效快，一个月以内就能看到结果。",
+      "doc": "Nà wǒ xuǎn xiān tán hétong. Yīnwèi tā huā de qián shǎo, jiànxiào kuài, yí ge yuè yǐnèi jiù néng kàndào jiéguǒ.",
+      "v": "Vậy em chọn đàm phán hợp đồng trước. Vì nó tốn ít tiền, có hiệu quả nhanh, trong vòng một tháng là thấy kết quả."
+    },
+    {
+      "ai": "Y",
+      "t": "加仓库虽然效果更好，但是要花的时间和钱都比较多，可以等合同谈完，看看效果再决定。",
+      "doc": "Jiā cāngkù suīrán xiàoguǒ gèng hǎo, dànshì yào huā de shíjiān hé qián dōu bǐjiào duō, kěyǐ děng hétong tán wán, kànkan xiàoguǒ zài juédìng.",
+      "v": "Thêm kho tuy hiệu quả hơn, nhưng tốn khá nhiều thời gian và tiền, có thể đợi đàm phán hợp đồng xong, xem hiệu quả rồi mới quyết định.",
+      "np": [
+        { "mau": "虽然 A，但是 B", "giai": "\"Tuy A nhưng B\" — thừa nhận ưu điểm A rồi nêu điểm cân nhắc B. Cách lập luận công bằng, dễ được chấp nhận.", "vd": "这个方法虽然慢，但是很安全。", "vdDoc": "Zhège fāngfǎ suīrán màn, dànshì hěn ānquán.", "vdV": "Cách này tuy chậm nhưng rất an toàn." },
+        { "mau": "等 A，再 B", "giai": "Đợi A xong rồi mới B — hoãn quyết định đến khi có thông tin.", "vd": "等结果出来，我们再讨论。", "vdDoc": "Děng jiéguǒ chūlai, wǒmen zài tǎolùn.", "vdV": "Đợi có kết quả rồi chúng ta bàn tiếp." }
+      ]
+    },
+    {
+      "ai": "Q",
+      "t": "好，这个思路我同意。那合同的事由你来负责，下周五之前给我一个初步结果。",
+      "doc": "Hǎo, zhège sīlù wǒ tóngyì. Nà hétong de shì yóu nǐ lái fùzé, xià zhōuwǔ zhīqián gěi wǒ yí ge chūbù jiéguǒ.",
+      "v": "Được, hướng này tôi đồng ý. Vậy việc hợp đồng giao cho em phụ trách, trước thứ Sáu tuần sau cho tôi một kết quả sơ bộ."
+    },
+    {
+      "ai": "Y",
+      "t": "好的，没问题。会后我把今天的汇报材料和问题整理一下，发到部门群里。",
+      "doc": "Hǎo de, méi wèntí. Huì hòu wǒ bǎ jīntiān de huìbào cáiliào hé wèntí zhěnglǐ yíxià, fā dào bùmén qún li.",
+      "v": "Vâng, không vấn đề. Sau buổi họp em sẽ sắp xếp lại tài liệu báo cáo và các câu hỏi hôm nay, gửi vào nhóm chat của phòng.",
+      "khac": [
+        { "kieu": "ngắn gọn", "t": "收到，我会按时完成。", "doc": "Shōudào, wǒ huì ànshí wánchéng.", "v": "Đã rõ, em sẽ hoàn thành đúng hạn.", "ghiChu": "nhận việc gọn gàng" }
+      ]
+    },
+    {
+      "ai": "Q",
+      "t": "很好。大家注意一下小范今天的方法：先说要讲几点，再一点一点讲清楚，不知道的不乱说。",
+      "doc": "Hěn hǎo. Dàjiā zhùyì yíxià Xiǎo Fàn jīntiān de fāngfǎ: xiān shuō yào jiǎng jǐ diǎn, zài yì diǎn yì diǎn jiǎng qīngchu, bù zhīdào de bú luàn shuō.",
+      "v": "Rất tốt. Mọi người chú ý cách làm của Ngọc hôm nay: nói trước sẽ trình bày mấy ý, rồi lần lượt nói rõ từng ý, cái gì không biết thì không nói bừa."
+    },
+    {
+      "ai": "Y",
+      "t": "谢谢钱总。说实话，我上台之前紧张得手都在出汗。",
+      "doc": "Xièxie Qián zǒng. Shuō shíhuà, wǒ shàngtái zhīqián jǐnzhāng de shǒu dōu zài chū hàn.",
+      "v": "Cảm ơn giám đốc Tiền. Nói thật, trước khi lên trình bày em hồi hộp đến mức tay toát mồ hôi.",
+      "np": [
+        { "mau": "adj + 得 + kết quả/mức độ", "giai": "Bổ ngữ trình độ: miêu tả trạng thái đến mức nào bằng một hình ảnh cụ thể: 紧张得手都在出汗, 高兴得跳了起来.", "vd": "他累得一句话也不想说。", "vdDoc": "Tā lèi de yí jù huà yě bù xiǎng shuō.", "vdV": "Anh ấy mệt đến mức chẳng muốn nói câu nào." }
+      ]
+    },
+    {
+      "ai": "Q",
+      "t": "紧张很正常。准备得越充分，就越不怕别人提问。",
+      "doc": "Jǐnzhāng hěn zhèngcháng. Zhǔnbèi de yuè chōngfèn, jiù yuè bú pà biérén tíwèn.",
+      "v": "Hồi hộp là bình thường. Chuẩn bị càng kỹ thì càng không sợ người khác đặt câu hỏi.",
+      "np": [
+        { "mau": "越 A，就越 B", "giai": "Càng A thì càng B. Thêm 就 nối hai vế làm câu chặt hơn.", "vd": "你越着急，就越容易出错。", "vdDoc": "Nǐ yuè zháojí, jiù yuè róngyì chūcuò.", "vdV": "Bạn càng vội thì càng dễ sai." }
+      ]
+    }
+  ],
+  "tuVung": [
+    { "chu": "议题", "doc": "yìtí", "nghia": "nội dung (chương trình) họp, đề mục thảo luận", "vd": "今天的会议有三个议题。" },
+    { "chu": "汇报", "doc": "huìbào", "nghia": "báo cáo (lên cấp trên)", "vd": "请你汇报一下进度。" },
+    { "chu": "调查", "doc": "diàochá", "nghia": "điều tra, khảo sát", "vd": "我们做了一个客户调查。" },
+    { "chu": "其中", "doc": "qízhōng", "nghia": "trong đó", "vd": "我买了三本书，其中一本是中文的。" },
+    { "chu": "满意度", "doc": "mǎnyìdù", "nghia": "mức độ hài lòng", "vd": "客户满意度提高了。" },
+    { "chu": "物流", "doc": "wùliú", "nghia": "logistics, vận chuyển hàng hoá", "vd": "物流公司明天来取货。" },
+    { "chu": "仓库", "doc": "cāngkù", "nghia": "kho hàng", "vd": "货已经从仓库发出了。" },
+    { "chu": "财务部", "doc": "cáiwù bù", "nghia": "phòng tài chính – kế toán", "vd": "报销要找财务部。" },
+    { "chu": "见效", "doc": "jiànxiào", "nghia": "có hiệu quả, thấy kết quả", "vd": "这个办法见效很快。" },
+    { "chu": "初步", "doc": "chūbù", "nghia": "sơ bộ, bước đầu", "vd": "这是初步的计划。" },
+    { "chu": "充分", "doc": "chōngfèn", "nghia": "đầy đủ, kỹ lưỡng", "vd": "我们做了充分的准备。" },
+    { "chu": "随时", "doc": "suíshí", "nghia": "bất cứ lúc nào", "vd": "有问题随时找我。" }
+  ],
+  "yNghia": "Một bài báo cáo ngắn mà tốt có khung rõ: nói trước sẽ trình bày mấy ý, mỗi ý có số liệu, cuối cùng là đề xuất. Phần hỏi đáp còn quan trọng hơn: không biết thì hẹn trả lời kèm thời hạn, chưa rõ câu hỏi thì hỏi lại, phải chọn thì chọn và nêu lý do. Nói thật \"chưa có số liệu\" đáng tin hơn một con số bịa.",
+  "meo": [
+    "Khung báo cáo 3 phút: 我主要说三点 → 第一/先说… → 第二… → 第三，我们的建议… → 我就汇报到这里，谢谢大家。",
+    "Ba kiểu trả lời câu hỏi: không biết ⇒ 这个我现在没有准确的数字，会后确认一下，明天…之前发给您; chưa rõ ⇒ 您是指…，对吗？; phải chọn ⇒ 我选… 因为….",
+    "Kết báo cáo trước lãnh đạo: 以上就是我的汇报，请各位领导指正 — 指正 = chỉ ra chỗ sai để sửa, câu khiêm tốn quen thuộc.",
+    "Cách gọi sếp ở công ty Trung Quốc: 姓 + 总 (钱总, 王总) cho giám đốc/tổng giám đốc; 姓 + 经理 cho quản lý.",
+    "多了一倍 = gấp đôi (thêm một lần); 当天 đọc dàngtiān (ngay hôm đó), khác 当时 dāngshí (lúc đó)."
+  ],
+  "cauHoi": [
+    {
+      "hoi": "Khảo sát phát hiện vấn đề gì rõ rệt nhất?",
+      "chon": ["Giá sản phẩm quá cao", "Tốc độ giao hàng kém hơn năm ngoái", "Khách mới giảm mạnh"],
+      "dung": 1,
+      "giai": "有一个地方明显比去年差，就是送货速度。"
+    },
+    {
+      "hoi": "Ngọc trả lời thế nào khi được hỏi chi phí thêm kho?",
+      "chon": ["Đoán đại một con số", "Nói rằng không cần thêm kho nữa", "Nói chưa có số chính xác, sẽ xác nhận với phòng tài chính và gửi email trước trưa mai"],
+      "dung": 2,
+      "giai": "这个我现在没有准确的数字。会后我跟财务部确认一下，明天上午之前发邮件给您。"
+    },
+    {
+      "hoi": "Câu \"您是指……对吗？\" được Ngọc dùng để làm gì?",
+      "chon": ["Xác nhận lại câu hỏi trước khi trả lời", "Từ chối trả lời", "Đổi sang chủ đề khác"],
+      "dung": 0,
+      "giai": "是指 = ý là; hỏi lại cho rõ câu hỏi của giám đốc."
+    },
+    {
+      "hoi": "Vì sao Ngọc chọn đàm phán lại hợp đồng trước?",
+      "chon": ["Vì công ty vận chuyển yêu cầu", "Vì tốn ít tiền, có hiệu quả nhanh, một tháng là thấy kết quả", "Vì thêm kho là không thể"],
+      "dung": 1,
+      "giai": "它花的钱少，见效快，一个月以内就能看到结果。"
+    }
+  ]
+}

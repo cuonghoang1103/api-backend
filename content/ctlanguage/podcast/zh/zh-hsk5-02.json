@@ -1,61 +1,396 @@
 {
   "id": "zh-hsk5-02",
   "nn": "zh",
+  "danhMuc": "doi-song",
   "cap": "HSK5",
-  "so": 2,
+  "so": 1,
   "tieuDe": "论文是写出来的，不是熬出来的",
   "tieuDeViet": "Luận văn là viết ra, không phải thức đêm mà ra",
   "moTa": "Gần nửa đêm ở thư viện, Linh — học viên cao học người Việt — vẫn chưa viết xong chương ba, mất ngủ và sợ làm bố mẹ thất vọng. Anh khoá trên Cao Vũ kể chuyện từng phải bảo lưu nửa năm, và cùng cô chia nhỏ vấn đề.",
   "chuDe": "Áp lực học tập",
   "bieuTuong": "books.vertical.fill",
   "nguoi": [
-    { "ma": "L", "ten": "Linh", "giong": "zh-nu", "vai": "học viên cao học người Việt" },
-    { "ma": "G", "ten": "Cao Vũ", "giong": "zh-nam", "vai": "nghiên cứu sinh khoá trên" }
+    {
+      "ma": "L",
+      "ten": "Linh",
+      "giong": "zh-nu",
+      "vai": "học viên cao học người Việt"
+    },
+    {
+      "ma": "G",
+      "ten": "Cao Vũ",
+      "giong": "zh-nam",
+      "vai": "nghiên cứu sinh khoá trên"
+    }
   ],
   "loi": [
-    { "ai": "G", "t": "阿玲？都快十二点了，你还在图书馆？", "doc": "Ā Líng? Dōu kuài shí'èr diǎn le, nǐ hái zài túshūguǎn?", "v": "Linh à? Sắp mười hai giờ rồi mà em vẫn ở thư viện?" },
-    { "ai": "L", "t": "高师兄……我论文的第三章还没写完，下周就要交给导师了。", "doc": "Gāo shīxiōng…… wǒ lùnwén de dì sān zhāng hái méi xiě wán, xià zhōu jiù yào jiāo gěi dǎoshī le.", "v": "Anh Cao… chương ba luận văn của em vẫn chưa viết xong, tuần sau đã phải nộp cho thầy hướng dẫn rồi." },
-    { "ai": "G", "t": "你的脸色很差，最近是不是又失眠了？", "doc": "Nǐ de liǎnsè hěn chà, zuìjìn shì bu shì yòu shīmián le?", "v": "Sắc mặt em kém lắm, dạo này lại mất ngủ phải không?" },
-    { "ai": "L", "t": "是啊。每天躺在床上，脑子里全是论文、数据，还有我爸妈。", "doc": "Shì a. Měi tiān tǎng zài chuáng shang, nǎozi li quán shì lùnwén, shùjù, hái yǒu wǒ bà mā.", "v": "Vâng. Ngày nào nằm trên giường, trong đầu cũng toàn là luận văn, số liệu, rồi cả bố mẹ em nữa." },
-    { "ai": "G", "t": "你爸妈？他们给你压力了？", "doc": "Nǐ bà mā? Tāmen gěi nǐ yālì le?", "v": "Bố mẹ em? Họ gây áp lực cho em à?" },
-    { "ai": "L", "t": "他们从来没逼过我。可正是因为这样，我才更怕让他们失望。为了让我来中国读研，他们连老家的那块地都卖了。", "doc": "Tāmen cónglái méi bī guo wǒ. Kě zhèng shì yīnwèi zhèyàng, wǒ cái gèng pà ràng tāmen shīwàng. Wèile ràng wǒ lái Zhōngguó dú yán, tāmen lián lǎojiā de nà kuài dì dōu mài le.", "v": "Bố mẹ chưa bao giờ ép em. Nhưng chính vì thế em mới càng sợ làm họ thất vọng. Để em sang Trung Quốc học cao học, bố mẹ đã bán cả mảnh đất ở quê." },
-    { "ai": "G", "t": "原来你一直背着这么重的东西。", "doc": "Yuánlái nǐ yìzhí bēizhe zhème zhòng de dōngxi.", "v": "Hóa ra em vẫn luôn gánh trên lưng một thứ nặng như vậy." },
-    { "ai": "L", "t": "而且我看身边的同学，有的已经发了论文，有的找到了工作，只有我还在原地踏步。", "doc": "Érqiě wǒ kàn shēnbiān de tóngxué, yǒude yǐjīng fā le lùnwén, yǒude zhǎodào le gōngzuò, zhǐyǒu wǒ hái zài yuándì tàbù.", "v": "Mà nhìn các bạn xung quanh, có người đã đăng bài báo, có người tìm được việc rồi, chỉ có em vẫn giậm chân tại chỗ." },
-    { "ai": "G", "t": "我跟你说一件事，可能你不信：我研二的时候，休学过半年。", "doc": "Wǒ gēn nǐ shuō yí jiàn shì, kěnéng nǐ bú xìn: wǒ yán'èr de shíhou, xiūxué guo bàn nián.", "v": "Anh kể em nghe chuyện này, có thể em không tin: hồi năm hai cao học, anh từng bảo lưu nửa năm." },
-    { "ai": "L", "t": "你？你可是我们实验室最厉害的人啊！", "doc": "Nǐ? Nǐ kě shì wǒmen shíyànshì zuì lìhai de rén a!", "v": "Anh á? Anh là người giỏi nhất phòng thí nghiệm của bọn em cơ mà!" },
-    { "ai": "G", "t": "那是后来。当时我每天只睡四个小时，越着急越写不出来，最后在实验室晕倒了。", "doc": "Nà shì hòulái. Dāngshí wǒ měi tiān zhǐ shuì sì ge xiǎoshí, yuè zháojí yuè xiě bu chūlai, zuìhòu zài shíyànshì yūndǎo le.", "v": "Đó là về sau. Hồi đó mỗi ngày anh chỉ ngủ bốn tiếng, càng sốt ruột càng không viết ra được, cuối cùng ngất ngay trong phòng thí nghiệm." },
-    { "ai": "L", "t": "那你家里人知道吗？", "doc": "Nà nǐ jiā li rén zhīdào ma?", "v": "Thế gia đình anh có biết không?" },
-    { "ai": "G", "t": "一开始我瞒着他们，怕他们担心。后来实在瞒不住了，才给我妈打了电话。", "doc": "Yì kāishǐ wǒ mánzhe tāmen, pà tāmen dānxīn. Hòulái shízài mán bu zhù le, cái gěi wǒ mā dǎ le diànhuà.", "v": "Lúc đầu anh giấu, sợ họ lo. Sau thật sự không giấu nổi nữa mới gọi điện cho mẹ." },
-    { "ai": "L", "t": "她是不是很生气？", "doc": "Tā shì bu shì hěn shēngqì?", "v": "Mẹ anh có giận lắm không?" },
-    { "ai": "G", "t": "恰恰相反。她只说了一句：“你怎么不早点儿告诉我？”", "doc": "Qiàqià xiāngfǎn. Tā zhǐ shuō le yí jù: “Nǐ zěnme bù zǎo diǎnr gàosu wǒ?”", "v": "Hoàn toàn ngược lại. Mẹ chỉ nói đúng một câu: \"Sao con không nói với mẹ sớm hơn?\"" },
-    { "ai": "G", "t": "那时候我才明白，父母最怕的不是我们失败，而是我们一个人硬撑。", "doc": "Nà shíhou wǒ cái míngbai, fùmǔ zuì pà de bú shì wǒmen shībài, ér shì wǒmen yí ge rén yìng chēng.", "v": "Lúc ấy anh mới hiểu, điều bố mẹ sợ nhất không phải là chúng ta thất bại, mà là chúng ta một mình gồng gánh." },
-    { "ai": "L", "t": "可是我该怎么跟他们说呢？说“我压力很大”，他们只会更担心。", "doc": "Kěshì wǒ gāi zěnme gēn tāmen shuō ne? Shuō “wǒ yālì hěn dà”, tāmen zhǐ huì gèng dānxīn.", "v": "Nhưng em nên nói với bố mẹ thế nào đây? Nói \"con áp lực lắm\" thì họ chỉ lo thêm thôi." },
-    { "ai": "G", "t": "不一定。你可以说得具体一点儿：哪里难，你打算怎么做，需要他们怎么支持你。", "doc": "Bù yídìng. Nǐ kěyǐ shuō de jùtǐ yìdiǎnr: nǎlǐ nán, nǐ dǎsuàn zěnme zuò, xūyào tāmen zěnme zhīchí nǐ.", "v": "Chưa chắc. Em có thể nói cụ thể hơn: khó ở chỗ nào, em định làm thế nào, cần bố mẹ hỗ trợ em ra sao." },
-    { "ai": "L", "t": "我打算怎么做……说实话，我自己也不知道。", "doc": "Wǒ dǎsuàn zěnme zuò…… shuō shíhuà, wǒ zìjǐ yě bù zhīdào.", "v": "Em định làm thế nào… nói thật, chính em cũng không biết." },
-    { "ai": "G", "t": "那我们先把问题拆开。第三章最难的是哪一部分？", "doc": "Nà wǒmen xiān bǎ wèntí chāi kāi. Dì sān zhāng zuì nán de shì nǎ yí bùfen?", "v": "Vậy mình chia nhỏ vấn đề ra trước đã. Chương ba khó nhất ở phần nào?" },
-    { "ai": "L", "t": "数据分析。有一组结果跟我的假设完全相反，我不知道怎么解释。", "doc": "Shùjù fēnxī. Yǒu yì zǔ jiéguǒ gēn wǒ de jiǎshè wánquán xiāngfǎn, wǒ bù zhīdào zěnme jiěshì.", "v": "Phần phân tích số liệu. Có một nhóm kết quả hoàn toàn ngược với giả thuyết của em, em không biết giải thích thế nào." },
-    { "ai": "G", "t": "这不一定是坏事。结果跟假设不一样，说不定正是你论文最有意思的地方。明天就去找导师谈谈，别一个人猜。", "doc": "Zhè bù yídìng shì huàishì. Jiéguǒ gēn jiǎshè bù yíyàng, shuōbudìng zhèng shì nǐ lùnwén zuì yǒu yìsi de dìfang. Míngtiān jiù qù zhǎo dǎoshī tántan, bié yí ge rén cāi.", "v": "Chưa chắc đã là chuyện xấu. Kết quả khác giả thuyết, biết đâu lại chính là chỗ thú vị nhất trong luận văn của em. Mai đi gặp thầy nói chuyện ngay, đừng ngồi đoán một mình." },
-    { "ai": "L", "t": "我一直怕导师觉得我能力不够。", "doc": "Wǒ yìzhí pà dǎoshī juéde wǒ nénglì bú gòu.", "v": "Em vẫn luôn sợ thầy thấy em không đủ năng lực." },
-    { "ai": "G", "t": "导师见过的学生多了，他不会因为一个问题就否定你。反而是什么都不问的学生，才让人担心。", "doc": "Dǎoshī jiàn guo de xuésheng duō le, tā bú huì yīnwèi yí ge wèntí jiù fǒudìng nǐ. Fǎn'ér shì shénme dōu bú wèn de xuésheng, cái ràng rén dānxīn.", "v": "Thầy gặp bao nhiêu học trò rồi, thầy sẽ không vì một vấn đề mà phủ nhận em đâu. Ngược lại, học trò chẳng hỏi gì mới làm người ta lo." },
-    { "ai": "L", "t": "听你这么一说，我心里轻松多了。", "doc": "Tīng nǐ zhème yì shuō, wǒ xīnli qīngsōng duō le.", "v": "Nghe anh nói vậy, em thấy nhẹ lòng hơn nhiều." },
-    { "ai": "G", "t": "还有，学校的心理咨询中心是免费的。去那儿不代表你有问题，而是代表你在照顾自己。", "doc": "Hái yǒu, xuéxiào de xīnlǐ zīxún zhōngxīn shì miǎnfèi de. Qù nàr bú dàibiǎo nǐ yǒu wèntí, ér shì dàibiǎo nǐ zài zhàogù zìjǐ.", "v": "Còn nữa, trung tâm tư vấn tâm lý của trường miễn phí. Đến đó không có nghĩa là em có vấn đề, mà là em đang chăm sóc bản thân." },
-    { "ai": "L", "t": "好，我记住了。今晚我先回去睡觉，明天上午去找导师，晚上给我妈打个视频电话。", "doc": "Hǎo, wǒ jìzhù le. Jīn wǎn wǒ xiān huíqu shuìjiào, míngtiān shàngwǔ qù zhǎo dǎoshī, wǎnshang gěi wǒ mā dǎ ge shìpín diànhuà.", "v": "Vâng, em nhớ rồi. Tối nay em về ngủ trước, sáng mai đi gặp thầy, buổi tối gọi video cho mẹ." },
-    { "ai": "G", "t": "这就对了。一步一步来——论文是写出来的，不是熬出来的。", "doc": "Zhè jiù duì le. Yí bù yí bù lái —— lùnwén shì xiě chūlai de, bú shì áo chūlai de.", "v": "Thế mới đúng. Từng bước một — luận văn là viết ra, chứ không phải thức đêm mà ra." },
-    { "ai": "L", "t": "谢谢你，师兄。那我们现在就一起走吧，今天的图书馆，我也该“下班”了。", "doc": "Xièxie nǐ, shīxiōng. Nà wǒmen xiànzài jiù yìqǐ zǒu ba, jīntiān de túshūguǎn, wǒ yě gāi “xiàbān” le.", "v": "Cảm ơn anh. Vậy giờ mình cùng về nhé, thư viện hôm nay, em cũng nên \"tan ca\" rồi." }
+    {
+      "ai": "G",
+      "t": "阿玲？都快十二点了，你还在图书馆？",
+      "doc": "Ā Líng? Dōu kuài shí'èr diǎn le, nǐ hái zài túshūguǎn?",
+      "v": "Linh à? Sắp mười hai giờ rồi mà em vẫn ở thư viện?",
+      "np": [
+        {
+          "mau": "都快……了",
+          "giai": "都快 + thời điểm + 了 = đã sắp… rồi (nhấn mạnh muộn, nhanh hơn mong đợi). 都 ở đây = \"đã\".",
+          "vd": "都快八点了，你怎么还不起床？",
+          "vdDoc": "Dōu kuài bā diǎn le, nǐ zěnme hái bù qǐchuáng?",
+          "vdV": "Sắp tám giờ rồi, sao em còn chưa dậy?"
+        }
+      ]
+    },
+    {
+      "ai": "L",
+      "t": "高师兄……我论文的第三章还没写完，下周就要交给导师了。",
+      "doc": "Gāo shīxiōng…… wǒ lùnwén de dì sān zhāng hái méi xiě wán, xià zhōu jiù yào jiāo gěi dǎoshī le.",
+      "v": "Anh Cao… chương ba luận văn của em vẫn chưa viết xong, tuần sau đã phải nộp cho thầy hướng dẫn rồi."
+    },
+    {
+      "ai": "G",
+      "t": "你的脸色很差，最近是不是又失眠了？",
+      "doc": "Nǐ de liǎnsè hěn chà, zuìjìn shì bu shì yòu shīmián le?",
+      "v": "Sắc mặt em kém lắm, dạo này lại mất ngủ phải không?",
+      "khac": [
+        {
+          "kieu": "mềm mỏng",
+          "t": "你看起来有点儿累，最近睡得不好吗？",
+          "doc": "Nǐ kàn qǐlai yǒudiǎnr lèi, zuìjìn shuì de bù hǎo ma?",
+          "v": "Trông em hơi mệt, dạo này ngủ không ngon à?",
+          "ghiChu": "hỏi han mà không chê thẳng sắc mặt người ta"
+        }
+      ]
+    },
+    {
+      "ai": "L",
+      "t": "是啊。每天躺在床上，脑子里全是论文、数据，还有我爸妈。",
+      "doc": "Shì a. Měi tiān tǎng zài chuáng shang, nǎozi li quán shì lùnwén, shùjù, hái yǒu wǒ bà mā.",
+      "v": "Vâng. Ngày nào nằm trên giường, trong đầu cũng toàn là luận văn, số liệu, rồi cả bố mẹ em nữa."
+    },
+    {
+      "ai": "G",
+      "t": "你爸妈？他们给你压力了？",
+      "doc": "Nǐ bà mā? Tāmen gěi nǐ yālì le?",
+      "v": "Bố mẹ em? Họ gây áp lực cho em à?"
+    },
+    {
+      "ai": "L",
+      "t": "他们从来没逼过我。可正是因为这样，我才更怕让他们失望。为了让我来中国读研，他们连老家的那块地都卖了。",
+      "doc": "Tāmen cónglái méi bī guo wǒ. Kě zhèng shì yīnwèi zhèyàng, wǒ cái gèng pà ràng tāmen shīwàng. Wèile ràng wǒ lái Zhōngguó dú yán, tāmen lián lǎojiā de nà kuài dì dōu mài le.",
+      "v": "Bố mẹ chưa bao giờ ép em. Nhưng chính vì thế em mới càng sợ làm họ thất vọng. Để em sang Trung Quốc học cao học, bố mẹ đã bán cả mảnh đất ở quê.",
+      "np": [
+        {
+          "mau": "正是因为……，才……",
+          "giai": "正是因为 A，才 B = chính vì A nên mới B — nhấn mạnh nguyên nhân bất ngờ, ngược với suy nghĩ thông thường.",
+          "vd": "正是因为他不说话，我才更担心。",
+          "vdDoc": "Zhèng shì yīnwèi tā bù shuōhuà, wǒ cái gèng dānxīn.",
+          "vdV": "Chính vì anh ấy không nói gì, tôi mới càng lo."
+        },
+        {
+          "mau": "为了……",
+          "giai": "为了 + mục đích, đặt đầu câu = để…, vì…: 为了让我来中国读研，他们…",
+          "vd": "为了身体健康，他每天跑步。",
+          "vdDoc": "Wèile shēntǐ jiànkāng, tā měi tiān pǎobù.",
+          "vdV": "Để khỏe mạnh, ngày nào anh ấy cũng chạy bộ."
+        }
+      ]
+    },
+    {
+      "ai": "G",
+      "t": "原来你一直背着这么重的东西。",
+      "doc": "Yuánlái nǐ yìzhí bēizhe zhème zhòng de dōngxi.",
+      "v": "Hóa ra em vẫn luôn gánh trên lưng một thứ nặng như vậy."
+    },
+    {
+      "ai": "L",
+      "t": "而且我看身边的同学，有的已经发了论文，有的找到了工作，只有我还在原地踏步。",
+      "doc": "Érqiě wǒ kàn shēnbiān de tóngxué, yǒude yǐjīng fā le lùnwén, yǒude zhǎodào le gōngzuò, zhǐyǒu wǒ hái zài yuándì tàbù.",
+      "v": "Mà nhìn các bạn xung quanh, có người đã đăng bài báo, có người tìm được việc rồi, chỉ có em vẫn giậm chân tại chỗ."
+    },
+    {
+      "ai": "G",
+      "t": "我跟你说一件事，可能你不信：我研二的时候，休学过半年。",
+      "doc": "Wǒ gēn nǐ shuō yí jiàn shì, kěnéng nǐ bú xìn: wǒ yán'èr de shíhou, xiūxué guo bàn nián.",
+      "v": "Anh kể em nghe chuyện này, có thể em không tin: hồi năm hai cao học, anh từng bảo lưu nửa năm.",
+      "khac": [
+        {
+          "kieu": "văn nói",
+          "t": "说出来你可能不信，我研二的时候休过半年学。",
+          "doc": "Shuō chūlai nǐ kěnéng bú xìn, wǒ yán'èr de shíhou xiū guo bàn nián xué.",
+          "v": "Nói ra có khi em không tin, hồi năm hai cao học anh từng bảo lưu nửa năm."
+        }
+      ]
+    },
+    {
+      "ai": "L",
+      "t": "你？你可是我们实验室最厉害的人啊！",
+      "doc": "Nǐ? Nǐ kě shì wǒmen shíyànshì zuì lìhai de rén a!",
+      "v": "Anh á? Anh là người giỏi nhất phòng thí nghiệm của bọn em cơ mà!"
+    },
+    {
+      "ai": "G",
+      "t": "那是后来。当时我每天只睡四个小时，越着急越写不出来，最后在实验室晕倒了。",
+      "doc": "Nà shì hòulái. Dāngshí wǒ měi tiān zhǐ shuì sì ge xiǎoshí, yuè zháojí yuè xiě bu chūlai, zuìhòu zài shíyànshì yūndǎo le.",
+      "v": "Đó là về sau. Hồi đó mỗi ngày anh chỉ ngủ bốn tiếng, càng sốt ruột càng không viết ra được, cuối cùng ngất ngay trong phòng thí nghiệm.",
+      "np": [
+        {
+          "mau": "越 A 越 B",
+          "giai": "越着急越写不出来 = càng sốt ruột càng không viết ra được. Hai vế có thể là động từ/tính từ khác nhau.",
+          "vd": "越想越生气。",
+          "vdDoc": "Yuè xiǎng yuè shēngqì.",
+          "vdV": "Càng nghĩ càng tức."
+        },
+        {
+          "mau": "V + 不出来",
+          "giai": "写不出来 = không viết ra được (ý không thành chữ); 想不出来 = nghĩ không ra; 认不出来 = không nhận ra.",
+          "vd": "他变化太大，我差点儿认不出来。",
+          "vdDoc": "Tā biànhuà tài dà, wǒ chàdiǎnr rèn bu chūlai.",
+          "vdV": "Anh ấy thay đổi nhiều quá, tôi suýt không nhận ra."
+        }
+      ]
+    },
+    {
+      "ai": "L",
+      "t": "那你家里人知道吗？",
+      "doc": "Nà nǐ jiā li rén zhīdào ma?",
+      "v": "Thế gia đình anh có biết không?"
+    },
+    {
+      "ai": "G",
+      "t": "一开始我瞒着他们，怕他们担心。后来实在瞒不住了，才给我妈打了电话。",
+      "doc": "Yì kāishǐ wǒ mánzhe tāmen, pà tāmen dānxīn. Hòulái shízài mán bu zhù le, cái gěi wǒ mā dǎ le diànhuà.",
+      "v": "Lúc đầu anh giấu, sợ họ lo. Sau thật sự không giấu nổi nữa mới gọi điện cho mẹ.",
+      "np": [
+        {
+          "mau": "V + 不住 (không giữ nổi)",
+          "giai": "瞒不住 = không giấu nổi nữa; 忍不住 = không nhịn được; 记不住 = không nhớ nổi. 住 = giữ chắc.",
+          "vd": "她听了这个故事，忍不住哭了。",
+          "vdDoc": "Tā tīng le zhège gùshi, rěn bu zhù kū le.",
+          "vdV": "Nghe câu chuyện này, cô ấy không kìm được mà khóc."
+        }
+      ]
+    },
+    {
+      "ai": "L",
+      "t": "她是不是很生气？",
+      "doc": "Tā shì bu shì hěn shēngqì?",
+      "v": "Mẹ anh có giận lắm không?"
+    },
+    {
+      "ai": "G",
+      "t": "恰恰相反。她只说了一句：“你怎么不早点儿告诉我？”",
+      "doc": "Qiàqià xiāngfǎn. Tā zhǐ shuō le yí jù: “Nǐ zěnme bù zǎo diǎnr gàosu wǒ?”",
+      "v": "Hoàn toàn ngược lại. Mẹ chỉ nói đúng một câu: \"Sao con không nói với mẹ sớm hơn?\""
+    },
+    {
+      "ai": "G",
+      "t": "那时候我才明白，父母最怕的不是我们失败，而是我们一个人硬撑。",
+      "doc": "Nà shíhou wǒ cái míngbai, fùmǔ zuì pà de bú shì wǒmen shībài, ér shì wǒmen yí ge rén yìng chēng.",
+      "v": "Lúc ấy anh mới hiểu, điều bố mẹ sợ nhất không phải là chúng ta thất bại, mà là chúng ta một mình gồng gánh.",
+      "np": [
+        {
+          "mau": "……的不是 A，而是 B",
+          "giai": "Điều… không phải A mà là B — bác bỏ cách hiểu thông thường để nói điều thật sự quan trọng.",
+          "vd": "我在乎的不是结果，而是过程。",
+          "vdDoc": "Wǒ zàihu de bú shì jiéguǒ, ér shì guòchéng.",
+          "vdV": "Điều tôi quan tâm không phải kết quả, mà là quá trình."
+        }
+      ]
+    },
+    {
+      "ai": "L",
+      "t": "可是我该怎么跟他们说呢？说“我压力很大”，他们只会更担心。",
+      "doc": "Kěshì wǒ gāi zěnme gēn tāmen shuō ne? Shuō “wǒ yālì hěn dà”, tāmen zhǐ huì gèng dānxīn.",
+      "v": "Nhưng em nên nói với bố mẹ thế nào đây? Nói \"con áp lực lắm\" thì họ chỉ lo thêm thôi."
+    },
+    {
+      "ai": "G",
+      "t": "不一定。你可以说得具体一点儿：哪里难，你打算怎么做，需要他们怎么支持你。",
+      "doc": "Bù yídìng. Nǐ kěyǐ shuō de jùtǐ yìdiǎnr: nǎlǐ nán, nǐ dǎsuàn zěnme zuò, xūyào tāmen zěnme zhīchí nǐ.",
+      "v": "Chưa chắc. Em có thể nói cụ thể hơn: khó ở chỗ nào, em định làm thế nào, cần bố mẹ hỗ trợ em ra sao.",
+      "np": [
+        {
+          "mau": "V + 得 + tính từ + 一点儿",
+          "giai": "说得具体一点儿 = nói cụ thể hơn một chút. Dùng khi góp ý, đề nghị nhẹ nhàng: 写得清楚一点儿, 走得慢一点儿.",
+          "vd": "请你说得慢一点儿。",
+          "vdDoc": "Qǐng nǐ shuō de màn yìdiǎnr.",
+          "vdV": "Làm ơn nói chậm hơn một chút."
+        }
+      ]
+    },
+    {
+      "ai": "L",
+      "t": "我打算怎么做……说实话，我自己也不知道。",
+      "doc": "Wǒ dǎsuàn zěnme zuò…… shuō shíhuà, wǒ zìjǐ yě bù zhīdào.",
+      "v": "Em định làm thế nào… nói thật, chính em cũng không biết."
+    },
+    {
+      "ai": "G",
+      "t": "那我们先把问题拆开。第三章最难的是哪一部分？",
+      "doc": "Nà wǒmen xiān bǎ wèntí chāi kāi. Dì sān zhāng zuì nán de shì nǎ yí bùfen?",
+      "v": "Vậy mình chia nhỏ vấn đề ra trước đã. Chương ba khó nhất ở phần nào?",
+      "khac": [
+        {
+          "kieu": "mềm mỏng",
+          "t": "咱们一步一步来，先看看哪儿最难。",
+          "doc": "Zánmen yí bù yí bù lái, xiān kànkan nǎr zuì nán.",
+          "v": "Mình đi từng bước một, trước hết xem chỗ nào khó nhất."
+        }
+      ]
+    },
+    {
+      "ai": "L",
+      "t": "数据分析。有一组结果跟我的假设完全相反，我不知道怎么解释。",
+      "doc": "Shùjù fēnxī. Yǒu yì zǔ jiéguǒ gēn wǒ de jiǎshè wánquán xiāngfǎn, wǒ bù zhīdào zěnme jiěshì.",
+      "v": "Phần phân tích số liệu. Có một nhóm kết quả hoàn toàn ngược với giả thuyết của em, em không biết giải thích thế nào."
+    },
+    {
+      "ai": "G",
+      "t": "这不一定是坏事。结果跟假设不一样，说不定正是你论文最有意思的地方。明天就去找导师谈谈，别一个人猜。",
+      "doc": "Zhè bù yídìng shì huàishì. Jiéguǒ gēn jiǎshè bù yíyàng, shuōbudìng zhèng shì nǐ lùnwén zuì yǒu yìsi de dìfang. Míngtiān jiù qù zhǎo dǎoshī tántan, bié yí ge rén cāi.",
+      "v": "Chưa chắc đã là chuyện xấu. Kết quả khác giả thuyết, biết đâu lại chính là chỗ thú vị nhất trong luận văn của em. Mai đi gặp thầy nói chuyện ngay, đừng ngồi đoán một mình."
+    },
+    {
+      "ai": "L",
+      "t": "我一直怕导师觉得我能力不够。",
+      "doc": "Wǒ yìzhí pà dǎoshī juéde wǒ nénglì bú gòu.",
+      "v": "Em vẫn luôn sợ thầy thấy em không đủ năng lực."
+    },
+    {
+      "ai": "G",
+      "t": "导师见过的学生多了，他不会因为一个问题就否定你。反而是什么都不问的学生，才让人担心。",
+      "doc": "Dǎoshī jiàn guo de xuésheng duō le, tā bú huì yīnwèi yí ge wèntí jiù fǒudìng nǐ. Fǎn'ér shì shénme dōu bú wèn de xuésheng, cái ràng rén dānxīn.",
+      "v": "Thầy gặp bao nhiêu học trò rồi, thầy sẽ không vì một vấn đề mà phủ nhận em đâu. Ngược lại, học trò chẳng hỏi gì mới làm người ta lo.",
+      "np": [
+        {
+          "mau": "反而",
+          "giai": "反而 = ngược lại (kết quả trái với điều người nghe nghĩ). Hay đứng đầu vế sau.",
+          "vd": "吃了药，他的病反而更严重了。",
+          "vdDoc": "Chī le yào, tā de bìng fǎn'ér gèng yánzhòng le.",
+          "vdV": "Uống thuốc xong, bệnh anh ấy ngược lại còn nặng hơn."
+        }
+      ]
+    },
+    {
+      "ai": "L",
+      "t": "听你这么一说，我心里轻松多了。",
+      "doc": "Tīng nǐ zhème yì shuō, wǒ xīnli qīngsōng duō le.",
+      "v": "Nghe anh nói vậy, em thấy nhẹ lòng hơn nhiều.",
+      "khac": [
+        {
+          "kieu": "tự nhiên hơn",
+          "t": "跟你聊完，我感觉好多了。",
+          "doc": "Gēn nǐ liáo wán, wǒ gǎnjué hǎo duō le.",
+          "v": "Nói chuyện với anh xong, em thấy khá hơn nhiều rồi."
+        }
+      ]
+    },
+    {
+      "ai": "G",
+      "t": "还有，学校的心理咨询中心是免费的。去那儿不代表你有问题，而是代表你在照顾自己。",
+      "doc": "Hái yǒu, xuéxiào de xīnlǐ zīxún zhōngxīn shì miǎnfèi de. Qù nàr bú dàibiǎo nǐ yǒu wèntí, ér shì dàibiǎo nǐ zài zhàogù zìjǐ.",
+      "v": "Còn nữa, trung tâm tư vấn tâm lý của trường miễn phí. Đến đó không có nghĩa là em có vấn đề, mà là em đang chăm sóc bản thân."
+    },
+    {
+      "ai": "L",
+      "t": "好，我记住了。今晚我先回去睡觉，明天上午去找导师，晚上给我妈打个视频电话。",
+      "doc": "Hǎo, wǒ jìzhù le. Jīn wǎn wǒ xiān huíqu shuìjiào, míngtiān shàngwǔ qù zhǎo dǎoshī, wǎnshang gěi wǒ mā dǎ ge shìpín diànhuà.",
+      "v": "Vâng, em nhớ rồi. Tối nay em về ngủ trước, sáng mai đi gặp thầy, buổi tối gọi video cho mẹ."
+    },
+    {
+      "ai": "G",
+      "t": "这就对了。一步一步来——论文是写出来的，不是熬出来的。",
+      "doc": "Zhè jiù duì le. Yí bù yí bù lái —— lùnwén shì xiě chūlai de, bú shì áo chūlai de.",
+      "v": "Thế mới đúng. Từng bước một — luận văn là viết ra, chứ không phải thức đêm mà ra."
+    },
+    {
+      "ai": "L",
+      "t": "谢谢你，师兄。那我们现在就一起走吧，今天的图书馆，我也该“下班”了。",
+      "doc": "Xièxie nǐ, shīxiōng. Nà wǒmen xiànzài jiù yìqǐ zǒu ba, jīntiān de túshūguǎn, wǒ yě gāi “xiàbān” le.",
+      "v": "Cảm ơn anh. Vậy giờ mình cùng về nhé, thư viện hôm nay, em cũng nên \"tan ca\" rồi.",
+      "khac": [
+        {
+          "kieu": "lịch sự",
+          "t": "今天真是多亏了你，师兄。",
+          "doc": "Jīntiān zhēn shì duōkuī le nǐ, shīxiōng.",
+          "v": "Hôm nay thật may mà có anh.",
+          "ghiChu": "多亏了 + người = nhờ có ai mà mọi chuyện ổn"
+        }
+      ]
+    }
   ],
   "tuVung": [
-    { "chu": "论文", "doc": "lùnwén", "nghia": "luận văn, bài báo khoa học", "vd": "他的论文写得很好。" },
-    { "chu": "导师", "doc": "dǎoshī", "nghia": "thầy/cô hướng dẫn (đạo sư)", "vd": "我的导师对我很好。" },
-    { "chu": "失眠", "doc": "shīmián", "nghia": "mất ngủ (thất miên)", "vd": "考试前我常常失眠。" },
-    { "chu": "失望", "doc": "shīwàng", "nghia": "thất vọng", "vd": "我不想让父母失望。" },
-    { "chu": "背着", "doc": "bēizhe", "nghia": "đang cõng, gánh trên lưng — 背 đọc bēi khi là động từ \"cõng\", đọc bèi khi là \"lưng\"/\"học thuộc\"", "vd": "她背着一个大书包。" },
-    { "chu": "原地踏步", "doc": "yuándì tàbù", "nghia": "giậm chân tại chỗ (nguyên địa đạp bộ)", "vd": "不学习新东西，就只能原地踏步。" },
-    { "chu": "恰恰相反", "doc": "qiàqià xiāngfǎn", "nghia": "hoàn toàn ngược lại (kháp kháp tương phản)", "vd": "他不是不关心你，恰恰相反，他很在乎你。" },
-    { "chu": "硬撑", "doc": "yìng chēng", "nghia": "cố gồng, gắng gượng chịu đựng", "vd": "不舒服就休息，别硬撑。" },
-    { "chu": "具体", "doc": "jùtǐ", "nghia": "cụ thể", "vd": "你能说得具体一点儿吗？" },
-    { "chu": "说不定", "doc": "shuōbudìng", "nghia": "biết đâu, không chừng", "vd": "说不定他已经到了。" },
-    { "chu": "反而", "doc": "fǎn'ér", "nghia": "ngược lại, trái lại (phản nhi)", "vd": "吃了药，病反而更重了。" },
-    { "chu": "熬", "doc": "áo", "nghia": "thức (đêm), chịu đựng, ninh (ngao); 熬夜 = thức khuya", "vd": "别再熬夜了。" }
+    {
+      "chu": "论文",
+      "doc": "lùnwén",
+      "nghia": "luận văn, bài báo khoa học",
+      "vd": "他的论文写得很好。"
+    },
+    {
+      "chu": "导师",
+      "doc": "dǎoshī",
+      "nghia": "thầy/cô hướng dẫn (đạo sư)",
+      "vd": "我的导师对我很好。"
+    },
+    {
+      "chu": "失眠",
+      "doc": "shīmián",
+      "nghia": "mất ngủ (thất miên)",
+      "vd": "考试前我常常失眠。"
+    },
+    {
+      "chu": "失望",
+      "doc": "shīwàng",
+      "nghia": "thất vọng",
+      "vd": "我不想让父母失望。"
+    },
+    {
+      "chu": "背着",
+      "doc": "bēizhe",
+      "nghia": "đang cõng, gánh trên lưng — 背 đọc bēi khi là động từ \"cõng\", đọc bèi khi là \"lưng\"/\"học thuộc\"",
+      "vd": "她背着一个大书包。"
+    },
+    {
+      "chu": "原地踏步",
+      "doc": "yuándì tàbù",
+      "nghia": "giậm chân tại chỗ (nguyên địa đạp bộ)",
+      "vd": "不学习新东西，就只能原地踏步。"
+    },
+    {
+      "chu": "恰恰相反",
+      "doc": "qiàqià xiāngfǎn",
+      "nghia": "hoàn toàn ngược lại (kháp kháp tương phản)",
+      "vd": "他不是不关心你，恰恰相反，他很在乎你。"
+    },
+    {
+      "chu": "硬撑",
+      "doc": "yìng chēng",
+      "nghia": "cố gồng, gắng gượng chịu đựng",
+      "vd": "不舒服就休息，别硬撑。"
+    },
+    {
+      "chu": "具体",
+      "doc": "jùtǐ",
+      "nghia": "cụ thể",
+      "vd": "你能说得具体一点儿吗？"
+    },
+    {
+      "chu": "说不定",
+      "doc": "shuōbudìng",
+      "nghia": "biết đâu, không chừng",
+      "vd": "说不定他已经到了。"
+    },
+    {
+      "chu": "反而",
+      "doc": "fǎn'ér",
+      "nghia": "ngược lại, trái lại (phản nhi)",
+      "vd": "吃了药，病反而更重了。"
+    },
+    {
+      "chu": "熬",
+      "doc": "áo",
+      "nghia": "thức (đêm), chịu đựng, ninh (ngao); 熬夜 = thức khuya",
+      "vd": "别再熬夜了。"
+    }
   ],
   "yNghia": "Áp lực không biến mất khi ta giấu nó — nó chỉ nặng thêm. Những người thương ta sợ nhất không phải là ta thất bại, mà là ta một mình gồng gánh. Nói ra, chia nhỏ vấn đề, hỏi người đi trước: đó không phải là yếu đuối, mà là cách đi tiếp.",
   "meo": [
@@ -66,10 +401,55 @@
     "背 đa âm: bēi (cõng: 背着) ↔ bèi (lưng; học thuộc: 背课文). 一 biến điệu: 一开始 yì kāishǐ, 一步一步 yí bù yí bù, 不一定 bù yídìng."
   ],
   "cauHoi": [
-    { "hoi": "Vì sao Linh càng sợ làm bố mẹ thất vọng?", "chon": ["Bố mẹ thường xuyên ép cô học", "Bố mẹ chưa bao giờ ép, lại bán cả mảnh đất ở quê cho cô đi học", "Bố mẹ muốn cô về nước ngay"], "dung": 1, "giai": "他们从来没逼过我……为了让我来中国读研，他们连老家的那块地都卖了." },
-    { "hoi": "Chuyện gì từng xảy ra với Cao Vũ năm hai cao học?", "chon": ["Anh đổi ngành học", "Anh trượt bảo vệ luận văn", "Anh ngất trong phòng thí nghiệm và phải bảo lưu nửa năm"], "dung": 2, "giai": "我研二的时候，休学过半年……最后在实验室晕倒了." },
-    { "hoi": "Mẹ Cao Vũ phản ứng thế nào khi biết chuyện?", "chon": ["Chỉ hỏi sao con không nói sớm hơn", "Rất giận và bắt anh về nhà", "Không nói gì cả"], "dung": 0, "giai": "她只说了一句：你怎么不早点儿告诉我？" },
-    { "hoi": "Theo Cao Vũ, kết quả trái với giả thuyết có thể là gì?", "chon": ["Bằng chứng Linh làm sai hết", "Chỗ thú vị nhất của luận văn", "Lý do phải bỏ chương ba"], "dung": 1, "giai": "说不定正是你论文最有意思的地方." },
-    { "hoi": "\"论文是写出来的，不是熬出来的\" muốn nói gì?", "chon": ["Phải thức đêm mới viết được luận văn", "Luận văn không quan trọng", "Tiến bộ đến từ làm từng bước, không phải từ vắt kiệt sức"], "dung": 2, "giai": "熬 = thức đêm, chịu đựng; câu này nhấn mạnh 一步一步来." }
+    {
+      "hoi": "Vì sao Linh càng sợ làm bố mẹ thất vọng?",
+      "chon": [
+        "Bố mẹ thường xuyên ép cô học",
+        "Bố mẹ chưa bao giờ ép, lại bán cả mảnh đất ở quê cho cô đi học",
+        "Bố mẹ muốn cô về nước ngay"
+      ],
+      "dung": 1,
+      "giai": "他们从来没逼过我……为了让我来中国读研，他们连老家的那块地都卖了."
+    },
+    {
+      "hoi": "Chuyện gì từng xảy ra với Cao Vũ năm hai cao học?",
+      "chon": [
+        "Anh đổi ngành học",
+        "Anh trượt bảo vệ luận văn",
+        "Anh ngất trong phòng thí nghiệm và phải bảo lưu nửa năm"
+      ],
+      "dung": 2,
+      "giai": "我研二的时候，休学过半年……最后在实验室晕倒了."
+    },
+    {
+      "hoi": "Mẹ Cao Vũ phản ứng thế nào khi biết chuyện?",
+      "chon": [
+        "Chỉ hỏi sao con không nói sớm hơn",
+        "Rất giận và bắt anh về nhà",
+        "Không nói gì cả"
+      ],
+      "dung": 0,
+      "giai": "她只说了一句：你怎么不早点儿告诉我？"
+    },
+    {
+      "hoi": "Theo Cao Vũ, kết quả trái với giả thuyết có thể là gì?",
+      "chon": [
+        "Bằng chứng Linh làm sai hết",
+        "Chỗ thú vị nhất của luận văn",
+        "Lý do phải bỏ chương ba"
+      ],
+      "dung": 1,
+      "giai": "说不定正是你论文最有意思的地方."
+    },
+    {
+      "hoi": "\"论文是写出来的，不是熬出来的\" muốn nói gì?",
+      "chon": [
+        "Phải thức đêm mới viết được luận văn",
+        "Luận văn không quan trọng",
+        "Tiến bộ đến từ làm từng bước, không phải từ vắt kiệt sức"
+      ],
+      "dung": 2,
+      "giai": "熬 = thức đêm, chịu đựng; câu này nhấn mạnh 一步一步来."
+    }
   ]
 }

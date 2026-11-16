@@ -1,0 +1,489 @@
+{
+  "id": "ja-cv-n3-01",
+  "nn": "ja",
+  "danhMuc": "cong-viec",
+  "cap": "N3",
+  "so": 1,
+  "tieuDe": "お電話ありがとうございます",
+  "tieuDeViet": "Cảm ơn quý khách đã gọi điện",
+  "moTa": "Nhân viên mới Vi lần đầu nhận điện thoại của khách khi người phụ trách vắng mặt: chào máy, báo vắng, xin số, nhắc lại, nhận lời nhắn. Sau đó chị Matsui hướng dẫn cách viết lời nhắn nội bộ bằng email cho đủ ý. Học kính ngữ điện thoại cơ bản: 〜でございます, 席を外しております, 折り返し, 復唱いたします, 申し伝えます, 承りました.",
+  "chuDe": "Nghe điện thoại, email nội bộ",
+  "bieuTuong": "phone.fill",
+  "nguoi": [
+    {
+      "ma": "V",
+      "ten": "ヴィ",
+      "giong": "ja2-nu",
+      "vai": "nhân viên mới người Việt, phòng kinh doanh"
+    },
+    {
+      "ma": "S",
+      "ten": "佐々木",
+      "giong": "ja-nam",
+      "vai": "khách hàng (công ty đối tác)"
+    },
+    {
+      "ma": "M",
+      "ten": "松井",
+      "giong": "ja-nu",
+      "vai": "chị tiền bối cùng phòng"
+    }
+  ],
+  "loi": [
+    {
+      "ai": "V",
+      "t": "お電話ありがとうございます。ミナト情報システム、営業部のヴィでございます。",
+      "doc": "おでんわありがとうございます。ミナトじょうほうシステム、えいぎょうぶのヴィでございます。",
+      "v": "Cảm ơn quý khách đã gọi điện. Đây là phòng kinh doanh công ty Minato Information Systems, tôi là Vi.",
+      "khac": [
+        {
+          "kieu": "ngắn gọn",
+          "t": "はい、ミナト情報システムでございます。",
+          "doc": "はい、ミナトじょうほうシステムでございます。",
+          "v": "Vâng, Minato Information Systems xin nghe."
+        },
+        {
+          "kieu": "lịch sự",
+          "t": "おはようございます。ミナト情報システムでございます。",
+          "doc": "おはようございます。ミナトじょうほうシステムでございます。",
+          "v": "Xin chào buổi sáng, Minato Information Systems xin nghe.",
+          "ghiChu": "nhiều công ty dùng câu này trước khoảng 10 giờ sáng"
+        }
+      ],
+      "np": [
+        {
+          "mau": "〜でございます",
+          "giai": "Cách nói rất lịch sự của 〜です, dùng khi nghe điện thoại, tiếp khách.",
+          "vd": "こちらが会議室でございます。",
+          "vdDoc": "こちらがかいぎしつでございます。",
+          "vdV": "Đây là phòng họp ạ."
+        }
+      ]
+    },
+    {
+      "ai": "S",
+      "t": "お世話になっております。ひまわり商事の佐々木と申します。",
+      "doc": "おせわになっております。ひまわりしょうじのささきともうします。",
+      "v": "Cảm ơn quý công ty luôn giúp đỡ. Tôi là Sasaki ở công ty thương mại Himawari."
+    },
+    {
+      "ai": "S",
+      "t": "恐れ入りますが、営業部の高田様はいらっしゃいますか。",
+      "doc": "おそれいりますが、えいぎょうぶのたかださまはいらっしゃいますか。",
+      "v": "Xin lỗi làm phiền, anh Takada phòng kinh doanh có ở đó không ạ?",
+      "khac": [
+        {
+          "kieu": "ngắn gọn",
+          "t": "高田様をお願いできますか。",
+          "doc": "たかださまをおねがいできますか。",
+          "v": "Cho tôi gặp anh Takada được không ạ?"
+        }
+      ],
+      "np": [
+        {
+          "mau": "恐れ入りますが",
+          "giai": "Câu đệm (クッション言葉) trước khi hỏi/nhờ: \"xin lỗi làm phiền…\". Làm câu hỏi nghe mềm hơn.",
+          "vd": "恐れ入りますが、お名前をもう一度お願いします。",
+          "vdDoc": "おそれいりますが、おなまえをもういちどおねがいします。",
+          "vdV": "Xin lỗi, phiền anh cho biết tên một lần nữa."
+        }
+      ]
+    },
+    {
+      "ai": "V",
+      "t": "佐々木様、いつもお世話になっております。",
+      "doc": "ささきさま、いつもおせわになっております。",
+      "v": "Anh Sasaki, cảm ơn anh lúc nào cũng giúp đỡ chúng tôi."
+    },
+    {
+      "ai": "V",
+      "t": "申し訳ございません。高田はただいま席を外しております。",
+      "doc": "もうしわけございません。たかだはただいませきをはずしております。",
+      "v": "Thành thật xin lỗi, anh Takada hiện không có ở chỗ ngồi.",
+      "khac": [
+        {
+          "kieu": "chuyên nghiệp",
+          "t": "あいにく高田は外出しておりまして、十五時に戻る予定です。",
+          "doc": "あいにくたかだはがいしゅつしておりまして、じゅうごじにもどるよていです。",
+          "v": "Tiếc là anh Takada đang ra ngoài, dự kiến 15 giờ sẽ về.",
+          "ghiChu": "khi người đó ra ngoài gặp khách"
+        },
+        {
+          "kieu": "lịch sự",
+          "t": "申し訳ございません。高田は本日お休みをいただいております。",
+          "doc": "もうしわけございません。たかだはほんじつおやすみをいただいております。",
+          "v": "Xin lỗi, hôm nay anh Takada nghỉ.",
+          "ghiChu": "khi nghỉ phép — không nói lý do riêng"
+        }
+      ],
+      "np": [
+        {
+          "mau": "Tên người công ty mình (không さん)",
+          "giai": "Khi nói với người ngoài công ty, gọi đồng nghiệp/cấp trên bên mình bằng họ trơn, không thêm さん hay chức danh (ウチ・ソト).",
+          "vd": "部長の山田は、ただいま会議中でございます。",
+          "vdDoc": "ぶちょうのやまだは、ただいまかいぎちゅうでございます。",
+          "vdV": "Trưởng phòng Yamada hiện đang họp ạ."
+        }
+      ]
+    },
+    {
+      "ai": "V",
+      "t": "戻りましたら、こちらから折り返しお電話いたしましょうか。",
+      "doc": "もどりましたら、こちらからおりかえしおでんわいたしましょうか。",
+      "v": "Khi anh ấy về, chúng tôi gọi lại cho anh nhé?",
+      "khac": [
+        {
+          "kieu": "trang trọng",
+          "t": "戻り次第、折り返しご連絡するよう申し伝えます。",
+          "doc": "もどりしだい、おりかえしごれんらくするようもうしつたえます。",
+          "v": "Ngay khi anh ấy về, tôi sẽ nhắn anh ấy liên lạc lại với anh."
+        }
+      ],
+      "np": [
+        {
+          "mau": "お + V-ます + いたす",
+          "giai": "Khiêm nhường ngữ (謙譲語): mình làm gì cho người kia. お電話いたします = tôi xin gọi điện.",
+          "vd": "資料は明日お送りいたします。",
+          "vdDoc": "しりょうはあしたおおくりいたします。",
+          "vdV": "Tài liệu tôi xin gửi vào ngày mai."
+        }
+      ]
+    },
+    {
+      "ai": "S",
+      "t": "では、お願いできますか。明日の打ち合わせの時間を変更したいと思っておりまして。",
+      "doc": "では、おねがいできますか。あしたのうちあわせのじかんをへんこうしたいとおもっておりまして。",
+      "v": "Vậy nhờ chị nhé. Tôi muốn đổi giờ buổi họp ngày mai."
+    },
+    {
+      "ai": "V",
+      "t": "かしこまりました。念のため、お電話番号を伺ってもよろしいでしょうか。",
+      "doc": "かしこまりました。ねんのため、おでんわばんごうをうかがってもよろしいでしょうか。",
+      "v": "Tôi đã rõ. Để cho chắc, cho tôi xin số điện thoại của anh được không ạ?",
+      "khac": [
+        {
+          "kieu": "lịch sự",
+          "t": "恐れ入りますが、ご連絡先をお教えいただけますか。",
+          "doc": "おそれいりますが、ごれんらくさきをおおしえいただけますか。",
+          "v": "Xin lỗi, anh cho tôi biết số liên lạc được không ạ?"
+        }
+      ],
+      "np": [
+        {
+          "mau": "伺ってもよろしいでしょうか",
+          "giai": "伺う = khiêm nhường của 聞く (hỏi). 〜てもよろしいでしょうか = xin phép rất lịch sự.",
+          "vd": "ご住所を伺ってもよろしいでしょうか。",
+          "vdDoc": "ごじゅうしょをうかがってもよろしいでしょうか。",
+          "vdV": "Cho tôi hỏi địa chỉ của anh được không ạ?"
+        }
+      ]
+    },
+    {
+      "ai": "S",
+      "t": "03-1234-5678です。",
+      "doc": "ゼロさん、いちにさんよん、ごろくななはちです。",
+      "v": "Số 03-1234-5678."
+    },
+    {
+      "ai": "V",
+      "t": "復唱いたします。03-1234-5678、ひまわり商事の佐々木様ですね。",
+      "doc": "ふくしょういたします。ゼロさん、いちにさんよん、ごろくななはち、ひまわりしょうじのささきさまですね。",
+      "v": "Tôi xin nhắc lại: 03-1234-5678, anh Sasaki công ty Himawari phải không ạ?"
+    },
+    {
+      "ai": "S",
+      "t": "はい、そうです。",
+      "doc": "はい、そうです。",
+      "v": "Vâng, đúng rồi."
+    },
+    {
+      "ai": "V",
+      "t": "明日のお打ち合わせの時間変更の件で、折り返しお電話するよう、高田に申し伝えます。",
+      "doc": "あしたのおうちあわせのじかんへんこうのけんで、おりかえしおでんわするよう、たかだにもうしつたえます。",
+      "v": "Tôi sẽ nhắn anh Takada gọi lại cho anh về việc đổi giờ buổi họp ngày mai.",
+      "np": [
+        {
+          "mau": "〜よう(に)申し伝えます",
+          "giai": "Tôi sẽ chuyển lời (cho người bên mình) để họ làm …. 申し伝える = khiêm nhường của 伝える.",
+          "vd": "明日までにお返事するよう、担当に申し伝えます。",
+          "vdDoc": "あしたまでにおへんじするよう、たんとうにもうしつたえます。",
+          "vdV": "Tôi sẽ nhắn người phụ trách trả lời anh trước ngày mai."
+        }
+      ]
+    },
+    {
+      "ai": "V",
+      "t": "私、ヴィが承りました。",
+      "doc": "わたくし、ヴィがうけたまわりました。",
+      "v": "Tôi là Vi, đã ghi nhận lời nhắn của anh.",
+      "np": [
+        {
+          "mau": "承る",
+          "giai": "Khiêm nhường của 受ける / 聞く: tiếp nhận (yêu cầu, lời nhắn, đơn hàng). Câu cố định khi kết thúc nhận lời nhắn.",
+          "vd": "ご注文を承りました。",
+          "vdDoc": "ごちゅうもんをうけたまわりました。",
+          "vdV": "Chúng tôi đã nhận đơn hàng của quý khách."
+        }
+      ]
+    },
+    {
+      "ai": "S",
+      "t": "ヴィさんですね。よろしくお願いします。失礼いたします。",
+      "doc": "ヴィさんですね。よろしくおねがいします。しつれいいたします。",
+      "v": "Chị Vi nhỉ. Nhờ chị nhé. Xin phép chào chị."
+    },
+    {
+      "ai": "V",
+      "t": "失礼いたします。",
+      "doc": "しつれいいたします。",
+      "v": "Xin phép chào anh."
+    },
+    {
+      "ai": "M",
+      "t": "ヴィさん、電話の受け方、すごくよかったよ。特に、番号を復唱したところ。",
+      "doc": "ヴィさん、でんわのうけかた、すごくよかったよ。とくに、ばんごうをふくしょうしたところ。",
+      "v": "Vi này, cách em nghe điện thoại rất tốt. Nhất là chỗ nhắc lại số điện thoại."
+    },
+    {
+      "ai": "V",
+      "t": "ありがとうございます。でも、緊張して、手が震えていました。",
+      "doc": "ありがとうございます。でも、きんちょうして、てがふるえていました。",
+      "v": "Em cảm ơn chị. Nhưng em run quá, tay còn rung."
+    },
+    {
+      "ai": "M",
+      "t": "一つだけ。電話を切るときは、相手が切ったのを確認してから、静かに切ってね。",
+      "doc": "ひとつだけ。でんわをきるときは、あいてがきったのをかくにんしてから、しずかにきってね。",
+      "v": "Chỉ một điều thôi. Lúc cúp máy, hãy đợi bên kia cúp trước rồi mới nhẹ nhàng cúp nhé."
+    },
+    {
+      "ai": "M",
+      "t": "それと、高田さんが戻るまで時間があるから、チャットかメールでも伝えておくと安心だよ。",
+      "doc": "それと、たかださんがもどるまでじかんがあるから、チャットかメールでもつたえておくとあんしんだよ。",
+      "v": "Còn nữa, từ giờ tới lúc anh Takada về còn lâu, nên nhắn qua chat hoặc email trước thì yên tâm hơn."
+    },
+    {
+      "ai": "V",
+      "t": "メールの書き方、少し見ていただけますか。「高田さん、佐々木さんから電話がありました。電話してください。」……これでいいでしょうか。",
+      "doc": "メールのかきかた、すこしみていただけますか。「たかださん、ささきさんからでんわがありました。でんわしてください。」……これでいいでしょうか。",
+      "v": "Chị xem giúp em cách viết email được không ạ? “Anh Takada, có điện thoại của anh Sasaki. Anh gọi lại nhé.” …Viết vậy được không ạ?"
+    },
+    {
+      "ai": "M",
+      "t": "社内だから丁寧すぎなくていいけど、「いつ」「誰から」「何の件で」「どうしてほしいか」は必ず入れよう。",
+      "doc": "しゃないだからていねいすぎなくていいけど、「いつ」「だれから」「なんのけんで」「どうしてほしいか」はかならずいれよう。",
+      "v": "Trong nội bộ thì không cần quá lịch sự, nhưng nhất định phải có: “lúc nào”, “ai gọi”, “về việc gì”, “muốn mình làm gì”.",
+      "np": [
+        {
+          "mau": "〜すぎなくていい",
+          "giai": "Không cần quá … (〜すぎる + 〜なくていい).",
+          "vd": "そんなに心配しすぎなくていいよ。",
+          "vdDoc": "そんなにしんぱいしすぎなくていいよ。",
+          "vdV": "Không cần lo quá như vậy đâu."
+        }
+      ]
+    },
+    {
+      "ai": "V",
+      "t": "では……「高田さん、十時十五分にひまわり商事の佐々木様からお電話がありました。明日の打ち合わせの時間変更の件で、折り返しお電話をお願いしたいとのことです。」",
+      "doc": "では……「たかださん、じゅうじじゅうごふんにひまわりしょうじのささきさまからおでんわがありました。あしたのうちあわせのじかんへんこうのけんで、おりかえしおでんわをおねがいしたいとのことです。」",
+      "v": "Vậy thì… “Anh Takada, lúc 10 giờ 15 có điện thoại của anh Sasaki công ty Himawari. Anh ấy nhắn là về việc đổi giờ họp ngày mai, nhờ anh gọi lại.”",
+      "khac": [
+        {
+          "kieu": "ngắn gọn",
+          "t": "高田さん、10:15 ひまわり商事・佐々木様より着信。明日の打ち合わせ時間変更の件、折り返し希望です。",
+          "doc": "たかださん、じゅうじじゅうごふん、ひまわりしょうじ・ささきさまよりちゃくしん。あしたのうちあわせじかんへんこうのけん、おりかえしきぼうです。",
+          "v": "Anh Takada, 10:15 có cuộc gọi của anh Sasaki (Himawari). Về việc đổi giờ họp mai, muốn anh gọi lại.",
+          "ghiChu": "tin nhắn chat nội bộ, viết gọn kiểu ghi chú"
+        }
+      ],
+      "np": [
+        {
+          "mau": "〜とのことです",
+          "giai": "Truyền đạt lời nhắn/nội dung người khác nói: \"(anh ấy) nhắn là …\". Trang trọng hơn 〜そうです.",
+          "vd": "部長は少し遅れるとのことです。",
+          "vdDoc": "ぶちょうはすこしおくれるとのことです。",
+          "vdV": "Trưởng phòng nhắn là sẽ đến muộn một chút."
+        }
+      ]
+    },
+    {
+      "ai": "V",
+      "t": "「電話番号は03-1234-5678です。よろしくお願いします。」",
+      "doc": "「でんわばんごうはゼロさん、いちにさんよん、ごろくななはちです。よろしくおねがいします。」",
+      "v": "“Số điện thoại là 03-1234-5678. Nhờ anh ạ.”"
+    },
+    {
+      "ai": "M",
+      "t": "完璧。それなら、高田さんがメールを読むだけで、すぐ動けるね。",
+      "doc": "かんぺき。それなら、たかださんがメールをよむだけで、すぐうごけるね。",
+      "v": "Hoàn hảo. Vậy thì anh Takada chỉ cần đọc email là hành động được ngay."
+    },
+    {
+      "ai": "V",
+      "t": "さっきの電話では「高田」と呼んで、メールでは「高田さん」なんですね。ちょっと不思議です。",
+      "doc": "さっきのでんわでは「たかだ」とよんで、メールでは「たかださん」なんですね。ちょっとふしぎです。",
+      "v": "Trong cuộc gọi lúc nãy em gọi là “Takada”, còn trong email lại là “anh Takada” nhỉ. Hơi lạ ạ."
+    },
+    {
+      "ai": "M",
+      "t": "社外の人と話すときは、自分の会社の人は「身内」だから、さんを付けないの。社内に戻れば、いつもどおり「さん」付けでいいんだよ。",
+      "doc": "しゃがいのひととはなすときは、じぶんのかいしゃのひとは「みうち」だから、さんをつけないの。しゃないにもどれば、いつもどおり「さん」づけでいいんだよ。",
+      "v": "Khi nói với người ngoài công ty, người công ty mình là “người nhà”, nên không thêm さん. Còn trong nội bộ thì cứ gọi có さん như bình thường.",
+      "np": [
+        {
+          "mau": "N + どおり",
+          "giai": "Đúng như N, theo như N (いつもどおり = như mọi khi, 予定どおり = đúng kế hoạch).",
+          "vd": "会議は予定どおり三時に始まった。",
+          "vdDoc": "かいぎはよていどおりさんじにはじまった。",
+          "vdV": "Cuộc họp bắt đầu lúc ba giờ đúng như dự kiến."
+        }
+      ]
+    },
+    {
+      "ai": "V",
+      "t": "ウチとソト、ですね。電話一本にも、日本の会社の考え方が入っているんですね。",
+      "doc": "ウチとソト、ですね。でんわいっぽんにも、にほんのかいしゃのかんがえかたがはいっているんですね。",
+      "v": "Là “trong” và “ngoài” nhỉ. Ngay cả một cuộc điện thoại cũng chứa cả cách nghĩ của công ty Nhật."
+    }
+  ],
+  "tuVung": [
+    {
+      "chu": "営業部",
+      "doc": "えいぎょうぶ",
+      "nghia": "phòng kinh doanh",
+      "vd": "営業部に配属されました。"
+    },
+    {
+      "chu": "お世話になっております",
+      "doc": "おせわになっております",
+      "nghia": "cảm ơn quý vị luôn giúp đỡ (câu chào cố định trong công việc)",
+      "vd": "いつもお世話になっております。"
+    },
+    {
+      "chu": "席を外して",
+      "doc": "せきをはずして",
+      "nghia": "không có ở chỗ ngồi, tạm vắng (席を外す)",
+      "vd": "少し席を外します。"
+    },
+    {
+      "chu": "折り返し",
+      "doc": "おりかえし",
+      "nghia": "gọi lại (phía bên kia gọi lại sau)",
+      "vd": "折り返しお電話します。"
+    },
+    {
+      "chu": "復唱",
+      "doc": "ふくしょう",
+      "nghia": "nhắc lại (để xác nhận)",
+      "vd": "ご注文を復唱いたします。"
+    },
+    {
+      "chu": "打ち合わせ",
+      "doc": "うちあわせ",
+      "nghia": "cuộc họp bàn, trao đổi công việc",
+      "vd": "午後に打ち合わせがあります。"
+    },
+    {
+      "chu": "申し伝えます",
+      "doc": "もうしつたえます",
+      "nghia": "tôi xin chuyển lời (khiêm nhường của 伝える)",
+      "vd": "担当者に申し伝えます。"
+    },
+    {
+      "chu": "承りました",
+      "doc": "うけたまわりました",
+      "nghia": "tôi đã tiếp nhận (khiêm nhường của 受けた/聞いた)",
+      "vd": "ご伝言、確かに承りました。"
+    },
+    {
+      "chu": "とのことです",
+      "doc": "とのことです",
+      "nghia": "(người đó) nhắn là, nói là",
+      "vd": "明日は休むとのことです。"
+    },
+    {
+      "chu": "社外",
+      "doc": "しゃがい",
+      "nghia": "ngoài công ty",
+      "vd": "社外の人には敬語を使う。"
+    },
+    {
+      "chu": "身内",
+      "doc": "みうち",
+      "nghia": "người nhà, người phía mình",
+      "vd": "身内のことを褒めすぎない。"
+    },
+    {
+      "chu": "緊張",
+      "doc": "きんちょう",
+      "nghia": "căng thẳng, hồi hộp",
+      "vd": "面接で緊張しました。"
+    }
+  ],
+  "yNghia": "Cuộc gọi đầu tiên ai cũng run tay. Nhưng nghe kỹ, nhắc lại số, ghi rõ \"lúc nào, ai, việc gì, cần làm gì\" — người nhận lời nhắn có thể hành động ngay. Ở công sở Nhật, lịch sự không chỉ là kính ngữ, mà là làm cho người khác đỡ phải hỏi lại.",
+  "meo": [
+    "Nhấc máy: 「お電話ありがとうございます。〈công ty〉、〈bộ phận〉の〈tên〉でございます」.",
+    "Người bên mình vắng: gọi họ trơn, không さん: 「高田はただいま席を外しております」 (ウチ・ソト).",
+    "Nhắc lại thông tin: 「復唱いたします」 — số điện thoại, tên, việc cần làm. Kết thúc: 「私、〜が承りました」.",
+    "Lời nhắn nội bộ đủ 4 ý: いつ・誰から・何の件で・どうしてほしいか; 〜とのことです = (người đó) nhắn là ….",
+    "Email gửi khách: mở đầu 「いつもお世話になっております」, kết thúc 「何卒よろしくお願いいたします」."
+  ],
+  "cauHoi": [
+    {
+      "hoi": "Anh Sasaki gọi điện về việc gì?",
+      "chon": [
+        "Đặt thêm hàng",
+        "Đổi giờ buổi họp ngày mai",
+        "Phàn nàn về sản phẩm",
+        "Hỏi giá"
+      ],
+      "dung": 1,
+      "giai": "「明日の打ち合わせの時間を変更したいと思っておりまして」."
+    },
+    {
+      "hoi": "Khi nói với khách, Vi nói về anh Takada thế nào?",
+      "chon": [
+        "高田さんは今いません",
+        "高田様はお休みです",
+        "高田はただいま席を外しております",
+        "高田部長はいらっしゃいません"
+      ],
+      "dung": 2,
+      "giai": "Với người ngoài công ty, gọi người bên mình bằng họ trơn, dùng khiêm nhường ngữ 〜ております."
+    },
+    {
+      "hoi": "Chị Matsui dặn gì khi cúp máy?",
+      "chon": [
+        "Đợi đối phương cúp trước rồi nhẹ nhàng cúp",
+        "Cúp ngay cho nhanh",
+        "Nói \"bye bye\"",
+        "Ghi âm cuộc gọi"
+      ],
+      "dung": 0,
+      "giai": "「相手が切ったのを確認してから、静かに切ってね」."
+    },
+    {
+      "hoi": "Lời nhắn nội bộ phải có những gì?",
+      "chon": [
+        "Chỉ tên người gọi",
+        "Số điện thoại và lời cảm ơn",
+        "Thời tiết hôm đó",
+        "Lúc nào, ai gọi, về việc gì, muốn mình làm gì"
+      ],
+      "dung": 3,
+      "giai": "「「いつ」「誰から」「何の件で」「どうしてほしいか」は必ず入れよう」."
+    },
+    {
+      "hoi": "Vì sao trong cuộc gọi Vi không thêm さん sau tên anh Takada?",
+      "chon": [
+        "Vì Vi quên",
+        "Vì với người ngoài, người công ty mình là \"người nhà\"",
+        "Vì anh Takada trẻ tuổi",
+        "Vì đó là cuộc gọi nội bộ"
+      ],
+      "dung": 1,
+      "giai": "「自分の会社の人は「身内」だから、さんを付けないの」."
+    }
+  ]
+}

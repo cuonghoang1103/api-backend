@@ -1,0 +1,419 @@
+{
+  "id": "ja-cs-n4-01",
+  "nn": "ja",
+  "danhMuc": "chia-se",
+  "cap": "N4",
+  "so": 1,
+  "tieuDe": "「がんばってね」のおばあさん",
+  "tieuDeViet": "Bà cụ nói “cố lên nhé”",
+  "moTa": "Lan kể về năm đầu tiên ở Nagoya: những đêm khóc gọi về nhà, lần lỡ nói “わかった” với quản lý cửa hàng, và bà cụ ngày nào cũng ghé quầy thu ngân để nói “がんばってね”. Một câu chuyện nhỏ về lần đầu tiên nói được lòng mình bằng tiếng Nhật.",
+  "chuDe": "Năm đầu ở Nhật",
+  "bieuTuong": "airplane.arrival",
+  "nguoi": [
+    {
+      "ma": "H",
+      "ten": "司会",
+      "giong": "ja-nam",
+      "vai": "người dẫn chương trình"
+    },
+    {
+      "ma": "L",
+      "ten": "ラン",
+      "giong": "ja2-nu",
+      "vai": "người Việt, sang Nhật học tiếng năm 22 tuổi"
+    }
+  ],
+  "loi": [
+    {
+      "ai": "H",
+      "t": "こんばんは。「わたしの一年目」の時間です。今日のゲストは、名古屋に住んでいるランさんです。",
+      "doc": "こんばんは。「わたしのいちねんめ」のじかんです。きょうのゲストは、なごやにすんでいるランさんです。",
+      "v": "Xin chào các bạn. Đây là chương trình “Năm đầu tiên của tôi”. Khách mời hôm nay là chị Lan, đang sống ở Nagoya."
+    },
+    {
+      "ai": "L",
+      "t": "こんばんは、ランです。今日は、日本に来て最初の一年のことを話したいと思います。",
+      "doc": "こんばんは、ランです。きょうは、にほんにきてさいしょのいちねんのことをはなしたいとおもいます。",
+      "v": "Xin chào, tôi là Lan. Hôm nay tôi muốn kể về năm đầu tiên khi tôi đến Nhật.",
+      "khac": [
+        {
+          "kieu": "thân mật",
+          "t": "どうも、ランです。今日は日本に来て一年目の話をしようと思います。",
+          "doc": "どうも、ランです。きょうはにほんにきていちねんめのはなしをしようとおもいます。",
+          "v": "Chào cả nhà, mình là Lan. Hôm nay mình định kể chuyện năm đầu ở Nhật.",
+          "ghiChu": "kiểu nói podcast, YouTube thân mật"
+        }
+      ],
+      "np": [
+        {
+          "mau": "V-たいと思います",
+          "giai": "Tôi muốn … (cách nói mong muốn mềm, lịch sự hơn 〜たいです). Gần nghĩa: 〜(よ)うと思います = tôi định ….",
+          "vd": "来年、日本語の試験を受けたいと思います。",
+          "vdDoc": "らいねん、にほんごのしけんをうけたいとおもいます。",
+          "vdV": "Năm sau tôi muốn thi tiếng Nhật."
+        }
+      ]
+    },
+    {
+      "ai": "L",
+      "t": "私は二十二歳のとき、日本語学校に入るために、一人で名古屋に来ました。",
+      "doc": "わたしはにじゅうにさいのとき、にほんごがっこうにはいるために、ひとりでなごやにきました。",
+      "v": "Năm hai mươi hai tuổi, tôi một mình đến Nagoya để vào học trường tiếng Nhật.",
+      "np": [
+        {
+          "mau": "V-る + ために",
+          "giai": "Để (làm) V — chỉ mục đích có chủ ý của người nói.",
+          "vd": "家を買うために、お金をためています。",
+          "vdDoc": "いえをかうために、おかねをためています。",
+          "vdV": "Tôi đang tiết kiệm tiền để mua nhà."
+        }
+      ]
+    },
+    {
+      "ai": "L",
+      "t": "空港に着いたとき、駅の放送が全然わからなくて、とても怖かったです。",
+      "doc": "くうこうについたとき、えきのほうそうがぜんぜんわからなくて、とてもこわかったです。",
+      "v": "Khi tới sân bay, tôi hoàn toàn không hiểu loa thông báo ở nhà ga, tôi đã rất sợ.",
+      "khac": [
+        {
+          "kieu": "thân mật",
+          "t": "空港に着いたとき、駅の放送が全然わからなくて、すごく怖かった。",
+          "doc": "くうこうについたとき、えきのほうそうがぜんぜんわからなくて、すごくこわかった。",
+          "v": "Lúc tới sân bay, loa ở ga chẳng hiểu gì, sợ ghê luôn.",
+          "ghiChu": "thể thường — kể với bạn bè"
+        }
+      ],
+      "np": [
+        {
+          "mau": "V-なくて (lý do)",
+          "giai": "Vì không … nên (cảm xúc, tình trạng). Thường đi với cảm xúc: 困る, 怖い, 大変.",
+          "vd": "言葉が通じなくて、困りました。",
+          "vdDoc": "ことばがつうじなくて、こまりました。",
+          "vdV": "Ngôn ngữ không thông nên tôi rất khổ."
+        }
+      ]
+    },
+    {
+      "ai": "L",
+      "t": "最初の三か月は、毎晩家族に電話して、泣いてばかりいました。",
+      "doc": "さいしょのさんかげつは、まいばんかぞくにでんわして、ないてばかりいました。",
+      "v": "Ba tháng đầu, tối nào tôi cũng gọi về cho gia đình và chỉ toàn khóc.",
+      "np": [
+        {
+          "mau": "V-てばかりいる",
+          "giai": "Suốt ngày chỉ V (lặp đi lặp lại, thường mang ý không tốt).",
+          "vd": "弟は毎日ゲームをしてばかりいます。",
+          "vdDoc": "おとうとはまいにちゲームをしてばかりいます。",
+          "vdV": "Em trai tôi ngày nào cũng chỉ chơi game."
+        }
+      ]
+    },
+    {
+      "ai": "L",
+      "t": "一番困ったのは、敬語です。アルバイトの面接で、店長に「わかった」と言ってしまったんです。",
+      "doc": "いちばんこまったのは、けいごです。アルバイトのめんせつで、てんちょうに「わかった」といってしまったんです。",
+      "v": "Khổ nhất là kính ngữ. Trong buổi phỏng vấn làm thêm, tôi lỡ nói “わかった” (ừ, hiểu rồi) với quản lý cửa hàng.",
+      "np": [
+        {
+          "mau": "V-てしまう",
+          "giai": "Lỡ làm, trót làm (điều không mong muốn, có chút hối tiếc).",
+          "vd": "友だちの名前を忘れてしまいました。",
+          "vdDoc": "ともだちのなまえをわすれてしまいました。",
+          "vdV": "Tôi lỡ quên tên bạn mất rồi."
+        }
+      ]
+    },
+    {
+      "ai": "L",
+      "t": "店長は笑って、「そういうときは『かしこまりました』と言うんだよ」と教えてくれました。",
+      "doc": "てんちょうはわらって、「そういうときは『かしこまりました』というんだよ」とおしえてくれました。",
+      "v": "Quản lý cười và dạy tôi: “Những lúc như vậy thì nói ‘かしこまりました’ nhé.”",
+      "np": [
+        {
+          "mau": "V-てくれる",
+          "giai": "Người khác làm V cho mình (mình biết ơn).",
+          "vd": "先輩が駅まで送ってくれました。",
+          "vdDoc": "せんぱいがえきまでおくってくれました。",
+          "vdV": "Anh khoá trên đưa tôi ra tận ga."
+        }
+      ]
+    },
+    {
+      "ai": "L",
+      "t": "それから、友だちには「わかった」、先生には「わかりました」、お客様には「かしこまりました」と、言い方を変えるようにしています。",
+      "doc": "それから、ともだちには「わかった」、せんせいには「わかりました」、おきゃくさまには「かしこまりました」と、いいかたをかえるようにしています。",
+      "v": "Từ đó, tôi cố gắng đổi cách nói: với bạn là “わかった”, với thầy cô là “わかりました”, với khách là “かしこまりました”.",
+      "np": [
+        {
+          "mau": "V-るようにしている",
+          "giai": "Cố gắng giữ thói quen làm V (nỗ lực đều đặn).",
+          "vd": "毎朝、日本語のニュースを聞くようにしています。",
+          "vdDoc": "まいあさ、にほんごのニュースをきくようにしています。",
+          "vdV": "Sáng nào tôi cũng cố nghe tin tức tiếng Nhật."
+        }
+      ]
+    },
+    {
+      "ai": "L",
+      "t": "アルバイトはスーパーのレジでした。毎日来るおばあさんが、いつも「がんばってね」と声をかけてくれました。",
+      "doc": "アルバイトはスーパーのレジでした。まいにちくるおばあさんが、いつも「がんばってね」とこえをかけてくれました。",
+      "v": "Tôi làm thu ngân ở siêu thị. Có một bà cụ ngày nào cũng đến, lần nào cũng nói với tôi “cố lên nhé”."
+    },
+    {
+      "ai": "L",
+      "t": "そのおばあさんに会うのが楽しみで、日本語の勉強も前よりがんばるようになりました。",
+      "doc": "そのおばあさんにあうのがたのしみで、にほんごのべんきょうもまえよりがんばるようになりました。",
+      "v": "Tôi mong được gặp bà, và cũng bắt đầu chăm học tiếng Nhật hơn trước.",
+      "np": [
+        {
+          "mau": "V-るようになる",
+          "giai": "Thay đổi dần thành (có thể/có thói quen) làm V.",
+          "vd": "日本に来て、納豆が食べられるようになりました。",
+          "vdDoc": "にほんにきて、なっとうがたべられるようになりました。",
+          "vdV": "Sang Nhật, tôi đã ăn được natto."
+        }
+      ]
+    },
+    {
+      "ai": "L",
+      "t": "冬になると、おばあさんがしばらく店に来なくなりました。",
+      "doc": "ふゆになると、おばあさんがしばらくみせにこなくなりました。",
+      "v": "Đến mùa đông, bà cụ không đến cửa hàng một thời gian.",
+      "np": [
+        {
+          "mau": "V-なくなる",
+          "giai": "Không còn V nữa (thay đổi từ có → không).",
+          "vd": "最近、彼から連絡が来なくなった。",
+          "vdDoc": "さいきん、かれかられんらくがこなくなった。",
+          "vdV": "Dạo này anh ấy không còn liên lạc nữa."
+        }
+      ]
+    },
+    {
+      "ai": "L",
+      "t": "一か月後、おばあさんはまた来てくれました。足をけがして、入院していたそうです。",
+      "doc": "いっかげつご、おばあさんはまたきてくれました。あしをけがして、にゅういんしていたそうです。",
+      "v": "Một tháng sau, bà lại đến. Nghe nói bà bị thương ở chân và phải nằm viện.",
+      "np": [
+        {
+          "mau": "普通形 + そうです (truyền đạt)",
+          "giai": "Nghe nói là … (truyền lại thông tin nghe được). Khác với そう \"trông có vẻ\" ở câu sau: 元気そう.",
+          "vd": "天気予報によると、明日は雨だそうです。",
+          "vdDoc": "てんきよほうによると、あしたはあめだそうです。",
+          "vdV": "Theo dự báo thời tiết, nghe nói mai mưa."
+        }
+      ]
+    },
+    {
+      "ai": "L",
+      "t": "私は思わず、「お元気そうでよかったです」と言いました。",
+      "doc": "わたしはおもわず、「おげんきそうでよかったです」といいました。",
+      "v": "Tôi bất giác nói: “Thấy bà khoẻ, cháu mừng quá.”",
+      "np": [
+        {
+          "mau": "A/V-ます + そう (vẻ bề ngoài)",
+          "giai": "Trông có vẻ … (phán đoán qua những gì nhìn thấy). 元気そう = trông khoẻ.",
+          "vd": "このケーキ、おいしそうですね。",
+          "vdDoc": "このケーキ、おいしそうですね。",
+          "vdV": "Cái bánh này trông ngon nhỉ."
+        }
+      ]
+    },
+    {
+      "ai": "L",
+      "t": "おばあさんは、「ランちゃん、日本語が上手になったね」と言って、にっこり笑いました。",
+      "doc": "おばあさんは、「ランちゃん、にほんごがじょうずになったね」といって、にっこりわらいました。",
+      "v": "Bà nói “Lan này, cháu giỏi tiếng Nhật lên rồi đấy”, rồi mỉm cười."
+    },
+    {
+      "ai": "L",
+      "t": "その時、初めて、自分の言葉で気持ちを伝えられたと思いました。",
+      "doc": "そのとき、はじめて、じぶんのことばできもちをつたえられたとおもいました。",
+      "v": "Lúc đó, lần đầu tiên tôi thấy mình đã truyền đạt được cảm xúc bằng chính lời của mình.",
+      "khac": [
+        {
+          "kieu": "thân mật",
+          "t": "その時はじめて、自分の言葉で気持ちを伝えられたって思った。",
+          "doc": "そのときはじめて、じぶんのことばできもちをつたえられたっておもった。",
+          "v": "Lúc đó lần đầu mình thấy đã nói được lòng mình bằng lời của mình.",
+          "ghiChu": "〜って思った = 〜と思った (văn nói)"
+        }
+      ]
+    },
+    {
+      "ai": "H",
+      "t": "すてきな話ですね。日本に来たばかりの人に、何か言いたいことはありますか。",
+      "doc": "すてきなはなしですね。にほんにきたばかりのひとに、なにかいいたいことはありますか。",
+      "v": "Câu chuyện thật đẹp. Chị có điều gì muốn nói với những người vừa mới sang Nhật không?",
+      "khac": [
+        {
+          "kieu": "lịch sự",
+          "t": "これから日本に来る方に、メッセージをお願いできますか。",
+          "doc": "これからにほんにくるかたに、メッセージをおねがいできますか。",
+          "v": "Chị có thể gửi lời nhắn tới những người sắp sang Nhật không ạ?"
+        }
+      ],
+      "np": [
+        {
+          "mau": "V-たばかり",
+          "giai": "Vừa mới V xong (cảm giác thời gian còn rất ngắn).",
+          "vd": "昼ごはんを食べたばかりです。",
+          "vdDoc": "ひるごはんをたべたばかりです。",
+          "vdV": "Tôi vừa mới ăn trưa xong."
+        }
+      ]
+    },
+    {
+      "ai": "L",
+      "t": "完璧な日本語じゃなくても大丈夫です。間違えても、話しかけてみてください。",
+      "doc": "かんぺきなにほんごじゃなくてもだいじょうぶです。まちがえても、はなしかけてみてください。",
+      "v": "Tiếng Nhật không hoàn hảo cũng không sao. Dù có sai, hãy thử bắt chuyện.",
+      "khac": [
+        {
+          "kieu": "thân mật",
+          "t": "完璧じゃなくても大丈夫。間違えてもいいから、話しかけてみて。",
+          "doc": "かんぺきじゃなくてもだいじょうぶ。まちがえてもいいから、はなしかけてみて。",
+          "v": "Không hoàn hảo cũng chẳng sao. Sai cũng được, cứ bắt chuyện thử đi.",
+          "ghiChu": "nói với bạn bè, đàn em"
+        }
+      ],
+      "np": [
+        {
+          "mau": "〜なくても大丈夫です",
+          "giai": "Không … cũng không sao (không bắt buộc).",
+          "vd": "明日は来なくても大丈夫です。",
+          "vdDoc": "あしたはこなくてもだいじょうぶです。",
+          "vdV": "Mai không đến cũng được."
+        }
+      ]
+    },
+    {
+      "ai": "L",
+      "t": "言葉は、教科書の中じゃなくて、人と人の間で上手になるものだと思います。",
+      "doc": "ことばは、きょうかしょのなかじゃなくて、ひととひとのあいだでじょうずになるものだとおもいます。",
+      "v": "Tôi nghĩ ngôn ngữ không giỏi lên trong sách giáo khoa, mà giỏi lên giữa người với người."
+    },
+    {
+      "ai": "H",
+      "t": "ランさん、今日はありがとうございました。",
+      "doc": "ランさん、きょうはありがとうございました。",
+      "v": "Chị Lan, cảm ơn chị hôm nay."
+    }
+  ],
+  "tuVung": [
+    {
+      "chu": "日本語学校",
+      "doc": "にほんごがっこう",
+      "nghia": "trường tiếng Nhật",
+      "vd": "日本語学校で二年勉強しました。"
+    },
+    {
+      "chu": "放送",
+      "doc": "ほうそう",
+      "nghia": "phát thanh, loa thông báo",
+      "vd": "駅の放送をよく聞いてください。"
+    },
+    {
+      "chu": "敬語",
+      "doc": "けいご",
+      "nghia": "kính ngữ",
+      "vd": "敬語は難しいです。"
+    },
+    {
+      "chu": "店長",
+      "doc": "てんちょう",
+      "nghia": "quản lý cửa hàng",
+      "vd": "店長に相談しました。"
+    },
+    {
+      "chu": "かしこまりました",
+      "doc": "かしこまりました",
+      "nghia": "tôi đã rõ (rất lịch sự, dùng với khách)",
+      "vd": "かしこまりました。少々お待ちください。"
+    },
+    {
+      "chu": "声をかけて",
+      "doc": "こえをかけて",
+      "nghia": "bắt chuyện, gọi, hỏi han (声をかける)",
+      "vd": "困っている人に声をかけてください。"
+    },
+    {
+      "chu": "楽しみ",
+      "doc": "たのしみ",
+      "nghia": "niềm vui mong đợi",
+      "vd": "週末の旅行が楽しみです。"
+    },
+    {
+      "chu": "思わず",
+      "doc": "おもわず",
+      "nghia": "bất giác, không kìm được",
+      "vd": "思わず笑ってしまった。"
+    },
+    {
+      "chu": "完璧",
+      "doc": "かんぺき",
+      "nghia": "hoàn hảo",
+      "vd": "完璧な人はいません。"
+    },
+    {
+      "chu": "話しかけて",
+      "doc": "はなしかけて",
+      "nghia": "bắt chuyện (話しかける)",
+      "vd": "隣の人に話しかけてみた。"
+    }
+  ],
+  "yNghia": "Ngôn ngữ không giỏi lên trong sách, mà giữa người với người. Một câu \"cố lên nhé\" của người lạ có thể là lý do để bạn học tiếp; rồi một ngày, chính bạn sẽ nói được bằng lời của mình điều mình thật lòng muốn nói. Đừng chờ nói hoàn hảo rồi mới mở lời.",
+  "meo": [
+    "わかった (bạn bè) → わかりました (thầy cô, đồng nghiệp) → かしこまりました (khách hàng, khi làm dịch vụ).",
+    "〜てばかりいる = suốt ngày chỉ … (thường hàm ý chê hoặc tiếc).",
+    "〜ようになる = thay đổi dần thành có thể/có thói quen; 〜なくなる = không còn … nữa.",
+    "〜たばかり = vừa mới (cảm giác thời gian rất ngắn).",
+    "Thể lịch sự ↔ thể thường: とても怖かったです ↔ すごく怖かった (kể với bạn bè)."
+  ],
+  "cauHoi": [
+    {
+      "hoi": "Lan sang Nhật để làm gì?",
+      "chon": [
+        "Đi làm kỹ sư",
+        "Học trường tiếng Nhật",
+        "Du lịch",
+        "Thăm người thân"
+      ],
+      "dung": 1,
+      "giai": "「日本語学校に入るために、一人で名古屋に来ました」."
+    },
+    {
+      "hoi": "Lan đã lỡ làm gì trong buổi phỏng vấn làm thêm?",
+      "chon": [
+        "Đến muộn",
+        "Quên mang hồ sơ",
+        "Nói \"わかった\" với quản lý cửa hàng",
+        "Khóc trước mặt quản lý"
+      ],
+      "dung": 2,
+      "giai": "「店長に「わかった」と言ってしまったんです」."
+    },
+    {
+      "hoi": "Vì sao bà cụ không đến cửa hàng một thời gian?",
+      "chon": [
+        "Bị thương ở chân và nằm viện",
+        "Chuyển nhà",
+        "Đi du lịch",
+        "Giận Lan"
+      ],
+      "dung": 0,
+      "giai": "「足をけがして、入院していたそうです」."
+    },
+    {
+      "hoi": "Lời khuyên của Lan cho người mới sang Nhật là gì?",
+      "chon": [
+        "Học thật nhiều kính ngữ trước",
+        "Chỉ nói khi đã chắc chắn đúng",
+        "Ở nhà học sách",
+        "Không cần hoàn hảo, sai cũng cứ bắt chuyện"
+      ],
+      "dung": 3,
+      "giai": "「完璧な日本語じゃなくても大丈夫です。間違えても、話しかけてみてください」."
+    }
+  ]
+}

@@ -1,0 +1,411 @@
+{
+  "id": "ja-ds-n4-01",
+  "nn": "ja",
+  "danhMuc": "doi-song",
+  "cap": "N4",
+  "so": 4,
+  "tieuDe": "予約をお願いしたいんですが",
+  "tieuDeViet": "Tôi muốn đặt bàn ạ",
+  "moTa": "Ngọc gọi điện đặt bàn cho bốn người. Giờ mình muốn đã kín chỗ, Ngọc phải xin gọi lại, rồi báo tên, số điện thoại và nhờ quán làm món chay. Học tiếng Nhật qua điện thoại: mở lời, nói ngày giờ – số người, nghe kính ngữ của nhân viên và kết thúc cuộc gọi.",
+  "chuDe": "Điện thoại",
+  "bieuTuong": "phone.fill",
+  "nguoi": [
+    {
+      "ma": "G",
+      "ten": "ゴック",
+      "giong": "ja-nu",
+      "vai": "du học sinh"
+    },
+    {
+      "ma": "S",
+      "ten": "店員",
+      "giong": "ja2-nam",
+      "vai": "nhân viên nhà hàng"
+    }
+  ],
+  "loi": [
+    {
+      "ai": "S",
+      "t": "お電話ありがとうございます。レストラン「やまぶき」でございます。",
+      "doc": "おでんわありがとうございます。レストラン「やまぶき」でございます。",
+      "v": "Cảm ơn quý khách đã gọi điện. Nhà hàng Yamabuki xin nghe."
+    },
+    {
+      "ai": "G",
+      "t": "もしもし。あの、予約をお願いしたいんですが。",
+      "doc": "もしもし。あの、よやくをおねがいしたいんですが。",
+      "v": "A lô. À, tôi muốn đặt bàn ạ.",
+      "khac": [
+        {
+          "kieu": "lịch sự",
+          "t": "すみません、予約をお願いできますか。",
+          "doc": "すみません、よやくをおねがいできますか。",
+          "v": "Xin lỗi, cho tôi đặt bàn được không ạ?"
+        },
+        {
+          "kieu": "trang trọng",
+          "t": "恐れ入ります、予約をさせていただきたいのですが。",
+          "doc": "おそれいります、よやくをさせていただきたいのですが。",
+          "v": "Xin phép làm phiền, tôi muốn được đặt bàn ạ.",
+          "ghiChu": "Rất trang trọng — khi gọi nhà hàng sang, khách sạn."
+        }
+      ],
+      "np": [
+        {
+          "mau": "〜たいんですが",
+          "giai": "Muốn … (たい) + んですが: nêu nhu cầu rồi để lửng cho người kia tiếp lời. Mềm và tự nhiên hơn nhiều so với nói thẳng 〜たいです.",
+          "vd": "この服を返品したいんですが。",
+          "vdDoc": "このふくをへんぴんしたいんですが。",
+          "vdV": "Tôi muốn trả lại bộ quần áo này ạ…"
+        }
+      ]
+    },
+    {
+      "ai": "S",
+      "t": "ありがとうございます。ご予約の日にちとお時間をお願いいたします。",
+      "doc": "ありがとうございます。ごよやくのひにちとおじかんをおねがいいたします。",
+      "v": "Cảm ơn quý khách. Xin cho biết ngày và giờ muốn đặt ạ."
+    },
+    {
+      "ai": "G",
+      "t": "今週の土曜日、夜七時に四人でお願いします。",
+      "doc": "こんしゅうのどようび、よるしちじによにんでおねがいします。",
+      "v": "Thứ Bảy tuần này, 7 giờ tối, bốn người ạ.",
+      "khac": [
+        {
+          "kieu": "tự nhiên hơn",
+          "t": "今週の土曜日の七時から、四人なんですが、空いていますか。",
+          "doc": "こんしゅうのどようびのしちじから、よにんなんですが、あいていますか。",
+          "v": "Thứ Bảy tuần này từ 7 giờ, bốn người, còn chỗ không ạ?"
+        }
+      ],
+      "np": [
+        {
+          "mau": "時間 + に、人数 + で",
+          "giai": "に chỉ thời điểm (七時に = lúc 7 giờ); で chỉ số người cùng đi (四人で = bốn người). Chú ý: 4 giờ là よじ, 7 giờ là しちじ, 4 người là よにん.",
+          "vd": "八時に三人でお願いします。",
+          "vdDoc": "はちじにさんにんでおねがいします。",
+          "vdV": "Cho tôi lúc 8 giờ, ba người."
+        }
+      ]
+    },
+    {
+      "ai": "S",
+      "t": "土曜日の七時、四名様ですね。少々お待ちください。",
+      "doc": "どようびのしちじ、よんめいさまですね。しょうしょうおまちください。",
+      "v": "Thứ Bảy lúc 7 giờ, bốn vị phải không ạ. Xin chờ một chút."
+    },
+    {
+      "ai": "S",
+      "t": "お待たせいたしました。申し訳ございません。七時は満席になっております。",
+      "doc": "おまたせいたしました。もうしわけございません。しちじはまんせきになっております。",
+      "v": "Xin lỗi đã để quý khách chờ. Thật xin lỗi, lúc 7 giờ đã kín chỗ rồi ạ."
+    },
+    {
+      "ai": "S",
+      "t": "八時からでしたら、お席をご用意できますが、いかがでしょうか。",
+      "doc": "はちじからでしたら、おせきをごよういできますが、いかがでしょうか。",
+      "v": "Nếu từ 8 giờ thì chúng tôi có thể chuẩn bị bàn, quý khách thấy thế nào ạ?",
+      "np": [
+        {
+          "mau": "〜でしたら",
+          "giai": "Dạng lịch sự của 〜なら／〜だったら: “nếu là … thì”. Nhân viên hay dùng để đưa ra phương án khác.",
+          "vd": "明日でしたら、空いています。",
+          "vdDoc": "あしたでしたら、あいています。",
+          "vdV": "Nếu là ngày mai thì còn trống ạ."
+        }
+      ]
+    },
+    {
+      "ai": "G",
+      "t": "八時ですか……。友だちに聞いてみます。あとでかけ直してもいいですか。",
+      "doc": "はちじですか……。ともだちにきいてみます。あとでかけなおしてもいいですか。",
+      "v": "8 giờ ạ… Để tôi hỏi bạn thử. Lát nữa tôi gọi lại được không ạ?",
+      "khac": [
+        {
+          "kieu": "lịch sự",
+          "t": "確認して、またこちらからお電話してもよろしいでしょうか。",
+          "doc": "かくにんして、またこちらからおでんわしてもよろしいでしょうか。",
+          "v": "Tôi xác nhận rồi gọi lại cho quán được không ạ?",
+          "ghiChu": "よろしいでしょうか lịch sự hơn いいですか."
+        }
+      ],
+      "np": [
+        {
+          "mau": "V てみる",
+          "giai": "Thử làm gì đó: 聞いてみます = hỏi thử xem. Hay dùng khi chưa chắc kết quả.",
+          "vd": "この靴、はいてみてもいいですか。",
+          "vdDoc": "このくつ、はいてみてもいいですか。",
+          "vdV": "Tôi đi thử đôi giày này được không?"
+        },
+        {
+          "mau": "V-stem + 直す (làm lại)",
+          "giai": "Gốc động từ (thể ます bỏ ます) + 直す = làm lại: かけ直す (gọi lại), 書き直す (viết lại), 見直す (xem lại).",
+          "vd": "名前を書き直してください。",
+          "vdDoc": "なまえをかきなおしてください。",
+          "vdV": "Anh viết lại tên giúp tôi."
+        }
+      ]
+    },
+    {
+      "ai": "S",
+      "t": "はい、もちろんです。ただ、お席が埋まってしまうこともございますので、お早めにお願いいたします。",
+      "doc": "はい、もちろんです。ただ、おせきがうまってしまうこともございますので、おはやめにおねがいいたします。",
+      "v": "Vâng, tất nhiên ạ. Có điều bàn có thể bị đặt hết, nên mong quý khách gọi sớm."
+    },
+    {
+      "ai": "G",
+      "t": "もしもし、さっき土曜日の予約のことで電話した者です。",
+      "doc": "もしもし、さっきどようびのよやくのことででんわしたものです。",
+      "v": "A lô, tôi là người vừa gọi lúc nãy về việc đặt bàn thứ Bảy.",
+      "np": [
+        {
+          "mau": "〜した者です (tự xưng khiêm tốn)",
+          "giai": "者 (もの) = người, cách nói khiêm nhường. 〜した者です = tôi là người đã … — dùng qua điện thoại khi đối phương chưa biết tên mình.",
+          "vd": "昨日メールした者です。",
+          "vdDoc": "きのうメールしたものです。",
+          "vdV": "Tôi là người đã gửi email hôm qua."
+        }
+      ]
+    },
+    {
+      "ai": "S",
+      "t": "はい、先ほどはありがとうございました。",
+      "doc": "はい、さきほどはありがとうございました。",
+      "v": "Vâng, cảm ơn quý khách lúc nãy ạ."
+    },
+    {
+      "ai": "G",
+      "t": "八時で大丈夫です。お願いします。",
+      "doc": "はちじでだいじょうぶです。おねがいします。",
+      "v": "8 giờ được ạ. Nhờ anh.",
+      "khac": [
+        {
+          "kieu": "lịch sự",
+          "t": "では、八時でお願いいたします。",
+          "doc": "では、はちじでおねがいいたします。",
+          "v": "Vậy cho tôi đặt lúc 8 giờ ạ."
+        }
+      ]
+    },
+    {
+      "ai": "S",
+      "t": "かしこまりました。では、お名前とお電話番号をお願いいたします。",
+      "doc": "かしこまりました。では、おなまえとおでんわばんごうをおねがいいたします。",
+      "v": "Vâng ạ. Xin quý khách cho biết tên và số điện thoại."
+    },
+    {
+      "ai": "G",
+      "t": "グエン・ティ・ゴックです。番号は、〇九〇、一二三四、五六七八です。",
+      "doc": "グエン・ティ・ゴックです。ばんごうは、ぜろきゅうぜろ、いちにさんよん、ごろくななはちです。",
+      "v": "Tôi là Nguyễn Thị Ngọc. Số điện thoại là 090-1234-5678."
+    },
+    {
+      "ai": "S",
+      "t": "グエン様、土曜日の夜八時、四名様ですね。",
+      "doc": "グエンさま、どようびのよるはちじ、よんめいさまですね。",
+      "v": "Quý khách Nguyễn, tối thứ Bảy lúc 8 giờ, bốn vị phải không ạ."
+    },
+    {
+      "ai": "S",
+      "t": "もし遅れる場合は、お電話をいただけますか。",
+      "doc": "もしおくれるばあいは、おでんわをいただけますか。",
+      "v": "Nếu đến muộn, quý khách vui lòng gọi điện cho chúng tôi nhé.",
+      "np": [
+        {
+          "mau": "〜場合は",
+          "giai": "場合 (ばあい) = trường hợp. V (thể từ điển／ない) hoặc N の + 場合は = “trong trường hợp …”. Trang trọng hơn 〜たら, hay gặp trong thông báo, quy định.",
+          "vd": "雨の場合は、中止です。",
+          "vdDoc": "あめのばあいは、ちゅうしです。",
+          "vdV": "Trường hợp trời mưa thì huỷ."
+        }
+      ]
+    },
+    {
+      "ai": "G",
+      "t": "わかりました。あの、一人ベジタリアンなんですが、お肉なしの料理はできますか。",
+      "doc": "わかりました。あの、ひとりベジタリアンなんですが、おにくなしのりょうりはできますか。",
+      "v": "Tôi hiểu rồi. À, có một người ăn chay, quán làm được món không thịt không ạ?",
+      "khac": [
+        {
+          "kieu": "lịch sự",
+          "t": "一人、お肉が食べられない者がいるのですが、対応していただけますか。",
+          "doc": "ひとり、おにくがたべられないものがいるのですが、たいおうしていただけますか。",
+          "v": "Có một người không ăn được thịt, quán có thể đáp ứng được không ạ?",
+          "ghiChu": "Lịch sự và rõ ràng; 対応 = xử lý, đáp ứng."
+        }
+      ],
+      "np": [
+        {
+          "mau": "〜んですが (nêu hoàn cảnh rồi hỏi)",
+          "giai": "Nói tình huống của mình + んですが, sau đó mới hỏi hay nhờ. Người Nhật thấy cách này lịch sự vì có lời giải thích trước.",
+          "vd": "道に迷ったんですが、駅はどちらですか。",
+          "vdDoc": "みちにまよったんですが、えきはどちらですか。",
+          "vdV": "Tôi bị lạc đường, ga ở phía nào ạ?"
+        }
+      ]
+    },
+    {
+      "ai": "S",
+      "t": "はい、野菜のコースもございます。当日、お店でお伝えください。",
+      "doc": "はい、やさいのコースもございます。とうじつ、おみせでおつたえください。",
+      "v": "Vâng, chúng tôi có thực đơn rau củ. Hôm đó quý khách báo lại tại quán nhé."
+    },
+    {
+      "ai": "G",
+      "t": "よかった。ありがとうございます。",
+      "doc": "よかった。ありがとうございます。",
+      "v": "May quá. Cảm ơn anh."
+    },
+    {
+      "ai": "S",
+      "t": "それでは、土曜日、お待ちしております。",
+      "doc": "それでは、どようび、おまちしております。",
+      "v": "Vậy chúng tôi chờ quý khách vào thứ Bảy.",
+      "np": [
+        {
+          "mau": "お + V-stem + しております",
+          "giai": "Khiêm nhường ngữ của nhân viên: お待ちしております = chúng tôi xin được chờ đón quý khách. Người học chỉ cần nghe hiểu, không cần dùng lại với nhân viên.",
+          "vd": "ご連絡をお待ちしております。",
+          "vdDoc": "ごれんらくをおまちしております。",
+          "vdV": "Chúng tôi chờ liên lạc của quý khách."
+        }
+      ]
+    },
+    {
+      "ai": "G",
+      "t": "よろしくお願いします。失礼します。",
+      "doc": "よろしくおねがいします。しつれいします。",
+      "v": "Nhờ anh nhé. Tôi xin phép cúp máy.",
+      "khac": [
+        {
+          "kieu": "trang trọng",
+          "t": "どうぞよろしくお願いいたします。失礼いたします。",
+          "doc": "どうぞよろしくおねがいいたします。しつれいいたします。",
+          "v": "Rất mong được giúp đỡ. Tôi xin phép ạ.",
+          "ghiChu": "Kết thúc cuộc gọi trang trọng (công việc, khách sạn)."
+        }
+      ]
+    },
+    {
+      "ai": "G",
+      "t": "ふう……。電話の日本語、緊張した。でも、ちゃんと予約できた！",
+      "doc": "ふう……。でんわのにほんご、きんちょうした。でも、ちゃんとよやくできた！",
+      "v": "Phù… Nói tiếng Nhật qua điện thoại hồi hộp thật. Nhưng mình đặt được bàn rồi!"
+    }
+  ],
+  "tuVung": [
+    {
+      "chu": "予約",
+      "doc": "よやく",
+      "nghia": "đặt trước (bàn, phòng, lịch hẹn)",
+      "vd": "病院の予約をしました。"
+    },
+    {
+      "chu": "少々",
+      "doc": "しょうしょう",
+      "nghia": "một chút (lịch sự của ちょっと)",
+      "vd": "少々お待ちください。"
+    },
+    {
+      "chu": "満席",
+      "doc": "まんせき",
+      "nghia": "kín chỗ, hết bàn",
+      "vd": "今日は満席です。"
+    },
+    {
+      "chu": "かけ直して",
+      "doc": "かけなおして",
+      "nghia": "gọi lại (điện thoại)",
+      "vd": "あとでかけ直してください。"
+    },
+    {
+      "chu": "先ほど",
+      "doc": "さきほど",
+      "nghia": "lúc nãy (lịch sự của さっき)",
+      "vd": "先ほどはありがとうございました。"
+    },
+    {
+      "chu": "電話番号",
+      "doc": "でんわばんごう",
+      "nghia": "số điện thoại",
+      "vd": "電話番号を教えてください。"
+    },
+    {
+      "chu": "遅れる",
+      "doc": "おくれる",
+      "nghia": "đến muộn, trễ",
+      "vd": "電車が遅れています。"
+    },
+    {
+      "chu": "当日",
+      "doc": "とうじつ",
+      "nghia": "ngày hôm đó (ngày diễn ra)",
+      "vd": "当日、受付で名前を言ってください。"
+    },
+    {
+      "chu": "お待ちしております",
+      "doc": "おまちしております",
+      "nghia": "chúng tôi xin chờ quý khách (khiêm nhường ngữ)",
+      "vd": "またのお越しをお待ちしております。"
+    },
+    {
+      "chu": "緊張",
+      "doc": "きんちょう",
+      "nghia": "hồi hộp, căng thẳng",
+      "vd": "面接で緊張しました。"
+    }
+  ],
+  "yNghia": "Nói chuyện qua điện thoại khó hơn gặp mặt vì không thấy nét mặt — nên càng cần câu rõ ràng, nhắc lại để xác nhận, và không ngại xin gọi lại. Hồi hộp là bình thường; điều quan trọng là cuối cùng bạn vẫn làm được.",
+  "meo": [
+    "Mở lời: 「予約をお願いしたいんですが」. Nói đủ ba thứ: ngày, giờ (〜時に), số người (〜人で).",
+    "Đếm người: 4 người là よにん, nhân viên nói 四名様 (よんめいさま). Giờ: 4 giờ よじ, 7 giờ しちじ, 9 giờ くじ.",
+    "Chưa quyết được thì xin gọi lại: 「あとでかけ直してもいいですか」. Gọi lại: 「さっき〜のことで電話した者です」.",
+    "Kết thúc cuộc gọi bằng 「失礼します」 — không nói さようなら."
+  ],
+  "cauHoi": [
+    {
+      "hoi": "Vì sao Ngọc không đặt được lúc 7 giờ?",
+      "chon": [
+        "Quán nghỉ thứ Bảy",
+        "Lúc 7 giờ đã kín chỗ",
+        "Quán không nhận nhóm bốn người",
+        "Ngọc gọi quá muộn trong ngày"
+      ],
+      "dung": 1,
+      "giai": "「七時は満席になっております」."
+    },
+    {
+      "hoi": "Cuối cùng Ngọc đặt bàn thế nào?",
+      "chon": [
+        "7 giờ, 4 người",
+        "8 giờ, 3 người",
+        "7 giờ, 3 người",
+        "8 giờ, 4 người"
+      ],
+      "dung": 3,
+      "giai": "「グエン様、土曜日の夜八時、四名様ですね」."
+    },
+    {
+      "hoi": "Ngọc nhờ quán điều gì?",
+      "chon": [
+        "Làm món không thịt cho một người",
+        "Giảm giá",
+        "Cho bàn gần cửa sổ",
+        "Làm bánh sinh nhật"
+      ],
+      "dung": 0,
+      "giai": "「一人ベジタリアンなんですが、お肉なしの料理はできますか」."
+    },
+    {
+      "hoi": "Khi gọi lại lần hai, Ngọc tự giới thiệu thế nào?",
+      "chon": [
+        "ゴックと申します。",
+        "さっき土曜日の予約のことで電話した者です。",
+        "グエン様です。"
+      ],
+      "dung": 1,
+      "giai": "〜した者です = tôi là người đã … — cách tự xưng khiêm tốn qua điện thoại."
+    }
+  ]
+}

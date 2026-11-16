@@ -1,6 +1,7 @@
 {
   "id": "en-c1-01",
   "nn": "en",
+  "danhMuc": "chia-se",
   "cap": "C1",
   "so": 1,
   "tieuDe": "Is AI Making Us Think Less?",
@@ -9,55 +10,249 @@
   "chuDe": "Công nghệ & AI",
   "bieuTuong": "brain.head.profile",
   "nguoi": [
-    { "ma": "O", "ten": "Oliver", "giong": "uk-nam", "vai": "người dẫn podcast" },
-    { "ma": "H", "ten": "Hannah", "giong": "us-nu", "vai": "khách mời, nhà tâm lý học nhận thức" }
+    {
+      "ma": "O",
+      "ten": "Oliver",
+      "giong": "uk-nam",
+      "vai": "người dẫn podcast"
+    },
+    {
+      "ma": "H",
+      "ten": "Hannah",
+      "giong": "us-nu",
+      "vai": "khách mời, nhà tâm lý học nhận thức"
+    }
   ],
   "loi": [
-    { "ai": "O", "t": "This is The Long Way Round, and I'm Oliver. A few weeks ago, a university lecturer wrote to us. Her students' essays, she said, have never been more polished, and she's never been less sure that they understand what they've written.", "v": "Đây là The Long Way Round, tôi là Oliver. Vài tuần trước, một giảng viên đại học viết thư cho chúng tôi. Cô nói bài luận của sinh viên chưa bao giờ trau chuốt đến thế, và cô cũng chưa bao giờ kém chắc chắn đến thế rằng các em hiểu những gì mình viết." },
-    { "ai": "O", "t": "So today's question is a blunt one: is AI making us think less? My guest is Hannah, a cognitive psychologist who studies how people learn. Welcome, Hannah.", "v": "Vì vậy câu hỏi hôm nay khá thẳng thừng: AI có đang khiến chúng ta suy nghĩ ít đi không? Khách mời của tôi là Hannah, nhà tâm lý học nhận thức nghiên cứu cách con người học. Chào mừng chị, Hannah." },
-    { "ai": "H", "t": "Thanks, Oliver. And if it's all right, I'd like to push back on the framing slightly.", "v": "Cảm ơn anh, Oliver. Và nếu được, tôi xin phản biện nhẹ cách đặt vấn đề." },
-    { "ai": "O", "t": "Please do.", "v": "Mời chị." },
-    { "ai": "H", "t": "Humans have always offloaded thinking onto tools. Writing itself was once criticised for weakening memory. Calculators, search engines, maps: each time, we hand over a task and free up attention for something else.", "v": "Con người luôn chuyển bớt việc suy nghĩ sang công cụ. Chính chữ viết từng bị chỉ trích là làm suy yếu trí nhớ. Máy tính bỏ túi, công cụ tìm kiếm, bản đồ: mỗi lần như vậy, ta giao đi một việc và giải phóng sự chú ý cho việc khác." },
-    { "ai": "H", "t": "So the question isn't whether we offload, but what we offload, and what we do with the space it frees up.", "v": "Nên câu hỏi không phải là ta có giao việc cho công cụ hay không, mà là giao cái gì, và làm gì với khoảng trống nó để lại." },
-    { "ai": "O", "t": "Fair enough. But surely there's a difference between letting a calculator do long division and letting a chatbot write your argument for you.", "v": "Cũng phải. Nhưng chắc chắn có khác biệt giữa việc để máy tính làm phép chia dài và để chatbot viết lập luận thay mình chứ." },
-    { "ai": "H", "t": "There is, and it's a crucial one. Long division is a procedure. An argument is the thinking. When you outsource the argument, you're not freeing up space for thought; you're skipping the thought altogether.", "v": "Có, và đó là khác biệt then chốt. Phép chia dài là một quy trình. Còn lập luận chính là tư duy. Khi bạn giao hẳn phần lập luận cho người khác, bạn không giải phóng chỗ cho suy nghĩ; bạn bỏ qua luôn việc suy nghĩ." },
-    { "ai": "O", "t": "Is there research behind that, or is it more of an intuition?", "v": "Điều đó có nghiên cứu đứng sau không, hay chủ yếu là trực giác?" },
-    { "ai": "H", "t": "There's a well-established finding in learning science: we tend to remember things better when we generate them ourselves, even imperfectly, than when we simply read a correct version. Struggling to recall or phrase an idea feels uncomfortable, but that discomfort is often a sign that learning is happening.", "v": "Trong khoa học về học tập có một phát hiện đã được khẳng định vững chắc: ta thường nhớ tốt hơn khi tự tạo ra thông tin, dù chưa hoàn hảo, so với chỉ đọc một phiên bản đúng. Vật lộn để nhớ lại hay để diễn đạt một ý thì khó chịu, nhưng sự khó chịu đó thường là dấu hiệu việc học đang diễn ra." },
-    { "ai": "O", "t": "So it's a bit like going to the gym. Nobody gets stronger by watching someone else lift.", "v": "Vậy nó hơi giống đi tập gym. Chẳng ai khoẻ lên nhờ ngồi xem người khác nâng tạ." },
-    { "ai": "H", "t": "Exactly, and researchers sometimes call it \"desirable difficulty.\" The effort isn't a flaw in the process. It is the process.", "v": "Đúng vậy, và các nhà nghiên cứu đôi khi gọi nó là \"khó khăn đáng có\". Nỗ lực không phải là khuyết điểm của quá trình. Nó chính là quá trình." },
-    { "ai": "O", "t": "Then the lecturer's worry seems justified. If AI removes the struggle, it removes the learning.", "v": "Vậy thì nỗi lo của cô giảng viên có vẻ có cơ sở. Nếu AI xoá bỏ sự vật lộn, nó cũng xoá bỏ việc học." },
-    { "ai": "H", "t": "If it's used as a ghostwriter, yes. But the same tool can be used in a completely different way: as a sparring partner.", "v": "Nếu nó được dùng như người viết thuê, thì đúng vậy. Nhưng cùng một công cụ có thể được dùng theo cách hoàn toàn khác: như một bạn tập đấu." },
-    { "ai": "O", "t": "What does that look like in practice?", "v": "Trên thực tế thì trông thế nào?" },
-    { "ai": "H", "t": "Say you're a student writing about urban flooding. Instead of asking the AI to write the essay, you draft your own argument first, however messy. Then you ask it to find the weakest point in your reasoning, or to argue the opposite side as convincingly as it can.", "v": "Giả sử bạn là sinh viên viết về ngập lụt đô thị. Thay vì nhờ AI viết bài luận, bạn tự phác thảo lập luận trước, dù lộn xộn đến đâu. Rồi bạn nhờ nó tìm điểm yếu nhất trong lập luận của bạn, hoặc bảo vệ phía ngược lại thuyết phục nhất có thể." },
-    { "ai": "O", "t": "So you're deliberately making it harder for yourself.", "v": "Vậy là mình cố tình làm khó bản thân." },
-    { "ai": "H", "t": "In the right places, yes. And the order matters enormously: think first, then consult. If you consult first, its answer becomes an anchor, and it's remarkably difficult to think beyond it.", "v": "Ở đúng chỗ, thì vâng. Và thứ tự cực kỳ quan trọng: nghĩ trước, rồi mới hỏi. Nếu hỏi trước, câu trả lời của nó trở thành cái neo, và rất khó để nghĩ vượt ra ngoài nó." },
-    { "ai": "O", "t": "I recognise that from my own work, actually. Once I've seen a suggested headline, I can't unsee it.", "v": "Thật ra tôi thấy điều đó trong chính công việc của mình. Một khi đã thấy một tiêu đề được gợi ý, tôi không thể gạt nó ra khỏi đầu." },
-    { "ai": "H", "t": "That's anchoring in a nutshell.", "v": "Hiệu ứng mỏ neo, tóm gọn lại là vậy." },
-    { "ai": "O", "t": "Let me play devil's advocate. In the workplace, nobody pays you to struggle. They pay you for results. Isn't refusing to use AI fully just a kind of nostalgia?", "v": "Để tôi thử đóng vai người phản biện. Ở nơi làm việc, chẳng ai trả tiền để bạn vật lộn. Họ trả tiền cho kết quả. Từ chối dùng AI hết mức chẳng phải chỉ là một kiểu hoài cổ sao?" },
-    { "ai": "H", "t": "For tasks you've already mastered, I'd agree: delegate away. But there's a catch. You can only judge whether an AI's output is any good if you understand the work yourself.", "v": "Với những việc bạn đã thành thạo, tôi đồng ý: cứ giao đi. Nhưng có một điểm mấu chốt. Bạn chỉ đánh giá được đầu ra của AI có tốt hay không khi chính bạn hiểu công việc đó." },
-    { "ai": "H", "t": "Someone who's never learned to build a clear argument can't tell when the machine has produced a confident, fluent, wrong one.", "v": "Một người chưa từng học cách xây dựng lập luận rõ ràng sẽ không nhận ra khi cỗ máy tạo ra một lập luận tự tin, trôi chảy, mà sai." },
-    { "ai": "O", "t": "So expertise becomes more valuable, not less.", "v": "Vậy chuyên môn trở nên quý giá hơn, chứ không phải kém đi." },
-    { "ai": "H", "t": "I'd argue so. The skill that's quietly gaining value is judgement: knowing what good looks like, spotting what's missing, and asking better questions.", "v": "Tôi cho là vậy. Kỹ năng đang âm thầm tăng giá trị là khả năng phán đoán: biết thế nào là tốt, nhận ra cái còn thiếu, và đặt câu hỏi hay hơn." },
-    { "ai": "O", "t": "Is there a simple habit you'd recommend to listeners who use these tools every day?", "v": "Chị có gợi ý thói quen đơn giản nào cho những thính giả dùng các công cụ này mỗi ngày không?" },
-    { "ai": "H", "t": "Two, actually. First, before you ask, spend two minutes writing down what you already think. Second, after you get an answer, try to explain it back in your own words without looking. If you can't, you haven't learned it. You've just borrowed it.", "v": "Thật ra là hai. Thứ nhất, trước khi hỏi, dành hai phút viết ra điều bạn đang nghĩ. Thứ hai, sau khi nhận câu trả lời, thử giải thích lại bằng lời của mình mà không nhìn. Nếu không làm được, bạn chưa học được nó. Bạn chỉ mới mượn nó thôi." },
-    { "ai": "O", "t": "\"You've just borrowed it.\" I think that's going on a sticky note above my desk.", "v": "\"Bạn chỉ mới mượn nó thôi.\" Tôi nghĩ câu đó sẽ được viết lên một tờ giấy nhớ dán trên bàn làm việc của tôi." },
-    { "ai": "H", "t": "As long as you write the note yourself.", "v": "Miễn là anh tự tay viết tờ giấy đó." },
-    { "ai": "O", "t": "Ha! Point taken. Hannah, thank you. You've given me a lot to think about, and I intend to do it without any help.", "v": "Ha! Tôi hiểu ý chị rồi. Hannah, cảm ơn chị. Chị đã cho tôi rất nhiều điều để suy nghĩ, và tôi định tự nghĩ mà không cần ai giúp." },
-    { "ai": "H", "t": "My pleasure, Oliver.", "v": "Rất hân hạnh, Oliver." }
+    {
+      "ai": "O",
+      "t": "This is The Long Way Round, and I'm Oliver. A few weeks ago, a university lecturer wrote to us. Her students' essays, she said, have never been more polished, and she's never been less sure that they understand what they've written.",
+      "v": "Đây là The Long Way Round, tôi là Oliver. Vài tuần trước, một giảng viên đại học viết thư cho chúng tôi. Cô nói bài luận của sinh viên chưa bao giờ trau chuốt đến thế, và cô cũng chưa bao giờ kém chắc chắn đến thế rằng các em hiểu những gì mình viết."
+    },
+    {
+      "ai": "O",
+      "t": "So today's question is a blunt one: is AI making us think less? My guest is Hannah, a cognitive psychologist who studies how people learn. Welcome, Hannah.",
+      "v": "Vì vậy câu hỏi hôm nay khá thẳng thừng: AI có đang khiến chúng ta suy nghĩ ít đi không? Khách mời của tôi là Hannah, nhà tâm lý học nhận thức nghiên cứu cách con người học. Chào mừng chị, Hannah."
+    },
+    {
+      "ai": "H",
+      "t": "Thanks, Oliver. And if it's all right, I'd like to push back on the framing slightly.",
+      "v": "Cảm ơn anh, Oliver. Và nếu được, tôi xin phản biện nhẹ cách đặt vấn đề."
+    },
+    {
+      "ai": "O",
+      "t": "Please do.",
+      "v": "Mời chị."
+    },
+    {
+      "ai": "H",
+      "t": "Humans have always offloaded thinking onto tools. Writing itself was once criticised for weakening memory. Calculators, search engines, maps: each time, we hand over a task and free up attention for something else.",
+      "v": "Con người luôn chuyển bớt việc suy nghĩ sang công cụ. Chính chữ viết từng bị chỉ trích là làm suy yếu trí nhớ. Máy tính bỏ túi, công cụ tìm kiếm, bản đồ: mỗi lần như vậy, ta giao đi một việc và giải phóng sự chú ý cho việc khác."
+    },
+    {
+      "ai": "H",
+      "t": "So the question isn't whether we offload, but what we offload, and what we do with the space it frees up.",
+      "v": "Nên câu hỏi không phải là ta có giao việc cho công cụ hay không, mà là giao cái gì, và làm gì với khoảng trống nó để lại."
+    },
+    {
+      "ai": "O",
+      "t": "Fair enough. But surely there's a difference between letting a calculator do long division and letting a chatbot write your argument for you.",
+      "v": "Cũng phải. Nhưng chắc chắn có khác biệt giữa việc để máy tính làm phép chia dài và để chatbot viết lập luận thay mình chứ."
+    },
+    {
+      "ai": "H",
+      "t": "There is, and it's a crucial one. Long division is a procedure. An argument is the thinking. When you outsource the argument, you're not freeing up space for thought; you're skipping the thought altogether.",
+      "v": "Có, và đó là khác biệt then chốt. Phép chia dài là một quy trình. Còn lập luận chính là tư duy. Khi bạn giao hẳn phần lập luận cho người khác, bạn không giải phóng chỗ cho suy nghĩ; bạn bỏ qua luôn việc suy nghĩ."
+    },
+    {
+      "ai": "O",
+      "t": "Is there research behind that, or is it more of an intuition?",
+      "v": "Điều đó có nghiên cứu đứng sau không, hay chủ yếu là trực giác?"
+    },
+    {
+      "ai": "H",
+      "t": "There's a well-established finding in learning science: we tend to remember things better when we generate them ourselves, even imperfectly, than when we simply read a correct version. Struggling to recall or phrase an idea feels uncomfortable, but that discomfort is often a sign that learning is happening.",
+      "v": "Trong khoa học về học tập có một phát hiện đã được khẳng định vững chắc: ta thường nhớ tốt hơn khi tự tạo ra thông tin, dù chưa hoàn hảo, so với chỉ đọc một phiên bản đúng. Vật lộn để nhớ lại hay để diễn đạt một ý thì khó chịu, nhưng sự khó chịu đó thường là dấu hiệu việc học đang diễn ra."
+    },
+    {
+      "ai": "O",
+      "t": "So it's a bit like going to the gym. Nobody gets stronger by watching someone else lift.",
+      "v": "Vậy nó hơi giống đi tập gym. Chẳng ai khoẻ lên nhờ ngồi xem người khác nâng tạ."
+    },
+    {
+      "ai": "H",
+      "t": "Exactly, and researchers sometimes call it \"desirable difficulty.\" The effort isn't a flaw in the process. It is the process.",
+      "v": "Đúng vậy, và các nhà nghiên cứu đôi khi gọi nó là \"khó khăn đáng có\". Nỗ lực không phải là khuyết điểm của quá trình. Nó chính là quá trình."
+    },
+    {
+      "ai": "O",
+      "t": "Then the lecturer's worry seems justified. If AI removes the struggle, it removes the learning.",
+      "v": "Vậy thì nỗi lo của cô giảng viên có vẻ có cơ sở. Nếu AI xoá bỏ sự vật lộn, nó cũng xoá bỏ việc học."
+    },
+    {
+      "ai": "H",
+      "t": "If it's used as a ghostwriter, yes. But the same tool can be used in a completely different way: as a sparring partner.",
+      "v": "Nếu nó được dùng như người viết thuê, thì đúng vậy. Nhưng cùng một công cụ có thể được dùng theo cách hoàn toàn khác: như một bạn tập đấu."
+    },
+    {
+      "ai": "O",
+      "t": "What does that look like in practice?",
+      "v": "Trên thực tế thì trông thế nào?"
+    },
+    {
+      "ai": "H",
+      "t": "Say you're a student writing about urban flooding. Instead of asking the AI to write the essay, you draft your own argument first, however messy. Then you ask it to find the weakest point in your reasoning, or to argue the opposite side as convincingly as it can.",
+      "v": "Giả sử bạn là sinh viên viết về ngập lụt đô thị. Thay vì nhờ AI viết bài luận, bạn tự phác thảo lập luận trước, dù lộn xộn đến đâu. Rồi bạn nhờ nó tìm điểm yếu nhất trong lập luận của bạn, hoặc bảo vệ phía ngược lại thuyết phục nhất có thể."
+    },
+    {
+      "ai": "O",
+      "t": "So you're deliberately making it harder for yourself.",
+      "v": "Vậy là mình cố tình làm khó bản thân."
+    },
+    {
+      "ai": "H",
+      "t": "In the right places, yes. And the order matters enormously: think first, then consult. If you consult first, its answer becomes an anchor, and it's remarkably difficult to think beyond it.",
+      "v": "Ở đúng chỗ, thì vâng. Và thứ tự cực kỳ quan trọng: nghĩ trước, rồi mới hỏi. Nếu hỏi trước, câu trả lời của nó trở thành cái neo, và rất khó để nghĩ vượt ra ngoài nó."
+    },
+    {
+      "ai": "O",
+      "t": "I recognise that from my own work, actually. Once I've seen a suggested headline, I can't unsee it.",
+      "v": "Thật ra tôi thấy điều đó trong chính công việc của mình. Một khi đã thấy một tiêu đề được gợi ý, tôi không thể gạt nó ra khỏi đầu."
+    },
+    {
+      "ai": "H",
+      "t": "That's anchoring in a nutshell.",
+      "v": "Hiệu ứng mỏ neo, tóm gọn lại là vậy."
+    },
+    {
+      "ai": "O",
+      "t": "Let me play devil's advocate. In the workplace, nobody pays you to struggle. They pay you for results. Isn't refusing to use AI fully just a kind of nostalgia?",
+      "v": "Để tôi thử đóng vai người phản biện. Ở nơi làm việc, chẳng ai trả tiền để bạn vật lộn. Họ trả tiền cho kết quả. Từ chối dùng AI hết mức chẳng phải chỉ là một kiểu hoài cổ sao?"
+    },
+    {
+      "ai": "H",
+      "t": "For tasks you've already mastered, I'd agree: delegate away. But there's a catch. You can only judge whether an AI's output is any good if you understand the work yourself.",
+      "v": "Với những việc bạn đã thành thạo, tôi đồng ý: cứ giao đi. Nhưng có một điểm mấu chốt. Bạn chỉ đánh giá được đầu ra của AI có tốt hay không khi chính bạn hiểu công việc đó."
+    },
+    {
+      "ai": "H",
+      "t": "Someone who's never learned to build a clear argument can't tell when the machine has produced a confident, fluent, wrong one.",
+      "v": "Một người chưa từng học cách xây dựng lập luận rõ ràng sẽ không nhận ra khi cỗ máy tạo ra một lập luận tự tin, trôi chảy, mà sai."
+    },
+    {
+      "ai": "O",
+      "t": "So expertise becomes more valuable, not less.",
+      "v": "Vậy chuyên môn trở nên quý giá hơn, chứ không phải kém đi."
+    },
+    {
+      "ai": "H",
+      "t": "I'd argue so. The skill that's quietly gaining value is judgement: knowing what good looks like, spotting what's missing, and asking better questions.",
+      "v": "Tôi cho là vậy. Kỹ năng đang âm thầm tăng giá trị là khả năng phán đoán: biết thế nào là tốt, nhận ra cái còn thiếu, và đặt câu hỏi hay hơn."
+    },
+    {
+      "ai": "O",
+      "t": "Is there a simple habit you'd recommend to listeners who use these tools every day?",
+      "v": "Chị có gợi ý thói quen đơn giản nào cho những thính giả dùng các công cụ này mỗi ngày không?"
+    },
+    {
+      "ai": "H",
+      "t": "Two, actually. First, before you ask, spend two minutes writing down what you already think. Second, after you get an answer, try to explain it back in your own words without looking. If you can't, you haven't learned it. You've just borrowed it.",
+      "v": "Thật ra là hai. Thứ nhất, trước khi hỏi, dành hai phút viết ra điều bạn đang nghĩ. Thứ hai, sau khi nhận câu trả lời, thử giải thích lại bằng lời của mình mà không nhìn. Nếu không làm được, bạn chưa học được nó. Bạn chỉ mới mượn nó thôi."
+    },
+    {
+      "ai": "O",
+      "t": "\"You've just borrowed it.\" I think that's going on a sticky note above my desk.",
+      "v": "\"Bạn chỉ mới mượn nó thôi.\" Tôi nghĩ câu đó sẽ được viết lên một tờ giấy nhớ dán trên bàn làm việc của tôi."
+    },
+    {
+      "ai": "H",
+      "t": "As long as you write the note yourself.",
+      "v": "Miễn là anh tự tay viết tờ giấy đó."
+    },
+    {
+      "ai": "O",
+      "t": "Ha! Point taken. Hannah, thank you. You've given me a lot to think about, and I intend to do it without any help.",
+      "v": "Ha! Tôi hiểu ý chị rồi. Hannah, cảm ơn chị. Chị đã cho tôi rất nhiều điều để suy nghĩ, và tôi định tự nghĩ mà không cần ai giúp."
+    },
+    {
+      "ai": "H",
+      "t": "My pleasure, Oliver.",
+      "v": "Rất hân hạnh, Oliver."
+    }
   ],
   "tuVung": [
-    { "chu": "polished", "doc": "/ˈpɒlɪʃt/", "nghia": "trau chuốt, bóng bẩy", "vd": "Her presentation was clear and polished." },
-    { "chu": "push back on", "doc": "/pʊʃ bæk ɒn/", "nghia": "phản biện, phản đối (một cách lịch sự)", "vd": "I'd like to push back on that assumption." },
-    { "chu": "offload", "doc": "/ˌɒfˈləʊd/", "nghia": "chuyển bớt, trút bớt (việc, gánh nặng) sang…", "vd": "We offload simple tasks to apps." },
-    { "chu": "outsource", "doc": "/ˈaʊtsɔːs/", "nghia": "thuê ngoài, giao hẳn cho bên khác làm", "vd": "Many firms outsource customer support." },
-    { "chu": "desirable difficulty", "doc": "/dɪˈzaɪərəbl ˈdɪfɪkəlti/", "nghia": "\"khó khăn đáng có\" — độ khó vừa đủ giúp học sâu hơn", "vd": "Testing yourself is a desirable difficulty." },
-    { "chu": "ghostwriter", "doc": "/ˈɡəʊstraɪtə(r)/", "nghia": "người viết thuê (đứng tên người khác)", "vd": "The singer's memoir was written by a ghostwriter." },
-    { "chu": "sparring partner", "doc": "/ˈspɑːrɪŋ ˌpɑːtnə(r)/", "nghia": "bạn tập đấu; người để mình thử sức, tranh luận", "vd": "My roommate is my sparring partner for debates." },
-    { "chu": "anchor", "doc": "/ˈæŋkə(r)/", "nghia": "cái neo; mốc khiến suy nghĩ bị \"neo\" lại", "vd": "The first price you hear acts as an anchor." },
-    { "chu": "play devil's advocate", "doc": "/pleɪ ˌdevlz ˈædvəkət/", "nghia": "cố tình đóng vai phản biện để kiểm tra lập luận", "vd": "Let me play devil's advocate for a minute." },
-    { "chu": "there's a catch", "doc": "/ðeəz ə kætʃ/", "nghia": "có một điều mắc mứu / cái giá ẩn", "vd": "It's free, but there's a catch." },
-    { "chu": "judgement", "doc": "/ˈdʒʌdʒmənt/", "nghia": "khả năng phán đoán, nhận định", "vd": "Good judgement comes from experience." },
-    { "chu": "Point taken", "doc": "/pɔɪnt ˈteɪkən/", "nghia": "tôi hiểu ý (và chấp nhận góp ý)", "vd": "\"You're always late.\" — \"Point taken.\"" }
+    {
+      "chu": "polished",
+      "doc": "/ˈpɒlɪʃt/",
+      "nghia": "trau chuốt, bóng bẩy",
+      "vd": "Her presentation was clear and polished."
+    },
+    {
+      "chu": "push back on",
+      "doc": "/pʊʃ bæk ɒn/",
+      "nghia": "phản biện, phản đối (một cách lịch sự)",
+      "vd": "I'd like to push back on that assumption."
+    },
+    {
+      "chu": "offload",
+      "doc": "/ˌɒfˈləʊd/",
+      "nghia": "chuyển bớt, trút bớt (việc, gánh nặng) sang…",
+      "vd": "We offload simple tasks to apps."
+    },
+    {
+      "chu": "outsource",
+      "doc": "/ˈaʊtsɔːs/",
+      "nghia": "thuê ngoài, giao hẳn cho bên khác làm",
+      "vd": "Many firms outsource customer support."
+    },
+    {
+      "chu": "desirable difficulty",
+      "doc": "/dɪˈzaɪərəbl ˈdɪfɪkəlti/",
+      "nghia": "\"khó khăn đáng có\" — độ khó vừa đủ giúp học sâu hơn",
+      "vd": "Testing yourself is a desirable difficulty."
+    },
+    {
+      "chu": "ghostwriter",
+      "doc": "/ˈɡəʊstraɪtə(r)/",
+      "nghia": "người viết thuê (đứng tên người khác)",
+      "vd": "The singer's memoir was written by a ghostwriter."
+    },
+    {
+      "chu": "sparring partner",
+      "doc": "/ˈspɑːrɪŋ ˌpɑːtnə(r)/",
+      "nghia": "bạn tập đấu; người để mình thử sức, tranh luận",
+      "vd": "My roommate is my sparring partner for debates."
+    },
+    {
+      "chu": "anchor",
+      "doc": "/ˈæŋkə(r)/",
+      "nghia": "cái neo; mốc khiến suy nghĩ bị \"neo\" lại",
+      "vd": "The first price you hear acts as an anchor."
+    },
+    {
+      "chu": "play devil's advocate",
+      "doc": "/pleɪ ˌdevlz ˈædvəkət/",
+      "nghia": "cố tình đóng vai phản biện để kiểm tra lập luận",
+      "vd": "Let me play devil's advocate for a minute."
+    },
+    {
+      "chu": "there's a catch",
+      "doc": "/ðeəz ə kætʃ/",
+      "nghia": "có một điều mắc mứu / cái giá ẩn",
+      "vd": "It's free, but there's a catch."
+    },
+    {
+      "chu": "judgement",
+      "doc": "/ˈdʒʌdʒmənt/",
+      "nghia": "khả năng phán đoán, nhận định",
+      "vd": "Good judgement comes from experience."
+    },
+    {
+      "chu": "Point taken",
+      "doc": "/pɔɪnt ˈteɪkən/",
+      "nghia": "tôi hiểu ý (và chấp nhận góp ý)",
+      "vd": "\"You're always late.\" — \"Point taken.\""
+    }
   ],
   "yNghia": "AI có thể làm bạn giỏi hơn hoặc lười nghĩ hơn — khác biệt nằm ở thứ tự: nghĩ trước, hỏi sau. Nếu không tự giải thích lại được bằng lời của mình, bạn chưa học được gì — bạn chỉ đang mượn tạm. Và khi máy làm được càng nhiều, khả năng phán đoán của chính bạn càng đáng giá.",
   "meo": [
@@ -68,10 +263,55 @@
     "\"Point taken.\" = tôi hiểu ý — cách chấp nhận góp ý gọn, tự nhiên."
   ],
   "cauHoi": [
-    { "hoi": "Hannah phản biện cách đặt vấn đề ban đầu thế nào?", "chon": ["AI hoàn toàn vô hại với tư duy", "Con người luôn giao việc cho công cụ — quan trọng là giao cái gì và dùng khoảng trống ra sao", "Nên cấm sinh viên dùng AI"], "dung": 1, "giai": "\"The question isn't whether we offload, but what we offload, and what we do with the space it frees up.\"" },
-    { "hoi": "\"Desirable difficulty\" là gì?", "chon": ["Khó khăn do công nghệ gây ra", "Bài tập quá khó khiến người học bỏ cuộc", "Sự vật lộn, nỗ lực vừa đủ giúp việc học thật sự diễn ra"], "dung": 2, "giai": "\"The effort isn't a flaw in the process. It is the process.\"" },
-    { "hoi": "Vì sao nên \"nghĩ trước, rồi mới hỏi\"?", "chon": ["Câu trả lời của AI dễ thành \"cái neo\" khiến ta khó nghĩ vượt ra ngoài", "AI trả lời chậm hơn nếu hỏi trước", "Vì giảng viên yêu cầu như vậy"], "dung": 0, "giai": "\"If you consult first, its answer becomes an anchor.\"" },
-    { "hoi": "Theo Hannah, vì sao chuyên môn vẫn quý khi có AI?", "chon": ["Vì AI không bao giờ làm đúng", "Vì chỉ người hiểu việc mới đánh giá được đầu ra của AI tốt hay sai", "Vì công ty bắt buộc như vậy"], "dung": 1, "giai": "\"You can only judge whether an AI's output is any good if you understand the work yourself.\"" },
-    { "hoi": "Câu \"As long as you write the note yourself\" có hàm ý gì?", "chon": ["Hannah muốn Oliver mua giấy nhớ", "Hannah không thích giấy nhớ", "Lời đùa nhắc lại ý chính: tự làm thì mới thật sự học"], "dung": 2, "giai": "Hannah đùa: ngay cả câu châm ngôn cũng nên tự tay viết, đừng nhờ máy." }
+    {
+      "hoi": "Hannah phản biện cách đặt vấn đề ban đầu thế nào?",
+      "chon": [
+        "AI hoàn toàn vô hại với tư duy",
+        "Con người luôn giao việc cho công cụ — quan trọng là giao cái gì và dùng khoảng trống ra sao",
+        "Nên cấm sinh viên dùng AI"
+      ],
+      "dung": 1,
+      "giai": "\"The question isn't whether we offload, but what we offload, and what we do with the space it frees up.\""
+    },
+    {
+      "hoi": "\"Desirable difficulty\" là gì?",
+      "chon": [
+        "Khó khăn do công nghệ gây ra",
+        "Bài tập quá khó khiến người học bỏ cuộc",
+        "Sự vật lộn, nỗ lực vừa đủ giúp việc học thật sự diễn ra"
+      ],
+      "dung": 2,
+      "giai": "\"The effort isn't a flaw in the process. It is the process.\""
+    },
+    {
+      "hoi": "Vì sao nên \"nghĩ trước, rồi mới hỏi\"?",
+      "chon": [
+        "Câu trả lời của AI dễ thành \"cái neo\" khiến ta khó nghĩ vượt ra ngoài",
+        "AI trả lời chậm hơn nếu hỏi trước",
+        "Vì giảng viên yêu cầu như vậy"
+      ],
+      "dung": 0,
+      "giai": "\"If you consult first, its answer becomes an anchor.\""
+    },
+    {
+      "hoi": "Theo Hannah, vì sao chuyên môn vẫn quý khi có AI?",
+      "chon": [
+        "Vì AI không bao giờ làm đúng",
+        "Vì chỉ người hiểu việc mới đánh giá được đầu ra của AI tốt hay sai",
+        "Vì công ty bắt buộc như vậy"
+      ],
+      "dung": 1,
+      "giai": "\"You can only judge whether an AI's output is any good if you understand the work yourself.\""
+    },
+    {
+      "hoi": "Câu \"As long as you write the note yourself\" có hàm ý gì?",
+      "chon": [
+        "Hannah muốn Oliver mua giấy nhớ",
+        "Hannah không thích giấy nhớ",
+        "Lời đùa nhắc lại ý chính: tự làm thì mới thật sự học"
+      ],
+      "dung": 2,
+      "giai": "Hannah đùa: ngay cả câu châm ngôn cũng nên tự tay viết, đừng nhờ máy."
+    }
   ]
 }

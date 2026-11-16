@@ -1,0 +1,247 @@
+{
+  "id": "zh-cs-hsk3-01",
+  "nn": "zh",
+  "danhMuc": "chia-se",
+  "cap": "HSK3",
+  "so": 1,
+  "tieuDe": "从零开始学中文",
+  "tieuDeViet": "Học tiếng Trung từ con số 0",
+  "moTa": "Hoàng Linh kể chuyện ba năm trước cô không biết một chữ Hán nào, từng nói nhầm \"我想问你\" thành \"我想吻你\" trước cả lớp — và người giúp cô vượt qua nỗi sợ nói sai lại là cô chủ quán cơm dưới nhà.",
+  "chuDe": "Học ngoại ngữ",
+  "bieuTuong": "character.book.closed.fill",
+  "nguoi": [
+    { "ma": "L", "ten": "Hoàng Linh", "giong": "zh-nu", "vai": "người kể chuyện, phiên dịch viên" }
+  ],
+  "loi": [
+    {
+      "ai": "L",
+      "t": "大家好，我是黄玲。今天想跟大家聊聊，我是怎么从零开始学中文的。",
+      "doc": "Dàjiā hǎo, wǒ shì Huáng Líng. Jīntiān xiǎng gēn dàjiā liáoliao, wǒ shì zěnme cóng líng kāishǐ xué Zhōngwén de.",
+      "v": "Chào mọi người, mình là Hoàng Linh. Hôm nay muốn trò chuyện với mọi người về việc mình đã học tiếng Trung từ con số 0 như thế nào.",
+      "khac": [
+        { "kieu": "trang trọng", "t": "大家好，欢迎收听我的节目，我是黄玲。", "doc": "Dàjiā hǎo, huānyíng shōutīng wǒ de jiémù, wǒ shì Huáng Líng.", "v": "Xin chào, chào mừng các bạn đến với chương trình, tôi là Hoàng Linh.", "ghiChu": "câu mở đầu kiểu phát thanh, podcast" }
+      ],
+      "np": [
+        { "mau": "是 + 怎么 + V + 的", "giai": "Cấu trúc 是…的 hỏi/kể về CÁCH một việc đã xảy ra (đã học bằng cách nào).", "vd": "你是怎么来的？", "vdDoc": "Nǐ shì zěnme lái de?", "vdV": "Bạn đến bằng cách nào?" }
+      ]
+    },
+    {
+      "ai": "L",
+      "t": "三年前，我二十二岁，一个汉字也不认识，只会说“你好”和“谢谢”。",
+      "doc": "Sān nián qián, wǒ èrshí'èr suì, yí ge Hànzì yě bú rènshi, zhǐ huì shuō “nǐ hǎo” hé “xièxie”.",
+      "v": "Ba năm trước, mình 22 tuổi, không biết một chữ Hán nào, chỉ biết nói \"xin chào\" và \"cảm ơn\".",
+      "np": [
+        { "mau": "一 + LT + N + 也不/也没 + V", "giai": "Phủ định tuyệt đối: \"không… một… nào\". 也 có thể thay bằng 都.", "vd": "我一分钱也没有。", "vdDoc": "Wǒ yì fēn qián yě méiyǒu.", "vdV": "Tôi không có lấy một xu." }
+      ]
+    },
+    {
+      "ai": "L",
+      "t": "刚开始最难的是声调。我的声调总是不对，常常闹笑话。",
+      "doc": "Gāng kāishǐ zuì nán de shì shēngdiào. Wǒ de shēngdiào zǒngshì bú duì, chángcháng nào xiàohua.",
+      "v": "Lúc mới bắt đầu khó nhất là thanh điệu. Thanh điệu của mình lúc nào cũng sai, thường xuyên gây cười."
+    },
+    {
+      "ai": "L",
+      "t": "有一次，我想对老师说“我想问你”，结果说成了“我想吻你”。",
+      "doc": "Yǒu yí cì, wǒ xiǎng duì lǎoshī shuō “wǒ xiǎng wèn nǐ”, jiéguǒ shuō chéng le “wǒ xiǎng wěn nǐ”.",
+      "v": "Có một lần, mình định nói với thầy \"em muốn hỏi thầy\", kết quả lại nói thành \"em muốn hôn thầy\".",
+      "np": [
+        { "mau": "V + 成 (nhầm thành)", "giai": "成 sau động từ = biến thành, nhầm thành: 说成, 看成, 写成.", "vd": "我把“已”看成了“己”。", "vdDoc": "Wǒ bǎ “yǐ” kàn chéng le “jǐ”.", "vdV": "Tôi nhìn nhầm chữ \"已\" thành chữ \"己\"." }
+      ]
+    },
+    {
+      "ai": "L",
+      "t": "全班同学都笑了，我的脸一下子就红了。",
+      "doc": "Quán bān tóngxué dōu xiào le, wǒ de liǎn yíxiàzi jiù hóng le.",
+      "v": "Cả lớp đều cười, mặt mình đỏ bừng ngay lập tức."
+    },
+    {
+      "ai": "L",
+      "t": "那天以后，我有点儿害怕说中文，上课的时候也不敢举手。",
+      "doc": "Nà tiān yǐhòu, wǒ yǒudiǎnr hàipà shuō Zhōngwén, shàngkè de shíhou yě bù gǎn jǔshǒu.",
+      "v": "Từ hôm đó, mình hơi sợ nói tiếng Trung, trong giờ học cũng không dám giơ tay.",
+      "np": [
+        { "mau": "有点儿 + adj/động từ tâm lý", "giai": "有点儿 đứng TRƯỚC tính từ = hơi… (thường là điều không như ý). Khác 一点儿 đứng SAU tính từ để so sánh (便宜一点儿).", "vd": "今天有点儿冷。", "vdDoc": "Jīntiān yǒudiǎnr lěng.", "vdV": "Hôm nay hơi lạnh." }
+      ]
+    },
+    {
+      "ai": "L",
+      "t": "后来，我家楼下开了一家小饭馆，老板是一位中国阿姨。",
+      "doc": "Hòulái, wǒ jiā lóu xià kāi le yì jiā xiǎo fànguǎn, lǎobǎn shì yí wèi Zhōngguó āyí.",
+      "v": "Sau đó, dưới nhà mình mở một quán cơm nhỏ, chủ quán là một cô người Trung Quốc."
+    },
+    {
+      "ai": "L",
+      "t": "我每天去那儿吃午饭，一边吃，一边跟阿姨聊天。",
+      "doc": "Wǒ měitiān qù nàr chī wǔfàn, yìbiān chī, yìbiān gēn āyí liáotiān.",
+      "v": "Ngày nào mình cũng xuống đó ăn trưa, vừa ăn vừa trò chuyện với cô.",
+      "np": [
+        { "mau": "一边 A，一边 B", "giai": "Vừa A vừa B — hai hành động diễn ra cùng lúc.", "vd": "他一边听音乐，一边做作业。", "vdDoc": "Tā yìbiān tīng yīnyuè, yìbiān zuò zuòyè.", "vdV": "Cậu ấy vừa nghe nhạc vừa làm bài tập." }
+      ]
+    },
+    {
+      "ai": "L",
+      "t": "阿姨说话很快。我听不懂的时候，就会对她说：",
+      "doc": "Āyí shuōhuà hěn kuài. Wǒ tīng bu dǒng de shíhou, jiù huì duì tā shuō:",
+      "v": "Cô nói rất nhanh. Những lúc nghe không hiểu, mình sẽ nói với cô:",
+      "np": [
+        { "mau": "V + 不懂 / 得懂", "giai": "Bổ ngữ khả năng: 听不懂 = nghe không hiểu, 看得懂 = đọc hiểu được.", "vd": "这本书我看不懂。", "vdDoc": "Zhè běn shū wǒ kàn bu dǒng.", "vdV": "Cuốn sách này tôi đọc không hiểu." }
+      ]
+    },
+    {
+      "ai": "L",
+      "t": "“阿姨，不好意思，您能说慢一点儿吗？”",
+      "doc": "“Āyí, bù hǎoyìsi, nín néng shuō màn yìdiǎnr ma?”",
+      "v": "\"Cô ơi, xin lỗi, cô nói chậm một chút được không ạ?\"",
+      "khac": [
+        { "kieu": "lịch sự", "t": "不好意思，我没听清楚，您能再说一遍吗？", "doc": "Bù hǎoyìsi, wǒ méi tīng qīngchu, nín néng zài shuō yí biàn ma?", "v": "Xin lỗi, tôi nghe không rõ, anh/chị nói lại một lần được không?", "ghiChu": "dùng được ở mọi nơi: cửa hàng, điện thoại, công ty" },
+        { "kieu": "thân mật", "t": "慢点儿说，好吗？", "doc": "Màn diǎnr shuō, hǎo ma?", "v": "Nói chậm chút được không?", "ghiChu": "với bạn bè" }
+      ],
+      "np": [
+        { "mau": "V + adj + 一点儿", "giai": "Yêu cầu làm \"…hơn một chút\": 说慢一点儿, 写大一点儿. 一点儿 đứng SAU tính từ.", "vd": "你能说大声一点儿吗？", "vdDoc": "Nǐ néng shuō dàshēng yìdiǎnr ma?", "vdV": "Bạn nói to hơn một chút được không?" }
+      ]
+    },
+    {
+      "ai": "L",
+      "t": "阿姨从来不笑我。我说错了，她就用正确的说法再说一次。",
+      "doc": "Āyí cónglái bú xiào wǒ. Wǒ shuō cuò le, tā jiù yòng zhèngquè de shuōfǎ zài shuō yí cì.",
+      "v": "Cô chưa bao giờ cười mình. Mình nói sai thì cô nói lại một lần theo cách đúng.",
+      "np": [
+        { "mau": "从来不 / 从来没 + V", "giai": "从来 = từ trước tới nay; 从来不 = chưa bao giờ (thói quen), 从来没…过 = chưa từng (trải nghiệm).", "vd": "他从来不喝酒。", "vdDoc": "Tā cónglái bù hē jiǔ.", "vdV": "Anh ấy xưa nay không uống rượu." }
+      ]
+    },
+    {
+      "ai": "L",
+      "t": "比如我说“我吃饭了已经”，她就说：“哦，你已经吃过饭了啊。”",
+      "doc": "Bǐrú wǒ shuō “wǒ chīfàn le yǐjīng”, tā jiù shuō: “Ò, nǐ yǐjīng chī guo fàn le a.”",
+      "v": "Ví dụ mình nói \"em ăn cơm rồi đã\" (kiểu tiếng Việt), cô sẽ nói: \"À, cháu đã ăn cơm rồi à.\"",
+      "np": [
+        { "mau": "已经 + V + 了", "giai": "已经 (đã) luôn đứng TRƯỚC động từ, 了 ở sau. Người Việt hay đặt sai thứ tự theo kiểu \"ăn rồi đã\".", "vd": "他已经下班了。", "vdDoc": "Tā yǐjīng xiàbān le.", "vdV": "Anh ấy đã tan làm rồi." }
+      ]
+    },
+    {
+      "ai": "L",
+      "t": "就这样，我每天学一点儿，每天说一点儿。",
+      "doc": "Jiù zhèyàng, wǒ měitiān xué yìdiǎnr, měitiān shuō yìdiǎnr.",
+      "v": "Cứ như thế, mỗi ngày mình học một chút, mỗi ngày nói một chút."
+    },
+    {
+      "ai": "L",
+      "t": "一年以后，我已经能用中文点菜、买东西，还能在市场上讲价了。",
+      "doc": "Yì nián yǐhòu, wǒ yǐjīng néng yòng Zhōngwén diǎn cài, mǎi dōngxi, hái néng zài shìchǎng shang jiǎngjià le.",
+      "v": "Một năm sau, mình đã có thể dùng tiếng Trung gọi món, mua đồ, còn mặc cả được ở chợ."
+    },
+    {
+      "ai": "L",
+      "t": "去年，我通过了HSK四级，现在在一家中国公司当翻译。",
+      "doc": "Qùnián, wǒ tōngguò le HSK sì jí, xiànzài zài yì jiā Zhōngguó gōngsī dāng fānyì.",
+      "v": "Năm ngoái, mình thi đỗ HSK cấp 4, giờ đang làm phiên dịch ở một công ty Trung Quốc."
+    },
+    {
+      "ai": "L",
+      "t": "有人问我，学中文有什么好办法？",
+      "doc": "Yǒu rén wèn wǒ, xué Zhōngwén yǒu shénme hǎo bànfǎ?",
+      "v": "Có người hỏi mình, học tiếng Trung có cách nào hay không?",
+      "khac": [
+        { "kieu": "tự nhiên hơn", "t": "很多人问我：怎么样才能学好中文？", "doc": "Hěn duō rén wèn wǒ: zěnmeyàng cái néng xué hǎo Zhōngwén?", "v": "Nhiều người hỏi mình: làm thế nào mới học giỏi được tiếng Trung?", "ghiChu": "怎么样才能…? = phải làm sao mới… được" }
+      ]
+    },
+    {
+      "ai": "L",
+      "t": "我觉得最重要的不是聪明，而是别怕说错。",
+      "doc": "Wǒ juéde zuì zhòngyào de bú shì cōngming, ér shì bié pà shuō cuò.",
+      "v": "Mình nghĩ quan trọng nhất không phải là thông minh, mà là đừng sợ nói sai.",
+      "khac": [
+        { "kieu": "ngắn gọn", "t": "我觉得，敢说比说得对更重要。", "doc": "Wǒ juéde, gǎn shuō bǐ shuō de duì gèng zhòngyào.", "v": "Mình nghĩ, dám nói quan trọng hơn nói đúng.", "ghiChu": "câu chốt dễ nhớ" }
+      ]
+    },
+    {
+      "ai": "L",
+      "t": "每天学十五分钟，比一个星期学一次、一次学三个小时更有用。",
+      "doc": "Měitiān xué shíwǔ fēnzhōng, bǐ yí ge xīngqī xué yí cì, yí cì xué sān ge xiǎoshí gèng yǒuyòng.",
+      "v": "Mỗi ngày học mười lăm phút có ích hơn một tuần học một lần, mỗi lần ba tiếng.",
+      "np": [
+        { "mau": "A 比 B 更 + adj", "giai": "So sánh hơn với 更 (càng, hơn nữa). Có thể so sánh cả hai cụm động từ dài, không chỉ danh từ.", "vd": "坐地铁比打车更快。", "vdDoc": "Zuò dìtiě bǐ dǎchē gèng kuài.", "vdV": "Đi tàu điện ngầm nhanh hơn đi taxi." }
+      ]
+    },
+    {
+      "ai": "L",
+      "t": "还有，找一个愿意听你说话的人。对我来说，就是楼下的那位阿姨。",
+      "doc": "Hái yǒu, zhǎo yí ge yuànyì tīng nǐ shuōhuà de rén. Duì wǒ lái shuō, jiù shì lóu xià de nà wèi āyí.",
+      "v": "Còn nữa, hãy tìm một người sẵn lòng nghe bạn nói. Với mình, đó chính là cô chủ quán dưới nhà.",
+      "np": [
+        { "mau": "对 + ai + 来说", "giai": "\"Đối với ai mà nói\" — nêu góc nhìn của một người cụ thể.", "vd": "对我来说，周末最重要。", "vdDoc": "Duì wǒ lái shuō, zhōumò zuì zhòngyào.", "vdV": "Với tôi, cuối tuần là quan trọng nhất." }
+      ]
+    },
+    {
+      "ai": "L",
+      "t": "现在我还常常去她那儿吃饭。她总是笑着说：“你的中文比我的越南语好多了！”",
+      "doc": "Xiànzài wǒ hái chángcháng qù tā nàr chīfàn. Tā zǒngshì xiào zhe shuō: “Nǐ de Zhōngwén bǐ wǒ de Yuènányǔ hǎo duō le!”",
+      "v": "Bây giờ mình vẫn hay đến chỗ cô ăn cơm. Cô lúc nào cũng cười nói: \"Tiếng Trung của cháu giỏi hơn tiếng Việt của cô nhiều rồi!\""
+    },
+    {
+      "ai": "L",
+      "t": "如果你也刚开始学中文，别着急，慢慢来，一定可以的。加油！",
+      "doc": "Rúguǒ nǐ yě gāng kāishǐ xué Zhōngwén, bié zháojí, mànmàn lái, yídìng kěyǐ de. Jiāyóu!",
+      "v": "Nếu bạn cũng mới bắt đầu học tiếng Trung, đừng sốt ruột, cứ từ từ, nhất định sẽ được. Cố lên!",
+      "khac": [
+        { "kieu": "thân mật", "t": "慢慢来，你一定行！", "doc": "Mànmàn lái, nǐ yídìng xíng!", "v": "Từ từ thôi, bạn nhất định làm được!", "ghiChu": "động viên bạn bè" }
+      ]
+    },
+    {
+      "ai": "L",
+      "t": "我是黄玲，下次见！",
+      "doc": "Wǒ shì Huáng Líng, xià cì jiàn!",
+      "v": "Mình là Hoàng Linh, hẹn gặp lại lần sau!",
+      "khac": [
+        { "kieu": "tự nhiên hơn", "t": "今天就聊到这儿，我们下次再见！", "doc": "Jīntiān jiù liáo dào zhèr, wǒmen xià cì zàijiàn!", "v": "Hôm nay trò chuyện đến đây thôi, hẹn gặp lại lần sau!", "ghiChu": "câu kết podcast, livestream" }
+      ]
+    }
+  ],
+  "tuVung": [
+    { "chu": "从零开始", "doc": "cóng líng kāishǐ", "nghia": "bắt đầu từ con số 0", "vd": "我是从零开始学的。" },
+    { "chu": "汉字", "doc": "Hànzì", "nghia": "chữ Hán", "vd": "这个汉字怎么读？" },
+    { "chu": "声调", "doc": "shēngdiào", "nghia": "thanh điệu", "vd": "中文有四个声调。" },
+    { "chu": "闹笑话", "doc": "nào xiàohua", "nghia": "gây ra chuyện buồn cười (vì nhầm lẫn)", "vd": "刚来的时候我常常闹笑话。" },
+    { "chu": "举手", "doc": "jǔshǒu", "nghia": "giơ tay", "vd": "有问题请举手。" },
+    { "chu": "饭馆", "doc": "fànguǎn", "nghia": "quán cơm, nhà hàng nhỏ", "vd": "楼下有一家饭馆。" },
+    { "chu": "阿姨", "doc": "āyí", "nghia": "cô, dì (gọi phụ nữ trung niên)", "vd": "阿姨，这个多少钱？" },
+    { "chu": "讲价", "doc": "jiǎngjià", "nghia": "mặc cả", "vd": "在市场买东西可以讲价。" },
+    { "chu": "翻译", "doc": "fānyì", "nghia": "phiên dịch; người phiên dịch", "vd": "她在公司当翻译。" },
+    { "chu": "说法", "doc": "shuōfǎ", "nghia": "cách nói", "vd": "这个说法更自然。" },
+    { "chu": "慢慢来", "doc": "mànmàn lái", "nghia": "cứ từ từ", "vd": "别着急，慢慢来。" }
+  ],
+  "yNghia": "Học ngoại ngữ không cần thông minh hơn người khác; cần dám nói sai và nói đều đặn mỗi ngày. Một người kiên nhẫn sửa câu cho bạn — không cười, chỉ nói lại câu đúng — có giá trị hơn nhiều giờ học một mình. Mười lăm phút mỗi ngày thắng ba tiếng mỗi tuần.",
+  "meo": [
+    "Câu cứu cánh khi nghe không kịp: 不好意思，您能说慢一点儿吗？/ 您能再说一遍吗？ — học thuộc trước khi ra đường.",
+    "已经 luôn đứng trước động từ: 我已经吃过饭了 (không nói *我吃饭了已经*). Lỗi kinh điển của người Việt.",
+    "有点儿 + tính từ (hơi… — không như ý): 有点儿冷. Tính từ + 一点儿 (…hơn chút — so sánh/yêu cầu): 慢一点儿.",
+    "Thanh điệu đổi nghĩa: 问 wèn (hỏi) ≠ 吻 wěn (hôn); 买 mǎi (mua) ≠ 卖 mài (bán). Luyện cặp đôi tối thiểu như vậy rất hiệu quả."
+  ],
+  "cauHoi": [
+    {
+      "hoi": "Linh đã nói nhầm câu \"我想问你\" thành câu gì?",
+      "chon": ["我想吻你 — em muốn hôn thầy", "我想睡觉 — em muốn ngủ", "我想回家 — em muốn về nhà"],
+      "dung": 0,
+      "giai": "问 wèn (hỏi) và 吻 wěn (hôn) chỉ khác thanh điệu."
+    },
+    {
+      "hoi": "Cô chủ quán làm gì khi Linh nói sai?",
+      "chon": ["Cười to", "Không nói gì", "Nói lại một lần theo cách đúng"],
+      "dung": 2,
+      "giai": "她就用正确的说法再说一次。"
+    },
+    {
+      "hoi": "Theo Linh, điều quan trọng nhất khi học tiếng Trung là gì?",
+      "chon": ["Thông minh", "Đừng sợ nói sai", "Học mỗi tuần ba tiếng"],
+      "dung": 1,
+      "giai": "最重要的不是聪明，而是别怕说错。"
+    },
+    {
+      "hoi": "Câu nào đặt 已经 đúng vị trí?",
+      "chon": ["我吃饭了已经。", "已经我吃饭了。", "我已经吃过饭了。"],
+      "dung": 2,
+      "giai": "已经 đứng trước động từ: 我已经吃过饭了。"
+    }
+  ]
+}

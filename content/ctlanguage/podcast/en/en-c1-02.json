@@ -1,6 +1,7 @@
 {
   "id": "en-c1-02",
   "nn": "en",
+  "danhMuc": "chia-se",
   "cap": "C1",
   "so": 2,
   "tieuDe": "The Courage to Change Your Mind",
@@ -9,58 +10,264 @@
   "chuDe": "Tư duy & khoa học",
   "bieuTuong": "lightbulb.fill",
   "nguoi": [
-    { "ma": "E", "ten": "Ethan", "giong": "us-nam", "vai": "người dẫn podcast" },
-    { "ma": "M", "ten": "Mei", "giong": "au-nu", "vai": "khách mời, nhà sinh vật biển" }
+    {
+      "ma": "E",
+      "ten": "Ethan",
+      "giong": "us-nam",
+      "vai": "người dẫn podcast"
+    },
+    {
+      "ma": "M",
+      "ten": "Mei",
+      "giong": "au-nu",
+      "vai": "khách mời, nhà sinh vật biển"
+    }
   ],
   "loi": [
-    { "ai": "E", "t": "You're listening to Open Questions. I'm Ethan. Today we're talking about something most of us find surprisingly hard: admitting we were wrong.", "v": "Bạn đang nghe Open Questions. Tôi là Ethan. Hôm nay chúng ta nói về một điều mà hầu hết chúng ta thấy khó đến bất ngờ: thừa nhận mình đã sai." },
-    { "ai": "E", "t": "My guest is Mei, a marine biologist who once spent three years proving her own hypothesis false. Mei, that sounds painful.", "v": "Khách mời của tôi là Mei, một nhà sinh vật biển từng mất ba năm để chứng minh chính giả thuyết của mình là sai. Mei, nghe có vẻ đau đớn đấy." },
-    { "ai": "M", "t": "It was, at first. I was convinced that a particular reef was recovering because of cooler water currents. I'd built my whole PhD around that idea. I'd even given talks about it.", "v": "Lúc đầu thì đúng vậy. Tôi tin chắc một rạn san hô đang hồi phục là nhờ các dòng nước mát hơn. Tôi đã xây cả luận án tiến sĩ quanh ý tưởng đó. Tôi còn từng đi thuyết trình về nó." },
-    { "ai": "E", "t": "And the data disagreed.", "v": "Và dữ liệu thì không đồng ý." },
-    { "ai": "M", "t": "Stubbornly. Year after year, the temperature readings just didn't line up with the recovery. What eventually explained it was a species of fish that grazes on the algae that smother young coral.", "v": "Một cách ngoan cố. Năm này qua năm khác, số đo nhiệt độ cứ không khớp với sự hồi phục. Thứ cuối cùng giải thích được lại là một loài cá chuyên gặm loại tảo vẫn phủ kín, bóp nghẹt san hô non." },
-    { "ai": "M", "t": "Fishing had been banned nearby a few years earlier, so the fish came back, and the coral followed.", "v": "Vài năm trước đó, vùng biển gần đấy đã cấm đánh bắt cá, nên cá quay lại, và san hô theo sau." },
-    { "ai": "E", "t": "So the answer was in the fish, not the water.", "v": "Vậy câu trả lời nằm ở loài cá, chứ không phải ở nước." },
-    { "ai": "M", "t": "Right. And here's the uncomfortable part: the clues had been sitting in my own data for over a year. I just hadn't looked at them closely, because they didn't fit my story.", "v": "Đúng. Và đây là phần khó chịu: manh mối đã nằm sẵn trong chính dữ liệu của tôi hơn một năm trời. Tôi chỉ không nhìn kỹ, vì chúng không khớp với câu chuyện của tôi." },
-    { "ai": "E", "t": "That's confirmation bias, isn't it?", "v": "Đó là thiên kiến xác nhận, đúng không?" },
-    { "ai": "M", "t": "Textbook confirmation bias. And I'd taught undergraduates about it! Knowing a bias exists doesn't make you immune to it. If anything, it can make you overconfident, because you assume it's something that happens to other people.", "v": "Thiên kiến xác nhận kinh điển. Mà tôi còn từng dạy sinh viên về nó! Biết một thiên kiến tồn tại không khiến bạn miễn nhiễm với nó. Thậm chí, nó còn có thể khiến bạn quá tự tin, vì bạn cho rằng đó là chuyện chỉ xảy ra với người khác." },
-    { "ai": "E", "t": "What finally made you look?", "v": "Cuối cùng điều gì khiến chị chịu nhìn vào?" },
-    { "ai": "M", "t": "A first-year research assistant asked me, quite innocently, \"What result would convince you that you're wrong?\" And I couldn't answer. That silence scared me more than any failed experiment.", "v": "Một trợ lý nghiên cứu năm nhất hỏi tôi, rất ngây thơ: \"Kết quả nào sẽ thuyết phục chị rằng chị sai?\" Và tôi không trả lời được. Sự im lặng đó làm tôi sợ hơn bất kỳ thí nghiệm thất bại nào." },
-    { "ai": "E", "t": "Why did it scare you?", "v": "Sao nó làm chị sợ?" },
-    { "ai": "M", "t": "Because if no possible evidence could change my mind, I wasn't doing science anymore. I was defending a belief.", "v": "Vì nếu không có bằng chứng nào có thể thay đổi suy nghĩ của tôi, thì tôi không còn làm khoa học nữa. Tôi đang bảo vệ một niềm tin." },
-    { "ai": "E", "t": "I suspect a lot of listeners recognise that outside science too, in arguments about health, money, even parenting.", "v": "Tôi đoán nhiều thính giả nhận ra điều đó cả bên ngoài khoa học, trong những cuộc tranh luận về sức khoẻ, tiền bạc, thậm chí cả chuyện nuôi dạy con." },
-    { "ai": "M", "t": "Absolutely. The trouble is that beliefs get tangled up with identity. If I'm \"the person who discovered the cooling effect,\" then being wrong isn't just an error. It feels like losing a piece of myself.", "v": "Hoàn toàn đúng. Vấn đề là niềm tin bị quấn chặt vào bản sắc. Nếu tôi là \"người phát hiện ra hiệu ứng làm mát\", thì sai không chỉ là một lỗi. Nó giống như mất đi một phần con người mình." },
-    { "ai": "E", "t": "So how did you untangle it?", "v": "Vậy chị đã gỡ nó ra thế nào?" },
-    { "ai": "M", "t": "I shifted what I was proud of. Instead of being proud of being right, I tried to be proud of being accurate, of updating quickly when the evidence changed. It sounds like a small change in wording, but it changes what you're protecting.", "v": "Tôi đổi điều mình tự hào. Thay vì tự hào vì đúng, tôi cố tự hào vì chính xác, vì cập nhật nhanh khi bằng chứng thay đổi. Nghe như chỉ đổi chút câu chữ, nhưng nó thay đổi thứ bạn đang ra sức bảo vệ." },
-    { "ai": "E", "t": "That's a lovely reframe. But doesn't changing your mind make you look weak, especially in front of a boss or a client?", "v": "Một cách nhìn lại thật hay. Nhưng đổi ý chẳng phải khiến mình trông yếu đuối sao, nhất là trước mặt sếp hay khách hàng?" },
-    { "ai": "M", "t": "Only if you do it without explanation. If you say, \"Here's what I believed, here's the new evidence, and here's why I've updated,\" most reasonable people find that far more trustworthy than someone who never budges.", "v": "Chỉ khi bạn đổi mà không giải thích. Nếu bạn nói: \"Đây là điều tôi từng tin, đây là bằng chứng mới, và đây là lý do tôi thay đổi\", phần lớn người biết lý lẽ sẽ thấy thế đáng tin hơn nhiều so với một người không bao giờ chịu nhúc nhích." },
-    { "ai": "E", "t": "What about the opposite risk, changing your mind every time someone pushes back?", "v": "Còn rủi ro ngược lại, đổi ý mỗi khi có người phản bác thì sao?" },
-    { "ai": "M", "t": "That's a real risk. Being open-minded doesn't mean agreeing with whoever spoke last. The point is to be moved by evidence and good arguments, not by pressure or volume.", "v": "Đó là rủi ro có thật. Cởi mở không có nghĩa là đồng ý với người nói sau cùng. Điều cốt lõi là bị thuyết phục bởi bằng chứng và lập luận tốt, chứ không phải bởi áp lực hay ai nói to hơn." },
-    { "ai": "E", "t": "Do you have any practical tools for this? Something listeners could try this week?", "v": "Chị có công cụ thực tế nào không? Thứ gì đó thính giả có thể thử ngay tuần này?" },
-    { "ai": "M", "t": "A couple. When you're in a disagreement, try to state the other person's view so well that they'd say, \"Yes, that's exactly what I mean.\" Only then argue against it. People call it steelmanning, the opposite of attacking a straw man.", "v": "Vài cái. Khi đang bất đồng, hãy thử trình bày quan điểm của người kia tốt đến mức họ phải nói: \"Đúng, chính xác là ý tôi.\" Chỉ sau đó mới phản bác. Người ta gọi đó là \"dựng người thép\", ngược với việc đánh vào \"người rơm\"." },
-    { "ai": "E", "t": "That's harder than it sounds.", "v": "Nói thì dễ, làm mới khó." },
-    { "ai": "M", "t": "Much harder. The second one is simpler: keep a short list of things you've changed your mind about. Once a month, I add a line. It reminds me that being wrong is normal, and survivable.", "v": "Khó hơn nhiều. Cái thứ hai đơn giản hơn: giữ một danh sách ngắn những điều bạn đã đổi ý. Mỗi tháng tôi thêm một dòng. Nó nhắc tôi rằng sai là chuyện bình thường, và chẳng ai chết vì nó cả." },
-    { "ai": "E", "t": "What's the most recent line?", "v": "Dòng gần đây nhất là gì?" },
-    { "ai": "M", "t": "Ha! That you can't learn to enjoy cold showers. My partner proved me wrong. I still don't love them, but I've stopped claiming it's impossible.", "v": "Ha! Rằng không thể tập để thích tắm nước lạnh. Người yêu tôi đã chứng minh tôi sai. Tôi vẫn chưa thích lắm, nhưng tôi đã thôi khẳng định là không thể." },
-    { "ai": "E", "t": "A humble example, but I like it. Not every update has to be about coral reefs.", "v": "Một ví dụ khiêm tốn, nhưng tôi thích. Không phải lần cập nhật nào cũng phải về rạn san hô." },
-    { "ai": "M", "t": "Exactly. If you practise on small things, it's much easier when something big comes along.", "v": "Chính xác. Nếu tập với những chuyện nhỏ, khi chuyện lớn đến sẽ dễ hơn nhiều." },
-    { "ai": "E", "t": "And what happened to your PhD in the end?", "v": "Rốt cuộc luận án của chị ra sao?" },
-    { "ai": "M", "t": "The fish story turned out to be far more interesting than my original idea, and it helped convince the local authorities to extend the fishing ban. Being wrong was the best thing that happened to my research.", "v": "Câu chuyện về loài cá hoá ra thú vị hơn nhiều so với ý tưởng ban đầu của tôi, và nó góp phần thuyết phục chính quyền địa phương mở rộng lệnh cấm đánh bắt. Sai lầm hoá ra là điều tốt nhất xảy đến với nghiên cứu của tôi." },
-    { "ai": "E", "t": "Mei, thank you. I'm off to look for the clues I've been ignoring.", "v": "Mei, cảm ơn chị. Tôi đi tìm những manh mối mình đang làm ngơ đây." },
-    { "ai": "M", "t": "Good luck. And let me know what you find, especially if it surprises you.", "v": "Chúc may mắn. Và cho tôi biết anh tìm thấy gì nhé, nhất là nếu nó làm anh bất ngờ." }
+    {
+      "ai": "E",
+      "t": "You're listening to Open Questions. I'm Ethan. Today we're talking about something most of us find surprisingly hard: admitting we were wrong.",
+      "v": "Bạn đang nghe Open Questions. Tôi là Ethan. Hôm nay chúng ta nói về một điều mà hầu hết chúng ta thấy khó đến bất ngờ: thừa nhận mình đã sai."
+    },
+    {
+      "ai": "E",
+      "t": "My guest is Mei, a marine biologist who once spent three years proving her own hypothesis false. Mei, that sounds painful.",
+      "v": "Khách mời của tôi là Mei, một nhà sinh vật biển từng mất ba năm để chứng minh chính giả thuyết của mình là sai. Mei, nghe có vẻ đau đớn đấy."
+    },
+    {
+      "ai": "M",
+      "t": "It was, at first. I was convinced that a particular reef was recovering because of cooler water currents. I'd built my whole PhD around that idea. I'd even given talks about it.",
+      "v": "Lúc đầu thì đúng vậy. Tôi tin chắc một rạn san hô đang hồi phục là nhờ các dòng nước mát hơn. Tôi đã xây cả luận án tiến sĩ quanh ý tưởng đó. Tôi còn từng đi thuyết trình về nó."
+    },
+    {
+      "ai": "E",
+      "t": "And the data disagreed.",
+      "v": "Và dữ liệu thì không đồng ý."
+    },
+    {
+      "ai": "M",
+      "t": "Stubbornly. Year after year, the temperature readings just didn't line up with the recovery. What eventually explained it was a species of fish that grazes on the algae that smother young coral.",
+      "v": "Một cách ngoan cố. Năm này qua năm khác, số đo nhiệt độ cứ không khớp với sự hồi phục. Thứ cuối cùng giải thích được lại là một loài cá chuyên gặm loại tảo vẫn phủ kín, bóp nghẹt san hô non."
+    },
+    {
+      "ai": "M",
+      "t": "Fishing had been banned nearby a few years earlier, so the fish came back, and the coral followed.",
+      "v": "Vài năm trước đó, vùng biển gần đấy đã cấm đánh bắt cá, nên cá quay lại, và san hô theo sau."
+    },
+    {
+      "ai": "E",
+      "t": "So the answer was in the fish, not the water.",
+      "v": "Vậy câu trả lời nằm ở loài cá, chứ không phải ở nước."
+    },
+    {
+      "ai": "M",
+      "t": "Right. And here's the uncomfortable part: the clues had been sitting in my own data for over a year. I just hadn't looked at them closely, because they didn't fit my story.",
+      "v": "Đúng. Và đây là phần khó chịu: manh mối đã nằm sẵn trong chính dữ liệu của tôi hơn một năm trời. Tôi chỉ không nhìn kỹ, vì chúng không khớp với câu chuyện của tôi."
+    },
+    {
+      "ai": "E",
+      "t": "That's confirmation bias, isn't it?",
+      "v": "Đó là thiên kiến xác nhận, đúng không?"
+    },
+    {
+      "ai": "M",
+      "t": "Textbook confirmation bias. And I'd taught undergraduates about it! Knowing a bias exists doesn't make you immune to it. If anything, it can make you overconfident, because you assume it's something that happens to other people.",
+      "v": "Thiên kiến xác nhận kinh điển. Mà tôi còn từng dạy sinh viên về nó! Biết một thiên kiến tồn tại không khiến bạn miễn nhiễm với nó. Thậm chí, nó còn có thể khiến bạn quá tự tin, vì bạn cho rằng đó là chuyện chỉ xảy ra với người khác."
+    },
+    {
+      "ai": "E",
+      "t": "What finally made you look?",
+      "v": "Cuối cùng điều gì khiến chị chịu nhìn vào?"
+    },
+    {
+      "ai": "M",
+      "t": "A first-year research assistant asked me, quite innocently, \"What result would convince you that you're wrong?\" And I couldn't answer. That silence scared me more than any failed experiment.",
+      "v": "Một trợ lý nghiên cứu năm nhất hỏi tôi, rất ngây thơ: \"Kết quả nào sẽ thuyết phục chị rằng chị sai?\" Và tôi không trả lời được. Sự im lặng đó làm tôi sợ hơn bất kỳ thí nghiệm thất bại nào."
+    },
+    {
+      "ai": "E",
+      "t": "Why did it scare you?",
+      "v": "Sao nó làm chị sợ?"
+    },
+    {
+      "ai": "M",
+      "t": "Because if no possible evidence could change my mind, I wasn't doing science anymore. I was defending a belief.",
+      "v": "Vì nếu không có bằng chứng nào có thể thay đổi suy nghĩ của tôi, thì tôi không còn làm khoa học nữa. Tôi đang bảo vệ một niềm tin."
+    },
+    {
+      "ai": "E",
+      "t": "I suspect a lot of listeners recognise that outside science too, in arguments about health, money, even parenting.",
+      "v": "Tôi đoán nhiều thính giả nhận ra điều đó cả bên ngoài khoa học, trong những cuộc tranh luận về sức khoẻ, tiền bạc, thậm chí cả chuyện nuôi dạy con."
+    },
+    {
+      "ai": "M",
+      "t": "Absolutely. The trouble is that beliefs get tangled up with identity. If I'm \"the person who discovered the cooling effect,\" then being wrong isn't just an error. It feels like losing a piece of myself.",
+      "v": "Hoàn toàn đúng. Vấn đề là niềm tin bị quấn chặt vào bản sắc. Nếu tôi là \"người phát hiện ra hiệu ứng làm mát\", thì sai không chỉ là một lỗi. Nó giống như mất đi một phần con người mình."
+    },
+    {
+      "ai": "E",
+      "t": "So how did you untangle it?",
+      "v": "Vậy chị đã gỡ nó ra thế nào?"
+    },
+    {
+      "ai": "M",
+      "t": "I shifted what I was proud of. Instead of being proud of being right, I tried to be proud of being accurate, of updating quickly when the evidence changed. It sounds like a small change in wording, but it changes what you're protecting.",
+      "v": "Tôi đổi điều mình tự hào. Thay vì tự hào vì đúng, tôi cố tự hào vì chính xác, vì cập nhật nhanh khi bằng chứng thay đổi. Nghe như chỉ đổi chút câu chữ, nhưng nó thay đổi thứ bạn đang ra sức bảo vệ."
+    },
+    {
+      "ai": "E",
+      "t": "That's a lovely reframe. But doesn't changing your mind make you look weak, especially in front of a boss or a client?",
+      "v": "Một cách nhìn lại thật hay. Nhưng đổi ý chẳng phải khiến mình trông yếu đuối sao, nhất là trước mặt sếp hay khách hàng?"
+    },
+    {
+      "ai": "M",
+      "t": "Only if you do it without explanation. If you say, \"Here's what I believed, here's the new evidence, and here's why I've updated,\" most reasonable people find that far more trustworthy than someone who never budges.",
+      "v": "Chỉ khi bạn đổi mà không giải thích. Nếu bạn nói: \"Đây là điều tôi từng tin, đây là bằng chứng mới, và đây là lý do tôi thay đổi\", phần lớn người biết lý lẽ sẽ thấy thế đáng tin hơn nhiều so với một người không bao giờ chịu nhúc nhích."
+    },
+    {
+      "ai": "E",
+      "t": "What about the opposite risk, changing your mind every time someone pushes back?",
+      "v": "Còn rủi ro ngược lại, đổi ý mỗi khi có người phản bác thì sao?"
+    },
+    {
+      "ai": "M",
+      "t": "That's a real risk. Being open-minded doesn't mean agreeing with whoever spoke last. The point is to be moved by evidence and good arguments, not by pressure or volume.",
+      "v": "Đó là rủi ro có thật. Cởi mở không có nghĩa là đồng ý với người nói sau cùng. Điều cốt lõi là bị thuyết phục bởi bằng chứng và lập luận tốt, chứ không phải bởi áp lực hay ai nói to hơn."
+    },
+    {
+      "ai": "E",
+      "t": "Do you have any practical tools for this? Something listeners could try this week?",
+      "v": "Chị có công cụ thực tế nào không? Thứ gì đó thính giả có thể thử ngay tuần này?"
+    },
+    {
+      "ai": "M",
+      "t": "A couple. When you're in a disagreement, try to state the other person's view so well that they'd say, \"Yes, that's exactly what I mean.\" Only then argue against it. People call it steelmanning, the opposite of attacking a straw man.",
+      "v": "Vài cái. Khi đang bất đồng, hãy thử trình bày quan điểm của người kia tốt đến mức họ phải nói: \"Đúng, chính xác là ý tôi.\" Chỉ sau đó mới phản bác. Người ta gọi đó là \"dựng người thép\", ngược với việc đánh vào \"người rơm\"."
+    },
+    {
+      "ai": "E",
+      "t": "That's harder than it sounds.",
+      "v": "Nói thì dễ, làm mới khó."
+    },
+    {
+      "ai": "M",
+      "t": "Much harder. The second one is simpler: keep a short list of things you've changed your mind about. Once a month, I add a line. It reminds me that being wrong is normal, and survivable.",
+      "v": "Khó hơn nhiều. Cái thứ hai đơn giản hơn: giữ một danh sách ngắn những điều bạn đã đổi ý. Mỗi tháng tôi thêm một dòng. Nó nhắc tôi rằng sai là chuyện bình thường, và chẳng ai chết vì nó cả."
+    },
+    {
+      "ai": "E",
+      "t": "What's the most recent line?",
+      "v": "Dòng gần đây nhất là gì?"
+    },
+    {
+      "ai": "M",
+      "t": "Ha! That you can't learn to enjoy cold showers. My partner proved me wrong. I still don't love them, but I've stopped claiming it's impossible.",
+      "v": "Ha! Rằng không thể tập để thích tắm nước lạnh. Người yêu tôi đã chứng minh tôi sai. Tôi vẫn chưa thích lắm, nhưng tôi đã thôi khẳng định là không thể."
+    },
+    {
+      "ai": "E",
+      "t": "A humble example, but I like it. Not every update has to be about coral reefs.",
+      "v": "Một ví dụ khiêm tốn, nhưng tôi thích. Không phải lần cập nhật nào cũng phải về rạn san hô."
+    },
+    {
+      "ai": "M",
+      "t": "Exactly. If you practise on small things, it's much easier when something big comes along.",
+      "v": "Chính xác. Nếu tập với những chuyện nhỏ, khi chuyện lớn đến sẽ dễ hơn nhiều."
+    },
+    {
+      "ai": "E",
+      "t": "And what happened to your PhD in the end?",
+      "v": "Rốt cuộc luận án của chị ra sao?"
+    },
+    {
+      "ai": "M",
+      "t": "The fish story turned out to be far more interesting than my original idea, and it helped convince the local authorities to extend the fishing ban. Being wrong was the best thing that happened to my research.",
+      "v": "Câu chuyện về loài cá hoá ra thú vị hơn nhiều so với ý tưởng ban đầu của tôi, và nó góp phần thuyết phục chính quyền địa phương mở rộng lệnh cấm đánh bắt. Sai lầm hoá ra là điều tốt nhất xảy đến với nghiên cứu của tôi."
+    },
+    {
+      "ai": "E",
+      "t": "Mei, thank you. I'm off to look for the clues I've been ignoring.",
+      "v": "Mei, cảm ơn chị. Tôi đi tìm những manh mối mình đang làm ngơ đây."
+    },
+    {
+      "ai": "M",
+      "t": "Good luck. And let me know what you find, especially if it surprises you.",
+      "v": "Chúc may mắn. Và cho tôi biết anh tìm thấy gì nhé, nhất là nếu nó làm anh bất ngờ."
+    }
   ],
   "tuVung": [
-    { "chu": "hypothesis", "doc": "/haɪˈpɒθəsɪs/", "nghia": "giả thuyết", "vd": "The experiment was designed to test her hypothesis." },
-    { "chu": "line up with", "doc": "/laɪn ʌp wɪð/", "nghia": "khớp với, ăn khớp với", "vd": "His story doesn't line up with the facts." },
-    { "chu": "smother", "doc": "/ˈsmʌðə(r)/", "nghia": "phủ kín, làm nghẹt thở", "vd": "Weeds can smother young plants." },
-    { "chu": "confirmation bias", "doc": "/ˌkɒnfəˈmeɪʃn ˈbaɪəs/", "nghia": "thiên kiến xác nhận (chỉ thấy điều hợp với niềm tin sẵn có)", "vd": "Confirmation bias makes us ignore inconvenient facts." },
-    { "chu": "immune to", "doc": "/ɪˈmjuːn tə/", "nghia": "miễn nhiễm với", "vd": "Nobody is immune to advertising." },
-    { "chu": "tangled up with", "doc": "/ˈtæŋɡld ʌp wɪð/", "nghia": "bị quấn vào, dính chặt với", "vd": "Her job is tangled up with her sense of self." },
-    { "chu": "reframe", "doc": "/ˌriːˈfreɪm/", "nghia": "cách nhìn lại; nhìn nhận lại vấn đề", "vd": "Try to reframe the failure as practice." },
-    { "chu": "budges", "doc": "/ˈbʌdʒɪz/", "nghia": "nhúc nhích, chịu đổi ý (budge)", "vd": "Once he decides, he never budges." },
-    { "chu": "open-minded", "doc": "/ˌəʊpən ˈmaɪndɪd/", "nghia": "cởi mở, sẵn sàng tiếp nhận ý mới", "vd": "Travel made her more open-minded." },
-    { "chu": "steelmanning", "doc": "/ˈstiːlmænɪŋ/", "nghia": "trình bày quan điểm đối phương ở dạng mạnh nhất rồi mới phản bác", "vd": "Steelmanning makes debates more honest." },
-    { "chu": "straw man", "doc": "/ˌstrɔː ˈmæn/", "nghia": "\"người rơm\" — bóp méo quan điểm đối phương cho dễ đánh", "vd": "That's a straw man; I never said that." },
-    { "chu": "survivable", "doc": "/səˈvaɪvəbl/", "nghia": "có thể vượt qua, không đến nỗi chết", "vd": "A bad exam is painful but survivable." }
+    {
+      "chu": "hypothesis",
+      "doc": "/haɪˈpɒθəsɪs/",
+      "nghia": "giả thuyết",
+      "vd": "The experiment was designed to test her hypothesis."
+    },
+    {
+      "chu": "line up with",
+      "doc": "/laɪn ʌp wɪð/",
+      "nghia": "khớp với, ăn khớp với",
+      "vd": "His story doesn't line up with the facts."
+    },
+    {
+      "chu": "smother",
+      "doc": "/ˈsmʌðə(r)/",
+      "nghia": "phủ kín, làm nghẹt thở",
+      "vd": "Weeds can smother young plants."
+    },
+    {
+      "chu": "confirmation bias",
+      "doc": "/ˌkɒnfəˈmeɪʃn ˈbaɪəs/",
+      "nghia": "thiên kiến xác nhận (chỉ thấy điều hợp với niềm tin sẵn có)",
+      "vd": "Confirmation bias makes us ignore inconvenient facts."
+    },
+    {
+      "chu": "immune to",
+      "doc": "/ɪˈmjuːn tə/",
+      "nghia": "miễn nhiễm với",
+      "vd": "Nobody is immune to advertising."
+    },
+    {
+      "chu": "tangled up with",
+      "doc": "/ˈtæŋɡld ʌp wɪð/",
+      "nghia": "bị quấn vào, dính chặt với",
+      "vd": "Her job is tangled up with her sense of self."
+    },
+    {
+      "chu": "reframe",
+      "doc": "/ˌriːˈfreɪm/",
+      "nghia": "cách nhìn lại; nhìn nhận lại vấn đề",
+      "vd": "Try to reframe the failure as practice."
+    },
+    {
+      "chu": "budges",
+      "doc": "/ˈbʌdʒɪz/",
+      "nghia": "nhúc nhích, chịu đổi ý (budge)",
+      "vd": "Once he decides, he never budges."
+    },
+    {
+      "chu": "open-minded",
+      "doc": "/ˌəʊpən ˈmaɪndɪd/",
+      "nghia": "cởi mở, sẵn sàng tiếp nhận ý mới",
+      "vd": "Travel made her more open-minded."
+    },
+    {
+      "chu": "steelmanning",
+      "doc": "/ˈstiːlmænɪŋ/",
+      "nghia": "trình bày quan điểm đối phương ở dạng mạnh nhất rồi mới phản bác",
+      "vd": "Steelmanning makes debates more honest."
+    },
+    {
+      "chu": "straw man",
+      "doc": "/ˌstrɔː ˈmæn/",
+      "nghia": "\"người rơm\" — bóp méo quan điểm đối phương cho dễ đánh",
+      "vd": "That's a straw man; I never said that."
+    },
+    {
+      "chu": "survivable",
+      "doc": "/səˈvaɪvəbl/",
+      "nghia": "có thể vượt qua, không đến nỗi chết",
+      "vd": "A bad exam is painful but survivable."
+    }
   ],
   "yNghia": "Thay đổi suy nghĩ khi có bằng chứng mới không phải là yếu đuối — đó là dấu hiệu của sự trưởng thành. Hãy tự hỏi: \"Điều gì sẽ thuyết phục mình rằng mình sai?\", và tập tự hào vì chính xác thay vì tự hào vì lúc nào cũng đúng.",
   "meo": [
@@ -71,10 +278,55 @@
     "Khi đổi ý trước sếp/khách: \"Here's what I believed, here's the new evidence, and here's why I've updated.\""
   ],
   "cauHoi": [
-    { "hoi": "Điều gì thật sự giúp rạn san hô hồi phục?", "chon": ["Các dòng nước mát hơn", "Một loài cá ăn tảo quay lại nhờ lệnh cấm đánh bắt", "Các nhà khoa học trồng thêm san hô"], "dung": 1, "giai": "\"A species of fish that grazes on the algae… Fishing had been banned nearby.\"" },
-    { "hoi": "Câu hỏi nào khiến Mei nhìn lại giả thuyết của mình?", "chon": ["\"Kết quả nào sẽ thuyết phục chị rằng chị sai?\"", "\"Chị có chắc về số đo nhiệt độ không?\"", "\"Khi nào chị bảo vệ luận án?\""], "dung": 0, "giai": "Trợ lý năm nhất hỏi: \"What result would convince you that you're wrong?\"" },
-    { "hoi": "Mei đã đổi điều mình tự hào như thế nào?", "chon": ["Cô thôi tự hào về nghiên cứu", "Từ tự hào vì chính xác sang tự hào vì đúng", "Từ tự hào vì đúng sang tự hào vì chính xác, cập nhật nhanh khi bằng chứng đổi"], "dung": 2, "giai": "\"Instead of being proud of being right, I tried to be proud of being accurate.\"" },
-    { "hoi": "Theo Mei, cởi mở KHÔNG có nghĩa là gì?", "chon": ["Đồng ý với người nói sau cùng", "Bị thuyết phục bởi bằng chứng", "Sẵn sàng cập nhật suy nghĩ"], "dung": 0, "giai": "\"Being open-minded doesn't mean agreeing with whoever spoke last.\"" },
-    { "hoi": "\"Steelmanning\" là gì?", "chon": ["Tấn công phiên bản yếu nhất của quan điểm đối phương", "Trình bày quan điểm đối phương tốt đến mức họ đồng ý rồi mới phản bác", "Tránh mọi cuộc tranh luận"], "dung": 1, "giai": "Ngược với \"straw man\" (bóp méo quan điểm đối phương cho dễ đánh)." }
+    {
+      "hoi": "Điều gì thật sự giúp rạn san hô hồi phục?",
+      "chon": [
+        "Các dòng nước mát hơn",
+        "Một loài cá ăn tảo quay lại nhờ lệnh cấm đánh bắt",
+        "Các nhà khoa học trồng thêm san hô"
+      ],
+      "dung": 1,
+      "giai": "\"A species of fish that grazes on the algae… Fishing had been banned nearby.\""
+    },
+    {
+      "hoi": "Câu hỏi nào khiến Mei nhìn lại giả thuyết của mình?",
+      "chon": [
+        "\"Kết quả nào sẽ thuyết phục chị rằng chị sai?\"",
+        "\"Chị có chắc về số đo nhiệt độ không?\"",
+        "\"Khi nào chị bảo vệ luận án?\""
+      ],
+      "dung": 0,
+      "giai": "Trợ lý năm nhất hỏi: \"What result would convince you that you're wrong?\""
+    },
+    {
+      "hoi": "Mei đã đổi điều mình tự hào như thế nào?",
+      "chon": [
+        "Cô thôi tự hào về nghiên cứu",
+        "Từ tự hào vì chính xác sang tự hào vì đúng",
+        "Từ tự hào vì đúng sang tự hào vì chính xác, cập nhật nhanh khi bằng chứng đổi"
+      ],
+      "dung": 2,
+      "giai": "\"Instead of being proud of being right, I tried to be proud of being accurate.\""
+    },
+    {
+      "hoi": "Theo Mei, cởi mở KHÔNG có nghĩa là gì?",
+      "chon": [
+        "Đồng ý với người nói sau cùng",
+        "Bị thuyết phục bởi bằng chứng",
+        "Sẵn sàng cập nhật suy nghĩ"
+      ],
+      "dung": 0,
+      "giai": "\"Being open-minded doesn't mean agreeing with whoever spoke last.\""
+    },
+    {
+      "hoi": "\"Steelmanning\" là gì?",
+      "chon": [
+        "Tấn công phiên bản yếu nhất của quan điểm đối phương",
+        "Trình bày quan điểm đối phương tốt đến mức họ đồng ý rồi mới phản bác",
+        "Tránh mọi cuộc tranh luận"
+      ],
+      "dung": 1,
+      "giai": "Ngược với \"straw man\" (bóp méo quan điểm đối phương cho dễ đánh)."
+    }
   ]
 }

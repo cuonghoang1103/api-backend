@@ -1,0 +1,429 @@
+{
+  "id": "en-se-b2-03",
+  "nn": "en",
+  "danhMuc": "phan-mem",
+  "cap": "B2",
+  "so": 3,
+  "tieuDe": "Tell Me About a Conflict",
+  "tieuDeViet": "Hãy kể về một lần bất đồng",
+  "moTa": "Bảo luyện phỏng vấn hành vi với chị mentor Helen. Câu trả lời đầu tiên chung chung bị dừng lại; lần thứ hai anh kể theo STAR — một lần bất đồng kỹ thuật với đồng nghiệp lớn tuổi hơn, rồi một lần thất bại vì không hỏi người dùng.",
+  "chuDe": "Phỏng vấn hành vi",
+  "bieuTuong": "person.2.wave.2.fill",
+  "nguoi": [
+    {
+      "ma": "H",
+      "ten": "Helen",
+      "giong": "uk-nu",
+      "vai": "mentor, đóng vai người phỏng vấn"
+    },
+    {
+      "ma": "B",
+      "ten": "Bảo",
+      "giong": "us-nam",
+      "vai": "lập trình viên chuẩn bị đi phỏng vấn"
+    }
+  ],
+  "loi": [
+    {
+      "ai": "H",
+      "t": "Okay, Bao, let's do a practice round. I'll be the interviewer.",
+      "v": "Được rồi Bảo, mình làm một vòng luyện nhé. Chị đóng vai người phỏng vấn."
+    },
+    {
+      "ai": "H",
+      "t": "Tell me about a time you had a conflict with a teammate.",
+      "v": "Hãy kể về một lần bạn bất đồng với một đồng đội.",
+      "np": [
+        {
+          "mau": "Tell me about a time (when) + quá khứ đơn",
+          "giai": "Mẫu câu kinh điển của phỏng vấn hành vi. Họ muốn MỘT câu chuyện cụ thể trong quá khứ, nên trả lời bằng quá khứ đơn, không nói chung chung ở hiện tại.",
+          "vd": "Tell me about a time you had to learn something quickly.",
+          "vdV": "Hãy kể về một lần bạn phải học điều gì đó thật nhanh."
+        }
+      ]
+    },
+    {
+      "ai": "B",
+      "t": "Um, well, we sometimes disagreed in my team, but we always talked about it and solved it. We're all good friends.",
+      "v": "Ừm, nhóm em thỉnh thoảng cũng bất đồng, nhưng bọn em luôn nói chuyện và giải quyết. Bọn em đều là bạn tốt."
+    },
+    {
+      "ai": "H",
+      "t": "Let me stop you there. That answer is very common, and it tells me almost nothing.",
+      "v": "Chị dừng em ở đây nhé. Câu trả lời đó rất phổ biến, và nó gần như không cho chị biết gì.",
+      "khac": [
+        {
+          "kieu": "mềm mỏng",
+          "t": "Can I pause you for a second? I think we can make that answer much stronger.",
+          "v": "Chị dừng em một chút được không? Chị nghĩ mình có thể làm câu trả lời đó mạnh hơn nhiều.",
+          "ghiChu": "góp ý mà không làm người kia mất tự tin"
+        }
+      ]
+    },
+    {
+      "ai": "B",
+      "t": "What's wrong with it? It's true.",
+      "v": "Nó sai chỗ nào ạ? Đúng sự thật mà.",
+      "khac": [
+        {
+          "kieu": "mềm mỏng",
+          "t": "Could you tell me what's missing from it?",
+          "v": "Chị có thể cho em biết nó còn thiếu gì không ạ?",
+          "ghiChu": "hỏi lại góp ý mà không nghe như đang cãi"
+        }
+      ]
+    },
+    {
+      "ai": "H",
+      "t": "It's too general. The interviewer wants one specific story. Use STAR: Situation, Task, Action, Result.",
+      "v": "Nó quá chung chung. Người phỏng vấn muốn một câu chuyện cụ thể. Dùng STAR: Tình huống, Nhiệm vụ, Hành động, Kết quả."
+    },
+    {
+      "ai": "B",
+      "t": "I know STAR, but I always forget it under pressure.",
+      "v": "Em biết STAR, nhưng hễ căng thẳng là em quên."
+    },
+    {
+      "ai": "H",
+      "t": "Then think of it as four questions. Where were you? What were you responsible for? What did you do? And what changed because of it?",
+      "v": "Vậy hãy coi nó là bốn câu hỏi. Em ở đâu? Em chịu trách nhiệm việc gì? Em đã làm gì? Và nhờ đó cái gì đã thay đổi?",
+      "np": [
+        {
+          "mau": "think of A as B",
+          "giai": "\"coi A là B, hình dung A như B\" — cách giải thích một khái niệm bằng hình ảnh dễ nhớ hơn.",
+          "vd": "Think of a database index as the index at the back of a book.",
+          "vdV": "Hãy coi chỉ mục cơ sở dữ liệu như phần mục lục ở cuối sách."
+        }
+      ]
+    },
+    {
+      "ai": "B",
+      "t": "Alright, let me try again. In my internship, our team was building a reporting page that loaded very slowly, about eight seconds.",
+      "v": "Được, để em thử lại. Hồi thực tập, nhóm em đang làm một trang báo cáo tải rất chậm, khoảng tám giây.",
+      "np": [
+        {
+          "mau": "quá khứ tiếp diễn làm bối cảnh",
+          "giai": "\"our team was building…\" — quá khứ tiếp diễn dựng phông nền (đang diễn ra lúc đó), rồi các sự kiện chính kể bằng quá khứ đơn.",
+          "vd": "We were preparing for a release when the server went down.",
+          "vdV": "Bọn mình đang chuẩn bị phát hành thì máy chủ sập."
+        }
+      ]
+    },
+    {
+      "ai": "B",
+      "t": "I was asked to fix it. A senior developer, Victor, wanted to add a cache straight away. I thought the real problem was a slow database query, and a cache would only hide it.",
+      "v": "Em được giao sửa nó. Một anh senior tên Victor muốn thêm bộ nhớ đệm ngay lập tức. Em lại nghĩ vấn đề thật là một truy vấn cơ sở dữ liệu chậm, và bộ nhớ đệm chỉ che giấu nó.",
+      "np": [
+        {
+          "mau": "I was asked to + V (bị động)",
+          "giai": "\"Tôi được giao/được yêu cầu…\" — câu bị động rất hợp để nói về nhiệm vụ (phần Task trong STAR) mà không cần nêu ai giao.",
+          "vd": "I was asked to lead the migration.",
+          "vdV": "Tôi được giao dẫn dắt việc chuyển đổi hệ thống."
+        }
+      ]
+    },
+    {
+      "ai": "H",
+      "t": "Good. That's the situation and the task. Now, what did you actually do?",
+      "v": "Tốt. Đó là tình huống và nhiệm vụ. Giờ, em đã thật sự làm gì?"
+    },
+    {
+      "ai": "B",
+      "t": "First, I didn't argue in the group chat. I asked him for a short call, and I brought data. I'd measured the query, and it took seven of the eight seconds.",
+      "v": "Đầu tiên, em không tranh luận trong nhóm chat. Em xin anh ấy một cuộc gọi ngắn, và em mang theo số liệu. Em đã đo truy vấn đó, và nó chiếm bảy trong tám giây.",
+      "np": [
+        {
+          "mau": "had + V3 (quá khứ hoàn thành)",
+          "giai": "\"I'd measured…\" — việc đã làm XONG trước một thời điểm trong quá khứ (trước cuộc gọi). Cho thấy mình đã chuẩn bị trước.",
+          "vd": "By the time the meeting started, I'd read all the reports.",
+          "vdV": "Lúc buổi họp bắt đầu, tôi đã đọc hết các báo cáo."
+        }
+      ]
+    },
+    {
+      "ai": "B",
+      "t": "I said, \"I might be wrong, but could we try fixing the query first? If it's not enough, we'll add the cache.\"",
+      "v": "Em nói: \"Có thể em sai, nhưng mình thử sửa truy vấn trước được không anh? Nếu chưa đủ thì mình thêm bộ nhớ đệm.\"",
+      "np": [
+        {
+          "mau": "I might be wrong, but…",
+          "giai": "Rào đón trước khi phản đối người có kinh nghiệm hơn: cho thấy mình khiêm tốn nhưng vẫn nêu rõ ý.",
+          "vd": "I might be wrong, but I think this test is checking the wrong value.",
+          "vdV": "Có thể tôi sai, nhưng tôi nghĩ test này đang kiểm sai giá trị."
+        }
+      ],
+      "khac": [
+        {
+          "kieu": "chuyên nghiệp",
+          "t": "The data suggests the query is the bottleneck. Could we address that first and add caching if we still need it?",
+          "v": "Số liệu cho thấy truy vấn là điểm nghẽn. Mình xử lý nó trước rồi thêm bộ nhớ đệm nếu vẫn cần được không?"
+        },
+        {
+          "kieu": "mềm mỏng",
+          "t": "I see why a cache makes sense, but would you be open to trying the query fix first?",
+          "v": "Em hiểu vì sao bộ nhớ đệm hợp lý, nhưng anh có sẵn lòng thử sửa truy vấn trước không?"
+        }
+      ]
+    },
+    {
+      "ai": "H",
+      "t": "I like that. You disagreed without making it personal.",
+      "v": "Chị thích chỗ đó. Em bất đồng mà không biến nó thành chuyện cá nhân."
+    },
+    {
+      "ai": "B",
+      "t": "He agreed to try for one day. I added an index to the table, and the page went from eight seconds to under one.",
+      "v": "Anh ấy đồng ý thử một ngày. Em thêm một chỉ mục cho bảng, và trang giảm từ tám giây xuống dưới một giây."
+    },
+    {
+      "ai": "H",
+      "t": "And what was the result for your working relationship?",
+      "v": "Thế kết quả đối với mối quan hệ làm việc của hai người thì sao?"
+    },
+    {
+      "ai": "B",
+      "t": "That's the part I'm proudest of. Later, he asked me to review his query code on another project. So the disagreement actually built trust.",
+      "v": "Đó là phần em tự hào nhất. Sau đó, anh ấy nhờ em review code truy vấn của anh ấy ở một dự án khác. Nên cuộc bất đồng thật ra đã xây dựng được lòng tin.",
+      "np": [
+        {
+          "mau": "the part (that) I'm proudest of",
+          "giai": "Mệnh đề quan hệ rút gọn (bỏ that) với giới từ đứng cuối: \"phần mà tôi tự hào nhất\". Văn nói tự nhiên hơn nhiều so với \"of which I'm proudest\".",
+          "vd": "That's the project I learned the most from.",
+          "vdV": "Đó là dự án tôi học được nhiều nhất."
+        }
+      ]
+    },
+    {
+      "ai": "H",
+      "t": "Much better. Notice how you said \"I\" this time, not \"we\". Interviewers hire you, not your team.",
+      "v": "Tốt hơn nhiều. Để ý là lần này em nói \"em\", chứ không phải \"bọn em\". Người phỏng vấn tuyển em, không tuyển cả nhóm em."
+    },
+    {
+      "ai": "B",
+      "t": "That's a good point. In Vietnamese, saying \"I did this\" can sound a bit like showing off.",
+      "v": "Đúng thật. Trong tiếng Việt, nói \"em đã làm cái này\" nghe hơi giống khoe khoang."
+    },
+    {
+      "ai": "H",
+      "t": "I understand, but in an interview, being clear isn't showing off. You can still give credit to others.",
+      "v": "Chị hiểu, nhưng trong phỏng vấn, nói rõ ràng không phải là khoe. Em vẫn có thể ghi nhận công của người khác.",
+      "np": [
+        {
+          "mau": "V-ing làm chủ ngữ: being clear is…",
+          "giai": "Danh động từ đứng đầu câu làm chủ ngữ, động từ chính chia số ít. \"being clear isn't showing off\" — cả hai vế đều là V-ing.",
+          "vd": "Asking for help isn't a sign of weakness.",
+          "vdV": "Nhờ giúp đỡ không phải là dấu hiệu yếu kém."
+        }
+      ]
+    },
+    {
+      "ai": "H",
+      "t": "Now, a harder one. Tell me about a time you failed.",
+      "v": "Giờ một câu khó hơn. Hãy kể về một lần em thất bại.",
+      "khac": [
+        {
+          "kieu": "trang trọng",
+          "t": "Could you describe a situation where something you worked on didn't go as planned?",
+          "v": "Bạn có thể mô tả một tình huống mà việc bạn làm không diễn ra như kế hoạch không?",
+          "ghiChu": "cách người phỏng vấn hỏi khéo về thất bại"
+        }
+      ]
+    },
+    {
+      "ai": "B",
+      "t": "Last year, I built a feature for our student club's app that let members vote on events. I spent three weeks on it, and almost nobody used it.",
+      "v": "Năm ngoái, em làm một tính năng cho ứng dụng của câu lạc bộ sinh viên, cho phép thành viên bình chọn sự kiện. Em mất ba tuần cho nó, mà gần như không ai dùng."
+    },
+    {
+      "ai": "H",
+      "t": "Why do you think that was?",
+      "v": "Em nghĩ vì sao lại vậy?"
+    },
+    {
+      "ai": "B",
+      "t": "Because I never asked the members if they wanted it. I just assumed. If I had shown them a simple sketch first, I would have found out in one day.",
+      "v": "Vì em chưa bao giờ hỏi thành viên xem họ có muốn không. Em chỉ tự đoán. Nếu em cho họ xem một bản phác thảo đơn giản trước, em đã biết được chỉ trong một ngày.",
+      "np": [
+        {
+          "mau": "If + had + V3, would have + V3 (điều kiện loại 3)",
+          "giai": "Nói về quá khứ đã không xảy ra và kết quả khác lẽ ra đã có — rất hợp để nói bài học từ thất bại mà không đổ lỗi.",
+          "vd": "If we had tested it on real phones, we would have seen the bug.",
+          "vdV": "Nếu bọn mình test trên điện thoại thật thì đã thấy lỗi rồi."
+        }
+      ]
+    },
+    {
+      "ai": "H",
+      "t": "And what do you do differently now?",
+      "v": "Còn bây giờ em làm khác đi thế nào?"
+    },
+    {
+      "ai": "B",
+      "t": "Now I always talk to at least three users before I write any code. It saves weeks.",
+      "v": "Giờ em luôn nói chuyện với ít nhất ba người dùng trước khi viết dòng code nào. Nó tiết kiệm hàng tuần trời."
+    },
+    {
+      "ai": "H",
+      "t": "Excellent. Short, honest, and you ended with what you changed. That's exactly what they want to hear.",
+      "v": "Xuất sắc. Ngắn, thật, và em kết thúc bằng điều em đã thay đổi. Đó chính là điều họ muốn nghe."
+    },
+    {
+      "ai": "B",
+      "t": "So the failure itself isn't the point?",
+      "v": "Vậy bản thân thất bại không phải là điều quan trọng ạ?"
+    },
+    {
+      "ai": "H",
+      "t": "No. Everybody fails. The point is whether you learned something you can show.",
+      "v": "Không. Ai cũng thất bại. Điều quan trọng là em có học được điều gì mà em chứng minh được hay không.",
+      "np": [
+        {
+          "mau": "The point is whether + mệnh đề",
+          "giai": "\"Điều cốt lõi là liệu… hay không\" — whether mở đầu một mệnh đề danh từ, nhấn vào điều thật sự quan trọng.",
+          "vd": "The question is whether we can finish by Friday.",
+          "vdV": "Vấn đề là liệu chúng ta có xong trước thứ Sáu không."
+        }
+      ]
+    },
+    {
+      "ai": "B",
+      "t": "Thanks, Helen. I feel much more confident now. Can we do one more round tomorrow?",
+      "v": "Cảm ơn chị Helen. Giờ em tự tin hơn nhiều rồi. Mai mình luyện thêm một vòng được không chị?",
+      "khac": [
+        {
+          "kieu": "lịch sự",
+          "t": "Would you be free for another practice round tomorrow?",
+          "v": "Mai chị có rảnh để luyện thêm một vòng không ạ?"
+        },
+        {
+          "kieu": "thân mật",
+          "t": "Same time tomorrow?",
+          "v": "Mai cùng giờ nhé chị?"
+        }
+      ]
+    }
+  ],
+  "tuVung": [
+    {
+      "chu": "practice round",
+      "doc": "/ˈpræktɪs raʊnd/",
+      "nghia": "vòng luyện tập",
+      "vd": "Let's do one practice round before the real interview."
+    },
+    {
+      "chu": "conflict",
+      "doc": "/ˈkɒnflɪkt/",
+      "nghia": "sự bất đồng, xung đột",
+      "vd": "How do you handle conflict in a team?"
+    },
+    {
+      "chu": "under pressure",
+      "doc": "/ˈʌndə ˈpreʃə/",
+      "nghia": "khi bị áp lực",
+      "vd": "She stays calm under pressure."
+    },
+    {
+      "chu": "responsible for",
+      "doc": "/rɪˈspɒnsəbl fɔː/",
+      "nghia": "chịu trách nhiệm về",
+      "vd": "I was responsible for the login system."
+    },
+    {
+      "chu": "straight away",
+      "doc": "/streɪt əˈweɪ/",
+      "nghia": "ngay lập tức",
+      "vd": "He replied straight away."
+    },
+    {
+      "chu": "brought data",
+      "doc": "/brɔːt ˈdeɪtə/",
+      "nghia": "mang theo số liệu (để thuyết phục)",
+      "vd": "She brought data to the meeting, not just opinions."
+    },
+    {
+      "chu": "making it personal",
+      "doc": "/ˈmeɪkɪŋ ɪt ˈpɜːsənl/",
+      "nghia": "biến thành chuyện cá nhân",
+      "vd": "You can disagree without making it personal."
+    },
+    {
+      "chu": "index",
+      "doc": "/ˈɪndeks/",
+      "nghia": "chỉ mục (giúp truy vấn nhanh hơn)",
+      "vd": "Adding an index made the search ten times faster."
+    },
+    {
+      "chu": "built trust",
+      "doc": "/bɪlt trʌst/",
+      "nghia": "xây dựng lòng tin",
+      "vd": "Being honest about mistakes built trust in the team."
+    },
+    {
+      "chu": "showing off",
+      "doc": "/ˈʃəʊɪŋ ɒf/",
+      "nghia": "khoe khoang",
+      "vd": "He's not showing off; he's just proud."
+    },
+    {
+      "chu": "give credit to",
+      "doc": "/ɡɪv ˈkredɪt tuː/",
+      "nghia": "ghi nhận công lao của",
+      "vd": "Always give credit to the people who helped you."
+    },
+    {
+      "chu": "assumed",
+      "doc": "/əˈsjuːmd/",
+      "nghia": "tự cho là, đoán mà không kiểm chứng",
+      "vd": "I assumed the meeting was cancelled."
+    }
+  ],
+  "yNghia": "Phỏng vấn hành vi không chấm việc bạn có từng bất đồng hay thất bại không — ai cũng có. Họ muốn thấy bạn xử lý thế nào: bất đồng bằng số liệu thay vì cái tôi, nhận thất bại kèm điều mình đã thay đổi. Và hãy nói \"tôi\": nói rõ việc mình làm không phải là khoe.",
+  "meo": [
+    "STAR = Situation · Task · Action · Result. Nhớ bằng 4 câu hỏi: Ở đâu? Phụ trách gì? Làm gì? Thay đổi gì?",
+    "Kể chuyện: quá khứ tiếp diễn cho bối cảnh (was building), quá khứ đơn cho sự kiện, quá khứ hoàn thành cho việc đã chuẩn bị trước (I'd measured).",
+    "Bất đồng với người có kinh nghiệm hơn: \"I might be wrong, but could we try…?\"",
+    "Nói về thất bại bằng điều kiện loại 3: \"If I had…, I would have…\" rồi kết bằng \"Now I always…\"."
+  ],
+  "cauHoi": [
+    {
+      "hoi": "Vì sao Helen dừng câu trả lời đầu tiên của Bảo?",
+      "chon": [
+        "Vì Bảo nói dối",
+        "Vì nó quá chung chung, không có câu chuyện cụ thể",
+        "Vì Bảo nói quá dài"
+      ],
+      "dung": 1,
+      "giai": "\"It's too general. The interviewer wants one specific story.\""
+    },
+    {
+      "hoi": "Bảo và Victor bất đồng về điều gì?",
+      "chon": [
+        "Thêm bộ nhớ đệm ngay hay sửa truy vấn chậm trước",
+        "Dùng ngôn ngữ lập trình nào",
+        "Ai sẽ dẫn dắt dự án"
+      ],
+      "dung": 0,
+      "giai": "\"Victor wanted to add a cache straight away. I thought the real problem was a slow database query.\""
+    },
+    {
+      "hoi": "Kết quả về mối quan hệ của hai người là gì?",
+      "chon": [
+        "Victor xin chuyển nhóm",
+        "Hai người không nói chuyện nữa",
+        "Victor sau đó nhờ Bảo review code truy vấn của mình"
+      ],
+      "dung": 2,
+      "giai": "\"Later, he asked me to review his query code on another project.\""
+    },
+    {
+      "hoi": "Vì sao tính năng bình chọn thất bại?",
+      "chon": [
+        "Vì có nhiều lỗi",
+        "Vì Bảo không hỏi thành viên trước xem họ có cần không",
+        "Vì làm quá chậm"
+      ],
+      "dung": 1,
+      "giai": "\"Because I never asked the members if they wanted it. I just assumed.\""
+    }
+  ]
+}

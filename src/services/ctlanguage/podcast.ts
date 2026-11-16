@@ -6,7 +6,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { NotFoundError } from '../../middleware/errorHandler.js';
 import { logger } from '../../utils/logger.js';
-import { CAP_PODCAST, NN_PODCAST, kiemTap, soSanhTap, tomTatTap, type NnPodcast, type TapPodcast } from './podcastThuan.js';
+import { CAP_PODCAST, DANH_MUC_PODCAST, MA_DANH_MUC, NN_PODCAST, danhMucCua, kiemTap, soSanhTap, tomTatTap, type NnPodcast, type TapPodcast } from './podcastThuan.js';
 import { kiemNn } from './tuDien.js';
 
 export const THU_MUC_PODCAST = path.join(process.cwd(), 'content', 'ctlanguage', 'podcast');
@@ -38,14 +38,22 @@ function kho(): TapPodcast[] { return (khoTap ??= napPodcast()); }
 /** Test: thay kho. */
 export function _datKhoPodcast(k: TapPodcast[] | null) { khoTap = k; }
 
-/** Danh sách tập (tóm tắt) gom theo cấp — `nn` bỏ trống ⇒ cả ba ngôn ngữ (tuyến không tham số: smoke-test deploy gọi). */
-export function danhSachPodcast(nnV?: unknown) {
+/**
+ * Danh sách tập (tóm tắt) gom theo cấp, trong MỘT danh mục (`danhMuc`, mặc định "doi-song") + bảng danh mục kèm số tập.
+ * `nn` bỏ trống ⇒ cả ba ngôn ngữ (tuyến không tham số: smoke-test deploy gọi). App bản cũ (chưa biết danh mục) không
+ * gửi `danhMuc` ⇒ nhận đúng "Đời sống" như trước.
+ */
+export function danhSachPodcast(nnV?: unknown, danhMucV?: unknown) {
   const nn = nnV === undefined || nnV === '' ? null : (kiemNn(String(nnV)) as NnPodcast);
-  const ds = kho().filter((t) => !nn || t.nn === nn);
+  const dm = typeof danhMucV === 'string' && MA_DANH_MUC.includes(danhMucV) ? danhMucV : 'doi-song';
+  const theoNn = kho().filter((t) => !nn || t.nn === nn);
+  const ds = theoNn.filter((t) => danhMucCua(t) === dm);
   const cap = (nn ? [nn] : [...NN_PODCAST]).flatMap((n) => CAP_PODCAST[n].map((c) => ({
     nn: n, cap: c, tap: ds.filter((t) => t.nn === n && t.cap === c).map(tomTatTap),
   }))).filter((g) => g.tap.length);
-  return { tong: ds.length, cap };
+  const danhMuc = DANH_MUC_PODCAST.map((d) => ({ ...d, soTap: theoNn.filter((t) => danhMucCua(t) === d.ma).length }))
+    .filter((d) => d.soTap > 0 || d.ma === 'doi-song');
+  return { tong: ds.length, tongTatCa: theoNn.length, danhMucDangXem: dm, danhMuc, cap };
 }
 
 export function chiTietTap(nnV: string, id: string): TapPodcast {

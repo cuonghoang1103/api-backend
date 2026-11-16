@@ -1,0 +1,241 @@
+{
+  "id": "zh-se-hsk3-01",
+  "nn": "zh",
+  "danhMuc": "phan-mem",
+  "cap": "HSK3",
+  "so": 1,
+  "tieuDe": "我是新来的程序员",
+  "tieuDeViet": "Tôi là lập trình viên mới đến",
+  "moTa": "Ngày đầu đi làm ở một công ty phần mềm Trung Quốc, Minh gặp chị Vương bên nhóm kiểm thử. Tự giới thiệu, kể kinh nghiệm, và nghe chị giải thích một vòng làm việc: viết code → nộp → kiểm thử → báo bug → lên bản.",
+  "chuDe": "Ngày đầu đi làm",
+  "bieuTuong": "person.badge.plus",
+  "nguoi": [
+    { "ma": "W", "ten": "Chị Vương", "giong": "zh-nu", "vai": "trưởng nhóm kiểm thử" },
+    { "ma": "M", "ten": "Minh", "giong": "zh-nam", "vai": "lập trình viên back-end người Việt" }
+  ],
+  "loi": [
+    {
+      "ai": "W",
+      "t": "你好！你就是新来的程序员吧？",
+      "doc": "Nǐ hǎo! Nǐ jiù shì xīn lái de chéngxùyuán ba?",
+      "v": "Chào em! Em là lập trình viên mới đến phải không?",
+      "khac": [
+        { "kieu": "lịch sự", "t": "您好，请问您是新来的同事吗？", "doc": "Nín hǎo, qǐngwèn nín shì xīn lái de tóngshì ma?", "v": "Chào anh, xin hỏi anh là đồng nghiệp mới phải không ạ?", "ghiChu": "khi chưa biết đối phương, hoặc đối phương lớn tuổi hơn" }
+      ],
+      "np": [
+        { "mau": "câu + 吧？", "giai": "吧 cuối câu hỏi = đoán gần chắc rồi hỏi lại để xác nhận (\"…phải không?\"). Khác 吗: 吗 hỏi thật sự chưa biết.", "vd": "你是越南人吧？", "vdDoc": "Nǐ shì Yuènán rén ba?", "vdV": "Bạn là người Việt Nam phải không?" }
+      ]
+    },
+    {
+      "ai": "M",
+      "t": "对，我叫阮明，是越南人。今天是我第一天上班，请多关照！",
+      "doc": "Duì, wǒ jiào Ruǎn Míng, shì Yuènán rén. Jīntiān shì wǒ dì yī tiān shàngbān, qǐng duō guānzhào!",
+      "v": "Vâng, em tên là Nguyễn Minh, người Việt Nam. Hôm nay là ngày đầu tiên em đi làm, mong chị chỉ bảo thêm!",
+      "khac": [
+        { "kieu": "trang trọng", "t": "大家好，我是阮明，以后请大家多多指教。", "doc": "Dàjiā hǎo, wǒ shì Ruǎn Míng, yǐhòu qǐng dàjiā duōduō zhǐjiào.", "v": "Chào mọi người, tôi là Nguyễn Minh, sau này mong mọi người chỉ giáo nhiều.", "ghiChu": "giới thiệu trước cả phòng, trong cuộc họp" },
+        { "kieu": "thân mật", "t": "你好，我叫阮明，新来的，以后多关照啊！", "doc": "Nǐ hǎo, wǒ jiào Ruǎn Míng, xīn lái de, yǐhòu duō guānzhào a!", "v": "Chào nhé, mình là Minh, người mới, sau này nhờ cậu nhé!", "ghiChu": "với đồng nghiệp cùng tuổi" }
+      ],
+      "np": [
+        { "mau": "第 + số + (lượng từ) + danh từ", "giai": "第 đặt trước số để chỉ thứ tự: 第一天 = ngày thứ nhất, 第二次 = lần thứ hai. Không có 第 thì là số lượng: 一天 = một ngày.", "vd": "这是我第二次来中国。", "vdDoc": "Zhè shì wǒ dì èr cì lái Zhōngguó.", "vdV": "Đây là lần thứ hai tôi đến Trung Quốc." }
+      ]
+    },
+    {
+      "ai": "W",
+      "t": "欢迎欢迎！我姓王，是测试组的，大家都叫我王姐。",
+      "doc": "Huānyíng huānyíng! Wǒ xìng Wáng, shì cèshì zǔ de, dàjiā dōu jiào wǒ Wáng jiě.",
+      "v": "Chào mừng em! Chị họ Vương, ở nhóm kiểm thử, mọi người đều gọi chị là chị Vương.",
+      "np": [
+        { "mau": "姓 + họ / 叫 + tên", "giai": "姓 chỉ đi với họ (我姓王), 叫 đi với tên hoặc họ tên đầy đủ (我叫王丽). Không nói *我姓王丽*.", "vd": "我姓陈，叫陈静。", "vdDoc": "Wǒ xìng Chén, jiào Chén Jìng.", "vdV": "Tôi họ Trần, tên là Trần Tĩnh." }
+      ]
+    },
+    {
+      "ai": "W",
+      "t": "你的中文说得真好，在哪儿学的？",
+      "doc": "Nǐ de Zhōngwén shuō de zhēn hǎo, zài nǎr xué de?",
+      "v": "Tiếng Trung của em nói hay thật, em học ở đâu thế?",
+      "np": [
+        { "mau": "V + 得 + 真/很 + adj", "giai": "Bổ ngữ trạng thái: nhận xét việc làm ra sao. Có tân ngữ thì đưa tân ngữ lên trước: 中文说得好 (không nói *说中文得好*).", "vd": "他代码写得很快。", "vdDoc": "Tā dàimǎ xiě de hěn kuài.", "vdV": "Anh ấy viết code rất nhanh." },
+        { "mau": "(是) + nơi chốn/thời gian + V + 的", "giai": "Hỏi/nhấn mạnh chi tiết của việc ĐÃ xảy ra (ở đâu, khi nào, bằng cách nào). 是 hay bị lược bỏ trong văn nói.", "vd": "你是什么时候来的？", "vdDoc": "Nǐ shì shénme shíhou lái de?", "vdV": "Bạn đến lúc nào vậy?" }
+      ]
+    },
+    {
+      "ai": "M",
+      "t": "哪里哪里，还差得远呢。我是在大学学的，学了三年。",
+      "doc": "Nǎlǐ nǎlǐ, hái chà de yuǎn ne. Wǒ shì zài dàxué xué de, xué le sān nián.",
+      "v": "Đâu có ạ, em còn kém xa lắm. Em học ở trường đại học, học ba năm rồi.",
+      "khac": [
+        { "kieu": "tự nhiên hơn", "t": "谢谢，我还在努力学习。", "doc": "Xièxie, wǒ hái zài nǔlì xuéxí.", "v": "Cảm ơn chị, em vẫn đang cố gắng học.", "ghiChu": "người trẻ bây giờ hay đáp lời khen bằng 谢谢 hơn là 哪里哪里" }
+      ],
+      "np": [
+        { "mau": "V + 了 + khoảng thời gian", "giai": "Nói một việc kéo dài bao lâu: 学了三年 = đã học (trong) ba năm. Khoảng thời gian đứng SAU động từ, khác tiếng Việt có thể nói \"ba năm học\".", "vd": "我在这家公司工作了两年。", "vdDoc": "Wǒ zài zhè jiā gōngsī gōngzuò le liǎng nián.", "vdV": "Tôi đã làm ở công ty này hai năm." }
+      ]
+    },
+    {
+      "ai": "W",
+      "t": "你以前做过什么工作？",
+      "doc": "Nǐ yǐqián zuò guo shénme gōngzuò?",
+      "v": "Trước đây em từng làm công việc gì?",
+      "np": [
+        { "mau": "V + 过", "giai": "过 sau động từ = đã từng trải qua (kinh nghiệm). Phủ định: 没 + V + 过.", "vd": "我没用过这个软件。", "vdDoc": "Wǒ méi yòng guo zhège ruǎnjiàn.", "vdV": "Tôi chưa từng dùng phần mềm này." }
+      ]
+    },
+    {
+      "ai": "M",
+      "t": "我在越南的一家公司写过两年代码，主要做网站的后端。",
+      "doc": "Wǒ zài Yuènán de yì jiā gōngsī xiě guo liǎng nián dàimǎ, zhǔyào zuò wǎngzhàn de hòuduān.",
+      "v": "Em từng viết code hai năm ở một công ty tại Việt Nam, chủ yếu làm back-end cho website."
+    },
+    {
+      "ai": "W",
+      "t": "太好了，开发组正好缺后端。那你会用Java吗？",
+      "doc": "Tài hǎo le, kāifā zǔ zhènghǎo quē hòuduān. Nà nǐ huì yòng Java ma?",
+      "v": "Tốt quá, nhóm phát triển đang thiếu đúng người làm back-end. Thế em có biết dùng Java không?"
+    },
+    {
+      "ai": "M",
+      "t": "会一点儿。我用得比较多的是Python和SQL。",
+      "doc": "Huì yìdiǎnr. Wǒ yòng de bǐjiào duō de shì Python hé SQL.",
+      "v": "Em biết một chút. Cái em dùng nhiều hơn là Python và SQL."
+    },
+    {
+      "ai": "W",
+      "t": "没问题。我先给你介绍一下我们每天的工作吧。",
+      "doc": "Méi wèntí. Wǒ xiān gěi nǐ jièshào yíxià wǒmen měitiān de gōngzuò ba.",
+      "v": "Không sao. Để chị giới thiệu qua cho em công việc hằng ngày của bọn chị nhé.",
+      "np": [
+        { "mau": "给 + người + V + 一下", "giai": "给 đưa người nhận lên trước động từ; 一下 làm động tác nhẹ đi (\"qua một chút\"), nghe mềm và lịch sự hơn.", "vd": "你能给我看一下吗？", "vdDoc": "Nǐ néng gěi wǒ kàn yíxià ma?", "vdV": "Bạn cho tôi xem một chút được không?" }
+      ]
+    },
+    {
+      "ai": "W",
+      "t": "程序员写完代码以后，要先提交，然后我们测试。",
+      "doc": "Chéngxùyuán xiě wán dàimǎ yǐhòu, yào xiān tíjiāo, ránhòu wǒmen cèshì.",
+      "v": "Lập trình viên viết xong code thì phải nộp (commit) trước, sau đó bọn chị kiểm thử.",
+      "np": [
+        { "mau": "先 A，然后 B", "giai": "Nói thứ tự hai việc: trước A, sau đó B. 然后 có thể thay bằng 再 khi B là việc sẽ làm (先吃饭再走).", "vd": "先看需求，然后再写代码。", "vdDoc": "Xiān kàn xūqiú, ránhòu zài xiě dàimǎ.", "vdV": "Đọc yêu cầu trước, rồi mới viết code." }
+      ]
+    },
+    {
+      "ai": "M",
+      "t": "如果测试的时候发现问题呢？",
+      "doc": "Rúguǒ cèshì de shíhou fāxiàn wèntí ne?",
+      "v": "Nếu lúc kiểm thử phát hiện lỗi thì sao ạ?"
+    },
+    {
+      "ai": "W",
+      "t": "我们就会提一个bug，你修改好了，再交给我们测。",
+      "doc": "Wǒmen jiù huì tí yí ge bug, nǐ xiūgǎi hǎo le, zài jiāo gěi wǒmen cè.",
+      "v": "Thì bọn chị sẽ báo một bug, em sửa xong rồi lại giao cho bọn chị kiểm."
+    },
+    {
+      "ai": "W",
+      "t": "测试通过了，才能上线。",
+      "doc": "Cèshì tōngguò le, cái néng shàngxiàn.",
+      "v": "Kiểm thử đạt rồi thì mới được lên bản (go-live).",
+      "np": [
+        { "mau": "A 了，才 B", "giai": "才 = \"mới\": phải có điều kiện A thì B mới xảy ra. Nhấn mạnh A là điều kiện bắt buộc.", "vd": "你说了，我才知道。", "vdDoc": "Nǐ shuō le, wǒ cái zhīdào.", "vdV": "Bạn nói thì tôi mới biết." }
+      ]
+    },
+    {
+      "ai": "M",
+      "t": "明白了。那新版本一般什么时候上线？",
+      "doc": "Míngbai le. Nà xīn bǎnběn yìbān shénme shíhou shàngxiàn?",
+      "v": "Em hiểu rồi. Thế phiên bản mới thường lên lúc nào ạ?",
+      "khac": [
+        { "kieu": "chuyên nghiệp", "t": "请问新版本一般在什么时候发布？", "doc": "Qǐngwèn xīn bǎnběn yìbān zài shénme shíhou fābù?", "v": "Xin hỏi phiên bản mới thường được phát hành vào lúc nào?", "ghiChu": "发布 = phát hành, hay dùng trong văn bản và họp" }
+      ]
+    },
+    {
+      "ai": "W",
+      "t": "一般两个星期一次，在周四晚上。上线那天大家都比较忙。",
+      "doc": "Yìbān liǎng ge xīngqī yí cì, zài zhōusì wǎnshang. Shàngxiàn nà tiān dàjiā dōu bǐjiào máng.",
+      "v": "Thường hai tuần một lần, vào tối thứ Năm. Hôm lên bản mọi người đều khá bận."
+    },
+    {
+      "ai": "M",
+      "t": "我有不懂的地方，可以问您吗？",
+      "doc": "Wǒ yǒu bù dǒng de dìfang, kěyǐ wèn nín ma?",
+      "v": "Có chỗ nào em không hiểu, em hỏi chị được không ạ?",
+      "khac": [
+        { "kieu": "lịch sự", "t": "以后有不懂的，可能还得麻烦您。", "doc": "Yǐhòu yǒu bù dǒng de, kěnéng hái děi máfan nín.", "v": "Sau này có gì không hiểu, chắc em còn phải làm phiền chị.", "ghiChu": "麻烦您 = làm phiền anh/chị, câu nhờ vả rất hay dùng" },
+        { "kieu": "thân mật", "t": "不懂的我能问你吗？", "doc": "Bù dǒng de wǒ néng wèn nǐ ma?", "v": "Chỗ không hiểu mình hỏi cậu được không?", "ghiChu": "với đồng nghiệp ngang hàng" }
+      ]
+    },
+    {
+      "ai": "W",
+      "t": "当然可以，别客气。不过你要记住：不懂就问，别一个人着急。",
+      "doc": "Dāngrán kěyǐ, bié kèqi. Búguò nǐ yào jìzhù: bù dǒng jiù wèn, bié yí ge rén zháojí.",
+      "v": "Tất nhiên rồi, đừng ngại. Nhưng em phải nhớ: không hiểu thì hỏi, đừng một mình cuống lên.",
+      "np": [
+        { "mau": "不 A 就 B", "giai": "\"Hễ không A thì B\" — câu điều kiện ngắn, rất hay dùng trong văn nói.", "vd": "不会就问老师。", "vdDoc": "Bú huì jiù wèn lǎoshī.", "vdV": "Không biết thì hỏi thầy." }
+      ]
+    },
+    {
+      "ai": "M",
+      "t": "好的，谢谢王姐！我一定会努力的。",
+      "doc": "Hǎo de, xièxie Wáng jiě! Wǒ yídìng huì nǔlì de.",
+      "v": "Vâng, cảm ơn chị Vương! Em nhất định sẽ cố gắng.",
+      "khac": [
+        { "kieu": "lịch sự", "t": "谢谢您，我会好好学的。", "doc": "Xièxie nín, wǒ huì hǎohǎo xué de.", "v": "Cảm ơn chị, em sẽ học hành chăm chỉ ạ.", "ghiChu": "với cấp trên, người hướng dẫn" }
+      ],
+      "np": [
+        { "mau": "一定会 + V + 的", "giai": "Khẳng định chắc chắn về tương lai, 的 cuối câu làm giọng chắc nịch hơn.", "vd": "明天他一定会来的。", "vdDoc": "Míngtiān tā yídìng huì lái de.", "vdV": "Ngày mai anh ấy nhất định sẽ đến." }
+      ]
+    },
+    {
+      "ai": "W",
+      "t": "走吧，我带你去见见开发组的同事。",
+      "doc": "Zǒu ba, wǒ dài nǐ qù jiànjian kāifā zǔ de tóngshì.",
+      "v": "Đi thôi, chị dẫn em đi gặp các đồng nghiệp bên nhóm phát triển.",
+      "np": [
+        { "mau": "Lặp động từ: 见见 / 看看", "giai": "Lặp động từ một âm tiết (AA) làm hành động nhẹ, ngắn, thoải mái. Chữ thứ hai đọc thanh nhẹ.", "vd": "你试试这个。", "vdDoc": "Nǐ shìshi zhège.", "vdV": "Bạn thử cái này xem." }
+      ]
+    }
+  ],
+  "tuVung": [
+    { "chu": "程序员", "doc": "chéngxùyuán", "nghia": "lập trình viên (trình tự viên)", "vd": "他是一名程序员。" },
+    { "chu": "代码", "doc": "dàimǎ", "nghia": "mã nguồn, code (đại mã); 写代码 = viết code", "vd": "这段代码是谁写的？" },
+    { "chu": "后端", "doc": "hòuduān", "nghia": "back-end (hậu đoan); 前端 qiánduān = front-end", "vd": "我主要做后端。" },
+    { "chu": "提交", "doc": "tíjiāo", "nghia": "nộp, gửi lên; commit/submit code (đề giao)", "vd": "写完记得提交代码。" },
+    { "chu": "测试", "doc": "cèshì", "nghia": "kiểm thử, test (trắc thí); 测试组 = nhóm kiểm thử", "vd": "这个功能还没测试。" },
+    { "chu": "修改", "doc": "xiūgǎi", "nghia": "sửa, chỉnh sửa (tu cải)", "vd": "这个地方需要修改。" },
+    { "chu": "通过", "doc": "tōngguò", "nghia": "thông qua, đạt (test pass)", "vd": "测试都通过了。" },
+    { "chu": "上线", "doc": "shàngxiàn", "nghia": "lên bản, go-live, đưa lên môi trường thật (thượng tuyến)", "vd": "新功能下周上线。" },
+    { "chu": "版本", "doc": "bǎnběn", "nghia": "phiên bản (bản bản)", "vd": "这是最新的版本。" },
+    { "chu": "同事", "doc": "tóngshì", "nghia": "đồng nghiệp (đồng sự)", "vd": "我的同事都很好。" },
+    { "chu": "请多关照", "doc": "qǐng duō guānzhào", "nghia": "mong được chỉ bảo/giúp đỡ nhiều (câu chào khi mới đến)", "vd": "我是新来的，请多关照。" }
+  ],
+  "yNghia": "Ngày đầu đi làm, không ai mong bạn biết hết. Điều đồng nghiệp đánh giá cao là bạn dám hỏi sớm: \"不懂就问\" — không hiểu thì hỏi, đừng một mình loay hoay. Hiểu rõ vòng làm việc của nhóm (viết → nộp → kiểm thử → sửa → lên bản) giúp bạn biết mình đứng ở đâu và cần nói với ai.",
+  "meo": [
+    "Tự giới thiệu ở công ty Trung Quốc: 我叫… + 是…人 + 今天第一天上班 + 请多关照 (hoặc 请多多指教 khi nói trước nhiều người).",
+    "Người Trung gọi đồng nghiệp lớn hơn bằng 姓 + 姐/哥 (王姐, 李哥), nhỏ hơn bằng 小 + 姓 (小阮). Gọi thẳng cả họ tên nghe khá cứng.",
+    "Thuật ngữ IT hay gặp: 提交 (commit), 提bug (báo bug), 测试通过 (test pass), 上线 (go-live), 版本 (version). \"bug\" giữ nguyên tiếng Anh.",
+    "一 đổi thanh: 一下 yíxià, 一个 yí ge (trước thanh 4), 一般 yìbān, 一点儿 yìdiǎnr (trước thanh 1, 2, 3)."
+  ],
+  "cauHoi": [
+    {
+      "hoi": "Minh từng làm gì trước khi đến công ty này?",
+      "chon": ["Làm kiểm thử ba năm", "Viết code back-end hai năm ở Việt Nam", "Dạy tiếng Trung ở đại học"],
+      "dung": 1,
+      "giai": "我在越南的一家公司写过两年代码，主要做网站的后端。"
+    },
+    {
+      "hoi": "Theo chị Vương, khi nào một phiên bản mới được lên bản?",
+      "chon": ["Khi lập trình viên viết xong code", "Mỗi tối thứ Năm, bất kể thế nào", "Sau khi kiểm thử đạt"],
+      "dung": 2,
+      "giai": "测试通过了，才能上线 — kiểm thử đạt rồi mới được lên bản."
+    },
+    {
+      "hoi": "Câu 我是在大学学的 nhấn mạnh điều gì?",
+      "chon": ["Nơi Minh đã học tiếng Trung", "Minh sẽ học đại học", "Minh đang học ở đại học"],
+      "dung": 0,
+      "giai": "Cấu trúc 是…的 nhấn mạnh chi tiết (ở đâu) của một việc đã xảy ra."
+    },
+    {
+      "hoi": "Lời khuyên quan trọng chị Vương dành cho Minh là gì?",
+      "chon": ["Làm thêm giờ vào ngày lên bản", "Học Java càng sớm càng tốt", "Không hiểu thì hỏi, đừng một mình lo lắng"],
+      "dung": 2,
+      "giai": "不懂就问，别一个人着急。"
+    }
+  ]
+}

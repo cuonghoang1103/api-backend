@@ -1,0 +1,373 @@
+{
+  "id": "en-ds-a1-04",
+  "nn": "en",
+  "danhMuc": "doi-song",
+  "cap": "A1",
+  "so": 7,
+  "tieuDe": "Where To?",
+  "tieuDeViet": "Đi đâu ạ?",
+  "moTa": "Khoa hỏi chỗ bắt taxi rồi đi ra ga: nói điểm đến, hỏi bao lâu, khoảng bao nhiêu tiền, nhờ bật máy lạnh, bảo dừng xe và trả tiền.",
+  "chuDe": "Đi lại",
+  "bieuTuong": "car.fill",
+  "nguoi": [
+    {
+      "ma": "K",
+      "ten": "Khoa",
+      "giong": "us-nam",
+      "vai": "khách du lịch"
+    },
+    {
+      "ma": "P",
+      "ten": "Tom",
+      "giong": "au-nam",
+      "vai": "người đi đường"
+    },
+    {
+      "ma": "D",
+      "ten": "Kate",
+      "giong": "uk-nu",
+      "vai": "tài xế taxi"
+    }
+  ],
+  "loi": [
+    {
+      "ai": "K",
+      "t": "Excuse me. Where can I get a taxi?",
+      "v": "Xin lỗi anh. Tôi bắt taxi ở đâu được ạ?",
+      "khac": [
+        {
+          "kieu": "lịch sự",
+          "t": "Excuse me, is there a taxi stand near here?",
+          "v": "Xin lỗi, gần đây có bến taxi không ạ?"
+        },
+        {
+          "kieu": "tự nhiên hơn",
+          "t": "Sorry, do you know where I can get a taxi?",
+          "v": "Xin lỗi, anh có biết tôi bắt taxi ở đâu không?",
+          "ghiChu": "câu hỏi gián tiếp — lịch sự hơn với người lạ"
+        }
+      ],
+      "np": [
+        {
+          "mau": "Where can I + V?",
+          "giai": "Hỏi chỗ có thể làm việc gì: Where can I buy…? Where can I park?",
+          "vd": "Where can I buy a SIM card?",
+          "vdV": "Tôi mua SIM ở đâu được?"
+        }
+      ]
+    },
+    {
+      "ai": "P",
+      "t": "The taxi stand is over there, next to the bank. Or you can use an app.",
+      "v": "Bến taxi ở đằng kia, cạnh ngân hàng. Hoặc anh có thể đặt xe bằng ứng dụng.",
+      "np": [
+        {
+          "mau": "over there / next to + N",
+          "giai": "over there = đằng kia (vừa nói vừa chỉ tay); next to = ngay cạnh.",
+          "vd": "The toilet is next to the lift.",
+          "vdV": "Nhà vệ sinh ở cạnh thang máy."
+        }
+      ]
+    },
+    {
+      "ai": "K",
+      "t": "Thanks! Is the train station far from here?",
+      "v": "Cảm ơn anh! Ga tàu có xa đây không ạ?",
+      "khac": [
+        {
+          "kieu": "ngắn gọn",
+          "t": "Is the station far?",
+          "v": "Ga có xa không?"
+        }
+      ],
+      "np": [
+        {
+          "mau": "Is + nơi + far from here?",
+          "giai": "Hỏi có xa không. Trả lời bằng thời gian: \"About ten minutes on foot\".",
+          "vd": "Is the hospital far from here?",
+          "vdV": "Bệnh viện có xa đây không?"
+        }
+      ]
+    },
+    {
+      "ai": "P",
+      "t": "About twenty minutes on foot. By car, five minutes.",
+      "v": "Đi bộ khoảng hai mươi phút. Đi xe thì năm phút."
+    },
+    {
+      "ai": "K",
+      "t": "Okay, I'll take a taxi. Thank you!",
+      "v": "Vâng, vậy tôi đi taxi. Cảm ơn anh!"
+    },
+    {
+      "ai": "D",
+      "t": "Hi! Where to?",
+      "v": "Chào anh! Đi đâu ạ?",
+      "khac": [
+        {
+          "kieu": "lịch sự",
+          "t": "Hello! Where would you like to go?",
+          "v": "Xin chào! Anh muốn đi đâu ạ?"
+        }
+      ],
+      "np": [
+        {
+          "mau": "Where to? = Where do you want to go?",
+          "giai": "Câu rút gọn rất hay nghe từ tài xế. Đáp: tên nơi + \"please\".",
+          "vd": "Where to? — The airport, please.",
+          "vdV": "Đi đâu ạ? — Ra sân bay."
+        }
+      ]
+    },
+    {
+      "ai": "K",
+      "t": "The Central Station, please. Here's the address.",
+      "v": "Ga Trung tâm ạ. Địa chỉ đây.",
+      "khac": [
+        {
+          "kieu": "lịch sự",
+          "t": "Could you take me to the Central Station, please?",
+          "v": "Chị chở tôi đến Ga Trung tâm được không ạ?"
+        },
+        {
+          "kieu": "ngắn gọn",
+          "t": "Central Station, please.",
+          "v": "Ga Trung tâm."
+        }
+      ],
+      "np": [
+        {
+          "mau": "Could you take me to + nơi?",
+          "giai": "Nhờ tài xế chở đến đâu. Đưa địa chỉ trên điện thoại kèm câu \"Here's the address\" cho chắc.",
+          "vd": "Could you take me to this hotel?",
+          "vdV": "Chị chở tôi đến khách sạn này được không?"
+        }
+      ]
+    },
+    {
+      "ai": "D",
+      "t": "No problem. Are you in a hurry?",
+      "v": "Được ạ. Anh có vội không?"
+    },
+    {
+      "ai": "K",
+      "t": "Yes, my train is at four. How long does it take?",
+      "v": "Có, tàu của tôi lúc bốn giờ. Đi mất bao lâu ạ?",
+      "np": [
+        {
+          "mau": "at + giờ",
+          "giai": "Giờ cụ thể dùng at: at four, at 7:30. Ngày dùng on (on Monday), tháng dùng in (in May).",
+          "vd": "The shop opens at nine.",
+          "vdV": "Cửa hàng mở lúc chín giờ."
+        }
+      ]
+    },
+    {
+      "ai": "D",
+      "t": "About ten minutes. The traffic is okay today.",
+      "v": "Khoảng mười phút. Hôm nay đường không kẹt lắm."
+    },
+    {
+      "ai": "K",
+      "t": "Great. About how much is it?",
+      "v": "Tốt quá. Khoảng bao nhiêu tiền ạ?",
+      "khac": [
+        {
+          "kieu": "lịch sự",
+          "t": "Roughly how much will it be?",
+          "v": "Ước chừng bao nhiêu tiền ạ?"
+        }
+      ]
+    },
+    {
+      "ai": "D",
+      "t": "About fifteen dollars.",
+      "v": "Khoảng mười lăm đô."
+    },
+    {
+      "ai": "K",
+      "t": "Okay. Could you turn on the air conditioning, please? It's hot.",
+      "v": "Vâng. Chị bật máy lạnh giúp tôi được không? Nóng quá.",
+      "khac": [
+        {
+          "kieu": "văn nói",
+          "t": "Can you turn the AC on?",
+          "v": "Chị bật máy lạnh được không?",
+          "ghiChu": "AC = máy lạnh, chỉ dùng khi nói"
+        }
+      ],
+      "np": [
+        {
+          "mau": "turn on / turn off",
+          "giai": "Bật / tắt (đèn, máy lạnh, nhạc). Có thể nói \"turn on the light\" hoặc \"turn the light on\".",
+          "vd": "Please turn off your phone.",
+          "vdV": "Vui lòng tắt điện thoại."
+        }
+      ]
+    },
+    {
+      "ai": "D",
+      "t": "Sure.",
+      "v": "Được ạ."
+    },
+    {
+      "ai": "K",
+      "t": "You can stop here, please. Next to the big clock.",
+      "v": "Chị dừng ở đây được rồi. Cạnh cái đồng hồ lớn.",
+      "khac": [
+        {
+          "kieu": "ngắn gọn",
+          "t": "Here is fine, thanks.",
+          "v": "Ở đây được rồi, cảm ơn chị.",
+          "ghiChu": "câu hay nhất khi muốn xuống xe"
+        },
+        {
+          "kieu": "lịch sự",
+          "t": "Could you drop me off here, please?",
+          "v": "Chị cho tôi xuống ở đây được không ạ?"
+        }
+      ]
+    },
+    {
+      "ai": "D",
+      "t": "Here we are. That's fourteen fifty.",
+      "v": "Tới rồi. Mười bốn đô rưỡi ạ."
+    },
+    {
+      "ai": "K",
+      "t": "Here's fifteen. Keep the change.",
+      "v": "Đây là mười lăm đô. Chị giữ tiền thừa nhé.",
+      "khac": [
+        {
+          "kieu": "tự nhiên hơn",
+          "t": "Fifteen's fine — keep the change.",
+          "v": "Mười lăm đi chị, khỏi thối."
+        }
+      ],
+      "np": [
+        {
+          "mau": "Keep the change.",
+          "giai": "Không cần thối lại — cách cho tiền tip nhỏ. Muốn lấy tiền thối: \"Can I have the change, please?\".",
+          "vd": "Here's ten dollars. Keep the change.",
+          "vdV": "Đây mười đô. Khỏi thối nhé."
+        }
+      ]
+    },
+    {
+      "ai": "D",
+      "t": "Thanks! Have a good trip!",
+      "v": "Cảm ơn anh! Chúc anh đi vui vẻ!"
+    }
+  ],
+  "tuVung": [
+    {
+      "chu": "taxi stand",
+      "doc": "/ˈtæksi stænd/",
+      "nghia": "bến taxi",
+      "vd": "The taxi stand is outside the hotel."
+    },
+    {
+      "chu": "next to",
+      "doc": "/nekst tuː/",
+      "nghia": "bên cạnh",
+      "vd": "The café is next to the bank."
+    },
+    {
+      "chu": "far",
+      "doc": "/fɑː(r)/",
+      "nghia": "xa",
+      "vd": "Is it far?"
+    },
+    {
+      "chu": "on foot",
+      "doc": "/ɒn fʊt/",
+      "nghia": "đi bộ",
+      "vd": "It's five minutes on foot."
+    },
+    {
+      "chu": "address",
+      "doc": "/əˈdres/",
+      "nghia": "địa chỉ",
+      "vd": "What is your address?"
+    },
+    {
+      "chu": "in a hurry",
+      "doc": "/ɪn ə ˈhʌri/",
+      "nghia": "vội",
+      "vd": "Sorry, I'm in a hurry."
+    },
+    {
+      "chu": "traffic",
+      "doc": "/ˈtræfɪk/",
+      "nghia": "giao thông, xe cộ",
+      "vd": "The traffic is bad at five p.m."
+    },
+    {
+      "chu": "air conditioning",
+      "doc": "/ˈeə kənˌdɪʃənɪŋ/",
+      "nghia": "máy lạnh, điều hoà",
+      "vd": "The room has air conditioning."
+    },
+    {
+      "chu": "Here we are",
+      "doc": "/hɪə wiː ɑː(r)/",
+      "nghia": "tới nơi rồi",
+      "vd": "Here we are — your hotel."
+    },
+    {
+      "chu": "Keep the change",
+      "doc": "/kiːp ðə tʃeɪndʒ/",
+      "nghia": "khỏi thối lại",
+      "vd": "Thanks! Keep the change."
+    }
+  ],
+  "yNghia": "Đi taxi ở nơi lạ, ba câu là đủ an tâm: nói rõ điểm đến (kèm địa chỉ trên điện thoại), hỏi trước khoảng bao nhiêu tiền, và nói \"Here is fine\" khi muốn xuống. Hỏi trước bao giờ cũng dễ chịu hơn bất ngờ sau.",
+  "meo": [
+    "Đặt xe qua ứng dụng: tài xế gọi thì nói \"Hi, I'm at the main entrance / I'm wearing a blue shirt\". Lên xe hỏi \"Are you here for Khoa?\" để chắc đúng xe.",
+    "Hỏi giá trước: \"About how much is it to…?\" — tránh bất ngờ lúc xuống xe.",
+    "Muốn dừng: \"Here is fine\", \"You can stop here\", \"Could you drop me off here?\".",
+    "\"Where to?\" là câu rút gọn của tài xế = \"Where do you want to go?\"."
+  ],
+  "cauHoi": [
+    {
+      "hoi": "Bến taxi ở đâu?",
+      "chon": [
+        "Cạnh ngân hàng",
+        "Cạnh ga tàu",
+        "Trước khách sạn"
+      ],
+      "dung": 0,
+      "giai": "\"The taxi stand is over there, next to the bank.\""
+    },
+    {
+      "hoi": "Tàu của Khoa chạy lúc mấy giờ?",
+      "chon": [
+        "Ba giờ",
+        "Bốn giờ",
+        "Năm giờ"
+      ],
+      "dung": 1,
+      "giai": "\"My train is at four.\""
+    },
+    {
+      "hoi": "Câu nào dùng để bảo tài xế dừng xe?",
+      "chon": [
+        "Turn on, please.",
+        "Where to?",
+        "Here is fine, thanks."
+      ],
+      "dung": 2,
+      "giai": "\"Here is fine\" = dừng ở đây được rồi."
+    },
+    {
+      "hoi": "Khoa trả bao nhiêu và vì sao?",
+      "chon": [
+        "$14.50 vừa đủ",
+        "$15 và bảo giữ tiền thừa",
+        "$20 và lấy lại tiền thối"
+      ],
+      "dung": 1,
+      "giai": "\"Here's fifteen. Keep the change.\""
+    }
+  ]
+}

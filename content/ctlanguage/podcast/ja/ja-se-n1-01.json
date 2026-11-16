@@ -1,0 +1,575 @@
+{
+  "id": "ja-se-n1-01",
+  "nn": "ja",
+  "danhMuc": "phan-mem",
+  "cap": "N1",
+  "so": 1,
+  "tieuDe": "代案のある反対",
+  "tieuDeViet": "Phản đối kèm phương án thay thế",
+  "moTa": "Họp thiết kế kiến trúc: trưởng phòng Ishihara muốn chuyển toàn bộ hệ thống sang microservices ngay. Kiến trúc sư người Việt Thiên đồng ý với cái đích nhưng phản đối cách đi — trước mặt cả cấp trên lẫn khách hàng. Cô đưa ra phương án tách từng bước (modular monolith), kèm tiêu chí và thời hạn. Văn nói trang trọng N1: 〜ともなると, 〜ならいざ知らず, 〜いかんで, 〜であれ〜であれ, 〜べく, とはいえ.",
+  "chuDe": "Thiết kế kiến trúc, phản biện",
+  "bieuTuong": "square.stack.3d.up.fill",
+  "nguoi": [
+    {
+      "ma": "I",
+      "ten": "石原部長",
+      "giong": "ja-nam",
+      "vai": "trưởng phòng phát triển"
+    },
+    {
+      "ma": "T",
+      "ten": "ティエン",
+      "giong": "ja2-nu",
+      "vai": "kiến trúc sư người Việt"
+    },
+    {
+      "ma": "H",
+      "ten": "長谷川",
+      "giong": "ja-nu",
+      "vai": "trưởng nhóm hệ thống phía khách hàng"
+    }
+  ],
+  "loi": [
+    {
+      "ai": "I",
+      "t": "では、新システムの構成について、私から方針を共有します。",
+      "doc": "では、しんシステムのこうせいについて、わたしからほうしんをきょうゆうします。",
+      "v": "Bây giờ tôi xin chia sẻ phương hướng về cấu trúc của hệ thống mới."
+    },
+    {
+      "ai": "I",
+      "t": "今のモノリス構成では、もう限界です。この機会に、全面的にマイクロサービスへ移行したいと考えています。",
+      "doc": "いまのモノリスこうせいでは、もうげんかいです。このきかいに、ぜんめんてきにマイクロサービスへいこうしたいとかんがえています。",
+      "v": "Cấu trúc monolith hiện tại đã tới giới hạn. Nhân dịp này, tôi muốn chuyển toàn bộ sang microservices."
+    },
+    {
+      "ai": "H",
+      "t": "弊社としても、障害のたびに全体が止まる状況は、一刻も早く解消したいところです。",
+      "doc": "へいしゃとしても、しょうがいのたびにぜんたいがとまるじょうきょうは、いっこくもはやくかいしょうしたいところです。",
+      "v": "Về phía công ty chúng tôi, tình trạng cứ có sự cố là cả hệ thống ngừng, chúng tôi cũng rất muốn giải quyết càng sớm càng tốt.",
+      "np": [
+        {
+          "mau": "V-たいところだ",
+          "giai": "Thật lòng thì muốn … (nhưng còn tuỳ hoàn cảnh) — cách nói mong muốn mềm, giữ khoảng lùi.",
+          "vd": "本当はもう少し休みたいところですが、締め切りがあるので。",
+          "vdDoc": "ほんとうはもうすこしやすみたいところですが、しめきりがあるので。",
+          "vdV": "Thật ra muốn nghỉ thêm chút nữa, nhưng có hạn chót."
+        }
+      ]
+    },
+    {
+      "ai": "I",
+      "t": "ティエンさん、設計担当として、何か補足はありますか。",
+      "doc": "ティエンさん、せっけいたんとうとして、なにかほそくはありますか。",
+      "v": "Chị Thiên, với tư cách người phụ trách thiết kế, chị có gì bổ sung không?"
+    },
+    {
+      "ai": "T",
+      "t": "はい。方向性そのものには、私も賛成です。",
+      "doc": "はい。ほうこうせいそのものには、わたしもさんせいです。",
+      "v": "Vâng. Bản thân phương hướng đó thì tôi cũng tán thành.",
+      "np": [
+        {
+          "mau": "N + そのもの",
+          "giai": "Chính bản thân N (nhấn mạnh: tôi đồng ý với chính N, còn phần khác thì chưa).",
+          "vd": "計画そのものは悪くないが、時間が足りない。",
+          "vdDoc": "けいかくそのものはわるくないが、じかんがたりない。",
+          "vdV": "Bản thân kế hoạch không tệ, nhưng thiếu thời gian."
+        }
+      ]
+    },
+    {
+      "ai": "T",
+      "t": "そのうえで、一点だけ、懸念をお伝えしてもよろしいでしょうか。",
+      "doc": "そのうえで、いってんだけ、けねんをおつたえしてもよろしいでしょうか。",
+      "v": "Trên cơ sở đó, tôi xin phép nêu một điểm lo ngại được không ạ?",
+      "khac": [
+        {
+          "kieu": "mềm mỏng",
+          "t": "差し出がましいようですが、一つだけ気になる点がございまして。",
+          "doc": "さしでがましいようですが、ひとつだけきになるてんがございまして。",
+          "v": "Có lẽ hơi quá phận, nhưng tôi có một điểm băn khoăn.",
+          "ghiChu": "góp ý với người trên — \"có lẽ tôi hơi vượt phận\""
+        },
+        {
+          "kieu": "trang trọng",
+          "t": "恐れながら、一点申し上げたいことがございます。",
+          "doc": "おそれながら、いってんもうしあげたいことがございます。",
+          "v": "Xin mạn phép, tôi có một điều muốn trình bày.",
+          "ghiChu": "rất trang trọng, trước lãnh đạo cấp cao"
+        }
+      ]
+    },
+    {
+      "ai": "I",
+      "t": "どうぞ。",
+      "doc": "どうぞ。",
+      "v": "Mời chị."
+    },
+    {
+      "ai": "T",
+      "t": "全面移行ともなると、サービス間の通信、監視、データの分割など、今は存在しない課題が一気に生じます。",
+      "doc": "ぜんめんいこうともなると、サービスかんのつうしん、かんし、データのぶんかつなど、いまはそんざいしないかだいがいっきにしょうじます。",
+      "v": "Một khi đã là chuyển đổi toàn bộ, thì những vấn đề hiện chưa có — giao tiếp giữa các service, giám sát, chia tách dữ liệu… — sẽ phát sinh cùng một lúc.",
+      "np": [
+        {
+          "mau": "〜ともなると",
+          "giai": "Một khi đã tới mức/vị trí … thì (tất nhiên) …. Dùng khi nói về một mức độ cao hơn bình thường.",
+          "vd": "部長ともなると、責任も重くなる。",
+          "vdDoc": "ぶちょうともなると、せきにんもおもくなる。",
+          "vdV": "Đã lên trưởng phòng thì trách nhiệm cũng nặng hơn."
+        }
+      ]
+    },
+    {
+      "ai": "T",
+      "t": "現在のチームは八名です。数十人規模の組織ならいざ知らず、この人数で十を超えるサービスを運用するのは、相当な負担になると言わざるを得ません。",
+      "doc": "げんざいのチームははちめいです。すうじゅうにんきぼのそしきならいざしらず、このにんずうでじゅうをこえるサービスをうんようするのは、そうとうなふたんになるといわざるをえません。",
+      "v": "Nhóm hiện có tám người. Nếu là tổ chức vài chục người thì còn khác, chứ với số người này mà vận hành hơn mười service thì buộc phải nói là gánh nặng rất lớn.",
+      "np": [
+        {
+          "mau": "〜ならいざ知らず",
+          "giai": "Nếu là A thì còn có thể hiểu/chấp nhận được, nhưng B thì … (N1, trang trọng).",
+          "vd": "子どもならいざ知らず、大人がそんなことをするなんて。",
+          "vdDoc": "こどもならいざしらず、おとながそんなことをするなんて。",
+          "vdV": "Trẻ con thì còn được, chứ người lớn mà làm chuyện như vậy…"
+        },
+        {
+          "mau": "〜と言わざるを得ない",
+          "giai": "Buộc phải nói rằng … — đưa ra nhận định tiêu cực một cách khách quan, khó tránh.",
+          "vd": "この計画は現実的ではないと言わざるを得ない。",
+          "vdDoc": "このけいかくはげんじつてきではないといわざるをえない。",
+          "vdV": "Buộc phải nói rằng kế hoạch này không thực tế."
+        }
+      ]
+    },
+    {
+      "ai": "I",
+      "t": "しかし、技術的な負債を先送りにしていては、いつまでたっても変われませんよ。",
+      "doc": "しかし、ぎじゅつてきなふさいをさきおくりにしていては、いつまでたってもかわれませんよ。",
+      "v": "Nhưng cứ trì hoãn món nợ kỹ thuật thì mãi mãi chẳng thay đổi được đâu.",
+      "np": [
+        {
+          "mau": "V-ていては",
+          "giai": "Nếu cứ (tiếp tục) làm V thì (kết quả xấu) … Dùng để cảnh báo.",
+          "vd": "そんなに休んでいては、試験に間に合わないよ。",
+          "vdDoc": "そんなにやすんでいては、しけんにまにあわないよ。",
+          "vdV": "Cứ nghỉ như thế thì không kịp thi đâu."
+        }
+      ]
+    },
+    {
+      "ai": "T",
+      "t": "おっしゃることは、ごもっともです。先送りにすべきだと申し上げているわけではございません。",
+      "doc": "おっしゃることは、ごもっともです。さきおくりにすべきだともうしあげているわけではございません。",
+      "v": "Điều anh nói hoàn toàn xác đáng. Tôi không hề nói rằng nên trì hoãn.",
+      "khac": [
+        {
+          "kieu": "mềm mỏng",
+          "t": "部長のお考えを否定するつもりは毛頭ございません。",
+          "doc": "ぶちょうのおかんがえをひていするつもりはもうとうございません。",
+          "v": "Tôi hoàn toàn không có ý phủ nhận suy nghĩ của anh.",
+          "ghiChu": "毛頭〜ない = không hề một chút nào"
+        },
+        {
+          "kieu": "thân mật",
+          "t": "いや、やらないって言ってるわけじゃなくて。",
+          "doc": "いや、やらないっていってるわけじゃなくて。",
+          "v": "Không, mình đâu có bảo là không làm.",
+          "ghiChu": "nói với đồng nghiệp ngang hàng"
+        }
+      ],
+      "np": [
+        {
+          "mau": "〜わけではございません",
+          "giai": "Không có nghĩa là … (phủ định một cách hiểu cực đoan). Dạng rất lịch sự của 〜わけではない.",
+          "vd": "反対しているわけではございません。時期の問題です。",
+          "vdDoc": "はんたいしているわけではございません。じきのもんだいです。",
+          "vdV": "Không phải tôi phản đối. Đây là vấn đề thời điểm."
+        }
+      ]
+    },
+    {
+      "ai": "T",
+      "t": "むしろ、移行を確実に成功させるべく、段階的に進めることをご提案したいのです。",
+      "doc": "むしろ、いこうをかくじつにせいこうさせるべく、だんかいてきにすすめることをごていあんしたいのです。",
+      "v": "Ngược lại, chính để việc chuyển đổi chắc chắn thành công, tôi muốn đề xuất tiến hành từng bước.",
+      "np": [
+        {
+          "mau": "V-る + べく",
+          "giai": "Để (đạt mục đích) … — văn trang trọng, mục đích của bản thân. する → すべく.",
+          "vd": "夢を実現すべく、毎日努力している。",
+          "vdDoc": "ゆめをじつげんすべく、まいにちどりょくしている。",
+          "vdV": "Để thực hiện ước mơ, ngày nào tôi cũng nỗ lực."
+        }
+      ]
+    },
+    {
+      "ai": "H",
+      "t": "段階的、と言いますと？",
+      "doc": "だんかいてき、といいますと？",
+      "v": "Từng bước nghĩa là thế nào ạ?"
+    },
+    {
+      "ai": "T",
+      "t": "まず、障害の影響が最も大きい決済の部分だけを切り出します。",
+      "doc": "まず、しょうがいのえいきょうがもっともおおきいけっさいのぶぶんだけをきりだします。",
+      "v": "Đầu tiên, chỉ tách riêng phần thanh toán — nơi sự cố gây ảnh hưởng lớn nhất."
+    },
+    {
+      "ai": "T",
+      "t": "残りは当面、モノリスのまま、内部をモジュールごとに整理しておきます。いわゆる「モジュラーモノリス」です。",
+      "doc": "のこりはとうめん、モノリスのまま、ないぶをモジュールごとにせいりしておきます。いわゆる「モジュラーモノリス」です。",
+      "v": "Phần còn lại trước mắt vẫn giữ là monolith, nhưng sắp xếp lại bên trong theo từng module. Tức là cái gọi là “modular monolith”."
+    },
+    {
+      "ai": "T",
+      "t": "そのうえで、切り出した決済サービスの運用実績いかんで、次に分ける範囲を決める、という進め方です。",
+      "doc": "そのうえで、きりだしたけっさいサービスのうんようじっせきいかんで、つぎにわけるはんいをきめる、というすすめかたです。",
+      "v": "Sau đó, tuỳ theo kết quả vận hành thực tế của service thanh toán đã tách, mới quyết định phạm vi tách tiếp theo.",
+      "np": [
+        {
+          "mau": "N + いかんで",
+          "giai": "Tuỳ vào N mà (kết quả thay đổi). Văn trang trọng N1; cũng nói 〜いかんによって.",
+          "vd": "結果いかんで、計画を変更する可能性もある。",
+          "vdDoc": "けっかいかんで、けいかくをへんこうするかのうせいもある。",
+          "vdV": "Tuỳ kết quả mà có khả năng thay đổi kế hoạch."
+        }
+      ]
+    },
+    {
+      "ai": "I",
+      "t": "それでは、結局、中途半端な構成が何年も続きかねないのではないですか。",
+      "doc": "それでは、けっきょく、ちゅうとはんぱなこうせいがなんねんもつづきかねないのではないですか。",
+      "v": "Như vậy thì rốt cuộc chẳng phải một cấu trúc nửa vời có thể kéo dài nhiều năm sao?"
+    },
+    {
+      "ai": "T",
+      "t": "ご懸念はもっともです。ですので、各段階の判断基準と期限を、最初に決めておくことを前提としたいと思います。",
+      "doc": "ごけねんはもっともです。ですので、かくだんかいのはんだんきじゅんときげんを、さいしょにきめておくことをぜんていとしたいとおもいます。",
+      "v": "Mối lo đó hoàn toàn có lý. Vì vậy, tôi muốn lấy điều kiện tiên quyết là quyết định ngay từ đầu tiêu chí và thời hạn cho mỗi giai đoạn.",
+      "np": [
+        {
+          "mau": "〜を前提とする",
+          "giai": "Lấy … làm tiền đề, điều kiện tiên quyết.",
+          "vd": "この計画は、予算が増えることを前提としている。",
+          "vdDoc": "このけいかくは、よさんがふえることをぜんていとしている。",
+          "vdV": "Kế hoạch này lấy việc tăng ngân sách làm tiền đề."
+        }
+      ]
+    },
+    {
+      "ai": "T",
+      "t": "例えば、決済サービスが三か月間、目標の稼働率を満たせば、次の段階に進む。満たせなければ、その原因を潰してから進む。",
+      "doc": "たとえば、けっさいサービスがさんかげつかん、もくひょうのかどうりつをみたせば、つぎのだんかいにすすむ。みたせなければ、そのげんいんをつぶしてからすすむ。",
+      "v": "Ví dụ, nếu service thanh toán đạt tỉ lệ hoạt động mục tiêu trong ba tháng thì sang giai đoạn tiếp. Không đạt thì xử lý dứt điểm nguyên nhân rồi mới đi tiếp."
+    },
+    {
+      "ai": "H",
+      "t": "顧客の立場から申しますと、全面移行の途中でまた大きな障害が起きるのが、一番困るんです。",
+      "doc": "こきゃくのたちばからもうしますと、ぜんめんいこうのとちゅうでまたおおきなしょうがいがおきるのが、いちばんこまるんです。",
+      "v": "Đứng ở vị trí khách hàng mà nói, điều chúng tôi sợ nhất là giữa chừng chuyển đổi toàn bộ lại xảy ra sự cố lớn."
+    },
+    {
+      "ai": "H",
+      "t": "理想の構成であれ、段階的な構成であれ、止まらないことが何より大事です。",
+      "doc": "りそうのこうせいであれ、だんかいてきなこうせいであれ、とまらないことがなによりだいじです。",
+      "v": "Dù là cấu trúc lý tưởng hay cấu trúc từng bước, điều quan trọng hơn hết là hệ thống không ngừng chạy.",
+      "np": [
+        {
+          "mau": "AであれBであれ",
+          "giai": "Dù là A hay B thì cũng … (N1, trang trọng).",
+          "vd": "学生であれ社会人であれ、ルールは守るべきだ。",
+          "vdDoc": "がくせいであれしゃかいじんであれ、ルールはまもるべきだ。",
+          "vdV": "Dù là sinh viên hay người đi làm, đều phải giữ quy định."
+        }
+      ]
+    },
+    {
+      "ai": "I",
+      "t": "……なるほど。私は少し、形から入りすぎていたのかもしれません。",
+      "doc": "……なるほど。わたしはすこし、かたちからはいりすぎていたのかもしれません。",
+      "v": "…Ra vậy. Có lẽ tôi đã hơi quá chú trọng vào hình thức."
+    },
+    {
+      "ai": "I",
+      "t": "とはいえ、マイクロサービス化という最終的な目標は変えたくありません。",
+      "doc": "とはいえ、マイクロサービスかというさいしゅうてきなもくひょうはかえたくありません。",
+      "v": "Dẫu vậy, tôi không muốn đổi mục tiêu cuối cùng là microservices hoá.",
+      "np": [
+        {
+          "mau": "とはいえ",
+          "giai": "Dẫu nói vậy, tuy thế (công nhận điều trước, nhưng vẫn giữ quan điểm).",
+          "vd": "春とはいえ、まだ寒い日が続いている。",
+          "vdDoc": "はるとはいえ、まださむいひがつづいている。",
+          "vdV": "Dù đã là mùa xuân, những ngày lạnh vẫn kéo dài."
+        }
+      ]
+    },
+    {
+      "ai": "T",
+      "t": "もちろんです。目指す姿は部長と同じです。違うのは、そこへ至る道筋だけでございます。",
+      "doc": "もちろんです。めざすすがたはぶちょうとおなじです。ちがうのは、そこへいたるみちすじだけでございます。",
+      "v": "Tất nhiên rồi ạ. Hình mẫu hướng tới của tôi cũng giống anh. Khác nhau chỉ là con đường để đi tới đó.",
+      "khac": [
+        {
+          "kieu": "tự nhiên hơn",
+          "t": "ゴールは同じで、行き方が違うだけなんです。",
+          "doc": "ゴールはおなじで、いきかたがちがうだけなんです。",
+          "v": "Đích thì giống nhau, chỉ khác cách đi thôi.",
+          "ghiChu": "nói nhẹ nhàng trong nhóm"
+        }
+      ],
+      "np": [
+        {
+          "mau": "〜に至る",
+          "giai": "Đi tới, đạt tới (một điểm, kết quả) — văn trang trọng.",
+          "vd": "結論に至るまで、三時間かかった。",
+          "vdDoc": "けつろんにいたるまで、さんじかんかかった。",
+          "vdV": "Mất ba tiếng mới đi tới kết luận."
+        }
+      ]
+    },
+    {
+      "ai": "I",
+      "t": "わかりました。では、ティエンさんの案を軸に、来週までに移行計画を具体化してください。",
+      "doc": "わかりました。では、ティエンさんのあんをじくに、らいしゅうまでにいこうけいかくをぐたいかしてください。",
+      "v": "Được rồi. Vậy lấy phương án của chị Thiên làm trục, trước tuần sau chị cụ thể hoá kế hoạch chuyển đổi nhé.",
+      "np": [
+        {
+          "mau": "N + を軸に",
+          "giai": "Lấy N làm trục chính, làm trung tâm.",
+          "vd": "若い社員を軸に、新しいチームを作った。",
+          "vdDoc": "わかいしゃいんをじくに、あたらしいチームをつくった。",
+          "vdV": "Lập nhóm mới lấy nhân viên trẻ làm nòng cốt."
+        }
+      ]
+    },
+    {
+      "ai": "T",
+      "t": "承知いたしました。判断基準につきましては、長谷川様にもご確認いただいたうえで確定させたいと存じます。",
+      "doc": "しょうちいたしました。はんだんきじゅんにつきましては、はせがわさまにもごかくにんいただいたうえでかくていさせたいとぞんじます。",
+      "v": "Tôi đã rõ. Về tiêu chí quyết định, tôi muốn chốt sau khi chị Hasegawa cũng đã xem qua.",
+      "khac": [
+        {
+          "kieu": "văn viết",
+          "t": "判断基準の案は、来週月曜日までに資料にてご共有いたします。",
+          "doc": "はんだんきじゅんのあんは、らいしゅうげつようびまでにしりょうにてごきょうゆういたします。",
+          "v": "Bản dự thảo tiêu chí sẽ được gửi bằng tài liệu trước thứ Hai tuần sau.",
+          "ghiChu": "にて = で (văn viết trang trọng)"
+        }
+      ],
+      "np": [
+        {
+          "mau": "〜と存じます",
+          "giai": "Khiêm nhường của 〜と思います. Dùng với khách hàng, cấp trên cao.",
+          "vd": "ご検討いただければ幸いに存じます。",
+          "vdDoc": "ごけんとういただければさいわいにぞんじます。",
+          "vdV": "Nếu được quý vị xem xét thì thật là may mắn cho chúng tôi."
+        }
+      ]
+    },
+    {
+      "ai": "I",
+      "t": "ティエンさん、さっきは助かったよ。正直、反対されるとは思っていなかったけどね。",
+      "doc": "ティエンさん、さっきはたすかったよ。しょうじき、はんたいされるとはおもっていなかったけどね。",
+      "v": "Chị Thiên, lúc nãy may có chị. Nói thật, tôi không nghĩ là sẽ bị phản đối."
+    },
+    {
+      "ai": "T",
+      "t": "出過ぎたことを申し上げて、失礼いたしました。",
+      "doc": "ですぎたことをもうしあげて、しつれいいたしました。",
+      "v": "Tôi đã nói những điều vượt quá phận mình, xin anh thứ lỗi.",
+      "khac": [
+        {
+          "kieu": "lịch sự",
+          "t": "生意気なことを言ってしまって、すみません。",
+          "doc": "なまいきなことをいってしまって、すみません。",
+          "v": "Xin lỗi vì đã nói hỗn hào.",
+          "ghiChu": "nhẹ hơn, với cấp trên trực tiếp đã quen"
+        }
+      ]
+    },
+    {
+      "ai": "I",
+      "t": "いや、ああいう場で言ってもらえないと困るんだ。会議で黙っていて、後から「実は無理だと思っていました」と言われるほうが、よほど怖い。",
+      "doc": "いや、ああいうばでいってもらえないとこまるんだ。かいぎでだまっていて、あとから「じつはむりだとおもっていました」といわれるほうが、よほどこわい。",
+      "v": "Không, ở những chỗ như thế mà không ai nói thì mới khổ. Họp thì im lặng, rồi sau đó bảo “thật ra tôi đã nghĩ là không được” — cái đó đáng sợ hơn nhiều.",
+      "np": [
+        {
+          "mau": "よほど",
+          "giai": "Hơn nhiều, rất (so sánh mạnh, mang cảm xúc của người nói).",
+          "vd": "一人で悩むより、相談したほうがよほど早い。",
+          "vdDoc": "ひとりでなやむより、そうだんしたほうがよほどはやい。",
+          "vdV": "Hỏi ý kiến người khác nhanh hơn nhiều so với tự loay hoay."
+        }
+      ]
+    },
+    {
+      "ai": "T",
+      "t": "反対するなら、代わりの案を持ってからにしよう、とは決めていました。",
+      "doc": "はんたいするなら、かわりのあんをもってからにしよう、とはきめていました。",
+      "v": "Tôi đã tự quyết rằng nếu phản đối thì phải có sẵn phương án thay thế."
+    },
+    {
+      "ai": "T",
+      "t": "代案のない反対は、ただのブレーキにすぎませんから。",
+      "doc": "だいあんのないはんたいは、ただのブレーキにすぎませんから。",
+      "v": "Vì phản đối mà không có phương án thay thế thì chỉ là cái phanh mà thôi.",
+      "np": [
+        {
+          "mau": "〜にすぎない",
+          "giai": "Chỉ là … mà thôi (hạ thấp mức độ, không hơn).",
+          "vd": "これは私の個人的な意見にすぎません。",
+          "vdDoc": "これはわたしのこじんてきないけんにすぎません。",
+          "vdV": "Đây chỉ là ý kiến cá nhân của tôi thôi."
+        }
+      ]
+    },
+    {
+      "ai": "I",
+      "t": "代案のある反対は、ハンドルになる、か。いい言葉だね。",
+      "doc": "だいあんのあるはんたいは、ハンドルになる、か。いいことばだね。",
+      "v": "Phản đối có phương án thay thế thì thành tay lái nhỉ. Câu hay đấy."
+    }
+  ],
+  "tuVung": [
+    {
+      "chu": "方針",
+      "doc": "ほうしん",
+      "nghia": "phương châm, phương hướng",
+      "vd": "会社の方針が変わった。"
+    },
+    {
+      "chu": "移行",
+      "doc": "いこう",
+      "nghia": "chuyển đổi, di chuyển (sang hệ thống mới)",
+      "vd": "データの移行が完了した。"
+    },
+    {
+      "chu": "懸念",
+      "doc": "けねん",
+      "nghia": "mối lo ngại",
+      "vd": "懸念点を三つ挙げます。"
+    },
+    {
+      "chu": "補足",
+      "doc": "ほそく",
+      "nghia": "bổ sung (ý)",
+      "vd": "一点補足します。"
+    },
+    {
+      "chu": "運用",
+      "doc": "うんよう",
+      "nghia": "vận hành (hệ thống)",
+      "vd": "システムの運用を担当している。"
+    },
+    {
+      "chu": "負債",
+      "doc": "ふさい",
+      "nghia": "món nợ; 技術的負債 = nợ kỹ thuật",
+      "vd": "技術的負債を返していく。"
+    },
+    {
+      "chu": "先送り",
+      "doc": "さきおくり",
+      "nghia": "trì hoãn, đẩy lùi sang sau",
+      "vd": "問題を先送りにしてはいけない。"
+    },
+    {
+      "chu": "中途半端",
+      "doc": "ちゅうとはんぱ",
+      "nghia": "nửa vời, dở dang",
+      "vd": "中途半端な気持ちでは続かない。"
+    },
+    {
+      "chu": "稼働率",
+      "doc": "かどうりつ",
+      "nghia": "tỉ lệ hoạt động (uptime)",
+      "vd": "稼働率99.9%を目標にする。"
+    },
+    {
+      "chu": "道筋",
+      "doc": "みちすじ",
+      "nghia": "con đường, lộ trình (để đạt mục tiêu)",
+      "vd": "解決への道筋が見えた。"
+    },
+    {
+      "chu": "出過ぎた",
+      "doc": "ですぎた",
+      "nghia": "vượt quá phận mình, quá đà",
+      "vd": "出過ぎたことを言ってすみません。"
+    },
+    {
+      "chu": "代案",
+      "doc": "だいあん",
+      "nghia": "phương án thay thế",
+      "vd": "反対なら代案を出してください。"
+    }
+  ],
+  "yNghia": "Phản đối cấp trên hay khách hàng không phải là bất kính, nếu bạn đồng ý với cái đích và chỉ bàn về con đường. Một lời phản đối không kèm phương án chỉ là cái phanh; có phương án, nó trở thành tay lái. Và người sếp tốt thà nghe \"không\" ngay trong phòng họp, còn hơn nghe \"thật ra em đã nghĩ là không được\" khi mọi chuyện đã muộn.",
+  "meo": [
+    "Khuôn phản đối lịch sự: đồng ý với đích (方向性そのものには賛成です) → xin phép (一点だけ懸念をお伝えしてもよろしいでしょうか) → lý do cụ thể → phương án thay thế → tiêu chí quyết định.",
+    "「〜と申し上げているわけではございません」 = tôi không hề nói rằng … — gạt đi cách hiểu cực đoan.",
+    "〜ならいざ知らず = A thì còn được, chứ B thì …; 〜ともなると = một khi tới mức …; 〜いかんで = tuỳ vào ….",
+    "〜であれ〜であれ = dù là A hay B; とはいえ = dẫu vậy (nhượng bộ nhưng giữ quan điểm); 〜べく = để (mục đích, văn trang trọng).",
+    "差し出がましいようですが / 出過ぎたことを申し上げて = lời khiêm khi góp ý vượt vai."
+  ],
+  "cauHoi": [
+    {
+      "hoi": "Trưởng phòng Ishihara muốn làm gì?",
+      "chon": [
+        "Giữ nguyên monolith",
+        "Chuyển toàn bộ sang microservices",
+        "Thuê công ty khác làm",
+        "Tách riêng phần thanh toán"
+      ],
+      "dung": 1,
+      "giai": "「全面的にマイクロサービスへ移行したいと考えています」."
+    },
+    {
+      "hoi": "Lo ngại chính của chị Thiên là gì?",
+      "chon": [
+        "Đội tám người mà vận hành hơn mười service là gánh nặng lớn",
+        "Microservices quá cũ",
+        "Khách không đồng ý",
+        "Thiếu máy chủ"
+      ],
+      "dung": 0,
+      "giai": "「この人数で十を超えるサービスを運用するのは、相当な負担になる」."
+    },
+    {
+      "hoi": "Phương án chị Thiên đề xuất là gì?",
+      "chon": [
+        "Dừng dự án",
+        "Viết lại toàn bộ trong một lần",
+        "Tách phần thanh toán trước, phần còn lại làm modular monolith, bước sau tuỳ kết quả vận hành",
+        "Chỉ sửa lỗi, không đổi cấu trúc"
+      ],
+      "dung": 2,
+      "giai": "「決済の部分だけを切り出します……運用実績いかんで、次に分ける範囲を決める」."
+    },
+    {
+      "hoi": "Để tránh cấu trúc nửa vời kéo dài, chị Thiên đề nghị gì?",
+      "chon": [
+        "Thuê thêm người",
+        "Báo cáo hằng ngày",
+        "Mua công cụ giám sát",
+        "Quyết định sẵn tiêu chí và thời hạn cho từng giai đoạn"
+      ],
+      "dung": 3,
+      "giai": "「各段階の判断基準と期限を、最初に決めておくことを前提としたい」."
+    },
+    {
+      "hoi": "Theo chị Thiên, phản đối không có phương án thay thế là gì?",
+      "chon": [
+        "Một tay lái",
+        "Chỉ là cái phanh",
+        "Một bản thiết kế",
+        "Một lời cảm ơn"
+      ],
+      "dung": 1,
+      "giai": "「代案のない反対は、ただのブレーキにすぎません」."
+    }
+  ]
+}

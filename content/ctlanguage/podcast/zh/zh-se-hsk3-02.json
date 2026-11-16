@@ -1,0 +1,236 @@
+{
+  "id": "zh-se-hsk3-02",
+  "nn": "zh",
+  "danhMuc": "phan-mem",
+  "cap": "HSK3",
+  "so": 2,
+  "tieuDe": "早上的站会",
+  "tieuDeViet": "Buổi họp đứng buổi sáng",
+  "moTa": "9 giờ 30, cả nhóm họp đứng (stand-up). Minh báo cáo ba việc: hôm qua làm gì, hôm nay làm gì, đang vướng gì — và học được vì sao vướng thì phải nói sớm.",
+  "chuDe": "Họp stand-up",
+  "bieuTuong": "person.3.fill",
+  "nguoi": [
+    { "ma": "C", "ten": "Chị Trần", "giong": "zh-nu", "vai": "trưởng nhóm phát triển" },
+    { "ma": "M", "ten": "Minh", "giong": "zh-nam", "vai": "lập trình viên back-end" }
+  ],
+  "loi": [
+    {
+      "ai": "C",
+      "t": "九点半了，我们开始站会吧。",
+      "doc": "Jiǔ diǎn bàn le, wǒmen kāishǐ zhànhuì ba.",
+      "v": "9 rưỡi rồi, chúng ta bắt đầu họp đứng nhé."
+    },
+    {
+      "ai": "C",
+      "t": "老规矩，每个人说三件事：昨天做了什么，今天要做什么，有没有遇到什么困难。",
+      "doc": "Lǎo guīju, měi ge rén shuō sān jiàn shì: zuótiān zuò le shénme, jīntiān yào zuò shénme, yǒu méiyǒu yùdào shénme kùnnan.",
+      "v": "Như mọi khi, mỗi người nói ba việc: hôm qua làm gì, hôm nay sẽ làm gì, có gặp khó khăn gì không.",
+      "np": [
+        { "mau": "有没有 + V？", "giai": "Câu hỏi chính phản: ghép khẳng định + phủ định (有没有, 是不是, 能不能) thay cho 吗. Không dùng thêm 吗 ở cuối.", "vd": "你有没有看到我的邮件？", "vdDoc": "Nǐ yǒu méiyǒu kàndào wǒ de yóujiàn?", "vdV": "Bạn có thấy email của tôi không?" }
+      ]
+    },
+    {
+      "ai": "C",
+      "t": "小阮，你先来吧。",
+      "doc": "Xiǎo Ruǎn, nǐ xiān lái ba.",
+      "v": "Minh, em nói trước đi.",
+      "khac": [
+        { "kieu": "tự nhiên hơn", "t": "小阮，从你开始吧。", "doc": "Xiǎo Ruǎn, cóng nǐ kāishǐ ba.", "v": "Minh, bắt đầu từ em nhé.", "ghiChu": "câu người điều phối họp hay dùng" }
+      ]
+    },
+    {
+      "ai": "M",
+      "t": "好的。昨天我把登录页面的接口写完了，也写了几个单元测试。",
+      "doc": "Hǎo de. Zuótiān wǒ bǎ dēnglù yèmiàn de jiēkǒu xiě wán le, yě xiě le jǐ ge dānyuán cèshì.",
+      "v": "Vâng. Hôm qua em đã viết xong API của trang đăng nhập, cũng viết vài unit test.",
+      "np": [
+        { "mau": "把 + tân ngữ + V + 完/好 + 了", "giai": "Câu chữ 把 nhấn mạnh đã xử lý xong một việc cụ thể. Sau động từ phải có thành phần khác (完, 好, 了…), không để động từ đứng trơ.", "vd": "我把文档发给你了。", "vdDoc": "Wǒ bǎ wéndàng fā gěi nǐ le.", "vdV": "Tôi đã gửi tài liệu cho bạn rồi." }
+      ]
+    },
+    {
+      "ai": "C",
+      "t": "测试都通过了吗？",
+      "doc": "Cèshì dōu tōngguò le ma?",
+      "v": "Test đều qua hết chưa?"
+    },
+    {
+      "ai": "M",
+      "t": "通过了。不过还有一个小bug没解决：用户输错密码三次以后，页面没有提示。",
+      "doc": "Tōngguò le. Búguò hái yǒu yí ge xiǎo bug méi jiějué: yònghù shū cuò mìmǎ sān cì yǐhòu, yèmiàn méiyǒu tíshì.",
+      "v": "Qua rồi ạ. Nhưng vẫn còn một bug nhỏ chưa xử lý: người dùng nhập sai mật khẩu ba lần thì trang không có thông báo.",
+      "np": [
+        { "mau": "V + 错 (bổ ngữ kết quả)", "giai": "错 sau động từ = làm sai: 输错 (nhập sai), 写错 (viết sai), 发错 (gửi nhầm). Phủ định dùng 没: 没输错.", "vd": "对不起，我打错电话了。", "vdDoc": "Duìbuqǐ, wǒ dǎ cuò diànhuà le.", "vdV": "Xin lỗi, tôi gọi nhầm số rồi." }
+      ]
+    },
+    {
+      "ai": "C",
+      "t": "那今天的计划呢？",
+      "doc": "Nà jīntiān de jìhuà ne?",
+      "v": "Thế kế hoạch hôm nay thì sao?"
+    },
+    {
+      "ai": "M",
+      "t": "今天上午我打算先把这个bug修好，下午再开始做注册的功能。",
+      "doc": "Jīntiān shàngwǔ wǒ dǎsuan xiān bǎ zhège bug xiū hǎo, xiàwǔ zài kāishǐ zuò zhùcè de gōngnéng.",
+      "v": "Sáng nay em định sửa xong bug này trước, chiều mới bắt đầu làm chức năng đăng ký.",
+      "khac": [
+        { "kieu": "ngắn gọn", "t": "今天先修bug，下午做注册。", "doc": "Jīntiān xiān xiū bug, xiàwǔ zuò zhùcè.", "v": "Hôm nay sửa bug trước, chiều làm đăng ký.", "ghiChu": "họp đứng nói càng gọn càng tốt" }
+      ],
+      "np": [
+        { "mau": "先 A，再 B", "giai": "再 ở đây = \"rồi mới\": nói thứ tự hai việc sẽ làm trong tương lai.", "vd": "我们先吃饭，再讨论。", "vdDoc": "Wǒmen xiān chīfàn, zài tǎolùn.", "vdV": "Chúng ta ăn cơm trước rồi mới bàn." }
+      ]
+    },
+    {
+      "ai": "C",
+      "t": "你觉得上午修得好吗？",
+      "doc": "Nǐ juéde shàngwǔ xiū de hǎo ma?",
+      "v": "Em thấy trong buổi sáng có sửa xong được không?",
+      "np": [
+        { "mau": "V + 得/不 + bổ ngữ (修得好 / 修不好)", "giai": "Bổ ngữ khả năng: có thể/không thể làm đến kết quả đó. 修得好 = sửa được, 修不好 = sửa không được.", "vd": "这么多工作，今天做得完吗？", "vdDoc": "Zhème duō gōngzuò, jīntiān zuò de wán ma?", "vdV": "Nhiều việc thế này, hôm nay làm xong được không?" }
+      ]
+    },
+    {
+      "ai": "M",
+      "t": "应该没问题，这个bug不太复杂。",
+      "doc": "Yīnggāi méi wèntí, zhège bug bú tài fùzá.",
+      "v": "Chắc là không vấn đề gì, bug này không phức tạp lắm."
+    },
+    {
+      "ai": "C",
+      "t": "好。如果中午还修不好，记得早点儿告诉我。",
+      "doc": "Hǎo. Rúguǒ zhōngwǔ hái xiū bu hǎo, jìde zǎo diǎnr gàosu wǒ.",
+      "v": "Được. Nếu đến trưa vẫn chưa sửa được, nhớ báo chị sớm nhé.",
+      "khac": [
+        { "kieu": "mềm mỏng", "t": "要是中午还没修好，你随时跟我说一声。", "doc": "Yàoshi zhōngwǔ hái méi xiū hǎo, nǐ suíshí gēn wǒ shuō yì shēng.", "v": "Nếu trưa vẫn chưa sửa xong, em cứ nói với chị một tiếng lúc nào cũng được.", "ghiChu": "giọng trưởng nhóm dễ chịu, không gây áp lực" }
+      ]
+    },
+    {
+      "ai": "M",
+      "t": "好的。还有一个困难：测试环境的数据库我连不上，一直显示密码错误。",
+      "doc": "Hǎo de. Hái yǒu yí ge kùnnan: cèshì huánjìng de shùjùkù wǒ lián bu shàng, yìzhí xiǎnshì mìmǎ cuòwù.",
+      "v": "Vâng. Còn một khó khăn: em không kết nối được database của môi trường test, cứ báo sai mật khẩu.",
+      "khac": [
+        { "kieu": "văn nói", "t": "我这边有个问题：测试库一直连不上。", "doc": "Wǒ zhèbiān yǒu ge wèntí: cèshì kù yìzhí lián bu shàng.", "v": "Bên em có vấn đề: database test cứ không vào được.", "ghiChu": "测试库 là cách nói tắt của 测试环境的数据库" }
+      ],
+      "np": [
+        { "mau": "V + 不上 (连不上)", "giai": "上 làm bổ ngữ = đạt tới, nối được. 连不上 = không kết nối được, 考不上 = thi không đỗ.", "vd": "网络不好，我连不上会议。", "vdDoc": "Wǎngluò bù hǎo, wǒ lián bu shàng huìyì.", "vdV": "Mạng kém, tôi không vào được cuộc họp." }
+      ]
+    },
+    {
+      "ai": "M",
+      "t": "我昨天试了好几次，还是不行。",
+      "doc": "Wǒ zuótiān shì le hǎo jǐ cì, háishi bù xíng.",
+      "v": "Hôm qua em thử mấy lần rồi mà vẫn không được.",
+      "np": [
+        { "mau": "好 + 几 + lượng từ", "giai": "好几 = khá nhiều, nhiều (hơn 几 một chút): 好几次 = mấy lần liền, 好几个人 = khá nhiều người.", "vd": "我等了好几天。", "vdDoc": "Wǒ děng le hǎo jǐ tiān.", "vdV": "Tôi đã đợi mấy ngày liền." }
+      ]
+    },
+    {
+      "ai": "C",
+      "t": "测试环境是小李负责的。他上周改过密码，可能忘了通知大家。",
+      "doc": "Cèshì huánjìng shì Xiǎo Lǐ fùzé de. Tā shàng zhōu gǎi guo mìmǎ, kěnéng wàng le tōngzhī dàjiā.",
+      "v": "Môi trường test là anh Lý phụ trách. Tuần trước anh ấy có đổi mật khẩu, chắc quên báo mọi người."
+    },
+    {
+      "ai": "C",
+      "t": "站会上我们不讨论细节，开完会你直接去找他，好吗？",
+      "doc": "Zhànhuì shang wǒmen bù tǎolùn xìjié, kāi wán huì nǐ zhíjiē qù zhǎo tā, hǎo ma?",
+      "v": "Trong họp đứng mình không bàn chi tiết, họp xong em đến tìm thẳng anh ấy nhé?",
+      "khac": [
+        { "kieu": "chuyên nghiệp", "t": "这个问题我们会后再聊。", "doc": "Zhège wèntí wǒmen huì hòu zài liáo.", "v": "Vấn đề này chúng ta bàn sau buổi họp.", "ghiChu": "câu kinh điển để giữ buổi họp ngắn" }
+      ]
+    },
+    {
+      "ai": "M",
+      "t": "好的，没问题。我说完了。",
+      "doc": "Hǎo de, méi wèntí. Wǒ shuō wán le.",
+      "v": "Vâng, không vấn đề gì. Em nói xong rồi.",
+      "khac": [
+        { "kieu": "tự nhiên hơn", "t": "我这边就这些。", "doc": "Wǒ zhèbiān jiù zhèxiē.", "v": "Bên em chỉ có vậy thôi.", "ghiChu": "câu kết lượt báo cáo hay nghe trong stand-up" }
+      ]
+    },
+    {
+      "ai": "C",
+      "t": "谢谢。另外提醒一下，下周四要上线，大家的任务最好周二以前做完。",
+      "doc": "Xièxie. Lìngwài tíxǐng yíxià, xià zhōusì yào shàngxiàn, dàjiā de rènwù zuìhǎo zhōu'èr yǐqián zuò wán.",
+      "v": "Cảm ơn em. Ngoài ra nhắc một chút, thứ Năm tuần sau lên bản, việc của mọi người tốt nhất làm xong trước thứ Ba.",
+      "np": [
+        { "mau": "最好 + V", "giai": "最好 = tốt nhất là…: đưa lời khuyên, đề nghị nhẹ nhàng.", "vd": "你最好先问一下经理。", "vdDoc": "Nǐ zuìhǎo xiān wèn yíxià jīnglǐ.", "vdV": "Tốt nhất bạn nên hỏi quản lý trước." }
+      ]
+    },
+    {
+      "ai": "M",
+      "t": "陈姐，我能问一个问题吗？为什么站会要站着开？",
+      "doc": "Chén jiě, wǒ néng wèn yí ge wèntí ma? Wèishénme zhànhuì yào zhàn zhe kāi?",
+      "v": "Chị Trần, em hỏi một câu được không? Sao họp đứng lại phải đứng mà họp ạ?",
+      "np": [
+        { "mau": "V1 + 着 + V2", "giai": "V1着 chỉ cách thức làm V2: 站着开 = đứng mà họp, 笑着说 = cười mà nói.", "vd": "他喜欢听着音乐写代码。", "vdDoc": "Tā xǐhuan tīng zhe yīnyuè xiě dàimǎ.", "vdV": "Anh ấy thích vừa nghe nhạc vừa viết code." }
+      ]
+    },
+    {
+      "ai": "C",
+      "t": "因为站着累，大家就不会说太久了。哈哈，开玩笑的。",
+      "doc": "Yīnwèi zhàn zhe lèi, dàjiā jiù bú huì shuō tài jiǔ le. Hāhā, kāi wánxiào de.",
+      "v": "Vì đứng thì mỏi, mọi người sẽ không nói lâu quá. Haha, chị đùa thôi."
+    },
+    {
+      "ai": "C",
+      "t": "其实站会最重要的，不是说自己做了多少，而是让大家早点儿知道谁遇到了困难。",
+      "doc": "Qíshí zhànhuì zuì zhòngyào de, bú shì shuō zìjǐ zuò le duōshao, ér shì ràng dàjiā zǎo diǎnr zhīdào shéi yùdào le kùnnan.",
+      "v": "Thật ra điều quan trọng nhất của họp đứng không phải là kể mình làm được bao nhiêu, mà là để mọi người sớm biết ai đang gặp khó khăn."
+    },
+    {
+      "ai": "M",
+      "t": "明白了。有困难要早说，不要一个人等。",
+      "doc": "Míngbai le. Yǒu kùnnan yào zǎo shuō, búyào yí ge rén děng.",
+      "v": "Em hiểu rồi. Có khó khăn thì phải nói sớm, đừng một mình ngồi đợi."
+    }
+  ],
+  "tuVung": [
+    { "chu": "站会", "doc": "zhànhuì", "nghia": "họp đứng, daily stand-up (trạm hội)", "vd": "我们每天早上开站会。" },
+    { "chu": "接口", "doc": "jiēkǒu", "nghia": "API, giao diện kết nối (tiếp khẩu)", "vd": "这个接口返回的数据不对。" },
+    { "chu": "单元测试", "doc": "dānyuán cèshì", "nghia": "unit test, kiểm thử đơn vị", "vd": "每个函数都要写单元测试。" },
+    { "chu": "功能", "doc": "gōngnéng", "nghia": "chức năng, tính năng (công năng)", "vd": "注册功能已经做好了。" },
+    { "chu": "数据库", "doc": "shùjùkù", "nghia": "cơ sở dữ liệu, database (số cứ khố)", "vd": "数据库在哪台服务器上？" },
+    { "chu": "测试环境", "doc": "cèshì huánjìng", "nghia": "môi trường test; 线上环境 = môi trường thật (production)", "vd": "先在测试环境试一下。" },
+    { "chu": "连不上", "doc": "lián bu shàng", "nghia": "không kết nối được", "vd": "我的电脑连不上网。" },
+    { "chu": "负责", "doc": "fùzé", "nghia": "phụ trách, chịu trách nhiệm", "vd": "这个模块由我负责。" },
+    { "chu": "细节", "doc": "xìjié", "nghia": "chi tiết (tế tiết)", "vd": "细节我们会后再说。" },
+    { "chu": "任务", "doc": "rènwù", "nghia": "nhiệm vụ, task", "vd": "今天的任务完成了吗？" },
+    { "chu": "困难", "doc": "kùnnan", "nghia": "khó khăn; trong stand-up = blocker, chỗ đang vướng", "vd": "遇到困难就说。" }
+  ],
+  "yNghia": "Họp đứng không phải để chứng minh mình chăm chỉ, mà để cả nhóm sớm thấy ai đang bị chặn. Một khó khăn nói ra lúc 9 giờ 30 có thể được gỡ trong 5 phút; giữ trong lòng thì có khi mất cả ngày.",
+  "meo": [
+    "Khung báo cáo stand-up bằng tiếng Trung: 昨天我…了 → 今天我打算… → 我遇到一个困难：… → 我这边就这些。",
+    "Câu chữ 把 rất hợp để báo việc đã xong: 我把接口写完了, 我把bug修好了 (nhấn vào việc gì đã được xử lý).",
+    "Bổ ngữ khả năng: 修得好 / 修不好, 连得上 / 连不上, 做得完 / 做不完 — hỏi \"có làm được không\" rất tự nhiên.",
+    "会后 (sau buổi họp) và 会后再聊 là câu cứu cánh khi cuộc họp sắp lan man.",
+    "不 đổi thanh trước thanh 4: 不太 bú tài, 不要 búyào; trước các thanh khác giữ bù: 不行 bù xíng."
+  ],
+  "cauHoi": [
+    {
+      "hoi": "Hôm qua Minh đã làm xong việc gì?",
+      "chon": ["Chức năng đăng ký", "API trang đăng nhập và vài unit test", "Sửa mật khẩu database"],
+      "dung": 1,
+      "giai": "昨天我把登录页面的接口写完了，也写了几个单元测试。"
+    },
+    {
+      "hoi": "Vì sao Minh không vào được database của môi trường test?",
+      "chon": ["Anh Lý đã đổi mật khẩu mà có thể quên báo mọi người", "Mạng ở công ty bị hỏng", "Minh chưa có tài khoản"],
+      "dung": 0,
+      "giai": "他上周改过密码，可能忘了通知大家。"
+    },
+    {
+      "hoi": "Chị Trần muốn Minh làm gì với vấn đề database?",
+      "chon": ["Trình bày chi tiết ngay trong họp", "Tự sửa cấu hình", "Họp xong đến tìm anh Lý"],
+      "dung": 2,
+      "giai": "站会上我们不讨论细节，开完会你直接去找他。"
+    },
+    {
+      "hoi": "Theo chị Trần, điều quan trọng nhất của họp đứng là gì?",
+      "chon": ["Để mọi người sớm biết ai đang gặp khó khăn", "Kể mình đã làm được bao nhiêu việc", "Họp càng nhanh càng tốt vì đứng mỏi"],
+      "dung": 0,
+      "giai": "最重要的…是让大家早点儿知道谁遇到了困难。"
+    }
+  ]
+}

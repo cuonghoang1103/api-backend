@@ -1,0 +1,104 @@
+{
+  "id": "en-cv-b1-01",
+  "nn": "en",
+  "danhMuc": "cong-viec",
+  "cap": "B1",
+  "so": 1,
+  "tieuDe": "Could You Send Me the Invoice?",
+  "tieuDeViet": "Anh chị gửi giúp hoá đơn được không?",
+  "moTa": "Huy, nhân viên mới, viết email \"Gửi hoá đơn cho tôi ngay. Cảm ơn.\" — rõ ràng nhưng nghe thô. Chị Linda sửa cùng anh từng dòng: lời chào, lý do viết, lời nhờ có hạn chót, câu kết. Rồi Huy gọi điện cho nhà cung cấp và học cách đọc lại địa chỉ email cho chắc.",
+  "chuDe": "Email & điện thoại",
+  "bieuTuong": "envelope.fill",
+  "nguoi": [
+    { "ma": "L", "ten": "Linda", "giong": "uk-nu", "vai": "trưởng phòng hành chính" },
+    { "ma": "H", "ten": "Huy", "giong": "us-nam", "vai": "nhân viên mới" },
+    { "ma": "K", "ten": "Karen", "giong": "au-nu", "vai": "nhân viên công ty in ấn (nhà cung cấp)" }
+  ],
+  "loi": [
+    { "ai": "L", "t": "Huy, can I have a quick look at your email before you send it?", "v": "Huy, chị xem nhanh email của em trước khi em gửi được không?" },
+    { "ai": "H", "t": "Sure. It's to the printing company. I need the invoice for last month.", "v": "Dạ được. Email gửi công ty in. Em cần hoá đơn tháng trước." },
+    { "ai": "L", "t": "Okay. \"Send me the invoice now. Thanks.\" Hmm. It's clear, but it sounds a little rude.", "v": "Rồi. \"Gửi hoá đơn cho tôi ngay. Cảm ơn.\" Ừm. Rõ ràng đấy, nhưng nghe hơi thô.",
+      "np": [{ "mau": "sound + tính từ", "giai": "\"nghe có vẻ…\" — sau sound dùng TÍNH TỪ (sounds rude, sounds great), không dùng trạng từ (không nói sounds rudely).", "vd": "Your plan sounds interesting.", "vdV": "Kế hoạch của bạn nghe thú vị đấy." }] },
+    { "ai": "H", "t": "Really? I said thanks.", "v": "Thật ạ? Em có nói cảm ơn mà." },
+    { "ai": "L", "t": "In English, a direct order can sound angry, even with \"thanks\" at the end. Let's make it softer.", "v": "Trong tiếng Anh, một câu ra lệnh thẳng có thể nghe như đang giận, kể cả có \"cảm ơn\" ở cuối. Mình làm nó mềm hơn nhé.",
+      "np": [{ "mau": "even with + N", "giai": "\"kể cả khi có…\" — nhấn mạnh điều gì đó vẫn đúng dù có thêm yếu tố kia.", "vd": "The room is cold, even with the heater on.", "vdV": "Phòng vẫn lạnh, kể cả khi đã bật máy sưởi." }] },
+    { "ai": "L", "t": "Start with a greeting: \"Dear Ms Wong\" if you've never met, or \"Hi Karen\" if you already know her.", "v": "Bắt đầu bằng lời chào: \"Dear Ms Wong\" nếu chưa gặp bao giờ, hoặc \"Hi Karen\" nếu đã quen.",
+      "khac": [
+        { "kieu": "trang trọng", "t": "Dear Ms Wong,", "v": "Kính gửi chị Wong,", "ghiChu": "chưa quen, hoặc khách hàng quan trọng; dùng họ, không dùng tên" },
+        { "kieu": "thân mật", "t": "Hi Karen,", "v": "Chào Karen,", "ghiChu": "đã trao đổi nhiều lần, quan hệ thân thiện" }
+      ] },
+    { "ai": "H", "t": "I've talked to Karen on the phone before, so \"Hi Karen\" is fine.", "v": "Em từng nói chuyện điện thoại với Karen rồi, nên \"Hi Karen\" là được.",
+      "np": [{ "mau": "have + V3 + before (hiện tại hoàn thành, trải nghiệm)", "giai": "Nói về việc đã từng xảy ra, không cần nêu lúc nào: \"Em từng… rồi\".", "vd": "I've worked with this client before.", "vdV": "Tôi từng làm việc với khách hàng này rồi." }] },
+    { "ai": "L", "t": "Good. Then say why you're writing: \"I'm writing about our invoice for October.\"", "v": "Tốt. Rồi nói lý do em viết: \"Tôi viết thư về hoá đơn tháng Mười của chúng tôi.\"",
+      "np": [{ "mau": "I'm writing about + N / to + V", "giai": "Câu mở đầu email chuẩn: nêu ngay mục đích. \"I'm writing to ask…\", \"I'm writing about…\".", "vd": "I'm writing to ask about the job advertised on your website.", "vdV": "Tôi viết thư để hỏi về vị trí đăng trên trang web của quý công ty." }],
+      "khac": [
+        { "kieu": "trang trọng", "t": "I am writing with regard to our invoice for October.", "v": "Tôi viết thư này liên quan đến hoá đơn tháng Mười của chúng tôi." },
+        { "kieu": "ngắn gọn", "t": "Just a quick note about our October invoice.", "v": "Vài dòng ngắn về hoá đơn tháng Mười của bọn mình." }
+      ] },
+    { "ai": "H", "t": "And then the request?", "v": "Rồi tới lời nhờ ạ?" },
+    { "ai": "L", "t": "Yes, but as a question: \"Could you please send it to me by Friday?\" A clear deadline, but polite.", "v": "Đúng, nhưng dưới dạng câu hỏi: \"Chị có thể gửi nó cho tôi trước thứ Sáu được không?\" Hạn chót rõ ràng, mà vẫn lịch sự.",
+      "np": [{ "mau": "Could you please + V…?", "giai": "Lời nhờ lịch sự chuẩn trong công việc. \"by Friday\" = muộn nhất là thứ Sáu (khác \"until Friday\" = cho tới thứ Sáu).", "vd": "Could you please reply by Monday?", "vdV": "Anh vui lòng trả lời trước thứ Hai được không?" }],
+      "khac": [
+        { "kieu": "lịch sự", "t": "I'd be grateful if you could send it by Friday.", "v": "Tôi rất cảm kích nếu chị có thể gửi trước thứ Sáu." },
+        { "kieu": "thân mật", "t": "Can you send it over by Friday?", "v": "Gửi giúp mình trước thứ Sáu nhé?" }
+      ] },
+    { "ai": "H", "t": "That's much better. How do I end it?", "v": "Hay hơn nhiều. Em kết thúc thế nào ạ?" },
+    { "ai": "L", "t": "\"Thank you for your help. Best regards,\" and your name. And if you attach a file, write \"Please find attached…\"", "v": "\"Cảm ơn sự giúp đỡ của chị. Trân trọng,\" rồi tên em. Còn nếu có đính kèm tệp thì viết \"Vui lòng xem tệp đính kèm…\"" },
+    { "ai": "H", "t": "Got it. Actually, I need the invoice today, so maybe I should call her.", "v": "Em hiểu rồi. Thật ra em cần hoá đơn trong hôm nay, nên chắc em nên gọi cho chị ấy." },
+    { "ai": "L", "t": "Good idea. Go ahead, I'll listen.", "v": "Ý hay. Em gọi đi, chị nghe." },
+    { "ai": "H", "t": "Hello, this is Huy from Blue River Travel. Could I speak to Karen, please?", "v": "Xin chào, tôi là Huy từ công ty Blue River Travel. Cho tôi gặp chị Karen được không ạ?",
+      "khac": [
+        { "kieu": "trang trọng", "t": "Good morning. My name is Huy, and I'm calling from Blue River Travel. May I speak to Karen, please?", "v": "Chào buổi sáng. Tôi tên là Huy, gọi từ Blue River Travel. Tôi có thể nói chuyện với chị Karen không ạ?" },
+        { "kieu": "thân mật", "t": "Hi, it's Huy from Blue River. Is Karen there?", "v": "Chào, Huy bên Blue River đây. Karen có đó không?" }
+      ] },
+    { "ai": "K", "t": "Speaking! Hi Huy. What can I do for you?", "v": "Tôi đây! Chào Huy. Tôi giúp gì được cho anh?",
+      "np": [{ "mau": "Speaking.", "giai": "Trên điện thoại, khi người gọi hỏi tên bạn, trả lời \"Speaking\" = \"Tôi đây/Chính tôi\". Không trả lời \"I am Karen\".", "vd": "Can I speak to Mr Tran? — Speaking.", "vdV": "Cho tôi gặp ông Trần? — Tôi đây." }] },
+    { "ai": "H", "t": "I'm calling about our invoice for October. We haven't received it yet, and our accountant needs it today.", "v": "Tôi gọi về hoá đơn tháng Mười của chúng tôi. Chúng tôi vẫn chưa nhận được, mà kế toán bên tôi cần nó trong hôm nay.",
+      "np": [{ "mau": "haven't + V3 + yet", "giai": "Hiện tại hoàn thành phủ định + yet: điều mong đợi vẫn chưa xảy ra tính đến giờ.", "vd": "The package hasn't arrived yet.", "vdV": "Gói hàng vẫn chưa tới." }] },
+    { "ai": "K", "t": "Oh, I'm so sorry about that. Let me check. Yes, it's here. It wasn't sent because we had your old email address.", "v": "Ôi, tôi rất xin lỗi. Để tôi kiểm tra. À đây rồi. Nó chưa được gửi vì chúng tôi đang giữ địa chỉ email cũ của anh.",
+      "np": [{ "mau": "wasn't + V3 (bị động quá khứ)", "giai": "Câu bị động giúp nói về sự cố mà không nhấn vào người làm sai: \"It wasn't sent\" thay vì \"I didn't send it\".", "vd": "The email wasn't delivered.", "vdV": "Email đã không được chuyển tới." }] },
+    { "ai": "H", "t": "Ah, that explains it. Could I give you the new one?", "v": "À, thì ra vậy. Tôi gửi chị địa chỉ mới nhé?" },
+    { "ai": "K", "t": "Of course. Go ahead.", "v": "Tất nhiên rồi. Anh nói đi." },
+    { "ai": "H", "t": "It's accounts at blueriver dot com. \"Blue river\" is one word.", "v": "Là accounts a còng blueriver chấm com. \"Blue river\" viết liền một chữ." },
+    { "ai": "K", "t": "Let me read that back to you: accounts at blueriver dot com.", "v": "Để tôi đọc lại cho anh: accounts a còng blueriver chấm com.",
+      "np": [{ "mau": "read + sth + back (to sb)", "giai": "\"đọc lại cho người kia nghe để xác nhận\" — kỹ năng quan trọng khi nghe số điện thoại, email, mã đơn hàng qua điện thoại.", "vd": "Can I read the order number back to you?", "vdV": "Tôi đọc lại mã đơn hàng cho anh nhé?" }] },
+    { "ai": "H", "t": "That's right. Could you send the invoice today, please?", "v": "Đúng rồi. Chị gửi hoá đơn trong hôm nay giúp tôi được không?",
+      "khac": [
+        { "kieu": "mềm mỏng", "t": "Would it be possible to send it today? Our accountant is waiting for it.", "v": "Liệu chị có thể gửi trong hôm nay không? Kế toán bên tôi đang chờ." }
+      ] },
+    { "ai": "K", "t": "I'll send it within the hour. Sorry again for the trouble.", "v": "Trong vòng một tiếng tôi sẽ gửi. Một lần nữa xin lỗi vì đã làm phiền." },
+    { "ai": "H", "t": "No problem at all. Thanks for your help, Karen. Have a nice afternoon.", "v": "Không có gì đâu. Cảm ơn chị đã giúp, Karen. Chúc chị buổi chiều vui vẻ.",
+      "khac": [
+        { "kieu": "trang trọng", "t": "Not at all. Thank you very much for your help. Have a good afternoon.", "v": "Không có gì ạ. Cảm ơn chị rất nhiều. Chúc chị buổi chiều tốt lành." }
+      ] },
+    { "ai": "L", "t": "Perfect. Clear, friendly, and you checked the email address. That's exactly how to do it.", "v": "Hoàn hảo. Rõ ràng, thân thiện, và em đã kiểm lại địa chỉ email. Đúng là phải làm như vậy." },
+    { "ai": "H", "t": "It's funny. Being polite actually made it faster.", "v": "Buồn cười thật. Lịch sự lại làm mọi việc nhanh hơn." }
+  ],
+  "tuVung": [
+    { "chu": "invoice", "doc": "/ˈɪnvɔɪs/", "nghia": "hoá đơn", "vd": "Please send the invoice to our accountant." },
+    { "chu": "rude", "doc": "/ruːd/", "nghia": "thô lỗ, bất lịch sự", "vd": "It's rude to interrupt." },
+    { "chu": "greeting", "doc": "/ˈɡriːtɪŋ/", "nghia": "lời chào", "vd": "Start every email with a greeting." },
+    { "chu": "deadline", "doc": "/ˈdedlaɪn/", "nghia": "hạn chót", "vd": "The deadline is next Monday." },
+    { "chu": "Best regards", "doc": "/best rɪˈɡɑːdz/", "nghia": "trân trọng (câu kết email)", "vd": "Best regards, Lan" },
+    { "chu": "Please find attached", "doc": "/pliːz faɪnd əˈtætʃt/", "nghia": "vui lòng xem tệp đính kèm", "vd": "Please find attached my CV." },
+    { "chu": "Speaking", "doc": "/ˈspiːkɪŋ/", "nghia": "(trên điện thoại) tôi đây, chính tôi", "vd": "Is that Mr Lee? — Speaking." },
+    { "chu": "I'm calling about", "doc": "/aɪm ˈkɔːlɪŋ əˈbaʊt/", "nghia": "tôi gọi về việc…", "vd": "I'm calling about my order." },
+    { "chu": "accountant", "doc": "/əˈkaʊntənt/", "nghia": "kế toán", "vd": "Our accountant checks every receipt." },
+    { "chu": "read that back", "doc": "/riːd ðæt bæk/", "nghia": "đọc lại (để xác nhận)", "vd": "Could you read that back to me?" },
+    { "chu": "within the hour", "doc": "/wɪˈðɪn ði ˈaʊə/", "nghia": "trong vòng một giờ tới", "vd": "We'll call you back within the hour." },
+    { "chu": "trouble", "doc": "/ˈtrʌbl/", "nghia": "sự phiền phức", "vd": "Sorry for the trouble." }
+  ],
+  "yNghia": "Lịch sự trong công việc không phải là rườm rà: một lời chào, một lý do, một lời nhờ có hạn chót rõ ràng và một câu cảm ơn thường giúp việc xong nhanh hơn một mệnh lệnh cụt lủn. Và trên điện thoại, đọc lại thông tin quan trọng là cách đơn giản nhất để tránh sai sót.",
+  "meo": [
+    "Khung email 4 phần: Greeting (Dear…/Hi…) · Lý do (I'm writing about…) · Lời nhờ (Could you please… by…?) · Kết (Thank you… Best regards).",
+    "Điện thoại: \"Hello, this is… from…\" · \"Could I speak to…?\" · \"I'm calling about…\" · trả lời \"Speaking\" khi người ta hỏi đúng bạn.",
+    "Đọc email: @ = \"at\", . = \"dot\". Luôn \"read it back\" để xác nhận.",
+    "sound + TÍNH TỪ: \"It sounds rude\" (không phải rudely)."
+  ],
+  "cauHoi": [
+    { "hoi": "Email đầu tiên của Huy có vấn đề gì?", "chon": ["Sai địa chỉ", "Rõ ràng nhưng nghe như ra lệnh, hơi thô", "Quá dài"], "dung": 1, "giai": "\"It's clear, but it sounds a little rude.\"" },
+    { "hoi": "Linda gợi ý nêu lời nhờ thế nào?", "chon": ["Dưới dạng câu hỏi có hạn chót: \"Could you please send it to me by Friday?\"", "Viết in hoa cho rõ", "Không cần hạn chót"], "dung": 0, "giai": "\"Yes, but as a question… A clear deadline, but polite.\"" },
+    { "hoi": "Vì sao hoá đơn chưa được gửi?", "chon": ["Karen quên", "Công ty in bị lỗi máy", "Bên in đang giữ địa chỉ email cũ của Huy"], "dung": 2, "giai": "\"It wasn't sent because we had your old email address.\"" },
+    { "hoi": "Karen làm gì để chắc chắn ghi đúng email?", "chon": ["Đọc lại địa chỉ cho Huy nghe", "Nhờ Huy nhắn tin", "Gửi thử một email trống"], "dung": 0, "giai": "\"Let me read that back to you.\"" }
+  ]
+}

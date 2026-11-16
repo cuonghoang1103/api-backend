@@ -1,0 +1,415 @@
+{
+  "id": "zh-ds-hsk2-02",
+  "nn": "zh",
+  "danhMuc": "doi-song",
+  "cap": "HSK2",
+  "so": 4,
+  "tieuDe": "有没有大一号的？",
+  "tieuDeViet": "Có cỡ lớn hơn một số không?",
+  "moTa": "Vy đi mua áo khoác mùa đông. Hỏi giá và \"giảm 20%\" nói thế nào, hỏi màu, xin thử, áo hơi chật nên xin đổi cỡ, đổi màu khi cỡ mình hết hàng, thử mặc cả và hỏi chính sách đổi hàng.",
+  "chuDe": "Mua sắm",
+  "bieuTuong": "tshirt.fill",
+  "nguoi": [
+    {
+      "ma": "V",
+      "ten": "Vy",
+      "giong": "zh-nu",
+      "vai": "du học sinh Việt Nam"
+    },
+    {
+      "ma": "S",
+      "ten": "Anh bán hàng",
+      "giong": "zh-nam",
+      "vai": "nhân viên cửa hàng quần áo"
+    }
+  ],
+  "loi": [
+    {
+      "ai": "S",
+      "t": "你好，随便看看。喜欢的话可以试一下。",
+      "doc": "Nǐ hǎo, suíbiàn kànkan. Xǐhuan dehuà kěyǐ shì yíxià.",
+      "v": "Chào chị, cứ xem thoải mái. Thích thì có thể mặc thử.",
+      "np": [
+        {
+          "mau": "……的话",
+          "giai": "Vế điều kiện + 的话 = \"nếu…\" (văn nói). Có thể đi cùng 如果: 如果喜欢的话.",
+          "vd": "明天下雨的话，我们就不去了。",
+          "vdDoc": "Míngtiān xià yǔ dehuà, wǒmen jiù bú qù le.",
+          "vdV": "Nếu mai mưa thì mình không đi nữa."
+        }
+      ]
+    },
+    {
+      "ai": "V",
+      "t": "好的。这件衣服多少钱？",
+      "doc": "Hǎo de. Zhè jiàn yīfu duōshao qián?",
+      "v": "Vâng. Cái áo này bao nhiêu tiền?",
+      "khac": [
+        {
+          "kieu": "ngắn gọn",
+          "t": "这件怎么卖？",
+          "doc": "Zhè jiàn zěnme mài?",
+          "v": "Cái này bán thế nào?",
+          "ghiChu": "câu hỏi giá rất tự nhiên ở chợ, cửa hàng"
+        }
+      ],
+      "np": [
+        {
+          "mau": "这/那 + 件 + 衣服",
+          "giai": "件 là lượng từ cho áo và \"việc\" (一件事). Quần dùng 条, giày dùng 双 (một đôi).",
+          "vd": "我想买一条裤子和一双鞋。",
+          "vdDoc": "Wǒ xiǎng mǎi yì tiáo kùzi hé yì shuāng xié.",
+          "vdV": "Tôi muốn mua một cái quần và một đôi giày."
+        }
+      ]
+    },
+    {
+      "ai": "S",
+      "t": "这件两百九十九，今天打八折。",
+      "doc": "Zhè jiàn liǎngbǎi jiǔshíjiǔ, jīntiān dǎ bā zhé.",
+      "v": "Cái này hai trăm chín mươi chín tệ, hôm nay giảm 20%.",
+      "np": [
+        {
+          "mau": "打 + số + 折",
+          "giai": "打八折 = bán 80% giá gốc, tức GIẢM 20% — người Việt rất dễ hiểu ngược thành \"giảm 80%\". 打五折 = giảm một nửa, 打九折 = giảm 10%.",
+          "vd": "这双鞋打七折。",
+          "vdDoc": "Zhè shuāng xié dǎ qī zhé.",
+          "vdV": "Đôi giày này giảm 30%."
+        }
+      ]
+    },
+    {
+      "ai": "V",
+      "t": "打八折是多少钱？",
+      "doc": "Dǎ bā zhé shì duōshao qián?",
+      "v": "Giảm 20% thì còn bao nhiêu tiền?"
+    },
+    {
+      "ai": "S",
+      "t": "两百三十九。",
+      "doc": "Liǎngbǎi sānshíjiǔ.",
+      "v": "Hai trăm ba mươi chín."
+    },
+    {
+      "ai": "V",
+      "t": "有红色的吗？",
+      "doc": "Yǒu hóngsè de ma?",
+      "v": "Có màu đỏ không anh?",
+      "khac": [
+        {
+          "kieu": "tự nhiên hơn",
+          "t": "这件有别的颜色吗？",
+          "doc": "Zhè jiàn yǒu bié de yánsè ma?",
+          "v": "Cái này có màu khác không?"
+        }
+      ]
+    },
+    {
+      "ai": "S",
+      "t": "有，还有白色和蓝色。你穿多大号的？",
+      "doc": "Yǒu, hái yǒu báisè hé lánsè. Nǐ chuān duō dà hào de?",
+      "v": "Có, còn có màu trắng và xanh dương. Chị mặc cỡ nào?",
+      "np": [
+        {
+          "mau": "穿多大号？",
+          "giai": "Hỏi cỡ quần áo: 你穿多大号的？ Trả lời: 我穿M号. Giày dùng 码: 你穿多大码的鞋？",
+          "vd": "我穿L号的。",
+          "vdDoc": "Wǒ chuān L hào de.",
+          "vdV": "Tôi mặc cỡ L."
+        }
+      ]
+    },
+    {
+      "ai": "V",
+      "t": "M号。我可以试试吗？",
+      "doc": "M hào. Wǒ kěyǐ shìshi ma?",
+      "v": "Cỡ M. Tôi thử được không?",
+      "khac": [
+        {
+          "kieu": "tự nhiên hơn",
+          "t": "能试一下吗？试衣间在哪儿？",
+          "doc": "Néng shì yíxià ma? Shìyījiān zài nǎr?",
+          "v": "Thử được không? Phòng thử đồ ở đâu?"
+        }
+      ],
+      "np": [
+        {
+          "mau": "Động từ lặp: V V / V 一下",
+          "giai": "试试 = thử chút, nghe nhẹ nhàng, thoải mái hơn 试. Động từ một âm tiết lặp lại: 看看, 听听, 尝尝; tương đương V + 一下.",
+          "vd": "你尝尝这个菜。",
+          "vdDoc": "Nǐ chángchang zhège cài.",
+          "vdV": "Bạn nếm thử món này xem."
+        }
+      ]
+    },
+    {
+      "ai": "S",
+      "t": "当然可以，试衣间在那边。",
+      "doc": "Dāngrán kěyǐ, shìyījiān zài nàbiān.",
+      "v": "Tất nhiên được, phòng thử đồ ở đằng kia."
+    },
+    {
+      "ai": "S",
+      "t": "怎么样？合适吗？",
+      "doc": "Zěnmeyàng? Héshì ma?",
+      "v": "Thế nào? Vừa không chị?"
+    },
+    {
+      "ai": "V",
+      "t": "颜色很好看，可是有点儿小。有没有大一号的？",
+      "doc": "Yánsè hěn hǎokàn, kěshì yǒudiǎnr xiǎo. Yǒu méiyǒu dà yí hào de?",
+      "v": "Màu đẹp lắm, nhưng hơi chật. Có cỡ lớn hơn một số không?",
+      "khac": [
+        {
+          "kieu": "ngắn gọn",
+          "t": "有点儿紧，能换L号的吗？",
+          "doc": "Yǒudiǎnr jǐn, néng huàn L hào de ma?",
+          "v": "Hơi chật, đổi cỡ L được không?"
+        },
+        {
+          "kieu": "mềm mỏng",
+          "t": "挺好看的，就是小了一点儿。",
+          "doc": "Tǐng hǎokàn de, jiùshì xiǎo le yìdiǎnr.",
+          "v": "Đẹp lắm, chỉ là hơi nhỏ một chút.",
+          "ghiChu": "khen trước, chê sau — người bán dễ nghe hơn"
+        }
+      ],
+      "np": [
+        {
+          "mau": "有点儿 + tính từ (không như ý)",
+          "giai": "有点儿 đứng TRƯỚC tính từ, thường mang ý chê, không hài lòng: 有点儿小, 有点儿贵. Còn tính từ + 一点儿 dùng khi so sánh, yêu cầu: 大一点儿 (to hơn chút).",
+          "vd": "今天有点儿冷。",
+          "vdDoc": "Jīntiān yǒudiǎnr lěng.",
+          "vdV": "Hôm nay hơi lạnh."
+        }
+      ]
+    },
+    {
+      "ai": "S",
+      "t": "红色的L号卖完了，白色的还有。",
+      "doc": "Hóngsè de L hào mài wán le, báisè de hái yǒu.",
+      "v": "Màu đỏ cỡ L bán hết rồi, màu trắng thì vẫn còn.",
+      "np": [
+        {
+          "mau": "V + 完了",
+          "giai": "完 sau động từ = làm xong, hết: 卖完了 (bán hết), 吃完了 (ăn xong), 用完了 (dùng hết).",
+          "vd": "我的钱用完了。",
+          "vdDoc": "Wǒ de qián yòng wán le.",
+          "vdV": "Tiền của tôi tiêu hết rồi."
+        }
+      ]
+    },
+    {
+      "ai": "V",
+      "t": "那我试试白色的吧。",
+      "doc": "Nà wǒ shìshi báisè de ba.",
+      "v": "Vậy tôi thử màu trắng nhé."
+    },
+    {
+      "ai": "S",
+      "t": "你穿白色的也很漂亮。",
+      "doc": "Nǐ chuān báisè de yě hěn piàoliang.",
+      "v": "Chị mặc màu trắng cũng rất đẹp."
+    },
+    {
+      "ai": "V",
+      "t": "是吗？我觉得白色比红色更好看。",
+      "doc": "Shì ma? Wǒ juéde báisè bǐ hóngsè gèng hǎokàn.",
+      "v": "Thật à? Tôi thấy màu trắng còn đẹp hơn màu đỏ.",
+      "np": [
+        {
+          "mau": "A 比 B (更) + tính từ",
+          "giai": "So sánh hơn: A 比 B + tính từ. Thêm 更 = \"còn… hơn\". KHÔNG dùng 很 trong câu 比 (không nói 比红色很好看).",
+          "vd": "今天比昨天更冷。",
+          "vdDoc": "Jīntiān bǐ zuótiān gèng lěng.",
+          "vdV": "Hôm nay còn lạnh hơn hôm qua."
+        }
+      ]
+    },
+    {
+      "ai": "V",
+      "t": "可以便宜一点儿吗？",
+      "doc": "Kěyǐ piányi yìdiǎnr ma?",
+      "v": "Có thể rẻ hơn một chút không?",
+      "khac": [
+        {
+          "kieu": "văn nói",
+          "t": "能不能再便宜点儿？",
+          "doc": "Néng bu néng zài piányi diǎnr?",
+          "v": "Bớt thêm chút được không?",
+          "ghiChu": "câu mặc cả quen thuộc nhất ở chợ"
+        },
+        {
+          "kieu": "ngắn gọn",
+          "t": "最低多少钱？",
+          "doc": "Zuì dī duōshao qián?",
+          "v": "Thấp nhất bao nhiêu?"
+        }
+      ]
+    },
+    {
+      "ai": "S",
+      "t": "已经打折了，不能再便宜了。不过我可以送你一双袜子。",
+      "doc": "Yǐjīng dǎ zhé le, bù néng zài piányi le. Búguò wǒ kěyǐ sòng nǐ yì shuāng wàzi.",
+      "v": "Đã giảm giá rồi, không bớt thêm được nữa. Nhưng tôi có thể tặng chị một đôi tất."
+    },
+    {
+      "ai": "V",
+      "t": "好吧，那我要这件。如果不合适，可以换吗？",
+      "doc": "Hǎo ba, nà wǒ yào zhè jiàn. Rúguǒ bù héshì, kěyǐ huàn ma?",
+      "v": "Thôi được, vậy tôi lấy cái này. Nếu không vừa thì đổi được không?",
+      "khac": [
+        {
+          "kieu": "lịch sự",
+          "t": "请问这件衣服可以退换吗？",
+          "doc": "Qǐngwèn zhè jiàn yīfu kěyǐ tuìhuàn ma?",
+          "v": "Cho hỏi cái áo này có đổi trả được không?"
+        }
+      ],
+      "np": [
+        {
+          "mau": "如果……，(就)……",
+          "giai": "如果 = nếu; vế sau có thể thêm 就. Văn nói hay dùng 要是 thay 如果.",
+          "vd": "如果你有时间，就来我家吧。",
+          "vdDoc": "Rúguǒ nǐ yǒu shíjiān, jiù lái wǒ jiā ba.",
+          "vdV": "Nếu bạn có thời gian thì đến nhà mình nhé."
+        }
+      ]
+    },
+    {
+      "ai": "S",
+      "t": "可以，七天内可以换，别忘了带小票。",
+      "doc": "Kěyǐ, qī tiān nèi kěyǐ huàn, bié wàng le dài xiǎopiào.",
+      "v": "Được, trong bảy ngày có thể đổi, đừng quên mang theo hóa đơn."
+    },
+    {
+      "ai": "V",
+      "t": "好的，谢谢！",
+      "doc": "Hǎo de, xièxie!",
+      "v": "Vâng, cảm ơn anh!"
+    }
+  ],
+  "tuVung": [
+    {
+      "chu": "衣服",
+      "doc": "yīfu",
+      "nghia": "quần áo",
+      "vd": "我想买衣服。"
+    },
+    {
+      "chu": "打八折",
+      "doc": "dǎ bā zhé",
+      "nghia": "bán 80% giá = giảm 20%",
+      "vd": "今天全部打八折。"
+    },
+    {
+      "chu": "颜色",
+      "doc": "yánsè",
+      "nghia": "màu sắc (nhan sắc)",
+      "vd": "你喜欢什么颜色？"
+    },
+    {
+      "chu": "试",
+      "doc": "shì",
+      "nghia": "thử",
+      "vd": "我可以试试吗？"
+    },
+    {
+      "chu": "试衣间",
+      "doc": "shìyījiān",
+      "nghia": "phòng thử đồ",
+      "vd": "试衣间在哪儿？"
+    },
+    {
+      "chu": "合适",
+      "doc": "héshì",
+      "nghia": "vừa, phù hợp",
+      "vd": "这件很合适。"
+    },
+    {
+      "chu": "号",
+      "doc": "hào",
+      "nghia": "cỡ, số (quần áo); số thứ tự",
+      "vd": "你穿多大号？"
+    },
+    {
+      "chu": "便宜",
+      "doc": "piányi",
+      "nghia": "rẻ (便 đọc pián, không đọc biàn)",
+      "vd": "这个很便宜。"
+    },
+    {
+      "chu": "比",
+      "doc": "bǐ",
+      "nghia": "so với, hơn (dùng để so sánh)",
+      "vd": "我比他高。"
+    },
+    {
+      "chu": "换",
+      "doc": "huàn",
+      "nghia": "đổi, thay",
+      "vd": "可以换一件吗？"
+    },
+    {
+      "chu": "送",
+      "doc": "sòng",
+      "nghia": "tặng; đưa tiễn",
+      "vd": "我送你一本书。"
+    },
+    {
+      "chu": "小票",
+      "doc": "xiǎopiào",
+      "nghia": "hóa đơn nhỏ, phiếu thu khi mua hàng",
+      "vd": "请保留小票。"
+    }
+  ],
+  "yNghia": "Mua sắm bằng tiếng nước ngoài không đáng sợ khi bạn có vài mẫu câu chắc tay: hỏi giá, hỏi màu, xin thử, xin đổi cỡ. Vy không mặc cả được thêm, nhưng nhận được đôi tất và — quan trọng hơn — hỏi rõ chuyện đổi hàng trước khi trả tiền. Hỏi kỹ trước khi mua luôn rẻ hơn hối hận sau khi mua.",
+  "meo": [
+    "打八折 = giảm 20% (trả 80%), không phải giảm 80%! Số càng nhỏ thì càng rẻ: 打五折 = nửa giá.",
+    "有点儿 + tính từ = hơi… (không như ý): 有点儿小. Tính từ + 一点儿 = …hơn chút (yêu cầu): 便宜一点儿, 大一点儿.",
+    "So sánh: A 比 B + tính từ, không dùng 很. Muốn \"còn… hơn\" thêm 更.",
+    "Lượng từ hay gặp khi mua đồ: 件 (áo), 条 (quần, váy), 双 (giày, tất), 个 (đa năng)."
+  ],
+  "cauHoi": [
+    {
+      "hoi": "Giá gốc cái áo là bao nhiêu và hôm nay giảm bao nhiêu?",
+      "chon": [
+        "239 tệ, giảm 80%",
+        "299 tệ, giảm 20%",
+        "299 tệ, giảm 80%"
+      ],
+      "dung": 1,
+      "giai": "两百九十九，打八折 — giá 299 tệ, trả 80% tức giảm 20%, còn 239 tệ."
+    },
+    {
+      "hoi": "Vì sao Vy cuối cùng mua màu trắng?",
+      "chon": [
+        "Vì màu đỏ đắt hơn",
+        "Vì màu đỏ cỡ L đã bán hết",
+        "Vì anh bán hàng không thích màu đỏ"
+      ],
+      "dung": 1,
+      "giai": "红色的L号卖完了，白色的还有。"
+    },
+    {
+      "hoi": "Anh bán hàng không bớt giá nhưng làm gì?",
+      "chon": [
+        "Tặng một đôi tất",
+        "Giảm thêm 10 tệ",
+        "Tặng một cái quần"
+      ],
+      "dung": 0,
+      "giai": "我可以送你一双袜子。"
+    },
+    {
+      "hoi": "Muốn đổi hàng, Vy cần làm gì?",
+      "chon": [
+        "Đổi trong ba ngày, không cần gì",
+        "Đổi trong bảy ngày, mang hóa đơn",
+        "Gọi điện trước cho cửa hàng"
+      ],
+      "dung": 1,
+      "giai": "七天内可以换，别忘了带小票。"
+    }
+  ]
+}

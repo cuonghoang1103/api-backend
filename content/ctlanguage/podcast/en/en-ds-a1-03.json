@@ -1,0 +1,401 @@
+{
+  "id": "en-ds-a1-03",
+  "nn": "en",
+  "danhMuc": "doi-song",
+  "cap": "A1",
+  "so": 6,
+  "tieuDe": "A Table for Two",
+  "tieuDeViet": "Cho một bàn hai người",
+  "moTa": "Đức và Hà đi ăn tối ở một nhà hàng nước ngoài: xin bàn, xin nước, nhờ gợi ý món, báo dị ứng, gọi tính tiền và mời bạn một bữa.",
+  "chuDe": "Nhà hàng",
+  "bieuTuong": "fork.knife",
+  "nguoi": [
+    {
+      "ma": "W",
+      "ten": "Grace",
+      "giong": "uk-nu",
+      "vai": "nhân viên phục vụ"
+    },
+    {
+      "ma": "D",
+      "ten": "Đức",
+      "giong": "us-nam",
+      "vai": "khách"
+    },
+    {
+      "ma": "H",
+      "ten": "Hà",
+      "giong": "au-nu",
+      "vai": "bạn của Đức"
+    }
+  ],
+  "loi": [
+    {
+      "ai": "W",
+      "t": "Good evening. Do you have a reservation?",
+      "v": "Chào buổi tối. Anh chị đã đặt bàn chưa ạ?"
+    },
+    {
+      "ai": "D",
+      "t": "No, we don't. A table for two, please.",
+      "v": "Chưa ạ. Cho chúng tôi một bàn hai người.",
+      "khac": [
+        {
+          "kieu": "lịch sự",
+          "t": "Do you have a table for two, please?",
+          "v": "Nhà hàng còn bàn cho hai người không ạ?"
+        },
+        {
+          "kieu": "tự nhiên hơn",
+          "t": "Hi, could we get a table for two?",
+          "v": "Chào chị, cho chúng tôi một bàn hai người được không?",
+          "ghiChu": "rất hay nghe ở Mỹ"
+        }
+      ],
+      "np": [
+        {
+          "mau": "a table for + số người",
+          "giai": "Cách xin bàn ở nhà hàng: a table for two / for four.",
+          "vd": "A table for four, please.",
+          "vdV": "Cho một bàn bốn người."
+        }
+      ]
+    },
+    {
+      "ai": "W",
+      "t": "Sure. This way, please. Here are your menus.",
+      "v": "Vâng. Mời anh chị đi lối này. Thực đơn đây ạ."
+    },
+    {
+      "ai": "H",
+      "t": "Thank you. Can we have some water, please?",
+      "v": "Cảm ơn chị. Cho chúng tôi ít nước được không?",
+      "khac": [
+        {
+          "kieu": "lịch sự",
+          "t": "Could we get some water, please?",
+          "v": "Chị cho chúng tôi xin ít nước được không ạ?"
+        },
+        {
+          "kieu": "tự nhiên hơn",
+          "t": "Just tap water is fine, thanks.",
+          "v": "Nước lọc thường là được rồi, cảm ơn chị.",
+          "ghiChu": "tap water thường miễn phí; \"still/sparkling\" là nước đóng chai, phải trả tiền"
+        }
+      ],
+      "np": [
+        {
+          "mau": "some + danh từ không đếm được",
+          "giai": "Dùng some với water, rice, bread… khi xin/mời. Không nói \"a water\" trong câu chuẩn (trừ khi gọi một chai/ly).",
+          "vd": "Can I have some bread, please?",
+          "vdV": "Cho tôi ít bánh mì được không?"
+        }
+      ]
+    },
+    {
+      "ai": "W",
+      "t": "Of course. Are you ready to order?",
+      "v": "Dạ được. Anh chị gọi món luôn chưa ạ?"
+    },
+    {
+      "ai": "D",
+      "t": "Not yet. Can we have a few more minutes?",
+      "v": "Chưa ạ. Cho chúng tôi thêm vài phút nhé?",
+      "khac": [
+        {
+          "kieu": "ngắn gọn",
+          "t": "We need a minute, thanks.",
+          "v": "Cho chúng tôi một chút, cảm ơn."
+        },
+        {
+          "kieu": "lịch sự",
+          "t": "Could you give us a few more minutes, please?",
+          "v": "Chị cho chúng tôi thêm vài phút được không ạ?"
+        }
+      ],
+      "np": [
+        {
+          "mau": "a few + N số nhiều",
+          "giai": "Một vài (đếm được): a few minutes, a few friends. Với danh từ không đếm được dùng \"a little\".",
+          "vd": "I have a few questions.",
+          "vdV": "Tôi có vài câu hỏi."
+        }
+      ]
+    },
+    {
+      "ai": "W",
+      "t": "Sure, take your time.",
+      "v": "Vâng, anh chị cứ thong thả."
+    },
+    {
+      "ai": "H",
+      "t": "Excuse me! We're ready now. What do you recommend?",
+      "v": "Chị ơi! Chúng tôi chọn xong rồi. Chị gợi ý món gì?",
+      "khac": [
+        {
+          "kieu": "thân mật",
+          "t": "What's good here?",
+          "v": "Ở đây món gì ngon?",
+          "ghiChu": "rất hay dùng, thân thiện"
+        },
+        {
+          "kieu": "lịch sự",
+          "t": "What would you recommend?",
+          "v": "Chị sẽ gợi ý món nào ạ?"
+        }
+      ],
+      "np": [
+        {
+          "mau": "What do you recommend?",
+          "giai": "Hỏi gợi ý. Dạng \"What would you recommend?\" lịch sự hơn một chút.",
+          "vd": "What do you recommend for dessert?",
+          "vdV": "Món tráng miệng chị gợi ý món gì?"
+        }
+      ]
+    },
+    {
+      "ai": "W",
+      "t": "The fish curry is very popular. It's a little spicy.",
+      "v": "Cà ri cá được gọi nhiều lắm. Hơi cay một chút."
+    },
+    {
+      "ai": "H",
+      "t": "Great, I'll have the fish curry, please. Not too spicy.",
+      "v": "Tuyệt, cho tôi cà ri cá nhé. Đừng cay quá.",
+      "khac": [
+        {
+          "kieu": "lịch sự",
+          "t": "Could I have the fish curry, please? Not too spicy, if possible.",
+          "v": "Cho tôi món cà ri cá được không ạ? Nếu được thì đừng cay quá."
+        },
+        {
+          "kieu": "tự nhiên hơn",
+          "t": "I'll go with the fish curry.",
+          "v": "Tôi chọn cà ri cá.",
+          "ghiChu": "văn nói, hay nghe ở Mỹ"
+        }
+      ],
+      "np": [
+        {
+          "mau": "I'll have + món",
+          "giai": "Gọi món. \"will\" diễn tả quyết định ngay lúc nói.",
+          "vd": "I'll have a lemon tea, please.",
+          "vdV": "Cho tôi một trà chanh."
+        }
+      ]
+    },
+    {
+      "ai": "D",
+      "t": "And I'd like the chicken salad, please.",
+      "v": "Còn tôi muốn món salad gà.",
+      "np": [
+        {
+          "mau": "I'd like = I would like",
+          "giai": "Lịch sự hơn \"I want\". Dùng khi gọi món, mua hàng, nhờ vả.",
+          "vd": "I'd like a window seat, please.",
+          "vdV": "Tôi muốn ghế cạnh cửa sổ."
+        }
+      ]
+    },
+    {
+      "ai": "D",
+      "t": "Oh, I'm allergic to peanuts. Are there any peanuts in it?",
+      "v": "À, tôi bị dị ứng đậu phộng. Trong món đó có đậu phộng không?",
+      "khac": [
+        {
+          "kieu": "ngắn gọn",
+          "t": "Does it have peanuts?",
+          "v": "Món đó có đậu phộng không?"
+        }
+      ],
+      "np": [
+        {
+          "mau": "be allergic to + N",
+          "giai": "Bị dị ứng với cái gì. Câu nên thuộc lòng nếu bạn bị dị ứng.",
+          "vd": "She's allergic to seafood.",
+          "vdV": "Cô ấy bị dị ứng hải sản."
+        },
+        {
+          "mau": "Are there any + N nhiều?",
+          "giai": "Hỏi có hay không (số nhiều). Số ít/không đếm được: \"Is there any…?\".",
+          "vd": "Is there any sugar in this?",
+          "vdV": "Trong cái này có đường không?"
+        }
+      ]
+    },
+    {
+      "ai": "W",
+      "t": "Yes, there are. But we can make it without peanuts.",
+      "v": "Có ạ. Nhưng chúng tôi có thể làm không có đậu phộng."
+    },
+    {
+      "ai": "D",
+      "t": "Yes, please. Thank you.",
+      "v": "Vâng, làm vậy giúp tôi. Cảm ơn chị."
+    },
+    {
+      "ai": "H",
+      "t": "Excuse me, can we have the bill, please?",
+      "v": "Chị ơi, cho chúng tôi tính tiền.",
+      "khac": [
+        {
+          "kieu": "văn nói",
+          "t": "Check, please!",
+          "v": "Tính tiền!",
+          "ghiChu": "ở Mỹ nói \"check\", ở Anh/Úc nói \"bill\""
+        },
+        {
+          "kieu": "lịch sự",
+          "t": "Could we get the bill when you have a moment?",
+          "v": "Khi nào chị rảnh thì tính tiền giúp chúng tôi nhé."
+        }
+      ]
+    },
+    {
+      "ai": "W",
+      "t": "Sure. Together or separately?",
+      "v": "Vâng. Trả chung hay riêng ạ?",
+      "np": [
+        {
+          "mau": "Together or separately?",
+          "giai": "Hỏi trả chung hay mỗi người trả phần mình. Muốn tách: \"Separately, please\" hoặc \"Can we split the bill?\".",
+          "vd": "Can we split the bill, please?",
+          "vdV": "Chia hoá đơn giúp chúng tôi được không?"
+        }
+      ]
+    },
+    {
+      "ai": "D",
+      "t": "Together, please. This is on me, Ha.",
+      "v": "Chung ạ. Bữa này tôi mời nhé, Hà.",
+      "khac": [
+        {
+          "kieu": "thân mật",
+          "t": "My treat!",
+          "v": "Mình mời!"
+        },
+        {
+          "kieu": "tự nhiên hơn",
+          "t": "I'll get this one.",
+          "v": "Bữa này để tôi trả."
+        }
+      ]
+    },
+    {
+      "ai": "H",
+      "t": "Thanks, Duc! Next time it's on me.",
+      "v": "Cảm ơn Đức! Lần sau mình mời nhé."
+    }
+  ],
+  "tuVung": [
+    {
+      "chu": "reservation",
+      "doc": "/ˌrezəˈveɪʃn/",
+      "nghia": "sự đặt chỗ, đặt bàn",
+      "vd": "I have a reservation for seven."
+    },
+    {
+      "chu": "menus",
+      "doc": "/ˈmenjuːz/",
+      "nghia": "thực đơn (số nhiều)",
+      "vd": "Can we see the menus, please?"
+    },
+    {
+      "chu": "order",
+      "doc": "/ˈɔːdə(r)/",
+      "nghia": "gọi món; đơn hàng",
+      "vd": "Are you ready to order?"
+    },
+    {
+      "chu": "recommend",
+      "doc": "/ˌrekəˈmend/",
+      "nghia": "gợi ý, giới thiệu",
+      "vd": "What do you recommend?"
+    },
+    {
+      "chu": "popular",
+      "doc": "/ˈpɒpjələ(r)/",
+      "nghia": "được ưa chuộng",
+      "vd": "This dish is very popular."
+    },
+    {
+      "chu": "spicy",
+      "doc": "/ˈspaɪsi/",
+      "nghia": "cay",
+      "vd": "I can eat spicy food."
+    },
+    {
+      "chu": "allergic to",
+      "doc": "/əˈlɜːdʒɪk tuː/",
+      "nghia": "dị ứng với",
+      "vd": "I'm allergic to shrimp."
+    },
+    {
+      "chu": "without",
+      "doc": "/wɪˈðaʊt/",
+      "nghia": "không có",
+      "vd": "Coffee without sugar, please."
+    },
+    {
+      "chu": "the bill",
+      "doc": "/ðə bɪl/",
+      "nghia": "hoá đơn (Anh, Úc); Mỹ: the check",
+      "vd": "Can we have the bill, please?"
+    },
+    {
+      "chu": "separately",
+      "doc": "/ˈseprətli/",
+      "nghia": "riêng (từng người)",
+      "vd": "We want to pay separately."
+    }
+  ],
+  "yNghia": "Nói rõ mình dị ứng gì không phải là khó tính — đó là tự bảo vệ mình, và nhà hàng tốt luôn sẵn lòng đổi món. Còn câu \"This is on me\" là cách đơn giản để cảm ơn một người bạn.",
+  "meo": [
+    "Trình tự ở nhà hàng: xin bàn (\"A table for two\") → xin nước, thực đơn → gọi món (\"I'll have… / I'd like…\") → tính tiền (\"Can we have the bill?\").",
+    "Anh/Úc: \"the bill\"; Mỹ: \"the check\". Ở Mỹ thường để thêm tiền tip khoảng 15–20%; ở Anh, Úc thường không bắt buộc.",
+    "Dị ứng: \"I'm allergic to + món\". Hỏi lại: \"Is there any… in it? / Are there any… in it?\".",
+    "\"I want…\" khi gọi món nghe hơi cộc; dùng \"I'd like…\" hoặc \"Could I have…?\"."
+  ],
+  "cauHoi": [
+    {
+      "hoi": "Vì sao Đức hỏi về đậu phộng?",
+      "chon": [
+        "Anh không thích ăn đậu phộng",
+        "Anh bị dị ứng đậu phộng",
+        "Anh muốn thêm đậu phộng"
+      ],
+      "dung": 1,
+      "giai": "\"I'm allergic to peanuts.\""
+    },
+    {
+      "hoi": "Câu nào dùng để xin tính tiền ở Mỹ?",
+      "chon": [
+        "Check, please!",
+        "Money, please!",
+        "Pay me, please!"
+      ],
+      "dung": 0,
+      "giai": "Mỹ dùng \"check\", Anh/Úc dùng \"bill\"."
+    },
+    {
+      "hoi": "\"This is on me\" nghĩa là gì?",
+      "chon": [
+        "Món này ở trên bàn tôi",
+        "Lỗi của tôi",
+        "Bữa này tôi mời"
+      ],
+      "dung": 2,
+      "giai": "\"It's on me\" = tôi trả tiền."
+    },
+    {
+      "hoi": "Hà gọi món gì?",
+      "chon": [
+        "Salad gà",
+        "Cà ri cá, không cay quá",
+        "Cà ri cá thật cay"
+      ],
+      "dung": 1,
+      "giai": "\"I'll have the fish curry, please. Not too spicy.\""
+    }
+  ]
+}

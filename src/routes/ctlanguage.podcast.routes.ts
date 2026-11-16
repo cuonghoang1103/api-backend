@@ -3,7 +3,7 @@
  * `/api/v1/ctlanguage` — router kia `router.use(authenticate)` sẽ chặn khách).
  *
  * Nội dung tĩnh trong repo, MỌI tuyến công khai (khách nghe được), không ghi gì:
- *   GET /            — mọi tập (tóm tắt) gom theo cấp, cả ba ngôn ngữ (không tham số — smoke-test deploy gọi); `?nn=ja` lọc
+ *   GET /            — tập (tóm tắt) của một danh mục (`?danhMuc=`, mặc định doi-song) gom theo cấp + bảng danh mục; `?nn=ja` lọc
  *   GET /:nn/:id     — kịch bản đầy đủ: người nói + giọng, từng dòng (gốc · cách đọc · dịch), từ vựng, ý nghĩa, câu hỏi
  * Tiếng: app đọc từng dòng qua `/ctlanguage/doc` (giọng của người nói). Dịch vụ: `services/ctlanguage/podcast.ts`.
  */
@@ -18,7 +18,7 @@ router.use(rateLimit({ windowMs: 60_000, max: 120, standardHeaders: true, legacy
   message: { success: false, message: 'Bạn thao tác hơi nhanh, chờ một chút nhé.', code: 'RATE_LIMIT_EXCEEDED' } }));
 
 router.get('/', (req: Request, res: Response<ApiResponse>, next) => {
-  try { res.set('Cache-Control', 'public, max-age=300').json({ success: true, data: danhSachPodcast(req.query.nn) }); } catch (e) { next(e); }
+  try { res.set('Cache-Control', 'public, max-age=300').json({ success: true, data: danhSachPodcast(req.query.nn, req.query.danhMuc) }); } catch (e) { next(e); }
 });
 
 router.get('/:nn/:id', (req: Request, res: Response<ApiResponse>, next) => {

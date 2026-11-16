@@ -1,0 +1,387 @@
+{
+  "id": "en-ds-a2-01",
+  "nn": "en",
+  "danhMuc": "doi-song",
+  "cap": "A2",
+  "so": 4,
+  "tieuDe": "Checking In",
+  "tieuDeViet": "Nhận phòng khách sạn",
+  "moTa": "Tuấn nhận phòng: báo tên đặt phòng, hỏi bữa sáng, Wi-Fi, phòng tập, giờ trả phòng, gửi vali sau khi trả phòng — rồi gọi lễ tân vì máy lạnh hỏng.",
+  "chuDe": "Khách sạn",
+  "bieuTuong": "bed.double.fill",
+  "nguoi": [
+    {
+      "ma": "R",
+      "ten": "Sophie",
+      "giong": "uk-nu",
+      "vai": "lễ tân khách sạn"
+    },
+    {
+      "ma": "T",
+      "ten": "Tuấn",
+      "giong": "us-nam",
+      "vai": "khách"
+    }
+  ],
+  "loi": [
+    {
+      "ai": "R",
+      "t": "Good afternoon, and welcome. How can I help you?",
+      "v": "Chào buổi chiều, chào mừng anh. Tôi có thể giúp gì ạ?"
+    },
+    {
+      "ai": "T",
+      "t": "Hi. I have a reservation under the name Tuan Nguyen.",
+      "v": "Chào chị. Tôi có đặt phòng dưới tên Tuấn Nguyễn.",
+      "khac": [
+        {
+          "kieu": "tự nhiên hơn",
+          "t": "Hi, I'd like to check in. The booking is under Nguyen.",
+          "v": "Chào chị, tôi muốn nhận phòng. Phòng đặt tên Nguyễn."
+        },
+        {
+          "kieu": "ngắn gọn",
+          "t": "Checking in, please. The name is Nguyen.",
+          "v": "Nhận phòng ạ. Tên Nguyễn."
+        }
+      ],
+      "np": [
+        {
+          "mau": "under the name + tên",
+          "giai": "Đặt phòng/bàn \"dưới tên\" ai. Nói họ (surname) cho dễ tìm.",
+          "vd": "The table is under the name Smith.",
+          "vdV": "Bàn đặt tên Smith."
+        }
+      ]
+    },
+    {
+      "ai": "R",
+      "t": "Let me check... Yes, a single room for three nights. Can I see your passport, please?",
+      "v": "Để tôi kiểm tra... Vâng, một phòng đơn ba đêm. Cho tôi xem hộ chiếu của anh được không?",
+      "np": [
+        {
+          "mau": "Let me + V",
+          "giai": "Để tôi làm gì (đề nghị tự làm). Rất hay nghe ở quầy dịch vụ: Let me check / Let me see.",
+          "vd": "Let me help you with your bag.",
+          "vdV": "Để tôi xách túi giúp anh."
+        }
+      ]
+    },
+    {
+      "ai": "T",
+      "t": "Sure, here you are.",
+      "v": "Vâng, đây ạ."
+    },
+    {
+      "ai": "R",
+      "t": "Thank you. Your room is 812, on the eighth floor. Breakfast is from six thirty to ten.",
+      "v": "Cảm ơn anh. Phòng của anh là 812, ở tầng tám. Bữa sáng từ sáu rưỡi đến mười giờ.",
+      "np": [
+        {
+          "mau": "from + giờ + to + giờ",
+          "giai": "Khoảng thời gian: from six thirty to ten. Có thể thay \"to\" bằng \"until\".",
+          "vd": "The shop is open from nine to five.",
+          "vdV": "Cửa hàng mở từ chín giờ đến năm giờ."
+        }
+      ]
+    },
+    {
+      "ai": "T",
+      "t": "Is breakfast included?",
+      "v": "Bữa sáng có bao gồm trong giá không?",
+      "khac": [
+        {
+          "kieu": "tự nhiên hơn",
+          "t": "Does the price include breakfast?",
+          "v": "Giá phòng có gồm bữa sáng không?"
+        },
+        {
+          "kieu": "lịch sự",
+          "t": "Could you tell me if breakfast is included?",
+          "v": "Chị cho tôi hỏi bữa sáng có bao gồm không ạ?"
+        }
+      ],
+      "np": [
+        {
+          "mau": "be included",
+          "giai": "Bị động: \"được bao gồm\". Hỏi: \"Is … included?\"; đáp: \"Yes, it is / No, it's extra\".",
+          "vd": "Is the tax included in the price?",
+          "vdV": "Thuế đã gồm trong giá chưa?"
+        }
+      ]
+    },
+    {
+      "ai": "R",
+      "t": "Yes, it is. It's in the restaurant on the ground floor.",
+      "v": "Có ạ. Ở nhà hàng tầng trệt.",
+      "np": [
+        {
+          "mau": "ground floor (Anh) = first floor (Mỹ)",
+          "giai": "Tầng trệt: người Anh nói ground floor, người Mỹ nói first floor. Vì vậy \"first floor\" ở Anh là tầng một (trên tầng trệt).",
+          "vd": "Reception is on the ground floor.",
+          "vdV": "Lễ tân ở tầng trệt."
+        }
+      ]
+    },
+    {
+      "ai": "T",
+      "t": "Great. What's the Wi-Fi password?",
+      "v": "Tuyệt. Mật khẩu Wi-Fi là gì ạ?",
+      "khac": [
+        {
+          "kieu": "lịch sự",
+          "t": "Could I have the Wi-Fi password, please?",
+          "v": "Cho tôi xin mật khẩu Wi-Fi được không ạ?"
+        }
+      ]
+    },
+    {
+      "ai": "R",
+      "t": "It's on this card, with your key. Is there anything else?",
+      "v": "Có trên tấm thẻ này, cùng với chìa khoá. Anh cần gì nữa không ạ?"
+    },
+    {
+      "ai": "T",
+      "t": "Yes. Is there a gym or a swimming pool?",
+      "v": "Có. Ở đây có phòng tập hay hồ bơi không?",
+      "np": [
+        {
+          "mau": "Is there a + N?",
+          "giai": "Hỏi nơi đó có cái gì không. Trả lời: \"Yes, there is / No, there isn't\".",
+          "vd": "Is there a pharmacy near here?",
+          "vdV": "Gần đây có nhà thuốc không?"
+        }
+      ]
+    },
+    {
+      "ai": "R",
+      "t": "There's a small gym on the second floor. It's open twenty-four hours. But I'm afraid we don't have a pool.",
+      "v": "Có một phòng tập nhỏ ở tầng hai, mở hai mươi bốn giờ. Nhưng rất tiếc chúng tôi không có hồ bơi.",
+      "np": [
+        {
+          "mau": "I'm afraid + mệnh đề",
+          "giai": "Báo tin không vui một cách lịch sự (\"rất tiếc là…\"). Không có nghĩa là \"sợ\".",
+          "vd": "I'm afraid the shop is closed.",
+          "vdV": "Rất tiếc cửa hàng đóng cửa rồi."
+        }
+      ]
+    },
+    {
+      "ai": "T",
+      "t": "That's okay. And what time is check-out?",
+      "v": "Không sao ạ. Còn mấy giờ phải trả phòng?",
+      "khac": [
+        {
+          "kieu": "tự nhiên hơn",
+          "t": "When do I need to check out?",
+          "v": "Khi nào tôi phải trả phòng?"
+        }
+      ]
+    },
+    {
+      "ai": "R",
+      "t": "Check-out is at eleven. If you need a late check-out, just call reception.",
+      "v": "Trả phòng lúc mười một giờ. Nếu anh cần trả phòng muộn, cứ gọi lễ tân."
+    },
+    {
+      "ai": "T",
+      "t": "Could I leave my suitcase here after check-out? My flight is in the evening.",
+      "v": "Sau khi trả phòng tôi gửi vali ở đây được không? Chuyến bay của tôi vào buổi tối.",
+      "khac": [
+        {
+          "kieu": "lịch sự",
+          "t": "Would it be possible to leave my luggage here after I check out?",
+          "v": "Liệu tôi có thể gửi hành lý ở đây sau khi trả phòng không ạ?",
+          "ghiChu": "rất hay dùng ở khách sạn"
+        },
+        {
+          "kieu": "ngắn gọn",
+          "t": "Can you keep my bag after check-out?",
+          "v": "Giữ giúp tôi cái túi sau khi trả phòng nhé?"
+        }
+      ],
+      "np": [
+        {
+          "mau": "Could I + V?",
+          "giai": "Xin phép lịch sự hơn \"Can I…?\". Đáp: \"Of course / Sure / I'm afraid not\".",
+          "vd": "Could I use your phone?",
+          "vdV": "Tôi dùng điện thoại của chị được không?"
+        }
+      ]
+    },
+    {
+      "ai": "R",
+      "t": "Of course. We can keep it for you at the front desk.",
+      "v": "Tất nhiên. Chúng tôi giữ giúp anh ở quầy lễ tân."
+    },
+    {
+      "ai": "T",
+      "t": "Thank you. One more thing — could I have an extra pillow?",
+      "v": "Cảm ơn chị. Thêm một việc nữa — cho tôi xin thêm một cái gối được không?",
+      "khac": [
+        {
+          "kieu": "lịch sự",
+          "t": "Would it be possible to get an extra pillow?",
+          "v": "Liệu tôi có thể xin thêm một cái gối không ạ?"
+        }
+      ]
+    },
+    {
+      "ai": "R",
+      "t": "No problem. I'll send one up to your room.",
+      "v": "Không vấn đề gì. Tôi sẽ cho người mang lên phòng anh."
+    },
+    {
+      "ai": "T",
+      "t": "Hi, this is room 812. Sorry to bother you, but the air conditioner isn't working.",
+      "v": "Chào chị, phòng 812 đây. Xin lỗi làm phiền, nhưng máy lạnh không chạy.",
+      "khac": [
+        {
+          "kieu": "mềm mỏng",
+          "t": "Hi, it's room 812. I think there's a problem with the air conditioner.",
+          "v": "Chào chị, phòng 812 đây. Hình như máy lạnh có vấn đề."
+        },
+        {
+          "kieu": "ngắn gọn",
+          "t": "Room 812 here — the AC is broken.",
+          "v": "Phòng 812 đây — máy lạnh hỏng."
+        }
+      ],
+      "np": [
+        {
+          "mau": "isn't working",
+          "giai": "Hiện tại tiếp diễn để báo đồ đang bị hỏng ngay lúc này: The TV isn't working / The shower isn't working.",
+          "vd": "The lift isn't working.",
+          "vdV": "Thang máy đang bị hỏng."
+        }
+      ]
+    },
+    {
+      "ai": "R",
+      "t": "I'm sorry about that. I'll send someone up right away.",
+      "v": "Rất xin lỗi anh. Tôi sẽ cho người lên ngay."
+    },
+    {
+      "ai": "T",
+      "t": "Thanks a lot.",
+      "v": "Cảm ơn chị nhiều."
+    }
+  ],
+  "tuVung": [
+    {
+      "chu": "reservation",
+      "doc": "/ˌrezəˈveɪʃn/",
+      "nghia": "việc đặt phòng",
+      "vd": "I have a reservation for two nights."
+    },
+    {
+      "chu": "passport",
+      "doc": "/ˈpɑːspɔːt/",
+      "nghia": "hộ chiếu",
+      "vd": "Please show your passport."
+    },
+    {
+      "chu": "included",
+      "doc": "/ɪnˈkluːdɪd/",
+      "nghia": "được bao gồm",
+      "vd": "Breakfast is included."
+    },
+    {
+      "chu": "ground floor",
+      "doc": "/ɡraʊnd flɔː(r)/",
+      "nghia": "tầng trệt (Anh)",
+      "vd": "The café is on the ground floor."
+    },
+    {
+      "chu": "password",
+      "doc": "/ˈpɑːswɜːd/",
+      "nghia": "mật khẩu",
+      "vd": "What is the password?"
+    },
+    {
+      "chu": "check-out",
+      "doc": "/ˈtʃek aʊt/",
+      "nghia": "việc trả phòng",
+      "vd": "Check-out is at noon."
+    },
+    {
+      "chu": "reception",
+      "doc": "/rɪˈsepʃn/",
+      "nghia": "quầy lễ tân",
+      "vd": "Please call reception."
+    },
+    {
+      "chu": "suitcase",
+      "doc": "/ˈsuːtkeɪs/",
+      "nghia": "vali",
+      "vd": "My suitcase is very heavy."
+    },
+    {
+      "chu": "front desk",
+      "doc": "/frʌnt desk/",
+      "nghia": "quầy lễ tân (Mỹ hay dùng)",
+      "vd": "Ask at the front desk."
+    },
+    {
+      "chu": "extra pillow",
+      "doc": "/ˈekstrə ˈpɪləʊ/",
+      "nghia": "gối thêm",
+      "vd": "Can I have an extra pillow?"
+    },
+    {
+      "chu": "right away",
+      "doc": "/raɪt əˈweɪ/",
+      "nghia": "ngay lập tức",
+      "vd": "I'll do it right away."
+    }
+  ],
+  "yNghia": "Khách sạn có nhiều dịch vụ miễn phí mà không hỏi thì không ai nói: gửi hành lý, gối thêm, trả phòng muộn. Hỏi ngay lúc nhận phòng — năm phút ở quầy lễ tân giúp cả chuyến đi nhẹ nhàng hơn.",
+  "meo": [
+    "Nhận phòng: \"I have a reservation under the name…\" + đưa hộ chiếu.",
+    "Hỏi tiện ích: \"Is breakfast included?\", \"What's the Wi-Fi password?\", \"Is there a gym?\", \"What time is check-out?\".",
+    "Nhờ vả lịch sự: \"Could I…?\", \"Would it be possible to…?\".",
+    "Báo hỏng: \"The … isn't working.\" — đáp lại thường là \"I'll send someone up right away.\""
+  ],
+  "cauHoi": [
+    {
+      "hoi": "Tuấn ở khách sạn mấy đêm?",
+      "chon": [
+        "Hai đêm",
+        "Ba đêm",
+        "Năm đêm"
+      ],
+      "dung": 1,
+      "giai": "\"a single room for three nights\"."
+    },
+    {
+      "hoi": "Khách sạn KHÔNG có gì?",
+      "chon": [
+        "Phòng tập",
+        "Bữa sáng",
+        "Hồ bơi"
+      ],
+      "dung": 2,
+      "giai": "\"I'm afraid we don't have a pool.\""
+    },
+    {
+      "hoi": "\"I'm afraid we don't have a pool\" nghĩa là gì?",
+      "chon": [
+        "Tôi sợ hồ bơi",
+        "Rất tiếc chúng tôi không có hồ bơi",
+        "Hồ bơi rất nguy hiểm"
+      ],
+      "dung": 1,
+      "giai": "\"I'm afraid…\" = rất tiếc là…, dùng để báo tin không vui lịch sự."
+    },
+    {
+      "hoi": "Vì sao Tuấn muốn gửi vali sau khi trả phòng?",
+      "chon": [
+        "Chuyến bay của anh vào buổi tối",
+        "Vali quá nặng",
+        "Anh muốn ở thêm một đêm"
+      ],
+      "dung": 0,
+      "giai": "\"My flight is in the evening.\""
+    }
+  ]
+}

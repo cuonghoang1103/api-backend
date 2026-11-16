@@ -1,6 +1,7 @@
 {
   "id": "zh-hsk2-02",
   "nn": "zh",
+  "danhMuc": "doi-song",
   "cap": "HSK2",
   "so": 2,
   "tieuDe": "你哪儿不舒服？",
@@ -9,42 +10,327 @@
   "chuDe": "Sức khoẻ",
   "bieuTuong": "stethoscope",
   "nguoi": [
-    { "ma": "Y", "ten": "Bác sĩ", "giong": "zh-nu", "vai": "bác sĩ phòng y tế trường" },
-    { "ma": "T", "ten": "Tuấn", "giong": "zh-nam", "vai": "sinh viên Việt Nam" }
+    {
+      "ma": "Y",
+      "ten": "Bác sĩ",
+      "giong": "zh-nu",
+      "vai": "bác sĩ phòng y tế trường"
+    },
+    {
+      "ma": "T",
+      "ten": "Tuấn",
+      "giong": "zh-nam",
+      "vai": "sinh viên Việt Nam"
+    }
   ],
   "loi": [
-    { "ai": "Y", "t": "请坐。你哪儿不舒服？", "doc": "Qǐng zuò. Nǐ nǎr bù shūfu?", "v": "Mời em ngồi. Em thấy khó chịu ở đâu?" },
-    { "ai": "T", "t": "医生，我头很疼，身体也很累。", "doc": "Yīshēng, wǒ tóu hěn téng, shēntǐ yě hěn lèi.", "v": "Bác sĩ ơi, em đau đầu lắm, người cũng mệt nữa." },
-    { "ai": "Y", "t": "从什么时候开始的？", "doc": "Cóng shénme shíhou kāishǐ de?", "v": "Bắt đầu từ lúc nào?" },
-    { "ai": "T", "t": "从昨天晚上开始的。", "doc": "Cóng zuótiān wǎnshang kāishǐ de.", "v": "Từ tối hôm qua ạ." },
-    { "ai": "Y", "t": "我看一下……你有点儿发烧，三十七度八。", "doc": "Wǒ kàn yíxià…… Nǐ yǒudiǎnr fāshāo, sānshíqī dù bā.", "v": "Để tôi xem nào… Em hơi sốt, ba mươi bảy độ tám." },
-    { "ai": "T", "t": "我是不是生病了？下个星期我要考试！", "doc": "Wǒ shì bu shì shēngbìng le? Xià ge xīngqī wǒ yào kǎoshì!", "v": "Có phải em bị ốm rồi không? Tuần sau em phải thi!" },
-    { "ai": "Y", "t": "别担心，问题不大。你每天睡几个小时？", "doc": "Bié dānxīn, wèntí bú dà. Nǐ měi tiān shuì jǐ ge xiǎoshí?", "v": "Đừng lo, không có gì nghiêm trọng. Mỗi ngày em ngủ mấy tiếng?" },
-    { "ai": "T", "t": "最近我每天晚上十二点以后才睡觉，早上六点就起床。", "doc": "Zuìjìn wǒ měi tiān wǎnshang shí'èr diǎn yǐhòu cái shuìjiào, zǎoshang liù diǎn jiù qǐchuáng.", "v": "Dạo này tối nào em cũng sau mười hai giờ mới ngủ, sáu giờ sáng đã dậy rồi." },
-    { "ai": "Y", "t": "只睡六个小时？早饭吃了吗？", "doc": "Zhǐ shuì liù ge xiǎoshí? Zǎofàn chī le ma?", "v": "Chỉ ngủ sáu tiếng? Em ăn sáng chưa?" },
-    { "ai": "T", "t": "没吃，我只喝了一杯咖啡。", "doc": "Méi chī, wǒ zhǐ hē le yì bēi kāfēi.", "v": "Chưa ạ, em chỉ uống một cốc cà phê." },
-    { "ai": "Y", "t": "你的身体在说：“我太累了！”", "doc": "Nǐ de shēntǐ zài shuō: “Wǒ tài lèi le!”", "v": "Cơ thể em đang nói: \"Tôi mệt quá rồi!\"" },
-    { "ai": "T", "t": "可是我得准备考试啊。", "doc": "Kěshì wǒ děi zhǔnbèi kǎoshì a.", "v": "Nhưng em phải ôn thi mà." },
-    { "ai": "Y", "t": "我明白。可是生病了，就不能好好学习了。", "doc": "Wǒ míngbai. Kěshì shēngbìng le, jiù bù néng hǎohǎo xuéxí le.", "v": "Tôi hiểu. Nhưng ốm rồi thì sẽ không học tử tế được nữa." },
-    { "ai": "T", "t": "那我应该怎么做？", "doc": "Nà wǒ yīnggāi zěnme zuò?", "v": "Vậy em nên làm thế nào ạ?" },
-    { "ai": "Y", "t": "这个药一天吃三次，饭后吃。今天晚上早点儿睡，多喝水。", "doc": "Zhège yào yì tiān chī sān cì, fàn hòu chī. Jīntiān wǎnshang zǎo diǎnr shuì, duō hē shuǐ.", "v": "Thuốc này ngày uống ba lần, uống sau bữa ăn. Tối nay ngủ sớm một chút, uống nhiều nước." },
-    { "ai": "T", "t": "好的。我可以喝咖啡吗？", "doc": "Hǎo de. Wǒ kěyǐ hē kāfēi ma?", "v": "Vâng ạ. Em uống cà phê được không?" },
-    { "ai": "Y", "t": "这几天别喝了。早饭一定要吃。", "doc": "Zhè jǐ tiān bié hē le. Zǎofàn yídìng yào chī.", "v": "Mấy hôm nay đừng uống nữa. Bữa sáng nhất định phải ăn." },
-    { "ai": "T", "t": "知道了。谢谢医生！", "doc": "Zhīdào le. Xièxie yīshēng!", "v": "Em biết rồi. Cảm ơn bác sĩ!" },
-    { "ai": "Y", "t": "不客气。记住：休息也是学习的一部分。", "doc": "Bú kèqi. Jìzhù: xiūxi yě shì xuéxí de yí bùfen.", "v": "Không có gì. Nhớ nhé: nghỉ ngơi cũng là một phần của việc học." }
+    {
+      "ai": "Y",
+      "t": "请坐。你哪儿不舒服？",
+      "doc": "Qǐng zuò. Nǐ nǎr bù shūfu?",
+      "v": "Mời em ngồi. Em thấy khó chịu ở đâu?",
+      "np": [
+        {
+          "mau": "哪儿不舒服？",
+          "giai": "Câu bác sĩ hỏi đầu tiên: (bạn) khó chịu ở đâu? Trả lời: bộ phận + 疼 / 不舒服: 我肚子不舒服.",
+          "vd": "你哪儿疼？",
+          "vdDoc": "Nǐ nǎr téng?",
+          "vdV": "Bạn đau ở đâu?"
+        }
+      ]
+    },
+    {
+      "ai": "T",
+      "t": "医生，我头很疼，身体也很累。",
+      "doc": "Yīshēng, wǒ tóu hěn téng, shēntǐ yě hěn lèi.",
+      "v": "Bác sĩ ơi, em đau đầu lắm, người cũng mệt nữa.",
+      "khac": [
+        {
+          "kieu": "mềm mỏng",
+          "t": "医生，我有点儿头疼。",
+          "doc": "Yīshēng, wǒ yǒudiǎnr tóu téng.",
+          "v": "Bác sĩ, em hơi đau đầu.",
+          "ghiChu": "khi đau nhẹ"
+        },
+        {
+          "kieu": "nhấn mạnh",
+          "t": "医生，我头疼得厉害。",
+          "doc": "Yīshēng, wǒ tóu téng de lìhai.",
+          "v": "Bác sĩ, em đau đầu dữ dội."
+        }
+      ],
+      "np": [
+        {
+          "mau": "Chủ ngữ + [bộ phận + tính từ]",
+          "giai": "我头很疼 = tôi (thì) đầu rất đau — vị ngữ là cả một cụm \"chủ–vị\" nhỏ. Rất hay dùng khi tả cơ thể: 他个子很高.",
+          "vd": "我肚子很疼。",
+          "vdDoc": "Wǒ dùzi hěn téng.",
+          "vdV": "Tôi đau bụng lắm."
+        }
+      ]
+    },
+    {
+      "ai": "Y",
+      "t": "从什么时候开始的？",
+      "doc": "Cóng shénme shíhou kāishǐ de?",
+      "v": "Bắt đầu từ lúc nào?",
+      "np": [
+        {
+          "mau": "从……开始",
+          "giai": "从 + thời điểm + 开始 = bắt đầu từ…: 从昨天开始, 从下个月开始.",
+          "vd": "我从去年开始学汉语。",
+          "vdDoc": "Wǒ cóng qùnián kāishǐ xué Hànyǔ.",
+          "vdV": "Tôi bắt đầu học tiếng Trung từ năm ngoái."
+        }
+      ]
+    },
+    {
+      "ai": "T",
+      "t": "从昨天晚上开始的。",
+      "doc": "Cóng zuótiān wǎnshang kāishǐ de.",
+      "v": "Từ tối hôm qua ạ."
+    },
+    {
+      "ai": "Y",
+      "t": "我看一下……你有点儿发烧，三十七度八。",
+      "doc": "Wǒ kàn yíxià…… Nǐ yǒudiǎnr fāshāo, sānshíqī dù bā.",
+      "v": "Để tôi xem nào… Em hơi sốt, ba mươi bảy độ tám."
+    },
+    {
+      "ai": "T",
+      "t": "我是不是生病了？下个星期我要考试！",
+      "doc": "Wǒ shì bu shì shēngbìng le? Xià ge xīngqī wǒ yào kǎoshì!",
+      "v": "Có phải em bị ốm rồi không? Tuần sau em phải thi!",
+      "np": [
+        {
+          "mau": "是不是……？",
+          "giai": "是不是 đặt trước vị ngữ để hỏi điều mình đoán: 我是不是生病了？ = có phải tôi bị ốm rồi không?",
+          "vd": "你是不是累了？",
+          "vdDoc": "Nǐ shì bu shì lèi le?",
+          "vdV": "Có phải bạn mệt rồi không?"
+        }
+      ]
+    },
+    {
+      "ai": "Y",
+      "t": "别担心，问题不大。你每天睡几个小时？",
+      "doc": "Bié dānxīn, wèntí bú dà. Nǐ měi tiān shuì jǐ ge xiǎoshí?",
+      "v": "Đừng lo, không có gì nghiêm trọng. Mỗi ngày em ngủ mấy tiếng?",
+      "khac": [
+        {
+          "kieu": "tự nhiên hơn",
+          "t": "放心，没什么大问题。",
+          "doc": "Fàngxīn, méi shénme dà wèntí.",
+          "v": "Yên tâm, không có vấn đề gì lớn đâu."
+        }
+      ]
+    },
+    {
+      "ai": "T",
+      "t": "最近我每天晚上十二点以后才睡觉，早上六点就起床。",
+      "doc": "Zuìjìn wǒ měi tiān wǎnshang shí'èr diǎn yǐhòu cái shuìjiào, zǎoshang liù diǎn jiù qǐchuáng.",
+      "v": "Dạo này tối nào em cũng sau mười hai giờ mới ngủ, sáu giờ sáng đã dậy rồi.",
+      "np": [
+        {
+          "mau": "才 (muộn) ↔ 就 (sớm)",
+          "giai": "十二点以后才睡觉 = sau 12 giờ MỚI ngủ (muộn); 六点就起床 = 6 giờ ĐÃ dậy (sớm). Người nói bộc lộ cảm nhận về thời gian.",
+          "vd": "他九点才来，我八点就到了。",
+          "vdDoc": "Tā jiǔ diǎn cái lái, wǒ bā diǎn jiù dào le.",
+          "vdV": "Chín giờ anh ấy mới đến, tám giờ tôi đã tới rồi."
+        }
+      ]
+    },
+    {
+      "ai": "Y",
+      "t": "只睡六个小时？早饭吃了吗？",
+      "doc": "Zhǐ shuì liù ge xiǎoshí? Zǎofàn chī le ma?",
+      "v": "Chỉ ngủ sáu tiếng? Em ăn sáng chưa?",
+      "np": [
+        {
+          "mau": "Tân ngữ đưa lên đầu: 早饭吃了吗？",
+          "giai": "Văn nói hay đưa tân ngữ lên đầu câu làm chủ đề: 早饭吃了吗？ = 你吃早饭了吗？ Nghe tự nhiên, gọn.",
+          "vd": "作业做完了吗？",
+          "vdDoc": "Zuòyè zuò wán le ma?",
+          "vdV": "Bài tập làm xong chưa?"
+        }
+      ]
+    },
+    {
+      "ai": "T",
+      "t": "没吃，我只喝了一杯咖啡。",
+      "doc": "Méi chī, wǒ zhǐ hē le yì bēi kāfēi.",
+      "v": "Chưa ạ, em chỉ uống một cốc cà phê.",
+      "np": [
+        {
+          "mau": "没 + V (chưa/không làm)",
+          "giai": "Phủ định việc đã qua dùng 没 + V, KHÔNG thêm 了: 没吃 (chưa ăn). 不 dùng cho thói quen, ý muốn: 我不吃早饭 (tôi không ăn sáng).",
+          "vd": "我昨天没去学校。",
+          "vdDoc": "Wǒ zuótiān méi qù xuéxiào.",
+          "vdV": "Hôm qua tôi không đến trường."
+        }
+      ]
+    },
+    {
+      "ai": "Y",
+      "t": "你的身体在说：“我太累了！”",
+      "doc": "Nǐ de shēntǐ zài shuō: “Wǒ tài lèi le!”",
+      "v": "Cơ thể em đang nói: \"Tôi mệt quá rồi!\""
+    },
+    {
+      "ai": "T",
+      "t": "可是我得准备考试啊。",
+      "doc": "Kěshì wǒ děi zhǔnbèi kǎoshì a.",
+      "v": "Nhưng em phải ôn thi mà.",
+      "np": [
+        {
+          "mau": "得 (děi) = phải",
+          "giai": "得 đọc děi = phải (văn nói). Phủ định KHÔNG nói 不得, mà nói 不用 (không cần).",
+          "vd": "我得走了，明天见。",
+          "vdDoc": "Wǒ děi zǒu le, míngtiān jiàn.",
+          "vdV": "Mình phải đi rồi, mai gặp."
+        }
+      ]
+    },
+    {
+      "ai": "Y",
+      "t": "我明白。可是生病了，就不能好好学习了。",
+      "doc": "Wǒ míngbai. Kěshì shēngbìng le, jiù bù néng hǎohǎo xuéxí le.",
+      "v": "Tôi hiểu. Nhưng ốm rồi thì sẽ không học tử tế được nữa."
+    },
+    {
+      "ai": "T",
+      "t": "那我应该怎么做？",
+      "doc": "Nà wǒ yīnggāi zěnme zuò?",
+      "v": "Vậy em nên làm thế nào ạ?",
+      "khac": [
+        {
+          "kieu": "văn nói",
+          "t": "那我该怎么办？",
+          "doc": "Nà wǒ gāi zěnme bàn?",
+          "v": "Vậy em phải làm sao?"
+        },
+        {
+          "kieu": "lịch sự",
+          "t": "您建议我怎么做？",
+          "doc": "Nín jiànyì wǒ zěnme zuò?",
+          "v": "Bác sĩ khuyên em nên làm thế nào ạ?"
+        }
+      ]
+    },
+    {
+      "ai": "Y",
+      "t": "这个药一天吃三次，饭后吃。今天晚上早点儿睡，多喝水。",
+      "doc": "Zhège yào yì tiān chī sān cì, fàn hòu chī. Jīntiān wǎnshang zǎo diǎnr shuì, duō hē shuǐ.",
+      "v": "Thuốc này ngày uống ba lần, uống sau bữa ăn. Tối nay ngủ sớm một chút, uống nhiều nước."
+    },
+    {
+      "ai": "T",
+      "t": "好的。我可以喝咖啡吗？",
+      "doc": "Hǎo de. Wǒ kěyǐ hē kāfēi ma?",
+      "v": "Vâng ạ. Em uống cà phê được không?",
+      "khac": [
+        {
+          "kieu": "văn nói",
+          "t": "咖啡还能喝吗？",
+          "doc": "Kāfēi hái néng hē ma?",
+          "v": "Cà phê còn uống được không ạ?"
+        }
+      ]
+    },
+    {
+      "ai": "Y",
+      "t": "这几天别喝了。早饭一定要吃。",
+      "doc": "Zhè jǐ tiān bié hē le. Zǎofàn yídìng yào chī.",
+      "v": "Mấy hôm nay đừng uống nữa. Bữa sáng nhất định phải ăn."
+    },
+    {
+      "ai": "T",
+      "t": "知道了。谢谢医生！",
+      "doc": "Zhīdào le. Xièxie yīshēng!",
+      "v": "Em biết rồi. Cảm ơn bác sĩ!",
+      "khac": [
+        {
+          "kieu": "lịch sự",
+          "t": "好的，我记住了，谢谢您！",
+          "doc": "Hǎo de, wǒ jìzhù le, xièxie nín!",
+          "v": "Vâng, em nhớ rồi, cảm ơn bác sĩ!"
+        }
+      ]
+    },
+    {
+      "ai": "Y",
+      "t": "不客气。记住：休息也是学习的一部分。",
+      "doc": "Bú kèqi. Jìzhù: xiūxi yě shì xuéxí de yí bùfen.",
+      "v": "Không có gì. Nhớ nhé: nghỉ ngơi cũng là một phần của việc học."
+    }
   ],
   "tuVung": [
-    { "chu": "不舒服", "doc": "bù shūfu", "nghia": "khó chịu, không khoẻ (trong người)", "vd": "我今天有点儿不舒服。" },
-    { "chu": "疼", "doc": "téng", "nghia": "đau (đông)", "vd": "我的眼睛很疼。" },
-    { "chu": "发烧", "doc": "fāshāo", "nghia": "sốt (phát thiêu)", "vd": "孩子发烧了，要去医院。" },
-    { "chu": "生病", "doc": "shēngbìng", "nghia": "bị ốm, mắc bệnh (sinh bệnh)", "vd": "他生病了，今天没来上课。" },
-    { "chu": "担心", "doc": "dānxīn", "nghia": "lo lắng (đảm tâm)", "vd": "别担心，我很好。" },
-    { "chu": "才", "doc": "cái", "nghia": "mới (muộn hơn dự kiến)", "vd": "他十点才来。" },
-    { "chu": "得", "doc": "děi", "nghia": "phải (khẩu ngữ) — chữ đa âm: 得 de (trợ từ), dé (được), děi (phải)", "vd": "我得走了。" },
-    { "chu": "准备", "doc": "zhǔnbèi", "nghia": "chuẩn bị", "vd": "你准备好了吗？" },
-    { "chu": "药", "doc": "yào", "nghia": "thuốc (dược)", "vd": "这个药饭后吃。" },
-    { "chu": "一定", "doc": "yídìng", "nghia": "nhất định, chắc chắn", "vd": "明天你一定要来。" },
-    { "chu": "休息", "doc": "xiūxi", "nghia": "nghỉ ngơi (hưu tức)", "vd": "你累了，休息一下吧。" }
+    {
+      "chu": "不舒服",
+      "doc": "bù shūfu",
+      "nghia": "khó chịu, không khoẻ (trong người)",
+      "vd": "我今天有点儿不舒服。"
+    },
+    {
+      "chu": "疼",
+      "doc": "téng",
+      "nghia": "đau (đông)",
+      "vd": "我的眼睛很疼。"
+    },
+    {
+      "chu": "发烧",
+      "doc": "fāshāo",
+      "nghia": "sốt (phát thiêu)",
+      "vd": "孩子发烧了，要去医院。"
+    },
+    {
+      "chu": "生病",
+      "doc": "shēngbìng",
+      "nghia": "bị ốm, mắc bệnh (sinh bệnh)",
+      "vd": "他生病了，今天没来上课。"
+    },
+    {
+      "chu": "担心",
+      "doc": "dānxīn",
+      "nghia": "lo lắng (đảm tâm)",
+      "vd": "别担心，我很好。"
+    },
+    {
+      "chu": "才",
+      "doc": "cái",
+      "nghia": "mới (muộn hơn dự kiến)",
+      "vd": "他十点才来。"
+    },
+    {
+      "chu": "得",
+      "doc": "děi",
+      "nghia": "phải (khẩu ngữ) — chữ đa âm: 得 de (trợ từ), dé (được), děi (phải)",
+      "vd": "我得走了。"
+    },
+    {
+      "chu": "准备",
+      "doc": "zhǔnbèi",
+      "nghia": "chuẩn bị",
+      "vd": "你准备好了吗？"
+    },
+    {
+      "chu": "药",
+      "doc": "yào",
+      "nghia": "thuốc (dược)",
+      "vd": "这个药饭后吃。"
+    },
+    {
+      "chu": "一定",
+      "doc": "yídìng",
+      "nghia": "nhất định, chắc chắn",
+      "vd": "明天你一定要来。"
+    },
+    {
+      "chu": "休息",
+      "doc": "xiūxi",
+      "nghia": "nghỉ ngơi (hưu tức)",
+      "vd": "你累了，休息一下吧。"
+    }
   ],
   "yNghia": "Tuấn tưởng thức khuya là chăm chỉ, nhưng một cơ thể kiệt sức thì không thể học tốt. Ngủ đủ, ăn sáng, biết dừng lại đúng lúc không phải là lười — đó là cách giữ cho mình đi được đường dài.",
   "meo": [
@@ -54,9 +340,45 @@
     "Tần suất: thời gian + động từ + số lần: 一天吃三次 (ngày uống ba lần). 别 + động từ = đừng: 别担心, 别喝了."
   ],
   "cauHoi": [
-    { "hoi": "Tuấn bị đau đầu từ khi nào?", "chon": ["Từ sáng nay", "Từ tối hôm qua", "Từ tuần trước"], "dung": 1, "giai": "Tuấn nói: 从昨天晚上开始的." },
-    { "hoi": "Thuốc bác sĩ kê phải uống thế nào?", "chon": ["Ngày ba lần, sau bữa ăn", "Ngày một lần, trước khi ngủ", "Khi nào đau thì uống"], "dung": 0, "giai": "Bác sĩ dặn: 一天吃三次，饭后吃." },
-    { "hoi": "Bác sĩ bảo Tuấn làm gì với cà phê?", "chon": ["Uống thêm cho tỉnh", "Uống sau bữa sáng", "Mấy hôm nay đừng uống"], "dung": 2, "giai": "这几天别喝了 — mấy hôm nay đừng uống nữa." },
-    { "hoi": "Trong câu 我得准备考试, chữ 得 đọc là gì?", "chon": ["de", "dé", "děi"], "dung": 2, "giai": "得 nghĩa là \"phải\" thì đọc děi." }
+    {
+      "hoi": "Tuấn bị đau đầu từ khi nào?",
+      "chon": [
+        "Từ sáng nay",
+        "Từ tối hôm qua",
+        "Từ tuần trước"
+      ],
+      "dung": 1,
+      "giai": "Tuấn nói: 从昨天晚上开始的."
+    },
+    {
+      "hoi": "Thuốc bác sĩ kê phải uống thế nào?",
+      "chon": [
+        "Ngày ba lần, sau bữa ăn",
+        "Ngày một lần, trước khi ngủ",
+        "Khi nào đau thì uống"
+      ],
+      "dung": 0,
+      "giai": "Bác sĩ dặn: 一天吃三次，饭后吃."
+    },
+    {
+      "hoi": "Bác sĩ bảo Tuấn làm gì với cà phê?",
+      "chon": [
+        "Uống thêm cho tỉnh",
+        "Uống sau bữa sáng",
+        "Mấy hôm nay đừng uống"
+      ],
+      "dung": 2,
+      "giai": "这几天别喝了 — mấy hôm nay đừng uống nữa."
+    },
+    {
+      "hoi": "Trong câu 我得准备考试, chữ 得 đọc là gì?",
+      "chon": [
+        "de",
+        "dé",
+        "děi"
+      ],
+      "dung": 2,
+      "giai": "得 nghĩa là \"phải\" thì đọc děi."
+    }
   ]
 }

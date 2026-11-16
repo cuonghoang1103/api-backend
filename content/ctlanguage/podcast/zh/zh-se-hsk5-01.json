@@ -1,0 +1,277 @@
+{
+  "id": "zh-se-hsk5-01",
+  "nn": "zh",
+  "danhMuc": "phan-mem",
+  "cap": "HSK5",
+  "so": 1,
+  "tieuDe": "技术面试：不懂装懂最危险",
+  "tieuDeViet": "Phỏng vấn kỹ thuật: giả vờ hiểu là nguy hiểm nhất",
+  "moTa": "Thu — kỹ sư back-end người Việt, bốn năm kinh nghiệm — phỏng vấn ở một công ty Trung Quốc. Cô trả lời cách tìm nguyên nhân API chậm, cache và nhất quán dữ liệu; gặp câu không chắc, cô nói thật rồi trình bày cách mình suy luận — và chính điều đó làm người phỏng vấn ấn tượng.",
+  "chuDe": "Phỏng vấn kỹ thuật",
+  "bieuTuong": "questionmark.bubble.fill",
+  "nguoi": [
+    { "ma": "H", "ten": "Anh Hà", "giong": "zh-nam", "vai": "người phỏng vấn, trưởng nhóm kỹ thuật" },
+    { "ma": "T", "ten": "Thu", "giong": "zh-nu", "vai": "ứng viên back-end người Việt" }
+  ],
+  "loi": [
+    {
+      "ai": "H",
+      "t": "你好，阮秋。请先简单介绍一下自己，重点说说最近做过的项目。",
+      "doc": "Nǐ hǎo, Ruǎn Qiū. Qǐng xiān jiǎndān jièshào yíxià zìjǐ, zhòngdiǎn shuōshuo zuìjìn zuò guo de xiàngmù.",
+      "v": "Chào em, Nguyễn Thu. Trước hết em giới thiệu ngắn về bản thân, tập trung nói về dự án gần đây nhất."
+    },
+    {
+      "ai": "T",
+      "t": "您好，我叫阮秋，有四年的后端开发经验。最近的一个项目，是为一家连锁药店做的库存管理系统。",
+      "doc": "Nín hǎo, wǒ jiào Ruǎn Qiū, yǒu sì nián de hòuduān kāifā jīngyàn. Zuìjìn de yí ge xiàngmù, shì wèi yì jiā liánsuǒ yàodiàn zuò de kùcún guǎnlǐ xìtǒng.",
+      "v": "Chào anh, em là Nguyễn Thu, có bốn năm kinh nghiệm phát triển back-end. Dự án gần nhất là hệ thống quản lý kho em làm cho một chuỗi nhà thuốc.",
+      "khac": [
+        { "kieu": "trang trọng", "t": "何经理您好，很高兴有机会参加这次面试。", "doc": "Hé jīnglǐ nín hǎo, hěn gāoxìng yǒu jīhuì cānjiā zhè cì miànshì.", "v": "Chào anh Hà, rất vui được có cơ hội tham gia buổi phỏng vấn này.", "ghiChu": "câu mở đầu trước khi tự giới thiệu" }
+      ],
+      "np": [
+        { "mau": "为 + đối tượng + V", "giai": "为 (wèi) = cho, vì (ai đó): 为客户做系统 = làm hệ thống cho khách. Trang trọng hơn 给.", "vd": "我们为用户提供更好的服务。", "vdDoc": "Wǒmen wèi yònghù tígōng gèng hǎo de fúwù.", "vdV": "Chúng tôi cung cấp dịch vụ tốt hơn cho người dùng." }
+      ]
+    },
+    {
+      "ai": "T",
+      "t": "我主要负责订单和库存两个模块。系统上线以后，盘点的时间从两天缩短到了半天。",
+      "doc": "Wǒ zhǔyào fùzé dìngdān hé kùcún liǎng ge mókuài. Xìtǒng shàngxiàn yǐhòu, pándiǎn de shíjiān cóng liǎng tiān suōduǎn dào le bàn tiān.",
+      "v": "Em chủ yếu phụ trách hai module đơn hàng và tồn kho. Sau khi hệ thống chạy, thời gian kiểm kê giảm từ hai ngày xuống còn nửa ngày.",
+      "np": [
+        { "mau": "从 A + V + 到 + B", "giai": "Diễn tả thay đổi về số lượng: 从两天缩短到半天 (từ hai ngày rút xuống nửa ngày), 从十个增加到二十个.", "vd": "用户从一千增加到了一万。", "vdDoc": "Yònghù cóng yì qiān zēngjiā dào le yí wàn.", "vdV": "Người dùng tăng từ một nghìn lên mười nghìn." }
+      ]
+    },
+    {
+      "ai": "H",
+      "t": "不错，有具体的数据。那我问一个技术问题：系统里有一个接口特别慢，用户抱怨了，你会怎么排查？",
+      "doc": "Búcuò, yǒu jùtǐ de shùjù. Nà wǒ wèn yí ge jìshù wèntí: xìtǒng li yǒu yí ge jiēkǒu tèbié màn, yònghù bàoyuàn le, nǐ huì zěnme páichá?",
+      "v": "Tốt, có số liệu cụ thể. Vậy anh hỏi một câu kỹ thuật: trong hệ thống có một API rất chậm, người dùng phàn nàn, em sẽ tìm nguyên nhân thế nào?"
+    },
+    {
+      "ai": "T",
+      "t": "我觉得与其一上来就改代码，不如先弄清楚到底慢在哪儿。",
+      "doc": "Wǒ juéde yǔqí yí shànglái jiù gǎi dàimǎ, bùrú xiān nòng qīngchu dàodǐ màn zài nǎr.",
+      "v": "Em nghĩ thay vì lao vào sửa code ngay, tốt hơn là làm rõ trước xem rốt cuộc chậm ở đâu.",
+      "khac": [
+        { "kieu": "chuyên nghiệp", "t": "我的思路是先定位问题，再考虑优化方案。", "doc": "Wǒ de sīlù shì xiān dìngwèi wèntí, zài kǎolǜ yōuhuà fāng'àn.", "v": "Hướng của em là khoanh vùng vấn đề trước, rồi mới tính phương án tối ưu.", "ghiChu": "定位问题 = khoanh vùng/định vị lỗi, từ rất hay dùng" }
+      ],
+      "np": [
+        { "mau": "与其 A，不如 B", "giai": "\"Thay vì A, chi bằng B\" — so sánh và chọn B là cách tốt hơn. Trang trọng, hay dùng khi trình bày quan điểm.", "vd": "与其在家等，不如去公司问问。", "vdDoc": "Yǔqí zài jiā děng, bùrú qù gōngsī wènwen.", "vdV": "Thay vì ở nhà chờ, chi bằng đến công ty hỏi xem." },
+        { "mau": "一上来就 + V", "giai": "Vừa bắt đầu đã làm ngay (thường hàm ý vội vàng, thiếu suy nghĩ).", "vd": "他一上来就问工资。", "vdDoc": "Tā yí shànglái jiù wèn gōngzī.", "vdV": "Anh ta vừa vào đã hỏi lương ngay." }
+      ]
+    },
+    {
+      "ai": "T",
+      "t": "我会先看监控和日志，确认是所有请求都慢，还是只有某些情况下才慢。",
+      "doc": "Wǒ huì xiān kàn jiānkòng hé rìzhì, quèrèn shì suǒyǒu qǐngqiú dōu màn, háishi zhǐyǒu mǒuxiē qíngkuàng xià cái màn.",
+      "v": "Em sẽ xem giám sát và log trước, xác định là mọi request đều chậm, hay chỉ chậm trong một số trường hợp."
+    },
+    {
+      "ai": "T",
+      "t": "如果问题出在数据库，就用执行计划看看查询有没有用到索引。",
+      "doc": "Rúguǒ wèntí chū zài shùjùkù, jiù yòng zhíxíng jìhuà kànkan cháxún yǒu méiyǒu yòng dào suǒyǐn.",
+      "v": "Nếu vấn đề nằm ở database, em dùng execution plan xem truy vấn có dùng tới index không."
+    },
+    {
+      "ai": "H",
+      "t": "假设索引没问题，可是数据量实在太大了呢？",
+      "doc": "Jiǎshè suǒyǐn méi wèntí, kěshì shùjù liàng shízài tài dà le ne?",
+      "v": "Giả sử index không có vấn đề, nhưng lượng dữ liệu thực sự quá lớn thì sao?"
+    },
+    {
+      "ai": "T",
+      "t": "那可以考虑加缓存，比如用Redis，把经常读、很少改的数据放进去。",
+      "doc": "Nà kěyǐ kǎolǜ jiā huǎncún, bǐrú yòng Redis, bǎ jīngcháng dú, hěn shǎo gǎi de shùjù fàng jìnqu.",
+      "v": "Thì có thể tính thêm cache, ví dụ dùng Redis, đưa vào đó những dữ liệu hay đọc mà ít khi sửa."
+    },
+    {
+      "ai": "H",
+      "t": "加了缓存以后，数据不一致的问题，你怎么处理？",
+      "doc": "Jiā le huǎncún yǐhòu, shùjù bù yízhì de wèntí, nǐ zěnme chǔlǐ?",
+      "v": "Thêm cache rồi thì vấn đề dữ liệu không nhất quán em xử lý thế nào?"
+    },
+    {
+      "ai": "T",
+      "t": "一般是更新数据库以后，把对应的缓存删掉，同时给缓存设置过期时间。这样即使删除失败了，数据最多也只是短时间不一致。",
+      "doc": "Yìbān shì gēngxīn shùjùkù yǐhòu, bǎ duìyìng de huǎncún shān diào, tóngshí gěi huǎncún shèzhì guòqī shíjiān. Zhèyàng jíshǐ shānchú shībài le, shùjù zuìduō yě zhǐ shì duǎn shíjiān bù yízhì.",
+      "v": "Thường là sau khi cập nhật database thì xoá cache tương ứng, đồng thời đặt thời gian hết hạn cho cache. Như vậy dù có xoá thất bại, dữ liệu cũng chỉ lệch nhau trong thời gian ngắn.",
+      "np": [
+        { "mau": "即使 A，也 B", "giai": "\"Cho dù A thì vẫn B\" — giả định một tình huống xấu mà kết quả vẫn không đổi. Mạnh hơn 虽然 (vì 虽然 nói việc có thật).", "vd": "即使很忙，他也每天学一个小时中文。", "vdDoc": "Jíshǐ hěn máng, tā yě měitiān xué yí ge xiǎoshí Zhōngwén.", "vdV": "Dù rất bận, ngày nào anh ấy cũng học tiếng Trung một tiếng." }
+      ]
+    },
+    {
+      "ai": "H",
+      "t": "很好。下一个问题：你了解消息队列在分布式事务里的用法吗？",
+      "doc": "Hěn hǎo. Xià yí ge wèntí: nǐ liǎojiě xiāoxi duìliè zài fēnbùshì shìwù li de yòngfǎ ma?",
+      "v": "Rất tốt. Câu tiếp theo: em có hiểu cách dùng hàng đợi tin nhắn trong giao dịch phân tán không?"
+    },
+    {
+      "ai": "T",
+      "t": "说实话，这一块我只在书上看过，没有在项目里真正用过，所以不敢说很了解。",
+      "doc": "Shuō shíhuà, zhè yí kuài wǒ zhǐ zài shū shang kàn guo, méiyǒu zài xiàngmù li zhēnzhèng yòng guo, suǒyǐ bù gǎn shuō hěn liǎojiě.",
+      "v": "Nói thật, mảng này em chỉ đọc qua sách, chưa thật sự dùng trong dự án, nên không dám nói là hiểu rõ.",
+      "khac": [
+        { "kieu": "chuyên nghiệp", "t": "这部分我的实际经验比较有限，我可以说说我目前的理解。", "doc": "Zhè bùfen wǒ de shíjì jīngyàn bǐjiào yǒuxiàn, wǒ kěyǐ shuōshuo wǒ mùqián de lǐjiě.", "v": "Phần này kinh nghiệm thực tế của em khá hạn chế, em xin nói về hiểu biết hiện tại của mình.", "ghiChu": "thừa nhận giới hạn mà vẫn chủ động" }
+      ]
+    },
+    {
+      "ai": "T",
+      "t": "不过我可以说说我的理解，如果有不对的地方，请您指出来。",
+      "doc": "Búguò wǒ kěyǐ shuōshuo wǒ de lǐjiě, rúguǒ yǒu bú duì de dìfang, qǐng nín zhǐ chūlai.",
+      "v": "Nhưng em có thể nói cách em hiểu, nếu có chỗ nào chưa đúng, mong anh chỉ ra."
+    },
+    {
+      "ai": "H",
+      "t": "好，你说。",
+      "doc": "Hǎo, nǐ shuō.",
+      "v": "Được, em nói đi."
+    },
+    {
+      "ai": "T",
+      "t": "我的理解是，下单和扣库存如果在两个服务里，就很难用一个数据库事务保证它们同时成功。",
+      "doc": "Wǒ de lǐjiě shì, xiàdān hé kòu kùcún rúguǒ zài liǎng ge fúwù li, jiù hěn nán yòng yí ge shùjùkù shìwù bǎozhèng tāmen tóngshí chénggōng.",
+      "v": "Em hiểu là: nếu đặt hàng và trừ kho nằm ở hai service khác nhau, thì rất khó dùng một transaction database để đảm bảo cả hai cùng thành công."
+    },
+    {
+      "ai": "T",
+      "t": "一种办法是先把订单写进数据库，再发一条消息，让库存服务去处理；一旦失败，就重试或者补偿。",
+      "doc": "Yì zhǒng bànfǎ shì xiān bǎ dìngdān xiě jìn shùjùkù, zài fā yì tiáo xiāoxi, ràng kùcún fúwù qù chǔlǐ; yídàn shībài, jiù chóngshì huòzhě bǔcháng.",
+      "v": "Một cách là ghi đơn hàng vào database trước, rồi gửi một message để service kho xử lý; một khi thất bại thì thử lại hoặc bù trừ.",
+      "np": [
+        { "mau": "一旦 A，就 B", "giai": "\"Một khi A (xảy ra) thì B\" — A thường là việc chưa xảy ra, có tính rủi ro.", "vd": "一旦发现问题，就马上告诉我。", "vdDoc": "Yídàn fāxiàn wèntí, jiù mǎshàng gàosu wǒ.", "vdV": "Một khi phát hiện vấn đề thì báo tôi ngay." }
+      ]
+    },
+    {
+      "ai": "H",
+      "t": "思路是对的。那重试的话，会不会扣两次库存？",
+      "doc": "Sīlù shì duì de. Nà chóngshì de huà, huì bu huì kòu liǎng cì kùcún?",
+      "v": "Hướng suy nghĩ đúng. Vậy nếu thử lại, liệu có bị trừ kho hai lần không?"
+    },
+    {
+      "ai": "T",
+      "t": "会，所以处理消息的接口必须是幂等的，比如用订单号判断这条消息是不是已经处理过了。",
+      "doc": "Huì, suǒyǐ chǔlǐ xiāoxi de jiēkǒu bìxū shì mìděng de, bǐrú yòng dìngdānhào pànduàn zhè tiáo xiāoxi shì bu shì yǐjīng chǔlǐ guo le.",
+      "v": "Có thể bị, nên API xử lý message bắt buộc phải idempotent, ví dụ dùng mã đơn để kiểm tra message này đã được xử lý chưa."
+    },
+    {
+      "ai": "H",
+      "t": "对于一个没用过的东西，能想到幂等，已经不简单了。",
+      "doc": "Duìyú yí ge méi yòng guo de dōngxi, néng xiǎngdào mìděng, yǐjīng bù jiǎndān le.",
+      "v": "Với một thứ chưa từng dùng mà nghĩ được tới idempotent thì đã không đơn giản rồi.",
+      "np": [
+        { "mau": "对于 + N，…", "giai": "对于 = đối với (một sự việc, vấn đề). Đặt đầu câu để nêu đối tượng được bàn tới.", "vd": "对于这个问题，大家有什么看法？", "vdDoc": "Duìyú zhège wèntí, dàjiā yǒu shénme kànfǎ?", "vdV": "Đối với vấn đề này, mọi người có ý kiến gì?" }
+      ]
+    },
+    {
+      "ai": "H",
+      "t": "我比较欣赏的是，你没有不懂装懂。",
+      "doc": "Wǒ bǐjiào xīnshǎng de shì, nǐ méiyǒu bù dǒng zhuāng dǒng.",
+      "v": "Điều anh khá đánh giá cao là em không giả vờ hiểu khi không hiểu.",
+      "np": [
+        { "mau": "不懂装懂", "giai": "Không hiểu mà làm như hiểu. 装 = giả vờ: 装睡 (giả ngủ), 装不知道 (vờ không biết).", "vd": "他明明知道，却装不知道。", "vdDoc": "Tā míngmíng zhīdào, què zhuāng bù zhīdào.", "vdV": "Rõ ràng anh ta biết mà lại vờ như không biết." }
+      ]
+    },
+    {
+      "ai": "T",
+      "t": "谢谢。我觉得就算装懂能过面试，进了团队以后也早晚会被发现。",
+      "doc": "Xièxie. Wǒ juéde jiùsuàn zhuāng dǒng néng guò miànshì, jìn le tuánduì yǐhòu yě zǎowǎn huì bèi fāxiàn.",
+      "v": "Cảm ơn anh. Em nghĩ cho dù giả vờ hiểu mà qua được phỏng vấn, vào nhóm rồi thì sớm muộn cũng bị lộ.",
+      "np": [
+        { "mau": "就算 A，也 B", "giai": "Giống 即使…也… nhưng mang sắc thái văn nói hơn: \"cho dù… thì cũng…\".", "vd": "就算明天下雨，我们也要去。", "vdDoc": "Jiùsuàn míngtiān xià yǔ, wǒmen yě yào qù.", "vdV": "Cho dù mai mưa, chúng ta cũng phải đi." }
+      ]
+    },
+    {
+      "ai": "H",
+      "t": "最后，你有什么问题想问我们吗？",
+      "doc": "Zuìhòu, nǐ yǒu shénme wèntí xiǎng wèn wǒmen ma?",
+      "v": "Cuối cùng, em có câu hỏi gì muốn hỏi bên anh không?"
+    },
+    {
+      "ai": "T",
+      "t": "有两个问题。第一，如果我加入的话，前三个月主要负责什么？第二，团队平时是怎么做代码评审的？",
+      "doc": "Yǒu liǎng ge wèntí. Dì yī, rúguǒ wǒ jiārù de huà, qián sān ge yuè zhǔyào fùzé shénme? Dì èr, tuánduì píngshí shì zěnme zuò dàimǎ píngshěn de?",
+      "v": "Em có hai câu. Thứ nhất, nếu em vào làm thì ba tháng đầu chủ yếu phụ trách gì? Thứ hai, nhóm bình thường review code thế nào?",
+      "khac": [
+        { "kieu": "lịch sự", "t": "方便的话，想请您介绍一下团队目前的技术栈和分工。", "doc": "Fāngbiàn de huà, xiǎng qǐng nín jièshào yíxià tuánduì mùqián de jìshù zhàn hé fēngōng.", "v": "Nếu tiện, em muốn nhờ anh giới thiệu qua công nghệ nhóm đang dùng và cách phân công.", "ghiChu": "技术栈 = tech stack; 方便的话 mở đầu lời nhờ rất lịch sự" }
+      ]
+    },
+    {
+      "ai": "H",
+      "t": "问得很好。前三个月你会先接手支付模块的维护，熟悉以后再参与新功能的开发。",
+      "doc": "Wèn de hěn hǎo. Qián sān ge yuè nǐ huì xiān jiēshǒu zhīfù mókuài de wéihù, shúxī yǐhòu zài cānyù xīn gōngnéng de kāifā.",
+      "v": "Hỏi hay lắm. Ba tháng đầu em sẽ nhận bảo trì module thanh toán trước, quen rồi mới tham gia phát triển tính năng mới."
+    },
+    {
+      "ai": "H",
+      "t": "代码评审的规定是：每个合并请求至少要有两个人看过，才能合并。",
+      "doc": "Dàimǎ píngshěn de guīdìng shì: měi ge hébìng qǐngqiú zhìshǎo yào yǒu liǎng ge rén kàn guo, cái néng hébìng.",
+      "v": "Quy định review code là: mỗi merge request phải có ít nhất hai người xem rồi mới được merge."
+    },
+    {
+      "ai": "T",
+      "t": "明白了，谢谢您。今天的面试让我学到了很多，不管结果怎么样，都很感谢您的时间。",
+      "doc": "Míngbai le, xièxie nín. Jīntiān de miànshì ràng wǒ xué dào le hěn duō, bùguǎn jiéguǒ zěnmeyàng, dōu hěn gǎnxiè nín de shíjiān.",
+      "v": "Em hiểu rồi, cảm ơn anh. Buổi phỏng vấn hôm nay giúp em học được nhiều, dù kết quả thế nào em cũng rất cảm ơn anh đã dành thời gian.",
+      "khac": [
+        { "kieu": "trang trọng", "t": "感谢您今天抽出时间，期待您的消息。", "doc": "Gǎnxiè nín jīntiān chōu chū shíjiān, qīdài nín de xiāoxi.", "v": "Cảm ơn anh hôm nay đã dành thời gian, mong nhận được tin của anh.", "ghiChu": "câu kết chuẩn mực của buổi phỏng vấn, email cảm ơn" }
+      ],
+      "np": [
+        { "mau": "不管 A，都 B", "giai": "\"Bất kể A thế nào thì đều B\". Sau 不管 thường là câu có từ để hỏi hoặc lựa chọn (怎么样, 是不是, 多少).", "vd": "不管多忙，他都会回家吃晚饭。", "vdDoc": "Bùguǎn duō máng, tā dōu huì huí jiā chī wǎnfàn.", "vdV": "Bất kể bận thế nào, anh ấy đều về nhà ăn tối." }
+      ]
+    },
+    {
+      "ai": "H",
+      "t": "不客气。一周之内人事会联系你。",
+      "doc": "Bú kèqi. Yì zhōu zhīnèi rénshì huì liánxì nǐ.",
+      "v": "Không có gì. Trong vòng một tuần bộ phận nhân sự sẽ liên hệ với em."
+    }
+  ],
+  "tuVung": [
+    { "chu": "排查", "doc": "páichá", "nghia": "rà soát, truy tìm nguyên nhân (bài tra), troubleshoot", "vd": "我们正在排查问题。" },
+    { "chu": "监控", "doc": "jiānkòng", "nghia": "giám sát, monitoring (giám khống)", "vd": "监控显示CPU很高。" },
+    { "chu": "索引", "doc": "suǒyǐn", "nghia": "chỉ mục, index (sách dẫn)", "vd": "给这个字段加个索引。" },
+    { "chu": "缓存", "doc": "huǎncún", "nghia": "bộ nhớ đệm, cache (hoãn tồn)", "vd": "先清一下缓存。" },
+    { "chu": "过期时间", "doc": "guòqī shíjiān", "nghia": "thời gian hết hạn, TTL", "vd": "缓存的过期时间是十分钟。" },
+    { "chu": "消息队列", "doc": "xiāoxi duìliè", "nghia": "hàng đợi tin nhắn, message queue (tiêu tức đội liệt)", "vd": "订单先放进消息队列。" },
+    { "chu": "分布式事务", "doc": "fēnbùshì shìwù", "nghia": "giao dịch phân tán, distributed transaction", "vd": "分布式事务很难做好。" },
+    { "chu": "重试", "doc": "chóngshì", "nghia": "thử lại, retry (trùng thí)", "vd": "失败以后自动重试三次。" },
+    { "chu": "幂等", "doc": "mìděng", "nghia": "idempotent — gọi nhiều lần kết quả như gọi một lần (mịch đẳng)", "vd": "这个接口必须是幂等的。" },
+    { "chu": "模块", "doc": "mókuài", "nghia": "module (mô khối)", "vd": "我负责支付模块。" },
+    { "chu": "合并请求", "doc": "hébìng qǐngqiú", "nghia": "merge request / pull request", "vd": "我提了一个合并请求。" },
+    { "chu": "不懂装懂", "doc": "bù dǒng zhuāng dǒng", "nghia": "không hiểu mà làm ra vẻ hiểu", "vd": "不懂装懂是最大的问题。" }
+  ],
+  "yNghia": "Người phỏng vấn giỏi không tìm người biết mọi đáp án; họ tìm người suy nghĩ rõ ràng và trung thực về giới hạn của mình. Nói \"phần này em chưa dùng thật, nhưng em hiểu thế này…\" rồi suy luận có căn cứ — thường được đánh giá cao hơn một câu trả lời học thuộc. Và luôn chuẩn bị câu hỏi ngược cho nhà tuyển dụng.",
+  "meo": [
+    "Trả lời câu \"em sẽ làm thế nào\" theo khung: 先定位问题 (khoanh vùng) → 看监控和日志 → 找原因 → 再优化. Nói thứ tự trước, chi tiết sau.",
+    "Gặp câu không chắc: 说实话，这一块我没有实际经验，不过我可以说说我的理解… — trung thực mà vẫn có nội dung.",
+    "Cặp liên từ HSK5 đáng dùng khi phỏng vấn: 与其…不如… · 即使/就算…也… · 一旦…就… · 不管…都….",
+    "Số liệu làm câu trả lời có trọng lượng: 从两天缩短到半天 (rút từ hai ngày xuống nửa ngày) — nói kết quả bằng con số.",
+    "Từ dễ nhầm: 熟悉 shúxī (quen thuộc) — văn nói còn nghe shóuxī; 事务 shìwù (transaction) ≠ 事物 shìwù (sự vật) — cùng âm, khác chữ."
+  ],
+  "cauHoi": [
+    {
+      "hoi": "Khi API chậm, việc đầu tiên Thu sẽ làm là gì?",
+      "chon": ["Thêm cache ngay", "Xem giám sát và log để xác định chậm ở đâu", "Viết lại toàn bộ code"],
+      "dung": 1,
+      "giai": "与其一上来就改代码，不如先弄清楚到底慢在哪儿。我会先看监控和日志…"
+    },
+    {
+      "hoi": "Thu xử lý vấn đề cache không nhất quán thế nào?",
+      "chon": ["Không dùng cache nữa", "Cập nhật cache trước rồi mới cập nhật database", "Xoá cache sau khi cập nhật database và đặt thời gian hết hạn"],
+      "dung": 2,
+      "giai": "更新数据库以后，把对应的缓存删掉，同时给缓存设置过期时间。"
+    },
+    {
+      "hoi": "Vì sao API xử lý message phải \"幂等\"?",
+      "chon": ["Để khi thử lại không bị trừ kho hai lần", "Để chạy nhanh hơn", "Để tiết kiệm bộ nhớ"],
+      "dung": 0,
+      "giai": "重试的话，会不会扣两次库存？— 所以…必须是幂等的。"
+    },
+    {
+      "hoi": "Điều gì làm người phỏng vấn đánh giá cao Thu?",
+      "chon": ["Cô biết rất nhiều công nghệ mới", "Cô trả lời rất nhanh", "Cô không giả vờ hiểu điều mình chưa rõ"],
+      "dung": 2,
+      "giai": "我比较欣赏的是，你没有不懂装懂。"
+    }
+  ]
+}

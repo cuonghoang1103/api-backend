@@ -1,0 +1,467 @@
+{
+  "id": "ja-ds-n3-04",
+  "nn": "ja",
+  "danhMuc": "doi-song",
+  "cap": "N3",
+  "so": 4,
+  "tieuDe": "困っているんですが",
+  "tieuDeViet": "Tôi đang gặp chút rắc rối…",
+  "moTa": "Nồi cơm điện mua trên mạng giao đến bị nứt nắp. Phương định gọi điện nói thẳng, nhưng bạn cùng phòng Mao chỉ cho cách “khiếu nại lịch sự” bằng những câu đệm. Học mở lời, trình bày sự việc, nhờ đổi hàng, hỏi phí — để được giúp nhanh mà không ai mất lòng.",
+  "chuDe": "Khiếu nại",
+  "bieuTuong": "exclamationmark.bubble.fill",
+  "nguoi": [
+    {
+      "ma": "F",
+      "ten": "フオン",
+      "giong": "ja-nu",
+      "vai": "du học sinh"
+    },
+    {
+      "ma": "M",
+      "ten": "真央",
+      "giong": "ja2-nu",
+      "vai": "bạn cùng phòng người Nhật"
+    },
+    {
+      "ma": "K",
+      "ten": "木村",
+      "giong": "ja-nam",
+      "vai": "nhân viên chăm sóc khách hàng"
+    }
+  ],
+  "loi": [
+    {
+      "ai": "M",
+      "t": "どうしたの？箱を開けたまま、固まってるけど。",
+      "doc": "どうしたの？はこをあけたまま、かたまってるけど。",
+      "v": "Sao thế? Cậu mở hộp ra rồi đứng đơ người luôn."
+    },
+    {
+      "ai": "F",
+      "t": "昨日ネットで買った炊飯器、ふたが割れてたの。",
+      "doc": "きのうネットでかったすいはんき、ふたがわれてたの。",
+      "v": "Cái nồi cơm điện mua trên mạng hôm qua bị nứt nắp rồi."
+    },
+    {
+      "ai": "M",
+      "t": "えー、ひどい。お店に連絡した？",
+      "doc": "えー、ひどい。おみせにれんらくした？",
+      "v": "Hả, tệ thật. Cậu báo cho cửa hàng chưa?"
+    },
+    {
+      "ai": "F",
+      "t": "今から電話する。「ふたが割れてます。すぐ新しいのを送ってください」って言えばいいよね。",
+      "doc": "いまからでんわする。「ふたがわれてます。すぐあたらしいのをおくってください」っていえばいいよね。",
+      "v": "Giờ tớ gọi đây. Cứ nói “Nắp bị nứt. Gửi ngay cái mới cho tôi” là được nhỉ."
+    },
+    {
+      "ai": "M",
+      "t": "間違いじゃないけど、ちょっと強く聞こえるかも。最初に「お忙しいところすみません」って入れると、相手も話を聞きやすいよ。",
+      "doc": "まちがいじゃないけど、ちょっとつよくきこえるかも。さいしょに「おいそがしいところすみません」っていれると、あいてもはなしをききやすいよ。",
+      "v": "Không sai, nhưng nghe hơi gắt đấy. Mở đầu bằng “Xin lỗi đã làm phiền lúc anh/chị đang bận” thì bên kia cũng dễ lắng nghe hơn.",
+      "np": [
+        {
+          "mau": "V-stem + やすい",
+          "giai": "Gốc động từ + やすい = dễ làm gì: 聞きやすい (dễ nghe), 使いやすい (dễ dùng). Ngược lại: 〜にくい (khó).",
+          "vd": "このペンは書きやすいです。",
+          "vdDoc": "このペンはかきやすいです。",
+          "vdV": "Cây bút này viết dễ."
+        },
+        {
+          "mau": "〜かも（しれない）",
+          "giai": "Có lẽ, biết đâu. Văn nói hay rút gọn còn かも.",
+          "vd": "明日は雪が降るかも。",
+          "vdDoc": "あしたはゆきがふるかも。",
+          "vdV": "Mai có khi tuyết rơi đấy."
+        }
+      ]
+    },
+    {
+      "ai": "F",
+      "t": "悪いのはお店なのに、私が謝るの？",
+      "doc": "わるいのはおみせなのに、わたしがあやまるの？",
+      "v": "Cửa hàng sai mà tớ lại phải xin lỗi à?",
+      "np": [
+        {
+          "mau": "〜のに (vậy mà)",
+          "giai": "Nối hai vế trái với mong đợi, thường kèm bất mãn: 悪いのはお店なのに = rõ ràng lỗi của cửa hàng vậy mà…",
+          "vd": "たくさん勉強したのに、試験に落ちました。",
+          "vdDoc": "たくさんべんきょうしたのに、しけんにおちました。",
+          "vdV": "Học nhiều vậy mà vẫn trượt."
+        }
+      ]
+    },
+    {
+      "ai": "M",
+      "t": "謝るんじゃなくて、クッション言葉。怒っている人より、困っている人のほうが、助けたくなるでしょ？",
+      "doc": "あやまるんじゃなくて、クッションことば。おこっているひとより、こまっているひとのほうが、たすけたくなるでしょ？",
+      "v": "Không phải xin lỗi đâu, đó là “câu đệm”. Người đang gặp khó thì người ta muốn giúp hơn người đang nổi giận, đúng không?",
+      "np": [
+        {
+          "mau": "A んじゃなくて、B",
+          "giai": "Không phải A mà là B — sửa lại cách hiểu của người kia. Văn nói của 〜のではなく.",
+          "vd": "怒ってるんじゃなくて、心配してるんだよ。",
+          "vdDoc": "おこってるんじゃなくて、しんぱいしてるんだよ。",
+          "vdV": "Tớ không giận đâu, tớ đang lo cho cậu đấy."
+        }
+      ]
+    },
+    {
+      "ai": "F",
+      "t": "なるほど……。「困っているんですが」ね。やってみる。",
+      "doc": "なるほど……。「こまっているんですが」ね。やってみる。",
+      "v": "Ra vậy… “Tôi đang gặp chút rắc rối” nhỉ. Tớ thử xem."
+    },
+    {
+      "ai": "K",
+      "t": "お電話ありがとうございます。お客様センター、担当の木村でございます。",
+      "doc": "おでんわありがとうございます。おきゃくさまセンター、たんとうのきむらでございます。",
+      "v": "Cảm ơn quý khách đã gọi. Trung tâm chăm sóc khách hàng, Kimura xin nghe."
+    },
+    {
+      "ai": "F",
+      "t": "お忙しいところすみません。先日そちらで炊飯器を買った者なんですが、ちょっと困っていることがありまして。",
+      "doc": "おいそがしいところすみません。せんじつそちらですいはんきをかったものなんですが、ちょっとこまっていることがありまして。",
+      "v": "Xin lỗi đã làm phiền lúc anh đang bận. Tôi vừa mua nồi cơm điện bên anh hôm trước, và đang gặp chút rắc rối ạ.",
+      "khac": [
+        {
+          "kieu": "trang trọng",
+          "t": "お忙しいところ恐れ入ります。先日そちらで炊飯器を購入した者ですが、少しご相談したいことがございまして。",
+          "doc": "おいそがしいところおそれいります。せんじつそちらですいはんきをこうにゅうしたものですが、すこしごそうだんしたいことがございまして。",
+          "v": "Xin lỗi đã làm phiền. Tôi là người đã mua nồi cơm điện bên quý công ty hôm trước, có chút việc muốn trao đổi ạ.",
+          "ghiChu": "Rất trang trọng: 購入 (mua), ご相談, ございまして."
+        },
+        {
+          "kieu": "văn nói",
+          "t": "すみません、この前そちらで炊飯器を買ったんですけど、ちょっと問題があって。",
+          "doc": "すみません、このまえそちらですいはんきをかったんですけど、ちょっともんだいがあって。",
+          "v": "Xin lỗi, hôm trước tôi mua nồi cơm điện bên anh, mà có chút vấn đề.",
+          "ghiChu": "Hơi suồng sã nhưng vẫn chấp nhận được khi gọi cửa hàng."
+        }
+      ],
+      "np": [
+        {
+          "mau": "〜ことがありまして",
+          "giai": "Để lửng bằng thể て lịch sự (ありまして) thay vì nói hết câu: báo “có chuyện…” và chờ người kia hỏi tiếp. Nghe mềm, không áp đặt.",
+          "vd": "実は、お願いしたいことがありまして。",
+          "vdDoc": "じつは、おねがいしたいことがありまして。",
+          "vdV": "Thật ra tôi có việc muốn nhờ ạ…"
+        }
+      ]
+    },
+    {
+      "ai": "K",
+      "t": "さようでございますか。どのようなことでしょうか。",
+      "doc": "さようでございますか。どのようなことでしょうか。",
+      "v": "Vậy ạ. Quý khách gặp chuyện gì ạ?"
+    },
+    {
+      "ai": "F",
+      "t": "昨日届いたんですが、箱を開けたら、ふたにひびが入っていたんです。",
+      "doc": "きのうとどいたんですが、はこをあけたら、ふたにひびがはいっていたんです。",
+      "v": "Hàng giao đến hôm qua, nhưng mở hộp ra thì thấy nắp có vết nứt.",
+      "khac": [
+        {
+          "kieu": "mềm mỏng",
+          "t": "昨日届いたものなんですが、ふたにひびが入っていたようで……。",
+          "doc": "きのうとどいたものなんですが、ふたにひびがはいっていたようで……。",
+          "v": "Món hàng giao đến hôm qua, hình như nắp bị nứt…",
+          "ghiChu": "ようで làm câu nhẹ đi, không mang giọng buộc tội."
+        }
+      ],
+      "np": [
+        {
+          "mau": "V たら (phát hiện)",
+          "giai": "〜たら ở đây không phải “nếu” mà là “khi làm A thì (bất ngờ) thấy B”: 開けたら、ひびが入っていた.",
+          "vd": "家に帰ったら、荷物が届いていました。",
+          "vdDoc": "いえにかえったら、にもつがとどいていました。",
+          "vdV": "Về đến nhà thì thấy bưu kiện đã tới."
+        }
+      ]
+    },
+    {
+      "ai": "K",
+      "t": "大変申し訳ございません。ご注文番号を教えていただけますか。",
+      "doc": "たいへんもうしわけございません。ごちゅうもんばんごうをおしえていただけますか。",
+      "v": "Thành thật xin lỗi quý khách. Quý khách cho tôi xin mã đơn hàng được không ạ?"
+    },
+    {
+      "ai": "F",
+      "t": "はい、少々お待ちください。……エー・ビーの三〇七五です。",
+      "doc": "はい、しょうしょうおまちください。……エー・ビーのさんぜろななごです。",
+      "v": "Vâng, anh chờ một chút. …Là AB-3075 ạ."
+    },
+    {
+      "ai": "K",
+      "t": "確認いたしました。お手数ですが、割れている部分の写真をメールで送っていただけないでしょうか。",
+      "doc": "かくにんいたしました。おてすうですが、われているぶぶんのしゃしんをメールでおくっていただけないでしょうか。",
+      "v": "Tôi đã kiểm tra rồi ạ. Phiền quý khách chụp ảnh chỗ bị nứt và gửi qua email giúp chúng tôi được không ạ?",
+      "np": [
+        {
+          "mau": "V ていただけないでしょうか",
+          "giai": "Nhờ vả rất lịch sự (lịch sự hơn 〜ていただけますか): dạng phủ định + でしょうか làm câu nhờ mềm hơn nữa.",
+          "vd": "書類をもう一度見ていただけないでしょうか。",
+          "vdDoc": "しょるいをもういちどみていただけないでしょうか。",
+          "vdV": "Anh xem lại hồ sơ giúp tôi một lần nữa được không ạ?"
+        }
+      ]
+    },
+    {
+      "ai": "F",
+      "t": "わかりました。あの、使う前なので、できれば交換していただけるとありがたいんですが。",
+      "doc": "わかりました。あの、つかうまえなので、できればこうかんしていただけるとありがたいんですが。",
+      "v": "Tôi hiểu rồi. À, vì tôi chưa dùng, nếu được đổi giúp cái mới thì tôi rất cảm kích.",
+      "khac": [
+        {
+          "kieu": "ngắn gọn",
+          "t": "新しいものと交換してもらえますか。",
+          "doc": "あたらしいものとこうかんしてもらえますか。",
+          "v": "Anh đổi giúp tôi cái mới được không?",
+          "ghiChu": "Thẳng hơn nhưng vẫn lịch sự."
+        },
+        {
+          "kieu": "nhấn mạnh",
+          "t": "まだ使っていないので、交換か返金をお願いしたいです。",
+          "doc": "まだつかっていないので、こうかんかへんきんをおねがいしたいです。",
+          "v": "Tôi chưa dùng nên muốn được đổi hàng hoặc hoàn tiền.",
+          "ghiChu": "Khi cần nói rõ yêu cầu của mình."
+        }
+      ],
+      "np": [
+        {
+          "mau": "V ていただけると ありがたいんですが",
+          "giai": "Nhờ cực mềm: “nếu anh … giúp thì tôi rất biết ơn”. Không ra lệnh, nhưng ý muốn vẫn rõ — mẫu câu vàng khi khiếu nại.",
+          "vd": "明日までに返事をいただけるとありがたいんですが。",
+          "vdDoc": "あしたまでにへんじをいただけるとありがたいんですが。",
+          "vdV": "Nếu anh trả lời giúp trước ngày mai thì tôi rất cảm ơn."
+        }
+      ]
+    },
+    {
+      "ai": "K",
+      "t": "もちろんでございます。写真を確認でき次第、新しい商品をお送りいたします。",
+      "doc": "もちろんでございます。しゃしんをかくにんできしだい、あたらしいしょうひんをおおくりいたします。",
+      "v": "Tất nhiên rồi ạ. Ngay khi kiểm tra được ảnh, chúng tôi sẽ gửi sản phẩm mới cho quý khách.",
+      "np": [
+        {
+          "mau": "V-stem + 次第",
+          "giai": "“Ngay sau khi … (là làm luôn)”. Hay dùng trong công việc, dịch vụ: 確認でき次第 = ngay khi xác nhận được.",
+          "vd": "準備ができ次第、お知らせします。",
+          "vdDoc": "じゅんびができしだい、おしらせします。",
+          "vdV": "Chuẩn bị xong là chúng tôi báo ngay."
+        }
+      ]
+    },
+    {
+      "ai": "F",
+      "t": "割れた方は、どうすればいいですか。",
+      "doc": "われたほうは、どうすればいいですか。",
+      "v": "Còn cái bị nứt thì tôi nên làm gì ạ?",
+      "khac": [
+        {
+          "kieu": "lịch sự",
+          "t": "割れた商品は、どのようにすればよろしいでしょうか。",
+          "doc": "われたしょうひんは、どのようにすればよろしいでしょうか。",
+          "v": "Sản phẩm bị nứt thì tôi nên xử lý thế nào ạ?"
+        }
+      ]
+    },
+    {
+      "ai": "K",
+      "t": "新しい商品をお届けする時に、配達員が回収いたしますので、箱に入れてお待ちください。",
+      "doc": "あたらしいしょうひんをおとどけするときに、はいたついんがかいしゅういたしますので、はこにいれておまちください。",
+      "v": "Khi giao sản phẩm mới, nhân viên giao hàng sẽ thu lại, quý khách cứ để sẵn trong hộp nhé."
+    },
+    {
+      "ai": "F",
+      "t": "送料はかかりますか。",
+      "doc": "そうりょうはかかりますか。",
+      "v": "Có mất phí vận chuyển không ạ?",
+      "khac": [
+        {
+          "kieu": "lịch sự",
+          "t": "送料などは、こちらで負担することになりますか。",
+          "doc": "そうりょうなどは、こちらでふたんすることになりますか。",
+          "v": "Phí vận chuyển và các khoản khác có phải do tôi chịu không ạ?"
+        }
+      ]
+    },
+    {
+      "ai": "K",
+      "t": "いいえ、こちらのミスですので、費用は一切かかりません。ご迷惑をおかけして、本当に申し訳ございませんでした。",
+      "doc": "いいえ、こちらのミスですので、ひようはいっさいかかりません。ごめいわくをおかけして、ほんとうにもうしわけございませんでした。",
+      "v": "Không ạ, đây là lỗi của chúng tôi nên quý khách không mất bất kỳ chi phí nào. Thành thật xin lỗi vì đã làm phiền quý khách."
+    },
+    {
+      "ai": "F",
+      "t": "いえ、すぐに対応していただいて、助かりました。ありがとうございます。",
+      "doc": "いえ、すぐにたいおうしていただいて、たすかりました。ありがとうございます。",
+      "v": "Không sao ạ, anh xử lý nhanh giúp tôi, tôi đỡ lo quá. Cảm ơn anh.",
+      "khac": [
+        {
+          "kieu": "trang trọng",
+          "t": "いえ、迅速にご対応いただき、ありがとうございます。",
+          "doc": "いえ、じんそくにごたいおういただき、ありがとうございます。",
+          "v": "Không ạ, cảm ơn quý công ty đã xử lý nhanh chóng.",
+          "ghiChu": "迅速に = nhanh chóng; hay dùng trong email, công việc."
+        }
+      ]
+    },
+    {
+      "ai": "M",
+      "t": "どうだった？",
+      "doc": "どうだった？",
+      "v": "Sao rồi?"
+    },
+    {
+      "ai": "F",
+      "t": "一回も怒らなかったのに、全部うまくいった。むしろ向こうが何回も謝ってくれて、こっちが申し訳なくなっちゃった。",
+      "doc": "いっかいもおこらなかったのに、ぜんぶうまくいった。むしろむこうがなんかいもあやまってくれて、こっちがもうしわけなくなっちゃった。",
+      "v": "Tớ không nổi giận lần nào mà mọi chuyện vẫn êm cả. Ngược lại, bên kia xin lỗi mấy lần làm tớ thấy ngại luôn."
+    },
+    {
+      "ai": "M",
+      "t": "でしょ？苦情は「怒り」じゃなくて「お願い」にすると、話が早いんだよ。",
+      "doc": "でしょ？くじょうは「いかり」じゃなくて「おねがい」にすると、はなしがはやいんだよ。",
+      "v": "Thấy chưa? Biến lời khiếu nại từ “cơn giận” thành “lời nhờ” thì mọi chuyện nhanh gọn hơn."
+    },
+    {
+      "ai": "F",
+      "t": "「困っているんですが」……魔法の言葉だね。メモしておこう。",
+      "doc": "「こまっているんですが」……まほうのことばだね。メモしておこう。",
+      "v": "“Tôi đang gặp chút rắc rối”… đúng là câu thần chú. Phải ghi lại mới được."
+    }
+  ],
+  "tuVung": [
+    {
+      "chu": "炊飯器",
+      "doc": "すいはんき",
+      "nghia": "nồi cơm điện",
+      "vd": "新しい炊飯器を買いました。"
+    },
+    {
+      "chu": "割れて",
+      "doc": "われて",
+      "nghia": "vỡ, nứt (thể て của 割れる)",
+      "vd": "コップが割れています。"
+    },
+    {
+      "chu": "クッション言葉",
+      "doc": "クッションことば",
+      "nghia": "câu đệm (làm lời nói mềm đi)",
+      "vd": "「恐れ入りますが」はクッション言葉です。"
+    },
+    {
+      "chu": "先日",
+      "doc": "せんじつ",
+      "nghia": "hôm trước, mấy hôm trước",
+      "vd": "先日はありがとうございました。"
+    },
+    {
+      "chu": "ひび",
+      "doc": "ひび",
+      "nghia": "vết nứt",
+      "vd": "スマホの画面にひびが入りました。"
+    },
+    {
+      "chu": "注文番号",
+      "doc": "ちゅうもんばんごう",
+      "nghia": "mã đơn hàng",
+      "vd": "注文番号はメールに書いてあります。"
+    },
+    {
+      "chu": "お手数ですが",
+      "doc": "おてすうですが",
+      "nghia": "phiền anh/chị… (câu đệm khi nhờ)",
+      "vd": "お手数ですが、ご確認ください。"
+    },
+    {
+      "chu": "交換",
+      "doc": "こうかん",
+      "nghia": "đổi, trao đổi",
+      "vd": "サイズを交換してもらいました。"
+    },
+    {
+      "chu": "送料",
+      "doc": "そうりょう",
+      "nghia": "phí vận chuyển",
+      "vd": "送料は無料です。"
+    },
+    {
+      "chu": "対応",
+      "doc": "たいおう",
+      "nghia": "xử lý, ứng phó",
+      "vd": "すぐに対応します。"
+    },
+    {
+      "chu": "苦情",
+      "doc": "くじょう",
+      "nghia": "lời phàn nàn, khiếu nại",
+      "vd": "隣の人から苦情が来ました。"
+    }
+  ],
+  "yNghia": "Khiếu nại không phải cuộc chiến. Người nghe điện thoại không làm vỡ nồi của bạn — họ là người có thể giúp bạn. Khi bạn nói như đang “nhờ”, họ sẽ đứng về phía bạn.",
+  "meo": [
+    "Khung khiếu nại lịch sự: câu đệm (お忙しいところすみません) → mình là ai (〜した者なんですが) → sự việc (〜んです) → mong muốn (〜ていただけるとありがたいんですが).",
+    "Câu đệm hay dùng: お忙しいところすみません／恐れ入りますが／お手数ですが／申し訳ないんですが.",
+    "Nói về lỗi mà không buộc tội: 〜ようで／〜みたいで (hình như…) thay vì khẳng định gắt.",
+    "Nghe kính ngữ của nhân viên: さようでございますか = そうですか; お送りいたします = 送ります (khiêm nhường)."
+  ],
+  "cauHoi": [
+    {
+      "hoi": "Nồi cơm điện của Phương bị làm sao?",
+      "chon": [
+        "Không bật được",
+        "Nắp bị nứt",
+        "Giao nhầm màu",
+        "Thiếu dây điện"
+      ],
+      "dung": 1,
+      "giai": "「ふたにひびが入っていたんです」."
+    },
+    {
+      "hoi": "Mao khuyên Phương mở đầu cuộc gọi thế nào?",
+      "chon": [
+        "Nói ngay yêu cầu đổi hàng",
+        "Bằng câu đệm 「お忙しいところすみません」",
+        "Xin lỗi vì đã mua hàng",
+        "Đòi gặp quản lý"
+      ],
+      "dung": 1,
+      "giai": "Câu đệm (クッション言葉) giúp bên kia dễ lắng nghe hơn."
+    },
+    {
+      "hoi": "Nhân viên yêu cầu Phương làm gì trước?",
+      "chon": [
+        "Mang hàng ra bưu điện",
+        "Trả phí vận chuyển",
+        "Gửi ảnh chỗ bị nứt qua email",
+        "Viết thư khiếu nại"
+      ],
+      "dung": 2,
+      "giai": "「割れている部分の写真をメールで送っていただけないでしょうか」."
+    },
+    {
+      "hoi": "Phí đổi hàng thế nào?",
+      "chon": [
+        "Phương trả một nửa",
+        "Phương trả hết",
+        "Không mất phí vì lỗi của cửa hàng",
+        "Chưa biết"
+      ],
+      "dung": 2,
+      "giai": "「こちらのミスですので、費用は一切かかりません」."
+    },
+    {
+      "hoi": "「確認でき次第」 nghĩa là gì?",
+      "chon": [
+        "Tuỳ theo việc kiểm tra",
+        "Ngay khi kiểm tra được",
+        "Trước khi kiểm tra",
+        "Nếu không kiểm tra được"
+      ],
+      "dung": 1,
+      "giai": "V-stem + 次第 = ngay sau khi …"
+    }
+  ]
+}

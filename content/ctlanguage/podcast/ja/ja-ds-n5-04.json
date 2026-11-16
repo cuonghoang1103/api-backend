@@ -1,0 +1,402 @@
+{
+  "id": "ja-ds-n5-04",
+  "nn": "ja",
+  "danhMuc": "doi-song",
+  "cap": "N5",
+  "so": 7,
+  "tieuDe": "まっすぐ行って、右です",
+  "tieuDeViet": "Đi thẳng rồi rẽ phải",
+  "moTa": "Bình đi tìm thư viện, phải hỏi đường một người qua đường. Rồi trời đổ mưa, Bình bắt taxi. Học mở lời với người lạ, nghe chỉ đường, nhắc lại để xác nhận, nói nơi muốn đến với tài xế và hỏi trả bằng thẻ.",
+  "chuDe": "Đi lại",
+  "bieuTuong": "map.fill",
+  "nguoi": [
+    {
+      "ma": "B",
+      "ten": "ビン",
+      "giong": "ja2-nam",
+      "vai": "du học sinh"
+    },
+    {
+      "ma": "W",
+      "ten": "女の人",
+      "giong": "ja-nu",
+      "vai": "người qua đường"
+    },
+    {
+      "ma": "D",
+      "ten": "運転手",
+      "giong": "ja-nam",
+      "vai": "tài xế taxi"
+    }
+  ],
+  "loi": [
+    {
+      "ai": "B",
+      "t": "あのう、すみません。",
+      "doc": "あのう、すみません。",
+      "v": "Dạ, xin lỗi chị.",
+      "khac": [
+        {
+          "kieu": "lịch sự",
+          "t": "すみません、ちょっとお聞きしてもいいですか。",
+          "doc": "すみません、ちょっとおききしてもいいですか。",
+          "v": "Xin lỗi, cho tôi hỏi một chút được không ạ?",
+          "ghiChu": "Mở lời với người lạ ngoài đường — lịch sự và rõ ý."
+        }
+      ]
+    },
+    {
+      "ai": "W",
+      "t": "はい、何でしょう。",
+      "doc": "はい、なんでしょう。",
+      "v": "Vâng, có chuyện gì vậy?"
+    },
+    {
+      "ai": "B",
+      "t": "みなみ図書館へは、どうやって行きますか。",
+      "doc": "みなみとしょかんへは、どうやっていきますか。",
+      "v": "Đến thư viện Minami thì đi thế nào ạ?",
+      "khac": [
+        {
+          "kieu": "ngắn gọn",
+          "t": "みなみ図書館はどこですか。",
+          "doc": "みなみとしょかんはどこですか。",
+          "v": "Thư viện Minami ở đâu ạ?"
+        },
+        {
+          "kieu": "lịch sự",
+          "t": "みなみ図書館への行き方を教えていただけませんか。",
+          "doc": "みなみとしょかんへのいきかたをおしえていただけませんか。",
+          "v": "Chị chỉ giúp tôi đường đến thư viện Minami được không ạ?",
+          "ghiChu": "Rất lịch sự; 行き方 = cách đi."
+        }
+      ],
+      "np": [
+        {
+          "mau": "どうやって + V",
+          "giai": "どうやって = bằng cách nào. Dùng để hỏi đường hoặc hỏi cách làm: どうやって行きますか, どうやって使いますか.",
+          "vd": "このきっぷは、どうやって買いますか。",
+          "vdDoc": "このきっぷは、どうやってかいますか。",
+          "vdV": "Vé này mua thế nào ạ?"
+        }
+      ]
+    },
+    {
+      "ai": "W",
+      "t": "この道をまっすぐ行って、二つ目の信号を右に曲がってください。",
+      "doc": "このみちをまっすぐいって、ふたつめのしんごうをみぎにまがってください。",
+      "v": "Anh đi thẳng đường này, đến cột đèn giao thông thứ hai thì rẽ phải.",
+      "np": [
+        {
+          "mau": "V て、V て ください (nối các bước)",
+          "giai": "Thể て nối các hành động theo thứ tự: まっすぐ行って、曲がってください = đi thẳng rồi rẽ.",
+          "vd": "駅で降りて、バスに乗ってください。",
+          "vdDoc": "えきでおりて、バスにのってください。",
+          "vdV": "Anh xuống ở ga rồi đi xe buýt."
+        },
+        {
+          "mau": "（場所）を 曲がる／渡る",
+          "giai": "を chỉ nơi mình đi qua: 信号を右に曲がる (đến đèn thì rẽ phải), 橋を渡る (qua cầu).",
+          "vd": "あの橋を渡ってください。",
+          "vdDoc": "あのはしをわたってください。",
+          "vdV": "Anh đi qua cây cầu kia."
+        }
+      ]
+    },
+    {
+      "ai": "B",
+      "t": "二つ目の信号を右ですね。",
+      "doc": "ふたつめのしんごうをみぎですね。",
+      "v": "Đến đèn thứ hai thì rẽ phải, đúng không ạ?",
+      "np": [
+        {
+          "mau": "〜ですね (nhắc lại để xác nhận)",
+          "giai": "Lặp lại thông tin + ですね để kiểm tra mình nghe đúng chưa. Người Nhật rất hay làm vậy, không ai cho là chậm hiểu.",
+          "vd": "三時ですね。",
+          "vdDoc": "さんじですね。",
+          "vdV": "Ba giờ phải không ạ."
+        }
+      ]
+    },
+    {
+      "ai": "W",
+      "t": "はい。それから、コンビニの角を左です。図書館はコンビニのとなりですよ。",
+      "doc": "はい。それから、コンビニのかどをひだりです。としょかんはコンビニのとなりですよ。",
+      "v": "Vâng. Sau đó đến góc có cửa hàng tiện lợi thì rẽ trái. Thư viện ở ngay cạnh cửa hàng đó."
+    },
+    {
+      "ai": "B",
+      "t": "歩いて何分ぐらいですか。",
+      "doc": "あるいてなんぷんぐらいですか。",
+      "v": "Đi bộ mất khoảng mấy phút ạ?",
+      "khac": [
+        {
+          "kieu": "thân mật",
+          "t": "歩いてどのくらい？",
+          "doc": "あるいてどのくらい？",
+          "v": "Đi bộ mất bao lâu?",
+          "ghiChu": "Hỏi bạn bè."
+        }
+      ],
+      "np": [
+        {
+          "mau": "〜ぐらい (khoảng)",
+          "giai": "Số + ぐらい／くらい = khoảng chừng. 何分ぐらい = khoảng mấy phút.",
+          "vd": "駅まで十分ぐらいです。",
+          "vdDoc": "えきまでじゅっぷんぐらいです。",
+          "vdV": "Đến ga mất khoảng 10 phút."
+        }
+      ]
+    },
+    {
+      "ai": "W",
+      "t": "十五分ぐらいかな。ちょっと遠いですよ。",
+      "doc": "じゅうごふんぐらいかな。ちょっととおいですよ。",
+      "v": "Chắc khoảng 15 phút. Hơi xa đấy."
+    },
+    {
+      "ai": "B",
+      "t": "わかりました。ありがとうございました。",
+      "doc": "わかりました。ありがとうございました。",
+      "v": "Tôi hiểu rồi. Cảm ơn chị ạ.",
+      "khac": [
+        {
+          "kieu": "lịch sự",
+          "t": "ご親切に、ありがとうございました。",
+          "doc": "ごしんせつに、ありがとうございました。",
+          "v": "Cảm ơn chị đã tận tình chỉ đường.",
+          "ghiChu": "Cảm ơn người lạ vừa giúp mình."
+        },
+        {
+          "kieu": "thân mật",
+          "t": "ありがとう、助かった！",
+          "doc": "ありがとう、たすかった！",
+          "v": "Cảm ơn nha, đỡ quá!",
+          "ghiChu": "Với bạn bè."
+        }
+      ]
+    },
+    {
+      "ai": "B",
+      "t": "あ、雨……。やっぱりタクシーで行きます。",
+      "doc": "あ、あめ……。やっぱりタクシーでいきます。",
+      "v": "Ơ, mưa rồi… Thôi, mình đi taxi vậy.",
+      "np": [
+        {
+          "mau": "やっぱり",
+          "giai": "やっぱり (văn nói của やはり) = “thôi thì, rốt cuộc” khi đổi ý sau khi cân nhắc; hoặc “quả đúng như mình nghĩ”.",
+          "vd": "やっぱり、ラーメンにします。",
+          "vdDoc": "やっぱり、ラーメンにします。",
+          "vdV": "Thôi, tôi chọn mì ramen vậy."
+        }
+      ]
+    },
+    {
+      "ai": "D",
+      "t": "ドアは自動ですから、さわらないでくださいね。",
+      "doc": "ドアはじどうですから、さわらないでくださいね。",
+      "v": "Cửa tự động nên anh đừng chạm vào nhé.",
+      "np": [
+        {
+          "mau": "V ないでください",
+          "giai": "Bảo người khác đừng làm gì: thể ない + でください. さわる → さわらない → さわらないでください. Rất hay gặp trên biển báo.",
+          "vd": "ここで写真を撮らないでください。",
+          "vdDoc": "ここでしゃしんをとらないでください。",
+          "vdV": "Xin đừng chụp ảnh ở đây."
+        }
+      ]
+    },
+    {
+      "ai": "D",
+      "t": "どちらまで？",
+      "doc": "どちらまで？",
+      "v": "Anh đi đâu ạ?"
+    },
+    {
+      "ai": "B",
+      "t": "みなみ図書館までお願いします。",
+      "doc": "みなみとしょかんまでおねがいします。",
+      "v": "Cho tôi đến thư viện Minami.",
+      "khac": [
+        {
+          "kieu": "ngắn gọn",
+          "t": "みなみ図書館まで。",
+          "doc": "みなみとしょかんまで。",
+          "v": "Đến thư viện Minami.",
+          "ghiChu": "Với tài xế taxi, chỉ cần tên nơi + まで là đủ."
+        }
+      ],
+      "np": [
+        {
+          "mau": "N まで お願いします",
+          "giai": "まで = đến (điểm cuối). Câu chuẩn khi nói với tài xế taxi.",
+          "vd": "空港までお願いします。",
+          "vdDoc": "くうこうまでおねがいします。",
+          "vdV": "Cho tôi ra sân bay."
+        }
+      ]
+    },
+    {
+      "ai": "D",
+      "t": "はい。……お客さん、着きましたよ。",
+      "doc": "はい。……おきゃくさん、つきましたよ。",
+      "v": "Vâng. …Anh ơi, đến nơi rồi."
+    },
+    {
+      "ai": "B",
+      "t": "カードで払ってもいいですか。",
+      "doc": "カードではらってもいいですか。",
+      "v": "Tôi trả bằng thẻ được không ạ?",
+      "khac": [
+        {
+          "kieu": "ngắn gọn",
+          "t": "カード、使えますか。",
+          "doc": "カード、つかえますか。",
+          "v": "Có dùng được thẻ không ạ?",
+          "ghiChu": "Câu rất hay dùng ở taxi, quán nhỏ."
+        }
+      ],
+      "np": [
+        {
+          "mau": "V て もいいですか",
+          "giai": "Xin phép: thể て + もいいですか. 払う → 払って. Người kia đáp: はい、いいですよ (được) hoặc すみません、ちょっと…… (không được).",
+          "vd": "ここに座ってもいいですか。",
+          "vdDoc": "ここにすわってもいいですか。",
+          "vdV": "Tôi ngồi đây được không?"
+        }
+      ]
+    },
+    {
+      "ai": "D",
+      "t": "はい、大丈夫ですよ。千二百円です。",
+      "doc": "はい、だいじょうぶですよ。せんにひゃくえんです。",
+      "v": "Vâng, được ạ. 1200 yên."
+    },
+    {
+      "ai": "B",
+      "t": "ありがとうございました。……あ、図書館のとなりに、本当にコンビニがある。",
+      "doc": "ありがとうございました。……あ、としょかんのとなりに、ほんとうにコンビニがある。",
+      "v": "Cảm ơn anh. …A, cạnh thư viện có cửa hàng tiện lợi thật kìa."
+    }
+  ],
+  "tuVung": [
+    {
+      "chu": "まっすぐ",
+      "doc": "まっすぐ",
+      "nghia": "thẳng",
+      "vd": "まっすぐ行ってください。"
+    },
+    {
+      "chu": "二つ目",
+      "doc": "ふたつめ",
+      "nghia": "cái thứ hai",
+      "vd": "二つ目の駅で降ります。"
+    },
+    {
+      "chu": "信号",
+      "doc": "しんごう",
+      "nghia": "đèn giao thông",
+      "vd": "信号は赤です。"
+    },
+    {
+      "chu": "曲がって",
+      "doc": "まがって",
+      "nghia": "rẽ (thể て của 曲がる)",
+      "vd": "左に曲がってください。"
+    },
+    {
+      "chu": "角",
+      "doc": "かど",
+      "nghia": "góc (đường, phố)",
+      "vd": "あの角に銀行があります。"
+    },
+    {
+      "chu": "左",
+      "doc": "ひだり",
+      "nghia": "bên trái",
+      "vd": "トイレは左です。"
+    },
+    {
+      "chu": "遠い",
+      "doc": "とおい",
+      "nghia": "xa",
+      "vd": "学校は家から遠いです。"
+    },
+    {
+      "chu": "やっぱり",
+      "doc": "やっぱり",
+      "nghia": "thôi thì, rốt cuộc; quả nhiên",
+      "vd": "やっぱり行きません。"
+    },
+    {
+      "chu": "自動",
+      "doc": "じどう",
+      "nghia": "tự động",
+      "vd": "このドアは自動です。"
+    },
+    {
+      "chu": "どちらまで",
+      "doc": "どちらまで",
+      "nghia": "(quý khách) đi đến đâu ạ — câu của tài xế taxi",
+      "vd": "どちらまで行かれますか。"
+    },
+    {
+      "chu": "払って",
+      "doc": "はらって",
+      "nghia": "trả tiền (thể て của 払う)",
+      "vd": "現金で払ってください。"
+    }
+  ],
+  "yNghia": "Hỏi đường là kỹ năng nhỏ nhưng mở ra cả một thành phố. Người lạ có thể ngại bắt chuyện, nhưng khi được hỏi lịch sự, họ thường chỉ rất kỹ — phần của bạn là nhắc lại để chắc mình nghe đúng.",
+  "meo": [
+    "Bộ từ chỉ đường: まっすぐ (thẳng), 右／左に曲がる (rẽ phải/trái), 〜つ目の信号 (đèn thứ …), 角 (góc), となり (bên cạnh).",
+    "Nghe xong, nhắc lại bằng 〜ですね (「二つ目の信号を右ですね」) để xác nhận.",
+    "Taxi ở Nhật: cửa sau tự đóng mở — đừng tự kéo. Lên xe nói 「〇〇までお願いします」.",
+    "Hỏi thẻ: 「カード、使えますか」; xin phép làm gì: 「〜てもいいですか」."
+  ],
+  "cauHoi": [
+    {
+      "hoi": "Người phụ nữ chỉ đường đến thư viện thế nào?",
+      "chon": [
+        "Đi thẳng, đến đèn thứ hai rẽ trái",
+        "Đi thẳng, đến đèn thứ hai rẽ phải, rồi rẽ trái ở góc cửa hàng tiện lợi",
+        "Rẽ phải ngay rồi đi thẳng",
+        "Qua cầu rồi rẽ trái"
+      ],
+      "dung": 1,
+      "giai": "「二つ目の信号を右に曲がって」 rồi 「コンビニの角を左」."
+    },
+    {
+      "hoi": "Vì sao Bình đi taxi?",
+      "chon": [
+        "Vì trời mưa",
+        "Vì bị lạc đường",
+        "Vì thư viện sắp đóng cửa",
+        "Vì người phụ nữ khuyên vậy"
+      ],
+      "dung": 0,
+      "giai": "「あ、雨……。やっぱりタクシーで行きます。」"
+    },
+    {
+      "hoi": "Tài xế dặn Bình điều gì?",
+      "chon": [
+        "Thắt dây an toàn",
+        "Ngồi ghế trước",
+        "Đừng chạm vào cửa vì cửa tự động",
+        "Trả bằng tiền mặt"
+      ],
+      "dung": 2,
+      "giai": "「ドアは自動ですから、さわらないでくださいね。」"
+    },
+    {
+      "hoi": "「さわらないでください」 nghĩa là gì?",
+      "chon": [
+        "Xin hãy chạm vào",
+        "Xin hãy mở cửa",
+        "Xin đừng chạm vào"
+      ],
+      "dung": 2,
+      "giai": "V ないでください = xin đừng làm V."
+    }
+  ]
+}

@@ -1,0 +1,405 @@
+{
+  "id": "ja-ds-n5-03",
+  "nn": "ja",
+  "danhMuc": "doi-song",
+  "cap": "N5",
+  "so": 6,
+  "tieuDe": "ご注文はお決まりですか",
+  "tieuDeViet": "Quý khách chọn món chưa ạ?",
+  "moTa": "Hà và Long đi ăn trưa ở một quán cơm. Học trả lời “mấy người”, gọi món, hỏi món có cay không, có tôm không, xin đổi vị, gọi tính tiền và trả riêng từng người.",
+  "chuDe": "Ăn uống",
+  "bieuTuong": "fork.knife",
+  "nguoi": [
+    {
+      "ma": "H",
+      "ten": "ハー",
+      "giong": "ja-nu",
+      "vai": "du học sinh"
+    },
+    {
+      "ma": "L",
+      "ten": "ロン",
+      "giong": "ja2-nam",
+      "vai": "bạn của Hà"
+    },
+    {
+      "ma": "S",
+      "ten": "店員",
+      "giong": "ja2-nu",
+      "vai": "nhân viên quán"
+    }
+  ],
+  "loi": [
+    {
+      "ai": "S",
+      "t": "いらっしゃいませ。何名様ですか。",
+      "doc": "いらっしゃいませ。なんめいさまですか。",
+      "v": "Xin mời quý khách. Quý khách đi mấy người ạ?"
+    },
+    {
+      "ai": "H",
+      "t": "二人です。",
+      "doc": "ふたりです。",
+      "v": "Hai người ạ.",
+      "khac": [
+        {
+          "kieu": "lịch sự",
+          "t": "二人ですが、席は空いていますか。",
+          "doc": "ふたりですが、せきはあいていますか。",
+          "v": "Chúng tôi hai người, còn bàn trống không ạ?",
+          "ghiChu": "Khi quán đông, hỏi luôn còn chỗ không."
+        }
+      ],
+      "np": [
+        {
+          "mau": "Đếm người: 一人・二人・三人",
+          "giai": "1 người ひとり, 2 người ふたり (đọc đặc biệt), từ 3 trở lên: số + にん (さんにん, よにん…). Nhân viên nói lịch sự là 〜名様 (めいさま).",
+          "vd": "家族は四人です。",
+          "vdDoc": "かぞくはよにんです。",
+          "vdV": "Gia đình tôi có bốn người."
+        }
+      ]
+    },
+    {
+      "ai": "S",
+      "t": "こちらの席へどうぞ。お決まりになりましたら、このボタンを押してください。",
+      "doc": "こちらのせきへどうぞ。おきまりになりましたら、このボタンをおしてください。",
+      "v": "Mời quý khách ngồi bàn này. Khi chọn xong món, quý khách bấm nút này nhé."
+    },
+    {
+      "ai": "L",
+      "t": "ハーさん、何にする？ぼくはカレーにする。",
+      "doc": "ハーさん、なににする？ぼくはカレーにする。",
+      "v": "Hà ăn gì? Tớ chọn cà ri.",
+      "khac": [
+        {
+          "kieu": "lịch sự",
+          "t": "ハーさん、何にしますか。",
+          "doc": "ハーさん、なににしますか。",
+          "v": "Chị Hà dùng món gì ạ?",
+          "ghiChu": "Với người chưa thân hoặc đồng nghiệp lớn tuổi hơn."
+        }
+      ],
+      "np": [
+        {
+          "mau": "N に する (chọn, quyết định)",
+          "giai": "Dùng khi chọn món, chọn đồ: カレーにする = chọn cà ri. 何にする？ = chọn gì đây? Lịch sự: 〜にします.",
+          "vd": "飲み物はお茶にします。",
+          "vdDoc": "のみものはおちゃにします。",
+          "vdV": "Đồ uống thì tôi chọn trà."
+        }
+      ]
+    },
+    {
+      "ai": "H",
+      "t": "わたしは日替わり定食にする。",
+      "doc": "わたしはひがわりていしょくにする。",
+      "v": "Tớ lấy suất cơm thay đổi theo ngày."
+    },
+    {
+      "ai": "S",
+      "t": "お待たせしました。ご注文をどうぞ。",
+      "doc": "おまたせしました。ごちゅうもんをどうぞ。",
+      "v": "Xin lỗi đã để quý khách chờ. Mời quý khách gọi món."
+    },
+    {
+      "ai": "H",
+      "t": "日替わり定食を一つと、カレーを一つお願いします。",
+      "doc": "ひがわりていしょくをひとつと、カレーをひとつおねがいします。",
+      "v": "Cho tôi một suất cơm theo ngày và một cà ri ạ.",
+      "khac": [
+        {
+          "kieu": "ngắn gọn",
+          "t": "日替わり定食とカレー、一つずつお願いします。",
+          "doc": "ひがわりていしょくとカレー、ひとつずつおねがいします。",
+          "v": "Cơm theo ngày và cà ri, mỗi món một phần ạ.",
+          "ghiChu": "ずつ = mỗi thứ … — gọn khi gọi nhiều món."
+        }
+      ],
+      "np": [
+        {
+          "mau": "N を 一つと、N を 一つ お願いします",
+          "giai": "Gọi món: món + を + số lượng + お願いします; nhiều món thì nối bằng と. Câu này dùng được ở mọi nhà hàng, quán cà phê.",
+          "vd": "コーヒーを二つお願いします。",
+          "vdDoc": "コーヒーをふたつおねがいします。",
+          "vdV": "Cho tôi hai cà phê."
+        }
+      ]
+    },
+    {
+      "ai": "L",
+      "t": "あの、カレーは辛いですか。",
+      "doc": "あの、カレーはからいですか。",
+      "v": "À, cà ri có cay không ạ?"
+    },
+    {
+      "ai": "S",
+      "t": "少し辛いです。甘口もできますよ。",
+      "doc": "すこしからいです。あまくちもできますよ。",
+      "v": "Hơi cay ạ. Quán cũng làm được vị dịu (ít cay)."
+    },
+    {
+      "ai": "L",
+      "t": "じゃあ、甘口でお願いします。",
+      "doc": "じゃあ、あまくちでおねがいします。",
+      "v": "Vậy cho tôi vị dịu ạ.",
+      "khac": [
+        {
+          "kieu": "lịch sự",
+          "t": "では、甘口にしていただけますか。",
+          "doc": "では、あまくちにしていただけますか。",
+          "v": "Vậy làm giúp tôi vị dịu được không ạ?",
+          "ghiChu": "Lịch sự hơn, khi nhờ đổi món."
+        }
+      ],
+      "np": [
+        {
+          "mau": "N で お願いします",
+          "giai": "Chọn kiểu, cách thức: 甘口でお願いします = làm theo kiểu ít cay giúp tôi. Tương tự: 大盛りでお願いします (phần lớn), カードでお願いします (trả bằng thẻ).",
+          "vd": "大盛りでお願いします。",
+          "vdDoc": "おおもりでおねがいします。",
+          "vdV": "Cho tôi phần lớn."
+        }
+      ]
+    },
+    {
+      "ai": "H",
+      "t": "すみません、定食に、えびは入っていますか。",
+      "doc": "すみません、ていしょくに、えびははいっていますか。",
+      "v": "Xin lỗi, suất cơm có tôm không ạ?",
+      "np": [
+        {
+          "mau": "N に N が／は 入っています",
+          "giai": "Hỏi món có thành phần gì: 入っています = có (được cho vào). Rất cần khi bị dị ứng hoặc ăn kiêng.",
+          "vd": "このパンに卵は入っていますか。",
+          "vdDoc": "このパンにたまごははいっていますか。",
+          "vdV": "Bánh mì này có trứng không?"
+        }
+      ]
+    },
+    {
+      "ai": "S",
+      "t": "いいえ、今日の定食は焼き魚です。えびは入っていません。",
+      "doc": "いいえ、きょうのていしょくはやきざかなです。えびははいっていません。",
+      "v": "Không ạ, cơm hôm nay là cá nướng. Không có tôm đâu ạ."
+    },
+    {
+      "ai": "H",
+      "t": "よかった。えびはちょっと……。",
+      "doc": "よかった。えびはちょっと……。",
+      "v": "May quá. Tôm thì tôi hơi…",
+      "khac": [
+        {
+          "kieu": "tự nhiên hơn",
+          "t": "よかった。えびが食べられないので。",
+          "doc": "よかった。えびがたべられないので。",
+          "v": "May quá, vì tôi không ăn được tôm.",
+          "ghiChu": "Nói rõ lý do — nên dùng khi bị dị ứng thật."
+        }
+      ],
+      "np": [
+        {
+          "mau": "N は ちょっと……",
+          "giai": "Bỏ lửng sau ちょっと là cách từ chối, nói “không được” rất mềm của người Nhật — người nghe tự hiểu. Dùng khi không ăn được, không thích, không tiện.",
+          "vd": "月曜日はちょっと……。",
+          "vdDoc": "げつようびはちょっと……。",
+          "vdV": "Thứ Hai thì hơi… (không tiện)."
+        }
+      ]
+    },
+    {
+      "ai": "L",
+      "t": "すみません、お会計お願いします。",
+      "doc": "すみません、おかいけいおねがいします。",
+      "v": "Xin lỗi, cho tôi thanh toán.",
+      "khac": [
+        {
+          "kieu": "văn nói",
+          "t": "すみません、お勘定お願いします。",
+          "doc": "すみません、おかんじょうおねがいします。",
+          "v": "Xin lỗi, tính tiền giúp tôi.",
+          "ghiChu": "Người lớn tuổi, ở quán nhậu hay nói 勘定."
+        },
+        {
+          "kieu": "lịch sự",
+          "t": "すみません、お会計をお願いできますか。",
+          "doc": "すみません、おかいけいをおねがいできますか。",
+          "v": "Xin lỗi, cho tôi thanh toán được không ạ?"
+        }
+      ]
+    },
+    {
+      "ai": "S",
+      "t": "はい。お会計はレジでお願いします。……二点で、千八百円です。",
+      "doc": "はい。おかいけいはレジでおねがいします。……にてんで、せんはっぴゃくえんです。",
+      "v": "Vâng. Quý khách thanh toán ở quầy thu ngân ạ. …Hai món, tổng 1800 yên."
+    },
+    {
+      "ai": "L",
+      "t": "別々でもいいですか。",
+      "doc": "べつべつでもいいですか。",
+      "v": "Trả riêng từng người được không ạ?",
+      "khac": [
+        {
+          "kieu": "lịch sự",
+          "t": "別々に払ってもいいですか。",
+          "doc": "べつべつにはらってもいいですか。",
+          "v": "Chúng tôi trả riêng được không ạ?"
+        }
+      ],
+      "np": [
+        {
+          "mau": "N でもいいですか",
+          "giai": "Hỏi “… cũng được chứ?”: N + でもいいですか. Với động từ dùng V て + もいいですか (xin phép).",
+          "vd": "カードでもいいですか。",
+          "vdDoc": "カードでもいいですか。",
+          "vdV": "Trả bằng thẻ cũng được chứ?"
+        }
+      ]
+    },
+    {
+      "ai": "S",
+      "t": "はい、大丈夫です。日替わり定食が九百五十円、カレーが八百五十円です。",
+      "doc": "はい、だいじょうぶです。ひがわりていしょくがきゅうひゃくごじゅうえん、カレーがはっぴゃくごじゅうえんです。",
+      "v": "Vâng, được ạ. Cơm theo ngày 950 yên, cà ri 850 yên."
+    },
+    {
+      "ai": "H",
+      "t": "ごちそうさまでした。おいしかったです！",
+      "doc": "ごちそうさまでした。おいしかったです！",
+      "v": "Cảm ơn vì bữa ăn. Ngon lắm ạ!",
+      "khac": [
+        {
+          "kieu": "thân mật",
+          "t": "おいしかったね！",
+          "doc": "おいしかったね！",
+          "v": "Ngon ghê ha!",
+          "ghiChu": "Nói với bạn đi cùng."
+        }
+      ],
+      "np": [
+        {
+          "mau": "い-adj quá khứ: 〜かったです",
+          "giai": "Bỏ い thêm かった: おいしい → おいしかった (đã ngon). Lịch sự: おいしかったです — không nói おいしいでした.",
+          "vd": "きのうは楽しかったです。",
+          "vdDoc": "きのうはたのしかったです。",
+          "vdV": "Hôm qua vui lắm."
+        }
+      ]
+    }
+  ],
+  "tuVung": [
+    {
+      "chu": "何名様",
+      "doc": "なんめいさま",
+      "nghia": "mấy vị (nhân viên hỏi số khách)",
+      "vd": "何名様ですか。"
+    },
+    {
+      "chu": "注文",
+      "doc": "ちゅうもん",
+      "nghia": "gọi món, đặt hàng",
+      "vd": "ご注文はお決まりですか。"
+    },
+    {
+      "chu": "日替わり定食",
+      "doc": "ひがわりていしょく",
+      "nghia": "suất cơm đổi món theo ngày",
+      "vd": "日替わり定食は安いです。"
+    },
+    {
+      "chu": "辛い",
+      "doc": "からい",
+      "nghia": "cay",
+      "vd": "辛いものが好きです。"
+    },
+    {
+      "chu": "甘口",
+      "doc": "あまくち",
+      "nghia": "vị dịu, ít cay (ngược với 辛口)",
+      "vd": "カレーは甘口がいいです。"
+    },
+    {
+      "chu": "焼き魚",
+      "doc": "やきざかな",
+      "nghia": "cá nướng",
+      "vd": "朝ごはんは焼き魚です。"
+    },
+    {
+      "chu": "ちょっと",
+      "doc": "ちょっと",
+      "nghia": "một chút; (bỏ lửng) hơi… = từ chối khéo",
+      "vd": "今日はちょっと……。"
+    },
+    {
+      "chu": "会計",
+      "doc": "かいけい",
+      "nghia": "thanh toán, tính tiền",
+      "vd": "お会計はこちらです。"
+    },
+    {
+      "chu": "別々",
+      "doc": "べつべつ",
+      "nghia": "riêng rẽ, từng người một",
+      "vd": "別々に払います。"
+    },
+    {
+      "chu": "ごちそうさまでした",
+      "doc": "ごちそうさまでした",
+      "nghia": "cảm ơn vì bữa ăn (nói sau khi ăn)",
+      "vd": "ごちそうさまでした。"
+    }
+  ],
+  "yNghia": "Gọi món ở nơi xa lạ không cần câu dài — chỉ cần nói được mình muốn gì và mình không ăn được gì. Dám hỏi “món này có tôm không?” không phải là làm phiền người khác, đó là biết tự chăm sóc mình.",
+  "meo": [
+    "Gọi món: món + を + 一つ + お願いします; nhiều món mỗi thứ một phần: 「〜と〜、一つずつお願いします」.",
+    "Nhiều quán ở Nhật có nút gọi nhân viên trên bàn: bấm là có người đến, không cần gọi to.",
+    "Tính tiền: 「お会計お願いします」; trả riêng: 「別々でもいいですか」. Nhiều quán thanh toán ở quầy レジ chứ không tại bàn.",
+    "Ăn xong, lúc ra về nói 「ごちそうさまでした」 với nhân viên — người Nhật rất quý câu này."
+  ],
+  "cauHoi": [
+    {
+      "hoi": "Long đổi món cà ri thế nào?",
+      "chon": [
+        "Lấy phần lớn",
+        "Lấy vị ít cay (甘口)",
+        "Không lấy cơm",
+        "Thêm tôm"
+      ],
+      "dung": 1,
+      "giai": "「じゃあ、甘口でお願いします。」"
+    },
+    {
+      "hoi": "Vì sao Hà hỏi suất cơm có tôm không?",
+      "chon": [
+        "Hà muốn thêm tôm",
+        "Hà không ăn được tôm",
+        "Tôm đã hết",
+        "Tôm rất đắt"
+      ],
+      "dung": 1,
+      "giai": "「えびはちょっと……」 — cách nói khéo là mình không ăn được tôm."
+    },
+    {
+      "hoi": "Hai người trả tiền thế nào?",
+      "chon": [
+        "Hà trả hết",
+        "Long trả hết",
+        "Quán mời",
+        "Mỗi người trả riêng phần mình"
+      ],
+      "dung": 3,
+      "giai": "「別々でもいいですか」 — 950 yên và 850 yên."
+    },
+    {
+      "hoi": "Nhân viên hỏi 「何名様ですか」 là hỏi gì?",
+      "chon": [
+        "Quý khách tên gì?",
+        "Quý khách đi mấy người?",
+        "Quý khách gọi món gì?"
+      ],
+      "dung": 1,
+      "giai": "何名様 = mấy vị. Đáp: 一人です／二人です／三人です…"
+    }
+  ]
+}

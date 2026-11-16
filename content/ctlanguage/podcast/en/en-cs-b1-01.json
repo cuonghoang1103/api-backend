@@ -1,0 +1,94 @@
+{
+  "id": "en-cs-b1-01",
+  "nn": "en",
+  "danhMuc": "chia-se",
+  "cap": "B1",
+  "so": 1,
+  "tieuDe": "Five Minutes a Day",
+  "tieuDeViet": "Mỗi ngày năm phút",
+  "moTa": "Ba mươi tư tuổi, ngồi văn phòng mười tiếng mỗi ngày, bác sĩ cảnh báo huyết áp. Dave thử chạy ba mươi phút và bỏ cuộc sau hai ngày. Lần thứ hai anh chỉ hứa năm phút — và một ông cụ trong công viên đã giúp anh đi tới vạch đích bán marathon.",
+  "chuDe": "Chạy bộ & thói quen",
+  "bieuTuong": "figure.run",
+  "nguoi": [
+    { "ma": "L", "ten": "Lily", "giong": "us-nu", "vai": "người dẫn podcast" },
+    { "ma": "D", "ten": "Dave", "giong": "uk-nam", "vai": "người kể chuyện, nhân viên văn phòng" }
+  ],
+  "loi": [
+    { "ai": "L", "t": "Hello and welcome back. My guest today says that running changed his life, but he didn't start as a runner. Dave, take us back.", "v": "Xin chào và chào mừng các bạn quay lại. Khách mời hôm nay nói rằng chạy bộ đã thay đổi cuộc đời anh, nhưng anh không khởi đầu là một người chạy bộ. Dave, kể lại từ đầu cho chúng tôi nhé." },
+    { "ai": "D", "t": "Sure. Three years ago, I was thirty-four, I worked in an office ten hours a day, and I hadn't done any exercise since school.", "v": "Vâng. Ba năm trước, tôi ba mươi tư tuổi, làm văn phòng mười tiếng mỗi ngày, và từ hồi đi học tới giờ chưa tập thể dục gì cả.",
+      "np": [{ "mau": "hadn't + V3 + since + mốc", "giai": "Quá khứ hoàn thành: một việc đã không xảy ra suốt từ một mốc cho đến một thời điểm trong quá khứ (ba năm trước).", "vd": "When I visited Hanoi last year, I hadn't been there since 2015.", "vdV": "Khi tôi ra Hà Nội năm ngoái, tôi đã không đến đó từ năm 2015." }] },
+    { "ai": "D", "t": "Then, at a normal check-up, my doctor looked at my blood pressure and said, \"If you don't change something, you'll be on medicine by forty.\"", "v": "Rồi trong một lần khám sức khoẻ bình thường, bác sĩ nhìn chỉ số huyết áp của tôi và nói: \"Nếu anh không thay đổi gì đó, trước bốn mươi tuổi anh sẽ phải uống thuốc.\"",
+      "np": [{ "mau": "If + hiện tại đơn, will + V (điều kiện loại 1)", "giai": "Cảnh báo một kết quả có thật có thể xảy ra. Vế if dùng hiện tại đơn, không dùng will. \"by forty\" = muộn nhất là lúc bốn mươi tuổi.", "vd": "If you don't sleep more, you'll get sick.", "vdV": "Nếu không ngủ nhiều hơn, bạn sẽ ốm đấy." }] },
+    { "ai": "L", "t": "That must have been a shock.", "v": "Chắc hẳn đó là một cú sốc.",
+      "np": [{ "mau": "must have + V3", "giai": "Phỏng đoán chắc chắn về quá khứ: \"chắc hẳn đã…\". Dùng khi đáp lại câu chuyện của người khác để thể hiện đồng cảm.", "vd": "You must have been very tired after the trip.", "vdV": "Chắc bạn đã rất mệt sau chuyến đi." }],
+      "khac": [
+        { "kieu": "tự nhiên hơn", "t": "Wow, that must have been scary.", "v": "Ôi, chắc là đáng sợ lắm." }
+      ] },
+    { "ai": "D", "t": "It was. That evening, I bought running shoes and planned to run for thirty minutes every morning.", "v": "Đúng vậy. Tối hôm đó, tôi mua giày chạy và lên kế hoạch chạy ba mươi phút mỗi sáng." },
+    { "ai": "D", "t": "I lasted two days. My legs hurt so much that I could hardly walk down the stairs.", "v": "Tôi trụ được hai ngày. Chân đau tới mức tôi gần như không đi xuống cầu thang nổi.",
+      "np": [{ "mau": "so much that… / could hardly + V", "giai": "\"so much that\" = nhiều đến mức mà. \"hardly\" = hầu như không — đã mang nghĩa phủ định, nên KHÔNG thêm not.", "vd": "It was so loud that I could hardly hear you.", "vdV": "Ồn tới mức tôi gần như không nghe thấy bạn." }] },
+    { "ai": "L", "t": "So what made the difference the second time?", "v": "Vậy lần thứ hai điều gì đã tạo nên khác biệt?",
+      "khac": [
+        { "kieu": "văn nói", "t": "So what was different the second time around?", "v": "Vậy lần thứ hai có gì khác?" }
+      ] },
+    { "ai": "D", "t": "A friend gave me a strange piece of advice: \"Make it so small that you can't say no.\" So I promised myself just five minutes a day. Not thirty. Five.", "v": "Một người bạn cho tôi một lời khuyên lạ: \"Làm nó nhỏ tới mức cậu không thể từ chối.\" Nên tôi tự hứa chỉ năm phút mỗi ngày. Không phải ba mươi. Năm.",
+      "np": [{ "mau": "make + O + tính từ", "giai": "\"làm cho cái gì trở nên…\": make it small, make the task easy. Sau make là tân ngữ rồi tính từ.", "vd": "Clear instructions make the job easier.", "vdV": "Hướng dẫn rõ ràng làm công việc dễ hơn." }] },
+    { "ai": "D", "t": "Some days I walked more than I ran. But I went out every single morning, even when it was raining.", "v": "Có hôm tôi đi bộ nhiều hơn chạy. Nhưng sáng nào tôi cũng ra ngoài, kể cả khi trời mưa.",
+      "np": [{ "mau": "even when + mệnh đề", "giai": "\"kể cả khi\" — nhấn mạnh rằng việc vẫn diễn ra dù hoàn cảnh không thuận lợi.", "vd": "She smiles even when she's tired.", "vdV": "Cô ấy vẫn cười kể cả khi mệt." }] },
+    { "ai": "L", "t": "Did anything keep you going on the hard days?", "v": "Có điều gì giúp anh tiếp tục vào những ngày khó khăn không?",
+      "khac": [
+        { "kieu": "tự nhiên hơn", "t": "What kept you going on the bad days?", "v": "Điều gì giúp anh trụ được vào những ngày tệ?" }
+      ] },
+    { "ai": "D", "t": "Funnily enough, an old man in the park. He was always there doing his exercises, and every morning he shouted, \"Good morning, runner!\"", "v": "Buồn cười là, một ông cụ trong công viên. Ông lúc nào cũng ở đó tập thể dục, và sáng nào ông cũng hét lên: \"Chào buổi sáng, vận động viên!\"" },
+    { "ai": "D", "t": "I didn't feel like a runner, but I didn't want to disappoint him.", "v": "Tôi không thấy mình giống vận động viên chút nào, nhưng tôi không muốn làm ông thất vọng.",
+      "np": [{ "mau": "feel like + N", "giai": "\"cảm thấy mình như là…\". Lưu ý: \"feel like + V-ing\" lại có nghĩa khác — muốn làm gì (I feel like going out).", "vd": "On my first day, I felt like a tourist in my own office.", "vdV": "Ngày đầu tiên, tôi thấy mình như khách du lịch ngay trong văn phòng của mình." }] },
+    { "ai": "D", "t": "After three months, five minutes had become thirty. After a year, I finished my first half marathon. I cried at the finish line.", "v": "Sau ba tháng, năm phút đã thành ba mươi. Sau một năm, tôi hoàn thành giải bán marathon đầu tiên. Tôi đã khóc ở vạch đích." },
+    { "ai": "L", "t": "That's amazing. But you said running changed your life, not just your fitness.", "v": "Thật tuyệt vời. Nhưng anh nói chạy bộ đã thay đổi cuộc đời anh, chứ không chỉ thể lực." },
+    { "ai": "D", "t": "Right. The biggest changes weren't in my legs. I started sleeping better, so I stopped scrolling on my phone at midnight. I was calmer at work, too.", "v": "Đúng thế. Những thay đổi lớn nhất không nằm ở đôi chân. Tôi bắt đầu ngủ ngon hơn, nên tôi bỏ thói lướt điện thoại lúc nửa đêm. Ở chỗ làm tôi cũng bình tĩnh hơn.",
+      "np": [{ "mau": "stop + V-ing ≠ stop + to V", "giai": "stop + V-ing = thôi, bỏ hẳn việc gì (stopped scrolling). stop + to V = dừng lại ĐỂ làm việc khác (stopped to drink water).", "vd": "I stopped drinking coffee after six p.m.", "vdV": "Tôi bỏ uống cà phê sau sáu giờ tối." }] },
+    { "ai": "D", "t": "And I learned something about myself: I'm not lazy. I just used to start too big, and then I'd give up and feel bad.", "v": "Và tôi học được một điều về bản thân: tôi không lười. Chỉ là trước đây tôi hay bắt đầu quá lớn, rồi bỏ cuộc và thấy tệ về mình.",
+      "np": [{ "mau": "used to + V / would + V (thói quen quá khứ)", "giai": "Cả hai đều nói thói quen trước kia. \"would\" chỉ dùng cho hành động lặp lại, không dùng cho trạng thái (không nói \"I would be lazy\").", "vd": "As a child, I would read under the blanket.", "vdV": "Hồi nhỏ tôi hay đọc sách trong chăn." }] },
+    { "ai": "L", "t": "Did that idea spread to other parts of your life?", "v": "Ý tưởng đó có lan sang những phần khác trong cuộc sống của anh không?" },
+    { "ai": "D", "t": "Completely. When I wanted to learn Spanish, I started with five words a day. When I wanted to save money, I started with the price of one coffee a week.", "v": "Hoàn toàn. Khi muốn học tiếng Tây Ban Nha, tôi bắt đầu với năm từ mỗi ngày. Khi muốn tiết kiệm tiền, tôi bắt đầu bằng giá một ly cà phê mỗi tuần." },
+    { "ai": "L", "t": "And your blood pressure?", "v": "Còn huyết áp của anh?" },
+    { "ai": "D", "t": "Normal for two years now. My doctor asked me what medicine I was taking. I said, \"An old man in the park.\"", "v": "Bình thường hai năm nay rồi. Bác sĩ hỏi tôi đang uống thuốc gì. Tôi bảo: \"Một ông cụ trong công viên.\"",
+      "np": [{ "mau": "câu hỏi gián tiếp: asked me what + S + V", "giai": "Trong câu tường thuật, câu hỏi KHÔNG đảo trợ động từ và lùi thì: \"What are you taking?\" → asked me what I was taking.", "vd": "She asked me where I lived.", "vdV": "Cô ấy hỏi tôi sống ở đâu." }] },
+    { "ai": "L", "t": "What would you say to someone who wants to start but feels it's too late?", "v": "Anh sẽ nói gì với người muốn bắt đầu nhưng cảm thấy đã quá muộn?",
+      "khac": [
+        { "kieu": "lịch sự", "t": "Do you have any advice for listeners who feel it's too late to start?", "v": "Anh có lời khuyên nào cho những thính giả cảm thấy đã quá muộn để bắt đầu không?" }
+      ] },
+    { "ai": "D", "t": "Start smaller than you think is reasonable. Five minutes. One page. One push-up. It feels silly, but small things you actually do are better than big things you only plan.", "v": "Hãy bắt đầu nhỏ hơn mức bạn nghĩ là hợp lý. Năm phút. Một trang sách. Một cái chống đẩy. Nghe thì ngớ ngẩn, nhưng việc nhỏ mà bạn thật sự làm tốt hơn việc lớn mà bạn chỉ lên kế hoạch." },
+    { "ai": "L", "t": "Dave, thank you so much. I think I'll go for a five-minute run after this.", "v": "Dave, cảm ơn anh rất nhiều. Tôi nghĩ xong buổi này tôi sẽ đi chạy năm phút.",
+      "khac": [
+        { "kieu": "trang trọng", "t": "Dave, thank you for joining us and sharing your story.", "v": "Dave, cảm ơn anh đã đến và chia sẻ câu chuyện của mình." }
+      ] },
+    { "ai": "D", "t": "Send me a message when you do. Good morning, runner!", "v": "Chạy xong thì nhắn tôi nhé. Chào buổi sáng, vận động viên!" }
+  ],
+  "tuVung": [
+    { "chu": "check-up", "doc": "/ˈtʃek ʌp/", "nghia": "lần khám sức khoẻ định kỳ", "vd": "I have a check-up every year." },
+    { "chu": "blood pressure", "doc": "/ˈblʌd ˌpreʃə/", "nghia": "huyết áp", "vd": "Too much salt can raise your blood pressure." },
+    { "chu": "lasted", "doc": "/ˈlɑːstɪd/", "nghia": "trụ được, kéo dài được (last)", "vd": "My new diet lasted one week." },
+    { "chu": "hardly", "doc": "/ˈhɑːdli/", "nghia": "hầu như không", "vd": "I could hardly believe it." },
+    { "chu": "every single", "doc": "/ˈevri ˈsɪŋɡl/", "nghia": "mỗi một, từng cái một (nhấn mạnh every)", "vd": "He calls me every single day." },
+    { "chu": "keep you going", "doc": "/kiːp juː ˈɡəʊɪŋ/", "nghia": "giúp bạn tiếp tục, không bỏ cuộc", "vd": "Music keeps me going at the gym." },
+    { "chu": "disappoint", "doc": "/ˌdɪsəˈpɔɪnt/", "nghia": "làm thất vọng", "vd": "I don't want to disappoint my parents." },
+    { "chu": "half marathon", "doc": "/ˌhɑːf ˈmærəθən/", "nghia": "bán marathon (khoảng 21 km)", "vd": "She's training for a half marathon." },
+    { "chu": "finish line", "doc": "/ˈfɪnɪʃ laɪn/", "nghia": "vạch đích", "vd": "Everyone cheered at the finish line." },
+    { "chu": "scrolling", "doc": "/ˈskrəʊlɪŋ/", "nghia": "lướt (màn hình điện thoại)", "vd": "I spent an hour scrolling through photos." },
+    { "chu": "give up", "doc": "/ɡɪv ʌp/", "nghia": "bỏ cuộc", "vd": "Don't give up after one bad day." },
+    { "chu": "push-up", "doc": "/ˈpʊʃ ʌp/", "nghia": "động tác chống đẩy", "vd": "I do twenty push-ups every morning." }
+  ],
+  "yNghia": "Ta thường nghĩ mình lười, trong khi thật ra ta chỉ bắt đầu quá lớn rồi bỏ cuộc. Một việc nhỏ đến mức không thể từ chối, làm đều đặn mỗi ngày, mạnh hơn một kế hoạch lớn chỉ nằm trên giấy. Và đôi khi, một lời chào của người lạ là đủ để ta không bỏ cuộc.",
+  "meo": [
+    "stop + V-ing = bỏ hẳn (stopped scrolling); stop + to V = dừng lại để làm việc khác.",
+    "Thói quen quá khứ: \"I used to start too big, and then I'd give up.\" — would chỉ cho hành động lặp lại.",
+    "\"hardly\" đã mang nghĩa phủ định: \"I could hardly walk\" (không nói \"couldn't hardly\").",
+    "Đáp lại câu chuyện của người khác: \"That must have been a shock / scary / hard.\""
+  ],
+  "cauHoi": [
+    { "hoi": "Vì sao lần đầu Dave bỏ cuộc?", "chon": ["Vì trời mưa", "Vì anh đặt mục tiêu ba mươi phút và chân đau quá", "Vì bác sĩ cấm chạy"], "dung": 1, "giai": "\"I lasted two days. My legs hurt so much that I could hardly walk down the stairs.\"" },
+    { "hoi": "Lời khuyên của người bạn là gì?", "chon": ["Làm nó nhỏ tới mức không thể từ chối", "Chạy cùng một nhóm", "Mua giày đắt tiền hơn"], "dung": 0, "giai": "\"Make it so small that you can't say no.\"" },
+    { "hoi": "Ông cụ trong công viên giúp Dave thế nào?", "chon": ["Dạy anh kỹ thuật chạy", "Chạy cùng anh mỗi sáng", "Sáng nào cũng chào \"Good morning, runner!\" khiến anh không muốn làm ông thất vọng"], "dung": 2, "giai": "\"I didn't feel like a runner, but I didn't want to disappoint him.\"" },
+    { "hoi": "Thay đổi lớn nhất theo Dave KHÔNG phải là gì?", "chon": ["Ngủ ngon hơn", "Đôi chân khoẻ hơn", "Bình tĩnh hơn ở chỗ làm"], "dung": 1, "giai": "\"The biggest changes weren't in my legs.\"" }
+  ]
+}

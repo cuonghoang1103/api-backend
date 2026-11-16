@@ -1,0 +1,396 @@
+{
+  "id": "zh-ds-hsk1-03",
+  "nn": "zh",
+  "danhMuc": "doi-song",
+  "cap": "HSK1",
+  "so": 5,
+  "tieuDe": "师傅，去火车站！",
+  "tieuDeViet": "Bác tài, cho ra ga tàu!",
+  "moTa": "Lan bắt taxi ra ga tàu để kịp chuyến mười rưỡi. Nói điểm đến, trả lời câu hỏi của tài xế, hỏi giá, trả tiền bằng quét mã, rồi hỏi đường đi bộ vào cửa ga.",
+  "chuDe": "Đi taxi, hỏi đường",
+  "bieuTuong": "car.fill",
+  "nguoi": [
+    {
+      "ma": "L",
+      "ten": "Lan",
+      "giong": "zh-nu",
+      "vai": "du khách Việt Nam"
+    },
+    {
+      "ma": "S",
+      "ten": "Bác tài",
+      "giong": "zh-nam",
+      "vai": "tài xế taxi"
+    }
+  ],
+  "loi": [
+    {
+      "ai": "L",
+      "t": "师傅，您好！去火车站。",
+      "doc": "Shīfu, nín hǎo! Qù huǒchēzhàn.",
+      "v": "Chào bác tài! Cho cháu ra ga tàu.",
+      "khac": [
+        {
+          "kieu": "lịch sự",
+          "t": "师傅，麻烦您去火车站。",
+          "doc": "Shīfu, máfan nín qù huǒchēzhàn.",
+          "v": "Bác tài ơi, phiền bác chở cháu ra ga tàu.",
+          "ghiChu": "lịch sự hơn một chút, hợp với tài xế lớn tuổi"
+        },
+        {
+          "kieu": "ngắn gọn",
+          "t": "师傅，到火车站。",
+          "doc": "Shīfu, dào huǒchēzhàn.",
+          "v": "Bác tài, ra ga tàu.",
+          "ghiChu": "cách người địa phương hay nói khi lên xe"
+        }
+      ],
+      "np": [
+        {
+          "mau": "师傅 (cách gọi)",
+          "giai": "师傅 là cách gọi lịch sự, thân thiện với tài xế, thợ sửa, đầu bếp, người làm nghề tay chân. Gọi 司机 (tài xế) thẳng mặt nghe hơi cộc.",
+          "vd": "师傅，这个能修吗？",
+          "vdDoc": "Shīfu, zhège néng xiū ma?",
+          "vdV": "Bác thợ ơi, cái này sửa được không?"
+        },
+        {
+          "mau": "去 + nơi chốn",
+          "giai": "去 = đi đến, nơi chốn đứng ngay sau, không cần giới từ: 去火车站, 去学校. Không nói 去到.",
+          "vd": "我们去饭店吧。",
+          "vdDoc": "Wǒmen qù fàndiàn ba.",
+          "vdV": "Mình đi nhà hàng nhé."
+        }
+      ]
+    },
+    {
+      "ai": "S",
+      "t": "好的，请上车。北京站还是北京西站？",
+      "doc": "Hǎo de, qǐng shàng chē. Běijīng Zhàn háishi Běijīng Xī Zhàn?",
+      "v": "Được, mời lên xe. Ga Bắc Kinh hay ga Bắc Kinh Tây?",
+      "np": [
+        {
+          "mau": "A 还是 B？",
+          "giai": "还是 dùng trong câu hỏi lựa chọn \"A hay B?\". Câu đã có 还是 thì KHÔNG thêm 吗. (Câu kể \"hoặc\" dùng 或者.)",
+          "vd": "你喝茶还是喝咖啡？",
+          "vdDoc": "Nǐ hē chá háishi hē kāfēi?",
+          "vdV": "Bạn uống trà hay cà phê?"
+        }
+      ]
+    },
+    {
+      "ai": "L",
+      "t": "北京西站。远吗？",
+      "doc": "Běijīng Xī Zhàn. Yuǎn ma?",
+      "v": "Ga Bắc Kinh Tây ạ. Có xa không bác?"
+    },
+    {
+      "ai": "S",
+      "t": "不太远，二十分钟。你几点的火车？",
+      "doc": "Bú tài yuǎn, èrshí fēnzhōng. Nǐ jǐ diǎn de huǒchē?",
+      "v": "Không xa lắm, hai mươi phút. Tàu của cháu mấy giờ?"
+    },
+    {
+      "ai": "L",
+      "t": "十点半的。",
+      "doc": "Shí diǎn bàn de.",
+      "v": "Chuyến mười rưỡi ạ.",
+      "np": [
+        {
+          "mau": "……的 (thay cho danh từ)",
+          "giai": "Khi danh từ đã rõ, có thể bỏ nó và giữ 的: 十点半的 = 十点半的火车. Tương tự: 红的 (cái màu đỏ), 我的 (của tôi).",
+          "vd": "这个是我的，那个是你的。",
+          "vdDoc": "Zhège shì wǒ de, nàge shì nǐ de.",
+          "vdV": "Cái này của tôi, cái kia của bạn."
+        }
+      ]
+    },
+    {
+      "ai": "S",
+      "t": "没问题，现在才九点。",
+      "doc": "Méi wèntí, xiànzài cái jiǔ diǎn.",
+      "v": "Không vấn đề gì, bây giờ mới chín giờ thôi."
+    },
+    {
+      "ai": "S",
+      "t": "到了。前面不能停车，我在这儿停吧。",
+      "doc": "Dào le. Qiánmiàn bù néng tíng chē, wǒ zài zhèr tíng ba.",
+      "v": "Tới rồi. Phía trước không được dừng xe, bác dừng ở đây nhé.",
+      "np": [
+        {
+          "mau": "不能 + V",
+          "giai": "不能 = không được / không thể (do quy định hoặc điều kiện). 这儿不能停车 = ở đây cấm dừng xe.",
+          "vd": "这儿不能吸烟。",
+          "vdDoc": "Zhèr bù néng xīyān.",
+          "vdV": "Ở đây không được hút thuốc."
+        }
+      ]
+    },
+    {
+      "ai": "L",
+      "t": "好的。多少钱？",
+      "doc": "Hǎo de. Duōshao qián?",
+      "v": "Vâng ạ. Bao nhiêu tiền ạ?",
+      "khac": [
+        {
+          "kieu": "lịch sự",
+          "t": "师傅，一共多少钱？",
+          "doc": "Shīfu, yígòng duōshao qián?",
+          "v": "Bác ơi, tổng cộng bao nhiêu ạ?"
+        }
+      ]
+    },
+    {
+      "ai": "S",
+      "t": "四十五块。",
+      "doc": "Sìshíwǔ kuài.",
+      "v": "Bốn mươi lăm tệ."
+    },
+    {
+      "ai": "L",
+      "t": "可以扫码吗？",
+      "doc": "Kěyǐ sǎo mǎ ma?",
+      "v": "Quét mã được không ạ?",
+      "khac": [
+        {
+          "kieu": "tự nhiên hơn",
+          "t": "能用手机付钱吗？",
+          "doc": "Néng yòng shǒujī fù qián ma?",
+          "v": "Trả bằng điện thoại được không ạ?"
+        },
+        {
+          "kieu": "văn nói",
+          "t": "我扫您吧。",
+          "doc": "Wǒ sǎo nín ba.",
+          "v": "Để cháu quét mã của bác nhé.",
+          "ghiChu": "cách nói tắt rất phổ biến: \"tôi quét anh\" = tôi quét mã của anh"
+        }
+      ],
+      "np": [
+        {
+          "mau": "可以 + V + 吗？",
+          "giai": "Hỏi xin phép hoặc hỏi có được phép không: 可以…吗？ Trả lời: 可以 (được) / 不可以 hoặc 不行 (không được).",
+          "vd": "我可以坐这儿吗？",
+          "vdDoc": "Wǒ kěyǐ zuò zhèr ma?",
+          "vdV": "Tôi ngồi đây được không?"
+        }
+      ]
+    },
+    {
+      "ai": "S",
+      "t": "可以，二维码在这儿。",
+      "doc": "Kěyǐ, èrwéimǎ zài zhèr.",
+      "v": "Được, mã QR ở đây."
+    },
+    {
+      "ai": "L",
+      "t": "好了。师傅，请问进站口在哪儿？",
+      "doc": "Hǎo le. Shīfu, qǐngwèn jìn zhàn kǒu zài nǎr?",
+      "v": "Xong rồi ạ. Bác ơi, cho cháu hỏi cửa vào ga ở đâu?",
+      "khac": [
+        {
+          "kieu": "tự nhiên hơn",
+          "t": "师傅，进站口怎么走？",
+          "doc": "Shīfu, jìn zhàn kǒu zěnme zǒu?",
+          "v": "Bác ơi, cửa vào ga đi lối nào ạ?",
+          "ghiChu": "怎么走 = đi đường nào — câu hỏi đường hay dùng nhất"
+        }
+      ]
+    },
+    {
+      "ai": "S",
+      "t": "你往前走，到路口往右，走五分钟就到了。",
+      "doc": "Nǐ wǎng qián zǒu, dào lùkǒu wǎng yòu, zǒu wǔ fēnzhōng jiù dào le.",
+      "v": "Cháu đi thẳng, tới ngã tư thì rẽ phải, đi năm phút là tới.",
+      "np": [
+        {
+          "mau": "往 + hướng + V",
+          "giai": "往 = \"về phía\": 往前走 (đi thẳng), 往左/往右 (sang trái/phải). Động từ có thể bỏ khi đã rõ: 到路口往右.",
+          "vd": "往左走，银行就在那儿。",
+          "vdDoc": "Wǎng zuǒ zǒu, yínháng jiù zài nàr.",
+          "vdV": "Rẽ trái, ngân hàng ở ngay đó."
+        },
+        {
+          "mau": "……就到了",
+          "giai": "Thời gian/quãng đường + 就到了 = \"là tới\", nhấn mạnh nhanh, gần.",
+          "vd": "坐地铁十分钟就到了。",
+          "vdDoc": "Zuò dìtiě shí fēnzhōng jiù dào le.",
+          "vdV": "Đi tàu điện ngầm mười phút là tới."
+        }
+      ]
+    },
+    {
+      "ai": "L",
+      "t": "往前走，然后往右，对吗？",
+      "doc": "Wǎng qián zǒu, ránhòu wǎng yòu, duì ma?",
+      "v": "Đi thẳng, sau đó rẽ phải, đúng không ạ?",
+      "khac": [
+        {
+          "kieu": "lịch sự",
+          "t": "您是说先往前走，再往右拐，对吧？",
+          "doc": "Nín shì shuō xiān wǎng qián zǒu, zài wǎng yòu guǎi, duì ba?",
+          "v": "Ý bác là đi thẳng trước, rồi rẽ phải, phải không ạ?",
+          "ghiChu": "nhắc lại để xác nhận — người nghe sẽ thấy bạn cẩn thận"
+        }
+      ]
+    },
+    {
+      "ai": "S",
+      "t": "对！别忘了你的东西。",
+      "doc": "Duì! Bié wàng le nǐ de dōngxi.",
+      "v": "Đúng rồi! Đừng quên đồ của cháu nhé.",
+      "np": [
+        {
+          "mau": "别 + V",
+          "giai": "别 = \"đừng\", dùng khi khuyên, nhắc nhở: 别忘了, 别担心, 别走.",
+          "vd": "别忘了带手机！",
+          "vdDoc": "Bié wàng le dài shǒujī!",
+          "vdV": "Đừng quên mang điện thoại!"
+        }
+      ]
+    },
+    {
+      "ai": "L",
+      "t": "谢谢师傅！再见！",
+      "doc": "Xièxie shīfu! Zàijiàn!",
+      "v": "Cháu cảm ơn bác! Chào bác ạ!",
+      "khac": [
+        {
+          "kieu": "lịch sự",
+          "t": "辛苦了，师傅！",
+          "doc": "Xīnkǔ le, shīfu!",
+          "v": "Bác vất vả rồi ạ!",
+          "ghiChu": "câu cảm ơn người làm dịch vụ (tài xế, giao hàng) rất được quý"
+        }
+      ]
+    },
+    {
+      "ai": "S",
+      "t": "不客气，一路平安！",
+      "doc": "Bú kèqi, yí lù píng'ān!",
+      "v": "Không có gì, thượng lộ bình an!"
+    }
+  ],
+  "tuVung": [
+    {
+      "chu": "师傅",
+      "doc": "shīfu",
+      "nghia": "bác tài, bác thợ (cách gọi lịch sự người làm nghề)",
+      "vd": "师傅，去机场。"
+    },
+    {
+      "chu": "火车站",
+      "doc": "huǒchēzhàn",
+      "nghia": "ga tàu hỏa",
+      "vd": "火车站远吗？"
+    },
+    {
+      "chu": "上车",
+      "doc": "shàng chē",
+      "nghia": "lên xe (下车 = xuống xe)",
+      "vd": "请上车。"
+    },
+    {
+      "chu": "还是",
+      "doc": "háishi",
+      "nghia": "hay là (trong câu hỏi lựa chọn)",
+      "vd": "你去还是我去？"
+    },
+    {
+      "chu": "分钟",
+      "doc": "fēnzhōng",
+      "nghia": "phút (khoảng thời gian)",
+      "vd": "等我五分钟。"
+    },
+    {
+      "chu": "停车",
+      "doc": "tíng chē",
+      "nghia": "dừng xe, đỗ xe",
+      "vd": "这儿可以停车吗？"
+    },
+    {
+      "chu": "扫码",
+      "doc": "sǎo mǎ",
+      "nghia": "quét mã (QR) để trả tiền",
+      "vd": "我扫码吧。"
+    },
+    {
+      "chu": "二维码",
+      "doc": "èrwéimǎ",
+      "nghia": "mã QR",
+      "vd": "请扫这个二维码。"
+    },
+    {
+      "chu": "往",
+      "doc": "wǎng",
+      "nghia": "về phía, hướng về",
+      "vd": "往前走。"
+    },
+    {
+      "chu": "路口",
+      "doc": "lùkǒu",
+      "nghia": "ngã tư, giao lộ",
+      "vd": "在路口往左。"
+    },
+    {
+      "chu": "东西",
+      "doc": "dōngxi",
+      "nghia": "đồ đạc, đồ vật (东西 đọc xi nhẹ; dōngxī = đông tây)",
+      "vd": "我去买东西。"
+    },
+    {
+      "chu": "一路平安",
+      "doc": "yí lù píng'ān",
+      "nghia": "thượng lộ bình an",
+      "vd": "明天见，一路平安！"
+    }
+  ],
+  "yNghia": "Đi taxi ở nơi lạ chỉ cần năm câu: nói nơi đến, trả lời giờ tàu, hỏi giá, hỏi trả tiền, hỏi đường. Và một câu nhỏ — nhắc lại chỉ dẫn để xác nhận — giúp bạn không lạc. Hỏi lại không phải là kém, mà là cách người cẩn thận đi đường.",
+  "meo": [
+    "Lên taxi: 师傅，去 + nơi đến. Muốn lịch sự hơn: 师傅，麻烦您去…",
+    "Câu hỏi lựa chọn dùng 还是 và KHÔNG có 吗: 北京站还是北京西站？",
+    "Chỉ đường: 往前走 (đi thẳng), 往左/往右 (rẽ trái/phải), 到路口 (đến ngã tư), 就到了 (là tới).",
+    "东西 đọc dōngxi (xi nhẹ) là \"đồ đạc\"; đọc dōngxī là \"phía đông và phía tây\"."
+  ],
+  "cauHoi": [
+    {
+      "hoi": "Lan muốn đến ga nào?",
+      "chon": [
+        "Ga Bắc Kinh",
+        "Ga Bắc Kinh Tây",
+        "Sân bay"
+      ],
+      "dung": 1,
+      "giai": "Lan trả lời: 北京西站."
+    },
+    {
+      "hoi": "Tàu của Lan khởi hành lúc mấy giờ?",
+      "chon": [
+        "Chín giờ",
+        "Mười giờ",
+        "Mười giờ rưỡi"
+      ],
+      "dung": 2,
+      "giai": "十点半的 — chuyến mười rưỡi."
+    },
+    {
+      "hoi": "Lan trả tiền taxi bằng cách nào?",
+      "chon": [
+        "Quét mã QR",
+        "Tiền mặt",
+        "Thẻ ngân hàng"
+      ],
+      "dung": 0,
+      "giai": "Lan hỏi 可以扫码吗？ và bác tài đưa 二维码."
+    },
+    {
+      "hoi": "Từ chỗ xuống xe, Lan đi thế nào để tới cửa vào ga?",
+      "chon": [
+        "Rẽ trái rồi đi thẳng",
+        "Đi thẳng, tới ngã tư rẽ phải",
+        "Quay lại phía sau"
+      ],
+      "dung": 1,
+      "giai": "你往前走，到路口往右 — đi thẳng, tới ngã tư rẽ phải."
+    }
+  ]
+}

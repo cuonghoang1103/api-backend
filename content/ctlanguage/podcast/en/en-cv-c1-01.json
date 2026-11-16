@@ -1,0 +1,111 @@
+{
+  "id": "en-cv-c1-01",
+  "nn": "en",
+  "danhMuc": "cong-viec",
+  "cap": "C1",
+  "so": 1,
+  "tieuDe": "Asking for What You're Worth",
+  "tieuDeViet": "Đòi đúng giá trị của mình",
+  "moTa": "Linh đã âm thầm dẫn dắt nhóm mobile suốt nửa năm và muốn xin lên senior kèm tăng lương. Tối hôm trước, mentor Pete sửa câu mở đầu đầy xin lỗi của cô. Hôm sau, cuộc đàm phán thật với sếp: nêu giá trị, đưa con số, im lặng, và biến một lời \"chưa được\" thành kế hoạch có ngày tháng.",
+  "chuDe": "Đàm phán lương & thăng chức",
+  "bieuTuong": "banknote.fill",
+  "nguoi": [
+    { "ma": "P", "ten": "Pete", "giong": "au-nam", "vai": "mentor của Linh" },
+    { "ma": "L", "ten": "Linh", "giong": "us-nu", "vai": "lập trình viên mobile" },
+    { "ma": "R", "ten": "Richard", "giong": "uk-nam", "vai": "quản lý kỹ thuật, sếp trực tiếp" }
+  ],
+  "loi": [
+    { "ai": "P", "t": "So tomorrow's the big conversation. Walk me through your opening.", "v": "Vậy là mai đến cuộc nói chuyện quan trọng. Kể anh nghe em định mở đầu thế nào." },
+    { "ai": "L", "t": "I was going to say, \"I know the budget is tight, but I was wondering if maybe I could possibly get a raise.\"", "v": "Em định nói: \"Em biết ngân sách đang eo hẹp, nhưng em đang băn khoăn liệu có lẽ em có thể được tăng lương không.\"" },
+    { "ai": "P", "t": "Stop right there. You've apologised three times before you've even asked. And \"the budget is tight\" is their argument, not yours.", "v": "Dừng ngay. Em đã xin lỗi ba lần trước cả khi kịp hỏi. Và \"ngân sách eo hẹp\" là lý lẽ của họ, không phải của em.",
+      "np": [{ "mau": "before + S + have + V3", "giai": "Sau before có thể dùng hiện tại hoàn thành để nhấn rằng hành động kia CHƯA kịp hoàn tất: \"before you've even asked\" = trước cả khi em kịp hỏi.", "vd": "Don't judge the idea before you've heard all of it.", "vdV": "Đừng phán xét ý tưởng trước khi nghe hết." }] },
+    { "ai": "L", "t": "I just don't want to sound greedy.", "v": "Em chỉ không muốn nghe có vẻ tham lam." },
+    { "ai": "P", "t": "Asking to be paid for the work you're already doing isn't greed. Lead with value: what you've delivered, and what level you're operating at.", "v": "Xin được trả công cho việc em đang làm thì không phải là tham. Hãy mở đầu bằng giá trị: em đã mang lại gì, và em đang làm việc ở cấp độ nào.",
+      "np": [{ "mau": "ask to be + V3 (bị động sau to)", "giai": "\"xin được…\": asking to be paid, asking to be considered. Bị động nguyên mẫu = to be + V3.", "vd": "She asked to be moved to the design team.", "vdV": "Cô ấy xin được chuyển sang nhóm thiết kế." }] },
+    { "ai": "L", "t": "Okay. Since March, I've been leading the mobile team, unofficially, and we shipped the redesign two weeks early.", "v": "Vâng. Từ tháng Ba, em đã dẫn dắt nhóm mobile, dù không chính thức, và bọn em ra mắt bản thiết kế lại sớm hai tuần." },
+    { "ai": "P", "t": "That's your story. And the number?", "v": "Đó là câu chuyện của em. Còn con số?" },
+    { "ai": "L", "t": "I've looked at salary surveys for senior developers in our city. The range is roughly thirty to forty percent above what I earn now.", "v": "Em đã xem các khảo sát lương cho lập trình viên senior ở thành phố mình. Mức dao động khoảng cao hơn ba mươi tới bốn mươi phần trăm so với lương hiện tại của em." },
+    { "ai": "P", "t": "Then aim for the upper end and justify it. And once you've said the number, stop talking. Silence feels awful, but let them fill it.", "v": "Vậy hãy nhắm vào mức cao và lý giải cho nó. Và một khi đã nói ra con số, ngừng nói. Im lặng thì khó chịu thật, nhưng hãy để họ lấp nó.",
+      "np": [{ "mau": "once + S + have + V3, …", "giai": "\"một khi đã…\" — once + hiện tại hoàn thành để nói hành động phải xong trước rồi mới tới việc sau.", "vd": "Once you've signed the contract, it's hard to change.", "vdV": "Một khi đã ký hợp đồng thì khó mà thay đổi." }] },
+    { "ai": "L", "t": "And if he says no?", "v": "Thế nếu anh ấy nói không?" },
+    { "ai": "P", "t": "Then ask what it would take. A no today can turn into a plan with dates.", "v": "Thì hỏi xem cần những gì. Một lời \"không\" hôm nay có thể trở thành một kế hoạch có ngày tháng.",
+      "khac": [
+        { "kieu": "chuyên nghiệp", "t": "Then ask, \"What would I need to show to get there?\"", "v": "Thì hỏi: \"Em cần chứng minh điều gì để đạt được mức đó?\"" }
+      ] },
+    { "ai": "R", "t": "Come in, Linh. You wanted to talk about your role?", "v": "Vào đi Linh. Em muốn nói chuyện về vị trí của em à?" },
+    { "ai": "L", "t": "Yes, thanks for making the time. I'd like to discuss moving into the senior developer position, along with a salary adjustment that reflects it.", "v": "Vâng, cảm ơn anh đã dành thời gian. Em muốn trao đổi về việc chuyển lên vị trí lập trình viên senior, cùng với việc điều chỉnh lương tương xứng.",
+      "np": [{ "mau": "discuss + N/V-ing (không có about)", "giai": "\"discuss\" là ngoại động từ: discuss the plan, discuss moving… KHÔNG nói \"discuss about\". \"along with\" = cùng với.", "vd": "We need to discuss the budget.", "vdV": "Chúng ta cần bàn về ngân sách." }],
+      "khac": [
+        { "kieu": "mềm mỏng", "t": "I was hoping we could talk about my career progression here.", "v": "Em mong mình có thể nói chuyện về con đường phát triển của em ở đây." },
+        { "kieu": "trang trọng", "t": "I'd like to formally request to be considered for the senior developer role.", "v": "Em xin chính thức đề nghị được xem xét cho vị trí lập trình viên senior." }
+      ] },
+    { "ai": "R", "t": "Okay. Tell me what's on your mind.", "v": "Được. Em cứ nói điều em đang nghĩ." },
+    { "ai": "L", "t": "Since March, I've effectively been running the mobile team: planning the sprints, reviewing most of the code and mentoring the two new hires. We delivered the redesign two weeks ahead of schedule.", "v": "Từ tháng Ba, trên thực tế em đã điều hành nhóm mobile: lập kế hoạch sprint, review phần lớn code và kèm hai bạn mới vào. Bọn em giao bản thiết kế lại sớm hơn kế hoạch hai tuần.",
+      "np": [{ "mau": "have been + V-ing (hiện tại hoàn thành tiếp diễn)", "giai": "Việc bắt đầu từ một mốc (since March) và vẫn đang tiếp diễn — rất hợp để chứng minh mình đã làm ở cấp cao hơn suốt một thời gian. \"effectively\" = trên thực tế.", "vd": "I've been handling all client calls since the summer.", "vdV": "Từ mùa hè, tôi đã xử lý mọi cuộc gọi với khách." }] },
+    { "ai": "R", "t": "No argument there. Your work this year has been excellent.", "v": "Chuyện đó thì không phải bàn. Năm nay em làm việc rất xuất sắc." },
+    { "ai": "L", "t": "Thank you. Given that I'm already operating at senior level, I'd like my title and pay to reflect that. Based on market data for the role, I'm looking for a base salary of thirty-eight million dong a month.", "v": "Cảm ơn anh. Vì em đã làm việc ở cấp senior, em muốn chức danh và lương phản ánh điều đó. Dựa trên số liệu thị trường cho vị trí này, em mong muốn mức lương cơ bản ba mươi tám triệu đồng mỗi tháng.",
+      "np": [{ "mau": "I'd like + O + to + V", "giai": "\"tôi muốn cái gì làm gì\": I'd like my title to reflect… Lịch sự nhưng rõ ràng, mạnh hơn \"I was wondering if…\".", "vd": "I'd like the contract to include remote work.", "vdV": "Tôi muốn hợp đồng có thêm điều khoản làm từ xa." }],
+      "khac": [
+        { "kieu": "chuyên nghiệp", "t": "Based on my research, a figure of around thirty-eight million would be in line with the market.", "v": "Theo tìm hiểu của em, mức khoảng ba mươi tám triệu là phù hợp với thị trường." }
+      ] },
+    { "ai": "R", "t": "That's a significant jump. It's about thirty-five percent above where you are now.", "v": "Đó là một bước nhảy đáng kể. Cao hơn khoảng ba mươi lăm phần trăm so với mức hiện tại của em." },
+    { "ai": "L", "t": "It is. But it's in line with what senior developers earn elsewhere in the city, and it reflects the scope of what I'm already doing.", "v": "Đúng vậy. Nhưng nó phù hợp với mức lương senior ở những nơi khác trong thành phố, và phản ánh đúng phạm vi công việc em đang làm." },
+    { "ai": "R", "t": "I'll be honest with you. The promotion, I can support. The full increase in one go would be very hard to get approved this year.", "v": "Anh sẽ nói thật. Việc thăng chức thì anh ủng hộ được. Tăng toàn bộ một lần thì năm nay rất khó được duyệt.",
+      "np": [{ "mau": "đưa tân ngữ lên đầu câu: The promotion, I can support.", "giai": "Đảo tân ngữ lên trước để đối lập hai ý (cái này thì được, cái kia thì khó). Văn nói tự nhiên, nhấn mạnh rõ.", "vd": "The design, I love. The colours, not so much.", "vdV": "Thiết kế thì tôi rất thích. Còn màu thì không lắm." }] },
+    { "ai": "L", "t": "I appreciate your honesty. Could you help me understand what's realistic, and what's standing in the way?", "v": "Em trân trọng sự thẳng thắn của anh. Anh có thể giúp em hiểu mức nào là thực tế, và điều gì đang cản trở không?",
+      "khac": [
+        { "kieu": "mềm mỏng", "t": "I understand. What sort of figure do you think might be achievable?", "v": "Em hiểu. Theo anh, mức nào có thể đạt được?" }
+      ] },
+    { "ai": "R", "t": "This year's budget was set in January. Realistically, I could get you to around thirty-three now.", "v": "Ngân sách năm nay đã chốt từ tháng Một. Thực tế, ngay bây giờ anh có thể đưa em lên khoảng ba mươi ba." },
+    { "ai": "L", "t": "I see. I'd like to find something that works for both of us. Would you be open to thirty-three now, with a formal review in six months that brings me to thirty-eight if I hit agreed targets?", "v": "Em hiểu. Em muốn tìm một phương án hợp với cả hai bên. Anh có sẵn lòng với mức ba mươi ba bây giờ, kèm một đợt đánh giá chính thức sau sáu tháng đưa em lên ba mươi tám nếu em đạt các mục tiêu đã thống nhất không?",
+      "np": [{ "mau": "Would you be open to + N/V-ing?", "giai": "Đề xuất phương án mà không ép: \"Anh có sẵn lòng với…?\". Sau to là danh từ hoặc V-ing.", "vd": "Would you be open to working from home two days a week?", "vdV": "Anh có sẵn lòng cho làm ở nhà hai ngày một tuần không?" }],
+      "khac": [
+        { "kieu": "trang trọng", "t": "Would you be willing to consider a phased increase, with a formal review in six months?", "v": "Anh có sẵn lòng cân nhắc tăng theo từng giai đoạn, kèm một đợt đánh giá chính thức sau sáu tháng không?" }
+      ] },
+    { "ai": "R", "t": "That's a creative solution. What kind of targets are you thinking of?", "v": "Đó là một giải pháp sáng tạo. Em đang nghĩ tới những mục tiêu kiểu gì?" },
+    { "ai": "L", "t": "Measurable ones: for example, the mobile release schedule, and getting the two new developers working independently. I'd want them in writing, so neither of us has to rely on memory.", "v": "Những mục tiêu đo được: ví dụ, lịch phát hành bản mobile, và giúp hai bạn mới làm việc độc lập. Em muốn chúng được ghi bằng văn bản, để không ai trong hai ta phải dựa vào trí nhớ.",
+      "np": [{ "mau": "so (that) neither of us has to + V", "giai": "\"để không ai trong hai ta phải…\" — neither of us đi với động từ số ít (has) trong văn trang trọng.", "vd": "Let's write it down so neither of us forgets.", "vdV": "Mình ghi lại để không ai trong hai đứa quên." }] },
+    { "ai": "R", "t": "That's reasonable. I'd also like you to start leading the hiring for the mobile team. That's a senior responsibility.", "v": "Hợp lý. Anh cũng muốn em bắt đầu phụ trách tuyển dụng cho nhóm mobile. Đó là trách nhiệm của senior." },
+    { "ai": "L", "t": "I'd be glad to. Could we also bring the title change forward to next month, rather than wait for the review?", "v": "Em rất sẵn lòng. Mình có thể đẩy việc đổi chức danh lên tháng sau, thay vì chờ tới đợt đánh giá không?",
+      "np": [{ "mau": "bring + sth + forward", "giai": "\"đẩy sớm lên, dời sớm hơn\" (ngược với put off/postpone). Cụm động từ tách được.", "vd": "Can we bring the meeting forward to ten?", "vdV": "Mình dời buổi họp sớm lên mười giờ được không?" }] },
+    { "ai": "R", "t": "I think I can make that happen. Let me speak to HR and come back to you with a written offer by Friday.", "v": "Anh nghĩ là được. Để anh nói chuyện với nhân sự và gửi lại em một đề nghị bằng văn bản trước thứ Sáu." },
+    { "ai": "L", "t": "That sounds fair. I don't need an answer today, but I'd appreciate having it in writing before I agree to anything.", "v": "Vậy là công bằng. Em không cần câu trả lời hôm nay, nhưng em mong có mọi thứ bằng văn bản trước khi em đồng ý điều gì.",
+      "np": [{ "mau": "I'd appreciate + V-ing / it if…", "giai": "\"tôi sẽ rất cảm kích nếu…\" — cách đặt điều kiện mà vẫn lịch sự. Sau appreciate là V-ing hoặc \"it if + mệnh đề\".", "vd": "I'd appreciate it if you could reply by Monday.", "vdV": "Tôi sẽ rất cảm kích nếu anh trả lời trước thứ Hai." }],
+      "khac": [
+        { "kieu": "chuyên nghiệp", "t": "I'd like to take a day to look over the written offer before confirming.", "v": "Em muốn dành một ngày xem kỹ đề nghị bằng văn bản trước khi xác nhận.", "ghiChu": "không bao giờ nhận lời ngay tại chỗ" }
+      ] },
+    { "ai": "R", "t": "Of course. And Linh, for what it's worth, you made a strong case. Most people come in here and apologise.", "v": "Tất nhiên. Và Linh này, nói thật lòng, em đã trình bày rất thuyết phục. Phần lớn mọi người vào đây là xin lỗi.",
+      "np": [{ "mau": "for what it's worth", "giai": "\"nói thì nói vậy, coi như ý kiến riêng\" — rào đón khiêm tốn trước khi khen hoặc góp ý.", "vd": "For what it's worth, I think you made the right choice.", "vdV": "Ý kiến riêng thôi, tôi nghĩ bạn đã chọn đúng." }] },
+    { "ai": "L", "t": "Someone told me not to.", "v": "Có người dặn em đừng làm vậy." },
+    { "ai": "R", "t": "Good advice. Hold on to whoever gave it to you.", "v": "Lời khuyên hay. Hãy giữ lấy người đã cho em lời khuyên đó." }
+  ],
+  "tuVung": [
+    { "chu": "the budget is tight", "doc": "/ðə ˈbʌdʒɪt ɪz taɪt/", "nghia": "ngân sách eo hẹp", "vd": "The budget is tight, so we can't hire this year." },
+    { "chu": "greedy", "doc": "/ˈɡriːdi/", "nghia": "tham lam", "vd": "Asking for a fair salary isn't greedy." },
+    { "chu": "Lead with", "doc": "/liːd wɪð/", "nghia": "mở đầu bằng, đặt lên trước tiên", "vd": "Lead with the result, then explain the details." },
+    { "chu": "upper end", "doc": "/ˈʌpər end/", "nghia": "mức cao (của một khoảng)", "vd": "Her offer was at the upper end of the range." },
+    { "chu": "justify", "doc": "/ˈdʒʌstɪfaɪ/", "nghia": "lý giải, chứng minh là hợp lý", "vd": "Can you justify the extra cost?" },
+    { "chu": "salary adjustment", "doc": "/ˈsæləri əˈdʒʌstmənt/", "nghia": "điều chỉnh lương", "vd": "Salary adjustments happen every January." },
+    { "chu": "ahead of schedule", "doc": "/əˈhed əv ˈʃedjuːl/", "nghia": "sớm hơn kế hoạch", "vd": "The project finished ahead of schedule." },
+    { "chu": "in line with", "doc": "/ɪn laɪn wɪð/", "nghia": "phù hợp với, ngang với", "vd": "The offer is in line with the market." },
+    { "chu": "in one go", "doc": "/ɪn wʌn ɡəʊ/", "nghia": "trong một lần", "vd": "I can't read the whole report in one go." },
+    { "chu": "standing in the way", "doc": "/ˈstændɪŋ ɪn ðə weɪ/", "nghia": "đang cản trở", "vd": "What's standing in the way of the launch?" },
+    { "chu": "open to", "doc": "/ˈəʊpən tuː/", "nghia": "sẵn lòng cân nhắc", "vd": "I'm open to new ideas." },
+    { "chu": "in writing", "doc": "/ɪn ˈraɪtɪŋ/", "nghia": "bằng văn bản", "vd": "Please confirm the offer in writing." },
+    { "chu": "for what it's worth", "doc": "/fə wɒt ɪts wɜːθ/", "nghia": "(rào đón) ý kiến riêng thôi, nói thật lòng", "vd": "For what it's worth, I liked your talk." },
+    { "chu": "a strong case", "doc": "/ə strɒŋ keɪs/", "nghia": "lập luận thuyết phục", "vd": "She made a strong case for hiring more testers." }
+  ],
+  "yNghia": "Đàm phán lương không phải là xin xỏ: bạn đang đề nghị được trả đúng giá trị của việc mình đã làm. Mở đầu bằng giá trị chứ không bằng lời xin lỗi, đưa con số có căn cứ, dám im lặng — và khi nghe \"chưa được\", hãy biến nó thành một kế hoạch có mục tiêu, có ngày tháng, ghi bằng văn bản.",
+  "meo": [
+    "Đừng mở đầu bằng xin lỗi hay lý lẽ của phía bên kia (\"I know the budget is tight…\"). Mở đầu bằng giá trị: \"Since March, I've been…\".",
+    "Đưa con số có căn cứ: \"Based on market data, I'm looking for…\" — rồi ngừng nói.",
+    "Biến \"không\" thành kế hoạch: \"Would you be open to X now, with a review in six months?\"",
+    "Không nhận lời tại chỗ: \"I'd appreciate having it in writing before I agree to anything.\""
+  ],
+  "cauHoi": [
+    { "hoi": "Pete chê câu mở đầu dự định của Linh ở điểm nào?", "chon": ["Quá ngắn", "Đầy lời xin lỗi và dùng lý lẽ \"ngân sách eo hẹp\" của phía sếp", "Không nêu con số"], "dung": 1, "giai": "\"You've apologised three times before you've even asked. And 'the budget is tight' is their argument, not yours.\"" },
+    { "hoi": "Linh dựa vào đâu để đưa ra mức 38 triệu?", "chon": ["Lương của đồng nghiệp", "Lời khuyên của Pete", "Khảo sát lương thị trường cho vị trí senior"], "dung": 2, "giai": "\"Based on market data for the role…\"" },
+    { "hoi": "Richard nói gì về đề nghị của Linh?", "chon": ["Ủng hộ thăng chức nhưng khó duyệt tăng hết một lần trong năm nay", "Từ chối cả hai", "Đồng ý ngay mức 38 triệu"], "dung": 0, "giai": "\"The promotion, I can support. The full increase in one go would be very hard to get approved this year.\"" },
+    { "hoi": "Phương án cuối cùng hai bên hướng tới là gì?", "chon": ["Giữ nguyên lương, đổi chức danh sau một năm", "33 triệu ngay, đánh giá chính thức sau sáu tháng để lên 38 nếu đạt mục tiêu, chức danh đổi từ tháng sau", "38 triệu ngay nhưng không đổi chức danh"], "dung": 1, "giai": "Linh đề xuất 33 + đánh giá sau 6 tháng, rồi xin đẩy việc đổi chức danh lên tháng sau; Richard đồng ý gửi đề nghị bằng văn bản." }
+  ]
+}

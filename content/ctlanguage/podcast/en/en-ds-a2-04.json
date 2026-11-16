@@ -1,0 +1,405 @@
+{
+  "id": "en-ds-a2-04",
+  "nn": "en",
+  "danhMuc": "doi-song",
+  "cap": "A2",
+  "so": 7,
+  "tieuDe": "I'd Love To, But...",
+  "tieuDeViet": "Mình rất muốn, nhưng…",
+  "moTa": "Chloe rủ Hiếu đi leo núi nhưng anh bận; hai người hẹn cà phê ngày khác. Rồi Hiếu rủ Chloe đi tiệc — cô lưỡng lự, xin nghĩ thêm, rồi nhận lời. Cách mời, nhận lời và từ chối mà không làm mất lòng.",
+  "chuDe": "Bạn bè",
+  "bieuTuong": "party.popper.fill",
+  "nguoi": [
+    {
+      "ma": "C",
+      "ten": "Chloe",
+      "giong": "au-nu",
+      "vai": "đồng nghiệp"
+    },
+    {
+      "ma": "H",
+      "ten": "Hiếu",
+      "giong": "us-nam",
+      "vai": "đồng nghiệp"
+    }
+  ],
+  "loi": [
+    {
+      "ai": "C",
+      "t": "Hey Hieu! Are you doing anything this weekend?",
+      "v": "Này Hiếu! Cuối tuần này bạn có làm gì không?",
+      "khac": [
+        {
+          "kieu": "văn nói",
+          "t": "Got any plans for the weekend?",
+          "v": "Cuối tuần có kế hoạch gì không?",
+          "ghiChu": "bỏ \"Have you\", chỉ dùng khi nói"
+        },
+        {
+          "kieu": "lịch sự",
+          "t": "Are you free this weekend, by any chance?",
+          "v": "Cuối tuần này bạn có rảnh không?"
+        }
+      ],
+      "np": [
+        {
+          "mau": "Are you doing…? (kế hoạch)",
+          "giai": "Hiện tại tiếp diễn dùng cho kế hoạch tương lai đã sắp xếp: Are you doing anything tonight?",
+          "vd": "I'm meeting my sister on Sunday.",
+          "vdV": "Chủ nhật tôi gặp em gái."
+        }
+      ]
+    },
+    {
+      "ai": "H",
+      "t": "Not much. Why?",
+      "v": "Không có gì nhiều. Sao vậy?"
+    },
+    {
+      "ai": "C",
+      "t": "A few of us are going hiking on Saturday. Do you want to come?",
+      "v": "Mấy đứa tụi mình định đi leo núi thứ Bảy. Bạn muốn đi cùng không?",
+      "khac": [
+        {
+          "kieu": "lịch sự",
+          "t": "Would you like to join us?",
+          "v": "Bạn có muốn đi cùng tụi mình không?"
+        },
+        {
+          "kieu": "thân mật",
+          "t": "Wanna come?",
+          "v": "Đi không?",
+          "ghiChu": "wanna = want to, chỉ dùng khi nói với bạn bè"
+        }
+      ],
+      "np": [
+        {
+          "mau": "go + V-ing",
+          "giai": "Hoạt động giải trí: go hiking, go swimming, go shopping, go camping.",
+          "vd": "Let's go swimming tomorrow.",
+          "vdV": "Mai mình đi bơi đi."
+        }
+      ]
+    },
+    {
+      "ai": "H",
+      "t": "Oh, I'd love to, but I'm visiting my aunt on Saturday. It's her birthday.",
+      "v": "Ồ, mình rất muốn, nhưng thứ Bảy mình đi thăm dì. Sinh nhật dì.",
+      "khac": [
+        {
+          "kieu": "mềm mỏng",
+          "t": "That sounds really fun, but I already have plans on Saturday.",
+          "v": "Nghe vui thật đấy, nhưng thứ Bảy mình có hẹn rồi."
+        },
+        {
+          "kieu": "ngắn gọn",
+          "t": "Sorry, I can't make it on Saturday.",
+          "v": "Tiếc quá, thứ Bảy mình không đi được."
+        }
+      ],
+      "np": [
+        {
+          "mau": "I'd love to, but + lý do",
+          "giai": "Từ chối mềm: tỏ ra thích lời mời trước, rồi mới nói lý do. Nghe ấm áp hơn hẳn \"No, I can't\".",
+          "vd": "I'd love to, but I have to work late.",
+          "vdV": "Mình rất muốn, nhưng mình phải làm muộn."
+        }
+      ]
+    },
+    {
+      "ai": "C",
+      "t": "That's a shame. Maybe next time?",
+      "v": "Tiếc quá. Để lần sau nhé?",
+      "khac": [
+        {
+          "kieu": "thân mật",
+          "t": "No worries! Next time, then.",
+          "v": "Không sao! Vậy lần sau nhé."
+        }
+      ]
+    },
+    {
+      "ai": "H",
+      "t": "Definitely. What about Sunday? Are you free?",
+      "v": "Chắc chắn rồi. Còn Chủ nhật thì sao? Bạn rảnh không?",
+      "np": [
+        {
+          "mau": "What about + N / V-ing?",
+          "giai": "Gợi ý hoặc hỏi về một lựa chọn khác: What about Sunday? What about going by bus?",
+          "vd": "What about having lunch together?",
+          "vdV": "Hay mình ăn trưa cùng nhau nhé?"
+        }
+      ]
+    },
+    {
+      "ai": "C",
+      "t": "We're only going on Saturday. But we could get coffee on Sunday.",
+      "v": "Tụi mình chỉ đi thứ Bảy thôi. Nhưng Chủ nhật mình đi cà phê được.",
+      "np": [
+        {
+          "mau": "could + V (gợi ý)",
+          "giai": "\"could\" ở đây là đưa ra một gợi ý nhẹ nhàng, không ép.",
+          "vd": "We could watch a film tonight.",
+          "vdV": "Tối nay mình có thể xem phim."
+        }
+      ]
+    },
+    {
+      "ai": "H",
+      "t": "Sounds good. What time?",
+      "v": "Được đấy. Mấy giờ?",
+      "khac": [
+        {
+          "kieu": "tự nhiên hơn",
+          "t": "Sounds great. When works for you?",
+          "v": "Hay đấy. Mấy giờ thì tiện cho bạn?"
+        }
+      ]
+    },
+    {
+      "ai": "C",
+      "t": "Ten o'clock, at the café near the park?",
+      "v": "Mười giờ, ở quán cà phê gần công viên nhé?"
+    },
+    {
+      "ai": "H",
+      "t": "Perfect. Oh, and Lucas is having a party on Friday. Are you going?",
+      "v": "Tuyệt. À, thứ Sáu Lucas tổ chức tiệc. Bạn có đi không?"
+    },
+    {
+      "ai": "C",
+      "t": "I'm not sure. I don't really know anyone there.",
+      "v": "Mình chưa chắc. Mình không quen ai ở đó lắm."
+    },
+    {
+      "ai": "H",
+      "t": "You know me! Come on, it'll be fun.",
+      "v": "Bạn quen mình mà! Đi đi, sẽ vui lắm.",
+      "np": [
+        {
+          "mau": "it'll = it will",
+          "giai": "will + V để dự đoán: It'll be fun. It'll rain tomorrow.",
+          "vd": "Don't worry, it'll be okay.",
+          "vdV": "Đừng lo, sẽ ổn thôi."
+        }
+      ]
+    },
+    {
+      "ai": "C",
+      "t": "Hmm, let me think about it and get back to you.",
+      "v": "Hừm, để mình suy nghĩ rồi trả lời bạn sau nhé.",
+      "khac": [
+        {
+          "kieu": "lịch sự",
+          "t": "Can I let you know tomorrow?",
+          "v": "Mai mình trả lời bạn được không?"
+        },
+        {
+          "kieu": "tự nhiên hơn",
+          "t": "Let me check my schedule and I'll let you know.",
+          "v": "Để mình xem lịch rồi báo bạn."
+        }
+      ],
+      "np": [
+        {
+          "mau": "get back to + sb",
+          "giai": "Trả lời ai sau (khi chưa quyết định được ngay). Nói vậy thì nhớ trả lời thật nhé.",
+          "vd": "I'll get back to you this afternoon.",
+          "vdV": "Chiều nay tôi sẽ trả lời anh."
+        }
+      ]
+    },
+    {
+      "ai": "H",
+      "t": "Sure, no pressure.",
+      "v": "Được, không ép đâu.",
+      "khac": [
+        {
+          "kieu": "thân mật",
+          "t": "No rush.",
+          "v": "Cứ từ từ."
+        }
+      ]
+    },
+    {
+      "ai": "C",
+      "t": "Actually... why not? Count me in! What should I bring?",
+      "v": "Thật ra thì... sao lại không chứ? Cho mình tham gia với! Mình nên mang gì?",
+      "khac": [
+        {
+          "kieu": "ngắn gọn",
+          "t": "I'm in!",
+          "v": "Mình đi!"
+        },
+        {
+          "kieu": "lịch sự",
+          "t": "I'd love to come. Should I bring anything?",
+          "v": "Mình rất muốn đến. Mình có nên mang gì không?"
+        }
+      ],
+      "np": [
+        {
+          "mau": "Count me in!",
+          "giai": "Thành ngữ: \"Tính cả tôi vào\" = tôi tham gia. Ngược lại: \"Count me out\".",
+          "vd": "A football game on Sunday? Count me in!",
+          "vdV": "Đá bóng Chủ nhật à? Cho mình một suất!"
+        }
+      ]
+    },
+    {
+      "ai": "H",
+      "t": "Just bring yourself. Maybe some snacks, if you like.",
+      "v": "Cứ đến là được. Có thể mang chút đồ ăn vặt nếu bạn muốn."
+    },
+    {
+      "ai": "C",
+      "t": "Okay. What time does it start?",
+      "v": "Được. Mấy giờ bắt đầu?"
+    },
+    {
+      "ai": "H",
+      "t": "Around eight. I can pick you up at seven thirty.",
+      "v": "Khoảng tám giờ. Mình có thể đón bạn lúc bảy rưỡi.",
+      "np": [
+        {
+          "mau": "pick + sb + up",
+          "giai": "Đón ai (bằng xe). Đại từ nằm giữa: pick you up, pick her up.",
+          "vd": "Can you pick me up at the station?",
+          "vdV": "Bạn đón mình ở ga được không?"
+        }
+      ]
+    },
+    {
+      "ai": "C",
+      "t": "That would be great. Thanks, Hieu.",
+      "v": "Thế thì tốt quá. Cảm ơn Hiếu."
+    },
+    {
+      "ai": "H",
+      "t": "No problem. And have fun on the hike!",
+      "v": "Không có gì. Đi leo núi vui nhé!"
+    },
+    {
+      "ai": "C",
+      "t": "Thanks! See you on Friday!",
+      "v": "Cảm ơn! Hẹn gặp thứ Sáu nhé!"
+    }
+  ],
+  "tuVung": [
+    {
+      "chu": "this weekend",
+      "doc": "/ðɪs ˌwiːkˈend/",
+      "nghia": "cuối tuần này",
+      "vd": "What are you doing this weekend?"
+    },
+    {
+      "chu": "hiking",
+      "doc": "/ˈhaɪkɪŋ/",
+      "nghia": "đi bộ đường dài, leo núi",
+      "vd": "We go hiking every month."
+    },
+    {
+      "chu": "I'd love to",
+      "doc": "/aɪd lʌv tuː/",
+      "nghia": "tôi rất muốn",
+      "vd": "I'd love to come!"
+    },
+    {
+      "chu": "That's a shame",
+      "doc": "/ðæts ə ʃeɪm/",
+      "nghia": "tiếc quá",
+      "vd": "You can't come? That's a shame."
+    },
+    {
+      "chu": "Definitely",
+      "doc": "/ˈdefɪnətli/",
+      "nghia": "chắc chắn rồi",
+      "vd": "\"See you tomorrow?\" — \"Definitely!\""
+    },
+    {
+      "chu": "Sounds good",
+      "doc": "/saʊndz ɡʊd/",
+      "nghia": "nghe được đấy, được",
+      "vd": "\"Pizza tonight?\" — \"Sounds good.\""
+    },
+    {
+      "chu": "get back to you",
+      "doc": "/ɡet bæk tə juː/",
+      "nghia": "trả lời bạn sau",
+      "vd": "I'll get back to you tomorrow."
+    },
+    {
+      "chu": "no pressure",
+      "doc": "/nəʊ ˈpreʃə(r)/",
+      "nghia": "không ép đâu",
+      "vd": "Come if you can — no pressure."
+    },
+    {
+      "chu": "Count me in",
+      "doc": "/kaʊnt miː ɪn/",
+      "nghia": "cho tôi tham gia",
+      "vd": "A trip to the beach? Count me in!"
+    },
+    {
+      "chu": "snacks",
+      "doc": "/snæks/",
+      "nghia": "đồ ăn vặt",
+      "vd": "I'll bring some snacks."
+    },
+    {
+      "chu": "pick you up",
+      "doc": "/pɪk juː ʌp/",
+      "nghia": "đón bạn",
+      "vd": "I'll pick you up at six."
+    }
+  ],
+  "yNghia": "Từ chối một lời mời không làm mất bạn — từ chối lạnh lùng mới làm. Cảm ơn lời mời, nói lý do ngắn, rồi đề nghị một dịp khác: người kia sẽ biết bạn vẫn muốn gặp họ.",
+  "meo": [
+    "Mời: \"Do you want to come?\", \"Would you like to join us?\", \"Are you free on…?\".",
+    "Nhận lời: \"Sounds good!\", \"I'd love to!\", \"Count me in!\".",
+    "Từ chối khéo: \"I'd love to, but…\" + lý do + đề nghị khác (\"What about Sunday?\" / \"Maybe next time?\").",
+    "Chưa quyết: \"Let me think about it and get back to you\" — và nhớ trả lời lại."
+  ],
+  "cauHoi": [
+    {
+      "hoi": "Vì sao Hiếu không đi leo núi?",
+      "chon": [
+        "Anh không thích leo núi",
+        "Anh đi thăm dì vào ngày sinh nhật dì",
+        "Anh phải đi làm"
+      ],
+      "dung": 1,
+      "giai": "\"I'm visiting my aunt on Saturday. It's her birthday.\""
+    },
+    {
+      "hoi": "Hiếu và Chloe hẹn nhau cà phê khi nào?",
+      "chon": [
+        "Thứ Bảy, 8 giờ",
+        "Thứ Sáu, 7 rưỡi",
+        "Chủ nhật, 10 giờ"
+      ],
+      "dung": 2,
+      "giai": "\"Ten o'clock, at the café near the park?\" — vào Chủ nhật."
+    },
+    {
+      "hoi": "\"Count me in!\" nghĩa là gì?",
+      "chon": [
+        "Đếm giúp tôi",
+        "Cho tôi tham gia",
+        "Tôi không đi đâu"
+      ],
+      "dung": 1,
+      "giai": "Thành ngữ = tôi tham gia."
+    },
+    {
+      "hoi": "Câu từ chối nào mềm mỏng nhất?",
+      "chon": [
+        "No. I'm busy.",
+        "I'd love to, but I already have plans. Maybe next time?",
+        "I don't want to."
+      ],
+      "dung": 1,
+      "giai": "Khen lời mời + lý do + đề nghị lần sau."
+    }
+  ]
+}

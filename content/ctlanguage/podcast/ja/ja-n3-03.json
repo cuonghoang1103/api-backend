@@ -1,6 +1,7 @@
 {
   "id": "ja-n3-03",
   "nn": "ja",
+  "danhMuc": "doi-song",
   "cap": "N3",
   "so": 3,
   "tieuDe": "ゆうべの地震",
@@ -9,48 +10,360 @@
   "chuDe": "Động đất & phòng tai hoạ",
   "bieuTuong": "exclamationmark.triangle.fill",
   "nguoi": [
-    { "ma": "F", "ten": "フン", "giong": "ja-nam", "vai": "du học sinh sống ở ký túc xá" },
-    { "ma": "T", "ten": "田村さん", "giong": "ja2-nu", "vai": "quản lý ký túc xá" }
+    {
+      "ma": "F",
+      "ten": "フン",
+      "giong": "ja-nam",
+      "vai": "du học sinh sống ở ký túc xá"
+    },
+    {
+      "ma": "T",
+      "ten": "田村さん",
+      "giong": "ja2-nu",
+      "vai": "quản lý ký túc xá"
+    }
   ],
   "loi": [
-    { "ai": "T", "t": "フンさん、ゆうべの地震、大丈夫だった？", "doc": "フンさん、ゆうべのじしん、だいじょうぶだった？", "v": "Hùng ơi, trận động đất tối qua cháu có sao không?" },
-    { "ai": "F", "t": "正直、すごく怖かったです。ベトナムではほとんど地震がないので、何をすればいいか全然わからなくて。", "doc": "しょうじき、すごくこわかったです。ベトナムではほとんどじしんがないので、なにをすればいいかぜんぜんわからなくて。", "v": "Nói thật là cháu sợ lắm ạ. Ở Việt Nam gần như không có động đất nên cháu hoàn toàn không biết phải làm gì." },
-    { "ai": "T", "t": "そうよね。揺れた時、どうしてた？", "doc": "そうよね。ゆれたとき、どうしてた？", "v": "Phải rồi. Lúc rung lắc cháu đã làm gì?" },
-    { "ai": "F", "t": "思わず外に逃げようとして、階段を走って下りちゃいました。", "doc": "おもわずそとににげようとして、かいだんをはしっておりちゃいました。", "v": "Cháu bất giác định chạy ra ngoài, thế là lao xuống cầu thang luôn." },
-    { "ai": "T", "t": "ああ、それは危ないの。揺れている間に外へ出ると、ガラスや看板が落ちてくることがあるから。", "doc": "ああ、それはあぶないの。ゆれているあいだにそとへでると、ガラスやかんばんがおちてくることがあるから。", "v": "Ôi, thế nguy hiểm lắm. Đang rung mà ra ngoài thì kính hay biển hiệu có thể rơi xuống đấy." },
-    { "ai": "F", "t": "じゃあ、どうすればよかったんですか。", "doc": "じゃあ、どうすればよかったんですか。", "v": "Vậy lẽ ra cháu nên làm thế nào ạ?" },
-    { "ai": "T", "t": "まずは机の下に入って、頭を守ること。揺れが止まったら、火を消して、ドアを開けておくの。", "doc": "まずはつくえのしたにはいって、あたまをまもること。ゆれがとまったら、ひをけして、ドアをあけておくの。", "v": "Trước hết là chui xuống gầm bàn, bảo vệ đầu. Hết rung thì tắt bếp, rồi mở sẵn cửa ra." },
-    { "ai": "F", "t": "ドアを開けておく？どうしてですか。", "doc": "ドアをあけておく？どうしてですか。", "v": "Mở sẵn cửa ạ? Sao lại thế ạ?" },
-    { "ai": "T", "t": "建物がゆがむと、ドアが開かなくなることがあるのよ。閉じ込められないようにね。", "doc": "たてものがゆがむと、ドアがあかなくなることがあるのよ。とじこめられないようにね。", "v": "Toà nhà bị méo thì có khi cửa không mở ra được nữa. Mở sẵn để khỏi bị nhốt bên trong." },
-    { "ai": "F", "t": "なるほど……。知らないことばかりです。", "doc": "なるほど……。しらないことばかりです。", "v": "Ra vậy… Toàn những điều cháu không biết." },
-    { "ai": "T", "t": "それから、非常用の袋は用意してある？", "doc": "それから、ひじょうようのふくろはよういしてある？", "v": "Còn nữa, cháu đã chuẩn bị túi đồ khẩn cấp chưa?" },
-    { "ai": "F", "t": "非常用の袋？いいえ、何も。", "doc": "ひじょうようのふくろ？いいえ、なにも。", "v": "Túi khẩn cấp ạ? Chưa, cháu chưa có gì cả." },
-    { "ai": "T", "t": "水と食べ物を三日分、懐中電灯、モバイルバッテリー、それから薬。パスポートのコピーも入れておくといいわね。", "doc": "みずとたべものをみっかぶん、かいちゅうでんとう、モバイルバッテリー、それからくすり。パスポートのコピーもいれておくといいわね。", "v": "Nước và đồ ăn đủ ba ngày, đèn pin, sạc dự phòng, rồi thuốc. Bỏ thêm bản sao hộ chiếu vào nữa thì tốt." },
-    { "ai": "F", "t": "パスポートのコピーまで……。今日のうちに買い物に行ってきます。", "doc": "パスポートのコピーまで……。きょうのうちにかいものにいってきます。", "v": "Cả bản sao hộ chiếu nữa… Ngay trong hôm nay cháu sẽ đi mua đồ." },
-    { "ai": "T", "t": "あと、避難所の場所は知ってる？この寮だと、近くの小学校がそうなっているのよ。", "doc": "あと、ひなんじょのばしょはしってる？このりょうだと、ちかくのしょうがっこうがそうなっているのよ。", "v": "À, cháu biết nơi sơ tán ở đâu chưa? Ký túc xá này thì nơi sơ tán là trường tiểu học gần đây." },
-    { "ai": "F", "t": "小学校ですか。前を毎日通っているのに、知りませんでした。", "doc": "しょうがっこうですか。まえをまいにちとおっているのに、しりませんでした。", "v": "Trường tiểu học ạ? Ngày nào cháu cũng đi ngang qua mà không hề biết." },
-    { "ai": "T", "t": "今度の日曜日に、町内の防災訓練があるの。一緒に参加してみない？", "doc": "こんどのにちようびに、ちょうないのぼうさいくんれんがあるの。いっしょにさんかしてみない？", "v": "Chủ nhật tới khu phố có buổi diễn tập phòng chống thiên tai. Cháu tham gia cùng cô không?" },
-    { "ai": "F", "t": "ぜひ。あの、もう一つ心配なのは、ベトナムの家族なんです。ゆうべ、ニュースを見た母から何回も電話が来て。", "doc": "ぜひ。あの、もうひとつしんぱいなのは、ベトナムのかぞくなんです。ゆうべ、ニュースをみたははからなんかいもでんわがきて。", "v": "Nhất định rồi ạ. À, còn một điều cháu lo là gia đình ở Việt Nam. Tối qua mẹ cháu xem tin tức xong gọi cho cháu mấy lần liền." },
-    { "ai": "T", "t": "それなら、電話がつながらない時にどう連絡するか、家族と決めておくといいわよ。", "doc": "それなら、でんわがつながらないときにどうれんらくするか、かぞくときめておくといいわよ。", "v": "Thế thì cháu nên bàn trước với gia đình xem khi không gọi được thì liên lạc bằng cách nào." },
-    { "ai": "F", "t": "たとえば、「無事」の一言だけメッセージを送る、とかですか。", "doc": "たとえば、「ぶじ」のひとことだけメッセージをおくる、とかですか。", "v": "Ví dụ như chỉ gửi một tin nhắn “bình an” thôi, đúng không ạ?" },
-    { "ai": "T", "t": "そうそう。短いほど、届きやすいの。", "doc": "そうそう。みじかいほど、とどきやすいの。", "v": "Đúng đúng. Càng ngắn càng dễ gửi tới." },
-    { "ai": "F", "t": "地震は止められないけど、準備はできるんですね。", "doc": "じしんはとめられないけど、じゅんびはできるんですね。", "v": "Động đất thì không ngăn được, nhưng chuẩn bị thì mình làm được nhỉ." },
-    { "ai": "T", "t": "そう。怖いと思うのは当たり前。でも、準備しておけば、怖くても体が動くのよ。", "doc": "そう。こわいとおもうのはあたりまえ。でも、じゅんびしておけば、こわくてもからだがうごくのよ。", "v": "Đúng thế. Sợ là chuyện đương nhiên. Nhưng nếu đã chuẩn bị sẵn thì dù sợ, cơ thể vẫn biết phải làm gì." },
-    { "ai": "F", "t": "今夜、母に電話して、二人で決めておきます。", "doc": "こんや、ははにでんわして、ふたりできめておきます。", "v": "Tối nay cháu sẽ gọi cho mẹ, hai mẹ con bàn trước với nhau." }
+    {
+      "ai": "T",
+      "t": "フンさん、ゆうべの地震、大丈夫だった？",
+      "doc": "フンさん、ゆうべのじしん、だいじょうぶだった？",
+      "v": "Hùng ơi, trận động đất tối qua cháu có sao không?"
+    },
+    {
+      "ai": "F",
+      "t": "正直、すごく怖かったです。ベトナムではほとんど地震がないので、何をすればいいか全然わからなくて。",
+      "doc": "しょうじき、すごくこわかったです。ベトナムではほとんどじしんがないので、なにをすればいいかぜんぜんわからなくて。",
+      "v": "Nói thật là cháu sợ lắm ạ. Ở Việt Nam gần như không có động đất nên cháu hoàn toàn không biết phải làm gì."
+    },
+    {
+      "ai": "T",
+      "t": "そうよね。揺れた時、どうしてた？",
+      "doc": "そうよね。ゆれたとき、どうしてた？",
+      "v": "Phải rồi. Lúc rung lắc cháu đã làm gì?",
+      "khac": [
+        {
+          "kieu": "lịch sự",
+          "t": "そうですよね。揺れた時、どうしていましたか。",
+          "doc": "そうですよね。ゆれたとき、どうしていましたか。",
+          "v": "Đúng vậy nhỉ. Lúc rung lắc, anh đã làm gì?",
+          "ghiChu": "Dạng です・ます — hỏi người không thân."
+        }
+      ]
+    },
+    {
+      "ai": "F",
+      "t": "思わず外に逃げようとして、階段を走って下りちゃいました。",
+      "doc": "おもわずそとににげようとして、かいだんをはしっておりちゃいました。",
+      "v": "Cháu bất giác định chạy ra ngoài, thế là lao xuống cầu thang luôn.",
+      "np": [
+        {
+          "mau": "V（よ）うとする",
+          "giai": "Định làm, sắp làm (có thể chưa thành): 逃げようとして = định chạy ra.",
+          "vd": "家を出ようとした時、電話が鳴った。",
+          "vdDoc": "いえをでようとしたとき、でんわがなった。",
+          "vdV": "Lúc tôi định ra khỏi nhà thì điện thoại reo."
+        },
+        {
+          "mau": "V ちゃう (= てしまう)",
+          "giai": "Văn nói của 〜てしまう: lỡ làm. 下りちゃいました = lỡ chạy xuống mất.",
+          "vd": "ケーキを全部食べちゃった。",
+          "vdDoc": "ケーキをぜんぶたべちゃった。",
+          "vdV": "Lỡ ăn hết cái bánh rồi."
+        }
+      ]
+    },
+    {
+      "ai": "T",
+      "t": "ああ、それは危ないの。揺れている間に外へ出ると、ガラスや看板が落ちてくることがあるから。",
+      "doc": "ああ、それはあぶないの。ゆれているあいだにそとへでると、ガラスやかんばんがおちてくることがあるから。",
+      "v": "Ôi, thế nguy hiểm lắm. Đang rung mà ra ngoài thì kính hay biển hiệu có thể rơi xuống đấy.",
+      "np": [
+        {
+          "mau": "V ている間に",
+          "giai": "Trong lúc …: 揺れている間に = trong lúc đang rung. 間に + việc xảy ra trong khoảng đó.",
+          "vd": "寝ている間に、雪が降った。",
+          "vdDoc": "ねているあいだに、ゆきがふった。",
+          "vdV": "Trong lúc ngủ thì tuyết đã rơi."
+        }
+      ]
+    },
+    {
+      "ai": "F",
+      "t": "じゃあ、どうすればよかったんですか。",
+      "doc": "じゃあ、どうすればよかったんですか。",
+      "v": "Vậy lẽ ra cháu nên làm thế nào ạ?",
+      "khac": [
+        {
+          "kieu": "lịch sự",
+          "t": "では、どうするのが正しかったのでしょうか。",
+          "doc": "では、どうするのがただしかったのでしょうか。",
+          "v": "Vậy làm thế nào mới là đúng ạ?"
+        }
+      ],
+      "np": [
+        {
+          "mau": "V ばよかった (hỏi lại việc đã qua)",
+          "giai": "“Lẽ ra nên làm thế nào?”: どうすればよかったんですか. V ばよかった = giá mà đã ….",
+          "vd": "何と言えばよかったんでしょう。",
+          "vdDoc": "なんといえばよかったんでしょう。",
+          "vdV": "Lẽ ra tôi nên nói thế nào nhỉ."
+        }
+      ]
+    },
+    {
+      "ai": "T",
+      "t": "まずは机の下に入って、頭を守ること。揺れが止まったら、火を消して、ドアを開けておくの。",
+      "doc": "まずはつくえのしたにはいって、あたまをまもること。ゆれがとまったら、ひをけして、ドアをあけておくの。",
+      "v": "Trước hết là chui xuống gầm bàn, bảo vệ đầu. Hết rung thì tắt bếp, rồi mở sẵn cửa ra."
+    },
+    {
+      "ai": "F",
+      "t": "ドアを開けておく？どうしてですか。",
+      "doc": "ドアをあけておく？どうしてですか。",
+      "v": "Mở sẵn cửa ạ? Sao lại thế ạ?"
+    },
+    {
+      "ai": "T",
+      "t": "建物がゆがむと、ドアが開かなくなることがあるのよ。閉じ込められないようにね。",
+      "doc": "たてものがゆがむと、ドアがあかなくなることがあるのよ。とじこめられないようにね。",
+      "v": "Toà nhà bị méo thì có khi cửa không mở ra được nữa. Mở sẵn để khỏi bị nhốt bên trong.",
+      "np": [
+        {
+          "mau": "V ないように",
+          "giai": "Để không …: 閉じ込められないように = để khỏi bị nhốt. Chỉ mục đích tránh điều xấu.",
+          "vd": "忘れないように、メモします。",
+          "vdDoc": "わすれないように、メモします。",
+          "vdV": "Tôi ghi lại để khỏi quên."
+        }
+      ]
+    },
+    {
+      "ai": "F",
+      "t": "なるほど……。知らないことばかりです。",
+      "doc": "なるほど……。しらないことばかりです。",
+      "v": "Ra vậy… Toàn những điều cháu không biết."
+    },
+    {
+      "ai": "T",
+      "t": "それから、非常用の袋は用意してある？",
+      "doc": "それから、ひじょうようのふくろはよういしてある？",
+      "v": "Còn nữa, cháu đã chuẩn bị túi đồ khẩn cấp chưa?",
+      "np": [
+        {
+          "mau": "V てある (đã làm sẵn)",
+          "giai": "Tha động từ + てある: việc đã được làm sẵn và kết quả vẫn còn đó. 用意してある = đã chuẩn bị sẵn.",
+          "vd": "テーブルに花が飾ってあります。",
+          "vdDoc": "テーブルにはながかざってあります。",
+          "vdV": "Trên bàn có cắm hoa sẵn."
+        }
+      ]
+    },
+    {
+      "ai": "F",
+      "t": "非常用の袋？いいえ、何も。",
+      "doc": "ひじょうようのふくろ？いいえ、なにも。",
+      "v": "Túi khẩn cấp ạ? Chưa, cháu chưa có gì cả."
+    },
+    {
+      "ai": "T",
+      "t": "水と食べ物を三日分、懐中電灯、モバイルバッテリー、それから薬。パスポートのコピーも入れておくといいわね。",
+      "doc": "みずとたべものをみっかぶん、かいちゅうでんとう、モバイルバッテリー、それからくすり。パスポートのコピーもいれておくといいわね。",
+      "v": "Nước và đồ ăn đủ ba ngày, đèn pin, sạc dự phòng, rồi thuốc. Bỏ thêm bản sao hộ chiếu vào nữa thì tốt.",
+      "np": [
+        {
+          "mau": "V るといい",
+          "giai": "Lời khuyên nhẹ: làm … thì tốt. 入れておくといい = nên bỏ sẵn vào.",
+          "vd": "わからない時は、辞書を使うといいですよ。",
+          "vdDoc": "わからないときは、じしょをつかうといいですよ。",
+          "vdV": "Khi không hiểu thì dùng từ điển là được đấy."
+        }
+      ]
+    },
+    {
+      "ai": "F",
+      "t": "パスポートのコピーまで……。今日のうちに買い物に行ってきます。",
+      "doc": "パスポートのコピーまで……。きょうのうちにかいものにいってきます。",
+      "v": "Cả bản sao hộ chiếu nữa… Ngay trong hôm nay cháu sẽ đi mua đồ.",
+      "khac": [
+        {
+          "kieu": "ngắn gọn",
+          "t": "パスポートのコピーまで……。今日中に買ってきます。",
+          "doc": "パスポートのコピーまで……。きょうじゅうにかってきます。",
+          "v": "Cả bản sao hộ chiếu nữa… Trong hôm nay cháu sẽ đi mua.",
+          "ghiChu": "今日中に (きょうじゅうに) = trong ngày hôm nay."
+        }
+      ],
+      "np": [
+        {
+          "mau": "〜うちに",
+          "giai": "Trong lúc (trạng thái) còn …, làm ngay kẻo lỡ: 今日のうちに = ngay trong hôm nay; 若いうちに = khi còn trẻ.",
+          "vd": "温かいうちに食べてください。",
+          "vdDoc": "あたたかいうちにたべてください。",
+          "vdV": "Ăn đi khi còn nóng."
+        }
+      ]
+    },
+    {
+      "ai": "T",
+      "t": "あと、避難所の場所は知ってる？この寮だと、近くの小学校がそうなっているのよ。",
+      "doc": "あと、ひなんじょのばしょはしってる？このりょうだと、ちかくのしょうがっこうがそうなっているのよ。",
+      "v": "À, cháu biết nơi sơ tán ở đâu chưa? Ký túc xá này thì nơi sơ tán là trường tiểu học gần đây."
+    },
+    {
+      "ai": "F",
+      "t": "小学校ですか。前を毎日通っているのに、知りませんでした。",
+      "doc": "しょうがっこうですか。まえをまいにちとおっているのに、しりませんでした。",
+      "v": "Trường tiểu học ạ? Ngày nào cháu cũng đi ngang qua mà không hề biết."
+    },
+    {
+      "ai": "T",
+      "t": "今度の日曜日に、町内の防災訓練があるの。一緒に参加してみない？",
+      "doc": "こんどのにちようびに、ちょうないのぼうさいくんれんがあるの。いっしょにさんかしてみない？",
+      "v": "Chủ nhật tới khu phố có buổi diễn tập phòng chống thiên tai. Cháu tham gia cùng cô không?",
+      "khac": [
+        {
+          "kieu": "lịch sự",
+          "t": "今度の日曜日に、町内の防災訓練があります。一緒に参加してみませんか。",
+          "doc": "こんどのにちようびに、ちょうないのぼうさいくんれんがあります。いっしょにさんかしてみませんか。",
+          "v": "Chủ nhật tới khu phố có buổi diễn tập phòng chống thiên tai. Anh tham gia cùng không?"
+        }
+      ]
+    },
+    {
+      "ai": "F",
+      "t": "ぜひ。あの、もう一つ心配なのは、ベトナムの家族なんです。ゆうべ、ニュースを見た母から何回も電話が来て。",
+      "doc": "ぜひ。あの、もうひとつしんぱいなのは、ベトナムのかぞくなんです。ゆうべ、ニュースをみたははからなんかいもでんわがきて。",
+      "v": "Nhất định rồi ạ. À, còn một điều cháu lo là gia đình ở Việt Nam. Tối qua mẹ cháu xem tin tức xong gọi cho cháu mấy lần liền."
+    },
+    {
+      "ai": "T",
+      "t": "それなら、電話がつながらない時にどう連絡するか、家族と決めておくといいわよ。",
+      "doc": "それなら、でんわがつながらないときにどうれんらくするか、かぞくときめておくといいわよ。",
+      "v": "Thế thì cháu nên bàn trước với gia đình xem khi không gọi được thì liên lạc bằng cách nào."
+    },
+    {
+      "ai": "F",
+      "t": "たとえば、「無事」の一言だけメッセージを送る、とかですか。",
+      "doc": "たとえば、「ぶじ」のひとことだけメッセージをおくる、とかですか。",
+      "v": "Ví dụ như chỉ gửi một tin nhắn “bình an” thôi, đúng không ạ?"
+    },
+    {
+      "ai": "T",
+      "t": "そうそう。短いほど、届きやすいの。",
+      "doc": "そうそう。みじかいほど、とどきやすいの。",
+      "v": "Đúng đúng. Càng ngắn càng dễ gửi tới.",
+      "np": [
+        {
+          "mau": "〜ほど (càng … càng)",
+          "giai": "Dạng gọn của 〜ば〜ほど: 短いほど届きやすい = càng ngắn càng dễ gửi tới.",
+          "vd": "練習するほど、上手になります。",
+          "vdDoc": "れんしゅうするほど、じょうずになります。",
+          "vdV": "Càng luyện tập càng giỏi."
+        }
+      ]
+    },
+    {
+      "ai": "F",
+      "t": "地震は止められないけど、準備はできるんですね。",
+      "doc": "じしんはとめられないけど、じゅんびはできるんですね。",
+      "v": "Động đất thì không ngăn được, nhưng chuẩn bị thì mình làm được nhỉ."
+    },
+    {
+      "ai": "T",
+      "t": "そう。怖いと思うのは当たり前。でも、準備しておけば、怖くても体が動くのよ。",
+      "doc": "そう。こわいとおもうのはあたりまえ。でも、じゅんびしておけば、こわくてもからだがうごくのよ。",
+      "v": "Đúng thế. Sợ là chuyện đương nhiên. Nhưng nếu đã chuẩn bị sẵn thì dù sợ, cơ thể vẫn biết phải làm gì."
+    },
+    {
+      "ai": "F",
+      "t": "今夜、母に電話して、二人で決めておきます。",
+      "doc": "こんや、ははにでんわして、ふたりできめておきます。",
+      "v": "Tối nay cháu sẽ gọi cho mẹ, hai mẹ con bàn trước với nhau.",
+      "khac": [
+        {
+          "kieu": "thân mật",
+          "t": "今夜、お母さんに電話して、一緒に決めとく。",
+          "doc": "こんや、おかあさんにでんわして、いっしょにきめとく。",
+          "v": "Tối nay tớ gọi cho mẹ rồi bàn trước với mẹ.",
+          "ghiChu": "Nói với bạn bè; 〜とく = 〜ておく (văn nói)."
+        }
+      ]
+    }
   ],
   "tuVung": [
-    { "chu": "揺れた", "doc": "ゆれた", "nghia": "đã rung lắc (揺れる)", "vd": "地震で家が揺れた。" },
-    { "chu": "思わず", "doc": "おもわず", "nghia": "bất giác, buột (làm mà không kịp nghĩ)", "vd": "思わず笑ってしまった。" },
-    { "chu": "頭を守る", "doc": "あたまをまもる", "nghia": "bảo vệ đầu (守る: bảo vệ, giữ)", "vd": "かばんで頭を守る。" },
-    { "chu": "開けておく", "doc": "あけておく", "nghia": "mở sẵn (〜ておく: làm sẵn để chuẩn bị)", "vd": "窓を開けておいてください。" },
-    { "chu": "閉じ込められない", "doc": "とじこめられない", "nghia": "không bị nhốt (bị động của 閉じ込める)", "vd": "エレベーターに閉じ込められた。" },
-    { "chu": "非常用", "doc": "ひじょうよう", "nghia": "dùng khi khẩn cấp (phi thường dụng)", "vd": "非常用の水を買った。" },
-    { "chu": "懐中電灯", "doc": "かいちゅうでんとう", "nghia": "đèn pin (hoài trung điện đăng)", "vd": "停電の時は懐中電灯を使う。" },
-    { "chu": "今日のうちに", "doc": "きょうのうちに", "nghia": "ngay trong hôm nay (〜うちに: trong lúc còn …)", "vd": "今日のうちに宿題を終わらせたい。" },
-    { "chu": "避難所", "doc": "ひなんじょ", "nghia": "nơi sơ tán, nơi lánh nạn (tị nạn sở)", "vd": "避難所は小学校です。" },
-    { "chu": "防災訓練", "doc": "ぼうさいくんれん", "nghia": "diễn tập phòng chống thiên tai (phòng tai huấn luyện)", "vd": "学校で防災訓練がある。" },
-    { "chu": "無事", "doc": "ぶじ", "nghia": "bình an, vô sự", "vd": "家族はみんな無事です。" },
-    { "chu": "当たり前", "doc": "あたりまえ", "nghia": "đương nhiên, lẽ thường", "vd": "約束を守るのは当たり前だ。" }
+    {
+      "chu": "揺れた",
+      "doc": "ゆれた",
+      "nghia": "đã rung lắc (揺れる)",
+      "vd": "地震で家が揺れた。"
+    },
+    {
+      "chu": "思わず",
+      "doc": "おもわず",
+      "nghia": "bất giác, buột (làm mà không kịp nghĩ)",
+      "vd": "思わず笑ってしまった。"
+    },
+    {
+      "chu": "頭を守る",
+      "doc": "あたまをまもる",
+      "nghia": "bảo vệ đầu (守る: bảo vệ, giữ)",
+      "vd": "かばんで頭を守る。"
+    },
+    {
+      "chu": "開けておく",
+      "doc": "あけておく",
+      "nghia": "mở sẵn (〜ておく: làm sẵn để chuẩn bị)",
+      "vd": "窓を開けておいてください。"
+    },
+    {
+      "chu": "閉じ込められない",
+      "doc": "とじこめられない",
+      "nghia": "không bị nhốt (bị động của 閉じ込める)",
+      "vd": "エレベーターに閉じ込められた。"
+    },
+    {
+      "chu": "非常用",
+      "doc": "ひじょうよう",
+      "nghia": "dùng khi khẩn cấp (phi thường dụng)",
+      "vd": "非常用の水を買った。"
+    },
+    {
+      "chu": "懐中電灯",
+      "doc": "かいちゅうでんとう",
+      "nghia": "đèn pin (hoài trung điện đăng)",
+      "vd": "停電の時は懐中電灯を使う。"
+    },
+    {
+      "chu": "今日のうちに",
+      "doc": "きょうのうちに",
+      "nghia": "ngay trong hôm nay (〜うちに: trong lúc còn …)",
+      "vd": "今日のうちに宿題を終わらせたい。"
+    },
+    {
+      "chu": "避難所",
+      "doc": "ひなんじょ",
+      "nghia": "nơi sơ tán, nơi lánh nạn (tị nạn sở)",
+      "vd": "避難所は小学校です。"
+    },
+    {
+      "chu": "防災訓練",
+      "doc": "ぼうさいくんれん",
+      "nghia": "diễn tập phòng chống thiên tai (phòng tai huấn luyện)",
+      "vd": "学校で防災訓練がある。"
+    },
+    {
+      "chu": "無事",
+      "doc": "ぶじ",
+      "nghia": "bình an, vô sự",
+      "vd": "家族はみんな無事です。"
+    },
+    {
+      "chu": "当たり前",
+      "doc": "あたりまえ",
+      "nghia": "đương nhiên, lẽ thường",
+      "vd": "約束を守るのは当たり前だ。"
+    }
   ],
   "yNghia": "Không ai ngăn được động đất, và sợ hãi là phản xạ tự nhiên. Nhưng chuẩn bị biến nỗi sợ thành hành động: biết chui vào đâu, mang theo gì, chạy về đâu, báo tin cho ai. Ở xứ người, sự an toàn của bạn còn là sự yên lòng của cả gia đình đang chờ một tin nhắn “bình an”.",
   "meo": [
@@ -61,9 +374,47 @@
     "Khi động đất: chui gầm bàn bảo vệ đầu → hết rung mới tắt lửa, mở cửa → không chạy ra ngoài lúc đang rung. Hãy tra trước 避難所 gần nhà mình."
   ],
   "cauHoi": [
-    { "hoi": "Vì sao chạy ra ngoài lúc đang rung lại nguy hiểm?", "chon": ["Vì cửa sẽ bị khoá", "Vì kính, biển hiệu có thể rơi xuống", "Vì ngoài trời lạnh", "Vì cầu thang bị sập"], "dung": 1, "giai": "「ガラスや看板が落ちてくることがあるから」." },
-    { "hoi": "Vì sao nên mở cửa sẵn sau khi hết rung?", "chon": ["Để toà nhà méo thì cửa vẫn mở được, không bị nhốt", "Để thông gió", "Để hàng xóm vào giúp"], "dung": 0, "giai": "「建物がゆがむと、ドアが開かなくなることがある」「閉じ込められないように」." },
-    { "hoi": "Thứ nào KHÔNG được cô Tamura nhắc trong túi khẩn cấp?", "chon": ["Nước và đồ ăn ba ngày", "Đèn pin", "Bản sao hộ chiếu", "Tiền mặt"], "dung": 3, "giai": "Cô nhắc nước, đồ ăn, đèn pin, sạc dự phòng, thuốc, bản sao hộ chiếu — không nhắc tiền mặt." },
-    { "hoi": "Nơi sơ tán của ký túc xá là đâu?", "chon": ["Nhà ga", "Toà thị chính", "Trường tiểu học gần đó"], "dung": 2, "giai": "「近くの小学校がそうなっている」." }
+    {
+      "hoi": "Vì sao chạy ra ngoài lúc đang rung lại nguy hiểm?",
+      "chon": [
+        "Vì cửa sẽ bị khoá",
+        "Vì kính, biển hiệu có thể rơi xuống",
+        "Vì ngoài trời lạnh",
+        "Vì cầu thang bị sập"
+      ],
+      "dung": 1,
+      "giai": "「ガラスや看板が落ちてくることがあるから」."
+    },
+    {
+      "hoi": "Vì sao nên mở cửa sẵn sau khi hết rung?",
+      "chon": [
+        "Để toà nhà méo thì cửa vẫn mở được, không bị nhốt",
+        "Để thông gió",
+        "Để hàng xóm vào giúp"
+      ],
+      "dung": 0,
+      "giai": "「建物がゆがむと、ドアが開かなくなることがある」「閉じ込められないように」."
+    },
+    {
+      "hoi": "Thứ nào KHÔNG được cô Tamura nhắc trong túi khẩn cấp?",
+      "chon": [
+        "Nước và đồ ăn ba ngày",
+        "Đèn pin",
+        "Bản sao hộ chiếu",
+        "Tiền mặt"
+      ],
+      "dung": 3,
+      "giai": "Cô nhắc nước, đồ ăn, đèn pin, sạc dự phòng, thuốc, bản sao hộ chiếu — không nhắc tiền mặt."
+    },
+    {
+      "hoi": "Nơi sơ tán của ký túc xá là đâu?",
+      "chon": [
+        "Nhà ga",
+        "Toà thị chính",
+        "Trường tiểu học gần đó"
+      ],
+      "dung": 2,
+      "giai": "「近くの小学校がそうなっている」."
+    }
   ]
 }

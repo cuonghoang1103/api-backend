@@ -1,0 +1,536 @@
+{
+  "id": "ja-se-n2-02",
+  "nn": "ja",
+  "danhMuc": "phan-mem",
+  "cap": "N2",
+  "so": 2,
+  "tieuDe": "謝罪は一回、再発防止はずっと",
+  "tieuDeViet": "Xin lỗi một lần, phòng tái phát mãi mãi",
+  "moTa": "Sau sự cố hệ thống giao hàng đêm qua, BrSE Đan và quản lý Saitō đến gặp trưởng phòng Fujita phía khách hàng. Đan trình bày báo cáo sự cố theo đúng khung: diễn biến, phạm vi ảnh hưởng, nguyên nhân trực tiếp và gốc rễ, xử lý tạm thời, biện pháp lâu dài, phòng tái phát. Học kính ngữ xin lỗi và cách trả lời câu hỏi gắt của khách.",
+  "chuDe": "Báo cáo sự cố",
+  "bieuTuong": "exclamationmark.triangle.fill",
+  "nguoi": [
+    {
+      "ma": "S",
+      "ten": "斎藤",
+      "giong": "ja-nu",
+      "vai": "quản lý dự án"
+    },
+    {
+      "ma": "F",
+      "ten": "藤田部長",
+      "giong": "ja-nam",
+      "vai": "trưởng phòng phía khách hàng"
+    },
+    {
+      "ma": "D",
+      "ten": "ダン",
+      "giong": "ja2-nam",
+      "vai": "BrSE người Việt"
+    }
+  ],
+  "loi": [
+    {
+      "ai": "S",
+      "t": "藤田部長、本日はお時間をいただき、ありがとうございます。",
+      "doc": "ふじたぶちょう、ほんじつはおじかんをいただき、ありがとうございます。",
+      "v": "Trưởng phòng Fujita, cảm ơn anh đã dành thời gian cho chúng tôi hôm nay."
+    },
+    {
+      "ai": "S",
+      "t": "まず、昨夜のシステム障害により、多大なご迷惑をおかけしましたこと、心よりお詫び申し上げます。",
+      "doc": "まず、さくやのシステムしょうがいにより、ただいなごめいわくをおかけしましたこと、こころよりおわびもうしあげます。",
+      "v": "Trước hết, chúng tôi thành thật xin lỗi vì sự cố hệ thống tối qua đã gây phiền hà rất lớn cho quý công ty.",
+      "khac": [
+        {
+          "kieu": "lịch sự",
+          "t": "昨日の障害では、大変ご迷惑をおかけして申し訳ありませんでした。",
+          "doc": "きのうのしょうがいでは、たいへんごめいわくをおかけしてもうしわけありませんでした。",
+          "v": "Về sự cố hôm qua, chúng tôi rất xin lỗi vì đã gây phiền hà.",
+          "ghiChu": "mức lịch sự thường, khi lỗi nhỏ hơn"
+        },
+        {
+          "kieu": "văn viết",
+          "t": "このたびは、弊社システムの障害により多大なるご迷惑をおかけし、深くお詫び申し上げます。",
+          "doc": "このたびは、へいしゃシステムのしょうがいによりただいなるごめいわくをおかけし、ふかくおわびもうしあげます。",
+          "v": "Lần này, sự cố hệ thống của công ty chúng tôi đã gây phiền hà rất lớn, chúng tôi xin thành thật xin lỗi.",
+          "ghiChu": "câu mở đầu văn bản/email xin lỗi chính thức"
+        }
+      ],
+      "np": [
+        {
+          "mau": "〜により",
+          "giai": "Do, bởi (nguyên nhân/phương tiện) — dạng trang trọng của 〜で / 〜によって.",
+          "vd": "台風により、電車が止まりました。",
+          "vdDoc": "たいふうにより、でんしゃがとまりました。",
+          "vdV": "Do bão, tàu điện đã ngừng chạy."
+        },
+        {
+          "mau": "お詫び申し上げます",
+          "giai": "Cách xin lỗi trang trọng nhất trong công việc (khiêm nhường ngữ). 〜こと、お詫び申し上げます = xin lỗi vì việc ….",
+          "vd": "返信が遅くなりましたこと、お詫び申し上げます。",
+          "vdDoc": "へんしんがおそくなりましたこと、おわびもうしあげます。",
+          "vdV": "Xin lỗi vì đã trả lời muộn."
+        }
+      ]
+    },
+    {
+      "ai": "F",
+      "t": "……経緯を聞かせてください。",
+      "doc": "……けいいをきかせてください。",
+      "v": "…Anh hãy cho tôi nghe đầu đuôi sự việc.",
+      "khac": [
+        {
+          "kieu": "lịch sự",
+          "t": "経緯をご説明いただけますか。",
+          "doc": "けいいをごせつめいいただけますか。",
+          "v": "Anh có thể giải thích đầu đuôi sự việc được không?"
+        },
+        {
+          "kieu": "văn nói",
+          "t": "で、何があったの？",
+          "doc": "で、なにがあったの？",
+          "v": "Thế rốt cuộc đã xảy ra chuyện gì?",
+          "ghiChu": "trong nội bộ, giữa người thân quen"
+        }
+      ]
+    },
+    {
+      "ai": "D",
+      "t": "はい。障害報告書に沿ってご説明いたします。",
+      "doc": "はい。しょうがいほうこくしょにそってごせつめいいたします。",
+      "v": "Vâng. Tôi xin giải thích theo bản báo cáo sự cố.",
+      "np": [
+        {
+          "mau": "〜に沿って",
+          "giai": "Theo đúng (kế hoạch, tài liệu, hướng dẫn) N.",
+          "vd": "マニュアルに沿って作業してください。",
+          "vdDoc": "マニュアルにそってさぎょうしてください。",
+          "vdV": "Hãy làm theo đúng hướng dẫn."
+        }
+      ]
+    },
+    {
+      "ai": "D",
+      "t": "発生は昨夜の二十一時十分ごろで、配送状況の画面が表示されなくなりました。復旧したのは二十二時四十分ですので、約一時間半にわたって、ご利用いただけない状態が続きました。",
+      "doc": "はっせいはさくやのにじゅういちじじゅっぷんごろで、はいそうじょうきょうのがめんがひょうじされなくなりました。ふっきゅうしたのはにじゅうにじよんじゅっぷんですので、やくいちじかんはんにわたって、ごりよういただけないじょうたいがつづきました。",
+      "v": "Sự cố xảy ra khoảng 21 giờ 10 tối qua: màn hình tình trạng giao hàng không hiển thị được. Hệ thống khôi phục lúc 22 giờ 40, nên trong khoảng một tiếng rưỡi, quý công ty không thể sử dụng.",
+      "np": [
+        {
+          "mau": "〜にわたって",
+          "giai": "Suốt, trải dài (một khoảng thời gian/phạm vi lớn).",
+          "vd": "三日間にわたって、会議が行われた。",
+          "vdDoc": "みっかかんにわたって、かいぎがおこなわれた。",
+          "vdV": "Hội nghị diễn ra suốt ba ngày."
+        }
+      ]
+    },
+    {
+      "ai": "D",
+      "t": "影響を受けたのは、その時間帯に配送状況を確認しようとした約千二百件のアクセスです。データの消失はございません。",
+      "doc": "えいきょうをうけたのは、そのじかんたいにはいそうじょうきょうをかくにんしようとしたやくせんにひゃっけんのアクセスです。データのしょうしつはございません。",
+      "v": "Bị ảnh hưởng là khoảng 1.200 lượt truy cập cố xem tình trạng giao hàng trong khung giờ đó. Không có dữ liệu nào bị mất."
+    },
+    {
+      "ai": "F",
+      "t": "原因は何だったんですか。",
+      "doc": "げんいんはなんだったんですか。",
+      "v": "Nguyên nhân là gì?"
+    },
+    {
+      "ai": "D",
+      "t": "直接の原因は、夜間のデータ集計処理が想定以上に時間がかかり、データベースの接続をすべて使い切ってしまったことです。",
+      "doc": "ちょくせつのげんいんは、やかんのデータしゅうけいしょりがそうていいじょうにじかんがかかり、データベースのせつぞくをすべてつかいきってしまったことです。",
+      "v": "Nguyên nhân trực tiếp là xử lý tổng hợp dữ liệu ban đêm chạy lâu hơn dự tính, dùng hết toàn bộ kết nối tới cơ sở dữ liệu.",
+      "np": [
+        {
+          "mau": "V-ます + 切る",
+          "giai": "Làm V đến hết, hoàn toàn (dùng hết, đọc hết…).",
+          "vd": "一晩で本を読み切った。",
+          "vdDoc": "ひとばんでほんをよみきった。",
+          "vdV": "Tôi đọc hết cuốn sách trong một đêm."
+        }
+      ]
+    },
+    {
+      "ai": "F",
+      "t": "その集計処理は、前からあるものでしょう。なぜ昨日だけ？",
+      "doc": "そのしゅうけいしょりは、まえからあるものでしょう。なぜきのうだけ？",
+      "v": "Xử lý tổng hợp đó có từ trước rồi mà. Sao chỉ hôm qua mới bị?"
+    },
+    {
+      "ai": "D",
+      "t": "おっしゃるとおりです。社内で「なぜ」を五回繰り返して分析いたしました。",
+      "doc": "おっしゃるとおりです。しゃないで「なぜ」をごかいくりかえしてぶんせきいたしました。",
+      "v": "Đúng như anh nói. Trong nội bộ, chúng tôi đã phân tích bằng cách hỏi “tại sao” năm lần liên tiếp."
+    },
+    {
+      "ai": "D",
+      "t": "先月の機能追加に伴い、集計対象のデータが約三倍に増えていたにもかかわらず、処理時間の見直しを行っていなかったことが、根本的な原因です。",
+      "doc": "せんげつのきのうついかにともない、しゅうけいたいしょうのデータがやくさんばいにふえていたにもかかわらず、しょりじかんのみなおしをおこなっていなかったことが、こんぽんてきなげんいんです。",
+      "v": "Nguyên nhân gốc là: dù dữ liệu cần tổng hợp đã tăng khoảng gấp ba sau đợt thêm chức năng tháng trước, chúng tôi đã không xem xét lại thời gian xử lý.",
+      "np": [
+        {
+          "mau": "〜にもかかわらず",
+          "giai": "Mặc dù … vậy mà (kết quả trái với điều đáng lẽ). Trang trọng hơn 〜のに.",
+          "vd": "雨にもかかわらず、多くの人が集まった。",
+          "vdDoc": "あめにもかかわらず、おおくのひとがあつまった。",
+          "vdV": "Mặc dù mưa, rất nhiều người vẫn tập trung."
+        }
+      ]
+    },
+    {
+      "ai": "D",
+      "t": "つまり、問題は一つの処理ではなく、変更の影響を確認する仕組みが弊社になかったことだと考えております。",
+      "doc": "つまり、もんだいはひとつのしょりではなく、へんこうのえいきょうをかくにんするしくみがへいしゃになかったことだとかんがえております。",
+      "v": "Tức là, chúng tôi cho rằng vấn đề không nằm ở một xử lý, mà ở chỗ công ty chúng tôi không có cơ chế kiểm tra ảnh hưởng của các thay đổi."
+    },
+    {
+      "ai": "F",
+      "t": "仕組みの問題、ですか。",
+      "doc": "しくみのもんだい、ですか。",
+      "v": "Vấn đề của cơ chế à?"
+    },
+    {
+      "ai": "S",
+      "t": "はい。担当者個人の注意不足として片付けてしまえば、同じことがまた起こりかねません。",
+      "doc": "はい。たんとうしゃこじんのちゅういぶそくとしてかたづけてしまえば、おなじことがまたおこりかねません。",
+      "v": "Vâng. Nếu chỉ khép lại bằng kết luận “người phụ trách thiếu cẩn thận” thì chuyện tương tự có thể lại xảy ra.",
+      "np": [
+        {
+          "mau": "V-ます + かねない",
+          "giai": "Có thể dẫn tới (điều xấu) — người nói lo ngại. Chỉ dùng cho kết quả tiêu cực.",
+          "vd": "このままでは事故が起きかねない。",
+          "vdDoc": "このままではじこがおきかねない。",
+          "vdV": "Cứ thế này thì có thể xảy ra tai nạn."
+        }
+      ]
+    },
+    {
+      "ai": "D",
+      "t": "対応についてご説明いたします。暫定対応として、昨夜のうちに集計処理の開始時刻を深夜二時に変更し、接続数の上限も見直しました。",
+      "doc": "たいおうについてごせつめいいたします。ざんていたいおうとして、さくやのうちにしゅうけいしょりのかいしじこくをしんやにじにへんこうし、せつぞくすうのじょうげんもみなおしました。",
+      "v": "Tôi xin giải thích các biện pháp xử lý. Xử lý tạm thời: ngay trong đêm qua, chúng tôi đã dời giờ bắt đầu tổng hợp sang 2 giờ sáng và xem lại giới hạn số kết nối."
+    },
+    {
+      "ai": "D",
+      "t": "恒久対策としては、集計処理を、画面表示とは別のデータベースで動かす構成に、二週間以内に変更いたします。",
+      "doc": "こうきゅうたいさくとしては、しゅうけいしょりを、がめんひょうじとはべつのデータベースでうごかすこうせいに、にしゅうかんいないにへんこういたします。",
+      "v": "Biện pháp lâu dài: trong vòng hai tuần, chúng tôi sẽ đổi cấu trúc để xử lý tổng hợp chạy trên một cơ sở dữ liệu tách riêng với phần hiển thị màn hình."
+    },
+    {
+      "ai": "D",
+      "t": "さらに再発防止策として、機能を追加する際には、データ量の変化を踏まえて、夜間処理の時間を必ず試算するよう、チェックリストに加えました。",
+      "doc": "さらにさいはつぼうしさくとして、きのうをついかするさいには、データりょうのへんかをふまえて、やかんしょりのじかんをかならずしさんするよう、チェックリストにくわえました。",
+      "v": "Thêm nữa, để phòng tái phát, chúng tôi đã bổ sung vào checklist: mỗi khi thêm chức năng phải ước tính thời gian xử lý ban đêm, có tính đến thay đổi lượng dữ liệu.",
+      "np": [
+        {
+          "mau": "〜を踏まえて",
+          "giai": "Dựa trên, có cân nhắc tới (kết quả, ý kiến, tình hình) để làm bước tiếp theo.",
+          "vd": "前回の反省を踏まえて、計画を見直した。",
+          "vdDoc": "ぜんかいのはんせいをふまえて、けいかくをみなおした。",
+          "vdV": "Rút kinh nghiệm lần trước, chúng tôi xem lại kế hoạch."
+        },
+        {
+          "mau": "V-る + 際(に)",
+          "giai": "Khi, lúc (trang trọng của 〜とき).",
+          "vd": "お降りの際は、お忘れ物にご注意ください。",
+          "vdDoc": "おおりのさいは、おわすれものにごちゅういください。",
+          "vdV": "Khi xuống xe, xin chú ý đừng để quên đồ."
+        }
+      ]
+    },
+    {
+      "ai": "F",
+      "t": "チェックリストを増やすだけで、本当に防げますか。チェック項目は、増えれば増えるほど、形だけになりがちですよ。",
+      "doc": "チェックリストをふやすだけで、ほんとうにふせげますか。チェックこうもくは、ふえればふえるほど、かたちだけになりがちですよ。",
+      "v": "Chỉ thêm checklist thì có ngăn được thật không? Mục kiểm tra càng nhiều thì càng dễ thành hình thức.",
+      "np": [
+        {
+          "mau": "〜ば〜ほど",
+          "giai": "Càng … càng … (V-ば + V-る + ほど).",
+          "vd": "練習すればするほど、上手になる。",
+          "vdDoc": "れんしゅうすればするほど、じょうずになる。",
+          "vdV": "Càng luyện càng giỏi."
+        },
+        {
+          "mau": "V-ます/N + がち",
+          "giai": "Hay bị, dễ có khuynh hướng (thường là điều không tốt).",
+          "vd": "冬は運動不足になりがちだ。",
+          "vdDoc": "ふゆはうんどうぶそくになりがちだ。",
+          "vdV": "Mùa đông hay bị thiếu vận động."
+        }
+      ]
+    },
+    {
+      "ai": "D",
+      "t": "ご指摘はごもっともです。",
+      "doc": "ごしてきはごもっともです。",
+      "v": "Anh chỉ ra rất xác đáng.",
+      "khac": [
+        {
+          "kieu": "mềm mỏng",
+          "t": "おっしゃる点は、私どもも懸念しておりました。",
+          "doc": "おっしゃるてんは、わたくしどももけねんしておりました。",
+          "v": "Điểm anh nói, chúng tôi cũng đã lo ngại."
+        },
+        {
+          "kieu": "chuyên nghiệp",
+          "t": "ご懸念のとおりです。そのため、人の確認に頼らない仕組みも用意しております。",
+          "doc": "ごけねんのとおりです。そのため、ひとのかくにんにたよらないしくみもよういしております。",
+          "v": "Đúng như anh lo ngại. Vì vậy chúng tôi cũng đã chuẩn bị cơ chế không phụ thuộc vào kiểm tra của con người.",
+          "ghiChu": "công nhận rồi chuyển ngay sang giải pháp"
+        }
+      ]
+    },
+    {
+      "ai": "D",
+      "t": "そこで、人の確認だけに頼らないよう、処理時間が通常の1.5倍を超えた時点で、自動的に担当者へ通知が届く監視も設定いたしました。",
+      "doc": "そこで、ひとのかくにんだけにたよらないよう、しょりじかんがつうじょうのいってんごばいをこえたじてんで、じどうてきにたんとうしゃへつうちがとどくかんしもせっていいたしました。",
+      "v": "Vì vậy, để không chỉ dựa vào kiểm tra của con người, chúng tôi đã cài đặt giám sát: khi thời gian xử lý vượt 1,5 lần bình thường, thông báo sẽ tự động gửi tới người phụ trách."
+    },
+    {
+      "ai": "F",
+      "t": "なるほど。障害が起きてから気づくのではなく、起きる前に気づける、ということですね。",
+      "doc": "なるほど。しょうがいがおきてからきづくのではなく、おきるまえにきづける、ということですね。",
+      "v": "Ra vậy. Tức là không phải xảy ra sự cố rồi mới biết, mà có thể nhận ra trước khi xảy ra."
+    },
+    {
+      "ai": "D",
+      "t": "はい。今回、お客様からのお問い合わせで障害を知ったことを、私どもは最も重く受け止めております。",
+      "doc": "はい。こんかい、おきゃくさまからのおといあわせでしょうがいをしったことを、わたくしどもはもっともおもくうけとめております。",
+      "v": "Vâng. Lần này, việc chúng tôi chỉ biết có sự cố qua liên hệ của khách hàng là điều chúng tôi nhìn nhận nghiêm túc nhất.",
+      "np": [
+        {
+          "mau": "重く受け止める",
+          "giai": "Nhìn nhận (sự việc, ý kiến) một cách nghiêm túc. Cụm cố định trong lời xin lỗi, báo cáo.",
+          "vd": "皆様のご意見を重く受け止めております。",
+          "vdDoc": "みなさまのごいけんをおもくうけとめております。",
+          "vdV": "Chúng tôi xin nghiêm túc tiếp nhận ý kiến của mọi người."
+        }
+      ]
+    },
+    {
+      "ai": "F",
+      "t": "……正直、昨夜は怒っていました。でも、原因を個人のせいにしなかったのは評価します。",
+      "doc": "……しょうじき、さくやはおこっていました。でも、げんいんをこじんのせいにしなかったのはひょうかします。",
+      "v": "…Nói thật, tối qua tôi rất bực. Nhưng tôi đánh giá cao việc các anh không đổ nguyên nhân cho một cá nhân."
+    },
+    {
+      "ai": "F",
+      "t": "恒久対策の進捗は、週に一度、報告してもらえますか。",
+      "doc": "こうきゅうたいさくのしんちょくは、しゅうにいちど、ほうこくしてもらえますか。",
+      "v": "Tiến độ biện pháp lâu dài, mỗi tuần báo cáo cho tôi một lần được không?",
+      "khac": [
+        {
+          "kieu": "lịch sự",
+          "t": "恒久対策の進捗について、週に一度ご報告いただけますでしょうか。",
+          "doc": "こうきゅうたいさくのしんちょくについて、しゅうにいちどごほうこくいただけますでしょうか。",
+          "v": "Về tiến độ biện pháp lâu dài, mỗi tuần các anh báo cáo một lần được không ạ?"
+        }
+      ]
+    },
+    {
+      "ai": "D",
+      "t": "承知いたしました。毎週金曜日に、進捗をご報告いたします。",
+      "doc": "しょうちいたしました。まいしゅうきんようびに、しんちょくをごほうこくいたします。",
+      "v": "Tôi đã rõ. Thứ Sáu hằng tuần chúng tôi sẽ báo cáo tiến độ.",
+      "khac": [
+        {
+          "kieu": "văn viết",
+          "t": "恒久対策の進捗につきましては、毎週金曜日にメールにてご報告いたします。",
+          "doc": "こうきゅうたいさくのしんちょくにつきましては、まいしゅうきんようびにメールにてごほうこくいたします。",
+          "v": "Về tiến độ biện pháp lâu dài, chúng tôi sẽ báo cáo qua email vào thứ Sáu hằng tuần.",
+          "ghiChu": "につきましては / にて: dạng trang trọng của については / で"
+        }
+      ]
+    },
+    {
+      "ai": "S",
+      "t": "ダンさん、お疲れさま。厳しい質問にも落ち着いて答えられていたね。",
+      "doc": "ダンさん、おつかれさま。きびしいしつもんにもおちついてこたえられていたね。",
+      "v": "Đan, vất vả rồi. Câu hỏi gắt mà em vẫn trả lời bình tĩnh."
+    },
+    {
+      "ai": "D",
+      "t": "ありがとうございます。実は、あの集計処理の見直しを忘れていたのは、私のチームなんです。",
+      "doc": "ありがとうございます。じつは、あのしゅうけいしょりのみなおしをわすれていたのは、わたしのチームなんです。",
+      "v": "Cảm ơn chị. Thật ra, nhóm quên xem lại xử lý tổng hợp đó chính là nhóm của em."
+    },
+    {
+      "ai": "S",
+      "t": "だからこそ、仕組みの話にしたのがよかったのよ。誰かを責めて終わる報告書は、次の障害を防げないから。",
+      "doc": "だからこそ、しくみのはなしにしたのがよかったのよ。だれかをせめておわるほうこくしょは、つぎのしょうがいをふせげないから。",
+      "v": "Chính vì vậy mà nói về cơ chế là đúng. Một bản báo cáo kết thúc bằng việc trách ai đó thì không ngăn được sự cố tiếp theo.",
+      "np": [
+        {
+          "mau": "だからこそ",
+          "giai": "Chính vì vậy (mà) — nhấn mạnh lý do.",
+          "vd": "難しい仕事だ。だからこそ、やりがいがある。",
+          "vdDoc": "むずかしいしごとだ。だからこそ、やりがいがある。",
+          "vdV": "Đó là việc khó. Chính vì vậy mới đáng làm."
+        }
+      ]
+    },
+    {
+      "ai": "D",
+      "t": "謝ることと、原因から逃げないことは、セットなんですね。",
+      "doc": "あやまることと、げんいんからにげないことは、セットなんですね。",
+      "v": "Xin lỗi và không né tránh nguyên nhân là phải đi đôi với nhau chị nhỉ."
+    },
+    {
+      "ai": "S",
+      "t": "そう。謝罪は一回で終わるけど、再発防止は続けるものだからね。",
+      "doc": "そう。しゃざいはいっかいでおわるけど、さいはつぼうしはつづけるものだからね。",
+      "v": "Đúng vậy. Lời xin lỗi nói một lần là xong, nhưng phòng tái phát là việc phải làm tiếp mãi.",
+      "np": [
+        {
+          "mau": "〜ものだ",
+          "giai": "Nêu bản chất, lẽ thường của sự việc: \"vốn là …\".",
+          "vd": "子どもは親の背中を見て育つものだ。",
+          "vdDoc": "こどもはおやのせなかをみてそだつものだ。",
+          "vdV": "Con cái vốn lớn lên nhìn theo cha mẹ."
+        }
+      ]
+    }
+  ],
+  "tuVung": [
+    {
+      "chu": "障害報告書",
+      "doc": "しょうがいほうこくしょ",
+      "nghia": "báo cáo sự cố",
+      "vd": "障害報告書を提出しました。"
+    },
+    {
+      "chu": "経緯",
+      "doc": "けいい",
+      "nghia": "đầu đuôi, diễn biến sự việc",
+      "vd": "事故の経緯を説明してください。"
+    },
+    {
+      "chu": "復旧",
+      "doc": "ふっきゅう",
+      "nghia": "khôi phục (hệ thống, giao thông)",
+      "vd": "電車はまもなく復旧します。"
+    },
+    {
+      "chu": "想定",
+      "doc": "そうてい",
+      "nghia": "dự tính, giả định trước",
+      "vd": "想定外の問題が起きた。"
+    },
+    {
+      "chu": "根本的",
+      "doc": "こんぽんてき",
+      "nghia": "gốc rễ, căn bản",
+      "vd": "根本的な解決が必要だ。"
+    },
+    {
+      "chu": "暫定対応",
+      "doc": "ざんていたいおう",
+      "nghia": "xử lý tạm thời",
+      "vd": "まず暫定対応をしてください。"
+    },
+    {
+      "chu": "恒久対策",
+      "doc": "こうきゅうたいさく",
+      "nghia": "biện pháp lâu dài, triệt để",
+      "vd": "恒久対策は来月完了します。"
+    },
+    {
+      "chu": "再発防止策",
+      "doc": "さいはつぼうしさく",
+      "nghia": "biện pháp phòng tái phát",
+      "vd": "再発防止策をまとめました。"
+    },
+    {
+      "chu": "試算",
+      "doc": "しさん",
+      "nghia": "ước tính, tính thử",
+      "vd": "費用を試算してみます。"
+    },
+    {
+      "chu": "監視",
+      "doc": "かんし",
+      "nghia": "giám sát (monitoring)",
+      "vd": "サーバーの監視を強化する。"
+    },
+    {
+      "chu": "ごもっとも",
+      "doc": "ごもっとも",
+      "nghia": "hoàn toàn đúng, rất xác đáng (lịch sự)",
+      "vd": "お怒りはごもっともです。"
+    },
+    {
+      "chu": "進捗",
+      "doc": "しんちょく",
+      "nghia": "tiến độ",
+      "vd": "進捗を報告してください。"
+    }
+  ],
+  "yNghia": "Một bản báo cáo sự cố tốt không kết thúc bằng tên của người có lỗi, mà bằng một cơ chế khiến lỗi đó khó xảy ra lần nữa. Lời xin lỗi chỉ nói một lần; còn phòng tái phát thì phải làm tiếp, đều đặn, kể cả khi khách đã nguôi giận.",
+  "meo": [
+    "Khung 障害報告: 発生日時 → 影響範囲 → 直接の原因 → 根本原因 → 暫定対応 → 恒久対策 → 再発防止策.",
+    "暫定対応 (xử lý tạm thời) ≠ 恒久対策 (biện pháp lâu dài): khách Nhật gần như luôn hỏi cả hai.",
+    "Xin lỗi trang trọng: 「多大なご迷惑をおかけしましたこと、心よりお詫び申し上げます」.",
+    "Nhận góp ý gắt: 「ご指摘はごもっともです」 — công nhận trước, rồi mới đưa giải pháp.",
+    "〜かねない = có thể dẫn tới điều xấu; 〜ば〜ほど = càng … càng; 〜がち = hay bị (khuynh hướng xấu)."
+  ],
+  "cauHoi": [
+    {
+      "hoi": "Nguyên nhân gốc của sự cố là gì?",
+      "chon": [
+        "Một kỹ sư gõ nhầm lệnh",
+        "Dữ liệu tăng gấp ba sau tính năng mới mà không xem lại thời gian xử lý",
+        "Máy chủ bị tấn công",
+        "Mất điện ở trung tâm dữ liệu"
+      ],
+      "dung": 1,
+      "giai": "「データが約三倍に増えていたにもかかわらず、処理時間の見直しを行っていなかった」."
+    },
+    {
+      "hoi": "Xử lý tạm thời (暫定対応) là gì?",
+      "chon": [
+        "Tách cơ sở dữ liệu riêng",
+        "Thêm checklist",
+        "Dời giờ tổng hợp sang 2 giờ sáng và xem lại giới hạn kết nối",
+        "Tắt chức năng giao hàng"
+      ],
+      "dung": 2,
+      "giai": "「開始時刻を深夜二時に変更し、接続数の上限も見直しました」."
+    },
+    {
+      "hoi": "Vì sao trưởng phòng Fujita nghi ngờ việc chỉ thêm checklist?",
+      "chon": [
+        "Vì càng nhiều mục thì càng dễ thành hình thức",
+        "Vì checklist tốn tiền",
+        "Vì không ai đọc tiếng Nhật",
+        "Vì luật cấm"
+      ],
+      "dung": 0,
+      "giai": "「増えれば増えるほど、形だけになりがちですよ」."
+    },
+    {
+      "hoi": "Điều gì đội của Đan nhìn nhận nghiêm túc nhất?",
+      "chon": [
+        "Mất dữ liệu",
+        "Phải làm thêm giờ",
+        "Bị phạt tiền",
+        "Chỉ biết có sự cố qua liên hệ của khách hàng"
+      ],
+      "dung": 3,
+      "giai": "「お客様からのお問い合わせで障害を知ったことを……最も重く受け止めております」."
+    },
+    {
+      "hoi": "Khách hàng đánh giá cao điều gì?",
+      "chon": [
+        "Báo cáo dài",
+        "Không đổ nguyên nhân cho một cá nhân",
+        "Xin lỗi nhiều lần",
+        "Giảm giá dịch vụ"
+      ],
+      "dung": 1,
+      "giai": "「原因を個人のせいにしなかったのは評価します」."
+    }
+  ]
+}

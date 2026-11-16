@@ -1,0 +1,424 @@
+{
+  "id": "ja-ds-n5-01",
+  "nn": "ja",
+  "danhMuc": "doi-song",
+  "cap": "N5",
+  "so": 4,
+  "tieuDe": "はじめまして、よろしくお願いします",
+  "tieuDeViet": "Rất vui được gặp, mong được giúp đỡ",
+  "moTa": "Ngày đầu dọn vào nhà chung, Vy gặp chú quản lý và cô bạn phòng bên. Học những câu cơ bản nhất: chào hỏi, tự giới thiệu, cảm ơn, xin lỗi, hỏi tuổi, chào khi ra khỏi nhà và khi về — kèm cách nói lịch sự, thân mật, kính ngữ.",
+  "chuDe": "Chào hỏi",
+  "bieuTuong": "hand.wave.fill",
+  "nguoi": [
+    {
+      "ma": "V",
+      "ten": "ヴィー",
+      "giong": "ja-nu",
+      "vai": "du học sinh mới dọn đến"
+    },
+    {
+      "ma": "K",
+      "ten": "小林さん",
+      "giong": "ja-nam",
+      "vai": "người quản lý nhà chung"
+    },
+    {
+      "ma": "Y",
+      "ten": "由美",
+      "giong": "ja2-nu",
+      "vai": "sinh viên Nhật ở phòng bên"
+    }
+  ],
+  "loi": [
+    {
+      "ai": "K",
+      "t": "いらっしゃい。ヴィーさんですね。管理人の小林です。",
+      "doc": "いらっしゃい。ヴィーさんですね。かんりにんのこばやしです。",
+      "v": "Chào mừng cháu. Cháu là Vy phải không? Chú là Kobayashi, người quản lý nhà."
+    },
+    {
+      "ai": "V",
+      "t": "はい。はじめまして、ヴィーです。ベトナムから来ました。どうぞよろしくお願いします。",
+      "doc": "はい。はじめまして、ヴィーです。ベトナムからきました。どうぞよろしくおねがいします。",
+      "v": "Vâng. Rất vui được gặp chú, cháu là Vy. Cháu đến từ Việt Nam. Mong chú giúp đỡ ạ.",
+      "khac": [
+        {
+          "kieu": "trang trọng",
+          "t": "はじめまして、ヴィーと申します。ベトナムから参りました。どうぞよろしくお願いいたします。",
+          "doc": "はじめまして、ヴィーともうします。ベトナムからまいりました。どうぞよろしくおねがいいたします。",
+          "v": "Hân hạnh được gặp, tôi tên là Vy. Tôi đến từ Việt Nam. Rất mong được chiếu cố.",
+          "ghiChu": "Kính ngữ khiêm nhường: phỏng vấn xin việc, gặp thầy cô, cấp trên, khách hàng."
+        },
+        {
+          "kieu": "thân mật",
+          "t": "ヴィーだよ。ベトナムから来たの。よろしくね！",
+          "doc": "ヴィーだよ。ベトナムからきたの。よろしくね！",
+          "v": "Mình là Vy nè. Mình từ Việt Nam sang. Làm quen nhé!",
+          "ghiChu": "Thể thường: với bạn cùng tuổi, bạn học — không dùng với người lớn mới gặp."
+        }
+      ],
+      "np": [
+        {
+          "mau": "N から来ました",
+          "giai": "から = “từ” (điểm xuất phát). 来ました là quá khứ lịch sự của 来ます (đến). Đây là câu chuẩn để nói mình đến từ đâu.",
+          "vd": "わたしはハノイから来ました。",
+          "vdDoc": "わたしはハノイからきました。",
+          "vdV": "Tôi đến từ Hà Nội."
+        }
+      ]
+    },
+    {
+      "ai": "K",
+      "t": "こちらこそ、よろしくお願いします。日本語、上手ですね。",
+      "doc": "こちらこそ、よろしくおねがいします。にほんご、じょうずですね。",
+      "v": "Chú cũng mong được cháu giúp đỡ. Tiếng Nhật của cháu giỏi nhỉ."
+    },
+    {
+      "ai": "V",
+      "t": "いいえ、まだまだです。",
+      "doc": "いいえ、まだまだです。",
+      "v": "Dạ không, cháu còn kém lắm ạ.",
+      "khac": [
+        {
+          "kieu": "tự nhiên hơn",
+          "t": "いえいえ、まだ勉強中です。",
+          "doc": "いえいえ、まだべんきょうちゅうです。",
+          "v": "Đâu có ạ, cháu vẫn đang học thôi.",
+          "ghiChu": "Được khen, người Nhật thường khiêm tốn từ chối nhẹ thay vì nhận ngay."
+        },
+        {
+          "kieu": "thân mật",
+          "t": "ううん、全然だよ。",
+          "doc": "ううん、ぜんぜんだよ。",
+          "v": "Không đâu, còn kém xa.",
+          "ghiChu": "Giữa bạn bè."
+        }
+      ]
+    },
+    {
+      "ai": "K",
+      "t": "これ、部屋のかぎです。ヴィーさんの部屋は二階です。",
+      "doc": "これ、へやのかぎです。ヴィーさんのへやはにかいです。",
+      "v": "Đây là chìa khoá phòng. Phòng của cháu ở tầng hai."
+    },
+    {
+      "ai": "V",
+      "t": "ありがとうございます。",
+      "doc": "ありがとうございます。",
+      "v": "Cháu cảm ơn chú."
+    },
+    {
+      "ai": "V",
+      "t": "あっ、すみません！大丈夫ですか。",
+      "doc": "あっ、すみません！だいじょうぶですか。",
+      "v": "Á, xin lỗi! Bạn có sao không?",
+      "khac": [
+        {
+          "kieu": "thân mật",
+          "t": "ごめん！大丈夫？",
+          "doc": "ごめん！だいじょうぶ？",
+          "v": "Xin lỗi nha! Có sao không?",
+          "ghiChu": "Với bạn bè hoặc người nhỏ tuổi hơn."
+        },
+        {
+          "kieu": "trang trọng",
+          "t": "大変申し訳ありません。おけがはありませんか。",
+          "doc": "たいへんもうしわけありません。おけがはありませんか。",
+          "v": "Tôi thành thật xin lỗi. Quý vị có bị thương không ạ?",
+          "ghiChu": "Xin lỗi nặng: với khách hàng, người lớn tuổi, hoặc khi lỗi lớn."
+        }
+      ],
+      "np": [
+        {
+          "mau": "すみません",
+          "giai": "すみません vừa là “xin lỗi”, vừa dùng để gọi người khác (“xin lỗi cho hỏi”), có khi còn là “cảm ơn vì đã làm phiền”. ごめんなさい chỉ là xin lỗi và thân mật hơn.",
+          "vd": "すみません、トイレはどこですか。",
+          "vdDoc": "すみません、トイレはどこですか。",
+          "vdV": "Xin lỗi, nhà vệ sinh ở đâu ạ?"
+        }
+      ]
+    },
+    {
+      "ai": "Y",
+      "t": "大丈夫です。あ、新しい人ですか。わたしは由美です。となりの部屋ですよ。",
+      "doc": "だいじょうぶです。あ、あたらしいひとですか。わたしはゆみです。となりのへやですよ。",
+      "v": "Mình không sao. À, bạn là người mới à? Mình là Yumi. Phòng bên cạnh đó.",
+      "np": [
+        {
+          "mau": "〜ですよ",
+          "giai": "よ ở cuối câu báo cho người nghe một thông tin họ chưa biết (“… đấy/đó”). Nghe thân thiện; dùng quá nhiều với người trên có thể giống như đang dạy đời.",
+          "vd": "この店のパンはおいしいですよ。",
+          "vdDoc": "このみせのパンはおいしいですよ。",
+          "vdV": "Bánh mì tiệm này ngon lắm đấy."
+        }
+      ]
+    },
+    {
+      "ai": "V",
+      "t": "はじめまして、ヴィーです。よろしくお願いします。",
+      "doc": "はじめまして、ヴィーです。よろしくおねがいします。",
+      "v": "Rất vui được gặp bạn, mình là Vy. Mong bạn giúp đỡ."
+    },
+    {
+      "ai": "Y",
+      "t": "ヴィーさん、何歳ですか。",
+      "doc": "ヴィーさん、なんさいですか。",
+      "v": "Vy bao nhiêu tuổi vậy?",
+      "khac": [
+        {
+          "kieu": "lịch sự",
+          "t": "失礼ですが、おいくつですか。",
+          "doc": "しつれいですが、おいくつですか。",
+          "v": "Xin lỗi, cho hỏi bạn bao nhiêu tuổi ạ?",
+          "ghiChu": "Lịch sự hơn, khi hỏi người mới gặp. Hỏi tuổi người lớn ở Nhật khá tế nhị."
+        },
+        {
+          "kieu": "thân mật",
+          "t": "何歳？",
+          "doc": "なんさい？",
+          "v": "Mấy tuổi?",
+          "ghiChu": "Giữa bạn bè, hoặc hỏi trẻ em."
+        }
+      ],
+      "np": [
+        {
+          "mau": "何歳ですか / おいくつですか",
+          "giai": "Hỏi tuổi: 何歳 (なんさい) là cách thường, おいくつ lịch sự hơn. Trả lời: số + 歳 (さい); riêng 20 tuổi thường đọc là はたち.",
+          "vd": "弟は十八歳です。",
+          "vdDoc": "おとうとはじゅうはっさいです。",
+          "vdV": "Em trai tôi 18 tuổi."
+        }
+      ]
+    },
+    {
+      "ai": "V",
+      "t": "二十歳です。",
+      "doc": "はたちです。",
+      "v": "Mình 20 tuổi."
+    },
+    {
+      "ai": "Y",
+      "t": "わたしも二十歳！じゃあ、タメ口で話そう。よろしくね。",
+      "doc": "わたしもはたち！じゃあ、タメぐちではなそう。よろしくね。",
+      "v": "Mình cũng 20! Vậy mình nói chuyện kiểu bạn bè đi. Làm quen nhé.",
+      "np": [
+        {
+          "mau": "V（よ）う — 話そう",
+          "giai": "Thể ý chí, là thể thường của 〜ましょう: rủ “mình cùng … đi”. 話す → 話そう, 行く → 行こう, 食べる → 食べよう. (Ngữ pháp N4 — gặp sớm cũng tốt.)",
+          "vd": "いっしょに帰ろう。",
+          "vdDoc": "いっしょにかえろう。",
+          "vdV": "Cùng về đi."
+        }
+      ]
+    },
+    {
+      "ai": "V",
+      "t": "うん、よろしくね！ねえ、近くにスーパー、ある？",
+      "doc": "うん、よろしくね！ねえ、ちかくにスーパー、ある？",
+      "v": "Ừ, làm quen nhé! Này, gần đây có siêu thị không?",
+      "khac": [
+        {
+          "kieu": "lịch sự",
+          "t": "この近くにスーパーはありますか。",
+          "doc": "このちかくにスーパーはありますか。",
+          "v": "Gần đây có siêu thị không ạ?",
+          "ghiChu": "Khi hỏi người lạ, người lớn tuổi."
+        }
+      ],
+      "np": [
+        {
+          "mau": "（場所）に N が／は あります",
+          "giai": "Hỏi ở đâu có cái gì: nơi chốn + に + đồ vật + あります. Người và con vật thì dùng います. Thể thường: ある？／いる？",
+          "vd": "駅の前に銀行があります。",
+          "vdDoc": "えきのまえにぎんこうがあります。",
+          "vdV": "Trước ga có ngân hàng."
+        }
+      ]
+    },
+    {
+      "ai": "Y",
+      "t": "あるよ。駅の前。あとで一緒に行こうか。",
+      "doc": "あるよ。えきのまえ。あとでいっしょにいこうか。",
+      "v": "Có chứ. Ở trước ga. Lát nữa đi cùng nhé?"
+    },
+    {
+      "ai": "V",
+      "t": "小林さん、ちょっと買い物に行ってきます。",
+      "doc": "こばやしさん、ちょっとかいものにいってきます。",
+      "v": "Chú Kobayashi, cháu đi mua đồ một chút ạ.",
+      "khac": [
+        {
+          "kieu": "ngắn gọn",
+          "t": "行ってきます！",
+          "doc": "いってきます！",
+          "v": "Cháu đi đây ạ!",
+          "ghiChu": "Câu chào khi ra khỏi nhà — dùng hằng ngày với người cùng nhà."
+        }
+      ],
+      "np": [
+        {
+          "mau": "N に行きます (đi để làm gì)",
+          "giai": "に chỉ mục đích: 買い物に行く = đi mua sắm. Với động từ thì lấy thể ます bỏ ます rồi thêm に: 見に行く = đi xem.",
+          "vd": "友だちと映画を見に行きます。",
+          "vdDoc": "ともだちとえいがをみにいきます。",
+          "vdV": "Tôi đi xem phim với bạn."
+        }
+      ]
+    },
+    {
+      "ai": "K",
+      "t": "行ってらっしゃい。気をつけてね。",
+      "doc": "いってらっしゃい。きをつけてね。",
+      "v": "Đi nhé. Cẩn thận đấy."
+    },
+    {
+      "ai": "V",
+      "t": "ただいま！",
+      "doc": "ただいま！",
+      "v": "Cháu về rồi ạ!",
+      "khac": [
+        {
+          "kieu": "lịch sự",
+          "t": "ただいま戻りました。",
+          "doc": "ただいまもどりました。",
+          "v": "Cháu đã về ạ.",
+          "ghiChu": "Lịch sự hơn — hay dùng ở công ty khi quay lại văn phòng."
+        }
+      ]
+    },
+    {
+      "ai": "K",
+      "t": "おかえりなさい。",
+      "doc": "おかえりなさい。",
+      "v": "Mừng cháu về.",
+      "khac": [
+        {
+          "kieu": "thân mật",
+          "t": "おかえり！",
+          "doc": "おかえり！",
+          "v": "Về rồi đấy à!",
+          "ghiChu": "Trong gia đình, giữa bạn cùng nhà."
+        }
+      ]
+    }
+  ],
+  "tuVung": [
+    {
+      "chu": "はじめまして",
+      "doc": "はじめまして",
+      "nghia": "rất vui được gặp (câu chào lần đầu gặp)",
+      "vd": "はじめまして、リンです。"
+    },
+    {
+      "chu": "よろしくお願いします",
+      "doc": "よろしくおねがいします",
+      "nghia": "mong được giúp đỡ / rất vui được làm quen",
+      "vd": "今日からよろしくお願いします。"
+    },
+    {
+      "chu": "管理人",
+      "doc": "かんりにん",
+      "nghia": "người quản lý (nhà, toà nhà)",
+      "vd": "管理人さんに聞いてください。"
+    },
+    {
+      "chu": "上手",
+      "doc": "じょうず",
+      "nghia": "giỏi, khéo",
+      "vd": "料理が上手ですね。"
+    },
+    {
+      "chu": "大丈夫",
+      "doc": "だいじょうぶ",
+      "nghia": "không sao, ổn",
+      "vd": "大丈夫ですか。"
+    },
+    {
+      "chu": "二十歳",
+      "doc": "はたち",
+      "nghia": "20 tuổi",
+      "vd": "姉は二十歳です。"
+    },
+    {
+      "chu": "タメ口",
+      "doc": "タメぐち",
+      "nghia": "lối nói ngang hàng (thể thường giữa bạn bè)",
+      "vd": "タメ口でいいよ。"
+    },
+    {
+      "chu": "買い物",
+      "doc": "かいもの",
+      "nghia": "mua sắm, đi chợ",
+      "vd": "週末は買い物に行きます。"
+    },
+    {
+      "chu": "行ってきます",
+      "doc": "いってきます",
+      "nghia": "tôi đi đây (chào khi ra khỏi nhà)",
+      "vd": "学校に行ってきます。"
+    },
+    {
+      "chu": "ただいま",
+      "doc": "ただいま",
+      "nghia": "tôi về rồi (chào khi về đến nhà)",
+      "vd": "ただいま！おなかすいた。"
+    },
+    {
+      "chu": "おかえりなさい",
+      "doc": "おかえりなさい",
+      "nghia": "mừng bạn về (đáp lại ただいま)",
+      "vd": "おかえりなさい。寒かったでしょう。"
+    }
+  ],
+  "yNghia": "Ở nơi mới, vài câu chào nhỏ — はじめまして, すみません, ただいま — là cách nhanh nhất để người lạ thành hàng xóm. Một chỗ ở bắt đầu thành “nhà” khi có người nói “おかえり” lúc bạn trở về.",
+  "meo": [
+    "Tự giới thiệu chuẩn 3 bước: はじめまして → (tên)です／(nơi)から来ました → よろしくお願いします.",
+    "Người lớn, cấp trên: dùng です・ます, trang trọng hơn thì 〜と申します. Bạn cùng tuổi: đợi họ nói 「タメ口でいいよ」 rồi hãy chuyển sang thể thường.",
+    "Hai cặp chào trong nhà: 行ってきます ↔ 行ってらっしゃい (khi đi), ただいま ↔ おかえりなさい (khi về).",
+    "Được khen thì khiêm tốn đáp 「いいえ、まだまだです」 — đó là phép lịch sự, không phải tự ti."
+  ],
+  "cauHoi": [
+    {
+      "hoi": "Vy nói mình đến từ Việt Nam bằng câu nào?",
+      "chon": [
+        "ベトナムへ行きました。",
+        "ベトナムから来ました。",
+        "ベトナムに住みます。"
+      ],
+      "dung": 1,
+      "giai": "から = từ (điểm xuất phát); 来ました = đã đến."
+    },
+    {
+      "hoi": "Vì sao Yumi rủ nói chuyện bằng タメ口?",
+      "chon": [
+        "Vì Yumi là người quản lý nhà",
+        "Vì Vy nói kính ngữ sai",
+        "Vì hai người bằng tuổi nhau",
+        "Vì Yumi không biết kính ngữ"
+      ],
+      "dung": 2,
+      "giai": "Cả hai đều 20 tuổi (二十歳), nên chuyển sang lối nói bạn bè."
+    },
+    {
+      "hoi": "Về đến nhà, Vy nói gì?",
+      "chon": [
+        "行ってきます",
+        "ただいま",
+        "行ってらっしゃい",
+        "おかえりなさい"
+      ],
+      "dung": 1,
+      "giai": "ただいま = tôi về rồi; người ở nhà đáp おかえりなさい."
+    },
+    {
+      "hoi": "Được khen 「日本語、上手ですね」, Vy đáp thế nào?",
+      "chon": [
+        "いいえ、まだまだです。",
+        "はい、上手です。",
+        "ありがとう、すごいです。"
+      ],
+      "dung": 0,
+      "giai": "Người Nhật thường khiêm tốn từ chối lời khen một cách nhẹ nhàng."
+    }
+  ]
+}

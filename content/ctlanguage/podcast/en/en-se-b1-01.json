@@ -1,0 +1,106 @@
+{
+  "id": "en-se-b1-01",
+  "nn": "en",
+  "danhMuc": "phan-mem",
+  "cap": "B1",
+  "so": 1,
+  "tieuDe": "Yesterday, Today, Blockers",
+  "tieuDeViet": "Hôm qua, hôm nay, vướng mắc",
+  "moTa": "Mười lăm phút daily stand-up của một nhóm phần mềm: mỗi người nói hôm qua làm gì, hôm nay làm gì, đang vướng gì. Linh bị chặn vì chờ API của đội back-end — và một đồng đội gỡ giúp chỉ bằng một câu.",
+  "chuDe": "Họp stand-up",
+  "bieuTuong": "person.3.fill",
+  "nguoi": [
+    { "ma": "T", "ten": "Tom", "giong": "uk-nam", "vai": "Scrum Master" },
+    { "ma": "L", "ten": "Linh", "giong": "us-nu", "vai": "lập trình viên front-end" },
+    { "ma": "J", "ten": "Jake", "giong": "au-nam", "vai": "lập trình viên full-stack" }
+  ],
+  "loi": [
+    { "ai": "T", "t": "Morning, everyone. Let's get started. We've got fifteen minutes, so let's keep it short.", "v": "Chào buổi sáng mọi người. Bắt đầu thôi. Mình có mười lăm phút, nên nói ngắn gọn nhé.",
+      "np": [{ "mau": "Let's + V nguyên mẫu", "giai": "Rủ cả nhóm cùng làm gì: \"Chúng ta hãy…\". Phủ định: Let's not + V.", "vd": "Let's not schedule meetings on Friday afternoon.", "vdV": "Mình đừng xếp họp vào chiều thứ Sáu nhé." }],
+      "khac": [
+        { "kieu": "tự nhiên hơn", "t": "Morning, all. Let's kick off — quick one today.", "v": "Chào cả nhà. Bắt đầu nhé — hôm nay họp nhanh.", "ghiChu": "\"kick off\" = bắt đầu, rất hay dùng trong họp" }
+      ] },
+    { "ai": "T", "t": "Linh, do you want to go first?", "v": "Linh, em nói trước nhé?",
+      "khac": [
+        { "kieu": "lịch sự", "t": "Linh, would you like to start us off?", "v": "Linh, em mở đầu giúp anh được không?" }
+      ] },
+    { "ai": "L", "t": "Sure. Yesterday I finished the login page and opened a pull request for it.", "v": "Vâng. Hôm qua em làm xong trang đăng nhập và đã mở pull request cho nó.",
+      "np": [{ "mau": "Yesterday + quá khứ đơn", "giai": "Phần \"hôm qua\" của stand-up luôn dùng quá khứ đơn vì có mốc thời gian đã qua: finished, opened, fixed.", "vd": "Yesterday I reviewed two pull requests and fixed a small bug.", "vdV": "Hôm qua mình review hai pull request và sửa một lỗi nhỏ." }] },
+    { "ai": "L", "t": "Today I'm going to start on the password reset feature.", "v": "Hôm nay em sẽ bắt đầu làm tính năng đặt lại mật khẩu.",
+      "np": [{ "mau": "be going to + V (kế hoạch đã định)", "giai": "Dùng \"be going to\" cho việc đã lên kế hoạch từ trước — đúng kiểu phần \"hôm nay\" của stand-up. \"will\" hợp hơn với quyết định ngay lúc nói.", "vd": "This afternoon I'm going to write tests for the cart.", "vdV": "Chiều nay mình sẽ viết test cho giỏ hàng." }] },
+    { "ai": "L", "t": "And I have one blocker. I'm waiting for the email service API from the back-end team, and I can't test anything without it.", "v": "Và em có một vướng mắc. Em đang chờ API dịch vụ email từ đội back-end, mà thiếu nó thì em không test được gì cả.",
+      "np": [{ "mau": "can't + V + without + N", "giai": "\"Không thể… nếu thiếu…\" — cách nói rất tự nhiên để giải thích vì sao mình bị chặn.", "vd": "I can't deploy without the new password.", "vdV": "Thiếu mật khẩu mới thì mình không deploy được." }],
+      "khac": [
+        { "kieu": "chuyên nghiệp", "t": "I'm currently blocked on the email service API from the back-end team.", "v": "Hiện em đang bị chặn bởi API dịch vụ email của đội back-end.", "ghiChu": "\"blocked on + N\" là cách nói chuẩn trong nhóm phần mềm" },
+        { "kieu": "mềm mỏng", "t": "One small thing: I'm a bit stuck because I still don't have the email API.", "v": "Có một chuyện nhỏ: em hơi kẹt vì vẫn chưa có API email.", "ghiChu": "khi không muốn nghe như đang trách đội khác" }
+      ] },
+    { "ai": "T", "t": "Thanks, Linh. Do you know when it'll be ready?", "v": "Cảm ơn Linh. Em có biết khi nào nó xong không?" },
+    { "ai": "L", "t": "They said Tuesday, but it's Thursday now, and I haven't heard anything.", "v": "Họ nói thứ Ba, nhưng giờ đã thứ Năm rồi mà em chưa nghe tin gì.",
+      "np": [{ "mau": "haven't + V3 (hiện tại hoàn thành phủ định)", "giai": "Diễn tả việc chưa xảy ra tính đến bây giờ, không nêu mốc thời gian cụ thể. Hay đi với yet: I haven't heard anything yet.", "vd": "The client hasn't replied to my email yet.", "vdV": "Khách vẫn chưa trả lời email của mình." }] },
+    { "ai": "T", "t": "Okay, I'll talk to their lead after this meeting and get you a date.", "v": "Được, sau buổi họp anh sẽ nói chuyện với trưởng nhóm bên đó và lấy ngày cụ thể cho em.",
+      "np": [{ "mau": "will + V (quyết định/đề nghị ngay lúc nói)", "giai": "\"I'll…\" dùng khi vừa quyết định làm gì ngay tại chỗ hoặc nhận việc giúp người khác.", "vd": "Don't worry, I'll send you the file now.", "vdV": "Đừng lo, mình gửi file cho bạn ngay." }],
+      "khac": [
+        { "kieu": "chuyên nghiệp", "t": "I'll follow up with their lead right after this and get back to you with a date.", "v": "Ngay sau buổi này anh sẽ trao đổi tiếp với trưởng nhóm bên đó và báo lại em ngày cụ thể.", "ghiChu": "\"follow up with\" + \"get back to you\" — cặp cụm cực hay dùng ở công sở" }
+      ] },
+    { "ai": "J", "t": "Actually, Linh, you might not need to wait. I built a mock of that API last sprint for my own tests.", "v": "Thật ra Linh có thể không cần chờ đâu. Sprint trước anh có làm một bản giả lập của API đó để chạy test của anh.",
+      "np": [{ "mau": "might not need to + V", "giai": "\"Có thể không cần…\" — might làm lời nói nhẹ, không chắc chắn 100%, nghe khéo hơn \"You don't need to wait\".", "vd": "You might not need to buy a new laptop. Try more RAM first.", "vdV": "Có khi bạn không cần mua laptop mới đâu. Thử thêm RAM trước đã." }] },
+    { "ai": "L", "t": "Really? That would be amazing.", "v": "Thật ạ? Vậy thì tuyệt quá." },
+    { "ai": "J", "t": "Yeah, it's not perfect, but it returns the right format. I can send it to you after the stand-up.", "v": "Ừ, nó không hoàn hảo, nhưng trả về đúng định dạng. Họp xong anh gửi cho em." },
+    { "ai": "T", "t": "Perfect. Let's take the details offline, though. Jake, your update?", "v": "Tuyệt. Nhưng chi tiết thì hai người bàn riêng sau nhé. Jake, phần của em?",
+      "np": [{ "mau": "…, though. (cuối câu)", "giai": "\"though\" đặt cuối câu trong văn nói = \"nhưng mà, tuy vậy\", làm câu nhắc nhở nghe nhẹ hơn.", "vd": "The app is fast. It's a bit ugly, though.", "vdV": "App chạy nhanh. Có điều hơi xấu." }],
+      "khac": [
+        { "kieu": "ngắn gọn", "t": "Let's take that offline.", "v": "Chuyện đó bàn riêng sau nhé." },
+        { "kieu": "lịch sự", "t": "Could you two sort out the details after the meeting?", "v": "Hai bạn trao đổi chi tiết sau buổi họp được không?" }
+      ] },
+    { "ai": "J", "t": "Yesterday I spent most of the day fixing that bug with the shopping cart. The price was being rounded twice.", "v": "Hôm qua anh dành gần cả ngày để sửa cái lỗi ở giỏ hàng. Giá tiền bị làm tròn hai lần.",
+      "np": [{ "mau": "spend + thời gian + V-ing", "giai": "\"Dành bao lâu để làm gì\": sau spend + thời gian là V-ing, không phải to V.", "vd": "I spent two hours reading the documentation.", "vdV": "Mình mất hai tiếng đọc tài liệu." }] },
+    { "ai": "J", "t": "The fix is done, but I still need to write a test for it, so that's my plan for this morning.", "v": "Bản sửa đã xong, nhưng anh vẫn cần viết test cho nó, nên đó là kế hoạch sáng nay." },
+    { "ai": "J", "t": "After that, I'll pick up the next ticket on the board. No blockers for me.", "v": "Sau đó anh sẽ nhận ticket tiếp theo trên bảng. Anh không có vướng mắc gì.",
+      "khac": [
+        { "kieu": "tự nhiên hơn", "t": "Nothing blocking me right now.", "v": "Hiện không có gì chặn anh cả." },
+        { "kieu": "văn nói", "t": "All good on my side.", "v": "Bên anh ổn hết." }
+      ] },
+    { "ai": "T", "t": "Great. My update is short. I'm meeting the client at two to show them the demo.", "v": "Tốt. Phần của anh ngắn thôi. Hai giờ anh gặp khách hàng để cho họ xem bản demo.",
+      "np": [{ "mau": "hiện tại tiếp diễn cho lịch hẹn", "giai": "\"I'm meeting the client at two\" — dùng hiện tại tiếp diễn cho việc đã hẹn, đã sắp xếp chắc chắn với người khác.", "vd": "We're having a team lunch on Friday.", "vdV": "Thứ Sáu nhóm mình ăn trưa cùng nhau." }] },
+    { "ai": "T", "t": "If anyone has something they want me to mention, tell me before lunch.", "v": "Ai có điều gì muốn anh nhắc tới thì báo anh trước giờ ăn trưa nhé." },
+    { "ai": "L", "t": "Oh, could you ask them about the login design? They haven't replied to my message about the button colors.", "v": "À, anh hỏi họ giúp em về thiết kế trang đăng nhập được không? Họ chưa trả lời tin nhắn của em về màu nút.",
+      "khac": [
+        { "kieu": "lịch sự", "t": "Would you mind asking them about the login design?", "v": "Anh có phiền hỏi họ về thiết kế trang đăng nhập không ạ?", "ghiChu": "Would you mind + V-ing — lịch sự hơn could you" }
+      ] },
+    { "ai": "T", "t": "Sure, I'll add it to my list. Anything else before we finish?", "v": "Được, anh ghi vào danh sách. Còn gì nữa không trước khi kết thúc?" },
+    { "ai": "J", "t": "Just one thing. Can we move stand-ups to nine fifteen? Nine is a bit early for me with the traffic.", "v": "Chỉ một việc thôi. Mình dời stand-up sang chín giờ mười lăm được không? Chín giờ hơi sớm với anh vì kẹt xe.",
+      "np": [{ "mau": "a bit + tính từ", "giai": "\"a bit\" = hơi, một chút; làm lời phàn nàn nghe nhẹ nhàng hơn so với \"too early\".", "vd": "The meeting was a bit long today.", "vdV": "Hôm nay buổi họp hơi dài." }],
+      "khac": [
+        { "kieu": "mềm mỏng", "t": "Would it be possible to move stand-ups to nine fifteen?", "v": "Liệu có thể dời stand-up sang chín giờ mười lăm không?", "ghiChu": "đề xuất thay đổi mà không gây áp lực" }
+      ] },
+    { "ai": "T", "t": "Let's ask the whole team in the chat and decide together.", "v": "Mình hỏi cả nhóm trong nhóm chat rồi cùng quyết định nhé." },
+    { "ai": "L", "t": "And thanks, Jake. You just saved my whole week.", "v": "Với lại cảm ơn anh Jake. Anh vừa cứu cả tuần của em đấy." },
+    { "ai": "J", "t": "That's what the team is for.", "v": "Có đồng đội là để vậy mà." },
+    { "ai": "T", "t": "Okay, that's it. Thanks, everyone. Twelve minutes, short and useful, just how I like it.", "v": "Được rồi, hết. Cảm ơn mọi người. Mười hai phút, ngắn và có ích — đúng kiểu anh thích." }
+  ],
+  "tuVung": [
+    { "chu": "stand-up", "doc": "/ˈstænd ʌp/", "nghia": "buổi họp đứng ngắn hằng ngày của nhóm (daily stand-up)", "vd": "Our stand-up starts at nine." },
+    { "chu": "pull request", "doc": "/ˈpʊl rɪˌkwest/", "nghia": "yêu cầu gộp code (nhờ nhóm xem và nhập vào nhánh chính)", "vd": "Please review my pull request." },
+    { "chu": "blocker", "doc": "/ˈblɒkə/", "nghia": "vướng mắc khiến mình không làm tiếp được", "vd": "Do you have any blockers?" },
+    { "chu": "feature", "doc": "/ˈfiːtʃə/", "nghia": "tính năng", "vd": "The new feature goes live next week." },
+    { "chu": "mock", "doc": "/mɒk/", "nghia": "bản giả lập (của API, dịch vụ) để test", "vd": "We use a mock instead of the real payment service." },
+    { "chu": "take the details offline", "doc": "/teɪk ðə ˈdiːteɪlz ˌɒfˈlaɪn/", "nghia": "bàn chi tiết riêng sau buổi họp", "vd": "Good point. Let's take the details offline." },
+    { "chu": "spent most of the day", "doc": "/spent məʊst əv ðə deɪ/", "nghia": "dành gần hết ngày", "vd": "I spent most of the day in meetings." },
+    { "chu": "rounded", "doc": "/ˈraʊndɪd/", "nghia": "được làm tròn (số)", "vd": "The total is rounded to two decimal places." },
+    { "chu": "pick up the next ticket", "doc": "/pɪk ʌp ðə nekst ˈtɪkɪt/", "nghia": "nhận đầu việc tiếp theo trên bảng", "vd": "When you're free, pick up the next ticket." },
+    { "chu": "a bit early", "doc": "/ə bɪt ˈɜːli/", "nghia": "hơi sớm", "vd": "Seven is a bit early for a meeting." }
+  ],
+  "yNghia": "Stand-up không phải để báo cáo cho sếp mà để cả nhóm thấy ai đang kẹt. Nói ra vướng mắc sớm — kể cả khi tưởng là chuyện của đội khác — nhiều khi chỉ cần một câu là có người gỡ giúp. Giữ cuộc họp ngắn, chuyện chi tiết thì bàn riêng.",
+  "meo": [
+    "Khuôn 3 câu cho stand-up: \"Yesterday I + quá khứ đơn. Today I'm going to + V. I'm blocked on… / No blockers.\"",
+    "\"I'll + V\" khi nhận việc ngay tại chỗ: \"I'll follow up with them.\" — \"I'm going to\" cho việc đã định từ trước.",
+    "spend + thời gian + V-ing: \"I spent the morning fixing it\" (không phải to fix).",
+    "\"Let's take that offline\" = câu lịch sự để cắt một cuộc thảo luận dài ra khỏi buổi họp chung."
+  ],
+  "cauHoi": [
+    { "hoi": "Vướng mắc của Linh là gì?", "chon": ["Chưa có API dịch vụ email từ đội back-end", "Máy tính bị hỏng", "Không biết làm trang đăng nhập"], "dung": 0, "giai": "\"I'm waiting for the email service API from the back-end team.\"" },
+    { "hoi": "Jake giúp Linh bằng cách nào?", "chon": ["Viết hộ tính năng đặt lại mật khẩu", "Gửi bản giả lập (mock) của API mà anh đã làm", "Gọi cho trưởng nhóm back-end"], "dung": 1, "giai": "\"I built a mock of that API last sprint… I can send it to you after the stand-up.\"" },
+    { "hoi": "Lỗi giỏ hàng Jake sửa hôm qua là gì?", "chon": ["Không thêm được sản phẩm", "Nút thanh toán biến mất", "Giá bị làm tròn hai lần"], "dung": 2, "giai": "\"The price was being rounded twice.\"" },
+    { "hoi": "Tom làm gì khi Jake đề nghị dời giờ stand-up?", "chon": ["Đồng ý ngay", "Đề nghị hỏi cả nhóm trong nhóm chat rồi cùng quyết", "Từ chối vì chín giờ là giờ cố định"], "dung": 1, "giai": "\"Let's ask the whole team in the chat and decide together.\"" }
+  ]
+}

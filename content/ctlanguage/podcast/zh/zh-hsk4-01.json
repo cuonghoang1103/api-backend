@@ -1,6 +1,7 @@
 {
   "id": "zh-hsk4-01",
   "nn": "zh",
+  "danhMuc": "doi-song",
   "cap": "HSK4",
   "so": 1,
   "tieuDe": "朋友圈里的别人",
@@ -9,50 +10,376 @@
   "chuDe": "Mạng xã hội & điện thoại",
   "bieuTuong": "iphone",
   "nguoi": [
-    { "ma": "Y", "ten": "Tiểu Vũ", "giong": "zh-nu", "vai": "đồng nghiệp người Trung Quốc" },
-    { "ma": "L", "ten": "Long", "giong": "zh-nam", "vai": "kỹ sư người Việt" }
+    {
+      "ma": "Y",
+      "ten": "Tiểu Vũ",
+      "giong": "zh-nu",
+      "vai": "đồng nghiệp người Trung Quốc"
+    },
+    {
+      "ma": "L",
+      "ten": "Long",
+      "giong": "zh-nam",
+      "vai": "kỹ sư người Việt"
+    }
   ],
   "loi": [
-    { "ai": "Y", "t": "阿龙，你怎么了？从早上到现在，你一直在刷手机。", "doc": "Ā Lóng, nǐ zěnme le? Cóng zǎoshang dào xiànzài, nǐ yìzhí zài shuā shǒujī.", "v": "Long, cậu sao thế? Từ sáng đến giờ cậu cứ lướt điện thoại mãi." },
-    { "ai": "L", "t": "没什么，我在看朋友圈。你看，我的大学同学又去国外旅游了。", "doc": "Méi shénme, wǒ zài kàn péngyouquān. Nǐ kàn, wǒ de dàxué tóngxué yòu qù guówài lǚyóu le.", "v": "Không có gì, mình đang xem Vòng bạn bè. Cậu xem, bạn đại học của mình lại đi du lịch nước ngoài rồi." },
-    { "ai": "Y", "t": "那很好啊，你为什么不高兴？", "doc": "Nà hěn hǎo a, nǐ wèishénme bù gāoxìng?", "v": "Thế thì tốt chứ, sao cậu lại không vui?" },
-    { "ai": "L", "t": "我也说不清楚。每次看完朋友圈，我都觉得别人过得比我好。", "doc": "Wǒ yě shuō bu qīngchu. Měi cì kàn wán péngyouquān, wǒ dōu juéde biérén guò de bǐ wǒ hǎo.", "v": "Mình cũng không nói rõ được. Lần nào xem xong Vòng bạn bè, mình cũng thấy người khác sống tốt hơn mình." },
-    { "ai": "Y", "t": "比如说呢？", "doc": "Bǐrú shuō ne?", "v": "Ví dụ như thế nào?" },
-    { "ai": "L", "t": "有的人升职了，有的人买房了，还有人每个周末都在吃好吃的。可是我呢？连周末都在加班。", "doc": "Yǒude rén shēng zhí le, yǒude rén mǎi fáng le, hái yǒu rén měi ge zhōumò dōu zài chī hǎochī de. Kěshì wǒ ne? Lián zhōumò dōu zài jiābān.", "v": "Có người được thăng chức, có người mua nhà, còn có người cuối tuần nào cũng đi ăn ngon. Còn mình thì sao? Đến cuối tuần cũng phải tăng ca." },
-    { "ai": "Y", "t": "可是你自己也发朋友圈啊。上个星期你发的照片，看起来特别开心。", "doc": "Kěshì nǐ zìjǐ yě fā péngyouquān a. Shàng ge xīngqī nǐ fā de zhàopiàn, kàn qǐlai tèbié kāixīn.", "v": "Nhưng chính cậu cũng đăng bài mà. Ảnh cậu đăng tuần trước trông vui cực kỳ." },
-    { "ai": "L", "t": "哪张？", "doc": "Nǎ zhāng?", "v": "Ảnh nào?" },
-    { "ai": "Y", "t": "就是你在湖边喝咖啡那张。", "doc": "Jiù shì nǐ zài hú biān hē kāfēi nà zhāng.", "v": "Cái ảnh cậu ngồi uống cà phê bên hồ ấy." },
-    { "ai": "L", "t": "哈哈，那天我其实特别累。拍完照片，我就回公司继续工作了。", "doc": "Hāha, nà tiān wǒ qíshí tèbié lèi. Pāi wán zhàopiàn, wǒ jiù huí gōngsī jìxù gōngzuò le.", "v": "Haha, hôm đó thật ra mình mệt rã rời. Chụp ảnh xong là mình về công ty làm tiếp." },
-    { "ai": "Y", "t": "你看，原来你的朋友圈也不是你真实的生活。", "doc": "Nǐ kàn, yuánlái nǐ de péngyouquān yě bú shì nǐ zhēnshí de shēnghuó.", "v": "Thấy chưa, hóa ra Vòng bạn bè của cậu cũng đâu phải cuộc sống thật của cậu." },
-    { "ai": "L", "t": "……你说得对。我只把最好看的照片发出去。", "doc": "…… Nǐ shuō de duì. Wǒ zhǐ bǎ zuì hǎokàn de zhàopiàn fā chūqu.", "v": "…Cậu nói đúng. Mình chỉ đăng những tấm ảnh đẹp nhất." },
-    { "ai": "Y", "t": "大家都一样。没有人会把加班、生病、跟家人吵架的照片发到网上。", "doc": "Dàjiā dōu yíyàng. Méiyǒu rén huì bǎ jiābān, shēngbìng, gēn jiārén chǎojià de zhàopiàn fā dào wǎng shang.", "v": "Ai cũng thế cả. Chẳng ai đăng lên mạng ảnh mình tăng ca, ốm đau hay cãi nhau với người nhà." },
-    { "ai": "L", "t": "这么说，我是在拿自己普通的日子跟别人最好的日子比较。", "doc": "Zhème shuō, wǒ shì zài ná zìjǐ pǔtōng de rìzi gēn biérén zuì hǎo de rìzi bǐjiào.", "v": "Nói vậy thì mình đang đem những ngày bình thường của mình so với những ngày đẹp nhất của người khác." },
-    { "ai": "Y", "t": "对。这样比较，不管你过得多好，都会觉得不够。", "doc": "Duì. Zhèyàng bǐjiào, bùguǎn nǐ guò de duō hǎo, dōu huì juéde bú gòu.", "v": "Đúng thế. So sánh kiểu đó thì dù cậu sống tốt đến đâu, cũng vẫn thấy chưa đủ." },
-    { "ai": "L", "t": "那你呢？你好像很少用手机。", "doc": "Nà nǐ ne? Nǐ hǎoxiàng hěn shǎo yòng shǒujī.", "v": "Còn cậu thì sao? Hình như cậu rất ít dùng điện thoại." },
-    { "ai": "Y", "t": "我以前也跟你一样，每天要看好几个小时。后来我发现，睡觉前刷手机，第二天一定没精神。", "doc": "Wǒ yǐqián yě gēn nǐ yíyàng, měi tiān yào kàn hǎo jǐ ge xiǎoshí. Hòulái wǒ fāxiàn, shuìjiào qián shuā shǒujī, dì èr tiān yídìng méi jīngshen.", "v": "Trước đây mình cũng giống cậu, ngày nào cũng xem mấy tiếng liền. Sau đó mình phát hiện ra, cứ lướt điện thoại trước khi ngủ là hôm sau chắc chắn uể oải." },
-    { "ai": "L", "t": "那你是怎么改掉这个习惯的？", "doc": "Nà nǐ shì zěnme gǎi diào zhège xíguàn de?", "v": "Vậy cậu bỏ được thói quen đó bằng cách nào?" },
-    { "ai": "Y", "t": "很简单：晚上十点以后，我就把手机放在客厅里充电，不带进卧室。", "doc": "Hěn jiǎndān: wǎnshang shí diǎn yǐhòu, wǒ jiù bǎ shǒujī fàng zài kètīng li chōngdiàn, bú dài jìn wòshì.", "v": "Đơn giản lắm: sau mười giờ tối, mình để điện thoại sạc ở phòng khách, không mang vào phòng ngủ." },
-    { "ai": "L", "t": "我怕有人找我，我却没看到消息。", "doc": "Wǒ pà yǒu rén zhǎo wǒ, wǒ què méi kàndào xiāoxi.", "v": "Mình sợ có người tìm mình mà mình lại không thấy tin nhắn." },
-    { "ai": "Y", "t": "真有急事的话，他们会打电话的。大部分消息，第二天早上回也来得及。", "doc": "Zhēn yǒu jí shì dehuà, tāmen huì dǎ diànhuà de. Dà bùfen xiāoxi, dì èr tiān zǎoshang huí yě láidejí.", "v": "Nếu thật sự có việc gấp, họ sẽ gọi điện. Phần lớn tin nhắn, sáng hôm sau trả lời vẫn kịp." },
-    { "ai": "L", "t": "好吧，我今天晚上就试试。", "doc": "Hǎo ba, wǒ jīntiān wǎnshang jiù shìshi.", "v": "Được rồi, tối nay mình thử luôn." },
-    { "ai": "Y", "t": "还有，这个周末别加班了，我们去爬山吧。不用拍照，就为了自己开心。", "doc": "Hái yǒu, zhège zhōumò bié jiābān le, wǒmen qù pá shān ba. Bú yòng pāi zhào, jiù wèile zìjǐ kāixīn.", "v": "Còn nữa, cuối tuần này đừng tăng ca nữa, chúng mình đi leo núi đi. Không cần chụp ảnh, chỉ để bản thân vui thôi." },
-    { "ai": "L", "t": "不拍照？那朋友们怎么知道我去爬山了？", "doc": "Bù pāi zhào? Nà péngyoumen zěnme zhīdào wǒ qù pá shān le?", "v": "Không chụp ảnh á? Thế bạn bè làm sao biết mình đi leo núi?" },
-    { "ai": "Y", "t": "他们不需要知道。你自己知道就够了。", "doc": "Tāmen bù xūyào zhīdào. Nǐ zìjǐ zhīdào jiù gòu le.", "v": "Họ không cần biết. Cậu tự biết là đủ rồi." },
-    { "ai": "L", "t": "哈哈，这句话我要记下来……不过，不发朋友圈。", "doc": "Hāha, zhè jù huà wǒ yào jì xiàlai…… búguò, bù fā péngyouquān.", "v": "Haha, câu này mình phải ghi lại… nhưng mà không đăng lên Vòng bạn bè đâu." }
+    {
+      "ai": "Y",
+      "t": "阿龙，你怎么了？从早上到现在，你一直在刷手机。",
+      "doc": "Ā Lóng, nǐ zěnme le? Cóng zǎoshang dào xiànzài, nǐ yìzhí zài shuā shǒujī.",
+      "v": "Long, cậu sao thế? Từ sáng đến giờ cậu cứ lướt điện thoại mãi.",
+      "khac": [
+        {
+          "kieu": "mềm mỏng",
+          "t": "阿龙，没事吧？看你一直在看手机。",
+          "doc": "Ā Lóng, méi shì ba? Kàn nǐ yìzhí zài kàn shǒujī.",
+          "v": "Long, cậu ổn chứ? Thấy cậu cứ xem điện thoại mãi.",
+          "ghiChu": "hỏi han nhẹ, không có ý trách"
+        }
+      ]
+    },
+    {
+      "ai": "L",
+      "t": "没什么，我在看朋友圈。你看，我的大学同学又去国外旅游了。",
+      "doc": "Méi shénme, wǒ zài kàn péngyouquān. Nǐ kàn, wǒ de dàxué tóngxué yòu qù guówài lǚyóu le.",
+      "v": "Không có gì, mình đang xem Vòng bạn bè. Cậu xem, bạn đại học của mình lại đi du lịch nước ngoài rồi."
+    },
+    {
+      "ai": "Y",
+      "t": "那很好啊，你为什么不高兴？",
+      "doc": "Nà hěn hǎo a, nǐ wèishénme bù gāoxìng?",
+      "v": "Thế thì tốt chứ, sao cậu lại không vui?",
+      "khac": [
+        {
+          "kieu": "tự nhiên hơn",
+          "t": "那不是挺好的吗？怎么不开心了？",
+          "doc": "Nà bú shì tǐng hǎo de ma? Zěnme bù kāixīn le?",
+          "v": "Thế chẳng phải tốt sao? Sao lại không vui?"
+        }
+      ]
+    },
+    {
+      "ai": "L",
+      "t": "我也说不清楚。每次看完朋友圈，我都觉得别人过得比我好。",
+      "doc": "Wǒ yě shuō bu qīngchu. Měi cì kàn wán péngyouquān, wǒ dōu juéde biérén guò de bǐ wǒ hǎo.",
+      "v": "Mình cũng không nói rõ được. Lần nào xem xong Vòng bạn bè, mình cũng thấy người khác sống tốt hơn mình.",
+      "np": [
+        {
+          "mau": "说不清楚 (bổ ngữ khả năng)",
+          "giai": "V + 不 + 清楚 = không… rõ được: 说不清楚, 看不清楚, 听不清楚. Khẳng định: 说得清楚.",
+          "vd": "字太小了，我看不清楚。",
+          "vdDoc": "Zì tài xiǎo le, wǒ kàn bu qīngchu.",
+          "vdV": "Chữ nhỏ quá, tôi nhìn không rõ."
+        },
+        {
+          "mau": "每次……，都……",
+          "giai": "每次 A，(主语) 都 B = lần nào A cũng B. 都 bắt buộc ở vế sau.",
+          "vd": "每次见到他，他都很忙。",
+          "vdDoc": "Měi cì jiàndào tā, tā dōu hěn máng.",
+          "vdV": "Lần nào gặp anh ấy, anh ấy cũng bận."
+        }
+      ]
+    },
+    {
+      "ai": "Y",
+      "t": "比如说呢？",
+      "doc": "Bǐrú shuō ne?",
+      "v": "Ví dụ như thế nào?"
+    },
+    {
+      "ai": "L",
+      "t": "有的人升职了，有的人买房了，还有人每个周末都在吃好吃的。可是我呢？连周末都在加班。",
+      "doc": "Yǒude rén shēng zhí le, yǒude rén mǎi fáng le, hái yǒu rén měi ge zhōumò dōu zài chī hǎochī de. Kěshì wǒ ne? Lián zhōumò dōu zài jiābān.",
+      "v": "Có người được thăng chức, có người mua nhà, còn có người cuối tuần nào cũng đi ăn ngon. Còn mình thì sao? Đến cuối tuần cũng phải tăng ca.",
+      "np": [
+        {
+          "mau": "有的……，有的……",
+          "giai": "有的 A，有的 B = có người/cái A, có người/cái B — liệt kê các nhóm khác nhau.",
+          "vd": "同学们有的唱歌，有的跳舞。",
+          "vdDoc": "Tóngxuémen yǒude chàng gē, yǒude tiàowǔ.",
+          "vdV": "Các bạn người thì hát, người thì nhảy."
+        },
+        {
+          "mau": "连……都/也……",
+          "giai": "连 A 都 B = ngay cả A cũng B — nhấn mạnh trường hợp ít ai ngờ: 连周末都在加班.",
+          "vd": "他忙得连饭都没时间吃。",
+          "vdDoc": "Tā máng de lián fàn dōu méi shíjiān chī.",
+          "vdV": "Anh ấy bận đến mức ngay cả cơm cũng không có thời gian ăn."
+        }
+      ]
+    },
+    {
+      "ai": "Y",
+      "t": "可是你自己也发朋友圈啊。上个星期你发的照片，看起来特别开心。",
+      "doc": "Kěshì nǐ zìjǐ yě fā péngyouquān a. Shàng ge xīngqī nǐ fā de zhàopiàn, kàn qǐlai tèbié kāixīn.",
+      "v": "Nhưng chính cậu cũng đăng bài mà. Ảnh cậu đăng tuần trước trông vui cực kỳ."
+    },
+    {
+      "ai": "L",
+      "t": "哪张？",
+      "doc": "Nǎ zhāng?",
+      "v": "Ảnh nào?"
+    },
+    {
+      "ai": "Y",
+      "t": "就是你在湖边喝咖啡那张。",
+      "doc": "Jiù shì nǐ zài hú biān hē kāfēi nà zhāng.",
+      "v": "Cái ảnh cậu ngồi uống cà phê bên hồ ấy."
+    },
+    {
+      "ai": "L",
+      "t": "哈哈，那天我其实特别累。拍完照片，我就回公司继续工作了。",
+      "doc": "Hāha, nà tiān wǒ qíshí tèbié lèi. Pāi wán zhàopiàn, wǒ jiù huí gōngsī jìxù gōngzuò le.",
+      "v": "Haha, hôm đó thật ra mình mệt rã rời. Chụp ảnh xong là mình về công ty làm tiếp."
+    },
+    {
+      "ai": "Y",
+      "t": "你看，原来你的朋友圈也不是你真实的生活。",
+      "doc": "Nǐ kàn, yuánlái nǐ de péngyouquān yě bú shì nǐ zhēnshí de shēnghuó.",
+      "v": "Thấy chưa, hóa ra Vòng bạn bè của cậu cũng đâu phải cuộc sống thật của cậu."
+    },
+    {
+      "ai": "L",
+      "t": "……你说得对。我只把最好看的照片发出去。",
+      "doc": "…… Nǐ shuō de duì. Wǒ zhǐ bǎ zuì hǎokàn de zhàopiàn fā chūqu.",
+      "v": "…Cậu nói đúng. Mình chỉ đăng những tấm ảnh đẹp nhất.",
+      "np": [
+        {
+          "mau": "把 + O + V + 出去",
+          "giai": "把照片发出去 = gửi/đăng ảnh ra ngoài. 出去 cho biết hướng \"ra khỏi phía mình\".",
+          "vd": "你把垃圾拿出去吧。",
+          "vdDoc": "Nǐ bǎ lājī ná chūqu ba.",
+          "vdV": "Bạn mang rác ra ngoài đi."
+        }
+      ]
+    },
+    {
+      "ai": "Y",
+      "t": "大家都一样。没有人会把加班、生病、跟家人吵架的照片发到网上。",
+      "doc": "Dàjiā dōu yíyàng. Méiyǒu rén huì bǎ jiābān, shēngbìng, gēn jiārén chǎojià de zhàopiàn fā dào wǎng shang.",
+      "v": "Ai cũng thế cả. Chẳng ai đăng lên mạng ảnh mình tăng ca, ốm đau hay cãi nhau với người nhà."
+    },
+    {
+      "ai": "L",
+      "t": "这么说，我是在拿自己普通的日子跟别人最好的日子比较。",
+      "doc": "Zhème shuō, wǒ shì zài ná zìjǐ pǔtōng de rìzi gēn biérén zuì hǎo de rìzi bǐjiào.",
+      "v": "Nói vậy thì mình đang đem những ngày bình thường của mình so với những ngày đẹp nhất của người khác.",
+      "np": [
+        {
+          "mau": "拿 A 跟 B 比(较)",
+          "giai": "拿 A 跟 B 比 = đem A so với B. 拿 ở đây là \"lấy, đem\", không phải \"cầm\".",
+          "vd": "别拿自己跟别人比。",
+          "vdDoc": "Bié ná zìjǐ gēn biérén bǐ.",
+          "vdV": "Đừng đem mình so với người khác."
+        }
+      ]
+    },
+    {
+      "ai": "Y",
+      "t": "对。这样比较，不管你过得多好，都会觉得不够。",
+      "doc": "Duì. Zhèyàng bǐjiào, bùguǎn nǐ guò de duō hǎo, dōu huì juéde bú gòu.",
+      "v": "Đúng thế. So sánh kiểu đó thì dù cậu sống tốt đến đâu, cũng vẫn thấy chưa đủ.",
+      "np": [
+        {
+          "mau": "不管……，都……",
+          "giai": "不管 + câu hỏi/lựa chọn, 都… = bất kể…, đều… Sau 不管 phải có từ để hỏi (多, 什么, 谁) hoặc A还是B.",
+          "vd": "不管多忙，他都会给妈妈打电话。",
+          "vdDoc": "Bùguǎn duō máng, tā dōu huì gěi māma dǎ diànhuà.",
+          "vdV": "Dù bận đến đâu, anh ấy cũng gọi điện cho mẹ."
+        }
+      ]
+    },
+    {
+      "ai": "L",
+      "t": "那你呢？你好像很少用手机。",
+      "doc": "Nà nǐ ne? Nǐ hǎoxiàng hěn shǎo yòng shǒujī.",
+      "v": "Còn cậu thì sao? Hình như cậu rất ít dùng điện thoại."
+    },
+    {
+      "ai": "Y",
+      "t": "我以前也跟你一样，每天要看好几个小时。后来我发现，睡觉前刷手机，第二天一定没精神。",
+      "doc": "Wǒ yǐqián yě gēn nǐ yíyàng, měi tiān yào kàn hǎo jǐ ge xiǎoshí. Hòulái wǒ fāxiàn, shuìjiào qián shuā shǒujī, dì èr tiān yídìng méi jīngshen.",
+      "v": "Trước đây mình cũng giống cậu, ngày nào cũng xem mấy tiếng liền. Sau đó mình phát hiện ra, cứ lướt điện thoại trước khi ngủ là hôm sau chắc chắn uể oải."
+    },
+    {
+      "ai": "L",
+      "t": "那你是怎么改掉这个习惯的？",
+      "doc": "Nà nǐ shì zěnme gǎi diào zhège xíguàn de?",
+      "v": "Vậy cậu bỏ được thói quen đó bằng cách nào?",
+      "khac": [
+        {
+          "kieu": "ngắn gọn",
+          "t": "你是怎么做到的？",
+          "doc": "Nǐ shì zěnme zuòdào de?",
+          "v": "Cậu làm được bằng cách nào?"
+        }
+      ],
+      "np": [
+        {
+          "mau": "V + 掉 (bỏ đi, mất đi)",
+          "giai": "掉 sau động từ = làm cho mất đi: 改掉 (bỏ, sửa bỏ), 扔掉 (vứt đi), 忘掉 (quên đi).",
+          "vd": "我想改掉晚睡的习惯。",
+          "vdDoc": "Wǒ xiǎng gǎi diào wǎn shuì de xíguàn.",
+          "vdV": "Tôi muốn bỏ thói quen ngủ muộn."
+        }
+      ]
+    },
+    {
+      "ai": "Y",
+      "t": "很简单：晚上十点以后，我就把手机放在客厅里充电，不带进卧室。",
+      "doc": "Hěn jiǎndān: wǎnshang shí diǎn yǐhòu, wǒ jiù bǎ shǒujī fàng zài kètīng li chōngdiàn, bú dài jìn wòshì.",
+      "v": "Đơn giản lắm: sau mười giờ tối, mình để điện thoại sạc ở phòng khách, không mang vào phòng ngủ."
+    },
+    {
+      "ai": "L",
+      "t": "我怕有人找我，我却没看到消息。",
+      "doc": "Wǒ pà yǒu rén zhǎo wǒ, wǒ què méi kàndào xiāoxi.",
+      "v": "Mình sợ có người tìm mình mà mình lại không thấy tin nhắn."
+    },
+    {
+      "ai": "Y",
+      "t": "真有急事的话，他们会打电话的。大部分消息，第二天早上回也来得及。",
+      "doc": "Zhēn yǒu jí shì dehuà, tāmen huì dǎ diànhuà de. Dà bùfen xiāoxi, dì èr tiān zǎoshang huí yě láidejí.",
+      "v": "Nếu thật sự có việc gấp, họ sẽ gọi điện. Phần lớn tin nhắn, sáng hôm sau trả lời vẫn kịp.",
+      "np": [
+        {
+          "mau": "来得及 / 来不及",
+          "giai": "来得及 = còn kịp; 来不及 = không kịp. Có thể đi kèm động từ: 来得及吃早饭.",
+          "vd": "快走吧，再不走就来不及了。",
+          "vdDoc": "Kuài zǒu ba, zài bù zǒu jiù láibují le.",
+          "vdV": "Đi nhanh đi, không đi nữa là không kịp đâu."
+        }
+      ]
+    },
+    {
+      "ai": "L",
+      "t": "好吧，我今天晚上就试试。",
+      "doc": "Hǎo ba, wǒ jīntiān wǎnshang jiù shìshi.",
+      "v": "Được rồi, tối nay mình thử luôn.",
+      "khac": [
+        {
+          "kieu": "văn nói",
+          "t": "行，那我今晚就试一下。",
+          "doc": "Xíng, nà wǒ jīn wǎn jiù shì yíxià.",
+          "v": "Được, vậy tối nay mình thử luôn."
+        }
+      ]
+    },
+    {
+      "ai": "Y",
+      "t": "还有，这个周末别加班了，我们去爬山吧。不用拍照，就为了自己开心。",
+      "doc": "Hái yǒu, zhège zhōumò bié jiābān le, wǒmen qù pá shān ba. Bú yòng pāi zhào, jiù wèile zìjǐ kāixīn.",
+      "v": "Còn nữa, cuối tuần này đừng tăng ca nữa, chúng mình đi leo núi đi. Không cần chụp ảnh, chỉ để bản thân vui thôi.",
+      "khac": [
+        {
+          "kieu": "mềm mỏng",
+          "t": "这个周末要不要一起去爬山？",
+          "doc": "Zhège zhōumò yào bu yào yìqǐ qù pá shān?",
+          "v": "Cuối tuần này có muốn cùng đi leo núi không?",
+          "ghiChu": "lời rủ dạng câu hỏi — người kia dễ nhận lời cũng dễ từ chối"
+        },
+        {
+          "kieu": "thân mật",
+          "t": "周末爬山去！不许加班！",
+          "doc": "Zhōumò pá shān qù! Bù xǔ jiābān!",
+          "v": "Cuối tuần đi leo núi! Cấm tăng ca!",
+          "ghiChu": "giữa bạn thân, giọng đùa"
+        }
+      ]
+    },
+    {
+      "ai": "L",
+      "t": "不拍照？那朋友们怎么知道我去爬山了？",
+      "doc": "Bù pāi zhào? Nà péngyoumen zěnme zhīdào wǒ qù pá shān le?",
+      "v": "Không chụp ảnh á? Thế bạn bè làm sao biết mình đi leo núi?"
+    },
+    {
+      "ai": "Y",
+      "t": "他们不需要知道。你自己知道就够了。",
+      "doc": "Tāmen bù xūyào zhīdào. Nǐ zìjǐ zhīdào jiù gòu le.",
+      "v": "Họ không cần biết. Cậu tự biết là đủ rồi."
+    },
+    {
+      "ai": "L",
+      "t": "哈哈，这句话我要记下来……不过，不发朋友圈。",
+      "doc": "Hāha, zhè jù huà wǒ yào jì xiàlai…… búguò, bù fā péngyouquān.",
+      "v": "Haha, câu này mình phải ghi lại… nhưng mà không đăng lên Vòng bạn bè đâu."
+    }
   ],
   "tuVung": [
-    { "chu": "刷手机", "doc": "shuā shǒujī", "nghia": "lướt điện thoại (刷 vốn là \"chải, quét\")", "vd": "别一边吃饭一边刷手机。" },
-    { "chu": "朋友圈", "doc": "péngyouquān", "nghia": "\"Vòng bạn bè\" — nơi đăng ảnh, trạng thái trong ứng dụng nhắn tin; nghĩa rộng: bảng tin cá nhân", "vd": "她每天都发朋友圈。" },
-    { "chu": "加班", "doc": "jiābān", "nghia": "tăng ca, làm thêm giờ (gia ban)", "vd": "这个月我加了很多班。" },
-    { "chu": "原来", "doc": "yuánlái", "nghia": "hóa ra (vỡ lẽ); vốn dĩ, ban đầu (nguyên lai)", "vd": "原来你也是越南人！" },
-    { "chu": "真实", "doc": "zhēnshí", "nghia": "chân thật, thật (chân thực)", "vd": "这是一个真实的故事。" },
-    { "chu": "普通", "doc": "pǔtōng", "nghia": "bình thường, phổ thông", "vd": "我只是一个普通的学生。" },
-    { "chu": "比较", "doc": "bǐjiào", "nghia": "so sánh; khá, tương đối (tỷ giảo)", "vd": "别总拿自己跟别人比较。" },
-    { "chu": "不管", "doc": "bùguǎn", "nghia": "bất kể, dù (thường đi với 都)", "vd": "不管多忙，他都会给妈妈打电话。" },
-    { "chu": "习惯", "doc": "xíguàn", "nghia": "thói quen; quen với (tập quán)", "vd": "我还不习惯这里的天气。" },
-    { "chu": "充电", "doc": "chōngdiàn", "nghia": "sạc điện (sung điện); nghĩa bóng: nạp thêm kiến thức", "vd": "我的手机没电了，要充电。" },
-    { "chu": "消息", "doc": "xiāoxi", "nghia": "tin nhắn, tin tức (tiêu tức)", "vd": "有消息就告诉我。" },
-    { "chu": "来得及", "doc": "láidejí", "nghia": "kịp, còn kịp (ngược lại: 来不及 láibují)", "vd": "现在出发还来得及。" }
+    {
+      "chu": "刷手机",
+      "doc": "shuā shǒujī",
+      "nghia": "lướt điện thoại (刷 vốn là \"chải, quét\")",
+      "vd": "别一边吃饭一边刷手机。"
+    },
+    {
+      "chu": "朋友圈",
+      "doc": "péngyouquān",
+      "nghia": "\"Vòng bạn bè\" — nơi đăng ảnh, trạng thái trong ứng dụng nhắn tin; nghĩa rộng: bảng tin cá nhân",
+      "vd": "她每天都发朋友圈。"
+    },
+    {
+      "chu": "加班",
+      "doc": "jiābān",
+      "nghia": "tăng ca, làm thêm giờ (gia ban)",
+      "vd": "这个月我加了很多班。"
+    },
+    {
+      "chu": "原来",
+      "doc": "yuánlái",
+      "nghia": "hóa ra (vỡ lẽ); vốn dĩ, ban đầu (nguyên lai)",
+      "vd": "原来你也是越南人！"
+    },
+    {
+      "chu": "真实",
+      "doc": "zhēnshí",
+      "nghia": "chân thật, thật (chân thực)",
+      "vd": "这是一个真实的故事。"
+    },
+    {
+      "chu": "普通",
+      "doc": "pǔtōng",
+      "nghia": "bình thường, phổ thông",
+      "vd": "我只是一个普通的学生。"
+    },
+    {
+      "chu": "比较",
+      "doc": "bǐjiào",
+      "nghia": "so sánh; khá, tương đối (tỷ giảo)",
+      "vd": "别总拿自己跟别人比较。"
+    },
+    {
+      "chu": "不管",
+      "doc": "bùguǎn",
+      "nghia": "bất kể, dù (thường đi với 都)",
+      "vd": "不管多忙，他都会给妈妈打电话。"
+    },
+    {
+      "chu": "习惯",
+      "doc": "xíguàn",
+      "nghia": "thói quen; quen với (tập quán)",
+      "vd": "我还不习惯这里的天气。"
+    },
+    {
+      "chu": "充电",
+      "doc": "chōngdiàn",
+      "nghia": "sạc điện (sung điện); nghĩa bóng: nạp thêm kiến thức",
+      "vd": "我的手机没电了，要充电。"
+    },
+    {
+      "chu": "消息",
+      "doc": "xiāoxi",
+      "nghia": "tin nhắn, tin tức (tiêu tức)",
+      "vd": "有消息就告诉我。"
+    },
+    {
+      "chu": "来得及",
+      "doc": "láidejí",
+      "nghia": "kịp, còn kịp (ngược lại: 来不及 láibují)",
+      "vd": "现在出发还来得及。"
+    }
   ],
   "yNghia": "Mỗi người chỉ đăng lên mạng những khoảnh khắc đẹp nhất — vậy mà ta lại đem cả \"hậu trường\" đời mình ra so với \"sân khấu\" của người khác. Có những niềm vui không cần ai thấy mới là thật: tự mình biết, như thế là đủ.",
   "meo": [
@@ -63,10 +390,55 @@
     "Bổ ngữ khả năng: 来得及 (kịp) ↔ 来不及 (không kịp); 说不清楚 (không nói rõ được). 得 ở đây đọc nhẹ de."
   ],
   "cauHoi": [
-    { "hoi": "Vì sao Long không vui khi xem Vòng bạn bè?", "chon": ["Bạn bè không thích bài của anh", "Anh thấy người khác sống tốt hơn mình", "Điện thoại của anh bị hỏng"], "dung": 1, "giai": "Long nói: 我都觉得别人过得比我好." },
-    { "hoi": "Sự thật về tấm ảnh uống cà phê bên hồ của Long là gì?", "chon": ["Hôm đó anh rất mệt, chụp xong lại về công ty làm việc", "Đó là ảnh của người khác", "Hôm đó là ngày nghỉ vui nhất của anh"], "dung": 0, "giai": "那天我其实特别累。拍完照片，我就回公司继续工作了." },
-    { "hoi": "Tiểu Vũ bỏ thói quen lướt điện thoại trước khi ngủ bằng cách nào?", "chon": ["Xoá hết ứng dụng mạng xã hội", "Tắt máy từ 8 giờ tối", "Sau 10 giờ tối để điện thoại sạc ở phòng khách"], "dung": 2, "giai": "晚上十点以后，我就把手机放在客厅里充电，不带进卧室." },
-    { "hoi": "\"连周末都在加班\" nghĩa là gì?", "chon": ["Cuối tuần không phải tăng ca", "Đến cả cuối tuần cũng tăng ca", "Chỉ tăng ca vào cuối tuần"], "dung": 1, "giai": "连…都… = đến cả… cũng…" },
-    { "hoi": "Câu nào cùng nghĩa với \"现在回消息也来得及\"?", "chon": ["Bây giờ trả lời tin nhắn vẫn còn kịp", "Bây giờ trả lời thì đã muộn", "Bây giờ không cần trả lời"], "dung": 0, "giai": "来得及 = kịp; 来不及 = không kịp." }
+    {
+      "hoi": "Vì sao Long không vui khi xem Vòng bạn bè?",
+      "chon": [
+        "Bạn bè không thích bài của anh",
+        "Anh thấy người khác sống tốt hơn mình",
+        "Điện thoại của anh bị hỏng"
+      ],
+      "dung": 1,
+      "giai": "Long nói: 我都觉得别人过得比我好."
+    },
+    {
+      "hoi": "Sự thật về tấm ảnh uống cà phê bên hồ của Long là gì?",
+      "chon": [
+        "Hôm đó anh rất mệt, chụp xong lại về công ty làm việc",
+        "Đó là ảnh của người khác",
+        "Hôm đó là ngày nghỉ vui nhất của anh"
+      ],
+      "dung": 0,
+      "giai": "那天我其实特别累。拍完照片，我就回公司继续工作了."
+    },
+    {
+      "hoi": "Tiểu Vũ bỏ thói quen lướt điện thoại trước khi ngủ bằng cách nào?",
+      "chon": [
+        "Xoá hết ứng dụng mạng xã hội",
+        "Tắt máy từ 8 giờ tối",
+        "Sau 10 giờ tối để điện thoại sạc ở phòng khách"
+      ],
+      "dung": 2,
+      "giai": "晚上十点以后，我就把手机放在客厅里充电，不带进卧室."
+    },
+    {
+      "hoi": "\"连周末都在加班\" nghĩa là gì?",
+      "chon": [
+        "Cuối tuần không phải tăng ca",
+        "Đến cả cuối tuần cũng tăng ca",
+        "Chỉ tăng ca vào cuối tuần"
+      ],
+      "dung": 1,
+      "giai": "连…都… = đến cả… cũng…"
+    },
+    {
+      "hoi": "Câu nào cùng nghĩa với \"现在回消息也来得及\"?",
+      "chon": [
+        "Bây giờ trả lời tin nhắn vẫn còn kịp",
+        "Bây giờ trả lời thì đã muộn",
+        "Bây giờ không cần trả lời"
+      ],
+      "dung": 0,
+      "giai": "来得及 = kịp; 来不及 = không kịp."
+    }
   ]
 }

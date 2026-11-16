@@ -1,0 +1,257 @@
+{
+  "id": "zh-cs-hsk4-01",
+  "nn": "zh",
+  "danhMuc": "chia-se",
+  "cap": "HSK4",
+  "so": 1,
+  "tieuDe": "留学第一年",
+  "tieuDeViet": "Năm đầu du học",
+  "moTa": "Tuấn sang miền Bắc Trung Quốc du học vào giữa mùa đông: nghe giảng không hiểu, lần đầu thi trượt, ăn mì gói một mình. Rồi một câu hỏi của bạn cùng phòng và một đêm giao thừa ở nhà người lạ đã thay đổi năm đầu tiên của anh.",
+  "chuDe": "Du học",
+  "bieuTuong": "airplane.departure",
+  "nguoi": [
+    { "ma": "J", "ten": "Tuấn", "giong": "zh-nam", "vai": "người kể chuyện, du học sinh người Việt" }
+  ],
+  "loi": [
+    {
+      "ai": "J",
+      "t": "大家好，我是阮俊。今天想跟大家分享我在中国留学第一年的故事。",
+      "doc": "Dàjiā hǎo, wǒ shì Ruǎn Jùn. Jīntiān xiǎng gēn dàjiā fēnxiǎng wǒ zài Zhōngguó liúxué dì yī nián de gùshi.",
+      "v": "Chào mọi người, mình là Nguyễn Tuấn. Hôm nay mình muốn chia sẻ câu chuyện năm đầu tiên du học ở Trung Quốc.",
+      "khac": [
+        { "kieu": "trang trọng", "t": "欢迎收听今天的节目，我是阮俊。", "doc": "Huānyíng shōutīng jīntiān de jiémù, wǒ shì Ruǎn Jùn.", "v": "Chào mừng các bạn đến với chương trình hôm nay, tôi là Nguyễn Tuấn.", "ghiChu": "câu mở đầu kiểu phát thanh" }
+      ]
+    },
+    {
+      "ai": "J",
+      "t": "我是十二月到北方的。下飞机的时候，外面是零下十五度。",
+      "doc": "Wǒ shì shí'èr yuè dào běifāng de. Xià fēijī de shíhou, wàimiàn shì líng xià shíwǔ dù.",
+      "v": "Mình đến miền Bắc vào tháng Mười hai. Lúc xuống máy bay, bên ngoài âm mười lăm độ.",
+      "np": [
+        { "mau": "是 + thời gian + V + 的", "giai": "Nhấn mạnh thời điểm của một việc đã xảy ra (đến VÀO THÁNG MƯỜI HAI).", "vd": "我是去年九月开始工作的。", "vdDoc": "Wǒ shì qùnián jiǔ yuè kāishǐ gōngzuò de.", "vdV": "Tôi bắt đầu đi làm từ tháng Chín năm ngoái." }
+      ]
+    },
+    {
+      "ai": "J",
+      "t": "我从小在胡志明市长大，从来没见过雪，所以既兴奋又害怕。",
+      "doc": "Wǒ cóngxiǎo zài Húzhìmíng Shì zhǎngdà, cónglái méi jiàn guo xuě, suǒyǐ jì xīngfèn yòu hàipà.",
+      "v": "Mình lớn lên ở Thành phố Hồ Chí Minh, chưa từng thấy tuyết, nên vừa háo hức vừa sợ.",
+      "np": [
+        { "mau": "既 A 又 B", "giai": "\"Vừa A vừa B\" — hai tính chất cùng tồn tại; trang trọng hơn 又…又….", "vd": "这个办法既简单又有效。", "vdDoc": "Zhège bànfǎ jì jiǎndān yòu yǒuxiào.", "vdV": "Cách này vừa đơn giản vừa hiệu quả." }
+      ]
+    },
+    {
+      "ai": "J",
+      "t": "可是兴奋只持续了一个星期。真正上课以后，我发现自己几乎听不懂老师在说什么。",
+      "doc": "Kěshì xīngfèn zhǐ chíxù le yí ge xīngqī. Zhēnzhèng shàngkè yǐhòu, wǒ fāxiàn zìjǐ jīhū tīng bu dǒng lǎoshī zài shuō shénme.",
+      "v": "Nhưng sự háo hức chỉ kéo dài một tuần. Khi thật sự vào học, mình phát hiện mình gần như không nghe hiểu thầy đang nói gì."
+    },
+    {
+      "ai": "J",
+      "t": "在越南学中文的时候，老师说得又慢又清楚；可这里的老师说话很快，还带着口音。",
+      "doc": "Zài Yuènán xué Zhōngwén de shíhou, lǎoshī shuō de yòu màn yòu qīngchu; kě zhèlǐ de lǎoshī shuōhuà hěn kuài, hái dài zhe kǒuyīn.",
+      "v": "Hồi học tiếng Trung ở Việt Nam, thầy cô nói vừa chậm vừa rõ; còn thầy cô ở đây nói rất nhanh, lại có giọng địa phương."
+    },
+    {
+      "ai": "J",
+      "t": "第一次考试，我只考了五十八分。这是我从小到大第一次不及格。",
+      "doc": "Dì yī cì kǎoshì, wǒ zhǐ kǎo le wǔshíbā fēn. Zhè shì wǒ cóngxiǎo dào dà dì yī cì bù jígé.",
+      "v": "Lần thi đầu tiên, mình chỉ được năm mươi tám điểm. Đây là lần đầu tiên từ bé đến lớn mình thi trượt."
+    },
+    {
+      "ai": "J",
+      "t": "那段时间，我每天一个人吃方便面，甚至不想给家里打电话，怕父母担心。",
+      "doc": "Nà duàn shíjiān, wǒ měitiān yí ge rén chī fāngbiànmiàn, shènzhì bù xiǎng gěi jiā li dǎ diànhuà, pà fùmǔ dānxīn.",
+      "v": "Khoảng thời gian đó, ngày nào mình cũng ăn mì gói một mình, thậm chí không muốn gọi điện về nhà, sợ bố mẹ lo.",
+      "np": [
+        { "mau": "甚至 + V", "giai": "甚至 = thậm chí — đưa ra ví dụ đến mức cao nhất, bất ngờ nhất.", "vd": "他太忙了，甚至忘了吃饭。", "vdDoc": "Tā tài máng le, shènzhì wàng le chīfàn.", "vdV": "Anh ấy bận quá, thậm chí quên cả ăn." }
+      ]
+    },
+    {
+      "ai": "J",
+      "t": "后来，我的室友小高发现我心情不好。",
+      "doc": "Hòulái, wǒ de shìyǒu Xiǎo Gāo fāxiàn wǒ xīnqíng bù hǎo.",
+      "v": "Sau đó, bạn cùng phòng của mình là Cao nhận ra mình đang buồn."
+    },
+    {
+      "ai": "J",
+      "t": "他问我：“你最近怎么了？有什么事可以跟我说。”",
+      "doc": "Tā wèn wǒ: “Nǐ zuìjìn zěnme le? Yǒu shénme shì kěyǐ gēn wǒ shuō.”",
+      "v": "Cậu ấy hỏi mình: \"Dạo này cậu sao thế? Có chuyện gì cứ nói với mình.\"",
+      "khac": [
+        { "kieu": "thân mật", "t": "你没事吧？需要帮忙就说一声。", "doc": "Nǐ méi shì ba? Xūyào bāngmáng jiù shuō yì shēng.", "v": "Cậu không sao chứ? Cần giúp thì cứ nói một tiếng.", "ghiChu": "hỏi han bạn bè, đồng nghiệp đang buồn" },
+        { "kieu": "lịch sự", "t": "您最近还好吗？有什么需要的话，请随时告诉我。", "doc": "Nín zuìjìn hái hǎo ma? Yǒu shénme xūyào de huà, qǐng suíshí gàosu wǒ.", "v": "Dạo này anh/chị vẫn ổn chứ? Nếu cần gì xin cứ báo tôi bất cứ lúc nào.", "ghiChu": "với người lớn tuổi, cấp trên" }
+      ]
+    },
+    {
+      "ai": "J",
+      "t": "我本来不好意思麻烦别人，但是那天，我终于把心里的话都说了出来。",
+      "doc": "Wǒ běnlái bù hǎoyìsi máfan biérén, dànshì nà tiān, wǒ zhōngyú bǎ xīn li de huà dōu shuō le chūlai.",
+      "v": "Vốn dĩ mình ngại làm phiền người khác, nhưng hôm đó, cuối cùng mình đã nói ra hết những điều trong lòng.",
+      "np": [
+        { "mau": "不好意思 + V", "giai": "不好意思 + động từ = ngại làm gì đó (vì xấu hổ, sợ phiền). Đứng một mình thì nghĩa \"xin lỗi\".", "vd": "我不好意思问老师。", "vdDoc": "Wǒ bù hǎoyìsi wèn lǎoshī.", "vdV": "Tôi ngại hỏi thầy." },
+        { "mau": "本来…，但是…", "giai": "本来 = vốn dĩ, ban đầu (định thế này), nhưng sau đó thay đổi.", "vd": "我本来想去，但是下雨了。", "vdDoc": "Wǒ běnlái xiǎng qù, dànshì xià yǔ le.", "vdV": "Lúc đầu tôi định đi, nhưng trời mưa." }
+      ]
+    },
+    {
+      "ai": "J",
+      "t": "没想到，小高说：“这有什么难的？上课的时候我帮你录音，下课我们一起听。”",
+      "doc": "Méi xiǎngdào, Xiǎo Gāo shuō: “Zhè yǒu shénme nán de? Shàngkè de shíhou wǒ bāng nǐ lùyīn, xiàkè wǒmen yìqǐ tīng.”",
+      "v": "Không ngờ, Cao nói: \"Có gì khó đâu? Trong giờ học mình ghi âm giúp cậu, tan học hai đứa cùng nghe.\"",
+      "np": [
+        { "mau": "这有什么 + adj + 的？", "giai": "Câu hỏi tu từ = \"có gì mà… đâu\" — làm nhẹ đi một chuyện người kia thấy nặng nề.", "vd": "这有什么好怕的？", "vdDoc": "Zhè yǒu shénme hǎo pà de?", "vdV": "Cái này có gì mà sợ?" }
+      ]
+    },
+    {
+      "ai": "J",
+      "t": "于是，每天晚上，我们在宿舍里一起听录音。听不懂的地方，他就一句一句给我解释。",
+      "doc": "Yúshì, měitiān wǎnshang, wǒmen zài sùshè li yìqǐ tīng lùyīn. Tīng bu dǒng de dìfang, tā jiù yí jù yí jù gěi wǒ jiěshì.",
+      "v": "Thế là tối nào hai đứa cũng ngồi trong ký túc xá nghe lại bản ghi âm. Chỗ nào không hiểu, cậu ấy giải thích cho mình từng câu một."
+    },
+    {
+      "ai": "J",
+      "t": "作为回报，我教他做越南春卷。他吃了第一口就说，比饭馆的还好吃。",
+      "doc": "Zuòwéi huíbào, wǒ jiāo tā zuò Yuènán chūnjuǎn. Tā chī le dì yī kǒu jiù shuō, bǐ fànguǎn de hái hǎochī.",
+      "v": "Để đáp lại, mình dạy cậu ấy làm nem rán Việt Nam. Cậu ấy ăn miếng đầu tiên đã khen ngon hơn cả ngoài quán.",
+      "np": [
+        { "mau": "作为 + N", "giai": "作为 = với tư cách là, coi như là: 作为回报 (để đáp lại), 作为学生 (với tư cách học sinh).", "vd": "作为新人，我要多学习。", "vdDoc": "Zuòwéi xīnrén, wǒ yào duō xuéxí.", "vdV": "Là người mới, tôi cần học hỏi nhiều." }
+      ]
+    },
+    {
+      "ai": "J",
+      "t": "他还拉我参加了学校的羽毛球俱乐部。在那儿，我认识了来自不同国家的朋友。",
+      "doc": "Tā hái lā wǒ cānjiā le xuéxiào de yǔmáoqiú jùlèbù. Zài nàr, wǒ rènshi le láizì bùtóng guójiā de péngyou.",
+      "v": "Cậu ấy còn kéo mình vào câu lạc bộ cầu lông của trường. Ở đó, mình quen những người bạn đến từ nhiều nước khác nhau."
+    },
+    {
+      "ai": "J",
+      "t": "慢慢地，我能听懂的越来越多，也敢在课上回答问题了。",
+      "doc": "Mànmàn de, wǒ néng tīng dǒng de yuè lái yuè duō, yě gǎn zài kè shang huídá wèntí le.",
+      "v": "Dần dần, những gì mình nghe hiểu được ngày càng nhiều, cũng dám trả lời câu hỏi trong lớp rồi.",
+      "np": [
+        { "mau": "越来越 + adj", "giai": "\"Ngày càng…\" — mức độ tăng dần theo thời gian.", "vd": "天气越来越冷了。", "vdDoc": "Tiānqì yuè lái yuè lěng le.", "vdV": "Thời tiết ngày càng lạnh." }
+      ]
+    },
+    {
+      "ai": "J",
+      "t": "第一年最难忘的，是春节。",
+      "doc": "Dì yī nián zuì nánwàng de, shì Chūnjié.",
+      "v": "Điều khó quên nhất của năm đầu tiên là Tết Nguyên đán."
+    },
+    {
+      "ai": "J",
+      "t": "宿舍里的同学都回家了。我买不起回越南的机票，只好一个人留在学校。",
+      "doc": "Sùshè li de tóngxué dōu huí jiā le. Wǒ mǎi bu qǐ huí Yuènán de jīpiào, zhǐhǎo yí ge rén liú zài xuéxiào.",
+      "v": "Các bạn trong ký túc xá đều về nhà cả. Mình không đủ tiền mua vé máy bay về Việt Nam, đành ở lại trường một mình.",
+      "np": [
+        { "mau": "V + 不起", "giai": "Bổ ngữ khả năng: không đủ khả năng (thường là tiền) để làm: 买不起, 住不起.", "vd": "这里的房子太贵了，我租不起。", "vdDoc": "Zhèlǐ de fángzi tài guì le, wǒ zū bu qǐ.", "vdV": "Nhà ở đây đắt quá, tôi không thuê nổi." },
+        { "mau": "只好 + V", "giai": "只好 = đành phải (không còn lựa chọn nào khác).", "vd": "末班车走了，我只好打车。", "vdDoc": "Mòbānchē zǒu le, wǒ zhǐhǎo dǎchē.", "vdV": "Chuyến xe cuối đi rồi, tôi đành phải đi taxi." }
+      ]
+    },
+    {
+      "ai": "J",
+      "t": "除夕那天下午，小高突然给我打电话：“你一个人过年多没意思，来我家吧！”",
+      "doc": "Chúxī nà tiān xiàwǔ, Xiǎo Gāo tūrán gěi wǒ dǎ diànhuà: “Nǐ yí ge rén guònián duō méi yìsi, lái wǒ jiā ba!”",
+      "v": "Chiều hôm giao thừa, Cao bất ngờ gọi điện cho mình: \"Cậu ăn Tết một mình buồn lắm, sang nhà mình đi!\"",
+      "khac": [
+        { "kieu": "mềm mỏng", "t": "要不你来我家过年吧？", "doc": "Yàobù nǐ lái wǒ jiā guònián ba?", "v": "Hay là cậu sang nhà mình ăn Tết nhé?", "ghiChu": "要不 = hay là — lời mời nhẹ nhàng, không ép" }
+      ]
+    },
+    {
+      "ai": "J",
+      "t": "我坐了三个小时的火车到他家。他的父母虽然听不懂我的口音，却一直给我夹菜。",
+      "doc": "Wǒ zuò le sān ge xiǎoshí de huǒchē dào tā jiā. Tā de fùmǔ suīrán tīng bu dǒng wǒ de kǒuyīn, què yìzhí gěi wǒ jiā cài.",
+      "v": "Mình ngồi ba tiếng tàu hoả đến nhà cậu ấy. Bố mẹ cậu ấy tuy nghe không hiểu giọng mình, nhưng cứ gắp thức ăn cho mình mãi.",
+      "np": [
+        { "mau": "虽然 A，却 B", "giai": "却 (què) = nhưng lại — đứng sau chủ ngữ, trước động từ; nhẹ và văn hơn 但是.", "vd": "他虽然很累，却一直在笑。", "vdDoc": "Tā suīrán hěn lèi, què yìzhí zài xiào.", "vdV": "Anh ấy tuy rất mệt nhưng lại cười suốt." }
+      ]
+    },
+    {
+      "ai": "J",
+      "t": "那天晚上，我们一起包饺子、看春节晚会。窗外放着烟花，我心里一点儿也不觉得冷。",
+      "doc": "Nà tiān wǎnshang, wǒmen yìqǐ bāo jiǎozi, kàn Chūnjié wǎnhuì. Chuāng wài fàng zhe yānhuā, wǒ xīn li yìdiǎnr yě bù juéde lěng.",
+      "v": "Tối hôm đó, mọi người cùng gói sủi cảo, xem chương trình đêm Xuân. Ngoài cửa sổ pháo hoa nổ, trong lòng mình chẳng thấy lạnh chút nào.",
+      "np": [
+        { "mau": "一点儿也不 + adj", "giai": "\"Không… chút nào\" — phủ định mạnh. Có thể thay 也 bằng 都.", "vd": "这个菜一点儿也不辣。", "vdDoc": "Zhège cài yìdiǎnr yě bú là.", "vdV": "Món này không cay chút nào." }
+      ]
+    },
+    {
+      "ai": "J",
+      "t": "现在回想起来，第一年让我明白了一件事：孤独是正常的，但不要一个人扛着。",
+      "doc": "Xiànzài huíxiǎng qǐlai, dì yī nián ràng wǒ míngbai le yí jiàn shì: gūdú shì zhèngcháng de, dàn búyào yí ge rén káng zhe.",
+      "v": "Bây giờ nghĩ lại, năm đầu tiên dạy mình một điều: cô đơn là chuyện bình thường, nhưng đừng một mình gồng gánh."
+    },
+    {
+      "ai": "J",
+      "t": "很多时候，别人愿意帮你，只是在等你先开口。",
+      "doc": "Hěn duō shíhou, biérén yuànyì bāng nǐ, zhǐ shì zài děng nǐ xiān kāikǒu.",
+      "v": "Rất nhiều khi, người khác sẵn lòng giúp bạn, chỉ là đang đợi bạn mở lời trước."
+    },
+    {
+      "ai": "J",
+      "t": "如果你也正在国外读书，觉得很累、很想家，可以试着对身边的人说一句：“我需要帮忙。”",
+      "doc": "Rúguǒ nǐ yě zhèngzài guówài dúshū, juéde hěn lèi, hěn xiǎng jiā, kěyǐ shìzhe duì shēnbiān de rén shuō yí jù: “Wǒ xūyào bāngmáng.”",
+      "v": "Nếu bạn cũng đang học ở nước ngoài, thấy mệt mỏi, rất nhớ nhà, hãy thử nói với người bên cạnh một câu: \"Mình cần giúp đỡ.\"",
+      "khac": [
+        { "kieu": "văn nói", "t": "要是你也在国外读书，又累又想家，就试着跟身边的人说：“你能帮帮我吗？”", "doc": "Yàoshi nǐ yě zài guówài dúshū, yòu lèi yòu xiǎng jiā, jiù shìzhe gēn shēnbiān de rén shuō: “Nǐ néng bāngbang wǒ ma?”", "v": "Nếu bạn cũng đang du học, vừa mệt vừa nhớ nhà, thì thử nói với người bên cạnh: \"Cậu giúp mình được không?\"", "ghiChu": "帮帮我 nghe gần gũi, tha thiết hơn 我需要帮忙" }
+      ]
+    },
+    {
+      "ai": "J",
+      "t": "我是阮俊，谢谢你的收听，我们下次见。",
+      "doc": "Wǒ shì Ruǎn Jùn, xièxie nǐ de shōutīng, wǒmen xià cì jiàn.",
+      "v": "Mình là Nguyễn Tuấn, cảm ơn bạn đã lắng nghe, hẹn gặp lại lần sau.",
+      "khac": [
+        { "kieu": "trang trọng", "t": "感谢收听，我们下期再见！", "doc": "Gǎnxiè shōutīng, wǒmen xià qī zàijiàn!", "v": "Cảm ơn đã lắng nghe, hẹn gặp lại ở số sau!", "ghiChu": "下期 = số/tập sau — câu kết chuẩn của podcast" }
+      ]
+    }
+  ],
+  "tuVung": [
+    { "chu": "留学", "doc": "liúxué", "nghia": "du học", "vd": "他在中国留学两年了。" },
+    { "chu": "口音", "doc": "kǒuyīn", "nghia": "giọng (địa phương), khẩu âm", "vd": "他说话有南方口音。" },
+    { "chu": "不及格", "doc": "bù jígé", "nghia": "không đạt, thi trượt", "vd": "这次考试我不及格。" },
+    { "chu": "甚至", "doc": "shènzhì", "nghia": "thậm chí", "vd": "他甚至没告诉父母。" },
+    { "chu": "室友", "doc": "shìyǒu", "nghia": "bạn cùng phòng", "vd": "我的室友是北京人。" },
+    { "chu": "录音", "doc": "lùyīn", "nghia": "ghi âm; bản ghi âm", "vd": "可以把课录音吗？" },
+    { "chu": "宿舍", "doc": "sùshè", "nghia": "ký túc xá", "vd": "我们住在同一个宿舍。" },
+    { "chu": "作为回报", "doc": "zuòwéi huíbào", "nghia": "để đáp lại, coi như trả ơn", "vd": "作为回报，我请他吃饭。" },
+    { "chu": "除夕", "doc": "chúxī", "nghia": "đêm giao thừa", "vd": "除夕晚上全家一起吃饭。" },
+    { "chu": "夹菜", "doc": "jiā cài", "nghia": "gắp thức ăn (cho người khác)", "vd": "奶奶总给我夹菜。" },
+    { "chu": "孤独", "doc": "gūdú", "nghia": "cô đơn, cô độc", "vd": "刚来的时候我很孤独。" },
+    { "chu": "开口", "doc": "kāikǒu", "nghia": "mở lời, lên tiếng", "vd": "有困难就开口。" }
+  ],
+  "yNghia": "Cô đơn ở xứ lạ là chuyện bình thường, không phải dấu hiệu yếu đuối. Điều nguy hiểm là gồng gánh một mình. Nhiều người quanh ta sẵn lòng giúp, họ chỉ đợi ta mở lời trước — và sự giúp đỡ thường bắt đầu từ một câu rất đơn giản: \"Mình cần giúp đỡ\".",
+  "meo": [
+    "Câu hỏi han người đang buồn: 你最近怎么了？/ 你没事吧？ — và lời mời mở lòng: 有什么事可以跟我说。",
+    "却 (què) = \"nhưng lại\", đứng sau chủ ngữ, trước động từ: 父母虽然听不懂，却一直给我夹菜. Không đặt 却 ở đầu câu như 但是.",
+    "Bổ ngữ khả năng chỉ tiền bạc/năng lực: 买不起 (không mua nổi), 住不起. Khẳng định: 买得起.",
+    "Phong tục: 除夕 (giao thừa) ở miền Bắc Trung Quốc gắn với 包饺子 (gói sủi cảo) và 春节晚会 (chương trình đêm Xuân); 夹菜 cho khách là cách thể hiện sự quý mến.",
+    "扛 đọc káng (vác, gồng gánh) — không nhầm với 抗 kàng (chống lại)."
+  ],
+  "cauHoi": [
+    {
+      "hoi": "Vì sao Tuấn nghe giảng không hiểu khi mới sang?",
+      "chon": ["Thầy cô dạy bằng tiếng Anh", "Thầy cô nói nhanh và có giọng địa phương", "Tuấn chưa từng học tiếng Trung"],
+      "dung": 1,
+      "giai": "这里的老师说话很快，还带着口音。"
+    },
+    {
+      "hoi": "Cao đã giúp Tuấn học bằng cách nào?",
+      "chon": ["Ghi âm bài giảng rồi tối cùng nghe, giải thích từng câu", "Làm bài kiểm tra hộ", "Giới thiệu gia sư"],
+      "dung": 0,
+      "giai": "上课的时候我帮你录音，下课我们一起听…一句一句给我解释。"
+    },
+    {
+      "hoi": "Vì sao Tuấn không về Việt Nam ăn Tết?",
+      "chon": ["Trường không cho nghỉ", "Bố mẹ sang thăm", "Không đủ tiền mua vé máy bay"],
+      "dung": 2,
+      "giai": "我买不起回越南的机票，只好一个人留在学校。"
+    },
+    {
+      "hoi": "Bài học lớn nhất của Tuấn trong năm đầu là gì?",
+      "chon": ["Phải học thật nhiều mới đỗ", "Cô đơn là bình thường, nhưng đừng gồng gánh một mình", "Nên chọn trường ở miền Nam"],
+      "dung": 1,
+      "giai": "孤独是正常的，但不要一个人扛着。"
+    }
+  ]
+}

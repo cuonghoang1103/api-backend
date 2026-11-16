@@ -1,0 +1,109 @@
+{
+  "id": "en-cs-c1-03",
+  "nn": "en",
+  "danhMuc": "chia-se",
+  "cap": "C1",
+  "so": 3,
+  "tieuDe": "Learning to Read Again",
+  "tieuDeViet": "Học đọc lại từ đầu",
+  "moTa": "Clara dạy văn học mười lăm năm. Sau một tai nạn xe đạp, cô vẫn nói được, vẫn nhận ra chồng — nhưng các con chữ không còn nghĩa gì. Câu chuyện bắt đầu lại từ cuốn sách tranh cho trẻ bốn tuổi, cậu con trai bảy tuổi làm thầy, và một câu nói đã đổi cách cô đo sự tiến bộ.",
+  "chuDe": "Bắt đầu lại từ số 0",
+  "bieuTuong": "book.fill",
+  "nguoi": [
+    { "ma": "R", "ten": "Ryan", "giong": "us-nam", "vai": "người dẫn podcast" },
+    { "ma": "C", "ten": "Clara", "giong": "uk-nu", "vai": "người kể chuyện, giáo viên" }
+  ],
+  "loi": [
+    { "ai": "R", "t": "My guest today taught English literature for fifteen years. Then, at thirty-eight, she had to learn to read all over again. Clara, thank you for being here.", "v": "Khách mời hôm nay đã dạy văn học Anh mười lăm năm. Rồi ở tuổi ba mươi tám, cô phải học đọc lại từ đầu. Clara, cảm ơn chị đã có mặt." },
+    { "ai": "C", "t": "Thank you for having me. A few years ago, I couldn't have told this story without crying, so this already feels like progress.", "v": "Cảm ơn anh đã mời tôi. Vài năm trước, tôi không thể kể câu chuyện này mà không khóc, nên được ngồi đây đã là một bước tiến.",
+      "np": [{ "mau": "couldn't have + V3", "giai": "\"đã không thể nào… (dù có muốn)\" — nói về một điều bất khả trong quá khứ, nhấn mạnh sự khác biệt với hiện tại.", "vd": "Two years ago, I couldn't have given this talk in English.", "vdV": "Hai năm trước, tôi đã không thể trình bày bài này bằng tiếng Anh." }] },
+    { "ai": "R", "t": "Take us back to the day it happened.", "v": "Hãy đưa chúng tôi trở lại ngày hôm đó.",
+      "khac": [
+        { "kieu": "lịch sự", "t": "If you're comfortable, could you take us back to the day of the accident?", "v": "Nếu chị thấy thoải mái, chị có thể kể lại ngày xảy ra tai nạn không?", "ghiChu": "khi hỏi về chuyện đau buồn, cho người kia quyền từ chối" }
+      ] },
+    { "ai": "C", "t": "It was an ordinary Tuesday. I was cycling to school, and a van turned without seeing me. I remember the sound and nothing else.", "v": "Đó là một ngày thứ Ba bình thường. Tôi đang đạp xe tới trường, và một chiếc xe tải nhỏ rẽ mà không thấy tôi. Tôi chỉ nhớ âm thanh, ngoài ra không còn gì." },
+    { "ai": "C", "t": "I woke up in hospital two days later with a head injury. The doctors were relieved: I could talk, I knew my name, and I recognised my husband.", "v": "Hai ngày sau tôi tỉnh dậy trong bệnh viện với chấn thương ở đầu. Các bác sĩ thở phào: tôi nói được, biết tên mình, và nhận ra chồng." },
+    { "ai": "R", "t": "So at first it seemed you'd been lucky.", "v": "Vậy là ban đầu có vẻ như chị đã may mắn.",
+      "np": [{ "mau": "it seemed (that) + had + V3", "giai": "\"có vẻ như đã…\" — quá khứ hoàn thành sau seemed vì sự may mắn xảy ra trước lúc nhận định.", "vd": "It seemed the problem had fixed itself.", "vdV": "Có vẻ như vấn đề đã tự hết." }] },
+    { "ai": "C", "t": "It did. It was only when a nurse handed me a get-well card that I realised something was terribly wrong.", "v": "Đúng vậy. Chỉ đến khi một cô y tá đưa tôi tấm thiệp chúc mau khoẻ, tôi mới nhận ra có điều gì đó sai khủng khiếp.",
+      "np": [{ "mau": "It was only when… that… (câu chẻ)", "giai": "\"Mãi đến khi… thì mới…\" — câu chẻ nhấn mạnh thời điểm nhận ra, tạo kịch tính khi kể chuyện.", "vd": "It was only when I got home that I noticed my phone was missing.", "vdV": "Mãi về tới nhà tôi mới để ý là mất điện thoại." }] },
+    { "ai": "C", "t": "I could see the letters perfectly clearly, but they meant nothing. It was as if someone had replaced my language with a beautiful, foreign alphabet.", "v": "Tôi thấy các chữ cái rõ ràng hoàn toàn, nhưng chúng chẳng mang nghĩa gì. Cứ như thể ai đó đã thay ngôn ngữ của tôi bằng một bảng chữ cái xa lạ mà đẹp đẽ.",
+      "np": [{ "mau": "as if + had + V3", "giai": "\"cứ như thể đã…\" — so sánh với một điều không có thật trong quá khứ, nên dùng quá khứ hoàn thành.", "vd": "He looked at me as if he had seen a ghost.", "vdV": "Anh ấy nhìn tôi như thể vừa thấy ma." }] },
+    { "ai": "R", "t": "What went through your mind?", "v": "Lúc đó chị đã nghĩ gì?",
+      "khac": [
+        { "kieu": "tự nhiên hơn", "t": "What was going through your head at that moment?", "v": "Lúc ấy trong đầu chị là gì?" },
+        { "kieu": "trang trọng", "t": "How did you feel when you realised?", "v": "Chị đã cảm thấy thế nào khi nhận ra điều đó?" }
+      ] },
+    { "ai": "C", "t": "Panic, at first. Then something worse, a kind of grief. Reading wasn't just my job; it was who I was. If I wasn't a reader, I genuinely didn't know who I was.", "v": "Lúc đầu là hoảng loạn. Rồi một thứ còn tệ hơn, một kiểu tang thương. Đọc không chỉ là công việc của tôi, nó là con người tôi. Nếu tôi không còn là người đọc, tôi thật sự không biết mình là ai." },
+    { "ai": "R", "t": "How do you even begin to recover from something like that?", "v": "Làm sao người ta có thể bắt đầu hồi phục sau một chuyện như vậy?" },
+    { "ai": "C", "t": "Very humbly. My speech therapist gave me a picture book meant for four-year-olds. A cat, a hat, a mat. Never have I felt so ashamed of a book.", "v": "Rất khiêm nhường. Chuyên gia trị liệu ngôn ngữ đưa tôi một cuốn sách tranh dành cho trẻ bốn tuổi. Con mèo, cái mũ, tấm thảm. Chưa bao giờ tôi thấy xấu hổ vì một cuốn sách đến thế.",
+      "np": [{ "mau": "Never have I + V3 (đảo ngữ)", "giai": "Đưa \"Never\" lên đầu câu thì đảo trợ động từ lên trước chủ ngữ — trang trọng, nhấn mạnh cảm xúc mạnh. Cách thường: I have never felt so ashamed.", "vd": "Never have I seen such a beautiful sunrise.", "vdV": "Chưa bao giờ tôi thấy một bình minh đẹp đến vậy." }] },
+    { "ai": "R", "t": "That must have been brutal for someone who used to teach novels.", "v": "Chắc hẳn điều đó rất khắc nghiệt với một người từng dạy tiểu thuyết." },
+    { "ai": "C", "t": "It was. And the hardest part was that my son, who was seven at the time, was learning to read in the same months. Some evenings, he was faster than me.", "v": "Đúng vậy. Và phần khó nhất là con trai tôi, lúc đó bảy tuổi, cũng đang học đọc trong chính những tháng ấy. Có những buổi tối, con đọc nhanh hơn tôi.",
+      "np": [{ "mau": "mệnh đề quan hệ không xác định: , who…,", "giai": "Thông tin thêm đặt giữa hai dấu phẩy; bỏ đi câu vẫn đủ nghĩa. Không dùng that trong loại mệnh đề này.", "vd": "My manager, who has two kids, always leaves at five.", "vdV": "Sếp tôi, người có hai con, luôn về lúc năm giờ." }] },
+    { "ai": "R", "t": "How did he react?", "v": "Cậu bé phản ứng thế nào?" },
+    { "ai": "C", "t": "With complete seriousness. He'd put his finger under each word, exactly the way his teacher did, and say, \"Take your time, Mummy.\"", "v": "Hoàn toàn nghiêm túc. Con đặt ngón tay dưới từng chữ, đúng y như cô giáo của con làm, và nói: \"Mẹ cứ từ từ thôi.\"",
+      "np": [{ "mau": "would + V (thói quen lặp lại trong quá khứ)", "giai": "\"He'd put… and say…\" — would diễn tả hành động lặp đi lặp lại trong quá khứ, mang sắc thái hoài niệm.", "vd": "Every summer, my grandmother would make plum jam.", "vdV": "Mùa hè nào bà tôi cũng làm mứt mận." }] },
+    { "ai": "C", "t": "He was teaching me a patience I'd spent years teaching other people without really having it myself.", "v": "Con đang dạy tôi một sự kiên nhẫn mà tôi đã mất nhiều năm dạy cho người khác mà bản thân thật ra chưa có." },
+    { "ai": "R", "t": "Was there a turning point?", "v": "Có bước ngoặt nào không?" },
+    { "ai": "C", "t": "There was. About four months in, I was in tears because I'd spent twenty minutes on a single paragraph. My therapist said something that changed everything.", "v": "Có. Khoảng bốn tháng sau, tôi đã khóc vì mất hai mươi phút cho một đoạn văn duy nhất. Chuyên gia trị liệu của tôi nói một điều đã thay đổi tất cả." },
+    { "ai": "C", "t": "She said, \"You keep comparing yourself to the woman you were before the accident. She's not your competition. Yesterday's you is.\"", "v": "Cô ấy nói: \"Chị cứ so sánh mình với người phụ nữ của trước tai nạn. Người đó không phải đối thủ của chị. Chị của ngày hôm qua mới là.\"",
+      "np": [{ "mau": "compare + sb/sth + to/with + sb/sth", "giai": "\"so sánh A với B\" — \"keep comparing\" nhấn vào thói quen lặp lại không dứt.", "vd": "Stop comparing your progress to other people's.", "vdV": "Đừng so sánh sự tiến bộ của bạn với người khác nữa." }] },
+    { "ai": "R", "t": "That's a powerful idea.", "v": "Đó là một ý tưởng mạnh mẽ.",
+      "khac": [
+        { "kieu": "tự nhiên hơn", "t": "Wow. That really stays with you.", "v": "Ồ. Câu đó thật sự ở lại trong lòng người nghe." },
+        { "kieu": "trang trọng", "t": "That's a remarkably powerful way of looking at it.", "v": "Đó là một cách nhìn mạnh mẽ đáng kinh ngạc." }
+      ] },
+    { "ai": "C", "t": "It was, because it made progress visible again. Measured against my old self, one and a half pages was failure. Measured against yesterday, it was a victory.", "v": "Đúng vậy, vì nó làm cho sự tiến bộ hiện ra trở lại. Đo theo con người cũ của tôi, một trang rưỡi là thất bại. Đo theo ngày hôm qua, đó là một chiến thắng.",
+      "np": [{ "mau": "Measured against + N, … (mệnh đề phân từ)", "giai": "Phân từ quá khứ đứng đầu thay cho \"If it is measured against…\". Gọn, trang trọng, hay dùng trong văn viết và diễn thuyết.", "vd": "Seen from above, the city looks like a circuit board.", "vdV": "Nhìn từ trên cao, thành phố trông như một bảng mạch." }] },
+    { "ai": "R", "t": "How long did it take before you could read comfortably?", "v": "Mất bao lâu chị mới đọc được một cách thoải mái?" },
+    { "ai": "C", "t": "About two years before I could read a novel for pleasure. Even now, I'm slower than I used to be, and long words sometimes fall apart in front of me.", "v": "Khoảng hai năm tôi mới đọc được một cuốn tiểu thuyết để thưởng thức. Đến giờ tôi vẫn chậm hơn trước, và đôi khi những từ dài vẫn vỡ vụn ra trước mắt tôi." },
+    { "ai": "R", "t": "And you went back to teaching.", "v": "Và chị đã quay lại dạy học." },
+    { "ai": "C", "t": "Part-time, yes, but not the way I expected. I now work with teenagers who struggle to read. Some of them have spent years being told they're lazy or stupid.", "v": "Bán thời gian, đúng vậy, nhưng không theo cách tôi nghĩ. Giờ tôi làm việc với những thiếu niên gặp khó khăn khi đọc. Có em đã mất nhiều năm bị người ta bảo là lười hoặc ngốc.",
+      "np": [{ "mau": "spend + thời gian + being + V3", "giai": "\"mất bao nhiêu năm bị…\" — spend + time + V-ing, ở đây V-ing ở dạng bị động (being told).", "vd": "She spent her childhood being compared to her sister.", "vdV": "Cả tuổi thơ cô ấy bị đem ra so với chị gái." }] },
+    { "ai": "C", "t": "Before the accident, I'm ashamed to say, I didn't really understand them. Reading had always come easily to me. Only after losing it did I understand how exhausting it is when every line is a fight.", "v": "Trước tai nạn, tôi xấu hổ phải nói rằng, tôi không thật sự hiểu các em. Đọc với tôi luôn dễ dàng. Chỉ sau khi mất nó, tôi mới hiểu kiệt sức thế nào khi mỗi dòng chữ là một trận chiến.",
+      "np": [{ "mau": "Only after + V-ing/N + did + S + V (đảo ngữ)", "giai": "\"Chỉ sau khi… thì mới…\" — đưa \"Only after…\" lên đầu thì đảo trợ động từ ở mệnh đề chính.", "vd": "Only after the launch did we see the real problems.", "vdV": "Chỉ sau khi ra mắt chúng tôi mới thấy những vấn đề thật." }] },
+    { "ai": "R", "t": "Do you ever tell them your story?", "v": "Chị có bao giờ kể cho các em nghe câu chuyện của mình không?" },
+    { "ai": "C", "t": "Always. When a sixteen-year-old hears that their teacher once struggled with a book for four-year-olds, something in their face relaxes.", "v": "Luôn luôn. Khi một em mười sáu tuổi nghe rằng cô giáo mình từng vật lộn với một cuốn sách cho trẻ bốn tuổi, có điều gì đó trên gương mặt em ấy dịu lại." },
+    { "ai": "R", "t": "If you could say one thing to someone who's starting over from zero right now, after an illness, a move or a loss, what would it be?", "v": "Nếu chị được nói một điều với người đang bắt đầu lại từ con số không ngay lúc này — sau một cơn bệnh, một lần chuyển đi hay một mất mát — đó sẽ là gì?",
+      "khac": [
+        { "kieu": "ngắn gọn", "t": "What would you say to someone starting over?", "v": "Chị sẽ nói gì với người đang bắt đầu lại?" }
+      ] },
+    { "ai": "C", "t": "Being a beginner feels like a humiliation, but it's really a kind of honesty. Stop measuring yourself against who you were. Measure against yesterday, and be gentle with yourself on the days you go backwards.", "v": "Làm người mới bắt đầu cảm giác như một sự nhục nhã, nhưng thật ra đó là một kiểu thành thật. Đừng đo bản thân bằng con người cũ nữa. Hãy đo bằng ngày hôm qua, và dịu dàng với chính mình vào những ngày bạn thụt lùi." },
+    { "ai": "C", "t": "And let people help you, even if they're seven years old.", "v": "Và hãy để người khác giúp bạn, kể cả khi họ mới bảy tuổi." },
+    { "ai": "R", "t": "Clara, thank you. I don't think I'll ever look at a picture book the same way again.", "v": "Clara, cảm ơn chị. Tôi nghĩ mình sẽ không bao giờ nhìn một cuốn sách tranh theo cách cũ nữa.",
+      "khac": [
+        { "kieu": "trang trọng", "t": "Clara, thank you for sharing something so personal with us.", "v": "Clara, cảm ơn chị đã chia sẻ với chúng tôi một điều riêng tư đến vậy." }
+      ] }
+  ],
+  "tuVung": [
+    { "chu": "all over again", "doc": "/ɔːl ˈəʊvər əˈɡen/", "nghia": "lại từ đầu, lại thêm một lần nữa", "vd": "I lost the file and had to write it all over again." },
+    { "chu": "head injury", "doc": "/hed ˈɪndʒəri/", "nghia": "chấn thương ở đầu", "vd": "Always wear a helmet to avoid a head injury." },
+    { "chu": "relieved", "doc": "/rɪˈliːvd/", "nghia": "nhẹ nhõm, thở phào", "vd": "We were relieved when the results came back." },
+    { "chu": "get-well card", "doc": "/ˌɡet ˈwel kɑːd/", "nghia": "thiệp chúc mau khoẻ", "vd": "The class sent her a get-well card." },
+    { "chu": "as if", "doc": "/æz ɪf/", "nghia": "cứ như thể", "vd": "She talks as if she knows everything." },
+    { "chu": "grief", "doc": "/ɡriːf/", "nghia": "nỗi đau mất mát, tang thương", "vd": "Grief can come in waves." },
+    { "chu": "humbly", "doc": "/ˈhʌmbli/", "nghia": "một cách khiêm nhường", "vd": "He humbly accepted the criticism." },
+    { "chu": "speech therapist", "doc": "/spiːtʃ ˈθerəpɪst/", "nghia": "chuyên gia trị liệu ngôn ngữ", "vd": "A speech therapist helped him talk again." },
+    { "chu": "turning point", "doc": "/ˈtɜːnɪŋ pɔɪnt/", "nghia": "bước ngoặt", "vd": "That trip was a turning point in my life." },
+    { "chu": "competition", "doc": "/ˌkɒmpəˈtɪʃn/", "nghia": "đối thủ; sự cạnh tranh", "vd": "Your only competition is who you were yesterday." },
+    { "chu": "fall apart", "doc": "/fɔːl əˈpɑːt/", "nghia": "vỡ vụn, rời rạc ra", "vd": "My old shoes are starting to fall apart." },
+    { "chu": "struggle to read", "doc": "/ˈstrʌɡl tə riːd/", "nghia": "vật lộn, gặp khó khăn khi đọc", "vd": "Some children struggle to read at first." },
+    { "chu": "exhausting", "doc": "/ɪɡˈzɔːstɪŋ/", "nghia": "làm kiệt sức", "vd": "Moving house is exhausting." },
+    { "chu": "starting over", "doc": "/ˈstɑːtɪŋ ˈəʊvə/", "nghia": "bắt đầu lại", "vd": "Starting over in a new country takes courage." },
+    { "chu": "be gentle with yourself", "doc": "/bi ˈdʒentl wɪð jɔːˈself/", "nghia": "hãy dịu dàng, bao dung với chính mình", "vd": "You're learning. Be gentle with yourself." }
+  ],
+  "yNghia": "Khi phải bắt đầu lại từ số không, thứ làm ta đau nhất thường là so sánh với con người cũ của mình. Hãy đo sự tiến bộ bằng ngày hôm qua chứ không phải bằng quá khứ. Làm người mới bắt đầu không nhục nhã — nó là sự thành thật, và nó giúp ta hiểu những người vẫn đang vật lộn.",
+  "meo": [
+    "Đảo ngữ để nhấn mạnh (C1): \"Never have I felt…\", \"Only after losing it did I understand…\".",
+    "Câu chẻ kể chuyện: \"It was only when… that I realised…\"",
+    "\"as if + had + V3\" để so sánh với điều không có thật trong quá khứ.",
+    "Mệnh đề phân từ thay cho if: \"Measured against yesterday, it was a victory.\""
+  ],
+  "cauHoi": [
+    { "hoi": "Clara nhận ra mình không đọc được khi nào?", "chon": ["Khi bác sĩ kiểm tra mắt", "Khi một y tá đưa cô tấm thiệp chúc mau khoẻ", "Khi quay lại trường dạy"], "dung": 1, "giai": "\"It was only when a nurse handed me a get-well card that I realised…\"" },
+    { "hoi": "Vì sao mất khả năng đọc lại là \"nỗi tang thương\" với Clara?", "chon": ["Vì cô mất việc", "Vì cô không đọc được thực đơn", "Vì đọc không chỉ là công việc mà là con người cô"], "dung": 2, "giai": "\"Reading wasn't just my job; it was who I was.\"" },
+    { "hoi": "Câu nói làm thay đổi tất cả của chuyên gia trị liệu là gì?", "chon": ["Đối thủ của chị là chị của ngày hôm qua, không phải chị trước tai nạn", "Hãy đọc nhiều hơn mỗi ngày", "Chị sẽ đọc lại bình thường trong một năm"], "dung": 0, "giai": "\"She's not your competition. Yesterday's you is.\"" },
+    { "hoi": "Hiện nay Clara làm gì?", "chon": ["Dạy tiểu thuyết toàn thời gian", "Viết sách tranh", "Dạy bán thời gian cho thiếu niên gặp khó khăn khi đọc"], "dung": 2, "giai": "\"I now work with teenagers who struggle to read.\"" }
+  ]
+}

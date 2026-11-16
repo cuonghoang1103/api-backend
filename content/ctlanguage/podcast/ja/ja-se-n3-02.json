@@ -1,0 +1,486 @@
+{
+  "id": "ja-se-n3-02",
+  "nn": "ja",
+  "danhMuc": "phan-mem",
+  "cap": "N3",
+  "so": 2,
+  "tieuDe": "「いい感じに」の中身",
+  "tieuDeViet": "Bên trong câu “làm cho ổn hơn”",
+  "moTa": "Khách hàng muốn kết quả tìm kiếm được sắp xếp “いい感じに” — cho ổn hơn. BrSE Tuấn không gật đầu cho qua mà hỏi lại từng điểm, đưa lựa chọn để khách chọn, rồi tóm tắt trước khi kết thúc. Học cách xác nhận đặc tả (仕様の確認) lịch sự: 念のため, つまり〜ということ, 〜という理解でよろしいでしょうか.",
+  "chuDe": "Xác nhận yêu cầu",
+  "bieuTuong": "questionmark.bubble.fill",
+  "nguoi": [
+    {
+      "ma": "T",
+      "ten": "高橋",
+      "giong": "ja-nu",
+      "vai": "người phụ trách phía khách hàng"
+    },
+    {
+      "ma": "A",
+      "ten": "トゥアン",
+      "giong": "ja2-nam",
+      "vai": "BrSE người Việt"
+    },
+    {
+      "ma": "N",
+      "ten": "中村",
+      "giong": "ja-nam",
+      "vai": "quản lý của Tuấn"
+    }
+  ],
+  "loi": [
+    {
+      "ai": "T",
+      "t": "では次に、商品検索の件です。検索結果を、もう少しいい感じに並べてほしいんです。",
+      "doc": "ではつぎに、しょうひんけんさくのけんです。けんさくけっかを、もうすこしいいかんじにならべてほしいんです。",
+      "v": "Tiếp theo là chuyện tìm kiếm sản phẩm. Tôi muốn kết quả tìm kiếm được sắp xếp sao cho ổn hơn một chút.",
+      "np": [
+        {
+          "mau": "V-てほしい",
+          "giai": "Muốn người khác làm V (mong muốn hướng về người nghe/người khác). Khác 〜たい là mình muốn làm.",
+          "vd": "もっとゆっくり話してほしいです。",
+          "vdDoc": "もっとゆっくりはなしてほしいです。",
+          "vdV": "Tôi muốn anh nói chậm hơn."
+        }
+      ]
+    },
+    {
+      "ai": "A",
+      "t": "承知しました。念のため確認させていただきたいのですが、「いい感じに」というのは、具体的にどのような並び順をイメージされていますか。",
+      "doc": "しょうちしました。ねんのためかくにんさせていただきたいのですが、「いいかんじに」というのは、ぐたいてきにどのようなならびじゅんをイメージされていますか。",
+      "v": "Tôi đã rõ. Để cho chắc, tôi xin phép hỏi lại: “cho ổn hơn” cụ thể là chị đang hình dung thứ tự sắp xếp như thế nào ạ?",
+      "khac": [
+        {
+          "kieu": "ngắn gọn",
+          "t": "「いい感じ」というと、例えばどんな順番でしょうか。",
+          "doc": "「いいかんじ」というと、たとえばどんなじゅんばんでしょうか。",
+          "v": "“Cho ổn” thì ví dụ là thứ tự thế nào ạ?"
+        },
+        {
+          "kieu": "mềm mỏng",
+          "t": "すみません、私の理解が足りないかもしれないのですが、「いい感じ」の基準を教えていただけますか。",
+          "doc": "すみません、わたしのりかいがたりないかもしれないのですが、「いいかんじ」のきじゅんをおしえていただけますか。",
+          "v": "Xin lỗi, có thể tôi hiểu chưa tới, chị cho tôi biết tiêu chí của “cho ổn” được không ạ?",
+          "ghiChu": "nhận phần chưa hiểu về mình để khách không bị mất mặt"
+        }
+      ],
+      "np": [
+        {
+          "mau": "〜させていただきたいのですが",
+          "giai": "Xin phép được làm … (khiêm nhường, rất lịch sự). Bỏ lửng bằng のですが để mở lời.",
+          "vd": "少し質問させていただきたいのですが。",
+          "vdDoc": "すこししつもんさせていただきたいのですが。",
+          "vdV": "Tôi xin phép hỏi một chút ạ."
+        },
+        {
+          "mau": "〜というのは",
+          "giai": "Dùng để hỏi lại/định nghĩa: \"cái gọi là … nghĩa là gì\".",
+          "vd": "「残業」というのは、何時からですか。",
+          "vdDoc": "「ざんぎょう」というのは、なんじからですか。",
+          "vdV": "“Tăng ca” tính từ mấy giờ ạ?"
+        }
+      ]
+    },
+    {
+      "ai": "T",
+      "t": "そうですね……。今は新しい順ですよね。でも、お客さんにとっては、よく売れている商品が上に来たほうが便利だと思うんです。",
+      "doc": "そうですね……。いまはあたらしいじゅんですよね。でも、おきゃくさんにとっては、よくうれているしょうひんがうえにきたほうがべんりだとおもうんです。",
+      "v": "Để xem… Hiện giờ đang xếp theo hàng mới nhất nhỉ. Nhưng với khách mua hàng, tôi nghĩ hàng bán chạy nằm trên thì tiện hơn.",
+      "np": [
+        {
+          "mau": "N + にとって",
+          "giai": "Đối với N (đứng ở vị trí của N mà đánh giá). Đi với từ đánh giá: 便利, 大切, 難しい…",
+          "vd": "私にとって、家族が一番大切です。",
+          "vdDoc": "わたしにとって、かぞくがいちばんたいせつです。",
+          "vdV": "Đối với tôi, gia đình là quan trọng nhất."
+        }
+      ]
+    },
+    {
+      "ai": "A",
+      "t": "つまり、販売数の多い順に並べる、ということでしょうか。",
+      "doc": "つまり、はんばいすうのおおいじゅんにならべる、ということでしょうか。",
+      "v": "Tức là sắp xếp theo thứ tự số lượng bán nhiều nhất, phải không ạ?",
+      "khac": [
+        {
+          "kieu": "chuyên nghiệp",
+          "t": "販売数の降順で表示する、という理解でよろしいでしょうか。",
+          "doc": "はんばいすうのこうじゅんでひょうじする、というりかいでよろしいでしょうか。",
+          "v": "Tôi hiểu là hiển thị theo số lượng bán giảm dần, như vậy có đúng không ạ?",
+          "ghiChu": "降順 = giảm dần, 昇順 = tăng dần"
+        }
+      ],
+      "np": [
+        {
+          "mau": "つまり〜ということ",
+          "giai": "Tóm lại/diễn đạt lại ý người kia để xác nhận: \"tức là …\".",
+          "vd": "つまり、明日は休みということですか。",
+          "vdDoc": "つまり、あしたはやすみということですか。",
+          "vdV": "Tức là mai được nghỉ phải không?"
+        }
+      ]
+    },
+    {
+      "ai": "T",
+      "t": "うーん、それだけだと、古い商品ばかり上に来てしまいますよね。",
+      "doc": "うーん、それだけだと、ふるいしょうひんばかりうえにきてしまいますよね。",
+      "v": "Ừm, chỉ vậy thì toàn hàng cũ sẽ nằm trên mất nhỉ.",
+      "np": [
+        {
+          "mau": "N + ばかり",
+          "giai": "Toàn là N, chỉ toàn N (thường mang ý chê, quá nhiều).",
+          "vd": "最近、雨ばかり降っています。",
+          "vdDoc": "さいきん、あめばかりふっています。",
+          "vdV": "Dạo này toàn mưa."
+        }
+      ]
+    },
+    {
+      "ai": "A",
+      "t": "おっしゃるとおりです。では、販売数を数える期間を、例えば直近三十日に限定するのはいかがでしょうか。",
+      "doc": "おっしゃるとおりです。では、はんばいすうをかぞえるきかんを、たとえばちょっきんさんじゅうにちにげんていするのはいかがでしょうか。",
+      "v": "Đúng như chị nói. Vậy nếu giới hạn khoảng thời gian đếm số lượng bán, ví dụ trong 30 ngày gần nhất, thì chị thấy sao ạ?",
+      "khac": [
+        {
+          "kieu": "tự nhiên hơn",
+          "t": "それなら、最近三十日の販売数で並べるのはどうでしょう。",
+          "doc": "それなら、さいきんさんじゅうにちのはんばいすうでならべるのはどうでしょう。",
+          "v": "Vậy thì xếp theo số bán trong 30 ngày gần đây thì sao ạ?"
+        }
+      ],
+      "np": [
+        {
+          "mau": "おっしゃるとおりです",
+          "giai": "Đúng như anh/chị nói. おっしゃる là tôn kính ngữ của 言う; 〜とおり = đúng như.",
+          "vd": "先生のおっしゃるとおりにやってみます。",
+          "vdDoc": "せんせいのおっしゃるとおりにやってみます。",
+          "vdV": "Em sẽ làm thử đúng như thầy nói."
+        },
+        {
+          "mau": "〜のはいかがでしょうか",
+          "giai": "Đề xuất lịch sự: \"… thì anh/chị thấy thế nào ạ?\". Lịch sự hơn 〜のはどうですか.",
+          "vd": "会議を午後にするのはいかがでしょうか。",
+          "vdDoc": "かいぎをごごにするのはいかがでしょうか。",
+          "vdV": "Dời cuộc họp sang buổi chiều thì anh thấy thế nào ạ?"
+        }
+      ]
+    },
+    {
+      "ai": "T",
+      "t": "あ、それはいいですね。",
+      "doc": "あ、それはいいですね。",
+      "v": "À, như vậy được đấy."
+    },
+    {
+      "ai": "A",
+      "t": "もう一点確認させてください。在庫がない商品は、どう扱いましょうか。表示しない、または一番下に移す、という二つの方法があります。",
+      "doc": "もういってんかくにんさせてください。ざいこがないしょうひんは、どうあつかいましょうか。ひょうじしない、またはいちばんしたにうつす、というふたつのほうほうがあります。",
+      "v": "Cho tôi xác nhận thêm một điểm. Hàng hết tồn kho thì xử lý thế nào ạ? Có hai cách: không hiển thị, hoặc chuyển xuống cuối.",
+      "np": [
+        {
+          "mau": "V-させてください",
+          "giai": "Xin cho phép tôi làm V (lịch sự, chủ động xin làm).",
+          "vd": "その仕事、私にやらせてください。",
+          "vdDoc": "そのしごと、わたしにやらせてください。",
+          "vdV": "Việc đó xin hãy để tôi làm."
+        }
+      ]
+    },
+    {
+      "ai": "T",
+      "t": "そこまで考えていませんでした。表示しないと、お客さんが探している商品が見つからなくて困るかもしれませんね。",
+      "doc": "そこまでかんがえていませんでした。ひょうじしないと、おきゃくさんがさがしているしょうひんがみつからなくてこまるかもしれませんね。",
+      "v": "Tôi chưa nghĩ tới đó. Nếu không hiển thị thì khách đang tìm món hàng đó sẽ không thấy, có khi lại khó chịu."
+    },
+    {
+      "ai": "T",
+      "t": "一番下に移す、でお願いします。",
+      "doc": "いちばんしたにうつす、でおねがいします。",
+      "v": "Vậy làm theo cách chuyển xuống cuối nhé."
+    },
+    {
+      "ai": "A",
+      "t": "かしこまりました。それから、この並び順は、スマートフォンのアプリにも適用しますか。",
+      "doc": "かしこまりました。それから、このならびじゅんは、スマートフォンのアプリにもてきようしますか。",
+      "v": "Tôi đã rõ. Ngoài ra, thứ tự này có áp dụng cho cả ứng dụng điện thoại không ạ?"
+    },
+    {
+      "ai": "T",
+      "t": "アプリは……どうでしたっけ。担当の者に確認して、明日までにご連絡します。",
+      "doc": "アプリは……どうでしたっけ。たんとうのものにかくにんして、あしたまでにごれんらくします。",
+      "v": "Ứng dụng thì… thế nào nhỉ. Tôi sẽ hỏi lại người phụ trách bên tôi, trước ngày mai sẽ báo anh.",
+      "khac": [
+        {
+          "kieu": "chuyên nghiệp",
+          "t": "アプリについては、担当者に確認のうえ、明日中にご連絡いたします。",
+          "doc": "アプリについては、たんとうしゃにかくにんのうえ、あしたじゅうにごれんらくいたします。",
+          "v": "Về ứng dụng, sau khi xác nhận với người phụ trách, tôi sẽ liên lạc trong ngày mai."
+        }
+      ],
+      "np": [
+        {
+          "mau": "〜っけ",
+          "giai": "Tự hỏi/hỏi lại điều mình không nhớ chắc (văn nói). Lịch sự: 〜でしたっけ.",
+          "vd": "会議は何時からでしたっけ。",
+          "vdDoc": "かいぎはなんじからでしたっけ。",
+          "vdV": "Họp lúc mấy giờ ấy nhỉ?"
+        },
+        {
+          "mau": "担当の者",
+          "giai": "Cách nói khiêm về nhân viên phía mình khi nói với người ngoài (者 khiêm hơn 人/方).",
+          "vd": "詳しいことは、営業の者からご説明します。",
+          "vdDoc": "くわしいことは、えいぎょうのものからごせつめいします。",
+          "vdV": "Chi tiết sẽ do người bên kinh doanh của chúng tôi giải thích."
+        }
+      ]
+    },
+    {
+      "ai": "A",
+      "t": "ありがとうございます。では、本日決まった内容を整理しますと……",
+      "doc": "ありがとうございます。では、ほんじつきまったないようをせいりしますと……",
+      "v": "Cảm ơn chị. Vậy tôi xin tóm tắt lại những gì đã chốt hôm nay…"
+    },
+    {
+      "ai": "A",
+      "t": "一つ目、直近三十日の販売数が多い順に並べる。二つ目、在庫切れの商品は一番下に表示する。三つ目、アプリへの適用は、明日、高橋様からご連絡をいただく。以上で間違いないでしょうか。",
+      "doc": "ひとつめ、ちょっきんさんじゅうにちのはんばいすうがおおいじゅんにならべる。ふたつめ、ざいこぎれのしょうひんはいちばんしたにひょうじする。みっつめ、アプリへのてきようは、あした、たかはしさまからごれんらくをいただく。いじょうでまちがいないでしょうか。",
+      "v": "Một: xếp theo số bán nhiều nhất trong 30 ngày gần nhất. Hai: hàng hết hàng hiển thị ở cuối. Ba: việc áp dụng cho ứng dụng, ngày mai chị Takahashi sẽ báo lại. Như vậy có đúng không ạ?",
+      "khac": [
+        {
+          "kieu": "văn viết",
+          "t": "本日の打ち合わせ内容を以下にまとめましたので、ご確認をお願いいたします。",
+          "doc": "ほんじつのうちあわせないようをいかにまとめましたので、ごかくにんをおねがいいたします。",
+          "v": "Tôi đã tóm tắt nội dung buổi họp hôm nay ở dưới, xin chị xem lại giúp.",
+          "ghiChu": "câu mở đầu email biên bản sau họp"
+        }
+      ]
+    },
+    {
+      "ai": "T",
+      "t": "はい、それで大丈夫です。トゥアンさん、細かく聞いてくれて助かりました。",
+      "doc": "はい、それでだいじょうぶです。トゥアンさん、こまかくきいてくれてたすかりました。",
+      "v": "Vâng, như vậy là ổn. Anh Tuấn, nhờ anh hỏi kỹ nên tôi đỡ được nhiều."
+    },
+    {
+      "ai": "A",
+      "t": "とんでもないです。後ほど、今の内容をメールでもお送りします。",
+      "doc": "とんでもないです。のちほど、いまのないようをメールでもおおくりします。",
+      "v": "Không có gì ạ. Lát nữa tôi sẽ gửi lại nội dung vừa rồi qua email.",
+      "khac": [
+        {
+          "kieu": "trang trọng",
+          "t": "恐れ入ります。後ほど議事録をお送りいたしますので、ご確認いただけますと幸いです。",
+          "doc": "おそれいります。のちほどぎじろくをおおくりいたしますので、ごかくにんいただけますとさいわいです。",
+          "v": "Không dám ạ. Lát nữa tôi sẽ gửi biên bản họp, mong chị xem giúp."
+        }
+      ]
+    },
+    {
+      "ai": "N",
+      "t": "打ち合わせ、どうだった？",
+      "doc": "うちあわせ、どうだった？",
+      "v": "Buổi họp thế nào?"
+    },
+    {
+      "ai": "A",
+      "t": "「いい感じに」と言われたときは、正直、困りました。",
+      "doc": "「いいかんじに」といわれたときは、しょうじき、こまりました。",
+      "v": "Lúc bị bảo “làm cho ổn”, thật lòng là em bối rối."
+    },
+    {
+      "ai": "N",
+      "t": "あるある。日本語の「いい感じ」は、言っている本人も、まだはっきり決めていないことが多いんだよ。",
+      "doc": "あるある。にほんごの「いいかんじ」は、いっているほんにんも、まだはっきりきめていないことがおおいんだよ。",
+      "v": "Chuyện thường thôi. Chữ “いい感じ” trong tiếng Nhật, nhiều khi chính người nói cũng chưa nghĩ rõ."
+    },
+    {
+      "ai": "A",
+      "t": "だから、選択肢を出して選んでもらうようにしました。",
+      "doc": "だから、せんたくしをだしてえらんでもらうようにしました。",
+      "v": "Vì vậy em đưa ra các lựa chọn để chị ấy chọn.",
+      "np": [
+        {
+          "mau": "V-てもらう",
+          "giai": "Được người khác làm V cho mình / nhờ người khác làm V.",
+          "vd": "先輩にコードを見てもらいました。",
+          "vdDoc": "せんぱいにコードをみてもらいました。",
+          "vdV": "Tôi nhờ tiền bối xem code giúp."
+        }
+      ]
+    },
+    {
+      "ai": "N",
+      "t": "それが正解。「どうしますか」と聞くより、「AとBならどちらがいいですか」と聞くほうが、相手も答えやすいから。",
+      "doc": "それがせいかい。「どうしますか」ときくより、「エーとビーならどちらがいいですか」ときくほうが、あいてもこたえやすいから。",
+      "v": "Đúng rồi. Hỏi “A hay B thì cái nào hơn” dễ trả lời hơn nhiều so với hỏi “làm thế nào ạ”.",
+      "np": [
+        {
+          "mau": "V-ます + やすい",
+          "giai": "Dễ V. Ngược lại: V-ます + にくい (khó V).",
+          "vd": "このペンは書きやすいです。",
+          "vdDoc": "このペンはかきやすいです。",
+          "vdV": "Cây bút này dễ viết."
+        }
+      ]
+    },
+    {
+      "ai": "A",
+      "t": "もし確認しないで作っていたら、たぶん作り直しになっていましたね。",
+      "doc": "もしかくにんしないでつくっていたら、たぶんつくりなおしになっていましたね。",
+      "v": "Nếu em không hỏi lại mà cứ làm, chắc đã phải làm lại từ đầu rồi.",
+      "np": [
+        {
+          "mau": "もし〜ていたら、〜ていた",
+          "giai": "Giả định trái với thực tế quá khứ: \"nếu (lúc đó) đã … thì đã …\".",
+          "vd": "もし早く出ていたら、間に合っていました。",
+          "vdDoc": "もしはやくでていたら、まにあっていました。",
+          "vdV": "Nếu đi sớm thì đã kịp rồi."
+        }
+      ]
+    },
+    {
+      "ai": "N",
+      "t": "そうだね。仕様の確認で使う十分は、作り直しの十日を減らしてくれるんだよ。",
+      "doc": "そうだね。しようのかくにんでつかうじゅっぷんは、つくりなおしのとおかをへらしてくれるんだよ。",
+      "v": "Đúng vậy. Mười phút hỏi lại đặc tả có thể bớt cho em mười ngày làm lại."
+    },
+    {
+      "ai": "A",
+      "t": "覚えておきます。じゃあ、忘れないうちに議事録を書いてしまいます。",
+      "doc": "おぼえておきます。じゃあ、わすれないうちにぎじろくをかいてしまいます。",
+      "v": "Em sẽ ghi nhớ. Vậy em viết luôn biên bản họp trước khi quên.",
+      "np": [
+        {
+          "mau": "V-ない + うちに",
+          "giai": "Trong lúc (tình trạng) chưa V thì làm ngay — trước khi điều không mong muốn xảy ra.",
+          "vd": "暗くならないうちに、帰りましょう。",
+          "vdDoc": "くらくならないうちに、かえりましょう。",
+          "vdV": "Về thôi trước khi trời tối."
+        }
+      ]
+    }
+  ],
+  "tuVung": [
+    {
+      "chu": "念のため",
+      "doc": "ねんのため",
+      "nghia": "để cho chắc, phòng khi",
+      "vd": "念のため、もう一度確認します。"
+    },
+    {
+      "chu": "具体的",
+      "doc": "ぐたいてき",
+      "nghia": "cụ thể",
+      "vd": "具体的な例を教えてください。"
+    },
+    {
+      "chu": "並び順",
+      "doc": "ならびじゅん",
+      "nghia": "thứ tự sắp xếp",
+      "vd": "並び順を変えました。"
+    },
+    {
+      "chu": "在庫",
+      "doc": "ざいこ",
+      "nghia": "hàng tồn kho",
+      "vd": "この商品は在庫がありません。"
+    },
+    {
+      "chu": "適用",
+      "doc": "てきよう",
+      "nghia": "áp dụng",
+      "vd": "新しいルールを全員に適用します。"
+    },
+    {
+      "chu": "担当の者",
+      "doc": "たんとうのもの",
+      "nghia": "người phụ trách (bên mình — cách nói khiêm)",
+      "vd": "担当の者に代わります。"
+    },
+    {
+      "chu": "整理",
+      "doc": "せいり",
+      "nghia": "sắp xếp, tóm tắt lại cho gọn",
+      "vd": "考えを整理しましょう。"
+    },
+    {
+      "chu": "議事録",
+      "doc": "ぎじろく",
+      "nghia": "biên bản cuộc họp",
+      "vd": "議事録を共有します。"
+    },
+    {
+      "chu": "選択肢",
+      "doc": "せんたくし",
+      "nghia": "các phương án lựa chọn",
+      "vd": "選択肢は三つあります。"
+    },
+    {
+      "chu": "作り直し",
+      "doc": "つくりなおし",
+      "nghia": "làm lại từ đầu",
+      "vd": "仕様が変わって、作り直しになった。"
+    },
+    {
+      "chu": "仕様",
+      "doc": "しよう",
+      "nghia": "đặc tả, quy cách (spec)",
+      "vd": "仕様書を読んでください。"
+    }
+  ],
+  "yNghia": "Yêu cầu mơ hồ không phải lỗi của khách — nhiều khi chính họ cũng chưa nghĩ xong. Việc của kỹ sư là biến \"làm cho ổn\" thành những lựa chọn cụ thể để người kia chọn. Mười phút hỏi lại có thể cứu mười ngày làm lại.",
+  "meo": [
+    "Hỏi lại yêu cầu lịch sự: 「念のため確認させていただきたいのですが」, 「〜という理解でよろしいでしょうか」.",
+    "Tóm tắt trước khi kết thúc họp: 「本日決まった内容を整理しますと……以上で間違いないでしょうか」.",
+    "Đưa lựa chọn A/B thay vì hỏi mở 「どうしますか」 — người Nhật quyết nhanh hơn.",
+    "〜っけ = tự hỏi điều mình quên (văn nói; lịch sự: 〜でしたっけ).",
+    "担当の者 = cách nói khiêm về nhân viên bên mình khi nói với người ngoài công ty."
+  ],
+  "cauHoi": [
+    {
+      "hoi": "Ban đầu khách hàng muốn gì?",
+      "chon": [
+        "Thêm chức năng thanh toán",
+        "Kết quả tìm kiếm được sắp xếp \"cho ổn hơn\", chưa cụ thể",
+        "Xoá hàng hết tồn kho",
+        "Làm lại ứng dụng điện thoại"
+      ],
+      "dung": 1,
+      "giai": "「検索結果を、もう少しいい感じに並べてほしいんです」."
+    },
+    {
+      "hoi": "Thứ tự sắp xếp cuối cùng đã chốt là gì?",
+      "chon": [
+        "Theo số bán nhiều nhất trong 30 ngày gần nhất",
+        "Theo hàng mới nhất",
+        "Theo giá rẻ nhất",
+        "Theo tên sản phẩm"
+      ],
+      "dung": 0,
+      "giai": "「直近三十日の販売数が多い順に並べる」."
+    },
+    {
+      "hoi": "Hàng hết tồn kho được xử lý thế nào?",
+      "chon": [
+        "Không hiển thị",
+        "Hiển thị đầu tiên",
+        "Chuyển xuống cuối",
+        "Hiển thị màu đỏ"
+      ],
+      "dung": 2,
+      "giai": "「一番下に移す、でお願いします」."
+    },
+    {
+      "hoi": "Vì sao anh Nakamura khen cách đưa lựa chọn A/B?",
+      "chon": [
+        "Vì nhanh hơn viết email",
+        "Vì khách thích chữ cái",
+        "Vì đó là quy định công ty",
+        "Vì người nghe dễ trả lời hơn"
+      ],
+      "dung": 3,
+      "giai": "「相手も答えやすいから」."
+    }
+  ]
+}

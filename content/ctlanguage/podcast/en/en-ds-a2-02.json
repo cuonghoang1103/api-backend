@@ -1,0 +1,414 @@
+{
+  "id": "en-ds-a2-02",
+  "nn": "en",
+  "danhMuc": "doi-song",
+  "cap": "A2",
+  "so": 5,
+  "tieuDe": "Something for a Sore Throat",
+  "tieuDeViet": "Thuốc cho cơn đau họng",
+  "moTa": "Liên bị đau họng, nhức đầu khi đang du học. Ở nhà thuốc cô tả triệu chứng, trả lời câu hỏi của dược sĩ, nhờ ghi lại cách uống và hỏi có cần đi khám không.",
+  "chuDe": "Sức khỏe",
+  "bieuTuong": "cross.case.fill",
+  "nguoi": [
+    {
+      "ma": "P",
+      "ten": "David",
+      "giong": "uk-nam",
+      "vai": "dược sĩ"
+    },
+    {
+      "ma": "L",
+      "ten": "Liên",
+      "giong": "au-nu",
+      "vai": "du học sinh"
+    }
+  ],
+  "loi": [
+    {
+      "ai": "P",
+      "t": "Hello. What can I do for you?",
+      "v": "Xin chào. Tôi giúp gì được cho bạn?"
+    },
+    {
+      "ai": "L",
+      "t": "Hi. I have a sore throat and a headache. Can you give me something for it?",
+      "v": "Chào anh. Tôi bị đau họng và nhức đầu. Anh bán cho tôi thuốc gì đó được không?",
+      "khac": [
+        {
+          "kieu": "tự nhiên hơn",
+          "t": "Hi. Do you have anything for a sore throat?",
+          "v": "Chào anh. Anh có thuốc gì trị đau họng không?",
+          "ghiChu": "câu chuẩn ở nhà thuốc"
+        },
+        {
+          "kieu": "ngắn gọn",
+          "t": "I need something for a headache, please.",
+          "v": "Cho tôi thuốc nhức đầu."
+        }
+      ],
+      "np": [
+        {
+          "mau": "have a + bệnh",
+          "giai": "Nói triệu chứng: have a headache / a cold / a fever / a sore throat. Không nói \"I am headache\".",
+          "vd": "I have a cold and a runny nose.",
+          "vdV": "Tôi bị cảm và sổ mũi."
+        },
+        {
+          "mau": "something for + bệnh",
+          "giai": "Thuốc để trị cái gì: something for a cough, something for the pain.",
+          "vd": "Do you have something for a cough?",
+          "vdV": "Anh có thuốc ho không?"
+        }
+      ]
+    },
+    {
+      "ai": "P",
+      "t": "Sure. How long have you had it?",
+      "v": "Được. Bạn bị bao lâu rồi?",
+      "np": [
+        {
+          "mau": "How long have you had + N?",
+          "giai": "Hiện tại hoàn thành: hỏi việc bắt đầu trong quá khứ và vẫn còn tới bây giờ.",
+          "vd": "How long have you lived here?",
+          "vdV": "Bạn sống ở đây bao lâu rồi?"
+        }
+      ]
+    },
+    {
+      "ai": "L",
+      "t": "Since yesterday morning.",
+      "v": "Từ sáng hôm qua.",
+      "np": [
+        {
+          "mau": "since + mốc / for + khoảng",
+          "giai": "since yesterday, since Monday (từ mốc); for two days, for a week (trong khoảng).",
+          "vd": "I've had a cough for three days.",
+          "vdV": "Tôi bị ho ba ngày rồi."
+        }
+      ]
+    },
+    {
+      "ai": "P",
+      "t": "Do you have a fever?",
+      "v": "Bạn có sốt không?"
+    },
+    {
+      "ai": "L",
+      "t": "I think so. I feel hot, and I'm a bit dizzy.",
+      "v": "Chắc là có. Tôi thấy nóng người, và hơi chóng mặt.",
+      "np": [
+        {
+          "mau": "I think so / I don't think so",
+          "giai": "Trả lời ngắn khi không chắc chắn: \"Chắc là vậy / Chắc là không\". Không nói \"I think yes\".",
+          "vd": "Is it going to rain? — I don't think so.",
+          "vdV": "Trời sắp mưa à? — Chắc là không."
+        }
+      ]
+    },
+    {
+      "ai": "P",
+      "t": "Are you taking any other medicine?",
+      "v": "Bạn có đang uống thuốc nào khác không?",
+      "np": [
+        {
+          "mau": "take medicine",
+          "giai": "Uống thuốc là \"take medicine / take a tablet\", không phải \"drink medicine\".",
+          "vd": "Take one tablet after dinner.",
+          "vdV": "Uống một viên sau bữa tối."
+        }
+      ]
+    },
+    {
+      "ai": "L",
+      "t": "No, I'm not.",
+      "v": "Không ạ."
+    },
+    {
+      "ai": "P",
+      "t": "Are you allergic to anything?",
+      "v": "Bạn có dị ứng với gì không?"
+    },
+    {
+      "ai": "L",
+      "t": "Not that I know of.",
+      "v": "Theo tôi biết thì không.",
+      "khac": [
+        {
+          "kieu": "ngắn gọn",
+          "t": "No, I'm not.",
+          "v": "Không ạ."
+        },
+        {
+          "kieu": "trang trọng",
+          "t": "I don't have any allergies, as far as I know.",
+          "v": "Theo tôi biết thì tôi không bị dị ứng gì."
+        }
+      ]
+    },
+    {
+      "ai": "P",
+      "t": "Okay. Take these tablets for the pain and the fever. Two tablets every six hours, after meals.",
+      "v": "Được rồi. Uống thuốc viên này để giảm đau và hạ sốt. Mỗi sáu tiếng hai viên, sau bữa ăn.",
+      "np": [
+        {
+          "mau": "every + số + hours",
+          "giai": "Tần suất: every six hours (cứ sáu tiếng một lần), every day, every morning.",
+          "vd": "The bus comes every ten minutes.",
+          "vdV": "Cứ mười phút có một chuyến xe buýt."
+        }
+      ]
+    },
+    {
+      "ai": "L",
+      "t": "Sorry, every six hours? Can you write it down for me, please?",
+      "v": "Xin lỗi, mỗi sáu tiếng ạ? Anh ghi lại giúp tôi được không?",
+      "khac": [
+        {
+          "kieu": "lịch sự",
+          "t": "Would you mind writing that down for me?",
+          "v": "Anh có phiền ghi lại giúp tôi không?",
+          "ghiChu": "sau \"Would you mind\" dùng V-ing"
+        },
+        {
+          "kieu": "ngắn gọn",
+          "t": "Could you write that down?",
+          "v": "Anh ghi ra giúp tôi nhé?"
+        }
+      ],
+      "np": [
+        {
+          "mau": "write it down",
+          "giai": "Cụm động từ tách được: đại từ (it, them) phải nằm GIỮA: write it down, không nói \"write down it\".",
+          "vd": "Please turn it off.",
+          "vdV": "Làm ơn tắt nó đi."
+        }
+      ]
+    },
+    {
+      "ai": "P",
+      "t": "Of course. And these are throat lozenges. Don't take more than eight a day.",
+      "v": "Tất nhiên. Còn đây là viên ngậm đau họng. Không ngậm quá tám viên một ngày.",
+      "np": [
+        {
+          "mau": "Don't + V",
+          "giai": "Câu mệnh lệnh phủ định, dùng để dặn/cấm. \"more than eight a day\" = hơn tám viên mỗi ngày.",
+          "vd": "Don't drink alcohol with this medicine.",
+          "vdV": "Đừng uống rượu khi dùng thuốc này."
+        }
+      ]
+    },
+    {
+      "ai": "L",
+      "t": "Thank you. How much is that?",
+      "v": "Cảm ơn anh. Hết bao nhiêu tiền ạ?"
+    },
+    {
+      "ai": "P",
+      "t": "That's nine forty. And drink lots of warm water and get some rest.",
+      "v": "Chín đô bốn mươi. Và nhớ uống nhiều nước ấm, nghỉ ngơi nhé.",
+      "khac": [
+        {
+          "kieu": "mềm mỏng",
+          "t": "You should also drink plenty of warm water and try to rest.",
+          "v": "Bạn cũng nên uống thật nhiều nước ấm và cố nghỉ ngơi."
+        }
+      ]
+    },
+    {
+      "ai": "L",
+      "t": "Should I see a doctor?",
+      "v": "Tôi có nên đi khám bác sĩ không?",
+      "khac": [
+        {
+          "kieu": "lịch sự",
+          "t": "Do you think I need to see a doctor?",
+          "v": "Anh nghĩ tôi có cần đi khám không?"
+        }
+      ],
+      "np": [
+        {
+          "mau": "Should I + V?",
+          "giai": "Xin lời khuyên. Đáp: \"Yes, you should / I don't think you need to\".",
+          "vd": "Should I take it before or after meals?",
+          "vdV": "Tôi nên uống trước hay sau bữa ăn?"
+        }
+      ]
+    },
+    {
+      "ai": "P",
+      "t": "If you still have a fever after three days, you should see a doctor. There's a clinic next door.",
+      "v": "Nếu sau ba ngày bạn vẫn còn sốt thì nên đi khám. Ngay bên cạnh có một phòng khám.",
+      "np": [
+        {
+          "mau": "If + hiện tại đơn, you should + V",
+          "giai": "Lời khuyên có điều kiện (điều kiện loại 1).",
+          "vd": "If the pain gets worse, you should call a doctor.",
+          "vdV": "Nếu cơn đau nặng hơn, bạn nên gọi bác sĩ."
+        }
+      ]
+    },
+    {
+      "ai": "L",
+      "t": "Do I need an appointment, or can I just walk in?",
+      "v": "Tôi có cần đặt hẹn không, hay cứ đến thẳng là được?",
+      "khac": [
+        {
+          "kieu": "tự nhiên hơn",
+          "t": "Do they take walk-ins?",
+          "v": "Ở đó có nhận khách không hẹn trước không?",
+          "ghiChu": "walk-in = khách đến không hẹn"
+        }
+      ]
+    },
+    {
+      "ai": "P",
+      "t": "They take walk-ins in the morning, but you might wait a long time.",
+      "v": "Buổi sáng họ có nhận khách không hẹn, nhưng có thể bạn phải đợi lâu."
+    },
+    {
+      "ai": "L",
+      "t": "Okay. Thanks for your help.",
+      "v": "Vâng. Cảm ơn anh đã giúp."
+    },
+    {
+      "ai": "P",
+      "t": "You're welcome. Feel better soon!",
+      "v": "Không có gì. Mau khỏe nhé!",
+      "khac": [
+        {
+          "kieu": "thân mật",
+          "t": "Get well soon!",
+          "v": "Mau khỏe nhé!"
+        },
+        {
+          "kieu": "trang trọng",
+          "t": "I hope you feel better soon.",
+          "v": "Mong bạn sớm khỏe lại."
+        }
+      ]
+    }
+  ],
+  "tuVung": [
+    {
+      "chu": "sore throat",
+      "doc": "/sɔː θrəʊt/",
+      "nghia": "đau họng",
+      "vd": "I have a sore throat."
+    },
+    {
+      "chu": "headache",
+      "doc": "/ˈhedeɪk/",
+      "nghia": "đau đầu",
+      "vd": "I've got a terrible headache."
+    },
+    {
+      "chu": "fever",
+      "doc": "/ˈfiːvə(r)/",
+      "nghia": "sốt",
+      "vd": "She has a high fever."
+    },
+    {
+      "chu": "dizzy",
+      "doc": "/ˈdɪzi/",
+      "nghia": "chóng mặt",
+      "vd": "I feel dizzy when I stand up."
+    },
+    {
+      "chu": "medicine",
+      "doc": "/ˈmedsn/",
+      "nghia": "thuốc",
+      "vd": "Take this medicine twice a day."
+    },
+    {
+      "chu": "allergic",
+      "doc": "/əˈlɜːdʒɪk/",
+      "nghia": "dị ứng",
+      "vd": "I'm allergic to penicillin."
+    },
+    {
+      "chu": "tablets",
+      "doc": "/ˈtæbləts/",
+      "nghia": "viên thuốc",
+      "vd": "Take two tablets."
+    },
+    {
+      "chu": "after meals",
+      "doc": "/ˈɑːftə miːlz/",
+      "nghia": "sau bữa ăn",
+      "vd": "Take it after meals."
+    },
+    {
+      "chu": "lozenges",
+      "doc": "/ˈlɒzɪndʒɪz/",
+      "nghia": "viên ngậm",
+      "vd": "These lozenges help your throat."
+    },
+    {
+      "chu": "get some rest",
+      "doc": "/ɡet sʌm rest/",
+      "nghia": "nghỉ ngơi",
+      "vd": "Go home and get some rest."
+    },
+    {
+      "chu": "appointment",
+      "doc": "/əˈpɔɪntmənt/",
+      "nghia": "cuộc hẹn (khám bệnh…)",
+      "vd": "I have an appointment at 3 p.m."
+    },
+    {
+      "chu": "walk-ins",
+      "doc": "/ˈwɔːk ɪnz/",
+      "nghia": "khách đến không hẹn trước",
+      "vd": "The clinic accepts walk-ins."
+    }
+  ],
+  "yNghia": "Ốm ở xứ người dễ hoảng, nhưng dược sĩ là người hỏi han rất kỹ — hãy trả lời thật, và nhờ họ ghi lại cách uống nếu bạn không chắc. Thuốc chỉ là một phần; nước ấm và giấc ngủ cũng là thuốc.",
+  "meo": [
+    "Tả triệu chứng: \"I have a sore throat / a headache / a fever\", \"I feel dizzy\", \"I've had it since yesterday\".",
+    "Câu dược sĩ hay hỏi: \"How long have you had it?\", \"Are you taking any other medicine?\", \"Are you allergic to anything?\".",
+    "Nghe cách dùng thuốc: \"two tablets every six hours\", \"after meals\", \"don't take more than…\". Không chắc thì: \"Can you write it down for me?\".",
+    "Uống thuốc = take medicine (không phải drink)."
+  ],
+  "cauHoi": [
+    {
+      "hoi": "Liên bị gì?",
+      "chon": [
+        "Đau bụng và sốt",
+        "Đau họng và nhức đầu",
+        "Đau răng"
+      ],
+      "dung": 1,
+      "giai": "\"I have a sore throat and a headache.\""
+    },
+    {
+      "hoi": "Phải uống thuốc viên như thế nào?",
+      "chon": [
+        "Hai viên mỗi sáu tiếng, sau bữa ăn",
+        "Một viên mỗi sáng",
+        "Tám viên một ngày, trước bữa ăn"
+      ],
+      "dung": 0,
+      "giai": "\"Two tablets every six hours, after meals.\" Tám viên là giới hạn của viên ngậm."
+    },
+    {
+      "hoi": "Khi nào Liên nên đi khám bác sĩ?",
+      "chon": [
+        "Ngay hôm nay",
+        "Nếu sau ba ngày vẫn còn sốt",
+        "Khi hết thuốc"
+      ],
+      "dung": 1,
+      "giai": "\"If you still have a fever after three days, you should see a doctor.\""
+    },
+    {
+      "hoi": "Câu nào đúng?",
+      "chon": [
+        "I drink medicine every day.",
+        "I'm headache.",
+        "I've had a cough since Monday."
+      ],
+      "dung": 2,
+      "giai": "take medicine; I have a headache; since + mốc thời gian."
+    }
+  ]
+}

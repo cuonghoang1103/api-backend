@@ -1,0 +1,405 @@
+{
+  "id": "zh-ds-hsk1-02",
+  "nn": "zh",
+  "danhMuc": "doi-song",
+  "cap": "HSK1",
+  "so": 4,
+  "tieuDe": "今天几月几号？",
+  "tieuDeViet": "Hôm nay ngày mấy tháng mấy?",
+  "moTa": "Tuấn sắp gọi điện chúc mừng sinh nhật mẹ ở Hà Nội và nhờ cô bạn Tiểu Lệ tính giờ giùm. Hỏi giờ, hỏi ngày, hỏi thứ, hỏi tuổi — và phát hiện sinh nhật hai người chỉ cách nhau một ngày.",
+  "chuDe": "Số, giờ, ngày",
+  "bieuTuong": "calendar",
+  "nguoi": [
+    {
+      "ma": "T",
+      "ten": "Tuấn",
+      "giong": "zh-nam",
+      "vai": "sinh viên Việt Nam"
+    },
+    {
+      "ma": "L",
+      "ten": "Tiểu Lệ",
+      "giong": "zh-nu",
+      "vai": "bạn cùng lớp người Trung"
+    }
+  ],
+  "loi": [
+    {
+      "ai": "T",
+      "t": "小丽，现在几点？",
+      "doc": "Xiǎo Lì, xiànzài jǐ diǎn?",
+      "v": "Tiểu Lệ, bây giờ mấy giờ rồi?",
+      "khac": [
+        {
+          "kieu": "lịch sự",
+          "t": "请问，现在几点了？",
+          "doc": "Qǐngwèn, xiànzài jǐ diǎn le?",
+          "v": "Cho hỏi, bây giờ mấy giờ rồi ạ?",
+          "ghiChu": "hỏi người lạ ngoài đường"
+        },
+        {
+          "kieu": "ngắn gọn",
+          "t": "几点了？",
+          "doc": "Jǐ diǎn le?",
+          "v": "Mấy giờ rồi?",
+          "ghiChu": "giữa bạn bè, người trong nhà"
+        }
+      ],
+      "np": [
+        {
+          "mau": "几 + lượng từ/đơn vị",
+          "giai": "几 hỏi số nhỏ (thường dưới 10) hoặc số có giới hạn như giờ, ngày, tháng: 几点 (mấy giờ), 几号 (ngày mấy), 几个 (mấy cái). Số lớn, không đoán được thì dùng 多少.",
+          "vd": "你有几个哥哥？",
+          "vdDoc": "Nǐ yǒu jǐ ge gēge?",
+          "vdV": "Bạn có mấy anh trai?"
+        }
+      ]
+    },
+    {
+      "ai": "L",
+      "t": "两点十分。",
+      "doc": "Liǎng diǎn shí fēn.",
+      "v": "Hai giờ mười phút.",
+      "np": [
+        {
+          "mau": "两 + 点/个 (không dùng 二)",
+          "giai": "Trước lượng từ và đơn vị giờ, số 2 nói là 两: 两点, 两个人, 两块钱. Khi đếm số, đọc số điện thoại, số thứ tự thì vẫn là 二: 一、二、三, 二号, 十二.",
+          "vd": "我有两个中国朋友。",
+          "vdDoc": "Wǒ yǒu liǎng ge Zhōngguó péngyou.",
+          "vdV": "Tôi có hai người bạn Trung Quốc."
+        }
+      ]
+    },
+    {
+      "ai": "T",
+      "t": "今天几月几号？",
+      "doc": "Jīntiān jǐ yuè jǐ hào?",
+      "v": "Hôm nay ngày mấy tháng mấy?",
+      "khac": [
+        {
+          "kieu": "văn nói",
+          "t": "今天是几号？",
+          "doc": "Jīntiān shì jǐ hào?",
+          "v": "Hôm nay là ngày mấy?",
+          "ghiChu": "khi ai cũng biết đang tháng nào"
+        }
+      ],
+      "np": [
+        {
+          "mau": "năm + 月 + 号 + 星期",
+          "giai": "Tiếng Trung nói từ lớn đến nhỏ: năm → tháng → ngày → thứ (2026年11月16号星期一), ngược với tiếng Việt. Văn nói dùng 号, văn viết/lịch dùng 日.",
+          "vd": "今天是十一月一号。",
+          "vdDoc": "Jīntiān shì shíyī yuè yī hào.",
+          "vdV": "Hôm nay là ngày mùng một tháng mười một."
+        }
+      ]
+    },
+    {
+      "ai": "L",
+      "t": "今天十一月十六号。",
+      "doc": "Jīntiān shíyī yuè shíliù hào.",
+      "v": "Hôm nay ngày mười sáu tháng mười một.",
+      "khac": [
+        {
+          "kieu": "văn viết",
+          "t": "今天是十一月十六日。",
+          "doc": "Jīntiān shì shíyī yuè shíliù rì.",
+          "v": "Hôm nay là ngày 16 tháng 11.",
+          "ghiChu": "日 dùng trên giấy tờ, thông báo, bản tin"
+        },
+        {
+          "kieu": "ngắn gọn",
+          "t": "十六号。",
+          "doc": "Shíliù hào.",
+          "v": "Ngày mười sáu."
+        }
+      ]
+    },
+    {
+      "ai": "T",
+      "t": "星期几？",
+      "doc": "Xīngqī jǐ?",
+      "v": "Thứ mấy?",
+      "khac": [
+        {
+          "kieu": "ngắn gọn",
+          "t": "周几？",
+          "doc": "Zhōu jǐ?",
+          "v": "Thứ mấy?",
+          "ghiChu": "giới trẻ, dân văn phòng hay nói"
+        },
+        {
+          "kieu": "văn nói",
+          "t": "礼拜几？",
+          "doc": "Lǐbài jǐ?",
+          "v": "Thứ mấy?",
+          "ghiChu": "người lớn tuổi, miền Nam Trung Quốc hay dùng"
+        }
+      ],
+      "np": [
+        {
+          "mau": "星期 + 一…六 / 星期天",
+          "giai": "Thứ Hai = 星期一, thứ Ba = 星期二… thứ Bảy = 星期六, Chủ nhật = 星期天 (hoặc 星期日). Chú ý: 星期一 là thứ HAI, không phải thứ nhất như tiếng Việt dễ nhầm.",
+          "vd": "我星期三有课。",
+          "vdDoc": "Wǒ xīngqīsān yǒu kè.",
+          "vdV": "Thứ Tư tôi có tiết học."
+        }
+      ]
+    },
+    {
+      "ai": "L",
+      "t": "星期一。你问这个做什么？",
+      "doc": "Xīngqīyī. Nǐ wèn zhège zuò shénme?",
+      "v": "Thứ Hai. Cậu hỏi cái này làm gì?"
+    },
+    {
+      "ai": "T",
+      "t": "明天是我妈妈的生日，我想给她打电话。",
+      "doc": "Míngtiān shì wǒ māma de shēngrì, wǒ xiǎng gěi tā dǎ diànhuà.",
+      "v": "Mai là sinh nhật mẹ mình, mình muốn gọi điện cho mẹ.",
+      "np": [
+        {
+          "mau": "给 + người + 打电话",
+          "giai": "\"Gọi điện cho ai\": người nhận đứng sau 给, TRƯỚC động từ 打电话. Đừng nói 打电话给她 khi mới học — nghe được nhưng 给她打电话 tự nhiên hơn.",
+          "vd": "我晚上给你打电话。",
+          "vdDoc": "Wǒ wǎnshang gěi nǐ dǎ diànhuà.",
+          "vdV": "Tối mình gọi cho cậu."
+        }
+      ]
+    },
+    {
+      "ai": "L",
+      "t": "太好了！你妈妈今年多大了？",
+      "doc": "Tài hǎo le! Nǐ māma jīnnián duō dà le?",
+      "v": "Hay quá! Mẹ cậu năm nay bao nhiêu tuổi rồi?",
+      "khac": [
+        {
+          "kieu": "lịch sự",
+          "t": "阿姨今年多大年纪了？",
+          "doc": "Āyí jīnnián duō dà niánjì le?",
+          "v": "Năm nay bác bao nhiêu tuổi rồi?",
+          "ghiChu": "hỏi tuổi người lớn tuổi: dùng 多大年纪, gọi mẹ bạn là 阿姨"
+        }
+      ],
+      "np": [
+        {
+          "mau": "多大了 / 几岁了 / 多大年纪了",
+          "giai": "Hỏi tuổi người trẻ, người ngang hàng: 你多大了？ Hỏi trẻ em (dưới 10 tuổi): 你几岁了？ Hỏi người lớn tuổi: 您多大年纪了？",
+          "vd": "小朋友，你几岁了？",
+          "vdDoc": "Xiǎopéngyǒu, nǐ jǐ suì le?",
+          "vdV": "Bé ơi, con mấy tuổi rồi?"
+        }
+      ]
+    },
+    {
+      "ai": "T",
+      "t": "她今年五十二岁。",
+      "doc": "Tā jīnnián wǔshí'èr suì.",
+      "v": "Năm nay mẹ mình năm mươi hai tuổi.",
+      "np": [
+        {
+          "mau": "Số 11–99: 十 làm hàng chục",
+          "giai": "Ghép như tiếng Việt: 五十二 = năm mươi hai, 十六 = mười sáu, 九十九 = chín mươi chín. 一百 = một trăm.",
+          "vd": "我们班有三十四个学生。",
+          "vdDoc": "Wǒmen bān yǒu sānshísì ge xuésheng.",
+          "vdV": "Lớp chúng tôi có ba mươi tư học sinh."
+        }
+      ]
+    },
+    {
+      "ai": "L",
+      "t": "北京现在两点，越南现在几点？",
+      "doc": "Běijīng xiànzài liǎng diǎn, Yuènán xiànzài jǐ diǎn?",
+      "v": "Bắc Kinh giờ là hai giờ, Việt Nam bây giờ mấy giờ?"
+    },
+    {
+      "ai": "T",
+      "t": "一点。越南晚一个小时。",
+      "doc": "Yì diǎn. Yuènán wǎn yí ge xiǎoshí.",
+      "v": "Một giờ. Việt Nam chậm hơn một tiếng."
+    },
+    {
+      "ai": "L",
+      "t": "你妈妈早上几点起床？",
+      "doc": "Nǐ māma zǎoshang jǐ diǎn qǐchuáng?",
+      "v": "Mẹ cậu sáng mấy giờ dậy?"
+    },
+    {
+      "ai": "T",
+      "t": "她六点半起床，七点半去工作。",
+      "doc": "Tā liù diǎn bàn qǐchuáng, qī diǎn bàn qù gōngzuò.",
+      "v": "Mẹ dậy lúc sáu rưỡi, bảy rưỡi đi làm.",
+      "np": [
+        {
+          "mau": "Chủ ngữ + thời gian + động từ",
+          "giai": "Thời gian đứng TRƯỚC động từ (她六点半起床), không đứng cuối câu như tiếng Việt (\"mẹ dậy lúc sáu rưỡi\"). Cũng có thể đưa lên đầu câu: 六点半她起床.",
+          "vd": "我晚上十点睡觉。",
+          "vdDoc": "Wǒ wǎnshang shí diǎn shuìjiào.",
+          "vdV": "Tôi đi ngủ lúc mười giờ tối."
+        }
+      ]
+    },
+    {
+      "ai": "L",
+      "t": "那你明天早上八点打吧，越南是七点。",
+      "doc": "Nà nǐ míngtiān zǎoshang bā diǎn dǎ ba, Yuènán shì qī diǎn.",
+      "v": "Vậy sáng mai cậu gọi lúc tám giờ đi, bên Việt Nam là bảy giờ."
+    },
+    {
+      "ai": "T",
+      "t": "好！谢谢你。你的生日是几月几号？",
+      "doc": "Hǎo! Xièxie nǐ. Nǐ de shēngrì shì jǐ yuè jǐ hào?",
+      "v": "Ok! Cảm ơn cậu. Sinh nhật cậu ngày mấy tháng mấy?",
+      "khac": [
+        {
+          "kieu": "văn nói",
+          "t": "你哪天过生日？",
+          "doc": "Nǐ nǎ tiān guò shēngrì?",
+          "v": "Cậu sinh nhật hôm nào?",
+          "ghiChu": "hỏi bạn bè, tự nhiên hơn"
+        }
+      ]
+    },
+    {
+      "ai": "L",
+      "t": "三月九号。你呢？",
+      "doc": "Sān yuè jiǔ hào. Nǐ ne?",
+      "v": "Mùng chín tháng ba. Còn cậu?"
+    },
+    {
+      "ai": "T",
+      "t": "真的吗？我是三月八号！",
+      "doc": "Zhēn de ma? Wǒ shì sān yuè bā hào!",
+      "v": "Thật á? Mình là mùng tám tháng ba!"
+    },
+    {
+      "ai": "L",
+      "t": "太好了！明年我们一起过生日吧！",
+      "doc": "Tài hǎo le! Míngnián wǒmen yìqǐ guò shēngrì ba!",
+      "v": "Tuyệt quá! Năm sau tụi mình tổ chức sinh nhật chung nhé!"
+    }
+  ],
+  "tuVung": [
+    {
+      "chu": "几点",
+      "doc": "jǐ diǎn",
+      "nghia": "mấy giờ",
+      "vd": "你几点上课？"
+    },
+    {
+      "chu": "分",
+      "doc": "fēn",
+      "nghia": "phút (trong giờ); 半 = rưỡi",
+      "vd": "两点十分。"
+    },
+    {
+      "chu": "几月几号",
+      "doc": "jǐ yuè jǐ hào",
+      "nghia": "ngày mấy tháng mấy",
+      "vd": "今天几月几号？"
+    },
+    {
+      "chu": "星期",
+      "doc": "xīngqī",
+      "nghia": "tuần; thứ (星期一 = thứ Hai)",
+      "vd": "今天星期几？"
+    },
+    {
+      "chu": "生日",
+      "doc": "shēngrì",
+      "nghia": "sinh nhật",
+      "vd": "生日快乐！"
+    },
+    {
+      "chu": "打电话",
+      "doc": "dǎ diànhuà",
+      "nghia": "gọi điện thoại",
+      "vd": "我给妈妈打电话。"
+    },
+    {
+      "chu": "多大",
+      "doc": "duō dà",
+      "nghia": "bao nhiêu tuổi (hỏi người trẻ, ngang hàng)",
+      "vd": "你今年多大？"
+    },
+    {
+      "chu": "岁",
+      "doc": "suì",
+      "nghia": "tuổi (đứng sau số)",
+      "vd": "我二十岁。"
+    },
+    {
+      "chu": "小时",
+      "doc": "xiǎoshí",
+      "nghia": "tiếng đồng hồ (giờ đồng hồ)",
+      "vd": "我每天学习两个小时。"
+    },
+    {
+      "chu": "起床",
+      "doc": "qǐchuáng",
+      "nghia": "thức dậy, ra khỏi giường",
+      "vd": "你几点起床？"
+    },
+    {
+      "chu": "半",
+      "doc": "bàn",
+      "nghia": "rưỡi, một nửa",
+      "vd": "六点半。"
+    },
+    {
+      "chu": "明年",
+      "doc": "míngnián",
+      "nghia": "năm sau",
+      "vd": "明年我去北京。"
+    }
+  ],
+  "yNghia": "Ngày, giờ, tuổi tác nghe khô khan — nhưng chính chúng làm nên những khoảnh khắc ấm áp: một cuộc gọi đúng lúc mẹ chưa đi làm, một sinh nhật chung với người bạn mới. Biết đếm và hỏi giờ bằng tiếng Trung là biết sắp xếp cuộc sống của mình ở nơi xa.",
+  "meo": [
+    "Ngày tháng nói từ lớn đến nhỏ: 十一月十六号星期一 (tháng 11, ngày 16, thứ Hai) — ngược tiếng Việt.",
+    "2 trước lượng từ/giờ là 两 (两点, 两个); đếm số và số thứ tự là 二 (二号, 十二).",
+    "Giờ: 点 = giờ, 分 = phút, 半 = rưỡi. 两点十分 = 2:10, 六点半 = 6:30.",
+    "Hỏi tuổi đúng người: trẻ em 几岁, người ngang hàng 多大, người lớn tuổi 多大年纪 — hỏi sai dễ bị coi là vô ý."
+  ],
+  "cauHoi": [
+    {
+      "hoi": "Hôm nay là thứ mấy, ngày mấy?",
+      "chon": [
+        "Chủ nhật, 16/11",
+        "Thứ Hai, 16/11",
+        "Thứ Hai, 11/6"
+      ],
+      "dung": 1,
+      "giai": "今天十一月十六号 và 星期一 = thứ Hai, ngày 16 tháng 11."
+    },
+    {
+      "hoi": "Tiểu Lệ khuyên Tuấn gọi cho mẹ lúc mấy giờ (giờ Bắc Kinh)?",
+      "chon": [
+        "Sáu rưỡi",
+        "Bảy giờ",
+        "Tám giờ"
+      ],
+      "dung": 2,
+      "giai": "那你明天早上八点打吧 — tám giờ Bắc Kinh, tức bảy giờ ở Việt Nam, trước khi mẹ đi làm lúc bảy rưỡi."
+    },
+    {
+      "hoi": "Muốn hỏi tuổi một bé năm tuổi, câu nào đúng?",
+      "chon": [
+        "你几岁了？",
+        "您多大年纪了？",
+        "你几点了？"
+      ],
+      "dung": 0,
+      "giai": "Trẻ em dùng 几岁; 多大年纪 dành cho người lớn tuổi."
+    },
+    {
+      "hoi": "Sinh nhật của Tuấn là ngày nào?",
+      "chon": [
+        "Mùng 9 tháng 3",
+        "Mùng 8 tháng 3",
+        "Ngày 16 tháng 11"
+      ],
+      "dung": 1,
+      "giai": "Tuấn nói 我是三月八号; Tiểu Lệ là 三月九号."
+    }
+  ]
+}

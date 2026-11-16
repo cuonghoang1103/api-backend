@@ -1,0 +1,384 @@
+{
+  "id": "en-ds-a2-03",
+  "nn": "en",
+  "danhMuc": "doi-song",
+  "cap": "A2",
+  "so": 6,
+  "tieuDe": "Can I Book for Saturday?",
+  "tieuDeViet": "Đặt chỗ thứ Bảy được không?",
+  "moTa": "Quỳnh gọi hai cuộc điện thoại: đặt bàn mừng sinh nhật mẹ và đặt lịch cắt tóc. Cách nói giờ, đánh vần tên, đọc số điện thoại và hỏi đổi lịch.",
+  "chuDe": "Gọi điện",
+  "bieuTuong": "phone.fill",
+  "nguoi": [
+    {
+      "ma": "Q",
+      "ten": "Quỳnh",
+      "giong": "us-nu",
+      "vai": "người gọi"
+    },
+    {
+      "ma": "R",
+      "ten": "Matt",
+      "giong": "au-nam",
+      "vai": "nhân viên nhà hàng"
+    },
+    {
+      "ma": "S",
+      "ten": "Emily",
+      "giong": "uk-nu",
+      "vai": "lễ tân tiệm tóc"
+    }
+  ],
+  "loi": [
+    {
+      "ai": "R",
+      "t": "Hello, Garden Restaurant. How can I help you?",
+      "v": "Xin chào, nhà hàng Garden nghe. Tôi giúp gì được ạ?"
+    },
+    {
+      "ai": "Q",
+      "t": "Hi. I'd like to book a table for Saturday evening, please.",
+      "v": "Chào anh. Tôi muốn đặt bàn tối thứ Bảy.",
+      "khac": [
+        {
+          "kieu": "tự nhiên hơn",
+          "t": "Hi, can I make a reservation for Saturday night?",
+          "v": "Chào anh, tôi đặt bàn tối thứ Bảy được không?"
+        },
+        {
+          "kieu": "trang trọng",
+          "t": "Good afternoon. I would like to reserve a table for this Saturday evening.",
+          "v": "Chào anh. Tôi muốn đặt trước một bàn vào tối thứ Bảy này."
+        }
+      ],
+      "np": [
+        {
+          "mau": "I'd like to + V",
+          "giai": "Nói điều mình muốn một cách lịch sự (= I want to, nhưng nhẹ nhàng hơn). Gọi điện đặt chỗ nên mở đầu bằng câu này.",
+          "vd": "I'd like to change my order.",
+          "vdV": "Tôi muốn đổi đơn hàng."
+        }
+      ]
+    },
+    {
+      "ai": "R",
+      "t": "Sure. For how many people?",
+      "v": "Vâng. Cho mấy người ạ?"
+    },
+    {
+      "ai": "Q",
+      "t": "For four people, at seven o'clock.",
+      "v": "Bốn người, lúc bảy giờ."
+    },
+    {
+      "ai": "R",
+      "t": "Let me check. I'm sorry, we're fully booked at seven. We have a table at six thirty or at eight fifteen.",
+      "v": "Để tôi xem. Rất tiếc, bảy giờ chúng tôi kín chỗ rồi. Còn một bàn lúc sáu rưỡi hoặc tám giờ mười lăm.",
+      "np": [
+        {
+          "mau": "fully booked",
+          "giai": "Kín chỗ, hết chỗ (nhà hàng, khách sạn, chuyến bay). Ngược lại: \"We have a table available\".",
+          "vd": "The hotel is fully booked this weekend.",
+          "vdV": "Cuối tuần này khách sạn kín phòng."
+        }
+      ]
+    },
+    {
+      "ai": "Q",
+      "t": "Six thirty is fine.",
+      "v": "Sáu rưỡi cũng được ạ.",
+      "khac": [
+        {
+          "kieu": "tự nhiên hơn",
+          "t": "Six thirty works for us.",
+          "v": "Sáu rưỡi hợp với chúng tôi."
+        },
+        {
+          "kieu": "ngắn gọn",
+          "t": "Six thirty, then.",
+          "v": "Vậy sáu rưỡi nhé."
+        }
+      ]
+    },
+    {
+      "ai": "R",
+      "t": "Great. Can I have your name and phone number, please?",
+      "v": "Tốt quá. Cho tôi xin tên và số điện thoại của chị."
+    },
+    {
+      "ai": "Q",
+      "t": "It's Quynh. Q-U-Y-N-H. My number is oh-four-one-two, five-five-five, oh-one-nine.",
+      "v": "Tên tôi là Quỳnh. Q-U-Y-N-H. Số của tôi là 0412 555 019.",
+      "np": [
+        {
+          "mau": "Đọc số điện thoại",
+          "giai": "Đọc từng chữ số, ngắt theo nhóm. Số 0 đọc \"oh\" hoặc \"zero\"; người Anh hay nói 55 là \"double five\".",
+          "vd": "My number is oh-nine-oh, double two, three-four-five.",
+          "vdV": "Số tôi là 090 22 345."
+        }
+      ]
+    },
+    {
+      "ai": "R",
+      "t": "Thank you. Is it for a special occasion?",
+      "v": "Cảm ơn chị. Có phải dịp gì đặc biệt không ạ?"
+    },
+    {
+      "ai": "Q",
+      "t": "Yes, it's my mum's birthday. Could we have a table by the window?",
+      "v": "Vâng, sinh nhật mẹ tôi. Cho chúng tôi một bàn cạnh cửa sổ được không?",
+      "khac": [
+        {
+          "kieu": "lịch sự",
+          "t": "Would it be possible to get a table by the window?",
+          "v": "Liệu có thể cho chúng tôi bàn cạnh cửa sổ không ạ?"
+        },
+        {
+          "kieu": "ngắn gọn",
+          "t": "A window table, if possible.",
+          "v": "Bàn cửa sổ, nếu được."
+        }
+      ],
+      "np": [
+        {
+          "mau": "my mum's birthday",
+          "giai": "Sở hữu cách 's: của ai. my mum's car, Tom's phone.",
+          "vd": "It's my friend's wedding.",
+          "vdV": "Đó là đám cưới bạn tôi."
+        }
+      ]
+    },
+    {
+      "ai": "R",
+      "t": "I'll make a note of that. See you on Saturday at six thirty.",
+      "v": "Tôi ghi chú lại rồi. Hẹn gặp chị sáu rưỡi thứ Bảy."
+    },
+    {
+      "ai": "Q",
+      "t": "Thank you. Bye.",
+      "v": "Cảm ơn anh. Chào anh."
+    },
+    {
+      "ai": "S",
+      "t": "Good morning, hair salon, Emily speaking.",
+      "v": "Chào buổi sáng, tiệm tóc đây, Emily nghe.",
+      "np": [
+        {
+          "mau": "<tên> speaking",
+          "giai": "Cách giới thiệu khi nhấc máy (nơi làm việc). Người gọi có thể hỏi: \"Is that Emily?\".",
+          "vd": "Good morning, Linh speaking.",
+          "vdV": "Chào buổi sáng, Linh nghe."
+        }
+      ]
+    },
+    {
+      "ai": "Q",
+      "t": "Hi. I'd like to make an appointment for a haircut.",
+      "v": "Chào chị. Tôi muốn đặt lịch cắt tóc.",
+      "khac": [
+        {
+          "kieu": "tự nhiên hơn",
+          "t": "Hi, do you have any time for a haircut this week?",
+          "v": "Chào chị, tuần này tiệm còn giờ nào cắt tóc không?"
+        }
+      ],
+      "np": [
+        {
+          "mau": "make an appointment / book a table",
+          "giai": "Hẹn dịch vụ (cắt tóc, bác sĩ, nha sĩ): make an appointment. Nhà hàng, khách sạn: book / make a reservation.",
+          "vd": "I'd like to make an appointment with the dentist.",
+          "vdV": "Tôi muốn đặt lịch với nha sĩ."
+        }
+      ]
+    },
+    {
+      "ai": "S",
+      "t": "Sure. When would you like to come in?",
+      "v": "Vâng. Chị muốn đến lúc nào ạ?"
+    },
+    {
+      "ai": "Q",
+      "t": "Do you have anything on Friday afternoon?",
+      "v": "Chiều thứ Sáu còn giờ nào không ạ?",
+      "khac": [
+        {
+          "kieu": "lịch sự",
+          "t": "Would Friday afternoon be possible?",
+          "v": "Chiều thứ Sáu có được không ạ?"
+        }
+      ],
+      "np": [
+        {
+          "mau": "on + ngày, in the afternoon",
+          "giai": "on Friday, on Friday afternoon (có tên ngày ⇒ on); in the afternoon (không có tên ngày ⇒ in).",
+          "vd": "I'm free on Monday morning.",
+          "vdV": "Sáng thứ Hai tôi rảnh."
+        }
+      ]
+    },
+    {
+      "ai": "S",
+      "t": "Let me see... We have three o'clock or four thirty.",
+      "v": "Để tôi xem... Còn ba giờ hoặc bốn giờ rưỡi."
+    },
+    {
+      "ai": "Q",
+      "t": "Three o'clock, please. Oh, sorry — how much is a haircut?",
+      "v": "Ba giờ ạ. À, xin lỗi — cắt tóc bao nhiêu tiền ạ?"
+    },
+    {
+      "ai": "S",
+      "t": "A women's cut is forty dollars. It takes about an hour.",
+      "v": "Cắt tóc nữ bốn mươi đô. Mất khoảng một tiếng."
+    },
+    {
+      "ai": "Q",
+      "t": "Okay, that's fine. Can I change the time later if I need to?",
+      "v": "Vâng, được ạ. Nếu cần thì sau này tôi đổi giờ được không?",
+      "khac": [
+        {
+          "kieu": "tự nhiên hơn",
+          "t": "If something comes up, can I reschedule?",
+          "v": "Nếu có việc đột xuất, tôi dời lịch được không?",
+          "ghiChu": "reschedule = dời lịch"
+        }
+      ],
+      "np": [
+        {
+          "mau": "if I need to",
+          "giai": "Lặp lại \"to\" để khỏi nhắc động từ (= if I need to change it).",
+          "vd": "You can stay if you want to.",
+          "vdV": "Bạn có thể ở lại nếu bạn muốn."
+        }
+      ]
+    },
+    {
+      "ai": "S",
+      "t": "Of course. Just call us a day before.",
+      "v": "Tất nhiên. Chị cứ gọi trước một ngày là được."
+    },
+    {
+      "ai": "Q",
+      "t": "Perfect. Thanks so much!",
+      "v": "Tuyệt. Cảm ơn chị nhiều!",
+      "khac": [
+        {
+          "kieu": "trang trọng",
+          "t": "Wonderful. Thank you very much for your help.",
+          "v": "Tuyệt vời. Cảm ơn chị rất nhiều."
+        }
+      ]
+    }
+  ],
+  "tuVung": [
+    {
+      "chu": "book a table",
+      "doc": "/bʊk ə ˈteɪbl/",
+      "nghia": "đặt bàn",
+      "vd": "I'd like to book a table for two."
+    },
+    {
+      "chu": "fully booked",
+      "doc": "/ˈfʊli bʊkt/",
+      "nghia": "kín chỗ",
+      "vd": "Sorry, we're fully booked."
+    },
+    {
+      "chu": "phone number",
+      "doc": "/fəʊn ˈnʌmbə(r)/",
+      "nghia": "số điện thoại",
+      "vd": "What is your phone number?"
+    },
+    {
+      "chu": "special occasion",
+      "doc": "/ˈspeʃl əˈkeɪʒn/",
+      "nghia": "dịp đặc biệt",
+      "vd": "We only go there for a special occasion."
+    },
+    {
+      "chu": "by the window",
+      "doc": "/baɪ ðə ˈwɪndəʊ/",
+      "nghia": "cạnh cửa sổ",
+      "vd": "Can we sit by the window?"
+    },
+    {
+      "chu": "make a note",
+      "doc": "/meɪk ə nəʊt/",
+      "nghia": "ghi chú lại",
+      "vd": "I'll make a note of your request."
+    },
+    {
+      "chu": "appointment",
+      "doc": "/əˈpɔɪntmənt/",
+      "nghia": "lịch hẹn",
+      "vd": "I have an appointment at ten."
+    },
+    {
+      "chu": "haircut",
+      "doc": "/ˈheəkʌt/",
+      "nghia": "việc cắt tóc",
+      "vd": "I need a haircut."
+    },
+    {
+      "chu": "come in",
+      "doc": "/kʌm ɪn/",
+      "nghia": "đến (cửa hàng, văn phòng)",
+      "vd": "Can you come in tomorrow?"
+    },
+    {
+      "chu": "a day before",
+      "doc": "/ə deɪ bɪˈfɔː(r)/",
+      "nghia": "trước một ngày",
+      "vd": "Please call a day before."
+    }
+  ],
+  "yNghia": "Gọi điện bằng tiếng Anh đáng sợ vì không nhìn thấy mặt nhau — nên hãy chuẩn bị sẵn: ngày, giờ, số người, tên đánh vần và một giờ dự phòng. Có sẵn những thứ đó, cuộc gọi chỉ mất một phút.",
+  "meo": [
+    "Mở đầu cuộc gọi: \"Hi, I'd like to book a table / make an appointment for…\".",
+    "Giờ: at seven, at six thirty, at eight fifteen. Ngày: on Saturday, on Friday afternoon.",
+    "Đánh vần tên Việt chậm từng chữ; đọc số điện thoại theo nhóm, 0 = \"oh\".",
+    "Hết chỗ: \"We're fully booked\" — nhận giờ khác: \"Six thirty is fine / works for us\"."
+  ],
+  "cauHoi": [
+    {
+      "hoi": "Vì sao Quỳnh đặt bàn lúc sáu rưỡi?",
+      "chon": [
+        "Cô thích ăn sớm",
+        "Bảy giờ đã kín chỗ",
+        "Mẹ cô muốn sáu rưỡi"
+      ],
+      "dung": 1,
+      "giai": "\"We're fully booked at seven.\""
+    },
+    {
+      "hoi": "Bữa tối là để làm gì?",
+      "chon": [
+        "Mừng sinh nhật mẹ Quỳnh",
+        "Gặp đối tác",
+        "Mừng tốt nghiệp"
+      ],
+      "dung": 0,
+      "giai": "\"It's my mum's birthday.\""
+    },
+    {
+      "hoi": "Cắt tóc ở đâu: \"make an appointment\" hay \"book a table\"?",
+      "chon": [
+        "book a table",
+        "make an appointment",
+        "make a table"
+      ],
+      "dung": 1,
+      "giai": "Dịch vụ như cắt tóc, bác sĩ dùng \"make an appointment\"."
+    },
+    {
+      "hoi": "Muốn đổi lịch hẹn, Quỳnh phải làm gì?",
+      "chon": [
+        "Gọi trước một ngày",
+        "Đến tiệm trực tiếp",
+        "Không đổi được"
+      ],
+      "dung": 0,
+      "giai": "\"Just call us a day before.\""
+    }
+  ]
+}

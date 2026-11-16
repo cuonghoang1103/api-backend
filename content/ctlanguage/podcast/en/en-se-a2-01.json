@@ -1,0 +1,104 @@
+{
+  "id": "en-se-a2-01",
+  "nn": "en",
+  "danhMuc": "phan-mem",
+  "cap": "A2",
+  "so": 1,
+  "tieuDe": "Hi, I'm a Developer",
+  "tieuDeViet": "Xin chào, tôi là lập trình viên",
+  "moTa": "Minh, sinh viên năm ba ngành kỹ thuật phần mềm, lần đầu đi một buổi gặp mặt dân công nghệ. Cách tự giới thiệu mình học gì, làm gì, thích front-end hay back-end — và một lời khuyên nhỏ từ chị tester Sarah.",
+  "chuDe": "Tự giới thiệu",
+  "bieuTuong": "laptopcomputer",
+  "nguoi": [
+    { "ma": "S", "ten": "Sarah", "giong": "uk-nu", "vai": "kỹ sư kiểm thử (tester)" },
+    { "ma": "M", "ten": "Minh", "giong": "us-nam", "vai": "sinh viên IT, lập trình viên bán thời gian" }
+  ],
+  "loi": [
+    { "ai": "S", "t": "Hi! Is this your first time at the meetup?", "v": "Chào bạn! Đây là lần đầu bạn đến buổi gặp mặt này à?",
+      "np": [{ "mau": "Is this your first time + at/in + N?", "giai": "Câu hỏi rất hay dùng để bắt chuyện với người lạ: \"Đây là lần đầu bạn… à?\". Sau \"first time\" dùng at (sự kiện), in (thành phố, nước).", "vd": "Is this your first time in Vietnam?", "vdV": "Đây là lần đầu bạn đến Việt Nam à?" }] },
+    { "ai": "M", "t": "Yes, it is. I'm Minh. Nice to meet you.", "v": "Vâng, đúng vậy. Mình là Minh. Rất vui được gặp chị.",
+      "khac": [
+        { "kieu": "thân mật", "t": "Yeah, first time! I'm Minh.", "v": "Ừ, lần đầu luôn! Mình là Minh.", "ghiChu": "giữa người trẻ, không khí thoải mái" },
+        { "kieu": "lịch sự", "t": "Yes, it's my first time. My name is Minh. It's nice to meet you.", "v": "Vâng, đây là lần đầu của tôi. Tôi tên là Minh. Rất vui được gặp chị.", "ghiChu": "với người lớn hơn hoặc lần đầu gặp ở môi trường công việc" }
+      ] },
+    { "ai": "S", "t": "Nice to meet you too. I'm Sarah. So, what do you do?", "v": "Mình cũng rất vui được gặp bạn. Mình là Sarah. Vậy bạn làm nghề gì?",
+      "np": [{ "mau": "What do you do?", "giai": "Hỏi nghề nghiệp, công việc thường ngày — KHÔNG phải hỏi \"bạn đang làm gì lúc này\" (câu đó là \"What are you doing?\").", "vd": "What does your sister do? — She's a nurse.", "vdV": "Chị bạn làm nghề gì? — Chị ấy là y tá." }],
+      "khac": [
+        { "kieu": "tự nhiên hơn", "t": "So, what kind of work do you do?", "v": "Vậy bạn làm công việc gì?" },
+        { "kieu": "lịch sự", "t": "May I ask what you do?", "v": "Cho mình hỏi bạn làm nghề gì nhé?", "ghiChu": "khi muốn hỏi khéo, với người vừa quen" }
+      ] },
+    { "ai": "M", "t": "I'm a student. I study software engineering at a university in Ho Chi Minh City.", "v": "Mình là sinh viên. Mình học kỹ thuật phần mềm ở một trường đại học tại Thành phố Hồ Chí Minh.",
+      "np": [{ "mau": "I study + ngành + at + trường", "giai": "Hiện tại đơn dùng cho sự thật lâu dài: mình học ngành gì, ở đâu. Ngành học không cần \"the\": study software engineering, study economics.", "vd": "My brother studies medicine at a university in Hanoi.", "vdV": "Anh mình học y ở một trường đại học tại Hà Nội." }] },
+    { "ai": "M", "t": "I'm in my third year, and I also work part-time as a junior web developer.", "v": "Mình đang học năm ba, và mình cũng làm bán thời gian ở vị trí lập trình viên web mới vào nghề.",
+      "np": [
+        { "mau": "be in my + first/second/third year", "giai": "Cách nói mình đang học năm thứ mấy. Không nói \"I'm third-year student\" thiếu mạo từ; nếu dùng thì phải là \"I'm a third-year student\".", "vd": "She's in her final year of university.", "vdV": "Cô ấy đang học năm cuối đại học." },
+        { "mau": "work as + a/an + nghề", "giai": "\"Làm việc với vai trò là…\". Nhớ có a/an trước nghề số ít.", "vd": "He works as a designer at a small company.", "vdV": "Anh ấy làm thiết kế ở một công ty nhỏ." }
+      ] },
+    { "ai": "S", "t": "Oh, nice! What do you work on?", "v": "Ồ, hay đấy! Bạn làm về cái gì?",
+      "khac": [
+        { "kieu": "tự nhiên hơn", "t": "Nice! What kind of projects do you work on?", "v": "Hay quá! Bạn làm những dự án kiểu gì?" }
+      ] },
+    { "ai": "M", "t": "I build websites for small shops. I mostly write front-end code in JavaScript and React.", "v": "Mình làm website cho các cửa hàng nhỏ. Mình chủ yếu viết code front-end bằng JavaScript và React.",
+      "np": [{ "mau": "mostly + V", "giai": "\"mostly\" = chủ yếu, phần lớn; đứng trước động từ thường (I mostly write) nhưng sau động từ be (It's mostly easy).", "vd": "I mostly work from home on Fridays.", "vdV": "Thứ Sáu mình chủ yếu làm ở nhà." }] },
+    { "ai": "S", "t": "Do you like front-end or back-end better?", "v": "Bạn thích front-end hay back-end hơn?",
+      "np": [{ "mau": "Do you like A or B better?", "giai": "Hỏi ai đó thích cái nào hơn trong hai lựa chọn. \"better\" đặt ở cuối câu. Cách khác: \"Which do you prefer, A or B?\"", "vd": "Do you like tea or coffee better?", "vdV": "Bạn thích trà hay cà phê hơn?" }],
+      "khac": [
+        { "kieu": "tự nhiên hơn", "t": "Which do you prefer, front-end or back-end?", "v": "Bạn thích cái nào hơn, front-end hay back-end?" }
+      ] },
+    { "ai": "M", "t": "I like front-end because I can see the result right away. But I'm learning back-end too, with Node.js and SQL.", "v": "Mình thích front-end vì mình thấy kết quả ngay lập tức. Nhưng mình cũng đang học back-end, với Node.js và SQL.",
+      "np": [{ "mau": "I'm learning… (hiện tại tiếp diễn cho giai đoạn này)", "giai": "Hiện tại tiếp diễn không chỉ dùng cho \"ngay lúc nói\" mà còn cho việc đang làm trong giai đoạn này (tuần này, học kỳ này).", "vd": "I'm reading a book about databases this month.", "vdV": "Tháng này mình đang đọc một cuốn sách về cơ sở dữ liệu." }] },
+    { "ai": "S", "t": "That's a good plan. Full-stack developers are very useful.", "v": "Kế hoạch tốt đấy. Lập trình viên full-stack rất được việc." },
+    { "ai": "M", "t": "What about you? What do you do?", "v": "Còn chị thì sao? Chị làm nghề gì?",
+      "khac": [
+        { "kieu": "ngắn gọn", "t": "And you?", "v": "Còn chị?" },
+        { "kieu": "lịch sự", "t": "How about you, Sarah? What do you do?", "v": "Còn chị thì sao, chị Sarah? Chị làm nghề gì ạ?", "ghiChu": "gọi tên người kia khiến câu thân thiện hơn" }
+      ] },
+    { "ai": "S", "t": "I'm a tester. I find bugs before our users find them!", "v": "Mình là tester. Mình tìm lỗi trước khi người dùng của bọn mình tìm thấy chúng!",
+      "np": [{ "mau": "before + S + V (hiện tại đơn)", "giai": "Sau \"before\" dùng hiện tại đơn dù nói về việc chung chung hay tương lai: before our users find them (không dùng will find).", "vd": "I check my code before I send it.", "vdV": "Mình kiểm tra code trước khi gửi đi." }] },
+    { "ai": "M", "t": "Ha! So you break things for a living.", "v": "Ha! Vậy là chị kiếm sống bằng nghề làm hỏng đồ." },
+    { "ai": "S", "t": "Exactly. Can I give you some advice? Put your projects online, in a public repository. Companies like to see real code.", "v": "Chính xác. Mình cho bạn một lời khuyên nhé? Hãy đưa các dự án của bạn lên mạng, vào một kho mã công khai. Công ty thích được xem code thật.",
+      "np": [{ "mau": "some advice (không đếm được)", "giai": "\"advice\" là danh từ không đếm được: nói some advice, a piece of advice — KHÔNG nói \"an advice\" hay \"advices\".", "vd": "My teacher gave me a piece of advice about my CV.", "vdV": "Thầy cho mình một lời khuyên về CV." }],
+      "khac": [
+        { "kieu": "thân mật", "t": "Here's a tip: put your projects online.", "v": "Mẹo nhỏ nè: đưa dự án lên mạng đi." },
+        { "kieu": "lịch sự", "t": "Could I give you a small piece of advice?", "v": "Mình có thể góp cho bạn một lời khuyên nhỏ không?", "ghiChu": "nhẹ nhàng, không áp đặt" }
+      ] },
+    { "ai": "M", "t": "That's a great idea. I have three small projects on my laptop. I can share them this week.", "v": "Ý hay quá. Mình có ba dự án nhỏ trong máy. Tuần này mình có thể chia sẻ chúng." },
+    { "ai": "S", "t": "Great. Here's my email. Send me the link, and I can look at your code.", "v": "Tuyệt. Đây là email của mình. Gửi mình đường link, mình có thể xem code của bạn.",
+      "khac": [
+        { "kieu": "lịch sự", "t": "Feel free to send me the link. I'd be happy to take a look.", "v": "Cứ thoải mái gửi mình đường link nhé. Mình rất sẵn lòng xem qua." }
+      ] },
+    { "ai": "M", "t": "Thank you so much! It was really nice to meet you.", "v": "Cảm ơn chị nhiều lắm! Rất vui được gặp chị.",
+      "np": [{ "mau": "It was nice to meet you.", "giai": "Lúc chào TẠM BIỆT dùng thì quá khứ \"It was nice to meet you\"; lúc mới gặp dùng \"Nice to meet you\".", "vd": "It was nice talking to you. See you next time!", "vdV": "Nói chuyện với bạn vui lắm. Hẹn lần sau nhé!" }],
+      "khac": [
+        { "kieu": "thân mật", "t": "Thanks a lot! Great meeting you.", "v": "Cảm ơn nhiều nha! Gặp chị vui lắm." },
+        { "kieu": "trang trọng", "t": "Thank you very much. It was a pleasure to meet you.", "v": "Cảm ơn chị rất nhiều. Thật hân hạnh được gặp chị." }
+      ] },
+    { "ai": "S", "t": "You too, Minh. Good luck with your studies!", "v": "Mình cũng vậy, Minh. Chúc bạn học tốt nhé!" }
+  ],
+  "tuVung": [
+    { "chu": "meetup", "doc": "/ˈmiːtʌp/", "nghia": "buổi gặp mặt (của một nhóm cùng sở thích, cùng nghề)", "vd": "There's a JavaScript meetup on Saturday." },
+    { "chu": "software engineering", "doc": "/ˈsɒftweər ˌendʒɪˈnɪərɪŋ/", "nghia": "ngành kỹ thuật phần mềm", "vd": "She has a degree in software engineering." },
+    { "chu": "part-time", "doc": "/ˌpɑːt ˈtaɪm/", "nghia": "bán thời gian", "vd": "I work part-time at a café." },
+    { "chu": "junior", "doc": "/ˈdʒuːniə/", "nghia": "mới vào nghề, cấp thấp (trái với senior)", "vd": "We're hiring two junior developers." },
+    { "chu": "front-end", "doc": "/ˈfrʌnt end/", "nghia": "phần giao diện người dùng thấy và bấm vào", "vd": "Front-end code runs in the browser." },
+    { "chu": "back-end", "doc": "/ˈbæk end/", "nghia": "phần chạy trên máy chủ: dữ liệu, xử lý, API", "vd": "The back-end saves your order in the database." },
+    { "chu": "right away", "doc": "/raɪt əˈweɪ/", "nghia": "ngay lập tức", "vd": "Please call me right away." },
+    { "chu": "Full-stack", "doc": "/ˈfʊl stæk/", "nghia": "làm được cả front-end lẫn back-end", "vd": "He's a full-stack developer." },
+    { "chu": "bugs", "doc": "/bʌɡz/", "nghia": "lỗi trong phần mềm (bug)", "vd": "We fixed three bugs today." },
+    { "chu": "advice", "doc": "/ədˈvaɪs/", "nghia": "lời khuyên (không đếm được)", "vd": "Thanks for the advice!" },
+    { "chu": "repository", "doc": "/rɪˈpɒzɪtri/", "nghia": "kho mã nguồn", "vd": "The code is in our team's repository." }
+  ],
+  "yNghia": "Một lời tự giới thiệu tốt không cần dài: bạn là ai, đang học/làm gì, thích gì và đang học thêm gì. Và ở những buổi gặp mặt, người lạ có thể cho bạn lời khuyên đáng giá — miễn là bạn dám mở lời và dám gửi code của mình cho người khác xem.",
+  "meo": [
+    "\"What do you do?\" = bạn làm nghề gì; \"What are you doing?\" = bạn đang làm gì (lúc này). Đừng nhầm hai câu.",
+    "Mẫu tự giới thiệu 3 câu: \"I'm a… / I study… at… / I'm learning… now.\"",
+    "\"advice\" không đếm được: some advice, a piece of advice — không có \"an advice\".",
+    "Chào tạm biệt dùng \"It was nice to meet you\" (quá khứ), không dùng \"Nice to meet you\" lần nữa."
+  ],
+  "cauHoi": [
+    { "hoi": "Minh đang học năm thứ mấy?", "chon": ["Năm nhất", "Năm cuối", "Năm ba"], "dung": 2, "giai": "\"I'm in my third year.\"" },
+    { "hoi": "Công việc của Sarah là gì?", "chon": ["Tester — tìm lỗi trước người dùng", "Lập trình viên front-end", "Giảng viên đại học"], "dung": 0, "giai": "\"I'm a tester. I find bugs before our users find them!\"" },
+    { "hoi": "Vì sao Minh thích front-end?", "chon": ["Vì lương cao hơn", "Vì thấy kết quả ngay lập tức", "Vì không phải học SQL"], "dung": 1, "giai": "\"because I can see the result right away\"" },
+    { "hoi": "Lời khuyên của Sarah là gì?", "chon": ["Học thêm một ngôn ngữ lập trình", "Đi thực tập ở công ty lớn", "Đưa dự án lên một kho mã công khai để công ty xem code thật"], "dung": 2, "giai": "\"Put your projects online, in a public repository. Companies like to see real code.\"" }
+  ]
+}

@@ -1,0 +1,381 @@
+{
+  "id": "ja-ds-n5-02",
+  "nn": "ja",
+  "danhMuc": "doi-song",
+  "cap": "N5",
+  "so": 5,
+  "tieuDe": "これはいくらですか",
+  "tieuDeViet": "Cái này bao nhiêu tiền?",
+  "moTa": "Thu đi chợ rau ở khu phố mua sắm. Học đếm đồ vật, hỏi giá, nghe số tiền (có cả những số dễ đọc sai như 300, 600, 800), nhờ viết ra giấy — và biết vì sao ở Nhật gần như không ai mặc cả.",
+  "chuDe": "Mua sắm",
+  "bieuTuong": "yensign.circle.fill",
+  "nguoi": [
+    {
+      "ma": "T",
+      "ten": "トゥー",
+      "giong": "ja-nu",
+      "vai": "du học sinh"
+    },
+    {
+      "ma": "S",
+      "ten": "八百屋さん",
+      "giong": "ja-nam",
+      "vai": "chú bán rau quả"
+    }
+  ],
+  "loi": [
+    {
+      "ai": "S",
+      "t": "いらっしゃい！今日はトマトが安いよ！",
+      "doc": "いらっしゃい！きょうはトマトがやすいよ！",
+      "v": "Mời vào! Hôm nay cà chua rẻ lắm!"
+    },
+    {
+      "ai": "T",
+      "t": "すみません、このトマトはいくらですか。",
+      "doc": "すみません、このトマトはいくらですか。",
+      "v": "Chú ơi, cà chua này bao nhiêu tiền ạ?",
+      "khac": [
+        {
+          "kieu": "thân mật",
+          "t": "これ、いくら？",
+          "doc": "これ、いくら？",
+          "v": "Cái này bao nhiêu?",
+          "ghiChu": "Với người bán quen, bạn bè. Với người lạ nên giữ です・ます."
+        },
+        {
+          "kieu": "lịch sự",
+          "t": "すみません、こちらはおいくらですか。",
+          "doc": "すみません、こちらはおいくらですか。",
+          "v": "Xin lỗi, món này giá bao nhiêu ạ?",
+          "ghiChu": "Lịch sự hơn: cửa hàng lớn, quầy có nhân viên tiếp khách."
+        }
+      ],
+      "np": [
+        {
+          "mau": "N はいくらですか",
+          "giai": "Hỏi giá: いくら = bao nhiêu tiền; おいくら là dạng lịch sự. Trả lời: số + 円 (えん).",
+          "vd": "このかさはいくらですか。",
+          "vdDoc": "このかさはいくらですか。",
+          "vdV": "Cái ô này bao nhiêu tiền?"
+        }
+      ]
+    },
+    {
+      "ai": "S",
+      "t": "一つ百円。三つで二百五十円だよ。",
+      "doc": "ひとつひゃくえん。みっつでにひゃくごじゅうえんだよ。",
+      "v": "Một quả 100 yên. Ba quả thì 250 yên.",
+      "np": [
+        {
+          "mau": "số lượng + で (tính gộp)",
+          "giai": "三つで = “ba cái thì (tổng cộng)”. で đứng sau số lượng nghĩa là gộp lại tính chung.",
+          "vd": "二つで五百円です。",
+          "vdDoc": "ふたつでごひゃくえんです。",
+          "vdV": "Hai cái là 500 yên."
+        },
+        {
+          "mau": "Đọc số trăm: 300・600・800",
+          "giai": "Ba số biến âm: 三百 さんびゃく, 六百 ろっぴゃく, 八百 はっぴゃく. Còn lại đọc đều: 百 ひゃく, 二百 にひゃく, 四百 よんひゃく, 五百 ごひゃく.",
+          "vd": "りんごは三百円です。",
+          "vdDoc": "りんごはさんびゃくえんです。",
+          "vdV": "Táo giá 300 yên."
+        }
+      ]
+    },
+    {
+      "ai": "T",
+      "t": "三つで二百五十円……。じゃあ、三つください。",
+      "doc": "みっつでにひゃくごじゅうえん……。じゃあ、みっつください。",
+      "v": "Ba quả 250 yên… Vậy chú cho cháu ba quả.",
+      "khac": [
+        {
+          "kieu": "lịch sự",
+          "t": "じゃあ、三つお願いします。",
+          "doc": "じゃあ、みっつおねがいします。",
+          "v": "Vậy cho cháu ba quả ạ.",
+          "ghiChu": "お願いします mềm hơn ください, dùng được ở mọi cửa hàng."
+        }
+      ],
+      "np": [
+        {
+          "mau": "N を + số lượng + ください",
+          "giai": "Số lượng đứng ngay trước động từ, không cần trợ từ: トマトを三つください. Đếm đồ vật nói chung dùng 一つ・二つ・三つ…",
+          "vd": "おにぎりを二つください。",
+          "vdDoc": "おにぎりをふたつください。",
+          "vdV": "Cho tôi hai nắm cơm."
+        }
+      ]
+    },
+    {
+      "ai": "T",
+      "t": "それから、このりんごも二つください。",
+      "doc": "それから、このりんごもふたつください。",
+      "v": "Thêm nữa, chú cho cháu cả hai quả táo này."
+    },
+    {
+      "ai": "S",
+      "t": "りんごは一つ百五十円だから……全部で五百五十円ね。",
+      "doc": "りんごはひとつひゃくごじゅうえんだから……ぜんぶでごひゃくごじゅうえんね。",
+      "v": "Táo một quả 150 yên nên… tổng cộng 550 yên nhé."
+    },
+    {
+      "ai": "T",
+      "t": "すみません、ここに書いてください。",
+      "doc": "すみません、ここにかいてください。",
+      "v": "Xin lỗi, chú viết ra đây giúp cháu với.",
+      "khac": [
+        {
+          "kieu": "lịch sự",
+          "t": "すみません、数字を書いていただけますか。",
+          "doc": "すみません、すうじをかいていただけますか。",
+          "v": "Xin lỗi, chú viết giúp cháu con số được không ạ?",
+          "ghiChu": "Lịch sự hơn ください; dùng với nhân viên, người lạ."
+        }
+      ],
+      "np": [
+        {
+          "mau": "V て ください",
+          "giai": "Nhờ ai làm gì: thể て + ください. 書く → 書いて, 見る → 見て, 待つ → 待って.",
+          "vd": "ちょっと待ってください。",
+          "vdDoc": "ちょっとまってください。",
+          "vdV": "Xin chờ một chút."
+        }
+      ]
+    },
+    {
+      "ai": "S",
+      "t": "いいよ。ほら、550円。",
+      "doc": "いいよ。ほら、ごひゃくごじゅうえん。",
+      "v": "Được thôi. Đây, 550 yên."
+    },
+    {
+      "ai": "T",
+      "t": "あ、わかりました。……少し高いですね。安くなりませんか。",
+      "doc": "あ、わかりました。……すこしたかいですね。やすくなりませんか。",
+      "v": "À, cháu hiểu rồi. …Hơi đắt chú nhỉ. Chú bớt cho cháu được không ạ?",
+      "khac": [
+        {
+          "kieu": "mềm mỏng",
+          "t": "もう少しだけ、安くなりませんか。",
+          "doc": "もうすこしだけ、やすくなりませんか。",
+          "v": "Chú bớt cho cháu một chút xíu thôi được không ạ?",
+          "ghiChu": "Thêm だけ cho nhẹ nhàng. Nhưng ở Nhật, phần lớn cửa hàng không mặc cả."
+        }
+      ],
+      "np": [
+        {
+          "mau": "い-adj → 〜く なります",
+          "giai": "Đổi い thành く rồi thêm なる để nói “trở nên …”: 安い → 安くなる (rẻ đi). 安くなりませんか = “không rẻ hơn được sao?” — cách hỏi bớt giá nhẹ nhàng.",
+          "vd": "冬は寒くなります。",
+          "vdDoc": "ふゆはさむくなります。",
+          "vdV": "Mùa đông trời trở lạnh."
+        }
+      ]
+    },
+    {
+      "ai": "S",
+      "t": "ははは、ごめんね。日本のお店は、あまり値段を下げないよ。",
+      "doc": "ははは、ごめんね。にほんのおみせは、あまりねだんをさげないよ。",
+      "v": "Ha ha, xin lỗi nhé. Cửa hàng ở Nhật ít khi hạ giá đâu."
+    },
+    {
+      "ai": "S",
+      "t": "でも、このみかんを一つ、おまけ。どうぞ。",
+      "doc": "でも、このみかんをひとつ、おまけ。どうぞ。",
+      "v": "Nhưng chú tặng thêm cháu một quả quýt này. Cầm lấy."
+    },
+    {
+      "ai": "T",
+      "t": "えっ、いいんですか。ありがとうございます！",
+      "doc": "えっ、いいんですか。ありがとうございます！",
+      "v": "Ơ, thật được ạ? Cháu cảm ơn chú!",
+      "khac": [
+        {
+          "kieu": "thân mật",
+          "t": "え、いいの？ありがとう！",
+          "doc": "え、いいの？ありがとう！",
+          "v": "Ơ, được hả? Cảm ơn nha!",
+          "ghiChu": "Với bạn bè hoặc người trong nhà."
+        }
+      ]
+    },
+    {
+      "ai": "S",
+      "t": "学生さん？どこから？",
+      "doc": "がくせいさん？どこから？",
+      "v": "Cháu là sinh viên à? Từ đâu đến thế?"
+    },
+    {
+      "ai": "T",
+      "t": "ベトナムからです。毎週土曜日に、この近くで日本語を勉強しています。",
+      "doc": "ベトナムからです。まいしゅうどようびに、このちかくでにほんごをべんきょうしています。",
+      "v": "Cháu từ Việt Nam ạ. Thứ Bảy hằng tuần cháu học tiếng Nhật ở gần đây.",
+      "np": [
+        {
+          "mau": "V ています (thói quen)",
+          "giai": "〜ています ngoài nghĩa “đang làm” còn chỉ việc làm đều đặn: 毎週勉強しています = tuần nào cũng học.",
+          "vd": "毎朝、公園を走っています。",
+          "vdDoc": "まいあさ、こうえんをはしっています。",
+          "vdV": "Sáng nào tôi cũng chạy bộ ở công viên."
+        }
+      ]
+    },
+    {
+      "ai": "S",
+      "t": "じゃあ、来週も来てね。はい、千円ね。おつり、四百五十円。",
+      "doc": "じゃあ、らいしゅうもきてね。はい、せんえんね。おつり、よんひゃくごじゅうえん。",
+      "v": "Vậy tuần sau lại đến nhé. Rồi, nhận của cháu 1000 yên. Tiền thừa 450 yên."
+    },
+    {
+      "ai": "T",
+      "t": "ありがとうございました。また来ます！",
+      "doc": "ありがとうございました。またきます！",
+      "v": "Cháu cảm ơn chú. Cháu sẽ lại đến!",
+      "khac": [
+        {
+          "kieu": "thân mật",
+          "t": "ありがとう！また来るね！",
+          "doc": "ありがとう！またくるね！",
+          "v": "Cảm ơn nha! Lần sau lại tới!",
+          "ghiChu": "Với người bán đã quen thân như bạn bè."
+        }
+      ]
+    },
+    {
+      "ai": "S",
+      "t": "まいどあり！また来週ね。",
+      "doc": "まいどあり！またらいしゅうね。",
+      "v": "Cảm ơn cháu nhé! Hẹn tuần sau."
+    },
+    {
+      "ai": "T",
+      "t": "安くなりませんでした。でも、みかんをもらいました！",
+      "doc": "やすくなりませんでした。でも、みかんをもらいました！",
+      "v": "Không được bớt giá. Nhưng cháu được cho một quả quýt!",
+      "np": [
+        {
+          "mau": "〜ませんでした (quá khứ phủ định)",
+          "giai": "Quá khứ phủ định lịch sự: なります → なりませんでした (đã không …). Quá khứ khẳng định: もらいます → もらいました.",
+          "vd": "きのうは雨が降りませんでした。",
+          "vdDoc": "きのうはあめがふりませんでした。",
+          "vdV": "Hôm qua trời không mưa."
+        }
+      ]
+    }
+  ],
+  "tuVung": [
+    {
+      "chu": "いくら",
+      "doc": "いくら",
+      "nghia": "bao nhiêu tiền",
+      "vd": "このパンはいくらですか。"
+    },
+    {
+      "chu": "安い",
+      "doc": "やすい",
+      "nghia": "rẻ",
+      "vd": "この店は安いです。"
+    },
+    {
+      "chu": "高い",
+      "doc": "たかい",
+      "nghia": "đắt; cao",
+      "vd": "東京の家賃は高いです。"
+    },
+    {
+      "chu": "全部で",
+      "doc": "ぜんぶで",
+      "nghia": "tổng cộng",
+      "vd": "全部で千円です。"
+    },
+    {
+      "chu": "書いて",
+      "doc": "かいて",
+      "nghia": "viết (thể て của 書く)",
+      "vd": "名前を書いてください。"
+    },
+    {
+      "chu": "値段",
+      "doc": "ねだん",
+      "nghia": "giá cả",
+      "vd": "値段を見てください。"
+    },
+    {
+      "chu": "おまけ",
+      "doc": "おまけ",
+      "nghia": "đồ tặng thêm, khuyến mãi",
+      "vd": "おまけをもらいました。"
+    },
+    {
+      "chu": "毎週",
+      "doc": "まいしゅう",
+      "nghia": "hằng tuần",
+      "vd": "毎週日曜日に掃除します。"
+    },
+    {
+      "chu": "おつり",
+      "doc": "おつり",
+      "nghia": "tiền thừa (tiền thối lại)",
+      "vd": "おつりは百円です。"
+    },
+    {
+      "chu": "まいどあり",
+      "doc": "まいどあり",
+      "nghia": "cảm ơn quý khách (câu của người bán ở chợ, quán nhỏ)",
+      "vd": "まいどあり！またどうぞ。"
+    }
+  ],
+  "yNghia": "Ở Nhật, giá đã niêm yết thì hiếm khi mặc cả — nhưng sự tử tế thì không có bảng giá. Hỏi lịch sự, cười khi bị từ chối, và tuần sau quay lại: đó là cách biến một người bán hàng thành người quen.",
+  "meo": [
+    "Hỏi giá: 「これはいくらですか」; lịch sự hơn: 「こちらはおいくらですか」.",
+    "Gọi số lượng: N を + 一つ／二つ／三つ + ください (hoặc お願いします).",
+    "Biến âm số trăm, số nghìn: 300 さんびゃく, 600 ろっぴゃく, 800 はっぴゃく, 3000 さんぜん, 8000 はっせん.",
+    "Nghe số không kịp? 「ここに書いてください」 — người bán sẽ viết ra hoặc chỉ cho bạn màn hình máy tính tiền."
+  ],
+  "cauHoi": [
+    {
+      "hoi": "Thu mua những gì?",
+      "chon": [
+        "3 quả cà chua và 2 quả táo",
+        "2 quả cà chua và 3 quả táo",
+        "Chỉ 3 quả táo",
+        "Cà chua và quýt"
+      ],
+      "dung": 0,
+      "giai": "「三つください」 (cà chua) rồi 「このりんごも二つください」. Quả quýt là quà tặng thêm."
+    },
+    {
+      "hoi": "Tổng tiền Thu phải trả là bao nhiêu?",
+      "chon": [
+        "450 yên",
+        "250 yên",
+        "550 yên",
+        "1000 yên"
+      ],
+      "dung": 2,
+      "giai": "Cà chua 250 + táo 150 × 2 = 550 yên (五百五十円). 450 yên là tiền thừa."
+    },
+    {
+      "hoi": "Khi Thu xin bớt giá, chú bán hàng làm gì?",
+      "chon": [
+        "Bớt 100 yên",
+        "Không bớt nhưng tặng một quả quýt",
+        "Không bán nữa",
+        "Bớt một nửa"
+      ],
+      "dung": 1,
+      "giai": "「日本のお店は、あまり値段を下げないよ。でも、このみかんを一つ、おまけ。」"
+    },
+    {
+      "hoi": "300 yên đọc thế nào?",
+      "chon": [
+        "さんひゃくえん",
+        "さんぴゃくえん",
+        "さんびゃくえん"
+      ],
+      "dung": 2,
+      "giai": "三百 biến âm thành さんびゃく."
+    }
+  ]
+}

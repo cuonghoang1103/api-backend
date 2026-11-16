@@ -1,6 +1,7 @@
 {
   "id": "en-b1-03",
   "nn": "en",
+  "danhMuc": "doi-song",
   "cap": "B1",
   "so": 3,
   "tieuDe": "A Friend I Have Never Met",
@@ -9,47 +10,315 @@
   "chuDe": "Tình bạn online",
   "bieuTuong": "bubble.left.and.bubble.right.fill",
   "nguoi": [
-    { "ma": "V", "ten": "Vy", "giong": "us-nu", "vai": "học sinh lớp 12" },
-    { "ma": "Q", "ten": "Quang", "giong": "uk-nam", "vai": "anh trai" }
+    {
+      "ma": "V",
+      "ten": "Vy",
+      "giong": "us-nu",
+      "vai": "học sinh lớp 12"
+    },
+    {
+      "ma": "Q",
+      "ten": "Quang",
+      "giong": "uk-nam",
+      "vai": "anh trai"
+    }
   ],
   "loi": [
-    { "ai": "Q", "t": "Who are you laughing with? You've been on your phone for an hour.", "v": "Em đang cười với ai thế? Em ôm điện thoại cả tiếng rồi đấy." },
-    { "ai": "V", "t": "It's Mia, my friend from the drawing community. We're working on a comic together.", "v": "Mia, bạn em trong cộng đồng vẽ. Bọn em đang cùng vẽ một truyện tranh." },
-    { "ai": "Q", "t": "Mia? I've never heard of her. Is she from your school?", "v": "Mia? Anh chưa nghe tên bao giờ. Bạn cùng trường em à?" },
-    { "ai": "V", "t": "No, she lives in Da Nang. We met online about a year ago.", "v": "Không, bạn ấy sống ở Đà Nẵng. Bọn em quen nhau trên mạng khoảng một năm trước." },
-    { "ai": "Q", "t": "So you've never actually met her?", "v": "Vậy là em chưa từng gặp bạn ấy ngoài đời à?" },
-    { "ai": "V", "t": "Not in person, but we talk almost every day. Honestly, she understands me better than some of my classmates.", "v": "Chưa gặp trực tiếp, nhưng gần như ngày nào bọn em cũng nói chuyện. Thật lòng thì bạn ấy hiểu em hơn cả vài đứa cùng lớp." },
-    { "ai": "Q", "t": "I'm not saying that's bad. I just worry a bit. People can pretend to be anyone online.", "v": "Anh không bảo thế là xấu. Anh chỉ hơi lo thôi. Trên mạng người ta có thể giả làm bất kỳ ai." },
-    { "ai": "V", "t": "I know, I know. But we've done video calls lots of times. I've even met her cat.", "v": "Em biết, em biết mà. Nhưng bọn em gọi video nhiều lần rồi. Em còn được \"gặp\" cả con mèo của bạn ấy." },
-    { "ai": "Q", "t": "Ha ha, okay, that's a good sign.", "v": "Ha ha, được rồi, đó là dấu hiệu tốt." },
-    { "ai": "V", "t": "Actually, she's coming to Hanoi next month for an art fair. She wants to meet up.", "v": "Thật ra tháng sau bạn ấy ra Hà Nội dự một hội chợ nghệ thuật. Bạn ấy muốn gặp mặt." },
-    { "ai": "Q", "t": "That's exciting! Can I give you some advice, as your annoying older brother?", "v": "Hay đấy! Anh cho em vài lời khuyên được không, với tư cách ông anh phiền phức?" },
-    { "ai": "V", "t": "Go on.", "v": "Anh nói đi." },
-    { "ai": "Q", "t": "Meet somewhere public, like a café or the fair itself. Not at her hotel or at our house the first time.", "v": "Gặp ở chỗ công cộng, như quán cà phê hay chính hội chợ. Lần đầu đừng gặp ở khách sạn của bạn ấy hay ở nhà mình." },
-    { "ai": "V", "t": "That's reasonable.", "v": "Hợp lý ạ." },
-    { "ai": "Q", "t": "And tell me or Mum where you're going and when you'll be back. Keep your phone charged.", "v": "Và nói với anh hoặc mẹ là em đi đâu, mấy giờ về. Nhớ sạc đầy điện thoại." },
-    { "ai": "V", "t": "You sound like a safety poster, but okay.", "v": "Anh nói y như áp phích an toàn ấy, nhưng được ạ." },
-    { "ai": "Q", "t": "Last thing: if anything feels wrong, you're allowed to leave. You don't owe anyone an explanation.", "v": "Điều cuối: nếu thấy có gì không ổn, em cứ việc đi về. Em không nợ ai lời giải thích cả." },
-    { "ai": "V", "t": "Thanks, Quang. I actually feel better now that we've talked about it.", "v": "Cảm ơn anh Quang. Nói chuyện xong em thấy yên tâm hơn thật." },
-    { "ai": "Q", "t": "And for the record, I think it's great that you've found someone who shares your passion.", "v": "Mà nói cho rõ nhé, anh thấy rất tuyệt khi em tìm được người cùng đam mê với mình." },
-    { "ai": "V", "t": "Really? I thought you'd say online friends aren't \"real\" friends.", "v": "Thật ạ? Em tưởng anh sẽ bảo bạn trên mạng không phải bạn \"thật\"." },
-    { "ai": "Q", "t": "A friend is someone who's there for you. Where you met doesn't matter that much.", "v": "Bạn là người ở bên em khi em cần. Quen nhau ở đâu không quan trọng lắm." },
-    { "ai": "V", "t": "Maybe you could come to the fair too. Mia would love to meet you.", "v": "Hay anh đi hội chợ cùng luôn. Chắc Mia sẽ thích gặp anh lắm." },
-    { "ai": "Q", "t": "Only if I'm allowed to buy a copy of your comic, signed by both artists.", "v": "Chỉ khi anh được mua một cuốn truyện của hai đứa, có chữ ký của cả hai tác giả." }
+    {
+      "ai": "Q",
+      "t": "Who are you laughing with? You've been on your phone for an hour.",
+      "v": "Em đang cười với ai thế? Em ôm điện thoại cả tiếng rồi đấy.",
+      "khac": [
+        {
+          "kieu": "tự nhiên hơn",
+          "t": "Who's making you laugh so much? You've been glued to your phone for an hour.",
+          "v": "Ai làm em cười dữ vậy? Em dán mắt vào điện thoại cả tiếng rồi."
+        }
+      ],
+      "np": [
+        {
+          "mau": "Giới từ cuối câu hỏi",
+          "giai": "Văn nói để giới từ ở cuối: Who are you laughing with? (trang trọng: With whom…?).",
+          "vd": "Who are you talking to?",
+          "vdV": "Em đang nói chuyện với ai đấy?"
+        }
+      ]
+    },
+    {
+      "ai": "V",
+      "t": "It's Mia, my friend from the drawing community. We're working on a comic together.",
+      "v": "Mia, bạn em trong cộng đồng vẽ. Bọn em đang cùng vẽ một truyện tranh."
+    },
+    {
+      "ai": "Q",
+      "t": "Mia? I've never heard of her. Is she from your school?",
+      "v": "Mia? Anh chưa nghe tên bao giờ. Bạn cùng trường em à?",
+      "np": [
+        {
+          "mau": "hear of + sb/sth",
+          "giai": "Biết đến, từng nghe nói tới. Khác \"hear from\" = nhận tin từ ai.",
+          "vd": "Have you heard of this band?",
+          "vdV": "Bạn biết ban nhạc này không?"
+        }
+      ]
+    },
+    {
+      "ai": "V",
+      "t": "No, she lives in Da Nang. We met online about a year ago.",
+      "v": "Không, bạn ấy sống ở Đà Nẵng. Bọn em quen nhau trên mạng khoảng một năm trước."
+    },
+    {
+      "ai": "Q",
+      "t": "So you've never actually met her?",
+      "v": "Vậy là em chưa từng gặp bạn ấy ngoài đời à?"
+    },
+    {
+      "ai": "V",
+      "t": "Not in person, but we talk almost every day. Honestly, she understands me better than some of my classmates.",
+      "v": "Chưa gặp trực tiếp, nhưng gần như ngày nào bọn em cũng nói chuyện. Thật lòng thì bạn ấy hiểu em hơn cả vài đứa cùng lớp."
+    },
+    {
+      "ai": "Q",
+      "t": "I'm not saying that's bad. I just worry a bit. People can pretend to be anyone online.",
+      "v": "Anh không bảo thế là xấu. Anh chỉ hơi lo thôi. Trên mạng người ta có thể giả làm bất kỳ ai.",
+      "khac": [
+        {
+          "kieu": "mềm mỏng",
+          "t": "Don't get me wrong, I think it's great. I just worry a little — anyone can pretend to be someone else online.",
+          "v": "Đừng hiểu lầm, anh thấy thế là hay. Anh chỉ hơi lo thôi — trên mạng ai cũng có thể giả làm người khác."
+        }
+      ],
+      "np": [
+        {
+          "mau": "pretend to be + N",
+          "giai": "Giả vờ là ai/cái gì.",
+          "vd": "He pretended to be asleep.",
+          "vdV": "Cậu ấy giả vờ ngủ."
+        }
+      ]
+    },
+    {
+      "ai": "V",
+      "t": "I know, I know. But we've done video calls lots of times. I've even met her cat.",
+      "v": "Em biết, em biết mà. Nhưng bọn em gọi video nhiều lần rồi. Em còn được \"gặp\" cả con mèo của bạn ấy."
+    },
+    {
+      "ai": "Q",
+      "t": "Ha ha, okay, that's a good sign.",
+      "v": "Ha ha, được rồi, đó là dấu hiệu tốt."
+    },
+    {
+      "ai": "V",
+      "t": "Actually, she's coming to Hanoi next month for an art fair. She wants to meet up.",
+      "v": "Thật ra tháng sau bạn ấy ra Hà Nội dự một hội chợ nghệ thuật. Bạn ấy muốn gặp mặt.",
+      "np": [
+        {
+          "mau": "hiện tại tiếp diễn cho kế hoạch",
+          "giai": "Lịch hẹn tương lai đã sắp xếp: she's coming next month.",
+          "vd": "I'm meeting my teacher tomorrow.",
+          "vdV": "Mai tôi gặp thầy."
+        }
+      ]
+    },
+    {
+      "ai": "Q",
+      "t": "That's exciting! Can I give you some advice, as your annoying older brother?",
+      "v": "Hay đấy! Anh cho em vài lời khuyên được không, với tư cách ông anh phiền phức?",
+      "khac": [
+        {
+          "kieu": "lịch sự",
+          "t": "Do you mind if I give you a bit of advice?",
+          "v": "Em có phiền nếu anh góp chút lời khuyên không?"
+        }
+      ],
+      "np": [
+        {
+          "mau": "advice (không đếm được)",
+          "giai": "Không nói \"an advice / advices\". Dùng: some advice, a piece of advice.",
+          "vd": "Let me give you a piece of advice.",
+          "vdV": "Để tôi cho bạn một lời khuyên."
+        }
+      ]
+    },
+    {
+      "ai": "V",
+      "t": "Go on.",
+      "v": "Anh nói đi.",
+      "khac": [
+        {
+          "kieu": "tự nhiên hơn",
+          "t": "Sure, go ahead.",
+          "v": "Ừ, anh nói đi."
+        }
+      ]
+    },
+    {
+      "ai": "Q",
+      "t": "Meet somewhere public, like a café or the fair itself. Not at her hotel or at our house the first time.",
+      "v": "Gặp ở chỗ công cộng, như quán cà phê hay chính hội chợ. Lần đầu đừng gặp ở khách sạn của bạn ấy hay ở nhà mình."
+    },
+    {
+      "ai": "V",
+      "t": "That's reasonable.",
+      "v": "Hợp lý ạ.",
+      "khac": [
+        {
+          "kieu": "thân mật",
+          "t": "Fair enough.",
+          "v": "Cũng hợp lý."
+        }
+      ]
+    },
+    {
+      "ai": "Q",
+      "t": "And tell me or Mum where you're going and when you'll be back. Keep your phone charged.",
+      "v": "Và nói với anh hoặc mẹ là em đi đâu, mấy giờ về. Nhớ sạc đầy điện thoại.",
+      "np": [
+        {
+          "mau": "where you're going / when you'll be back",
+          "giai": "Câu hỏi lồng trong câu kể: S + V (không đảo). Không nói \"where are you going\".",
+          "vd": "Tell me what time the film starts.",
+          "vdV": "Cho anh biết mấy giờ phim bắt đầu."
+        }
+      ]
+    },
+    {
+      "ai": "V",
+      "t": "You sound like a safety poster, but okay.",
+      "v": "Anh nói y như áp phích an toàn ấy, nhưng được ạ."
+    },
+    {
+      "ai": "Q",
+      "t": "Last thing: if anything feels wrong, you're allowed to leave. You don't owe anyone an explanation.",
+      "v": "Điều cuối: nếu thấy có gì không ổn, em cứ việc đi về. Em không nợ ai lời giải thích cả.",
+      "np": [
+        {
+          "mau": "be allowed to + V",
+          "giai": "Được phép làm gì.",
+          "vd": "You're not allowed to smoke here.",
+          "vdV": "Ở đây không được hút thuốc."
+        }
+      ]
+    },
+    {
+      "ai": "V",
+      "t": "Thanks, Quang. I actually feel better now that we've talked about it.",
+      "v": "Cảm ơn anh Quang. Nói chuyện xong em thấy yên tâm hơn thật."
+    },
+    {
+      "ai": "Q",
+      "t": "And for the record, I think it's great that you've found someone who shares your passion.",
+      "v": "Mà nói cho rõ nhé, anh thấy rất tuyệt khi em tìm được người cùng đam mê với mình."
+    },
+    {
+      "ai": "V",
+      "t": "Really? I thought you'd say online friends aren't \"real\" friends.",
+      "v": "Thật ạ? Em tưởng anh sẽ bảo bạn trên mạng không phải bạn \"thật\".",
+      "np": [
+        {
+          "mau": "thought + S + would (you'd)",
+          "giai": "Tương lai trong quá khứ: \"will\" lùi thành \"would\" sau động từ quá khứ (thought, said).",
+          "vd": "I thought it would rain.",
+          "vdV": "Tôi tưởng trời sẽ mưa."
+        }
+      ]
+    },
+    {
+      "ai": "Q",
+      "t": "A friend is someone who's there for you. Where you met doesn't matter that much.",
+      "v": "Bạn là người ở bên em khi em cần. Quen nhau ở đâu không quan trọng lắm."
+    },
+    {
+      "ai": "V",
+      "t": "Maybe you could come to the fair too. Mia would love to meet you.",
+      "v": "Hay anh đi hội chợ cùng luôn. Chắc Mia sẽ thích gặp anh lắm.",
+      "khac": [
+        {
+          "kieu": "lịch sự",
+          "t": "Why don't you come to the fair with us? Mia would love to meet you.",
+          "v": "Sao anh không đi hội chợ cùng bọn em? Mia rất muốn gặp anh."
+        }
+      ]
+    },
+    {
+      "ai": "Q",
+      "t": "Only if I'm allowed to buy a copy of your comic, signed by both artists.",
+      "v": "Chỉ khi anh được mua một cuốn truyện của hai đứa, có chữ ký của cả hai tác giả."
+    }
   ],
   "tuVung": [
-    { "chu": "community", "doc": "/kəˈmjuːnəti/", "nghia": "cộng đồng", "vd": "She is active in an online photography community." },
-    { "chu": "in person", "doc": "/ɪn ˈpɜːsn/", "nghia": "trực tiếp, ngoài đời", "vd": "I'd like to thank you in person." },
-    { "chu": "pretend", "doc": "/prɪˈtend/", "nghia": "giả vờ, giả làm", "vd": "He pretended to be asleep." },
-    { "chu": "video calls", "doc": "/ˈvɪdiəʊ kɔːlz/", "nghia": "cuộc gọi video", "vd": "We have video calls with Grandma on Sundays." },
-    { "chu": "meet up", "doc": "/miːt ʌp/", "nghia": "hẹn gặp mặt", "vd": "Let's meet up after work." },
-    { "chu": "advice", "doc": "/ədˈvaɪs/", "nghia": "lời khuyên (không đếm được)", "vd": "Can I give you some advice?" },
-    { "chu": "public", "doc": "/ˈpʌblɪk/", "nghia": "công cộng, nơi đông người", "vd": "Don't share your password in public places." },
-    { "chu": "reasonable", "doc": "/ˈriːznəbl/", "nghia": "hợp lý", "vd": "That's a reasonable price." },
-    { "chu": "charged", "doc": "/tʃɑːdʒd/", "nghia": "(pin) được sạc đầy", "vd": "Is your laptop charged?" },
-    { "chu": "owe", "doc": "/əʊ/", "nghia": "nợ", "vd": "I owe you ten thousand dong." },
-    { "chu": "for the record", "doc": "/fə ðə ˈrekɔːd/", "nghia": "nói cho rõ, xin nói để ghi nhận", "vd": "For the record, I never said that." },
-    { "chu": "passion", "doc": "/ˈpæʃn/", "nghia": "niềm đam mê", "vd": "Music is her passion." }
+    {
+      "chu": "community",
+      "doc": "/kəˈmjuːnəti/",
+      "nghia": "cộng đồng",
+      "vd": "She is active in an online photography community."
+    },
+    {
+      "chu": "in person",
+      "doc": "/ɪn ˈpɜːsn/",
+      "nghia": "trực tiếp, ngoài đời",
+      "vd": "I'd like to thank you in person."
+    },
+    {
+      "chu": "pretend",
+      "doc": "/prɪˈtend/",
+      "nghia": "giả vờ, giả làm",
+      "vd": "He pretended to be asleep."
+    },
+    {
+      "chu": "video calls",
+      "doc": "/ˈvɪdiəʊ kɔːlz/",
+      "nghia": "cuộc gọi video",
+      "vd": "We have video calls with Grandma on Sundays."
+    },
+    {
+      "chu": "meet up",
+      "doc": "/miːt ʌp/",
+      "nghia": "hẹn gặp mặt",
+      "vd": "Let's meet up after work."
+    },
+    {
+      "chu": "advice",
+      "doc": "/ədˈvaɪs/",
+      "nghia": "lời khuyên (không đếm được)",
+      "vd": "Can I give you some advice?"
+    },
+    {
+      "chu": "public",
+      "doc": "/ˈpʌblɪk/",
+      "nghia": "công cộng, nơi đông người",
+      "vd": "Don't share your password in public places."
+    },
+    {
+      "chu": "reasonable",
+      "doc": "/ˈriːznəbl/",
+      "nghia": "hợp lý",
+      "vd": "That's a reasonable price."
+    },
+    {
+      "chu": "charged",
+      "doc": "/tʃɑːdʒd/",
+      "nghia": "(pin) được sạc đầy",
+      "vd": "Is your laptop charged?"
+    },
+    {
+      "chu": "owe",
+      "doc": "/əʊ/",
+      "nghia": "nợ",
+      "vd": "I owe you ten thousand dong."
+    },
+    {
+      "chu": "for the record",
+      "doc": "/fə ðə ˈrekɔːd/",
+      "nghia": "nói cho rõ, xin nói để ghi nhận",
+      "vd": "For the record, I never said that."
+    },
+    {
+      "chu": "passion",
+      "doc": "/ˈpæʃn/",
+      "nghia": "niềm đam mê",
+      "vd": "Music is her passion."
+    }
   ],
   "yNghia": "Một tình bạn bắt đầu trên mạng vẫn có thể rất thật — điều làm nên bạn bè là sự có mặt cho nhau, không phải nơi gặp gỡ. Chỉ cần thêm chút cẩn trọng: gặp ở nơi công cộng, báo cho người thân, và nhớ rằng bạn luôn được quyền rời đi.",
   "meo": [
@@ -59,9 +328,45 @@
     "\"I thought you'd say…\" ('d = would) = em tưởng anh sẽ nói…"
   ],
   "cauHoi": [
-    { "hoi": "Vy và Mia quen nhau ở đâu?", "chon": ["Trong một cộng đồng vẽ trên mạng", "Ở trường", "Ở hội chợ nghệ thuật"], "dung": 0, "giai": "\"It's Mia, my friend from the drawing community… We met online.\"" },
-    { "hoi": "Quang khuyên gì cho lần gặp đầu tiên?", "chon": ["Gặp ở khách sạn của Mia cho tiện", "Gặp ở nơi công cộng và báo cho người nhà biết", "Đừng gọi video trước khi gặp"], "dung": 1, "giai": "\"Meet somewhere public…\" và \"tell me or Mum where you're going\"." },
-    { "hoi": "Theo Quang, điều gì làm nên một người bạn?", "chon": ["Gặp nhau ngoài đời nhiều lần", "Học cùng trường", "Ở bên mình khi mình cần"], "dung": 2, "giai": "\"A friend is someone who's there for you. Where you met doesn't matter that much.\"" },
-    { "hoi": "\"You don't owe anyone an explanation\" nghĩa là gì?", "chon": ["Em nên giải thích thật rõ ràng", "Em không cần phải giải thích với ai cả", "Em đang nợ tiền ai đó"], "dung": 1, "giai": "\"owe\" = nợ; ở đây ý là em không có nghĩa vụ giải thích khi muốn rời đi." }
+    {
+      "hoi": "Vy và Mia quen nhau ở đâu?",
+      "chon": [
+        "Trong một cộng đồng vẽ trên mạng",
+        "Ở trường",
+        "Ở hội chợ nghệ thuật"
+      ],
+      "dung": 0,
+      "giai": "\"It's Mia, my friend from the drawing community… We met online.\""
+    },
+    {
+      "hoi": "Quang khuyên gì cho lần gặp đầu tiên?",
+      "chon": [
+        "Gặp ở khách sạn của Mia cho tiện",
+        "Gặp ở nơi công cộng và báo cho người nhà biết",
+        "Đừng gọi video trước khi gặp"
+      ],
+      "dung": 1,
+      "giai": "\"Meet somewhere public…\" và \"tell me or Mum where you're going\"."
+    },
+    {
+      "hoi": "Theo Quang, điều gì làm nên một người bạn?",
+      "chon": [
+        "Gặp nhau ngoài đời nhiều lần",
+        "Học cùng trường",
+        "Ở bên mình khi mình cần"
+      ],
+      "dung": 2,
+      "giai": "\"A friend is someone who's there for you. Where you met doesn't matter that much.\""
+    },
+    {
+      "hoi": "\"You don't owe anyone an explanation\" nghĩa là gì?",
+      "chon": [
+        "Em nên giải thích thật rõ ràng",
+        "Em không cần phải giải thích với ai cả",
+        "Em đang nợ tiền ai đó"
+      ],
+      "dung": 1,
+      "giai": "\"owe\" = nợ; ở đây ý là em không có nghĩa vụ giải thích khi muốn rời đi."
+    }
   ]
 }

@@ -1,0 +1,296 @@
+{
+  "id": "zh-cs-hsk5-01",
+  "nn": "zh",
+  "danhMuc": "chia-se",
+  "cap": "HSK5",
+  "so": 1,
+  "tieuDe": "边境小镇的生意经",
+  "tieuDeViet": "Kinh nghiệm buôn bán ở thị trấn biên giới",
+  "moTa": "Nông Thu Hoa lớn lên ở một thị trấn sát biên giới Việt – Trung. Mười chín tuổi bày sạp bán cà phê, hạt điều, mặc cả bằng máy tính bỏ túi; hai mươi ba tuổi mất trắng ba năm tích cóp vì tin một lời hứa miệng. Chị kể vì sao \"giấy trắng mực đen\" và chữ tín phải đi cùng nhau.",
+  "chuDe": "Buôn bán",
+  "bieuTuong": "shippingbox.fill",
+  "nguoi": [
+    { "ma": "H", "ten": "Thu Hoa", "giong": "zh-nu", "vai": "người kể chuyện, chủ một công ty xuất khẩu nhỏ" }
+  ],
+  "loi": [
+    {
+      "ai": "H",
+      "t": "大家好，我叫农秋花，在越南和中国交界的一个小镇长大。",
+      "doc": "Dàjiā hǎo, wǒ jiào Nóng Qiūhuā, zài Yuènán hé Zhōngguó jiāojiè de yí ge xiǎo zhèn zhǎngdà.",
+      "v": "Chào mọi người, tôi là Nông Thu Hoa, lớn lên ở một thị trấn nhỏ nơi giáp ranh Việt Nam và Trung Quốc."
+    },
+    {
+      "ai": "H",
+      "t": "我们那儿的人，几乎家家户户都跟边境贸易有关系。",
+      "doc": "Wǒmen nàr de rén, jīhū jiājiāhùhù dōu gēn biānjìng màoyì yǒu guānxi.",
+      "v": "Người ở chỗ chúng tôi, gần như nhà nào cũng có dính dáng tới buôn bán biên giới."
+    },
+    {
+      "ai": "H",
+      "t": "十九岁那年，我没考上大学，就跟着姑姑在口岸附近摆了一个小摊，卖咖啡和腰果。",
+      "doc": "Shíjiǔ suì nà nián, wǒ méi kǎo shàng dàxué, jiù gēn zhe gūgu zài kǒu'àn fùjìn bǎi le yí ge xiǎo tān, mài kāfēi hé yāoguǒ.",
+      "v": "Năm mười chín tuổi, tôi thi trượt đại học, liền theo cô ruột bày một sạp nhỏ gần cửa khẩu, bán cà phê và hạt điều.",
+      "np": [
+        { "mau": "V + 上 (考上)", "giai": "上 sau 考 = thi đỗ, đạt được mục tiêu: 考上大学 (đỗ đại học), 没考上 (thi trượt).", "vd": "她考上了研究生。", "vdDoc": "Tā kǎo shàng le yánjiūshēng.", "vdV": "Cô ấy thi đỗ cao học rồi." }
+      ]
+    },
+    {
+      "ai": "H",
+      "t": "来买东西的大多是中国人。一开始我一句中文也不会，只能用计算器跟客人讲价。",
+      "doc": "Lái mǎi dōngxi de dàduō shì Zhōngguó rén. Yì kāishǐ wǒ yí jù Zhōngwén yě bú huì, zhǐ néng yòng jìsuànqì gēn kèrén jiǎngjià.",
+      "v": "Người đến mua phần lớn là người Trung Quốc. Lúc đầu tôi không biết một câu tiếng Trung nào, chỉ có thể dùng máy tính bỏ túi để mặc cả với khách."
+    },
+    {
+      "ai": "H",
+      "t": "客人在计算器上按一个数字，我摇摇头，再按一个更高的。就这样一来一回，生意就成了。",
+      "doc": "Kèrén zài jìsuànqì shang àn yí ge shùzì, wǒ yáoyao tóu, zài àn yí ge gèng gāo de. Jiù zhèyàng yì lái yì huí, shēngyi jiù chéng le.",
+      "v": "Khách bấm một con số trên máy tính, tôi lắc đầu, bấm lại một số cao hơn. Cứ thế qua lại vài lượt, thế là thành giao dịch."
+    },
+    {
+      "ai": "H",
+      "t": "可是光靠计算器，生意是做不大的。于是我开始每天晚上自学中文，第二天就拿客人练习。",
+      "doc": "Kěshì guāng kào jìsuànqì, shēngyi shì zuò bu dà de. Yúshì wǒ kāishǐ měitiān wǎnshang zìxué Zhōngwén, dì èr tiān jiù ná kèrén liànxí.",
+      "v": "Nhưng chỉ dựa vào máy tính thì không làm ăn lớn được. Thế là tối nào tôi cũng tự học tiếng Trung, hôm sau lấy khách ra luyện tập.",
+      "np": [
+        { "mau": "光靠 + N", "giai": "光靠 = chỉ dựa vào (một thứ duy nhất) — thường hàm ý là không đủ.", "vd": "光靠工资，很难买房。", "vdDoc": "Guāng kào gōngzī, hěn nán mǎi fáng.", "vdV": "Chỉ dựa vào lương thì rất khó mua nhà." },
+        { "mau": "是 + V不 + adj + 的", "giai": "是…的 bao bổ ngữ khả năng để khẳng định chắc chắn một nhận định: 是做不大的 = chắc chắn không làm lớn được.", "vd": "这样学是学不好的。", "vdDoc": "Zhèyàng xué shì xué bu hǎo de.", "vdV": "Học kiểu này thì không thể học giỏi được." }
+      ]
+    },
+    {
+      "ai": "H",
+      "t": "我学会的第一句完整的话是：",
+      "doc": "Wǒ xuéhuì de dì yī jù wánzhěng de huà shì:",
+      "v": "Câu hoàn chỉnh đầu tiên tôi học được là:"
+    },
+    {
+      "ai": "H",
+      "t": "“老板，这是今年的新货，您尝尝。”",
+      "doc": "“Lǎobǎn, zhè shì jīnnián de xīn huò, nín chángchang.”",
+      "v": "\"Ông chủ ơi, đây là hàng mới năm nay, ông nếm thử xem.\"",
+      "khac": [
+        { "kieu": "văn nói", "t": "这是刚到的新货，您先尝一个，不好吃不要钱。", "doc": "Zhè shì gāng dào de xīn huò, nín xiān cháng yí ge, bù hǎochī bú yào qián.", "v": "Hàng mới về đây ạ, anh nếm thử một hạt trước, không ngon không lấy tiền.", "ghiChu": "câu chào hàng quen thuộc ở chợ" },
+        { "kieu": "lịch sự", "t": "您好，这批是今年的新货，欢迎您先试吃一下。", "doc": "Nín hǎo, zhè pī shì jīnnián de xīn huò, huānyíng nín xiān shì chī yíxià.", "v": "Chào anh, lô này là hàng mới năm nay, mời anh dùng thử trước.", "ghiChu": "khi chào khách buôn, đối tác" }
+      ]
+    },
+    {
+      "ai": "H",
+      "t": "慢慢地，有几位老客人开始从我这儿大批进货，生意一年比一年好。",
+      "doc": "Mànmàn de, yǒu jǐ wèi lǎo kèrén kāishǐ cóng wǒ zhèr dàpī jìnhuò, shēngyi yì nián bǐ yì nián hǎo.",
+      "v": "Dần dần, có mấy khách quen bắt đầu nhập hàng số lượng lớn chỗ tôi, việc buôn bán năm sau tốt hơn năm trước.",
+      "np": [
+        { "mau": "一 + LT + 比 + 一 + LT + adj", "giai": "\"…sau hơn …trước\" — tăng/giảm dần theo thời gian: 一年比一年好, 一天比一天冷.", "vd": "他的中文一天比一天好。", "vdDoc": "Tā de Zhōngwén yì tiān bǐ yì tiān hǎo.", "vdV": "Tiếng Trung của anh ấy mỗi ngày một tốt hơn." }
+      ]
+    },
+    {
+      "ai": "H",
+      "t": "二十三岁那年，我遇到了一个大客户，他一开口就要两吨腰果。",
+      "doc": "Èrshísān suì nà nián, wǒ yùdào le yí ge dà kèhù, tā yì kāikǒu jiù yào liǎng dūn yāoguǒ.",
+      "v": "Năm hai mươi ba tuổi, tôi gặp một khách lớn, vừa mở miệng đã đặt hai tấn hạt điều."
+    },
+    {
+      "ai": "H",
+      "t": "我高兴极了，把姑姑的钱和我自己攒的钱全都拿出来进了货。",
+      "doc": "Wǒ gāoxìng jí le, bǎ gūgu de qián hé wǒ zìjǐ zǎn de qián quán dōu ná chūlai jìn le huò.",
+      "v": "Tôi mừng quá, đem hết tiền của cô và tiền tự mình dành dụm ra nhập hàng."
+    },
+    {
+      "ai": "H",
+      "t": "他说先拉走一半，过一个星期再来付全款、拉剩下的。我竟然连合同都没签。",
+      "doc": "Tā shuō xiān lā zǒu yíbàn, guò yí ge xīngqī zài lái fù quánkuǎn, lā shèngxià de. Wǒ jìngrán lián hétong dōu méi qiān.",
+      "v": "Anh ta nói chở đi một nửa trước, một tuần sau quay lại trả đủ tiền, chở nốt phần còn lại. Thế mà tôi đến cả hợp đồng cũng không ký.",
+      "np": [
+        { "mau": "连 A 都/也 + V", "giai": "\"Đến cả A cũng…\" — A là điều tối thiểu, hiển nhiên nhất mà vẫn (không) xảy ra.", "vd": "他忙得连饭都没吃。", "vdDoc": "Tā máng de lián fàn dōu méi chī.", "vdV": "Anh ấy bận đến mức cơm cũng chưa ăn." },
+        { "mau": "竟然", "giai": "竟然 = thế mà, vậy mà — diễn tả điều bất ngờ, trái lẽ thường.", "vd": "这么简单的题，我竟然做错了。", "vdDoc": "Zhème jiǎndān de tí, wǒ jìngrán zuò cuò le.", "vdV": "Câu dễ thế mà tôi lại làm sai." }
+      ]
+    },
+    {
+      "ai": "H",
+      "t": "结果可想而知：一个星期过去了，一个月过去了，他的电话再也打不通了。",
+      "doc": "Jiéguǒ kě xiǎng ér zhī: yí ge xīngqī guòqu le, yí ge yuè guòqu le, tā de diànhuà zài yě dǎ bu tōng le.",
+      "v": "Kết quả thì ai cũng đoán được: một tuần trôi qua, một tháng trôi qua, điện thoại của anh ta không bao giờ gọi được nữa.",
+      "np": [
+        { "mau": "再也不/没 + V", "giai": "\"Không bao giờ… nữa\" — từ một thời điểm trở đi, hoàn toàn không còn.", "vd": "那次以后，我再也没见过他。", "vdDoc": "Nà cì yǐhòu, wǒ zài yě méi jiàn guo tā.", "vdV": "Từ lần đó, tôi không bao giờ gặp lại anh ta nữa." },
+        { "mau": "可想而知", "giai": "Thành ngữ: \"có thể nghĩ mà biết\" — kết quả quá rõ ràng, không cần nói.", "vd": "没有准备，结果可想而知。", "vdDoc": "Méiyǒu zhǔnbèi, jiéguǒ kě xiǎng ér zhī.", "vdV": "Không chuẩn bị gì, kết quả thì khỏi phải nói." }
+      ]
+    },
+    {
+      "ai": "H",
+      "t": "那一次，我亏了差不多三年的积蓄。我躲在仓库里哭了一整天。",
+      "doc": "Nà yí cì, wǒ kuī le chàbuduō sān nián de jīxù. Wǒ duǒ zài cāngkù li kū le yì zhěng tiān.",
+      "v": "Lần đó, tôi lỗ gần như toàn bộ tiền dành dụm ba năm. Tôi trốn trong kho khóc suốt cả ngày."
+    },
+    {
+      "ai": "H",
+      "t": "姑姑没有骂我，只说了一句话：“钱没了可以再赚，可是同样的亏，千万别吃第二次。”",
+      "doc": "Gūgu méiyǒu mà wǒ, zhǐ shuō le yí jù huà: “Qián méi le kěyǐ zài zhuàn, kěshì tóngyàng de kuī, qiānwàn bié chī dì èr cì.”",
+      "v": "Cô tôi không mắng, chỉ nói một câu: \"Mất tiền thì có thể kiếm lại, nhưng cùng một cú thiệt, nhất định đừng chịu lần thứ hai.\"",
+      "khac": [
+        { "kieu": "văn nói", "t": "钱可以再挣，同一个坑可别再掉进去了。", "doc": "Qián kěyǐ zài zhèng, tóng yí ge kēng kě bié zài diào jìnqu le.", "v": "Tiền thì kiếm lại được, cái hố cũ thì đừng có rơi vào lần nữa.", "ghiChu": "挣 zhèng = kiếm (tiền), văn nói; 坑 = cái hố, ẩn dụ bẫy lừa" }
+      ],
+      "np": [
+        { "mau": "吃亏 tách ra: 吃…的亏", "giai": "吃亏 = chịu thiệt. Là từ ly hợp nên có thể tách: 同样的亏…吃第二次, 吃了大亏.", "vd": "我吃过这种亏。", "vdDoc": "Wǒ chī guo zhè zhǒng kuī.", "vdV": "Tôi từng chịu thiệt kiểu này rồi." }
+      ]
+    },
+    {
+      "ai": "H",
+      "t": "从那以后，我给自己定了规矩：凡是大订单，一定要先收定金，一定要白纸黑字写清楚。",
+      "doc": "Cóng nà yǐhòu, wǒ gěi zìjǐ dìng le guīju: fánshì dà dìngdān, yídìng yào xiān shōu dìngjīn, yídìng yào bái zhǐ hēi zì xiě qīngchu.",
+      "v": "Từ đó, tôi tự đặt cho mình quy tắc: hễ là đơn lớn, nhất định phải thu tiền đặt cọc trước, nhất định phải ghi rõ giấy trắng mực đen.",
+      "np": [
+        { "mau": "凡是 + N, 都/一定 + V", "giai": "凡是 = hễ là, phàm là — áp dụng cho TẤT CẢ trường hợp thuộc loại đó, không ngoại lệ.", "vd": "凡是新员工，都要参加培训。", "vdDoc": "Fánshì xīn yuángōng, dōu yào cānjiā péixùn.", "vdV": "Hễ là nhân viên mới đều phải tham gia đào tạo." }
+      ]
+    },
+    {
+      "ai": "H",
+      "t": "有的客人觉得我太死板，宁可去别家买，也不愿意付定金。",
+      "doc": "Yǒu de kèrén juéde wǒ tài sǐbǎn, nìngkě qù bié jiā mǎi, yě bú yuànyì fù dìngjīn.",
+      "v": "Có khách thấy tôi cứng nhắc quá, thà sang nhà khác mua còn hơn là chịu đặt cọc.",
+      "np": [
+        { "mau": "宁可 A，也不 B", "giai": "\"Thà A chứ không B\" — chọn A (dù bất lợi) để tránh B.", "vd": "我宁可走路，也不坐他的车。", "vdDoc": "Wǒ nìngkě zǒulù, yě bú zuò tā de chē.", "vdV": "Tôi thà đi bộ chứ không đi xe của anh ta." }
+      ]
+    },
+    {
+      "ai": "H",
+      "t": "我也不勉强。毕竟，留下来的客人，才是真正能长期合作的。",
+      "doc": "Wǒ yě bù miǎnqiǎng. Bìjìng, liú xiàlai de kèrén, cái shì zhēnzhèng néng chángqī hézuò de.",
+      "v": "Tôi cũng không ép. Dù sao thì những khách ở lại mới là người thật sự có thể hợp tác lâu dài.",
+      "np": [
+        { "mau": "毕竟", "giai": "毕竟 = dù sao thì, suy cho cùng — đưa ra lý do căn bản để giải thích hoặc biện minh.", "vd": "别怪他，他毕竟是新来的。", "vdDoc": "Bié guài tā, tā bìjìng shì xīn lái de.", "vdV": "Đừng trách cậu ấy, dù sao cậu ấy cũng là người mới." }
+      ]
+    },
+    {
+      "ai": "H",
+      "t": "不过，有规矩并不等于不讲人情。说到这儿，我想讲讲陆大哥。",
+      "doc": "Búguò, yǒu guīju bìng bù děngyú bù jiǎng rénqíng. Shuō dào zhèr, wǒ xiǎng jiǎngjiang Lù dàgē.",
+      "v": "Nhưng có quy tắc không có nghĩa là không có tình người. Nói đến đây, tôi muốn kể về anh Lục."
+    },
+    {
+      "ai": "H",
+      "t": "陆大哥是做水果批发的，这些年一直从我这儿进火龙果。有一年台风，我的货在路上耽误了五天，坏了将近一半。",
+      "doc": "Lù dàgē shì zuò shuǐguǒ pīfā de, zhèxiē nián yìzhí cóng wǒ zhèr jìn huǒlóngguǒ. Yǒu yì nián táifēng, wǒ de huò zài lù shang dānwu le wǔ tiān, huài le jiāngjìn yíbàn.",
+      "v": "Anh Lục buôn sỉ hoa quả, mấy năm nay vẫn nhập thanh long chỗ tôi. Có một năm bão, hàng của tôi bị kẹt trên đường năm ngày, hỏng gần một nửa."
+    },
+    {
+      "ai": "H",
+      "t": "按合同，这是我的责任，我准备好了全额赔偿。",
+      "doc": "Àn hétong, zhè shì wǒ de zérèn, wǒ zhǔnbèi hǎo le quán'é péicháng.",
+      "v": "Theo hợp đồng, đây là trách nhiệm của tôi, tôi đã chuẩn bị bồi thường toàn bộ."
+    },
+    {
+      "ai": "H",
+      "t": "可陆大哥说：“台风又不是你能控制的。损失我们一人一半，何况你这几年从来没让我失望过。”",
+      "doc": "Kě Lù dàgē shuō: “Táifēng yòu bú shì nǐ néng kòngzhì de. Sǔnshī wǒmen yì rén yíbàn, hékuàng nǐ zhè jǐ nián cónglái méi ràng wǒ shīwàng guo.”",
+      "v": "Nhưng anh Lục nói: \"Bão đâu phải thứ em kiểm soát được. Thiệt hại mỗi người chịu một nửa, huống hồ mấy năm nay em chưa từng làm anh thất vọng.\"",
+      "np": [
+        { "mau": "又不是…", "giai": "又 + phủ định = \"đâu phải…\" — phản bác nhẹ, nhấn mạnh lý lẽ hiển nhiên.", "vd": "你又不是故意的，别难过了。", "vdDoc": "Nǐ yòu bú shì gùyì de, bié nánguò le.", "vdV": "Em đâu có cố ý, đừng buồn nữa." },
+        { "mau": "何况", "giai": "何况 = huống hồ, huống chi — thêm một lý do mạnh hơn nữa.", "vd": "大人都觉得难，何况孩子呢？", "vdDoc": "Dàrén dōu juéde nán, hékuàng háizi ne?", "vdV": "Người lớn còn thấy khó, huống chi trẻ con?" }
+      ]
+    },
+    {
+      "ai": "H",
+      "t": "那一刻我才明白，诚信不是写在合同上的，而是一年一年攒出来的。",
+      "doc": "Nà yí kè wǒ cái míngbai, chéngxìn bú shì xiě zài hétong shang de, ér shì yì nián yì nián zǎn chūlai de.",
+      "v": "Khoảnh khắc đó tôi mới hiểu, chữ tín không phải viết trên hợp đồng, mà là tích góp qua từng năm."
+    },
+    {
+      "ai": "H",
+      "t": "合同保护的是最坏的情况，信任决定的是最好的合作。",
+      "doc": "Hétong bǎohù de shì zuì huài de qíngkuàng, xìnrèn juédìng de shì zuì hǎo de hézuò.",
+      "v": "Hợp đồng bảo vệ ta trong tình huống xấu nhất, còn lòng tin quyết định sự hợp tác tốt nhất."
+    },
+    {
+      "ai": "H",
+      "t": "现在，我在镇上开了一家小公司，有六个员工，生意以出口农产品为主。",
+      "doc": "Xiànzài, wǒ zài zhèn shang kāi le yì jiā xiǎo gōngsī, yǒu liù ge yuángōng, shēngyi yǐ chūkǒu nóngchǎnpǐn wéi zhǔ.",
+      "v": "Giờ tôi mở một công ty nhỏ ở thị trấn, có sáu nhân viên, chủ yếu xuất khẩu nông sản.",
+      "np": [
+        { "mau": "以 A 为主", "giai": "\"Lấy A làm chính\" = chủ yếu là A. Văn viết, hay dùng khi giới thiệu công ty, sản phẩm.", "vd": "我们的客户以年轻人为主。", "vdDoc": "Wǒmen de kèhù yǐ niánqīng rén wéi zhǔ.", "vdV": "Khách hàng của chúng tôi chủ yếu là người trẻ." }
+      ]
+    },
+    {
+      "ai": "H",
+      "t": "我还会给新来的员工上中文课。第一课不教“多少钱”，而是教一句话：",
+      "doc": "Wǒ hái huì gěi xīn lái de yuángōng shàng Zhōngwén kè. Dì yī kè bù jiāo “duōshao qián”, ér shì jiāo yí jù huà:",
+      "v": "Tôi còn dạy tiếng Trung cho nhân viên mới. Bài đầu tiên không dạy \"bao nhiêu tiền\", mà dạy một câu:"
+    },
+    {
+      "ai": "H",
+      "t": "“咱们先把合同写清楚吧。”",
+      "doc": "“Zánmen xiān bǎ hétong xiě qīngchu ba.”",
+      "v": "\"Chúng ta ghi rõ hợp đồng trước đã nhé.\"",
+      "khac": [
+        { "kieu": "mềm mỏng", "t": "为了对双方都负责，咱们还是签个合同吧。", "doc": "Wèile duì shuāngfāng dōu fùzé, zánmen háishi qiān ge hétong ba.", "v": "Để có trách nhiệm với cả hai bên, mình vẫn nên ký một bản hợp đồng nhé.", "ghiChu": "đề nghị ký hợp đồng mà không làm đối phương phật lòng" },
+        { "kieu": "trang trọng", "t": "请问我们能否先把合作条款以书面形式确认下来？", "doc": "Qǐngwèn wǒmen néngfǒu xiān bǎ hézuò tiáokuǎn yǐ shūmiàn xíngshì quèrèn xiàlai?", "v": "Xin hỏi chúng ta có thể xác nhận trước các điều khoản hợp tác bằng văn bản được không?", "ghiChu": "với đối tác mới, trong email hoặc buổi đàm phán chính thức" }
+      ]
+    },
+    {
+      "ai": "H",
+      "t": "这句话听起来好像不太客气，其实是在保护双方。",
+      "doc": "Zhè jù huà tīng qǐlai hǎoxiàng bú tài kèqi, qíshí shì zài bǎohù shuāngfāng.",
+      "v": "Câu này nghe thì có vẻ không khách sáo lắm, nhưng thật ra là đang bảo vệ cả hai bên."
+    },
+    {
+      "ai": "H",
+      "t": "做了十几年生意，我最大的体会是：语言能帮你打开门，但能让人留下来的，只有诚信。",
+      "doc": "Zuò le shí jǐ nián shēngyi, wǒ zuì dà de tǐhuì shì: yǔyán néng bāng nǐ dǎkāi mén, dàn néng ràng rén liú xiàlai de, zhǐyǒu chéngxìn.",
+      "v": "Làm ăn hơn mười năm, điều tôi thấm nhất là: ngôn ngữ giúp bạn mở được cửa, nhưng thứ giữ được người ta ở lại chỉ có chữ tín."
+    },
+    {
+      "ai": "H",
+      "t": "我是农秋花，谢谢你听我讲这些。祝你生意兴隆，也祝你遇到自己的“陆大哥”。",
+      "doc": "Wǒ shì Nóng Qiūhuā, xièxie nǐ tīng wǒ jiǎng zhèxiē. Zhù nǐ shēngyi xīnglóng, yě zhù nǐ yùdào zìjǐ de “Lù dàgē”.",
+      "v": "Tôi là Nông Thu Hoa, cảm ơn bạn đã nghe tôi kể. Chúc bạn buôn may bán đắt, và chúc bạn gặp được \"anh Lục\" của riêng mình.",
+      "khac": [
+        { "kieu": "trang trọng", "t": "祝您生意兴隆，财源广进！", "doc": "Zhù nín shēngyi xīnglóng, cáiyuán guǎng jìn!", "v": "Chúc anh/chị làm ăn phát đạt, tiền vào như nước!", "ghiChu": "lời chúc kinh điển với người buôn bán, dịp Tết, khai trương" }
+      ]
+    }
+  ],
+  "tuVung": [
+    { "chu": "边境贸易", "doc": "biānjìng màoyì", "nghia": "buôn bán biên giới, biên mậu", "vd": "这个小镇靠边境贸易发展起来。" },
+    { "chu": "口岸", "doc": "kǒu'àn", "nghia": "cửa khẩu", "vd": "每天有很多货车经过口岸。" },
+    { "chu": "摆了一个小摊", "doc": "bǎi le yí ge xiǎo tān", "nghia": "bày một sạp hàng nhỏ (摆摊 = bày sạp)", "vd": "他在学校门口摆摊卖早饭。" },
+    { "chu": "讲价", "doc": "jiǎngjià", "nghia": "mặc cả", "vd": "在这儿买东西可以讲价。" },
+    { "chu": "进货", "doc": "jìnhuò", "nghia": "nhập hàng", "vd": "我每个月进两次货。" },
+    { "chu": "积蓄", "doc": "jīxù", "nghia": "tiền tích góp, tiền dành dụm", "vd": "他用全部积蓄开了一家店。" },
+    { "chu": "定金", "doc": "dìngjīn", "nghia": "tiền đặt cọc", "vd": "请先付百分之三十的定金。" },
+    { "chu": "白纸黑字", "doc": "bái zhǐ hēi zì", "nghia": "giấy trắng mực đen — có văn bản làm bằng", "vd": "白纸黑字写着，谁也赖不掉。" },
+    { "chu": "死板", "doc": "sǐbǎn", "nghia": "cứng nhắc", "vd": "规定不能太死板。" },
+    { "chu": "赔偿", "doc": "péicháng", "nghia": "bồi thường", "vd": "损失由我们来赔偿。" },
+    { "chu": "诚信", "doc": "chéngxìn", "nghia": "thành tín, chữ tín", "vd": "做生意最重要的是诚信。" },
+    { "chu": "生意兴隆", "doc": "shēngyi xīnglóng", "nghia": "buôn bán phát đạt", "vd": "祝您新年快乐，生意兴隆！" }
+  ],
+  "yNghia": "Hợp đồng và chữ tín không đối lập nhau: hợp đồng bảo vệ bạn khi mọi chuyện xấu đi, còn lòng tin — tích góp từng năm — quyết định khi mọi chuyện tốt đẹp. Đề nghị \"ghi rõ trước đã\" không phải là nghi ngờ đối tác, mà là tôn trọng cả hai bên. Và thiệt một lần là bài học; thiệt hai lần cùng một kiểu mới là lỗi.",
+  "meo": [
+    "Câu then chốt khi làm ăn: 咱们先把合同写清楚吧 / 先付定金 / 白纸黑字. Nói mềm: 为了对双方都负责….",
+    "Cặp liên từ HSK5 trong tập: 宁可…也不… (thà… chứ không) · 凡是…都… (hễ là… đều) · 连…都… (đến cả… cũng) · 何况 (huống hồ) · 毕竟 (dù sao thì).",
+    "咱们 (zánmen) = chúng ta (gồm cả người nghe) — nghe gần gũi hơn 我们, rất hợp khi rủ đối phương cùng làm.",
+    "Lời chúc người buôn bán: 生意兴隆 (làm ăn phát đạt), 财源广进 (tiền vào như nước) — dùng dịp Tết, khai trương.",
+    "Đơn vị đếm: 吨 dūn (tấn), 批 pī (lô hàng: 这批货), 笔 bǐ (khoản tiền / đơn giao dịch: 一笔订单)."
+  ],
+  "cauHoi": [
+    {
+      "hoi": "Lúc chưa biết tiếng Trung, Thu Hoa mặc cả với khách bằng cách nào?",
+      "chon": ["Nhờ cô ruột phiên dịch", "Bấm số trên máy tính bỏ túi", "Viết giá lên giấy"],
+      "dung": 1,
+      "giai": "只能用计算器跟客人讲价。"
+    },
+    {
+      "hoi": "Vì sao chị mất gần hết tiền dành dụm ba năm?",
+      "chon": ["Không ký hợp đồng, khách lấy nửa lô hàng rồi biến mất", "Hàng bị bão làm hỏng", "Giá hạt điều giảm mạnh"],
+      "dung": 0,
+      "giai": "我竟然连合同都没签…他的电话再也打不通了。"
+    },
+    {
+      "hoi": "Anh Lục phản ứng thế nào khi hàng bị bão làm hỏng?",
+      "chon": ["Đòi bồi thường toàn bộ theo hợp đồng", "Huỷ hợp đồng", "Đề nghị mỗi bên chịu một nửa thiệt hại"],
+      "dung": 2,
+      "giai": "损失我们一人一半，何况你这几年从来没让我失望过。"
+    },
+    {
+      "hoi": "Theo Thu Hoa, hợp đồng và lòng tin khác nhau thế nào?",
+      "chon": ["Hợp đồng bảo vệ khi xấu nhất, lòng tin quyết định hợp tác tốt nhất", "Có lòng tin thì không cần hợp đồng", "Hợp đồng quan trọng hơn lòng tin"],
+      "dung": 0,
+      "giai": "合同保护的是最坏的情况，信任决定的是最好的合作。"
+    }
+  ]
+}

@@ -1,0 +1,545 @@
+{
+  "id": "ja-se-n2-01",
+  "nn": "ja",
+  "danhMuc": "phan-mem",
+  "cap": "N2",
+  "so": 1,
+  "tieuDe": "わからないと言える強さ",
+  "tieuDeViet": "Dũng khí nói \"tôi không biết\"",
+  "moTa": "Phỏng vấn kỹ thuật vào một công ty phần mềm ở Tōkyō: Quân kể chuyện tối ưu truy vấn bằng index, trả lời câu bẫy \"thêm index có luôn nhanh hơn không\", rồi gặp câu hỏi về hệ thống phân tán mà anh chưa từng làm. Học cách kể kinh nghiệm kỹ thuật và nói \"chưa có kinh nghiệm\" một cách lịch sự mà vẫn ghi điểm.",
+  "chuDe": "Phỏng vấn kỹ thuật",
+  "bieuTuong": "laptopcomputer",
+  "nguoi": [
+    {
+      "ma": "M",
+      "ten": "松本",
+      "giong": "ja-nam",
+      "vai": "người phỏng vấn, trưởng phòng kỹ thuật"
+    },
+    {
+      "ma": "I",
+      "ten": "井上",
+      "giong": "ja2-nu",
+      "vai": "người phỏng vấn, kỹ sư"
+    },
+    {
+      "ma": "Q",
+      "ten": "クアン",
+      "giong": "ja2-nam",
+      "vai": "ứng viên người Việt"
+    }
+  ],
+  "loi": [
+    {
+      "ai": "M",
+      "t": "では、技術的な質問に移らせていただきます。クアンさんが直近で担当されたプロジェクトについて、構成を簡単に説明していただけますか。",
+      "doc": "では、ぎじゅつてきなしつもんにうつらせていただきます。クアンさんがちょっきんでたんとうされたプロジェクトについて、こうせいをかんたんにせつめいしていただけますか。",
+      "v": "Bây giờ xin chuyển sang câu hỏi kỹ thuật. Anh Quân có thể giới thiệu ngắn gọn cấu trúc của dự án anh phụ trách gần đây nhất không?",
+      "np": [
+        {
+          "mau": "〜させていただきます",
+          "giai": "Khiêm nhường: \"xin phép được làm …\". Người phỏng vấn dùng để chuyển phần một cách lịch sự.",
+          "vd": "それでは、始めさせていただきます。",
+          "vdDoc": "それでは、はじめさせていただきます。",
+          "vdV": "Vậy xin phép được bắt đầu."
+        },
+        {
+          "mau": "〜される (尊敬)",
+          "giai": "Thể bị động dùng làm tôn kính ngữ: 担当する → 担当される (người kia phụ trách).",
+          "vd": "社長はもう帰られました。",
+          "vdDoc": "しゃちょうはもうかえられました。",
+          "vdV": "Giám đốc đã về rồi."
+        }
+      ]
+    },
+    {
+      "ai": "Q",
+      "t": "はい。飲食店向けの予約サービスで、フロントエンドはReact、バックエンドはNode.jsとPostgreSQLで構築しました。",
+      "doc": "はい。いんしょくてんむけのよやくサービスで、フロントエンドはリアクト、バックエンドはノードジェイエスとポストグレスキューエルでこうちくしました。",
+      "v": "Vâng. Đó là dịch vụ đặt bàn cho các nhà hàng; frontend dùng React, backend xây dựng bằng Node.js và PostgreSQL.",
+      "np": [
+        {
+          "mau": "N + 向け",
+          "giai": "Dành cho, hướng tới đối tượng N.",
+          "vd": "これは子ども向けの本です。",
+          "vdDoc": "これはこどもむけのほんです。",
+          "vdV": "Đây là sách dành cho trẻ em."
+        }
+      ]
+    },
+    {
+      "ai": "Q",
+      "t": "私はバックエンドを担当しておりまして、主にAPIの設計とデータベースのチューニングを行いました。",
+      "doc": "わたしはバックエンドをたんとうしておりまして、おもにエーピーアイのせっけいとデータベースのチューニングをおこないました。",
+      "v": "Tôi phụ trách backend, chủ yếu thiết kế API và tối ưu (tuning) cơ sở dữ liệu.",
+      "khac": [
+        {
+          "kieu": "ngắn gọn",
+          "t": "バックエンド担当で、API設計とDBチューニングをしていました。",
+          "doc": "バックエンドたんとうで、エーピーアイせっけいとディービーチューニングをしていました。",
+          "v": "Tôi làm backend, thiết kế API và tuning DB.",
+          "ghiChu": "nói với đồng nghiệp; trong phỏng vấn nên giữ câu gốc"
+        }
+      ],
+      "np": [
+        {
+          "mau": "〜ておりまして",
+          "giai": "Khiêm nhường của 〜ていまして: nối câu lịch sự khi nói về bản thân trước người trên.",
+          "vd": "現在、東京に住んでおりまして、通勤は可能です。",
+          "vdDoc": "げんざい、とうきょうにすんでおりまして、つうきんはかのうです。",
+          "vdV": "Hiện tôi sống ở Tōkyō nên có thể đi làm được."
+        }
+      ]
+    },
+    {
+      "ai": "I",
+      "t": "チューニングというと、具体的にはどのようなことをされたんですか。",
+      "doc": "チューニングというと、ぐたいてきにはどのようなことをされたんですか。",
+      "v": "Nói đến tuning thì cụ thể anh đã làm những gì?",
+      "np": [
+        {
+          "mau": "〜というと",
+          "giai": "Nhắc lại một từ của người kia để hỏi sâu hơn: \"nói đến … thì (cụ thể) là …?\".",
+          "vd": "日本の冬というと、やはり雪ですね。",
+          "vdDoc": "にほんのふゆというと、やはりゆきですね。",
+          "vdV": "Nói đến mùa đông Nhật thì phải là tuyết."
+        }
+      ]
+    },
+    {
+      "ai": "Q",
+      "t": "サービスの利用者が増えるに伴って、予約一覧の表示に五秒以上かかるようになったんです。",
+      "doc": "サービスのりようしゃがふえるにともなって、よやくいちらんのひょうじにごびょういじょうかかるようになったんです。",
+      "v": "Cùng với việc số người dùng tăng lên, việc hiển thị danh sách đặt bàn bắt đầu mất hơn năm giây.",
+      "np": [
+        {
+          "mau": "〜に伴って",
+          "giai": "Cùng với sự thay đổi A thì B cũng thay đổi theo (văn trang trọng, hay dùng trong báo cáo).",
+          "vd": "人口の増加に伴って、交通渋滞がひどくなった。",
+          "vdDoc": "じんこうのぞうかにともなって、こうつうじゅうたいがひどくなった。",
+          "vdV": "Cùng với dân số tăng, tắc đường trở nên tồi tệ."
+        }
+      ]
+    },
+    {
+      "ai": "Q",
+      "t": "実行計画を確認したところ、全件をスキャンしていることがわかったので、検索条件に合わせて複合インデックスを追加しました。",
+      "doc": "じっこうけいかくをかくにんしたところ、ぜんけんをスキャンしていることがわかったので、けんさくじょうけんにあわせてふくごうインデックスをついかしました。",
+      "v": "Khi kiểm tra execution plan, tôi thấy truy vấn đang quét toàn bộ bản ghi, nên tôi thêm composite index khớp với điều kiện tìm kiếm.",
+      "np": [
+        {
+          "mau": "V-た + ところ",
+          "giai": "Làm V thì (phát hiện ra/kết quả là) … Dùng nhiều khi kể quá trình điều tra.",
+          "vd": "先生に聞いてみたところ、すぐに教えてくれた。",
+          "vdDoc": "せんせいにきいてみたところ、すぐにおしえてくれた。",
+          "vdV": "Thử hỏi thầy thì thầy chỉ ngay."
+        }
+      ]
+    },
+    {
+      "ai": "Q",
+      "t": "その結果、表示時間を0.3秒程度まで短縮できました。",
+      "doc": "そのけっか、ひょうじじかんをれいてんさんびょうていどまでたんしゅくできました。",
+      "v": "Kết quả là thời gian hiển thị rút xuống còn khoảng 0,3 giây."
+    },
+    {
+      "ai": "M",
+      "t": "なるほど。では、インデックスを追加すれば、常に速くなるとお考えですか。",
+      "doc": "なるほど。では、インデックスをついかすれば、つねにはやくなるとおかんがえですか。",
+      "v": "Ra vậy. Vậy anh có cho rằng cứ thêm index là luôn luôn nhanh hơn không?",
+      "np": [
+        {
+          "mau": "お + V-ます + です (尊敬)",
+          "giai": "Tôn kính ngữ: お考えです = 考えています (của người trên). Tương tự: お待ちです, お持ちです.",
+          "vd": "部長がお待ちです。",
+          "vdDoc": "ぶちょうがおまちです。",
+          "vdV": "Trưởng phòng đang đợi anh."
+        }
+      ]
+    },
+    {
+      "ai": "Q",
+      "t": "いいえ、必ずしもそうとは限りません。",
+      "doc": "いいえ、かならずしもそうとはかぎりません。",
+      "v": "Không, không hẳn lúc nào cũng vậy.",
+      "khac": [
+        {
+          "kieu": "mềm mỏng",
+          "t": "場合によると思います。",
+          "doc": "ばあいによるとおもいます。",
+          "v": "Tôi nghĩ là tuỳ trường hợp.",
+          "ghiChu": "câu trả lời an toàn, sau đó phải giải thích tiếp"
+        }
+      ],
+      "np": [
+        {
+          "mau": "必ずしも〜とは限らない",
+          "giai": "Không hẳn lúc nào cũng …, chưa chắc đã … Dùng để bác bỏ nhẹ một khẳng định tuyệt đối.",
+          "vd": "高い物が必ずしもいいとは限らない。",
+          "vdDoc": "たかいものがかならずしもいいとはかぎらない。",
+          "vdV": "Đồ đắt chưa chắc đã tốt."
+        }
+      ]
+    },
+    {
+      "ai": "Q",
+      "t": "読み取りは速くなる一方で、書き込みのたびにインデックスも更新しなければならないので、書き込みが多いテーブルでは、かえって遅くなることもあります。",
+      "doc": "よみとりははやくなるいっぽうで、かきこみのたびにインデックスもこうしんしなければならないので、かきこみがおおいテーブルでは、かえっておそくなることもあります。",
+      "v": "Đọc thì nhanh hơn, nhưng mặt khác mỗi lần ghi lại phải cập nhật cả index, nên với bảng ghi nhiều, có khi lại chậm hơn.",
+      "np": [
+        {
+          "mau": "〜一方で",
+          "giai": "Một mặt … nhưng mặt khác … (đối chiếu hai mặt của một sự việc).",
+          "vd": "便利になった一方で、問題も増えた。",
+          "vdDoc": "べんりになったいっぽうで、もんだいもふえた。",
+          "vdV": "Tiện hơn, nhưng mặt khác vấn đề cũng nhiều lên."
+        },
+        {
+          "mau": "N/V-る + たびに",
+          "giai": "Mỗi lần … là (lại) …",
+          "vd": "この歌を聞くたびに、故郷を思い出す。",
+          "vdDoc": "このうたをきくたびに、ふるさとをおもいだす。",
+          "vdV": "Mỗi lần nghe bài này tôi lại nhớ quê."
+        }
+      ]
+    },
+    {
+      "ai": "M",
+      "t": "いいですね。では、少し難しい質問をします。",
+      "doc": "いいですね。では、すこしむずかしいしつもんをします。",
+      "v": "Tốt lắm. Bây giờ tôi hỏi một câu khó hơn một chút."
+    },
+    {
+      "ai": "M",
+      "t": "複数のサービスにまたがる処理で、データの整合性をどう保つか、経験に基づいて話していただけますか。",
+      "doc": "ふくすうのサービスにまたがるしょりで、データのせいごうせいをどうたもつか、けいけんにもとづいてはなしていただけますか。",
+      "v": "Với xử lý trải qua nhiều service, anh giữ tính nhất quán của dữ liệu như thế nào? Anh hãy nói dựa trên kinh nghiệm.",
+      "np": [
+        {
+          "mau": "〜に基づいて",
+          "giai": "Dựa trên (cơ sở, dữ liệu, kinh nghiệm) N.",
+          "vd": "アンケートの結果に基づいて、計画を立てた。",
+          "vdDoc": "アンケートのけっかにもとづいて、けいかくをたてた。",
+          "vdV": "Lập kế hoạch dựa trên kết quả khảo sát."
+        }
+      ]
+    },
+    {
+      "ai": "Q",
+      "t": "……正直に申し上げますと、その規模の分散システムを設計した経験はございません。",
+      "doc": "……しょうじきにもうしあげますと、そのきぼのぶんさんシステムをせっけいしたけいけんはございません。",
+      "v": "…Nói thật với anh, tôi chưa có kinh nghiệm thiết kế hệ thống phân tán ở quy mô đó.",
+      "khac": [
+        {
+          "kieu": "mềm mỏng",
+          "t": "申し訳ありません、実務での経験はまだないのですが、考え方をお話ししてもよろしいでしょうか。",
+          "doc": "もうしわけありません、じつむでのけいけんはまだないのですが、かんがえかたをおはなししてもよろしいでしょうか。",
+          "v": "Xin lỗi, tôi chưa có kinh nghiệm thực tế, nhưng tôi xin trình bày cách nghĩ của mình được không ạ?"
+        },
+        {
+          "kieu": "trang trọng",
+          "t": "恐縮ですが、その点につきましては実務経験がございません。",
+          "doc": "きょうしゅくですが、そのてんにつきましてはじつむけいけんがございません。",
+          "v": "Thật ngại, nhưng về điểm đó tôi chưa có kinh nghiệm thực tế."
+        }
+      ],
+      "np": [
+        {
+          "mau": "申し上げる / ございます",
+          "giai": "申し上げる = khiêm nhường của 言う; ございます = cách nói rất lịch sự của あります. Dùng trong phỏng vấn, với khách hàng.",
+          "vd": "ご案内申し上げます。こちらに資料がございます。",
+          "vdDoc": "ごあんないもうしあげます。こちらにしりょうがございます。",
+          "vdV": "Xin được hướng dẫn. Tài liệu ở đây ạ."
+        }
+      ]
+    },
+    {
+      "ai": "Q",
+      "t": "ただ、知っている範囲でよろしければ、考え方をお話しさせていただけますか。",
+      "doc": "ただ、しっているはんいでよろしければ、かんがえかたをおはなしさせていただけますか。",
+      "v": "Tuy vậy, nếu trong phạm vi những gì tôi biết cũng được, xin cho tôi trình bày cách nghĩ."
+    },
+    {
+      "ai": "M",
+      "t": "もちろんです。どうぞ。",
+      "doc": "もちろんです。どうぞ。",
+      "v": "Tất nhiên rồi. Mời anh."
+    },
+    {
+      "ai": "Q",
+      "t": "一つのトランザクションで全部をまとめるのは難しいので、処理を小さく分けて、失敗したら取り消しの処理を順に実行する方法があると理解しています。",
+      "doc": "ひとつのトランザクションでぜんぶをまとめるのはむずかしいので、しょりをちいさくわけて、しっぱいしたらとりけしのしょりをじゅんにじっこうするほうほうがあるとりかいしています。",
+      "v": "Gói tất cả vào một transaction thì khó, nên theo tôi hiểu có cách chia xử lý thành nhiều bước nhỏ, nếu bước nào thất bại thì lần lượt chạy các xử lý huỷ bù."
+    },
+    {
+      "ai": "Q",
+      "t": "その場合、同じメッセージが二回届いても結果が変わらないように、設計せざるを得ないと思います。",
+      "doc": "そのばあい、おなじメッセージがにかいとどいてもけっかがかわらないように、せっけいせざるをえないとおもいます。",
+      "v": "Khi đó, tôi nghĩ buộc phải thiết kế sao cho dù cùng một thông điệp đến hai lần thì kết quả cũng không đổi.",
+      "np": [
+        {
+          "mau": "V-ない + ざるを得ない",
+          "giai": "Buộc phải V (không còn cách nào khác). Ngoại lệ: する → せざるを得ない.",
+          "vd": "雨なので、試合は中止せざるを得ない。",
+          "vdDoc": "あめなので、しあいはちゅうしせざるをえない。",
+          "vdV": "Vì mưa nên buộc phải huỷ trận đấu."
+        }
+      ]
+    },
+    {
+      "ai": "I",
+      "t": "「冪等性」のことですね。",
+      "doc": "「べきとうせい」のことですね。",
+      "v": "Ý anh là “tính luỹ đẳng” (idempotency) nhỉ."
+    },
+    {
+      "ai": "Q",
+      "t": "はい、その言葉です。名前がすぐに出てこなくて、失礼しました。",
+      "doc": "はい、そのことばです。なまえがすぐにでてこなくて、しつれいしました。",
+      "v": "Vâng, chính là từ đó. Xin lỗi, tôi không nhớ ra ngay tên gọi."
+    },
+    {
+      "ai": "M",
+      "t": "いえいえ。経験がないことを正直に言った上で、自分の頭で考えてくれたのはよかったですよ。",
+      "doc": "いえいえ。けいけんがないことをしょうじきにいったうえで、じぶんのあたまでかんがえてくれたのはよかったですよ。",
+      "v": "Không sao. Anh nói thật là chưa có kinh nghiệm, rồi vẫn tự suy nghĩ bằng cái đầu của mình — như vậy là tốt.",
+      "np": [
+        {
+          "mau": "V-た + 上で",
+          "giai": "Sau khi làm A (làm cơ sở) rồi mới B.",
+          "vd": "内容を確認した上で、サインしてください。",
+          "vdDoc": "ないようをかくにんしたうえで、サインしてください。",
+          "vdV": "Hãy ký sau khi đã xem kỹ nội dung."
+        }
+      ]
+    },
+    {
+      "ai": "M",
+      "t": "知ったかぶりをされるより、ずっと一緒に働きやすいですから。",
+      "doc": "しったかぶりをされるより、ずっといっしょにはたらきやすいですから。",
+      "v": "Vì làm việc cùng người như vậy dễ hơn nhiều so với người không biết mà làm ra vẻ biết."
+    },
+    {
+      "ai": "I",
+      "t": "最後に、クアンさんから何か質問はありますか。",
+      "doc": "さいごに、クアンさんからなにかしつもんはありますか。",
+      "v": "Cuối cùng, anh Quân có câu hỏi gì cho chúng tôi không?"
+    },
+    {
+      "ai": "Q",
+      "t": "はい。御社では、新しく入ったエンジニアが分散システムなどを学ぶにあたって、どのようなサポートがあるか伺ってもよろしいでしょうか。",
+      "doc": "はい。おんしゃでは、あたらしくはいったエンジニアがぶんさんシステムなどをまなぶにあたって、どのようなサポートがあるかうかがってもよろしいでしょうか。",
+      "v": "Vâng. Cho tôi hỏi, khi kỹ sư mới vào học những thứ như hệ thống phân tán, quý công ty có hỗ trợ như thế nào ạ?",
+      "khac": [
+        {
+          "kieu": "ngắn gọn",
+          "t": "入社後の技術的な学習支援について、教えていただけますか。",
+          "doc": "にゅうしゃごのぎじゅつてきながくしゅうしえんについて、おしえていただけますか。",
+          "v": "Anh chị cho tôi biết về hỗ trợ học kỹ thuật sau khi vào công ty được không ạ?"
+        }
+      ],
+      "np": [
+        {
+          "mau": "〜にあたって",
+          "giai": "Khi bắt đầu/nhân dịp làm một việc quan trọng (trang trọng).",
+          "vd": "留学するにあたって、両親と話し合った。",
+          "vdDoc": "りゅうがくするにあたって、りょうしんとはなしあった。",
+          "vdV": "Trước khi đi du học, tôi đã bàn với bố mẹ."
+        }
+      ]
+    },
+    {
+      "ai": "I",
+      "t": "月に一度の勉強会と、先輩と組んで設計を学ぶ制度があります。今日のような質問ができる方なら、すぐに伸びると思いますよ。",
+      "doc": "つきにいちどのべんきょうかいと、せんぱいとくんでせっけいをまなぶせいどがあります。きょうのようなしつもんができるかたなら、すぐにのびるとおもいますよ。",
+      "v": "Có buổi học nhóm mỗi tháng một lần, và chế độ ghép cặp với tiền bối để học thiết kế. Người hỏi được như anh hôm nay thì chắc sẽ tiến bộ nhanh thôi."
+    },
+    {
+      "ai": "Q",
+      "t": "ありがとうございます。今日答えられなかった部分は、帰ってからしっかり勉強いたします。",
+      "doc": "ありがとうございます。きょうこたえられなかったぶぶんは、かえってからしっかりべんきょういたします。",
+      "v": "Cảm ơn anh chị. Phần hôm nay tôi chưa trả lời được, về nhà tôi sẽ học kỹ."
+    },
+    {
+      "ai": "Q",
+      "t": "本日は貴重なお時間をいただき、ありがとうございました。",
+      "doc": "ほんじつはきちょうなおじかんをいただき、ありがとうございました。",
+      "v": "Cảm ơn anh chị đã dành thời gian quý báu hôm nay.",
+      "khac": [
+        {
+          "kieu": "ngắn gọn",
+          "t": "本日はありがとうございました。",
+          "doc": "ほんじつはありがとうございました。",
+          "v": "Cảm ơn anh chị về buổi hôm nay."
+        },
+        {
+          "kieu": "văn viết",
+          "t": "本日はお忙しい中、面接の機会をいただき、誠にありがとうございました。",
+          "doc": "ほんじつはおいそがしいなか、めんせつのきかいをいただき、まことにありがとうございました。",
+          "v": "Xin chân thành cảm ơn quý công ty đã dành cho tôi cơ hội phỏng vấn hôm nay dù rất bận.",
+          "ghiChu": "câu mở đầu email cảm ơn sau phỏng vấn"
+        }
+      ]
+    },
+    {
+      "ai": "I",
+      "t": "松本さん、今の方、どう思われました？",
+      "doc": "まつもとさん、いまのかた、どうおもわれました？",
+      "v": "Anh Matsumoto, anh thấy ứng viên vừa rồi thế nào?"
+    },
+    {
+      "ai": "M",
+      "t": "知識はこれからだけど、わからないことをわからないと言える。そこはエンジニアとして一番大事な部分だと思うな。",
+      "doc": "ちしきはこれからだけど、わからないことをわからないといえる。そこはエンジニアとしていちばんだいじなぶぶんだとおもうな。",
+      "v": "Kiến thức thì còn phải bồi thêm, nhưng cậu ấy dám nói không biết là không biết. Tôi nghĩ đó là phần quan trọng nhất của một kỹ sư.",
+      "np": [
+        {
+          "mau": "N + として",
+          "giai": "Với tư cách là N, ở vai trò N.",
+          "vd": "彼はリーダーとしてチームをまとめた。",
+          "vdDoc": "かれはリーダーとしてチームをまとめた。",
+          "vdV": "Anh ấy gắn kết cả nhóm với vai trò trưởng nhóm."
+        }
+      ]
+    }
+  ],
+  "tuVung": [
+    {
+      "chu": "構成",
+      "doc": "こうせい",
+      "nghia": "cấu trúc, cấu hình (hệ thống)",
+      "vd": "システムの構成図を見せてください。"
+    },
+    {
+      "chu": "構築",
+      "doc": "こうちく",
+      "nghia": "xây dựng (hệ thống)",
+      "vd": "新しいサーバーを構築しました。"
+    },
+    {
+      "chu": "実行計画",
+      "doc": "じっこうけいかく",
+      "nghia": "execution plan (kế hoạch thực thi truy vấn)",
+      "vd": "実行計画を見れば、遅い原因がわかる。"
+    },
+    {
+      "chu": "複合インデックス",
+      "doc": "ふくごうインデックス",
+      "nghia": "composite index (chỉ mục nhiều cột)",
+      "vd": "二つの列に複合インデックスを張った。"
+    },
+    {
+      "chu": "短縮",
+      "doc": "たんしゅく",
+      "nghia": "rút ngắn",
+      "vd": "作業時間を半分に短縮した。"
+    },
+    {
+      "chu": "とは限りません",
+      "doc": "とはかぎりません",
+      "nghia": "chưa chắc là, không hẳn là",
+      "vd": "日本人が皆、寿司が好きとは限りません。"
+    },
+    {
+      "chu": "整合性",
+      "doc": "せいごうせい",
+      "nghia": "tính nhất quán, khớp nhau (dữ liệu)",
+      "vd": "データの整合性を確認する。"
+    },
+    {
+      "chu": "分散システム",
+      "doc": "ぶんさんシステム",
+      "nghia": "hệ thống phân tán",
+      "vd": "分散システムは設計が難しい。"
+    },
+    {
+      "chu": "冪等性",
+      "doc": "べきとうせい",
+      "nghia": "tính luỹ đẳng (idempotency): làm nhiều lần kết quả vẫn như một lần",
+      "vd": "このAPIは冪等性がある。"
+    },
+    {
+      "chu": "知ったかぶり",
+      "doc": "しったかぶり",
+      "nghia": "không biết mà làm ra vẻ biết",
+      "vd": "知ったかぶりはやめよう。"
+    },
+    {
+      "chu": "御社",
+      "doc": "おんしゃ",
+      "nghia": "quý công ty (khi NÓI; khi viết dùng 貴社)",
+      "vd": "御社を志望した理由は……"
+    },
+    {
+      "chu": "伸びる",
+      "doc": "のびる",
+      "nghia": "tiến bộ, phát triển; dài ra",
+      "vd": "彼女の日本語はすぐ伸びた。"
+    }
+  ],
+  "yNghia": "Phỏng vấn kỹ thuật không phải để chứng minh bạn biết hết. Nói thật \"tôi chưa làm\", rồi vẫn bình tĩnh suy luận từ những gì mình biết — đó mới là điều người phỏng vấn muốn thấy, vì trong công việc thật, ngày nào cũng có câu hỏi chưa ai trả lời sẵn.",
+  "meo": [
+    "Kể kinh nghiệm kỹ thuật theo khuôn: vấn đề (〜ようになった) → điều tra (〜たところ) → xử lý → kết quả có con số.",
+    "Không biết thì nói thật mà lịch sự: 「正直に申し上げますと、〜経験はございません。ただ、〜考え方をお話しさせていただけますか」.",
+    "必ずしも〜とは限らない = không hẳn lúc nào cũng … — câu an toàn khi câu hỏi có bẫy \"luôn luôn\".",
+    "〜ざるを得ない: する → せざるを得ない (chỗ hay sai).",
+    "御社 (おんしゃ) khi NÓI; 貴社 (きしゃ) khi VIẾT (CV, email)."
+  ],
+  "cauHoi": [
+    {
+      "hoi": "Quân rút ngắn thời gian hiển thị danh sách bằng cách nào?",
+      "chon": [
+        "Mua máy chủ mạnh hơn",
+        "Xem execution plan rồi thêm composite index",
+        "Xoá bớt dữ liệu cũ",
+        "Viết lại bằng ngôn ngữ khác"
+      ],
+      "dung": 1,
+      "giai": "「実行計画を確認したところ……複合インデックスを追加しました」."
+    },
+    {
+      "hoi": "Theo Quân, vì sao thêm index không phải lúc nào cũng nhanh hơn?",
+      "chon": [
+        "Vì index tốn tiền",
+        "Vì index chỉ dùng cho bảng nhỏ",
+        "Vì mỗi lần ghi phải cập nhật cả index, bảng ghi nhiều có thể chậm đi",
+        "Vì PostgreSQL không hỗ trợ"
+      ],
+      "dung": 2,
+      "giai": "「書き込みのたびにインデックスも更新しなければならない」."
+    },
+    {
+      "hoi": "Khi gặp câu hỏi chưa có kinh nghiệm, Quân làm gì?",
+      "chon": [
+        "Nói thật là chưa có kinh nghiệm rồi xin trình bày cách nghĩ",
+        "Im lặng",
+        "Đổi chủ đề",
+        "Nói đại là đã làm rồi"
+      ],
+      "dung": 0,
+      "giai": "「正直に申し上げますと……ただ、……考え方をお話しさせていただけますか」."
+    },
+    {
+      "hoi": "冪等性 trong bài được giải thích là gì?",
+      "chon": [
+        "Xử lý thật nhanh",
+        "Chia nhỏ transaction",
+        "Ghi log đầy đủ",
+        "Cùng một thông điệp đến hai lần thì kết quả vẫn không đổi"
+      ],
+      "dung": 3,
+      "giai": "「同じメッセージが二回届いても結果が変わらないように」."
+    },
+    {
+      "hoi": "Khi NÓI chuyện, ứng viên gọi công ty người phỏng vấn là gì?",
+      "chon": [
+        "貴社",
+        "弊社",
+        "御社",
+        "当社"
+      ],
+      "dung": 2,
+      "giai": "御社 dùng khi nói; 貴社 dùng khi viết."
+    }
+  ]
+}

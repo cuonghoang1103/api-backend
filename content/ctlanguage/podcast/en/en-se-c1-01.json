@@ -1,0 +1,113 @@
+{
+  "id": "en-se-c1-01",
+  "nn": "en",
+  "danhMuc": "phan-mem",
+  "cap": "C1",
+  "so": 1,
+  "tieuDe": "Design a URL Shortener",
+  "tieuDeViet": "Thiết kế dịch vụ rút gọn đường link",
+  "moTa": "Vòng phỏng vấn thiết kế hệ thống kinh điển. Hà chốt yêu cầu, ước lượng tải, chọn cách sinh mã ngắn, chọn cơ sở dữ liệu, thêm bộ nhớ đệm, rồi cân nhắc 301 hay 302 — nói rõ mỗi đánh đổi bằng tiếng Anh chuẩn ngành.",
+  "chuDe": "Thiết kế hệ thống",
+  "bieuTuong": "link",
+  "nguoi": [
+    { "ma": "J", "ten": "James", "giong": "uk-nam", "vai": "kỹ sư trưởng, người phỏng vấn" },
+    { "ma": "H", "ten": "Hà", "giong": "us-nu", "vai": "ứng viên kỹ sư back-end" }
+  ],
+  "loi": [
+    { "ai": "J", "t": "Let's get into the design question. I'd like you to design a URL shortener: a service that turns a long link into a short one, with something like a seven-character code.", "v": "Vào câu hỏi thiết kế nhé. Tôi muốn bạn thiết kế một dịch vụ rút gọn đường link: biến một link dài thành link ngắn, với một mã khoảng bảy ký tự." },
+    { "ai": "H", "t": "Sounds good. Before I draw anything, I'd like to pin down the requirements, because they'll drive most of the decisions.", "v": "Được ạ. Trước khi vẽ gì, em muốn chốt rõ các yêu cầu, vì chúng sẽ quyết định phần lớn các lựa chọn.",
+      "np": [{ "mau": "pin down + N", "giai": "\"chốt rõ, xác định chính xác\" — mạnh hơn \"clarify\": không chỉ hỏi mà còn khoá lại để làm căn cứ.", "vd": "We need to pin down the budget before we hire anyone.", "vdV": "Mình cần chốt ngân sách trước khi tuyển ai." }],
+      "khac": [
+        { "kieu": "chuyên nghiệp", "t": "Before diving in, could I spend a couple of minutes clarifying the scope?", "v": "Trước khi đi sâu, em dành vài phút làm rõ phạm vi được không ạ?" },
+        { "kieu": "ngắn gọn", "t": "Can I start with the requirements?", "v": "Em bắt đầu từ yêu cầu nhé?" }
+      ] },
+    { "ai": "J", "t": "Go ahead.", "v": "Cứ tự nhiên." },
+    { "ai": "H", "t": "Functionally, users create a short link and get redirected when they open it. Do we also need custom aliases, expiry dates or click analytics?", "v": "Về chức năng, người dùng tạo link ngắn và được chuyển hướng khi mở nó. Mình có cần thêm tên tuỳ chọn, ngày hết hạn hay thống kê lượt bấm không ạ?" },
+    { "ai": "J", "t": "Analytics, yes, but just a click count. Custom aliases are a nice-to-have. No expiry for now.", "v": "Thống kê thì có, nhưng chỉ cần đếm lượt bấm. Tên tuỳ chọn là có thì tốt. Tạm thời không cần hết hạn." },
+    { "ai": "H", "t": "And non-functionally, I'm assuming redirects have to be fast and highly available, since a broken link is visible to everyone who clicks it. Is that fair?", "v": "Còn phi chức năng, em giả định việc chuyển hướng phải nhanh và luôn sẵn sàng, vì một link hỏng thì ai bấm vào cũng thấy. Giả định vậy có hợp lý không ạ?",
+      "np": [{ "mau": "I'm assuming (that)… Is that fair?", "giai": "Nêu giả định rồi xin xác nhận — vừa chủ động vừa an toàn. \"since\" ở đây = because, nêu lý do người nghe dễ chấp nhận.", "vd": "I'm assuming most users are on mobile. Is that fair?", "vdV": "Em giả định phần lớn người dùng dùng điện thoại. Vậy có hợp lý không?" }],
+      "khac": [
+        { "kieu": "lịch sự", "t": "Does that sound reasonable to you?", "v": "Anh thấy vậy có hợp lý không ạ?", "ghiChu": "thay cho \"Is that fair?\" ở cuối câu" }
+      ] },
+    { "ai": "J", "t": "That's fair.", "v": "Hợp lý." },
+    { "ai": "H", "t": "Then let me do some back-of-the-envelope maths. Say a hundred million new links a month. Links are read far more often than they're created, so let's assume a hundred reads for every write.", "v": "Vậy để em tính nhẩm sơ bộ. Giả sử một trăm triệu link mới mỗi tháng. Link được đọc nhiều hơn hẳn so với được tạo, nên giả định cứ một lần ghi có một trăm lần đọc.",
+      "np": [{ "mau": "Say + con số… (= giả sử)", "giai": "\"Say\" đứng đầu câu trong văn nói = \"giả sử, cứ cho là\", rất hay dùng khi ước lượng. \"far more often than\" — far nhấn mạnh so sánh hơn.", "vd": "Say we have ten thousand users at launch.", "vdV": "Giả sử lúc ra mắt mình có mười nghìn người dùng." }] },
+    { "ai": "H", "t": "That works out at roughly forty writes and four thousand redirects a second on average, with peaks of maybe ten times that.", "v": "Tính ra khoảng bốn mươi lần ghi và bốn nghìn lần chuyển hướng mỗi giây trung bình, lúc cao điểm có khi gấp mười.",
+      "np": [{ "mau": "work out at + con số", "giai": "\"tính ra là…\" — dùng khi trình bày kết quả một phép tính ước lượng.", "vd": "The cost works out at about two dollars per user.", "vdV": "Chi phí tính ra khoảng hai đô mỗi người dùng." }] },
+    { "ai": "J", "t": "So it's a read-heavy system.", "v": "Vậy đây là hệ thống thiên về đọc." },
+    { "ai": "H", "t": "Very much so, which already tells me caching is going to be central. But let's start with the core: generating the short code.", "v": "Rất rõ là vậy, và điều đó cho em biết bộ nhớ đệm sẽ đóng vai trò trung tâm. Nhưng hãy bắt đầu từ phần lõi: sinh mã ngắn.",
+      "np": [{ "mau": "…, which + V (which chỉ cả mệnh đề trước)", "giai": "\"which\" sau dấu phẩy có thể thay cho CẢ ý vừa nói, không chỉ một danh từ: \"…, which already tells me…\" = điều đó cho thấy.", "vd": "The tests passed on the first try, which surprised everyone.", "vdV": "Test qua ngay lần đầu, điều đó khiến ai cũng bất ngờ." }] },
+    { "ai": "H", "t": "If we use lowercase letters, uppercase letters and digits, that's sixty-two characters. Seven characters gives us sixty-two to the power of seven, about three and a half trillion codes. That's more than enough.", "v": "Nếu dùng chữ thường, chữ hoa và chữ số thì có sáu mươi hai ký tự. Bảy ký tự cho ta sáu mươi hai mũ bảy, khoảng ba nghìn rưỡi tỷ mã. Thế là quá đủ." },
+    { "ai": "J", "t": "How would you generate them without collisions?", "v": "Bạn sẽ sinh chúng thế nào để không bị trùng?" },
+    { "ai": "H", "t": "There are two main options. One is to hash the long URL and take the first seven characters. It's simple, but collisions are inevitable at this scale, so we'd need to check and retry.", "v": "Có hai lựa chọn chính. Một là băm link dài rồi lấy bảy ký tự đầu. Cách này đơn giản, nhưng ở quy mô này trùng lặp là không tránh khỏi, nên mình sẽ phải kiểm tra và thử lại." },
+    { "ai": "H", "t": "The other is to give every new link a unique number from a counter and convert that number to base sixty-two. No collisions, by design.", "v": "Cách kia là cấp cho mỗi link mới một số duy nhất từ một bộ đếm rồi đổi số đó sang hệ cơ số sáu mươi hai. Không trùng, ngay từ thiết kế." },
+    { "ai": "J", "t": "What's the catch with the counter?", "v": "Vậy cái bẫy của bộ đếm là gì?",
+      "khac": [
+        { "kieu": "trang trọng", "t": "What are the drawbacks of the counter approach?", "v": "Cách dùng bộ đếm có những nhược điểm gì?" }
+      ] },
+    { "ai": "H", "t": "The counter becomes a single point of failure, and the codes are predictable, so anyone could walk through every link in order.", "v": "Bộ đếm trở thành điểm lỗi duy nhất, và các mã có thể đoán trước, nên ai cũng có thể lần lượt dò hết mọi link." },
+    { "ai": "H", "t": "To get around both, I'd hand out ranges of numbers to each server, say a million at a time, and shuffle the bits before encoding.", "v": "Để lách cả hai vấn đề, em sẽ cấp cho mỗi máy chủ một dải số, ví dụ mỗi lần một triệu số, và xáo trộn các bit trước khi mã hoá.",
+      "np": [{ "mau": "To + V, S + would… (mục đích đặt đầu câu)", "giai": "Đưa mục đích lên đầu (\"To get around both, …\") giúp người nghe biết ngay bạn đang giải quyết vấn đề nào. \"get around\" = lách qua, vượt qua.", "vd": "To keep costs down, we'd run the jobs at night.", "vdV": "Để giữ chi phí thấp, mình sẽ chạy các tác vụ vào ban đêm." }] },
+    { "ai": "J", "t": "Okay. Where do the links live?", "v": "Được. Các link được lưu ở đâu?" },
+    { "ai": "H", "t": "The access pattern is extremely simple: look up one code, get one URL. No joins, no complex queries.", "v": "Cách truy cập cực kỳ đơn giản: tra một mã, lấy một link. Không có phép nối, không có truy vấn phức tạp." },
+    { "ai": "H", "t": "Given that, a key-value store would suit us better than a relational database, and it's easier to scale horizontally.", "v": "Vì vậy, một kho key-value sẽ hợp với mình hơn cơ sở dữ liệu quan hệ, và nó dễ mở rộng theo chiều ngang hơn.",
+      "np": [{ "mau": "Given that, … / Given + N, …", "giai": "\"Xét điều đó thì…\" — nối một kết luận với dữ kiện vừa nêu, trang trọng và mạch lạc hơn \"So\".", "vd": "Given the deadline, we should cut the scope.", "vdV": "Xét hạn chót, mình nên thu hẹp phạm vi." }] },
+    { "ai": "H", "t": "That said, if the business later wants rich reporting, I'd stream the click events into a separate analytics database rather than burden the main one.", "v": "Dù vậy, nếu sau này bên kinh doanh muốn báo cáo chi tiết, em sẽ đẩy các sự kiện bấm sang một cơ sở dữ liệu phân tích riêng thay vì đè gánh nặng lên cơ sở dữ liệu chính.",
+      "np": [{ "mau": "That said, …", "giai": "\"Tuy nói vậy, dù vậy\" — thêm một điều kiện/ngoại lệ ngay sau khi vừa khẳng định. Thể hiện tư duy cân nhắc hai mặt.", "vd": "The plan looks solid. That said, we haven't tested it under load.", "vdV": "Kế hoạch trông chắc chắn. Dù vậy, mình chưa thử nó khi tải nặng." }],
+      "khac": [
+        { "kieu": "trang trọng", "t": "Having said that, should reporting needs grow, I would move click events into a dedicated analytics store.", "v": "Dù vậy, nếu nhu cầu báo cáo tăng lên, em sẽ chuyển sự kiện bấm sang một kho phân tích riêng.", "ghiChu": "\"should + S + V\" = đảo ngữ thay cho \"if\", rất trang trọng" }
+      ] },
+    { "ai": "J", "t": "Let's talk about the cache you mentioned.", "v": "Nói về bộ nhớ đệm bạn vừa nhắc tới đi." },
+    { "ai": "H", "t": "Link traffic tends to follow a power law: a small fraction of links gets most of the clicks. So I'd put an in-memory cache in front of the database with an LRU eviction policy.", "v": "Lưu lượng link thường theo luật luỹ thừa: một phần nhỏ số link nhận phần lớn lượt bấm. Nên em sẽ đặt một bộ nhớ đệm trong RAM trước cơ sở dữ liệu, với chính sách loại bỏ LRU.",
+      "np": [{ "mau": "tend to + V", "giai": "\"có xu hướng, thường\" — nói về quy luật chung mà không khẳng định tuyệt đối; rất hợp phong cách kỹ sư thận trọng.", "vd": "Users tend to leave if a page takes more than three seconds.", "vdV": "Người dùng thường bỏ đi nếu trang tải quá ba giây." }] },
+    { "ai": "H", "t": "Even a modest cache should absorb the vast majority of reads.", "v": "Ngay cả một bộ nhớ đệm khiêm tốn cũng sẽ hấp thụ phần lớn lượt đọc." },
+    { "ai": "J", "t": "What happens when a popular link isn't in the cache yet, say it's just gone viral?", "v": "Chuyện gì xảy ra khi một link đang hot chưa có trong bộ nhớ đệm, ví dụ nó vừa lan truyền chóng mặt?" },
+    { "ai": "H", "t": "Thousands of requests could miss the cache at the same moment and all hit the database. To prevent that, only the first request fetches from the database, and the others wait for it to fill the cache.", "v": "Hàng nghìn yêu cầu có thể cùng lúc trượt bộ nhớ đệm và dồn hết vào cơ sở dữ liệu. Để tránh điều đó, chỉ yêu cầu đầu tiên lấy từ cơ sở dữ liệu, các yêu cầu còn lại chờ nó nạp vào bộ nhớ đệm." },
+    { "ai": "J", "t": "Good. One more thing: would you return a three-oh-one or a three-oh-two redirect?", "v": "Tốt. Một điều nữa: bạn sẽ trả về chuyển hướng 301 hay 302?" },
+    { "ai": "H", "t": "It hinges on the analytics requirement. A three-oh-one is permanent, so browsers cache it and stop asking us. That's cheaper, but we'd lose most of the click data.", "v": "Điều đó phụ thuộc vào yêu cầu thống kê. 301 là vĩnh viễn, nên trình duyệt lưu lại và không hỏi mình nữa. Rẻ hơn, nhưng mình sẽ mất phần lớn dữ liệu lượt bấm.",
+      "np": [{ "mau": "It hinges on + N", "giai": "\"Nó phụ thuộc hoàn toàn vào…\" — sắc nét hơn \"It depends on\", chỉ ra đúng yếu tố then chốt quyết định lựa chọn.", "vd": "The whole plan hinges on getting the API key in time.", "vdV": "Cả kế hoạch phụ thuộc vào việc có khoá API kịp lúc." }] },
+    { "ai": "H", "t": "Since you want click counts, I'd go with three-oh-two and accept the extra traffic.", "v": "Vì anh muốn đếm lượt bấm, em sẽ chọn 302 và chấp nhận lưu lượng tăng thêm." },
+    { "ai": "J", "t": "So you're trading cost for data.", "v": "Vậy là bạn đổi chi phí lấy dữ liệu." },
+    { "ai": "H", "t": "Exactly. And if the business later decided it didn't need analytics, switching to three-oh-one would be a one-line change that cuts our traffic dramatically.", "v": "Chính xác. Và nếu sau này bên kinh doanh quyết định không cần thống kê, chuyển sang 301 chỉ là thay đổi một dòng mà giảm lưu lượng rất mạnh." },
+    { "ai": "J", "t": "If I told you we had to cut the budget in half tomorrow, what would you sacrifice first?", "v": "Nếu tôi nói ngày mai mình phải cắt một nửa ngân sách, bạn sẽ hy sinh cái gì trước?" },
+    { "ai": "H", "t": "I'd shrink the analytics, not the redirects. Users forgive a delayed click count; they don't forgive a dead link.", "v": "Em sẽ thu nhỏ phần thống kê, không đụng tới chuyển hướng. Người dùng bỏ qua cho số lượt bấm bị trễ; họ không bỏ qua cho một link chết.",
+      "khac": [
+        { "kieu": "trang trọng", "t": "I would prioritise redirect availability and accept degraded analytics.", "v": "Em sẽ ưu tiên tính sẵn sàng của việc chuyển hướng và chấp nhận phần thống kê kém đi.", "ghiChu": "cách nói kiểu tài liệu thiết kế" }
+      ] },
+    { "ai": "J", "t": "I like that you kept coming back to the requirements. A lot of candidates jump straight to drawing boxes.", "v": "Tôi thích việc bạn liên tục quay về các yêu cầu. Rất nhiều ứng viên lao ngay vào vẽ các ô." },
+    { "ai": "H", "t": "The boxes are the easy part. The interesting part is explaining why each box is there.", "v": "Vẽ ô là phần dễ. Phần thú vị là giải thích vì sao mỗi ô lại ở đó." },
+    { "ai": "J", "t": "Well put. Let's take five minutes, and then we'll move on to the coding round.", "v": "Nói hay lắm. Nghỉ năm phút rồi mình chuyển sang vòng code nhé.",
+      "khac": [
+        { "kieu": "tự nhiên hơn", "t": "Nicely said. Let's take a short break.", "v": "Nói hay đấy. Nghỉ một chút nhé." }
+      ] }
+  ],
+  "tuVung": [
+    { "chu": "pin down", "doc": "/pɪn daʊn/", "nghia": "chốt rõ, xác định chính xác", "vd": "Let's pin down the exact requirements." },
+    { "chu": "highly available", "doc": "/ˈhaɪli əˈveɪləbl/", "nghia": "luôn sẵn sàng, hầu như không ngừng hoạt động", "vd": "The payment service must be highly available." },
+    { "chu": "nice-to-have", "doc": "/ˌnaɪs tə ˈhæv/", "nghia": "có thì tốt, không bắt buộc", "vd": "Dark mode is a nice-to-have." },
+    { "chu": "back-of-the-envelope", "doc": "/ˌbæk əv ði ˈenvələʊp/", "nghia": "(phép tính) nhẩm sơ bộ", "vd": "A back-of-the-envelope estimate is enough for now." },
+    { "chu": "read-heavy", "doc": "/ˈriːd ˌhevi/", "nghia": "thiên về đọc (đọc nhiều hơn ghi rất nhiều)", "vd": "News sites are read-heavy." },
+    { "chu": "collisions", "doc": "/kəˈlɪʒənz/", "nghia": "sự trùng lặp (hai đầu vào cho cùng một mã)", "vd": "A longer hash reduces collisions." },
+    { "chu": "single point of failure", "doc": "/ˈsɪŋɡl pɔɪnt əv ˈfeɪljə/", "nghia": "điểm lỗi duy nhất (hỏng là cả hệ thống hỏng)", "vd": "One database server is a single point of failure." },
+    { "chu": "key-value store", "doc": "/ˈkiː ˈvæljuː stɔː/", "nghia": "kho lưu trữ dạng khoá – giá trị", "vd": "We keep sessions in a key-value store." },
+    { "chu": "scale horizontally", "doc": "/skeɪl ˌhɒrɪˈzɒntəli/", "nghia": "mở rộng theo chiều ngang (thêm máy)", "vd": "Stateless services are easy to scale horizontally." },
+    { "chu": "power law", "doc": "/ˈpaʊə lɔː/", "nghia": "luật luỹ thừa (số ít chiếm phần lớn)", "vd": "Social media traffic follows a power law." },
+    { "chu": "eviction policy", "doc": "/ɪˈvɪkʃn ˈpɒləsi/", "nghia": "chính sách loại bỏ dữ liệu khỏi bộ nhớ đệm", "vd": "LRU is a common eviction policy." },
+    { "chu": "gone viral", "doc": "/ɡɒn ˈvaɪrəl/", "nghia": "lan truyền chóng mặt", "vd": "Her video has gone viral." },
+    { "chu": "hinges on", "doc": "/ˈhɪndʒɪz ɒn/", "nghia": "phụ thuộc then chốt vào", "vd": "Everything hinges on the first release." }
+  ],
+  "yNghia": "Phỏng vấn thiết kế hệ thống không có đáp án đúng duy nhất — chỉ có đánh đổi được nói rõ. Người được đánh giá cao là người chốt yêu cầu trước, ước lượng bằng con số, và giải thích vì sao mỗi thành phần tồn tại thay vì chỉ vẽ thật nhiều ô.",
+  "meo": [
+    "Trình tự an toàn: yêu cầu (chức năng + phi chức năng) → ước lượng tải → API & lõi → lưu trữ → bộ nhớ đệm → mở rộng → đánh đổi.",
+    "Cụm nói đánh đổi: \"It hinges on…\", \"We're trading X for Y\", \"That said, …\", \"Given that, …\".",
+    "\"Say + số\" để ước lượng: \"Say a hundred million links a month.\" — \"That works out at roughly…\"",
+    "Đọc mã HTTP: 301 = \"three-oh-one\", 404 = \"four-oh-four\"."
+  ],
+  "cauHoi": [
+    { "hoi": "Hà làm gì đầu tiên?", "chon": ["Vẽ sơ đồ kiến trúc", "Chọn cơ sở dữ liệu", "Chốt rõ các yêu cầu"], "dung": 2, "giai": "\"Before I draw anything, I'd like to pin down the requirements.\"" },
+    { "hoi": "Vì sao Hà không dùng bộ đếm đơn giản như vậy?", "chon": ["Vì nó là điểm lỗi duy nhất và mã dễ đoán", "Vì nó gây trùng mã", "Vì nó quá chậm"], "dung": 0, "giai": "\"The counter becomes a single point of failure, and the codes are predictable.\"" },
+    { "hoi": "Vì sao chọn kho key-value?", "chon": ["Vì nó miễn phí", "Vì cách truy cập rất đơn giản (một mã → một link) và dễ mở rộng ngang", "Vì nó hỗ trợ phép nối"], "dung": 1, "giai": "\"look up one code, get one URL. No joins… easier to scale horizontally.\"" },
+    { "hoi": "Vì sao Hà chọn chuyển hướng 302?", "chon": ["Vì 302 nhanh hơn", "Vì trình duyệt không hỗ trợ 301", "Vì cần đếm lượt bấm, mà 301 bị trình duyệt lưu lại nên mất dữ liệu"], "dung": 2, "giai": "\"A 301 is permanent, so browsers cache it… we'd lose most of the click data.\"" },
+    { "hoi": "Nếu bị cắt nửa ngân sách, Hà hy sinh gì trước?", "chon": ["Phần thống kê", "Bộ nhớ đệm", "Tính năng chuyển hướng"], "dung": 0, "giai": "\"I'd shrink the analytics, not the redirects.\"" }
+  ]
+}

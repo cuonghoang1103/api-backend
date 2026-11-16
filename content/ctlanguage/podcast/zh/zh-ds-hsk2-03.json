@@ -1,0 +1,442 @@
+{
+  "id": "zh-ds-hsk2-03",
+  "nn": "zh",
+  "danhMuc": "doi-song",
+  "cap": "HSK2",
+  "so": 5,
+  "tieuDe": "坐几号线？",
+  "tieuDeViet": "Đi tuyến số mấy?",
+  "moTa": "Khoa mới đến Trung Quốc, điện thoại chưa trả tiền được, phải tự mua vé tàu điện ngầm lần đầu. Hỏi tuyến, hỏi chỗ đổi tuyến, mua vé ở quầy vì chỉ có tờ một trăm, hỏi đúng chiều tàu — và được chị nhân viên chỉ từng bước.",
+  "chuDe": "Tàu điện ngầm",
+  "bieuTuong": "tram.fill",
+  "nguoi": [
+    {
+      "ma": "K",
+      "ten": "Khoa",
+      "giong": "zh-nam",
+      "vai": "người Việt mới sang"
+    },
+    {
+      "ma": "S",
+      "ten": "Chị nhân viên",
+      "giong": "zh-nu",
+      "vai": "nhân viên ga tàu điện ngầm"
+    }
+  ],
+  "loi": [
+    {
+      "ai": "K",
+      "t": "您好，请问去人民公园坐几号线？",
+      "doc": "Nín hǎo, qǐngwèn qù Rénmín Gōngyuán zuò jǐ hào xiàn?",
+      "v": "Chào chị, cho hỏi đi Công viên Nhân Dân thì đi tuyến số mấy ạ?",
+      "khac": [
+        {
+          "kieu": "lịch sự",
+          "t": "不好意思，打扰一下，去人民公园怎么坐？",
+          "doc": "Bù hǎoyìsi, dǎrǎo yíxià, qù Rénmín Gōngyuán zěnme zuò?",
+          "v": "Xin lỗi làm phiền chị một chút, đi Công viên Nhân Dân thì đi thế nào ạ?",
+          "ghiChu": "mở lời với người lạ đang bận"
+        },
+        {
+          "kieu": "ngắn gọn",
+          "t": "人民公园坐几号线？",
+          "doc": "Rénmín Gōngyuán zuò jǐ hào xiàn?",
+          "v": "Công viên Nhân Dân đi tuyến mấy?"
+        }
+      ],
+      "np": [
+        {
+          "mau": "坐 + phương tiện",
+          "giai": "Đi tàu, xe, máy bay dùng 坐: 坐地铁, 坐公交车, 坐飞机. Riêng xe đạp, xe máy, ngựa dùng 骑: 骑自行车.",
+          "vd": "我每天坐公交车上班。",
+          "vdDoc": "Wǒ měi tiān zuò gōngjiāochē shàngbān.",
+          "vdV": "Ngày nào tôi cũng đi xe buýt đi làm."
+        }
+      ]
+    },
+    {
+      "ai": "S",
+      "t": "先坐二号线，到中心站换四号线，再坐三站就到了。",
+      "doc": "Xiān zuò èr hào xiàn, dào Zhōngxīn Zhàn huàn sì hào xiàn, zài zuò sān zhàn jiù dào le.",
+      "v": "Đi tuyến số 2 trước, đến ga Trung Tâm thì đổi sang tuyến số 4, đi thêm ba ga là tới.",
+      "np": [
+        {
+          "mau": "先……，再……",
+          "giai": "先 = trước tiên, 再 = rồi mới (việc sau, chưa xảy ra). Dùng để kể thứ tự các bước.",
+          "vd": "我们先吃饭，再去看电影。",
+          "vdDoc": "Wǒmen xiān chī fàn, zài qù kàn diànyǐng.",
+          "vdV": "Mình ăn cơm trước, rồi đi xem phim."
+        },
+        {
+          "mau": "换 + tuyến/xe",
+          "giai": "换 = đổi; 换四号线 = đổi sang tuyến 4. Ga đổi tuyến gọi là 换乘站.",
+          "vd": "在下一站换车。",
+          "vdDoc": "Zài xià yí zhàn huàn chē.",
+          "vdV": "Đổi xe ở ga sau."
+        }
+      ]
+    },
+    {
+      "ai": "K",
+      "t": "二号线换四号线，对吗？大概要多长时间？",
+      "doc": "Èr hào xiàn huàn sì hào xiàn, duì ma? Dàgài yào duō cháng shíjiān?",
+      "v": "Tuyến 2 đổi sang tuyến 4, đúng không ạ? Mất khoảng bao lâu ạ?",
+      "np": [
+        {
+          "mau": "要 + thời gian / 多长时间",
+          "giai": "要 ở đây = \"mất, cần\" (thời gian, tiền). Hỏi thời lượng: 要多长时间？ (长 đọc cháng = dài).",
+          "vd": "从这儿到机场要一个小时。",
+          "vdDoc": "Cóng zhèr dào jīchǎng yào yí ge xiǎoshí.",
+          "vdV": "Từ đây đến sân bay mất một tiếng."
+        }
+      ]
+    },
+    {
+      "ai": "S",
+      "t": "三十分钟左右。",
+      "doc": "Sānshí fēnzhōng zuǒyòu.",
+      "v": "Khoảng ba mươi phút.",
+      "np": [
+        {
+          "mau": "số lượng + 左右",
+          "giai": "左右 đứng SAU con số = \"khoảng, chừng\": 三十分钟左右, 一百块左右. Đứng trước số dùng 大概.",
+          "vd": "他二十岁左右。",
+          "vdDoc": "Tā èrshí suì zuǒyòu.",
+          "vdV": "Cậu ấy khoảng hai mươi tuổi."
+        }
+      ]
+    },
+    {
+      "ai": "K",
+      "t": "我想买一张地铁票，在哪儿买？",
+      "doc": "Wǒ xiǎng mǎi yì zhāng dìtiě piào, zài nǎr mǎi?",
+      "v": "Tôi muốn mua một vé tàu điện ngầm, mua ở đâu ạ?",
+      "khac": [
+        {
+          "kieu": "lịch sự",
+          "t": "请问，在哪儿买地铁票？",
+          "doc": "Qǐngwèn, zài nǎr mǎi dìtiě piào?",
+          "v": "Cho hỏi, mua vé tàu điện ngầm ở đâu ạ?"
+        },
+        {
+          "kieu": "ngắn gọn",
+          "t": "售票处在哪儿？",
+          "doc": "Shòupiàochù zài nǎr?",
+          "v": "Quầy bán vé ở đâu?"
+        }
+      ]
+    },
+    {
+      "ai": "S",
+      "t": "那边有自动售票机。你也可以用手机扫码进站，很方便。",
+      "doc": "Nàbiān yǒu zìdòng shòupiàojī. Nǐ yě kěyǐ yòng shǒujī sǎo mǎ jìn zhàn, hěn fāngbiàn.",
+      "v": "Đằng kia có máy bán vé tự động. Anh cũng có thể dùng điện thoại quét mã vào ga, tiện lắm."
+    },
+    {
+      "ai": "K",
+      "t": "我刚到中国，手机还不能付钱。",
+      "doc": "Wǒ gāng dào Zhōngguó, shǒujī hái bù néng fù qián.",
+      "v": "Tôi mới đến Trung Quốc, điện thoại chưa trả tiền được.",
+      "np": [
+        {
+          "mau": "刚 + V",
+          "giai": "刚 = vừa mới (xảy ra cách đây không lâu): 刚到, 刚吃完. Đứng ngay trước động từ.",
+          "vd": "我刚下课。",
+          "vdDoc": "Wǒ gāng xià kè.",
+          "vdV": "Tôi vừa tan học."
+        },
+        {
+          "mau": "还不 + V",
+          "giai": "还不 = vẫn chưa (thể làm…), nhấn mạnh tình trạng hiện tại còn kéo dài.",
+          "vd": "他还不会说汉语。",
+          "vdDoc": "Tā hái bú huì shuō Hànyǔ.",
+          "vdV": "Anh ấy vẫn chưa biết nói tiếng Trung."
+        }
+      ]
+    },
+    {
+      "ai": "S",
+      "t": "那你用售票机吧。先选“人民公园”，然后付钱。",
+      "doc": "Nà nǐ yòng shòupiàojī ba. Xiān xuǎn “Rénmín Gōngyuán”, ránhòu fù qián.",
+      "v": "Vậy anh dùng máy bán vé nhé. Chọn \"Công viên Nhân Dân\" trước, sau đó trả tiền."
+    },
+    {
+      "ai": "K",
+      "t": "一张票多少钱？",
+      "doc": "Yì zhāng piào duōshao qián?",
+      "v": "Một vé bao nhiêu tiền ạ?",
+      "khac": [
+        {
+          "kieu": "văn nói",
+          "t": "票多少钱一张？",
+          "doc": "Piào duōshao qián yì zhāng?",
+          "v": "Vé bao nhiêu tiền một tấm?",
+          "ghiChu": "đảo giá lên trước — cách hỏi rất khẩu ngữ"
+        }
+      ]
+    },
+    {
+      "ai": "S",
+      "t": "五块。机器能用十块、五块和一块的。",
+      "doc": "Wǔ kuài. Jīqì néng yòng shí kuài, wǔ kuài hé yí kuài de.",
+      "v": "Năm tệ. Máy nhận tờ mười tệ, năm tệ và một tệ."
+    },
+    {
+      "ai": "K",
+      "t": "哎呀，我只有一百块的。",
+      "doc": "Āiyā, wǒ zhǐyǒu yìbǎi kuài de.",
+      "v": "Ôi, tôi chỉ có tờ một trăm."
+    },
+    {
+      "ai": "S",
+      "t": "没关系，在我这儿买也可以。",
+      "doc": "Méi guānxi, zài wǒ zhèr mǎi yě kěyǐ.",
+      "v": "Không sao, mua ở chỗ tôi cũng được."
+    },
+    {
+      "ai": "K",
+      "t": "太好了！给您一百。",
+      "doc": "Tài hǎo le! Gěi nín yìbǎi.",
+      "v": "Tốt quá! Gửi chị một trăm."
+    },
+    {
+      "ai": "S",
+      "t": "这是你的票，找你九十五。",
+      "doc": "Zhè shì nǐ de piào, zhǎo nǐ jiǔshíwǔ.",
+      "v": "Vé của anh đây, trả lại anh chín mươi lăm.",
+      "np": [
+        {
+          "mau": "找 + người + số tiền",
+          "giai": "找钱 = trả lại tiền thừa. 找你九十五 = thối lại anh 95. Muốn hỏi tiền thừa: 找我多少？",
+          "vd": "这是一百，找我二十。",
+          "vdDoc": "Zhè shì yìbǎi, zhǎo wǒ èrshí.",
+          "vdV": "Đây là một trăm, thối lại tôi hai mươi."
+        }
+      ]
+    },
+    {
+      "ai": "K",
+      "t": "麻烦您了！请问二号线在哪边？",
+      "doc": "Máfan nín le! Qǐngwèn èr hào xiàn zài nǎbiān?",
+      "v": "Làm phiền chị quá! Cho hỏi tuyến 2 ở phía nào ạ?",
+      "khac": [
+        {
+          "kieu": "nhấn mạnh",
+          "t": "太谢谢您了！",
+          "doc": "Tài xièxie nín le!",
+          "v": "Cảm ơn chị nhiều lắm!"
+        },
+        {
+          "kieu": "thân mật",
+          "t": "谢啦！",
+          "doc": "Xiè la!",
+          "v": "Cảm ơn nha!",
+          "ghiChu": "chỉ dùng với bạn bè, người trẻ"
+        }
+      ]
+    },
+    {
+      "ai": "S",
+      "t": "往前走，下楼就是。坐往中心站方向的车，别坐错了。",
+      "doc": "Wǎng qián zǒu, xià lóu jiù shì. Zuò wǎng Zhōngxīn Zhàn fāngxiàng de chē, bié zuò cuò le.",
+      "v": "Đi thẳng, xuống cầu thang là tới. Lên tàu đi về hướng ga Trung Tâm, đừng đi nhầm chiều nhé.",
+      "np": [
+        {
+          "mau": "V + 错",
+          "giai": "错 sau động từ = làm sai: 坐错 (đi nhầm tàu/xe), 走错 (đi nhầm đường), 说错 (nói sai), 买错 (mua nhầm).",
+          "vd": "对不起，我走错了。",
+          "vdDoc": "Duìbuqǐ, wǒ zǒu cuò le.",
+          "vdV": "Xin lỗi, tôi đi nhầm rồi."
+        }
+      ]
+    },
+    {
+      "ai": "K",
+      "t": "好的。到了中心站以后，怎么换四号线？",
+      "doc": "Hǎo de. Dào le Zhōngxīn Zhàn yǐhòu, zěnme huàn sì hào xiàn?",
+      "v": "Vâng. Đến ga Trung Tâm rồi thì đổi sang tuyến 4 thế nào ạ?",
+      "khac": [
+        {
+          "kieu": "ngắn gọn",
+          "t": "在中心站怎么换乘？",
+          "doc": "Zài Zhōngxīn Zhàn zěnme huànchéng?",
+          "v": "Ở ga Trung Tâm đổi tuyến thế nào?"
+        }
+      ]
+    },
+    {
+      "ai": "S",
+      "t": "下车以后看牌子，跟着“四号线”走就行。",
+      "doc": "Xià chē yǐhòu kàn páizi, gēnzhe “sì hào xiàn” zǒu jiù xíng.",
+      "v": "Xuống tàu thì nhìn biển chỉ dẫn, cứ đi theo biển \"Tuyến số 4\" là được.",
+      "np": [
+        {
+          "mau": "……就行",
+          "giai": "就行 = \"là được rồi\", dùng khi chỉ dẫn hoặc trấn an rằng việc rất đơn giản. Gần nghĩa 就可以了.",
+          "vd": "你给我发个消息就行。",
+          "vdDoc": "Nǐ gěi wǒ fā ge xiāoxi jiù xíng.",
+          "vdV": "Bạn nhắn tin cho tôi là được."
+        }
+      ]
+    },
+    {
+      "ai": "K",
+      "t": "明白了。谢谢您，您真热情！",
+      "doc": "Míngbai le. Xièxie nín, nín zhēn rèqíng!",
+      "v": "Tôi hiểu rồi. Cảm ơn chị, chị nhiệt tình thật!",
+      "khac": [
+        {
+          "kieu": "lịch sự",
+          "t": "明白了，太感谢您了！",
+          "doc": "Míngbai le, tài gǎnxiè nín le!",
+          "v": "Tôi hiểu rồi, cảm ơn chị rất nhiều!"
+        }
+      ]
+    },
+    {
+      "ai": "S",
+      "t": "不客气，祝你玩儿得开心！",
+      "doc": "Bú kèqi, zhù nǐ wánr de kāixīn!",
+      "v": "Không có gì, chúc anh đi chơi vui vẻ!",
+      "np": [
+        {
+          "mau": "祝 + người + điều chúc",
+          "giai": "祝 = chúc. 祝你玩儿得开心 (chúc đi chơi vui), 祝你生日快乐, 祝你一路平安.",
+          "vd": "祝你考试顺利！",
+          "vdDoc": "Zhù nǐ kǎoshì shùnlì!",
+          "vdV": "Chúc bạn thi suôn sẻ!"
+        },
+        {
+          "mau": "V + 得 + tính từ",
+          "giai": "Bổ ngữ trạng thái: 玩儿得开心 = chơi (một cách) vui vẻ; 说得很好 = nói giỏi. 得 đọc nhẹ \"de\".",
+          "vd": "他跑得很快。",
+          "vdDoc": "Tā pǎo de hěn kuài.",
+          "vdV": "Anh ấy chạy rất nhanh."
+        }
+      ]
+    }
+  ],
+  "tuVung": [
+    {
+      "chu": "地铁",
+      "doc": "dìtiě",
+      "nghia": "tàu điện ngầm",
+      "vd": "我们坐地铁去吧。"
+    },
+    {
+      "chu": "号线",
+      "doc": "hào xiàn",
+      "nghia": "tuyến số… (二号线 = tuyến 2)",
+      "vd": "坐一号线。"
+    },
+    {
+      "chu": "换",
+      "doc": "huàn",
+      "nghia": "đổi (tuyến, xe)",
+      "vd": "在这儿换车。"
+    },
+    {
+      "chu": "站",
+      "doc": "zhàn",
+      "nghia": "ga, trạm; lượng từ cho số ga",
+      "vd": "再坐两站。"
+    },
+    {
+      "chu": "左右",
+      "doc": "zuǒyòu",
+      "nghia": "khoảng, chừng (sau con số)",
+      "vd": "十分钟左右。"
+    },
+    {
+      "chu": "票",
+      "doc": "piào",
+      "nghia": "vé",
+      "vd": "一张票多少钱？"
+    },
+    {
+      "chu": "售票机",
+      "doc": "shòupiàojī",
+      "nghia": "máy bán vé",
+      "vd": "售票机在那边。"
+    },
+    {
+      "chu": "方便",
+      "doc": "fāngbiàn",
+      "nghia": "tiện lợi",
+      "vd": "坐地铁很方便。"
+    },
+    {
+      "chu": "刚",
+      "doc": "gāng",
+      "nghia": "vừa mới",
+      "vd": "我刚到。"
+    },
+    {
+      "chu": "找",
+      "doc": "zhǎo",
+      "nghia": "thối tiền; tìm",
+      "vd": "找你十块。"
+    },
+    {
+      "chu": "方向",
+      "doc": "fāngxiàng",
+      "nghia": "hướng, chiều",
+      "vd": "你坐错方向了。"
+    },
+    {
+      "chu": "热情",
+      "doc": "rèqíng",
+      "nghia": "nhiệt tình",
+      "vd": "他对人很热情。"
+    }
+  ],
+  "yNghia": "Ở thành phố lạ, chỉ cần hỏi đúng ba điều là không lạc: đi tuyến nào, đổi ở đâu, đi chiều nào. Khoa không có điện thoại trả tiền, không có tiền lẻ — nhưng có một câu hỏi lịch sự và một lời \"麻烦您了\". Người ta sẵn lòng giúp người biết hỏi và biết cảm ơn.",
+  "meo": [
+    "Hỏi đường tàu: 去 + nơi đến + 坐几号线？ Hỏi đổi tuyến: 在哪儿换？/ 怎么换乘？",
+    "Kể các bước: 先… 再… 然后… — 先坐二号线，再换四号线.",
+    "左右 đứng SAU số (三十分钟左右), 大概 đứng TRƯỚC (大概三十分钟) — cùng nghĩa \"khoảng\".",
+    "麻烦您了 = \"làm phiền anh/chị quá\" — câu cảm ơn khi người ta mất công giúp mình, nghe chân thành hơn 谢谢 thường."
+  ],
+  "cauHoi": [
+    {
+      "hoi": "Để đến Công viên Nhân Dân, Khoa phải đi thế nào?",
+      "chon": [
+        "Tuyến 4, đổi tuyến 2 ở ga Trung Tâm",
+        "Tuyến 2, đổi tuyến 4 ở ga Trung Tâm",
+        "Chỉ đi tuyến 2, ba ga"
+      ],
+      "dung": 1,
+      "giai": "先坐二号线，到中心站换四号线，再坐三站就到了。"
+    },
+    {
+      "hoi": "Vì sao Khoa không quét mã vào ga?",
+      "chon": [
+        "Vì điện thoại hết pin",
+        "Vì anh mới đến, điện thoại chưa trả tiền được",
+        "Vì ga không cho quét mã"
+      ],
+      "dung": 1,
+      "giai": "我刚到中国，手机还不能付钱。"
+    },
+    {
+      "hoi": "Khoa được thối lại bao nhiêu tiền?",
+      "chon": [
+        "95 tệ",
+        "5 tệ",
+        "90 tệ"
+      ],
+      "dung": 0,
+      "giai": "Vé năm tệ, đưa một trăm: 找你九十五。"
+    },
+    {
+      "hoi": "\"别坐错了\" nghĩa là gì?",
+      "chon": [
+        "Đừng ngồi sai ghế",
+        "Đừng đi nhầm (chiều) tàu",
+        "Đừng ngồi lâu quá"
+      ],
+      "dung": 1,
+      "giai": "坐错 = đi nhầm tàu/xe; chị nhân viên dặn lên đúng tàu đi về hướng ga Trung Tâm."
+    }
+  ]
+}

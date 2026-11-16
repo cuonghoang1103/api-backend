@@ -1,0 +1,91 @@
+{
+  "id": "en-cs-b1-02",
+  "nn": "en",
+  "danhMuc": "chia-se",
+  "cap": "B1",
+  "so": 2,
+  "tieuDe": "The Woman With the Flask of Tea",
+  "tieuDeViet": "Người phụ nữ với bình trà",
+  "moTa": "Tàu dừng giữa đường, Grace sắp lỡ buổi phỏng vấn công việc mơ ước và ngồi khóc trên sân ga. Một người phụ nữ lạ rót cho cô cốc trà và hỏi đúng một câu. Câu nói sau đó của bà đã theo Grace suốt chín năm.",
+  "chuDe": "Lời khuyên của người lạ",
+  "bieuTuong": "tram.fill",
+  "nguoi": [
+    { "ma": "G", "ten": "Grace", "giong": "au-nu", "vai": "người kể chuyện" }
+  ],
+  "loi": [
+    { "ai": "G", "t": "Hi, I'm Grace, and today I want to tell you about the best advice I ever got. It came from a woman whose name I never learned.", "v": "Xin chào, mình là Grace, và hôm nay mình muốn kể về lời khuyên hay nhất mình từng nhận. Nó đến từ một người phụ nữ mà mình chưa bao giờ biết tên.",
+      "np": [{ "mau": "N + whose + N", "giai": "\"whose\" = của người đó, nối hai ý về sở hữu: a woman whose name I never learned = một người phụ nữ mà tên của bà tôi không biết.", "vd": "I met a man whose son studies in my class.", "vdV": "Tôi gặp một người đàn ông có con trai học cùng lớp tôi." }] },
+    { "ai": "G", "t": "I was twenty-three, and I had a job interview in another city at nine o'clock in the morning. It was the job I really wanted.", "v": "Lúc đó mình hai mươi ba tuổi, và mình có một buổi phỏng vấn xin việc ở thành phố khác lúc chín giờ sáng. Đó là công việc mình rất muốn." },
+    { "ai": "G", "t": "I took the early train, but halfway there, it stopped. There was a problem on the line, and nobody knew how long it would take.", "v": "Mình đi chuyến tàu sớm, nhưng được nửa đường thì nó dừng. Đường ray có sự cố, và không ai biết sẽ mất bao lâu.",
+      "np": [{ "mau": "nobody knew how long it would take", "giai": "Câu hỏi lồng trong câu (how long…) không đảo trợ động từ. Vì kể chuyện quá khứ nên will lùi thành would.", "vd": "I didn't know when the bus would arrive.", "vdV": "Mình không biết khi nào xe buýt sẽ tới." }] },
+    { "ai": "G", "t": "After an hour, I realised I was going to miss the interview. I went out onto the platform and started crying. I couldn't stop.", "v": "Sau một tiếng, mình nhận ra mình sắp lỡ buổi phỏng vấn. Mình bước ra sân ga và bắt đầu khóc. Mình không thể ngừng lại.",
+      "np": [{ "mau": "was going to + V (tương lai trong quá khứ)", "giai": "Khi kể chuyện, \"was going to\" diễn tả điều lúc đó sắp xảy ra hoặc chắc chắn sẽ xảy ra.", "vd": "I knew I was going to be late.", "vdV": "Tôi biết là mình sắp trễ rồi." }] },
+    { "ai": "G", "t": "An older woman with a big shopping bag sat down next to me. She said, \"Excuse me, dear, are you alright?\"", "v": "Một người phụ nữ lớn tuổi với chiếc túi đi chợ to ngồi xuống cạnh mình. Bà hỏi: \"Xin lỗi cháu, cháu có ổn không?\"",
+      "khac": [
+        { "kieu": "lịch sự", "t": "Excuse me, is everything alright? Can I help at all?", "v": "Xin lỗi, mọi chuyện ổn chứ? Tôi có giúp được gì không?", "ghiChu": "hỏi han một người lạ đang gặp chuyện" },
+        { "kieu": "thân mật", "t": "Are you okay, love?", "v": "Cháu có sao không, cháu?", "ghiChu": "\"love\", \"dear\" — người lớn tuổi ở Anh, Úc hay gọi người trẻ một cách trìu mến" }
+      ] },
+    { "ai": "G", "t": "I told her everything. She listened, poured me some tea from her flask, and then she asked me a simple question.", "v": "Mình kể bà nghe mọi chuyện. Bà lắng nghe, rót cho mình chút trà từ bình giữ nhiệt, rồi hỏi mình một câu rất đơn giản." },
+    { "ai": "G", "t": "\"Have you called them?\"", "v": "\"Cháu đã gọi cho họ chưa?\"",
+      "np": [{ "mau": "Have you + V3? (hỏi việc đã làm chưa)", "giai": "Hiện tại hoàn thành để hỏi một việc đã xảy ra hay chưa tính tới lúc này, không quan trọng khi nào.", "vd": "Have you told your boss?", "vdV": "Bạn đã báo sếp chưa?" }],
+      "khac": [
+        { "kieu": "văn nói", "t": "Did you ring them?", "v": "Cháu gọi cho họ chưa?", "ghiChu": "\"ring\" = gọi điện, kiểu Anh/Úc; người Mỹ hay dùng quá khứ đơn cho câu hỏi này" }
+      ] },
+    { "ai": "G", "t": "I said no. What was the point?", "v": "Mình nói chưa. Gọi thì được gì chứ?",
+      "khac": [
+        { "kieu": "tự nhiên hơn", "t": "I said no. Why bother?", "v": "Mình nói chưa. Gọi làm gì cho mệt?" }
+      ] },
+    { "ai": "G", "t": "They wouldn't wait for someone who was late for her own interview.", "v": "Họ sẽ chẳng chờ một người đến trễ buổi phỏng vấn của chính mình." },
+    { "ai": "G", "t": "She laughed, kindly, not meanly, and said, \"You've already decided their answer for them. The worst they can say is no, and no is where you are right now.\"", "v": "Bà bật cười, hiền hậu chứ không chế giễu, và nói: \"Cháu đã quyết định câu trả lời thay cho họ rồi. Tệ nhất họ cũng chỉ nói không, mà \"không\" chính là chỗ cháu đang đứng lúc này.\"",
+      "np": [{ "mau": "The worst (that) + S + can + V + is…", "giai": "\"Điều tệ nhất mà… có thể… là…\" — so sánh nhất + mệnh đề rút gọn, rất hay dùng để động viên ai đó dám thử.", "vd": "The worst that can happen is you learn something.", "vdV": "Tệ nhất thì bạn cũng học được điều gì đó." }] },
+    { "ai": "G", "t": "So I called. My voice was shaking. I said, \"I'm so sorry. My train has stopped, and I won't make it by nine. Is there any chance we could do the interview later or online?\"", "v": "Thế là mình gọi. Giọng mình run run. Mình nói: \"Em thành thật xin lỗi. Tàu của em bị dừng, và em sẽ không kịp tới trước chín giờ. Liệu có cách nào mình phỏng vấn muộn hơn hoặc trực tuyến không ạ?\"",
+      "np": [{ "mau": "Is there any chance (that) we could + V?", "giai": "Cách xin điều gì đó rất lịch sự, khiêm tốn: \"Liệu có khả năng nào…\". \"could\" làm lời đề nghị mềm hơn \"can\".", "vd": "Is there any chance you could send it today?", "vdV": "Liệu có cách nào anh gửi nó trong hôm nay không?" }],
+      "khac": [
+        { "kieu": "chuyên nghiệp", "t": "I'm very sorry for the short notice. Due to a train delay, I won't be able to arrive by nine. Would it be possible to reschedule or meet online?", "v": "Em rất xin lỗi vì báo gấp. Do tàu bị chậm, em sẽ không thể đến trước chín giờ. Liệu có thể dời lịch hoặc gặp trực tuyến không ạ?", "ghiChu": "dùng được cả cho email báo trễ" }
+      ] },
+    { "ai": "G", "t": "There was a pause. Then the manager said, \"Of course. Thanks for letting us know. Let's do it online at eleven.\"", "v": "Đầu dây im lặng một lúc. Rồi chị quản lý nói: \"Tất nhiên rồi. Cảm ơn em đã báo cho bọn chị. Mình làm trực tuyến lúc mười một giờ nhé.\"",
+      "np": [{ "mau": "Thanks for + V-ing", "giai": "Sau giới từ for dùng V-ing: thanks for letting us know, thanks for waiting.", "vd": "Thanks for waiting. I'm ready now.", "vdV": "Cảm ơn đã chờ. Giờ tôi sẵn sàng rồi." }],
+      "khac": [
+        { "kieu": "chuyên nghiệp", "t": "We appreciate you letting us know in advance.", "v": "Chúng tôi trân trọng việc bạn báo trước cho chúng tôi." }
+      ] },
+    { "ai": "G", "t": "I did the interview on my phone, sitting on a suitcase on that platform. Two weeks later, I got the job.", "v": "Mình phỏng vấn qua điện thoại, ngồi trên va li ngay trên sân ga đó. Hai tuần sau, mình nhận được việc." },
+    { "ai": "G", "t": "When I turned to thank the woman, her train had arrived and she was gone. I never even asked her name.", "v": "Lúc mình quay sang cảm ơn bà, tàu của bà đã tới và bà đã đi mất. Mình thậm chí còn chưa hỏi tên bà.",
+      "np": [{ "mau": "had + V3 (xảy ra trước một hành động quá khứ khác)", "giai": "Tàu tới TRƯỚC lúc tôi quay sang: dùng quá khứ hoàn thành (had arrived) cho việc xảy ra trước.", "vd": "When we got to the cinema, the film had started.", "vdV": "Lúc bọn mình tới rạp thì phim đã chiếu rồi." }] },
+    { "ai": "G", "t": "That was nine years ago, and I still think about her sentence almost every week.", "v": "Chuyện đó đã chín năm rồi, và gần như tuần nào mình cũng nghĩ tới câu nói của bà." },
+    { "ai": "G", "t": "I used it when I asked my boss for a pay rise. I used it when I asked a shy man from the gym if he wanted to get coffee. He's my husband now.", "v": "Mình dùng nó khi xin sếp tăng lương. Mình dùng nó khi hỏi một anh chàng nhút nhát ở phòng gym có muốn đi uống cà phê không. Giờ anh ấy là chồng mình.",
+      "np": [{ "mau": "ask + sb + if + mệnh đề", "giai": "Câu hỏi có/không khi tường thuật dùng if (hoặc whether), không đảo trợ động từ: asked him if he wanted…", "vd": "I asked her if she needed help.", "vdV": "Tôi hỏi cô ấy có cần giúp không." }] },
+    { "ai": "G", "t": "Not every answer has been yes, of course. I've heard plenty of nos. But not one of them hurt as much as I expected.", "v": "Tất nhiên không phải câu trả lời nào cũng là có. Mình đã nghe không ít lời từ chối. Nhưng chưa lần nào đau như mình tưởng.",
+      "np": [{ "mau": "not as much as I expected", "giai": "So sánh ngang bằng phủ định: \"không… bằng mình nghĩ\".", "vd": "The test wasn't as hard as I expected.", "vdV": "Bài kiểm tra không khó như mình tưởng." }] },
+    { "ai": "G", "t": "What I learned is this: we often say no to ourselves, so other people don't have to. That's a job we can let them do.", "v": "Điều mình học được là thế này: ta hay tự nói \"không\" với chính mình, để người khác khỏi phải nói. Đó là việc ta có thể để họ tự làm." },
+    { "ai": "G", "t": "So if there's something you want to ask for this week, like help, a second chance, a discount or a date, ask.", "v": "Vậy nếu tuần này có điều gì bạn muốn xin — sự giúp đỡ, một cơ hội thứ hai, một khoản giảm giá hay một buổi hẹn — hãy hỏi." },
+    { "ai": "G", "t": "The worst they can say is no. And you're already standing there.", "v": "Tệ nhất họ cũng chỉ nói không. Mà bạn thì vốn đang đứng ở đó rồi." },
+    { "ai": "G", "t": "And if you ever meet a kind woman with a flask of tea on a train platform, please tell her Grace says thank you.", "v": "Và nếu có bao giờ bạn gặp một người phụ nữ tốt bụng mang bình trà trên một sân ga, xin nói với bà rằng Grace gửi lời cảm ơn." }
+  ],
+  "tuVung": [
+    { "chu": "halfway", "doc": "/ˌhɑːfˈweɪ/", "nghia": "nửa đường", "vd": "We stopped for lunch halfway." },
+    { "chu": "platform", "doc": "/ˈplætfɔːm/", "nghia": "sân ga", "vd": "The train leaves from platform three." },
+    { "chu": "miss the interview", "doc": "/mɪs ði ˈɪntəvjuː/", "nghia": "lỡ buổi phỏng vấn", "vd": "Leave early so you don't miss the interview." },
+    { "chu": "flask", "doc": "/flɑːsk/", "nghia": "bình giữ nhiệt", "vd": "He always carries a flask of coffee." },
+    { "chu": "The worst they can say is no", "doc": "/ðə wɜːst ðeɪ kən seɪ ɪz nəʊ/", "nghia": "tệ nhất họ cũng chỉ nói không", "vd": "Just ask. The worst they can say is no." },
+    { "chu": "shaking", "doc": "/ˈʃeɪkɪŋ/", "nghia": "run rẩy", "vd": "My hands were shaking before the exam." },
+    { "chu": "make it by", "doc": "/meɪk ɪt baɪ/", "nghia": "kịp (có mặt) trước giờ…", "vd": "I'll try to make it by six." },
+    { "chu": "Is there any chance", "doc": "/ɪz ðeər ˈeni tʃɑːns/", "nghia": "liệu có khả năng nào…", "vd": "Is there any chance you're free tomorrow?" },
+    { "chu": "letting us know", "doc": "/ˈletɪŋ ʌs nəʊ/", "nghia": "báo cho chúng tôi biết", "vd": "Thanks for letting us know about the delay." },
+    { "chu": "pay rise", "doc": "/ˈpeɪ raɪz/", "nghia": "tăng lương (Anh/Úc; Mỹ: raise)", "vd": "She asked for a pay rise after her first year." },
+    { "chu": "plenty of", "doc": "/ˈplenti əv/", "nghia": "nhiều, không ít", "vd": "We have plenty of time." },
+    { "chu": "a second chance", "doc": "/ə ˈsekənd tʃɑːns/", "nghia": "cơ hội thứ hai", "vd": "Everyone deserves a second chance." }
+  ],
+  "yNghia": "Ta hay tự trả lời \"không\" thay cho người khác rồi bỏ cuộc trước khi hỏi. Hỏi thì tệ nhất cũng chỉ nghe một lời từ chối — mà không hỏi thì ta vốn đã ở đó rồi. Và một chút tử tế của người lạ có thể theo ta suốt nhiều năm.",
+  "meo": [
+    "Xin điều gì một cách khiêm tốn: \"Is there any chance we could…?\" / \"Would it be possible to…?\"",
+    "Kể chuyện: quá khứ hoàn thành cho việc xảy ra trước (her train had arrived), was going to cho điều sắp xảy ra.",
+    "Câu hỏi gián tiếp không đảo trợ động từ: \"nobody knew how long it would take\", \"I asked him if he wanted…\".",
+    "Thanks for + V-ing: \"Thanks for letting us know.\""
+  ],
+  "cauHoi": [
+    { "hoi": "Vì sao Grace khóc trên sân ga?", "chon": ["Vì cô bị mất ví", "Vì tàu dừng và cô sắp lỡ buổi phỏng vấn", "Vì cô nhớ nhà"], "dung": 1, "giai": "\"I realised I was going to miss the interview.\"" },
+    { "hoi": "Người phụ nữ lạ hỏi Grace câu gì?", "chon": ["\"Cháu đã gọi cho họ chưa?\"", "\"Cháu đi đâu vậy?\"", "\"Cháu có muốn ăn gì không?\""], "dung": 0, "giai": "\"Have you called them?\"" },
+    { "hoi": "Kết quả cuộc gọi là gì?", "chon": ["Công ty huỷ buổi phỏng vấn", "Grace phải chờ tới tuần sau", "Công ty đồng ý phỏng vấn trực tuyến lúc 11 giờ"], "dung": 2, "giai": "\"Let's do it online at eleven.\"" },
+    { "hoi": "Grace đã dùng câu nói của bà vào việc nào?", "chon": ["Xin tăng lương và mời một anh chàng đi uống cà phê", "Mua nhà", "Đổi nghề"], "dung": 0, "giai": "\"I used it when I asked my boss for a pay rise. I used it when I asked a shy man…\"" }
+  ]
+}

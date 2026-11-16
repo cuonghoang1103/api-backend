@@ -1,6 +1,7 @@
 {
   "id": "en-a2-01",
   "nn": "en",
+  "danhMuc": "doi-song",
   "cap": "A2",
   "so": 1,
   "tieuDe": "Lost in a New City",
@@ -9,43 +10,323 @@
   "chuDe": "Hỏi đường",
   "bieuTuong": "map.fill",
   "nguoi": [
-    { "ma": "K", "ten": "Khánh", "giong": "us-nam", "vai": "du học sinh" },
-    { "ma": "R", "ten": "Ruby", "giong": "au-nu", "vai": "người dân địa phương" }
+    {
+      "ma": "K",
+      "ten": "Khánh",
+      "giong": "us-nam",
+      "vai": "du học sinh"
+    },
+    {
+      "ma": "R",
+      "ten": "Ruby",
+      "giong": "au-nu",
+      "vai": "người dân địa phương"
+    }
   ],
   "loi": [
-    { "ai": "K", "t": "Excuse me, sorry to bother you. Could you help me?", "v": "Xin lỗi, phiền chị một chút. Chị giúp tôi được không?" },
-    { "ai": "R", "t": "Sure, what's up?", "v": "Được chứ, có chuyện gì vậy?" },
-    { "ai": "K", "t": "I'm looking for the City Library. My phone battery is dead, so I can't check the map.", "v": "Tôi đang tìm Thư viện Thành phố. Điện thoại tôi hết pin nên không xem bản đồ được." },
-    { "ai": "R", "t": "Oh no, that's the worst! Okay, it's not far from here.", "v": "Ôi, tệ thật! Được rồi, chỗ đó không xa đây đâu." },
-    { "ai": "K", "t": "Great. How do I get there?", "v": "Tốt quá. Tôi đi đến đó bằng cách nào?" },
-    { "ai": "R", "t": "Go straight along this street until you see a big park.", "v": "Anh đi thẳng theo con đường này cho đến khi thấy một công viên lớn." },
-    { "ai": "K", "t": "Straight to the park. Got it.", "v": "Đi thẳng tới công viên. Tôi hiểu rồi." },
-    { "ai": "R", "t": "Then turn left at the traffic lights.", "v": "Rồi rẽ trái ở chỗ đèn giao thông." },
-    { "ai": "K", "t": "Turn left at the lights... and then?", "v": "Rẽ trái ở đèn giao thông... rồi sao nữa?" },
-    { "ai": "R", "t": "Walk past a bakery and a bookshop. The library is on your right, opposite a bus stop.", "v": "Đi qua một tiệm bánh và một hiệu sách. Thư viện nằm bên tay phải anh, đối diện một trạm xe buýt." },
-    { "ai": "K", "t": "How long does it take on foot?", "v": "Đi bộ mất bao lâu ạ?" },
-    { "ai": "R", "t": "About ten minutes. Are you new here?", "v": "Khoảng mười phút. Anh mới đến đây à?" },
-    { "ai": "K", "t": "Yes, I arrived last week. I'm a student from Vietnam. Everything is still a bit confusing.", "v": "Vâng, tôi mới đến tuần trước. Tôi là sinh viên từ Việt Nam. Mọi thứ vẫn còn hơi rối." },
-    { "ai": "R", "t": "I understand. When I moved to London, I got lost every single day.", "v": "Tôi hiểu mà. Hồi chuyển đến London, ngày nào tôi cũng bị lạc." },
-    { "ai": "K", "t": "Really? That makes me feel better.", "v": "Thật ạ? Nghe vậy tôi thấy đỡ hơn." },
-    { "ai": "R", "t": "Honestly, getting lost was the best part. I found my favourite café that way.", "v": "Nói thật, bị lạc lại là phần vui nhất. Tôi tìm ra quán cà phê yêu thích của mình nhờ thế đấy." },
-    { "ai": "K", "t": "That's a nice way to think about it.", "v": "Nghĩ như vậy hay thật." },
-    { "ai": "R", "t": "Oh, and the bakery on the way sells amazing meat pies. You should try one.", "v": "À, tiệm bánh trên đường đi bán bánh nướng nhân thịt ngon tuyệt. Anh nên thử một cái." },
-    { "ai": "K", "t": "I will! Thank you so much for your help.", "v": "Tôi sẽ thử! Cảm ơn chị nhiều vì đã giúp." },
-    { "ai": "R", "t": "No worries. Good luck, and enjoy getting lost!", "v": "Không có gì. Chúc may mắn, và cứ tận hưởng việc bị lạc nhé!" }
+    {
+      "ai": "K",
+      "t": "Excuse me, sorry to bother you. Could you help me?",
+      "v": "Xin lỗi, phiền chị một chút. Chị giúp tôi được không?",
+      "khac": [
+        {
+          "kieu": "ngắn gọn",
+          "t": "Sorry, can you help me?",
+          "v": "Xin lỗi, bạn giúp mình được không?"
+        },
+        {
+          "kieu": "lịch sự",
+          "t": "Excuse me, could you help me for a moment?",
+          "v": "Xin lỗi, bạn giúp tôi một chút được không?"
+        }
+      ],
+      "np": [
+        {
+          "mau": "Could you + V?",
+          "giai": "Nhờ người lạ: \"Could you…?\" lịch sự hơn \"Can you…?\". Mở đầu bằng \"Excuse me\" hoặc \"Sorry to bother you\".",
+          "vd": "Could you take a photo of us?",
+          "vdV": "Bạn chụp giúp chúng tôi một tấm ảnh được không?"
+        }
+      ]
+    },
+    {
+      "ai": "R",
+      "t": "Sure, what's up?",
+      "v": "Được chứ, có chuyện gì vậy?",
+      "khac": [
+        {
+          "kieu": "lịch sự",
+          "t": "Of course. How can I help?",
+          "v": "Tất nhiên. Tôi giúp gì được?"
+        }
+      ]
+    },
+    {
+      "ai": "K",
+      "t": "I'm looking for the City Library. My phone battery is dead, so I can't check the map.",
+      "v": "Tôi đang tìm Thư viện Thành phố. Điện thoại tôi hết pin nên không xem bản đồ được.",
+      "khac": [
+        {
+          "kieu": "tự nhiên hơn",
+          "t": "Do you know where the City Library is? My phone is dead, so I can't check the map.",
+          "v": "Bạn có biết Thư viện Thành phố ở đâu không? Điện thoại mình hết pin nên không xem bản đồ được.",
+          "ghiChu": "câu hỏi gián tiếp: chủ ngữ đứng trước động từ (where it is)"
+        }
+      ],
+      "np": [
+        {
+          "mau": "be looking for + N",
+          "giai": "Đang tìm (một nơi, một thứ). Hay dùng khi hỏi đường, ở cửa hàng.",
+          "vd": "I'm looking for a pharmacy.",
+          "vdV": "Tôi đang tìm nhà thuốc."
+        }
+      ]
+    },
+    {
+      "ai": "R",
+      "t": "Oh no, that's the worst! Okay, it's not far from here.",
+      "v": "Ôi, tệ thật! Được rồi, chỗ đó không xa đây đâu."
+    },
+    {
+      "ai": "K",
+      "t": "Great. How do I get there?",
+      "v": "Tốt quá. Tôi đi đến đó bằng cách nào?",
+      "khac": [
+        {
+          "kieu": "lịch sự",
+          "t": "What's the best way to get there?",
+          "v": "Đi đường nào tới đó là tiện nhất?"
+        }
+      ],
+      "np": [
+        {
+          "mau": "How do I get to + nơi? / get there",
+          "giai": "Hỏi cách đi. Trước \"there/here\" KHÔNG có \"to\": get there, không phải \"get to there\".",
+          "vd": "How do I get to the airport?",
+          "vdV": "Tôi đi đến sân bay bằng cách nào?"
+        }
+      ]
+    },
+    {
+      "ai": "R",
+      "t": "Go straight along this street until you see a big park.",
+      "v": "Anh đi thẳng theo con đường này cho đến khi thấy một công viên lớn.",
+      "np": [
+        {
+          "mau": "until + hiện tại đơn",
+          "giai": "Cho tới khi. Dù nói về tương lai, sau \"until\" vẫn dùng hiện tại đơn (until you see).",
+          "vd": "Wait here until I come back.",
+          "vdV": "Đợi ở đây cho tới khi tôi quay lại."
+        }
+      ]
+    },
+    {
+      "ai": "K",
+      "t": "Straight to the park. Got it.",
+      "v": "Đi thẳng tới công viên. Tôi hiểu rồi."
+    },
+    {
+      "ai": "R",
+      "t": "Then turn left at the traffic lights.",
+      "v": "Rồi rẽ trái ở chỗ đèn giao thông."
+    },
+    {
+      "ai": "K",
+      "t": "Turn left at the lights... and then?",
+      "v": "Rẽ trái ở đèn giao thông... rồi sao nữa?"
+    },
+    {
+      "ai": "R",
+      "t": "Walk past a bakery and a bookshop. The library is on your right, opposite a bus stop.",
+      "v": "Đi qua một tiệm bánh và một hiệu sách. Thư viện nằm bên tay phải anh, đối diện một trạm xe buýt.",
+      "np": [
+        {
+          "mau": "past (giới từ) ≠ passed",
+          "giai": "\"walk past\" = đi ngang qua (giới từ). \"passed\" là quá khứ của động từ pass.",
+          "vd": "Go past the school and turn right.",
+          "vdV": "Đi qua trường học rồi rẽ phải."
+        }
+      ]
+    },
+    {
+      "ai": "K",
+      "t": "How long does it take on foot?",
+      "v": "Đi bộ mất bao lâu ạ?",
+      "khac": [
+        {
+          "kieu": "tự nhiên hơn",
+          "t": "How long is the walk?",
+          "v": "Đi bộ mất bao lâu?"
+        },
+        {
+          "kieu": "ngắn gọn",
+          "t": "Is it walkable?",
+          "v": "Có đi bộ được không?"
+        }
+      ],
+      "np": [
+        {
+          "mau": "How long does it take (to + V)?",
+          "giai": "Hỏi thời gian cần để làm gì. Đáp: \"It takes about ten minutes\".",
+          "vd": "How long does it take to get to the beach?",
+          "vdV": "Đi ra biển mất bao lâu?"
+        }
+      ]
+    },
+    {
+      "ai": "R",
+      "t": "About ten minutes. Are you new here?",
+      "v": "Khoảng mười phút. Anh mới đến đây à?"
+    },
+    {
+      "ai": "K",
+      "t": "Yes, I arrived last week. I'm a student from Vietnam. Everything is still a bit confusing.",
+      "v": "Vâng, tôi mới đến tuần trước. Tôi là sinh viên từ Việt Nam. Mọi thứ vẫn còn hơi rối."
+    },
+    {
+      "ai": "R",
+      "t": "I understand. When I moved to London, I got lost every single day.",
+      "v": "Tôi hiểu mà. Hồi chuyển đến London, ngày nào tôi cũng bị lạc.",
+      "np": [
+        {
+          "mau": "When + quá khứ, quá khứ",
+          "giai": "Kể chuyện đã xảy ra: hai vế đều quá khứ đơn. got lost = bị lạc.",
+          "vd": "When I was a child, I lived in Hue.",
+          "vdV": "Hồi nhỏ tôi sống ở Huế."
+        }
+      ]
+    },
+    {
+      "ai": "K",
+      "t": "Really? That makes me feel better.",
+      "v": "Thật ạ? Nghe vậy tôi thấy đỡ hơn."
+    },
+    {
+      "ai": "R",
+      "t": "Honestly, getting lost was the best part. I found my favourite café that way.",
+      "v": "Nói thật, bị lạc lại là phần vui nhất. Tôi tìm ra quán cà phê yêu thích của mình nhờ thế đấy."
+    },
+    {
+      "ai": "K",
+      "t": "That's a nice way to think about it.",
+      "v": "Nghĩ như vậy hay thật."
+    },
+    {
+      "ai": "R",
+      "t": "Oh, and the bakery on the way sells amazing meat pies. You should try one.",
+      "v": "À, tiệm bánh trên đường đi bán bánh nướng nhân thịt ngon tuyệt. Anh nên thử một cái."
+    },
+    {
+      "ai": "K",
+      "t": "I will! Thank you so much for your help.",
+      "v": "Tôi sẽ thử! Cảm ơn chị nhiều vì đã giúp.",
+      "khac": [
+        {
+          "kieu": "trang trọng",
+          "t": "I will. Thank you, I really appreciate your help.",
+          "v": "Nhất định rồi. Cảm ơn bạn, tôi thật sự cảm kích sự giúp đỡ."
+        },
+        {
+          "kieu": "thân mật",
+          "t": "Will do! Thanks a lot!",
+          "v": "Nhất định! Cảm ơn nhiều nha!"
+        }
+      ],
+      "np": [
+        {
+          "mau": "Thank you for + N / V-ing",
+          "giai": "Cảm ơn vì điều gì: for your help, for helping me.",
+          "vd": "Thank you for waiting.",
+          "vdV": "Cảm ơn bạn đã đợi."
+        }
+      ]
+    },
+    {
+      "ai": "R",
+      "t": "No worries. Good luck, and enjoy getting lost!",
+      "v": "Không có gì. Chúc may mắn, và cứ tận hưởng việc bị lạc nhé!",
+      "khac": [
+        {
+          "kieu": "lịch sự",
+          "t": "You're welcome. Good luck!",
+          "v": "Không có gì. Chúc bạn may mắn!"
+        },
+        {
+          "kieu": "tự nhiên hơn",
+          "t": "No problem! Good luck!",
+          "v": "Không có chi! Chúc may mắn!",
+          "ghiChu": "\"No worries\" là kiểu Úc, \"No problem\" dùng ở mọi nơi"
+        }
+      ]
+    }
   ],
   "tuVung": [
-    { "chu": "bother", "doc": "/ˈbɒðə(r)/", "nghia": "làm phiền", "vd": "Sorry to bother you, but where is the station?" },
-    { "chu": "battery", "doc": "/ˈbætəri/", "nghia": "pin", "vd": "My battery is low." },
-    { "chu": "far", "doc": "/fɑː(r)/", "nghia": "xa", "vd": "Is the hospital far from here?" },
-    { "chu": "Go straight", "doc": "/ɡəʊ streɪt/", "nghia": "đi thẳng", "vd": "Go straight and you will see the bank." },
-    { "chu": "turn left", "doc": "/tɜːn left/", "nghia": "rẽ trái", "vd": "Turn left at the corner." },
-    { "chu": "traffic lights", "doc": "/ˈtræfɪk laɪts/", "nghia": "đèn giao thông", "vd": "Stop at the traffic lights." },
-    { "chu": "opposite", "doc": "/ˈɒpəzɪt/", "nghia": "đối diện", "vd": "The café is opposite the cinema." },
-    { "chu": "on foot", "doc": "/ɒn fʊt/", "nghia": "đi bộ", "vd": "I go to school on foot." },
-    { "chu": "confusing", "doc": "/kənˈfjuːzɪŋ/", "nghia": "khó hiểu, gây rối", "vd": "The bus map is confusing." },
-    { "chu": "got lost", "doc": "/ɡɒt lɒst/", "nghia": "bị lạc (get lost)", "vd": "We got lost in the old town." },
-    { "chu": "No worries", "doc": "/nəʊ ˈwʌriz/", "nghia": "không có gì / đừng lo (người Úc rất hay dùng)", "vd": "\"Thanks!\" — \"No worries.\"" }
+    {
+      "chu": "bother",
+      "doc": "/ˈbɒðə(r)/",
+      "nghia": "làm phiền",
+      "vd": "Sorry to bother you, but where is the station?"
+    },
+    {
+      "chu": "battery",
+      "doc": "/ˈbætəri/",
+      "nghia": "pin",
+      "vd": "My battery is low."
+    },
+    {
+      "chu": "far",
+      "doc": "/fɑː(r)/",
+      "nghia": "xa",
+      "vd": "Is the hospital far from here?"
+    },
+    {
+      "chu": "Go straight",
+      "doc": "/ɡəʊ streɪt/",
+      "nghia": "đi thẳng",
+      "vd": "Go straight and you will see the bank."
+    },
+    {
+      "chu": "turn left",
+      "doc": "/tɜːn left/",
+      "nghia": "rẽ trái",
+      "vd": "Turn left at the corner."
+    },
+    {
+      "chu": "traffic lights",
+      "doc": "/ˈtræfɪk laɪts/",
+      "nghia": "đèn giao thông",
+      "vd": "Stop at the traffic lights."
+    },
+    {
+      "chu": "opposite",
+      "doc": "/ˈɒpəzɪt/",
+      "nghia": "đối diện",
+      "vd": "The café is opposite the cinema."
+    },
+    {
+      "chu": "on foot",
+      "doc": "/ɒn fʊt/",
+      "nghia": "đi bộ",
+      "vd": "I go to school on foot."
+    },
+    {
+      "chu": "confusing",
+      "doc": "/kənˈfjuːzɪŋ/",
+      "nghia": "khó hiểu, gây rối",
+      "vd": "The bus map is confusing."
+    },
+    {
+      "chu": "got lost",
+      "doc": "/ɡɒt lɒst/",
+      "nghia": "bị lạc (get lost)",
+      "vd": "We got lost in the old town."
+    },
+    {
+      "chu": "No worries",
+      "doc": "/nəʊ ˈwʌriz/",
+      "nghia": "không có gì / đừng lo (người Úc rất hay dùng)",
+      "vd": "\"Thanks!\" — \"No worries.\""
+    }
   ],
   "yNghia": "Hỏi đường không phải là làm phiền người khác — phần lớn mọi người vui khi được giúp. Và đôi khi chính lúc lạc đường, ta lại tìm ra những điều thú vị nhất ở một nơi mới.",
   "meo": [
@@ -55,9 +336,45 @@
     "Hỏi thời gian: \"How long does it take (on foot / by bus)?\" — mất bao lâu."
   ],
   "cauHoi": [
-    { "hoi": "Vì sao Khánh không xem được bản đồ?", "chon": ["Anh không có mạng", "Điện thoại hết pin", "Anh không biết đọc bản đồ"], "dung": 1, "giai": "\"My phone battery is dead.\"" },
-    { "hoi": "Thư viện nằm ở đâu?", "chon": ["Bên phải, đối diện trạm xe buýt", "Bên trái, cạnh công viên", "Bên phải, cạnh tiệm bánh"], "dung": 0, "giai": "\"The library is on your right, opposite a bus stop.\" Tiệm bánh chỉ nằm trên đường đi." },
-    { "hoi": "Ruby nghĩ gì về việc bị lạc ở London?", "chon": ["Đó là điều tồi tệ nhất", "Cô chưa bao giờ bị lạc", "Đó là phần vui nhất, cô tìm ra quán cà phê yêu thích"], "dung": 2, "giai": "\"Honestly, getting lost was the best part.\"" },
-    { "hoi": "\"How long does it take on foot?\" hỏi điều gì?", "chon": ["Đường dài bao nhiêu mét", "Đi bộ mất bao lâu", "Có xe buýt đi tới đó không"], "dung": 1, "giai": "\"How long does it take…?\" hỏi thời gian; \"on foot\" = đi bộ." }
+    {
+      "hoi": "Vì sao Khánh không xem được bản đồ?",
+      "chon": [
+        "Anh không có mạng",
+        "Điện thoại hết pin",
+        "Anh không biết đọc bản đồ"
+      ],
+      "dung": 1,
+      "giai": "\"My phone battery is dead.\""
+    },
+    {
+      "hoi": "Thư viện nằm ở đâu?",
+      "chon": [
+        "Bên phải, đối diện trạm xe buýt",
+        "Bên trái, cạnh công viên",
+        "Bên phải, cạnh tiệm bánh"
+      ],
+      "dung": 0,
+      "giai": "\"The library is on your right, opposite a bus stop.\" Tiệm bánh chỉ nằm trên đường đi."
+    },
+    {
+      "hoi": "Ruby nghĩ gì về việc bị lạc ở London?",
+      "chon": [
+        "Đó là điều tồi tệ nhất",
+        "Cô chưa bao giờ bị lạc",
+        "Đó là phần vui nhất, cô tìm ra quán cà phê yêu thích"
+      ],
+      "dung": 2,
+      "giai": "\"Honestly, getting lost was the best part.\""
+    },
+    {
+      "hoi": "\"How long does it take on foot?\" hỏi điều gì?",
+      "chon": [
+        "Đường dài bao nhiêu mét",
+        "Đi bộ mất bao lâu",
+        "Có xe buýt đi tới đó không"
+      ],
+      "dung": 1,
+      "giai": "\"How long does it take…?\" hỏi thời gian; \"on foot\" = đi bộ."
+    }
   ]
 }

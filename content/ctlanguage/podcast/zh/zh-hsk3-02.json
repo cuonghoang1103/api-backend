@@ -1,6 +1,7 @@
 {
   "id": "zh-hsk3-02",
   "nn": "zh",
+  "danhMuc": "doi-song",
   "cap": "HSK3",
   "so": 2,
   "tieuDe": "先把话说清楚",
@@ -9,48 +10,369 @@
   "chuDe": "Thuê nhà",
   "bieuTuong": "key.fill",
   "nguoi": [
-    { "ma": "F", "ten": "Phương", "giong": "zh-nu", "vai": "nhân viên văn phòng người Việt" },
-    { "ma": "L", "ten": "Ông Lưu", "giong": "zh-nam", "vai": "chủ nhà" }
+    {
+      "ma": "F",
+      "ten": "Phương",
+      "giong": "zh-nu",
+      "vai": "nhân viên văn phòng người Việt"
+    },
+    {
+      "ma": "L",
+      "ten": "Ông Lưu",
+      "giong": "zh-nam",
+      "vai": "chủ nhà"
+    }
   ],
   "loi": [
-    { "ai": "L", "t": "你好，你就是昨天打电话的阮小姐吧？", "doc": "Nǐ hǎo, nǐ jiù shì zuótiān dǎ diànhuà de Ruǎn xiǎojiě ba?", "v": "Chào cô, cô là cô Nguyễn gọi điện hôm qua đúng không?" },
-    { "ai": "F", "t": "是我。刘先生您好，我想看看这套房子。", "doc": "Shì wǒ. Liú xiānsheng nín hǎo, wǒ xiǎng kànkan zhè tào fángzi.", "v": "Vâng, là tôi. Chào ông Lưu, tôi muốn xem căn hộ này." },
-    { "ai": "L", "t": "请进。这是客厅，那边是卧室和厨房。", "doc": "Qǐng jìn. Zhè shì kètīng, nàbiān shì wòshì hé chúfáng.", "v": "Mời vào. Đây là phòng khách, bên kia là phòng ngủ và bếp." },
-    { "ai": "F", "t": "房间比照片上的大，也很干净。离地铁站远吗？", "doc": "Fángjiān bǐ zhàopiàn shang de dà, yě hěn gānjìng. Lí dìtiě zhàn yuǎn ma?", "v": "Phòng rộng hơn trong ảnh, lại sạch sẽ. Có cách ga tàu điện ngầm xa không ạ?" },
-    { "ai": "L", "t": "不远，走路五分钟就到了。附近还有超市和银行。", "doc": "Bù yuǎn, zǒulù wǔ fēnzhōng jiù dào le. Fùjìn hái yǒu chāoshì hé yínháng.", "v": "Không xa, đi bộ năm phút là tới. Gần đây còn có siêu thị và ngân hàng." },
-    { "ai": "F", "t": "太好了。一个月房租多少钱？", "doc": "Tài hǎo le. Yí ge yuè fángzū duōshao qián?", "v": "Tốt quá. Tiền thuê một tháng bao nhiêu ạ?" },
-    { "ai": "L", "t": "三千五，押一付三。", "doc": "Sānqiān wǔ, yā yī fù sān.", "v": "Ba nghìn rưỡi, áp một trả ba." },
-    { "ai": "F", "t": "“押一付三”是什么意思？", "doc": "“Yā yī fù sān” shì shénme yìsi?", "v": "\"Áp một trả ba\" nghĩa là gì ạ?" },
-    { "ai": "L", "t": "就是先交一个月的押金，再交三个月的房租。", "doc": "Jiù shì xiān jiāo yí ge yuè de yājīn, zài jiāo sān ge yuè de fángzū.", "v": "Tức là đặt cọc trước một tháng, rồi trả tiền thuê ba tháng." },
-    { "ai": "F", "t": "明白了。水电费呢？是包括在房租里的吗？", "doc": "Míngbai le. Shuǐdiàn fèi ne? Shì bāokuò zài fángzū li de ma?", "v": "Tôi hiểu rồi. Còn tiền điện nước? Đã tính trong tiền thuê chưa ạ?" },
-    { "ai": "L", "t": "不包括，水电费你自己交，一般一个月两百块左右。", "doc": "Bù bāokuò, shuǐdiàn fèi nǐ zìjǐ jiāo, yìbān yí ge yuè liǎngbǎi kuài zuǒyòu.", "v": "Chưa, tiền điện nước cô tự trả, thường khoảng hai trăm tệ một tháng." },
-    { "ai": "F", "t": "我可以试一下热水吗？", "doc": "Wǒ kěyǐ shì yíxià rè shuǐ ma?", "v": "Tôi thử nước nóng một chút được không?" },
-    { "ai": "L", "t": "当然可以。", "doc": "Dāngrán kěyǐ.", "v": "Tất nhiên rồi." },
-    { "ai": "F", "t": "奇怪，好像没有热水。", "doc": "Qíguài, hǎoxiàng méiyǒu rè shuǐ.", "v": "Lạ nhỉ, hình như không có nước nóng." },
-    { "ai": "L", "t": "哦，热水器可能坏了。别担心，我这个周末就找人来修。", "doc": "Ò, rèshuǐqì kěnéng huài le. Bié dānxīn, wǒ zhège zhōumò jiù zhǎo rén lái xiū.", "v": "Ồ, chắc bình nóng lạnh hỏng rồi. Đừng lo, cuối tuần này tôi gọi người đến sửa ngay." },
-    { "ai": "F", "t": "谢谢。那我们能不能把这件事写进合同里？", "doc": "Xièxie. Nà wǒmen néng bu néng bǎ zhè jiàn shì xiě jìn hétong li?", "v": "Cảm ơn ông. Vậy mình có thể ghi việc này vào hợp đồng được không ạ?" },
-    { "ai": "L", "t": "你是不相信我吗？", "doc": "Nǐ shì bù xiāngxìn wǒ ma?", "v": "Cô không tin tôi à?" },
-    { "ai": "F", "t": "不是不相信您。我刚来中国，很多事情还不清楚。写清楚了，我们两个人都放心。", "doc": "Bú shì bù xiāngxìn nín. Wǒ gāng lái Zhōngguó, hěn duō shìqing hái bù qīngchu. Xiě qīngchu le, wǒmen liǎng ge rén dōu fàngxīn.", "v": "Không phải tôi không tin ông. Tôi mới sang Trung Quốc, nhiều chuyện còn chưa rõ. Viết rõ ra rồi thì cả hai bên đều yên tâm." },
-    { "ai": "L", "t": "你说得有道理。先把话说清楚，以后就少很多麻烦。", "doc": "Nǐ shuō de yǒu dàolǐ. Xiān bǎ huà shuō qīngchu, yǐhòu jiù shǎo hěn duō máfan.", "v": "Cô nói có lý. Nói rõ với nhau trước thì sau này đỡ bao nhiêu phiền phức." },
-    { "ai": "F", "t": "还有一个问题：我可以在阳台上养花吗？", "doc": "Hái yǒu yí ge wèntí: wǒ kěyǐ zài yángtái shang yǎng huā ma?", "v": "Còn một câu nữa: tôi trồng hoa ngoài ban công được không ạ?" },
-    { "ai": "L", "t": "可以，只要别把水弄到楼下就行。", "doc": "Kěyǐ, zhǐyào bié bǎ shuǐ nòng dào lóu xià jiù xíng.", "v": "Được, miễn đừng để nước chảy xuống tầng dưới là được." },
-    { "ai": "F", "t": "好的！那我决定租这套房子了。", "doc": "Hǎo de! Nà wǒ juédìng zū zhè tào fángzi le.", "v": "Vâng! Vậy tôi quyết định thuê căn này." },
-    { "ai": "L", "t": "好，我们明天上午签合同吧。", "doc": "Hǎo, wǒmen míngtiān shàngwǔ qiān hétong ba.", "v": "Được, sáng mai mình ký hợp đồng nhé." },
-    { "ai": "F", "t": "没问题，明天见！", "doc": "Méi wèntí, míngtiān jiàn!", "v": "Không vấn đề gì, mai gặp ông!" }
+    {
+      "ai": "L",
+      "t": "你好，你就是昨天打电话的阮小姐吧？",
+      "doc": "Nǐ hǎo, nǐ jiù shì zuótiān dǎ diànhuà de Ruǎn xiǎojiě ba?",
+      "v": "Chào cô, cô là cô Nguyễn gọi điện hôm qua đúng không?"
+    },
+    {
+      "ai": "F",
+      "t": "是我。刘先生您好，我想看看这套房子。",
+      "doc": "Shì wǒ. Liú xiānsheng nín hǎo, wǒ xiǎng kànkan zhè tào fángzi.",
+      "v": "Vâng, là tôi. Chào ông Lưu, tôi muốn xem căn hộ này.",
+      "khac": [
+        {
+          "kieu": "tự nhiên hơn",
+          "t": "您好，我是来看房的。",
+          "doc": "Nín hǎo, wǒ shì lái kàn fáng de.",
+          "v": "Chào ông, tôi đến xem nhà ạ."
+        }
+      ],
+      "np": [
+        {
+          "mau": "套 (lượng từ cho căn hộ)",
+          "giai": "套 dùng cho căn hộ, bộ (đồ): 一套房子, 一套衣服. Phòng lẻ dùng 间: 一间卧室.",
+          "vd": "这套房子有三个房间。",
+          "vdDoc": "Zhè tào fángzi yǒu sān ge fángjiān.",
+          "vdV": "Căn hộ này có ba phòng."
+        }
+      ]
+    },
+    {
+      "ai": "L",
+      "t": "请进。这是客厅，那边是卧室和厨房。",
+      "doc": "Qǐng jìn. Zhè shì kètīng, nàbiān shì wòshì hé chúfáng.",
+      "v": "Mời vào. Đây là phòng khách, bên kia là phòng ngủ và bếp."
+    },
+    {
+      "ai": "F",
+      "t": "房间比照片上的大，也很干净。离地铁站远吗？",
+      "doc": "Fángjiān bǐ zhàopiàn shang de dà, yě hěn gānjìng. Lí dìtiě zhàn yuǎn ma?",
+      "v": "Phòng rộng hơn trong ảnh, lại sạch sẽ. Có cách ga tàu điện ngầm xa không ạ?",
+      "np": [
+        {
+          "mau": "A 比 B + tính từ",
+          "giai": "比照片上的大 = rộng hơn (cái) trong ảnh. 的 thay cho danh từ đã nhắc (照片上的房间).",
+          "vd": "实物比网上的好看。",
+          "vdDoc": "Shíwù bǐ wǎng shang de hǎokàn.",
+          "vdV": "Đồ thật đẹp hơn trên mạng."
+        },
+        {
+          "mau": "A 离 B + 远/近",
+          "giai": "离 nói khoảng cách giữa hai nơi: 这儿离地铁站远吗？ Không dùng 从 trong câu này.",
+          "vd": "学校离我家不远。",
+          "vdDoc": "Xuéxiào lí wǒ jiā bù yuǎn.",
+          "vdV": "Trường cách nhà tôi không xa."
+        }
+      ]
+    },
+    {
+      "ai": "L",
+      "t": "不远，走路五分钟就到了。附近还有超市和银行。",
+      "doc": "Bù yuǎn, zǒulù wǔ fēnzhōng jiù dào le. Fùjìn hái yǒu chāoshì hé yínháng.",
+      "v": "Không xa, đi bộ năm phút là tới. Gần đây còn có siêu thị và ngân hàng."
+    },
+    {
+      "ai": "F",
+      "t": "太好了。一个月房租多少钱？",
+      "doc": "Tài hǎo le. Yí ge yuè fángzū duōshao qián?",
+      "v": "Tốt quá. Tiền thuê một tháng bao nhiêu ạ?",
+      "khac": [
+        {
+          "kieu": "ngắn gọn",
+          "t": "房租一个月多少？",
+          "doc": "Fángzū yí ge yuè duōshao?",
+          "v": "Tiền thuê một tháng bao nhiêu?"
+        },
+        {
+          "kieu": "lịch sự",
+          "t": "请问房租是怎么算的？",
+          "doc": "Qǐngwèn fángzū shì zěnme suàn de?",
+          "v": "Cho hỏi tiền thuê tính thế nào ạ?",
+          "ghiChu": "hỏi cả cách trả (theo tháng, theo quý, cọc…)"
+        }
+      ]
+    },
+    {
+      "ai": "L",
+      "t": "三千五，押一付三。",
+      "doc": "Sānqiān wǔ, yā yī fù sān.",
+      "v": "Ba nghìn rưỡi, áp một trả ba."
+    },
+    {
+      "ai": "F",
+      "t": "“押一付三”是什么意思？",
+      "doc": "“Yā yī fù sān” shì shénme yìsi?",
+      "v": "\"Áp một trả ba\" nghĩa là gì ạ?"
+    },
+    {
+      "ai": "L",
+      "t": "就是先交一个月的押金，再交三个月的房租。",
+      "doc": "Jiù shì xiān jiāo yí ge yuè de yājīn, zài jiāo sān ge yuè de fángzū.",
+      "v": "Tức là đặt cọc trước một tháng, rồi trả tiền thuê ba tháng."
+    },
+    {
+      "ai": "F",
+      "t": "明白了。水电费呢？是包括在房租里的吗？",
+      "doc": "Míngbai le. Shuǐdiàn fèi ne? Shì bāokuò zài fángzū li de ma?",
+      "v": "Tôi hiểu rồi. Còn tiền điện nước? Đã tính trong tiền thuê chưa ạ?",
+      "khac": [
+        {
+          "kieu": "văn nói",
+          "t": "房租包水电吗？",
+          "doc": "Fángzū bāo shuǐdiàn ma?",
+          "v": "Tiền nhà có bao điện nước không?"
+        }
+      ],
+      "np": [
+        {
+          "mau": "是……的 (xác nhận chi tiết)",
+          "giai": "是包括在房租里的吗？ — 是…的 bọc phần cần xác nhận, nghe như hỏi lại một chi tiết cụ thể chứ không hỏi chung chung.",
+          "vd": "早饭是包括在房费里的吗？",
+          "vdDoc": "Zǎofàn shì bāokuò zài fángfèi li de ma?",
+          "vdV": "Bữa sáng có tính trong tiền phòng không?"
+        }
+      ]
+    },
+    {
+      "ai": "L",
+      "t": "不包括，水电费你自己交，一般一个月两百块左右。",
+      "doc": "Bù bāokuò, shuǐdiàn fèi nǐ zìjǐ jiāo, yìbān yí ge yuè liǎngbǎi kuài zuǒyòu.",
+      "v": "Chưa, tiền điện nước cô tự trả, thường khoảng hai trăm tệ một tháng."
+    },
+    {
+      "ai": "F",
+      "t": "我可以试一下热水吗？",
+      "doc": "Wǒ kěyǐ shì yíxià rè shuǐ ma?",
+      "v": "Tôi thử nước nóng một chút được không?",
+      "khac": [
+        {
+          "kieu": "lịch sự",
+          "t": "能让我试一下热水吗？",
+          "doc": "Néng ràng wǒ shì yíxià rè shuǐ ma?",
+          "v": "Ông cho tôi thử nước nóng một chút được không?"
+        }
+      ]
+    },
+    {
+      "ai": "L",
+      "t": "当然可以。",
+      "doc": "Dāngrán kěyǐ.",
+      "v": "Tất nhiên rồi."
+    },
+    {
+      "ai": "F",
+      "t": "奇怪，好像没有热水。",
+      "doc": "Qíguài, hǎoxiàng méiyǒu rè shuǐ.",
+      "v": "Lạ nhỉ, hình như không có nước nóng."
+    },
+    {
+      "ai": "L",
+      "t": "哦，热水器可能坏了。别担心，我这个周末就找人来修。",
+      "doc": "Ò, rèshuǐqì kěnéng huài le. Bié dānxīn, wǒ zhège zhōumò jiù zhǎo rén lái xiū.",
+      "v": "Ồ, chắc bình nóng lạnh hỏng rồi. Đừng lo, cuối tuần này tôi gọi người đến sửa ngay."
+    },
+    {
+      "ai": "F",
+      "t": "谢谢。那我们能不能把这件事写进合同里？",
+      "doc": "Xièxie. Nà wǒmen néng bu néng bǎ zhè jiàn shì xiě jìn hétong li?",
+      "v": "Cảm ơn ông. Vậy mình có thể ghi việc này vào hợp đồng được không ạ?",
+      "khac": [
+        {
+          "kieu": "lịch sự",
+          "t": "麻烦您把修热水器的事写进合同，可以吗？",
+          "doc": "Máfan nín bǎ xiū rèshuǐqì de shì xiě jìn hétong, kěyǐ ma?",
+          "v": "Phiền ông ghi việc sửa bình nóng lạnh vào hợp đồng, được không ạ?"
+        },
+        {
+          "kieu": "ngắn gọn",
+          "t": "这个能写进合同吗？",
+          "doc": "Zhège néng xiě jìn hétong ma?",
+          "v": "Cái này ghi vào hợp đồng được không?"
+        }
+      ],
+      "np": [
+        {
+          "mau": "把 + O + V + 进 + nơi",
+          "giai": "把这件事写进合同里 = ghi việc này vào hợp đồng. 进 là bổ ngữ hướng \"vào trong\".",
+          "vd": "把衣服放进箱子里。",
+          "vdDoc": "Bǎ yīfu fàng jìn xiāngzi li.",
+          "vdV": "Cho quần áo vào vali."
+        }
+      ]
+    },
+    {
+      "ai": "L",
+      "t": "你是不相信我吗？",
+      "doc": "Nǐ shì bù xiāngxìn wǒ ma?",
+      "v": "Cô không tin tôi à?"
+    },
+    {
+      "ai": "F",
+      "t": "不是不相信您。我刚来中国，很多事情还不清楚。写清楚了，我们两个人都放心。",
+      "doc": "Bú shì bù xiāngxìn nín. Wǒ gāng lái Zhōngguó, hěn duō shìqing hái bù qīngchu. Xiě qīngchu le, wǒmen liǎng ge rén dōu fàngxīn.",
+      "v": "Không phải tôi không tin ông. Tôi mới sang Trung Quốc, nhiều chuyện còn chưa rõ. Viết rõ ra rồi thì cả hai bên đều yên tâm.",
+      "khac": [
+        {
+          "kieu": "mềm mỏng",
+          "t": "我没有不相信您的意思，只是想写清楚一点儿。",
+          "doc": "Wǒ méiyǒu bù xiāngxìn nín de yìsi, zhǐshì xiǎng xiě qīngchu yìdiǎnr.",
+          "v": "Tôi không có ý không tin ông đâu, chỉ muốn viết rõ ràng hơn chút thôi."
+        }
+      ],
+      "np": [
+        {
+          "mau": "不是不 + V",
+          "giai": "Phủ định kép: 不是不相信 = không phải là không tin — dùng để xoa dịu khi người kia hiểu lầm mình.",
+          "vd": "我不是不想去，是没有时间。",
+          "vdDoc": "Wǒ bú shì bù xiǎng qù, shì méiyǒu shíjiān.",
+          "vdV": "Không phải tôi không muốn đi, mà là không có thời gian."
+        }
+      ]
+    },
+    {
+      "ai": "L",
+      "t": "你说得有道理。先把话说清楚，以后就少很多麻烦。",
+      "doc": "Nǐ shuō de yǒu dàolǐ. Xiān bǎ huà shuō qīngchu, yǐhòu jiù shǎo hěn duō máfan.",
+      "v": "Cô nói có lý. Nói rõ với nhau trước thì sau này đỡ bao nhiêu phiền phức.",
+      "np": [
+        {
+          "mau": "先……，以后就……",
+          "giai": "先 A，以后就 B = làm A trước thì về sau sẽ B — khuyên làm việc phòng ngừa.",
+          "vd": "先把计划做好，以后就不会着急了。",
+          "vdDoc": "Xiān bǎ jìhuà zuò hǎo, yǐhòu jiù bú huì zháojí le.",
+          "vdV": "Lập kế hoạch kỹ trước thì sau này sẽ không phải cuống."
+        }
+      ]
+    },
+    {
+      "ai": "F",
+      "t": "还有一个问题：我可以在阳台上养花吗？",
+      "doc": "Hái yǒu yí ge wèntí: wǒ kěyǐ zài yángtái shang yǎng huā ma?",
+      "v": "Còn một câu nữa: tôi trồng hoa ngoài ban công được không ạ?"
+    },
+    {
+      "ai": "L",
+      "t": "可以，只要别把水弄到楼下就行。",
+      "doc": "Kěyǐ, zhǐyào bié bǎ shuǐ nòng dào lóu xià jiù xíng.",
+      "v": "Được, miễn đừng để nước chảy xuống tầng dưới là được.",
+      "np": [
+        {
+          "mau": "只要……就……",
+          "giai": "只要 A 就 B = chỉ cần A là B: điều kiện tối thiểu. Hay đi với 就行/就可以.",
+          "vd": "只要你努力，就一定能学好。",
+          "vdDoc": "Zhǐyào nǐ nǔlì, jiù yídìng néng xué hǎo.",
+          "vdV": "Chỉ cần bạn cố gắng, nhất định sẽ học tốt."
+        }
+      ]
+    },
+    {
+      "ai": "F",
+      "t": "好的！那我决定租这套房子了。",
+      "doc": "Hǎo de! Nà wǒ juédìng zū zhè tào fángzi le.",
+      "v": "Vâng! Vậy tôi quyết định thuê căn này."
+    },
+    {
+      "ai": "L",
+      "t": "好，我们明天上午签合同吧。",
+      "doc": "Hǎo, wǒmen míngtiān shàngwǔ qiān hétong ba.",
+      "v": "Được, sáng mai mình ký hợp đồng nhé."
+    },
+    {
+      "ai": "F",
+      "t": "没问题，明天见！",
+      "doc": "Méi wèntí, míngtiān jiàn!",
+      "v": "Không vấn đề gì, mai gặp ông!"
+    }
   ],
   "tuVung": [
-    { "chu": "房租", "doc": "fángzū", "nghia": "tiền thuê nhà (phòng tô)", "vd": "这里的房租很贵。" },
-    { "chu": "押金", "doc": "yājīn", "nghia": "tiền đặt cọc (áp kim)", "vd": "搬走的时候，押金会还给你。" },
-    { "chu": "干净", "doc": "gānjìng", "nghia": "sạch sẽ (can tịnh)", "vd": "房间打扫得很干净。" },
-    { "chu": "离", "doc": "lí", "nghia": "cách (khoảng cách tới một nơi) (ly)", "vd": "我家离公司很近。" },
-    { "chu": "银行", "doc": "yínháng", "nghia": "ngân hàng (行 ở đây đọc háng)", "vd": "附近有银行吗？" },
-    { "chu": "包括", "doc": "bāokuò", "nghia": "bao gồm", "vd": "房租包括水电费吗？" },
-    { "chu": "左右", "doc": "zuǒyòu", "nghia": "khoảng, chừng (đặt sau con số)", "vd": "我们七点左右到。" },
-    { "chu": "修", "doc": "xiū", "nghia": "sửa (tu)", "vd": "我的手机坏了，要拿去修。" },
-    { "chu": "合同", "doc": "hétong", "nghia": "hợp đồng (hợp đồng)", "vd": "签合同以前要看清楚。" },
-    { "chu": "清楚", "doc": "qīngchu", "nghia": "rõ ràng (thanh sở)", "vd": "老师讲得很清楚。" },
-    { "chu": "放心", "doc": "fàngxīn", "nghia": "yên tâm (phóng tâm)", "vd": "你放心，我一定准时到。" },
-    { "chu": "只要", "doc": "zhǐyào", "nghia": "chỉ cần, miễn là (thường đi với 就)", "vd": "只要你努力，就一定能学好。" }
+    {
+      "chu": "房租",
+      "doc": "fángzū",
+      "nghia": "tiền thuê nhà (phòng tô)",
+      "vd": "这里的房租很贵。"
+    },
+    {
+      "chu": "押金",
+      "doc": "yājīn",
+      "nghia": "tiền đặt cọc (áp kim)",
+      "vd": "搬走的时候，押金会还给你。"
+    },
+    {
+      "chu": "干净",
+      "doc": "gānjìng",
+      "nghia": "sạch sẽ (can tịnh)",
+      "vd": "房间打扫得很干净。"
+    },
+    {
+      "chu": "离",
+      "doc": "lí",
+      "nghia": "cách (khoảng cách tới một nơi) (ly)",
+      "vd": "我家离公司很近。"
+    },
+    {
+      "chu": "银行",
+      "doc": "yínháng",
+      "nghia": "ngân hàng (行 ở đây đọc háng)",
+      "vd": "附近有银行吗？"
+    },
+    {
+      "chu": "包括",
+      "doc": "bāokuò",
+      "nghia": "bao gồm",
+      "vd": "房租包括水电费吗？"
+    },
+    {
+      "chu": "左右",
+      "doc": "zuǒyòu",
+      "nghia": "khoảng, chừng (đặt sau con số)",
+      "vd": "我们七点左右到。"
+    },
+    {
+      "chu": "修",
+      "doc": "xiū",
+      "nghia": "sửa (tu)",
+      "vd": "我的手机坏了，要拿去修。"
+    },
+    {
+      "chu": "合同",
+      "doc": "hétong",
+      "nghia": "hợp đồng (hợp đồng)",
+      "vd": "签合同以前要看清楚。"
+    },
+    {
+      "chu": "清楚",
+      "doc": "qīngchu",
+      "nghia": "rõ ràng (thanh sở)",
+      "vd": "老师讲得很清楚。"
+    },
+    {
+      "chu": "放心",
+      "doc": "fàngxīn",
+      "nghia": "yên tâm (phóng tâm)",
+      "vd": "你放心，我一定准时到。"
+    },
+    {
+      "chu": "只要",
+      "doc": "zhǐyào",
+      "nghia": "chỉ cần, miễn là (thường đi với 就)",
+      "vd": "只要你努力，就一定能学好。"
+    }
   ],
   "yNghia": "Xin ghi một điều vào hợp đồng không có nghĩa là nghi ngờ người khác. Phương nói rõ lý do bằng sự tôn trọng, và ông chủ nhà hiểu ngay: nói rõ từ đầu là để sau này còn giữ được hòa khí. Rõ ràng chính là một kiểu tử tế.",
   "meo": [
@@ -61,10 +383,55 @@
     "行: 就行 (là được) đọc xíng; 银行 (ngân hàng) đọc háng. 一个月 đọc yí ge yuè (一 trước thanh 4 → thanh 2)."
   ],
   "cauHoi": [
-    { "hoi": "Từ căn hộ đi bộ đến ga tàu điện ngầm mất bao lâu?", "chon": ["Năm phút", "Mười lăm phút", "Nửa tiếng"], "dung": 0, "giai": "走路五分钟就到了." },
-    { "hoi": "\"押一付三\" nghĩa là gì?", "chon": ["Trả ba tháng, được miễn một tháng", "Cọc một tháng, trả trước tiền thuê ba tháng", "Cọc ba tháng, trả một tháng"], "dung": 1, "giai": "Ông Lưu giải thích: 先交一个月的押金，再交三个月的房租." },
-    { "hoi": "Tiền điện nước thì sao?", "chon": ["Đã gồm trong tiền thuê", "Chủ nhà trả", "Người thuê tự trả, khoảng 200 tệ/tháng"], "dung": 2, "giai": "不包括，水电费你自己交，一般一个月两百块左右." },
-    { "hoi": "Vì sao Phương muốn ghi việc sửa bình nóng lạnh vào hợp đồng?", "chon": ["Vì cô không tin ông Lưu", "Vì cô mới sang, viết rõ thì hai bên đều yên tâm", "Vì luật bắt buộc như vậy"], "dung": 1, "giai": "Cô nói: 不是不相信您……写清楚了，我们两个人都放心." },
-    { "hoi": "Chữ 行 trong 银行 đọc là gì?", "chon": ["xíng", "háng", "hàng"], "dung": 1, "giai": "银行 yínháng — 行 đọc háng khi nghĩa là \"hàng, ngành, cửa hiệu\"." }
+    {
+      "hoi": "Từ căn hộ đi bộ đến ga tàu điện ngầm mất bao lâu?",
+      "chon": [
+        "Năm phút",
+        "Mười lăm phút",
+        "Nửa tiếng"
+      ],
+      "dung": 0,
+      "giai": "走路五分钟就到了."
+    },
+    {
+      "hoi": "\"押一付三\" nghĩa là gì?",
+      "chon": [
+        "Trả ba tháng, được miễn một tháng",
+        "Cọc một tháng, trả trước tiền thuê ba tháng",
+        "Cọc ba tháng, trả một tháng"
+      ],
+      "dung": 1,
+      "giai": "Ông Lưu giải thích: 先交一个月的押金，再交三个月的房租."
+    },
+    {
+      "hoi": "Tiền điện nước thì sao?",
+      "chon": [
+        "Đã gồm trong tiền thuê",
+        "Chủ nhà trả",
+        "Người thuê tự trả, khoảng 200 tệ/tháng"
+      ],
+      "dung": 2,
+      "giai": "不包括，水电费你自己交，一般一个月两百块左右."
+    },
+    {
+      "hoi": "Vì sao Phương muốn ghi việc sửa bình nóng lạnh vào hợp đồng?",
+      "chon": [
+        "Vì cô không tin ông Lưu",
+        "Vì cô mới sang, viết rõ thì hai bên đều yên tâm",
+        "Vì luật bắt buộc như vậy"
+      ],
+      "dung": 1,
+      "giai": "Cô nói: 不是不相信您……写清楚了，我们两个人都放心."
+    },
+    {
+      "hoi": "Chữ 行 trong 银行 đọc là gì?",
+      "chon": [
+        "xíng",
+        "háng",
+        "hàng"
+      ],
+      "dung": 1,
+      "giai": "银行 yínháng — 行 đọc háng khi nghĩa là \"hàng, ngành, cửa hiệu\"."
+    }
   ]
 }

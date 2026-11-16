@@ -1,0 +1,422 @@
+{
+  "id": "en-se-b2-04",
+  "nn": "en",
+  "danhMuc": "phan-mem",
+  "cap": "B2",
+  "so": 4,
+  "tieuDe": "Thinking Out Loud",
+  "tieuDeViet": "Nghĩ thành tiếng",
+  "moTa": "Vòng phỏng vấn thuật toán: tìm xem có hai số nào trong danh sách cộng lại bằng một số cho trước. Tuấn hỏi lại yêu cầu trước khi code, nói ra cách giải chậm rồi cải tiến, chạy thử ví dụ, nêu trường hợp biên — và không bao giờ im lặng quá lâu.",
+  "chuDe": "Phỏng vấn kỹ thuật",
+  "bieuTuong": "brain.head.profile",
+  "nguoi": [
+    {
+      "ma": "O",
+      "ten": "Olivia",
+      "giong": "au-nu",
+      "vai": "người phỏng vấn kỹ thuật"
+    },
+    {
+      "ma": "T",
+      "ten": "Tuấn",
+      "giong": "us-nam",
+      "vai": "ứng viên"
+    }
+  ],
+  "loi": [
+    {
+      "ai": "O",
+      "t": "Okay, Tuan, here's the problem. You get a list of numbers and a target number. Return true if any two numbers in the list add up to the target.",
+      "v": "Được rồi Tuấn, đề bài đây. Bạn nhận một danh sách số và một số mục tiêu. Trả về true nếu có hai số bất kỳ trong danh sách cộng lại bằng số mục tiêu."
+    },
+    {
+      "ai": "T",
+      "t": "Okay. Before I start, can I ask a few questions to make sure I understand the problem?",
+      "v": "Vâng. Trước khi bắt đầu, em hỏi vài câu để chắc là em hiểu đúng đề được không ạ?",
+      "khac": [
+        {
+          "kieu": "chuyên nghiệp",
+          "t": "Before I jump in, I'd like to clarify a few things.",
+          "v": "Trước khi bắt tay vào, em muốn làm rõ vài điểm.",
+          "ghiChu": "\"clarify\" = làm rõ — từ khoá trong phỏng vấn kỹ thuật"
+        },
+        {
+          "kieu": "lịch sự",
+          "t": "Would it be alright if I asked a couple of clarifying questions first?",
+          "v": "Em hỏi trước vài câu để làm rõ có được không ạ?"
+        }
+      ]
+    },
+    {
+      "ai": "O",
+      "t": "Please do. That's what I was hoping for.",
+      "v": "Cứ hỏi đi. Tôi đang mong vậy đấy."
+    },
+    {
+      "ai": "T",
+      "t": "Is the list sorted?",
+      "v": "Danh sách đã được sắp xếp chưa ạ?"
+    },
+    {
+      "ai": "O",
+      "t": "No, it can be in any order.",
+      "v": "Chưa, nó có thể theo thứ tự bất kỳ."
+    },
+    {
+      "ai": "T",
+      "t": "Can the numbers be negative?",
+      "v": "Các số có thể âm không ạ?"
+    },
+    {
+      "ai": "O",
+      "t": "Yes.",
+      "v": "Có."
+    },
+    {
+      "ai": "T",
+      "t": "And can I use the same number twice? For example, if the target is ten and there's only one five in the list, does five plus five count?",
+      "v": "Và em có được dùng cùng một số hai lần không? Ví dụ, nếu mục tiêu là mười và trong danh sách chỉ có một số năm, thì năm cộng năm có tính không?"
+    },
+    {
+      "ai": "O",
+      "t": "Good question. No, it has to be two different positions in the list.",
+      "v": "Câu hỏi hay. Không, phải là hai vị trí khác nhau trong danh sách."
+    },
+    {
+      "ai": "T",
+      "t": "Got it. And roughly how long can the list be? A hundred items, or millions?",
+      "v": "Em hiểu rồi. Và danh sách dài khoảng bao nhiêu ạ? Một trăm phần tử, hay hàng triệu?",
+      "khac": [
+        {
+          "kieu": "chuyên nghiệp",
+          "t": "What's the expected input size?",
+          "v": "Kích thước đầu vào dự kiến là bao nhiêu ạ?",
+          "ghiChu": "câu hỏi chuẩn để biết cần thuật toán nhanh tới mức nào"
+        }
+      ]
+    },
+    {
+      "ai": "O",
+      "t": "Assume it could be up to a million.",
+      "v": "Giả sử nó có thể lên tới một triệu.",
+      "np": [
+        {
+          "mau": "Assume (that) + mệnh đề",
+          "giai": "\"Giả sử rằng…\" — cách người phỏng vấn đặt điều kiện. Ứng viên cũng có thể dùng: \"Can I assume the input is valid?\"",
+          "vd": "Can I assume the input is never empty?",
+          "vdV": "Em có thể giả sử đầu vào không bao giờ rỗng không?"
+        }
+      ]
+    },
+    {
+      "ai": "T",
+      "t": "Okay, that tells me a slow solution won't be good enough. I'll start with the simple idea and then improve it, if that's alright.",
+      "v": "Vâng, vậy là một lời giải chậm sẽ không đủ tốt. Em sẽ bắt đầu từ ý tưởng đơn giản rồi cải tiến, nếu chị thấy được.",
+      "np": [
+        {
+          "mau": "…, if that's alright.",
+          "giai": "Gắn cuối câu để xin phép nhẹ nhàng, vẫn chủ động dẫn dắt. Tương tự: \"if that's okay with you\".",
+          "vd": "I'll share my screen, if that's alright.",
+          "vdV": "Em chia sẻ màn hình nhé, nếu chị thấy được."
+        }
+      ],
+      "khac": [
+        {
+          "kieu": "chuyên nghiệp",
+          "t": "I'll start with a brute-force solution and then optimise it.",
+          "v": "Em sẽ bắt đầu bằng lời giải vét cạn rồi tối ưu dần.",
+          "ghiChu": "brute force = vét cạn"
+        }
+      ]
+    },
+    {
+      "ai": "O",
+      "t": "Sure. Talk me through it.",
+      "v": "Được. Bạn giải thích cho tôi từng bước nhé."
+    },
+    {
+      "ai": "T",
+      "t": "The simplest approach is to check every pair: for each number, loop through all the numbers after it and see if any of them adds up to the target.",
+      "v": "Cách đơn giản nhất là kiểm tra mọi cặp: với mỗi số, duyệt qua tất cả các số đứng sau nó và xem có số nào cộng lại bằng mục tiêu không.",
+      "np": [
+        {
+          "mau": "The simplest approach is to + V",
+          "giai": "Mở đầu lời giải bằng cách vét cạn (brute force) cho thấy bạn hiểu bài trước khi tối ưu. \"approach\" = cách tiếp cận.",
+          "vd": "The simplest approach is to sort the list first.",
+          "vdV": "Cách đơn giản nhất là sắp xếp danh sách trước."
+        }
+      ]
+    },
+    {
+      "ai": "T",
+      "t": "That works, but it's O of n squared. With a million items, that's around a trillion... actually, half a trillion comparisons. Way too slow.",
+      "v": "Cách đó chạy được, nhưng là O(n²). Với một triệu phần tử, tức là khoảng một nghìn tỷ… à không, nửa nghìn tỷ phép so sánh. Chậm quá mức.",
+      "khac": [
+        {
+          "kieu": "văn nói",
+          "t": "That'd work, but it's quadratic, so it won't scale to a million.",
+          "v": "Cách đó được, nhưng là bậc hai, nên không chịu nổi một triệu phần tử.",
+          "ghiChu": "\"quadratic\" = bậc hai, cách đọc gọn của O(n²)"
+        }
+      ]
+    },
+    {
+      "ai": "O",
+      "t": "So what would you do instead?",
+      "v": "Vậy bạn sẽ làm gì thay thế?"
+    },
+    {
+      "ai": "T",
+      "t": "Hmm. Let me think for a moment.",
+      "v": "Ừm. Cho em nghĩ một chút.",
+      "khac": [
+        {
+          "kieu": "chuyên nghiệp",
+          "t": "Give me a second to think this through.",
+          "v": "Cho em vài giây để nghĩ cho kỹ.",
+          "ghiChu": "báo trước khi im lặng để người phỏng vấn không nghĩ bạn bị bí"
+        },
+        {
+          "kieu": "tự nhiên hơn",
+          "t": "Hmm, let me think about that.",
+          "v": "Ừm, để em nghĩ đã."
+        }
+      ]
+    },
+    {
+      "ai": "T",
+      "t": "For each number, I know exactly what partner I need: the target minus that number. So the question becomes, \"Have I already seen that partner?\"",
+      "v": "Với mỗi số, em biết chính xác mình cần \"bạn cặp\" nào: mục tiêu trừ đi số đó. Nên câu hỏi trở thành: \"Mình đã gặp bạn cặp đó chưa?\"",
+      "np": [
+        {
+          "mau": "the question becomes…",
+          "giai": "Cách diễn đạt rất hay khi bạn biến đổi bài toán sang dạng dễ hơn — giúp người nghe theo kịp suy nghĩ của bạn.",
+          "vd": "Once the data is sorted, the question becomes where to split it.",
+          "vdV": "Khi dữ liệu đã sắp xếp, câu hỏi trở thành nên chia nó ở đâu."
+        }
+      ]
+    },
+    {
+      "ai": "O",
+      "t": "Keep going.",
+      "v": "Tiếp đi."
+    },
+    {
+      "ai": "T",
+      "t": "If I store every number I've seen in a hash set, checking takes constant time. So I go through the list once, and for each number, I check whether its partner is in the set. If it is, I return true. If not, I add the number to the set and move on.",
+      "v": "Nếu em lưu mọi số đã gặp vào một hash set, việc kiểm tra mất thời gian hằng số. Nên em duyệt danh sách một lần, và với mỗi số, em kiểm tra xem bạn cặp của nó có trong set không. Nếu có, em trả về true. Nếu không, em thêm số đó vào set và đi tiếp.",
+      "np": [
+        {
+          "mau": "check whether + mệnh đề",
+          "giai": "\"kiểm tra xem… hay không\" — whether (hoặc if) mở đầu mệnh đề, không đảo trợ động từ: check whether it is (không phải whether is it).",
+          "vd": "Check whether the user is logged in.",
+          "vdV": "Kiểm tra xem người dùng đã đăng nhập chưa."
+        }
+      ]
+    },
+    {
+      "ai": "T",
+      "t": "That's O of n time, but it uses O of n extra memory for the set. I think that's a fair trade-off here, unless memory is very limited.",
+      "v": "Cách này là O(n) thời gian, nhưng tốn thêm O(n) bộ nhớ cho set. Em nghĩ đây là sự đánh đổi hợp lý, trừ khi bộ nhớ rất hạn chế.",
+      "np": [
+        {
+          "mau": "unless + mệnh đề",
+          "giai": "\"trừ khi\" = if… not. Dùng để nêu ngoại lệ cho lựa chọn của mình — người phỏng vấn đánh giá cao việc bạn tự nêu giới hạn.",
+          "vd": "We'll use the cache, unless the data changes every second.",
+          "vdV": "Mình sẽ dùng bộ nhớ đệm, trừ khi dữ liệu thay đổi mỗi giây."
+        }
+      ]
+    },
+    {
+      "ai": "O",
+      "t": "It isn't. Can you walk me through an example?",
+      "v": "Không hạn chế đâu. Bạn chạy thử một ví dụ cho tôi xem được không?",
+      "khac": [
+        {
+          "kieu": "tự nhiên hơn",
+          "t": "It isn't. Could you trace it through with a quick example?",
+          "v": "Không hạn chế đâu. Bạn chạy tay thử một ví dụ nhanh được không?"
+        }
+      ]
+    },
+    {
+      "ai": "T",
+      "t": "Sure. The list is three, nine, minus two, seven, and the target is five. Three: I need two. It's not in the set, so I add three. Nine: I need minus four. Not there, so I add nine. Minus two: I need seven. Not there yet, so I add it. Seven: I need minus two, and it's in the set. Return true.",
+      "v": "Vâng. Danh sách là ba, chín, âm hai, bảy, và mục tiêu là năm. Ba: em cần hai. Không có trong set, nên thêm ba. Chín: cần âm bốn. Không có, thêm chín. Âm hai: cần bảy. Chưa có, thêm vào. Bảy: cần âm hai, và nó có trong set. Trả về true."
+    },
+    {
+      "ai": "O",
+      "t": "Nice. Any edge cases you'd test?",
+      "v": "Tốt. Bạn sẽ test những trường hợp biên nào?"
+    },
+    {
+      "ai": "T",
+      "t": "An empty list, a list with one number, and the case we talked about, where the target is double a single number. With my approach, the five wouldn't be in the set yet when I check it, so it correctly returns false.",
+      "v": "Danh sách rỗng, danh sách có một số, và trường hợp mình vừa nói, khi mục tiêu bằng hai lần một số duy nhất. Với cách của em, số năm chưa có trong set lúc em kiểm tra nó, nên nó trả về false đúng."
+    },
+    {
+      "ai": "O",
+      "t": "Good. Now, what if the list were already sorted? Would you change anything?",
+      "v": "Tốt. Giờ, nếu danh sách đã được sắp xếp sẵn thì sao? Bạn có thay đổi gì không?",
+      "np": [
+        {
+          "mau": "What if + S + were…?",
+          "giai": "\"Nếu… thì sao?\" cho tình huống giả định: dùng quá khứ, và với be thường dùng were cho mọi ngôi trong văn trang trọng.",
+          "vd": "What if the server were in another country?",
+          "vdV": "Nếu máy chủ nằm ở nước khác thì sao?"
+        }
+      ]
+    },
+    {
+      "ai": "T",
+      "t": "Then I could use two pointers, one at each end, and move them towards each other. Same O of n time, but no extra memory.",
+      "v": "Vậy em có thể dùng hai con trỏ, mỗi con ở một đầu, rồi dịch chúng lại gần nhau. Vẫn O(n) thời gian, nhưng không tốn thêm bộ nhớ."
+    },
+    {
+      "ai": "O",
+      "t": "Excellent. I like that you explained your thinking the whole time. Even when you went quiet, you told me why.",
+      "v": "Xuất sắc. Tôi thích việc bạn giải thích suy nghĩ suốt cả bài. Kể cả khi bạn im lặng, bạn cũng nói cho tôi biết vì sao."
+    },
+    {
+      "ai": "T",
+      "t": "Thanks. Honestly, I used to code in total silence. A friend told me interviewers can't give you points for thoughts they can't hear.",
+      "v": "Cảm ơn chị. Thật lòng thì trước đây em code trong im lặng hoàn toàn. Một người bạn bảo em rằng người phỏng vấn không thể cho điểm những suy nghĩ mà họ không nghe được.",
+      "np": [
+        {
+          "mau": "N + (that) + S + V (mệnh đề quan hệ bỏ that)",
+          "giai": "\"thoughts they can't hear\" = những suy nghĩ mà họ không nghe được. Khi đại từ quan hệ là tân ngữ, có thể bỏ that/which.",
+          "vd": "This is the bug I told you about.",
+          "vdV": "Đây là cái lỗi mình kể với bạn."
+        }
+      ]
+    },
+    {
+      "ai": "O",
+      "t": "Your friend is right. Let's move on to the next question.",
+      "v": "Bạn của bạn nói đúng. Mình chuyển sang câu tiếp theo nhé."
+    }
+  ],
+  "tuVung": [
+    {
+      "chu": "add up to",
+      "doc": "/æd ʌp tuː/",
+      "nghia": "cộng lại bằng",
+      "vd": "The three numbers add up to twenty."
+    },
+    {
+      "chu": "make sure",
+      "doc": "/meɪk ʃʊə/",
+      "nghia": "đảm bảo, chắc chắn",
+      "vd": "Make sure you understand the question first."
+    },
+    {
+      "chu": "roughly",
+      "doc": "/ˈrʌfli/",
+      "nghia": "khoảng, xấp xỉ",
+      "vd": "It takes roughly two seconds."
+    },
+    {
+      "chu": "Talk me through",
+      "doc": "/tɔːk miː θruː/",
+      "nghia": "giải thích cho tôi từng bước",
+      "vd": "Talk me through your design."
+    },
+    {
+      "chu": "approach",
+      "doc": "/əˈprəʊtʃ/",
+      "nghia": "cách tiếp cận",
+      "vd": "Let's try a different approach."
+    },
+    {
+      "chu": "pair",
+      "doc": "/peə/",
+      "nghia": "cặp",
+      "vd": "Check every pair of values."
+    },
+    {
+      "chu": "hash set",
+      "doc": "/hæʃ set/",
+      "nghia": "cấu trúc tập hợp tra cứu rất nhanh (dùng băm)",
+      "vd": "A hash set doesn't store duplicates."
+    },
+    {
+      "chu": "constant time",
+      "doc": "/ˈkɒnstənt taɪm/",
+      "nghia": "thời gian hằng số, O(1)",
+      "vd": "Looking up a key takes constant time."
+    },
+    {
+      "chu": "trade-off",
+      "doc": "/ˈtreɪd ɒf/",
+      "nghia": "sự đánh đổi",
+      "vd": "Speed versus memory is a classic trade-off."
+    },
+    {
+      "chu": "walk me through",
+      "doc": "/wɔːk miː θruː/",
+      "nghia": "dẫn tôi đi qua từng bước",
+      "vd": "Can you walk me through the code?"
+    },
+    {
+      "chu": "edge cases",
+      "doc": "/edʒ ˈkeɪsɪz/",
+      "nghia": "trường hợp biên",
+      "vd": "Don't forget the edge cases, like an empty input."
+    },
+    {
+      "chu": "two pointers",
+      "doc": "/tuː ˈpɔɪntəz/",
+      "nghia": "kỹ thuật hai con trỏ",
+      "vd": "Two pointers work well on sorted arrays."
+    }
+  ],
+  "yNghia": "Trong phỏng vấn kỹ thuật, người ta không chỉ chấm đáp án mà chấm cách bạn nghĩ. Hỏi lại yêu cầu, nói ra cách đơn giản trước rồi cải tiến, tự nêu đánh đổi và trường hợp biên — và khi cần im lặng thì báo trước. Suy nghĩ mà người ta không nghe được thì không được tính điểm.",
+  "meo": [
+    "Trước khi code, hỏi 3–4 câu: sắp xếp chưa? số âm? trùng lặp? kích thước dữ liệu?",
+    "Câu \"mua thời gian\": \"Let me think for a moment.\" / \"Give me a second to think this through.\"",
+    "Nêu đánh đổi: \"That's O(n) time, but it uses O(n) extra memory… unless memory is very limited.\"",
+    "Đọc độ phức tạp: O(n) = \"O of n\", O(n²) = \"O of n squared\", O(log n) = \"O of log n\"."
+  ],
+  "cauHoi": [
+    {
+      "hoi": "Tuấn làm gì trước khi bắt đầu giải?",
+      "chon": [
+        "Viết code ngay",
+        "Hỏi lại các yêu cầu để chắc hiểu đúng đề",
+        "Hỏi xin gợi ý"
+      ],
+      "dung": 1,
+      "giai": "\"Before I start, can I ask a few questions to make sure I understand the problem?\""
+    },
+    {
+      "hoi": "Vì sao cách kiểm tra mọi cặp không đủ tốt?",
+      "chon": [
+        "Vì nó là O(n²), quá chậm với một triệu phần tử",
+        "Vì nó cho kết quả sai",
+        "Vì nó tốn quá nhiều bộ nhớ"
+      ],
+      "dung": 0,
+      "giai": "\"With a million items, that's… half a trillion comparisons. Way too slow.\""
+    },
+    {
+      "hoi": "Cái giá của lời giải dùng hash set là gì?",
+      "chon": [
+        "Chậm hơn cách cũ",
+        "Không xử lý được số âm",
+        "Tốn thêm O(n) bộ nhớ"
+      ],
+      "dung": 2,
+      "giai": "\"…it uses O(n) extra memory for the set.\""
+    },
+    {
+      "hoi": "Nếu danh sách đã sắp xếp, Tuấn đề xuất gì?",
+      "chon": [
+        "Dùng hai con trỏ ở hai đầu, không tốn thêm bộ nhớ",
+        "Sắp xếp lại lần nữa",
+        "Dùng hai hash set"
+      ],
+      "dung": 0,
+      "giai": "\"Then I could use two pointers, one at each end… no extra memory.\""
+    }
+  ]
+}

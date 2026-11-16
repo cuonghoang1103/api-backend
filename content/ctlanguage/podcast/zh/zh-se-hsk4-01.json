@@ -1,0 +1,256 @@
+{
+  "id": "zh-se-hsk4-01",
+  "nn": "zh",
+  "danhMuc": "phan-mem",
+  "cap": "HSK4",
+  "so": 1,
+  "tieuDe": "这个bug怎么复现？",
+  "tieuDeViet": "Bug này tái hiện thế nào?",
+  "moTa": "Lan — tester người Việt — báo một bug \"trang thanh toán không mở được\", nhưng lập trình viên Triệu không tái hiện được. Anh chỉ cho cô cách viết một báo cáo bug mà ai đọc cũng làm lại được: tiêu đề, môi trường, các bước, kết quả mong đợi và thực tế.",
+  "chuDe": "Báo bug",
+  "bieuTuong": "ladybug.fill",
+  "nguoi": [
+    { "ma": "Z", "ten": "Anh Triệu", "giong": "zh-nam", "vai": "lập trình viên front-end" },
+    { "ma": "L", "ten": "Lan", "giong": "zh-nu", "vai": "kỹ sư kiểm thử người Việt" }
+  ],
+  "loi": [
+    {
+      "ai": "Z",
+      "t": "小黎，你提的那个bug我看了，可是在我这边复现不了。",
+      "doc": "Xiǎo Lí, nǐ tí de nàge bug wǒ kàn le, kěshì zài wǒ zhèbiān fùxiàn bu liǎo.",
+      "v": "Lan ơi, cái bug em báo anh xem rồi, nhưng ở máy anh không tái hiện được.",
+      "khac": [
+        { "kieu": "mềm mỏng", "t": "这个bug我这边暂时没复现出来，你能再描述得详细一点儿吗？", "doc": "Zhège bug wǒ zhèbiān zànshí méi fùxiàn chūlai, nǐ néng zài miáoshù de xiángxì yìdiǎnr ma?", "v": "Bug này bên anh tạm thời chưa tái hiện được, em mô tả chi tiết hơn chút được không?", "ghiChu": "\"暂时\" làm câu bớt nặng, không ngụ ý bug không có thật" }
+      ],
+      "np": [
+        { "mau": "V + 不了", "giai": "Bổ ngữ khả năng: không thể làm được (vì điều kiện khách quan). 复现不了 = không tái hiện được; 来不了 = không đến được.", "vd": "今天我有事，去不了。", "vdDoc": "Jīntiān wǒ yǒu shì, qù bu liǎo.", "vdV": "Hôm nay tôi có việc, không đi được." }
+      ]
+    },
+    {
+      "ai": "L",
+      "t": "不会吧？我刚才又试了一次，还是会出现。",
+      "doc": "Bú huì ba? Wǒ gāngcái yòu shì le yí cì, háishi huì chūxiàn.",
+      "v": "Không lẽ nào? Vừa nãy em thử lại một lần, vẫn bị mà.",
+      "khac": [
+        { "kieu": "mềm mỏng", "t": "是吗？那我再确认一下。", "doc": "Shì ma? Nà wǒ zài quèrèn yíxià.", "v": "Vậy ạ? Thế để em kiểm tra lại.", "ghiChu": "tránh nghe như đang cãi lại đồng nghiệp" }
+      ]
+    },
+    {
+      "ai": "Z",
+      "t": "你在描述里只写了“支付页面打不开”，信息太少了。",
+      "doc": "Nǐ zài miáoshù li zhǐ xiě le “zhīfù yèmiàn dǎ bu kāi”, xìnxī tài shǎo le.",
+      "v": "Trong phần mô tả em chỉ viết \"trang thanh toán không mở được\", thông tin ít quá.",
+      "khac": [
+        { "kieu": "mềm mỏng", "t": "描述里的信息可能还不太够，能不能再补充一点儿？", "doc": "Miáoshù li de xìnxī kěnéng hái bú tài gòu, néng bu néng zài bǔchōng yìdiǎnr?", "v": "Thông tin trong mô tả có lẽ chưa đủ lắm, em bổ sung thêm chút được không?", "ghiChu": "góp ý mà không chê thẳng" }
+      ]
+    },
+    {
+      "ai": "Z",
+      "t": "是一直打不开，还是偶尔打不开？用的是什么手机、什么浏览器？",
+      "doc": "Shì yìzhí dǎ bu kāi, háishi ǒu'ěr dǎ bu kāi? Yòng de shì shénme shǒujī, shénme liúlǎnqì?",
+      "v": "Là lúc nào cũng không mở được, hay thỉnh thoảng mới không mở được? Dùng điện thoại gì, trình duyệt gì?",
+      "np": [
+        { "mau": "是 A，还是 B？", "giai": "Câu hỏi lựa chọn \"A hay B\". 还是 dùng trong câu hỏi; trong câu trần thuật thì dùng 或者 (A或者B都可以).", "vd": "你喝茶还是喝咖啡？", "vdDoc": "Nǐ hē chá háishi hē kāfēi?", "vdV": "Bạn uống trà hay cà phê?" }
+      ]
+    },
+    {
+      "ai": "L",
+      "t": "不好意思，是我写得太简单了。那一个好的bug应该包括哪些内容呢？",
+      "doc": "Bù hǎoyìsi, shì wǒ xiě de tài jiǎndān le. Nà yí ge hǎo de bug yīnggāi bāokuò nǎxiē nèiróng ne?",
+      "v": "Xin lỗi anh, là em viết sơ sài quá. Vậy một báo cáo bug tốt nên có những nội dung gì ạ?",
+      "khac": [
+        { "kieu": "lịch sự", "t": "抱歉，是我没写清楚。", "doc": "Bàoqiàn, shì wǒ méi xiě qīngchu.", "v": "Xin lỗi, là em viết chưa rõ.", "ghiChu": "抱歉 trang trọng hơn 不好意思 một chút, hay dùng trong công việc" }
+      ]
+    },
+    {
+      "ai": "Z",
+      "t": "首先，标题要具体，让人一看就知道是什么问题。",
+      "doc": "Shǒuxiān, biāotí yào jùtǐ, ràng rén yí kàn jiù zhīdào shì shénme wèntí.",
+      "v": "Trước hết, tiêu đề phải cụ thể, để người ta nhìn là biết ngay lỗi gì.",
+      "np": [
+        { "mau": "一 A 就 B", "giai": "Vừa A là B xảy ra ngay: 一看就知道 = nhìn là biết. Hai hành động nối nhau rất nhanh.", "vd": "他一下班就回家。", "vdDoc": "Tā yí xiàbān jiù huí jiā.", "vdV": "Anh ấy vừa tan làm là về nhà ngay." }
+      ]
+    },
+    {
+      "ai": "Z",
+      "t": "比如“安卓手机上点击‘确认支付’后页面一直白屏”，就比“页面打不开”清楚多了。",
+      "doc": "Bǐrú “Ānzhuó shǒujī shang diǎnjī ‘quèrèn zhīfù’ hòu yèmiàn yìzhí báipíng”, jiù bǐ “yèmiàn dǎ bu kāi” qīngchu duō le.",
+      "v": "Ví dụ \"Trên điện thoại Android, bấm 'Xác nhận thanh toán' xong trang cứ trắng xoá\" thì rõ hơn \"trang không mở được\" nhiều.",
+      "np": [
+        { "mau": "A 比 B + adj + 多了", "giai": "So sánh hơn nhiều: thêm 多了 hoặc 得多 sau tính từ. Không dùng 很/非常 trong câu chữ 比 (không nói *比B很清楚*).", "vd": "这个版本比上一个快多了。", "vdDoc": "Zhège bǎnběn bǐ shàng yí ge kuài duō le.", "vdV": "Phiên bản này nhanh hơn bản trước nhiều." }
+      ]
+    },
+    {
+      "ai": "L",
+      "t": "明白。然后呢？",
+      "doc": "Míngbai. Ránhòu ne?",
+      "v": "Em hiểu. Tiếp theo thì sao ạ?"
+    },
+    {
+      "ai": "Z",
+      "t": "然后要写清楚环境：系统版本、浏览器版本，还有是测试环境还是线上环境。",
+      "doc": "Ránhòu yào xiě qīngchu huánjìng: xìtǒng bǎnběn, liúlǎnqì bǎnběn, hái yǒu shì cèshì huánjìng háishi xiànshàng huánjìng.",
+      "v": "Sau đó phải ghi rõ môi trường: phiên bản hệ điều hành, phiên bản trình duyệt, và là môi trường test hay môi trường thật."
+    },
+    {
+      "ai": "Z",
+      "t": "最重要的是复现步骤：第一步做什么，第二步做什么，要一步一步写下来。",
+      "doc": "Zuì zhòngyào de shì fùxiàn bùzhòu: dì yī bù zuò shénme, dì èr bù zuò shénme, yào yí bù yí bù xiě xiàlai.",
+      "v": "Quan trọng nhất là các bước tái hiện: bước một làm gì, bước hai làm gì, phải ghi lại từng bước một.",
+      "np": [
+        { "mau": "一 + LT + 一 + LT", "giai": "Lặp \"một… một…\" = lần lượt từng cái: 一步一步 (từng bước), 一个一个 (từng cái).", "vd": "请大家一个一个进来。", "vdDoc": "Qǐng dàjiā yí ge yí ge jìnlai.", "vdV": "Mời mọi người vào lần lượt từng người." },
+        { "mau": "V + 下来 (ghi lại)", "giai": "下来 sau 写/记/拍 = ghi lại, lưu lại để không mất.", "vd": "你把他的电话号码记下来。", "vdDoc": "Nǐ bǎ tā de diànhuà hàomǎ jì xiàlai.", "vdV": "Bạn ghi lại số điện thoại của anh ấy đi." }
+      ]
+    },
+    {
+      "ai": "L",
+      "t": "我懂了。按照我写的步骤，别人也能看到同样的问题，对吧？",
+      "doc": "Wǒ dǒng le. Ànzhào wǒ xiě de bùzhòu, biérén yě néng kàndào tóngyàng de wèntí, duì ba?",
+      "v": "Em hiểu rồi. Làm theo các bước em viết, người khác cũng thấy được đúng lỗi đó, phải không ạ?",
+      "np": [
+        { "mau": "按照 + N", "giai": "按照 = theo, dựa theo (quy định, kế hoạch, bước làm). Trang trọng hơn 按 một chút.", "vd": "请按照说明书安装。", "vdDoc": "Qǐng ànzhào shuōmíngshū ānzhuāng.", "vdV": "Hãy cài đặt theo hướng dẫn." }
+      ]
+    },
+    {
+      "ai": "Z",
+      "t": "对。还要写“预期结果”和“实际结果”：你本来以为会怎么样，结果实际发生了什么。",
+      "doc": "Duì. Hái yào xiě “yùqī jiéguǒ” hé “shíjì jiéguǒ”: nǐ běnlái yǐwéi huì zěnmeyàng, jiéguǒ shíjì fāshēng le shénme.",
+      "v": "Đúng. Còn phải ghi \"kết quả mong đợi\" và \"kết quả thực tế\": đáng lẽ em nghĩ sẽ thế nào, mà thực tế lại xảy ra gì."
+    },
+    {
+      "ai": "L",
+      "t": "那截图和日志也需要吗？",
+      "doc": "Nà jiétú hé rìzhì yě xūyào ma?",
+      "v": "Thế ảnh chụp màn hình và log có cần không ạ?"
+    },
+    {
+      "ai": "Z",
+      "t": "需要，越详细越好。有时候一张截图比一段话还有用。",
+      "doc": "Xūyào, yuè xiángxì yuè hǎo. Yǒu shíhou yì zhāng jiétú bǐ yí duàn huà hái yǒuyòng.",
+      "v": "Cần chứ, càng chi tiết càng tốt. Có khi một tấm ảnh chụp màn hình còn có ích hơn cả một đoạn chữ.",
+      "np": [
+        { "mau": "越 A 越 B", "giai": "Càng A càng B. Hai vế có thể cùng chủ ngữ hoặc khác chủ ngữ.", "vd": "问题发现得越早越好。", "vdDoc": "Wèntí fāxiàn de yuè zǎo yuè hǎo.", "vdV": "Lỗi phát hiện càng sớm càng tốt." }
+      ]
+    },
+    {
+      "ai": "L",
+      "t": "好的。我刚才又看了一下，好像只有在网速比较慢的时候才会出现。",
+      "doc": "Hǎo de. Wǒ gāngcái yòu kàn le yíxià, hǎoxiàng zhǐyǒu zài wǎngsù bǐjiào màn de shíhou cái huì chūxiàn.",
+      "v": "Vâng. Em vừa xem lại, hình như chỉ khi mạng khá chậm thì mới bị.",
+      "np": [
+        { "mau": "只有 A，才 B", "giai": "Chỉ khi A thì B mới xảy ra — A là điều kiện duy nhất. Khác 只要…就… (chỉ cần A là B).", "vd": "只有多练习，才能说得好。", "vdDoc": "Zhǐyǒu duō liànxí, cái néng shuō de hǎo.", "vdV": "Chỉ có luyện nhiều mới nói giỏi được." }
+      ]
+    },
+    {
+      "ai": "Z",
+      "t": "这个信息非常重要！你是怎么发现的？",
+      "doc": "Zhège xìnxī fēicháng zhòngyào! Nǐ shì zěnme fāxiàn de?",
+      "v": "Thông tin này cực kỳ quan trọng! Em phát hiện ra bằng cách nào?"
+    },
+    {
+      "ai": "L",
+      "t": "我是在地铁上测的时候发现的，回到办公室连上WiFi，就正常了。",
+      "doc": "Wǒ shì zài dìtiě shang cè de shíhou fāxiàn de, huí dào bàngōngshì lián shàng WiFi, jiù zhèngcháng le.",
+      "v": "Em phát hiện lúc test trên tàu điện ngầm, về văn phòng kết nối WiFi thì lại bình thường."
+    },
+    {
+      "ai": "Z",
+      "t": "那很可能是接口超时以后，前端没有处理好。",
+      "doc": "Nà hěn kěnéng shì jiēkǒu chāoshí yǐhòu, qiánduān méiyǒu chǔlǐ hǎo.",
+      "v": "Vậy rất có thể là sau khi API bị quá thời gian chờ, front-end không xử lý cho tốt."
+    },
+    {
+      "ai": "Z",
+      "t": "你可以用浏览器的工具把网速调慢，试试能不能稳定复现。",
+      "doc": "Nǐ kěyǐ yòng liúlǎnqì de gōngjù bǎ wǎngsù tiáo màn, shìshi néng bu néng wěndìng fùxiàn.",
+      "v": "Em có thể dùng công cụ của trình duyệt chỉnh mạng chậm lại, thử xem có tái hiện ổn định được không."
+    },
+    {
+      "ai": "L",
+      "t": "好，我试一下，然后把bug重新写一遍，再加上日志。",
+      "doc": "Hǎo, wǒ shì yíxià, ránhòu bǎ bug chóngxīn xiě yí biàn, zài jiā shàng rìzhì.",
+      "v": "Vâng, em thử một chút, rồi viết lại bug từ đầu, kèm thêm log."
+    },
+    {
+      "ai": "L",
+      "t": "对了，这个bug的优先级要定成“高”吗？",
+      "doc": "Duì le, zhège bug de yōuxiānjí yào dìng chéng “gāo” ma?",
+      "v": "À đúng rồi, mức ưu tiên của bug này có nên đặt là \"cao\" không ạ?",
+      "khac": [
+        { "kieu": "mềm mỏng", "t": "这个bug的优先级，你看定多高比较合适？", "doc": "Zhège bug de yōuxiānjí, nǐ kàn dìng duō gāo bǐjiào héshì?", "v": "Mức ưu tiên của bug này, anh thấy đặt bao nhiêu thì hợp?", "ghiChu": "hỏi ý kiến người khác, không tự quyết" }
+      ]
+    },
+    {
+      "ai": "Z",
+      "t": "支付是核心功能，用户付不了钱，影响很大，我觉得应该是最高的。",
+      "doc": "Zhīfù shì héxīn gōngnéng, yònghù fù bu liǎo qián, yǐngxiǎng hěn dà, wǒ juéde yīnggāi shì zuì gāo de.",
+      "v": "Thanh toán là chức năng cốt lõi, người dùng không trả tiền được thì ảnh hưởng rất lớn, anh nghĩ nên để mức cao nhất."
+    },
+    {
+      "ai": "L",
+      "t": "谢谢赵哥，你教了我很多。以后提bug之前，我先站在开发的角度再看一遍。",
+      "doc": "Xièxie Zhào gē, nǐ jiāo le wǒ hěn duō. Yǐhòu tí bug zhīqián, wǒ xiān zhàn zài kāifā de jiǎodù zài kàn yí biàn.",
+      "v": "Cảm ơn anh Triệu, anh dạy em nhiều quá. Sau này trước khi báo bug, em sẽ đứng ở góc nhìn của lập trình viên đọc lại một lượt.",
+      "khac": [
+        { "kieu": "lịch sự", "t": "谢谢您的指点，我以后会注意的。", "doc": "Xièxie nín de zhǐdiǎn, wǒ yǐhòu huì zhùyì de.", "v": "Cảm ơn anh đã chỉ bảo, sau này em sẽ chú ý.", "ghiChu": "với người hướng dẫn, cấp trên" }
+      ],
+      "np": [
+        { "mau": "站在 + ai + 的角度", "giai": "Đứng ở góc độ/góc nhìn của ai đó để suy nghĩ — cụm rất hay dùng trong công việc.", "vd": "站在用户的角度想一想。", "vdDoc": "Zhàn zài yònghù de jiǎodù xiǎng yi xiǎng.", "vdV": "Thử nghĩ từ góc nhìn của người dùng." }
+      ]
+    },
+    {
+      "ai": "Z",
+      "t": "不客气。其实bug写得好，大家都省时间，修得也快。",
+      "doc": "Bú kèqi. Qíshí bug xiě de hǎo, dàjiā dōu shěng shíjiān, xiū de yě kuài.",
+      "v": "Không có gì. Thật ra bug viết tốt thì ai cũng đỡ tốn thời gian, sửa cũng nhanh."
+    }
+  ],
+  "tuVung": [
+    { "chu": "复现", "doc": "fùxiàn", "nghia": "tái hiện (lỗi), reproduce (phục hiện)", "vd": "这个问题很难复现。" },
+    { "chu": "描述", "doc": "miáoshù", "nghia": "mô tả (miêu thuật)", "vd": "请描述一下当时的情况。" },
+    { "chu": "复现步骤", "doc": "fùxiàn bùzhòu", "nghia": "các bước tái hiện (steps to reproduce)", "vd": "复现步骤一定要写清楚。" },
+    { "chu": "预期结果", "doc": "yùqī jiéguǒ", "nghia": "kết quả mong đợi (expected result)", "vd": "预期结果是跳转到首页。" },
+    { "chu": "实际结果", "doc": "shíjì jiéguǒ", "nghia": "kết quả thực tế (actual result)", "vd": "实际结果是页面报错。" },
+    { "chu": "截图", "doc": "jiétú", "nghia": "ảnh chụp màn hình; chụp màn hình (tiệt đồ)", "vd": "你截个图发给我。" },
+    { "chu": "日志", "doc": "rìzhì", "nghia": "log, nhật ký hệ thống (nhật chí)", "vd": "先看一下服务器的日志。" },
+    { "chu": "浏览器", "doc": "liúlǎnqì", "nghia": "trình duyệt (lưu lãm khí)", "vd": "换一个浏览器试试。" },
+    { "chu": "超时", "doc": "chāoshí", "nghia": "quá thời gian chờ, timeout (siêu thời)", "vd": "请求超时了。" },
+    { "chu": "前端", "doc": "qiánduān", "nghia": "front-end (tiền đoan)", "vd": "这是前端的问题。" },
+    { "chu": "优先级", "doc": "yōuxiānjí", "nghia": "mức ưu tiên, priority (ưu tiên cấp)", "vd": "这个bug优先级很高。" },
+    { "chu": "白屏", "doc": "báipíng", "nghia": "màn hình trắng (trang không hiển thị gì)", "vd": "打开以后一直白屏。" }
+  ],
+  "yNghia": "Một báo cáo bug tốt là một bức thư gửi cho người không ngồi cạnh bạn: họ phải làm lại được đúng điều bạn thấy. \"Không mở được\" là cảm giác; \"Android, mạng chậm, bấm Xác nhận → trắng màn hình\" mới là thông tin. Và đôi khi chính lúc viết lại cho rõ, bạn tìm ra nguyên nhân.",
+  "meo": [
+    "Khung báo bug chuẩn: 标题 (tiêu đề cụ thể) · 环境 (môi trường) · 复现步骤 (các bước) · 预期结果 / 实际结果 · 截图/日志 · 优先级.",
+    "Bổ ngữ khả năng với 了 (liǎo): 复现不了, 付不了钱, 去不了 = không thể (vì điều kiện). Chữ 了 ở đây đọc liǎo, không phải le.",
+    "Câu chữ 比 không dùng 很/非常: nói 比…清楚多了 / 清楚得多, không nói *比…很清楚*.",
+    "Góp ý lịch sự cho đồng nghiệp: thêm 可能, 暂时, 能不能…: 描述可能还不太够，能不能再补充一点儿？",
+    "Chữ dễ nhầm: 复现 fùxiàn (tái hiện) ≠ 发现 fāxiàn (phát hiện); 优先级 yōuxiānjí ≠ 级别 jíbié (cấp bậc)."
+  ],
+  "cauHoi": [
+    {
+      "hoi": "Vì sao anh Triệu không tái hiện được bug Lan báo?",
+      "chon": ["Lỗi chỉ có ở iPhone", "Mô tả quá ít thông tin, lỗi chỉ xảy ra khi mạng chậm", "Anh ấy chưa cài ứng dụng"],
+      "dung": 1,
+      "giai": "信息太少了 — và sau đó Lan phát hiện: 只有在网速比较慢的时候才会出现。"
+    },
+    {
+      "hoi": "Theo anh Triệu, phần quan trọng nhất của một báo cáo bug là gì?",
+      "chon": ["Mức ưu tiên", "Tiêu đề thật dài", "Các bước tái hiện"],
+      "dung": 2,
+      "giai": "最重要的是复现步骤。"
+    },
+    {
+      "hoi": "\"预期结果\" nghĩa là gì?",
+      "chon": ["Kết quả mong đợi", "Kết quả thực tế", "Kết quả của lần test trước"],
+      "dung": 0,
+      "giai": "预期 = dự kiến, mong đợi; 实际结果 mới là kết quả thực tế."
+    },
+    {
+      "hoi": "Anh Triệu nghĩ nguyên nhân có thể là gì?",
+      "chon": ["Cơ sở dữ liệu bị mất dữ liệu", "Người dùng nhập sai mật khẩu", "API timeout và front-end không xử lý tốt"],
+      "dung": 2,
+      "giai": "很可能是接口超时以后，前端没有处理好。"
+    }
+  ]
+}

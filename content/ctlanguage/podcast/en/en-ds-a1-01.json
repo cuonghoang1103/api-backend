@@ -1,0 +1,386 @@
+{
+  "id": "en-ds-a1-01",
+  "nn": "en",
+  "danhMuc": "doi-song",
+  "cap": "A1",
+  "so": 4,
+  "tieuDe": "Hi, How Are You?",
+  "tieuDeViet": "Chào, bạn khỏe không?",
+  "moTa": "Thu gặp anh hàng xóm mới người Úc trong thang máy. Những câu chào, giới thiệu, hỏi thăm và tạm biệt cơ bản nhất — kèm câu cứu nguy khi nghe không kịp: \"Sorry, can you say that again?\"",
+  "chuDe": "Chào hỏi",
+  "bieuTuong": "person.2.fill",
+  "nguoi": [
+    {
+      "ma": "T",
+      "ten": "Thu",
+      "giong": "us-nu",
+      "vai": "nhân viên văn phòng"
+    },
+    {
+      "ma": "J",
+      "ten": "Jack",
+      "giong": "au-nam",
+      "vai": "hàng xóm mới"
+    }
+  ],
+  "loi": [
+    {
+      "ai": "T",
+      "t": "Good morning!",
+      "v": "Chào buổi sáng!",
+      "khac": [
+        {
+          "kieu": "thân mật",
+          "t": "Morning!",
+          "v": "Chào buổi sáng!",
+          "ghiChu": "rút gọn, rất hay dùng với hàng xóm, đồng nghiệp"
+        },
+        {
+          "kieu": "văn nói",
+          "t": "Hi there!",
+          "v": "Chào anh!",
+          "ghiChu": "chào bất cứ lúc nào trong ngày"
+        }
+      ]
+    },
+    {
+      "ai": "J",
+      "t": "Morning! Which floor?",
+      "v": "Chào buổi sáng! Chị lên tầng mấy?",
+      "np": [
+        {
+          "mau": "Which + N?",
+          "giai": "Hỏi chọn một trong một nhóm có sẵn (tầng, xe buýt, cổng…). \"What\" dùng khi lựa chọn không giới hạn.",
+          "vd": "Which bus goes to the airport?",
+          "vdV": "Xe buýt nào đi sân bay?"
+        }
+      ]
+    },
+    {
+      "ai": "T",
+      "t": "Five, please. Thank you.",
+      "v": "Tầng năm, cảm ơn anh.",
+      "khac": [
+        {
+          "kieu": "lịch sự",
+          "t": "The fifth floor, please. Thanks a lot.",
+          "v": "Cho tôi lên tầng năm, cảm ơn anh nhiều."
+        },
+        {
+          "kieu": "ngắn gọn",
+          "t": "Five, thanks.",
+          "v": "Năm, cảm ơn."
+        }
+      ]
+    },
+    {
+      "ai": "J",
+      "t": "No problem. I'm on seven. I'm new here — I'm Jack.",
+      "v": "Không có gì. Tôi ở tầng bảy. Tôi mới đến — tôi là Jack.",
+      "np": [
+        {
+          "mau": "I'm = I am",
+          "giai": "Trong văn nói gần như luôn rút gọn: I am → I'm, you are → you're, he is → he's.",
+          "vd": "I'm Thu. I'm from Hue.",
+          "vdV": "Tôi là Thu. Tôi đến từ Huế."
+        }
+      ]
+    },
+    {
+      "ai": "T",
+      "t": "Hi, Jack. I'm Thu. Nice to meet you.",
+      "v": "Chào Jack. Tôi là Thu. Rất vui được gặp anh.",
+      "khac": [
+        {
+          "kieu": "trang trọng",
+          "t": "Hello, Jack. My name is Thu. It's a pleasure to meet you.",
+          "v": "Xin chào Jack. Tôi tên là Thu. Rất hân hạnh được gặp anh.",
+          "ghiChu": "gặp khách hàng, người lớn tuổi"
+        },
+        {
+          "kieu": "thân mật",
+          "t": "Hey, Jack! I'm Thu. Good to meet you.",
+          "v": "Chào Jack! Mình là Thu. Vui được gặp bạn."
+        }
+      ]
+    },
+    {
+      "ai": "J",
+      "t": "Nice to meet you too. How are you today?",
+      "v": "Tôi cũng rất vui được gặp chị. Hôm nay chị thế nào?",
+      "khac": [
+        {
+          "kieu": "thân mật",
+          "t": "How's it going?",
+          "v": "Dạo này sao rồi?",
+          "ghiChu": "giữa bạn bè, người trẻ"
+        },
+        {
+          "kieu": "tự nhiên hơn",
+          "t": "How are you doing?",
+          "v": "Chị khỏe không?"
+        }
+      ],
+      "np": [
+        {
+          "mau": "How are you?",
+          "giai": "Câu hỏi thăm xã giao, không phải hỏi bệnh. Trả lời ngắn (\"Good, thanks\") rồi hỏi lại \"And you?\" là đủ.",
+          "vd": "How are you, Mrs. Hall? — Very well, thank you.",
+          "vdV": "Bà Hall khỏe không ạ? — Rất khỏe, cảm ơn cháu."
+        }
+      ]
+    },
+    {
+      "ai": "T",
+      "t": "I'm fine, thanks. And you?",
+      "v": "Tôi khỏe, cảm ơn. Còn anh?",
+      "khac": [
+        {
+          "kieu": "tự nhiên hơn",
+          "t": "Pretty good, thanks. How about you?",
+          "v": "Khá ổn, cảm ơn anh. Còn anh thì sao?",
+          "ghiChu": "người bản xứ ít nói \"I'm fine, thank you, and you?\" như sách"
+        },
+        {
+          "kieu": "ngắn gọn",
+          "t": "Good, thanks. You?",
+          "v": "Ổn, cảm ơn. Anh thì sao?"
+        }
+      ]
+    },
+    {
+      "ai": "J",
+      "t": "Not bad. A little tired. I moved in yesterday.",
+      "v": "Cũng tạm. Hơi mệt. Tôi mới chuyển đến hôm qua.",
+      "np": [
+        {
+          "mau": "Quá khứ đơn: V-ed",
+          "giai": "Việc đã xong trong quá khứ, hay đi với yesterday, last week. Động từ có quy tắc thêm -ed: move → moved, arrive → arrived.",
+          "vd": "I arrived in Hanoi last week.",
+          "vdV": "Tôi đến Hà Nội tuần trước."
+        }
+      ]
+    },
+    {
+      "ai": "T",
+      "t": "Oh, welcome! Where are you from?",
+      "v": "Ồ, chào mừng anh! Anh đến từ đâu?",
+      "khac": [
+        {
+          "kieu": "tự nhiên hơn",
+          "t": "Oh, welcome! Where are you from originally?",
+          "v": "Ồ, chào mừng anh! Quê gốc anh ở đâu?",
+          "ghiChu": "khi người đó đang sống xa quê"
+        }
+      ]
+    },
+    {
+      "ai": "J",
+      "t": "I'm from Sydney, in Australia. And you? Are you from Hanoi?",
+      "v": "Tôi đến từ Sydney, ở Úc. Còn chị? Chị là người Hà Nội à?"
+    },
+    {
+      "ai": "T",
+      "t": "No, I'm from Hue. But I work here now.",
+      "v": "Không, tôi người Huế. Nhưng giờ tôi làm việc ở đây."
+    },
+    {
+      "ai": "J",
+      "t": "Sorry, from where? Can you say that again?",
+      "v": "Xin lỗi, từ đâu cơ? Chị nói lại được không?",
+      "khac": [
+        {
+          "kieu": "lịch sự",
+          "t": "Sorry, could you repeat that, please?",
+          "v": "Xin lỗi, chị nhắc lại giúp tôi được không?"
+        },
+        {
+          "kieu": "trang trọng",
+          "t": "I'm sorry, I didn't catch that.",
+          "v": "Xin lỗi, tôi nghe chưa rõ."
+        },
+        {
+          "kieu": "ngắn gọn",
+          "t": "Sorry?",
+          "v": "Xin lỗi, gì cơ?",
+          "ghiChu": "lên giọng ở cuối"
+        }
+      ],
+      "np": [
+        {
+          "mau": "Can you + V?",
+          "giai": "Nhờ ai làm gì. \"Could you + V?\" lịch sự hơn một chút, dùng với người lạ.",
+          "vd": "Can you speak more slowly, please?",
+          "vdV": "Anh nói chậm hơn một chút được không?"
+        }
+      ]
+    },
+    {
+      "ai": "T",
+      "t": "Hue. H-U-E. It's a city in the middle of Vietnam.",
+      "v": "Huế. H-U-E. Đó là một thành phố ở miền Trung Việt Nam.",
+      "np": [
+        {
+          "mau": "in the middle of + N",
+          "giai": "Ở giữa (một nơi, một việc). Ở đây = miền Trung.",
+          "vd": "The park is in the middle of the city.",
+          "vdV": "Công viên nằm giữa thành phố."
+        }
+      ]
+    },
+    {
+      "ai": "J",
+      "t": "Ah, Hue! I want to go there. Is it nice?",
+      "v": "À, Huế! Tôi muốn đến đó. Ở đó đẹp không?"
+    },
+    {
+      "ai": "T",
+      "t": "Yes, it's beautiful. And the food is very good. Oh, this is my floor. Have a nice day, Jack!",
+      "v": "Có, đẹp lắm. Đồ ăn cũng rất ngon. Ồ, tới tầng của tôi rồi. Chúc anh một ngày vui vẻ, Jack!",
+      "khac": [
+        {
+          "kieu": "thân mật",
+          "t": "Have a good one!",
+          "v": "Chúc một ngày vui nhé!",
+          "ghiChu": "rất hay nghe ở Mỹ, Úc"
+        },
+        {
+          "kieu": "tự nhiên hơn",
+          "t": "Enjoy your day, Jack!",
+          "v": "Chúc anh một ngày vui, Jack!"
+        }
+      ]
+    },
+    {
+      "ai": "J",
+      "t": "You too! See you around, Thu.",
+      "v": "Chị cũng vậy nhé! Gặp lại chị sau, Thu.",
+      "khac": [
+        {
+          "kieu": "lịch sự",
+          "t": "You too! It was nice meeting you.",
+          "v": "Chị cũng vậy! Rất vui vì được gặp chị.",
+          "ghiChu": "khi chia tay sau lần gặp đầu"
+        },
+        {
+          "kieu": "thân mật",
+          "t": "You too! Catch you later.",
+          "v": "Chị cũng vậy! Gặp sau nhé."
+        }
+      ],
+      "np": [
+        {
+          "mau": "See you around",
+          "giai": "Hẹn gặp lại mà không hẹn giờ cụ thể — hợp với hàng xóm, người cùng toà nhà. \"See you tomorrow\" khi chắc chắn gặp lại.",
+          "vd": "Bye, Linh! See you around.",
+          "vdV": "Tạm biệt Linh! Gặp lại sau nhé."
+        }
+      ]
+    }
+  ],
+  "tuVung": [
+    {
+      "chu": "floor",
+      "doc": "/flɔː(r)/",
+      "nghia": "tầng (nhà)",
+      "vd": "My office is on the third floor."
+    },
+    {
+      "chu": "Not bad",
+      "doc": "/nɒt bæd/",
+      "nghia": "cũng ổn, không tệ",
+      "vd": "\"How are you?\" — \"Not bad, thanks.\""
+    },
+    {
+      "chu": "tired",
+      "doc": "/ˈtaɪəd/",
+      "nghia": "mệt",
+      "vd": "I'm tired after work."
+    },
+    {
+      "chu": "moved in",
+      "doc": "/muːvd ɪn/",
+      "nghia": "đã dọn vào ở (move in)",
+      "vd": "We moved in last month."
+    },
+    {
+      "chu": "welcome",
+      "doc": "/ˈwelkəm/",
+      "nghia": "chào mừng",
+      "vd": "Welcome to Vietnam!"
+    },
+    {
+      "chu": "say that again",
+      "doc": "/seɪ ðæt əˈɡen/",
+      "nghia": "nói lại điều đó",
+      "vd": "Sorry, can you say that again?"
+    },
+    {
+      "chu": "beautiful",
+      "doc": "/ˈbjuːtɪfl/",
+      "nghia": "đẹp",
+      "vd": "Da Nang is a beautiful city."
+    },
+    {
+      "chu": "Have a nice day",
+      "doc": "/hæv ə naɪs deɪ/",
+      "nghia": "chúc một ngày vui vẻ",
+      "vd": "Thank you! Have a nice day."
+    },
+    {
+      "chu": "See you around",
+      "doc": "/siː juː əˈraʊnd/",
+      "nghia": "gặp lại sau (không hẹn trước)",
+      "vd": "Nice to meet you. See you around!"
+    }
+  ],
+  "yNghia": "Một câu chào trong thang máy chỉ mất năm giây nhưng biến người lạ thành hàng xóm. Và nghe không kịp thì cứ hỏi lại — \"Sorry, can you say that again?\" không làm bạn kém đi, nó giúp cuộc nói chuyện tiếp tục.",
+  "meo": [
+    "\"How are you?\" là câu xã giao: trả lời ngắn (\"Good, thanks / Not bad\") rồi hỏi lại \"And you?\" hoặc \"How about you?\".",
+    "Câu cứu nguy khi nghe không kịp: \"Sorry?\" (lên giọng), \"Can you say that again?\", \"Could you speak more slowly, please?\".",
+    "Đánh vần tên Việt cho người nước ngoài: nói tên → đánh vần từng chữ (H-U-E) → giải thích thêm (\"a city in the middle of Vietnam\").",
+    "Tạm biệt: \"Have a nice day!\" — đáp lại \"You too!\"; \"See you around\" khi không hẹn ngày gặp."
+  ],
+  "cauHoi": [
+    {
+      "hoi": "Jack ở tầng mấy?",
+      "chon": [
+        "Tầng năm",
+        "Tầng bảy",
+        "Tầng tám"
+      ],
+      "dung": 1,
+      "giai": "\"I'm on seven.\" — Thu mới là người ở tầng năm."
+    },
+    {
+      "hoi": "Câu nào tự nhiên nhất để đáp lại \"How are you?\"",
+      "chon": [
+        "Pretty good, thanks. How about you?",
+        "I am sick today.",
+        "Yes, I am."
+      ],
+      "dung": 0,
+      "giai": "Đáp ngắn và hỏi lại là cách người bản xứ hay dùng."
+    },
+    {
+      "hoi": "Khi không nghe rõ người kia nói, bạn nên nói gì?",
+      "chon": [
+        "Again!",
+        "What do you say?",
+        "Sorry, could you repeat that, please?"
+      ],
+      "dung": 2,
+      "giai": "\"Sorry, could you repeat that, please?\" vừa lịch sự vừa rõ ý."
+    },
+    {
+      "hoi": "Ai đó chúc \"Have a nice day!\", bạn đáp:",
+      "chon": [
+        "You too!",
+        "Me too!",
+        "Yes, I have."
+      ],
+      "dung": 0,
+      "giai": "\"You too!\" = Bạn cũng vậy nhé. \"Me too\" dùng khi bạn cũng như vậy."
+    }
+  ]
+}

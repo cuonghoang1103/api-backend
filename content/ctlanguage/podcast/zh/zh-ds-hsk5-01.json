@@ -1,0 +1,629 @@
+{
+  "id": "zh-ds-hsk5-01",
+  "nn": "zh",
+  "danhMuc": "doi-song",
+  "cap": "HSK5",
+  "so": 2,
+  "tieuDe": "给面子，是一种体贴",
+  "tieuDeViet": "Giữ thể diện cho người khác là một sự tinh tế",
+  "moTa": "Khánh lần đầu đi ăn cơm nhà bạn người Trung và về nhà cứ thấy mình làm sai điều gì. Chị Lâm — đồng nghiệp người Trung — gỡ từng tình huống: được khen, được gắp thức ăn liên tục, tặng quà bị đẩy lại, quà không được mở ra. Rồi hai người đóng vai để luyện đúng những câu cần nói.",
+  "chuDe": "Phép lịch sự, 面子",
+  "bieuTuong": "gift.fill",
+  "nguoi": [
+    {
+      "ma": "K",
+      "ten": "Khánh",
+      "giong": "zh-nam",
+      "vai": "kỹ sư người Việt làm việc ở Trung Quốc"
+    },
+    {
+      "ma": "L",
+      "ten": "Chị Lâm",
+      "giong": "zh-nu",
+      "vai": "đồng nghiệp người Trung"
+    }
+  ],
+  "loi": [
+    {
+      "ai": "K",
+      "t": "林姐，有件事想请教你。昨天去朋友家做客，我总觉得自己哪里做得不对，可是又说不上来。",
+      "doc": "Lín jiě, yǒu jiàn shì xiǎng qǐngjiào nǐ. Zuótiān qù péngyou jiā zuòkè, wǒ zǒng juéde zìjǐ nǎlǐ zuò de bú duì, kěshì yòu shuō bu shànglái.",
+      "v": "Chị Lâm, em có chuyện muốn hỏi ý chị. Hôm qua đi ăn nhà bạn, em cứ thấy mình làm sai chỗ nào đó, mà lại không nói rõ được.",
+      "khac": [
+        {
+          "kieu": "lịch sự",
+          "t": "林姐，你现在方便吗？想跟你请教点儿事。",
+          "doc": "Lín jiě, nǐ xiànzài fāngbiàn ma? Xiǎng gēn nǐ qǐngjiào diǎnr shì.",
+          "v": "Chị Lâm, giờ chị có tiện không? Em muốn hỏi ý chị chút chuyện.",
+          "ghiChu": "hỏi xem người ta có rảnh trước khi nhờ — rất được quý ở chỗ làm"
+        }
+      ],
+      "np": [
+        {
+          "mau": "请教",
+          "giai": "请教 = xin chỉ giáo, hỏi ý kiến người có kinh nghiệm — khiêm tốn hơn 问. Dùng với đồng nghiệp lớn hơn, thầy cô, người đi trước.",
+          "vd": "这个问题我想请教一下王老师。",
+          "vdDoc": "Zhège wèntí wǒ xiǎng qǐngjiào yíxià Wáng lǎoshī.",
+          "vdV": "Vấn đề này tôi muốn xin ý kiến thầy Vương."
+        },
+        {
+          "mau": "V + 不上来",
+          "giai": "说不上来 = không nói ra được (biết lờ mờ nhưng không diễn đạt nổi). Cùng kiểu: 想不起来 (không nhớ ra), 叫不上名字来 (không gọi được tên).",
+          "vd": "这个味道很熟悉，可是我说不上来是什么。",
+          "vdDoc": "Zhège wèidào hěn shúxī, kěshì wǒ shuō bu shànglái shì shénme.",
+          "vdV": "Mùi vị này rất quen, nhưng tôi không nói ra được là gì."
+        }
+      ]
+    },
+    {
+      "ai": "L",
+      "t": "你慢慢说，是哪方面的事？",
+      "doc": "Nǐ mànmàn shuō, shì nǎ fāngmiàn de shì?",
+      "v": "Em cứ từ từ kể, chuyện về mặt nào?"
+    },
+    {
+      "ai": "K",
+      "t": "第一件，一进门，朋友的妈妈就夸我中文说得地道。我马上说：“没有没有，我说得很差。”",
+      "doc": "Dì yī jiàn, yí jìn mén, péngyou de māma jiù kuā wǒ Zhōngwén shuō de dìdao. Wǒ mǎshàng shuō: “Méiyǒu méiyǒu, wǒ shuō de hěn chà.”",
+      "v": "Chuyện thứ nhất, vừa vào cửa, mẹ bạn em đã khen em nói tiếng Trung chuẩn. Em vội nói: \"Đâu có đâu có, cháu nói kém lắm.\"",
+      "np": [
+        {
+          "mau": "一……就……",
+          "giai": "一 A 就 B = vừa A thì B ngay: 一进门就夸我. Nhấn mạnh hai việc nối tiếp rất nhanh.",
+          "vd": "他一回家就打开电脑。",
+          "vdDoc": "Tā yì huí jiā jiù dǎkāi diànnǎo.",
+          "vdV": "Anh ấy vừa về nhà là mở máy tính."
+        },
+        {
+          "mau": "夸 + người + V 得 + adj",
+          "giai": "Khen ai làm gì thế nào: 夸我中文说得地道. Bổ ngữ trạng thái V 得 + tính từ nằm trong câu khen.",
+          "vd": "老师夸她字写得漂亮。",
+          "vdDoc": "Lǎoshī kuā tā zì xiě de piàoliang.",
+          "vdV": "Cô giáo khen chữ cô ấy viết đẹp."
+        }
+      ]
+    },
+    {
+      "ai": "L",
+      "t": "这很正常啊，中国人听到夸奖，一般也会先谦虚一下。",
+      "doc": "Zhè hěn zhèngcháng a, Zhōngguó rén tīngdào kuājiǎng, yìbān yě huì xiān qiānxū yíxià.",
+      "v": "Bình thường mà, người Trung nghe khen thường cũng khiêm tốn một chút trước đã."
+    },
+    {
+      "ai": "K",
+      "t": "问题是，她一共夸了三次，我就否认了三次。到最后，她的表情有点儿尴尬。",
+      "doc": "Wèntí shì, tā yígòng kuā le sān cì, wǒ jiù fǒurèn le sān cì. Dào zuìhòu, tā de biǎoqíng yǒudiǎnr gāngà.",
+      "v": "Vấn đề là, bác ấy khen tổng cộng ba lần, em cũng phủ nhận ba lần. Đến cuối, nét mặt bác hơi ngượng."
+    },
+    {
+      "ai": "L",
+      "t": "哈哈，谦虚一次是礼貌，一直否认，听起来就像在说她没有眼光。",
+      "doc": "Hāha, qiānxū yí cì shì lǐmào, yìzhí fǒurèn, tīng qǐlai jiù xiàng zài shuō tā méiyǒu yǎnguāng.",
+      "v": "Haha, khiêm tốn một lần là lịch sự, cứ phủ nhận mãi thì nghe như đang bảo bác ấy không biết nhìn người.",
+      "np": [
+        {
+          "mau": "A 是……，B 就……",
+          "giai": "Đặt hai cách làm cạnh nhau để so: 谦虚一次是礼貌，一直否认就… — cùng một hành động, mức độ khác thì ý nghĩa khác.",
+          "vd": "偶尔迟到是意外，天天迟到就是态度问题了。",
+          "vdDoc": "Ǒu'ěr chídào shì yìwài, tiāntiān chídào jiù shì tàidu wèntí le.",
+          "vdV": "Thỉnh thoảng đến muộn là bất ngờ, ngày nào cũng muộn thì là vấn đề thái độ rồi."
+        }
+      ]
+    },
+    {
+      "ai": "L",
+      "t": "比较好的做法是先谦虚，再接受，比如：“哪里哪里，还差得远呢，谢谢阿姨鼓励！”",
+      "doc": "Bǐjiào hǎo de zuòfǎ shì xiān qiānxū, zài jiēshòu, bǐrú: “Nǎlǐ nǎlǐ, hái chà de yuǎn ne, xièxie āyí gǔlì!”",
+      "v": "Cách tốt hơn là khiêm tốn trước, nhận lời khen sau, ví dụ: \"Đâu có đâu có, cháu còn kém xa ạ, cảm ơn bác đã động viên!\""
+    },
+    {
+      "ai": "K",
+      "t": "“谢谢鼓励”，这个说法真好，既谦虚，又不会让对方下不来台。",
+      "doc": "“Xièxie gǔlì”, zhège shuōfǎ zhēn hǎo, jì qiānxū, yòu bú huì ràng duìfāng xià bu lái tái.",
+      "v": "\"Cảm ơn đã động viên\" — cách nói này hay thật, vừa khiêm tốn, lại không làm người kia bẽ mặt.",
+      "np": [
+        {
+          "mau": "既……，又……",
+          "giai": "既 A 又 B = vừa A vừa B (văn phong trang trọng hơn 又…又…). Hai vế cùng chiều, thường là hai ưu điểm.",
+          "vd": "这个办法既省钱，又省时间。",
+          "vdDoc": "Zhège bànfǎ jì shěng qián, yòu shěng shíjiān.",
+          "vdV": "Cách này vừa tiết kiệm tiền, vừa tiết kiệm thời gian."
+        },
+        {
+          "mau": "让 + người + 下不来台",
+          "giai": "下不来台 = bẽ mặt, không có lối thoát trước mặt người khác — chính là \"mất mặt\" (没面子). 让人下不来台 = làm ai bẽ mặt.",
+          "vd": "他当着大家的面批评我，让我下不来台。",
+          "vdDoc": "Tā dāngzhe dàjiā de miàn pīpíng wǒ, ràng wǒ xià bu lái tái.",
+          "vdV": "Anh ấy phê bình tôi trước mặt mọi người, làm tôi bẽ mặt."
+        }
+      ]
+    },
+    {
+      "ai": "K",
+      "t": "第二件，吃饭的时候，阿姨一直给我夹菜。我实在吃不下了，就直接说了一句：“我不要了。”",
+      "doc": "Dì èr jiàn, chī fàn de shíhou, āyí yìzhí gěi wǒ jiā cài. Wǒ shízài chī bu xià le, jiù zhíjiē shuō le yí jù: “Wǒ bú yào le.”",
+      "v": "Chuyện thứ hai, lúc ăn cơm, bác cứ gắp thức ăn cho em mãi. Em thật sự ăn không nổi nữa, nên nói thẳng một câu: \"Cháu không lấy nữa.\"",
+      "np": [
+        {
+          "mau": "V + 不下 (吃不下)",
+          "giai": "吃不下 = ăn không vào nữa (no rồi, không còn chỗ). 下 chỉ khả năng chứa: 坐不下 (ngồi không đủ chỗ), 放不下 (để không vừa).",
+          "vd": "车里坐不下六个人。",
+          "vdDoc": "Chē li zuò bu xià liù ge rén.",
+          "vdV": "Trong xe không ngồi đủ sáu người."
+        }
+      ]
+    },
+    {
+      "ai": "L",
+      "t": "意思没错，只是太直接了。“不要”听起来像是你不喜欢她做的菜。",
+      "doc": "Yìsi méi cuò, zhǐshì tài zhíjiē le. “Bú yào” tīng qǐlai xiàng shì nǐ bù xǐhuan tā zuò de cài.",
+      "v": "Ý thì không sai, chỉ là thẳng quá. \"Không lấy\" nghe như em không thích món bác nấu.",
+      "np": [
+        {
+          "mau": "……，只是……",
+          "giai": "只是 = chỉ là, có điều — làm lời phê bình nhẹ đi: công nhận phần đúng trước, rồi chỉ ra phần chưa ổn.",
+          "vd": "你的想法很好，只是现在还不是时候。",
+          "vdDoc": "Nǐ de xiǎngfǎ hěn hǎo, zhǐshì xiànzài hái bú shì shíhou.",
+          "vdV": "Ý tưởng của bạn rất hay, chỉ là bây giờ chưa phải lúc."
+        }
+      ]
+    },
+    {
+      "ai": "L",
+      "t": "拒绝之前，先把对方的好意接住：先夸菜，再说饱了。",
+      "doc": "Jùjué zhīqián, xiān bǎ duìfāng de hǎoyì jiē zhù: xiān kuā cài, zài shuō bǎo le.",
+      "v": "Trước khi từ chối, hãy đón lấy thiện ý của người ta trước: khen món ăn trước, rồi mới nói mình no."
+    },
+    {
+      "ai": "K",
+      "t": "明白了。我拒绝的是菜，不是人。",
+      "doc": "Míngbai le. Wǒ jùjué de shì cài, bú shì rén.",
+      "v": "Em hiểu rồi. Cái em từ chối là món ăn, không phải con người.",
+      "np": [
+        {
+          "mau": "……的是 A，不是 B",
+          "giai": "Cấu trúc nhấn mạnh: (cái mà) V 的是 A，不是 B. Đưa đối tượng thật sự lên làm tiêu điểm.",
+          "vd": "我担心的是时间，不是钱。",
+          "vdDoc": "Wǒ dānxīn de shì shíjiān, bú shì qián.",
+          "vdV": "Điều tôi lo là thời gian, không phải tiền."
+        }
+      ]
+    },
+    {
+      "ai": "L",
+      "t": "总结得好！第三件呢？",
+      "doc": "Zǒngjié de hǎo! Dì sān jiàn ne?",
+      "v": "Tổng kết hay đấy! Chuyện thứ ba thì sao?"
+    },
+    {
+      "ai": "K",
+      "t": "我带了一盒越南咖啡当礼物。阿姨推了好几次，说：“来就来，还带什么东西！”我差点儿就拿回来了。",
+      "doc": "Wǒ dài le yì hé Yuènán kāfēi dàng lǐwù. Āyí tuī le hǎo jǐ cì, shuō: “Lái jiù lái, hái dài shénme dōngxi!” Wǒ chàdiǎnr jiù ná huílai le.",
+      "v": "Em mang một hộp cà phê Việt Nam làm quà. Bác đẩy lại mấy lần, nói: \"Đến chơi là được rồi, còn mang quà làm gì!\" Em suýt nữa thì cầm về.",
+      "np": [
+        {
+          "mau": "当 (dàng) + danh từ",
+          "giai": "当 đọc dàng khi là \"coi như, làm (vai trò)\": 当礼物 = làm quà, 当真 = coi là thật. Đọc dāng khi là \"làm (nghề), đứng trước\": 当老师, 当着.",
+          "vd": "我把他当好朋友。",
+          "vdDoc": "Wǒ bǎ tā dàng hǎo péngyou.",
+          "vdV": "Tôi coi anh ấy là bạn thân."
+        },
+        {
+          "mau": "差点儿 + V",
+          "giai": "差点儿 = suýt nữa (cuối cùng KHÔNG xảy ra): 差点儿就拿回来了 = suýt cầm về (nhưng không cầm).",
+          "vd": "我今天差点儿迟到。",
+          "vdDoc": "Wǒ jīntiān chàdiǎnr chídào.",
+          "vdV": "Hôm nay tôi suýt đến muộn."
+        }
+      ]
+    },
+    {
+      "ai": "L",
+      "t": "千万别拿回来！推几次是客气，不是真的不要。你坚持一下，她就会收下。",
+      "doc": "Qiānwàn bié ná huílai! Tuī jǐ cì shì kèqi, bú shì zhēn de bú yào. Nǐ jiānchí yíxià, tā jiù huì shōu xià.",
+      "v": "Ngàn lần đừng cầm về! Đẩy lại vài lần là khách sáo, không phải thật sự không muốn nhận. Em cứ nài thêm chút, bác sẽ nhận thôi.",
+      "np": [
+        {
+          "mau": "千万别 + V",
+          "giai": "千万 + 别/不要 = \"nhất định đừng\", lời dặn rất mạnh. Không dùng 千万 trong câu khẳng định thông thường.",
+          "vd": "千万别告诉他！",
+          "vdDoc": "Qiānwàn bié gàosu tā!",
+          "vdV": "Nhất định đừng nói với anh ấy!"
+        }
+      ]
+    },
+    {
+      "ai": "K",
+      "t": "后来她收下了，可是没打开就放在一边了。我还以为她不喜欢呢。",
+      "doc": "Hòulái tā shōu xià le, kěshì méi dǎkāi jiù fàng zài yìbiān le. Wǒ hái yǐwéi tā bù xǐhuan ne.",
+      "v": "Sau đó bác nhận, nhưng không mở ra mà để sang một bên. Em còn tưởng bác không thích.",
+      "np": [
+        {
+          "mau": "以为 (tưởng — mà sai)",
+          "giai": "以为 = tưởng rằng, thường hàm ý điều mình nghĩ là SAI. 认为 = cho rằng (ý kiến, không hàm ý sai).",
+          "vd": "我以为今天是星期五，原来是星期四。",
+          "vdDoc": "Wǒ yǐwéi jīntiān shì xīngqīwǔ, yuánlái shì xīngqīsì.",
+          "vdV": "Tôi tưởng hôm nay thứ Sáu, hóa ra là thứ Năm."
+        }
+      ]
+    },
+    {
+      "ai": "L",
+      "t": "正好相反。很多人觉得当着客人的面拆礼物，好像很在乎礼物值多少钱，所以会等客人走了再打开。",
+      "doc": "Zhènghǎo xiāngfǎn. Hěn duō rén juéde dāngzhe kèrén de miàn chāi lǐwù, hǎoxiàng hěn zàihu lǐwù zhí duōshao qián, suǒyǐ huì děng kèrén zǒu le zài dǎkāi.",
+      "v": "Ngược lại hoàn toàn. Nhiều người cho rằng mở quà ngay trước mặt khách thì giống như rất để ý món quà đáng bao nhiêu tiền, nên sẽ đợi khách về rồi mới mở.",
+      "np": [
+        {
+          "mau": "当着 + người + 的面",
+          "giai": "当着…的面 = ngay trước mặt ai (当 đọc dāng). Hay đi với việc nhạy cảm: 当着大家的面批评, 当着客人的面拆礼物.",
+          "vd": "别当着孩子的面吵架。",
+          "vdDoc": "Bié dāngzhe háizi de miàn chǎojià.",
+          "vdV": "Đừng cãi nhau trước mặt con."
+        }
+      ]
+    },
+    {
+      "ai": "K",
+      "t": "原来这些都是在给对方留面子。",
+      "doc": "Yuánlái zhèxiē dōu shì zài gěi duìfāng liú miànzi.",
+      "v": "Thì ra những điều này đều là để giữ thể diện cho người kia."
+    },
+    {
+      "ai": "L",
+      "t": "对。面子不是虚伪，而是照顾别人的感受。来，我们练一练：我演阿姨，你来回答。",
+      "doc": "Duì. Miànzi bú shì xūwěi, ér shì zhàogù biérén de gǎnshòu. Lái, wǒmen liàn yi liàn: wǒ yǎn āyí, nǐ lái huídá.",
+      "v": "Đúng. Thể diện không phải là giả tạo, mà là quan tâm đến cảm nhận của người khác. Nào, mình luyện thử: chị đóng vai bác, em trả lời.",
+      "np": [
+        {
+          "mau": "不是……，而是……",
+          "giai": "不是 A，而是 B = không phải A mà là B — bác bỏ một cách hiểu sai rồi đưa ra cách hiểu đúng. Văn phong trang trọng hơn 不是…是….",
+          "vd": "成功不是运气，而是坚持。",
+          "vdDoc": "Chénggōng bú shì yùnqi, ér shì jiānchí.",
+          "vdV": "Thành công không phải là may mắn, mà là kiên trì."
+        }
+      ]
+    },
+    {
+      "ai": "L",
+      "t": "“小庆，你的中文说得比我儿子还好！”",
+      "doc": "“Xiǎo Qìng, nǐ de Zhōngwén shuō de bǐ wǒ érzi hái hǎo!”",
+      "v": "\"Tiểu Khánh, cháu nói tiếng Trung còn hay hơn con trai bác!\"",
+      "np": [
+        {
+          "mau": "A 比 B 还 + adj",
+          "giai": "还 trong câu 比 = \"còn… hơn\", nhấn mạnh B vốn đã giỏi/nhiều mà A còn hơn. Dùng nhiều trong lời khen phóng đại.",
+          "vd": "这里的冬天比北京还冷。",
+          "vdDoc": "Zhèlǐ de dōngtiān bǐ Běijīng hái lěng.",
+          "vdV": "Mùa đông ở đây còn lạnh hơn Bắc Kinh."
+        }
+      ]
+    },
+    {
+      "ai": "K",
+      "t": "“哪里哪里，您过奖了。都是小杨教得好！”",
+      "doc": "“Nǎlǐ nǎlǐ, nín guòjiǎng le. Dōu shì Xiǎo Yáng jiāo de hǎo!”",
+      "v": "\"Đâu có ạ, bác quá khen rồi. Toàn nhờ Tiểu Dương dạy giỏi thôi!\"",
+      "khac": [
+        {
+          "kieu": "lịch sự",
+          "t": "谢谢阿姨夸奖，我还得继续努力！",
+          "doc": "Xièxie āyí kuājiǎng, wǒ hái děi jìxù nǔlì!",
+          "v": "Cảm ơn bác đã khen, cháu còn phải cố gắng nhiều!",
+          "ghiChu": "nhận lời khen + khiêm tốn — an toàn với mọi người lớn tuổi"
+        },
+        {
+          "kieu": "thân mật",
+          "t": "真的吗？太开心了，谢谢阿姨！",
+          "doc": "Zhēn de ma? Tài kāixīn le, xièxie āyí!",
+          "v": "Thật ạ? Cháu vui quá, cảm ơn bác!",
+          "ghiChu": "giới trẻ ngày nay cũng nhận thẳng lời khen, nhất là khi đã thân"
+        },
+        {
+          "kieu": "trang trọng",
+          "t": "您过奖了，我要学的还有很多。",
+          "doc": "Nín guòjiǎng le, wǒ yào xué de hái yǒu hěn duō.",
+          "v": "Ngài quá khen, tôi còn nhiều điều phải học.",
+          "ghiChu": "với cấp trên, đối tác, dịp trang trọng"
+        }
+      ],
+      "np": [
+        {
+          "mau": "都是 + người + V 得好",
+          "giai": "Đẩy công lao sang người khác — cách khiêm tốn rất \"Trung Quốc\": 都是老师教得好, 都是大家的功劳.",
+          "vd": "这次成功，都是大家努力的结果。",
+          "vdDoc": "Zhè cì chénggōng, dōu shì dàjiā nǔlì de jiéguǒ.",
+          "vdV": "Thành công lần này đều là kết quả cố gắng của mọi người."
+        }
+      ]
+    },
+    {
+      "ai": "L",
+      "t": "“再吃一块鱼，这是阿姨特意给你做的。”",
+      "doc": "“Zài chī yí kuài yú, zhè shì āyí tèyì gěi nǐ zuò de.”",
+      "v": "\"Ăn thêm miếng cá nữa, món này bác làm riêng cho cháu đấy.\""
+    },
+    {
+      "ai": "K",
+      "t": "“阿姨，这鱼太好吃了！不过我今天真的吃得太饱了，下次来我一定多吃点儿。”",
+      "doc": "“Āyí, zhè yú tài hǎochī le! Búguò wǒ jīntiān zhēn de chī de tài bǎo le, xià cì lái wǒ yídìng duō chī diǎnr.”",
+      "v": "\"Bác ơi, cá ngon quá ạ! Nhưng hôm nay cháu thật sự no quá rồi, lần sau đến cháu nhất định ăn nhiều hơn.\"",
+      "khac": [
+        {
+          "kieu": "văn nói",
+          "t": "够了够了，阿姨您也多吃点儿！",
+          "doc": "Gòu le gòu le, āyí nín yě duō chī diǎnr!",
+          "v": "Đủ rồi đủ rồi, bác cũng ăn nhiều vào ạ!",
+          "ghiChu": "vừa từ chối vừa mời lại — rất tự nhiên trên mâm cơm"
+        },
+        {
+          "kieu": "mềm mỏng",
+          "t": "谢谢阿姨，我自己来就好。",
+          "doc": "Xièxie āyí, wǒ zìjǐ lái jiù hǎo.",
+          "v": "Cảm ơn bác, cháu tự gắp là được rồi ạ.",
+          "ghiChu": "khi vẫn ăn được nhưng muốn tự lấy phần vừa đủ"
+        }
+      ]
+    },
+    {
+      "ai": "L",
+      "t": "“来就来，还带什么礼物！拿回去，拿回去。”",
+      "doc": "“Lái jiù lái, hái dài shénme lǐwù! Ná huíqu, ná huíqu.”",
+      "v": "\"Đến chơi là quý rồi, còn mang quà làm gì! Cầm về đi, cầm về đi.\""
+    },
+    {
+      "ai": "K",
+      "t": "“一点儿小心意，不值什么钱，是我从老家带来的，您一定要收下。”",
+      "doc": "“Yìdiǎnr xiǎo xīnyì, bù zhí shénme qián, shì wǒ cóng lǎojiā dài lái de, nín yídìng yào shōu xià.”",
+      "v": "\"Chút lòng thành thôi ạ, không đáng bao nhiêu tiền, là cháu mang từ quê sang, bác nhất định phải nhận ạ.\"",
+      "khac": [
+        {
+          "kieu": "trang trọng",
+          "t": "小小礼物，不成敬意，请您收下。",
+          "doc": "Xiǎoxiǎo lǐwù, bù chéng jìngyì, qǐng nín shōu xià.",
+          "v": "Món quà nhỏ, chẳng đáng là bao, xin ngài nhận cho.",
+          "ghiChu": "tặng quà đối tác, cấp trên, dịp lễ nghi"
+        },
+        {
+          "kieu": "văn nói",
+          "t": "您就收下吧，不然我拿回去也没人喝。",
+          "doc": "Nín jiù shōu xià ba, bùrán wǒ ná huíqu yě méi rén hē.",
+          "v": "Bác cứ nhận đi ạ, không thì cháu mang về cũng chẳng ai uống.",
+          "ghiChu": "đùa nhẹ để người nhận dễ nhận hơn"
+        }
+      ],
+      "np": [
+        {
+          "mau": "是……的 (nhấn nguồn gốc)",
+          "giai": "是 + nơi/cách + V + 的 nhấn mạnh món quà từ đâu ra: 是我从老家带来的. Nói rõ nguồn gốc làm món quà có ý nghĩa hơn giá tiền.",
+          "vd": "这件衣服是我妈妈亲手做的。",
+          "vdDoc": "Zhè jiàn yīfu shì wǒ māma qīnshǒu zuò de.",
+          "vdV": "Chiếc áo này là mẹ tôi tự tay may."
+        }
+      ]
+    },
+    {
+      "ai": "L",
+      "t": "完美！你看，三句话，没有一句是假的，可是每一句都让人听着舒服。",
+      "doc": "Wánměi! Nǐ kàn, sān jù huà, méiyǒu yí jù shì jiǎ de, kěshì měi yí jù dōu ràng rén tīngzhe shūfu.",
+      "v": "Hoàn hảo! Em xem, ba câu, không câu nào là giả, nhưng câu nào cũng làm người ta nghe dễ chịu.",
+      "np": [
+        {
+          "mau": "没有一 + lượng từ + 是……",
+          "giai": "没有一句是假的 = không có câu nào là giả. Phủ định toàn bộ bằng cách nói \"không có một… nào\".",
+          "vd": "他说的话，没有一句是真的。",
+          "vdDoc": "Tā shuō de huà, méiyǒu yí jù shì zhēn de.",
+          "vdV": "Những gì anh ta nói, không có câu nào là thật."
+        }
+      ]
+    },
+    {
+      "ai": "K",
+      "t": "我以前觉得“给面子”就是说客气话，现在才明白，它其实是一种体贴。",
+      "doc": "Wǒ yǐqián juéde “gěi miànzi” jiù shì shuō kèqi huà, xiànzài cái míngbai, tā qíshí shì yì zhǒng tǐtiē.",
+      "v": "Trước đây em nghĩ \"giữ thể diện\" chỉ là nói lời khách sáo, giờ mới hiểu, thật ra đó là một sự tinh tế, chu đáo."
+    },
+    {
+      "ai": "L",
+      "t": "没错。不过也别太紧张，就算说错了，只要你是真心的，对方也感觉得到。",
+      "doc": "Méi cuò. Búguò yě bié tài jǐnzhāng, jiùsuàn shuō cuò le, zhǐyào nǐ shì zhēnxīn de, duìfāng yě gǎnjué de dào.",
+      "v": "Đúng thế. Nhưng cũng đừng căng thẳng quá, dù có nói sai, chỉ cần em thật lòng, người kia cũng cảm nhận được.",
+      "np": [
+        {
+          "mau": "就算……，也……",
+          "giai": "就算 = cho dù (giả định), vế sau dùng 也: 就算说错了，对方也感觉得到. Văn nói của 即使…也….",
+          "vd": "就算下雨，我们也要去。",
+          "vdDoc": "Jiùsuàn xià yǔ, wǒmen yě yào qù.",
+          "vdV": "Cho dù trời mưa, chúng ta cũng phải đi."
+        },
+        {
+          "mau": "V + 得到 / 不到",
+          "giai": "感觉得到 = cảm nhận được; 看不到 = không nhìn thấy được. Bổ ngữ khả năng với 到.",
+          "vd": "这么远，你看得到吗？",
+          "vdDoc": "Zhème yuǎn, nǐ kàn de dào ma?",
+          "vdV": "Xa thế này, bạn có nhìn thấy được không?"
+        }
+      ]
+    },
+    {
+      "ai": "K",
+      "t": "那我今天就给阿姨发个消息，谢谢她的招待。",
+      "doc": "Nà wǒ jīntiān jiù gěi āyí fā ge xiāoxi, xièxie tā de zhāodài.",
+      "v": "Vậy hôm nay em nhắn tin cho bác luôn, cảm ơn bác đã tiếp đãi.",
+      "khac": [
+        {
+          "kieu": "lịch sự",
+          "t": "阿姨，昨天打扰您了，谢谢您的热情招待！",
+          "doc": "Āyí, zuótiān dǎrǎo nín le, xièxie nín de rèqíng zhāodài!",
+          "v": "Bác ơi, hôm qua đã làm phiền bác, cảm ơn bác đã tiếp đãi nhiệt tình!",
+          "ghiChu": "mẫu tin nhắn cảm ơn sau khi đến nhà người khác"
+        }
+      ]
+    },
+    {
+      "ai": "L",
+      "t": "好主意。记得加一句：“给您添麻烦了。”这句话，中国的长辈最爱听。",
+      "doc": "Hǎo zhǔyi. Jìde jiā yí jù: “Gěi nín tiān máfan le.” Zhè jù huà, Zhōngguó de zhǎngbèi zuì ài tīng.",
+      "v": "Ý hay đấy. Nhớ thêm một câu: \"Đã làm phiền bác rồi.\" Câu này người lớn tuổi ở Trung Quốc thích nghe nhất.",
+      "np": [
+        {
+          "mau": "长 zhǎng (lớn) ↔ cháng (dài)",
+          "giai": "长辈 (bậc trên), 长大 (lớn lên), 校长 — 长 đọc zhǎng. 长城, 很长, 多长时间 — đọc cháng.",
+          "vd": "孩子们都长大了。",
+          "vdDoc": "Háizimen dōu zhǎngdà le.",
+          "vdV": "Bọn trẻ đều lớn cả rồi."
+        }
+      ]
+    }
+  ],
+  "tuVung": [
+    {
+      "chu": "请教",
+      "doc": "qǐngjiào",
+      "nghia": "xin chỉ giáo, hỏi ý kiến (khiêm tốn)",
+      "vd": "我想向您请教一个问题。"
+    },
+    {
+      "chu": "做客",
+      "doc": "zuòkè",
+      "nghia": "làm khách, đến chơi nhà",
+      "vd": "欢迎来我家做客。"
+    },
+    {
+      "chu": "夸",
+      "doc": "kuā",
+      "nghia": "khen (khẩu ngữ của 夸奖)",
+      "vd": "老师夸他聪明。"
+    },
+    {
+      "chu": "地道",
+      "doc": "dìdao",
+      "nghia": "chuẩn, đúng kiểu bản xứ",
+      "vd": "他的北京话很地道。"
+    },
+    {
+      "chu": "谦虚",
+      "doc": "qiānxū",
+      "nghia": "khiêm tốn",
+      "vd": "他是一个很谦虚的人。"
+    },
+    {
+      "chu": "尴尬",
+      "doc": "gāngà",
+      "nghia": "ngượng, khó xử",
+      "vd": "气氛有点儿尴尬。"
+    },
+    {
+      "chu": "眼光",
+      "doc": "yǎnguāng",
+      "nghia": "con mắt, khả năng nhìn nhận",
+      "vd": "你的眼光真好。"
+    },
+    {
+      "chu": "下不来台",
+      "doc": "xià bu lái tái",
+      "nghia": "bẽ mặt, không có lối thoát trước người khác",
+      "vd": "别让他下不来台。"
+    },
+    {
+      "chu": "夹菜",
+      "doc": "jiā cài",
+      "nghia": "gắp thức ăn (cho người khác)",
+      "vd": "奶奶一直给我夹菜。"
+    },
+    {
+      "chu": "好意",
+      "doc": "hǎoyì",
+      "nghia": "thiện ý, lòng tốt",
+      "vd": "谢谢你的好意。"
+    },
+    {
+      "chu": "在乎",
+      "doc": "zàihu",
+      "nghia": "để ý, coi trọng",
+      "vd": "我不在乎别人怎么说。"
+    },
+    {
+      "chu": "面子",
+      "doc": "miànzi",
+      "nghia": "thể diện, sĩ diện",
+      "vd": "给他一点儿面子吧。"
+    },
+    {
+      "chu": "小心意",
+      "doc": "xiǎo xīnyì",
+      "nghia": "chút lòng thành (khi tặng quà)",
+      "vd": "一点儿小心意，请收下。"
+    },
+    {
+      "chu": "体贴",
+      "doc": "tǐtiē",
+      "nghia": "chu đáo, tinh tế quan tâm người khác",
+      "vd": "他对妻子很体贴。"
+    },
+    {
+      "chu": "长辈",
+      "doc": "zhǎngbèi",
+      "nghia": "bậc trên, người lớn tuổi trong nhà",
+      "vd": "过年要给长辈拜年。"
+    }
+  ],
+  "yNghia": "\"Thể diện\" thường bị hiểu là sĩ diện, giả lả. Nhưng ba câu Khánh luyện không câu nào là nói dối: nhận lời khen mà nhường công cho người khác, từ chối món ăn mà vẫn khen người nấu, tặng quà mà nói về tấm lòng thay vì giá tiền. Giữ thể diện cho người khác, nói cho cùng, là chọn cách nói để người đối diện thấy mình được tôn trọng — và điều đó đúng ở mọi nền văn hóa.",
+  "meo": [
+    "Được khen: khiêm tốn MỘT lần rồi nhận (哪里哪里，谢谢鼓励 / 您过奖了). Phủ nhận mãi sẽ thành chê con mắt của người khen.",
+    "Từ chối món ăn: khen món trước, nói no sau (太好吃了，不过我真的吃饱了). Tránh nói trống 我不要了.",
+    "Tặng quà: người nhận đẩy lại vài lần là phép lịch sự — hãy nài thêm (一点儿小心意，您一定要收下). Người lớn tuổi thường không mở quà trước mặt khách; giới trẻ ngày nay thì có khi mở luôn.",
+    "Chữ đa âm trong bài: 当 dàng (当礼物) ↔ dāng (当着…的面); 长 zhǎng (长辈) ↔ cháng (很长); 得 děi (我还得努力) ↔ de (说得好)."
+  ],
+  "cauHoi": [
+    {
+      "hoi": "Vì sao mẹ của bạn Khánh tỏ ra ngượng?",
+      "chon": [
+        "Vì Khánh đến muộn",
+        "Vì bác khen ba lần và Khánh phủ nhận cả ba lần",
+        "Vì Khánh không ăn món của bác"
+      ],
+      "dung": 1,
+      "giai": "她一共夸了三次，我就否认了三次……她的表情有点儿尴尬。"
+    },
+    {
+      "hoi": "Theo chị Lâm, cách từ chối khi được gắp thức ăn tốt nhất là gì?",
+      "chon": [
+        "Nói thẳng 我不要了",
+        "Im lặng để thức ăn lại trong bát",
+        "Khen món ăn trước, rồi nói mình đã no"
+      ],
+      "dung": 2,
+      "giai": "先夸菜，再说饱了。"
+    },
+    {
+      "hoi": "Vì sao nhiều người Trung không mở quà ngay trước mặt khách?",
+      "chon": [
+        "Vì họ không thích quà",
+        "Vì mở ngay trông như rất để ý món quà đáng bao nhiêu tiền",
+        "Vì phải đợi đến Tết mới được mở"
+      ],
+      "dung": 1,
+      "giai": "当着客人的面拆礼物，好像很在乎礼物值多少钱。"
+    },
+    {
+      "hoi": "Theo chị Lâm, \"面子\" thật ra là gì?",
+      "chon": [
+        "Là sự giả tạo để được lòng người khác",
+        "Là quan tâm đến cảm nhận của người khác",
+        "Là khoe khoang thành tích"
+      ],
+      "dung": 1,
+      "giai": "面子不是虚伪，而是照顾别人的感受。"
+    },
+    {
+      "hoi": "\"带了一盒咖啡当礼物\" — chữ 当 đọc thế nào?",
+      "chon": [
+        "dāng",
+        "dàng",
+        "dǎng"
+      ],
+      "dung": 1,
+      "giai": "当 nghĩa \"coi như, làm (vai trò)\" đọc dàng; 当着…的面 mới đọc dāng."
+    }
+  ]
+}

@@ -1,0 +1,471 @@
+{
+  "id": "zh-ds-hsk2-01",
+  "nn": "zh",
+  "danhMuc": "doi-song",
+  "cap": "HSK2",
+  "so": 3,
+  "tieuDe": "服务员，买单！",
+  "tieuDeViet": "Em ơi, tính tiền!",
+  "moTa": "Đức đi ăn một mình ở quán cơm nhà làm. Quét mã trên bàn để gọi món, nhờ giới thiệu món, dặn không bỏ rau mùi, báo mang nhầm món, gọi tính tiền, quét mã trả tiền và xin gói đồ ăn thừa mang về.",
+  "chuDe": "Ăn uống, thanh toán",
+  "bieuTuong": "qrcode",
+  "nguoi": [
+    {
+      "ma": "D",
+      "ten": "Đức",
+      "giong": "zh-nam",
+      "vai": "sinh viên Việt Nam"
+    },
+    {
+      "ma": "F",
+      "ten": "Nhân viên",
+      "giong": "zh-nu",
+      "vai": "nhân viên phục vụ"
+    }
+  ],
+  "loi": [
+    {
+      "ai": "F",
+      "t": "欢迎光临！请问几位？",
+      "doc": "Huānyíng guānglín! Qǐngwèn jǐ wèi?",
+      "v": "Xin chào quý khách! Anh đi mấy người ạ?",
+      "np": [
+        {
+          "mau": "几位？",
+          "giai": "位 là lượng từ lịch sự cho người (thay 个). Nhân viên hỏi 几位？; mình trả lời 一位 / 两位 / 就我一个人.",
+          "vd": "我们三位。",
+          "vdDoc": "Wǒmen sān wèi.",
+          "vdV": "Chúng tôi ba người."
+        }
+      ]
+    },
+    {
+      "ai": "D",
+      "t": "一位。",
+      "doc": "Yí wèi.",
+      "v": "Một người.",
+      "khac": [
+        {
+          "kieu": "tự nhiên hơn",
+          "t": "就我一个人。",
+          "doc": "Jiù wǒ yí ge rén.",
+          "v": "Chỉ mình tôi thôi."
+        }
+      ]
+    },
+    {
+      "ai": "F",
+      "t": "这边请。桌子上有二维码，您扫码就可以点菜。",
+      "doc": "Zhèbiān qǐng. Zhuōzi shang yǒu èrwéimǎ, nín sǎo mǎ jiù kěyǐ diǎn cài.",
+      "v": "Mời anh bên này. Trên bàn có mã QR, anh quét mã là gọi món được.",
+      "np": [
+        {
+          "mau": "……就可以……",
+          "giai": "Điều kiện + 就可以 + V = \"chỉ cần… là được…\". 就 nối hai vế, nhấn mạnh đơn giản, dễ dàng.",
+          "vd": "你在这儿等我就可以了。",
+          "vdDoc": "Nǐ zài zhèr děng wǒ jiù kěyǐ le.",
+          "vdV": "Bạn chỉ cần đợi tôi ở đây là được."
+        }
+      ]
+    },
+    {
+      "ai": "D",
+      "t": "好的。我第一次来，菜太多了，你能给我介绍一下吗？",
+      "doc": "Hǎo de. Wǒ dì yī cì lái, cài tài duō le, nǐ néng gěi wǒ jièshào yíxià ma?",
+      "v": "Được. Tôi đến lần đầu, món nhiều quá, em giới thiệu giúp tôi được không?",
+      "khac": [
+        {
+          "kieu": "lịch sự",
+          "t": "麻烦你给我推荐一下。",
+          "doc": "Máfan nǐ gěi wǒ tuījiàn yíxià.",
+          "v": "Phiền em gợi ý giúp tôi vài món.",
+          "ghiChu": "麻烦你 + việc nhờ = câu nhờ vả lịch sự chuẩn"
+        },
+        {
+          "kieu": "ngắn gọn",
+          "t": "你们这儿什么好吃？",
+          "doc": "Nǐmen zhèr shénme hǎochī?",
+          "v": "Ở đây món gì ngon?",
+          "ghiChu": "hỏi nhanh, thân thiện, ở quán bình dân"
+        }
+      ],
+      "np": [
+        {
+          "mau": "第 + số + 次",
+          "giai": "第一次 = lần đầu tiên, 第二次 = lần thứ hai. 第 đứng trước số để chỉ thứ tự.",
+          "vd": "这是我第二次来北京。",
+          "vdDoc": "Zhè shì wǒ dì èr cì lái Běijīng.",
+          "vdV": "Đây là lần thứ hai tôi đến Bắc Kinh."
+        },
+        {
+          "mau": "给 + người + V + 一下",
+          "giai": "给 + người = làm cho ai; V + 一下 làm động tác \"một chút\", nghe nhẹ nhàng hơn khi nhờ vả.",
+          "vd": "你给我看一下。",
+          "vdDoc": "Nǐ gěi wǒ kàn yíxià.",
+          "vdV": "Cho tôi xem một chút."
+        }
+      ]
+    },
+    {
+      "ai": "F",
+      "t": "我们这儿的红烧肉很有名，西红柿炒鸡蛋也不错。",
+      "doc": "Wǒmen zhèr de hóngshāoròu hěn yǒumíng, xīhóngshì chǎo jīdàn yě búcuò.",
+      "v": "Thịt kho tàu ở quán em nổi tiếng lắm, trứng xào cà chua cũng ngon."
+    },
+    {
+      "ai": "D",
+      "t": "好，就要这两个。再来一碗米饭。",
+      "doc": "Hǎo, jiù yào zhè liǎng ge. Zài lái yì wǎn mǐfàn.",
+      "v": "Được, lấy hai món đó. Cho thêm một bát cơm.",
+      "khac": [
+        {
+          "kieu": "mềm mỏng",
+          "t": "那我点这两个吧。",
+          "doc": "Nà wǒ diǎn zhè liǎng ge ba.",
+          "v": "Vậy tôi gọi hai món này nhé."
+        },
+        {
+          "kieu": "văn nói",
+          "t": "这两个，再加一碗米饭。",
+          "doc": "Zhè liǎng ge, zài jiā yì wǎn mǐfàn.",
+          "v": "Hai món này, thêm một bát cơm.",
+          "ghiChu": "nói nhanh khi gọi món, rất phổ biến"
+        }
+      ],
+      "np": [
+        {
+          "mau": "来 + số lượng + món (gọi món)",
+          "giai": "Khi gọi đồ ăn uống, 来 = \"cho (tôi)…\": 来一碗米饭, 来两瓶水. 再来 = gọi thêm.",
+          "vd": "再来一瓶啤酒。",
+          "vdDoc": "Zài lái yì píng píjiǔ.",
+          "vdV": "Cho thêm một chai bia."
+        }
+      ]
+    },
+    {
+      "ai": "F",
+      "t": "好的。有没有不吃的东西？",
+      "doc": "Hǎo de. Yǒu méiyǒu bù chī de dōngxi?",
+      "v": "Vâng ạ. Anh có kiêng món gì không?",
+      "np": [
+        {
+          "mau": "有没有……？",
+          "giai": "Câu hỏi chính phản: 有没有 = có… không? (giống 有…吗？). Cùng kiểu: 是不是, 好不好, 去不去.",
+          "vd": "你有没有时间？",
+          "vdDoc": "Nǐ yǒu méiyǒu shíjiān?",
+          "vdV": "Bạn có thời gian không?"
+        }
+      ]
+    },
+    {
+      "ai": "D",
+      "t": "我不吃香菜，请不要放香菜。",
+      "doc": "Wǒ bù chī xiāngcài, qǐng bú yào fàng xiāngcài.",
+      "v": "Tôi không ăn rau mùi, làm ơn đừng bỏ rau mùi.",
+      "khac": [
+        {
+          "kieu": "tự nhiên hơn",
+          "t": "麻烦别放香菜，谢谢！",
+          "doc": "Máfan bié fàng xiāngcài, xièxie!",
+          "v": "Phiền em đừng bỏ rau mùi nhé, cảm ơn!"
+        },
+        {
+          "kieu": "ngắn gọn",
+          "t": "不要香菜！",
+          "doc": "Bú yào xiāngcài!",
+          "v": "Không rau mùi!",
+          "ghiChu": "nói nhanh với nhân viên, quán đông — người Trung cũng nói vậy"
+        }
+      ]
+    },
+    {
+      "ai": "F",
+      "t": "没问题，我记下了。",
+      "doc": "Méi wèntí, wǒ jì xià le.",
+      "v": "Không vấn đề gì, em ghi lại rồi ạ."
+    },
+    {
+      "ai": "D",
+      "t": "服务员，这个菜好像不是我点的。",
+      "doc": "Fúwùyuán, zhège cài hǎoxiàng bú shì wǒ diǎn de.",
+      "v": "Em ơi, món này hình như không phải tôi gọi.",
+      "khac": [
+        {
+          "kieu": "mềm mỏng",
+          "t": "不好意思，我没点这个菜。",
+          "doc": "Bù hǎoyìsi, wǒ méi diǎn zhège cài.",
+          "v": "Xin lỗi, tôi không gọi món này."
+        },
+        {
+          "kieu": "văn nói",
+          "t": "你好，这个是不是上错了？",
+          "doc": "Nǐ hǎo, zhège shì bu shì shàng cuò le?",
+          "v": "Em ơi, món này có phải mang nhầm không?",
+          "ghiChu": "gọi nhân viên bằng 你好 cũng rất phổ biến hiện nay"
+        }
+      ],
+      "np": [
+        {
+          "mau": "好像 + câu",
+          "giai": "好像 = \"hình như\", làm lời phàn nàn bớt gay gắt — mình không khẳng định người ta sai.",
+          "vd": "他好像不在家。",
+          "vdDoc": "Tā hǎoxiàng bú zài jiā.",
+          "vdV": "Hình như anh ấy không có nhà."
+        },
+        {
+          "mau": "是 + 我 + V + 的",
+          "giai": "我点的 = (món) mà tôi gọi. 的 sau cụm động từ biến nó thành \"cái mà…\": 我买的, 妈妈做的.",
+          "vd": "这是妈妈做的。",
+          "vdDoc": "Zhè shì māma zuò de.",
+          "vdV": "Cái này là mẹ làm."
+        }
+      ]
+    },
+    {
+      "ai": "F",
+      "t": "啊，不好意思！这是八号桌的。您的菜马上就来。",
+      "doc": "À, bù hǎoyìsi! Zhè shì bā hào zhuō de. Nín de cài mǎshàng jiù lái.",
+      "v": "A, em xin lỗi! Món này của bàn số tám. Món của anh sẽ có ngay ạ.",
+      "np": [
+        {
+          "mau": "马上就 + V",
+          "giai": "马上 = ngay lập tức; 马上就来 = có ngay, tới ngay. Câu nhân viên quán hay nói nhất.",
+          "vd": "我马上就到。",
+          "vdDoc": "Wǒ mǎshàng jiù dào.",
+          "vdV": "Tôi tới ngay đây."
+        }
+      ]
+    },
+    {
+      "ai": "F",
+      "t": "您的红烧肉来了，请慢用。",
+      "doc": "Nín de hóngshāoròu lái le, qǐng màn yòng.",
+      "v": "Thịt kho của anh đây ạ, mời anh dùng bữa."
+    },
+    {
+      "ai": "D",
+      "t": "真好吃！可是太多了，我吃不完。",
+      "doc": "Zhēn hǎochī! Kěshì tài duō le, wǒ chī bu wán.",
+      "v": "Ngon thật! Nhưng nhiều quá, tôi ăn không hết.",
+      "np": [
+        {
+          "mau": "V + 不完 / V + 得完",
+          "giai": "Bổ ngữ khả năng: 吃不完 = ăn không hết (không có khả năng), 吃得完 = ăn hết được. Tương tự 做不完, 看不完.",
+          "vd": "今天的作业太多，我做不完。",
+          "vdDoc": "Jīntiān de zuòyè tài duō, wǒ zuò bu wán.",
+          "vdV": "Bài tập hôm nay nhiều quá, tôi làm không hết."
+        }
+      ]
+    },
+    {
+      "ai": "D",
+      "t": "服务员，买单！",
+      "doc": "Fúwùyuán, mǎidān!",
+      "v": "Em ơi, tính tiền!",
+      "khac": [
+        {
+          "kieu": "lịch sự",
+          "t": "你好，麻烦结一下账。",
+          "doc": "Nǐ hǎo, máfan jié yíxià zhàng.",
+          "v": "Em ơi, phiền em tính tiền giúp.",
+          "ghiChu": "lịch sự, dùng được ở nhà hàng sang"
+        },
+        {
+          "kieu": "ngắn gọn",
+          "t": "结账！",
+          "doc": "Jiézhàng!",
+          "v": "Tính tiền!",
+          "ghiChu": "quán bình dân, nói to gọi nhân viên"
+        }
+      ]
+    },
+    {
+      "ai": "F",
+      "t": "好的。一共八十六块。您可以扫桌子上的码，也可以扫我这儿的。",
+      "doc": "Hǎo de. Yígòng bāshíliù kuài. Nín kěyǐ sǎo zhuōzi shang de mǎ, yě kěyǐ sǎo wǒ zhèr de.",
+      "v": "Vâng ạ. Tổng cộng tám mươi sáu tệ. Anh có thể quét mã trên bàn, cũng có thể quét mã ở chỗ em.",
+      "np": [
+        {
+          "mau": "可以……，也可以……",
+          "giai": "Đưa hai lựa chọn đều được: \"có thể…, cũng có thể…\".",
+          "vd": "你可以坐地铁，也可以打车。",
+          "vdDoc": "Nǐ kěyǐ zuò dìtiě, yě kěyǐ dǎchē.",
+          "vdV": "Bạn có thể đi tàu điện ngầm, cũng có thể đi taxi."
+        }
+      ]
+    },
+    {
+      "ai": "D",
+      "t": "我扫好了，你看一下。",
+      "doc": "Wǒ sǎo hǎo le, nǐ kàn yíxià.",
+      "v": "Tôi quét xong rồi, em xem giúp nhé.",
+      "khac": [
+        {
+          "kieu": "văn nói",
+          "t": "付好了，你看看到了没有。",
+          "doc": "Fù hǎo le, nǐ kànkan dào le méiyǒu.",
+          "v": "Trả rồi đó, em xem tiền vào chưa.",
+          "ghiChu": "nói khi trả tiền qua điện thoại, nhờ người bán kiểm tra"
+        }
+      ],
+      "np": [
+        {
+          "mau": "V + 好了",
+          "giai": "好 sau động từ = làm xong, làm ổn: 扫好了 (quét xong), 准备好了 (chuẩn bị xong), 写好了.",
+          "vd": "饭做好了，来吃吧！",
+          "vdDoc": "Fàn zuò hǎo le, lái chī ba!",
+          "vdV": "Cơm nấu xong rồi, ra ăn đi!"
+        }
+      ]
+    },
+    {
+      "ai": "F",
+      "t": "收到了，谢谢！剩下的菜要打包吗？",
+      "doc": "Shōudào le, xièxie! Shèngxià de cài yào dǎbāo ma?",
+      "v": "Nhận được rồi, cảm ơn anh! Đồ ăn còn lại anh có muốn gói mang về không?"
+    },
+    {
+      "ai": "D",
+      "t": "要，麻烦你帮我打包。",
+      "doc": "Yào, máfan nǐ bāng wǒ dǎbāo.",
+      "v": "Có, phiền em gói giúp tôi.",
+      "khac": [
+        {
+          "kieu": "ngắn gọn",
+          "t": "要，打包吧，谢谢。",
+          "doc": "Yào, dǎbāo ba, xièxie.",
+          "v": "Có, gói lại giúp tôi, cảm ơn."
+        }
+      ]
+    },
+    {
+      "ai": "F",
+      "t": "好的，请稍等。欢迎下次再来！",
+      "doc": "Hǎo de, qǐng shāo děng. Huānyíng xià cì zài lái!",
+      "v": "Vâng, anh chờ một chút ạ. Lần sau anh lại ghé nhé!"
+    }
+  ],
+  "tuVung": [
+    {
+      "chu": "欢迎光临",
+      "doc": "huānyíng guānglín",
+      "nghia": "chào mừng quý khách (câu nhân viên chào khách)",
+      "vd": "欢迎光临！请进。"
+    },
+    {
+      "chu": "点菜",
+      "doc": "diǎn cài",
+      "nghia": "gọi món",
+      "vd": "我们可以点菜了吗？"
+    },
+    {
+      "chu": "介绍",
+      "doc": "jièshào",
+      "nghia": "giới thiệu",
+      "vd": "我来介绍一下。"
+    },
+    {
+      "chu": "米饭",
+      "doc": "mǐfàn",
+      "nghia": "cơm (cơm trắng)",
+      "vd": "再来两碗米饭。"
+    },
+    {
+      "chu": "香菜",
+      "doc": "xiāngcài",
+      "nghia": "rau mùi (ngò)",
+      "vd": "我不吃香菜。"
+    },
+    {
+      "chu": "服务员",
+      "doc": "fúwùyuán",
+      "nghia": "nhân viên phục vụ",
+      "vd": "服务员，来一杯茶。"
+    },
+    {
+      "chu": "马上",
+      "doc": "mǎshàng",
+      "nghia": "ngay, lập tức",
+      "vd": "我马上来。"
+    },
+    {
+      "chu": "买单",
+      "doc": "mǎidān",
+      "nghia": "tính tiền, thanh toán (ở quán ăn)",
+      "vd": "服务员，买单！"
+    },
+    {
+      "chu": "一共",
+      "doc": "yígòng",
+      "nghia": "tổng cộng",
+      "vd": "一共多少钱？"
+    },
+    {
+      "chu": "扫码",
+      "doc": "sǎo mǎ",
+      "nghia": "quét mã",
+      "vd": "可以扫码吗？"
+    },
+    {
+      "chu": "打包",
+      "doc": "dǎbāo",
+      "nghia": "gói mang về",
+      "vd": "这个菜帮我打包。"
+    },
+    {
+      "chu": "稍等",
+      "doc": "shāo děng",
+      "nghia": "chờ một chút (lịch sự)",
+      "vd": "请稍等一下。"
+    }
+  ],
+  "yNghia": "Ở quán ăn, những câu bạn cần nhất không phải tên món, mà là câu NHỜ và câu BÁO: nhờ giới thiệu, dặn kiêng, báo mang nhầm, xin gói về. Đức nói lỗi của quán bằng 好像 và 不好意思 — thế là chuyện nhầm món kết thúc bằng một nụ cười chứ không phải một cái nhăn mặt.",
+  "meo": [
+    "Gọi món: 来 + số lượng + món (来一碗米饭). Gọi thêm: 再来…",
+    "Nhờ vả lịch sự: 麻烦你 + việc (麻烦你帮我打包). Chỉ cần nhớ một mẫu này là đủ dùng ở mọi nơi.",
+    "Tính tiền: 买单 / 结账. Ngày nay nhiều quán cho quét mã trên bàn để gọi món và trả tiền — hỏi 可以扫码吗？",
+    "Báo nhầm món cho mềm: 好像 + câu (这个菜好像不是我点的) — không đổ lỗi, vẫn nói rõ vấn đề."
+  ],
+  "cauHoi": [
+    {
+      "hoi": "Đức gọi những món gì?",
+      "chon": [
+        "Mì bò và trà nóng",
+        "Thịt kho, trứng xào cà chua và một bát cơm",
+        "Thịt kho và hai bát cơm"
+      ],
+      "dung": 1,
+      "giai": "Đức nói 就要这两个。再来一碗米饭。"
+    },
+    {
+      "hoi": "Đức kiêng gì?",
+      "chon": [
+        "Rau mùi",
+        "Đồ cay",
+        "Thịt lợn"
+      ],
+      "dung": 0,
+      "giai": "我不吃香菜，请不要放香菜。"
+    },
+    {
+      "hoi": "Món mang nhầm là của ai?",
+      "chon": [
+        "Của bếp",
+        "Của bàn số tám",
+        "Của bàn số sáu"
+      ],
+      "dung": 1,
+      "giai": "这是八号桌的。"
+    },
+    {
+      "hoi": "Câu nào dùng để xin gói đồ ăn thừa mang về?",
+      "chon": [
+        "麻烦你帮我打包。",
+        "服务员，买单！",
+        "请慢用。"
+      ],
+      "dung": 0,
+      "giai": "打包 = gói mang về; 买单 = tính tiền; 请慢用 là câu nhân viên mời khách dùng bữa."
+    }
+  ]
+}

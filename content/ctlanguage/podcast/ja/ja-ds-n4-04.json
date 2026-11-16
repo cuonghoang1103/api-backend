@@ -1,0 +1,436 @@
+{
+  "id": "ja-ds-n4-04",
+  "nn": "ja",
+  "danhMuc": "doi-song",
+  "cap": "N4",
+  "so": 7,
+  "tieuDe": "ごめん、その日はちょっと……",
+  "tieuDeViet": "Xin lỗi, hôm đó thì hơi…",
+  "moTa": "Aoi rủ Hải đi nướng thịt ngoài trời, đàn anh Morita mời đi liên hoan — nhưng Hải đều bận. Học cách rủ rê (〜ない？／〜ませんか), từ chối khéo với bạn bè và với người trên, đề nghị ngày khác, và hiểu câu “行けたら行く” thật ra thường có nghĩa là gì.",
+  "chuDe": "Bạn bè",
+  "bieuTuong": "bubble.left.and.bubble.right.fill",
+  "nguoi": [
+    {
+      "ma": "H",
+      "ten": "ハイ",
+      "giong": "ja-nam",
+      "vai": "du học sinh"
+    },
+    {
+      "ma": "A",
+      "ten": "葵",
+      "giong": "ja-nu",
+      "vai": "bạn cùng lớp người Nhật"
+    },
+    {
+      "ma": "M",
+      "ten": "森田先輩",
+      "giong": "ja2-nam",
+      "vai": "đàn anh trong nhóm nghiên cứu"
+    }
+  ],
+  "loi": [
+    {
+      "ai": "A",
+      "t": "ねえハイくん、今度の日曜、みんなでバーベキューするんだけど、来ない？",
+      "doc": "ねえハイくん、こんどのにちよう、みんなでバーベキューするんだけど、こない？",
+      "v": "Này Hải, Chủ nhật này cả nhóm đi nướng thịt, cậu đi không?",
+      "khac": [
+        {
+          "kieu": "lịch sự",
+          "t": "今度の日曜日、バーベキューをするんですが、ハイさんも来ませんか。",
+          "doc": "こんどのにちようび、バーベキューをするんですが、ハイさんもきませんか。",
+          "v": "Chủ nhật này chúng tôi tổ chức nướng thịt, anh Hải cũng đến chứ?",
+          "ghiChu": "Với người chưa thân, đồng nghiệp."
+        },
+        {
+          "kieu": "trang trọng",
+          "t": "今度の日曜日にバーベキューを予定しているのですが、もしよろしければいらっしゃいませんか。",
+          "doc": "こんどのにちようびにバーベキューをよていしているのですが、もしよろしければいらっしゃいませんか。",
+          "v": "Chủ nhật này chúng em định tổ chức nướng thịt, nếu anh/chị không phiền thì mời đến dự ạ.",
+          "ghiChu": "Mời thầy cô, cấp trên — いらっしゃる là kính ngữ của 来る."
+        }
+      ],
+      "np": [
+        {
+          "mau": "V ない？ (rủ rê, thể thường)",
+          "giai": "Câu hỏi phủ định để rủ: 来ない？ = đến không? Lịch sự: 〜ませんか. Dạng phủ định nghe nhẹ, để người kia dễ từ chối.",
+          "vd": "一緒にお昼食べない？",
+          "vdDoc": "いっしょにおひるたべない？",
+          "vdV": "Đi ăn trưa cùng không?"
+        }
+      ]
+    },
+    {
+      "ai": "H",
+      "t": "バーベキュー？いいね！日曜の何時から？",
+      "doc": "バーベキュー？いいね！にちようのなんじから？",
+      "v": "Nướng thịt á? Hay đấy! Chủ nhật mấy giờ?"
+    },
+    {
+      "ai": "A",
+      "t": "昼の十二時から、川のそばの公園で。食べ物はみんなで持っていくの。",
+      "doc": "ひるのじゅうにじから、かわのそばのこうえんで。たべものはみんなでもっていくの。",
+      "v": "Từ 12 giờ trưa, ở công viên cạnh sông. Đồ ăn thì mỗi người mang một ít."
+    },
+    {
+      "ai": "H",
+      "t": "あ……日曜か。ごめん、日曜はちょっと……。アルバイトが入ってるんだ。",
+      "doc": "あ……にちようか。ごめん、にちようはちょっと……。アルバイトがはいってるんだ。",
+      "v": "À… Chủ nhật à. Xin lỗi, Chủ nhật thì hơi… Tớ có ca làm thêm.",
+      "khac": [
+        {
+          "kieu": "lịch sự",
+          "t": "すみません、日曜日はちょっと用事がありまして……。",
+          "doc": "すみません、にちようびはちょっとようじがありまして……。",
+          "v": "Xin lỗi, Chủ nhật tôi có chút việc bận…",
+          "ghiChu": "Với người trên hoặc người chưa thân; không cần nói rõ việc gì."
+        },
+        {
+          "kieu": "mềm mỏng",
+          "t": "行きたいんだけど、日曜はバイトで行けないんだ。ごめんね。",
+          "doc": "いきたいんだけど、にちようはバイトでいけないんだ。ごめんね。",
+          "v": "Tớ muốn đi lắm, nhưng Chủ nhật đi làm thêm nên không đi được. Xin lỗi nha.",
+          "ghiChu": "Nói “muốn đi” trước để người rủ không buồn."
+        }
+      ],
+      "np": [
+        {
+          "mau": "〜は ちょっと……",
+          "giai": "Từ chối khéo: nói ちょっと rồi bỏ lửng, người nghe tự hiểu là “không được”. Thường kèm lý do ngắn ở sau.",
+          "vd": "その日はちょっと……。",
+          "vdDoc": "そのひはちょっと……。",
+          "vdV": "Hôm đó thì hơi… (không tiện)."
+        }
+      ]
+    },
+    {
+      "ai": "A",
+      "t": "そっか、残念。",
+      "doc": "そっか、ざんねん。",
+      "v": "Vậy à, tiếc ghê."
+    },
+    {
+      "ai": "H",
+      "t": "本当に行きたかったんだけど。また誘ってくれる？",
+      "doc": "ほんとうにいきたかったんだけど。またさそってくれる？",
+      "v": "Tớ muốn đi thật mà. Lần sau lại rủ tớ nhé?",
+      "khac": [
+        {
+          "kieu": "lịch sự",
+          "t": "本当に残念です。また誘ってくださいね。",
+          "doc": "ほんとうにざんねんです。またさそってくださいね。",
+          "v": "Tiếc thật đấy. Lần sau lại mời tôi nhé."
+        }
+      ],
+      "np": [
+        {
+          "mau": "V たかった",
+          "giai": "Quá khứ của 〜たい: đã muốn … (mà không được). Hay dùng khi từ chối để bày tỏ tiếc nuối.",
+          "vd": "その映画、見たかったな。",
+          "vdDoc": "そのえいが、みたかったな。",
+          "vdV": "Phim đó tớ muốn xem lắm cơ."
+        }
+      ]
+    },
+    {
+      "ai": "A",
+      "t": "もちろん。あ、じゃあ、来週の土曜は？映画を見に行こうって話してるんだけど。",
+      "doc": "もちろん。あ、じゃあ、らいしゅうのどようは？えいがをみにいこうってはなしてるんだけど。",
+      "v": "Tất nhiên. À, thế thứ Bảy tuần sau thì sao? Bọn tớ đang bàn đi xem phim."
+    },
+    {
+      "ai": "H",
+      "t": "土曜なら大丈夫！行く行く。",
+      "doc": "どようならだいじょうぶ！いくいく。",
+      "v": "Thứ Bảy thì được! Đi chứ đi chứ.",
+      "np": [
+        {
+          "mau": "N なら",
+          "giai": "“Nếu là N thì”: đưa ra điều kiện mình làm được. 土曜なら大丈夫 = thứ Bảy thì được.",
+          "vd": "コーヒーなら飲めます。",
+          "vdDoc": "コーヒーならのめます。",
+          "vdV": "Cà phê thì tôi uống được."
+        }
+      ]
+    },
+    {
+      "ai": "A",
+      "t": "よかった。拓海くんにも声をかけておくね。",
+      "doc": "よかった。たくみくんにもこえをかけておくね。",
+      "v": "Tốt quá. Tớ rủ cả Takumi nữa nhé."
+    },
+    {
+      "ai": "M",
+      "t": "ハイくん、今夜ゼミの飲み会があるんだけど、来られる？",
+      "doc": "ハイくん、こんやゼミののみかいがあるんだけど、こられる？",
+      "v": "Hải này, tối nay nhóm nghiên cứu có buổi liên hoan, em đến được không?"
+    },
+    {
+      "ai": "H",
+      "t": "森田先輩、誘っていただいて、ありがとうございます。",
+      "doc": "もりたせんぱい、さそっていただいて、ありがとうございます。",
+      "v": "Anh Morita, cảm ơn anh đã mời em ạ.",
+      "np": [
+        {
+          "mau": "V ていただいて、ありがとうございます",
+          "giai": "Cảm ơn người trên vì đã làm gì cho mình: thể て + いただいて + ありがとうございます. Lịch sự hơn 〜てくれて、ありがとう.",
+          "vd": "教えていただいて、ありがとうございます。",
+          "vdDoc": "おしえていただいて、ありがとうございます。",
+          "vdV": "Cảm ơn thầy đã chỉ bảo ạ."
+        }
+      ]
+    },
+    {
+      "ai": "H",
+      "t": "ただ、明日の朝早くテストがあるので、今夜は遠慮させていただきます。",
+      "doc": "ただ、あしたのあさはやくテストがあるので、こんやはえんりょさせていただきます。",
+      "v": "Có điều sáng sớm mai em có bài kiểm tra, nên tối nay em xin phép không tham gia ạ.",
+      "khac": [
+        {
+          "kieu": "tự nhiên hơn",
+          "t": "すみません、今夜はちょっと……。明日テストなので。",
+          "doc": "すみません、こんやはちょっと……。あしたテストなので。",
+          "v": "Xin lỗi anh, tối nay em hơi… Mai em có bài kiểm tra ạ.",
+          "ghiChu": "Vẫn lịch sự, nhẹ hơn; dùng với đàn anh thân."
+        },
+        {
+          "kieu": "thân mật",
+          "t": "ごめん、今日はパス。明日テストなんだ。",
+          "doc": "ごめん、きょうはパス。あしたテストなんだ。",
+          "v": "Xin lỗi, hôm nay tớ xin kiếu. Mai tớ có bài kiểm tra.",
+          "ghiChu": "Chỉ dùng với bạn bè ngang hàng."
+        }
+      ],
+      "np": [
+        {
+          "mau": "遠慮させていただきます",
+          "giai": "Từ chối rất lịch sự với người trên: “xin phép được (khiêm tốn) không tham gia”. 遠慮する = ngại, kiềm chế; させていただく = khiêm nhường ngữ.",
+          "vd": "今回は参加を遠慮させていただきます。",
+          "vdDoc": "こんかいはさんかをえんりょさせていただきます。",
+          "vdV": "Lần này em xin phép không tham gia ạ."
+        }
+      ]
+    },
+    {
+      "ai": "M",
+      "t": "そっか、テストなら仕方ないね。がんばって。",
+      "doc": "そっか、テストならしかたないね。がんばって。",
+      "v": "Vậy à, có bài kiểm tra thì đành vậy. Cố lên nhé."
+    },
+    {
+      "ai": "H",
+      "t": "ありがとうございます。次はぜひ参加させてください。",
+      "doc": "ありがとうございます。つぎはぜひさんかさせてください。",
+      "v": "Cảm ơn anh. Lần sau nhất định cho em tham gia với ạ.",
+      "khac": [
+        {
+          "kieu": "thân mật",
+          "t": "ありがとう！次は絶対行くね。",
+          "doc": "ありがとう！つぎはぜったいいくね。",
+          "v": "Cảm ơn nha! Lần sau nhất định tớ đi.",
+          "ghiChu": "Với bạn bè."
+        }
+      ],
+      "np": [
+        {
+          "mau": "V させてください",
+          "giai": "Xin cho mình được làm gì: thể sai khiến + てください. 参加させてください = cho tôi tham gia. Câu này cho thấy mình thật lòng muốn đi lần sau.",
+          "vd": "わたしにも手伝わせてください。",
+          "vdDoc": "わたしにもてつだわせてください。",
+          "vdV": "Cho tôi giúp một tay với."
+        }
+      ]
+    },
+    {
+      "ai": "A",
+      "t": "ハイくん、日本人の「行けたら行く」って、知ってる？",
+      "doc": "ハイくん、にほんじんの「いけたらいく」って、しってる？",
+      "v": "Hải này, cậu biết câu “đi được thì đi” của người Nhật không?"
+    },
+    {
+      "ai": "H",
+      "t": "「行けたら行く」？行ける時は来る、っていう意味でしょう？",
+      "doc": "「いけたらいく」？いけるときはくる、っていういみでしょう？",
+      "v": "“Đi được thì đi”? Nghĩa là lúc nào đi được thì đến, đúng không?"
+    },
+    {
+      "ai": "A",
+      "t": "言葉ではそうだけど、実はたいてい「行かない」って意味なの。",
+      "doc": "ことばではそうだけど、じつはたいてい「いかない」っていみなの。",
+      "v": "Theo chữ thì vậy, nhưng thật ra phần lớn là “không đi” đấy."
+    },
+    {
+      "ai": "H",
+      "t": "えっ、本当？じゃあ、ぼく、何回も信じて待ってたよ……。",
+      "doc": "えっ、ほんとう？じゃあ、ぼく、なんかいもしんじてまってたよ……。",
+      "v": "Hả, thật á? Vậy mà tớ tin rồi ngồi chờ mấy lần liền…"
+    },
+    {
+      "ai": "A",
+      "t": "あはは、ごめん。はっきり断ると、相手が悲しむと思う人が多いんだ。",
+      "doc": "あはは、ごめん。はっきりことわると、あいてがかなしむとおもうひとがおおいんだ。",
+      "v": "Ha ha, xin lỗi nhé. Nhiều người nghĩ từ chối thẳng thì người kia sẽ buồn."
+    },
+    {
+      "ai": "H",
+      "t": "でも、ぼくは「行けない、ごめん。でも来週なら行ける」のほうがうれしいな。",
+      "doc": "でも、ぼくは「いけない、ごめん。でもらいしゅうならいける」のほうがうれしいな。",
+      "v": "Nhưng tớ thì thích nghe “không đi được, xin lỗi. Nhưng tuần sau thì đi được” hơn.",
+      "np": [
+        {
+          "mau": "〜のほうが（いい／うれしい）",
+          "giai": "So sánh, chọn một bên: A のほうが … = A thì … hơn. Thường đi với より: B より A のほうが.",
+          "vd": "バスより電車のほうが速いです。",
+          "vdDoc": "バスよりでんしゃのほうがはやいです。",
+          "vdV": "Tàu điện nhanh hơn xe buýt."
+        }
+      ]
+    },
+    {
+      "ai": "A",
+      "t": "わかる。断る時に、別の日を言ってくれると、また誘いたくなるよね。",
+      "doc": "わかる。ことわるときに、べつのひをいってくれると、またさそいたくなるよね。",
+      "v": "Hiểu mà. Lúc từ chối mà đề nghị ngày khác thì mình lại muốn rủ tiếp nhỉ."
+    },
+    {
+      "ai": "H",
+      "t": "じゃあ、ぼくのルール。断る時は、「ごめん」と「理由」と「次」。",
+      "doc": "じゃあ、ぼくのルール。ことわるときは、「ごめん」と「りゆう」と「つぎ」。",
+      "v": "Vậy đây là luật của tớ. Khi từ chối: “xin lỗi”, “lý do” và “lần sau”."
+    },
+    {
+      "ai": "A",
+      "t": "いいね、それ。じゃあ、土曜の映画、遅れないでよ！",
+      "doc": "いいね、それ。じゃあ、どようのえいが、おくれないでよ！",
+      "v": "Hay đấy. Vậy phim thứ Bảy, đừng có đến muộn nhé!"
+    },
+    {
+      "ai": "H",
+      "t": "行けたら行く……うそうそ、絶対行く！",
+      "doc": "いけたらいく……うそうそ、ぜったいいく！",
+      "v": "Đi được thì đi… Đùa thôi, nhất định tớ đi!"
+    }
+  ],
+  "tuVung": [
+    {
+      "chu": "誘って",
+      "doc": "さそって",
+      "nghia": "rủ, mời (thể て của 誘う)",
+      "vd": "友だちを映画に誘いました。"
+    },
+    {
+      "chu": "残念",
+      "doc": "ざんねん",
+      "nghia": "tiếc, đáng tiếc",
+      "vd": "雨で中止なんて残念です。"
+    },
+    {
+      "chu": "声をかけて",
+      "doc": "こえをかけて",
+      "nghia": "bắt chuyện, rủ (ai đó)",
+      "vd": "新しい人に声をかけてみます。"
+    },
+    {
+      "chu": "飲み会",
+      "doc": "のみかい",
+      "nghia": "buổi liên hoan, buổi nhậu",
+      "vd": "金曜日に会社の飲み会があります。"
+    },
+    {
+      "chu": "先輩",
+      "doc": "せんぱい",
+      "nghia": "đàn anh, đàn chị",
+      "vd": "先輩に相談しました。"
+    },
+    {
+      "chu": "遠慮",
+      "doc": "えんりょ",
+      "nghia": "ngại, từ chối khéo; giữ ý",
+      "vd": "遠慮しないで、食べてください。"
+    },
+    {
+      "chu": "仕方ない",
+      "doc": "しかたない",
+      "nghia": "đành vậy, không còn cách nào",
+      "vd": "電車が止まったから、仕方ないね。"
+    },
+    {
+      "chu": "参加",
+      "doc": "さんか",
+      "nghia": "tham gia",
+      "vd": "会議に参加します。"
+    },
+    {
+      "chu": "断る",
+      "doc": "ことわる",
+      "nghia": "từ chối",
+      "vd": "仕事を断りました。"
+    },
+    {
+      "chu": "理由",
+      "doc": "りゆう",
+      "nghia": "lý do",
+      "vd": "理由を教えてください。"
+    },
+    {
+      "chu": "絶対",
+      "doc": "ぜったい",
+      "nghia": "nhất định, tuyệt đối",
+      "vd": "絶対に忘れないでね。"
+    }
+  ],
+  "yNghia": "Từ chối không làm mất bạn — từ chối mập mờ mới khiến người ta chờ mãi. Một lời “xin lỗi” kèm lý do ngắn và một ngày khác là đủ để người rủ thấy mình được quý, và lần sau vẫn muốn rủ tiếp.",
+  "meo": [
+    "Rủ: bạn bè 「〜ない？」／「〜（よ）うよ」; lịch sự 「〜ませんか」; mời người trên 「よろしければ、いらっしゃいませんか」.",
+    "Từ chối khéo: 「〜はちょっと……」 + lý do ngắn + đề nghị khác (「来週なら大丈夫」).",
+    "Với người trên: 「誘っていただいてありがとうございます」 rồi 「今回は遠慮させていただきます」, cuối cùng 「次はぜひ参加させてください」.",
+    "「行けたら行く」 nhiều khi là lời từ chối nhẹ. Nếu bạn thật sự muốn đi, hãy nói rõ 「行く！」 hoặc hẹn giờ cụ thể."
+  ],
+  "cauHoi": [
+    {
+      "hoi": "Vì sao Hải không đi nướng thịt Chủ nhật?",
+      "chon": [
+        "Hải không thích nướng thịt",
+        "Hải có ca làm thêm",
+        "Hải có bài kiểm tra",
+        "Hải bị ốm"
+      ],
+      "dung": 1,
+      "giai": "「アルバイトが入ってるんだ」."
+    },
+    {
+      "hoi": "Hải từ chối đàn anh Morita bằng câu nào?",
+      "chon": [
+        "今日はパス。",
+        "行けたら行く。",
+        "今夜は遠慮させていただきます。",
+        "絶対行く！"
+      ],
+      "dung": 2,
+      "giai": "Với người trên dùng cách nói khiêm nhường 遠慮させていただきます."
+    },
+    {
+      "hoi": "Theo Aoi, câu 「行けたら行く」 thường có nghĩa là gì?",
+      "chon": [
+        "Chắc chắn sẽ đi",
+        "Sẽ đến muộn",
+        "Thường là không đi",
+        "Sẽ đi cùng bạn"
+      ],
+      "dung": 2,
+      "giai": "「実はたいてい「行かない」って意味なの」."
+    },
+    {
+      "hoi": "“Luật từ chối” của Hải gồm những gì?",
+      "chon": [
+        "Xin lỗi – lý do – lần sau",
+        "Im lặng – không trả lời",
+        "Nói “đi được thì đi”",
+        "Hứa rồi huỷ"
+      ],
+      "dung": 0,
+      "giai": "「「ごめん」と「理由」と「次」」."
+    }
+  ]
+}

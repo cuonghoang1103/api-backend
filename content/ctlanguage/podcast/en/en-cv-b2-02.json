@@ -1,0 +1,108 @@
+{
+  "id": "en-cv-b2-02",
+  "nn": "en",
+  "danhMuc": "cong-viec",
+  "cap": "B2",
+  "so": 2,
+  "tieuDe": "Any Questions?",
+  "tieuDeViet": "Mọi người có câu hỏi nào không?",
+  "moTa": "Anh trình bày kết quả ba tháng thử nghiệm đối tác giao hàng mới trước giám đốc. Cách dẫn dắt bài thuyết trình, xử lý khi bị ngắt lời, đáp một câu hỏi khó mà không bịa số liệu, và khéo léo dời một chủ đề lạc đề sang buổi họp khác.",
+  "chuDe": "Thuyết trình & hỏi đáp",
+  "bieuTuong": "chart.bar.fill",
+  "nguoi": [
+    { "ma": "A", "ten": "Anh", "giong": "us-nu", "vai": "chuyên viên phân tích, người thuyết trình" },
+    { "ma": "G", "ten": "Greg", "giong": "uk-nam", "vai": "giám đốc vận hành" },
+    { "ma": "Z", "ten": "Zoe", "giong": "au-nu", "vai": "trưởng phòng kinh doanh" }
+  ],
+  "loi": [
+    { "ai": "A", "t": "Good morning, everyone. Thanks for making time for this. I'm going to share the results of our three-month trial with the new delivery partner.", "v": "Chào buổi sáng mọi người. Cảm ơn mọi người đã dành thời gian. Tôi sẽ chia sẻ kết quả ba tháng thử nghiệm với đối tác giao hàng mới.",
+      "khac": [
+        { "kieu": "trang trọng", "t": "Good morning, and thank you all for being here.", "v": "Chào buổi sáng, và xin cảm ơn tất cả mọi người đã có mặt." }
+      ] },
+    { "ai": "A", "t": "I'll start with the key numbers, then talk about costs, and finish with my recommendation. There'll be time for questions at the end.", "v": "Tôi sẽ bắt đầu bằng các con số chính, sau đó nói về chi phí, và kết thúc bằng đề xuất của tôi. Cuối buổi sẽ có thời gian cho câu hỏi.",
+      "np": [{ "mau": "I'll start with…, then…, and finish with…", "giai": "Câu \"bản đồ\" đầu bài thuyết trình (signposting): cho người nghe biết trước lộ trình, giúp họ theo dõi và bớt ngắt lời.", "vd": "I'll start with the problem, then show our solution, and finish with the timeline.", "vdV": "Tôi sẽ bắt đầu bằng vấn đề, rồi trình bày giải pháp, và kết thúc bằng tiến độ." }] },
+    { "ai": "A", "t": "As you can see on this first slide, the average delivery time dropped from two days to just under one and a half.", "v": "Như mọi người thấy ở slide đầu tiên này, thời gian giao hàng trung bình giảm từ hai ngày xuống còn dưới một ngày rưỡi một chút.",
+      "np": [{ "mau": "drop from A to B", "giai": "Mô tả số liệu giảm: drop/fall from… to…; tăng: rise/go up from… to…. \"just under\" = thấp hơn một chút.", "vd": "Sales rose from two hundred to just over three hundred.", "vdV": "Doanh số tăng từ hai trăm lên hơn ba trăm một chút." }] },
+    { "ai": "G", "t": "Sorry to interrupt, but is that across all regions or just the cities?", "v": "Xin lỗi ngắt lời, nhưng đó là tính trên mọi khu vực hay chỉ các thành phố?",
+      "khac": [
+        { "kieu": "lịch sự", "t": "Sorry, could I just ask a quick question here?", "v": "Xin lỗi, tôi hỏi nhanh một câu ở đây được không?" }
+      ] },
+    { "ai": "A", "t": "Good question. That's the average across all regions. If you don't mind, I'll show the breakdown by region in a minute.", "v": "Câu hỏi hay. Đó là trung bình trên mọi khu vực. Nếu anh không phiền, lát nữa tôi sẽ trình bày số liệu chia theo từng khu vực.",
+      "np": [{ "mau": "If you don't mind, I'll + V", "giai": "Cách lịch sự để giữ nhịp bài nói khi bị hỏi trước: trả lời ngắn rồi hẹn chi tiết ở phần sau.", "vd": "If you don't mind, I'll come back to that at the end.", "vdV": "Nếu anh không phiền, tôi sẽ quay lại chuyện đó ở cuối." }],
+      "khac": [
+        { "kieu": "chuyên nghiệp", "t": "I'll be covering that on the next slide, if that's alright.", "v": "Tôi sẽ nói về điều đó ở slide tiếp theo, nếu anh thấy được." }
+      ] },
+    { "ai": "G", "t": "Fine, go on.", "v": "Được, cô tiếp đi." },
+    { "ai": "A", "t": "Customer complaints about late deliveries fell by thirty percent, and our repeat order rate went up slightly, from forty-one to forty-four percent.", "v": "Khiếu nại của khách về giao hàng trễ giảm ba mươi phần trăm, và tỉ lệ khách đặt lại tăng nhẹ, từ bốn mươi mốt lên bốn mươi bốn phần trăm.",
+      "np": [{ "mau": "fall by + % / go up from… to…", "giai": "\"by\" chỉ MỨC thay đổi (fell by 30%), \"from… to…\" chỉ điểm đầu và điểm cuối. Đừng nhầm hai cách.", "vd": "Costs went up by five percent, from one hundred to one hundred and five.", "vdV": "Chi phí tăng năm phần trăm, từ một trăm lên một trăm lẻ năm." }] },
+    { "ai": "A", "t": "Now, the less exciting part. The new partner is about eight percent more expensive per parcel.", "v": "Giờ đến phần kém hấp dẫn hơn. Đối tác mới đắt hơn khoảng tám phần trăm cho mỗi kiện hàng." },
+    { "ai": "A", "t": "However, because there were fewer complaints, our support team handled around six hundred fewer calls, which covers roughly half of the extra cost.", "v": "Tuy nhiên, vì khiếu nại ít đi, đội hỗ trợ của chúng ta nhận ít hơn khoảng sáu trăm cuộc gọi, bù được khoảng một nửa chi phí tăng thêm.",
+      "np": [{ "mau": "fewer + danh từ đếm được", "giai": "\"fewer\" cho danh từ đếm được (fewer calls, fewer complaints); \"less\" cho không đếm được (less time, less money).", "vd": "We had fewer bugs and less stress this sprint.", "vdV": "Sprint này ít lỗi hơn và đỡ căng thẳng hơn." }] },
+    { "ai": "A", "t": "So, to sum up: faster deliveries, happier customers and a moderate increase in cost. My recommendation is to extend the contract for twelve months and review it after six.", "v": "Vậy tóm lại: giao hàng nhanh hơn, khách hài lòng hơn và chi phí tăng ở mức vừa phải. Đề xuất của tôi là gia hạn hợp đồng mười hai tháng và đánh giá lại sau sáu tháng.",
+      "khac": [
+        { "kieu": "trang trọng", "t": "In conclusion, I recommend extending the contract for twelve months, with a review after six.", "v": "Kết luận lại, tôi đề xuất gia hạn hợp đồng mười hai tháng, đánh giá lại sau sáu tháng.", "ghiChu": "recommend + V-ing, giống suggest" }
+      ] },
+    { "ai": "A", "t": "That's all from me. I'm happy to take any questions.", "v": "Phần của tôi đến đây là hết. Tôi sẵn lòng trả lời mọi câu hỏi.",
+      "khac": [
+        { "kieu": "ngắn gọn", "t": "Any questions?", "v": "Có câu hỏi nào không ạ?" },
+        { "kieu": "trang trọng", "t": "I'd now be glad to answer any questions you may have.", "v": "Bây giờ tôi xin sẵn lòng giải đáp mọi thắc mắc." }
+      ] },
+    { "ai": "G", "t": "I'll start. Eight percent doesn't sound like much, but across a year that's a lot of money. Are you sure the repeat orders are because of delivery, and not the summer sale?", "v": "Tôi hỏi trước. Tám phần trăm nghe không nhiều, nhưng cả năm thì là một khoản lớn. Cô có chắc lượng đơn đặt lại là nhờ giao hàng, chứ không phải nhờ đợt giảm giá mùa hè?" },
+    { "ai": "A", "t": "That's a fair challenge. If I understand correctly, you're asking whether the improvement could be seasonal.", "v": "Đó là một chất vấn chính đáng. Nếu tôi hiểu đúng, anh đang hỏi liệu sự cải thiện có thể chỉ là do mùa vụ không.",
+      "np": [{ "mau": "If I understand correctly, you're asking whether…", "giai": "Nhắc lại câu hỏi bằng lời của mình: vừa xác nhận đã hiểu đúng, vừa có thêm vài giây suy nghĩ trước khi trả lời câu khó.", "vd": "If I understand correctly, you're asking how long the migration will take.", "vdV": "Nếu tôi hiểu đúng, anh đang hỏi việc chuyển đổi sẽ mất bao lâu." }],
+      "khac": [
+        { "kieu": "mềm mỏng", "t": "That's a really good point, and I've wondered the same thing.", "v": "Đó là một ý rất đáng chú ý, và chính tôi cũng từng băn khoăn như vậy." }
+      ] },
+    { "ai": "A", "t": "Honestly, I can't fully separate the two with three months of data. What I can say is that the biggest improvement in repeat orders came from the regions where delivery got faster.", "v": "Thành thật mà nói, với ba tháng dữ liệu tôi chưa thể tách bạch hoàn toàn hai yếu tố. Điều tôi có thể nói là lượng đơn đặt lại cải thiện nhiều nhất ở những khu vực mà giao hàng nhanh lên.",
+      "np": [{ "mau": "What I can say is that + mệnh đề", "giai": "Câu chẻ giúp tách rõ điều mình CHẮC CHẮN khỏi điều mình chưa chắc — rất hữu ích khi trả lời câu hỏi khó mà không nói quá.", "vd": "What I can say is that no customer data was lost.", "vdV": "Điều tôi có thể khẳng định là không có dữ liệu khách hàng nào bị mất." }] },
+    { "ai": "G", "t": "Hmm. That's interesting, but it's not proof.", "v": "Hừm. Thú vị đấy, nhưng đó chưa phải bằng chứng." },
+    { "ai": "A", "t": "I agree, it's not proof. That's partly why I suggest reviewing it after six months, when the sale effect will be gone.", "v": "Tôi đồng ý, đó chưa phải bằng chứng. Đó cũng là một phần lý do tôi đề nghị đánh giá lại sau sáu tháng, khi ảnh hưởng của đợt giảm giá đã hết." },
+    { "ai": "Z", "t": "Can I add something from the sales side? Two of our biggest business clients told us they stayed because of faster delivery.", "v": "Tôi bổ sung một chút từ phía kinh doanh được không? Hai khách hàng doanh nghiệp lớn nhất nói với chúng tôi rằng họ ở lại vì giao hàng nhanh hơn." },
+    { "ai": "A", "t": "Thank you, Zoe, that's really helpful. I'll add it to the report.", "v": "Cảm ơn chị Zoe, thông tin rất hữu ích. Tôi sẽ thêm vào báo cáo." },
+    { "ai": "G", "t": "One more. What's the cost per parcel in the northern region specifically?", "v": "Một câu nữa. Chi phí mỗi kiện hàng ở khu vực phía Bắc cụ thể là bao nhiêu?" },
+    { "ai": "A", "t": "I don't have that figure with me, and I don't want to guess. I'll check with the finance team and send it to you by the end of today.", "v": "Tôi không có con số đó ở đây, và tôi không muốn đoán. Tôi sẽ kiểm tra với phòng tài chính và gửi anh trước cuối ngày hôm nay.",
+      "khac": [
+        { "kieu": "chuyên nghiệp", "t": "I'd rather not give you an inaccurate number. Let me confirm with finance and get back to you this afternoon.", "v": "Tôi không muốn đưa anh một con số thiếu chính xác. Để tôi xác nhận với phòng tài chính rồi báo lại anh chiều nay." },
+        { "kieu": "ngắn gọn", "t": "Let me get back to you on that.", "v": "Cho tôi báo lại anh chuyện đó sau." }
+      ] },
+    { "ai": "G", "t": "Good. I'd rather wait for a real number than get a guess.", "v": "Tốt. Tôi thà chờ một con số thật còn hơn nhận một con số đoán." },
+    { "ai": "Z", "t": "While we're all here, should we also talk about the warehouse staffing problem?", "v": "Nhân tiện mọi người đang ở đây, mình có nên bàn luôn vụ thiếu nhân sự ở kho không?" },
+    { "ai": "A", "t": "That's an important topic, but it's a bit outside today's scope. Could we put it on the agenda for next week's meeting?", "v": "Đó là chủ đề quan trọng, nhưng hơi nằm ngoài phạm vi hôm nay. Mình đưa nó vào chương trình buổi họp tuần sau được không?",
+      "khac": [
+        { "kieu": "mềm mỏng", "t": "I think that deserves its own discussion. Shall we pick it up next week?", "v": "Tôi nghĩ chuyện đó xứng đáng có một buổi thảo luận riêng. Tuần sau mình bàn nhé?" }
+      ] },
+    { "ai": "G", "t": "Agreed. Anh, well presented. And thank you for not inventing a number. You'd be surprised how many people do.", "v": "Đồng ý. Anh, cô trình bày tốt. Và cảm ơn vì đã không bịa ra một con số. Cô sẽ ngạc nhiên vì có biết bao nhiêu người làm vậy đấy.",
+      "np": [{ "mau": "You'd be surprised how many/much…", "giai": "\"Bạn sẽ ngạc nhiên vì có bao nhiêu…\" — cách nói nhấn mạnh rằng điều gì đó phổ biến hơn người ta nghĩ.", "vd": "You'd be surprised how much time we waste in meetings.", "vdV": "Bạn sẽ ngạc nhiên vì chúng ta lãng phí bao nhiêu thời gian cho các cuộc họp." }] },
+    { "ai": "A", "t": "Thank you. I'll send the slides and the northern figures this afternoon.", "v": "Cảm ơn anh. Chiều nay tôi sẽ gửi slide và số liệu khu vực phía Bắc." }
+  ],
+  "tuVung": [
+    { "chu": "trial", "doc": "/ˈtraɪəl/", "nghia": "đợt thử nghiệm", "vd": "We're running a one-month trial." },
+    { "chu": "recommendation", "doc": "/ˌrekəmenˈdeɪʃn/", "nghia": "đề xuất, khuyến nghị", "vd": "What's your recommendation?" },
+    { "chu": "interrupt", "doc": "/ˌɪntəˈrʌpt/", "nghia": "ngắt lời", "vd": "Sorry to interrupt, but we're out of time." },
+    { "chu": "breakdown", "doc": "/ˈbreɪkdaʊn/", "nghia": "số liệu chia nhỏ theo từng mục", "vd": "Here's a breakdown of costs by month." },
+    { "chu": "repeat order rate", "doc": "/rɪˈpiːt ˈɔːdə reɪt/", "nghia": "tỉ lệ khách đặt hàng lại", "vd": "Our repeat order rate is growing." },
+    { "chu": "per parcel", "doc": "/pɜː ˈpɑːsl/", "nghia": "cho mỗi kiện hàng", "vd": "Shipping costs three dollars per parcel." },
+    { "chu": "to sum up", "doc": "/tə sʌm ʌp/", "nghia": "tóm lại", "vd": "To sum up, the project is on track." },
+    { "chu": "extend the contract", "doc": "/ɪkˈstend ðə ˈkɒntrækt/", "nghia": "gia hạn hợp đồng", "vd": "They decided to extend the contract." },
+    { "chu": "fair challenge", "doc": "/feə ˈtʃælɪndʒ/", "nghia": "một chất vấn chính đáng", "vd": "That's a fair challenge. Let me explain." },
+    { "chu": "seasonal", "doc": "/ˈsiːzənl/", "nghia": "theo mùa, do mùa vụ", "vd": "Ice cream sales are seasonal." },
+    { "chu": "proof", "doc": "/pruːf/", "nghia": "bằng chứng", "vd": "Do you have any proof?" },
+    { "chu": "figure", "doc": "/ˈfɪɡə/", "nghia": "con số, số liệu", "vd": "I'll send you the exact figure tomorrow." },
+    { "chu": "scope", "doc": "/skəʊp/", "nghia": "phạm vi", "vd": "That's outside the scope of this project." },
+    { "chu": "agenda", "doc": "/əˈdʒendə/", "nghia": "chương trình (buổi họp)", "vd": "What's on the agenda today?" }
+  ],
+  "yNghia": "Thuyết trình tốt không phải là không bao giờ bị hỏi khó, mà là biết trả lời thật: tách rõ điều mình chắc với điều chưa chắc, và dám nói \"tôi không có số liệu đó, tôi sẽ gửi sau\". Một con số bịa ra có thể khiến người nghe nghi ngờ tất cả những con số còn lại.",
+  "meo": [
+    "Mở bài có lộ trình: \"I'll start with…, then…, and finish with…\" · kết: \"To sum up…\" · mời hỏi: \"I'm happy to take any questions.\"",
+    "Bị ngắt lời: trả lời ngắn + \"If you don't mind, I'll show that in a minute.\"",
+    "Câu hỏi khó: nhắc lại (\"If I understand correctly, you're asking…\") → điều chắc chắn (\"What I can say is…\") → hẹn bổ sung (\"I'll get back to you by…\").",
+    "Số liệu: fell BY 30% (mức thay đổi) · went up FROM 41 TO 44% (điểm đầu – cuối) · fewer + đếm được, less + không đếm được."
+  ],
+  "cauHoi": [
+    { "hoi": "Khi Greg ngắt lời hỏi về khu vực, Anh làm gì?", "chon": ["Bỏ qua câu hỏi", "Trả lời ngắn rồi hẹn trình bày chi tiết theo khu vực ngay sau đó", "Dừng thuyết trình để trả lời mọi chi tiết"], "dung": 1, "giai": "\"That's the average across all regions. If you don't mind, I'll show the breakdown by region in a minute.\"" },
+    { "hoi": "Nhược điểm của đối tác mới là gì?", "chon": ["Đắt hơn khoảng 8% mỗi kiện hàng", "Giao hàng chậm hơn", "Nhiều khiếu nại hơn"], "dung": 0, "giai": "\"The new partner is about eight percent more expensive per parcel.\"" },
+    { "hoi": "Greg nghi ngờ điều gì?", "chon": ["Số liệu bị làm giả", "Đối tác sắp phá sản", "Lượng đơn đặt lại tăng có thể do đợt giảm giá mùa hè"], "dung": 2, "giai": "\"Are you sure the repeat orders are because of delivery, and not the summer sale?\"" },
+    { "hoi": "Khi không có số liệu khu vực phía Bắc, Anh làm gì?", "chon": ["Đoán một con số gần đúng", "Nói không biết rồi bỏ qua", "Nói không muốn đoán và hẹn gửi số thật trước cuối ngày"], "dung": 2, "giai": "\"I don't have that figure with me, and I don't want to guess. I'll check… by the end of today.\"" },
+    { "hoi": "Anh xử lý câu hỏi về nhân sự kho của Zoe thế nào?", "chon": ["Đề nghị đưa vào chương trình buổi họp tuần sau", "Trả lời ngay", "Từ chối thẳng"], "dung": 0, "giai": "\"It's a bit outside today's scope. Could we put it on the agenda for next week's meeting?\"" }
+  ]
+}

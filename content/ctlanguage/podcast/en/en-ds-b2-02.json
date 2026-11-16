@@ -1,0 +1,550 @@
+{
+  "id": "en-ds-b2-02",
+  "nn": "en",
+  "danhMuc": "doi-song",
+  "cap": "B2",
+  "so": 2,
+  "tieuDe": "Can We Talk About the Noise?",
+  "tieuDeViet": "Mình nói chuyện về tiếng ồn nhé?",
+  "moTa": "Hàng xóm tầng dưới gõ cửa vì nhạc quá to. Trang xử lý khéo, rồi phải nói chuyện với bạn ở chung Ellie — về chuyện tiếng ồn, chậu bát và chiếc xe đạp ngoài hành lang. Cách nêu vấn đề bằng \"I feel…\", nhận lỗi và cùng nhau đặt luật nhà.",
+  "chuDe": "Hàng xóm",
+  "bieuTuong": "building.2.fill",
+  "nguoi": [
+    {
+      "ma": "D",
+      "ten": "Dan",
+      "giong": "us-nam",
+      "vai": "hàng xóm tầng dưới"
+    },
+    {
+      "ma": "T",
+      "ten": "Trang",
+      "giong": "au-nu",
+      "vai": "người thuê"
+    },
+    {
+      "ma": "E",
+      "ten": "Ellie",
+      "giong": "uk-nu",
+      "vai": "bạn ở chung của Trang"
+    }
+  ],
+  "loi": [
+    {
+      "ai": "D",
+      "t": "Hi, sorry to bother you. I'm Dan, from downstairs.",
+      "v": "Chào chị, xin lỗi làm phiền. Tôi là Dan, ở tầng dưới."
+    },
+    {
+      "ai": "T",
+      "t": "Oh, hi Dan. Is everything alright?",
+      "v": "Ồ, chào Dan. Mọi chuyện ổn chứ?"
+    },
+    {
+      "ai": "D",
+      "t": "Not really, to be honest. The music's been pretty loud the last few nights, and I start work at six.",
+      "v": "Thật lòng thì không ổn lắm. Mấy tối nay nhạc khá to, mà tôi bắt đầu làm lúc sáu giờ sáng.",
+      "khac": [
+        {
+          "kieu": "mềm mỏng",
+          "t": "I don't want to be a pain, but the music has been a bit loud lately.",
+          "v": "Tôi không muốn làm khó chị đâu, nhưng dạo này nhạc hơi to."
+        }
+      ],
+      "np": [
+        {
+          "mau": "has been + adj + the last few nights",
+          "giai": "Hiện tại hoàn thành cho tình trạng lặp lại gần đây tới hiện tại. \"the last few nights\" = mấy tối vừa rồi.",
+          "vd": "It's been really cold the last few days.",
+          "vdV": "Mấy ngày vừa rồi trời lạnh thật."
+        }
+      ]
+    },
+    {
+      "ai": "T",
+      "t": "Oh no, I'm really sorry. I had no idea it was coming through the floor.",
+      "v": "Ôi, tôi thật sự xin lỗi. Tôi không hề biết là tiếng vọng xuống sàn.",
+      "khac": [
+        {
+          "kieu": "trang trọng",
+          "t": "I do apologise — I didn't realise the noise carried that much.",
+          "v": "Tôi thành thật xin lỗi — tôi không nhận ra tiếng ồn vọng xa như vậy."
+        }
+      ],
+      "np": [
+        {
+          "mau": "have no idea + (that) mệnh đề",
+          "giai": "Hoàn toàn không biết. Nhấn mạnh hơn \"I didn't know\".",
+          "vd": "I had no idea you were ill.",
+          "vdV": "Tôi không hề biết anh bị ốm."
+        }
+      ]
+    },
+    {
+      "ai": "D",
+      "t": "These old buildings have thin floors. I can hear pretty much everything.",
+      "v": "Mấy toà nhà cũ này sàn mỏng lắm. Tôi nghe được gần như mọi thứ."
+    },
+    {
+      "ai": "T",
+      "t": "It's my flatmate's speaker, I think. I'll talk to her. Would it help if we turned it off by ten on weeknights?",
+      "v": "Chắc là loa của bạn ở chung với tôi. Tôi sẽ nói với cô ấy. Nếu ngày thường bọn tôi tắt nhạc trước mười giờ thì có đỡ không?",
+      "khac": [
+        {
+          "kieu": "lịch sự",
+          "t": "How about we keep it off after ten on weeknights? Would that work for you?",
+          "v": "Hay ngày thường sau mười giờ bọn tôi tắt nhạc? Như vậy có ổn với anh không?"
+        }
+      ],
+      "np": [
+        {
+          "mau": "Would it help if + quá khứ?",
+          "giai": "Đề xuất giải pháp một cách mềm (điều kiện loại 2): hỏi ý người kia thay vì tự quyết.",
+          "vd": "Would it help if I came in earlier?",
+          "vdV": "Nếu tôi đến sớm hơn thì có giúp được không?"
+        }
+      ]
+    },
+    {
+      "ai": "D",
+      "t": "That would make a huge difference. Weekends I don't mind so much.",
+      "v": "Như vậy thì đỡ hơn rất nhiều. Cuối tuần thì tôi không phiền lắm.",
+      "np": [
+        {
+          "mau": "make a (huge) difference",
+          "giai": "Tạo ra khác biệt lớn, giúp ích nhiều.",
+          "vd": "A good night's sleep makes a huge difference.",
+          "vdV": "Ngủ đủ một đêm giúp ích rất nhiều."
+        }
+      ]
+    },
+    {
+      "ai": "T",
+      "t": "Deal. And if it ever gets loud again, please just text me instead of waiting. Here's my number.",
+      "v": "Được ạ. Và nếu lần nào ồn nữa, anh cứ nhắn tin cho tôi, đừng chịu đựng. Số tôi đây.",
+      "khac": [
+        {
+          "kieu": "lịch sự",
+          "t": "Please feel free to let me know straight away if it happens again.",
+          "v": "Nếu có lần sau, anh cứ báo tôi ngay nhé."
+        }
+      ]
+    },
+    {
+      "ai": "D",
+      "t": "Thanks, I appreciate that. Sorry again for knocking so late.",
+      "v": "Cảm ơn chị, tôi cảm kích lắm. Xin lỗi lần nữa vì gõ cửa muộn thế này."
+    },
+    {
+      "ai": "T",
+      "t": "No, thank you for being so nice about it.",
+      "v": "Không, cảm ơn anh đã nói chuyện nhẹ nhàng như vậy."
+    },
+    {
+      "ai": "T",
+      "t": "Ellie, have you got a minute? There's something I'd like to talk about.",
+      "v": "Ellie, cậu có rảnh một chút không? Mình muốn nói chuyện này.",
+      "khac": [
+        {
+          "kieu": "mềm mỏng",
+          "t": "Are you free for a quick chat? Nothing serious.",
+          "v": "Cậu rảnh nói chuyện chút không? Không có gì nghiêm trọng đâu.",
+          "ghiChu": "thêm \"Nothing serious\" để người kia khỏi lo"
+        },
+        {
+          "kieu": "thân mật",
+          "t": "Hey, can we chat for a sec?",
+          "v": "Này, nói chuyện chút được không?"
+        }
+      ],
+      "np": [
+        {
+          "mau": "have you got…? (Anh)",
+          "giai": "Người Anh hay dùng \"have got\" = have. Mỹ: \"Do you have a minute?\".",
+          "vd": "Have you got any plans tonight?",
+          "vdV": "Tối nay cậu có kế hoạch gì không?"
+        }
+      ]
+    },
+    {
+      "ai": "E",
+      "t": "Sure. Is it about the dishes? I know, I know.",
+      "v": "Ừ. Về chuyện bát đĩa à? Biết rồi, biết rồi."
+    },
+    {
+      "ai": "T",
+      "t": "Ha ha, partly. But first — the guy downstairs came up. He said the music has been keeping him awake.",
+      "v": "Ha ha, một phần thôi. Nhưng trước hết — anh tầng dưới vừa lên. Anh ấy nói nhạc làm anh ấy mất ngủ.",
+      "np": [
+        {
+          "mau": "keep + sb + adj",
+          "giai": "Làm cho ai ở trạng thái nào (kéo dài): keep him awake, keep the room warm.",
+          "vd": "The coffee kept me awake all night.",
+          "vdV": "Cà phê làm tôi thức trắng đêm."
+        }
+      ]
+    },
+    {
+      "ai": "E",
+      "t": "Seriously? Why didn't he just bang on the ceiling?",
+      "v": "Thật á? Sao anh ta không đập lên trần nhà cho rồi?"
+    },
+    {
+      "ai": "T",
+      "t": "He was actually really polite about it. I said we'd turn it off by ten on weeknights. I hope that's okay with you.",
+      "v": "Thật ra anh ấy rất lịch sự. Mình đã nói ngày thường bọn mình sẽ tắt nhạc trước mười giờ. Mong là cậu thấy ổn.",
+      "khac": [
+        {
+          "kieu": "mềm mỏng",
+          "t": "I hope you don't mind — I sort of agreed to something on our behalf.",
+          "v": "Mong cậu đừng phiền — mình lỡ thay mặt cả hai đồng ý một chuyện."
+        }
+      ],
+      "np": [
+        {
+          "mau": "I said we'd (would) + V",
+          "giai": "Câu tường thuật: \"We will\" lùi thành \"we would\" khi kể lại lời mình đã nói.",
+          "vd": "She said she would call me.",
+          "vdV": "Cô ấy nói sẽ gọi cho tôi."
+        }
+      ]
+    },
+    {
+      "ai": "E",
+      "t": "I mean... I guess. I just wish you had asked me first.",
+      "v": "Thì... chắc là được. Mình chỉ ước cậu hỏi mình trước.",
+      "np": [
+        {
+          "mau": "wish + S + had + V3",
+          "giai": "Ước điều đã xảy ra khác đi (tiếc/trách nhẹ về quá khứ).",
+          "vd": "I wish I had brought an umbrella.",
+          "vdV": "Giá mà tôi mang ô theo."
+        }
+      ]
+    },
+    {
+      "ai": "T",
+      "t": "That's fair. I should have checked with you. Sorry.",
+      "v": "Cậu nói đúng. Lẽ ra mình phải hỏi cậu. Xin lỗi nhé.",
+      "khac": [
+        {
+          "kieu": "thân mật",
+          "t": "Fair point — my bad.",
+          "v": "Đúng thật — lỗi mình."
+        },
+        {
+          "kieu": "trang trọng",
+          "t": "You're right. I should have consulted you first. I apologise.",
+          "v": "Cậu nói đúng. Lẽ ra mình phải hỏi ý cậu trước. Mình xin lỗi."
+        }
+      ],
+      "np": [
+        {
+          "mau": "should have + V3",
+          "giai": "Lẽ ra nên làm (nhưng đã không làm) — dùng để nhận lỗi.",
+          "vd": "I should have called you earlier.",
+          "vdV": "Lẽ ra tôi nên gọi cho anh sớm hơn."
+        }
+      ]
+    },
+    {
+      "ai": "E",
+      "t": "It's okay. Ten is reasonable, honestly. I can use headphones after that.",
+      "v": "Không sao. Mười giờ cũng hợp lý mà. Sau đó mình đeo tai nghe."
+    },
+    {
+      "ai": "T",
+      "t": "Thanks. Now, about the dishes...",
+      "v": "Cảm ơn cậu. Giờ, về chuyện bát đĩa..."
+    },
+    {
+      "ai": "E",
+      "t": "Go on.",
+      "v": "Cậu nói đi."
+    },
+    {
+      "ai": "T",
+      "t": "When dishes are left in the sink for a few days, I feel like I'm the only one cleaning. It stresses me out a bit.",
+      "v": "Khi bát đĩa bị để trong bồn mấy ngày liền, mình cảm thấy như chỉ có mình dọn dẹp. Mình hơi bị căng thẳng.",
+      "khac": [
+        {
+          "kieu": "mềm mỏng",
+          "t": "I've noticed the dishes have been piling up, and it's been getting to me a little.",
+          "v": "Mình để ý bát đĩa cứ chất đống, và nó làm mình hơi khó chịu."
+        }
+      ],
+      "np": [
+        {
+          "mau": "When X, I feel… (câu \"I\")",
+          "giai": "Nói về cảm xúc của mình thay vì buộc tội (\"You never wash up\"). Người nghe ít phòng thủ hơn.",
+          "vd": "When meetings start late, I feel my time is wasted.",
+          "vdV": "Khi cuộc họp bắt đầu muộn, tôi thấy thời gian của mình bị lãng phí."
+        },
+        {
+          "mau": "be left + nơi",
+          "giai": "Bị động: bị để lại ở đâu.",
+          "vd": "Some bags were left on the bus.",
+          "vdV": "Có vài cái túi bị để quên trên xe buýt."
+        }
+      ]
+    },
+    {
+      "ai": "E",
+      "t": "I didn't realise it bothered you that much. I usually do them all at the weekend.",
+      "v": "Mình không nhận ra nó làm cậu khó chịu đến thế. Mình thường rửa hết vào cuối tuần."
+    },
+    {
+      "ai": "T",
+      "t": "I get that. It's just that by Friday, there's nothing clean left.",
+      "v": "Mình hiểu. Chỉ là tới thứ Sáu thì không còn cái gì sạch nữa."
+    },
+    {
+      "ai": "E",
+      "t": "Fair enough. What do you suggest?",
+      "v": "Cũng đúng. Cậu đề xuất thế nào?",
+      "khac": [
+        {
+          "kieu": "tự nhiên hơn",
+          "t": "Okay. So what would work for you?",
+          "v": "Được rồi. Vậy cách nào thì ổn với cậu?"
+        }
+      ]
+    },
+    {
+      "ai": "T",
+      "t": "How about we each wash our own things the same day? And we take turns with the bins.",
+      "v": "Hay là mỗi đứa rửa đồ của mình ngay trong ngày? Và mình thay phiên nhau đổ rác.",
+      "np": [
+        {
+          "mau": "How about + mệnh đề / V-ing?",
+          "giai": "Đưa ra đề xuất. \"How about we…\" (văn nói) = \"How about washing…\".",
+          "vd": "How about we split the cost?",
+          "vdV": "Hay mình chia đôi chi phí nhé?"
+        },
+        {
+          "mau": "take turns (with / doing)",
+          "giai": "Thay phiên nhau.",
+          "vd": "We take turns cooking dinner.",
+          "vdV": "Chúng tôi thay phiên nấu bữa tối."
+        }
+      ]
+    },
+    {
+      "ai": "E",
+      "t": "The same day is a bit strict. Could we say by the next morning?",
+      "v": "Trong ngày thì hơi gắt. Mình nói là trước sáng hôm sau được không?",
+      "np": [
+        {
+          "mau": "Could we say…?",
+          "giai": "Mặc cả, điều chỉnh một đề xuất nhẹ nhàng.",
+          "vd": "Could we say Thursday instead of Wednesday?",
+          "vdV": "Mình chốt thứ Năm thay vì thứ Tư được không?"
+        }
+      ]
+    },
+    {
+      "ai": "T",
+      "t": "By the next morning works for me.",
+      "v": "Trước sáng hôm sau thì mình đồng ý.",
+      "khac": [
+        {
+          "kieu": "ngắn gọn",
+          "t": "Works for me.",
+          "v": "Được đó."
+        }
+      ]
+    },
+    {
+      "ai": "E",
+      "t": "And while we're at it — could you not leave your bike in the hallway? I nearly tripped over it twice.",
+      "v": "Mà nhân tiện — cậu đừng để xe đạp ở hành lang được không? Mình suýt vấp hai lần rồi.",
+      "khac": [
+        {
+          "kieu": "mềm mỏng",
+          "t": "Also, would you mind keeping your bike somewhere else? The hallway gets a bit tight.",
+          "v": "Còn nữa, cậu có phiền để xe đạp chỗ khác không? Hành lang hơi chật."
+        }
+      ],
+      "np": [
+        {
+          "mau": "could you not + V?",
+          "giai": "Nhờ ai ĐỪNG làm gì một cách lịch sự. Nhẹ hơn \"Don't…\".",
+          "vd": "Could you not play music after midnight?",
+          "vdV": "Cậu đừng mở nhạc sau nửa đêm được không?"
+        },
+        {
+          "mau": "while we're at it",
+          "giai": "Nhân tiện đang bàn chuyện này thì nói luôn chuyện kia.",
+          "vd": "While we're at it, let's clean the fridge.",
+          "vdV": "Nhân tiện, dọn tủ lạnh luôn đi."
+        }
+      ]
+    },
+    {
+      "ai": "T",
+      "t": "Oh, fair point. I'll keep it on the balcony from now on.",
+      "v": "Ồ, cậu nói đúng. Từ giờ mình sẽ để nó ngoài ban công."
+    },
+    {
+      "ai": "E",
+      "t": "Great. Should we write these down? Like, simple house rules on the fridge?",
+      "v": "Tuyệt. Mình có nên ghi lại không? Kiểu luật nhà đơn giản dán lên tủ lạnh?"
+    },
+    {
+      "ai": "T",
+      "t": "Good idea. Then nobody has to remember — or nag.",
+      "v": "Ý hay. Vậy thì không ai phải nhớ — hay phải cằn nhằn nữa."
+    },
+    {
+      "ai": "E",
+      "t": "Deal. And maybe we should invite Dan for dinner. Start things off on a better note.",
+      "v": "Chốt. Mà có lẽ mình nên mời Dan ăn tối. Để bắt đầu lại cho vui vẻ hơn.",
+      "np": [
+        {
+          "mau": "on a good / better note",
+          "giai": "Thành ngữ: bắt đầu/kết thúc một cách vui vẻ, tích cực.",
+          "vd": "Let's end the meeting on a positive note.",
+          "vdV": "Hãy kết thúc buổi họp một cách tích cực."
+        }
+      ]
+    },
+    {
+      "ai": "T",
+      "t": "I love that. Nothing fixes things with neighbours like a home-cooked meal.",
+      "v": "Mình thích ý đó. Không gì hàn gắn tình hàng xóm bằng một bữa cơm nhà nấu."
+    }
+  ],
+  "tuVung": [
+    {
+      "chu": "had no idea",
+      "doc": "/hæd nəʊ aɪˈdɪə/",
+      "nghia": "hoàn toàn không biết",
+      "vd": "I had no idea it was so late."
+    },
+    {
+      "chu": "weeknights",
+      "doc": "/ˈwiːknaɪts/",
+      "nghia": "các tối ngày thường",
+      "vd": "I stay home on weeknights."
+    },
+    {
+      "chu": "make a huge difference",
+      "doc": "/meɪk ə hjuːdʒ ˈdɪfrəns/",
+      "nghia": "giúp ích rất nhiều",
+      "vd": "Small changes make a huge difference."
+    },
+    {
+      "chu": "flatmate",
+      "doc": "/ˈflætmeɪt/",
+      "nghia": "bạn ở chung căn hộ (Anh)",
+      "vd": "My flatmate is from Spain."
+    },
+    {
+      "chu": "keeping him awake",
+      "doc": "/ˈkiːpɪŋ hɪm əˈweɪk/",
+      "nghia": "làm anh ấy mất ngủ",
+      "vd": "The noise is keeping him awake."
+    },
+    {
+      "chu": "stresses me out",
+      "doc": "/ˈstresɪz miː aʊt/",
+      "nghia": "làm tôi căng thẳng (stress out)",
+      "vd": "Traffic really stresses me out."
+    },
+    {
+      "chu": "fair point",
+      "doc": "/feə(r) pɔɪnt/",
+      "nghia": "ý đúng đấy, có lý",
+      "vd": "\"We should leave earlier.\" — \"Fair point.\""
+    },
+    {
+      "chu": "take turns",
+      "doc": "/teɪk tɜːnz/",
+      "nghia": "thay phiên",
+      "vd": "Let's take turns driving."
+    },
+    {
+      "chu": "while we're at it",
+      "doc": "/waɪl wɪə(r) ət ɪt/",
+      "nghia": "nhân tiện",
+      "vd": "While we're at it, let's fix the door."
+    },
+    {
+      "chu": "tripped over",
+      "doc": "/trɪpt ˈəʊvə(r)/",
+      "nghia": "vấp phải",
+      "vd": "I tripped over a cable."
+    },
+    {
+      "chu": "nag",
+      "doc": "/næɡ/",
+      "nghia": "cằn nhằn",
+      "vd": "Please stop nagging me."
+    },
+    {
+      "chu": "on a better note",
+      "doc": "/ɒn ə ˈbetə nəʊt/",
+      "nghia": "theo hướng vui vẻ hơn",
+      "vd": "Let's start again on a better note."
+    }
+  ],
+  "yNghia": "Mâu thuẫn sống chung hiếm khi do người xấu — thường do không ai nói ra cho tới khi bực bội. Nói sớm, nói bằng cảm xúc của mình (\"I feel…\") thay vì buộc tội, sẵn sàng nhận phần lỗi của mình, và biến lời hứa thành luật chung. Hàng xóm gõ cửa nhẹ nhàng xứng đáng được đáp lại nhẹ nhàng.",
+  "meo": [
+    "Nêu vấn đề không gây chiến: \"Have you got a minute?\" → \"When X happens, I feel…\" → \"What do you suggest?\".",
+    "Nhận lỗi gọn: \"That's fair. I should have checked with you.\" — không cần biện hộ dài.",
+    "Đề xuất và mặc cả mềm: \"Would it help if we…?\", \"How about we…?\", \"Could we say…?\".",
+    "Nhờ ai ĐỪNG làm gì: \"Could you not…?\" lịch sự hơn \"Don't…\". Anh: flatmate; Mỹ: roommate."
+  ],
+  "cauHoi": [
+    {
+      "hoi": "Vì sao Dan khó chịu?",
+      "chon": [
+        "Trang đỗ xe chắn lối",
+        "Nhạc to mấy tối liền mà anh phải dậy làm lúc 6 giờ",
+        "Rác để ngoài hành lang"
+      ],
+      "dung": 1,
+      "giai": "\"The music's been pretty loud the last few nights, and I start work at six.\""
+    },
+    {
+      "hoi": "Ellie không vui điều gì ở Trang?",
+      "chon": [
+        "Trang mở nhạc to",
+        "Trang đã đồng ý với Dan mà không hỏi cô trước",
+        "Trang mời Dan ăn tối"
+      ],
+      "dung": 1,
+      "giai": "\"I just wish you had asked me first.\""
+    },
+    {
+      "hoi": "Hai người thống nhất gì về bát đĩa?",
+      "chon": [
+        "Rửa trong ngày",
+        "Rửa trước sáng hôm sau",
+        "Rửa vào cuối tuần"
+      ],
+      "dung": 1,
+      "giai": "Ellie đề nghị \"by the next morning\" và Trang đồng ý."
+    },
+    {
+      "hoi": "Câu nào là câu \"I\" (nói về cảm xúc, không buộc tội)?",
+      "chon": [
+        "You never wash your dishes.",
+        "When dishes are left for days, I feel like I'm the only one cleaning.",
+        "Why are you so lazy?"
+      ],
+      "dung": 1,
+      "giai": "Nói về cảm xúc của mình giúp người kia ít phòng thủ."
+    },
+    {
+      "hoi": "\"I should have checked with you\" nghĩa là gì?",
+      "chon": [
+        "Tôi sẽ hỏi cậu",
+        "Lẽ ra tôi phải hỏi cậu (nhưng đã không hỏi)",
+        "Tôi đã hỏi cậu rồi"
+      ],
+      "dung": 1,
+      "giai": "should have + V3 = lẽ ra nên làm."
+    }
+  ]
+}

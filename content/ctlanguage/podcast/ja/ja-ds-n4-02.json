@@ -1,0 +1,407 @@
+{
+  "id": "ja-ds-n4-02",
+  "nn": "ja",
+  "danhMuc": "doi-song",
+  "cap": "N4",
+  "so": 5,
+  "tieuDe": "この薬、眠くなりますか",
+  "tieuDeViet": "Thuốc này có gây buồn ngủ không?",
+  "moTa": "Khám xong, Quang mang đơn thuốc đến hiệu thuốc. Dược sĩ hỏi về dị ứng, thuốc đang uống, rồi dặn cách uống. Học “sổ tay thuốc” là gì, nói triệu chứng – dị ứng, hỏi tác dụng phụ, hỏi lỡ quên uống thì làm sao.",
+  "chuDe": "Sức khoẻ",
+  "bieuTuong": "pills.fill",
+  "nguoi": [
+    {
+      "ma": "Q",
+      "ten": "クアン",
+      "giong": "ja-nam",
+      "vai": "du học sinh"
+    },
+    {
+      "ma": "Y",
+      "ten": "薬剤師",
+      "giong": "ja-nu",
+      "vai": "dược sĩ"
+    }
+  ],
+  "loi": [
+    {
+      "ai": "Y",
+      "t": "こんにちは。処方箋をお預かりします。",
+      "doc": "こんにちは。しょほうせんをおあずかりします。",
+      "v": "Xin chào. Tôi xin nhận đơn thuốc của anh."
+    },
+    {
+      "ai": "Q",
+      "t": "お願いします。あの、薬局に来るのは初めてなんですが……。",
+      "doc": "おねがいします。あの、やっきょくにくるのははじめてなんですが……。",
+      "v": "Nhờ chị. À, đây là lần đầu tôi đến hiệu thuốc…",
+      "khac": [
+        {
+          "kieu": "lịch sự",
+          "t": "お願いします。こちらは初めてなのですが、よろしいでしょうか。",
+          "doc": "おねがいします。こちらははじめてなのですが、よろしいでしょうか。",
+          "v": "Nhờ chị. Tôi đến đây lần đầu, có được không ạ?"
+        }
+      ],
+      "np": [
+        {
+          "mau": "V るのは 初めてです",
+          "giai": "の biến động từ thành danh từ: 来るのは = việc đến (đây). 〜のは初めてです = lần đầu làm việc đó.",
+          "vd": "一人で旅行するのは初めてです。",
+          "vdDoc": "ひとりでりょこうするのははじめてです。",
+          "vdV": "Đây là lần đầu tôi đi du lịch một mình."
+        }
+      ]
+    },
+    {
+      "ai": "Y",
+      "t": "大丈夫ですよ。お薬手帳はお持ちですか。",
+      "doc": "だいじょうぶですよ。おくすりてちょうはおもちですか。",
+      "v": "Không sao đâu ạ. Anh có mang sổ tay thuốc không?"
+    },
+    {
+      "ai": "Q",
+      "t": "お薬手帳？すみません、それは何ですか。",
+      "doc": "おくすりてちょう？すみません、それはなんですか。",
+      "v": "Sổ tay thuốc? Xin lỗi, đó là gì vậy ạ?",
+      "khac": [
+        {
+          "kieu": "lịch sự",
+          "t": "すみません、お薬手帳というのは何ですか。",
+          "doc": "すみません、おくすりてちょうというのはなんですか。",
+          "v": "Xin lỗi, “sổ tay thuốc” là gì ạ?",
+          "ghiChu": "〜というのは: hỏi nghĩa của một từ lạ, lịch sự."
+        },
+        {
+          "kieu": "văn nói",
+          "t": "お薬手帳って何ですか。",
+          "doc": "おくすりてちょうってなんですか。",
+          "v": "Sổ tay thuốc là gì thế ạ?",
+          "ghiChu": "って = というのは trong văn nói; vẫn lịch sự nhờ です."
+        }
+      ]
+    },
+    {
+      "ai": "Y",
+      "t": "今まで飲んだ薬を記録するノートです。ほかの病院に行った時に見せると、安全なんですよ。",
+      "doc": "いままでのんだくすりをきろくするノートです。ほかのびょういんにいったときにみせると、あんぜんなんですよ。",
+      "v": "Là cuốn sổ ghi lại những thuốc anh đã uống. Khi đi bệnh viện khác, đưa sổ này ra thì an toàn hơn.",
+      "np": [
+        {
+          "mau": "V と、〜 (hễ … thì)",
+          "giai": "と sau thể từ điển: hễ làm A thì kết quả B xảy ra một cách tự nhiên. 見せると、安全 = đưa ra thì (sẽ) an toàn.",
+          "vd": "このボタンを押すと、お湯が出ます。",
+          "vdDoc": "このボタンをおすと、おゆがでます。",
+          "vdV": "Hễ bấm nút này là nước nóng chảy ra."
+        }
+      ]
+    },
+    {
+      "ai": "Q",
+      "t": "そうなんですか。じゃあ、作ってください。",
+      "doc": "そうなんですか。じゃあ、つくってください。",
+      "v": "Ra vậy. Thế chị làm giúp tôi một cuốn nhé."
+    },
+    {
+      "ai": "Y",
+      "t": "はい。それから、この紙に少し書いていただけますか。アレルギーはありますか。",
+      "doc": "はい。それから、このかみにすこしかいていただけますか。アレルギーはありますか。",
+      "v": "Vâng. Thêm nữa, anh điền giúp vào tờ giấy này một chút nhé. Anh có bị dị ứng gì không?",
+      "np": [
+        {
+          "mau": "V て いただけますか",
+          "giai": "Nhờ lịch sự hơn 〜てください: “anh có thể … giúp tôi được không?”. Nhân viên, người trong công việc hay dùng.",
+          "vd": "もう少しゆっくり話していただけますか。",
+          "vdDoc": "もうすこしゆっくりはなしていただけますか。",
+          "vdV": "Anh nói chậm hơn một chút giúp tôi được không?"
+        }
+      ]
+    },
+    {
+      "ai": "Q",
+      "t": "卵のアレルギーがあります。薬のアレルギーはないと思います。",
+      "doc": "たまごのアレルギーがあります。くすりのアレルギーはないとおもいます。",
+      "v": "Tôi bị dị ứng trứng. Dị ứng thuốc thì tôi nghĩ là không có.",
+      "np": [
+        {
+          "mau": "〜と思います",
+          "giai": "Thể thường + と思います = tôi nghĩ là … Dùng khi không chắc 100%, nghe mềm và trung thực hơn nói khẳng định.",
+          "vd": "明日は雨が降ると思います。",
+          "vdDoc": "あしたはあめがふるとおもいます。",
+          "vdV": "Tôi nghĩ mai trời sẽ mưa."
+        }
+      ]
+    },
+    {
+      "ai": "Y",
+      "t": "今、ほかに飲んでいる薬はありますか。",
+      "doc": "いま、ほかにのんでいるくすりはありますか。",
+      "v": "Hiện giờ anh có đang uống thuốc nào khác không?"
+    },
+    {
+      "ai": "Q",
+      "t": "頭が痛い時に、国から持ってきた薬を飲んでいます。",
+      "doc": "あたまがいたいときに、くにからもってきたくすりをのんでいます。",
+      "v": "Khi đau đầu, tôi uống thuốc mang từ quê sang."
+    },
+    {
+      "ai": "Y",
+      "t": "名前はわかりますか。一緒に飲むと、よくない薬もありますから。",
+      "doc": "なまえはわかりますか。いっしょにのむと、よくないくすりもありますから。",
+      "v": "Anh có biết tên thuốc không? Vì có những thuốc uống chung với nhau không tốt."
+    },
+    {
+      "ai": "Q",
+      "t": "ベトナム語なので……。あ、写真を撮ってきました。これです。",
+      "doc": "ベトナムごなので……。あ、しゃしんをとってきました。これです。",
+      "v": "Tên bằng tiếng Việt nên… À, tôi có chụp ảnh mang theo. Đây ạ."
+    },
+    {
+      "ai": "Y",
+      "t": "ありがとうございます。……これなら、今日のお薬と一緒に飲んでも大丈夫です。",
+      "doc": "ありがとうございます。……これなら、きょうのおくすりといっしょにのんでもだいじょうぶです。",
+      "v": "Cảm ơn anh. …Thuốc này thì uống cùng thuốc hôm nay cũng không sao."
+    },
+    {
+      "ai": "Y",
+      "t": "では、お薬の説明をします。こちらは熱を下げる薬で、一日三回、食後に飲んでください。",
+      "doc": "では、おくすりのせつめいをします。こちらはねつをさげるくすりで、いちにちさんかい、しょくごにのんでください。",
+      "v": "Giờ tôi giải thích về thuốc nhé. Đây là thuốc hạ sốt, ngày uống 3 lần, sau bữa ăn."
+    },
+    {
+      "ai": "Q",
+      "t": "食後って、ご飯を食べたすぐ後ですか。",
+      "doc": "しょくごって、ごはんをたべたすぐあとですか。",
+      "v": "“Sau bữa ăn” nghĩa là ngay sau khi ăn xong ạ?",
+      "np": [
+        {
+          "mau": "V た 後（で）",
+          "giai": "Sau khi làm gì: thể た + 後. 食べた後 = sau khi ăn. すぐ後 = ngay sau.",
+          "vd": "仕事が終わった後で、ジムに行きます。",
+          "vdDoc": "しごとがおわったあとで、ジムにいきます。",
+          "vdV": "Sau khi xong việc, tôi đi tập gym."
+        }
+      ]
+    },
+    {
+      "ai": "Y",
+      "t": "食べてから三十分ぐらいまでに飲めば大丈夫です。",
+      "doc": "たべてからさんじゅっぷんぐらいまでにのめばだいじょうぶです。",
+      "v": "Uống trong vòng khoảng 30 phút sau khi ăn là được."
+    },
+    {
+      "ai": "Y",
+      "t": "それから、こちらの咳止めは、飲むと眠くなることがあります。",
+      "doc": "それから、こちらのせきどめは、のむとねむくなることがあります。",
+      "v": "Còn thuốc ho này, uống vào đôi khi sẽ buồn ngủ.",
+      "np": [
+        {
+          "mau": "V ることがあります",
+          "giai": "Thể từ điển + ことがある = đôi khi/có lúc xảy ra. Khác với V たことがある = đã từng.",
+          "vd": "朝の電車は遅れることがあります。",
+          "vdDoc": "あさのでんしゃはおくれることがあります。",
+          "vdV": "Tàu buổi sáng có lúc bị trễ."
+        }
+      ]
+    },
+    {
+      "ai": "Q",
+      "t": "眠くなるんですか。明日アルバイトで自転車に乗るんですが……。",
+      "doc": "ねむくなるんですか。あしたアルバイトでじてんしゃにのるんですが……。",
+      "v": "Buồn ngủ ạ? Mai tôi đi làm thêm phải đạp xe…"
+    },
+    {
+      "ai": "Y",
+      "t": "それなら、自転車に乗る前には飲まないほうがいいですね。夜、寝る前に飲んでください。",
+      "doc": "それなら、じてんしゃにのるまえにはのまないほうがいいですね。よる、ねるまえにのんでください。",
+      "v": "Vậy thì trước khi đạp xe anh đừng uống. Hãy uống buổi tối, trước khi ngủ.",
+      "np": [
+        {
+          "mau": "V ないほうがいい",
+          "giai": "Lời khuyên “không nên …”: thể ない + ほうがいい. Ngược lại: V たほうがいい = nên ….",
+          "vd": "夜遅くコーヒーを飲まないほうがいいです。",
+          "vdDoc": "よるおそくコーヒーをのまないほうがいいです。",
+          "vdV": "Không nên uống cà phê lúc khuya."
+        }
+      ]
+    },
+    {
+      "ai": "Q",
+      "t": "わかりました。もし飲み忘れたら、どうすればいいですか。",
+      "doc": "わかりました。もしのみわすれたら、どうすればいいですか。",
+      "v": "Tôi hiểu rồi. Nếu lỡ quên uống thì tôi nên làm thế nào ạ?",
+      "khac": [
+        {
+          "kieu": "lịch sự",
+          "t": "飲み忘れてしまった場合は、どうしたらよろしいでしょうか。",
+          "doc": "のみわすれてしまったばあいは、どうしたらよろしいでしょうか。",
+          "v": "Trường hợp tôi lỡ quên uống thì nên làm sao ạ?"
+        }
+      ],
+      "np": [
+        {
+          "mau": "V-stem + 忘れる",
+          "giai": "Gốc động từ + 忘れる = quên làm việc đó: 飲み忘れる (quên uống), 買い忘れる (quên mua), 言い忘れる (quên nói).",
+          "vd": "牛乳を買い忘れました。",
+          "vdDoc": "ぎゅうにゅうをかいわすれました。",
+          "vdV": "Tôi quên mua sữa."
+        }
+      ]
+    },
+    {
+      "ai": "Y",
+      "t": "気がついた時に一回飲んでください。でも、二回分を一度に飲まないでくださいね。",
+      "doc": "きがついたときにいっかいのんでください。でも、にかいぶんをいちどにのまないでくださいね。",
+      "v": "Khi nhớ ra thì anh uống một lần. Nhưng đừng uống gộp hai lần một lúc nhé."
+    },
+    {
+      "ai": "Q",
+      "t": "はい。わからないことがあったら、また聞いてもいいですか。",
+      "doc": "はい。わからないことがあったら、またきいてもいいですか。",
+      "v": "Vâng. Nếu có gì không hiểu, tôi hỏi lại chị được không ạ?",
+      "khac": [
+        {
+          "kieu": "lịch sự",
+          "t": "何かあったら、お電話でお聞きしてもよろしいですか。",
+          "doc": "なにかあったら、おでんわでおききしてもよろしいですか。",
+          "v": "Nếu có gì, tôi gọi điện hỏi chị được không ạ?"
+        }
+      ]
+    },
+    {
+      "ai": "Y",
+      "t": "もちろんです。お大事に。",
+      "doc": "もちろんです。おだいじに。",
+      "v": "Tất nhiên rồi. Anh giữ gìn sức khoẻ nhé."
+    },
+    {
+      "ai": "Q",
+      "t": "ありがとうございました。聞いてよかったです。",
+      "doc": "ありがとうございました。きいてよかったです。",
+      "v": "Cảm ơn chị. May mà tôi đã hỏi.",
+      "khac": [
+        {
+          "kieu": "tự nhiên hơn",
+          "t": "ありがとうございました。いろいろ聞けて、安心しました。",
+          "doc": "ありがとうございました。いろいろきけて、あんしんしました。",
+          "v": "Cảm ơn chị. Hỏi được nhiều điều, tôi yên tâm rồi."
+        }
+      ]
+    }
+  ],
+  "tuVung": [
+    {
+      "chu": "処方箋",
+      "doc": "しょほうせん",
+      "nghia": "đơn thuốc (bác sĩ kê)",
+      "vd": "処方箋を薬局に出します。"
+    },
+    {
+      "chu": "薬局",
+      "doc": "やっきょく",
+      "nghia": "hiệu thuốc",
+      "vd": "駅の前に薬局があります。"
+    },
+    {
+      "chu": "お薬手帳",
+      "doc": "おくすりてちょう",
+      "nghia": "sổ tay ghi thuốc đã dùng",
+      "vd": "お薬手帳を忘れました。"
+    },
+    {
+      "chu": "アレルギー",
+      "doc": "アレルギー",
+      "nghia": "dị ứng",
+      "vd": "そばのアレルギーがあります。"
+    },
+    {
+      "chu": "食後",
+      "doc": "しょくご",
+      "nghia": "sau bữa ăn",
+      "vd": "この薬は食後に飲みます。"
+    },
+    {
+      "chu": "咳止め",
+      "doc": "せきどめ",
+      "nghia": "thuốc ho, thuốc giảm ho",
+      "vd": "咳止めをください。"
+    },
+    {
+      "chu": "眠くなる",
+      "doc": "ねむくなる",
+      "nghia": "trở nên buồn ngủ",
+      "vd": "ご飯を食べると眠くなります。"
+    },
+    {
+      "chu": "飲み忘れ",
+      "doc": "のみわすれ",
+      "nghia": "quên uống (thuốc)",
+      "vd": "薬の飲み忘れに気をつけてください。"
+    },
+    {
+      "chu": "一緒に",
+      "doc": "いっしょに",
+      "nghia": "cùng nhau, cùng lúc",
+      "vd": "一緒に帰りましょう。"
+    },
+    {
+      "chu": "お大事に",
+      "doc": "おだいじに",
+      "nghia": "giữ gìn sức khoẻ nhé (nói với người ốm)",
+      "vd": "どうぞお大事に。"
+    }
+  ],
+  "yNghia": "Thuốc là thứ không nên “đoán”. Hỏi một câu nghe có vẻ ngớ ngẩn — “食後 là ngay sau khi ăn à?” — còn hơn uống sai. Ở hiệu thuốc, câu hỏi của bạn luôn được chào đón.",
+  "meo": [
+    "Ở Nhật, khám xong bạn nhận 処方箋 rồi mang đến 薬局 để lấy thuốc. Nên làm お薬手帳 và mang theo mỗi lần.",
+    "Hỏi nghĩa từ lạ: 「〜って何ですか」 hoặc lịch sự hơn 「〜というのは何ですか」.",
+    "Cách uống thường gặp: 食前 (しょくぜん, trước ăn), 食後 (sau ăn), 食間 (しょっかん, giữa hai bữa), 寝る前 (trước khi ngủ).",
+    "Khuyên “không nên”: V ないほうがいい; dặn “đừng”: V ないでください."
+  ],
+  "cauHoi": [
+    {
+      "hoi": "お薬手帳 là gì?",
+      "chon": [
+        "Phiếu khám bệnh",
+        "Sổ ghi lại những thuốc đã uống",
+        "Thẻ bảo hiểm",
+        "Hoá đơn tiền thuốc"
+      ],
+      "dung": 1,
+      "giai": "「今まで飲んだ薬を記録するノートです」."
+    },
+    {
+      "hoi": "Quang bị dị ứng gì?",
+      "chon": [
+        "Thuốc hạ sốt",
+        "Sữa",
+        "Trứng",
+        "Không bị dị ứng gì"
+      ],
+      "dung": 2,
+      "giai": "「卵のアレルギーがあります」."
+    },
+    {
+      "hoi": "Vì sao dược sĩ dặn uống thuốc ho trước khi ngủ?",
+      "chon": [
+        "Vì thuốc có thể gây buồn ngủ mà Quang phải đạp xe",
+        "Vì thuốc rất đắng",
+        "Vì thuốc chỉ có tác dụng ban đêm",
+        "Vì Quang hay quên"
+      ],
+      "dung": 0,
+      "giai": "「飲むと眠くなることがあります」 và Quang mai phải đạp xe đi làm."
+    },
+    {
+      "hoi": "Lỡ quên uống thuốc thì làm sao?",
+      "chon": [
+        "Bỏ luôn lần đó",
+        "Lần sau uống gấp đôi",
+        "Nhớ ra thì uống một lần, không uống gộp hai lần",
+        "Gọi cấp cứu"
+      ],
+      "dung": 2,
+      "giai": "「気がついた時に一回飲んでください。でも、二回分を一度に飲まないでください」."
+    }
+  ]
+}

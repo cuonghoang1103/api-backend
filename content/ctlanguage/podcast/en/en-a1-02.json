@@ -1,6 +1,7 @@
 {
   "id": "en-a1-02",
   "nn": "en",
+  "danhMuc": "doi-song",
   "cap": "A1",
   "so": 2,
   "tieuDe": "Coffee, Please!",
@@ -9,38 +10,281 @@
   "chuDe": "Quán cà phê",
   "bieuTuong": "cup.and.saucer.fill",
   "nguoi": [
-    { "ma": "M", "ten": "Mai", "giong": "uk-nu", "vai": "khách" },
-    { "ma": "T", "ten": "Tom", "giong": "au-nam", "vai": "nhân viên quán" }
+    {
+      "ma": "M",
+      "ten": "Mai",
+      "giong": "uk-nu",
+      "vai": "khách"
+    },
+    {
+      "ma": "T",
+      "ten": "Tom",
+      "giong": "au-nam",
+      "vai": "nhân viên quán"
+    }
   ],
   "loi": [
-    { "ai": "T", "t": "Good morning! What can I get for you?", "v": "Chào buổi sáng! Chị muốn dùng gì ạ?" },
-    { "ai": "M", "t": "Hi. Can I have a coffee, please?", "v": "Chào anh. Cho tôi một ly cà phê nhé." },
-    { "ai": "T", "t": "Sure. Hot or iced?", "v": "Được ạ. Nóng hay đá?" },
-    { "ai": "M", "t": "Iced, please. It's very hot today.", "v": "Đá nhé. Hôm nay nóng quá." },
-    { "ai": "T", "t": "Yes, it is! Small, medium or large?", "v": "Đúng vậy! Ly nhỏ, vừa hay lớn ạ?" },
-    { "ai": "M", "t": "Medium, please. With milk, but no sugar.", "v": "Ly vừa nhé. Có sữa, nhưng không đường." },
-    { "ai": "T", "t": "No problem. Anything to eat?", "v": "Không vấn đề gì. Chị có muốn ăn gì không?" },
-    { "ai": "M", "t": "Hmm... How much is the banana cake?", "v": "Ừm... Bánh chuối bao nhiêu tiền vậy?" },
-    { "ai": "T", "t": "It's three dollars. My mum makes it every morning.", "v": "Ba đô-la ạ. Mẹ tôi làm bánh mỗi sáng." },
-    { "ai": "M", "t": "Wow! Then I want one, please.", "v": "Ồ! Vậy cho tôi một cái nhé." },
-    { "ai": "T", "t": "Great choice. That's seven dollars, please.", "v": "Chọn hay đấy. Tổng cộng bảy đô-la ạ." },
-    { "ai": "M", "t": "Here you are.", "v": "Tiền đây, gửi anh." },
-    { "ai": "T", "t": "Thank you. What's your name, please?", "v": "Cảm ơn chị. Chị tên gì ạ?" },
-    { "ai": "M", "t": "Mai. M, A, I.", "v": "Mai. M, A, I." },
-    { "ai": "T", "t": "Okay, Mai. Your coffee is ready in two minutes.", "v": "Được rồi, chị Mai. Hai phút nữa cà phê của chị sẽ xong." },
-    { "ai": "M", "t": "Thanks! And please say thank you to your mum. The cake smells so good.", "v": "Cảm ơn anh! Nhờ anh cảm ơn mẹ anh giúp tôi nhé. Bánh thơm quá." },
-    { "ai": "T", "t": "Ha ha, I will. She will be very happy!", "v": "Ha ha, tôi sẽ nói. Mẹ tôi sẽ vui lắm!" }
+    {
+      "ai": "T",
+      "t": "Good morning! What can I get for you?",
+      "v": "Chào buổi sáng! Chị muốn dùng gì ạ?",
+      "khac": [
+        {
+          "kieu": "tự nhiên hơn",
+          "t": "Morning! What can I get you?",
+          "v": "Chào buổi sáng! Chị dùng gì ạ?"
+        },
+        {
+          "kieu": "lịch sự",
+          "t": "Good morning! What would you like?",
+          "v": "Chào buổi sáng! Quý khách muốn dùng gì ạ?"
+        }
+      ]
+    },
+    {
+      "ai": "M",
+      "t": "Hi. Can I have a coffee, please?",
+      "v": "Chào anh. Cho tôi một ly cà phê nhé.",
+      "khac": [
+        {
+          "kieu": "lịch sự",
+          "t": "Hi. Could I have a coffee, please?",
+          "v": "Chào anh. Cho tôi một ly cà phê được không ạ?"
+        },
+        {
+          "kieu": "tự nhiên hơn",
+          "t": "Hi, I'll have a coffee, please.",
+          "v": "Chào anh, cho tôi một ly cà phê."
+        },
+        {
+          "kieu": "ngắn gọn",
+          "t": "A coffee, please.",
+          "v": "Một cà phê nhé."
+        }
+      ],
+      "np": [
+        {
+          "mau": "Can I have + N, please?",
+          "giai": "Mẫu gọi món/mua hàng thông dụng nhất. \"Could I have…?\" lịch sự hơn.",
+          "vd": "Can I have a glass of water, please?",
+          "vdV": "Cho tôi một ly nước được không?"
+        }
+      ]
+    },
+    {
+      "ai": "T",
+      "t": "Sure. Hot or iced?",
+      "v": "Được ạ. Nóng hay đá?",
+      "np": [
+        {
+          "mau": "A or B? (rút gọn)",
+          "giai": "Câu hỏi lựa chọn rút gọn, đầy đủ là \"Would you like it hot or iced?\". Đáp bằng lựa chọn + \"please\".",
+          "vd": "Here or to go?",
+          "vdV": "Uống ở đây hay mang đi?"
+        }
+      ]
+    },
+    {
+      "ai": "M",
+      "t": "Iced, please. It's very hot today.",
+      "v": "Đá nhé. Hôm nay nóng quá."
+    },
+    {
+      "ai": "T",
+      "t": "Yes, it is! Small, medium or large?",
+      "v": "Đúng vậy! Ly nhỏ, vừa hay lớn ạ?"
+    },
+    {
+      "ai": "M",
+      "t": "Medium, please. With milk, but no sugar.",
+      "v": "Ly vừa nhé. Có sữa, nhưng không đường.",
+      "khac": [
+        {
+          "kieu": "ngắn gọn",
+          "t": "Medium, please. Just milk, no sugar.",
+          "v": "Cỡ vừa. Chỉ sữa, không đường."
+        }
+      ],
+      "np": [
+        {
+          "mau": "with + N / no + N",
+          "giai": "Nói thêm hay bỏ gì: with milk, with ice, no sugar, no onions.",
+          "vd": "A sandwich with cheese, but no onions, please.",
+          "vdV": "Cho tôi bánh mì kẹp phô mai, không hành nhé."
+        }
+      ]
+    },
+    {
+      "ai": "T",
+      "t": "No problem. Anything to eat?",
+      "v": "Không vấn đề gì. Chị có muốn ăn gì không?"
+    },
+    {
+      "ai": "M",
+      "t": "Hmm... How much is the banana cake?",
+      "v": "Ừm... Bánh chuối bao nhiêu tiền vậy?",
+      "khac": [
+        {
+          "kieu": "ngắn gọn",
+          "t": "How much for the banana cake?",
+          "v": "Bánh chuối nhiêu vậy?"
+        }
+      ],
+      "np": [
+        {
+          "mau": "How much is + N?",
+          "giai": "Hỏi giá một món. Nhiều món: \"How much are…?\".",
+          "vd": "How much is a bottle of water?",
+          "vdV": "Một chai nước bao nhiêu tiền?"
+        }
+      ]
+    },
+    {
+      "ai": "T",
+      "t": "It's three dollars. My mum makes it every morning.",
+      "v": "Ba đô-la ạ. Mẹ tôi làm bánh mỗi sáng."
+    },
+    {
+      "ai": "M",
+      "t": "Wow! Then I want one, please.",
+      "v": "Ồ! Vậy cho tôi một cái nhé.",
+      "khac": [
+        {
+          "kieu": "lịch sự",
+          "t": "Then I'd like one, please.",
+          "v": "Vậy cho tôi một cái nhé.",
+          "ghiChu": "\"I want\" khi gọi món nghe hơi cộc"
+        },
+        {
+          "kieu": "tự nhiên hơn",
+          "t": "Oh, I'll take one, then!",
+          "v": "Ồ, vậy tôi lấy một cái!"
+        }
+      ],
+      "np": [
+        {
+          "mau": "I'd like vs. I want",
+          "giai": "\"I'd like\" (= I would like) lịch sự hơn \"I want\", nên dùng khi gọi món, mua hàng.",
+          "vd": "I'd like a table for two, please.",
+          "vdV": "Tôi muốn một bàn cho hai người."
+        }
+      ]
+    },
+    {
+      "ai": "T",
+      "t": "Great choice. That's seven dollars, please.",
+      "v": "Chọn hay đấy. Tổng cộng bảy đô-la ạ."
+    },
+    {
+      "ai": "M",
+      "t": "Here you are.",
+      "v": "Tiền đây, gửi anh.",
+      "khac": [
+        {
+          "kieu": "tự nhiên hơn",
+          "t": "Here you go.",
+          "v": "Đây ạ.",
+          "ghiChu": "văn nói, rất phổ biến"
+        }
+      ]
+    },
+    {
+      "ai": "T",
+      "t": "Thank you. What's your name, please?",
+      "v": "Cảm ơn chị. Chị tên gì ạ?"
+    },
+    {
+      "ai": "M",
+      "t": "Mai. M, A, I.",
+      "v": "Mai. M, A, I."
+    },
+    {
+      "ai": "T",
+      "t": "Okay, Mai. Your coffee is ready in two minutes.",
+      "v": "Được rồi, chị Mai. Hai phút nữa cà phê của chị sẽ xong.",
+      "np": [
+        {
+          "mau": "in + khoảng thời gian",
+          "giai": "\"in two minutes\" = hai phút NỮA (tính từ bây giờ), không phải \"trong vòng\".",
+          "vd": "The bus leaves in ten minutes.",
+          "vdV": "Mười phút nữa xe buýt chạy."
+        }
+      ]
+    },
+    {
+      "ai": "M",
+      "t": "Thanks! And please say thank you to your mum. The cake smells so good.",
+      "v": "Cảm ơn anh! Nhờ anh cảm ơn mẹ anh giúp tôi nhé. Bánh thơm quá."
+    },
+    {
+      "ai": "T",
+      "t": "Ha ha, I will. She will be very happy!",
+      "v": "Ha ha, tôi sẽ nói. Mẹ tôi sẽ vui lắm!",
+      "np": [
+        {
+          "mau": "will + V",
+          "giai": "Hứa (\"I will\") và dự đoán (\"She will be happy\"). Văn nói hay rút gọn: I'll, she'll.",
+          "vd": "I'll call you tomorrow.",
+          "vdV": "Mai tôi sẽ gọi cho bạn."
+        }
+      ]
+    }
   ],
   "tuVung": [
-    { "chu": "Can I have", "doc": "/kæn aɪ hæv/", "nghia": "cho tôi…, tôi có thể lấy… (gọi món lịch sự)", "vd": "Can I have a tea, please?" },
-    { "chu": "iced", "doc": "/aɪst/", "nghia": "có đá, ướp lạnh", "vd": "An iced tea, please." },
-    { "chu": "medium", "doc": "/ˈmiːdiəm/", "nghia": "cỡ vừa, trung bình", "vd": "A medium pizza is enough for two." },
-    { "chu": "sugar", "doc": "/ˈʃʊɡə(r)/", "nghia": "đường", "vd": "No sugar, please." },
-    { "chu": "milk", "doc": "/mɪlk/", "nghia": "sữa", "vd": "I drink milk every morning." },
-    { "chu": "How much is", "doc": "/haʊ mʌtʃ ɪz/", "nghia": "… giá bao nhiêu?", "vd": "How much is this bag?" },
-    { "chu": "Here you are", "doc": "/hɪər juː ɑː(r)/", "nghia": "của bạn đây (khi đưa đồ, đưa tiền)", "vd": "Here you are — your change." },
-    { "chu": "ready", "doc": "/ˈredi/", "nghia": "sẵn sàng, xong", "vd": "Dinner is ready!" },
-    { "chu": "smells", "doc": "/smelz/", "nghia": "có mùi, toả mùi (smell)", "vd": "This soup smells great." }
+    {
+      "chu": "Can I have",
+      "doc": "/kæn aɪ hæv/",
+      "nghia": "cho tôi…, tôi có thể lấy… (gọi món lịch sự)",
+      "vd": "Can I have a tea, please?"
+    },
+    {
+      "chu": "iced",
+      "doc": "/aɪst/",
+      "nghia": "có đá, ướp lạnh",
+      "vd": "An iced tea, please."
+    },
+    {
+      "chu": "medium",
+      "doc": "/ˈmiːdiəm/",
+      "nghia": "cỡ vừa, trung bình",
+      "vd": "A medium pizza is enough for two."
+    },
+    {
+      "chu": "sugar",
+      "doc": "/ˈʃʊɡə(r)/",
+      "nghia": "đường",
+      "vd": "No sugar, please."
+    },
+    {
+      "chu": "milk",
+      "doc": "/mɪlk/",
+      "nghia": "sữa",
+      "vd": "I drink milk every morning."
+    },
+    {
+      "chu": "How much is",
+      "doc": "/haʊ mʌtʃ ɪz/",
+      "nghia": "… giá bao nhiêu?",
+      "vd": "How much is this bag?"
+    },
+    {
+      "chu": "Here you are",
+      "doc": "/hɪər juː ɑː(r)/",
+      "nghia": "của bạn đây (khi đưa đồ, đưa tiền)",
+      "vd": "Here you are — your change."
+    },
+    {
+      "chu": "ready",
+      "doc": "/ˈredi/",
+      "nghia": "sẵn sàng, xong",
+      "vd": "Dinner is ready!"
+    },
+    {
+      "chu": "smells",
+      "doc": "/smelz/",
+      "nghia": "có mùi, toả mùi (smell)",
+      "vd": "This soup smells great."
+    }
   ],
   "yNghia": "Gọi món cũng là giao tiếp: nói rõ mình muốn gì, thêm một chữ \"please\" là đủ lịch sự. Và một lời cảm ơn nhỏ gửi đúng người — như người mẹ dậy sớm làm bánh — có thể làm sáng cả ngày của họ.",
   "meo": [
@@ -49,9 +293,45 @@
     "\"Here you are.\" dùng khi đưa đồ hoặc đưa tiền cho người khác."
   ],
   "cauHoi": [
-    { "hoi": "Mai gọi cà phê như thế nào?", "chon": ["Nóng, ly lớn, có đường", "Đá, ly vừa, có sữa, không đường", "Đá, ly nhỏ, không sữa"], "dung": 1, "giai": "Mai nói: \"Iced, please… Medium, please. With milk, but no sugar.\"" },
-    { "hoi": "Ai làm bánh chuối?", "chon": ["Tom", "Mai", "Mẹ của Tom"], "dung": 2, "giai": "Tom nói: \"My mum makes it every morning.\"" },
-    { "hoi": "Khi đưa tiền cho người khác, ta nói câu nào?", "chon": ["Here you are.", "Here are you.", "You are here."], "dung": 0, "giai": "\"Here you are.\" = của bạn đây. \"You are here\" là \"bạn đang ở đây\"." },
-    { "hoi": "Một cái bánh chuối giá bao nhiêu?", "chon": ["Bảy đô-la", "Hai đô-la", "Ba đô-la"], "dung": 2, "giai": "\"It's three dollars.\" Bảy đô-la là tổng tiền cả cà phê và bánh." }
+    {
+      "hoi": "Mai gọi cà phê như thế nào?",
+      "chon": [
+        "Nóng, ly lớn, có đường",
+        "Đá, ly vừa, có sữa, không đường",
+        "Đá, ly nhỏ, không sữa"
+      ],
+      "dung": 1,
+      "giai": "Mai nói: \"Iced, please… Medium, please. With milk, but no sugar.\""
+    },
+    {
+      "hoi": "Ai làm bánh chuối?",
+      "chon": [
+        "Tom",
+        "Mai",
+        "Mẹ của Tom"
+      ],
+      "dung": 2,
+      "giai": "Tom nói: \"My mum makes it every morning.\""
+    },
+    {
+      "hoi": "Khi đưa tiền cho người khác, ta nói câu nào?",
+      "chon": [
+        "Here you are.",
+        "Here are you.",
+        "You are here."
+      ],
+      "dung": 0,
+      "giai": "\"Here you are.\" = của bạn đây. \"You are here\" là \"bạn đang ở đây\"."
+    },
+    {
+      "hoi": "Một cái bánh chuối giá bao nhiêu?",
+      "chon": [
+        "Bảy đô-la",
+        "Hai đô-la",
+        "Ba đô-la"
+      ],
+      "dung": 2,
+      "giai": "\"It's three dollars.\" Bảy đô-la là tổng tiền cả cà phê và bánh."
+    }
   ]
 }

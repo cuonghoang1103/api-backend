@@ -1,0 +1,519 @@
+{
+  "id": "zh-ds-hsk4-01",
+  "nn": "zh",
+  "danhMuc": "doi-song",
+  "cap": "HSK4",
+  "so": 2,
+  "tieuDe": "我想退货",
+  "tieuDeViet": "Tôi muốn trả hàng",
+  "moTa": "Tai nghe Trang mua hỏng sau hai ngày, nhưng cô quay lại cửa hàng vào đúng ngày thứ tám — quá hạn \"bảy ngày đổi trả\". Phàn nàn lịch sự mà kiên định: thừa nhận quy định, đưa bằng chứng, nhờ hỏi quản lý — và còn góp ý để người sau không phải chạy uổng một chuyến.",
+  "chuDe": "Phàn nàn, đổi trả",
+  "bieuTuong": "arrow.uturn.backward.circle.fill",
+  "nguoi": [
+    {
+      "ma": "T",
+      "ten": "Trang",
+      "giong": "zh-nu",
+      "vai": "khách hàng người Việt"
+    },
+    {
+      "ma": "S",
+      "ten": "Nhân viên",
+      "giong": "zh-nam",
+      "vai": "nhân viên chăm sóc khách hàng"
+    }
+  ],
+  "loi": [
+    {
+      "ai": "S",
+      "t": "您好，请问有什么可以帮您？",
+      "doc": "Nín hǎo, qǐngwèn yǒu shénme kěyǐ bāng nín?",
+      "v": "Chào chị, em có thể giúp gì cho chị ạ?"
+    },
+    {
+      "ai": "T",
+      "t": "你好。我上周六在你们店买了一副耳机，用了两天，左边就没有声音了。",
+      "doc": "Nǐ hǎo. Wǒ shàng zhōuliù zài nǐmen diàn mǎi le yí fù ěrjī, yòng le liǎng tiān, zuǒbian jiù méiyǒu shēngyīn le.",
+      "v": "Chào em. Thứ Bảy tuần trước chị mua một chiếc tai nghe ở cửa hàng mình, dùng được hai ngày thì bên trái đã mất tiếng.",
+      "khac": [
+        {
+          "kieu": "mềm mỏng",
+          "t": "不好意思，打扰一下，我在这儿买的耳机好像有点儿问题。",
+          "doc": "Bù hǎoyìsi, dǎrǎo yíxià, wǒ zài zhèr mǎi de ěrjī hǎoxiàng yǒudiǎnr wèntí.",
+          "v": "Xin lỗi làm phiền chút, tai nghe chị mua ở đây hình như có chút vấn đề.",
+          "ghiChu": "mở lời nhẹ trước, rồi mới kể chi tiết"
+        },
+        {
+          "kieu": "ngắn gọn",
+          "t": "这副耳机刚买两天就坏了。",
+          "doc": "Zhè fù ěrjī gāng mǎi liǎng tiān jiù huài le.",
+          "v": "Tai nghe này mới mua hai ngày đã hỏng."
+        }
+      ],
+      "np": [
+        {
+          "mau": "V + 了 + thời lượng，就……了",
+          "giai": "用了两天就… = mới dùng hai ngày đã… 就 nhấn mạnh việc xảy ra SỚM hơn mong đợi — rất hợp khi phàn nàn chất lượng.",
+          "vd": "这双鞋穿了一个星期就破了。",
+          "vdDoc": "Zhè shuāng xié chuān le yí ge xīngqī jiù pò le.",
+          "vdV": "Đôi giày này mới đi một tuần đã rách."
+        }
+      ]
+    },
+    {
+      "ai": "S",
+      "t": "不好意思，给您带来麻烦了。我能看一下吗？",
+      "doc": "Bù hǎoyìsi, gěi nín dài lái máfan le. Wǒ néng kàn yíxià ma?",
+      "v": "Xin lỗi chị, đã gây phiền phức cho chị. Em xem một chút được không ạ?"
+    },
+    {
+      "ai": "T",
+      "t": "当然。这是耳机，盒子和小票都在这儿。",
+      "doc": "Dāngrán. Zhè shì ěrjī, hézi hé xiǎopiào dōu zài zhèr.",
+      "v": "Tất nhiên. Đây là tai nghe, hộp và hóa đơn đều ở đây."
+    },
+    {
+      "ai": "S",
+      "t": "确实没有声音。您是想换一副新的，还是退货？",
+      "doc": "Quèshí méiyǒu shēngyīn. Nín shì xiǎng huàn yí fù xīn de, háishi tuìhuò?",
+      "v": "Đúng là không có tiếng thật. Chị muốn đổi cái mới hay trả hàng ạ?"
+    },
+    {
+      "ai": "T",
+      "t": "我想退货。说实话，我对这个牌子有点儿失望了。",
+      "doc": "Wǒ xiǎng tuìhuò. Shuō shíhuà, wǒ duì zhège páizi yǒudiǎnr shīwàng le.",
+      "v": "Chị muốn trả hàng. Nói thật, chị hơi thất vọng về thương hiệu này.",
+      "khac": [
+        {
+          "kieu": "mềm mỏng",
+          "t": "如果可以的话，我想退货。",
+          "doc": "Rúguǒ kěyǐ dehuà, wǒ xiǎng tuìhuò.",
+          "v": "Nếu được thì chị muốn trả hàng."
+        },
+        {
+          "kieu": "nhấn mạnh",
+          "t": "我要退货。",
+          "doc": "Wǒ yào tuìhuò.",
+          "v": "Tôi muốn trả hàng.",
+          "ghiChu": "dứt khoát, hơi cứng — dễ nghe như sắp cãi nhau, chỉ dùng khi đã thương lượng không được"
+        }
+      ],
+      "np": [
+        {
+          "mau": "对 + O + 失望/满意",
+          "giai": "Thái độ với cái gì: 对 + đối tượng + tính từ cảm xúc. 对…失望 (thất vọng về), 对…满意 (hài lòng với), 对…感兴趣.",
+          "vd": "我对这次的服务很满意。",
+          "vdDoc": "Wǒ duì zhè cì de fúwù hěn mǎnyì.",
+          "vdV": "Tôi rất hài lòng với dịch vụ lần này."
+        }
+      ]
+    },
+    {
+      "ai": "S",
+      "t": "是这样的，我们店的规定是七天内可以退，您是上周六买的，今天正好是第八天。",
+      "doc": "Shì zhèyàng de, wǒmen diàn de guīdìng shì qī tiān nèi kěyǐ tuì, nín shì shàng zhōuliù mǎi de, jīntiān zhènghǎo shì dì bā tiān.",
+      "v": "Là thế này ạ, quy định của cửa hàng là trả hàng trong bảy ngày, chị mua thứ Bảy tuần trước, hôm nay vừa đúng ngày thứ tám.",
+      "np": [
+        {
+          "mau": "是……的 (nhấn thời gian/cách thức)",
+          "giai": "Với việc đã xảy ra, 是…的 nhấn mạnh THỜI ĐIỂM, nơi chốn, cách thức: 您是上周六买的 = chị mua vào thứ Bảy tuần trước (chứ không phải lúc khác).",
+          "vd": "我是坐高铁来的。",
+          "vdDoc": "Wǒ shì zuò gāotiě lái de.",
+          "vdV": "Tôi đến bằng tàu cao tốc."
+        },
+        {
+          "mau": "是这样的",
+          "giai": "Câu mở đầu khi sắp giải thích một điều người nghe có thể không thích — giúp lời từ chối mềm hơn.",
+          "vd": "是这样的，明天的会议改时间了。",
+          "vdDoc": "Shì zhèyàng de, míngtiān de huìyì gǎi shíjiān le.",
+          "vdV": "Là thế này, cuộc họp ngày mai đổi giờ rồi."
+        }
+      ]
+    },
+    {
+      "ai": "T",
+      "t": "可是耳机第三天就坏了。那几天我在外地出差，今天才有时间过来。",
+      "doc": "Kěshì ěrjī dì sān tiān jiù huài le. Nà jǐ tiān wǒ zài wàidì chūchāi, jīntiān cái yǒu shíjiān guòlai.",
+      "v": "Nhưng tai nghe hỏng từ ngày thứ ba rồi. Mấy hôm đó chị đi công tác ở tỉnh khác, hôm nay mới có thời gian qua.",
+      "np": [
+        {
+          "mau": "就 (sớm) ↔ 才 (muộn)",
+          "giai": "Cùng một câu có cả hai: 第三天就坏了 (hỏng sớm), 今天才有时间 (mãi hôm nay mới rảnh). Học cặp này là nói được \"thời gian theo cảm nhận\".",
+          "vd": "他七点就到了，我八点才到。",
+          "vdDoc": "Tā qī diǎn jiù dào le, wǒ bā diǎn cái dào.",
+          "vdV": "Anh ấy bảy giờ đã đến, tôi tám giờ mới đến."
+        }
+      ]
+    },
+    {
+      "ai": "S",
+      "t": "我理解您的情况，不过超过七天，系统里就退不了了。",
+      "doc": "Wǒ lǐjiě nín de qíngkuàng, búguò chāoguò qī tiān, xìtǒng li jiù tuì bu liǎo le.",
+      "v": "Em hiểu hoàn cảnh của chị, nhưng quá bảy ngày thì hệ thống không cho trả nữa.",
+      "np": [
+        {
+          "mau": "V + 不了 (liǎo)",
+          "giai": "不了 sau động từ = không thể làm được (do điều kiện khách quan). 了 ở đây đọc liǎo, không đọc le: 退不了, 来不了, 吃不了.",
+          "vd": "明天下大雨，我们去不了了。",
+          "vdDoc": "Míngtiān xià dà yǔ, wǒmen qù bu liǎo le.",
+          "vdV": "Mai mưa to, mình không đi được nữa rồi."
+        }
+      ]
+    },
+    {
+      "ai": "T",
+      "t": "我明白，这不是你的问题。不过东西是在七天内坏的，这一点我有证据。",
+      "doc": "Wǒ míngbai, zhè bú shì nǐ de wèntí. Búguò dōngxi shì zài qī tiān nèi huài de, zhè yì diǎn wǒ yǒu zhèngjù.",
+      "v": "Chị hiểu, đây không phải lỗi của em. Nhưng đồ hỏng trong vòng bảy ngày, điểm này chị có bằng chứng.",
+      "khac": [
+        {
+          "kieu": "lịch sự",
+          "t": "我知道您也是按规定办事，但是我想请您看看我的情况。",
+          "doc": "Wǒ zhīdào nín yě shì àn guīdìng bànshì, dànshì wǒ xiǎng qǐng nín kànkan wǒ de qíngkuàng.",
+          "v": "Chị biết em cũng làm theo quy định, nhưng chị muốn nhờ em xem xét trường hợp của chị."
+        },
+        {
+          "kieu": "nhấn mạnh",
+          "t": "问题是，耳机是在七天内坏的。",
+          "doc": "Wèntí shì, ěrjī shì zài qī tiān nèi huài de.",
+          "v": "Vấn đề là, tai nghe hỏng trong vòng bảy ngày."
+        }
+      ]
+    },
+    {
+      "ai": "T",
+      "t": "你看，这是我第三天给你们客服发的消息，还有当时录的视频。",
+      "doc": "Nǐ kàn, zhè shì wǒ dì sān tiān gěi nǐmen kèfú fā de xiāoxi, hái yǒu dāngshí lù de shìpín.",
+      "v": "Em xem, đây là tin nhắn chị gửi bộ phận chăm sóc khách hàng vào ngày thứ ba, còn có video quay lúc đó.",
+      "np": [
+        {
+          "mau": "Định ngữ dài + 的 + danh từ",
+          "giai": "Cả cụm \"tôi gửi cho CSKH vào ngày thứ ba\" đứng TRƯỚC 的 để bổ nghĩa cho 消息. Tiếng Việt đặt sau (\"tin nhắn mà…\"), tiếng Trung đặt trước.",
+          "vd": "这是我妈妈昨天给我寄的东西。",
+          "vdDoc": "Zhè shì wǒ māma zuótiān gěi wǒ jì de dōngxi.",
+          "vdV": "Đây là đồ mẹ tôi gửi cho tôi hôm qua."
+        }
+      ]
+    },
+    {
+      "ai": "S",
+      "t": "哦，您那时候已经联系过我们了？",
+      "doc": "Ò, nín nà shíhou yǐjīng liánxì guo wǒmen le?",
+      "v": "Ồ, lúc đó chị đã liên hệ với bên em rồi ạ?"
+    },
+    {
+      "ai": "T",
+      "t": "对，客服让我带着东西来店里。我按他说的做了，没想到会因为一天被拒绝。",
+      "doc": "Duì, kèfú ràng wǒ dàizhe dōngxi lái diàn li. Wǒ àn tā shuō de zuò le, méi xiǎngdào huì yīnwèi yì tiān bèi jùjué.",
+      "v": "Đúng, nhân viên chăm sóc khách hàng bảo chị mang đồ đến cửa hàng. Chị làm đúng như lời anh ấy, không ngờ lại bị từ chối chỉ vì một ngày.",
+      "np": [
+        {
+          "mau": "被 + V (bị động)",
+          "giai": "被 đánh dấu bị động, thường mang nghĩa không mong muốn: 被拒绝 (bị từ chối), 被偷了 (bị trộm). Người làm có thể bỏ: 被(人)拒绝.",
+          "vd": "我的自行车被偷了。",
+          "vdDoc": "Wǒ de zìxíngchē bèi tōu le.",
+          "vdV": "Xe đạp của tôi bị trộm rồi."
+        },
+        {
+          "mau": "没想到……",
+          "giai": "没想到 = không ngờ, dùng cho chuyện bất ngờ (vui hoặc buồn). Nói nhẹ nhàng mà vẫn cho thấy mình không hài lòng.",
+          "vd": "没想到他会来。",
+          "vdDoc": "Méi xiǎngdào tā huì lái.",
+          "vdV": "Không ngờ anh ấy lại đến."
+        }
+      ]
+    },
+    {
+      "ai": "S",
+      "t": "您说得有道理。请您稍等一下，我去问问我们经理。",
+      "doc": "Nín shuō de yǒu dàolǐ. Qǐng nín shāo děng yíxià, wǒ qù wènwen wǒmen jīnglǐ.",
+      "v": "Chị nói có lý. Chị vui lòng chờ một chút, em đi hỏi quản lý."
+    },
+    {
+      "ai": "T",
+      "t": "好的，麻烦你了。",
+      "doc": "Hǎo de, máfan nǐ le.",
+      "v": "Được, làm phiền em nhé.",
+      "khac": [
+        {
+          "kieu": "lịch sự",
+          "t": "辛苦你了，我在这儿等。",
+          "doc": "Xīnkǔ nǐ le, wǒ zài zhèr děng.",
+          "v": "Vất vả cho em rồi, chị đợi ở đây."
+        }
+      ]
+    },
+    {
+      "ai": "S",
+      "t": "让您久等了。经理说，既然您七天内就联系过客服，我们可以给您办退货。",
+      "doc": "Ràng nín jiǔ děng le. Jīnglǐ shuō, jìrán nín qī tiān nèi jiù liánxì guo kèfú, wǒmen kěyǐ gěi nín bàn tuìhuò.",
+      "v": "Để chị đợi lâu rồi. Quản lý nói, vì chị đã liên hệ chăm sóc khách hàng trong vòng bảy ngày, nên bên em có thể làm thủ tục trả hàng cho chị.",
+      "np": [
+        {
+          "mau": "既然……，就/可以……",
+          "giai": "既然 = \"đã… thì…\": nêu một sự thật cả hai bên công nhận, rồi rút ra kết luận. Khác 因为 (nêu nguyên nhân thông thường).",
+          "vd": "既然你不舒服，就早点儿回家吧。",
+          "vdDoc": "Jìrán nǐ bù shūfu, jiù zǎo diǎnr huí jiā ba.",
+          "vdV": "Đã không khỏe thì về nhà sớm đi."
+        }
+      ]
+    },
+    {
+      "ai": "T",
+      "t": "太好了，谢谢你帮我去问。",
+      "doc": "Tài hǎo le, xièxie nǐ bāng wǒ qù wèn.",
+      "v": "Tốt quá, cảm ơn em đã đi hỏi giúp chị."
+    },
+    {
+      "ai": "S",
+      "t": "应该的。钱会原路退回，一般三到五个工作日到账。",
+      "doc": "Yīnggāi de. Qián huì yuán lù tuì huí, yìbān sān dào wǔ ge gōngzuòrì dào zhàng.",
+      "v": "Việc nên làm mà chị. Tiền sẽ hoàn về đúng tài khoản chị đã thanh toán, thường từ ba đến năm ngày làm việc."
+    },
+    {
+      "ai": "T",
+      "t": "好的。另外，我想提一个小建议，可以吗？",
+      "doc": "Hǎo de. Lìngwài, wǒ xiǎng tí yí ge xiǎo jiànyì, kěyǐ ma?",
+      "v": "Được. Ngoài ra, chị muốn góp một ý nhỏ, được không?",
+      "khac": [
+        {
+          "kieu": "chuyên nghiệp",
+          "t": "有件事我想跟您反映一下。",
+          "doc": "Yǒu jiàn shì wǒ xiǎng gēn nín fǎnyìng yíxià.",
+          "v": "Có một việc tôi muốn phản ánh với anh.",
+          "ghiChu": "反映 là cách nói chuẩn khi góp ý với cửa hàng, cơ quan"
+        },
+        {
+          "kieu": "mềm mỏng",
+          "t": "我能说说我的一点儿想法吗？",
+          "doc": "Wǒ néng shuōshuo wǒ de yìdiǎnr xiǎngfǎ ma?",
+          "v": "Chị nói chút suy nghĩ của mình được không?"
+        }
+      ]
+    },
+    {
+      "ai": "S",
+      "t": "您请说。",
+      "doc": "Nín qǐng shuō.",
+      "v": "Mời chị nói ạ."
+    },
+    {
+      "ai": "T",
+      "t": "客服在电话里能不能直接告诉顾客，七天是从哪天算起？那样大家就不会白跑一趟了。",
+      "doc": "Kèfú zài diànhuà li néng bu néng zhíjiē gàosu gùkè, qī tiān shì cóng nǎ tiān suàn qǐ? Nàyàng dàjiā jiù bú huì bái pǎo yí tàng le.",
+      "v": "Bên chăm sóc khách hàng có thể nói luôn với khách qua điện thoại rằng bảy ngày được tính từ ngày nào không? Như vậy mọi người sẽ không phải chạy uổng công một chuyến.",
+      "np": [
+        {
+          "mau": "白 + V (uổng công)",
+          "giai": "白 trước động từ = làm mà không được gì: 白跑一趟 (chạy uổng một chuyến), 白等了 (đợi uổng công).",
+          "vd": "他不在家，我白去了。",
+          "vdDoc": "Tā bú zài jiā, wǒ bái qù le.",
+          "vdV": "Anh ấy không có nhà, tôi đi uổng công."
+        },
+        {
+          "mau": "从……算起",
+          "giai": "从 + mốc + 算起 = tính từ mốc nào: 从购买那天算起 (tính từ ngày mua).",
+          "vd": "保修期从购买当天算起。",
+          "vdDoc": "Bǎoxiū qī cóng gòumǎi dàngtiān suàn qǐ.",
+          "vdV": "Thời hạn bảo hành tính từ chính ngày mua."
+        }
+      ]
+    },
+    {
+      "ai": "S",
+      "t": "这个建议很好，我会跟经理反映的。今天真是不好意思。",
+      "doc": "Zhège jiànyì hěn hǎo, wǒ huì gēn jīnglǐ fǎnyìng de. Jīntiān zhēn shì bù hǎoyìsi.",
+      "v": "Ý kiến này rất hay, em sẽ phản ánh với quản lý. Hôm nay thật sự xin lỗi chị.",
+      "np": [
+        {
+          "mau": "会……的 (cam kết)",
+          "giai": "会 + V + 的 = chắc chắn sẽ…, dùng khi hứa hoặc khẳng định: 我会跟经理反映的, 他会来的.",
+          "vd": "放心吧，我会准时到的。",
+          "vdDoc": "Fàngxīn ba, wǒ huì zhǔnshí dào de.",
+          "vdV": "Yên tâm, tôi sẽ đến đúng giờ."
+        }
+      ]
+    },
+    {
+      "ai": "T",
+      "t": "没关系，你的态度很好，问题也解决了。",
+      "doc": "Méi guānxi, nǐ de tàidu hěn hǎo, wèntí yě jiějué le.",
+      "v": "Không sao, thái độ của em rất tốt, vấn đề cũng giải quyết xong rồi."
+    },
+    {
+      "ai": "S",
+      "t": "谢谢您的理解。您还想看看别的耳机吗？今天有活动。",
+      "doc": "Xièxie nín de lǐjiě. Nín hái xiǎng kànkan bié de ěrjī ma? Jīntiān yǒu huódòng.",
+      "v": "Cảm ơn chị đã thông cảm. Chị có muốn xem tai nghe khác không ạ? Hôm nay có khuyến mãi."
+    },
+    {
+      "ai": "T",
+      "t": "哈哈，今天先不看了，等钱退回来再说吧！",
+      "doc": "Hāha, jīntiān xiān bú kàn le, děng qián tuì huílai zài shuō ba!",
+      "v": "Haha, hôm nay thôi chưa xem, đợi tiền hoàn về rồi tính!",
+      "khac": [
+        {
+          "kieu": "mềm mỏng",
+          "t": "谢谢，我改天再来看看。",
+          "doc": "Xièxie, wǒ gǎitiān zài lái kànkan.",
+          "v": "Cảm ơn em, hôm khác chị lại ghé xem.",
+          "ghiChu": "câu từ chối lời mời mua hàng lịch sự, phổ biến"
+        }
+      ],
+      "np": [
+        {
+          "mau": "等……再说",
+          "giai": "等 + điều kiện + 再说 = đợi… rồi hẵng tính, cách hoãn quyết định nhẹ nhàng.",
+          "vd": "这件事等我回来再说。",
+          "vdDoc": "Zhè jiàn shì děng wǒ huílai zài shuō.",
+          "vdV": "Việc này đợi tôi về rồi tính."
+        }
+      ]
+    },
+    {
+      "ai": "S",
+      "t": "好的，欢迎下次光临！",
+      "doc": "Hǎo de, huānyíng xià cì guānglín!",
+      "v": "Vâng, hẹn gặp lại chị lần sau!"
+    }
+  ],
+  "tuVung": [
+    {
+      "chu": "耳机",
+      "doc": "ěrjī",
+      "nghia": "tai nghe",
+      "vd": "我的耳机没电了。"
+    },
+    {
+      "chu": "退货",
+      "doc": "tuìhuò",
+      "nghia": "trả hàng (换货 = đổi hàng)",
+      "vd": "这个可以退货吗？"
+    },
+    {
+      "chu": "确实",
+      "doc": "quèshí",
+      "nghia": "quả thật, đúng là",
+      "vd": "他说的确实有道理。"
+    },
+    {
+      "chu": "失望",
+      "doc": "shīwàng",
+      "nghia": "thất vọng",
+      "vd": "别让我失望。"
+    },
+    {
+      "chu": "规定",
+      "doc": "guīdìng",
+      "nghia": "quy định",
+      "vd": "这是公司的规定。"
+    },
+    {
+      "chu": "出差",
+      "doc": "chūchāi",
+      "nghia": "đi công tác (差 đọc chāi)",
+      "vd": "他下周去上海出差。"
+    },
+    {
+      "chu": "超过",
+      "doc": "chāoguò",
+      "nghia": "vượt quá",
+      "vd": "不能超过一百块。"
+    },
+    {
+      "chu": "证据",
+      "doc": "zhèngjù",
+      "nghia": "bằng chứng",
+      "vd": "你有证据吗？"
+    },
+    {
+      "chu": "客服",
+      "doc": "kèfú",
+      "nghia": "chăm sóc khách hàng (客户服务)",
+      "vd": "有问题可以联系客服。"
+    },
+    {
+      "chu": "拒绝",
+      "doc": "jùjué",
+      "nghia": "từ chối",
+      "vd": "他拒绝了我的邀请。"
+    },
+    {
+      "chu": "既然",
+      "doc": "jìrán",
+      "nghia": "đã… thì…, vì đã…",
+      "vd": "既然来了，就多坐一会儿。"
+    },
+    {
+      "chu": "建议",
+      "doc": "jiànyì",
+      "nghia": "đề nghị, góp ý",
+      "vd": "你有什么建议？"
+    },
+    {
+      "chu": "态度",
+      "doc": "tàidu",
+      "nghia": "thái độ",
+      "vd": "他的工作态度很好。"
+    }
+  ],
+  "yNghia": "Phàn nàn giỏi không phải là nói to, mà là nói đúng thứ tự: kể sự việc, thừa nhận người đối diện không có lỗi (这不是你的问题), đưa bằng chứng, rồi để họ có đường đi hỏi cấp trên. Trang không hề lớn tiếng mà vẫn được trả hàng — và lời góp ý cuối giúp cả những người sau. Cứng rắn với vấn đề, mềm mỏng với con người.",
+  "meo": [
+    "Mở lời phàn nàn: 不好意思，打扰一下 + sự việc. Kể bằng mẫu V + 了 + thời lượng + 就…了 (用了两天就坏了) để nhấn mạnh hỏng sớm.",
+    "Bác bỏ mà không gây hấn: 我明白/我理解…，不过… — công nhận trước, phản bác sau.",
+    "Chữ đa âm trong bài: 了 liǎo (退不了) ↔ le; 差 chāi (出差) ↔ chà (差不多); 当 dāng (当时) ↔ dàng (当天).",
+    "Góp ý với cửa hàng, cơ quan: 我想提一个建议 / 我想反映一下 — nghe xây dựng, không phải cãi nhau."
+  ],
+  "cauHoi": [
+    {
+      "hoi": "Vì sao lúc đầu nhân viên nói không trả hàng được?",
+      "chon": [
+        "Vì Trang làm mất hóa đơn",
+        "Vì hôm nay đã là ngày thứ tám, quá hạn bảy ngày",
+        "Vì tai nghe bị hỏng do Trang làm rơi"
+      ],
+      "dung": 1,
+      "giai": "七天内可以退……今天正好是第八天。"
+    },
+    {
+      "hoi": "Bằng chứng Trang đưa ra là gì?",
+      "chon": [
+        "Hóa đơn và hộp",
+        "Tin nhắn gửi bộ phận CSKH ngày thứ ba và video quay lúc đó",
+        "Lời làm chứng của bạn"
+      ],
+      "dung": 1,
+      "giai": "这是我第三天给你们客服发的消息，还有当时录的视频。"
+    },
+    {
+      "hoi": "Quản lý đồng ý trả hàng vì lý do gì?",
+      "chon": [
+        "Vì Trang là khách quen",
+        "Vì Trang đã liên hệ CSKH trong vòng bảy ngày",
+        "Vì tai nghe còn mới"
+      ],
+      "dung": 1,
+      "giai": "既然您七天内就联系过客服，我们可以给您办退货。"
+    },
+    {
+      "hoi": "Trang góp ý điều gì?",
+      "chon": [
+        "Kéo dài thời hạn đổi trả lên mười ngày",
+        "CSKH nên nói rõ qua điện thoại bảy ngày tính từ ngày nào",
+        "Cửa hàng nên bán tai nghe tốt hơn"
+      ],
+      "dung": 1,
+      "giai": "客服……能不能直接告诉顾客，七天是从哪天算起？"
+    },
+    {
+      "hoi": "\"退不了\" đọc thế nào?",
+      "chon": [
+        "tuì bu le",
+        "tuì bu liǎo",
+        "tuì bù lái"
+      ],
+      "dung": 1,
+      "giai": "了 trong bổ ngữ khả năng V不了 đọc liǎo."
+    }
+  ]
+}

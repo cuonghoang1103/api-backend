@@ -245,10 +245,20 @@ export async function deTroChoi(nnGoc: string, soCau = 40): Promise<MucTroChoi[]
     : nn === 'zh'
       ? `t.doc IS NOT NULL AND t.doc !~ '^[A-ZĀÁǍÀĒÉĚÈŌÓǑÒ]' AND char_length(t.chu) BETWEEN 1 AND 4`
       : `t.doc IS NOT NULL AND t.doc_latin IS NOT NULL AND char_length(t.chu) BETWEEN 1 AND 5`;
-  const ds = await prisma.$queryRawUnsafe<{ id: number; chu: string; doc: string | null; doc_latin: string | null; han_viet: string | null; nghia_vi: string | null; nghia_en: string | null }[]>(
-    `SELECT t.id, t.chu, t.doc, t.doc_latin, t.han_viet, t.nghia_vi, t.nghia_en FROM ctl_tu t
-      WHERE t.nn = $1 AND t.nguon = 'kho' AND t.nghia_vi IS NOT NULL AND ${dieuKien}
-      ORDER BY random() LIMIT $2`, nn, n * 2);
+  type Dong = { id: number; chu: string; doc: string | null; doc_latin: string | null; han_viet: string | null; nghia_vi: string | null; nghia_en: string | null };
+  const COT_CHOI = `SELECT t.id, t.chu, t.doc, t.doc_latin, t.han_viet, t.nghia_vi, t.nghia_en FROM ctl_tu t
+      WHERE t.nn = $1 AND t.nguon = 'kho' AND t.nghia_vi IS NOT NULL AND ${dieuKien}`;
+  // Ưu tiên từ của kho CHỦ ĐỀ tới cấp trung cao (tuDeChoi) — thiếu mới bù bằng cả kho (16/11/2026: hết "rhumbline").
+  const { tuDeChoi } = await import('./chuDeTu.js');
+  const chon = tuDeChoi(nn as 'en' | 'ja' | 'zh');
+  let ds: Dong[] = chon.length
+    ? await prisma.$queryRawUnsafe<Dong[]>(`${COT_CHOI} AND ${nn === 'en' ? 'lower(t.chu)' : 't.chu'} = ANY($3::text[]) ORDER BY random() LIMIT $2`, nn, n * 2, chon)
+    : [];
+  if (ds.length < n) {
+    const bu = await prisma.$queryRawUnsafe<Dong[]>(`${COT_CHOI} ORDER BY random() LIMIT $2`, nn, n * 2);
+    const co = new Set(ds.map((d) => d.id));
+    ds = [...ds, ...bu.filter((d) => !co.has(d.id))];
+  }
   const daCo = new Set<string>();
   const ra: MucTroChoi[] = [];
   for (const r of ds) {

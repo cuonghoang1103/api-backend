@@ -1,0 +1,494 @@
+{
+  "id": "ja-se-n3-03",
+  "nn": "ja",
+  "danhMuc": "phan-mem",
+  "cap": "N3",
+  "so": 3,
+  "tieuDe": "指摘はコードに、感謝は人に",
+  "tieuDeViet": "Góp ý cho code, cảm ơn cho người",
+  "moTa": "Hoa review code của đàn em Yoshida, nhưng comment đầu tiên của cô quá cộc. Chị Kobayashi chỉ cách ghép lý do với đề xuất, tách lỗi bắt buộc sửa với \"nits\". Sau đó đến lượt Yoshida góp ý code của Hoa — và Hoa học cách nhận góp ý. Học cách 指摘する・受ける mềm mỏng trong code review.",
+  "chuDe": "Code review",
+  "bieuTuong": "text.bubble.fill",
+  "nguoi": [
+    {
+      "ma": "K",
+      "ten": "小林",
+      "giong": "ja-nu",
+      "vai": "trưởng nhóm"
+    },
+    {
+      "ma": "H",
+      "ten": "ホア",
+      "giong": "ja2-nu",
+      "vai": "kỹ sư người Việt năm thứ hai"
+    },
+    {
+      "ma": "Y",
+      "ten": "吉田",
+      "giong": "ja-nam",
+      "vai": "kỹ sư mới vào"
+    }
+  ],
+  "loi": [
+    {
+      "ai": "K",
+      "t": "ホアさん、吉田くんのプルリク、レビューしてくれた？",
+      "doc": "ホアさん、よしだくんのプルリク、レビューしてくれた？",
+      "v": "Hoa ơi, em review pull request của Yoshida chưa?"
+    },
+    {
+      "ai": "H",
+      "t": "はい、今コメントを書いているところです。ちょっと見てもらえますか。",
+      "doc": "はい、いまコメントをかいているところです。ちょっとみてもらえますか。",
+      "v": "Dạ, em đang viết comment ạ. Chị xem giúp em một chút được không?",
+      "khac": [
+        {
+          "kieu": "lịch sự",
+          "t": "お手数ですが、少し見ていただけますか。",
+          "doc": "おてすうですが、すこしみていただけますか。",
+          "v": "Phiền chị, chị xem giúp em một chút được không ạ?",
+          "ghiChu": "nhờ cấp trên hoặc người không thân"
+        },
+        {
+          "kieu": "thân mật",
+          "t": "ちょっと見てもらえる？",
+          "doc": "ちょっとみてもらえる？",
+          "v": "Xem giúp mình chút được không?",
+          "ghiChu": "với đồng nghiệp ngang hàng"
+        }
+      ],
+      "np": [
+        {
+          "mau": "V-ている + ところです",
+          "giai": "Đang ở giữa lúc làm V (hành động chưa xong).",
+          "vd": "今、資料を作っているところです。",
+          "vdDoc": "いま、しりょうをつくっているところです。",
+          "vdV": "Bây giờ tôi đang làm tài liệu."
+        }
+      ]
+    },
+    {
+      "ai": "K",
+      "t": "どれどれ……「この関数は長すぎます。分けてください。」「変数名が悪いです。」……うーん。",
+      "doc": "どれどれ……「このかんすうはながすぎます。わけてください。」「へんすうめいがわるいです。」……うーん。",
+      "v": "Để chị xem… “Hàm này dài quá. Hãy tách ra.” “Tên biến tệ.”… Ừm.",
+      "np": [
+        {
+          "mau": "A/V-ます + すぎる",
+          "giai": "Quá … (vượt mức cần thiết). Tính từ い bỏ い: 長い → 長すぎる.",
+          "vd": "昨日は食べすぎました。",
+          "vdDoc": "きのうはたべすぎました。",
+          "vdV": "Hôm qua tôi ăn quá nhiều."
+        }
+      ]
+    },
+    {
+      "ai": "H",
+      "t": "だめでしょうか。内容は間違っていないと思うんですが。",
+      "doc": "だめでしょうか。ないようはまちがっていないとおもうんですが。",
+      "v": "Không được ạ? Em nghĩ nội dung thì không sai…"
+    },
+    {
+      "ai": "K",
+      "t": "内容は正しいよ。でも、文字だけだと、思ったより冷たく読めるんだよね。",
+      "doc": "ないようはただしいよ。でも、もじだけだと、おもったよりつめたくよめるんだよね。",
+      "v": "Nội dung thì đúng. Nhưng chỉ có chữ thôi thì đọc lên lạnh lùng hơn mình tưởng.",
+      "np": [
+        {
+          "mau": "思ったより",
+          "giai": "Hơn mình tưởng, so với điều mình nghĩ.",
+          "vd": "この仕事は思ったより簡単でした。",
+          "vdDoc": "このしごとはおもったよりかんたんでした。",
+          "vdV": "Việc này dễ hơn tôi tưởng."
+        }
+      ]
+    },
+    {
+      "ai": "K",
+      "t": "特に「悪い」は、コードじゃなくて本人が否定されたように感じちゃう。",
+      "doc": "とくに「わるい」は、コードじゃなくてほんにんがひていされたようにかんじちゃう。",
+      "v": "Nhất là chữ “tệ”, người đọc sẽ thấy như chính mình bị phủ nhận chứ không phải code.",
+      "np": [
+        {
+          "mau": "〜ちゃう",
+          "giai": "Văn nói của 〜てしまう (lỡ, không tránh được). 〜でしまう → 〜じゃう.",
+          "vd": "大事なファイルを消しちゃった。",
+          "vdDoc": "だいじなファイルをけしちゃった。",
+          "vdV": "Lỡ xoá mất file quan trọng rồi."
+        }
+      ]
+    },
+    {
+      "ai": "H",
+      "t": "なるほど……。じゃあ、どう書けばいいでしょうか。",
+      "doc": "なるほど……。じゃあ、どうかけばいいでしょうか。",
+      "v": "Ra vậy… Thế em nên viết thế nào ạ?"
+    },
+    {
+      "ai": "K",
+      "t": "理由と提案をセットにするといいよ。例えば、「この関数は処理が三つ入っているので、分けると読みやすくなりそうです。どうでしょう？」とか。",
+      "doc": "りゆうとていあんをセットにするといいよ。たとえば、「このかんすうはしょりがみっつはいっているので、わけるとよみやすくなりそうです。どうでしょう？」とか。",
+      "v": "Ghép lý do với đề xuất là được. Ví dụ: “Hàm này chứa ba xử lý, tách ra có lẽ sẽ dễ đọc hơn. Bạn thấy sao?”",
+      "np": [
+        {
+          "mau": "〜といい",
+          "giai": "Lời khuyên: \"làm … thì tốt/được đấy\".",
+          "vd": "わからないときは、辞書を引くといいですよ。",
+          "vdDoc": "わからないときは、じしょをひくといいですよ。",
+          "vdV": "Lúc không hiểu thì tra từ điển là được."
+        }
+      ]
+    },
+    {
+      "ai": "H",
+      "t": "変数名のほうは、「dataだと中身がわかりにくいので、userListのような名前はどうですか」でしょうか。",
+      "doc": "へんすうめいのほうは、「データだとなかみがわかりにくいので、ユーザーリストのようななまえはどうですか」でしょうか。",
+      "v": "Còn tên biến thì có thể viết: “Tên data khó biết bên trong chứa gì, đặt tên kiểu userList thì sao?” phải không ạ?",
+      "khac": [
+        {
+          "kieu": "mềm mỏng",
+          "t": "細かい点ですが、dataよりuserListのほうが意図が伝わりやすいかもしれません。",
+          "doc": "こまかいてんですが、データよりユーザーリストのほうがいとがつたわりやすいかもしれません。",
+          "v": "Chi tiết nhỏ thôi, nhưng userList có lẽ truyền đạt ý đồ rõ hơn data."
+        },
+        {
+          "kieu": "ngắn gọn",
+          "t": "nits: 変数名、userListのほうがわかりやすいかも。",
+          "doc": "ニッツ、へんすうめい、ユーザーリストのほうがわかりやすいかも。",
+          "v": "nits: tên biến, userList có lẽ dễ hiểu hơn.",
+          "ghiChu": "nits = góp ý nhỏ, không bắt buộc sửa"
+        }
+      ],
+      "np": [
+        {
+          "mau": "V-ます + にくい",
+          "giai": "Khó V. Ngược lại: V-ます + やすい (dễ V).",
+          "vd": "この字は小さくて読みにくいです。",
+          "vdDoc": "このじはちいさくてよみにくいです。",
+          "vdV": "Chữ này nhỏ nên khó đọc."
+        }
+      ]
+    },
+    {
+      "ai": "K",
+      "t": "そうそう、いい感じ。あと、必ず直してほしいところと、好みの問題は分けて書いてね。",
+      "doc": "そうそう、いいかんじ。あと、かならずなおしてほしいところと、このみのもんだいはわけてかいてね。",
+      "v": "Đúng rồi, được đấy. Thêm nữa, chỗ nhất định phải sửa và chỗ chỉ là sở thích thì viết tách riêng nhé."
+    },
+    {
+      "ai": "K",
+      "t": "うちのチームでは、好みの問題には「nits」って最初に付けるの。",
+      "doc": "うちのチームでは、このみのもんだいには「ニッツ」ってさいしょにつけるの。",
+      "v": "Nhóm mình hay ghi “nits” ở đầu những góp ý thuộc về sở thích."
+    },
+    {
+      "ai": "H",
+      "t": "わかりました。それから、いいところも一つ書いておきます。テストがとても丁寧に書いてあったので。",
+      "doc": "わかりました。それから、いいところもひとつかいておきます。テストがとてもていねいにかいてあったので。",
+      "v": "Em hiểu rồi. Em cũng sẽ viết thêm một điểm tốt nữa, vì phần test được viết rất cẩn thận.",
+      "np": [
+        {
+          "mau": "V-てある",
+          "giai": "Trạng thái còn lại do ai đó đã cố ý làm (chủ ngữ là vật). 書いてある = đã được viết sẵn.",
+          "vd": "机の上にメモが置いてあります。",
+          "vdDoc": "つくえのうえにメモがおいてあります。",
+          "vdV": "Trên bàn có để sẵn một tờ ghi chú."
+        }
+      ]
+    },
+    {
+      "ai": "Y",
+      "t": "ホアさん、レビューありがとうございました。すごく勉強になりました。",
+      "doc": "ホアさん、レビューありがとうございました。すごくべんきょうになりました。",
+      "v": "Chị Hoa, cảm ơn chị đã review. Em học được rất nhiều.",
+      "khac": [
+        {
+          "kieu": "trang trọng",
+          "t": "丁寧にレビューしていただき、ありがとうございました。",
+          "doc": "ていねいにレビューしていただき、ありがとうございました。",
+          "v": "Cảm ơn chị đã review cho em rất cẩn thận.",
+          "ghiChu": "với cấp trên, người ở bộ phận khác"
+        }
+      ]
+    },
+    {
+      "ai": "Y",
+      "t": "実は僕も、ホアさんのプルリクにコメントしたんですが……一つ質問してもいいですか。",
+      "doc": "じつはぼくも、ホアさんのプルリクにコメントしたんですが……ひとつしつもんしてもいいですか。",
+      "v": "Thật ra em cũng đã comment vào pull request của chị… Em hỏi một câu được không ạ?",
+      "np": [
+        {
+          "mau": "V-てもいいですか",
+          "giai": "Xin phép: \"tôi làm V có được không?\". Lịch sự hơn: 〜てもよろしいでしょうか.",
+          "vd": "ここに座ってもいいですか。",
+          "vdDoc": "ここにすわってもいいですか。",
+          "vdV": "Tôi ngồi đây được không?"
+        }
+      ]
+    },
+    {
+      "ai": "H",
+      "t": "もちろん。どうぞ。",
+      "doc": "もちろん。どうぞ。",
+      "v": "Tất nhiên. Em cứ hỏi."
+    },
+    {
+      "ai": "Y",
+      "t": "エラーが起きたとき、ログを出さずに処理を続けているように見えるんですが、これは意図的ですか。",
+      "doc": "エラーがおきたとき、ログをださずにしょりをつづけているようにみえるんですが、これはいとてきですか。",
+      "v": "Khi có lỗi, hình như code không ghi log mà cứ tiếp tục xử lý, cái này là chị cố ý ạ?",
+      "khac": [
+        {
+          "kieu": "mềm mỏng",
+          "t": "もし私の読み違いだったらすみません。エラーのときにログが出ていないようなのですが……。",
+          "doc": "もしわたしのよみちがいだったらすみません。エラーのときにログがでていないようなのですが……。",
+          "v": "Nếu em đọc nhầm thì xin lỗi chị. Hình như lúc lỗi thì không có log…",
+          "ghiChu": "khi góp ý code của người trên"
+        },
+        {
+          "kieu": "thân mật",
+          "t": "ここ、エラーのときログ出てなくない？わざと？",
+          "doc": "ここ、エラーのときログでてなくない？わざと？",
+          "v": "Chỗ này lúc lỗi không ra log à? Cố ý hả?",
+          "ghiChu": "giữa đồng nghiệp ngang hàng, đã thân"
+        }
+      ],
+      "np": [
+        {
+          "mau": "V-ない + ずに",
+          "giai": "Không làm V mà … (= 〜ないで, nhưng trang trọng/văn viết hơn). する → せずに.",
+          "vd": "朝ごはんを食べずに出かけました。",
+          "vdDoc": "あさごはんをたべずにでかけました。",
+          "vdV": "Tôi ra ngoài mà không ăn sáng."
+        }
+      ]
+    },
+    {
+      "ai": "H",
+      "t": "あ……意図的じゃないです。完全に忘れていました。",
+      "doc": "あ……いとてきじゃないです。かんぜんにわすれていました。",
+      "v": "À… không phải cố ý đâu. Chị quên mất hoàn toàn."
+    },
+    {
+      "ai": "H",
+      "t": "ご指摘ありがとうございます。すぐに直します。",
+      "doc": "ごしてきありがとうございます。すぐになおします。",
+      "v": "Cảm ơn em đã chỉ ra. Chị sửa ngay.",
+      "khac": [
+        {
+          "kieu": "chuyên nghiệp",
+          "t": "ご指摘のとおりです。修正しましたので、再度ご確認をお願いします。",
+          "doc": "ごしてきのとおりです。しゅうせいしましたので、さいどごかくにんをおねがいします。",
+          "v": "Đúng như anh/chị chỉ ra. Tôi đã sửa, nhờ anh/chị xem lại lần nữa.",
+          "ghiChu": "trả lời comment trên pull request"
+        },
+        {
+          "kieu": "thân mật",
+          "t": "うわ、ほんとだ。ありがとう、直すね。",
+          "doc": "うわ、ほんとだ。ありがとう、なおすね。",
+          "v": "Ôi, đúng thật. Cảm ơn nhé, mình sửa đây."
+        }
+      ]
+    },
+    {
+      "ai": "Y",
+      "t": "よかったです。言い方がきつくなかったか、ちょっと心配で。",
+      "doc": "よかったです。いいかたがきつくなかったか、ちょっとしんぱいで。",
+      "v": "May quá. Em hơi lo không biết cách nói của em có gắt quá không.",
+      "np": [
+        {
+          "mau": "〜か (lồng câu hỏi)",
+          "giai": "Đặt một câu hỏi có/không bên trong câu lớn: きつくなかったか心配 = lo không biết có gắt không.",
+          "vd": "忘れ物がないか、もう一度見てください。",
+          "vdDoc": "わすれものがないか、もういちどみてください。",
+          "vdV": "Xem lại lần nữa xem có quên gì không."
+        }
+      ]
+    },
+    {
+      "ai": "H",
+      "t": "全然きつくなかったですよ。質問の形にしてくれたので、素直に受け取れました。",
+      "doc": "ぜんぜんきつくなかったですよ。しつもんのかたちにしてくれたので、すなおにうけとれました。",
+      "v": "Không gắt chút nào đâu. Em viết dưới dạng câu hỏi nên chị tiếp nhận một cách thoải mái."
+    },
+    {
+      "ai": "H",
+      "t": "それに、このバグが本番で起きていたら、原因を探すのに何時間もかかったはずです。",
+      "doc": "それに、このバグがほんばんでおきていたら、げんいんをさがすのになんじかんもかかったはずです。",
+      "v": "Hơn nữa, nếu bug này xảy ra trên production thì chắc phải mất mấy tiếng mới tìm ra nguyên nhân.",
+      "np": [
+        {
+          "mau": "V-る + のに (mục đích)",
+          "giai": "Để V thì (cần/mất …). Thường đi với かかる, 使う, 必要, 便利.",
+          "vd": "この部屋を掃除するのに一時間かかります。",
+          "vdDoc": "このへやをそうじするのにいちじかんかかります。",
+          "vdV": "Dọn phòng này mất một tiếng."
+        }
+      ]
+    },
+    {
+      "ai": "Y",
+      "t": "レビューって、相手のミスを探すことだと思っていましたけど、ちょっと違うんですね。",
+      "doc": "レビューって、あいてのミスをさがすことだとおもっていましたけど、ちょっとちがうんですね。",
+      "v": "Em cứ tưởng review là đi tìm lỗi của người khác, nhưng hoá ra hơi khác nhỉ.",
+      "np": [
+        {
+          "mau": "N + って",
+          "giai": "Văn nói của 〜は / 〜というのは: nêu chủ đề để nói về nó.",
+          "vd": "日本の夏って、本当に暑いですね。",
+          "vdDoc": "にほんのなつって、ほんとうにあついですね。",
+          "vdV": "Mùa hè Nhật đúng là nóng thật."
+        }
+      ]
+    },
+    {
+      "ai": "K",
+      "t": "そう。レビューは、二人で同じコードを守る作業なんだよ。",
+      "doc": "そう。レビューは、ふたりでおなじコードをまもるさぎょうなんだよ。",
+      "v": "Đúng vậy. Review là việc hai người cùng bảo vệ một đoạn code."
+    },
+    {
+      "ai": "K",
+      "t": "だから、書く人は言葉に気をつけて、受ける人は自分を否定されたと思わないこと。",
+      "doc": "だから、かくひとはことばにきをつけて、うけるひとはじぶんをひていされたとおもわないこと。",
+      "v": "Vì vậy, người viết thì cẩn thận lời lẽ, người nhận thì đừng nghĩ mình bị phủ nhận.",
+      "np": [
+        {
+          "mau": "V-る/V-ない + こと",
+          "giai": "Đặt ở cuối câu để nêu quy tắc, lời dặn (kiểu nội quy).",
+          "vd": "授業中は携帯電話を使わないこと。",
+          "vdDoc": "じゅぎょうちゅうはけいたいでんわをつかわないこと。",
+          "vdV": "Trong giờ học không được dùng điện thoại."
+        }
+      ]
+    },
+    {
+      "ai": "H",
+      "t": "指摘はコードに、感謝は人に、ですね。",
+      "doc": "してきはコードに、かんしゃはひとに、ですね。",
+      "v": "Góp ý thì dành cho code, còn cảm ơn thì dành cho người, chị nhỉ."
+    }
+  ],
+  "tuVung": [
+    {
+      "chu": "関数",
+      "doc": "かんすう",
+      "nghia": "hàm (trong lập trình)",
+      "vd": "この関数は何をしていますか。"
+    },
+    {
+      "chu": "変数名",
+      "doc": "へんすうめい",
+      "nghia": "tên biến",
+      "vd": "わかりやすい変数名を付けましょう。"
+    },
+    {
+      "chu": "処理",
+      "doc": "しょり",
+      "nghia": "xử lý (một đoạn công việc của chương trình)",
+      "vd": "処理に時間がかかっています。"
+    },
+    {
+      "chu": "否定",
+      "doc": "ひてい",
+      "nghia": "phủ nhận, phủ định",
+      "vd": "彼は噂を否定しました。"
+    },
+    {
+      "chu": "提案",
+      "doc": "ていあん",
+      "nghia": "đề xuất",
+      "vd": "新しい提案があります。"
+    },
+    {
+      "chu": "好み",
+      "doc": "このみ",
+      "nghia": "sở thích, gu",
+      "vd": "それは好みの問題です。"
+    },
+    {
+      "chu": "丁寧",
+      "doc": "ていねい",
+      "nghia": "cẩn thận, chu đáo; lịch sự",
+      "vd": "丁寧に説明してくれました。"
+    },
+    {
+      "chu": "ログ",
+      "doc": "ログ",
+      "nghia": "log — bản ghi hoạt động của chương trình",
+      "vd": "ログを確認してください。"
+    },
+    {
+      "chu": "意図的",
+      "doc": "いとてき",
+      "nghia": "cố ý, có chủ đích",
+      "vd": "意図的にそうしました。"
+    },
+    {
+      "chu": "指摘",
+      "doc": "してき",
+      "nghia": "chỉ ra (lỗi, vấn đề)",
+      "vd": "ご指摘ありがとうございます。"
+    },
+    {
+      "chu": "素直",
+      "doc": "すなお",
+      "nghia": "thẳng thắn, dễ tiếp nhận, không bướng",
+      "vd": "素直に謝りました。"
+    }
+  ],
+  "yNghia": "Code review không phải là cuộc săn lỗi của nhau, mà là hai người cùng bảo vệ một đoạn code. Người viết góp ý thì nói lý do và đề xuất, đừng phán xét; người nhận góp ý thì tách mình ra khỏi code của mình. Góp ý dành cho code, lời cảm ơn dành cho con người.",
+  "meo": [
+    "Viết comment review: lý do + đề xuất + câu hỏi mở: 「〜ので、〜すると読みやすくなりそうです。どうでしょう？」.",
+    "Tránh từ phán xét như 悪い, だめ; dùng わかりにくい, 〜のほうがいいかもしれません.",
+    "nits: = góp ý nhỏ, không bắt buộc sửa. Ghi rõ chỗ nào bắt buộc (MUST) và chỗ nào là sở thích.",
+    "Nhận góp ý: 「ご指摘ありがとうございます。すぐに直します」 — cảm ơn trước, giải thích sau (nếu cần).",
+    "〜ずに = 〜ないで (trang trọng hơn); する → せずに."
+  ],
+  "cauHoi": [
+    {
+      "hoi": "Comment đầu tiên của Hoa có vấn đề gì?",
+      "chon": [
+        "Nội dung sai",
+        "Nội dung đúng nhưng đọc lên lạnh lùng, như phủ nhận người viết",
+        "Viết bằng tiếng Việt",
+        "Quá dài"
+      ],
+      "dung": 1,
+      "giai": "「内容は正しいよ。でも、文字だけだと、思ったより冷たく読める」."
+    },
+    {
+      "hoi": "Chị Kobayashi khuyên viết comment thế nào?",
+      "chon": [
+        "Ghép lý do với đề xuất",
+        "Viết thật ngắn",
+        "Chỉ nói chỗ sai",
+        "Gọi điện thay vì viết"
+      ],
+      "dung": 0,
+      "giai": "「理由と提案をセットにするといいよ」."
+    },
+    {
+      "hoi": "Trong nhóm, \"nits\" dùng để làm gì?",
+      "chon": [
+        "Đánh dấu lỗi nghiêm trọng",
+        "Đánh dấu code đã duyệt",
+        "Đánh dấu góp ý thuộc về sở thích, không bắt buộc",
+        "Đánh dấu câu hỏi cho khách"
+      ],
+      "dung": 2,
+      "giai": "「好みの問題には「nits」って最初に付けるの」."
+    },
+    {
+      "hoi": "Yoshida phát hiện điều gì trong code của Hoa?",
+      "chon": [
+        "Tên biến khó hiểu",
+        "Hàm quá dài",
+        "Thiếu test",
+        "Khi lỗi xảy ra thì không ghi log mà vẫn tiếp tục xử lý"
+      ],
+      "dung": 3,
+      "giai": "「エラーが起きたとき、ログを出さずに処理を続けているように見える」."
+    }
+  ]
+}

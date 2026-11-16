@@ -1,0 +1,433 @@
+{
+  "id": "ja-ds-n3-05",
+  "nn": "ja",
+  "danhMuc": "doi-song",
+  "cap": "N3",
+  "so": 5,
+  "tieuDe": "部屋を探しているんですが",
+  "tieuDeViet": "Tôi đang tìm phòng thuê",
+  "moTa": "Đức đến văn phòng bất động sản tìm phòng để chuyển nhà tháng sau. Học nói điều kiện (giá thuê, khoảng cách tới ga, hướng nắng), hiểu tiền đặt cọc 敷金 và tiền lễ 礼金, hỏi khi không có người bảo lãnh, xin xem phòng và hỏi bớt chi phí một cách khéo léo.",
+  "chuDe": "Nhà ở",
+  "bieuTuong": "key.fill",
+  "nguoi": [
+    {
+      "ma": "D",
+      "ten": "ドゥック",
+      "giong": "ja2-nam",
+      "vai": "người Việt đang tìm phòng"
+    },
+    {
+      "ma": "F",
+      "ten": "不動産屋",
+      "giong": "ja-nu",
+      "vai": "nhân viên bất động sản"
+    }
+  ],
+  "loi": [
+    {
+      "ai": "F",
+      "t": "いらっしゃいませ。お部屋探しですか。",
+      "doc": "いらっしゃいませ。おへやさがしですか。",
+      "v": "Xin chào. Anh đang tìm phòng ạ?"
+    },
+    {
+      "ai": "D",
+      "t": "はい。来月から住める部屋を探しているんですが。",
+      "doc": "はい。らいげつからすめるへやをさがしているんですが。",
+      "v": "Vâng. Tôi đang tìm phòng có thể ở từ tháng sau ạ.",
+      "khac": [
+        {
+          "kieu": "lịch sự",
+          "t": "はい。来月から入居できるお部屋を探しているのですが。",
+          "doc": "はい。らいげつからにゅうきょできるおへやをさがしているのですが。",
+          "v": "Vâng. Tôi đang tìm phòng có thể dọn vào từ tháng sau ạ.",
+          "ghiChu": "入居 (にゅうきょ) = dọn vào ở — từ chuyên dùng khi thuê nhà."
+        }
+      ],
+      "np": [
+        {
+          "mau": "V（可能形）+ N",
+          "giai": "Thể khả năng bổ nghĩa cho danh từ: 住める部屋 = phòng có thể ở được. 住む → 住める, 使う → 使える.",
+          "vd": "ペットが飼える部屋はありますか。",
+          "vdDoc": "ペットがかえるへやはありますか。",
+          "vdV": "Có phòng nào nuôi được thú cưng không?"
+        }
+      ]
+    },
+    {
+      "ai": "F",
+      "t": "ありがとうございます。ご希望の条件をうかがってもよろしいですか。",
+      "doc": "ありがとうございます。ごきぼうのじょうけんをうかがってもよろしいですか。",
+      "v": "Cảm ơn anh. Tôi xin phép hỏi những điều kiện anh mong muốn nhé?",
+      "np": [
+        {
+          "mau": "うかがう (khiêm nhường của 聞く)",
+          "giai": "うかがう = (tôi) xin hỏi / xin nghe, khiêm nhường ngữ của 聞く (và cả 訪ねる: đến thăm). Nhân viên dùng để hạ mình, tôn khách.",
+          "vd": "お名前をうかがってもよろしいですか。",
+          "vdDoc": "おなまえをうかがってもよろしいですか。",
+          "vdV": "Tôi xin phép hỏi tên quý khách được không ạ?"
+        }
+      ]
+    },
+    {
+      "ai": "D",
+      "t": "家賃は管理費込みで六万円以内、駅から歩いて十分以内がいいです。",
+      "doc": "やちんはかんりひこみでろくまんえんいない、えきからあるいてじゅっぷんいないがいいです。",
+      "v": "Tiền thuê tính cả phí quản lý trong vòng 6 man yên, đi bộ từ ga không quá 10 phút thì tốt ạ.",
+      "khac": [
+        {
+          "kieu": "mềm mỏng",
+          "t": "できれば、家賃は管理費込みで六万円ぐらいまでだと助かります。",
+          "doc": "できれば、やちんはかんりひこみでろくまんえんぐらいまでだとたすかります。",
+          "v": "Nếu được, tiền thuê tính cả phí quản lý khoảng 6 man yên đổ lại thì tốt cho tôi quá.",
+          "ghiChu": "Nêu điều kiện mà không cứng nhắc."
+        }
+      ],
+      "np": [
+        {
+          "mau": "N 込みで／〜以内",
+          "giai": "込み (こみ) = đã bao gồm: 税込み (đã gồm thuế), 管理費込み. 以内 (いない) = trong vòng, không quá.",
+          "vd": "この値段は税込みです。",
+          "vdDoc": "このねだんはぜいこみです。",
+          "vdV": "Giá này đã gồm thuế."
+        }
+      ]
+    },
+    {
+      "ai": "F",
+      "t": "間取りはいかがですか。一人暮らしでしたら、1Kが多いですね。",
+      "doc": "まどりはいかがですか。ひとりぐらしでしたら、ワンケーがおおいですね。",
+      "v": "Còn cách bố trí phòng thì sao ạ? Sống một mình thì phần lớn là phòng 1K."
+    },
+    {
+      "ai": "D",
+      "t": "1Kで大丈夫です。あと、日当たりがいい部屋だとうれしいです。",
+      "doc": "ワンケーでだいじょうぶです。あと、ひあたりがいいへやだとうれしいです。",
+      "v": "1K là được ạ. Thêm nữa, phòng có nhiều nắng thì tôi rất thích."
+    },
+    {
+      "ai": "F",
+      "t": "承知しました。それと、念のためにうかがいますが、保証人になってくれる方は日本にいらっしゃいますか。",
+      "doc": "しょうちしました。それと、ねんのためにうかがいますが、ほしょうにんになってくれるかたはにほんにいらっしゃいますか。",
+      "v": "Tôi hiểu rồi. Ngoài ra, cho tôi hỏi để chắc chắn: anh có ai ở Nhật đứng ra bảo lãnh không ạ?"
+    },
+    {
+      "ai": "D",
+      "t": "いいえ、いません。それだと、借りられないですか。",
+      "doc": "いいえ、いません。それだと、かりられないですか。",
+      "v": "Không, tôi không có. Như vậy thì không thuê được sao ạ?",
+      "khac": [
+        {
+          "kieu": "lịch sự",
+          "t": "保証人がいないのですが、それでも借りられる物件はありますか。",
+          "doc": "ほしょうにんがいないのですが、それでもかりられるぶっけんはありますか。",
+          "v": "Tôi không có người bảo lãnh, vậy có căn nào vẫn thuê được không ạ?"
+        }
+      ]
+    },
+    {
+      "ai": "F",
+      "t": "大丈夫ですよ。保証会社を使えば、保証人がいなくても借りられる物件がたくさんあります。",
+      "doc": "だいじょうぶですよ。ほしょうがいしゃをつかえば、ほしょうにんがいなくてもかりられるぶっけんがたくさんあります。",
+      "v": "Không sao đâu ạ. Dùng công ty bảo lãnh thì có rất nhiều căn thuê được dù không có người bảo lãnh.",
+      "np": [
+        {
+          "mau": "V ば、〜／V なくても",
+          "giai": "〜ば = nếu (điều kiện để có kết quả): 使えば = nếu dùng. 〜なくても = dù không … (vẫn): いなくても = dù không có.",
+          "vd": "急がなくても、間に合いますよ。",
+          "vdDoc": "いそがなくても、まにあいますよ。",
+          "vdV": "Dù không vội thì vẫn kịp đấy."
+        }
+      ]
+    },
+    {
+      "ai": "F",
+      "t": "では、こちらの物件はいかがでしょう。駅から徒歩八分、二階の角部屋で、南向きです。",
+      "doc": "では、こちらのぶっけんはいかがでしょう。えきからとほはっぷん、にかいのかどべやで、みなみむきです。",
+      "v": "Vậy căn này anh thấy sao ạ? Đi bộ 8 phút từ ga, phòng góc tầng hai, hướng nam."
+    },
+    {
+      "ai": "D",
+      "t": "いいですね。家賃はいくらですか。",
+      "doc": "いいですね。やちんはいくらですか。",
+      "v": "Được đấy. Tiền thuê bao nhiêu ạ?"
+    },
+    {
+      "ai": "F",
+      "t": "家賃が五万四千円、管理費が四千円で、合計五万八千円です。",
+      "doc": "やちんがごまんよんせんえん、かんりひがよんせんえんで、ごうけいごまんはっせんえんです。",
+      "v": "Tiền thuê 54.000 yên, phí quản lý 4.000 yên, tổng cộng 58.000 yên."
+    },
+    {
+      "ai": "D",
+      "t": "予算内ですね。初期費用はどのくらいかかりますか。",
+      "doc": "よさんないですね。しょきひようはどのくらいかかりますか。",
+      "v": "Trong ngân sách rồi. Chi phí ban đầu mất khoảng bao nhiêu ạ?",
+      "khac": [
+        {
+          "kieu": "ngắn gọn",
+          "t": "最初にいくら必要ですか。",
+          "doc": "さいしょにいくらひつようですか。",
+          "v": "Lúc đầu cần bao nhiêu tiền ạ?",
+          "ghiChu": "Dễ nói hơn, nếu chưa nhớ từ 初期費用."
+        }
+      ]
+    },
+    {
+      "ai": "F",
+      "t": "敷金が一か月、礼金が一か月、それに保証会社の費用と最初の月の家賃がかかります。だいたい二十万円ぐらいですね。",
+      "doc": "しききんがいっかげつ、れいきんがいっかげつ、それにほしょうがいしゃのひようとさいしょのつきのやちんがかかります。だいたいにじゅうまんえんぐらいですね。",
+      "v": "Tiền đặt cọc một tháng, tiền lễ một tháng, cộng thêm phí công ty bảo lãnh và tiền thuê tháng đầu. Khoảng chừng 200.000 yên."
+    },
+    {
+      "ai": "D",
+      "t": "敷金と礼金は、何が違うんですか。",
+      "doc": "しききんとれいきんは、なにがちがうんですか。",
+      "v": "Tiền đặt cọc với tiền lễ khác nhau thế nào ạ?",
+      "np": [
+        {
+          "mau": "〜んですか (hỏi để được giải thích)",
+          "giai": "Thêm ん vào câu hỏi khi muốn người kia giải thích lý do, hoàn cảnh: 何が違うんですか = khác nhau ở chỗ nào vậy?",
+          "vd": "どうして日本に来たんですか。",
+          "vdDoc": "どうしてにほんにきたんですか。",
+          "vdV": "Sao anh lại sang Nhật vậy?"
+        }
+      ]
+    },
+    {
+      "ai": "F",
+      "t": "敷金は預けるお金なので、出る時に、修理代を引いて返ってきます。礼金は大家さんへのお礼なので、返ってきません。",
+      "doc": "しききんはあずけるおかねなので、でるときに、しゅうりだいをひいてかえってきます。れいきんはおおやさんへのおれいなので、かえってきません。",
+      "v": "Tiền đặt cọc là tiền gửi, lúc chuyển đi sẽ được trả lại sau khi trừ chi phí sửa chữa. Tiền lễ là tiền cảm ơn chủ nhà nên không được trả lại."
+    },
+    {
+      "ai": "D",
+      "t": "お礼のお金……。ベトナムにはない習慣ですね。",
+      "doc": "おれいのおかね……。ベトナムにはないしゅうかんですね。",
+      "v": "Tiền cảm ơn… Ở Việt Nam không có phong tục này."
+    },
+    {
+      "ai": "D",
+      "t": "あの、礼金を少し安くしてもらえたりしますか。",
+      "doc": "あの、れいきんをすこしやすくしてもらえたりしますか。",
+      "v": "À, tiền lễ có thể bớt một chút được không ạ?",
+      "khac": [
+        {
+          "kieu": "mềm mỏng",
+          "t": "難しいかもしれませんが、礼金を少し下げていただくことはできますか。",
+          "doc": "むずかしいかもしれませんが、れいきんをすこしさげていただくことはできますか。",
+          "v": "Có lẽ hơi khó, nhưng có thể giảm tiền lễ một chút giúp tôi không ạ?",
+          "ghiChu": "Mở đầu bằng 難しいかもしれませんが để người kia không bị áp lực."
+        },
+        {
+          "kieu": "trang trọng",
+          "t": "礼金について、ご相談できる余地はございますか。",
+          "doc": "れいきんについて、ごそうだんできるよちはございますか。",
+          "v": "Về khoản tiền lễ, liệu có thể thương lượng được không ạ?",
+          "ghiChu": "余地 (よち) = chỗ, khả năng còn để bàn."
+        }
+      ],
+      "np": [
+        {
+          "mau": "〜たりしますか (hỏi dò nhẹ)",
+          "giai": "〜たりする ngoài nghĩa liệt kê còn làm câu hỏi mơ hồ, nhẹ đi: “có kiểu … được không nhỉ?”. Hay dùng khi hỏi điều khó nói.",
+          "vd": "週末は、混んでいたりしますか。",
+          "vdDoc": "しゅうまつは、こんでいたりしますか。",
+          "vdV": "Cuối tuần có đông kiểu vậy không ạ?"
+        }
+      ]
+    },
+    {
+      "ai": "F",
+      "t": "大家さんに聞いてみないとわかりませんが、相談してみますね。",
+      "doc": "おおやさんにきいてみないとわかりませんが、そうだんしてみますね。",
+      "v": "Phải hỏi chủ nhà mới biết được, nhưng tôi sẽ thử thương lượng xem.",
+      "np": [
+        {
+          "mau": "V ないと わからない",
+          "giai": "“Không … thì không biết được” = phải … mới biết. Câu trả lời trung thực khi chưa chắc chắn.",
+          "vd": "実際に食べてみないとわかりません。",
+          "vdDoc": "じっさいにたべてみないとわかりません。",
+          "vdV": "Phải ăn thử thật mới biết được."
+        }
+      ]
+    },
+    {
+      "ai": "D",
+      "t": "ありがとうございます。一度、部屋を見てから決めたいんですが、内見はできますか。",
+      "doc": "ありがとうございます。いちど、へやをみてからきめたいんですが、ないけんはできますか。",
+      "v": "Cảm ơn chị. Tôi muốn xem phòng một lần rồi mới quyết, có xem phòng được không ạ?"
+    },
+    {
+      "ai": "F",
+      "t": "はい、今日の午後なら空いていますよ。",
+      "doc": "はい、きょうのごごならあいていますよ。",
+      "v": "Vâng, chiều nay thì có thể ạ."
+    },
+    {
+      "ai": "D",
+      "t": "写真より明るいですね。……あの、窓を開けてみてもいいですか。",
+      "doc": "しゃしんよりあかるいですね。……あの、まどをあけてみてもいいですか。",
+      "v": "Sáng hơn trong ảnh nhỉ. …À, tôi mở thử cửa sổ được không ạ?"
+    },
+    {
+      "ai": "F",
+      "t": "どうぞ。前の道は夜も静かですよ。",
+      "doc": "どうぞ。まえのみちはよるもしずかですよ。",
+      "v": "Anh cứ tự nhiên. Con đường phía trước buổi tối cũng yên tĩnh lắm."
+    },
+    {
+      "ai": "D",
+      "t": "電車の音も聞こえない……。ここに決めたいと思います。",
+      "doc": "でんしゃのおともきこえない……。ここにきめたいとおもいます。",
+      "v": "Không nghe cả tiếng tàu… Tôi nghĩ tôi sẽ chọn căn này.",
+      "khac": [
+        {
+          "kieu": "trang trọng",
+          "t": "こちらの物件でお願いしたいと思います。",
+          "doc": "こちらのぶっけんでおねがいしたいとおもいます。",
+          "v": "Tôi muốn thuê căn này ạ."
+        }
+      ]
+    },
+    {
+      "ai": "F",
+      "t": "ありがとうございます。では、事務所に戻って、申込書を書いていただきますね。",
+      "doc": "ありがとうございます。では、じむしょにもどって、もうしこみしょをかいていただきますね。",
+      "v": "Cảm ơn anh. Vậy mình về văn phòng, anh điền đơn đăng ký thuê giúp tôi nhé."
+    },
+    {
+      "ai": "D",
+      "t": "はい。……わからない言葉を一つずつ聞いて、本当によかったです。",
+      "doc": "はい。……わからないことばをひとつずつきいて、ほんとうによかったです。",
+      "v": "Vâng. …May mà tôi hỏi từng từ mình không hiểu."
+    }
+  ],
+  "tuVung": [
+    {
+      "chu": "家賃",
+      "doc": "やちん",
+      "nghia": "tiền thuê nhà",
+      "vd": "家賃は毎月二十七日に払います。"
+    },
+    {
+      "chu": "管理費",
+      "doc": "かんりひ",
+      "nghia": "phí quản lý (toà nhà)",
+      "vd": "管理費は家賃と別です。"
+    },
+    {
+      "chu": "間取り",
+      "doc": "まどり",
+      "nghia": "cách bố trí phòng (1K, 1LDK…)",
+      "vd": "この部屋の間取りを見せてください。"
+    },
+    {
+      "chu": "日当たり",
+      "doc": "ひあたり",
+      "nghia": "độ đón nắng",
+      "vd": "日当たりがいい部屋は人気です。"
+    },
+    {
+      "chu": "保証人",
+      "doc": "ほしょうにん",
+      "nghia": "người bảo lãnh",
+      "vd": "保証人が必要です。"
+    },
+    {
+      "chu": "物件",
+      "doc": "ぶっけん",
+      "nghia": "căn hộ, bất động sản (đang cho thuê/bán)",
+      "vd": "駅に近い物件を探しています。"
+    },
+    {
+      "chu": "角部屋",
+      "doc": "かどべや",
+      "nghia": "phòng ở góc toà nhà",
+      "vd": "角部屋は窓が多いです。"
+    },
+    {
+      "chu": "初期費用",
+      "doc": "しょきひよう",
+      "nghia": "chi phí ban đầu",
+      "vd": "初期費用が高くて困っています。"
+    },
+    {
+      "chu": "敷金",
+      "doc": "しききん",
+      "nghia": "tiền đặt cọc (được trả lại sau khi trừ sửa chữa)",
+      "vd": "敷金は二か月です。"
+    },
+    {
+      "chu": "礼金",
+      "doc": "れいきん",
+      "nghia": "tiền lễ cảm ơn chủ nhà (không trả lại)",
+      "vd": "礼金なしの部屋もあります。"
+    },
+    {
+      "chu": "内見",
+      "doc": "ないけん",
+      "nghia": "đi xem phòng trước khi thuê",
+      "vd": "土曜日に内見に行きます。"
+    },
+    {
+      "chu": "申込書",
+      "doc": "もうしこみしょ",
+      "nghia": "đơn đăng ký",
+      "vd": "申込書に名前を書きました。"
+    }
+  ],
+  "yNghia": "Hợp đồng thuê nhà đầy những từ lạ — và mỗi từ lạ là một khoản tiền. Hỏi “敷金 với 礼金 khác gì nhau?” không làm bạn kém đi; nó giúp bạn biết mình đang trả tiền cho cái gì.",
+  "meo": [
+    "Nêu điều kiện: 「家賃は〜以内」「駅から歩いて〜分以内」「〜だとうれしいです／助かります」.",
+    "Không có người bảo lãnh: hỏi 「保証会社を使える物件はありますか」 — rất nhiều căn chấp nhận.",
+    "Bộ từ phải thuộc: 家賃・管理費・敷金・礼金・更新料 (こうしんりょう, phí gia hạn hợp đồng)・初期費用.",
+    "Hỏi bớt khéo: 「難しいかもしれませんが、〜ていただくことはできますか」 hoặc 「〜てもらえたりしますか」."
+  ],
+  "cauHoi": [
+    {
+      "hoi": "Đức muốn phòng thế nào?",
+      "chon": [
+        "Dưới 6 man yên gồm phí quản lý, đi bộ từ ga trong 10 phút",
+        "Rộng, có hai phòng ngủ",
+        "Gần trường, giá bao nhiêu cũng được",
+        "Ở tầng một, hướng bắc"
+      ],
+      "dung": 0,
+      "giai": "「家賃は管理費込みで六万円以内、駅から歩いて十分以内」."
+    },
+    {
+      "hoi": "Không có người bảo lãnh thì sao?",
+      "chon": [
+        "Không thể thuê",
+        "Phải trả gấp đôi tiền cọc",
+        "Dùng công ty bảo lãnh thì vẫn thuê được nhiều căn",
+        "Phải nhờ trường bảo lãnh"
+      ],
+      "dung": 2,
+      "giai": "「保証会社を使えば、保証人がいなくても借りられる物件がたくさんあります」."
+    },
+    {
+      "hoi": "敷金 khác 礼金 thế nào?",
+      "chon": [
+        "敷金 được trả lại sau khi trừ sửa chữa, 礼金 thì không",
+        "Cả hai đều được trả lại",
+        "礼金 được trả lại, 敷金 thì không",
+        "Hai khoản giống nhau"
+      ],
+      "dung": 0,
+      "giai": "敷金 = tiền gửi; 礼金 = tiền cảm ơn chủ nhà."
+    },
+    {
+      "hoi": "Tổng tiền hằng tháng của căn được giới thiệu là bao nhiêu?",
+      "chon": [
+        "54.000 yên",
+        "58.000 yên",
+        "60.000 yên",
+        "200.000 yên"
+      ],
+      "dung": 1,
+      "giai": "家賃 54.000 + 管理費 4.000 = 58.000 yên. 200.000 yên là chi phí ban đầu."
+    }
+  ]
+}

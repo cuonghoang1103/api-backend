@@ -26,6 +26,21 @@ export const GIONG_PODCAST: Record<NnPodcast, readonly string[]> = {
   zh: ['zh-nu', 'zh-nam'],
 };
 
+/** Danh mục (16/11/2026 — user): mặc định "Đời sống". Thứ tự = thứ tự hiện trên app. */
+export const DANH_MUC_PODCAST = [
+  { ma: 'doi-song', ten: 'Đời sống', moTa: 'Câu và hội thoại hằng ngày — từ cơ bản nhất tới hay dùng nhất, ra đường gặp người nước ngoài là dùng được', bieuTuong: 'house.fill' },
+  { ma: 'chia-se', ten: 'Podcast chia sẻ', moTa: 'Một người kể chuyện đời, trải nghiệm, bài học thật — như nghe podcast', bieuTuong: 'mic.fill' },
+  { ma: 'phan-mem', ten: 'Software Engineering', moTa: 'Từ cơ bản tới chuyên sâu: họp nhóm, code review, phỏng vấn kỹ thuật, thiết kế hệ thống', bieuTuong: 'chevron.left.forwardslash.chevron.right' },
+  { ma: 'cong-viec', ten: 'Công sở & phỏng vấn', moTa: 'Đi làm, xin việc, email, họp, báo cáo — nói lịch sự và chuyên nghiệp', bieuTuong: 'briefcase.fill' },
+] as const;
+export type DanhMucPodcast = (typeof DANH_MUC_PODCAST)[number]['ma'];
+export const MA_DANH_MUC: readonly string[] = DANH_MUC_PODCAST.map((d) => d.ma);
+
+/** Kiểu của một cách nói khác. */
+export const KIEU_KHAC = ['lịch sự', 'thân mật', 'trang trọng', 'tự nhiên hơn', 'ngắn gọn', 'chuyên nghiệp', 'mềm mỏng', 'nhấn mạnh', 'văn nói', 'văn viết'] as const;
+
+export interface CachNoiKhac { kieu: string; t: string; doc?: string; v: string; ghiChu?: string }
+
 export interface NguoiNoi { ma: string; ten: string; giong: string; vai?: string }
 export interface DongPodcast {
   /** mã người nói (`nguoi[].ma`) */
@@ -36,14 +51,23 @@ export interface DongPodcast {
   doc?: string;
   /** bản dịch tiếng Việt */
   v: string;
+  /** Cách nói khác cho cùng ý (lịch sự / thân mật / trang trọng…) — app hiện khi chạm "Cách nói khác". */
+  khac?: CachNoiKhac[];
+  /** Ngữ pháp học được từ câu này (16/11/2026 — user: "học ngữ pháp từ từng câu"). */
+  np?: NguPhapCau[];
 }
+
+/** Một điểm ngữ pháp trong câu: mẫu (trích từ câu) + giải thích tiếng Việt + ví dụ khác (tuỳ chọn). */
+export interface NguPhapCau { mau: string; giai: string; vd?: string; vdDoc?: string; vdV?: string }
 export interface TuPodcast { chu: string; doc?: string; nghia: string; vd?: string }
 export interface CauHoiPodcast { hoi: string; chon: string[]; dung: number; giai?: string }
 export interface TapPodcast {
   id: string;
   nn: NnPodcast;
+  /** danh mục — thiếu ⇒ "doi-song" */
+  danhMuc?: DanhMucPodcast;
   cap: string;
-  /** thứ tự trong cấp (1, 2, 3…) */
+  /** thứ tự trong cấp (1, 2, 3…) — duy nhất trong (ngôn ngữ, danh mục, cấp) */
   so: number;
   tieuDe: string;
   tieuDeViet: string;
@@ -62,7 +86,7 @@ export interface TapPodcast {
   cauHoi: CauHoiPodcast[];
 }
 
-const ID = /^(en|ja|zh)-[a-z0-9]+-\d{2}$/;
+const ID = /^(en|ja|zh)-[a-z0-9]+(-[a-z0-9]+)*-\d{2}$/;
 const SF = /^[a-z0-9.]+$/;
 
 /** Danh sách lỗi của một tập (rỗng = hợp lệ). */
@@ -76,6 +100,7 @@ export function kiemTap(t: TapPodcast): string[] {
   if (!NN_PODCAST.includes(t.nn)) return [`nn lạ: ${String(t.nn)}`];
   if (typeof t.id !== 'string' || !ID.test(t.id) || !t.id.startsWith(`${t.nn}-`)) loi.push(`id sai khuôn: ${String(t.id)}`);
   if (!CAP_PODCAST[t.nn].includes(t.cap)) loi.push(`cap lạ: ${String(t.cap)}`);
+  if (t.danhMuc !== undefined && !MA_DANH_MUC.includes(t.danhMuc)) loi.push(`danhMuc lạ: ${String(t.danhMuc)}`);
   if (!Number.isInteger(t.so) || t.so < 1 || t.so > 99) loi.push('so phải là số nguyên 1–99');
   chuoi(t.tieuDe, 'tieuDe', 120);
   chuoi(t.tieuDeViet, 'tieuDeViet', 120);
@@ -101,6 +126,26 @@ export function kiemTap(t: TapPodcast): string[] {
     chuoi(d?.t, `loi[${i}].t`, 400);
     chuoi(d?.v, `loi[${i}].v`, 600);
     if (t.nn !== 'en' && (typeof d?.doc !== 'string' || !d.doc.trim())) loi.push(`loi[${i}].doc thiếu (bắt buộc với ${t.nn})`);
+    if (d?.np !== undefined) {
+      if (!Array.isArray(d.np) || d.np.length < 1 || d.np.length > 3) loi.push(`loi[${i}].np: 1–3 điểm`);
+      else d.np.forEach((g, j) => {
+        chuoi(g?.mau, `loi[${i}].np[${j}].mau`, 80);
+        chuoi(g?.giai, `loi[${i}].np[${j}].giai`, 600);
+        if (g?.vd !== undefined && (typeof g.vd !== 'string' || !g.vd.trim())) loi.push(`loi[${i}].np[${j}].vd rỗng`);
+        if (g?.vd && t.nn !== 'en' && (typeof g.vdDoc !== 'string' || !g.vdDoc.trim())) loi.push(`loi[${i}].np[${j}].vdDoc thiếu`);
+        if (g?.vd && (typeof g.vdV !== 'string' || !g.vdV.trim())) loi.push(`loi[${i}].np[${j}].vdV thiếu`);
+      });
+    }
+    if (d?.khac !== undefined) {
+      if (!Array.isArray(d.khac) || d.khac.length < 1 || d.khac.length > 4) loi.push(`loi[${i}].khac: 1–4 cách`);
+      else d.khac.forEach((k, j) => {
+        if (!(KIEU_KHAC as readonly string[]).includes(k?.kieu)) loi.push(`loi[${i}].khac[${j}].kieu lạ: ${String(k?.kieu)}`);
+        chuoi(k?.t, `loi[${i}].khac[${j}].t`, 400);
+        chuoi(k?.v, `loi[${i}].khac[${j}].v`, 600);
+        if (t.nn !== 'en' && (typeof k?.doc !== 'string' || !k.doc.trim())) loi.push(`loi[${i}].khac[${j}].doc thiếu`);
+        if (k?.t === d.t) loi.push(`loi[${i}].khac[${j}] trùng câu gốc`);
+      });
+    }
   });
 
   if (!Array.isArray(t.tuVung) || t.tuVung.length < 4 || t.tuVung.length > 30) loi.push('tuVung: 4–30 từ');
@@ -131,15 +176,20 @@ export function uocPhut(t: TapPodcast): number {
 
 export function tomTatTap(t: TapPodcast) {
   return {
-    id: t.id, nn: t.nn, cap: t.cap, so: t.so, tieuDe: t.tieuDe, tieuDeViet: t.tieuDeViet, moTa: t.moTa,
+    id: t.id, nn: t.nn, danhMuc: danhMucCua(t), cap: t.cap, so: t.so, tieuDe: t.tieuDe, tieuDeViet: t.tieuDeViet, moTa: t.moTa,
     chuDe: t.chuDe, bieuTuong: t.bieuTuong, phut: uocPhut(t), soDong: t.loi.length, soTu: t.tuVung.length,
     nguoi: t.nguoi.map((n) => n.ten),
+    soCachNoi: t.loi.reduce((s, d) => s + (d.khac?.length ?? 0), 0),
+    soNguPhap: t.loi.reduce((s, d) => s + (d.np?.length ?? 0), 0),
   };
 }
+
+export function danhMucCua(t: TapPodcast): DanhMucPodcast { return t.danhMuc ?? 'doi-song'; }
 
 /** Sắp tập: theo ngôn ngữ → cấp (dễ → khó) → số. */
 export function soSanhTap(a: TapPodcast, b: TapPodcast): number {
   return NN_PODCAST.indexOf(a.nn) - NN_PODCAST.indexOf(b.nn)
+    || MA_DANH_MUC.indexOf(danhMucCua(a)) - MA_DANH_MUC.indexOf(danhMucCua(b))
     || CAP_PODCAST[a.nn].indexOf(a.cap) - CAP_PODCAST[b.nn].indexOf(b.cap)
     || a.so - b.so || a.id.localeCompare(b.id);
 }

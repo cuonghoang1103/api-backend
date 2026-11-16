@@ -1,0 +1,114 @@
+{
+  "id": "en-se-c1-02",
+  "nn": "en",
+  "danhMuc": "phan-mem",
+  "cap": "C1",
+  "so": 2,
+  "tieuDe": "Forty-Seven Minutes: A Blameless Postmortem",
+  "tieuDeViet": "Bốn mươi bảy phút: buổi rút kinh nghiệm không đổ lỗi",
+  "moTa": "Một thay đổi cấu hình làm hỏng thanh toán suốt 47 phút. Buổi postmortem không truy tìm \"thủ phạm\" mà hỏi vì sao hệ thống để chuyện đó xảy ra: dòng thời gian, nguyên nhân gốc, yếu tố góp phần, và việc cần làm có người chịu trách nhiệm, có hạn.",
+  "chuDe": "Rút kinh nghiệm sự cố",
+  "bieuTuong": "exclamationmark.triangle.fill",
+  "nguoi": [
+    { "ma": "N", "ten": "Natalie", "giong": "uk-nu", "vai": "quản lý kỹ thuật, điều phối buổi họp" },
+    { "ma": "L", "ten": "Long", "giong": "us-nam", "vai": "kỹ sư trực sự cố (on-call)" },
+    { "ma": "B", "ten": "Ben", "giong": "au-nam", "vai": "kỹ sư vận hành hệ thống (SRE)" }
+  ],
+  "loi": [
+    { "ai": "N", "t": "Thanks for joining, everyone. Before we start, a reminder: this is a blameless postmortem. We're here to understand how the system let this happen, not to find someone to blame.", "v": "Cảm ơn mọi người đã tham gia. Trước khi bắt đầu, xin nhắc: đây là buổi postmortem không đổ lỗi. Chúng ta ở đây để hiểu vì sao hệ thống để chuyện này xảy ra, không phải để tìm người chịu tội.",
+      "np": [{ "mau": "let + O + V nguyên mẫu", "giai": "\"để cho, cho phép điều gì xảy ra\". Câu này đặt chủ ngữ là \"the system\" chứ không phải một con người — chính là tinh thần blameless.", "vd": "Our pipeline let an untested change reach production.", "vdV": "Quy trình của chúng ta đã để một thay đổi chưa test lọt lên production." }] },
+    { "ai": "N", "t": "Long, you were on call. Could you walk us through the timeline?", "v": "Long, hôm đó em trực. Em kể lại dòng thời gian cho mọi người được không?",
+      "khac": [
+        { "kieu": "lịch sự", "t": "Would you mind taking us through what happened, step by step?", "v": "Em có thể kể lại từng bước chuyện đã xảy ra không?" }
+      ] },
+    { "ai": "L", "t": "Sure. At two minutes past two, I deployed a configuration change that lowered the timeout for calls to our payment provider from ten seconds to one.", "v": "Vâng. Lúc hai giờ hai phút, em triển khai một thay đổi cấu hình hạ thời gian chờ khi gọi tới bên xử lý thanh toán từ mười giây xuống một giây." },
+    { "ai": "L", "t": "The idea was to fail fast instead of keeping users waiting. It had been tested in staging, and it looked fine.", "v": "Ý tưởng là thất bại nhanh thay vì bắt người dùng phải chờ. Nó đã được test trên staging và trông ổn.",
+      "np": [{ "mau": "had been + V3 (quá khứ hoàn thành bị động)", "giai": "Việc đã được làm xong TRƯỚC một thời điểm quá khứ (trước lúc deploy). Hay dùng khi kể sự cố để giải thích vì sao mọi người đã tin là an toàn.", "vd": "The backup had been checked the night before.", "vdV": "Bản sao lưu đã được kiểm tra từ tối hôm trước." }] },
+    { "ai": "L", "t": "At nine minutes past, the error-rate alert fired. By then, about twelve percent of checkouts were failing.", "v": "Lúc hai giờ chín phút, cảnh báo tỉ lệ lỗi bật lên. Đến lúc đó, khoảng mười hai phần trăm lượt thanh toán đang thất bại.",
+      "np": [{ "mau": "By then, + quá khứ tiếp diễn", "giai": "\"Đến lúc đó thì đang…\" — mô tả tình trạng đang diễn ra tại một mốc trong dòng thời gian sự cố.", "vd": "By the time we noticed, the disk was filling up fast.", "vdV": "Đến lúc bọn mình nhận ra thì ổ đĩa đang đầy lên rất nhanh." }] },
+    { "ai": "B", "t": "Just to add some context: in staging, the payment provider is a mock that responds in milliseconds. In production, it regularly takes over a second at peak times.", "v": "Bổ sung chút bối cảnh: trên staging, bên thanh toán là một bản giả lập trả lời trong vài mili giây. Còn trên production, giờ cao điểm nó thường mất hơn một giây.",
+      "khac": [
+        { "kieu": "chuyên nghiệp", "t": "For context, our staging environment doesn't reflect real-world latency.", "v": "Để mọi người nắm bối cảnh: môi trường staging không phản ánh độ trễ thực tế." }
+      ] },
+    { "ai": "N", "t": "So staging gave us a false sense of security.", "v": "Vậy là staging cho chúng ta cảm giác an toàn giả tạo." },
+    { "ai": "L", "t": "Exactly. At twenty past, I connected the errors to my change and started a rollback. That's where things got worse.", "v": "Đúng vậy. Lúc hai giờ hai mươi, em liên hệ được lỗi với thay đổi của mình và bắt đầu rollback. Từ đó mọi chuyện tệ hơn." },
+    { "ai": "N", "t": "Go on.", "v": "Em kể tiếp đi." },
+    { "ai": "L", "t": "The rollback tool reads its settings from the same configuration service, which was now timing out too. So the rollback itself kept failing.", "v": "Công cụ rollback đọc thiết lập từ chính dịch vụ cấu hình đó, mà lúc ấy nó cũng đang bị hết thời gian chờ. Nên bản thân việc rollback cứ thất bại liên tục.",
+      "np": [{ "mau": "N + itself (nhấn mạnh)", "giai": "\"the rollback itself\" = chính bản thân việc rollback — đại từ phản thân đặt ngay sau danh từ để nhấn mạnh điều trớ trêu.", "vd": "The monitoring system itself went down.", "vdV": "Chính hệ thống giám sát cũng sập." }] },
+    { "ai": "L", "t": "Ben and I had to apply the old value by hand, server by server. We were fully recovered at eleven minutes to three: forty-seven minutes in total.", "v": "Anh Ben và em phải đặt lại giá trị cũ bằng tay, từng máy chủ một. Đến ba giờ kém mười một thì phục hồi hoàn toàn: tổng cộng bốn mươi bảy phút." },
+    { "ai": "N", "t": "Thank you, Long. I know it's not easy to walk through your own change in front of everyone.", "v": "Cảm ơn em, Long. Chị biết chẳng dễ gì kể lại thay đổi của chính mình trước mặt mọi người." },
+    { "ai": "L", "t": "Honestly, my first instinct was to apologise and promise to be more careful.", "v": "Thật lòng thì phản xạ đầu tiên của em là xin lỗi và hứa sẽ cẩn thận hơn.",
+      "np": [{ "mau": "my first instinct was to + V", "giai": "\"phản xạ đầu tiên của tôi là…\" — nói về phản ứng tự nhiên, thường để sau đó nói ra điều mình đã làm khác đi.", "vd": "My first instinct was to restart the server.", "vdV": "Phản xạ đầu tiên của tôi là khởi động lại máy chủ." }] },
+    { "ai": "N", "t": "I appreciate that, but \"be more careful\" isn't an action item. Anyone could have made that change. The question is why nothing stopped it.", "v": "Chị trân trọng điều đó, nhưng \"cẩn thận hơn\" không phải là một việc cần làm. Ai cũng có thể đã thực hiện thay đổi ấy. Câu hỏi là vì sao không có gì chặn nó lại.",
+      "np": [{ "mau": "could have + V3 (khả năng trong quá khứ)", "giai": "\"lẽ ra ai cũng có thể đã…\" — nói rằng việc đó có thể xảy ra với bất kỳ ai, gỡ áp lực khỏi một cá nhân.", "vd": "Anyone could have missed that warning.", "vdV": "Ai cũng có thể đã bỏ sót cảnh báo đó." }],
+      "khac": [
+        { "kieu": "mềm mỏng", "t": "That's generous of you, but I don't think this comes down to one person.", "v": "Em thật rộng lượng, nhưng chị không nghĩ chuyện này là do một người.", "ghiChu": "\"come down to\" = rốt cuộc là do" }
+      ] },
+    { "ai": "B", "t": "Then let's ask why a few times. Why did a bad value reach every server? Because configuration changes go out to all servers at once.", "v": "Vậy mình hỏi \"tại sao\" vài lần. Tại sao một giá trị sai lại tới được mọi máy chủ? Vì thay đổi cấu hình được đẩy ra tất cả máy chủ cùng lúc." },
+    { "ai": "B", "t": "And why do they go out all at once, when code goes out gradually? Because configuration has never been treated as code. It skips review, it skips the canary stage, everything.", "v": "Thế tại sao chúng đẩy ra cùng lúc, trong khi code thì được đẩy dần dần? Vì cấu hình chưa bao giờ được đối xử như code. Nó bỏ qua review, bỏ qua giai đoạn canary, bỏ qua tất cả.",
+      "np": [{ "mau": "has never been + V3 (hiện tại hoàn thành bị động)", "giai": "\"chưa bao giờ được…\" tính đến nay — nhấn vào một khoảng trống kéo dài trong quy trình chứ không phải một lần sơ suất.", "vd": "This script has never been tested on Windows.", "vdV": "Script này chưa bao giờ được test trên Windows." }] },
+    { "ai": "N", "t": "So the root cause isn't the timeout value. It's that config changes bypass every safety net we've built for code.", "v": "Vậy nguyên nhân gốc không phải giá trị thời gian chờ. Mà là thay đổi cấu hình đi vòng qua mọi tấm lưới an toàn ta đã dựng cho code.",
+      "np": [{ "mau": "It's that + mệnh đề (câu chẻ)", "giai": "\"Vấn đề là ở chỗ…\" — tách và nhấn vào điều thật sự quan trọng sau khi phủ nhận cách hiểu bề mặt (isn't X. It's that…).", "vd": "The problem isn't the code. It's that nobody reviewed it.", "vdV": "Vấn đề không nằm ở code. Mà là không ai review nó." }] },
+    { "ai": "L", "t": "In hindsight, if the change had gone through a canary, only five percent of users would have been affected, and probably only for a few minutes.", "v": "Nhìn lại thì, nếu thay đổi đi qua canary, chỉ năm phần trăm người dùng bị ảnh hưởng, và có lẽ chỉ trong vài phút.",
+      "np": [{ "mau": "If + had + V3, would have been + V3", "giai": "Điều kiện loại 3 với bị động: nói kết quả lẽ ra đã khác. Đi cùng \"In hindsight\" (nhìn lại) rất tự nhiên trong postmortem.", "vd": "If we had added an alert, the issue would have been caught earlier.", "vdV": "Nếu có cảnh báo, sự cố đã được phát hiện sớm hơn." }],
+      "khac": [
+        { "kieu": "trang trọng", "t": "Had the change gone through a canary release, the impact would have been limited to around five percent of users.", "v": "Giá như thay đổi đi qua bản phát hành canary, ảnh hưởng đã chỉ giới hạn ở khoảng năm phần trăm người dùng.", "ghiChu": "đảo ngữ \"Had + S + V3\" thay cho \"If\", hay dùng trong báo cáo viết" }
+      ] },
+    { "ai": "N", "t": "What else made it worse? I'd call these contributing factors.", "v": "Còn gì làm nó tệ hơn nữa? Chị gọi chúng là các yếu tố góp phần." },
+    { "ai": "B", "t": "Two things. The alert threshold was set at ten percent errors, which is far too high for checkout. And the rollback runbook didn't mention the dependency on the config service.", "v": "Hai điều. Ngưỡng cảnh báo đặt ở mười phần trăm lỗi, quá cao với khâu thanh toán. Và sổ tay hướng dẫn rollback không nhắc tới việc phụ thuộc vào dịch vụ cấu hình." },
+    { "ai": "N", "t": "Good. Let's turn all of this into action items. Each one needs an owner and a date; otherwise, it's just a wish.", "v": "Tốt. Giờ biến tất cả thành việc cần làm. Mỗi việc cần một người phụ trách và một ngày hạn; nếu không, nó chỉ là một mong ước.",
+      "np": [{ "mau": "; otherwise, …", "giai": "\"nếu không thì\" — nêu hệ quả nếu điều kiện trước không được đáp ứng. Hay đứng sau dấu chấm phẩy hoặc mở đầu câu mới.", "vd": "Write it down; otherwise, we'll forget by Monday.", "vdV": "Ghi lại đi; không thì tới thứ Hai là quên." }] },
+    { "ai": "B", "t": "I'll take the first one: route config changes through the same pipeline as code, with a canary stage. I'd estimate three weeks, so let's say the end of the month.", "v": "Anh nhận việc đầu: đưa thay đổi cấu hình qua cùng quy trình triển khai như code, có giai đoạn canary. Anh ước khoảng ba tuần, vậy cứ đặt hạn cuối tháng.",
+      "khac": [
+        { "kieu": "chuyên nghiệp", "t": "I can own that one. Realistically, end of the month.", "v": "Anh phụ trách việc đó. Thực tế thì cuối tháng." }
+      ] },
+    { "ai": "L", "t": "I'll update the rollback runbook and make the tool work even when the config service is down. I can have a draft by Friday.", "v": "Em sẽ cập nhật sổ tay rollback và làm cho công cụ chạy được kể cả khi dịch vụ cấu hình sập. Em có bản nháp trước thứ Sáu." },
+    { "ai": "N", "t": "And I'll own the alerting change: checkout alerts at two percent instead of ten, starting this week.", "v": "Còn chị phụ trách thay đổi cảnh báo: cảnh báo thanh toán ở mức hai phần trăm thay vì mười, áp dụng từ tuần này." },
+    { "ai": "B", "t": "Can we also fix staging? As long as the mock answers in milliseconds, we'll keep missing timeout problems.", "v": "Mình sửa luôn staging được không? Chừng nào bản giả lập còn trả lời trong vài mili giây, mình sẽ còn bỏ sót các lỗi thời gian chờ.",
+      "np": [{ "mau": "As long as + hiện tại đơn, will + V", "giai": "\"chừng nào… thì…\" — nêu điều kiện kéo dài; vế as long as dùng hiện tại đơn dù nói về tương lai.", "vd": "As long as the tests are slow, people will skip them.", "vdV": "Chừng nào test còn chậm thì người ta còn bỏ qua chúng." }] },
+    { "ai": "N", "t": "Agreed, but it's a bigger piece of work. Let's log it as a follow-up and size it in the next planning session, rather than rush it.", "v": "Đồng ý, nhưng đó là việc lớn hơn. Mình ghi lại thành việc tiếp theo và ước lượng nó trong buổi lập kế hoạch tới, thay vì làm vội.",
+      "khac": [
+        { "kieu": "chuyên nghiệp", "t": "Let's capture that as a follow-up and prioritise it in the next planning session.", "v": "Mình ghi nhận đó là việc tiếp theo và xếp ưu tiên trong buổi lập kế hoạch tới." }
+      ] },
+    { "ai": "N", "t": "One last thing for the write-up. What actually went well?", "v": "Điều cuối cho bản báo cáo. Có gì thật sự diễn ra tốt không?" },
+    { "ai": "L", "t": "Detection was fast: the alert fired seven minutes after the change. And Ben joined within two minutes of me asking for help, on a Friday afternoon.", "v": "Phát hiện nhanh: cảnh báo bật bảy phút sau thay đổi. Và anh Ben vào hỗ trợ chỉ hai phút sau khi em kêu cứu, vào một chiều thứ Sáu." },
+    { "ai": "B", "t": "That's what on-call is for.", "v": "Trực sự cố là để vậy mà." },
+    { "ai": "N", "t": "It's worth writing that down too. If postmortems only ever list failures, people stop wanting to attend them.", "v": "Điều đó cũng đáng ghi lại. Nếu postmortem lúc nào cũng chỉ liệt kê thất bại, người ta sẽ hết muốn tham dự.",
+      "np": [{ "mau": "It's worth + V-ing", "giai": "\"đáng để làm gì\" — sau worth luôn là V-ing hoặc danh từ.", "vd": "It's worth checking the logs before you restart anything.", "vdV": "Đáng để xem log trước khi khởi động lại bất cứ thứ gì." }] },
+    { "ai": "N", "t": "I'll circulate the draft by tomorrow. Long, thank you for being so open. That's exactly what makes these meetings work.", "v": "Ngày mai chị gửi bản nháp cho mọi người. Long, cảm ơn em đã cởi mở như vậy. Đó chính là điều khiến những buổi họp này có ích.",
+      "khac": [
+        { "kieu": "văn viết", "t": "The written postmortem will be shared with the wider team by end of day tomorrow.", "v": "Bản báo cáo postmortem sẽ được gửi tới toàn đội trước cuối ngày mai.", "ghiChu": "câu kết trong email tổng kết" }
+      ] },
+    { "ai": "L", "t": "Thanks. Strangely, I feel better now than I did this morning.", "v": "Cảm ơn chị. Lạ thật, giờ em thấy nhẹ lòng hơn hẳn sáng nay." }
+  ],
+  "tuVung": [
+    { "chu": "blameless", "doc": "/ˈbleɪmləs/", "nghia": "không đổ lỗi (cho cá nhân)", "vd": "We run blameless reviews after every incident." },
+    { "chu": "postmortem", "doc": "/ˌpəʊstˈmɔːtəm/", "nghia": "buổi/bản phân tích rút kinh nghiệm sau sự cố", "vd": "The postmortem is due on Monday." },
+    { "chu": "on call", "doc": "/ɒn kɔːl/", "nghia": "đang trực (sẵn sàng xử lý sự cố)", "vd": "I'm on call this weekend." },
+    { "chu": "fail fast", "doc": "/feɪl fɑːst/", "nghia": "thất bại nhanh (báo lỗi sớm thay vì treo)", "vd": "It's better to fail fast than hang forever." },
+    { "chu": "staging", "doc": "/ˈsteɪdʒɪŋ/", "nghia": "môi trường thử nghiệm giống production", "vd": "Test it in staging first." },
+    { "chu": "false sense of security", "doc": "/fɔːls sens əv sɪˈkjʊərəti/", "nghia": "cảm giác an toàn giả tạo", "vd": "Green tests can give a false sense of security." },
+    { "chu": "rollback", "doc": "/ˈrəʊlbæk/", "nghia": "quay lui về phiên bản trước", "vd": "The rollback took ten minutes." },
+    { "chu": "root cause", "doc": "/ruːt kɔːz/", "nghia": "nguyên nhân gốc", "vd": "We still haven't found the root cause." },
+    { "chu": "safety net", "doc": "/ˈseɪfti net/", "nghia": "lưới an toàn, cơ chế chặn lỗi", "vd": "Code review is one safety net; tests are another." },
+    { "chu": "canary", "doc": "/kəˈneəri/", "nghia": "phát hành thử cho một phần nhỏ người dùng trước", "vd": "The canary showed errors, so we stopped the release." },
+    { "chu": "In hindsight", "doc": "/ɪn ˈhaɪndsaɪt/", "nghia": "nhìn lại thì, giờ nghĩ lại", "vd": "In hindsight, we should have waited." },
+    { "chu": "contributing factors", "doc": "/kənˈtrɪbjuːtɪŋ ˈfæktəz/", "nghia": "các yếu tố góp phần", "vd": "Fatigue was one of the contributing factors." },
+    { "chu": "runbook", "doc": "/ˈrʌnbʊk/", "nghia": "sổ tay các bước xử lý sự cố", "vd": "Follow the runbook if the database fails." },
+    { "chu": "action items", "doc": "/ˈækʃn ˈaɪtəmz/", "nghia": "việc cần làm (có người phụ trách, có hạn)", "vd": "Each action item needs an owner." }
+  ],
+  "yNghia": "Sự cố hiếm khi do một người \"bất cẩn\" — nó xảy ra khi hệ thống không có gì chặn một sai sót bình thường. \"Cẩn thận hơn\" không phải giải pháp; giải pháp là lưới an toàn, có người phụ trách và có ngày hạn. Và một nhóm dám kể lỗi của mình một cách cởi mở thì sẽ ít lỗi lặp lại hơn.",
+  "meo": [
+    "Khung postmortem: Timeline · Impact · Root cause · Contributing factors · What went well · Action items (owner + date).",
+    "Ngôn ngữ blameless: chủ ngữ là hệ thống — \"How did the system let this happen?\" thay vì \"Who did this?\".",
+    "Nhìn lại quá khứ: \"In hindsight, if X had…, Y would have…\" / trang trọng: \"Had X…, Y would have…\".",
+    "Kể dòng thời gian: \"At two minutes past two, …\", \"By then, …\", \"That's where things got worse.\""
+  ],
+  "cauHoi": [
+    { "hoi": "Thay đổi nào gây ra sự cố?", "chon": ["Xoá một bảng trong cơ sở dữ liệu", "Hạ thời gian chờ gọi bên thanh toán từ 10 giây xuống 1 giây", "Cập nhật thư viện thanh toán"], "dung": 1, "giai": "\"…lowered the timeout for calls to our payment provider from ten seconds to one.\"" },
+    { "hoi": "Vì sao test trên staging không phát hiện lỗi?", "chon": ["Vì bên thanh toán trên staging là bản giả lập trả lời trong vài mili giây", "Vì không ai chạy test", "Vì staging bị sập"], "dung": 0, "giai": "\"In staging, the payment provider is a mock that responds in milliseconds.\"" },
+    { "hoi": "Vì sao rollback cũng thất bại?", "chon": ["Vì Long không có quyền", "Vì mạng chậm", "Vì công cụ rollback đọc thiết lập từ chính dịch vụ cấu hình đang bị hết thời gian chờ"], "dung": 2, "giai": "\"The rollback tool reads its settings from the same configuration service, which was now timing out too.\"" },
+    { "hoi": "Nguyên nhân gốc theo kết luận của nhóm là gì?", "chon": ["Long bất cẩn", "Thay đổi cấu hình bỏ qua mọi lưới an toàn (review, canary) mà code phải đi qua", "Bên thanh toán quá chậm"], "dung": 1, "giai": "\"It's that config changes bypass every safety net we've built for code.\"" },
+    { "hoi": "Theo Natalie, một việc cần làm phải có gì?", "chon": ["Người phụ trách và ngày hạn", "Chữ ký của giám đốc", "Ít nhất ba người cùng làm"], "dung": 0, "giai": "\"Each one needs an owner and a date; otherwise, it's just a wish.\"" }
+  ]
+}

@@ -1,6 +1,7 @@
 {
   "id": "zh-hsk3-01",
   "nn": "zh",
+  "danhMuc": "doi-song",
   "cap": "HSK3",
   "so": 1,
   "tieuDe": "第一次坐高铁",
@@ -9,47 +10,365 @@
   "chuDe": "Đi tàu cao tốc",
   "bieuTuong": "tram.fill",
   "nguoi": [
-    { "ma": "W", "ten": "Chị Vương", "giong": "zh-nu", "vai": "hành khách ngồi cạnh" },
-    { "ma": "H", "ten": "Hải", "giong": "zh-nam", "vai": "nghiên cứu sinh Việt Nam" }
+    {
+      "ma": "W",
+      "ten": "Chị Vương",
+      "giong": "zh-nu",
+      "vai": "hành khách ngồi cạnh"
+    },
+    {
+      "ma": "H",
+      "ten": "Hải",
+      "giong": "zh-nam",
+      "vai": "nghiên cứu sinh Việt Nam"
+    }
   ],
   "loi": [
-    { "ai": "W", "t": "不好意思，靠窗的座位是我的。", "doc": "Bù hǎoyìsi, kào chuāng de zuòwèi shì wǒ de.", "v": "Xin lỗi, ghế cạnh cửa sổ là của tôi." },
-    { "ai": "H", "t": "啊？我的票是十二F……", "doc": "Á? Wǒ de piào shì shí'èr F……", "v": "Hả? Vé của tôi là 12F mà…" },
-    { "ai": "W", "t": "你再看看，你的是十二D，我的才是十二F。", "doc": "Nǐ zài kànkan, nǐ de shì shí'èr D, wǒ de cái shì shí'èr F.", "v": "Anh xem lại đi, của anh là 12D, của tôi mới là 12F." },
-    { "ai": "H", "t": "哎呀，真的！对不起，我是第一次坐高铁，有点儿着急。", "doc": "Āiyā, zhēn de! Duìbuqǐ, wǒ shì dì yī cì zuò gāotiě, yǒudiǎnr zháojí.", "v": "Ôi, đúng thật! Xin lỗi chị, lần đầu tôi đi tàu cao tốc nên hơi cuống." },
-    { "ai": "W", "t": "没关系。你先把行李放上去吧，上面还有地方。", "doc": "Méi guānxi. Nǐ xiān bǎ xíngli fàng shàngqu ba, shàngmiàn hái yǒu dìfang.", "v": "Không sao. Anh để hành lý lên trên trước đi, trên đó vẫn còn chỗ." },
-    { "ai": "H", "t": "好的。您是去上海吗？", "doc": "Hǎo de. Nín shì qù Shànghǎi ma?", "v": "Vâng. Chị đi Thượng Hải ạ?" },
-    { "ai": "W", "t": "对，我是回家。你呢？你是从哪儿来的？", "doc": "Duì, wǒ shì huí jiā. Nǐ ne? Nǐ shì cóng nǎr lái de?", "v": "Ừ, tôi về nhà. Còn anh? Anh từ đâu đến?" },
-    { "ai": "H", "t": "我是从越南来的，在北京读研究生。这次去上海参加一个会议。", "doc": "Wǒ shì cóng Yuènán lái de, zài Běijīng dú yánjiūshēng. Zhè cì qù Shànghǎi cānjiā yí ge huìyì.", "v": "Tôi đến từ Việt Nam, đang học cao học ở Bắc Kinh. Lần này đi Thượng Hải dự một cuộc hội thảo." },
-    { "ai": "W", "t": "你的票是在网上买的吗？", "doc": "Nǐ de piào shì zài wǎng shang mǎi de ma?", "v": "Vé của anh mua trên mạng à?" },
-    { "ai": "H", "t": "是用手机买的，很方便。不过进站的时候，我差点儿忘了带护照。", "doc": "Shì yòng shǒujī mǎi de, hěn fāngbiàn. Búguò jìn zhàn de shíhou, wǒ chàdiǎnr wàng le dài hùzhào.", "v": "Mua bằng điện thoại, tiện lắm. Có điều lúc vào ga tôi suýt quên mang hộ chiếu." },
-    { "ai": "W", "t": "外国人坐高铁一定要带护照，没有护照可不行。", "doc": "Wàiguó rén zuò gāotiě yídìng yào dài hùzhào, méiyǒu hùzhào kě bù xíng.", "v": "Người nước ngoài đi tàu cao tốc nhất định phải mang hộ chiếu, không có là không được đâu." },
-    { "ai": "H", "t": "我知道了。坐高铁比坐飞机方便多了，不用很早就去机场。", "doc": "Wǒ zhīdào le. Zuò gāotiě bǐ zuò fēijī fāngbiàn duō le, bú yòng hěn zǎo jiù qù jīchǎng.", "v": "Tôi biết rồi. Đi tàu cao tốc tiện hơn đi máy bay nhiều, không phải ra sân bay từ sớm." },
-    { "ai": "W", "t": "是啊，而且高铁很少晚点。从北京到上海只要四个多小时。", "doc": "Shì a, érqiě gāotiě hěn shǎo wǎndiǎn. Cóng Běijīng dào Shànghǎi zhǐ yào sì ge duō xiǎoshí.", "v": "Đúng vậy, mà tàu cao tốc rất ít khi trễ giờ. Từ Bắc Kinh đến Thượng Hải chỉ mất hơn bốn tiếng." },
-    { "ai": "H", "t": "我一直在想明天的会议，紧张得不得了。", "doc": "Wǒ yìzhí zài xiǎng míngtiān de huìyì, jǐnzhāng de bùdéliǎo.", "v": "Tôi cứ nghĩ mãi về hội thảo ngày mai, hồi hộp kinh khủng." },
-    { "ai": "W", "t": "你看，窗外的风景多漂亮！", "doc": "Nǐ kàn, chuāng wài de fēngjǐng duō piàoliang!", "v": "Anh nhìn kìa, phong cảnh ngoài cửa sổ đẹp biết bao!" },
-    { "ai": "H", "t": "真漂亮！我刚才一直低着头，都没注意。", "doc": "Zhēn piàoliang! Wǒ gāngcái yìzhí dīzhe tóu, dōu méi zhùyì.", "v": "Đẹp thật! Nãy giờ tôi cứ cúi đầu, chẳng để ý gì cả." },
-    { "ai": "W", "t": "会议是明天的事，风景是现在的。车开得这么快，不看就过去了。", "doc": "Huìyì shì míngtiān de shì, fēngjǐng shì xiànzài de. Chē kāi de zhème kuài, bú kàn jiù guòqu le.", "v": "Hội thảo là chuyện của ngày mai, phong cảnh là của bây giờ. Tàu chạy nhanh thế này, không ngắm là nó trôi qua mất." },
-    { "ai": "H", "t": "您说得对。那我先不想会议了。", "doc": "Nín shuō de duì. Nà wǒ xiān bù xiǎng huìyì le.", "v": "Chị nói đúng. Vậy tạm thời tôi không nghĩ đến hội thảo nữa." },
-    { "ai": "W", "t": "对了，你要不要换到靠窗的座位？这趟车我坐过很多次了。", "doc": "Duì le, nǐ yào bu yào huàn dào kào chuāng de zuòwèi? Zhè tàng chē wǒ zuò guo hěn duō cì le.", "v": "À này, anh có muốn đổi sang ghế cạnh cửa sổ không? Tuyến này tôi đi nhiều lần rồi." },
-    { "ai": "H", "t": "真的可以吗？太谢谢您了！", "doc": "Zhēn de kěyǐ ma? Tài xièxie nín le!", "v": "Thật được ạ? Cảm ơn chị nhiều lắm!" },
-    { "ai": "W", "t": "不客气。第一次坐高铁，应该好好看看外面。", "doc": "Bú kèqi. Dì yī cì zuò gāotiě, yīnggāi hǎohǎo kànkan wàimiàn.", "v": "Không có gì. Lần đầu đi tàu cao tốc thì nên ngắm bên ngoài cho thật kỹ." },
-    { "ai": "H", "t": "下次您来越南，我请您喝越南咖啡！", "doc": "Xià cì nín lái Yuènán, wǒ qǐng nín hē Yuènán kāfēi!", "v": "Lần sau chị sang Việt Nam, tôi mời chị uống cà phê Việt!" },
-    { "ai": "W", "t": "好啊，一言为定！", "doc": "Hǎo a, yì yán wéi dìng!", "v": "Được đấy, nhất ngôn đã định nhé!" }
+    {
+      "ai": "W",
+      "t": "不好意思，靠窗的座位是我的。",
+      "doc": "Bù hǎoyìsi, kào chuāng de zuòwèi shì wǒ de.",
+      "v": "Xin lỗi, ghế cạnh cửa sổ là của tôi.",
+      "khac": [
+        {
+          "kieu": "mềm mỏng",
+          "t": "不好意思，您好像坐错位子了。",
+          "doc": "Bù hǎoyìsi, nín hǎoxiàng zuò cuò wèizi le.",
+          "v": "Xin lỗi, hình như anh ngồi nhầm chỗ rồi.",
+          "ghiChu": "dùng 好像 để người kia không bị mất mặt"
+        },
+        {
+          "kieu": "ngắn gọn",
+          "t": "你好，这是我的座位。",
+          "doc": "Nǐ hǎo, zhè shì wǒ de zuòwèi.",
+          "v": "Chào anh, đây là ghế của tôi."
+        }
+      ],
+      "np": [
+        {
+          "mau": "Cụm từ + 的 + danh từ",
+          "giai": "靠窗的座位 = ghế cạnh cửa sổ: phần bổ nghĩa (靠窗) đứng TRƯỚC 的 và danh từ. Tiếng Việt thì đặt sau.",
+          "vd": "我想要一个靠走廊的座位。",
+          "vdDoc": "Wǒ xiǎng yào yí ge kào zǒuláng de zuòwèi.",
+          "vdV": "Tôi muốn một ghế cạnh lối đi."
+        }
+      ]
+    },
+    {
+      "ai": "H",
+      "t": "啊？我的票是十二F……",
+      "doc": "Á? Wǒ de piào shì shí'èr F……",
+      "v": "Hả? Vé của tôi là 12F mà…"
+    },
+    {
+      "ai": "W",
+      "t": "你再看看，你的是十二D，我的才是十二F。",
+      "doc": "Nǐ zài kànkan, nǐ de shì shí'èr D, wǒ de cái shì shí'èr F.",
+      "v": "Anh xem lại đi, của anh là 12D, của tôi mới là 12F.",
+      "np": [
+        {
+          "mau": "才是 (mới là)",
+          "giai": "才是 nhấn mạnh \"cái này MỚI đúng là…\", bác bỏ điều người kia vừa nghĩ: 我的才是十二F.",
+          "vd": "这才是我想要的。",
+          "vdDoc": "Zhè cái shì wǒ xiǎng yào de.",
+          "vdV": "Đây mới là thứ tôi muốn."
+        }
+      ]
+    },
+    {
+      "ai": "H",
+      "t": "哎呀，真的！对不起，我是第一次坐高铁，有点儿着急。",
+      "doc": "Āiyā, zhēn de! Duìbuqǐ, wǒ shì dì yī cì zuò gāotiě, yǒudiǎnr zháojí.",
+      "v": "Ôi, đúng thật! Xin lỗi chị, lần đầu tôi đi tàu cao tốc nên hơi cuống.",
+      "khac": [
+        {
+          "kieu": "tự nhiên hơn",
+          "t": "真不好意思，我坐错了，我马上换。",
+          "doc": "Zhēn bù hǎoyìsi, wǒ zuò cuò le, wǒ mǎshàng huàn.",
+          "v": "Thật ngại quá, tôi ngồi nhầm rồi, tôi đổi ngay."
+        }
+      ],
+      "np": [
+        {
+          "mau": "着急 (zháojí)",
+          "giai": "着 đọc zháo trong 着急 (sốt ruột, cuống), 睡着 (ngủ thiếp). Đọc zhe khi làm trợ từ tiếp diễn: 看着, 提着.",
+          "vd": "别着急，慢慢说。",
+          "vdDoc": "Bié zháojí, mànmàn shuō.",
+          "vdV": "Đừng vội, cứ từ từ nói."
+        }
+      ]
+    },
+    {
+      "ai": "W",
+      "t": "没关系。你先把行李放上去吧，上面还有地方。",
+      "doc": "Méi guānxi. Nǐ xiān bǎ xíngli fàng shàngqu ba, shàngmiàn hái yǒu dìfang.",
+      "v": "Không sao. Anh để hành lý lên trên trước đi, trên đó vẫn còn chỗ.",
+      "np": [
+        {
+          "mau": "把 + O + V + 上去",
+          "giai": "把 đưa đồ vật lên trước, động từ + bổ ngữ hướng cho biết nó đi đâu: 把行李放上去 = để hành lý lên trên.",
+          "vd": "把箱子拿下来吧。",
+          "vdDoc": "Bǎ xiāngzi ná xiàlai ba.",
+          "vdV": "Lấy cái vali xuống đi."
+        }
+      ]
+    },
+    {
+      "ai": "H",
+      "t": "好的。您是去上海吗？",
+      "doc": "Hǎo de. Nín shì qù Shànghǎi ma?",
+      "v": "Vâng. Chị đi Thượng Hải ạ?"
+    },
+    {
+      "ai": "W",
+      "t": "对，我是回家。你呢？你是从哪儿来的？",
+      "doc": "Duì, wǒ shì huí jiā. Nǐ ne? Nǐ shì cóng nǎr lái de?",
+      "v": "Ừ, tôi về nhà. Còn anh? Anh từ đâu đến?"
+    },
+    {
+      "ai": "H",
+      "t": "我是从越南来的，在北京读研究生。这次去上海参加一个会议。",
+      "doc": "Wǒ shì cóng Yuènán lái de, zài Běijīng dú yánjiūshēng. Zhè cì qù Shànghǎi cānjiā yí ge huìyì.",
+      "v": "Tôi đến từ Việt Nam, đang học cao học ở Bắc Kinh. Lần này đi Thượng Hải dự một cuộc hội thảo."
+    },
+    {
+      "ai": "W",
+      "t": "你的票是在网上买的吗？",
+      "doc": "Nǐ de piào shì zài wǎng shang mǎi de ma?",
+      "v": "Vé của anh mua trên mạng à?",
+      "np": [
+        {
+          "mau": "是 + 在 nơi + V + 的",
+          "giai": "Với việc đã xảy ra, 是…的 nhấn mạnh NƠI CHỐN/cách thức: 是在网上买的 = mua (ở) trên mạng. Phần nhấn mạnh nằm giữa 是 và 的.",
+          "vd": "这本书是在书店买的。",
+          "vdDoc": "Zhè běn shū shì zài shūdiàn mǎi de.",
+          "vdV": "Quyển sách này mua ở hiệu sách."
+        }
+      ]
+    },
+    {
+      "ai": "H",
+      "t": "是用手机买的，很方便。不过进站的时候，我差点儿忘了带护照。",
+      "doc": "Shì yòng shǒujī mǎi de, hěn fāngbiàn. Búguò jìn zhàn de shíhou, wǒ chàdiǎnr wàng le dài hùzhào.",
+      "v": "Mua bằng điện thoại, tiện lắm. Có điều lúc vào ga tôi suýt quên mang hộ chiếu.",
+      "np": [
+        {
+          "mau": "差点儿 + V",
+          "giai": "差点儿 = suýt nữa — việc ĐÃ KHÔNG xảy ra: 差点儿忘了 = suýt quên (nhưng không quên).",
+          "vd": "我差点儿坐错车。",
+          "vdDoc": "Wǒ chàdiǎnr zuò cuò chē.",
+          "vdV": "Tôi suýt đi nhầm xe."
+        }
+      ]
+    },
+    {
+      "ai": "W",
+      "t": "外国人坐高铁一定要带护照，没有护照可不行。",
+      "doc": "Wàiguó rén zuò gāotiě yídìng yào dài hùzhào, méiyǒu hùzhào kě bù xíng.",
+      "v": "Người nước ngoài đi tàu cao tốc nhất định phải mang hộ chiếu, không có là không được đâu."
+    },
+    {
+      "ai": "H",
+      "t": "我知道了。坐高铁比坐飞机方便多了，不用很早就去机场。",
+      "doc": "Wǒ zhīdào le. Zuò gāotiě bǐ zuò fēijī fāngbiàn duō le, bú yòng hěn zǎo jiù qù jīchǎng.",
+      "v": "Tôi biết rồi. Đi tàu cao tốc tiện hơn đi máy bay nhiều, không phải ra sân bay từ sớm.",
+      "np": [
+        {
+          "mau": "A 比 B + tính từ + 多了",
+          "giai": "So sánh hơn NHIỀU: tính từ + 多了 (hoặc 得多). Hơn một chút: + 一点儿.",
+          "vd": "今天比昨天冷多了。",
+          "vdDoc": "Jīntiān bǐ zuótiān lěng duō le.",
+          "vdV": "Hôm nay lạnh hơn hôm qua nhiều."
+        }
+      ]
+    },
+    {
+      "ai": "W",
+      "t": "是啊，而且高铁很少晚点。从北京到上海只要四个多小时。",
+      "doc": "Shì a, érqiě gāotiě hěn shǎo wǎndiǎn. Cóng Běijīng dào Shànghǎi zhǐ yào sì ge duō xiǎoshí.",
+      "v": "Đúng vậy, mà tàu cao tốc rất ít khi trễ giờ. Từ Bắc Kinh đến Thượng Hải chỉ mất hơn bốn tiếng."
+    },
+    {
+      "ai": "H",
+      "t": "我一直在想明天的会议，紧张得不得了。",
+      "doc": "Wǒ yìzhí zài xiǎng míngtiān de huìyì, jǐnzhāng de bùdéliǎo.",
+      "v": "Tôi cứ nghĩ mãi về hội thảo ngày mai, hồi hộp kinh khủng.",
+      "np": [
+        {
+          "mau": "Tính từ + 得不得了",
+          "giai": "得不得了 sau tính từ = \"…kinh khủng, cực kỳ\" (văn nói): 紧张得不得了, 高兴得不得了.",
+          "vd": "听到这个消息，她高兴得不得了。",
+          "vdDoc": "Tīngdào zhège xiāoxi, tā gāoxìng de bùdéliǎo.",
+          "vdV": "Nghe tin này, cô ấy vui mừng khôn xiết."
+        }
+      ]
+    },
+    {
+      "ai": "W",
+      "t": "你看，窗外的风景多漂亮！",
+      "doc": "Nǐ kàn, chuāng wài de fēngjǐng duō piàoliang!",
+      "v": "Anh nhìn kìa, phong cảnh ngoài cửa sổ đẹp biết bao!"
+    },
+    {
+      "ai": "H",
+      "t": "真漂亮！我刚才一直低着头，都没注意。",
+      "doc": "Zhēn piàoliang! Wǒ gāngcái yìzhí dīzhe tóu, dōu méi zhùyì.",
+      "v": "Đẹp thật! Nãy giờ tôi cứ cúi đầu, chẳng để ý gì cả."
+    },
+    {
+      "ai": "W",
+      "t": "会议是明天的事，风景是现在的。车开得这么快，不看就过去了。",
+      "doc": "Huìyì shì míngtiān de shì, fēngjǐng shì xiànzài de. Chē kāi de zhème kuài, bú kàn jiù guòqu le.",
+      "v": "Hội thảo là chuyện của ngày mai, phong cảnh là của bây giờ. Tàu chạy nhanh thế này, không ngắm là nó trôi qua mất."
+    },
+    {
+      "ai": "H",
+      "t": "您说得对。那我先不想会议了。",
+      "doc": "Nín shuō de duì. Nà wǒ xiān bù xiǎng huìyì le.",
+      "v": "Chị nói đúng. Vậy tạm thời tôi không nghĩ đến hội thảo nữa.",
+      "khac": [
+        {
+          "kieu": "ngắn gọn",
+          "t": "有道理。",
+          "doc": "Yǒu dàolǐ.",
+          "v": "Có lý."
+        },
+        {
+          "kieu": "thân mật",
+          "t": "也是！",
+          "doc": "Yě shì!",
+          "v": "Cũng đúng!",
+          "ghiChu": "giữa bạn bè, khi bị thuyết phục nhẹ"
+        }
+      ]
+    },
+    {
+      "ai": "W",
+      "t": "对了，你要不要换到靠窗的座位？这趟车我坐过很多次了。",
+      "doc": "Duì le, nǐ yào bu yào huàn dào kào chuāng de zuòwèi? Zhè tàng chē wǒ zuò guo hěn duō cì le.",
+      "v": "À này, anh có muốn đổi sang ghế cạnh cửa sổ không? Tuyến này tôi đi nhiều lần rồi."
+    },
+    {
+      "ai": "H",
+      "t": "真的可以吗？太谢谢您了！",
+      "doc": "Zhēn de kěyǐ ma? Tài xièxie nín le!",
+      "v": "Thật được ạ? Cảm ơn chị nhiều lắm!",
+      "khac": [
+        {
+          "kieu": "mềm mỏng",
+          "t": "这怎么好意思呢？",
+          "doc": "Zhè zěnme hǎoyìsi ne?",
+          "v": "Thế này ngại quá?",
+          "ghiChu": "phản xạ khiêm nhường khi nhận ý tốt; người kia thường nài thêm một lần"
+        },
+        {
+          "kieu": "lịch sự",
+          "t": "那就麻烦您了，谢谢！",
+          "doc": "Nà jiù máfan nín le, xièxie!",
+          "v": "Vậy làm phiền chị nhé, cảm ơn chị!"
+        }
+      ]
+    },
+    {
+      "ai": "W",
+      "t": "不客气。第一次坐高铁，应该好好看看外面。",
+      "doc": "Bú kèqi. Dì yī cì zuò gāotiě, yīnggāi hǎohǎo kànkan wàimiàn.",
+      "v": "Không có gì. Lần đầu đi tàu cao tốc thì nên ngắm bên ngoài cho thật kỹ."
+    },
+    {
+      "ai": "H",
+      "t": "下次您来越南，我请您喝越南咖啡！",
+      "doc": "Xià cì nín lái Yuènán, wǒ qǐng nín hē Yuènán kāfēi!",
+      "v": "Lần sau chị sang Việt Nam, tôi mời chị uống cà phê Việt!",
+      "khac": [
+        {
+          "kieu": "tự nhiên hơn",
+          "t": "以后有机会来越南，一定找我！",
+          "doc": "Yǐhòu yǒu jīhuì lái Yuènán, yídìng zhǎo wǒ!",
+          "v": "Sau này có dịp sang Việt Nam, nhất định tìm tôi nhé!"
+        }
+      ]
+    },
+    {
+      "ai": "W",
+      "t": "好啊，一言为定！",
+      "doc": "Hǎo a, yì yán wéi dìng!",
+      "v": "Được đấy, nhất ngôn đã định nhé!"
+    }
   ],
   "tuVung": [
-    { "chu": "座位", "doc": "zuòwèi", "nghia": "chỗ ngồi, ghế (toạ vị)", "vd": "这个座位有人吗？" },
-    { "chu": "高铁", "doc": "gāotiě", "nghia": "tàu cao tốc (viết tắt của 高速铁路, cao thiết)", "vd": "我们坐高铁去上海吧。" },
-    { "chu": "着急", "doc": "zháojí", "nghia": "sốt ruột, cuống (trước 急 đọc zháo, không phải zhe)", "vd": "别着急，慢慢说。" },
-    { "chu": "行李", "doc": "xíngli", "nghia": "hành lý (行 ở đây đọc xíng)", "vd": "你的行李太多了。" },
-    { "chu": "差点儿", "doc": "chàdiǎnr", "nghia": "suýt nữa", "vd": "我差点儿迟到了。" },
-    { "chu": "护照", "doc": "hùzhào", "nghia": "hộ chiếu", "vd": "请出示你的护照。" },
-    { "chu": "不行", "doc": "bù xíng", "nghia": "không được (行 = được, ổn)", "vd": "明天不行，后天可以吗？" },
-    { "chu": "晚点", "doc": "wǎndiǎn", "nghia": "trễ giờ (tàu xe, máy bay)", "vd": "飞机晚点了一个小时。" },
-    { "chu": "紧张", "doc": "jǐnzhāng", "nghia": "hồi hộp, căng thẳng (khẩn trương)", "vd": "考试的时候我很紧张。" },
-    { "chu": "风景", "doc": "fēngjǐng", "nghia": "phong cảnh", "vd": "这里的风景很美。" },
-    { "chu": "注意", "doc": "zhùyì", "nghia": "chú ý, để ý", "vd": "过马路要注意安全。" },
-    { "chu": "一言为定", "doc": "yì yán wéi dìng", "nghia": "nói là làm, chốt nhé (nhất ngôn vi định)", "vd": "明天八点见，一言为定！" }
+    {
+      "chu": "座位",
+      "doc": "zuòwèi",
+      "nghia": "chỗ ngồi, ghế (toạ vị)",
+      "vd": "这个座位有人吗？"
+    },
+    {
+      "chu": "高铁",
+      "doc": "gāotiě",
+      "nghia": "tàu cao tốc (viết tắt của 高速铁路, cao thiết)",
+      "vd": "我们坐高铁去上海吧。"
+    },
+    {
+      "chu": "着急",
+      "doc": "zháojí",
+      "nghia": "sốt ruột, cuống (trước 急 đọc zháo, không phải zhe)",
+      "vd": "别着急，慢慢说。"
+    },
+    {
+      "chu": "行李",
+      "doc": "xíngli",
+      "nghia": "hành lý (行 ở đây đọc xíng)",
+      "vd": "你的行李太多了。"
+    },
+    {
+      "chu": "差点儿",
+      "doc": "chàdiǎnr",
+      "nghia": "suýt nữa",
+      "vd": "我差点儿迟到了。"
+    },
+    {
+      "chu": "护照",
+      "doc": "hùzhào",
+      "nghia": "hộ chiếu",
+      "vd": "请出示你的护照。"
+    },
+    {
+      "chu": "不行",
+      "doc": "bù xíng",
+      "nghia": "không được (行 = được, ổn)",
+      "vd": "明天不行，后天可以吗？"
+    },
+    {
+      "chu": "晚点",
+      "doc": "wǎndiǎn",
+      "nghia": "trễ giờ (tàu xe, máy bay)",
+      "vd": "飞机晚点了一个小时。"
+    },
+    {
+      "chu": "紧张",
+      "doc": "jǐnzhāng",
+      "nghia": "hồi hộp, căng thẳng (khẩn trương)",
+      "vd": "考试的时候我很紧张。"
+    },
+    {
+      "chu": "风景",
+      "doc": "fēngjǐng",
+      "nghia": "phong cảnh",
+      "vd": "这里的风景很美。"
+    },
+    {
+      "chu": "注意",
+      "doc": "zhùyì",
+      "nghia": "chú ý, để ý",
+      "vd": "过马路要注意安全。"
+    },
+    {
+      "chu": "一言为定",
+      "doc": "yì yán wéi dìng",
+      "nghia": "nói là làm, chốt nhé (nhất ngôn vi định)",
+      "vd": "明天八点见，一言为定！"
+    }
   ],
   "yNghia": "Tàu chạy hơn 300 km/h, và cảnh ngoài cửa sổ cũng trôi qua nhanh như thế. Lo cho ngày mai là chuyện bình thường, nhưng đừng để nó lấy mất \"bây giờ\". Và một lần nhầm ghế, nếu được đón bằng sự tử tế, có khi lại thành một chuyến đi đáng nhớ.",
   "meo": [
@@ -60,10 +379,55 @@
     "行 là chữ đa âm: xíng (đi; được: 行李, 不行) và háng (hàng, ngành: 银行 yínháng)."
   ],
   "cauHoi": [
-    { "hoi": "Ghế đúng của Hải là ghế nào?", "chon": ["12F", "12D", "6F"], "dung": 1, "giai": "Chị Vương nói: 你的是十二D，我的才是十二F." },
-    { "hoi": "Hải đi Thượng Hải để làm gì?", "chon": ["Về nhà", "Đi du lịch", "Dự một cuộc hội thảo"], "dung": 2, "giai": "Hải nói: 这次去上海参加一个会议." },
-    { "hoi": "Hải suýt quên mang thứ gì?", "chon": ["Hộ chiếu", "Điện thoại", "Hành lý"], "dung": 0, "giai": "我差点儿忘了带护照 — suýt quên mang hộ chiếu." },
-    { "hoi": "Vì sao chị Vương nhường ghế cạnh cửa sổ?", "chon": ["Chị muốn ngủ", "Chị đi tuyến này nhiều rồi, muốn Hải được ngắm cảnh", "Ghế cửa sổ bị hỏng"], "dung": 1, "giai": "Chị nói 这趟车我坐过很多次了 và 第一次坐高铁，应该好好看看外面." },
-    { "hoi": "Câu \"你是从哪儿来的？\" dùng cấu trúc gì?", "chon": ["是…的 (nhấn mạnh chuyện đã xảy ra)", "把 (xử lý vật)", "比 (so sánh)"], "dung": 0, "giai": "是…的 nhấn mạnh nơi chốn/cách thức của việc đã xảy ra." }
+    {
+      "hoi": "Ghế đúng của Hải là ghế nào?",
+      "chon": [
+        "12F",
+        "12D",
+        "6F"
+      ],
+      "dung": 1,
+      "giai": "Chị Vương nói: 你的是十二D，我的才是十二F."
+    },
+    {
+      "hoi": "Hải đi Thượng Hải để làm gì?",
+      "chon": [
+        "Về nhà",
+        "Đi du lịch",
+        "Dự một cuộc hội thảo"
+      ],
+      "dung": 2,
+      "giai": "Hải nói: 这次去上海参加一个会议."
+    },
+    {
+      "hoi": "Hải suýt quên mang thứ gì?",
+      "chon": [
+        "Hộ chiếu",
+        "Điện thoại",
+        "Hành lý"
+      ],
+      "dung": 0,
+      "giai": "我差点儿忘了带护照 — suýt quên mang hộ chiếu."
+    },
+    {
+      "hoi": "Vì sao chị Vương nhường ghế cạnh cửa sổ?",
+      "chon": [
+        "Chị muốn ngủ",
+        "Chị đi tuyến này nhiều rồi, muốn Hải được ngắm cảnh",
+        "Ghế cửa sổ bị hỏng"
+      ],
+      "dung": 1,
+      "giai": "Chị nói 这趟车我坐过很多次了 và 第一次坐高铁，应该好好看看外面."
+    },
+    {
+      "hoi": "Câu \"你是从哪儿来的？\" dùng cấu trúc gì?",
+      "chon": [
+        "是…的 (nhấn mạnh chuyện đã xảy ra)",
+        "把 (xử lý vật)",
+        "比 (so sánh)"
+      ],
+      "dung": 0,
+      "giai": "是…的 nhấn mạnh nơi chốn/cách thức của việc đã xảy ra."
+    }
   ]
 }

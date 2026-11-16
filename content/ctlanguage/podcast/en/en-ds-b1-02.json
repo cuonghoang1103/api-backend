@@ -1,0 +1,430 @@
+{
+  "id": "en-ds-b1-02",
+  "nn": "en",
+  "danhMuc": "doi-song",
+  "cap": "B1",
+  "so": 5,
+  "tieuDe": "Crazy Weather, Isn't It?",
+  "tieuDeViet": "Thời tiết lạ nhỉ?",
+  "moTa": "Cơn mưa bất chợt ở trạm xe buýt Hà Nội mở đầu cuộc trò chuyện giữa Duy và Harriet, du khách người Anh: thời tiết, quê quán, cảm nhận về Hà Nội, nghề nghiệp, sở thích — và một câu hỏi \"rất Việt Nam\" khiến khách nước ngoài bất ngờ.",
+  "chuDe": "Trò chuyện",
+  "bieuTuong": "bubble.left.and.bubble.right.fill",
+  "nguoi": [
+    {
+      "ma": "D",
+      "ten": "Duy",
+      "giong": "us-nam",
+      "vai": "người Hà Nội"
+    },
+    {
+      "ma": "H",
+      "ten": "Harriet",
+      "giong": "uk-nu",
+      "vai": "du khách người Anh"
+    }
+  ],
+  "loi": [
+    {
+      "ai": "D",
+      "t": "Crazy weather, isn't it? It was sunny ten minutes ago.",
+      "v": "Thời tiết lạ nhỉ? Mười phút trước còn nắng.",
+      "khac": [
+        {
+          "kieu": "văn nói",
+          "t": "It's really coming down, isn't it?",
+          "v": "Mưa to thật nhỉ?",
+          "ghiChu": "\"come down\" = mưa xối xả"
+        },
+        {
+          "kieu": "tự nhiên hơn",
+          "t": "Can you believe this rain?",
+          "v": "Mưa gì mà ghê vậy?"
+        }
+      ],
+      "np": [
+        {
+          "mau": "Câu hỏi đuôi: …, isn't it?",
+          "giai": "Không thật sự hỏi, mà mời người kia đồng ý — cách mở đầu small talk kinh điển. Câu khẳng định ⇒ đuôi phủ định.",
+          "vd": "It's a lovely day, isn't it?",
+          "vdV": "Hôm nay trời đẹp nhỉ?"
+        }
+      ]
+    },
+    {
+      "ai": "H",
+      "t": "I know! And of course I left my umbrella at the hotel.",
+      "v": "Đúng thế! Mà tất nhiên là tôi để quên ô ở khách sạn."
+    },
+    {
+      "ai": "D",
+      "t": "Are you here on holiday?",
+      "v": "Chị đến đây du lịch à?",
+      "khac": [
+        {
+          "kieu": "tự nhiên hơn",
+          "t": "Are you visiting, or do you live here?",
+          "v": "Chị đến chơi hay sống ở đây?",
+          "ghiChu": "câu hỏi mở, không đoán bừa"
+        },
+        {
+          "kieu": "văn nói",
+          "t": "Here on vacation?",
+          "v": "Đi du lịch à?",
+          "ghiChu": "\"vacation\" là tiếng Mỹ"
+        }
+      ],
+      "np": [
+        {
+          "mau": "be here on holiday / on business",
+          "giai": "Đến đây để du lịch / công tác. Người Anh nói holiday, người Mỹ nói vacation.",
+          "vd": "I'm here on business for a week.",
+          "vdV": "Tôi đến đây công tác một tuần."
+        }
+      ]
+    },
+    {
+      "ai": "H",
+      "t": "Yes, for two weeks. I'm from Manchester, in the north of England.",
+      "v": "Ừ, hai tuần. Tôi đến từ Manchester, ở miền bắc nước Anh."
+    },
+    {
+      "ai": "D",
+      "t": "Oh, nice. So this weather must feel normal to you!",
+      "v": "Ồ, hay quá. Vậy chắc thời tiết này bình thường với chị nhỉ!",
+      "np": [
+        {
+          "mau": "must + V (suy đoán)",
+          "giai": "Đoán gần như chắc chắn dựa trên thông tin có sẵn: \"chắc hẳn là\".",
+          "vd": "You've worked all day. You must be tired.",
+          "vdV": "Bạn làm cả ngày rồi. Chắc bạn mệt lắm."
+        }
+      ]
+    },
+    {
+      "ai": "H",
+      "t": "Ha ha, not really. Our rain is cold and grey. This is warm rain — I actually quite like it.",
+      "v": "Ha ha, không hẳn. Mưa bên tôi lạnh và xám xịt. Đây là mưa ấm — thật ra tôi khá thích."
+    },
+    {
+      "ai": "D",
+      "t": "How are you finding Hanoi so far?",
+      "v": "Đến giờ chị thấy Hà Nội thế nào?",
+      "khac": [
+        {
+          "kieu": "tự nhiên hơn",
+          "t": "How do you like Hanoi so far?",
+          "v": "Chị thích Hà Nội không?"
+        },
+        {
+          "kieu": "ngắn gọn",
+          "t": "Enjoying Hanoi so far?",
+          "v": "Chị thấy Hà Nội vui chứ?"
+        }
+      ],
+      "np": [
+        {
+          "mau": "How are you finding + N?",
+          "giai": "\"find\" ở đây = cảm thấy, thấy (sau khi trải nghiệm). Câu hỏi cảm nhận rất lịch sự, hay dùng với khách.",
+          "vd": "How are you finding the new job?",
+          "vdV": "Bạn thấy công việc mới thế nào?"
+        }
+      ]
+    },
+    {
+      "ai": "H",
+      "t": "I love it. It's busy and loud, but the food is amazing. Crossing the street is a bit scary, though.",
+      "v": "Tôi mê lắm. Đông đúc và ồn ào, nhưng đồ ăn tuyệt vời. Có điều băng qua đường hơi đáng sợ.",
+      "np": [
+        {
+          "mau": "…, though (cuối câu)",
+          "giai": "\"though\" ở cuối câu = \"có điều, tuy vậy\" — thêm một ý trái ngược nhẹ, rất văn nói.",
+          "vd": "The hotel is small. It's very clean, though.",
+          "vdV": "Khách sạn nhỏ. Có điều rất sạch."
+        }
+      ]
+    },
+    {
+      "ai": "D",
+      "t": "Ha ha, everyone says that. The trick is to walk slowly and keep going. Don't stop suddenly.",
+      "v": "Ha ha, ai cũng nói vậy. Bí quyết là đi chậm và cứ đi đều. Đừng đột ngột dừng lại."
+    },
+    {
+      "ai": "H",
+      "t": "That's good advice. I'm Harriet, by the way.",
+      "v": "Lời khuyên hay đấy. Nhân tiện, tôi là Harriet.",
+      "np": [
+        {
+          "mau": "by the way",
+          "giai": "Nhân tiện, tiện thể — dùng để chuyển ý hoặc giới thiệu tên giữa cuộc trò chuyện.",
+          "vd": "By the way, the meeting is at three.",
+          "vdV": "Nhân tiện, cuộc họp lúc ba giờ."
+        }
+      ]
+    },
+    {
+      "ai": "D",
+      "t": "Nice to meet you, Harriet. I'm Duy.",
+      "v": "Rất vui được gặp chị, Harriet. Tôi là Duy."
+    },
+    {
+      "ai": "H",
+      "t": "Are you from Hanoi, Duy?",
+      "v": "Anh là người Hà Nội à, Duy?"
+    },
+    {
+      "ai": "D",
+      "t": "Born and raised. But my parents are from a small town near the sea.",
+      "v": "Sinh ra và lớn lên ở đây. Nhưng bố mẹ tôi quê ở một thị trấn nhỏ gần biển.",
+      "khac": [
+        {
+          "kieu": "trang trọng",
+          "t": "Yes, I grew up here.",
+          "v": "Vâng, tôi lớn lên ở đây."
+        }
+      ]
+    },
+    {
+      "ai": "H",
+      "t": "What do you do, if you don't mind me asking?",
+      "v": "Anh làm nghề gì, nếu anh không phiền tôi hỏi?",
+      "np": [
+        {
+          "mau": "if you don't mind me asking",
+          "giai": "Thêm vào cuối câu hỏi hơi riêng tư để nghe lịch sự hơn.",
+          "vd": "Where do you live, if you don't mind me asking?",
+          "vdV": "Anh sống ở đâu, nếu anh không phiền tôi hỏi?"
+        }
+      ]
+    },
+    {
+      "ai": "D",
+      "t": "I'm a software tester. And in my free time, I play the guitar in a small band.",
+      "v": "Tôi là kiểm thử phần mềm. Còn lúc rảnh, tôi chơi guitar trong một ban nhạc nhỏ."
+    },
+    {
+      "ai": "H",
+      "t": "No way! I play the drums. What kind of music do you play?",
+      "v": "Không thể nào! Tôi chơi trống. Ban nhạc anh chơi thể loại gì?",
+      "khac": [
+        {
+          "kieu": "lịch sự",
+          "t": "Oh, really? What sort of music do you play?",
+          "v": "Ồ, thật à? Anh chơi loại nhạc gì?"
+        }
+      ]
+    },
+    {
+      "ai": "D",
+      "t": "Mostly old rock songs. We play at a café on Friday nights.",
+      "v": "Chủ yếu là nhạc rock cũ. Tối thứ Sáu tụi tôi chơi ở một quán cà phê."
+    },
+    {
+      "ai": "H",
+      "t": "Can I ask you something? People here often ask me how old I am and if I'm married. Is that normal?",
+      "v": "Tôi hỏi anh chuyện này được không? Ở đây người ta hay hỏi tôi bao nhiêu tuổi và đã kết hôn chưa. Chuyện đó bình thường à?",
+      "np": [
+        {
+          "mau": "ask + how old I am / if I am…",
+          "giai": "Câu hỏi gián tiếp: trong câu kể, chủ ngữ đứng TRƯỚC động từ (how old I am, không phải \"how old am I\"). Câu yes/no dùng if.",
+          "vd": "She asked me where I work.",
+          "vdV": "Cô ấy hỏi tôi làm ở đâu."
+        }
+      ]
+    },
+    {
+      "ai": "D",
+      "t": "Ha ha, sorry about that! For us, it's a way to know how to address someone — like older sister or younger sister.",
+      "v": "Ha ha, xin lỗi chị nhé! Với chúng tôi, đó là cách để biết nên xưng hô thế nào — như chị hay em."
+    },
+    {
+      "ai": "H",
+      "t": "Oh, that makes sense! At home, those questions feel a bit too personal.",
+      "v": "Ồ, hợp lý ghê! Ở bên tôi, mấy câu đó hơi quá riêng tư."
+    },
+    {
+      "ai": "D",
+      "t": "Good to know. I'll stick to the weather, then!",
+      "v": "Biết vậy thì tốt. Vậy tôi chỉ nói chuyện thời tiết thôi!"
+    },
+    {
+      "ai": "H",
+      "t": "Oh, wait — is this my bus? Number thirty-two?",
+      "v": "Ơ, khoan — xe của tôi đây à? Số ba mươi hai?"
+    },
+    {
+      "ai": "D",
+      "t": "Yes, that's the one.",
+      "v": "Đúng rồi, chính nó."
+    },
+    {
+      "ai": "H",
+      "t": "It was really nice talking to you, Duy.",
+      "v": "Rất vui được nói chuyện với anh, Duy.",
+      "khac": [
+        {
+          "kieu": "trang trọng",
+          "t": "It was a pleasure chatting with you.",
+          "v": "Thật hân hạnh được trò chuyện với anh."
+        },
+        {
+          "kieu": "thân mật",
+          "t": "Great chatting with you!",
+          "v": "Nói chuyện vui ghê!"
+        }
+      ],
+      "np": [
+        {
+          "mau": "It was nice + V-ing",
+          "giai": "Dùng khi chia tay sau cuộc trò chuyện. \"Nice to meet you\" khi mới gặp, \"Nice meeting/talking to you\" khi chia tay.",
+          "vd": "It was nice meeting you.",
+          "vdV": "Rất vui vì đã gặp anh."
+        }
+      ]
+    },
+    {
+      "ai": "D",
+      "t": "You too, Harriet. Enjoy the rest of your trip — and good luck crossing the street!",
+      "v": "Tôi cũng vậy, Harriet. Chúc chị tận hưởng phần còn lại của chuyến đi — và chúc may mắn khi qua đường!",
+      "khac": [
+        {
+          "kieu": "lịch sự",
+          "t": "You too. Have a wonderful time in Vietnam.",
+          "v": "Tôi cũng vậy. Chúc chị có những ngày tuyệt vời ở Việt Nam."
+        }
+      ]
+    }
+  ],
+  "tuVung": [
+    {
+      "chu": "Crazy weather",
+      "doc": "/ˈkreɪzi ˈweðə(r)/",
+      "nghia": "thời tiết thất thường",
+      "vd": "Crazy weather today, isn't it?"
+    },
+    {
+      "chu": "umbrella",
+      "doc": "/ʌmˈbrelə/",
+      "nghia": "cái ô",
+      "vd": "Don't forget your umbrella."
+    },
+    {
+      "chu": "on holiday",
+      "doc": "/ɒn ˈhɒlədeɪ/",
+      "nghia": "đi nghỉ, du lịch (Anh)",
+      "vd": "We're going on holiday next week."
+    },
+    {
+      "chu": "so far",
+      "doc": "/səʊ fɑː(r)/",
+      "nghia": "cho tới giờ",
+      "vd": "So far, everything is fine."
+    },
+    {
+      "chu": "amazing",
+      "doc": "/əˈmeɪzɪŋ/",
+      "nghia": "tuyệt vời",
+      "vd": "The view is amazing."
+    },
+    {
+      "chu": "scary",
+      "doc": "/ˈskeəri/",
+      "nghia": "đáng sợ",
+      "vd": "The film was really scary."
+    },
+    {
+      "chu": "trick",
+      "doc": "/trɪk/",
+      "nghia": "mẹo, bí quyết",
+      "vd": "The trick is to start early."
+    },
+    {
+      "chu": "by the way",
+      "doc": "/baɪ ðə weɪ/",
+      "nghia": "nhân tiện",
+      "vd": "By the way, I'm Lan."
+    },
+    {
+      "chu": "Born and raised",
+      "doc": "/bɔːn ənd reɪzd/",
+      "nghia": "sinh ra và lớn lên (ở đây)",
+      "vd": "I'm a Saigon girl, born and raised."
+    },
+    {
+      "chu": "address someone",
+      "doc": "/əˈdres ˈsʌmwʌn/",
+      "nghia": "xưng hô với ai",
+      "vd": "How should I address your teacher?"
+    },
+    {
+      "chu": "personal",
+      "doc": "/ˈpɜːsənl/",
+      "nghia": "riêng tư, cá nhân",
+      "vd": "Sorry, that's a personal question."
+    },
+    {
+      "chu": "stick to",
+      "doc": "/stɪk tuː/",
+      "nghia": "bám vào, chỉ (nói về)",
+      "vd": "Let's stick to the plan."
+    }
+  ],
+  "yNghia": "Small talk không phải chuyện vô nghĩa — nó là cây cầu nhỏ để hai người lạ thấy an toàn với nhau. Chủ đề an toàn là thời tiết, đồ ăn, chuyến đi, sở thích. Những câu rất bình thường ở mình (tuổi, hôn nhân, lương, cân nặng) có thể quá riêng tư với người khác — và giải thích lý do văn hoá luôn giúp hai bên hiểu nhau hơn.",
+  "meo": [
+    "Mở lời bằng câu hỏi đuôi về thời tiết: \"Crazy weather, isn't it?\", \"Lovely day, isn't it?\".",
+    "Câu hỏi an toàn: \"Are you here on holiday?\", \"How are you finding…?\", \"What do you do?\", \"What kind of music do you like?\".",
+    "Tránh hỏi ngay: tuổi, hôn nhân, lương, cân nặng, tôn giáo. Nếu cần hỏi điều hơi riêng: thêm \"if you don't mind me asking\".",
+    "Chia tay tự nhiên: \"It was really nice talking to you\" → \"You too. Enjoy the rest of your trip!\"."
+  ],
+  "cauHoi": [
+    {
+      "hoi": "Harriet đến từ đâu?",
+      "chon": [
+        "London",
+        "Manchester, miền bắc nước Anh",
+        "Sydney"
+      ],
+      "dung": 1,
+      "giai": "\"I'm from Manchester, in the north of England.\""
+    },
+    {
+      "hoi": "Theo Duy, bí quyết băng qua đường ở Hà Nội là gì?",
+      "chon": [
+        "Chạy thật nhanh",
+        "Đi chậm, đi đều, đừng đột ngột dừng",
+        "Chờ đến khi hết xe"
+      ],
+      "dung": 1,
+      "giai": "\"Walk slowly and keep going. Don't stop suddenly.\""
+    },
+    {
+      "hoi": "Vì sao người Việt hay hỏi tuổi?",
+      "chon": [
+        "Để biết cách xưng hô",
+        "Để biết người đó có giàu không",
+        "Vì tò mò chuyện riêng"
+      ],
+      "dung": 0,
+      "giai": "\"It's a way to know how to address someone.\""
+    },
+    {
+      "hoi": "Câu nào đúng ngữ pháp?",
+      "chon": [
+        "She asked me how old am I.",
+        "She asked me how old I am.",
+        "She asked me how am I old."
+      ],
+      "dung": 1,
+      "giai": "Câu hỏi gián tiếp: chủ ngữ trước động từ."
+    },
+    {
+      "hoi": "\"How are you finding Hanoi?\" hỏi gì?",
+      "chon": [
+        "Bạn tìm đường đến Hà Nội thế nào?",
+        "Bạn thấy Hà Nội thế nào?",
+        "Bạn ở Hà Nội bao lâu?"
+      ],
+      "dung": 1,
+      "giai": "\"find\" = cảm thấy (sau khi trải nghiệm)."
+    }
+  ]
+}

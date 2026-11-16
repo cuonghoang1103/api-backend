@@ -1,0 +1,375 @@
+{
+  "id": "en-ds-a1-02",
+  "nn": "en",
+  "danhMuc": "doi-song",
+  "cap": "A1",
+  "so": 5,
+  "tieuDe": "How Much Are the Mangoes?",
+  "tieuDeViet": "Xoài bao nhiêu tiền?",
+  "moTa": "Vy đi chợ phiên cuối tuần ở nước ngoài: hỏi giá, nghe số (twelve hay twenty?), xin nếm thử, mua nửa ký, hỏi trả thẻ và nhận tiền thối.",
+  "chuDe": "Mua sắm",
+  "bieuTuong": "cart.fill",
+  "nguoi": [
+    {
+      "ma": "V",
+      "ten": "Vy",
+      "giong": "us-nu",
+      "vai": "du học sinh"
+    },
+    {
+      "ma": "S",
+      "ten": "Sam",
+      "giong": "au-nam",
+      "vai": "người bán trái cây"
+    }
+  ],
+  "loi": [
+    {
+      "ai": "S",
+      "t": "Hi there! Fresh fruit today. Can I help you?",
+      "v": "Chào cô! Hôm nay có trái cây tươi. Tôi giúp gì được không?"
+    },
+    {
+      "ai": "V",
+      "t": "Hi. How much are the mangoes?",
+      "v": "Chào anh. Xoài bao nhiêu tiền ạ?",
+      "khac": [
+        {
+          "kieu": "ngắn gọn",
+          "t": "How much for the mangoes?",
+          "v": "Xoài nhiêu vậy anh?"
+        },
+        {
+          "kieu": "lịch sự",
+          "t": "Excuse me, how much are these mangoes, please?",
+          "v": "Xin lỗi, xoài này bao nhiêu tiền ạ?"
+        }
+      ],
+      "np": [
+        {
+          "mau": "How much is + N ít / How much are + N nhiều",
+          "giai": "Hỏi giá. Một món: \"How much is this bag?\"; nhiều món hoặc danh từ số nhiều: \"How much are the mangoes?\".",
+          "vd": "How much is this T-shirt?",
+          "vdV": "Cái áo thun này bao nhiêu tiền?"
+        }
+      ]
+    },
+    {
+      "ai": "S",
+      "t": "They're three dollars each, or five for twelve dollars.",
+      "v": "Ba đô một quả, hoặc năm quả mười hai đô.",
+      "np": [
+        {
+          "mau": "… each / … for + giá",
+          "giai": "\"three dollars each\" = mỗi cái ba đô; \"five for twelve dollars\" = năm cái giá mười hai đô (mua nhiều rẻ hơn).",
+          "vd": "The pens are one dollar each, or three for two dollars.",
+          "vdV": "Bút một đô một cây, hoặc ba cây hai đô."
+        }
+      ]
+    },
+    {
+      "ai": "V",
+      "t": "Sorry, did you say twelve or twenty?",
+      "v": "Xin lỗi, anh nói mười hai hay hai mươi ạ?",
+      "khac": [
+        {
+          "kieu": "lịch sự",
+          "t": "Sorry, was that twelve or twenty?",
+          "v": "Xin lỗi, là mười hai hay hai mươi ạ?"
+        },
+        {
+          "kieu": "ngắn gọn",
+          "t": "Twelve?",
+          "v": "Mười hai ạ?",
+          "ghiChu": "lên giọng để xác nhận lại số"
+        }
+      ],
+      "np": [
+        {
+          "mau": "Did you say A or B?",
+          "giai": "Hỏi lại để chắc chắn mình nghe đúng — rất cần với số và giá tiền.",
+          "vd": "Did you say Gate 15 or Gate 50?",
+          "vdV": "Anh nói cổng 15 hay cổng 50 ạ?"
+        }
+      ]
+    },
+    {
+      "ai": "S",
+      "t": "Twelve. One, two — twelve.",
+      "v": "Mười hai. Một, hai — mười hai."
+    },
+    {
+      "ai": "V",
+      "t": "Okay. Can I try one first?",
+      "v": "Vâng. Tôi nếm thử trước được không?",
+      "khac": [
+        {
+          "kieu": "lịch sự",
+          "t": "Could I try a piece first?",
+          "v": "Cho tôi nếm thử một miếng trước được không ạ?"
+        },
+        {
+          "kieu": "thân mật",
+          "t": "Can I have a taste?",
+          "v": "Cho mình nếm chút nhé?"
+        }
+      ],
+      "np": [
+        {
+          "mau": "Can I + V?",
+          "giai": "Xin phép làm gì. \"Could I…?\" lịch sự hơn, \"May I…?\" trang trọng nhất.",
+          "vd": "Can I sit here?",
+          "vdV": "Tôi ngồi đây được không?"
+        }
+      ]
+    },
+    {
+      "ai": "S",
+      "t": "Of course. Here you go. They're very sweet.",
+      "v": "Tất nhiên rồi. Đây cô. Ngọt lắm."
+    },
+    {
+      "ai": "V",
+      "t": "Mmm, delicious! Five, please. And how much are the bananas?",
+      "v": "Ừm, ngon quá! Cho tôi năm quả. Còn chuối bao nhiêu ạ?"
+    },
+    {
+      "ai": "S",
+      "t": "The bananas are two fifty a kilo.",
+      "v": "Chuối hai đô rưỡi một ký.",
+      "np": [
+        {
+          "mau": "two fifty = 2.50",
+          "giai": "Giá tiền thường đọc gọn: $2.50 = \"two fifty\", $13.25 = \"thirteen twenty-five\". \"a kilo\" = mỗi ký (a = mỗi).",
+          "vd": "Apples are four ninety-nine a kilo.",
+          "vdV": "Táo 4,99 đô một ký."
+        }
+      ]
+    },
+    {
+      "ai": "V",
+      "t": "Can I have half a kilo, please?",
+      "v": "Cho tôi nửa ký được không ạ?",
+      "khac": [
+        {
+          "kieu": "tự nhiên hơn",
+          "t": "I'll take half a kilo, please.",
+          "v": "Tôi lấy nửa ký nhé."
+        },
+        {
+          "kieu": "ngắn gọn",
+          "t": "Half a kilo, please.",
+          "v": "Nửa ký ạ."
+        }
+      ],
+      "np": [
+        {
+          "mau": "half a + N",
+          "giai": "Nửa…: half a kilo, half an hour, half a cup. Không nói \"a half of kilo\".",
+          "vd": "I'll be there in half an hour.",
+          "vdV": "Nửa tiếng nữa tôi tới."
+        }
+      ]
+    },
+    {
+      "ai": "S",
+      "t": "Sure. So that's twelve plus one twenty-five. Thirteen twenty-five in total.",
+      "v": "Được. Vậy là mười hai cộng một đô hai mươi lăm. Tổng cộng mười ba đô hai mươi lăm."
+    },
+    {
+      "ai": "V",
+      "t": "Can I pay by card?",
+      "v": "Tôi trả bằng thẻ được không?",
+      "khac": [
+        {
+          "kieu": "ngắn gọn",
+          "t": "Do you take cards?",
+          "v": "Anh có nhận thẻ không?"
+        },
+        {
+          "kieu": "lịch sự",
+          "t": "Is it okay if I pay by card?",
+          "v": "Tôi trả bằng thẻ có được không ạ?"
+        }
+      ],
+      "np": [
+        {
+          "mau": "pay by card / in cash",
+          "giai": "Trả bằng thẻ: by card; trả tiền mặt: in cash (hoặc pay cash); trả bằng điện thoại: by phone.",
+          "vd": "Can I pay in cash?",
+          "vdV": "Tôi trả tiền mặt được không?"
+        }
+      ]
+    },
+    {
+      "ai": "S",
+      "t": "Sorry, cash only.",
+      "v": "Xin lỗi, chỉ nhận tiền mặt."
+    },
+    {
+      "ai": "V",
+      "t": "No problem. Here's twenty dollars.",
+      "v": "Không sao. Đây là hai mươi đô.",
+      "khac": [
+        {
+          "kieu": "tự nhiên hơn",
+          "t": "No worries. Is a twenty okay?",
+          "v": "Không sao. Tờ hai mươi được không anh?",
+          "ghiChu": "khi đưa tờ tiền lớn"
+        }
+      ]
+    },
+    {
+      "ai": "S",
+      "t": "Thanks. And here's your change: six seventy-five.",
+      "v": "Cảm ơn. Và đây là tiền thối của cô: sáu đô bảy mươi lăm."
+    },
+    {
+      "ai": "V",
+      "t": "Thank you. Do you have a bag?",
+      "v": "Cảm ơn. Anh có túi không?",
+      "khac": [
+        {
+          "kieu": "lịch sự",
+          "t": "Could I have a bag, please?",
+          "v": "Cho tôi xin một cái túi được không ạ?"
+        }
+      ],
+      "np": [
+        {
+          "mau": "Do you have + N?",
+          "giai": "Hỏi người bán có món gì không. Trả lời: \"Yes, I do. / Sorry, I don't.\"",
+          "vd": "Do you have smaller sizes?",
+          "vdV": "Anh có cỡ nhỏ hơn không?"
+        }
+      ]
+    },
+    {
+      "ai": "S",
+      "t": "Here. Enjoy the mangoes! See you next week.",
+      "v": "Đây. Ăn xoài ngon nhé! Tuần sau gặp lại."
+    },
+    {
+      "ai": "V",
+      "t": "Thanks! Bye!",
+      "v": "Cảm ơn anh! Tạm biệt!"
+    }
+  ],
+  "tuVung": [
+    {
+      "chu": "How much",
+      "doc": "/haʊ mʌtʃ/",
+      "nghia": "bao nhiêu (tiền)",
+      "vd": "How much is this?"
+    },
+    {
+      "chu": "each",
+      "doc": "/iːtʃ/",
+      "nghia": "mỗi (cái)",
+      "vd": "They are two dollars each."
+    },
+    {
+      "chu": "try",
+      "doc": "/traɪ/",
+      "nghia": "thử, nếm thử",
+      "vd": "Can I try this jacket?"
+    },
+    {
+      "chu": "sweet",
+      "doc": "/swiːt/",
+      "nghia": "ngọt",
+      "vd": "This cake is too sweet."
+    },
+    {
+      "chu": "delicious",
+      "doc": "/dɪˈlɪʃəs/",
+      "nghia": "ngon",
+      "vd": "The soup is delicious."
+    },
+    {
+      "chu": "half a kilo",
+      "doc": "/hɑːf ə ˈkiːləʊ/",
+      "nghia": "nửa ký",
+      "vd": "Half a kilo of tomatoes, please."
+    },
+    {
+      "chu": "in total",
+      "doc": "/ɪn ˈtəʊtl/",
+      "nghia": "tổng cộng",
+      "vd": "That's ten dollars in total."
+    },
+    {
+      "chu": "pay by card",
+      "doc": "/peɪ baɪ kɑːd/",
+      "nghia": "trả bằng thẻ",
+      "vd": "Can I pay by card here?"
+    },
+    {
+      "chu": "cash",
+      "doc": "/kæʃ/",
+      "nghia": "tiền mặt",
+      "vd": "I only have cash."
+    },
+    {
+      "chu": "change",
+      "doc": "/tʃeɪndʒ/",
+      "nghia": "tiền thối, tiền lẻ",
+      "vd": "Here's your change."
+    },
+    {
+      "chu": "bag",
+      "doc": "/bæɡ/",
+      "nghia": "túi",
+      "vd": "Do you need a bag?"
+    }
+  ],
+  "yNghia": "Ở chợ, nghe sai một con số là trả sai tiền. Đừng ngại hỏi lại \"twelve or twenty?\" — người bán thà nói lại hai lần còn hơn để khách bực mình. Hỏi rõ, trả đúng, rồi quay lại tuần sau.",
+  "meo": [
+    "Số dễ nghe nhầm: thirTEEN (13) – THIRty (30), fifTEEN (15) – FIFty (50). Số -teen nhấn âm cuối, số -ty nhấn âm đầu. Không chắc thì hỏi \"one-five or five-zero?\".",
+    "Đọc giá: $2.50 = \"two fifty\" hoặc \"two dollars fifty\"; $13.25 = \"thirteen twenty-five\".",
+    "Câu mua hàng: \"How much is/are…?\", \"Can I try one?\", \"Can I have…, please?\", \"Do you take cards?\", \"Do you have a bag?\".",
+    "\"Here you go / Here you are\" = Đây ạ (khi đưa đồ, đưa tiền)."
+  ],
+  "cauHoi": [
+    {
+      "hoi": "Vì sao Vy hỏi lại \"twelve or twenty?\"",
+      "chon": [
+        "Cô thấy xoài quá đắt",
+        "Cô không chắc mình nghe đúng con số",
+        "Cô muốn mặc cả"
+      ],
+      "dung": 1,
+      "giai": "Hỏi lại để chắc chắn nghe đúng giá."
+    },
+    {
+      "hoi": "Vy trả bằng gì?",
+      "chon": [
+        "Tiền mặt",
+        "Thẻ",
+        "Điện thoại"
+      ],
+      "dung": 0,
+      "giai": "Sam nói \"cash only\", Vy đưa tờ hai mươi đô."
+    },
+    {
+      "hoi": "\"Three dollars each\" nghĩa là gì?",
+      "chon": [
+        "Ba đô cho tất cả",
+        "Mỗi quả ba đô",
+        "Ba quả một đô"
+      ],
+      "dung": 1,
+      "giai": "\"each\" = mỗi cái."
+    },
+    {
+      "hoi": "Vy nhận lại bao nhiêu tiền thối?",
+      "chon": [
+        "$6.25",
+        "$7.75",
+        "$6.75"
+      ],
+      "dung": 2,
+      "giai": "20 − 13,25 = 6,75: \"six seventy-five\"."
+    }
+  ]
+}

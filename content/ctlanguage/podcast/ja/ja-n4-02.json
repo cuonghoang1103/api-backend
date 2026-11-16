@@ -1,6 +1,7 @@
 {
   "id": "ja-n4-02",
   "nn": "ja",
+  "danhMuc": "doi-song",
   "cap": "N4",
   "so": 2,
   "tieuDe": "病院へ行く",
@@ -9,45 +10,344 @@
   "chuDe": "Sức khoẻ",
   "bieuTuong": "cross.case.fill",
   "nguoi": [
-    { "ma": "N", "ten": "ナム", "giong": "ja-nam", "vai": "du học sinh" },
-    { "ma": "U", "ten": "受付", "giong": "ja-nu", "vai": "nhân viên quầy lễ tân phòng khám" },
-    { "ma": "D", "ten": "医者", "giong": "ja2-nam", "vai": "bác sĩ" }
+    {
+      "ma": "N",
+      "ten": "ナム",
+      "giong": "ja-nam",
+      "vai": "du học sinh"
+    },
+    {
+      "ma": "U",
+      "ten": "受付",
+      "giong": "ja-nu",
+      "vai": "nhân viên quầy lễ tân phòng khám"
+    },
+    {
+      "ma": "D",
+      "ten": "医者",
+      "giong": "ja2-nam",
+      "vai": "bác sĩ"
+    }
   ],
   "loi": [
-    { "ai": "U", "t": "こんにちは。今日はどうされましたか。", "doc": "こんにちは。きょうはどうされましたか。", "v": "Xin chào. Hôm nay anh bị làm sao ạ?" },
-    { "ai": "N", "t": "きのうの夜から熱があるんです。のども痛くて……。", "doc": "きのうのよるからねつがあるんです。のどもいたくて……。", "v": "Tôi bị sốt từ tối qua. Họng cũng đau nữa…" },
-    { "ai": "U", "t": "そうですか。保険証はお持ちですか。", "doc": "そうですか。ほけんしょうはおもちですか。", "v": "Vậy ạ. Anh có mang thẻ bảo hiểm không ạ?" },
-    { "ai": "N", "t": "はい、これです。この病院は初めてなんですが、大丈夫ですか。", "doc": "はい、これです。このびょういんははじめてなんですが、だいじょうぶですか。", "v": "Vâng, đây ạ. Tôi khám ở đây lần đầu, có sao không ạ?" },
-    { "ai": "U", "t": "大丈夫ですよ。この問診票に書いてから、少しお待ちください。", "doc": "だいじょうぶですよ。このもんしんひょうにかいてから、すこしおまちください。", "v": "Không sao đâu ạ. Anh điền vào phiếu khám này rồi chờ một chút nhé." },
-    { "ai": "N", "t": "すみません、この漢字が読めないんですが……。", "doc": "すみません、このかんじがよめないんですが……。", "v": "Xin lỗi, chữ Hán này tôi không đọc được…" },
-    { "ai": "U", "t": "「咳」は「せき」と読みます。ゴホン、ゴホン、のことです。", "doc": "「せき」は「せき」とよみます。ゴホン、ゴホン、のことです。", "v": "Chữ này đọc là “seki” — tức là ho, khụ khụ ấy ạ." },
-    { "ai": "N", "t": "ああ、咳ですね。少し出ます。", "doc": "ああ、せきですね。すこしでます。", "v": "À, ho ạ. Tôi có ho một chút." },
-    { "ai": "D", "t": "ナムさん、どうぞ。熱は何度ありますか。", "doc": "ナムさん、どうぞ。ねつはなんどありますか。", "v": "Anh Nam, mời vào. Anh sốt bao nhiêu độ?" },
-    { "ai": "N", "t": "今朝は38度5分でした。", "doc": "けさはさんじゅうはちどごぶでした。", "v": "Sáng nay là 38 độ rưỡi ạ." },
-    { "ai": "D", "t": "口を開けてください。……のどがかなり赤いですね。最近、よく寝ていますか。", "doc": "くちをあけてください。……のどがかなりあかいですね。さいきん、よくねていますか。", "v": "Anh há miệng ra. …Họng đỏ khá nhiều đấy. Dạo này anh có ngủ đủ không?" },
-    { "ai": "N", "t": "実は、試験とアルバイトで、毎日4時間ぐらいしか寝ていないんです。", "doc": "じつは、しけんとアルバイトで、まいにちよじかんぐらいしかねていないんです。", "v": "Thật ra vì thi cử với làm thêm, ngày nào tôi cũng chỉ ngủ được khoảng 4 tiếng." },
-    { "ai": "D", "t": "それは少なすぎますね。風邪ですが、体が疲れているから治りにくいんですよ。", "doc": "それはすくなすぎますね。かぜですが、からだがつかれているからなおりにくいんですよ。", "v": "Thế thì ít quá. Anh bị cảm thôi, nhưng cơ thể mệt nên khó khỏi lắm." },
-    { "ai": "D", "t": "薬を三日分出します。一日3回、ご飯を食べてから飲んでください。", "doc": "くすりをみっかぶんだします。いちにちさんかい、ごはんをたべてからのんでください。", "v": "Tôi kê thuốc cho ba ngày. Ngày uống 3 lần, sau khi ăn." },
-    { "ai": "N", "t": "わかりました。アルバイトは行ってもいいですか。", "doc": "わかりました。アルバイトはいってもいいですか。", "v": "Tôi hiểu rồi. Tôi đi làm thêm có được không ạ?" },
-    { "ai": "D", "t": "熱が下がるまで、休んだほうがいいですね。無理をしないほうがいいですよ。", "doc": "ねつがさがるまで、やすんだほうがいいですね。むりをしないほうがいいですよ。", "v": "Anh nên nghỉ cho đến khi hạ sốt. Đừng cố quá sức thì hơn." },
-    { "ai": "N", "t": "でも、休むと店長に悪いし……。", "doc": "でも、やすむとてんちょうにわるいし……。", "v": "Nhưng nghỉ thì thấy có lỗi với ông chủ…" },
-    { "ai": "D", "t": "無理をして長く休むより、今二日休むほうが、お店のためにもなりますよ。", "doc": "むりをしてながくやすむより、いまふつかやすむほうが、おみせのためにもなりますよ。", "v": "Nghỉ hai ngày bây giờ còn tốt cho quán hơn là cố rồi phải nghỉ dài." },
-    { "ai": "N", "t": "そうですね。店長に電話して、話してみます。", "doc": "そうですね。てんちょうにでんわして、はなしてみます。", "v": "Đúng vậy ạ. Tôi sẽ gọi điện nói chuyện với ông chủ." },
-    { "ai": "D", "t": "それから、水をたくさん飲んで、今夜は早く寝てくださいね。", "doc": "それから、みずをたくさんのんで、こんやははやくねてくださいね。", "v": "Thêm nữa, anh uống nhiều nước và tối nay đi ngủ sớm nhé." },
-    { "ai": "N", "t": "はい。ありがとうございました。", "doc": "はい。ありがとうございました。", "v": "Vâng. Cảm ơn bác sĩ." }
+    {
+      "ai": "U",
+      "t": "こんにちは。今日はどうされましたか。",
+      "doc": "こんにちは。きょうはどうされましたか。",
+      "v": "Xin chào. Hôm nay anh bị làm sao ạ?"
+    },
+    {
+      "ai": "N",
+      "t": "きのうの夜から熱があるんです。のども痛くて……。",
+      "doc": "きのうのよるからねつがあるんです。のどもいたくて……。",
+      "v": "Tôi bị sốt từ tối qua. Họng cũng đau nữa…",
+      "khac": [
+        {
+          "kieu": "lịch sự",
+          "t": "昨日の夜から熱がありまして、のども痛いんです。",
+          "doc": "きのうのよるからねつがありまして、のどもいたいんです。",
+          "v": "Tôi bị sốt từ tối qua, họng cũng đau ạ."
+        },
+        {
+          "kieu": "ngắn gọn",
+          "t": "熱とのどの痛みです。",
+          "doc": "ねつとのどのいたみです。",
+          "v": "Sốt và đau họng ạ.",
+          "ghiChu": "Nói nhanh triệu chứng ở quầy lễ tân."
+        }
+      ],
+      "np": [
+        {
+          "mau": "〜んです (giải thích tình trạng)",
+          "giai": "Thêm ん khi giải thích hoàn cảnh cho người kia hiểu: 熱があるんです = (chuyện là) tôi bị sốt. Rất hay dùng khi kể bệnh, nêu lý do.",
+          "vd": "おなかが痛いんです。",
+          "vdDoc": "おなかがいたいんです。",
+          "vdV": "Tôi bị đau bụng ạ."
+        },
+        {
+          "mau": "い-adj → 〜くて",
+          "giai": "Nối tính từ い: 痛い → 痛くて (đau, rồi…). Để lửng 痛くて…… là cách kể tiếp triệu chứng.",
+          "vd": "この部屋は広くて、明るいです。",
+          "vdDoc": "このへやはひろくて、あかるいです。",
+          "vdV": "Phòng này rộng và sáng."
+        }
+      ]
+    },
+    {
+      "ai": "U",
+      "t": "そうですか。保険証はお持ちですか。",
+      "doc": "そうですか。ほけんしょうはおもちですか。",
+      "v": "Vậy ạ. Anh có mang thẻ bảo hiểm không ạ?"
+    },
+    {
+      "ai": "N",
+      "t": "はい、これです。この病院は初めてなんですが、大丈夫ですか。",
+      "doc": "はい、これです。このびょういんははじめてなんですが、だいじょうぶですか。",
+      "v": "Vâng, đây ạ. Tôi khám ở đây lần đầu, có sao không ạ?",
+      "khac": [
+        {
+          "kieu": "lịch sự",
+          "t": "はい、こちらです。こちらは初めてなのですが、よろしいでしょうか。",
+          "doc": "はい、こちらです。こちらははじめてなのですが、よろしいでしょうか。",
+          "v": "Vâng, đây ạ. Tôi đến đây lần đầu, có được không ạ?"
+        }
+      ]
+    },
+    {
+      "ai": "U",
+      "t": "大丈夫ですよ。この問診票に書いてから、少しお待ちください。",
+      "doc": "だいじょうぶですよ。このもんしんひょうにかいてから、すこしおまちください。",
+      "v": "Không sao đâu ạ. Anh điền vào phiếu khám này rồi chờ một chút nhé."
+    },
+    {
+      "ai": "N",
+      "t": "すみません、この漢字が読めないんですが……。",
+      "doc": "すみません、このかんじがよめないんですが……。",
+      "v": "Xin lỗi, chữ Hán này tôi không đọc được…",
+      "khac": [
+        {
+          "kieu": "lịch sự",
+          "t": "すみません、この漢字の読み方を教えていただけますか。",
+          "doc": "すみません、このかんじのよみかたをおしえていただけますか。",
+          "v": "Xin lỗi, chị chỉ giúp tôi cách đọc chữ Hán này được không ạ?"
+        }
+      ],
+      "np": [
+        {
+          "mau": "Thể khả năng: 読める",
+          "giai": "Có thể làm: 読む → 読める, 書く → 書ける, 食べる → 食べられる. Phủ định: 読めない (không đọc được).",
+          "vd": "漢字が少し読めます。",
+          "vdDoc": "かんじがすこしよめます。",
+          "vdV": "Tôi đọc được một ít chữ Hán."
+        }
+      ]
+    },
+    {
+      "ai": "U",
+      "t": "「咳」は「せき」と読みます。ゴホン、ゴホン、のことです。",
+      "doc": "「せき」は「せき」とよみます。ゴホン、ゴホン、のことです。",
+      "v": "Chữ này đọc là “seki” — tức là ho, khụ khụ ấy ạ."
+    },
+    {
+      "ai": "N",
+      "t": "ああ、咳ですね。少し出ます。",
+      "doc": "ああ、せきですね。すこしでます。",
+      "v": "À, ho ạ. Tôi có ho một chút."
+    },
+    {
+      "ai": "D",
+      "t": "ナムさん、どうぞ。熱は何度ありますか。",
+      "doc": "ナムさん、どうぞ。ねつはなんどありますか。",
+      "v": "Anh Nam, mời vào. Anh sốt bao nhiêu độ?"
+    },
+    {
+      "ai": "N",
+      "t": "今朝は38度5分でした。",
+      "doc": "けさはさんじゅうはちどごぶでした。",
+      "v": "Sáng nay là 38 độ rưỡi ạ."
+    },
+    {
+      "ai": "D",
+      "t": "口を開けてください。……のどがかなり赤いですね。最近、よく寝ていますか。",
+      "doc": "くちをあけてください。……のどがかなりあかいですね。さいきん、よくねていますか。",
+      "v": "Anh há miệng ra. …Họng đỏ khá nhiều đấy. Dạo này anh có ngủ đủ không?"
+    },
+    {
+      "ai": "N",
+      "t": "実は、試験とアルバイトで、毎日4時間ぐらいしか寝ていないんです。",
+      "doc": "じつは、しけんとアルバイトで、まいにちよじかんぐらいしかねていないんです。",
+      "v": "Thật ra vì thi cử với làm thêm, ngày nào tôi cũng chỉ ngủ được khoảng 4 tiếng.",
+      "np": [
+        {
+          "mau": "N で (nguyên nhân)",
+          "giai": "試験とアルバイトで = vì thi cử và làm thêm. で sau danh từ có thể chỉ nguyên nhân.",
+          "vd": "風邪で学校を休みました。",
+          "vdDoc": "かぜでがっこうをやすみました。",
+          "vdV": "Tôi nghỉ học vì bị cảm."
+        }
+      ]
+    },
+    {
+      "ai": "D",
+      "t": "それは少なすぎますね。風邪ですが、体が疲れているから治りにくいんですよ。",
+      "doc": "それはすくなすぎますね。かぜですが、からだがつかれているからなおりにくいんですよ。",
+      "v": "Thế thì ít quá. Anh bị cảm thôi, nhưng cơ thể mệt nên khó khỏi lắm.",
+      "np": [
+        {
+          "mau": "〜すぎる／V-stem + にくい",
+          "giai": "少なすぎる = ít quá mức; 治りにくい = khó khỏi. すぎる: quá; にくい: khó (ngược lại là やすい: dễ).",
+          "vd": "この靴は歩きにくいです。",
+          "vdDoc": "このくつはあるきにくいです。",
+          "vdV": "Đôi giày này khó đi."
+        }
+      ]
+    },
+    {
+      "ai": "D",
+      "t": "薬を三日分出します。一日3回、ご飯を食べてから飲んでください。",
+      "doc": "くすりをみっかぶんだします。いちにちさんかい、ごはんをたべてからのんでください。",
+      "v": "Tôi kê thuốc cho ba ngày. Ngày uống 3 lần, sau khi ăn.",
+      "np": [
+        {
+          "mau": "Số + 分 (phần cho …)",
+          "giai": "Số + 分 (ぶん) = lượng dùng cho …: 三日分 = phần cho ba ngày, 二人分 = phần cho hai người.",
+          "vd": "パンを二人分買いました。",
+          "vdDoc": "パンをふたりぶんかいました。",
+          "vdV": "Tôi mua bánh mì đủ cho hai người."
+        }
+      ]
+    },
+    {
+      "ai": "N",
+      "t": "わかりました。アルバイトは行ってもいいですか。",
+      "doc": "わかりました。アルバイトはいってもいいですか。",
+      "v": "Tôi hiểu rồi. Tôi đi làm thêm có được không ạ?",
+      "khac": [
+        {
+          "kieu": "lịch sự",
+          "t": "わかりました。アルバイトに行っても大丈夫でしょうか。",
+          "doc": "わかりました。アルバイトにいってもだいじょうぶでしょうか。",
+          "v": "Tôi hiểu rồi. Tôi đi làm thêm có ổn không ạ?"
+        }
+      ]
+    },
+    {
+      "ai": "D",
+      "t": "熱が下がるまで、休んだほうがいいですね。無理をしないほうがいいですよ。",
+      "doc": "ねつがさがるまで、やすんだほうがいいですね。むりをしないほうがいいですよ。",
+      "v": "Anh nên nghỉ cho đến khi hạ sốt. Đừng cố quá sức thì hơn.",
+      "np": [
+        {
+          "mau": "V たほうがいい／V ないほうがいい",
+          "giai": "Lời khuyên: thể た + ほうがいい (nên làm), thể ない + ほうがいい (không nên làm).",
+          "vd": "早く寝たほうがいいですよ。",
+          "vdDoc": "はやくねたほうがいいですよ。",
+          "vdV": "Anh nên đi ngủ sớm."
+        },
+        {
+          "mau": "V るまで",
+          "giai": "Cho đến khi: 熱が下がるまで = cho đến khi hạ sốt.",
+          "vd": "雨がやむまで、ここで待ちましょう。",
+          "vdDoc": "あめがやむまで、ここでまちましょう。",
+          "vdV": "Đợi ở đây cho đến khi tạnh mưa đi."
+        }
+      ]
+    },
+    {
+      "ai": "N",
+      "t": "でも、休むと店長に悪いし……。",
+      "doc": "でも、やすむとてんちょうにわるいし……。",
+      "v": "Nhưng nghỉ thì thấy có lỗi với ông chủ…",
+      "khac": [
+        {
+          "kieu": "mềm mỏng",
+          "t": "でも、休むとお店に迷惑をかけてしまうので……。",
+          "doc": "でも、やすむとおみせにめいわくをかけてしまうので……。",
+          "v": "Nhưng nghỉ thì lại làm phiền quán…"
+        }
+      ],
+      "np": [
+        {
+          "mau": "〜し…… (nêu lý do, để lửng)",
+          "giai": "し liệt kê lý do, thường để lửng câu, ngụ ý còn lý do khác nữa: 店長に悪いし…… = (nghỉ thì) có lỗi với ông chủ…",
+          "vd": "今日は雨だし、寒いし、家にいます。",
+          "vdDoc": "きょうはあめだし、さむいし、いえにいます。",
+          "vdV": "Hôm nay vừa mưa vừa lạnh, nên tôi ở nhà."
+        }
+      ]
+    },
+    {
+      "ai": "D",
+      "t": "無理をして長く休むより、今二日休むほうが、お店のためにもなりますよ。",
+      "doc": "むりをしてながくやすむより、いまふつかやすむほうが、おみせのためにもなりますよ。",
+      "v": "Nghỉ hai ngày bây giờ còn tốt cho quán hơn là cố rồi phải nghỉ dài."
+    },
+    {
+      "ai": "N",
+      "t": "そうですね。店長に電話して、話してみます。",
+      "doc": "そうですね。てんちょうにでんわして、はなしてみます。",
+      "v": "Đúng vậy ạ. Tôi sẽ gọi điện nói chuyện với ông chủ."
+    },
+    {
+      "ai": "D",
+      "t": "それから、水をたくさん飲んで、今夜は早く寝てくださいね。",
+      "doc": "それから、みずをたくさんのんで、こんやははやくねてくださいね。",
+      "v": "Thêm nữa, anh uống nhiều nước và tối nay đi ngủ sớm nhé."
+    },
+    {
+      "ai": "N",
+      "t": "はい。ありがとうございました。",
+      "doc": "はい。ありがとうございました。",
+      "v": "Vâng. Cảm ơn bác sĩ."
+    }
   ],
   "tuVung": [
-    { "chu": "熱", "doc": "ねつ", "nghia": "sốt; nhiệt (nhiệt)", "vd": "熱が38度あります。" },
-    { "chu": "保険証", "doc": "ほけんしょう", "nghia": "thẻ bảo hiểm y tế (bảo hiểm chứng)", "vd": "病院に保険証を持っていきます。" },
-    { "chu": "問診票", "doc": "もんしんひょう", "nghia": "phiếu khai triệu chứng trước khi khám (vấn chẩn phiếu)", "vd": "問診票に名前を書いてください。" },
-    { "chu": "咳", "doc": "せき", "nghia": "ho", "vd": "咳が止まりません。" },
-    { "chu": "少なすぎます", "doc": "すくなすぎます", "nghia": "quá ít (〜すぎる: quá mức)", "vd": "この料理は塩が少なすぎます。" },
-    { "chu": "風邪", "doc": "かぜ", "nghia": "cảm (cảm lạnh)", "vd": "風邪をひきました。" },
-    { "chu": "治りにくい", "doc": "なおりにくい", "nghia": "khó khỏi (〜にくい: khó làm/khó xảy ra)", "vd": "この病気は治りにくいです。" },
-    { "chu": "三日分", "doc": "みっかぶん", "nghia": "lượng dùng cho ba ngày", "vd": "薬を三日分もらいました。" },
-    { "chu": "食べてから", "doc": "たべてから", "nghia": "sau khi ăn (〜てから: sau khi làm A rồi mới B)", "vd": "ご飯を食べてから、薬を飲みます。" },
-    { "chu": "休んだほうがいい", "doc": "やすんだほうがいい", "nghia": "nên nghỉ (〜たほうがいい: lời khuyên)", "vd": "疲れたら、休んだほうがいいです。" },
-    { "chu": "無理をしない", "doc": "むりをしない", "nghia": "đừng cố quá sức (vô lý)", "vd": "無理をしないでくださいね。" }
+    {
+      "chu": "熱",
+      "doc": "ねつ",
+      "nghia": "sốt; nhiệt (nhiệt)",
+      "vd": "熱が38度あります。"
+    },
+    {
+      "chu": "保険証",
+      "doc": "ほけんしょう",
+      "nghia": "thẻ bảo hiểm y tế (bảo hiểm chứng)",
+      "vd": "病院に保険証を持っていきます。"
+    },
+    {
+      "chu": "問診票",
+      "doc": "もんしんひょう",
+      "nghia": "phiếu khai triệu chứng trước khi khám (vấn chẩn phiếu)",
+      "vd": "問診票に名前を書いてください。"
+    },
+    {
+      "chu": "咳",
+      "doc": "せき",
+      "nghia": "ho",
+      "vd": "咳が止まりません。"
+    },
+    {
+      "chu": "少なすぎます",
+      "doc": "すくなすぎます",
+      "nghia": "quá ít (〜すぎる: quá mức)",
+      "vd": "この料理は塩が少なすぎます。"
+    },
+    {
+      "chu": "風邪",
+      "doc": "かぜ",
+      "nghia": "cảm (cảm lạnh)",
+      "vd": "風邪をひきました。"
+    },
+    {
+      "chu": "治りにくい",
+      "doc": "なおりにくい",
+      "nghia": "khó khỏi (〜にくい: khó làm/khó xảy ra)",
+      "vd": "この病気は治りにくいです。"
+    },
+    {
+      "chu": "三日分",
+      "doc": "みっかぶん",
+      "nghia": "lượng dùng cho ba ngày",
+      "vd": "薬を三日分もらいました。"
+    },
+    {
+      "chu": "食べてから",
+      "doc": "たべてから",
+      "nghia": "sau khi ăn (〜てから: sau khi làm A rồi mới B)",
+      "vd": "ご飯を食べてから、薬を飲みます。"
+    },
+    {
+      "chu": "休んだほうがいい",
+      "doc": "やすんだほうがいい",
+      "nghia": "nên nghỉ (〜たほうがいい: lời khuyên)",
+      "vd": "疲れたら、休んだほうがいいです。"
+    },
+    {
+      "chu": "無理をしない",
+      "doc": "むりをしない",
+      "nghia": "đừng cố quá sức (vô lý)",
+      "vd": "無理をしないでくださいね。"
+    }
   ],
   "yNghia": "Du học sinh hay nghĩ “nghỉ một ngày là có lỗi”. Nhưng cố quá sức rồi gục hẳn mới là phiền nhất cho mọi người. Biết nói “tôi mệt, tôi cần nghỉ” cũng là một kỹ năng sống ở nước ngoài — và cơ thể bạn là thứ duy nhất không thể làm thêm ca để bù lại.",
   "meo": [
@@ -58,9 +358,48 @@
     "Đi khám ở Nhật luôn mang 保険証; uống thuốc 「食後」 = sau ăn, 「食前」 = trước ăn."
   ],
   "cauHoi": [
-    { "hoi": "Nam có những triệu chứng nào?", "chon": ["Đau bụng và sốt", "Sốt, đau họng, hơi ho", "Đau đầu và chóng mặt"], "dung": 1, "giai": "「熱があるんです。のども痛くて」, sau đó 「咳……少し出ます」." },
-    { "hoi": "Vì sao bác sĩ nói bệnh của Nam khó khỏi?", "chon": ["Vì Nam ngủ quá ít, cơ thể mệt", "Vì Nam không uống thuốc", "Vì bệnh rất nặng", "Vì Nam ăn uống thất thường"], "dung": 0, "giai": "「毎日4時間ぐらいしか寝ていない」 → 「体が疲れているから治りにくい」." },
-    { "hoi": "Nam phải uống thuốc thế nào?", "chon": ["Ngày 2 lần, trước khi ăn", "Ngày 1 lần trước khi ngủ", "Ngày 3 lần, trước khi ăn", "Ngày 3 lần, sau khi ăn"], "dung": 3, "giai": "「一日3回、ご飯を食べてから飲んでください」." },
-    { "hoi": "「休んだほうがいいですね」 nghĩa là gì?", "chon": ["Anh đã nghỉ rồi nhỉ", "Anh không được nghỉ", "Anh nên nghỉ", "Anh nghỉ cũng được"], "dung": 2, "giai": "〜たほうがいい là mẫu đưa lời khuyên." }
+    {
+      "hoi": "Nam có những triệu chứng nào?",
+      "chon": [
+        "Đau bụng và sốt",
+        "Sốt, đau họng, hơi ho",
+        "Đau đầu và chóng mặt"
+      ],
+      "dung": 1,
+      "giai": "「熱があるんです。のども痛くて」, sau đó 「咳……少し出ます」."
+    },
+    {
+      "hoi": "Vì sao bác sĩ nói bệnh của Nam khó khỏi?",
+      "chon": [
+        "Vì Nam ngủ quá ít, cơ thể mệt",
+        "Vì Nam không uống thuốc",
+        "Vì bệnh rất nặng",
+        "Vì Nam ăn uống thất thường"
+      ],
+      "dung": 0,
+      "giai": "「毎日4時間ぐらいしか寝ていない」 → 「体が疲れているから治りにくい」."
+    },
+    {
+      "hoi": "Nam phải uống thuốc thế nào?",
+      "chon": [
+        "Ngày 2 lần, trước khi ăn",
+        "Ngày 1 lần trước khi ngủ",
+        "Ngày 3 lần, trước khi ăn",
+        "Ngày 3 lần, sau khi ăn"
+      ],
+      "dung": 3,
+      "giai": "「一日3回、ご飯を食べてから飲んでください」."
+    },
+    {
+      "hoi": "「休んだほうがいいですね」 nghĩa là gì?",
+      "chon": [
+        "Anh đã nghỉ rồi nhỉ",
+        "Anh không được nghỉ",
+        "Anh nên nghỉ",
+        "Anh nghỉ cũng được"
+      ],
+      "dung": 2,
+      "giai": "〜たほうがいい là mẫu đưa lời khuyên."
+    }
   ]
 }

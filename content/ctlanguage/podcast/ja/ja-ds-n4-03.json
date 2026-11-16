@@ -1,0 +1,416 @@
+{
+  "id": "ja-ds-n4-03",
+  "nn": "ja",
+  "danhMuc": "doi-song",
+  "cap": "N4",
+  "so": 6,
+  "tieuDe": "区役所と銀行で",
+  "tieuDeViet": "Ở uỷ ban quận và ngân hàng",
+  "moTa": "Chuyển nhà sang thành phố mới, Tiên phải đi đăng ký địa chỉ ở uỷ ban quận, làm bảo hiểm y tế, rồi mở tài khoản ngân hàng. Học tên các thủ tục, cách hỏi “điền gì vào đây”, “người nước ngoài có làm được không”, và vì sao thứ tự các bước lại quan trọng.",
+  "chuDe": "Thủ tục",
+  "bieuTuong": "building.columns.fill",
+  "nguoi": [
+    {
+      "ma": "T",
+      "ten": "ティエン",
+      "giong": "ja2-nu",
+      "vai": "người Việt vừa chuyển nhà"
+    },
+    {
+      "ma": "K",
+      "ten": "職員",
+      "giong": "ja-nam",
+      "vai": "nhân viên uỷ ban quận"
+    },
+    {
+      "ma": "B",
+      "ten": "銀行員",
+      "giong": "ja-nu",
+      "vai": "nhân viên ngân hàng"
+    }
+  ],
+  "loi": [
+    {
+      "ai": "K",
+      "t": "次の方、どうぞ。",
+      "doc": "つぎのかた、どうぞ。",
+      "v": "Mời người tiếp theo."
+    },
+    {
+      "ai": "T",
+      "t": "すみません、引っ越してきたので、住所の登録をしたいんですが。",
+      "doc": "すみません、ひっこしてきたので、じゅうしょのとうろくをしたいんですが。",
+      "v": "Xin lỗi, tôi mới chuyển đến nên muốn đăng ký địa chỉ ạ.",
+      "khac": [
+        {
+          "kieu": "ngắn gọn",
+          "t": "転入届を出したいんですが。",
+          "doc": "てんにゅうとどけをだしたいんですが。",
+          "v": "Tôi muốn nộp tờ khai chuyển đến ạ.",
+          "ghiChu": "Nói đúng tên thủ tục thì nhân viên hiểu ngay."
+        },
+        {
+          "kieu": "lịch sự",
+          "t": "住民登録の手続きをお願いしたいのですが。",
+          "doc": "じゅうみんとうろくのてつづきをおねがいしたいのですが。",
+          "v": "Tôi muốn làm thủ tục đăng ký cư trú ạ."
+        }
+      ],
+      "np": [
+        {
+          "mau": "V てきた (chuyển động về phía này)",
+          "giai": "引っ越してきた = đã chuyển đến (đây). 〜てくる chỉ hướng về phía người nói, hoặc việc vừa diễn ra cho tới giờ.",
+          "vd": "去年、大阪から東京に引っ越してきました。",
+          "vdDoc": "きょねん、おおさかからとうきょうにひっこしてきました。",
+          "vdV": "Năm ngoái tôi chuyển từ Osaka lên Tokyo."
+        }
+      ]
+    },
+    {
+      "ai": "K",
+      "t": "転入届ですね。在留カードとパスポートはお持ちですか。",
+      "doc": "てんにゅうとどけですね。ざいりゅうカードとパスポートはおもちですか。",
+      "v": "Tờ khai chuyển đến phải không ạ. Chị có mang thẻ cư trú và hộ chiếu không?"
+    },
+    {
+      "ai": "T",
+      "t": "はい、これです。",
+      "doc": "はい、これです。",
+      "v": "Vâng, đây ạ."
+    },
+    {
+      "ai": "K",
+      "t": "では、こちらの用紙に、新しい住所と前の住所を書いてください。",
+      "doc": "では、こちらのようしに、あたらしいじゅうしょとまえのじゅうしょをかいてください。",
+      "v": "Vậy chị viết địa chỉ mới và địa chỉ cũ vào tờ này nhé."
+    },
+    {
+      "ai": "T",
+      "t": "すみません、ここは何を書けばいいですか。",
+      "doc": "すみません、ここはなにをかけばいいですか。",
+      "v": "Xin lỗi, ô này tôi phải viết gì ạ?",
+      "khac": [
+        {
+          "kieu": "lịch sự",
+          "t": "恐れ入りますが、こちらの欄には何を書けばよろしいでしょうか。",
+          "doc": "おそれいりますが、こちらのらんにはなにをかけばよろしいでしょうか。",
+          "v": "Xin lỗi làm phiền, ô này tôi nên điền gì ạ?",
+          "ghiChu": "欄 (らん) = ô, mục trên giấy tờ."
+        }
+      ],
+      "np": [
+        {
+          "mau": "何を V ばいいですか",
+          "giai": "Hỏi “nên làm gì / làm thế nào thì được”: thể ば + いいですか. 書く → 書けば, 行く → 行けば, する → すれば.",
+          "vd": "どこで降りればいいですか。",
+          "vdDoc": "どこでおりればいいですか。",
+          "vdV": "Tôi nên xuống ở đâu ạ?"
+        }
+      ]
+    },
+    {
+      "ai": "K",
+      "t": "そこは世帯主の名前です。一人で住んでいるなら、ご自分の名前で大丈夫ですよ。",
+      "doc": "そこはせたいぬしのなまえです。ひとりですんでいるなら、ごじぶんのなまえでだいじょうぶですよ。",
+      "v": "Đó là tên chủ hộ. Nếu chị sống một mình thì ghi tên chính mình là được.",
+      "np": [
+        {
+          "mau": "〜なら",
+          "giai": "“Nếu (đúng là) … thì”: dựa trên thông tin người kia vừa nói hoặc một giả định. 一人で住んでいるなら = nếu chị sống một mình thì.",
+          "vd": "駅へ行くなら、バスが便利ですよ。",
+          "vdDoc": "えきへいくなら、バスがべんりですよ。",
+          "vdV": "Nếu đi ra ga thì xe buýt tiện đấy."
+        }
+      ]
+    },
+    {
+      "ai": "T",
+      "t": "わかりました。……書けました。これでいいですか。",
+      "doc": "わかりました。……かけました。これでいいですか。",
+      "v": "Tôi hiểu rồi. …Viết xong rồi. Thế này được chưa ạ?",
+      "khac": [
+        {
+          "kieu": "lịch sự",
+          "t": "書き終わりました。これでよろしいでしょうか。",
+          "doc": "かきおわりました。これでよろしいでしょうか。",
+          "v": "Tôi viết xong rồi. Như thế này được chưa ạ?"
+        }
+      ]
+    },
+    {
+      "ai": "K",
+      "t": "はい、ありがとうございます。それから、国民健康保険の手続きも、今日一緒にしておいたほうがいいですよ。",
+      "doc": "はい、ありがとうございます。それから、こくみんけんこうほけんのてつづきも、きょういっしょにしておいたほうがいいですよ。",
+      "v": "Vâng, cảm ơn chị. Ngoài ra, chị nên làm luôn thủ tục bảo hiểm y tế quốc dân trong hôm nay.",
+      "np": [
+        {
+          "mau": "V ておいたほうがいい",
+          "giai": "〜ておく (làm sẵn, làm trước) + たほうがいい (nên): nên làm sẵn cho xong. Lời khuyên rất hay nghe ở cơ quan.",
+          "vd": "旅行の前に、ホテルを予約しておいたほうがいいです。",
+          "vdDoc": "りょこうのまえに、ホテルをよやくしておいたほうがいいです。",
+          "vdV": "Trước chuyến đi, nên đặt khách sạn trước."
+        }
+      ]
+    },
+    {
+      "ai": "T",
+      "t": "保険ですか。どこへ行けばいいですか。",
+      "doc": "ほけんですか。どこへいけばいいですか。",
+      "v": "Bảo hiểm ạ? Tôi phải đi đến đâu ạ?"
+    },
+    {
+      "ai": "K",
+      "t": "二階の五番の窓口です。ここで番号の紙をもらってから、行ってください。",
+      "doc": "にかいのごばんのまどぐちです。ここでばんごうのかみをもらってから、いってください。",
+      "v": "Quầy số 5 ở tầng hai. Chị lấy giấy số thứ tự ở đây rồi hãy lên nhé.",
+      "np": [
+        {
+          "mau": "V てから",
+          "giai": "Làm A xong rồi mới làm B: thể て + から. Nhấn mạnh thứ tự, khác với V て đơn thuần chỉ nối hành động.",
+          "vd": "手を洗ってから、ご飯を食べます。",
+          "vdDoc": "てをあらってから、ごはんをたべます。",
+          "vdV": "Rửa tay xong rồi mới ăn cơm."
+        }
+      ]
+    },
+    {
+      "ai": "T",
+      "t": "二階の五番ですね。ありがとうございました。",
+      "doc": "にかいのごばんですね。ありがとうございました。",
+      "v": "Quầy số 5 tầng hai nhỉ. Cảm ơn anh."
+    },
+    {
+      "ai": "B",
+      "t": "いらっしゃいませ。本日はどのようなご用件でしょうか。",
+      "doc": "いらっしゃいませ。ほんじつはどのようなごようけんでしょうか。",
+      "v": "Xin chào quý khách. Hôm nay quý khách cần làm việc gì ạ?"
+    },
+    {
+      "ai": "T",
+      "t": "口座を作りたいんですが、外国人でも作れますか。",
+      "doc": "こうざをつくりたいんですが、がいこくじんでもつくれますか。",
+      "v": "Tôi muốn mở tài khoản, người nước ngoài có mở được không ạ?",
+      "khac": [
+        {
+          "kieu": "trang trọng",
+          "t": "口座を開きたいのですが、外国籍でも大丈夫でしょうか。",
+          "doc": "こうざをひらきたいのですが、がいこくせきでもだいじょうぶでしょうか。",
+          "v": "Tôi muốn mở tài khoản, người mang quốc tịch nước ngoài có được không ạ?"
+        }
+      ],
+      "np": [
+        {
+          "mau": "N でも + V（可能形）ますか",
+          "giai": "でも = “dù là … cũng”. 作れます là thể khả năng của 作る (làm được). Cả câu: người nước ngoài cũng làm được chứ?",
+          "vd": "子どもでも使えますか。",
+          "vdDoc": "こどもでもつかえますか。",
+          "vdV": "Trẻ em cũng dùng được chứ?"
+        }
+      ]
+    },
+    {
+      "ai": "B",
+      "t": "はい、お作りいただけます。在留カードと日本の電話番号、それから、住所が確認できるものをお持ちですか。",
+      "doc": "はい、おつくりいただけます。ざいりゅうカードとにほんのでんわばんごう、それから、じゅうしょがかくにんできるものをおもちですか。",
+      "v": "Vâng, quý khách mở được ạ. Quý khách có thẻ cư trú, số điện thoại ở Nhật, và giấy tờ xác nhận địa chỉ không ạ?"
+    },
+    {
+      "ai": "T",
+      "t": "在留カードは、さっき区役所で新しい住所を書いてもらいました。",
+      "doc": "ざいりゅうカードは、さっきくやくしょであたらしいじゅうしょをかいてもらいました。",
+      "v": "Thẻ cư trú thì lúc nãy tôi vừa được uỷ ban quận ghi địa chỉ mới vào rồi."
+    },
+    {
+      "ai": "B",
+      "t": "それでしたら大丈夫です。はんこはお持ちですか。",
+      "doc": "それでしたらだいじょうぶです。はんこはおもちですか。",
+      "v": "Vậy thì được ạ. Quý khách có con dấu không ạ?"
+    },
+    {
+      "ai": "T",
+      "t": "はんこ？持っていません。サインではだめですか。",
+      "doc": "はんこ？もっていません。サインではだめですか。",
+      "v": "Con dấu ạ? Tôi không có. Ký tên thì không được sao ạ?",
+      "khac": [
+        {
+          "kieu": "mềm mỏng",
+          "t": "はんこがないのですが、サインでもいいでしょうか。",
+          "doc": "はんこがないのですが、サインでもいいでしょうか。",
+          "v": "Tôi không có con dấu, ký tên có được không ạ?"
+        }
+      ]
+    },
+    {
+      "ai": "B",
+      "t": "当行では、サインでも大丈夫です。では、こちらの用紙にご記入ください。",
+      "doc": "とうこうでは、サインでもだいじょうぶです。では、こちらのようしにごきにゅうください。",
+      "v": "Ở ngân hàng chúng tôi, ký tên cũng được ạ. Mời quý khách điền vào tờ này."
+    },
+    {
+      "ai": "T",
+      "t": "あの、キャッシュカードはいつもらえますか。",
+      "doc": "あの、キャッシュカードはいつもらえますか。",
+      "v": "À, khi nào tôi nhận được thẻ rút tiền ạ?"
+    },
+    {
+      "ai": "B",
+      "t": "一週間ぐらいで、ご住所に郵便で届きます。書留ですので、ご本人が受け取ってください。",
+      "doc": "いっしゅうかんぐらいで、ごじゅうしょにゆうびんでとどきます。かきとめですので、ごほんにんがうけとってください。",
+      "v": "Khoảng một tuần thẻ sẽ được gửi bưu điện đến địa chỉ của quý khách. Là thư bảo đảm nên quý khách phải tự nhận."
+    },
+    {
+      "ai": "T",
+      "t": "家にいない時は、どうなりますか。",
+      "doc": "いえにいないときは、どうなりますか。",
+      "v": "Nếu lúc đó tôi không có nhà thì sao ạ?"
+    },
+    {
+      "ai": "B",
+      "t": "不在票が入りますので、郵便局に連絡して、もう一度届けてもらってください。",
+      "doc": "ふざいひょうがはいりますので、ゆうびんきょくにれんらくして、もういちどとどけてもらってください。",
+      "v": "Sẽ có phiếu báo vắng nhà bỏ vào hòm thư, quý khách liên lạc với bưu điện để họ giao lại nhé.",
+      "np": [
+        {
+          "mau": "V てもらう",
+          "giai": "Được người khác làm cho mình: 届けてもらう = nhờ (bưu điện) giao lại. Người làm đứng trước に (郵便局に届けてもらう).",
+          "vd": "友だちに写真を撮ってもらいました。",
+          "vdDoc": "ともだちにしゃしんをとってもらいました。",
+          "vdV": "Tôi nhờ bạn chụp ảnh giúp."
+        }
+      ]
+    },
+    {
+      "ai": "T",
+      "t": "住所が決まると、保険も、銀行も、全部つながるんですね。",
+      "doc": "じゅうしょがきまると、ほけんも、ぎんこうも、ぜんぶつながるんですね。",
+      "v": "Có địa chỉ rồi thì bảo hiểm, ngân hàng, mọi thứ đều nối vào nhau nhỉ."
+    },
+    {
+      "ai": "B",
+      "t": "そうなんです。順番が大事なんですよ。",
+      "doc": "そうなんです。じゅんばんがだいじなんですよ。",
+      "v": "Đúng vậy. Thứ tự rất quan trọng đấy ạ."
+    }
+  ],
+  "tuVung": [
+    {
+      "chu": "転入届",
+      "doc": "てんにゅうとどけ",
+      "nghia": "tờ khai chuyển đến (đăng ký địa chỉ mới)",
+      "vd": "引っ越したら、転入届を出します。"
+    },
+    {
+      "chu": "在留カード",
+      "doc": "ざいりゅうカード",
+      "nghia": "thẻ cư trú (của người nước ngoài)",
+      "vd": "在留カードはいつも持っていてください。"
+    },
+    {
+      "chu": "用紙",
+      "doc": "ようし",
+      "nghia": "tờ đơn, mẫu giấy",
+      "vd": "この用紙に名前を書いてください。"
+    },
+    {
+      "chu": "世帯主",
+      "doc": "せたいぬし",
+      "nghia": "chủ hộ",
+      "vd": "世帯主は父です。"
+    },
+    {
+      "chu": "国民健康保険",
+      "doc": "こくみんけんこうほけん",
+      "nghia": "bảo hiểm y tế quốc dân",
+      "vd": "国民健康保険に入りました。"
+    },
+    {
+      "chu": "窓口",
+      "doc": "まどぐち",
+      "nghia": "quầy tiếp nhận, quầy giao dịch",
+      "vd": "三番の窓口へどうぞ。"
+    },
+    {
+      "chu": "口座",
+      "doc": "こうざ",
+      "nghia": "tài khoản ngân hàng",
+      "vd": "給料は口座に入ります。"
+    },
+    {
+      "chu": "はんこ",
+      "doc": "はんこ",
+      "nghia": "con dấu cá nhân",
+      "vd": "ここにはんこを押してください。"
+    },
+    {
+      "chu": "書留",
+      "doc": "かきとめ",
+      "nghia": "thư bảo đảm (phải ký nhận)",
+      "vd": "書留で送ります。"
+    },
+    {
+      "chu": "不在票",
+      "doc": "ふざいひょう",
+      "nghia": "phiếu báo vắng nhà (của bưu điện, giao hàng)",
+      "vd": "ポストに不在票が入っていました。"
+    },
+    {
+      "chu": "順番",
+      "doc": "じゅんばん",
+      "nghia": "thứ tự, lượt",
+      "vd": "順番に並んでください。"
+    }
+  ],
+  "yNghia": "Thủ tục ở Nhật trông rối, nhưng nó có một sợi chỉ: địa chỉ → bảo hiểm → ngân hàng → mọi thứ khác. Biết thứ tự và dám hỏi “ô này viết gì?” thì không giấy tờ nào đáng sợ cả.",
+  "meo": [
+    "Chuyển nhà ở Nhật: nộp 転入届 tại uỷ ban (区役所／市役所) — thường phải trong vòng 14 ngày sau khi chuyển đến. Mang theo 在留カード.",
+    "Không biết điền gì: 「ここは何を書けばいいですか」. Nghe nhân viên nói 〜ておいたほうがいい là lời khuyên nên làm luôn.",
+    "Hỏi người nước ngoài có làm được không: 「外国人でも〜できますか」／「〜作れますか」.",
+    "Không có nhà khi bưu điện giao thư bảo đảm ⇒ có 不在票 trong hòm thư: gọi số trên phiếu để hẹn giao lại."
+  ],
+  "cauHoi": [
+    {
+      "hoi": "Ở uỷ ban, Tiên làm những thủ tục gì?",
+      "chon": [
+        "Chỉ đăng ký địa chỉ",
+        "Đăng ký địa chỉ và bảo hiểm y tế",
+        "Mở tài khoản ngân hàng",
+        "Gia hạn hộ chiếu"
+      ],
+      "dung": 1,
+      "giai": "転入届 rồi được khuyên làm luôn 国民健康保険 ở quầy số 5 tầng hai."
+    },
+    {
+      "hoi": "Ô “世帯主” Tiên nên ghi gì?",
+      "chon": [
+        "Tên chủ nhà cho thuê",
+        "Tên bố mẹ ở Việt Nam",
+        "Tên của chính mình vì sống một mình",
+        "Bỏ trống"
+      ],
+      "dung": 2,
+      "giai": "「一人で住んでいるなら、ご自分の名前で大丈夫ですよ」."
+    },
+    {
+      "hoi": "Tiên không có con dấu thì sao?",
+      "chon": [
+        "Không mở được tài khoản",
+        "Ở ngân hàng này ký tên cũng được",
+        "Phải mua con dấu ngay",
+        "Phải nhờ người Nhật bảo lãnh"
+      ],
+      "dung": 1,
+      "giai": "「当行では、サインでも大丈夫です」 — tuỳ ngân hàng."
+    },
+    {
+      "hoi": "Thẻ ngân hàng được gửi đến thế nào?",
+      "chon": [
+        "Nhận ngay tại quầy",
+        "Gửi email",
+        "Thư bảo đảm đến địa chỉ, phải tự nhận",
+        "Gửi về Việt Nam"
+      ],
+      "dung": 2,
+      "giai": "「書留ですので、ご本人が受け取ってください」."
+    }
+  ]
+}

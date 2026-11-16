@@ -1,0 +1,99 @@
+{
+  "id": "en-cs-b2-03",
+  "nn": "en",
+  "danhMuc": "chia-se",
+  "cap": "B2",
+  "so": 3,
+  "tieuDe": "Switching to IT at Thirty",
+  "tieuDeViet": "Chuyển sang ngành IT ở tuổi ba mươi",
+  "moTa": "Nam làm ngân hàng tám năm, có con nhỏ và khoản vay mua nhà khi quyết định học lập trình. Bị từ chối hai mươi ba lần, có người hỏi thẳng \"sao tuổi này còn bắt đầu từ con số không\" — cho tới khi anh nhận ra quá khứ mình giấu đi chính là lợi thế.",
+  "chuDe": "Đổi nghề",
+  "bieuTuong": "arrow.triangle.2.circlepath",
+  "nguoi": [
+    { "ma": "S", "ten": "Sophie", "giong": "uk-nu", "vai": "người dẫn podcast" },
+    { "ma": "N", "ten": "Nam", "giong": "us-nam", "vai": "người kể chuyện, lập trình viên" }
+  ],
+  "loi": [
+    { "ai": "S", "t": "Welcome to the show. My guest today spent eight years in banking before writing his first line of code, at the age of thirty. Nam, welcome.", "v": "Chào mừng các bạn đến với chương trình. Khách mời hôm nay đã làm ngân hàng tám năm trước khi viết dòng code đầu tiên, ở tuổi ba mươi. Nam, chào mừng anh." },
+    { "ai": "N", "t": "Thanks for having me, Sophie.", "v": "Cảm ơn chị đã mời tôi, Sophie.",
+      "khac": [
+        { "kieu": "trang trọng", "t": "Thank you for inviting me. It's a pleasure to be here.", "v": "Cảm ơn chị đã mời. Rất hân hạnh được có mặt ở đây." },
+        { "kieu": "thân mật", "t": "Thanks, great to be here.", "v": "Cảm ơn chị, vui lắm khi được tới đây." }
+      ] },
+    { "ai": "S", "t": "Let's start at the beginning. What made you think about changing careers?", "v": "Hãy bắt đầu từ đầu. Điều gì khiến anh nghĩ tới chuyện đổi nghề?",
+      "khac": [
+        { "kieu": "tự nhiên hơn", "t": "So what got you thinking about a career change?", "v": "Vậy điều gì làm anh bắt đầu nghĩ tới chuyện đổi nghề?" }
+      ] },
+    { "ai": "N", "t": "It started with something tiny. At the bank, my team spent every Friday afternoon copying numbers between spreadsheets by hand.", "v": "Nó bắt đầu từ một chuyện rất nhỏ. Ở ngân hàng, nhóm tôi chiều thứ Sáu nào cũng ngồi chép số liệu giữa các bảng tính bằng tay." },
+    { "ai": "N", "t": "Out of frustration, I taught myself to write a small script that did it automatically. It took me two weeks of evenings, and it saved the team four hours a week.", "v": "Vì bực quá, tôi tự học viết một đoạn script nhỏ làm việc đó tự động. Tôi mất hai tuần buổi tối, và nó tiết kiệm cho cả nhóm bốn tiếng mỗi tuần.",
+      "np": [{ "mau": "Out of + N (cảm xúc) / teach oneself to + V", "giai": "\"Out of frustration/curiosity\" = vì bực bội/tò mò mà làm gì. \"taught myself to\" = tự học (không có thầy).", "vd": "Out of curiosity, I opened the file.", "vdV": "Vì tò mò, tôi đã mở file đó." }] },
+    { "ai": "N", "t": "When it worked for the first time, I felt something I hadn't felt at work for years. I was genuinely excited.", "v": "Lần đầu nó chạy được, tôi cảm thấy một điều đã nhiều năm rồi tôi không còn cảm thấy ở chỗ làm. Tôi thật sự phấn khích.",
+      "np": [{ "mau": "hadn't + V3 + for + khoảng thời gian", "giai": "Quá khứ hoàn thành: trạng thái đã không có suốt một khoảng thời gian tính đến một mốc trong quá khứ.", "vd": "She hadn't spoken English for years before she moved to London.", "vdV": "Cô ấy đã nhiều năm không nói tiếng Anh trước khi chuyển tới London." }] },
+    { "ai": "S", "t": "But a script is a long way from a new career. What held you back?", "v": "Nhưng một đoạn script còn cách xa một nghề mới. Điều gì đã níu chân anh?",
+      "np": [{ "mau": "hold + sb + back", "giai": "\"cản trở, níu chân ai\" — cụm động từ tách được: held you back, hold me back.", "vd": "Fear of failure held her back for years.", "vdV": "Nỗi sợ thất bại đã níu chân cô ấy nhiều năm." }] },
+    { "ai": "N", "t": "Fear, mostly. I was thirty, my daughter was one, and I kept thinking, \"Companies want twenty-two-year-olds who can work all night.\"", "v": "Chủ yếu là nỗi sợ. Tôi ba mươi tuổi, con gái tôi mới một tuổi, và tôi cứ nghĩ mãi: \"Công ty chỉ muốn mấy cậu hai mươi hai tuổi làm được thâu đêm.\"" },
+    { "ai": "N", "t": "I also had a mortgage. Quitting my job to study full time simply wasn't an option.", "v": "Tôi còn có khoản vay mua nhà. Nghỉ việc để học toàn thời gian đơn giản là không thể.",
+      "np": [{ "mau": "V-ing làm chủ ngữ + wasn't an option", "giai": "\"Quitting my job to study full time\" cả cụm là chủ ngữ. \"…wasn't an option\" = không phải là lựa chọn có thể.", "vd": "Moving abroad wasn't an option for us.", "vdV": "Ra nước ngoài không phải là lựa chọn với chúng tôi." }] },
+    { "ai": "S", "t": "So how did you do it?", "v": "Vậy anh đã làm thế nào?" },
+    { "ai": "N", "t": "Slowly. I kept my job and studied from nine to midnight, after my daughter went to sleep. My wife covered for me at weekends so I could do longer projects.", "v": "Từ từ. Tôi giữ công việc và học từ chín giờ tới nửa đêm, sau khi con gái ngủ. Cuối tuần vợ tôi gánh việc nhà thay để tôi làm được những dự án dài hơn.",
+      "np": [{ "mau": "so (that) + S + could + V", "giai": "Chỉ mục đích trong quá khứ: \"để tôi có thể…\". Có thể bỏ that.", "vd": "I left early so I could catch the last bus.", "vdV": "Tôi về sớm để kịp chuyến xe buýt cuối." }] },
+    { "ai": "N", "t": "The first six months were brutal. The younger people in online forums were so much faster than me, and I often felt stupid.", "v": "Sáu tháng đầu thật khắc nghiệt. Những người trẻ hơn trên các diễn đàn nhanh hơn tôi rất nhiều, và tôi thường thấy mình ngốc nghếch." },
+    { "ai": "S", "t": "Did you ever come close to giving up?", "v": "Có lúc nào anh suýt bỏ cuộc không?",
+      "np": [{ "mau": "come close to + V-ing", "giai": "\"suýt nữa thì…\" — to ở đây là giới từ nên theo sau là V-ing.", "vd": "We came close to losing the client.", "vdV": "Chúng tôi suýt mất khách hàng đó." }] },
+    { "ai": "N", "t": "Many times. The worst moment was after I'd applied for twenty-three junior jobs and been rejected by every single one.", "v": "Nhiều lần. Lúc tồi tệ nhất là sau khi tôi nộp đơn hai mươi ba vị trí mới vào nghề và bị từ chối ở tất cả.",
+      "np": [{ "mau": "had + V3 + and (had) been + V3", "giai": "Quá khứ hoàn thành chủ động và bị động nối nhau, \"had\" chỉ cần viết một lần: I'd applied… and been rejected.", "vd": "By Friday, he'd finished the report and been told to rewrite it.", "vdV": "Đến thứ Sáu, anh ấy đã viết xong báo cáo và bị yêu cầu viết lại." }] },
+    { "ai": "N", "t": "One interviewer actually asked me, \"Why would someone your age start from the bottom?\" That stung.", "v": "Một người phỏng vấn còn hỏi thẳng tôi: \"Sao người ở tuổi anh lại bắt đầu từ chân đáy?\" Câu đó làm tôi đau." },
+    { "ai": "S", "t": "That's a terrible question to ask. How did you respond?", "v": "Đó là một câu hỏi tệ hại. Anh đã trả lời thế nào?" },
+    { "ai": "N", "t": "Badly, at the time. I apologised for my age. Looking back, I wish I'd said, \"Because I know exactly why I'm here.\"", "v": "Lúc đó thì trả lời dở. Tôi xin lỗi vì tuổi của mình. Giờ nhìn lại, tôi ước mình đã nói: \"Vì tôi biết chính xác tại sao tôi ở đây.\"",
+      "np": [{ "mau": "I wish I'd + V3", "giai": "Tiếc nuối về điều đã không làm trong quá khứ: \"Tôi ước mình đã…\". \"Looking back\" = nhìn lại.", "vd": "I wish I'd started learning English earlier.", "vdV": "Tôi ước mình đã bắt đầu học tiếng Anh sớm hơn." }],
+      "khac": [
+        { "kieu": "nhấn mạnh", "t": "Because I know exactly what I bring to the table.", "v": "Vì tôi biết chính xác mình mang lại được gì.", "ghiChu": "\"bring to the table\" = đóng góp được gì — câu tự tin trong phỏng vấn" }
+      ] },
+    { "ai": "S", "t": "So what changed?", "v": "Vậy điều gì đã thay đổi?" },
+    { "ai": "N", "t": "A friend looked at my CV and said, \"You're hiding your best asset.\" I'd removed my banking years because I was embarrassed by them.", "v": "Một người bạn xem CV của tôi và nói: \"Cậu đang giấu tài sản quý nhất của mình.\" Tôi đã xoá những năm làm ngân hàng vì thấy xấu hổ về chúng." },
+    { "ai": "N", "t": "I rewrote it to say, \"Eight years in banking. I understand the problems your software is trying to solve.\" Two weeks later, a company that builds tools for banks hired me.", "v": "Tôi viết lại thành: \"Tám năm trong ngành ngân hàng. Tôi hiểu những vấn đề mà phần mềm của quý công ty đang cố giải quyết.\" Hai tuần sau, một công ty làm công cụ cho ngân hàng đã tuyển tôi.",
+      "khac": [
+        { "kieu": "văn viết", "t": "Eight years of banking experience, with a deep understanding of the problems your products solve.", "v": "Tám năm kinh nghiệm ngân hàng, am hiểu sâu những vấn đề mà sản phẩm của quý công ty giải quyết.", "ghiChu": "dòng tóm tắt trong CV" }
+      ] },
+    { "ai": "S", "t": "So the experience you thought was wasted turned out to be your advantage.", "v": "Vậy kinh nghiệm anh tưởng là phí hoài hoá ra lại là lợi thế của anh.",
+      "np": [{ "mau": "the N (that) you thought was…", "giai": "Mệnh đề quan hệ có chen \"you thought\": the experience (that) you thought was wasted = cái kinh nghiệm mà anh tưởng là phí hoài.", "vd": "The bug I thought was fixed came back.", "vdV": "Con lỗi mà tôi tưởng đã sửa lại quay về." }] },
+    { "ai": "N", "t": "Exactly. In my first month, I spotted a problem in how they calculated interest that the whole team had missed. Nobody asked about my age after that.", "v": "Chính xác. Ngay tháng đầu tiên, tôi phát hiện một lỗi trong cách họ tính lãi mà cả nhóm đã bỏ sót. Sau đó chẳng ai hỏi về tuổi của tôi nữa." },
+    { "ai": "S", "t": "It's been four years now. Any regrets?", "v": "Giờ đã bốn năm rồi. Anh có hối tiếc gì không?" },
+    { "ai": "N", "t": "Only one. I wish I'd stopped comparing myself to an imaginary twenty-two-year-old much sooner.", "v": "Chỉ một thôi. Tôi ước mình đã thôi so sánh bản thân với một cậu hai mươi hai tuổi tưởng tượng sớm hơn nhiều." },
+    { "ai": "S", "t": "What would you tell someone in their thirties who's thinking about doing what you did?", "v": "Anh sẽ nói gì với một người ở tuổi ba mươi đang nghĩ tới việc làm điều anh đã làm?",
+      "khac": [
+        { "kieu": "trang trọng", "t": "If you could give one piece of advice to someone considering a career change in their thirties, what would it be?", "v": "Nếu được đưa ra một lời khuyên cho người đang cân nhắc đổi nghề ở tuổi ba mươi, anh sẽ nói gì?" }
+      ] },
+    { "ai": "N", "t": "Don't burn your bridges; build one. Keep your job, learn in small steps, and don't throw away your old career. The more you connect it to your new one, the more valuable you become.", "v": "Đừng đốt cầu, hãy xây một cây cầu. Giữ công việc, học từng bước nhỏ, và đừng vứt bỏ nghề cũ. Bạn càng nối nó với nghề mới, bạn càng trở nên giá trị.",
+      "np": [{ "mau": "The more…, the more…", "giai": "\"càng… càng…\" — hai vế đều bắt đầu bằng the + so sánh hơn, vế sau là kết quả.", "vd": "The more you practise, the more confident you feel.", "vdV": "Bạn càng luyện tập, bạn càng thấy tự tin." }] },
+    { "ai": "S", "t": "Nam, thank you. That's a story a lot of people needed to hear today.", "v": "Nam, cảm ơn anh. Đó là câu chuyện mà nhiều người cần được nghe hôm nay." }
+  ],
+  "tuVung": [
+    { "chu": "changing careers", "doc": "/ˈtʃeɪndʒɪŋ kəˈrɪəz/", "nghia": "đổi nghề", "vd": "Changing careers at forty is more common than you think." },
+    { "chu": "Out of frustration", "doc": "/aʊt əv frʌˈstreɪʃn/", "nghia": "vì bực bội", "vd": "Out of frustration, she deleted the whole file." },
+    { "chu": "taught myself", "doc": "/tɔːt maɪˈself/", "nghia": "tự học", "vd": "I taught myself to play the guitar." },
+    { "chu": "held you back", "doc": "/held juː bæk/", "nghia": "níu chân, cản trở bạn (hold back)", "vd": "What held you back from applying?" },
+    { "chu": "mortgage", "doc": "/ˈmɔːɡɪdʒ/", "nghia": "khoản vay mua nhà", "vd": "They pay their mortgage every month." },
+    { "chu": "covered for", "doc": "/ˈkʌvəd fɔː/", "nghia": "làm thay, đỡ việc cho ai", "vd": "Can you cover for me on Friday?" },
+    { "chu": "brutal", "doc": "/ˈbruːtl/", "nghia": "khắc nghiệt, cực kỳ vất vả", "vd": "The first week of the new job was brutal." },
+    { "chu": "come close to giving up", "doc": "/kʌm kləʊs tə ˈɡɪvɪŋ ʌp/", "nghia": "suýt bỏ cuộc", "vd": "I came close to giving up many times." },
+    { "chu": "rejected", "doc": "/rɪˈdʒektɪd/", "nghia": "bị từ chối", "vd": "Her first application was rejected." },
+    { "chu": "stung", "doc": "/stʌŋ/", "nghia": "làm đau, làm tổn thương (sting)", "vd": "His comment really stung." },
+    { "chu": "asset", "doc": "/ˈæset/", "nghia": "tài sản, điểm mạnh quý giá", "vd": "Your languages are a real asset." },
+    { "chu": "spotted", "doc": "/ˈspɒtɪd/", "nghia": "phát hiện ra", "vd": "She spotted a mistake in the contract." },
+    { "chu": "burn your bridges", "doc": "/bɜːn jɔː ˈbrɪdʒɪz/", "nghia": "đốt cầu, cắt đứt đường lui", "vd": "Leave politely. Don't burn your bridges." }
+  ],
+  "yNghia": "Đổi nghề muộn không có nghĩa là bắt đầu từ số không. Những năm ở nghề cũ không phải thời gian phí hoài — nối chúng với nghề mới, chúng thành lợi thế mà người trẻ hơn không có. Đừng đốt cầu: hãy xây một cây cầu từ chỗ mình đang đứng.",
+  "meo": [
+    "Tiếc nuối quá khứ: \"I wish I'd + V3\" — \"I wish I'd said…\", \"I wish I'd stopped… sooner.\"",
+    "\"come close to + V-ing\" = suýt; \"hold someone back\" = níu chân.",
+    "\"The more…, the more…\" để nói càng… càng…",
+    "Kể sự kiện quá khứ chồng nhau: \"after I'd applied… and been rejected\" (had viết một lần)."
+  ],
+  "cauHoi": [
+    { "hoi": "Điều gì khiến Nam bắt đầu nghĩ tới lập trình?", "chon": ["Một khoá học miễn phí", "Đoạn script nhỏ anh tự viết để thay việc chép số liệu bằng tay", "Lời khuyên của sếp"], "dung": 1, "giai": "\"I taught myself to write a small script that did it automatically.\"" },
+    { "hoi": "Vì sao Nam không nghỉ việc để học toàn thời gian?", "chon": ["Vì có khoản vay mua nhà", "Vì sếp không cho", "Vì anh không thích học"], "dung": 0, "giai": "\"I also had a mortgage. Quitting my job… simply wasn't an option.\"" },
+    { "hoi": "Người bạn khuyên Nam điều gì về CV?", "chon": ["Viết CV ngắn hơn", "Ghi tuổi trẻ hơn", "Đừng giấu những năm làm ngân hàng — đó là tài sản quý nhất"], "dung": 2, "giai": "\"You're hiding your best asset.\"" },
+    { "hoi": "Ngay tháng đầu ở chỗ làm mới, Nam làm được gì?", "chon": ["Được thăng chức", "Phát hiện lỗi trong cách tính lãi mà cả nhóm bỏ sót", "Viết lại toàn bộ hệ thống"], "dung": 1, "giai": "\"I spotted a problem in how they calculated interest that the whole team had missed.\"" }
+  ]
+}

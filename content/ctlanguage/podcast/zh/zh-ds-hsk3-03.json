@@ -1,0 +1,462 @@
+{
+  "id": "zh-ds-hsk3-03",
+  "nn": "zh",
+  "danhMuc": "doi-song",
+  "cap": "HSK3",
+  "so": 6,
+  "tieuDe": "周末有空吗？",
+  "tieuDeViet": "Cuối tuần rảnh không?",
+  "moTa": "Việt rủ cô bạn Tiểu Tuyết đi xem lễ hội ánh sáng: hai người dời ngày, chốt giờ và chỗ hẹn. Đến lượt Tiểu Tuyết rủ Việt đi leo núi ngắm bình minh lúc năm giờ sáng — và Việt từ chối khéo mà không làm bạn mất vui. Cuối cùng là một tin nhắn báo đến muộn đúng cách.",
+  "chuDe": "Rủ đi chơi, hẹn giờ",
+  "bieuTuong": "calendar.badge.clock",
+  "nguoi": [
+    {
+      "ma": "V",
+      "ten": "Việt",
+      "giong": "zh-nam",
+      "vai": "sinh viên Việt Nam"
+    },
+    {
+      "ma": "X",
+      "ten": "Tiểu Tuyết",
+      "giong": "zh-nu",
+      "vai": "bạn người Trung"
+    }
+  ],
+  "loi": [
+    {
+      "ai": "V",
+      "t": "小雪，这个周末你有空吗？",
+      "doc": "Xiǎo Xuě, zhège zhōumò nǐ yǒu kòng ma?",
+      "v": "Tiểu Tuyết, cuối tuần này cậu rảnh không?",
+      "khac": [
+        {
+          "kieu": "tự nhiên hơn",
+          "t": "小雪，周末有时间吗？",
+          "doc": "Xiǎo Xuě, zhōumò yǒu shíjiān ma?",
+          "v": "Tiểu Tuyết, cuối tuần có thời gian không?"
+        },
+        {
+          "kieu": "lịch sự",
+          "t": "王老师，您这个周末方便吗？",
+          "doc": "Wáng lǎoshī, nín zhège zhōumò fāngbiàn ma?",
+          "v": "Thầy Vương, cuối tuần này thầy có tiện không ạ?",
+          "ghiChu": "hẹn người lớn tuổi, thầy cô, đồng nghiệp lớn: dùng 您 + 方便吗"
+        }
+      ],
+      "np": [
+        {
+          "mau": "有空 (kòng) ↔ 空 (kōng)",
+          "giai": "空 đọc kòng khi là \"thời gian rảnh, chỗ trống\": 有空, 没空. Đọc kōng khi là \"trống rỗng, không khí\": 空气, 空调.",
+          "vd": "你明天有空吗？我请你吃饭。",
+          "vdDoc": "Nǐ míngtiān yǒu kòng ma? Wǒ qǐng nǐ chī fàn.",
+          "vdV": "Mai bạn rảnh không? Mình mời bạn ăn cơm."
+        }
+      ]
+    },
+    {
+      "ai": "X",
+      "t": "怎么了？你有什么好主意？",
+      "doc": "Zěnme le? Nǐ yǒu shénme hǎo zhǔyi?",
+      "v": "Sao thế? Cậu có ý hay gì à?"
+    },
+    {
+      "ai": "V",
+      "t": "听说湖边公园这个周末有灯光节，我们一起去看看，怎么样？",
+      "doc": "Tīngshuō húbiān gōngyuán zhège zhōumò yǒu dēngguāng jié, wǒmen yìqǐ qù kànkan, zěnmeyàng?",
+      "v": "Nghe nói cuối tuần này công viên ven hồ có lễ hội ánh sáng, tụi mình cùng đi xem, thế nào?",
+      "khac": [
+        {
+          "kieu": "tự nhiên hơn",
+          "t": "要不要一起去看灯光节？",
+          "doc": "Yào bu yào yìqǐ qù kàn dēngguāng jié?",
+          "v": "Có muốn cùng đi xem lễ hội ánh sáng không?"
+        },
+        {
+          "kieu": "thân mật",
+          "t": "走，一起去看灯光节吧！",
+          "doc": "Zǒu, yìqǐ qù kàn dēngguāng jié ba!",
+          "v": "Đi, cùng đi xem lễ hội ánh sáng nào!",
+          "ghiChu": "giữa bạn thân, giọng hào hứng"
+        }
+      ],
+      "np": [
+        {
+          "mau": "听说……",
+          "giai": "听说 + câu = nghe nói…, đặt đầu câu để dẫn thông tin mình nghe được từ người khác.",
+          "vd": "听说明天会下雪。",
+          "vdDoc": "Tīngshuō míngtiān huì xià xuě.",
+          "vdV": "Nghe nói ngày mai sẽ có tuyết."
+        },
+        {
+          "mau": "……，怎么样？",
+          "giai": "Đưa ra đề nghị rồi hỏi ý kiến: đề nghị + 怎么样？ (thế nào?). Mềm hơn câu mệnh lệnh.",
+          "vd": "我们明天去吃火锅，怎么样？",
+          "vdDoc": "Wǒmen míngtiān qù chī huǒguō, zěnmeyàng?",
+          "vdV": "Mai mình đi ăn lẩu, thế nào?"
+        }
+      ]
+    },
+    {
+      "ai": "X",
+      "t": "听起来不错！不过星期六我得陪我妈去看奶奶。",
+      "doc": "Tīng qǐlai búcuò! Búguò xīngqīliù wǒ děi péi wǒ mā qù kàn nǎinai.",
+      "v": "Nghe hay đấy! Có điều thứ Bảy mình phải đi cùng mẹ về thăm bà nội.",
+      "np": [
+        {
+          "mau": "得 (děi) = phải",
+          "giai": "得 đọc děi khi là \"phải\" (văn nói, = 必须/要). Đọc de khi là trợ từ bổ ngữ (说得好), đọc dé khi là \"được, đạt\" (得到).",
+          "vd": "太晚了，我得走了。",
+          "vdDoc": "Tài wǎn le, wǒ děi zǒu le.",
+          "vdV": "Muộn quá rồi, mình phải đi đây."
+        },
+        {
+          "mau": "听起来 + tính từ",
+          "giai": "V + 起来 = \"khi… thì thấy\": 听起来不错 (nghe có vẻ hay), 看起来很累 (trông có vẻ mệt).",
+          "vd": "这个菜看起来很好吃。",
+          "vdDoc": "Zhège cài kàn qǐlai hěn hǎochī.",
+          "vdV": "Món này trông ngon quá."
+        }
+      ]
+    },
+    {
+      "ai": "V",
+      "t": "那星期天呢？",
+      "doc": "Nà xīngqītiān ne?",
+      "v": "Vậy Chủ nhật thì sao?"
+    },
+    {
+      "ai": "X",
+      "t": "星期天可以。几点？在哪儿见？",
+      "doc": "Xīngqītiān kěyǐ. Jǐ diǎn? Zài nǎr jiàn?",
+      "v": "Chủ nhật được. Mấy giờ? Gặp ở đâu?"
+    },
+    {
+      "ai": "V",
+      "t": "灯光节晚上七点开始。我们六点在地铁站门口见，先吃饭再去，好不好？",
+      "doc": "Dēngguāng jié wǎnshang qī diǎn kāishǐ. Wǒmen liù diǎn zài dìtiě zhàn ménkǒu jiàn, xiān chī fàn zài qù, hǎo bu hǎo?",
+      "v": "Lễ hội bắt đầu lúc bảy giờ tối. Mình gặp nhau ở cửa ga tàu điện lúc sáu giờ, ăn cơm trước rồi đi, được không?",
+      "np": [
+        {
+          "mau": "Thời gian + 在 + nơi + V",
+          "giai": "Trật tự cố định: chủ ngữ + thời gian + nơi chốn + động từ: 我们六点在地铁站门口见. Không nói 我们见在地铁站.",
+          "vd": "我明天在图书馆等你。",
+          "vdDoc": "Wǒ míngtiān zài túshūguǎn děng nǐ.",
+          "vdV": "Mai mình đợi cậu ở thư viện."
+        }
+      ]
+    },
+    {
+      "ai": "X",
+      "t": "六点有点儿早，我星期天下午有课，五点半才下课。六点半吧？",
+      "doc": "Liù diǎn yǒudiǎnr zǎo, wǒ xīngqītiān xiàwǔ yǒu kè, wǔ diǎn bàn cái xià kè. Liù diǎn bàn ba?",
+      "v": "Sáu giờ hơi sớm, chiều Chủ nhật mình có tiết, năm rưỡi mới tan. Sáu rưỡi nhé?",
+      "khac": [
+        {
+          "kieu": "mềm mỏng",
+          "t": "能不能晚一点儿？六点半怎么样？",
+          "doc": "Néng bu néng wǎn yìdiǎnr? Liù diǎn bàn zěnmeyàng?",
+          "v": "Muộn hơn chút được không? Sáu rưỡi thế nào?"
+        }
+      ],
+      "np": [
+        {
+          "mau": "才 (muộn hơn mong đợi)",
+          "giai": "才 + V = mới (muộn, chậm hơn mong đợi): 五点半才下课. Ngược lại 就 = đã (sớm, nhanh): 五点就下课了.",
+          "vd": "他十点才起床。",
+          "vdDoc": "Tā shí diǎn cái qǐchuáng.",
+          "vdV": "Mười giờ anh ấy mới dậy."
+        }
+      ]
+    },
+    {
+      "ai": "V",
+      "t": "没问题，六点半就六点半。",
+      "doc": "Méi wèntí, liù diǎn bàn jiù liù diǎn bàn.",
+      "v": "Không vấn đề, sáu rưỡi thì sáu rưỡi.",
+      "np": [
+        {
+          "mau": "X 就 X",
+          "giai": "Lặp lại đề nghị của người kia với 就 ở giữa = \"vậy thì X luôn\", tỏ ý đồng ý dễ dàng.",
+          "vd": "你想吃面？好，面就面。",
+          "vdDoc": "Nǐ xiǎng chī miàn? Hǎo, miàn jiù miàn.",
+          "vdV": "Cậu muốn ăn mì à? Ừ, mì thì mì."
+        }
+      ]
+    },
+    {
+      "ai": "X",
+      "t": "对了，下个星期六我们几个同学去爬山，早上五点出发，你要不要一起来？",
+      "doc": "Duì le, xià ge xīngqīliù wǒmen jǐ ge tóngxué qù pá shān, zǎoshang wǔ diǎn chūfā, nǐ yào bu yào yìqǐ lái?",
+      "v": "À này, thứ Bảy tuần sau mấy đứa bạn cùng lớp tụi mình đi leo núi, năm giờ sáng xuất phát, cậu có muốn đi cùng không?",
+      "np": [
+        {
+          "mau": "要不要 + V？ (mời, rủ)",
+          "giai": "Câu chính phản 要不要 dùng để mời một cách thoải mái: người được mời dễ nhận lời cũng dễ từ chối.",
+          "vd": "你要不要喝点儿水？",
+          "vdDoc": "Nǐ yào bu yào hē diǎnr shuǐ?",
+          "vdV": "Bạn có muốn uống chút nước không?"
+        }
+      ]
+    },
+    {
+      "ai": "V",
+      "t": "五点？！",
+      "doc": "Wǔ diǎn?!",
+      "v": "Năm giờ á?!"
+    },
+    {
+      "ai": "X",
+      "t": "对啊，我们想在山上看日出。",
+      "doc": "Duì a, wǒmen xiǎng zài shān shang kàn rìchū.",
+      "v": "Đúng rồi, tụi mình muốn ngắm bình minh trên núi."
+    },
+    {
+      "ai": "V",
+      "t": "谢谢你想着我。不过说实话，我早上五点真的起不来，怕让大家等我。",
+      "doc": "Xièxie nǐ xiǎngzhe wǒ. Búguò shuō shíhuà, wǒ zǎoshang wǔ diǎn zhēn de qǐ bu lái, pà ràng dàjiā děng wǒ.",
+      "v": "Cảm ơn cậu đã nghĩ đến mình. Nhưng nói thật, năm giờ sáng mình thật sự không dậy nổi, sợ cả nhóm phải đợi mình.",
+      "khac": [
+        {
+          "kieu": "mềm mỏng",
+          "t": "那天我可能不太方便，下次吧。",
+          "doc": "Nà tiān wǒ kěnéng bú tài fāngbiàn, xià cì ba.",
+          "v": "Hôm đó chắc mình không tiện lắm, để lần sau nhé.",
+          "ghiChu": "từ chối mà không cần nêu lý do cụ thể — rất phổ biến"
+        },
+        {
+          "kieu": "lịch sự",
+          "t": "谢谢您的邀请，这次我就不参加了。",
+          "doc": "Xièxie nín de yāoqǐng, zhè cì wǒ jiù bù cānjiā le.",
+          "v": "Cảm ơn anh/chị đã mời, lần này tôi xin phép không tham gia.",
+          "ghiChu": "với đồng nghiệp, cấp trên, người không thân"
+        },
+        {
+          "kieu": "thân mật",
+          "t": "不去了不去了，我起不来！",
+          "doc": "Bú qù le bú qù le, wǒ qǐ bu lái!",
+          "v": "Thôi thôi, mình không dậy nổi đâu!",
+          "ghiChu": "chỉ với bạn rất thân"
+        }
+      ],
+      "np": [
+        {
+          "mau": "V + 不来 (起不来)",
+          "giai": "起不来 = không dậy nổi (không làm được). Bổ ngữ khả năng: 起得来 / 起不来. Đây là lý do \"do mình\", nghe nhẹ nhàng, không trách ai.",
+          "vd": "这首歌太难了，我唱不来。",
+          "vdDoc": "Zhè shǒu gē tài nán le, wǒ chàng bu lái.",
+          "vdV": "Bài hát này khó quá, mình hát không nổi."
+        }
+      ]
+    },
+    {
+      "ai": "V",
+      "t": "这次我就不去了。你们拍点儿日出的照片给我看看吧！",
+      "doc": "Zhè cì wǒ jiù bú qù le. Nǐmen pāi diǎnr rìchū de zhàopiàn gěi wǒ kànkan ba!",
+      "v": "Lần này mình không đi đâu. Các cậu chụp mấy tấm ảnh bình minh cho mình xem nhé!"
+    },
+    {
+      "ai": "X",
+      "t": "哈哈，好吧，我就知道你起不来。",
+      "doc": "Hāha, hǎo ba, wǒ jiù zhīdào nǐ qǐ bu lái.",
+      "v": "Haha, được thôi, mình biết ngay là cậu không dậy nổi mà."
+    },
+    {
+      "ai": "V",
+      "t": "不过下次如果是下午的活动，一定叫我！",
+      "doc": "Búguò xià cì rúguǒ shì xiàwǔ de huódòng, yídìng jiào wǒ!",
+      "v": "Nhưng lần sau nếu là hoạt động buổi chiều thì nhất định gọi mình nhé!",
+      "khac": [
+        {
+          "kieu": "mềm mỏng",
+          "t": "下次有别的活动，记得叫上我。",
+          "doc": "Xià cì yǒu bié de huódòng, jìde jiào shang wǒ.",
+          "v": "Lần sau có hoạt động khác thì nhớ rủ mình."
+        }
+      ]
+    },
+    {
+      "ai": "X",
+      "t": "行！那星期天六点半，地铁站门口，不见不散！",
+      "doc": "Xíng! Nà xīngqītiān liù diǎn bàn, dìtiě zhàn ménkǒu, bú jiàn bú sàn!",
+      "v": "Được! Vậy sáu rưỡi Chủ nhật, cửa ga tàu điện, không gặp không về!"
+    },
+    {
+      "ai": "V",
+      "t": "不见不散！",
+      "doc": "Bú jiàn bú sàn!",
+      "v": "Không gặp không về!"
+    },
+    {
+      "ai": "V",
+      "t": "喂，小雪，真不好意思，地铁出了点儿问题，我可能要晚到十分钟。",
+      "doc": "Wéi, Xiǎo Xuě, zhēn bù hǎoyìsi, dìtiě chū le diǎnr wèntí, wǒ kěnéng yào wǎn dào shí fēnzhōng.",
+      "v": "A lô, Tiểu Tuyết, thật ngại quá, tàu điện gặp chút sự cố, chắc mình đến muộn mười phút.",
+      "khac": [
+        {
+          "kieu": "trang trọng",
+          "t": "抱歉，我会晚到一会儿，请您稍等。",
+          "doc": "Bàoqiàn, wǒ huì wǎn dào yíhuìr, qǐng nín shāo děng.",
+          "v": "Xin lỗi, tôi sẽ đến muộn một chút, phiền anh/chị chờ giúp.",
+          "ghiChu": "với người không thân, hẹn công việc"
+        },
+        {
+          "kieu": "thân mật",
+          "t": "我晚点儿到，等我一下！",
+          "doc": "Wǒ wǎn diǎnr dào, děng wǒ yíxià!",
+          "v": "Mình tới trễ chút, đợi mình nha!"
+        }
+      ],
+      "np": [
+        {
+          "mau": "晚/早 + V + thời lượng",
+          "giai": "晚到十分钟 = đến muộn mười phút; 早走半个小时 = về sớm nửa tiếng. Thời lượng đứng SAU động từ.",
+          "vd": "今天我想早走一个小时。",
+          "vdDoc": "Jīntiān wǒ xiǎng zǎo zǒu yí ge xiǎoshí.",
+          "vdV": "Hôm nay tôi muốn về sớm một tiếng."
+        }
+      ]
+    },
+    {
+      "ai": "X",
+      "t": "没事，你慢慢来，我在门口的咖啡店等你。",
+      "doc": "Méi shì, nǐ mànmàn lái, wǒ zài ménkǒu de kāfēi diàn děng nǐ.",
+      "v": "Không sao, cậu cứ từ từ, mình đợi ở quán cà phê ngay cửa ga."
+    },
+    {
+      "ai": "V",
+      "t": "太好了，谢谢！等我到了，咖啡我请！",
+      "doc": "Tài hǎo le, xièxie! Děng wǒ dào le, kāfēi wǒ qǐng!",
+      "v": "Tốt quá, cảm ơn cậu! Đợi mình tới, cà phê mình mời!"
+    },
+    {
+      "ai": "X",
+      "t": "好啊，那我点一杯最贵的！",
+      "doc": "Hǎo a, nà wǒ diǎn yì bēi zuì guì de!",
+      "v": "Được thôi, vậy mình gọi ly đắt nhất!"
+    }
+  ],
+  "tuVung": [
+    {
+      "chu": "有空",
+      "doc": "yǒu kòng",
+      "nghia": "rảnh, có thời gian (空 đọc kòng)",
+      "vd": "你今天有空吗？"
+    },
+    {
+      "chu": "听说",
+      "doc": "tīngshuō",
+      "nghia": "nghe nói",
+      "vd": "听说你要回国了？"
+    },
+    {
+      "chu": "陪",
+      "doc": "péi",
+      "nghia": "đi cùng, ở bên (bồi)",
+      "vd": "我陪你去医院。"
+    },
+    {
+      "chu": "门口",
+      "doc": "ménkǒu",
+      "nghia": "cửa, lối vào",
+      "vd": "我在门口等你。"
+    },
+    {
+      "chu": "出发",
+      "doc": "chūfā",
+      "nghia": "xuất phát, khởi hành",
+      "vd": "我们几点出发？"
+    },
+    {
+      "chu": "日出",
+      "doc": "rìchū",
+      "nghia": "bình minh, mặt trời mọc",
+      "vd": "我想去海边看日出。"
+    },
+    {
+      "chu": "说实话",
+      "doc": "shuō shíhuà",
+      "nghia": "nói thật",
+      "vd": "说实话，我不太喜欢。"
+    },
+    {
+      "chu": "活动",
+      "doc": "huódòng",
+      "nghia": "hoạt động, sự kiện",
+      "vd": "周末有什么活动？"
+    },
+    {
+      "chu": "不见不散",
+      "doc": "bú jiàn bú sàn",
+      "nghia": "không gặp không về (chốt lời hẹn)",
+      "vd": "明天八点，不见不散！"
+    },
+    {
+      "chu": "晚到",
+      "doc": "wǎn dào",
+      "nghia": "đến muộn",
+      "vd": "我可能会晚到。"
+    },
+    {
+      "chu": "慢慢来",
+      "doc": "mànmàn lái",
+      "nghia": "cứ từ từ, đừng vội",
+      "vd": "别着急，慢慢来。"
+    },
+    {
+      "chu": "请",
+      "doc": "qǐng",
+      "nghia": "mời (trả tiền cho người khác); xin, làm ơn",
+      "vd": "今天我请你吃饭。"
+    }
+  ],
+  "yNghia": "Từ chối khéo có công thức: cảm ơn lời mời (谢谢你想着我) + lý do \"do mình\" (我起不来) + mở cửa cho lần sau (下次一定叫我). Người được từ chối vẫn thấy mình được quý. Và khi lỡ đến muộn — báo trước, nói rõ bao lâu, rồi mời ly cà phê: tình bạn không mất đi vì mười phút.",
+  "meo": [
+    "Rủ: 听说…，我们一起去…，怎么样？/ 要不要一起去…？ — đề nghị kèm câu hỏi để người kia dễ trả lời.",
+    "Từ chối mềm: 谢谢 + 不过/说实话 + lý do + 下次吧. Không cần lý do thật chi tiết: 那天不太方便 là đủ.",
+    "才 = mới (muộn hơn mong đợi), 就 = đã (sớm hơn mong đợi): 五点半才下课 ↔ 五点就下课了.",
+    "Chữ đa âm: 空 kòng (rảnh) / kōng (trống, không khí); 得 děi (phải) / de (trợ từ) / dé (được)."
+  ],
+  "cauHoi": [
+    {
+      "hoi": "Vì sao Tiểu Tuyết không đi được thứ Bảy?",
+      "chon": [
+        "Phải đi học thêm",
+        "Phải đi cùng mẹ thăm bà nội",
+        "Phải đi leo núi"
+      ],
+      "dung": 1,
+      "giai": "星期六我得陪我妈去看奶奶。"
+    },
+    {
+      "hoi": "Hai người hẹn gặp lúc mấy giờ, ở đâu?",
+      "chon": [
+        "Sáu giờ, công viên ven hồ",
+        "Sáu rưỡi Chủ nhật, cửa ga tàu điện",
+        "Bảy giờ, quán cà phê"
+      ],
+      "dung": 1,
+      "giai": "星期天六点半，地铁站门口。"
+    },
+    {
+      "hoi": "Việt từ chối đi leo núi bằng cách nào?",
+      "chon": [
+        "Nói rằng leo núi chán lắm",
+        "Cảm ơn, nói thật là không dậy nổi lúc năm giờ, hẹn lần sau",
+        "Im lặng không trả lời"
+      ],
+      "dung": 1,
+      "giai": "谢谢你想着我……我早上五点真的起不来……下次……一定叫我！"
+    },
+    {
+      "hoi": "Chủ nhật, Việt đến muộn bao lâu và vì sao?",
+      "chon": [
+        "Mười phút, vì tàu điện gặp sự cố",
+        "Nửa tiếng, vì ngủ quên",
+        "Mười phút, vì quên đường"
+      ],
+      "dung": 0,
+      "giai": "地铁出了点儿问题，我可能要晚到十分钟。"
+    }
+  ]
+}

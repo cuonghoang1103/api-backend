@@ -1,0 +1,537 @@
+{
+  "id": "ja-ds-n2-01",
+  "nn": "ja",
+  "danhMuc": "doi-song",
+  "cap": "N2",
+  "so": 1,
+  "tieuDe": "回覧板と夏祭り",
+  "tieuDeViet": "Bảng thông báo luân phiên và lễ hội mùa hè",
+  "moTa": "Toàn sống ở một khu phố cũ. Bác hàng xóm Takahashi đưa bảng thông báo luân phiên, rồi tối đó bác hội trưởng hội khu phố đến nhờ giúp dựng lễ hội mùa hè. Học cách nhận lời có điều kiện, nói khéo khi bận, hỏi điều mình chưa biết, và vì sao “quen mặt hàng xóm” lại quan trọng ở Nhật.",
+  "chuDe": "Hàng xóm",
+  "bieuTuong": "party.popper.fill",
+  "nguoi": [
+    {
+      "ma": "T",
+      "ten": "トアン",
+      "giong": "ja2-nam",
+      "vai": "người Việt đi làm, sống trong khu phố"
+    },
+    {
+      "ma": "H",
+      "ten": "高橋さん",
+      "giong": "ja-nu",
+      "vai": "bác hàng xóm"
+    },
+    {
+      "ma": "S",
+      "ten": "佐々木さん",
+      "giong": "ja-nam",
+      "vai": "hội trưởng hội khu phố"
+    }
+  ],
+  "loi": [
+    {
+      "ai": "H",
+      "t": "トアンさん、こんにちは。回覧板、回ってきたから、置いておくわね。",
+      "doc": "トアンさん、こんにちは。かいらんばん、まわってきたから、おいておくわね。",
+      "v": "Toàn ơi, chào cháu. Bảng thông báo luân phiên đến lượt nhà cháu, bác để đây nhé."
+    },
+    {
+      "ai": "T",
+      "t": "あ、高橋さん、ありがとうございます。すみません、これ、読んだらどうすればいいんでしたっけ。",
+      "doc": "あ、たかはしさん、ありがとうございます。すみません、これ、よんだらどうすればいいんでしたっけ。",
+      "v": "À, bác Takahashi, cháu cảm ơn bác. Xin lỗi, đọc xong cái này thì phải làm gì ấy nhỉ?",
+      "khac": [
+        {
+          "kieu": "trang trọng",
+          "t": "恐れ入りますが、読み終わったら、どちらにお回しすればよろしいでしょうか。",
+          "doc": "おそれいりますが、よみおわったら、どちらにおまわしすればよろしいでしょうか。",
+          "v": "Xin lỗi làm phiền, đọc xong thì cháu nên chuyền sang nhà nào ạ?",
+          "ghiChu": "Rất lịch sự — với người lớn tuổi chưa thân."
+        },
+        {
+          "kieu": "thân mật",
+          "t": "これ、読んだらどうするんだっけ？",
+          "doc": "これ、よんだらどうするんだっけ？",
+          "v": "Cái này đọc xong thì làm gì ấy nhỉ?",
+          "ghiChu": "Hỏi bạn bè, người trong nhà."
+        }
+      ],
+      "np": [
+        {
+          "mau": "〜っけ",
+          "giai": "Hỏi lại điều mình từng biết nhưng quên, hoặc tự hỏi mình: どうすればいいんでしたっけ = phải làm thế nào ấy nhỉ? Dạng lịch sự: 〜でしたっけ; thân mật: 〜だっけ.",
+          "vd": "会議は何時からでしたっけ。",
+          "vdDoc": "かいぎはなんじからでしたっけ。",
+          "vdV": "Cuộc họp bắt đầu lúc mấy giờ ấy nhỉ?"
+        }
+      ]
+    },
+    {
+      "ai": "H",
+      "t": "読んだら、ここにハンコかサインをして、お隣の田中さんのポストに入れてくれればいいの。",
+      "doc": "よんだら、ここにハンコかサインをして、おとなりのたなかさんのポストにいれてくれればいいの。",
+      "v": "Đọc xong thì cháu đóng dấu hoặc ký vào đây, rồi bỏ vào hòm thư nhà bác Tanaka bên cạnh là được."
+    },
+    {
+      "ai": "T",
+      "t": "なるほど、順番に回すんですね。……「夏祭りのお手伝いのお願い」？",
+      "doc": "なるほど、じゅんばんにまわすんですね。……「なつまつりのおてつだいのおねがい」？",
+      "v": "Ra vậy, chuyền lần lượt từng nhà nhỉ. …“Nhờ giúp đỡ lễ hội mùa hè”?"
+    },
+    {
+      "ai": "H",
+      "t": "そうそう、それね。今年は人手が足りなくて、会長さんが困ってるのよ。今晩あたり、直接お願いに来るんじゃないかしら。",
+      "doc": "そうそう、それね。ことしはひとでがたりなくて、かいちょうさんがこまってるのよ。こんばんあたり、ちょくせつおねがいにくるんじゃないかしら。",
+      "v": "Đúng rồi, cái đó đấy. Năm nay thiếu người nên bác hội trưởng đang khổ sở. Chắc tối nay bác ấy sẽ đến tận nơi nhờ cháu đấy."
+    },
+    {
+      "ai": "S",
+      "t": "ごめんください。町内会の佐々木です。夜分遅くにすみません。",
+      "doc": "ごめんください。ちょうないかいのささきです。やぶんおそくにすみません。",
+      "v": "Xin phép, có ai ở nhà không? Tôi là Sasaki của hội khu phố. Xin lỗi đến muộn thế này."
+    },
+    {
+      "ai": "T",
+      "t": "こんばんは。どうぞ、お上がりください。",
+      "doc": "こんばんは。どうぞ、おあがりください。",
+      "v": "Chào bác. Mời bác vào nhà ạ.",
+      "khac": [
+        {
+          "kieu": "tự nhiên hơn",
+          "t": "こんばんは。散らかっていますが、どうぞお上がりください。",
+          "doc": "こんばんは。ちらかっていますが、どうぞおあがりください。",
+          "v": "Chào bác. Nhà cửa hơi bừa bộn, nhưng mời bác vào ạ.",
+          "ghiChu": "Câu khiêm tốn quen thuộc khi mời khách vào nhà."
+        }
+      ]
+    },
+    {
+      "ai": "S",
+      "t": "いや、玄関で結構です。回覧板、ご覧になりました？",
+      "doc": "いや、げんかんでけっこうです。かいらんばん、ごらんになりました？",
+      "v": "Thôi, tôi đứng ở cửa là được rồi. Cậu đã xem bảng thông báo chưa?"
+    },
+    {
+      "ai": "T",
+      "t": "はい、さっき読みました。お祭りのお手伝いの件ですよね。",
+      "doc": "はい、さっきよみました。おまつりのおてつだいのけんですよね。",
+      "v": "Vâng, cháu vừa đọc xong. Là chuyện giúp lễ hội phải không ạ?"
+    },
+    {
+      "ai": "S",
+      "t": "ええ。実は、若い人が年々減ってきたせいで、テントを立てたり、机を運んだりする人が足りないんですよ。",
+      "doc": "ええ。じつは、わかいひとがねんねんへってきたせいで、テントをたてたり、つくえをはこんだりするひとがたりないんですよ。",
+      "v": "Phải. Thật ra, vì người trẻ mỗi năm một ít đi nên không đủ người dựng lều, khiêng bàn.",
+      "np": [
+        {
+          "mau": "〜せいで",
+          "giai": "Vì (nguyên nhân gây ra kết quả xấu). Kết quả tốt thì dùng 〜おかげで. 若い人が減ってきたせいで = vì người trẻ ít đi (nên mới thiếu người).",
+          "vd": "寝不足のせいで、仕事でミスをしてしまった。",
+          "vdDoc": "ねぶそくのせいで、しごとでミスをしてしまった。",
+          "vdV": "Vì thiếu ngủ mà tôi mắc lỗi trong công việc."
+        }
+      ]
+    },
+    {
+      "ai": "S",
+      "t": "もちろん、お仕事もあるでしょうから、無理にとは言いませんが。",
+      "doc": "もちろん、おしごともあるでしょうから、むりにとはいいませんが。",
+      "v": "Tất nhiên cậu còn công việc, nên tôi không ép đâu."
+    },
+    {
+      "ai": "T",
+      "t": "お世話になっている町のことですから、断るわけにはいきません。ただ、平日は仕事で、どうしても抜けられないんです。",
+      "doc": "おせわになっているまちのことですから、ことわるわけにはいきません。ただ、へいじつはしごとで、どうしてもぬけられないんです。",
+      "v": "Là việc của khu phố đã giúp đỡ cháu nhiều, cháu không thể từ chối được. Có điều ngày thường cháu đi làm, không sao xin nghỉ được.",
+      "khac": [
+        {
+          "kieu": "mềm mỏng",
+          "t": "ぜひお手伝いしたいんですが、平日は仕事がありまして……。",
+          "doc": "ぜひおてつだいしたいんですが、へいじつはしごとがありまして……。",
+          "v": "Cháu rất muốn giúp, nhưng ngày thường cháu phải đi làm…",
+          "ghiChu": "Nhận lời trước, nêu giới hạn sau — người nghe không bị hụt hẫng."
+        }
+      ],
+      "np": [
+        {
+          "mau": "〜わけにはいかない",
+          "giai": "Không thể làm vậy được (vì lẽ thường, vì tình nghĩa, trách nhiệm) — dù về khả năng thì làm được. Khác với 〜できない (không có khả năng).",
+          "vd": "明日は大事な会議があるので、休むわけにはいかない。",
+          "vdDoc": "あしたはだいじなかいぎがあるので、やすむわけにはいかない。",
+          "vdV": "Mai có cuộc họp quan trọng nên tôi không thể nghỉ được."
+        }
+      ]
+    },
+    {
+      "ai": "S",
+      "t": "準備は前の日の土曜日の朝なので、平日は気にしなくて大丈夫ですよ。",
+      "doc": "じゅんびはまえのひのどようびのあさなので、へいじつはきにしなくてだいじょうぶですよ。",
+      "v": "Phần chuẩn bị là sáng thứ Bảy, hôm trước lễ hội, nên ngày thường cậu đừng bận tâm."
+    },
+    {
+      "ai": "T",
+      "t": "土曜日の朝でしたら、八時から昼までなら行けます。午後は先約がありまして。",
+      "doc": "どようびのあさでしたら、はちじからひるまでならいけます。ごごはせんやくがありまして。",
+      "v": "Nếu là sáng thứ Bảy thì cháu đi được từ 8 giờ đến trưa. Buổi chiều cháu có hẹn trước rồi ạ.",
+      "khac": [
+        {
+          "kieu": "ngắn gọn",
+          "t": "土曜の午前中なら大丈夫です。",
+          "doc": "どようのごぜんちゅうならだいじょうぶです。",
+          "v": "Sáng thứ Bảy thì cháu được ạ."
+        },
+        {
+          "kieu": "trang trọng",
+          "t": "土曜日の午前中でしたら、お手伝いさせていただけます。",
+          "doc": "どようびのごぜんちゅうでしたら、おてつだいさせていただけます。",
+          "v": "Nếu là buổi sáng thứ Bảy thì cháu xin được giúp một tay ạ."
+        }
+      ]
+    },
+    {
+      "ai": "S",
+      "t": "十分です！助かります。力仕事が多いので、若い人がいてくれるだけで、ずいぶん違うんですよ。",
+      "doc": "じゅうぶんです！たすかります。ちからしごとがおおいので、わかいひとがいてくれるだけで、ずいぶんちがうんですよ。",
+      "v": "Thế là đủ rồi! Đỡ quá. Việc nặng nhiều, chỉ cần có người trẻ ở đó thôi là khác hẳn."
+    },
+    {
+      "ai": "T",
+      "t": "あの、実は私、日本のお祭りに参加したことがなくて、何をするのか、まったく見当がつかないんですが……。",
+      "doc": "あの、じつはわたし、にほんのおまつりにさんかしたことがなくて、なにをするのか、まったくけんとうがつかないんですが……。",
+      "v": "À, thật ra cháu chưa từng tham gia lễ hội Nhật nào, nên hoàn toàn không hình dung được sẽ làm gì…",
+      "np": [
+        {
+          "mau": "見当がつかない",
+          "giai": "Không đoán ra, không hình dung được chút nào. Hay đi với まったく／全然. Gần nghĩa: 想像がつかない.",
+          "vd": "彼が何を考えているのか、見当がつかない。",
+          "vdDoc": "かれがなにをかんがえているのか、けんとうがつかない。",
+          "vdV": "Tôi không đoán nổi anh ấy đang nghĩ gì."
+        }
+      ]
+    },
+    {
+      "ai": "S",
+      "t": "心配いりませんよ。テントを立てて、提灯を飾って、あとは盆踊りの櫓を組むくらいです。",
+      "doc": "しんぱいいりませんよ。テントをたてて、ちょうちんをかざって、あとはぼんおどりのやぐらをくむくらいです。",
+      "v": "Đừng lo. Dựng lều, treo đèn lồng, rồi dựng cái giàn yagura cho điệu múa Bon nữa là xong."
+    },
+    {
+      "ai": "T",
+      "t": "櫓……？",
+      "doc": "やぐら……？",
+      "v": "Yagura…?"
+    },
+    {
+      "ai": "S",
+      "t": "真ん中に立てる、高い台のことです。その周りを、みんなで輪になって踊るんですよ。",
+      "doc": "まんなかにたてる、たかいだいのことです。そのまわりを、みんなでわになっておどるんですよ。",
+      "v": "Là cái đài cao dựng ở giữa. Mọi người xếp thành vòng tròn múa quanh nó."
+    },
+    {
+      "ai": "H",
+      "t": "あら、会長さん、もういらしてたの。トアンさん、引き受けてくれたのね。",
+      "doc": "あら、かいちょうさん、もういらしてたの。トアンさん、ひきうけてくれたのね。",
+      "v": "Ơ, bác hội trưởng đến rồi à. Toàn nhận lời giúp rồi đấy nhỉ."
+    },
+    {
+      "ai": "T",
+      "t": "はい。私にできることがあれば、と思いまして。",
+      "doc": "はい。わたしにできることがあれば、とおもいまして。",
+      "v": "Vâng. Cháu nghĩ nếu có việc gì cháu làm được thì…",
+      "khac": [
+        {
+          "kieu": "tự nhiên hơn",
+          "t": "はい。少しでも役に立てればと思って。",
+          "doc": "はい。すこしでもやくにたてればとおもって。",
+          "v": "Vâng. Cháu nghĩ giúp được chút nào hay chút nấy."
+        }
+      ]
+    },
+    {
+      "ai": "H",
+      "t": "そういえば、去年の集まりで、トアンさんが持ってきてくれたバインミー、大人気だったじゃない？お祭りで屋台を出してみたら？",
+      "doc": "そういえば、きょねんのあつまりで、トアンさんがもってきてくれたバインミー、だいにんきだったじゃない？おまつりでやたいをだしてみたら？",
+      "v": "À mà này, ở buổi gặp mặt năm ngoái, bánh mì Việt Nam cháu mang đến được khen nức nở còn gì? Cháu thử mở một quầy hàng ở lễ hội xem?"
+    },
+    {
+      "ai": "T",
+      "t": "えっ、私がですか。でも、外国の食べ物を出してもいいものなんでしょうか。",
+      "doc": "えっ、わたしがですか。でも、がいこくのたべものをだしてもいいものなんでしょうか。",
+      "v": "Hả, cháu ạ? Nhưng bán đồ ăn nước ngoài thì có được không ạ?"
+    },
+    {
+      "ai": "S",
+      "t": "いいですねえ！最近は、子どもに限らず、お年寄りも新しいものを楽しみにしているんですよ。",
+      "doc": "いいですねえ！さいきんは、こどもにかぎらず、おとしよりもあたらしいものをたのしみにしているんですよ。",
+      "v": "Hay quá! Dạo này không chỉ trẻ con mà cả người già cũng háo hức với những thứ mới mẻ đấy.",
+      "np": [
+        {
+          "mau": "N に限らず",
+          "giai": "Không chỉ N (mà cả những cái khác nữa). Thường đi với も ở vế sau: 子どもに限らず、お年寄りも.",
+          "vd": "この店は、週末に限らず、平日も混んでいる。",
+          "vdDoc": "このみせは、しゅうまつにかぎらず、へいじつもこんでいる。",
+          "vdV": "Quán này không chỉ cuối tuần mà ngày thường cũng đông."
+        }
+      ]
+    },
+    {
+      "ai": "S",
+      "t": "ただ、食べ物の屋台は保健所への届け出が必要なので、それは私の方で手続きしておきます。",
+      "doc": "ただ、たべもののやたいはほけんじょへのとどけでがひつようなので、それはわたしのほうでてつづきしておきます。",
+      "v": "Có điều quầy đồ ăn phải khai báo với trung tâm y tế, phần thủ tục đó để tôi lo."
+    },
+    {
+      "ai": "T",
+      "t": "ありがとうございます。それなら、材料の準備と、当日の売り場は私が担当します。",
+      "doc": "ありがとうございます。それなら、ざいりょうのじゅんびと、とうじつのうりばはわたしがたんとうします。",
+      "v": "Cháu cảm ơn bác. Vậy phần chuẩn bị nguyên liệu và đứng quầy hôm đó để cháu phụ trách."
+    },
+    {
+      "ai": "H",
+      "t": "じゃあ、私も手伝うわよ。野菜を切るくらいなら、できるから。",
+      "doc": "じゃあ、わたしもてつだうわよ。やさいをきるくらいなら、できるから。",
+      "v": "Vậy bác cũng giúp nhé. Thái rau thôi thì bác làm được."
+    },
+    {
+      "ai": "T",
+      "t": "本当ですか。心強いです。",
+      "doc": "ほんとうですか。こころづよいです。",
+      "v": "Thật ạ? Có bác cháu yên tâm hẳn."
+    },
+    {
+      "ai": "S",
+      "t": "ところで、トアンさん、町内会にはまだ入っていませんでしたよね。会費は月三百円で、ゴミ置き場の掃除当番が年に二回あります。",
+      "doc": "ところで、トアンさん、ちょうないかいにはまだはいっていませんでしたよね。かいひはつきさんびゃくえんで、ごみおきばのそうじとうばんがねんににかいあります。",
+      "v": "À mà cậu Toàn, cậu vẫn chưa vào hội khu phố nhỉ. Hội phí 300 yên một tháng, mỗi năm có hai lần đến lượt quét dọn chỗ để rác."
+    },
+    {
+      "ai": "T",
+      "t": "正直に言うと、言葉もまだまだなので、入っても迷惑をかけるんじゃないかと思って、ためらっていたんです。",
+      "doc": "しょうじきにいうと、ことばもまだまだなので、はいってもめいわくをかけるんじゃないかとおもって、ためらっていたんです。",
+      "v": "Nói thật, tiếng Nhật cháu còn kém, cháu sợ vào rồi lại làm phiền mọi người nên cứ chần chừ mãi.",
+      "np": [
+        {
+          "mau": "〜んじゃないかと思う",
+          "giai": "Lo rằng / đoán rằng “có khi là …”: nói ra một nỗi lo mà không khẳng định chắc. Lịch sự hơn: 〜のではないかと思います.",
+          "vd": "このままだと、間に合わないんじゃないかと思います。",
+          "vdDoc": "このままだと、まにあわないんじゃないかとおもいます。",
+          "vdV": "Cứ thế này thì tôi e là sẽ không kịp."
+        }
+      ]
+    },
+    {
+      "ai": "S",
+      "t": "迷惑だなんて、とんでもない。言葉が完璧じゃなくても、顔を知っている人が近くにいるだけで、いざという時に助け合えるんです。",
+      "doc": "めいわくだなんて、とんでもない。ことばがかんぺきじゃなくても、かおをしっているひとがちかくにいるだけで、いざというときにたすけあえるんです。",
+      "v": "Phiền gì mà phiền, không có chuyện đó đâu. Tiếng Nhật không hoàn hảo cũng được, chỉ cần quanh mình có người quen mặt là lúc hữu sự đã giúp được nhau rồi.",
+      "np": [
+        {
+          "mau": "〜なんて、とんでもない",
+          "giai": "なんて nhắc lại lời người kia với ý “chuyện … ấy à” rồi phủ nhận mạnh bằng とんでもない (không có chuyện đó). Cách gạt đi sự khiêm tốn của người khác một cách ấm áp.",
+          "vd": "お礼なんて、とんでもないです。",
+          "vdDoc": "おれいなんて、とんでもないです。",
+          "vdV": "Cảm ơn gì đâu, không có gì đâu ạ."
+        }
+      ]
+    },
+    {
+      "ai": "H",
+      "t": "そうよ。地震の時なんか、隣に誰が住んでいるか知っているかどうかで、全然違うんだから。",
+      "doc": "そうよ。じしんのときなんか、となりにだれがすんでいるかしっているかどうかで、ぜんぜんちがうんだから。",
+      "v": "Đúng đấy. Như lúc động đất chẳng hạn, có biết nhà bên là ai hay không là khác nhau một trời một vực."
+    },
+    {
+      "ai": "T",
+      "t": "わかりました。それでは、入会させていただきます。よろしくお願いいたします。",
+      "doc": "わかりました。それでは、にゅうかいさせていただきます。よろしくおねがいいたします。",
+      "v": "Cháu hiểu rồi. Vậy cháu xin phép được vào hội. Mong các bác giúp đỡ.",
+      "khac": [
+        {
+          "kieu": "tự nhiên hơn",
+          "t": "わかりました。じゃあ、ぜひ入らせてください。",
+          "doc": "わかりました。じゃあ、ぜひはいらせてください。",
+          "v": "Cháu hiểu rồi. Vậy cho cháu vào hội với nhé.",
+          "ghiChu": "Vẫn lịch sự nhưng ấm áp, gần gũi hơn."
+        }
+      ]
+    },
+    {
+      "ai": "S",
+      "t": "こちらこそ。では、土曜の朝八時、公民館の前でお待ちしています。軍手だけ持ってきてください。",
+      "doc": "こちらこそ。では、どようのあさはちじ、こうみんかんのまえでおまちしています。ぐんてだけもってきてください。",
+      "v": "Tôi mới phải nói vậy. Thế 8 giờ sáng thứ Bảy, tôi chờ cậu trước nhà văn hoá. Cậu chỉ cần mang găng tay lao động."
+    },
+    {
+      "ai": "H",
+      "t": "バインミー、二時間で売り切れちゃったわね！",
+      "doc": "バインミー、にじかんでうりきれちゃったわね！",
+      "v": "Bánh mì bán hết veo trong hai tiếng luôn nhỉ!"
+    },
+    {
+      "ai": "T",
+      "t": "皆さんが「おいしい」と言ってくださるのを聞いて、やっと、この町の一員になれた気がします。",
+      "doc": "みなさんが「おいしい」といってくださるのをきいて、やっと、このまちのいちいんになれたきがします。",
+      "v": "Nghe mọi người khen “ngon quá”, cháu thấy như cuối cùng mình đã thành một người của khu phố này."
+    },
+    {
+      "ai": "S",
+      "t": "来年は、盆踊りの輪にも入ってもらいますよ。",
+      "doc": "らいねんは、ぼんおどりのわにもはいってもらいますよ。",
+      "v": "Sang năm thì cậu phải vào vòng múa Bon nữa đấy nhé."
+    },
+    {
+      "ai": "T",
+      "t": "はい、それまでに踊りを覚えておきます。……手伝いに行ったつもりが、私の方がたくさんもらってしまいました。",
+      "doc": "はい、それまでにおどりをおぼえておきます。……てつだいにいったつもりが、わたしのほうがたくさんもらってしまいました。",
+      "v": "Vâng, từ giờ đến đó cháu sẽ tập thuộc điệu múa. …Cứ tưởng mình đi giúp, hoá ra mình mới là người nhận được nhiều hơn.",
+      "np": [
+        {
+          "mau": "〜つもりが",
+          "giai": "Định là … / tưởng là … vậy mà kết quả lại khác. つもり (ý định) + が (nhưng).",
+          "vd": "少しだけ休むつもりが、朝まで寝てしまった。",
+          "vdDoc": "すこしだけやすむつもりが、あさまでねてしまった。",
+          "vdV": "Định nghỉ một chút thôi mà ngủ một mạch đến sáng."
+        }
+      ]
+    }
+  ],
+  "tuVung": [
+    {
+      "chu": "回覧板",
+      "doc": "かいらんばん",
+      "nghia": "bảng thông báo chuyền lần lượt từng nhà trong khu phố",
+      "vd": "回覧板をお隣に回しました。"
+    },
+    {
+      "chu": "町内会",
+      "doc": "ちょうないかい",
+      "nghia": "hội khu phố (tổ dân phố)",
+      "vd": "町内会の集まりに出ました。"
+    },
+    {
+      "chu": "人手",
+      "doc": "ひとで",
+      "nghia": "nhân lực, người làm",
+      "vd": "引っ越しの人手が足りない。"
+    },
+    {
+      "chu": "見当がつかない",
+      "doc": "けんとうがつかない",
+      "nghia": "không đoán ra, không hình dung được",
+      "vd": "値段の見当がつかない。"
+    },
+    {
+      "chu": "提灯",
+      "doc": "ちょうちん",
+      "nghia": "đèn lồng (Nhật)",
+      "vd": "お祭りの夜は提灯がきれいだ。"
+    },
+    {
+      "chu": "盆踊り",
+      "doc": "ぼんおどり",
+      "nghia": "điệu múa Bon (múa tập thể mùa hè)",
+      "vd": "毎年、盆踊りに参加しています。"
+    },
+    {
+      "chu": "櫓",
+      "doc": "やぐら",
+      "nghia": "giàn/đài cao dựng giữa sân lễ hội",
+      "vd": "櫓の上で太鼓をたたく。"
+    },
+    {
+      "chu": "屋台",
+      "doc": "やたい",
+      "nghia": "quầy hàng (ở lễ hội, ven đường)",
+      "vd": "屋台でたこ焼きを買った。"
+    },
+    {
+      "chu": "保健所",
+      "doc": "ほけんじょ",
+      "nghia": "trung tâm y tế công cộng (quản lý vệ sinh)",
+      "vd": "保健所に相談しました。"
+    },
+    {
+      "chu": "当番",
+      "doc": "とうばん",
+      "nghia": "phiên trực, lượt làm",
+      "vd": "今週は私が掃除当番です。"
+    },
+    {
+      "chu": "軍手",
+      "doc": "ぐんて",
+      "nghia": "găng tay vải lao động",
+      "vd": "軍手をして荷物を運ぶ。"
+    },
+    {
+      "chu": "一員",
+      "doc": "いちいん",
+      "nghia": "một thành viên",
+      "vd": "チームの一員として頑張ります。"
+    }
+  ],
+  "yNghia": "Ở một nơi xa nhà, “hàng xóm” không tự nhiên mà có — nó bắt đầu từ việc dám nhận một lời nhờ nhỏ, dù tiếng còn vụng. Đến khi hữu sự, người quen mặt là tấm lưới an toàn đầu tiên; và thường thì người đi giúp lại là người nhận được nhiều nhất.",
+  "meo": [
+    "Nhận lời có điều kiện: 「〜でしたら、〜なら行けます」 — vừa nhiệt tình vừa rõ ràng giới hạn của mình.",
+    "Không thể từ chối vì tình nghĩa: 〜わけにはいかない; không có khả năng: 〜できない. Hai câu khác nhau xa.",
+    "Nghe kính ngữ của người lớn: ご覧になりました？ = 見ましたか; いらしてた = 来ていた.",
+    "回覧板: đọc xong đóng dấu／ký rồi chuyền sang nhà kế tiếp, đừng giữ lâu — cả khu phố đang chờ."
+  ],
+  "cauHoi": [
+    {
+      "hoi": "Đọc xong 回覧板 thì phải làm gì?",
+      "chon": [
+        "Mang trả cho hội trưởng",
+        "Đóng dấu hoặc ký rồi bỏ vào hòm thư nhà bên cạnh",
+        "Giữ lại ở nhà",
+        "Dán lên cửa"
+      ],
+      "dung": 1,
+      "giai": "「ハンコかサインをして、お隣の田中さんのポストに入れてくれればいいの」."
+    },
+    {
+      "hoi": "Vì sao năm nay thiếu người giúp lễ hội?",
+      "chon": [
+        "Lễ hội to hơn mọi năm",
+        "Người trẻ mỗi năm một ít đi",
+        "Hội trưởng bị ốm",
+        "Trời quá nóng"
+      ],
+      "dung": 1,
+      "giai": "「若い人が年々減ってきたせいで」."
+    },
+    {
+      "hoi": "Toàn nhận giúp thế nào?",
+      "chon": [
+        "Cả ngày thứ Bảy",
+        "Các buổi tối trong tuần",
+        "Sáng thứ Bảy từ 8 giờ đến trưa",
+        "Chỉ ngày lễ hội"
+      ],
+      "dung": 2,
+      "giai": "「土曜日の朝でしたら、八時から昼までなら行けます」."
+    },
+    {
+      "hoi": "Vì sao Toàn chần chừ chưa vào hội khu phố?",
+      "chon": [
+        "Hội phí quá đắt",
+        "Sợ tiếng còn kém sẽ làm phiền mọi người",
+        "Không có thời gian",
+        "Không biết hội ở đâu"
+      ],
+      "dung": 1,
+      "giai": "「入っても迷惑をかけるんじゃないかと思って、ためらっていたんです」."
+    },
+    {
+      "hoi": "「断るわけにはいきません」 có nghĩa gì?",
+      "chon": [
+        "Tôi không biết cách từ chối",
+        "Tôi không thể từ chối (vì tình nghĩa)",
+        "Tôi đã từ chối rồi",
+        "Tôi muốn từ chối"
+      ],
+      "dung": 1,
+      "giai": "〜わけにはいかない = không thể làm vậy vì lẽ thường, tình nghĩa."
+    }
+  ]
+}

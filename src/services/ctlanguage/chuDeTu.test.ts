@@ -125,3 +125,14 @@ test('NỘI DUNG: ảnh trong tệp đều có trong danh mục Fluent', () => {
   assert.deepEqual(kiemDanhMuc(k.danhMuc, ten), []);
   for (const nn of NN_CDT) for (const t of k.tep[nn].values() as Iterable<TepChuDe>) for (const x of t.tu) if (x.anh) assert.ok(ten.has(x.anh), `${nn}/${t.ma}: ${x.anh}`);
 });
+
+test('tuDeChoi: từ cho trò chơi chỉ tới cấp trung cao, không có từ C1/C2 · N1 · HSK5–6', async () => {
+  const { tuDeChoi, chuDeCua } = await import('./chuDeTu.js');
+  for (const nn of ['en', 'ja', 'zh'] as const) {
+    const ds = new Set(tuDeChoi(nn));
+    assert.ok(ds.size > 1500, `${nn}: ${ds.size}`);
+    const kho = chuDeCua(nn).flatMap(({ tep }) => tep.tu);
+    const cao = kho.filter((t) => ['C1', 'C2', 'N1', 'HSK5', 'HSK6'].includes(t.cap ?? '') && !kho.some((u) => u !== t && u.chu === t.chu && !['C1', 'C2', 'N1', 'HSK5', 'HSK6'].includes(u.cap ?? '')));
+    for (const t of cao.slice(0, 50)) assert.ok(!ds.has(nn === 'en' ? t.chu.toLowerCase() : t.chu), `${nn}: ${t.chu} (${t.cap})`);
+  }
+});

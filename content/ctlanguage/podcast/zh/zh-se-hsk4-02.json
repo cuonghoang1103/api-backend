@@ -1,0 +1,238 @@
+{
+  "id": "zh-se-hsk4-02",
+  "nn": "zh",
+  "danhMuc": "phan-mem",
+  "cap": "HSK4",
+  "so": 2,
+  "tieuDe": "需求评审：先问清楚再写代码",
+  "tieuDeViet": "Duyệt yêu cầu: hỏi rõ rồi mới viết code",
+  "moTa": "Quản lý sản phẩm Tôn trình bày yêu cầu \"xuất đơn hàng ra Excel\". Minh hỏi lại bốn điều: xuất những trường nào, tối đa bao nhiêu dòng, ai được xuất, và tiêu chí nghiệm thu là gì — mỗi câu hỏi tiết kiệm cả tuần sửa code về sau.",
+  "chuDe": "Duyệt yêu cầu",
+  "bieuTuong": "checklist",
+  "nguoi": [
+    { "ma": "S", "ten": "Chị Tôn", "giong": "zh-nu", "vai": "quản lý sản phẩm (PM)" },
+    { "ma": "M", "ten": "Minh", "giong": "zh-nam", "vai": "lập trình viên back-end" }
+  ],
+  "loi": [
+    {
+      "ai": "S",
+      "t": "大家好，今天评审的是“订单导出”这个需求。原型图我已经发到群里了。",
+      "doc": "Dàjiā hǎo, jīntiān píngshěn de shì “dìngdān dǎochū” zhège xūqiú. Yuánxíng tú wǒ yǐjīng fā dào qún li le.",
+      "v": "Chào mọi người, hôm nay chúng ta duyệt yêu cầu \"xuất đơn hàng\". Bản prototype tôi đã gửi vào nhóm chat rồi."
+    },
+    {
+      "ai": "S",
+      "t": "简单来说，就是让商家可以把订单导出成Excel表格。",
+      "doc": "Jiǎndān lái shuō, jiù shì ràng shāngjiā kěyǐ bǎ dìngdān dǎochū chéng Excel biǎogé.",
+      "v": "Nói đơn giản, là cho phép chủ cửa hàng xuất đơn hàng thành bảng Excel.",
+      "np": [
+        { "mau": "简单来说，…", "giai": "Mở đầu câu tóm tắt: \"nói đơn giản thì…\". Cùng họ: 总的来说 (nói chung), 具体来说 (nói cụ thể).", "vd": "简单来说，这个功能就是自动备份。", "vdDoc": "Jiǎndān lái shuō, zhège gōngnéng jiù shì zìdòng bèifèn.", "vdV": "Nói đơn giản, chức năng này là sao lưu tự động." },
+        { "mau": "把 A + V + 成 + B", "giai": "Biến/chuyển A thành B: 导出成 (xuất thành), 翻译成 (dịch sang), 改成 (sửa thành).", "vd": "请把这段话翻译成英文。", "vdDoc": "Qǐng bǎ zhè duàn huà fānyì chéng Yīngwén.", "vdV": "Hãy dịch đoạn này sang tiếng Anh." }
+      ]
+    },
+    {
+      "ai": "M",
+      "t": "孙经理，我想先确认几个问题，可以吗？",
+      "doc": "Sūn jīnglǐ, wǒ xiǎng xiān quèrèn jǐ ge wèntí, kěyǐ ma?",
+      "v": "Chị Tôn, em muốn xác nhận trước mấy vấn đề, được không ạ?",
+      "khac": [
+        { "kieu": "chuyên nghiệp", "t": "我这边有几个细节想跟您确认一下。", "doc": "Wǒ zhèbiān yǒu jǐ ge xìjié xiǎng gēn nín quèrèn yíxià.", "v": "Bên em có vài chi tiết muốn xác nhận lại với chị.", "ghiChu": "câu mở đầu đặt câu hỏi trong buổi họp" },
+        { "kieu": "văn nói", "t": "我先问几个问题哈。", "doc": "Wǒ xiān wèn jǐ ge wèntí ha.", "v": "Em hỏi mấy câu trước nhé.", "ghiChu": "哈 cuối câu làm giọng nhẹ, thân thiện; dùng khi đã quen" }
+      ]
+    },
+    {
+      "ai": "S",
+      "t": "当然，有问题尽管问。",
+      "doc": "Dāngrán, yǒu wèntí jǐnguǎn wèn.",
+      "v": "Tất nhiên, có gì cứ hỏi.",
+      "np": [
+        { "mau": "尽管 + V", "giai": "尽管 (jǐnguǎn) đứng trước động từ = cứ việc, đừng ngại. Khác 尽管…但是… (mặc dù… nhưng…).", "vd": "需要什么尽管说。", "vdDoc": "Xūyào shénme jǐnguǎn shuō.", "vdV": "Cần gì cứ nói." }
+      ]
+    },
+    {
+      "ai": "M",
+      "t": "第一，导出的时候需要哪些字段？是页面上看到的所有字段，还是只要一部分？",
+      "doc": "Dì yī, dǎochū de shíhou xūyào nǎxiē zìduàn? Shì yèmiàn shang kàndào de suǒyǒu zìduàn, háishi zhǐ yào yí bùfen?",
+      "v": "Thứ nhất, khi xuất cần những trường nào? Là tất cả các trường thấy trên trang, hay chỉ cần một phần?"
+    },
+    {
+      "ai": "S",
+      "t": "订单号、下单时间、金额和状态，这几个肯定要。手机号码要不要，我得再问问。",
+      "doc": "Dìngdānhào, xiàdān shíjiān, jīn'é hé zhuàngtài, zhè jǐ ge kěndìng yào. Shǒujī hàomǎ yào bu yào, wǒ děi zài wènwen.",
+      "v": "Mã đơn, thời gian đặt, số tiền và trạng thái — mấy cái này chắc chắn cần. Có cần số điện thoại không thì tôi phải hỏi thêm."
+    },
+    {
+      "ai": "M",
+      "t": "手机号码属于用户的个人信息，如果要导出，可能需要考虑权限和安全的问题。",
+      "doc": "Shǒujī hàomǎ shǔyú yònghù de gèrén xìnxī, rúguǒ yào dǎochū, kěnéng xūyào kǎolǜ quánxiàn hé ānquán de wèntí.",
+      "v": "Số điện thoại thuộc thông tin cá nhân của người dùng, nếu xuất ra thì có thể phải tính tới chuyện phân quyền và bảo mật.",
+      "khac": [
+        { "kieu": "chuyên nghiệp", "t": "手机号这块可能涉及隐私，建议先跟法务确认一下。", "doc": "Shǒujī hào zhè kuài kěnéng shèjí yǐnsī, jiànyì xiān gēn fǎwù quèrèn yíxià.", "v": "Phần số điện thoại có thể liên quan đến quyền riêng tư, đề nghị xác nhận với bộ phận pháp chế trước.", "ghiChu": "这块 = mảng/phần này, cách nói rất hay gặp ở công ty" }
+      ],
+      "np": [
+        { "mau": "A 属于 B", "giai": "属于 = thuộc về, thuộc loại. Dùng khi phân loại hoặc nói quyền sở hữu.", "vd": "这个问题属于前端。", "vdDoc": "Zhège wèntí shǔyú qiánduān.", "vdV": "Vấn đề này thuộc về front-end." }
+      ]
+    },
+    {
+      "ai": "S",
+      "t": "有道理，这一点我会记下来。",
+      "doc": "Yǒu dàolǐ, zhè yì diǎn wǒ huì jì xiàlai.",
+      "v": "Có lý, điểm này tôi sẽ ghi lại."
+    },
+    {
+      "ai": "M",
+      "t": "第二，一次最多可以导出多少条订单？有的商家一个月可能有几十万条。",
+      "doc": "Dì èr, yí cì zuìduō kěyǐ dǎochū duōshao tiáo dìngdān? Yǒu de shāngjiā yí ge yuè kěnéng yǒu jǐ shí wàn tiáo.",
+      "v": "Thứ hai, mỗi lần tối đa được xuất bao nhiêu đơn? Có cửa hàng một tháng có thể có vài trăm nghìn đơn."
+    },
+    {
+      "ai": "S",
+      "t": "这个我还真没想过。数据量很大的话，会有什么问题吗？",
+      "doc": "Zhège wǒ hái zhēn méi xiǎng guo. Shùjù liàng hěn dà de huà, huì yǒu shénme wèntí ma?",
+      "v": "Cái này tôi thật sự chưa nghĩ tới. Nếu dữ liệu nhiều thì sẽ có vấn đề gì à?",
+      "np": [
+        { "mau": "…的话，…", "giai": "Đặt sau vế điều kiện = \"nếu… thì\". Có thể dùng một mình hoặc kèm 如果/要是 ở đầu.", "vd": "明天下雨的话，我们就不去了。", "vdDoc": "Míngtiān xià yǔ de huà, wǒmen jiù bú qù le.", "vdV": "Nếu mai mưa thì chúng ta không đi nữa." }
+      ]
+    },
+    {
+      "ai": "M",
+      "t": "如果一下子导出太多，页面可能会卡住，服务器的压力也会很大。",
+      "doc": "Rúguǒ yíxiàzi dǎochū tài duō, yèmiàn kěnéng huì kǎ zhù, fúwùqì de yālì yě huì hěn dà.",
+      "v": "Nếu một lúc xuất quá nhiều, trang có thể bị treo, áp lực lên máy chủ cũng sẽ rất lớn."
+    },
+    {
+      "ai": "M",
+      "t": "我建议按时间筛选，一次最多导出三个月的数据，在后台生成，好了以后再通知用户下载。",
+      "doc": "Wǒ jiànyì àn shíjiān shāixuǎn, yí cì zuìduō dǎochū sān ge yuè de shùjù, zài hòutái shēngchéng, hǎo le yǐhòu zài tōngzhī yònghù xiàzǎi.",
+      "v": "Em đề nghị lọc theo thời gian, mỗi lần xuất tối đa dữ liệu ba tháng, tạo file ở chế độ nền, xong rồi mới báo người dùng tải về.",
+      "khac": [
+        { "kieu": "mềm mỏng", "t": "您看这样行不行：一次最多导出三个月，在后台生成，好了再通知用户。", "doc": "Nín kàn zhèyàng xíng bu xíng: yí cì zuìduō dǎochū sān ge yuè, zài hòutái shēngchéng, hǎo le zài tōngzhī yònghù.", "v": "Chị xem thế này có được không: mỗi lần tối đa ba tháng, tạo ở nền, xong thì báo người dùng.", "ghiChu": "您看…行不行 = đưa đề xuất nhưng để người kia quyết" }
+      ]
+    },
+    {
+      "ai": "S",
+      "t": "这个办法不错，用户体验也不会太差。",
+      "doc": "Zhège bànfǎ búcuò, yònghù tǐyàn yě bú huì tài chà.",
+      "v": "Cách này hay đấy, trải nghiệm người dùng cũng không tệ lắm."
+    },
+    {
+      "ai": "M",
+      "t": "第三，谁可以导出？是所有员工都能导出，还是只有店长可以？",
+      "doc": "Dì sān, shéi kěyǐ dǎochū? Shì suǒyǒu yuángōng dōu néng dǎochū, háishi zhǐyǒu diànzhǎng kěyǐ?",
+      "v": "Thứ ba, ai được phép xuất? Tất cả nhân viên đều xuất được, hay chỉ cửa hàng trưởng?"
+    },
+    {
+      "ai": "S",
+      "t": "我原来的想法是大家都能用，但是听你这么一说，还是只给店长比较安全。",
+      "doc": "Wǒ yuánlái de xiǎngfǎ shì dàjiā dōu néng yòng, dànshì tīng nǐ zhème yì shuō, háishi zhǐ gěi diànzhǎng bǐjiào ānquán.",
+      "v": "Ý ban đầu của tôi là ai cũng dùng được, nhưng nghe cậu nói vậy thì chỉ cho cửa hàng trưởng vẫn an toàn hơn.",
+      "np": [
+        { "mau": "听你这么一说", "giai": "\"Nghe bạn nói vậy (thì tôi thấy/hiểu ra)…\" — dùng khi ý kiến của người khác làm mình đổi suy nghĩ.", "vd": "听你这么一说，我也觉得有问题。", "vdDoc": "Tīng nǐ zhème yì shuō, wǒ yě juéde yǒu wèntí.", "vdV": "Nghe bạn nói vậy, tôi cũng thấy có vấn đề." },
+        { "mau": "还是 + A + 比较 + adj", "giai": "还是 ở câu trần thuật = \"vẫn là… thì hơn\", dùng sau khi cân nhắc các lựa chọn.", "vd": "太晚了，还是打车比较快。", "vdDoc": "Tài wǎn le, háishi dǎchē bǐjiào kuài.", "vdV": "Muộn quá rồi, đi taxi vẫn nhanh hơn." }
+      ]
+    },
+    {
+      "ai": "M",
+      "t": "最后一个问题：这个需求的验收标准是什么？测试同事要按什么来测？",
+      "doc": "Zuìhòu yí ge wèntí: zhège xūqiú de yànshōu biāozhǔn shì shénme? Cèshì tóngshì yào àn shénme lái cè?",
+      "v": "Câu cuối: tiêu chí nghiệm thu của yêu cầu này là gì? Đồng nghiệp kiểm thử sẽ dựa vào đâu để test?"
+    },
+    {
+      "ai": "S",
+      "t": "你提醒得对。我会在需求文档里补充验收标准，写清楚每种情况应该是什么结果。",
+      "doc": "Nǐ tíxǐng de duì. Wǒ huì zài xūqiú wéndàng li bǔchōng yànshōu biāozhǔn, xiě qīngchu měi zhǒng qíngkuàng yīnggāi shì shénme jiéguǒ.",
+      "v": "Cậu nhắc đúng đấy. Tôi sẽ bổ sung tiêu chí nghiệm thu vào tài liệu yêu cầu, ghi rõ mỗi trường hợp phải ra kết quả gì."
+    },
+    {
+      "ai": "S",
+      "t": "不好意思，今天问题这么多，看来这个需求我考虑得还不够全面。",
+      "doc": "Bù hǎoyìsi, jīntiān wèntí zhème duō, kànlái zhège xūqiú wǒ kǎolǜ de hái bú gòu quánmiàn.",
+      "v": "Ngại quá, hôm nay nhiều câu hỏi thế này, xem ra yêu cầu này tôi cân nhắc vẫn chưa đủ toàn diện."
+    },
+    {
+      "ai": "M",
+      "t": "您别这么说。评审会本来就是为了把问题找出来。",
+      "doc": "Nín bié zhème shuō. Píngshěn huì běnlái jiù shì wèile bǎ wèntí zhǎo chūlai.",
+      "v": "Chị đừng nói vậy. Buổi duyệt vốn dĩ là để tìm ra vấn đề mà.",
+      "khac": [
+        { "kieu": "mềm mỏng", "t": "没关系，现在发现问题，总比上线以后发现好。", "doc": "Méi guānxi, xiànzài fāxiàn wèntí, zǒng bǐ shàngxiàn yǐhòu fāxiàn hǎo.", "v": "Không sao đâu, phát hiện vấn đề bây giờ dù sao cũng tốt hơn là sau khi lên bản mới phát hiện.", "ghiChu": "an ủi đồng nghiệp mà vẫn nói được ý chính" }
+      ],
+      "np": [
+        { "mau": "本来就是…", "giai": "本来就 = vốn dĩ đã là (lẽ đương nhiên như vậy), dùng để trấn an hoặc phản bác nhẹ.", "vd": "学语言本来就需要时间。", "vdDoc": "Xué yǔyán běnlái jiù xūyào shíjiān.", "vdV": "Học ngôn ngữ vốn dĩ cần thời gian." }
+      ]
+    },
+    {
+      "ai": "M",
+      "t": "现在改需求只要改几行字，等代码写完了再改，可能要多花一个星期。",
+      "doc": "Xiànzài gǎi xūqiú zhǐ yào gǎi jǐ háng zì, děng dàimǎ xiě wán le zài gǎi, kěnéng yào duō huā yí ge xīngqī.",
+      "v": "Bây giờ sửa yêu cầu chỉ cần sửa vài dòng chữ, đợi code viết xong mới sửa thì có khi phải tốn thêm một tuần.",
+      "np": [
+        { "mau": "等 A 再 B", "giai": "Đợi A xảy ra rồi mới làm B.", "vd": "等他回来再说吧。", "vdDoc": "Děng tā huílai zài shuō ba.", "vdV": "Đợi anh ấy về rồi hẵng nói." },
+        { "mau": "多 + V + số lượng", "giai": "多 đặt TRƯỚC động từ = làm thêm/nhiều hơn dự kiến: 多花一个星期 (tốn thêm một tuần), 多睡一会儿.", "vd": "今天我多做了两个小时。", "vdDoc": "Jīntiān wǒ duō zuò le liǎng ge xiǎoshí.", "vdV": "Hôm nay tôi làm thêm hai tiếng." }
+      ]
+    },
+    {
+      "ai": "S",
+      "t": "说得对。那我下周二之前把文档改好，再开一次短会确认，怎么样？",
+      "doc": "Shuō de duì. Nà wǒ xià zhōu'èr zhīqián bǎ wéndàng gǎi hǎo, zài kāi yí cì duǎn huì quèrèn, zěnmeyàng?",
+      "v": "Nói đúng lắm. Vậy trước thứ Ba tuần sau tôi sửa xong tài liệu, rồi họp ngắn một buổi để chốt, thế nào?"
+    },
+    {
+      "ai": "M",
+      "t": "好的。文档更新以后，麻烦您在群里通知一下。",
+      "doc": "Hǎo de. Wéndàng gēngxīn yǐhòu, máfan nín zài qún li tōngzhī yíxià.",
+      "v": "Vâng. Tài liệu cập nhật xong, phiền chị báo một tiếng trong nhóm chat.",
+      "khac": [
+        { "kieu": "thân mật", "t": "文档改好了跟我说一声就行。", "doc": "Wéndàng gǎi hǎo le gēn wǒ shuō yì shēng jiù xíng.", "v": "Tài liệu sửa xong nói với em một tiếng là được.", "ghiChu": "với đồng nghiệp thân" }
+      ]
+    }
+  ],
+  "tuVung": [
+    { "chu": "需求", "doc": "xūqiú", "nghia": "yêu cầu (nghiệp vụ), requirement (nhu cầu)", "vd": "这个需求下周开发。" },
+    { "chu": "评审", "doc": "píngshěn", "nghia": "duyệt, thẩm định, review (bình thẩm)", "vd": "方案明天评审。" },
+    { "chu": "原型图", "doc": "yuánxíng tú", "nghia": "bản mẫu giao diện, prototype (nguyên hình đồ)", "vd": "原型图画好了吗？" },
+    { "chu": "字段", "doc": "zìduàn", "nghia": "trường dữ liệu, field (tự đoạn)", "vd": "这个表有十个字段。" },
+    { "chu": "权限", "doc": "quánxiàn", "nghia": "quyền hạn, phân quyền (quyền hạn)", "vd": "你没有这个权限。" },
+    { "chu": "筛选", "doc": "shāixuǎn", "nghia": "lọc, sàng lọc (si tuyển)", "vd": "可以按日期筛选。" },
+    { "chu": "后台", "doc": "hòutái", "nghia": "phía sau, chạy nền; trang quản trị (hậu đài)", "vd": "文件在后台生成。" },
+    { "chu": "服务器", "doc": "fúwùqì", "nghia": "máy chủ, server (phục vụ khí)", "vd": "服务器压力太大了。" },
+    { "chu": "用户体验", "doc": "yònghù tǐyàn", "nghia": "trải nghiệm người dùng, UX", "vd": "这样改用户体验更好。" },
+    { "chu": "验收标准", "doc": "yànshōu biāozhǔn", "nghia": "tiêu chí nghiệm thu, acceptance criteria (nghiệm thu tiêu chuẩn)", "vd": "验收标准要写清楚。" },
+    { "chu": "需求文档", "doc": "xūqiú wéndàng", "nghia": "tài liệu yêu cầu (PRD)", "vd": "需求文档在共享盘里。" },
+    { "chu": "导出", "doc": "dǎochū", "nghia": "xuất (dữ liệu), export (đạo xuất); 导入 = nhập", "vd": "把数据导出成表格。" }
+  ],
+  "yNghia": "Câu hỏi rẻ nhất là câu hỏi đặt ra trước khi viết dòng code đầu tiên. Hỏi rõ trường dữ liệu, giới hạn, quyền và tiêu chí nghiệm thu không phải làm khó PM — đó là cách giúp cả nhóm tránh làm lại. Đặt câu hỏi kèm đề xuất (\"您看这样行不行\") còn được quý hơn chỉ nêu vấn đề.",
+  "meo": [
+    "Đánh số khi hỏi trong họp: 第一… 第二… 第三… 最后一个问题… — người nghe dễ theo dõi và dễ ghi biên bản.",
+    "Đề xuất mềm: 我建议… / 您看这样行不行 / 是不是可以… — đưa giải pháp nhưng để người kia quyết.",
+    "听你这么一说 (nghe bạn nói vậy) + 还是…比较… là cách đổi ý rất tự nhiên mà không mất mặt.",
+    "Hai chữ 尽管: 尽管问 (cứ hỏi, jǐnguǎn + động từ) và 尽管…但是… (mặc dù… nhưng…).",
+    "Từ ghép hay gặp: 下单 (đặt hàng), 订单号 (mã đơn), 金额 jīn'é (số tiền) — dấu ' tách âm tiết bắt đầu bằng nguyên âm."
+  ],
+  "cauHoi": [
+    {
+      "hoi": "Vì sao Minh lưu ý về việc xuất số điện thoại?",
+      "chon": ["Vì số điện thoại quá dài", "Vì đó là thông tin cá nhân, liên quan phân quyền và bảo mật", "Vì Excel không hiển thị được số"],
+      "dung": 1,
+      "giai": "手机号码属于用户的个人信息…需要考虑权限和安全的问题。"
+    },
+    {
+      "hoi": "Minh đề xuất gì cho trường hợp dữ liệu quá lớn?",
+      "chon": ["Lọc theo thời gian, tối đa ba tháng, tạo file ở nền rồi báo người dùng", "Chỉ cho xuất 100 đơn", "Mua thêm máy chủ"],
+      "dung": 0,
+      "giai": "按时间筛选，一次最多导出三个月的数据，在后台生成…"
+    },
+    {
+      "hoi": "Cuối cùng chị Tôn quyết định ai được quyền xuất đơn?",
+      "chon": ["Tất cả nhân viên", "Chỉ bộ phận pháp chế", "Chỉ cửa hàng trưởng"],
+      "dung": 2,
+      "giai": "还是只给店长比较安全。"
+    },
+    {
+      "hoi": "Theo Minh, vì sao nên sửa yêu cầu ngay bây giờ?",
+      "chon": ["Vì PM sắp nghỉ phép", "Vì sửa bây giờ chỉ mất vài dòng chữ, để sau có thể mất thêm một tuần", "Vì khách hàng đang chờ"],
+      "dung": 1,
+      "giai": "现在改需求只要改几行字，等代码写完了再改，可能要多花一个星期。"
+    }
+  ]
+}

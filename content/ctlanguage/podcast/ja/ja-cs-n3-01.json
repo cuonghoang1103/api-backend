@@ -1,0 +1,479 @@
+{
+  "id": "ja-cs-n3-01",
+  "nn": "ja",
+  "danhMuc": "chia-se",
+  "cap": "N3",
+  "so": 1,
+  "tieuDe": "三回目のN2",
+  "tieuDeViet": "Lần thi N2 thứ ba",
+  "moTa": "Kỹ sư Duy kể chuyện hai lần trượt N2: lần đầu coi thường, lần hai học bốn tiếng mỗi đêm mà điểm còn thấp hơn. Lần thứ ba, anh đổi hẳn cách học — mỗi ngày một tiếng không nghỉ, và nhờ tiền bối người Nhật trò chuyện giờ ăn trưa. Học 〜せいで / 〜おかげで, 〜ば〜ほど, 〜わけではない, 〜たとたん, 〜からこそ.",
+  "chuDe": "Học tiếng, thi JLPT",
+  "bieuTuong": "graduationcap.fill",
+  "nguoi": [
+    {
+      "ma": "A",
+      "ten": "青木",
+      "giong": "ja-nu",
+      "vai": "người dẫn chương trình"
+    },
+    {
+      "ma": "D",
+      "ten": "ズイ",
+      "giong": "ja-nam",
+      "vai": "kỹ sư người Việt ở Nhật"
+    }
+  ],
+  "loi": [
+    {
+      "ai": "A",
+      "t": "「失敗のあとで」、今日のゲストは、エンジニアのズイさんです。ズイさんは日本語能力試験のN2に、三回目で合格されたそうですね。",
+      "doc": "「しっぱいのあとで」、きょうのゲストは、エンジニアのズイさんです。ズイさんはにほんごのうりょくしけんのエヌにに、さんかいめでごうかくされたそうですね。",
+      "v": "“Sau thất bại” — khách mời hôm nay là kỹ sư Duy. Nghe nói anh Duy đỗ N2 kỳ thi năng lực tiếng Nhật ở lần thứ ba?",
+      "np": [
+        {
+          "mau": "普通形 + そうです (truyền đạt)",
+          "giai": "Nghe nói là … — truyền lại thông tin mình nghe được. 合格された là tôn kính ngữ (dạng bị động) của 合格した.",
+          "vd": "田中さんは来月結婚するそうです。",
+          "vdDoc": "たなかさんはらいげつけっこんするそうです。",
+          "vdV": "Nghe nói anh Tanaka tháng sau cưới."
+        }
+      ]
+    },
+    {
+      "ai": "D",
+      "t": "はい。恥ずかしい話ですが、二回落ちました。",
+      "doc": "はい。はずかしいはなしですが、にかいおちました。",
+      "v": "Vâng. Nói ra thì ngại, nhưng tôi đã trượt hai lần.",
+      "khac": [
+        {
+          "kieu": "thân mật",
+          "t": "うん、実は二回落ちてるんだよね。",
+          "doc": "うん、じつはにかいおちてるんだよね。",
+          "v": "Ừ, thật ra mình trượt hai lần rồi.",
+          "ghiChu": "kể với bạn bè"
+        }
+      ]
+    },
+    {
+      "ai": "A",
+      "t": "一回目は、どんな感じだったんですか。",
+      "doc": "いちかいめは、どんなかんじだったんですか。",
+      "v": "Lần đầu thì thế nào ạ?"
+    },
+    {
+      "ai": "D",
+      "t": "一回目は、正直、なめていました。N3に一回で受かったので、N2もなんとかなるだろうと思っていたんです。",
+      "doc": "いちかいめは、しょうじき、なめていました。エヌさんにいっかいでうかったので、エヌにもなんとかなるだろうとおもっていたんです。",
+      "v": "Lần đầu, nói thật là tôi đã coi thường. Vì N3 tôi đỗ ngay lần đầu, nên nghĩ N2 chắc cũng xoay xở được.",
+      "np": [
+        {
+          "mau": "〜だろうと思う",
+          "giai": "Tôi đoán là chắc … (dự đoán của người nói, không chắc chắn lắm).",
+          "vd": "明日はたぶん晴れるだろうと思います。",
+          "vdDoc": "あしたはたぶんはれるだろうとおもいます。",
+          "vdV": "Tôi đoán mai chắc trời nắng."
+        }
+      ]
+    },
+    {
+      "ai": "D",
+      "t": "文法の本を一冊やっただけで、試験を受けてしまったんです。",
+      "doc": "ぶんぽうのほんをいっさつやっただけで、しけんをうけてしまったんです。",
+      "v": "Tôi chỉ học xong một cuốn ngữ pháp là đi thi luôn.",
+      "np": [
+        {
+          "mau": "V-ただけで",
+          "giai": "Chỉ (mới) làm V thôi mà đã … (mức độ rất ít).",
+          "vd": "少し歩いただけで、疲れてしまった。",
+          "vdDoc": "すこしあるいただけで、つかれてしまった。",
+          "vdV": "Mới đi bộ một chút mà đã mệt."
+        }
+      ]
+    },
+    {
+      "ai": "D",
+      "t": "結果は八十五点。合格点まで、あと五点でした。",
+      "doc": "けっかははちじゅうごてん。ごうかくてんまで、あとごてんでした。",
+      "v": "Kết quả là 85 điểm. Còn thiếu năm điểm nữa là đạt."
+    },
+    {
+      "ai": "A",
+      "t": "あと五点……。それは悔しいですね。",
+      "doc": "あとごてん……。それはくやしいですね。",
+      "v": "Thiếu năm điểm… Tiếc thật đấy.",
+      "khac": [
+        {
+          "kieu": "thân mật",
+          "t": "あと五点かあ。それは悔しいね。",
+          "doc": "あとごてんかあ。それはくやしいね。",
+          "v": "Thiếu có năm điểm à. Tiếc nhỉ."
+        }
+      ]
+    },
+    {
+      "ai": "D",
+      "t": "悔しかったので、二回目は毎日四時間勉強しました。仕事が終わってから、夜中の一時まで。",
+      "doc": "くやしかったので、にかいめはまいにちよじかんべんきょうしました。しごとがおわってから、よなかのいちじまで。",
+      "v": "Vì tức quá, lần thứ hai tôi học bốn tiếng mỗi ngày. Từ lúc tan làm cho tới một giờ sáng."
+    },
+    {
+      "ai": "D",
+      "t": "でも、二回目は、一回目より点が下がってしまったんです。",
+      "doc": "でも、にかいめは、いっかいめよりてんがさがってしまったんです。",
+      "v": "Vậy mà lần hai, điểm còn thấp hơn lần một."
+    },
+    {
+      "ai": "A",
+      "t": "えっ、そんなに勉強したのにですか。",
+      "doc": "えっ、そんなにべんきょうしたのにですか。",
+      "v": "Hả, học nhiều như thế mà vẫn vậy sao?",
+      "np": [
+        {
+          "mau": "〜のに",
+          "giai": "Vậy mà, thế mà (kết quả trái với kỳ vọng, thường kèm bất ngờ/tiếc).",
+          "vd": "約束したのに、彼は来なかった。",
+          "vdDoc": "やくそくしたのに、かれはこなかった。",
+          "vdV": "Đã hứa rồi mà anh ấy không đến."
+        }
+      ]
+    },
+    {
+      "ai": "D",
+      "t": "はい。寝不足のせいで、試験の日に頭がぼーっとしていて、聴解の問題がほとんど頭に入らなかったんです。",
+      "doc": "はい。ねぶそくのせいで、しけんのひにあたまがぼーっとしていて、ちょうかいのもんだいがほとんどあたまにはいらなかったんです。",
+      "v": "Vâng. Vì thiếu ngủ nên hôm thi đầu óc lơ mơ, phần nghe hiểu gần như không vào đầu.",
+      "np": [
+        {
+          "mau": "〜せいで",
+          "giai": "Tại vì … (nguyên nhân dẫn tới kết quả xấu). Ngược lại: 〜おかげで (nhờ có, kết quả tốt).",
+          "vd": "雨のせいで、試合が中止になった。",
+          "vdDoc": "あめのせいで、しあいがちゅうしになった。",
+          "vdV": "Tại mưa mà trận đấu bị huỷ."
+        }
+      ]
+    },
+    {
+      "ai": "D",
+      "t": "それに、問題集を何回も解いていたので、答えを覚えてしまっていて、本当の力がついていなかったんだと思います。",
+      "doc": "それに、もんだいしゅうをなんかいもといていたので、こたえをおぼえてしまっていて、ほんとうのちからがついていなかったんだとおもいます。",
+      "v": "Hơn nữa, tôi làm đi làm lại sách bài tập nên thuộc luôn đáp án, còn thực lực thì chưa có."
+    },
+    {
+      "ai": "A",
+      "t": "勉強すればするほどいい、というわけではないんですね。",
+      "doc": "べんきょうすればするほどいい、というわけではないんですね。",
+      "v": "Vậy là không phải cứ học càng nhiều càng tốt nhỉ.",
+      "np": [
+        {
+          "mau": "V-ば + V-る + ほど",
+          "giai": "Càng … càng ….",
+          "vd": "日本語は勉強すればするほど面白くなる。",
+          "vdDoc": "にほんごはべんきょうすればするほどおもしろくなる。",
+          "vdV": "Tiếng Nhật càng học càng thú vị."
+        },
+        {
+          "mau": "〜わけではない",
+          "giai": "Không hẳn là, không có nghĩa là … (phủ định một phần).",
+          "vd": "嫌いなわけではないが、あまり食べない。",
+          "vdDoc": "きらいなわけではないが、あまりたべない。",
+          "vdV": "Không phải là ghét, nhưng tôi ít ăn."
+        }
+      ]
+    },
+    {
+      "ai": "D",
+      "t": "そうなんです。そこで、三回目はやり方を変えることにしました。",
+      "doc": "そうなんです。そこで、さんかいめはやりかたをかえることにしました。",
+      "v": "Đúng vậy. Thế nên lần thứ ba tôi quyết định đổi cách học.",
+      "khac": [
+        {
+          "kieu": "thân mật",
+          "t": "そうそう。で、三回目はやり方を変えることにしたんだ。",
+          "doc": "そうそう。で、さんかいめはやりかたをかえることにしたんだ。",
+          "v": "Đúng đúng. Rồi lần ba mình quyết đổi cách học."
+        }
+      ],
+      "np": [
+        {
+          "mau": "V-る + ことにした",
+          "giai": "Đã quyết định làm V (quyết định của bản thân).",
+          "vd": "来年から一人暮らしをすることにしました。",
+          "vdDoc": "らいねんからひとりぐらしをすることにしました。",
+          "vdV": "Tôi đã quyết định từ năm sau sống một mình."
+        }
+      ]
+    },
+    {
+      "ai": "D",
+      "t": "まず、毎日の勉強は一時間だけにして、その代わり、絶対に休まないようにしました。",
+      "doc": "まず、まいにちのべんきょうはいちじかんだけにして、そのかわり、ぜったいにやすまないようにしました。",
+      "v": "Trước hết, mỗi ngày chỉ học một tiếng, nhưng đổi lại, tuyệt đối không bỏ ngày nào.",
+      "np": [
+        {
+          "mau": "V-ない + ようにする",
+          "giai": "Cố gắng để không V (tạo thói quen tránh điều gì).",
+          "vd": "夜遅くに食べないようにしています。",
+          "vdDoc": "よるおそくにたべないようにしています。",
+          "vdV": "Tôi cố gắng không ăn khuya."
+        }
+      ]
+    },
+    {
+      "ai": "D",
+      "t": "それから、会社の日本人の先輩に、昼ごはんのときに日本語のニュースについて話す相手になってもらいました。",
+      "doc": "それから、かいしゃのにほんじんのせんぱいに、ひるごはんのときににほんごのニュースについてはなすあいてになってもらいました。",
+      "v": "Rồi tôi nhờ một anh tiền bối người Nhật ở công ty làm bạn nói chuyện về tin tức tiếng Nhật vào giờ ăn trưa.",
+      "np": [
+        {
+          "mau": "〜てもらう",
+          "giai": "Được ai làm gì cho mình / nhờ ai làm gì. Người làm đi với に.",
+          "vd": "友だちに写真を撮ってもらいました。",
+          "vdDoc": "ともだちにしゃしんをとってもらいました。",
+          "vdV": "Tôi nhờ bạn chụp ảnh giúp."
+        }
+      ]
+    },
+    {
+      "ai": "D",
+      "t": "最初は「迷惑じゃないかな」と思って、なかなか頼めなかったんですけど。",
+      "doc": "さいしょは「めいわくじゃないかな」とおもって、なかなかたのめなかったんですけど。",
+      "v": "Lúc đầu tôi sợ “liệu có phiền anh ấy không”, nên mãi không dám nhờ."
+    },
+    {
+      "ai": "A",
+      "t": "先輩は何と言っていましたか。",
+      "doc": "せんぱいはなんといっていましたか。",
+      "v": "Anh tiền bối đã nói gì ạ?",
+      "khac": [
+        {
+          "kieu": "lịch sự",
+          "t": "先輩はどのようにおっしゃっていましたか。",
+          "doc": "せんぱいはどのようにおっしゃっていましたか。",
+          "v": "Anh tiền bối đã nói như thế nào ạ?",
+          "ghiChu": "おっしゃる = tôn kính ngữ của 言う"
+        },
+        {
+          "kieu": "thân mật",
+          "t": "先輩、何て言ってた？",
+          "doc": "せんぱい、なんていってた？",
+          "v": "Anh ấy bảo sao?"
+        }
+      ]
+    },
+    {
+      "ai": "D",
+      "t": "「ベトナムのことを知りたかったから、むしろありがたい」って。それから、お互いに教え合うようになったんです。",
+      "doc": "「ベトナムのことをしりたかったから、むしろありがたい」って。それから、おたがいにおしえあうようになったんです。",
+      "v": "Anh ấy bảo “Anh đang muốn biết về Việt Nam, nên còn cảm ơn em ấy chứ”. Từ đó hai bên dạy nhau.",
+      "np": [
+        {
+          "mau": "V-ます + 合う",
+          "giai": "Làm V lẫn nhau, cho nhau.",
+          "vd": "困ったときは助け合いましょう。",
+          "vdDoc": "こまったときはたすけあいましょう。",
+          "vdV": "Lúc khó khăn hãy giúp đỡ lẫn nhau."
+        }
+      ]
+    },
+    {
+      "ai": "D",
+      "t": "そのおかげで、聴解がずいぶん楽になりました。教科書の日本語じゃなくて、生きた日本語に慣れたんだと思います。",
+      "doc": "そのおかげで、ちょうかいがずいぶんらくになりました。きょうかしょのにほんごじゃなくて、いきたにほんごになれたんだとおもいます。",
+      "v": "Nhờ vậy mà phần nghe hiểu nhẹ nhàng hơn hẳn. Tôi nghĩ mình đã quen với tiếng Nhật “sống”, không phải tiếng Nhật trong sách.",
+      "np": [
+        {
+          "mau": "〜おかげで",
+          "giai": "Nhờ có … (kết quả tốt, mang ý biết ơn). Đối lập với 〜せいで.",
+          "vd": "先生のおかげで、合格できました。",
+          "vdDoc": "せんせいのおかげで、ごうかくできました。",
+          "vdV": "Nhờ thầy mà em đã đỗ."
+        }
+      ]
+    },
+    {
+      "ai": "A",
+      "t": "三回目の結果は？",
+      "doc": "さんかいめのけっかは？",
+      "v": "Kết quả lần thứ ba thì sao?"
+    },
+    {
+      "ai": "D",
+      "t": "百二十八点で、合格しました。ネットで結果を見たとたん、会社のトイレで泣きました。",
+      "doc": "ひゃくにじゅうはちてんで、ごうかくしました。ネットでけっかをみたとたん、かいしゃのトイレでなきました。",
+      "v": "128 điểm, tôi đã đỗ. Vừa xem kết quả trên mạng là tôi khóc luôn trong nhà vệ sinh công ty.",
+      "np": [
+        {
+          "mau": "V-た + とたん",
+          "giai": "Vừa V xong thì ngay lập tức (điều bất ngờ) xảy ra.",
+          "vd": "家を出たとたん、雨が降り出した。",
+          "vdDoc": "いえをでたとたん、あめがふりだした。",
+          "vdV": "Vừa ra khỏi nhà thì trời đổ mưa."
+        }
+      ]
+    },
+    {
+      "ai": "A",
+      "t": "最後に、今、JLPTの勉強をしている方に一言お願いします。",
+      "doc": "さいごに、いま、ジェイエルピーティーのべんきょうをしているかたにひとことおねがいします。",
+      "v": "Cuối cùng, xin anh nói đôi lời với những ai đang ôn JLPT."
+    },
+    {
+      "ai": "D",
+      "t": "落ちたことは、無駄じゃありませんでした。落ちたからこそ、自分に合ったやり方が見つかったんです。",
+      "doc": "おちたことは、むだじゃありませんでした。おちたからこそ、じぶんにあったやりかたがみつかったんです。",
+      "v": "Việc trượt không hề vô ích. Chính vì trượt mà tôi mới tìm ra cách học hợp với mình.",
+      "khac": [
+        {
+          "kieu": "văn viết",
+          "t": "不合格の経験は決して無駄ではなかった。不合格だったからこそ、自分に合う学習法に出会えたのだ。",
+          "doc": "ふごうかくのけいけんはけっしてむだではなかった。ふごうかくだったからこそ、じぶんにあうがくしゅうほうにであえたのだ。",
+          "v": "Trải nghiệm thi trượt tuyệt nhiên không vô ích. Chính vì trượt mà tôi đã gặp được phương pháp học hợp với mình.",
+          "ghiChu": "văn viết blog, bài luận (thể だ/である)"
+        }
+      ],
+      "np": [
+        {
+          "mau": "〜からこそ",
+          "giai": "Chính vì … (nên mới) — nhấn mạnh lý do, thường là lý do tích cực bất ngờ.",
+          "vd": "好きだからこそ、厳しく言うんです。",
+          "vdDoc": "すきだからこそ、きびしくいうんです。",
+          "vdV": "Chính vì quý nên mới nói nghiêm khắc."
+        }
+      ]
+    },
+    {
+      "ai": "D",
+      "t": "長く勉強するより、毎日やめないこと。一人で頑張るより、誰かと話すこと。それが私の答えです。",
+      "doc": "ながくべんきょうするより、まいにちやめないこと。ひとりでがんばるより、だれかとはなすこと。それがわたしのこたえです。",
+      "v": "Thay vì học thật lâu, hãy đừng bỏ ngày nào. Thay vì cố một mình, hãy nói chuyện với ai đó. Đó là câu trả lời của tôi."
+    },
+    {
+      "ai": "A",
+      "t": "ズイさん、ありがとうございました。",
+      "doc": "ズイさん、ありがとうございました。",
+      "v": "Cảm ơn anh Duy."
+    }
+  ],
+  "tuVung": [
+    {
+      "chu": "合格",
+      "doc": "ごうかく",
+      "nghia": "đỗ, đạt (kỳ thi)",
+      "vd": "試験に合格しました。"
+    },
+    {
+      "chu": "なめて",
+      "doc": "なめて",
+      "nghia": "coi thường (なめる, văn nói)",
+      "vd": "試験をなめてはいけない。"
+    },
+    {
+      "chu": "悔しい",
+      "doc": "くやしい",
+      "nghia": "tức, cay cú, tiếc (vì thua, vì không đạt)",
+      "vd": "負けて悔しい。"
+    },
+    {
+      "chu": "寝不足",
+      "doc": "ねぶそく",
+      "nghia": "thiếu ngủ",
+      "vd": "寝不足で頭が痛い。"
+    },
+    {
+      "chu": "聴解",
+      "doc": "ちょうかい",
+      "nghia": "nghe hiểu (phần thi)",
+      "vd": "聴解が一番難しい。"
+    },
+    {
+      "chu": "問題集",
+      "doc": "もんだいしゅう",
+      "nghia": "sách bài tập",
+      "vd": "問題集を三冊やりました。"
+    },
+    {
+      "chu": "迷惑",
+      "doc": "めいわく",
+      "nghia": "phiền hà",
+      "vd": "ご迷惑をおかけしました。"
+    },
+    {
+      "chu": "教え合う",
+      "doc": "おしえあう",
+      "nghia": "dạy lẫn nhau",
+      "vd": "友だちと日本語とベトナム語を教え合う。"
+    },
+    {
+      "chu": "おかげで",
+      "doc": "おかげで",
+      "nghia": "nhờ có (kết quả tốt)",
+      "vd": "あなたのおかげで助かりました。"
+    },
+    {
+      "chu": "とたん",
+      "doc": "とたん",
+      "nghia": "vừa … thì ngay",
+      "vd": "座ったとたん、眠くなった。"
+    },
+    {
+      "chu": "無駄",
+      "doc": "むだ",
+      "nghia": "vô ích, lãng phí",
+      "vd": "時間を無駄にしたくない。"
+    }
+  ],
+  "yNghia": "Trượt không có nghĩa là mình kém — đôi khi chỉ là cách học chưa hợp. Học nhiều hơn chưa chắc đã tốt hơn; đều đặn mỗi ngày và có người để nói chuyện thật mới làm cho tiếng \"sống\". Mỗi lần trượt là một tấm bản đồ chỉ ra con đường không nên đi lại.",
+  "meo": [
+    "〜せいで (tại vì — kết quả xấu) ↔ 〜おかげで (nhờ có — kết quả tốt).",
+    "〜ば〜ほど = càng … càng …; 〜わけではない = không hẳn là ….",
+    "〜ことにした = đã quyết định (một lần); 〜ようにした = đã cố tạo thói quen.",
+    "〜たとたん = vừa … thì ngay lập tức (điều bất ngờ xảy ra).",
+    "Cấp JLPT đọc: N2 = エヌに, N3 = エヌさん; JLPT = ジェイエルピーティー."
+  ],
+  "cauHoi": [
+    {
+      "hoi": "Lần thi đầu Duy thiếu bao nhiêu điểm để đỗ?",
+      "chon": [
+        "Mười điểm",
+        "Năm điểm",
+        "Hai điểm",
+        "Hai mươi điểm"
+      ],
+      "dung": 1,
+      "giai": "「合格点まで、あと五点でした」."
+    },
+    {
+      "hoi": "Vì sao lần thứ hai điểm còn thấp hơn?",
+      "chon": [
+        "Đề quá khó",
+        "Đến muộn giờ thi",
+        "Thiếu ngủ và học thuộc đáp án, chưa có thực lực",
+        "Không học gì"
+      ],
+      "dung": 2,
+      "giai": "「寝不足のせいで……答えを覚えてしまっていて」."
+    },
+    {
+      "hoi": "Lần thứ ba Duy thay đổi cách học thế nào?",
+      "chon": [
+        "Mỗi ngày học một tiếng không nghỉ và nói chuyện tin tức với tiền bối giờ trưa",
+        "Học sáu tiếng mỗi ngày",
+        "Đi học trung tâm",
+        "Chỉ làm đề thi cũ"
+      ],
+      "dung": 0,
+      "giai": "「毎日の勉強は一時間だけにして……絶対に休まない」「昼ごはんのときに日本語のニュースについて話す」."
+    },
+    {
+      "hoi": "「そのおかげで」 nói về kết quả gì?",
+      "chon": [
+        "Được tăng lương",
+        "Được chuyển công ty",
+        "Quen thêm bạn",
+        "Phần nghe hiểu nhẹ nhàng hơn hẳn"
+      ],
+      "dung": 3,
+      "giai": "「そのおかげで、聴解がずいぶん楽になりました」."
+    }
+  ]
+}

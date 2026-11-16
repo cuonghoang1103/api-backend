@@ -1,6 +1,7 @@
 {
   "id": "en-a1-03",
   "nn": "en",
+  "danhMuc": "doi-song",
   "cap": "A1",
   "so": 3,
   "tieuDe": "This Is My Family",
@@ -9,38 +10,273 @@
   "chuDe": "Gia đình",
   "bieuTuong": "house.fill",
   "nguoi": [
-    { "ma": "S", "ten": "Sophie", "giong": "us-nu", "vai": "bạn cùng lớp" },
-    { "ma": "M", "ten": "Minh", "giong": "uk-nam", "vai": "sinh viên" }
+    {
+      "ma": "S",
+      "ten": "Sophie",
+      "giong": "us-nu",
+      "vai": "bạn cùng lớp"
+    },
+    {
+      "ma": "M",
+      "ten": "Minh",
+      "giong": "uk-nam",
+      "vai": "sinh viên"
+    }
   ],
   "loi": [
-    { "ai": "S", "t": "Minh, who is in this photo?", "v": "Minh ơi, ai trong ảnh này vậy?" },
-    { "ai": "M", "t": "That's my family. It's from Tet, our New Year.", "v": "Đó là gia đình mình. Ảnh chụp dịp Tết, năm mới của người Việt." },
-    { "ai": "S", "t": "Oh, nice! Who is this man?", "v": "Ồ, đẹp quá! Người đàn ông này là ai?" },
-    { "ai": "M", "t": "That's my dad. He is a farmer. He is very kind.", "v": "Đó là bố mình. Bố là nông dân. Bố hiền lắm." },
-    { "ai": "S", "t": "And the woman next to him?", "v": "Còn người phụ nữ đứng cạnh bác?" },
-    { "ai": "M", "t": "That's my mum. She is a teacher. She is very funny.", "v": "Đó là mẹ mình. Mẹ là giáo viên. Mẹ vui tính lắm." },
-    { "ai": "S", "t": "Who are the two kids?", "v": "Hai đứa nhỏ là ai vậy?" },
-    { "ai": "M", "t": "My little sister and my little brother. She is ten, and he is six.", "v": "Em gái và em trai mình. Em gái mười tuổi, em trai sáu tuổi." },
-    { "ai": "S", "t": "They look happy! And this old lady?", "v": "Trông tụi nhỏ vui ghê! Còn bà cụ này?" },
-    { "ai": "M", "t": "That's my grandma. She lives with us. She cooks the best food.", "v": "Đó là bà mình. Bà sống cùng nhà mình. Bà nấu ăn ngon nhất." },
-    { "ai": "S", "t": "You have a big family. I only have my mum.", "v": "Nhà bạn đông người ghê. Mình chỉ có mẹ thôi." },
-    { "ai": "M", "t": "Do you miss her?", "v": "Bạn có nhớ mẹ không?" },
-    { "ai": "S", "t": "Yes, a lot. But we talk every Sunday.", "v": "Có, nhớ lắm. Nhưng Chủ nhật nào hai mẹ con cũng nói chuyện." },
-    { "ai": "M", "t": "That's nice. I don't call my family very often.", "v": "Hay thật. Mình không hay gọi điện về nhà lắm." },
-    { "ai": "S", "t": "Why not? It's only five minutes.", "v": "Sao vậy? Chỉ mất năm phút thôi mà." },
-    { "ai": "M", "t": "You're right. I can call them tonight.", "v": "Bạn nói đúng. Tối nay mình sẽ gọi về nhà." },
-    { "ai": "S", "t": "Good idea! Say hello to your grandma for me.", "v": "Ý hay đó! Gửi lời chào bà giúp mình nhé." }
+    {
+      "ai": "S",
+      "t": "Minh, who is in this photo?",
+      "v": "Minh ơi, ai trong ảnh này vậy?",
+      "np": [
+        {
+          "mau": "Who is…?",
+          "giai": "Hỏi về người: Who is this? Who is in the photo? Số nhiều: Who are…?",
+          "vd": "Who is your best friend?",
+          "vdV": "Bạn thân nhất của bạn là ai?"
+        }
+      ]
+    },
+    {
+      "ai": "M",
+      "t": "That's my family. It's from Tet, our New Year.",
+      "v": "Đó là gia đình mình. Ảnh chụp dịp Tết, năm mới của người Việt."
+    },
+    {
+      "ai": "S",
+      "t": "Oh, nice! Who is this man?",
+      "v": "Ồ, đẹp quá! Người đàn ông này là ai?"
+    },
+    {
+      "ai": "M",
+      "t": "That's my dad. He is a farmer. He is very kind.",
+      "v": "Đó là bố mình. Bố là nông dân. Bố hiền lắm.",
+      "khac": [
+        {
+          "kieu": "tự nhiên hơn",
+          "t": "That's my dad. He's a farmer, and he's really kind.",
+          "v": "Đó là bố mình. Bố là nông dân, và bố rất hiền."
+        },
+        {
+          "kieu": "trang trọng",
+          "t": "That is my father. He is a farmer and a very kind man.",
+          "v": "Đó là cha tôi. Ông là nông dân và là một người rất tốt bụng."
+        }
+      ],
+      "np": [
+        {
+          "mau": "very / really + adj",
+          "giai": "Nhấn mạnh tính từ. \"really\" thân mật hơn \"very\" trong văn nói.",
+          "vd": "The food here is really good.",
+          "vdV": "Đồ ăn ở đây ngon thật sự."
+        }
+      ]
+    },
+    {
+      "ai": "S",
+      "t": "And the woman next to him?",
+      "v": "Còn người phụ nữ đứng cạnh bác?",
+      "np": [
+        {
+          "mau": "next to + him / her / them",
+          "giai": "Sau giới từ dùng đại từ tân ngữ: next to him (không phải \"next to he\").",
+          "vd": "Sit next to me.",
+          "vdV": "Ngồi cạnh mình nè."
+        }
+      ]
+    },
+    {
+      "ai": "M",
+      "t": "That's my mum. She is a teacher. She is very funny.",
+      "v": "Đó là mẹ mình. Mẹ là giáo viên. Mẹ vui tính lắm."
+    },
+    {
+      "ai": "S",
+      "t": "Who are the two kids?",
+      "v": "Hai đứa nhỏ là ai vậy?",
+      "khac": [
+        {
+          "kieu": "trang trọng",
+          "t": "Who are the two children?",
+          "v": "Hai đứa trẻ là ai vậy?",
+          "ghiChu": "\"kids\" là văn nói, \"children\" chuẩn hơn"
+        }
+      ]
+    },
+    {
+      "ai": "M",
+      "t": "My little sister and my little brother. She is ten, and he is six.",
+      "v": "Em gái và em trai mình. Em gái mười tuổi, em trai sáu tuổi.",
+      "khac": [
+        {
+          "kieu": "tự nhiên hơn",
+          "t": "My younger sister and brother. She's ten and he's six.",
+          "v": "Em gái và em trai mình. Em gái mười tuổi, em trai sáu tuổi."
+        }
+      ],
+      "np": [
+        {
+          "mau": "S + be + số (tuổi)",
+          "giai": "Nói tuổi bằng \"be\", không dùng \"have\": She is ten (years old). Không nói \"She has ten years\".",
+          "vd": "My grandma is seventy-five.",
+          "vdV": "Bà tôi bảy mươi lăm tuổi."
+        }
+      ]
+    },
+    {
+      "ai": "S",
+      "t": "They look happy! And this old lady?",
+      "v": "Trông tụi nhỏ vui ghê! Còn bà cụ này?",
+      "khac": [
+        {
+          "kieu": "lịch sự",
+          "t": "They look happy! And who is this lady?",
+          "v": "Tụi nhỏ trông vui quá! Còn bà này là ai vậy?",
+          "ghiChu": "\"old lady\" có thể nghe thiếu tế nhị — nói \"this lady\" lịch sự hơn"
+        }
+      ],
+      "np": [
+        {
+          "mau": "look + adj",
+          "giai": "Trông có vẻ: look happy, look tired. Sau \"look\" dùng tính từ, không dùng trạng từ.",
+          "vd": "You look great today!",
+          "vdV": "Hôm nay trông bạn tuyệt lắm!"
+        }
+      ]
+    },
+    {
+      "ai": "M",
+      "t": "That's my grandma. She lives with us. She cooks the best food.",
+      "v": "Đó là bà mình. Bà sống cùng nhà mình. Bà nấu ăn ngon nhất.",
+      "np": [
+        {
+          "mau": "the best (so sánh nhất)",
+          "giai": "good → better → the best. So sánh nhất luôn có \"the\".",
+          "vd": "This is the best café in town.",
+          "vdV": "Đây là quán cà phê ngon nhất thị trấn."
+        }
+      ]
+    },
+    {
+      "ai": "S",
+      "t": "You have a big family. I only have my mum.",
+      "v": "Nhà bạn đông người ghê. Mình chỉ có mẹ thôi."
+    },
+    {
+      "ai": "M",
+      "t": "Do you miss her?",
+      "v": "Bạn có nhớ mẹ không?"
+    },
+    {
+      "ai": "S",
+      "t": "Yes, a lot. But we talk every Sunday.",
+      "v": "Có, nhớ lắm. Nhưng Chủ nhật nào hai mẹ con cũng nói chuyện."
+    },
+    {
+      "ai": "M",
+      "t": "That's nice. I don't call my family very often.",
+      "v": "Hay thật. Mình không hay gọi điện về nhà lắm.",
+      "np": [
+        {
+          "mau": "don't + V / not very often",
+          "giai": "Phủ định hiện tại đơn: I/you/we/they + don't + V. \"not very often\" = không thường lắm.",
+          "vd": "I don't eat meat very often.",
+          "vdV": "Tôi không hay ăn thịt lắm."
+        }
+      ]
+    },
+    {
+      "ai": "S",
+      "t": "Why not? It's only five minutes.",
+      "v": "Sao vậy? Chỉ mất năm phút thôi mà."
+    },
+    {
+      "ai": "M",
+      "t": "You're right. I can call them tonight.",
+      "v": "Bạn nói đúng. Tối nay mình sẽ gọi về nhà.",
+      "khac": [
+        {
+          "kieu": "tự nhiên hơn",
+          "t": "You're right. I'll call them tonight.",
+          "v": "Bạn nói đúng. Tối nay mình sẽ gọi.",
+          "ghiChu": "\"I'll\" nghe như một quyết định chắc chắn"
+        }
+      ]
+    },
+    {
+      "ai": "S",
+      "t": "Good idea! Say hello to your grandma for me.",
+      "v": "Ý hay đó! Gửi lời chào bà giúp mình nhé.",
+      "khac": [
+        {
+          "kieu": "thân mật",
+          "t": "Good idea! Say hi to your grandma for me!",
+          "v": "Ý hay đó! Gửi lời chào bà giùm mình nhé!"
+        },
+        {
+          "kieu": "trang trọng",
+          "t": "Please give my regards to your grandmother.",
+          "v": "Cho tôi gửi lời hỏi thăm bà của bạn.",
+          "ghiChu": "trang trọng, hơi cổ điển"
+        }
+      ]
+    }
   ],
   "tuVung": [
-    { "chu": "family", "doc": "/ˈfæməli/", "nghia": "gia đình", "vd": "I love my family." },
-    { "chu": "farmer", "doc": "/ˈfɑːmə(r)/", "nghia": "nông dân", "vd": "My uncle is a farmer." },
-    { "chu": "kind", "doc": "/kaɪnd/", "nghia": "tốt bụng, hiền", "vd": "Our teacher is very kind." },
-    { "chu": "funny", "doc": "/ˈfʌni/", "nghia": "vui tính, buồn cười", "vd": "My brother is so funny." },
-    { "chu": "next to", "doc": "/nekst tuː/", "nghia": "bên cạnh", "vd": "The bank is next to the school." },
-    { "chu": "little sister", "doc": "/ˈlɪtl ˈsɪstə(r)/", "nghia": "em gái", "vd": "My little sister is five." },
-    { "chu": "grandma", "doc": "/ˈɡrænmɑː/", "nghia": "bà (cách gọi thân mật)", "vd": "My grandma lives in Hue." },
-    { "chu": "miss", "doc": "/mɪs/", "nghia": "nhớ (ai đó)", "vd": "I miss my parents." },
-    { "chu": "often", "doc": "/ˈɒfn/", "nghia": "thường xuyên", "vd": "How often do you call home?" }
+    {
+      "chu": "family",
+      "doc": "/ˈfæməli/",
+      "nghia": "gia đình",
+      "vd": "I love my family."
+    },
+    {
+      "chu": "farmer",
+      "doc": "/ˈfɑːmə(r)/",
+      "nghia": "nông dân",
+      "vd": "My uncle is a farmer."
+    },
+    {
+      "chu": "kind",
+      "doc": "/kaɪnd/",
+      "nghia": "tốt bụng, hiền",
+      "vd": "Our teacher is very kind."
+    },
+    {
+      "chu": "funny",
+      "doc": "/ˈfʌni/",
+      "nghia": "vui tính, buồn cười",
+      "vd": "My brother is so funny."
+    },
+    {
+      "chu": "next to",
+      "doc": "/nekst tuː/",
+      "nghia": "bên cạnh",
+      "vd": "The bank is next to the school."
+    },
+    {
+      "chu": "little sister",
+      "doc": "/ˈlɪtl ˈsɪstə(r)/",
+      "nghia": "em gái",
+      "vd": "My little sister is five."
+    },
+    {
+      "chu": "grandma",
+      "doc": "/ˈɡrænmɑː/",
+      "nghia": "bà (cách gọi thân mật)",
+      "vd": "My grandma lives in Hue."
+    },
+    {
+      "chu": "miss",
+      "doc": "/mɪs/",
+      "nghia": "nhớ (ai đó)",
+      "vd": "I miss my parents."
+    },
+    {
+      "chu": "often",
+      "doc": "/ˈɒfn/",
+      "nghia": "thường xuyên",
+      "vd": "How often do you call home?"
+    }
   ],
   "yNghia": "Một cuộc gọi năm phút chẳng tốn bao nhiêu, nhưng với người thân ở xa lại là cả một niềm vui. Đừng đợi đến Tết mới hỏi thăm gia đình — \"tối nay\" luôn là lúc thích hợp.",
   "meo": [
@@ -50,9 +286,45 @@
     "Người Anh viết \"mum\", người Mỹ viết \"mom\" — cùng nghĩa là mẹ."
   ],
   "cauHoi": [
-    { "hoi": "Bố của Minh làm nghề gì?", "chon": ["Giáo viên", "Nông dân", "Đầu bếp"], "dung": 1, "giai": "\"That's my dad. He is a farmer.\"" },
-    { "hoi": "Ai sống cùng nhà với gia đình Minh?", "chon": ["Bà của Minh", "Dì của Minh", "Sophie"], "dung": 0, "giai": "\"That's my grandma. She lives with us.\"" },
-    { "hoi": "Sophie nói chuyện với mẹ khi nào?", "chon": ["Mỗi tối", "Mỗi dịp Tết", "Mỗi Chủ nhật"], "dung": 2, "giai": "\"We talk every Sunday.\"" },
-    { "hoi": "\"Do you miss her?\" nghĩa là gì?", "chon": ["Bạn có gặp mẹ không?", "Bạn có nhớ mẹ không?", "Bạn có gọi cho mẹ không?"], "dung": 1, "giai": "\"miss someone\" = nhớ ai đó." }
+    {
+      "hoi": "Bố của Minh làm nghề gì?",
+      "chon": [
+        "Giáo viên",
+        "Nông dân",
+        "Đầu bếp"
+      ],
+      "dung": 1,
+      "giai": "\"That's my dad. He is a farmer.\""
+    },
+    {
+      "hoi": "Ai sống cùng nhà với gia đình Minh?",
+      "chon": [
+        "Bà của Minh",
+        "Dì của Minh",
+        "Sophie"
+      ],
+      "dung": 0,
+      "giai": "\"That's my grandma. She lives with us.\""
+    },
+    {
+      "hoi": "Sophie nói chuyện với mẹ khi nào?",
+      "chon": [
+        "Mỗi tối",
+        "Mỗi dịp Tết",
+        "Mỗi Chủ nhật"
+      ],
+      "dung": 2,
+      "giai": "\"We talk every Sunday.\""
+    },
+    {
+      "hoi": "\"Do you miss her?\" nghĩa là gì?",
+      "chon": [
+        "Bạn có gặp mẹ không?",
+        "Bạn có nhớ mẹ không?",
+        "Bạn có gọi cho mẹ không?"
+      ],
+      "dung": 1,
+      "giai": "\"miss someone\" = nhớ ai đó."
+    }
   ]
 }

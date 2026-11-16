@@ -1,0 +1,548 @@
+{
+  "id": "en-ds-c1-01",
+  "nn": "en",
+  "danhMuc": "doi-song",
+  "cap": "C1",
+  "so": 1,
+  "tieuDe": "What They Say vs. What They Mean",
+  "tieuDeViet": "Điều họ nói và điều họ muốn nói",
+  "moTa": "Khánh trò chuyện với Alastair (người London) và Jordan (người Brisbane) về những tầng nghĩa ngầm trong tiếng Anh: nói giảm nói tránh, từ chối mà không nói \"không\", khen và nhận lời khen — và vì sao người học Việt hay \"lỡ\" từ chối một lời khen.",
+  "chuDe": "Văn hoá giao tiếp",
+  "bieuTuong": "globe.asia.australia.fill",
+  "nguoi": [
+    {
+      "ma": "K",
+      "ten": "Khánh",
+      "giong": "us-nu",
+      "vai": "người dẫn chương trình"
+    },
+    {
+      "ma": "A",
+      "ten": "Alastair",
+      "giong": "uk-nam",
+      "vai": "khách mời người Anh"
+    },
+    {
+      "ma": "J",
+      "ten": "Jordan",
+      "giong": "au-nam",
+      "vai": "khách mời người Úc"
+    }
+  ],
+  "loi": [
+    {
+      "ai": "K",
+      "t": "Welcome back to the show. Today we're talking about something that confuses almost every learner: what English speakers say versus what they actually mean.",
+      "v": "Chào mừng các bạn quay lại chương trình. Hôm nay chúng ta nói về điều làm gần như mọi người học bối rối: điều người nói tiếng Anh nói ra và điều họ thực sự muốn nói."
+    },
+    {
+      "ai": "K",
+      "t": "With me are Alastair, who grew up in London, and Jordan, from Brisbane.",
+      "v": "Cùng tôi hôm nay là Alastair, lớn lên ở London, và Jordan, đến từ Brisbane."
+    },
+    {
+      "ai": "A",
+      "t": "Thanks for having me. Although I'm slightly worried I'm about to be exposed.",
+      "v": "Cảm ơn đã mời tôi. Dù tôi hơi lo là mình sắp bị \"lật tẩy\".",
+      "np": [
+        {
+          "mau": "be about to + V",
+          "giai": "Sắp sửa (ngay lập tức). Khác \"be going to\" ở chỗ rất gần, sắp xảy ra.",
+          "vd": "I was about to call you.",
+          "vdV": "Tôi vừa định gọi cho bạn."
+        }
+      ]
+    },
+    {
+      "ai": "J",
+      "t": "Oh, you are, mate. The British are world champions at not saying what they mean.",
+      "v": "Ồ, chắc chắn rồi, ông bạn. Người Anh là vô địch thế giới về khoản không nói thẳng điều mình nghĩ."
+    },
+    {
+      "ai": "K",
+      "t": "Let's start there. Alastair, if a colleague says, \"That's an interesting idea,\" should I be pleased?",
+      "v": "Bắt đầu từ đó nhé. Alastair, nếu đồng nghiệp nói \"Ý tưởng thú vị đấy\", tôi có nên vui không?"
+    },
+    {
+      "ai": "A",
+      "t": "Honestly? It depends on the tone, but quite often it means, \"I'm not convinced.\" If they then say, \"Have you considered…\", you're in trouble.",
+      "v": "Thật lòng nhé? Tuỳ giọng điệu, nhưng khá thường xuyên nó nghĩa là \"Tôi chưa bị thuyết phục\". Nếu sau đó họ nói \"Anh đã cân nhắc… chưa\", thì anh gặp rắc rối rồi.",
+      "np": [
+        {
+          "mau": "Have you considered + V-ing?",
+          "giai": "Cách góp ý gián tiếp: gợi một hướng khác mà không nói \"anh sai rồi\".",
+          "vd": "Have you considered asking your manager?",
+          "vdV": "Anh đã nghĩ tới việc hỏi quản lý chưa?"
+        }
+      ]
+    },
+    {
+      "ai": "K",
+      "t": "So it's a polite way of disagreeing.",
+      "v": "Vậy đó là một cách lịch sự để phản đối."
+    },
+    {
+      "ai": "A",
+      "t": "Exactly. We tend to soften criticism so much that the message almost disappears.",
+      "v": "Chính xác. Chúng tôi có xu hướng làm mềm lời phê bình đến mức thông điệp gần như biến mất.",
+      "np": [
+        {
+          "mau": "so + adv/adj + that…",
+          "giai": "Đến mức mà (kết quả). \"so much that\" = nhiều đến mức.",
+          "vd": "He spoke so quietly that nobody heard him.",
+          "vdV": "Anh ấy nói nhỏ đến mức không ai nghe thấy."
+        },
+        {
+          "mau": "tend to + V",
+          "giai": "Có xu hướng, thường hay — mô tả khuynh hướng chung, nghe khách quan hơn \"always\".",
+          "vd": "People tend to eat more in winter.",
+          "vdV": "Người ta có xu hướng ăn nhiều hơn vào mùa đông."
+        }
+      ]
+    },
+    {
+      "ai": "J",
+      "t": "Whereas in Australia, we'd probably just say, \"Nah, that won't work.\" But we'd say it with a grin and shout you a coffee afterwards.",
+      "v": "Còn ở Úc, chắc bọn tôi chỉ nói \"Không, cái đó không ổn đâu\". Nhưng sẽ nói kèm nụ cười toe và mời anh ly cà phê sau đó.",
+      "np": [
+        {
+          "mau": "whereas",
+          "giai": "Nối hai ý tương phản (trang trọng hơn \"while/but\"): ở chỗ này thế này, còn chỗ kia thế kia.",
+          "vd": "I like tea, whereas my wife prefers coffee.",
+          "vdV": "Tôi thích trà, còn vợ tôi thích cà phê hơn."
+        },
+        {
+          "mau": "would (thói quen điển hình)",
+          "giai": "\"we'd say\" = chúng tôi thường sẽ nói — mô tả cách cư xử điển hình trong một tình huống giả định.",
+          "vd": "In that situation, most people would just apologise.",
+          "vdV": "Trong tình huống đó, đa số người ta sẽ chỉ xin lỗi."
+        }
+      ]
+    },
+    {
+      "ai": "K",
+      "t": "Interesting. In Vietnam, we're indirect in some ways but surprisingly direct in others.",
+      "v": "Thú vị thật. Ở Việt Nam, chúng tôi gián tiếp ở một số mặt nhưng lại thẳng thắn bất ngờ ở những mặt khác."
+    },
+    {
+      "ai": "A",
+      "t": "In what way?",
+      "v": "Theo kiểu nào?"
+    },
+    {
+      "ai": "K",
+      "t": "Well, we rarely give a flat \"no\" to an invitation. But we might comment on someone's weight without thinking twice.",
+      "v": "Chẳng hạn, chúng tôi hiếm khi từ chối lời mời bằng một chữ \"không\" cụt lủn. Nhưng lại có thể nhận xét về cân nặng của ai đó mà không nghĩ ngợi gì.",
+      "np": [
+        {
+          "mau": "without + V-ing",
+          "giai": "Mà không làm gì. \"without thinking twice\" = không chần chừ, không nghĩ lại.",
+          "vd": "She left without saying goodbye.",
+          "vdV": "Cô ấy đi mà không chào."
+        }
+      ]
+    },
+    {
+      "ai": "J",
+      "t": "Ha! Yeah, that one would raise a few eyebrows back home.",
+      "v": "Ha! Ừ, cái đó mà ở bên tôi thì khối người nhướng mày đấy.",
+      "np": [
+        {
+          "mau": "raise (a few) eyebrows",
+          "giai": "Thành ngữ: khiến người khác ngạc nhiên, không đồng tình.",
+          "vd": "His comments raised a few eyebrows at the meeting.",
+          "vdV": "Phát biểu của anh ấy khiến vài người trong cuộc họp ngạc nhiên."
+        }
+      ]
+    },
+    {
+      "ai": "A",
+      "t": "Comments about someone's body are generally off-limits in English, even well-meant ones.",
+      "v": "Nhận xét về cơ thể người khác nhìn chung là điều cấm kỵ trong tiếng Anh, kể cả khi có ý tốt."
+    },
+    {
+      "ai": "K",
+      "t": "Good to know. So, refusing. How do you say no without offending anyone?",
+      "v": "Biết vậy thì tốt. Vậy còn chuyện từ chối. Làm sao nói \"không\" mà không làm ai phật lòng?",
+      "khac": [
+        {
+          "kieu": "tự nhiên hơn",
+          "t": "So how do you turn someone down without upsetting them?",
+          "v": "Vậy làm sao từ chối ai đó mà không làm họ buồn?"
+        }
+      ]
+    },
+    {
+      "ai": "A",
+      "t": "The classic British formula is: appreciate, apologise, give a reason. \"Oh, that's so kind of you — I'm afraid I can't make it on Saturday. I've got family coming over.\"",
+      "v": "Công thức kinh điển của người Anh là: cảm ơn, xin lỗi, đưa lý do. \"Ôi, anh chu đáo quá — tôi e là thứ Bảy tôi không đến được. Nhà tôi có khách.\"",
+      "khac": [
+        {
+          "kieu": "tự nhiên hơn",
+          "t": "Thanks so much for thinking of me, but I won't be able to make it this time.",
+          "v": "Cảm ơn đã nghĩ tới tôi, nhưng lần này tôi không đến được."
+        },
+        {
+          "kieu": "trang trọng",
+          "t": "Thank you for the kind invitation. Unfortunately, I have a prior commitment on Saturday.",
+          "v": "Cảm ơn lời mời chu đáo. Tiếc là thứ Bảy tôi đã có hẹn trước.",
+          "ghiChu": "email, công việc"
+        }
+      ],
+      "np": [
+        {
+          "mau": "have got + O + V-ing",
+          "giai": "\"I've got family coming over\" = nhà tôi sắp có người tới — sự kiện đã sắp xếp.",
+          "vd": "I've got friends staying with me this week.",
+          "vdV": "Tuần này có bạn ở lại nhà tôi."
+        }
+      ]
+    },
+    {
+      "ai": "J",
+      "t": "And if you actually want to be invited again, add \"Maybe another time?\" Otherwise it can sound like a permanent no.",
+      "v": "Và nếu thật sự muốn được mời lần sau, hãy thêm \"Để dịp khác nhé?\". Không thì nghe như là \"không\" vĩnh viễn.",
+      "np": [
+        {
+          "mau": "otherwise",
+          "giai": "Nếu không thì (hậu quả của việc không làm điều vừa nói).",
+          "vd": "Write it down. Otherwise you will forget.",
+          "vdV": "Ghi lại đi. Không thì bạn sẽ quên."
+        }
+      ]
+    },
+    {
+      "ai": "K",
+      "t": "What about at work? Say my manager asks me to take on an extra project and I'm already overloaded.",
+      "v": "Còn ở chỗ làm thì sao? Chẳng hạn quản lý giao thêm một dự án mà tôi đã quá tải rồi.",
+      "np": [
+        {
+          "mau": "take on + N",
+          "giai": "Nhận thêm (việc, trách nhiệm).",
+          "vd": "I can't take on any more work this month.",
+          "vdV": "Tháng này tôi không nhận thêm việc được nữa."
+        }
+      ]
+    },
+    {
+      "ai": "A",
+      "t": "You'd probably say something like, \"I'd be happy to help, but I'm a bit stretched at the moment. Could we look at what I could drop?\"",
+      "v": "Chắc chị sẽ nói kiểu \"Tôi rất sẵn lòng, nhưng hiện tôi hơi kín việc. Mình xem tôi có thể bỏ bớt việc nào không?\"",
+      "khac": [
+        {
+          "kieu": "chuyên nghiệp",
+          "t": "I want to do this properly, so could we discuss priorities first?",
+          "v": "Tôi muốn làm việc này cho tốt, nên mình bàn lại thứ tự ưu tiên trước được không?"
+        },
+        {
+          "kieu": "mềm mỏng",
+          "t": "I'm keen to help — would it be possible to push back the deadline on something else?",
+          "v": "Tôi rất muốn giúp — liệu có thể lùi hạn một việc khác không?"
+        }
+      ],
+      "np": [
+        {
+          "mau": "be stretched",
+          "giai": "Bị kéo căng, quá tải (thời gian, nguồn lực) — nói giảm của \"too busy\".",
+          "vd": "The team is really stretched this week.",
+          "vdV": "Tuần này cả nhóm rất kín việc."
+        }
+      ]
+    },
+    {
+      "ai": "J",
+      "t": "Notice he didn't say no. He made it a shared problem.",
+      "v": "Để ý là anh ấy không nói \"không\". Anh ấy biến nó thành vấn đề chung.",
+      "np": [
+        {
+          "mau": "make + O + N/adj",
+          "giai": "Biến cái gì thành gì: make it a shared problem, make it easier.",
+          "vd": "Good music makes the work less boring.",
+          "vdV": "Nhạc hay làm công việc bớt nhàm chán."
+        }
+      ]
+    },
+    {
+      "ai": "K",
+      "t": "That's clever. Now, compliments. This is where Vietnamese learners really struggle, I think.",
+      "v": "Khéo thật. Giờ đến chuyện khen. Tôi nghĩ đây là chỗ người học Việt Nam thật sự lúng túng."
+    },
+    {
+      "ai": "K",
+      "t": "If someone says, \"Your English is excellent,\" most of us immediately say, \"Oh no, no, it's terrible.\"",
+      "v": "Nếu ai đó nói \"Tiếng Anh của bạn xuất sắc\", hầu hết chúng tôi lập tức đáp \"Ôi không, không, tệ lắm\"."
+    },
+    {
+      "ai": "A",
+      "t": "Which is very modest, but to an English speaker it can feel like you're turning down a gift.",
+      "v": "Điều đó rất khiêm tốn, nhưng với người nói tiếng Anh, nó có thể giống như chị đang từ chối một món quà.",
+      "np": [
+        {
+          "mau": "Which… (mệnh đề quan hệ nối tiếp)",
+          "giai": "\"Which\" mở đầu câu để bình luận về CẢ ý vừa nói trước đó — rất văn nói.",
+          "vd": "He was late again. Which is why I stopped waiting.",
+          "vdV": "Anh ấy lại đến muộn. Đó là lý do tôi thôi không đợi."
+        }
+      ]
+    },
+    {
+      "ai": "J",
+      "t": "Yeah, and then we feel awkward, so we insist, and you deny it again, and suddenly we're arguing about your English.",
+      "v": "Ừ, rồi bọn tôi thấy ngượng, nên cứ khăng khăng, chị lại chối tiếp, và tự nhiên mình cãi nhau về tiếng Anh của chị."
+    },
+    {
+      "ai": "K",
+      "t": "So what should we say instead?",
+      "v": "Vậy chúng tôi nên nói gì?"
+    },
+    {
+      "ai": "A",
+      "t": "Just \"Thank you, that's really kind.\" If you want to stay modest, add something like, \"I've been working hard on it.\"",
+      "v": "Chỉ cần \"Cảm ơn, anh tốt quá\". Nếu muốn giữ khiêm tốn, thêm kiểu \"Tôi đã cố gắng nhiều\".",
+      "khac": [
+        {
+          "kieu": "tự nhiên hơn",
+          "t": "Oh, thanks! I've been practising a lot.",
+          "v": "Ôi, cảm ơn! Dạo này tôi luyện nhiều lắm."
+        },
+        {
+          "kieu": "mềm mỏng",
+          "t": "That's kind of you to say. I've still got a lot to learn, though.",
+          "v": "Anh nói vậy thật tốt. Dù tôi vẫn còn nhiều điều phải học.",
+          "ghiChu": "nhận lời khen trước, khiêm tốn sau"
+        }
+      ],
+      "np": [
+        {
+          "mau": "That's kind of you (to say)",
+          "giai": "Cấu trúc \"It's + adj + of + người + to V\" để khen/cảm ơn hành động của ai.",
+          "vd": "It's very kind of you to help.",
+          "vdV": "Anh thật tốt vì đã giúp."
+        }
+      ]
+    },
+    {
+      "ai": "K",
+      "t": "And when we give compliments?",
+      "v": "Còn khi chúng tôi khen người khác?"
+    },
+    {
+      "ai": "A",
+      "t": "Be specific, and focus on things people chose, not things they were born with. \"That presentation was really clear\" works far better than \"You're so tall.\"",
+      "v": "Hãy cụ thể, và khen những gì người ta lựa chọn, không phải những gì họ sinh ra đã có. \"Bài thuyết trình đó rất rõ ràng\" hiệu quả hơn nhiều so với \"Bạn cao thế\".",
+      "khac": [
+        {
+          "kieu": "trang trọng",
+          "t": "I thought your presentation was exceptionally well structured.",
+          "v": "Tôi thấy bài thuyết trình của anh có cấu trúc rất xuất sắc."
+        },
+        {
+          "kieu": "thân mật",
+          "t": "Loved your presentation — so clear!",
+          "v": "Thích bài thuyết trình của bạn ghê — rõ ràng quá!"
+        }
+      ],
+      "np": [
+        {
+          "mau": "focus on + N",
+          "giai": "Tập trung vào. \"things they were born with\" = mệnh đề quan hệ rút gọn, giới từ ở cuối.",
+          "vd": "Focus on what you can control.",
+          "vdV": "Hãy tập trung vào những gì bạn kiểm soát được."
+        }
+      ]
+    },
+    {
+      "ai": "J",
+      "t": "And \"not bad\" from a Brit is basically a standing ovation.",
+      "v": "Còn \"không tệ\" từ miệng một người Anh thì cơ bản là cả khán phòng đứng dậy vỗ tay rồi."
+    },
+    {
+      "ai": "A",
+      "t": "Guilty. If I say \"not bad at all,\" I'm genuinely impressed.",
+      "v": "Tôi nhận tội. Nếu tôi nói \"không tệ chút nào\", nghĩa là tôi thật sự ấn tượng.",
+      "np": [
+        {
+          "mau": "Nói giảm (understatement)",
+          "giai": "Nói nhẹ hơn thực tế để thể hiện ý mạnh: \"not bad at all\" = rất tốt; \"a bit of a problem\" = vấn đề lớn.",
+          "vd": "It's a bit chilly — it was minus ten!",
+          "vdV": "Hơi se lạnh — âm mười độ cơ đấy!"
+        }
+      ]
+    },
+    {
+      "ai": "K",
+      "t": "So the real skill isn't memorising phrases. It's reading the situation.",
+      "v": "Vậy kỹ năng thật sự không phải là thuộc lòng các cụm từ, mà là đọc được tình huống."
+    },
+    {
+      "ai": "A",
+      "t": "Exactly. And if you're not sure what someone means, it's perfectly fine to check: \"Just to clarify — are you saying we shouldn't go ahead?\"",
+      "v": "Chính xác. Và nếu không chắc người kia muốn nói gì, hoàn toàn ổn khi hỏi lại: \"Cho tôi làm rõ — ý anh là mình không nên tiếp tục à?\"",
+      "khac": [
+        {
+          "kieu": "mềm mỏng",
+          "t": "Sorry, I just want to make sure I've understood — do you think it's not a good idea?",
+          "v": "Xin lỗi, tôi chỉ muốn chắc là mình hiểu đúng — anh nghĩ đó không phải ý hay à?"
+        },
+        {
+          "kieu": "ngắn gọn",
+          "t": "So, is that a no?",
+          "v": "Vậy là \"không\" hả?",
+          "ghiChu": "chỉ dùng khi thân, kèm nụ cười"
+        }
+      ],
+      "np": [
+        {
+          "mau": "Just to clarify, …",
+          "giai": "Mở đầu câu hỏi xác nhận lại ý — lịch sự, chuyên nghiệp, không làm người kia mất mặt.",
+          "vd": "Just to clarify, the deadline is Friday, not Monday?",
+          "vdV": "Cho tôi làm rõ, hạn là thứ Sáu chứ không phải thứ Hai?"
+        }
+      ]
+    },
+    {
+      "ai": "J",
+      "t": "People appreciate that. Nobody expects you to be a mind reader.",
+      "v": "Người ta trân trọng điều đó. Không ai đòi chị phải đọc được suy nghĩ cả."
+    },
+    {
+      "ai": "K",
+      "t": "Great advice. That's all for today. Thank you both — and to our listeners: I'd love to hear your stories. Not bad, right?",
+      "v": "Lời khuyên hay quá. Hôm nay đến đây thôi. Cảm ơn hai anh — và các bạn nghe đài: tôi rất muốn nghe câu chuyện của các bạn. Không tệ, nhỉ?"
+    }
+  ],
+  "tuVung": [
+    {
+      "chu": "convinced",
+      "doc": "/kənˈvɪnst/",
+      "nghia": "bị thuyết phục, tin chắc",
+      "vd": "I'm not convinced it will work."
+    },
+    {
+      "chu": "soften criticism",
+      "doc": "/ˈsɒfn ˈkrɪtɪsɪzəm/",
+      "nghia": "làm mềm lời phê bình",
+      "vd": "Managers often soften criticism."
+    },
+    {
+      "chu": "without thinking twice",
+      "doc": "/wɪˈðaʊt ˈθɪŋkɪŋ twaɪs/",
+      "nghia": "không chần chừ",
+      "vd": "She helped me without thinking twice."
+    },
+    {
+      "chu": "raise a few eyebrows",
+      "doc": "/reɪz ə fjuː ˈaɪbraʊz/",
+      "nghia": "gây ngạc nhiên, khó chịu",
+      "vd": "His outfit raised a few eyebrows."
+    },
+    {
+      "chu": "off-limits",
+      "doc": "/ˌɒf ˈlɪmɪts/",
+      "nghia": "cấm kỵ, không được đụng tới",
+      "vd": "Politics is off-limits at dinner."
+    },
+    {
+      "chu": "make it",
+      "doc": "/meɪk ɪt/",
+      "nghia": "đến được, tham dự được",
+      "vd": "Sorry, I can't make it tonight."
+    },
+    {
+      "chu": "overloaded",
+      "doc": "/ˌəʊvəˈləʊdɪd/",
+      "nghia": "quá tải",
+      "vd": "I'm overloaded with work."
+    },
+    {
+      "chu": "stretched",
+      "doc": "/stretʃt/",
+      "nghia": "kín việc, căng (nguồn lực)",
+      "vd": "We are stretched this month."
+    },
+    {
+      "chu": "modest",
+      "doc": "/ˈmɒdɪst/",
+      "nghia": "khiêm tốn",
+      "vd": "Don't be so modest."
+    },
+    {
+      "chu": "turning down",
+      "doc": "/ˈtɜːnɪŋ daʊn/",
+      "nghia": "từ chối (turn down)",
+      "vd": "She is turning down the offer."
+    },
+    {
+      "chu": "genuinely",
+      "doc": "/ˈdʒenjuɪnli/",
+      "nghia": "thật sự, thành thật",
+      "vd": "I'm genuinely sorry."
+    },
+    {
+      "chu": "clarify",
+      "doc": "/ˈklærəfaɪ/",
+      "nghia": "làm rõ",
+      "vd": "Could you clarify that point?"
+    }
+  ],
+  "yNghia": "Không có nền văn hoá nào \"đúng\" hơn: người Anh nói giảm, người Úc nói thẳng kèm nụ cười, người Việt khéo khi từ chối nhưng thẳng khi nhận xét. Kỹ năng thật là đọc tình huống — và khi không chắc, cứ hỏi lại cho rõ. Nhận một lời khen bằng \"Thank you\" không làm bạn kém khiêm tốn; nó chỉ cho thấy bạn trân trọng người khen.",
+  "meo": [
+    "Câu \"có tầng nghĩa\" thường gặp: \"That's an interesting idea\" (có thể = tôi không đồng ý), \"I'll bear it in mind\" (có thể = tôi sẽ không làm), \"Not bad at all\" (= rất tốt).",
+    "Từ chối khéo: cảm ơn → xin lỗi → lý do → (đề nghị dịp khác). Ở chỗ làm: biến lời từ chối thành câu hỏi về ưu tiên.",
+    "Nhận lời khen: \"Thank you, that's really kind\" (+ \"I've been working on it\"). Đừng chối liên tục — nghe như từ chối món quà.",
+    "Khen cụ thể, khen điều người ta chọn và làm (bài nói, món ăn, ý tưởng); tránh nhận xét cơ thể, cân nặng, tuổi.",
+    "Không chắc ý người kia: \"Just to clarify — are you saying…?\"."
+  ],
+  "cauHoi": [
+    {
+      "hoi": "Theo Alastair, \"That's an interesting idea\" thường có thể nghĩa là gì?",
+      "chon": [
+        "Ý tưởng tuyệt vời",
+        "Tôi chưa bị thuyết phục",
+        "Tôi chưa nghe rõ"
+      ],
+      "dung": 1,
+      "giai": "\"Quite often it means, 'I'm not convinced.'\""
+    },
+    {
+      "hoi": "Công thức từ chối kinh điển của người Anh gồm:",
+      "chon": [
+        "Từ chối, rồi im lặng",
+        "Cảm ơn, xin lỗi, đưa lý do",
+        "Hứa sẽ đến rồi không đến"
+      ],
+      "dung": 1,
+      "giai": "\"Appreciate, apologise, give a reason.\""
+    },
+    {
+      "hoi": "Vì sao chối lời khen liên tục có thể gây khó xử?",
+      "chon": [
+        "Người khen thấy như món quà bị từ chối",
+        "Vì như vậy là nói dối",
+        "Vì người Anh không thích sự khiêm tốn"
+      ],
+      "dung": 0,
+      "giai": "\"It can feel like you're turning down a gift.\""
+    },
+    {
+      "hoi": "Lời khen nào phù hợp nhất ở chỗ làm?",
+      "chon": [
+        "You've lost weight!",
+        "You're so tall.",
+        "That presentation was really clear."
+      ],
+      "dung": 2,
+      "giai": "Khen cụ thể, về điều người ta làm, không về cơ thể."
+    },
+    {
+      "hoi": "Khi không chắc người kia muốn nói gì, nên làm gì?",
+      "chon": [
+        "Đoán và làm theo",
+        "Hỏi lại: \"Just to clarify — are you saying…?\"",
+        "Im lặng cho qua"
+      ],
+      "dung": 1,
+      "giai": "\"It's perfectly fine to check.\""
+    }
+  ]
+}

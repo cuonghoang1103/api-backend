@@ -1,6 +1,7 @@
 {
   "id": "ja-n4-01",
   "nn": "ja",
+  "danhMuc": "doi-song",
   "cap": "N4",
   "so": 1,
   "tieuDe": "はじめてのアルバイト",
@@ -9,46 +10,372 @@
   "chuDe": "Làm thêm",
   "bieuTuong": "fork.knife",
   "nguoi": [
-    { "ma": "H", "ten": "ホア", "giong": "ja-nu", "vai": "du học sinh, nhân viên làm thêm mới" },
-    { "ma": "N", "ten": "店長", "giong": "ja-nam", "vai": "chủ quán ramen" }
+    {
+      "ma": "H",
+      "ten": "ホア",
+      "giong": "ja-nu",
+      "vai": "du học sinh, nhân viên làm thêm mới"
+    },
+    {
+      "ma": "N",
+      "ten": "店長",
+      "giong": "ja-nam",
+      "vai": "chủ quán ramen"
+    }
   ],
   "loi": [
-    { "ai": "N", "t": "ホアさん、今日からよろしくね。", "doc": "ホアさん、きょうからよろしくね。", "v": "Hoa à, từ hôm nay mong em giúp đỡ nhé." },
-    { "ai": "H", "t": "ホアです。よろしくお願いします。わからないことがたくさんあるので、メモを取ってもいいですか。", "doc": "ホアです。よろしくおねがいします。わからないことがたくさんあるので、メモをとってもいいですか。", "v": "Em là Hoa ạ. Mong anh chỉ bảo. Em còn nhiều thứ chưa biết, em ghi chép lại có được không ạ?" },
-    { "ai": "N", "t": "もちろん。じゃあ、まず大事なことを三つ話すね。", "doc": "もちろん。じゃあ、まずだいじなことをみっつはなすね。", "v": "Tất nhiên rồi. Vậy trước hết anh nói ba điều quan trọng nhé." },
-    { "ai": "N", "t": "一つ目。お客さんが入ってきたら、大きい声で「いらっしゃいませ」と言うこと。", "doc": "ひとつめ。おきゃくさんがはいってきたら、おおきいこえで「いらっしゃいませ」ということ。", "v": "Thứ nhất. Khách vừa bước vào là phải nói to “Irasshaimase”." },
-    { "ai": "H", "t": "はい。大きい声で、ですね。", "doc": "はい。おおきいこえで、ですね。", "v": "Vâng. Nói thật to, phải không ạ." },
-    { "ai": "N", "t": "二つ目。厨房に入る前に、必ず手を洗わなければならない。", "doc": "ふたつめ。ちゅうぼうにはいるまえに、かならずてをあらわなければならない。", "v": "Thứ hai. Trước khi vào bếp nhất định phải rửa tay." },
-    { "ai": "H", "t": "手を洗う、ですね。三つ目は何ですか。", "doc": "てをあらう、ですね。みっつめはなんですか。", "v": "Rửa tay ạ. Còn điều thứ ba là gì ạ?" },
-    { "ai": "N", "t": "三つ目が一番大事。わからない時は、自分で決めないで、すぐ聞くこと。", "doc": "みっつめがいちばんだいじ。わからないときは、じぶんできめないで、すぐきくこと。", "v": "Điều thứ ba là quan trọng nhất. Khi không biết thì đừng tự quyết, hỏi ngay." },
-    { "ai": "H", "t": "聞いてもいいんですか。忙しい時は迷惑じゃないですか。", "doc": "きいてもいいんですか。いそがしいときはめいわくじゃないですか。", "v": "Em hỏi cũng được ạ? Lúc quán đông thì không làm phiền anh sao?" },
-    { "ai": "N", "t": "間違えるほうが困るよ。聞くのも仕事のうちだから。", "doc": "まちがえるほうがこまるよ。きくのもしごとのうちだから。", "v": "Làm sai mới phiền hơn đấy. Hỏi cũng là một phần công việc mà." },
-    { "ai": "H", "t": "店長、すみません。3番テーブルのお客さんが、ラーメンに卵を入れないでくださいと言っています。", "doc": "てんちょう、すみません。さんばんテーブルのおきゃくさんが、ラーメンにたまごをいれないでくださいといっています。", "v": "Anh chủ ơi, xin lỗi anh. Khách bàn số 3 dặn là đừng cho trứng vào mì ạ." },
-    { "ai": "N", "t": "了解。卵なしね。よく聞いてくれたね。", "doc": "りょうかい。たまごなしね。よくきいてくれたね。", "v": "Rõ. Không trứng nhé. Em hỏi lại là tốt lắm." },
-    { "ai": "H", "t": "あの、実はさっき、5番テーブルの注文を間違えてしまいました。", "doc": "あの、じつはさっき、ごばんテーブルのちゅうもんをまちがえてしまいました。", "v": "À… thật ra lúc nãy em lỡ làm sai món của bàn số 5." },
-    { "ai": "H", "t": "餃子を二つと言われたのに、一つしか出しませんでした。", "doc": "ぎょうざをふたつといわれたのに、ひとつしかだしませんでした。", "v": "Khách gọi hai đĩa gyoza mà em chỉ mang ra có một." },
-    { "ai": "N", "t": "そうか。じゃあ、すぐもう一つ作るから、持っていって、一言謝ろう。", "doc": "そうか。じゃあ、すぐもうひとつつくるから、もっていって、ひとことあやまろう。", "v": "Vậy à. Anh làm ngay một đĩa nữa, em mang ra và nói một lời xin lỗi nhé." },
-    { "ai": "H", "t": "はい。……お客様、大変申し訳ございませんでした。餃子をもう一つお持ちしました。", "doc": "はい。……おきゃくさま、たいへんもうしわけございませんでした。ぎょうざをもうひとつおもちしました。", "v": "Vâng. …Thưa quý khách, em thành thật xin lỗi. Em mang thêm một đĩa gyoza ạ." },
-    { "ai": "N", "t": "お疲れさま。初日にしては、よくできたよ。", "doc": "おつかれさま。しょにちにしては、よくできたよ。", "v": "Vất vả rồi. Ngày đầu mà làm được vậy là giỏi lắm." },
-    { "ai": "H", "t": "でも、間違えてしまって……。", "doc": "でも、まちがえてしまって……。", "v": "Nhưng em lại làm sai…" },
-    { "ai": "N", "t": "間違えない人はいないよ。すぐ言ってくれたから、お客さんも笑ってたでしょう。", "doc": "まちがえないひとはいないよ。すぐいってくれたから、おきゃくさんもわらってたでしょう。", "v": "Không ai là không sai cả. Em báo ngay nên khách cũng cười đấy thôi." },
-    { "ai": "H", "t": "はい。「ありがとう」って言ってくれました。", "doc": "はい。「ありがとう」っていってくれました。", "v": "Vâng. Khách còn nói “cảm ơn” với em." },
-    { "ai": "N", "t": "来週もよろしくね。メモ、忘れないで。", "doc": "らいしゅうもよろしくね。メモ、わすれないで。", "v": "Tuần sau cũng nhờ em nhé. Đừng quên sổ ghi chép." },
-    { "ai": "H", "t": "はい！来週はもっと上手にできるように、がんばります。", "doc": "はい！らいしゅうはもっとじょうずにできるように、がんばります。", "v": "Vâng! Tuần sau em sẽ cố gắng để làm tốt hơn." }
+    {
+      "ai": "N",
+      "t": "ホアさん、今日からよろしくね。",
+      "doc": "ホアさん、きょうからよろしくね。",
+      "v": "Hoa à, từ hôm nay mong em giúp đỡ nhé."
+    },
+    {
+      "ai": "H",
+      "t": "ホアです。よろしくお願いします。わからないことがたくさんあるので、メモを取ってもいいですか。",
+      "doc": "ホアです。よろしくおねがいします。わからないことがたくさんあるので、メモをとってもいいですか。",
+      "v": "Em là Hoa ạ. Mong anh chỉ bảo. Em còn nhiều thứ chưa biết, em ghi chép lại có được không ạ?",
+      "khac": [
+        {
+          "kieu": "trang trọng",
+          "t": "ホアと申します。よろしくお願いいたします。わからないことが多いので、メモを取らせていただいてもよろしいですか。",
+          "doc": "ホアともうします。よろしくおねがいいたします。わからないことがおおいので、メモをとらせていただいてもよろしいですか。",
+          "v": "Em tên là Hoa. Mong anh chỉ bảo. Em còn nhiều điều chưa biết, em xin phép ghi chép lại được không ạ?",
+          "ghiChu": "Rất lịch sự — ngày đầu đi làm, với cấp trên."
+        }
+      ],
+      "np": [
+        {
+          "mau": "〜ので",
+          "giai": "Nêu lý do mềm, khách quan: たくさんあるので = vì có nhiều (điều chưa biết). Lịch sự hơn から, hợp khi xin phép.",
+          "vd": "熱があるので、今日は休みます。",
+          "vdDoc": "ねつがあるので、きょうはやすみます。",
+          "vdV": "Vì bị sốt nên hôm nay tôi nghỉ."
+        }
+      ]
+    },
+    {
+      "ai": "N",
+      "t": "もちろん。じゃあ、まず大事なことを三つ話すね。",
+      "doc": "もちろん。じゃあ、まずだいじなことをみっつはなすね。",
+      "v": "Tất nhiên rồi. Vậy trước hết anh nói ba điều quan trọng nhé."
+    },
+    {
+      "ai": "N",
+      "t": "一つ目。お客さんが入ってきたら、大きい声で「いらっしゃいませ」と言うこと。",
+      "doc": "ひとつめ。おきゃくさんがはいってきたら、おおきいこえで「いらっしゃいませ」ということ。",
+      "v": "Thứ nhất. Khách vừa bước vào là phải nói to “Irasshaimase”.",
+      "np": [
+        {
+          "mau": "V ること (quy định, lời dặn)",
+          "giai": "Kết câu bằng thể từ điển + こと để nêu quy tắc, lời dặn (hay gặp trong nội quy): 言うこと = phải nói.",
+          "vd": "毎日、日記を書くこと。",
+          "vdDoc": "まいにち、にっきをかくこと。",
+          "vdV": "Mỗi ngày phải viết nhật ký."
+        },
+        {
+          "mau": "V たら (khi, sau khi)",
+          "giai": "入ってきたら = khi (khách) bước vào thì…. 〜たら nối việc xảy ra trước với việc làm sau.",
+          "vd": "駅に着いたら、電話してください。",
+          "vdDoc": "えきについたら、でんわしてください。",
+          "vdV": "Đến ga thì gọi cho tôi nhé."
+        }
+      ]
+    },
+    {
+      "ai": "H",
+      "t": "はい。大きい声で、ですね。",
+      "doc": "はい。おおきいこえで、ですね。",
+      "v": "Vâng. Nói thật to, phải không ạ."
+    },
+    {
+      "ai": "N",
+      "t": "二つ目。厨房に入る前に、必ず手を洗わなければならない。",
+      "doc": "ふたつめ。ちゅうぼうにはいるまえに、かならずてをあらわなければならない。",
+      "v": "Thứ hai. Trước khi vào bếp nhất định phải rửa tay.",
+      "khac": [
+        {
+          "kieu": "văn nói",
+          "t": "二つ目。厨房に入る前に、必ず手を洗わなきゃいけないよ。",
+          "doc": "ふたつめ。ちゅうぼうにはいるまえに、かならずてをあらわなきゃいけないよ。",
+          "v": "Thứ hai. Trước khi vào bếp nhất định phải rửa tay đấy.",
+          "ghiChu": "なきゃ = なければ, rút gọn trong văn nói."
+        },
+        {
+          "kieu": "lịch sự",
+          "t": "二つ目です。厨房に入る前に、必ず手を洗ってください。",
+          "doc": "ふたつめです。ちゅうぼうにはいるまえに、かならずてをあらってください。",
+          "v": "Điều thứ hai. Trước khi vào bếp, nhất định hãy rửa tay."
+        }
+      ],
+      "np": [
+        {
+          "mau": "V なければならない",
+          "giai": "Phải làm gì (nghĩa vụ): thể ない bỏ い + ければならない. 洗わない → 洗わなければならない. Lịch sự: 〜なければなりません.",
+          "vd": "明日は早く起きなければなりません。",
+          "vdDoc": "あしたははやくおきなければなりません。",
+          "vdV": "Ngày mai tôi phải dậy sớm."
+        }
+      ]
+    },
+    {
+      "ai": "H",
+      "t": "手を洗う、ですね。三つ目は何ですか。",
+      "doc": "てをあらう、ですね。みっつめはなんですか。",
+      "v": "Rửa tay ạ. Còn điều thứ ba là gì ạ?"
+    },
+    {
+      "ai": "N",
+      "t": "三つ目が一番大事。わからない時は、自分で決めないで、すぐ聞くこと。",
+      "doc": "みっつめがいちばんだいじ。わからないときは、じぶんできめないで、すぐきくこと。",
+      "v": "Điều thứ ba là quan trọng nhất. Khi không biết thì đừng tự quyết, hỏi ngay."
+    },
+    {
+      "ai": "H",
+      "t": "聞いてもいいんですか。忙しい時は迷惑じゃないですか。",
+      "doc": "きいてもいいんですか。いそがしいときはめいわくじゃないですか。",
+      "v": "Em hỏi cũng được ạ? Lúc quán đông thì không làm phiền anh sao?",
+      "khac": [
+        {
+          "kieu": "lịch sự",
+          "t": "お忙しい時にお聞きしても、ご迷惑ではないでしょうか。",
+          "doc": "おいそがしいときにおききしても、ごめいわくではないでしょうか。",
+          "v": "Lúc anh bận mà em hỏi thì có làm phiền anh không ạ?"
+        }
+      ]
+    },
+    {
+      "ai": "N",
+      "t": "間違えるほうが困るよ。聞くのも仕事のうちだから。",
+      "doc": "まちがえるほうがこまるよ。きくのもしごとのうちだから。",
+      "v": "Làm sai mới phiền hơn đấy. Hỏi cũng là một phần công việc mà."
+    },
+    {
+      "ai": "H",
+      "t": "店長、すみません。3番テーブルのお客さんが、ラーメンに卵を入れないでくださいと言っています。",
+      "doc": "てんちょう、すみません。さんばんテーブルのおきゃくさんが、ラーメンにたまごをいれないでくださいといっています。",
+      "v": "Anh chủ ơi, xin lỗi anh. Khách bàn số 3 dặn là đừng cho trứng vào mì ạ.",
+      "khac": [
+        {
+          "kieu": "ngắn gọn",
+          "t": "店長、3番テーブル、卵なしでお願いします。",
+          "doc": "てんちょう、さんばんテーブル、たまごなしでおねがいします。",
+          "v": "Anh ơi, bàn 3, không trứng ạ.",
+          "ghiChu": "Lúc quán đông, báo bếp thật ngắn gọn."
+        }
+      ],
+      "np": [
+        {
+          "mau": "「…」と言っています (truyền lời)",
+          "giai": "Kể lại lời người khác: 「…」と言っています = (ai đó) nói rằng …. Câu được trích có thể là lời nhờ: 入れないでください.",
+          "vd": "先生が、明日はテストだと言っています。",
+          "vdDoc": "せんせいが、あしたはテストだといっています。",
+          "vdV": "Thầy nói là mai có bài kiểm tra."
+        }
+      ]
+    },
+    {
+      "ai": "N",
+      "t": "了解。卵なしね。よく聞いてくれたね。",
+      "doc": "りょうかい。たまごなしね。よくきいてくれたね。",
+      "v": "Rõ. Không trứng nhé. Em hỏi lại là tốt lắm."
+    },
+    {
+      "ai": "H",
+      "t": "あの、実はさっき、5番テーブルの注文を間違えてしまいました。",
+      "doc": "あの、じつはさっき、ごばんテーブルのちゅうもんをまちがえてしまいました。",
+      "v": "À… thật ra lúc nãy em lỡ làm sai món của bàn số 5.",
+      "khac": [
+        {
+          "kieu": "lịch sự",
+          "t": "申し訳ありません。実は先ほど、5番テーブルの注文を間違えてしまいました。",
+          "doc": "もうしわけありません。じつはさきほど、ごばんテーブルのちゅうもんをまちがえてしまいました。",
+          "v": "Em xin lỗi. Thật ra lúc nãy em đã lỡ làm sai món của bàn số 5.",
+          "ghiChu": "Báo lỗi với cấp trên: xin lỗi trước, kể sự việc sau."
+        }
+      ],
+      "np": [
+        {
+          "mau": "V てしまいました",
+          "giai": "Lỡ làm gì (đáng tiếc), hoặc đã làm xong hẳn: 間違えてしまいました = lỡ làm sai mất rồi.",
+          "vd": "電車にかさを忘れてしまいました。",
+          "vdDoc": "でんしゃにかさをわすれてしまいました。",
+          "vdV": "Tôi lỡ để quên ô trên tàu."
+        }
+      ]
+    },
+    {
+      "ai": "H",
+      "t": "餃子を二つと言われたのに、一つしか出しませんでした。",
+      "doc": "ぎょうざをふたつといわれたのに、ひとつしかだしませんでした。",
+      "v": "Khách gọi hai đĩa gyoza mà em chỉ mang ra có một.",
+      "np": [
+        {
+          "mau": "〜しか V ない",
+          "giai": "Chỉ … (ít hơn mong đợi), luôn đi với động từ phủ định: 一つしか出しませんでした = chỉ mang ra có một.",
+          "vd": "財布に百円しかありません。",
+          "vdDoc": "さいふにひゃくえんしかありません。",
+          "vdV": "Trong ví chỉ có 100 yên."
+        }
+      ]
+    },
+    {
+      "ai": "N",
+      "t": "そうか。じゃあ、すぐもう一つ作るから、持っていって、一言謝ろう。",
+      "doc": "そうか。じゃあ、すぐもうひとつつくるから、もっていって、ひとことあやまろう。",
+      "v": "Vậy à. Anh làm ngay một đĩa nữa, em mang ra và nói một lời xin lỗi nhé."
+    },
+    {
+      "ai": "H",
+      "t": "はい。……お客様、大変申し訳ございませんでした。餃子をもう一つお持ちしました。",
+      "doc": "はい。……おきゃくさま、たいへんもうしわけございませんでした。ぎょうざをもうひとつおもちしました。",
+      "v": "Vâng. …Thưa quý khách, em thành thật xin lỗi. Em mang thêm một đĩa gyoza ạ.",
+      "khac": [
+        {
+          "kieu": "lịch sự",
+          "t": "お客様、大変失礼いたしました。餃子をもう一つお持ちしました。",
+          "doc": "おきゃくさま、たいへんしつれいいたしました。ぎょうざをもうひとつおもちしました。",
+          "v": "Thưa quý khách, em thành thật xin lỗi vì sơ suất. Em mang thêm một đĩa gyoza ạ.",
+          "ghiChu": "失礼いたしました nhẹ hơn 申し訳ございません một chút, cũng hay dùng với khách."
+        }
+      ],
+      "np": [
+        {
+          "mau": "お + V-stem + します (khiêm nhường)",
+          "giai": "Hạ mình khi làm gì cho khách: 持つ → お持ちします, 待つ → お待ちします. Quá khứ: お持ちしました.",
+          "vd": "お荷物をお持ちします。",
+          "vdDoc": "おにもつをおもちします。",
+          "vdV": "Để tôi xách hành lý giúp quý khách."
+        }
+      ]
+    },
+    {
+      "ai": "N",
+      "t": "お疲れさま。初日にしては、よくできたよ。",
+      "doc": "おつかれさま。しょにちにしては、よくできたよ。",
+      "v": "Vất vả rồi. Ngày đầu mà làm được vậy là giỏi lắm."
+    },
+    {
+      "ai": "H",
+      "t": "でも、間違えてしまって……。",
+      "doc": "でも、まちがえてしまって……。",
+      "v": "Nhưng em lại làm sai…"
+    },
+    {
+      "ai": "N",
+      "t": "間違えない人はいないよ。すぐ言ってくれたから、お客さんも笑ってたでしょう。",
+      "doc": "まちがえないひとはいないよ。すぐいってくれたから、おきゃくさんもわらってたでしょう。",
+      "v": "Không ai là không sai cả. Em báo ngay nên khách cũng cười đấy thôi."
+    },
+    {
+      "ai": "H",
+      "t": "はい。「ありがとう」って言ってくれました。",
+      "doc": "はい。「ありがとう」っていってくれました。",
+      "v": "Vâng. Khách còn nói “cảm ơn” với em."
+    },
+    {
+      "ai": "N",
+      "t": "来週もよろしくね。メモ、忘れないで。",
+      "doc": "らいしゅうもよろしくね。メモ、わすれないで。",
+      "v": "Tuần sau cũng nhờ em nhé. Đừng quên sổ ghi chép."
+    },
+    {
+      "ai": "H",
+      "t": "はい！来週はもっと上手にできるように、がんばります。",
+      "doc": "はい！らいしゅうはもっとじょうずにできるように、がんばります。",
+      "v": "Vâng! Tuần sau em sẽ cố gắng để làm tốt hơn.",
+      "khac": [
+        {
+          "kieu": "trang trọng",
+          "t": "はい。来週はもっとお役に立てるよう、頑張ります。",
+          "doc": "はい。らいしゅうはもっとおやくにたてるよう、がんばります。",
+          "v": "Vâng. Tuần sau em sẽ cố gắng để giúp ích được nhiều hơn ạ."
+        }
+      ],
+      "np": [
+        {
+          "mau": "V（可能形）ように、〜",
+          "giai": "Để có thể …: できるように、がんばります = cố gắng để làm được. ように chỉ mục đích, thường đi với thể khả năng hoặc phủ định.",
+          "vd": "日本語が話せるように、毎日練習しています。",
+          "vdDoc": "にほんごがはなせるように、まいにちれんしゅうしています。",
+          "vdV": "Tôi luyện tập hằng ngày để nói được tiếng Nhật."
+        }
+      ]
+    }
   ],
   "tuVung": [
-    { "chu": "メモを取って", "doc": "メモをとって", "nghia": "ghi chép (メモを取る)", "vd": "授業でメモを取ってください。" },
-    { "chu": "大事", "doc": "だいじ", "nghia": "quan trọng (đại sự)", "vd": "健康は大事です。" },
-    { "chu": "厨房", "doc": "ちゅうぼう", "nghia": "nhà bếp (của nhà hàng)", "vd": "厨房はとても暑いです。" },
-    { "chu": "洗わなければならない", "doc": "あらわなければならない", "nghia": "phải rửa (mẫu 〜なければならない: bắt buộc)", "vd": "ご飯の前に手を洗わなければならない。" },
-    { "chu": "迷惑", "doc": "めいわく", "nghia": "phiền hà, làm phiền (mê hoặc)", "vd": "夜の大きい音は迷惑です。" },
-    { "chu": "注文", "doc": "ちゅうもん", "nghia": "gọi món, đặt hàng (chú văn)", "vd": "ご注文はお決まりですか。" },
-    { "chu": "間違えてしまいました", "doc": "まちがえてしまいました", "nghia": "lỡ làm sai mất rồi (〜てしまう: tiếc nuối)", "vd": "名前を間違えてしまいました。" },
-    { "chu": "一言", "doc": "ひとこと", "nghia": "một lời, một câu ngắn", "vd": "一言お礼を言いたいです。" },
-    { "chu": "謝ろう", "doc": "あやまろう", "nghia": "hãy xin lỗi (thể ý chí của 謝る)", "vd": "けんかしたら、すぐ謝ろう。" },
-    { "chu": "申し訳ございませんでした", "doc": "もうしわけございませんでした", "nghia": "thành thật xin lỗi (rất lịch sự, dùng với khách)", "vd": "お待たせして、申し訳ございませんでした。" },
-    { "chu": "お疲れさま", "doc": "おつかれさま", "nghia": "vất vả rồi (chào khi xong việc)", "vd": "今日もお疲れさまでした。" },
-    { "chu": "初日", "doc": "しょにち", "nghia": "ngày đầu tiên (sơ nhật)", "vd": "仕事の初日は緊張します。" }
+    {
+      "chu": "メモを取って",
+      "doc": "メモをとって",
+      "nghia": "ghi chép (メモを取る)",
+      "vd": "授業でメモを取ってください。"
+    },
+    {
+      "chu": "大事",
+      "doc": "だいじ",
+      "nghia": "quan trọng (đại sự)",
+      "vd": "健康は大事です。"
+    },
+    {
+      "chu": "厨房",
+      "doc": "ちゅうぼう",
+      "nghia": "nhà bếp (của nhà hàng)",
+      "vd": "厨房はとても暑いです。"
+    },
+    {
+      "chu": "洗わなければならない",
+      "doc": "あらわなければならない",
+      "nghia": "phải rửa (mẫu 〜なければならない: bắt buộc)",
+      "vd": "ご飯の前に手を洗わなければならない。"
+    },
+    {
+      "chu": "迷惑",
+      "doc": "めいわく",
+      "nghia": "phiền hà, làm phiền (mê hoặc)",
+      "vd": "夜の大きい音は迷惑です。"
+    },
+    {
+      "chu": "注文",
+      "doc": "ちゅうもん",
+      "nghia": "gọi món, đặt hàng (chú văn)",
+      "vd": "ご注文はお決まりですか。"
+    },
+    {
+      "chu": "間違えてしまいました",
+      "doc": "まちがえてしまいました",
+      "nghia": "lỡ làm sai mất rồi (〜てしまう: tiếc nuối)",
+      "vd": "名前を間違えてしまいました。"
+    },
+    {
+      "chu": "一言",
+      "doc": "ひとこと",
+      "nghia": "một lời, một câu ngắn",
+      "vd": "一言お礼を言いたいです。"
+    },
+    {
+      "chu": "謝ろう",
+      "doc": "あやまろう",
+      "nghia": "hãy xin lỗi (thể ý chí của 謝る)",
+      "vd": "けんかしたら、すぐ謝ろう。"
+    },
+    {
+      "chu": "申し訳ございませんでした",
+      "doc": "もうしわけございませんでした",
+      "nghia": "thành thật xin lỗi (rất lịch sự, dùng với khách)",
+      "vd": "お待たせして、申し訳ございませんでした。"
+    },
+    {
+      "chu": "お疲れさま",
+      "doc": "おつかれさま",
+      "nghia": "vất vả rồi (chào khi xong việc)",
+      "vd": "今日もお疲れさまでした。"
+    },
+    {
+      "chu": "初日",
+      "doc": "しょにち",
+      "nghia": "ngày đầu tiên (sơ nhật)",
+      "vd": "仕事の初日は緊張します。"
+    }
   ],
   "yNghia": "Ngày đầu đi làm, ai cũng sợ hỏi vì sợ làm phiền. Nhưng người làm phiền nhất là người lặng lẽ làm sai. Hỏi ngay, báo lỗi ngay, xin lỗi một câu thật lòng — khách hàng và người chủ nhớ điều đó lâu hơn nhớ cái lỗi của bạn.",
   "meo": [
@@ -59,9 +386,47 @@
     "Mục tiêu: thể khả năng/thể ない + ように + がんばります — 「上手にできるように、がんばります」."
   ],
   "cauHoi": [
-    { "hoi": "Theo ông chủ, điều nào quan trọng nhất?", "chon": ["Nói “Irasshaimase” thật to", "Không biết thì hỏi ngay, đừng tự quyết", "Rửa tay trước khi vào bếp"], "dung": 1, "giai": "「三つ目が一番大事。わからない時は、自分で決めないで、すぐ聞くこと」." },
-    { "hoi": "Khách bàn số 3 dặn gì?", "chon": ["Thêm trứng", "Ít muối", "Mang thêm gyoza", "Đừng cho trứng vào mì"], "dung": 3, "giai": "「ラーメンに卵を入れないでください」." },
-    { "hoi": "Hoa đã làm sai gì ở bàn số 5?", "chon": ["Chỉ mang ra một đĩa gyoza thay vì hai", "Mang nhầm sang bàn khác", "Quên chào khách"], "dung": 0, "giai": "「餃子を二つと言われたのに、一つしか出しませんでした」." },
-    { "hoi": "Mẫu nào diễn tả việc bắt buộc phải làm?", "chon": ["洗ってもいい", "洗わないで", "洗わなければならない", "洗ってしまった"], "dung": 2, "giai": "〜なければならない = phải làm." }
+    {
+      "hoi": "Theo ông chủ, điều nào quan trọng nhất?",
+      "chon": [
+        "Nói “Irasshaimase” thật to",
+        "Không biết thì hỏi ngay, đừng tự quyết",
+        "Rửa tay trước khi vào bếp"
+      ],
+      "dung": 1,
+      "giai": "「三つ目が一番大事。わからない時は、自分で決めないで、すぐ聞くこと」."
+    },
+    {
+      "hoi": "Khách bàn số 3 dặn gì?",
+      "chon": [
+        "Thêm trứng",
+        "Ít muối",
+        "Mang thêm gyoza",
+        "Đừng cho trứng vào mì"
+      ],
+      "dung": 3,
+      "giai": "「ラーメンに卵を入れないでください」."
+    },
+    {
+      "hoi": "Hoa đã làm sai gì ở bàn số 5?",
+      "chon": [
+        "Chỉ mang ra một đĩa gyoza thay vì hai",
+        "Mang nhầm sang bàn khác",
+        "Quên chào khách"
+      ],
+      "dung": 0,
+      "giai": "「餃子を二つと言われたのに、一つしか出しませんでした」."
+    },
+    {
+      "hoi": "Mẫu nào diễn tả việc bắt buộc phải làm?",
+      "chon": [
+        "洗ってもいい",
+        "洗わないで",
+        "洗わなければならない",
+        "洗ってしまった"
+      ],
+      "dung": 2,
+      "giai": "〜なければならない = phải làm."
+    }
   ]
 }

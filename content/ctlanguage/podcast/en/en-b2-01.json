@@ -1,6 +1,7 @@
 {
   "id": "en-b2-01",
   "nn": "en",
+  "danhMuc": "cong-viec",
   "cap": "B2",
   "so": 1,
   "tieuDe": "Tell Me About a Mistake",
@@ -9,50 +10,224 @@
   "chuDe": "Phỏng vấn xin việc",
   "bieuTuong": "briefcase.fill",
   "nguoi": [
-    { "ma": "C", "ten": "Claire", "giong": "uk-nu", "vai": "quản lý kỹ thuật, người phỏng vấn" },
-    { "ma": "D", "ten": "Đức", "giong": "us-nam", "vai": "ứng viên" }
+    {
+      "ma": "C",
+      "ten": "Claire",
+      "giong": "uk-nu",
+      "vai": "quản lý kỹ thuật, người phỏng vấn"
+    },
+    {
+      "ma": "D",
+      "ten": "Đức",
+      "giong": "us-nam",
+      "vai": "ứng viên"
+    }
   ],
   "loi": [
-    { "ai": "C", "t": "Thanks for coming in, Duc. Did you find the office easily?", "v": "Cảm ơn Đức đã đến. Bạn tìm văn phòng có dễ không?" },
-    { "ai": "D", "t": "Yes, thank you. I actually came twenty minutes early, so I had a coffee downstairs.", "v": "Dạ có, cảm ơn chị. Thật ra em đến sớm hai mươi phút nên đã ngồi uống cà phê ở dưới tầng." },
-    { "ai": "C", "t": "Smart move. So, I've read your CV. Could you start by telling me a bit about yourself?", "v": "Khôn đấy. Chị đã đọc CV của bạn rồi. Bạn có thể bắt đầu bằng việc giới thiệu đôi chút về bản thân không?" },
-    { "ai": "D", "t": "Sure. I'm in my final year of software engineering, and for the past six months I've been interning at a small logistics start-up, mostly on the back end.", "v": "Dạ vâng. Em đang học năm cuối ngành kỹ thuật phần mềm, và sáu tháng qua em thực tập ở một start-up nhỏ về logistics, chủ yếu làm phần back-end." },
-    { "ai": "C", "t": "And what drew you to this position in particular?", "v": "Vậy điều gì khiến bạn chú ý đến vị trí này nói riêng?" },
-    { "ai": "D", "t": "Two things. Your team builds tools that people use every day, and from what I've read, you put a lot of emphasis on mentoring junior developers. That matters a lot to me at this stage.", "v": "Hai điều ạ. Đội của chị làm những công cụ mà mọi người dùng hằng ngày, và theo những gì em đọc được, công ty rất chú trọng việc kèm cặp lập trình viên mới. Ở giai đoạn này, điều đó rất quan trọng với em." },
-    { "ai": "C", "t": "Good. Now, here's a question people often dread. Tell me about a time you made a serious mistake at work.", "v": "Tốt. Giờ đến một câu hỏi mà mọi người hay sợ. Hãy kể về một lần bạn mắc lỗi nghiêm trọng trong công việc." },
-    { "ai": "D", "t": "Okay. In my second month, I ran a script that I thought was connected to the test database. It turned out to be connected to the live one.", "v": "Vâng. Tháng thứ hai, em chạy một đoạn script mà em tưởng đang nối với cơ sở dữ liệu thử nghiệm. Hoá ra nó nối với cơ sở dữ liệu thật đang chạy." },
-    { "ai": "C", "t": "Ouch. What happened?", "v": "Ối. Rồi sao?" },
-    { "ai": "D", "t": "It deleted around two hundred customer orders. My stomach dropped. For a moment, I actually considered trying to fix it quietly before anyone noticed.", "v": "Nó xoá mất khoảng hai trăm đơn hàng của khách. Em thót tim. Trong một khoảnh khắc, em đã thật sự tính lặng lẽ sửa trước khi có ai phát hiện." },
-    { "ai": "C", "t": "But you didn't.", "v": "Nhưng bạn đã không làm vậy." },
-    { "ai": "D", "t": "No. I told my team lead within five minutes. We restored the data from the morning backup, and only a handful of orders had to be re-entered by hand.", "v": "Vâng. Em báo trưởng nhóm trong vòng năm phút. Bọn em khôi phục dữ liệu từ bản sao lưu buổi sáng, và chỉ vài đơn phải nhập lại bằng tay." },
-    { "ai": "C", "t": "How did your lead react?", "v": "Trưởng nhóm của bạn phản ứng thế nào?" },
-    { "ai": "D", "t": "Surprisingly calmly. She said the real problem wasn't me. It was that a new intern could reach the live database so easily.", "v": "Bình tĩnh đến bất ngờ ạ. Chị ấy nói vấn đề thật sự không nằm ở em, mà ở chỗ một thực tập sinh mới lại có thể chạm vào cơ sở dữ liệu thật dễ dàng như thế." },
-    { "ai": "C", "t": "That sounds like a good lead. And what did you take away from it?", "v": "Nghe như một trưởng nhóm giỏi. Vậy bạn rút ra được gì?" },
-    { "ai": "D", "t": "Technically, I now double-check which environment I'm in before running anything, and I helped set up separate permissions. But the bigger lesson was that hiding a mistake would have made it ten times worse.", "v": "Về kỹ thuật, giờ em luôn kiểm tra lại mình đang ở môi trường nào trước khi chạy bất cứ thứ gì, và em đã góp phần thiết lập phân quyền riêng. Nhưng bài học lớn hơn là nếu giấu lỗi thì mọi chuyện sẽ tệ gấp mười lần." },
-    { "ai": "C", "t": "I appreciate your honesty. A lot of candidates give me a \"mistake\" that's really a hidden strength, like \"I work too hard.\"", "v": "Chị đánh giá cao sự thành thật của bạn. Nhiều ứng viên kể cho chị một \"lỗi\" mà thực chất là điểm mạnh trá hình, kiểu \"Em làm việc chăm quá.\"" },
-    { "ai": "D", "t": "To be honest, I did think about saying that.", "v": "Thật lòng thì em cũng đã định nói câu đó." },
-    { "ai": "C", "t": "Ha! I'm glad you didn't. One last thing: do you have any questions for me?", "v": "Ha! Chị mừng là bạn đã không nói. Một điều cuối: bạn có câu hỏi nào cho chị không?" },
-    { "ai": "D", "t": "Yes, a couple. What does a typical first month look like for a new developer here?", "v": "Dạ có, vài câu ạ. Tháng đầu tiên của một lập trình viên mới ở đây thường diễn ra thế nào?" },
-    { "ai": "C", "t": "You'd pair with a senior developer, ship a small feature in your second week, and have a check-in with me every Friday.", "v": "Bạn sẽ làm cặp với một lập trình viên lâu năm, ra mắt một tính năng nhỏ vào tuần thứ hai, và trao đổi nhanh với chị mỗi thứ Sáu." },
-    { "ai": "D", "t": "That sounds great. And my second question: what's the biggest challenge the team is facing right now?", "v": "Nghe tuyệt quá ạ. Câu thứ hai của em: thách thức lớn nhất đội đang gặp phải hiện nay là gì?" },
-    { "ai": "C", "t": "Good question. Honestly, we're growing faster than our documentation, so someone who writes things down would be very welcome.", "v": "Câu hỏi hay. Thật lòng mà nói, bọn chị phát triển nhanh hơn tốc độ viết tài liệu, nên một người chịu khó ghi chép lại sẽ rất được chào đón." },
-    { "ai": "D", "t": "Then I might be your person. I kept a notes file for every bug I fixed during my internship.", "v": "Vậy có lẽ em là người chị cần. Trong kỳ thực tập em giữ một tệp ghi chú cho mọi lỗi em đã sửa." },
-    { "ai": "C", "t": "Bring that to the next round. We'll be in touch by the end of the week.", "v": "Vòng sau hãy mang nó theo nhé. Bọn chị sẽ liên lạc trước cuối tuần." },
-    { "ai": "D", "t": "Thank you so much for your time, Claire.", "v": "Cảm ơn chị rất nhiều vì đã dành thời gian, chị Claire." }
+    {
+      "ai": "C",
+      "t": "Thanks for coming in, Duc. Did you find the office easily?",
+      "v": "Cảm ơn Đức đã đến. Bạn tìm văn phòng có dễ không?"
+    },
+    {
+      "ai": "D",
+      "t": "Yes, thank you. I actually came twenty minutes early, so I had a coffee downstairs.",
+      "v": "Dạ có, cảm ơn chị. Thật ra em đến sớm hai mươi phút nên đã ngồi uống cà phê ở dưới tầng."
+    },
+    {
+      "ai": "C",
+      "t": "Smart move. So, I've read your CV. Could you start by telling me a bit about yourself?",
+      "v": "Khôn đấy. Chị đã đọc CV của bạn rồi. Bạn có thể bắt đầu bằng việc giới thiệu đôi chút về bản thân không?"
+    },
+    {
+      "ai": "D",
+      "t": "Sure. I'm in my final year of software engineering, and for the past six months I've been interning at a small logistics start-up, mostly on the back end.",
+      "v": "Dạ vâng. Em đang học năm cuối ngành kỹ thuật phần mềm, và sáu tháng qua em thực tập ở một start-up nhỏ về logistics, chủ yếu làm phần back-end."
+    },
+    {
+      "ai": "C",
+      "t": "And what drew you to this position in particular?",
+      "v": "Vậy điều gì khiến bạn chú ý đến vị trí này nói riêng?"
+    },
+    {
+      "ai": "D",
+      "t": "Two things. Your team builds tools that people use every day, and from what I've read, you put a lot of emphasis on mentoring junior developers. That matters a lot to me at this stage.",
+      "v": "Hai điều ạ. Đội của chị làm những công cụ mà mọi người dùng hằng ngày, và theo những gì em đọc được, công ty rất chú trọng việc kèm cặp lập trình viên mới. Ở giai đoạn này, điều đó rất quan trọng với em."
+    },
+    {
+      "ai": "C",
+      "t": "Good. Now, here's a question people often dread. Tell me about a time you made a serious mistake at work.",
+      "v": "Tốt. Giờ đến một câu hỏi mà mọi người hay sợ. Hãy kể về một lần bạn mắc lỗi nghiêm trọng trong công việc."
+    },
+    {
+      "ai": "D",
+      "t": "Okay. In my second month, I ran a script that I thought was connected to the test database. It turned out to be connected to the live one.",
+      "v": "Vâng. Tháng thứ hai, em chạy một đoạn script mà em tưởng đang nối với cơ sở dữ liệu thử nghiệm. Hoá ra nó nối với cơ sở dữ liệu thật đang chạy."
+    },
+    {
+      "ai": "C",
+      "t": "Ouch. What happened?",
+      "v": "Ối. Rồi sao?"
+    },
+    {
+      "ai": "D",
+      "t": "It deleted around two hundred customer orders. My stomach dropped. For a moment, I actually considered trying to fix it quietly before anyone noticed.",
+      "v": "Nó xoá mất khoảng hai trăm đơn hàng của khách. Em thót tim. Trong một khoảnh khắc, em đã thật sự tính lặng lẽ sửa trước khi có ai phát hiện."
+    },
+    {
+      "ai": "C",
+      "t": "But you didn't.",
+      "v": "Nhưng bạn đã không làm vậy."
+    },
+    {
+      "ai": "D",
+      "t": "No. I told my team lead within five minutes. We restored the data from the morning backup, and only a handful of orders had to be re-entered by hand.",
+      "v": "Vâng. Em báo trưởng nhóm trong vòng năm phút. Bọn em khôi phục dữ liệu từ bản sao lưu buổi sáng, và chỉ vài đơn phải nhập lại bằng tay."
+    },
+    {
+      "ai": "C",
+      "t": "How did your lead react?",
+      "v": "Trưởng nhóm của bạn phản ứng thế nào?"
+    },
+    {
+      "ai": "D",
+      "t": "Surprisingly calmly. She said the real problem wasn't me. It was that a new intern could reach the live database so easily.",
+      "v": "Bình tĩnh đến bất ngờ ạ. Chị ấy nói vấn đề thật sự không nằm ở em, mà ở chỗ một thực tập sinh mới lại có thể chạm vào cơ sở dữ liệu thật dễ dàng như thế."
+    },
+    {
+      "ai": "C",
+      "t": "That sounds like a good lead. And what did you take away from it?",
+      "v": "Nghe như một trưởng nhóm giỏi. Vậy bạn rút ra được gì?"
+    },
+    {
+      "ai": "D",
+      "t": "Technically, I now double-check which environment I'm in before running anything, and I helped set up separate permissions. But the bigger lesson was that hiding a mistake would have made it ten times worse.",
+      "v": "Về kỹ thuật, giờ em luôn kiểm tra lại mình đang ở môi trường nào trước khi chạy bất cứ thứ gì, và em đã góp phần thiết lập phân quyền riêng. Nhưng bài học lớn hơn là nếu giấu lỗi thì mọi chuyện sẽ tệ gấp mười lần."
+    },
+    {
+      "ai": "C",
+      "t": "I appreciate your honesty. A lot of candidates give me a \"mistake\" that's really a hidden strength, like \"I work too hard.\"",
+      "v": "Chị đánh giá cao sự thành thật của bạn. Nhiều ứng viên kể cho chị một \"lỗi\" mà thực chất là điểm mạnh trá hình, kiểu \"Em làm việc chăm quá.\""
+    },
+    {
+      "ai": "D",
+      "t": "To be honest, I did think about saying that.",
+      "v": "Thật lòng thì em cũng đã định nói câu đó."
+    },
+    {
+      "ai": "C",
+      "t": "Ha! I'm glad you didn't. One last thing: do you have any questions for me?",
+      "v": "Ha! Chị mừng là bạn đã không nói. Một điều cuối: bạn có câu hỏi nào cho chị không?"
+    },
+    {
+      "ai": "D",
+      "t": "Yes, a couple. What does a typical first month look like for a new developer here?",
+      "v": "Dạ có, vài câu ạ. Tháng đầu tiên của một lập trình viên mới ở đây thường diễn ra thế nào?"
+    },
+    {
+      "ai": "C",
+      "t": "You'd pair with a senior developer, ship a small feature in your second week, and have a check-in with me every Friday.",
+      "v": "Bạn sẽ làm cặp với một lập trình viên lâu năm, ra mắt một tính năng nhỏ vào tuần thứ hai, và trao đổi nhanh với chị mỗi thứ Sáu."
+    },
+    {
+      "ai": "D",
+      "t": "That sounds great. And my second question: what's the biggest challenge the team is facing right now?",
+      "v": "Nghe tuyệt quá ạ. Câu thứ hai của em: thách thức lớn nhất đội đang gặp phải hiện nay là gì?"
+    },
+    {
+      "ai": "C",
+      "t": "Good question. Honestly, we're growing faster than our documentation, so someone who writes things down would be very welcome.",
+      "v": "Câu hỏi hay. Thật lòng mà nói, bọn chị phát triển nhanh hơn tốc độ viết tài liệu, nên một người chịu khó ghi chép lại sẽ rất được chào đón."
+    },
+    {
+      "ai": "D",
+      "t": "Then I might be your person. I kept a notes file for every bug I fixed during my internship.",
+      "v": "Vậy có lẽ em là người chị cần. Trong kỳ thực tập em giữ một tệp ghi chú cho mọi lỗi em đã sửa."
+    },
+    {
+      "ai": "C",
+      "t": "Bring that to the next round. We'll be in touch by the end of the week.",
+      "v": "Vòng sau hãy mang nó theo nhé. Bọn chị sẽ liên lạc trước cuối tuần."
+    },
+    {
+      "ai": "D",
+      "t": "Thank you so much for your time, Claire.",
+      "v": "Cảm ơn chị rất nhiều vì đã dành thời gian, chị Claire."
+    }
   ],
   "tuVung": [
-    { "chu": "drew you to", "doc": "/druː juː tuː/", "nghia": "thu hút bạn đến với… (draw someone to)", "vd": "What drew you to teaching?" },
-    { "chu": "put a lot of emphasis on", "doc": "/pʊt ə lɒt əv ˈemfəsɪs ɒn/", "nghia": "rất chú trọng vào…", "vd": "Our school puts a lot of emphasis on speaking skills." },
-    { "chu": "mentoring", "doc": "/ˈmentɔːrɪŋ/", "nghia": "kèm cặp, hướng dẫn (người mới)", "vd": "Good mentoring can speed up your career." },
-    { "chu": "dread", "doc": "/dred/", "nghia": "sợ, ngại (một việc sắp tới)", "vd": "I dread Monday mornings." },
-    { "chu": "turned out to be", "doc": "/tɜːnd aʊt tə biː/", "nghia": "hoá ra là", "vd": "The \"easy\" task turned out to be very hard." },
-    { "chu": "My stomach dropped", "doc": "/maɪ ˈstʌmək drɒpt/", "nghia": "thót tim, chột dạ (vì sợ)", "vd": "When I saw the bill, my stomach dropped." },
-    { "chu": "a handful of", "doc": "/ə ˈhændfʊl əv/", "nghia": "một vài, một nhúm", "vd": "Only a handful of students came." },
-    { "chu": "take away from", "doc": "/teɪk əˈweɪ frəm/", "nghia": "rút ra (bài học) từ…", "vd": "What did you take away from the workshop?" },
-    { "chu": "double-check", "doc": "/ˌdʌbl ˈtʃek/", "nghia": "kiểm tra lại lần nữa", "vd": "Always double-check the address before you send." },
-    { "chu": "appreciate", "doc": "/əˈpriːʃieɪt/", "nghia": "đánh giá cao, trân trọng", "vd": "I really appreciate your help." },
-    { "chu": "hidden strength", "doc": "/ˈhɪdn streŋθ/", "nghia": "điểm mạnh trá hình", "vd": "Being \"too detailed\" is often a hidden strength." },
-    { "chu": "be in touch", "doc": "/bi ɪn tʌtʃ/", "nghia": "liên lạc (lại)", "vd": "I'll be in touch next week." }
+    {
+      "chu": "drew you to",
+      "doc": "/druː juː tuː/",
+      "nghia": "thu hút bạn đến với… (draw someone to)",
+      "vd": "What drew you to teaching?"
+    },
+    {
+      "chu": "put a lot of emphasis on",
+      "doc": "/pʊt ə lɒt əv ˈemfəsɪs ɒn/",
+      "nghia": "rất chú trọng vào…",
+      "vd": "Our school puts a lot of emphasis on speaking skills."
+    },
+    {
+      "chu": "mentoring",
+      "doc": "/ˈmentɔːrɪŋ/",
+      "nghia": "kèm cặp, hướng dẫn (người mới)",
+      "vd": "Good mentoring can speed up your career."
+    },
+    {
+      "chu": "dread",
+      "doc": "/dred/",
+      "nghia": "sợ, ngại (một việc sắp tới)",
+      "vd": "I dread Monday mornings."
+    },
+    {
+      "chu": "turned out to be",
+      "doc": "/tɜːnd aʊt tə biː/",
+      "nghia": "hoá ra là",
+      "vd": "The \"easy\" task turned out to be very hard."
+    },
+    {
+      "chu": "My stomach dropped",
+      "doc": "/maɪ ˈstʌmək drɒpt/",
+      "nghia": "thót tim, chột dạ (vì sợ)",
+      "vd": "When I saw the bill, my stomach dropped."
+    },
+    {
+      "chu": "a handful of",
+      "doc": "/ə ˈhændfʊl əv/",
+      "nghia": "một vài, một nhúm",
+      "vd": "Only a handful of students came."
+    },
+    {
+      "chu": "take away from",
+      "doc": "/teɪk əˈweɪ frəm/",
+      "nghia": "rút ra (bài học) từ…",
+      "vd": "What did you take away from the workshop?"
+    },
+    {
+      "chu": "double-check",
+      "doc": "/ˌdʌbl ˈtʃek/",
+      "nghia": "kiểm tra lại lần nữa",
+      "vd": "Always double-check the address before you send."
+    },
+    {
+      "chu": "appreciate",
+      "doc": "/əˈpriːʃieɪt/",
+      "nghia": "đánh giá cao, trân trọng",
+      "vd": "I really appreciate your help."
+    },
+    {
+      "chu": "hidden strength",
+      "doc": "/ˈhɪdn streŋθ/",
+      "nghia": "điểm mạnh trá hình",
+      "vd": "Being \"too detailed\" is often a hidden strength."
+    },
+    {
+      "chu": "be in touch",
+      "doc": "/bi ɪn tʌtʃ/",
+      "nghia": "liên lạc (lại)",
+      "vd": "I'll be in touch next week."
+    }
   ],
   "yNghia": "Nhà tuyển dụng không tìm người chưa bao giờ sai — họ tìm người dám nhận lỗi sớm và biết rút ra bài học. Và buổi phỏng vấn là hai chiều: những câu bạn hỏi lại cũng cho thấy bạn là người như thế nào.",
   "meo": [
@@ -62,10 +237,55 @@
     "Luôn chuẩn bị 2 câu hỏi lại: \"What does a typical first month look like?\" / \"What's the biggest challenge the team is facing?\""
   ],
   "cauHoi": [
-    { "hoi": "Lỗi của Đức là gì?", "chon": ["Nộp code trễ hạn", "Chạy script trên cơ sở dữ liệu thật, xoá khoảng 200 đơn hàng", "Làm lộ mật khẩu của khách"], "dung": 1, "giai": "\"It turned out to be connected to the live one. It deleted around two hundred customer orders.\"" },
-    { "hoi": "Đức đã xử lý thế nào?", "chon": ["Đợi tới cuối ngày mới báo", "Lặng lẽ tự sửa", "Báo trưởng nhóm trong 5 phút và khôi phục từ bản sao lưu"], "dung": 2, "giai": "Anh có nghĩ tới việc sửa lặng lẽ nhưng \"I told my team lead within five minutes.\"" },
-    { "hoi": "Theo trưởng nhóm, vấn đề thật sự là gì?", "chon": ["Thực tập sinh mới chạm được vào cơ sở dữ liệu thật quá dễ", "Đức thiếu cẩn thận", "Bản sao lưu quá cũ"], "dung": 0, "giai": "\"The real problem wasn't me. It was that a new intern could reach the live database so easily.\"" },
-    { "hoi": "Vì sao Claire thích câu trả lời của Đức hơn \"I work too hard\"?", "chon": ["Vì nó ngắn gọn", "Vì nó thành thật và cho thấy Đức học được gì", "Vì nó cho thấy Đức không bao giờ sai"], "dung": 1, "giai": "\"I appreciate your honesty.\" — \"I work too hard\" chỉ là điểm mạnh trá hình." },
-    { "hoi": "Thách thức lớn nhất của đội hiện nay là gì?", "chon": ["Khách hàng phàn nàn nhiều", "Thiếu người làm back-end", "Tài liệu không theo kịp tốc độ phát triển"], "dung": 2, "giai": "\"We're growing faster than our documentation.\"" }
+    {
+      "hoi": "Lỗi của Đức là gì?",
+      "chon": [
+        "Nộp code trễ hạn",
+        "Chạy script trên cơ sở dữ liệu thật, xoá khoảng 200 đơn hàng",
+        "Làm lộ mật khẩu của khách"
+      ],
+      "dung": 1,
+      "giai": "\"It turned out to be connected to the live one. It deleted around two hundred customer orders.\""
+    },
+    {
+      "hoi": "Đức đã xử lý thế nào?",
+      "chon": [
+        "Đợi tới cuối ngày mới báo",
+        "Lặng lẽ tự sửa",
+        "Báo trưởng nhóm trong 5 phút và khôi phục từ bản sao lưu"
+      ],
+      "dung": 2,
+      "giai": "Anh có nghĩ tới việc sửa lặng lẽ nhưng \"I told my team lead within five minutes.\""
+    },
+    {
+      "hoi": "Theo trưởng nhóm, vấn đề thật sự là gì?",
+      "chon": [
+        "Thực tập sinh mới chạm được vào cơ sở dữ liệu thật quá dễ",
+        "Đức thiếu cẩn thận",
+        "Bản sao lưu quá cũ"
+      ],
+      "dung": 0,
+      "giai": "\"The real problem wasn't me. It was that a new intern could reach the live database so easily.\""
+    },
+    {
+      "hoi": "Vì sao Claire thích câu trả lời của Đức hơn \"I work too hard\"?",
+      "chon": [
+        "Vì nó ngắn gọn",
+        "Vì nó thành thật và cho thấy Đức học được gì",
+        "Vì nó cho thấy Đức không bao giờ sai"
+      ],
+      "dung": 1,
+      "giai": "\"I appreciate your honesty.\" — \"I work too hard\" chỉ là điểm mạnh trá hình."
+    },
+    {
+      "hoi": "Thách thức lớn nhất của đội hiện nay là gì?",
+      "chon": [
+        "Khách hàng phàn nàn nhiều",
+        "Thiếu người làm back-end",
+        "Tài liệu không theo kịp tốc độ phát triển"
+      ],
+      "dung": 2,
+      "giai": "\"We're growing faster than our documentation.\""
+    }
   ]
 }

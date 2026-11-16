@@ -1,0 +1,86 @@
+{
+  "id": "en-cs-a2-01",
+  "nn": "en",
+  "danhMuc": "chia-se",
+  "cap": "A2",
+  "so": 1,
+  "tieuDe": "My First Year Away From Home",
+  "tieuDeViet": "Năm đầu tiên xa nhà",
+  "moTa": "Mai rời thị trấn nhỏ lên thành phố học đại học năm mười tám tuổi. Cô kể về những tuần cô đơn, hai tháng ăn mì gói, và món trứng chiên cà chua mẹ dạy qua điện thoại đã biến hai người lạ cùng phòng thành bạn thân.",
+  "chuDe": "Sống xa nhà",
+  "bieuTuong": "house.fill",
+  "nguoi": [
+    { "ma": "J", "ten": "Jack", "giong": "au-nam", "vai": "người dẫn podcast" },
+    { "ma": "M", "ten": "Mai", "giong": "us-nu", "vai": "người kể chuyện, sinh viên năm hai" }
+  ],
+  "loi": [
+    { "ai": "J", "t": "Welcome to the show. Today, Mai tells us about her first year away from home. Mai, where did you move to?", "v": "Chào mừng các bạn đến với chương trình. Hôm nay Mai kể cho chúng ta về năm đầu tiên xa nhà. Mai, bạn đã chuyển đến đâu?" },
+    { "ai": "M", "t": "I moved from a small town in the countryside to the city for university. I was eighteen.", "v": "Mình chuyển từ một thị trấn nhỏ ở nông thôn lên thành phố để học đại học. Lúc đó mình mười tám tuổi.",
+      "np": [{ "mau": "move from A to B", "giai": "\"chuyển từ A đến B\" — nói về việc chuyển nơi ở. Quá khứ của move là moved.", "vd": "We moved from Hue to Da Nang last year.", "vdV": "Năm ngoái nhà mình chuyển từ Huế vào Đà Nẵng." }] },
+    { "ai": "J", "t": "How did you feel in the first week?", "v": "Tuần đầu tiên bạn cảm thấy thế nào?",
+      "khac": [
+        { "kieu": "tự nhiên hơn", "t": "What was the first week like?", "v": "Tuần đầu tiên thế nào?", "ghiChu": "\"What was … like?\" = hỏi về cảm nhận, trải nghiệm" }
+      ] },
+    { "ai": "M", "t": "Honestly, I felt lonely. I didn't know anyone, and the city was so noisy.", "v": "Thật lòng mà nói, mình thấy cô đơn. Mình không quen ai cả, và thành phố thì ồn ào quá.",
+      "np": [{ "mau": "so + tính từ", "giai": "\"so\" đứng trước tính từ để nhấn mạnh: so noisy = ồn quá chừng. Dùng nhiều trong văn nói.", "vd": "The exam was so difficult.", "vdV": "Bài thi khó quá trời." }],
+      "khac": [
+        { "kieu": "văn nói", "t": "To be honest, I was really lonely.", "v": "Nói thật là mình cô đơn lắm." }
+      ] },
+    { "ai": "M", "t": "My room was very small, and I shared it with two girls I didn't know.", "v": "Phòng mình rất nhỏ, và mình ở chung với hai bạn nữ mình không quen." },
+    { "ai": "M", "t": "At home, my mum cooked every meal. In the city, I ate instant noodles almost every day.", "v": "Ở nhà, mẹ mình nấu mọi bữa. Ở thành phố, gần như ngày nào mình cũng ăn mì gói.",
+      "np": [{ "mau": "almost every day", "giai": "\"gần như ngày nào cũng\" — cụm chỉ tần suất, thường đặt cuối câu. Lưu ý: \"almost\" không đứng một mình trước danh từ (không nói \"almost students\").", "vd": "I drink coffee almost every morning.", "vdV": "Gần như sáng nào mình cũng uống cà phê." }] },
+    { "ai": "J", "t": "Oh no! For how long?", "v": "Ôi không! Trong bao lâu vậy?",
+      "khac": [
+        { "kieu": "tự nhiên hơn", "t": "Oh no! How long did that go on?", "v": "Ôi không! Chuyện đó kéo dài bao lâu?" }
+      ] },
+    { "ai": "M", "t": "For about two months. Then I got sick, and I decided to learn to cook.", "v": "Khoảng hai tháng. Rồi mình bị ốm, và mình quyết định học nấu ăn.",
+      "np": [{ "mau": "decide to + V / learn to + V", "giai": "Sau decide và learn dùng \"to + động từ nguyên mẫu\". Quá khứ: decided to, learned to.", "vd": "She decided to learn to swim this summer.", "vdV": "Cô ấy quyết định học bơi vào mùa hè này." }] },
+    { "ai": "M", "t": "I called my mum every Sunday, and she taught me one dish on the phone each week.", "v": "Mình gọi cho mẹ mỗi Chủ nhật, và mỗi tuần mẹ dạy mình một món qua điện thoại.",
+      "np": [{ "mau": "teach + người + điều gì (quá khứ: taught)", "giai": "Teach có hai tân ngữ: teach me a dish. Quá khứ bất quy tắc: teach → taught.", "vd": "My grandfather taught me chess.", "vdV": "Ông mình dạy mình chơi cờ vua." }] },
+    { "ai": "M", "t": "The first dish was fried eggs with tomatoes. It was terrible, but I ate all of it.", "v": "Món đầu tiên là trứng chiên cà chua. Nó dở tệ, nhưng mình vẫn ăn hết." },
+    { "ai": "M", "t": "By the end of the year, I could cook ten dishes. My roommates loved our Sunday dinners.", "v": "Đến cuối năm, mình nấu được mười món. Hai bạn cùng phòng rất thích những bữa tối Chủ nhật của bọn mình.",
+      "np": [{ "mau": "could + V (khả năng trong quá khứ)", "giai": "\"could\" = quá khứ của can, nói về việc đã làm được trong quá khứ. \"By the end of…\" = tính đến cuối…", "vd": "By the age of six, I could read.", "vdV": "Đến sáu tuổi thì mình đọc được rồi." }] },
+    { "ai": "J", "t": "So your roommates became your friends?", "v": "Vậy là các bạn cùng phòng thành bạn của bạn à?",
+      "khac": [
+        { "kieu": "thân mật", "t": "So you all became friends in the end?", "v": "Vậy rốt cuộc mấy bạn thành bạn bè luôn hả?" }
+      ] },
+    { "ai": "M", "t": "Yes, my best friends. We still meet every month.", "v": "Đúng vậy, bạn thân nhất luôn. Bọn mình vẫn gặp nhau mỗi tháng." },
+    { "ai": "J", "t": "What did you learn from that year?", "v": "Bạn đã học được gì từ năm đó?" },
+    { "ai": "M", "t": "I learned that feeling lonely is normal at the start. It doesn't last forever if you open your door a little.", "v": "Mình học được rằng cảm thấy cô đơn lúc đầu là bình thường. Nó không kéo dài mãi nếu bạn mở cửa lòng mình ra một chút.",
+      "np": [{ "mau": "V-ing làm chủ ngữ: feeling lonely is…", "giai": "Động từ thêm -ing có thể làm chủ ngữ của câu, động từ chính chia số ít (is).", "vd": "Cooking for friends is fun.", "vdV": "Nấu ăn cho bạn bè thật vui." }] },
+    { "ai": "J", "t": "What advice do you have for students who are moving away this year?", "v": "Bạn có lời khuyên gì cho những bạn sinh viên năm nay sắp xa nhà?",
+      "khac": [
+        { "kieu": "lịch sự", "t": "Do you have any advice for students who are moving away this year?", "v": "Bạn có lời khuyên nào cho các bạn sinh viên sắp xa nhà năm nay không?" }
+      ] },
+    { "ai": "M", "t": "Call your family, learn one simple dish, and say hello to your neighbours. Small things make a big difference.", "v": "Hãy gọi cho gia đình, học một món đơn giản, và chào hỏi hàng xóm. Những điều nhỏ tạo nên khác biệt lớn." },
+    { "ai": "J", "t": "Thank you, Mai. That was lovely.", "v": "Cảm ơn Mai. Câu chuyện thật đáng yêu.",
+      "khac": [
+        { "kieu": "trang trọng", "t": "Thank you so much for sharing your story, Mai.", "v": "Cảm ơn Mai rất nhiều vì đã chia sẻ câu chuyện của mình." }
+      ] }
+  ],
+  "tuVung": [
+    { "chu": "countryside", "doc": "/ˈkʌntrisaɪd/", "nghia": "vùng nông thôn", "vd": "My grandparents live in the countryside." },
+    { "chu": "lonely", "doc": "/ˈləʊnli/", "nghia": "cô đơn", "vd": "I felt lonely in the new city." },
+    { "chu": "noisy", "doc": "/ˈnɔɪzi/", "nghia": "ồn ào", "vd": "The street is very noisy at night." },
+    { "chu": "shared", "doc": "/ʃeəd/", "nghia": "dùng chung, ở chung (share)", "vd": "We shared a small flat." },
+    { "chu": "instant noodles", "doc": "/ˈɪnstənt ˈnuːdlz/", "nghia": "mì gói, mì ăn liền", "vd": "Instant noodles are cheap but not healthy." },
+    { "chu": "dish", "doc": "/dɪʃ/", "nghia": "món ăn", "vd": "Pho is my favourite dish." },
+    { "chu": "roommates", "doc": "/ˈruːmmeɪts/", "nghia": "bạn cùng phòng", "vd": "My roommates are from different cities." },
+    { "chu": "last forever", "doc": "/lɑːst fərˈevə/", "nghia": "kéo dài mãi mãi", "vd": "Bad days don't last forever." },
+    { "chu": "neighbours", "doc": "/ˈneɪbəz/", "nghia": "hàng xóm", "vd": "Our neighbours are very kind." },
+    { "chu": "make a big difference", "doc": "/meɪk ə bɪɡ ˈdɪfrəns/", "nghia": "tạo nên khác biệt lớn", "vd": "A short walk can make a big difference." }
+  ],
+  "yNghia": "Cô đơn ở những tuần đầu xa nhà là chuyện bình thường, và nó không kéo dài mãi nếu ta chịu mở lòng một chút. Đôi khi chỉ một món ăn đơn giản nấu chung đã đủ biến người lạ thành bạn thân.",
+  "meo": [
+    "Kể chuyện quá khứ: dùng quá khứ đơn — moved, felt, ate, decided, taught (teach → taught, eat → ate là bất quy tắc).",
+    "\"What was … like?\" để hỏi trải nghiệm: \"What was your first week like?\"",
+    "decide to + V, learn to + V: \"I decided to learn to cook.\"",
+    "\"so + tính từ\" để nhấn mạnh trong văn nói: so noisy, so tired."
+  ],
+  "cauHoi": [
+    { "hoi": "Mai chuyển lên thành phố khi bao nhiêu tuổi?", "chon": ["Mười tám tuổi", "Hai mươi tuổi", "Mười sáu tuổi"], "dung": 0, "giai": "\"I was eighteen.\"" },
+    { "hoi": "Vì sao Mai quyết định học nấu ăn?", "chon": ["Vì bạn cùng phòng nhờ", "Vì mì gói đắt", "Vì cô bị ốm sau hai tháng ăn mì gói"], "dung": 2, "giai": "\"Then I got sick, and I decided to learn to cook.\"" },
+    { "hoi": "Ai dạy Mai nấu ăn?", "chon": ["Một đầu bếp", "Mẹ cô, qua điện thoại mỗi tuần", "Hai bạn cùng phòng"], "dung": 1, "giai": "\"she taught me one dish on the phone each week\"" },
+    { "hoi": "Lời khuyên của Mai KHÔNG có điều nào?", "chon": ["Gọi cho gia đình", "Chào hỏi hàng xóm", "Ở một mình cho quen"], "dung": 2, "giai": "Mai khuyên gọi gia đình, học một món đơn giản và chào hàng xóm." }
+  ]
+}

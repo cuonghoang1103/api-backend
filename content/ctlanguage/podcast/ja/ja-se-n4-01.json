@@ -1,0 +1,460 @@
+{
+  "id": "ja-se-n4-01",
+  "nn": "ja",
+  "danhMuc": "phan-mem",
+  "cap": "N4",
+  "so": 1,
+  "tieuDe": "はじめまして、開発チームのみなさん",
+  "tieuDeViet": "Chào nhóm phát triển, tôi là người mới",
+  "moTa": "Ngày đầu đi làm ở một công ty phần mềm tại Nhật, kỹ sư Nam tự giới thiệu với nhóm. Anh Satō giải thích ngay những từ dân IT dùng hằng ngày: バグ, チケット, リリース, レビュー, テスト環境, 本番環境. Học cách tự giới thiệu ở công sở và câu hỏi \"nên hỏi ai\".",
+  "chuDe": "Tự giới thiệu ở công ty IT",
+  "bieuTuong": "person.crop.circle.badge.plus",
+  "nguoi": [
+    {
+      "ma": "T",
+      "ten": "田中",
+      "giong": "ja-nu",
+      "vai": "trưởng nhóm"
+    },
+    {
+      "ma": "N",
+      "ten": "ナム",
+      "giong": "ja-nam",
+      "vai": "kỹ sư người Việt, ngày đầu đi làm"
+    },
+    {
+      "ma": "S",
+      "ten": "佐藤",
+      "giong": "ja2-nam",
+      "vai": "kỹ sư server, người hướng dẫn"
+    }
+  ],
+  "loi": [
+    {
+      "ai": "T",
+      "t": "みなさん、ちょっといいですか。今日から新しいメンバーが入りました。",
+      "doc": "みなさん、ちょっといいですか。きょうからあたらしいメンバーがはいりました。",
+      "v": "Mọi người ơi, cho tôi xin một chút. Từ hôm nay nhóm mình có thành viên mới."
+    },
+    {
+      "ai": "T",
+      "t": "グエンさん、自己紹介をお願いします。",
+      "doc": "グエンさん、じこしょうかいをおねがいします。",
+      "v": "Anh Nguyễn, mời anh tự giới thiệu."
+    },
+    {
+      "ai": "N",
+      "t": "はじめまして。ベトナムから来たグエン・ナムと申します。",
+      "doc": "はじめまして。ベトナムからきたグエン・ナムともうします。",
+      "v": "Xin chào mọi người. Tôi là Nguyễn Nam, đến từ Việt Nam.",
+      "khac": [
+        {
+          "kieu": "trang trọng",
+          "t": "本日からお世話になります、グエン・ナムと申します。",
+          "doc": "ほんじつからおせわになります、グエン・ナムともうします。",
+          "v": "Từ hôm nay tôi xin được mọi người giúp đỡ, tôi là Nguyễn Nam.",
+          "ghiChu": "câu mở đầu chuẩn ngày đầu đi làm"
+        },
+        {
+          "kieu": "ngắn gọn",
+          "t": "はじめまして、ナムです。",
+          "doc": "はじめまして、ナムです。",
+          "v": "Xin chào, tôi là Nam.",
+          "ghiChu": "khi nhóm nhỏ, không khí thoải mái"
+        }
+      ],
+      "np": [
+        {
+          "mau": "〜と申します",
+          "giai": "Cách nói tên mình một cách khiêm nhường (謙譲語 của 〜と言います). Dùng khi gặp lần đầu ở công ty, khi phỏng vấn, khi gọi điện.",
+          "vd": "営業部の山田と申します。",
+          "vdDoc": "えいぎょうぶのやまだともうします。",
+          "vdV": "Tôi là Yamada ở phòng kinh doanh."
+        }
+      ]
+    },
+    {
+      "ai": "N",
+      "t": "ハノイのIT会社で三年間、Webアプリの開発をしていました。",
+      "doc": "ハノイのアイティーがいしゃでさんねんかん、ウェブアプリのかいはつをしていました。",
+      "v": "Tôi đã làm phát triển ứng dụng web ba năm ở một công ty IT tại Hà Nội.",
+      "np": [
+        {
+          "mau": "〜ていました",
+          "giai": "Diễn tả việc làm kéo dài một thời gian trong quá khứ (đã làm suốt…). Khác 〜ました chỉ một hành động đã xong.",
+          "vd": "大学で日本語を勉強していました。",
+          "vdDoc": "だいがくでにほんごをべんきょうしていました。",
+          "vdV": "Hồi đại học tôi đã học tiếng Nhật."
+        }
+      ]
+    },
+    {
+      "ai": "N",
+      "t": "主にJavaとReactを使っていました。データベースはSQLを少し書くことができます。",
+      "doc": "おもにジャバとリアクトをつかっていました。データベースはエスキューエルをすこしかくことができます。",
+      "v": "Chủ yếu tôi dùng Java và React. Về cơ sở dữ liệu thì tôi viết được một chút SQL.",
+      "np": [
+        {
+          "mau": "V-る + ことができます",
+          "giai": "Có thể làm V (năng lực, khả năng). Nghe trang trọng hơn thể khả năng (書けます).",
+          "vd": "Pythonを使うことができます。",
+          "vdDoc": "パイソンをつかうことができます。",
+          "vdV": "Tôi có thể dùng Python."
+        }
+      ]
+    },
+    {
+      "ai": "N",
+      "t": "日本の会社で働くのは初めてなので、わからないことがたくさんあると思います。",
+      "doc": "にほんのかいしゃではたらくのははじめてなので、わからないことがたくさんあるとおもいます。",
+      "v": "Đây là lần đầu tôi làm việc ở công ty Nhật, nên chắc sẽ có nhiều điều tôi chưa biết.",
+      "np": [
+        {
+          "mau": "V-る + のは初めてです",
+          "giai": "Lần đầu làm V. のは biến cả cụm động từ thành chủ đề của câu.",
+          "vd": "一人で旅行するのは初めてです。",
+          "vdDoc": "ひとりでりょこうするのははじめてです。",
+          "vdV": "Đây là lần đầu tôi đi du lịch một mình."
+        }
+      ]
+    },
+    {
+      "ai": "N",
+      "t": "いろいろ教えていただけると嬉しいです。どうぞよろしくお願いいたします。",
+      "doc": "いろいろおしえていただけるとうれしいです。どうぞよろしくおねがいいたします。",
+      "v": "Nếu được mọi người chỉ bảo nhiều điều thì tôi rất vui. Rất mong được mọi người giúp đỡ.",
+      "khac": [
+        {
+          "kieu": "tự nhiên hơn",
+          "t": "いろいろ教えてください。よろしくお願いします。",
+          "doc": "いろいろおしえてください。よろしくおねがいします。",
+          "v": "Mong mọi người chỉ bảo. Rất mong được giúp đỡ.",
+          "ghiChu": "đơn giản, vẫn lịch sự"
+        },
+        {
+          "kieu": "trang trọng",
+          "t": "ご指導のほど、よろしくお願いいたします。",
+          "doc": "ごしどうのほど、よろしくおねがいいたします。",
+          "v": "Kính mong mọi người chỉ dạy.",
+          "ghiChu": "trước cấp trên, buổi chào toàn công ty"
+        }
+      ],
+      "np": [
+        {
+          "mau": "〜ていただけると嬉しいです",
+          "giai": "Cách nhờ vả mềm: \"nếu được anh/chị làm … cho thì tôi rất vui\". Không ép người nghe.",
+          "vd": "資料を送っていただけると嬉しいです。",
+          "vdDoc": "しりょうをおくっていただけるとうれしいです。",
+          "vdV": "Nếu anh/chị gửi giúp tài liệu thì tốt quá."
+        }
+      ]
+    },
+    {
+      "ai": "S",
+      "t": "よろしく、ナムさん。僕は佐藤です。同じチームでサーバーの担当をしています。",
+      "doc": "よろしく、ナムさん。ぼくはさとうです。おなじチームでサーバーのたんとうをしています。",
+      "v": "Chào Nam nhé. Mình là Satō. Mình phụ trách server trong cùng nhóm."
+    },
+    {
+      "ai": "S",
+      "t": "さっそくだけど、うちのチームでよく使う言葉を少し説明するね。",
+      "doc": "さっそくだけど、うちのチームでよくつかうことばをすこしせつめいするね。",
+      "v": "Vào việc luôn nhé, mình giải thích vài từ nhóm mình hay dùng."
+    },
+    {
+      "ai": "S",
+      "t": "バグが見つかったら、まずチケットを作ってください。",
+      "doc": "バグがみつかったら、まずチケットをつくってください。",
+      "v": "Nếu thấy bug thì trước tiên hãy tạo ticket.",
+      "khac": [
+        {
+          "kieu": "lịch sự",
+          "t": "バグを見つけた場合は、まずチケットを作成してください。",
+          "doc": "バグをみつけたばあいは、まずチケットをさくせいしてください。",
+          "v": "Trường hợp phát hiện bug, trước tiên xin hãy tạo ticket.",
+          "ghiChu": "kiểu văn bản hướng dẫn, nội quy"
+        },
+        {
+          "kieu": "thân mật",
+          "t": "バグ見つけたら、まずチケット切ってね。",
+          "doc": "バグみつけたら、まずチケットきってね。",
+          "v": "Thấy bug thì tạo ticket trước nhé.",
+          "ghiChu": "「チケットを切る」 là cách nói của dân IT = tạo ticket"
+        }
+      ],
+      "np": [
+        {
+          "mau": "V-たら",
+          "giai": "Khi/nếu V (xảy ra) thì … Hành động sau diễn ra sau khi V đã xảy ra.",
+          "vd": "仕事が終わったら、連絡します。",
+          "vdDoc": "しごとがおわったら、れんらくします。",
+          "vdV": "Xong việc tôi sẽ liên lạc."
+        }
+      ]
+    },
+    {
+      "ai": "N",
+      "t": "チケットというのは、課題を管理するカードのことですか。",
+      "doc": "チケットというのは、かだいをかんりするカードのことですか。",
+      "v": "“Ticket” nghĩa là thẻ để quản lý công việc phải không ạ?",
+      "np": [
+        {
+          "mau": "AというのはBのことです",
+          "giai": "Dùng để hỏi hoặc giải thích nghĩa của một từ: \"A nghĩa là B\".",
+          "vd": "PRというのは、プルリクエストのことです。",
+          "vdDoc": "ピーアールというのは、プルリクエストのことです。",
+          "vdV": "“PR” nghĩa là pull request."
+        }
+      ]
+    },
+    {
+      "ai": "S",
+      "t": "そうそう。それから、毎週金曜日にリリースがあるので、木曜日までにレビューを終わらせてね。",
+      "doc": "そうそう。それから、まいしゅうきんようびにリリースがあるので、もくようびまでにレビューをおわらせてね。",
+      "v": "Đúng rồi. Còn nữa, thứ Sáu hằng tuần có release, nên nhớ xong review trước thứ Năm nhé.",
+      "khac": [
+        {
+          "kieu": "lịch sự",
+          "t": "毎週金曜日にリリースがありますので、木曜日までにレビューを終わらせてください。",
+          "doc": "まいしゅうきんようびにリリースがありますので、もくようびまでにレビューをおわらせてください。",
+          "v": "Thứ Sáu hằng tuần có release, nên xin hãy hoàn thành review trước thứ Năm.",
+          "ghiChu": "nói với người mới không thân, hoặc cấp trên"
+        }
+      ],
+      "np": [
+        {
+          "mau": "〜までに",
+          "giai": "Hạn chót: phải xong trước (hoặc đúng) thời điểm đó. Khác 〜まで = làm liên tục cho tới thời điểm đó.",
+          "vd": "金曜日までに出してください。",
+          "vdDoc": "きんようびまでにだしてください。",
+          "vdV": "Hãy nộp trước thứ Sáu."
+        }
+      ]
+    },
+    {
+      "ai": "N",
+      "t": "リリースの前に、テスト環境で確認しますか。",
+      "doc": "リリースのまえに、テストかんきょうでかくにんしますか。",
+      "v": "Trước khi release thì mình kiểm tra trên môi trường test phải không ạ?"
+    },
+    {
+      "ai": "T",
+      "t": "ええ。本番環境に出す前に、必ずテスト環境で動かしてみてください。",
+      "doc": "ええ。ほんばんかんきょうにだすまえに、かならずテストかんきょうでうごかしてみてください。",
+      "v": "Đúng vậy. Trước khi đưa lên môi trường production, nhất định phải chạy thử trên môi trường test.",
+      "np": [
+        {
+          "mau": "V-る + 前に",
+          "giai": "Trước khi V. Động từ trước 前に luôn ở thể từ điển, kể cả khi câu nói về quá khứ.",
+          "vd": "寝る前に、メールを確認します。",
+          "vdDoc": "ねるまえに、メールをかくにんします。",
+          "vdV": "Trước khi ngủ tôi kiểm tra mail."
+        },
+        {
+          "mau": "V-てみる",
+          "giai": "Thử làm V để xem kết quả ra sao.",
+          "vd": "新しいツールを使ってみます。",
+          "vdDoc": "あたらしいツールをつかってみます。",
+          "vdV": "Tôi sẽ thử dùng công cụ mới."
+        }
+      ]
+    },
+    {
+      "ai": "N",
+      "t": "わかりました。もしわからないことがあったら、どなたに聞けばいいですか。",
+      "doc": "わかりました。もしわからないことがあったら、どなたにきけばいいですか。",
+      "v": "Tôi hiểu rồi. Nếu có điều gì không hiểu thì tôi nên hỏi ai ạ?",
+      "khac": [
+        {
+          "kieu": "trang trọng",
+          "t": "わからない点があった場合は、どなたに伺えばよろしいでしょうか。",
+          "doc": "わからないてんがあったばあいは、どなたにうかがえばよろしいでしょうか。",
+          "v": "Trường hợp có điểm chưa rõ, tôi nên hỏi vị nào thì được ạ?",
+          "ghiChu": "伺う là khiêm nhường của 聞く"
+        },
+        {
+          "kieu": "thân mật",
+          "t": "わからないとき、誰に聞けばいい？",
+          "doc": "わからないとき、だれにきけばいい？",
+          "v": "Lúc không hiểu thì hỏi ai được?",
+          "ghiChu": "giữa đồng nghiệp ngang hàng đã thân"
+        }
+      ],
+      "np": [
+        {
+          "mau": "〜ばいいですか",
+          "giai": "Hỏi xin hướng dẫn: \"nên làm thế nào / hỏi ai thì được?\". どなた là cách nói lịch sự của 誰.",
+          "vd": "どこに置けばいいですか。",
+          "vdDoc": "どこにおけばいいですか。",
+          "vdV": "Tôi nên để ở đâu ạ?"
+        }
+      ]
+    },
+    {
+      "ai": "T",
+      "t": "最初の一か月は佐藤さんがメンターなので、何でも聞いてください。",
+      "doc": "さいしょのいっかげつはさとうさんがメンターなので、なんでもきいてください。",
+      "v": "Tháng đầu tiên anh Satō là người hướng dẫn (mentor), nên cứ hỏi bất cứ điều gì."
+    },
+    {
+      "ai": "S",
+      "t": "遠慮しないでね。聞かないで一人で悩むほうが、時間がかかるから。",
+      "doc": "えんりょしないでね。きかないでひとりでなやむほうが、じかんがかかるから。",
+      "v": "Đừng ngại nhé. Không hỏi mà ngồi loay hoay một mình mới tốn thời gian hơn.",
+      "np": [
+        {
+          "mau": "V-ないで",
+          "giai": "Không làm A mà (lại) làm B; làm B trong trạng thái không A.",
+          "vd": "朝ごはんを食べないで、会社に来ました。",
+          "vdDoc": "あさごはんをたべないで、かいしゃにきました。",
+          "vdV": "Tôi đến công ty mà không ăn sáng."
+        }
+      ]
+    },
+    {
+      "ai": "N",
+      "t": "ありがとうございます。早くチームの役に立てるように頑張ります。",
+      "doc": "ありがとうございます。はやくチームのやくにたてるようにがんばります。",
+      "v": "Cảm ơn anh. Tôi sẽ cố gắng để sớm giúp được cho nhóm.",
+      "khac": [
+        {
+          "kieu": "trang trọng",
+          "t": "一日も早く戦力になれるよう、精一杯努めます。",
+          "doc": "いちにちもはやくせんりょくになれるよう、せいいっぱいつとめます。",
+          "v": "Tôi sẽ nỗ lực hết sức để sớm trở thành lực lượng hữu ích.",
+          "ghiChu": "câu chào trước cả phòng, trong email chào"
+        }
+      ],
+      "np": [
+        {
+          "mau": "〜ように頑張ります",
+          "giai": "Cố gắng để đạt tới một trạng thái. Trước ように thường là thể khả năng hoặc thể ない.",
+          "vd": "日本語で会議に出られるように頑張ります。",
+          "vdDoc": "にほんごでかいぎにでられるようにがんばります。",
+          "vdV": "Tôi sẽ cố để có thể dự họp bằng tiếng Nhật."
+        }
+      ]
+    }
+  ],
+  "tuVung": [
+    {
+      "chu": "自己紹介",
+      "doc": "じこしょうかい",
+      "nghia": "tự giới thiệu",
+      "vd": "面接で自己紹介をしました。"
+    },
+    {
+      "chu": "開発",
+      "doc": "かいはつ",
+      "nghia": "phát triển (phần mềm, sản phẩm)",
+      "vd": "アプリの開発をしています。"
+    },
+    {
+      "chu": "サーバー",
+      "doc": "サーバー",
+      "nghia": "máy chủ, server",
+      "vd": "サーバーが止まりました。"
+    },
+    {
+      "chu": "担当",
+      "doc": "たんとう",
+      "nghia": "phụ trách; người phụ trách",
+      "vd": "このページの担当は私です。"
+    },
+    {
+      "chu": "バグ",
+      "doc": "バグ",
+      "nghia": "lỗi phần mềm, bug",
+      "vd": "バグを直しました。"
+    },
+    {
+      "chu": "チケット",
+      "doc": "チケット",
+      "nghia": "ticket — thẻ công việc trên công cụ quản lý",
+      "vd": "チケットを作ってください。"
+    },
+    {
+      "chu": "リリース",
+      "doc": "リリース",
+      "nghia": "phát hành, đưa bản mới ra cho người dùng",
+      "vd": "来週リリースします。"
+    },
+    {
+      "chu": "レビュー",
+      "doc": "レビュー",
+      "nghia": "review, xem xét lại (code, tài liệu)",
+      "vd": "コードのレビューをお願いします。"
+    },
+    {
+      "chu": "テスト環境",
+      "doc": "テストかんきょう",
+      "nghia": "môi trường test",
+      "vd": "テスト環境で確認しました。"
+    },
+    {
+      "chu": "本番環境",
+      "doc": "ほんばんかんきょう",
+      "nghia": "môi trường production (bản thật người dùng đang dùng)",
+      "vd": "本番環境は触らないでください。"
+    },
+    {
+      "chu": "遠慮",
+      "doc": "えんりょ",
+      "nghia": "ngại ngần, khách sáo",
+      "vd": "遠慮しないで食べてください。"
+    }
+  ],
+  "yNghia": "Ngày đầu ở công ty mới, không ai chờ bạn biết hết mọi thứ. Điều người ta nhớ là thái độ: nói rõ mình đã làm gì, thật lòng nhận còn nhiều điều chưa biết, và dám hỏi. Hỏi sớm không phải là làm phiền — ngồi loay hoay một mình mới làm cả nhóm chậm lại.",
+  "meo": [
+    "Tự giới thiệu ở công ty: はじめまして → 〈nơi đến〉から来た〈tên〉と申します → kinh nghiệm (〜ていました) → どうぞよろしくお願いいたします.",
+    "Từ IT viết bằng katakana và đọc theo kiểu Nhật: サーバー, バグ, チケット, リリース, レビュー. Nói đúng âm Nhật thì người Nhật nghe dễ hơn nói kiểu tiếng Anh.",
+    "テスト環境 (môi trường test) ↔ 本番環境 (production). 本番 vốn nghĩa là \"buổi diễn chính thức\".",
+    "〜までに = hạn chót (trước thời điểm đó); 〜まで = suốt cho tới thời điểm đó: 五時まで働く ↔ 五時までに出す."
+  ],
+  "cauHoi": [
+    {
+      "hoi": "Trước khi sang Nhật, Nam đã làm gì?",
+      "chon": [
+        "Dạy tiếng Nhật ở Hà Nội",
+        "Phát triển ứng dụng web ba năm ở công ty IT tại Hà Nội",
+        "Làm tester một năm",
+        "Là sinh viên năm cuối"
+      ],
+      "dung": 1,
+      "giai": "「ハノイのIT会社で三年間、Webアプリの開発をしていました」."
+    },
+    {
+      "hoi": "Theo anh Satō, thấy bug thì việc đầu tiên là gì?",
+      "chon": [
+        "Báo trưởng nhóm bằng điện thoại",
+        "Tự sửa ngay",
+        "Tạo ticket",
+        "Ghi vào sổ tay"
+      ],
+      "dung": 2,
+      "giai": "「バグが見つかったら、まずチケットを作ってください」."
+    },
+    {
+      "hoi": "Vì sao phải xong review trước thứ Năm?",
+      "chon": [
+        "Vì thứ Sáu hằng tuần có release",
+        "Vì thứ Năm có họp",
+        "Vì thứ Sáu nghỉ",
+        "Vì khách muốn vậy"
+      ],
+      "dung": 0,
+      "giai": "「毎週金曜日にリリースがあるので」."
+    },
+    {
+      "hoi": "Vì sao anh Satō bảo đừng ngại hỏi?",
+      "chon": [
+        "Vì anh ấy rảnh",
+        "Vì hỏi được thưởng",
+        "Vì trưởng nhóm bắt buộc",
+        "Vì không hỏi mà loay hoay một mình còn tốn thời gian hơn"
+      ],
+      "dung": 3,
+      "giai": "「聞かないで一人で悩むほうが、時間がかかるから」."
+    }
+  ]
+}

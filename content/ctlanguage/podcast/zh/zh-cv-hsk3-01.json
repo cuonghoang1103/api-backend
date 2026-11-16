@@ -1,0 +1,239 @@
+{
+  "id": "zh-cv-hsk3-01",
+  "nn": "zh",
+  "danhMuc": "cong-viec",
+  "cap": "HSK3",
+  "so": 1,
+  "tieuDe": "接电话，写邮件",
+  "tieuDeViet": "Nghe điện thoại, viết email",
+  "moTa": "Thanh làm ở phòng kinh doanh của một công ty thương mại. Khách hàng gọi tìm giám đốc Vương đúng lúc ông đang họp: cô ghi lời nhắn, đọc lại số điện thoại để xác nhận, rồi viết email tóm tắt — từng câu đều dùng được ngay ở văn phòng.",
+  "chuDe": "Điện thoại & email",
+  "bieuTuong": "phone.fill",
+  "nguoi": [
+    { "ma": "Q", "ten": "Thanh", "giong": "zh-nu", "vai": "nhân viên phòng kinh doanh người Việt" },
+    { "ma": "L", "ten": "Ông Lưu", "giong": "zh-nam", "vai": "khách hàng" }
+  ],
+  "loi": [
+    {
+      "ai": "Q",
+      "t": "您好，销售部，请问您找哪位？",
+      "doc": "Nín hǎo, xiāoshòu bù, qǐngwèn nín zhǎo nǎ wèi?",
+      "v": "Xin chào, phòng kinh doanh xin nghe, xin hỏi anh muốn gặp ai ạ?",
+      "khac": [
+        { "kieu": "thân mật", "t": "喂，你好，找谁呀？", "doc": "Wéi, nǐ hǎo, zhǎo shéi ya?", "v": "A lô, chào bạn, tìm ai thế?", "ghiChu": "điện thoại cá nhân; ở công ty nên dùng câu gốc" }
+      ],
+      "np": [
+        { "mau": "请问 + câu hỏi", "giai": "请问 = xin hỏi, đặt đầu câu hỏi để lịch sự. 哪位 lịch sự hơn 谁.", "vd": "请问，洗手间在哪儿？", "vdDoc": "Qǐngwèn, xǐshǒujiān zài nǎr?", "vdV": "Xin hỏi, nhà vệ sinh ở đâu?" }
+      ]
+    },
+    {
+      "ai": "L",
+      "t": "你好，我姓刘，是王经理的客户。请问王经理在吗？",
+      "doc": "Nǐ hǎo, wǒ xìng Liú, shì Wáng jīnglǐ de kèhù. Qǐngwèn Wáng jīnglǐ zài ma?",
+      "v": "Chào cô, tôi họ Lưu, là khách hàng của giám đốc Vương. Xin hỏi giám đốc Vương có ở đó không?"
+    },
+    {
+      "ai": "Q",
+      "t": "刘先生，不好意思，王经理正在开会，可能十一点以后才能结束。",
+      "doc": "Liú xiānsheng, bù hǎoyìsi, Wáng jīnglǐ zhèngzài kāihuì, kěnéng shíyī diǎn yǐhòu cái néng jiéshù.",
+      "v": "Anh Lưu, xin lỗi anh, giám đốc Vương đang họp, có lẽ sau 11 giờ mới xong.",
+      "khac": [
+        { "kieu": "lịch sự", "t": "不好意思，王经理现在不方便接电话。", "doc": "Bù hǎoyìsi, Wáng jīnglǐ xiànzài bù fāngbiàn jiē diànhuà.", "v": "Xin lỗi, giám đốc Vương hiện không tiện nghe máy.", "ghiChu": "khi không muốn nói rõ lý do sếp vắng" }
+      ],
+      "np": [
+        { "mau": "正在 + V", "giai": "正在 = đang (làm gì đó ngay lúc này). Có thể thêm 呢 cuối câu: 他正在开会呢.", "vd": "我正在写报告。", "vdDoc": "Wǒ zhèngzài xiě bàogào.", "vdV": "Tôi đang viết báo cáo." }
+      ]
+    },
+    {
+      "ai": "Q",
+      "t": "您需要留言吗？还是等一会儿再打过来？",
+      "doc": "Nín xūyào liúyán ma? Háishi děng yíhuìr zài dǎ guòlai?",
+      "v": "Anh có cần để lại lời nhắn không ạ? Hay là lát nữa anh gọi lại?",
+      "khac": [
+        { "kieu": "chuyên nghiệp", "t": "要不要我请他开完会给您回电话？", "doc": "Yào bu yào wǒ qǐng tā kāi wán huì gěi nín huí diànhuà?", "v": "Có cần tôi nhắn anh ấy họp xong gọi lại cho anh không?", "ghiChu": "chủ động đề nghị — khách đỡ phải gọi lại" }
+      ],
+      "np": [
+        { "mau": "A 吗？还是 B？", "giai": "Đưa hai lựa chọn cho người nghe; 还是 dùng trong câu hỏi.", "vd": "你现在走，还是吃完饭再走？", "vdDoc": "Nǐ xiànzài zǒu, háishi chī wán fàn zài zǒu?", "vdV": "Bạn đi bây giờ, hay ăn cơm xong rồi đi?" }
+      ]
+    },
+    {
+      "ai": "L",
+      "t": "那麻烦你帮我留个言吧。",
+      "doc": "Nà máfan nǐ bāng wǒ liú ge yán ba.",
+      "v": "Vậy phiền cô ghi lời nhắn giúp tôi nhé.",
+      "np": [
+        { "mau": "麻烦 + ai + V", "giai": "麻烦你… = phiền bạn… — câu nhờ vả lịch sự, rất hay dùng ở công ty.", "vd": "麻烦你帮我拿一下。", "vdDoc": "Máfan nǐ bāng wǒ ná yíxià.", "vdV": "Phiền bạn lấy giúp tôi một chút." }
+      ]
+    },
+    {
+      "ai": "Q",
+      "t": "好的，您请说，我记一下。",
+      "doc": "Hǎo de, nín qǐng shuō, wǒ jì yíxià.",
+      "v": "Vâng, mời anh nói, tôi ghi lại."
+    },
+    {
+      "ai": "L",
+      "t": "上次我们订的那批咖啡杯，我想再加两百个，不知道下周五以前能不能送到。",
+      "doc": "Shàng cì wǒmen dìng de nà pī kāfēi bēi, wǒ xiǎng zài jiā liǎng bǎi ge, bù zhīdào xià zhōuwǔ yǐqián néng bu néng sòng dào.",
+      "v": "Lô cốc cà phê chúng tôi đặt lần trước, tôi muốn đặt thêm hai trăm cái, không biết trước thứ Sáu tuần sau có giao được không."
+    },
+    {
+      "ai": "Q",
+      "t": "好的。加两百个咖啡杯，下周五以前送到。请问您的电话号码是多少？",
+      "doc": "Hǎo de. Jiā liǎng bǎi ge kāfēi bēi, xià zhōuwǔ yǐqián sòng dào. Qǐngwèn nín de diànhuà hàomǎ shì duōshao?",
+      "v": "Vâng. Thêm hai trăm cốc cà phê, giao trước thứ Sáu tuần sau. Xin hỏi số điện thoại của anh là bao nhiêu ạ?"
+    },
+    {
+      "ai": "L",
+      "t": "一三九，八八零二，六五四七。",
+      "doc": "Yāo sān jiǔ, bā bā líng èr, liù wǔ sì qī.",
+      "v": "Một ba chín, tám tám không hai, sáu năm bốn bảy."
+    },
+    {
+      "ai": "Q",
+      "t": "我重复一遍：一三九，八八零二，六五四七，对吗？",
+      "doc": "Wǒ chóngfù yí biàn: yāo sān jiǔ, bā bā líng èr, liù wǔ sì qī, duì ma?",
+      "v": "Tôi nhắc lại nhé: một ba chín, tám tám không hai, sáu năm bốn bảy, đúng không ạ?",
+      "khac": [
+        { "kieu": "chuyên nghiệp", "t": "我跟您确认一下号码：一三九，八八零二，六五四七。", "doc": "Wǒ gēn nín quèrèn yíxià hàomǎ: yāo sān jiǔ, bā bā líng èr, liù wǔ sì qī.", "v": "Tôi xin xác nhận lại số với anh: một ba chín, tám tám không hai, sáu năm bốn bảy.", "ghiChu": "luôn đọc lại số, tên, ngày giờ khi ghi lời nhắn" }
+      ],
+      "np": [
+        { "mau": "V + 一遍", "giai": "遍 = lượt (làm trọn từ đầu tới cuối): 重复一遍, 看一遍, 再说一遍.", "vd": "请再检查一遍。", "vdDoc": "Qǐng zài jiǎnchá yí biàn.", "vdV": "Xin kiểm tra lại một lượt." }
+      ]
+    },
+    {
+      "ai": "L",
+      "t": "对，没错。",
+      "doc": "Duì, méi cuò.",
+      "v": "Đúng, không sai."
+    },
+    {
+      "ai": "L",
+      "t": "另外，你能不能发一封邮件给我，把今天说的内容写清楚？我好跟老板说。",
+      "doc": "Lìngwài, nǐ néng bu néng fā yì fēng yóujiàn gěi wǒ, bǎ jīntiān shuō de nèiróng xiě qīngchu? Wǒ hǎo gēn lǎobǎn shuō.",
+      "v": "Ngoài ra, cô có thể gửi tôi một email, ghi rõ nội dung hôm nay không? Để tôi báo lại với sếp.",
+      "np": [
+        { "mau": "…，我好 + V", "giai": "好 đứng trước động từ ở vế sau = \"để (tiện) mà…\": 给我电话号码，我好联系你.", "vd": "你早点儿告诉我，我好准备。", "vdDoc": "Nǐ zǎo diǎnr gàosu wǒ, wǒ hǎo zhǔnbèi.", "vdV": "Bạn báo tôi sớm, để tôi còn chuẩn bị." }
+      ]
+    },
+    {
+      "ai": "Q",
+      "t": "没问题。请问您的邮箱是？",
+      "doc": "Méi wèntí. Qǐngwèn nín de yóuxiāng shì?",
+      "v": "Không vấn đề gì. Xin hỏi email của anh là gì ạ?"
+    },
+    {
+      "ai": "L",
+      "t": "我把邮箱地址用短信发给你，这样不会写错。",
+      "doc": "Wǒ bǎ yóuxiāng dìzhǐ yòng duǎnxìn fā gěi nǐ, zhèyàng bú huì xiě cuò.",
+      "v": "Tôi gửi địa chỉ email cho cô qua tin nhắn, như thế sẽ không ghi nhầm."
+    },
+    {
+      "ai": "Q",
+      "t": "好的，谢谢您。收到以后，我半个小时之内给您发邮件。",
+      "doc": "Hǎo de, xièxie nín. Shōudào yǐhòu, wǒ bàn ge xiǎoshí zhīnèi gěi nín fā yóujiàn.",
+      "v": "Vâng, cảm ơn anh. Nhận được rồi, trong vòng nửa tiếng tôi sẽ gửi email cho anh."
+    },
+    {
+      "ai": "L",
+      "t": "好，谢谢你，再见。",
+      "doc": "Hǎo, xièxie nǐ, zàijiàn.",
+      "v": "Được, cảm ơn cô, chào cô."
+    },
+    {
+      "ai": "Q",
+      "t": "不客气，刘先生再见。",
+      "doc": "Bú kèqi, Liú xiānsheng zàijiàn.",
+      "v": "Không có gì ạ, chào anh Lưu.",
+      "khac": [
+        { "kieu": "trang trọng", "t": "感谢您的来电，再见。", "doc": "Gǎnxiè nín de láidiàn, zàijiàn.", "v": "Cảm ơn anh đã gọi điện, xin chào.", "ghiChu": "câu kết của lễ tân, chăm sóc khách hàng" }
+      ]
+    },
+    {
+      "ai": "Q",
+      "t": "好，现在写邮件。标题：关于追加两百个咖啡杯的确认。",
+      "doc": "Hǎo, xiànzài xiě yóujiàn. Biāotí: guānyú zhuījiā liǎng bǎi ge kāfēi bēi de quèrèn.",
+      "v": "Được rồi, giờ viết email. Tiêu đề: Xác nhận về việc đặt thêm hai trăm cốc cà phê.",
+      "np": [
+        { "mau": "关于 + N", "giai": "关于 = về (vấn đề gì) — rất hay dùng ở tiêu đề email, thông báo: 关于…的通知 / 的确认.", "vd": "关于下周会议的通知", "vdDoc": "Guānyú xià zhōu huìyì de tōngzhī", "vdV": "Thông báo về cuộc họp tuần sau" }
+      ]
+    },
+    {
+      "ai": "Q",
+      "t": "刘先生您好：感谢您今天的来电。",
+      "doc": "Liú xiānsheng nín hǎo: gǎnxiè nín jīntiān de láidiàn.",
+      "v": "Kính gửi anh Lưu: cảm ơn anh đã gọi điện hôm nay.",
+      "khac": [
+        { "kieu": "văn viết", "t": "尊敬的刘先生：您好！", "doc": "Zūnjìng de Liú xiānsheng: nín hǎo!", "v": "Kính gửi ông Lưu: Xin chào ông!", "ghiChu": "mở đầu thư rất trang trọng, thư gửi khách mới hoặc cấp cao" }
+      ]
+    },
+    {
+      "ai": "Q",
+      "t": "您希望在原来的订单上再加两百个咖啡杯，下周五以前送到。王经理开完会以后，会尽快跟您联系。",
+      "doc": "Nín xīwàng zài yuánlái de dìngdān shang zài jiā liǎng bǎi ge kāfēi bēi, xià zhōuwǔ yǐqián sòng dào. Wáng jīnglǐ kāi wán huì yǐhòu, huì jǐnkuài gēn nín liánxì.",
+      "v": "Anh muốn đặt thêm hai trăm cốc cà phê vào đơn hàng cũ, giao trước thứ Sáu tuần sau. Giám đốc Vương họp xong sẽ liên hệ với anh sớm nhất có thể."
+    },
+    {
+      "ai": "Q",
+      "t": "如果有问题，请随时联系我。祝好！销售部，阮青。",
+      "doc": "Rúguǒ yǒu wèntí, qǐng suíshí liánxì wǒ. Zhù hǎo! Xiāoshòu bù, Ruǎn Qīng.",
+      "v": "Nếu có vấn đề gì, xin cứ liên hệ với tôi bất cứ lúc nào. Chúc mọi điều tốt đẹp! Phòng kinh doanh, Nguyễn Thanh.",
+      "khac": [
+        { "kieu": "văn viết", "t": "如有任何问题，欢迎随时与我联系。", "doc": "Rú yǒu rènhé wèntí, huānyíng suíshí yǔ wǒ liánxì.", "v": "Nếu có bất kỳ vấn đề nào, xin vui lòng liên hệ với tôi bất cứ lúc nào.", "ghiChu": "如有 / 与 là cách viết trang trọng của 如果有 / 跟" }
+      ]
+    },
+    {
+      "ai": "Q",
+      "t": "写好了。发之前，再检查一遍数字和日期，这个最容易错。",
+      "doc": "Xiě hǎo le. Fā zhīqián, zài jiǎnchá yí biàn shùzì hé rìqī, zhège zuì róngyì cuò.",
+      "v": "Viết xong rồi. Trước khi gửi, kiểm tra lại một lượt các con số và ngày tháng — cái này dễ sai nhất."
+    }
+  ],
+  "tuVung": [
+    { "chu": "销售部", "doc": "xiāoshòu bù", "nghia": "phòng kinh doanh, phòng bán hàng", "vd": "我在销售部工作。" },
+    { "chu": "开会", "doc": "kāihuì", "nghia": "họp", "vd": "经理正在开会。" },
+    { "chu": "留言", "doc": "liúyán", "nghia": "để lại lời nhắn; lời nhắn (留个言 = để lại một lời nhắn)", "vd": "他不在，你可以留言。" },
+    { "chu": "电话号码", "doc": "diànhuà hàomǎ", "nghia": "số điện thoại", "vd": "请留下您的电话号码。" },
+    { "chu": "重复", "doc": "chóngfù", "nghia": "nhắc lại, lặp lại", "vd": "请您重复一下。" },
+    { "chu": "邮件", "doc": "yóujiàn", "nghia": "email, thư điện tử (= 电子邮件)", "vd": "我给你发了一封邮件。" },
+    { "chu": "邮箱", "doc": "yóuxiāng", "nghia": "hộp thư, địa chỉ email", "vd": "你的邮箱是多少？" },
+    { "chu": "短信", "doc": "duǎnxìn", "nghia": "tin nhắn (SMS)", "vd": "我用短信发给你。" },
+    { "chu": "来电", "doc": "láidiàn", "nghia": "cuộc gọi đến (cách nói trang trọng)", "vd": "感谢您的来电。" },
+    { "chu": "尽快", "doc": "jǐnkuài", "nghia": "sớm nhất có thể", "vd": "我会尽快回复您。" },
+    { "chu": "订单", "doc": "dìngdān", "nghia": "đơn đặt hàng", "vd": "这个订单很急。" }
+  ],
+  "yNghia": "Một lời nhắn tốt gồm đủ: ai gọi, việc gì, hạn khi nào, liên hệ thế nào — và luôn đọc lại để xác nhận. Gửi kèm một email tóm tắt biến lời nói thành chữ viết, tránh hiểu lầm cho cả hai bên. Trước khi bấm gửi, hãy kiểm tra lại con số và ngày tháng: đó là chỗ dễ sai nhất.",
+  "meo": [
+    "Ở Trung Quốc, khi đọc số điện thoại, số phòng, số 1 đọc là yāo (幺) thay cho yī để khỏi nhầm với 七 qī: 一三九 = yāo sān jiǔ.",
+    "Nghe điện thoại ở công ty: 您好，+ tên bộ phận + 请问您找哪位？ Sếp vắng: 他正在开会 / 他现在不方便接电话 + 您需要留言吗？",
+    "Mẫu email ngắn: 标题 关于…的确认 → 称呼 刘先生您好： → nội dung → 如有问题，请随时联系我 → 祝好！+ tên.",
+    "麻烦你… (phiền bạn…) và …，我好 + V (để tôi tiện…) là hai mẫu nhờ vả rất hay gặp ở văn phòng.",
+    "一 đổi thanh: 一遍 yí biàn, 一会儿 yíhuìr (trước thanh 4); 一封 yì fēng (trước thanh 1)."
+  ],
+  "cauHoi": [
+    {
+      "hoi": "Vì sao ông Lưu không nói chuyện được với giám đốc Vương?",
+      "chon": ["Giám đốc Vương đi công tác", "Giám đốc Vương đang họp", "Giám đốc Vương nghỉ phép"],
+      "dung": 1,
+      "giai": "王经理正在开会，可能十一点以后才能结束。"
+    },
+    {
+      "hoi": "Ông Lưu muốn gì?",
+      "chon": ["Huỷ đơn hàng cốc cà phê", "Đổi địa chỉ giao hàng", "Đặt thêm 200 cốc cà phê, giao trước thứ Sáu tuần sau"],
+      "dung": 2,
+      "giai": "我想再加两百个，不知道下周五以前能不能送到。"
+    },
+    {
+      "hoi": "Trong số điện thoại, \"一\" được đọc là gì?",
+      "chon": ["yāo", "yī", "yì"],
+      "dung": 0,
+      "giai": "Khi đọc số điện thoại từng chữ số, 一 thường đọc yāo để khỏi nhầm với 七 qī."
+    },
+    {
+      "hoi": "Vì sao ông Lưu gửi địa chỉ email qua tin nhắn?",
+      "chon": ["Vì ông không nhớ email", "Để tránh ghi nhầm", "Vì điện thoại sắp hết pin"],
+      "dung": 1,
+      "giai": "我把邮箱地址用短信发给你，这样不会写错。"
+    }
+  ]
+}

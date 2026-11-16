@@ -789,3 +789,31 @@ Mẫu một mục:
 - **Cách sửa:** so theo ngày VN: `if (w > weekStartVN(now)) break;` — test ctw7a xanh lại lúc 01:00 thứ Hai.
 - **Ảnh hưởng:** biểu đồ tiến độ OKR thiếu cột tuần mới mỗi sáng thứ Hai 0h–7h; dữ liệu không mất.
 - **Bài học:** ranh giới tuần/ngày phải so cùng một múi giờ — trộn mili-giây UTC với ngày VN là lỗi chỉ hiện ở vài giờ trong tuần, test xanh cả tuần rồi đỏ đúng đêm Chủ nhật.
+
+### 16/11/2026 — CT Language iOS (game + gọi CuongMini) — chữ dài tràn ra ngoài thẻ/bong bóng
+- **Triệu chứng:** game Thư pháp hiện nghĩa "việc nghiên cứu và thiết kế huy hiệu" chạy một dòng ra ngoài thẻ sách; thẻ từ "hometown (/ˈhəʊm.taʊn/) — quê hương, thành phố quê" trong bong bóng CuongMini tràn khỏi viền.
+- **Nguyên nhân:** game (`Modules/TroChoi/*/…CTL.swift`) đo chữ trong khổ có xuống dòng nhưng vẽ `g.draw(text, at:)` một điểm ⇒ chữ một dòng; bố cục chung `DongTuXuong` (`UI/ThanhPhanCTL.swift`) và `LuongChu` (`Shared/Ielts/ChuChamDuoc.swift`) đo phần tử bằng `.unspecified` rồi đặt nguyên cỡ đó, phần tử rộng hơn hàng thì tràn.
+- **Cách sửa:** 5 game vẽ `in: CGRect` theo cỡ đo được (tự xuống dòng); hai bố cục ép phần tử quá rộng về đúng bề rộng hàng (ios-app f86e327 + bcd24aa).
+- **Ảnh hưởng:** mọi màn dùng chip/câu chạm từ/thẻ chữ trong game — chữ dài bị che.
+- **Bài học:** đo một kiểu vẽ một kiểu là tràn; bố cục tự xếp hàng phải luôn kẹp phần tử về bề rộng đề xuất.
+
+### 16/11/2026 — CT Language iOS (chạm từ tra nhanh) — chạm tên "Lan" ra từ "land", chạm "Vietnam" báo không có
+- **Triệu chứng:** trong Podcast chạm tên nhân vật Lan ⇒ trang từ "land (hạ cánh)"; chạm Vietnam/Hanoi/London ⇒ "Chưa có trong từ điển".
+- **Nguyên nhân:** `TraNhanhTuCTL.chon` (`Modules/Dich/BoDichCTL.swift`) không khớp đúng thì lấy mục đầu `hasPrefix(q)` — đúng cho Trung/Nhật (tách từ) nhưng sai với tiếng Anh; từ điển không có tên riêng.
+- **Cách sửa:** tiếng Anh chỉ nhận khớp đúng; thêm `TenRiengCTL` (nước + thành phố: cờ, cách đọc 3 thứ tiếng, tên Việt, giới thiệu) và truyền tên nhân vật của bài vào màn tra (ios-app f86e327).
+- **Ảnh hưởng:** mọi màn chạm từ (Podcast, Đọc link, Dịch) — đưa nghĩa sai cho tên riêng.
+- **Bài học:** khớp tiền tố là heuristic cho ngôn ngữ không có khoảng trắng; với tiếng Anh nó biến tên riêng thành từ khác.
+
+### 16/11/2026 — CT Language (trò chơi từ) — hỏi từ hiếm người học không bao giờ gặp ("rhumbline", "heraldry")
+- **Triệu chứng:** game Thư pháp đưa nghĩa "đường rhumb", "việc nghiên cứu và thiết kế huy hiệu".
+- **Nguyên nhân:** `deTroChoi` (`src/services/ctlanguage/tuDien.ts`) bốc ngẫu nhiên cả kho ~13k từ tiếng Anh; cột `thong_dung` của kho soạn tay luôn true nên không lọc được độ hiếm.
+- **Cách sửa:** ưu tiên từ của kho chủ đề (soạn tay, có cấp) tới A1–B2 / N5–N2 / HSK1–4 (`tuDeChoi` trong `chuDeTu.ts`), thiếu mới bù bằng cả kho; test trong `chuDeTu.test.ts` (77a692b01).
+- **Ảnh hưởng:** mọi trò chơi từ của app (60 giây, gõ nhanh, Thư pháp, Cánh trôi…) ở cả ba ngôn ngữ.
+- **Bài học:** "từ có nghĩa Việt" ≠ "từ đáng học"; nguồn cho game phải có thông tin cấp độ.
+
+### 16/11/2026 — CT Language iOS (thẻ lộ trình trang chủ) — hiện mã trình độ thô "beginner"
+- **Triệu chứng:** thẻ lộ trình ở tab Hôm nay in "beginner" thay vì nhãn tiếng Việt.
+- **Nguyên nhân:** thẻ đọc thẳng `LuaChonNgonNgu.level` (mã lưu trữ) không qua bảng nhãn.
+- **Cách sửa:** đổi sang nhãn "Mới bắt đầu"… trong đợt làm lại trang chủ (ios-app 5acc763).
+- **Ảnh hưởng:** mọi người dùng thấy chữ tiếng Anh thô trên trang chủ.
+- **Bài học:** mã lưu trữ không bao giờ hiện thẳng cho người dùng — luôn qua một hàm nhãn.

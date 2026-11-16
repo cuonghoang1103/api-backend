@@ -18,6 +18,13 @@ Mẫu một mục:
 
 ---
 
+### 16/11/2026 — Giọng video — chữ đầu câu đọc sai phụ âm ("Xoá" ⇒ "Đoá", "Dừng" ⇒ "Đừng", "Khi" ⇒ "Đi")
+- **Triệu chứng:** user nghe video: từ ĐẦU câu hay sai phụ âm đầu. Đo 10.920 câu lồng 16/11 (so chữ đầu Whisper nghe với kịch bản, vần giữ nguyên): "D" hoa đầu câu ⇒ "Đ" 71% (giữa câu 3,8%), "X" hoa 25% (giữa câu 2,5%), chữ khác ~1%.
+- **Nguyên nhân:** `chuDocGoc` giữ chữ HOA đầu câu; trong bài giảng chữ D/X/K… hoa gần như chỉ mở đầu từ tiếng Anh (Docker, Database, XML) ⇒ giọng F5 học "D hoa = đờ". Thử 10 câu × 3 seed cùng giọng: viết hoa đúng 5/30, viết thường 27/30.
+- **Cách sửa:** `giong/phienAmBai.ts › _chuGoc`: từ viết hoa chữ đầu mà có dấu tiếng Việt hoặc dáng một âm tiết Việt ⇒ hạ chữ thường trước khi đưa cho giọng (phụ đề giữ nguyên); `scratchpad/swt2/lech3.mts` so không phân biệt hoa/thường. Áp cho tập lồng từ 16:11.
+- **Ảnh hưởng:** ~2% số câu của mọi tập lồng bằng giọng chữ gốc (cuong6) trước 16:11 ngày 16/11 — vào danh sách thay giọng sau.
+- **Bài học:** lỗi "ngẫu nhiên" theo tai người thường có quy luật — gom thống kê theo vị trí/chữ cái từ dữ liệu sẵn có (thoigian.json có cả `hien` lẫn `nghe`) trước khi đoán; viết hoa/thường là một phần của "chữ" đối với giọng đọc theo ký tự.
+
 ### 16/11/2026 — Giọng video (dữ liệu train) — ElevenLabs đọc số/ký hiệu KHÁC chữ ghi kèm ⇒ giọng học đọc số sai, khựng quanh số
 - **Triệu chứng:** giọng cuong6 đọc "2026" thiếu "không trăm", khựng/chậm bất thường quanh số, gạch nối; ~1/3 dữ liệu train có chữ số.
 - **Nguyên nhân:** sinh dữ liệu đưa EL câu GỐC ("12.24", "x86-64", "F03", "fe80::1") còn chữ train là `chuDocGoc` ("mười hai chấm hai mươi tư"…); nghe lại bằng Whisper: EL đọc "phẩy hai bốn", đọc cả "gạch nối", đọc số 0 đầu, địa chỉ IPv6 thì loạn ⇒ cặp chữ–tiếng lệch.

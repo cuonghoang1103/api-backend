@@ -140,9 +140,9 @@ export default {
 
     /* ── Chương 15 — Dự án cuối khoá: một pipeline CI/CD hoàn chỉnh từ số 0 ── */
     'ga-15-0-slides': { yt: 'YLtlz88zrLg', credit: "Tom Shaw — CI/CD Tutorial using GitHub Actions - Automated Testing & Automated Deployments" },
-    'ga-15-1-ci-cho-pr': { yt: '3mzQRJY1GVE', credit: "TECH SCHOOL — [Backend #10] Setup Github Actions for Golang + Postgres to run automated tests" },
+    'ga-15-1-ci-cho-pr': { yt: '3mzQRJY1GVE', credit: "TECH SCHOOL — [Backend #10] Setup Github Actions for Golang + Postgres to run automated tests", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/github-actions/15-du-an-cuoi-khoa/15-02-ci-cho-pr-64b52289.mp4' }, defaultVideoTrack: 'VI'},
     'ga-15-2-build-anh': { yt: '-NH8Urs4ST0', credit: "Nick Janetakis — Build Git Tagged Multi-Arch Docker Images with GitHub Actions" },
-    'ga-15-3-deploy-an-toan': { yt: '-9LhRHXWjrc', credit: "Petabridge — Continuous Deployment of Docker Compose Applications Using GitHub Actions" },
-    'ga-15-4-van-hanh-pipeline': { yt: 'zNXJVeGcUmw', credit: "Initialized Capital — Trunk: Why CI Breaks at Scale — Merge Queues, Flaky Tests, and AI Coding" },
+    'ga-15-3-deploy-an-toan': { yt: '-9LhRHXWjrc', credit: "Petabridge — Continuous Deployment of Docker Compose Applications Using GitHub Actions", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/github-actions/15-du-an-cuoi-khoa/15-04-deploy-an-toan-ed9a04a0.mp4' }, defaultVideoTrack: 'VI'},
+    'ga-15-4-van-hanh-pipeline': { yt: 'zNXJVeGcUmw', credit: "Initialized Capital — Trunk: Why CI Breaks at Scale — Merge Queues, Flaky Tests, and AI Coding", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/github-actions/15-du-an-cuoi-khoa/15-05-van-hanh-pipeline-8b92e12d.mp4' }, defaultVideoTrack: 'VI'},
   },
 };

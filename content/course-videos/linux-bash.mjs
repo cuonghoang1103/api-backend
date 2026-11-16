@@ -112,12 +112,12 @@ export default {
     'lnx-11-0-slides': { yt: 'Kzpm-rGAXos', credit: "Learn Linux TV — Systemd Explained: How to Manage Linux Services Easily" },
     'lnx-11-1-systemd-unit': { yt: 'C4a7jxlMTfo', credit: 'tutoriaLinux — How to Create a systemd Linux Service' },   // How to Create a systemd Linux Service
     'lnx-11-2-cron-timer': { yt: 'DixhIrgMy3M', credit: 'tutoriaLinux — Introduction to systemd timers', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/linux-bash/11-systemd-cron-quan-tri/11-03-cron-timer-227d5e27.mp4' }, defaultVideoTrack: 'VI'},     // Introduction to systemd timers
-    'lnx-11-3-gia-co-may-chu': { yt: '1PljaLoTZ28', credit: 'TechSky - Ethical Hacking — How to Harden Linux Server using Auditd, UFW & Fail2Ban?' }, // How to Harden Linux Server using Auditd, UFW & Fail2Ban?
+    'lnx-11-3-gia-co-may-chu': { yt: '1PljaLoTZ28', credit: 'TechSky - Ethical Hacking — How to Harden Linux Server using Auditd, UFW & Fail2Ban?', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/linux-bash/11-systemd-cron-quan-tri/11-04-gia-co-may-chu-78e17ab5.mp4' }, defaultVideoTrack: 'VI'}, // How to Harden Linux Server using Auditd, UFW & Fail2Ban?
 
     /* ── Chương 12 — Chẩn đoán một máy chủ thật ── */
     'lnx-12-0-slides': { yt: 'iJ_eIsA5E1U', credit: "ByteByteGo — Linux Performance Tools!" },
-    'lnx-12-1-phuong-phap': { yt: 'ZNkFDHLQnrA', credit: 'EuroBSDCon — Keynote 3: System Performance Analysis Methodologies - Brendan Gregg' },  // Keynote 3: System Performance Analysis Methodologies - Brendan Gregg
-    'lnx-12-2-no-chet': { yt: 'fhBHvsi0Ql0', credit: 'USENIX — LISA19 - Linux Systems Performance' },      // LISA19 - Linux Systems Performance
+    'lnx-12-1-phuong-phap': { yt: 'ZNkFDHLQnrA', credit: 'EuroBSDCon — Keynote 3: System Performance Analysis Methodologies - Brendan Gregg', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/linux-bash/12-chan-doan-may-chu/12-02-phuong-phap-54eb8797.mp4' }, defaultVideoTrack: 'VI'},  // Keynote 3: System Performance Analysis Methodologies - Brendan Gregg
+    'lnx-12-2-no-chet': { yt: 'fhBHvsi0Ql0', credit: 'USENIX — LISA19 - Linux Systems Performance', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/linux-bash/12-chan-doan-may-chu/12-03-no-chet-09ab5fdf.mp4' }, defaultVideoTrack: 'VI'},      // LISA19 - Linux Systems Performance
     'lnx-12-3-no-cham': { yt: 'FJW8nGV4jxY', credit: 'Brendan Gregg — Linux Performance Tools, Brendan Gregg, part 1 of 2' },      // Linux Performance Tools, Brendan Gregg, part 1 of 2
     'lnx-12-4-no-la': { yt: 'zrr2nUln9Kk', credit: 'Brendan Gregg — Linux Performance Tools, Brendan Gregg, part 2 of 2' },        // Linux Performance Tools, Brendan Gregg, part 2 of 2
     'lnx-12-5-tong-ket': { yt: 'JNbt2YuB2lo', credit: 'Red Hat Enterprise Linux — Skills every sysadmin should learn beyond the basics' },   // Skills every sysadmin should learn beyond the basics

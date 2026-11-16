@@ -7,8 +7,8 @@ export default {
   courseSlug: 'computer-organization-and-architecture',
   defaultVideoTrack: 'YT',
   lessons: {
-    "cea201-gioi-thieu": { yt: "O5nskjZ_GoI", credit: "CrashCourse — Early Computing: Crash Course Computer Science #1" },
-    "cea201-1-1-org-vs-arch": { yt: "Ol8D69VKX2k", credit: "Neso Academy — Introduction to Computer Organization and Architecture (COA)" },
+    "cea201-gioi-thieu": { yt: "O5nskjZ_GoI", credit: "CrashCourse — Early Computing: Crash Course Computer Science #1", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/computer-organization-and-architecture/00-gioi-thieu-mon-hoc/00-01-bat-dau-tai-day-cea201-39ea3402.mp4' }, defaultVideoTrack: 'VI'},
+    "cea201-1-1-org-vs-arch": { yt: "Ol8D69VKX2k", credit: "Neso Academy — Introduction to Computer Organization and Architecture (COA)", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/computer-organization-and-architecture/01-gioi-thieu/01-03-to-chuc-vs-kien-truc-119a118e.mp4' }, defaultVideoTrack: 'VI'},
     "cea201-2-1-history-moore": { yt: "6-tKOHICqrI", credit: "CrashCourse — Integrated Circuits & Moore's Law: Crash Course Computer Science #17" },
     "cea201-2-2-performance-amdahl": { yt: "2dYV_lADfFI", credit: "Engineering Funda — Amdahl's Law in COA: Basics, Proof, and CPU Performance Explained" },
     "cea201-3-1-components-cycle": { yt: "FZGugFqdr60", credit: "CrashCourse — The Central Processing Unit (CPU): Crash Course Computer Science #7" },
@@ -39,9 +39,9 @@ export default {
     "cea201-chuan-dau-ra": { yt: "aa6YISbAJEA", credit: "Branch Education — The Incredible Evolution of Computers" },
     "cea201-tai-lieu": { yt: "1Zo8ZE0r_bo", credit: "THE IT CHANNEL — Architecture and Programming with Marie Simulator - A Short Tutorial (part 1/3)!" },
     // Chapter 1 — Introduction
-    "cea201-1-0a-slides-organization-architecture": { yt: "j8NnE1YeSN0", credit: "Gate Smashers — L-1.2: Von Neumann's Architecture | Stored Memory Concept in Computer Architecture" },
-    "cea201-1-0b-slides-moore-intel-arm": { yt: "dX9CGRZwD-w", credit: "Branch Education — How are Microchips Made? 🖥️🛠️ CPU Manufacturing Process Steps" },
-    "cea201-1-2-structure-function": { yt: "d86ws7mQYIg", credit: "Branch Education — How does Computer Hardware Work?  💻🛠🔬  [3D Animated Teardown]" },
+    "cea201-1-0a-slides-organization-architecture": { yt: "j8NnE1YeSN0", credit: "Gate Smashers — L-1.2: Von Neumann's Architecture | Stored Memory Concept in Computer Architecture", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/computer-organization-and-architecture/01-gioi-thieu/01-01-slide-kien-truc-to-chuc-may-ias-1a924cdd.mp4' }, defaultVideoTrack: 'VI'},
+    "cea201-1-0b-slides-moore-intel-arm": { yt: "dX9CGRZwD-w", credit: "Branch Education — How are Microchips Made? 🖥️🛠️ CPU Manufacturing Process Steps", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/computer-organization-and-architecture/01-gioi-thieu/01-02-slide-moore-intel-nhung-arm-7a976efb.mp4' }, defaultVideoTrack: 'VI'},
+    "cea201-1-2-structure-function": { yt: "d86ws7mQYIg", credit: "Branch Education — How does Computer Hardware Work?  💻🛠🔬  [3D Animated Teardown]", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/computer-organization-and-architecture/01-gioi-thieu/01-04-cau-truc-va-chuc-nang-c60944b7.mp4' }, defaultVideoTrack: 'VI'},
     // Chapter 2 — Computer Evolution & Performance
     "cea201-2-0-slides-hieu-nang-amdahl": { yt: "5ayaVunXFUY", credit: "Engineering Funda — CPU Performance Parameters in COA: Average CPI, MIPS, and Execution Time | COA" },
     // Chapter 3 — Top-Level View & Interconnection

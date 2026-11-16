@@ -122,22 +122,22 @@ export default {
 
     /* ── Chương 13 — Docker trong vòng lặp phát triển hằng ngày ── */
     'dk-13-0-slides': { yt: 'zkMRWDQV4Tg', credit: "ArjanCodes — How To Use Docker To Make Local Development A Breeze" },
-    'dk-13-1-dev-containers': { yt: 'kPMA9cnpScU', credit: "Syntax — you should be using dev containers" },
-    'dk-13-2-hot-reload-debug': { yt: 'u1q8AyNMxd4', credit: "Docker — Deciding Between Volumes, Bind Mounts, and Compose Watch (DockerCon 2023)" },
-    'dk-13-3-db-that-cho-test': { yt: 'sNg0bnMF_qY', credit: "Dreams of Code — Testcontainers have forever changed the way I write tests" },
-    'dk-13-4-mac-windows': { yt: 'gcacQ29AjOo', credit: "Bret Fisher — Docker Desktop for macOS Setup and Tips" },
+    'dk-13-1-dev-containers': { yt: 'kPMA9cnpScU', credit: "Syntax — you should be using dev containers", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/docker/13-phat-trien/13-02-dev-containers-ef16afe9.mp4' }, defaultVideoTrack: 'VI'},
+    'dk-13-2-hot-reload-debug': { yt: 'u1q8AyNMxd4', credit: "Docker — Deciding Between Volumes, Bind Mounts, and Compose Watch (DockerCon 2023)", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/docker/13-phat-trien/13-03-hot-reload-debug-532a02fe.mp4' }, defaultVideoTrack: 'VI'},
+    'dk-13-3-db-that-cho-test': { yt: 'sNg0bnMF_qY', credit: "Dreams of Code — Testcontainers have forever changed the way I write tests", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/docker/13-phat-trien/13-04-db-that-cho-test-4ad9ab78.mp4' }, defaultVideoTrack: 'VI'},
+    'dk-13-4-mac-windows': { yt: 'gcacQ29AjOo', credit: "Bret Fisher — Docker Desktop for macOS Setup and Tips", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/docker/13-phat-trien/13-05-mac-windows-8ea32dd1.mp4' }, defaultVideoTrack: 'VI'},
 
     /* ── Chương 14 — Docker cho mọi việc: công cụ, tự host & AI ── */
     'dk-14-0-slides': { yt: 'RUqGlWr5LBA', credit: "NetworkChuck — 18 Weird and Wonderful ways I use Docker" },
-    'dk-14-1-cong-cu-khong-cai': { yt: 'Iz7HkvitqQE', credit: "Pablo's Spot — Productivity with Containers - AWS Command Line Interface using Docker Container" },
-    'dk-14-2-kho-du-lieu-mot-lenh': { yt: 'Hs9Fh1fr5s8', credit: "Caleb Curry — Run Postgres in a Docker Container (Easiest PostgreSQL Setup)" },
-    'dk-14-3-tu-host': { yt: 'AjWonyr8nxI', credit: "Christian Lempa — Caddy: Everyone Says It’s the EASIEST… I Tested It" },
+    'dk-14-1-cong-cu-khong-cai': { yt: 'Iz7HkvitqQE', credit: "Pablo's Spot — Productivity with Containers - AWS Command Line Interface using Docker Container", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/docker/14-moi-viec/14-02-cong-cu-khong-cai-47927ab8.mp4' }, defaultVideoTrack: 'VI'},
+    'dk-14-2-kho-du-lieu-mot-lenh': { yt: 'Hs9Fh1fr5s8', credit: "Caleb Curry — Run Postgres in a Docker Container (Easiest PostgreSQL Setup)", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/docker/14-moi-viec/14-03-kho-du-lieu-mot-lenh-1ecd8494.mp4' }, defaultVideoTrack: 'VI'},
+    'dk-14-3-tu-host': { yt: 'AjWonyr8nxI', credit: "Christian Lempa — Caddy: Everyone Says It’s the EASIEST… I Tested It", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/docker/14-moi-viec/14-04-tu-host-a6328e21.mp4' }, defaultVideoTrack: 'VI'},
     'dk-14-4-gpu-ai': { yt: '4YA1n2zs6XA', credit: "Techno Tim — Run AI Models with Docker - No Setup, No Headaches" },
 
     /* ── Chương 15 — Nâng cao: build, bảo mật & vượt khỏi một máy ── */
     'dk-15-0-slides': { yt: 'V4f_sHTzvCI', credit: "Bret Fisher — Docker Production Best Practices from Bret Fisher at DockerCon" },
     'dk-15-1-buildx-bake': { yt: '99QLREnqL7A', credit: "Bret Fisher — Docker Build the best way with Docker Bake" },
-    'dk-15-2-rootless-podman': { yt: 'jeTKgAEyhsA', credit: "The Linux Foundation — Rootless Containers from Scratch - Liz Rice, Aqua Security" },
+    'dk-15-2-rootless-podman': { yt: 'jeTKgAEyhsA', credit: "The Linux Foundation — Rootless Containers from Scratch - Liz Rice, Aqua Security", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/docker/15-nang-cao/15-03-rootless-podman-dbb2e6eb.mp4' }, defaultVideoTrack: 'VI'},
     'dk-15-3-swarm': { yt: '_YsPt7dIvqU', credit: "Christian Lempa — Docker Swarm Mode: EASY Tutorial" },
     'dk-15-4-kubernetes': { yt: 'ZW_ONm4-WdM', credit: "Christian Lempa — From Docker to Kubernetes with ease! // Helm + Kompose Tutorial" },
 

@@ -80,21 +80,21 @@ export default {
     'rx-8-0-slides': { yt: 'uAmRtE52mYk', credit: "React Conf — Exploring React Performance" },
     'rx-8-1-do': { yt: 'CclO4tPoebs', credit: "React Conf — Profiling with React Performance tracks", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/react/08-hieu-nang-va-tiep-can/08-02-do-4955bb35.mp4' }, defaultVideoTrack: 'VI'},
     'rx-8-2-memo': { yt: 'huBxeruVnAM', credit: "Developer Way — Mastering memoization in React - Advanced React course, Episode 5" },
-    'rx-8-3-lazy': { yt: 'JU6sl_yyZqs', credit: "Web Dev Simplified — Speed Up Your React Apps With Code Splitting" },
-    'rx-8-4-a11y': { yt: 'UHjt2A6CS6A', credit: "React Conf — Demystifying accessibility in React apps | Kateryna Porshnieva" },
+    'rx-8-3-lazy': { yt: 'JU6sl_yyZqs', credit: "Web Dev Simplified — Speed Up Your React Apps With Code Splitting", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/react/08-hieu-nang-va-tiep-can/08-04-lazy-812b0aa4.mp4' }, defaultVideoTrack: 'VI'},
+    'rx-8-4-a11y': { yt: 'UHjt2A6CS6A', credit: "React Conf — Demystifying accessibility in React apps | Kateryna Porshnieva", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/react/08-hieu-nang-va-tiep-can/08-05-a11y-92e0b037.mp4' }, defaultVideoTrack: 'VI'},
 
     /* ── Chương 9 — Test React ── */
     'rx-9-0-slides': { yt: '6dOpQIwyV6g', credit: "RoadsideCoder — React Testing Full Course 2026 | Vitest and React Testing Library Tutorial" },
-    'rx-9-1-testing-library': { yt: 'CxSL0knFxAs', credit: "PedroTech — React Vite Testing Tutorial For Beginners - Vitest Testing Crash Course" },
-    'rx-9-2-async': { yt: 'pP8FQnv6o7A', credit: "Anson — Mock Service Worker with React" },
+    'rx-9-1-testing-library': { yt: 'CxSL0knFxAs', credit: "PedroTech — React Vite Testing Tutorial For Beginners - Vitest Testing Crash Course", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/react/09-test-react/09-02-testing-library-89f46af4.mp4' }, defaultVideoTrack: 'VI'},
+    'rx-9-2-async': { yt: 'pP8FQnv6o7A', credit: "Anson — Mock Service Worker with React", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/react/09-test-react/09-03-async-8fda94a3.mp4' }, defaultVideoTrack: 'VI'},
     'rx-9-3-hook': { yt: 'bvdHVxqjv80', credit: "Jack Herrington — TypeScript/React Testing: Components, Hooks, Custom Hooks, Redux and Zustand", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/react/09-test-react/09-04-hook-2c57a0f1.mp4' }, defaultVideoTrack: 'VI'},
-    'rx-9-4-phong-van': { yt: 'Fha2bVoC8SE', credit: "Paul Dowman's tech events and interviews — Kent C. Dodds – Write tests. Not too many. Mostly integration." },
+    'rx-9-4-phong-van': { yt: 'Fha2bVoC8SE', credit: "Paul Dowman's tech events and interviews — Kent C. Dodds – Write tests. Not too many. Mostly integration.", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/react/09-test-react/09-05-phong-van-6820655e.mp4' }, defaultVideoTrack: 'VI'},
 
     /* ── Chương 10 — Dự án giữa khoá: giao diện đặt lịch ── */
-    'rx-10-1-thiet-ke': { yt: 'AGWyx96lP8U', credit: "Tech With Tim — How I Plan My Coding Projects - 9 Steps" },
-    'rx-10-2-xay-dung': { yt: '9ySmMd5Cjc0', credit: "Sam Selikoff — Building an Interactive Calendar with Tailwind UI, React and date-fns" },
-    'rx-10-3-chat-luong': { yt: '2oiBKSjOOFE', credit: "Web Dev Simplified — The Only Accessibility Video You Will Ever Need" },
-    'rx-10-4-tong-ket': { yt: 'hTkS2hlpYbw', credit: "Codeching — Dockerizing a React Vite App for Production with Nginx, manage Environment Variables and Source Maps" },
+    'rx-10-1-thiet-ke': { yt: 'AGWyx96lP8U', credit: "Tech With Tim — How I Plan My Coding Projects - 9 Steps", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/react/10-du-an-giua-khoa/10-01-thiet-ke-cd4d0041.mp4' }, defaultVideoTrack: 'VI'},
+    'rx-10-2-xay-dung': { yt: '9ySmMd5Cjc0', credit: "Sam Selikoff — Building an Interactive Calendar with Tailwind UI, React and date-fns", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/react/10-du-an-giua-khoa/10-03-xay-dung-64d929f2.mp4' }, defaultVideoTrack: 'VI'},
+    'rx-10-3-chat-luong': { yt: '2oiBKSjOOFE', credit: "Web Dev Simplified — The Only Accessibility Video You Will Ever Need", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/react/10-du-an-giua-khoa/10-04-chat-luong-e5699a06.mp4' }, defaultVideoTrack: 'VI'},
+    'rx-10-4-tong-ket': { yt: 'hTkS2hlpYbw', credit: "Codeching — Dockerizing a React Vite App for Production with Nginx, manage Environment Variables and Source Maps", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/react/10-du-an-giua-khoa/10-05-tong-ket-7cb78407.mp4' }, defaultVideoTrack: 'VI'},
 
     /* ── Chương 11 — React bên trong ── */
     'rx-11-0-slides': { yt: '7YhdqIR2Yzo', credit: "Philip Fabianek — How Does React Actually Work? React.js Deep Dive #1" },

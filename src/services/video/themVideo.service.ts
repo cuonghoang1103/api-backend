@@ -535,7 +535,7 @@ async function themDaNguThat(
       trackGoc: chon.ma.slice(0, 24),
       tuDong: chon.tuDong,
     };
-    // Thêm lại video đã có: phụ đề đổi (khác ngôn ngữ / YouTube sửa) ⇒ bỏ bản dịch cũ (lệch câu là dịch SAI câu).
+    // Thêm lại video đã có: phụ đề đổi (khác ngôn ngữ / YouTube sửa) ⇒ bỏ bản dịch + thẻ học cũ (lệch câu là SAI câu).
     const cu = await prisma.videoNguoiDung.findUnique({
       where: { uk_video_nguoi_dung: { userId, nguon, videoId: ma } },
       select: { cues: true, lang: true },
@@ -544,7 +544,7 @@ async function themDaNguThat(
     const hang = await prisma.videoNguoiDung.upsert({
       where: { uk_video_nguoi_dung: { userId, nguon, videoId: ma } },
       create: { userId, nguon, videoId: ma, ...ghi },
-      update: giuDich ? ghi : { ...ghi, dichVi: Prisma.DbNull, soDich: 0 },
+      update: giuDich ? ghi : { ...ghi, dichVi: Prisma.DbNull, soDich: 0, trichHoc: Prisma.DbNull },
       select: CHON_VIDEO,
     });
     logger.info(`[video] ${userId} thêm ${nguon}:${ma} (${chon.nn}, ${chon.ma}${chon.tuDong ? ', tự động' : ''}) — ${cues.length} câu`);

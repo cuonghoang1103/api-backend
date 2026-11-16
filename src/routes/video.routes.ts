@@ -17,6 +17,7 @@ import { body } from 'express-validator';
 import rateLimit from 'express-rate-limit';
 import { laNnVideo } from '../services/video/phuDeDaNgu.js';
 import { dichTiep } from '../services/video/dichPhuDe.js';
+import { trichHoc } from '../services/video/trichHoc.js';
 
 const router = Router();
 router.use(authenticate);
@@ -47,6 +48,7 @@ router.get('/thu-vien', async (req, res: Response<ApiResponse>, next) => {
 //   POST /them            {url, nn?: auto|en|ja|zh, nhomLon?} ⇒ {ma, buoc, viTri, loi, video} (trả ngay)
 //   GET  /them/:ma        ⇒ cùng hình — app hỏi ~1,5 s/lần để hiện từng bước
 //   POST /cua-toi/:id/dich {tu?} ⇒ {moi:[[i,"bản dịch"]], daDich, tong, xong, dangBan, conLuot}
+//   POST /cua-toi/:id/trich-hoc {phamVi: cau|doan|video, tu?, den?} ⇒ {tu:[thẻ từ], nguPhap:[thẻ mẫu], khoa, tuBoNho, conLuot}
 // ════════════════════════════════════════════════════════════════
 
 /** Chống bấm dồn: 6 link/phút/người (hàng đợi đã giới hạn 3 việc đang chờ). */
@@ -77,6 +79,15 @@ router.post('/them', gioiHanThem, body('url').isString().isLength({ min: 8, max:
 router.get('/them/:ma', param('ma').isUUID(), validate,
   async (req, res: Response<ApiResponse>, next) => {
     try { ok(res, them.xemViecThem(idNguoiDung(req), String(req.params.ma))); } catch (e) { next(e); }
+  });
+
+// Thẻ học (từ vựng + ngữ pháp) của một câu / đoạn / cả video — JSON có cấu trúc, lưu lại (xem `trichHoc.ts`).
+// Đường có `/ai/`? KHÔNG — app gọi `DongYChiaSeAI.batBuoc()` trước (chỉ gửi phụ đề, không gửi dữ liệu người dùng).
+router.post('/cua-toi/:id(\\d+)/trich-hoc', gioiHanDich, param('id').isInt(),
+  body('phamVi').isIn(['cau', 'doan', 'video']),
+  body('tu').optional().isInt({ min: 0, max: 100000 }), body('den').optional().isInt({ min: 0, max: 100000 }), validate,
+  async (req, res: Response<ApiResponse>, next) => {
+    try { ok(res, await trichHoc(idNguoiDung(req), Number(req.params.id), req.body ?? {})); } catch (e) { next(e); }
   });
 
 router.post('/cua-toi/:id(\\d+)/dich', gioiHanDich, param('id').isInt(),

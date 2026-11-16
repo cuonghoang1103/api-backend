@@ -1427,6 +1427,8 @@ model VideoNguoiDung {
   tuDong   Boolean? @map("tu_dong")
   /// Số câu đã có bản dịch tiếng Việt trong `dichVi`.
   soDich   Int      @default(0) @map("so_dich")
+  /// Thẻ học trích bằng AI theo phạm vi: { "<khoá>": { tu: [...], nguPhap: [...], luc } } — xem `trichHoc.ts`.
+  trichHoc Json?    @map("trich_hoc") @db.JsonB
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")

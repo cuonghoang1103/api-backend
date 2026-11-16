@@ -18,6 +18,13 @@ Mẫu một mục:
 
 ---
 
+### 16/11/2026 — Video (điều phối) — giọng mới lồng xong 20 tập/giờ mà render đứng không
+- **Triệu chứng:** sau khi chuyển sang giọng cuong6, 3 làn render nhàn rỗi suốt 1 giờ; kiem-gio báo "cho-soat 0"; sau-giong đánh "CẦN SOÁT lệch=54–68" cho tập đọc đúng.
+- **Nguyên nhân:** (1) `scratchpad/swt2/lech3.mts` so `doc` với `chuDoc()` (phiên âm cũ) — giọng mới dùng `chuDocGoc()` ⇒ câu nào cũng "lệch"; (2) `.da-soat-giu` còn dấu soát của bản giọng cũ ⇒ bước soát tay bỏ qua; (3) `anh-sot.py` bắt từ Anh "sót" — giờ giữ từ Anh là cố ý; (4) `dieu-phoi-linux/sau-giong.sh` gọi `dang-ky.mts` cho TỪNG tập (~15 phút/lượt khi máy bận) ⇒ thả tối đa ~4 tập/giờ.
+- **Cách sửa:** lech3 chấp nhận cả `chuDocGoc(hien)`; gỡ dấu `.da-soat-giu` của 432 tập lồng lại; tắt anh-sot trong kiem-gio.sh; sau-giong chỉ dang-ky MỘT lần mỗi vòng (biến DK); đưa 17 tập bị đánh nhầm về hàng soát lại.
+- **Ảnh hưởng:** ~1 giờ máy thuê render không có việc (~$0,3).
+- **Bài học:** đổi cách tạo dữ liệu (doc) thì rà MỌI chốt kiểm đọc dữ liệu đó (lech3, anh-sot, dấu đã soát) — chốt kiểm viết cho cách cũ sẽ chặn câm cách mới.
+
 ### 16/11/2026 — Video (điều phối) — đưa 432 tập về lồng tiếng giọng mới nhưng 5 tập vẫn render bằng giọng cũ
 - **Triệu chứng:** gỡ dấu "ok" giọng cũ của 432 tập (đã lồng tiếng, chưa render) để đọc lại bằng giọng cuong6; 20 phút sau máy thuê render xong 5 tập (pro-lpe3-3, node-4-3, dkr-9-2, dkr-12-3, gha-14-1) bằng giọng CŨ, 400 dấu cũ đã quay lại `hang-giong-xong.txt` trên linux-nha.
 - **Nguyên nhân:** dọn linux-nha TRƯỚC rồi mới dọn Mac; giữa hai bước `scratchpad/dong-bo-linux.sh` (chạy liên tục) gộp các dòng `hang-giong-xong` còn trên Mac (`.dp/keo-*` + bản Mac) sang lại Linux ⇒ làn render thấy "giọng ok" và render luôn.

@@ -59,6 +59,7 @@ import { RedisStore } from 'rate-limit-redis';
 import { getRedis } from './config/redis.js';
 import { nanoid } from 'nanoid';
 import { locLoiMoiMuaChoIos } from './utils/appIos.js';
+import { thuongHieuChoCTCourses } from './utils/thuongHieuApp.js';
 import { laLoiGoiNoiBo } from './services/xacMinhOAuth.js';
 
 // 22/10/2026: rambo.ai.vn SERVFAIL ⇒ CuongMini đi rambo `fetch failed`. Chỉ tên miền khai trong DNS_DU_PHONG, chỉ khi tra cứu hỏng.
@@ -355,6 +356,7 @@ const corsOptions: cors.CorsOptions = {
     'Accept',
     'cf-turnstile-response',
     'X-Client-Platform',
+    'X-CT-App',
   ],
   exposedHeaders: [
     'X-Request-ID',
@@ -411,6 +413,8 @@ app.use(cookieParser(config.cookieSecret));
 // App iOS: bỏ lời mời mua ("Nâng cấp tại /pro") khỏi thông báo — App Store 3.1.1.
 // Chỉ chạy khi có header `X-Client-Platform: ios`; web/desktop không đổi.
 app.use(locLoiMoiMuaChoIos);
+// App CT Courses (`X-CT-App: ctcourses`): đổi TÊN thương hiệu trường ⇒ "CuongThai Courses" trong JSON trả về. Không header ⇒ không đổi.
+app.use(thuongHieuChoCTCourses);
 
 // ─── 5. Compression (gzip/brotli) ──────────────────────────
 app.use(compression({

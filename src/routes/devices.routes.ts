@@ -11,7 +11,7 @@ import { AppError } from '../middleware/errorHandler.js';
 import type { ApiResponse } from '../types/index.js';
 
 /** Các app iOS nhận thông báo đẩy — trùng `apns.ts › APP_DAY`. */
-const APP_HOP_LE = new Set(['com.cuongthai.app', 'com.cuongthai.ctwork']);
+const APP_HOP_LE = new Set(['com.cuongthai.app', 'com.cuongthai.ctwork', 'com.cuongthai.ctcourses']);
 
 const router = Router();
 router.use(authenticate);

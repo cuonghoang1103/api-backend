@@ -24,6 +24,16 @@ import { amThanhChoTopic } from './goiDayCtw.js';
 const BUNDLE_ID = process.env.APNS_BUNDLE_ID ?? 'com.cuongthai.app';
 /** App iOS CT Work riêng (17/10/2026) — cùng khoá APNs của đội, khác `apns-topic`. */
 export const BUNDLE_CTWORK = 'com.cuongthai.ctwork';
+/** App iOS CT Courses (16/11/2026) — app HỌC TẬP: chỉ nhận thông báo học tập (`laThongBaoHocTap`), không nhận tin nhắn /
+ *  mạng xã hội (app đó không có màn chat/bảng tin để mở khi chạm). */
+export const BUNDLE_CTCOURSES = 'com.cuongthai.ctcourses';
+
+/** Thông báo thuộc việc học (học kỳ, khoá, Academy, phòng thi, code lab, lộ trình…) ⇒ được gửi tới app CT Courses. */
+export function laThongBaoHocTap(noi: NoiDungDay): boolean {
+  if (noi.nhom === 'hoc-tap' || noi.duLieu?.ctc === true) return true;
+  const url = typeof noi.duLieu?.url === 'string' ? noi.duLieu.url : '';
+  return /^\/(hoc-tap|academy|courses|khoa-hoc|exam|phong-thi|code-lab|codelab|roadmap|lo-trinh|vo)(\/|$|\?)/.test(url);
+}
 const MAY_CHU_THAT = 'https://api.push.apple.com';
 const MAY_CHU_THU = 'https://api.sandbox.push.apple.com';
 
@@ -170,7 +180,8 @@ export async function guiThongBao(
       select: { token: true, sandbox: true, app: true },
     });
     const ctw = tatCa.filter((t) => t.app === BUNDLE_CTWORK);
-    const chinh = tatCa.filter((t) => t.app !== BUNDLE_CTWORK);
+    const hocTap = laThongBaoHocTap(noi);
+    const chinh = tatCa.filter((t) => t.app !== BUNDLE_CTWORK && (t.app !== BUNDLE_CTCOURSES || hocTap));
     const the = kenh === 'chiCtwork' ? ctw : kenh === 'ctwork' && ctw.length > 0 ? ctw : chinh;
     if (the.length === 0) return 0;
     const kq = await Promise.all(the.map((t) => (t.app === BUNDLE_CTWORK

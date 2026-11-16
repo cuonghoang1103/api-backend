@@ -56,13 +56,20 @@ export const BUNDLE_CTLANGUAGE = 'com.cuongthai.ctlanguage';
 export const SAN_PHAM_THUE_BAO: Readonly<Record<string, true>> = Object.freeze({
   'com.cuongthai.ctlanguage.pro.thang': true,
   'com.cuongthai.ctlanguage.pro.nam': true,
+  // CT Courses (16/11/2026): thuê bao riêng của app học tập, cùng một quyền Pro trên máy chủ.
+  'com.cuongthai.ctcourses.pro.thang': true,
+  'com.cuongthai.ctcourses.pro.nam': true,
 });
+
+/// App iOS CT Courses (16/11/2026) — bán Pro bằng thuê bao tháng/năm như CT Language (sản phẩm riêng của bundle này).
+export const BUNDLE_CTCOURSES = 'com.cuongthai.ctcourses';
 
 /// Sản phẩm nào thuộc app nào. Giao dịch hợp chữ ký nhưng sản phẩm của app A gắn bundle app B ⇒ từ chối (không ai
 /// được "đổi" gói rẻ của app này lấy quyền ở app kia bằng cách sửa máy khách).
 export const SAN_PHAM_CUA_APP: Readonly<Record<string, readonly string[]>> = Object.freeze({
   [BUNDLE_ID]: Object.keys(SAN_PHAM_PRO),
-  [BUNDLE_CTLANGUAGE]: Object.keys(SAN_PHAM_THUE_BAO),
+  [BUNDLE_CTLANGUAGE]: Object.keys(SAN_PHAM_THUE_BAO).filter((m) => m.startsWith(`${BUNDLE_CTLANGUAGE}.`)),
+  [BUNDLE_CTCOURSES]: Object.keys(SAN_PHAM_THUE_BAO).filter((m) => m.startsWith('com.cuongthai.ctcourses.')),
 });
 
 const NGAY_MS = 86_400_000;

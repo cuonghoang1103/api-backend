@@ -18,6 +18,20 @@ Mẫu một mục:
 
 ---
 
+### 16/11/2026 — app iOS (màn đồng ý quy tắc dùng chung) — chữ nút "Tôi đồng ý" màu tối trên nền thương hiệu
+- **Triệu chứng:** chụp app CT Courses lần đầu: nút "Tôi đồng ý" chữ gần đen trên nền lam, khó đọc (~2:1); app CuongThai dính y hệt ở chủ đề sáng.
+- **Nguyên nhân:** `ios-app/CuongThaiApp/Shared/Views/LegalViews.swift` (TermsConsentView) tô chữ nút bằng `AppColors.textPrimary` — ở chế độ sáng đó là màu gần đen.
+- **Cách sửa:** đổi sang `AppColors.onPrimary` (trắng); app CT Courses dùng màn chào/đồng ý riêng (`CTCoursesApp/Man/DongYCTC.swift`).
+- **Ảnh hưởng:** màn mở đầu của app CuongThai (TestFlight) từ khi bỏ ép chế độ tối 19/08.
+- **Bài học:** chữ đặt TRÊN nền thương hiệu luôn là `onPrimary`; soát tương phản bằng ảnh chụp cả sáng lẫn tối, đừng tin tên token.
+
+### 16/11/2026 — backend (đổi tên thương hiệu cho app CT Courses) — luật "FPT" đứng riêng đổi luôn tên CÔNG TY
+- **Triệu chứng:** thử `X-CT-App: ctcourses` trên `/academy/advisor/catalog`: "FPT Software" thành "CuongThai Software", "(Naver/LINE, FPT)" thành "(…, CuongThai)" — bịa một công ty không có thật.
+- **Nguyên nhân:** `src/utils/thuongHieuApp.ts` bản đầu thay MỌI chữ "FPT" đứng thành từ; nhưng ngoài ngữ cảnh trường, "FPT" là tên tập đoàn.
+- **Cách sửa:** chỉ đổi "FPT University / Đại học FPT / FPTU"; "FPT" đứng riêng chỉ đổi sau từ ngữ cảnh trường (sinh viên, trường, giáo trình, đề…); test giữ nguyên "FPT Software", "FPT.AI" (`thuongHieuApp.test.ts`). Bắt trước khi lên prod.
+- **Ảnh hưởng:** không — phát hiện khi kiểm trên backend cục bộ.
+- **Bài học:** thay chữ hàng loạt trên dữ liệu thì kiểm trên DỮ LIỆU THẬT trước (grep mọi chỗ khớp và đọc ngữ cảnh), không chỉ trên câu mẫu tự nghĩ.
+
 ### 16/11/2026 — Web (video khoá học) — khoá Authentication gắn nhãn DONE nhưng bài chỉ có video YouTube, "VN sắp có"
 - **Triệu chứng:** user mở /courses/authentication/learn: bài nào cũng chỉ có tab YT; 77 video tiếng Việt đã ở R2 và có trong `content/course-videos/authentication.mjs` từ đầu tháng 11.
 - **Nguyên nhân:** `scripts/course-video-seed.mjs` (dòng ~76) chặn CẢ bản đồ khi có entry `yt` mà `credit` rỗng; 7 bài lab (auth-6-7…auth-12-7) thêm 04/11 để `credit: ''` ⇒ mỗi lần deploy bước seed bỏ qua toàn bộ khoá, chỉ in một dòng WARN "Course video-track seed reported errors (rc=1)" giữa log deploy — không ai đọc; `kiem-video-web.mjs` chỉ so mã nguồn nên báo 77/77.

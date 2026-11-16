@@ -153,6 +153,7 @@ export function amThanhCtw(type: string, payload: unknown): string {
 
 /** `aps.sound` theo `apns-topic`: app CT Work ⇒ âm riêng (âm theo loại nếu bên gọi đưa), app chính ⇒ `default` như cũ. */
 export function amThanhChoTopic(topic: string, amThanh?: string): string {
+  if (topic === 'com.cuongthai.ctcourses') return 'thong-bao.caf';   // âm tự tổng hợp của app CT Courses (gốc gói app)
   return topic === 'com.cuongthai.ctwork' ? (amThanh ?? AM_THANH_CTWORK) : 'default';
 }
 

@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { xetGiaoDich, taiKhoanTuThe, SAN_PHAM_PRO, BUNDLE_ID, BUNDLE_CTLANGUAGE, type GiaoDichApple } from './quyTac.js';
+import { xetGiaoDich, taiKhoanTuThe, SAN_PHAM_PRO, BUNDLE_ID, BUNDLE_CTLANGUAGE, BUNDLE_CTCOURSES, type GiaoDichApple } from './quyTac.js';
 import { ngayChoThang } from '../billing.service.js';
 
 const THAT: GiaoDichApple = {
@@ -180,4 +180,20 @@ test('⛔ thuê bao thiếu expiresDate ⇒ từ chối, không đoán', () => {
   const { expiresDate, ...thieu } = THUE_BAO;
   const r = xetGiaoDich(thieu, XET);
   assert.ok(!r.nhan && r.vi === 'thieu_han');
+});
+
+// ─── CT Courses: thuê bao riêng của app học tập (16/11/2026) ──────────────────
+
+test('CT Courses: gói năm của đúng bundle ⇒ cấp tới hạn Apple', () => {
+  const gd = { ...THUE_BAO, bundleId: BUNDLE_CTCOURSES, productId: 'com.cuongthai.ctcourses.pro.nam',
+               expiresDate: BAY_GIO.getTime() + 365 * 86_400_000 };
+  const r = xetGiaoDich(gd, XET);
+  assert.ok(r.nhan && r.soNgay === 365);
+});
+
+test('⛔ CT Courses ↔ CT Language: sản phẩm app này gắn bundle app kia ⇒ từ chối', () => {
+  const a = xetGiaoDich({ ...THUE_BAO, bundleId: BUNDLE_CTCOURSES }, XET);
+  assert.ok(!a.nhan && a.vi === 'san_pham_la');
+  const b = xetGiaoDich({ ...THUE_BAO, bundleId: BUNDLE_CTLANGUAGE, productId: 'com.cuongthai.ctcourses.pro.thang' }, XET);
+  assert.ok(!b.nhan && b.vi === 'san_pham_la');
 });

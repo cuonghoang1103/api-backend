@@ -1,0 +1,969 @@
+{
+  "ma": "hsk5-bo-sung-3",
+  "nn": "zh",
+  "ten": "HSK5 bổ sung 3 — Phó từ & liên từ nối câu",
+  "moTa": "Phó từ và liên từ HSK5 giúp câu văn tự nhiên, mạch lạc: 毕竟, 居然, 难怪, 幸亏, 何况, 宁可, 与其, 从而… Mỗi từ kèm mẫu câu hay dùng và lưu ý cách đọc (尽量 jǐn / 尽力 jìn).",
+  "nhom": "hsk",
+  "cap": "HSK5",
+  "tu": [
+    {
+      "chu": "一再",
+      "doc": "yīzài",
+      "loai": "adv",
+      "nghia": "nhiều lần, hết lần này đến lần khác",
+      "cap": "HSK5",
+      "viDu": "老师一再提醒我们注意安全。",
+      "viDuDoc": "Lǎoshī yízài tíxǐng wǒmen zhùyì ānquán.",
+      "viDuNghia": "Thầy giáo nhắc đi nhắc lại chúng tôi chú ý an toàn.",
+      "cumTu": [
+        "一再强调",
+        "一再要求",
+        "一再推迟"
+      ],
+      "ghiChu": "一再 ≈ 再三; 再三 còn đứng sau động từ (考虑再三)."
+    },
+    {
+      "chu": "一律",
+      "doc": "yīlǜ",
+      "loai": "adv",
+      "nghia": "đều, nhất loạt",
+      "cap": "HSK5",
+      "viDu": "本店商品一律八折。",
+      "viDuDoc": "Běn diàn shāngpǐn yílǜ bā zhé.",
+      "viDuNghia": "Hàng hóa của cửa hàng đều giảm 20%.",
+      "cumTu": [
+        "一律平等",
+        "一律免费"
+      ],
+      "ghiChu": "八折 = trả 80% giá (giảm 20%), người Việt hay hiểu nhầm là giảm 80%."
+    },
+    {
+      "chu": "一旦",
+      "doc": "yīdàn",
+      "loai": "conj",
+      "nghia": "một khi",
+      "cap": "HSK5",
+      "viDu": "一旦养成坏习惯，就很难改掉。",
+      "viDuDoc": "Yídàn yǎngchéng huài xíguàn, jiù hěn nán gǎi diào.",
+      "viDuNghia": "Một khi đã hình thành thói quen xấu thì rất khó bỏ.",
+      "cumTu": [
+        "一旦…就…"
+      ]
+    },
+    {
+      "chu": "万一",
+      "doc": "wànyī",
+      "loai": "conj",
+      "nghia": "lỡ như, nhỡ",
+      "cap": "HSK5",
+      "viDu": "带把伞吧，万一下雨呢？",
+      "viDuDoc": "Dài bǎ sǎn ba, wànyī xià yǔ ne?",
+      "viDuNghia": "Mang ô theo đi, lỡ trời mưa thì sao?",
+      "cumTu": [
+        "万一…怎么办",
+        "以防万一"
+      ],
+      "ghiChu": "万一 dùng cho khả năng nhỏ và không mong muốn; 如果 trung tính."
+    },
+    {
+      "chu": "不断",
+      "doc": "bùduàn",
+      "loai": "adv",
+      "nghia": "không ngừng",
+      "cap": "HSK5",
+      "viDu": "随着科技的不断发展，生活变得越来越方便。",
+      "viDuDoc": "Suízhe kējì de búduàn fāzhǎn, shēnghuó biàn de yuè lái yuè fāngbiàn.",
+      "viDuNghia": "Cùng với sự phát triển không ngừng của khoa học công nghệ, cuộc sống ngày càng tiện lợi.",
+      "cumTu": [
+        "不断提高",
+        "不断努力",
+        "不断发展"
+      ]
+    },
+    {
+      "chu": "不免",
+      "doc": "bùmiǎn",
+      "loai": "adv",
+      "nghia": "khó tránh khỏi",
+      "cap": "HSK5",
+      "viDu": "第一次上台演讲，不免有些紧张。",
+      "viDuDoc": "Dì yī cì shàngtái yǎnjiǎng, bùmiǎn yǒuxiē jǐnzhāng.",
+      "viDuNghia": "Lần đầu lên sân khấu diễn thuyết, khó tránh khỏi có chút hồi hộp.",
+      "cumTu": [
+        "不免有些…",
+        "不免担心"
+      ],
+      "ghiChu": "不免 là phó từ đứng trước động từ; 难免 còn làm vị ngữ (这是难免的)."
+    },
+    {
+      "chu": "再三",
+      "doc": "zàisān",
+      "loai": "adv",
+      "nghia": "nhiều lần, đi đi lại lại",
+      "cap": "HSK5",
+      "viDu": "考虑再三，我还是决定留在这里。",
+      "viDuDoc": "Kǎolǜ zàisān, wǒ háishi juédìng liú zài zhèli.",
+      "viDuNghia": "Cân nhắc đi cân nhắc lại, tôi vẫn quyết định ở lại đây.",
+      "cumTu": [
+        "再三考虑",
+        "再三强调",
+        "考虑再三"
+      ],
+      "ghiChu": "Xem 一再."
+    },
+    {
+      "chu": "亲自",
+      "doc": "qīnzì",
+      "loai": "adv",
+      "nghia": "đích thân",
+      "cap": "HSK5",
+      "viDu": "这件事你最好亲自去办。",
+      "viDuDoc": "Zhè jiàn shì nǐ zuì hǎo qīnzì qù bàn.",
+      "viDuNghia": "Việc này tốt nhất bạn đích thân đi làm.",
+      "cumTu": [
+        "亲自动手",
+        "亲自参加",
+        "亲自去"
+      ]
+    },
+    {
+      "chu": "依然",
+      "doc": "yīrán",
+      "loai": "adv",
+      "nghia": "vẫn, vẫn như cũ",
+      "cap": "HSK5",
+      "viDu": "多年过去了，这里依然那么美。",
+      "viDuDoc": "Duō nián guòqù le, zhèli yīrán nàme měi.",
+      "viDuNghia": "Bao năm trôi qua, nơi này vẫn đẹp như thế.",
+      "cumTu": [
+        "依然如故",
+        "依然存在"
+      ],
+      "ghiChu": "依然 trang trọng hơn 仍然/还."
+    },
+    {
+      "chu": "始终",
+      "doc": "shǐzhōng",
+      "loai": "adv",
+      "nghia": "trước sau, luôn luôn",
+      "cap": "HSK5",
+      "viDu": "他始终相信自己能成功。",
+      "viDuDoc": "Tā shǐzhōng xiāngxìn zìjǐ néng chénggōng.",
+      "viDuNghia": "Anh ấy trước sau vẫn tin mình sẽ thành công.",
+      "cumTu": [
+        "始终如一",
+        "始终坚持",
+        "始终没有"
+      ],
+      "ghiChu": "始终 nhấn \"từ đầu đến cuối không đổi\"; 一直 chỉ \"liên tục suốt\", dùng rộng hơn."
+    },
+    {
+      "chu": "尽量",
+      "doc": "jǐnliàng",
+      "loai": "adv",
+      "nghia": "cố gắng hết mức",
+      "cap": "HSK5",
+      "viDu": "明天你尽量早点儿来。",
+      "viDuDoc": "Míngtiān nǐ jǐnliàng zǎo diǎnr lái.",
+      "viDuNghia": "Mai bạn cố gắng đến sớm một chút.",
+      "cumTu": [
+        "尽量早点儿",
+        "尽量不…",
+        "尽量满足"
+      ],
+      "ghiChu": "尽 đọc jǐn (thanh 3) trong 尽量/尽快/尽管; đọc jìn trong 尽力/尽头."
+    },
+    {
+      "chu": "尽快",
+      "doc": "jǐnkuài",
+      "loai": "adv",
+      "nghia": "càng nhanh càng tốt",
+      "cap": "HSK5",
+      "viDu": "请你尽快给我回复。",
+      "viDuDoc": "Qǐng nǐ jǐnkuài gěi wǒ huífù.",
+      "viDuNghia": "Xin bạn trả lời tôi sớm nhất có thể.",
+      "cumTu": [
+        "尽快完成",
+        "尽快回复",
+        "尽快解决"
+      ],
+      "ghiChu": "Xem 尽量."
+    },
+    {
+      "chu": "尽力",
+      "doc": "jìnlì",
+      "loai": "v",
+      "nghia": "cố hết sức",
+      "cap": "HSK5",
+      "viDu": "我一定尽力帮你。",
+      "viDuDoc": "Wǒ yídìng jìnlì bāng nǐ.",
+      "viDuNghia": "Tôi nhất định cố hết sức giúp bạn.",
+      "cumTu": [
+        "尽力而为",
+        "尽力帮助",
+        "已经尽力了"
+      ],
+      "ghiChu": "尽 ở đây đọc jìn (thanh 4)."
+    },
+    {
+      "chu": "居然",
+      "doc": "jūrán",
+      "loai": "adv",
+      "nghia": "vậy mà, thế mà (bất ngờ)",
+      "cap": "HSK5",
+      "viDu": "这么简单的题，他居然做错了。",
+      "viDuDoc": "Zhème jiǎndān de tí, tā jūrán zuò cuò le.",
+      "viDuNghia": "Bài dễ như vậy mà cậu ấy lại làm sai.",
+      "cumTu": [
+        "居然会",
+        "居然是"
+      ],
+      "ghiChu": "居然 ≈ 竟然, diễn tả điều ngoài dự đoán."
+    },
+    {
+      "chu": "幸亏",
+      "doc": "xìngkuī",
+      "loai": "adv",
+      "nghia": "may mà, may thay",
+      "cap": "HSK5",
+      "viDu": "幸亏你提醒我，不然我就忘了。",
+      "viDuDoc": "Xìngkuī nǐ tíxǐng wǒ, bùrán wǒ jiù wàng le.",
+      "viDuNghia": "May mà bạn nhắc tôi, không thì tôi quên mất.",
+      "cumTu": [
+        "幸亏…不然…"
+      ],
+      "ghiChu": "幸亏 ≈ 多亏; 多亏 còn đi được với danh từ (多亏了你)."
+    },
+    {
+      "chu": "多亏",
+      "doc": "duōkuī",
+      "loai": "v",
+      "nghia": "nhờ có, may nhờ",
+      "cap": "HSK5",
+      "viDu": "多亏了大家的帮助，我们才按时完成了任务。",
+      "viDuDoc": "Duōkuī le dàjiā de bāngzhù, wǒmen cái ànshí wánchéng le rènwu.",
+      "viDuNghia": "Nhờ có sự giúp đỡ của mọi người, chúng tôi mới hoàn thành nhiệm vụ đúng hạn.",
+      "cumTu": [
+        "多亏了你",
+        "多亏…才…"
+      ],
+      "ghiChu": "Xem 幸亏."
+    },
+    {
+      "chu": "干脆",
+      "doc": "gāncuì",
+      "loai": "adv",
+      "nghia": "thôi thì cứ, dứt khoát",
+      "cap": "HSK5",
+      "viDu": "既然这么麻烦，我们干脆不去了。",
+      "viDuDoc": "Jìrán zhème máfan, wǒmen gāncuì bú qù le.",
+      "viDuNghia": "Đã phiền phức thế thì thôi chúng ta khỏi đi luôn.",
+      "cumTu": [
+        "干脆利落",
+        "说话干脆",
+        "干脆不…"
+      ],
+      "ghiChu": "干 ở đây đọc gān (thanh 1)."
+    },
+    {
+      "chu": "简直",
+      "doc": "jiǎnzhí",
+      "loai": "adv",
+      "nghia": "quả thực, đúng là (nhấn mạnh)",
+      "cap": "HSK5",
+      "viDu": "这里的风景简直太美了！",
+      "viDuDoc": "Zhèli de fēngjǐng jiǎnzhí tài měi le!",
+      "viDuNghia": "Phong cảnh ở đây quả thực đẹp quá!",
+      "cumTu": [
+        "简直是",
+        "简直不敢相信"
+      ],
+      "ghiChu": "简直 mang sắc thái cường điệu, hay đi với 太…了 / 是."
+    },
+    {
+      "chu": "难怪",
+      "doc": "nánguài",
+      "loai": "adv",
+      "nghia": "thảo nào, chả trách",
+      "cap": "HSK5",
+      "viDu": "原来他是北京人，难怪普通话说得这么好。",
+      "viDuDoc": "Yuánlái tā shì Běijīng rén, nánguài pǔtōnghuà shuō de zhème hǎo.",
+      "viDuNghia": "Hóa ra anh ấy là người Bắc Kinh, thảo nào nói tiếng phổ thông hay thế.",
+      "cumTu": [
+        "难怪…原来…"
+      ],
+      "ghiChu": "难怪 ≈ 怪不得."
+    },
+    {
+      "chu": "怪不得",
+      "doc": "guàibude",
+      "loai": "adv",
+      "nghia": "hèn gì, thảo nào",
+      "cap": "HSK5",
+      "viDu": "下雪了，怪不得这么冷。",
+      "viDuDoc": "Xià xuě le, guàibude zhème lěng.",
+      "viDuNghia": "Tuyết rơi rồi, hèn gì lạnh thế.",
+      "cumTu": [
+        "怪不得…原来…"
+      ],
+      "ghiChu": "Xem 难怪. 不 thanh nhẹ."
+    },
+    {
+      "chu": "毕竟",
+      "doc": "bìjìng",
+      "loai": "adv",
+      "nghia": "suy cho cùng, dù sao",
+      "cap": "HSK5",
+      "viDu": "他毕竟还是个孩子，别对他太严格了。",
+      "viDuDoc": "Tā bìjìng háishi ge háizi, bié duì tā tài yángé le.",
+      "viDuNghia": "Dù sao nó vẫn còn là trẻ con, đừng quá nghiêm khắc với nó.",
+      "cumTu": [
+        "毕竟是",
+        "毕竟还"
+      ]
+    },
+    {
+      "chu": "极其",
+      "doc": "jíqí",
+      "loai": "adv",
+      "nghia": "cực kỳ",
+      "cap": "HSK5",
+      "viDu": "这是一个极其重要的决定。",
+      "viDuDoc": "Zhè shì yí gè jíqí zhòngyào de juédìng.",
+      "viDuNghia": "Đây là một quyết định cực kỳ quan trọng.",
+      "cumTu": [
+        "极其重要",
+        "极其困难",
+        "极其严重"
+      ],
+      "ghiChu": "极其 dùng trong văn viết, thường đi với tính từ hai âm tiết."
+    },
+    {
+      "chu": "格外",
+      "doc": "géwài",
+      "loai": "adv",
+      "nghia": "đặc biệt, hơn hẳn",
+      "cap": "HSK5",
+      "viDu": "雨后的空气格外新鲜。",
+      "viDuDoc": "Yǔ hòu de kōngqì géwài xīnxiān.",
+      "viDuNghia": "Không khí sau mưa trong lành hơn hẳn.",
+      "cumTu": [
+        "格外高兴",
+        "格外小心",
+        "格外美丽"
+      ]
+    },
+    {
+      "chu": "的确",
+      "doc": "díquè",
+      "loai": "adv",
+      "nghia": "quả thật, đích thực",
+      "cap": "HSK5",
+      "viDu": "这家饭馆的菜的确不错。",
+      "viDuDoc": "Zhè jiā fànguǎn de cài díquè búcuò.",
+      "viDuNghia": "Món ăn ở quán này quả thật ngon.",
+      "cumTu": [
+        "的确如此",
+        "的的确确"
+      ],
+      "ghiChu": "的 ở đây đọc dí (thanh 2), không đọc de."
+    },
+    {
+      "chu": "迟早",
+      "doc": "chízǎo",
+      "loai": "adv",
+      "nghia": "sớm muộn",
+      "cap": "HSK5",
+      "viDu": "只要坚持下去，你迟早会成功的。",
+      "viDuDoc": "Zhǐyào jiānchí xiàqù, nǐ chízǎo huì chénggōng de.",
+      "viDuNghia": "Chỉ cần kiên trì, sớm muộn gì bạn cũng sẽ thành công.",
+      "cumTu": [
+        "迟早会",
+        "迟早的事"
+      ]
+    },
+    {
+      "chu": "连忙",
+      "doc": "liánmáng",
+      "loai": "adv",
+      "nghia": "vội vàng, liền",
+      "cap": "HSK5",
+      "viDu": "看到老人上车，他连忙站起来让座。",
+      "viDuDoc": "Kàn dào lǎorén shàng chē, tā liánmáng zhàn qǐlái ràng zuò.",
+      "viDuNghia": "Thấy cụ già lên xe, cậu ấy vội đứng dậy nhường chỗ.",
+      "cumTu": [
+        "连忙道歉",
+        "连忙跑过去"
+      ],
+      "ghiChu": "连忙 chỉ dùng kể việc đã xảy ra, không dùng trong câu cầu khiến (không nói 你连忙去)."
+    },
+    {
+      "chu": "急忙",
+      "doc": "jímáng",
+      "loai": "adv",
+      "nghia": "vội vã",
+      "cap": "HSK5",
+      "viDu": "听到孩子哭了，妈妈急忙跑了过去。",
+      "viDuDoc": "Tīng dào háizi kū le, māma jímáng pǎo le guòqù.",
+      "viDuNghia": "Nghe con khóc, mẹ vội vã chạy tới.",
+      "cumTu": [
+        "急急忙忙",
+        "急忙赶来"
+      ]
+    },
+    {
+      "chu": "逐步",
+      "doc": "zhúbù",
+      "loai": "adv",
+      "nghia": "từng bước",
+      "cap": "HSK5",
+      "viDu": "我们要逐步提高自己的汉语水平。",
+      "viDuDoc": "Wǒmen yào zhúbù tígāo zìjǐ de Hànyǔ shuǐpíng.",
+      "viDuNghia": "Chúng ta phải từng bước nâng cao trình độ tiếng Trung của mình.",
+      "cumTu": [
+        "逐步提高",
+        "逐步完善",
+        "逐步实现"
+      ],
+      "ghiChu": "逐步 (có kế hoạch, từng bước chủ động) gần 逐渐 (dần dần, tự nhiên)."
+    },
+    {
+      "chu": "逐渐",
+      "doc": "zhújiàn",
+      "loai": "adv",
+      "nghia": "dần dần",
+      "cap": "HSK5",
+      "viDu": "天气逐渐暖和起来了。",
+      "viDuDoc": "Tiānqì zhújiàn nuǎnhuo qǐlái le.",
+      "viDuNghia": "Thời tiết dần dần ấm lên.",
+      "cumTu": [
+        "逐渐增加",
+        "逐渐习惯",
+        "逐渐消失"
+      ],
+      "ghiChu": "Xem 逐步."
+    },
+    {
+      "chu": "陆续",
+      "doc": "lùxù",
+      "loai": "adv",
+      "nghia": "lần lượt",
+      "cap": "HSK5",
+      "viDu": "客人们陆续到了。",
+      "viDuDoc": "Kèrénmen lùxù dào le.",
+      "viDuNghia": "Khách khứa lần lượt kéo đến.",
+      "cumTu": [
+        "陆续到达",
+        "陆陆续续"
+      ]
+    },
+    {
+      "chu": "纷纷",
+      "doc": "fēnfēn",
+      "loai": "adv",
+      "nghia": "nhao nhao, tới tấp",
+      "cap": "HSK5",
+      "viDu": "听了他的建议，大家纷纷表示同意。",
+      "viDuDoc": "Tīng le tā de jiànyì, dàjiā fēnfēn biǎoshì tóngyì.",
+      "viDuNghia": "Nghe đề xuất của anh ấy, mọi người nhao nhao bày tỏ đồng ý.",
+      "cumTu": [
+        "纷纷表示",
+        "议论纷纷"
+      ]
+    },
+    {
+      "chu": "悄悄",
+      "doc": "qiāoqiāo",
+      "loai": "adv",
+      "nghia": "lặng lẽ, khe khẽ",
+      "cap": "HSK5",
+      "viDu": "他悄悄地走进了房间。",
+      "viDuDoc": "Tā qiāoqiāo de zǒu jìn le fángjiān.",
+      "viDuNghia": "Anh ấy lặng lẽ bước vào phòng.",
+      "cumTu": [
+        "悄悄地",
+        "静悄悄"
+      ]
+    },
+    {
+      "chu": "至今",
+      "doc": "zhìjīn",
+      "loai": "adv",
+      "nghia": "đến nay",
+      "cap": "HSK5",
+      "viDu": "那次旅行我至今还记得很清楚。",
+      "viDuDoc": "Nà cì lǚxíng wǒ zhìjīn hái jìde hěn qīngchu.",
+      "viDuNghia": "Chuyến đi đó đến giờ tôi vẫn nhớ rất rõ.",
+      "cumTu": [
+        "至今仍",
+        "至今为止"
+      ]
+    },
+    {
+      "chu": "从此",
+      "doc": "cóngcǐ",
+      "loai": "adv",
+      "nghia": "từ đó, từ đây",
+      "cap": "HSK5",
+      "viDu": "毕业以后我们就分开了，从此再也没见过面。",
+      "viDuDoc": "Bìyè yǐhòu wǒmen jiù fēnkāi le, cóngcǐ zài yě méi jiàn guò miàn.",
+      "viDuNghia": "Sau khi tốt nghiệp chúng tôi chia tay, từ đó không gặp lại nữa.",
+      "cumTu": [
+        "从此以后"
+      ]
+    },
+    {
+      "chu": "曾经",
+      "doc": "céngjīng",
+      "loai": "adv",
+      "nghia": "đã từng",
+      "cap": "HSK5",
+      "viDu": "我曾经在上海工作过两年。",
+      "viDuDoc": "Wǒ céngjīng zài Shànghǎi gōngzuò guò liǎng nián.",
+      "viDuNghia": "Tôi từng làm việc ở Thượng Hải hai năm.",
+      "cumTu": [
+        "曾经…过"
+      ],
+      "ghiChu": "曾 đọc céng (không đọc zēng như họ 曾); thường đi với 过/了 sau động từ."
+    },
+    {
+      "chu": "总算",
+      "doc": "zǒngsuàn",
+      "loai": "adv",
+      "nghia": "cuối cùng cũng, rốt cuộc",
+      "cap": "HSK5",
+      "viDu": "等了一个小时，公共汽车总算来了。",
+      "viDuDoc": "Děng le yí gè xiǎoshí, gōnggòng qìchē zǒngsuàn lái le.",
+      "viDuNghia": "Đợi một tiếng, xe buýt cuối cùng cũng đến.",
+      "cumTu": [
+        "总算完成了",
+        "总算放心了"
+      ],
+      "ghiChu": "总算 hàm ý \"sau bao chờ đợi, vất vả\"; còn nghĩa \"nhìn chung cũng tạm\" (成绩总算不错)."
+    },
+    {
+      "chu": "反而",
+      "doc": "fǎn'ér",
+      "loai": "adv",
+      "nghia": "trái lại, ngược lại",
+      "cap": "HSK5",
+      "viDu": "雨不但没停，反而越下越大了。",
+      "viDuDoc": "Yǔ búdàn méi tíng, fǎn'ér yuè xià yuè dà le.",
+      "viDuNghia": "Mưa không những không tạnh mà ngược lại càng lúc càng to.",
+      "cumTu": [
+        "不但不…反而…"
+      ]
+    },
+    {
+      "chu": "反正",
+      "doc": "fǎnzhèng",
+      "loai": "adv",
+      "nghia": "dù sao thì, đằng nào cũng",
+      "cap": "HSK5",
+      "viDu": "你别着急，反正时间还早。",
+      "viDuDoc": "Nǐ bié zháojí, fǎnzhèng shíjiān hái zǎo.",
+      "viDuNghia": "Bạn đừng sốt ruột, đằng nào thời gian vẫn còn sớm.",
+      "cumTu": [
+        "反正都一样",
+        "反正我不去"
+      ]
+    },
+    {
+      "chu": "未必",
+      "doc": "wèibì",
+      "loai": "adv",
+      "nghia": "chưa chắc",
+      "cap": "HSK5",
+      "viDu": "贵的东西未必就是好的。",
+      "viDuDoc": "Guì de dōngxi wèibì jiù shì hǎo de.",
+      "viDuNghia": "Đồ đắt chưa chắc đã là đồ tốt.",
+      "cumTu": [
+        "未必如此",
+        "未必是"
+      ],
+      "ghiChu": "未必 ≈ 不一定 / 不见得."
+    },
+    {
+      "chu": "或许",
+      "doc": "huòxǔ",
+      "loai": "adv",
+      "nghia": "có lẽ",
+      "cap": "HSK5",
+      "viDu": "你再给他打个电话，或许他忘了。",
+      "viDuDoc": "Nǐ zài gěi tā dǎ ge diànhuà, huòxǔ tā wàng le.",
+      "viDuNghia": "Bạn gọi lại cho anh ấy đi, có lẽ anh ấy quên rồi.",
+      "cumTu": [
+        "或许是",
+        "或许会"
+      ],
+      "ghiChu": "或许 ≈ 也许, hơi văn viết hơn."
+    },
+    {
+      "chu": "似乎",
+      "doc": "sìhū",
+      "loai": "adv",
+      "nghia": "hình như, dường như",
+      "cap": "HSK5",
+      "viDu": "他似乎有什么心事。",
+      "viDuDoc": "Tā sìhū yǒu shénme xīnshì.",
+      "viDuNghia": "Anh ấy dường như có tâm sự gì đó.",
+      "cumTu": [
+        "似乎是",
+        "似乎有点儿"
+      ],
+      "ghiChu": "似 đọc sì."
+    },
+    {
+      "chu": "仿佛",
+      "doc": "fǎngfú",
+      "loai": "adv",
+      "nghia": "dường như, như thể",
+      "cap": "HSK5",
+      "viDu": "回到老家，我仿佛又回到了小时候。",
+      "viDuDoc": "Huí dào lǎojiā, wǒ fǎngfú yòu huí dào le xiǎoshíhou.",
+      "viDuNghia": "Trở về quê cũ, tôi như được quay lại thời thơ ấu.",
+      "cumTu": [
+        "仿佛…一样",
+        "仿佛是"
+      ],
+      "ghiChu": "仿佛 hay dùng so sánh ví von (仿佛…一样/似的), văn chương hơn 好像."
+    },
+    {
+      "chu": "不见得",
+      "doc": "bùjiàndé",
+      "loai": "adv",
+      "nghia": "chưa chắc, không hẳn",
+      "cap": "HSK5",
+      "viDu": "他说的话不见得都是真的。",
+      "viDuDoc": "Tā shuō de huà bú jiàndé dōu shì zhēn de.",
+      "viDuNghia": "Lời anh ta nói chưa chắc đều là thật.",
+      "cumTu": [
+        "不见得对",
+        "不见得会"
+      ],
+      "ghiChu": "Xem 未必."
+    },
+    {
+      "chu": "说不定",
+      "doc": "shuōbudìng",
+      "loai": "adv",
+      "nghia": "biết đâu, không chừng",
+      "cap": "HSK5",
+      "viDu": "你问问他吧，说不定他知道。",
+      "viDuDoc": "Nǐ wènwen tā ba, shuōbudìng tā zhīdào.",
+      "viDuNghia": "Bạn hỏi anh ấy xem, biết đâu anh ấy biết.",
+      "cumTu": [
+        "说不定会",
+        "也说不定"
+      ],
+      "ghiChu": "不 thanh nhẹ: shuōbudìng."
+    },
+    {
+      "chu": "相当",
+      "doc": "xiāngdāng",
+      "loai": "adv",
+      "nghia": "khá, tương đối; tương đương",
+      "cap": "HSK5",
+      "viDu": "这个问题相当复杂。",
+      "viDuDoc": "Zhège wèntí xiāngdāng fùzá.",
+      "viDuNghia": "Vấn đề này khá phức tạp.",
+      "cumTu": [
+        "相当不错",
+        "相当于",
+        "相当多"
+      ],
+      "ghiChu": "相当于 = tương đương với (一公里相当于一千米)."
+    },
+    {
+      "chu": "绝对",
+      "doc": "juéduì",
+      "loai": "adv",
+      "nghia": "tuyệt đối, chắc chắn",
+      "cap": "HSK5",
+      "viDu": "放心吧，我绝对不会告诉别人。",
+      "viDuDoc": "Fàngxīn ba, wǒ juéduì bú huì gàosu biérén.",
+      "viDuNghia": "Yên tâm đi, tôi tuyệt đối không nói với ai.",
+      "cumTu": [
+        "绝对不会",
+        "绝对正确",
+        "绝对没问题"
+      ]
+    },
+    {
+      "chu": "立即",
+      "doc": "lìjí",
+      "loai": "adv",
+      "nghia": "lập tức, ngay",
+      "cap": "HSK5",
+      "viDu": "发现火情请立即拨打119。",
+      "viDuDoc": "Fāxiàn huǒqíng qǐng lìjí bōdǎ yāo yāo jiǔ.",
+      "viDuNghia": "Phát hiện cháy hãy gọi ngay 119.",
+      "cumTu": [
+        "立即行动",
+        "立即停止"
+      ],
+      "ghiChu": "立即 văn viết hơn 立刻/马上. Số 1 trong số điện thoại đọc yāo."
+    },
+    {
+      "chu": "照常",
+      "doc": "zhàocháng",
+      "loai": "adv",
+      "nghia": "như thường lệ",
+      "cap": "HSK5",
+      "viDu": "明天虽然下雨，但比赛照常进行。",
+      "viDuDoc": "Míngtiān suīrán xià yǔ, dàn bǐsài zhàocháng jìnxíng.",
+      "viDuNghia": "Ngày mai tuy mưa nhưng trận đấu vẫn diễn ra như thường lệ.",
+      "cumTu": [
+        "照常营业",
+        "照常上课",
+        "一切照常"
+      ]
+    },
+    {
+      "chu": "难免",
+      "doc": "nánmiǎn",
+      "loai": "adj",
+      "nghia": "khó tránh",
+      "cap": "HSK5",
+      "viDu": "刚开始工作，犯错误是难免的。",
+      "viDuDoc": "Gāng kāishǐ gōngzuò, fàn cuòwù shì nánmiǎn de.",
+      "viDuNghia": "Mới bắt đầu đi làm, mắc lỗi là khó tránh.",
+      "cumTu": [
+        "难免会",
+        "在所难免"
+      ],
+      "ghiChu": "Xem 不免."
+    },
+    {
+      "chu": "轻易",
+      "doc": "qīngyì",
+      "loai": "adv",
+      "nghia": "dễ dàng, tùy tiện",
+      "cap": "HSK5",
+      "viDu": "他不会轻易放弃的。",
+      "viDuDoc": "Tā bú huì qīngyì fàngqì de.",
+      "viDuNghia": "Anh ấy sẽ không dễ dàng bỏ cuộc đâu.",
+      "cumTu": [
+        "不轻易",
+        "轻易相信",
+        "轻易下结论"
+      ],
+      "ghiChu": "Thường dùng ở dạng phủ định: 不要轻易…"
+    },
+    {
+      "chu": "何况",
+      "doc": "hékuàng",
+      "loai": "conj",
+      "nghia": "huống hồ, huống chi",
+      "cap": "HSK5",
+      "viDu": "这道题连老师都不会，何况我们呢？",
+      "viDuDoc": "Zhè dào tí lián lǎoshī dōu bú huì, hékuàng wǒmen ne?",
+      "viDuNghia": "Câu này đến thầy còn không làm được, huống hồ là chúng mình?",
+      "cumTu": [
+        "连…都…何况…",
+        "更何况"
+      ]
+    },
+    {
+      "chu": "何必",
+      "doc": "hébì",
+      "loai": "adv",
+      "nghia": "cần gì, việc gì phải",
+      "cap": "HSK5",
+      "viDu": "一点小事，何必生这么大的气？",
+      "viDuDoc": "Yìdiǎn xiǎoshì, hébì shēng zhème dà de qì?",
+      "viDuNghia": "Chuyện cỏn con, việc gì phải giận dữ thế?",
+      "cumTu": [
+        "何必呢",
+        "何必这样"
+      ],
+      "ghiChu": "Câu phản vấn, hàm ý \"không cần\"."
+    },
+    {
+      "chu": "哪怕",
+      "doc": "nǎpà",
+      "loai": "conj",
+      "nghia": "dù cho, cho dù",
+      "cap": "HSK5",
+      "viDu": "哪怕再忙，他也会每天给家里打电话。",
+      "viDuDoc": "Nǎpà zài máng, tā yě huì měi tiān gěi jiāli dǎ diànhuà.",
+      "viDuNghia": "Cho dù bận đến mấy, anh ấy vẫn gọi điện về nhà mỗi ngày.",
+      "cumTu": [
+        "哪怕…也…"
+      ],
+      "ghiChu": "哪怕 ≈ 即使, khẩu ngữ hơn; đi với 也/都."
+    },
+    {
+      "chu": "宁可",
+      "doc": "nìngkě",
+      "loai": "conj",
+      "nghia": "thà… (còn hơn)",
+      "cap": "HSK5",
+      "viDu": "我宁可走路，也不想挤公共汽车。",
+      "viDuDoc": "Wǒ nìngkě zǒulù, yě bù xiǎng jǐ gōnggòng qìchē.",
+      "viDuNghia": "Tôi thà đi bộ còn hơn chen chúc xe buýt.",
+      "cumTu": [
+        "宁可…也不…",
+        "宁可…也要…"
+      ],
+      "ghiChu": "宁 đọc nìng (thanh 4); khác 宁静 níngjìng."
+    },
+    {
+      "chu": "与其",
+      "doc": "yǔqí",
+      "loai": "conj",
+      "nghia": "thà rằng (… không bằng)",
+      "cap": "HSK5",
+      "viDu": "与其在家生气，不如出去走走。",
+      "viDuDoc": "Yǔqí zài jiā shēngqì, bùrú chūqù zǒuzou.",
+      "viDuNghia": "Ngồi nhà tức giận thì chẳng bằng ra ngoài đi dạo.",
+      "cumTu": [
+        "与其…不如…"
+      ],
+      "ghiChu": "与其 đi với phương án bị gạt bỏ, 不如 đi với phương án tốt hơn."
+    },
+    {
+      "chu": "因而",
+      "doc": "yīn'ér",
+      "loai": "conj",
+      "nghia": "vì vậy, do đó",
+      "cap": "HSK5",
+      "viDu": "他平时很努力，因而成绩一直很好。",
+      "viDuDoc": "Tā píngshí hěn nǔlì, yīn'ér chéngjì yìzhí hěn hǎo.",
+      "viDuNghia": "Bình thường cậu ấy rất chăm, vì thế thành tích luôn tốt.",
+      "cumTu": [
+        "因而…"
+      ],
+      "ghiChu": "因而 dùng trong văn viết, ≈ 因此."
+    },
+    {
+      "chu": "从而",
+      "doc": "cóng'ér",
+      "loai": "conj",
+      "nghia": "từ đó, nhờ đó mà",
+      "cap": "HSK5",
+      "viDu": "他改变了学习方法，从而提高了学习效率。",
+      "viDuDoc": "Tā gǎibiàn le xuéxí fāngfǎ, cóng'ér tígāo le xuéxí xiàolǜ.",
+      "viDuNghia": "Cậu ấy thay đổi phương pháp học, nhờ đó nâng cao hiệu quả học tập.",
+      "cumTu": [
+        "从而提高",
+        "从而使"
+      ],
+      "ghiChu": "从而 nối vế sau là kết quả/mục đích đạt được, thường cùng chủ ngữ với vế trước."
+    },
+    {
+      "chu": "此外",
+      "doc": "cǐwài",
+      "loai": "conj",
+      "nghia": "ngoài ra",
+      "cap": "HSK5",
+      "viDu": "我会说英语和汉语，此外还会一点儿日语。",
+      "viDuDoc": "Wǒ huì shuō Yīngyǔ hé Hànyǔ, cǐwài hái huì yìdiǎnr Rìyǔ.",
+      "viDuNghia": "Tôi nói được tiếng Anh và tiếng Trung, ngoài ra còn biết chút tiếng Nhật.",
+      "cumTu": [
+        "此外还",
+        "除此之外"
+      ]
+    },
+    {
+      "chu": "以及",
+      "doc": "yǐjí",
+      "loai": "conj",
+      "nghia": "cùng với, và",
+      "cap": "HSK5",
+      "viDu": "会议讨论了价格、质量以及服务等问题。",
+      "viDuDoc": "Huìyì tǎolùn le jiàgé, zhìliàng yǐjí fúwù děng wèntí.",
+      "viDuNghia": "Cuộc họp đã thảo luận các vấn đề giá cả, chất lượng và dịch vụ.",
+      "cumTu": [
+        "A、B以及C"
+      ],
+      "ghiChu": "以及 dùng trong văn viết, thường nối mục cuối của một chuỗi liệt kê."
+    },
+    {
+      "chu": "至于",
+      "doc": "zhìyú",
+      "loai": "prep",
+      "nghia": "còn về; đến mức",
+      "cap": "HSK5",
+      "viDu": "我只负责写报告，至于别的事，我不清楚。",
+      "viDuDoc": "Wǒ zhǐ fùzé xiě bàogào, zhìyú bié de shì, wǒ bù qīngchu.",
+      "viDuNghia": "Tôi chỉ phụ trách viết báo cáo, còn việc khác thì tôi không rõ.",
+      "cumTu": [
+        "至于…",
+        "不至于"
+      ],
+      "ghiChu": "不至于 = chưa đến mức (他不至于这么笨吧)."
+    },
+    {
+      "chu": "除非",
+      "doc": "chúfēi",
+      "loai": "conj",
+      "nghia": "trừ phi, trừ khi",
+      "cap": "HSK5",
+      "viDu": "除非你亲自去请，否则他不会来的。",
+      "viDuDoc": "Chúfēi nǐ qīnzì qù qǐng, fǒuzé tā bú huì lái de.",
+      "viDuNghia": "Trừ khi bạn đích thân đi mời, nếu không anh ấy sẽ không đến.",
+      "cumTu": [
+        "除非…否则…",
+        "除非…才…"
+      ]
+    },
+    {
+      "chu": "假如",
+      "doc": "jiǎrú",
+      "loai": "conj",
+      "nghia": "giả sử, nếu như",
+      "cap": "HSK5",
+      "viDu": "假如明天下雨，我们就改天再去。",
+      "viDuDoc": "Jiǎrú míngtiān xià yǔ, wǒmen jiù gǎitiān zài qù.",
+      "viDuNghia": "Nếu mai mưa thì chúng ta để hôm khác đi.",
+      "cumTu": [
+        "假如…就…"
+      ],
+      "ghiChu": "假 đọc jiǎ (thanh 3); khác 放假 fàngjià."
+    },
+    {
+      "chu": "总之",
+      "doc": "zǒngzhī",
+      "loai": "conj",
+      "nghia": "tóm lại",
+      "cap": "HSK5",
+      "viDu": "总之，健康比什么都重要。",
+      "viDuDoc": "Zǒngzhī, jiànkāng bǐ shénme dōu zhòngyào.",
+      "viDuNghia": "Tóm lại, sức khỏe quan trọng hơn tất cả.",
+      "cumTu": [
+        "总之一句话"
+      ],
+      "ghiChu": "Hay dùng mở đầu đoạn kết bài viết."
+    },
+    {
+      "chu": "不然",
+      "doc": "bùrán",
+      "loai": "conj",
+      "nghia": "nếu không thì",
+      "cap": "HSK5",
+      "viDu": "快走吧，不然要迟到了。",
+      "viDuDoc": "Kuài zǒu ba, bùrán yào chídào le.",
+      "viDuNghia": "Đi nhanh lên, không thì muộn mất.",
+      "cumTu": [
+        "要不然",
+        "不然的话"
+      ],
+      "ghiChu": "不然 ≈ 否则, khẩu ngữ hơn."
+    },
+    {
+      "chu": "则",
+      "doc": "zé",
+      "loai": "conj",
+      "nghia": "thì (văn viết, nêu đối chiếu)",
+      "cap": "HSK5",
+      "viDu": "有人喜欢城市生活，有人则更喜欢农村。",
+      "viDuDoc": "Yǒu rén xǐhuan chéngshì shēnghuó, yǒu rén zé gèng xǐhuan nóngcūn.",
+      "viDuNghia": "Có người thích cuộc sống thành phố, có người thì thích nông thôn hơn.",
+      "cumTu": [
+        "…则…"
+      ],
+      "ghiChu": "则 đứng sau chủ ngữ của vế sau, dùng trong văn viết để đối chiếu."
+    }
+  ]
+}

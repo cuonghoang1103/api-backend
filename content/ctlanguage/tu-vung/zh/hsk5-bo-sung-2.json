@@ -1,0 +1,1509 @@
+{
+  "ma": "hsk5-bo-sung-2",
+  "nn": "zh",
+  "ten": "HSK5 bổ sung 2 — Tính từ miêu tả & đánh giá",
+  "moTa": "Tính từ HSK5 miêu tả tính cách, trạng thái, mức độ — dùng nhiều khi nói và viết về con người, sự việc. Có ghi chú phân biệt từ gần nghĩa (明显/明确, 激烈/强烈, 艰巨/艰苦, 舒适/舒服).",
+  "nhom": "hsk",
+  "cap": "HSK5",
+  "tu": [
+    {
+      "chu": "宝贵",
+      "doc": "bǎoguì",
+      "loai": "adj",
+      "nghia": "quý báu",
+      "cap": "HSK5",
+      "viDu": "谢谢你提出这么宝贵的意见。",
+      "viDuDoc": "Xièxie nǐ tíchū zhème bǎoguì de yìjiàn.",
+      "viDuNghia": "Cảm ơn bạn đã đưa ra ý kiến quý báu như vậy.",
+      "cumTu": [
+        "宝贵的时间",
+        "宝贵经验",
+        "宝贵意见"
+      ],
+      "ghiChu": "宝贵 (quý về giá trị: thời gian, kinh nghiệm) gần 珍贵 (HSK6, quý hiếm: 珍贵的文物)."
+    },
+    {
+      "chu": "完美",
+      "doc": "wánměi",
+      "loai": "adj",
+      "nghia": "hoàn mỹ, hoàn hảo",
+      "cap": "HSK5",
+      "viDu": "世界上没有完美的人。",
+      "viDuDoc": "Shìjiè shàng méiyǒu wánměi de rén.",
+      "viDuNghia": "Trên đời không có ai hoàn hảo.",
+      "cumTu": [
+        "完美无缺",
+        "追求完美",
+        "完美的结局"
+      ],
+      "ghiChu": "完美 chỉ là tính từ; 完善 vừa là tính từ vừa là động từ (hoàn thiện)."
+    },
+    {
+      "chu": "完整",
+      "doc": "wánzhěng",
+      "loai": "adj",
+      "nghia": "hoàn chỉnh, nguyên vẹn",
+      "cap": "HSK5",
+      "viDu": "请把你的想法完整地写下来。",
+      "viDuDoc": "Qǐng bǎ nǐ de xiǎngfǎ wánzhěng de xiě xiàlái.",
+      "viDuNghia": "Hãy viết đầy đủ suy nghĩ của bạn ra.",
+      "cumTu": [
+        "完整的句子",
+        "保存完整",
+        "完整性"
+      ]
+    },
+    {
+      "chu": "巨大",
+      "doc": "jùdà",
+      "loai": "adj",
+      "nghia": "to lớn, khổng lồ",
+      "cap": "HSK5",
+      "viDu": "互联网给我们的生活带来了巨大的变化。",
+      "viDuDoc": "Hùliánwǎng gěi wǒmen de shēnghuó dài lái le jùdà de biànhuà.",
+      "viDuNghia": "Internet đã mang lại thay đổi to lớn cho cuộc sống của chúng ta.",
+      "cumTu": [
+        "巨大的变化",
+        "巨大的压力",
+        "巨大成功"
+      ]
+    },
+    {
+      "chu": "广泛",
+      "doc": "guǎngfàn",
+      "loai": "adj",
+      "nghia": "rộng rãi, phổ biến",
+      "cap": "HSK5",
+      "viDu": "这种材料被广泛用于建筑行业。",
+      "viDuDoc": "Zhè zhǒng cáiliào bèi guǎngfàn yòng yú jiànzhù hángyè.",
+      "viDuNghia": "Loại vật liệu này được dùng rộng rãi trong ngành xây dựng.",
+      "cumTu": [
+        "广泛应用",
+        "兴趣广泛",
+        "广泛关注"
+      ]
+    },
+    {
+      "chu": "强烈",
+      "doc": "qiángliè",
+      "loai": "adj",
+      "nghia": "mạnh mẽ, mãnh liệt",
+      "cap": "HSK5",
+      "viDu": "他对这个决定表示强烈反对。",
+      "viDuDoc": "Tā duì zhège juédìng biǎoshì qiángliè fǎnduì.",
+      "viDuNghia": "Anh ấy phản đối kịch liệt quyết định này.",
+      "cumTu": [
+        "强烈反对",
+        "强烈要求",
+        "阳光强烈"
+      ],
+      "ghiChu": "强 ở đây đọc qiáng. Xem 激烈."
+    },
+    {
+      "chu": "彻底",
+      "doc": "chèdǐ",
+      "loai": "adj",
+      "nghia": "triệt để, hoàn toàn",
+      "cap": "HSK5",
+      "viDu": "这次大扫除，我把房间彻底打扫了一遍。",
+      "viDuDoc": "Zhè cì dà sǎochú, wǒ bǎ fángjiān chèdǐ dǎsǎo le yí biàn.",
+      "viDuNghia": "Lần tổng vệ sinh này tôi đã dọn phòng triệt để một lượt.",
+      "cumTu": [
+        "彻底解决",
+        "彻底改变",
+        "彻底失败"
+      ]
+    },
+    {
+      "chu": "必然",
+      "doc": "bìrán",
+      "loai": "adj",
+      "nghia": "tất yếu",
+      "cap": "HSK5",
+      "viDu": "不努力的结果必然是失败。",
+      "viDuDoc": "Bù nǔlì de jiéguǒ bìrán shì shībài.",
+      "viDuNghia": "Không cố gắng thì kết quả tất yếu là thất bại.",
+      "cumTu": [
+        "必然结果",
+        "必然趋势",
+        "必然联系"
+      ],
+      "ghiChu": "Trái nghĩa: 偶然."
+    },
+    {
+      "chu": "必要",
+      "doc": "bìyào",
+      "loai": "adj",
+      "nghia": "cần thiết",
+      "cap": "HSK5",
+      "viDu": "没有必要为这点小事生气。",
+      "viDuDoc": "Méiyǒu bìyào wèi zhè diǎn xiǎoshì shēngqì.",
+      "viDuNghia": "Không cần thiết phải tức giận vì chuyện nhỏ này.",
+      "cumTu": [
+        "没有必要",
+        "必要的时候",
+        "必要条件"
+      ],
+      "ghiChu": "必要 là tính từ/danh từ (有必要, 没必要); 必须 là phó từ đứng trước động từ."
+    },
+    {
+      "chu": "明显",
+      "doc": "míngxiǎn",
+      "loai": "adj",
+      "nghia": "rõ ràng, rõ rệt",
+      "cap": "HSK5",
+      "viDu": "吃药以后，他的病明显好多了。",
+      "viDuDoc": "Chī yào yǐhòu, tā de bìng míngxiǎn hǎo duō le.",
+      "viDuNghia": "Sau khi uống thuốc, bệnh của anh ấy đỡ rõ rệt.",
+      "cumTu": [
+        "明显的变化",
+        "明显提高",
+        "很明显"
+      ],
+      "ghiChu": "明显 (dễ thấy, rõ rệt) · 明确 (rõ ràng, dứt khoát về mục tiêu/thái độ) · 显然 (phó từ: hiển nhiên là)."
+    },
+    {
+      "chu": "明确",
+      "doc": "míngquè",
+      "loai": "adj",
+      "nghia": "rõ ràng, minh xác",
+      "cap": "HSK5",
+      "viDu": "你要先明确自己的学习目标。",
+      "viDuDoc": "Nǐ yào xiān míngquè zìjǐ de xuéxí mùbiāo.",
+      "viDuNghia": "Bạn phải xác định rõ mục tiêu học tập của mình trước.",
+      "cumTu": [
+        "明确目标",
+        "明确表示",
+        "态度明确"
+      ],
+      "ghiChu": "Xem 明显. 明确 còn dùng như động từ (明确目标 = xác định rõ mục tiêu)."
+    },
+    {
+      "chu": "显然",
+      "doc": "xiǎnrán",
+      "loai": "adv",
+      "nghia": "hiển nhiên, rõ ràng là",
+      "cap": "HSK5",
+      "viDu": "他一句话也不说，显然是生气了。",
+      "viDuDoc": "Tā yí jù huà yě bù shuō, xiǎnrán shì shēngqì le.",
+      "viDuNghia": "Anh ấy không nói câu nào, rõ ràng là đang giận.",
+      "cumTu": [
+        "很显然",
+        "显然是"
+      ],
+      "ghiChu": "Xem 明显."
+    },
+    {
+      "chu": "激烈",
+      "doc": "jīliè",
+      "loai": "adj",
+      "nghia": "kịch liệt, gay gắt",
+      "cap": "HSK5",
+      "viDu": "现在找工作的竞争非常激烈。",
+      "viDuDoc": "Xiànzài zhǎo gōngzuò de jìngzhēng fēicháng jīliè.",
+      "viDuNghia": "Bây giờ cạnh tranh tìm việc rất gay gắt.",
+      "cumTu": [
+        "竞争激烈",
+        "激烈的讨论",
+        "比赛激烈"
+      ],
+      "ghiChu": "激烈 (cuộc thi, tranh luận gay gắt) khác 强烈 (cảm xúc, ánh sáng, yêu cầu mạnh mẽ)."
+    },
+    {
+      "chu": "深刻",
+      "doc": "shēnkè",
+      "loai": "adj",
+      "nghia": "sâu sắc",
+      "cap": "HSK5",
+      "viDu": "这部电影给我留下了深刻的印象。",
+      "viDuDoc": "Zhè bù diànyǐng gěi wǒ liú xià le shēnkè de yìnxiàng.",
+      "viDuNghia": "Bộ phim này để lại cho tôi ấn tượng sâu sắc.",
+      "cumTu": [
+        "深刻的印象",
+        "深刻认识",
+        "意义深刻"
+      ]
+    },
+    {
+      "chu": "独特",
+      "doc": "dútè",
+      "loai": "adj",
+      "nghia": "độc đáo, riêng biệt",
+      "cap": "HSK5",
+      "viDu": "这家餐厅的装修风格很独特。",
+      "viDuDoc": "Zhè jiā cāntīng de zhuāngxiū fēnggé hěn dútè.",
+      "viDuNghia": "Phong cách trang trí của nhà hàng này rất độc đáo.",
+      "cumTu": [
+        "独特的风格",
+        "独特的魅力",
+        "独特之处"
+      ]
+    },
+    {
+      "chu": "特殊",
+      "doc": "tèshū",
+      "loai": "adj",
+      "nghia": "đặc thù, đặc biệt (ngoại lệ)",
+      "cap": "HSK5",
+      "viDu": "除非有特殊情况，否则不能请假。",
+      "viDuDoc": "Chúfēi yǒu tèshū qíngkuàng, fǒuzé bù néng qǐngjià.",
+      "viDuNghia": "Trừ khi có trường hợp đặc biệt, nếu không thì không được xin nghỉ.",
+      "cumTu": [
+        "特殊情况",
+        "特殊要求",
+        "特殊人物"
+      ],
+      "ghiChu": "特殊 (khác thường, ngoại lệ) khác 特别 (đặc biệt; còn là phó từ \"rất\")."
+    },
+    {
+      "chu": "突出",
+      "doc": "tūchū",
+      "loai": "adj",
+      "nghia": "nổi bật",
+      "cap": "HSK5",
+      "viDu": "她在工作中表现很突出，很快就升职了。",
+      "viDuDoc": "Tā zài gōngzuò zhōng biǎoxiàn hěn tūchū, hěn kuài jiù shēngzhí le.",
+      "viDuNghia": "Cô ấy thể hiện rất nổi bật trong công việc, nhanh chóng được thăng chức.",
+      "cumTu": [
+        "表现突出",
+        "突出重点",
+        "成绩突出"
+      ],
+      "ghiChu": "突出 còn là động từ: làm nổi bật (突出重点)."
+    },
+    {
+      "chu": "生动",
+      "doc": "shēngdòng",
+      "loai": "adj",
+      "nghia": "sinh động",
+      "cap": "HSK5",
+      "viDu": "王老师讲课又生动又有趣。",
+      "viDuDoc": "Wáng lǎoshī jiǎngkè yòu shēngdòng yòu yǒuqù.",
+      "viDuNghia": "Thầy Vương giảng bài vừa sinh động vừa thú vị.",
+      "cumTu": [
+        "生动形象",
+        "生动的描写",
+        "讲得很生动"
+      ]
+    },
+    {
+      "chu": "相似",
+      "doc": "xiāngsì",
+      "loai": "adj",
+      "nghia": "tương tự, giống nhau",
+      "cap": "HSK5",
+      "viDu": "这两种文化有很多相似的地方。",
+      "viDuDoc": "Zhè liǎng zhǒng wénhuà yǒu hěn duō xiāngsì de dìfang.",
+      "viDuNghia": "Hai nền văn hóa này có nhiều điểm tương đồng.",
+      "cumTu": [
+        "十分相似",
+        "相似之处",
+        "与…相似"
+      ],
+      "ghiChu": "似 đọc sì trong 相似/似乎; đọc shì trong 似的."
+    },
+    {
+      "chu": "相关",
+      "doc": "xiāngguān",
+      "loai": "adj",
+      "nghia": "liên quan",
+      "cap": "HSK5",
+      "viDu": "请把相关材料发到我的邮箱。",
+      "viDuDoc": "Qǐng bǎ xiāngguān cáiliào fā dào wǒ de yóuxiāng.",
+      "viDuNghia": "Hãy gửi tài liệu liên quan vào hộp thư của tôi.",
+      "cumTu": [
+        "相关部门",
+        "密切相关",
+        "与…相关"
+      ]
+    },
+    {
+      "chu": "客观",
+      "doc": "kèguān",
+      "loai": "adj",
+      "nghia": "khách quan",
+      "cap": "HSK5",
+      "viDu": "评价一个人要客观，不能只看一面。",
+      "viDuDoc": "Píngjià yí gè rén yào kèguān, bù néng zhǐ kàn yí miàn.",
+      "viDuNghia": "Đánh giá một người phải khách quan, không thể chỉ nhìn một mặt.",
+      "cumTu": [
+        "客观地说",
+        "客观条件",
+        "客观事实"
+      ],
+      "ghiChu": "Trái nghĩa: 主观."
+    },
+    {
+      "chu": "主观",
+      "doc": "zhǔguān",
+      "loai": "adj",
+      "nghia": "chủ quan (theo ý riêng)",
+      "cap": "HSK5",
+      "viDu": "你的看法太主观了，要多听听别人的意见。",
+      "viDuDoc": "Nǐ de kànfǎ tài zhǔguān le, yào duō tīngting biérén de yìjiàn.",
+      "viDuNghia": "Cách nhìn của bạn chủ quan quá, nên nghe thêm ý kiến người khác.",
+      "cumTu": [
+        "主观判断",
+        "主观愿望",
+        "主观努力"
+      ],
+      "ghiChu": "Tiếng Việt \"chủ quan\" còn nghĩa \"lơ là, coi thường\" — nghĩa đó tiếng Trung dùng 大意/轻敌, không dùng 主观."
+    },
+    {
+      "chu": "合理",
+      "doc": "hélǐ",
+      "loai": "adj",
+      "nghia": "hợp lý",
+      "cap": "HSK5",
+      "viDu": "这家店的价格很合理。",
+      "viDuDoc": "Zhè jiā diàn de jiàgé hěn hélǐ.",
+      "viDuNghia": "Giá cả ở cửa hàng này rất hợp lý.",
+      "cumTu": [
+        "合理安排",
+        "价格合理",
+        "合理的要求"
+      ]
+    },
+    {
+      "chu": "公平",
+      "doc": "gōngpíng",
+      "loai": "adj",
+      "nghia": "công bằng",
+      "cap": "HSK5",
+      "viDu": "比赛规则对每个人都是公平的。",
+      "viDuDoc": "Bǐsài guīzé duì měi gè rén dōu shì gōngpíng de.",
+      "viDuNghia": "Luật thi đấu công bằng với mọi người.",
+      "cumTu": [
+        "公平竞争",
+        "不公平",
+        "公平合理"
+      ]
+    },
+    {
+      "chu": "具体",
+      "doc": "jùtǐ",
+      "loai": "adj",
+      "nghia": "cụ thể",
+      "cap": "HSK5",
+      "viDu": "你能说得具体一点吗？",
+      "viDuDoc": "Nǐ néng shuō de jùtǐ yìdiǎn ma?",
+      "viDuNghia": "Bạn có thể nói cụ thể hơn một chút không?",
+      "cumTu": [
+        "具体情况",
+        "具体时间",
+        "具体来说"
+      ],
+      "ghiChu": "Trái nghĩa: 抽象."
+    },
+    {
+      "chu": "抽象",
+      "doc": "chōuxiàng",
+      "loai": "adj",
+      "nghia": "trừu tượng",
+      "cap": "HSK5",
+      "viDu": "这个概念太抽象了，你能举个例子吗？",
+      "viDuDoc": "Zhège gàiniàn tài chōuxiàng le, nǐ néng jǔ gè lìzi ma?",
+      "viDuNghia": "Khái niệm này trừu tượng quá, bạn có thể lấy một ví dụ không?",
+      "cumTu": [
+        "抽象的概念",
+        "抽象画",
+        "抽象思维"
+      ]
+    },
+    {
+      "chu": "基本",
+      "doc": "jīběn",
+      "loai": "adj",
+      "nghia": "cơ bản; về cơ bản",
+      "cap": "HSK5",
+      "viDu": "这项工作已经基本完成了。",
+      "viDuDoc": "Zhè xiàng gōngzuò yǐjīng jīběn wánchéng le.",
+      "viDuNghia": "Công việc này về cơ bản đã hoàn thành.",
+      "cumTu": [
+        "基本知识",
+        "基本上",
+        "基本原则"
+      ],
+      "ghiChu": "基本上 = về cơ bản, nói chung."
+    },
+    {
+      "chu": "全面",
+      "doc": "quánmiàn",
+      "loai": "adj",
+      "nghia": "toàn diện",
+      "cap": "HSK5",
+      "viDu": "我们要全面地看问题。",
+      "viDuDoc": "Wǒmen yào quánmiàn de kàn wèntí.",
+      "viDuNghia": "Chúng ta phải nhìn vấn đề một cách toàn diện.",
+      "cumTu": [
+        "全面发展",
+        "全面了解",
+        "全面考虑"
+      ],
+      "ghiChu": "Trái nghĩa: 片面 (phiến diện)."
+    },
+    {
+      "chu": "单纯",
+      "doc": "dānchún",
+      "loai": "adj",
+      "nghia": "đơn thuần, trong sáng",
+      "cap": "HSK5",
+      "viDu": "她是一个很单纯的女孩，从不骗人。",
+      "viDuDoc": "Tā shì yí gè hěn dānchún de nǚhái, cóng bú piàn rén.",
+      "viDuNghia": "Cô ấy là cô gái rất trong sáng, chưa bao giờ lừa ai.",
+      "cumTu": [
+        "想法单纯",
+        "单纯的孩子",
+        "单纯地认为"
+      ]
+    },
+    {
+      "chu": "单调",
+      "doc": "dāndiào",
+      "loai": "adj",
+      "nghia": "đơn điệu",
+      "cap": "HSK5",
+      "viDu": "每天都做同样的事，生活太单调了。",
+      "viDuDoc": "Měi tiān dōu zuò tóngyàng de shì, shēnghuó tài dāndiào le.",
+      "viDuNghia": "Ngày nào cũng làm một việc như nhau, cuộc sống đơn điệu quá.",
+      "cumTu": [
+        "生活单调",
+        "单调乏味",
+        "颜色单调"
+      ],
+      "ghiChu": "调 ở đây đọc diào."
+    },
+    {
+      "chu": "单独",
+      "doc": "dāndú",
+      "loai": "adv",
+      "nghia": "một mình, riêng",
+      "cap": "HSK5",
+      "viDu": "我想单独跟你谈谈。",
+      "viDuDoc": "Wǒ xiǎng dāndú gēn nǐ tántan.",
+      "viDuNghia": "Tôi muốn nói chuyện riêng với bạn.",
+      "cumTu": [
+        "单独行动",
+        "单独谈话",
+        "单独住"
+      ]
+    },
+    {
+      "chu": "糊涂",
+      "doc": "hútu",
+      "loai": "adj",
+      "nghia": "hồ đồ, lẫn lộn",
+      "cap": "HSK5",
+      "viDu": "我真糊涂，把钥匙忘在家里了。",
+      "viDuDoc": "Wǒ zhēn hútu, bǎ yàoshi wàng zài jiāli le.",
+      "viDuNghia": "Tôi thật đãng trí, để quên chìa khóa ở nhà rồi.",
+      "cumTu": [
+        "糊里糊涂",
+        "装糊涂",
+        "越听越糊涂"
+      ],
+      "ghiChu": "涂 thanh nhẹ: hútu."
+    },
+    {
+      "chu": "糟糕",
+      "doc": "zāogāo",
+      "loai": "adj",
+      "nghia": "tồi tệ, hỏng bét",
+      "cap": "HSK5",
+      "viDu": "糟糕，我忘带护照了！",
+      "viDuDoc": "Zāogāo, wǒ wàng dài hùzhào le!",
+      "viDuNghia": "Toi rồi, tôi quên mang hộ chiếu!",
+      "cumTu": [
+        "太糟糕了",
+        "糟糕的天气",
+        "情况很糟糕"
+      ],
+      "ghiChu": "Đứng đầu câu như thán từ: \"Chết rồi! / Toi rồi!\"."
+    },
+    {
+      "chu": "舒适",
+      "doc": "shūshì",
+      "loai": "adj",
+      "nghia": "dễ chịu, tiện nghi",
+      "cap": "HSK5",
+      "viDu": "这家酒店的房间又干净又舒适。",
+      "viDuDoc": "Zhè jiā jiǔdiàn de fángjiān yòu gānjìng yòu shūshì.",
+      "viDuNghia": "Phòng khách sạn này vừa sạch vừa dễ chịu.",
+      "cumTu": [
+        "舒适的环境",
+        "舒适感",
+        "安静舒适"
+      ],
+      "ghiChu": "舒适 thiên về văn viết, mô tả môi trường; 舒服 là khẩu ngữ, dùng cả cho cảm giác cơ thể."
+    },
+    {
+      "chu": "温暖",
+      "doc": "wēnnuǎn",
+      "loai": "adj",
+      "nghia": "ấm áp",
+      "cap": "HSK5",
+      "viDu": "朋友的关心让我感到很温暖。",
+      "viDuDoc": "Péngyou de guānxīn ràng wǒ gǎndào hěn wēnnuǎn.",
+      "viDuNghia": "Sự quan tâm của bạn bè khiến tôi thấy rất ấm lòng.",
+      "cumTu": [
+        "温暖的家",
+        "温暖人心",
+        "阳光温暖"
+      ],
+      "ghiChu": "温暖 dùng được nghĩa bóng (ấm lòng); 暖和 chỉ nói nhiệt độ, khẩu ngữ."
+    },
+    {
+      "chu": "湿润",
+      "doc": "shīrùn",
+      "loai": "adj",
+      "nghia": "ẩm, ẩm ướt (dễ chịu)",
+      "cap": "HSK5",
+      "viDu": "南方的气候比较湿润。",
+      "viDuDoc": "Nánfāng de qìhòu bǐjiào shīrùn.",
+      "viDuNghia": "Khí hậu miền Nam tương đối ẩm.",
+      "cumTu": [
+        "空气湿润",
+        "气候湿润",
+        "眼睛湿润了"
+      ]
+    },
+    {
+      "chu": "粗糙",
+      "doc": "cūcāo",
+      "loai": "adj",
+      "nghia": "thô ráp, cẩu thả",
+      "cap": "HSK5",
+      "viDu": "这件衣服的做工很粗糙。",
+      "viDuDoc": "Zhè jiàn yīfu de zuògōng hěn cūcāo.",
+      "viDuNghia": "Đường may của chiếc áo này rất cẩu thả.",
+      "cumTu": [
+        "皮肤粗糙",
+        "做工粗糙",
+        "粗糙的手"
+      ],
+      "ghiChu": "糙 đọc cāo (thanh 1)."
+    },
+    {
+      "chu": "迫切",
+      "doc": "pòqiè",
+      "loai": "adj",
+      "nghia": "cấp thiết, tha thiết",
+      "cap": "HSK5",
+      "viDu": "他迫切希望找到一份稳定的工作。",
+      "viDuDoc": "Tā pòqiè xīwàng zhǎo dào yí fèn wěndìng de gōngzuò.",
+      "viDuNghia": "Anh ấy tha thiết mong tìm được một công việc ổn định.",
+      "cumTu": [
+        "迫切需要",
+        "迫切希望",
+        "迫切的问题"
+      ]
+    },
+    {
+      "chu": "密切",
+      "doc": "mìqiè",
+      "loai": "adj",
+      "nghia": "mật thiết, chặt chẽ",
+      "cap": "HSK5",
+      "viDu": "身体健康和饮食习惯密切相关。",
+      "viDuDoc": "Shēntǐ jiànkāng hé yǐnshí xíguàn mìqiè xiāngguān.",
+      "viDuNghia": "Sức khỏe và thói quen ăn uống liên quan mật thiết với nhau.",
+      "cumTu": [
+        "密切联系",
+        "密切关注",
+        "关系密切"
+      ]
+    },
+    {
+      "chu": "谨慎",
+      "doc": "jǐnshèn",
+      "loai": "adj",
+      "nghia": "thận trọng",
+      "cap": "HSK5",
+      "viDu": "投资的时候一定要谨慎。",
+      "viDuDoc": "Tóuzī de shíhou yídìng yào jǐnshèn.",
+      "viDuNghia": "Khi đầu tư nhất định phải thận trọng.",
+      "cumTu": [
+        "小心谨慎",
+        "谨慎考虑",
+        "说话谨慎"
+      ]
+    },
+    {
+      "chu": "坦率",
+      "doc": "tǎnshuài",
+      "loai": "adj",
+      "nghia": "thẳng thắn",
+      "cap": "HSK5",
+      "viDu": "坦率地说，我不太喜欢这个方案。",
+      "viDuDoc": "Tǎnshuài de shuō, wǒ bú tài xǐhuan zhège fāng'àn.",
+      "viDuNghia": "Nói thẳng thì tôi không thích phương án này lắm.",
+      "cumTu": [
+        "坦率地说",
+        "为人坦率"
+      ],
+      "ghiChu": "率 ở đây đọc shuài (khác 效率 xiàolǜ)."
+    },
+    {
+      "chu": "诚恳",
+      "doc": "chéngkěn",
+      "loai": "adj",
+      "nghia": "thành khẩn, chân thành",
+      "cap": "HSK5",
+      "viDu": "他诚恳地向大家道了歉。",
+      "viDuDoc": "Tā chéngkěn de xiàng dàjiā dào le qiàn.",
+      "viDuNghia": "Anh ấy thành khẩn xin lỗi mọi người.",
+      "cumTu": [
+        "态度诚恳",
+        "诚恳地道歉",
+        "诚恳的建议"
+      ]
+    },
+    {
+      "chu": "虚心",
+      "doc": "xūxīn",
+      "loai": "adj",
+      "nghia": "khiêm tốn, cầu thị",
+      "cap": "HSK5",
+      "viDu": "他很虚心，总是认真听取别人的意见。",
+      "viDuDoc": "Tā hěn xūxīn, zǒngshì rènzhēn tīngqǔ biérén de yìjiàn.",
+      "viDuNghia": "Anh ấy rất cầu thị, luôn nghiêm túc lắng nghe ý kiến người khác.",
+      "cumTu": [
+        "虚心学习",
+        "虚心接受",
+        "虚心请教"
+      ],
+      "ghiChu": "虚心 (khiêm tốn tiếp thu) khác 谦虚 (khiêm tốn, không khoe mình)."
+    },
+    {
+      "chu": "刻苦",
+      "doc": "kèkǔ",
+      "loai": "adj",
+      "nghia": "chăm chỉ, chịu khó",
+      "cap": "HSK5",
+      "viDu": "他学习非常刻苦，每天学到很晚。",
+      "viDuDoc": "Tā xuéxí fēicháng kèkǔ, měi tiān xué dào hěn wǎn.",
+      "viDuNghia": "Anh ấy học rất chịu khó, ngày nào cũng học đến khuya.",
+      "cumTu": [
+        "刻苦学习",
+        "刻苦训练",
+        "刻苦钻研"
+      ]
+    },
+    {
+      "chu": "天真",
+      "doc": "tiānzhēn",
+      "loai": "adj",
+      "nghia": "ngây thơ",
+      "cap": "HSK5",
+      "viDu": "你太天真了，事情没有那么简单。",
+      "viDuDoc": "Nǐ tài tiānzhēn le, shìqing méiyǒu nàme jiǎndān.",
+      "viDuNghia": "Bạn ngây thơ quá, mọi chuyện không đơn giản vậy đâu.",
+      "cumTu": [
+        "天真可爱",
+        "天真的想法"
+      ]
+    },
+    {
+      "chu": "淘气",
+      "doc": "táoqì",
+      "loai": "adj",
+      "nghia": "nghịch ngợm",
+      "cap": "HSK5",
+      "viDu": "这个孩子很淘气，总是到处乱跑。",
+      "viDuDoc": "Zhège háizi hěn táoqì, zǒngshì dàochù luàn pǎo.",
+      "viDuNghia": "Đứa bé này rất nghịch, lúc nào cũng chạy lung tung.",
+      "cumTu": [
+        "淘气的孩子",
+        "淘气包"
+      ],
+      "ghiChu": "淘气 ≈ 调皮 (tiáopí), đều chỉ trẻ con nghịch ngợm."
+    },
+    {
+      "chu": "调皮",
+      "doc": "tiáopí",
+      "loai": "adj",
+      "nghia": "tinh nghịch",
+      "cap": "HSK5",
+      "viDu": "弟弟很调皮，经常跟妈妈开玩笑。",
+      "viDuDoc": "Dìdi hěn tiáopí, jīngcháng gēn māma kāi wánxiào.",
+      "viDuNghia": "Em trai rất tinh nghịch, hay đùa với mẹ.",
+      "cumTu": [
+        "调皮捣蛋",
+        "调皮的孩子"
+      ],
+      "ghiChu": "调 ở đây đọc tiáo."
+    },
+    {
+      "chu": "狡猾",
+      "doc": "jiǎohuá",
+      "loai": "adj",
+      "nghia": "xảo quyệt, ranh mãnh",
+      "cap": "HSK5",
+      "viDu": "那个商人很狡猾，你别相信他。",
+      "viDuDoc": "Nàge shāngrén hěn jiǎohuá, nǐ bié xiāngxìn tā.",
+      "viDuNghia": "Gã thương nhân đó rất xảo quyệt, bạn đừng tin hắn.",
+      "cumTu": [
+        "狡猾的狐狸",
+        "非常狡猾"
+      ]
+    },
+    {
+      "chu": "老实",
+      "doc": "lǎoshi",
+      "loai": "adj",
+      "nghia": "thật thà",
+      "cap": "HSK5",
+      "viDu": "他是个老实人，从来不说假话。",
+      "viDuDoc": "Tā shì ge lǎoshi rén, cónglái bù shuō jiǎhuà.",
+      "viDuNghia": "Anh ấy là người thật thà, chưa bao giờ nói dối.",
+      "cumTu": [
+        "老实人",
+        "老实说",
+        "老老实实"
+      ],
+      "ghiChu": "老实说 = nói thật thì… (mở đầu câu)."
+    },
+    {
+      "chu": "能干",
+      "doc": "nénggàn",
+      "loai": "adj",
+      "nghia": "giỏi giang, tháo vát",
+      "cap": "HSK5",
+      "viDu": "她又漂亮又能干，大家都很喜欢她。",
+      "viDuDoc": "Tā yòu piàoliang yòu nénggàn, dàjiā dōu hěn xǐhuan tā.",
+      "viDuNghia": "Cô ấy vừa xinh vừa giỏi giang, ai cũng quý.",
+      "cumTu": [
+        "聪明能干",
+        "能干的员工"
+      ],
+      "ghiChu": "干 đọc gàn (thanh 4)."
+    },
+    {
+      "chu": "热心",
+      "doc": "rèxīn",
+      "loai": "adj",
+      "nghia": "nhiệt tình, sốt sắng",
+      "cap": "HSK5",
+      "viDu": "邻居们都很热心，经常帮助我们。",
+      "viDuDoc": "Línjūmen dōu hěn rèxīn, jīngcháng bāngzhù wǒmen.",
+      "viDuNghia": "Hàng xóm đều rất nhiệt tình, thường giúp đỡ chúng tôi.",
+      "cumTu": [
+        "热心人",
+        "热心帮助",
+        "热心肠"
+      ],
+      "ghiChu": "热心 (sốt sắng giúp người) gần 热情 (nhiệt tình, niềm nở khi tiếp đón)."
+    },
+    {
+      "chu": "好客",
+      "doc": "hàokè",
+      "loai": "adj",
+      "nghia": "hiếu khách",
+      "cap": "HSK5",
+      "viDu": "这里的人非常好客。",
+      "viDuDoc": "Zhèli de rén fēicháng hàokè.",
+      "viDuNghia": "Người ở đây rất hiếu khách.",
+      "cumTu": [
+        "热情好客"
+      ],
+      "ghiChu": "好 ở đây đọc hào (thanh 4) = thích; tương tự 爱好 àihào, 好奇 hàoqí."
+    },
+    {
+      "chu": "疯狂",
+      "doc": "fēngkuáng",
+      "loai": "adj",
+      "nghia": "điên cuồng, cuồng nhiệt",
+      "cap": "HSK5",
+      "viDu": "球迷们疯狂地为自己的球队加油。",
+      "viDuDoc": "Qiúmímen fēngkuáng de wèi zìjǐ de qiúduì jiāyóu.",
+      "viDuNghia": "Các cổ động viên cuồng nhiệt cổ vũ cho đội bóng của mình.",
+      "cumTu": [
+        "疯狂购物",
+        "疯狂的想法"
+      ]
+    },
+    {
+      "chu": "恶劣",
+      "doc": "èliè",
+      "loai": "adj",
+      "nghia": "tồi tệ, khắc nghiệt",
+      "cap": "HSK5",
+      "viDu": "由于天气恶劣，航班被取消了。",
+      "viDuDoc": "Yóuyú tiānqì èliè, hángbān bèi qǔxiāo le.",
+      "viDuNghia": "Do thời tiết xấu, chuyến bay đã bị hủy.",
+      "cumTu": [
+        "天气恶劣",
+        "环境恶劣",
+        "态度恶劣"
+      ],
+      "ghiChu": "恶 ở đây đọc è."
+    },
+    {
+      "chu": "艰巨",
+      "doc": "jiānjù",
+      "loai": "adj",
+      "nghia": "nặng nề, gian nan (nhiệm vụ)",
+      "cap": "HSK5",
+      "viDu": "这是一项艰巨的任务。",
+      "viDuDoc": "Zhè shì yí xiàng jiānjù de rènwu.",
+      "viDuNghia": "Đây là một nhiệm vụ nặng nề.",
+      "cumTu": [
+        "艰巨的任务",
+        "艰巨的工作"
+      ],
+      "ghiChu": "艰巨 mô tả nhiệm vụ lớn, khó; 艰苦 mô tả điều kiện sống/làm việc thiếu thốn."
+    },
+    {
+      "chu": "艰苦",
+      "doc": "jiānkǔ",
+      "loai": "adj",
+      "nghia": "gian khổ (điều kiện)",
+      "cap": "HSK5",
+      "viDu": "那时候条件很艰苦，但大家都很快乐。",
+      "viDuDoc": "Nà shíhou tiáojiàn hěn jiānkǔ, dàn dàjiā dōu hěn kuàilè.",
+      "viDuNghia": "Hồi đó điều kiện rất gian khổ nhưng mọi người đều vui vẻ.",
+      "cumTu": [
+        "艰苦奋斗",
+        "条件艰苦",
+        "艰苦的环境"
+      ],
+      "ghiChu": "Xem 艰巨."
+    },
+    {
+      "chu": "豪华",
+      "doc": "háohuá",
+      "loai": "adj",
+      "nghia": "sang trọng, xa hoa",
+      "cap": "HSK5",
+      "viDu": "他们住在一家豪华酒店里。",
+      "viDuDoc": "Tāmen zhù zài yì jiā háohuá jiǔdiàn li.",
+      "viDuNghia": "Họ ở trong một khách sạn sang trọng.",
+      "cumTu": [
+        "豪华酒店",
+        "豪华装修",
+        "豪华轿车"
+      ]
+    },
+    {
+      "chu": "神秘",
+      "doc": "shénmì",
+      "loai": "adj",
+      "nghia": "thần bí, bí ẩn",
+      "cap": "HSK5",
+      "viDu": "这个地方充满了神秘的色彩。",
+      "viDuDoc": "Zhège dìfang chōngmǎn le shénmì de sècǎi.",
+      "viDuNghia": "Nơi này phủ đầy màu sắc bí ẩn.",
+      "cumTu": [
+        "神秘感",
+        "神秘人物",
+        "神秘的微笑"
+      ],
+      "ghiChu": "秘 đọc mì (không đọc bì)."
+    },
+    {
+      "chu": "陌生",
+      "doc": "mòshēng",
+      "loai": "adj",
+      "nghia": "lạ, xa lạ",
+      "cap": "HSK5",
+      "viDu": "小孩子不要跟陌生人走。",
+      "viDuDoc": "Xiǎo háizi búyào gēn mòshēngrén zǒu.",
+      "viDuNghia": "Trẻ con không được đi theo người lạ.",
+      "cumTu": [
+        "陌生人",
+        "陌生的城市",
+        "感到陌生"
+      ]
+    },
+    {
+      "chu": "模糊",
+      "doc": "móhu",
+      "loai": "adj",
+      "nghia": "mờ, mơ hồ",
+      "cap": "HSK5",
+      "viDu": "照片拍得太模糊了，看不清楚。",
+      "viDuDoc": "Zhàopiàn pāi de tài móhu le, kàn bu qīngchu.",
+      "viDuNghia": "Ảnh chụp mờ quá, nhìn không rõ.",
+      "cumTu": [
+        "模糊不清",
+        "记忆模糊",
+        "视线模糊"
+      ],
+      "ghiChu": "模 ở đây đọc mó, 糊 thanh nhẹ; khác 模样 múyàng."
+    },
+    {
+      "chu": "慌张",
+      "doc": "huāngzhāng",
+      "loai": "adj",
+      "nghia": "hoảng hốt, cuống quýt",
+      "cap": "HSK5",
+      "viDu": "别慌张，慢慢说。",
+      "viDuDoc": "Bié huāngzhāng, mànmàn shuō.",
+      "viDuNghia": "Đừng cuống, nói từ từ thôi.",
+      "cumTu": [
+        "慌慌张张",
+        "神色慌张"
+      ]
+    },
+    {
+      "chu": "匆忙",
+      "doc": "cōngmáng",
+      "loai": "adj",
+      "nghia": "vội vàng",
+      "cap": "HSK5",
+      "viDu": "他吃完早饭就匆忙地出门了。",
+      "viDuDoc": "Tā chī wán zǎofàn jiù cōngmáng de chūmén le.",
+      "viDuNghia": "Anh ấy ăn sáng xong là vội vàng ra khỏi nhà.",
+      "cumTu": [
+        "匆匆忙忙",
+        "匆忙离开",
+        "走得匆忙"
+      ]
+    },
+    {
+      "chu": "可怕",
+      "doc": "kěpà",
+      "loai": "adj",
+      "nghia": "đáng sợ",
+      "cap": "HSK5",
+      "viDu": "那个噩梦太可怕了。",
+      "viDuDoc": "Nàge èmèng tài kěpà le.",
+      "viDuNghia": "Cơn ác mộng đó đáng sợ quá.",
+      "cumTu": [
+        "可怕的后果",
+        "太可怕了"
+      ]
+    },
+    {
+      "chu": "悠久",
+      "doc": "yōujiǔ",
+      "loai": "adj",
+      "nghia": "lâu đời",
+      "cap": "HSK5",
+      "viDu": "中国有着悠久的历史和灿烂的文化。",
+      "viDuDoc": "Zhōngguó yǒu zhe yōujiǔ de lìshǐ hé cànlàn de wénhuà.",
+      "viDuNghia": "Trung Quốc có lịch sử lâu đời và nền văn hóa rực rỡ.",
+      "cumTu": [
+        "历史悠久",
+        "悠久的传统"
+      ]
+    },
+    {
+      "chu": "优美",
+      "doc": "yōuměi",
+      "loai": "adj",
+      "nghia": "đẹp đẽ, êm đẹp",
+      "cap": "HSK5",
+      "viDu": "这首歌的旋律很优美。",
+      "viDuDoc": "Zhè shǒu gē de xuánlǜ hěn yōuměi.",
+      "viDuNghia": "Giai điệu bài hát này rất êm đẹp.",
+      "cumTu": [
+        "风景优美",
+        "优美的音乐",
+        "文笔优美"
+      ]
+    },
+    {
+      "chu": "伟大",
+      "doc": "wěidà",
+      "loai": "adj",
+      "nghia": "vĩ đại",
+      "cap": "HSK5",
+      "viDu": "长城是一项伟大的工程。",
+      "viDuDoc": "Chángchéng shì yí xiàng wěidà de gōngchéng.",
+      "viDuNghia": "Vạn Lý Trường Thành là một công trình vĩ đại.",
+      "cumTu": [
+        "伟大的人物",
+        "伟大的事业",
+        "伟大的母爱"
+      ]
+    },
+    {
+      "chu": "繁荣",
+      "doc": "fánróng",
+      "loai": "adj",
+      "nghia": "phồn vinh, thịnh vượng",
+      "cap": "HSK5",
+      "viDu": "改革开放以后，这座城市越来越繁荣。",
+      "viDuDoc": "Gǎigé kāifàng yǐhòu, zhè zuò chéngshì yuè lái yuè fánróng.",
+      "viDuNghia": "Sau cải cách mở cửa, thành phố này ngày càng phồn vinh.",
+      "cumTu": [
+        "经济繁荣",
+        "繁荣发展",
+        "繁荣昌盛"
+      ]
+    },
+    {
+      "chu": "活跃",
+      "doc": "huóyuè",
+      "loai": "adj",
+      "nghia": "sôi nổi, năng động",
+      "cap": "HSK5",
+      "viDu": "他在课堂上很活跃，经常回答问题。",
+      "viDuDoc": "Tā zài kètáng shàng hěn huóyuè, jīngcháng huídá wèntí.",
+      "viDuNghia": "Trên lớp cậu ấy rất sôi nổi, thường trả lời câu hỏi.",
+      "cumTu": [
+        "气氛活跃",
+        "思想活跃",
+        "活跃气氛"
+      ],
+      "ghiChu": "活跃 còn là động từ: 活跃气氛 = làm không khí sôi nổi."
+    },
+    {
+      "chu": "平静",
+      "doc": "píngjìng",
+      "loai": "adj",
+      "nghia": "bình lặng, bình tĩnh",
+      "cap": "HSK5",
+      "viDu": "听到这个消息，她的心情久久不能平静。",
+      "viDuDoc": "Tīng dào zhège xiāoxi, tā de xīnqíng jiǔjiǔ bù néng píngjìng.",
+      "viDuNghia": "Nghe tin này, lòng cô ấy mãi không thể bình tĩnh lại.",
+      "cumTu": [
+        "心情平静",
+        "平静的生活",
+        "湖面平静"
+      ]
+    },
+    {
+      "chu": "痛快",
+      "doc": "tòngkuai",
+      "loai": "adj",
+      "nghia": "sảng khoái, đã; dứt khoát",
+      "cap": "HSK5",
+      "viDu": "今天玩得真痛快！",
+      "viDuDoc": "Jīntiān wán de zhēn tòngkuai!",
+      "viDuNghia": "Hôm nay chơi thật đã!",
+      "cumTu": [
+        "玩得痛快",
+        "痛痛快快",
+        "痛快地答应"
+      ],
+      "ghiChu": "Dễ nhầm: 痛快 không liên quan đến \"đau\"; 痛苦 mới là đau khổ."
+    },
+    {
+      "chu": "痛苦",
+      "doc": "tòngkǔ",
+      "loai": "adj",
+      "nghia": "đau khổ",
+      "cap": "HSK5",
+      "viDu": "失去亲人是一件非常痛苦的事。",
+      "viDuDoc": "Shīqù qīnrén shì yí jiàn fēicháng tòngkǔ de shì.",
+      "viDuNghia": "Mất người thân là chuyện vô cùng đau khổ.",
+      "cumTu": [
+        "感到痛苦",
+        "痛苦的回忆",
+        "减轻痛苦"
+      ],
+      "ghiChu": "Xem 痛快."
+    },
+    {
+      "chu": "了不起",
+      "doc": "liǎobuqǐ",
+      "loai": "adj",
+      "nghia": "giỏi, phi thường",
+      "cap": "HSK5",
+      "viDu": "他十岁就会说三种语言，真了不起！",
+      "viDuDoc": "Tā shí suì jiù huì shuō sān zhǒng yǔyán, zhēn liǎobuqǐ!",
+      "viDuNghia": "Mới mười tuổi cậu bé đã nói được ba thứ tiếng, thật phi thường!",
+      "cumTu": [
+        "真了不起",
+        "了不起的成就",
+        "没什么了不起"
+      ],
+      "ghiChu": "了 đọc liǎo; 不 thanh nhẹ. 没什么了不起 = chẳng có gì ghê gớm."
+    },
+    {
+      "chu": "不得了",
+      "doc": "bùdéliǎo",
+      "loai": "adj",
+      "nghia": "cực kỳ, hết sức; nguy rồi",
+      "cap": "HSK5",
+      "viDu": "听说考上了大学，他高兴得不得了。",
+      "viDuDoc": "Tīngshuō kǎo shàng le dàxué, tā gāoxìng de bùdéliǎo.",
+      "viDuNghia": "Nghe tin đỗ đại học, cậu ấy vui không tả xiết.",
+      "cumTu": [
+        "…得不得了",
+        "不得了了"
+      ],
+      "ghiChu": "Sau 得 làm bổ ngữ chỉ mức độ cực cao (高兴得不得了); đứng riêng = \"nguy rồi!\"."
+    },
+    {
+      "chu": "古典",
+      "doc": "gǔdiǎn",
+      "loai": "adj",
+      "nghia": "cổ điển",
+      "cap": "HSK5",
+      "viDu": "我平时喜欢听古典音乐。",
+      "viDuDoc": "Wǒ píngshí xǐhuan tīng gǔdiǎn yīnyuè.",
+      "viDuNghia": "Bình thường tôi thích nghe nhạc cổ điển.",
+      "cumTu": [
+        "古典音乐",
+        "古典文学",
+        "古典园林"
+      ]
+    },
+    {
+      "chu": "真实",
+      "doc": "zhēnshí",
+      "loai": "adj",
+      "nghia": "chân thực, có thật",
+      "cap": "HSK5",
+      "viDu": "这部电影是根据真实的故事改编的。",
+      "viDuDoc": "Zhè bù diànyǐng shì gēnjù zhēnshí de gùshi gǎibiān de.",
+      "viDuNghia": "Bộ phim này được chuyển thể từ câu chuyện có thật.",
+      "cumTu": [
+        "真实情况",
+        "真实感受",
+        "真实的故事"
+      ]
+    },
+    {
+      "chu": "实用",
+      "doc": "shíyòng",
+      "loai": "adj",
+      "nghia": "thiết thực, hữu ích",
+      "cap": "HSK5",
+      "viDu": "这本书很实用，适合初学者。",
+      "viDuDoc": "Zhè běn shū hěn shíyòng, shìhé chūxuézhě.",
+      "viDuNghia": "Cuốn sách này rất thiết thực, phù hợp với người mới học.",
+      "cumTu": [
+        "实用价值",
+        "简单实用",
+        "实用性"
+      ]
+    },
+    {
+      "chu": "均匀",
+      "doc": "jūnyún",
+      "loai": "adj",
+      "nghia": "đều, đồng đều",
+      "cap": "HSK5",
+      "viDu": "把糖和面粉搅拌均匀。",
+      "viDuDoc": "Bǎ táng hé miànfěn jiǎobàn jūnyún.",
+      "viDuNghia": "Trộn đều đường và bột mì.",
+      "cumTu": [
+        "分布均匀",
+        "呼吸均匀",
+        "均匀地"
+      ]
+    },
+    {
+      "chu": "整齐",
+      "doc": "zhěngqí",
+      "loai": "adj",
+      "nghia": "ngay ngắn, gọn gàng",
+      "cap": "HSK5",
+      "viDu": "他的房间总是收拾得很整齐。",
+      "viDuDoc": "Tā de fángjiān zǒngshì shōushi de hěn zhěngqí.",
+      "viDuNghia": "Phòng của anh ấy lúc nào cũng dọn gọn gàng.",
+      "cumTu": [
+        "整整齐齐",
+        "排列整齐",
+        "整齐的队伍"
+      ]
+    },
+    {
+      "chu": "弱",
+      "doc": "ruò",
+      "loai": "adj",
+      "nghia": "yếu",
+      "cap": "HSK5",
+      "viDu": "她身体比较弱，容易感冒。",
+      "viDuDoc": "Tā shēntǐ bǐjiào ruò, róngyì gǎnmào.",
+      "viDuNghia": "Cô ấy sức khỏe hơi yếu, dễ bị cảm.",
+      "cumTu": [
+        "身体弱",
+        "能力弱",
+        "弱点"
+      ]
+    },
+    {
+      "chu": "时髦",
+      "doc": "shímáo",
+      "loai": "adj",
+      "nghia": "hợp thời trang, mốt",
+      "cap": "HSK5",
+      "viDu": "她总是穿得很时髦。",
+      "viDuDoc": "Tā zǒngshì chuān de hěn shímáo.",
+      "viDuNghia": "Cô ấy lúc nào cũng ăn mặc rất mốt.",
+      "cumTu": [
+        "时髦的衣服",
+        "赶时髦"
+      ]
+    },
+    {
+      "chu": "惭愧",
+      "doc": "cánkuì",
+      "loai": "adj",
+      "nghia": "hổ thẹn, áy náy",
+      "cap": "HSK5",
+      "viDu": "没能帮上忙，我感到很惭愧。",
+      "viDuDoc": "Méi néng bāng shàng máng, wǒ gǎndào hěn cánkuì.",
+      "viDuNghia": "Không giúp được gì, tôi thấy rất áy náy.",
+      "cumTu": [
+        "感到惭愧",
+        "惭愧地说"
+      ],
+      "ghiChu": "惭愧 = hổ thẹn vì mình làm chưa tốt; 害羞 = ngượng ngùng, e thẹn."
+    },
+    {
+      "chu": "灰心",
+      "doc": "huīxīn",
+      "loai": "adj",
+      "nghia": "nản lòng",
+      "cap": "HSK5",
+      "viDu": "一次失败没什么，千万别灰心。",
+      "viDuDoc": "Yí cì shībài méi shénme, qiānwàn bié huīxīn.",
+      "viDuNghia": "Thất bại một lần chẳng sao, đừng nản lòng nhé.",
+      "cumTu": [
+        "别灰心",
+        "灰心丧气"
+      ]
+    },
+    {
+      "chu": "自豪",
+      "doc": "zìháo",
+      "loai": "adj",
+      "nghia": "tự hào",
+      "cap": "HSK5",
+      "viDu": "我为自己的祖国感到自豪。",
+      "viDuDoc": "Wǒ wèi zìjǐ de zǔguó gǎndào zìháo.",
+      "viDuNghia": "Tôi cảm thấy tự hào về tổ quốc mình.",
+      "cumTu": [
+        "感到自豪",
+        "为…自豪",
+        "自豪感"
+      ],
+      "ghiChu": "自豪 (tự hào, nghĩa tốt) khác 骄傲 (vừa \"tự hào\" vừa \"kiêu ngạo\")."
+    },
+    {
+      "chu": "自觉",
+      "doc": "zìjué",
+      "loai": "adj",
+      "nghia": "tự giác",
+      "cap": "HSK5",
+      "viDu": "他学习很自觉，从来不用父母催。",
+      "viDuDoc": "Tā xuéxí hěn zìjué, cónglái búyòng fùmǔ cuī.",
+      "viDuNghia": "Cậu ấy học rất tự giác, chưa bao giờ phải để bố mẹ giục.",
+      "cumTu": [
+        "自觉遵守",
+        "自觉性",
+        "很自觉"
+      ]
+    },
+    {
+      "chu": "自愿",
+      "doc": "zìyuàn",
+      "loai": "v",
+      "nghia": "tự nguyện",
+      "cap": "HSK5",
+      "viDu": "参加这次活动完全是自愿的。",
+      "viDuDoc": "Cānjiā zhè cì huódòng wánquán shì zìyuàn de.",
+      "viDuNghia": "Tham gia hoạt động lần này hoàn toàn là tự nguyện.",
+      "cumTu": [
+        "自愿参加",
+        "自愿报名",
+        "出于自愿"
+      ]
+    },
+    {
+      "chu": "良好",
+      "doc": "liánghǎo",
+      "loai": "adj",
+      "nghia": "tốt đẹp, tốt",
+      "cap": "HSK5",
+      "viDu": "养成良好的习惯对一生都有好处。",
+      "viDuDoc": "Yǎngchéng liánghǎo de xíguàn duì yìshēng dōu yǒu hǎochù.",
+      "viDuNghia": "Hình thành thói quen tốt có lợi cho cả đời.",
+      "cumTu": [
+        "良好的习惯",
+        "良好的环境",
+        "表现良好"
+      ],
+      "ghiChu": "良好 mang sắc thái văn viết, thường làm định ngữ."
+    },
+    {
+      "chu": "重大",
+      "doc": "zhòngdà",
+      "loai": "adj",
+      "nghia": "trọng đại",
+      "cap": "HSK5",
+      "viDu": "这是我人生中的一个重大决定。",
+      "viDuDoc": "Zhè shì wǒ rénshēng zhōng de yí gè zhòngdà juédìng.",
+      "viDuNghia": "Đây là một quyết định trọng đại trong đời tôi.",
+      "cumTu": [
+        "重大事件",
+        "重大意义",
+        "重大损失"
+      ],
+      "ghiChu": "重 ở đây đọc zhòng."
+    },
+    {
+      "chu": "次要",
+      "doc": "cìyào",
+      "loai": "adj",
+      "nghia": "thứ yếu",
+      "cap": "HSK5",
+      "viDu": "价格是次要的，质量才是最重要的。",
+      "viDuDoc": "Jiàgé shì cìyào de, zhìliàng cái shì zuì zhòngyào de.",
+      "viDuNghia": "Giá cả là thứ yếu, chất lượng mới là quan trọng nhất.",
+      "cumTu": [
+        "次要问题",
+        "次要的"
+      ]
+    },
+    {
+      "chu": "多余",
+      "doc": "duōyú",
+      "loai": "adj",
+      "nghia": "thừa",
+      "cap": "HSK5",
+      "viDu": "你的担心是多余的，他已经到家了。",
+      "viDuDoc": "Nǐ de dānxīn shì duōyú de, tā yǐjīng dào jiā le.",
+      "viDuNghia": "Bạn lo thừa rồi, anh ấy đã về đến nhà.",
+      "cumTu": [
+        "多余的话",
+        "多余的钱",
+        "显得多余"
+      ]
+    },
+    {
+      "chu": "临时",
+      "doc": "línshí",
+      "loai": "adj",
+      "nghia": "tạm thời; đột xuất",
+      "cap": "HSK5",
+      "viDu": "会议临时改到了明天。",
+      "viDuDoc": "Huìyì línshí gǎi dào le míngtiān.",
+      "viDuNghia": "Cuộc họp đột xuất được dời sang ngày mai.",
+      "cumTu": [
+        "临时工",
+        "临时决定",
+        "临时通知"
+      ],
+      "ghiChu": "临时 vừa \"tạm thời\" (临时工) vừa \"đột xuất, phút chót\" (临时改变)."
+    },
+    {
+      "chu": "私人",
+      "doc": "sīrén",
+      "loai": "adj",
+      "nghia": "riêng tư, cá nhân",
+      "cap": "HSK5",
+      "viDu": "这是我的私人问题，请不要过问。",
+      "viDuDoc": "Zhè shì wǒ de sīrén wèntí, qǐng búyào guòwèn.",
+      "viDuNghia": "Đây là chuyện riêng của tôi, xin đừng hỏi tới.",
+      "cumTu": [
+        "私人生活",
+        "私人医生",
+        "私人空间"
+      ]
+    },
+    {
+      "chu": "日常",
+      "doc": "rìcháng",
+      "loai": "adj",
+      "nghia": "hằng ngày, thường nhật",
+      "cap": "HSK5",
+      "viDu": "手机已经成了日常生活的一部分。",
+      "viDuDoc": "Shǒujī yǐjīng chéng le rìcháng shēnghuó de yí bùfen.",
+      "viDuNghia": "Điện thoại đã trở thành một phần của cuộc sống hằng ngày.",
+      "cumTu": [
+        "日常生活",
+        "日常用语",
+        "日常工作"
+      ]
+    },
+    {
+      "chu": "唯一",
+      "doc": "wéiyī",
+      "loai": "adj",
+      "nghia": "duy nhất",
+      "cap": "HSK5",
+      "viDu": "他是我唯一能相信的人。",
+      "viDuDoc": "Tā shì wǒ wéiyī néng xiāngxìn de rén.",
+      "viDuNghia": "Anh ấy là người duy nhất tôi có thể tin.",
+      "cumTu": [
+        "唯一的办法",
+        "唯一的选择"
+      ],
+      "ghiChu": "一 đứng cuối từ giữ thanh 1: wéiyī."
+    },
+    {
+      "chu": "有利",
+      "doc": "yǒulì",
+      "loai": "adj",
+      "nghia": "có lợi",
+      "cap": "HSK5",
+      "viDu": "多运动有利于身体健康。",
+      "viDuDoc": "Duō yùndòng yǒulì yú shēntǐ jiànkāng.",
+      "viDuNghia": "Vận động nhiều có lợi cho sức khỏe.",
+      "cumTu": [
+        "有利于",
+        "有利条件",
+        "对…有利"
+      ],
+      "ghiChu": "Mẫu hay dùng: A 有利于 B."
+    },
+    {
+      "chu": "迅速",
+      "doc": "xùnsù",
+      "loai": "adj",
+      "nghia": "nhanh chóng",
+      "cap": "HSK5",
+      "viDu": "消防员迅速赶到了现场。",
+      "viDuDoc": "Xiāofángyuán xùnsù gǎn dào le xiànchǎng.",
+      "viDuNghia": "Lính cứu hỏa nhanh chóng có mặt tại hiện trường.",
+      "cumTu": [
+        "迅速发展",
+        "迅速反应",
+        "行动迅速"
+      ]
+    },
+    {
+      "chu": "偶然",
+      "doc": "ǒurán",
+      "loai": "adj",
+      "nghia": "ngẫu nhiên, tình cờ",
+      "cap": "HSK5",
+      "viDu": "我是在一次偶然的机会认识他的。",
+      "viDuDoc": "Wǒ shì zài yí cì ǒurán de jīhuì rènshi tā de.",
+      "viDuNghia": "Tôi quen anh ấy trong một lần tình cờ.",
+      "cumTu": [
+        "偶然的机会",
+        "偶然发现",
+        "并非偶然"
+      ],
+      "ghiChu": "偶然 (ngẫu nhiên, trái với 必然) khác 偶尔 (thỉnh thoảng — tần suất)."
+    },
+    {
+      "chu": "现代",
+      "doc": "xiàndài",
+      "loai": "adj",
+      "nghia": "hiện đại",
+      "cap": "HSK5",
+      "viDu": "这座城市既有古老的建筑，也有现代的高楼。",
+      "viDuDoc": "Zhè zuò chéngshì jì yǒu gǔlǎo de jiànzhù, yě yǒu xiàndài de gāolóu.",
+      "viDuNghia": "Thành phố này vừa có kiến trúc cổ vừa có nhà cao tầng hiện đại.",
+      "cumTu": [
+        "现代化",
+        "现代社会",
+        "现代人"
+      ]
+    },
+    {
+      "chu": "现实",
+      "doc": "xiànshí",
+      "loai": "adj",
+      "nghia": "thực tế; hiện thực",
+      "cap": "HSK5",
+      "viDu": "你的计划不太现实，再考虑考虑吧。",
+      "viDuDoc": "Nǐ de jìhuà bú tài xiànshí, zài kǎolǜ kǎolǜ ba.",
+      "viDuNghia": "Kế hoạch của bạn không thực tế lắm, cân nhắc lại xem.",
+      "cumTu": [
+        "面对现实",
+        "现实生活",
+        "很现实"
+      ]
+    }
+  ]
+}

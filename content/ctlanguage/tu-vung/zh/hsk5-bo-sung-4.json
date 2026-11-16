@@ -1,0 +1,1740 @@
+{
+  "ma": "hsk5-bo-sung-4",
+  "nn": "zh",
+  "ten": "HSK5 bổ sung 4 — Danh từ trừu tượng & cụm quen dùng",
+  "moTa": "Danh từ trừu tượng HSK5 xuất hiện dày trong bài đọc, bài luận: giá trị, yếu tố, hiện tượng, quan điểm, giai đoạn, lĩnh vực… cùng vài cụm quen dùng (打交道, 讨价还价, 舍不得). Ghi chú phân biệt 形势/形式, 观念/观点, 成就/成果.",
+  "nhom": "hsk",
+  "cap": "HSK5",
+  "tu": [
+    {
+      "chu": "价值",
+      "doc": "jiàzhí",
+      "loai": "n",
+      "nghia": "giá trị",
+      "cap": "HSK5",
+      "viDu": "这本书很有参考价值。",
+      "viDuDoc": "Zhè běn shū hěn yǒu cānkǎo jiàzhí.",
+      "viDuNghia": "Cuốn sách này rất có giá trị tham khảo.",
+      "cumTu": [
+        "价值观",
+        "有价值",
+        "实现自身价值"
+      ],
+      "ghiChu": "价值观 = hệ giá trị, quan niệm giá trị (hay gặp trong bài viết)."
+    },
+    {
+      "chu": "优势",
+      "doc": "yōushì",
+      "loai": "n",
+      "nghia": "ưu thế, lợi thế",
+      "cap": "HSK5",
+      "viDu": "会说多种语言是你找工作的一大优势。",
+      "viDuDoc": "Huì shuō duō zhǒng yǔyán shì nǐ zhǎo gōngzuò de yí dà yōushì.",
+      "viDuNghia": "Biết nói nhiều thứ tiếng là một lợi thế lớn khi bạn tìm việc.",
+      "cumTu": [
+        "占优势",
+        "发挥优势",
+        "优势和劣势"
+      ]
+    },
+    {
+      "chu": "原则",
+      "doc": "yuánzé",
+      "loai": "n",
+      "nghia": "nguyên tắc",
+      "cap": "HSK5",
+      "viDu": "做人要有原则。",
+      "viDuDoc": "Zuòrén yào yǒu yuánzé.",
+      "viDuNghia": "Làm người phải có nguyên tắc.",
+      "cumTu": [
+        "原则上",
+        "坚持原则",
+        "基本原则"
+      ],
+      "ghiChu": "原则上 = về nguyên tắc."
+    },
+    {
+      "chu": "因素",
+      "doc": "yīnsù",
+      "loai": "n",
+      "nghia": "nhân tố, yếu tố",
+      "cap": "HSK5",
+      "viDu": "影响健康的因素有很多。",
+      "viDuDoc": "Yǐngxiǎng jiànkāng de yīnsù yǒu hěn duō.",
+      "viDuNghia": "Có nhiều yếu tố ảnh hưởng đến sức khỏe.",
+      "cumTu": [
+        "主要因素",
+        "重要因素",
+        "不利因素"
+      ]
+    },
+    {
+      "chu": "地位",
+      "doc": "dìwèi",
+      "loai": "n",
+      "nghia": "địa vị, vị trí",
+      "cap": "HSK5",
+      "viDu": "教育在国家发展中占有重要地位。",
+      "viDuDoc": "Jiàoyù zài guójiā fāzhǎn zhōng zhànyǒu zhòngyào dìwèi.",
+      "viDuNghia": "Giáo dục chiếm vị trí quan trọng trong sự phát triển của đất nước.",
+      "cumTu": [
+        "社会地位",
+        "重要地位",
+        "提高地位"
+      ]
+    },
+    {
+      "chu": "心理",
+      "doc": "xīnlǐ",
+      "loai": "n",
+      "nghia": "tâm lý",
+      "cap": "HSK5",
+      "viDu": "考试前很多学生都有紧张心理。",
+      "viDuDoc": "Kǎoshì qián hěn duō xuéshēng dōu yǒu jǐnzhāng xīnlǐ.",
+      "viDuNghia": "Trước kỳ thi nhiều học sinh có tâm lý căng thẳng.",
+      "cumTu": [
+        "心理健康",
+        "心理压力",
+        "心理学"
+      ]
+    },
+    {
+      "chu": "性质",
+      "doc": "xìngzhì",
+      "loai": "n",
+      "nghia": "tính chất",
+      "cap": "HSK5",
+      "viDu": "这两件事的性质完全不同。",
+      "viDuDoc": "Zhè liǎng jiàn shì de xìngzhì wánquán bùtóng.",
+      "viDuNghia": "Tính chất của hai việc này hoàn toàn khác nhau.",
+      "cumTu": [
+        "性质严重",
+        "工作性质"
+      ],
+      "ghiChu": "性质 (tính chất của sự việc) khác 性格 (tính cách con người)."
+    },
+    {
+      "chu": "意义",
+      "doc": "yìyì",
+      "loai": "n",
+      "nghia": "ý nghĩa",
+      "cap": "HSK5",
+      "viDu": "这次活动很有意义。",
+      "viDuDoc": "Zhè cì huódòng hěn yǒu yìyì.",
+      "viDuNghia": "Hoạt động lần này rất có ý nghĩa.",
+      "cumTu": [
+        "有意义",
+        "重要意义",
+        "人生的意义"
+      ],
+      "ghiChu": "意义 (ý nghĩa, giá trị) khác 意思 (nghĩa của từ; 有意思 = thú vị)."
+    },
+    {
+      "chu": "成就",
+      "doc": "chéngjiù",
+      "loai": "n",
+      "nghia": "thành tựu",
+      "cap": "HSK5",
+      "viDu": "他在科学研究方面取得了很大的成就。",
+      "viDuDoc": "Tā zài kēxué yánjiū fāngmiàn qǔdé le hěn dà de chéngjiù.",
+      "viDuNghia": "Ông ấy đã đạt được thành tựu lớn trong nghiên cứu khoa học.",
+      "cumTu": [
+        "取得成就",
+        "成就感",
+        "伟大成就"
+      ],
+      "ghiChu": "成就 (thành tựu lớn, lâu dài) · 成果 (kết quả cụ thể của công việc) · 成绩 (điểm số, thành tích)."
+    },
+    {
+      "chu": "成果",
+      "doc": "chéngguǒ",
+      "loai": "n",
+      "nghia": "thành quả",
+      "cap": "HSK5",
+      "viDu": "这是我们大家共同努力的成果。",
+      "viDuDoc": "Zhè shì wǒmen dàjiā gòngtóng nǔlì de chéngguǒ.",
+      "viDuNghia": "Đây là thành quả nỗ lực chung của tất cả chúng ta.",
+      "cumTu": [
+        "研究成果",
+        "劳动成果",
+        "取得成果"
+      ],
+      "ghiChu": "Xem 成就."
+    },
+    {
+      "chu": "本质",
+      "doc": "běnzhì",
+      "loai": "n",
+      "nghia": "bản chất",
+      "cap": "HSK5",
+      "viDu": "我们要透过现象看本质。",
+      "viDuDoc": "Wǒmen yào tòuguò xiànxiàng kàn běnzhì.",
+      "viDuNghia": "Chúng ta phải nhìn qua hiện tượng để thấy bản chất.",
+      "cumTu": [
+        "本质上",
+        "本质区别",
+        "问题的本质"
+      ]
+    },
+    {
+      "chu": "概念",
+      "doc": "gàiniàn",
+      "loai": "n",
+      "nghia": "khái niệm",
+      "cap": "HSK5",
+      "viDu": "很多人对时间没有概念。",
+      "viDuDoc": "Hěn duō rén duì shíjiān méiyǒu gàiniàn.",
+      "viDuNghia": "Nhiều người không có khái niệm về thời gian.",
+      "cumTu": [
+        "基本概念",
+        "没有概念",
+        "新概念"
+      ]
+    },
+    {
+      "chu": "现象",
+      "doc": "xiànxiàng",
+      "loai": "n",
+      "nghia": "hiện tượng",
+      "cap": "HSK5",
+      "viDu": "这种现象在大城市很普遍。",
+      "viDuDoc": "Zhè zhǒng xiànxiàng zài dà chéngshì hěn pǔbiàn.",
+      "viDuNghia": "Hiện tượng này rất phổ biến ở các thành phố lớn.",
+      "cumTu": [
+        "社会现象",
+        "自然现象",
+        "普遍现象"
+      ]
+    },
+    {
+      "chu": "程度",
+      "doc": "chéngdù",
+      "loai": "n",
+      "nghia": "mức độ, trình độ",
+      "cap": "HSK5",
+      "viDu": "这个问题已经严重到了一定的程度。",
+      "viDuDoc": "Zhège wèntí yǐjīng yánzhòng dào le yídìng de chéngdù.",
+      "viDuNghia": "Vấn đề này đã nghiêm trọng tới một mức độ nhất định.",
+      "cumTu": [
+        "文化程度",
+        "在一定程度上",
+        "严重程度"
+      ],
+      "ghiChu": "在一定程度上 = ở một mức độ nào đó (hay dùng trong bài luận)."
+    },
+    {
+      "chu": "结构",
+      "doc": "jiégòu",
+      "loai": "n",
+      "nghia": "kết cấu, cấu trúc",
+      "cap": "HSK5",
+      "viDu": "这篇文章结构很清楚。",
+      "viDuDoc": "Zhè piān wénzhāng jiégòu hěn qīngchu.",
+      "viDuNghia": "Bài văn này có cấu trúc rất rõ ràng.",
+      "cumTu": [
+        "句子结构",
+        "经济结构",
+        "结构合理"
+      ],
+      "ghiChu": "结 ở đây đọc jié; trong 结实 đọc jiē."
+    },
+    {
+      "chu": "结论",
+      "doc": "jiélùn",
+      "loai": "n",
+      "nghia": "kết luận",
+      "cap": "HSK5",
+      "viDu": "现在下结论还太早。",
+      "viDuDoc": "Xiànzài xià jiélùn hái tài zǎo.",
+      "viDuNghia": "Bây giờ đưa ra kết luận vẫn còn quá sớm.",
+      "cumTu": [
+        "下结论",
+        "得出结论"
+      ],
+      "ghiChu": "Đi với động từ 下/得出 (không nói 做结论)."
+    },
+    {
+      "chu": "观念",
+      "doc": "guānniàn",
+      "loai": "n",
+      "nghia": "quan niệm",
+      "cap": "HSK5",
+      "viDu": "随着社会的发展，人们的观念也在改变。",
+      "viDuDoc": "Suízhe shèhuì de fāzhǎn, rénmen de guānniàn yě zài gǎibiàn.",
+      "viDuNghia": "Cùng với sự phát triển của xã hội, quan niệm của mọi người cũng đang thay đổi.",
+      "cumTu": [
+        "传统观念",
+        "观念更新",
+        "消费观念"
+      ],
+      "ghiChu": "观念 (quan niệm chung, định hình lâu) khác 观点 (quan điểm về một vấn đề cụ thể)."
+    },
+    {
+      "chu": "观点",
+      "doc": "guāndiǎn",
+      "loai": "n",
+      "nghia": "quan điểm",
+      "cap": "HSK5",
+      "viDu": "我同意你的观点。",
+      "viDuDoc": "Wǒ tóngyì nǐ de guāndiǎn.",
+      "viDuNghia": "Tôi đồng ý với quan điểm của bạn.",
+      "cumTu": [
+        "提出观点",
+        "不同的观点",
+        "个人观点"
+      ],
+      "ghiChu": "Xem 观念."
+    },
+    {
+      "chu": "规律",
+      "doc": "guīlǜ",
+      "loai": "n",
+      "nghia": "quy luật",
+      "cap": "HSK5",
+      "viDu": "她的生活很有规律，每天早睡早起。",
+      "viDuDoc": "Tā de shēnghuó hěn yǒu guīlǜ, měi tiān zǎo shuì zǎo qǐ.",
+      "viDuNghia": "Cuộc sống của cô ấy rất điều độ, ngày nào cũng ngủ sớm dậy sớm.",
+      "cumTu": [
+        "有规律",
+        "自然规律",
+        "掌握规律"
+      ],
+      "ghiChu": "生活有规律 = sống điều độ."
+    },
+    {
+      "chu": "规则",
+      "doc": "guīzé",
+      "loai": "n",
+      "nghia": "quy tắc, luật chơi",
+      "cap": "HSK5",
+      "viDu": "你知道这个游戏的规则吗？",
+      "viDuDoc": "Nǐ zhīdào zhège yóuxì de guīzé ma?",
+      "viDuNghia": "Bạn có biết luật của trò chơi này không?",
+      "cumTu": [
+        "交通规则",
+        "遵守规则",
+        "比赛规则"
+      ]
+    },
+    {
+      "chu": "规模",
+      "doc": "guīmó",
+      "loai": "n",
+      "nghia": "quy mô",
+      "cap": "HSK5",
+      "viDu": "这家公司的规模越来越大。",
+      "viDuDoc": "Zhè jiā gōngsī de guīmó yuè lái yuè dà.",
+      "viDuNghia": "Quy mô của công ty này ngày càng lớn.",
+      "cumTu": [
+        "大规模",
+        "规模宏大",
+        "扩大规模"
+      ],
+      "ghiChu": "模 ở đây đọc mó."
+    },
+    {
+      "chu": "逻辑",
+      "doc": "luójí",
+      "loai": "n",
+      "nghia": "logic",
+      "cap": "HSK5",
+      "viDu": "他说话很有逻辑。",
+      "viDuDoc": "Tā shuōhuà hěn yǒu luójí.",
+      "viDuNghia": "Anh ấy nói chuyện rất logic.",
+      "cumTu": [
+        "逻辑思维",
+        "符合逻辑",
+        "没有逻辑"
+      ]
+    },
+    {
+      "chu": "道德",
+      "doc": "dàodé",
+      "loai": "n",
+      "nghia": "đạo đức",
+      "cap": "HSK5",
+      "viDu": "随地扔垃圾是不道德的行为。",
+      "viDuDoc": "Suídì rēng lājī shì bú dàodé de xíngwéi.",
+      "viDuNghia": "Vứt rác bừa bãi là hành vi thiếu đạo đức.",
+      "cumTu": [
+        "道德标准",
+        "职业道德",
+        "讲道德"
+      ]
+    },
+    {
+      "chu": "阶段",
+      "doc": "jiēduàn",
+      "loai": "n",
+      "nghia": "giai đoạn",
+      "cap": "HSK5",
+      "viDu": "这个项目已经进入最后阶段了。",
+      "viDuDoc": "Zhège xiàngmù yǐjīng jìnrù zuìhòu jiēduàn le.",
+      "viDuNghia": "Dự án này đã bước vào giai đoạn cuối.",
+      "cumTu": [
+        "初级阶段",
+        "现阶段",
+        "关键阶段"
+      ]
+    },
+    {
+      "chu": "领域",
+      "doc": "lǐngyù",
+      "loai": "n",
+      "nghia": "lĩnh vực",
+      "cap": "HSK5",
+      "viDu": "人工智能已经进入了很多领域。",
+      "viDuDoc": "Réngōng zhìnéng yǐjīng jìnrù le hěn duō lǐngyù.",
+      "viDuNghia": "Trí tuệ nhân tạo đã đi vào nhiều lĩnh vực.",
+      "cumTu": [
+        "专业领域",
+        "科学领域",
+        "各个领域"
+      ]
+    },
+    {
+      "chu": "魅力",
+      "doc": "mèilì",
+      "loai": "n",
+      "nghia": "sức hấp dẫn, sức quyến rũ",
+      "cap": "HSK5",
+      "viDu": "这座古城有一种独特的魅力。",
+      "viDuDoc": "Zhè zuò gǔchéng yǒu yì zhǒng dútè de mèilì.",
+      "viDuNghia": "Cổ thành này có một sức hấp dẫn đặc biệt.",
+      "cumTu": [
+        "个人魅力",
+        "很有魅力",
+        "魅力十足"
+      ]
+    },
+    {
+      "chu": "范围",
+      "doc": "fànwéi",
+      "loai": "n",
+      "nghia": "phạm vi",
+      "cap": "HSK5",
+      "viDu": "这次考试的范围是第一课到第十课。",
+      "viDuDoc": "Zhè cì kǎoshì de fànwéi shì dì yī kè dào dì shí kè.",
+      "viDuNghia": "Phạm vi bài thi lần này là từ bài 1 đến bài 10.",
+      "cumTu": [
+        "考试范围",
+        "范围很广",
+        "在…范围内"
+      ]
+    },
+    {
+      "chu": "方式",
+      "doc": "fāngshì",
+      "loai": "n",
+      "nghia": "phương thức, cách",
+      "cap": "HSK5",
+      "viDu": "每个人都有自己的生活方式。",
+      "viDuDoc": "Měi gè rén dōu yǒu zìjǐ de shēnghuó fāngshì.",
+      "viDuNghia": "Mỗi người đều có lối sống của riêng mình.",
+      "cumTu": [
+        "生活方式",
+        "联系方式",
+        "表达方式"
+      ],
+      "ghiChu": "方式 (cách thức, hình thức) gần 方法 (phương pháp giải quyết việc)."
+    },
+    {
+      "chu": "后果",
+      "doc": "hòuguǒ",
+      "loai": "n",
+      "nghia": "hậu quả",
+      "cap": "HSK5",
+      "viDu": "酒后开车的后果很严重。",
+      "viDuDoc": "Jiǔ hòu kāichē de hòuguǒ hěn yánzhòng.",
+      "viDuNghia": "Hậu quả của việc lái xe sau khi uống rượu rất nghiêm trọng.",
+      "cumTu": [
+        "严重后果",
+        "后果不堪设想",
+        "承担后果"
+      ],
+      "ghiChu": "后果 thường chỉ kết quả xấu; trung tính dùng 结果."
+    },
+    {
+      "chu": "命运",
+      "doc": "mìngyùn",
+      "loai": "n",
+      "nghia": "số phận, vận mệnh",
+      "cap": "HSK5",
+      "viDu": "一次偶然的机会改变了他的命运。",
+      "viDuDoc": "Yí cì ǒurán de jīhuì gǎibiàn le tā de mìngyùn.",
+      "viDuNghia": "Một cơ hội tình cờ đã thay đổi số phận anh ấy.",
+      "cumTu": [
+        "改变命运",
+        "命运的安排",
+        "掌握自己的命运"
+      ]
+    },
+    {
+      "chu": "前途",
+      "doc": "qiántú",
+      "loai": "n",
+      "nghia": "tiền đồ, tương lai",
+      "cap": "HSK5",
+      "viDu": "这个年轻人很努力，前途无量。",
+      "viDuDoc": "Zhège niánqīngrén hěn nǔlì, qiántú wúliàng.",
+      "viDuNghia": "Chàng trai trẻ này rất chăm chỉ, tương lai rộng mở.",
+      "cumTu": [
+        "有前途",
+        "前途无量",
+        "前途光明"
+      ]
+    },
+    {
+      "chu": "差距",
+      "doc": "chājù",
+      "loai": "n",
+      "nghia": "khoảng cách, chênh lệch",
+      "cap": "HSK5",
+      "viDu": "城市和农村之间还存在很大的差距。",
+      "viDuDoc": "Chéngshì hé nóngcūn zhījiān hái cúnzài hěn dà de chājù.",
+      "viDuNghia": "Giữa thành thị và nông thôn vẫn còn khoảng cách lớn.",
+      "cumTu": [
+        "缩小差距",
+        "贫富差距",
+        "有差距"
+      ],
+      "ghiChu": "差 ở đây đọc chā (không đọc chà hay chāi)."
+    },
+    {
+      "chu": "形势",
+      "doc": "xíngshì",
+      "loai": "n",
+      "nghia": "tình hình, cục diện",
+      "cap": "HSK5",
+      "viDu": "目前的经济形势不太乐观。",
+      "viDuDoc": "Mùqián de jīngjì xíngshì bú tài lèguān.",
+      "viDuNghia": "Tình hình kinh tế hiện nay không mấy lạc quan.",
+      "cumTu": [
+        "国际形势",
+        "经济形势",
+        "形势严峻"
+      ],
+      "ghiChu": "形势 (tình hình lớn, cục diện) khác 形式 (hình thức) — cùng đọc xíngshì, dễ viết nhầm."
+    },
+    {
+      "chu": "形式",
+      "doc": "xíngshì",
+      "loai": "n",
+      "nghia": "hình thức",
+      "cap": "HSK5",
+      "viDu": "学习的形式可以多种多样。",
+      "viDuDoc": "Xuéxí de xíngshì kěyǐ duōzhǒng-duōyàng.",
+      "viDuNghia": "Hình thức học tập có thể rất đa dạng.",
+      "cumTu": [
+        "表现形式",
+        "形式主义",
+        "各种形式"
+      ],
+      "ghiChu": "Xem 形势."
+    },
+    {
+      "chu": "形象",
+      "doc": "xíngxiàng",
+      "loai": "n",
+      "nghia": "hình tượng, hình ảnh",
+      "cap": "HSK5",
+      "viDu": "公司非常重视自己的品牌形象。",
+      "viDuDoc": "Gōngsī fēicháng zhòngshì zìjǐ de pǐnpái xíngxiàng.",
+      "viDuNghia": "Công ty rất coi trọng hình ảnh thương hiệu của mình.",
+      "cumTu": [
+        "个人形象",
+        "形象生动",
+        "树立形象"
+      ],
+      "ghiChu": "形象 còn là tính từ: sinh động, giàu hình ảnh (说得很形象)."
+    },
+    {
+      "chu": "情绪",
+      "doc": "qíngxù",
+      "loai": "n",
+      "nghia": "tâm trạng, cảm xúc",
+      "cap": "HSK5",
+      "viDu": "最近他情绪不太好，你多关心他一下。",
+      "viDuDoc": "Zuìjìn tā qíngxù bú tài hǎo, nǐ duō guānxīn tā yíxià.",
+      "viDuNghia": "Dạo này tâm trạng anh ấy không tốt lắm, bạn quan tâm anh ấy nhiều chút.",
+      "cumTu": [
+        "情绪稳定",
+        "控制情绪",
+        "闹情绪"
+      ]
+    },
+    {
+      "chu": "状况",
+      "doc": "zhuàngkuàng",
+      "loai": "n",
+      "nghia": "tình trạng, hiện trạng",
+      "cap": "HSK5",
+      "viDu": "你最近的健康状况怎么样？",
+      "viDuDoc": "Nǐ zuìjìn de jiànkāng zhuàngkuàng zěnmeyàng?",
+      "viDuNghia": "Tình trạng sức khỏe của bạn dạo này thế nào?",
+      "cumTu": [
+        "健康状况",
+        "经济状况",
+        "身体状况"
+      ],
+      "ghiChu": "状况 (tình hình của sự việc) gần 状态 (trạng thái của người/vật lúc đó)."
+    },
+    {
+      "chu": "状态",
+      "doc": "zhuàngtài",
+      "loai": "n",
+      "nghia": "trạng thái, phong độ",
+      "cap": "HSK5",
+      "viDu": "今天我的状态不太好，总是出错。",
+      "viDuDoc": "Jīntiān wǒ de zhuàngtài bú tài hǎo, zǒngshì chūcuò.",
+      "viDuNghia": "Hôm nay phong độ của tôi không tốt, cứ bị sai.",
+      "cumTu": [
+        "精神状态",
+        "最佳状态",
+        "进入状态"
+      ],
+      "ghiChu": "Xem 状况."
+    },
+    {
+      "chu": "细节",
+      "doc": "xìjié",
+      "loai": "n",
+      "nghia": "chi tiết",
+      "cap": "HSK5",
+      "viDu": "成功往往取决于细节。",
+      "viDuDoc": "Chénggōng wǎngwǎng qǔjué yú xìjié.",
+      "viDuNghia": "Thành công thường phụ thuộc vào chi tiết.",
+      "cumTu": [
+        "注意细节",
+        "细节决定成败",
+        "具体细节"
+      ]
+    },
+    {
+      "chu": "措施",
+      "doc": "cuòshī",
+      "loai": "n",
+      "nghia": "biện pháp",
+      "cap": "HSK5",
+      "viDu": "学校采取了很多措施保护学生安全。",
+      "viDuDoc": "Xuéxiào cǎiqǔ le hěn duō cuòshī bǎohù xuéshēng ānquán.",
+      "viDuNghia": "Nhà trường áp dụng nhiều biện pháp để bảo vệ an toàn cho học sinh.",
+      "cumTu": [
+        "采取措施",
+        "安全措施",
+        "有效措施"
+      ],
+      "ghiChu": "Đi với động từ 采取 (không dùng 使用)."
+    },
+    {
+      "chu": "背景",
+      "doc": "bèijǐng",
+      "loai": "n",
+      "nghia": "bối cảnh, lý lịch",
+      "cap": "HSK5",
+      "viDu": "了解作者的背景有助于理解这首诗。",
+      "viDuDoc": "Liǎojiě zuòzhě de bèijǐng yǒuzhù yú lǐjiě zhè shǒu shī.",
+      "viDuNghia": "Hiểu về bối cảnh của tác giả giúp hiểu bài thơ này.",
+      "cumTu": [
+        "历史背景",
+        "家庭背景",
+        "背景音乐"
+      ],
+      "ghiChu": "背 ở đây đọc bèi."
+    },
+    {
+      "chu": "角色",
+      "doc": "juésè",
+      "loai": "n",
+      "nghia": "vai, vai trò",
+      "cap": "HSK5",
+      "viDu": "她在这部电影里扮演一个老师的角色。",
+      "viDuDoc": "Tā zài zhè bù diànyǐng li bànyǎn yí gè lǎoshī de juésè.",
+      "viDuNghia": "Trong bộ phim này cô ấy đóng vai một giáo viên.",
+      "cumTu": [
+        "扮演角色",
+        "重要角色",
+        "主要角色"
+      ],
+      "ghiChu": "角 ở đây đọc jué (không đọc jiǎo)."
+    },
+    {
+      "chu": "资料",
+      "doc": "zīliào",
+      "loai": "n",
+      "nghia": "tư liệu, tài liệu",
+      "cap": "HSK5",
+      "viDu": "我在图书馆查了很多资料。",
+      "viDuDoc": "Wǒ zài túshūguǎn chá le hěn duō zīliào.",
+      "viDuNghia": "Tôi đã tra rất nhiều tài liệu ở thư viện.",
+      "cumTu": [
+        "查资料",
+        "收集资料",
+        "参考资料"
+      ]
+    },
+    {
+      "chu": "资金",
+      "doc": "zījīn",
+      "loai": "n",
+      "nghia": "vốn, nguồn tiền",
+      "cap": "HSK5",
+      "viDu": "开公司需要大量的资金。",
+      "viDuDoc": "Kāi gōngsī xūyào dàliàng de zījīn.",
+      "viDuNghia": "Mở công ty cần rất nhiều vốn.",
+      "cumTu": [
+        "缺乏资金",
+        "资金不足",
+        "筹集资金"
+      ]
+    },
+    {
+      "chu": "财产",
+      "doc": "cáichǎn",
+      "loai": "n",
+      "nghia": "tài sản",
+      "cap": "HSK5",
+      "viDu": "他把所有财产都留给了孩子。",
+      "viDuDoc": "Tā bǎ suǒyǒu cáichǎn dōu liú gěi le háizi.",
+      "viDuNghia": "Ông ấy để lại toàn bộ tài sản cho con cái.",
+      "cumTu": [
+        "个人财产",
+        "财产安全",
+        "公共财产"
+      ]
+    },
+    {
+      "chu": "时代",
+      "doc": "shídài",
+      "loai": "n",
+      "nghia": "thời đại",
+      "cap": "HSK5",
+      "viDu": "我们生活在一个信息时代。",
+      "viDuDoc": "Wǒmen shēnghuó zài yí gè xìnxī shídài.",
+      "viDuNghia": "Chúng ta đang sống trong thời đại thông tin.",
+      "cumTu": [
+        "新时代",
+        "时代变了",
+        "跟上时代"
+      ],
+      "ghiChu": "时代 (thời đại lớn) · 时期 (thời kỳ, một giai đoạn) · 年代 (thập niên: 八十年代)."
+    },
+    {
+      "chu": "时期",
+      "doc": "shíqī",
+      "loai": "n",
+      "nghia": "thời kỳ",
+      "cap": "HSK5",
+      "viDu": "学生时期是人生中最美好的时期之一。",
+      "viDuDoc": "Xuéshēng shíqī shì rénshēng zhōng zuì měihǎo de shíqī zhī yī.",
+      "viDuNghia": "Thời học sinh là một trong những thời kỳ đẹp nhất đời người.",
+      "cumTu": [
+        "特殊时期",
+        "关键时期",
+        "历史时期"
+      ],
+      "ghiChu": "Xem 时代."
+    },
+    {
+      "chu": "年代",
+      "doc": "niándài",
+      "loai": "n",
+      "nghia": "thập niên; thời kỳ",
+      "cap": "HSK5",
+      "viDu": "这首歌在上个世纪八十年代很流行。",
+      "viDuDoc": "Zhè shǒu gē zài shàng ge shìjì bāshí niándài hěn liúxíng.",
+      "viDuNghia": "Bài hát này rất thịnh hành vào thập niên 80 thế kỷ trước.",
+      "cumTu": [
+        "八十年代",
+        "那个年代",
+        "年代久远"
+      ],
+      "ghiChu": "Xem 时代."
+    },
+    {
+      "chu": "人生",
+      "doc": "rénshēng",
+      "loai": "n",
+      "nghia": "đời người, cuộc đời",
+      "cap": "HSK5",
+      "viDu": "人生没有那么多如果。",
+      "viDuDoc": "Rénshēng méiyǒu nàme duō rúguǒ.",
+      "viDuNghia": "Đời người không có nhiều chữ \"nếu\" đến thế.",
+      "cumTu": [
+        "人生观",
+        "人生目标",
+        "人生经历"
+      ]
+    },
+    {
+      "chu": "人才",
+      "doc": "réncái",
+      "loai": "n",
+      "nghia": "nhân tài",
+      "cap": "HSK5",
+      "viDu": "公司需要更多懂技术的人才。",
+      "viDuDoc": "Gōngsī xūyào gèng duō dǒng jìshù de réncái.",
+      "viDuNghia": "Công ty cần thêm nhiều nhân tài hiểu kỹ thuật.",
+      "cumTu": [
+        "培养人才",
+        "优秀人才",
+        "人才市场"
+      ]
+    },
+    {
+      "chu": "人物",
+      "doc": "rénwù",
+      "loai": "n",
+      "nghia": "nhân vật",
+      "cap": "HSK5",
+      "viDu": "这部小说里的人物写得很生动。",
+      "viDuDoc": "Zhè bù xiǎoshuō li de rénwù xiě de hěn shēngdòng.",
+      "viDuNghia": "Các nhân vật trong tiểu thuyết này được viết rất sinh động.",
+      "cumTu": [
+        "历史人物",
+        "重要人物",
+        "主要人物"
+      ]
+    },
+    {
+      "chu": "人员",
+      "doc": "rényuán",
+      "loai": "n",
+      "nghia": "nhân viên, nhân sự (của một bộ phận)",
+      "cap": "HSK5",
+      "viDu": "工作人员正在检查大家的证件。",
+      "viDuDoc": "Gōngzuò rényuán zhèngzài jiǎnchá dàjiā de zhèngjiàn.",
+      "viDuNghia": "Nhân viên đang kiểm tra giấy tờ của mọi người.",
+      "cumTu": [
+        "工作人员",
+        "技术人员",
+        "管理人员"
+      ],
+      "ghiChu": "人员 luôn đi sau định ngữ chỉ ngành/bộ phận (工作人员), không đứng một mình chỉ \"một người\"."
+    },
+    {
+      "chu": "专家",
+      "doc": "zhuānjiā",
+      "loai": "n",
+      "nghia": "chuyên gia",
+      "cap": "HSK5",
+      "viDu": "专家建议每天至少喝八杯水。",
+      "viDuDoc": "Zhuānjiā jiànyì měi tiān zhìshǎo hē bā bēi shuǐ.",
+      "viDuNghia": "Chuyên gia khuyên mỗi ngày nên uống ít nhất tám cốc nước.",
+      "cumTu": [
+        "专家意见",
+        "医学专家",
+        "请教专家"
+      ]
+    },
+    {
+      "chu": "企业",
+      "doc": "qǐyè",
+      "loai": "n",
+      "nghia": "doanh nghiệp",
+      "cap": "HSK5",
+      "viDu": "这家企业有一千多名员工。",
+      "viDuDoc": "Zhè jiā qǐyè yǒu yìqiān duō míng yuángōng.",
+      "viDuNghia": "Doanh nghiệp này có hơn một nghìn nhân viên.",
+      "cumTu": [
+        "国有企业",
+        "大型企业",
+        "企业文化"
+      ]
+    },
+    {
+      "chu": "行为",
+      "doc": "xíngwéi",
+      "loai": "n",
+      "nghia": "hành vi",
+      "cap": "HSK5",
+      "viDu": "父母的行为对孩子影响很大。",
+      "viDuDoc": "Fùmǔ de xíngwéi duì háizi yǐngxiǎng hěn dà.",
+      "viDuNghia": "Hành vi của cha mẹ ảnh hưởng rất lớn đến con cái.",
+      "cumTu": [
+        "不良行为",
+        "行为习惯",
+        "违法行为"
+      ],
+      "ghiChu": "为 ở đây đọc wéi; 行 đọc xíng."
+    },
+    {
+      "chu": "事实",
+      "doc": "shìshí",
+      "loai": "n",
+      "nghia": "sự thật",
+      "cap": "HSK5",
+      "viDu": "事实证明，他的决定是正确的。",
+      "viDuDoc": "Shìshí zhèngmíng, tā de juédìng shì zhèngquè de.",
+      "viDuNghia": "Sự thật chứng minh quyết định của anh ấy là đúng.",
+      "cumTu": [
+        "事实上",
+        "事实证明",
+        "尊重事实"
+      ],
+      "ghiChu": "事实上 = trên thực tế (hay dùng trong bài viết)."
+    },
+    {
+      "chu": "事物",
+      "doc": "shìwù",
+      "loai": "n",
+      "nghia": "sự vật",
+      "cap": "HSK5",
+      "viDu": "孩子对新鲜事物总是充满好奇。",
+      "viDuDoc": "Háizi duì xīnxiān shìwù zǒngshì chōngmǎn hàoqí.",
+      "viDuNghia": "Trẻ con luôn tò mò với những điều mới mẻ.",
+      "cumTu": [
+        "新事物",
+        "客观事物"
+      ],
+      "ghiChu": "事物 (sự vật, hiện tượng nói chung) khác 事务 (công việc, sự vụ — HSK6)."
+    },
+    {
+      "chu": "常识",
+      "doc": "chángshí",
+      "loai": "n",
+      "nghia": "kiến thức phổ thông, lẽ thường",
+      "cap": "HSK5",
+      "viDu": "这是生活常识，每个人都应该知道。",
+      "viDuDoc": "Zhè shì shēnghuó chángshí, měi gè rén dōu yīnggāi zhīdào.",
+      "viDuNghia": "Đây là kiến thức thường thức, ai cũng nên biết.",
+      "cumTu": [
+        "生活常识",
+        "基本常识",
+        "缺乏常识"
+      ]
+    },
+    {
+      "chu": "学问",
+      "doc": "xuéwen",
+      "loai": "n",
+      "nghia": "học vấn, kiến thức",
+      "cap": "HSK5",
+      "viDu": "别看他年轻，他很有学问。",
+      "viDuDoc": "Bié kàn tā niánqīng, tā hěn yǒu xuéwen.",
+      "viDuNghia": "Đừng thấy anh ấy trẻ, anh ấy rất có học vấn.",
+      "cumTu": [
+        "有学问",
+        "做学问",
+        "大有学问"
+      ],
+      "ghiChu": "问 thanh nhẹ: xuéwen."
+    },
+    {
+      "chu": "疑问",
+      "doc": "yíwèn",
+      "loai": "n",
+      "nghia": "thắc mắc, nghi vấn",
+      "cap": "HSK5",
+      "viDu": "如果有什么疑问，可以随时问我。",
+      "viDuDoc": "Rúguǒ yǒu shénme yíwèn, kěyǐ suíshí wèn wǒ.",
+      "viDuNghia": "Nếu có thắc mắc gì, có thể hỏi tôi bất cứ lúc nào.",
+      "cumTu": [
+        "毫无疑问",
+        "提出疑问",
+        "疑问句"
+      ],
+      "ghiChu": "毫无疑问 = không còn nghi ngờ gì nữa."
+    },
+    {
+      "chu": "理由",
+      "doc": "lǐyóu",
+      "loai": "n",
+      "nghia": "lý do",
+      "cap": "HSK5",
+      "viDu": "你没有理由不相信他。",
+      "viDuDoc": "Nǐ méiyǒu lǐyóu bù xiāngxìn tā.",
+      "viDuNghia": "Bạn không có lý do gì để không tin anh ấy.",
+      "cumTu": [
+        "理由充分",
+        "找理由",
+        "没有理由"
+      ],
+      "ghiChu": "理由 (lý do để biện minh, lập luận) gần 原因 (nguyên nhân khách quan)."
+    },
+    {
+      "chu": "道理",
+      "doc": "dàoli",
+      "loai": "n",
+      "nghia": "đạo lý, lẽ phải",
+      "cap": "HSK5",
+      "viDu": "你说的话很有道理。",
+      "viDuDoc": "Nǐ shuō de huà hěn yǒu dàoli.",
+      "viDuNghia": "Bạn nói rất có lý.",
+      "cumTu": [
+        "有道理",
+        "讲道理",
+        "没道理"
+      ],
+      "ghiChu": "理 thanh nhẹ: dàoli."
+    },
+    {
+      "chu": "教训",
+      "doc": "jiàoxun",
+      "loai": "n",
+      "nghia": "bài học (rút ra từ sai lầm)",
+      "cap": "HSK5",
+      "viDu": "这次的失败给了我一个深刻的教训。",
+      "viDuDoc": "Zhè cì de shībài gěi le wǒ yí gè shēnkè de jiàoxun.",
+      "viDuNghia": "Thất bại lần này cho tôi một bài học sâu sắc.",
+      "cumTu": [
+        "吸取教训",
+        "接受教训",
+        "教训他一顿"
+      ],
+      "ghiChu": "Danh từ: bài học; động từ: dạy cho một bài học, mắng (教训孩子)."
+    },
+    {
+      "chu": "矛盾",
+      "doc": "máodùn",
+      "loai": "n",
+      "nghia": "mâu thuẫn",
+      "cap": "HSK5",
+      "viDu": "他们俩之间有点儿矛盾。",
+      "viDuDoc": "Tāmen liǎ zhījiān yǒudiǎnr máodùn.",
+      "viDuNghia": "Giữa hai người họ có chút mâu thuẫn.",
+      "cumTu": [
+        "产生矛盾",
+        "解决矛盾",
+        "心里很矛盾"
+      ],
+      "ghiChu": "心里很矛盾 = trong lòng phân vân, giằng xé (dùng như tính từ)."
+    },
+    {
+      "chu": "气氛",
+      "doc": "qìfēn",
+      "loai": "n",
+      "nghia": "bầu không khí",
+      "cap": "HSK5",
+      "viDu": "晚会的气氛非常热烈。",
+      "viDuDoc": "Wǎnhuì de qìfēn fēicháng rèliè.",
+      "viDuNghia": "Không khí buổi dạ hội vô cùng sôi nổi.",
+      "cumTu": [
+        "气氛紧张",
+        "活跃气氛",
+        "节日气氛"
+      ],
+      "ghiChu": "氛 đọc fēn (thanh 1)."
+    },
+    {
+      "chu": "愿望",
+      "doc": "yuànwàng",
+      "loai": "n",
+      "nghia": "nguyện vọng, mong ước",
+      "cap": "HSK5",
+      "viDu": "我的愿望是去世界各地旅行。",
+      "viDuDoc": "Wǒ de yuànwàng shì qù shìjiè gè dì lǚxíng.",
+      "viDuNghia": "Mong ước của tôi là đi du lịch khắp thế giới.",
+      "cumTu": [
+        "美好的愿望",
+        "实现愿望",
+        "新年愿望"
+      ]
+    },
+    {
+      "chu": "梦想",
+      "doc": "mèngxiǎng",
+      "loai": "n",
+      "nghia": "ước mơ",
+      "cap": "HSK5",
+      "viDu": "只要坚持，梦想总会实现的。",
+      "viDuDoc": "Zhǐyào jiānchí, mèngxiǎng zǒng huì shíxiàn de.",
+      "viDuNghia": "Chỉ cần kiên trì, ước mơ rồi sẽ thành hiện thực.",
+      "cumTu": [
+        "实现梦想",
+        "追求梦想",
+        "梦想成真"
+      ]
+    },
+    {
+      "chu": "奇迹",
+      "doc": "qíjì",
+      "loai": "n",
+      "nghia": "kỳ tích, phép màu",
+      "cap": "HSK5",
+      "viDu": "他能活下来简直是一个奇迹。",
+      "viDuDoc": "Tā néng huó xiàlái jiǎnzhí shì yí gè qíjì.",
+      "viDuNghia": "Anh ấy sống sót được quả là một phép màu.",
+      "cumTu": [
+        "创造奇迹",
+        "出现奇迹",
+        "医学奇迹"
+      ]
+    },
+    {
+      "chu": "毛病",
+      "doc": "máobìng",
+      "loai": "n",
+      "nghia": "tật, lỗi, trục trặc",
+      "cap": "HSK5",
+      "viDu": "我的电脑出了点儿毛病。",
+      "viDuDoc": "Wǒ de diànnǎo chū le diǎnr máobìng.",
+      "viDuNghia": "Máy tính của tôi bị trục trặc một chút.",
+      "cumTu": [
+        "出毛病",
+        "老毛病",
+        "改掉毛病"
+      ],
+      "ghiChu": "毛病 vừa chỉ hỏng hóc máy móc, vừa chỉ tật xấu (他有迟到的毛病)."
+    },
+    {
+      "chu": "借口",
+      "doc": "jièkǒu",
+      "loai": "n",
+      "nghia": "cớ, lời bào chữa",
+      "cap": "HSK5",
+      "viDu": "别再找借口了，快去做作业。",
+      "viDuDoc": "Bié zài zhǎo jièkǒu le, kuài qù zuò zuòyè.",
+      "viDuNghia": "Đừng tìm cớ nữa, mau đi làm bài tập.",
+      "cumTu": [
+        "找借口",
+        "以…为借口"
+      ]
+    },
+    {
+      "chu": "用途",
+      "doc": "yòngtú",
+      "loai": "n",
+      "nghia": "công dụng",
+      "cap": "HSK5",
+      "viDu": "这种植物有很多用途。",
+      "viDuDoc": "Zhè zhǒng zhíwù yǒu hěn duō yòngtú.",
+      "viDuNghia": "Loài cây này có nhiều công dụng.",
+      "cumTu": [
+        "用途广泛",
+        "有什么用途"
+      ]
+    },
+    {
+      "chu": "种类",
+      "doc": "zhǒnglèi",
+      "loai": "n",
+      "nghia": "chủng loại, loại",
+      "cap": "HSK5",
+      "viDu": "超市里水果的种类很多。",
+      "viDuDoc": "Chāoshì li shuǐguǒ de zhǒnglèi hěn duō.",
+      "viDuNghia": "Siêu thị có rất nhiều loại hoa quả.",
+      "cumTu": [
+        "种类繁多",
+        "不同种类"
+      ],
+      "ghiChu": "种 ở đây đọc zhǒng (thanh 3); 种树 đọc zhòng."
+    },
+    {
+      "chu": "秩序",
+      "doc": "zhìxù",
+      "loai": "n",
+      "nghia": "trật tự",
+      "cap": "HSK5",
+      "viDu": "请大家排队，遵守秩序。",
+      "viDuDoc": "Qǐng dàjiā páiduì, zūnshǒu zhìxù.",
+      "viDuNghia": "Mời mọi người xếp hàng, giữ trật tự.",
+      "cumTu": [
+        "社会秩序",
+        "交通秩序",
+        "维持秩序"
+      ]
+    },
+    {
+      "chu": "纪律",
+      "doc": "jìlǜ",
+      "loai": "n",
+      "nghia": "kỷ luật",
+      "cap": "HSK5",
+      "viDu": "上课要遵守课堂纪律。",
+      "viDuDoc": "Shàngkè yào zūnshǒu kètáng jìlǜ.",
+      "viDuNghia": "Lên lớp phải tuân thủ kỷ luật lớp học.",
+      "cumTu": [
+        "遵守纪律",
+        "违反纪律",
+        "纪律严明"
+      ]
+    },
+    {
+      "chu": "记忆",
+      "doc": "jìyì",
+      "loai": "n",
+      "nghia": "trí nhớ, ký ức",
+      "cap": "HSK5",
+      "viDu": "那个夏天一直留在我的记忆里。",
+      "viDuDoc": "Nàge xiàtiān yìzhí liú zài wǒ de jìyì li.",
+      "viDuNghia": "Mùa hè năm ấy mãi đọng lại trong ký ức tôi.",
+      "cumTu": [
+        "记忆力",
+        "美好的记忆",
+        "失去记忆"
+      ]
+    },
+    {
+      "chu": "精力",
+      "doc": "jīnglì",
+      "loai": "n",
+      "nghia": "sức lực, tinh lực",
+      "cap": "HSK5",
+      "viDu": "他把全部精力都放在了工作上。",
+      "viDuDoc": "Tā bǎ quánbù jīnglì dōu fàng zài le gōngzuò shàng.",
+      "viDuNghia": "Anh ấy dồn toàn bộ sức lực vào công việc.",
+      "cumTu": [
+        "精力充沛",
+        "集中精力",
+        "花精力"
+      ],
+      "ghiChu": "精力 (sức lực làm việc) khác 精神 (tinh thần; 有精神 = tỉnh táo, phấn chấn)."
+    },
+    {
+      "chu": "能源",
+      "doc": "néngyuán",
+      "loai": "n",
+      "nghia": "năng lượng, nguồn năng lượng",
+      "cap": "HSK5",
+      "viDu": "太阳能是一种清洁能源。",
+      "viDuDoc": "Tàiyángnéng shì yì zhǒng qīngjié néngyuán.",
+      "viDuNghia": "Năng lượng mặt trời là một nguồn năng lượng sạch.",
+      "cumTu": [
+        "节约能源",
+        "新能源",
+        "能源危机"
+      ]
+    },
+    {
+      "chu": "本领",
+      "doc": "běnlǐng",
+      "loai": "n",
+      "nghia": "tài năng, khả năng",
+      "cap": "HSK5",
+      "viDu": "要想在社会上生存，就得有真本领。",
+      "viDuDoc": "Yào xiǎng zài shèhuì shàng shēngcún, jiù děi yǒu zhēn běnlǐng.",
+      "viDuNghia": "Muốn tồn tại ngoài xã hội thì phải có năng lực thật.",
+      "cumTu": [
+        "学本领",
+        "有本领",
+        "本领高强"
+      ],
+      "ghiChu": "本领 = tài năng, kỹ năng làm việc (không phải \"bản lĩnh\" theo nghĩa vững vàng tinh thần trong tiếng Việt). 得 ở đây đọc děi."
+    },
+    {
+      "chu": "身份",
+      "doc": "shēnfèn",
+      "loai": "n",
+      "nghia": "thân phận, danh tính",
+      "cap": "HSK5",
+      "viDu": "请出示您的身份证。",
+      "viDuDoc": "Qǐng chūshì nín de shēnfènzhèng.",
+      "viDuNghia": "Xin vui lòng xuất trình chứng minh thư.",
+      "cumTu": [
+        "身份证",
+        "身份不明",
+        "以…的身份"
+      ]
+    },
+    {
+      "chu": "风格",
+      "doc": "fēnggé",
+      "loai": "n",
+      "nghia": "phong cách",
+      "cap": "HSK5",
+      "viDu": "我很喜欢这位作家的写作风格。",
+      "viDuDoc": "Wǒ hěn xǐhuan zhè wèi zuòjiā de xiězuò fēnggé.",
+      "viDuNghia": "Tôi rất thích phong cách viết của nhà văn này.",
+      "cumTu": [
+        "个人风格",
+        "独特的风格",
+        "风格不同"
+      ]
+    },
+    {
+      "chu": "风俗",
+      "doc": "fēngsú",
+      "loai": "n",
+      "nghia": "phong tục",
+      "cap": "HSK5",
+      "viDu": "每个地方都有自己的风俗习惯。",
+      "viDuDoc": "Měi gè dìfang dōu yǒu zìjǐ de fēngsú xíguàn.",
+      "viDuNghia": "Mỗi nơi đều có phong tục tập quán riêng.",
+      "cumTu": [
+        "风俗习惯",
+        "民间风俗",
+        "尊重风俗"
+      ]
+    },
+    {
+      "chu": "地区",
+      "doc": "dìqū",
+      "loai": "n",
+      "nghia": "khu vực, vùng",
+      "cap": "HSK5",
+      "viDu": "这个地区冬天很冷。",
+      "viDuDoc": "Zhège dìqū dōngtiān hěn lěng.",
+      "viDuNghia": "Vùng này mùa đông rất lạnh.",
+      "cumTu": [
+        "偏远地区",
+        "沿海地区",
+        "地区差异"
+      ]
+    },
+    {
+      "chu": "战争",
+      "doc": "zhànzhēng",
+      "loai": "n",
+      "nghia": "chiến tranh",
+      "cap": "HSK5",
+      "viDu": "没有人喜欢战争。",
+      "viDuDoc": "Méiyǒu rén xǐhuan zhànzhēng.",
+      "viDuNghia": "Không ai thích chiến tranh.",
+      "cumTu": [
+        "发动战争",
+        "战争爆发",
+        "反对战争"
+      ]
+    },
+    {
+      "chu": "和平",
+      "doc": "hépíng",
+      "loai": "n",
+      "nghia": "hòa bình",
+      "cap": "HSK5",
+      "viDu": "全世界人民都希望和平。",
+      "viDuDoc": "Quán shìjiè rénmín dōu xīwàng hépíng.",
+      "viDuNghia": "Nhân dân toàn thế giới đều mong hòa bình.",
+      "cumTu": [
+        "世界和平",
+        "和平共处",
+        "热爱和平"
+      ]
+    },
+    {
+      "chu": "文明",
+      "doc": "wénmíng",
+      "loai": "n",
+      "nghia": "văn minh; (tính từ) lịch sự, có văn hóa",
+      "cap": "HSK5",
+      "viDu": "请文明用语，不要说脏话。",
+      "viDuDoc": "Qǐng wénmíng yòngyǔ, búyào shuō zānghuà.",
+      "viDuNghia": "Hãy dùng lời lẽ lịch sự, đừng nói tục.",
+      "cumTu": [
+        "古代文明",
+        "文明礼貌",
+        "文明城市"
+      ]
+    },
+    {
+      "chu": "思想",
+      "doc": "sīxiǎng",
+      "loai": "n",
+      "nghia": "tư tưởng, suy nghĩ",
+      "cap": "HSK5",
+      "viDu": "这本书的思想很深刻。",
+      "viDuDoc": "Zhè běn shū de sīxiǎng hěn shēnkè.",
+      "viDuNghia": "Tư tưởng của cuốn sách này rất sâu sắc.",
+      "cumTu": [
+        "思想开放",
+        "思想家",
+        "思想观念"
+      ]
+    },
+    {
+      "chu": "项目",
+      "doc": "xiàngmù",
+      "loai": "n",
+      "nghia": "hạng mục, dự án",
+      "cap": "HSK5",
+      "viDu": "我们正在做一个新项目。",
+      "viDuDoc": "Wǒmen zhèngzài zuò yí gè xīn xiàngmù.",
+      "viDuNghia": "Chúng tôi đang làm một dự án mới.",
+      "cumTu": [
+        "项目经理",
+        "合作项目",
+        "体育项目"
+      ]
+    },
+    {
+      "chu": "业务",
+      "doc": "yèwù",
+      "loai": "n",
+      "nghia": "nghiệp vụ, công việc chuyên môn",
+      "cap": "HSK5",
+      "viDu": "他刚来公司，对业务还不太熟悉。",
+      "viDuDoc": "Tā gāng lái gōngsī, duì yèwù hái bú tài shúxī.",
+      "viDuNghia": "Anh ấy mới vào công ty, còn chưa quen nghiệp vụ lắm.",
+      "cumTu": [
+        "业务能力",
+        "开展业务",
+        "业务范围"
+      ]
+    },
+    {
+      "chu": "设备",
+      "doc": "shèbèi",
+      "loai": "n",
+      "nghia": "thiết bị",
+      "cap": "HSK5",
+      "viDu": "医院新买了一批先进的设备。",
+      "viDuDoc": "Yīyuàn xīn mǎi le yì pī xiānjìn de shèbèi.",
+      "viDuNghia": "Bệnh viện mới mua một lô thiết bị tiên tiến.",
+      "cumTu": [
+        "医疗设备",
+        "先进设备",
+        "设备齐全"
+      ],
+      "ghiChu": "设备 (máy móc, thiết bị) khác 设施 (cơ sở vật chất, công trình phục vụ: 公共设施)."
+    },
+    {
+      "chu": "设施",
+      "doc": "shèshī",
+      "loai": "n",
+      "nghia": "cơ sở vật chất, tiện ích",
+      "cap": "HSK5",
+      "viDu": "这个小区的配套设施很完善。",
+      "viDuDoc": "Zhège xiǎoqū de pèitào shèshī hěn wánshàn.",
+      "viDuNghia": "Các tiện ích đi kèm của khu dân cư này rất đầy đủ.",
+      "cumTu": [
+        "公共设施",
+        "基础设施",
+        "设施完善"
+      ],
+      "ghiChu": "Xem 设备."
+    },
+    {
+      "chu": "成分",
+      "doc": "chéngfèn",
+      "loai": "n",
+      "nghia": "thành phần",
+      "cap": "HSK5",
+      "viDu": "这种药的主要成分是什么？",
+      "viDuDoc": "Zhè zhǒng yào de zhǔyào chéngfèn shì shénme?",
+      "viDuNghia": "Thành phần chính của loại thuốc này là gì?",
+      "cumTu": [
+        "主要成分",
+        "化学成分",
+        "营养成分"
+      ],
+      "ghiChu": "分 đọc fèn (thanh 4)."
+    },
+    {
+      "chu": "情景",
+      "doc": "qíngjǐng",
+      "loai": "n",
+      "nghia": "cảnh tượng, tình cảnh",
+      "cap": "HSK5",
+      "viDu": "我还记得第一次见到她时的情景。",
+      "viDuDoc": "Wǒ hái jìde dì yī cì jiàn dào tā shí de qíngjǐng.",
+      "viDuNghia": "Tôi vẫn nhớ cảnh lần đầu gặp cô ấy.",
+      "cumTu": [
+        "当时的情景",
+        "情景对话"
+      ]
+    },
+    {
+      "chu": "青春",
+      "doc": "qīngchūn",
+      "loai": "n",
+      "nghia": "tuổi thanh xuân",
+      "cap": "HSK5",
+      "viDu": "不要浪费你的青春。",
+      "viDuDoc": "Búyào làngfèi nǐ de qīngchūn.",
+      "viDuNghia": "Đừng lãng phí tuổi thanh xuân của bạn.",
+      "cumTu": [
+        "青春期",
+        "青春时代",
+        "青春活力"
+      ]
+    },
+    {
+      "chu": "寿命",
+      "doc": "shòumìng",
+      "loai": "n",
+      "nghia": "tuổi thọ",
+      "cap": "HSK5",
+      "viDu": "现代人的平均寿命越来越长。",
+      "viDuDoc": "Xiàndài rén de píngjūn shòumìng yuè lái yuè cháng.",
+      "viDuNghia": "Tuổi thọ trung bình của người hiện đại ngày càng cao.",
+      "cumTu": [
+        "平均寿命",
+        "延长寿命",
+        "使用寿命"
+      ],
+      "ghiChu": "使用寿命 = tuổi thọ sử dụng của máy móc, đồ vật."
+    },
+    {
+      "chu": "利益",
+      "doc": "lìyì",
+      "loai": "n",
+      "nghia": "lợi ích",
+      "cap": "HSK5",
+      "viDu": "我们不能只考虑自己的利益。",
+      "viDuDoc": "Wǒmen bù néng zhǐ kǎolǜ zìjǐ de lìyì.",
+      "viDuNghia": "Chúng ta không thể chỉ nghĩ đến lợi ích của bản thân.",
+      "cumTu": [
+        "个人利益",
+        "共同利益",
+        "经济利益"
+      ]
+    },
+    {
+      "chu": "贡献",
+      "doc": "gòngxiàn",
+      "loai": "n",
+      "nghia": "cống hiến, đóng góp",
+      "cap": "HSK5",
+      "viDu": "他为国家的发展做出了巨大贡献。",
+      "viDuDoc": "Tā wèi guójiā de fāzhǎn zuò chū le jùdà gòngxiàn.",
+      "viDuNghia": "Ông ấy đã có đóng góp to lớn cho sự phát triển của đất nước.",
+      "cumTu": [
+        "做出贡献",
+        "突出贡献",
+        "为…贡献力量"
+      ],
+      "ghiChu": "Cụm cố định: 为…做出贡献."
+    },
+    {
+      "chu": "步骤",
+      "doc": "bùzhòu",
+      "loai": "n",
+      "nghia": "bước, trình tự",
+      "cap": "HSK5",
+      "viDu": "请按照说明书上的步骤操作。",
+      "viDuDoc": "Qǐng ànzhào shuōmíngshū shàng de bùzhòu cāozuò.",
+      "viDuNghia": "Hãy thao tác theo các bước trong sách hướng dẫn.",
+      "cumTu": [
+        "操作步骤",
+        "具体步骤",
+        "有步骤地"
+      ]
+    },
+    {
+      "chu": "标志",
+      "doc": "biāozhì",
+      "loai": "n",
+      "nghia": "biểu tượng, dấu hiệu",
+      "cap": "HSK5",
+      "viDu": "长城是中国的标志之一。",
+      "viDuDoc": "Chángchéng shì Zhōngguó de biāozhì zhī yī.",
+      "viDuNghia": "Vạn Lý Trường Thành là một trong những biểu tượng của Trung Quốc.",
+      "cumTu": [
+        "标志着",
+        "交通标志",
+        "明显的标志"
+      ],
+      "ghiChu": "标志着 = đánh dấu (这标志着一个新时代的开始)."
+    },
+    {
+      "chu": "象征",
+      "doc": "xiàngzhēng",
+      "loai": "v",
+      "nghia": "tượng trưng; biểu tượng",
+      "cap": "HSK5",
+      "viDu": "在中国，红色象征着幸福和好运。",
+      "viDuDoc": "Zài Zhōngguó, hóngsè xiàngzhēng zhe xìngfú hé hǎoyùn.",
+      "viDuNghia": "Ở Trung Quốc, màu đỏ tượng trưng cho hạnh phúc và may mắn.",
+      "cumTu": [
+        "象征着",
+        "…的象征"
+      ]
+    },
+    {
+      "chu": "秘密",
+      "doc": "mìmì",
+      "loai": "n",
+      "nghia": "bí mật",
+      "cap": "HSK5",
+      "viDu": "这是我们俩之间的秘密，不能告诉别人。",
+      "viDuDoc": "Zhè shì wǒmen liǎ zhījiān de mìmì, bù néng gàosu biérén.",
+      "viDuNghia": "Đây là bí mật giữa hai chúng ta, không được nói với ai.",
+      "cumTu": [
+        "保守秘密",
+        "公开的秘密",
+        "秘密地"
+      ]
+    },
+    {
+      "chu": "制度",
+      "doc": "zhìdù",
+      "loai": "n",
+      "nghia": "chế độ, quy chế",
+      "cap": "HSK5",
+      "viDu": "公司有严格的考勤制度。",
+      "viDuDoc": "Gōngsī yǒu yángé de kǎoqín zhìdù.",
+      "viDuNghia": "Công ty có quy chế chấm công nghiêm ngặt.",
+      "cumTu": [
+        "规章制度",
+        "教育制度",
+        "建立制度"
+      ]
+    },
+    {
+      "chu": "组织",
+      "doc": "zǔzhī",
+      "loai": "v",
+      "nghia": "tổ chức; tổ chức (danh từ)",
+      "cap": "HSK5",
+      "viDu": "这次活动是由学生会组织的。",
+      "viDuDoc": "Zhè cì huódòng shì yóu xuéshēnghuì zǔzhī de.",
+      "viDuNghia": "Hoạt động lần này do hội sinh viên tổ chức.",
+      "cumTu": [
+        "组织活动",
+        "国际组织",
+        "组织能力"
+      ]
+    },
+    {
+      "chu": "主题",
+      "doc": "zhǔtí",
+      "loai": "n",
+      "nghia": "chủ đề",
+      "cap": "HSK5",
+      "viDu": "这次演讲比赛的主题是“我的梦想”。",
+      "viDuDoc": "Zhè cì yǎnjiǎng bǐsài de zhǔtí shì “Wǒ de mèngxiǎng”.",
+      "viDuNghia": "Chủ đề của cuộc thi diễn thuyết lần này là \"Ước mơ của tôi\".",
+      "cumTu": [
+        "主题曲",
+        "讨论主题",
+        "主题明确"
+      ]
+    },
+    {
+      "chu": "主张",
+      "doc": "zhǔzhāng",
+      "loai": "v",
+      "nghia": "chủ trương; chủ trương (danh từ)",
+      "cap": "HSK5",
+      "viDu": "他主张用和平的方式解决问题。",
+      "viDuDoc": "Tā zhǔzhāng yòng hépíng de fāngshì jiějué wèntí.",
+      "viDuNghia": "Ông ấy chủ trương giải quyết vấn đề bằng phương thức hòa bình.",
+      "cumTu": [
+        "自作主张",
+        "提出主张",
+        "主张…"
+      ]
+    },
+    {
+      "chu": "语气",
+      "doc": "yǔqì",
+      "loai": "n",
+      "nghia": "giọng điệu, ngữ khí",
+      "cap": "HSK5",
+      "viDu": "他说话的语气让人很不舒服。",
+      "viDuDoc": "Tā shuōhuà de yǔqì ràng rén hěn bù shūfu.",
+      "viDuNghia": "Giọng điệu nói chuyện của anh ta khiến người ta rất khó chịu.",
+      "cumTu": [
+        "语气温和",
+        "说话语气",
+        "语气词"
+      ]
+    },
+    {
+      "chu": "成语",
+      "doc": "chéngyǔ",
+      "loai": "n",
+      "nghia": "thành ngữ",
+      "cap": "HSK5",
+      "viDu": "学汉语的时候，多学一些成语很有用。",
+      "viDuDoc": "Xué Hànyǔ de shíhou, duō xué yìxiē chéngyǔ hěn yǒuyòng.",
+      "viDuNghia": "Khi học tiếng Trung, học thêm thành ngữ rất có ích.",
+      "cumTu": [
+        "成语故事",
+        "四字成语"
+      ]
+    },
+    {
+      "chu": "打交道",
+      "doc": "dǎ jiāodao",
+      "loai": "phr",
+      "nghia": "giao thiệp, làm việc với",
+      "cap": "HSK5",
+      "viDu": "做销售工作每天都要跟不同的人打交道。",
+      "viDuDoc": "Zuò xiāoshòu gōngzuò měi tiān dōu yào gēn bùtóng de rén dǎ jiāodao.",
+      "viDuNghia": "Làm nghề bán hàng ngày nào cũng phải giao thiệp với đủ kiểu người.",
+      "cumTu": [
+        "跟…打交道",
+        "不好打交道"
+      ],
+      "ghiChu": "Mẫu: 跟/和 + người + 打交道."
+    },
+    {
+      "chu": "讨价还价",
+      "doc": "tǎojià-huánjià",
+      "loai": "phr",
+      "nghia": "mặc cả",
+      "cap": "HSK5",
+      "viDu": "在市场买东西可以讨价还价。",
+      "viDuDoc": "Zài shìchǎng mǎi dōngxi kěyǐ tǎojià-huánjià.",
+      "viDuNghia": "Mua đồ ở chợ có thể mặc cả.",
+      "cumTu": [
+        "跟老板讨价还价"
+      ],
+      "ghiChu": "还 ở đây đọc huán (trả lại), không đọc hái."
+    },
+    {
+      "chu": "舍不得",
+      "doc": "shěbude",
+      "loai": "v",
+      "nghia": "không nỡ, tiếc",
+      "cap": "HSK5",
+      "viDu": "我舍不得离开这座城市。",
+      "viDuDoc": "Wǒ shěbude líkāi zhè zuò chéngshì.",
+      "viDuNghia": "Tôi không nỡ rời khỏi thành phố này.",
+      "cumTu": [
+        "舍不得花钱",
+        "舍不得走",
+        "舍不得扔"
+      ],
+      "ghiChu": "舍 đọc shě (thanh 3); trái nghĩa: 舍得."
+    },
+    {
+      "chu": "忍不住",
+      "doc": "rěnbuzhù",
+      "loai": "v",
+      "nghia": "không nhịn được",
+      "cap": "HSK5",
+      "viDu": "看到这个视频，我忍不住笑了。",
+      "viDuDoc": "Kàn dào zhège shìpín, wǒ rěnbuzhù xiào le.",
+      "viDuNghia": "Xem video này, tôi không nhịn được cười.",
+      "cumTu": [
+        "忍不住笑",
+        "忍不住哭了起来"
+      ]
+    },
+    {
+      "chu": "看不起",
+      "doc": "kànbuqǐ",
+      "loai": "v",
+      "nghia": "coi thường",
+      "cap": "HSK5",
+      "viDu": "你不要看不起任何一种工作。",
+      "viDuDoc": "Nǐ búyào kànbuqǐ rènhé yì zhǒng gōngzuò.",
+      "viDuNghia": "Bạn đừng coi thường bất kỳ công việc nào.",
+      "cumTu": [
+        "被人看不起",
+        "看不起别人"
+      ],
+      "ghiChu": "Trái nghĩa: 看得起."
+    },
+    {
+      "chu": "名胜古迹",
+      "doc": "míngshèng gǔjì",
+      "loai": "n",
+      "nghia": "danh lam thắng cảnh, di tích",
+      "cap": "HSK5",
+      "viDu": "北京有很多名胜古迹。",
+      "viDuDoc": "Běijīng yǒu hěn duō míngshèng gǔjì.",
+      "viDuNghia": "Bắc Kinh có rất nhiều danh lam thắng cảnh, di tích.",
+      "cumTu": [
+        "参观名胜古迹"
+      ]
+    },
+    {
+      "chu": "一辈子",
+      "doc": "yībèizi",
+      "loai": "n",
+      "nghia": "cả đời",
+      "cap": "HSK5",
+      "viDu": "这件事我一辈子都忘不了。",
+      "viDuDoc": "Zhè jiàn shì wǒ yíbèizi dōu wàng bu liǎo.",
+      "viDuNghia": "Chuyện này cả đời tôi cũng không quên được.",
+      "cumTu": [
+        "一辈子的朋友",
+        "过一辈子"
+      ]
+    }
+  ]
+}

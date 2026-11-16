@@ -831,3 +831,10 @@ Mẫu một mục:
 - **Cách sửa:** `laWav16kChuan` kiểm đúng chuẩn; không đúng ⇒ `doiWav16k` dùng ffmpeg (có sẵn trong ảnh backend) đổi về WAV PCM 16 kHz mono rồi mới chấm; rỗng/hỏng ⇒ câu dễ hiểu "dừng video rồi bấm micro đọc lại"; test trong `phatAm.test.ts`.
 - **Ảnh hưởng:** người dùng Pro không chấm được phát âm trong màn video (các màn khác ghi WAV chuẩn nên không dính).
 - **Bài học:** đầu vào âm thanh từ thiết bị phải được chuẩn hoá ở máy chủ, đừng giả định đúng định dạng — phiên âm thanh của màn khác có thể đổi cách ghi.
+
+### 16/11/2026 — app iOS (đăng nhập Google/GitHub qua web) — kiểu `HinhSVG` trùng tên làm vỡ bản dựng CuongThai + CT Courses
+- **Triệu chứng:** sau khi thêm `Shared/Auth/DangNhapQuaWeb.swift`, scheme CuongThaiApp và CTCoursesApp báo "invalid redeclaration of 'HinhSVG'"; CT Language vẫn xanh.
+- **Nguyên nhân:** tệp mới khai `struct HinhSVG` trùng `Shared/Sach/HinhSVG.swift:21`; CT Language không kéo `Shared/Sach/` nên không lộ, app chính kéo cả `Shared/`.
+- **Cách sửa:** đổi tên thành `HinhLogoMxh` (chưa commit); dựng lại scheme CuongThaiApp xanh.
+- **Ảnh hưởng:** chỉ bản dựng cục bộ của hai app kia trong lúc làm, chưa lên bản nào.
+- **Bài học:** thêm tệp vào `Shared/` ⇒ grep tên kiểu trên TOÀN `CuongThaiApp/` và dựng cả scheme CuongThaiApp, không chỉ app đang làm.

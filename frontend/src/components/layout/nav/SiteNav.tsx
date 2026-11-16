@@ -305,6 +305,7 @@ export default function SiteNav() {
   const isBarePage = (pathname?.startsWith('/creator') ?? false)
     || (pathname?.startsWith('/nhung-video') ?? false) // bare iframe frame for the desktop app overlay
     || (pathname?.startsWith('/admin') ?? false) // admin has its own shell
+    || (pathname?.startsWith('/dang-nhap-app') ?? false) // trang đăng nhập cho app iOS (mở trong ASWebAuthenticationSession)
     || pathname === '/work' || (pathname?.startsWith('/work/') ?? false); // CT Work has its own shell
   if (isAuthPage || isBarePage) return null;
 

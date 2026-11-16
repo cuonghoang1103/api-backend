@@ -10,6 +10,9 @@ import type { ApiResponse, AuthResponse } from '../types/index.js';
 import mfaRoutes from './mfa.routes.js';
 import { laLoiGoiNoiBo, xacMinhOAuth } from '../services/xacMinhOAuth.js';
 import { luuTokenApple } from '../services/appleSiwa.service.js';
+import {
+  chuyenHuongLoi, doiMa, khoMacDinh, laMaApp, laNhaCungCapQuaWeb, laThu, laTrangThai, taoMa, type MaApp,
+} from '../services/maDangNhapApp.js';
 import { logger } from '../utils/logger.js';
 
 const router = Router();
@@ -263,6 +266,83 @@ router.post(
         maxAge: 30 * 24 * 60 * 60 * 1000, // 30 ngày (08/11/2026) — gia hạn trượt ở frontend lib/hetPhien.ts
         path: '/',
       });
+      res.json({ success: true, data: result });
+    } catch (error) {
+      next(error);
+    }
+  },
+);
+
+// ─── Đăng nhập app di động QUA WEB (16/11/2026) ───────────
+// App mở ASWebAuthenticationSession tới cuongthai.com/dang-nhap-app → web đăng nhập Google/GitHub bằng NextAuth →
+// máy chủ Next gọi /app/tao-ma (chữ ký nội bộ) → chuyển hướng `<scheme>://dang-nhap?ma=…&trangThai=…` → app gọi
+// /app/doi-ma kèm mã xác minh PKCE. Luật bảo mật: đầu file services/maDangNhapApp.ts.
+
+// POST /api/v1/auth/app/tao-ma — CHỈ máy chủ Next (đã xác minh đăng nhập ở NextAuth).
+router.post(
+  '/app/tao-ma',
+  (req: Request, _res: Response, next: NextFunction) => {
+    // Chặn TRƯỚC khi kiểm thân: bên ngoài không được biết gì về tuyến này ngoài 401.
+    if (!laLoiGoiNoiBo(req.headers as Record<string, unknown>)) {
+      next(new AppError('Unauthorized', 401, 'NOI_BO_ONLY'));
+      return;
+    }
+    next();
+  },
+  [
+    body('email').isEmail().withMessage('Valid email is required'),
+    body('provider').custom((v) => laNhaCungCapQuaWeb(v)).withMessage('provider must be google or github'),
+    body('providerId').isString().notEmpty().withMessage('Provider ID is required'),
+    body('avatarUrl').optional({ values: 'falsy' }).isURL({ protocols: ['https'], require_protocol: true })
+      .withMessage('avatarUrl must be an https URL'),
+    body('app').custom((v) => laMaApp(v)).withMessage('app không được phép'),
+    body('trangThai').custom((v) => laTrangThai(v)).withMessage('trangThai sai định dạng'),
+    body('thu').custom((v) => laThu(v)).withMessage('thu sai định dạng'),
+  ],
+  validate,
+  async (req: Request, res: Response<ApiResponse<{ chuyenHuong: string }>>, next: NextFunction) => {
+    try {
+      const { email, fullName, provider, providerId, avatarUrl, app, trangThai, thu } = req.body as Record<string, string>;
+      let userId: number;
+      try {
+        const r = await authService.oauthRegister({ email, fullName, provider, providerId, avatarUrl });
+        userId = r.userId;
+      } catch (e) {
+        // Tài khoản bị khoá / vô hiệu / là agent ⇒ báo VỀ APP (qua scheme cố định) để app hiện câu dễ hiểu,
+        // thay vì bỏ người dùng đứng trên trang lỗi trong cửa sổ đăng nhập.
+        if (e instanceof AppError && e.statusCode === 403) {
+          res.json({ success: true, data: { chuyenHuong: chuyenHuongLoi(app as MaApp, trangThai, e.code ?? 'FORBIDDEN') } });
+          return;
+        }
+        throw e;
+      }
+      const { chuyenHuong } = await taoMa(await khoMacDinh(), { userId, app, trangThai, thu });
+      res.json({ success: true, data: { chuyenHuong } });
+    } catch (error) {
+      next(error);
+    }
+  },
+);
+
+// POST /api/v1/auth/app/doi-ma — app đổi mã một lần lấy phiên (cùng dạng AuthResponse với /login, /oauth/token).
+router.post(
+  '/app/doi-ma',
+  [
+    body('ma').isString().notEmpty(),
+    body('app').isString().notEmpty(),
+    body('trangThai').isString().notEmpty(),
+    body('maXacMinh').isString().notEmpty(),
+  ],
+  validate,
+  async (req: Request, res: Response<ApiResponse<AuthResponse>>, next: NextFunction) => {
+    try {
+      const kq = await doiMa(await khoMacDinh(), req.body);
+      if (!kq.ok) {
+        logger.warn('[app-dang-nhap] từ chối đổi mã', { lyDo: kq.lyDo, app: String(req.body?.app ?? '').slice(0, 20), ip: req.ip });
+        // Một câu chung cho mọi lý do — không cho người dò biết sai ở khâu nào.
+        throw new AppError('Mã đăng nhập không hợp lệ hoặc đã hết hạn. Thử đăng nhập lại.', 400, 'APP_LOGIN_CODE_INVALID');
+      }
+      const result = await authService.capPhienChoApp(kq.userId, { ip: req.ip, userAgent: req.headers['user-agent'] });
       res.json({ success: true, data: result });
     } catch (error) {
       next(error);

@@ -27,7 +27,7 @@ export const KHOA = {
 const CAN_GIAY = 25 * 60;
 const CAN_NGAY = 2;
 const TRANG_CAM = ['/login', '/register', '/admin', '/gop-y', '/verify', '/forgot-password', '/reset-password',
-  '/phong-thi', '/exam', '/checkout', '/cart', '/oauth', '/onboarding'];
+  '/phong-thi', '/exam', '/checkout', '/cart', '/oauth', '/onboarding', '/dang-nhap-app'];
 
 const doc = (k: string) => { try { return localStorage.getItem(k); } catch { return null; } };
 const ghi = (k: string, v: string) => { try { localStorage.setItem(k, v); } catch { /* chế độ riêng tư */ } };

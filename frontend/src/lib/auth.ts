@@ -160,6 +160,10 @@ export const authConfig: NextAuthConfig = {
       const email = token.email as string | undefined;
       if (!email) return token;
 
+      /* Mốc đăng nhập nhà cung cấp VỪA xong (16/11/2026) — /api/auth/app/ma dùng để chắc phiên NextAuth được cấp
+       * TRONG lượt "đăng nhập app qua web" chứ không phải một phiên cũ còn sót trong trình duyệt. */
+      if (account && account.provider !== "credentials") token.dangNhapLuc = Date.now();
+
       /* 10/11/2026: callback này chạy ở MỌI lần đọc phiên (một lần tải trang ≈ 5 lần), và trước đây lần nào
        * cũng gọi backend /auth/role ⇒ chạm authLimiter (10 lượt/phút, chung một IP container cho cả site)
        * ⇒ chuỗi 429. Role chỉ cần tươi trong vòng 60 giây; đăng nhập mới (`account`) và `update()` thì luôn hỏi. */
@@ -260,6 +264,7 @@ export const authConfig: NextAuthConfig = {
         session.user.provider = (token.provider as string | null) ?? null;
         // Expose roleVersion so client components can detect role changes
         (session.user as any).roleVersion = (token.backendRoleVersion as number) ?? 0;
+        (session.user as unknown as Record<string, unknown>).dangNhapLuc = (token.dangNhapLuc as number | undefined) ?? null;
       }
       return session;
     },

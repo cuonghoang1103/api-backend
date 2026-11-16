@@ -1066,6 +1066,32 @@ export class AuthService {
     return this.buildAuthResponse(user, mfaAt);
   }
 
+  /**
+   * Cấp phiên cho app di động SAU khi đã đổi mã đăng nhập một lần (16/11/2026, `POST /auth/app/doi-ma` —
+   * services/maDangNhapApp.ts). KHÔNG tự kiểm mã ở đây. Kiểm lại tài khoản như mọi đường khác (có thể bị khoá
+   * trong 2 phút giữa lúc tạo và lúc đổi mã); agent bị chặn ở `buildAuthResponse`. Không mang claim MFA —
+   * y như đăng nhập OAuth: admin gặp MFA_REQUIRED ở tuyến quản trị và nhập mã sau.
+   */
+  async capPhienChoApp(userId: number, meta?: { ip?: string; userAgent?: string }): Promise<AuthResponse> {
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+      include: { roles: { include: { role: true } } },
+    });
+    if (!user) throw new AppError('User not found', 401, 'USER_NOT_FOUND');
+    if (!user.enabled) throw new AppError('Account is disabled', 403, 'ACCOUNT_DISABLED');
+    if (!user.accountNonLocked) throw new AppError('Account is locked', 403, 'ACCOUNT_LOCKED');
+    const res = this.buildAuthResponse(user);
+    await prisma.user.update({
+      where: { id: user.id },
+      data: {
+        lastLoginAt: new Date(),
+        lastLoginIp: meta?.ip ?? null,
+        lastLoginUserAgent: meta?.userAgent?.slice(0, 500) ?? null,
+      },
+    }).catch(() => { /* mốc đăng nhập chỉ để thống kê — không chặn đăng nhập */ });
+    return res;
+  }
+
   // ─── Build Auth Response ───────────────────────────────
   private buildAuthResponse(user: {
     id: number;

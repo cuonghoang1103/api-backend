@@ -44,7 +44,7 @@ export default {
     'sdn302-goc-2-2-node-http': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/server-side-development-nodejs-express-mongodb/01-nen-tang-nodejs/G01-04-node-http-tron-649187f9.mp4' }, defaultVideoTrack: 'VI'},
     'sdn302-goc-3-3-node-mongodb': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/server-side-development-nodejs-express-mongodb/03-mongodb-mongoose/G03-05-nodejs-mongodb-tron-bc6c2ff6.mp4' }, defaultVideoTrack: 'VI'},
     'sdn302-goc-5-1-population': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/server-side-development-nodejs-express-mongodb/03-mongodb-mongoose/G05-01-population-tron-3b216d66.mp4' }, defaultVideoTrack: 'VI'},
-    'sdn302-goc-13-cors': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/server-side-development-nodejs-express-mongodb/05-xac-thuc-bao-mat/G13-cors-f2d7f485.mp4' }, defaultVideoTrack: 'VI'},
+    'sdn302-goc-13-cors': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/server-side-development-nodejs-express-mongodb/05-xac-thuc-bao-mat/G13-cors-79744fa6.mp4' }, defaultVideoTrack: 'VI'},
     'sdn302-goc-15-16-baas': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/server-side-development-nodejs-express-mongodb/06-tich-hop-react-trien-khai/G15-16-baas-tron-4d87eb63.mp4' }, defaultVideoTrack: 'VI'},
     'sdn302-goc-17-19-nestjs-hono': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/server-side-development-nodejs-express-mongodb/08-nestjs-hono-production/G17-19-nest-tron-878b4a8f.mp4' }, defaultVideoTrack: 'VI'},
   },

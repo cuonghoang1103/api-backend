@@ -18,6 +18,13 @@ Mẫu một mục:
 
 ---
 
+### 16/11/2026 — Agent máy nhà (giám sát) — môn soạn xong vẫn mở phiên Claude rỗng 48 lần/ngày
+- **Triệu chứng:** CSX và CEA201 đã soạn xong, hôm nay mỗi môn vẫn bị mở phiên mới ~15 phút/lần (48 lần) chỉ để kiểm rồi thoát; MMA301 25 phiên rỗng chờ trả lời câu hỏi — tốn hạn mức Claude Max.
+- **Nguyên nhân:** `~/agent-nha/giam-sat.sh` chỉ nhận "môn xong" khi báo cáo có dòng tiêu đề `# XONG KHOÁ`; agent viết "phiên kiểm sau XONG KHOÁ" / "Khoá đã XONG" ⇒ không khớp; câu hỏi §13 của MMA không ai trả lời.
+- **Cách sửa:** mở rộng regex nhận "xong"; chuyển tay csx→wdp, cea→mad; trả lời §13 trong KE-HOACH-MMA301.md; thêm luật nho/ cho agent ghi đúng `## XONG KHOÁ` và bỏ viết phiên âm (giọng mới đọc chữ gốc).
+- **Ảnh hưởng:** ~120 phiên rỗng trong ngày 16/11 (và có thể từ trước).
+- **Bài học:** mỗi giờ đếm số phiên mở/agent trong giam-sat.log; phiên mở > 4/giờ mà báo cáo không tiến ⇒ kiểm ngay.
+
 ### 16/11/2026 — Video (điều phối) — lồng lại + render lại 27 tập ĐÃ CÓ trên web (Git, Auth)
 - **Triệu chứng:** user hỏi "khoá git làm xong rồi mà?" — 20 tập git + 6 auth + 1 tst bị đọc lại giọng mới, 15 tập render lại, dù web đã có video.
 - **Nguyên nhân:** danh sách "đã lồng tiếng mà chưa render" lấy từ `hang-giong-xong` trừ `hang-render-swt-xong` trên linux-nha — tập render ở chỗ khác (Mac/máy thuê cũ, hoặc đọc lại sau khi đã lên R2) không có dòng "ok" ở đó ⇒ lọt vào danh sách.

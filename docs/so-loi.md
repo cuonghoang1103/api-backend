@@ -894,3 +894,10 @@ Mẫu một mục:
 - **Cách sửa:** đổi sang mốc thời gian đầy đủ (dòng 6: `ts(d, h)` ghép ngày/tháng của dòng nhật ký với giờ rồi `mktime`); chạy lại ra 8 tập cuong8: từ Anh đúng 93,9% so 87,0% của cuong6.
 - **Ảnh hưởng:** chỉ một bảng số nội bộ sai trong vài phút, chưa báo ra ngoài.
 - **Bài học:** nhật ký chỉ in `dd/mm HH:MM` thì mọi phép so trước/sau phải ghép đủ ngày; đo quanh nửa đêm là lúc lộ.
+
+### 17/11/2026 — deploy (bộ kiểm CI trước push) — test Sign in with Apple chưa biết bundle CT Courses ⇒ deploy lên prod nhưng KHÔNG push main
+- **Triệu chứng:** `deploy-nha.sh` 276fbb17c tráo ảnh + smoke-test sạch 94 route, rồi bước 8 báo `✗ npm test — HỎNG` ⇒ bỏ qua `git push`, `origin/main` tụt sau 7 commit.
+- **Nguyên nhân:** commit 45dd42b26 (backend app iOS CT Courses) thêm `com.cuongthai.ctcourses` vào danh sách client id mặc định của `src/services/appleSiwa.ts` nhưng không sửa phép kiểm `src/services/appleSiwa.test.ts:56` vẫn đòi đúng ba bundle cũ.
+- **Cách sửa:** test đòi bốn bundle + kiểm `providerCho('com.cuongthai.ctcourses') === 'siwa:ctcourses'`; chạy lại `scripts/kiem-ci-truoc-push.sh` trên worktree sạch rồi mới push.
+- **Ảnh hưởng:** không ảnh hưởng người dùng (prod đã chạy bản mới); chỉ GitHub lệch production tới khi push.
+- **Bài học:** đổi một danh sách trắng thì `grep` tên hàm trong `*.test.ts` trước khi commit; `npx tsc` xanh không bắt được test so mảng cố định.

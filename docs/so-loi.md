@@ -18,6 +18,13 @@ Mẫu một mục:
 
 ---
 
+### 16/11/2026 — Video (điều phối) — lồng lại + render lại 27 tập ĐÃ CÓ trên web (Git, Auth)
+- **Triệu chứng:** user hỏi "khoá git làm xong rồi mà?" — 20 tập git + 6 auth + 1 tst bị đọc lại giọng mới, 15 tập render lại, dù web đã có video.
+- **Nguyên nhân:** danh sách "đã lồng tiếng mà chưa render" lấy từ `hang-giong-xong` trừ `hang-render-swt-xong` trên linux-nha — tập render ở chỗ khác (Mac/máy thuê cũ, hoặc đọc lại sau khi đã lên R2) không có dòng "ok" ở đó ⇒ lọt vào danh sách.
+- **Cách sửa:** đối chiếu với `content/course-videos/*.mjs` (có `vi:` = đã lên web) ⇒ 27 tập; gỡ 12 tập chưa render khỏi hàng render.
+- **Ảnh hưởng:** ~1–2 giờ làn giọng + ~1 giờ làn render máy thuê.
+- **Bài học:** trước khi làm lại hàng loạt, lấy NGUỒN SỰ THẬT cuối (video đã gắn web) để lọc, không lấy sổ trung gian của một máy.
+
 ### 16/11/2026 — Video (điều phối) — giọng mới lồng xong 20 tập/giờ mà render đứng không
 - **Triệu chứng:** sau khi chuyển sang giọng cuong6, 3 làn render nhàn rỗi suốt 1 giờ; kiem-gio báo "cho-soat 0"; sau-giong đánh "CẦN SOÁT lệch=54–68" cho tập đọc đúng.
 - **Nguyên nhân:** (1) `scratchpad/swt2/lech3.mts` so `doc` với `chuDoc()` (phiên âm cũ) — giọng mới dùng `chuDocGoc()` ⇒ câu nào cũng "lệch"; (2) `.da-soat-giu` còn dấu soát của bản giọng cũ ⇒ bước soát tay bỏ qua; (3) `anh-sot.py` bắt từ Anh "sót" — giờ giữ từ Anh là cố ý; (4) `dieu-phoi-linux/sau-giong.sh` gọi `dang-ky.mts` cho TỪNG tập (~15 phút/lượt khi máy bận) ⇒ thả tối đa ~4 tập/giờ.

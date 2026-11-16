@@ -824,3 +824,10 @@ Mẫu một mục:
 - **Cách sửa:** đổi sang nhãn "Mới bắt đầu"… trong đợt làm lại trang chủ (ios-app 5acc763).
 - **Ảnh hưởng:** mọi người dùng thấy chữ tiếng Anh thô trên trang chủ.
 - **Bài học:** mã lưu trữ không bao giờ hiện thẳng cho người dùng — luôn qua một hàm nhãn.
+
+### 16/11/2026 — CT Language (luyện phát âm trong Học qua video) — đọc theo 3–4 lần đều báo "Bản ghi phải là WAV PCM 16 kHz"
+- **Triệu chứng:** ở màn Học qua video, bấm micro đọc theo câu rồi chấm ⇒ luôn lỗi "Bản ghi phải là WAV PCM 16 kHz", không chấm được.
+- **Nguyên nhân:** `src/services/ctlanguage/phatAm.ts` chỉ nhận WAV có header đúng vị trí cố định (`giayCuaWav`); khi trình phát YouTube đang giữ phiên âm thanh, bản ghi của iPhone ra WAV khác dạng/tần số (hoặc rỗng) ⇒ bị từ chối cứng.
+- **Cách sửa:** `laWav16kChuan` kiểm đúng chuẩn; không đúng ⇒ `doiWav16k` dùng ffmpeg (có sẵn trong ảnh backend) đổi về WAV PCM 16 kHz mono rồi mới chấm; rỗng/hỏng ⇒ câu dễ hiểu "dừng video rồi bấm micro đọc lại"; test trong `phatAm.test.ts`.
+- **Ảnh hưởng:** người dùng Pro không chấm được phát âm trong màn video (các màn khác ghi WAV chuẩn nên không dính).
+- **Bài học:** đầu vào âm thanh từ thiết bị phải được chuẩn hoá ở máy chủ, đừng giả định đúng định dạng — phiên âm thanh của màn khác có thể đổi cách ghi.

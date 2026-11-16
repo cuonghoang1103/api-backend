@@ -50,8 +50,37 @@ export interface PhuThuocPhatAm {
   cham: typeof chamAzure;
   coKhoa: () => boolean;
   bayGio: () => Date;
+  /** Đổi bản ghi bất kỳ (WAV lạ, m4a…) về WAV PCM 16 kHz mono 16-bit; null = không đọc được. Test thay được. */
+  doiWav16k?: (buf: Buffer) => Promise<Buffer | null>;
 }
-const THAT: PhuThuocPhatAm = { laPro: isProEffective, cham: chamAzure, coKhoa: coKhoaPhatAm, bayGio: () => new Date() };
+const THAT: PhuThuocPhatAm = { laPro: isProEffective, cham: chamAzure, coKhoa: coKhoaPhatAm, bayGio: () => new Date(), doiWav16k };
+
+/** WAV PCM 16 kHz mono 16-bit, khối `fmt ` ngay sau header (đúng dạng `giayCuaWav`/Azure đọc). THUẦN. */
+export function laWav16kChuan(buf: Buffer): boolean {
+  if (buf.length < 44 || buf.toString('ascii', 0, 4) !== 'RIFF' || buf.toString('ascii', 8, 12) !== 'WAVE') return false;
+  if (buf.toString('ascii', 12, 16) !== 'fmt ' || buf.toString('ascii', 36, 40) !== 'data') return false;
+  return buf.readUInt16LE(20) === 1 && buf.readUInt16LE(22) === 1 && buf.readUInt32LE(24) === 16_000 && buf.readUInt16LE(34) === 16;
+}
+
+/** ffmpeg (có sẵn trong ảnh backend) đổi qua ống: vào bất kỳ ⇒ ra WAV PCM s16le 16 kHz mono. Trần 20 s. */
+export async function doiWav16k(buf: Buffer): Promise<Buffer | null> {
+  if (!buf.length) return null;
+  const { spawn } = await import('node:child_process');
+  return new Promise((ok) => {
+    const p = spawn('ffmpeg', ['-hide_banner', '-loglevel', 'error', '-i', 'pipe:0', '-ac', '1', '-ar', '16000', '-acodec', 'pcm_s16le', '-f', 'wav', '-bitexact', 'pipe:1']);
+    const ra: Buffer[] = [];
+    const hen = setTimeout(() => { p.kill('SIGKILL'); ok(null); }, 20_000);
+    p.stdout.on('data', (d: Buffer) => ra.push(d));
+    p.on('error', () => { clearTimeout(hen); ok(null); });
+    p.on('close', (ma) => {
+      clearTimeout(hen);
+      const out = Buffer.concat(ra);
+      ok(ma === 0 && laWav16kChuan(out) && out.length > 44 ? out : null);
+    });
+    p.stdin.on('error', () => { /* ffmpeg đóng sớm ⇒ close lo */ });
+    p.stdin.end(buf);
+  });
+}
 
 const dem = new Map<string, number>();
 const khoaDem = (userId: number, luc: Date) => `${userId}:${dauNgayVn(luc).toISOString().slice(0, 10)}`;
@@ -76,8 +105,13 @@ export async function luyenPhatAm(
   if (cau.length > TOI_DA_KY_TU) throw new BadRequestError(`Câu mẫu tối đa ${TOI_DA_KY_TU} ký tự`, 'CTL_PHAT_AM_CAU');
   const audio = b.audio;
   if (!audio?.length) throw new BadRequestError('Thiếu bản ghi', 'CTL_PHAT_AM_AUDIO');
-  const giay = giayCuaWav(audio);
-  if (giay == null) throw new BadRequestError('Bản ghi phải là WAV PCM 16 kHz', 'CTL_PHAT_AM_AUDIO');
+  // 16/11/2026: bản ghi từ màn "Học qua video" (trình phát YouTube đang giữ phiên âm thanh) có thể ra WAV có khối phụ /
+  // tần số khác / m4a — trước đây báo cứng "phải là WAV PCM 16 kHz" và người học kẹt. Nay: không đúng chuẩn ⇒ ffmpeg đổi
+  // về WAV PCM 16 kHz mono 16-bit rồi chấm; rỗng/hỏng hẳn ⇒ câu dễ hiểu.
+  const wav = laWav16kChuan(audio) ? audio : await (pt.doiWav16k ?? doiWav16k)(audio);
+  if (!wav) throw new BadRequestError('Bản ghi bị rỗng hoặc hỏng — dừng video rồi bấm micro đọc lại nhé', 'CTL_PHAT_AM_AUDIO');
+  const giay = giayCuaWav(wav);
+  if (giay == null) throw new BadRequestError('Bản ghi bị rỗng hoặc hỏng — dừng video rồi bấm micro đọc lại nhé', 'CTL_PHAT_AM_AUDIO');
   if (giay > TOI_DA_GIAY + 0.5) throw new BadRequestError(`Bản ghi tối đa ${TOI_DA_GIAY} giây`, 'CTL_PHAT_AM_QUA_DAI');
 
   const luot = await luotPhatAm(userId, pt);
@@ -91,7 +125,7 @@ export async function luyenPhatAm(
   }
 
   const lang = ngonNguPhatAm(giongAzure(nn, b.giong));
-  const r = await pt.cham({ audio, cau, lang, toiDaGiay: TOI_DA_GIAY + 0.5, ngonDieu: lang === 'en-US', toiDaKyTu: TOI_DA_KY_TU });
+  const r = await pt.cham({ audio: wav, cau, lang, toiDaGiay: TOI_DA_GIAY + 0.5, ngonDieu: lang === 'en-US', toiDaKyTu: TOI_DA_KY_TU });
   if (!r.ketQua) {
     const lyDo = r.lyDo ?? 'loi_may_cham';
     return { ketQua: null, lyDo, thongBao: THONG_BAO[lyDo], goiY: [], luot };

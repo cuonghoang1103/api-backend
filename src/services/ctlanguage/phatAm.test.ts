@@ -202,3 +202,21 @@ test('chamPhatAm cũ của web: đầu ra GIỮ NGUYÊN dạng (không lộ amTi
   const r = await chamPhatAm(99, { audio: wav(1), cau: 'Hi', giong: 'uk' });
   assert.deepEqual(r, { ketQua: { diem: { chinhXac: 80, troiChay: 90, dayDu: 100, tong: 85 }, ngheRa: 'Hi.', tu: [{ tu: 'hi', diem: 80, loi: 'None', am: [{ am: '', diem: 70 }] }] } });
 });
+
+test('bản ghi không đúng WAV 16 kHz (vd từ màn Học qua video) ⇒ ffmpeg đổi về chuẩn rồi chấm, rỗng/hỏng ⇒ câu dễ hiểu', async () => {
+  const { laWav16kChuan, doiWav16k } = await import('./phatAm.js');
+  // WAV 44,1 kHz stereo 16-bit, 0,5 s im lặng
+  const sr = 44_100, ch = 2, n = Math.floor(sr * 0.5);
+  const h = Buffer.alloc(44);
+  h.write('RIFF', 0); h.writeUInt32LE(36 + n * ch * 2, 4); h.write('WAVE', 8); h.write('fmt ', 12);
+  h.writeUInt32LE(16, 16); h.writeUInt16LE(1, 20); h.writeUInt16LE(ch, 22); h.writeUInt32LE(sr, 24);
+  h.writeUInt32LE(sr * ch * 2, 28); h.writeUInt16LE(ch * 2, 32); h.writeUInt16LE(16, 34); h.write('data', 36); h.writeUInt32LE(n * ch * 2, 40);
+  const lech = Buffer.concat([h, Buffer.alloc(n * ch * 2)]);
+  assert.equal(laWav16kChuan(lech), false);
+  const doi = await doiWav16k(lech);
+  if (doi) {   // máy có ffmpeg (ảnh backend luôn có)
+    assert.equal(laWav16kChuan(doi), true);
+  }
+  assert.equal(await doiWav16k(Buffer.from('khong phai am thanh')), null);
+  assert.equal(await doiWav16k(Buffer.alloc(0)), null);
+});

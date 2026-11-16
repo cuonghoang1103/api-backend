@@ -15,12 +15,12 @@ export default {
   defaultVideoTrack: 'YT',
   lessons: {
     // 0.1 About / course map → broad "intro to C" full course
-    "prf192-gioi-thieu": { yt: "KJgsSFOSQv0", credit: "freeCodeCamp.org — C Programming Tutorial for Beginners" },
+    "prf192-gioi-thieu": { yt: "KJgsSFOSQv0", credit: "freeCodeCamp.org — C Programming Tutorial for Beginners", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/programming-fundamentals/00-gioi-thieu-huong-dan-hoc/00-02-gioi-thieu-mon-ban-do-63f7c996.mp4' }, defaultVideoTrack: 'VI'},
 
     // Chapter 1 — programming & the C program
-    "prf192-1-1-lap-trinh-la-gi": { yt: "EjavYOFoJJ0", credit: "Jenny's Lectures CS IT — C_01 Introduction to C Language | C Programming Tutorials" },
-    "prf192-1-2-phat-trien-phan-mem": { yt: "qcEBXrqFLe8", credit: "Jenny's Lectures CS IT — C_03 Language Translators | Compiler | Interpreter | Assembler | C Programming Tutorials" },
-    "prf192-1-3-cau-truc-chuong-trinh-c": { yt: "HucJhUkDJuk", credit: "Jenny's Lectures CS IT — C_05 Structure of a C Program | Programming in C" },
+    "prf192-1-1-lap-trinh-la-gi": { yt: "EjavYOFoJJ0", credit: "Jenny's Lectures CS IT — C_01 Introduction to C Language | C Programming Tutorials", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/programming-fundamentals/01-nhap-mon-chuong-trinh-may-tinh/01-03-lap-trinh-la-gi-5c678296.mp4' }, defaultVideoTrack: 'VI'},
+    "prf192-1-2-phat-trien-phan-mem": { yt: "qcEBXrqFLe8", credit: "Jenny's Lectures CS IT — C_03 Language Translators | Compiler | Interpreter | Assembler | C Programming Tutorials", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/programming-fundamentals/01-nhap-mon-chuong-trinh-may-tinh/01-04-cac-buoc-phat-trien-ae451b34.mp4' }, defaultVideoTrack: 'VI'},
+    "prf192-1-3-cau-truc-chuong-trinh-c": { yt: "HucJhUkDJuk", credit: "Jenny's Lectures CS IT — C_05 Structure of a C Program | Programming in C", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/programming-fundamentals/01-nhap-mon-chuong-trinh-may-tinh/01-05-cau-truc-chuong-trinh-c-cfeda16e.mp4' }, defaultVideoTrack: 'VI'},
 
     // Chapter 2 — variables, types, I/O
     "prf192-2-1-bien-hang": { yt: "dhh5lrXXXYw", credit: "Jenny's Lectures CS IT — C_08 Variables in C Programming | C Programming Tutorials" },
@@ -67,12 +67,12 @@ export default {
 
     // Section 0 — giới thiệu, tài liệu, môi trường
     "prf192-tai-lieu-tham-khao": { yt: "de2Hsvxaf8M", credit: "Computerphile — \"C\" Programming Language: Brian Kernighan - Computerphile" },
-    "prf192-0-0-slides-gioi-thieu-mon": { yt: "SlqjA04_dpk", credit: "CS50 — CS50x - Lecture 1 - C" },
-    "prf192-0-5-cai-dat-moi-truong": { yt: "QdfVAO1DFus", credit: "Geeky Script — How to install C/C++ in Visual Studio Code on Windows 10/11 [ 2026 Update ] MinGW w64 GNU Compiler" },
+    "prf192-0-0-slides-gioi-thieu-mon": { yt: "SlqjA04_dpk", credit: "CS50 — CS50x - Lecture 1 - C", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/programming-fundamentals/00-gioi-thieu-huong-dan-hoc/00-01-slide-gioi-thieu-mon-de3cca1e.mp4' }, defaultVideoTrack: 'VI'},
+    "prf192-0-5-cai-dat-moi-truong": { yt: "QdfVAO1DFus", credit: "Geeky Script — How to install C/C++ in Visual Studio Code on Windows 10/11 [ 2026 Update ] MinGW w64 GNU Compiler", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/programming-fundamentals/00-gioi-thieu-huong-dan-hoc/00-06-cai-dat-cong-cu-1e307f11.mp4' }, defaultVideoTrack: 'VI'},
 
     // Chapter 1 — chương trình & máy tính
-    "prf192-1-0a-slides-nhap-mon-lap-trinh": { yt: "zltgXvg6r3k", credit: "CrashCourse — Instructions & Programs: Crash Course Computer Science #8" },
-    "prf192-1-0b-slides-bien-dich-cau-truc-c": { yt: "ksJ9bdSX5Yo", credit: "Mike Shah — In 54 Minutes, Understand the whole C and C++ compilation process" },
+    "prf192-1-0a-slides-nhap-mon-lap-trinh": { yt: "zltgXvg6r3k", credit: "CrashCourse — Instructions & Programs: Crash Course Computer Science #8", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/programming-fundamentals/01-nhap-mon-chuong-trinh-may-tinh/01-01-slide-nhap-mon-lap-trinh-33c79be8.mp4' }, defaultVideoTrack: 'VI'},
+    "prf192-1-0b-slides-bien-dich-cau-truc-c": { yt: "ksJ9bdSX5Yo", credit: "Mike Shah — In 54 Minutes, Understand the whole C and C++ compilation process", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/programming-fundamentals/01-nhap-mon-chuong-trinh-may-tinh/01-02-slide-bien-dich-cau-truc-c-580f0317.mp4' }, defaultVideoTrack: 'VI'},
 
     // Chapter 2 — biến, kiểu dữ liệu & nhập/xuất
     "prf192-2-0a-slides-bien-kieu-du-lieu": { yt: "OSyjOvFbAGI", credit: "mycodeschool — Data types, Constants and Variables - C Programming Tutorial 05" },

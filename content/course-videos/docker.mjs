@@ -136,10 +136,10 @@ export default {
 
     /* ── Chương 15 — Nâng cao: build, bảo mật & vượt khỏi một máy ── */
     'dk-15-0-slides': { yt: 'V4f_sHTzvCI', credit: "Bret Fisher — Docker Production Best Practices from Bret Fisher at DockerCon" },
-    'dk-15-1-buildx-bake': { yt: '99QLREnqL7A', credit: "Bret Fisher — Docker Build the best way with Docker Bake" },
+    'dk-15-1-buildx-bake': { yt: '99QLREnqL7A', credit: "Bret Fisher — Docker Build the best way with Docker Bake", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/docker/15-nang-cao/15-02-buildx-bake-1d7a71e6.mp4' }, defaultVideoTrack: 'VI'},
     'dk-15-2-rootless-podman': { yt: 'jeTKgAEyhsA', credit: "The Linux Foundation — Rootless Containers from Scratch - Liz Rice, Aqua Security", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/docker/15-nang-cao/15-03-rootless-podman-dbb2e6eb.mp4' }, defaultVideoTrack: 'VI'},
-    'dk-15-3-swarm': { yt: '_YsPt7dIvqU', credit: "Christian Lempa — Docker Swarm Mode: EASY Tutorial" },
-    'dk-15-4-kubernetes': { yt: 'ZW_ONm4-WdM', credit: "Christian Lempa — From Docker to Kubernetes with ease! // Helm + Kompose Tutorial" },
+    'dk-15-3-swarm': { yt: '_YsPt7dIvqU', credit: "Christian Lempa — Docker Swarm Mode: EASY Tutorial", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/docker/15-nang-cao/15-04-swarm-7d862698.mp4' }, defaultVideoTrack: 'VI'},
+    'dk-15-4-kubernetes': { yt: 'ZW_ONm4-WdM', credit: "Christian Lempa — From Docker to Kubernetes with ease! // Helm + Kompose Tutorial", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/docker/15-nang-cao/15-05-kubernetes-ea0e887f.mp4' }, defaultVideoTrack: 'VI'},
 
     /* ── Chương 16 — Dự án cuối khoá: đóng gói và đưa một ứng dụng thật lên production ── */
     'dk-16-0-slides': { yt: 'lEcULR30-GM', credit: "freeCodeCamp.org — Master Full-Stack Docker & CI/CD – Build a Production-Ready Pipeline" },

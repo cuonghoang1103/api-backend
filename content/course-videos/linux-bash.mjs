@@ -119,35 +119,35 @@ export default {
     'lnx-12-1-phuong-phap': { yt: 'ZNkFDHLQnrA', credit: 'EuroBSDCon — Keynote 3: System Performance Analysis Methodologies - Brendan Gregg', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/linux-bash/12-chan-doan-may-chu/12-02-phuong-phap-54eb8797.mp4' }, defaultVideoTrack: 'VI'},  // Keynote 3: System Performance Analysis Methodologies - Brendan Gregg
     'lnx-12-2-no-chet': { yt: 'fhBHvsi0Ql0', credit: 'USENIX — LISA19 - Linux Systems Performance', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/linux-bash/12-chan-doan-may-chu/12-03-no-chet-09ab5fdf.mp4' }, defaultVideoTrack: 'VI'},      // LISA19 - Linux Systems Performance
     'lnx-12-3-no-cham': { yt: 'FJW8nGV4jxY', credit: 'Brendan Gregg — Linux Performance Tools, Brendan Gregg, part 1 of 2' },      // Linux Performance Tools, Brendan Gregg, part 1 of 2
-    'lnx-12-4-no-la': { yt: 'zrr2nUln9Kk', credit: 'Brendan Gregg — Linux Performance Tools, Brendan Gregg, part 2 of 2' },        // Linux Performance Tools, Brendan Gregg, part 2 of 2
-    'lnx-12-5-tong-ket': { yt: 'JNbt2YuB2lo', credit: 'Red Hat Enterprise Linux — Skills every sysadmin should learn beyond the basics' },   // Skills every sysadmin should learn beyond the basics
+    'lnx-12-4-no-la': { yt: 'zrr2nUln9Kk', credit: 'Brendan Gregg — Linux Performance Tools, Brendan Gregg, part 2 of 2', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/linux-bash/12-chan-doan-may-chu/12-05-no-la-6389f693.mp4' }, defaultVideoTrack: 'VI'},        // Linux Performance Tools, Brendan Gregg, part 2 of 2
+    'lnx-12-5-tong-ket': { yt: 'JNbt2YuB2lo', credit: 'Red Hat Enterprise Linux — Skills every sysadmin should learn beyond the basics', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/linux-bash/12-chan-doan-may-chu/12-06-tong-ket-7625f830.mp4' }, defaultVideoTrack: 'VI'},   // Skills every sysadmin should learn beyond the basics
 
     /* ── Chương 13 — Bash nâng cao (MỚI 28/09/2026) ── */
     'lnx-13-0-slides': { yt: 'uqHjc7hlqd0', credit: "James Pannacciulli — Introduction to Advanced Bash Usage - James Pannacciulli @ OSCON 2014" },
-    'lnx-13-1-mang-mang-ket-hop': { yt: 'asHJ-xfuyno', credit: "You Suck at Programming — Arrays in Bash Explained in 7 Minutes! - Indexed, Associative, and Nested / Multi-Dimensional" },
-    'lnx-13-2-luong-nang-cao': { yt: 'f3eIK5xk4vg', credit: "You Suck at Programming — Command vs. Process substitution in Bash - explaining the difference. You Suck at Programming #073" },
-    'lnx-13-3-song-song-toc-do': { yt: 'OpaiGYxkSuQ', credit: "Ole Tange — Part 1: GNU Parallel script processing and execution" },
-    'lnx-13-4-script-chuyen-nghiep': { yt: '28Ygo05cLmo', credit: "Nick Janetakis — Linting and Improving Your Bash Scripts with ShellCheck" },
+    'lnx-13-1-mang-mang-ket-hop': { yt: 'asHJ-xfuyno', credit: "You Suck at Programming — Arrays in Bash Explained in 7 Minutes! - Indexed, Associative, and Nested / Multi-Dimensional", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/linux-bash/13-bash-nang-cao/13-02-mang-mang-ket-hop-5b686a26.mp4' }, defaultVideoTrack: 'VI'},
+    'lnx-13-2-luong-nang-cao': { yt: 'f3eIK5xk4vg', credit: "You Suck at Programming — Command vs. Process substitution in Bash - explaining the difference. You Suck at Programming #073", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/linux-bash/13-bash-nang-cao/13-03-luong-nang-cao-6345a9f9.mp4' }, defaultVideoTrack: 'VI'},
+    'lnx-13-3-song-song-toc-do': { yt: 'OpaiGYxkSuQ', credit: "Ole Tange — Part 1: GNU Parallel script processing and execution", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/linux-bash/13-bash-nang-cao/13-04-song-song-toc-do-b910de22.mp4' }, defaultVideoTrack: 'VI'},
+    'lnx-13-4-script-chuyen-nghiep': { yt: '28Ygo05cLmo', credit: "Nick Janetakis — Linting and Improving Your Bash Scripts with ShellCheck", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/linux-bash/13-bash-nang-cao/13-05-script-chuyen-nghiep-bc023227.mp4' }, defaultVideoTrack: 'VI'},
 
     /* ── Chương 14 — Linux chuyên sâu (MỚI 29/09/2026) ── */
     'lnx-14-0-slides': { yt: 'ZdVpKx6Wmc8', credit: "Brendan Gregg — Linux Performance Analysis in 60 seconds" },
-    'lnx-14-1-ben-trong-nhan': { yt: 'x1npPrzyKfs', credit: "linuxfestnorthwest — Linux Container Primitives: cgroups, namespaces, and more!" },
-    'lnx-14-2-hieu-nang': { yt: 'bj3qdEDbCD4', credit: "Brendan Gregg — Velocity 2017: Performance Analysis Superpowers with Linux eBPF" },
-    'lnx-14-3-luu-tru': { yt: 'MeltFN-bXrQ', credit: "Learn Linux TV — Linux Logical Volume Manager (LVM) Deep Dive Tutorial" },
-    'lnx-14-4-bao-mat-sau': { yt: '_WOKRaM-HI4', credit: "Red Hat Summit — Security-Enhanced Linux for mere mortals" },
+    'lnx-14-1-ben-trong-nhan': { yt: 'x1npPrzyKfs', credit: "linuxfestnorthwest — Linux Container Primitives: cgroups, namespaces, and more!", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/linux-bash/14-linux-chuyen-sau/14-02-ben-trong-nhan-2d2f4c7a.mp4' }, defaultVideoTrack: 'VI'},
+    'lnx-14-2-hieu-nang': { yt: 'bj3qdEDbCD4', credit: "Brendan Gregg — Velocity 2017: Performance Analysis Superpowers with Linux eBPF", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/linux-bash/14-linux-chuyen-sau/14-03-hieu-nang-9d0ff792.mp4' }, defaultVideoTrack: 'VI'},
+    'lnx-14-3-luu-tru': { yt: 'MeltFN-bXrQ', credit: "Learn Linux TV — Linux Logical Volume Manager (LVM) Deep Dive Tutorial", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/linux-bash/14-linux-chuyen-sau/14-04-luu-tru-265a8950.mp4' }, defaultVideoTrack: 'VI'},
+    'lnx-14-4-bao-mat-sau': { yt: '_WOKRaM-HI4', credit: "Red Hat Summit — Security-Enhanced Linux for mere mortals", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/linux-bash/14-linux-chuyen-sau/14-05-bao-mat-sau-246a7eb0.mp4' }, defaultVideoTrack: 'VI'},
 
     /* ── Chương 15 — macOS & Windows (MỚI 29/09/2026) ── */
     'lnx-15-0-slides': { yt: 'nahtw_csB5w', credit: "Microsoft Developer — What is the difference between Cmd, PowerShell, and Bash? | One Dev Question" },
-    'lnx-15-1-macos-zsh-bsd': { yt: 'dRdGq8khTJc', credit: "Eric Murphy — Bash vs ZSH vs Fish: What's the Difference?" },
-    'lnx-15-2-macos-cong-cu': { yt: 'SELYgZvAZbU', credit: "Corey Schafer — Homebrew Tutorial: Simplify Software Installation on Mac Using This Package Manager" },
-    'lnx-15-3-windows-wsl2': { yt: 'vxTW22y8zV8', credit: "NetworkChuck — Linux on Windows......Windows on Linux" },
-    'lnx-15-4-powershell-cho-nguoi-biet-bash': { yt: 'BOZBg3W58dI', credit: "BlueMonkey 4n6 — Powershell tutorial for Linux users – (1) getting around the filesystem" },
+    'lnx-15-1-macos-zsh-bsd': { yt: 'dRdGq8khTJc', credit: "Eric Murphy — Bash vs ZSH vs Fish: What's the Difference?", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/linux-bash/15-macos-windows/15-02-macos-zsh-bsd-9748d1fb.mp4' }, defaultVideoTrack: 'VI'},
+    'lnx-15-2-macos-cong-cu': { yt: 'SELYgZvAZbU', credit: "Corey Schafer — Homebrew Tutorial: Simplify Software Installation on Mac Using This Package Manager", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/linux-bash/15-macos-windows/15-03-macos-cong-cu-e5e1a6a2.mp4' }, defaultVideoTrack: 'VI'},
+    'lnx-15-3-windows-wsl2': { yt: 'vxTW22y8zV8', credit: "NetworkChuck — Linux on Windows......Windows on Linux", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/linux-bash/15-macos-windows/15-04-windows-wsl2-0bff6af8.mp4' }, defaultVideoTrack: 'VI'},
+    'lnx-15-4-powershell-cho-nguoi-biet-bash': { yt: 'BOZBg3W58dI', credit: "BlueMonkey 4n6 — Powershell tutorial for Linux users – (1) getting around the filesystem", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/linux-bash/15-macos-windows/15-05-powershell-884a6bce.mp4' }, defaultVideoTrack: 'VI'},
 
     /* ── Chương 16 — Dự án cuối khoá (MỚI 29/09/2026) ── */
     'lnx-16-0-slides': { yt: '2Btkx9toufg', credit: "Byte My Pi — Ubuntu Server: Getting started with a Linux Server" },
-    'lnx-16-1-dung-may': { yt: 'ZhMw53Ud2tY', credit: "NetworkChuck — 5 Steps to Secure Linux (protect from hackers)" },
-    'lnx-16-2-deploy-script': { yt: 'BiuQ-sVbWGU', credit: "Web Dev Cody — How do software systems achieve zero downtime on new deploys?" },
-    'lnx-16-3-tu-dong-hoa-giam-sat': { yt: 'n6BuUgkZ5T0', credit: "Learn Linux TV — Automate Your Tasks with systemd Timers: A Step-by-Step Guide" },
-    'lnx-16-4-su-co-tuan-dau': { yt: '9YFjQdkz9iM', credit: "DevLinux — How to Find Logs and Troubleshoot Common Problems on a Linux Server" },
+    'lnx-16-1-dung-may': { yt: 'ZhMw53Ud2tY', credit: "NetworkChuck — 5 Steps to Secure Linux (protect from hackers)", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/linux-bash/16-du-an-cuoi-khoa/16-02-dung-may-81d8a754.mp4' }, defaultVideoTrack: 'VI'},
+    'lnx-16-2-deploy-script': { yt: 'BiuQ-sVbWGU', credit: "Web Dev Cody — How do software systems achieve zero downtime on new deploys?", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/linux-bash/16-du-an-cuoi-khoa/16-03-deploy-script-898a95ec.mp4' }, defaultVideoTrack: 'VI'},
+    'lnx-16-3-tu-dong-hoa-giam-sat': { yt: 'n6BuUgkZ5T0', credit: "Learn Linux TV — Automate Your Tasks with systemd Timers: A Step-by-Step Guide", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/linux-bash/16-du-an-cuoi-khoa/16-04-tu-dong-hoa-giam-sat-18b70258.mp4' }, defaultVideoTrack: 'VI'},
+    'lnx-16-4-su-co-tuan-dau': { yt: '9YFjQdkz9iM', credit: "DevLinux — How to Find Logs and Troubleshoot Common Problems on a Linux Server", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/linux-bash/16-du-an-cuoi-khoa/16-05-su-co-tuan-dau-300f3648.mp4' }, defaultVideoTrack: 'VI'},
   },
 };

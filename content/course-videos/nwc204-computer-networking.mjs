@@ -30,14 +30,14 @@ export default {
   defaultVideoTrack: 'YT',
   lessons: {
     /* ── Chương 1 — Networking Today (buổi 1–2) ─────────────────────────── */
-    "nwc204-1-1-mang-la-gi-thanh-phan-to-po": { yt: "H8W9oMNSuwo", credit: "Jeremy's IT Lab — Free CCNA | Network Devices | Day 1 | CCNA 200-301 Complete Course" },
-    "nwc204-1-2-ket-noi-do-tin-cay-de-doa": { yt: "YJGGYKAV4pA", credit: "Practical Networking — How Data moves through the Internet - Networking Fundamentals" },
-    "nwc204-1-3-nghe-it-cong-cu-ai-va-tu-kiem": { yt: "S7MNX_UD7vY", credit: "NetworkChuck — FREE CCNA // What is a Network? // Day 0" },
+    "nwc204-1-1-mang-la-gi-thanh-phan-to-po": { yt: "H8W9oMNSuwo", credit: "Jeremy's IT Lab — Free CCNA | Network Devices | Day 1 | CCNA 200-301 Complete Course", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nwc204-computer-networking/01-mang-may-tinh-hom-nay/01-01-mang-la-gi-thanh-phan-to-po-95adebc2.mp4' }, defaultVideoTrack: 'VI'},
+    "nwc204-1-2-ket-noi-do-tin-cay-de-doa": { yt: "YJGGYKAV4pA", credit: "Practical Networking — How Data moves through the Internet - Networking Fundamentals", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nwc204-computer-networking/01-mang-may-tinh-hom-nay/01-02-ket-noi-do-tin-cay-de-doa-2e0a039e.mp4' }, defaultVideoTrack: 'VI'},
+    "nwc204-1-3-nghe-it-cong-cu-ai-va-tu-kiem": { yt: "S7MNX_UD7vY", credit: "NetworkChuck — FREE CCNA // What is a Network? // Day 0", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nwc204-computer-networking/01-mang-may-tinh-hom-nay/01-03-nghe-it-cong-cu-ai-va-tu-kiem-502c9751.mp4' }, defaultVideoTrack: 'VI'},
 
     /* ── Chương 2 — Cấu hình switch và thiết bị đầu cuối (buổi 3–6) ─────── */
-    "nwc204-2-1-vao-thiet-bi-console-ssh-va-che-do-ios": { yt: "IYbtai7Nu2g", credit: "Jeremy's IT Lab — Free CCNA | Intro to the CLI | Day 4 | CCNA 200-301 Complete Course" },
-    "nwc204-2-2-cau-truc-lenh-tro-giup-va-lam-cung": { yt: "SDocmq1c05s", credit: "Jeremy's IT Lab — Free CCNA | Basic Device Security | Day 4 Lab | CCNA 200-301 Complete Course" },
-    "nwc204-2-3-luu-cau-hinh-va-cong-dia-chi": { yt: "dIXJJRxbIAc", credit: "IT Boost by Formip — Cisco Config Files Explained: Running vs Startup" },
+    "nwc204-2-1-vao-thiet-bi-console-ssh-va-che-do-ios": { yt: "IYbtai7Nu2g", credit: "Jeremy's IT Lab — Free CCNA | Intro to the CLI | Day 4 | CCNA 200-301 Complete Course", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nwc204-computer-networking/02-cau-hinh-switch-va-thiet-bi-dau-cuoi/02-01-vao-thiet-bi-console-ssh-va-che-do-ios-29ce8f0a.mp4' }, defaultVideoTrack: 'VI'},
+    "nwc204-2-2-cau-truc-lenh-tro-giup-va-lam-cung": { yt: "SDocmq1c05s", credit: "Jeremy's IT Lab — Free CCNA | Basic Device Security | Day 4 Lab | CCNA 200-301 Complete Course", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nwc204-computer-networking/02-cau-hinh-switch-va-thiet-bi-dau-cuoi/02-02-cau-truc-lenh-tro-giup-va-lam-cung-e7ddc7ed.mp4' }, defaultVideoTrack: 'VI'},
+    "nwc204-2-3-luu-cau-hinh-va-cong-dia-chi": { yt: "dIXJJRxbIAc", credit: "IT Boost by Formip — Cisco Config Files Explained: Running vs Startup", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nwc204-computer-networking/02-cau-hinh-switch-va-thiet-bi-dau-cuoi/02-03-luu-cau-hinh-va-cong-dia-chi-f19675d0.mp4' }, defaultVideoTrack: 'VI'},
     "nwc204-2-4-cau-hinh-ip-va-kiem-tra-ket-noi": { yt: "e1jbvyMeS5I", credit: "Jeremy's IT Lab — Free CCNA | Configuring IP Addresses | Day 8 Lab | CCNA 200-301 Complete Course" },
     "nwc204-2-5-lab-1-1-tera-term-va-cau-hinh-co-ban": { yt: "yQdOyK0n6NY", credit: "Tech Acad — 2.9.1 Packet Tracer - Basic Switch and End Device Configuration" },
 
@@ -108,5 +108,6 @@ export default {
     /* ── Chương 12 — ICMP (buổi 37–40) ──────────────────────────────────── */
     "nwc204-12-1-thong-diep-icmp": { yt: "zesTvBZCESk", credit: "Jeremy's IT Lab — CCNP ENCOR // Internet Control Message Protocol (ICMP) // ENCOR 350-401 Complete Course" },
     "nwc204-12-2-ping-traceroute-va-lab-2-3": { yt: "vJV-GBZ6PeM", credit: "PowerCert Animated Videos — PING and TRACERT (traceroute) networking commands" },
+    'nwc204-0-1-ho-so-mon': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nwc204-computer-networking/00-khung-chuong-trinh/00-01-bat-dau-tai-day-nwc204-4717fb91.mp4' }, defaultVideoTrack: 'VI' },
   },
 };

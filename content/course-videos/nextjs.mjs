@@ -26,54 +26,54 @@ export default {
     /* ── Mục 0 — Giới thiệu ─────────────────────────────────────────────── */
     'nextjs-0-1-gioi-thieu': { yt: 'Tn6-PIqc4UM', credit: 'Fireship — React in 100 Seconds' },
     'nextjs-0-2-react-vs-nextjs': { yt: 'x7cQ3mrcKaY', credit: 'JSConf — Pete Hunt: React: Rethinking best practices -- JSConf EU', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nextjs/00-gioi-thieu/00-04-react-vs-nextjs-ca5ddae1.mp4' }, defaultVideoTrack: 'VI'},
-    'nextjs-0-3-cai-dat': { yt: 'Sklc_fQBmcs', credit: 'Fireship — Next.js in 100 Seconds // Plus Full Beginner\'s Tutorial' },
-    'nextjs-0-4-cach-hoc': { yt: '7DC3ZrxvUUU', credit: 'Codevolution — Next.js 15 Tutorial - 4 - Before We Start' },
+    'nextjs-0-3-cai-dat': { yt: 'Sklc_fQBmcs', credit: 'Fireship — Next.js in 100 Seconds // Plus Full Beginner\'s Tutorial', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nextjs/00-gioi-thieu/00-05-cai-dat-c3fb108a.mp4' }, defaultVideoTrack: 'VI'},
+    'nextjs-0-4-cach-hoc': { yt: '7DC3ZrxvUUU', credit: 'Codevolution — Next.js 15 Tutorial - 4 - Before We Start', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nextjs/00-gioi-thieu/00-06-cach-hoc-f7bc2b74.mp4' }, defaultVideoTrack: 'VI'},
 
     /* ── Chương 1 — JSX & mô hình render ────────────────────────────────── */
-    'nextjs-1-1-react-lam-gi': { yt: 'H6QAY_VqvUc', credit: 'Codevolution — React 19 Tutorial - 1 - Introduction' },
-    'nextjs-1-2-jsx-la-javascript': { yt: '6sg98ju4O-w', credit: 'Codevolution — React 19 Tutorial - 6 - JSX' },
-    'nextjs-1-3-ngoac-nhon': { yt: '1IvSI_YKx-k', credit: 'Codevolution — React 19 Tutorial - 7 - Rules of JSX' },
-    'nextjs-1-4-danh-sach-dieu-kien': { yt: 'VwuwodgrIaU', credit: 'Codevolution — React 19 Tutorial - 10 - Conditional Rendering' },
-    'nextjs-1-5-luat-jsx': { yt: 'zFdDdPMyIAo', credit: 'Codevolution — React 19 Tutorial - 4 - Components' },
+    'nextjs-1-1-react-lam-gi': { yt: 'H6QAY_VqvUc', credit: 'Codevolution — React 19 Tutorial - 1 - Introduction', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nextjs/01-jsx-mo-hinh-render/01-01-react-lam-gi-5cbeb5b7.mp4' }, defaultVideoTrack: 'VI'},
+    'nextjs-1-2-jsx-la-javascript': { yt: '6sg98ju4O-w', credit: 'Codevolution — React 19 Tutorial - 6 - JSX', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nextjs/01-jsx-mo-hinh-render/01-02-jsx-la-javascript-1c46b48b.mp4' }, defaultVideoTrack: 'VI'},
+    'nextjs-1-3-ngoac-nhon': { yt: '1IvSI_YKx-k', credit: 'Codevolution — React 19 Tutorial - 7 - Rules of JSX', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nextjs/01-jsx-mo-hinh-render/01-03-ngoac-nhon-f0eab968.mp4' }, defaultVideoTrack: 'VI'},
+    'nextjs-1-4-danh-sach-dieu-kien': { yt: 'VwuwodgrIaU', credit: 'Codevolution — React 19 Tutorial - 10 - Conditional Rendering', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nextjs/01-jsx-mo-hinh-render/01-04-danh-sach-dieu-kien-d2af7f39.mp4' }, defaultVideoTrack: 'VI'},
+    'nextjs-1-5-luat-jsx': { yt: 'zFdDdPMyIAo', credit: 'Codevolution — React 19 Tutorial - 4 - Components', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nextjs/01-jsx-mo-hinh-render/01-05-luat-jsx-48483f49.mp4' }, defaultVideoTrack: 'VI'},
 
     /* ── Chương 2 — Component, props & ghép ─────────────────────────────── */
-    'nextjs-2-1-props': { yt: 'JQBaytmgmGo', credit: 'Codevolution — React 19 Tutorial - 8 - Props' },
-    'nextjs-2-2-children-composition': { yt: '-FRGDF5gCjc', credit: 'Coding Addict — React 18 Tutorial - Children Prop' },
-    'nextjs-2-3-khuon-props': { yt: 'pQLXUT94Hcg', credit: 'Codevolution — React 19 Tutorial - 9 - Props Patterns' },
-    'nextjs-2-4-tu-duy-component': { yt: 'ACqQh7zdPiY', credit: 'Codevolution — React 19 Tutorial - 5 - Export and Import Components' },
+    'nextjs-2-1-props': { yt: 'JQBaytmgmGo', credit: 'Codevolution — React 19 Tutorial - 8 - Props', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nextjs/02-component-props/02-01-props-f30d35e3.mp4' }, defaultVideoTrack: 'VI'},
+    'nextjs-2-2-children-composition': { yt: '-FRGDF5gCjc', credit: 'Coding Addict — React 18 Tutorial - Children Prop', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nextjs/02-component-props/02-02-children-composition-13944ccf.mp4' }, defaultVideoTrack: 'VI'},
+    'nextjs-2-3-khuon-props': { yt: 'pQLXUT94Hcg', credit: 'Codevolution — React 19 Tutorial - 9 - Props Patterns', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nextjs/02-component-props/02-03-khuon-props-e099237f.mp4' }, defaultVideoTrack: 'VI'},
+    'nextjs-2-4-tu-duy-component': { yt: 'ACqQh7zdPiY', credit: 'Codevolution — React 19 Tutorial - 5 - Export and Import Components', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nextjs/02-component-props/02-04-tu-duy-component-3db0a5ef.mp4' }, defaultVideoTrack: 'VI'},
 
     /* ── Chương 3 — State & mô hình render lại ──────────────────────────── */
-    'nextjs-3-1-usestate': { yt: 'akZJe9Mx-Xc', credit: 'Codevolution — React 19 Tutorial - 18 - useState Hook' },
-    'nextjs-3-2-state-la-anh-chup': { yt: 'hjNExKVUHSw', credit: 'Codevolution — React 19 Tutorial - 21 - State as a Snapshot' },
-    'nextjs-3-3-khong-mutate': { yt: 'm0FUyg5ntlM', credit: 'Codevolution — React 19 Tutorial - 25 - useState with Arrays' },
-    'nextjs-3-4-state-o-dau': { yt: 'YpjvL5SvVhM', credit: 'Codevolution — React 19 Tutorial - 26 - Sharing State Between Components' },
+    'nextjs-3-1-usestate': { yt: 'akZJe9Mx-Xc', credit: 'Codevolution — React 19 Tutorial - 18 - useState Hook', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nextjs/03-state/03-01-usestate-d0d9ac0f.mp4' }, defaultVideoTrack: 'VI'},
+    'nextjs-3-2-state-la-anh-chup': { yt: 'hjNExKVUHSw', credit: 'Codevolution — React 19 Tutorial - 21 - State as a Snapshot', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nextjs/03-state/03-02-state-la-anh-chup-daeba597.mp4' }, defaultVideoTrack: 'VI'},
+    'nextjs-3-3-khong-mutate': { yt: 'm0FUyg5ntlM', credit: 'Codevolution — React 19 Tutorial - 25 - useState with Arrays', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nextjs/03-state/03-03-khong-mutate-19346a8b.mp4' }, defaultVideoTrack: 'VI'},
+    'nextjs-3-4-state-o-dau': { yt: 'YpjvL5SvVhM', credit: 'Codevolution — React 19 Tutorial - 26 - Sharing State Between Components', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nextjs/03-state/03-04-state-o-dau-d44ecc21.mp4' }, defaultVideoTrack: 'VI'},
 
     /* ── Chương 4 — Sự kiện & form có kiểm soát ─────────────────────────── */
-    'nextjs-4-1-su-kien': { yt: 'peewECGtPCI', credit: 'Codevolution — React 19 Tutorial - 15 - Event Handling' },
-    'nextjs-4-2-input-co-kiem-soat': { yt: 'MCIfZlQlmSc', credit: 'Codevolution — React 19 Tutorial - 24 - useState with Objects' },
+    'nextjs-4-1-su-kien': { yt: 'peewECGtPCI', credit: 'Codevolution — React 19 Tutorial - 15 - Event Handling', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nextjs/04-su-kien-form/04-01-su-kien-02010a9b.mp4' }, defaultVideoTrack: 'VI'},
+    'nextjs-4-2-input-co-kiem-soat': { yt: 'MCIfZlQlmSc', credit: 'Codevolution — React 19 Tutorial - 24 - useState with Objects', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nextjs/04-su-kien-form/04-02-input-co-kiem-soat-87018a50.mp4' }, defaultVideoTrack: 'VI'},
     'nextjs-4-3-form-thật': { yt: 'XzZoUojeuF0', credit: 'Codevolution — React 19 Tutorial - 16 - Event Handlers as Props' },
-    'nextjs-4-4-controlled-vs-uncontrolled': { yt: 'yCS2m01bQ6w', credit: 'Codevolution — React Hooks Tutorial - 28 - useRef Hook Part 1' },
+    'nextjs-4-4-controlled-vs-uncontrolled': { yt: 'yCS2m01bQ6w', credit: 'Codevolution — React Hooks Tutorial - 28 - useRef Hook Part 1', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nextjs/04-su-kien-form/04-04-controlled-vs-uncontrolled-2556b553.mp4' }, defaultVideoTrack: 'VI'},
 
     /* ── Chương 5 — useEffect ───────────────────────────────────────────── */
-    'nextjs-5-1-effect-la-gi': { yt: 'dH6i3GurZW8', credit: 'Jack Herrington — Mastering React\'s useEffect' },
-    'nextjs-5-2-phu-thuoc-don-dep': { yt: 'DTlmk6QeOHY', credit: 'Codevolution — React Hooks Tutorial - 10 - useEffect with cleanup' },
-    'nextjs-5-3-chay-hai-lan-dev': { yt: 'j8s01ThR7bQ', credit: 'Jack Herrington — React 18: useEffect Double Call; Mistake or Awesome?' },
-    'nextjs-5-4-effect-khong-nen-viet': { yt: 'SP-NrbQHFww', credit: 'Codevolution — React Hooks Tutorial - 11 - useEffect with incorrect dependency' },
-    'nextjs-5-5-fetch-va-cuoc-dua': { yt: 'bYFYF2GnMy8', credit: 'Codevolution — React Hooks Tutorial - 12 - Fetching data with useEffect Part 1' },
+    'nextjs-5-1-effect-la-gi': { yt: 'dH6i3GurZW8', credit: 'Jack Herrington — Mastering React\'s useEffect', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nextjs/05-useeffect/05-01-effect-la-gi-7c8c4017.mp4' }, defaultVideoTrack: 'VI'},
+    'nextjs-5-2-phu-thuoc-don-dep': { yt: 'DTlmk6QeOHY', credit: 'Codevolution — React Hooks Tutorial - 10 - useEffect with cleanup', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nextjs/05-useeffect/05-02-phu-thuoc-don-dep-0e93e45b.mp4' }, defaultVideoTrack: 'VI'},
+    'nextjs-5-3-chay-hai-lan-dev': { yt: 'j8s01ThR7bQ', credit: 'Jack Herrington — React 18: useEffect Double Call; Mistake or Awesome?', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nextjs/05-useeffect/05-03-chay-hai-lan-dev-9292f4bf.mp4' }, defaultVideoTrack: 'VI'},
+    'nextjs-5-4-effect-khong-nen-viet': { yt: 'SP-NrbQHFww', credit: 'Codevolution — React Hooks Tutorial - 11 - useEffect with incorrect dependency', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nextjs/05-useeffect/05-04-effect-khong-nen-viet-30b92ca4.mp4' }, defaultVideoTrack: 'VI'},
+    'nextjs-5-5-fetch-va-cuoc-dua': { yt: 'bYFYF2GnMy8', credit: 'Codevolution — React Hooks Tutorial - 12 - Fetching data with useEffect Part 1', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nextjs/05-useeffect/05-05-fetch-va-cuoc-dua-1aba6a1a.mp4' }, defaultVideoTrack: 'VI'},
 
     /* ── Chương 6 — Bộ đồ nghề hooks ────────────────────────────────────── */
-    'nextjs-6-1-useref': { yt: 'TNhaISOUy6Q', credit: 'Fireship — 10 React Hooks Explained // Plus Build your own from Scratch' },
-    'nextjs-6-2-usememo-usecallback': { yt: 'qySZIzZvZOY', credit: 'Codevolution — React Hooks Tutorial - 27 - useMemo Hook' },
-    'nextjs-6-3-usereducer': { yt: 'cVYp4u1m6iA', credit: 'Codevolution — React Hooks Tutorial - 18 - useReducer Hook' },
-    'nextjs-6-4-usecontext': { yt: 'BdKykWVTPtU', credit: 'Codevolution — React 19 Tutorial - 34 - Context and useContext Hook' },
-    'nextjs-6-5-custom-hooks': { yt: 'l-s9MgoMwTI', credit: 'Codevolution — React Hooks Tutorial - 30 - Custom Hooks' },
+    'nextjs-6-1-useref': { yt: 'TNhaISOUy6Q', credit: 'Fireship — 10 React Hooks Explained // Plus Build your own from Scratch', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nextjs/06-hooks/06-01-useref-dcd15ce4.mp4' }, defaultVideoTrack: 'VI'},
+    'nextjs-6-2-usememo-usecallback': { yt: 'qySZIzZvZOY', credit: 'Codevolution — React Hooks Tutorial - 27 - useMemo Hook', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nextjs/06-hooks/06-02-usememo-usecallback-0bac820f.mp4' }, defaultVideoTrack: 'VI'},
+    'nextjs-6-3-usereducer': { yt: 'cVYp4u1m6iA', credit: 'Codevolution — React Hooks Tutorial - 18 - useReducer Hook', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nextjs/06-hooks/06-03-usereducer-69db0ee1.mp4' }, defaultVideoTrack: 'VI'},
+    'nextjs-6-4-usecontext': { yt: 'BdKykWVTPtU', credit: 'Codevolution — React 19 Tutorial - 34 - Context and useContext Hook', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nextjs/06-hooks/06-04-usecontext-e3f99fd1.mp4' }, defaultVideoTrack: 'VI'},
+    'nextjs-6-5-custom-hooks': { yt: 'l-s9MgoMwTI', credit: 'Codevolution — React Hooks Tutorial - 30 - Custom Hooks', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nextjs/06-hooks/06-05-custom-hooks-63cdb111.mp4' }, defaultVideoTrack: 'VI'},
 
     /* ── Chương 7 — Danh sách, key & hiệu năng render ───────────────────── */
     'nextjs-7-1-reconciliation': { yt: 'i793Qm6kv3U', credit: 'CrossComm, Inc. — Understanding React\'s UI Rendering Process' },
-    'nextjs-7-2-key': { yt: 'y_J0-bUoACc', credit: 'Codevolution — React 19 Tutorial - 12 - Lists and Keys' },
-    'nextjs-7-3-vi-sao-render-lai': { yt: 'qiPHXVeNi_w', credit: 'Codevolution — React 19 Tutorial - 20 - How State Updates Work' },
-    'nextjs-7-4-react-memo': { yt: 'HA96JzJ_G1A', credit: 'Akilesh Rao — useMemo & useCallback DO NOT prevent re-renders (React Memoization Explained)' },
-    'nextjs-7-5-do-dung-doan': { yt: '00RoZflFE34', credit: 'Ben Awad — How to use the React Profiler to find and fix Performance Problems' },
+    'nextjs-7-2-key': { yt: 'y_J0-bUoACc', credit: 'Codevolution — React 19 Tutorial - 12 - Lists and Keys', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nextjs/07-danh-sach-key-hieu-nang/07-02-key-e2a25440.mp4' }, defaultVideoTrack: 'VI'},
+    'nextjs-7-3-vi-sao-render-lai': { yt: 'qiPHXVeNi_w', credit: 'Codevolution — React 19 Tutorial - 20 - How State Updates Work', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nextjs/07-danh-sach-key-hieu-nang/07-03-vi-sao-render-lai-a0e96498.mp4' }, defaultVideoTrack: 'VI'},
+    'nextjs-7-4-react-memo': { yt: 'HA96JzJ_G1A', credit: 'Akilesh Rao — useMemo & useCallback DO NOT prevent re-renders (React Memoization Explained)', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nextjs/07-danh-sach-key-hieu-nang/07-04-react-memo-6b266d63.mp4' }, defaultVideoTrack: 'VI'},
+    'nextjs-7-5-do-dung-doan': { yt: '00RoZflFE34', credit: 'Ben Awad — How to use the React Profiler to find and fix Performance Problems', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nextjs/07-danh-sach-key-hieu-nang/07-05-do-dung-doan-988bc221.mp4' }, defaultVideoTrack: 'VI'},
 
     /* ── Chương 8 — App Router ──────────────────────────────────────────── */
     'nextjs-8-1-tu-react-toi-nextjs': { yt: 'ZjAqacIC_3c', credit: 'Codevolution — Next.js 14 Tutorial - 1 - Introduction' },
@@ -165,6 +165,6 @@ export default {
     'nextjs-20-3-docker': { yt: 'd1ntel1pk7s', credit: 'Programming with Umair — Next.js 14+ Docker Tutorial - Dev and Prod Environments using Dockerfile and Docker Compose' },
     'nextjs-20-4-vps-stale-build': { yt: 'DCJiQBag6Fs', credit: 'ByteGrad — Dockerize Next.js 16 & Deploy To VPS (+ Custom Domain, SSL, CDN Cloudflare, Docker Compose)' },
     'nextjs-20-5-quy-trinh-an-toan': { yt: 'ipDdja_PduE', credit: 'ByteGrad — Next.js + Postgres Dev / Prod (VPS Coolify, Prisma, Migrations)' },
-    'nextjs-0-0-bat-dau-2': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nextjs/00-gioi-thieu/00-02-bat-dau-tai-day-2-13c2dbb6.mp4' }, defaultVideoTrack: 'VI' },
+    'nextjs-0-0-bat-dau-2': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nextjs/00-gioi-thieu/00-02-bat-dau-tai-day-2-13c2dbb6.mp4' }, defaultVideoTrack: 'VI'},
   },
 };

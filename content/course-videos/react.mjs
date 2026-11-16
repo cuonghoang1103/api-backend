@@ -98,15 +98,15 @@ export default {
 
     /* ── Chương 11 — React bên trong ── */
     'rx-11-0-slides': { yt: '7YhdqIR2Yzo', credit: "Philip Fabianek — How Does React Actually Work? React.js Deep Dive #1" },
-    'rx-11-1-virtual-dom': { yt: 'rKk4XJYzSQA', credit: "Tejas Kumar — React Fiber Reconciliation: How it Works (Part 1)" },
-    'rx-11-2-key-identity': { yt: '76OedwmXlYY', credit: "Developer Way — The mystery of React key: how to write performant lists" },
+    'rx-11-1-virtual-dom': { yt: 'rKk4XJYzSQA', credit: "Tejas Kumar — React Fiber Reconciliation: How it Works (Part 1)", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/react/11-react-ben-trong/11-02-virtual-dom-ab28d0a7.mp4' }, defaultVideoTrack: 'VI'},
+    'rx-11-2-key-identity': { yt: '76OedwmXlYY', credit: "Developer Way — The mystery of React key: how to write performant lists", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/react/11-react-ben-trong/11-03-key-identity-b3a532a2.mp4' }, defaultVideoTrack: 'VI'},
     'rx-11-3-strict-mode-ref': { yt: '1UOAI7pFDek', credit: "Sam Selikoff — Why React Strict Mode breaks your app – on purpose" },
-    'rx-11-4-portal-error-boundary': { yt: 'LyLa7dU5tp8', credit: "Web Dev Simplified — Learn React Portal In 12 Minutes By Building A Modal" },
-    'rx-11-5-du-an': { yt: '_FuDMEgIy7I', credit: "Web Dev Simplified — Learn React Error Boundaries In 7 Minutes" },
+    'rx-11-4-portal-error-boundary': { yt: 'LyLa7dU5tp8', credit: "Web Dev Simplified — Learn React Portal In 12 Minutes By Building A Modal", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/react/11-react-ben-trong/11-05-portal-error-boundary-894fa25f.mp4' }, defaultVideoTrack: 'VI'},
+    'rx-11-5-du-an': { yt: '_FuDMEgIy7I', credit: "Web Dev Simplified — Learn React Error Boundaries In 7 Minutes", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/react/11-react-ben-trong/11-06-du-an-081b0a01.mp4' }, defaultVideoTrack: 'VI'},
 
     /* ── Chương 12 — React 19 & concurrent ── */
     'rx-12-0-slides': { yt: 'B_2E96URooA', credit: "React Conf — Async React" },
-    'rx-12-1-suspense-use': { yt: 't6MeFVF3V9I', credit: "Jack Herrington — Warning: React 19's use Hook Can Impact App Performance" },
+    'rx-12-1-suspense-use': { yt: 't6MeFVF3V9I', credit: "Jack Herrington — Warning: React 19's use Hook Can Impact App Performance", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/react/12-react-19-concurrent/12-02-suspense-use-0ffcdece.mp4' }, defaultVideoTrack: 'VI'},
     'rx-12-2-transition': { yt: 'lDukIAymutM', credit: "Academind — useTransition() vs useDeferredValue | React 18" },
     'rx-12-3-actions': { yt: 'I3AsmAWWGEs', credit: "Callstack — Modern React Patterns: Concurrent Rendering, Actions & What’s Next | Aurora Scharff at RUC 2025" },
     'rx-12-4-compiler-rsc': { yt: 'T-rHmWSZajc', credit: "React Conferences by GitNation — Nadia Makarevich – How React Compiler Performs on Real Code, React Advanced 2024" },

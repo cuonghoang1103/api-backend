@@ -1,0 +1,640 @@
+{
+  "ma": "ielts-chu-de-truyen-thong-quang-cao",
+  "nn": "en",
+  "ten": "IELTS theo chủ đề: Truyền thông và quảng cáo",
+  "moTa": "Từ và cụm đặc thù chủ đề Truyền thông – Quảng cáo trong đề IELTS (báo chí, tin tức, kiểm duyệt, quảng cáo, người nổi tiếng, tiêu dùng) — cấp B1–C1, ví dụ theo văn phong Writing Task 2 và Speaking.",
+  "nhom": "ielts",
+  "cap": "C1",
+  "tu": [
+    {
+      "chu": "mass media",
+      "doc": "/ˌmæs ˈmiːdiə/",
+      "loai": "n",
+      "nghia": "phương tiện truyền thông đại chúng",
+      "cap": "B2",
+      "viDu": "The mass media has a huge influence on public opinion.",
+      "viDuNghia": "Truyền thông đại chúng có ảnh hưởng rất lớn tới dư luận.",
+      "cumTu": [
+        "the role of the mass media",
+        "influenced by the mass media"
+      ]
+    },
+    {
+      "chu": "mainstream media",
+      "doc": "/ˌmeɪnstriːm ˈmiːdiə/",
+      "loai": "n",
+      "nghia": "truyền thông chính thống",
+      "cap": "C1",
+      "viDu": "Many young people no longer trust the mainstream media.",
+      "viDuNghia": "Nhiều người trẻ không còn tin truyền thông chính thống.",
+      "cumTu": [
+        "distrust of the mainstream media"
+      ]
+    },
+    {
+      "chu": "media coverage",
+      "doc": "/ˈmiːdiə ˌkʌvərɪdʒ/",
+      "loai": "n",
+      "nghia": "sự đưa tin của truyền thông",
+      "cap": "B2",
+      "viDu": "The disaster received extensive media coverage.",
+      "viDuNghia": "Thảm hoạ nhận được sự đưa tin rộng rãi của truyền thông.",
+      "cumTu": [
+        "extensive media coverage",
+        "attract media coverage",
+        "biased media coverage"
+      ],
+      "hoTu": [
+        "cover (v)"
+      ]
+    },
+    {
+      "chu": "news outlet",
+      "doc": "/ˈnjuːz ˌaʊtlet/",
+      "loai": "n",
+      "nghia": "cơ quan báo chí, kênh tin tức",
+      "cap": "C1",
+      "viDu": "Independent news outlets struggle to compete with large corporations.",
+      "viDuNghia": "Các kênh tin tức độc lập vật lộn để cạnh tranh với tập đoàn lớn.",
+      "cumTu": [
+        "major news outlets",
+        "online news outlets"
+      ]
+    },
+    {
+      "chu": "broadcaster",
+      "doc": "/ˈbrɔːdkɑːstə/",
+      "loai": "n",
+      "nghia": "đài phát thanh/truyền hình; người dẫn chương trình",
+      "cap": "B2",
+      "viDu": "Public broadcasters should provide educational programmes.",
+      "viDuNghia": "Đài truyền hình công nên cung cấp chương trình giáo dục.",
+      "cumTu": [
+        "a public broadcaster",
+        "national broadcaster"
+      ],
+      "hoTu": [
+        "broadcast (v/n)"
+      ]
+    },
+    {
+      "chu": "journalism",
+      "doc": "/ˈdʒɜːnəlɪzəm/",
+      "loai": "n",
+      "nghia": "nghề báo, báo chí",
+      "cap": "B2",
+      "viDu": "Good journalism holds powerful people to account.",
+      "viDuNghia": "Báo chí tốt buộc người có quyền lực phải chịu trách nhiệm.",
+      "cumTu": [
+        "investigative journalism",
+        "citizen journalism"
+      ],
+      "hoTu": [
+        "journalist (n)",
+        "journalistic (adj)"
+      ]
+    },
+    {
+      "chu": "tabloid",
+      "doc": "/ˈtæblɔɪd/",
+      "loai": "n",
+      "nghia": "báo lá cải",
+      "cap": "C1",
+      "viDu": "Tabloids are full of gossip about celebrities' private lives.",
+      "viDuNghia": "Báo lá cải đầy chuyện ngồi lê đôi mách về đời tư người nổi tiếng.",
+      "cumTu": [
+        "tabloid newspapers",
+        "the tabloid press"
+      ],
+      "ghiChu": "Đối lập: broadsheet (báo nghiêm túc)."
+    },
+    {
+      "chu": "front page",
+      "doc": "/ˌfrʌnt ˈpeɪdʒ/",
+      "loai": "n",
+      "nghia": "trang nhất",
+      "cap": "B2",
+      "viDu": "The scandal was on the front page of every newspaper.",
+      "viDuNghia": "Vụ bê bối nằm trên trang nhất của mọi tờ báo.",
+      "cumTu": [
+        "make the front page",
+        "front-page news"
+      ]
+    },
+    {
+      "chu": "current affairs",
+      "doc": "/ˌkʌrənt əˈfeəz/",
+      "loai": "n",
+      "nghia": "thời sự",
+      "cap": "B2",
+      "viDu": "I try to keep up with current affairs by reading the news every morning.",
+      "viDuNghia": "Tôi cố cập nhật thời sự bằng cách đọc tin mỗi sáng.",
+      "cumTu": [
+        "current affairs programmes",
+        "keep up with current affairs"
+      ],
+      "ghiChu": "Hay dùng trong Speaking Part 1 (news)."
+    },
+    {
+      "chu": "editorial",
+      "doc": "/ˌedɪˈtɔːriəl/",
+      "loai": "n",
+      "nghia": "bài xã luận",
+      "cap": "C1",
+      "viDu": "The newspaper's editorial criticised the new law.",
+      "viDuNghia": "Bài xã luận của tờ báo chỉ trích luật mới.",
+      "cumTu": [
+        "an editorial on",
+        "editorial independence"
+      ],
+      "hoTu": [
+        "editor (n)",
+        "edit (v)"
+      ]
+    },
+    {
+      "chu": "freedom of the press",
+      "doc": "/ˌfriːdəm əv ðə ˈpres/",
+      "loai": "n",
+      "nghia": "tự do báo chí",
+      "cap": "C1",
+      "viDu": "Freedom of the press is essential in a democracy.",
+      "viDuNghia": "Tự do báo chí là thiết yếu trong một nền dân chủ.",
+      "cumTu": [
+        "defend freedom of the press",
+        "restrict freedom of the press"
+      ],
+      "ghiChu": "Đồng nghĩa: press freedom."
+    },
+    {
+      "chu": "censorship",
+      "doc": "/ˈsensəʃɪp/",
+      "loai": "n",
+      "nghia": "sự kiểm duyệt",
+      "cap": "C1",
+      "viDu": "Internet censorship limits access to information.",
+      "viDuNghia": "Kiểm duyệt Internet hạn chế tiếp cận thông tin.",
+      "cumTu": [
+        "strict censorship",
+        "internet censorship",
+        "state censorship"
+      ],
+      "hoTu": [
+        "censor (v)"
+      ]
+    },
+    {
+      "chu": "censor",
+      "doc": "/ˈsensə/",
+      "loai": "v",
+      "nghia": "kiểm duyệt",
+      "cap": "C1",
+      "viDu": "Should governments censor violent content online?",
+      "viDuNghia": "Chính phủ có nên kiểm duyệt nội dung bạo lực trên mạng không?",
+      "cumTu": [
+        "censor films",
+        "heavily censored"
+      ],
+      "hoTu": [
+        "censorship (n)"
+      ],
+      "ghiChu": "Đừng nhầm với \"censure\" (khiển trách)."
+    },
+    {
+      "chu": "sensationalism",
+      "doc": "/senˈseɪʃənəlɪzəm/",
+      "loai": "n",
+      "nghia": "lối đưa tin giật gân",
+      "cap": "C1",
+      "viDu": "Sensationalism sells newspapers but misleads readers.",
+      "viDuNghia": "Đưa tin giật gân giúp bán báo nhưng làm người đọc hiểu sai.",
+      "cumTu": [
+        "media sensationalism"
+      ],
+      "hoTu": [
+        "sensational (adj)",
+        "sensationalise (v)"
+      ]
+    },
+    {
+      "chu": "sensational",
+      "doc": "/senˈseɪʃənl/",
+      "loai": "adj",
+      "nghia": "giật gân",
+      "cap": "C1",
+      "viDu": "Sensational headlines attract clicks but rarely tell the full story.",
+      "viDuNghia": "Tít giật gân thu hút lượt nhấp nhưng hiếm khi kể đủ câu chuyện.",
+      "cumTu": [
+        "sensational headlines",
+        "sensational stories"
+      ],
+      "hoTu": [
+        "sensationalism (n)"
+      ]
+    },
+    {
+      "chu": "clickbait",
+      "doc": "/ˈklɪkbeɪt/",
+      "loai": "n",
+      "nghia": "tít câu view",
+      "cap": "C1",
+      "viDu": "Clickbait headlines often exaggerate the content of the article.",
+      "viDuNghia": "Tít câu view thường phóng đại nội dung bài viết.",
+      "cumTu": [
+        "clickbait headlines",
+        "fall for clickbait"
+      ]
+    },
+    {
+      "chu": "paparazzi",
+      "doc": "/ˌpæpəˈrætsi/",
+      "loai": "n",
+      "nghia": "thợ săn ảnh người nổi tiếng",
+      "cap": "C1",
+      "viDu": "Celebrities are constantly followed by paparazzi.",
+      "viDuNghia": "Người nổi tiếng liên tục bị thợ săn ảnh bám theo.",
+      "cumTu": [
+        "hounded by paparazzi"
+      ],
+      "hoTu": [
+        "paparazzo (n, số ít)"
+      ]
+    },
+    {
+      "chu": "invasion of privacy",
+      "doc": "/ɪnˌveɪʒn əv ˈprɪvəsi/",
+      "loai": "n",
+      "nghia": "sự xâm phạm đời tư",
+      "cap": "C1",
+      "viDu": "Publishing private photos is a serious invasion of privacy.",
+      "viDuNghia": "Đăng ảnh riêng tư là xâm phạm đời tư nghiêm trọng.",
+      "cumTu": [
+        "a gross invasion of privacy"
+      ],
+      "hoTu": [
+        "invade (v)"
+      ]
+    },
+    {
+      "chu": "propaganda",
+      "doc": "/ˌprɒpəˈɡændə/",
+      "loai": "n",
+      "nghia": "tuyên truyền (thường mang nghĩa xấu)",
+      "cap": "C1",
+      "viDu": "During wartime, governments use the media for propaganda.",
+      "viDuNghia": "Thời chiến, chính phủ dùng truyền thông để tuyên truyền.",
+      "cumTu": [
+        "political propaganda",
+        "a propaganda campaign"
+      ]
+    },
+    {
+      "chu": "public opinion",
+      "doc": "/ˌpʌblɪk əˈpɪnjən/",
+      "loai": "n",
+      "nghia": "dư luận",
+      "cap": "B2",
+      "viDu": "Television can shape public opinion on political issues.",
+      "viDuNghia": "Truyền hình có thể định hình dư luận về các vấn đề chính trị.",
+      "cumTu": [
+        "shape public opinion",
+        "sway public opinion"
+      ]
+    },
+    {
+      "chu": "echo chamber",
+      "doc": "/ˈekəʊ ˌtʃeɪmbə/",
+      "loai": "n",
+      "nghia": "buồng vang (chỉ nghe ý kiến giống mình)",
+      "cap": "C1",
+      "viDu": "Social media algorithms can trap users in an echo chamber.",
+      "viDuNghia": "Thuật toán mạng xã hội có thể nhốt người dùng trong buồng vang.",
+      "cumTu": [
+        "live in an echo chamber",
+        "create echo chambers"
+      ]
+    },
+    {
+      "chu": "media literacy",
+      "doc": "/ˈmiːdiə ˌlɪtərəsi/",
+      "loai": "n",
+      "nghia": "năng lực hiểu biết truyền thông",
+      "cap": "C1",
+      "viDu": "Media literacy helps students tell facts from opinions.",
+      "viDuNghia": "Năng lực truyền thông giúp học sinh phân biệt sự thật với ý kiến.",
+      "cumTu": [
+        "teach media literacy",
+        "improve media literacy"
+      ]
+    },
+    {
+      "chu": "fact-check",
+      "doc": "/ˈfækt tʃek/",
+      "loai": "v",
+      "nghia": "kiểm chứng thông tin",
+      "cap": "C1",
+      "viDu": "Journalists must fact-check stories before publishing them.",
+      "viDuNghia": "Nhà báo phải kiểm chứng thông tin trước khi đăng.",
+      "cumTu": [
+        "fact-check claims",
+        "independent fact-checkers"
+      ],
+      "hoTu": [
+        "fact-checker (n)"
+      ]
+    },
+    {
+      "chu": "prime time",
+      "doc": "/ˈpraɪm ˌtaɪm/",
+      "loai": "n",
+      "nghia": "giờ vàng (truyền hình)",
+      "cap": "C1",
+      "viDu": "Adverts shown at prime time are extremely expensive.",
+      "viDuNghia": "Quảng cáo phát giờ vàng cực kỳ đắt.",
+      "cumTu": [
+        "prime-time television",
+        "a prime-time slot"
+      ]
+    },
+    {
+      "chu": "commercial",
+      "doc": "/kəˈmɜːʃl/",
+      "loai": "n",
+      "nghia": "quảng cáo (trên TV/radio)",
+      "cap": "B2",
+      "viDu": "Children see thousands of TV commercials every year.",
+      "viDuNghia": "Trẻ em xem hàng nghìn quảng cáo truyền hình mỗi năm.",
+      "cumTu": [
+        "a TV commercial",
+        "commercial break"
+      ],
+      "hoTu": [
+        "commercialise (v)"
+      ]
+    },
+    {
+      "chu": "advertiser",
+      "doc": "/ˈædvətaɪzə/",
+      "loai": "n",
+      "nghia": "nhà quảng cáo",
+      "cap": "B2",
+      "viDu": "Advertisers increasingly target children through online games.",
+      "viDuNghia": "Nhà quảng cáo ngày càng nhắm vào trẻ em qua trò chơi trực tuyến.",
+      "cumTu": [
+        "advertisers target",
+        "attract advertisers"
+      ],
+      "hoTu": [
+        "advertise (v)",
+        "advertising (n)"
+      ]
+    },
+    {
+      "chu": "advertising campaign",
+      "doc": "/ˈædvətaɪzɪŋ kæmˌpeɪn/",
+      "loai": "n",
+      "nghia": "chiến dịch quảng cáo",
+      "cap": "B2",
+      "viDu": "The advertising campaign doubled the company's sales.",
+      "viDuNghia": "Chiến dịch quảng cáo đã giúp doanh số công ty tăng gấp đôi.",
+      "cumTu": [
+        "launch an advertising campaign",
+        "a successful advertising campaign"
+      ]
+    },
+    {
+      "chu": "target audience",
+      "doc": "/ˌtɑːɡɪt ˈɔːdiəns/",
+      "loai": "n",
+      "nghia": "đối tượng mục tiêu, khán giả mục tiêu",
+      "cap": "B2",
+      "viDu": "The target audience for this product is teenagers.",
+      "viDuNghia": "Đối tượng mục tiêu của sản phẩm này là thanh thiếu niên.",
+      "cumTu": [
+        "reach a target audience",
+        "identify the target audience"
+      ]
+    },
+    {
+      "chu": "brand loyalty",
+      "doc": "/ˌbrænd ˈlɔɪəlti/",
+      "loai": "n",
+      "nghia": "lòng trung thành với thương hiệu",
+      "cap": "C1",
+      "viDu": "Companies spend millions trying to build brand loyalty.",
+      "viDuNghia": "Các công ty chi hàng triệu để xây dựng lòng trung thành với thương hiệu.",
+      "cumTu": [
+        "build brand loyalty",
+        "strong brand loyalty"
+      ]
+    },
+    {
+      "chu": "celebrity endorsement",
+      "doc": "/səˌlebrəti ɪnˈdɔːsmənt/",
+      "loai": "n",
+      "nghia": "việc người nổi tiếng quảng bá sản phẩm",
+      "cap": "C1",
+      "viDu": "Celebrity endorsement can persuade young people to buy unhealthy products.",
+      "viDuNghia": "Người nổi tiếng quảng bá có thể thuyết phục người trẻ mua sản phẩm không lành mạnh.",
+      "cumTu": [
+        "rely on celebrity endorsement"
+      ]
+    },
+    {
+      "chu": "influencer",
+      "doc": "/ˈɪnfluənsə/",
+      "loai": "n",
+      "nghia": "người có ảnh hưởng (trên mạng)",
+      "cap": "B2",
+      "viDu": "Influencers are often paid to promote products without saying so clearly.",
+      "viDuNghia": "Người có ảnh hưởng thường được trả tiền quảng bá sản phẩm mà không nói rõ.",
+      "cumTu": [
+        "social media influencers",
+        "a fashion influencer"
+      ],
+      "hoTu": [
+        "influence (n/v)"
+      ]
+    },
+    {
+      "chu": "product placement",
+      "doc": "/ˈprɒdʌkt ˌpleɪsmənt/",
+      "loai": "n",
+      "nghia": "quảng cáo lồng ghép sản phẩm (trong phim, chương trình)",
+      "cap": "C1",
+      "viDu": "Product placement in films is a subtle form of advertising.",
+      "viDuNghia": "Lồng ghép sản phẩm trong phim là một dạng quảng cáo tinh vi.",
+      "cumTu": [
+        "product placement in films",
+        "paid product placement"
+      ]
+    },
+    {
+      "chu": "persuasive",
+      "doc": "/pəˈsweɪsɪv/",
+      "loai": "adj",
+      "nghia": "có sức thuyết phục",
+      "cap": "B2",
+      "viDu": "Advertisements use persuasive language to create desire.",
+      "viDuNghia": "Quảng cáo dùng ngôn ngữ thuyết phục để tạo ham muốn.",
+      "cumTu": [
+        "persuasive techniques",
+        "highly persuasive"
+      ],
+      "hoTu": [
+        "persuade (v)",
+        "persuasion (n)"
+      ]
+    },
+    {
+      "chu": "misleading",
+      "doc": "/ˌmɪsˈliːdɪŋ/",
+      "loai": "adj",
+      "nghia": "gây hiểu lầm, sai lệch",
+      "cap": "B2",
+      "viDu": "Misleading advertisements should be banned.",
+      "viDuNghia": "Quảng cáo gây hiểu lầm nên bị cấm.",
+      "cumTu": [
+        "misleading claims",
+        "misleading information",
+        "deliberately misleading"
+      ],
+      "hoTu": [
+        "mislead (v)"
+      ]
+    },
+    {
+      "chu": "billboard",
+      "doc": "/ˈbɪlbɔːd/",
+      "loai": "n",
+      "nghia": "biển quảng cáo lớn ngoài trời",
+      "cap": "B2",
+      "viDu": "Huge billboards dominate the city's main roads.",
+      "viDuNghia": "Những biển quảng cáo khổng lồ chiếm lĩnh các trục đường chính.",
+      "cumTu": [
+        "advertising billboards",
+        "a giant billboard"
+      ]
+    },
+    {
+      "chu": "slogan",
+      "doc": "/ˈsləʊɡən/",
+      "loai": "n",
+      "nghia": "khẩu hiệu",
+      "cap": "B2",
+      "viDu": "A catchy slogan helps people remember a brand.",
+      "viDuNghia": "Một khẩu hiệu dễ nhớ giúp người ta nhớ thương hiệu.",
+      "cumTu": [
+        "a catchy slogan",
+        "an advertising slogan"
+      ]
+    },
+    {
+      "chu": "sponsorship",
+      "doc": "/ˈspɒnsəʃɪp/",
+      "loai": "n",
+      "nghia": "sự tài trợ",
+      "cap": "C1",
+      "viDu": "Sports events depend heavily on corporate sponsorship.",
+      "viDuNghia": "Các sự kiện thể thao phụ thuộc nhiều vào tài trợ của doanh nghiệp.",
+      "cumTu": [
+        "corporate sponsorship",
+        "sponsorship deal"
+      ],
+      "hoTu": [
+        "sponsor (n/v)"
+      ]
+    },
+    {
+      "chu": "publicity",
+      "doc": "/pʌbˈlɪsəti/",
+      "loai": "n",
+      "nghia": "sự công khai, quảng bá, sự chú ý của công chúng",
+      "cap": "B2",
+      "viDu": "The scandal brought the company a lot of negative publicity.",
+      "viDuNghia": "Vụ bê bối mang lại cho công ty nhiều tai tiếng.",
+      "cumTu": [
+        "negative publicity",
+        "a publicity stunt",
+        "attract publicity"
+      ],
+      "hoTu": [
+        "publicise (v)"
+      ]
+    },
+    {
+      "chu": "word of mouth",
+      "doc": "/ˌwɜːd əv ˈmaʊθ/",
+      "loai": "n",
+      "nghia": "truyền miệng",
+      "cap": "B2",
+      "viDu": "Small restaurants often rely on word of mouth rather than advertising.",
+      "viDuNghia": "Nhà hàng nhỏ thường dựa vào truyền miệng hơn là quảng cáo.",
+      "cumTu": [
+        "by word of mouth",
+        "word-of-mouth recommendations"
+      ]
+    },
+    {
+      "chu": "impulse buying",
+      "doc": "/ˈɪmpʌls ˌbaɪɪŋ/",
+      "loai": "n",
+      "nghia": "mua sắm bốc đồng",
+      "cap": "C1",
+      "viDu": "Online shopping encourages impulse buying.",
+      "viDuNghia": "Mua sắm trực tuyến khuyến khích mua bốc đồng.",
+      "cumTu": [
+        "encourage impulse buying"
+      ],
+      "hoTu": [
+        "impulse buy (n)"
+      ]
+    },
+    {
+      "chu": "materialistic",
+      "doc": "/məˌtɪəriəˈlɪstɪk/",
+      "loai": "adj",
+      "nghia": "thực dụng, trọng vật chất",
+      "cap": "C1",
+      "viDu": "Advertising may make children more materialistic.",
+      "viDuNghia": "Quảng cáo có thể khiến trẻ trọng vật chất hơn.",
+      "cumTu": [
+        "a materialistic society",
+        "become materialistic"
+      ],
+      "hoTu": [
+        "materialism (n)"
+      ]
+    },
+    {
+      "chu": "subscriber",
+      "doc": "/səbˈskraɪbə/",
+      "loai": "n",
+      "nghia": "người đăng ký (theo dõi/dài hạn)",
+      "cap": "B2",
+      "viDu": "The channel now has over a million subscribers.",
+      "viDuNghia": "Kênh hiện có hơn một triệu người đăng ký.",
+      "cumTu": [
+        "paying subscribers",
+        "gain subscribers"
+      ],
+      "hoTu": [
+        "subscribe (v)",
+        "subscription (n)"
+      ]
+    },
+    {
+      "chu": "gimmick",
+      "doc": "/ˈɡɪmɪk/",
+      "loai": "n",
+      "nghia": "mánh lới quảng cáo",
+      "cap": "C1",
+      "viDu": "The free gift is just a marketing gimmick.",
+      "viDuNghia": "Quà tặng miễn phí chỉ là mánh lới tiếp thị.",
+      "cumTu": [
+        "a marketing gimmick",
+        "a publicity gimmick"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,704 @@
+{
+  "ma": "ielts-chu-de-kinh-te-viec-lam",
+  "nn": "en",
+  "ten": "IELTS theo chủ đề: Kinh tế và việc làm",
+  "moTa": "Từ và cụm đặc thù chủ đề Kinh tế – Việc làm trong đề IELTS (thất nghiệp, thị trường lao động, toàn cầu hoá, mức sống, cân bằng công việc – cuộc sống) — cấp B1–C1, ví dụ theo văn phong Writing Task 2 và Speaking.",
+  "nhom": "ielts",
+  "cap": "B2",
+  "tu": [
+    {
+      "chu": "unemployment rate",
+      "doc": "/ˌʌnɪmˈplɔɪmənt ˌreɪt/",
+      "loai": "n",
+      "nghia": "tỉ lệ thất nghiệp",
+      "cap": "B2",
+      "viDu": "The unemployment rate among young graduates has risen sharply.",
+      "viDuNghia": "Tỉ lệ thất nghiệp của sinh viên mới tốt nghiệp đã tăng mạnh.",
+      "cumTu": [
+        "a high unemployment rate",
+        "the youth unemployment rate"
+      ],
+      "ghiChu": "Task 1: \"the unemployment rate rose/fell to…\"."
+    },
+    {
+      "chu": "unemployment benefit",
+      "doc": "/ˌʌnɪmˈplɔɪmənt ˌbenɪfɪt/",
+      "loai": "n",
+      "nghia": "trợ cấp thất nghiệp",
+      "cap": "B2",
+      "viDu": "Generous unemployment benefits may discourage some people from looking for work.",
+      "viDuNghia": "Trợ cấp thất nghiệp hào phóng có thể khiến một số người không muốn tìm việc.",
+      "cumTu": [
+        "claim unemployment benefit",
+        "be on unemployment benefit"
+      ]
+    },
+    {
+      "chu": "labour market",
+      "doc": "/ˈleɪbə ˌmɑːkɪt/",
+      "loai": "n",
+      "nghia": "thị trường lao động",
+      "cap": "C1",
+      "viDu": "Graduates are entering a highly competitive labour market.",
+      "viDuNghia": "Sinh viên tốt nghiệp đang bước vào một thị trường lao động rất cạnh tranh.",
+      "cumTu": [
+        "enter the labour market",
+        "a flexible labour market"
+      ],
+      "ghiChu": "Anh-Mỹ: labor market."
+    },
+    {
+      "chu": "workforce",
+      "doc": "/ˈwɜːkfɔːs/",
+      "loai": "n",
+      "nghia": "lực lượng lao động",
+      "cap": "B2",
+      "viDu": "Women now make up almost half of the workforce.",
+      "viDuNghia": "Phụ nữ nay chiếm gần một nửa lực lượng lao động.",
+      "cumTu": [
+        "a skilled workforce",
+        "join the workforce",
+        "reduce the workforce"
+      ]
+    },
+    {
+      "chu": "job security",
+      "doc": "/ˈdʒɒb sɪˌkjʊərəti/",
+      "loai": "n",
+      "nghia": "sự ổn định công việc",
+      "cap": "B2",
+      "viDu": "Many people value job security more than a high salary.",
+      "viDuNghia": "Nhiều người coi trọng sự ổn định công việc hơn lương cao.",
+      "cumTu": [
+        "lack of job security",
+        "offer job security"
+      ]
+    },
+    {
+      "chu": "job satisfaction",
+      "doc": "/ˈdʒɒb ˌsætɪsˌfækʃn/",
+      "loai": "n",
+      "nghia": "sự hài lòng trong công việc",
+      "cap": "B2",
+      "viDu": "Job satisfaction depends on more than just money.",
+      "viDuNghia": "Sự hài lòng trong công việc phụ thuộc vào nhiều thứ hơn tiền bạc.",
+      "cumTu": [
+        "high job satisfaction",
+        "improve job satisfaction"
+      ]
+    },
+    {
+      "chu": "work-life balance",
+      "doc": "/ˌwɜːk laɪf ˈbæləns/",
+      "loai": "n",
+      "nghia": "cân bằng công việc và cuộc sống",
+      "cap": "B2",
+      "viDu": "Flexible hours can help employees achieve a better work-life balance.",
+      "viDuNghia": "Giờ làm linh hoạt giúp nhân viên cân bằng công việc – cuộc sống tốt hơn.",
+      "cumTu": [
+        "achieve a work-life balance",
+        "a healthy work-life balance"
+      ]
+    },
+    {
+      "chu": "flexible working",
+      "doc": "/ˌfleksəbl ˈwɜːkɪŋ/",
+      "loai": "n",
+      "nghia": "làm việc linh hoạt (giờ/địa điểm)",
+      "cap": "B2",
+      "viDu": "Flexible working is especially valuable for parents of young children.",
+      "viDuNghia": "Làm việc linh hoạt đặc biệt có giá trị với cha mẹ có con nhỏ.",
+      "cumTu": [
+        "flexible working hours",
+        "offer flexible working"
+      ]
+    },
+    {
+      "chu": "career prospects",
+      "doc": "/kəˈrɪə ˌprɒspekts/",
+      "loai": "n",
+      "nghia": "triển vọng nghề nghiệp",
+      "cap": "B2",
+      "viDu": "Learning a second language can improve your career prospects.",
+      "viDuNghia": "Học thêm một ngoại ngữ có thể cải thiện triển vọng nghề nghiệp.",
+      "cumTu": [
+        "good career prospects",
+        "improve career prospects"
+      ]
+    },
+    {
+      "chu": "career ladder",
+      "doc": "/kəˈrɪə ˌlædə/",
+      "loai": "n",
+      "nghia": "nấc thang sự nghiệp",
+      "cap": "C1",
+      "viDu": "It takes years to climb the career ladder in a large company.",
+      "viDuNghia": "Phải mất nhiều năm mới leo được nấc thang sự nghiệp ở một công ty lớn.",
+      "cumTu": [
+        "climb the career ladder",
+        "move up the career ladder"
+      ]
+    },
+    {
+      "chu": "employability",
+      "doc": "/ɪmˌplɔɪəˈbɪləti/",
+      "loai": "n",
+      "nghia": "khả năng được tuyển dụng",
+      "cap": "C1",
+      "viDu": "Internships greatly improve students' employability.",
+      "viDuNghia": "Thực tập cải thiện đáng kể khả năng được tuyển dụng của sinh viên.",
+      "cumTu": [
+        "improve employability",
+        "employability skills"
+      ],
+      "hoTu": [
+        "employable (adj)"
+      ]
+    },
+    {
+      "chu": "internship",
+      "doc": "/ˈɪntɜːnʃɪp/",
+      "loai": "n",
+      "nghia": "kỳ thực tập",
+      "cap": "B2",
+      "viDu": "She did a three-month internship at a law firm.",
+      "viDuNghia": "Cô ấy thực tập ba tháng ở một công ty luật.",
+      "cumTu": [
+        "do an internship",
+        "an unpaid internship"
+      ],
+      "hoTu": [
+        "intern (n)"
+      ]
+    },
+    {
+      "chu": "apprenticeship",
+      "doc": "/əˈprentɪʃɪp/",
+      "loai": "n",
+      "nghia": "học việc (vừa học vừa làm có lương)",
+      "cap": "B2",
+      "viDu": "Apprenticeships offer young people a practical alternative to university.",
+      "viDuNghia": "Học việc cho người trẻ một lựa chọn thực tế thay cho đại học.",
+      "cumTu": [
+        "do an apprenticeship",
+        "apprenticeship schemes"
+      ],
+      "hoTu": [
+        "apprentice (n)"
+      ]
+    },
+    {
+      "chu": "redundant",
+      "doc": "/rɪˈdʌndənt/",
+      "loai": "adj",
+      "nghia": "bị cho thôi việc (vì cắt giảm); thừa",
+      "cap": "C1",
+      "viDu": "Hundreds of workers were made redundant when the factory closed.",
+      "viDuNghia": "Hàng trăm công nhân bị cho thôi việc khi nhà máy đóng cửa.",
+      "cumTu": [
+        "be made redundant",
+        "redundant workers"
+      ],
+      "hoTu": [
+        "redundancy (n)"
+      ],
+      "ghiChu": "\"be made redundant\" là cách nói Anh-Anh chuẩn cho mất việc do cắt giảm."
+    },
+    {
+      "chu": "redundancy",
+      "doc": "/rɪˈdʌndənsi/",
+      "loai": "n",
+      "nghia": "sự cắt giảm nhân sự",
+      "cap": "C1",
+      "viDu": "The bank announced 2,000 redundancies.",
+      "viDuNghia": "Ngân hàng thông báo cắt giảm 2.000 nhân sự.",
+      "cumTu": [
+        "face redundancy",
+        "redundancy pay",
+        "voluntary redundancy"
+      ],
+      "hoTu": [
+        "redundant (adj)"
+      ]
+    },
+    {
+      "chu": "lay off",
+      "doc": "/ˌleɪ ˈɒf/",
+      "loai": "phr",
+      "nghia": "sa thải (vì thiếu việc)",
+      "cap": "C1",
+      "viDu": "Firms often lay off older workers first when sales fall.",
+      "viDuNghia": "Các công ty thường sa thải lao động lớn tuổi trước khi doanh số giảm.",
+      "cumTu": [
+        "lay off workers",
+        "be laid off"
+      ],
+      "hoTu": [
+        "layoff (n)"
+      ],
+      "ghiChu": "Khác \"fire/sack\" (đuổi vì lỗi cá nhân)."
+    },
+    {
+      "chu": "burnout",
+      "doc": "/ˈbɜːnaʊt/",
+      "loai": "n",
+      "nghia": "kiệt sức (vì làm việc quá độ)",
+      "cap": "C1",
+      "viDu": "Long hours and constant pressure can lead to burnout.",
+      "viDuNghia": "Giờ làm dài và áp lực liên tục có thể dẫn tới kiệt sức.",
+      "cumTu": [
+        "suffer from burnout",
+        "prevent burnout"
+      ],
+      "hoTu": [
+        "burn out (phr)"
+      ]
+    },
+    {
+      "chu": "productivity",
+      "doc": "/ˌprɒdʌkˈtɪvəti/",
+      "loai": "n",
+      "nghia": "năng suất",
+      "cap": "B2",
+      "viDu": "Some studies show that a four-day week increases productivity.",
+      "viDuNghia": "Một số nghiên cứu cho thấy tuần làm bốn ngày làm tăng năng suất.",
+      "cumTu": [
+        "boost productivity",
+        "labour productivity",
+        "increase productivity"
+      ],
+      "hoTu": [
+        "productive (adj)"
+      ]
+    },
+    {
+      "chu": "manual labour",
+      "doc": "/ˌmænjuəl ˈleɪbə/",
+      "loai": "n",
+      "nghia": "lao động chân tay",
+      "cap": "B2",
+      "viDu": "Robots are increasingly taking over manual labour.",
+      "viDuNghia": "Rô-bốt ngày càng thay thế lao động chân tay.",
+      "cumTu": [
+        "do manual labour",
+        "manual labour jobs"
+      ],
+      "hoTu": [
+        "manual (adj)"
+      ]
+    },
+    {
+      "chu": "skilled worker",
+      "doc": "/ˌskɪld ˈwɜːkə/",
+      "loai": "n",
+      "nghia": "lao động có tay nghề",
+      "cap": "B2",
+      "viDu": "The country faces a shortage of skilled workers.",
+      "viDuNghia": "Đất nước đang thiếu lao động có tay nghề.",
+      "cumTu": [
+        "a shortage of skilled workers",
+        "highly skilled workers"
+      ],
+      "hoTu": [
+        "skill (n)"
+      ]
+    },
+    {
+      "chu": "unskilled",
+      "doc": "/ˌʌnˈskɪld/",
+      "loai": "adj",
+      "nghia": "không có tay nghề",
+      "cap": "B2",
+      "viDu": "Unskilled jobs are the most at risk from automation.",
+      "viDuNghia": "Việc làm không cần tay nghề có nguy cơ cao nhất trước tự động hoá.",
+      "cumTu": [
+        "unskilled workers",
+        "unskilled labour"
+      ]
+    },
+    {
+      "chu": "blue-collar",
+      "doc": "/ˌbluː ˈkɒlə/",
+      "loai": "adj",
+      "nghia": "(thuộc) lao động chân tay, công nhân",
+      "cap": "C1",
+      "viDu": "Blue-collar workers have seen their wages fall in real terms.",
+      "viDuNghia": "Công nhân lao động chân tay chứng kiến lương thực tế giảm.",
+      "cumTu": [
+        "blue-collar jobs",
+        "blue-collar workers"
+      ]
+    },
+    {
+      "chu": "white-collar",
+      "doc": "/ˌwaɪt ˈkɒlə/",
+      "loai": "adj",
+      "nghia": "(thuộc) nhân viên văn phòng",
+      "cap": "C1",
+      "viDu": "AI may soon threaten white-collar jobs as well.",
+      "viDuNghia": "AI có thể sớm đe doạ cả công việc văn phòng.",
+      "cumTu": [
+        "white-collar jobs",
+        "white-collar workers"
+      ]
+    },
+    {
+      "chu": "self-employed",
+      "doc": "/ˌself ɪmˈplɔɪd/",
+      "loai": "adj",
+      "nghia": "tự làm chủ",
+      "cap": "B2",
+      "viDu": "Being self-employed gives you freedom but no paid holidays.",
+      "viDuNghia": "Tự làm chủ cho bạn tự do nhưng không có ngày nghỉ hưởng lương.",
+      "cumTu": [
+        "be self-employed",
+        "self-employed workers"
+      ],
+      "hoTu": [
+        "self-employment (n)"
+      ]
+    },
+    {
+      "chu": "freelance",
+      "doc": "/ˈfriːlɑːns/",
+      "loai": "adj",
+      "nghia": "làm tự do (theo hợp đồng từng việc)",
+      "cap": "B2",
+      "viDu": "More young people are choosing freelance work over office jobs.",
+      "viDuNghia": "Ngày càng nhiều người trẻ chọn làm tự do thay vì công việc văn phòng.",
+      "cumTu": [
+        "freelance work",
+        "work freelance",
+        "a freelance designer"
+      ],
+      "hoTu": [
+        "freelancer (n)"
+      ]
+    },
+    {
+      "chu": "gig economy",
+      "doc": "/ˈɡɪɡ ɪˌkɒnəmi/",
+      "loai": "n",
+      "nghia": "nền kinh tế việc làm tự do ngắn hạn (giao hàng, chạy xe công nghệ…)",
+      "cap": "C1",
+      "viDu": "Workers in the gig economy often have no sick pay or pension.",
+      "viDuNghia": "Người làm trong nền kinh tế việc ngắn hạn thường không có lương ốm hay lương hưu.",
+      "cumTu": [
+        "the rise of the gig economy",
+        "gig economy workers"
+      ]
+    },
+    {
+      "chu": "start-up",
+      "doc": "/ˈstɑːt ʌp/",
+      "loai": "n",
+      "nghia": "công ty khởi nghiệp",
+      "cap": "B2",
+      "viDu": "The city offers tax breaks to attract tech start-ups.",
+      "viDuNghia": "Thành phố giảm thuế để thu hút các công ty khởi nghiệp công nghệ.",
+      "cumTu": [
+        "a tech start-up",
+        "launch a start-up",
+        "start-up costs"
+      ],
+      "hoTu": [
+        "start up (phr)"
+      ]
+    },
+    {
+      "chu": "multinational",
+      "doc": "/ˌmʌltiˈnæʃnəl/",
+      "loai": "adj",
+      "nghia": "đa quốc gia",
+      "cap": "B2",
+      "viDu": "Multinational companies bring jobs but may harm local businesses.",
+      "viDuNghia": "Công ty đa quốc gia mang lại việc làm nhưng có thể hại doanh nghiệp địa phương.",
+      "cumTu": [
+        "multinational corporations",
+        "multinational companies",
+        "multinationals (n)"
+      ]
+    },
+    {
+      "chu": "outsource",
+      "doc": "/ˈaʊtsɔːs/",
+      "loai": "v",
+      "nghia": "thuê ngoài, chuyển việc ra bên ngoài",
+      "cap": "C1",
+      "viDu": "Many firms outsource their customer service to cheaper countries.",
+      "viDuNghia": "Nhiều công ty thuê ngoài dịch vụ khách hàng ở các nước rẻ hơn.",
+      "cumTu": [
+        "outsource jobs",
+        "outsource production"
+      ],
+      "hoTu": [
+        "outsourcing (n)"
+      ]
+    },
+    {
+      "chu": "brain drain",
+      "doc": "/ˈbreɪn ˌdreɪn/",
+      "loai": "n",
+      "nghia": "chảy máu chất xám",
+      "cap": "C1",
+      "viDu": "Low salaries have caused a brain drain of doctors to richer countries.",
+      "viDuNghia": "Lương thấp đã gây chảy máu chất xám, bác sĩ đi sang nước giàu hơn.",
+      "cumTu": [
+        "suffer from a brain drain",
+        "reverse the brain drain"
+      ]
+    },
+    {
+      "chu": "globalisation",
+      "doc": "/ˌɡləʊbəlaɪˈzeɪʃn/",
+      "loai": "n",
+      "nghia": "toàn cầu hoá",
+      "cap": "C1",
+      "viDu": "Globalisation has lifted millions out of poverty but widened inequality.",
+      "viDuNghia": "Toàn cầu hoá đã giúp hàng triệu người thoát nghèo nhưng nới rộng bất bình đẳng.",
+      "cumTu": [
+        "the effects of globalisation",
+        "economic globalisation"
+      ],
+      "hoTu": [
+        "globalise (v)",
+        "global (adj)"
+      ],
+      "ghiChu": "Anh-Mỹ: globalization."
+    },
+    {
+      "chu": "economic growth",
+      "doc": "/ˌiːkəˌnɒmɪk ˈɡrəʊθ/",
+      "loai": "n",
+      "nghia": "tăng trưởng kinh tế",
+      "cap": "B2",
+      "viDu": "Economic growth should not come at the expense of the environment.",
+      "viDuNghia": "Tăng trưởng kinh tế không nên đánh đổi bằng môi trường.",
+      "cumTu": [
+        "rapid economic growth",
+        "boost economic growth",
+        "sustain economic growth"
+      ]
+    },
+    {
+      "chu": "economic downturn",
+      "doc": "/ˌiːkəˌnɒmɪk ˈdaʊntɜːn/",
+      "loai": "n",
+      "nghia": "suy giảm kinh tế",
+      "cap": "C1",
+      "viDu": "Young workers are often the first to lose their jobs in an economic downturn.",
+      "viDuNghia": "Lao động trẻ thường mất việc đầu tiên khi kinh tế suy giảm.",
+      "cumTu": [
+        "during an economic downturn",
+        "a sharp economic downturn"
+      ]
+    },
+    {
+      "chu": "gross domestic product",
+      "doc": "/ˌɡrəʊs dəˌmestɪk ˈprɒdʌkt/",
+      "loai": "n",
+      "nghia": "tổng sản phẩm quốc nội (GDP)",
+      "cap": "C1",
+      "viDu": "Tourism accounts for ten per cent of the country's gross domestic product.",
+      "viDuNghia": "Du lịch chiếm mười phần trăm GDP của đất nước.",
+      "cumTu": [
+        "a share of gross domestic product",
+        "GDP growth",
+        "GDP per capita"
+      ],
+      "ghiChu": "Viết tắt GDP."
+    },
+    {
+      "chu": "per capita",
+      "doc": "/pə ˈkæpɪtə/",
+      "loai": "adv",
+      "nghia": "tính theo đầu người",
+      "cap": "C1",
+      "viDu": "Income per capita has doubled in the last twenty years.",
+      "viDuNghia": "Thu nhập bình quân đầu người đã tăng gấp đôi trong hai mươi năm qua.",
+      "cumTu": [
+        "per capita income",
+        "GDP per capita",
+        "consumption per capita"
+      ],
+      "ghiChu": "Rất hay dùng trong Task 1."
+    },
+    {
+      "chu": "standard of living",
+      "doc": "/ˌstændəd əv ˈlɪvɪŋ/",
+      "loai": "n",
+      "nghia": "mức sống",
+      "cap": "B2",
+      "viDu": "The standard of living in Vietnam has improved dramatically.",
+      "viDuNghia": "Mức sống ở Việt Nam đã cải thiện vượt bậc.",
+      "cumTu": [
+        "raise the standard of living",
+        "a high standard of living"
+      ],
+      "ghiChu": "Số nhiều: living standards."
+    },
+    {
+      "chu": "cost of living",
+      "doc": "/ˌkɒst əv ˈlɪvɪŋ/",
+      "loai": "n",
+      "nghia": "chi phí sinh hoạt",
+      "cap": "B2",
+      "viDu": "The cost of living in big cities forces many young people to share flats.",
+      "viDuNghia": "Chi phí sinh hoạt ở thành phố lớn buộc nhiều người trẻ ở ghép.",
+      "cumTu": [
+        "the rising cost of living",
+        "a cost-of-living crisis"
+      ]
+    },
+    {
+      "chu": "purchasing power",
+      "doc": "/ˈpɜːtʃəsɪŋ ˌpaʊə/",
+      "loai": "n",
+      "nghia": "sức mua",
+      "cap": "C1",
+      "viDu": "Inflation reduces the purchasing power of ordinary families.",
+      "viDuNghia": "Lạm phát làm giảm sức mua của các gia đình bình thường.",
+      "cumTu": [
+        "increase purchasing power",
+        "consumer purchasing power"
+      ]
+    },
+    {
+      "chu": "consumer spending",
+      "doc": "/kənˌsjuːmə ˈspendɪŋ/",
+      "loai": "n",
+      "nghia": "chi tiêu tiêu dùng",
+      "cap": "C1",
+      "viDu": "Consumer spending usually falls during a recession.",
+      "viDuNghia": "Chi tiêu tiêu dùng thường giảm khi có suy thoái.",
+      "cumTu": [
+        "boost consumer spending",
+        "a fall in consumer spending"
+      ]
+    },
+    {
+      "chu": "consumerism",
+      "doc": "/kənˈsjuːmərɪzəm/",
+      "loai": "n",
+      "nghia": "chủ nghĩa tiêu dùng",
+      "cap": "C1",
+      "viDu": "Critics blame consumerism for the huge amount of waste we produce.",
+      "viDuNghia": "Người phê phán đổ lỗi cho chủ nghĩa tiêu dùng về lượng rác khổng lồ ta thải ra.",
+      "cumTu": [
+        "the culture of consumerism",
+        "rampant consumerism"
+      ],
+      "hoTu": [
+        "consumerist (adj)"
+      ]
+    },
+    {
+      "chu": "income tax",
+      "doc": "/ˈɪnkʌm ˌtæks/",
+      "loai": "n",
+      "nghia": "thuế thu nhập",
+      "cap": "B2",
+      "viDu": "Should the rich pay a higher rate of income tax?",
+      "viDuNghia": "Người giàu có nên chịu thuế thu nhập cao hơn không?",
+      "cumTu": [
+        "pay income tax",
+        "raise income tax"
+      ]
+    },
+    {
+      "chu": "wealth gap",
+      "doc": "/ˈwelθ ˌɡæp/",
+      "loai": "n",
+      "nghia": "khoảng cách giàu nghèo",
+      "cap": "C1",
+      "viDu": "The wealth gap between rich and poor continues to grow.",
+      "viDuNghia": "Khoảng cách giàu nghèo tiếp tục tăng.",
+      "cumTu": [
+        "widen the wealth gap",
+        "narrow the wealth gap"
+      ],
+      "ghiChu": "Đồng nghĩa: the gap between rich and poor, income inequality."
+    },
+    {
+      "chu": "poverty line",
+      "doc": "/ˈpɒvəti ˌlaɪn/",
+      "loai": "n",
+      "nghia": "chuẩn nghèo",
+      "cap": "C1",
+      "viDu": "Millions of families still live below the poverty line.",
+      "viDuNghia": "Hàng triệu gia đình vẫn sống dưới chuẩn nghèo.",
+      "cumTu": [
+        "live below the poverty line",
+        "above the poverty line"
+      ]
+    },
+    {
+      "chu": "living wage",
+      "doc": "/ˌlɪvɪŋ ˈweɪdʒ/",
+      "loai": "n",
+      "nghia": "mức lương đủ sống",
+      "cap": "C1",
+      "viDu": "Every full-time worker should earn a living wage.",
+      "viDuNghia": "Mọi lao động toàn thời gian nên được trả lương đủ sống.",
+      "cumTu": [
+        "pay a living wage",
+        "earn a living wage"
+      ],
+      "ghiChu": "Cao hơn \"minimum wage\" (lương tối thiểu theo luật)."
+    },
+    {
+      "chu": "trade union",
+      "doc": "/ˌtreɪd ˈjuːniən/",
+      "loai": "n",
+      "nghia": "công đoàn",
+      "cap": "B2",
+      "viDu": "Trade unions campaign for better pay and working conditions.",
+      "viDuNghia": "Công đoàn vận động cho lương và điều kiện làm việc tốt hơn.",
+      "cumTu": [
+        "join a trade union",
+        "trade union members"
+      ]
+    },
+    {
+      "chu": "fringe benefits",
+      "doc": "/ˈfrɪndʒ ˌbenɪfɪts/",
+      "loai": "n",
+      "nghia": "phúc lợi phụ (ngoài lương)",
+      "cap": "C1",
+      "viDu": "Fringe benefits such as health insurance can attract good staff.",
+      "viDuNghia": "Phúc lợi phụ như bảo hiểm y tế có thể thu hút nhân viên giỏi.",
+      "cumTu": [
+        "offer fringe benefits"
+      ],
+      "ghiChu": "Thân mật: perks."
+    },
+    {
+      "chu": "job-hopping",
+      "doc": "/ˈdʒɒb ˌhɒpɪŋ/",
+      "loai": "n",
+      "nghia": "nhảy việc liên tục",
+      "cap": "C1",
+      "viDu": "Job-hopping is common among young professionals today.",
+      "viDuNghia": "Nhảy việc liên tục phổ biến ở người đi làm trẻ ngày nay.",
+      "cumTu": [
+        "frequent job-hopping"
+      ],
+      "hoTu": [
+        "job-hopper (n)"
+      ]
+    },
+    {
+      "chu": "retirement age",
+      "doc": "/rɪˈtaɪəmənt ˌeɪdʒ/",
+      "loai": "n",
+      "nghia": "tuổi nghỉ hưu",
+      "cap": "B2",
+      "viDu": "Many governments are raising the retirement age.",
+      "viDuNghia": "Nhiều chính phủ đang nâng tuổi nghỉ hưu.",
+      "cumTu": [
+        "raise the retirement age",
+        "reach retirement age"
+      ]
+    }
+  ]
+}

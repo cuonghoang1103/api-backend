@@ -1,0 +1,704 @@
+{
+  "ma": "ielts-chu-de-giao-duc",
+  "nn": "en",
+  "ten": "IELTS theo chủ đề: Giáo dục",
+  "moTa": "Từ và cụm đặc thù chủ đề Giáo dục trong đề IELTS (hệ thống trường, đại học, phương pháp học, đánh giá) — cấp B1–C1, ví dụ theo văn phong Writing Task 2 và Speaking.",
+  "nhom": "ielts",
+  "cap": "B2",
+  "tu": [
+    {
+      "chu": "curriculum",
+      "doc": "/kəˈrɪkjələm/",
+      "loai": "n",
+      "nghia": "chương trình giảng dạy",
+      "cap": "B2",
+      "viDu": "Some argue that coding should be part of the school curriculum.",
+      "viDuNghia": "Một số người cho rằng lập trình nên có trong chương trình học phổ thông.",
+      "cumTu": [
+        "the national curriculum",
+        "a broad curriculum",
+        "on the curriculum"
+      ],
+      "hoTu": [
+        "curricular (adj)"
+      ],
+      "ghiChu": "Số nhiều: curricula hoặc curriculums. Khác \"syllabus\" (đề cương của một môn)."
+    },
+    {
+      "chu": "syllabus",
+      "doc": "/ˈsɪləbəs/",
+      "loai": "n",
+      "nghia": "đề cương môn học",
+      "cap": "B2",
+      "viDu": "The history syllabus covers the period from 1900 to the present.",
+      "viDuNghia": "Đề cương môn lịch sử bao quát giai đoạn từ 1900 tới nay.",
+      "cumTu": [
+        "on the syllabus",
+        "follow the syllabus",
+        "cover the syllabus"
+      ]
+    },
+    {
+      "chu": "compulsory education",
+      "doc": "/kəmˌpʌlsəri ˌedʒuˈkeɪʃn/",
+      "loai": "n",
+      "nghia": "giáo dục bắt buộc",
+      "cap": "B2",
+      "viDu": "In Vietnam, compulsory education now lasts until the end of lower secondary school.",
+      "viDuNghia": "Ở Việt Nam, giáo dục bắt buộc nay kéo dài tới hết bậc trung học cơ sở.",
+      "cumTu": [
+        "extend compulsory education",
+        "years of compulsory education"
+      ],
+      "hoTu": [
+        "compulsory (adj)"
+      ]
+    },
+    {
+      "chu": "higher education",
+      "doc": "/ˌhaɪər ˌedʒuˈkeɪʃn/",
+      "loai": "n",
+      "nghia": "giáo dục đại học, bậc cao đẳng – đại học",
+      "cap": "B2",
+      "viDu": "Should higher education be free for all students?",
+      "viDuNghia": "Giáo dục đại học có nên miễn phí cho mọi sinh viên không?",
+      "cumTu": [
+        "access to higher education",
+        "go into higher education",
+        "higher education institutions"
+      ]
+    },
+    {
+      "chu": "tertiary education",
+      "doc": "/ˌtɜːʃəri ˌedʒuˈkeɪʃn/",
+      "loai": "n",
+      "nghia": "giáo dục bậc ba (sau phổ thông)",
+      "cap": "C1",
+      "viDu": "Tertiary education includes universities, colleges and vocational institutes.",
+      "viDuNghia": "Giáo dục bậc ba gồm đại học, cao đẳng và các viện dạy nghề.",
+      "cumTu": [
+        "enter tertiary education",
+        "tertiary education funding"
+      ],
+      "hoTu": [
+        "tertiary (adj)"
+      ],
+      "ghiChu": "Văn trang trọng hơn \"higher education\"; hợp với Writing."
+    },
+    {
+      "chu": "vocational training",
+      "doc": "/vəʊˌkeɪʃənl ˈtreɪnɪŋ/",
+      "loai": "n",
+      "nghia": "đào tạo nghề",
+      "cap": "C1",
+      "viDu": "Vocational training can be a better option than university for many young people.",
+      "viDuNghia": "Đào tạo nghề có thể là lựa chọn tốt hơn đại học với nhiều bạn trẻ.",
+      "cumTu": [
+        "provide vocational training",
+        "vocational courses",
+        "vocational qualifications"
+      ],
+      "hoTu": [
+        "vocation (n)",
+        "vocational (adj)"
+      ]
+    },
+    {
+      "chu": "academic performance",
+      "doc": "/ˌækəˌdemɪk pəˈfɔːməns/",
+      "loai": "n",
+      "nghia": "kết quả học tập",
+      "cap": "B2",
+      "viDu": "Lack of sleep can seriously affect children's academic performance.",
+      "viDuNghia": "Thiếu ngủ có thể ảnh hưởng nghiêm trọng tới kết quả học tập của trẻ.",
+      "cumTu": [
+        "improve academic performance",
+        "poor academic performance"
+      ]
+    },
+    {
+      "chu": "educational attainment",
+      "doc": "/ˌedʒuˌkeɪʃənl əˈteɪnmənt/",
+      "loai": "n",
+      "nghia": "trình độ học vấn đạt được",
+      "cap": "C1",
+      "viDu": "There is a strong link between parents' income and children's educational attainment.",
+      "viDuNghia": "Có mối liên hệ chặt giữa thu nhập cha mẹ và trình độ học vấn của con.",
+      "cumTu": [
+        "level of educational attainment",
+        "raise educational attainment"
+      ],
+      "hoTu": [
+        "attain (v)"
+      ]
+    },
+    {
+      "chu": "literacy",
+      "doc": "/ˈlɪtərəsi/",
+      "loai": "n",
+      "nghia": "khả năng đọc viết",
+      "cap": "C1",
+      "viDu": "Adult literacy rates have risen sharply over the past fifty years.",
+      "viDuNghia": "Tỉ lệ người lớn biết đọc viết đã tăng mạnh trong năm mươi năm qua.",
+      "cumTu": [
+        "literacy rate",
+        "adult literacy",
+        "literacy skills"
+      ],
+      "hoTu": [
+        "literate (adj)",
+        "illiteracy (n)"
+      ]
+    },
+    {
+      "chu": "illiterate",
+      "doc": "/ɪˈlɪtərət/",
+      "loai": "adj",
+      "nghia": "mù chữ",
+      "cap": "C1",
+      "viDu": "Millions of adults worldwide are still illiterate.",
+      "viDuNghia": "Hàng triệu người lớn trên thế giới vẫn mù chữ.",
+      "cumTu": [
+        "functionally illiterate",
+        "computer illiterate"
+      ],
+      "hoTu": [
+        "illiteracy (n)",
+        "literate (adj)"
+      ]
+    },
+    {
+      "chu": "numeracy",
+      "doc": "/ˈnjuːmərəsi/",
+      "loai": "n",
+      "nghia": "khả năng tính toán cơ bản",
+      "cap": "C1",
+      "viDu": "Primary schools should focus on literacy and numeracy.",
+      "viDuNghia": "Trường tiểu học nên tập trung vào đọc viết và tính toán.",
+      "cumTu": [
+        "basic numeracy",
+        "literacy and numeracy",
+        "numeracy skills"
+      ],
+      "hoTu": [
+        "numerate (adj)"
+      ]
+    },
+    {
+      "chu": "rote learning",
+      "doc": "/ˌrəʊt ˈlɜːnɪŋ/",
+      "loai": "n",
+      "nghia": "học vẹt, học thuộc lòng máy móc",
+      "cap": "C1",
+      "viDu": "Rote learning may help students pass exams but not understand concepts.",
+      "viDuNghia": "Học vẹt có thể giúp qua kỳ thi nhưng không giúp hiểu khái niệm.",
+      "cumTu": [
+        "rely on rote learning",
+        "rote learning methods"
+      ],
+      "hoTu": [
+        "learn by rote (phr)"
+      ]
+    },
+    {
+      "chu": "critical thinking",
+      "doc": "/ˌkrɪtɪkl ˈθɪŋkɪŋ/",
+      "loai": "n",
+      "nghia": "tư duy phản biện",
+      "cap": "B2",
+      "viDu": "Group discussions encourage critical thinking in a way lectures cannot.",
+      "viDuNghia": "Thảo luận nhóm khuyến khích tư duy phản biện theo cách bài giảng không làm được.",
+      "cumTu": [
+        "develop critical thinking",
+        "critical thinking skills",
+        "foster critical thinking"
+      ]
+    },
+    {
+      "chu": "distance learning",
+      "doc": "/ˈdɪstəns ˌlɜːnɪŋ/",
+      "loai": "n",
+      "nghia": "học từ xa",
+      "cap": "B2",
+      "viDu": "Distance learning allows working adults to study at their own pace.",
+      "viDuNghia": "Học từ xa cho phép người đi làm học theo nhịp riêng.",
+      "cumTu": [
+        "a distance learning course",
+        "offer distance learning"
+      ],
+      "ghiChu": "Gần nghĩa: online learning, e-learning."
+    },
+    {
+      "chu": "drop out",
+      "doc": "/ˌdrɒp ˈaʊt/",
+      "loai": "phr",
+      "nghia": "bỏ học giữa chừng",
+      "cap": "B2",
+      "viDu": "Some students drop out of university because of financial pressure.",
+      "viDuNghia": "Một số sinh viên bỏ đại học giữa chừng vì áp lực tài chính.",
+      "cumTu": [
+        "drop out of school",
+        "drop out of university",
+        "dropout rate"
+      ],
+      "hoTu": [
+        "dropout (n)"
+      ]
+    },
+    {
+      "chu": "enrol",
+      "doc": "/ɪnˈrəʊl/",
+      "loai": "v",
+      "nghia": "ghi danh, nhập học",
+      "cap": "B2",
+      "viDu": "More women than men now enrol in university courses.",
+      "viDuNghia": "Hiện nay số nữ ghi danh vào đại học nhiều hơn nam.",
+      "cumTu": [
+        "enrol on a course",
+        "enrol in university",
+        "enrol students"
+      ],
+      "hoTu": [
+        "enrolment (n)"
+      ],
+      "ghiChu": "Anh-Anh: enrol/enrolment; Anh-Mỹ: enroll/enrollment."
+    },
+    {
+      "chu": "enrolment",
+      "doc": "/ɪnˈrəʊlmənt/",
+      "loai": "n",
+      "nghia": "sự ghi danh; số học sinh nhập học",
+      "cap": "C1",
+      "viDu": "Primary school enrolment has reached almost 100 per cent.",
+      "viDuNghia": "Tỉ lệ nhập học tiểu học đã đạt gần 100%.",
+      "cumTu": [
+        "school enrolment",
+        "enrolment rates",
+        "increase enrolment"
+      ],
+      "hoTu": [
+        "enrol (v)"
+      ],
+      "ghiChu": "Hay gặp trong biểu đồ Task 1."
+    },
+    {
+      "chu": "postgraduate",
+      "doc": "/ˌpəʊstˈɡrædʒuət/",
+      "loai": "adj",
+      "nghia": "sau đại học",
+      "cap": "B2",
+      "viDu": "She is planning to do a postgraduate degree abroad.",
+      "viDuNghia": "Cô ấy dự định học sau đại học ở nước ngoài.",
+      "cumTu": [
+        "a postgraduate course",
+        "postgraduate students",
+        "postgraduate study"
+      ]
+    },
+    {
+      "chu": "student loan",
+      "doc": "/ˌstjuːdnt ˈləʊn/",
+      "loai": "n",
+      "nghia": "khoản vay sinh viên",
+      "cap": "B2",
+      "viDu": "Many graduates spend years paying off their student loans.",
+      "viDuNghia": "Nhiều sinh viên tốt nghiệp mất nhiều năm trả khoản vay sinh viên.",
+      "cumTu": [
+        "take out a student loan",
+        "repay a student loan",
+        "student loan debt"
+      ]
+    },
+    {
+      "chu": "qualification",
+      "doc": "/ˌkwɒlɪfɪˈkeɪʃn/",
+      "loai": "n",
+      "nghia": "bằng cấp, chứng chỉ",
+      "cap": "B2",
+      "viDu": "Employers increasingly value experience as much as formal qualifications.",
+      "viDuNghia": "Nhà tuyển dụng ngày càng coi trọng kinh nghiệm ngang bằng bằng cấp chính quy.",
+      "cumTu": [
+        "academic qualifications",
+        "gain a qualification",
+        "formal qualifications"
+      ],
+      "hoTu": [
+        "qualify (v)",
+        "qualified (adj)"
+      ]
+    },
+    {
+      "chu": "diploma",
+      "doc": "/dɪˈpləʊmə/",
+      "loai": "n",
+      "nghia": "văn bằng, bằng tốt nghiệp (thường dưới cử nhân)",
+      "cap": "B2",
+      "viDu": "He left school with a diploma in graphic design.",
+      "viDuNghia": "Anh ấy ra trường với văn bằng thiết kế đồ hoạ.",
+      "cumTu": [
+        "a diploma in",
+        "award a diploma"
+      ]
+    },
+    {
+      "chu": "seminar",
+      "doc": "/ˈsemɪnɑː/",
+      "loai": "n",
+      "nghia": "buổi thảo luận chuyên đề (lớp nhỏ)",
+      "cap": "B2",
+      "viDu": "Students are expected to take part actively in weekly seminars.",
+      "viDuNghia": "Sinh viên được kỳ vọng tham gia tích cực các buổi thảo luận hằng tuần.",
+      "cumTu": [
+        "attend a seminar",
+        "lead a seminar"
+      ]
+    },
+    {
+      "chu": "tutorial",
+      "doc": "/tjuːˈtɔːriəl/",
+      "loai": "n",
+      "nghia": "buổi học kèm nhóm nhỏ với giảng viên",
+      "cap": "B2",
+      "viDu": "In tutorials, students can ask questions they would not ask in lectures.",
+      "viDuNghia": "Trong buổi học nhóm nhỏ, sinh viên dám hỏi những điều không hỏi trong giờ giảng lớn.",
+      "cumTu": [
+        "a weekly tutorial",
+        "tutorial group"
+      ],
+      "hoTu": [
+        "tutor (n)"
+      ]
+    },
+    {
+      "chu": "dissertation",
+      "doc": "/ˌdɪsəˈteɪʃn/",
+      "loai": "n",
+      "nghia": "luận văn, khoá luận",
+      "cap": "C1",
+      "viDu": "I wrote my dissertation on the impact of social media on teenagers.",
+      "viDuNghia": "Tôi viết luận văn về tác động của mạng xã hội tới thanh thiếu niên.",
+      "cumTu": [
+        "write a dissertation",
+        "a dissertation on"
+      ],
+      "ghiChu": "Khác \"thesis\" (thường dùng cho luận án cao học/tiến sĩ ở Anh)."
+    },
+    {
+      "chu": "plagiarism",
+      "doc": "/ˈpleɪdʒərɪzəm/",
+      "loai": "n",
+      "nghia": "đạo văn",
+      "cap": "C1",
+      "viDu": "Universities use software to detect plagiarism in essays.",
+      "viDuNghia": "Các trường đại học dùng phần mềm để phát hiện đạo văn trong bài luận.",
+      "cumTu": [
+        "accused of plagiarism",
+        "detect plagiarism"
+      ],
+      "hoTu": [
+        "plagiarise (v)"
+      ]
+    },
+    {
+      "chu": "faculty",
+      "doc": "/ˈfæklti/",
+      "loai": "n",
+      "nghia": "khoa (đại học); đội ngũ giảng viên",
+      "cap": "C1",
+      "viDu": "She works in the Faculty of Law.",
+      "viDuNghia": "Cô ấy làm việc ở Khoa Luật.",
+      "cumTu": [
+        "the Faculty of",
+        "faculty members"
+      ]
+    },
+    {
+      "chu": "mentor",
+      "doc": "/ˈmentɔː/",
+      "loai": "n",
+      "nghia": "người hướng dẫn, người dìu dắt",
+      "cap": "C1",
+      "viDu": "Having a mentor can make the first year at university much easier.",
+      "viDuNghia": "Có người dìu dắt có thể giúp năm nhất đại học dễ dàng hơn nhiều.",
+      "cumTu": [
+        "act as a mentor",
+        "a mentor to"
+      ],
+      "hoTu": [
+        "mentoring (n)",
+        "mentor (v)"
+      ]
+    },
+    {
+      "chu": "standardised test",
+      "doc": "/ˌstændədaɪzd ˈtest/",
+      "loai": "n",
+      "nghia": "bài thi chuẩn hoá",
+      "cap": "C1",
+      "viDu": "Standardised tests cannot measure creativity or teamwork.",
+      "viDuNghia": "Bài thi chuẩn hoá không đo được sự sáng tạo hay khả năng làm việc nhóm.",
+      "cumTu": [
+        "take a standardised test",
+        "rely on standardised tests"
+      ],
+      "ghiChu": "Anh-Mỹ viết standardized."
+    },
+    {
+      "chu": "gap year",
+      "doc": "/ˈɡæp ˌjɪə/",
+      "loai": "n",
+      "nghia": "năm nghỉ (giữa phổ thông và đại học)",
+      "cap": "B2",
+      "viDu": "Taking a gap year can help young people become more independent.",
+      "viDuNghia": "Nghỉ một năm trước đại học có thể giúp người trẻ tự lập hơn.",
+      "cumTu": [
+        "take a gap year",
+        "spend a gap year"
+      ]
+    },
+    {
+      "chu": "boarding school",
+      "doc": "/ˈbɔːdɪŋ ˌskuːl/",
+      "loai": "n",
+      "nghia": "trường nội trú",
+      "cap": "B2",
+      "viDu": "Sending young children to boarding school can weaken family bonds.",
+      "viDuNghia": "Gửi trẻ nhỏ vào trường nội trú có thể làm lỏng gắn kết gia đình.",
+      "cumTu": [
+        "go to boarding school",
+        "attend a boarding school"
+      ],
+      "hoTu": [
+        "boarder (n)"
+      ]
+    },
+    {
+      "chu": "single-sex school",
+      "doc": "/ˌsɪŋɡl seks ˈskuːl/",
+      "loai": "n",
+      "nghia": "trường chỉ dành cho một giới",
+      "cap": "B2",
+      "viDu": "Some parents believe girls do better academically in single-sex schools.",
+      "viDuNghia": "Một số phụ huynh tin rằng nữ sinh học tốt hơn ở trường một giới.",
+      "cumTu": [
+        "attend a single-sex school",
+        "single-sex education"
+      ],
+      "ghiChu": "Đối lập: mixed school / co-educational school — đề Task 2 kinh điển."
+    },
+    {
+      "chu": "state school",
+      "doc": "/ˈsteɪt ˌskuːl/",
+      "loai": "n",
+      "nghia": "trường công lập",
+      "cap": "B2",
+      "viDu": "Most children in the UK attend state schools.",
+      "viDuNghia": "Phần lớn trẻ em ở Anh học trường công lập.",
+      "cumTu": [
+        "go to a state school",
+        "state school pupils"
+      ],
+      "ghiChu": "Anh-Mỹ: public school (ở Anh \"public school\" lại là trường tư danh giá)."
+    },
+    {
+      "chu": "home-schooling",
+      "doc": "/ˌhəʊm ˈskuːlɪŋ/",
+      "loai": "n",
+      "nghia": "học tại nhà (thay cho đến trường)",
+      "cap": "C1",
+      "viDu": "Home-schooling gives flexibility but may limit social interaction.",
+      "viDuNghia": "Học tại nhà cho sự linh hoạt nhưng có thể hạn chế giao tiếp xã hội.",
+      "cumTu": [
+        "choose home-schooling",
+        "the rise of home-schooling"
+      ],
+      "hoTu": [
+        "home-school (v)"
+      ]
+    },
+    {
+      "chu": "mixed-ability",
+      "doc": "/ˌmɪkst əˈbɪləti/",
+      "loai": "adj",
+      "nghia": "(lớp) gồm học sinh nhiều trình độ",
+      "cap": "C1",
+      "viDu": "Teaching mixed-ability classes requires a lot of planning.",
+      "viDuNghia": "Dạy lớp nhiều trình độ đòi hỏi chuẩn bị rất kỹ.",
+      "cumTu": [
+        "mixed-ability classes",
+        "mixed-ability groups"
+      ],
+      "ghiChu": "Đề hay hỏi: nên xếp lớp theo năng lực hay trộn?"
+    },
+    {
+      "chu": "gifted",
+      "doc": "/ˈɡɪftɪd/",
+      "loai": "adj",
+      "nghia": "có năng khiếu",
+      "cap": "B2",
+      "viDu": "Gifted children need extra challenges to stay motivated.",
+      "viDuNghia": "Trẻ có năng khiếu cần thêm thử thách để giữ động lực.",
+      "cumTu": [
+        "gifted children",
+        "gifted and talented",
+        "a gifted student"
+      ]
+    },
+    {
+      "chu": "learning difficulties",
+      "doc": "/ˈlɜːnɪŋ ˌdɪfɪkəltiz/",
+      "loai": "n",
+      "nghia": "khó khăn trong học tập",
+      "cap": "C1",
+      "viDu": "Children with learning difficulties often need one-to-one support.",
+      "viDuNghia": "Trẻ gặp khó khăn trong học tập thường cần hỗ trợ một kèm một.",
+      "cumTu": [
+        "have learning difficulties",
+        "students with learning difficulties"
+      ]
+    },
+    {
+      "chu": "extracurricular",
+      "doc": "/ˌekstrəkəˈrɪkjələ/",
+      "loai": "adj",
+      "nghia": "ngoại khoá",
+      "cap": "C1",
+      "viDu": "Extracurricular activities help students develop teamwork and leadership.",
+      "viDuNghia": "Hoạt động ngoại khoá giúp học sinh phát triển kỹ năng làm việc nhóm và lãnh đạo.",
+      "cumTu": [
+        "extracurricular activities",
+        "take part in extracurricular activities"
+      ]
+    },
+    {
+      "chu": "well-rounded",
+      "doc": "/ˌwel ˈraʊndɪd/",
+      "loai": "adj",
+      "nghia": "phát triển toàn diện",
+      "cap": "C1",
+      "viDu": "Schools should aim to produce well-rounded individuals, not just high scorers.",
+      "viDuNghia": "Trường học nên hướng tới con người toàn diện, không chỉ người đạt điểm cao.",
+      "cumTu": [
+        "a well-rounded education",
+        "well-rounded individuals"
+      ]
+    },
+    {
+      "chu": "lifelong learning",
+      "doc": "/ˌlaɪflɒŋ ˈlɜːnɪŋ/",
+      "loai": "n",
+      "nghia": "học tập suốt đời",
+      "cap": "C1",
+      "viDu": "In a fast-changing job market, lifelong learning is essential.",
+      "viDuNghia": "Trong thị trường việc làm thay đổi nhanh, học tập suốt đời là thiết yếu.",
+      "cumTu": [
+        "promote lifelong learning",
+        "a culture of lifelong learning"
+      ]
+    },
+    {
+      "chu": "hands-on",
+      "doc": "/ˌhændz ˈɒn/",
+      "loai": "adj",
+      "nghia": "thực hành, trực tiếp làm",
+      "cap": "C1",
+      "viDu": "Science is easier to understand through hands-on experiments.",
+      "viDuNghia": "Khoa học dễ hiểu hơn qua thí nghiệm thực hành.",
+      "cumTu": [
+        "hands-on experience",
+        "a hands-on approach",
+        "hands-on learning"
+      ]
+    },
+    {
+      "chu": "attendance",
+      "doc": "/əˈtendəns/",
+      "loai": "n",
+      "nghia": "sự đi học đầy đủ, sự có mặt",
+      "cap": "B2",
+      "viDu": "School attendance drops sharply in rural areas during the harvest.",
+      "viDuNghia": "Tỉ lệ đi học giảm mạnh ở nông thôn vào mùa gặt.",
+      "cumTu": [
+        "school attendance",
+        "attendance rate",
+        "poor attendance"
+      ],
+      "hoTu": [
+        "attend (v)"
+      ]
+    },
+    {
+      "chu": "truancy",
+      "doc": "/ˈtruːənsi/",
+      "loai": "n",
+      "nghia": "trốn học",
+      "cap": "C1",
+      "viDu": "Truancy is often a sign of problems at home.",
+      "viDuNghia": "Trốn học thường là dấu hiệu có vấn đề ở gia đình.",
+      "cumTu": [
+        "tackle truancy",
+        "truancy rates"
+      ],
+      "hoTu": [
+        "truant (n)",
+        "play truant (phr)"
+      ]
+    },
+    {
+      "chu": "peer pressure",
+      "doc": "/ˈpɪə ˌpreʃə/",
+      "loai": "n",
+      "nghia": "áp lực từ bạn bè đồng trang lứa",
+      "cap": "B2",
+      "viDu": "Many teenagers start smoking because of peer pressure.",
+      "viDuNghia": "Nhiều thiếu niên bắt đầu hút thuốc vì áp lực từ bạn bè.",
+      "cumTu": [
+        "give in to peer pressure",
+        "resist peer pressure",
+        "under peer pressure"
+      ]
+    },
+    {
+      "chu": "teacher training",
+      "doc": "/ˈtiːtʃə ˌtreɪnɪŋ/",
+      "loai": "n",
+      "nghia": "đào tạo giáo viên",
+      "cap": "B2",
+      "viDu": "Better teacher training would raise standards more than new buildings.",
+      "viDuNghia": "Đào tạo giáo viên tốt hơn sẽ nâng chất lượng nhiều hơn xây trường mới.",
+      "cumTu": [
+        "teacher training courses",
+        "invest in teacher training"
+      ]
+    },
+    {
+      "chu": "co-educational",
+      "doc": "/ˌkəʊ edʒuˈkeɪʃənl/",
+      "loai": "adj",
+      "nghia": "(trường) học chung nam nữ",
+      "cap": "C1",
+      "viDu": "Co-educational schools better reflect the real world, where men and women work together.",
+      "viDuNghia": "Trường học chung nam nữ phản ánh đúng hơn đời thực, nơi nam nữ cùng làm việc.",
+      "cumTu": [
+        "a co-educational school",
+        "co-educational boarding schools"
+      ],
+      "hoTu": [
+        "co-education (n)"
+      ],
+      "ghiChu": "Viết tắt thân mật: co-ed."
+    },
+    {
+      "chu": "grade inflation",
+      "doc": "/ˈɡreɪd ɪnˌfleɪʃn/",
+      "loai": "n",
+      "nghia": "lạm phát điểm số",
+      "cap": "C1",
+      "viDu": "Grade inflation makes it harder for employers to tell students apart.",
+      "viDuNghia": "Lạm phát điểm khiến nhà tuyển dụng khó phân biệt sinh viên.",
+      "cumTu": [
+        "the problem of grade inflation"
+      ]
+    }
+  ]
+}

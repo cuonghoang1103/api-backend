@@ -1,0 +1,1973 @@
+{
+  "ma": "ielts-hoc-thuat-1",
+  "nn": "en",
+  "ten": "Từ học thuật cốt lõi 1",
+  "moTa": "Động từ và danh từ học thuật dùng nhiều nhất trong IELTS Writing/Reading (approach, require, establish, factor, principle, sector…) — nền móng để viết Task 2 và đọc bài học thuật, cấp B1–B2.",
+  "nhom": "ielts",
+  "cap": "B2",
+  "tu": [
+    {
+      "chu": "approach",
+      "doc": "/əˈprəʊtʃ/",
+      "loai": "n",
+      "nghia": "cách tiếp cận, phương pháp",
+      "cap": "B1",
+      "viDu": "A more practical approach to teaching science would keep students interested.",
+      "viDuNghia": "Một cách tiếp cận thực tế hơn trong dạy khoa học sẽ giữ được hứng thú của học sinh.",
+      "cumTu": [
+        "adopt an approach",
+        "take a different approach",
+        "a holistic approach",
+        "approach to something"
+      ],
+      "hoTu": [
+        "approach (v)",
+        "approachable (adj)"
+      ],
+      "ghiChu": "Đi với giới từ \"to\": an approach TO the problem (không dùng \"of\"). Rất hay dùng ở Task 2 khi bàn giải pháp."
+    },
+    {
+      "chu": "identify",
+      "doc": "/aɪˈdentɪfaɪ/",
+      "loai": "v",
+      "nghia": "nhận diện, xác định",
+      "cap": "B1",
+      "viDu": "The first step is to identify the main causes of the problem.",
+      "viDuNghia": "Bước đầu tiên là xác định nguyên nhân chính của vấn đề.",
+      "cumTu": [
+        "identify the cause",
+        "identify with",
+        "clearly identify",
+        "identify a need"
+      ],
+      "hoTu": [
+        "identification (n)",
+        "identity (n)",
+        "identifiable (adj)"
+      ],
+      "ghiChu": "\"identify with somebody\" = đồng cảm/thấy mình giống ai."
+    },
+    {
+      "chu": "involve",
+      "doc": "/ɪnˈvɒlv/",
+      "loai": "v",
+      "nghia": "bao gồm, liên quan; lôi cuốn tham gia",
+      "cap": "B1",
+      "viDu": "The job involves dealing with customers every day.",
+      "viDuNghia": "Công việc bao gồm việc làm việc với khách hàng mỗi ngày.",
+      "cumTu": [
+        "involve doing",
+        "be involved in",
+        "get involved",
+        "actively involve"
+      ],
+      "hoTu": [
+        "involvement (n)",
+        "involved (adj)"
+      ],
+      "ghiChu": "Sau \"involve\" là V-ing, không phải to V."
+    },
+    {
+      "chu": "issue",
+      "doc": "/ˈɪʃuː/",
+      "loai": "n",
+      "nghia": "vấn đề (cần bàn)",
+      "cap": "B1",
+      "viDu": "Climate change is one of the most pressing issues of our time.",
+      "viDuNghia": "Biến đổi khí hậu là một trong những vấn đề cấp bách nhất thời đại.",
+      "cumTu": [
+        "address an issue",
+        "a key issue",
+        "raise an issue",
+        "a controversial issue"
+      ],
+      "hoTu": [
+        "issue (v)"
+      ],
+      "ghiChu": "\"address/tackle an issue\" hay hơn \"solve an issue\". Động từ \"issue\" = ban hành, phát hành."
+    },
+    {
+      "chu": "rely on",
+      "doc": "/rɪˈlaɪ ɒn/",
+      "loai": "phr",
+      "nghia": "dựa vào, phụ thuộc vào",
+      "cap": "B1",
+      "viDu": "Many students rely on their parents for financial support.",
+      "viDuNghia": "Nhiều sinh viên dựa vào cha mẹ để được hỗ trợ tài chính.",
+      "cumTu": [
+        "rely heavily on",
+        "rely on somebody for",
+        "can rely on"
+      ],
+      "hoTu": [
+        "reliance (n)",
+        "reliable (adj)",
+        "reliant (adj)"
+      ]
+    },
+    {
+      "chu": "analyse",
+      "doc": "/ˈænəlaɪz/",
+      "loai": "v",
+      "nghia": "phân tích",
+      "cap": "B2",
+      "viDu": "Researchers analysed data from over two thousand households.",
+      "viDuNghia": "Các nhà nghiên cứu đã phân tích dữ liệu từ hơn hai nghìn hộ gia đình.",
+      "cumTu": [
+        "analyse data",
+        "analyse the causes",
+        "carefully analyse"
+      ],
+      "hoTu": [
+        "analysis (n)",
+        "analyst (n)",
+        "analytical (adj)"
+      ],
+      "ghiChu": "Anh-Anh viết \"analyse\", Anh-Mỹ \"analyze\" — chọn một cách và dùng thống nhất trong bài."
+    },
+    {
+      "chu": "analysis",
+      "doc": "/əˈnæləsɪs/",
+      "loai": "n",
+      "nghia": "sự phân tích, bản phân tích",
+      "cap": "B2",
+      "viDu": "A closer analysis of the figures shows a different picture.",
+      "viDuNghia": "Phân tích kỹ hơn các số liệu cho thấy một bức tranh khác.",
+      "cumTu": [
+        "carry out an analysis",
+        "in-depth analysis",
+        "statistical analysis",
+        "in the final analysis"
+      ],
+      "hoTu": [
+        "analyse (v)",
+        "analyst (n)",
+        "analytical (adj)"
+      ],
+      "ghiChu": "Số nhiều bất quy tắc: analyses /əˈnæləsiːz/."
+    },
+    {
+      "chu": "aspect",
+      "doc": "/ˈæspekt/",
+      "loai": "n",
+      "nghia": "khía cạnh, mặt",
+      "cap": "B2",
+      "viDu": "Cost is only one aspect of the problem that governments must consider.",
+      "viDuNghia": "Chi phí chỉ là một khía cạnh của vấn đề mà chính phủ phải cân nhắc.",
+      "cumTu": [
+        "every aspect of life",
+        "a key aspect",
+        "the negative aspects"
+      ],
+      "ghiChu": "Dùng \"aspect OF\": every aspect of daily life."
+    },
+    {
+      "chu": "assume",
+      "doc": "/əˈsjuːm/",
+      "loai": "v",
+      "nghia": "cho rằng, giả định; đảm nhận",
+      "cap": "B2",
+      "viDu": "Many people assume that technology always makes life easier.",
+      "viDuNghia": "Nhiều người cho rằng công nghệ luôn làm cuộc sống dễ dàng hơn.",
+      "cumTu": [
+        "assume that",
+        "it is widely assumed",
+        "assume responsibility",
+        "assume a role"
+      ],
+      "hoTu": [
+        "assumption (n)"
+      ],
+      "ghiChu": "Nghĩa thứ hai \"đảm nhận\": assume responsibility/control — trang trọng hơn \"take\"."
+    },
+    {
+      "chu": "category",
+      "doc": "/ˈkætəɡəri/",
+      "loai": "n",
+      "nghia": "loại, hạng mục",
+      "cap": "B2",
+      "viDu": "These jobs fall into two broad categories: manual and intellectual.",
+      "viDuNghia": "Những công việc này chia thành hai loại lớn: lao động chân tay và trí óc.",
+      "cumTu": [
+        "fall into a category",
+        "a broad category",
+        "belong to a category"
+      ],
+      "hoTu": [
+        "categorise (v)",
+        "categorical (adj)"
+      ],
+      "ghiChu": "\"fall into … categories\" là cụm hay dùng khi phân loại ý trong bài viết."
+    },
+    {
+      "chu": "concept",
+      "doc": "/ˈkɒnsept/",
+      "loai": "n",
+      "nghia": "khái niệm",
+      "cap": "B2",
+      "viDu": "The concept of working from home was unfamiliar to most companies a decade ago.",
+      "viDuNghia": "Khái niệm làm việc tại nhà còn xa lạ với hầu hết các công ty cách đây một thập kỷ.",
+      "cumTu": [
+        "the concept of",
+        "grasp a concept",
+        "a basic concept",
+        "an abstract concept"
+      ],
+      "hoTu": [
+        "conceptual (adj)",
+        "conceive (v)",
+        "conception (n)"
+      ]
+    },
+    {
+      "chu": "conclude",
+      "doc": "/kənˈkluːd/",
+      "loai": "v",
+      "nghia": "kết luận; kết thúc",
+      "cap": "B2",
+      "viDu": "The study concluded that regular exercise improves memory.",
+      "viDuNghia": "Nghiên cứu kết luận rằng tập thể dục đều đặn cải thiện trí nhớ.",
+      "cumTu": [
+        "conclude that",
+        "conclude by saying",
+        "it can be concluded that"
+      ],
+      "hoTu": [
+        "conclusion (n)",
+        "conclusive (adj)"
+      ],
+      "ghiChu": "\"To conclude, …\" dùng được nhưng nhiều thí sinh lạm dụng; \"In conclusion,\" vẫn tự nhiên hơn ở đoạn kết."
+    },
+    {
+      "chu": "conduct",
+      "doc": "/kənˈdʌkt/",
+      "loai": "v",
+      "nghia": "tiến hành, thực hiện",
+      "cap": "B2",
+      "viDu": "Scientists conducted a survey of 500 teenagers.",
+      "viDuNghia": "Các nhà khoa học đã tiến hành một cuộc khảo sát với 500 thiếu niên.",
+      "cumTu": [
+        "conduct research",
+        "conduct a survey",
+        "conduct an experiment",
+        "conduct an investigation"
+      ],
+      "hoTu": [
+        "conduct (n) /ˈkɒndʌkt/",
+        "conductor (n)"
+      ],
+      "ghiChu": "Động từ nhấn âm 2 (conDUCT), danh từ \"hạnh kiểm, cách cư xử\" nhấn âm 1 (CONduct)."
+    },
+    {
+      "chu": "consequence",
+      "doc": "/ˈkɒnsɪkwəns/",
+      "loai": "n",
+      "nghia": "hậu quả, kết quả",
+      "cap": "B2",
+      "viDu": "Cutting school budgets could have serious consequences for future generations.",
+      "viDuNghia": "Cắt giảm ngân sách trường học có thể gây hậu quả nghiêm trọng cho các thế hệ tương lai.",
+      "cumTu": [
+        "have consequences",
+        "serious consequences",
+        "as a consequence",
+        "face the consequences"
+      ],
+      "hoTu": [
+        "consequent (adj)",
+        "consequently (adv)"
+      ],
+      "ghiChu": "Thường mang nghĩa tiêu cực. \"As a consequence\" = \"as a result\"."
+    },
+    {
+      "chu": "consist",
+      "doc": "/kənˈsɪst/",
+      "loai": "v",
+      "nghia": "gồm có (consist of); nằm ở (consist in)",
+      "cap": "B2",
+      "viDu": "The course consists of ten lectures and three seminars.",
+      "viDuNghia": "Khoá học gồm mười bài giảng và ba buổi thảo luận.",
+      "cumTu": [
+        "consist of",
+        "consist mainly of",
+        "consist in"
+      ],
+      "hoTu": [
+        "consistent (adj)",
+        "consistency (n)"
+      ],
+      "ghiChu": "Không dùng ở thể bị động và tiếp diễn: KHÔNG viết \"is consisted of\"."
+    },
+    {
+      "chu": "context",
+      "doc": "/ˈkɒntekst/",
+      "loai": "n",
+      "nghia": "bối cảnh, ngữ cảnh",
+      "cap": "B2",
+      "viDu": "The policy must be understood in its historical context.",
+      "viDuNghia": "Chính sách phải được hiểu trong bối cảnh lịch sử của nó.",
+      "cumTu": [
+        "in this context",
+        "in the context of",
+        "historical context",
+        "out of context"
+      ],
+      "hoTu": [
+        "contextual (adj)"
+      ],
+      "ghiChu": "\"taken out of context\" = bị trích ra khỏi ngữ cảnh, làm sai lệch ý."
+    },
+    {
+      "chu": "contribute",
+      "doc": "/kənˈtrɪbjuːt/",
+      "loai": "v",
+      "nghia": "đóng góp; góp phần gây ra",
+      "cap": "B2",
+      "viDu": "Air pollution contributes to a wide range of health problems.",
+      "viDuNghia": "Ô nhiễm không khí góp phần gây ra nhiều vấn đề sức khoẻ.",
+      "cumTu": [
+        "contribute to",
+        "contribute significantly",
+        "contribute money"
+      ],
+      "hoTu": [
+        "contribution (n)",
+        "contributor (n)"
+      ],
+      "ghiChu": "Sau \"contribute to\" là danh từ/V-ing: contribute to improving…"
+    },
+    {
+      "chu": "contribution",
+      "doc": "/ˌkɒntrɪˈbjuːʃn/",
+      "loai": "n",
+      "nghia": "sự đóng góp",
+      "cap": "B2",
+      "viDu": "Immigrants make a valuable contribution to the economy.",
+      "viDuNghia": "Người nhập cư đóng góp giá trị cho nền kinh tế.",
+      "cumTu": [
+        "make a contribution to",
+        "a significant contribution",
+        "financial contribution"
+      ],
+      "hoTu": [
+        "contribute (v)",
+        "contributor (n)"
+      ],
+      "ghiChu": "Động từ đi kèm là \"make\", không phải \"do\"."
+    },
+    {
+      "chu": "define",
+      "doc": "/dɪˈfaɪn/",
+      "loai": "v",
+      "nghia": "định nghĩa, xác định rõ",
+      "cap": "B2",
+      "viDu": "It is difficult to define success in a way that everyone accepts.",
+      "viDuNghia": "Thật khó định nghĩa thành công theo cách mà ai cũng chấp nhận.",
+      "cumTu": [
+        "define as",
+        "clearly define",
+        "broadly defined",
+        "define the role"
+      ],
+      "hoTu": [
+        "definition (n)",
+        "definite (adj)",
+        "definitive (adj)"
+      ],
+      "ghiChu": "\"be defined as\" hay dùng ở đầu bài để làm rõ khái niệm."
+    },
+    {
+      "chu": "definition",
+      "doc": "/ˌdefɪˈnɪʃn/",
+      "loai": "n",
+      "nghia": "định nghĩa",
+      "cap": "B2",
+      "viDu": "There is no single definition of poverty that applies to every country.",
+      "viDuNghia": "Không có một định nghĩa duy nhất về nghèo đói áp dụng cho mọi quốc gia.",
+      "cumTu": [
+        "by definition",
+        "a clear definition",
+        "a broad definition"
+      ],
+      "hoTu": [
+        "define (v)",
+        "definitive (adj)"
+      ],
+      "ghiChu": "\"by definition\" = theo đúng bản chất của nó."
+    },
+    {
+      "chu": "demonstrate",
+      "doc": "/ˈdemənstreɪt/",
+      "loai": "v",
+      "nghia": "chứng minh, cho thấy; biểu tình",
+      "cap": "B2",
+      "viDu": "Recent studies demonstrate that children learn languages faster than adults.",
+      "viDuNghia": "Các nghiên cứu gần đây cho thấy trẻ em học ngôn ngữ nhanh hơn người lớn.",
+      "cumTu": [
+        "clearly demonstrate",
+        "demonstrate that",
+        "demonstrate the importance of"
+      ],
+      "hoTu": [
+        "demonstration (n)",
+        "demonstrator (n)"
+      ],
+      "ghiChu": "Thay cho \"show\" để tăng tính học thuật. Nhấn âm 1: DEMonstrate."
+    },
+    {
+      "chu": "distribute",
+      "doc": "/dɪˈstrɪbjuːt/",
+      "loai": "v",
+      "nghia": "phân phối, phân phát",
+      "cap": "B2",
+      "viDu": "Wealth is not distributed equally across the population.",
+      "viDuNghia": "Của cải không được phân phối đều trong dân chúng.",
+      "cumTu": [
+        "distribute equally",
+        "distribute food",
+        "widely distributed"
+      ],
+      "hoTu": [
+        "distribution (n)",
+        "distributor (n)"
+      ],
+      "ghiChu": "Anh-Anh có thể nhấn âm 1 (DIStribute) nhưng nhấn âm 2 phổ biến hơn."
+    },
+    {
+      "chu": "element",
+      "doc": "/ˈelɪmənt/",
+      "loai": "n",
+      "nghia": "yếu tố, thành phần",
+      "cap": "B2",
+      "viDu": "Trust is an essential element of any successful team.",
+      "viDuNghia": "Sự tin tưởng là yếu tố thiết yếu của bất kỳ đội nhóm thành công nào.",
+      "cumTu": [
+        "a key element",
+        "an essential element",
+        "an element of risk"
+      ],
+      "hoTu": [
+        "elementary (adj)"
+      ],
+      "ghiChu": "\"an element of truth/risk\" = một phần sự thật/rủi ro."
+    },
+    {
+      "chu": "emerge",
+      "doc": "/iˈmɜːdʒ/",
+      "loai": "v",
+      "nghia": "nổi lên, xuất hiện; lộ ra",
+      "cap": "B2",
+      "viDu": "New problems emerged as the city grew rapidly.",
+      "viDuNghia": "Những vấn đề mới nảy sinh khi thành phố phát triển nhanh.",
+      "cumTu": [
+        "emerge from",
+        "it emerged that",
+        "emerge as a leader",
+        "a clear pattern emerges"
+      ],
+      "hoTu": [
+        "emergence (n)",
+        "emerging (adj)"
+      ],
+      "ghiChu": "\"emerging economies\" = các nền kinh tế mới nổi."
+    },
+    {
+      "chu": "emphasis",
+      "doc": "/ˈemfəsɪs/",
+      "loai": "n",
+      "nghia": "sự nhấn mạnh, trọng tâm",
+      "cap": "B2",
+      "viDu": "Schools place too much emphasis on exam results.",
+      "viDuNghia": "Trường học đặt quá nhiều trọng tâm vào kết quả thi.",
+      "cumTu": [
+        "place emphasis on",
+        "put emphasis on",
+        "a strong emphasis",
+        "shift the emphasis"
+      ],
+      "hoTu": [
+        "emphasise (v)",
+        "emphatic (adj)"
+      ],
+      "ghiChu": "Giới từ đi kèm là \"on\". Số nhiều: emphases."
+    },
+    {
+      "chu": "emphasise",
+      "doc": "/ˈemfəsaɪz/",
+      "loai": "v",
+      "nghia": "nhấn mạnh",
+      "cap": "B2",
+      "viDu": "The report emphasises the need for better public transport.",
+      "viDuNghia": "Báo cáo nhấn mạnh nhu cầu cần giao thông công cộng tốt hơn.",
+      "cumTu": [
+        "emphasise the importance of",
+        "emphasise that",
+        "strongly emphasise"
+      ],
+      "hoTu": [
+        "emphasis (n)",
+        "emphatic (adj)"
+      ],
+      "ghiChu": "Không dùng \"emphasise on\" — động từ đi thẳng tân ngữ (emphasise the point)."
+    },
+    {
+      "chu": "enable",
+      "doc": "/ɪˈneɪbl/",
+      "loai": "v",
+      "nghia": "giúp cho, tạo điều kiện cho (ai làm gì)",
+      "cap": "B2",
+      "viDu": "The internet enables people to work from almost anywhere.",
+      "viDuNghia": "Internet giúp mọi người có thể làm việc từ hầu như bất cứ đâu.",
+      "cumTu": [
+        "enable somebody to do",
+        "enable access to"
+      ],
+      "hoTu": [
+        "able (adj)",
+        "ability (n)"
+      ],
+      "ghiChu": "Cấu trúc: enable + người + to V. Trang trọng hơn \"allow\"."
+    },
+    {
+      "chu": "ensure",
+      "doc": "/ɪnˈʃɔː(r)/",
+      "loai": "v",
+      "nghia": "đảm bảo",
+      "cap": "B2",
+      "viDu": "Governments should ensure that every child has access to education.",
+      "viDuNghia": "Chính phủ nên đảm bảo rằng mọi trẻ em đều được đi học.",
+      "cumTu": [
+        "ensure that",
+        "ensure safety",
+        "ensure access to"
+      ],
+      "ghiChu": "Dễ nhầm với \"insure\" (mua bảo hiểm) và \"assure\" (trấn an ai đó)."
+    },
+    {
+      "chu": "establish",
+      "doc": "/ɪˈstæblɪʃ/",
+      "loai": "v",
+      "nghia": "thành lập; xác lập; xác minh",
+      "cap": "B2",
+      "viDu": "The university was established in 1920.",
+      "viDuNghia": "Trường đại học được thành lập năm 1920.",
+      "cumTu": [
+        "establish a company",
+        "establish a link",
+        "establish the cause",
+        "well established"
+      ],
+      "hoTu": [
+        "establishment (n)",
+        "established (adj)"
+      ],
+      "ghiChu": "\"establish a link between A and B\" = xác lập mối liên hệ — rất hay gặp trong bài Reading khoa học."
+    },
+    {
+      "chu": "factor",
+      "doc": "/ˈfæktə(r)/",
+      "loai": "n",
+      "nghia": "yếu tố, nhân tố",
+      "cap": "B2",
+      "viDu": "Cost is a major factor in deciding where to study abroad.",
+      "viDuNghia": "Chi phí là một yếu tố lớn khi quyết định du học ở đâu.",
+      "cumTu": [
+        "a key factor",
+        "a contributing factor",
+        "a major factor in",
+        "economic factors"
+      ],
+      "hoTu": [
+        "factor in (v)"
+      ],
+      "ghiChu": "Task 2: \"There are several factors behind this trend\" là câu mở thân bài hay dùng."
+    },
+    {
+      "chu": "impact",
+      "doc": "/ˈɪmpækt/",
+      "loai": "n",
+      "nghia": "tác động, ảnh hưởng",
+      "cap": "B2",
+      "viDu": "Social media has had a huge impact on how young people communicate.",
+      "viDuNghia": "Mạng xã hội đã có tác động lớn đến cách người trẻ giao tiếp.",
+      "cumTu": [
+        "have an impact on",
+        "a significant impact",
+        "a negative impact",
+        "environmental impact"
+      ],
+      "hoTu": [
+        "impact (v)",
+        "impactful (adj)"
+      ],
+      "ghiChu": "Luôn đi với \"on\". Danh từ nhấn âm 1; động từ \"impact (on)\" có thể nhấn âm 2."
+    },
+    {
+      "chu": "implement",
+      "doc": "/ˈɪmplɪment/",
+      "loai": "v",
+      "nghia": "thực thi, triển khai",
+      "cap": "B2",
+      "viDu": "The government plans to implement stricter rules on plastic waste.",
+      "viDuNghia": "Chính phủ dự định thực thi các quy định chặt chẽ hơn về rác thải nhựa.",
+      "cumTu": [
+        "implement a policy",
+        "implement changes",
+        "fully implement",
+        "implement a plan"
+      ],
+      "hoTu": [
+        "implementation (n)"
+      ],
+      "ghiChu": "Động từ phát âm đuôi /-ment/; danh từ \"implement\" (dụng cụ) đọc /-mənt/."
+    },
+    {
+      "chu": "imply",
+      "doc": "/ɪmˈplaɪ/",
+      "loai": "v",
+      "nghia": "ngụ ý, hàm ý",
+      "cap": "B2",
+      "viDu": "The results imply that diet matters more than exercise.",
+      "viDuNghia": "Kết quả hàm ý rằng chế độ ăn quan trọng hơn tập thể dục.",
+      "cumTu": [
+        "imply that",
+        "strongly imply",
+        "this implies"
+      ],
+      "hoTu": [
+        "implication (n)",
+        "implicit (adj)"
+      ],
+      "ghiChu": "Người nói \"imply\" (ngụ ý), người nghe \"infer\" (suy ra) — đừng dùng lẫn."
+    },
+    {
+      "chu": "indicate",
+      "doc": "/ˈɪndɪkeɪt/",
+      "loai": "v",
+      "nghia": "cho thấy, chỉ ra",
+      "cap": "B2",
+      "viDu": "Research indicates that sleep affects academic performance.",
+      "viDuNghia": "Nghiên cứu cho thấy giấc ngủ ảnh hưởng đến kết quả học tập.",
+      "cumTu": [
+        "indicate that",
+        "clearly indicate",
+        "evidence indicates"
+      ],
+      "hoTu": [
+        "indication (n)",
+        "indicator (n)",
+        "indicative (adj)"
+      ],
+      "ghiChu": "Từ thay thế \"show\" an toàn và tự nhiên trong cả Task 1 lẫn Task 2."
+    },
+    {
+      "chu": "interpret",
+      "doc": "/ɪnˈtɜːprɪt/",
+      "loai": "v",
+      "nghia": "diễn giải, hiểu; phiên dịch",
+      "cap": "B2",
+      "viDu": "The same data can be interpreted in very different ways.",
+      "viDuNghia": "Cùng một dữ liệu có thể được diễn giải theo những cách rất khác nhau.",
+      "cumTu": [
+        "interpret as",
+        "interpret data",
+        "be open to interpretation"
+      ],
+      "hoTu": [
+        "interpretation (n)",
+        "interpreter (n)"
+      ],
+      "ghiChu": "\"interpret\" (dịch nói) khác \"translate\" (dịch viết)."
+    },
+    {
+      "chu": "maintain",
+      "doc": "/meɪnˈteɪn/",
+      "loai": "v",
+      "nghia": "duy trì; bảo trì; khẳng định",
+      "cap": "B2",
+      "viDu": "It is important to maintain a healthy balance between work and life.",
+      "viDuNghia": "Điều quan trọng là duy trì sự cân bằng lành mạnh giữa công việc và cuộc sống.",
+      "cumTu": [
+        "maintain a balance",
+        "maintain standards",
+        "maintain that",
+        "well maintained"
+      ],
+      "hoTu": [
+        "maintenance (n)"
+      ],
+      "ghiChu": "Nghĩa \"khẳng định\": Some critics maintain that… — dùng hay khi nêu quan điểm người khác."
+    },
+    {
+      "chu": "majority",
+      "doc": "/məˈdʒɒrəti/",
+      "loai": "n",
+      "nghia": "phần lớn, đa số",
+      "cap": "B2",
+      "viDu": "The majority of students prefer online lectures.",
+      "viDuNghia": "Phần lớn sinh viên thích bài giảng trực tuyến.",
+      "cumTu": [
+        "the vast majority",
+        "a majority of",
+        "in the majority",
+        "majority vote"
+      ],
+      "hoTu": [
+        "major (adj)"
+      ],
+      "ghiChu": "\"The majority of + danh từ số nhiều\" đi với động từ số nhiều."
+    },
+    {
+      "chu": "minority",
+      "doc": "/maɪˈnɒrəti/",
+      "loai": "n",
+      "nghia": "thiểu số, phần nhỏ",
+      "cap": "B2",
+      "viDu": "Only a minority of workers support the new policy.",
+      "viDuNghia": "Chỉ một bộ phận nhỏ người lao động ủng hộ chính sách mới.",
+      "cumTu": [
+        "a small minority",
+        "ethnic minorities",
+        "in the minority"
+      ],
+      "hoTu": [
+        "minor (adj)"
+      ],
+      "ghiChu": "\"ethnic minorities\" = dân tộc thiểu số."
+    },
+    {
+      "chu": "obtain",
+      "doc": "/əbˈteɪn/",
+      "loai": "v",
+      "nghia": "có được, đạt được",
+      "cap": "B2",
+      "viDu": "Students must obtain permission before using the laboratory.",
+      "viDuNghia": "Sinh viên phải xin được phép trước khi dùng phòng thí nghiệm.",
+      "cumTu": [
+        "obtain information",
+        "obtain permission",
+        "obtain a degree"
+      ],
+      "hoTu": [
+        "obtainable (adj)"
+      ],
+      "ghiChu": "Trang trọng hơn \"get\"."
+    },
+    {
+      "chu": "participate",
+      "doc": "/pɑːˈtɪsɪpeɪt/",
+      "loai": "v",
+      "nghia": "tham gia",
+      "cap": "B2",
+      "viDu": "All employees are encouraged to participate in the training programme.",
+      "viDuNghia": "Mọi nhân viên được khuyến khích tham gia chương trình đào tạo.",
+      "cumTu": [
+        "participate in",
+        "actively participate",
+        "participate fully"
+      ],
+      "hoTu": [
+        "participation (n)",
+        "participant (n)"
+      ],
+      "ghiChu": "Đi với \"in\". Trang trọng hơn \"take part in\"."
+    },
+    {
+      "chu": "phase",
+      "doc": "/feɪz/",
+      "loai": "n",
+      "nghia": "giai đoạn",
+      "cap": "B2",
+      "viDu": "The project is now entering its final phase.",
+      "viDuNghia": "Dự án đang bước vào giai đoạn cuối.",
+      "cumTu": [
+        "the first phase",
+        "enter a phase",
+        "a transitional phase",
+        "phase out (v)"
+      ],
+      "hoTu": [
+        "phase (v)"
+      ],
+      "ghiChu": "\"phase out\" = loại bỏ dần, rất hay dùng: phase out petrol cars."
+    },
+    {
+      "chu": "potential",
+      "doc": "/pəˈtenʃl/",
+      "loai": "n",
+      "nghia": "tiềm năng",
+      "cap": "B2",
+      "viDu": "Every child has the potential to succeed if given the right support.",
+      "viDuNghia": "Mọi trẻ em đều có tiềm năng thành công nếu được hỗ trợ đúng cách.",
+      "cumTu": [
+        "reach your potential",
+        "full potential",
+        "have the potential to",
+        "potential for growth"
+      ],
+      "hoTu": [
+        "potential (adj)",
+        "potentially (adv)"
+      ],
+      "ghiChu": "Tính từ \"potential\" (tiềm tàng) cũng rất hay dùng: potential risks."
+    },
+    {
+      "chu": "principle",
+      "doc": "/ˈprɪnsəpl/",
+      "loai": "n",
+      "nghia": "nguyên tắc, nguyên lý",
+      "cap": "B2",
+      "viDu": "The scheme is based on the principle that the polluter should pay.",
+      "viDuNghia": "Chương trình dựa trên nguyên tắc người gây ô nhiễm phải trả tiền.",
+      "cumTu": [
+        "in principle",
+        "the basic principles",
+        "a matter of principle",
+        "moral principles"
+      ],
+      "hoTu": [
+        "principled (adj)"
+      ],
+      "ghiChu": "Phát âm giống \"principal\" (hiệu trưởng; chính) nhưng nghĩa khác hẳn."
+    },
+    {
+      "chu": "procedure",
+      "doc": "/prəˈsiːdʒə(r)/",
+      "loai": "n",
+      "nghia": "thủ tục, quy trình",
+      "cap": "B2",
+      "viDu": "Staff must follow safety procedures at all times.",
+      "viDuNghia": "Nhân viên phải luôn tuân theo quy trình an toàn.",
+      "cumTu": [
+        "follow a procedure",
+        "standard procedure",
+        "legal procedures"
+      ],
+      "hoTu": [
+        "procedural (adj)"
+      ]
+    },
+    {
+      "chu": "promote",
+      "doc": "/prəˈməʊt/",
+      "loai": "v",
+      "nghia": "thúc đẩy, khuyến khích; quảng bá; thăng chức",
+      "cap": "B2",
+      "viDu": "Schools should promote healthy eating habits.",
+      "viDuNghia": "Trường học nên khuyến khích thói quen ăn uống lành mạnh.",
+      "cumTu": [
+        "promote health",
+        "promote awareness",
+        "promote equality",
+        "be promoted to"
+      ],
+      "hoTu": [
+        "promotion (n)",
+        "promoter (n)"
+      ],
+      "ghiChu": "Ba nghĩa phổ biến; trong Task 2 thường là \"thúc đẩy\"."
+    },
+    {
+      "chu": "pursue",
+      "doc": "/pəˈsjuː/",
+      "loai": "v",
+      "nghia": "theo đuổi",
+      "cap": "B2",
+      "viDu": "More young people are choosing to pursue careers in technology.",
+      "viDuNghia": "Ngày càng nhiều người trẻ chọn theo đuổi sự nghiệp công nghệ.",
+      "cumTu": [
+        "pursue a career",
+        "pursue a goal",
+        "pursue a dream",
+        "pursue higher education"
+      ],
+      "hoTu": [
+        "pursuit (n)"
+      ],
+      "ghiChu": "Không dùng \"pursue on\" — đi thẳng tân ngữ."
+    },
+    {
+      "chu": "require",
+      "doc": "/rɪˈkwaɪə(r)/",
+      "loai": "v",
+      "nghia": "đòi hỏi, cần",
+      "cap": "B2",
+      "viDu": "The job requires good communication skills.",
+      "viDuNghia": "Công việc đòi hỏi kỹ năng giao tiếp tốt.",
+      "cumTu": [
+        "require somebody to do",
+        "be required by law",
+        "require attention"
+      ],
+      "hoTu": [
+        "requirement (n)",
+        "requisite (adj)"
+      ],
+      "ghiChu": "Trang trọng hơn \"need\". \"be required to do\" = bắt buộc phải làm."
+    },
+    {
+      "chu": "restrict",
+      "doc": "/rɪˈstrɪkt/",
+      "loai": "v",
+      "nghia": "hạn chế, giới hạn",
+      "cap": "B2",
+      "viDu": "Many cities restrict the number of cars entering the centre.",
+      "viDuNghia": "Nhiều thành phố hạn chế số ô tô đi vào trung tâm.",
+      "cumTu": [
+        "restrict access",
+        "restrict the use of",
+        "strictly restricted",
+        "restrict to"
+      ],
+      "hoTu": [
+        "restriction (n)",
+        "restrictive (adj)"
+      ]
+    },
+    {
+      "chu": "restriction",
+      "doc": "/rɪˈstrɪkʃn/",
+      "loai": "n",
+      "nghia": "sự hạn chế, quy định hạn chế",
+      "cap": "B2",
+      "viDu": "The government lifted travel restrictions last month.",
+      "viDuNghia": "Chính phủ đã dỡ bỏ các hạn chế đi lại vào tháng trước.",
+      "cumTu": [
+        "impose restrictions on",
+        "lift restrictions",
+        "strict restrictions"
+      ],
+      "hoTu": [
+        "restrict (v)",
+        "restrictive (adj)"
+      ],
+      "ghiChu": "\"impose/lift restrictions ON something\"."
+    },
+    {
+      "chu": "reveal",
+      "doc": "/rɪˈviːl/",
+      "loai": "v",
+      "nghia": "tiết lộ, cho thấy",
+      "cap": "B2",
+      "viDu": "The survey revealed that most people feel stressed at work.",
+      "viDuNghia": "Cuộc khảo sát cho thấy hầu hết mọi người cảm thấy căng thẳng ở nơi làm việc.",
+      "cumTu": [
+        "reveal that",
+        "reveal the truth",
+        "a study reveals"
+      ],
+      "hoTu": [
+        "revelation (n)",
+        "revealing (adj)"
+      ]
+    },
+    {
+      "chu": "sector",
+      "doc": "/ˈsektə(r)/",
+      "loai": "n",
+      "nghia": "khu vực, lĩnh vực (kinh tế)",
+      "cap": "B2",
+      "viDu": "Jobs in the service sector have grown rapidly.",
+      "viDuNghia": "Việc làm trong khu vực dịch vụ đã tăng nhanh.",
+      "cumTu": [
+        "the public sector",
+        "the private sector",
+        "the service sector",
+        "across all sectors"
+      ],
+      "ghiChu": "\"public/private sector\" = khu vực nhà nước/tư nhân — cực kỳ hay dùng."
+    },
+    {
+      "chu": "strategy",
+      "doc": "/ˈstrætədʒi/",
+      "loai": "n",
+      "nghia": "chiến lược",
+      "cap": "B2",
+      "viDu": "The company needs a clear strategy to attract younger customers.",
+      "viDuNghia": "Công ty cần một chiến lược rõ ràng để thu hút khách hàng trẻ.",
+      "cumTu": [
+        "develop a strategy",
+        "a long-term strategy",
+        "adopt a strategy",
+        "marketing strategy"
+      ],
+      "hoTu": [
+        "strategic (adj)",
+        "strategically (adv)"
+      ]
+    },
+    {
+      "chu": "structure",
+      "doc": "/ˈstrʌktʃə(r)/",
+      "loai": "n",
+      "nghia": "cấu trúc, cơ cấu",
+      "cap": "B2",
+      "viDu": "The structure of the family has changed over the last century.",
+      "viDuNghia": "Cơ cấu gia đình đã thay đổi trong thế kỷ qua.",
+      "cumTu": [
+        "social structure",
+        "the structure of",
+        "a clear structure"
+      ],
+      "hoTu": [
+        "structure (v)",
+        "structural (adj)"
+      ]
+    },
+    {
+      "chu": "status",
+      "doc": "/ˈsteɪtəs/",
+      "loai": "n",
+      "nghia": "địa vị; tình trạng",
+      "cap": "B2",
+      "viDu": "In many cultures, owning a car is a symbol of status.",
+      "viDuNghia": "Ở nhiều nền văn hoá, sở hữu ô tô là biểu tượng của địa vị.",
+      "cumTu": [
+        "social status",
+        "status symbol",
+        "legal status",
+        "marital status"
+      ],
+      "ghiChu": "Anh-Anh hay đọc /ˈsteɪtəs/, Anh-Mỹ có thể /ˈstætəs/."
+    },
+    {
+      "chu": "tendency",
+      "doc": "/ˈtendənsi/",
+      "loai": "n",
+      "nghia": "xu hướng, khuynh hướng",
+      "cap": "B2",
+      "viDu": "There is a growing tendency for people to marry later.",
+      "viDuNghia": "Ngày càng có xu hướng người ta kết hôn muộn hơn.",
+      "cumTu": [
+        "a tendency to do",
+        "a growing tendency",
+        "a natural tendency"
+      ],
+      "hoTu": [
+        "tend (v)"
+      ],
+      "ghiChu": "\"a tendency to do\" chỉ khuynh hướng của người/vật; không dùng thay \"trend\" trong mô tả biểu đồ."
+    },
+    {
+      "chu": "transform",
+      "doc": "/trænsˈfɔːm/",
+      "loai": "v",
+      "nghia": "biến đổi, thay đổi hoàn toàn",
+      "cap": "B2",
+      "viDu": "Smartphones have transformed the way we shop.",
+      "viDuNghia": "Điện thoại thông minh đã thay đổi hoàn toàn cách chúng ta mua sắm.",
+      "cumTu": [
+        "transform into",
+        "completely transform",
+        "transform the way"
+      ],
+      "hoTu": [
+        "transformation (n)",
+        "transformative (adj)"
+      ],
+      "ghiChu": "Mạnh hơn \"change\": thay đổi tận gốc."
+    },
+    {
+      "chu": "transition",
+      "doc": "/trænˈzɪʃn/",
+      "loai": "n",
+      "nghia": "sự chuyển đổi, chuyển tiếp",
+      "cap": "B2",
+      "viDu": "The transition from school to university can be difficult for many students.",
+      "viDuNghia": "Sự chuyển tiếp từ trường phổ thông lên đại học có thể khó khăn với nhiều sinh viên.",
+      "cumTu": [
+        "the transition from A to B",
+        "a smooth transition",
+        "a period of transition"
+      ],
+      "hoTu": [
+        "transitional (adj)"
+      ]
+    },
+    {
+      "chu": "acquire",
+      "doc": "/əˈkwaɪə(r)/",
+      "loai": "v",
+      "nghia": "đạt được, thu nhận (kiến thức, kỹ năng); mua lại",
+      "cap": "B2",
+      "viDu": "Children acquire language skills naturally through interaction.",
+      "viDuNghia": "Trẻ em thu nhận kỹ năng ngôn ngữ một cách tự nhiên qua giao tiếp.",
+      "cumTu": [
+        "acquire knowledge",
+        "acquire skills",
+        "acquire a taste for"
+      ],
+      "hoTu": [
+        "acquisition (n)"
+      ],
+      "ghiChu": "\"acquire\" nhấn quá trình tích luỹ, trang trọng hơn \"get/learn\"."
+    },
+    {
+      "chu": "adapt",
+      "doc": "/əˈdæpt/",
+      "loai": "v",
+      "nghia": "thích nghi; điều chỉnh, phỏng theo",
+      "cap": "B2",
+      "viDu": "International students often need time to adapt to a new culture.",
+      "viDuNghia": "Du học sinh thường cần thời gian để thích nghi với nền văn hoá mới.",
+      "cumTu": [
+        "adapt to",
+        "adapt quickly",
+        "adapt something for"
+      ],
+      "hoTu": [
+        "adaptation (n)",
+        "adaptable (adj)"
+      ],
+      "ghiChu": "Đừng nhầm với \"adopt\" (nhận nuôi; áp dụng)."
+    },
+    {
+      "chu": "adjust",
+      "doc": "/əˈdʒʌst/",
+      "loai": "v",
+      "nghia": "điều chỉnh; thích nghi",
+      "cap": "B2",
+      "viDu": "It took me a few weeks to adjust to the new time zone.",
+      "viDuNghia": "Tôi mất vài tuần để thích nghi với múi giờ mới.",
+      "cumTu": [
+        "adjust to",
+        "adjust the settings",
+        "make adjustments"
+      ],
+      "hoTu": [
+        "adjustment (n)",
+        "adjustable (adj)"
+      ],
+      "ghiChu": "\"adjust to\" gần nghĩa \"adapt to\" nhưng thường cho thay đổi nhỏ, cụ thể."
+    },
+    {
+      "chu": "alter",
+      "doc": "/ˈɔːltə(r)/",
+      "loai": "v",
+      "nghia": "thay đổi, sửa đổi",
+      "cap": "B2",
+      "viDu": "The new evidence does not alter the main conclusion.",
+      "viDuNghia": "Bằng chứng mới không làm thay đổi kết luận chính.",
+      "cumTu": [
+        "alter the course of",
+        "significantly alter",
+        "alter the fact that"
+      ],
+      "hoTu": [
+        "alteration (n)"
+      ],
+      "ghiChu": "Trang trọng hơn \"change\", thường là thay đổi một phần."
+    },
+    {
+      "chu": "alternative",
+      "doc": "/ɔːlˈtɜːnətɪv/",
+      "loai": "n",
+      "nghia": "lựa chọn thay thế",
+      "cap": "B2",
+      "viDu": "Public transport is a cheaper alternative to driving.",
+      "viDuNghia": "Giao thông công cộng là lựa chọn thay thế rẻ hơn so với lái xe.",
+      "cumTu": [
+        "an alternative to",
+        "a viable alternative",
+        "have no alternative but to"
+      ],
+      "hoTu": [
+        "alternative (adj)",
+        "alternatively (adv)"
+      ],
+      "ghiChu": "Đi với \"to\": an alternative TO cars."
+    },
+    {
+      "chu": "anticipate",
+      "doc": "/ænˈtɪsɪpeɪt/",
+      "loai": "v",
+      "nghia": "dự đoán, lường trước",
+      "cap": "B2",
+      "viDu": "Few experts anticipated how quickly the market would recover.",
+      "viDuNghia": "Ít chuyên gia lường trước được thị trường sẽ phục hồi nhanh như vậy.",
+      "cumTu": [
+        "anticipate problems",
+        "anticipate demand",
+        "as anticipated"
+      ],
+      "hoTu": [
+        "anticipation (n)"
+      ],
+      "ghiChu": "Sau \"anticipate\" có thể là V-ing: anticipate having problems."
+    },
+    {
+      "chu": "capacity",
+      "doc": "/kəˈpæsəti/",
+      "loai": "n",
+      "nghia": "khả năng; sức chứa, công suất",
+      "cap": "B2",
+      "viDu": "The stadium has a capacity of 50,000 people.",
+      "viDuNghia": "Sân vận động có sức chứa 50.000 người.",
+      "cumTu": [
+        "capacity for",
+        "full capacity",
+        "the capacity to do",
+        "in my capacity as"
+      ],
+      "hoTu": [
+        "capable (adj)"
+      ],
+      "ghiChu": "\"in his capacity as manager\" = với tư cách là quản lý."
+    },
+    {
+      "chu": "circumstance",
+      "doc": "/ˈsɜːkəmstəns/",
+      "loai": "n",
+      "nghia": "hoàn cảnh, tình huống",
+      "cap": "B2",
+      "viDu": "Under no circumstances should children be left alone near water.",
+      "viDuNghia": "Không được để trẻ em ở một mình gần nước trong bất kỳ hoàn cảnh nào.",
+      "cumTu": [
+        "under the circumstances",
+        "in certain circumstances",
+        "under no circumstances",
+        "financial circumstances"
+      ],
+      "hoTu": [
+        "circumstantial (adj)"
+      ],
+      "ghiChu": "Hay dùng số nhiều. \"Under no circumstances + đảo ngữ\" là cấu trúc điểm cao."
+    },
+    {
+      "chu": "component",
+      "doc": "/kəmˈpəʊnənt/",
+      "loai": "n",
+      "nghia": "thành phần, bộ phận",
+      "cap": "B2",
+      "viDu": "Exercise is a key component of a healthy lifestyle.",
+      "viDuNghia": "Tập thể dục là một thành phần then chốt của lối sống lành mạnh.",
+      "cumTu": [
+        "a key component",
+        "an essential component",
+        "electronic components"
+      ]
+    },
+    {
+      "chu": "consult",
+      "doc": "/kənˈsʌlt/",
+      "loai": "v",
+      "nghia": "hỏi ý kiến, tham khảo",
+      "cap": "B2",
+      "viDu": "You should consult a doctor before starting a new diet.",
+      "viDuNghia": "Bạn nên hỏi ý kiến bác sĩ trước khi bắt đầu chế độ ăn mới.",
+      "cumTu": [
+        "consult a doctor",
+        "consult an expert",
+        "consult with"
+      ],
+      "hoTu": [
+        "consultation (n)",
+        "consultant (n)"
+      ]
+    },
+    {
+      "chu": "consume",
+      "doc": "/kənˈsjuːm/",
+      "loai": "v",
+      "nghia": "tiêu thụ; tiêu tốn",
+      "cap": "B2",
+      "viDu": "Large cars consume much more fuel than small ones.",
+      "viDuNghia": "Ô tô lớn tiêu thụ nhiều nhiên liệu hơn hẳn ô tô nhỏ.",
+      "cumTu": [
+        "consume energy",
+        "consume time",
+        "be consumed by"
+      ],
+      "hoTu": [
+        "consumer (n)",
+        "consumption (n)"
+      ],
+      "ghiChu": "\"time-consuming\" (adj) = tốn thời gian."
+    },
+    {
+      "chu": "convert",
+      "doc": "/kənˈvɜːt/",
+      "loai": "v",
+      "nghia": "chuyển đổi",
+      "cap": "B2",
+      "viDu": "Many old factories have been converted into apartments.",
+      "viDuNghia": "Nhiều nhà máy cũ đã được chuyển đổi thành căn hộ.",
+      "cumTu": [
+        "convert into",
+        "convert to",
+        "convert energy"
+      ],
+      "hoTu": [
+        "conversion (n)",
+        "convertible (adj)"
+      ]
+    },
+    {
+      "chu": "criticise",
+      "doc": "/ˈkrɪtɪsaɪz/",
+      "loai": "v",
+      "nghia": "chỉ trích, phê bình",
+      "cap": "B2",
+      "viDu": "The policy was widely criticised for ignoring the poor.",
+      "viDuNghia": "Chính sách bị chỉ trích rộng rãi vì phớt lờ người nghèo.",
+      "cumTu": [
+        "criticise somebody for",
+        "be widely criticised",
+        "heavily criticised"
+      ],
+      "hoTu": [
+        "criticism (n)",
+        "critic (n)",
+        "critical (adj)"
+      ],
+      "ghiChu": "Cấu trúc: criticise somebody FOR doing something."
+    },
+    {
+      "chu": "deny",
+      "doc": "/dɪˈnaɪ/",
+      "loai": "v",
+      "nghia": "phủ nhận; từ chối (không cho)",
+      "cap": "B2",
+      "viDu": "No one can deny that technology has improved our lives.",
+      "viDuNghia": "Không ai có thể phủ nhận rằng công nghệ đã cải thiện cuộc sống của chúng ta.",
+      "cumTu": [
+        "deny that",
+        "deny access",
+        "there is no denying that",
+        "deny somebody something"
+      ],
+      "hoTu": [
+        "denial (n)"
+      ],
+      "ghiChu": "\"There is no denying that…\" là cách mở câu Task 2 rất tự nhiên."
+    },
+    {
+      "chu": "detect",
+      "doc": "/dɪˈtekt/",
+      "loai": "v",
+      "nghia": "phát hiện",
+      "cap": "B2",
+      "viDu": "Early tests can detect the disease before symptoms appear.",
+      "viDuNghia": "Xét nghiệm sớm có thể phát hiện bệnh trước khi triệu chứng xuất hiện.",
+      "cumTu": [
+        "detect a problem",
+        "difficult to detect",
+        "detect changes"
+      ],
+      "hoTu": [
+        "detection (n)",
+        "detector (n)"
+      ]
+    },
+    {
+      "chu": "dominate",
+      "doc": "/ˈdɒmɪneɪt/",
+      "loai": "v",
+      "nghia": "thống trị, chiếm ưu thế",
+      "cap": "B2",
+      "viDu": "A few large companies dominate the technology market.",
+      "viDuNghia": "Một vài công ty lớn thống trị thị trường công nghệ.",
+      "cumTu": [
+        "dominate the market",
+        "dominate the conversation",
+        "male-dominated"
+      ],
+      "hoTu": [
+        "dominant (adj)",
+        "domination (n)"
+      ]
+    },
+    {
+      "chu": "eliminate",
+      "doc": "/ɪˈlɪmɪneɪt/",
+      "loai": "v",
+      "nghia": "loại bỏ, loại trừ",
+      "cap": "B2",
+      "viDu": "The aim is to eliminate poverty within a generation.",
+      "viDuNghia": "Mục tiêu là xoá bỏ nghèo đói trong vòng một thế hệ.",
+      "cumTu": [
+        "eliminate the need for",
+        "completely eliminate",
+        "eliminate waste"
+      ],
+      "hoTu": [
+        "elimination (n)"
+      ]
+    },
+    {
+      "chu": "encounter",
+      "doc": "/ɪnˈkaʊntə(r)/",
+      "loai": "v",
+      "nghia": "gặp phải (khó khăn)",
+      "cap": "B2",
+      "viDu": "New employees often encounter problems in their first month.",
+      "viDuNghia": "Nhân viên mới thường gặp phải khó khăn trong tháng đầu.",
+      "cumTu": [
+        "encounter difficulties",
+        "encounter problems",
+        "encounter resistance"
+      ],
+      "hoTu": [
+        "encounter (n)"
+      ],
+      "ghiChu": "Trang trọng hơn \"face/meet\"."
+    },
+    {
+      "chu": "enhance",
+      "doc": "/ɪnˈhɑːns/",
+      "loai": "v",
+      "nghia": "nâng cao, tăng cường",
+      "cap": "B2",
+      "viDu": "Travelling abroad can enhance your understanding of other cultures.",
+      "viDuNghia": "Du lịch nước ngoài có thể nâng cao hiểu biết của bạn về các nền văn hoá khác.",
+      "cumTu": [
+        "enhance the quality of",
+        "enhance performance",
+        "greatly enhance"
+      ],
+      "hoTu": [
+        "enhancement (n)"
+      ],
+      "ghiChu": "Dùng cho thứ vốn đã tốt, làm tốt hơn; không dùng cho người (không viết \"enhance students\")."
+    },
+    {
+      "chu": "exceed",
+      "doc": "/ɪkˈsiːd/",
+      "loai": "v",
+      "nghia": "vượt quá",
+      "cap": "B2",
+      "viDu": "The cost of the project exceeded the original budget.",
+      "viDuNghia": "Chi phí dự án đã vượt quá ngân sách ban đầu.",
+      "cumTu": [
+        "exceed expectations",
+        "exceed the limit",
+        "exceed the budget"
+      ],
+      "hoTu": [
+        "excess (n)",
+        "excessive (adj)"
+      ]
+    },
+    {
+      "chu": "exclude",
+      "doc": "/ɪkˈskluːd/",
+      "loai": "v",
+      "nghia": "loại trừ, không cho vào",
+      "cap": "B2",
+      "viDu": "Poor families are often excluded from good schools.",
+      "viDuNghia": "Gia đình nghèo thường bị loại khỏi các trường tốt.",
+      "cumTu": [
+        "exclude from",
+        "socially excluded",
+        "exclude the possibility"
+      ],
+      "hoTu": [
+        "exclusion (n)",
+        "exclusive (adj)",
+        "excluding (prep)"
+      ]
+    },
+    {
+      "chu": "expand",
+      "doc": "/ɪkˈspænd/",
+      "loai": "v",
+      "nghia": "mở rộng",
+      "cap": "B2",
+      "viDu": "The company plans to expand into Asian markets.",
+      "viDuNghia": "Công ty dự định mở rộng sang các thị trường châu Á.",
+      "cumTu": [
+        "expand into",
+        "rapidly expand",
+        "expand the range"
+      ],
+      "hoTu": [
+        "expansion (n)",
+        "expansive (adj)"
+      ]
+    },
+    {
+      "chu": "expansion",
+      "doc": "/ɪkˈspænʃn/",
+      "loai": "n",
+      "nghia": "sự mở rộng",
+      "cap": "B2",
+      "viDu": "The rapid expansion of cities has put pressure on housing.",
+      "viDuNghia": "Sự mở rộng nhanh của các thành phố đã gây áp lực lên nhà ở.",
+      "cumTu": [
+        "rapid expansion",
+        "economic expansion",
+        "expansion of"
+      ],
+      "hoTu": [
+        "expand (v)"
+      ]
+    },
+    {
+      "chu": "expose",
+      "doc": "/ɪkˈspəʊz/",
+      "loai": "v",
+      "nghia": "phơi bày; tiếp xúc (với)",
+      "cap": "B2",
+      "viDu": "Children should not be exposed to violent content.",
+      "viDuNghia": "Trẻ em không nên tiếp xúc với nội dung bạo lực.",
+      "cumTu": [
+        "be exposed to",
+        "expose the truth",
+        "expose a scandal"
+      ],
+      "hoTu": [
+        "exposure (n)"
+      ],
+      "ghiChu": "\"be exposed to\" = tiếp xúc với (thường là điều có hại)."
+    },
+    {
+      "chu": "extent",
+      "doc": "/ɪkˈstent/",
+      "loai": "n",
+      "nghia": "mức độ, phạm vi",
+      "cap": "B2",
+      "viDu": "To what extent do you agree with this statement?",
+      "viDuNghia": "Bạn đồng ý với nhận định này ở mức độ nào?",
+      "cumTu": [
+        "to some extent",
+        "to a large extent",
+        "to what extent",
+        "the full extent of"
+      ],
+      "hoTu": [
+        "extend (v)",
+        "extensive (adj)"
+      ],
+      "ghiChu": "Dạng đề Task 2 \"To what extent do you agree or disagree?\" — phải nêu rõ mức độ đồng ý."
+    },
+    {
+      "chu": "generate",
+      "doc": "/ˈdʒenəreɪt/",
+      "loai": "v",
+      "nghia": "tạo ra, phát sinh",
+      "cap": "B2",
+      "viDu": "Tourism generates a large amount of income for the region.",
+      "viDuNghia": "Du lịch tạo ra nguồn thu lớn cho khu vực.",
+      "cumTu": [
+        "generate income",
+        "generate electricity",
+        "generate interest",
+        "generate jobs"
+      ],
+      "hoTu": [
+        "generation (n)",
+        "generator (n)"
+      ]
+    },
+    {
+      "chu": "highlight",
+      "doc": "/ˈhaɪlaɪt/",
+      "loai": "v",
+      "nghia": "làm nổi bật, nhấn mạnh",
+      "cap": "B2",
+      "viDu": "The report highlights the need for more teachers.",
+      "viDuNghia": "Báo cáo làm nổi bật nhu cầu cần thêm giáo viên.",
+      "cumTu": [
+        "highlight the importance of",
+        "highlight the need for",
+        "highlight the problem"
+      ],
+      "hoTu": [
+        "highlight (n)"
+      ]
+    },
+    {
+      "chu": "instance",
+      "doc": "/ˈɪnstəns/",
+      "loai": "n",
+      "nghia": "ví dụ, trường hợp",
+      "cap": "B2",
+      "viDu": "There have been several instances of cheating in online exams.",
+      "viDuNghia": "Đã có một vài trường hợp gian lận trong các kỳ thi trực tuyến.",
+      "cumTu": [
+        "for instance",
+        "in this instance",
+        "in the first instance"
+      ],
+      "ghiChu": "\"for instance\" = \"for example\", dùng xen kẽ để tránh lặp."
+    },
+    {
+      "chu": "institution",
+      "doc": "/ˌɪnstɪˈtjuːʃn/",
+      "loai": "n",
+      "nghia": "tổ chức, cơ quan; thể chế",
+      "cap": "B2",
+      "viDu": "Universities are among the oldest institutions in Europe.",
+      "viDuNghia": "Các trường đại học thuộc những tổ chức lâu đời nhất ở châu Âu.",
+      "cumTu": [
+        "educational institutions",
+        "financial institutions",
+        "public institutions"
+      ],
+      "hoTu": [
+        "institute (n/v)",
+        "institutional (adj)"
+      ]
+    },
+    {
+      "chu": "interact",
+      "doc": "/ˌɪntərˈækt/",
+      "loai": "v",
+      "nghia": "tương tác",
+      "cap": "B2",
+      "viDu": "Children learn by interacting with others.",
+      "viDuNghia": "Trẻ em học bằng cách tương tác với người khác.",
+      "cumTu": [
+        "interact with",
+        "interact socially"
+      ],
+      "hoTu": [
+        "interaction (n)",
+        "interactive (adj)"
+      ]
+    },
+    {
+      "chu": "interaction",
+      "doc": "/ˌɪntərˈækʃn/",
+      "loai": "n",
+      "nghia": "sự tương tác",
+      "cap": "B2",
+      "viDu": "Online learning reduces face-to-face interaction between students.",
+      "viDuNghia": "Học trực tuyến làm giảm sự tương tác trực tiếp giữa các sinh viên.",
+      "cumTu": [
+        "social interaction",
+        "face-to-face interaction",
+        "interaction between"
+      ],
+      "hoTu": [
+        "interact (v)",
+        "interactive (adj)"
+      ]
+    },
+    {
+      "chu": "motivate",
+      "doc": "/ˈməʊtɪveɪt/",
+      "loai": "v",
+      "nghia": "thúc đẩy, tạo động lực",
+      "cap": "B2",
+      "viDu": "Good teachers know how to motivate their students.",
+      "viDuNghia": "Giáo viên giỏi biết cách tạo động lực cho học sinh.",
+      "cumTu": [
+        "motivate somebody to do",
+        "highly motivated",
+        "be motivated by"
+      ],
+      "hoTu": [
+        "motivation (n)",
+        "motive (n)"
+      ]
+    },
+    {
+      "chu": "objective",
+      "doc": "/əbˈdʒektɪv/",
+      "loai": "n",
+      "nghia": "mục tiêu",
+      "cap": "B2",
+      "viDu": "The main objective of the policy is to reduce unemployment.",
+      "viDuNghia": "Mục tiêu chính của chính sách là giảm thất nghiệp.",
+      "cumTu": [
+        "achieve an objective",
+        "the main objective",
+        "set objectives"
+      ],
+      "hoTu": [
+        "objective (adj)",
+        "objectively (adv)"
+      ],
+      "ghiChu": "Tính từ \"objective\" = khách quan (trái với subjective)."
+    },
+    {
+      "chu": "overcome",
+      "doc": "/ˌəʊvəˈkʌm/",
+      "loai": "v",
+      "nghia": "vượt qua",
+      "cap": "B2",
+      "viDu": "Many immigrants have to overcome language barriers.",
+      "viDuNghia": "Nhiều người nhập cư phải vượt qua rào cản ngôn ngữ.",
+      "cumTu": [
+        "overcome difficulties",
+        "overcome barriers",
+        "overcome a fear"
+      ],
+      "ghiChu": "Bất quy tắc: overcome – overcame – overcome."
+    },
+    {
+      "chu": "overview",
+      "doc": "/ˈəʊvəvjuː/",
+      "loai": "n",
+      "nghia": "cái nhìn tổng quan",
+      "cap": "B2",
+      "viDu": "The first chapter gives an overview of the history of the city.",
+      "viDuNghia": "Chương đầu đưa ra cái nhìn tổng quan về lịch sử thành phố.",
+      "cumTu": [
+        "give an overview",
+        "a brief overview",
+        "a general overview"
+      ],
+      "ghiChu": "Task 1 bắt buộc có \"overview\" — đoạn nêu xu hướng chính, không có số liệu chi tiết."
+    },
+    {
+      "chu": "possess",
+      "doc": "/pəˈzes/",
+      "loai": "v",
+      "nghia": "sở hữu, có",
+      "cap": "B2",
+      "viDu": "Leaders must possess good communication skills.",
+      "viDuNghia": "Người lãnh đạo phải có kỹ năng giao tiếp tốt.",
+      "cumTu": [
+        "possess skills",
+        "possess qualities",
+        "possess knowledge"
+      ],
+      "hoTu": [
+        "possession (n)",
+        "possessive (adj)"
+      ],
+      "ghiChu": "Trang trọng hơn \"have\", dùng cho phẩm chất/tài sản."
+    },
+    {
+      "chu": "preserve",
+      "doc": "/prɪˈzɜːv/",
+      "loai": "v",
+      "nghia": "bảo tồn, giữ gìn",
+      "cap": "B2",
+      "viDu": "Governments should preserve historic buildings for future generations.",
+      "viDuNghia": "Chính phủ nên bảo tồn các công trình lịch sử cho thế hệ sau.",
+      "cumTu": [
+        "preserve traditions",
+        "preserve the environment",
+        "well preserved"
+      ],
+      "hoTu": [
+        "preservation (n)"
+      ],
+      "ghiChu": "\"preserve\" nhấn giữ nguyên trạng; \"conserve\" nhấn tiết kiệm/không lãng phí."
+    },
+    {
+      "chu": "proceed",
+      "doc": "/prəˈsiːd/",
+      "loai": "v",
+      "nghia": "tiến hành, tiếp tục",
+      "cap": "B2",
+      "viDu": "After the break, the meeting proceeded as planned.",
+      "viDuNghia": "Sau giờ nghỉ, cuộc họp tiếp tục như kế hoạch.",
+      "cumTu": [
+        "proceed with",
+        "proceed to do",
+        "proceed as planned"
+      ],
+      "hoTu": [
+        "procedure (n)",
+        "process (n)",
+        "proceedings (n)"
+      ]
+    },
+    {
+      "chu": "perspective",
+      "doc": "/pəˈspektɪv/",
+      "loai": "n",
+      "nghia": "góc nhìn, quan điểm",
+      "cap": "B2",
+      "viDu": "Living abroad gave me a new perspective on my own culture.",
+      "viDuNghia": "Sống ở nước ngoài cho tôi một góc nhìn mới về văn hoá của chính mình.",
+      "cumTu": [
+        "from a … perspective",
+        "a different perspective",
+        "put things into perspective"
+      ],
+      "ghiChu": "\"from an economic perspective\" = xét về mặt kinh tế — cách mở luận điểm rất hay."
+    },
+    {
+      "chu": "accommodate",
+      "doc": "/əˈkɒmədeɪt/",
+      "loai": "v",
+      "nghia": "cung cấp chỗ ở, chứa được; đáp ứng",
+      "cap": "B2",
+      "viDu": "The new hall can accommodate up to 500 students.",
+      "viDuNghia": "Hội trường mới có thể chứa tới 500 sinh viên.",
+      "cumTu": [
+        "accommodate guests",
+        "accommodate the needs of",
+        "accommodate changes"
+      ],
+      "hoTu": [
+        "accommodation (n)"
+      ],
+      "ghiChu": "Nghĩa \"đáp ứng, chiều theo\": accommodate different learning styles."
+    },
+    {
+      "chu": "acknowledge",
+      "doc": "/əkˈnɒlɪdʒ/",
+      "loai": "v",
+      "nghia": "thừa nhận; ghi nhận",
+      "cap": "B2",
+      "viDu": "Even its supporters acknowledge that the plan is expensive.",
+      "viDuNghia": "Ngay cả những người ủng hộ cũng thừa nhận kế hoạch này tốn kém.",
+      "cumTu": [
+        "acknowledge that",
+        "widely acknowledged",
+        "acknowledge the importance of"
+      ],
+      "hoTu": [
+        "acknowledgement (n)"
+      ],
+      "ghiChu": "Task 2: \"While it must be acknowledged that…, I believe…\" để nhượng bộ trước khi phản biện."
+    },
+    {
+      "chu": "assessment",
+      "doc": "/əˈsesmənt/",
+      "loai": "n",
+      "nghia": "sự đánh giá",
+      "cap": "B2",
+      "viDu": "Continuous assessment may be fairer than a single final exam.",
+      "viDuNghia": "Đánh giá liên tục có thể công bằng hơn một kỳ thi cuối duy nhất.",
+      "cumTu": [
+        "make an assessment",
+        "risk assessment",
+        "continuous assessment",
+        "an accurate assessment"
+      ],
+      "hoTu": [
+        "assess (v)",
+        "assessor (n)"
+      ]
+    },
+    {
+      "chu": "clarify",
+      "doc": "/ˈklærəfaɪ/",
+      "loai": "v",
+      "nghia": "làm rõ",
+      "cap": "B2",
+      "viDu": "Could you clarify what you mean by \"success\"?",
+      "viDuNghia": "Bạn có thể làm rõ ý bạn khi nói \"thành công\" không?",
+      "cumTu": [
+        "clarify the situation",
+        "clarify a point",
+        "clarify the rules"
+      ],
+      "hoTu": [
+        "clarification (n)",
+        "clarity (n)"
+      ],
+      "ghiChu": "Hữu ích ở Speaking khi xin giám khảo nói rõ câu hỏi."
+    },
+    {
+      "chu": "commitment",
+      "doc": "/kəˈmɪtmənt/",
+      "loai": "n",
+      "nghia": "sự cam kết, tận tâm",
+      "cap": "B2",
+      "viDu": "The company has a strong commitment to reducing emissions.",
+      "viDuNghia": "Công ty có cam kết mạnh mẽ về việc giảm khí thải.",
+      "cumTu": [
+        "a commitment to",
+        "make a commitment",
+        "long-term commitment",
+        "show commitment"
+      ],
+      "hoTu": [
+        "commit (v)",
+        "committed (adj)"
+      ],
+      "ghiChu": "\"commitment TO + V-ing\": a commitment to reducing…"
+    },
+    {
+      "chu": "conflict",
+      "doc": "/ˈkɒnflɪkt/",
+      "loai": "n",
+      "nghia": "xung đột, mâu thuẫn",
+      "cap": "B2",
+      "viDu": "There is often a conflict between economic growth and environmental protection.",
+      "viDuNghia": "Thường có sự xung đột giữa tăng trưởng kinh tế và bảo vệ môi trường.",
+      "cumTu": [
+        "come into conflict with",
+        "a conflict of interest",
+        "resolve a conflict",
+        "armed conflict"
+      ],
+      "hoTu": [
+        "conflict (v) /kənˈflɪkt/",
+        "conflicting (adj)"
+      ],
+      "ghiChu": "\"conflicting views\" = các quan điểm trái ngược — dùng hay ở mở bài Task 2."
+    },
+    {
+      "chu": "construct",
+      "doc": "/kənˈstrʌkt/",
+      "loai": "v",
+      "nghia": "xây dựng; tạo lập",
+      "cap": "B2",
+      "viDu": "The bridge was constructed in less than two years.",
+      "viDuNghia": "Cây cầu được xây dựng trong chưa đầy hai năm.",
+      "cumTu": [
+        "construct a building",
+        "construct an argument",
+        "newly constructed"
+      ],
+      "hoTu": [
+        "construction (n)",
+        "constructive (adj)"
+      ],
+      "ghiChu": "\"construct an argument\" = xây dựng lập luận."
+    },
+    {
+      "chu": "devote",
+      "doc": "/dɪˈvəʊt/",
+      "loai": "v",
+      "nghia": "cống hiến, dành (thời gian, sức lực)",
+      "cap": "B2",
+      "viDu": "She devoted her life to helping poor children.",
+      "viDuNghia": "Bà đã cống hiến cả đời để giúp đỡ trẻ em nghèo.",
+      "cumTu": [
+        "devote time to",
+        "devote yourself to",
+        "devote resources to"
+      ],
+      "hoTu": [
+        "devotion (n)",
+        "devoted (adj)"
+      ],
+      "ghiChu": "\"devote … to + V-ing\" (to là giới từ)."
+    },
+    {
+      "chu": "dimension",
+      "doc": "/daɪˈmenʃn/",
+      "loai": "n",
+      "nghia": "khía cạnh; kích thước",
+      "cap": "B2",
+      "viDu": "The crisis has a moral as well as an economic dimension.",
+      "viDuNghia": "Cuộc khủng hoảng có khía cạnh đạo đức cũng như kinh tế.",
+      "cumTu": [
+        "add a new dimension",
+        "the social dimension",
+        "three dimensions"
+      ],
+      "hoTu": [
+        "dimensional (adj)"
+      ]
+    },
+    {
+      "chu": "discipline",
+      "doc": "/ˈdɪsəplɪn/",
+      "loai": "n",
+      "nghia": "kỷ luật; ngành học",
+      "cap": "B2",
+      "viDu": "Students need self-discipline to succeed in online courses.",
+      "viDuNghia": "Sinh viên cần tính tự giác để thành công trong các khoá học trực tuyến.",
+      "cumTu": [
+        "self-discipline",
+        "strict discipline",
+        "an academic discipline"
+      ],
+      "hoTu": [
+        "discipline (v)",
+        "disciplinary (adj)"
+      ],
+      "ghiChu": "Nghĩa \"ngành học\" hay gặp ở Reading: across different disciplines."
+    }
+  ]
+}

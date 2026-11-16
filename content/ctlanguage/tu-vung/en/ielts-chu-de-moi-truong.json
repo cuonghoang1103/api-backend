@@ -1,0 +1,738 @@
+{
+  "ma": "ielts-chu-de-moi-truong",
+  "nn": "en",
+  "ten": "IELTS theo chủ đề: Môi trường",
+  "moTa": "Từ và cụm đặc thù chủ đề Môi trường trong đề IELTS (biến đổi khí hậu, năng lượng, ô nhiễm, đa dạng sinh học) — cấp B1–C1, ví dụ theo văn phong Writing Task 2 và Speaking.",
+  "nhom": "ielts",
+  "cap": "B2",
+  "tu": [
+    {
+      "chu": "emission",
+      "doc": "/iˈmɪʃn/",
+      "loai": "n",
+      "nghia": "khí thải, sự thải ra",
+      "cap": "B2",
+      "viDu": "Governments must set strict limits on vehicle emissions.",
+      "viDuNghia": "Chính phủ phải đặt giới hạn chặt chẽ cho khí thải xe cộ.",
+      "cumTu": [
+        "carbon emissions",
+        "reduce emissions",
+        "vehicle emissions",
+        "emission targets"
+      ],
+      "hoTu": [
+        "emit (v)"
+      ],
+      "ghiChu": "Thường dùng số nhiều \"emissions\" khi nói về khí thải nói chung."
+    },
+    {
+      "chu": "emit",
+      "doc": "/iˈmɪt/",
+      "loai": "v",
+      "nghia": "thải ra, phát ra (khí, nhiệt, ánh sáng)",
+      "cap": "C1",
+      "viDu": "Coal-fired power stations emit large amounts of carbon dioxide.",
+      "viDuNghia": "Nhà máy nhiệt điện than thải ra lượng lớn khí CO2.",
+      "cumTu": [
+        "emit gases",
+        "emit carbon dioxide",
+        "emit radiation"
+      ],
+      "hoTu": [
+        "emission (n)"
+      ]
+    },
+    {
+      "chu": "biodiversity",
+      "doc": "/ˌbaɪəʊdaɪˈvɜːsəti/",
+      "loai": "n",
+      "nghia": "đa dạng sinh học",
+      "cap": "C1",
+      "viDu": "Rainforests are home to more than half of the world's biodiversity.",
+      "viDuNghia": "Rừng mưa nhiệt đới là nơi cư trú của hơn một nửa đa dạng sinh học thế giới.",
+      "cumTu": [
+        "loss of biodiversity",
+        "protect biodiversity",
+        "rich biodiversity"
+      ],
+      "hoTu": [
+        "biodiverse (adj)"
+      ]
+    },
+    {
+      "chu": "fossil fuel",
+      "doc": "/ˈfɒsl ˌfjuːəl/",
+      "loai": "n",
+      "nghia": "nhiên liệu hoá thạch",
+      "cap": "B2",
+      "viDu": "Our dependence on fossil fuels is the main cause of global warming.",
+      "viDuNghia": "Sự phụ thuộc vào nhiên liệu hoá thạch là nguyên nhân chính của sự nóng lên toàn cầu.",
+      "cumTu": [
+        "burn fossil fuels",
+        "reliance on fossil fuels",
+        "phase out fossil fuels"
+      ],
+      "ghiChu": "Than, dầu mỏ, khí đốt — đối lập với renewable energy."
+    },
+    {
+      "chu": "carbon footprint",
+      "doc": "/ˌkɑːbən ˈfʊtprɪnt/",
+      "loai": "n",
+      "nghia": "dấu chân carbon (lượng khí thải do một người/tổ chức gây ra)",
+      "cap": "C1",
+      "viDu": "Flying less is one of the easiest ways to reduce your carbon footprint.",
+      "viDuNghia": "Bay ít hơn là một trong những cách dễ nhất để giảm dấu chân carbon của bạn.",
+      "cumTu": [
+        "reduce your carbon footprint",
+        "a large carbon footprint",
+        "offset a carbon footprint"
+      ]
+    },
+    {
+      "chu": "greenhouse gas",
+      "doc": "/ˈɡriːnhaʊs ˌɡæs/",
+      "loai": "n",
+      "nghia": "khí nhà kính",
+      "cap": "B2",
+      "viDu": "Methane is a greenhouse gas that is far more powerful than carbon dioxide.",
+      "viDuNghia": "Mê-tan là một khí nhà kính mạnh hơn nhiều so với CO2.",
+      "cumTu": [
+        "greenhouse gas emissions",
+        "release greenhouse gases",
+        "cut greenhouse gases"
+      ]
+    },
+    {
+      "chu": "greenhouse effect",
+      "doc": "/ˈɡriːnhaʊs ɪˌfekt/",
+      "loai": "n",
+      "nghia": "hiệu ứng nhà kính",
+      "cap": "B2",
+      "viDu": "The greenhouse effect traps heat in the Earth's atmosphere.",
+      "viDuNghia": "Hiệu ứng nhà kính giữ nhiệt lại trong bầu khí quyển Trái Đất.",
+      "cumTu": [
+        "intensify the greenhouse effect",
+        "contribute to the greenhouse effect"
+      ]
+    },
+    {
+      "chu": "carbon dioxide",
+      "doc": "/ˌkɑːbən daɪˈɒksaɪd/",
+      "loai": "n",
+      "nghia": "khí CO2, cacbon điôxít",
+      "cap": "B2",
+      "viDu": "Trees absorb carbon dioxide and release oxygen.",
+      "viDuNghia": "Cây hấp thụ CO2 và nhả ra ôxy.",
+      "cumTu": [
+        "levels of carbon dioxide",
+        "absorb carbon dioxide",
+        "carbon dioxide emissions"
+      ],
+      "ghiChu": "Trong bài viết có thể viết tắt CO2 sau lần đầu nêu đầy đủ."
+    },
+    {
+      "chu": "carbon tax",
+      "doc": "/ˈkɑːbən ˌtæks/",
+      "loai": "n",
+      "nghia": "thuế carbon",
+      "cap": "C1",
+      "viDu": "A carbon tax would encourage companies to switch to cleaner technology.",
+      "viDuNghia": "Thuế carbon sẽ khuyến khích các công ty chuyển sang công nghệ sạch hơn.",
+      "cumTu": [
+        "introduce a carbon tax",
+        "impose a carbon tax"
+      ]
+    },
+    {
+      "chu": "carbon neutral",
+      "doc": "/ˌkɑːbən ˈnjuːtrəl/",
+      "loai": "adj",
+      "nghia": "trung hoà carbon",
+      "cap": "C1",
+      "viDu": "The city aims to become carbon neutral by 2050.",
+      "viDuNghia": "Thành phố đặt mục tiêu trung hoà carbon vào năm 2050.",
+      "cumTu": [
+        "become carbon neutral",
+        "a carbon-neutral economy"
+      ],
+      "hoTu": [
+        "carbon neutrality (n)"
+      ]
+    },
+    {
+      "chu": "renewable",
+      "doc": "/rɪˈnjuːəbl/",
+      "loai": "adj",
+      "nghia": "tái tạo được",
+      "cap": "B2",
+      "viDu": "Solar and wind are renewable sources of energy.",
+      "viDuNghia": "Mặt trời và gió là các nguồn năng lượng tái tạo.",
+      "cumTu": [
+        "renewable sources",
+        "renewable resources",
+        "renewables (n)"
+      ],
+      "hoTu": [
+        "renew (v)",
+        "renewal (n)"
+      ],
+      "ghiChu": "\"renewables\" (n, số nhiều) = các nguồn năng lượng tái tạo."
+    },
+    {
+      "chu": "non-renewable",
+      "doc": "/ˌnɒn rɪˈnjuːəbl/",
+      "loai": "adj",
+      "nghia": "không tái tạo được",
+      "cap": "B2",
+      "viDu": "Oil is a non-renewable resource that will eventually run out.",
+      "viDuNghia": "Dầu mỏ là tài nguyên không tái tạo, rồi sẽ có ngày cạn kiệt.",
+      "cumTu": [
+        "non-renewable resources",
+        "non-renewable energy"
+      ]
+    },
+    {
+      "chu": "clean energy",
+      "doc": "/ˌkliːn ˈenədʒi/",
+      "loai": "n",
+      "nghia": "năng lượng sạch",
+      "cap": "B2",
+      "viDu": "Investing in clean energy creates jobs as well as cutting pollution.",
+      "viDuNghia": "Đầu tư vào năng lượng sạch vừa tạo việc làm vừa giảm ô nhiễm.",
+      "cumTu": [
+        "switch to clean energy",
+        "invest in clean energy"
+      ]
+    },
+    {
+      "chu": "solar panel",
+      "doc": "/ˌsəʊlə ˈpænl/",
+      "loai": "n",
+      "nghia": "tấm pin mặt trời",
+      "cap": "B1",
+      "viDu": "More households are installing solar panels on their roofs.",
+      "viDuNghia": "Ngày càng nhiều hộ gia đình lắp tấm pin mặt trời trên mái nhà.",
+      "cumTu": [
+        "install solar panels",
+        "rooftop solar panels"
+      ],
+      "hoTu": [
+        "solar power (n)"
+      ]
+    },
+    {
+      "chu": "wind turbine",
+      "doc": "/ˈwɪnd ˌtɜːbaɪn/",
+      "loai": "n",
+      "nghia": "tua-bin gió",
+      "cap": "B2",
+      "viDu": "Some people complain that wind turbines spoil the landscape.",
+      "viDuNghia": "Một số người phàn nàn rằng tua-bin gió làm hỏng cảnh quan.",
+      "cumTu": [
+        "offshore wind turbines",
+        "a wind farm"
+      ]
+    },
+    {
+      "chu": "nuclear power",
+      "doc": "/ˌnjuːkliə ˈpaʊə/",
+      "loai": "n",
+      "nghia": "điện hạt nhân",
+      "cap": "B2",
+      "viDu": "Nuclear power produces little carbon but creates dangerous waste.",
+      "viDuNghia": "Điện hạt nhân thải ít carbon nhưng tạo ra chất thải nguy hiểm.",
+      "cumTu": [
+        "a nuclear power station",
+        "rely on nuclear power"
+      ],
+      "hoTu": [
+        "nuclear (adj)"
+      ]
+    },
+    {
+      "chu": "hydroelectric",
+      "doc": "/ˌhaɪdrəʊɪˈlektrɪk/",
+      "loai": "adj",
+      "nghia": "(thuộc) thuỷ điện",
+      "cap": "C1",
+      "viDu": "The new hydroelectric dam flooded several villages.",
+      "viDuNghia": "Con đập thuỷ điện mới đã làm ngập nhiều ngôi làng.",
+      "cumTu": [
+        "hydroelectric power",
+        "a hydroelectric dam"
+      ],
+      "hoTu": [
+        "hydropower (n)"
+      ]
+    },
+    {
+      "chu": "landfill",
+      "doc": "/ˈlændfɪl/",
+      "loai": "n",
+      "nghia": "bãi chôn lấp rác",
+      "cap": "C1",
+      "viDu": "Most household waste still ends up in landfill.",
+      "viDuNghia": "Phần lớn rác sinh hoạt vẫn bị đưa ra bãi chôn lấp.",
+      "cumTu": [
+        "end up in landfill",
+        "landfill sites",
+        "divert waste from landfill"
+      ]
+    },
+    {
+      "chu": "waste disposal",
+      "doc": "/ˈweɪst dɪˌspəʊzl/",
+      "loai": "n",
+      "nghia": "xử lý rác thải",
+      "cap": "B2",
+      "viDu": "Poor waste disposal is a serious problem in fast-growing cities.",
+      "viDuNghia": "Xử lý rác kém là vấn đề nghiêm trọng ở các thành phố phát triển nhanh.",
+      "cumTu": [
+        "waste disposal systems",
+        "safe waste disposal"
+      ],
+      "hoTu": [
+        "dispose of (v)"
+      ]
+    },
+    {
+      "chu": "single-use plastic",
+      "doc": "/ˌsɪŋɡl juːs ˈplæstɪk/",
+      "loai": "n",
+      "nghia": "nhựa dùng một lần",
+      "cap": "B2",
+      "viDu": "Many countries have banned single-use plastics such as straws and bags.",
+      "viDuNghia": "Nhiều nước đã cấm nhựa dùng một lần như ống hút và túi.",
+      "cumTu": [
+        "ban single-use plastics",
+        "cut down on single-use plastic"
+      ]
+    },
+    {
+      "chu": "biodegradable",
+      "doc": "/ˌbaɪəʊdɪˈɡreɪdəbl/",
+      "loai": "adj",
+      "nghia": "phân huỷ sinh học được",
+      "cap": "C1",
+      "viDu": "Supermarkets should switch to biodegradable packaging.",
+      "viDuNghia": "Siêu thị nên chuyển sang bao bì phân huỷ sinh học được.",
+      "cumTu": [
+        "biodegradable packaging",
+        "biodegradable materials"
+      ],
+      "hoTu": [
+        "degrade (v)"
+      ]
+    },
+    {
+      "chu": "environmentally friendly",
+      "doc": "/ɪnˌvaɪrənˌmentəli ˈfrendli/",
+      "loai": "adj",
+      "nghia": "thân thiện với môi trường",
+      "cap": "B2",
+      "viDu": "Cycling is the most environmentally friendly way to get around.",
+      "viDuNghia": "Đạp xe là cách đi lại thân thiện với môi trường nhất.",
+      "cumTu": [
+        "environmentally friendly products",
+        "an environmentally friendly alternative"
+      ],
+      "ghiChu": "Đồng nghĩa: eco-friendly, green."
+    },
+    {
+      "chu": "environmental degradation",
+      "doc": "/ɪnˌvaɪrənˌmentl ˌdeɡrəˈdeɪʃn/",
+      "loai": "n",
+      "nghia": "sự suy thoái môi trường",
+      "cap": "C1",
+      "viDu": "Rapid industrialisation has led to severe environmental degradation.",
+      "viDuNghia": "Công nghiệp hoá nhanh đã dẫn tới suy thoái môi trường nghiêm trọng.",
+      "cumTu": [
+        "cause environmental degradation",
+        "reverse environmental degradation"
+      ],
+      "hoTu": [
+        "degrade (v)"
+      ]
+    },
+    {
+      "chu": "toxic",
+      "doc": "/ˈtɒksɪk/",
+      "loai": "adj",
+      "nghia": "độc hại",
+      "cap": "B2",
+      "viDu": "Factories must not dump toxic waste into rivers.",
+      "viDuNghia": "Nhà máy không được xả chất thải độc hại xuống sông.",
+      "cumTu": [
+        "toxic waste",
+        "toxic chemicals",
+        "toxic fumes"
+      ],
+      "hoTu": [
+        "toxicity (n)",
+        "toxin (n)"
+      ]
+    },
+    {
+      "chu": "smog",
+      "doc": "/smɒɡ/",
+      "loai": "n",
+      "nghia": "khói bụi, sương khói ô nhiễm",
+      "cap": "B2",
+      "viDu": "On some days the smog in the capital is so thick that schools close.",
+      "viDuNghia": "Có những ngày khói bụi ở thủ đô dày đến mức trường học phải đóng cửa.",
+      "cumTu": [
+        "thick smog",
+        "a layer of smog",
+        "smog-filled"
+      ],
+      "hoTu": [
+        "smoggy (adj)"
+      ]
+    },
+    {
+      "chu": "acid rain",
+      "doc": "/ˌæsɪd ˈreɪn/",
+      "loai": "n",
+      "nghia": "mưa axit",
+      "cap": "B2",
+      "viDu": "Acid rain damages forests, lakes and old buildings.",
+      "viDuNghia": "Mưa axit làm hại rừng, hồ và các công trình cổ.",
+      "cumTu": [
+        "cause acid rain",
+        "damaged by acid rain"
+      ]
+    },
+    {
+      "chu": "ozone layer",
+      "doc": "/ˈəʊzəʊn ˌleɪə/",
+      "loai": "n",
+      "nghia": "tầng ô-dôn",
+      "cap": "B2",
+      "viDu": "The ozone layer protects us from harmful ultraviolet rays.",
+      "viDuNghia": "Tầng ô-dôn bảo vệ chúng ta khỏi tia cực tím có hại.",
+      "cumTu": [
+        "damage to the ozone layer",
+        "a hole in the ozone layer"
+      ]
+    },
+    {
+      "chu": "sea level",
+      "doc": "/ˈsiː ˌlevl/",
+      "loai": "n",
+      "nghia": "mực nước biển",
+      "cap": "B2",
+      "viDu": "Rising sea levels threaten low-lying coastal cities.",
+      "viDuNghia": "Mực nước biển dâng đe doạ các thành phố ven biển thấp.",
+      "cumTu": [
+        "rising sea levels",
+        "above sea level"
+      ],
+      "ghiChu": "IELTS hay dùng cụm \"rising sea levels\"."
+    },
+    {
+      "chu": "natural disaster",
+      "doc": "/ˌnætʃrəl dɪˈzɑːstə/",
+      "loai": "n",
+      "nghia": "thiên tai",
+      "cap": "B1",
+      "viDu": "Climate change is making natural disasters more frequent.",
+      "viDuNghia": "Biến đổi khí hậu khiến thiên tai xảy ra thường xuyên hơn.",
+      "cumTu": [
+        "cope with natural disasters",
+        "devastating natural disasters"
+      ]
+    },
+    {
+      "chu": "natural resources",
+      "doc": "/ˌnætʃrəl rɪˈzɔːsɪz/",
+      "loai": "n",
+      "nghia": "tài nguyên thiên nhiên",
+      "cap": "B1",
+      "viDu": "We are using up natural resources faster than they can be replaced.",
+      "viDuNghia": "Chúng ta đang dùng cạn tài nguyên thiên nhiên nhanh hơn tốc độ tái tạo.",
+      "cumTu": [
+        "exploit natural resources",
+        "scarce natural resources"
+      ]
+    },
+    {
+      "chu": "deplete",
+      "doc": "/dɪˈpliːt/",
+      "loai": "v",
+      "nghia": "làm cạn kiệt",
+      "cap": "C1",
+      "viDu": "Overfishing has depleted fish stocks in many oceans.",
+      "viDuNghia": "Đánh bắt quá mức đã làm cạn kiệt nguồn cá ở nhiều đại dương.",
+      "cumTu": [
+        "deplete resources",
+        "severely depleted"
+      ],
+      "hoTu": [
+        "depletion (n)"
+      ]
+    },
+    {
+      "chu": "depletion",
+      "doc": "/dɪˈpliːʃn/",
+      "loai": "n",
+      "nghia": "sự cạn kiệt",
+      "cap": "C1",
+      "viDu": "The depletion of groundwater is a growing concern for farmers.",
+      "viDuNghia": "Sự cạn kiệt nước ngầm là mối lo ngày càng lớn với nông dân.",
+      "cumTu": [
+        "resource depletion",
+        "ozone depletion"
+      ],
+      "hoTu": [
+        "deplete (v)"
+      ]
+    },
+    {
+      "chu": "conserve",
+      "doc": "/kənˈsɜːv/",
+      "loai": "v",
+      "nghia": "bảo tồn, tiết kiệm (năng lượng, nước)",
+      "cap": "C1",
+      "viDu": "Simple habits like turning off lights help to conserve energy.",
+      "viDuNghia": "Những thói quen đơn giản như tắt đèn giúp tiết kiệm năng lượng.",
+      "cumTu": [
+        "conserve energy",
+        "conserve water",
+        "conserve wildlife"
+      ],
+      "hoTu": [
+        "conservation (n)",
+        "conservationist (n)"
+      ],
+      "ghiChu": "Khác \"preserve\" (giữ nguyên trạng); \"conserve\" nhấn vào dùng tiết kiệm/bảo vệ."
+    },
+    {
+      "chu": "contaminate",
+      "doc": "/kənˈtæmɪneɪt/",
+      "loai": "v",
+      "nghia": "làm ô nhiễm, nhiễm bẩn",
+      "cap": "C1",
+      "viDu": "Chemicals from the mine contaminated the local water supply.",
+      "viDuNghia": "Hoá chất từ mỏ đã làm nhiễm bẩn nguồn nước địa phương.",
+      "cumTu": [
+        "contaminated water",
+        "contaminate the soil"
+      ],
+      "hoTu": [
+        "contamination (n)",
+        "contaminant (n)"
+      ]
+    },
+    {
+      "chu": "contamination",
+      "doc": "/kənˌtæmɪˈneɪʃn/",
+      "loai": "n",
+      "nghia": "sự nhiễm bẩn",
+      "cap": "C1",
+      "viDu": "Plastic contamination has been found in seafood and even in salt.",
+      "viDuNghia": "Đã phát hiện nhiễm bẩn nhựa trong hải sản và cả trong muối.",
+      "cumTu": [
+        "water contamination",
+        "risk of contamination"
+      ],
+      "hoTu": [
+        "contaminate (v)"
+      ]
+    },
+    {
+      "chu": "extinct",
+      "doc": "/ɪkˈstɪŋkt/",
+      "loai": "adj",
+      "nghia": "tuyệt chủng",
+      "cap": "B2",
+      "viDu": "Many species could become extinct within the next few decades.",
+      "viDuNghia": "Nhiều loài có thể tuyệt chủng trong vài thập kỷ tới.",
+      "cumTu": [
+        "become extinct",
+        "be driven extinct",
+        "now extinct"
+      ],
+      "hoTu": [
+        "extinction (n)"
+      ]
+    },
+    {
+      "chu": "extinction",
+      "doc": "/ɪkˈstɪŋkʃn/",
+      "loai": "n",
+      "nghia": "sự tuyệt chủng",
+      "cap": "C1",
+      "viDu": "Habitat loss is pushing the tiger towards extinction.",
+      "viDuNghia": "Mất môi trường sống đang đẩy loài hổ tới bờ tuyệt chủng.",
+      "cumTu": [
+        "on the brink of extinction",
+        "face extinction",
+        "mass extinction"
+      ],
+      "hoTu": [
+        "extinct (adj)"
+      ]
+    },
+    {
+      "chu": "habitat loss",
+      "doc": "/ˈhæbɪtæt ˌlɒs/",
+      "loai": "n",
+      "nghia": "sự mất môi trường sống",
+      "cap": "C1",
+      "viDu": "Habitat loss is the biggest threat to wildlife worldwide.",
+      "viDuNghia": "Mất môi trường sống là mối đe doạ lớn nhất với động vật hoang dã toàn cầu.",
+      "cumTu": [
+        "cause habitat loss",
+        "due to habitat loss"
+      ]
+    },
+    {
+      "chu": "poaching",
+      "doc": "/ˈpəʊtʃɪŋ/",
+      "loai": "n",
+      "nghia": "săn trộm",
+      "cap": "C1",
+      "viDu": "Poaching for ivory has drastically reduced elephant numbers.",
+      "viDuNghia": "Săn trộm lấy ngà đã làm số lượng voi giảm mạnh.",
+      "cumTu": [
+        "illegal poaching",
+        "crack down on poaching"
+      ],
+      "hoTu": [
+        "poach (v)",
+        "poacher (n)"
+      ]
+    },
+    {
+      "chu": "overfishing",
+      "doc": "/ˌəʊvəˈfɪʃɪŋ/",
+      "loai": "n",
+      "nghia": "đánh bắt quá mức",
+      "cap": "C1",
+      "viDu": "Overfishing threatens the livelihoods of coastal communities.",
+      "viDuNghia": "Đánh bắt quá mức đe doạ sinh kế của các cộng đồng ven biển.",
+      "cumTu": [
+        "the problem of overfishing",
+        "prevent overfishing"
+      ],
+      "hoTu": [
+        "overfish (v)"
+      ]
+    },
+    {
+      "chu": "reforestation",
+      "doc": "/ˌriːˌfɒrɪˈsteɪʃn/",
+      "loai": "n",
+      "nghia": "trồng lại rừng",
+      "cap": "C1",
+      "viDu": "Reforestation projects can help absorb carbon from the air.",
+      "viDuNghia": "Các dự án trồng lại rừng có thể giúp hấp thụ carbon từ không khí.",
+      "cumTu": [
+        "reforestation projects",
+        "large-scale reforestation"
+      ],
+      "hoTu": [
+        "reforest (v)"
+      ]
+    },
+    {
+      "chu": "desertification",
+      "doc": "/dɪˌzɜːtɪfɪˈkeɪʃn/",
+      "loai": "n",
+      "nghia": "sa mạc hoá",
+      "cap": "C1",
+      "viDu": "Desertification is forcing farmers to abandon their land.",
+      "viDuNghia": "Sa mạc hoá đang buộc nông dân bỏ đất canh tác.",
+      "cumTu": [
+        "combat desertification",
+        "the spread of desertification"
+      ]
+    },
+    {
+      "chu": "pesticide",
+      "doc": "/ˈpestɪsaɪd/",
+      "loai": "n",
+      "nghia": "thuốc trừ sâu",
+      "cap": "B2",
+      "viDu": "The heavy use of pesticides has harmed bees and other insects.",
+      "viDuNghia": "Việc dùng nhiều thuốc trừ sâu đã gây hại cho ong và các loài côn trùng khác.",
+      "cumTu": [
+        "spray pesticides",
+        "pesticide residue",
+        "use of pesticides"
+      ]
+    },
+    {
+      "chu": "organic farming",
+      "doc": "/ɔːˌɡænɪk ˈfɑːmɪŋ/",
+      "loai": "n",
+      "nghia": "canh tác hữu cơ",
+      "cap": "B2",
+      "viDu": "Organic farming avoids artificial chemicals but often produces lower yields.",
+      "viDuNghia": "Canh tác hữu cơ tránh hoá chất nhân tạo nhưng thường cho năng suất thấp hơn.",
+      "cumTu": [
+        "switch to organic farming",
+        "organic produce"
+      ]
+    },
+    {
+      "chu": "food chain",
+      "doc": "/ˈfuːd ˌtʃeɪn/",
+      "loai": "n",
+      "nghia": "chuỗi thức ăn",
+      "cap": "B2",
+      "viDu": "Microplastics can enter the food chain through fish.",
+      "viDuNghia": "Vi nhựa có thể đi vào chuỗi thức ăn qua cá.",
+      "cumTu": [
+        "enter the food chain",
+        "at the top of the food chain"
+      ]
+    },
+    {
+      "chu": "ecological",
+      "doc": "/ˌiːkəˈlɒdʒɪkl/",
+      "loai": "adj",
+      "nghia": "(thuộc) sinh thái",
+      "cap": "C1",
+      "viDu": "The oil spill was an ecological disaster for the coastline.",
+      "viDuNghia": "Vụ tràn dầu là một thảm hoạ sinh thái với bờ biển.",
+      "cumTu": [
+        "an ecological disaster",
+        "ecological balance"
+      ],
+      "hoTu": [
+        "ecology (n)",
+        "ecologist (n)"
+      ]
+    },
+    {
+      "chu": "irreversible",
+      "doc": "/ˌɪrɪˈvɜːsəbl/",
+      "loai": "adj",
+      "nghia": "không thể đảo ngược",
+      "cap": "C1",
+      "viDu": "Some scientists warn that the damage to coral reefs may be irreversible.",
+      "viDuNghia": "Một số nhà khoa học cảnh báo tổn hại với rạn san hô có thể không đảo ngược được.",
+      "cumTu": [
+        "irreversible damage",
+        "irreversible consequences"
+      ],
+      "hoTu": [
+        "irreversibly (adv)"
+      ]
+    },
+    {
+      "chu": "sustainable development",
+      "doc": "/səˌsteɪnəbl dɪˈveləpmənt/",
+      "loai": "n",
+      "nghia": "phát triển bền vững",
+      "cap": "C1",
+      "viDu": "Sustainable development meets present needs without harming future generations.",
+      "viDuNghia": "Phát triển bền vững đáp ứng nhu cầu hiện tại mà không hại thế hệ sau.",
+      "cumTu": [
+        "promote sustainable development",
+        "goals of sustainable development"
+      ]
+    }
+  ]
+}

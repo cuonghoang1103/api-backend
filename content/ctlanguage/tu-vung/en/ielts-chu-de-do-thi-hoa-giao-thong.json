@@ -1,0 +1,672 @@
+{
+  "ma": "ielts-chu-de-do-thi-hoa-giao-thong",
+  "nn": "en",
+  "ten": "IELTS theo chủ đề: Đô thị hoá và giao thông",
+  "moTa": "Từ và cụm đặc thù chủ đề Đô thị hoá – Giao thông trong đề IELTS (di cư ra thành phố, nhà ở, quy hoạch, ùn tắc, phương tiện công cộng) — cấp B1–C1, ví dụ theo văn phong Writing Task 2, Task 1 (bản đồ) và Speaking.",
+  "nhom": "ielts",
+  "cap": "C1",
+  "tu": [
+    {
+      "chu": "urbanisation",
+      "doc": "/ˌɜːbənaɪˈzeɪʃn/",
+      "loai": "n",
+      "nghia": "đô thị hoá",
+      "cap": "C1",
+      "viDu": "Rapid urbanisation has put enormous pressure on housing.",
+      "viDuNghia": "Đô thị hoá nhanh đã gây áp lực khổng lồ lên nhà ở.",
+      "cumTu": [
+        "rapid urbanisation",
+        "the process of urbanisation"
+      ],
+      "hoTu": [
+        "urbanise (v)",
+        "urban (adj)"
+      ],
+      "ghiChu": "Anh-Mỹ: urbanization."
+    },
+    {
+      "chu": "urban sprawl",
+      "doc": "/ˌɜːbən ˈsprɔːl/",
+      "loai": "n",
+      "nghia": "sự lan rộng đô thị thiếu quy hoạch",
+      "cap": "C1",
+      "viDu": "Urban sprawl is destroying farmland around the capital.",
+      "viDuNghia": "Đô thị lan rộng đang phá huỷ đất nông nghiệp quanh thủ đô.",
+      "cumTu": [
+        "uncontrolled urban sprawl",
+        "limit urban sprawl"
+      ]
+    },
+    {
+      "chu": "rural-urban migration",
+      "doc": "/ˌrʊərəl ˌɜːbən maɪˈɡreɪʃn/",
+      "loai": "n",
+      "nghia": "di cư từ nông thôn ra thành thị",
+      "cap": "C1",
+      "viDu": "Rural-urban migration is driven by the search for better jobs.",
+      "viDuNghia": "Di cư nông thôn ra thành thị xuất phát từ việc tìm việc làm tốt hơn.",
+      "cumTu": [
+        "large-scale rural-urban migration"
+      ]
+    },
+    {
+      "chu": "urban dweller",
+      "doc": "/ˌɜːbən ˈdwelə/",
+      "loai": "n",
+      "nghia": "cư dân đô thị",
+      "cap": "C1",
+      "viDu": "Most urban dwellers live in flats rather than houses.",
+      "viDuNghia": "Phần lớn cư dân đô thị sống trong căn hộ thay vì nhà riêng.",
+      "cumTu": [
+        "urban dwellers",
+        "city dwellers"
+      ],
+      "hoTu": [
+        "dwell (v)"
+      ]
+    },
+    {
+      "chu": "metropolis",
+      "doc": "/məˈtrɒpəlɪs/",
+      "loai": "n",
+      "nghia": "đô thị lớn, thủ phủ",
+      "cap": "C1",
+      "viDu": "Ho Chi Minh City has grown into a busy metropolis.",
+      "viDuNghia": "Thành phố Hồ Chí Minh đã phát triển thành một đô thị lớn sôi động.",
+      "cumTu": [
+        "a bustling metropolis",
+        "a sprawling metropolis"
+      ],
+      "hoTu": [
+        "metropolitan (adj)"
+      ]
+    },
+    {
+      "chu": "megacity",
+      "doc": "/ˈmeɡəsɪti/",
+      "loai": "n",
+      "nghia": "siêu đô thị (trên 10 triệu dân)",
+      "cap": "C1",
+      "viDu": "By 2030 there will be more than forty megacities worldwide.",
+      "viDuNghia": "Đến năm 2030 sẽ có hơn bốn mươi siêu đô thị trên thế giới.",
+      "cumTu": [
+        "Asian megacities",
+        "the growth of megacities"
+      ]
+    },
+    {
+      "chu": "satellite town",
+      "doc": "/ˈsætəlaɪt ˌtaʊn/",
+      "loai": "n",
+      "nghia": "đô thị vệ tinh",
+      "cap": "C1",
+      "viDu": "Building satellite towns could ease overcrowding in the centre.",
+      "viDuNghia": "Xây đô thị vệ tinh có thể giảm quá tải ở trung tâm.",
+      "cumTu": [
+        "develop satellite towns"
+      ]
+    },
+    {
+      "chu": "suburban",
+      "doc": "/səˈbɜːbən/",
+      "loai": "adj",
+      "nghia": "(thuộc) ngoại ô",
+      "cap": "B2",
+      "viDu": "Many families move to suburban areas for cheaper housing.",
+      "viDuNghia": "Nhiều gia đình chuyển ra ngoại ô để có nhà rẻ hơn.",
+      "cumTu": [
+        "suburban areas",
+        "suburban life",
+        "suburban sprawl"
+      ],
+      "hoTu": [
+        "suburb (n)",
+        "suburbia (n)"
+      ]
+    },
+    {
+      "chu": "inner city",
+      "doc": "/ˌɪnə ˈsɪti/",
+      "loai": "n",
+      "nghia": "khu nội đô (thường nghèo, xuống cấp)",
+      "cap": "C1",
+      "viDu": "Crime is often higher in deprived inner cities.",
+      "viDuNghia": "Tội phạm thường cao hơn ở các khu nội đô nghèo.",
+      "cumTu": [
+        "inner-city areas",
+        "inner-city schools"
+      ],
+      "ghiChu": "Ở Anh \"inner city\" thường mang hàm ý nghèo, xuống cấp."
+    },
+    {
+      "chu": "residential area",
+      "doc": "/ˌrezɪˌdenʃl ˈeəriə/",
+      "loai": "n",
+      "nghia": "khu dân cư",
+      "cap": "B2",
+      "viDu": "The old factory site was turned into a residential area.",
+      "viDuNghia": "Khu nhà máy cũ được chuyển thành khu dân cư.",
+      "cumTu": [
+        "a quiet residential area",
+        "residential development"
+      ],
+      "hoTu": [
+        "resident (n)",
+        "residence (n)"
+      ],
+      "ghiChu": "Rất hay gặp trong Task 1 dạng bản đồ."
+    },
+    {
+      "chu": "industrial zone",
+      "doc": "/ɪnˌdʌstriəl ˈzəʊn/",
+      "loai": "n",
+      "nghia": "khu công nghiệp",
+      "cap": "B2",
+      "viDu": "A new industrial zone was built on the outskirts of the town.",
+      "viDuNghia": "Một khu công nghiệp mới được xây ở rìa thị trấn.",
+      "cumTu": [
+        "an industrial zone",
+        "industrial parks"
+      ]
+    },
+    {
+      "chu": "infrastructure",
+      "doc": "/ˈɪnfrəstrʌktʃə/",
+      "loai": "n",
+      "nghia": "cơ sở hạ tầng",
+      "cap": "C1",
+      "viDu": "The government plans to invest heavily in transport infrastructure.",
+      "viDuNghia": "Chính phủ dự định đầu tư mạnh vào hạ tầng giao thông.",
+      "cumTu": [
+        "transport infrastructure",
+        "improve infrastructure",
+        "poor infrastructure"
+      ],
+      "hoTu": [
+        "infrastructural (adj)"
+      ]
+    },
+    {
+      "chu": "urban planning",
+      "doc": "/ˌɜːbən ˈplænɪŋ/",
+      "loai": "n",
+      "nghia": "quy hoạch đô thị",
+      "cap": "C1",
+      "viDu": "Good urban planning puts schools and shops within walking distance.",
+      "viDuNghia": "Quy hoạch đô thị tốt đặt trường và cửa hàng trong tầm đi bộ.",
+      "cumTu": [
+        "careful urban planning",
+        "poor urban planning"
+      ],
+      "hoTu": [
+        "urban planner (n)"
+      ]
+    },
+    {
+      "chu": "regeneration",
+      "doc": "/rɪˌdʒenəˈreɪʃn/",
+      "loai": "n",
+      "nghia": "sự tái thiết, chỉnh trang (khu đô thị)",
+      "cap": "C1",
+      "viDu": "The regeneration of the docks created thousands of jobs.",
+      "viDuNghia": "Việc tái thiết khu bến cảng tạo ra hàng nghìn việc làm.",
+      "cumTu": [
+        "urban regeneration",
+        "a regeneration project"
+      ],
+      "hoTu": [
+        "regenerate (v)"
+      ]
+    },
+    {
+      "chu": "gentrification",
+      "doc": "/ˌdʒentrɪfɪˈkeɪʃn/",
+      "loai": "n",
+      "nghia": "sự \"quý tộc hoá\" khu phố (người giàu đến, dân cũ bị đẩy đi)",
+      "cap": "C2",
+      "viDu": "Gentrification has pushed many long-term residents out of the area.",
+      "viDuNghia": "Quá trình quý tộc hoá đã đẩy nhiều cư dân lâu năm khỏi khu vực.",
+      "cumTu": [
+        "the effects of gentrification"
+      ],
+      "hoTu": [
+        "gentrify (v)"
+      ]
+    },
+    {
+      "chu": "high-rise",
+      "doc": "/ˈhaɪ raɪz/",
+      "loai": "adj",
+      "nghia": "cao tầng",
+      "cap": "B2",
+      "viDu": "High-rise apartments allow more people to live in a small area.",
+      "viDuNghia": "Chung cư cao tầng cho phép nhiều người sống trên diện tích nhỏ.",
+      "cumTu": [
+        "high-rise buildings",
+        "high-rise flats",
+        "a high-rise (n)"
+      ]
+    },
+    {
+      "chu": "concrete jungle",
+      "doc": "/ˌkɒŋkriːt ˈdʒʌŋɡl/",
+      "loai": "n",
+      "nghia": "rừng bê tông",
+      "cap": "C1",
+      "viDu": "Without parks, the city would be nothing but a concrete jungle.",
+      "viDuNghia": "Không có công viên, thành phố chỉ là một rừng bê tông.",
+      "cumTu": [
+        "live in a concrete jungle"
+      ],
+      "ghiChu": "Thành ngữ hay cho Speaking."
+    },
+    {
+      "chu": "housing shortage",
+      "doc": "/ˈhaʊzɪŋ ˌʃɔːtɪdʒ/",
+      "loai": "n",
+      "nghia": "sự thiếu nhà ở",
+      "cap": "C1",
+      "viDu": "The housing shortage has pushed rents to record levels.",
+      "viDuNghia": "Thiếu nhà ở đã đẩy giá thuê lên mức kỷ lục.",
+      "cumTu": [
+        "an acute housing shortage",
+        "tackle the housing shortage"
+      ]
+    },
+    {
+      "chu": "affordable housing",
+      "doc": "/əˌfɔːdəbl ˈhaʊzɪŋ/",
+      "loai": "n",
+      "nghia": "nhà ở giá phải chăng",
+      "cap": "B2",
+      "viDu": "The city needs more affordable housing for young families.",
+      "viDuNghia": "Thành phố cần nhiều nhà ở giá phải chăng hơn cho các gia đình trẻ.",
+      "cumTu": [
+        "build affordable housing",
+        "a lack of affordable housing"
+      ]
+    },
+    {
+      "chu": "slum",
+      "doc": "/slʌm/",
+      "loai": "n",
+      "nghia": "khu ổ chuột",
+      "cap": "C1",
+      "viDu": "Millions of migrants end up living in slums.",
+      "viDuNghia": "Hàng triệu người di cư rốt cuộc phải sống trong khu ổ chuột.",
+      "cumTu": [
+        "urban slums",
+        "slum dwellers",
+        "clear slums"
+      ]
+    },
+    {
+      "chu": "overcrowded",
+      "doc": "/ˌəʊvəˈkraʊdɪd/",
+      "loai": "adj",
+      "nghia": "quá đông, chật chội",
+      "cap": "B2",
+      "viDu": "Overcrowded buses make commuting stressful.",
+      "viDuNghia": "Xe buýt quá đông khiến việc đi làm căng thẳng.",
+      "cumTu": [
+        "overcrowded cities",
+        "overcrowded housing"
+      ],
+      "hoTu": [
+        "overcrowding (n)"
+      ]
+    },
+    {
+      "chu": "overcrowding",
+      "doc": "/ˌəʊvəˈkraʊdɪŋ/",
+      "loai": "n",
+      "nghia": "tình trạng quá tải người",
+      "cap": "C1",
+      "viDu": "Overcrowding in cities leads to health and social problems.",
+      "viDuNghia": "Quá tải dân ở thành phố dẫn tới vấn đề sức khoẻ và xã hội.",
+      "cumTu": [
+        "ease overcrowding",
+        "serious overcrowding"
+      ],
+      "hoTu": [
+        "overcrowded (adj)"
+      ]
+    },
+    {
+      "chu": "population density",
+      "doc": "/ˌpɒpjuˈleɪʃn ˌdensəti/",
+      "loai": "n",
+      "nghia": "mật độ dân số",
+      "cap": "C1",
+      "viDu": "Hanoi has one of the highest population densities in Asia.",
+      "viDuNghia": "Hà Nội có mật độ dân số thuộc hàng cao nhất châu Á.",
+      "cumTu": [
+        "high population density",
+        "population density per square kilometre"
+      ]
+    },
+    {
+      "chu": "densely populated",
+      "doc": "/ˌdensli ˈpɒpjuleɪtɪd/",
+      "loai": "adj",
+      "nghia": "đông dân cư",
+      "cap": "C1",
+      "viDu": "Densely populated cities need efficient public transport.",
+      "viDuNghia": "Thành phố đông dân cần giao thông công cộng hiệu quả.",
+      "cumTu": [
+        "a densely populated area",
+        "densely populated cities"
+      ],
+      "ghiChu": "Đối lập: sparsely populated."
+    },
+    {
+      "chu": "green space",
+      "doc": "/ˌɡriːn ˈspeɪs/",
+      "loai": "n",
+      "nghia": "không gian xanh",
+      "cap": "B2",
+      "viDu": "Green spaces improve residents' mental health.",
+      "viDuNghia": "Không gian xanh cải thiện sức khoẻ tinh thần của cư dân.",
+      "cumTu": [
+        "urban green spaces",
+        "a lack of green space"
+      ]
+    },
+    {
+      "chu": "amenities",
+      "doc": "/əˈmiːnətiz/",
+      "loai": "n",
+      "nghia": "tiện ích (công cộng)",
+      "cap": "C1",
+      "viDu": "The new estate lacks basic amenities such as shops and clinics.",
+      "viDuNghia": "Khu dân cư mới thiếu tiện ích cơ bản như cửa hàng và phòng khám.",
+      "cumTu": [
+        "local amenities",
+        "public amenities",
+        "basic amenities"
+      ]
+    },
+    {
+      "chu": "liveable",
+      "doc": "/ˈlɪvəbl/",
+      "loai": "adj",
+      "nghia": "đáng sống",
+      "cap": "C1",
+      "viDu": "Vienna is often ranked the most liveable city in the world.",
+      "viDuNghia": "Vienna thường được xếp hạng thành phố đáng sống nhất thế giới.",
+      "cumTu": [
+        "a liveable city",
+        "more liveable"
+      ],
+      "hoTu": [
+        "liveability (n)"
+      ]
+    },
+    {
+      "chu": "noise pollution",
+      "doc": "/ˈnɔɪz pəˌluːʃn/",
+      "loai": "n",
+      "nghia": "ô nhiễm tiếng ồn",
+      "cap": "B2",
+      "viDu": "Noise pollution from traffic can disturb sleep.",
+      "viDuNghia": "Ô nhiễm tiếng ồn từ xe cộ có thể làm rối loạn giấc ngủ.",
+      "cumTu": [
+        "reduce noise pollution",
+        "suffer from noise pollution"
+      ]
+    },
+    {
+      "chu": "exhaust fumes",
+      "doc": "/ɪɡˈzɔːst ˌfjuːmz/",
+      "loai": "n",
+      "nghia": "khí thải (từ ống xả xe)",
+      "cap": "B2",
+      "viDu": "Exhaust fumes are the main source of air pollution in cities.",
+      "viDuNghia": "Khí thải xe là nguồn chính gây ô nhiễm không khí ở thành phố.",
+      "cumTu": [
+        "car exhaust fumes",
+        "breathe in exhaust fumes"
+      ]
+    },
+    {
+      "chu": "traffic congestion",
+      "doc": "/ˈtræfɪk kənˌdʒestʃən/",
+      "loai": "n",
+      "nghia": "ùn tắc giao thông",
+      "cap": "B2",
+      "viDu": "Traffic congestion costs the economy billions every year.",
+      "viDuNghia": "Ùn tắc giao thông gây thiệt hại hàng tỉ cho nền kinh tế mỗi năm.",
+      "cumTu": [
+        "ease traffic congestion",
+        "severe traffic congestion"
+      ],
+      "hoTu": [
+        "congested (adj)"
+      ],
+      "ghiChu": "Trang trọng hơn \"traffic jam\" — hợp với Writing."
+    },
+    {
+      "chu": "congestion charge",
+      "doc": "/kənˈdʒestʃən ˌtʃɑːdʒ/",
+      "loai": "n",
+      "nghia": "phí vào khu vực đông đúc",
+      "cap": "C1",
+      "viDu": "London introduced a congestion charge to reduce traffic in the centre.",
+      "viDuNghia": "London áp phí ùn tắc để giảm xe ở trung tâm.",
+      "cumTu": [
+        "introduce a congestion charge",
+        "pay the congestion charge"
+      ]
+    },
+    {
+      "chu": "toll",
+      "doc": "/təʊl/",
+      "loai": "n",
+      "nghia": "phí cầu đường",
+      "cap": "C1",
+      "viDu": "Drivers have to pay a toll to use the new motorway.",
+      "viDuNghia": "Tài xế phải trả phí để đi đường cao tốc mới.",
+      "cumTu": [
+        "a toll road",
+        "pay a toll",
+        "toll booth"
+      ],
+      "ghiChu": "Nghĩa khác: \"death toll\" = số người chết."
+    },
+    {
+      "chu": "commute",
+      "doc": "/kəˈmjuːt/",
+      "loai": "v",
+      "nghia": "đi lại (giữa nhà và nơi làm việc)",
+      "cap": "B2",
+      "viDu": "Many people commute for over an hour each way.",
+      "viDuNghia": "Nhiều người đi làm mất hơn một tiếng mỗi chiều.",
+      "cumTu": [
+        "commute to work",
+        "a long commute (n)",
+        "daily commute (n)"
+      ],
+      "hoTu": [
+        "commuter (n)"
+      ]
+    },
+    {
+      "chu": "commuter",
+      "doc": "/kəˈmjuːtə/",
+      "loai": "n",
+      "nghia": "người đi làm xa hằng ngày",
+      "cap": "B2",
+      "viDu": "Trains are packed with commuters during rush hour.",
+      "viDuNghia": "Tàu chật kín người đi làm vào giờ cao điểm.",
+      "cumTu": [
+        "commuter trains",
+        "daily commuters"
+      ],
+      "hoTu": [
+        "commute (v/n)"
+      ]
+    },
+    {
+      "chu": "car ownership",
+      "doc": "/ˈkɑːr ˌəʊnəʃɪp/",
+      "loai": "n",
+      "nghia": "việc sở hữu ô tô",
+      "cap": "B2",
+      "viDu": "Car ownership has risen rapidly as incomes have grown.",
+      "viDuNghia": "Sở hữu ô tô tăng nhanh khi thu nhập tăng.",
+      "cumTu": [
+        "levels of car ownership",
+        "discourage car ownership"
+      ]
+    },
+    {
+      "chu": "car-sharing",
+      "doc": "/ˈkɑː ˌʃeərɪŋ/",
+      "loai": "n",
+      "nghia": "đi chung xe",
+      "cap": "B2",
+      "viDu": "Car-sharing schemes reduce the number of vehicles on the road.",
+      "viDuNghia": "Chương trình đi chung xe giảm số xe trên đường.",
+      "cumTu": [
+        "car-sharing schemes",
+        "encourage car-sharing"
+      ],
+      "ghiChu": "Gần nghĩa: carpooling."
+    },
+    {
+      "chu": "mass transit",
+      "doc": "/ˌmæs ˈtrænsɪt/",
+      "loai": "n",
+      "nghia": "giao thông công cộng sức chở lớn",
+      "cap": "C1",
+      "viDu": "Cities must invest in mass transit rather than wider roads.",
+      "viDuNghia": "Các thành phố phải đầu tư vào giao thông công cộng sức chở lớn thay vì mở rộng đường.",
+      "cumTu": [
+        "a mass transit system",
+        "invest in mass transit"
+      ]
+    },
+    {
+      "chu": "high-speed rail",
+      "doc": "/ˌhaɪ spiːd ˈreɪl/",
+      "loai": "n",
+      "nghia": "đường sắt cao tốc",
+      "cap": "B2",
+      "viDu": "A high-speed rail link would cut the journey time in half.",
+      "viDuNghia": "Tuyến đường sắt cao tốc sẽ rút ngắn một nửa thời gian di chuyển.",
+      "cumTu": [
+        "a high-speed rail line",
+        "build high-speed rail"
+      ]
+    },
+    {
+      "chu": "transport hub",
+      "doc": "/ˈtrænspɔːt ˌhʌb/",
+      "loai": "n",
+      "nghia": "đầu mối giao thông",
+      "cap": "C1",
+      "viDu": "The station has become a major transport hub for the region.",
+      "viDuNghia": "Nhà ga đã trở thành đầu mối giao thông lớn của vùng.",
+      "cumTu": [
+        "a major transport hub"
+      ]
+    },
+    {
+      "chu": "cycle lane",
+      "doc": "/ˈsaɪkl ˌleɪn/",
+      "loai": "n",
+      "nghia": "làn đường xe đạp",
+      "cap": "B2",
+      "viDu": "More cycle lanes would encourage people to leave their cars at home.",
+      "viDuNghia": "Nhiều làn xe đạp hơn sẽ khuyến khích người dân để ô tô ở nhà.",
+      "cumTu": [
+        "a separate cycle lane",
+        "build cycle lanes"
+      ]
+    },
+    {
+      "chu": "pedestrianise",
+      "doc": "/pəˈdestriənaɪz/",
+      "loai": "v",
+      "nghia": "biến thành phố đi bộ",
+      "cap": "C1",
+      "viDu": "The council plans to pedestrianise the old town centre.",
+      "viDuNghia": "Chính quyền dự định biến khu phố cổ thành phố đi bộ.",
+      "cumTu": [
+        "pedestrianise a street",
+        "a pedestrianised area"
+      ],
+      "hoTu": [
+        "pedestrian (n)",
+        "pedestrianisation (n)"
+      ]
+    },
+    {
+      "chu": "road safety",
+      "doc": "/ˈrəʊd ˌseɪfti/",
+      "loai": "n",
+      "nghia": "an toàn giao thông",
+      "cap": "B2",
+      "viDu": "Lower speed limits near schools improve road safety.",
+      "viDuNghia": "Giới hạn tốc độ thấp hơn gần trường học cải thiện an toàn giao thông.",
+      "cumTu": [
+        "road safety campaigns",
+        "improve road safety"
+      ]
+    },
+    {
+      "chu": "road rage",
+      "doc": "/ˈrəʊd ˌreɪdʒ/",
+      "loai": "n",
+      "nghia": "cơn giận dữ khi lái xe",
+      "cap": "C1",
+      "viDu": "Heavy traffic often leads to road rage.",
+      "viDuNghia": "Giao thông đông đúc thường dẫn tới cơn giận khi lái xe.",
+      "cumTu": [
+        "an incident of road rage"
+      ]
+    },
+    {
+      "chu": "ring road",
+      "doc": "/ˈrɪŋ ˌrəʊd/",
+      "loai": "n",
+      "nghia": "đường vành đai",
+      "cap": "B2",
+      "viDu": "A new ring road was built to keep lorries out of the centre.",
+      "viDuNghia": "Một đường vành đai mới được xây để xe tải không vào trung tâm.",
+      "cumTu": [
+        "the outer ring road",
+        "build a ring road"
+      ],
+      "ghiChu": "Gặp nhiều trong Task 1 bản đồ."
+    },
+    {
+      "chu": "low-emission zone",
+      "doc": "/ˌləʊ ɪˈmɪʃn ˌzəʊn/",
+      "loai": "n",
+      "nghia": "vùng phát thải thấp",
+      "cap": "C1",
+      "viDu": "Older diesel cars are banned from the low-emission zone.",
+      "viDuNghia": "Ô tô diesel cũ bị cấm vào vùng phát thải thấp.",
+      "cumTu": [
+        "introduce a low-emission zone"
+      ]
+    },
+    {
+      "chu": "fuel-efficient",
+      "doc": "/ˌfjuːəl ɪˈfɪʃnt/",
+      "loai": "adj",
+      "nghia": "tiết kiệm nhiên liệu",
+      "cap": "C1",
+      "viDu": "Fuel-efficient cars are cheaper to run and less polluting.",
+      "viDuNghia": "Xe tiết kiệm nhiên liệu rẻ hơn khi vận hành và ít gây ô nhiễm hơn.",
+      "cumTu": [
+        "fuel-efficient vehicles",
+        "more fuel-efficient"
+      ],
+      "hoTu": [
+        "fuel efficiency (n)"
+      ]
+    }
+  ]
+}

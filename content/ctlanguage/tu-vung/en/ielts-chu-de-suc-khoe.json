@@ -1,0 +1,683 @@
+{
+  "ma": "ielts-chu-de-suc-khoe",
+  "nn": "en",
+  "ten": "IELTS theo chủ đề: Sức khoẻ",
+  "moTa": "Từ và cụm đặc thù chủ đề Sức khoẻ trong đề IELTS (lối sống, dinh dưỡng, bệnh tật, y tế công cộng, dân số già) — cấp B1–C1, ví dụ theo văn phong Writing Task 2 và Speaking.",
+  "nhom": "ielts",
+  "cap": "B2",
+  "tu": [
+    {
+      "chu": "sedentary lifestyle",
+      "doc": "/ˌsednteri ˈlaɪfstaɪl/",
+      "loai": "n",
+      "nghia": "lối sống ít vận động",
+      "cap": "C1",
+      "viDu": "A sedentary lifestyle increases the risk of heart disease.",
+      "viDuNghia": "Lối sống ít vận động làm tăng nguy cơ bệnh tim.",
+      "cumTu": [
+        "lead a sedentary lifestyle",
+        "the dangers of a sedentary lifestyle"
+      ],
+      "hoTu": [
+        "sedentary (adj)"
+      ]
+    },
+    {
+      "chu": "physical activity",
+      "doc": "/ˌfɪzɪkl ækˈtɪvəti/",
+      "loai": "n",
+      "nghia": "hoạt động thể chất",
+      "cap": "B1",
+      "viDu": "Adults should do at least 150 minutes of physical activity a week.",
+      "viDuNghia": "Người lớn nên vận động thể chất ít nhất 150 phút mỗi tuần.",
+      "cumTu": [
+        "regular physical activity",
+        "levels of physical activity"
+      ]
+    },
+    {
+      "chu": "balanced diet",
+      "doc": "/ˌbælənst ˈdaɪət/",
+      "loai": "n",
+      "nghia": "chế độ ăn cân bằng",
+      "cap": "B1",
+      "viDu": "A balanced diet should include plenty of fruit and vegetables.",
+      "viDuNghia": "Chế độ ăn cân bằng nên có nhiều rau quả.",
+      "cumTu": [
+        "eat a balanced diet",
+        "maintain a balanced diet"
+      ]
+    },
+    {
+      "chu": "junk food",
+      "doc": "/ˈdʒʌŋk ˌfuːd/",
+      "loai": "n",
+      "nghia": "đồ ăn vặt, đồ ăn nhanh kém dinh dưỡng",
+      "cap": "B1",
+      "viDu": "Advertising junk food to children should be banned.",
+      "viDuNghia": "Nên cấm quảng cáo đồ ăn kém dinh dưỡng cho trẻ em.",
+      "cumTu": [
+        "cut down on junk food",
+        "junk food advertising"
+      ]
+    },
+    {
+      "chu": "processed food",
+      "doc": "/ˌprəʊsest ˈfuːd/",
+      "loai": "n",
+      "nghia": "thực phẩm chế biến sẵn",
+      "cap": "B2",
+      "viDu": "Processed food is often high in salt, sugar and fat.",
+      "viDuNghia": "Thực phẩm chế biến sẵn thường nhiều muối, đường và chất béo.",
+      "cumTu": [
+        "highly processed food",
+        "rely on processed food"
+      ]
+    },
+    {
+      "chu": "sugary drinks",
+      "doc": "/ˌʃʊɡəri ˈdrɪŋks/",
+      "loai": "n",
+      "nghia": "đồ uống có đường",
+      "cap": "B2",
+      "viDu": "Several countries have introduced a tax on sugary drinks.",
+      "viDuNghia": "Nhiều nước đã áp thuế lên đồ uống có đường.",
+      "cumTu": [
+        "a tax on sugary drinks",
+        "consumption of sugary drinks"
+      ]
+    },
+    {
+      "chu": "nutrition",
+      "doc": "/njuˈtrɪʃn/",
+      "loai": "n",
+      "nghia": "dinh dưỡng",
+      "cap": "B2",
+      "viDu": "Good nutrition in early childhood affects health for life.",
+      "viDuNghia": "Dinh dưỡng tốt thời thơ ấu ảnh hưởng tới sức khoẻ cả đời.",
+      "cumTu": [
+        "poor nutrition",
+        "nutrition education",
+        "good nutrition"
+      ],
+      "hoTu": [
+        "nutritious (adj)",
+        "nutritional (adj)",
+        "nutritionist (n)"
+      ]
+    },
+    {
+      "chu": "nutritious",
+      "doc": "/njuˈtrɪʃəs/",
+      "loai": "adj",
+      "nghia": "bổ dưỡng",
+      "cap": "B2",
+      "viDu": "Schools should provide nutritious meals at an affordable price.",
+      "viDuNghia": "Trường học nên cung cấp bữa ăn bổ dưỡng với giá phải chăng.",
+      "cumTu": [
+        "nutritious food",
+        "a nutritious meal"
+      ],
+      "hoTu": [
+        "nutrition (n)"
+      ]
+    },
+    {
+      "chu": "malnutrition",
+      "doc": "/ˌmælnjuˈtrɪʃn/",
+      "loai": "n",
+      "nghia": "suy dinh dưỡng",
+      "cap": "C1",
+      "viDu": "Malnutrition remains a major problem in parts of Africa.",
+      "viDuNghia": "Suy dinh dưỡng vẫn là vấn đề lớn ở nhiều vùng châu Phi.",
+      "cumTu": [
+        "suffer from malnutrition",
+        "child malnutrition"
+      ],
+      "hoTu": [
+        "malnourished (adj)"
+      ]
+    },
+    {
+      "chu": "obese",
+      "doc": "/əʊˈbiːs/",
+      "loai": "adj",
+      "nghia": "béo phì",
+      "cap": "B2",
+      "viDu": "Nearly a third of children in some countries are obese.",
+      "viDuNghia": "Gần một phần ba trẻ em ở một số nước bị béo phì.",
+      "cumTu": [
+        "clinically obese",
+        "become obese"
+      ],
+      "hoTu": [
+        "obesity (n)"
+      ]
+    },
+    {
+      "chu": "cholesterol",
+      "doc": "/kəˈlestərɒl/",
+      "loai": "n",
+      "nghia": "cholesterol",
+      "cap": "B2",
+      "viDu": "Too much red meat can raise cholesterol levels.",
+      "viDuNghia": "Ăn quá nhiều thịt đỏ có thể làm tăng mức cholesterol.",
+      "cumTu": [
+        "high cholesterol",
+        "cholesterol levels"
+      ]
+    },
+    {
+      "chu": "heart disease",
+      "doc": "/ˈhɑːt dɪˌziːz/",
+      "loai": "n",
+      "nghia": "bệnh tim",
+      "cap": "B1",
+      "viDu": "Heart disease is one of the leading causes of death worldwide.",
+      "viDuNghia": "Bệnh tim là một trong những nguyên nhân tử vong hàng đầu thế giới.",
+      "cumTu": [
+        "risk of heart disease",
+        "suffer from heart disease"
+      ]
+    },
+    {
+      "chu": "diabetes",
+      "doc": "/ˌdaɪəˈbiːtiːz/",
+      "loai": "n",
+      "nghia": "bệnh tiểu đường",
+      "cap": "B2",
+      "viDu": "Type 2 diabetes is closely linked to poor diet and lack of exercise.",
+      "viDuNghia": "Tiểu đường tuýp 2 liên quan chặt tới ăn uống kém và thiếu vận động.",
+      "cumTu": [
+        "type 2 diabetes",
+        "develop diabetes"
+      ],
+      "hoTu": [
+        "diabetic (adj/n)"
+      ]
+    },
+    {
+      "chu": "chronic",
+      "doc": "/ˈkrɒnɪk/",
+      "loai": "adj",
+      "nghia": "mãn tính, kinh niên",
+      "cap": "C1",
+      "viDu": "An ageing population means more people living with chronic diseases.",
+      "viDuNghia": "Dân số già đi đồng nghĩa có nhiều người sống chung với bệnh mãn tính hơn.",
+      "cumTu": [
+        "chronic disease",
+        "chronic pain",
+        "chronic illness"
+      ],
+      "hoTu": [
+        "chronically (adv)"
+      ],
+      "ghiChu": "Đối lập: acute (cấp tính)."
+    },
+    {
+      "chu": "life expectancy",
+      "doc": "/ˈlaɪf ɪkˌspektənsi/",
+      "loai": "n",
+      "nghia": "tuổi thọ trung bình",
+      "cap": "B2",
+      "viDu": "Life expectancy has risen thanks to better healthcare.",
+      "viDuNghia": "Tuổi thọ trung bình đã tăng nhờ chăm sóc y tế tốt hơn.",
+      "cumTu": [
+        "average life expectancy",
+        "increase life expectancy",
+        "life expectancy at birth"
+      ],
+      "ghiChu": "Hay gặp ở Task 1 (biểu đồ)."
+    },
+    {
+      "chu": "longevity",
+      "doc": "/lɒnˈdʒevəti/",
+      "loai": "n",
+      "nghia": "sự sống lâu, tuổi thọ",
+      "cap": "C1",
+      "viDu": "Diet and social life both play a role in longevity.",
+      "viDuNghia": "Chế độ ăn và đời sống xã hội đều góp phần vào sự sống lâu.",
+      "cumTu": [
+        "the secret of longevity",
+        "increase longevity"
+      ]
+    },
+    {
+      "chu": "epidemic",
+      "doc": "/ˌepɪˈdemɪk/",
+      "loai": "n",
+      "nghia": "dịch bệnh (trong một vùng)",
+      "cap": "C1",
+      "viDu": "Doctors describe obesity as an epidemic in developed countries.",
+      "viDuNghia": "Bác sĩ mô tả béo phì như một dịch bệnh ở các nước phát triển.",
+      "cumTu": [
+        "an obesity epidemic",
+        "a flu epidemic",
+        "reach epidemic proportions"
+      ],
+      "hoTu": [
+        "epidemiology (n)"
+      ],
+      "ghiChu": "\"pandemic\" = đại dịch lan khắp nhiều nước."
+    },
+    {
+      "chu": "pandemic",
+      "doc": "/pænˈdemɪk/",
+      "loai": "n",
+      "nghia": "đại dịch",
+      "cap": "B2",
+      "viDu": "The pandemic forced millions of people to work from home.",
+      "viDuNghia": "Đại dịch buộc hàng triệu người làm việc tại nhà.",
+      "cumTu": [
+        "a global pandemic",
+        "during the pandemic"
+      ]
+    },
+    {
+      "chu": "outbreak",
+      "doc": "/ˈaʊtbreɪk/",
+      "loai": "n",
+      "nghia": "sự bùng phát (dịch bệnh)",
+      "cap": "B2",
+      "viDu": "An outbreak of measles closed several schools.",
+      "viDuNghia": "Một đợt bùng phát sởi khiến nhiều trường đóng cửa.",
+      "cumTu": [
+        "an outbreak of",
+        "contain an outbreak"
+      ],
+      "hoTu": [
+        "break out (phr)"
+      ]
+    },
+    {
+      "chu": "infectious disease",
+      "doc": "/ɪnˌfekʃəs dɪˈziːz/",
+      "loai": "n",
+      "nghia": "bệnh truyền nhiễm",
+      "cap": "B2",
+      "viDu": "Vaccines have greatly reduced deaths from infectious diseases.",
+      "viDuNghia": "Vắc-xin đã giảm mạnh số ca tử vong vì bệnh truyền nhiễm.",
+      "cumTu": [
+        "spread of infectious diseases",
+        "control infectious diseases"
+      ],
+      "hoTu": [
+        "infection (n)",
+        "infect (v)"
+      ]
+    },
+    {
+      "chu": "contagious",
+      "doc": "/kənˈteɪdʒəs/",
+      "loai": "adj",
+      "nghia": "lây (qua tiếp xúc)",
+      "cap": "C1",
+      "viDu": "The virus is highly contagious, so patients must be isolated.",
+      "viDuNghia": "Vi-rút rất dễ lây nên bệnh nhân phải được cách ly.",
+      "cumTu": [
+        "highly contagious",
+        "a contagious disease"
+      ],
+      "hoTu": [
+        "contagion (n)"
+      ],
+      "ghiChu": "Nghĩa bóng: \"contagious laughter\" = tiếng cười dễ lan."
+    },
+    {
+      "chu": "immune system",
+      "doc": "/ɪˈmjuːn ˌsɪstəm/",
+      "loai": "n",
+      "nghia": "hệ miễn dịch",
+      "cap": "B2",
+      "viDu": "Regular sleep helps keep the immune system strong.",
+      "viDuNghia": "Ngủ đều đặn giúp hệ miễn dịch khoẻ.",
+      "cumTu": [
+        "boost the immune system",
+        "a weakened immune system"
+      ]
+    },
+    {
+      "chu": "preventive",
+      "doc": "/prɪˈventɪv/",
+      "loai": "adj",
+      "nghia": "phòng ngừa",
+      "cap": "C1",
+      "viDu": "Governments should spend more on preventive healthcare.",
+      "viDuNghia": "Chính phủ nên chi nhiều hơn cho y tế phòng ngừa.",
+      "cumTu": [
+        "preventive measures",
+        "preventive medicine",
+        "preventive healthcare"
+      ],
+      "hoTu": [
+        "prevent (v)",
+        "prevention (n)"
+      ],
+      "ghiChu": "Còn viết \"preventative\"."
+    },
+    {
+      "chu": "medical check-up",
+      "doc": "/ˌmedɪkl ˈtʃek ʌp/",
+      "loai": "n",
+      "nghia": "khám sức khoẻ định kỳ",
+      "cap": "B2",
+      "viDu": "Regular medical check-ups can detect problems early.",
+      "viDuNghia": "Khám sức khoẻ định kỳ có thể phát hiện sớm vấn đề.",
+      "cumTu": [
+        "have a medical check-up",
+        "an annual check-up"
+      ]
+    },
+    {
+      "chu": "diagnose",
+      "doc": "/ˈdaɪəɡnəʊz/",
+      "loai": "v",
+      "nghia": "chẩn đoán",
+      "cap": "B2",
+      "viDu": "Cancer that is diagnosed early is much easier to treat.",
+      "viDuNghia": "Ung thư được chẩn đoán sớm dễ điều trị hơn nhiều.",
+      "cumTu": [
+        "be diagnosed with",
+        "diagnose a disease",
+        "wrongly diagnosed"
+      ],
+      "hoTu": [
+        "diagnosis (n)",
+        "diagnostic (adj)"
+      ]
+    },
+    {
+      "chu": "medical treatment",
+      "doc": "/ˌmedɪkl ˈtriːtmənt/",
+      "loai": "n",
+      "nghia": "điều trị y khoa",
+      "cap": "B1",
+      "viDu": "Many people cannot afford medical treatment without insurance.",
+      "viDuNghia": "Nhiều người không đủ tiền điều trị nếu không có bảo hiểm.",
+      "cumTu": [
+        "receive medical treatment",
+        "seek medical treatment"
+      ]
+    },
+    {
+      "chu": "therapy",
+      "doc": "/ˈθerəpi/",
+      "loai": "n",
+      "nghia": "liệu pháp, trị liệu",
+      "cap": "B2",
+      "viDu": "Talking therapy can be very effective for depression.",
+      "viDuNghia": "Liệu pháp trò chuyện có thể rất hiệu quả với trầm cảm.",
+      "cumTu": [
+        "undergo therapy",
+        "physical therapy",
+        "therapy sessions"
+      ],
+      "hoTu": [
+        "therapist (n)",
+        "therapeutic (adj)"
+      ]
+    },
+    {
+      "chu": "over-the-counter",
+      "doc": "/ˌəʊvə ðə ˈkaʊntə/",
+      "loai": "adj",
+      "nghia": "(thuốc) mua không cần đơn",
+      "cap": "C1",
+      "viDu": "Over-the-counter painkillers can be dangerous if overused.",
+      "viDuNghia": "Thuốc giảm đau không kê đơn có thể nguy hiểm nếu lạm dụng.",
+      "cumTu": [
+        "over-the-counter medicine",
+        "available over the counter"
+      ]
+    },
+    {
+      "chu": "alternative medicine",
+      "doc": "/ɔːlˌtɜːnətɪv ˈmedsn/",
+      "loai": "n",
+      "nghia": "y học thay thế",
+      "cap": "B2",
+      "viDu": "Acupuncture is a popular form of alternative medicine.",
+      "viDuNghia": "Châm cứu là một dạng y học thay thế phổ biến.",
+      "cumTu": [
+        "turn to alternative medicine",
+        "practise alternative medicine"
+      ]
+    },
+    {
+      "chu": "cosmetic surgery",
+      "doc": "/kɒzˌmetɪk ˈsɜːdʒəri/",
+      "loai": "n",
+      "nghia": "phẫu thuật thẩm mỹ",
+      "cap": "B2",
+      "viDu": "Social media has made cosmetic surgery more popular among young people.",
+      "viDuNghia": "Mạng xã hội khiến phẫu thuật thẩm mỹ phổ biến hơn với người trẻ.",
+      "cumTu": [
+        "have cosmetic surgery",
+        "undergo cosmetic surgery"
+      ]
+    },
+    {
+      "chu": "public health",
+      "doc": "/ˌpʌblɪk ˈhelθ/",
+      "loai": "n",
+      "nghia": "sức khoẻ cộng đồng, y tế công cộng",
+      "cap": "B2",
+      "viDu": "Smoking bans have greatly improved public health.",
+      "viDuNghia": "Lệnh cấm hút thuốc đã cải thiện đáng kể sức khoẻ cộng đồng.",
+      "cumTu": [
+        "a public health campaign",
+        "a threat to public health"
+      ]
+    },
+    {
+      "chu": "healthcare system",
+      "doc": "/ˈhelθkeə ˌsɪstəm/",
+      "loai": "n",
+      "nghia": "hệ thống y tế",
+      "cap": "B2",
+      "viDu": "An ageing population puts pressure on the healthcare system.",
+      "viDuNghia": "Dân số già gây áp lực lên hệ thống y tế.",
+      "cumTu": [
+        "a free healthcare system",
+        "strain on the healthcare system"
+      ]
+    },
+    {
+      "chu": "sanitation",
+      "doc": "/ˌsænɪˈteɪʃn/",
+      "loai": "n",
+      "nghia": "vệ sinh môi trường, hệ thống thoát nước thải",
+      "cap": "C1",
+      "viDu": "Poor sanitation is a major cause of disease in slums.",
+      "viDuNghia": "Vệ sinh kém là nguyên nhân chính gây bệnh ở khu ổ chuột.",
+      "cumTu": [
+        "improve sanitation",
+        "access to sanitation",
+        "poor sanitation"
+      ]
+    },
+    {
+      "chu": "ageing population",
+      "doc": "/ˌeɪdʒɪŋ ˌpɒpjuˈleɪʃn/",
+      "loai": "n",
+      "nghia": "dân số già hoá",
+      "cap": "C1",
+      "viDu": "Japan has one of the fastest ageing populations in the world.",
+      "viDuNghia": "Nhật Bản có tốc độ già hoá dân số thuộc hàng nhanh nhất thế giới.",
+      "cumTu": [
+        "an ageing population",
+        "cope with an ageing population"
+      ],
+      "ghiChu": "Anh-Mỹ: aging population."
+    },
+    {
+      "chu": "mental illness",
+      "doc": "/ˌmentl ˈɪlnəs/",
+      "loai": "n",
+      "nghia": "bệnh tâm thần",
+      "cap": "B2",
+      "viDu": "There is still a stigma attached to mental illness.",
+      "viDuNghia": "Bệnh tâm thần vẫn bị kỳ thị.",
+      "cumTu": [
+        "suffer from mental illness",
+        "the stigma of mental illness"
+      ]
+    },
+    {
+      "chu": "stress-related",
+      "doc": "/ˈstres rɪˌleɪtɪd/",
+      "loai": "adj",
+      "nghia": "liên quan tới căng thẳng",
+      "cap": "C1",
+      "viDu": "Long working hours lead to stress-related illnesses.",
+      "viDuNghia": "Giờ làm dài dẫn tới các bệnh liên quan tới căng thẳng.",
+      "cumTu": [
+        "stress-related illness",
+        "stress-related problems"
+      ]
+    },
+    {
+      "chu": "fatigue",
+      "doc": "/fəˈtiːɡ/",
+      "loai": "n",
+      "nghia": "sự mệt mỏi",
+      "cap": "C1",
+      "viDu": "Night-shift workers often suffer from chronic fatigue.",
+      "viDuNghia": "Người làm ca đêm thường bị mệt mỏi kéo dài.",
+      "cumTu": [
+        "suffer from fatigue",
+        "mental fatigue"
+      ]
+    },
+    {
+      "chu": "well-being",
+      "doc": "/ˌwel ˈbiːɪŋ/",
+      "loai": "n",
+      "nghia": "sự khoẻ mạnh, hạnh phúc (thể chất và tinh thần)",
+      "cap": "B2",
+      "viDu": "Spending time in nature improves mental well-being.",
+      "viDuNghia": "Dành thời gian với thiên nhiên cải thiện sức khoẻ tinh thần.",
+      "cumTu": [
+        "mental well-being",
+        "a sense of well-being",
+        "physical well-being"
+      ]
+    },
+    {
+      "chu": "health-conscious",
+      "doc": "/ˈhelθ ˌkɒnʃəs/",
+      "loai": "adj",
+      "nghia": "quan tâm tới sức khoẻ",
+      "cap": "C1",
+      "viDu": "Health-conscious consumers are buying more plant-based food.",
+      "viDuNghia": "Người tiêu dùng quan tâm sức khoẻ đang mua nhiều thực phẩm thực vật hơn.",
+      "cumTu": [
+        "increasingly health-conscious",
+        "health-conscious consumers"
+      ]
+    },
+    {
+      "chu": "health hazard",
+      "doc": "/ˈhelθ ˌhæzəd/",
+      "loai": "n",
+      "nghia": "mối nguy cho sức khoẻ",
+      "cap": "C1",
+      "viDu": "Air pollution is a serious health hazard in big cities.",
+      "viDuNghia": "Ô nhiễm không khí là mối nguy nghiêm trọng cho sức khoẻ ở các thành phố lớn.",
+      "cumTu": [
+        "pose a health hazard",
+        "a major health hazard"
+      ]
+    },
+    {
+      "chu": "binge drinking",
+      "doc": "/ˈbɪndʒ ˌdrɪŋkɪŋ/",
+      "loai": "n",
+      "nghia": "uống rượu bia quá mức trong một lần",
+      "cap": "C1",
+      "viDu": "Binge drinking among students is a growing concern.",
+      "viDuNghia": "Uống rượu quá mức trong sinh viên là mối lo ngày càng lớn.",
+      "cumTu": [
+        "binge drinking culture",
+        "reduce binge drinking"
+      ],
+      "hoTu": [
+        "binge (v/n)"
+      ]
+    },
+    {
+      "chu": "alcohol consumption",
+      "doc": "/ˈælkəhɒl kənˌsʌmpʃn/",
+      "loai": "n",
+      "nghia": "việc tiêu thụ rượu bia",
+      "cap": "B2",
+      "viDu": "Raising taxes can reduce alcohol consumption.",
+      "viDuNghia": "Tăng thuế có thể giảm tiêu thụ rượu bia.",
+      "cumTu": [
+        "reduce alcohol consumption",
+        "excessive alcohol consumption"
+      ]
+    },
+    {
+      "chu": "organ donation",
+      "doc": "/ˈɔːɡən dəʊˌneɪʃn/",
+      "loai": "n",
+      "nghia": "hiến tạng",
+      "cap": "C1",
+      "viDu": "Some countries make organ donation the default unless people opt out.",
+      "viDuNghia": "Một số nước mặc định hiến tạng trừ khi người dân từ chối.",
+      "cumTu": [
+        "encourage organ donation",
+        "an organ donor"
+      ],
+      "hoTu": [
+        "donor (n)",
+        "donate (v)"
+      ]
+    },
+    {
+      "chu": "general practitioner",
+      "doc": "/ˌdʒenrəl prækˈtɪʃənə/",
+      "loai": "n",
+      "nghia": "bác sĩ đa khoa",
+      "cap": "C1",
+      "viDu": "Patients usually see a general practitioner before a specialist.",
+      "viDuNghia": "Bệnh nhân thường khám bác sĩ đa khoa trước khi gặp bác sĩ chuyên khoa.",
+      "cumTu": [
+        "see a general practitioner",
+        "register with a GP"
+      ],
+      "ghiChu": "Viết tắt GP (Anh)."
+    },
+    {
+      "chu": "life-threatening",
+      "doc": "/ˈlaɪf ˌθretnɪŋ/",
+      "loai": "adj",
+      "nghia": "đe doạ tính mạng",
+      "cap": "C1",
+      "viDu": "Some allergies can be life-threatening.",
+      "viDuNghia": "Một số dị ứng có thể đe doạ tính mạng.",
+      "cumTu": [
+        "a life-threatening illness",
+        "life-threatening injuries"
+      ]
+    },
+    {
+      "chu": "recovery",
+      "doc": "/rɪˈkʌvəri/",
+      "loai": "n",
+      "nghia": "sự hồi phục",
+      "cap": "B2",
+      "viDu": "Regular exercise can speed up recovery after surgery.",
+      "viDuNghia": "Tập luyện đều đặn có thể giúp hồi phục nhanh hơn sau phẫu thuật.",
+      "cumTu": [
+        "make a full recovery",
+        "a speedy recovery",
+        "recovery time"
+      ],
+      "hoTu": [
+        "recover (v)"
+      ]
+    }
+  ]
+}

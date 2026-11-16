@@ -1,0 +1,654 @@
+{
+  "ma": "ielts-chu-de-xa-hoi-gia-dinh",
+  "nn": "en",
+  "ten": "IELTS theo chủ đề: Xã hội và gia đình",
+  "moTa": "Từ và cụm đặc thù chủ đề Xã hội – Gia đình trong đề IELTS (nuôi dạy con, khoảng cách thế hệ, bình đẳng giới, người già, bất bình đẳng, di cư) — cấp B1–C1, ví dụ theo văn phong Writing Task 2 và Speaking.",
+  "nhom": "ielts",
+  "cap": "B2",
+  "tu": [
+    {
+      "chu": "nuclear family",
+      "doc": "/ˌnjuːkliə ˈfæməli/",
+      "loai": "n",
+      "nghia": "gia đình hạt nhân (bố mẹ và con)",
+      "cap": "B2",
+      "viDu": "The nuclear family has replaced the extended family in most cities.",
+      "viDuNghia": "Gia đình hạt nhân đã thay thế đại gia đình ở hầu hết thành phố.",
+      "cumTu": [
+        "the traditional nuclear family",
+        "live in a nuclear family"
+      ],
+      "ghiChu": "Đối lập: extended family (nhiều thế hệ)."
+    },
+    {
+      "chu": "upbringing",
+      "doc": "/ˈʌpbrɪŋɪŋ/",
+      "loai": "n",
+      "nghia": "sự nuôi dạy, giáo dưỡng",
+      "cap": "C1",
+      "viDu": "A strict upbringing does not always produce well-behaved adults.",
+      "viDuNghia": "Cách nuôi dạy nghiêm khắc không phải lúc nào cũng tạo ra người lớn biết cư xử.",
+      "cumTu": [
+        "a strict upbringing",
+        "a sheltered upbringing",
+        "have a happy upbringing"
+      ],
+      "hoTu": [
+        "bring up (phr)"
+      ]
+    },
+    {
+      "chu": "bring up",
+      "doc": "/ˌbrɪŋ ˈʌp/",
+      "loai": "phr",
+      "nghia": "nuôi nấng, nuôi dạy (con)",
+      "cap": "B1",
+      "viDu": "It is more expensive than ever to bring up children in a big city.",
+      "viDuNghia": "Nuôi con ở thành phố lớn đắt đỏ hơn bao giờ hết.",
+      "cumTu": [
+        "bring up children",
+        "be brought up by"
+      ],
+      "hoTu": [
+        "upbringing (n)"
+      ],
+      "ghiChu": "Nghĩa khác: nêu ra (một vấn đề)."
+    },
+    {
+      "chu": "parenting",
+      "doc": "/ˈpeərəntɪŋ/",
+      "loai": "n",
+      "nghia": "việc làm cha mẹ, cách nuôi dạy con",
+      "cap": "B2",
+      "viDu": "Good parenting matters more than expensive schools.",
+      "viDuNghia": "Cách nuôi dạy con tốt quan trọng hơn trường đắt tiền.",
+      "cumTu": [
+        "parenting skills",
+        "parenting style",
+        "positive parenting"
+      ],
+      "hoTu": [
+        "parent (n/v)",
+        "parental (adj)"
+      ]
+    },
+    {
+      "chu": "parental",
+      "doc": "/pəˈrentl/",
+      "loai": "adj",
+      "nghia": "(thuộc) cha mẹ",
+      "cap": "C1",
+      "viDu": "Parental involvement is a key factor in a child's success at school.",
+      "viDuNghia": "Sự tham gia của cha mẹ là yếu tố then chốt cho thành công ở trường của trẻ.",
+      "cumTu": [
+        "parental guidance",
+        "parental involvement",
+        "parental leave"
+      ],
+      "hoTu": [
+        "parent (n)"
+      ]
+    },
+    {
+      "chu": "spoilt",
+      "doc": "/spɔɪlt/",
+      "loai": "adj",
+      "nghia": "hư (được chiều quá)",
+      "cap": "B2",
+      "viDu": "Children who are given everything they want may become spoilt.",
+      "viDuNghia": "Trẻ được cho mọi thứ mình muốn có thể trở nên hư.",
+      "cumTu": [
+        "a spoilt child",
+        "spoilt brat"
+      ],
+      "hoTu": [
+        "spoil (v)"
+      ],
+      "ghiChu": "Anh-Mỹ: spoiled."
+    },
+    {
+      "chu": "role model",
+      "doc": "/ˈrəʊl ˌmɒdl/",
+      "loai": "n",
+      "nghia": "tấm gương, hình mẫu",
+      "cap": "B2",
+      "viDu": "Sports stars should behave well because they are role models for young people.",
+      "viDuNghia": "Ngôi sao thể thao nên cư xử tốt vì họ là tấm gương cho giới trẻ.",
+      "cumTu": [
+        "a positive role model",
+        "act as a role model"
+      ]
+    },
+    {
+      "chu": "generation gap",
+      "doc": "/ˌdʒenəˈreɪʃn ˌɡæp/",
+      "loai": "n",
+      "nghia": "khoảng cách thế hệ",
+      "cap": "B2",
+      "viDu": "Technology has widened the generation gap between parents and teenagers.",
+      "viDuNghia": "Công nghệ đã nới rộng khoảng cách thế hệ giữa cha mẹ và con tuổi teen.",
+      "cumTu": [
+        "bridge the generation gap",
+        "widen the generation gap"
+      ]
+    },
+    {
+      "chu": "intergenerational",
+      "doc": "/ˌɪntədʒenəˈreɪʃənl/",
+      "loai": "adj",
+      "nghia": "giữa các thế hệ",
+      "cap": "C1",
+      "viDu": "Intergenerational living can benefit both grandparents and grandchildren.",
+      "viDuNghia": "Sống nhiều thế hệ chung có thể có lợi cho cả ông bà lẫn cháu.",
+      "cumTu": [
+        "intergenerational relationships",
+        "intergenerational living"
+      ]
+    },
+    {
+      "chu": "close-knit",
+      "doc": "/ˌkləʊs ˈnɪt/",
+      "loai": "adj",
+      "nghia": "gắn bó khăng khít",
+      "cap": "C1",
+      "viDu": "I grew up in a close-knit family where we ate dinner together every night.",
+      "viDuNghia": "Tôi lớn lên trong một gia đình gắn bó, tối nào cũng ăn cơm cùng nhau.",
+      "cumTu": [
+        "a close-knit family",
+        "a close-knit community"
+      ],
+      "ghiChu": "Rất hợp cho Speaking Part 1–2."
+    },
+    {
+      "chu": "family bond",
+      "doc": "/ˌfæməli ˈbɒnd/",
+      "loai": "n",
+      "nghia": "sự gắn kết gia đình",
+      "cap": "B2",
+      "viDu": "Eating meals together helps to strengthen family bonds.",
+      "viDuNghia": "Ăn cơm cùng nhau giúp củng cố gắn kết gia đình.",
+      "cumTu": [
+        "strengthen family bonds",
+        "weaken family bonds"
+      ]
+    },
+    {
+      "chu": "sibling rivalry",
+      "doc": "/ˌsɪblɪŋ ˈraɪvlri/",
+      "loai": "n",
+      "nghia": "sự ganh đua giữa anh chị em",
+      "cap": "C1",
+      "viDu": "Comparing children with each other often leads to sibling rivalry.",
+      "viDuNghia": "So sánh con cái với nhau thường dẫn tới ganh đua giữa anh chị em.",
+      "cumTu": [
+        "intense sibling rivalry"
+      ]
+    },
+    {
+      "chu": "single-parent family",
+      "doc": "/ˌsɪŋɡl ˌpeərənt ˈfæməli/",
+      "loai": "n",
+      "nghia": "gia đình đơn thân",
+      "cap": "B2",
+      "viDu": "Children from single-parent families may need extra support.",
+      "viDuNghia": "Trẻ từ gia đình đơn thân có thể cần hỗ trợ thêm.",
+      "cumTu": [
+        "grow up in a single-parent family"
+      ]
+    },
+    {
+      "chu": "stay-at-home parent",
+      "doc": "/ˌsteɪ ət həʊm ˈpeərənt/",
+      "loai": "n",
+      "nghia": "cha/mẹ ở nhà nội trợ, chăm con",
+      "cap": "B2",
+      "viDu": "More fathers are choosing to become stay-at-home parents.",
+      "viDuNghia": "Ngày càng nhiều ông bố chọn ở nhà chăm con.",
+      "cumTu": [
+        "a stay-at-home mum",
+        "a stay-at-home dad"
+      ]
+    },
+    {
+      "chu": "working parent",
+      "doc": "/ˌwɜːkɪŋ ˈpeərənt/",
+      "loai": "n",
+      "nghia": "cha/mẹ đi làm",
+      "cap": "B1",
+      "viDu": "Working parents often rely on grandparents for childcare.",
+      "viDuNghia": "Cha mẹ đi làm thường nhờ ông bà trông con.",
+      "cumTu": [
+        "support working parents",
+        "working mothers"
+      ]
+    },
+    {
+      "chu": "dual-income family",
+      "doc": "/ˌdjuːəl ˌɪnkʌm ˈfæməli/",
+      "loai": "n",
+      "nghia": "gia đình có cả hai vợ chồng cùng đi làm",
+      "cap": "C1",
+      "viDu": "Dual-income families have more money but less time together.",
+      "viDuNghia": "Gia đình hai nguồn thu nhập có nhiều tiền hơn nhưng ít thời gian bên nhau.",
+      "cumTu": [
+        "the rise of dual-income families"
+      ]
+    },
+    {
+      "chu": "childcare",
+      "doc": "/ˈtʃaɪldkeə/",
+      "loai": "n",
+      "nghia": "việc trông giữ trẻ",
+      "cap": "B2",
+      "viDu": "The high cost of childcare stops many mothers returning to work.",
+      "viDuNghia": "Chi phí trông trẻ cao khiến nhiều bà mẹ không quay lại làm việc.",
+      "cumTu": [
+        "affordable childcare",
+        "childcare facilities",
+        "the cost of childcare"
+      ]
+    },
+    {
+      "chu": "household chores",
+      "doc": "/ˌhaʊshəʊld ˈtʃɔːz/",
+      "loai": "n",
+      "nghia": "việc nhà",
+      "cap": "B1",
+      "viDu": "Women still do most of the household chores in many countries.",
+      "viDuNghia": "Ở nhiều nước, phụ nữ vẫn làm phần lớn việc nhà.",
+      "cumTu": [
+        "share household chores",
+        "do household chores"
+      ]
+    },
+    {
+      "chu": "gender equality",
+      "doc": "/ˌdʒendər iˈkwɒləti/",
+      "loai": "n",
+      "nghia": "bình đẳng giới",
+      "cap": "B2",
+      "viDu": "Gender equality in the workplace has improved but is far from complete.",
+      "viDuNghia": "Bình đẳng giới nơi làm việc đã cải thiện nhưng còn xa mới hoàn thiện.",
+      "cumTu": [
+        "promote gender equality",
+        "achieve gender equality"
+      ]
+    },
+    {
+      "chu": "gender role",
+      "doc": "/ˈdʒendə ˌrəʊl/",
+      "loai": "n",
+      "nghia": "vai trò giới",
+      "cap": "C1",
+      "viDu": "Traditional gender roles are changing as more women enter the workforce.",
+      "viDuNghia": "Vai trò giới truyền thống đang thay đổi khi nhiều phụ nữ đi làm hơn.",
+      "cumTu": [
+        "traditional gender roles",
+        "challenge gender roles"
+      ]
+    },
+    {
+      "chu": "domestic violence",
+      "doc": "/dəˌmestɪk ˈvaɪələns/",
+      "loai": "n",
+      "nghia": "bạo lực gia đình",
+      "cap": "C1",
+      "viDu": "Victims of domestic violence often feel unable to leave home.",
+      "viDuNghia": "Nạn nhân bạo lực gia đình thường cảm thấy không thể rời khỏi nhà.",
+      "cumTu": [
+        "victims of domestic violence",
+        "tackle domestic violence"
+      ]
+    },
+    {
+      "chu": "adolescent",
+      "doc": "/ˌædəˈlesnt/",
+      "loai": "n",
+      "nghia": "thanh thiếu niên",
+      "cap": "C1",
+      "viDu": "Adolescents need more sleep than adults.",
+      "viDuNghia": "Thanh thiếu niên cần ngủ nhiều hơn người lớn.",
+      "cumTu": [
+        "adolescent behaviour",
+        "troubled adolescents"
+      ],
+      "hoTu": [
+        "adolescence (n)"
+      ]
+    },
+    {
+      "chu": "adolescence",
+      "doc": "/ˌædəˈlesns/",
+      "loai": "n",
+      "nghia": "tuổi vị thành niên",
+      "cap": "C1",
+      "viDu": "Adolescence is a time of rapid physical and emotional change.",
+      "viDuNghia": "Tuổi vị thành niên là thời kỳ thay đổi nhanh về thể chất và cảm xúc.",
+      "cumTu": [
+        "during adolescence",
+        "in early adolescence"
+      ],
+      "hoTu": [
+        "adolescent (n/adj)"
+      ]
+    },
+    {
+      "chu": "senior citizen",
+      "doc": "/ˌsiːniə ˈsɪtɪzn/",
+      "loai": "n",
+      "nghia": "người cao tuổi",
+      "cap": "B2",
+      "viDu": "Senior citizens can travel free on public transport in many cities.",
+      "viDuNghia": "Người cao tuổi được đi phương tiện công cộng miễn phí ở nhiều thành phố.",
+      "cumTu": [
+        "discounts for senior citizens"
+      ],
+      "ghiChu": "Cách nói lịch sự hơn \"old people\"."
+    },
+    {
+      "chu": "elderly care",
+      "doc": "/ˈeldəli ˌkeə/",
+      "loai": "n",
+      "nghia": "chăm sóc người cao tuổi",
+      "cap": "B2",
+      "viDu": "The demand for elderly care will rise as the population ages.",
+      "viDuNghia": "Nhu cầu chăm sóc người cao tuổi sẽ tăng khi dân số già đi.",
+      "cumTu": [
+        "provide elderly care",
+        "elderly care facilities"
+      ]
+    },
+    {
+      "chu": "nursing home",
+      "doc": "/ˈnɜːsɪŋ ˌhəʊm/",
+      "loai": "n",
+      "nghia": "viện dưỡng lão",
+      "cap": "B2",
+      "viDu": "In Asia, sending parents to a nursing home is still seen as shameful by some.",
+      "viDuNghia": "Ở châu Á, gửi cha mẹ vào viện dưỡng lão vẫn bị một số người coi là đáng xấu hổ.",
+      "cumTu": [
+        "live in a nursing home",
+        "move into a nursing home"
+      ],
+      "ghiChu": "Gần nghĩa: care home, retirement home."
+    },
+    {
+      "chu": "orphan",
+      "doc": "/ˈɔːfn/",
+      "loai": "n",
+      "nghia": "trẻ mồ côi",
+      "cap": "B2",
+      "viDu": "The charity provides education for orphans.",
+      "viDuNghia": "Tổ chức từ thiện cung cấp giáo dục cho trẻ mồ côi.",
+      "cumTu": [
+        "war orphans",
+        "be left an orphan"
+      ],
+      "hoTu": [
+        "orphanage (n)",
+        "orphaned (adj)"
+      ]
+    },
+    {
+      "chu": "homelessness",
+      "doc": "/ˈhəʊmləsnəs/",
+      "loai": "n",
+      "nghia": "tình trạng vô gia cư",
+      "cap": "C1",
+      "viDu": "Rising rents have caused a sharp increase in homelessness.",
+      "viDuNghia": "Tiền thuê nhà tăng đã khiến tình trạng vô gia cư tăng mạnh.",
+      "cumTu": [
+        "tackle homelessness",
+        "the causes of homelessness"
+      ],
+      "hoTu": [
+        "homeless (adj)"
+      ]
+    },
+    {
+      "chu": "social cohesion",
+      "doc": "/ˌsəʊʃl kəʊˈhiːʒn/",
+      "loai": "n",
+      "nghia": "sự gắn kết xã hội",
+      "cap": "C1",
+      "viDu": "Community events help build social cohesion.",
+      "viDuNghia": "Sự kiện cộng đồng giúp xây dựng gắn kết xã hội.",
+      "cumTu": [
+        "promote social cohesion",
+        "undermine social cohesion"
+      ],
+      "hoTu": [
+        "cohesive (adj)"
+      ]
+    },
+    {
+      "chu": "social mobility",
+      "doc": "/ˌsəʊʃl məʊˈbɪləti/",
+      "loai": "n",
+      "nghia": "sự dịch chuyển tầng lớp xã hội",
+      "cap": "C1",
+      "viDu": "Free education is the key to social mobility.",
+      "viDuNghia": "Giáo dục miễn phí là chìa khoá cho dịch chuyển tầng lớp xã hội.",
+      "cumTu": [
+        "increase social mobility",
+        "lack of social mobility"
+      ]
+    },
+    {
+      "chu": "social norm",
+      "doc": "/ˌsəʊʃl ˈnɔːm/",
+      "loai": "n",
+      "nghia": "chuẩn mực xã hội",
+      "cap": "C1",
+      "viDu": "Social norms around marriage have changed rapidly.",
+      "viDuNghia": "Chuẩn mực xã hội về hôn nhân đã thay đổi nhanh chóng.",
+      "cumTu": [
+        "challenge social norms",
+        "conform to social norms"
+      ]
+    },
+    {
+      "chu": "social welfare",
+      "doc": "/ˌsəʊʃl ˈwelfeə/",
+      "loai": "n",
+      "nghia": "phúc lợi xã hội",
+      "cap": "C1",
+      "viDu": "Higher taxes are needed to fund social welfare programmes.",
+      "viDuNghia": "Cần thuế cao hơn để tài trợ các chương trình phúc lợi xã hội.",
+      "cumTu": [
+        "social welfare programmes",
+        "the social welfare system"
+      ],
+      "hoTu": [
+        "welfare (n)"
+      ]
+    },
+    {
+      "chu": "isolation",
+      "doc": "/ˌaɪsəˈleɪʃn/",
+      "loai": "n",
+      "nghia": "sự cô lập, cô đơn",
+      "cap": "B2",
+      "viDu": "Many elderly people live in isolation after their children move away.",
+      "viDuNghia": "Nhiều người già sống cô lập sau khi con cái chuyển đi.",
+      "cumTu": [
+        "social isolation",
+        "feelings of isolation",
+        "in isolation"
+      ],
+      "hoTu": [
+        "isolate (v)",
+        "isolated (adj)"
+      ]
+    },
+    {
+      "chu": "loneliness",
+      "doc": "/ˈləʊnlinəs/",
+      "loai": "n",
+      "nghia": "sự cô đơn",
+      "cap": "B2",
+      "viDu": "Loneliness can be as harmful to health as smoking.",
+      "viDuNghia": "Sự cô đơn có thể hại sức khoẻ như hút thuốc.",
+      "cumTu": [
+        "combat loneliness",
+        "feelings of loneliness"
+      ],
+      "hoTu": [
+        "lonely (adj)"
+      ]
+    },
+    {
+      "chu": "sense of belonging",
+      "doc": "/ˌsens əv bɪˈlɒŋɪŋ/",
+      "loai": "n",
+      "nghia": "cảm giác thuộc về",
+      "cap": "B2",
+      "viDu": "Joining a club gives newcomers a sense of belonging.",
+      "viDuNghia": "Tham gia câu lạc bộ cho người mới cảm giác được thuộc về.",
+      "cumTu": [
+        "a strong sense of belonging",
+        "create a sense of belonging"
+      ]
+    },
+    {
+      "chu": "disadvantaged",
+      "doc": "/ˌdɪsədˈvɑːntɪdʒd/",
+      "loai": "adj",
+      "nghia": "thiệt thòi, có hoàn cảnh khó khăn",
+      "cap": "C1",
+      "viDu": "Scholarships give disadvantaged students a chance to go to university.",
+      "viDuNghia": "Học bổng cho học sinh có hoàn cảnh khó khăn cơ hội vào đại học.",
+      "cumTu": [
+        "disadvantaged backgrounds",
+        "socially disadvantaged",
+        "the disadvantaged"
+      ],
+      "hoTu": [
+        "disadvantage (n)"
+      ]
+    },
+    {
+      "chu": "underprivileged",
+      "doc": "/ˌʌndəˈprɪvəlɪdʒd/",
+      "loai": "adj",
+      "nghia": "kém may mắn, nghèo khó",
+      "cap": "C1",
+      "viDu": "The scheme provides free meals for underprivileged children.",
+      "viDuNghia": "Chương trình cung cấp bữa ăn miễn phí cho trẻ em nghèo khó.",
+      "cumTu": [
+        "underprivileged children",
+        "underprivileged areas"
+      ]
+    },
+    {
+      "chu": "marginalised",
+      "doc": "/ˈmɑːdʒɪnəlaɪzd/",
+      "loai": "adj",
+      "nghia": "bị gạt ra lề xã hội",
+      "cap": "C1",
+      "viDu": "Minority groups often feel marginalised by mainstream society.",
+      "viDuNghia": "Các nhóm thiểu số thường cảm thấy bị xã hội chính thống gạt ra lề.",
+      "cumTu": [
+        "marginalised groups",
+        "feel marginalised"
+      ],
+      "hoTu": [
+        "marginalise (v)",
+        "marginalisation (n)"
+      ]
+    },
+    {
+      "chu": "migrant",
+      "doc": "/ˈmaɪɡrənt/",
+      "loai": "n",
+      "nghia": "người di cư",
+      "cap": "B2",
+      "viDu": "Migrant workers send billions of dollars home every year.",
+      "viDuNghia": "Lao động di cư gửi hàng tỉ đô la về nước mỗi năm.",
+      "cumTu": [
+        "migrant workers",
+        "economic migrants"
+      ],
+      "hoTu": [
+        "migrate (v)",
+        "migration (n)"
+      ]
+    },
+    {
+      "chu": "multicultural",
+      "doc": "/ˌmʌltiˈkʌltʃərəl/",
+      "loai": "adj",
+      "nghia": "đa văn hoá",
+      "cap": "B2",
+      "viDu": "London is one of the most multicultural cities in the world.",
+      "viDuNghia": "London là một trong những thành phố đa văn hoá nhất thế giới.",
+      "cumTu": [
+        "a multicultural society",
+        "multicultural communities"
+      ],
+      "hoTu": [
+        "multiculturalism (n)"
+      ]
+    },
+    {
+      "chu": "birth rate",
+      "doc": "/ˈbɜːθ ˌreɪt/",
+      "loai": "n",
+      "nghia": "tỉ lệ sinh",
+      "cap": "B2",
+      "viDu": "Falling birth rates mean fewer workers to support retirees.",
+      "viDuNghia": "Tỉ lệ sinh giảm đồng nghĩa ít người lao động để nuôi người nghỉ hưu.",
+      "cumTu": [
+        "a falling birth rate",
+        "a low birth rate"
+      ],
+      "ghiChu": "Hay gặp ở biểu đồ Task 1."
+    },
+    {
+      "chu": "overpopulation",
+      "doc": "/ˌəʊvəˌpɒpjuˈleɪʃn/",
+      "loai": "n",
+      "nghia": "sự quá tải dân số",
+      "cap": "C1",
+      "viDu": "Overpopulation puts pressure on housing and services.",
+      "viDuNghia": "Quá tải dân số gây áp lực lên nhà ở và dịch vụ.",
+      "cumTu": [
+        "the problem of overpopulation"
+      ],
+      "hoTu": [
+        "overpopulated (adj)"
+      ]
+    },
+    {
+      "chu": "individualism",
+      "doc": "/ˌɪndɪˈvɪdʒuəlɪzəm/",
+      "loai": "n",
+      "nghia": "chủ nghĩa cá nhân",
+      "cap": "C1",
+      "viDu": "Western societies tend to value individualism more than Asian ones.",
+      "viDuNghia": "Xã hội phương Tây có xu hướng đề cao chủ nghĩa cá nhân hơn xã hội châu Á.",
+      "cumTu": [
+        "a culture of individualism"
+      ],
+      "hoTu": [
+        "individualistic (adj)"
+      ]
+    },
+    {
+      "chu": "filial piety",
+      "doc": "/ˌfɪliəl ˈpaɪəti/",
+      "loai": "n",
+      "nghia": "lòng hiếu thảo",
+      "cap": "C2",
+      "viDu": "Filial piety is a core value in Vietnamese culture.",
+      "viDuNghia": "Hiếu thảo là giá trị cốt lõi trong văn hoá Việt Nam.",
+      "cumTu": [
+        "a sense of filial piety"
+      ],
+      "hoTu": [
+        "filial (adj)"
+      ],
+      "ghiChu": "Rất hữu ích khi nói về văn hoá Việt Nam trong Speaking."
+    }
+  ]
+}

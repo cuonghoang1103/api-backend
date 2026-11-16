@@ -1,0 +1,2724 @@
+{
+  "ma": "ielts-tinh-tu-trang-tu-1",
+  "nn": "en",
+  "ten": "IELTS · Tính từ đánh giá & miêu tả (1)",
+  "moTa": "Tính từ dùng để đánh giá mức độ, tầm quan trọng, tính hợp lý của vấn đề trong IELTS Writing Task 2 và Speaking: significant, detrimental, inevitable, plausible, unprecedented…",
+  "nhom": "ielts",
+  "cap": "B2",
+  "tu": [
+    {
+      "chu": "significant",
+      "doc": "/sɪɡˈnɪfɪkənt/",
+      "loai": "adj",
+      "nghia": "đáng kể, quan trọng",
+      "cap": "B1",
+      "viDu": "Social media has had a significant impact on the way young people communicate.",
+      "viDuNghia": "Mạng xã hội đã tác động đáng kể đến cách người trẻ giao tiếp.",
+      "cumTu": [
+        "a significant impact",
+        "a significant number of",
+        "statistically significant",
+        "play a significant role"
+      ],
+      "hoTu": [
+        "significance (n)",
+        "significantly (adv)",
+        "signify (v)"
+      ],
+      "ghiChu": "Dùng thay \"big/important\" trong Writing; nhấn mạnh tầm quan trọng hoặc độ lớn đủ để chú ý."
+    },
+    {
+      "chu": "substantial",
+      "doc": "/səbˈstænʃl/",
+      "loai": "adj",
+      "nghia": "lớn, đáng kể (về lượng, giá trị)",
+      "cap": "B2",
+      "viDu": "Governments need to invest a substantial amount of money in public transport.",
+      "viDuNghia": "Chính phủ cần đầu tư một khoản tiền lớn vào giao thông công cộng.",
+      "cumTu": [
+        "a substantial amount",
+        "substantial evidence",
+        "a substantial increase"
+      ],
+      "hoTu": [
+        "substance (n)",
+        "substantially (adv)"
+      ],
+      "ghiChu": "Thiên về số lượng/kích thước thật, khác \"significant\" (thiên về tầm quan trọng)."
+    },
+    {
+      "chu": "considerable",
+      "doc": "/kənˈsɪdərəbl/",
+      "loai": "adj",
+      "nghia": "đáng kể, khá lớn",
+      "cap": "B2",
+      "viDu": "Learning a second language requires considerable effort and patience.",
+      "viDuNghia": "Học một ngôn ngữ thứ hai đòi hỏi nỗ lực và sự kiên nhẫn đáng kể.",
+      "cumTu": [
+        "considerable effort",
+        "to a considerable extent",
+        "considerable debate"
+      ],
+      "hoTu": [
+        "considerably (adv)",
+        "consider (v)"
+      ],
+      "ghiChu": "Đừng nhầm với \"considerate\" (chu đáo, biết nghĩ cho người khác)."
+    },
+    {
+      "chu": "controversial",
+      "doc": "/ˌkɒntrəˈvɜːʃl/",
+      "loai": "adj",
+      "nghia": "gây tranh cãi",
+      "cap": "B2",
+      "viDu": "Genetic engineering remains a highly controversial issue.",
+      "viDuNghia": "Kỹ thuật di truyền vẫn là một vấn đề gây nhiều tranh cãi.",
+      "cumTu": [
+        "a controversial issue",
+        "highly controversial",
+        "a controversial decision"
+      ],
+      "hoTu": [
+        "controversy (n)",
+        "controversially (adv)"
+      ],
+      "ghiChu": "Rất hay dùng ở câu mở bài Task 2: \"... is a controversial issue.\""
+    },
+    {
+      "chu": "detrimental",
+      "doc": "/ˌdetrɪˈmentl/",
+      "loai": "adj",
+      "nghia": "có hại, gây tổn hại",
+      "cap": "C1",
+      "viDu": "Spending too much time on screens can be detrimental to children's eyesight.",
+      "viDuNghia": "Dành quá nhiều thời gian trước màn hình có thể gây hại cho thị lực của trẻ.",
+      "cumTu": [
+        "detrimental to",
+        "a detrimental effect",
+        "potentially detrimental"
+      ],
+      "hoTu": [
+        "detriment (n)",
+        "detrimentally (adv)"
+      ],
+      "ghiChu": "Đi với giới từ \"to\": detrimental to health. Trang trọng hơn \"harmful\"."
+    },
+    {
+      "chu": "inevitable",
+      "doc": "/ɪnˈevɪtəbl/",
+      "loai": "adj",
+      "nghia": "không thể tránh khỏi",
+      "cap": "B2",
+      "viDu": "Some job losses are inevitable as automation spreads.",
+      "viDuNghia": "Việc mất một số việc làm là không thể tránh khỏi khi tự động hoá lan rộng.",
+      "cumTu": [
+        "almost inevitable",
+        "an inevitable consequence",
+        "it is inevitable that"
+      ],
+      "hoTu": [
+        "inevitability (n)",
+        "inevitably (adv)"
+      ]
+    },
+    {
+      "chu": "beneficial",
+      "doc": "/ˌbenɪˈfɪʃl/",
+      "loai": "adj",
+      "nghia": "có lợi",
+      "cap": "B2",
+      "viDu": "Regular exercise is beneficial to both physical and mental health.",
+      "viDuNghia": "Tập thể dục đều đặn có lợi cho cả sức khoẻ thể chất lẫn tinh thần.",
+      "cumTu": [
+        "beneficial to",
+        "mutually beneficial",
+        "a beneficial effect"
+      ],
+      "hoTu": [
+        "benefit (n/v)",
+        "beneficiary (n)"
+      ],
+      "ghiChu": "Đi với \"to\" hoặc \"for\"."
+    },
+    {
+      "chu": "crucial",
+      "doc": "/ˈkruːʃl/",
+      "loai": "adj",
+      "nghia": "cực kỳ quan trọng, then chốt",
+      "cap": "B2",
+      "viDu": "Parents play a crucial role in shaping their children's values.",
+      "viDuNghia": "Cha mẹ đóng vai trò then chốt trong việc hình thành giá trị sống của con cái.",
+      "cumTu": [
+        "play a crucial role",
+        "crucial to",
+        "of crucial importance"
+      ],
+      "hoTu": [
+        "crucially (adv)"
+      ]
+    },
+    {
+      "chu": "essential",
+      "doc": "/ɪˈsenʃl/",
+      "loai": "adj",
+      "nghia": "thiết yếu, cần thiết",
+      "cap": "B1",
+      "viDu": "Access to clean water is essential for a healthy life.",
+      "viDuNghia": "Được tiếp cận nước sạch là điều thiết yếu cho một cuộc sống khoẻ mạnh.",
+      "cumTu": [
+        "essential for",
+        "absolutely essential",
+        "it is essential that"
+      ],
+      "hoTu": [
+        "essence (n)",
+        "essentially (adv)"
+      ],
+      "ghiChu": "Sau \"It is essential that ...\" dùng động từ nguyên mẫu hoặc \"should + V\"."
+    },
+    {
+      "chu": "vital",
+      "doc": "/ˈvaɪtl/",
+      "loai": "adj",
+      "nghia": "sống còn, cực kỳ quan trọng",
+      "cap": "B2",
+      "viDu": "Teachers are vital to the success of any education system.",
+      "viDuNghia": "Giáo viên là yếu tố sống còn đối với thành công của mọi hệ thống giáo dục.",
+      "cumTu": [
+        "vital to",
+        "play a vital role",
+        "of vital importance"
+      ],
+      "hoTu": [
+        "vitality (n)",
+        "vitally (adv)"
+      ]
+    },
+    {
+      "chu": "fundamental",
+      "doc": "/ˌfʌndəˈmentl/",
+      "loai": "adj",
+      "nghia": "cơ bản, nền tảng",
+      "cap": "B2",
+      "viDu": "Education is a fundamental right of every child.",
+      "viDuNghia": "Giáo dục là quyền cơ bản của mọi trẻ em.",
+      "cumTu": [
+        "a fundamental right",
+        "a fundamental change",
+        "fundamental to"
+      ],
+      "hoTu": [
+        "fundamentals (n)",
+        "fundamentally (adv)"
+      ]
+    },
+    {
+      "chu": "inherent",
+      "doc": "/ɪnˈhɪərənt/",
+      "loai": "adj",
+      "nghia": "vốn có, cố hữu",
+      "cap": "C1",
+      "viDu": "There are risks inherent in any new technology.",
+      "viDuNghia": "Công nghệ mới nào cũng có những rủi ro vốn có.",
+      "cumTu": [
+        "inherent in",
+        "an inherent risk",
+        "inherent weakness"
+      ],
+      "hoTu": [
+        "inherently (adv)"
+      ],
+      "ghiChu": "Thường đi với \"in\"."
+    },
+    {
+      "chu": "prevalent",
+      "doc": "/ˈprevələnt/",
+      "loai": "adj",
+      "nghia": "phổ biến, thịnh hành",
+      "cap": "C1",
+      "viDu": "Obesity is increasingly prevalent among teenagers in urban areas.",
+      "viDuNghia": "Béo phì ngày càng phổ biến ở thanh thiếu niên thành thị.",
+      "cumTu": [
+        "increasingly prevalent",
+        "prevalent among",
+        "widely prevalent"
+      ],
+      "hoTu": [
+        "prevalence (n)",
+        "prevail (v)"
+      ]
+    },
+    {
+      "chu": "widespread",
+      "doc": "/ˈwaɪdspred/",
+      "loai": "adj",
+      "nghia": "lan rộng, phổ biến",
+      "cap": "B2",
+      "viDu": "There is widespread concern about the rising cost of housing.",
+      "viDuNghia": "Có mối lo ngại lan rộng về chi phí nhà ở tăng cao.",
+      "cumTu": [
+        "widespread concern",
+        "widespread use",
+        "widespread support"
+      ],
+      "hoTu": [
+        "spread (v)"
+      ]
+    },
+    {
+      "chu": "compelling",
+      "doc": "/kəmˈpelɪŋ/",
+      "loai": "adj",
+      "nghia": "thuyết phục, hấp dẫn",
+      "cap": "C1",
+      "viDu": "There is compelling evidence that smoking causes cancer.",
+      "viDuNghia": "Có bằng chứng thuyết phục rằng hút thuốc gây ung thư.",
+      "cumTu": [
+        "compelling evidence",
+        "a compelling argument",
+        "a compelling reason"
+      ],
+      "hoTu": [
+        "compel (v)",
+        "compellingly (adv)"
+      ]
+    },
+    {
+      "chu": "convincing",
+      "doc": "/kənˈvɪnsɪŋ/",
+      "loai": "adj",
+      "nghia": "có sức thuyết phục",
+      "cap": "B2",
+      "viDu": "The writer fails to provide a convincing argument for this view.",
+      "viDuNghia": "Người viết không đưa ra được lập luận thuyết phục cho quan điểm này.",
+      "cumTu": [
+        "a convincing argument",
+        "convincing evidence",
+        "far from convincing"
+      ],
+      "hoTu": [
+        "convince (v)",
+        "convinced (adj)",
+        "convincingly (adv)"
+      ]
+    },
+    {
+      "chu": "plausible",
+      "doc": "/ˈplɔːzəbl/",
+      "loai": "adj",
+      "nghia": "có vẻ hợp lý, đáng tin",
+      "cap": "C1",
+      "viDu": "It is plausible that remote work will become the norm in many industries.",
+      "viDuNghia": "Có cơ sở để cho rằng làm việc từ xa sẽ thành chuẩn mực ở nhiều ngành.",
+      "cumTu": [
+        "a plausible explanation",
+        "perfectly plausible",
+        "seem plausible"
+      ],
+      "hoTu": [
+        "plausibility (n)",
+        "implausible (adj)"
+      ]
+    },
+    {
+      "chu": "feasible",
+      "doc": "/ˈfiːzəbl/",
+      "loai": "adj",
+      "nghia": "khả thi",
+      "cap": "C1",
+      "viDu": "It is not financially feasible to provide free university education for everyone.",
+      "viDuNghia": "Cung cấp giáo dục đại học miễn phí cho mọi người là không khả thi về tài chính.",
+      "cumTu": [
+        "economically feasible",
+        "technically feasible",
+        "a feasible solution"
+      ],
+      "hoTu": [
+        "feasibility (n)"
+      ]
+    },
+    {
+      "chu": "viable",
+      "doc": "/ˈvaɪəbl/",
+      "loai": "adj",
+      "nghia": "khả thi, có thể duy trì lâu dài",
+      "cap": "C1",
+      "viDu": "Solar energy has become a viable alternative to fossil fuels.",
+      "viDuNghia": "Năng lượng mặt trời đã trở thành phương án thay thế khả thi cho nhiên liệu hoá thạch.",
+      "cumTu": [
+        "a viable alternative",
+        "economically viable",
+        "a viable option"
+      ],
+      "hoTu": [
+        "viability (n)"
+      ],
+      "ghiChu": "\"Feasible\" = làm được; \"viable\" = làm được VÀ duy trì được."
+    },
+    {
+      "chu": "adverse",
+      "doc": "/ˈædvɜːs/",
+      "loai": "adj",
+      "nghia": "bất lợi, có hại",
+      "cap": "C1",
+      "viDu": "The new policy could have an adverse effect on small businesses.",
+      "viDuNghia": "Chính sách mới có thể gây tác động bất lợi cho các doanh nghiệp nhỏ.",
+      "cumTu": [
+        "an adverse effect",
+        "adverse impact",
+        "adverse weather conditions"
+      ],
+      "hoTu": [
+        "adversely (adv)",
+        "adversity (n)"
+      ],
+      "ghiChu": "Dễ nhầm \"averse\" (không thích, né tránh: risk-averse)."
+    },
+    {
+      "chu": "harmful",
+      "doc": "/ˈhɑːmfl/",
+      "loai": "adj",
+      "nghia": "có hại",
+      "cap": "B1",
+      "viDu": "Fast food can be harmful if it is eaten every day.",
+      "viDuNghia": "Đồ ăn nhanh có thể có hại nếu ăn hằng ngày.",
+      "cumTu": [
+        "harmful to",
+        "harmful effects",
+        "potentially harmful"
+      ],
+      "hoTu": [
+        "harm (n/v)",
+        "harmless (adj)"
+      ]
+    },
+    {
+      "chu": "profound",
+      "doc": "/prəˈfaʊnd/",
+      "loai": "adj",
+      "nghia": "sâu sắc, sâu rộng",
+      "cap": "C1",
+      "viDu": "The internet has had a profound effect on how we access information.",
+      "viDuNghia": "Internet đã tác động sâu sắc đến cách chúng ta tiếp cận thông tin.",
+      "cumTu": [
+        "a profound effect",
+        "profound changes",
+        "a profound impact"
+      ],
+      "hoTu": [
+        "profoundly (adv)",
+        "profundity (n)"
+      ]
+    },
+    {
+      "chu": "tremendous",
+      "doc": "/trəˈmendəs/",
+      "loai": "adj",
+      "nghia": "to lớn, khủng khiếp",
+      "cap": "B2",
+      "viDu": "Tourism has brought tremendous benefits to the local economy.",
+      "viDuNghia": "Du lịch đã mang lại lợi ích to lớn cho kinh tế địa phương.",
+      "cumTu": [
+        "tremendous pressure",
+        "a tremendous amount",
+        "tremendous benefits"
+      ],
+      "hoTu": [
+        "tremendously (adv)"
+      ],
+      "ghiChu": "Hợp Speaking hơn văn viết trang trọng."
+    },
+    {
+      "chu": "immense",
+      "doc": "/ɪˈmens/",
+      "loai": "adj",
+      "nghia": "bao la, rất lớn",
+      "cap": "C1",
+      "viDu": "Doctors are under immense pressure during a pandemic.",
+      "viDuNghia": "Bác sĩ chịu áp lực rất lớn trong đại dịch.",
+      "cumTu": [
+        "immense pressure",
+        "immense value",
+        "of immense importance"
+      ],
+      "hoTu": [
+        "immensely (adv)",
+        "immensity (n)"
+      ]
+    },
+    {
+      "chu": "vast",
+      "doc": "/vɑːst/",
+      "loai": "adj",
+      "nghia": "rộng lớn, rất nhiều",
+      "cap": "B2",
+      "viDu": "The vast majority of people now own a smartphone.",
+      "viDuNghia": "Phần lớn mọi người hiện nay đều có điện thoại thông minh.",
+      "cumTu": [
+        "the vast majority",
+        "a vast amount",
+        "vast numbers of"
+      ],
+      "hoTu": [
+        "vastly (adv)",
+        "vastness (n)"
+      ],
+      "ghiChu": "\"The vast majority of\" rất hay dùng ở cả Task 1 lẫn Task 2."
+    },
+    {
+      "chu": "negligible",
+      "doc": "/ˈneɡlɪdʒəbl/",
+      "loai": "adj",
+      "nghia": "không đáng kể",
+      "cap": "C1",
+      "viDu": "The difference between the two figures is negligible.",
+      "viDuNghia": "Chênh lệch giữa hai số liệu là không đáng kể.",
+      "cumTu": [
+        "a negligible effect",
+        "negligible risk",
+        "negligible difference"
+      ],
+      "hoTu": [
+        "negligibly (adv)"
+      ],
+      "ghiChu": "Đừng nhầm \"negligent\" (cẩu thả, lơ là)."
+    },
+    {
+      "chu": "marginal",
+      "doc": "/ˈmɑːdʒɪnl/",
+      "loai": "adj",
+      "nghia": "rất nhỏ, không đáng kể; ngoài lề",
+      "cap": "C1",
+      "viDu": "There was only a marginal improvement in test scores.",
+      "viDuNghia": "Điểm kiểm tra chỉ cải thiện rất ít.",
+      "cumTu": [
+        "a marginal increase",
+        "marginal benefit",
+        "of marginal importance"
+      ],
+      "hoTu": [
+        "margin (n)",
+        "marginally (adv)",
+        "marginalise (v)"
+      ]
+    },
+    {
+      "chu": "minimal",
+      "doc": "/ˈmɪnɪməl/",
+      "loai": "adj",
+      "nghia": "tối thiểu, rất ít",
+      "cap": "B2",
+      "viDu": "The project can be completed at minimal cost.",
+      "viDuNghia": "Dự án có thể hoàn thành với chi phí tối thiểu.",
+      "cumTu": [
+        "minimal cost",
+        "minimal impact",
+        "minimal effort"
+      ],
+      "hoTu": [
+        "minimum (n)",
+        "minimise (v)",
+        "minimally (adv)"
+      ]
+    },
+    {
+      "chu": "moderate",
+      "doc": "/ˈmɒdərət/",
+      "loai": "adj",
+      "nghia": "vừa phải, ôn hoà",
+      "cap": "B2",
+      "viDu": "Moderate exercise, such as walking, is suitable for most older people.",
+      "viDuNghia": "Tập luyện vừa phải, như đi bộ, phù hợp với hầu hết người cao tuổi.",
+      "cumTu": [
+        "moderate exercise",
+        "a moderate increase",
+        "moderate views"
+      ],
+      "hoTu": [
+        "moderately (adv)",
+        "moderation (n)"
+      ],
+      "ghiChu": "Động từ \"moderate\" đọc /ˈmɒdəreɪt/ (điều tiết, làm dịu)."
+    },
+    {
+      "chu": "excessive",
+      "doc": "/ɪkˈsesɪv/",
+      "loai": "adj",
+      "nghia": "quá mức",
+      "cap": "B2",
+      "viDu": "Excessive use of social media can lead to anxiety.",
+      "viDuNghia": "Dùng mạng xã hội quá mức có thể dẫn tới lo âu.",
+      "cumTu": [
+        "excessive use",
+        "excessive amounts of",
+        "excessive force"
+      ],
+      "hoTu": [
+        "excess (n)",
+        "exceed (v)",
+        "excessively (adv)"
+      ]
+    },
+    {
+      "chu": "adequate",
+      "doc": "/ˈædɪkwət/",
+      "loai": "adj",
+      "nghia": "đủ, thoả đáng",
+      "cap": "B2",
+      "viDu": "Many rural schools lack adequate facilities.",
+      "viDuNghia": "Nhiều trường học nông thôn thiếu cơ sở vật chất đầy đủ.",
+      "cumTu": [
+        "adequate facilities",
+        "adequate funding",
+        "adequate for"
+      ],
+      "hoTu": [
+        "adequacy (n)",
+        "adequately (adv)",
+        "inadequate (adj)"
+      ]
+    },
+    {
+      "chu": "sufficient",
+      "doc": "/səˈfɪʃnt/",
+      "loai": "adj",
+      "nghia": "đủ",
+      "cap": "B2",
+      "viDu": "There is not sufficient evidence to support this claim.",
+      "viDuNghia": "Không có đủ bằng chứng để ủng hộ khẳng định này.",
+      "cumTu": [
+        "sufficient evidence",
+        "sufficient time",
+        "sufficient to do sth"
+      ],
+      "hoTu": [
+        "sufficiency (n)",
+        "sufficiently (adv)",
+        "insufficient (adj)"
+      ]
+    },
+    {
+      "chu": "insufficient",
+      "doc": "/ˌɪnsəˈfɪʃnt/",
+      "loai": "adj",
+      "nghia": "không đủ",
+      "cap": "C1",
+      "viDu": "Insufficient sleep affects students' concentration.",
+      "viDuNghia": "Ngủ không đủ ảnh hưởng tới khả năng tập trung của học sinh.",
+      "cumTu": [
+        "insufficient funds",
+        "insufficient evidence",
+        "insufficient sleep"
+      ],
+      "hoTu": [
+        "insufficiently (adv)",
+        "sufficient (adj)"
+      ]
+    },
+    {
+      "chu": "inadequate",
+      "doc": "/ɪnˈædɪkwət/",
+      "loai": "adj",
+      "nghia": "không thoả đáng, thiếu",
+      "cap": "C1",
+      "viDu": "Public transport in many cities is inadequate for the growing population.",
+      "viDuNghia": "Giao thông công cộng ở nhiều thành phố không đáp ứng đủ dân số ngày càng tăng.",
+      "cumTu": [
+        "inadequate funding",
+        "woefully inadequate",
+        "feel inadequate"
+      ],
+      "hoTu": [
+        "inadequacy (n)",
+        "inadequately (adv)"
+      ]
+    },
+    {
+      "chu": "appropriate",
+      "doc": "/əˈprəʊpriət/",
+      "loai": "adj",
+      "nghia": "phù hợp, thích đáng",
+      "cap": "B1",
+      "viDu": "Governments should take appropriate measures to reduce traffic congestion.",
+      "viDuNghia": "Chính phủ nên có biện pháp phù hợp để giảm ùn tắc giao thông.",
+      "cumTu": [
+        "appropriate measures",
+        "appropriate for",
+        "it is appropriate to"
+      ],
+      "hoTu": [
+        "appropriately (adv)",
+        "inappropriate (adj)"
+      ]
+    },
+    {
+      "chu": "irrelevant",
+      "doc": "/ɪˈreləvənt/",
+      "loai": "adj",
+      "nghia": "không liên quan",
+      "cap": "B2",
+      "viDu": "Personal details such as age are irrelevant to job performance.",
+      "viDuNghia": "Thông tin cá nhân như tuổi tác không liên quan đến hiệu quả công việc.",
+      "cumTu": [
+        "irrelevant to",
+        "largely irrelevant",
+        "become irrelevant"
+      ],
+      "hoTu": [
+        "irrelevance (n)",
+        "relevant (adj)"
+      ]
+    },
+    {
+      "chu": "legitimate",
+      "doc": "/lɪˈdʒɪtɪmət/",
+      "loai": "adj",
+      "nghia": "chính đáng, hợp pháp",
+      "cap": "C1",
+      "viDu": "Parents have legitimate concerns about online safety.",
+      "viDuNghia": "Phụ huynh có những lo ngại chính đáng về an toàn trên mạng.",
+      "cumTu": [
+        "a legitimate concern",
+        "a legitimate reason",
+        "legitimate business"
+      ],
+      "hoTu": [
+        "legitimacy (n)",
+        "legitimately (adv)"
+      ]
+    },
+    {
+      "chu": "accurate",
+      "doc": "/ˈækjərət/",
+      "loai": "adj",
+      "nghia": "chính xác",
+      "cap": "B1",
+      "viDu": "Weather forecasts are becoming more accurate thanks to technology.",
+      "viDuNghia": "Dự báo thời tiết ngày càng chính xác hơn nhờ công nghệ.",
+      "cumTu": [
+        "accurate information",
+        "highly accurate",
+        "an accurate picture"
+      ],
+      "hoTu": [
+        "accuracy (n)",
+        "accurately (adv)",
+        "inaccurate (adj)"
+      ]
+    },
+    {
+      "chu": "comprehensive",
+      "doc": "/ˌkɒmprɪˈhensɪv/",
+      "loai": "adj",
+      "nghia": "toàn diện, đầy đủ",
+      "cap": "B2",
+      "viDu": "The government needs a comprehensive plan to tackle unemployment.",
+      "viDuNghia": "Chính phủ cần một kế hoạch toàn diện để giải quyết thất nghiệp.",
+      "cumTu": [
+        "a comprehensive plan",
+        "comprehensive coverage",
+        "a comprehensive review"
+      ],
+      "hoTu": [
+        "comprehensively (adv)",
+        "comprehend (v)"
+      ],
+      "ghiChu": "Không có nghĩa \"dễ hiểu\" (dễ hiểu = comprehensible)."
+    },
+    {
+      "chu": "thorough",
+      "doc": "/ˈθʌrə/",
+      "loai": "adj",
+      "nghia": "kỹ lưỡng, tỉ mỉ",
+      "cap": "B2",
+      "viDu": "A thorough investigation is needed before any decision is made.",
+      "viDuNghia": "Cần một cuộc điều tra kỹ lưỡng trước khi đưa ra quyết định.",
+      "cumTu": [
+        "a thorough investigation",
+        "thorough knowledge",
+        "a thorough understanding"
+      ],
+      "hoTu": [
+        "thoroughly (adv)",
+        "thoroughness (n)"
+      ],
+      "ghiChu": "Dễ nhầm chính tả với \"through\", \"though\", \"thought\"."
+    },
+    {
+      "chu": "extensive",
+      "doc": "/ɪkˈstensɪv/",
+      "loai": "adj",
+      "nghia": "rộng rãi, sâu rộng",
+      "cap": "B2",
+      "viDu": "The flood caused extensive damage to farmland.",
+      "viDuNghia": "Lũ lụt gây thiệt hại trên diện rộng cho đất nông nghiệp.",
+      "cumTu": [
+        "extensive research",
+        "extensive damage",
+        "extensive use"
+      ],
+      "hoTu": [
+        "extend (v)",
+        "extent (n)",
+        "extensively (adv)"
+      ]
+    },
+    {
+      "chu": "intensive",
+      "doc": "/ɪnˈtensɪv/",
+      "loai": "adj",
+      "nghia": "chuyên sâu, cường độ cao",
+      "cap": "B2",
+      "viDu": "She took an intensive English course before going abroad.",
+      "viDuNghia": "Cô ấy học một khoá tiếng Anh cấp tốc trước khi ra nước ngoài.",
+      "cumTu": [
+        "an intensive course",
+        "intensive farming",
+        "labour-intensive"
+      ],
+      "hoTu": [
+        "intensify (v)",
+        "intensity (n)",
+        "intensively (adv)"
+      ],
+      "ghiChu": "Khác \"intense\" (mãnh liệt, dữ dội)."
+    },
+    {
+      "chu": "rigorous",
+      "doc": "/ˈrɪɡərəs/",
+      "loai": "adj",
+      "nghia": "nghiêm ngặt, chặt chẽ",
+      "cap": "C1",
+      "viDu": "New medicines must pass rigorous testing before they are sold.",
+      "viDuNghia": "Thuốc mới phải qua kiểm nghiệm nghiêm ngặt trước khi được bán.",
+      "cumTu": [
+        "rigorous testing",
+        "rigorous standards",
+        "a rigorous analysis"
+      ],
+      "hoTu": [
+        "rigour (n)",
+        "rigorously (adv)"
+      ]
+    },
+    {
+      "chu": "stringent",
+      "doc": "/ˈstrɪndʒənt/",
+      "loai": "adj",
+      "nghia": "nghiêm ngặt, khắt khe (luật lệ)",
+      "cap": "C1",
+      "viDu": "Stringent regulations are needed to control air pollution.",
+      "viDuNghia": "Cần có quy định khắt khe để kiểm soát ô nhiễm không khí.",
+      "cumTu": [
+        "stringent regulations",
+        "stringent controls",
+        "stringent requirements"
+      ],
+      "hoTu": [
+        "stringently (adv)",
+        "stringency (n)"
+      ],
+      "ghiChu": "Thường đi với luật lệ/quy định; trang trọng hơn \"strict\"."
+    },
+    {
+      "chu": "rigid",
+      "doc": "/ˈrɪdʒɪd/",
+      "loai": "adj",
+      "nghia": "cứng nhắc",
+      "cap": "C1",
+      "viDu": "A rigid school timetable leaves little room for creativity.",
+      "viDuNghia": "Thời khoá biểu cứng nhắc chừa rất ít chỗ cho sự sáng tạo.",
+      "cumTu": [
+        "rigid rules",
+        "a rigid structure",
+        "rigid thinking"
+      ],
+      "hoTu": [
+        "rigidity (n)",
+        "rigidly (adv)"
+      ]
+    },
+    {
+      "chu": "consistent",
+      "doc": "/kənˈsɪstənt/",
+      "loai": "adj",
+      "nghia": "nhất quán, đều đặn",
+      "cap": "B2",
+      "viDu": "Consistent practice is the key to improving your speaking skills.",
+      "viDuNghia": "Luyện tập đều đặn là chìa khoá để cải thiện kỹ năng nói.",
+      "cumTu": [
+        "consistent with",
+        "consistent results",
+        "remain consistent"
+      ],
+      "hoTu": [
+        "consistency (n)",
+        "consistently (adv)",
+        "inconsistent (adj)"
+      ]
+    },
+    {
+      "chu": "inconsistent",
+      "doc": "/ˌɪnkənˈsɪstənt/",
+      "loai": "adj",
+      "nghia": "không nhất quán, mâu thuẫn",
+      "cap": "C1",
+      "viDu": "The results of the two studies are inconsistent with each other.",
+      "viDuNghia": "Kết quả của hai nghiên cứu mâu thuẫn với nhau.",
+      "cumTu": [
+        "inconsistent with",
+        "highly inconsistent",
+        "inconsistent results"
+      ],
+      "hoTu": [
+        "inconsistency (n)",
+        "consistent (adj)"
+      ]
+    },
+    {
+      "chu": "coherent",
+      "doc": "/kəʊˈhɪərənt/",
+      "loai": "adj",
+      "nghia": "mạch lạc, chặt chẽ",
+      "cap": "C1",
+      "viDu": "A good essay presents a coherent argument from start to finish.",
+      "viDuNghia": "Một bài luận tốt trình bày lập luận mạch lạc từ đầu đến cuối.",
+      "cumTu": [
+        "a coherent argument",
+        "a coherent strategy",
+        "coherent and cohesive"
+      ],
+      "hoTu": [
+        "coherence (n)",
+        "coherently (adv)"
+      ],
+      "ghiChu": "\"Coherence and Cohesion\" là một trong bốn tiêu chí chấm IELTS Writing."
+    },
+    {
+      "chu": "logical",
+      "doc": "/ˈlɒdʒɪkl/",
+      "loai": "adj",
+      "nghia": "hợp lý, logic",
+      "cap": "B2",
+      "viDu": "It is logical to invest in renewable energy for the long term.",
+      "viDuNghia": "Đầu tư vào năng lượng tái tạo về lâu dài là điều hợp lý.",
+      "cumTu": [
+        "a logical conclusion",
+        "logical reasoning",
+        "the logical choice"
+      ],
+      "hoTu": [
+        "logic (n)",
+        "logically (adv)",
+        "illogical (adj)"
+      ]
+    },
+    {
+      "chu": "rational",
+      "doc": "/ˈræʃnəl/",
+      "loai": "adj",
+      "nghia": "có lý trí, hợp lý",
+      "cap": "C1",
+      "viDu": "People do not always make rational decisions about money.",
+      "viDuNghia": "Con người không phải lúc nào cũng đưa ra quyết định hợp lý về tiền bạc.",
+      "cumTu": [
+        "a rational decision",
+        "rational thinking",
+        "a rational explanation"
+      ],
+      "hoTu": [
+        "rationality (n)",
+        "rationally (adv)",
+        "irrational (adj)"
+      ]
+    },
+    {
+      "chu": "irrational",
+      "doc": "/ɪˈræʃənl/",
+      "loai": "adj",
+      "nghia": "phi lý, không hợp lý",
+      "cap": "C1",
+      "viDu": "Many people have an irrational fear of flying.",
+      "viDuNghia": "Nhiều người sợ đi máy bay một cách phi lý.",
+      "cumTu": [
+        "an irrational fear",
+        "irrational behaviour",
+        "completely irrational"
+      ],
+      "hoTu": [
+        "irrationality (n)",
+        "irrationally (adv)"
+      ]
+    },
+    {
+      "chu": "subjective",
+      "doc": "/səbˈdʒektɪv/",
+      "loai": "adj",
+      "nghia": "chủ quan",
+      "cap": "C1",
+      "viDu": "Judging art is often highly subjective.",
+      "viDuNghia": "Đánh giá nghệ thuật thường rất chủ quan.",
+      "cumTu": [
+        "highly subjective",
+        "a subjective judgement",
+        "subjective experience"
+      ],
+      "hoTu": [
+        "subjectivity (n)",
+        "subjectively (adv)"
+      ]
+    },
+    {
+      "chu": "biased",
+      "doc": "/ˈbaɪəst/",
+      "loai": "adj",
+      "nghia": "thiên vị, phiến diện",
+      "cap": "B2",
+      "viDu": "Some newspapers are biased towards a particular political party.",
+      "viDuNghia": "Một số tờ báo thiên vị một đảng chính trị nhất định.",
+      "cumTu": [
+        "biased towards",
+        "biased against",
+        "a biased view",
+        "politically biased"
+      ],
+      "hoTu": [
+        "bias (n)",
+        "unbiased (adj)"
+      ]
+    },
+    {
+      "chu": "impartial",
+      "doc": "/ɪmˈpɑːʃl/",
+      "loai": "adj",
+      "nghia": "công bằng, không thiên vị",
+      "cap": "C1",
+      "viDu": "Judges must remain impartial at all times.",
+      "viDuNghia": "Thẩm phán phải luôn giữ sự không thiên vị.",
+      "cumTu": [
+        "remain impartial",
+        "impartial advice",
+        "an impartial observer"
+      ],
+      "hoTu": [
+        "impartiality (n)",
+        "impartially (adv)"
+      ]
+    },
+    {
+      "chu": "neutral",
+      "doc": "/ˈnjuːtrəl/",
+      "loai": "adj",
+      "nghia": "trung lập",
+      "cap": "B2",
+      "viDu": "The teacher tried to stay neutral during the class debate.",
+      "viDuNghia": "Giáo viên cố gắng giữ trung lập trong buổi tranh luận của lớp.",
+      "cumTu": [
+        "remain neutral",
+        "a neutral position",
+        "politically neutral"
+      ],
+      "hoTu": [
+        "neutrality (n)",
+        "neutralise (v)"
+      ]
+    },
+    {
+      "chu": "ambiguous",
+      "doc": "/æmˈbɪɡjuəs/",
+      "loai": "adj",
+      "nghia": "mơ hồ, nước đôi",
+      "cap": "C1",
+      "viDu": "The wording of the law is ambiguous and open to interpretation.",
+      "viDuNghia": "Câu chữ của luật mơ hồ và có thể hiểu theo nhiều cách.",
+      "cumTu": [
+        "highly ambiguous",
+        "an ambiguous statement",
+        "deliberately ambiguous"
+      ],
+      "hoTu": [
+        "ambiguity (n)",
+        "ambiguously (adv)",
+        "unambiguous (adj)"
+      ]
+    },
+    {
+      "chu": "explicit",
+      "doc": "/ɪkˈsplɪsɪt/",
+      "loai": "adj",
+      "nghia": "rõ ràng, tường minh",
+      "cap": "C1",
+      "viDu": "The instructions should be explicit so that nobody is confused.",
+      "viDuNghia": "Hướng dẫn nên rõ ràng để không ai bị nhầm lẫn.",
+      "cumTu": [
+        "explicit instructions",
+        "make sth explicit",
+        "explicit reference"
+      ],
+      "hoTu": [
+        "explicitly (adv)"
+      ],
+      "ghiChu": "Ngược nghĩa: implicit (ngầm)."
+    },
+    {
+      "chu": "implicit",
+      "doc": "/ɪmˈplɪsɪt/",
+      "loai": "adj",
+      "nghia": "ngầm, ẩn ý",
+      "cap": "C1",
+      "viDu": "There is an implicit assumption that older workers are less productive.",
+      "viDuNghia": "Có một giả định ngầm rằng người lao động lớn tuổi kém năng suất hơn.",
+      "cumTu": [
+        "an implicit assumption",
+        "implicit in",
+        "implicit criticism"
+      ],
+      "hoTu": [
+        "implicitly (adv)",
+        "imply (v)"
+      ]
+    },
+    {
+      "chu": "obvious",
+      "doc": "/ˈɒbviəs/",
+      "loai": "adj",
+      "nghia": "hiển nhiên, rõ ràng",
+      "cap": "B1",
+      "viDu": "The most obvious solution is to build more affordable housing.",
+      "viDuNghia": "Giải pháp hiển nhiên nhất là xây thêm nhà ở giá phải chăng.",
+      "cumTu": [
+        "an obvious reason",
+        "an obvious choice",
+        "it is obvious that"
+      ],
+      "hoTu": [
+        "obviously (adv)"
+      ]
+    },
+    {
+      "chu": "evident",
+      "doc": "/ˈevɪdənt/",
+      "loai": "adj",
+      "nghia": "rõ ràng, hiển nhiên (có bằng chứng)",
+      "cap": "B2",
+      "viDu": "It is evident that the gap between rich and poor is widening.",
+      "viDuNghia": "Rõ ràng là khoảng cách giàu nghèo đang ngày càng lớn.",
+      "cumTu": [
+        "it is evident that",
+        "clearly evident",
+        "become evident"
+      ],
+      "hoTu": [
+        "evidence (n)",
+        "evidently (adv)"
+      ]
+    },
+    {
+      "chu": "apparent",
+      "doc": "/əˈpærənt/",
+      "loai": "adj",
+      "nghia": "rõ ràng; bề ngoài có vẻ",
+      "cap": "B2",
+      "viDu": "It soon became apparent that the plan would not work.",
+      "viDuNghia": "Chẳng bao lâu đã thấy rõ kế hoạch sẽ không thành công.",
+      "cumTu": [
+        "become apparent",
+        "for no apparent reason",
+        "an apparent contradiction"
+      ],
+      "hoTu": [
+        "apparently (adv)"
+      ],
+      "ghiChu": "Đứng trước danh từ thường mang nghĩa \"có vẻ, bề ngoài\" (an apparent success)."
+    },
+    {
+      "chu": "noticeable",
+      "doc": "/ˈnəʊtɪsəbl/",
+      "loai": "adj",
+      "nghia": "dễ nhận thấy, rõ rệt",
+      "cap": "B2",
+      "viDu": "There has been a noticeable improvement in air quality.",
+      "viDuNghia": "Chất lượng không khí đã cải thiện rõ rệt.",
+      "cumTu": [
+        "a noticeable difference",
+        "a noticeable improvement",
+        "barely noticeable"
+      ],
+      "hoTu": [
+        "notice (v/n)",
+        "noticeably (adv)"
+      ]
+    },
+    {
+      "chu": "striking",
+      "doc": "/ˈstraɪkɪŋ/",
+      "loai": "adj",
+      "nghia": "nổi bật, gây ấn tượng",
+      "cap": "B2",
+      "viDu": "The most striking feature of the chart is the sharp rise in car ownership.",
+      "viDuNghia": "Đặc điểm nổi bật nhất của biểu đồ là số người sở hữu ô tô tăng mạnh.",
+      "cumTu": [
+        "a striking feature",
+        "a striking contrast",
+        "striking similarities"
+      ],
+      "hoTu": [
+        "strike (v)",
+        "strikingly (adv)"
+      ],
+      "ghiChu": "\"The most striking feature is ...\" là câu mở đoạn tổng quan Task 1 rất hiệu quả."
+    },
+    {
+      "chu": "remarkable",
+      "doc": "/rɪˈmɑːkəbl/",
+      "loai": "adj",
+      "nghia": "đáng chú ý, phi thường",
+      "cap": "B2",
+      "viDu": "The country has made remarkable progress in reducing poverty.",
+      "viDuNghia": "Đất nước đã đạt tiến bộ đáng chú ý trong việc giảm nghèo.",
+      "cumTu": [
+        "remarkable progress",
+        "a remarkable achievement",
+        "remarkable for"
+      ],
+      "hoTu": [
+        "remark (n/v)",
+        "remarkably (adv)"
+      ]
+    },
+    {
+      "chu": "notable",
+      "doc": "/ˈnəʊtəbl/",
+      "loai": "adj",
+      "nghia": "đáng chú ý, nổi bật",
+      "cap": "B2",
+      "viDu": "A notable exception is Japan, where the birth rate has continued to fall.",
+      "viDuNghia": "Một ngoại lệ đáng chú ý là Nhật Bản, nơi tỉ lệ sinh tiếp tục giảm.",
+      "cumTu": [
+        "a notable exception",
+        "notable for",
+        "a notable feature"
+      ],
+      "hoTu": [
+        "notably (adv)",
+        "note (v)"
+      ]
+    },
+    {
+      "chu": "noteworthy",
+      "doc": "/ˈnəʊtwɜːði/",
+      "loai": "adj",
+      "nghia": "đáng lưu ý",
+      "cap": "C1",
+      "viDu": "It is noteworthy that women now outnumber men at university.",
+      "viDuNghia": "Đáng lưu ý là hiện nay nữ sinh đại học đông hơn nam.",
+      "cumTu": [
+        "it is noteworthy that",
+        "particularly noteworthy",
+        "a noteworthy achievement"
+      ],
+      "hoTu": [
+        "note (n/v)"
+      ]
+    },
+    {
+      "chu": "outstanding",
+      "doc": "/aʊtˈstændɪŋ/",
+      "loai": "adj",
+      "nghia": "xuất sắc; còn tồn đọng",
+      "cap": "B2",
+      "viDu": "She received an award for her outstanding contribution to science.",
+      "viDuNghia": "Bà nhận giải thưởng cho đóng góp xuất sắc cho khoa học.",
+      "cumTu": [
+        "an outstanding achievement",
+        "outstanding performance",
+        "outstanding debts"
+      ],
+      "hoTu": [
+        "outstandingly (adv)"
+      ],
+      "ghiChu": "Nghĩa 2: chưa trả/chưa giải quyết (outstanding debts)."
+    },
+    {
+      "chu": "exceptional",
+      "doc": "/ɪkˈsepʃənl/",
+      "loai": "adj",
+      "nghia": "đặc biệt, xuất chúng; ngoại lệ",
+      "cap": "B2",
+      "viDu": "Scholarships should be given to students with exceptional ability.",
+      "viDuNghia": "Học bổng nên trao cho học sinh có năng lực đặc biệt.",
+      "cumTu": [
+        "exceptional ability",
+        "in exceptional circumstances",
+        "exceptional talent"
+      ],
+      "hoTu": [
+        "exception (n)",
+        "exceptionally (adv)"
+      ]
+    },
+    {
+      "chu": "unprecedented",
+      "doc": "/ʌnˈpresɪdentɪd/",
+      "loai": "adj",
+      "nghia": "chưa từng có",
+      "cap": "C1",
+      "viDu": "The pandemic caused unprecedented disruption to education.",
+      "viDuNghia": "Đại dịch gây gián đoạn chưa từng có cho giáo dục.",
+      "cumTu": [
+        "unprecedented levels",
+        "on an unprecedented scale",
+        "unprecedented growth"
+      ],
+      "hoTu": [
+        "precedent (n)"
+      ]
+    },
+    {
+      "chu": "conventional",
+      "doc": "/kənˈvenʃənl/",
+      "loai": "adj",
+      "nghia": "thông thường, truyền thống",
+      "cap": "B2",
+      "viDu": "Online learning is becoming as popular as conventional classroom teaching.",
+      "viDuNghia": "Học trực tuyến đang trở nên phổ biến như dạy học trên lớp truyền thống.",
+      "cumTu": [
+        "conventional methods",
+        "conventional wisdom",
+        "conventional medicine"
+      ],
+      "hoTu": [
+        "convention (n)",
+        "conventionally (adv)",
+        "unconventional (adj)"
+      ]
+    },
+    {
+      "chu": "contemporary",
+      "doc": "/kənˈtemprəri/",
+      "loai": "adj",
+      "nghia": "đương đại",
+      "cap": "B2",
+      "viDu": "Contemporary society places great value on convenience.",
+      "viDuNghia": "Xã hội đương đại rất coi trọng sự tiện lợi.",
+      "cumTu": [
+        "contemporary society",
+        "contemporary art",
+        "contemporary issues"
+      ],
+      "hoTu": [
+        "contemporary (n)"
+      ]
+    },
+    {
+      "chu": "innovative",
+      "doc": "/ˈɪnəveɪtɪv/",
+      "loai": "adj",
+      "nghia": "đổi mới, sáng tạo",
+      "cap": "B2",
+      "viDu": "Companies need innovative ideas to stay competitive.",
+      "viDuNghia": "Các công ty cần ý tưởng đổi mới để giữ sức cạnh tranh.",
+      "cumTu": [
+        "an innovative approach",
+        "highly innovative",
+        "innovative solutions"
+      ],
+      "hoTu": [
+        "innovation (n)",
+        "innovate (v)",
+        "innovator (n)"
+      ]
+    },
+    {
+      "chu": "novel",
+      "doc": "/ˈnɒvl/",
+      "loai": "adj",
+      "nghia": "mới lạ",
+      "cap": "C1",
+      "viDu": "Scientists have developed a novel approach to treating the disease.",
+      "viDuNghia": "Các nhà khoa học đã phát triển một cách tiếp cận mới lạ để điều trị căn bệnh.",
+      "cumTu": [
+        "a novel approach",
+        "a novel idea",
+        "novel technology"
+      ],
+      "hoTu": [
+        "novelty (n)"
+      ],
+      "ghiChu": "Danh từ \"novel\" = tiểu thuyết."
+    },
+    {
+      "chu": "distinctive",
+      "doc": "/dɪˈstɪŋktɪv/",
+      "loai": "adj",
+      "nghia": "đặc trưng, dễ phân biệt",
+      "cap": "B2",
+      "viDu": "Each region has its own distinctive culture and cuisine.",
+      "viDuNghia": "Mỗi vùng có văn hoá và ẩm thực đặc trưng riêng.",
+      "cumTu": [
+        "a distinctive feature",
+        "distinctive style",
+        "distinctive character"
+      ],
+      "hoTu": [
+        "distinct (adj)",
+        "distinction (n)",
+        "distinctively (adv)"
+      ]
+    },
+    {
+      "chu": "diverse",
+      "doc": "/daɪˈvɜːs/",
+      "loai": "adj",
+      "nghia": "đa dạng",
+      "cap": "B2",
+      "viDu": "Big cities are home to people from diverse backgrounds.",
+      "viDuNghia": "Các thành phố lớn là nơi sinh sống của những người thuộc nhiều nguồn gốc khác nhau.",
+      "cumTu": [
+        "diverse backgrounds",
+        "culturally diverse",
+        "a diverse range of"
+      ],
+      "hoTu": [
+        "diversity (n)",
+        "diversify (v)"
+      ]
+    },
+    {
+      "chu": "homogeneous",
+      "doc": "/ˌhɒməˈdʒiːniəs/",
+      "loai": "adj",
+      "nghia": "đồng nhất, thuần nhất",
+      "cap": "C2",
+      "viDu": "Globalisation is making cultures around the world more homogeneous.",
+      "viDuNghia": "Toàn cầu hoá đang khiến các nền văn hoá trên thế giới đồng nhất hơn.",
+      "cumTu": [
+        "a homogeneous group",
+        "culturally homogeneous",
+        "increasingly homogeneous"
+      ],
+      "hoTu": [
+        "homogeneity (n)",
+        "homogenise (v)"
+      ],
+      "ghiChu": "Hay dùng trong bài Task 2 về toàn cầu hoá và bản sắc văn hoá."
+    },
+    {
+      "chu": "complex",
+      "doc": "/ˈkɒmpleks/",
+      "loai": "adj",
+      "nghia": "phức tạp",
+      "cap": "B2",
+      "viDu": "Climate change is a complex problem with no simple solution.",
+      "viDuNghia": "Biến đổi khí hậu là một vấn đề phức tạp không có lời giải đơn giản.",
+      "cumTu": [
+        "a complex issue",
+        "highly complex",
+        "increasingly complex"
+      ],
+      "hoTu": [
+        "complexity (n)"
+      ]
+    },
+    {
+      "chu": "intricate",
+      "doc": "/ˈɪntrɪkət/",
+      "loai": "adj",
+      "nghia": "rắc rối, tinh xảo",
+      "cap": "C1",
+      "viDu": "The relationship between diet and health is intricate.",
+      "viDuNghia": "Mối quan hệ giữa chế độ ăn và sức khoẻ rất phức tạp.",
+      "cumTu": [
+        "intricate details",
+        "an intricate pattern",
+        "an intricate relationship"
+      ],
+      "hoTu": [
+        "intricacy (n)",
+        "intricately (adv)"
+      ]
+    },
+    {
+      "chu": "sophisticated",
+      "doc": "/səˈfɪstɪkeɪtɪd/",
+      "loai": "adj",
+      "nghia": "tinh vi, phức tạp; sành điệu",
+      "cap": "B2",
+      "viDu": "Criminals are using increasingly sophisticated methods to steal data.",
+      "viDuNghia": "Tội phạm dùng các thủ đoạn ngày càng tinh vi để đánh cắp dữ liệu.",
+      "cumTu": [
+        "sophisticated technology",
+        "highly sophisticated",
+        "sophisticated methods"
+      ],
+      "hoTu": [
+        "sophistication (n)"
+      ]
+    },
+    {
+      "chu": "straightforward",
+      "doc": "/ˌstreɪtˈfɔːwəd/",
+      "loai": "adj",
+      "nghia": "đơn giản, dễ hiểu; thẳng thắn",
+      "cap": "B2",
+      "viDu": "The solution to this problem is not as straightforward as it seems.",
+      "viDuNghia": "Lời giải cho vấn đề này không đơn giản như vẻ ngoài.",
+      "cumTu": [
+        "relatively straightforward",
+        "a straightforward process",
+        "a straightforward answer"
+      ],
+      "hoTu": [
+        "straightforwardly (adv)"
+      ]
+    },
+    {
+      "chu": "simplistic",
+      "doc": "/sɪmˈplɪstɪk/",
+      "loai": "adj",
+      "nghia": "đơn giản hoá quá mức",
+      "cap": "C1",
+      "viDu": "It is simplistic to blame young people for all social problems.",
+      "viDuNghia": "Đổ lỗi cho người trẻ về mọi vấn đề xã hội là cách nhìn quá đơn giản.",
+      "cumTu": [
+        "overly simplistic",
+        "a simplistic view",
+        "a simplistic approach"
+      ],
+      "hoTu": [
+        "simplify (v)",
+        "simplistically (adv)"
+      ],
+      "ghiChu": "Mang nghĩa chê, khác \"simple\"."
+    },
+    {
+      "chu": "primary",
+      "doc": "/ˈpraɪməri/",
+      "loai": "adj",
+      "nghia": "chính, hàng đầu",
+      "cap": "B2",
+      "viDu": "The primary cause of the problem is a lack of funding.",
+      "viDuNghia": "Nguyên nhân chính của vấn đề là thiếu kinh phí.",
+      "cumTu": [
+        "the primary cause",
+        "primary concern",
+        "of primary importance"
+      ],
+      "hoTu": [
+        "primarily (adv)"
+      ]
+    },
+    {
+      "chu": "dominant",
+      "doc": "/ˈdɒmɪnənt/",
+      "loai": "adj",
+      "nghia": "chiếm ưu thế, thống trị",
+      "cap": "B2",
+      "viDu": "English has become the dominant language of international business.",
+      "viDuNghia": "Tiếng Anh đã trở thành ngôn ngữ chiếm ưu thế trong kinh doanh quốc tế.",
+      "cumTu": [
+        "a dominant position",
+        "a dominant role",
+        "the dominant force"
+      ],
+      "hoTu": [
+        "dominate (v)",
+        "dominance (n)"
+      ]
+    },
+    {
+      "chu": "predominant",
+      "doc": "/prɪˈdɒmɪnənt/",
+      "loai": "adj",
+      "nghia": "chiếm phần lớn, nổi trội",
+      "cap": "C1",
+      "viDu": "Cars are still the predominant form of transport in rural areas.",
+      "viDuNghia": "Ô tô vẫn là phương tiện giao thông chủ yếu ở nông thôn.",
+      "cumTu": [
+        "the predominant form",
+        "the predominant view",
+        "a predominant feature"
+      ],
+      "hoTu": [
+        "predominance (n)",
+        "predominantly (adv)",
+        "predominate (v)"
+      ]
+    },
+    {
+      "chu": "prominent",
+      "doc": "/ˈprɒmɪnənt/",
+      "loai": "adj",
+      "nghia": "nổi tiếng, nổi bật",
+      "cap": "B2",
+      "viDu": "Many prominent scientists have warned about the dangers of AI.",
+      "viDuNghia": "Nhiều nhà khoa học nổi tiếng đã cảnh báo về nguy cơ của AI.",
+      "cumTu": [
+        "a prominent figure",
+        "play a prominent role",
+        "a prominent position"
+      ],
+      "hoTu": [
+        "prominence (n)",
+        "prominently (adv)"
+      ]
+    },
+    {
+      "chu": "influential",
+      "doc": "/ˌɪnfluˈenʃl/",
+      "loai": "adj",
+      "nghia": "có ảnh hưởng",
+      "cap": "B2",
+      "viDu": "Celebrities are highly influential among young people.",
+      "viDuNghia": "Người nổi tiếng có ảnh hưởng lớn đối với giới trẻ.",
+      "cumTu": [
+        "highly influential",
+        "an influential figure",
+        "influential in"
+      ],
+      "hoTu": [
+        "influence (n/v)"
+      ]
+    },
+    {
+      "chu": "potent",
+      "doc": "/ˈpəʊtnt/",
+      "loai": "adj",
+      "nghia": "mạnh, có tác dụng mạnh",
+      "cap": "C1",
+      "viDu": "Advertising is a potent tool for shaping consumer behaviour.",
+      "viDuNghia": "Quảng cáo là công cụ mạnh để định hình hành vi tiêu dùng.",
+      "cumTu": [
+        "a potent symbol",
+        "a potent force",
+        "a potent drug"
+      ],
+      "hoTu": [
+        "potency (n)"
+      ]
+    },
+    {
+      "chu": "effective",
+      "doc": "/ɪˈfektɪv/",
+      "loai": "adj",
+      "nghia": "hiệu quả, có tác dụng",
+      "cap": "B1",
+      "viDu": "Fines are an effective way to reduce littering.",
+      "viDuNghia": "Phạt tiền là cách hiệu quả để giảm xả rác.",
+      "cumTu": [
+        "highly effective",
+        "an effective way",
+        "cost-effective"
+      ],
+      "hoTu": [
+        "effect (n)",
+        "effectiveness (n)",
+        "effectively (adv)"
+      ],
+      "ghiChu": "\"Effective\" = đạt kết quả; \"efficient\" = đạt kết quả mà không lãng phí."
+    },
+    {
+      "chu": "efficient",
+      "doc": "/ɪˈfɪʃnt/",
+      "loai": "adj",
+      "nghia": "hiệu quả, năng suất (ít lãng phí)",
+      "cap": "B1",
+      "viDu": "Electric trains are a more efficient way to move large numbers of people.",
+      "viDuNghia": "Tàu điện là cách hiệu quả hơn để chở số đông người.",
+      "cumTu": [
+        "energy-efficient",
+        "highly efficient",
+        "efficient use of"
+      ],
+      "hoTu": [
+        "efficiency (n)",
+        "efficiently (adv)",
+        "inefficient (adj)"
+      ]
+    },
+    {
+      "chu": "productive",
+      "doc": "/prəˈdʌktɪv/",
+      "loai": "adj",
+      "nghia": "năng suất, hữu ích",
+      "cap": "B2",
+      "viDu": "Employees are often more productive when they have flexible hours.",
+      "viDuNghia": "Nhân viên thường làm việc năng suất hơn khi có giờ giấc linh hoạt.",
+      "cumTu": [
+        "highly productive",
+        "a productive discussion",
+        "a productive workforce"
+      ],
+      "hoTu": [
+        "productivity (n)",
+        "produce (v)",
+        "productively (adv)"
+      ]
+    },
+    {
+      "chu": "counterproductive",
+      "doc": "/ˌkaʊntəprəˈdʌktɪv/",
+      "loai": "adj",
+      "nghia": "phản tác dụng",
+      "cap": "C1",
+      "viDu": "Punishing children too harshly can be counterproductive.",
+      "viDuNghia": "Phạt trẻ quá nặng có thể phản tác dụng.",
+      "cumTu": [
+        "prove counterproductive",
+        "counterproductive to",
+        "entirely counterproductive"
+      ],
+      "hoTu": [
+        "productive (adj)"
+      ]
+    },
+    {
+      "chu": "ineffective",
+      "doc": "/ˌɪnɪˈfektɪv/",
+      "loai": "adj",
+      "nghia": "không hiệu quả",
+      "cap": "C1",
+      "viDu": "Banning advertising alone would be ineffective in reducing obesity.",
+      "viDuNghia": "Chỉ cấm quảng cáo thôi sẽ không hiệu quả trong việc giảm béo phì.",
+      "cumTu": [
+        "largely ineffective",
+        "prove ineffective",
+        "ineffective in"
+      ],
+      "hoTu": [
+        "ineffectiveness (n)",
+        "ineffectively (adv)"
+      ]
+    },
+    {
+      "chu": "futile",
+      "doc": "/ˈfjuːtaɪl/",
+      "loai": "adj",
+      "nghia": "vô ích",
+      "cap": "C1",
+      "viDu": "It is futile to try to stop young people from using smartphones altogether.",
+      "viDuNghia": "Cố ngăn hoàn toàn người trẻ dùng điện thoại thông minh là vô ích.",
+      "cumTu": [
+        "a futile attempt",
+        "utterly futile",
+        "prove futile"
+      ],
+      "hoTu": [
+        "futility (n)"
+      ]
+    },
+    {
+      "chu": "worthwhile",
+      "doc": "/ˌwɜːθˈwaɪl/",
+      "loai": "adj",
+      "nghia": "đáng giá, đáng làm",
+      "cap": "B2",
+      "viDu": "Volunteering is a worthwhile experience for teenagers.",
+      "viDuNghia": "Làm tình nguyện là một trải nghiệm đáng giá cho thanh thiếu niên.",
+      "cumTu": [
+        "a worthwhile investment",
+        "well worthwhile",
+        "worthwhile to do sth"
+      ],
+      "hoTu": [
+        "worth (adj/n)"
+      ]
+    },
+    {
+      "chu": "rewarding",
+      "doc": "/rɪˈwɔːdɪŋ/",
+      "loai": "adj",
+      "nghia": "bổ ích, mang lại sự hài lòng",
+      "cap": "B2",
+      "viDu": "Teaching can be a very rewarding career.",
+      "viDuNghia": "Dạy học có thể là một nghề rất bổ ích và nhiều niềm vui.",
+      "cumTu": [
+        "a rewarding career",
+        "a rewarding experience",
+        "financially rewarding"
+      ],
+      "hoTu": [
+        "reward (n/v)"
+      ]
+    },
+    {
+      "chu": "fruitful",
+      "doc": "/ˈfruːtfl/",
+      "loai": "adj",
+      "nghia": "có kết quả, hiệu quả",
+      "cap": "C1",
+      "viDu": "The two countries held fruitful discussions on trade.",
+      "viDuNghia": "Hai nước đã có những cuộc thảo luận hiệu quả về thương mại.",
+      "cumTu": [
+        "fruitful discussions",
+        "a fruitful collaboration",
+        "prove fruitful"
+      ],
+      "hoTu": [
+        "fruit (n)",
+        "fruitless (adj)"
+      ]
+    },
+    {
+      "chu": "meaningful",
+      "doc": "/ˈmiːnɪŋfl/",
+      "loai": "adj",
+      "nghia": "có ý nghĩa",
+      "cap": "B2",
+      "viDu": "Young people want meaningful work, not just a high salary.",
+      "viDuNghia": "Người trẻ muốn công việc có ý nghĩa, không chỉ lương cao.",
+      "cumTu": [
+        "meaningful work",
+        "a meaningful relationship",
+        "meaningful change"
+      ],
+      "hoTu": [
+        "meaning (n)",
+        "meaningless (adj)"
+      ]
+    },
+    {
+      "chu": "pointless",
+      "doc": "/ˈpɔɪntləs/",
+      "loai": "adj",
+      "nghia": "vô nghĩa, vô ích",
+      "cap": "B2",
+      "viDu": "Memorising facts without understanding them is pointless.",
+      "viDuNghia": "Học thuộc lòng kiến thức mà không hiểu là vô ích.",
+      "cumTu": [
+        "completely pointless",
+        "it is pointless to",
+        "a pointless exercise"
+      ],
+      "hoTu": [
+        "point (n)"
+      ]
+    },
+    {
+      "chu": "trivial",
+      "doc": "/ˈtrɪviəl/",
+      "loai": "adj",
+      "nghia": "tầm thường, vặt vãnh",
+      "cap": "C1",
+      "viDu": "Newspapers often focus on trivial stories about celebrities.",
+      "viDuNghia": "Báo chí thường tập trung vào những chuyện vặt vãnh về người nổi tiếng.",
+      "cumTu": [
+        "a trivial matter",
+        "seemingly trivial",
+        "trivial details"
+      ],
+      "hoTu": [
+        "trivia (n)",
+        "trivialise (v)"
+      ]
+    },
+    {
+      "chu": "insignificant",
+      "doc": "/ˌɪnsɪɡˈnɪfɪkənt/",
+      "loai": "adj",
+      "nghia": "không đáng kể",
+      "cap": "B2",
+      "viDu": "The cost is insignificant compared to the long-term benefits.",
+      "viDuNghia": "Chi phí là không đáng kể so với lợi ích lâu dài.",
+      "cumTu": [
+        "relatively insignificant",
+        "statistically insignificant",
+        "an insignificant amount"
+      ],
+      "hoTu": [
+        "insignificance (n)",
+        "significant (adj)"
+      ]
+    },
+    {
+      "chu": "severe",
+      "doc": "/sɪˈvɪə/",
+      "loai": "adj",
+      "nghia": "nghiêm trọng, khắc nghiệt",
+      "cap": "B2",
+      "viDu": "Many cities face severe traffic congestion during rush hour.",
+      "viDuNghia": "Nhiều thành phố gặp tình trạng ùn tắc nghiêm trọng vào giờ cao điểm.",
+      "cumTu": [
+        "severe problems",
+        "severe weather",
+        "a severe shortage"
+      ],
+      "hoTu": [
+        "severity (n)",
+        "severely (adv)"
+      ]
+    },
+    {
+      "chu": "acute",
+      "doc": "/əˈkjuːt/",
+      "loai": "adj",
+      "nghia": "gay gắt, trầm trọng; cấp tính",
+      "cap": "C1",
+      "viDu": "There is an acute shortage of nurses in rural hospitals.",
+      "viDuNghia": "Bệnh viện nông thôn thiếu điều dưỡng trầm trọng.",
+      "cumTu": [
+        "an acute shortage",
+        "acute pain",
+        "acutely aware"
+      ],
+      "hoTu": [
+        "acutely (adv)",
+        "acuteness (n)"
+      ]
+    },
+    {
+      "chu": "critical",
+      "doc": "/ˈkrɪtɪkl/",
+      "loai": "adj",
+      "nghia": "then chốt; phê phán",
+      "cap": "B2",
+      "viDu": "Critical thinking is a critical skill for university students.",
+      "viDuNghia": "Tư duy phản biện là một kỹ năng then chốt đối với sinh viên đại học.",
+      "cumTu": [
+        "critical thinking",
+        "critical of",
+        "at a critical stage"
+      ],
+      "hoTu": [
+        "criticism (n)",
+        "criticise (v)",
+        "critically (adv)"
+      ],
+      "ghiChu": "Hai nghĩa: then chốt (a critical stage) và chỉ trích (critical of)."
+    },
+    {
+      "chu": "urgent",
+      "doc": "/ˈɜːdʒənt/",
+      "loai": "adj",
+      "nghia": "khẩn cấp",
+      "cap": "B1",
+      "viDu": "Urgent action is needed to protect endangered species.",
+      "viDuNghia": "Cần hành động khẩn cấp để bảo vệ các loài có nguy cơ tuyệt chủng.",
+      "cumTu": [
+        "urgent action",
+        "in urgent need of",
+        "an urgent matter"
+      ],
+      "hoTu": [
+        "urgency (n)",
+        "urgently (adv)"
+      ]
+    },
+    {
+      "chu": "pressing",
+      "doc": "/ˈpresɪŋ/",
+      "loai": "adj",
+      "nghia": "cấp bách",
+      "cap": "C1",
+      "viDu": "Housing is one of the most pressing issues facing young people today.",
+      "viDuNghia": "Nhà ở là một trong những vấn đề cấp bách nhất mà người trẻ hiện nay đối mặt.",
+      "cumTu": [
+        "a pressing issue",
+        "a pressing need",
+        "a pressing concern"
+      ],
+      "hoTu": [
+        "press (v)",
+        "pressure (n)"
+      ]
+    },
+    {
+      "chu": "imminent",
+      "doc": "/ˈɪmɪnənt/",
+      "loai": "adj",
+      "nghia": "sắp xảy ra",
+      "cap": "C1",
+      "viDu": "Scientists warn that a major water crisis is imminent.",
+      "viDuNghia": "Các nhà khoa học cảnh báo khủng hoảng nước lớn sắp xảy ra.",
+      "cumTu": [
+        "imminent danger",
+        "an imminent threat",
+        "be imminent"
+      ],
+      "hoTu": [
+        "imminence (n)",
+        "imminently (adv)"
+      ]
+    },
+    {
+      "chu": "long-term",
+      "doc": "/ˌlɒŋ ˈtɜːm/",
+      "loai": "adj",
+      "nghia": "dài hạn",
+      "cap": "B2",
+      "viDu": "Governments should focus on long-term solutions rather than quick fixes.",
+      "viDuNghia": "Chính phủ nên tập trung vào giải pháp dài hạn thay vì cách chữa cháy.",
+      "cumTu": [
+        "long-term effects",
+        "in the long term",
+        "long-term planning"
+      ],
+      "hoTu": [
+        "long term (n)"
+      ]
+    },
+    {
+      "chu": "short-term",
+      "doc": "/ˌʃɔːt ˈtɜːm/",
+      "loai": "adj",
+      "nghia": "ngắn hạn",
+      "cap": "B2",
+      "viDu": "Cutting taxes may bring only short-term benefits.",
+      "viDuNghia": "Giảm thuế có thể chỉ mang lại lợi ích ngắn hạn.",
+      "cumTu": [
+        "short-term gains",
+        "in the short term",
+        "short-term memory"
+      ],
+      "hoTu": [
+        "short term (n)"
+      ]
+    },
+    {
+      "chu": "temporary",
+      "doc": "/ˈtemprəri/",
+      "loai": "adj",
+      "nghia": "tạm thời",
+      "cap": "B1",
+      "viDu": "Building more roads is only a temporary solution to congestion.",
+      "viDuNghia": "Xây thêm đường chỉ là giải pháp tạm thời cho ùn tắc.",
+      "cumTu": [
+        "a temporary solution",
+        "temporary work",
+        "on a temporary basis"
+      ],
+      "hoTu": [
+        "temporarily (adv)"
+      ]
+    },
+    {
+      "chu": "permanent",
+      "doc": "/ˈpɜːmənənt/",
+      "loai": "adj",
+      "nghia": "lâu dài, vĩnh viễn",
+      "cap": "B1",
+      "viDu": "Loud music can cause permanent damage to hearing.",
+      "viDuNghia": "Âm nhạc quá to có thể gây tổn thương vĩnh viễn cho thính giác.",
+      "cumTu": [
+        "permanent damage",
+        "a permanent job",
+        "permanent residents"
+      ],
+      "hoTu": [
+        "permanence (n)",
+        "permanently (adv)"
+      ]
+    },
+    {
+      "chu": "gradual",
+      "doc": "/ˈɡrædʒuəl/",
+      "loai": "adj",
+      "nghia": "dần dần, từ từ",
+      "cap": "B2",
+      "viDu": "There has been a gradual shift towards online shopping.",
+      "viDuNghia": "Đã có sự chuyển dịch dần sang mua sắm trực tuyến.",
+      "cumTu": [
+        "a gradual shift",
+        "gradual change",
+        "a gradual decline"
+      ],
+      "hoTu": [
+        "gradually (adv)"
+      ]
+    },
+    {
+      "chu": "abrupt",
+      "doc": "/əˈbrʌpt/",
+      "loai": "adj",
+      "nghia": "đột ngột",
+      "cap": "C1",
+      "viDu": "The abrupt closure of the factory left hundreds of people unemployed.",
+      "viDuNghia": "Nhà máy đóng cửa đột ngột khiến hàng trăm người thất nghiệp.",
+      "cumTu": [
+        "an abrupt end",
+        "abrupt change",
+        "come to an abrupt halt"
+      ],
+      "hoTu": [
+        "abruptly (adv)"
+      ]
+    },
+    {
+      "chu": "steady",
+      "doc": "/ˈstedi/",
+      "loai": "adj",
+      "nghia": "đều đặn, ổn định",
+      "cap": "B1",
+      "viDu": "The city has seen steady growth in tourism.",
+      "viDuNghia": "Thành phố chứng kiến du lịch tăng trưởng đều đặn.",
+      "cumTu": [
+        "steady growth",
+        "a steady income",
+        "steady progress"
+      ],
+      "hoTu": [
+        "steadily (adv)",
+        "steadiness (n)"
+      ]
+    },
+    {
+      "chu": "stable",
+      "doc": "/ˈsteɪbl/",
+      "loai": "adj",
+      "nghia": "ổn định",
+      "cap": "B1",
+      "viDu": "A stable job gives people a sense of security.",
+      "viDuNghia": "Một công việc ổn định mang lại cho con người cảm giác an toàn.",
+      "cumTu": [
+        "a stable job",
+        "politically stable",
+        "a stable economy"
+      ],
+      "hoTu": [
+        "stability (n)",
+        "stabilise (v)"
+      ]
+    },
+    {
+      "chu": "volatile",
+      "doc": "/ˈvɒlətaɪl/",
+      "loai": "adj",
+      "nghia": "biến động, bất ổn",
+      "cap": "C1",
+      "viDu": "Food prices have been extremely volatile this year.",
+      "viDuNghia": "Giá lương thực năm nay biến động rất mạnh.",
+      "cumTu": [
+        "a volatile market",
+        "highly volatile",
+        "volatile prices"
+      ],
+      "hoTu": [
+        "volatility (n)"
+      ]
+    },
+    {
+      "chu": "unpredictable",
+      "doc": "/ˌʌnprɪˈdɪktəbl/",
+      "loai": "adj",
+      "nghia": "khó đoán, không lường trước",
+      "cap": "B2",
+      "viDu": "The weather in this region is highly unpredictable.",
+      "viDuNghia": "Thời tiết ở vùng này rất khó đoán.",
+      "cumTu": [
+        "highly unpredictable",
+        "unpredictable results",
+        "unpredictable behaviour"
+      ],
+      "hoTu": [
+        "predict (v)",
+        "unpredictability (n)"
+      ]
+    },
+    {
+      "chu": "predictable",
+      "doc": "/prɪˈdɪktəbl/",
+      "loai": "adj",
+      "nghia": "có thể đoán trước",
+      "cap": "B2",
+      "viDu": "Some people prefer a predictable routine at work.",
+      "viDuNghia": "Một số người thích nhịp làm việc có thể đoán trước.",
+      "cumTu": [
+        "entirely predictable",
+        "predictable results",
+        "a predictable routine"
+      ],
+      "hoTu": [
+        "predict (v)",
+        "prediction (n)",
+        "predictably (adv)"
+      ]
+    },
+    {
+      "chu": "foreseeable",
+      "doc": "/fɔːˈsiːəbl/",
+      "loai": "adj",
+      "nghia": "có thể thấy trước",
+      "cap": "C1",
+      "viDu": "Petrol cars will remain common for the foreseeable future.",
+      "viDuNghia": "Xe chạy xăng sẽ vẫn phổ biến trong tương lai trước mắt.",
+      "cumTu": [
+        "for the foreseeable future",
+        "foreseeable risks",
+        "in the foreseeable future"
+      ],
+      "hoTu": [
+        "foresee (v)",
+        "unforeseeable (adj)"
+      ],
+      "ghiChu": "\"For the foreseeable future\" = trong khoảng tương lai có thể lường trước được."
+    },
+    {
+      "chu": "unavoidable",
+      "doc": "/ˌʌnəˈvɔɪdəbl/",
+      "loai": "adj",
+      "nghia": "không tránh được",
+      "cap": "B2",
+      "viDu": "Some delays are unavoidable when building large infrastructure.",
+      "viDuNghia": "Một số sự chậm trễ là không tránh được khi xây dựng hạ tầng lớn.",
+      "cumTu": [
+        "largely unavoidable",
+        "an unavoidable consequence",
+        "unavoidable costs"
+      ],
+      "hoTu": [
+        "avoid (v)",
+        "avoidable (adj)"
+      ]
+    },
+    {
+      "chu": "deliberate",
+      "doc": "/dɪˈlɪbərət/",
+      "loai": "adj",
+      "nghia": "cố ý, có chủ đích",
+      "cap": "B2",
+      "viDu": "Spreading fake news is often a deliberate attempt to mislead people.",
+      "viDuNghia": "Lan truyền tin giả thường là hành vi cố ý nhằm đánh lừa mọi người.",
+      "cumTu": [
+        "a deliberate attempt",
+        "a deliberate policy",
+        "a deliberate choice"
+      ],
+      "hoTu": [
+        "deliberately (adv)",
+        "deliberation (n)"
+      ],
+      "ghiChu": "Động từ \"deliberate\" /dɪˈlɪbəreɪt/ = cân nhắc kỹ."
+    },
+    {
+      "chu": "voluntary",
+      "doc": "/ˈvɒləntri/",
+      "loai": "adj",
+      "nghia": "tự nguyện",
+      "cap": "B2",
+      "viDu": "Community service should be voluntary rather than compulsory.",
+      "viDuNghia": "Phục vụ cộng đồng nên là tự nguyện thay vì bắt buộc.",
+      "cumTu": [
+        "voluntary work",
+        "on a voluntary basis",
+        "a voluntary organisation"
+      ],
+      "hoTu": [
+        "volunteer (n/v)",
+        "voluntarily (adv)"
+      ]
+    },
+    {
+      "chu": "compulsory",
+      "doc": "/kəmˈpʌlsəri/",
+      "loai": "adj",
+      "nghia": "bắt buộc",
+      "cap": "B2",
+      "viDu": "Should physical education be compulsory at secondary school?",
+      "viDuNghia": "Thể dục có nên là môn bắt buộc ở trường trung học không?",
+      "cumTu": [
+        "compulsory education",
+        "make sth compulsory",
+        "a compulsory subject"
+      ],
+      "hoTu": [
+        "compulsion (n)",
+        "compel (v)"
+      ],
+      "ghiChu": "Đề Task 2 hay hỏi: \"Should ... be compulsory?\""
+    },
+    {
+      "chu": "mandatory",
+      "doc": "/ˈmændətəri/",
+      "loai": "adj",
+      "nghia": "bắt buộc (theo luật)",
+      "cap": "C1",
+      "viDu": "Wearing a seat belt is mandatory in most countries.",
+      "viDuNghia": "Đeo dây an toàn là bắt buộc ở hầu hết các nước.",
+      "cumTu": [
+        "mandatory for",
+        "make sth mandatory",
+        "a mandatory requirement"
+      ],
+      "hoTu": [
+        "mandate (n/v)"
+      ]
+    },
+    {
+      "chu": "optional",
+      "doc": "/ˈɒpʃənl/",
+      "loai": "adj",
+      "nghia": "tuỳ chọn, không bắt buộc",
+      "cap": "B2",
+      "viDu": "Foreign language classes are optional at some schools.",
+      "viDuNghia": "Lớp ngoại ngữ là môn tự chọn ở một số trường.",
+      "cumTu": [
+        "optional extras",
+        "an optional subject",
+        "entirely optional"
+      ],
+      "hoTu": [
+        "option (n)",
+        "opt (v)"
+      ]
+    },
+    {
+      "chu": "desirable",
+      "doc": "/dɪˈzaɪərəbl/",
+      "loai": "adj",
+      "nghia": "đáng mong muốn",
+      "cap": "B2",
+      "viDu": "It is desirable for children to learn a musical instrument.",
+      "viDuNghia": "Trẻ em học một nhạc cụ là điều đáng mong muốn.",
+      "cumTu": [
+        "highly desirable",
+        "a desirable outcome",
+        "it is desirable that"
+      ],
+      "hoTu": [
+        "desire (n/v)",
+        "undesirable (adj)"
+      ]
+    },
+    {
+      "chu": "undesirable",
+      "doc": "/ˌʌndɪˈzaɪərəbl/",
+      "loai": "adj",
+      "nghia": "không mong muốn",
+      "cap": "C1",
+      "viDu": "Tourism can have undesirable effects on local communities.",
+      "viDuNghia": "Du lịch có thể gây tác động không mong muốn đến cộng đồng địa phương.",
+      "cumTu": [
+        "undesirable effects",
+        "undesirable consequences",
+        "socially undesirable"
+      ],
+      "hoTu": [
+        "desirable (adj)"
+      ]
+    },
+    {
+      "chu": "favourable",
+      "doc": "/ˈfeɪvərəbl/",
+      "loai": "adj",
+      "nghia": "thuận lợi, tán thành",
+      "cap": "B2",
+      "viDu": "The new law received a favourable response from the public.",
+      "viDuNghia": "Luật mới nhận được phản hồi tích cực từ công chúng.",
+      "cumTu": [
+        "favourable conditions",
+        "a favourable response",
+        "favourable to"
+      ],
+      "hoTu": [
+        "favour (n/v)",
+        "favourably (adv)",
+        "unfavourable (adj)"
+      ],
+      "ghiChu": "Anh-Anh viết \"favourable\", Anh-Mỹ \"favorable\" — giữ một kiểu chính tả trong cả bài."
+    },
+    {
+      "chu": "unfavourable",
+      "doc": "/ʌnˈfeɪvərəbl/",
+      "loai": "adj",
+      "nghia": "bất lợi, không thuận",
+      "cap": "C1",
+      "viDu": "Unfavourable weather conditions led to a poor harvest.",
+      "viDuNghia": "Thời tiết bất lợi dẫn đến mất mùa.",
+      "cumTu": [
+        "unfavourable conditions",
+        "an unfavourable comparison",
+        "an unfavourable view"
+      ],
+      "hoTu": [
+        "favourable (adj)"
+      ]
+    },
+    {
+      "chu": "sceptical",
+      "doc": "/ˈskeptɪkl/",
+      "loai": "adj",
+      "nghia": "hoài nghi",
+      "cap": "C1",
+      "viDu": "Many experts remain sceptical about the benefits of the new policy.",
+      "viDuNghia": "Nhiều chuyên gia vẫn hoài nghi về lợi ích của chính sách mới.",
+      "cumTu": [
+        "sceptical about",
+        "remain sceptical",
+        "deeply sceptical"
+      ],
+      "hoTu": [
+        "sceptic (n)",
+        "scepticism (n)"
+      ],
+      "ghiChu": "Anh-Mỹ viết \"skeptical\"."
+    },
+    {
+      "chu": "reluctant",
+      "doc": "/rɪˈlʌktənt/",
+      "loai": "adj",
+      "nghia": "miễn cưỡng, ngần ngại",
+      "cap": "B2",
+      "viDu": "Many older people are reluctant to use online banking.",
+      "viDuNghia": "Nhiều người lớn tuổi ngần ngại dùng ngân hàng trực tuyến.",
+      "cumTu": [
+        "reluctant to do sth",
+        "increasingly reluctant",
+        "reluctant acceptance"
+      ],
+      "hoTu": [
+        "reluctance (n)",
+        "reluctantly (adv)"
+      ]
+    },
+    {
+      "chu": "apathetic",
+      "doc": "/ˌæpəˈθetɪk/",
+      "loai": "adj",
+      "nghia": "thờ ơ, lãnh đạm",
+      "cap": "C1",
+      "viDu": "Young people are often described as politically apathetic.",
+      "viDuNghia": "Người trẻ thường bị mô tả là thờ ơ với chính trị.",
+      "cumTu": [
+        "politically apathetic",
+        "apathetic about",
+        "apathetic voters"
+      ],
+      "hoTu": [
+        "apathy (n)"
+      ]
+    },
+    {
+      "chu": "hostile",
+      "doc": "/ˈhɒstaɪl/",
+      "loai": "adj",
+      "nghia": "thù địch, chống đối",
+      "cap": "B2",
+      "viDu": "Some local residents are hostile to the idea of a new airport.",
+      "viDuNghia": "Một số cư dân địa phương phản đối gay gắt ý tưởng xây sân bay mới.",
+      "cumTu": [
+        "hostile to",
+        "a hostile environment",
+        "a hostile reaction"
+      ],
+      "hoTu": [
+        "hostility (n)"
+      ]
+    },
+    {
+      "chu": "vulnerable",
+      "doc": "/ˈvʌlnərəbl/",
+      "loai": "adj",
+      "nghia": "dễ bị tổn thương",
+      "cap": "B2",
+      "viDu": "The elderly are particularly vulnerable to extreme heat.",
+      "viDuNghia": "Người cao tuổi đặc biệt dễ bị tổn thương bởi nắng nóng gay gắt.",
+      "cumTu": [
+        "vulnerable to",
+        "vulnerable groups",
+        "particularly vulnerable"
+      ],
+      "hoTu": [
+        "vulnerability (n)"
+      ]
+    },
+    {
+      "chu": "susceptible",
+      "doc": "/səˈseptəbl/",
+      "loai": "adj",
+      "nghia": "dễ bị ảnh hưởng, dễ mắc",
+      "cap": "C1",
+      "viDu": "Children are more susceptible to advertising than adults.",
+      "viDuNghia": "Trẻ em dễ bị quảng cáo tác động hơn người lớn.",
+      "cumTu": [
+        "susceptible to",
+        "highly susceptible",
+        "susceptible to infection"
+      ],
+      "hoTu": [
+        "susceptibility (n)"
+      ]
+    },
+    {
+      "chu": "robust",
+      "doc": "/rəʊˈbʌst/",
+      "loai": "adj",
+      "nghia": "vững chắc, mạnh mẽ",
+      "cap": "C1",
+      "viDu": "A robust healthcare system can cope with sudden crises.",
+      "viDuNghia": "Một hệ thống y tế vững mạnh có thể ứng phó với khủng hoảng bất ngờ.",
+      "cumTu": [
+        "robust evidence",
+        "a robust economy",
+        "a robust system"
+      ],
+      "hoTu": [
+        "robustly (adv)",
+        "robustness (n)"
+      ]
+    },
+    {
+      "chu": "precarious",
+      "doc": "/prɪˈkeəriəs/",
+      "loai": "adj",
+      "nghia": "bấp bênh",
+      "cap": "C1",
+      "viDu": "Many gig workers live in a precarious financial situation.",
+      "viDuNghia": "Nhiều người làm việc tự do qua ứng dụng sống trong tình cảnh tài chính bấp bênh.",
+      "cumTu": [
+        "a precarious situation",
+        "a precarious position",
+        "precarious employment"
+      ],
+      "hoTu": [
+        "precariously (adv)"
+      ]
+    },
+    {
+      "chu": "affordable",
+      "doc": "/əˈfɔːdəbl/",
+      "loai": "adj",
+      "nghia": "giá phải chăng",
+      "cap": "B2",
+      "viDu": "The government should provide more affordable housing for young families.",
+      "viDuNghia": "Chính phủ nên cung cấp thêm nhà ở giá phải chăng cho các gia đình trẻ.",
+      "cumTu": [
+        "affordable housing",
+        "affordable prices",
+        "more affordable"
+      ],
+      "hoTu": [
+        "afford (v)",
+        "affordability (n)"
+      ]
+    },
+    {
+      "chu": "costly",
+      "doc": "/ˈkɒstli/",
+      "loai": "adj",
+      "nghia": "tốn kém; phải trả giá đắt",
+      "cap": "B2",
+      "viDu": "Building a new metro line is extremely costly.",
+      "viDuNghia": "Xây một tuyến tàu điện ngầm mới cực kỳ tốn kém.",
+      "cumTu": [
+        "a costly mistake",
+        "prove costly",
+        "extremely costly"
+      ],
+      "hoTu": [
+        "cost (n/v)"
+      ]
+    },
+    {
+      "chu": "lucrative",
+      "doc": "/ˈluːkrətɪv/",
+      "loai": "adj",
+      "nghia": "sinh lời, béo bở",
+      "cap": "C1",
+      "viDu": "Professional sport has become a lucrative industry.",
+      "viDuNghia": "Thể thao chuyên nghiệp đã trở thành một ngành sinh lời lớn.",
+      "cumTu": [
+        "a lucrative career",
+        "a lucrative contract",
+        "highly lucrative"
+      ],
+      "hoTu": [
+        "lucratively (adv)"
+      ]
+    },
+    {
+      "chu": "profitable",
+      "doc": "/ˈprɒfɪtəbl/",
+      "loai": "adj",
+      "nghia": "có lãi",
+      "cap": "B2",
+      "viDu": "Organic farming can be profitable if consumers are willing to pay more.",
+      "viDuNghia": "Canh tác hữu cơ có thể có lãi nếu người tiêu dùng sẵn lòng trả nhiều hơn.",
+      "cumTu": [
+        "highly profitable",
+        "a profitable business",
+        "remain profitable"
+      ],
+      "hoTu": [
+        "profit (n)",
+        "profitability (n)"
+      ]
+    },
+    {
+      "chu": "economical",
+      "doc": "/ˌiːkəˈnɒmɪkl/",
+      "loai": "adj",
+      "nghia": "tiết kiệm",
+      "cap": "B2",
+      "viDu": "Public transport is more economical than driving to work.",
+      "viDuNghia": "Đi phương tiện công cộng tiết kiệm hơn lái xe đi làm.",
+      "cumTu": [
+        "economical with",
+        "an economical car",
+        "more economical"
+      ],
+      "hoTu": [
+        "economy (n)",
+        "economically (adv)"
+      ],
+      "ghiChu": "Dễ nhầm \"economic\" (thuộc về kinh tế: economic growth)."
+    },
+    {
+      "chu": "prosperous",
+      "doc": "/ˈprɒspərəs/",
+      "loai": "adj",
+      "nghia": "thịnh vượng",
+      "cap": "B2",
+      "viDu": "The town became prosperous after the new port was built.",
+      "viDuNghia": "Thị trấn trở nên thịnh vượng sau khi cảng mới được xây.",
+      "cumTu": [
+        "a prosperous economy",
+        "a prosperous future",
+        "increasingly prosperous"
+      ],
+      "hoTu": [
+        "prosperity (n)",
+        "prosper (v)"
+      ]
+    },
+    {
+      "chu": "affluent",
+      "doc": "/ˈæfluənt/",
+      "loai": "adj",
+      "nghia": "giàu có",
+      "cap": "C1",
+      "viDu": "Obesity rates are rising even in less affluent countries.",
+      "viDuNghia": "Tỉ lệ béo phì đang tăng ngay cả ở những nước kém giàu có hơn.",
+      "cumTu": [
+        "affluent societies",
+        "affluent areas",
+        "affluent families"
+      ],
+      "hoTu": [
+        "affluence (n)"
+      ]
+    },
+    {
+      "chu": "deprived",
+      "doc": "/dɪˈpraɪvd/",
+      "loai": "adj",
+      "nghia": "thiếu thốn, nghèo khó",
+      "cap": "C1",
+      "viDu": "Children from deprived areas often have fewer opportunities.",
+      "viDuNghia": "Trẻ em ở vùng nghèo khó thường có ít cơ hội hơn.",
+      "cumTu": [
+        "deprived areas",
+        "socially deprived",
+        "sleep-deprived"
+      ],
+      "hoTu": [
+        "deprive (v)",
+        "deprivation (n)"
+      ]
+    },
+    {
+      "chu": "privileged",
+      "doc": "/ˈprɪvəlɪdʒd/",
+      "loai": "adj",
+      "nghia": "có đặc quyền",
+      "cap": "C1",
+      "viDu": "Only a privileged few can afford to study abroad.",
+      "viDuNghia": "Chỉ một số ít người có đặc quyền mới đủ tiền du học.",
+      "cumTu": [
+        "a privileged few",
+        "a privileged background",
+        "feel privileged"
+      ],
+      "hoTu": [
+        "privilege (n)"
+      ]
+    },
+    {
+      "chu": "isolated",
+      "doc": "/ˈaɪsəleɪtɪd/",
+      "loai": "adj",
+      "nghia": "bị cô lập, biệt lập",
+      "cap": "B2",
+      "viDu": "Older people living alone can feel isolated.",
+      "viDuNghia": "Người già sống một mình có thể cảm thấy bị cô lập.",
+      "cumTu": [
+        "feel isolated",
+        "socially isolated",
+        "an isolated case"
+      ],
+      "hoTu": [
+        "isolation (n)",
+        "isolate (v)"
+      ]
+    },
+    {
+      "chu": "interdependent",
+      "doc": "/ˌɪntədɪˈpendənt/",
+      "loai": "adj",
+      "nghia": "phụ thuộc lẫn nhau",
+      "cap": "C1",
+      "viDu": "The economies of the world are increasingly interdependent.",
+      "viDuNghia": "Các nền kinh tế thế giới ngày càng phụ thuộc lẫn nhau.",
+      "cumTu": [
+        "increasingly interdependent",
+        "interdependent economies",
+        "highly interdependent"
+      ],
+      "hoTu": [
+        "interdependence (n)"
+      ]
+    },
+    {
+      "chu": "mutual",
+      "doc": "/ˈmjuːtʃuəl/",
+      "loai": "adj",
+      "nghia": "lẫn nhau, chung",
+      "cap": "B2",
+      "viDu": "Trade agreements should bring mutual benefits to both countries.",
+      "viDuNghia": "Hiệp định thương mại nên mang lại lợi ích chung cho cả hai nước.",
+      "cumTu": [
+        "mutual benefit",
+        "mutual respect",
+        "mutual understanding"
+      ],
+      "hoTu": [
+        "mutually (adv)"
+      ]
+    },
+    {
+      "chu": "collective",
+      "doc": "/kəˈlektɪv/",
+      "loai": "adj",
+      "nghia": "tập thể, chung",
+      "cap": "B2",
+      "viDu": "Tackling climate change requires collective action.",
+      "viDuNghia": "Giải quyết biến đổi khí hậu đòi hỏi hành động tập thể.",
+      "cumTu": [
+        "collective action",
+        "collective responsibility",
+        "a collective effort"
+      ],
+      "hoTu": [
+        "collectively (adv)",
+        "collect (v)"
+      ]
+    },
+    {
+      "chu": "universal",
+      "doc": "/ˌjuːnɪˈvɜːsl/",
+      "loai": "adj",
+      "nghia": "phổ quát, toàn dân",
+      "cap": "B2",
+      "viDu": "Some countries offer universal healthcare to all citizens.",
+      "viDuNghia": "Một số nước cung cấp chăm sóc y tế toàn dân cho mọi công dân.",
+      "cumTu": [
+        "universal access",
+        "universal healthcare",
+        "universal basic income"
+      ],
+      "hoTu": [
+        "universally (adv)",
+        "universe (n)"
+      ]
+    }
+  ]
+}

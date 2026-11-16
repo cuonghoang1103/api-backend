@@ -1,0 +1,1985 @@
+{
+  "ma": "ielts-lien-ket-quan-diem",
+  "nn": "en",
+  "ten": "IELTS · Từ nối & cụm nêu quan điểm",
+  "moTa": "Từ nối, cụm nêu quan điểm, nhượng bộ, nguyên nhân – kết quả, ví dụ, kết luận cho Writing Task 2 và Speaking: nevertheless, consequently, in light of, it could be argued that, to a large extent…",
+  "nhom": "ielts",
+  "cap": "B2",
+  "tu": [
+    {
+      "chu": "nevertheless",
+      "doc": "/ˌnevəðəˈles/",
+      "loai": "adv",
+      "nghia": "tuy nhiên, dù vậy",
+      "cap": "B2",
+      "viDu": "Online learning is convenient; nevertheless, many students miss face-to-face contact.",
+      "viDuNghia": "Học trực tuyến tiện lợi; tuy vậy, nhiều sinh viên vẫn nhớ những buổi gặp trực tiếp.",
+      "cumTu": [
+        "Nevertheless, + clause",
+        "but nevertheless",
+        "is nevertheless true"
+      ],
+      "ghiChu": "Đứng đầu câu hoặc sau dấu chấm phẩy, có dấu phẩy theo sau. ✗ Không nối hai mệnh đề chỉ bằng dấu phẩy."
+    },
+    {
+      "chu": "nonetheless",
+      "doc": "/ˌnʌnðəˈles/",
+      "loai": "adv",
+      "nghia": "tuy vậy, dù sao",
+      "cap": "C1",
+      "viDu": "The plan is expensive. Nonetheless, it is worth considering.",
+      "viDuNghia": "Kế hoạch tốn kém. Dù vậy, nó vẫn đáng cân nhắc.",
+      "cumTu": [
+        "Nonetheless, + clause",
+        "but nonetheless",
+        "is nonetheless important"
+      ],
+      "ghiChu": "Nghĩa như \"nevertheless\", hơi trang trọng hơn."
+    },
+    {
+      "chu": "consequently",
+      "doc": "/ˈkɒnsɪkwəntli/",
+      "loai": "adv",
+      "nghia": "do đó, vì vậy",
+      "cap": "B2",
+      "viDu": "Many young people cannot afford a house. Consequently, they live with their parents for longer.",
+      "viDuNghia": "Nhiều người trẻ không đủ tiền mua nhà. Do đó, họ sống với cha mẹ lâu hơn.",
+      "cumTu": [
+        "Consequently, + clause",
+        "and consequently"
+      ],
+      "hoTu": [
+        "consequence (n)",
+        "consequent (adj)"
+      ]
+    },
+    {
+      "chu": "therefore",
+      "doc": "/ˈðeəfɔː/",
+      "loai": "adv",
+      "nghia": "vì vậy, do đó",
+      "cap": "B1",
+      "viDu": "Exercise improves mood; therefore, it should be part of every school day.",
+      "viDuNghia": "Tập thể dục cải thiện tâm trạng; vì vậy, nó nên là một phần của mỗi ngày học.",
+      "cumTu": [
+        "and therefore",
+        "Therefore, + clause",
+        "it therefore follows that"
+      ],
+      "ghiChu": "Có thể đứng giữa câu: \"It is therefore important to ...\"."
+    },
+    {
+      "chu": "thus",
+      "doc": "/ðʌs/",
+      "loai": "adv",
+      "nghia": "do đó, nhờ vậy",
+      "cap": "B2",
+      "viDu": "Public transport reduces the number of cars, thus cutting pollution.",
+      "viDuNghia": "Giao thông công cộng giảm số ô tô, nhờ đó cắt giảm ô nhiễm.",
+      "cumTu": [
+        "thus + V-ing",
+        "and thus",
+        "thus far"
+      ],
+      "ghiChu": "\"Thus + V-ing\" diễn tả kết quả trực tiếp của mệnh đề chính."
+    },
+    {
+      "chu": "hence",
+      "doc": "/hens/",
+      "loai": "adv",
+      "nghia": "vì thế, do đó",
+      "cap": "C1",
+      "viDu": "The city is surrounded by mountains; hence the poor air quality.",
+      "viDuNghia": "Thành phố bị núi bao quanh; vì thế chất lượng không khí kém.",
+      "cumTu": [
+        "hence the + noun",
+        "and hence",
+        "hence the need for"
+      ],
+      "ghiChu": "Có thể theo sau chỉ bằng cụm danh từ, không cần động từ: \"hence the problem\"."
+    },
+    {
+      "chu": "accordingly",
+      "doc": "/əˈkɔːdɪŋli/",
+      "loai": "adv",
+      "nghia": "theo đó, tương ứng",
+      "cap": "C1",
+      "viDu": "Prices have risen, and wages should be adjusted accordingly.",
+      "viDuNghia": "Giá cả đã tăng, và lương cũng nên được điều chỉnh tương ứng.",
+      "cumTu": [
+        "act accordingly",
+        "adjust accordingly",
+        "Accordingly, + clause"
+      ],
+      "hoTu": [
+        "accord (n)",
+        "according to (prep)"
+      ]
+    },
+    {
+      "chu": "furthermore",
+      "doc": "/ˌfɜːðəˈmɔː/",
+      "loai": "adv",
+      "nghia": "hơn nữa",
+      "cap": "B2",
+      "viDu": "Cycling is good for health. Furthermore, it is cheap and environmentally friendly.",
+      "viDuNghia": "Đi xe đạp tốt cho sức khoẻ. Hơn nữa, nó rẻ và thân thiện với môi trường.",
+      "cumTu": [
+        "Furthermore, + clause",
+        "and furthermore"
+      ],
+      "ghiChu": "Đừng lạm dụng; xen kẽ với \"In addition\", \"Moreover\" và câu nối tự nhiên."
+    },
+    {
+      "chu": "moreover",
+      "doc": "/mɔːrˈəʊvə/",
+      "loai": "adv",
+      "nghia": "hơn thế nữa",
+      "cap": "B2",
+      "viDu": "Online shopping saves time. Moreover, prices are often lower.",
+      "viDuNghia": "Mua sắm trực tuyến tiết kiệm thời gian. Hơn thế, giá thường thấp hơn.",
+      "cumTu": [
+        "Moreover, + clause",
+        "and moreover"
+      ]
+    },
+    {
+      "chu": "in addition",
+      "doc": "/ˌɪn əˈdɪʃn/",
+      "loai": "phr",
+      "nghia": "thêm vào đó",
+      "cap": "B1",
+      "viDu": "In addition, working from home reduces travel costs.",
+      "viDuNghia": "Thêm vào đó, làm việc tại nhà giảm chi phí đi lại.",
+      "cumTu": [
+        "In addition, + clause",
+        "in addition to + noun/V-ing"
+      ],
+      "hoTu": [
+        "add (v)",
+        "additional (adj)"
+      ],
+      "ghiChu": "✓ \"In addition to working ...\" ✗ \"In addition to work ...\" (to ở đây là giới từ)."
+    },
+    {
+      "chu": "additionally",
+      "doc": "/əˈdɪʃənəli/",
+      "loai": "adv",
+      "nghia": "ngoài ra",
+      "cap": "B2",
+      "viDu": "Additionally, the scheme would create thousands of jobs.",
+      "viDuNghia": "Ngoài ra, chương trình sẽ tạo ra hàng nghìn việc làm.",
+      "cumTu": [
+        "Additionally, + clause",
+        "additionally, it is"
+      ],
+      "hoTu": [
+        "additional (adj)",
+        "addition (n)"
+      ]
+    },
+    {
+      "chu": "besides",
+      "doc": "/bɪˈsaɪdz/",
+      "loai": "adv",
+      "nghia": "ngoài ra, vả lại",
+      "cap": "B2",
+      "viDu": "I don't have time to join the club. Besides, it is too expensive.",
+      "viDuNghia": "Tôi không có thời gian tham gia câu lạc bộ. Vả lại, nó quá đắt.",
+      "cumTu": [
+        "Besides, + clause",
+        "besides + noun/V-ing"
+      ],
+      "hoTu": [
+        "beside (prep)"
+      ],
+      "ghiChu": "Hợp Speaking hơn văn viết trang trọng. Dễ nhầm \"beside\" (bên cạnh)."
+    },
+    {
+      "chu": "likewise",
+      "doc": "/ˈlaɪkwaɪz/",
+      "loai": "adv",
+      "nghia": "tương tự, cũng vậy",
+      "cap": "C1",
+      "viDu": "Parents should limit screen time; likewise, schools should encourage outdoor play.",
+      "viDuNghia": "Cha mẹ nên hạn chế thời gian dùng màn hình; tương tự, trường học nên khuyến khích chơi ngoài trời.",
+      "cumTu": [
+        "Likewise, + clause",
+        "do likewise"
+      ]
+    },
+    {
+      "chu": "similarly",
+      "doc": "/ˈsɪmələli/",
+      "loai": "adv",
+      "nghia": "tương tự",
+      "cap": "B2",
+      "viDu": "Similarly, the number of female engineers has increased.",
+      "viDuNghia": "Tương tự, số kỹ sư nữ đã tăng lên.",
+      "cumTu": [
+        "Similarly, + clause",
+        "similarly high"
+      ],
+      "hoTu": [
+        "similar (adj)",
+        "similarity (n)"
+      ]
+    },
+    {
+      "chu": "conversely",
+      "doc": "/ˈkɒnvɜːsli/",
+      "loai": "adv",
+      "nghia": "ngược lại",
+      "cap": "C1",
+      "viDu": "Some people find city life exciting; conversely, others find it stressful.",
+      "viDuNghia": "Một số người thấy cuộc sống thành phố thú vị; ngược lại, người khác thấy căng thẳng.",
+      "cumTu": [
+        "Conversely, + clause",
+        "and conversely"
+      ],
+      "hoTu": [
+        "converse (n/adj)"
+      ]
+    },
+    {
+      "chu": "in contrast",
+      "doc": "/ˌɪn ˈkɒntrɑːst/",
+      "loai": "phr",
+      "nghia": "trái lại, ngược lại",
+      "cap": "B2",
+      "viDu": "In contrast, the number of bus users fell steadily.",
+      "viDuNghia": "Trái lại, số người đi xe buýt giảm đều.",
+      "cumTu": [
+        "In contrast, + clause",
+        "in contrast to + noun",
+        "in stark contrast"
+      ],
+      "hoTu": [
+        "contrast (n/v)",
+        "contrasting (adj)"
+      ]
+    },
+    {
+      "chu": "by contrast",
+      "doc": "/ˌbaɪ ˈkɒntrɑːst/",
+      "loai": "phr",
+      "nghia": "ngược lại",
+      "cap": "C1",
+      "viDu": "By contrast, rural areas saw little change.",
+      "viDuNghia": "Ngược lại, khu vực nông thôn ít thay đổi.",
+      "cumTu": [
+        "By contrast, + clause",
+        "by contrast with"
+      ],
+      "hoTu": [
+        "contrast (n/v)"
+      ]
+    },
+    {
+      "chu": "on the contrary",
+      "doc": "/ˌɒn ðə ˈkɒntrəri/",
+      "loai": "phr",
+      "nghia": "trái lại (bác bỏ ý trước)",
+      "cap": "B2",
+      "viDu": "Technology does not make us lazy; on the contrary, it helps us do more.",
+      "viDuNghia": "Công nghệ không làm ta lười biếng; trái lại, nó giúp ta làm được nhiều hơn.",
+      "cumTu": [
+        "on the contrary, + clause",
+        "quite the contrary"
+      ],
+      "hoTu": [
+        "contrary (adj)"
+      ],
+      "ghiChu": "Chỉ dùng để BÁC BỎ ý vừa nêu; muốn so sánh hai đối tượng thì dùng \"in contrast\"."
+    },
+    {
+      "chu": "on the other hand",
+      "doc": "/ˌɒn ði ˈʌðə hænd/",
+      "loai": "phr",
+      "nghia": "mặt khác",
+      "cap": "B1",
+      "viDu": "On the other hand, living in a city can be expensive.",
+      "viDuNghia": "Mặt khác, sống ở thành phố có thể tốn kém.",
+      "cumTu": [
+        "on the one hand ... on the other hand",
+        "but on the other hand"
+      ],
+      "ghiChu": "Dùng để nêu mặt đối lập của cùng một vấn đề, không dùng để thêm ý cùng chiều."
+    },
+    {
+      "chu": "whereas",
+      "doc": "/ˌweərˈæz/",
+      "loai": "conj",
+      "nghia": "trong khi (đối lập)",
+      "cap": "B2",
+      "viDu": "Men preferred football, whereas women preferred tennis.",
+      "viDuNghia": "Nam giới thích bóng đá, trong khi nữ giới thích quần vợt.",
+      "cumTu": [
+        "X, whereas Y",
+        "Whereas X, Y"
+      ],
+      "ghiChu": "Rất hay dùng trong Task 1 để so sánh hai nhóm."
+    },
+    {
+      "chu": "although",
+      "doc": "/ɔːlˈðəʊ/",
+      "loai": "conj",
+      "nghia": "mặc dù",
+      "cap": "B1",
+      "viDu": "Although the city is expensive, many young people want to live there.",
+      "viDuNghia": "Mặc dù thành phố đắt đỏ, nhiều người trẻ vẫn muốn sống ở đó.",
+      "cumTu": [
+        "Although + clause, + clause",
+        "although it is true that"
+      ],
+      "hoTu": [
+        "though (conj)"
+      ],
+      "ghiChu": "✗ \"Although ..., but ...\" — lỗi rất phổ biến của người Việt; chỉ dùng một trong hai."
+    },
+    {
+      "chu": "even though",
+      "doc": "/ˌiːvn ˈðəʊ/",
+      "loai": "conj",
+      "nghia": "mặc dù (nhấn mạnh)",
+      "cap": "B1",
+      "viDu": "Even though smoking is harmful, millions of people still smoke.",
+      "viDuNghia": "Mặc dù hút thuốc có hại, hàng triệu người vẫn hút.",
+      "cumTu": [
+        "Even though + clause",
+        "even though it is true that"
+      ],
+      "ghiChu": "Khác \"even if\" (cho dù nếu — giả định)."
+    },
+    {
+      "chu": "despite",
+      "doc": "/dɪˈspaɪt/",
+      "loai": "prep",
+      "nghia": "mặc dù, bất chấp",
+      "cap": "B1",
+      "viDu": "Despite the high cost, many parents send their children to private schools.",
+      "viDuNghia": "Bất chấp chi phí cao, nhiều phụ huynh vẫn cho con học trường tư.",
+      "cumTu": [
+        "despite + noun/V-ing",
+        "despite the fact that"
+      ],
+      "ghiChu": "✗ \"despite of\". Sau \"despite\" là danh từ/V-ing; muốn dùng mệnh đề thì \"despite the fact that\"."
+    },
+    {
+      "chu": "in spite of",
+      "doc": "/ɪn ˈspaɪt əv/",
+      "loai": "phr",
+      "nghia": "mặc dù, bất chấp",
+      "cap": "B1",
+      "viDu": "In spite of government efforts, unemployment remains high.",
+      "viDuNghia": "Bất chấp nỗ lực của chính phủ, thất nghiệp vẫn cao.",
+      "cumTu": [
+        "in spite of + noun/V-ing",
+        "in spite of the fact that"
+      ]
+    },
+    {
+      "chu": "notwithstanding",
+      "doc": "/ˌnɒtwɪθˈstændɪŋ/",
+      "loai": "prep",
+      "nghia": "mặc dù, bất chấp",
+      "cap": "C2",
+      "viDu": "Notwithstanding these problems, the project was a success.",
+      "viDuNghia": "Bất chấp những vấn đề này, dự án vẫn thành công.",
+      "cumTu": [
+        "notwithstanding + noun",
+        "these difficulties notwithstanding"
+      ],
+      "ghiChu": "Rất trang trọng; có thể đứng sau danh từ."
+    },
+    {
+      "chu": "albeit",
+      "doc": "/ˌɔːlˈbiːɪt/",
+      "loai": "conj",
+      "nghia": "mặc dù (là)",
+      "cap": "C1",
+      "viDu": "The economy is growing, albeit slowly.",
+      "viDuNghia": "Nền kinh tế đang tăng trưởng, dù chậm.",
+      "cumTu": [
+        "albeit slowly",
+        "albeit small",
+        "albeit with"
+      ],
+      "ghiChu": "Theo sau là tính từ/trạng từ/cụm từ, không phải mệnh đề đầy đủ."
+    },
+    {
+      "chu": "admittedly",
+      "doc": "/ədˈmɪtɪdli/",
+      "loai": "adv",
+      "nghia": "phải thừa nhận rằng",
+      "cap": "C1",
+      "viDu": "Admittedly, online courses lack face-to-face interaction.",
+      "viDuNghia": "Phải thừa nhận rằng khoá học trực tuyến thiếu tương tác trực tiếp.",
+      "cumTu": [
+        "Admittedly, + clause",
+        "Admittedly ..., but"
+      ],
+      "hoTu": [
+        "admit (v)",
+        "admission (n)"
+      ],
+      "ghiChu": "Mở câu nhượng bộ trước khi phản bác: \"Admittedly, X. However, Y.\""
+    },
+    {
+      "chu": "granted",
+      "doc": "/ˈɡrɑːntɪd/",
+      "loai": "adv",
+      "nghia": "đành rằng, cứ cho là",
+      "cap": "C1",
+      "viDu": "Granted, the new system is expensive, but it will save money in the long run.",
+      "viDuNghia": "Đành rằng hệ thống mới tốn kém, nhưng về lâu dài nó sẽ tiết kiệm tiền.",
+      "cumTu": [
+        "Granted, + clause, but ...",
+        "granted that + clause",
+        "take sth for granted"
+      ],
+      "hoTu": [
+        "grant (v/n)"
+      ]
+    },
+    {
+      "chu": "as a result",
+      "doc": "/ˌæz ə rɪˈzʌlt/",
+      "loai": "phr",
+      "nghia": "kết quả là",
+      "cap": "B1",
+      "viDu": "Many factories closed. As a result, thousands of workers lost their jobs.",
+      "viDuNghia": "Nhiều nhà máy đóng cửa. Kết quả là hàng nghìn công nhân mất việc.",
+      "cumTu": [
+        "As a result, + clause",
+        "as a result of + noun"
+      ],
+      "hoTu": [
+        "result (n/v)"
+      ]
+    },
+    {
+      "chu": "as a consequence",
+      "doc": "/ˌæz ə ˈkɒnsɪkwəns/",
+      "loai": "phr",
+      "nghia": "hệ quả là",
+      "cap": "B2",
+      "viDu": "As a consequence, house prices have risen sharply.",
+      "viDuNghia": "Hệ quả là giá nhà đã tăng mạnh.",
+      "cumTu": [
+        "as a consequence of + noun",
+        "As a consequence, + clause"
+      ],
+      "hoTu": [
+        "consequence (n)",
+        "consequently (adv)"
+      ]
+    },
+    {
+      "chu": "due to",
+      "doc": "/ˈdjuː tə/",
+      "loai": "phr",
+      "nghia": "do, bởi vì",
+      "cap": "B1",
+      "viDu": "The flight was cancelled due to bad weather.",
+      "viDuNghia": "Chuyến bay bị huỷ do thời tiết xấu.",
+      "cumTu": [
+        "due to + noun",
+        "due to the fact that",
+        "largely due to"
+      ],
+      "ghiChu": "Sau \"due to\" là danh từ; muốn dùng mệnh đề thì \"due to the fact that\"."
+    },
+    {
+      "chu": "owing to",
+      "doc": "/ˈəʊɪŋ tə/",
+      "loai": "phr",
+      "nghia": "do, vì",
+      "cap": "C1",
+      "viDu": "Owing to a lack of funding, the project was abandoned.",
+      "viDuNghia": "Do thiếu kinh phí, dự án bị bỏ dở.",
+      "cumTu": [
+        "owing to + noun",
+        "owing to the fact that",
+        "largely owing to"
+      ],
+      "hoTu": [
+        "owe (v)"
+      ]
+    },
+    {
+      "chu": "on account of",
+      "doc": "/ˌɒn əˈkaʊnt əv/",
+      "loai": "phr",
+      "nghia": "vì, bởi",
+      "cap": "C1",
+      "viDu": "Many people moved to the city on account of better job opportunities.",
+      "viDuNghia": "Nhiều người chuyển lên thành phố vì cơ hội việc làm tốt hơn.",
+      "cumTu": [
+        "on account of + noun",
+        "on account of the fact that"
+      ],
+      "hoTu": [
+        "account (n)"
+      ]
+    },
+    {
+      "chu": "thanks to",
+      "doc": "/ˈθæŋks tə/",
+      "loai": "phr",
+      "nghia": "nhờ có",
+      "cap": "B1",
+      "viDu": "Thanks to the internet, people can work from anywhere.",
+      "viDuNghia": "Nhờ có internet, con người có thể làm việc ở bất cứ đâu.",
+      "cumTu": [
+        "thanks largely to",
+        "thanks in part to"
+      ],
+      "ghiChu": "Chỉ dùng cho nguyên nhân mang lại kết quả tốt."
+    },
+    {
+      "chu": "in light of",
+      "doc": "/ɪn ˈlaɪt əv/",
+      "loai": "phr",
+      "nghia": "xét đến, dựa trên",
+      "cap": "C1",
+      "viDu": "In light of recent research, schools should start later in the morning.",
+      "viDuNghia": "Xét đến các nghiên cứu gần đây, trường học nên bắt đầu muộn hơn vào buổi sáng.",
+      "cumTu": [
+        "in light of the evidence",
+        "in light of recent events",
+        "in the light of"
+      ],
+      "ghiChu": "Anh-Anh hay dùng \"in the light of\"."
+    },
+    {
+      "chu": "in view of",
+      "doc": "/ɪn ˈvjuː əv/",
+      "loai": "phr",
+      "nghia": "xét vì, do",
+      "cap": "C1",
+      "viDu": "In view of the rising costs, the plan should be reconsidered.",
+      "viDuNghia": "Xét vì chi phí đang tăng, kế hoạch nên được xem xét lại.",
+      "cumTu": [
+        "in view of the fact that",
+        "in view of + noun"
+      ],
+      "ghiChu": "Khác \"in my view\" (theo quan điểm của tôi)."
+    },
+    {
+      "chu": "given that",
+      "doc": "/ˈɡɪvn ðæt/",
+      "loai": "conj",
+      "nghia": "xét rằng, vì rằng",
+      "cap": "C1",
+      "viDu": "Given that most jobs require computer skills, IT should be taught in all schools.",
+      "viDuNghia": "Xét rằng hầu hết công việc đòi hỏi kỹ năng máy tính, tin học nên được dạy ở mọi trường.",
+      "cumTu": [
+        "Given that + clause",
+        "given the + noun"
+      ],
+      "hoTu": [
+        "give (v)"
+      ]
+    },
+    {
+      "chu": "provided that",
+      "doc": "/prəˈvaɪdɪd ðæt/",
+      "loai": "conj",
+      "nghia": "với điều kiện là",
+      "cap": "B2",
+      "viDu": "Homework is useful provided that it is not excessive.",
+      "viDuNghia": "Bài tập về nhà có ích với điều kiện là không quá nhiều.",
+      "cumTu": [
+        "provided that + clause",
+        "providing that"
+      ],
+      "hoTu": [
+        "provide (v)"
+      ]
+    },
+    {
+      "chu": "as long as",
+      "doc": "/əz ˈlɒŋ əz/",
+      "loai": "conj",
+      "nghia": "miễn là",
+      "cap": "B1",
+      "viDu": "Video games are harmless as long as children do not play them for too long.",
+      "viDuNghia": "Trò chơi điện tử vô hại miễn là trẻ không chơi quá lâu.",
+      "cumTu": [
+        "as long as + clause",
+        "so long as"
+      ]
+    },
+    {
+      "chu": "unless",
+      "doc": "/ənˈles/",
+      "loai": "conj",
+      "nghia": "trừ khi",
+      "cap": "B1",
+      "viDu": "Traffic will get worse unless public transport is improved.",
+      "viDuNghia": "Giao thông sẽ tệ hơn trừ khi giao thông công cộng được cải thiện.",
+      "cumTu": [
+        "unless + clause",
+        "unless otherwise stated"
+      ],
+      "ghiChu": "\"Unless\" đã mang nghĩa phủ định; ✗ \"unless ... not\"."
+    },
+    {
+      "chu": "in the event of",
+      "doc": "/ɪn ði ɪˈvent əv/",
+      "loai": "phr",
+      "nghia": "trong trường hợp (xảy ra)",
+      "cap": "C1",
+      "viDu": "In the event of a fire, residents should use the stairs.",
+      "viDuNghia": "Trong trường hợp hoả hoạn, cư dân nên dùng cầu thang bộ.",
+      "cumTu": [
+        "in the event of + noun",
+        "in the event that + clause"
+      ],
+      "hoTu": [
+        "event (n)"
+      ]
+    },
+    {
+      "chu": "so that",
+      "doc": "/ˈsəʊ ðæt/",
+      "loai": "conj",
+      "nghia": "để mà",
+      "cap": "B1",
+      "viDu": "Cities should build more cycle lanes so that people can cycle safely.",
+      "viDuNghia": "Các thành phố nên xây thêm làn xe đạp để mọi người có thể đạp xe an toàn.",
+      "cumTu": [
+        "so that + S + can/could",
+        "so that + S + will/would"
+      ]
+    },
+    {
+      "chu": "so as to",
+      "doc": "/ˈsəʊ əz tə/",
+      "loai": "phr",
+      "nghia": "để (mà)",
+      "cap": "B2",
+      "viDu": "Many people work longer hours so as to earn more money.",
+      "viDuNghia": "Nhiều người làm việc nhiều giờ hơn để kiếm thêm tiền.",
+      "cumTu": [
+        "so as to + V",
+        "so as not to + V"
+      ],
+      "ghiChu": "Phủ định: \"so as not to + V\"."
+    },
+    {
+      "chu": "with a view to",
+      "doc": "/wɪð ə ˈvjuː tə/",
+      "loai": "phr",
+      "nghia": "nhằm mục đích",
+      "cap": "C1",
+      "viDu": "The government introduced the tax with a view to reducing sugar consumption.",
+      "viDuNghia": "Chính phủ áp thuế này nhằm giảm tiêu thụ đường.",
+      "cumTu": [
+        "with a view to + V-ing",
+        "with a view to improving"
+      ],
+      "ghiChu": "Theo sau là V-ing (to ở đây là giới từ)."
+    },
+    {
+      "chu": "for instance",
+      "doc": "/fər ˈɪnstəns/",
+      "loai": "phr",
+      "nghia": "ví dụ",
+      "cap": "B1",
+      "viDu": "For instance, many companies now allow staff to work from home.",
+      "viDuNghia": "Ví dụ, nhiều công ty hiện cho phép nhân viên làm việc tại nhà.",
+      "cumTu": [
+        "For instance, + clause",
+        "take ..., for instance"
+      ],
+      "hoTu": [
+        "instance (n)"
+      ],
+      "ghiChu": "Dùng xen kẽ với \"for example\" để tránh lặp."
+    },
+    {
+      "chu": "such as",
+      "doc": "/ˈsʌtʃ əz/",
+      "loai": "phr",
+      "nghia": "chẳng hạn như",
+      "cap": "B1",
+      "viDu": "Activities such as swimming and cycling are good for the heart.",
+      "viDuNghia": "Các hoạt động như bơi và đạp xe tốt cho tim.",
+      "cumTu": [
+        "such as + noun",
+        "N such as X and Y"
+      ],
+      "ghiChu": "Theo sau là danh từ/cụm danh từ, không phải mệnh đề."
+    },
+    {
+      "chu": "namely",
+      "doc": "/ˈneɪmli/",
+      "loai": "adv",
+      "nghia": "cụ thể là",
+      "cap": "C1",
+      "viDu": "Two factors, namely cost and convenience, influence how people travel.",
+      "viDuNghia": "Hai yếu tố, cụ thể là chi phí và sự tiện lợi, ảnh hưởng đến cách mọi người di chuyển.",
+      "cumTu": [
+        "namely + noun",
+        "two reasons, namely"
+      ],
+      "hoTu": [
+        "name (n)"
+      ]
+    },
+    {
+      "chu": "that is to say",
+      "doc": "/ˌðæt ɪz tə ˈseɪ/",
+      "loai": "phr",
+      "nghia": "nghĩa là, tức là",
+      "cap": "C1",
+      "viDu": "The scheme was a failure, that is to say, it did not achieve its goals.",
+      "viDuNghia": "Chương trình thất bại, tức là nó không đạt được mục tiêu.",
+      "cumTu": [
+        "that is to say, + clause",
+        "that is (i.e.)"
+      ]
+    },
+    {
+      "chu": "in other words",
+      "doc": "/ɪn ˈʌðə wɜːdz/",
+      "loai": "phr",
+      "nghia": "nói cách khác",
+      "cap": "B1",
+      "viDu": "In other words, people need more time to rest.",
+      "viDuNghia": "Nói cách khác, con người cần thêm thời gian nghỉ ngơi.",
+      "cumTu": [
+        "In other words, + clause",
+        "to put it another way"
+      ]
+    },
+    {
+      "chu": "a case in point",
+      "doc": "/ə ˌkeɪs ɪn ˈpɔɪnt/",
+      "loai": "phr",
+      "nghia": "một ví dụ điển hình",
+      "cap": "C1",
+      "viDu": "Singapore is a case in point: it has very efficient public transport.",
+      "viDuNghia": "Singapore là một ví dụ điển hình: nước này có giao thông công cộng rất hiệu quả.",
+      "cumTu": [
+        "X is a case in point",
+        "a classic case in point"
+      ]
+    },
+    {
+      "chu": "in particular",
+      "doc": "/ɪn pəˈtɪkjələ/",
+      "loai": "phr",
+      "nghia": "đặc biệt là",
+      "cap": "B1",
+      "viDu": "Young people, in particular, are affected by rising rents.",
+      "viDuNghia": "Đặc biệt là người trẻ bị ảnh hưởng bởi tiền thuê nhà tăng.",
+      "cumTu": [
+        "in particular + noun",
+        "one in particular"
+      ],
+      "hoTu": [
+        "particular (adj)",
+        "particularly (adv)"
+      ]
+    },
+    {
+      "chu": "above all",
+      "doc": "/əˌbʌv ˈɔːl/",
+      "loai": "phr",
+      "nghia": "trên hết",
+      "cap": "B2",
+      "viDu": "Above all, education should help children think for themselves.",
+      "viDuNghia": "Trên hết, giáo dục nên giúp trẻ tự suy nghĩ.",
+      "cumTu": [
+        "Above all, + clause",
+        "and above all"
+      ]
+    },
+    {
+      "chu": "first and foremost",
+      "doc": "/ˌfɜːst ənd ˈfɔːməʊst/",
+      "loai": "phr",
+      "nghia": "trước hết và quan trọng nhất",
+      "cap": "C1",
+      "viDu": "First and foremost, a teacher must be patient.",
+      "viDuNghia": "Trước hết và quan trọng nhất, giáo viên phải kiên nhẫn.",
+      "cumTu": [
+        "First and foremost, + clause",
+        "first and foremost a"
+      ]
+    },
+    {
+      "chu": "to begin with",
+      "doc": "/tə bɪˈɡɪn wɪð/",
+      "loai": "phr",
+      "nghia": "trước hết, để bắt đầu",
+      "cap": "B1",
+      "viDu": "To begin with, public transport is cheaper than driving.",
+      "viDuNghia": "Trước hết, phương tiện công cộng rẻ hơn lái xe.",
+      "cumTu": [
+        "To begin with, + clause",
+        "to start with"
+      ]
+    },
+    {
+      "chu": "firstly",
+      "doc": "/ˈfɜːstli/",
+      "loai": "adv",
+      "nghia": "thứ nhất",
+      "cap": "B1",
+      "viDu": "Firstly, technology saves time.",
+      "viDuNghia": "Thứ nhất, công nghệ tiết kiệm thời gian.",
+      "cumTu": [
+        "Firstly, ... Secondly, ...",
+        "Firstly, + clause"
+      ],
+      "hoTu": [
+        "first (adj)"
+      ]
+    },
+    {
+      "chu": "lastly",
+      "doc": "/ˈlɑːstli/",
+      "loai": "adv",
+      "nghia": "cuối cùng (ý cuối)",
+      "cap": "B1",
+      "viDu": "Lastly, the new law would be difficult to enforce.",
+      "viDuNghia": "Cuối cùng, luật mới sẽ khó thực thi.",
+      "cumTu": [
+        "Lastly, + clause",
+        "and lastly"
+      ],
+      "hoTu": [
+        "last (adj)"
+      ]
+    },
+    {
+      "chu": "in conclusion",
+      "doc": "/ɪn kənˈkluːʒn/",
+      "loai": "phr",
+      "nghia": "tóm lại, kết luận",
+      "cap": "B1",
+      "viDu": "In conclusion, the advantages of tourism outweigh its disadvantages.",
+      "viDuNghia": "Tóm lại, lợi ích của du lịch lớn hơn tác hại.",
+      "cumTu": [
+        "In conclusion, + clause",
+        "in conclusion, I believe that"
+      ],
+      "hoTu": [
+        "conclude (v)",
+        "conclusion (n)"
+      ],
+      "ghiChu": "Mở đoạn kết Task 2. ✗ \"In conclude\"."
+    },
+    {
+      "chu": "to sum up",
+      "doc": "/tə ˌsʌm ˈʌp/",
+      "loai": "phr",
+      "nghia": "tóm lại",
+      "cap": "B1",
+      "viDu": "To sum up, both sides of the argument have some merit.",
+      "viDuNghia": "Tóm lại, cả hai phía của tranh luận đều có điểm hợp lý.",
+      "cumTu": [
+        "To sum up, + clause",
+        "to summarise"
+      ],
+      "hoTu": [
+        "summary (n)",
+        "summarise (v)"
+      ]
+    },
+    {
+      "chu": "all things considered",
+      "doc": "/ˌɔːl ˌθɪŋz kənˈsɪdəd/",
+      "loai": "phr",
+      "nghia": "xét mọi mặt",
+      "cap": "C1",
+      "viDu": "All things considered, I believe that the ban is a sensible idea.",
+      "viDuNghia": "Xét mọi mặt, tôi tin rằng lệnh cấm là một ý tưởng hợp lý.",
+      "cumTu": [
+        "All things considered, + clause",
+        "all things considered, it seems"
+      ]
+    },
+    {
+      "chu": "on balance",
+      "doc": "/ɒn ˈbæləns/",
+      "loai": "phr",
+      "nghia": "cân nhắc mọi mặt",
+      "cap": "C1",
+      "viDu": "On balance, I think the benefits of the internet outweigh the drawbacks.",
+      "viDuNghia": "Cân nhắc mọi mặt, tôi cho rằng lợi ích của internet lớn hơn bất lợi.",
+      "cumTu": [
+        "On balance, + clause",
+        "on balance, I would argue"
+      ],
+      "hoTu": [
+        "balance (n/v)"
+      ]
+    },
+    {
+      "chu": "it could be argued that",
+      "doc": "/ɪt kʊd bi ˈɑːɡjuːd ðæt/",
+      "loai": "phr",
+      "nghia": "có thể lập luận rằng",
+      "cap": "C1",
+      "viDu": "It could be argued that university education should be free for everyone.",
+      "viDuNghia": "Có thể lập luận rằng giáo dục đại học nên miễn phí cho mọi người.",
+      "cumTu": [
+        "It could be argued that + clause",
+        "it is often argued that"
+      ],
+      "hoTu": [
+        "argue (v)",
+        "argument (n)"
+      ],
+      "ghiChu": "Cách nêu một quan điểm khách quan, không dùng \"I\"."
+    },
+    {
+      "chu": "it is widely believed that",
+      "doc": "/ɪt ɪz ˌwaɪdli bɪˈliːvd ðæt/",
+      "loai": "phr",
+      "nghia": "nhiều người tin rằng",
+      "cap": "B2",
+      "viDu": "It is widely believed that reading improves vocabulary.",
+      "viDuNghia": "Nhiều người tin rằng đọc sách giúp tăng vốn từ.",
+      "cumTu": [
+        "It is widely believed that",
+        "it is widely accepted that",
+        "it is generally thought that"
+      ],
+      "hoTu": [
+        "belief (n)",
+        "believe (v)"
+      ]
+    },
+    {
+      "chu": "proponents of",
+      "doc": "/prəˈpəʊnənts əv/",
+      "loai": "phr",
+      "nghia": "những người ủng hộ",
+      "cap": "C1",
+      "viDu": "Proponents of nuclear energy argue that it is clean and reliable.",
+      "viDuNghia": "Những người ủng hộ năng lượng hạt nhân cho rằng nó sạch và ổn định.",
+      "cumTu": [
+        "proponents of + noun",
+        "leading proponents of"
+      ],
+      "hoTu": [
+        "proponent (n)"
+      ],
+      "ghiChu": "Đối lập: \"opponents of\" / \"critics of\"."
+    },
+    {
+      "chu": "opponents of",
+      "doc": "/əˈpəʊnənts əv/",
+      "loai": "phr",
+      "nghia": "những người phản đối",
+      "cap": "C1",
+      "viDu": "Opponents of the plan claim that it will damage the environment.",
+      "viDuNghia": "Những người phản đối kế hoạch cho rằng nó sẽ gây hại cho môi trường.",
+      "cumTu": [
+        "opponents of + noun",
+        "fierce opponents of"
+      ],
+      "hoTu": [
+        "oppose (v)",
+        "opposition (n)"
+      ]
+    },
+    {
+      "chu": "from my perspective",
+      "doc": "/frəm maɪ pəˈspektɪv/",
+      "loai": "phr",
+      "nghia": "theo góc nhìn của tôi",
+      "cap": "B2",
+      "viDu": "From my perspective, schools should focus more on practical skills.",
+      "viDuNghia": "Theo góc nhìn của tôi, trường học nên chú trọng kỹ năng thực tế hơn.",
+      "cumTu": [
+        "From my perspective, + clause",
+        "from a ... perspective"
+      ],
+      "hoTu": [
+        "perspective (n)"
+      ]
+    },
+    {
+      "chu": "in my view",
+      "doc": "/ɪn maɪ ˈvjuː/",
+      "loai": "phr",
+      "nghia": "theo tôi",
+      "cap": "B1",
+      "viDu": "In my view, governments should invest more in public transport.",
+      "viDuNghia": "Theo tôi, chính phủ nên đầu tư nhiều hơn vào giao thông công cộng.",
+      "cumTu": [
+        "In my view, + clause",
+        "in my personal view"
+      ],
+      "hoTu": [
+        "view (n)"
+      ]
+    },
+    {
+      "chu": "as far as I am concerned",
+      "doc": "/əz ˌfɑːr əz aɪ əm kənˈsɜːnd/",
+      "loai": "phr",
+      "nghia": "đối với tôi, theo tôi",
+      "cap": "B2",
+      "viDu": "As far as I am concerned, health is more important than wealth.",
+      "viDuNghia": "Theo tôi, sức khoẻ quan trọng hơn tiền bạc.",
+      "cumTu": [
+        "As far as I am concerned, + clause",
+        "as far as I'm concerned"
+      ],
+      "hoTu": [
+        "concern (v/n)"
+      ],
+      "ghiChu": "Văn nói thường rút gọn \"As far as I'm concerned\"."
+    },
+    {
+      "chu": "I firmly believe that",
+      "doc": "/aɪ ˈfɜːmli bɪˈliːv ðæt/",
+      "loai": "phr",
+      "nghia": "tôi tin chắc rằng",
+      "cap": "B2",
+      "viDu": "I firmly believe that every child should learn to swim.",
+      "viDuNghia": "Tôi tin chắc rằng mọi trẻ em nên học bơi.",
+      "cumTu": [
+        "I firmly believe that + clause",
+        "I strongly believe that"
+      ],
+      "hoTu": [
+        "firm (adj)",
+        "belief (n)"
+      ]
+    },
+    {
+      "chu": "to a large extent",
+      "doc": "/tʊ ə ˌlɑːdʒ ɪkˈstent/",
+      "loai": "phr",
+      "nghia": "ở mức độ lớn, phần lớn",
+      "cap": "B2",
+      "viDu": "I agree to a large extent that technology has improved education.",
+      "viDuNghia": "Tôi phần lớn đồng ý rằng công nghệ đã cải thiện giáo dục.",
+      "cumTu": [
+        "agree to a large extent",
+        "to a large extent, + clause"
+      ],
+      "hoTu": [
+        "extent (n)"
+      ],
+      "ghiChu": "Đề \"To what extent do you agree?\" ⇒ nêu rõ mức độ: completely / to a large extent / to some extent."
+    },
+    {
+      "chu": "to some extent",
+      "doc": "/tə ˈsʌm ɪkˌstent/",
+      "loai": "phr",
+      "nghia": "ở một mức độ nào đó",
+      "cap": "B2",
+      "viDu": "To some extent, success depends on luck.",
+      "viDuNghia": "Ở một mức độ nào đó, thành công phụ thuộc vào may mắn.",
+      "cumTu": [
+        "agree to some extent",
+        "to some extent, + clause"
+      ],
+      "hoTu": [
+        "extent (n)"
+      ]
+    },
+    {
+      "chu": "to a certain degree",
+      "doc": "/tʊ ə ˌsɜːtn dɪˈɡriː/",
+      "loai": "phr",
+      "nghia": "ở một mức độ nhất định",
+      "cap": "C1",
+      "viDu": "To a certain degree, advertising influences what we buy.",
+      "viDuNghia": "Ở một mức độ nhất định, quảng cáo ảnh hưởng đến những gì chúng ta mua.",
+      "cumTu": [
+        "to a certain degree",
+        "to a lesser degree"
+      ],
+      "hoTu": [
+        "degree (n)"
+      ]
+    },
+    {
+      "chu": "by and large",
+      "doc": "/ˌbaɪ ənd ˈlɑːdʒ/",
+      "loai": "phr",
+      "nghia": "nhìn chung",
+      "cap": "C1",
+      "viDu": "By and large, the public supports the new law.",
+      "viDuNghia": "Nhìn chung, công chúng ủng hộ luật mới.",
+      "cumTu": [
+        "By and large, + clause",
+        "by and large true"
+      ]
+    },
+    {
+      "chu": "generally speaking",
+      "doc": "/ˌdʒenrəli ˈspiːkɪŋ/",
+      "loai": "phr",
+      "nghia": "nói chung",
+      "cap": "B2",
+      "viDu": "Generally speaking, older people are less comfortable with technology.",
+      "viDuNghia": "Nói chung, người lớn tuổi kém thoải mái hơn với công nghệ.",
+      "cumTu": [
+        "Generally speaking, + clause",
+        "generally speaking, it is"
+      ],
+      "hoTu": [
+        "general (adj)",
+        "generally (adv)"
+      ]
+    },
+    {
+      "chu": "on the whole",
+      "doc": "/ˌɒn ðə ˈhəʊl/",
+      "loai": "phr",
+      "nghia": "nhìn chung",
+      "cap": "B2",
+      "viDu": "On the whole, the conference was a success.",
+      "viDuNghia": "Nhìn chung, hội nghị đã thành công.",
+      "cumTu": [
+        "On the whole, + clause",
+        "on the whole, I agree"
+      ]
+    },
+    {
+      "chu": "as a rule",
+      "doc": "/ˌæz ə ˈruːl/",
+      "loai": "phr",
+      "nghia": "theo lệ thường, thường thì",
+      "cap": "C1",
+      "viDu": "As a rule, I try not to check my phone during meals.",
+      "viDuNghia": "Thường thì tôi cố không xem điện thoại trong bữa ăn.",
+      "cumTu": [
+        "As a rule, + clause",
+        "as a general rule"
+      ],
+      "hoTu": [
+        "rule (n)"
+      ]
+    },
+    {
+      "chu": "for the most part",
+      "doc": "/fə ðə ˈməʊst pɑːt/",
+      "loai": "phr",
+      "nghia": "phần lớn, đa phần",
+      "cap": "C1",
+      "viDu": "For the most part, students enjoyed the online lessons.",
+      "viDuNghia": "Phần lớn học sinh thích các buổi học trực tuyến.",
+      "cumTu": [
+        "For the most part, + clause",
+        "for the most part, it is"
+      ]
+    },
+    {
+      "chu": "it goes without saying that",
+      "doc": "/ɪt ˌɡəʊz wɪˌðaʊt ˈseɪɪŋ ðæt/",
+      "loai": "phr",
+      "nghia": "khỏi phải nói, hiển nhiên là",
+      "cap": "C1",
+      "viDu": "It goes without saying that health is our most valuable asset.",
+      "viDuNghia": "Khỏi phải nói, sức khoẻ là tài sản quý giá nhất của chúng ta.",
+      "cumTu": [
+        "It goes without saying that + clause",
+        "it goes without saying"
+      ]
+    },
+    {
+      "chu": "needless to say",
+      "doc": "/ˌniːdləs tə ˈseɪ/",
+      "loai": "phr",
+      "nghia": "không cần phải nói",
+      "cap": "C1",
+      "viDu": "Needless to say, the plan was very unpopular.",
+      "viDuNghia": "Không cần phải nói, kế hoạch rất không được lòng dân.",
+      "cumTu": [
+        "Needless to say, + clause",
+        "needless to say, it is"
+      ],
+      "hoTu": [
+        "need (n/v)"
+      ]
+    },
+    {
+      "chu": "there is no doubt that",
+      "doc": "/ðeər ɪz ˌnəʊ ˈdaʊt ðæt/",
+      "loai": "phr",
+      "nghia": "không còn nghi ngờ gì rằng",
+      "cap": "B2",
+      "viDu": "There is no doubt that smartphones have changed our lives.",
+      "viDuNghia": "Không còn nghi ngờ gì rằng điện thoại thông minh đã thay đổi cuộc sống của chúng ta.",
+      "cumTu": [
+        "There is no doubt that + clause",
+        "there is little doubt that"
+      ],
+      "hoTu": [
+        "doubt (n/v)",
+        "undoubtedly (adv)"
+      ]
+    },
+    {
+      "chu": "with regard to",
+      "doc": "/wɪð rɪˈɡɑːd tə/",
+      "loai": "phr",
+      "nghia": "về, liên quan đến",
+      "cap": "C1",
+      "viDu": "With regard to education, the government has made some progress.",
+      "viDuNghia": "Về giáo dục, chính phủ đã đạt được một số tiến bộ.",
+      "cumTu": [
+        "with regard to + noun",
+        "in regard to",
+        "as regards"
+      ],
+      "hoTu": [
+        "regard (v/n)",
+        "regarding (prep)"
+      ],
+      "ghiChu": "✗ \"with regards to\" trong văn viết chuẩn."
+    },
+    {
+      "chu": "regarding",
+      "doc": "/rɪˈɡɑːdɪŋ/",
+      "loai": "prep",
+      "nghia": "về, liên quan đến",
+      "cap": "B2",
+      "viDu": "There are many concerns regarding online privacy.",
+      "viDuNghia": "Có nhiều lo ngại liên quan đến quyền riêng tư trên mạng.",
+      "cumTu": [
+        "regarding + noun",
+        "questions regarding",
+        "concerns regarding"
+      ],
+      "hoTu": [
+        "regard (v)"
+      ]
+    },
+    {
+      "chu": "in terms of",
+      "doc": "/ɪn ˈtɜːmz əv/",
+      "loai": "phr",
+      "nghia": "về mặt",
+      "cap": "B2",
+      "viDu": "In terms of cost, public transport is the best option.",
+      "viDuNghia": "Về mặt chi phí, phương tiện công cộng là lựa chọn tốt nhất.",
+      "cumTu": [
+        "in terms of + noun",
+        "in financial terms",
+        "in terms of cost"
+      ],
+      "hoTu": [
+        "term (n)"
+      ],
+      "ghiChu": "Rất hay dùng ở cả Task 1 lẫn Task 2 để chuyển khía cạnh."
+    },
+    {
+      "chu": "as for",
+      "doc": "/ˈæz fə/",
+      "loai": "phr",
+      "nghia": "còn về",
+      "cap": "B2",
+      "viDu": "As for the elderly, they often prefer to shop in person.",
+      "viDuNghia": "Còn về người cao tuổi, họ thường thích mua sắm trực tiếp.",
+      "cumTu": [
+        "As for + noun",
+        "as for me"
+      ],
+      "ghiChu": "Dùng để chuyển sang đối tượng khác trong đoạn."
+    },
+    {
+      "chu": "when it comes to",
+      "doc": "/wen ɪt ˈkʌmz tə/",
+      "loai": "phr",
+      "nghia": "khi nói đến",
+      "cap": "B2",
+      "viDu": "When it comes to learning languages, practice is more important than talent.",
+      "viDuNghia": "Khi nói đến việc học ngôn ngữ, luyện tập quan trọng hơn năng khiếu.",
+      "cumTu": [
+        "When it comes to + noun/V-ing",
+        "when it comes down to it"
+      ],
+      "ghiChu": "Sau \"to\" là danh từ hoặc V-ing. Rất hữu dụng trong Speaking."
+    },
+    {
+      "chu": "in relation to",
+      "doc": "/ɪn rɪˈleɪʃn tə/",
+      "loai": "phr",
+      "nghia": "liên quan đến; so với",
+      "cap": "C1",
+      "viDu": "Salaries are low in relation to the cost of living.",
+      "viDuNghia": "Lương thấp so với chi phí sinh hoạt.",
+      "cumTu": [
+        "in relation to + noun",
+        "in relation to this"
+      ],
+      "hoTu": [
+        "relate (v)",
+        "relation (n)"
+      ]
+    },
+    {
+      "chu": "with respect to",
+      "doc": "/wɪð rɪˈspekt tə/",
+      "loai": "phr",
+      "nghia": "về, đối với",
+      "cap": "C1",
+      "viDu": "The two cities differ with respect to climate.",
+      "viDuNghia": "Hai thành phố khác nhau về khí hậu.",
+      "cumTu": [
+        "with respect to + noun",
+        "with respect to this issue"
+      ],
+      "hoTu": [
+        "respect (n)"
+      ]
+    },
+    {
+      "chu": "in comparison with",
+      "doc": "/ɪn kəmˈpærɪsn wɪð/",
+      "loai": "phr",
+      "nghia": "so với",
+      "cap": "B2",
+      "viDu": "In comparison with cars, trains produce far less pollution.",
+      "viDuNghia": "So với ô tô, tàu hoả thải ra ít ô nhiễm hơn nhiều.",
+      "cumTu": [
+        "in comparison with/to",
+        "by comparison"
+      ],
+      "hoTu": [
+        "compare (v)",
+        "comparison (n)"
+      ]
+    },
+    {
+      "chu": "by the same token",
+      "doc": "/baɪ ðə ˌseɪm ˈtəʊkən/",
+      "loai": "phr",
+      "nghia": "cùng lý lẽ đó, tương tự như vậy",
+      "cap": "C2",
+      "viDu": "Children need discipline; by the same token, they need freedom to explore.",
+      "viDuNghia": "Trẻ em cần kỷ luật; cùng lý lẽ đó, chúng cũng cần tự do khám phá.",
+      "cumTu": [
+        "by the same token, + clause",
+        "and by the same token"
+      ]
+    },
+    {
+      "chu": "rather than",
+      "doc": "/ˈrɑːðə ðæn/",
+      "loai": "phr",
+      "nghia": "thay vì",
+      "cap": "B1",
+      "viDu": "Governments should invest in prevention rather than treatment.",
+      "viDuNghia": "Chính phủ nên đầu tư vào phòng ngừa thay vì chữa trị.",
+      "cumTu": [
+        "rather than + noun/V",
+        "rather than doing sth"
+      ]
+    },
+    {
+      "chu": "instead",
+      "doc": "/ɪnˈsted/",
+      "loai": "adv",
+      "nghia": "thay vào đó",
+      "cap": "B1",
+      "viDu": "Instead, the money should be spent on schools.",
+      "viDuNghia": "Thay vào đó, số tiền nên được chi cho trường học.",
+      "cumTu": [
+        "instead of + noun/V-ing",
+        "Instead, + clause"
+      ]
+    },
+    {
+      "chu": "alternatively",
+      "doc": "/ɔːlˈtɜːnətɪvli/",
+      "loai": "adv",
+      "nghia": "hoặc là, theo cách khác",
+      "cap": "B2",
+      "viDu": "Alternatively, people could share cars to reduce traffic.",
+      "viDuNghia": "Hoặc là, mọi người có thể đi chung xe để giảm giao thông.",
+      "cumTu": [
+        "Alternatively, + clause",
+        "or alternatively"
+      ],
+      "hoTu": [
+        "alternative (n/adj)"
+      ]
+    },
+    {
+      "chu": "otherwise",
+      "doc": "/ˈʌðəwaɪz/",
+      "loai": "adv",
+      "nghia": "nếu không thì",
+      "cap": "B2",
+      "viDu": "We must act now; otherwise, it will be too late.",
+      "viDuNghia": "Chúng ta phải hành động ngay; nếu không thì sẽ quá muộn.",
+      "cumTu": [
+        "otherwise, + clause",
+        "unless otherwise stated",
+        "think otherwise"
+      ]
+    },
+    {
+      "chu": "indeed",
+      "doc": "/ɪnˈdiːd/",
+      "loai": "adv",
+      "nghia": "thật vậy, quả thực",
+      "cap": "B2",
+      "viDu": "Exercise is important; indeed, it can add years to your life.",
+      "viDuNghia": "Tập thể dục quan trọng; quả thực, nó có thể kéo dài tuổi thọ.",
+      "cumTu": [
+        "Indeed, + clause",
+        "very ... indeed"
+      ],
+      "ghiChu": "Dùng để nhấn mạnh và mở rộng ý vừa nêu."
+    },
+    {
+      "chu": "in fact",
+      "doc": "/ɪn ˈfækt/",
+      "loai": "phr",
+      "nghia": "thực ra",
+      "cap": "B1",
+      "viDu": "In fact, many people work better in the morning.",
+      "viDuNghia": "Thực ra, nhiều người làm việc tốt hơn vào buổi sáng.",
+      "cumTu": [
+        "In fact, + clause",
+        "in actual fact"
+      ]
+    },
+    {
+      "chu": "as a matter of fact",
+      "doc": "/əz ə ˌmætər əv ˈfækt/",
+      "loai": "phr",
+      "nghia": "thực tế là",
+      "cap": "B2",
+      "viDu": "As a matter of fact, I have never been abroad.",
+      "viDuNghia": "Thực tế là tôi chưa từng ra nước ngoài.",
+      "cumTu": [
+        "As a matter of fact, + clause",
+        "as a matter of fact, I"
+      ],
+      "ghiChu": "Hợp Speaking hơn Writing."
+    },
+    {
+      "chu": "in reality",
+      "doc": "/ɪn riˈæləti/",
+      "loai": "phr",
+      "nghia": "trên thực tế",
+      "cap": "B2",
+      "viDu": "In reality, few people read the terms and conditions.",
+      "viDuNghia": "Trên thực tế, ít ai đọc điều khoản và điều kiện.",
+      "cumTu": [
+        "In reality, + clause",
+        "but in reality"
+      ],
+      "hoTu": [
+        "real (adj)",
+        "reality (n)"
+      ]
+    },
+    {
+      "chu": "in practice",
+      "doc": "/ɪn ˈpræktɪs/",
+      "loai": "phr",
+      "nghia": "trong thực tế (khi áp dụng)",
+      "cap": "B2",
+      "viDu": "The law sounds good, but in practice it is difficult to enforce.",
+      "viDuNghia": "Luật nghe hay, nhưng trong thực tế rất khó thực thi.",
+      "cumTu": [
+        "in theory ... in practice",
+        "put sth into practice"
+      ],
+      "hoTu": [
+        "practise (v)"
+      ]
+    },
+    {
+      "chu": "in theory",
+      "doc": "/ɪn ˈθɪəri/",
+      "loai": "phr",
+      "nghia": "về lý thuyết",
+      "cap": "B2",
+      "viDu": "In theory, everyone has equal access to education.",
+      "viDuNghia": "Về lý thuyết, mọi người đều được tiếp cận giáo dục bình đẳng.",
+      "cumTu": [
+        "in theory ... but in practice",
+        "at least in theory"
+      ],
+      "hoTu": [
+        "theory (n)",
+        "theoretical (adj)"
+      ]
+    },
+    {
+      "chu": "in general",
+      "doc": "/ɪn ˈdʒenrəl/",
+      "loai": "phr",
+      "nghia": "nói chung",
+      "cap": "B1",
+      "viDu": "In general, young people adapt to change more quickly.",
+      "viDuNghia": "Nói chung, người trẻ thích nghi với thay đổi nhanh hơn.",
+      "cumTu": [
+        "In general, + clause",
+        "people in general"
+      ],
+      "hoTu": [
+        "general (adj)"
+      ]
+    },
+    {
+      "chu": "after all",
+      "doc": "/ˌɑːftər ˈɔːl/",
+      "loai": "phr",
+      "nghia": "suy cho cùng",
+      "cap": "B1",
+      "viDu": "We should respect older people; after all, they built the society we live in.",
+      "viDuNghia": "Chúng ta nên tôn trọng người già; suy cho cùng, họ đã xây dựng xã hội ta đang sống.",
+      "cumTu": [
+        "after all, + clause",
+        "..., after all"
+      ]
+    },
+    {
+      "chu": "even so",
+      "doc": "/ˈiːvn səʊ/",
+      "loai": "phr",
+      "nghia": "dù vậy",
+      "cap": "B2",
+      "viDu": "The hotel was expensive. Even so, it was fully booked.",
+      "viDuNghia": "Khách sạn đắt đỏ. Dù vậy, nó vẫn kín phòng.",
+      "cumTu": [
+        "Even so, + clause",
+        "but even so"
+      ]
+    },
+    {
+      "chu": "that said",
+      "doc": "/ˌðæt ˈsed/",
+      "loai": "phr",
+      "nghia": "dù nói vậy",
+      "cap": "C1",
+      "viDu": "Social media has many benefits. That said, it can also be addictive.",
+      "viDuNghia": "Mạng xã hội có nhiều lợi ích. Dù nói vậy, nó cũng có thể gây nghiện.",
+      "cumTu": [
+        "That said, + clause",
+        "having said that"
+      ]
+    },
+    {
+      "chu": "having said that",
+      "doc": "/ˌhævɪŋ ˈsed ðæt/",
+      "loai": "phr",
+      "nghia": "nói vậy nhưng",
+      "cap": "C1",
+      "viDu": "I love city life. Having said that, I sometimes need a break in the countryside.",
+      "viDuNghia": "Tôi thích cuộc sống thành phố. Nói vậy nhưng đôi khi tôi cần nghỉ ngơi ở nông thôn.",
+      "cumTu": [
+        "Having said that, + clause",
+        "that said"
+      ],
+      "ghiChu": "Rất tự nhiên trong Speaking khi muốn tự cân bằng ý của mình."
+    },
+    {
+      "chu": "even if",
+      "doc": "/ˌiːvn ˈɪf/",
+      "loai": "conj",
+      "nghia": "cho dù, ngay cả khi",
+      "cap": "B1",
+      "viDu": "Even if fuel prices fall, people should still use public transport.",
+      "viDuNghia": "Cho dù giá nhiên liệu giảm, mọi người vẫn nên dùng phương tiện công cộng.",
+      "cumTu": [
+        "even if + clause",
+        "even if it is true that"
+      ]
+    },
+    {
+      "chu": "regardless of",
+      "doc": "/rɪˈɡɑːdləs əv/",
+      "loai": "phr",
+      "nghia": "bất kể",
+      "cap": "B2",
+      "viDu": "Everyone should have access to healthcare regardless of income.",
+      "viDuNghia": "Mọi người nên được tiếp cận y tế bất kể thu nhập.",
+      "cumTu": [
+        "regardless of + noun",
+        "regardless of whether"
+      ],
+      "hoTu": [
+        "regard (v)"
+      ]
+    },
+    {
+      "chu": "irrespective of",
+      "doc": "/ˌɪrɪˈspektɪv əv/",
+      "loai": "phr",
+      "nghia": "bất kể, không kể",
+      "cap": "C1",
+      "viDu": "Students should be treated equally irrespective of their background.",
+      "viDuNghia": "Học sinh nên được đối xử bình đẳng bất kể xuất thân.",
+      "cumTu": [
+        "irrespective of + noun",
+        "irrespective of whether"
+      ],
+      "ghiChu": "Trang trọng hơn \"regardless of\"."
+    },
+    {
+      "chu": "not to mention",
+      "doc": "/ˌnɒt tə ˈmenʃn/",
+      "loai": "phr",
+      "nghia": "chưa kể đến",
+      "cap": "B2",
+      "viDu": "Cars are expensive to run, not to mention the cost of parking.",
+      "viDuNghia": "Ô tô tốn kém khi sử dụng, chưa kể chi phí gửi xe.",
+      "cumTu": [
+        "not to mention + noun",
+        "..., not to mention the fact that"
+      ]
+    },
+    {
+      "chu": "let alone",
+      "doc": "/ˌlet əˈləʊn/",
+      "loai": "phr",
+      "nghia": "huống chi, nói gì đến",
+      "cap": "C1",
+      "viDu": "Many people cannot afford to rent a flat, let alone buy one.",
+      "viDuNghia": "Nhiều người không đủ tiền thuê căn hộ, nói gì đến mua.",
+      "cumTu": [
+        "let alone + noun/V",
+        "can't ..., let alone"
+      ],
+      "ghiChu": "Đứng sau một mệnh đề phủ định."
+    },
+    {
+      "chu": "as well as",
+      "doc": "/əz ˈwel əz/",
+      "loai": "phr",
+      "nghia": "cũng như, cùng với",
+      "cap": "B1",
+      "viDu": "Exercise improves mental health as well as physical fitness.",
+      "viDuNghia": "Tập thể dục cải thiện sức khoẻ tinh thần cũng như thể lực.",
+      "cumTu": [
+        "as well as + noun/V-ing",
+        "X as well as Y"
+      ]
+    },
+    {
+      "chu": "not only ... but also",
+      "doc": "/nɒt ˈəʊnli ... bət ˈɔːlsəʊ/",
+      "loai": "phr",
+      "nghia": "không những ... mà còn",
+      "cap": "B1",
+      "viDu": "Recycling not only reduces waste but also saves energy.",
+      "viDuNghia": "Tái chế không những giảm rác thải mà còn tiết kiệm năng lượng.",
+      "cumTu": [
+        "not only X but also Y",
+        "Not only does + S + V ..."
+      ],
+      "ghiChu": "Đặt đầu câu thì đảo ngữ: \"Not only does recycling reduce waste, but it also ...\"."
+    },
+    {
+      "chu": "coupled with",
+      "doc": "/ˈkʌpld wɪð/",
+      "loai": "phr",
+      "nghia": "cộng với",
+      "cap": "C1",
+      "viDu": "High rents, coupled with low wages, make city life difficult.",
+      "viDuNghia": "Tiền thuê nhà cao, cộng với lương thấp, khiến cuộc sống thành phố khó khăn.",
+      "cumTu": [
+        "coupled with + noun",
+        "X coupled with Y"
+      ],
+      "hoTu": [
+        "couple (v)"
+      ]
+    },
+    {
+      "chu": "in turn",
+      "doc": "/ɪn ˈtɜːn/",
+      "loai": "phr",
+      "nghia": "đến lượt nó, từ đó",
+      "cap": "B2",
+      "viDu": "Stress affects sleep, which in turn affects performance at work.",
+      "viDuNghia": "Căng thẳng ảnh hưởng đến giấc ngủ, từ đó ảnh hưởng đến hiệu quả công việc.",
+      "cumTu": [
+        "which in turn",
+        "this in turn + V"
+      ],
+      "ghiChu": "Dùng để nối một chuỗi nguyên nhân – kết quả."
+    },
+    {
+      "chu": "thereby",
+      "doc": "/ˌðeəˈbaɪ/",
+      "loai": "adv",
+      "nghia": "nhờ đó, bằng cách đó",
+      "cap": "C1",
+      "viDu": "Companies can use renewable energy, thereby reducing their carbon footprint.",
+      "viDuNghia": "Các công ty có thể dùng năng lượng tái tạo, nhờ đó giảm dấu chân carbon.",
+      "cumTu": [
+        "thereby + V-ing",
+        "and thereby"
+      ]
+    },
+    {
+      "chu": "whereby",
+      "doc": "/weəˈbaɪ/",
+      "loai": "adv",
+      "nghia": "theo đó, nhờ đó (mà)",
+      "cap": "C1",
+      "viDu": "They introduced a system whereby students can borrow laptops for free.",
+      "viDuNghia": "Họ áp dụng một hệ thống theo đó học sinh có thể mượn máy tính xách tay miễn phí.",
+      "cumTu": [
+        "a system whereby",
+        "a process whereby",
+        "an arrangement whereby"
+      ]
+    },
+    {
+      "chu": "give rise to",
+      "doc": "/ˌɡɪv ˈraɪz tə/",
+      "loai": "phr",
+      "nghia": "làm nảy sinh, gây ra",
+      "cap": "C1",
+      "viDu": "Rapid urbanisation has given rise to many social problems.",
+      "viDuNghia": "Đô thị hoá nhanh đã làm nảy sinh nhiều vấn đề xã hội.",
+      "cumTu": [
+        "give rise to + noun",
+        "give rise to concerns"
+      ]
+    },
+    {
+      "chu": "result in",
+      "doc": "/rɪˈzʌlt ɪn/",
+      "loai": "phr",
+      "nghia": "dẫn đến (kết quả)",
+      "cap": "B2",
+      "viDu": "Poor diet can result in serious health problems.",
+      "viDuNghia": "Chế độ ăn kém có thể dẫn đến các vấn đề sức khoẻ nghiêm trọng.",
+      "cumTu": [
+        "result in + noun/V-ing",
+        "inevitably result in"
+      ],
+      "hoTu": [
+        "result (n)"
+      ],
+      "ghiChu": "\"Result in\" = gây ra kết quả; \"result from\" = là kết quả của. Đừng đảo ngược."
+    },
+    {
+      "chu": "result from",
+      "doc": "/rɪˈzʌlt frəm/",
+      "loai": "phr",
+      "nghia": "là kết quả của, bắt nguồn từ",
+      "cap": "B2",
+      "viDu": "Many accidents result from driver fatigue.",
+      "viDuNghia": "Nhiều tai nạn là kết quả của việc tài xế mệt mỏi.",
+      "cumTu": [
+        "result from + noun",
+        "largely result from"
+      ],
+      "hoTu": [
+        "result (n)"
+      ]
+    },
+    {
+      "chu": "lead to",
+      "doc": "/ˈliːd tə/",
+      "loai": "phr",
+      "nghia": "dẫn đến",
+      "cap": "B1",
+      "viDu": "Lack of exercise can lead to obesity.",
+      "viDuNghia": "Thiếu vận động có thể dẫn đến béo phì.",
+      "cumTu": [
+        "lead to + noun",
+        "inevitably lead to"
+      ],
+      "ghiChu": "Quá khứ: led to."
+    },
+    {
+      "chu": "contribute to",
+      "doc": "/kənˈtrɪbjuːt tə/",
+      "loai": "phr",
+      "nghia": "góp phần vào",
+      "cap": "B2",
+      "viDu": "Car exhaust fumes contribute to air pollution.",
+      "viDuNghia": "Khí thải ô tô góp phần gây ô nhiễm không khí.",
+      "cumTu": [
+        "contribute to + noun/V-ing",
+        "significantly contribute to"
+      ],
+      "hoTu": [
+        "contribution (n)",
+        "contributor (n)"
+      ]
+    },
+    {
+      "chu": "bring about",
+      "doc": "/ˌbrɪŋ əˈbaʊt/",
+      "loai": "phr",
+      "nghia": "mang lại, gây ra (thay đổi)",
+      "cap": "C1",
+      "viDu": "Technology can bring about huge changes in education.",
+      "viDuNghia": "Công nghệ có thể mang lại những thay đổi lớn trong giáo dục.",
+      "cumTu": [
+        "bring about change",
+        "bring about + noun"
+      ]
+    },
+    {
+      "chu": "be attributed to",
+      "doc": "/bi əˈtrɪbjuːtɪd tə/",
+      "loai": "phr",
+      "nghia": "được cho là do",
+      "cap": "C1",
+      "viDu": "The rise in obesity can be attributed to poor diet and lack of exercise.",
+      "viDuNghia": "Béo phì gia tăng có thể được cho là do ăn uống kém và thiếu vận động.",
+      "cumTu": [
+        "can be attributed to",
+        "be largely attributed to"
+      ],
+      "hoTu": [
+        "attribute (v)",
+        "attribution (n)"
+      ]
+    },
+    {
+      "chu": "to be honest",
+      "doc": "/tə bi ˈɒnɪst/",
+      "loai": "phr",
+      "nghia": "thành thật mà nói",
+      "cap": "B1",
+      "viDu": "To be honest, I don't read as much as I used to.",
+      "viDuNghia": "Thành thật mà nói, tôi không đọc nhiều như trước.",
+      "cumTu": [
+        "To be honest, + clause",
+        "to be perfectly honest"
+      ],
+      "hoTu": [
+        "honesty (n)"
+      ],
+      "ghiChu": "Đừng mở đầu mọi câu trả lời Speaking bằng cụm này."
+    },
+    {
+      "chu": "I suppose",
+      "doc": "/aɪ səˈpəʊz/",
+      "loai": "phr",
+      "nghia": "tôi cho là",
+      "cap": "B1",
+      "viDu": "I suppose most people would prefer to work from home.",
+      "viDuNghia": "Tôi cho là hầu hết mọi người thích làm việc tại nhà hơn.",
+      "cumTu": [
+        "I suppose so",
+        "I suppose that + clause"
+      ],
+      "hoTu": [
+        "suppose (v)"
+      ]
+    },
+    {
+      "chu": "it depends on",
+      "doc": "/ɪt dɪˈpendz ɒn/",
+      "loai": "phr",
+      "nghia": "còn tuỳ vào",
+      "cap": "B1",
+      "viDu": "It depends on the type of job and the person's personality.",
+      "viDuNghia": "Còn tuỳ vào loại công việc và tính cách của mỗi người.",
+      "cumTu": [
+        "It depends on + noun",
+        "it depends on whether"
+      ],
+      "hoTu": [
+        "depend (v)",
+        "dependent (adj)"
+      ],
+      "ghiChu": "Trong Speaking, nói \"It depends\" xong phải giải thích tiếp, đừng bỏ lửng."
+    },
+    {
+      "chu": "as far as I know",
+      "doc": "/əz ˌfɑːr əz aɪ ˈnəʊ/",
+      "loai": "phr",
+      "nghia": "theo tôi biết",
+      "cap": "B1",
+      "viDu": "As far as I know, the museum is free on Sundays.",
+      "viDuNghia": "Theo tôi biết, bảo tàng miễn phí vào Chủ nhật.",
+      "cumTu": [
+        "As far as I know, + clause",
+        "as far as I can tell"
+      ]
+    },
+    {
+      "chu": "off the top of my head",
+      "doc": "/ˌɒf ðə ˌtɒp əv maɪ ˈhed/",
+      "loai": "phr",
+      "nghia": "nghĩ ngay ra, chưa kịp suy nghĩ kỹ",
+      "cap": "C1",
+      "viDu": "Off the top of my head, I can think of three reasons.",
+      "viDuNghia": "Nghĩ ngay ra thì tôi thấy có ba lý do.",
+      "cumTu": [
+        "off the top of my head, I'd say",
+        "I can't say off the top of my head"
+      ],
+      "ghiChu": "Giúp có thời gian suy nghĩ một cách tự nhiên trong Speaking."
+    },
+    {
+      "chu": "if I had to choose",
+      "doc": "/ɪf aɪ ˌhæd tə ˈtʃuːz/",
+      "loai": "phr",
+      "nghia": "nếu phải chọn",
+      "cap": "B1",
+      "viDu": "If I had to choose, I would pick the beach over the mountains.",
+      "viDuNghia": "Nếu phải chọn, tôi sẽ chọn biển thay vì núi.",
+      "cumTu": [
+        "If I had to choose, I'd ...",
+        "if I had to pick one"
+      ]
+    },
+    {
+      "chu": "the thing is",
+      "doc": "/ðə ˈθɪŋ ɪz/",
+      "loai": "phr",
+      "nghia": "vấn đề là",
+      "cap": "B2",
+      "viDu": "The thing is, I don't really have time to cook.",
+      "viDuNghia": "Vấn đề là tôi không thực sự có thời gian nấu ăn.",
+      "cumTu": [
+        "The thing is, + clause",
+        "the thing is that"
+      ],
+      "ghiChu": "Văn nói thân mật; không dùng trong Writing."
+    },
+    {
+      "chu": "broadly speaking",
+      "doc": "/ˌbrɔːdli ˈspiːkɪŋ/",
+      "loai": "phr",
+      "nghia": "nói chung, nhìn đại thể",
+      "cap": "C1",
+      "viDu": "Broadly speaking, there are two types of learners.",
+      "viDuNghia": "Nói chung, có hai kiểu người học.",
+      "cumTu": [
+        "Broadly speaking, + clause",
+        "broadly speaking, it is"
+      ],
+      "hoTu": [
+        "broad (adj)",
+        "broadly (adv)"
+      ]
+    },
+    {
+      "chu": "in a nutshell",
+      "doc": "/ɪn ə ˈnʌtʃel/",
+      "loai": "phr",
+      "nghia": "tóm gọn lại",
+      "cap": "C1",
+      "viDu": "In a nutshell, I think the benefits outweigh the costs.",
+      "viDuNghia": "Tóm gọn lại, tôi nghĩ lợi ích lớn hơn chi phí.",
+      "cumTu": [
+        "In a nutshell, + clause",
+        "to put it in a nutshell"
+      ],
+      "ghiChu": "Hợp Speaking; trong Writing nên dùng \"In conclusion\"."
+    }
+  ]
+}

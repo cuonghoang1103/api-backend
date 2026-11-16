@@ -1,0 +1,659 @@
+{
+  "ma": "ielts-chu-de-cong-nghe",
+  "nn": "en",
+  "ten": "IELTS theo chủ đề: Công nghệ",
+  "moTa": "Từ và cụm đặc thù chủ đề Công nghệ trong đề IELTS (AI, Internet, quyền riêng tư dữ liệu, tự động hoá, đời sống số) — cấp B1–C1, ví dụ theo văn phong Writing Task 2 và Speaking.",
+  "nhom": "ielts",
+  "cap": "B2",
+  "tu": [
+    {
+      "chu": "artificial intelligence",
+      "doc": "/ˌɑːtɪfɪʃl ɪnˈtelɪdʒəns/",
+      "loai": "n",
+      "nghia": "trí tuệ nhân tạo",
+      "cap": "B2",
+      "viDu": "Artificial intelligence is already changing the way doctors diagnose illness.",
+      "viDuNghia": "Trí tuệ nhân tạo đang thay đổi cách bác sĩ chẩn đoán bệnh.",
+      "cumTu": [
+        "advances in artificial intelligence",
+        "AI-powered",
+        "the rise of artificial intelligence"
+      ],
+      "ghiChu": "Viết tắt AI; lần đầu trong bài viết nên ghi đầy đủ."
+    },
+    {
+      "chu": "chatbot",
+      "doc": "/ˈtʃætbɒt/",
+      "loai": "n",
+      "nghia": "chatbot, phần mềm trò chuyện tự động",
+      "cap": "B2",
+      "viDu": "Many companies now use chatbots to answer customer questions.",
+      "viDuNghia": "Nhiều công ty nay dùng chatbot để trả lời câu hỏi của khách.",
+      "cumTu": [
+        "an AI chatbot",
+        "talk to a chatbot"
+      ]
+    },
+    {
+      "chu": "automation",
+      "doc": "/ˌɔːtəˈmeɪʃn/",
+      "loai": "n",
+      "nghia": "tự động hoá",
+      "cap": "C1",
+      "viDu": "Automation could replace millions of factory jobs in the coming decades.",
+      "viDuNghia": "Tự động hoá có thể thay thế hàng triệu việc làm nhà máy trong những thập kỷ tới.",
+      "cumTu": [
+        "increased automation",
+        "the impact of automation",
+        "job losses due to automation"
+      ],
+      "hoTu": [
+        "automate (v)",
+        "automated (adj)"
+      ]
+    },
+    {
+      "chu": "robotics",
+      "doc": "/rəʊˈbɒtɪks/",
+      "loai": "n",
+      "nghia": "ngành rô-bốt học",
+      "cap": "C1",
+      "viDu": "Advances in robotics are transforming the car industry.",
+      "viDuNghia": "Những tiến bộ về rô-bốt học đang thay đổi ngành ô tô.",
+      "cumTu": [
+        "advances in robotics",
+        "robotics engineering"
+      ],
+      "hoTu": [
+        "robot (n)",
+        "robotic (adj)"
+      ]
+    },
+    {
+      "chu": "cutting-edge",
+      "doc": "/ˌkʌtɪŋ ˈedʒ/",
+      "loai": "adj",
+      "nghia": "tiên tiến nhất, mũi nhọn",
+      "cap": "C1",
+      "viDu": "The hospital uses cutting-edge technology to treat cancer.",
+      "viDuNghia": "Bệnh viện dùng công nghệ tiên tiến nhất để điều trị ung thư.",
+      "cumTu": [
+        "cutting-edge technology",
+        "cutting-edge research"
+      ],
+      "hoTu": [
+        "at the cutting edge (phr)"
+      ]
+    },
+    {
+      "chu": "state-of-the-art",
+      "doc": "/ˌsteɪt əv ði ˈɑːt/",
+      "loai": "adj",
+      "nghia": "hiện đại nhất",
+      "cap": "C1",
+      "viDu": "The new campus has state-of-the-art laboratories.",
+      "viDuNghia": "Khuôn viên mới có phòng thí nghiệm hiện đại nhất.",
+      "cumTu": [
+        "state-of-the-art equipment",
+        "state-of-the-art facilities"
+      ],
+      "ghiChu": "Đứng trước danh từ thì có gạch nối."
+    },
+    {
+      "chu": "technological advances",
+      "doc": "/ˌteknəˈlɒdʒɪkl ədˈvɑːnsɪz/",
+      "loai": "n",
+      "nghia": "những tiến bộ công nghệ",
+      "cap": "B2",
+      "viDu": "Technological advances have made communication faster and cheaper.",
+      "viDuNghia": "Tiến bộ công nghệ đã khiến liên lạc nhanh hơn và rẻ hơn.",
+      "cumTu": [
+        "rapid technological advances",
+        "keep up with technological advances"
+      ]
+    },
+    {
+      "chu": "obsolete",
+      "doc": "/ˈɒbsəliːt/",
+      "loai": "adj",
+      "nghia": "lỗi thời, không còn dùng",
+      "cap": "C1",
+      "viDu": "Many traditional jobs will become obsolete because of AI.",
+      "viDuNghia": "Nhiều nghề truyền thống sẽ trở nên lỗi thời vì AI.",
+      "cumTu": [
+        "become obsolete",
+        "render something obsolete",
+        "obsolete technology"
+      ],
+      "hoTu": [
+        "obsolescence (n)"
+      ]
+    },
+    {
+      "chu": "outdated",
+      "doc": "/ˌaʊtˈdeɪtɪd/",
+      "loai": "adj",
+      "nghia": "lạc hậu, cũ",
+      "cap": "B2",
+      "viDu": "Many schools still rely on outdated textbooks and equipment.",
+      "viDuNghia": "Nhiều trường vẫn dựa vào sách và thiết bị lạc hậu.",
+      "cumTu": [
+        "outdated equipment",
+        "outdated methods",
+        "hopelessly outdated"
+      ]
+    },
+    {
+      "chu": "gadget",
+      "doc": "/ˈɡædʒɪt/",
+      "loai": "n",
+      "nghia": "đồ dùng công nghệ nhỏ, thiết bị",
+      "cap": "B2",
+      "viDu": "Children today are surrounded by electronic gadgets from a young age.",
+      "viDuNghia": "Trẻ em ngày nay được bao quanh bởi thiết bị điện tử từ nhỏ.",
+      "cumTu": [
+        "electronic gadgets",
+        "the latest gadgets",
+        "kitchen gadgets"
+      ],
+      "hoTu": [
+        "gadgetry (n)"
+      ]
+    },
+    {
+      "chu": "wearable",
+      "doc": "/ˈweərəbl/",
+      "loai": "adj",
+      "nghia": "đeo được (thiết bị trên người)",
+      "cap": "C1",
+      "viDu": "Wearable devices can track your heart rate and sleep.",
+      "viDuNghia": "Thiết bị đeo được có thể theo dõi nhịp tim và giấc ngủ.",
+      "cumTu": [
+        "wearable technology",
+        "wearable devices",
+        "wearables (n)"
+      ]
+    },
+    {
+      "chu": "user-friendly",
+      "doc": "/ˌjuːzə ˈfrendli/",
+      "loai": "adj",
+      "nghia": "dễ sử dụng, thân thiện với người dùng",
+      "cap": "B2",
+      "viDu": "The app is so user-friendly that even my grandparents can use it.",
+      "viDuNghia": "Ứng dụng dễ dùng đến mức ông bà tôi cũng dùng được.",
+      "cumTu": [
+        "a user-friendly interface",
+        "make something more user-friendly"
+      ]
+    },
+    {
+      "chu": "tech-savvy",
+      "doc": "/ˌtek ˈsævi/",
+      "loai": "adj",
+      "nghia": "thạo công nghệ",
+      "cap": "C1",
+      "viDu": "Younger, more tech-savvy employees adapt quickly to new software.",
+      "viDuNghia": "Nhân viên trẻ, thạo công nghệ thích nghi nhanh với phần mềm mới.",
+      "cumTu": [
+        "tech-savvy generation",
+        "tech-savvy users"
+      ],
+      "ghiChu": "Dùng tốt trong Speaking khi nói về người trẻ."
+    },
+    {
+      "chu": "technophobe",
+      "doc": "/ˈteknəfəʊb/",
+      "loai": "n",
+      "nghia": "người sợ/ngại công nghệ",
+      "cap": "C1",
+      "viDu": "My father is a bit of a technophobe and refuses to use online banking.",
+      "viDuNghia": "Bố tôi hơi ngại công nghệ và không chịu dùng ngân hàng trực tuyến.",
+      "cumTu": [
+        "a self-confessed technophobe"
+      ],
+      "hoTu": [
+        "technophobia (n)"
+      ]
+    },
+    {
+      "chu": "computer literate",
+      "doc": "/kəmˌpjuːtə ˈlɪtərət/",
+      "loai": "adj",
+      "nghia": "biết sử dụng máy tính",
+      "cap": "C1",
+      "viDu": "Almost every job now requires applicants to be computer literate.",
+      "viDuNghia": "Gần như mọi công việc giờ đều yêu cầu ứng viên biết dùng máy tính.",
+      "cumTu": [
+        "be computer literate"
+      ],
+      "hoTu": [
+        "computer literacy (n)"
+      ]
+    },
+    {
+      "chu": "digital literacy",
+      "doc": "/ˌdɪdʒɪtl ˈlɪtərəsi/",
+      "loai": "n",
+      "nghia": "năng lực số",
+      "cap": "C1",
+      "viDu": "Digital literacy should be taught alongside reading and writing.",
+      "viDuNghia": "Năng lực số nên được dạy song song với đọc và viết.",
+      "cumTu": [
+        "improve digital literacy",
+        "digital literacy skills"
+      ]
+    },
+    {
+      "chu": "digital divide",
+      "doc": "/ˌdɪdʒɪtl dɪˈvaɪd/",
+      "loai": "n",
+      "nghia": "khoảng cách số (giữa người có và không có công nghệ)",
+      "cap": "C1",
+      "viDu": "The pandemic exposed the digital divide between rich and poor students.",
+      "viDuNghia": "Đại dịch phơi bày khoảng cách số giữa học sinh giàu và nghèo.",
+      "cumTu": [
+        "bridge the digital divide",
+        "widen the digital divide"
+      ]
+    },
+    {
+      "chu": "digital native",
+      "doc": "/ˌdɪdʒɪtl ˈneɪtɪv/",
+      "loai": "n",
+      "nghia": "người lớn lên cùng công nghệ số",
+      "cap": "C1",
+      "viDu": "As digital natives, today's teenagers learn new apps without instructions.",
+      "viDuNghia": "Là thế hệ lớn lên cùng công nghệ số, thiếu niên ngày nay học ứng dụng mới mà không cần hướng dẫn.",
+      "cumTu": [
+        "a generation of digital natives"
+      ]
+    },
+    {
+      "chu": "cyberbullying",
+      "doc": "/ˈsaɪbəbʊliɪŋ/",
+      "loai": "n",
+      "nghia": "bắt nạt qua mạng",
+      "cap": "C1",
+      "viDu": "Cyberbullying can follow children home in a way that school bullying cannot.",
+      "viDuNghia": "Bắt nạt qua mạng có thể theo trẻ về tận nhà, điều mà bắt nạt ở trường không làm được.",
+      "cumTu": [
+        "victims of cyberbullying",
+        "tackle cyberbullying"
+      ],
+      "hoTu": [
+        "cyberbully (n/v)"
+      ]
+    },
+    {
+      "chu": "cybercrime",
+      "doc": "/ˈsaɪbəkraɪm/",
+      "loai": "n",
+      "nghia": "tội phạm mạng",
+      "cap": "C1",
+      "viDu": "Cybercrime costs businesses billions of dollars every year.",
+      "viDuNghia": "Tội phạm mạng gây thiệt hại hàng tỉ đô la cho doanh nghiệp mỗi năm.",
+      "cumTu": [
+        "fight cybercrime",
+        "a rise in cybercrime"
+      ],
+      "hoTu": [
+        "cybercriminal (n)"
+      ]
+    },
+    {
+      "chu": "hacker",
+      "doc": "/ˈhækə/",
+      "loai": "n",
+      "nghia": "tin tặc",
+      "cap": "B2",
+      "viDu": "Hackers stole the personal details of millions of customers.",
+      "viDuNghia": "Tin tặc đã đánh cắp thông tin cá nhân của hàng triệu khách hàng.",
+      "cumTu": [
+        "computer hackers",
+        "targeted by hackers"
+      ],
+      "hoTu": [
+        "hack (v)",
+        "hacking (n)"
+      ]
+    },
+    {
+      "chu": "identity theft",
+      "doc": "/aɪˈdentəti ˌθeft/",
+      "loai": "n",
+      "nghia": "đánh cắp danh tính",
+      "cap": "C1",
+      "viDu": "Sharing too much online increases the risk of identity theft.",
+      "viDuNghia": "Chia sẻ quá nhiều trên mạng làm tăng nguy cơ bị đánh cắp danh tính.",
+      "cumTu": [
+        "victims of identity theft",
+        "protect against identity theft"
+      ]
+    },
+    {
+      "chu": "data privacy",
+      "doc": "/ˈdeɪtə ˌprɪvəsi/",
+      "loai": "n",
+      "nghia": "quyền riêng tư dữ liệu",
+      "cap": "B2",
+      "viDu": "Many users are worried about data privacy on social media.",
+      "viDuNghia": "Nhiều người dùng lo lắng về quyền riêng tư dữ liệu trên mạng xã hội.",
+      "cumTu": [
+        "concerns about data privacy",
+        "data privacy laws"
+      ],
+      "ghiChu": "Phát âm \"data\" Anh-Anh /ˈdeɪtə/."
+    },
+    {
+      "chu": "personal data",
+      "doc": "/ˌpɜːsənl ˈdeɪtə/",
+      "loai": "n",
+      "nghia": "dữ liệu cá nhân",
+      "cap": "B2",
+      "viDu": "Tech companies collect huge amounts of personal data.",
+      "viDuNghia": "Các công ty công nghệ thu thập lượng khổng lồ dữ liệu cá nhân.",
+      "cumTu": [
+        "collect personal data",
+        "misuse of personal data",
+        "protect personal data"
+      ]
+    },
+    {
+      "chu": "virtual reality",
+      "doc": "/ˌvɜːtʃuəl riˈæləti/",
+      "loai": "n",
+      "nghia": "thực tế ảo",
+      "cap": "B2",
+      "viDu": "Virtual reality could transform the way history is taught.",
+      "viDuNghia": "Thực tế ảo có thể thay đổi cách dạy môn lịch sử.",
+      "cumTu": [
+        "virtual reality headset",
+        "in virtual reality"
+      ],
+      "ghiChu": "Viết tắt VR."
+    },
+    {
+      "chu": "augmented reality",
+      "doc": "/ɔːɡˌmentɪd riˈæləti/",
+      "loai": "n",
+      "nghia": "thực tế tăng cường",
+      "cap": "C1",
+      "viDu": "Augmented reality lets shoppers see how furniture would look in their home.",
+      "viDuNghia": "Thực tế tăng cường cho người mua thấy đồ nội thất sẽ trông thế nào trong nhà.",
+      "cumTu": [
+        "augmented reality apps",
+        "use augmented reality"
+      ],
+      "ghiChu": "Viết tắt AR — khác VR ở chỗ chồng hình ảnh số lên thế giới thật."
+    },
+    {
+      "chu": "addictive",
+      "doc": "/əˈdɪktɪv/",
+      "loai": "adj",
+      "nghia": "gây nghiện",
+      "cap": "B2",
+      "viDu": "Social media apps are designed to be addictive.",
+      "viDuNghia": "Ứng dụng mạng xã hội được thiết kế để gây nghiện.",
+      "cumTu": [
+        "highly addictive",
+        "addictive behaviour"
+      ],
+      "hoTu": [
+        "addiction (n)",
+        "addict (n)"
+      ]
+    },
+    {
+      "chu": "addiction",
+      "doc": "/əˈdɪkʃn/",
+      "loai": "n",
+      "nghia": "sự nghiện",
+      "cap": "B2",
+      "viDu": "Smartphone addiction is affecting young people's sleep and concentration.",
+      "viDuNghia": "Nghiện điện thoại thông minh đang ảnh hưởng tới giấc ngủ và sự tập trung của người trẻ.",
+      "cumTu": [
+        "internet addiction",
+        "gaming addiction",
+        "overcome an addiction"
+      ],
+      "hoTu": [
+        "addictive (adj)",
+        "addicted (adj)"
+      ]
+    },
+    {
+      "chu": "information overload",
+      "doc": "/ˌɪnfəˈmeɪʃn ˌəʊvələʊd/",
+      "loai": "n",
+      "nghia": "quá tải thông tin",
+      "cap": "C1",
+      "viDu": "Constant notifications lead to information overload and stress.",
+      "viDuNghia": "Thông báo liên tục dẫn tới quá tải thông tin và căng thẳng.",
+      "cumTu": [
+        "suffer from information overload"
+      ]
+    },
+    {
+      "chu": "fake news",
+      "doc": "/ˌfeɪk ˈnjuːz/",
+      "loai": "n",
+      "nghia": "tin giả",
+      "cap": "B2",
+      "viDu": "Fake news spreads faster on social media than real news.",
+      "viDuNghia": "Tin giả lan trên mạng xã hội nhanh hơn tin thật.",
+      "cumTu": [
+        "spread fake news",
+        "combat fake news"
+      ]
+    },
+    {
+      "chu": "social networking",
+      "doc": "/ˌsəʊʃl ˈnetwɜːkɪŋ/",
+      "loai": "n",
+      "nghia": "mạng xã hội (hoạt động kết nối trên mạng)",
+      "cap": "B2",
+      "viDu": "Social networking sites help people stay in touch with friends abroad.",
+      "viDuNghia": "Các trang mạng xã hội giúp mọi người giữ liên lạc với bạn ở nước ngoài.",
+      "cumTu": [
+        "social networking sites",
+        "use social networking"
+      ]
+    },
+    {
+      "chu": "e-commerce",
+      "doc": "/ˌiː ˈkɒmɜːs/",
+      "loai": "n",
+      "nghia": "thương mại điện tử",
+      "cap": "B2",
+      "viDu": "The growth of e-commerce has forced many small shops to close.",
+      "viDuNghia": "Sự phát triển của thương mại điện tử đã buộc nhiều cửa hàng nhỏ đóng cửa.",
+      "cumTu": [
+        "the rise of e-commerce",
+        "e-commerce platforms"
+      ]
+    },
+    {
+      "chu": "streaming",
+      "doc": "/ˈstriːmɪŋ/",
+      "loai": "n",
+      "nghia": "phát trực tuyến",
+      "cap": "B2",
+      "viDu": "Streaming services have changed how people watch films.",
+      "viDuNghia": "Dịch vụ phát trực tuyến đã thay đổi cách mọi người xem phim.",
+      "cumTu": [
+        "streaming services",
+        "video streaming",
+        "live streaming"
+      ],
+      "hoTu": [
+        "stream (v)"
+      ]
+    },
+    {
+      "chu": "cloud computing",
+      "doc": "/ˌklaʊd kəmˈpjuːtɪŋ/",
+      "loai": "n",
+      "nghia": "điện toán đám mây",
+      "cap": "C1",
+      "viDu": "Cloud computing allows staff to access files from anywhere.",
+      "viDuNghia": "Điện toán đám mây cho phép nhân viên truy cập tệp từ bất cứ đâu.",
+      "cumTu": [
+        "move to cloud computing",
+        "cloud computing services"
+      ]
+    },
+    {
+      "chu": "broadband",
+      "doc": "/ˈbrɔːdbænd/",
+      "loai": "n",
+      "nghia": "Internet băng thông rộng",
+      "cap": "B2",
+      "viDu": "Many rural areas still lack fast broadband.",
+      "viDuNghia": "Nhiều vùng nông thôn vẫn thiếu Internet băng thông rộng nhanh.",
+      "cumTu": [
+        "broadband connection",
+        "high-speed broadband"
+      ]
+    },
+    {
+      "chu": "connectivity",
+      "doc": "/ˌkɒnekˈtɪvəti/",
+      "loai": "n",
+      "nghia": "khả năng kết nối",
+      "cap": "C1",
+      "viDu": "Improved connectivity has allowed more people to work from home.",
+      "viDuNghia": "Kết nối tốt hơn đã giúp nhiều người làm việc tại nhà.",
+      "cumTu": [
+        "internet connectivity",
+        "poor connectivity"
+      ],
+      "hoTu": [
+        "connect (v)"
+      ]
+    },
+    {
+      "chu": "remote working",
+      "doc": "/rɪˌməʊt ˈwɜːkɪŋ/",
+      "loai": "n",
+      "nghia": "làm việc từ xa",
+      "cap": "B2",
+      "viDu": "Remote working saves commuting time but can feel isolating.",
+      "viDuNghia": "Làm việc từ xa tiết kiệm thời gian đi lại nhưng có thể gây cô lập.",
+      "cumTu": [
+        "the shift to remote working",
+        "embrace remote working"
+      ],
+      "hoTu": [
+        "work remotely (phr)"
+      ]
+    },
+    {
+      "chu": "self-driving car",
+      "doc": "/ˌself ˌdraɪvɪŋ ˈkɑː/",
+      "loai": "n",
+      "nghia": "xe tự lái",
+      "cap": "B2",
+      "viDu": "Self-driving cars could reduce accidents caused by human error.",
+      "viDuNghia": "Xe tự lái có thể giảm tai nạn do lỗi con người.",
+      "cumTu": [
+        "develop self-driving cars",
+        "self-driving technology"
+      ],
+      "ghiChu": "Đồng nghĩa: driverless car, autonomous vehicle."
+    },
+    {
+      "chu": "drone",
+      "doc": "/drəʊn/",
+      "loai": "n",
+      "nghia": "máy bay không người lái",
+      "cap": "B2",
+      "viDu": "Drones are now used to deliver medicine to remote villages.",
+      "viDuNghia": "Máy bay không người lái nay được dùng để giao thuốc tới các làng xa.",
+      "cumTu": [
+        "fly a drone",
+        "drone delivery"
+      ]
+    },
+    {
+      "chu": "3D printing",
+      "doc": "/ˌθriː diː ˈprɪntɪŋ/",
+      "loai": "n",
+      "nghia": "in 3D",
+      "cap": "B2",
+      "viDu": "3D printing may allow hospitals to produce replacement body parts.",
+      "viDuNghia": "In 3D có thể cho phép bệnh viện tạo các bộ phận cơ thể thay thế.",
+      "cumTu": [
+        "3D printing technology",
+        "use 3D printing"
+      ]
+    },
+    {
+      "chu": "genetic engineering",
+      "doc": "/dʒəˌnetɪk ˌendʒɪˈnɪərɪŋ/",
+      "loai": "n",
+      "nghia": "kỹ thuật di truyền",
+      "cap": "C1",
+      "viDu": "Genetic engineering raises difficult ethical questions.",
+      "viDuNghia": "Kỹ thuật di truyền đặt ra những câu hỏi đạo đức khó.",
+      "cumTu": [
+        "advances in genetic engineering",
+        "the ethics of genetic engineering"
+      ]
+    },
+    {
+      "chu": "genetically modified",
+      "doc": "/dʒəˌnetɪkli ˈmɒdɪfaɪd/",
+      "loai": "adj",
+      "nghia": "biến đổi gen",
+      "cap": "C1",
+      "viDu": "Some consumers refuse to buy genetically modified food.",
+      "viDuNghia": "Một số người tiêu dùng không mua thực phẩm biến đổi gen.",
+      "cumTu": [
+        "genetically modified crops",
+        "genetically modified food"
+      ],
+      "ghiChu": "Viết tắt GM (Anh) / GMO."
+    },
+    {
+      "chu": "biotechnology",
+      "doc": "/ˌbaɪəʊtekˈnɒlədʒi/",
+      "loai": "n",
+      "nghia": "công nghệ sinh học",
+      "cap": "C1",
+      "viDu": "Biotechnology has produced crops that resist drought.",
+      "viDuNghia": "Công nghệ sinh học đã tạo ra cây trồng chịu hạn.",
+      "cumTu": [
+        "advances in biotechnology",
+        "the biotechnology industry"
+      ]
+    },
+    {
+      "chu": "space exploration",
+      "doc": "/ˈspeɪs ˌekspləˌreɪʃn/",
+      "loai": "n",
+      "nghia": "thám hiểm không gian",
+      "cap": "B2",
+      "viDu": "Some people think money spent on space exploration should go to fighting poverty.",
+      "viDuNghia": "Một số người cho rằng tiền chi cho thám hiểm không gian nên dành để chống đói nghèo.",
+      "cumTu": [
+        "fund space exploration",
+        "the cost of space exploration"
+      ],
+      "ghiChu": "Đề Task 2 kinh điển: chi tiền cho vũ trụ hay vấn đề trên Trái Đất."
+    },
+    {
+      "chu": "labour-saving",
+      "doc": "/ˈleɪbə ˌseɪvɪŋ/",
+      "loai": "adj",
+      "nghia": "tiết kiệm sức lao động",
+      "cap": "C1",
+      "viDu": "Labour-saving devices like washing machines gave women more free time.",
+      "viDuNghia": "Thiết bị tiết kiệm sức lao động như máy giặt cho phụ nữ nhiều thời gian rảnh hơn.",
+      "cumTu": [
+        "labour-saving devices",
+        "labour-saving technology"
+      ]
+    }
+  ]
+}

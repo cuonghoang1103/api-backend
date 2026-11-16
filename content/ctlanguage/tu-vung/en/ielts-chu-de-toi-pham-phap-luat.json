@@ -1,0 +1,608 @@
+{
+  "ma": "ielts-chu-de-toi-pham-phap-luat",
+  "nn": "en",
+  "ten": "IELTS theo chủ đề: Tội phạm và pháp luật",
+  "moTa": "Từ và cụm đặc thù chủ đề Tội phạm – Pháp luật trong đề IELTS (hình phạt, cải tạo, tội phạm vị thành niên, thực thi pháp luật) — cấp B1–C1, ví dụ theo văn phong Writing Task 2 và Speaking.",
+  "nhom": "ielts",
+  "cap": "C1",
+  "tu": [
+    {
+      "chu": "crime rate",
+      "doc": "/ˈkraɪm ˌreɪt/",
+      "loai": "n",
+      "nghia": "tỉ lệ tội phạm",
+      "cap": "B2",
+      "viDu": "The crime rate tends to rise when unemployment is high.",
+      "viDuNghia": "Tỉ lệ tội phạm có xu hướng tăng khi thất nghiệp cao.",
+      "cumTu": [
+        "a high crime rate",
+        "reduce the crime rate",
+        "crime rates have fallen"
+      ]
+    },
+    {
+      "chu": "violent crime",
+      "doc": "/ˌvaɪələnt ˈkraɪm/",
+      "loai": "n",
+      "nghia": "tội phạm bạo lực",
+      "cap": "B2",
+      "viDu": "Violent crime has fallen in most Western countries since the 1990s.",
+      "viDuNghia": "Tội phạm bạo lực đã giảm ở hầu hết các nước phương Tây từ thập niên 1990.",
+      "cumTu": [
+        "commit violent crime",
+        "a rise in violent crime"
+      ]
+    },
+    {
+      "chu": "petty crime",
+      "doc": "/ˌpeti ˈkraɪm/",
+      "loai": "n",
+      "nghia": "tội phạm vặt",
+      "cap": "C1",
+      "viDu": "Petty crime such as pickpocketing is common in tourist areas.",
+      "viDuNghia": "Tội phạm vặt như móc túi phổ biến ở khu du lịch.",
+      "cumTu": [
+        "commit petty crime",
+        "petty criminals"
+      ]
+    },
+    {
+      "chu": "white-collar crime",
+      "doc": "/ˌwaɪt ˌkɒlə ˈkraɪm/",
+      "loai": "n",
+      "nghia": "tội phạm kinh tế (cổ cồn trắng)",
+      "cap": "C1",
+      "viDu": "White-collar crime often receives lighter sentences than street crime.",
+      "viDuNghia": "Tội phạm kinh tế thường nhận án nhẹ hơn tội phạm đường phố.",
+      "cumTu": [
+        "investigate white-collar crime"
+      ]
+    },
+    {
+      "chu": "juvenile delinquency",
+      "doc": "/ˌdʒuːvənaɪl dɪˈlɪŋkwənsi/",
+      "loai": "n",
+      "nghia": "phạm pháp ở trẻ vị thành niên",
+      "cap": "C1",
+      "viDu": "Poor parenting is often blamed for juvenile delinquency.",
+      "viDuNghia": "Nuôi dạy con kém thường bị đổ lỗi cho tình trạng trẻ vị thành niên phạm pháp.",
+      "cumTu": [
+        "prevent juvenile delinquency",
+        "causes of juvenile delinquency"
+      ],
+      "hoTu": [
+        "juvenile delinquent (n)"
+      ]
+    },
+    {
+      "chu": "juvenile",
+      "doc": "/ˈdʒuːvənaɪl/",
+      "loai": "adj",
+      "nghia": "(thuộc) vị thành niên",
+      "cap": "C1",
+      "viDu": "Juvenile offenders should be treated differently from adults.",
+      "viDuNghia": "Người phạm tội vị thành niên nên được đối xử khác với người lớn.",
+      "cumTu": [
+        "juvenile offenders",
+        "juvenile crime",
+        "juvenile court"
+      ]
+    },
+    {
+      "chu": "repeat offender",
+      "doc": "/rɪˌpiːt əˈfendə/",
+      "loai": "n",
+      "nghia": "người tái phạm",
+      "cap": "C1",
+      "viDu": "Most crimes are committed by a small number of repeat offenders.",
+      "viDuNghia": "Phần lớn tội phạm do một số ít người tái phạm gây ra.",
+      "cumTu": [
+        "persistent repeat offenders"
+      ]
+    },
+    {
+      "chu": "first-time offender",
+      "doc": "/ˌfɜːst taɪm əˈfendə/",
+      "loai": "n",
+      "nghia": "người phạm tội lần đầu",
+      "cap": "C1",
+      "viDu": "First-time offenders could do community work instead of going to prison.",
+      "viDuNghia": "Người phạm tội lần đầu có thể làm công ích thay vì vào tù.",
+      "cumTu": [
+        "treat first-time offenders leniently"
+      ]
+    },
+    {
+      "chu": "reoffend",
+      "doc": "/ˌriːəˈfend/",
+      "loai": "v",
+      "nghia": "tái phạm",
+      "cap": "C1",
+      "viDu": "Prisoners who learn a trade are less likely to reoffend.",
+      "viDuNghia": "Phạm nhân học được nghề ít có khả năng tái phạm hơn.",
+      "cumTu": [
+        "likely to reoffend",
+        "reduce the risk of reoffending"
+      ],
+      "hoTu": [
+        "reoffending (n)"
+      ]
+    },
+    {
+      "chu": "recidivism",
+      "doc": "/rɪˈsɪdɪvɪzəm/",
+      "loai": "n",
+      "nghia": "tình trạng tái phạm",
+      "cap": "C2",
+      "viDu": "Education in prison has been shown to lower recidivism.",
+      "viDuNghia": "Giáo dục trong trại giam được chứng minh làm giảm tái phạm.",
+      "cumTu": [
+        "recidivism rates",
+        "reduce recidivism"
+      ],
+      "hoTu": [
+        "recidivist (n)"
+      ],
+      "ghiChu": "Từ trang trọng, rất \"ăn điểm\" Lexical Resource nếu dùng đúng."
+    },
+    {
+      "chu": "rehabilitation",
+      "doc": "/ˌriːəˌbɪlɪˈteɪʃn/",
+      "loai": "n",
+      "nghia": "sự cải tạo, phục hồi (người phạm tội)",
+      "cap": "C1",
+      "viDu": "Prisons should focus on rehabilitation rather than punishment.",
+      "viDuNghia": "Nhà tù nên tập trung vào cải tạo hơn là trừng phạt.",
+      "cumTu": [
+        "rehabilitation programmes",
+        "focus on rehabilitation"
+      ],
+      "hoTu": [
+        "rehabilitate (v)"
+      ],
+      "ghiChu": "Cũng dùng cho cai nghiện / phục hồi chức năng."
+    },
+    {
+      "chu": "rehabilitate",
+      "doc": "/ˌriːəˈbɪlɪteɪt/",
+      "loai": "v",
+      "nghia": "cải tạo, giúp tái hoà nhập",
+      "cap": "C1",
+      "viDu": "The aim of prison should be to rehabilitate offenders.",
+      "viDuNghia": "Mục đích của nhà tù nên là cải tạo người phạm tội.",
+      "cumTu": [
+        "rehabilitate offenders",
+        "rehabilitate prisoners"
+      ],
+      "hoTu": [
+        "rehabilitation (n)"
+      ]
+    },
+    {
+      "chu": "imprisonment",
+      "doc": "/ɪmˈprɪznmənt/",
+      "loai": "n",
+      "nghia": "sự bỏ tù, án tù",
+      "cap": "C1",
+      "viDu": "He was sentenced to five years' imprisonment.",
+      "viDuNghia": "Anh ta bị kết án năm năm tù.",
+      "cumTu": [
+        "life imprisonment",
+        "a term of imprisonment"
+      ],
+      "hoTu": [
+        "imprison (v)"
+      ]
+    },
+    {
+      "chu": "capital punishment",
+      "doc": "/ˌkæpɪtl ˈpʌnɪʃmənt/",
+      "loai": "n",
+      "nghia": "án tử hình",
+      "cap": "C1",
+      "viDu": "Supporters of capital punishment claim that it deters murder.",
+      "viDuNghia": "Người ủng hộ án tử hình cho rằng nó răn đe tội giết người.",
+      "cumTu": [
+        "abolish capital punishment",
+        "support capital punishment"
+      ],
+      "ghiChu": "Đồng nghĩa: the death penalty."
+    },
+    {
+      "chu": "death penalty",
+      "doc": "/ˈdeθ ˌpenlti/",
+      "loai": "n",
+      "nghia": "án tử hình",
+      "cap": "B2",
+      "viDu": "More than half the world's countries have abolished the death penalty.",
+      "viDuNghia": "Hơn một nửa số nước trên thế giới đã bãi bỏ án tử hình.",
+      "cumTu": [
+        "abolish the death penalty",
+        "face the death penalty"
+      ]
+    },
+    {
+      "chu": "deterrent",
+      "doc": "/dɪˈterənt/",
+      "loai": "n",
+      "nghia": "biện pháp răn đe",
+      "cap": "C1",
+      "viDu": "Heavy fines act as a deterrent to dangerous driving.",
+      "viDuNghia": "Phạt nặng có tác dụng răn đe lái xe nguy hiểm.",
+      "cumTu": [
+        "act as a deterrent",
+        "an effective deterrent"
+      ],
+      "hoTu": [
+        "deter (v)"
+      ]
+    },
+    {
+      "chu": "custody",
+      "doc": "/ˈkʌstədi/",
+      "loai": "n",
+      "nghia": "sự tạm giam; quyền nuôi con",
+      "cap": "C1",
+      "viDu": "The suspect remains in custody while police investigate.",
+      "viDuNghia": "Nghi phạm vẫn bị tạm giam trong khi cảnh sát điều tra.",
+      "cumTu": [
+        "in custody",
+        "police custody",
+        "custody of the children"
+      ],
+      "hoTu": [
+        "custodial (adj)"
+      ]
+    },
+    {
+      "chu": "custodial sentence",
+      "doc": "/kʌˌstəʊdiəl ˈsentəns/",
+      "loai": "n",
+      "nghia": "án giam",
+      "cap": "C2",
+      "viDu": "Judges are using fewer custodial sentences for minor offences.",
+      "viDuNghia": "Thẩm phán đang ít dùng án giam hơn cho các tội nhẹ.",
+      "cumTu": [
+        "a custodial sentence",
+        "avoid a custodial sentence"
+      ],
+      "ghiChu": "Đối lập: non-custodial sentence (án không giam: phạt tiền, công ích…)."
+    },
+    {
+      "chu": "parole",
+      "doc": "/pəˈrəʊl/",
+      "loai": "n",
+      "nghia": "sự tha có điều kiện",
+      "cap": "C1",
+      "viDu": "He was released on parole after serving half his sentence.",
+      "viDuNghia": "Anh ta được tha có điều kiện sau khi thụ án một nửa.",
+      "cumTu": [
+        "on parole",
+        "be eligible for parole"
+      ]
+    },
+    {
+      "chu": "probation",
+      "doc": "/prəˈbeɪʃn/",
+      "loai": "n",
+      "nghia": "án treo; thời gian thử thách",
+      "cap": "C1",
+      "viDu": "Instead of prison, she was put on probation for two years.",
+      "viDuNghia": "Thay vì vào tù, cô ấy bị án treo hai năm.",
+      "cumTu": [
+        "on probation",
+        "probation officer"
+      ],
+      "hoTu": [
+        "probationary (adj)"
+      ],
+      "ghiChu": "Nghĩa khác: thời gian thử việc."
+    },
+    {
+      "chu": "inmate",
+      "doc": "/ˈɪnmeɪt/",
+      "loai": "n",
+      "nghia": "phạm nhân",
+      "cap": "C1",
+      "viDu": "Overcrowding makes it hard to give inmates proper education.",
+      "viDuNghia": "Quá tải khiến khó giáo dục phạm nhân một cách đúng mực.",
+      "cumTu": [
+        "prison inmates",
+        "former inmates"
+      ]
+    },
+    {
+      "chu": "conviction",
+      "doc": "/kənˈvɪkʃn/",
+      "loai": "n",
+      "nghia": "sự kết án; tiền án",
+      "cap": "C1",
+      "viDu": "A previous conviction can make it difficult to find a job.",
+      "viDuNghia": "Một tiền án có thể khiến khó tìm việc.",
+      "cumTu": [
+        "a criminal conviction",
+        "previous convictions",
+        "secure a conviction"
+      ],
+      "hoTu": [
+        "convict (v)"
+      ],
+      "ghiChu": "Nghĩa khác: niềm tin chắc chắn."
+    },
+    {
+      "chu": "criminal record",
+      "doc": "/ˌkrɪmɪnl ˈrekɔːd/",
+      "loai": "n",
+      "nghia": "hồ sơ tiền án tiền sự",
+      "cap": "B2",
+      "viDu": "Having a criminal record can prevent you from travelling to some countries.",
+      "viDuNghia": "Có tiền án có thể khiến bạn không được đến một số nước.",
+      "cumTu": [
+        "have a criminal record",
+        "a clean criminal record"
+      ]
+    },
+    {
+      "chu": "criminal justice system",
+      "doc": "/ˌkrɪmɪnl ˈdʒʌstɪs ˌsɪstəm/",
+      "loai": "n",
+      "nghia": "hệ thống tư pháp hình sự",
+      "cap": "C1",
+      "viDu": "The criminal justice system should treat rich and poor equally.",
+      "viDuNghia": "Hệ thống tư pháp hình sự nên đối xử bình đẳng với người giàu và nghèo.",
+      "cumTu": [
+        "reform the criminal justice system"
+      ]
+    },
+    {
+      "chu": "law enforcement",
+      "doc": "/ˈlɔː ɪnˌfɔːsmənt/",
+      "loai": "n",
+      "nghia": "việc thực thi pháp luật; lực lượng chấp pháp",
+      "cap": "C1",
+      "viDu": "Better law enforcement is needed to stop illegal logging.",
+      "viDuNghia": "Cần thực thi pháp luật tốt hơn để ngăn khai thác gỗ trái phép.",
+      "cumTu": [
+        "law enforcement agencies",
+        "law enforcement officers"
+      ]
+    },
+    {
+      "chu": "police force",
+      "doc": "/pəˈliːs ˌfɔːs/",
+      "loai": "n",
+      "nghia": "lực lượng cảnh sát",
+      "cap": "B2",
+      "viDu": "The city plans to increase the size of its police force.",
+      "viDuNghia": "Thành phố dự định tăng quân số lực lượng cảnh sát.",
+      "cumTu": [
+        "join the police force",
+        "a well-trained police force"
+      ]
+    },
+    {
+      "chu": "rule of law",
+      "doc": "/ˌruːl əv ˈlɔː/",
+      "loai": "n",
+      "nghia": "pháp quyền",
+      "cap": "C1",
+      "viDu": "The rule of law means that no one is above the law.",
+      "viDuNghia": "Pháp quyền nghĩa là không ai đứng trên pháp luật.",
+      "cumTu": [
+        "uphold the rule of law",
+        "respect for the rule of law"
+      ]
+    },
+    {
+      "chu": "prosecute",
+      "doc": "/ˈprɒsɪkjuːt/",
+      "loai": "v",
+      "nghia": "truy tố",
+      "cap": "C1",
+      "viDu": "Parents who allow children to miss school can be prosecuted.",
+      "viDuNghia": "Cha mẹ để con bỏ học có thể bị truy tố.",
+      "cumTu": [
+        "be prosecuted for",
+        "prosecute offenders"
+      ],
+      "hoTu": [
+        "prosecution (n)",
+        "prosecutor (n)"
+      ]
+    },
+    {
+      "chu": "prosecution",
+      "doc": "/ˌprɒsɪˈkjuːʃn/",
+      "loai": "n",
+      "nghia": "sự truy tố; bên công tố",
+      "cap": "C1",
+      "viDu": "Fear of prosecution stops many companies from polluting.",
+      "viDuNghia": "Nỗi sợ bị truy tố khiến nhiều công ty không dám gây ô nhiễm.",
+      "cumTu": [
+        "face prosecution",
+        "the prosecution case"
+      ],
+      "hoTu": [
+        "prosecute (v)"
+      ]
+    },
+    {
+      "chu": "legalise",
+      "doc": "/ˈliːɡəlaɪz/",
+      "loai": "v",
+      "nghia": "hợp pháp hoá",
+      "cap": "C1",
+      "viDu": "Some countries have decided to legalise certain drugs.",
+      "viDuNghia": "Một số nước đã quyết định hợp pháp hoá một số loại ma tuý.",
+      "cumTu": [
+        "legalise drugs",
+        "calls to legalise"
+      ],
+      "hoTu": [
+        "legalisation (n)"
+      ],
+      "ghiChu": "Anh-Mỹ: legalize."
+    },
+    {
+      "chu": "crack down on",
+      "doc": "/ˌkræk ˈdaʊn ɒn/",
+      "loai": "phr",
+      "nghia": "trấn áp, mạnh tay xử lý",
+      "cap": "C1",
+      "viDu": "The police are cracking down on drink-driving over the holidays.",
+      "viDuNghia": "Cảnh sát đang mạnh tay xử lý lái xe say rượu dịp lễ.",
+      "cumTu": [
+        "crack down on crime",
+        "crack down on corruption"
+      ],
+      "hoTu": [
+        "crackdown (n)"
+      ]
+    },
+    {
+      "chu": "CCTV",
+      "doc": "/ˌsiː siː tiː ˈviː/",
+      "loai": "n",
+      "nghia": "camera giám sát (hệ thống truyền hình mạch kín)",
+      "cap": "B2",
+      "viDu": "CCTV cameras in city centres may deter street crime.",
+      "viDuNghia": "Camera giám sát ở trung tâm thành phố có thể răn đe tội phạm đường phố.",
+      "cumTu": [
+        "CCTV cameras",
+        "caught on CCTV",
+        "CCTV footage"
+      ]
+    },
+    {
+      "chu": "drug abuse",
+      "doc": "/ˈdrʌɡ əˌbjuːs/",
+      "loai": "n",
+      "nghia": "lạm dụng ma tuý",
+      "cap": "B2",
+      "viDu": "Drug abuse is closely linked to other types of crime.",
+      "viDuNghia": "Lạm dụng ma tuý liên quan chặt chẽ tới các loại tội phạm khác.",
+      "cumTu": [
+        "tackle drug abuse",
+        "drug abuse among teenagers"
+      ]
+    },
+    {
+      "chu": "drug trafficking",
+      "doc": "/ˈdrʌɡ ˌtræfɪkɪŋ/",
+      "loai": "n",
+      "nghia": "buôn bán ma tuý",
+      "cap": "C1",
+      "viDu": "Drug trafficking carries very heavy penalties in Vietnam.",
+      "viDuNghia": "Buôn bán ma tuý chịu hình phạt rất nặng ở Việt Nam.",
+      "cumTu": [
+        "be convicted of drug trafficking"
+      ],
+      "hoTu": [
+        "trafficker (n)"
+      ]
+    },
+    {
+      "chu": "offence",
+      "doc": "/əˈfens/",
+      "loai": "n",
+      "nghia": "hành vi phạm tội, vi phạm",
+      "cap": "B2",
+      "viDu": "Driving without insurance is a criminal offence.",
+      "viDuNghia": "Lái xe không có bảo hiểm là một hành vi phạm tội.",
+      "cumTu": [
+        "a criminal offence",
+        "a minor offence",
+        "commit an offence"
+      ],
+      "hoTu": [
+        "offend (v)",
+        "offender (n)"
+      ],
+      "ghiChu": "Anh-Mỹ: offense."
+    },
+    {
+      "chu": "drink-driving",
+      "doc": "/ˌdrɪŋk ˈdraɪvɪŋ/",
+      "loai": "n",
+      "nghia": "lái xe khi say rượu",
+      "cap": "B2",
+      "viDu": "Drink-driving causes thousands of deaths every year.",
+      "viDuNghia": "Lái xe khi say rượu gây ra hàng nghìn ca tử vong mỗi năm.",
+      "cumTu": [
+        "drink-driving laws",
+        "be arrested for drink-driving"
+      ],
+      "ghiChu": "Anh-Mỹ: drunk driving."
+    },
+    {
+      "chu": "lenient",
+      "doc": "/ˈliːniənt/",
+      "loai": "adj",
+      "nghia": "khoan hồng, nhẹ tay",
+      "cap": "C1",
+      "viDu": "Many people feel the courts are too lenient with young offenders.",
+      "viDuNghia": "Nhiều người thấy toà án quá nhẹ tay với người phạm tội trẻ.",
+      "cumTu": [
+        "a lenient sentence",
+        "too lenient"
+      ],
+      "hoTu": [
+        "leniency (n)"
+      ],
+      "ghiChu": "Đối lập: harsh, severe."
+    },
+    {
+      "chu": "harsh punishment",
+      "doc": "/ˌhɑːʃ ˈpʌnɪʃmənt/",
+      "loai": "n",
+      "nghia": "hình phạt hà khắc",
+      "cap": "B2",
+      "viDu": "Harsh punishment alone will not solve the problem of youth crime.",
+      "viDuNghia": "Chỉ hình phạt hà khắc sẽ không giải quyết được tội phạm thanh thiếu niên.",
+      "cumTu": [
+        "impose harsh punishment",
+        "harsher punishments"
+      ]
+    },
+    {
+      "chu": "abide by",
+      "doc": "/əˈbaɪd baɪ/",
+      "loai": "phr",
+      "nghia": "tuân thủ",
+      "cap": "C1",
+      "viDu": "Everyone must abide by the law, including politicians.",
+      "viDuNghia": "Mọi người đều phải tuân thủ pháp luật, kể cả chính trị gia.",
+      "cumTu": [
+        "abide by the rules",
+        "abide by the law"
+      ]
+    },
+    {
+      "chu": "gun control",
+      "doc": "/ˈɡʌn kənˌtrəʊl/",
+      "loai": "n",
+      "nghia": "kiểm soát súng đạn",
+      "cap": "C1",
+      "viDu": "Stricter gun control would reduce the number of shootings.",
+      "viDuNghia": "Kiểm soát súng chặt hơn sẽ giảm số vụ xả súng.",
+      "cumTu": [
+        "gun control laws",
+        "tighter gun control"
+      ]
+    },
+    {
+      "chu": "gang",
+      "doc": "/ɡæŋ/",
+      "loai": "n",
+      "nghia": "băng nhóm",
+      "cap": "B2",
+      "viDu": "Teenagers without hope often join gangs.",
+      "viDuNghia": "Thiếu niên mất hy vọng thường gia nhập băng nhóm.",
+      "cumTu": [
+        "join a gang",
+        "gang violence",
+        "a criminal gang"
+      ]
+    }
+  ]
+}

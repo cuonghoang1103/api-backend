@@ -1,0 +1,1671 @@
+{
+  "ma": "ielts-bieu-do",
+  "nn": "en",
+  "ten": "IELTS · Mô tả biểu đồ (Writing Task 1)",
+  "moTa": "Động từ, danh từ, cụm từ và trạng từ để mô tả xu hướng, tỉ lệ, so sánh số liệu trong Task 1: fluctuate, plummet, level off, account for, the proportion of, a slight decline, respectively…",
+  "nhom": "ielts",
+  "cap": "B2",
+  "tu": [
+    {
+      "chu": "fluctuate",
+      "doc": "/ˈflʌktʃueɪt/",
+      "loai": "v",
+      "nghia": "dao động, lên xuống thất thường",
+      "cap": "C1",
+      "viDu": "The price of oil fluctuated between 60 and 80 dollars a barrel over the period.",
+      "viDuNghia": "Giá dầu dao động trong khoảng 60 đến 80 đô la một thùng trong suốt giai đoạn.",
+      "cumTu": [
+        "fluctuate between X and Y",
+        "fluctuate wildly",
+        "fluctuate around"
+      ],
+      "hoTu": [
+        "fluctuation (n)"
+      ],
+      "ghiChu": "Dùng khi đường đồ thị lên xuống liên tục, không theo một hướng rõ ràng."
+    },
+    {
+      "chu": "fluctuation",
+      "doc": "/ˌflʌktʃuˈeɪʃn/",
+      "loai": "n",
+      "nghia": "sự dao động",
+      "cap": "C1",
+      "viDu": "There were considerable fluctuations in visitor numbers throughout the year.",
+      "viDuNghia": "Số lượng khách dao động đáng kể trong suốt năm.",
+      "cumTu": [
+        "considerable fluctuations",
+        "seasonal fluctuations",
+        "fluctuations in"
+      ],
+      "hoTu": [
+        "fluctuate (v)"
+      ]
+    },
+    {
+      "chu": "plummet",
+      "doc": "/ˈplʌmɪt/",
+      "loai": "v",
+      "nghia": "lao dốc, giảm mạnh đột ngột",
+      "cap": "C1",
+      "viDu": "Sales of DVDs plummeted after streaming services became popular.",
+      "viDuNghia": "Doanh số DVD lao dốc sau khi các dịch vụ xem phim trực tuyến trở nên phổ biến.",
+      "cumTu": [
+        "plummet to",
+        "plummet by",
+        "prices plummet"
+      ],
+      "ghiChu": "Mạnh hơn \"fall sharply\"; không nói \"plummet down\"."
+    },
+    {
+      "chu": "plunge",
+      "doc": "/plʌndʒ/",
+      "loai": "v",
+      "nghia": "giảm mạnh, tụt dốc",
+      "cap": "C1",
+      "viDu": "The temperature plunged to minus ten degrees in January.",
+      "viDuNghia": "Nhiệt độ tụt xuống âm mười độ vào tháng Một.",
+      "cumTu": [
+        "plunge to",
+        "plunge by",
+        "a sharp plunge"
+      ],
+      "hoTu": [
+        "plunge (n)"
+      ]
+    },
+    {
+      "chu": "surge",
+      "doc": "/sɜːdʒ/",
+      "loai": "v",
+      "nghia": "tăng vọt",
+      "cap": "C1",
+      "viDu": "The number of online shoppers surged during the pandemic.",
+      "viDuNghia": "Số người mua sắm trực tuyến tăng vọt trong đại dịch.",
+      "cumTu": [
+        "surge to",
+        "a surge in",
+        "a surge in demand"
+      ],
+      "hoTu": [
+        "surge (n)"
+      ]
+    },
+    {
+      "chu": "soar",
+      "doc": "/sɔː/",
+      "loai": "v",
+      "nghia": "tăng vọt",
+      "cap": "C1",
+      "viDu": "House prices soared in the capital between 2010 and 2020.",
+      "viDuNghia": "Giá nhà ở thủ đô tăng vọt từ năm 2010 đến 2020.",
+      "cumTu": [
+        "soar to",
+        "prices soar",
+        "soaring costs"
+      ],
+      "hoTu": [
+        "soaring (adj)"
+      ]
+    },
+    {
+      "chu": "dwindle",
+      "doc": "/ˈdwɪndl/",
+      "loai": "v",
+      "nghia": "hao hụt dần, teo dần",
+      "cap": "C2",
+      "viDu": "The number of farmers dwindled steadily over the century.",
+      "viDuNghia": "Số nông dân giảm dần đều qua thế kỷ.",
+      "cumTu": [
+        "dwindle to",
+        "dwindling numbers",
+        "dwindling resources"
+      ],
+      "hoTu": [
+        "dwindling (adj)"
+      ],
+      "ghiChu": "Diễn tả giảm từ từ tới mức rất nhỏ; khác \"plummet\" (giảm đột ngột)."
+    },
+    {
+      "chu": "reach a peak",
+      "doc": "/ˌriːtʃ ə ˈpiːk/",
+      "loai": "phr",
+      "nghia": "đạt đỉnh",
+      "cap": "B2",
+      "viDu": "Unemployment reached a peak of 12% in 2009.",
+      "viDuNghia": "Tỉ lệ thất nghiệp đạt đỉnh 12% vào năm 2009.",
+      "cumTu": [
+        "reach a peak of",
+        "reach a peak in",
+        "peak at"
+      ],
+      "hoTu": [
+        "peak (n/v)"
+      ],
+      "ghiChu": "Biến thể: \"peak at 12%\", \"hit a peak of 12%\"."
+    },
+    {
+      "chu": "hit a low",
+      "doc": "/ˌhɪt ə ˈləʊ/",
+      "loai": "phr",
+      "nghia": "chạm đáy",
+      "cap": "B2",
+      "viDu": "The birth rate hit a low of 1.2 children per woman in 2020.",
+      "viDuNghia": "Tỉ lệ sinh chạm đáy 1,2 con mỗi phụ nữ vào năm 2020.",
+      "cumTu": [
+        "hit a low of",
+        "hit an all-time low",
+        "hit a record low"
+      ],
+      "hoTu": [
+        "low (n)"
+      ]
+    },
+    {
+      "chu": "bottom out",
+      "doc": "/ˌbɒtəm ˈaʊt/",
+      "loai": "phr",
+      "nghia": "chạm đáy rồi ngừng giảm",
+      "cap": "C1",
+      "viDu": "Car sales bottomed out in 2009 and then began to recover.",
+      "viDuNghia": "Doanh số ô tô chạm đáy năm 2009 rồi bắt đầu phục hồi.",
+      "cumTu": [
+        "bottom out at",
+        "finally bottom out",
+        "prices bottom out"
+      ],
+      "hoTu": [
+        "bottom (n)"
+      ]
+    },
+    {
+      "chu": "level off",
+      "doc": "/ˌlevl ˈɒf/",
+      "loai": "phr",
+      "nghia": "chững lại, đi ngang",
+      "cap": "C1",
+      "viDu": "After rising for five years, the figure levelled off at around 40%.",
+      "viDuNghia": "Sau năm năm tăng, con số chững lại ở mức khoảng 40%.",
+      "cumTu": [
+        "level off at",
+        "begin to level off",
+        "level out"
+      ],
+      "hoTu": [
+        "level (n/v)"
+      ],
+      "ghiChu": "Anh-Anh viết \"levelled\", Anh-Mỹ \"leveled\"."
+    },
+    {
+      "chu": "stabilise",
+      "doc": "/ˈsteɪbəlaɪz/",
+      "loai": "v",
+      "nghia": "ổn định lại",
+      "cap": "C1",
+      "viDu": "The population stabilised at about 5 million after 2015.",
+      "viDuNghia": "Dân số ổn định ở mức khoảng 5 triệu sau năm 2015.",
+      "cumTu": [
+        "stabilise at",
+        "begin to stabilise",
+        "stabilise prices"
+      ],
+      "hoTu": [
+        "stable (adj)",
+        "stability (n)"
+      ],
+      "ghiChu": "Anh-Mỹ viết \"stabilize\"."
+    },
+    {
+      "chu": "remain stable",
+      "doc": "/rɪˌmeɪn ˈsteɪbl/",
+      "loai": "phr",
+      "nghia": "giữ ổn định",
+      "cap": "B1",
+      "viDu": "The number of students remained stable at around 2,000 a year.",
+      "viDuNghia": "Số sinh viên giữ ổn định ở mức khoảng 2.000 mỗi năm.",
+      "cumTu": [
+        "remain stable at",
+        "remain relatively stable",
+        "remain stable throughout"
+      ],
+      "hoTu": [
+        "stability (n)"
+      ]
+    },
+    {
+      "chu": "remain unchanged",
+      "doc": "/rɪˌmeɪn ʌnˈtʃeɪndʒd/",
+      "loai": "phr",
+      "nghia": "không thay đổi",
+      "cap": "B2",
+      "viDu": "The proportion of part-time workers remained unchanged between 2000 and 2010.",
+      "viDuNghia": "Tỉ lệ người làm bán thời gian không thay đổi từ năm 2000 đến 2010.",
+      "cumTu": [
+        "remain unchanged at",
+        "remain virtually unchanged",
+        "remain largely unchanged"
+      ],
+      "hoTu": [
+        "change (v)"
+      ]
+    },
+    {
+      "chu": "rise",
+      "doc": "/raɪz/",
+      "loai": "v",
+      "nghia": "tăng lên",
+      "cap": "B1",
+      "viDu": "Average temperatures are expected to rise by two degrees by the end of the century.",
+      "viDuNghia": "Nhiệt độ trung bình được dự báo sẽ tăng hai độ vào cuối thế kỷ.",
+      "cumTu": [
+        "rise by",
+        "rise to",
+        "rise sharply"
+      ],
+      "hoTu": [
+        "rise (n)",
+        "rising (adj)"
+      ],
+      "ghiChu": "\"Rise\" (số liệu tự tăng, không có tân ngữ) ≠ \"raise\" (nâng cái gì lên). Quá khứ: rose – risen."
+    },
+    {
+      "chu": "increase",
+      "doc": "/ɪnˈkriːs/",
+      "loai": "v",
+      "nghia": "tăng",
+      "cap": "B1",
+      "viDu": "The number of tourists increased from 2 million to 5 million.",
+      "viDuNghia": "Số khách du lịch tăng từ 2 triệu lên 5 triệu.",
+      "cumTu": [
+        "increase by",
+        "increase from X to Y",
+        "increase dramatically"
+      ],
+      "hoTu": [
+        "increase (n)",
+        "increasingly (adv)"
+      ],
+      "ghiChu": "Danh từ nhấn âm đầu /ˈɪnkriːs/. \"Increase by 10%\" = tăng thêm 10%; \"increase to 10%\" = tăng lên mức 10%."
+    },
+    {
+      "chu": "decrease",
+      "doc": "/dɪˈkriːs/",
+      "loai": "v",
+      "nghia": "giảm",
+      "cap": "B1",
+      "viDu": "The proportion of smokers decreased steadily over the decade.",
+      "viDuNghia": "Tỉ lệ người hút thuốc giảm đều trong thập kỷ.",
+      "cumTu": [
+        "decrease by",
+        "decrease to",
+        "decrease steadily"
+      ],
+      "hoTu": [
+        "decrease (n)"
+      ],
+      "ghiChu": "Danh từ nhấn âm đầu /ˈdiːkriːs/."
+    },
+    {
+      "chu": "decline",
+      "doc": "/dɪˈklaɪn/",
+      "loai": "v",
+      "nghia": "suy giảm",
+      "cap": "B2",
+      "viDu": "Newspaper sales have declined since the arrival of the internet.",
+      "viDuNghia": "Doanh số báo giấy đã suy giảm kể từ khi có internet.",
+      "cumTu": [
+        "decline by",
+        "decline steadily",
+        "a decline in"
+      ],
+      "hoTu": [
+        "decline (n)"
+      ]
+    },
+    {
+      "chu": "drop",
+      "doc": "/drɒp/",
+      "loai": "v",
+      "nghia": "giảm, rơi xuống",
+      "cap": "B1",
+      "viDu": "The unemployment rate dropped to 5% in 2019.",
+      "viDuNghia": "Tỉ lệ thất nghiệp giảm xuống 5% năm 2019.",
+      "cumTu": [
+        "drop to",
+        "drop by",
+        "a drop in"
+      ],
+      "hoTu": [
+        "drop (n)"
+      ]
+    },
+    {
+      "chu": "climb",
+      "doc": "/klaɪm/",
+      "loai": "v",
+      "nghia": "tăng dần (leo lên)",
+      "cap": "B1",
+      "viDu": "Car ownership climbed steadily to reach 70% in 2020.",
+      "viDuNghia": "Tỉ lệ sở hữu ô tô tăng đều, đạt 70% năm 2020.",
+      "cumTu": [
+        "climb to",
+        "climb steadily",
+        "climb by"
+      ],
+      "hoTu": [
+        "climb (n)"
+      ]
+    },
+    {
+      "chu": "double",
+      "doc": "/ˈdʌbl/",
+      "loai": "v",
+      "nghia": "tăng gấp đôi",
+      "cap": "B1",
+      "viDu": "The number of cyclists doubled between 2005 and 2015.",
+      "viDuNghia": "Số người đi xe đạp tăng gấp đôi từ năm 2005 đến 2015.",
+      "cumTu": [
+        "almost double",
+        "more than double",
+        "double in size"
+      ],
+      "hoTu": [
+        "double (adj/n)"
+      ]
+    },
+    {
+      "chu": "triple",
+      "doc": "/ˈtrɪpl/",
+      "loai": "v",
+      "nghia": "tăng gấp ba",
+      "cap": "B2",
+      "viDu": "Spending on healthcare tripled over the thirty-year period.",
+      "viDuNghia": "Chi tiêu cho y tế tăng gấp ba trong giai đoạn ba mươi năm.",
+      "cumTu": [
+        "nearly triple",
+        "triple in size",
+        "more than triple"
+      ],
+      "hoTu": [
+        "triple (adj)"
+      ]
+    },
+    {
+      "chu": "halve",
+      "doc": "/hɑːv/",
+      "loai": "v",
+      "nghia": "giảm một nửa",
+      "cap": "C1",
+      "viDu": "The number of daily smokers halved between 1990 and 2010.",
+      "viDuNghia": "Số người hút thuốc hằng ngày giảm một nửa từ năm 1990 đến 2010.",
+      "cumTu": [
+        "almost halve",
+        "be halved",
+        "halve the cost"
+      ],
+      "hoTu": [
+        "half (n)"
+      ],
+      "ghiChu": "Chữ \"l\" câm: /hɑːv/."
+    },
+    {
+      "chu": "rebound",
+      "doc": "/rɪˈbaʊnd/",
+      "loai": "v",
+      "nghia": "bật tăng trở lại",
+      "cap": "C1",
+      "viDu": "After a sharp fall in 2020, air travel rebounded strongly.",
+      "viDuNghia": "Sau khi giảm mạnh năm 2020, ngành hàng không bật tăng trở lại mạnh mẽ.",
+      "cumTu": [
+        "rebound strongly",
+        "rebound to",
+        "a rebound in"
+      ],
+      "hoTu": [
+        "rebound (n)"
+      ]
+    },
+    {
+      "chu": "slump",
+      "doc": "/slʌmp/",
+      "loai": "v",
+      "nghia": "sụt giảm mạnh",
+      "cap": "C1",
+      "viDu": "Sales slumped by 30% during the recession.",
+      "viDuNghia": "Doanh số sụt giảm 30% trong thời kỳ suy thoái.",
+      "cumTu": [
+        "slump to",
+        "slump by",
+        "a slump in"
+      ],
+      "hoTu": [
+        "slump (n)"
+      ]
+    },
+    {
+      "chu": "dip",
+      "doc": "/dɪp/",
+      "loai": "v",
+      "nghia": "giảm nhẹ (tạm thời)",
+      "cap": "B2",
+      "viDu": "The figure dipped slightly in 2015 before rising again.",
+      "viDuNghia": "Con số giảm nhẹ năm 2015 trước khi tăng trở lại.",
+      "cumTu": [
+        "dip slightly",
+        "a dip in",
+        "dip below"
+      ],
+      "hoTu": [
+        "dip (n)"
+      ]
+    },
+    {
+      "chu": "upward trend",
+      "doc": "/ˌʌpwəd ˈtrend/",
+      "loai": "n",
+      "nghia": "xu hướng tăng",
+      "cap": "B2",
+      "viDu": "There was an upward trend in the number of electric cars sold.",
+      "viDuNghia": "Số ô tô điện bán ra có xu hướng tăng.",
+      "cumTu": [
+        "a clear upward trend",
+        "show an upward trend",
+        "follow an upward trend"
+      ],
+      "hoTu": [
+        "upward (adj)",
+        "upwards (adv)"
+      ]
+    },
+    {
+      "chu": "downward trend",
+      "doc": "/ˌdaʊnwəd ˈtrend/",
+      "loai": "n",
+      "nghia": "xu hướng giảm",
+      "cap": "B2",
+      "viDu": "Coal consumption followed a downward trend throughout the period.",
+      "viDuNghia": "Tiêu thụ than theo xu hướng giảm trong suốt giai đoạn.",
+      "cumTu": [
+        "a steady downward trend",
+        "show a downward trend",
+        "reverse the downward trend"
+      ],
+      "hoTu": [
+        "downward (adj)",
+        "downwards (adv)"
+      ]
+    },
+    {
+      "chu": "a slight decline",
+      "doc": "/ə ˌslaɪt dɪˈklaɪn/",
+      "loai": "phr",
+      "nghia": "sự giảm nhẹ",
+      "cap": "B2",
+      "viDu": "There was a slight decline in the number of visitors in 2018.",
+      "viDuNghia": "Số lượng khách giảm nhẹ vào năm 2018.",
+      "cumTu": [
+        "a slight decline in",
+        "experience a slight decline",
+        "show a slight decline"
+      ],
+      "hoTu": [
+        "slight (adj)",
+        "slightly (adv)"
+      ],
+      "ghiChu": "Mẫu \"There was a + adj + noun + in + X\" giúp đa dạng câu so với \"X declined slightly\"."
+    },
+    {
+      "chu": "a sharp rise",
+      "doc": "/ə ˌʃɑːp ˈraɪz/",
+      "loai": "phr",
+      "nghia": "sự tăng mạnh",
+      "cap": "B2",
+      "viDu": "There was a sharp rise in house prices after 2015.",
+      "viDuNghia": "Giá nhà tăng mạnh sau năm 2015.",
+      "cumTu": [
+        "a sharp rise in",
+        "see a sharp rise",
+        "a sharp rise of 20%"
+      ],
+      "hoTu": [
+        "sharp (adj)",
+        "sharply (adv)"
+      ]
+    },
+    {
+      "chu": "a steady increase",
+      "doc": "/ə ˌstedi ˈɪnkriːs/",
+      "loai": "phr",
+      "nghia": "sự tăng đều",
+      "cap": "B2",
+      "viDu": "The chart shows a steady increase in online sales.",
+      "viDuNghia": "Biểu đồ cho thấy doanh số trực tuyến tăng đều.",
+      "cumTu": [
+        "a steady increase in",
+        "show a steady increase",
+        "a steady increase of"
+      ],
+      "hoTu": [
+        "steady (adj)",
+        "steadily (adv)"
+      ]
+    },
+    {
+      "chu": "a gradual decrease",
+      "doc": "/ə ˌɡrædʒuəl ˈdiːkriːs/",
+      "loai": "phr",
+      "nghia": "sự giảm dần",
+      "cap": "B2",
+      "viDu": "There was a gradual decrease in the birth rate over the period.",
+      "viDuNghia": "Tỉ lệ sinh giảm dần trong giai đoạn này.",
+      "cumTu": [
+        "a gradual decrease in",
+        "show a gradual decrease",
+        "a gradual decrease of"
+      ],
+      "hoTu": [
+        "gradual (adj)",
+        "gradually (adv)"
+      ]
+    },
+    {
+      "chu": "a dramatic fall",
+      "doc": "/ə drəˌmætɪk ˈfɔːl/",
+      "loai": "phr",
+      "nghia": "sự giảm mạnh, đột biến",
+      "cap": "B2",
+      "viDu": "The graph shows a dramatic fall in the price of laptops.",
+      "viDuNghia": "Đồ thị cho thấy giá máy tính xách tay giảm mạnh.",
+      "cumTu": [
+        "a dramatic fall in",
+        "experience a dramatic fall",
+        "a dramatic fall of"
+      ],
+      "hoTu": [
+        "dramatic (adj)",
+        "dramatically (adv)"
+      ]
+    },
+    {
+      "chu": "account for",
+      "doc": "/əˈkaʊnt fə/",
+      "loai": "phr",
+      "nghia": "chiếm (tỉ lệ)",
+      "cap": "B2",
+      "viDu": "Women accounted for 45% of the workforce in 2020.",
+      "viDuNghia": "Phụ nữ chiếm 45% lực lượng lao động năm 2020.",
+      "cumTu": [
+        "account for X%",
+        "account for the largest share",
+        "account for a third of"
+      ],
+      "hoTu": [
+        "account (n)"
+      ],
+      "ghiChu": "Còn có nghĩa \"giải thích\" (How do you account for this?). Khi nghĩa là \"chiếm\" thì không dùng bị động."
+    },
+    {
+      "chu": "the proportion of",
+      "doc": "/ðə prəˈpɔːʃn əv/",
+      "loai": "phr",
+      "nghia": "tỉ lệ (của)",
+      "cap": "B2",
+      "viDu": "The proportion of people living alone rose to 30%.",
+      "viDuNghia": "Tỉ lệ người sống một mình tăng lên 30%.",
+      "cumTu": [
+        "the proportion of X who",
+        "a high proportion of",
+        "in proportion to"
+      ],
+      "hoTu": [
+        "proportion (n)",
+        "proportional (adj)"
+      ],
+      "ghiChu": "\"The proportion of + danh từ số nhiều\" vẫn chia động từ số ít."
+    },
+    {
+      "chu": "the number of",
+      "doc": "/ðə ˈnʌmbər əv/",
+      "loai": "phr",
+      "nghia": "số lượng (danh từ đếm được)",
+      "cap": "B1",
+      "viDu": "The number of international students has risen sharply.",
+      "viDuNghia": "Số sinh viên quốc tế đã tăng mạnh.",
+      "cumTu": [
+        "the number of + plural noun",
+        "a large number of",
+        "the total number of"
+      ],
+      "hoTu": [
+        "number (n/v)",
+        "numerous (adj)"
+      ],
+      "ghiChu": "\"The number of + N số nhiều + V số ít\"; \"A number of + N số nhiều + V số nhiều\"."
+    },
+    {
+      "chu": "the amount of",
+      "doc": "/ði əˈmaʊnt əv/",
+      "loai": "phr",
+      "nghia": "lượng (danh từ không đếm được)",
+      "cap": "B1",
+      "viDu": "The amount of plastic waste produced each year has doubled.",
+      "viDuNghia": "Lượng rác nhựa thải ra mỗi năm đã tăng gấp đôi.",
+      "cumTu": [
+        "the amount of + uncountable noun",
+        "a large amount of",
+        "the total amount of"
+      ],
+      "hoTu": [
+        "amount (n/v)"
+      ],
+      "ghiChu": "Lỗi hay gặp: ✗ \"the amount of people\" → ✓ \"the number of people\"."
+    },
+    {
+      "chu": "the figure for",
+      "doc": "/ðə ˈfɪɡə fə/",
+      "loai": "phr",
+      "nghia": "số liệu của",
+      "cap": "B2",
+      "viDu": "The figure for Japan was much lower than that for the USA.",
+      "viDuNghia": "Số liệu của Nhật Bản thấp hơn nhiều so với của Mỹ.",
+      "cumTu": [
+        "the figure for X",
+        "the corresponding figure for",
+        "the figures for"
+      ],
+      "hoTu": [
+        "figure (n)"
+      ],
+      "ghiChu": "Dùng \"that for / those for\" để khỏi lặp lại \"the figure for\"."
+    },
+    {
+      "chu": "the majority of",
+      "doc": "/ðə məˈdʒɒrəti əv/",
+      "loai": "phr",
+      "nghia": "phần lớn, đa số",
+      "cap": "B1",
+      "viDu": "The majority of respondents preferred to shop online.",
+      "viDuNghia": "Đa số người được hỏi thích mua sắm trực tuyến hơn.",
+      "cumTu": [
+        "the vast majority of",
+        "an overwhelming majority of",
+        "a slim majority"
+      ],
+      "hoTu": [
+        "major (adj)",
+        "majority (n)"
+      ]
+    },
+    {
+      "chu": "a minority of",
+      "doc": "/ə maɪˈnɒrəti əv/",
+      "loai": "phr",
+      "nghia": "một số ít",
+      "cap": "B2",
+      "viDu": "Only a minority of students walked to school.",
+      "viDuNghia": "Chỉ một số ít học sinh đi bộ đến trường.",
+      "cumTu": [
+        "a small minority of",
+        "only a minority of",
+        "in the minority"
+      ],
+      "hoTu": [
+        "minor (adj)",
+        "minority (n)"
+      ]
+    },
+    {
+      "chu": "a quarter of",
+      "doc": "/ə ˈkwɔːtər əv/",
+      "loai": "phr",
+      "nghia": "một phần tư",
+      "cap": "B1",
+      "viDu": "Just under a quarter of households owned a computer in 1995.",
+      "viDuNghia": "Chưa tới một phần tư số hộ gia đình có máy tính vào năm 1995.",
+      "cumTu": [
+        "nearly a quarter of",
+        "just over a quarter of",
+        "roughly a quarter of"
+      ],
+      "hoTu": [
+        "quarter (n)"
+      ],
+      "ghiChu": "Task 1 nên đổi % sang phân số cho đa dạng: 25% = a quarter, 75% = three quarters."
+    },
+    {
+      "chu": "a third of",
+      "doc": "/ə ˈθɜːd əv/",
+      "loai": "phr",
+      "nghia": "một phần ba",
+      "cap": "B1",
+      "viDu": "Roughly a third of the budget was spent on education.",
+      "viDuNghia": "Khoảng một phần ba ngân sách được chi cho giáo dục.",
+      "cumTu": [
+        "roughly a third of",
+        "a third of the population",
+        "just over a third of"
+      ],
+      "hoTu": [
+        "third (n)"
+      ]
+    },
+    {
+      "chu": "two thirds",
+      "doc": "/ˌtuː ˈθɜːdz/",
+      "loai": "phr",
+      "nghia": "hai phần ba",
+      "cap": "B1",
+      "viDu": "Almost two thirds of the respondents agreed with the proposal.",
+      "viDuNghia": "Gần hai phần ba số người được hỏi đồng ý với đề xuất.",
+      "cumTu": [
+        "two thirds of",
+        "nearly two thirds",
+        "over two thirds"
+      ],
+      "hoTu": [
+        "third (n)"
+      ]
+    },
+    {
+      "chu": "three quarters",
+      "doc": "/ˌθriː ˈkwɔːtəz/",
+      "loai": "phr",
+      "nghia": "ba phần tư",
+      "cap": "B1",
+      "viDu": "Three quarters of the land was used for farming.",
+      "viDuNghia": "Ba phần tư diện tích đất được dùng cho nông nghiệp.",
+      "cumTu": [
+        "three quarters of",
+        "nearly three quarters",
+        "just under three quarters"
+      ],
+      "hoTu": [
+        "quarter (n)"
+      ]
+    },
+    {
+      "chu": "per cent",
+      "doc": "/pə ˈsent/",
+      "loai": "phr",
+      "nghia": "phần trăm",
+      "cap": "B1",
+      "viDu": "Around 60 per cent of adults exercise at least once a week.",
+      "viDuNghia": "Khoảng 60 phần trăm người lớn tập thể dục ít nhất một lần mỗi tuần.",
+      "cumTu": [
+        "X per cent of",
+        "a 10 per cent increase",
+        "per cent of the total"
+      ],
+      "hoTu": [
+        "percentage (n)"
+      ],
+      "ghiChu": "Anh-Anh viết \"per cent\" (hai chữ), Anh-Mỹ \"percent\"."
+    },
+    {
+      "chu": "percentage point",
+      "doc": "/pəˈsentɪdʒ pɔɪnt/",
+      "loai": "n",
+      "nghia": "điểm phần trăm",
+      "cap": "C1",
+      "viDu": "The unemployment rate fell by two percentage points, from 7% to 5%.",
+      "viDuNghia": "Tỉ lệ thất nghiệp giảm hai điểm phần trăm, từ 7% xuống 5%.",
+      "cumTu": [
+        "by X percentage points",
+        "a percentage point increase",
+        "two percentage points"
+      ],
+      "hoTu": [
+        "percentage (n)"
+      ],
+      "ghiChu": "Từ 10% lên 15% là tăng 5 điểm phần trăm (về tương đối là tăng 50%, không phải 5%)."
+    },
+    {
+      "chu": "rate",
+      "doc": "/reɪt/",
+      "loai": "n",
+      "nghia": "tỉ lệ, mức",
+      "cap": "B1",
+      "viDu": "The crime rate in the city fell by 10% last year.",
+      "viDuNghia": "Tỉ lệ tội phạm ở thành phố giảm 10% năm ngoái.",
+      "cumTu": [
+        "the birth rate",
+        "the unemployment rate",
+        "at a rate of"
+      ],
+      "hoTu": [
+        "rate (v)"
+      ]
+    },
+    {
+      "chu": "just over",
+      "doc": "/ˌdʒʌst ˈəʊvə/",
+      "loai": "phr",
+      "nghia": "hơn một chút",
+      "cap": "B1",
+      "viDu": "Just over half of the participants were women.",
+      "viDuNghia": "Nữ giới chiếm hơn một nửa số người tham gia một chút.",
+      "cumTu": [
+        "just over half",
+        "just over 10%",
+        "just over a quarter"
+      ]
+    },
+    {
+      "chu": "just under",
+      "doc": "/ˌdʒʌst ˈʌndə/",
+      "loai": "phr",
+      "nghia": "chưa tới, ít hơn một chút",
+      "cap": "B1",
+      "viDu": "Just under 40% of homes were heated by gas.",
+      "viDuNghia": "Chưa tới 40% số nhà được sưởi bằng khí đốt.",
+      "cumTu": [
+        "just under half",
+        "just under 40%",
+        "just under a third"
+      ]
+    },
+    {
+      "chu": "approximately",
+      "doc": "/əˈprɒksɪmətli/",
+      "loai": "adv",
+      "nghia": "xấp xỉ",
+      "cap": "B1",
+      "viDu": "Approximately 30% of the energy came from renewable sources.",
+      "viDuNghia": "Xấp xỉ 30% năng lượng đến từ nguồn tái tạo.",
+      "cumTu": [
+        "approximately X%",
+        "approximately equal",
+        "approximately half"
+      ],
+      "hoTu": [
+        "approximate (adj)",
+        "approximation (n)"
+      ]
+    },
+    {
+      "chu": "roughly",
+      "doc": "/ˈrʌfli/",
+      "loai": "adv",
+      "nghia": "khoảng, đại khái",
+      "cap": "B2",
+      "viDu": "Roughly half of the students lived on campus.",
+      "viDuNghia": "Khoảng một nửa số sinh viên sống trong khuôn viên trường.",
+      "cumTu": [
+        "roughly half",
+        "roughly equal",
+        "roughly the same"
+      ],
+      "hoTu": [
+        "rough (adj)"
+      ]
+    },
+    {
+      "chu": "in the region of",
+      "doc": "/ɪn ðə ˈriːdʒən əv/",
+      "loai": "phr",
+      "nghia": "vào khoảng",
+      "cap": "C1",
+      "viDu": "The cost of the project was in the region of 5 million pounds.",
+      "viDuNghia": "Chi phí dự án vào khoảng 5 triệu bảng.",
+      "cumTu": [
+        "somewhere in the region of",
+        "in the region of X million"
+      ],
+      "hoTu": [
+        "region (n)"
+      ]
+    },
+    {
+      "chu": "stand at",
+      "doc": "/ˈstænd ət/",
+      "loai": "phr",
+      "nghia": "ở mức",
+      "cap": "B2",
+      "viDu": "In 2000, the figure stood at 8%, and it is projected to stand at 12% by 2030.",
+      "viDuNghia": "Năm 2000, con số ở mức 8%, và được dự báo sẽ ở mức 12% vào năm 2030.",
+      "cumTu": [
+        "stand at X%",
+        "initially stand at",
+        "stand at a record high"
+      ],
+      "ghiChu": "Hay dùng cho số liệu năm đầu: \"In 1990, X stood at ...\". Quá khứ: stood."
+    },
+    {
+      "chu": "amount to",
+      "doc": "/əˈmaʊnt tə/",
+      "loai": "phr",
+      "nghia": "lên tới, tổng cộng là",
+      "cap": "C1",
+      "viDu": "Total spending on advertising amounted to 2 billion dollars.",
+      "viDuNghia": "Tổng chi cho quảng cáo lên tới 2 tỉ đô la.",
+      "cumTu": [
+        "amount to X",
+        "amount to nearly",
+        "amount to the same thing"
+      ],
+      "hoTu": [
+        "amount (n)"
+      ]
+    },
+    {
+      "chu": "outnumber",
+      "doc": "/ˌaʊtˈnʌmbə/",
+      "loai": "v",
+      "nghia": "đông hơn, nhiều hơn về số lượng",
+      "cap": "C1",
+      "viDu": "Female students outnumbered male students in most subjects.",
+      "viDuNghia": "Nữ sinh đông hơn nam sinh ở hầu hết các môn.",
+      "cumTu": [
+        "outnumber X by",
+        "far outnumber",
+        "be outnumbered by"
+      ],
+      "hoTu": [
+        "number (n)"
+      ]
+    },
+    {
+      "chu": "lag behind",
+      "doc": "/ˌlæɡ bɪˈhaɪnd/",
+      "loai": "phr",
+      "nghia": "tụt lại phía sau",
+      "cap": "C1",
+      "viDu": "Rural areas lagged behind cities in internet access.",
+      "viDuNghia": "Nông thôn tụt lại sau thành phố về khả năng tiếp cận internet.",
+      "cumTu": [
+        "lag behind X",
+        "lag far behind",
+        "lag behind in"
+      ],
+      "hoTu": [
+        "lag (n)"
+      ]
+    },
+    {
+      "chu": "compared with",
+      "doc": "/kəmˈpeəd wɪð/",
+      "loai": "phr",
+      "nghia": "so với",
+      "cap": "B1",
+      "viDu": "Compared with 1990, far more people now live in cities.",
+      "viDuNghia": "So với năm 1990, hiện có nhiều người sống ở thành phố hơn hẳn.",
+      "cumTu": [
+        "compared with/to",
+        "as compared with",
+        "compared with the previous year"
+      ],
+      "hoTu": [
+        "compare (v)",
+        "comparison (n)"
+      ]
+    },
+    {
+      "chu": "over the period",
+      "doc": "/ˌəʊvə ðə ˈpɪəriəd/",
+      "loai": "phr",
+      "nghia": "trong suốt giai đoạn",
+      "cap": "B1",
+      "viDu": "Over the period shown, the price of gold almost doubled.",
+      "viDuNghia": "Trong suốt giai đoạn được thể hiện, giá vàng gần như tăng gấp đôi.",
+      "cumTu": [
+        "over the period shown",
+        "over the same period",
+        "over the period from X to Y"
+      ],
+      "hoTu": [
+        "period (n)"
+      ]
+    },
+    {
+      "chu": "throughout the period",
+      "doc": "/θruːˌaʊt ðə ˈpɪəriəd/",
+      "loai": "phr",
+      "nghia": "suốt cả giai đoạn",
+      "cap": "B2",
+      "viDu": "Coal remained the main source of energy throughout the period.",
+      "viDuNghia": "Than vẫn là nguồn năng lượng chính suốt cả giai đoạn.",
+      "cumTu": [
+        "throughout the period shown",
+        "throughout the whole period",
+        "throughout the decade"
+      ]
+    },
+    {
+      "chu": "vertical axis",
+      "doc": "/ˌvɜːtɪkl ˈæksɪs/",
+      "loai": "n",
+      "nghia": "trục tung",
+      "cap": "C1",
+      "viDu": "The vertical axis shows the number of visitors in thousands.",
+      "viDuNghia": "Trục tung thể hiện số lượng khách tính theo nghìn.",
+      "cumTu": [
+        "on the vertical axis",
+        "the y-axis",
+        "the scale of the vertical axis"
+      ],
+      "hoTu": [
+        "vertical (adj)",
+        "axis (n)"
+      ],
+      "ghiChu": "Số nhiều của \"axis\" là \"axes\" /ˈæksiːz/."
+    },
+    {
+      "chu": "horizontal axis",
+      "doc": "/ˌhɒrɪˈzɒntl ˈæksɪs/",
+      "loai": "n",
+      "nghia": "trục hoành",
+      "cap": "C1",
+      "viDu": "The years are shown on the horizontal axis.",
+      "viDuNghia": "Các năm được thể hiện trên trục hoành.",
+      "cumTu": [
+        "on the horizontal axis",
+        "the x-axis",
+        "labelled on the horizontal axis"
+      ],
+      "hoTu": [
+        "horizontal (adj)",
+        "axis (n)"
+      ]
+    },
+    {
+      "chu": "line graph",
+      "doc": "/ˈlaɪn ɡrɑːf/",
+      "loai": "n",
+      "nghia": "biểu đồ đường",
+      "cap": "B2",
+      "viDu": "The line graph illustrates changes in water consumption.",
+      "viDuNghia": "Biểu đồ đường minh hoạ những thay đổi trong lượng nước tiêu thụ.",
+      "cumTu": [
+        "the line graph shows",
+        "according to the line graph",
+        "in the line graph"
+      ],
+      "hoTu": [
+        "graph (n)"
+      ]
+    },
+    {
+      "chu": "bar chart",
+      "doc": "/ˈbɑː tʃɑːt/",
+      "loai": "n",
+      "nghia": "biểu đồ cột",
+      "cap": "B2",
+      "viDu": "The bar chart compares the average salaries in five professions.",
+      "viDuNghia": "Biểu đồ cột so sánh mức lương trung bình của năm nghề.",
+      "cumTu": [
+        "the bar chart compares",
+        "as shown in the bar chart",
+        "a bar chart of"
+      ],
+      "hoTu": [
+        "chart (n)"
+      ]
+    },
+    {
+      "chu": "pie chart",
+      "doc": "/ˈpaɪ tʃɑːt/",
+      "loai": "n",
+      "nghia": "biểu đồ tròn",
+      "cap": "B2",
+      "viDu": "The two pie charts show how household income was spent in 1980 and 2020.",
+      "viDuNghia": "Hai biểu đồ tròn cho thấy thu nhập hộ gia đình được chi tiêu thế nào năm 1980 và 2020.",
+      "cumTu": [
+        "the pie chart shows",
+        "two pie charts",
+        "a segment of the pie chart"
+      ],
+      "hoTu": [
+        "chart (n)"
+      ]
+    },
+    {
+      "chu": "flowchart",
+      "doc": "/ˈfləʊtʃɑːt/",
+      "loai": "n",
+      "nghia": "lưu đồ, sơ đồ quy trình",
+      "cap": "C1",
+      "viDu": "The flowchart shows the stages in the production of chocolate.",
+      "viDuNghia": "Lưu đồ thể hiện các bước sản xuất sô-cô-la.",
+      "cumTu": [
+        "the flowchart illustrates",
+        "a simple flowchart",
+        "according to the flowchart"
+      ],
+      "hoTu": [
+        "flow (n)",
+        "chart (n)"
+      ]
+    },
+    {
+      "chu": "diagram",
+      "doc": "/ˈdaɪəɡræm/",
+      "loai": "n",
+      "nghia": "sơ đồ, biểu đồ",
+      "cap": "B1",
+      "viDu": "The diagram illustrates how rainwater is collected and reused.",
+      "viDuNghia": "Sơ đồ minh hoạ cách nước mưa được thu gom và tái sử dụng.",
+      "cumTu": [
+        "the diagram shows",
+        "a labelled diagram",
+        "in the diagram"
+      ],
+      "hoTu": [
+        "diagrammatic (adj)"
+      ]
+    },
+    {
+      "chu": "segment",
+      "doc": "/ˈseɡmənt/",
+      "loai": "n",
+      "nghia": "phần, phân khúc",
+      "cap": "C1",
+      "viDu": "The largest segment of the pie chart represents housing costs.",
+      "viDuNghia": "Phần lớn nhất của biểu đồ tròn thể hiện chi phí nhà ở.",
+      "cumTu": [
+        "the largest segment",
+        "a market segment",
+        "a segment of"
+      ],
+      "hoTu": [
+        "segmentation (n)"
+      ]
+    },
+    {
+      "chu": "statistics",
+      "doc": "/stəˈtɪstɪks/",
+      "loai": "n",
+      "nghia": "số liệu thống kê",
+      "cap": "B2",
+      "viDu": "According to official statistics, crime fell by 5% last year.",
+      "viDuNghia": "Theo số liệu thống kê chính thức, tội phạm giảm 5% năm ngoái.",
+      "cumTu": [
+        "official statistics",
+        "according to statistics",
+        "statistics show that"
+      ],
+      "hoTu": [
+        "statistical (adj)",
+        "statistically (adv)"
+      ]
+    },
+    {
+      "chu": "projection",
+      "doc": "/prəˈdʒekʃn/",
+      "loai": "n",
+      "nghia": "dự phóng, dự báo",
+      "cap": "C1",
+      "viDu": "According to projections, the population will reach 10 million by 2050.",
+      "viDuNghia": "Theo dự phóng, dân số sẽ đạt 10 triệu vào năm 2050.",
+      "cumTu": [
+        "according to projections",
+        "future projections",
+        "population projections"
+      ],
+      "hoTu": [
+        "project (v)",
+        "projected (adj)"
+      ]
+    },
+    {
+      "chu": "projected",
+      "doc": "/prəˈdʒektɪd/",
+      "loai": "adj",
+      "nghia": "được dự kiến, được dự báo",
+      "cap": "C1",
+      "viDu": "Sales are projected to rise by 15% over the next decade.",
+      "viDuNghia": "Doanh số được dự báo tăng 15% trong thập kỷ tới.",
+      "cumTu": [
+        "be projected to",
+        "the projected figure",
+        "projected growth"
+      ],
+      "hoTu": [
+        "projection (n)",
+        "project (v)"
+      ],
+      "ghiChu": "Mẫu \"X is projected/expected/predicted to + V\" dùng cho số liệu tương lai trong Task 1."
+    },
+    {
+      "chu": "estimated",
+      "doc": "/ˈestɪmeɪtɪd/",
+      "loai": "adj",
+      "nghia": "ước tính",
+      "cap": "B2",
+      "viDu": "An estimated 2 million people visited the museum last year.",
+      "viDuNghia": "Ước tính 2 triệu người đã đến bảo tàng năm ngoái.",
+      "cumTu": [
+        "an estimated X",
+        "the estimated cost",
+        "it is estimated that"
+      ],
+      "hoTu": [
+        "estimate (v/n)",
+        "estimation (n)"
+      ]
+    },
+    {
+      "chu": "median",
+      "doc": "/ˈmiːdiən/",
+      "loai": "n",
+      "nghia": "trung vị",
+      "cap": "C1",
+      "viDu": "The median age of the population rose from 30 to 38.",
+      "viDuNghia": "Tuổi trung vị của dân số tăng từ 30 lên 38.",
+      "cumTu": [
+        "the median age",
+        "median income",
+        "the median value"
+      ],
+      "ghiChu": "Khác \"average/mean\" (trung bình cộng)."
+    },
+    {
+      "chu": "gap",
+      "doc": "/ɡæp/",
+      "loai": "n",
+      "nghia": "khoảng cách, chênh lệch",
+      "cap": "B1",
+      "viDu": "The gap between male and female salaries narrowed over the period.",
+      "viDuNghia": "Khoảng cách lương giữa nam và nữ thu hẹp lại trong giai đoạn.",
+      "cumTu": [
+        "the gap between X and Y",
+        "narrow the gap",
+        "widen the gap"
+      ]
+    },
+    {
+      "chu": "similarity",
+      "doc": "/ˌsɪməˈlærəti/",
+      "loai": "n",
+      "nghia": "sự tương đồng",
+      "cap": "B2",
+      "viDu": "There are clear similarities between the patterns for the two countries.",
+      "viDuNghia": "Có những điểm tương đồng rõ rệt giữa xu hướng của hai nước.",
+      "cumTu": [
+        "a striking similarity",
+        "similarity between",
+        "bear a similarity to"
+      ],
+      "hoTu": [
+        "similar (adj)",
+        "similarly (adv)"
+      ]
+    },
+    {
+      "chu": "overall",
+      "doc": "/ˌəʊvərˈɔːl/",
+      "loai": "adv",
+      "nghia": "nhìn chung, tổng thể",
+      "cap": "B2",
+      "viDu": "Overall, the number of car users increased while bus use declined.",
+      "viDuNghia": "Nhìn chung, số người dùng ô tô tăng trong khi số người đi xe buýt giảm.",
+      "cumTu": [
+        "Overall, it is clear that",
+        "the overall trend",
+        "the overall picture"
+      ],
+      "ghiChu": "Từ mở đầu đoạn tổng quan Task 1. ✗ \"In overall\"."
+    },
+    {
+      "chu": "depict",
+      "doc": "/dɪˈpɪkt/",
+      "loai": "v",
+      "nghia": "mô tả, khắc hoạ",
+      "cap": "C1",
+      "viDu": "The table depicts the number of tourists who visited three countries.",
+      "viDuNghia": "Bảng mô tả số khách du lịch đến ba quốc gia.",
+      "cumTu": [
+        "depict changes",
+        "graphically depict",
+        "the chart depicts"
+      ],
+      "hoTu": [
+        "depiction (n)"
+      ],
+      "ghiChu": "Dùng thay \"show\" ở câu mở bài Task 1 để tránh lặp đề."
+    },
+    {
+      "chu": "it is noticeable that",
+      "doc": "/ɪt ɪz ˈnəʊtɪsəbl ðæt/",
+      "loai": "phr",
+      "nghia": "đáng chú ý là",
+      "cap": "B2",
+      "viDu": "It is noticeable that the figures for men and women were almost identical.",
+      "viDuNghia": "Đáng chú ý là số liệu của nam và nữ gần như giống hệt nhau.",
+      "cumTu": [
+        "it is noticeable that",
+        "most noticeably",
+        "it is clear that"
+      ],
+      "hoTu": [
+        "noticeable (adj)",
+        "noticeably (adv)"
+      ]
+    },
+    {
+      "chu": "twofold",
+      "doc": "/ˈtuːfəʊld/",
+      "loai": "adj",
+      "nghia": "gấp đôi",
+      "cap": "C1",
+      "viDu": "There was a twofold increase in the number of cyclists.",
+      "viDuNghia": "Số người đi xe đạp tăng gấp đôi.",
+      "cumTu": [
+        "a twofold increase",
+        "increase twofold",
+        "a twofold rise"
+      ],
+      "hoTu": [
+        "threefold (adj)",
+        "tenfold (adj)"
+      ],
+      "ghiChu": "Mẫu \"a + số-fold + increase\" giúp đa dạng cách nói \"tăng gấp X lần\"."
+    },
+    {
+      "chu": "annually",
+      "doc": "/ˈænjuəli/",
+      "loai": "adv",
+      "nghia": "hằng năm",
+      "cap": "B2",
+      "viDu": "Around 3 million tonnes of waste are produced annually.",
+      "viDuNghia": "Khoảng 3 triệu tấn rác được thải ra hằng năm.",
+      "cumTu": [
+        "produced annually",
+        "updated annually",
+        "twice annually"
+      ],
+      "hoTu": [
+        "annual (adj)"
+      ]
+    },
+    {
+      "chu": "the remainder",
+      "doc": "/ðə rɪˈmeɪndə/",
+      "loai": "n",
+      "nghia": "phần còn lại",
+      "cap": "C1",
+      "viDu": "Half of the budget went on salaries, and the remainder on equipment.",
+      "viDuNghia": "Một nửa ngân sách chi cho lương, phần còn lại cho thiết bị.",
+      "cumTu": [
+        "the remainder of",
+        "the remainder was",
+        "for the remainder of"
+      ],
+      "hoTu": [
+        "remain (v)",
+        "remaining (adj)"
+      ]
+    },
+    {
+      "chu": "consecutive",
+      "doc": "/kənˈsekjətɪv/",
+      "loai": "adj",
+      "nghia": "liên tiếp",
+      "cap": "C1",
+      "viDu": "Sales rose for five consecutive years.",
+      "viDuNghia": "Doanh số tăng trong năm năm liên tiếp.",
+      "cumTu": [
+        "three consecutive years",
+        "consecutive months",
+        "for the second consecutive year"
+      ],
+      "hoTu": [
+        "consecutively (adv)"
+      ]
+    },
+    {
+      "chu": "respectively",
+      "doc": "/rɪˈspektɪvli/",
+      "loai": "adv",
+      "nghia": "lần lượt là",
+      "cap": "B2",
+      "viDu": "The figures for France and Spain were 20% and 15% respectively.",
+      "viDuNghia": "Số liệu của Pháp và Tây Ban Nha lần lượt là 20% và 15%.",
+      "cumTu": [
+        "X and Y, respectively",
+        "20% and 15% respectively"
+      ],
+      "hoTu": [
+        "respective (adj)"
+      ],
+      "ghiChu": "Đặt ở cuối câu; thứ tự số liệu phải khớp thứ tự đối tượng đã nêu."
+    },
+    {
+      "chu": "sharply",
+      "doc": "/ˈʃɑːpli/",
+      "loai": "adv",
+      "nghia": "mạnh, đột ngột",
+      "cap": "B2",
+      "viDu": "The price of petrol rose sharply in 2008.",
+      "viDuNghia": "Giá xăng tăng mạnh năm 2008.",
+      "cumTu": [
+        "rise sharply",
+        "fall sharply",
+        "increase sharply"
+      ],
+      "hoTu": [
+        "sharp (adj)"
+      ]
+    },
+    {
+      "chu": "steeply",
+      "doc": "/ˈstiːpli/",
+      "loai": "adv",
+      "nghia": "dốc, rất mạnh",
+      "cap": "C1",
+      "viDu": "The cost of university tuition has risen steeply.",
+      "viDuNghia": "Học phí đại học tăng rất mạnh.",
+      "cumTu": [
+        "rise steeply",
+        "fall steeply",
+        "steeply increasing"
+      ],
+      "hoTu": [
+        "steep (adj)"
+      ]
+    },
+    {
+      "chu": "steadily",
+      "doc": "/ˈstedɪli/",
+      "loai": "adv",
+      "nghia": "đều đặn",
+      "cap": "B2",
+      "viDu": "The number of vegetarians grew steadily over the decade.",
+      "viDuNghia": "Số người ăn chay tăng đều trong thập kỷ.",
+      "cumTu": [
+        "increase steadily",
+        "decline steadily",
+        "grow steadily"
+      ],
+      "hoTu": [
+        "steady (adj)"
+      ]
+    },
+    {
+      "chu": "gradually",
+      "doc": "/ˈɡrædʒuəli/",
+      "loai": "adv",
+      "nghia": "dần dần",
+      "cap": "B1",
+      "viDu": "The use of cash has gradually declined.",
+      "viDuNghia": "Việc dùng tiền mặt đã giảm dần.",
+      "cumTu": [
+        "gradually increase",
+        "gradually decline",
+        "gradually replace"
+      ],
+      "hoTu": [
+        "gradual (adj)"
+      ]
+    },
+    {
+      "chu": "slightly",
+      "doc": "/ˈslaɪtli/",
+      "loai": "adv",
+      "nghia": "nhẹ, một chút",
+      "cap": "B1",
+      "viDu": "The figure for 2019 was slightly higher than that for 2018.",
+      "viDuNghia": "Con số năm 2019 cao hơn năm 2018 một chút.",
+      "cumTu": [
+        "slightly higher",
+        "fall slightly",
+        "slightly more than"
+      ],
+      "hoTu": [
+        "slight (adj)"
+      ]
+    },
+    {
+      "chu": "marginally",
+      "doc": "/ˈmɑːdʒɪnəli/",
+      "loai": "adv",
+      "nghia": "rất ít, không đáng kể",
+      "cap": "C1",
+      "viDu": "Sales increased only marginally in the final year.",
+      "viDuNghia": "Doanh số chỉ tăng rất ít trong năm cuối.",
+      "cumTu": [
+        "marginally higher",
+        "increase marginally",
+        "only marginally"
+      ],
+      "hoTu": [
+        "marginal (adj)"
+      ]
+    },
+    {
+      "chu": "dramatically",
+      "doc": "/drəˈmætɪkli/",
+      "loai": "adv",
+      "nghia": "mạnh mẽ, đột biến",
+      "cap": "B2",
+      "viDu": "The number of smartphone users increased dramatically after 2010.",
+      "viDuNghia": "Số người dùng điện thoại thông minh tăng mạnh sau năm 2010.",
+      "cumTu": [
+        "increase dramatically",
+        "change dramatically",
+        "dramatically different"
+      ],
+      "hoTu": [
+        "dramatic (adj)"
+      ]
+    },
+    {
+      "chu": "significantly",
+      "doc": "/sɪɡˈnɪfɪkəntli/",
+      "loai": "adv",
+      "nghia": "đáng kể",
+      "cap": "B2",
+      "viDu": "Female participation in sport rose significantly.",
+      "viDuNghia": "Tỉ lệ nữ tham gia thể thao tăng đáng kể.",
+      "cumTu": [
+        "significantly higher",
+        "increase significantly",
+        "differ significantly"
+      ],
+      "hoTu": [
+        "significant (adj)"
+      ]
+    },
+    {
+      "chu": "markedly",
+      "doc": "/ˈmɑːkɪdli/",
+      "loai": "adv",
+      "nghia": "rõ rệt",
+      "cap": "C1",
+      "viDu": "The two groups differed markedly in their spending habits.",
+      "viDuNghia": "Hai nhóm khác nhau rõ rệt về thói quen chi tiêu.",
+      "cumTu": [
+        "differ markedly",
+        "markedly different",
+        "markedly higher"
+      ],
+      "hoTu": [
+        "marked (adj)"
+      ],
+      "ghiChu": "Đọc 3 âm tiết /ˈmɑːkɪdli/."
+    },
+    {
+      "chu": "noticeably",
+      "doc": "/ˈnəʊtɪsəbli/",
+      "loai": "adv",
+      "nghia": "rõ rệt, dễ thấy",
+      "cap": "C1",
+      "viDu": "Prices were noticeably lower in rural areas.",
+      "viDuNghia": "Giá cả thấp hơn rõ rệt ở nông thôn.",
+      "cumTu": [
+        "noticeably higher",
+        "noticeably lower",
+        "noticeably different"
+      ],
+      "hoTu": [
+        "noticeable (adj)"
+      ]
+    },
+    {
+      "chu": "moderately",
+      "doc": "/ˈmɒdərətli/",
+      "loai": "adv",
+      "nghia": "vừa phải",
+      "cap": "B2",
+      "viDu": "Exports grew moderately between 2010 and 2015.",
+      "viDuNghia": "Xuất khẩu tăng vừa phải từ năm 2010 đến 2015.",
+      "cumTu": [
+        "grow moderately",
+        "moderately successful",
+        "moderately high"
+      ],
+      "hoTu": [
+        "moderate (adj)"
+      ]
+    },
+    {
+      "chu": "rapidly",
+      "doc": "/ˈræpɪdli/",
+      "loai": "adv",
+      "nghia": "nhanh chóng",
+      "cap": "B1",
+      "viDu": "The population of the city grew rapidly after 1950.",
+      "viDuNghia": "Dân số thành phố tăng nhanh sau năm 1950.",
+      "cumTu": [
+        "grow rapidly",
+        "rapidly increasing",
+        "change rapidly"
+      ],
+      "hoTu": [
+        "rapid (adj)"
+      ]
+    },
+    {
+      "chu": "consistently",
+      "doc": "/kənˈsɪstəntli/",
+      "loai": "adv",
+      "nghia": "nhất quán, luôn luôn",
+      "cap": "C1",
+      "viDu": "Japan consistently had the highest life expectancy.",
+      "viDuNghia": "Nhật Bản luôn có tuổi thọ trung bình cao nhất.",
+      "cumTu": [
+        "consistently higher",
+        "consistently high",
+        "perform consistently"
+      ],
+      "hoTu": [
+        "consistent (adj)"
+      ]
+    },
+    {
+      "chu": "erratically",
+      "doc": "/ɪˈrætɪkli/",
+      "loai": "adv",
+      "nghia": "thất thường",
+      "cap": "C2",
+      "viDu": "The price of coffee changed erratically throughout the period.",
+      "viDuNghia": "Giá cà phê thay đổi thất thường suốt giai đoạn.",
+      "cumTu": [
+        "change erratically",
+        "fluctuate erratically",
+        "behave erratically"
+      ],
+      "hoTu": [
+        "erratic (adj)"
+      ]
+    }
+  ]
+}

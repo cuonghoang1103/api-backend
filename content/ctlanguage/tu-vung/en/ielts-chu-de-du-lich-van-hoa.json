@@ -1,0 +1,643 @@
+{
+  "ma": "ielts-chu-de-du-lich-van-hoa",
+  "nn": "en",
+  "ten": "IELTS theo chủ đề: Du lịch và văn hoá",
+  "moTa": "Từ và cụm đặc thù chủ đề Du lịch – Văn hoá trong đề IELTS (du lịch đại trà, di sản, bản sắc văn hoá, toàn cầu hoá văn hoá, trải nghiệm đi xa) — cấp B1–C1, ví dụ theo văn phong Writing Task 2 và Speaking.",
+  "nhom": "ielts",
+  "cap": "B2",
+  "tu": [
+    {
+      "chu": "tourism",
+      "doc": "/ˈtʊərɪzəm/",
+      "loai": "n",
+      "nghia": "du lịch (ngành du lịch)",
+      "cap": "B1",
+      "viDu": "Tourism is one of the main sources of income for the island.",
+      "viDuNghia": "Du lịch là một trong những nguồn thu chính của hòn đảo.",
+      "cumTu": [
+        "the tourism industry",
+        "boost tourism",
+        "international tourism"
+      ],
+      "hoTu": [
+        "tourist (n)",
+        "touristy (adj)"
+      ]
+    },
+    {
+      "chu": "mass tourism",
+      "doc": "/ˌmæs ˈtʊərɪzəm/",
+      "loai": "n",
+      "nghia": "du lịch đại trà",
+      "cap": "C1",
+      "viDu": "Mass tourism has damaged many beautiful beaches.",
+      "viDuNghia": "Du lịch đại trà đã làm hỏng nhiều bãi biển đẹp.",
+      "cumTu": [
+        "the effects of mass tourism",
+        "mass tourism destinations"
+      ]
+    },
+    {
+      "chu": "overtourism",
+      "doc": "/ˌəʊvəˈtʊərɪzəm/",
+      "loai": "n",
+      "nghia": "tình trạng quá tải du lịch",
+      "cap": "C1",
+      "viDu": "Venice is struggling with overtourism.",
+      "viDuNghia": "Venice đang vật lộn với tình trạng quá tải du lịch.",
+      "cumTu": [
+        "tackle overtourism",
+        "the problem of overtourism"
+      ]
+    },
+    {
+      "chu": "ecotourism",
+      "doc": "/ˈiːkəʊˌtʊərɪzəm/",
+      "loai": "n",
+      "nghia": "du lịch sinh thái",
+      "cap": "C1",
+      "viDu": "Ecotourism can fund the protection of national parks.",
+      "viDuNghia": "Du lịch sinh thái có thể tài trợ cho việc bảo vệ vườn quốc gia.",
+      "cumTu": [
+        "promote ecotourism",
+        "ecotourism projects"
+      ]
+    },
+    {
+      "chu": "tourist destination",
+      "doc": "/ˈtʊərɪst ˌdestɪˌneɪʃn/",
+      "loai": "n",
+      "nghia": "điểm đến du lịch",
+      "cap": "B2",
+      "viDu": "Ha Long Bay is one of Vietnam's most popular tourist destinations.",
+      "viDuNghia": "Vịnh Hạ Long là một trong những điểm đến du lịch nổi tiếng nhất Việt Nam.",
+      "cumTu": [
+        "a popular tourist destination",
+        "a major tourist destination"
+      ]
+    },
+    {
+      "chu": "tourist trap",
+      "doc": "/ˈtʊərɪst ˌtræp/",
+      "loai": "n",
+      "nghia": "nơi \"chặt chém\" khách du lịch",
+      "cap": "C1",
+      "viDu": "The restaurant near the cathedral is a tourist trap with high prices and poor food.",
+      "viDuNghia": "Nhà hàng gần nhà thờ là chỗ chặt chém khách, giá cao mà đồ ăn tệ.",
+      "cumTu": [
+        "avoid tourist traps"
+      ]
+    },
+    {
+      "chu": "off the beaten track",
+      "doc": "/ˌɒf ðə ˌbiːtn ˈtræk/",
+      "loai": "phr",
+      "nghia": "xa chốn đông người, ít ai biết tới",
+      "cap": "C1",
+      "viDu": "I prefer travelling off the beaten track to visiting famous sights.",
+      "viDuNghia": "Tôi thích đi những nơi ít người biết hơn là thăm danh lam nổi tiếng.",
+      "cumTu": [
+        "go off the beaten track",
+        "a village off the beaten track"
+      ],
+      "ghiChu": "Thành ngữ hay cho Speaking Part 2 (kể về chuyến đi)."
+    },
+    {
+      "chu": "package holiday",
+      "doc": "/ˈpækɪdʒ ˌhɒlədeɪ/",
+      "loai": "n",
+      "nghia": "tour trọn gói",
+      "cap": "B2",
+      "viDu": "Package holidays are convenient but offer little contact with local people.",
+      "viDuNghia": "Tour trọn gói tiện lợi nhưng ít tiếp xúc với người địa phương.",
+      "cumTu": [
+        "book a package holiday",
+        "cheap package holidays"
+      ]
+    },
+    {
+      "chu": "backpacker",
+      "doc": "/ˈbækpækə/",
+      "loai": "n",
+      "nghia": "khách du lịch ba lô",
+      "cap": "B2",
+      "viDu": "The old quarter is full of cheap hostels for backpackers.",
+      "viDuNghia": "Phố cổ đầy nhà nghỉ giá rẻ cho khách du lịch ba lô.",
+      "cumTu": [
+        "budget backpackers",
+        "a backpacker hostel"
+      ],
+      "hoTu": [
+        "backpacking (n)"
+      ]
+    },
+    {
+      "chu": "budget airline",
+      "doc": "/ˌbʌdʒɪt ˈeəlaɪn/",
+      "loai": "n",
+      "nghia": "hãng hàng không giá rẻ",
+      "cap": "B2",
+      "viDu": "Budget airlines have made foreign travel affordable for students.",
+      "viDuNghia": "Hãng bay giá rẻ khiến du lịch nước ngoài vừa túi tiền sinh viên.",
+      "cumTu": [
+        "fly with a budget airline"
+      ],
+      "ghiChu": "Đồng nghĩa: low-cost carrier."
+    },
+    {
+      "chu": "tour operator",
+      "doc": "/ˈtʊər ˌɒpəreɪtə/",
+      "loai": "n",
+      "nghia": "công ty lữ hành",
+      "cap": "B2",
+      "viDu": "Tour operators should make sure local communities benefit from tourism.",
+      "viDuNghia": "Công ty lữ hành nên bảo đảm cộng đồng địa phương được hưởng lợi từ du lịch.",
+      "cumTu": [
+        "a local tour operator",
+        "major tour operators"
+      ]
+    },
+    {
+      "chu": "peak season",
+      "doc": "/ˈpiːk ˌsiːzn/",
+      "loai": "n",
+      "nghia": "mùa cao điểm",
+      "cap": "B2",
+      "viDu": "Hotel prices double during the peak season.",
+      "viDuNghia": "Giá khách sạn tăng gấp đôi vào mùa cao điểm.",
+      "cumTu": [
+        "in the peak season",
+        "peak-season prices"
+      ],
+      "ghiChu": "Đối lập: off-season / low season."
+    },
+    {
+      "chu": "off-season",
+      "doc": "/ˈɒf ˌsiːzn/",
+      "loai": "n",
+      "nghia": "mùa thấp điểm",
+      "cap": "B2",
+      "viDu": "Travelling in the off-season is cheaper and less crowded.",
+      "viDuNghia": "Đi du lịch mùa thấp điểm rẻ hơn và ít đông đúc hơn.",
+      "cumTu": [
+        "in the off-season",
+        "off-season discounts"
+      ]
+    },
+    {
+      "chu": "staycation",
+      "doc": "/steɪˈkeɪʃn/",
+      "loai": "n",
+      "nghia": "kỳ nghỉ tại chỗ (không đi xa)",
+      "cap": "C1",
+      "viDu": "Many families chose a staycation instead of flying abroad.",
+      "viDuNghia": "Nhiều gia đình chọn nghỉ tại chỗ thay vì bay ra nước ngoài.",
+      "cumTu": [
+        "have a staycation"
+      ]
+    },
+    {
+      "chu": "stopover",
+      "doc": "/ˈstɒpəʊvə/",
+      "loai": "n",
+      "nghia": "điểm dừng chân (giữa chuyến bay dài)",
+      "cap": "B2",
+      "viDu": "We had a two-day stopover in Singapore on the way to Australia.",
+      "viDuNghia": "Chúng tôi dừng chân hai ngày ở Singapore trên đường sang Úc.",
+      "cumTu": [
+        "a stopover in",
+        "an overnight stopover"
+      ]
+    },
+    {
+      "chu": "hospitality",
+      "doc": "/ˌhɒspɪˈtæləti/",
+      "loai": "n",
+      "nghia": "lòng hiếu khách; ngành nhà hàng – khách sạn",
+      "cap": "B2",
+      "viDu": "Vietnam is known for the hospitality of its people.",
+      "viDuNghia": "Việt Nam nổi tiếng với lòng hiếu khách của người dân.",
+      "cumTu": [
+        "the hospitality industry",
+        "warm hospitality"
+      ],
+      "hoTu": [
+        "hospitable (adj)"
+      ]
+    },
+    {
+      "chu": "hospitable",
+      "doc": "/hɒˈspɪtəbl/",
+      "loai": "adj",
+      "nghia": "hiếu khách",
+      "cap": "C1",
+      "viDu": "The villagers were extremely hospitable and invited us to dinner.",
+      "viDuNghia": "Dân làng cực kỳ hiếu khách và mời chúng tôi ăn tối.",
+      "cumTu": [
+        "hospitable people",
+        "a hospitable welcome"
+      ],
+      "hoTu": [
+        "hospitality (n)"
+      ]
+    },
+    {
+      "chu": "culture shock",
+      "doc": "/ˈkʌltʃə ˌʃɒk/",
+      "loai": "n",
+      "nghia": "sốc văn hoá",
+      "cap": "B2",
+      "viDu": "International students often experience culture shock in their first months.",
+      "viDuNghia": "Du học sinh thường bị sốc văn hoá trong những tháng đầu.",
+      "cumTu": [
+        "experience culture shock",
+        "suffer from culture shock",
+        "reverse culture shock"
+      ]
+    },
+    {
+      "chu": "cultural heritage",
+      "doc": "/ˌkʌltʃərəl ˈherɪtɪdʒ/",
+      "loai": "n",
+      "nghia": "di sản văn hoá",
+      "cap": "B2",
+      "viDu": "Governments have a duty to protect their cultural heritage.",
+      "viDuNghia": "Chính phủ có trách nhiệm bảo vệ di sản văn hoá.",
+      "cumTu": [
+        "preserve cultural heritage",
+        "rich cultural heritage"
+      ]
+    },
+    {
+      "chu": "heritage site",
+      "doc": "/ˈherɪtɪdʒ ˌsaɪt/",
+      "loai": "n",
+      "nghia": "khu di sản",
+      "cap": "B2",
+      "viDu": "Hoi An is a UNESCO World Heritage Site.",
+      "viDuNghia": "Hội An là một Di sản Thế giới được UNESCO công nhận.",
+      "cumTu": [
+        "a World Heritage Site",
+        "protect heritage sites"
+      ]
+    },
+    {
+      "chu": "intangible heritage",
+      "doc": "/ɪnˌtændʒəbl ˈherɪtɪdʒ/",
+      "loai": "n",
+      "nghia": "di sản phi vật thể",
+      "cap": "C1",
+      "viDu": "Traditional music is part of a country's intangible heritage.",
+      "viDuNghia": "Âm nhạc truyền thống là một phần di sản phi vật thể của một đất nước.",
+      "cumTu": [
+        "intangible cultural heritage"
+      ],
+      "ghiChu": "Ví dụ Việt Nam: Nhã nhạc cung đình Huế, ca trù, quan họ."
+    },
+    {
+      "chu": "historic",
+      "doc": "/hɪˈstɒrɪk/",
+      "loai": "adj",
+      "nghia": "có ý nghĩa lịch sử, lịch sử",
+      "cap": "B2",
+      "viDu": "Many historic buildings were demolished to make way for offices.",
+      "viDuNghia": "Nhiều toà nhà lịch sử bị phá để xây văn phòng.",
+      "cumTu": [
+        "historic buildings",
+        "a historic town",
+        "a historic moment"
+      ],
+      "hoTu": [
+        "history (n)"
+      ],
+      "ghiChu": "Khác \"historical\" (thuộc về lịch sử, có liên quan đến quá khứ): historic = quan trọng, đáng ghi nhớ."
+    },
+    {
+      "chu": "restoration",
+      "doc": "/ˌrestəˈreɪʃn/",
+      "loai": "n",
+      "nghia": "sự trùng tu, phục hồi",
+      "cap": "C1",
+      "viDu": "The restoration of the ancient temple took ten years.",
+      "viDuNghia": "Việc trùng tu ngôi đền cổ mất mười năm.",
+      "cumTu": [
+        "restoration work",
+        "the restoration of"
+      ],
+      "hoTu": [
+        "restore (v)"
+      ]
+    },
+    {
+      "chu": "artefact",
+      "doc": "/ˈɑːtɪfækt/",
+      "loai": "n",
+      "nghia": "hiện vật (cổ)",
+      "cap": "C1",
+      "viDu": "The museum displays artefacts from the Dong Son culture.",
+      "viDuNghia": "Bảo tàng trưng bày hiện vật của văn hoá Đông Sơn.",
+      "cumTu": [
+        "ancient artefacts",
+        "cultural artefacts"
+      ],
+      "ghiChu": "Anh-Mỹ: artifact."
+    },
+    {
+      "chu": "preservation",
+      "doc": "/ˌprezəˈveɪʃn/",
+      "loai": "n",
+      "nghia": "sự bảo tồn",
+      "cap": "C1",
+      "viDu": "Tourist fees could pay for the preservation of historic sites.",
+      "viDuNghia": "Phí du lịch có thể chi trả cho việc bảo tồn di tích.",
+      "cumTu": [
+        "the preservation of",
+        "preservation work"
+      ],
+      "hoTu": [
+        "preserve (v)"
+      ]
+    },
+    {
+      "chu": "cultural identity",
+      "doc": "/ˌkʌltʃərəl aɪˈdentəti/",
+      "loai": "n",
+      "nghia": "bản sắc văn hoá",
+      "cap": "C1",
+      "viDu": "Globalisation may threaten a nation's cultural identity.",
+      "viDuNghia": "Toàn cầu hoá có thể đe doạ bản sắc văn hoá của một quốc gia.",
+      "cumTu": [
+        "a strong cultural identity",
+        "lose cultural identity"
+      ]
+    },
+    {
+      "chu": "cultural diversity",
+      "doc": "/ˌkʌltʃərəl daɪˈvɜːsəti/",
+      "loai": "n",
+      "nghia": "sự đa dạng văn hoá",
+      "cap": "B2",
+      "viDu": "Cultural diversity makes a city more vibrant.",
+      "viDuNghia": "Đa dạng văn hoá làm thành phố sôi động hơn.",
+      "cumTu": [
+        "celebrate cultural diversity",
+        "respect cultural diversity"
+      ]
+    },
+    {
+      "chu": "cultural exchange",
+      "doc": "/ˌkʌltʃərəl ɪksˈtʃeɪndʒ/",
+      "loai": "n",
+      "nghia": "giao lưu văn hoá",
+      "cap": "B2",
+      "viDu": "Student exchange programmes promote cultural exchange.",
+      "viDuNghia": "Chương trình trao đổi sinh viên thúc đẩy giao lưu văn hoá.",
+      "cumTu": [
+        "promote cultural exchange",
+        "cultural exchange programmes"
+      ]
+    },
+    {
+      "chu": "cultural awareness",
+      "doc": "/ˌkʌltʃərəl əˈweənəs/",
+      "loai": "n",
+      "nghia": "sự hiểu biết về văn hoá",
+      "cap": "B2",
+      "viDu": "Travelling abroad raises cultural awareness.",
+      "viDuNghia": "Đi nước ngoài nâng cao hiểu biết về văn hoá.",
+      "cumTu": [
+        "raise cultural awareness",
+        "develop cultural awareness"
+      ]
+    },
+    {
+      "chu": "cross-cultural",
+      "doc": "/ˌkrɒs ˈkʌltʃərəl/",
+      "loai": "adj",
+      "nghia": "liên văn hoá",
+      "cap": "C1",
+      "viDu": "Working abroad improves cross-cultural communication skills.",
+      "viDuNghia": "Làm việc ở nước ngoài cải thiện kỹ năng giao tiếp liên văn hoá.",
+      "cumTu": [
+        "cross-cultural communication",
+        "cross-cultural understanding"
+      ]
+    },
+    {
+      "chu": "customs and traditions",
+      "doc": "/ˌkʌstəmz ənd trəˈdɪʃnz/",
+      "loai": "n",
+      "nghia": "phong tục tập quán",
+      "cap": "B2",
+      "viDu": "Visitors should respect local customs and traditions.",
+      "viDuNghia": "Du khách nên tôn trọng phong tục tập quán địa phương.",
+      "cumTu": [
+        "respect local customs and traditions",
+        "preserve customs and traditions"
+      ]
+    },
+    {
+      "chu": "indigenous",
+      "doc": "/ɪnˈdɪdʒənəs/",
+      "loai": "adj",
+      "nghia": "bản địa",
+      "cap": "C1",
+      "viDu": "Tourism can bring income to indigenous communities.",
+      "viDuNghia": "Du lịch có thể mang thu nhập tới các cộng đồng bản địa.",
+      "cumTu": [
+        "indigenous people",
+        "indigenous culture",
+        "indigenous languages"
+      ]
+    },
+    {
+      "chu": "ethnic minority",
+      "doc": "/ˌeθnɪk maɪˈnɒrəti/",
+      "loai": "n",
+      "nghia": "dân tộc thiểu số",
+      "cap": "B2",
+      "viDu": "Sapa is home to several ethnic minority groups.",
+      "viDuNghia": "Sa Pa là nơi sinh sống của nhiều nhóm dân tộc thiểu số.",
+      "cumTu": [
+        "ethnic minority groups",
+        "ethnic minority languages"
+      ],
+      "hoTu": [
+        "ethnicity (n)"
+      ]
+    },
+    {
+      "chu": "endangered language",
+      "doc": "/ɪnˌdeɪndʒəd ˈlæŋɡwɪdʒ/",
+      "loai": "n",
+      "nghia": "ngôn ngữ có nguy cơ biến mất",
+      "cap": "C1",
+      "viDu": "Should governments spend money to save endangered languages?",
+      "viDuNghia": "Chính phủ có nên chi tiền cứu các ngôn ngữ có nguy cơ biến mất không?",
+      "cumTu": [
+        "revive endangered languages",
+        "protect endangered languages"
+      ],
+      "ghiChu": "Đề Task 2 kinh điển."
+    },
+    {
+      "chu": "folklore",
+      "doc": "/ˈfəʊklɔː/",
+      "loai": "n",
+      "nghia": "văn hoá dân gian, truyện dân gian",
+      "cap": "C1",
+      "viDu": "Many festivals are rooted in local folklore.",
+      "viDuNghia": "Nhiều lễ hội bắt nguồn từ văn hoá dân gian địa phương.",
+      "cumTu": [
+        "traditional folklore",
+        "according to folklore"
+      ],
+      "hoTu": [
+        "folk (adj)"
+      ]
+    },
+    {
+      "chu": "handicraft",
+      "doc": "/ˈhændikrɑːft/",
+      "loai": "n",
+      "nghia": "đồ thủ công",
+      "cap": "B2",
+      "viDu": "Tourists buy handicrafts made by local artisans.",
+      "viDuNghia": "Du khách mua đồ thủ công do nghệ nhân địa phương làm.",
+      "cumTu": [
+        "traditional handicrafts",
+        "handicraft villages"
+      ],
+      "ghiChu": "Rất hợp khi nói về làng nghề Việt Nam."
+    },
+    {
+      "chu": "authentic",
+      "doc": "/ɔːˈθentɪk/",
+      "loai": "adj",
+      "nghia": "chân thực, đích thực",
+      "cap": "B2",
+      "viDu": "Tourists want an authentic experience, not a staged show.",
+      "viDuNghia": "Du khách muốn trải nghiệm chân thực, không phải màn trình diễn dàn dựng.",
+      "cumTu": [
+        "an authentic experience",
+        "authentic local food"
+      ],
+      "hoTu": [
+        "authenticity (n)"
+      ]
+    },
+    {
+      "chu": "commercialisation",
+      "doc": "/kəˌmɜːʃəlaɪˈzeɪʃn/",
+      "loai": "n",
+      "nghia": "sự thương mại hoá",
+      "cap": "C1",
+      "viDu": "The commercialisation of traditional festivals worries older residents.",
+      "viDuNghia": "Sự thương mại hoá lễ hội truyền thống khiến người lớn tuổi lo ngại.",
+      "cumTu": [
+        "the commercialisation of culture"
+      ],
+      "hoTu": [
+        "commercialise (v)",
+        "commercial (adj)"
+      ]
+    },
+    {
+      "chu": "homogenisation",
+      "doc": "/həˌmɒdʒənaɪˈzeɪʃn/",
+      "loai": "n",
+      "nghia": "sự đồng nhất hoá (văn hoá)",
+      "cap": "C2",
+      "viDu": "Some fear the homogenisation of culture as every city gets the same chains.",
+      "viDuNghia": "Một số người lo văn hoá bị đồng nhất hoá khi thành phố nào cũng có cùng chuỗi cửa hàng.",
+      "cumTu": [
+        "cultural homogenisation"
+      ],
+      "hoTu": [
+        "homogeneous (adj)"
+      ]
+    },
+    {
+      "chu": "picturesque",
+      "doc": "/ˌpɪktʃəˈresk/",
+      "loai": "adj",
+      "nghia": "đẹp như tranh",
+      "cap": "C1",
+      "viDu": "We stayed in a picturesque village in the mountains.",
+      "viDuNghia": "Chúng tôi ở một ngôi làng đẹp như tranh trên núi.",
+      "cumTu": [
+        "a picturesque village",
+        "picturesque scenery"
+      ]
+    },
+    {
+      "chu": "breathtaking",
+      "doc": "/ˈbreθteɪkɪŋ/",
+      "loai": "adj",
+      "nghia": "đẹp ngoạn mục",
+      "cap": "C1",
+      "viDu": "The view from the top of the mountain was breathtaking.",
+      "viDuNghia": "Khung cảnh từ đỉnh núi đẹp ngoạn mục.",
+      "cumTu": [
+        "breathtaking views",
+        "breathtaking scenery"
+      ],
+      "ghiChu": "Speaking: dùng thay \"very beautiful\"."
+    },
+    {
+      "chu": "iconic",
+      "doc": "/aɪˈkɒnɪk/",
+      "loai": "adj",
+      "nghia": "mang tính biểu tượng",
+      "cap": "C1",
+      "viDu": "The Eiffel Tower is the most iconic landmark in Paris.",
+      "viDuNghia": "Tháp Eiffel là địa danh mang tính biểu tượng nhất Paris.",
+      "cumTu": [
+        "an iconic landmark",
+        "iconic buildings"
+      ],
+      "hoTu": [
+        "icon (n)"
+      ]
+    },
+    {
+      "chu": "broaden your horizons",
+      "doc": "/ˌbrɔːdn jɔː həˈraɪznz/",
+      "loai": "phr",
+      "nghia": "mở mang tầm hiểu biết",
+      "cap": "B2",
+      "viDu": "Travelling abroad is a great way to broaden your horizons.",
+      "viDuNghia": "Đi nước ngoài là cách tuyệt vời để mở mang tầm hiểu biết.",
+      "cumTu": [
+        "broaden their horizons",
+        "help broaden your horizons"
+      ],
+      "ghiChu": "Cụm kinh điển trong bài viết về lợi ích du lịch/du học."
+    },
+    {
+      "chu": "wanderlust",
+      "doc": "/ˈwɒndəlʌst/",
+      "loai": "n",
+      "nghia": "niềm đam mê xê dịch",
+      "cap": "C1",
+      "viDu": "My wanderlust started when I visited Thailand at the age of eighteen.",
+      "viDuNghia": "Niềm đam mê xê dịch của tôi bắt đầu khi tôi thăm Thái Lan năm mười tám tuổi.",
+      "cumTu": [
+        "a sense of wanderlust"
+      ]
+    },
+    {
+      "chu": "local economy",
+      "doc": "/ˌləʊkl ɪˈkɒnəmi/",
+      "loai": "n",
+      "nghia": "kinh tế địa phương",
+      "cap": "B2",
+      "viDu": "Tourism brings money into the local economy.",
+      "viDuNghia": "Du lịch mang tiền vào kinh tế địa phương.",
+      "cumTu": [
+        "boost the local economy",
+        "support the local economy"
+      ]
+    }
+  ]
+}

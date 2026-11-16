@@ -1,0 +1,1761 @@
+{
+  "ma": "ielts-hoc-thuat-4",
+  "nn": "en",
+  "ten": "Từ học thuật cốt lõi 4",
+  "moTa": "Từ học thuật cấp C1–C2 cho band 7.5–8.0: mitigate, outweigh, scrutiny, trade-off, rationale, undermine, proponent, exacerbate… — dùng đúng chỗ, tránh lạm dụng.",
+  "nhom": "ielts",
+  "cap": "C1",
+  "tu": [
+    {
+      "chu": "misconception",
+      "doc": "/ˌmɪskənˈsepʃn/",
+      "loai": "n",
+      "nghia": "quan niệm sai",
+      "cap": "C1",
+      "viDu": "It is a common misconception that older people cannot learn new skills.",
+      "viDuNghia": "Một quan niệm sai phổ biến là người lớn tuổi không học được kỹ năng mới.",
+      "cumTu": [
+        "a common misconception",
+        "popular misconceptions",
+        "correct a misconception"
+      ],
+      "hoTu": [
+        "misconceive (v)"
+      ]
+    },
+    {
+      "chu": "mitigate",
+      "doc": "/ˈmɪtɪɡeɪt/",
+      "loai": "v",
+      "nghia": "giảm nhẹ, giảm thiểu (tác hại)",
+      "cap": "C1",
+      "viDu": "Planting trees can help mitigate the effects of pollution.",
+      "viDuNghia": "Trồng cây có thể giúp giảm thiểu tác hại của ô nhiễm.",
+      "cumTu": [
+        "mitigate the effects",
+        "mitigate risks",
+        "mitigate the impact"
+      ],
+      "hoTu": [
+        "mitigation (n)"
+      ]
+    },
+    {
+      "chu": "mobilise",
+      "doc": "/ˈməʊbəlaɪz/",
+      "loai": "v",
+      "nghia": "huy động",
+      "cap": "C1",
+      "viDu": "The charity mobilised hundreds of volunteers after the flood.",
+      "viDuNghia": "Tổ chức từ thiện đã huy động hàng trăm tình nguyện viên sau trận lũ.",
+      "cumTu": [
+        "mobilise support",
+        "mobilise resources",
+        "mobilise volunteers"
+      ],
+      "hoTu": [
+        "mobilisation (n)"
+      ],
+      "ghiChu": "Anh-Mỹ \"mobilize\"."
+    },
+    {
+      "chu": "momentum",
+      "doc": "/məˈmentəm/",
+      "loai": "n",
+      "nghia": "đà, động lượng",
+      "cap": "C1",
+      "viDu": "The campaign for equal pay is gaining momentum.",
+      "viDuNghia": "Chiến dịch đòi trả lương bình đẳng đang có thêm đà.",
+      "cumTu": [
+        "gain momentum",
+        "lose momentum",
+        "maintain momentum"
+      ]
+    },
+    {
+      "chu": "necessitate",
+      "doc": "/nəˈsesɪteɪt/",
+      "loai": "v",
+      "nghia": "đòi hỏi, bắt buộc phải có",
+      "cap": "C1",
+      "viDu": "The rise in student numbers will necessitate more classrooms.",
+      "viDuNghia": "Số sinh viên tăng sẽ đòi hỏi thêm phòng học.",
+      "cumTu": [
+        "necessitate changes",
+        "necessitate doing"
+      ],
+      "hoTu": [
+        "necessity (n)",
+        "necessary (adj)"
+      ]
+    },
+    {
+      "chu": "nurture",
+      "doc": "/ˈnɜːtʃə(r)/",
+      "loai": "v",
+      "nghia": "nuôi dưỡng, vun đắp",
+      "cap": "C1",
+      "viDu": "Schools should nurture creativity rather than memorisation.",
+      "viDuNghia": "Trường học nên nuôi dưỡng sự sáng tạo hơn là học thuộc.",
+      "cumTu": [
+        "nurture talent",
+        "nurture creativity",
+        "nurture a relationship"
+      ],
+      "hoTu": [
+        "nurture (n)"
+      ],
+      "ghiChu": "\"nature vs nurture\" = bẩm sinh hay nuôi dạy — chủ đề kinh điển."
+    },
+    {
+      "chu": "objection",
+      "doc": "/əbˈdʒekʃn/",
+      "loai": "n",
+      "nghia": "sự phản đối",
+      "cap": "C1",
+      "viDu": "Local residents raised several objections to the new road.",
+      "viDuNghia": "Cư dân địa phương đã nêu một số ý kiến phản đối con đường mới.",
+      "cumTu": [
+        "raise an objection",
+        "have no objection to",
+        "a strong objection"
+      ],
+      "hoTu": [
+        "object (v)",
+        "objectionable (adj)"
+      ]
+    },
+    {
+      "chu": "oblige",
+      "doc": "/əˈblaɪdʒ/",
+      "loai": "v",
+      "nghia": "bắt buộc; giúp đỡ",
+      "cap": "C1",
+      "viDu": "Employers are obliged to provide a safe workplace.",
+      "viDuNghia": "Người sử dụng lao động có nghĩa vụ đảm bảo nơi làm việc an toàn.",
+      "cumTu": [
+        "be obliged to do",
+        "feel obliged to",
+        "legally obliged"
+      ],
+      "hoTu": [
+        "obligation (n)",
+        "obligatory (adj)"
+      ]
+    },
+    {
+      "chu": "offset",
+      "doc": "/ˈɒfset/",
+      "loai": "v",
+      "nghia": "bù lại, bù trừ",
+      "cap": "C1",
+      "viDu": "Higher prices were offset by better quality.",
+      "viDuNghia": "Giá cao hơn được bù lại bằng chất lượng tốt hơn.",
+      "cumTu": [
+        "offset the cost",
+        "offset carbon emissions",
+        "be offset by"
+      ],
+      "hoTu": [
+        "offset (n)"
+      ],
+      "ghiChu": "Bất quy tắc: offset – offset – offset. Động từ có thể nhấn âm 2 (ofSET)."
+    },
+    {
+      "chu": "optimise",
+      "doc": "/ˈɒptɪmaɪz/",
+      "loai": "v",
+      "nghia": "tối ưu hoá",
+      "cap": "C1",
+      "viDu": "Companies use data to optimise their delivery routes.",
+      "viDuNghia": "Các công ty dùng dữ liệu để tối ưu hoá tuyến giao hàng.",
+      "cumTu": [
+        "optimise performance",
+        "optimise efficiency"
+      ],
+      "hoTu": [
+        "optimal (adj)",
+        "optimisation (n)"
+      ],
+      "ghiChu": "Anh-Mỹ \"optimize\"."
+    },
+    {
+      "chu": "originate",
+      "doc": "/əˈrɪdʒɪneɪt/",
+      "loai": "v",
+      "nghia": "bắt nguồn",
+      "cap": "C1",
+      "viDu": "The tradition originated in China over two thousand years ago.",
+      "viDuNghia": "Truyền thống này bắt nguồn từ Trung Quốc hơn hai nghìn năm trước.",
+      "cumTu": [
+        "originate in",
+        "originate from",
+        "originate with"
+      ],
+      "hoTu": [
+        "origin (n)",
+        "original (adj)"
+      ]
+    },
+    {
+      "chu": "outlook",
+      "doc": "/ˈaʊtlʊk/",
+      "loai": "n",
+      "nghia": "quan điểm sống; triển vọng",
+      "cap": "C1",
+      "viDu": "Travelling broadens your outlook on life.",
+      "viDuNghia": "Du lịch mở rộng quan điểm sống của bạn.",
+      "cumTu": [
+        "outlook on life",
+        "a positive outlook",
+        "the economic outlook"
+      ]
+    },
+    {
+      "chu": "outset",
+      "doc": "/ˈaʊtset/",
+      "loai": "n",
+      "nghia": "lúc đầu, sự khởi đầu",
+      "cap": "C1",
+      "viDu": "It is important to state your opinion at the outset of the essay.",
+      "viDuNghia": "Điều quan trọng là nêu quan điểm ngay từ đầu bài luận.",
+      "cumTu": [
+        "at the outset",
+        "from the outset"
+      ],
+      "ghiChu": "Chỉ dùng trong \"at/from the outset\"."
+    },
+    {
+      "chu": "outweigh",
+      "doc": "/ˌaʊtˈweɪ/",
+      "loai": "v",
+      "nghia": "lớn hơn, nặng hơn (về tầm quan trọng)",
+      "cap": "C1",
+      "viDu": "In my view, the benefits of tourism outweigh its drawbacks.",
+      "viDuNghia": "Theo tôi, lợi ích của du lịch lớn hơn những bất lợi của nó.",
+      "cumTu": [
+        "the benefits outweigh the drawbacks",
+        "far outweigh",
+        "outweigh the risks"
+      ],
+      "ghiChu": "Câu then chốt cho dạng đề \"Do the advantages outweigh the disadvantages?\" — phải trả lời rõ bên nào nặng hơn."
+    },
+    {
+      "chu": "overlook",
+      "doc": "/ˌəʊvəˈlʊk/",
+      "loai": "v",
+      "nghia": "bỏ qua, không để ý; nhìn ra (cảnh)",
+      "cap": "C1",
+      "viDu": "The needs of rural communities are often overlooked.",
+      "viDuNghia": "Nhu cầu của các cộng đồng nông thôn thường bị bỏ qua.",
+      "cumTu": [
+        "overlook the fact that",
+        "easily overlooked",
+        "often overlooked"
+      ],
+      "hoTu": [
+        "oversight (n)"
+      ],
+      "ghiChu": "Nghĩa khác: a room overlooking the sea = phòng nhìn ra biển."
+    },
+    {
+      "chu": "oversight",
+      "doc": "/ˈəʊvəsaɪt/",
+      "loai": "n",
+      "nghia": "sự sơ suất; sự giám sát",
+      "cap": "C1",
+      "viDu": "The mistake was caused by a simple oversight.",
+      "viDuNghia": "Lỗi này là do một sơ suất đơn giản.",
+      "cumTu": [
+        "a simple oversight",
+        "government oversight",
+        "regulatory oversight"
+      ],
+      "hoTu": [
+        "overlook (v)",
+        "oversee (v)"
+      ],
+      "ghiChu": "Hai nghĩa gần như ngược nhau: sơ suất (bỏ sót) và giám sát (oversee)."
+    },
+    {
+      "chu": "paradox",
+      "doc": "/ˈpærədɒks/",
+      "loai": "n",
+      "nghia": "nghịch lý",
+      "cap": "C1",
+      "viDu": "It is a paradox that we are more connected yet feel lonelier than ever.",
+      "viDuNghia": "Thật nghịch lý khi chúng ta kết nối nhiều hơn mà lại thấy cô đơn hơn bao giờ hết.",
+      "cumTu": [
+        "a strange paradox",
+        "the paradox of",
+        "it is a paradox that"
+      ],
+      "hoTu": [
+        "paradoxical (adj)",
+        "paradoxically (adv)"
+      ]
+    },
+    {
+      "chu": "parameter",
+      "doc": "/pəˈræmɪtə(r)/",
+      "loai": "n",
+      "nghia": "thông số; giới hạn, khuôn khổ",
+      "cap": "C1",
+      "viDu": "The research was carried out within strict parameters.",
+      "viDuNghia": "Nghiên cứu được tiến hành trong khuôn khổ nghiêm ngặt.",
+      "cumTu": [
+        "within the parameters of",
+        "set parameters",
+        "key parameters"
+      ],
+      "ghiChu": "Nhấn âm 2: paRAmeter."
+    },
+    {
+      "chu": "persistence",
+      "doc": "/pəˈsɪstəns/",
+      "loai": "n",
+      "nghia": "sự kiên trì; sự dai dẳng",
+      "cap": "C1",
+      "viDu": "Learning a language requires persistence and patience.",
+      "viDuNghia": "Học một ngôn ngữ đòi hỏi sự kiên trì và nhẫn nại.",
+      "cumTu": [
+        "persistence and determination",
+        "the persistence of"
+      ],
+      "hoTu": [
+        "persist (v)",
+        "persistent (adj)"
+      ]
+    },
+    {
+      "chu": "pitfall",
+      "doc": "/ˈpɪtfɔːl/",
+      "loai": "n",
+      "nghia": "cạm bẫy, khó khăn tiềm ẩn",
+      "cap": "C1",
+      "viDu": "One pitfall of online shopping is that you cannot see the product.",
+      "viDuNghia": "Một cạm bẫy của mua sắm trực tuyến là bạn không thể xem tận mắt sản phẩm.",
+      "cumTu": [
+        "avoid pitfalls",
+        "potential pitfalls",
+        "common pitfalls"
+      ],
+      "ghiChu": "Thường dùng số nhiều."
+    },
+    {
+      "chu": "portray",
+      "doc": "/pɔːˈtreɪ/",
+      "loai": "v",
+      "nghia": "miêu tả, khắc hoạ",
+      "cap": "C1",
+      "viDu": "Scientists are often portrayed as strange people in films.",
+      "viDuNghia": "Các nhà khoa học thường bị khắc hoạ là người kỳ quặc trong phim.",
+      "cumTu": [
+        "portray as",
+        "be portrayed as",
+        "accurately portray"
+      ],
+      "hoTu": [
+        "portrayal (n)",
+        "portrait (n)"
+      ],
+      "ghiChu": "\"the media portray X as Y\" — cấu trúc hay cho đề truyền thông."
+    },
+    {
+      "chu": "precedent",
+      "doc": "/ˈpresɪdənt/",
+      "loai": "n",
+      "nghia": "tiền lệ",
+      "cap": "C1",
+      "viDu": "The court's decision could set a dangerous precedent.",
+      "viDuNghia": "Phán quyết của toà có thể tạo ra một tiền lệ nguy hiểm.",
+      "cumTu": [
+        "set a precedent",
+        "without precedent",
+        "break with precedent"
+      ],
+      "hoTu": [
+        "unprecedented (adj)",
+        "precede (v)"
+      ],
+      "ghiChu": "\"unprecedented\" = chưa từng có — từ rất hay ở Task 2."
+    },
+    {
+      "chu": "premise",
+      "doc": "/ˈpremɪs/",
+      "loai": "n",
+      "nghia": "tiền đề",
+      "cap": "C1",
+      "viDu": "The argument is based on a false premise.",
+      "viDuNghia": "Lập luận dựa trên một tiền đề sai.",
+      "cumTu": [
+        "a false premise",
+        "the basic premise",
+        "on the premise that"
+      ],
+      "hoTu": [
+        "premises (n) = khu nhà, cơ sở"
+      ],
+      "ghiChu": "Số nhiều \"premises\" còn có nghĩa khác: khu nhà/cơ sở kinh doanh."
+    },
+    {
+      "chu": "prerequisite",
+      "doc": "/ˌpriːˈrekwəzɪt/",
+      "loai": "n",
+      "nghia": "điều kiện tiên quyết",
+      "cap": "C1",
+      "viDu": "A good command of English is a prerequisite for studying abroad.",
+      "viDuNghia": "Tiếng Anh tốt là điều kiện tiên quyết để du học.",
+      "cumTu": [
+        "a prerequisite for",
+        "an essential prerequisite"
+      ],
+      "ghiChu": "Đi với \"for\"."
+    },
+    {
+      "chu": "presume",
+      "doc": "/prɪˈzjuːm/",
+      "loai": "v",
+      "nghia": "cho là, đoán chừng",
+      "cap": "C1",
+      "viDu": "I presume that most readers are familiar with the theory.",
+      "viDuNghia": "Tôi cho là phần lớn người đọc đã quen thuộc với lý thuyết này.",
+      "cumTu": [
+        "presume that",
+        "be presumed innocent",
+        "I presume"
+      ],
+      "hoTu": [
+        "presumption (n)",
+        "presumably (adv)"
+      ],
+      "ghiChu": "\"presume\" thường có căn cứ hơn \"assume\"."
+    },
+    {
+      "chu": "prevail",
+      "doc": "/prɪˈveɪl/",
+      "loai": "v",
+      "nghia": "thịnh hành; chiếm ưu thế, thắng thế",
+      "cap": "C1",
+      "viDu": "This attitude still prevails in many rural areas.",
+      "viDuNghia": "Thái độ này vẫn còn phổ biến ở nhiều vùng nông thôn.",
+      "cumTu": [
+        "common sense prevailed",
+        "prevail over",
+        "the prevailing view"
+      ],
+      "hoTu": [
+        "prevalent (adj)",
+        "prevalence (n)",
+        "prevailing (adj)"
+      ]
+    },
+    {
+      "chu": "prevalence",
+      "doc": "/ˈprevələns/",
+      "loai": "n",
+      "nghia": "sự phổ biến, mức độ phổ biến",
+      "cap": "C1",
+      "viDu": "The prevalence of obesity among children is worrying.",
+      "viDuNghia": "Mức độ phổ biến của béo phì ở trẻ em thật đáng lo ngại.",
+      "cumTu": [
+        "the prevalence of",
+        "high prevalence"
+      ],
+      "hoTu": [
+        "prevalent (adj)",
+        "prevail (v)"
+      ],
+      "ghiChu": "Hay gặp trong Reading y học, sức khoẻ."
+    },
+    {
+      "chu": "prioritise",
+      "doc": "/praɪˈɒrətaɪz/",
+      "loai": "v",
+      "nghia": "ưu tiên",
+      "cap": "C1",
+      "viDu": "Governments should prioritise education over military spending.",
+      "viDuNghia": "Chính phủ nên ưu tiên giáo dục hơn chi tiêu quân sự.",
+      "cumTu": [
+        "prioritise A over B",
+        "prioritise safety",
+        "prioritise tasks"
+      ],
+      "hoTu": [
+        "priority (n)"
+      ],
+      "ghiChu": "Anh-Mỹ \"prioritize\". Cấu trúc: prioritise A OVER B."
+    },
+    {
+      "chu": "privilege",
+      "doc": "/ˈprɪvəlɪdʒ/",
+      "loai": "n",
+      "nghia": "đặc quyền; vinh dự",
+      "cap": "C1",
+      "viDu": "Higher education should be a right, not a privilege.",
+      "viDuNghia": "Giáo dục đại học nên là quyền, không phải đặc quyền.",
+      "cumTu": [
+        "a privilege, not a right",
+        "special privileges",
+        "it is a privilege to"
+      ],
+      "hoTu": [
+        "privileged (adj)",
+        "underprivileged (adj)"
+      ],
+      "ghiChu": "\"underprivileged children\" = trẻ em có hoàn cảnh khó khăn."
+    },
+    {
+      "chu": "prolong",
+      "doc": "/prəˈlɒŋ/",
+      "loai": "v",
+      "nghia": "kéo dài",
+      "cap": "C1",
+      "viDu": "Modern medicine has prolonged life expectancy.",
+      "viDuNghia": "Y học hiện đại đã kéo dài tuổi thọ.",
+      "cumTu": [
+        "prolong life",
+        "prolong the process",
+        "prolonged exposure"
+      ],
+      "hoTu": [
+        "prolonged (adj)"
+      ]
+    },
+    {
+      "chu": "proponent",
+      "doc": "/prəˈpəʊnənt/",
+      "loai": "n",
+      "nghia": "người ủng hộ, người đề xuất",
+      "cap": "C1",
+      "viDu": "Proponents of the plan argue that it will create jobs.",
+      "viDuNghia": "Những người ủng hộ kế hoạch lập luận rằng nó sẽ tạo việc làm.",
+      "cumTu": [
+        "a leading proponent",
+        "proponents argue that"
+      ],
+      "ghiChu": "Cặp với \"opponent\": \"Proponents argue…, whereas opponents claim…\" — mở bài đề \"discuss both views\"."
+    },
+    {
+      "chu": "proposition",
+      "doc": "/ˌprɒpəˈzɪʃn/",
+      "loai": "n",
+      "nghia": "đề xuất; mệnh đề",
+      "cap": "C1",
+      "viDu": "Living in the city centre is an expensive proposition.",
+      "viDuNghia": "Sống ở trung tâm thành phố là một lựa chọn tốn kém.",
+      "cumTu": [
+        "an attractive proposition",
+        "a difficult proposition",
+        "the proposition that"
+      ],
+      "hoTu": [
+        "propose (v)",
+        "proposal (n)"
+      ]
+    },
+    {
+      "chu": "proximity",
+      "doc": "/prɒkˈsɪməti/",
+      "loai": "n",
+      "nghia": "sự gần gũi (về khoảng cách)",
+      "cap": "C1",
+      "viDu": "Many people choose a house for its proximity to good schools.",
+      "viDuNghia": "Nhiều người chọn nhà vì gần trường tốt.",
+      "cumTu": [
+        "proximity to",
+        "close proximity",
+        "in the proximity of"
+      ],
+      "hoTu": [
+        "proximate (adj)"
+      ],
+      "ghiChu": "Đi với \"to\"."
+    },
+    {
+      "chu": "quantify",
+      "doc": "/ˈkwɒntɪfaɪ/",
+      "loai": "v",
+      "nghia": "định lượng",
+      "cap": "C1",
+      "viDu": "The benefits of art education are difficult to quantify.",
+      "viDuNghia": "Lợi ích của giáo dục nghệ thuật rất khó định lượng.",
+      "cumTu": [
+        "difficult to quantify",
+        "quantify the risk",
+        "quantify the impact"
+      ],
+      "hoTu": [
+        "quantity (n)",
+        "quantifiable (adj)",
+        "quantitative (adj)"
+      ]
+    },
+    {
+      "chu": "rationale",
+      "doc": "/ˌræʃəˈnɑːl/",
+      "loai": "n",
+      "nghia": "lý do cơ bản, cơ sở lý luận",
+      "cap": "C1",
+      "viDu": "The rationale behind the policy is to reduce traffic in the city centre.",
+      "viDuNghia": "Lý do đằng sau chính sách là giảm giao thông ở trung tâm thành phố.",
+      "cumTu": [
+        "the rationale behind",
+        "the rationale for",
+        "a clear rationale"
+      ],
+      "hoTu": [
+        "rational (adj)"
+      ],
+      "ghiChu": "Đọc /-ˈnɑːl/ (âm cuối nhấn), khác \"rational\" /ˈræʃnəl/."
+    },
+    {
+      "chu": "reconcile",
+      "doc": "/ˈrekənsaɪl/",
+      "loai": "v",
+      "nghia": "dung hoà; hoà giải",
+      "cap": "C1",
+      "viDu": "It is difficult to reconcile economic growth with environmental protection.",
+      "viDuNghia": "Thật khó dung hoà tăng trưởng kinh tế với bảo vệ môi trường.",
+      "cumTu": [
+        "reconcile A with B",
+        "reconcile differences",
+        "be reconciled with"
+      ],
+      "hoTu": [
+        "reconciliation (n)"
+      ]
+    },
+    {
+      "chu": "rectify",
+      "doc": "/ˈrektɪfaɪ/",
+      "loai": "v",
+      "nghia": "sửa chữa, khắc phục (sai sót)",
+      "cap": "C1",
+      "viDu": "The government promised to rectify the situation quickly.",
+      "viDuNghia": "Chính phủ hứa sẽ nhanh chóng khắc phục tình hình.",
+      "cumTu": [
+        "rectify a mistake",
+        "rectify the situation",
+        "rectify the problem"
+      ],
+      "hoTu": [
+        "rectification (n)"
+      ]
+    },
+    {
+      "chu": "redistribute",
+      "doc": "/ˌriːdɪˈstrɪbjuːt/",
+      "loai": "v",
+      "nghia": "tái phân phối",
+      "cap": "C1",
+      "viDu": "Taxes are used to redistribute wealth from rich to poor.",
+      "viDuNghia": "Thuế được dùng để tái phân phối của cải từ người giàu sang người nghèo.",
+      "cumTu": [
+        "redistribute wealth",
+        "redistribute income",
+        "redistribute resources"
+      ],
+      "hoTu": [
+        "redistribution (n)"
+      ]
+    },
+    {
+      "chu": "refine",
+      "doc": "/rɪˈfaɪn/",
+      "loai": "v",
+      "nghia": "tinh chỉnh, hoàn thiện; tinh chế",
+      "cap": "C1",
+      "viDu": "Engineers spent months refining the design.",
+      "viDuNghia": "Các kỹ sư mất nhiều tháng tinh chỉnh thiết kế.",
+      "cumTu": [
+        "refine a technique",
+        "refine skills",
+        "refined sugar"
+      ],
+      "hoTu": [
+        "refinement (n)",
+        "refinery (n)"
+      ],
+      "ghiChu": "\"refined sugar\" = đường tinh luyện."
+    },
+    {
+      "chu": "refute",
+      "doc": "/rɪˈfjuːt/",
+      "loai": "v",
+      "nghia": "bác bỏ (bằng lý lẽ)",
+      "cap": "C1",
+      "viDu": "The scientist refuted the claim with clear evidence.",
+      "viDuNghia": "Nhà khoa học đã bác bỏ tuyên bố đó bằng bằng chứng rõ ràng.",
+      "cumTu": [
+        "refute a claim",
+        "refute an argument",
+        "refute allegations"
+      ],
+      "hoTu": [
+        "refutation (n)"
+      ],
+      "ghiChu": "Mạnh hơn \"deny\": refute là chứng minh điều kia sai."
+    },
+    {
+      "chu": "reluctance",
+      "doc": "/rɪˈlʌktəns/",
+      "loai": "n",
+      "nghia": "sự miễn cưỡng, ngần ngại",
+      "cap": "C1",
+      "viDu": "There is a growing reluctance among young people to buy houses.",
+      "viDuNghia": "Người trẻ ngày càng ngần ngại mua nhà.",
+      "cumTu": [
+        "reluctance to do",
+        "show reluctance",
+        "with reluctance"
+      ],
+      "hoTu": [
+        "reluctant (adj)",
+        "reluctantly (adv)"
+      ]
+    },
+    {
+      "chu": "render",
+      "doc": "/ˈrendə(r)/",
+      "loai": "v",
+      "nghia": "làm cho (trở nên); cung cấp",
+      "cap": "C1",
+      "viDu": "Smartphones have rendered many older devices obsolete.",
+      "viDuNghia": "Điện thoại thông minh đã khiến nhiều thiết bị cũ trở nên lỗi thời.",
+      "cumTu": [
+        "render obsolete",
+        "render useless",
+        "render a service"
+      ],
+      "hoTu": [
+        "rendering (n)"
+      ],
+      "ghiChu": "Cấu trúc: render + tân ngữ + tính từ (render something useless)."
+    },
+    {
+      "chu": "replicate",
+      "doc": "/ˈreplɪkeɪt/",
+      "loai": "v",
+      "nghia": "lặp lại, tái tạo",
+      "cap": "C1",
+      "viDu": "Other scientists were unable to replicate the results.",
+      "viDuNghia": "Các nhà khoa học khác không lặp lại được kết quả.",
+      "cumTu": [
+        "replicate results",
+        "replicate a study",
+        "difficult to replicate"
+      ],
+      "hoTu": [
+        "replication (n)",
+        "replica (n)"
+      ],
+      "ghiChu": "Trong khoa học, kết quả \"replicated\" = được kiểm chứng lại."
+    },
+    {
+      "chu": "resilience",
+      "doc": "/rɪˈzɪliəns/",
+      "loai": "n",
+      "nghia": "khả năng phục hồi, sức bật",
+      "cap": "C1",
+      "viDu": "Children who face challenges often develop greater resilience.",
+      "viDuNghia": "Trẻ em đối mặt với thử thách thường hình thành sức bật lớn hơn.",
+      "cumTu": [
+        "build resilience",
+        "emotional resilience",
+        "economic resilience"
+      ],
+      "hoTu": [
+        "resilient (adj)"
+      ]
+    },
+    {
+      "chu": "retention",
+      "doc": "/rɪˈtenʃn/",
+      "loai": "n",
+      "nghia": "sự giữ lại, ghi nhớ",
+      "cap": "C1",
+      "viDu": "Regular revision improves the retention of new vocabulary.",
+      "viDuNghia": "Ôn tập đều đặn giúp ghi nhớ từ vựng mới tốt hơn.",
+      "cumTu": [
+        "staff retention",
+        "memory retention",
+        "the retention of"
+      ],
+      "hoTu": [
+        "retain (v)"
+      ]
+    },
+    {
+      "chu": "retrieve",
+      "doc": "/rɪˈtriːv/",
+      "loai": "v",
+      "nghia": "lấy lại, truy xuất",
+      "cap": "C1",
+      "viDu": "The data can be retrieved from the server at any time.",
+      "viDuNghia": "Dữ liệu có thể được truy xuất từ máy chủ bất cứ lúc nào.",
+      "cumTu": [
+        "retrieve information",
+        "retrieve data",
+        "retrieve a memory"
+      ],
+      "hoTu": [
+        "retrieval (n)"
+      ]
+    },
+    {
+      "chu": "safeguard",
+      "doc": "/ˈseɪfɡɑːd/",
+      "loai": "v",
+      "nghia": "bảo vệ, che chở",
+      "cap": "C1",
+      "viDu": "Strict laws are needed to safeguard personal data.",
+      "viDuNghia": "Cần có luật nghiêm ngặt để bảo vệ dữ liệu cá nhân.",
+      "cumTu": [
+        "safeguard rights",
+        "safeguard the environment",
+        "safeguard against"
+      ],
+      "hoTu": [
+        "safeguard (n)"
+      ]
+    },
+    {
+      "chu": "sanction",
+      "doc": "/ˈsæŋkʃn/",
+      "loai": "n",
+      "nghia": "lệnh trừng phạt; sự cho phép",
+      "cap": "C1",
+      "viDu": "The UN imposed economic sanctions on the country.",
+      "viDuNghia": "Liên Hợp Quốc đã áp lệnh trừng phạt kinh tế lên nước này.",
+      "cumTu": [
+        "impose sanctions",
+        "economic sanctions",
+        "lift sanctions"
+      ],
+      "hoTu": [
+        "sanction (v)"
+      ],
+      "ghiChu": "Hai nghĩa ngược nhau: trừng phạt (số nhiều) và cho phép chính thức (số ít)."
+    },
+    {
+      "chu": "scenario",
+      "doc": "/səˈnɑːriəʊ/",
+      "loai": "n",
+      "nghia": "kịch bản, tình huống giả định",
+      "cap": "C1",
+      "viDu": "In the worst-case scenario, the company could close.",
+      "viDuNghia": "Trong kịch bản xấu nhất, công ty có thể đóng cửa.",
+      "cumTu": [
+        "worst-case scenario",
+        "a likely scenario",
+        "in this scenario"
+      ]
+    },
+    {
+      "chu": "scrutinise",
+      "doc": "/ˈskruːtənaɪz/",
+      "loai": "v",
+      "nghia": "xem xét kỹ lưỡng",
+      "cap": "C1",
+      "viDu": "Every claim in the report was carefully scrutinised.",
+      "viDuNghia": "Mọi tuyên bố trong báo cáo đều được xem xét kỹ lưỡng.",
+      "cumTu": [
+        "closely scrutinise",
+        "scrutinise the evidence"
+      ],
+      "hoTu": [
+        "scrutiny (n)"
+      ],
+      "ghiChu": "Anh-Mỹ \"scrutinize\"."
+    },
+    {
+      "chu": "scrutiny",
+      "doc": "/ˈskruːtəni/",
+      "loai": "n",
+      "nghia": "sự giám sát, xem xét kỹ",
+      "cap": "C1",
+      "viDu": "Politicians are under constant public scrutiny.",
+      "viDuNghia": "Chính trị gia luôn bị công chúng giám sát.",
+      "cumTu": [
+        "under scrutiny",
+        "close scrutiny",
+        "public scrutiny"
+      ],
+      "hoTu": [
+        "scrutinise (v)"
+      ]
+    },
+    {
+      "chu": "shortfall",
+      "doc": "/ˈʃɔːtfɔːl/",
+      "loai": "n",
+      "nghia": "sự thiếu hụt",
+      "cap": "C1",
+      "viDu": "There is a shortfall of 20,000 teachers in the country.",
+      "viDuNghia": "Cả nước thiếu hụt 20.000 giáo viên.",
+      "cumTu": [
+        "a shortfall in",
+        "a funding shortfall",
+        "make up the shortfall"
+      ]
+    },
+    {
+      "chu": "signify",
+      "doc": "/ˈsɪɡnɪfaɪ/",
+      "loai": "v",
+      "nghia": "biểu thị, có nghĩa là",
+      "cap": "C1",
+      "viDu": "A red light signifies danger.",
+      "viDuNghia": "Đèn đỏ biểu thị sự nguy hiểm.",
+      "cumTu": [
+        "signify a change",
+        "signify that"
+      ],
+      "hoTu": [
+        "significance (n)",
+        "significant (adj)"
+      ]
+    },
+    {
+      "chu": "simulate",
+      "doc": "/ˈsɪmjuleɪt/",
+      "loai": "v",
+      "nghia": "mô phỏng",
+      "cap": "C1",
+      "viDu": "Pilots train on machines that simulate real flights.",
+      "viDuNghia": "Phi công luyện tập trên máy mô phỏng chuyến bay thật.",
+      "cumTu": [
+        "simulate conditions",
+        "computer-simulated",
+        "simulate reality"
+      ],
+      "hoTu": [
+        "simulation (n)",
+        "simulator (n)"
+      ]
+    },
+    {
+      "chu": "spectrum",
+      "doc": "/ˈspektrəm/",
+      "loai": "n",
+      "nghia": "phổ, dải; phạm vi",
+      "cap": "C1",
+      "viDu": "The course attracts students from across the social spectrum.",
+      "viDuNghia": "Khoá học thu hút sinh viên từ mọi tầng lớp xã hội.",
+      "cumTu": [
+        "a broad spectrum",
+        "the political spectrum",
+        "across the spectrum"
+      ],
+      "ghiChu": "Số nhiều: spectra hoặc spectrums."
+    },
+    {
+      "chu": "speculate",
+      "doc": "/ˈspekjuleɪt/",
+      "loai": "v",
+      "nghia": "suy đoán; đầu cơ",
+      "cap": "C1",
+      "viDu": "Experts can only speculate about the long-term effects.",
+      "viDuNghia": "Các chuyên gia chỉ có thể suy đoán về tác động lâu dài.",
+      "cumTu": [
+        "speculate about",
+        "speculate on",
+        "widely speculated"
+      ],
+      "hoTu": [
+        "speculation (n)",
+        "speculative (adj)"
+      ]
+    },
+    {
+      "chu": "stakeholder",
+      "doc": "/ˈsteɪkhəʊldə(r)/",
+      "loai": "n",
+      "nghia": "bên liên quan",
+      "cap": "C1",
+      "viDu": "All stakeholders should be consulted before the decision is made.",
+      "viDuNghia": "Mọi bên liên quan cần được hỏi ý kiến trước khi ra quyết định.",
+      "cumTu": [
+        "key stakeholders",
+        "consult stakeholders",
+        "stakeholder engagement"
+      ],
+      "hoTu": [
+        "stake (n)"
+      ]
+    },
+    {
+      "chu": "standardise",
+      "doc": "/ˈstændədaɪz/",
+      "loai": "v",
+      "nghia": "tiêu chuẩn hoá",
+      "cap": "C1",
+      "viDu": "Standardised tests do not measure creativity.",
+      "viDuNghia": "Các bài kiểm tra tiêu chuẩn hoá không đo được sự sáng tạo.",
+      "cumTu": [
+        "standardised tests",
+        "standardise procedures"
+      ],
+      "hoTu": [
+        "standard (n)",
+        "standardisation (n)"
+      ],
+      "ghiChu": "Anh-Mỹ \"standardize\"."
+    },
+    {
+      "chu": "standpoint",
+      "doc": "/ˈstændpɔɪnt/",
+      "loai": "n",
+      "nghia": "quan điểm, lập trường",
+      "cap": "C1",
+      "viDu": "From a financial standpoint, renting is more flexible.",
+      "viDuNghia": "Xét về mặt tài chính, thuê nhà linh hoạt hơn.",
+      "cumTu": [
+        "from … standpoint",
+        "from a practical standpoint"
+      ],
+      "ghiChu": "Đồng nghĩa \"viewpoint/perspective\", dùng xen kẽ để tránh lặp."
+    },
+    {
+      "chu": "stem from",
+      "doc": "/stem frɒm/",
+      "loai": "phr",
+      "nghia": "bắt nguồn từ, xuất phát từ",
+      "cap": "C1",
+      "viDu": "Many health problems stem from a lack of exercise.",
+      "viDuNghia": "Nhiều vấn đề sức khoẻ bắt nguồn từ việc thiếu vận động.",
+      "cumTu": [
+        "stem largely from",
+        "stem directly from"
+      ],
+      "ghiChu": "Không dùng ở bị động. Cụm thay \"be caused by\" rất tự nhiên ở đoạn nguyên nhân."
+    },
+    {
+      "chu": "stereotype",
+      "doc": "/ˈsteriətaɪp/",
+      "loai": "n",
+      "nghia": "khuôn mẫu, định kiến",
+      "cap": "C1",
+      "viDu": "Advertisements often reinforce gender stereotypes.",
+      "viDuNghia": "Quảng cáo thường củng cố định kiến giới.",
+      "cumTu": [
+        "gender stereotypes",
+        "challenge a stereotype",
+        "negative stereotypes"
+      ],
+      "hoTu": [
+        "stereotype (v)",
+        "stereotypical (adj)"
+      ]
+    },
+    {
+      "chu": "stimulus",
+      "doc": "/ˈstɪmjələs/",
+      "loai": "n",
+      "nghia": "sự kích thích, tác nhân kích thích",
+      "cap": "C1",
+      "viDu": "The government introduced a stimulus package to boost the economy.",
+      "viDuNghia": "Chính phủ đưa ra gói kích thích để thúc đẩy nền kinh tế.",
+      "cumTu": [
+        "a stimulus package",
+        "economic stimulus",
+        "respond to a stimulus"
+      ],
+      "hoTu": [
+        "stimulate (v)"
+      ],
+      "ghiChu": "Số nhiều: stimuli."
+    },
+    {
+      "chu": "strive",
+      "doc": "/straɪv/",
+      "loai": "v",
+      "nghia": "cố gắng, phấn đấu",
+      "cap": "C1",
+      "viDu": "We should always strive to improve ourselves.",
+      "viDuNghia": "Chúng ta nên luôn phấn đấu hoàn thiện bản thân.",
+      "cumTu": [
+        "strive for",
+        "strive to do",
+        "constantly strive"
+      ],
+      "hoTu": [
+        "striving (n)"
+      ],
+      "ghiChu": "Bất quy tắc: strive – strove – striven."
+    },
+    {
+      "chu": "subsidise",
+      "doc": "/ˈsʌbsɪdaɪz/",
+      "loai": "v",
+      "nghia": "trợ cấp, bao cấp",
+      "cap": "C1",
+      "viDu": "Should the government subsidise public transport?",
+      "viDuNghia": "Chính phủ có nên trợ cấp cho giao thông công cộng không?",
+      "cumTu": [
+        "subsidise public transport",
+        "heavily subsidised",
+        "subsidise farmers"
+      ],
+      "hoTu": [
+        "subsidy (n)"
+      ],
+      "ghiChu": "Anh-Mỹ \"subsidize\"."
+    },
+    {
+      "chu": "subsidy",
+      "doc": "/ˈsʌbsədi/",
+      "loai": "n",
+      "nghia": "khoản trợ cấp",
+      "cap": "C1",
+      "viDu": "Farmers receive subsidies to keep food prices low.",
+      "viDuNghia": "Nông dân nhận trợ cấp để giữ giá lương thực thấp.",
+      "cumTu": [
+        "government subsidies",
+        "cut subsidies",
+        "subsidies for"
+      ],
+      "hoTu": [
+        "subsidise (v)"
+      ]
+    },
+    {
+      "chu": "supplement",
+      "doc": "/ˈsʌplɪment/",
+      "loai": "v",
+      "nghia": "bổ sung, thêm vào",
+      "cap": "C1",
+      "viDu": "Many students supplement their income with part-time work.",
+      "viDuNghia": "Nhiều sinh viên bổ sung thu nhập bằng việc làm thêm.",
+      "cumTu": [
+        "supplement income",
+        "supplement your diet"
+      ],
+      "hoTu": [
+        "supplement (n) /ˈsʌplɪmənt/",
+        "supplementary (adj)"
+      ],
+      "ghiChu": "\"dietary supplements\" = thực phẩm chức năng."
+    },
+    {
+      "chu": "suppress",
+      "doc": "/səˈpres/",
+      "loai": "v",
+      "nghia": "đàn áp; kìm nén",
+      "cap": "C1",
+      "viDu": "Governments should not suppress free speech.",
+      "viDuNghia": "Chính phủ không nên đàn áp tự do ngôn luận.",
+      "cumTu": [
+        "suppress emotions",
+        "suppress information",
+        "suppress dissent"
+      ],
+      "hoTu": [
+        "suppression (n)"
+      ]
+    },
+    {
+      "chu": "surpass",
+      "doc": "/səˈpɑːs/",
+      "loai": "v",
+      "nghia": "vượt qua, vượt trội",
+      "cap": "C1",
+      "viDu": "Online sales have surpassed in-store sales for the first time.",
+      "viDuNghia": "Doanh số trực tuyến lần đầu vượt qua doanh số tại cửa hàng.",
+      "cumTu": [
+        "surpass expectations",
+        "surpass a record",
+        "far surpass"
+      ],
+      "hoTu": [
+        "unsurpassed (adj)"
+      ]
+    },
+    {
+      "chu": "symbolise",
+      "doc": "/ˈsɪmbəlaɪz/",
+      "loai": "v",
+      "nghia": "tượng trưng",
+      "cap": "C1",
+      "viDu": "The dove symbolises peace.",
+      "viDuNghia": "Chim bồ câu tượng trưng cho hoà bình.",
+      "cumTu": [
+        "symbolise freedom",
+        "symbolise hope"
+      ],
+      "hoTu": [
+        "symbol (n)",
+        "symbolic (adj)"
+      ],
+      "ghiChu": "Anh-Mỹ \"symbolize\". Không dùng \"symbolise for\"."
+    },
+    {
+      "chu": "synthesis",
+      "doc": "/ˈsɪnθəsɪs/",
+      "loai": "n",
+      "nghia": "sự tổng hợp",
+      "cap": "C1",
+      "viDu": "The book is a synthesis of ten years of research.",
+      "viDuNghia": "Cuốn sách là sự tổng hợp mười năm nghiên cứu.",
+      "cumTu": [
+        "a synthesis of",
+        "protein synthesis"
+      ],
+      "hoTu": [
+        "synthesise (v)",
+        "synthetic (adj)"
+      ],
+      "ghiChu": "Số nhiều: syntheses."
+    },
+    {
+      "chu": "terminate",
+      "doc": "/ˈtɜːmɪneɪt/",
+      "loai": "v",
+      "nghia": "chấm dứt, kết thúc",
+      "cap": "C1",
+      "viDu": "The company terminated his contract without warning.",
+      "viDuNghia": "Công ty đã chấm dứt hợp đồng của anh ấy không báo trước.",
+      "cumTu": [
+        "terminate a contract",
+        "terminate employment"
+      ],
+      "hoTu": [
+        "termination (n)"
+      ]
+    },
+    {
+      "chu": "trade-off",
+      "doc": "/ˈtreɪd ɒf/",
+      "loai": "n",
+      "nghia": "sự đánh đổi",
+      "cap": "C1",
+      "viDu": "There is always a trade-off between price and quality.",
+      "viDuNghia": "Luôn có sự đánh đổi giữa giá cả và chất lượng.",
+      "cumTu": [
+        "a trade-off between",
+        "make a trade-off",
+        "an acceptable trade-off"
+      ],
+      "hoTu": [
+        "trade off (phr)"
+      ],
+      "ghiChu": "Rất hữu ích để thể hiện tư duy cân nhắc ở Task 2."
+    },
+    {
+      "chu": "trajectory",
+      "doc": "/trəˈdʒektəri/",
+      "loai": "n",
+      "nghia": "quỹ đạo, hướng phát triển",
+      "cap": "C1",
+      "viDu": "The company's growth trajectory has slowed this year.",
+      "viDuNghia": "Quỹ đạo tăng trưởng của công ty đã chậm lại năm nay.",
+      "cumTu": [
+        "career trajectory",
+        "growth trajectory",
+        "an upward trajectory"
+      ]
+    },
+    {
+      "chu": "transmit",
+      "doc": "/trænzˈmɪt/",
+      "loai": "v",
+      "nghia": "truyền (bệnh, tín hiệu, giá trị)",
+      "cap": "C1",
+      "viDu": "The disease is transmitted through contaminated water.",
+      "viDuNghia": "Bệnh lây truyền qua nguồn nước bị ô nhiễm.",
+      "cumTu": [
+        "transmit a disease",
+        "transmit data",
+        "transmit values"
+      ],
+      "hoTu": [
+        "transmission (n)"
+      ]
+    },
+    {
+      "chu": "transparency",
+      "doc": "/trænsˈpærənsi/",
+      "loai": "n",
+      "nghia": "sự minh bạch",
+      "cap": "C1",
+      "viDu": "Voters demand greater transparency in government spending.",
+      "viDuNghia": "Cử tri đòi hỏi sự minh bạch hơn trong chi tiêu của chính phủ.",
+      "cumTu": [
+        "greater transparency",
+        "lack of transparency",
+        "ensure transparency"
+      ],
+      "hoTu": [
+        "transparent (adj)"
+      ]
+    },
+    {
+      "chu": "underestimate",
+      "doc": "/ˌʌndərˈestɪmeɪt/",
+      "loai": "v",
+      "nghia": "đánh giá thấp",
+      "cap": "C1",
+      "viDu": "We should never underestimate the power of education.",
+      "viDuNghia": "Chúng ta không bao giờ nên đánh giá thấp sức mạnh của giáo dục.",
+      "cumTu": [
+        "underestimate the importance of",
+        "seriously underestimate"
+      ],
+      "hoTu": [
+        "underestimate (n)",
+        "overestimate (v)"
+      ]
+    },
+    {
+      "chu": "underline",
+      "doc": "/ˌʌndəˈlaɪn/",
+      "loai": "v",
+      "nghia": "nhấn mạnh, làm nổi bật",
+      "cap": "C1",
+      "viDu": "The accident underlines the need for better safety rules.",
+      "viDuNghia": "Vụ tai nạn nhấn mạnh sự cần thiết của quy định an toàn tốt hơn.",
+      "cumTu": [
+        "underline the importance of",
+        "underline the need for"
+      ],
+      "ghiChu": "Nghĩa đen: gạch chân."
+    },
+    {
+      "chu": "undermine",
+      "doc": "/ˌʌndəˈmaɪn/",
+      "loai": "v",
+      "nghia": "làm suy yếu, phá hoại (dần dần)",
+      "cap": "C1",
+      "viDu": "Constant criticism can undermine a child's confidence.",
+      "viDuNghia": "Bị chỉ trích liên tục có thể làm suy yếu sự tự tin của trẻ.",
+      "cumTu": [
+        "undermine confidence",
+        "undermine authority",
+        "undermine efforts"
+      ]
+    },
+    {
+      "chu": "unify",
+      "doc": "/ˈjuːnɪfaɪ/",
+      "loai": "v",
+      "nghia": "thống nhất, hợp nhất",
+      "cap": "C1",
+      "viDu": "Sport can unify people from different backgrounds.",
+      "viDuNghia": "Thể thao có thể gắn kết những người có xuất thân khác nhau.",
+      "cumTu": [
+        "unify the country",
+        "unify people"
+      ],
+      "hoTu": [
+        "unification (n)",
+        "unity (n)"
+      ]
+    },
+    {
+      "chu": "uphold",
+      "doc": "/ʌpˈhəʊld/",
+      "loai": "v",
+      "nghia": "duy trì, bảo vệ (luật, giá trị)",
+      "cap": "C1",
+      "viDu": "Judges must uphold the law fairly.",
+      "viDuNghia": "Thẩm phán phải giữ gìn luật pháp một cách công bằng.",
+      "cumTu": [
+        "uphold the law",
+        "uphold values",
+        "uphold a decision"
+      ],
+      "ghiChu": "Bất quy tắc: uphold – upheld – upheld."
+    },
+    {
+      "chu": "utilisation",
+      "doc": "/ˌjuːtəlaɪˈzeɪʃn/",
+      "loai": "n",
+      "nghia": "sự sử dụng, tận dụng",
+      "cap": "C1",
+      "viDu": "Better utilisation of resources could cut costs.",
+      "viDuNghia": "Tận dụng nguồn lực tốt hơn có thể cắt giảm chi phí.",
+      "cumTu": [
+        "efficient utilisation",
+        "the utilisation of",
+        "capacity utilisation"
+      ],
+      "hoTu": [
+        "utilise (v)"
+      ]
+    },
+    {
+      "chu": "utility",
+      "doc": "/juːˈtɪləti/",
+      "loai": "n",
+      "nghia": "tiện ích công cộng (điện, nước); tính hữu dụng",
+      "cap": "C1",
+      "viDu": "Utility bills have risen sharply this winter.",
+      "viDuNghia": "Hoá đơn điện nước đã tăng mạnh mùa đông năm nay.",
+      "cumTu": [
+        "utility bills",
+        "public utilities",
+        "of little utility"
+      ],
+      "hoTu": [
+        "utilise (v)"
+      ]
+    },
+    {
+      "chu": "validate",
+      "doc": "/ˈvælɪdeɪt/",
+      "loai": "v",
+      "nghia": "xác nhận, chứng thực",
+      "cap": "C1",
+      "viDu": "The results need to be validated by further research.",
+      "viDuNghia": "Kết quả cần được xác nhận bằng nghiên cứu thêm.",
+      "cumTu": [
+        "validate results",
+        "validate a theory",
+        "validate feelings"
+      ],
+      "hoTu": [
+        "validation (n)",
+        "valid (adj)"
+      ]
+    },
+    {
+      "chu": "validity",
+      "doc": "/vəˈlɪdəti/",
+      "loai": "n",
+      "nghia": "tính hợp lệ, tính đúng đắn",
+      "cap": "C1",
+      "viDu": "Some experts question the validity of the survey.",
+      "viDuNghia": "Một số chuyên gia nghi ngờ tính đúng đắn của cuộc khảo sát.",
+      "cumTu": [
+        "question the validity",
+        "the validity of",
+        "scientific validity"
+      ],
+      "hoTu": [
+        "valid (adj)",
+        "validate (v)"
+      ]
+    },
+    {
+      "chu": "viability",
+      "doc": "/ˌvaɪəˈbɪləti/",
+      "loai": "n",
+      "nghia": "tính khả thi",
+      "cap": "C1",
+      "viDu": "Investors are worried about the long-term viability of the project.",
+      "viDuNghia": "Nhà đầu tư lo ngại về tính khả thi lâu dài của dự án.",
+      "cumTu": [
+        "commercial viability",
+        "economic viability",
+        "long-term viability"
+      ],
+      "hoTu": [
+        "viable (adj)"
+      ],
+      "ghiChu": "\"a viable alternative\" = một lựa chọn thay thế khả thi."
+    },
+    {
+      "chu": "vulnerability",
+      "doc": "/ˌvʌlnərəˈbɪləti/",
+      "loai": "n",
+      "nghia": "sự dễ bị tổn thương",
+      "cap": "C1",
+      "viDu": "Old people's vulnerability to scams is a growing concern.",
+      "viDuNghia": "Việc người già dễ bị lừa đảo là mối lo ngày càng tăng.",
+      "cumTu": [
+        "vulnerability to",
+        "emotional vulnerability",
+        "security vulnerabilities"
+      ],
+      "hoTu": [
+        "vulnerable (adj)"
+      ]
+    },
+    {
+      "chu": "withstand",
+      "doc": "/wɪðˈstænd/",
+      "loai": "v",
+      "nghia": "chịu đựng được, chống chọi",
+      "cap": "C1",
+      "viDu": "The building is designed to withstand earthquakes.",
+      "viDuNghia": "Toà nhà được thiết kế để chịu được động đất.",
+      "cumTu": [
+        "withstand pressure",
+        "withstand the test of time",
+        "withstand heat"
+      ],
+      "ghiChu": "Bất quy tắc: withstand – withstood – withstood."
+    },
+    {
+      "chu": "yield",
+      "doc": "/jiːld/",
+      "loai": "v",
+      "nghia": "mang lại (kết quả, lợi nhuận); nhượng bộ",
+      "cap": "C1",
+      "viDu": "The new teaching method has yielded positive results.",
+      "viDuNghia": "Phương pháp giảng dạy mới đã mang lại kết quả tích cực.",
+      "cumTu": [
+        "yield results",
+        "yield a profit",
+        "yield to pressure"
+      ],
+      "hoTu": [
+        "yield (n)"
+      ],
+      "ghiChu": "Danh từ \"crop yield\" = sản lượng cây trồng."
+    },
+    {
+      "chu": "denote",
+      "doc": "/dɪˈnəʊt/",
+      "loai": "v",
+      "nghia": "biểu thị, chỉ",
+      "cap": "C2",
+      "viDu": "In the chart, the red line denotes male workers.",
+      "viDuNghia": "Trong biểu đồ, đường màu đỏ biểu thị lao động nam.",
+      "cumTu": [
+        "denote that",
+        "be denoted by"
+      ],
+      "hoTu": [
+        "denotation (n)"
+      ]
+    },
+    {
+      "chu": "elicit",
+      "doc": "/iˈlɪsɪt/",
+      "loai": "v",
+      "nghia": "gợi ra, khơi gợi (phản ứng, thông tin)",
+      "cap": "C2",
+      "viDu": "The question failed to elicit a clear answer.",
+      "viDuNghia": "Câu hỏi không khơi gợi được câu trả lời rõ ràng.",
+      "cumTu": [
+        "elicit a response",
+        "elicit information",
+        "elicit support"
+      ],
+      "ghiChu": "Dễ nhầm với \"illicit\" (bất hợp pháp)."
+    },
+    {
+      "chu": "envisage",
+      "doc": "/ɪnˈvɪzɪdʒ/",
+      "loai": "v",
+      "nghia": "hình dung, dự tính",
+      "cap": "C2",
+      "viDu": "Few people envisaged how quickly the internet would spread.",
+      "viDuNghia": "Ít ai hình dung được internet sẽ lan rộng nhanh đến vậy.",
+      "cumTu": [
+        "envisage a future",
+        "envisage that",
+        "envisage doing"
+      ],
+      "ghiChu": "Anh-Mỹ hay dùng \"envision\"."
+    },
+    {
+      "chu": "exacerbate",
+      "doc": "/ɪɡˈzæsəbeɪt/",
+      "loai": "v",
+      "nghia": "làm trầm trọng thêm",
+      "cap": "C2",
+      "viDu": "Cutting public services may exacerbate inequality.",
+      "viDuNghia": "Cắt giảm dịch vụ công có thể làm trầm trọng thêm bất bình đẳng.",
+      "cumTu": [
+        "exacerbate the problem",
+        "further exacerbate",
+        "exacerbate tensions"
+      ],
+      "hoTu": [
+        "exacerbation (n)"
+      ],
+      "ghiChu": "Trái nghĩa với \"alleviate\" — cặp từ rất được ưa ở Task 2."
+    },
+    {
+      "chu": "fallacy",
+      "doc": "/ˈfæləsi/",
+      "loai": "n",
+      "nghia": "ngộ nhận, nguỵ biện",
+      "cap": "C2",
+      "viDu": "It is a fallacy that money guarantees happiness.",
+      "viDuNghia": "Cho rằng tiền bảo đảm hạnh phúc là một ngộ nhận.",
+      "cumTu": [
+        "a common fallacy",
+        "a logical fallacy"
+      ],
+      "hoTu": [
+        "fallacious (adj)"
+      ]
+    },
+    {
+      "chu": "impetus",
+      "doc": "/ˈɪmpɪtəs/",
+      "loai": "n",
+      "nghia": "động lực, sức đẩy",
+      "cap": "C2",
+      "viDu": "The report gave fresh impetus to the campaign.",
+      "viDuNghia": "Bản báo cáo đã tạo động lực mới cho chiến dịch.",
+      "cumTu": [
+        "give impetus to",
+        "provide the impetus",
+        "the main impetus"
+      ]
+    },
+    {
+      "chu": "influx",
+      "doc": "/ˈɪnflʌks/",
+      "loai": "n",
+      "nghia": "dòng người/vật đổ vào",
+      "cap": "C2",
+      "viDu": "The city could not cope with the influx of tourists.",
+      "viDuNghia": "Thành phố không đối phó nổi với dòng du khách đổ về.",
+      "cumTu": [
+        "an influx of",
+        "a sudden influx",
+        "a massive influx"
+      ]
+    },
+    {
+      "chu": "nuance",
+      "doc": "/ˈnjuːɑːns/",
+      "loai": "n",
+      "nghia": "sắc thái",
+      "cap": "C2",
+      "viDu": "Machine translation often misses the nuances of language.",
+      "viDuNghia": "Dịch máy thường bỏ sót các sắc thái của ngôn ngữ.",
+      "cumTu": [
+        "subtle nuances",
+        "cultural nuances",
+        "the nuances of"
+      ],
+      "hoTu": [
+        "nuanced (adj)"
+      ],
+      "ghiChu": "\"a nuanced view\" = quan điểm tinh tế, nhiều chiều — điểm cộng ở Task 2."
+    },
+    {
+      "chu": "paradigm",
+      "doc": "/ˈpærədaɪm/",
+      "loai": "n",
+      "nghia": "mô hình, hệ hình",
+      "cap": "C2",
+      "viDu": "The discovery led to a paradigm shift in medicine.",
+      "viDuNghia": "Phát hiện này dẫn tới một sự thay đổi mô hình tư duy trong y học.",
+      "cumTu": [
+        "a paradigm shift",
+        "a new paradigm",
+        "the dominant paradigm"
+      ],
+      "hoTu": [
+        "paradigmatic (adj)"
+      ],
+      "ghiChu": "\"paradigm shift\" = thay đổi căn bản cách nghĩ."
+    },
+    {
+      "chu": "perpetuate",
+      "doc": "/pəˈpetʃueɪt/",
+      "loai": "v",
+      "nghia": "duy trì, kéo dài (điều xấu)",
+      "cap": "C2",
+      "viDu": "Some films perpetuate negative stereotypes of women.",
+      "viDuNghia": "Một số bộ phim duy trì định kiến tiêu cực về phụ nữ.",
+      "cumTu": [
+        "perpetuate stereotypes",
+        "perpetuate the myth",
+        "perpetuate inequality"
+      ],
+      "hoTu": [
+        "perpetual (adj)"
+      ],
+      "ghiChu": "Thường mang sắc thái tiêu cực."
+    },
+    {
+      "chu": "proliferation",
+      "doc": "/prəˌlɪfəˈreɪʃn/",
+      "loai": "n",
+      "nghia": "sự gia tăng nhanh, sinh sôi",
+      "cap": "C2",
+      "viDu": "The proliferation of fake news online is a growing concern.",
+      "viDuNghia": "Sự gia tăng nhanh tin giả trên mạng là mối lo ngày càng lớn.",
+      "cumTu": [
+        "the proliferation of",
+        "nuclear proliferation"
+      ],
+      "hoTu": [
+        "proliferate (v)"
+      ]
+    },
+    {
+      "chu": "ramification",
+      "doc": "/ˌræmɪfɪˈkeɪʃn/",
+      "loai": "n",
+      "nghia": "hệ quả (phức tạp, khó lường)",
+      "cap": "C2",
+      "viDu": "The decision could have serious ramifications for the economy.",
+      "viDuNghia": "Quyết định này có thể gây ra những hệ quả nghiêm trọng cho nền kinh tế.",
+      "cumTu": [
+        "serious ramifications",
+        "far-reaching ramifications",
+        "the ramifications of"
+      ],
+      "ghiChu": "Hầu như luôn dùng số nhiều."
+    },
+    {
+      "chu": "realm",
+      "doc": "/relm/",
+      "loai": "n",
+      "nghia": "lĩnh vực, địa hạt",
+      "cap": "C2",
+      "viDu": "Such technology was once in the realm of science fiction.",
+      "viDuNghia": "Công nghệ như thế từng chỉ thuộc địa hạt khoa học viễn tưởng.",
+      "cumTu": [
+        "in the realm of",
+        "beyond the realm of possibility"
+      ],
+      "ghiChu": "\"beyond the realm of possibility\" = vượt ngoài khả năng."
+    },
+    {
+      "chu": "repercussion",
+      "doc": "/ˌriːpəˈkʌʃn/",
+      "loai": "n",
+      "nghia": "hậu quả (gián tiếp, tiêu cực)",
+      "cap": "C2",
+      "viDu": "The scandal had serious repercussions for the company.",
+      "viDuNghia": "Vụ bê bối gây hậu quả nghiêm trọng cho công ty.",
+      "cumTu": [
+        "serious repercussions",
+        "have repercussions for",
+        "political repercussions"
+      ],
+      "ghiChu": "Thường dùng số nhiều."
+    },
+    {
+      "chu": "underpin",
+      "doc": "/ˌʌndəˈpɪn/",
+      "loai": "v",
+      "nghia": "làm nền tảng, chống đỡ",
+      "cap": "C2",
+      "viDu": "Strong values underpin the success of the company.",
+      "viDuNghia": "Các giá trị vững chắc làm nền tảng cho thành công của công ty.",
+      "cumTu": [
+        "underpin the theory",
+        "be underpinned by"
+      ],
+      "hoTu": [
+        "underpinning (n)"
+      ]
+    },
+    {
+      "chu": "upheaval",
+      "doc": "/ʌpˈhiːvl/",
+      "loai": "n",
+      "nghia": "biến động lớn",
+      "cap": "C2",
+      "viDu": "The country went through a period of political upheaval.",
+      "viDuNghia": "Đất nước trải qua một thời kỳ biến động chính trị.",
+      "cumTu": [
+        "social upheaval",
+        "political upheaval",
+        "emotional upheaval"
+      ]
+    }
+  ]
+}

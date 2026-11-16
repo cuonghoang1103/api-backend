@@ -32,6 +32,13 @@ Mẫu một mục:
 - **Ảnh hưởng:** không — phát hiện khi kiểm trên backend cục bộ.
 - **Bài học:** thay chữ hàng loạt trên dữ liệu thì kiểm trên DỮ LIỆU THẬT trước (grep mọi chỗ khớp và đọc ngữ cảnh), không chỉ trên câu mẫu tự nghĩ.
 
+### 16/11/2026 — Giọng (chép mô hình) — `pkill -f` cắt nhầm lượt tải giọng mới về máy nhà
+- **Triệu chứng:** lượt chép `cuong8_giong.pt` (1,35 GB) về linux-nha chỉ chạy ~100 KB/s; lệnh `pkill -f "scp -q vast7:…"` trên Mac để dừng phép thử lại giết luôn tác vụ nền đang chép (exit 144).
+- **Nguyên nhân:** chuỗi khớp nằm trong dòng lệnh `ssh linux-nha '… scp -q vast7:…'` của chính tác vụ nền (lỗi cũ: `pkill -f` khớp lệnh ssh của mình). Tốc độ thấp: một luồng ssh qua proxy Vast + đường lên nhà đầy (render đẩy tập sang máy thuê) ⇒ ACK nghẽn.
+- **Cách sửa:** dừng theo PID; tải song song 21 khúc 64 MB × 12 luồng từ 3 máy thuê (`dd skip/count`), ghép + so sha256 (7c743eb5…). Bản sao Mac để NGOÀI cây video-bai-giang (tránh dong-bo đẩy 1,35 GB qua đường hầm).
+- **Ảnh hưởng:** đổi giọng chậm ~45 phút; không mất dữ liệu.
+- **Bài học:** không `pkill -f` bằng chuỗi có trong lệnh ssh đang chạy — dùng PID; tệp lớn từ máy thuê về nhà ⇒ chia khúc song song ngay từ đầu.
+
 ### 16/11/2026 — Máy nhà (đĩa) — ổ chính tụt còn 25 GB, sát ngưỡng làn render tự dừng
 - **Triệu chứng:** 21:40 `df /` còn 25 GB (render.sh dừng nhận tập khi < 25 GB — `DP_DIA_TOI_THIEU`).
 - **Nguyên nhân:** ảnh Docker của MỖI lượt deploy-nha (`ghcr.io/cuonghoang1103/api-backend-{backend,frontend}:<sha>`, ~5,5 GB/lượt) nằm lại máy nhà mãi — 68 ảnh cũ ≈ 64 GB; cộng build cache.

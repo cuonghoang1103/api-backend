@@ -10,6 +10,8 @@ import { NotFoundError, BadRequestError } from '../../middleware/errorHandler.js
 import { transcribeWithGroq } from '../interview/voice/stt.js';
 import { NHOM_CHU_DE, NHOM_LON, NHOM_LON_CO_CON, nhomCuaKhoa, nhomLonCuaKhoa, tachTieuDe } from './nhomChuDe.js';
 import { chonNguonPhuDe, docPhan, laTrackRieng, type PhanVideo, type TrackVideo } from './phuDeRieng.js';
+import type { NnVideo } from './phuDeDaNgu.js';
+import { hinhVideoCuaToi } from './themVideo.service.js';
 
 export type CauPhuDe = { t: number; en: string };
 
@@ -70,8 +72,12 @@ export async function danhMuc() {
  * `videoId` (`i.ytimg.com/vi/<id>/hqdefault.jpg`) — đo 24 ảnh ngẫu nhiên
  * 19/09/2026 đều là ảnh thật, không có ảnh xám placeholder nào.
  */
-export async function thuVien(userId: number) {
-  const ds = await prisma.lessonTranscript.findMany({
+export async function thuVien(userId: number, nn?: NnVideo) {
+  /* CT Language (16/11/2026): `?nn=en|ja|zh` ⇒ chỉ video tự thêm của ngôn ngữ đó; bài giảng Academy (phụ đề tiếng
+     Anh) chỉ kèm khi nn = en. Không có `nn` (app CuongThai) ⇒ như cũ — nhưng chỉ video YouTube tiếng Anh, vì video
+     Nhật/Trung/TikTok thêm từ CT Language không phát/học được ở màn tiếng Anh của app kia. */
+  const coAcademy = !nn || nn === 'en';
+  const ds = !coAcademy ? [] : await prisma.lessonTranscript.findMany({
     select: {
       lessonId: true, videoId: true, soCau: true, soTu: true,
       lesson: {
@@ -150,23 +156,13 @@ export async function thuVien(userId: number) {
   // nhánh vẽ. Khác biệt duy nhất: `lessonId` ÂM (= -id trong bảng riêng) và
   // có `nguon`, nhờ đó app biết gọi endpoint phụ đề nào.
   const tuThem = await prisma.videoNguoiDung.findMany({
-    where: { userId },
+    where: nn ? { userId, lang: nn } : { userId, lang: 'en', nguon: 'youtube' },
     select: { id: true, nguon: true, nhomLon: true, videoId: true, tieuDe: true,
-              anhBia: true, giay: true, soCau: true, soTu: true, tacGia: true },
+              anhBia: true, giay: true, soCau: true, soTu: true, tacGia: true,
+              lang: true, trackGoc: true, tuDong: true, soDich: true, createdAt: true },
     orderBy: { createdAt: 'desc' },
   });
-  const cuaToi = tuThem.map((v: (typeof tuThem)[number]) => ({
-    lessonId: -v.id,
-    videoId: v.videoId,
-    nguon: v.nguon,
-    nhomLon: v.nhomLon,
-    tieuDe: v.tieuDe,
-    tieuDeVi: v.tacGia,
-    anhBiaUrl: v.anhBia,
-    giay: v.giay,
-    soCau: v.soCau,
-    soTu: v.soTu,
-  }));
+  const cuaToi = tuThem.map((v: (typeof tuThem)[number]) => hinhVideoCuaToi(v));
 
   // Video tự thêm cũng thành các HÀNG như khoá học, gom theo nhóm lớn — để
   // màn duyệt chỉ có một cách vẽ, không phải hai nhánh.

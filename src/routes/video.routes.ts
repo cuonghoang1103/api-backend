@@ -14,6 +14,9 @@ import * as svc from '../services/video/phuDe.service.js';
 import { chuanTrack } from '../services/video/phuDeRieng.js';
 import * as them from '../services/video/themVideo.service.js';
 import { body } from 'express-validator';
+import rateLimit from 'express-rate-limit';
+import { laNnVideo } from '../services/video/phuDeDaNgu.js';
+import { dichTiep } from '../services/video/dichPhuDe.js';
 
 const router = Router();
 router.use(authenticate);
@@ -34,8 +37,53 @@ router.get('/danh-muc', async (_req, res: Response<ApiResponse>, next) => {
  * route dưới giữ lại cho bản app cũ.
  */
 router.get('/thu-vien', async (req, res: Response<ApiResponse>, next) => {
-  try { ok(res, await svc.thuVien(idNguoiDung(req))); } catch (e) { next(e); }
+  // `?nn=en|ja|zh` (app CT Language) ⇒ thư viện của ngôn ngữ đó. Thiếu/lạ ⇒ như cũ (app CuongThai).
+  const nn = laNnVideo(req.query.nn) ? req.query.nn : undefined;
+  try { ok(res, await svc.thuVien(idNguoiDung(req), nn)); } catch (e) { next(e); }
 });
+
+// ════════════════════════════════════════════════════════════════
+// CT LANGUAGE (16/11/2026) — thêm video đa ngôn ngữ CHẠY NỀN + dịch phụ đề theo lô
+//   POST /them            {url, nn?: auto|en|ja|zh, nhomLon?} ⇒ {ma, buoc, viTri, loi, video} (trả ngay)
+//   GET  /them/:ma        ⇒ cùng hình — app hỏi ~1,5 s/lần để hiện từng bước
+//   POST /cua-toi/:id/dich {tu?} ⇒ {moi:[[i,"bản dịch"]], daDich, tong, xong, dangBan, conLuot}
+// ════════════════════════════════════════════════════════════════
+
+/** Chống bấm dồn: 6 link/phút/người (hàng đợi đã giới hạn 3 việc đang chờ). */
+const gioiHanThem = rateLimit({
+  windowMs: 60_000, max: 6, standardHeaders: true, legacyHeaders: false,
+  keyGenerator: (req) => `video-them:${(req as Request).userId}`,
+  message: { success: false, message: 'Bạn thêm video hơi nhanh — đợi một chút nhé.', code: 'RATE_LIMIT_EXCEEDED' },
+});
+/** Dịch: app gọi liên tiếp từng lô khi đang mở video — 30 lô/phút là dư (trần câu/ngày nằm ở service). */
+const gioiHanDich = rateLimit({
+  windowMs: 60_000, max: 30, standardHeaders: true, legacyHeaders: false,
+  keyGenerator: (req) => `video-dich:${(req as Request).userId}`,
+  message: { success: false, message: 'Đang dịch hơi dồn — đợi một chút nhé.', code: 'RATE_LIMIT_EXCEEDED' },
+});
+
+router.post('/them', gioiHanThem, body('url').isString().isLength({ min: 8, max: 2048 }),
+  body('nn').optional().isIn(['auto', 'en', 'ja', 'zh']),
+  body('nhomLon').optional().isString().isLength({ max: 24 }), validate,
+  async (req, res: Response<ApiResponse>, next) => {
+    try {
+      ok(res, them.guiViecThem(idNguoiDung(req), String(req.body.url), {
+        nn: req.body.nn ? String(req.body.nn) : undefined,
+        nhomLon: req.body.nhomLon ? String(req.body.nhomLon) : undefined,
+      }));
+    } catch (e) { next(e); }
+  });
+
+router.get('/them/:ma', param('ma').isUUID(), validate,
+  async (req, res: Response<ApiResponse>, next) => {
+    try { ok(res, them.xemViecThem(idNguoiDung(req), String(req.params.ma))); } catch (e) { next(e); }
+  });
+
+router.post('/cua-toi/:id(\\d+)/dich', gioiHanDich, param('id').isInt(),
+  body('tu').optional().isInt({ min: 0, max: 100000 }), validate,
+  async (req, res: Response<ApiResponse>, next) => {
+    try { ok(res, await dichTiep(idNguoiDung(req), Number(req.params.id), req.body?.tu)); } catch (e) { next(e); }
+  });
 
 // ════════════════════════════════════════════════════════════════
 // VIDEO NGƯỜI DÙNG TỰ THÊM

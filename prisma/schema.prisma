@@ -1418,6 +1418,16 @@ model VideoNguoiDung {
 
   dichVi Json? @map("dich_vi") @db.JsonB
 
+  /// Ngôn ngữ của phụ đề: 'en' | 'ja' | 'zh' (CT Language, 16/11/2026). Hàng cũ = 'en'.
+  /// `cues[].en` là CÂU GỐC theo ngôn ngữ này (tên trường giữ nguyên cho app CuongThai).
+  lang     String   @default("en") @db.VarChar(12)
+  /// Mã track đã lấy ('ja', 'en-orig', 'zh-Hant', 'jpn-JP'…) — chứa Hant/TW/HK ⇒ app chuyển giản thể trên máy.
+  trackGoc String?  @map("track_goc") @db.VarChar(24)
+  /// Phụ đề tự động (nhận dạng giọng nói) — `null` = hàng cũ, không rõ.
+  tuDong   Boolean? @map("tu_dong")
+  /// Số câu đã có bản dịch tiếng Việt trong `dichVi`.
+  soDich   Int      @default(0) @map("so_dich")
+
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
@@ -1428,6 +1438,8 @@ model VideoNguoiDung {
   @@unique([userId, nguon, videoId], name: "uk_video_nguoi_dung")
   @@index([userId], name: "idx_video_nguoi_dung_user")
   @@index([userId, nhomLon], name: "idx_video_nguoi_dung_nhom_lon")
+  @@index([userId, lang], name: "idx_video_nguoi_dung_lang")
+  @@index([nguon, videoId, lang], name: "idx_video_nguoi_dung_nguon_video")
   @@map("video_nguoi_dung")
 }
 

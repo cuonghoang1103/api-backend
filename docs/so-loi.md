@@ -866,3 +866,10 @@ Mẫu một mục:
 - **Cách sửa:** đổi tên thành `HinhLogoMxh` (chưa commit); dựng lại scheme CuongThaiApp xanh.
 - **Ảnh hưởng:** chỉ bản dựng cục bộ của hai app kia trong lúc làm, chưa lên bản nào.
 - **Bài học:** thêm tệp vào `Shared/` ⇒ grep tên kiểu trên TOÀN `CuongThaiApp/` và dựng cả scheme CuongThaiApp, không chỉ app đang làm.
+
+### 17/11/2026 — video bài giảng (làn giọng trên máy nhà) — bản `lam-giong.mts` đang thử trên Mac tự lên sản xuất, tệp chỉ có ở máy nhà bị xoá
+- **Triệu chứng:** đang thử "cổng từ tiếng Anh" bằng bản sao riêng trên máy nhà thì thấy `vbg-dp/giong/lam-giong.mts` của sản xuất đã trùng md5 với bản đang sửa trên Mac; `giong/anh-kho.txt` và bản sao thử `lam-giong-cong.mts` (chỉ tạo trên máy nhà) biến mất.
+- **Nguyên nhân:** `video-bai-giang/scratchpad/dong-bo-linux.sh:48` chạy `rsync -az --delete` cả dự án Mac ⇒ máy nhà mỗi vòng: sửa tệp ở bản gốc Mac = lên sản xuất sau vài phút (làn giọng nạp lại script mỗi tập), còn tệp chỉ có ở máy nhà thì bị `--delete` xoá.
+- **Cách sửa:** bản lên nhầm đã qua kiểm cú pháp và chạy đúng (theo dõi các tập sau 00:02 không lỗi) nên giữ; đặt `anh-kho.txt` vào bản gốc Mac `giong/` để cầu đồng bộ tự mang sang; đo trên 2 tập thật: từ Anh trượt 23 ⇒ 13, thêm ~34% lượt đọc.
+- **Ảnh hưởng:** ~12 phút các tập mới chạy cổng từ Anh khi chưa có danh sách từ khó (đọc lại thừa vài câu/tập); không tập nào hỏng.
+- **Bài học:** thư mục Mac của video-bai-giang LÀ sản xuất — thử nghiệm phải làm trên bản sao tên khác ĐẶT Ở MAC (hoặc ngoài cây đồng bộ như `/tmp`), và tệp dữ liệu mới phải tạo ở Mac, không tạo trên máy nhà.

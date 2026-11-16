@@ -61,8 +61,8 @@ export default {
     'io-5-1-vi-sao': { yt: 'dcroxRr8uJc', credit: 'Irshit — Scaling Websockets Horizontally | SocketIo | Redis Pub\Sub | HandsOn', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/socket-io/05-redis-adapter-cluster/05-01-vi-sao-redis-adapter-62773377.mp4' }, defaultVideoTrack: 'VI'},     // Scaling Websockets Horizontally | SocketIo | Redis Pub\Sub | HandsOn
     'io-5-2-adapter-api': { yt: 'pEUwiD0kOmE', credit: 'Jonas Grøndahl Petersen  — Socket IO server with Redis!', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/socket-io/05-redis-adapter-cluster/05-02-adapter-api-2dfe16cf.mp4' }, defaultVideoTrack: 'VI'},// Socket IO server with Redis!
     'io-5-3-redis-down': { yt: 'gzIcGhJC8hA', credit: 'Hussein Nasser — Scaling Websockets with Redis, HAProxy and Node JS - High-availability Group Chat Application', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/socket-io/05-redis-adapter-cluster/05-03-redis-chet-29b5396c.mp4' }, defaultVideoTrack: 'VI'}, // Scaling Websockets with Redis, HAProxy and Node JS - High-availability Group Chat Application
-    'io-5-4-checklist': { yt: 'xQFEQNJQGpE', credit: 'Nelderson Gaming — Session 4 - Multiple servers and Socket.IO' },  // Session 4 - Multiple servers and Socket.IO
-    'io-5-5-alt': { yt: 'x-ydCL8pj40', credit: 'Packt  — Socket.IO Solutions : Performing Load Balancing with the Nginx Server | packtpub.com' },        // Socket.IO Solutions : Performing Load Balancing with the Nginx Server
+    'io-5-4-checklist': { yt: 'xQFEQNJQGpE', credit: 'Nelderson Gaming — Session 4 - Multiple servers and Socket.IO', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/socket-io/05-redis-adapter-cluster/05-04-checklist-scale-e0691dbe.mp4' }, defaultVideoTrack: 'VI'},  // Session 4 - Multiple servers and Socket.IO
+    'io-5-5-alt': { yt: 'x-ydCL8pj40', credit: 'Packt  — Socket.IO Solutions : Performing Load Balancing with the Nginx Server | packtpub.com', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/socket-io/05-redis-adapter-cluster/05-05-lua-chon-thay-redis-ef42717f.mp4' }, defaultVideoTrack: 'VI'},        // Socket.IO Solutions : Performing Load Balancing with the Nginx Server
 
     /* ── Chương 6 — Ack và bảo đảm giao nhận ── */
     'io-6-1-at-most-once': { yt: 'l6nLt4Km1cA', credit: 'DevMentors EN — Message delivery (at least-once, at most-once, exactly once?) | Messaging in distributed systems' }, // Message delivery (at least-once, at most-once, exactly once?) | Messaging in distributed systems
@@ -101,6 +101,6 @@ export default {
 
     /* ── Chương 11 — Cái sống sót qua đo đạc ── */
     'io-11-1-song-qua': { yt: 'EtG0tv2a9Uw', credit: 'HuXn WebDev — Socket.IO Mastery: Learn Real-Time Web Development' }, // Socket.IO Mastery: Learn Real-Time Web Development
-    'io-0-0-start-here-2': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/socket-io/00-socket-io-la-gi/00-02-bon-tang-va-cach-hoc-a86ec265.mp4' }, defaultVideoTrack: 'VI' },
+    'io-0-0-start-here-2': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/socket-io/00-socket-io-la-gi/00-02-bon-tang-va-cach-hoc-a86ec265.mp4' }, defaultVideoTrack: 'VI'},
   },
 };

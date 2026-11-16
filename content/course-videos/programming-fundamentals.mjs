@@ -75,7 +75,7 @@ export default {
     "prf192-1-0b-slides-bien-dich-cau-truc-c": { yt: "ksJ9bdSX5Yo", credit: "Mike Shah — In 54 Minutes, Understand the whole C and C++ compilation process", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/programming-fundamentals/01-nhap-mon-chuong-trinh-may-tinh/01-02-slide-bien-dich-cau-truc-c-580f0317.mp4' }, defaultVideoTrack: 'VI'},
 
     // Chapter 2 — biến, kiểu dữ liệu & nhập/xuất
-    "prf192-2-0a-slides-bien-kieu-du-lieu": { yt: "OSyjOvFbAGI", credit: "mycodeschool — Data types, Constants and Variables - C Programming Tutorial 05" },
+    "prf192-2-0a-slides-bien-kieu-du-lieu": { yt: "OSyjOvFbAGI", credit: "mycodeschool — Data types, Constants and Variables - C Programming Tutorial 05", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/programming-fundamentals/02-bien-kieu-du-lieu-nhap-xuat/02-01-slide-bien-kieu-du-lieu-0530bd5e.mp4' }, defaultVideoTrack: 'VI'},
     "prf192-2-0b-slides-literal-hang-nhap-xuat": { yt: "r0OuA1Q8jOo", credit: "Portfolio Courses — Constants | C Programming Tutorial" },
 
     // Chapter 3 — biểu thức & toán tử

@@ -76,8 +76,8 @@ export default {
     'nextjs-7-5-do-dung-doan': { yt: '00RoZflFE34', credit: 'Ben Awad — How to use the React Profiler to find and fix Performance Problems', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nextjs/07-danh-sach-key-hieu-nang/07-05-do-dung-doan-988bc221.mp4' }, defaultVideoTrack: 'VI'},
 
     /* ── Chương 8 — App Router ──────────────────────────────────────────── */
-    'nextjs-8-1-tu-react-toi-nextjs': { yt: 'ZjAqacIC_3c', credit: 'Codevolution — Next.js 14 Tutorial - 1 - Introduction' },
-    'nextjs-8-2-cac-file-quy-uoc': { yt: '9602Yzvd7ik', credit: 'Codevolution — Next.js 15 Tutorial - 5 - Routing' },
+    'nextjs-8-1-tu-react-toi-nextjs': { yt: 'ZjAqacIC_3c', credit: 'Codevolution — Next.js 14 Tutorial - 1 - Introduction', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nextjs/08-app-router/08-01-tu-react-toi-nextjs-82dbbf5f.mp4' }, defaultVideoTrack: 'VI'},
+    'nextjs-8-2-cac-file-quy-uoc': { yt: '9602Yzvd7ik', credit: 'Codevolution — Next.js 15 Tutorial - 5 - Routing', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nextjs/08-app-router/08-02-cac-file-quy-uoc-55de9219.mp4' }, defaultVideoTrack: 'VI'},
     'nextjs-8-3-layout-long': { yt: 'TzF2RKFjRyk', credit: 'Codevolution — Next.js 15 Tutorial - 15 - Nested Layouts' },
     'nextjs-8-4-dieu-huong-link': { yt: '9y7E44zHiGM', credit: 'Codevolution — Next.js 15 Tutorial - 19 - Link Component' },
     'nextjs-8-5-route-group-metadata': { yt: 'auXXk38rGgk', credit: 'Codevolution — Next.js 15 Tutorial - 13 - Route Groups' },

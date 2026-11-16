@@ -50,7 +50,7 @@ export default {
     // Chapter 4 — Cache Memory
     "cea201-4-0a-slides-phan-cap-bo-nho-locality": { yt: "7yrK_9PderQ", credit: "BitLemon — Cache Hierarchy: How Modern CPU Caches Are Organized (L1, L2 and L3)" },
     "cea201-4-0b-slides-cache-anh-xa-truc-tiep": { yt: "V_QS1HzJ8Bc", credit: "Neso Academy — Direct Memory Mapping" },
-    "cea201-4-0c-slides-set-associative-thay-the-ghi": { yt: "KhAh6thw_TI", credit: "Neso Academy — Set Associative Mapping" },
+    "cea201-4-0c-slides-set-associative-thay-the-ghi": { yt: "KhAh6thw_TI", credit: "Neso Academy — Set Associative Mapping", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/computer-organization-and-architecture/04-bo-nho-cache/04-03-slide-set-associative-thay-the-ghi-4479be34.mp4' }, defaultVideoTrack: 'VI'},
     // Chapter 5 — Internal Memory
     "cea201-5-0a-slides-dram-sram-rom": { yt: "7J7X7aZvMXQ", credit: "Branch Education — How does Computer Memory Work? 💻🛠" },
     "cea201-5-0b-slides-sua-loi-ddr-edram-cong-nghe-moi": { yt: "OokKoNO75QE", credit: "Actually Hardcore Overclocking — How double data rate DRAM works" },

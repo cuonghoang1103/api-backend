@@ -32,6 +32,7 @@ import { chamPhatAm, type KetQuaPhatAm } from './phatAm.service.js';
 import { synthesizeCuongMini } from '../makerlab/tts.js';
 import { logger } from '../../utils/logger.js';
 import { boSungTheNN } from './theNgoaiNgu.js';
+import { quyenEl, moLuongEl, ghiDungEl } from '../giong/elevenlabs.js';
 
 const GIONG_GIA_SU = 'en-GB-AdaMultilingualNeural';
 
@@ -429,7 +430,7 @@ export async function docGiaSu(noi: string, nn: NgonNgu = 'en'): Promise<string 
  * NGAY giọng mặc định (người dùng dặn: đừng để ảnh hưởng trải nghiệm) và nghỉ thử
  * máy nhà 2 phút — để các lượt sau không phải chờ hạn thêm lần nào nữa.
  */
-export type GiongGoi = 'mac-dinh' | 'khanh-linh' | 'cuong' | 'hoai-my' | 'nam-minh';
+export type GiongGoi = 'mac-dinh' | 'khanh-linh' | 'cuong' | 'hoai-my' | 'nam-minh' | 'cuong-el';
 type GiongNha = 'khanh-linh' | 'cuong';
 const GIONG_NHA: Record<GiongNha, string> = { 'khanh-linh': 'f5-khanh-linh', cuong: 'f5-cuong-nghiem' };
 let nhaNghiDen = 0;
@@ -444,7 +445,7 @@ const GIONG_VIET: Record<'hoai-my' | 'nam-minh', string> = { 'hoai-my': 'vi-VN-H
 const TOC_VIET_BAN_XU = '-6%';
 
 export function docGiong(x: unknown): GiongGoi {
-  return x === 'khanh-linh' || x === 'cuong' || x === 'hoai-my' || x === 'nam-minh' ? x : 'mac-dinh';
+  return x === 'khanh-linh' || x === 'cuong' || x === 'hoai-my' || x === 'nam-minh' || x === 'cuong-el' ? x : 'mac-dinh';
 }
 
 /** SSML nhiều giọng: tiếng Việt = giọng Việt bản xứ, `[en]…[/en]` = giọng bản xứ của ngoại ngữ. Thuần — test được. */
@@ -478,6 +479,63 @@ async function docGiaSuGiongViet(noi: string, giong: 'hoai-my' | 'nam-minh', nn:
   })();
   dangTao.set(r2, p);
   try { return await p; } catch { return null; } finally { dangTao.delete(r2); }
+}
+
+/* ── Giọng ElevenLabs của chủ app (16/11/2026 — app CT Language) ──────────────────────────────────────────────
+ * User: "dùng voice mình đã train qua ElevenLabs (giọng robot Odin) cho giọng tiếng Việt hướng dẫn, dùng chung không
+ * giới hạn, hết credit thì tự chuyển về giọng cũ". Phần TIẾNG VIỆT = giọng nhân bản (cửa chung `giong/elevenlabs.ts`,
+ * việc `ct_language`: mọi người dùng, không trần theo người, dừng ở mức `giuChoRobot`); phần NGOẠI NGỮ vẫn giọng Azure
+ * bản xứ (người học chọn — `ngoai`) để phát âm mẫu chuẩn. Mỗi đoạn một tệp mp3 lưu R2 theo băm ⇒ câu lặp lại (chào,
+ * khen…) không tốn credit lần hai. Trả null ⇒ nơi gọi lùi Hoài My. */
+const R2_EL = 'ctlanguage/audio/giong-el';
+
+async function doanViet(t: string, giong: string, model: string): Promise<string> {
+  const k = `${R2_EL}/${crypto.createHash('sha1').update(`${giong}|${model}|${t}`).digest('hex')}.mp3`;
+  const dang = dangTao.get(k);
+  if (dang) { const u = await dang; if (u) return u; throw new Error('ElevenLabs đoạn trùng hỏng'); }
+  const p = (async (): Promise<string | null> => {
+    if (await objectExists(k)) {
+      void ghiDungEl({ viec: 'ct_language', kyTu: t.length, model, ms: 0, ok: true, cache: true });
+      return buildPublicUrl(k);
+    }
+    const t0 = Date.now();
+    try {
+      const res = await moLuongEl({ text: t, giong, model, dinhDang: 'mp3_44100_64', signal: AbortSignal.timeout(20_000) });
+      const buf = Buffer.from(await res.arrayBuffer());
+      if (buf.length < 512) throw new Error(`ElevenLabs trả tệp rỗng (${buf.length} byte)`);
+      const url = (await putObject(k, buf, 'audio/mpeg')).url;
+      void ghiDungEl({ viec: 'ct_language', kyTu: t.length, model, ms: Date.now() - t0, ok: true });
+      return url;
+    } catch (e) {
+      void ghiDungEl({ viec: 'ct_language', kyTu: t.length, model, ms: Date.now() - t0, ok: false, loi: e instanceof Error ? e.message : String(e) });
+      throw e;
+    }
+  })();
+  dangTao.set(k, p);
+  try { const u = await p; if (!u) throw new Error('ElevenLabs hỏng'); return u; } finally { dangTao.delete(k); }
+}
+
+async function docGiaSuCuongEl(noi: string, nn: NgonNgu, ngoai?: string): Promise<string[] | null> {
+  const doan = tachDoan(noi);
+  const tongViet = doan.filter((d) => !d.en).reduce((n, d) => n + d.t.length, 0);
+  const q = await quyenEl({ viec: 'ct_language', kyTu: tongViet, ngonNgu: 'vi' });
+  if (!q.duoc) {
+    logger.info('[ctlanguage/goi] giọng ElevenLabs không dùng được — lùi Hoài My', { lyDo: q.lyDo });
+    return null;
+  }
+  try {
+    return await Promise.all(doan.map(async (d) => {
+      if (d.en) {
+        const u = await docDoanAnh(d.t, nn, ngoai);
+        if (!u) throw new Error('Azure giọng ngoại ngữ hỏng');
+        return u;
+      }
+      return doanViet(d.t.replace(/CuongMini/g, 'Cường Mi-ni'), q.giong, q.model);
+    }));
+  } catch (e) {
+    logger.warn('[ctlanguage/goi] giọng ElevenLabs hỏng — lùi Hoài My', { loi: e instanceof Error ? e.message : String(e) });
+    return null;
+  }
 }
 
 /** Một đoạn ngoại ngữ (Anh: Sonia · Nhật: Nanami · Trung: Xiaoxiao) → URL mp3 (lưu R2 theo băm). */
@@ -516,6 +574,12 @@ async function docDoanNha(t: string, voice: string, hanMs: number): Promise<stri
  */
 export async function docGiaSuTheoGiong(noi: string, giong: GiongGoi, nn: NgonNgu = 'en', ngoai?: string): Promise<{ audioUrl: string | null; audioUrls?: string[]; giongThat: GiongGoi }> {
   noi = boSungTheNN(noi, nn);
+  if (giong === 'cuong-el') {
+    const urls = await docGiaSuCuongEl(noi, nn, ngoai);
+    if (urls) return { audioUrl: urls[0] ?? null, audioUrls: urls, giongThat: 'cuong-el' };
+    // Hết credit / chạm mức giữ cho robot / ElevenLabs lỗi ⇒ giọng cũ (Hoài My) — cuộc gọi không bao giờ câm.
+    giong = 'hoai-my';
+  }
   if (giong === 'hoai-my' || giong === 'nam-minh') {
     const u = await docGiaSuGiongViet(noi, giong, nn, ngoai);
     // Azure từ chối giọng Việt (vùng không có, hết hạn mức) ⇒ lùi về giọng mặc định — cuộc gọi không bao giờ câm.

@@ -16,6 +16,7 @@
  *   admin  — không trần.
  *   Pro    — trần `tranProNgay` ký tự/người/ngày (mặc định 8.000), và chỉ khi quỹ còn hơn `giuChoRobot`.
  *   Free   — giữ giọng cũ (trình duyệt / máy nhà).
+ *   App CT Language (`ct_language`, 16/11) — mọi người dùng, không trần theo người; dừng ở mức giữ cho robot.
  *
  * Cài đặt sống trong `app_settings` (key `giong_el`), sửa ở trang admin — không cần deploy.
  * Mọi lượt ghi sổ `giong_el_dung` (thống kê admin + trần Pro).
@@ -23,7 +24,7 @@
 import { prisma } from '../../config/database.js';
 import { logger } from '../../utils/logger.js';
 
-export const VIEC_EL = ['robot', 'phong_van', 'gia_su', 'ai_chat', 'ngoai_ngu', 'khac'] as const;
+export const VIEC_EL = ['robot', 'phong_van', 'gia_su', 'ai_chat', 'ngoai_ngu', 'ct_language', 'khac'] as const;
 export type ViecEl = (typeof VIEC_EL)[number];
 export type ViecWebEl = Exclude<ViecEl, 'robot'>;
 
@@ -33,6 +34,7 @@ export const NHAN_VIEC_EL: Record<ViecEl, string> = {
   gia_su: 'Gia sư / Luyện nói',
   ai_chat: 'AI Chat (gọi thoại)',
   ngoai_ngu: 'Ngoại ngữ (bài học, từ vựng)',
+  ct_language: 'App CT Language (CuongMini hướng dẫn)',
   khac: 'Khác',
 };
 
@@ -60,7 +62,7 @@ export function caiDatMacDinh(): CaiDatGiongEl {
     bat: true,
     robot: true,
     web: true,
-    viec: { phong_van: true, gia_su: true, ai_chat: true, ngoai_ngu: true, khac: true },
+    viec: { phong_van: true, gia_su: true, ai_chat: true, ngoai_ngu: true, ct_language: true, khac: true },
     tranProNgay: 8_000,
     giuChoRobot: 15_000,
     giongMacDinh: process.env.ELEVENLABS_VOICE_ID?.trim() || GIONG_CUONG_ODIN,
@@ -215,6 +217,9 @@ export function xetQuyen(o: {
   if (!cd.viec[o.viec]) return { duoc: false, lyDo: 'tat_viec' };
   if (o.conLai !== null && o.conLai <= cd.giuChoRobot) return { duoc: false, lyDo: 'giu_cho_robot' };
   if (o.laAdmin) return { duoc: true, lyDo: 'admin' };
+  // App CT Language (16/11/2026, chủ app chốt): MỌI người dùng (cả Free), KHÔNG trần theo người — chỉ dừng khi quỹ
+  // chạm mức giữ cho robot (ngay trên) hoặc ElevenLabs báo hết credit ⇒ nơi gọi lùi giọng cũ (Hoài My).
+  if (o.viec === 'ct_language') return { duoc: true, lyDo: 'ct_language' };
   if (!o.laPro) return { duoc: false, lyDo: 'khong_pro' };
   if (!(cd.tranProNgay > 0)) return { duoc: false, lyDo: 'pro_tat' };
   if (o.daDungHomNay + o.kyTu > cd.tranProNgay) return { duoc: false, lyDo: 'het_tran_ngay' };

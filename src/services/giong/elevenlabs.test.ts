@@ -56,3 +56,11 @@ test('tachChan: không bao giờ đẩy byte lẻ xuống bo', () => {
   assert.deepEqual([...b.chan], [3, 4, 5, 6]);
   assert.equal(b.le, null);
 });
+
+test('app CT Language: mọi người (cả Free) không trần theo người; vẫn dừng ở mức giữ cho robot / khi tắt việc', () => {
+  assert.equal(xetQuyen({ ...co, viec: 'ct_language' }).lyDo, 'ct_language');
+  assert.equal(xetQuyen({ ...co, viec: 'ct_language', daDungHomNay: 9_999_999 }).duoc, true);
+  assert.equal(xetQuyen({ ...co, viec: 'ct_language', conLai: cd.giuChoRobot }).lyDo, 'giu_cho_robot');
+  assert.equal(xetQuyen({ ...co, viec: 'ct_language', cd: { ...cd, viec: { ...cd.viec, ct_language: false } } }).lyDo, 'tat_viec');
+  assert.equal(xetQuyen({ ...co, viec: 'ct_language', cd: { ...cd, web: false } }).lyDo, 'tat_web');
+});

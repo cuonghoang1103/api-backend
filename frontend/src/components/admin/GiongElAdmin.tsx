@@ -11,7 +11,7 @@ import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContaine
 import { Loader2, RefreshCw, Mic, Save, AlertCircle } from 'lucide-react';
 import api from '@/lib/api';
 
-type Viec = 'robot' | 'phong_van' | 'gia_su' | 'ai_chat' | 'ngoai_ngu' | 'khac';
+type Viec = 'robot' | 'phong_van' | 'gia_su' | 'ai_chat' | 'ngoai_ngu' | 'ct_language' | 'khac';
 type ViecWeb = Exclude<Viec, 'robot'>;
 interface DongViec { luot: number; kyTu: number; credit: number; cache: number; loi: number }
 interface CaiDat {
@@ -30,9 +30,9 @@ interface ThongKe {
   loiGanDay: Array<{ createdAt: string; viec: Viec; loi: string | null }>;
 }
 
-const VIEC: Viec[] = ['robot', 'phong_van', 'gia_su', 'ai_chat', 'ngoai_ngu', 'khac'];
+const VIEC: Viec[] = ['robot', 'phong_van', 'gia_su', 'ai_chat', 'ngoai_ngu', 'ct_language', 'khac'];
 const MAU: Record<Viec, string> = {
-  robot: '#22d3ee', phong_van: '#a78bfa', gia_su: '#34d399', ai_chat: '#f472b6', ngoai_ngu: '#fbbf24', khac: '#94a3b8',
+  robot: '#22d3ee', phong_van: '#a78bfa', gia_su: '#34d399', ai_chat: '#f472b6', ngoai_ngu: '#fbbf24', ct_language: '#fb923c', khac: '#94a3b8',
 };
 const so = (n: number) => n.toLocaleString('vi-VN');
 

@@ -1,0 +1,84 @@
+# CT Lồng Tiếng — dựng bản cài 3 nền tảng (app ở apps/ct-long-tieng/).
+#
+# CHỈ chạy tay (workflow_dispatch) và CHỈ lưu bản cài làm ARTIFACT của lượt chạy — không tạo release, không
+# publish, không đẩy đi đâu. Phát hành công khai chờ chủ kênh duyệt (docs/long-tieng-hop-dong.md mục 4).
+#
+#   gh workflow run ct-long-tieng-build.yml
+#   gh run download <run-id>           # lấy dmg/zip (mac arm64+x64), exe (win), AppImage (linux)
+#
+# Bản mac CHƯA ký Developer ID (móc after-pack ký ad-hoc): lần đầu mở phải chuột phải → Mở.
+
+name: CT Lồng Tiếng — dựng bản cài (artifact)
+
+on:
+  workflow_dispatch:
+
+concurrency:
+  group: ct-long-tieng-build
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+defaults:
+  run:
+    working-directory: apps/ct-long-tieng
+
+jobs:
+  kiem-tra:
+    name: Kiểm kiểu + unit test
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: apps/ct-long-tieng/package-lock.json
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm test
+
+  dung:
+    name: Dựng ${{ matrix.ten }}
+    needs: kiem-tra
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 40
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: macos-latest
+            ten: macOS
+            lenh: dist:mac
+          - os: windows-latest
+            ten: Windows
+            lenh: dist:win
+          - os: ubuntu-latest
+            ten: Linux
+            lenh: dist:linux
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: apps/ct-long-tieng/package-lock.json
+      - run: npm ci
+      - name: Dựng bản cài
+        run: npm run ${{ matrix.lenh }}
+        env:
+          # Không tìm chứng chỉ ký trong keychain của runner; không có GH_TOKEN ⇒ không thể publish dù cấu hình có sai.
+          CSC_IDENTITY_AUTO_DISCOVERY: 'false'
+      - name: Lưu bản cài làm artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ct-long-tieng-${{ matrix.ten }}
+          if-no-files-found: error
+          retention-days: 14
+          path: |
+            apps/ct-long-tieng/release/*.dmg
+            apps/ct-long-tieng/release/*.zip
+            apps/ct-long-tieng/release/*.exe
+            apps/ct-long-tieng/release/*.AppImage

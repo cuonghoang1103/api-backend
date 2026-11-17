@@ -2,8 +2,14 @@
   "courseSlug": "introduction-to-databases",
   "sinhBoi": "scripts/phu-de-tu-video-rieng.mjs",
   "lessons": {
-    "dbi202-bao-dong-tim-khoa": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/04-phu-thuoc-ham-chuan-hoa/04-06-armstrong-bao-dong-tim-khoa-4e7fbc01.mp4","durationSec":478.13,"nguonCau":"srt",
-      "parts": [],
+    "dbi202-bao-dong-tim-khoa": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/04-phu-thuoc-ham-chuan-hoa/04-06-armstrong-bao-dong-tim-khoa-4e7fbc01.mp4","durationSec":478.13,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":106.68,"ten":"Chào bạn · DBI202 Bài 4.2 · Thám tử suy luận"},
+        {"t":106.68,"den":192.67,"ten":"Thuật toán bao đóng · Tính bao đóng từng vòng"},
+        {"t":192.67,"den":283.35,"ten":"Tìm mọi khoá: chia bốn nhóm"},
+        {"t":283.35,"den":362.83,"ten":"Câu FE thật: khi có nhiều khoá · Bao đóng còn kiểm được gì"},
+        {"t":362.83,"den":478.13,"ten":"Bẫy: chỉ quét một lượt · Tự kiểm: câu FE thật"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 4.2 của DBI202: luật Armstrong, bao đóng và tìm khoá."},
         {"t":12.88,"vi":"Bốn bài slide vừa rồi nói về các dạng chuẩn."},
@@ -88,8 +94,15 @@
         {"t":470.1,"vi":"Giờ bạn tự giải lại ba câu FE vừa xem ra giấy, mỗi câu không quá sáu mươi giây nhé."}
       ]
     },
-    "dbi202-bat-dau-tai-day": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/00-gioi-thieu-huong-dan-hoc/00-01-bat-dau-tai-day-database-la-gi-75114d8b.mp4","durationSec":665.34,"nguonCau":"srt",
-      "parts": [],
+    "dbi202-bat-dau-tai-day": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/00-gioi-thieu-huong-dan-hoc/00-01-bat-dau-tai-day-database-la-gi-75114d8b.mp4","durationSec":665.34,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":115.53,"ten":"Chào bạn · DBI202 · Bạn dùng database mỗi ngày"},
+        {"t":115.53,"den":295.51,"ten":"Sổ tay, Excel, rồi database · Lịch sử ngắn, có mốc năm"},
+        {"t":295.51,"den":425.36,"ten":"Database đang chạy quanh bạn"},
+        {"t":425.36,"den":505.81,"ten":"Sự cố thật: GitLab xoá nhầm database"},
+        {"t":505.81,"den":612.55,"ten":"Khoá này tổ chức thế nào, học sao cho khỏi nản"},
+        {"t":612.55,"den":665.34,"ten":"Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với môn DBI202, Cơ sở dữ liệu, trên cuongthai.com."},
         {"t":11.77,"vi":"Khoá này giúp bạn ba việc: thi qua cả phần lý thuyết lẫn phần thực hành của môn, tự thiết kế được database cho đồ án, và dùng được cả SQL Server của trường lẫn PostgreSQL ngoài đi làm."},
@@ -183,8 +196,20 @@
         {"t":653.53,"vi":"Giờ bạn kéo xuống dưới video, đọc lại bảng mười hai thuật ngữ Anh Việt, che cột nghĩa để tự kiểm, rồi hẵng sang bài cài đặt nhé."}
       ]
     },
-    "dbi202-buoi-dau-tien": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/00-gioi-thieu-huong-dan-hoc/00-03-buoi-thuc-hanh-dau-tien-tron-76d1c561.mp4","durationSec":1044.27,"nguonCau":"srt",
-      "parts": [],
+    "dbi202-buoi-dau-tien": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/00-gioi-thieu-huong-dan-hoc/00-03-buoi-thuc-hanh-dau-tien-tron-76d1c561.mp4","durationSec":1044.27,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":5.1,"den":139.2,"ten":"Phần 1 · Chào bạn · DBI202 Bài 0.3 · Sổ lớp thành hai bảng"},
+        {"t":139.2,"den":220.07,"ten":"Phần 1 · Bước 2: hai bảng, đọc từng dòng"},
+        {"t":220.07,"den":298.62,"ten":"Phần 1 · Kiểm bảng đã có, và ba chỗ đổi trên PostgreSQL"},
+        {"t":298.62,"den":401.61,"ten":"Phần 1 · Bẫy chữ N trước chuỗi tiếng Việt"},
+        {"t":401.61,"den":499.05,"ten":"Phần 1 · Thực hành: bài 1 và bài 2 · Tự kiểm kiểu đề FE"},
+        {"t":499.05,"den":591.62,"ten":"Phần 1 · Tóm tắt · Chào bạn · Bài 0.3 phần 2"},
+        {"t":591.62,"den":675.76,"ten":"Phần 2 · Cục tẩy, cây kéo và chữ WHERE · Bước 5: UPDATE sửa một ô"},
+        {"t":675.76,"den":770.66,"ten":"Phần 2 · Lỗi 1: quên WHERE · Lỗi 2: nháy đơn và nháy kép"},
+        {"t":770.66,"den":911.04,"ten":"Phần 2 · Nháy đơn, nhưng vẫn cần chữ N · Thực hành: bài 3, 4, 5"},
+        {"t":911.04,"den":986.36,"ten":"Phần 2 · 12 thuật ngữ của buổi đầu · Tự kiểm kiểu đề FE"},
+        {"t":986.36,"den":1044.27,"ten":"Phần 2 · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 0.3 trong Mục 0 của môn DBI202, buổi thực hành đầu tiên."},
         {"t":13.48,"vi":"Bài trước mình đã cài SQL Server và PostgreSQL, kết nối được vào cả hai, và biết đọc lỗi kết nối theo bốn nhóm."},
@@ -335,19 +360,15 @@
         {"t":1025.17,"vi":"Giờ bạn làm phần Thực hành ngay dưới video: tự gõ lại ba bài vừa rồi, rồi vào Code Lab luyện các bài thêm, sửa, xoá từ dễ đến khó, rồi hẵng sang bài mới nhé."}
       ]
     },
-    "dbi202-cai-dat": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/00-gioi-thieu-huong-dan-hoc/00-02-cai-dat-ket-noi-sql-server-postgresql-3ec1c853.mp4","durationSec":864.36,"nguonCau":"thoigian",
+    "dbi202-cai-dat": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/00-gioi-thieu-huong-dan-hoc/00-02-cai-dat-ket-noi-sql-server-postgresql-3ec1c853.mp4","durationSec":864.36,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":32.47,"ten":"Chào bạn · DBI202 Mục 0"},
-        {"t":32.47,"den":74.8,"ten":"Đích đến: hai dòng chữ thật"},
-        {"t":74.8,"den":131.74,"ten":"Windows: tải, cài SSMS, dịch vụ phải chạy"},
-        {"t":131.74,"den":182.52,"ten":"Ô Server name: gõ gì cho đúng"},
-        {"t":182.52,"den":244.61,"ten":"Hai kiểu xác thực và Mixed Mode"},
+        {"t":0,"den":131.74,"ten":"Chào bạn · DBI202 Mục 0 · Đích đến: hai dòng chữ thật"},
+        {"t":131.74,"den":244.61,"ten":"Ô Server name: gõ gì cho đúng"},
         {"t":244.61,"den":332.45,"ten":"TCP/IP, tường lửa và chứng chỉ"},
         {"t":332.45,"den":457.33,"ten":"Hơn mười lỗi kết nối: thông báo → nghĩa → cách sửa"},
         {"t":457.33,"den":550.1,"ten":"Mac: SQL Server sống trong Docker"},
         {"t":550.1,"den":638.92,"ten":"PostgreSQL trên cả hai hệ điều hành"},
-        {"t":638.92,"den":682.88,"ten":"Đặt cạnh nhau: vì sao PostgreSQL thấy dễ hơn"},
-        {"t":682.88,"den":731.59,"ten":"Thực hành"},
+        {"t":638.92,"den":731.59,"ten":"Đặt cạnh nhau: vì sao PostgreSQL thấy dễ hơn · Thực hành"},
         {"t":731.59,"den":806.88,"ten":"Áp dụng vào dự án PRJ301 Nhà trọ"},
         {"t":806.88,"den":864.36,"ten":"Tóm tắt"}
       ],
@@ -437,19 +458,15 @@
         {"t":852.53,"vi":"Giờ bạn làm phần Thực hành ngay dưới video: chạy được hai câu kiểm phiên bản trên máy mình, chụp lại, rồi hẵng sang bài tiếp theo nhé."}
       ]
     },
-    "dbi202-cai-dat-ket-noi": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/00-gioi-thieu-huong-dan-hoc/00-02-cai-dat-ket-noi-sql-server-postgresql-3ec1c853.mp4","durationSec":864.36,"nguonCau":"thoigian",
+    "dbi202-cai-dat-ket-noi": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/00-gioi-thieu-huong-dan-hoc/00-02-cai-dat-ket-noi-sql-server-postgresql-3ec1c853.mp4","durationSec":864.36,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":32.47,"ten":"Chào bạn · DBI202 Mục 0"},
-        {"t":32.47,"den":74.8,"ten":"Đích đến: hai dòng chữ thật"},
-        {"t":74.8,"den":131.74,"ten":"Windows: tải, cài SSMS, dịch vụ phải chạy"},
-        {"t":131.74,"den":182.52,"ten":"Ô Server name: gõ gì cho đúng"},
-        {"t":182.52,"den":244.61,"ten":"Hai kiểu xác thực và Mixed Mode"},
+        {"t":0,"den":131.74,"ten":"Chào bạn · DBI202 Mục 0 · Đích đến: hai dòng chữ thật"},
+        {"t":131.74,"den":244.61,"ten":"Ô Server name: gõ gì cho đúng"},
         {"t":244.61,"den":332.45,"ten":"TCP/IP, tường lửa và chứng chỉ"},
         {"t":332.45,"den":457.33,"ten":"Hơn mười lỗi kết nối: thông báo → nghĩa → cách sửa"},
         {"t":457.33,"den":550.1,"ten":"Mac: SQL Server sống trong Docker"},
         {"t":550.1,"den":638.92,"ten":"PostgreSQL trên cả hai hệ điều hành"},
-        {"t":638.92,"den":682.88,"ten":"Đặt cạnh nhau: vì sao PostgreSQL thấy dễ hơn"},
-        {"t":682.88,"den":731.59,"ten":"Thực hành"},
+        {"t":638.92,"den":731.59,"ten":"Đặt cạnh nhau: vì sao PostgreSQL thấy dễ hơn · Thực hành"},
         {"t":731.59,"den":806.88,"ten":"Áp dụng vào dự án PRJ301 Nhà trọ"},
         {"t":806.88,"den":864.36,"ten":"Tóm tắt"}
       ],
@@ -539,8 +556,13 @@
         {"t":852.53,"vi":"Giờ bạn làm phần Thực hành ngay dưới video: chạy được hai câu kiểm phiên bản trên máy mình, chụp lại, rồi hẵng sang bài tiếp theo nhé."}
       ]
     },
-    "dbi202-cap-nhat-du-lieu": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/06-truy-van-sql/06-08-insert-update-delete-an-toan-2f0ed00a.mp4","durationSec":359.58,"nguonCau":"srt",
-      "parts": [],
+    "dbi202-cap-nhat-du-lieu": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/06-truy-van-sql/06-08-insert-update-delete-an-toan-2f0ed00a.mp4","durationSec":359.58,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":91.39,"ten":"Chào bạn · DBI202 Bài 6.5 · Đo hai lần, cắt một lần"},
+        {"t":91.39,"den":178.8,"ten":"UPDATE có JOIN và nghi thức an toàn · DELETE thiếu WHERE"},
+        {"t":178.8,"den":256.45,"ten":"DELETE, TRUNCATE, DROP · SQL Server không có LIMIT"},
+        {"t":256.45,"den":359.58,"ten":"⭐ Xoá mềm: dữ liệu không bao giờ bị huỷ · Tự kiểm kiểu đề FE"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 6.5 của DBI202: INSERT, UPDATE và DELETE an toàn."},
         {"t":12.89,"vi":"Từ đầu chương tới giờ toàn là SELECT: chạy sai thì chạy lại, dữ liệu không mất gì."},
@@ -599,8 +621,19 @@
         {"t":351.4,"vi":"Giờ bạn tự thử: DELETE thiếu WHERE trong một giao dịch, rồi ROLLBACK để cứu lại bảng nhé."}
       ]
     },
-    "dbi202-cau-noi-di-lam": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/09-chuyen-sau-ngoai-giao-trinh/09-09-cau-noi-di-lam-tron-5337426a.mp4","durationSec":939.33,"nguonCau":"srt",
-      "parts": [],
+    "dbi202-cau-noi-di-lam": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/09-chuyen-sau-ngoai-giao-trinh/09-09-cau-noi-di-lam-tron-5337426a.mp4","durationSec":939.33,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":5.1,"den":124.92,"ten":"Phần 1 · Chào bạn · cầu nối sau DBI202"},
+        {"t":124.92,"den":252.84,"ten":"Phần 1 · 2. Phần chủ yếu để thi"},
+        {"t":252.84,"den":331.86,"ten":"Phần 1 · Nối chuỗi, giờ hiện tại, thay NULL (chạy thật)"},
+        {"t":331.86,"den":424.51,"ten":"Phần 1 · Tự kiểm · Tóm tắt"},
+        {"t":424.51,"den":501.33,"ten":"Phần 2 · Chào bạn · cầu nối tập 2"},
+        {"t":501.33,"den":637.63,"ten":"Phần 2 · Lỗi giữa giao dịch: chạy tiếp hay huỷ cả? (chạy thật)"},
+        {"t":637.63,"den":725.05,"ten":"Phần 2 · 4. Làm dự án — thứ tự nên đi"},
+        {"t":725.05,"den":803.41,"ten":"Phần 2 · 5. Tự kiểm trước phỏng vấn (câu 1–3)"},
+        {"t":803.41,"den":886.26,"ten":"Phần 2 · 5. Tự kiểm trước phỏng vấn (câu 4–6)"},
+        {"t":886.26,"den":939.33,"ten":"Phần 2 · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn. Nếu bạn vừa học xong DBI202, chúc mừng nhé: ERD, chuẩn hoá, SQL, chỉ mục, giao dịch, bạn đã đi hết một môn không hề nhẹ."},
         {"t":17.07,"vi":"Chắc bạn đang tự hỏi: học cái này để thi, hay đi làm có dùng thật không?"},
@@ -723,8 +756,14 @@
         {"t":930.95,"vi":"Hẹn gặp bạn ở đó nhé."}
       ]
     },
-    "dbi202-chi-muc": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/08-chi-muc-toi-uu/08-03-chi-muc-va-ke-hoach-thuc-thi-f28ebe99.mp4","durationSec":443.51,"nguonCau":"srt",
-      "parts": [],
+    "dbi202-chi-muc": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/08-chi-muc-toi-uu/08-03-chi-muc-va-ke-hoach-thuc-thi-f28ebe99.mp4","durationSec":443.51,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":95.74,"ten":"Chào bạn · DBI202 Bài 8.2 · Cây B-tree: gốc, nhánh, lá"},
+        {"t":95.74,"den":206.83,"ten":"Chưa có chỉ mục: quét cả bảng"},
+        {"t":206.83,"den":298.38,"ten":"Chỉ mục ghép và tiền tố trái nhất"},
+        {"t":298.38,"den":401.55,"ten":"🐘 EXPLAIN ANALYZE trên PostgreSQL"},
+        {"t":401.55,"den":443.51,"ten":"Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 8.2 của DBI202: chỉ mục và cách đọc kế hoạch thực thi."},
         {"t":13.02,"vi":"Tạo chỉ mục thì dễ. Khó là biết nên tạo loại nào, và chứng minh được cơ sở dữ liệu thật sự đã dùng nó."},
@@ -789,8 +828,20 @@
         {"t":434.59,"vi":"Giờ bạn tự thử: tạo một bảng lớn, đo số trang đọc trước và sau khi thêm một chỉ mục phủ nhé."}
       ]
     },
-    "dbi202-chuan-hoa": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/04-phu-thuoc-ham-chuan-hoa/04-01-slide-chapter-3-phu-thuoc-ham-bao-dong-tron-fa986120.mp4","durationSec":1168.53,"nguonCau":"srt",
-      "parts": [],
+    "dbi202-chuan-hoa": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/04-phu-thuoc-ham-chuan-hoa/04-01-slide-chapter-3-phu-thuoc-ham-bao-dong-tron-fa986120.mp4","durationSec":1168.53,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":5.1,"den":113.06,"ten":"Phần 1 · Chào bạn · DBI202 Bài 4.A · Biết mã sinh viên là biết họ tên"},
+        {"t":113.06,"den":224,"ten":"Phần 1 · Slide 4: định nghĩa phụ thuộc hàm"},
+        {"t":224,"den":324.58,"ten":"Phần 1 · Slide 6: khoá và siêu khoá · Slide 7: tiên đề Armstrong"},
+        {"t":324.58,"den":470.38,"ten":"Phần 1 · Slide 8: suy ra từ, và tương đương"},
+        {"t":470.38,"den":564.47,"ten":"Phần 1 · Áp dụng vào dự án PRJ301 Nhà trọ · Tự kiểm kiểu đề FE"},
+        {"t":564.47,"den":651.52,"ten":"Phần 1 · Tóm tắt · Chào bạn · Bài 4.A phần 2"},
+        {"t":651.52,"den":775.38,"ten":"Phần 2 · Slide 11: bài tập bốn khoá"},
+        {"t":775.38,"den":892.36,"ten":"Phần 2 · Slide 12: cơ sở tối thiểu"},
+        {"t":892.36,"den":997.01,"ten":"Phần 2 · Slide 14–15: chiếu bảng thì phụ thuộc đi đâu?"},
+        {"t":997.01,"den":1072.15,"ten":"Phần 2 · Slide 19: ví dụ chiếu lên A, C, D"},
+        {"t":1072.15,"den":1168.53,"ten":"Phần 2 · Tự kiểm kiểu đề FE · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Chương 4 của DBI202: phụ thuộc hàm và chuẩn hoá. Đây là bộ slide Chapter 3 của trường, phần một."},
         {"t":15.93,"vi":"Chương trước khép lại bằng danh sách người chấm dùng cho câu một đề thực hành, và một câu hỏi bỏ ngỏ: bảng mình vừa vẽ đã tốt chưa?"},
@@ -975,8 +1026,13 @@
         {"t":1151.06,"vi":"Giờ bạn kéo xuống dưới video, tự làm lại slide mười một và slide mười chín trên giấy, rồi luyện tìm khoá ở bài 4.2 nhé."}
       ]
     },
-    "dbi202-chuan-hoa-vi-du": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/04-phu-thuoc-ham-chuan-hoa/04-08-chuan-hoa-mot-bang-don-hang-494890ec.mp4","durationSec":421.71,"nguonCau":"srt",
-      "parts": [],
+    "dbi202-chuan-hoa-vi-du": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/04-phu-thuoc-ham-chuan-hoa/04-08-chuan-hoa-mot-bang-don-hang-494890ec.mp4","durationSec":421.71,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":96.91,"ten":"Chào bạn · DBI202 Bài 4.4 · Bảng xuất phát và ba bất thường"},
+        {"t":96.91,"den":206.21,"ten":"Bước 1: lên 1NF · Bước 2: lên 2NF"},
+        {"t":206.21,"den":308.6,"ten":"Bước 4: soát BCNF · Chạy thật 4 bảng, và trên PostgreSQL"},
+        {"t":308.6,"den":421.71,"ten":"⭐ Trên BCNF: 4NF · Tự kiểm kiểu đề FE"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 4.4 của DBI202: chuẩn hoá một bảng từ đầu tới cuối."},
         {"t":13.28,"vi":"Bài trước cho ta hai đèn để chấm mỗi lần tách: không mất mát, và bảo toàn phụ thuộc."},
@@ -1043,8 +1099,16 @@
         {"t":412.9,"vi":"Giờ bạn tự chuẩn hoá lại bảng đơn hàng này ra giấy theo khuôn bốn dòng, rồi so với video nhé."}
       ]
     },
-    "dbi202-cs1-on": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/09-chuyen-sau-ngoai-giao-trinh/09-01-tap-cs1-on-7-bai-cc5a5013.mp4","durationSec":664.74,"nguonCau":"srt",
-      "parts": [],
+    "dbi202-cs1-on": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/09-chuyen-sau-ngoai-giao-trinh/09-01-tap-cs1-on-7-bai-cc5a5013.mp4","durationSec":664.74,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":106.49,"ten":"Chào bạn · bài tập CS.1 · Bài 1: đây là mô hình dữ liệu nào?"},
+        {"t":106.49,"den":185.9,"ten":"Bài 2: sắp lại dòng thời gian"},
+        {"t":185.9,"den":263.26,"ten":"Bài 3: chọn đúng DBMS cho công việc"},
+        {"t":263.26,"den":389.44,"ten":"Bài 4: định lý CAP — RDBMS hay NoSQL?"},
+        {"t":389.44,"den":513.02,"ten":"Bài 5: chạy cả hai — và một chi tiết tinh"},
+        {"t":513.02,"den":606.77,"ten":"Bài 7: ghép nghề với tin tuyển dụng · Tự kiểm"},
+        {"t":606.77,"den":664.74,"ten":"Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với phần bài tập của deck lịch sử."},
         {"t":9.19,"vi":"Deck này không thi, nên bảy bài dưới đây không phải dạng ôn thi."},
@@ -1132,8 +1196,16 @@
         {"t":661.22,"vi":"Nói to như đang phỏng vấn nhé."}
       ]
     },
-    "dbi202-cs2-on": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/09-chuyen-sau-ngoai-giao-trinh/09-02-tap-cs2-on-tron-6ca7f81e.mp4","durationSec":788.46,"nguonCau":"srt",
-      "parts": [],
+    "dbi202-cs2-on": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/09-chuyen-sau-ngoai-giao-trinh/09-02-tap-cs2-on-tron-6ca7f81e.mp4","durationSec":788.46,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":5.1,"den":146.12,"ten":"Phần 1 · Chào bạn · bài tập CS.2"},
+        {"t":146.12,"den":252.25,"ten":"Phần 1 · Bài 2: seek theo khoá hay quét cả bảng?"},
+        {"t":252.25,"den":381.76,"ten":"Phần 1 · Bài 3: bảng nào phạm luật 8060 byte? · Tóm tắt"},
+        {"t":381.76,"den":496.17,"ten":"Phần 2 · Chào bạn · bài tập CS.2 (2/2)"},
+        {"t":496.17,"den":603.09,"ten":"Phần 2 · Bài 5: thống kê cũ chọn sai kế hoạch"},
+        {"t":603.09,"den":722.34,"ten":"Phần 2 · Bài 6: chuỗi ad hoc hay tham số?"},
+        {"t":722.34,"den":788.46,"ten":"Phần 2 · Tóm tắt 8 ý"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với phần bài tập của deck bên trong một DBMS: sáu bài, tập này giải bài một tới ba."},
         {"t":13.18,"vi":"Bài nào cũng bắt bạn đoán trước trên giấy: một con số, tên một kế hoạch, hay lỗi hoặc chạy được. Rồi mới chạy lệnh thật và so."},
@@ -1231,8 +1303,20 @@
         {"t":770.76,"vi":"Giờ bạn làm quiz mười câu của CS hai để tự kiểm, rồi sang deck Chuyên sâu ba: chỉ mục, nơi các trang B-tree giúp bộ máy seek thay vì quét nhé."}
       ]
     },
-    "dbi202-cs3-on": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/09-chuyen-sau-ngoai-giao-trinh/09-03-tap-cs3-on-tron-9502b2af.mp4","durationSec":1248.96,"nguonCau":"srt",
-      "parts": [],
+    "dbi202-cs3-on": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/09-chuyen-sau-ngoai-giao-trinh/09-03-tap-cs3-on-tron-9502b2af.mp4","durationSec":1248.96,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":5.1,"den":186.33,"ten":"Phần 1 · Chào bạn · bài tập CS.3 · Bài 1: cây cao bao nhiêu?"},
+        {"t":186.33,"den":306.83,"ten":"Phần 1 · Bài 2: một index cho ba truy vấn"},
+        {"t":306.83,"den":440.16,"ten":"Phần 1 · Bài 3: sửa ba điều kiện cho SARGable"},
+        {"t":440.16,"den":519.75,"ten":"Phần 1 · Tóm tắt · Chào bạn · bài tập CS.3 (2/3)"},
+        {"t":519.75,"den":659,"ten":"Phần 2 · Bài 4: màn hình đơn chờ xử lý"},
+        {"t":659,"den":793.69,"ten":"Phần 2 · Bài 5: xoá một khách hàng rất chậm"},
+        {"t":793.69,"den":900.38,"ten":"Phần 2 · Tóm tắt · Chào bạn · bài tập CS.3 (3/3)"},
+        {"t":900.38,"den":995.71,"ten":"Phần 3 · Bài 6: lời giải — sáu bước"},
+        {"t":995.71,"den":1089.36,"ten":"Phần 3 · Bài 6: PostgreSQL và cái bẫy bước ba · Thuật ngữ Anh → Việt"},
+        {"t":1089.36,"den":1164.57,"ten":"Phần 3 · T-SQL ↔ PostgreSQL — index và kế hoạch"},
+        {"t":1164.57,"den":1248.96,"ten":"Phần 3 · Tóm tắt 8 ý"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với phần bài tập của deck Chỉ mục chuyên sâu: sáu bài, tập này giải bài một tới ba."},
         {"t":12.6,"vi":"Đây là những câu người phỏng vấn thật sự hỏi: sao truy vấn này chậm, em thêm index nào, thứ tự cột ra sao, sao index của anh không được dùng."},
@@ -1373,8 +1457,18 @@
         {"t":1240.19,"vi":"Hẹn gặp ở deck tiếp theo."}
       ]
     },
-    "dbi202-cs4-on": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/09-chuyen-sau-ngoai-giao-trinh/09-04-tap-cs4-on-tron-c883e3c9.mp4","durationSec":904.53,"nguonCau":"srt",
-      "parts": [],
+    "dbi202-cs4-on": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/09-chuyen-sau-ngoai-giao-trinh/09-04-tap-cs4-on-tron-c883e3c9.mp4","durationSec":904.53,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":5.1,"den":95.42,"ten":"Phần 1 · Chào bạn · bài tập CS.4 · Bài 1: gọi tên bất thường"},
+        {"t":95.42,"den":174.36,"ten":"Phần 1 · Bài 1: đáp án · Bài 2: rút tiền mà không mất cập nhật"},
+        {"t":174.36,"den":267.48,"ten":"Phần 1 · Bài 2: lời giải — một câu nguyên tử"},
+        {"t":267.48,"den":350.03,"ten":"Phần 1 · Bài 3: lời giải — một bên lỗi deadlock"},
+        {"t":350.03,"den":447.55,"ten":"Phần 1 · Bài 4: lời giải — id nhỏ trước · Tóm tắt"},
+        {"t":447.55,"den":595.6,"ten":"Phần 2 · Chào bạn · bài 5 tới 7"},
+        {"t":595.6,"den":686.98,"ten":"Phần 2 · Bài 6: chọn kỹ thuật cho sáu tình huống"},
+        {"t":686.98,"den":834.71,"ten":"Phần 2 · Bài 7: ai đang chặn ai? · Bảng tra T-SQL ↔ PostgreSQL"},
+        {"t":834.71,"den":904.53,"ten":"Phần 2 · Tóm tắt 8 ý"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với phần bài tập của deck Giao dịch và đồng thời: bảy bài, tập này giải bài một tới bốn."},
         {"t":13.13,"vi":"Lỗi đồng thời vô hình khi bạn thử một mình."},
@@ -1486,8 +1580,18 @@
         {"t":892,"vi":"Deck sau, chuyên sâu năm, là SQL nâng cao cho đi làm và phỏng vấn."}
       ]
     },
-    "dbi202-cs5-on": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/09-chuyen-sau-ngoai-giao-trinh/09-05-tap-cs5-on-tron-df38e449.mp4","durationSec":822.44,"nguonCau":"srt",
-      "parts": [],
+    "dbi202-cs5-on": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/09-chuyen-sau-ngoai-giao-trinh/09-05-tap-cs5-on-tron-df38e449.mp4","durationSec":822.44,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":5.1,"den":140.82,"ten":"Phần 1 · Chào bạn · bài tập CS.5 · Bài 1: xếp hạng trong phòng"},
+        {"t":140.82,"den":219.5,"ten":"Phần 1 · Bài 2: những tháng tăng trưởng · Bài 2: lời giải"},
+        {"t":219.5,"den":303.42,"ten":"Phần 1 · Bài 3: dưới mỗi quản lý có bao nhiêu người · Bài 3: lời giải"},
+        {"t":303.42,"den":392.06,"ten":"Phần 1 · Bài 4: ai làm nhiều nhất ở mỗi dự án · Bài 4: lời giải"},
+        {"t":392.06,"den":495.91,"ten":"Phần 1 · Tóm tắt · Chào bạn · bài 5–6"},
+        {"t":495.91,"den":578.42,"ten":"Phần 2 · Bài 5: lời giải · Bài 6: đồng bộ bảng giá"},
+        {"t":578.42,"den":671.11,"ten":"Phần 2 · Bài 6: lời giải SQL Server"},
+        {"t":671.11,"den":755.78,"ten":"Phần 2 · Bảng cú pháp hai hệ"},
+        {"t":755.78,"den":822.44,"ten":"Phần 2 · Tóm tắt 8 ý"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài tập của deck SQL nâng cao: sáu bài đúng kiểu hay gặp khi phỏng vấn."},
         {"t":13.02,"vi":"Tập này giải bài một tới bốn."},
@@ -1598,8 +1702,20 @@
         {"t":814.18,"vi":"Hẹn gặp bạn ở đó."}
       ]
     },
-    "dbi202-cs6-on": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/09-chuyen-sau-ngoai-giao-trinh/09-06-tap-cs6-on-tron-c5993950.mp4","durationSec":1152.94,"nguonCau":"srt",
-      "parts": [],
+    "dbi202-cs6-on": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/09-chuyen-sau-ngoai-giao-trinh/09-06-tap-cs6-on-tron-c5993950.mp4","durationSec":1152.94,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":5.1,"den":133.78,"ten":"Phần 1 · Chào bạn · bài tập CS.6 · Bài 1: từ đề tới bảng — LMS nhỏ"},
+        {"t":133.78,"den":280.02,"ten":"Phần 1 · Bài 1: chạy thật — phá ba quy tắc"},
+        {"t":280.02,"den":435.05,"ten":"Phần 1 · Bài 3: mã giảm giá — duy nhất theo cửa hàng, có xoá mềm"},
+        {"t":435.05,"den":525.58,"ten":"Phần 1 · 🐘 Bài 4 trên PostgreSQL: daterange + EXCLUDE · Tự kiểm"},
+        {"t":525.58,"den":607.25,"ten":"Phần 1 · Tóm tắt · Chào bạn · bài tập CS.6 (2/2)"},
+        {"t":607.25,"den":716.82,"ten":"Phần 2 · Bài 5: chọn ON DELETE cho một blog"},
+        {"t":716.82,"den":794.58,"ten":"Phần 2 · Bài 6: thêm cột NOT NULL, UNIQUE vào bảng đang chạy, theo lô"},
+        {"t":794.58,"den":905.45,"ten":"Phần 2 · 🐘 Bài 6 trên PostgreSQL: khối DO và cái bẫy giao dịch"},
+        {"t":905.45,"den":987.87,"ten":"Phần 2 · Thuật ngữ và bảng SQL Server ↔ PostgreSQL"},
+        {"t":987.87,"den":1064.76,"ten":"Phần 2 · Tóm tắt cả deck trong 8 ý"},
+        {"t":1064.76,"den":1152.94,"ten":"Phần 2 · Tự kiểm · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với phần bài tập của deck thiết kế thực chiến: bảy bài, mọi đáp án đều chạy thật trên SQL Server và PostgreSQL."},
         {"t":15.94,"vi":"Tập này giải bài một tới bốn."},
@@ -1754,8 +1870,21 @@
         {"t":1134.95,"vi":"Việc cuối: chạy checklist mười câu cho lược đồ đồ án của bạn, sửa bằng một migration mới, và đọc migration.sql trước khi commit."}
       ]
     },
-    "dbi202-cs7-on": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/09-chuyen-sau-ngoai-giao-trinh/09-07-tap-cs7-on-tron-154be17b.mp4","durationSec":1053.44,"nguonCau":"srt",
-      "parts": [],
+    "dbi202-cs7-on": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/09-chuyen-sau-ngoai-giao-trinh/09-07-tap-cs7-on-tron-154be17b.mp4","durationSec":1053.44,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":5.1,"den":82.28,"ten":"Phần 1 · Chào bạn · bài tập CS.7 · Bài 1: ô tìm kiếm sản phẩm"},
+        {"t":82.28,"den":189.16,"ten":"Phần 1 · Bài 1: lời giải · Bài 1: kẻ tấn công dò số cột — chạy thật"},
+        {"t":189.16,"den":285.79,"ten":"Phần 1 · Bài 2: tài khoản báo cáo · Bài 2: lời giải"},
+        {"t":285.79,"den":361.19,"ten":"Phần 1 · Bài 3: RLS đa khách hàng · Bài 3: lời giải"},
+        {"t":361.19,"den":444.35,"ten":"Phần 1 · Bài 3: những chỗ hay hỏng — chạy thật"},
+        {"t":444.35,"den":538.81,"ten":"Phần 1 · Tóm tắt · Chào bạn · bài tập (2/2)"},
+        {"t":538.81,"den":620.95,"ten":"Phần 2 · Bài 4: lời giải · Bài 5: phân vùng bảng đặt phòng"},
+        {"t":620.95,"den":731.01,"ten":"Phần 2 · Bài 5: lời giải PostgreSQL"},
+        {"t":731.01,"den":848.84,"ten":"Phần 2 · Bài 6: đo thật một chỉ mục · Bài 6: lời giải"},
+        {"t":848.84,"den":934.18,"ten":"Phần 2 · Bảng cú pháp hai hệ"},
+        {"t":934.18,"den":1010.73,"ten":"Phần 2 · Tóm tắt 8 ý của deck"},
+        {"t":1010.73,"den":1053.44,"ten":"Phần 2 · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài tập của deck Bảo mật và vận hành: sáu bài đúng kiểu một lập trình viên mới gặp trong vài tháng đầu ở một đội thật. Tập này giải bài một tới ba."},
         {"t":18.81,"vi":"Đọc đề, tự quyết định sẽ kiểm gì hoặc viết gì, rồi mới xem lời giải. Mọi script đều chạy thật trên SQL Server hai không hai hai và PostgreSQL mười sáu."},
@@ -1887,8 +2016,13 @@
         {"t":1038.37,"vi":"Việc cuối: chọn một câu chậm nhất trong đồ án của bạn, đo số lần đọc, thêm đúng một chỉ mục, rồi đo lại."}
       ]
     },
-    "dbi202-cs8-on": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/09-chuyen-sau-ngoai-giao-trinh/09-08-tap-cs8-on-33-bai-011a0d54.mp4","durationSec":451.32,"nguonCau":"srt",
-      "parts": [],
+    "dbi202-cs8-on": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/09-chuyen-sau-ngoai-giao-trinh/09-08-tap-cs8-on-33-bai-011a0d54.mp4","durationSec":451.32,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":85.33,"ten":"Chào bạn · CS.8 bài tập · Luyện thế nào để nhớ thật"},
+        {"t":85.33,"den":226.63,"ten":"Bài 8: top 2 mỗi danh mục, có đồng hạng (chạy thật)"},
+        {"t":226.63,"den":355.52,"ten":"Bài 33: chuyển tiền — tất cả hoặc không (chạy thật)"},
+        {"t":355.52,"den":451.32,"ten":"Tự kiểm · Tóm tắt 8 ý"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với phần bài tập của deck phỏng vấn."},
         {"t":9.16,"vi":"Các tập slide đã cho chín khuôn mẫu, ba mươi ba bài, và cách thiết kế trong mười lăm phút."},
@@ -1949,8 +2083,21 @@
         {"t":438.92,"vi":"Giờ bạn mở trang bài tập, tuần này làm mỗi khuôn một bài: một, ba, sáu, chín, mười ba, mười chín và mười tám, không nhìn lời giải trước nhé."}
       ]
     },
-    "dbi202-csdl-dbms": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/01-csdl-va-dbms/01-01-slide-chapter-1-the-gioi-csdl-tron-b2310705.mp4","durationSec":1186.2,"nguonCau":"srt",
-      "parts": [],
+    "dbi202-csdl-dbms": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/01-csdl-va-dbms/01-01-slide-chapter-1-the-gioi-csdl-tron-b2310705.mp4","durationSec":1186.2,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":5.1,"den":82.72,"ten":"Phần 1 · Chào bạn · DBI202 Bài 1.A"},
+        {"t":82.72,"den":200.6,"ten":"Phần 1 · Slide 4: dữ liệu khác thông tin"},
+        {"t":200.6,"den":314.28,"ten":"Phần 1 · Slide 6: năm việc một DBMS phải làm"},
+        {"t":314.28,"den":409.86,"ten":"Phần 1 · Slide 8: mô hình mạng, dạng đồ thị"},
+        {"t":409.86,"den":521.74,"ten":"Phần 1 · Slide 10: bảng BOOK và bốn câu lệnh"},
+        {"t":521.74,"den":618.65,"ten":"Phần 1 · Tự kiểm kiểu đề FE · Tóm tắt"},
+        {"t":618.65,"den":721.69,"ten":"Phần 2 · Chào bạn · Bài 1.A phần 2 · Slide 12: nhỏ hơn và lớn hơn"},
+        {"t":721.69,"den":853.65,"ten":"Phần 2 · Slide 14: kho dữ liệu và bộ trung gian"},
+        {"t":853.65,"den":939.72,"ten":"Phần 2 · Slide 17: ba nhóm người dùng"},
+        {"t":939.72,"den":1045.85,"ten":"Phần 2 · Slide 19: DML, ngôn ngữ thao tác dữ liệu"},
+        {"t":1045.85,"den":1125.63,"ten":"Phần 2 · Slide 21: xu hướng NoSQL và đa mô hình · Tự kiểm kiểu đề FE"},
+        {"t":1125.63,"den":1186.2,"ten":"Phần 2 · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Chương 1 của DBI202: bộ slide Chapter 1 của trường, thế giới các hệ cơ sở dữ liệu, phần một."},
         {"t":15.88,"vi":"Bài trước mình đã đi qua năm slide mở đầu: số chương của trường khác trên web, và ba cửa để qua môn."},
@@ -2092,8 +2239,15 @@
         {"t":1169.14,"vi":"Giờ bạn làm bài quiz Chương 1 ngay dưới video, rồi chạy thử lệnh SHOWPLAN và EXPLAIN trên máy mình trước khi sang bài tiếp nhé."}
       ]
     },
-    "dbi202-dai-so-nang-cao": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/02-mo-hinh-quan-he-dai-so/02-07-dai-so-quan-he-bang-hinh-va-phep-chia-83852dea.mp4","durationSec":716.76,"nguonCau":"srt",
-      "parts": [],
+    "dbi202-dai-so-nang-cao": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/02-mo-hinh-quan-he-dai-so/02-07-dai-so-quan-he-bang-hinh-va-phep-chia-83852dea.mp4","durationSec":716.76,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":121.36,"ten":"Chào bạn · DBI202 Bài 2.3"},
+        {"t":121.36,"den":237.47,"ten":"Chọn σ và chiếu π"},
+        {"t":237.47,"den":387.87,"ten":"Nối theo điều kiện ⋈θ · Nối ngoài — giữ cả dòng không khớp"},
+        {"t":387.87,"den":509.14,"ten":"Phép chia ÷ — câu hỏi có chữ \"tất cả\""},
+        {"t":509.14,"den":603.42,"ten":"Phép chia trong SQL: phủ định hai lần"},
+        {"t":603.42,"den":716.76,"ten":"⭐ Đại số là ngôn ngữ của bộ tối ưu · Tự kiểm kiểu đề FE"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 2.3 của DBI202: đại số quan hệ bằng hình."},
         {"t":11.83,"vi":"Bốn bài slide vừa rồi giới thiệu từng phép một, mỗi phép một ví dụ khác nhau, và bài trước dừng ở nối ngoài."},
@@ -2205,8 +2359,15 @@
         {"t":706.7,"vi":"Giờ bạn tự viết phép chia cho câu hỏi: ai học tất cả các môn mà SE02 học, rồi chạy thử trên máy mình nhé."}
       ]
     },
-    "dbi202-dai-so-quan-he": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/02-mo-hinh-quan-he-dai-so/02-07-dai-so-quan-he-bang-hinh-va-phep-chia-83852dea.mp4","durationSec":716.76,"nguonCau":"srt",
-      "parts": [],
+    "dbi202-dai-so-quan-he": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/02-mo-hinh-quan-he-dai-so/02-07-dai-so-quan-he-bang-hinh-va-phep-chia-83852dea.mp4","durationSec":716.76,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":121.36,"ten":"Chào bạn · DBI202 Bài 2.3"},
+        {"t":121.36,"den":237.47,"ten":"Chọn σ và chiếu π"},
+        {"t":237.47,"den":387.87,"ten":"Nối theo điều kiện ⋈θ · Nối ngoài — giữ cả dòng không khớp"},
+        {"t":387.87,"den":509.14,"ten":"Phép chia ÷ — câu hỏi có chữ \"tất cả\""},
+        {"t":509.14,"den":603.42,"ten":"Phép chia trong SQL: phủ định hai lần"},
+        {"t":603.42,"den":716.76,"ten":"⭐ Đại số là ngôn ngữ của bộ tối ưu · Tự kiểm kiểu đề FE"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 2.3 của DBI202: đại số quan hệ bằng hình."},
         {"t":11.83,"vi":"Bốn bài slide vừa rồi giới thiệu từng phép một, mỗi phép một ví dụ khác nhau, và bài trước dừng ở nối ngoài."},
@@ -2318,8 +2479,13 @@
         {"t":706.7,"vi":"Giờ bạn tự viết phép chia cho câu hỏi: ai học tất cả các môn mà SE02 học, rồi chạy thử trên máy mình nhé."}
       ]
     },
-    "dbi202-dieu-kien-qua-mon": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/00-gioi-thieu-huong-dan-hoc/00-04-slide-gioi-thieu-mon-hoc-8f56e2c3.mp4","durationSec":409.19,"nguonCau":"srt",
-      "parts": [],
+    "dbi202-dieu-kien-qua-mon": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/00-gioi-thieu-huong-dan-hoc/00-04-slide-gioi-thieu-mon-hoc-8f56e2c3.mp4","durationSec":409.19,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":87.83,"ten":"Chào bạn · DBI202 Bài 0.A · Slide 1: tên môn và bản đồ môn"},
+        {"t":87.83,"den":209.79,"ten":"Slide 2: bảy mục tiêu, bảy chuẩn đầu ra"},
+        {"t":209.79,"den":315.22,"ten":"Slide 4: giáo trình và tài liệu"},
+        {"t":315.22,"den":409.19,"ten":"Tự kiểm trong ba mươi giây · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 0.A của DBI202: năm slide đầu tiên thầy cô chiếu ở buổi học đầu."},
         {"t":13.87,"vi":"Bài trước mình đã sửa và xoá dữ liệu, gặp cái lỗi quên WHERE, và thấy khoá ngoại bảo vệ dữ liệu theo cả hai chiều."},
@@ -2372,8 +2538,13 @@
         {"t":396.21,"vi":"Giờ bạn kéo xuống dưới video, chụp lại bảng đối chiếu chương của trường với chương trên web, giữ nó cả học kỳ, rồi hẵng sang Chương 1 nhé."}
       ]
     },
-    "dbi202-er-model": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/03-mo-hinh-er/03-07-ve-erd-tu-mot-doan-de-7fa2c141.mp4","durationSec":421.88,"nguonCau":"srt",
-      "parts": [],
+    "dbi202-er-model": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/03-mo-hinh-er/03-07-ve-erd-tu-mot-doan-de-7fa2c141.mp4","durationSec":421.88,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":106.36,"ten":"Chào bạn · DBI202 Bài 3.1 · Bản vẽ trước khi xây"},
+        {"t":106.36,"den":195.07,"ten":"Đề: quán trà sữa nhận đơn · Bước 1: thực thể"},
+        {"t":195.07,"den":309.28,"ten":"Bước 3: liên kết và bản số · Từ sơ đồ sang bảng, chạy thật"},
+        {"t":309.28,"den":421.88,"ten":"Hai lỗi hay gặp · Tự kiểm kiểu đề FE"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 3.1 của DBI202: vẽ sơ đồ thực thể liên kết từ một đoạn đề."},
         {"t":14.04,"vi":"Ba bài slide vừa rồi cho bạn đủ ký hiệu và luật chuyển sang bảng."},
@@ -2442,8 +2613,13 @@
         {"t":412.37,"vi":"Giờ bạn gập máy lại, tự vẽ lại sơ đồ quán trà sữa ra giấy trong mười phút, rồi so với bài web nhé."}
       ]
     },
-    "dbi202-er-nang-cao": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/03-mo-hinh-er/03-08-thuc-the-yeu-ba-ngoi-da-tri-c8c6c138.mp4","durationSec":410.52,"nguonCau":"srt",
-      "parts": [],
+    "dbi202-er-nang-cao": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/03-mo-hinh-er/03-08-thuc-the-yeu-ba-ngoi-da-tri-c8c6c138.mp4","durationSec":410.52,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":123.01,"ten":"Chào bạn · DBI202 Bài 3.2"},
+        {"t":123.01,"den":249.74,"ten":"Bản số và ràng buộc tham gia · Liên kết ba ngôi"},
+        {"t":249.74,"den":338.52,"ten":"Đa trị, phức hợp, dẫn xuất · ⭐ Liên kết trở thành thực thể"},
+        {"t":338.52,"den":410.52,"ten":"Tự kiểm kiểu đề FE · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 3.2 của DBI202."},
         {"t":9.68,"vi":"Bài trước mình vẽ sơ đồ quán trà sữa chỉ với thực thể thường và liên kết hai ngôi."},
@@ -2504,8 +2680,14 @@
         {"t":401.99,"vi":"Giờ bạn tự chạy lại ví dụ toà nhà và phòng trên máy mình, thử chèn trùng và thử xoá toà nhé."}
       ]
     },
-    "dbi202-er-subclass": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/03-mo-hinh-er/03-09-lop-con-isa-ba-cach-luu-xuong-bang-bce06571.mp4","durationSec":480.92,"nguonCau":"srt",
-      "parts": [],
+    "dbi202-er-subclass": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/03-mo-hinh-er/03-09-lop-con-isa-ba-cach-luu-xuong-bang-bce06571.mp4","durationSec":480.92,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":98.57,"ten":"Chào bạn · DBI202 Bài 3.3 · Một người, hai vai"},
+        {"t":98.57,"den":196.01,"ten":"Cách 1: mỗi lớp một bảng (kiểu E/R)"},
+        {"t":196.01,"den":293.68,"ten":"Cách 3: một bảng rộng (nhiều NULL)"},
+        {"t":293.68,"den":402.82,"ten":"Lỗi hay mất điểm: khoá riêng cho lớp con"},
+        {"t":402.82,"den":480.92,"ten":"Tự kiểm kiểu đề FE · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 3.3 của DBI202: lớp con và ba cách lưu xuống bảng."},
         {"t":12.54,"vi":"Bài 3.2 vừa rồi cho bốn cấu trúc khó: thực thể yếu mượn khoá của chủ, liên kết ba ngôi, và thuộc tính đa trị tách thành bảng riêng."},
@@ -2580,8 +2762,14 @@
         {"t":467.91,"vi":"Giờ bạn kéo xuống dưới video, chạy lại cả ba cách với bốn người An, Bình, Chi, Dũng, rồi tự giải thích vì sao chị Chi chỉ vừa với cách một nhé."}
       ]
     },
-    "dbi202-er-to-relation": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/03-mo-hinh-er/03-10-erd-sang-luoc-do-bay-quy-tac-2507ca86.mp4","durationSec":437.74,"nguonCau":"srt",
-      "parts": [],
+    "dbi202-er-to-relation": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/03-mo-hinh-er/03-10-erd-sang-luoc-do-bay-quy-tac-2507ca86.mp4","durationSec":437.74,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":91.03,"ten":"Chào bạn · DBI202 Bài 3.4 · Một phép chuyển máy móc"},
+        {"t":91.03,"den":238.48,"ten":"R3 liên kết 1:N, R4 liên kết 1:1"},
+        {"t":238.48,"den":321.48,"ten":"Viết DDL theo thứ tự, chạy thật"},
+        {"t":321.48,"den":397.29,"ten":"Lỗi hay gặp, và đọc ngược · Tự kiểm kiểu đề FE"},
+        {"t":397.29,"den":437.74,"ten":"Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 3.4 của DBI202: chuyển sơ đồ thực thể liên kết sang lược đồ quan hệ."},
         {"t":14.35,"vi":"Ba bài vừa rồi mỗi bài cho bạn vài luật chuyển lẻ: liên kết một nhiều, thực thể yếu, đa trị, lớp con."},
@@ -2642,8 +2830,14 @@
         {"t":427.27,"vi":"Giờ bạn chép bảy quy tắc ra một tờ giấy dán cạnh bàn, rồi tự chuyển lại sơ đồ thư viện mà không nhìn video nhé."}
       ]
     },
-    "dbi202-execution-plan": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/08-chi-muc-toi-uu/08-03-chi-muc-va-ke-hoach-thuc-thi-f28ebe99.mp4","durationSec":443.51,"nguonCau":"srt",
-      "parts": [],
+    "dbi202-execution-plan": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/08-chi-muc-toi-uu/08-03-chi-muc-va-ke-hoach-thuc-thi-f28ebe99.mp4","durationSec":443.51,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":95.74,"ten":"Chào bạn · DBI202 Bài 8.2 · Cây B-tree: gốc, nhánh, lá"},
+        {"t":95.74,"den":206.83,"ten":"Chưa có chỉ mục: quét cả bảng"},
+        {"t":206.83,"den":298.38,"ten":"Chỉ mục ghép và tiền tố trái nhất"},
+        {"t":298.38,"den":401.55,"ten":"🐘 EXPLAIN ANALYZE trên PostgreSQL"},
+        {"t":401.55,"den":443.51,"ten":"Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 8.2 của DBI202: chỉ mục và cách đọc kế hoạch thực thi."},
         {"t":13.02,"vi":"Tạo chỉ mục thì dễ. Khó là biết nên tạo loại nào, và chứng minh được cơ sở dữ liệu thật sự đã dùng nó."},
@@ -2708,8 +2902,36 @@
         {"t":434.59,"vi":"Giờ bạn tự thử: tạo một bảng lớn, đo số trang đọc trước và sau khi thêm một chỉ mục phủ nhé."}
       ]
     },
-    "dbi202-fe3-fa25-chua-tron-de": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/13-chua-tron-de-fe/09-fe3-fa25-tron-13286361.mp4","durationSec":2482.01,"nguonCau":"srt",
-      "parts": [],
+    "dbi202-fe3-fa25-chua-tron-de": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/13-chua-tron-de-fe/09-fe3-fa25-tron-13286361.mp4","durationSec":2482.01,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":5.1,"den":86.51,"ten":"Phần 1 · Cách học loạt chữa đề"},
+        {"t":86.51,"den":173.91,"ten":"Phần 1 · Câu 1 · Nhóm lệnh SQL: DML, DDL, DCL, TCL"},
+        {"t":173.91,"den":252.17,"ten":"Phần 1 · Câu 3 · Nhược điểm mô hình mạng"},
+        {"t":252.17,"den":337.32,"ten":"Phần 1 · Câu 5 · Định nghĩa cơ sở dữ liệu"},
+        {"t":337.32,"den":458.41,"ten":"Phần 1 · Câu 7 · Bộ biên dịch truy vấn: khâu dựng cây"},
+        {"t":458.41,"den":565.96,"ten":"Phần 1 · Câu 10 · Kiểu liên kết trong mô hình mạng"},
+        {"t":565.96,"den":653.08,"ten":"Phần 1 · Câu 13 · Đại số quan hệ là gì · Tổng kết phần 1"},
+        {"t":653.08,"den":800.39,"ten":"Phần 2 · câu 14–26 · Câu 14 · Sửa lược đồ bảng đã có"},
+        {"t":800.39,"den":882.32,"ten":"Phần 2 · Câu 16 · Siêu khoá · Câu 17 · Khái niệm bao đóng"},
+        {"t":882.32,"den":965.24,"ten":"Phần 2 · Câu 18 · Tính bao đóng {AB}+"},
+        {"t":965.24,"den":1047.92,"ten":"Phần 2 · Câu 20 · Dạng chuẩn: chỉ phụ thuộc vào khoá"},
+        {"t":1047.92,"den":1159.56,"ten":"Phần 2 · Câu 22 · Mục đích của chuẩn hoá"},
+        {"t":1159.56,"den":1235.27,"ten":"Phần 2 · Câu 25 · Thực thể yếu là gì · Câu 26 · Khoá phức hợp"},
+        {"t":1235.27,"den":1325.99,"ten":"Phần 2 · Tổng kết phần 2 · Phần 3 · câu 27–38"},
+        {"t":1325.99,"den":1440.48,"ten":"Phần 3 · Câu 27 · Thuộc tính dẫn xuất trong ERD"},
+        {"t":1440.48,"den":1561.4,"ten":"Phần 3 · Câu 30 · Thuộc tính dẫn xuất khi chuyển sang bảng"},
+        {"t":1561.4,"den":1640.18,"ten":"Phần 3 · Câu 33 · Phép giao tập hợp"},
+        {"t":1640.18,"den":1717.85,"ten":"Phần 3 · Câu 35 · Kích thước tối đa của phép nối"},
+        {"t":1717.85,"den":1813.88,"ten":"Phần 3 · Câu 37 · So sánh WHERE và HAVING"},
+        {"t":1813.88,"den":1906.13,"ten":"Phần 3 · Tổng kết phần 3 · Phần 4 · câu 39–50"},
+        {"t":1906.13,"den":1986.43,"ten":"Phần 4 · Câu 39 · Từ khoá khai báo khoá ngoại"},
+        {"t":1986.43,"den":2074.28,"ten":"Phần 4 · Câu 41 · Phương thức giao dịch của Connection"},
+        {"t":2074.28,"den":2157.67,"ten":"Phần 4 · Câu 43 · Cập nhật bảng gốc qua view"},
+        {"t":2157.67,"den":2234.91,"ten":"Phần 4 · Câu 45 · Biến cục bộ T-SQL: phát biểu sai"},
+        {"t":2234.91,"den":2337.42,"ten":"Phần 4 · Câu 47 · Hàm người dùng trả về một giá trị"},
+        {"t":2337.42,"den":2429.19,"ten":"Phần 4 · Câu 50 · Định nghĩa stored procedure"},
+        {"t":2429.19,"den":2482.01,"ten":"Phần 4 · Tổng kết cả đề"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đây là phần một trên bốn của video chữa trọn đề thi cuối kỳ FE số ba, môn DBI202, cơ sở dữ liệu."},
         {"t":15.23,"vi":"Đây là đề FA25, kỳ thi chính: năm mươi câu trắc nghiệm, làm trong sáu mươi phút."},
@@ -3164,8 +3386,17 @@
         {"t":2474.39,"vi":"Chúc bạn thi tốt!"}
       ]
     },
-    "dbi202-fe31-sp26-chua-tron-de": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/13-chua-tron-de-fe/04-fe31-sp26-phan-4-72c1f9cb.mp4","durationSec":758.19,"nguonCau":"srt",
-      "parts": [],
+    "dbi202-fe31-sp26-chua-tron-de": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/13-chua-tron-de-fe/04-fe31-sp26-phan-4-72c1f9cb.mp4","durationSec":758.19,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":5.1,"den":127.23,"ten":"Phần 4 · câu 39–50"},
+        {"t":127.23,"den":232.96,"ten":"Câu 40 · Mức cô lập chặt nhất"},
+        {"t":232.96,"den":340.51,"ten":"Câu 42 · Câu lệnh tạo view cập nhật được"},
+        {"t":340.51,"den":446.31,"ten":"Câu 44 · Stored procedure làm được gì (chọn 2)"},
+        {"t":446.31,"den":539.25,"ten":"Câu 46 · Đọc hàm GetLaptopPrice"},
+        {"t":539.25,"den":625.15,"ten":"Câu 48 · Các loại tham số của stored procedure"},
+        {"t":625.15,"den":717.4,"ten":"Câu 50 · Tệp tạo kèm cơ sở dữ liệu mới"},
+        {"t":717.4,"den":758.19,"ten":"Tổng kết cả đề"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đây là phần bốn, phần cuối của video chữa trọn đề FE số ba mươi mốt, môn DBI202."},
         {"t":13.9,"vi":"Vẫn là đề SP26, đợt thi chính."},
@@ -3290,8 +3521,40 @@
         {"t":755.76,"vi":"Chúc bạn thi tốt!"}
       ]
     },
-    "dbi202-fe32-sp26-chua-tron-de": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/13-chua-tron-de-fe/05-fe32-sp26-tron-19cd8011.mp4","durationSec":2907.35,"nguonCau":"srt",
-      "parts": [],
+    "dbi202-fe32-sp26-chua-tron-de": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/13-chua-tron-de-fe/05-fe32-sp26-tron-19cd8011.mp4","durationSec":2907.35,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":5.1,"den":90.25,"ten":"Phần 1 · Cách học loạt chữa đề"},
+        {"t":90.25,"den":204.67,"ten":"Phần 1 · Câu 1 · Bộ biên dịch truy vấn: khâu chọn kế hoạch tốt nhất"},
+        {"t":204.67,"den":311.5,"ten":"Phần 1 · Câu 3 · Đặc điểm CSDL: nhiều người dùng cùng lúc"},
+        {"t":311.5,"den":397.53,"ten":"Phần 1 · Câu 5 · Định nghĩa cơ sở dữ liệu"},
+        {"t":397.53,"den":478.37,"ten":"Phần 1 · Câu 7 · Bộ biên dịch truy vấn: khâu dựng cây"},
+        {"t":478.37,"den":561.39,"ten":"Phần 1 · Câu 9 · Tên gọi các dòng của quan hệ"},
+        {"t":561.39,"den":678.39,"ten":"Phần 1 · Câu 11 · Định nghĩa toàn vẹn tham chiếu"},
+        {"t":678.39,"den":762.52,"ten":"Phần 1 · Câu 13 · Kiểu liên kết trong mô hình mạng · Tổng kết phần 1"},
+        {"t":762.52,"den":848.69,"ten":"Phần 2 · câu 14–26"},
+        {"t":848.69,"den":956,"ten":"Phần 2 · Câu 15 · Vì sao cần xác định khoá ứng viên (chọn 2)"},
+        {"t":956,"den":1088.43,"ten":"Phần 2 · Câu 17 · Tìm khoá của R(X,Y,Z,W)"},
+        {"t":1088.43,"den":1210.99,"ten":"Phần 2 · Câu 19 · Thuộc tính trùng tên khác nghĩa"},
+        {"t":1210.99,"den":1288.24,"ten":"Phần 2 · Câu 21 · Dạng chuẩn cao nhất của R(ABCD)"},
+        {"t":1288.24,"den":1374.79,"ten":"Phần 2 · Câu 22 · Khi nào nên phi chuẩn hoá"},
+        {"t":1374.79,"den":1465.4,"ten":"Phần 2 · Câu 24 · Vai trò của khoá chính"},
+        {"t":1465.4,"den":1554.84,"ten":"Phần 2 · Câu 26 · Thực thể là gì · Tổng kết phần 2"},
+        {"t":1554.84,"den":1635.59,"ten":"Phần 3 · câu 27–38 · Câu 27 · Ý nghĩa liên kết một-nhiều"},
+        {"t":1635.59,"den":1717.33,"ten":"Phần 3 · Câu 28 · Ký hiệu tập thực thể yếu"},
+        {"t":1717.33,"den":1825.1,"ten":"Phần 3 · Câu 30 · Thuộc tính dẫn xuất khi chuyển sang bảng"},
+        {"t":1825.1,"den":1921.46,"ten":"Phần 3 · Câu 32 · Lệnh nào KHÔNG thuộc DDL (chọn các đáp án đúng)"},
+        {"t":1921.46,"den":2016.15,"ten":"Phần 3 · Câu 34 · Khách chưa mua hàng (chọn 2)"},
+        {"t":2016.15,"den":2119.36,"ten":"Phần 3 · Câu 36 · Đọc truy vấn con NOT IN"},
+        {"t":2119.36,"den":2215.85,"ten":"Phần 3 · Câu 38 · UPDATE có điều kiện WHERE · Tổng kết phần 3"},
+        {"t":2215.85,"den":2312.1,"ten":"Phần 4 · câu 39–50 · Câu 39 · Cái giá của quá nhiều chỉ mục"},
+        {"t":2312.1,"den":2404.26,"ten":"Phần 4 · Câu 40 · Ràng buộc bắt buộc có giá trị"},
+        {"t":2404.26,"den":2490.61,"ten":"Phần 4 · Câu 42 · Mục đích của giao dịch (chọn 2)"},
+        {"t":2490.61,"den":2600.89,"ten":"Phần 4 · Câu 44 · Dạng ràng buộc tổng quát: assertion"},
+        {"t":2600.89,"den":2682.87,"ten":"Phần 4 · Câu 46 · Trigger có phải gọi mới chạy?"},
+        {"t":2682.87,"den":2777.43,"ten":"Phần 4 · Câu 48 · Cursor: phát biểu không đúng"},
+        {"t":2777.43,"den":2860.71,"ten":"Phần 4 · Câu 50 · Khai báo biến cục bộ · Thống kê 50 câu theo chương"},
+        {"t":2860.71,"den":2907.35,"ten":"Phần 4 · Tổng kết cả đề"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đây là phần một trên bốn của video chữa trọn đề thi cuối kỳ FE số ba mươi hai, môn DBI202, cơ sở dữ liệu."},
         {"t":15.76,"vi":"Đây là đề SP26, đợt thi lại, cũng là một đề mới nhất trong Phòng thi: năm mươi câu trắc nghiệm, làm trong sáu mươi phút."},
@@ -3799,8 +4062,19 @@
         {"t":2890.38,"vi":"Giờ bạn vào Phòng thi trên cuongthai.com, làm lại đề này bấm giờ sáu mươi phút, rồi sang đề FE số ba, FA25. Chúc bạn thi tốt!"}
       ]
     },
-    "dbi202-final-exam-fe": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/11-thi-cuoi-ky/11-01-fe-thi-cuoi-ky-60-phut-tron-3d5e8c85.mp4","durationSec":1045.82,"nguonCau":"srt",
-      "parts": [],
+    "dbi202-final-exam-fe": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/11-thi-cuoi-ky/11-01-fe-thi-cuoi-ky-60-phut-tron-3d5e8c85.mp4","durationSec":1045.82,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":5.1,"den":107.78,"ten":"Phần 1 · Chào bạn · DBI202 Thi cuối kỳ FE · Trung bình 7,2 vẫn trượt"},
+        {"t":107.78,"den":270.88,"ten":"Phần 1 · Đề thật: 50 câu, 72 giây một câu · Lộ trình ôn theo 7 CLO"},
+        {"t":270.88,"den":397.49,"ten":"Phần 1 · Đề rải đều cả tám chương · Trong phòng thi: hai lượt"},
+        {"t":397.49,"den":481.72,"ten":"Phần 1 · Mẹo câu \"choose two\""},
+        {"t":481.72,"den":573.91,"ten":"Phần 1 · Tự kiểm · Tóm tắt"},
+        {"t":573.91,"den":673.3,"ten":"Phần 2 · Mười câu mẫu · cách học"},
+        {"t":673.3,"den":769.98,"ten":"Phần 2 · Câu 3 · Thực thể yếu vẽ thế nào (10 đề)"},
+        {"t":769.98,"den":849.16,"ten":"Phần 2 · Câu 6 · Tính bao đóng {AB}+ (7 đề)"},
+        {"t":849.16,"den":957.58,"ten":"Phần 2 · Câu 8 · Lấy hết dòng của cả hai bảng (6 đề)"},
+        {"t":957.58,"den":1045.82,"ten":"Phần 2 · Tự kiểm: hai câu thật nữa · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài thi cuối kỳ của DBI202, gọi là FE: sáu mươi phút, ba mươi phần trăm điểm môn."},
         {"t":14.45,"vi":"Hai bài trước, mình đã chuẩn bị cho bài thi thực hành tám mươi lăm phút, và ôn ba mươi câu hỏi vấn đáp theo bảy chuẩn đầu ra."},
@@ -3938,8 +4212,14 @@
         {"t":1028.39,"vi":"Giờ bạn vào Phòng thi, làm trọn một đề FE DBI202 trong sáu mươi phút, rồi mở video chữa trọn đề để soát từng câu nhé."}
       ]
     },
-    "dbi202-final-exam-pe": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/10-on-thi-lab-pe-fe/10-01-thi-thuc-hanh-85-phut-cam-nang-e1d472f5.mp4","durationSec":493.56,"nguonCau":"srt",
-      "parts": [],
+    "dbi202-final-exam-pe": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/10-on-thi-lab-pe-fe/10-01-thi-thuc-hanh-85-phut-cam-nang-e1d472f5.mp4","durationSec":493.56,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":149,"ten":"Chào bạn · DBI202 Bài 9.1 · PE chiếm 30% điểm môn"},
+        {"t":149,"den":252.28,"ten":"Năm luật nộp bài: sai một là 0 điểm · Chia 85 phút"},
+        {"t":252.28,"den":358.46,"ten":"Mười khuôn truy vấn · Một tệp trả lời đúng"},
+        {"t":358.46,"den":450.63,"ten":"Năm lỗi mất điểm dù SQL đúng · ⭐ Thử như dân chuyên nghiệp"},
+        {"t":450.63,"den":493.56,"ten":"Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 9.1 của DBI202: cẩm nang cho bài thi thực hành tám mươi lăm phút."},
         {"t":13.71,"vi":"Mọi điều trong bài này mình đối chiếu với các đề PE thật của kỳ Spring 2026, đã có trong Phòng thi trên web."},
@@ -4006,8 +4286,13 @@
         {"t":482.74,"vi":"Giờ bạn tự thử: vào Phòng thi, mở đề DBI202 PE một, làm đúng tám mươi lăm phút, mỗi câu một tệp nhé."}
       ]
     },
-    "dbi202-gioi-thieu": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/00-gioi-thieu-huong-dan-hoc/00-04-slide-gioi-thieu-mon-hoc-8f56e2c3.mp4","durationSec":409.19,"nguonCau":"srt",
-      "parts": [],
+    "dbi202-gioi-thieu": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/00-gioi-thieu-huong-dan-hoc/00-04-slide-gioi-thieu-mon-hoc-8f56e2c3.mp4","durationSec":409.19,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":87.83,"ten":"Chào bạn · DBI202 Bài 0.A · Slide 1: tên môn và bản đồ môn"},
+        {"t":87.83,"den":209.79,"ten":"Slide 2: bảy mục tiêu, bảy chuẩn đầu ra"},
+        {"t":209.79,"den":315.22,"ten":"Slide 4: giáo trình và tài liệu"},
+        {"t":315.22,"den":409.19,"ten":"Tự kiểm trong ba mươi giây · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 0.A của DBI202: năm slide đầu tiên thầy cô chiếu ở buổi học đầu."},
         {"t":13.87,"vi":"Bài trước mình đã sửa và xoá dữ liệu, gặp cái lỗi quên WHERE, và thấy khoá ngoại bảo vệ dữ liệu theo cả hai chiều."},
@@ -4060,8 +4345,13 @@
         {"t":396.21,"vi":"Giờ bạn kéo xuống dưới video, chụp lại bảng đối chiếu chương của trường với chương trên web, giữ nó cả học kỳ, rồi hẵng sang Chương 1 nhé."}
       ]
     },
-    "dbi202-group-by-subquery": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/06-truy-van-sql/06-06-group-by-bang-hinh-e8687e3a.mp4","durationSec":349.18,"nguonCau":"srt",
-      "parts": [],
+    "dbi202-group-by-subquery": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/06-truy-van-sql/06-06-group-by-bang-hinh-e8687e3a.mp4","durationSec":349.18,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":80.09,"ten":"Chào bạn · DBI202 Bài 6.3 · Chín phiếu sinh viên"},
+        {"t":80.09,"den":156.91,"ten":"HAVING: đậy nắp rổ không đạt"},
+        {"t":156.91,"den":229.6,"ten":"WHERE trước khi gom, HAVING sau khi gom"},
+        {"t":229.6,"den":349.18,"ten":"🐘 FILTER trên PostgreSQL"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 6.3 của DBI202: GROUP BY bằng hình."},
         {"t":11.29,"vi":"Bài trước mình đã nối bảng, và thấy nối sai thì tổng bị to."},
@@ -4116,8 +4406,13 @@
         {"t":342.57,"vi":"Giờ bạn tự tạo bảng chín sinh viên này và thử đủ các câu vừa rồi nhé."}
       ]
     },
-    "dbi202-join-day-du": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/06-truy-van-sql/06-05-join-bang-hinh-f86f3e4a.mp4","durationSec":399.38,"nguonCau":"srt",
-      "parts": [],
+    "dbi202-join-day-du": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/06-truy-van-sql/06-05-join-bang-hinh-f86f3e4a.mp4","durationSec":399.38,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":81.22,"ten":"Chào bạn · DBI202 Bài 6.2"},
+        {"t":81.22,"den":173.01,"ten":"LEFT JOIN: giữ hết bảng bên trái"},
+        {"t":173.01,"den":267.64,"ten":"SELF JOIN: một bảng, hai vai · Bẫy kinh điển: ON hay WHERE"},
+        {"t":267.64,"den":399.38,"ten":"🐘 JOIN trên PostgreSQL · ⭐ Ba cách máy thật sự nối"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 6.2 của DBI202: JOIN bằng hình."},
         {"t":11.01,"vi":"Ở các tập slide, mình đã viết JOIN ON để nối hai bảng, và đã thấy tự nối. Nhưng mỗi ví dụ một bộ dữ liệu, nên khó so các kiểu nối với nhau."},
@@ -4183,8 +4478,14 @@
         {"t":392.33,"vi":"Giờ bạn tự tạo hai bảng tí hon này trên máy, và chạy đủ sáu kiểu nối nhé."}
       ]
     },
-    "dbi202-kieu-du-lieu": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/05-sql-ddl-dinh-nghia-du-lieu/05-04-kieu-du-lieu-chon-sai-tra-gia-81548a52.mp4","durationSec":467.23,"nguonCau":"srt",
-      "parts": [],
+    "dbi202-kieu-du-lieu": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/05-sql-ddl-dinh-nghia-du-lieu/05-04-kieu-du-lieu-chon-sai-tra-gia-81548a52.mp4","durationSec":467.23,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":91.86,"ten":"Chào bạn · DBI202 Bài 5.2 · Kiểu dữ liệu là cái hộp"},
+        {"t":91.86,"den":199.23,"ten":"Chạy thật: chữ \"Nguyễn\" mất dấu"},
+        {"t":199.23,"den":279.38,"ten":"Ngày giờ: mỗi ý nghĩa một kiểu"},
+        {"t":279.38,"den":369.66,"ten":"IDENTITY và lỗ hổng trong dãy số"},
+        {"t":369.66,"den":467.23,"ten":"⭐ Kiểu hẹp là quyết định hiệu năng · Tự kiểm kiểu đề FE"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 5.2 của DBI202: kiểu dữ liệu."},
         {"t":11.14,"vi":"Bài trước mình đã viết CREATE TABLE, ALTER và DROP. Mỗi cột trong đó đều phải khai một kiểu."},
@@ -4254,8 +4555,15 @@
         {"t":459.5,"vi":"Giờ bạn tự chạy lại thí nghiệm chữ Nguyễn có và không có chữ N trên máy mình nhé."}
       ]
     },
-    "dbi202-mo-hinh-quan-he": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/02-mo-hinh-quan-he-dai-so/02-01-slide-chapter-2-mo-hinh-quan-he-470697c2.mp4","durationSec":652.95,"nguonCau":"srt",
-      "parts": [],
+    "dbi202-mo-hinh-quan-he": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/02-mo-hinh-quan-he-dai-so/02-01-slide-chapter-2-mo-hinh-quan-he-470697c2.mp4","durationSec":652.95,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":120.45,"ten":"Chào bạn · DBI202 Bài 2.A · Cái bảng bạn đã quen"},
+        {"t":120.45,"den":240.01,"ten":"Slide 4: mô hình dữ liệu có ba phần"},
+        {"t":240.01,"den":320.64,"ten":"Slide 7: lược đồ, thể hiện, bậc, lực lượng"},
+        {"t":320.64,"den":445.01,"ten":"Slide 8: lược đồ của cả một database"},
+        {"t":445.01,"den":541.37,"ten":"Slide 10–11: đại số quan hệ và bốn nhóm phép"},
+        {"t":541.37,"den":652.95,"ten":"Áp dụng vào dự án PRJ301 Nhà trọ · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Chương 2 của DBI202: bộ slide Chapter 2 của trường, mô hình dữ liệu quan hệ, phần một."},
         {"t":15.1,"vi":"Bài trước là thực hành Chương 1: tám câu hỏi CQ1.1 đến 1.3, trong đó có câu mô hình dữ liệu gồm cấu trúc, thao tác và ràng buộc."},
@@ -4348,8 +4656,15 @@
         {"t":638.94,"vi":"Giờ bạn kéo xuống dưới video, chạy lại bảng Student và ba bảng câu lạc bộ thuyền, thử cả hai lỗi 2627 và 547, rồi hẵng sang phần sau nhé."}
       ]
     },
-    "dbi202-ngan-hang-cau-hoi": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/10-on-thi-lab-pe-fe/10-02-ngan-hang-cau-hoi-van-dap-9398ba6c.mp4","durationSec":690.39,"nguonCau":"srt",
-      "parts": [],
+    "dbi202-ngan-hang-cau-hoi": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/10-on-thi-lab-pe-fe/10-02-ngan-hang-cau-hoi-van-dap-9398ba6c.mp4","durationSec":690.39,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":114.13,"ten":"Chào bạn · DBI202 Bài 9.2 · CLO1 — Khái niệm cơ sở dữ liệu"},
+        {"t":114.13,"den":286.83,"ten":"CLO2 — Mô hình quan hệ và đại số"},
+        {"t":286.83,"den":420.3,"ten":"CLO4 — Mô hình ER · CLO5 — SQL"},
+        {"t":420.3,"den":553.12,"ten":"CLO6 và CLO7 — Lập trình, chỉ mục, giao dịch"},
+        {"t":553.12,"den":650.47,"ten":"Trả lời bằng đúng thuật ngữ · ⭐ Khi nào thì phá luật?"},
+        {"t":650.47,"den":690.39,"ten":"Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 9.2 của DBI202: ngân hàng câu hỏi vấn đáp."},
         {"t":11.91,"vi":"Syllabus của môn liệt kê ba mươi câu hỏi kiến tạo, trải trên bảy chuẩn đầu ra, gọi là CLO."},
@@ -4448,8 +4763,15 @@
         {"t":679.18,"vi":"Giờ bạn tự thử: xem lại video này, nhưng bấm dừng ở mỗi câu hỏi và nói to câu trả lời của mình trước khi nghe đáp án nhé."}
       ]
     },
-    "dbi202-on-ch1": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/01-csdl-va-dbms/01-02-thuc-hanh-cq1-csdl-dbms-a8e434bf.mp4","durationSec":583.85,"nguonCau":"srt",
-      "parts": [],
+    "dbi202-on-ch1": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/01-csdl-va-dbms/01-02-thuc-hanh-cq1-csdl-dbms-a8e434bf.mp4","durationSec":583.85,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":154.12,"ten":"Chào bạn · Bài 1.2 thực hành · Cách dùng bài này"},
+        {"t":154.12,"den":252.93,"ten":"Bài 2: các giai đoạn phát triển"},
+        {"t":252.93,"den":364.56,"ten":"Bài 4: một lần chuyển tiền và mất điện"},
+        {"t":364.56,"den":457.7,"ten":"Bài 6: ba mức và độc lập dữ liệu · Bài 7: DDL hay DML?"},
+        {"t":457.7,"den":532.97,"ten":"Bài 8: biến dữ liệu thành thông tin"},
+        {"t":532.97,"den":583.85,"ten":"Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 1.2, bài thực hành của Chương 1."},
         {"t":9.98,"vi":"Bài trước mình đã đi hết slide Chapter 1: database, DBMS, hệ cơ sở dữ liệu, bên trong một DBMS, và hai nhóm lệnh DDL với DML."},
@@ -4532,8 +4854,17 @@
         {"t":571.71,"vi":"Giờ bạn làm quiz Chương 1 ngay dưới video, rồi đọc lại bảng mười tám thuật ngữ, che cột nghĩa để tự kiểm, rồi hẵng sang Chương 2 nhé."}
       ]
     },
-    "dbi202-on-ch2": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/02-mo-hinh-quan-he-dai-so/02-09-thuc-hanh-dai-so-quan-he-tron-9ed70fd9.mp4","durationSec":785.84,"nguonCau":"srt",
-      "parts": [],
+    "dbi202-on-ch2": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/02-mo-hinh-quan-he-dai-so/02-09-thuc-hanh-dai-so-quan-he-tron-9ed70fd9.mp4","durationSec":785.84,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":5.1,"den":99.4,"ten":"Phần 1 · Chào bạn · DBI202 Bài 2.5 🧪 · Cách dùng bài này"},
+        {"t":99.4,"den":184.05,"ten":"Phần 1 · Bài 2 (giải đủ): một cây biểu thức"},
+        {"t":184.05,"den":299.77,"ten":"Phần 1 · Bài 3 (khung): \"cả hai\" và \"một trong hai\""},
+        {"t":299.77,"den":382.85,"ten":"Phần 1 · Tự kiểm kiểu đề FE · Tóm tắt"},
+        {"t":382.85,"den":486.98,"ten":"Phần 2 · Chào bạn · DBI202 Bài 2.5 🧪 phần 2"},
+        {"t":486.98,"den":605.15,"ten":"Phần 2 · Bài 6 (khung): hợp, giao, hiệu trên túi"},
+        {"t":605.15,"den":707.07,"ten":"Phần 2 · Bài 8 (giải đủ): nối ngoài, đếm cả số 0 · Thuật ngữ Chương 2"},
+        {"t":707.07,"den":785.84,"ten":"Phần 2 · Tự kiểm kiểu đề FE · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài thực hành của Chương 2, phần một."},
         {"t":9.41,"vi":"Hai bài trước ta đã có đủ đồ nghề: các phép đại số, và các khoá giữ cho dữ liệu đúng."},
@@ -4654,8 +4985,17 @@
         {"t":770.11,"vi":"Giờ bạn làm bài quiz Chương 2 ngay dưới video, rồi tự gõ lại bài tám với COUNT sao để thấy tận mắt cái bẫy nhé."}
       ]
     },
-    "dbi202-on-ch3": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/03-mo-hinh-er/03-12-thuc-hanh-erd-kieu-pe-tron-afa765c0.mp4","durationSec":880,"nguonCau":"srt",
-      "parts": [],
+    "dbi202-on-ch3": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/03-mo-hinh-er/03-12-thuc-hanh-erd-kieu-pe-tron-afa765c0.mp4","durationSec":880,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":5.1,"den":179.42,"ten":"Phần 1 · Chào bạn · DBI202 Bài 3.5 🧪"},
+        {"t":179.42,"den":278.56,"ten":"Phần 1 · Bài 2 (giải đủ): khách sạn"},
+        {"t":278.56,"den":381.78,"ten":"Phần 1 · Bài 3 (khung): phức hợp, đa trị, dẫn xuất"},
+        {"t":381.78,"den":471.38,"ten":"Phần 1 · Tự kiểm kiểu đề FE · Tóm tắt"},
+        {"t":471.38,"den":563.94,"ten":"Phần 2 · Chào bạn · DBI202 Bài 3.5 🧪 phần 2"},
+        {"t":563.94,"den":729.03,"ten":"Phần 2 · Bài 6 (khung): một một và liên kết đệ quy"},
+        {"t":729.03,"den":835.66,"ten":"Phần 2 · Danh sách người chấm dùng · Thuật ngữ Chương 3"},
+        {"t":835.66,"den":880,"ten":"Phần 2 · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài thực hành của Chương 3, phần một."},
         {"t":9.54,"vi":"Bạn đã có bảy quy tắc chuyển sơ đồ sang bảng, và đã xem mười đề trong Xưởng ERD."},
@@ -4775,8 +5115,16 @@
         {"t":865.1,"vi":"Giờ bạn làm bài quiz Chương 3 ngay dưới video, rồi tự làm lại đề phòng khám trong hai mươi lăm phút nhé."}
       ]
     },
-    "dbi202-on-ch4": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/04-phu-thuoc-ham-chuan-hoa/04-09-thuc-hanh-chuan-hoa-tron-c93650d6.mp4","durationSec":867.41,"nguonCau":"srt",
-      "parts": [],
+    "dbi202-on-ch4": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/04-phu-thuoc-ham-chuan-hoa/04-09-thuc-hanh-chuan-hoa-tron-c93650d6.mp4","durationSec":867.41,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":5.1,"den":168.49,"ten":"Phần 1 · Chào bạn · DBI202 Bài 4.5 🧪 · Quy trình 6 bước"},
+        {"t":168.49,"den":300.02,"ten":"Phần 1 · Bài 2 (khung): tìm mọi khoá · Bài 3 (giải đủ): phủ tối thiểu"},
+        {"t":300.02,"den":392.39,"ten":"Phần 1 · Bài 4 (khung): dạng chuẩn cao nhất · Tự kiểm kiểu đề FE"},
+        {"t":392.39,"den":554.97,"ten":"Phần 1 · Tóm tắt · Chào bạn · DBI202 Bài 4.5 🧪 phần 2"},
+        {"t":554.97,"den":689.48,"ten":"Phần 2 · Bài 6 (khung): tổng hợp 3NF"},
+        {"t":689.48,"den":784.76,"ten":"Phần 2 · Bài 8 (khung): bảng đơn hàng tới CREATE TABLE"},
+        {"t":784.76,"den":867.41,"ten":"Phần 2 · Tự kiểm kiểu đề FE · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài thực hành của Chương 4, phần một."},
         {"t":9.66,"vi":"Ba bài chuyên đề vừa rồi cho ta bao đóng, phép kiểm chase, và khuôn trả lời bốn dòng."},
@@ -4910,8 +5258,18 @@
         {"t":853.59,"vi":"Giờ bạn làm Quiz 2 về ERD và chuẩn hoá, rồi tự làm lại bài năm và bài bảy ra giấy nhé."}
       ]
     },
-    "dbi202-on-ch5": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/05-sql-ddl-dinh-nghia-du-lieu/05-06-thuc-hanh-ddl-kieu-pe-tron-f74ee7e4.mp4","durationSec":856.7,"nguonCau":"srt",
-      "parts": [],
+    "dbi202-on-ch5": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/05-sql-ddl-dinh-nghia-du-lieu/05-06-thuc-hanh-ddl-kieu-pe-tron-f74ee7e4.mp4","durationSec":856.7,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":5.1,"den":127.16,"ten":"Phần 1 · Chào bạn · DBI202 Bài 5.4 phần 1 · Năm thói quen khi thi PE"},
+        {"t":127.16,"den":205.02,"ten":"Phần 1 · Bài 1 — ERD rồi lược đồ · Bài 1 — Bốn câu CREATE TABLE"},
+        {"t":205.02,"den":303.38,"ten":"Phần 1 · Bài 1 — Tự kiểm bằng đếm ràng buộc"},
+        {"t":303.38,"den":398.54,"ten":"Phần 1 · Bài 3 — ALTER bảng đã có dữ liệu · Tự kiểm kiểu đề FE"},
+        {"t":398.54,"den":517.37,"ten":"Phần 1 · Tóm tắt · Chào bạn · DBI202 Bài 5.4 phần 2"},
+        {"t":517.37,"den":600.49,"ten":"Phần 2 · Bài 5 — Xoá cả CSDL đúng thứ tự · Bài 6 — NULL, LIKE và ngày"},
+        {"t":600.49,"den":698.65,"ten":"Phần 2 · Bài 7 — Đề PE thu nhỏ: câu lạc bộ · Bài 7 — Bốn bảng"},
+        {"t":698.65,"den":810.26,"ten":"Phần 2 · Bài 7 — Thử sai và đọc kết quả · 🐘 Bảng đối chiếu DDL"},
+        {"t":810.26,"den":856.7,"ten":"Phần 2 · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với phần thực hành Chương 5 của DBI202, phần một."},
         {"t":11.65,"vi":"Bài trước mình đã gặp năm người gác cổng, đặt tên cho từng người, và phá thử từng luật để đọc lỗi năm trăm bốn mươi bảy, hai nghìn sáu trăm hai mươi bảy."},
@@ -5030,8 +5388,16 @@
         {"t":843.75,"vi":"Trước khi sang chương mới, hãy tự làm lại Bài 7 trên máy mình mà không nhìn lời giải."}
       ]
     },
-    "dbi202-on-ch6": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/06-truy-van-sql/06-09-thuc-hanh-truy-van-kieu-pe-tron-6d735a2c.mp4","durationSec":724.82,"nguonCau":"srt",
-      "parts": [],
+    "dbi202-on-ch6": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/06-truy-van-sql/06-09-thuc-hanh-truy-van-kieu-pe-tron-6d735a2c.mp4","durationSec":724.82,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":5.1,"den":83.22,"ten":"Phần 1 · Chào bạn · DBI202 Bài 6.6 phần 1"},
+        {"t":83.22,"den":213.83,"ten":"Phần 1 · Bài 1 — Lọc và sắp xếp · Bài 1 trên PostgreSQL"},
+        {"t":213.83,"den":324.88,"ten":"Phần 1 · Bài 3 — Tự nối · Bài 4 — NOT EXISTS và phép chia"},
+        {"t":324.88,"den":404.84,"ten":"Phần 1 · Tự kiểm kiểu đề FE · Tóm tắt"},
+        {"t":404.84,"den":514.6,"ten":"Phần 2 · Chào bạn · DBI202 Bài 6.6 phần 2"},
+        {"t":514.6,"den":613.37,"ten":"Phần 2 · Bài 7 — TOP WITH TIES và top N mỗi nhóm"},
+        {"t":613.37,"den":724.82,"ten":"Phần 2 · 🐘 Bảng đối chiếu truy vấn · Tự kiểm kiểu đề FE"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với phần thực hành Chương 6 của DBI202: tám bài truy vấn đúng dạng đề PE."},
         {"t":13.19,"vi":"Cả chương mình đã đi qua SELECT, nối bảng, gom nhóm, truy vấn lồng và cập nhật dữ liệu."},
@@ -5135,8 +5501,19 @@
         {"t":710.49,"vi":"Trước khi sang chương mới, hãy tự làm lại cả tám bài trên FUHCompany mà không nhìn lời giải."}
       ]
     },
-    "dbi202-on-ch7": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/07-lap-trinh-view-procedure-trigger/07-07-thuc-hanh-lap-trinh-kieu-pe-tron-72256caa.mp4","durationSec":948.33,"nguonCau":"srt",
-      "parts": [],
+    "dbi202-on-ch7": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/07-lap-trinh-view-procedure-trigger/07-07-thuc-hanh-lap-trinh-kieu-pe-tron-72256caa.mp4","durationSec":948.33,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":5.1,"den":87.88,"ten":"Phần 1 · Chào bạn · DBI202 Bài 7.5 phần 1"},
+        {"t":87.88,"den":172.67,"ten":"Phần 1 · Bài 1 — Thủ tục OUTPUT: tổng lương một phòng"},
+        {"t":172.67,"den":257.91,"ten":"Phần 1 · Bài 2 — Thủ tục có giao dịch · Bài 2 — Lời giải và gọi thử"},
+        {"t":257.91,"den":357.27,"ten":"Phần 1 · Bài 3 — Hàm vô hướng: số dự án"},
+        {"t":357.27,"den":485.42,"ten":"Phần 1 · 🐘 Cùng việc đó trên PostgreSQL · Tự kiểm kiểu đề FE"},
+        {"t":485.42,"den":590.64,"ten":"Phần 2 · Chào bạn · DBI202 Bài 7.5 phần 2"},
+        {"t":590.64,"den":688.71,"ten":"Phần 2 · Bài 5 — Cái bẫy và cách sửa · Bài 6 — Trigger ghi nhật ký"},
+        {"t":688.71,"den":783.9,"ten":"Phần 2 · Bài 6 — Gọi thử · Bài 7 — Cursor tăng lương theo giờ"},
+        {"t":783.9,"den":887,"ten":"Phần 2 · Bài 7 — Cùng việc đó trong một câu"},
+        {"t":887,"den":948.33,"ten":"Phần 2 · Tóm tắt Chương 7"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với phần thực hành Chương 7 của DBI202: bảy bài đúng dạng một hai câu cuối của đề PE."},
         {"t":14.49,"vi":"Câu cuối đề PE gần như luôn là \"tạo thủ tục, hàm hoặc trigger để làm việc gì đó\"."},
@@ -5254,8 +5631,15 @@
         {"t":932.02,"vi":"Giờ bạn tự thử: viết trigger bài năm theo bản đầu, chạy phép thử đổi địa chỉ, rồi tự sửa bằng UPDATE của cột nhé."}
       ]
     },
-    "dbi202-on-ch8": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/08-chi-muc-toi-uu/08-05-thuc-hanh-giao-dich-chi-muc-tron-8ed2e939.mp4","durationSec":681.37,"nguonCau":"srt",
-      "parts": [],
+    "dbi202-on-ch8": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/08-chi-muc-toi-uu/08-05-thuc-hanh-giao-dich-chi-muc-tron-8ed2e939.mp4","durationSec":681.37,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":5.1,"den":145.65,"ten":"Phần 1 · Chào bạn · DBI202 Bài 8.4 phần 1"},
+        {"t":145.65,"den":236.24,"ten":"Phần 1 · Bài 2 — Chọn và chứng minh một chỉ mục"},
+        {"t":236.24,"den":311.28,"ten":"Phần 1 · Bài 4 — View WITH CHECK OPTION · Tự kiểm kiểu đề FE"},
+        {"t":311.28,"den":441.16,"ten":"Phần 1 · Tóm tắt phần 1 · Chào bạn · DBI202 Bài 8.4 phần 2"},
+        {"t":441.16,"den":550.73,"ten":"Phần 2 · Bài 6 — Chỉ mục một phần (PostgreSQL)"},
+        {"t":550.73,"den":681.37,"ten":"Phần 2 · T-SQL và PostgreSQL, đặt cạnh nhau · Tự kiểm kiểu đề FE"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với phần thực hành Chương 8 của DBI202: bảy bài về giao dịch, chỉ mục và view."},
         {"t":13.72,"vi":"Điểm chung của cả bảy bài: không chỉ viết cho đúng, mà phải chứng minh bằng dữ liệu thật."},
@@ -5341,8 +5725,14 @@
         {"t":664.03,"vi":"Giờ bạn tự thử: tạo một view nối hai bảng, sửa một cột qua nó, rồi thử chèn một dòng để tự thấy lỗi bốn nghìn bốn trăm linh năm nhé."}
       ]
     },
-    "dbi202-on-pe": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/10-on-thi-lab-pe-fe/10-01-thi-thuc-hanh-85-phut-cam-nang-e1d472f5.mp4","durationSec":493.56,"nguonCau":"srt",
-      "parts": [],
+    "dbi202-on-pe": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/10-on-thi-lab-pe-fe/10-01-thi-thuc-hanh-85-phut-cam-nang-e1d472f5.mp4","durationSec":493.56,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":149,"ten":"Chào bạn · DBI202 Bài 9.1 · PE chiếm 30% điểm môn"},
+        {"t":149,"den":252.28,"ten":"Năm luật nộp bài: sai một là 0 điểm · Chia 85 phút"},
+        {"t":252.28,"den":358.46,"ten":"Mười khuôn truy vấn · Một tệp trả lời đúng"},
+        {"t":358.46,"den":450.63,"ten":"Năm lỗi mất điểm dù SQL đúng · ⭐ Thử như dân chuyên nghiệp"},
+        {"t":450.63,"den":493.56,"ten":"Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 9.1 của DBI202: cẩm nang cho bài thi thực hành tám mươi lăm phút."},
         {"t":13.71,"vi":"Mọi điều trong bài này mình đối chiếu với các đề PE thật của kỳ Spring 2026, đã có trong Phòng thi trên web."},
@@ -5409,8 +5799,26 @@
         {"t":482.74,"vi":"Giờ bạn tự thử: vào Phòng thi, mở đề DBI202 PE một, làm đúng tám mươi lăm phút, mỗi câu một tệp nhé."}
       ]
     },
-    "dbi202-pe1-sp26-chua-tron-de": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/12-chua-tron-de-pe/01-pe1-sp26-tron-2f946095.mp4","durationSec":1654.78,"nguonCau":"srt",
-      "parts": [],
+    "dbi202-pe1-sp26-chua-tron-de": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/12-chua-tron-de-pe/01-pe1-sp26-tron-2f946095.mp4","durationSec":1654.78,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":5.1,"den":120.83,"ten":"Phần 1 · Chào bạn · Đề PE1 SP26 · Mười câu, mười điểm"},
+        {"t":120.83,"den":212.01,"ten":"Phần 1 · Database của đề: sáu bảng nhân sự · Câu 1 — ERD thành bảng"},
+        {"t":212.01,"den":324.25,"ten":"Phần 1 · Câu 2 và câu 3 · Câu 4, 5 và 6"},
+        {"t":324.25,"den":465.92,"ten":"Phần 1 · Câu 9 và câu 10 · Chia 85 phút"},
+        {"t":465.92,"den":564.86,"ten":"Phần 2 · Phần 2: Câu 1 tới 3 · Câu 1 trên ảnh gốc"},
+        {"t":564.86,"den":663.4,"ten":"Phần 2 · Câu 1 — lời giải chạy thật · Câu 1 — bốn lỗi mất điểm"},
+        {"t":663.4,"den":740.56,"ten":"Phần 2 · JOIN là dòng ghép dòng · Câu 3 — JOIN tìm phòng IT"},
+        {"t":740.56,"den":825.3,"ten":"Phần 2 · Tóm tắt & tự kiểm · Phần 3: Câu 4 tới 6"},
+        {"t":825.3,"den":922.59,"ten":"Phần 3 · Câu 4 — đếm trước cho rõ"},
+        {"t":922.59,"den":1006.48,"ten":"Phần 3 · Câu 5 — lời giải chạy thật"},
+        {"t":1006.48,"den":1105.69,"ten":"Phần 3 · Câu 6 — hai lối đi sai · Tóm tắt & tự kiểm"},
+        {"t":1105.69,"den":1181.4,"ten":"Phần 4 · Phần 4: Câu 7 và 8 · Câu 7 — soi dữ liệu trước"},
+        {"t":1181.4,"den":1265.29,"ten":"Phần 4 · Câu 7 — hai lớp NOT EXISTS"},
+        {"t":1265.29,"den":1404.03,"ten":"Phần 4 · Câu 8 — thủ tục có tham số OUTPUT · Câu 8 — bẫy chữ OUTPUT"},
+        {"t":1404.03,"den":1506.75,"ten":"Phần 5 · Phần 5: Câu 9, 10 và soát bài"},
+        {"t":1506.75,"den":1600.73,"ten":"Phần 5 · Câu 10 — xoá nhân viên phòng IT"},
+        {"t":1600.73,"den":1654.78,"ten":"Phần 5 · Tổng kết đề PE1"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với loạt chữa trọn đề thi thực hành DBI202."},
         {"t":9.76,"vi":"Đề đầu tiên là đề Spring 2026, mình gọi là đề PE1."},
@@ -5647,8 +6055,26 @@
         {"t":1634.08,"vi":"Giờ bạn vào Phòng thi trên web, làm lại cả đề PE1 trong tám mươi lăm phút mà không xem video, rồi so với lời giải mẫu. Đề tiếp theo là đề PE2, cơ sở dữ liệu nghe nhạc."}
       ]
     },
-    "dbi202-pe2-sp26-chua-tron-de": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/12-chua-tron-de-pe/06-pe2-sp26-tron-1859019a.mp4","durationSec":1627.39,"nguonCau":"srt",
-      "parts": [],
+    "dbi202-pe2-sp26-chua-tron-de": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/12-chua-tron-de-pe/06-pe2-sp26-tron-1859019a.mp4","durationSec":1627.39,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":5.1,"den":107.83,"ten":"Phần 1 · Chào bạn · Đề PE2 SP26 · Mười câu, luật nộp bài như cũ"},
+        {"t":107.83,"den":188,"ten":"Phần 1 · Câu 1 — ERD có lớp con và thuộc tính đa trị · Câu 2 và câu 3"},
+        {"t":188,"den":270.4,"ten":"Phần 1 · Câu 4 và câu 5 · Câu 6 và câu 7"},
+        {"t":270.4,"den":349.33,"ten":"Phần 1 · Câu 8 — thủ tục theo năm · Câu 9 và câu 10"},
+        {"t":349.33,"den":445.48,"ten":"Phần 1 · Chia 85 phút · Tóm tắt & tự kiểm"},
+        {"t":445.48,"den":551.03,"ten":"Phần 2 · Phần 2: Câu 1 và 2 · Câu 1 — đọc ERD trên ảnh gốc"},
+        {"t":551.03,"den":642.53,"ten":"Phần 2 · Câu 1 — lời giải chạy thật · Câu 1 — bốn lỗi mất điểm"},
+        {"t":642.53,"den":727.88,"ten":"Phần 2 · Tóm tắt & tự kiểm · Phần 3: Câu 3 tới 5"},
+        {"t":727.88,"den":838.73,"ten":"Phần 3 · Câu 3 — nối ba bảng, đổi tên cột"},
+        {"t":838.73,"den":982.96,"ten":"Phần 3 · Câu 5 — hai cái bẫy của phép đếm"},
+        {"t":982.96,"den":1076.5,"ten":"Phần 4 · Phần 4: Câu 6 và 7"},
+        {"t":1076.5,"den":1152.7,"ten":"Phần 4 · Câu 7 — đứng đầu cả hai bảng"},
+        {"t":1152.7,"den":1259.14,"ten":"Phần 4 · Câu 7 — vì sao không có nước Mỹ · Tóm tắt & tự kiểm"},
+        {"t":1259.14,"den":1362.1,"ten":"Phần 5 · Phần 5: Câu 8 tới 10 · Câu 8 — thủ tục theo năm"},
+        {"t":1362.1,"den":1462.98,"ten":"Phần 5 · Câu 9 — trigger đứng chặn ở cửa · Câu 9 — lời giải"},
+        {"t":1462.98,"den":1557.12,"ten":"Phần 5 · Câu 9 — chạy ví dụ của đề · Câu 10 — đề gọi sai tên cột"},
+        {"t":1557.12,"den":1627.39,"ten":"Phần 5 · Soát bài trước khi nộp · Tổng kết đề PE2"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với đề thi thực hành thứ hai của loạt chữa đề DBI202: đề Spring 2026, Paper số một, mình gọi là đề PE2."},
         {"t":18.28,"vi":"Đề PE1 dùng database nhân sự."},
@@ -5864,8 +6290,27 @@
         {"t":1613.29,"vi":"Đề tiếp theo là PE3, Paper số tám, cùng database nghe nhạc nhưng sáu câu khác hẳn."}
       ]
     },
-    "dbi202-pe3-sp26-chua-tron-de": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/12-chua-tron-de-pe/11-pe3-sp26-tron-d773a196.mp4","durationSec":1700.74,"nguonCau":"srt",
-      "parts": [],
+    "dbi202-pe3-sp26-chua-tron-de": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/12-chua-tron-de-pe/11-pe3-sp26-tron-d773a196.mp4","durationSec":1700.74,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":5.1,"den":109.47,"ten":"Phần 1 · Chào bạn · Đề PE3 SP26 · Mười câu, luật nộp bài như cũ"},
+        {"t":109.47,"den":188.99,"ten":"Phần 1 · Câu 1 — ERD có lớp con và thuộc tính đa trị · Câu 2 và câu 3"},
+        {"t":188.99,"den":277.7,"ten":"Phần 1 · Câu 4 và câu 5 · Câu 6 và câu 7"},
+        {"t":277.7,"den":380.06,"ten":"Phần 1 · Câu 8 — hàm trả về bảng · Câu 9 và câu 10"},
+        {"t":380.06,"den":466.48,"ten":"Phần 1 · Tóm tắt & tự kiểm · Phần 2: Câu 1 và 2"},
+        {"t":466.48,"den":559.24,"ten":"Phần 2 · Câu 1 — đọc ERD trên ảnh gốc · Câu 1 — bốn quy tắc, năm bảng"},
+        {"t":559.24,"den":650.74,"ten":"Phần 2 · Câu 1 — lời giải chạy thật · Câu 1 — bốn lỗi mất điểm"},
+        {"t":650.74,"den":737.73,"ten":"Phần 2 · Tóm tắt & tự kiểm · Phần 3: Câu 3 tới 5"},
+        {"t":737.73,"den":822.01,"ten":"Phần 3 · Câu 3 — Rock trong khoảng năm"},
+        {"t":822.01,"den":905.93,"ten":"Phần 3 · Câu 4 — LEFT JOIN một khối JOIN trong ngoặc"},
+        {"t":905.93,"den":1027.69,"ten":"Phần 3 · Câu 5 — mọi người dùng, đếm bài khác nhau"},
+        {"t":1027.69,"den":1125.48,"ten":"Phần 4 · Phần 4: Câu 6 và 7"},
+        {"t":1125.48,"den":1207.84,"ten":"Phần 4 · Câu 7 — đứng đầu cả hai bảng"},
+        {"t":1207.84,"den":1309.36,"ten":"Phần 4 · Câu 7 — vì sao không có nước Mỹ · Tóm tắt & tự kiểm"},
+        {"t":1309.36,"den":1419.98,"ten":"Phần 5 · Phần 5: Câu 8 tới 10 · Câu 8 — hàm trả về bảng là gì"},
+        {"t":1419.98,"den":1522.81,"ten":"Phần 5 · Câu 9 — trigger đứng chặn ở cửa · Câu 9 — lời giải"},
+        {"t":1522.81,"den":1616.16,"ten":"Phần 5 · Câu 9 — chạy ví dụ của đề"},
+        {"t":1616.16,"den":1700.74,"ten":"Phần 5 · Soát bài trước khi nộp · Tổng kết đề PE3 và cả loạt PE"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với đề thi thực hành thứ ba của loạt chữa đề DBI202: đề Spring 2026, Paper số tám, mình gọi là đề PE3."},
         {"t":17.8,"vi":"Đề này dùng đúng database nghe nhạc của đề PE2."},
@@ -6067,8 +6512,14 @@
         {"t":1688.91,"vi":"Phần tiếp theo của loạt này là chữa trọn các đề trắc nghiệm FE."}
       ]
     },
-    "dbi202-phan-ra": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/04-phu-thuoc-ham-chuan-hoa/04-07-phan-ra-khong-mat-mat-bao-toan-phu-thuoc-e7907352.mp4","durationSec":461.05,"nguonCau":"srt",
-      "parts": [],
+    "dbi202-phan-ra": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/04-phu-thuoc-ham-chuan-hoa/04-07-phan-ra-khong-mat-mat-bao-toan-phu-thuoc-e7907352.mp4","durationSec":461.05,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":115.5,"ten":"Chào bạn · DBI202 Bài 4.3 · Xé tờ giấy rồi dán lại"},
+        {"t":115.5,"den":199.75,"ten":"Phép kiểm: phần chung phải là khoá · Bảng chase"},
+        {"t":199.75,"den":280.22,"ten":"Đèn hai: bảo toàn phụ thuộc"},
+        {"t":280.22,"den":361.58,"ten":"Chạy thật: luật bị mất · Ba NF và BCNF: bảng tổng kết"},
+        {"t":361.58,"den":461.05,"ten":"⭐ Phi chuẩn hoá có chủ đích · Tự kiểm kiểu đề FE"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 4.3 của DBI202: phân rã."},
         {"t":10.64,"vi":"Bài trước mình học tính bao đóng và tìm khoá."},
@@ -6138,8 +6589,20 @@
         {"t":453.3,"vi":"Giờ bạn tự chạy chase cho hai cách tách trong bài ra giấy, rồi so với màn hình nhé."}
       ]
     },
-    "dbi202-plsql": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/07-lap-trinh-view-procedure-trigger/07-02-slide-chapter-8-procedure-function-tron-77cad910.mp4","durationSec":1139.35,"nguonCau":"srt",
-      "parts": [],
+    "dbi202-plsql": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/07-lap-trinh-view-procedure-trigger/07-02-slide-chapter-8-procedure-function-tron-77cad910.mp4","durationSec":1139.35,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":5.1,"den":128.9,"ten":"Phần 1 · Chào bạn · DBI202 Bài 7.B · Nhà hàng ba tầng và nút bấm"},
+        {"t":128.9,"den":204.38,"ten":"Phần 1 · Slide 21: sơ đồ ba tầng · Slide 22: tầng web"},
+        {"t":204.38,"den":279.65,"ten":"Phần 1 · Slide 23: tầng ứng dụng · Slide 24: tầng cơ sở dữ liệu"},
+        {"t":279.65,"den":365.4,"ten":"Phần 1 · Slide 25: năm lợi ích của procedure"},
+        {"t":365.4,"den":493.99,"ten":"Phần 1 · Slide 26: SQL/PSM"},
+        {"t":493.99,"den":599.13,"ten":"Phần 1 · Tự kiểm kiểu đề FE · Tóm tắt"},
+        {"t":599.13,"den":688.19,"ten":"Phần 2 · Chào bạn · Bài 7.B phần 2 · Slide 28: Example 1 — ba việc"},
+        {"t":688.19,"den":804.12,"ten":"Phần 2 · Slide 29: thủ tục liệt kê dự án"},
+        {"t":804.12,"den":904.56,"ten":"Phần 2 · Slide 31: hàm trong SQL Server · Slide 32: hàm vô hướng"},
+        {"t":904.56,"den":1015.69,"ten":"Phần 2 · Slide 33: hàm trả bảng inline"},
+        {"t":1015.69,"den":1139.35,"ten":"Phần 2 · Thủ tục hay hàm? · Tự kiểm kiểu đề FE"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 7.B của DBI202."},
         {"t":9.94,"vi":"Vẫn bộ slide Chapter 8 của trường, từ slide hai mươi."},
@@ -6305,8 +6768,14 @@
         {"t":1123.31,"vi":"Giờ bạn kéo xuống dưới video, tự viết hàm inline trả nhân viên theo phòng, rồi JOIN nó với bảng phân công như trong bài nhé."}
       ]
     },
-    "dbi202-proc-function": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/07-lap-trinh-view-procedure-trigger/07-05-procedure-function-cau-8-pe-213bcb13.mp4","durationSec":409.26,"nguonCau":"srt",
-      "parts": [],
+    "dbi202-proc-function": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/07-lap-trinh-view-procedure-trigger/07-05-procedure-function-cau-8-pe-213bcb13.mp4","durationSec":409.26,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":103.66,"ten":"Chào bạn · DBI202 Bài 7.3 · Chạy ngay tại chỗ dữ liệu nằm"},
+        {"t":103.66,"den":189.18,"ten":"Gọi thủ tục, ba tình huống · Khuôn câu 8 đề PE"},
+        {"t":189.18,"den":271.81,"ten":"Thủ tục hay hàm? · Hàm vô hướng và hàm trả bảng"},
+        {"t":271.81,"den":366.29,"ten":"⭐ Thủ tục và SQL injection"},
+        {"t":366.29,"den":409.26,"ten":"Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 7.3 của DBI202: stored procedure và function."},
         {"t":12.94,"vi":"Bài trước, view đặt tên cho một câu SELECT."},
@@ -6370,8 +6839,14 @@
         {"t":397.89,"vi":"Giờ bạn tự thử: viết một thủ tục đếm có OUTPUT, rồi gọi nó hai lần, một lần quên chữ OUTPUT, để tự thấy cái NULL đó nhé."}
       ]
     },
-    "dbi202-rang-buoc-quan-he": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/02-mo-hinh-quan-he-dai-so/02-08-khoa-va-toan-ven-tham-chieu-6daece23.mp4","durationSec":541.89,"nguonCau":"srt",
-      "parts": [],
+    "dbi202-rang-buoc-quan-he": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/02-mo-hinh-quan-he-dai-so/02-08-khoa-va-toan-ven-tham-chieu-6daece23.mp4","durationSec":541.89,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":125.8,"ten":"Chào bạn · DBI202 Bài 2.4"},
+        {"t":125.8,"den":244.79,"ten":"Siêu khoá, khoá dự tuyển, khoá chính"},
+        {"t":244.79,"den":322.92,"ten":"Chèn đăng ký cho sinh viên không có thật"},
+        {"t":322.92,"den":423.25,"ten":"NO ACTION, CASCADE, SET NULL · \"Bọn em kiểm ở Java rồi\""},
+        {"t":423.25,"den":541.89,"ten":"⭐ Ràng buộc làm truy vấn nhanh hơn · Tự kiểm kiểu đề FE"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 2.4 của DBI202: khoá và toàn vẹn tham chiếu."},
         {"t":12.22,"vi":"Bài trước mình nối bảng Enroll với Student theo cột sid, và mặc nhiên tin rằng mọi sid trong Enroll đều có thật."},
@@ -6445,8 +6920,14 @@
         {"t":530.21,"vi":"Giờ bạn tự chạy hai câu phá khoá ngoại trên máy mình, đọc to từng phần của lỗi năm trăm bốn mươi bảy, rồi sang bài thực hành nhé."}
       ]
     },
-    "dbi202-rang-buoc-sql": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/05-sql-ddl-dinh-nghia-du-lieu/05-05-rang-buoc-va-alter-tren-bang-co-du-lieu-58edafb6.mp4","durationSec":500.81,"nguonCau":"srt",
-      "parts": [],
+    "dbi202-rang-buoc-sql": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/05-sql-ddl-dinh-nghia-du-lieu/05-05-rang-buoc-va-alter-tren-bang-co-du-lieu-58edafb6.mp4","durationSec":500.81,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":130.1,"ten":"Chào bạn · DBI202 Bài 5.3 · Năm người gác cổng"},
+        {"t":130.1,"den":227.42,"ten":"Chạy thật: phá từng người gác · Đặt tên để lỗi đọc được"},
+        {"t":227.42,"den":342.32,"ten":"Thêm cột NOT NULL vào bảng có dữ liệu"},
+        {"t":342.32,"den":421.7,"ten":"Xoá bảng: con trước, cha sau · 🐘 Cùng việc trên PostgreSQL"},
+        {"t":421.7,"den":500.81,"ten":"Tự kiểm kiểu đề FE · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 5.3 của DBI202: ràng buộc trong SQL Server."},
         {"t":12.36,"vi":"Bài trước, kiểu dữ liệu là luật đầu tiên: cột kiểu ngày thì không ai nhét chữ vào được."},
@@ -6525,8 +7006,21 @@
         {"t":493.46,"vi":"Bài tiếp theo là phần thực hành: bảy bài đúng dạng câu một và hai của đề PE."}
       ]
     },
-    "dbi202-select-join": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/06-truy-van-sql/06-01-slide-chapter-6-dml-select-tron-d0a0f2e3.mp4","durationSec":1116.44,"nguonCau":"srt",
-      "parts": [],
+    "dbi202-select-join": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/06-truy-van-sql/06-01-slide-chapter-6-dml-select-tron-d0a0f2e3.mp4","durationSec":1116.44,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":5.1,"den":90.07,"ten":"Phần 1 · Chào bạn · DBI202 Bài 6.A · Thứ tự viết khác thứ tự chạy"},
+        {"t":90.07,"den":213.88,"ten":"Phần 1 · Slide 22: INSERT ba dạng · Slide 23: UPDATE"},
+        {"t":213.88,"den":291.08,"ten":"Phần 1 · Slide 24: DELETE, TRUNCATE và hai câu hỏi"},
+        {"t":291.08,"den":399.7,"ten":"Phần 1 · Slide 25: SELECT chính là pi của xích-ma"},
+        {"t":399.7,"den":483.93,"ten":"Phần 1 · Slide 27: Ví dụ 1 và 2 · Slide 28: Ví dụ 3, bí danh cột"},
+        {"t":483.93,"den":567.78,"ten":"Phần 1 · Slide 29: Ví dụ 4, AND và OR · Tự kiểm kiểu đề FE"},
+        {"t":567.78,"den":651,"ten":"Phần 1 · Tóm tắt · Chào bạn · Bài 6.A phần 2"},
+        {"t":651,"den":767.39,"ten":"Phần 2 · Slide 30: ORDER BY · Slide 31: Ví dụ 6, sắp theo hai cột"},
+        {"t":767.39,"den":868.6,"ten":"Phần 2 · Slide 32–33: truy vấn nhiều bảng"},
+        {"t":868.6,"den":982.12,"ten":"Phần 2 · Slide 35: Ví dụ 7, nối hai bảng · Slide 36: hai cột cùng tên"},
+        {"t":982.12,"den":1066.04,"ten":"Phần 2 · Áp dụng vào dự án PRJ301 Nhà trọ · Tự kiểm kiểu đề FE"},
+        {"t":1066.04,"den":1116.44,"ten":"Phần 2 · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Chương 6 của DBI202: truy vấn SQL. Đây là nửa sau bộ slide Chapter 6 của trường, từ slide hai mươi hai."},
         {"t":16.55,"vi":"Chương trước mình đã dựng bảng bằng CREATE TABLE với đủ khoá chính, khoá ngoại, ràng buộc kiểm tra, và dựng xong cơ sở dữ liệu công ty FUHCompany."},
@@ -6690,8 +7184,20 @@
         {"t":1099.08,"vi":"Giờ bạn kéo xuống dưới video, viết lại ví dụ bảy bằng JOIN kèm ON, thử bỏ điều kiện nối xem ra bao nhiêu dòng, rồi hẵng sang bài 6.B nhé."}
       ]
     },
-    "dbi202-slide-cs1-1": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/09-chuyen-sau-ngoai-giao-trinh/09-01-slide-cs1-1-lich-su-tron-3605fc0e.mp4","durationSec":1130.47,"nguonCau":"srt",
-      "parts": [],
+    "dbi202-slide-cs1-1": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/09-chuyen-sau-ngoai-giao-trinh/09-01-slide-cs1-1-lich-su-tron-3605fc0e.mp4","durationSec":1130.47,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":5.1,"den":94.14,"ten":"Phần 1 · Chào bạn · ⭐ Chuyên sâu CS.1"},
+        {"t":94.14,"den":259.59,"ten":"Phần 1 · Slide 2: trước 1970 — dữ liệu nằm trong file"},
+        {"t":259.59,"den":404.01,"ten":"Phần 1 · Slide 4: mô hình mạng — CODASYL"},
+        {"t":404.01,"den":502.47,"ten":"Phần 1 · Slide 6: System R và sự ra đời của SQL · Tự kiểm"},
+        {"t":502.47,"den":588.13,"ten":"Phần 1 · Tóm tắt · Chào bạn · CS.1 tập 2"},
+        {"t":588.13,"den":693.69,"ten":"Phần 2 · Slide 7: Ingres — đối thủ song song ở Berkeley"},
+        {"t":693.69,"den":772.34,"ten":"Phần 2 · Slide 9: Sybase và SQL Server 1.0"},
+        {"t":772.34,"den":871.23,"ten":"Phần 2 · Slide 10: SQL Server tách hẳn khỏi Sybase"},
+        {"t":871.23,"den":959.52,"ten":"Phần 2 · Slide 12: PostgreSQL — đổi tên khi có SQL"},
+        {"t":959.52,"den":1067.51,"ten":"Phần 2 · Slide 13: MySQL — hướng web · Tự kiểm"},
+        {"t":1067.51,"den":1130.47,"ten":"Phần 2 · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với deck Chuyên sâu đầu tiên của DBI202: lịch sử và hệ sinh thái cơ sở dữ liệu."},
         {"t":13.39,"vi":"Ở Chương 1 bạn đã biết cơ sở dữ liệu và DBMS là gì, và cả môn xây trên mô hình quan hệ: bảng và khoá."},
@@ -6820,8 +7326,22 @@
         {"t":1116.52,"vi":"Giờ bạn thử vẽ lại cây gia phả này ra giấy, không nhìn màn hình, ghi kèm năm của từng nhánh nhé."}
       ]
     },
-    "dbi202-slide-cs1-2": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/09-chuyen-sau-ngoai-giao-trinh/09-01-slide-cs1-2-he-sinh-thai-tron-2e4b6a66.mp4","durationSec":1269.06,"nguonCau":"srt",
-      "parts": [],
+    "dbi202-slide-cs1-2": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/09-chuyen-sau-ngoai-giao-trinh/09-01-slide-cs1-2-he-sinh-thai-tron-2e4b6a66.mp4","durationSec":1269.06,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":5.1,"den":104.7,"ten":"Phần 1 · Chào bạn · CS.1 phần 2 · Slide 14: một ngôn ngữ, nhiều chuẩn"},
+        {"t":104.7,"den":190.65,"ten":"Phần 1 · 🐘 Chuẩn và hai hệ của môn"},
+        {"t":190.65,"den":273.39,"ten":"Phần 1 · Slide 15: vì sao NoSQL ra đời — định lý CAP"},
+        {"t":273.39,"den":367.91,"ten":"Phần 1 · Slide 16: bốn họ NoSQL"},
+        {"t":367.91,"den":476.14,"ten":"Phần 1 · Slide 17: NewSQL — muốn cả hai thế giới"},
+        {"t":476.14,"den":579.78,"ten":"Phần 1 · Tự kiểm · Tóm tắt"},
+        {"t":579.78,"den":660.08,"ten":"Phần 2 · Chào bạn · CS.1 tập cuối"},
+        {"t":660.08,"den":744.85,"ten":"Phần 2 · Slide 20: so sánh bốn hệ phổ biến"},
+        {"t":744.85,"den":827.34,"ten":"Phần 2 · Slide 21: sự cố thật — GitLab xoá nhầm CSDL production"},
+        {"t":827.34,"den":923.74,"ten":"Phần 2 · Slide 22: cùng một câu hỏi, hai hệ — chạy thật"},
+        {"t":923.74,"den":1033.09,"ten":"Phần 2 · 🐘 Slide 23: phía PostgreSQL và cái bẫy NULL"},
+        {"t":1033.09,"den":1165.13,"ten":"Phần 2 · Slide 24: lộ trình nghề liên quan tới CSDL"},
+        {"t":1165.13,"den":1269.06,"ten":"Phần 2 · Tự kiểm · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, tập trước ta vẽ cây gia phả: Ingres sinh ra cả nhánh SQL Server lẫn nhánh PostgreSQL; Oracle bán SQL đầu tiên; MySQL đi theo web."},
         {"t":16.8,"vi":"Hôm nay câu chuyện đi tiếp: SQL thành chuẩn thế nào, vì sao thập niên 2000 phải sinh ra hẳn một họ cơ sở dữ liệu khác là NoSQL, và vì sao mô hình quan hệ vẫn là mặc định."},
@@ -6982,8 +7502,27 @@
         {"t":1250.71,"vi":"Giờ bạn mở SSMS và psql, tự chạy hai câu hỏi phiên bản, rồi thử TOP với LIMIT trên một cột có NULL, để tận mắt thấy cái bẫy đó nhé."}
       ]
     },
-    "dbi202-slide-cs2-1": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/09-chuyen-sau-ngoai-giao-trinh/09-02-slide-cs2-1-ben-trong-tron-a19dc942.mp4","durationSec":2028.99,"nguonCau":"srt",
-      "parts": [],
+    "dbi202-slide-cs2-1": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/09-chuyen-sau-ngoai-giao-trinh/09-02-slide-cs2-1-ben-trong-tron-a19dc942.mp4","durationSec":2028.99,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":5.1,"den":123.67,"ten":"Phần 1 · Chào bạn · ⭐ Chuyên sâu CS.2 · Slide 1: mở hộp đen DBMS"},
+        {"t":123.67,"den":293.42,"ten":"Phần 1 · Slide 2: vì sao phải mở hộp đen · Slide 3: kiến trúc hai nửa"},
+        {"t":293.42,"den":375.3,"ten":"Phần 1 · Slide 4: cùng kiến trúc, khác tên gọi"},
+        {"t":375.3,"den":466.96,"ten":"Phần 1 · Slide 4: chạy thật — một tiến trình hay nhiều"},
+        {"t":466.96,"den":559.08,"ten":"Phần 1 · Tự kiểm · Tóm tắt"},
+        {"t":559.08,"den":664.1,"ten":"Phần 2 · Chào bạn · CS.2 tập 2"},
+        {"t":664.1,"den":797.06,"ten":"Phần 2 · Slide 6: extent, trang IAM và heap"},
+        {"t":797.06,"den":947.97,"ten":"Phần 2 · Slide 7: mỗi dòng nằm ở đâu — SQL Server"},
+        {"t":947.97,"den":1027.74,"ten":"Phần 2 · Slide 8: PostgreSQL — mỗi bảng một file"},
+        {"t":1027.74,"den":1119.11,"ten":"Phần 2 · Tự kiểm · Tóm tắt"},
+        {"t":1119.11,"den":1228.14,"ten":"Phần 3 · Chào bạn · CS.2 tập 3"},
+        {"t":1228.14,"den":1348.04,"ten":"Phần 3 · Slide 10: đo thật một trang SQL Server"},
+        {"t":1348.04,"den":1457.16,"ten":"Phần 3 · Slide 11: đo thật một trang PostgreSQL"},
+        {"t":1457.16,"den":1557.04,"ten":"Phần 3 · Tự kiểm · Tóm tắt"},
+        {"t":1557.04,"den":1658.59,"ten":"Phần 4 · Chào bạn · CS.2 tập 4 · Slide 12: định dạng một dòng"},
+        {"t":1658.59,"den":1824.75,"ten":"Phần 4 · Slide 12: thứ tự cột và byte đệm"},
+        {"t":1824.75,"den":1932.98,"ten":"Phần 4 · Slide 14: dòng quá dài — TOAST của PostgreSQL"},
+        {"t":1932.98,"den":2028.99,"ten":"Phần 4 · Tự kiểm · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với deck Chuyên sâu thứ hai của DBI202: bên trong một DBMS."},
         {"t":12.18,"vi":"Deck trước đi qua lịch sử: Codd đưa ra mô hình quan hệ năm 1970, SQL Server mọc từ Sybase, còn PostgreSQL mọc từ Ingres qua Postgres."},
@@ -7244,8 +7783,22 @@
         {"t":2011.58,"vi":"Giờ bạn đo một bảng thật của mình trên hai hệ, rồi thử đảo thứ tự cột bigint và smallint trên PostgreSQL xem tiết kiệm được bao nhiêu trang nhé."}
       ]
     },
-    "dbi202-slide-cs2-2": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/09-chuyen-sau-ngoai-giao-trinh/09-02-slide-cs2-2-ben-trong-e-tron-06e076d9.mp4","durationSec":1443.99,"nguonCau":"srt",
-      "parts": [],
+    "dbi202-slide-cs2-2": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/09-chuyen-sau-ngoai-giao-trinh/09-02-slide-cs2-2-ben-trong-e-tron-06e076d9.mp4","durationSec":1443.99,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":5.1,"den":113.59,"ten":"Phần 1 · Chào bạn · CS.2 phần 2"},
+        {"t":113.59,"den":242.89,"ten":"Phần 1 · Slide 16: SQL Server — SET STATISTICS IO ON"},
+        {"t":242.89,"den":374.06,"ten":"Phần 1 · Slide 17: PostgreSQL — EXPLAIN ANALYZE BUFFERS"},
+        {"t":374.06,"den":476.42,"ten":"Phần 1 · Tự kiểm · Tóm tắt"},
+        {"t":476.42,"den":597.7,"ten":"Phần 2 · Chào bạn · CS.2 phần 2 tập 2"},
+        {"t":597.7,"den":699.15,"ten":"Phần 2 · Slide 19: sập máy thì sao — khôi phục"},
+        {"t":699.15,"den":808.5,"ten":"Phần 2 · Slide 20: nhìn tận mắt nhật ký"},
+        {"t":808.5,"den":898.03,"ten":"Phần 2 · Tự kiểm · Tóm tắt"},
+        {"t":898.03,"den":1047.84,"ten":"Phần 3 · Chào bạn · CS.2 tập cuối"},
+        {"t":1047.84,"den":1153.96,"ten":"Phần 3 · Slide 22: hành trình một câu SELECT"},
+        {"t":1153.96,"den":1274.12,"ten":"Phần 3 · Slide 23: cache kế hoạch — plan cache"},
+        {"t":1274.12,"den":1351.55,"ten":"Phần 3 · Slide 24: tóm tắt và câu hỏi phỏng vấn"},
+        {"t":1351.55,"den":1443.99,"ten":"Phần 3 · Tự kiểm · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với phần hai của deck Chuyên sâu hai: bên trong một DBMS."},
         {"t":10.85,"vi":"Phần một đã đặt các dòng vào trang tám KB trên đĩa: header, mảng con trỏ, đầu dòng, và TOAST cho giá trị dài."},
@@ -7432,8 +7985,25 @@
         {"t":1427.41,"vi":"Giờ bạn mở trang bài tập CS.2, viết dự đoán ra giấy cho bài một: một trang chứa bao nhiêu dòng, rồi hẵng xem lời giải nhé."}
       ]
     },
-    "dbi202-slide-cs3-1": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/09-chuyen-sau-ngoai-giao-trinh/09-03-slide-cs3-1-chi-muc-tron-8e4dcefc.mp4","durationSec":1750.78,"nguonCau":"srt",
-      "parts": [],
+    "dbi202-slide-cs3-1": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/09-chuyen-sau-ngoai-giao-trinh/09-03-slide-cs3-1-chi-muc-tron-8e4dcefc.mp4","durationSec":1750.78,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":5.1,"den":122.84,"ten":"Phần 1 · Chào bạn · ⭐ Chuyên sâu CS.3"},
+        {"t":122.84,"den":233.75,"ten":"Phần 1 · Slide 2: vì sao quét cả bảng chậm"},
+        {"t":233.75,"den":326.43,"ten":"Phần 1 · Slide 3: từ cây nhị phân tới B-tree"},
+        {"t":326.43,"den":409.33,"ten":"Phần 1 · Slide 4: cấu trúc một cây B+"},
+        {"t":409.33,"den":499.52,"ten":"Phần 1 · Tự kiểm · Tóm tắt"},
+        {"t":499.52,"den":610.68,"ten":"Phần 2 · Chào bạn · CS.3 tập 2 · Slide 5: tìm một khoá bằng 44"},
+        {"t":610.68,"den":687.33,"ten":"Phần 2 · Slide 6: tìm một khoảng 20 tới 45"},
+        {"t":687.33,"den":774.01,"ten":"Phần 2 · Slide 7: chèn 47 vào lá đã đầy — tách nút"},
+        {"t":774.01,"den":908.6,"ten":"Phần 2 · Slide 8: độ cao cây — vì sao 3 lần đọc là đủ"},
+        {"t":908.6,"den":998.98,"ten":"Phần 2 · Tự kiểm · Tóm tắt"},
+        {"t":998.98,"den":1147.16,"ten":"Phần 3 · Chào bạn · CS.3 tập 3"},
+        {"t":1147.16,"den":1258.92,"ten":"Phần 3 · Slide 10: PostgreSQL — chỉ có heap và index riêng"},
+        {"t":1258.92,"den":1363.61,"ten":"Phần 3 · Tự kiểm · Tóm tắt"},
+        {"t":1363.61,"den":1525.44,"ten":"Phần 4 · Chào bạn · CS.3 tập 4 · Slide 11: Key Lookup và RID Lookup"},
+        {"t":1525.44,"den":1657.57,"ten":"Phần 4 · Slide 12: độ chọn lọc — khi nào optimizer bỏ index"},
+        {"t":1657.57,"den":1750.78,"ten":"Phần 4 · Tự kiểm · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với deck Chuyên sâu thứ ba của DBI202: chỉ mục chuyên sâu."},
         {"t":11.73,"vi":"Deck trước cho ta đơn vị chi phí là trang tám KB, đo bằng logical reads, và optimizer dựa vào thống kê để chọn seek hay scan. Chương tám trên web cũng đã cho thấy index biến một lần quét thành một lần tìm thẳng."},
@@ -7637,8 +8207,30 @@
         {"t":1734.89,"vi":"Giờ bạn tự tìm điểm bùng phát trên bảng thử của mình: tăng dần khoảng ngày, xem kế hoạch đổi từ seek sang scan ở đâu nhé."}
       ]
     },
-    "dbi202-slide-cs3-2": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/09-chuyen-sau-ngoai-giao-trinh/09-03-slide-cs3-2-chi-muc-e-tron-890f814d.mp4","durationSec":2442.39,"nguonCau":"srt",
-      "parts": [],
+    "dbi202-slide-cs3-2": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/09-chuyen-sau-ngoai-giao-trinh/09-03-slide-cs3-2-chi-muc-e-tron-890f814d.mp4","durationSec":2442.39,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":5.1,"den":166.71,"ten":"Phần 1 · Chào bạn · CS.3 phần 2"},
+        {"t":166.71,"den":285.54,"ten":"Phần 1 · Slide 14: thứ tự cột — so bằng trước, so khoảng sau"},
+        {"t":285.54,"den":381.38,"ten":"Phần 1 · Tự kiểm · Tóm tắt"},
+        {"t":381.38,"den":511.61,"ten":"Phần 2 · Chào bạn · CS.3 phần 2 tập 2"},
+        {"t":511.61,"den":703.17,"ten":"Phần 2 · Slide 15: 🐘 Index Only Scan & Heap Fetches"},
+        {"t":703.17,"den":813.87,"ten":"Phần 2 · Slide 16: 🐘 partial index & kế hoạch chung · Tự kiểm"},
+        {"t":813.87,"den":897.1,"ten":"Phần 2 · Tóm tắt · Chào bạn · CS.3 phần 2 tập 3"},
+        {"t":897.1,"den":1004.16,"ten":"Phần 3 · Slide 17: SARGable và không SARGable — SQL Server"},
+        {"t":1004.16,"den":1134.85,"ten":"Phần 3 · Slide 17: collation & đổi kiểu tham số"},
+        {"t":1134.85,"den":1240.6,"ten":"Phần 3 · Slide 18: sửa cho SARGable — SQL Server"},
+        {"t":1240.6,"den":1327.91,"ten":"Phần 3 · Slide 18: 🐘 index biểu thức & pattern_ops · Tự kiểm"},
+        {"t":1327.91,"den":1407.53,"ten":"Phần 3 · Tóm tắt · Chào bạn · CS.3 phần 2 tập 4"},
+        {"t":1407.53,"den":1510.13,"ten":"Phần 4 · Slide 19: index cho khoá ngoại & JOIN — SQL Server"},
+        {"t":1510.13,"den":1685.7,"ten":"Phần 4 · Slide 19: 🐘 khoá ngoại trên PostgreSQL"},
+        {"t":1685.7,"den":1865.56,"ten":"Phần 4 · Slide 20: 🐘 cái giá trên PostgreSQL"},
+        {"t":1865.56,"den":1962.26,"ten":"Phần 4 · Tự kiểm · Tóm tắt"},
+        {"t":1962.26,"den":2095.49,"ten":"Phần 5 · Chào bạn · CS.3 phần 2 tập 5"},
+        {"t":2095.49,"den":2204.75,"ten":"Phần 5 · Slide 23: đọc kế hoạch — PostgreSQL"},
+        {"t":2204.75,"den":2299.38,"ten":"Phần 5 · Slide 24: quy trình chẩn đoán một truy vấn chậm"},
+        {"t":2299.38,"den":2400.19,"ten":"Phần 5 · Slide 25: tóm tắt cả deck · Tự kiểm"},
+        {"t":2400.19,"den":2442.39,"ten":"Phần 5 · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với phần hai của deck Chỉ mục chuyên sâu."},
         {"t":9.22,"vi":"Phần một nói index là gì: cây B cộng, heap hay clustered, lookup tốn trang cho từng dòng, và điểm bùng phát rất thấp mà optimizer bỏ index."},
@@ -7943,8 +8535,27 @@
         {"t":2427.25,"vi":"Giờ bạn lấy truy vấn chậm nhất của đồ án, chạy đủ sáu bước trên cả hai hệ, và ghi lại con số trước sau nhé."}
       ]
     },
-    "dbi202-slide-cs4-1": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/09-chuyen-sau-ngoai-giao-trinh/09-04-slide-cs4-1-dong-thoi-tron-9f49f18d.mp4","durationSec":1897.69,"nguonCau":"srt",
-      "parts": [],
+    "dbi202-slide-cs4-1": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/09-chuyen-sau-ngoai-giao-trinh/09-04-slide-cs4-1-dong-thoi-tron-9f49f18d.mp4","durationSec":1897.69,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":5.1,"den":96.27,"ten":"Phần 1 · Chào bạn · mở deck CS4 · Slide 1: đồng thời là gì"},
+        {"t":96.27,"den":246.52,"ten":"Phần 1 · Slide 2: Chương 7 dạy gì — deck này đi sâu gì"},
+        {"t":246.52,"den":332.12,"ten":"Phần 1 · Slide 4: đọc bẩn — SQL Server"},
+        {"t":332.12,"den":453.86,"ten":"Phần 1 · Slide 4: WITH (NOLOCK) là đọc bẩn"},
+        {"t":453.86,"den":610.63,"ten":"Phần 1 · Tóm tắt · Chào bạn · ba bất thường tiếp theo"},
+        {"t":610.63,"den":725.49,"ten":"Phần 2 · Slide 5: 🐘 REPEATABLE READ của PostgreSQL"},
+        {"t":725.49,"den":852.93,"ten":"Phần 2 · Slide 6: 🐘 PostgreSQL không có dòng ma ở REPEATABLE READ"},
+        {"t":852.93,"den":934.75,"ten":"Phần 2 · Slide 7: 🐘 mất cập nhật trên PostgreSQL · Tự kiểm"},
+        {"t":934.75,"den":1012.38,"ten":"Phần 2 · Tóm tắt · Chào bạn · bất thường thứ năm"},
+        {"t":1012.38,"den":1114.4,"ten":"Phần 3 · Slide 8: lệch ghi — trực ca bác sĩ"},
+        {"t":1114.4,"den":1282.55,"ten":"Phần 3 · Slide 8: 🐘 lệch ghi trên PostgreSQL — SSI"},
+        {"t":1282.55,"den":1366.81,"ten":"Phần 3 · Slide 10: hai trường phái — khoá vs nhiều phiên bản"},
+        {"t":1366.81,"den":1466.5,"ten":"Phần 3 · Tự kiểm · Tóm tắt"},
+        {"t":1466.5,"den":1552.23,"ten":"Phần 4 · Chào bạn · bên trong bộ máy khoá · Slide 11: khoá S, U, X"},
+        {"t":1552.23,"den":1637.65,"ten":"Phần 4 · Slide 11: khoá hai pha (2PL)"},
+        {"t":1637.65,"den":1731.99,"ten":"Phần 4 · Slide 11: 🐘 khoá trên PostgreSQL — pg_locks và pgrowlocks"},
+        {"t":1731.99,"den":1809.96,"ten":"Phần 4 · Slide 12: chạy thêm — leo thang chặn cả dòng không liên quan"},
+        {"t":1809.96,"den":1897.69,"ten":"Phần 4 · Tự kiểm · Tóm tắt phần 1"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn. Deck trước, Chỉ mục chuyên sâu, khép lại bằng sáu bước chẩn đoán một truy vấn chậm khi chỉ có một người dùng."},
         {"t":14.57,"vi":"Hôm nay mở deck mới: Giao dịch và đồng thời."},
@@ -8195,8 +8806,25 @@
         {"t":1882.34,"vi":"Giờ bạn mở ba cửa sổ: UPDATE một dòng mà không commit, rồi soi khoá bằng sys.dm_tran_locks hoặc pg_locks nhé."}
       ]
     },
-    "dbi202-slide-cs4-2": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/09-chuyen-sau-ngoai-giao-trinh/09-04-slide-cs4-2-dong-thoi-e-tron-99ecc30b.mp4","durationSec":1496.04,"nguonCau":"srt",
-      "parts": [],
+    "dbi202-slide-cs4-2": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/09-chuyen-sau-ngoai-giao-trinh/09-04-slide-cs4-2-dong-thoi-e-tron-99ecc30b.mp4","durationSec":1496.04,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":5.1,"den":136.07,"ten":"Phần 1 · Chào bạn · phần 2: nhiều phiên bản"},
+        {"t":136.07,"den":221.6,"ten":"Phần 1 · Slide 14: mặt trái MVCC — VACUUM và giao dịch ngồi lì"},
+        {"t":221.6,"den":319.52,"ten":"Phần 1 · Slide 15: MVCC trong SQL Server — RCSI và SNAPSHOT"},
+        {"t":319.52,"den":403.91,"ten":"Phần 1 · Slide 16: mặc định của mỗi hệ — và hệ quả thật"},
+        {"t":403.91,"den":503.19,"ten":"Phần 1 · Tự kiểm · Tóm tắt"},
+        {"t":503.19,"den":609.41,"ten":"Phần 2 · Chào bạn · khi hai giao dịch chờ nhau"},
+        {"t":609.41,"den":703.46,"ten":"Phần 2 · Slide 18: hệ tự gỡ deadlock thế nào — và cách tránh"},
+        {"t":703.46,"den":788.72,"ten":"Phần 2 · Slide 19: khoá chủ động — FOR UPDATE và UPDLOCK"},
+        {"t":788.72,"den":889.32,"ten":"Phần 2 · Slide 20: hàng đợi việc — SKIP LOCKED và READPAST · Tự kiểm"},
+        {"t":889.32,"den":965.55,"ten":"Phần 2 · Tóm tắt · Chào bạn · bộ đồ nghề cuối cùng"},
+        {"t":965.55,"den":1062.64,"ten":"Phần 3 · Slide 21: đồng thời lạc quan — cột version và rowversion"},
+        {"t":1062.64,"den":1159.2,"ten":"Phần 3 · Slide 22: lỗi giữa giao dịch — SET XACT_ABORT ON"},
+        {"t":1159.2,"den":1245.46,"ten":"Phần 3 · Slide 23: thử lại khi xung đột"},
+        {"t":1245.46,"den":1332.31,"ten":"Phần 3 · Slide 24: giao dịch dài — hậu quả và quy tắc"},
+        {"t":1332.31,"den":1414.51,"ten":"Phần 3 · Slide 25: tóm tắt — chọn gì khi nào"},
+        {"t":1414.51,"den":1496.04,"ten":"Phần 3 · Tự kiểm · Tóm tắt cả deck"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, sang phần hai của deck Giao dịch và đồng thời."},
         {"t":9.21,"vi":"Phần một kết thúc ở bộ máy khoá: S, U, X, khoá hai pha, và leo thang khoá."},
@@ -8386,8 +9014,22 @@
         {"t":1483.26,"vi":"Giờ bạn mở hai cửa sổ, và dự đoán trước kết quả từng bài trước khi chạy nhé."}
       ]
     },
-    "dbi202-slide-cs5-1": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/09-chuyen-sau-ngoai-giao-trinh/09-05-slide-cs5-1-sql-nang-cao-tron-1aa548f3.mp4","durationSec":1441.77,"nguonCau":"srt",
-      "parts": [],
+    "dbi202-slide-cs5-1": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/09-chuyen-sau-ngoai-giao-trinh/09-05-slide-cs5-1-sql-nang-cao-tron-1aa548f3.mp4","durationSec":1441.77,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":5.1,"den":145.76,"ten":"Phần 1 · Chào bạn · mở deck CS5 · Slide 1: SQL nâng cao"},
+        {"t":145.76,"den":221.2,"ten":"Phần 1 · Slide 3: GROUP BY gộp dòng — OVER giữ dòng"},
+        {"t":221.2,"den":365.76,"ten":"Phần 1 · Slide 4: cú pháp OVER và thứ tự thực thi"},
+        {"t":365.76,"den":443.69,"ten":"Phần 1 · Tự kiểm · Tóm tắt"},
+        {"t":443.69,"den":538.67,"ten":"Phần 2 · Chào bạn · ôn tập trước · Slide 6: cửa sổ của một dòng"},
+        {"t":538.67,"den":628.84,"ten":"Phần 2 · Slide 7: LAG và LEAD"},
+        {"t":628.84,"den":760.09,"ten":"Phần 2 · Slide 8: luỹ kế và trung bình trượt"},
+        {"t":760.09,"den":869.87,"ten":"Phần 2 · Slide 9: LAST_VALUE, NTILE, giới hạn RANGE · Tự kiểm"},
+        {"t":869.87,"den":1010.84,"ten":"Phần 2 · Tóm tắt · Chào bạn · ôn tập trước"},
+        {"t":1010.84,"den":1140.76,"ten":"Phần 3 · Slide 10: bẫy dấu chấm phẩy trước WITH"},
+        {"t":1140.76,"den":1272.25,"ten":"Phần 3 · Slide 11: RECURSIVE và kiểu dữ liệu"},
+        {"t":1272.25,"den":1362.16,"ten":"Phần 3 · Slide 12: giới hạn đệ quy · CYCLE"},
+        {"t":1362.16,"den":1441.77,"ten":"Phần 3 · Tự kiểm · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn. Deck trước, Giao dịch và đồng thời, khép lại bằng bộ đồ nghề: câu UPDATE nguyên tử, FOR UPDATE, SKIP LOCKED và vòng thử lại."},
         {"t":15.77,"vi":"Hôm nay mở deck mới: SQL nâng cao cho đi làm và phỏng vấn."},
@@ -8567,8 +9209,28 @@
         {"t":1427.31,"vi":"Giờ bạn thử đếm tất cả cấp dưới của từng quản lý trong FUHCompany bằng CTE đệ quy nhé."}
       ]
     },
-    "dbi202-slide-cs5-2": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/09-chuyen-sau-ngoai-giao-trinh/09-05-slide-cs5-2-sql-nang-cao-d-tron-08120dc0.mp4","durationSec":1847.06,"nguonCau":"srt",
-      "parts": [],
+    "dbi202-slide-cs5-2": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/09-chuyen-sau-ngoai-giao-trinh/09-05-slide-cs5-2-sql-nang-cao-d-tron-08120dc0.mp4","durationSec":1847.06,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":5.1,"den":97.71,"ten":"Phần 1 · Chào bạn · mở phần 2 · Slide 13: top-N mỗi nhóm — 3 cách"},
+        {"t":97.71,"den":217.09,"ten":"Phần 1 · Slide 13: 🐘 LATERAL · Slide 14: khi có đồng hạng"},
+        {"t":217.09,"den":304.39,"ten":"Phần 1 · Slide 15: gaps & islands"},
+        {"t":304.39,"den":386.2,"ten":"Phần 1 · Slide 15: ngày trừ số — hai hệ · Tự kiểm"},
+        {"t":386.2,"den":499.72,"ten":"Phần 1 · Tóm tắt · Chào bạn · ôn tập trước"},
+        {"t":499.72,"den":618.38,"ten":"Phần 2 · Slide 16: 🐘 FILTER và crosstab"},
+        {"t":618.38,"den":729.18,"ten":"Phần 2 · Slide 17: 🐘 INSERT … ON CONFLICT"},
+        {"t":729.18,"den":818.63,"ten":"Phần 2 · Slide 18: bẫy 4 — đua hai phiên"},
+        {"t":818.63,"den":905.56,"ten":"Phần 2 · Tự kiểm · Tóm tắt"},
+        {"t":905.56,"den":983.74,"ten":"Phần 3 · Chào bạn · ôn tập trước · Slide 19: OUTPUT"},
+        {"t":983.74,"den":1111.37,"ten":"Phần 3 · Slide 19: bẫy trigger · 🐘 RETURNING"},
+        {"t":1111.37,"den":1222.3,"ten":"Phần 3 · Slide 20: keyset hai cột · Slide 21: JSON trên SQL Server"},
+        {"t":1222.3,"den":1309.24,"ten":"Phần 3 · Slide 21: Edge ↔ SQL Server 2022 · Tự kiểm"},
+        {"t":1309.24,"den":1392.66,"ten":"Phần 3 · Tóm tắt · Chào bạn · ôn tập trước"},
+        {"t":1392.66,"den":1475.98,"ten":"Phần 4 · Slide 22: jsonb"},
+        {"t":1475.98,"den":1586.13,"ten":"Phần 4 · Slide 23: STRING_AGG và collation"},
+        {"t":1586.13,"den":1668.49,"ten":"Phần 4 · Slide 24: EXISTS, IN, JOIN và NULL"},
+        {"t":1668.49,"den":1772.08,"ten":"Phần 4 · Slide 25: năm câu hỏi phỏng vấn"},
+        {"t":1772.08,"den":1847.06,"ten":"Phần 4 · Tự kiểm · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn. Phần một đã xong: hàm cửa sổ, khung, CTE và CTE đệ quy."},
         {"t":10.71,"vi":"Phần hai là các bài toán kinh điển trong phỏng vấn."},
@@ -8806,8 +9468,27 @@
         {"t":1835.03,"vi":"Giờ bạn ôn lại chuỗi bảy bước của deck, rồi mở bài tập ra làm thử nhé."}
       ]
     },
-    "dbi202-slide-cs6-1": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/09-chuyen-sau-ngoai-giao-trinh/09-06-slide-cs6-1-thiet-ke-tron-25130333.mp4","durationSec":1870.53,"nguonCau":"srt",
-      "parts": [],
+    "dbi202-slide-cs6-1": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/09-chuyen-sau-ngoai-giao-trinh/09-06-slide-cs6-1-thiet-ke-tron-25130333.mp4","durationSec":1870.53,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":5.1,"den":109.21,"ten":"Phần 1 · Chào bạn · ⭐ Chuyên sâu CS.6"},
+        {"t":109.21,"den":205.85,"ten":"Phần 1 · Slide 2: bốn tầng thiết kế"},
+        {"t":205.85,"den":311.21,"ten":"Phần 1 · Slide 3: đọc đề Salon Mây"},
+        {"t":311.21,"den":469.64,"ten":"Phần 1 · Slide 4: khoá tự nhiên hay khoá thay thế"},
+        {"t":469.64,"den":569.62,"ten":"Phần 1 · Tự kiểm · Tóm tắt"},
+        {"t":569.62,"den":683.78,"ten":"Phần 2 · Chào bạn · CS.6 tập 2 · Slide 5: IDENTITY và lỗ hổng id"},
+        {"t":683.78,"den":802.78,"ten":"Phần 2 · 🐘 PostgreSQL khác gì · khi nào chọn UUID"},
+        {"t":802.78,"den":921.11,"ten":"Phần 2 · Slide 6: đo thật trên SQL Server — cái bẫy của v7"},
+        {"t":921.11,"den":1010,"ten":"Phần 2 · Slide 7: khoá ghép (composite key)"},
+        {"t":1010,"den":1123.34,"ten":"Phần 2 · Slide 8: quy ước đặt tên"},
+        {"t":1123.34,"den":1217.18,"ten":"Phần 2 · Tự kiểm · Tóm tắt"},
+        {"t":1217.18,"den":1298.66,"ten":"Phần 3 · Chào bạn · CS.6 tập 3"},
+        {"t":1298.66,"den":1392.47,"ten":"Phần 3 · Slide 9: MONEY, cỡ số tiền, Prisma"},
+        {"t":1392.47,"den":1480.22,"ten":"Phần 3 · Slide 10: thời gian và múi giờ"},
+        {"t":1480.22,"den":1613.85,"ten":"Phần 3 · 🐘 PostgreSQL: timestamp hay timestamptz"},
+        {"t":1613.85,"den":1740.31,"ten":"Phần 3 · 🐘 PostgreSQL: UTF-8 sẵn, đếm ký tự"},
+        {"t":1740.31,"den":1818.36,"ten":"Phần 3 · 🐘 PostgreSQL: partial index + view · Tự kiểm"},
+        {"t":1818.36,"den":1870.53,"ten":"Phần 3 · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với deck Chuyên sâu thứ sáu của DBI202: thiết kế cơ sở dữ liệu thực chiến."},
         {"t":13.1,"vi":"Ở Chương 3 và Xưởng ERD, bạn đã vẽ thực thể, liên kết, rồi chuyển chúng thành bảng."},
@@ -9069,8 +9750,29 @@
         {"t":1862,"vi":"Sửa ngay khi còn rẻ nhé."}
       ]
     },
-    "dbi202-slide-cs6-2": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/09-chuyen-sau-ngoai-giao-trinh/09-06-slide-cs6-2-thiet-ke-tron-3b9b9c25.mp4","durationSec":2163.24,"nguonCau":"srt",
-      "parts": [],
+    "dbi202-slide-cs6-2": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/09-chuyen-sau-ngoai-giao-trinh/09-06-slide-cs6-2-thiet-ke-tron-3b9b9c25.mp4","durationSec":2163.24,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":5.1,"den":121.42,"ten":"Phần 1 · Chào bạn · CS.6 phần 2 · Slide 13: created_at và updated_at"},
+        {"t":121.42,"den":243.29,"ten":"Phần 1 · 🐘 PostgreSQL: hàm trigger BEFORE UPDATE"},
+        {"t":243.29,"den":374.85,"ten":"Phần 1 · 🐘 PostgreSQL: trigger + bảng lịch sử"},
+        {"t":374.85,"den":469.7,"ten":"Phần 1 · Tự kiểm · Tóm tắt"},
+        {"t":469.7,"den":554.3,"ten":"Phần 2 · Chào bạn · CS.6 phần 2 tập 2"},
+        {"t":554.3,"den":685.07,"ten":"Phần 2 · Slide 16: cung loại trừ — mỗi cha một khoá ngoại thật"},
+        {"t":685.07,"den":797.91,"ten":"Phần 2 · Slide 17: cột JSON và luật chọn"},
+        {"t":797.91,"den":880.08,"ten":"Phần 2 · Slide 18: phi chuẩn hoá có chủ đích"},
+        {"t":880.08,"den":968.68,"ten":"Phần 2 · 🐘 PostgreSQL: trigger mức dòng và materialized view"},
+        {"t":968.68,"den":1088.66,"ten":"Phần 2 · Tóm tắt · Chào bạn · CS.6 phần 2 tập 3"},
+        {"t":1088.66,"den":1201.2,"ten":"Phần 3 · Slide 19: không trùng lịch — trigger trên SQL Server"},
+        {"t":1201.2,"den":1320.79,"ten":"Phần 3 · Slide 20: ON DELETE — xoá cha thì con ra sao"},
+        {"t":1320.79,"den":1413.27,"ten":"Phần 3 · Slide 21: migration không gián đoạn"},
+        {"t":1413.27,"den":1499,"ten":"Phần 3 · 🐘 PostgreSQL: cú pháp khác, view sống sót · Tự kiểm"},
+        {"t":1499,"den":1583.08,"ten":"Phần 3 · Tóm tắt · Chào bạn · CS.6 tập cuối"},
+        {"t":1583.08,"den":1727.27,"ten":"Phần 4 · Slide 22: Prisma — schema.prisma thành SQL"},
+        {"t":1727.27,"den":1806.32,"ten":"Phần 4 · Slide 23: case study — ERD Salon Mây"},
+        {"t":1806.32,"den":1941.39,"ten":"Phần 4 · Slide 24: lược đồ đầy đủ và các index"},
+        {"t":1941.39,"den":2067.91,"ten":"Phần 4 · 🐘 PostgreSQL: cùng lược đồ, cú pháp khác"},
+        {"t":2067.91,"den":2163.24,"ten":"Phần 4 · Tự kiểm · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với phần hai của deck thiết kế thực chiến."},
         {"t":9.4,"vi":"Phần một đã chọn khoá, kiểu dữ liệu, tên, và xoá mềm."},
@@ -9352,8 +10054,21 @@
         {"t":2146.15,"vi":"Giờ bạn vẽ ERD đồ án của mình, đi từ bảng trung tâm ra ngoài, nói một câu vì cho mỗi đường nối, rồi soát đủ mười câu checklist nhé."}
       ]
     },
-    "dbi202-slide-cs7-1": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/09-chuyen-sau-ngoai-giao-trinh/09-07-slide-cs7-1-bao-mat-van-hanh-tron-2a3aedff.mp4","durationSec":1357.85,"nguonCau":"srt",
-      "parts": [],
+    "dbi202-slide-cs7-1": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/09-chuyen-sau-ngoai-giao-trinh/09-07-slide-cs7-1-bao-mat-van-hanh-tron-2a3aedff.mp4","durationSec":1357.85,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":5.1,"den":81.21,"ten":"Phần 1 · Chào bạn · mở deck CS7 · Slide 1: Bảo mật và vận hành CSDL"},
+        {"t":81.21,"den":219.48,"ten":"Phần 1 · Slide 2: vì sao chương này quan trọng"},
+        {"t":219.48,"den":356.92,"ten":"Phần 1 · Slide 4: demo thật — EXEC ghép chuỗi"},
+        {"t":356.92,"den":447.32,"ten":"Phần 1 · Tự kiểm · Tóm tắt"},
+        {"t":447.32,"den":541.89,"ten":"Phần 2 · Chào bạn · tập 2"},
+        {"t":541.89,"den":680.12,"ten":"Phần 2 · Slide 7: tầng ứng dụng — tham số hoá ở mọi driver"},
+        {"t":680.12,"den":816.49,"ten":"Phần 2 · Slide 9: GRANT, REVOKE, DENY"},
+        {"t":816.49,"den":912.54,"ten":"Phần 2 · Tự kiểm · Tóm tắt"},
+        {"t":912.54,"den":1006.61,"ten":"Phần 3 · Chào bạn · tập 3 · Slide 10: có quyền thì chạy được"},
+        {"t":1006.61,"den":1128.08,"ten":"Phần 3 · Slide 11: thiếu quyền ra lỗi thật"},
+        {"t":1128.08,"den":1270.93,"ten":"Phần 3 · Slide 12: câu PostgreSQL trên slide — chạy thật"},
+        {"t":1270.93,"den":1357.85,"ten":"Phần 3 · Tự kiểm · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn. Deck trước, Thiết kế cơ sở dữ liệu thực chiến, khép lại bằng checklist mười câu cho lược đồ đồ án và thói quen đọc kỹ từng migration."},
         {"t":17.16,"vi":"Hôm nay mở deck mới: Bảo mật và vận hành cơ sở dữ liệu."},
@@ -9545,8 +10260,27 @@
         {"t":1340.77,"vi":"Giờ bạn thử tạo một tài khoản riêng cho ứng dụng đồ án, chỉ cấp những bảng nó dùng, rồi đổi chuỗi kết nối sang tài khoản đó nhé."}
       ]
     },
-    "dbi202-slide-cs7-2": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/09-chuyen-sau-ngoai-giao-trinh/09-07-slide-cs7-2-bao-mat-van-hanh-tron-2959411a.mp4","durationSec":1840.19,"nguonCau":"srt",
-      "parts": [],
+    "dbi202-slide-cs7-2": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/09-chuyen-sau-ngoai-giao-trinh/09-07-slide-cs7-2-bao-mat-van-hanh-tron-2959411a.mp4","durationSec":1840.19,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":5.1,"den":107.34,"ten":"Phần 1 · Chào bạn · mở phần 2"},
+        {"t":107.34,"den":244.57,"ten":"Phần 1 · Slide 14: hai điều nên biết thêm — chạy thật"},
+        {"t":244.57,"den":332.91,"ten":"Phần 1 · Slide 16: TLS và Transparent Data Encryption"},
+        {"t":332.91,"den":430.76,"ten":"Phần 1 · Tự kiểm · Tóm tắt"},
+        {"t":430.76,"den":519.74,"ten":"Phần 2 · Chào bạn · tập 2 phần 2 · Slide 17: băm nhanh không salt"},
+        {"t":519.74,"den":597.45,"ten":"Phần 2 · Slide 17: bcrypt có salt — chạy thật"},
+        {"t":597.45,"den":699.41,"ten":"Phần 2 · Slide 18: Dynamic Data Masking"},
+        {"t":699.41,"den":791.98,"ten":"Phần 2 · Tự kiểm · Tóm tắt"},
+        {"t":791.98,"den":875.5,"ten":"Phần 3 · Chào bạn · tập 3 phần 2"},
+        {"t":875.5,"den":973.95,"ten":"Phần 3 · Slide 19: chạy thật — xoá nhầm rồi khôi phục"},
+        {"t":973.95,"den":1070.74,"ten":"Phần 3 · Slide 20: sao lưu và khôi phục — PostgreSQL"},
+        {"t":1070.74,"den":1156.99,"ten":"Phần 3 · Slide 21: quy tắc 3-2-1 và sự cố GitLab"},
+        {"t":1156.99,"den":1240.49,"ten":"Phần 3 · Slide 22: nhân bản và sẵn sàng cao"},
+        {"t":1240.49,"den":1337.96,"ten":"Phần 3 · Tự kiểm · Tóm tắt"},
+        {"t":1337.96,"den":1428.64,"ten":"Phần 4 · Chào bạn · tập cuối deck"},
+        {"t":1428.64,"den":1597.74,"ten":"Phần 4 · Slide 23: SQL Server — partition function và scheme"},
+        {"t":1597.74,"den":1759.07,"ten":"Phần 4 · Slide 25: giám sát trên SQL Server"},
+        {"t":1759.07,"den":1840.19,"ten":"Phần 4 · Tự kiểm · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn. Phần một trả lời câu hỏi ai được chạy một câu truy vấn: tham số hoá, quyền tối thiểu, và tài khoản riêng cho ứng dụng."},
         {"t":15.24,"vi":"Phần hai đi tiếp ba câu: câu truy vấn đó nhìn thấy những dòng nào, bản thân dữ liệu có được bảo vệ không, và hỏng thì sao."},
@@ -9795,8 +10529,32 @@
         {"t":1827.31,"vi":"Giờ bạn chạy năm câu checklist trên đồ án của mình, và ghi lại câu nào chưa đạt nhé."}
       ]
     },
-    "dbi202-slide-cs8-1": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/09-chuyen-sau-ngoai-giao-trinh/09-08-slide-cs8-1-phong-van-tron-788973de.mp4","durationSec":2398.53,"nguonCau":"srt",
-      "parts": [],
+    "dbi202-slide-cs8-1": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/09-chuyen-sau-ngoai-giao-trinh/09-08-slide-cs8-1-phong-van-tron-788973de.mp4","durationSec":2398.53,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":5.1,"den":91.68,"ten":"Phần 1 · Chào bạn · ⭐ Chuyên sâu CS.8 · Slide 1: deck ôn tổng cả môn"},
+        {"t":91.68,"den":230.25,"ten":"Phần 1 · Slide 2: bốn loại câu hỏi · Slide 3: khung trả lời 3 bước"},
+        {"t":230.25,"den":378.16,"ten":"Phần 1 · Slide 4: viết SQL trước mặt người phỏng vấn"},
+        {"t":378.16,"den":455.18,"ten":"Phần 1 · Slide 5: câu 5–6 · thứ tự SELECT và NULL (chạy thật)"},
+        {"t":455.18,"den":536.79,"ten":"Phần 1 · Tự kiểm · Tóm tắt"},
+        {"t":536.79,"den":629.87,"ten":"Phần 2 · Chào bạn · CS.8 phần 2/5"},
+        {"t":629.87,"den":742.86,"ten":"Phần 2 · Câu 8–12: khoá ứng viên, khoá ngoại, khoá thay thế, ràng buộc, id"},
+        {"t":742.86,"den":830.8,"ten":"Phần 2 · Câu 13–17: chuẩn hoá"},
+        {"t":830.8,"den":935.22,"ten":"Phần 2 · Câu 18–22: thiết kế ERD"},
+        {"t":935.22,"den":1023.47,"ten":"Phần 2 · Tự kiểm · Tóm tắt"},
+        {"t":1023.47,"den":1138.18,"ten":"Phần 3 · Chào bạn · CS.8 phần 3/5"},
+        {"t":1138.18,"den":1266.91,"ten":"Phần 3 · Câu 26: DELETE, TRUNCATE, DROP (chạy thật)"},
+        {"t":1266.91,"den":1435.88,"ten":"Phần 3 · Câu 31–32: chỉ mục, clustered và nonclustered (chạy thật)"},
+        {"t":1435.88,"den":1530.69,"ten":"Phần 3 · Tự kiểm · Tóm tắt"},
+        {"t":1530.69,"den":1640.4,"ten":"Phần 4 · Chào bạn · CS.8 phần 4/5"},
+        {"t":1640.4,"den":1729.49,"ten":"Phần 4 · Câu 41–43: mặc định, MVCC, tính bền vững (chạy thật)"},
+        {"t":1729.49,"den":1817.71,"ten":"Phần 4 · Câu 44–47: khoá, deadlock, lạc quan/bi quan, giao dịch dài"},
+        {"t":1817.71,"den":1908.01,"ten":"Phần 4 · Tự kiểm · Tóm tắt"},
+        {"t":1908.01,"den":2031.41,"ten":"Phần 5 · Chào bạn · CS.8 phần 5/5"},
+        {"t":2031.41,"den":2117.42,"ten":"Phần 5 · Câu 53–56: SQL hay NoSQL, CAP, jsonb, Redis"},
+        {"t":2117.42,"den":2204.35,"ten":"Phần 5 · Câu 57–60: SQL injection, phân quyền, mật khẩu, dữ liệu cá nhân"},
+        {"t":2204.35,"den":2311.84,"ten":"Phần 5 · Câu 61–66: sao lưu, nhân bản, mở rộng, connection pool, N+1"},
+        {"t":2311.84,"den":2398.53,"ten":"Phần 5 · Tự kiểm · Phần 1 trong năm dòng"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với deck Chuyên sâu cuối cùng của DBI202: phỏng vấn database."},
         {"t":12.08,"vi":"Deck trước nói về bảo mật và vận hành: chống SQL injection, phân quyền, sao lưu và nhân bản."},
@@ -10087,8 +10845,21 @@
         {"t":2380.5,"vi":"Bài sau chuyển sang ba mươi ba bài SQL kinh điển và câu hỏi thiết kế, bạn mở bài web và tự nói to câu bốn mươi tám đến sáu mươi sáu trước nhé."}
       ]
     },
-    "dbi202-slide-cs8-2": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/09-chuyen-sau-ngoai-giao-trinh/09-08-slide-cs8-2-sql-truc-tiep-tron-36fbf725.mp4","durationSec":1305.13,"nguonCau":"srt",
-      "parts": [],
+    "dbi202-slide-cs8-2": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/09-chuyen-sau-ngoai-giao-trinh/09-08-slide-cs8-2-sql-truc-tiep-tron-36fbf725.mp4","durationSec":1305.13,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":5.1,"den":97.55,"ten":"Phần 1 · Chào bạn · CS.8 phần 2 · Slide 13: 33 bài, 9 khuôn mẫu"},
+        {"t":97.55,"den":253.95,"ten":"Phần 1 · Slide 14: lương cao thứ N và bẫy đồng hạng (chạy thật)"},
+        {"t":253.95,"den":362.16,"ten":"Phần 1 · Slide 16: tự nối và phép nối loại trừ (chạy thật) · Tự kiểm"},
+        {"t":362.16,"den":497.8,"ten":"Phần 1 · Tóm tắt · Chào bạn · CS.8 phần 2 (2/3)"},
+        {"t":497.8,"den":632.51,"ten":"Phần 2 · Slide 18: chuỗi thời gian — ngày 0, cùng kỳ, liên tiếp (chạy thật)"},
+        {"t":632.51,"den":739.45,"ten":"Phần 2 · Slide 20: ghi dữ liệu an toàn (chạy thật) · Tự kiểm"},
+        {"t":739.45,"den":818.41,"ten":"Phần 2 · Tóm tắt · Chào bạn · CS.8 phần 2 (3/3)"},
+        {"t":818.41,"den":905.69,"ten":"Phần 3 · Slide 21: vẽ CSDL trong 15 phút"},
+        {"t":905.69,"den":1065.46,"ten":"Phần 3 · Slide 22: bài mẫu đặt vé xem phim — ERD"},
+        {"t":1065.46,"den":1143.94,"ten":"Phần 3 · Slide 24: Shopee, Grab, Facebook mini"},
+        {"t":1143.94,"den":1248.46,"ten":"Phần 3 · Slide 25: checklist và câu hỏi ngược · Tự kiểm"},
+        {"t":1248.46,"den":1305.13,"ten":"Phần 3 · Phần 2 trong năm dòng"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với phần hai của deck phỏng vấn database."},
         {"t":9.98,"vi":"Phần một là sáu mươi sáu câu lý thuyết, trả lời theo ba bước."},
@@ -10247,8 +11018,13 @@
         {"t":1288.55,"vi":"Giờ bạn bấm giờ mười lăm phút, tự thiết kế Grab mini trên giấy theo sáu bước, rồi so với gợi ý trong bài tập Chuyên sâu tám nhé."}
       ]
     },
-    "dbi202-slide-dbi1-1": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/00-gioi-thieu-huong-dan-hoc/00-04-slide-gioi-thieu-mon-hoc-8f56e2c3.mp4","durationSec":409.19,"nguonCau":"srt",
-      "parts": [],
+    "dbi202-slide-dbi1-1": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/00-gioi-thieu-huong-dan-hoc/00-04-slide-gioi-thieu-mon-hoc-8f56e2c3.mp4","durationSec":409.19,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":87.83,"ten":"Chào bạn · DBI202 Bài 0.A · Slide 1: tên môn và bản đồ môn"},
+        {"t":87.83,"den":209.79,"ten":"Slide 2: bảy mục tiêu, bảy chuẩn đầu ra"},
+        {"t":209.79,"den":315.22,"ten":"Slide 4: giáo trình và tài liệu"},
+        {"t":315.22,"den":409.19,"ten":"Tự kiểm trong ba mươi giây · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 0.A của DBI202: năm slide đầu tiên thầy cô chiếu ở buổi học đầu."},
         {"t":13.87,"vi":"Bài trước mình đã sửa và xoá dữ liệu, gặp cái lỗi quên WHERE, và thấy khoá ngoại bảo vệ dữ liệu theo cả hai chiều."},
@@ -10301,8 +11077,21 @@
         {"t":396.21,"vi":"Giờ bạn kéo xuống dưới video, chụp lại bảng đối chiếu chương của trường với chương trên web, giữ nó cả học kỳ, rồi hẵng sang Chương 1 nhé."}
       ]
     },
-    "dbi202-slide-dbi2-1": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/01-csdl-va-dbms/01-01-slide-chapter-1-the-gioi-csdl-tron-b2310705.mp4","durationSec":1186.2,"nguonCau":"srt",
-      "parts": [],
+    "dbi202-slide-dbi2-1": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/01-csdl-va-dbms/01-01-slide-chapter-1-the-gioi-csdl-tron-b2310705.mp4","durationSec":1186.2,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":5.1,"den":82.72,"ten":"Phần 1 · Chào bạn · DBI202 Bài 1.A"},
+        {"t":82.72,"den":200.6,"ten":"Phần 1 · Slide 4: dữ liệu khác thông tin"},
+        {"t":200.6,"den":314.28,"ten":"Phần 1 · Slide 6: năm việc một DBMS phải làm"},
+        {"t":314.28,"den":409.86,"ten":"Phần 1 · Slide 8: mô hình mạng, dạng đồ thị"},
+        {"t":409.86,"den":521.74,"ten":"Phần 1 · Slide 10: bảng BOOK và bốn câu lệnh"},
+        {"t":521.74,"den":618.65,"ten":"Phần 1 · Tự kiểm kiểu đề FE · Tóm tắt"},
+        {"t":618.65,"den":721.69,"ten":"Phần 2 · Chào bạn · Bài 1.A phần 2 · Slide 12: nhỏ hơn và lớn hơn"},
+        {"t":721.69,"den":853.65,"ten":"Phần 2 · Slide 14: kho dữ liệu và bộ trung gian"},
+        {"t":853.65,"den":939.72,"ten":"Phần 2 · Slide 17: ba nhóm người dùng"},
+        {"t":939.72,"den":1045.85,"ten":"Phần 2 · Slide 19: DML, ngôn ngữ thao tác dữ liệu"},
+        {"t":1045.85,"den":1125.63,"ten":"Phần 2 · Slide 21: xu hướng NoSQL và đa mô hình · Tự kiểm kiểu đề FE"},
+        {"t":1125.63,"den":1186.2,"ten":"Phần 2 · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Chương 1 của DBI202: bộ slide Chapter 1 của trường, thế giới các hệ cơ sở dữ liệu, phần một."},
         {"t":15.88,"vi":"Bài trước mình đã đi qua năm slide mở đầu: số chương của trường khác trên web, và ba cửa để qua môn."},
@@ -10444,8 +11233,15 @@
         {"t":1169.14,"vi":"Giờ bạn làm bài quiz Chương 1 ngay dưới video, rồi chạy thử lệnh SHOWPLAN và EXPLAIN trên máy mình trước khi sang bài tiếp nhé."}
       ]
     },
-    "dbi202-slide-dbi3-1": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/02-mo-hinh-quan-he-dai-so/02-01-slide-chapter-2-mo-hinh-quan-he-470697c2.mp4","durationSec":652.95,"nguonCau":"srt",
-      "parts": [],
+    "dbi202-slide-dbi3-1": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/02-mo-hinh-quan-he-dai-so/02-01-slide-chapter-2-mo-hinh-quan-he-470697c2.mp4","durationSec":652.95,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":120.45,"ten":"Chào bạn · DBI202 Bài 2.A · Cái bảng bạn đã quen"},
+        {"t":120.45,"den":240.01,"ten":"Slide 4: mô hình dữ liệu có ba phần"},
+        {"t":240.01,"den":320.64,"ten":"Slide 7: lược đồ, thể hiện, bậc, lực lượng"},
+        {"t":320.64,"den":445.01,"ten":"Slide 8: lược đồ của cả một database"},
+        {"t":445.01,"den":541.37,"ten":"Slide 10–11: đại số quan hệ và bốn nhóm phép"},
+        {"t":541.37,"den":652.95,"ten":"Áp dụng vào dự án PRJ301 Nhà trọ · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Chương 2 của DBI202: bộ slide Chapter 2 của trường, mô hình dữ liệu quan hệ, phần một."},
         {"t":15.1,"vi":"Bài trước là thực hành Chương 1: tám câu hỏi CQ1.1 đến 1.3, trong đó có câu mô hình dữ liệu gồm cấu trúc, thao tác và ràng buộc."},
@@ -10538,8 +11334,18 @@
         {"t":638.94,"vi":"Giờ bạn kéo xuống dưới video, chạy lại bảng Student và ba bảng câu lạc bộ thuyền, thử cả hai lỗi 2627 và 547, rồi hẵng sang phần sau nhé."}
       ]
     },
-    "dbi202-slide-dbi3-2": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/02-mo-hinh-quan-he-dai-so/02-02-slide-chapter-2-dai-so-tron-c62ea827.mp4","durationSec":1062.04,"nguonCau":"srt",
-      "parts": [],
+    "dbi202-slide-dbi3-2": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/02-mo-hinh-quan-he-dai-so/02-02-slide-chapter-2-dai-so-tron-c62ea827.mp4","durationSec":1062.04,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":5.1,"den":148.16,"ten":"Phần 1 · Chào bạn · Bài 2.B phần 1 · Mỗi phép là một cái máy"},
+        {"t":148.16,"den":260.19,"ten":"Phần 1 · Slide 13–14: ví dụ hợp, giao, hiệu"},
+        {"t":260.19,"den":374.36,"ten":"Phần 1 · Slide 16: phép chiếu pi, cây kéo cắt cột"},
+        {"t":374.36,"den":477.08,"ten":"Phần 1 · Slide 18: phép nối theta, ghép cặp thoả điều kiện"},
+        {"t":477.08,"den":568.3,"ten":"Phần 1 · Tóm tắt · Chào bạn · Bài 2.B phần 2"},
+        {"t":568.3,"den":700.45,"ten":"Phần 2 · Slide 19: phép nối tự nhiên, ghép cặp khớp"},
+        {"t":700.45,"den":816.29,"ten":"Phần 2 · Slide 21–22: biểu thức, cây, và vai trò trong DBMS"},
+        {"t":816.29,"den":959.34,"ten":"Phần 2 · Slide 24: cây biểu thức dựng từ lá lên gốc"},
+        {"t":959.34,"den":1062.04,"ten":"Phần 2 · Tự kiểm kiểu đề FE · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 2.B, phần sau của slide Chapter 2: các phép của đại số quan hệ, phần một."},
         {"t":12.96,"vi":"Bài trước mình đã học quan hệ là một bảng có lược đồ và thể hiện, các loại khoá, và bốn nhóm phép của đại số quan hệ."},
@@ -10682,8 +11488,20 @@
         {"t":1042.27,"vi":"Giờ bạn kéo xuống dưới video, tự giải cả năm câu PC, Laptop, Printer, vẽ cây trước rồi mới viết SQL, đối chiếu đáp số rồi hẵng sang bài tiếp nhé."}
       ]
     },
-    "dbi202-slide-dbi4-1": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/04-phu-thuoc-ham-chuan-hoa/04-01-slide-chapter-3-phu-thuoc-ham-bao-dong-tron-fa986120.mp4","durationSec":1168.53,"nguonCau":"srt",
-      "parts": [],
+    "dbi202-slide-dbi4-1": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/04-phu-thuoc-ham-chuan-hoa/04-01-slide-chapter-3-phu-thuoc-ham-bao-dong-tron-fa986120.mp4","durationSec":1168.53,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":5.1,"den":113.06,"ten":"Phần 1 · Chào bạn · DBI202 Bài 4.A · Biết mã sinh viên là biết họ tên"},
+        {"t":113.06,"den":224,"ten":"Phần 1 · Slide 4: định nghĩa phụ thuộc hàm"},
+        {"t":224,"den":324.58,"ten":"Phần 1 · Slide 6: khoá và siêu khoá · Slide 7: tiên đề Armstrong"},
+        {"t":324.58,"den":470.38,"ten":"Phần 1 · Slide 8: suy ra từ, và tương đương"},
+        {"t":470.38,"den":564.47,"ten":"Phần 1 · Áp dụng vào dự án PRJ301 Nhà trọ · Tự kiểm kiểu đề FE"},
+        {"t":564.47,"den":651.52,"ten":"Phần 1 · Tóm tắt · Chào bạn · Bài 4.A phần 2"},
+        {"t":651.52,"den":775.38,"ten":"Phần 2 · Slide 11: bài tập bốn khoá"},
+        {"t":775.38,"den":892.36,"ten":"Phần 2 · Slide 12: cơ sở tối thiểu"},
+        {"t":892.36,"den":997.01,"ten":"Phần 2 · Slide 14–15: chiếu bảng thì phụ thuộc đi đâu?"},
+        {"t":997.01,"den":1072.15,"ten":"Phần 2 · Slide 19: ví dụ chiếu lên A, C, D"},
+        {"t":1072.15,"den":1168.53,"ten":"Phần 2 · Tự kiểm kiểu đề FE · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Chương 4 của DBI202: phụ thuộc hàm và chuẩn hoá. Đây là bộ slide Chapter 3 của trường, phần một."},
         {"t":15.93,"vi":"Chương trước khép lại bằng danh sách người chấm dùng cho câu một đề thực hành, và một câu hỏi bỏ ngỏ: bảng mình vừa vẽ đã tốt chưa?"},
@@ -10868,8 +11686,19 @@
         {"t":1151.06,"vi":"Giờ bạn kéo xuống dưới video, tự làm lại slide mười một và slide mười chín trên giấy, rồi luyện tìm khoá ở bài 4.2 nhé."}
       ]
     },
-    "dbi202-slide-dbi4-2": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/04-phu-thuoc-ham-chuan-hoa/04-02-slide-chapter-3-bat-thuong-phan-ra-tron-0ce07313.mp4","durationSec":1082.56,"nguonCau":"srt",
-      "parts": [],
+    "dbi202-slide-dbi4-2": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/04-phu-thuoc-ham-chuan-hoa/04-02-slide-chapter-3-bat-thuong-phan-ra-tron-0ce07313.mp4","durationSec":1082.56,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":5.1,"den":133.65,"ten":"Phần 1 · Chào bạn · DBI202 Bài 4.B"},
+        {"t":133.65,"den":216.37,"ten":"Phần 1 · Slide 22: định nghĩa phân rã"},
+        {"t":216.37,"den":350.7,"ten":"Phần 1 · Slide 24–25: tách được gì, và cái giá"},
+        {"t":350.7,"den":485.69,"ten":"Phần 1 · Slide 27: tách mà mất phụ thuộc"},
+        {"t":485.69,"den":583.38,"ten":"Phần 1 · Tự kiểm kiểu đề FE · Tóm tắt"},
+        {"t":583.38,"den":679.49,"ten":"Phần 2 · Chào bạn · Bài 4.B phần 2 · Slide 30–31: 1NF và nhóm lặp"},
+        {"t":679.49,"den":799.13,"ten":"Phần 2 · Slide 32–33: trải dòng và khoá mới"},
+        {"t":799.13,"den":900.58,"ten":"Phần 2 · Slide 36–37: sáu trên bảy cột vi phạm"},
+        {"t":900.58,"den":989.19,"ten":"Phần 2 · Áp dụng vào dự án PRJ301 Nhà trọ"},
+        {"t":989.19,"den":1082.56,"ten":"Phần 2 · Tự kiểm kiểu đề FE · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 4.B của DBI202, vẫn là bộ slide Chapter 3 của trường, từ slide hai mươi."},
         {"t":14.4,"vi":"Bài trước mình đã có đồ nghề: bao đóng để tìm khoá, phủ tối thiểu, và cách tìm phụ thuộc của một bảng sau khi chiếu."},
@@ -11032,8 +11861,20 @@
         {"t":1065.86,"vi":"Giờ bạn kéo xuống dưới video, tự tách bảng hoá đơn phẳng của dự án nhà trọ ra giấy, rồi chạy script để so với đáp án nhé."}
       ]
     },
-    "dbi202-slide-dbi4-3": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/04-phu-thuoc-ham-chuan-hoa/04-03-slide-chapter-3-dua-ve-2nf-3nf-tron-2d3cc33b.mp4","durationSec":1050.47,"nguonCau":"srt",
-      "parts": [],
+    "dbi202-slide-dbi4-3": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/04-phu-thuoc-ham-chuan-hoa/04-03-slide-chapter-3-dua-ve-2nf-3nf-tron-2d3cc33b.mp4","durationSec":1050.47,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":5.1,"den":85.15,"ten":"Phần 1 · Chào bạn · DBI202 Bài 4.C"},
+        {"t":85.15,"den":197.69,"ten":"Phần 1 · Slide 39: bước một, bảng STUDENT"},
+        {"t":197.69,"den":303.4,"ten":"Phần 1 · Slide 42: tạo ba bảng trên SQL Server"},
+        {"t":303.4,"den":397.72,"ten":"Phần 1 · Slide 44–47: bản số một và nhiều"},
+        {"t":397.72,"den":496.79,"ten":"Phần 1 · Tự kiểm kiểu đề FE · Tóm tắt"},
+        {"t":496.79,"den":599.43,"ten":"Phần 2 · Chào bạn · Bài 4.C phần 2 · Slide 49: Grade cần cả khoá"},
+        {"t":599.43,"den":690.34,"ten":"Phần 2 · Slide 51: đạt 2NF rồi, còn 3NF?"},
+        {"t":690.34,"den":781.2,"ten":"Phần 2 · Slide 53: STUDENT kêu báo động"},
+        {"t":781.2,"den":898.9,"ten":"Phần 2 · Slide 56: nhà Bob vừa xanh vừa đỏ"},
+        {"t":898.9,"den":997.24,"ten":"Phần 2 · Áp dụng vào dự án PRJ301 Nhà trọ · Tự kiểm kiểu đề FE"},
+        {"t":997.24,"den":1050.47,"ten":"Phần 2 · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 4.C của DBI202: slide Chapter 3 của trường, đưa bảng sinh viên về 2NF từng bước, phần một."},
         {"t":16.31,"vi":"Bài trước mình đã thấy bất thường khi dữ liệu lặp, trải bảng sinh viên thành 1NF với khoá ghép StudentID và Subject, và thấy nó chưa đạt 2NF vì phụ thuộc bộ phận."},
@@ -11173,8 +12014,19 @@
         {"t":1034.36,"vi":"Giờ bạn kéo xuống dưới video, chạy lại câu sơn nhà Bob để thấy bất thường tận mắt, rồi hẵng sang bài 4.D nhé."}
       ]
     },
-    "dbi202-slide-dbi4-4": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/04-phu-thuoc-ham-chuan-hoa/04-04-slide-chapter-3-3nf-bcnf-phan-ra-tron-a18abdfc.mp4","durationSec":1015.23,"nguonCau":"srt",
-      "parts": [],
+    "dbi202-slide-dbi4-4": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/04-phu-thuoc-ham-chuan-hoa/04-04-slide-chapter-3-3nf-bcnf-phan-ra-tron-a18abdfc.mp4","durationSec":1015.23,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":5.1,"den":111.23,"ten":"Phần 1 · Chào bạn · DBI202 Bài 4.D · Slide 59: cắt HouseColor ra"},
+        {"t":111.23,"den":230.44,"ten":"Phần 1 · Slide 61: sơn lại nhà chỉ một dòng"},
+        {"t":230.44,"den":348.17,"ten":"Phần 1 · 🐘 Làm trên PostgreSQL: string_agg"},
+        {"t":348.17,"den":440.11,"ten":"Phần 1 · Slide 66: Movies1 không đạt BCNF · Tự kiểm kiểu đề FE"},
+        {"t":440.11,"den":534.8,"ten":"Phần 1 · Tóm tắt · Chào bạn · Bài 4.D phần 2"},
+        {"t":534.8,"den":655.71,"ten":"Phần 2 · Slide 67: mảnh Movies đạt BCNF"},
+        {"t":655.71,"den":732.87,"ten":"Phần 2 · Slide 70: thuật toán phân rã BCNF"},
+        {"t":732.87,"den":852.78,"ten":"Phần 2 · Slide 71: thuật toán tổng hợp 3NF"},
+        {"t":852.78,"den":950.29,"ten":"Phần 2 · Slide 73: bậc thang các dạng chuẩn · Tự kiểm kiểu đề FE"},
+        {"t":950.29,"den":1015.23,"ten":"Phần 2 · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 4.D của DBI202: phần cuối slide Chapter 3, sửa về 3NF, BCNF và hai thuật toán phân rã, phần một."},
         {"t":17.31,"vi":"Bài trước mình đã thấy bảng STUDENT đạt 2NF mà không đạt 3NF, vì HouseName xác định HouseColor, và nhà Bob bị lưu vừa Blue vừa Red."},
@@ -11306,8 +12158,20 @@
         {"t":996.07,"vi":"Giờ bạn kéo xuống dưới video, tự phân rã bảng sinh viên bằng cả hai thuật toán trên giấy, rồi sang các bài 4.2 đến 4.5 để luyện thêm nhé."}
       ]
     },
-    "dbi202-slide-dbi5-1": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/03-mo-hinh-er/03-01-slide-chapter-4-mo-hinh-er-tron-db98670a.mp4","durationSec":1017.71,"nguonCau":"srt",
-      "parts": [],
+    "dbi202-slide-dbi5-1": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/03-mo-hinh-er/03-01-slide-chapter-4-mo-hinh-er-tron-db98670a.mp4","durationSec":1017.71,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":5.1,"den":83.95,"ten":"Phần 1 · Chào bạn · DBI202 Bài 3.A"},
+        {"t":83.95,"den":165.76,"ten":"Phần 1 · Slide 1–3: tên chương, mục tiêu, mục lục"},
+        {"t":165.76,"den":273.92,"ten":"Phần 1 · Slide 5: bốn trạm từ yêu cầu tới bảng"},
+        {"t":273.92,"den":374.19,"ten":"Phần 1 · Slide 8: năm ký hiệu Chen · Slide 9: Chen và Crow's Foot"},
+        {"t":374.19,"den":458.92,"ten":"Phần 1 · Tự kiểm kiểu đề FE · Tóm tắt"},
+        {"t":458.92,"den":541.9,"ten":"Phần 2 · Chào bạn · DBI202 Bài 3.A phần 2"},
+        {"t":541.9,"den":655.95,"ten":"Phần 2 · Slide 11: liên kết và bản số · Slide 12: bốn loại thuộc tính"},
+        {"t":655.95,"den":732.32,"ten":"Phần 2 · Slide 13: thực thể yếu Crews"},
+        {"t":732.32,"den":832.93,"ten":"Phần 2 · Slide 15: Contracts, ba liên kết hỗ trợ"},
+        {"t":832.93,"den":914.9,"ten":"Phần 2 · Slide 18: ERD công ty hoàn chỉnh"},
+        {"t":914.9,"den":1017.71,"ten":"Phần 2 · Áp dụng vào dự án PRJ301 Nhà trọ · Tự kiểm kiểu đề FE"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Chương 3 của DBI202: bộ slide Chapter 4 của trường, mô hình thực thể liên kết, phần một."},
         {"t":15.43,"vi":"Chương trước mình đã học đại số quan hệ, luyện tự nối, gom nhóm, và nối ngoài để đếm cả số không."},
@@ -11455,8 +12319,21 @@
         {"t":1002.4,"vi":"Giờ bạn kéo xuống dưới video, che lời giải, tự vẽ lại ERD công ty rồi chạy năm câu CREATE TABLE nhé."}
       ]
     },
-    "dbi202-slide-dbi5-2": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/03-mo-hinh-er/03-02-slide-chapter-4-er-sang-quan-he-tron-efdaa035.mp4","durationSec":1100.76,"nguonCau":"srt",
-      "parts": [],
+    "dbi202-slide-dbi5-2": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/03-mo-hinh-er/03-02-slide-chapter-4-er-sang-quan-he-tron-efdaa035.mp4","durationSec":1100.76,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":5.1,"den":119.84,"ten":"Phần 1 · Chào bạn · DBI202 Bài 3.B"},
+        {"t":119.84,"den":222.41,"ten":"Phần 1 · Chạy thật và hai câu thầy hay hỏi"},
+        {"t":222.41,"den":331.1,"ten":"Phần 1 · Chạy thật: UNIQUE và NULL · Slide 21: liên kết n ngôi"},
+        {"t":331.1,"den":411.57,"ten":"Phần 1 · Slide 22: thuộc tính phức hợp · Slide 23: thuộc tính đa trị"},
+        {"t":411.57,"den":495.33,"ten":"Phần 1 · Slide 24: ví dụ Children"},
+        {"t":495.33,"den":582.44,"ten":"Phần 1 · Tự kiểm kiểu đề FE · Tóm tắt"},
+        {"t":582.44,"den":663.71,"ten":"Phần 2 · Chào bạn · DBI202 Bài 3.B phần 2"},
+        {"t":663.71,"den":749.09,"ten":"Phần 2 · Slide 27: tách rời và đầy đủ, bỏ bảng cha"},
+        {"t":749.09,"den":848.32,"ten":"Phần 2 · Slide 29: kết tập · Slide 30: một tập thực thể, hai vai trò"},
+        {"t":848.32,"den":963.43,"ten":"Phần 2 · Slide 31: gộp quan hệ nhiều-một"},
+        {"t":963.43,"den":1052.1,"ten":"Phần 2 · Áp dụng vào dự án PRJ301 Nhà trọ · Tự kiểm kiểu đề FE"},
+        {"t":1052.1,"den":1100.76,"ten":"Phần 2 · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 3.B của DBI202: từ sơ đồ thực thể liên kết sang bảng, phần một."},
         {"t":13.73,"vi":"Bài trước mình đã lắp đủ các khối của ERD, thực thể yếu Crews, lớp con, và dựng xong ERD công ty bốn thực thể, sáu liên kết."},
@@ -11621,8 +12498,22 @@
         {"t":1082.57,"vi":"Giờ bạn kéo xuống dưới video, tự chuyển ERD công ty của bài 3.A thành năm câu CREATE TABLE, chạy thật, rồi hẵng sang bài 3.C nhé."}
       ]
     },
-    "dbi202-slide-dbi5-3": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/03-mo-hinh-er/03-03-slide-chapter-4-lop-con-va-uml-tron-59a3d9d9.mp4","durationSec":1172.14,"nguonCau":"srt",
-      "parts": [],
+    "dbi202-slide-dbi5-3": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/03-mo-hinh-er/03-03-slide-chapter-4-lop-con-va-uml-tron-59a3d9d9.mp4","durationSec":1172.14,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":5.1,"den":85.85,"ten":"Phần 1 · Chào bạn · DBI202 Bài 3.C · Ba cách cất một kho phim"},
+        {"t":85.85,"den":176.64,"ten":"Phần 1 · Slide 33–34: cây lớp con cần chuyển"},
+        {"t":176.64,"den":299.43,"ten":"Phần 1 · Slide 36: kiểu E/R, chạy thật"},
+        {"t":299.43,"den":384.54,"ten":"Phần 1 · Slide 38: dùng giá trị NULL, chạy thật"},
+        {"t":384.54,"den":467.74,"ten":"Phần 1 · Slide 39: UML, phần tự học · Slide 40: bảng tra UML và E/R"},
+        {"t":467.74,"den":551.16,"ten":"Phần 1 · Slide 41: lớp UML, hộp ba ngăn"},
+        {"t":551.16,"den":634.33,"ten":"Phần 1 · Tự kiểm kiểu đề FE · Tóm tắt"},
+        {"t":634.33,"den":735.04,"ten":"Phần 2 · Chào bạn · DBI202 Bài 3.C phần 2"},
+        {"t":735.04,"den":827.52,"ten":"Phần 2 · Slide 44: liên kết tự thân · Slide 45: lớp liên kết"},
+        {"t":827.52,"den":908.51,"ten":"Phần 2 · Slide 46: lớp con trong UML · Slide 47: kết tập và hợp thành"},
+        {"t":908.51,"den":984.74,"ten":"Phần 2 · Slide 48–49: UML sang bảng, chạy thật"},
+        {"t":984.74,"den":1091.92,"ten":"Phần 2 · Slide 51–52: kết tập, hợp thành sang bảng"},
+        {"t":1091.92,"den":1172.14,"ten":"Phần 2 · Tự kiểm kiểu đề FE · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 3.C của DBI202: phần cuối bộ slide Chapter 4 của trường, trên web là Chương 3, phần một."},
         {"t":15.86,"vi":"Bài 3.B vừa rồi cho bạn bộ luật chuyển sơ đồ E/R sang bảng: mỗi thực thể một bảng, liên kết nhiều nhiều thành bảng nối, và hai cách cho phân cấp Person với Student."},
@@ -11789,8 +12680,16 @@
         {"t":1154.96,"vi":"Giờ bạn kéo xuống dưới video, chạy lại bảng Presidents và Movies, thử thêm một chủ tịch thứ hai cho Disney để xem UNIQUE làm gì nhé."}
       ]
     },
-    "dbi202-slide-dbi6-1": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/02-mo-hinh-quan-he-dai-so/02-03-slide-chapter-5-dai-so-tren-tui-0c7198af.mp4","durationSec":635.15,"nguonCau":"srt",
-      "parts": [],
+    "dbi202-slide-dbi6-1": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/02-mo-hinh-quan-he-dai-so/02-03-slide-chapter-5-dai-so-tren-tui-0c7198af.mp4","durationSec":635.15,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":118.12,"ten":"Chào bạn · DBI202 Bài 2.C · Tập và túi: menu và hoá đơn"},
+        {"t":118.12,"den":208.67,"ten":"Slide 4: một bộ xuất hiện ba lần"},
+        {"t":208.67,"den":324.1,"ten":"Slide 6: trung bình trên túi và trên tập"},
+        {"t":324.1,"den":410.02,"ten":"Slide 8: đếm số bản rồi chạy thật"},
+        {"t":410.02,"den":506.16,"ten":"Slide 9–10: chiếu và chọn trên túi"},
+        {"t":506.16,"den":586.08,"ten":"Slide 13–14: nối trên túi · Tự kiểm kiểu đề FE"},
+        {"t":586.08,"den":635.15,"ten":"Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 2.C của DBI202: bộ slide Chapter 5 của trường, phần tự học. Trên web nó nằm ở cuối Chương 2."},
         {"t":16.47,"vi":"Bài trước mình đã học nối tự nhiên, phép đổi tên ρ, và dựng cây biểu thức cho bài PC, Laptop, Printer."},
@@ -11889,8 +12788,20 @@
         {"t":621.85,"vi":"Giờ bạn kéo xuống dưới video, tự lập bảng đếm cho hai túi R và S rồi chạy lại các câu UNION ALL, ROW_NUMBER, trước khi sang bài 2.D nhé."}
       ]
     },
-    "dbi202-slide-dbi6-2": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/02-mo-hinh-quan-he-dai-so/02-04-slide-chapter-5-phep-mo-rong-tron-d0f3ae98.mp4","durationSec":1035.58,"nguonCau":"srt",
-      "parts": [],
+    "dbi202-slide-dbi6-2": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/02-mo-hinh-quan-he-dai-so/02-04-slide-chapter-5-phep-mo-rong-tron-d0f3ae98.mp4","durationSec":1035.58,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":5.1,"den":107.36,"ten":"Phần 1 · Chào bạn · Bài 2.D phần 1"},
+        {"t":107.36,"den":207.14,"ten":"Phần 1 · Slide 17: loại trùng δ = DISTINCT · Slide 18: năm phép gộp"},
+        {"t":207.14,"den":308.91,"ten":"Phần 1 · Slide 19: ví dụ gộp và bẫy AVG trên cột INT"},
+        {"t":308.91,"den":408.57,"ten":"Phần 1 · Slide 21: chia nhóm rồi gộp · Slide 22: phép nhóm γ"},
+        {"t":408.57,"den":507.56,"ten":"Phần 1 · Tự kiểm kiểu đề FE · Tóm tắt"},
+        {"t":507.56,"den":593.08,"ten":"Phần 2 · Chào bạn · Bài 2.D phần 2"},
+        {"t":593.08,"den":692.51,"ten":"Phần 2 · Slide 24: phép chiếu mở rộng"},
+        {"t":692.51,"den":804.13,"ten":"Phần 2 · Slide 26: phép sắp xếp τ = ORDER BY"},
+        {"t":804.13,"den":890.26,"ten":"Phần 2 · Slide 28: nối ngoài tự nhiên"},
+        {"t":890.26,"den":983.03,"ten":"Phần 2 · Slide 30: nối ngoài trái, phải, đầy đủ · Tự kiểm kiểu đề FE"},
+        {"t":983.03,"den":1035.58,"ten":"Phần 2 · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 2.D của DBI202, nửa sau bộ slide Chapter 5 tự học của trường, phần một."},
         {"t":14.94,"vi":"Bài trước mình đã coi quan hệ là túi: hợp là n cộng m, giao là MIN, hiệu là MAX của không và n trừ m."},
@@ -12042,8 +12953,19 @@
         {"t":1017,"vi":"Giờ bạn kéo xuống dưới video, làm bài thực hành 2.5, luyện mọi phép trên một cơ sở dữ liệu trường học nhỏ, kiểm từng đáp án bằng SQL nhé."}
       ]
     },
-    "dbi202-slide-dbi7-1": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/05-sql-ddl-dinh-nghia-du-lieu/05-01-slide-chapter-6-rang-buoc-so-sanh-chuoi-tron-355a2325.mp4","durationSec":1106.01,"nguonCau":"srt",
-      "parts": [],
+    "dbi202-slide-dbi7-1": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/05-sql-ddl-dinh-nghia-du-lieu/05-01-slide-chapter-6-rang-buoc-so-sanh-chuoi-tron-355a2325.mp4","durationSec":1106.01,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":5.1,"den":137.72,"ten":"Phần 1 · Chào bạn · DBI202 Bài 5.A · Bốn trạm gác ở cổng dữ liệu"},
+        {"t":137.72,"den":224.77,"ten":"Phần 1 · Slide 4: từ thiết kế trên giấy tới DBMS"},
+        {"t":224.77,"den":362.48,"ten":"Phần 1 · Slide 6: bốn loại ràng buộc toàn vẹn"},
+        {"t":362.48,"den":468.18,"ten":"Phần 1 · Slide 7: so sánh chuỗi · Tự kiểm kiểu đề FE"},
+        {"t":468.18,"den":553.48,"ten":"Phần 1 · Tóm tắt · Chào bạn · Bài 5.A phần 2"},
+        {"t":553.48,"den":656.14,"ten":"Phần 2 · Slide 8: LIKE, phần trăm và gạch dưới"},
+        {"t":656.14,"den":799.51,"ten":"Phần 2 · Slide 10: ESCAPE, tìm chính dấu phần trăm"},
+        {"t":799.51,"den":894.61,"ten":"Phần 2 · Slide 12: giá trị NULL · Slide 13: logic ba giá trị"},
+        {"t":894.61,"den":1020.19,"ten":"Phần 2 · Slide 14: UNKNOWN trong WHERE, người biến mất"},
+        {"t":1020.19,"den":1106.01,"ten":"Phần 2 · Tự kiểm kiểu đề FE · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Chương 5 của DBI202: SQL định nghĩa dữ liệu. Đây là bộ slide Chapter 6 của trường, phần một."},
         {"t":15.92,"vi":"Chương 4 khép lại với chuẩn hoá: bảng đã được tách đúng trên giấy, không dư thừa, không bất thường."},
@@ -12211,8 +13133,15 @@
         {"t":1092.96,"vi":"Giờ bạn tự viết mẫu LIKE cho email và số điện thoại, rồi chạy thử trên máy nhé."}
       ]
     },
-    "dbi202-slide-dbi7-2": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/05-sql-ddl-dinh-nghia-du-lieu/05-02-slide-chapter-6-create-alter-drop-fuhcompany-26caa0ba.mp4","durationSec":664.69,"nguonCau":"srt",
-      "parts": [],
+    "dbi202-slide-dbi7-2": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/05-sql-ddl-dinh-nghia-du-lieu/05-02-slide-chapter-6-create-alter-drop-fuhcompany-26caa0ba.mp4","durationSec":664.69,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":111.57,"ten":"Chào bạn · DBI202 Bài 5.B · Bản vẽ, xây, sửa, phá"},
+        {"t":111.57,"den":266.1,"ten":"Slide 16: CREATE và hai chỗ viết ràng buộc"},
+        {"t":266.1,"den":343.36,"ten":"Slide 18: ALTER thêm, xoá, đổi cột"},
+        {"t":343.36,"den":463.19,"ten":"Slide 19: thêm và bỏ ràng buộc"},
+        {"t":463.19,"den":580.59,"ten":"Slide 21: sơ đồ FUHCompany, thứ tự tạo và xoá"},
+        {"t":580.59,"den":664.69,"ten":"Tự kiểm kiểu đề FE · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 5.B của DBI202, slide mười lăm tới hai mươi mốt của Chapter 6."},
         {"t":13.43,"vi":"Bài trước mình đã gặp bốn loại ràng buộc, LIKE, ngày giờ và NULL, toàn trên những bảng có sẵn."},
@@ -12311,8 +13240,21 @@
         {"t":652.41,"vi":"Giờ bạn tự gõ lại script FUHCompany đủ bảy bảng, đặt tên mọi ràng buộc theo quy ước, rồi thử xoá đúng thứ tự nhé."}
       ]
     },
-    "dbi202-slide-dbi7-3": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/06-truy-van-sql/06-01-slide-chapter-6-dml-select-tron-d0a0f2e3.mp4","durationSec":1116.44,"nguonCau":"srt",
-      "parts": [],
+    "dbi202-slide-dbi7-3": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/06-truy-van-sql/06-01-slide-chapter-6-dml-select-tron-d0a0f2e3.mp4","durationSec":1116.44,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":5.1,"den":90.07,"ten":"Phần 1 · Chào bạn · DBI202 Bài 6.A · Thứ tự viết khác thứ tự chạy"},
+        {"t":90.07,"den":213.88,"ten":"Phần 1 · Slide 22: INSERT ba dạng · Slide 23: UPDATE"},
+        {"t":213.88,"den":291.08,"ten":"Phần 1 · Slide 24: DELETE, TRUNCATE và hai câu hỏi"},
+        {"t":291.08,"den":399.7,"ten":"Phần 1 · Slide 25: SELECT chính là pi của xích-ma"},
+        {"t":399.7,"den":483.93,"ten":"Phần 1 · Slide 27: Ví dụ 1 và 2 · Slide 28: Ví dụ 3, bí danh cột"},
+        {"t":483.93,"den":567.78,"ten":"Phần 1 · Slide 29: Ví dụ 4, AND và OR · Tự kiểm kiểu đề FE"},
+        {"t":567.78,"den":651,"ten":"Phần 1 · Tóm tắt · Chào bạn · Bài 6.A phần 2"},
+        {"t":651,"den":767.39,"ten":"Phần 2 · Slide 30: ORDER BY · Slide 31: Ví dụ 6, sắp theo hai cột"},
+        {"t":767.39,"den":868.6,"ten":"Phần 2 · Slide 32–33: truy vấn nhiều bảng"},
+        {"t":868.6,"den":982.12,"ten":"Phần 2 · Slide 35: Ví dụ 7, nối hai bảng · Slide 36: hai cột cùng tên"},
+        {"t":982.12,"den":1066.04,"ten":"Phần 2 · Áp dụng vào dự án PRJ301 Nhà trọ · Tự kiểm kiểu đề FE"},
+        {"t":1066.04,"den":1116.44,"ten":"Phần 2 · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Chương 6 của DBI202: truy vấn SQL. Đây là nửa sau bộ slide Chapter 6 của trường, từ slide hai mươi hai."},
         {"t":16.55,"vi":"Chương trước mình đã dựng bảng bằng CREATE TABLE với đủ khoá chính, khoá ngoại, ràng buộc kiểm tra, và dựng xong cơ sở dữ liệu công ty FUHCompany."},
@@ -12476,8 +13418,20 @@
         {"t":1099.08,"vi":"Giờ bạn kéo xuống dưới video, viết lại ví dụ bảy bằng JOIN kèm ON, thử bỏ điều kiện nối xem ra bao nhiêu dòng, rồi hẵng sang bài 6.B nhé."}
       ]
     },
-    "dbi202-slide-dbi7-4": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/06-truy-van-sql/06-02-slide-chapter-6-tu-noi-tap-hop-tron-5f7d54f2.mp4","durationSec":1110.32,"nguonCau":"srt",
-      "parts": [],
+    "dbi202-slide-dbi7-4": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/06-truy-van-sql/06-02-slide-chapter-6-tu-noi-tap-hop-tron-5f7d54f2.mp4","durationSec":1110.32,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":5.1,"den":119.9,"ten":"Phần 1 · Chào bạn · DBI202 Bài 6.B · Một bảng, hai bản"},
+        {"t":119.9,"den":241.95,"ten":"Phần 1 · Slide 38: Ví dụ 8, DISTINCT qua bảng nối"},
+        {"t":241.95,"den":338.54,"ten":"Phần 1 · Slide 40: hợp, giao, hiệu · Slide 41: Ví dụ 10.1, UNION"},
+        {"t":338.54,"den":442.61,"ten":"Phần 1 · Slide 42: Ví dụ 10.2, EXCEPT và bẫy NOT IN"},
+        {"t":442.61,"den":566.25,"ten":"Phần 1 · Slide 44: mở mục truy vấn con · Tự kiểm kiểu đề FE"},
+        {"t":566.25,"den":646.53,"ten":"Phần 2 · Chào bạn · Bài 6.B phần 2 · Slide 45: truy vấn con là gì"},
+        {"t":646.53,"den":743.37,"ten":"Phần 2 · Slide 46: truy vấn con trả về một giá trị"},
+        {"t":743.37,"den":847.86,"ten":"Phần 2 · Slide 48: Ví dụ 11 với dấu bằng"},
+        {"t":847.86,"den":963.97,"ten":"Phần 2 · Slide 50: Ví dụ 11 với IN · Slide 51: EXISTS, IN, ALL, ANY"},
+        {"t":963.97,"den":1050.12,"ten":"Phần 2 · Slide 52: so sánh cả một bộ · Tự kiểm kiểu đề FE"},
+        {"t":1050.12,"den":1110.32,"ten":"Phần 2 · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 6.B của DBI202: slide Chapter 6 của trường, từ slide ba mươi bảy."},
         {"t":13.86,"vi":"Bài trước mình đã nối hai bảng: FROM hai bảng tạo ra tích, điều kiện nối giữ các cặp thuộc về nhau, và cột trùng tên thì phải ghi tiền tố."},
@@ -12634,8 +13588,21 @@
         {"t":1090.45,"vi":"Giờ bạn kéo xuống dưới video, viết ví dụ mười một đủ ba cách, rồi thử đổi sang một phòng không tồn tại để xem ALL và ANY trả về gì, rồi hẵng sang bài 6.C nhé."}
       ]
     },
-    "dbi202-slide-dbi7-5": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/06-truy-van-sql/06-03-slide-chapter-6-tuong-quan-join-tron-51571bc2.mp4","durationSec":1136.72,"nguonCau":"srt",
-      "parts": [],
+    "dbi202-slide-dbi7-5": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/06-truy-van-sql/06-03-slide-chapter-6-tuong-quan-join-tron-51571bc2.mp4","durationSec":1136.72,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":5.1,"den":109.13,"ten":"Phần 1 · Chào bạn · Bài 6.C phần 1"},
+        {"t":109.13,"den":226.67,"ten":"Phần 1 · Slide 54: truy vấn con tương quan"},
+        {"t":226.67,"den":326.79,"ten":"Phần 1 · Slide 56: tên phim dùng cho hai phim trở lên"},
+        {"t":326.79,"den":406.87,"ten":"Phần 1 · Slide 58: biểu thức JOIN · Slide 59: Ví dụ 15.1 và 15.2"},
+        {"t":406.87,"den":488.86,"ten":"Phần 1 · Slide 60: thêm ví dụ — ba bảng và nối theta"},
+        {"t":488.86,"den":591.75,"ten":"Phần 1 · Tự kiểm kiểu đề FE · Tóm tắt"},
+        {"t":591.75,"den":717.1,"ten":"Phần 2 · Chào bạn · Bài 6.C phần 2 · Ghép đôi và chiếc ghế trống"},
+        {"t":717.1,"den":813.83,"ten":"Phần 2 · Slide 62: phép nối ngoài · Slide 63: Ví dụ 17.1"},
+        {"t":813.83,"den":897.27,"ten":"Phần 2 · Slide 64: Ví dụ 17.2 và bẫy WHERE"},
+        {"t":897.27,"den":997.88,"ten":"Phần 2 · Slide 66: bỏ bản trùng · Slide 67: Ví dụ 17.3"},
+        {"t":997.88,"den":1080.01,"ten":"Phần 2 · Áp dụng vào dự án PRJ301 Nhà trọ · Tự kiểm kiểu đề FE"},
+        {"t":1080.01,"den":1136.72,"ten":"Phần 2 · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 6.C của DBI202, phần một. Vẫn là bộ slide Chapter 6 của trường, từ slide năm mươi ba."},
         {"t":15.34,"vi":"Bài trước mình học truy vấn con: đứng ở ba chỗ, và câu bên trong chạy trước, chạy đúng một lần, rồi đưa kết quả cho câu ngoài."},
@@ -12803,8 +13770,20 @@
         {"t":1117.5,"vi":"Giờ bạn kéo xuống dưới video, chạy ví dụ mười bảy chấm hai với điều kiện địa điểm ở ON rồi ở WHERE, đếm số dòng mỗi lần, rồi hẵng sang bài 6.D nhé."}
       ]
     },
-    "dbi202-slide-dbi7-6": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/06-truy-van-sql/06-04-slide-chapter-6-gom-nhom-having-tron-b4ee5ed4.mp4","durationSec":1152,"nguonCau":"srt",
-      "parts": [],
+    "dbi202-slide-dbi7-6": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/06-truy-van-sql/06-04-slide-chapter-6-gom-nhom-having-tron-b4ee5ed4.mp4","durationSec":1152,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":5.1,"den":130.09,"ten":"Phần 1 · Chào bạn · Bài 6.D phần 1 · Gom hoá đơn vào rổ theo tháng"},
+        {"t":130.09,"den":247.51,"ten":"Phần 1 · Slide 69: gom nhóm và hàm gộp · Slide 70: năm hàm gộp"},
+        {"t":247.51,"den":374.15,"ten":"Phần 1 · Slide 71: Ví dụ 18.1 và 18.2 · Slide 72: cú pháp GROUP BY"},
+        {"t":374.15,"den":479.85,"ten":"Phần 1 · Slide 74: máy hiểu câu GROUP BY thế nào · Slide 75: Ví dụ 20"},
+        {"t":479.85,"den":574.32,"ten":"Phần 1 · Tự kiểm kiểu đề FE · Tóm tắt"},
+        {"t":574.32,"den":687.12,"ten":"Phần 2 · Chào bạn · Bài 6.D phần 2 · Cổng vào và nắp rổ"},
+        {"t":687.12,"den":780.03,"ten":"Phần 2 · Slide 77: ví dụ R(A, B) toàn NULL"},
+        {"t":780.03,"den":888.49,"ten":"Phần 2 · Slide 79: cú pháp đủ và thứ tự chạy · Slide 80: Ví dụ 21"},
+        {"t":888.49,"den":1002.23,"ten":"Phần 2 · Slide 81: luật của HAVING"},
+        {"t":1002.23,"den":1091.16,"ten":"Phần 2 · Áp dụng vào dự án PRJ301 Nhà trọ · Tự kiểm kiểu đề FE"},
+        {"t":1091.16,"den":1152,"ten":"Phần 2 · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 6.D, phần một, những slide cuối của bộ Chapter 6 trường."},
         {"t":11.75,"vi":"Bài trước mình đã dùng nối ngoài để giữ các dòng không có cặp, thấy WHERE đặt sai chỗ biến LEFT JOIN thành nối trong, và dùng DISTINCT để bỏ bản trùng."},
@@ -12974,8 +13953,21 @@
         {"t":1131.39,"vi":"Giờ bạn kéo xuống dưới video, viết lại câu đủ sáu mệnh đề trên FUHCompany, đổi điều kiện giữa WHERE và HAVING xem chỗ nào báo lỗi, rồi hẵng sang tập chuyên đề nhé."}
       ]
     },
-    "dbi202-slide-dbi8-1": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/08-chi-muc-toi-uu/08-01-slide-chapter-7-giao-dich-tron-b1ddcd90.mp4","durationSec":1121.17,"nguonCau":"srt",
-      "parts": [],
+    "dbi202-slide-dbi8-1": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/08-chi-muc-toi-uu/08-01-slide-chapter-7-giao-dich-tron-b1ddcd90.mp4","durationSec":1121.17,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":5.1,"den":124.16,"ten":"Phần 1 · Chào bạn · DBI202 Chương 8"},
+        {"t":124.16,"den":222.94,"ten":"Phần 1 · Slide 4–5: một người dùng và hàng trăm người dùng"},
+        {"t":222.94,"den":310.06,"ten":"Phần 1 · Slide 8: tính nguyên tử"},
+        {"t":310.06,"den":390.95,"ten":"Phần 1 · Gói hai bước vào một giao dịch"},
+        {"t":390.95,"den":495.96,"ten":"Phần 1 · Tự kiểm kiểu đề FE · Tóm tắt"},
+        {"t":495.96,"den":572.42,"ten":"Phần 2 · Chào bạn · Bài 8.A phần 2"},
+        {"t":572.42,"den":690.18,"ten":"Phần 2 · Slide 12: BEGIN, COMMIT và ROLLBACK"},
+        {"t":690.18,"den":776.44,"ten":"Phần 2 · SAVE TRANSACTION: lùi một phần"},
+        {"t":776.44,"den":866.31,"ten":"Phần 2 · Slide 16–17: giao dịch chỉ đọc"},
+        {"t":866.31,"den":969.44,"ten":"Phần 2 · Slide 20: cho phép đọc bẩn — khi nào được?"},
+        {"t":969.44,"den":1067.7,"ten":"Phần 2 · Áp dụng vào dự án PRJ301 Nhà trọ · Tự kiểm kiểu đề FE"},
+        {"t":1067.7,"den":1121.17,"ten":"Phần 2 · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Chương 8 của DBI202."},
         {"t":9.94,"vi":"Mình học bộ slide Chapter 7 của trường, từ slide một."},
@@ -13134,8 +14126,20 @@
         {"t":1104.25,"vi":"Giờ bạn kéo xuống dưới video, viết lại khuôn chuyển tiền có TRY CATCH, chạy cả nhánh thành công lẫn nhánh lỗi, rồi hẵng sang bài 8.B nhé."}
       ]
     },
-    "dbi202-slide-dbi8-2": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/08-chi-muc-toi-uu/08-02-slide-chapter-7-chi-muc-view-tron-f6fadc1a.mp4","durationSec":1147.24,"nguonCau":"srt",
-      "parts": [],
+    "dbi202-slide-dbi8-2": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/08-chi-muc-toi-uu/08-02-slide-chapter-7-chi-muc-view-tron-f6fadc1a.mp4","durationSec":1147.24,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":5.1,"den":122.75,"ten":"Phần 1 · Chào bạn · DBI202 Bài 8.B · Mục lục cuối sách"},
+        {"t":122.75,"den":227.87,"ten":"Phần 1 · Slide 23: clustered và nonclustered"},
+        {"t":227.87,"den":332.11,"ten":"Phần 1 · Slide 25: chọn chỉ mục — vì sao bảng phải đủ lớn?"},
+        {"t":332.11,"den":463.13,"ten":"Phần 1 · Slide 26: bảng và view"},
+        {"t":463.13,"den":544.97,"ten":"Phần 1 · Slide 31: truy vấn view — và bẫy ORDER BY"},
+        {"t":544.97,"den":644.41,"ten":"Phần 1 · Tóm tắt · Chào bạn · Bài 8.B phần 2"},
+        {"t":644.41,"den":742.54,"ten":"Phần 2 · Slide 32: nối qua view"},
+        {"t":742.54,"den":831.47,"ten":"Phần 2 · Slide 36: bốn luật của view cập nhật được"},
+        {"t":831.47,"den":932.05,"ten":"Phần 2 · Slide 38: sửa bảng, view thấy ngay"},
+        {"t":932.05,"den":1055.19,"ten":"Phần 2 · Slide 41: mười thói quen tối ưu truy vấn"},
+        {"t":1055.19,"den":1147.24,"ten":"Phần 2 · Tự kiểm kiểu đề FE · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 8.B của DBI202."},
         {"t":10.06,"vi":"Vẫn bộ slide Chapter 7 của trường, từ slide hai mươi hai."},
@@ -13300,8 +14304,21 @@
         {"t":1128.16,"vi":"Giờ bạn kéo xuống dưới video, tạo một view có và một view không có WITH CHECK OPTION, chèn thử một nhân viên sai phòng vào cả hai, rồi hẵng sang tập chuyên đề nhé."}
       ]
     },
-    "dbi202-slide-dbi9-1": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/07-lap-trinh-view-procedure-trigger/07-01-slide-chapter-8-tsql-tron-5b8054ab.mp4","durationSec":1209.52,"nguonCau":"srt",
-      "parts": [],
+    "dbi202-slide-dbi9-1": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/07-lap-trinh-view-procedure-trigger/07-01-slide-chapter-8-tsql-tron-5b8054ab.mp4","durationSec":1209.52,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":5.1,"den":87.61,"ten":"Phần 1 · Chào bạn · DBI202 Bài 7.A · Vì sao lập trình trong CSDL"},
+        {"t":87.61,"den":177,"ten":"Phần 1 · Slide 1–3: mục tiêu và nội dung · Slide 4: sơ đồ FUHCompany"},
+        {"t":177,"den":309.65,"ten":"Phần 1 · Slide 5: khai báo biến · Slide 6: gán giá trị cho biến"},
+        {"t":309.65,"den":393.14,"ten":"Phần 1 · Slide 7: PRINT, CAST, CONVERT · Slide 8: điều khiển luồng"},
+        {"t":393.14,"den":505.01,"ten":"Phần 1 · Slide 9: BEGIN…END và IF…ELSE · Slide 10: CASE…WHEN"},
+        {"t":505.01,"den":602.75,"ten":"Phần 1 · Tự kiểm kiểu đề FE · Tóm tắt"},
+        {"t":602.75,"den":681.05,"ten":"Phần 2 · Chào bạn · Bài 7.A phần 2 · Slide 11: CASE trong câu lệnh"},
+        {"t":681.05,"den":818.22,"ten":"Phần 2 · Slide 12: WHILE, BREAK, CONTINUE"},
+        {"t":818.22,"den":936.39,"ten":"Phần 2 · Slide 14: TRY…CATCH · Slide 15: IF của chuẩn SQL/PSM"},
+        {"t":936.39,"den":1020.24,"ten":"Phần 2 · Slide 16: truy vấn trong chương trình"},
+        {"t":1020.24,"den":1111.83,"ten":"Phần 2 · Slide 18: WHILE và REPEAT"},
+        {"t":1111.83,"den":1209.52,"ten":"Phần 2 · Tự kiểm kiểu đề FE · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Chương 7 của DBI202: lập trình trong cơ sở dữ liệu."},
         {"t":12.46,"vi":"Mình học bộ slide Chapter 8 của trường, từ slide một."},
@@ -13476,8 +14493,20 @@
         {"t":1190.84,"vi":"Giờ bạn kéo xuống dưới video, tự viết một khối TRY CATCH chèn hai phòng trong cùng một giao dịch, cố ý cho lần hai trùng khoá, rồi kiểm xem bảng còn gì nhé."}
       ]
     },
-    "dbi202-slide-dbi9-2": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/07-lap-trinh-view-procedure-trigger/07-02-slide-chapter-8-procedure-function-tron-77cad910.mp4","durationSec":1139.35,"nguonCau":"srt",
-      "parts": [],
+    "dbi202-slide-dbi9-2": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/07-lap-trinh-view-procedure-trigger/07-02-slide-chapter-8-procedure-function-tron-77cad910.mp4","durationSec":1139.35,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":5.1,"den":128.9,"ten":"Phần 1 · Chào bạn · DBI202 Bài 7.B · Nhà hàng ba tầng và nút bấm"},
+        {"t":128.9,"den":204.38,"ten":"Phần 1 · Slide 21: sơ đồ ba tầng · Slide 22: tầng web"},
+        {"t":204.38,"den":279.65,"ten":"Phần 1 · Slide 23: tầng ứng dụng · Slide 24: tầng cơ sở dữ liệu"},
+        {"t":279.65,"den":365.4,"ten":"Phần 1 · Slide 25: năm lợi ích của procedure"},
+        {"t":365.4,"den":493.99,"ten":"Phần 1 · Slide 26: SQL/PSM"},
+        {"t":493.99,"den":599.13,"ten":"Phần 1 · Tự kiểm kiểu đề FE · Tóm tắt"},
+        {"t":599.13,"den":688.19,"ten":"Phần 2 · Chào bạn · Bài 7.B phần 2 · Slide 28: Example 1 — ba việc"},
+        {"t":688.19,"den":804.12,"ten":"Phần 2 · Slide 29: thủ tục liệt kê dự án"},
+        {"t":804.12,"den":904.56,"ten":"Phần 2 · Slide 31: hàm trong SQL Server · Slide 32: hàm vô hướng"},
+        {"t":904.56,"den":1015.69,"ten":"Phần 2 · Slide 33: hàm trả bảng inline"},
+        {"t":1015.69,"den":1139.35,"ten":"Phần 2 · Thủ tục hay hàm? · Tự kiểm kiểu đề FE"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 7.B của DBI202."},
         {"t":9.94,"vi":"Vẫn bộ slide Chapter 8 của trường, từ slide hai mươi."},
@@ -13643,8 +14672,21 @@
         {"t":1123.31,"vi":"Giờ bạn kéo xuống dưới video, tự viết hàm inline trả nhân viên theo phòng, rồi JOIN nó với bảng phân công như trong bài nhé."}
       ]
     },
-    "dbi202-slide-dbi9-3": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/07-lap-trinh-view-procedure-trigger/07-03-slide-chapter-8-trigger-cursor-tron-c394ae5b.mp4","durationSec":1239.7,"nguonCau":"srt",
-      "parts": [],
+    "dbi202-slide-dbi9-3": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/07-lap-trinh-view-procedure-trigger/07-03-slide-chapter-8-trigger-cursor-tron-c394ae5b.mp4","durationSec":1239.7,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":5.1,"den":142.92,"ten":"Phần 1 · Chào bạn · DBI202 Bài 7.C · Chuông báo ở cửa"},
+        {"t":142.92,"den":228.95,"ten":"Phần 1 · Slide 36: vì sao dùng trigger"},
+        {"t":228.95,"den":341.82,"ten":"Phần 1 · Slide 37: bốn đặc điểm của trigger"},
+        {"t":341.82,"den":430.4,"ten":"Phần 1 · Slide 39: các lựa chọn khi thiết kế trigger"},
+        {"t":430.4,"den":534.99,"ten":"Phần 1 · Slide 42: RAISERROR chỉ báo lỗi"},
+        {"t":534.99,"den":635.78,"ten":"Phần 1 · Tự kiểm kiểu đề FE · Tóm tắt"},
+        {"t":635.78,"den":760.71,"ten":"Phần 2 · Chào bạn · Bài 7.C phần 2 · Hai tờ phiếu ở quầy đổi hàng"},
+        {"t":760.71,"den":838.83,"ten":"Phần 2 · 🐘 PostgreSQL: NEW, OLD và bảng chuyển tiếp"},
+        {"t":838.83,"den":956.37,"ten":"Phần 2 · Slide 46: chặn dưới 18 tuổi và bẫy nhiều dòng"},
+        {"t":956.37,"den":1058.89,"ten":"Phần 2 · Slide 48: cursor, ngón tay dò từng dòng"},
+        {"t":1058.89,"den":1140.95,"ten":"Phần 2 · Slide 50: procedure dùng cursor"},
+        {"t":1140.95,"den":1239.7,"ten":"Phần 2 · Tự kiểm kiểu đề FE · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 7.C của DBI202: trigger và cursor. Đây là phần cuối bộ slide Chapter 8 của trường, từ slide ba mươi lăm."},
         {"t":16.75,"vi":"Bài trước mình đã viết stored procedure và function: những đoạn code cất sẵn trong cơ sở dữ liệu, chờ ai đó gọi bằng EXEC hoặc gọi trong câu SELECT."},
@@ -13820,8 +14862,15 @@
         {"t":1219.47,"vi":"Giờ bạn kéo xuống dưới video, viết lại trigger chặn dưới mười tám tuổi bằng IF EXISTS, thử chèn hai dòng một lúc, và viết một vòng cursor, rồi hẵng sang bài tiếp nhé."}
       ]
     },
-    "dbi202-sql-ddl": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/05-sql-ddl-dinh-nghia-du-lieu/05-02-slide-chapter-6-create-alter-drop-fuhcompany-26caa0ba.mp4","durationSec":664.69,"nguonCau":"srt",
-      "parts": [],
+    "dbi202-sql-ddl": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/05-sql-ddl-dinh-nghia-du-lieu/05-02-slide-chapter-6-create-alter-drop-fuhcompany-26caa0ba.mp4","durationSec":664.69,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":111.57,"ten":"Chào bạn · DBI202 Bài 5.B · Bản vẽ, xây, sửa, phá"},
+        {"t":111.57,"den":266.1,"ten":"Slide 16: CREATE và hai chỗ viết ràng buộc"},
+        {"t":266.1,"den":343.36,"ten":"Slide 18: ALTER thêm, xoá, đổi cột"},
+        {"t":343.36,"den":463.19,"ten":"Slide 19: thêm và bỏ ràng buộc"},
+        {"t":463.19,"den":580.59,"ten":"Slide 21: sơ đồ FUHCompany, thứ tự tạo và xoá"},
+        {"t":580.59,"den":664.69,"ten":"Tự kiểm kiểu đề FE · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 5.B của DBI202, slide mười lăm tới hai mươi mốt của Chapter 6."},
         {"t":13.43,"vi":"Bài trước mình đã gặp bốn loại ràng buộc, LIKE, ngày giờ và NULL, toàn trên những bảng có sẵn."},
@@ -13920,8 +14969,14 @@
         {"t":652.41,"vi":"Giờ bạn tự gõ lại script FUHCompany đủ bảy bảng, đặt tên mọi ràng buộc theo quy ước, rồi thử xoá đúng thứ tự nhé."}
       ]
     },
-    "dbi202-transaction-acid": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/08-chi-muc-toi-uu/08-04-giao-dich-acid-khoa-chet-e952183b.mp4","durationSec":466.18,"nguonCau":"srt",
-      "parts": [],
+    "dbi202-transaction-acid": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/08-chi-muc-toi-uu/08-04-giao-dich-acid-khoa-chet-e952183b.mp4","durationSec":466.18,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":87.05,"ten":"Chào bạn · DBI202 Bài 8.3 · Chuyển khoản: hai câu như một"},
+        {"t":87.05,"den":191.38,"ten":"Hai người, một chỗ ngồi cuối cùng"},
+        {"t":191.38,"den":311.91,"ten":"Đọc không lặp lại và đọc bóng ma · Bốn mức cô lập"},
+        {"t":311.91,"den":420.77,"ten":"Giao dịch bị bỏ quên · 🐘 PostgreSQL và MVCC"},
+        {"t":420.77,"den":466.18,"ten":"Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 8.3 của DBI202: giao dịch, ACID, các mức cô lập và khoá chết."},
         {"t":13.62,"vi":"Tới giờ mình toàn chạy một mình một cửa sổ."},
@@ -13994,8 +15049,13 @@
         {"t":456.48,"vi":"Giờ bạn tự thử: mở hai cửa sổ SSMS và dựng lại khoá chết, xem phiên nào bị chọn làm nạn nhân nhé."}
       ]
     },
-    "dbi202-trigger-cursor": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/07-lap-trinh-view-procedure-trigger/07-06-trigger-cursor-cau-9-pe-6831f21d.mp4","durationSec":404.26,"nguonCau":"srt",
-      "parts": [],
+    "dbi202-trigger-cursor": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/07-lap-trinh-view-procedure-trigger/07-06-trigger-cursor-cau-9-pe-6831f21d.mp4","durationSec":404.26,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":101.91,"ten":"Chào bạn · DBI202 Bài 7.4 · Hai bảng ảo inserted và deleted"},
+        {"t":101.91,"den":217.89,"ten":"Bẫy: trigger chạy một lần mỗi câu lệnh · Khuôn câu 9 đề PE"},
+        {"t":217.89,"den":326.69,"ten":"Cursor và một câu UPDATE"},
+        {"t":326.69,"den":404.26,"ten":"Tự kiểm kiểu đề FE · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 7.4 của DBI202: trigger và cursor."},
         {"t":11.53,"vi":"Thủ tục ở bài trước phải có người gọi."},
@@ -14059,8 +15119,13 @@
         {"t":395.02,"vi":"Giờ bạn tự thử: viết trigger nhật ký, rồi sửa nhiều dòng một lúc để chắc nó ghi đủ tất cả nhé."}
       ]
     },
-    "dbi202-truy-van-long": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/06-truy-van-sql/06-07-truy-van-long-cd873f8b.mp4","durationSec":401.22,"nguonCau":"srt",
-      "parts": [],
+    "dbi202-truy-van-long": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/06-truy-van-sql/06-07-truy-van-long-cd873f8b.mp4","durationSec":401.22,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":107.99,"ten":"Chào bạn · DBI202 Bài 6.4"},
+        {"t":107.99,"den":214.9,"ten":"Cái bẫy NOT IN gặp NULL · Hai cách chữa"},
+        {"t":214.9,"den":295.58,"ten":"Khuôn \"với mọi\": phép chia viết bằng SQL"},
+        {"t":295.58,"den":401.22,"ten":"🐘 PostgreSQL và ⭐ CTE đệ quy · Tự kiểm kiểu đề FE"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 6.4 của DBI202: truy vấn lồng."},
         {"t":11.2,"vi":"Bài trước mình đã gặp truy vấn con đơn giản: câu trong ngoặc chạy trước, trả về một con số, rồi câu ngoài dùng con số đó."},
@@ -14127,8 +15192,13 @@
         {"t":393.47,"vi":"Giờ bạn tự chạy lại cái bẫy NOT IN trên máy, rồi chữa nó bằng cả hai cách nhé."}
       ]
     },
-    "dbi202-view": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/07-lap-trinh-view-procedure-trigger/07-04-view-bang-ao-cfbb0028.mp4","durationSec":386.22,"nguonCau":"srt",
-      "parts": [],
+    "dbi202-view": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/07-lap-trinh-view-procedure-trigger/07-04-view-bang-ao-cfbb0028.mp4","durationSec":386.22,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":116.65,"ten":"Chào bạn · DBI202 Bài 7.2 · Cửa sổ nhìn vào kho"},
+        {"t":116.65,"den":202.64,"ten":"Khi nào UPDATE được qua view? · Dòng lọt ra ngoài cửa sổ"},
+        {"t":202.64,"den":295.16,"ten":"WITH CHECK OPTION · View có chỉ mục"},
+        {"t":295.16,"den":386.22,"ten":"⭐ View giúp đổi lược đồ không dừng hệ thống"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 7.2 của DBI202: View, cái bảng ảo giúp che đi sự phức tạp."},
         {"t":13.21,"vi":"Bạn đã viết những câu SELECT nối ba, bốn bảng. Hôm nay mình học cách đặt tên cho một câu như thế, rồi dùng nó y như một cái bảng."},
@@ -14188,8 +15258,36 @@
         {"t":378.14,"vi":"Giờ bạn tự thử: tạo một view có WITH CHECK OPTION rồi cố đẩy một dòng ra ngoài nó nhé."}
       ]
     },
-    "dbi202-xuong-erd": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/03-mo-hinh-er/03-11-xuong-erd-tron-be5860e7.mp4","durationSec":3007.49,"nguonCau":"srt",
-      "parts": [],
+    "dbi202-xuong-erd": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-databases/03-mo-hinh-er/03-11-xuong-erd-tron-be5860e7.mp4","durationSec":3007.49,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":5.1,"den":128.55,"ten":"Phần 1 · Chào bạn · Xưởng ERD phần 1 · Mười đề, mỗi đề một ý mới"},
+        {"t":128.55,"den":226.16,"ten":"Phần 1 · Ba bộ ký hiệu, một sự thật · Đề 1 · Thư viện: đọc đề"},
+        {"t":226.16,"den":341.88,"ten":"Phần 1 · Đề 1 · Vẽ ERD từng nét · Đề 1 · Lược đồ và CREATE TABLE"},
+        {"t":341.88,"den":466.06,"ten":"Phần 1 · Đề 1 · Cái bẫy: khoá của Loan"},
+        {"t":466.06,"den":609.39,"ten":"Phần 1 · Đề 2 · Khoá ngoại tự trỏ, chạy thật"},
+        {"t":609.39,"den":703.75,"ten":"Phần 1 · Tự kiểm kiểu đề FE · Tóm tắt"},
+        {"t":703.75,"den":848.05,"ten":"Phần 2 · Chào bạn · Xưởng ERD phần 2 · Đề 3 · Chuỗi khách sạn: đọc đề"},
+        {"t":848.05,"den":939.38,"ten":"Phần 2 · Đề 3 · Tám bảng, CHECK có tên"},
+        {"t":939.38,"den":1031.5,"ten":"Phần 2 · Đề 4 · Đăng ký học phần: đọc đề"},
+        {"t":1031.5,"den":1111.71,"ten":"Phần 2 · Đề 4 · Bảng Prerequisite hai khoá ngoại"},
+        {"t":1111.71,"den":1220.38,"ten":"Phần 2 · Đề 5 · Bệnh viện: đọc đề · Đề 5 · Lớp con, đệ quy, ba ngôi"},
+        {"t":1220.38,"den":1297.55,"ten":"Phần 2 · Đề 5 · Chín bảng, ba khoá ngoại"},
+        {"t":1297.55,"den":1385.96,"ten":"Phần 2 · Tự kiểm kiểu đề FE · Tóm tắt"},
+        {"t":1385.96,"den":1507.71,"ten":"Phần 3 · Chào bạn · Xưởng ERD phần 3 · Đề 6 · Rạp chiếu phim: đọc đề"},
+        {"t":1507.71,"den":1615.97,"ten":"Phần 3 · Đề 6 · Khoá mang theo mọi tổ tiên"},
+        {"t":1615.97,"den":1709.02,"ten":"Phần 3 · Đề 7 · Kho nối kho, có hướng"},
+        {"t":1709.02,"den":1788.06,"ten":"Phần 3 · Đề 8 · Mạng xã hội: đọc đề"},
+        {"t":1788.06,"den":1914.69,"ten":"Phần 3 · Đề 8 · CHECK giữ mỗi cặp một dòng · Tự kiểm kiểu đề FE"},
+        {"t":1914.69,"den":2028.49,"ten":"Phần 4 · Chào bạn · Xưởng ERD phần 4 · Đề 9 · Quản lý dự án: đọc đề"},
+        {"t":2028.49,"den":2125.19,"ten":"Phần 4 · Đề 9 · Chạy thật hai cây và cái bẫy"},
+        {"t":2125.19,"den":2223.85,"ten":"Phần 4 · Đề 10 · Mỗi phần là một đề đã gặp"},
+        {"t":2223.85,"den":2343.82,"ten":"Phần 4 · Mười lỗi bị trừ điểm (1–5) · Mười lỗi bị trừ điểm (6–10)"},
+        {"t":2343.82,"den":2431.77,"ten":"Phần 4 · Tự kiểm kiểu đề FE · Tóm tắt"},
+        {"t":2431.77,"den":2564.78,"ten":"Phần 5 · Chào bạn · Luyện vấn đáp"},
+        {"t":2564.78,"den":2666.6,"ten":"Phần 5 · Nhóm 2 · Thực thể yếu, đa trị, phức hợp, dẫn xuất (câu 7–12)"},
+        {"t":2666.6,"den":2792.97,"ten":"Phần 5 · Nhóm 3 · Liên kết, bản số, khoá ngoại (câu 13–20)"},
+        {"t":2792.97,"den":3007.49,"ten":"Phần 5 · Nhóm 4 · Lớp con và quyết định thiết kế (câu 21–25)"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Xưởng ERD, bài 3.4 của DBI202, trang sinh viên hay mở lại nhất, vì thầy cô lúc nào cũng hỏi ERD."},
         {"t":16.39,"vi":"Bài trước bạn đã có bảy quy tắc chuyển sơ đồ sang bảng, áp đúng thứ tự, gần như máy móc."},

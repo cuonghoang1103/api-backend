@@ -2,8 +2,17 @@
   "courseSlug": "networking-for-developers",
   "sinhBoi": "scripts/phu-de-tu-video-rieng.mjs",
   "lessons": {
-    "netdev-0-1-cai-dat": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/networking-for-developers/00-vi-sao-can-hieu-mang/00-03-phong-lab-mang-f6fc2e68.mp4","durationSec":784.94,"nguonCau":"srt",
-      "parts": [],
+    "netdev-0-1-cai-dat": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/networking-for-developers/00-vi-sao-can-hieu-mang/00-03-phong-lab-mang-f6fc2e68.mp4","durationSec":784.94,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":116.55,"ten":"Ôn nhanh · hôm nay · Bìa · phòng lab mạng"},
+        {"t":116.55,"den":213.29,"ten":"Cài trực tiếp trên máy (tuỳ chọn) · Vì sao dùng lab Docker"},
+        {"t":213.29,"den":301.83,"ten":"Mô phỏng: một request đi qua phòng lab"},
+        {"t":301.83,"den":418.5,"ten":"Chạy thật: năm container trên máy mình"},
+        {"t":418.5,"den":505.59,"ten":"Request đầu tiên, gói tin đầu tiên"},
+        {"t":505.59,"den":597.81,"ten":"Lab chạy ở đâu?"},
+        {"t":597.81,"den":688.76,"ten":"Luật của phòng lab · Thực hành 20–30 phút"},
+        {"t":688.76,"den":784.94,"ten":"Ba câu tự kiểm · Tóm tắt & bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 0.1 của khoá Networking for Developers."},
         {"t":10.84,"vi":"Bài trước, ta xem bảy sự cố thật."},
@@ -133,8 +142,17 @@
         {"t":776.6,"vi":"Bài sau, 0.2: lần theo một địa chỉ từ lúc bạn bấm Enter, từng chặng một."}
       ]
     },
-    "netdev-0-2-go-dia-chi": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/networking-for-developers/00-vi-sao-can-hieu-mang/00-04-go-dia-chi-roi-enter-197b37ab.mp4","durationSec":773.87,"nguonCau":"srt",
-      "parts": [],
+    "netdev-0-2-go-dia-chi": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/networking-for-developers/00-vi-sao-can-hieu-mang/00-04-go-dia-chi-roi-enter-197b37ab.mp4","durationSec":773.87,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":122.95,"ten":"Ôn nhanh · hôm nay · Bìa · gõ địa chỉ rồi Enter"},
+        {"t":122.95,"den":245.4,"ten":"Mô phỏng: bảy chặng thành những gói tin bay"},
+        {"t":245.4,"den":321.74,"ten":"Chạy thật: curl -v trên máy mình"},
+        {"t":321.74,"den":422.76,"ten":"Chạy thật: tự trừ ra từng chặng · Vẽ đúng tỉ lệ: một request"},
+        {"t":422.76,"den":506.04,"ten":"Chạy thật: request thứ hai không bắt tay lại"},
+        {"t":506.04,"den":608.65,"ten":"Mô hình tính nhẩm · Trình duyệt làm việc này hàng chục lần"},
+        {"t":608.65,"den":733.2,"ten":"Thực hành 20 phút · Chạy thật: lời giải trên máy mình"},
+        {"t":733.2,"den":773.87,"ten":"Tóm tắt & bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 0.2 của khoá Networking for Developers."},
         {"t":11.06,"vi":"Bài trước, ta dựng phòng lab: client, router, nginx và API, rồi bắt được mười gói tin của một request."},
@@ -268,8 +286,19 @@
         {"t":766.94,"vi":"Bài sau mở Chương 1: bit, byte và hex, bảng chữ cái của mọi gói tin."}
       ]
     },
-    "netdev-0-8-bat-dau-tai-day": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/networking-for-developers/00-vi-sao-can-hieu-mang/00-01-bat-dau-tai-day-88964704.mp4","durationSec":911.01,"nguonCau":"srt",
-      "parts": [],
+    "netdev-0-8-bat-dau-tai-day": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/networking-for-developers/00-vi-sao-can-hieu-mang/00-01-bat-dau-tai-day-88964704.mp4","durationSec":911.01,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":89.92,"ten":"Chào khoá · khoá này giúp gì · Bìa · mạng là gì"},
+        {"t":89.92,"den":174.48,"ten":"Mô phỏng: gửi dữ liệu như gửi bưu kiện"},
+        {"t":174.48,"den":271.73,"ten":"Chạy thật: tra tên, rồi gửi ba gói"},
+        {"t":271.73,"den":405.84,"ten":"Những cặp ai cũng nhầm · Bảy mốc dựng nên Internet"},
+        {"t":405.84,"den":498.51,"ten":"Vì sao ra đời: dùng chung máy, sống sót khi đứt"},
+        {"t":498.51,"den":594.08,"ten":"Lập trình viên dùng mạng mỗi tuần"},
+        {"t":594.08,"den":692.31,"ten":"Chạy thật: một request HTTPS có những chặng nào"},
+        {"t":692.31,"den":791.56,"ten":"Con đường của khoá học · Phòng lab bạn sẽ tự dựng"},
+        {"t":791.56,"den":869.26,"ten":"Chạy thật: lời giải trên máy mình · Ba câu tự kiểm"},
+        {"t":869.26,"den":911.01,"ten":"Tóm tắt & bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với khoá Networking for Developers, mạng máy tính dành cho lập trình viên."},
         {"t":12.29,"vi":"Có thể bạn đã gặp cảnh này: API chạy ngon trên laptop, nhưng điện thoại của bạn cùng nhóm gọi không tới."},
@@ -428,8 +457,17 @@
         {"t":903.69,"vi":"Bài sau: những sự cố thật từng lên báo, và cách học mạng để không bỏ cuộc."}
       ]
     },
-    "netdev-0-9-bat-dau-hoc-xong": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/networking-for-developers/00-vi-sao-can-hieu-mang/00-02-bat-dau-su-co-va-cach-hoc-19d2d0e4.mp4","durationSec":781.06,"nguonCau":"srt",
-      "parts": [],
+    "netdev-0-9-bat-dau-hoc-xong": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/networking-for-developers/00-vi-sao-can-hieu-mang/00-02-bat-dau-su-co-va-cach-hoc-19d2d0e4.mp4","durationSec":781.06,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":83.43,"ten":"Ôn nhanh · hôm nay · Bìa · sự cố thật và cách học"},
+        {"t":83.43,"den":173.02,"ten":"Facebook 2021: tự xoá mình khỏi Internet"},
+        {"t":173.02,"den":303.99,"ten":"Dyn 2016 và YouTube 2008"},
+        {"t":303.99,"den":385.47,"ten":"Chính trang này, 18/8/2026: 502 trong bảy phút"},
+        {"t":385.47,"den":503.29,"ten":"Ba câu chuyện sinh viên (minh hoạ)"},
+        {"t":503.29,"den":584.37,"ten":"Hai lộ trình qua khoá học · Đọc thông báo lỗi trước khi tìm"},
+        {"t":584.37,"den":665.16,"ten":"Khi bí: hỏi sao cho người ta giúp được · Thực hành 10 phút"},
+        {"t":665.16,"den":781.06,"ten":"Chạy thật: lời giải trên máy mình · Ba câu tự kiểm"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với phần Bắt đầu tại đây, nửa thứ hai, của khoá Networking for Developers."},
         {"t":12.68,"vi":"Bài trước, ta coi mạng là bưu kiện, địa chỉ và bưu cục. Router chỉ đọc địa chỉ, rồi chuyền gói đi từng chặng."},
@@ -560,8 +598,16 @@
         {"t":772.38,"vi":"Bài sau, 0.1: ta dựng phòng lab mạng trên máy bạn, rồi lần theo một địa chỉ đi qua nó."}
       ]
     },
-    "netdev-1-0-bit-byte": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/networking-for-developers/01-cac-tang-va-goi-tin/01-01-bit-byte-hex-tin-hieu-7f510f8f.mp4","durationSec":645.33,"nguonCau":"srt",
-      "parts": [],
+    "netdev-1-0-bit-byte": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/networking-for-developers/01-cac-tang-va-goi-tin/01-01-bit-byte-hex-tin-hieu-7f510f8f.mp4","durationSec":645.33,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":102.7,"ten":"Ôn nhanh · hôm nay · Bìa · bit, byte, hex"},
+        {"t":102.7,"den":191.52,"ten":"Tám bit thành một byte: 256 giá trị"},
+        {"t":191.52,"den":289.1,"ten":"Chữ là byte — không phải một byte một chữ"},
+        {"t":289.1,"den":380.56,"ten":"CPU của bạn lưu số theo chiều ngược lại"},
+        {"t":380.56,"den":455.92,"ten":"Chạy thật: card ghi mười gigabit, đo được gần bốn mươi"},
+        {"t":455.92,"den":552.38,"ten":"Dùng ở đâu trong khoá · Thực hành 20 phút"},
+        {"t":552.38,"den":645.33,"ten":"Ba câu tự kiểm · Tóm tắt & bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Chương 1 của khoá Networking for Developers, bài 1.1."},
         {"t":11.88,"vi":"Mục 0, ta đã lần theo một địa chỉ: DNS, TCP, TLS, request, mỗi chặng tốn chừng một vòng đi về."},
@@ -671,8 +717,15 @@
         {"t":636.66,"vi":"Bài sau, 1.2: các tầng bọc lấy những byte của bạn, mô hình OSI và TCP/IP."}
       ]
     },
-    "netdev-1-1-osi-tcpip": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/networking-for-developers/01-cac-tang-va-goi-tin/01-02-osi-va-tcp-ip-f76cb3e4.mp4","durationSec":636.62,"nguonCau":"srt",
-      "parts": [],
+    "netdev-1-1-osi-tcpip": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/networking-for-developers/01-cac-tang-va-goi-tin/01-02-osi-va-tcp-ip-f76cb3e4.mp4","durationSec":636.62,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":117.87,"ten":"Ôn nhanh · hôm nay · Bìa · OSI và TCP/IP"},
+        {"t":117.87,"den":214.17,"ten":"Mô phỏng 3D: bốn tầng chồng lên nhau"},
+        {"t":214.17,"den":302.25,"ten":"Mỗi thiết bị chỉ đọc tới tầng của nó"},
+        {"t":302.25,"den":387.87,"ten":"Chạy thật: gắn nhãn từng dòng curl -v"},
+        {"t":387.87,"den":485.62,"ten":"Chạy thật: route và tshark theo tầng"},
+        {"t":485.62,"den":636.62,"ten":"Thực hành 20 phút · Chạy thật: lời giải"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 1.2 của khoá Networking for Developers."},
         {"t":11.06,"vi":"Bài trước, ta học bảng chữ cái của gói tin: một byte là tám bit, viết bằng hai chữ số hex."},
@@ -781,8 +834,17 @@
         {"t":629.84,"vi":"Bài sau, 1.3: các header đó lồng vào nhau ra sao, từng byte một."}
       ]
     },
-    "netdev-1-2-dong-goi": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/networking-for-developers/01-cac-tang-va-goi-tin/01-03-dong-goi-frame-packet-segment-cff630f1.mp4","durationSec":801.26,"nguonCau":"srt",
-      "parts": [],
+    "netdev-1-2-dong-goi": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/networking-for-developers/01-cac-tang-va-goi-tin/01-03-dong-goi-frame-packet-segment-cff630f1.mp4","durationSec":801.26,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":120.73,"ten":"Ôn nhanh · hôm nay · Bìa · đóng gói"},
+        {"t":120.73,"den":207.09,"ten":"Bốn header lồng nhau như phong bì"},
+        {"t":207.09,"den":301.25,"ten":"Frame thật, tô màu theo tầng"},
+        {"t":301.25,"den":397.79,"ten":"Byte 14–33: header IPv4 · Byte 34–65: header TCP"},
+        {"t":397.79,"den":504.85,"ten":"MTU: gói lớn nhất một đường truyền chở được"},
+        {"t":504.85,"den":598.38,"ten":"Đo được: một câu trả lời, ba segment"},
+        {"t":598.38,"den":705.16,"ten":"Chi phí header: tin nhỏ thì đắt · Thực hành 25 phút"},
+        {"t":705.16,"den":801.26,"ten":"Ba câu tự kiểm · Tóm tắt & bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 1.3 của khoá Networking for Developers."},
         {"t":10.89,"vi":"Bài trước, ta thấy bốn tầng TCP/IP, và tshark in ra bốn header của cùng một gói: Ethernet, IP, TCP, HTTP."},
@@ -912,8 +974,18 @@
         {"t":797.94,"vi":"Ethernet và ARP."}
       ]
     },
-    "netdev-1-3-ethernet-arp": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/networking-for-developers/01-cac-tang-va-goi-tin/01-04-ethernet-mac-arp-d43f5af2.mp4","durationSec":761.21,"nguonCau":"srt",
-      "parts": [],
+    "netdev-1-3-ethernet-arp": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/networking-for-developers/01-cac-tang-va-goi-tin/01-04-ethernet-mac-arp-d43f5af2.mp4","durationSec":761.21,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":81.06,"ten":"Ôn nhanh · hôm nay · Bìa · Ethernet, MAC và ARP"},
+        {"t":81.06,"den":170.37,"ten":"Địa chỉ MAC: 48 bit trên một card mạng"},
+        {"t":170.37,"den":261.5,"ten":"Chạy thật: bảng switch ngay trong nhân máy mình"},
+        {"t":261.5,"den":340.62,"ten":"ARP bắt thật: ai giữ 10.10.1.11?"},
+        {"t":340.62,"den":424.35,"ten":"Chạy thật: trên Linux không có bản sao"},
+        {"t":424.35,"den":504.9,"ten":"Chạy thật: cùng một request, hai phía router"},
+        {"t":504.9,"den":591.85,"ten":"Không thông báo: chừng 9 giây mất kết nối"},
+        {"t":591.85,"den":671.54,"ten":"Thực hành 25 phút · Chạy thật: đổi MAC có thông báo"},
+        {"t":671.54,"den":761.21,"ten":"Ba câu tự kiểm · Tóm tắt & bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 1.4 của khoá Networking for Developers."},
         {"t":11.12,"vi":"Bài trước, ta mở frame một trăm bốn mươi chín byte."},
@@ -1047,8 +1119,19 @@
         {"t":756.5,"vi":"Một máy phục vụ nhiều ứng dụng và nhiều khách thế nào."}
       ]
     },
-    "netdev-1-4-cong-socket": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/networking-for-developers/01-cac-tang-va-goi-tin/01-05-cong-va-socket-fc0b9943.mp4","durationSec":857.77,"nguonCau":"srt",
-      "parts": [],
+    "netdev-1-4-cong-socket": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/networking-for-developers/01-cac-tang-va-goi-tin/01-05-cong-va-socket-fc0b9943.mp4","durationSec":857.77,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":91.42,"ten":"Ôn nhanh · hôm nay · Bìa · cổng và socket"},
+        {"t":91.42,"den":179.14,"ten":"Cổng chọn chương trình trên một máy"},
+        {"t":179.14,"den":285.77,"ten":"ss -tlnp: ai đang nghe trên máy này?"},
+        {"t":285.77,"den":385.14,"ten":"Nhân chọn đúng socket thế nào"},
+        {"t":385.14,"den":466.88,"ten":"Chạy thật: cổng tạm phía máy khách"},
+        {"t":466.88,"den":554.4,"ten":"Chạy thật: loopback và mọi card mạng"},
+        {"t":554.4,"den":639.01,"ten":"Docker -p: cửa từ máy chủ vào container"},
+        {"t":639.01,"den":714.43,"ten":"Socket nằm ở đâu trong máy · Thực hành 25 phút"},
+        {"t":714.43,"den":809.16,"ten":"Chạy thật: sửa lỗi hôm demo · Ba câu tự kiểm"},
+        {"t":809.16,"den":857.77,"ten":"Tóm tắt & bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 1.5, bài cuối của Chương 1, khoá Networking for Developers."},
         {"t":12.85,"vi":"Bài trước, ARP đổi IP của chặng kế thành MAC, và mỗi router dựng lại frame: MAC mới, IP giữ nguyên."},
@@ -1157,8 +1240,14 @@
         {"t":848.95,"vi":"Thế là xong Chương 1. Tiếp theo, Lab 1 ghép tất cả lại, trên một request của LabFlow."}
       ]
     },
-    "netdev-1-6-lab-giai-phau-request": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/networking-for-developers/01-cac-tang-va-goi-tin/01-06-lab-1-giai-phau-request-7cb66cbc.mp4","durationSec":412.66,"nguonCau":"srt",
-      "parts": [],
+    "netdev-1-6-lab-giai-phau-request": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/networking-for-developers/01-cac-tang-va-goi-tin/01-06-lab-1-giai-phau-request-7cb66cbc.mp4","durationSec":412.66,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":89.33,"ten":"Ôn nhanh · hôm nay · Bìa · Lab 1"},
+        {"t":89.33,"den":165.75,"ten":"Mô phỏng: hai khẳng định trên bản đồ"},
+        {"t":165.75,"den":257.3,"ten":"Rubric — 10 điểm · Cách làm"},
+        {"t":257.3,"den":340.62,"ten":"Checklist bằng chứng R2–R6 · Đi xa hơn"},
+        {"t":340.62,"den":412.66,"ten":"Ba câu tự kiểm phương pháp · Tổng kết Chương 1 & chương sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Lab 1, bài thực hành cuối Chương 1 của khoá Networking for Developers."},
         {"t":12.75,"vi":"Chương này, ta đã đi từ bit và byte, qua bốn tầng, đóng gói, MAC và ARP, tới cổng và socket."},
@@ -1227,8 +1316,14 @@
         {"t":403.51,"vi":"Chương 2 bắt đầu bằng bài 2.1: địa chỉ IPv4, CIDR, và chia subnet bằng tay."}
       ]
     },
-    "netdev-10-3-reverse-forward": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/networking-for-developers/10-can-bang-tai-va-proxy/10-03-reverse-forward-2517327a.mp4","durationSec":527.43,"nguonCau":"srt",
-      "parts": [],
+    "netdev-10-3-reverse-forward": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/networking-for-developers/10-can-bang-tai-va-proxy/10-03-reverse-forward-2517327a.mp4","durationSec":527.43,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":96.93,"ten":"Ôn nhanh · hôm nay · Reverse, forward và đường hầm"},
+        {"t":96.93,"den":183.8,"ten":"Chạy thật: backend sau reverse proxy thấy gì"},
+        {"t":183.8,"den":275.11,"ten":"Cùng một hộp, việc ngược nhau"},
+        {"t":275.11,"den":363.42,"ten":"Mô phỏng: cổng 22 bị chặn · Sự cố thật: cổng 22 bị chặn"},
+        {"t":363.42,"den":527.43,"ten":"Thực hành 20 phút · Chạy thật: lời giải"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 10.3 của khoá Networking for Developers."},
         {"t":10.56,"vi":"Bài trước: thuật toán cân bằng tải, băm nhất quán, kiểm sức khoẻ và rút êm."},
@@ -1319,8 +1414,15 @@
         {"t":517.01,"vi":"Bài sau, 10.4: mã lỗi cổng, 502, 503, 504 và 524."}
       ]
     },
-    "netdev-10-4-ma-loi-gateway": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/networking-for-developers/10-can-bang-tai-va-proxy/10-04-ma-loi-gateway-1ef24dbf.mp4","durationSec":540.6,"nguonCau":"srt",
-      "parts": [],
+    "netdev-10-4-ma-loi-gateway": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/networking-for-developers/10-can-bang-tai-va-proxy/10-04-ma-loi-gateway-1ef24dbf.mp4","durationSec":540.6,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":81.69,"ten":"Ôn nhanh · hôm nay · Đọc 502, 503, 504 và 524"},
+        {"t":81.69,"den":164.82,"ten":"Bốn mã · Mô phỏng: trạng thái backend thành mã"},
+        {"t":164.82,"den":265.52,"ten":"Chạy thật: 502 và 504 · Chạy thật: 503, 500 và 499"},
+        {"t":265.52,"den":350.5,"ten":"Sự cố thật: 502 bảy phút · Mô phỏng: vòng khởi động lại"},
+        {"t":350.5,"den":427.83,"ten":"Chạy thật: hỏi từng chặng · Thực hành 20 phút"},
+        {"t":427.83,"den":540.6,"ten":"Chạy thật: lời giải · Ba câu tự kiểm"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 10.4 của khoá Networking for Developers."},
         {"t":10.59,"vi":"Bài trước: reverse proxy đứng trước máy chủ, forward proxy đứng trước client, và đường hầm."},
@@ -1413,8 +1515,14 @@
         {"t":535.07,"vi":"Tiếp theo là Lab 10: cân bằng tải cho LabFlow."}
       ]
     },
-    "netdev-10-5-lab-lb-labflow": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/networking-for-developers/10-can-bang-tai-va-proxy/10-05-lab-10-lb-labflow-b0704943.mp4","durationSec":406.3,"nguonCau":"srt",
-      "parts": [],
+    "netdev-10-5-lab-lb-labflow": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/networking-for-developers/10-can-bang-tai-va-proxy/10-05-lab-10-lb-labflow-b0704943.mp4","durationSec":406.3,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":93.49,"ten":"Ôn nhanh · hôm nay · Bìa · Lab 10"},
+        {"t":93.49,"den":177.13,"ten":"Hệ thống · Bốn yêu cầu"},
+        {"t":177.13,"den":257.92,"ten":"Thang điểm — 10 điểm · Làm mẫu R2: dính và failover"},
+        {"t":257.92,"den":339.91,"ten":"Gợi ý · Lab này chứng minh gì"},
+        {"t":339.91,"den":406.3,"ten":"Ba câu tự kiểm phương pháp · Tổng kết Chương 10 & chương sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Lab 10, phần mười của dự án xuyên khoá."},
         {"t":9.87,"vi":"Chương 10 cho bạn: L4 và L7, thuật toán và kiểm sức khoẻ, các loại proxy và đường hầm, và mã lỗi cổng."},
@@ -1481,8 +1589,14 @@
         {"t":396.06,"vi":"Chương 11 là công cụ và phương pháp chẩn đoán, bắt đầu bằng bài 11.1: tcpdump, bắt gói trên máy chủ không giao diện."}
       ]
     },
-    "netdev-11-1-tcpdump": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/networking-for-developers/11-cong-cu-va-chan-doan/11-01-tcpdump-ad49fb6a.mp4","durationSec":511.41,"nguonCau":"srt",
-      "parts": [],
+    "netdev-11-1-tcpdump": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/networking-for-developers/11-cong-cu-va-chan-doan/11-01-tcpdump-ad49fb6a.mp4","durationSec":511.41,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":106.54,"ten":"Ôn nhanh · hôm nay · tcpdump trên máy chủ"},
+        {"t":106.54,"den":195.25,"ten":"Một bản bắt trên lab · Chạy thật: bắt rồi đọc lại"},
+        {"t":195.25,"den":285.96,"ten":"Chạy thật: đọc nội dung bằng -A · Lưu bây giờ, phân tích sau"},
+        {"t":285.96,"den":368.01,"ten":"Mô phỏng: namespace của container · Bản bắt nói gì"},
+        {"t":368.01,"den":511.41,"ten":"Thực hành 20 phút · Chạy thật: lời giải"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 11.1, mở đầu Chương 11 của khoá Networking for Developers."},
         {"t":12.16,"vi":"Chương 10 là cân bằng tải và proxy: L4, L7, thuật toán, và cách đọc mã lỗi cổng."},
@@ -1571,8 +1685,15 @@
         {"t":503.72,"vi":"Bài sau, 11.2: Wireshark, theo một luồng và đọc một request chậm."}
       ]
     },
-    "netdev-11-2-wireshark": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/networking-for-developers/11-cong-cu-va-chan-doan/11-02-wireshark-1d8e580f.mp4","durationSec":496.05,"nguonCau":"srt",
-      "parts": [],
+    "netdev-11-2-wireshark": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/networking-for-developers/11-cong-cu-va-chan-doan/11-02-wireshark-1d8e580f.mp4","durationSec":496.05,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":98.03,"ten":"Ôn nhanh · hôm nay · Wireshark: theo luồng, đọc request chậm"},
+        {"t":98.03,"den":177.3,"ten":"Lọc HTTP · Chạy thật: lọc HTTP"},
+        {"t":177.3,"den":254.2,"ten":"Chạy thật: follow stream · Bộ lọc bắt và bộ lọc hiển thị"},
+        {"t":254.2,"den":350.29,"ten":"Chạy thật: đếm gói gửi lại"},
+        {"t":350.29,"den":456.42,"ten":"Thực hành 20 phút · Chạy thật: lời giải"},
+        {"t":456.42,"den":496.05,"ten":"Tóm tắt & bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 11.2 của khoá Networking for Developers."},
         {"t":10.84,"vi":"Bài trước: tcpdump bắt gói trên máy chủ, có bộ lọc, lưu ra tệp pcap."},
@@ -1662,8 +1783,15 @@
         {"t":486.89,"vi":"Bài sau, 11.3: đo đường đi bằng mtr, ping, iperf3 và curl trừ w."}
       ]
     },
-    "netdev-11-3-do-duong": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/networking-for-developers/11-cong-cu-va-chan-doan/11-03-do-duong-eb1d0010.mp4","durationSec":527.52,"nguonCau":"srt",
-      "parts": [],
+    "netdev-11-3-do-duong": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/networking-for-developers/11-cong-cu-va-chan-doan/11-03-do-duong-eb1d0010.mp4","durationSec":527.52,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":97.86,"ten":"Ôn nhanh · hôm nay · Đo đường đi"},
+        {"t":97.86,"den":182.79,"ten":"Mô phỏng: chặng nào phình · Chạy thật: curl -w"},
+        {"t":182.79,"den":267.5,"ten":"Chạy thật: ping và mtr · Chạy thật: mtr chỉ ra chỗ mất"},
+        {"t":267.5,"den":346.03,"ten":"Băng thông không phải độ trễ · Mô phỏng: ống to, đường dài"},
+        {"t":346.03,"den":444.23,"ten":"Mẫu curl -w dùng lại · Thực hành 20 phút"},
+        {"t":444.23,"den":527.52,"ten":"Ba câu tự kiểm · Tóm tắt & bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 11.3 của khoá Networking for Developers."},
         {"t":10.8,"vi":"Bài trước: đọc tệp pcap bằng tshark, theo luồng, và phân biệt khoảng trống với gói gửi lại."},
@@ -1761,8 +1889,13 @@
         {"t":521.55,"vi":"Bài sau, 11.4: bảng kiểm chẩn đoán theo tầng."}
       ]
     },
-    "netdev-11-5-lab-chan-doan": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/networking-for-developers/11-cong-cu-va-chan-doan/11-05-lab-11-chan-doan-7ce33f29.mp4","durationSec":377.86,"nguonCau":"srt",
-      "parts": [],
+    "netdev-11-5-lab-chan-doan": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/networking-for-developers/11-cong-cu-va-chan-doan/11-05-lab-11-chan-doan-7ce33f29.mp4","durationSec":377.86,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":88.21,"ten":"Ôn nhanh · hôm nay · Bìa · Lab 11"},
+        {"t":88.21,"den":165.72,"ten":"Hệ thống · Bốn yêu cầu"},
+        {"t":165.72,"den":241.72,"ten":"Thang điểm — 10 điểm · Làm mẫu R3: đo đường đi"},
+        {"t":241.72,"den":377.86,"ten":"Gợi ý · Lab này chứng minh gì"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Lab 11, phần mười một của dự án xuyên khoá."},
         {"t":10.37,"vi":"Chương 11 cho bạn: tcpdump, tshark, curl trừ w, ping, mtr, iperf3, và bảng kiểm theo tầng."},
@@ -1826,8 +1959,15 @@
         {"t":369.08,"vi":"Chương 12 là mạng trong phỏng vấn, bắt đầu bằng bài 12.1: câu hỏi kinh điển và cách trả lời."}
       ]
     },
-    "netdev-12-1-cau-hoi": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/networking-for-developers/12-mang-trong-phong-van/12-01-cau-hoi-08148f48.mp4","durationSec":551.28,"nguonCau":"srt",
-      "parts": [],
+    "netdev-12-1-cau-hoi": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/networking-for-developers/12-mang-trong-phong-van/12-01-cau-hoi-08148f48.mp4","durationSec":551.28,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":117.25,"ten":"Ôn nhanh · hôm nay · Câu hỏi kinh điển"},
+        {"t":117.25,"den":209.15,"ten":"Mô phỏng: hành trình theo số đo thật"},
+        {"t":209.15,"den":316.7,"ten":"Mô phỏng: câu trả lời yếu và mạnh · Cú bắt tay ba bước"},
+        {"t":316.7,"den":427.62,"ten":"HTTP 1.1, 2 và 3 · TLS và DNS, ngắn gọn"},
+        {"t":427.62,"den":512.38,"ten":"Câu trả lời mẫu, kèm số đo thật · Ba câu tự kiểm"},
+        {"t":512.38,"den":551.28,"ten":"Tóm tắt & bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 12.1, mở đầu Chương 12 của khoá Networking for Developers."},
         {"t":12.33,"vi":"Mười một chương qua, bạn đã đo DNS, TCP, TLS, HTTP, CDN, cân bằng tải, và chẩn đoán theo tầng."},
@@ -1917,8 +2057,14 @@
         {"t":544.12,"vi":"Bài sau, 12.2: vòng tình huống, chẩn đoán từ một triệu chứng."}
       ]
     },
-    "netdev-12-2-tinh-huong": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/networking-for-developers/12-mang-trong-phong-van/12-02-tinh-huong-575c6406.mp4","durationSec":489.7,"nguonCau":"srt",
-      "parts": [],
+    "netdev-12-2-tinh-huong": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/networking-for-developers/12-mang-trong-phong-van/12-02-tinh-huong-575c6406.mp4","durationSec":489.7,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":103.06,"ten":"Ôn nhanh · hôm nay · Vòng tình huống"},
+        {"t":103.06,"den":183.62,"ten":"Mô phỏng: khung chạy trên một tình huống"},
+        {"t":183.62,"den":261.85,"ten":"Tình huống: API timeout mỗi tối"},
+        {"t":261.85,"den":345.55,"ten":"Chạy thật: thiếu chứng chỉ trung gian · Kể như một kỹ sư"},
+        {"t":345.55,"den":489.7,"ten":"Thực hành 25 phút · Câu trả lời mẫu, kèm bằng chứng"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 12.2 của khoá Networking for Developers."},
         {"t":10.84,"vi":"Bài trước: câu hỏi kinh điển, trả lời bằng đánh đổi, cơ chế, và một con số bạn tự đo."},
@@ -2002,8 +2148,14 @@
         {"t":484.02,"vi":"Bài sau, 12.3: những chứng chỉ nên biết."}
       ]
     },
-    "netdev-13-1-dung-lab": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/networking-for-developers/13-du-an-cuoi-khoa/13-01-dung-lab-d7479937.mp4","durationSec":457.79,"nguonCau":"srt",
-      "parts": [],
+    "netdev-13-1-dung-lab": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/networking-for-developers/13-du-an-cuoi-khoa/13-01-dung-lab-d7479937.mp4","durationSec":457.79,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":86.65,"ten":"Ôn nhanh · hôm nay · Dự án cuối khoá"},
+        {"t":86.65,"den":173.83,"ten":"Stack bạn dựng · Mô phỏng: lab và đường thật"},
+        {"t":173.83,"den":269.09,"ten":"Chạy thật: request đầu tiên, và một lỗi nhỏ · Phương pháp"},
+        {"t":269.09,"den":356.15,"ten":"Checklist hoàn thành · Đường thật mà nó phản chiếu"},
+        {"t":356.15,"den":457.79,"ten":"Chạy thật: lời giải · Ba câu tự kiểm"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 13.1, mở đầu Chương 13, chương cuối của khoá Networking for Developers."},
         {"t":13.04,"vi":"Mười hai chương qua bạn học từng tầng: DNS, TCP, TLS, HTTP, CDN, thời gian thực, cân bằng tải, chẩn đoán, phỏng vấn."},
@@ -2081,8 +2233,14 @@
         {"t":451.57,"vi":"Bài sau, 13.2: đo mọi chặng và ghi mốc nền."}
       ]
     },
-    "netdev-13-2-do-duong-di": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/networking-for-developers/13-du-an-cuoi-khoa/13-02-do-duong-di-7db23467.mp4","durationSec":479.44,"nguonCau":"srt",
-      "parts": [],
+    "netdev-13-2-do-duong-di": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/networking-for-developers/13-du-an-cuoi-khoa/13-02-do-duong-di-7db23467.mp4","durationSec":479.44,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":95.57,"ten":"Ôn nhanh · hôm nay · Đo mọi chặng"},
+        {"t":95.57,"den":199.75,"ten":"curl -w xuyên stack · Chạy thật: một request, tách chặng"},
+        {"t":199.75,"den":286.78,"ten":"Mô phỏng: hai khoảng để chỉnh"},
+        {"t":286.78,"den":370.69,"ten":"Bảng mốc nền · Đo từ nhiều mạng"},
+        {"t":370.69,"den":479.44,"ten":"Chạy thật: lời giải · Ba câu tự kiểm"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 13.2 của khoá Networking for Developers."},
         {"t":10.74,"vi":"Bài trước: stack của dự án đã chạy, client, biên nginx, API, và lộ một lỗi X-Forwarded-For nhỏ."},
@@ -2162,8 +2320,14 @@
         {"t":471.05,"vi":"Bài sau, 13.3: tối ưu bằng giữ kết nối, cache, nén và CDN."}
       ]
     },
-    "netdev-13-3-toi-uu": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/networking-for-developers/13-du-an-cuoi-khoa/13-03-toi-uu-eedd96a8.mp4","durationSec":469.28,"nguonCau":"srt",
-      "parts": [],
+    "netdev-13-3-toi-uu": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/networking-for-developers/13-du-an-cuoi-khoa/13-03-toi-uu-eedd96a8.mp4","durationSec":469.28,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":98.24,"ten":"Ôn nhanh · hôm nay · Tối ưu"},
+        {"t":98.24,"den":183.62,"ten":"Nén · Chạy thật: nén, theo byte và theo thời gian"},
+        {"t":183.62,"den":274.52,"ten":"Keep-alive, HTTP/2, CDN"},
+        {"t":274.52,"den":366.7,"ten":"Chọn nút theo khoảng · Bảng trước sau"},
+        {"t":366.7,"den":469.28,"ten":"Chạy thật: lời giải · Ba câu tự kiểm"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 13.3 của khoá Networking for Developers."},
         {"t":10.8,"vi":"Bài trước: bảng mốc nền. Bắt tay 20 mili giây, phía máy chủ 20, tải thân 41, và 67 kilobyte chưa nén."},
@@ -2244,8 +2408,14 @@
         {"t":462.99,"vi":"Bài sau, 13.4: cố tình làm hỏng rồi chẩn đoán."}
       ]
     },
-    "netdev-13-4-co-y-lam-hong": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/networking-for-developers/13-du-an-cuoi-khoa/13-04-co-y-lam-hong-0f0d65f7.mp4","durationSec":459.39,"nguonCau":"srt",
-      "parts": [],
+    "netdev-13-4-co-y-lam-hong": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/networking-for-developers/13-du-an-cuoi-khoa/13-04-co-y-lam-hong-0f0d65f7.mp4","durationSec":459.39,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":92.65,"ten":"Ôn nhanh · hôm nay · Cố tình làm hỏng"},
+        {"t":92.65,"den":186.31,"ten":"Mô phỏng: ba lỗi, ba chặng · Lỗi gây ra trên stack"},
+        {"t":186.31,"den":268.62,"ten":"Chạy thật: mỗi lỗi một lệnh xác nhận"},
+        {"t":268.62,"den":358.3,"ten":"Viết báo cáo sự cố · Hỗn loạn là một kỹ năng"},
+        {"t":358.3,"den":459.39,"ten":"Chạy thật: lời giải · Ba câu tự kiểm"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 13.4 của khoá Networking for Developers."},
         {"t":10.84,"vi":"Bài trước: tối ưu từng nút, nén cắt nửa thời gian, cache biến ba giây thành 0,3 mili giây."},
@@ -2321,8 +2491,14 @@
         {"t":452.79,"vi":"Bài sau, 13.5: tổng kết khoá và câu chuyện phỏng vấn."}
       ]
     },
-    "netdev-13-5-tong-ket": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/networking-for-developers/13-du-an-cuoi-khoa/13-05-tong-ket-59879367.mp4","durationSec":470.9,"nguonCau":"srt",
-      "parts": [],
+    "netdev-13-5-tong-ket": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/networking-for-developers/13-du-an-cuoi-khoa/13-05-tong-ket-59879367.mp4","durationSec":470.9,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":102.18,"ten":"Ôn nhanh · hôm nay · Tổng kết và câu chuyện phỏng vấn"},
+        {"t":102.18,"den":217.25,"ten":"Mô phỏng: một request, mười ba chương · Dự án, nhìn lại"},
+        {"t":217.25,"den":318.47,"ten":"Câu chuyện phỏng vấn · Thang chấm dự án"},
+        {"t":318.47,"den":428.81,"ten":"Thực hành 20 phút · Câu chuyện mẫu, số thật"},
+        {"t":428.81,"den":470.9,"ten":"Tổng kết khoá"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 13.5, bài cuối của khoá Networking for Developers."},
         {"t":11.69,"vi":"Bốn bài vừa rồi bạn đã dựng stack, đo mốc nền, tối ưu từng nút, và cố tình làm hỏng."},
@@ -2401,8 +2577,21 @@
         {"t":466.64,"vi":"Hẹn gặp ở những khoá tiếp theo."}
       ]
     },
-    "netdev-2-1-ipv4-cidr": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/networking-for-developers/02-dia-chi-ip-dinh-tuyen-nat/02-01-ipv4-cidr-chia-subnet-512bf666.mp4","durationSec":1070.82,"nguonCau":"srt",
-      "parts": [],
+    "netdev-2-1-ipv4-cidr": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/networking-for-developers/02-dia-chi-ip-dinh-tuyen-nat/02-01-ipv4-cidr-chia-subnet-512bf666.mp4","durationSec":1070.82,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":98.87,"ten":"Ôn nhanh · hôm nay · Bìa · IPv4, CIDR, subnet"},
+        {"t":98.87,"den":199.92,"ten":"Bài này mang về gì · Địa chỉ IPv4 là một số 32 bit"},
+        {"t":199.92,"den":287.61,"ten":"Chạy thật: cùng địa chỉ, hai mặt nạ"},
+        {"t":287.61,"den":379.51,"ten":"Mô phỏng: phép AND từng bit"},
+        {"t":379.51,"den":457.78,"ten":"Quyết định đầu tiên: cùng mạng, hay qua gateway?"},
+        {"t":457.78,"den":541.59,"ten":"Lỗi: sai một ký tự — /16 thay vì /24"},
+        {"t":541.59,"den":650.51,"ten":"Chạy thật: gõ nhầm /16 trên client2 · Các địa chỉ đặc biệt"},
+        {"t":650.51,"den":727.42,"ten":"Từ lớp địa chỉ tới CIDR tới cạn kiệt"},
+        {"t":727.42,"den":826.01,"ten":"Vì sao lớn trước — và khi không vừa"},
+        {"t":826.01,"den":919.1,"ten":"Chạy thật: subnet Docker trên máy mình · Thực hành 25 phút"},
+        {"t":919.1,"den":1027.71,"ten":"Chạy thật: lời giải · Ba câu tự kiểm"},
+        {"t":1027.71,"den":1070.82,"ten":"Tóm tắt & bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Chương 2 của khoá Networking for Developers, bài 2.1."},
         {"t":11.91,"vi":"Chương 1, ta đọc một gói tin từ bit tới HTTP: MAC cho từng chặng, IP cho cả hành trình, cổng chọn chương trình."},
@@ -2537,8 +2726,21 @@
         {"t":1067.05,"vi":"Bảng định tuyến và traceroute."}
       ]
     },
-    "netdev-2-2-dinh-tuyen": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/networking-for-developers/02-dia-chi-ip-dinh-tuyen-nat/02-02-bang-dinh-tuyen-traceroute-4b2bc9bf.mp4","durationSec":1085,"nguonCau":"srt",
-      "parts": [],
+    "netdev-2-2-dinh-tuyen": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/networking-for-developers/02-dia-chi-ip-dinh-tuyen-nat/02-02-bang-dinh-tuyen-traceroute-4b2bc9bf.mp4","durationSec":1085,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":84.32,"ten":"Ôn nhanh · hôm nay · Bìa · định tuyến và traceroute"},
+        {"t":84.32,"den":171.45,"ten":"Lab mới: Internet trong một hộp"},
+        {"t":171.45,"den":287.22,"ten":"Đọc bảng định tuyến của laptop · Mỗi máy chỉ chọn chặng kế"},
+        {"t":287.22,"den":367.57,"ten":"Router lõi không có tuyến mặc định"},
+        {"t":367.57,"den":449.79,"ten":"Khớp tiền tố dài nhất · Mô phỏng: dòng nào thắng?"},
+        {"t":449.79,"den":554.68,"ten":"TTL: gói tin không sống mãi"},
+        {"t":554.68,"den":632.32,"ten":"Chạy thật: traceroute và bản bắt"},
+        {"t":632.32,"den":729.16,"ten":"Chạy thật: dấu sao vô hại"},
+        {"t":729.16,"den":821.59,"ten":"Chạy thật: vòng lặp định tuyến"},
+        {"t":821.59,"den":937.21,"ten":"Chạy thật: Docker trên Linux thì khác · Nằm ở đâu trong máy"},
+        {"t":937.21,"den":1037.48,"ten":"Chạy thật: /26 bị quên · Ba câu tự kiểm"},
+        {"t":1037.48,"den":1085,"ten":"Tóm tắt & bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 2.2 của khoá Networking for Developers."},
         {"t":11.94,"vi":"Bài trước, máy áp mặt nạ lên địa chỉ đích để quyết định: cùng mạng thì giao thẳng, khác mạng thì đưa cho cổng mặc định."},
@@ -2673,8 +2875,22 @@
         {"t":1076.26,"vi":"Bài sau, 2.3: router nhà còn làm thêm một việc, nó viết lại địa chỉ. NAT."}
       ]
     },
-    "netdev-2-3-nat": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/networking-for-developers/02-dia-chi-ip-dinh-tuyen-nat/02-03-nat-dai-ip-rieng-docker-9e65e974.mp4","durationSec":1187.99,"nguonCau":"srt",
-      "parts": [],
+    "netdev-2-3-nat": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/networking-for-developers/02-dia-chi-ip-dinh-tuyen-nat/02-03-nat-dai-ip-rieng-docker-9e65e974.mp4","durationSec":1187.99,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":85.31,"ten":"Ôn nhanh · hôm nay · Bìa · NAT, dải riêng, mạng Docker"},
+        {"t":85.31,"den":168.3,"ten":"Dải riêng: không có trên Internet"},
+        {"t":168.3,"den":257.05,"ten":"NAT: router dán địa chỉ của nó lên gói"},
+        {"t":257.05,"den":364.1,"ten":"Cùng kết nối, hai phía router"},
+        {"t":364.1,"den":470.64,"ten":"NAT nhớ kết nối im lặng bao lâu?"},
+        {"t":470.64,"den":550.71,"ten":"Chạy thật: đụng cổng 41000 · Mô phỏng: bảng NAT đầy dần"},
+        {"t":550.71,"den":660.51,"ten":"Vì sao không ai gọi vào laptop được"},
+        {"t":660.51,"den":736.89,"ten":"Mở cổng = DNAT · NAT không phải tường lửa"},
+        {"t":736.89,"den":815.53,"ten":"Chạy thật: điện thoại 4G sau CGNAT · Mô phỏng: NAT của ai?"},
+        {"t":815.53,"den":910.17,"ten":"docker run -p là DNAT trên máy bạn"},
+        {"t":910.17,"den":1029.56,"ten":"Cổng công bố vượt qua tường lửa · Nằm ở đâu trong máy"},
+        {"t":1029.56,"den":1143,"ten":"Chạy thật: lời giải · Ba câu tự kiểm"},
+        {"t":1143,"den":1187.99,"ten":"Tóm tắt & bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 2.3 của khoá Networking for Developers."},
         {"t":10.33,"vi":"Bài trước, ta đi theo gói tin qua bốn router, đọc bảng định tuyến, và học traceroute."},
@@ -2850,8 +3066,21 @@
         {"t":1178.93,"vi":"Bài sau, 2.4: IPv6, nơi mỗi thiết bị có địa chỉ công cộng riêng, không cần NAT."}
       ]
     },
-    "netdev-2-4-ipv6": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/networking-for-developers/02-dia-chi-ip-dinh-tuyen-nat/02-04-ipv6-cho-lap-trinh-vien-4cce5cee.mp4","durationSec":1071.86,"nguonCau":"srt",
-      "parts": [],
+    "netdev-2-4-ipv6": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/networking-for-developers/02-dia-chi-ip-dinh-tuyen-nat/02-04-ipv6-cho-lap-trinh-vien-4cce5cee.mp4","durationSec":1071.86,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":83.11,"ten":"Ôn nhanh · hôm nay · Bìa · IPv6 cho lập trình viên"},
+        {"t":83.11,"den":170.77,"ten":"128 bit, viết bằng hex — và một dấu ::"},
+        {"t":170.77,"den":250.84,"ten":"Bao nhiêu chỗ: /48 cho một nơi, /64 cho một mạng"},
+        {"t":250.84,"den":358.98,"ten":"Chạy thật: địa chỉ và tuyến IPv6 của laptop"},
+        {"t":358.98,"den":446.99,"ten":"Không NAT: máy chủ thấy đúng thiết bị"},
+        {"t":446.99,"den":552.21,"ten":"Chạy thật: tên labflow.test"},
+        {"t":552.21,"den":644.82,"ten":"Chạy thật: Happy Eyeballs đo thật"},
+        {"t":644.82,"den":721.23,"ten":"Lỗi: localhost từ chối kết nối · Chạy thật: localhost và ::1"},
+        {"t":721.23,"den":803.63,"ten":"Vì sao localhost hỏng — hai cách sửa"},
+        {"t":803.63,"den":880.23,"ten":"Chạy thật: 0.0.0.0 với :: · Nằm ở đâu trong máy"},
+        {"t":880.23,"den":963.62,"ten":"Thực hành 25 phút · Chạy thật: lời giải"},
+        {"t":963.62,"den":1071.86,"ten":"Ba câu tự kiểm · Tóm tắt & bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 2.4 của khoá Networking for Developers."},
         {"t":11.06,"vi":"Bài trước, router nhà viết lại địa chỉ: cả nhà ra Internet bằng một IP."},
@@ -3027,8 +3256,22 @@
         {"t":1064.68,"vi":"Bài sau, 2.5: Internet được nối lại thế nào, AS và BGP."}
       ]
     },
-    "netdev-2-5-bgp-internet": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/networking-for-developers/02-dia-chi-ip-dinh-tuyen-nat/02-05-as-va-bgp-1a50d71c.mp4","durationSec":1135.24,"nguonCau":"srt",
-      "parts": [],
+    "netdev-2-5-bgp-internet": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/networking-for-developers/02-dia-chi-ip-dinh-tuyen-nat/02-05-as-va-bgp-1a50d71c.mp4","durationSec":1135.24,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":82.89,"ten":"Ôn nhanh · hôm nay · Bìa · AS và BGP"},
+        {"t":82.89,"den":165.89,"ten":"Internet là mạng của các mạng"},
+        {"t":165.89,"den":242.83,"ten":"Mô phỏng: lời quảng bá lan đi · Đọc bảng BGP của nhà mạng"},
+        {"t":242.83,"den":338.79,"ten":"Chạy thật: bảng BGP của nhà mạng"},
+        {"t":338.79,"den":418.38,"ten":"Điểm yếu: BGP tin những gì nó nghe · Mô phỏng: /25 thắng /24"},
+        {"t":418.38,"den":506,"ten":"Dựng lại: rogue quảng bá một nửa LabFlow"},
+        {"t":506,"den":581.1,"ten":"Chạy thật: triệu chứng và nạn nhân"},
+        {"t":581.1,"den":683.06,"ten":"Chạy thật: bộ lọc prefix-list"},
+        {"t":683.06,"den":787.74,"ten":"RPKI chưa phải toàn bộ lời giải"},
+        {"t":787.74,"den":869.83,"ten":"Dựng lại: trung tâm dữ liệu rút dải của mình"},
+        {"t":869.83,"den":982.49,"ten":"“DNS sập” thường không phải lỗi DNS · Nằm ở đâu trong máy"},
+        {"t":982.49,"den":1087.02,"ten":"Chạy thật: lời giải · Ba câu tự kiểm"},
+        {"t":1087.02,"den":1135.24,"ten":"Tóm tắt & bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 2.5 của khoá Networking for Developers."},
         {"t":10.89,"vi":"Bài trước là IPv6: địa chỉ 128 bit, không NAT, và Happy Eyeballs."},
@@ -3202,8 +3445,13 @@
         {"t":1128.07,"vi":"Bạn tự lập kế hoạch địa chỉ, vẽ đường đi, mở cổng, và sửa hai sự cố."}
       ]
     },
-    "netdev-2-6-lab-duong-vao-labflow": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/networking-for-developers/02-dia-chi-ip-dinh-tuyen-nat/02-06-lab-2-duong-vao-labflow-49264368.mp4","durationSec":418.72,"nguonCau":"srt",
-      "parts": [],
+    "netdev-2-6-lab-duong-vao-labflow": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/networking-for-developers/02-dia-chi-ip-dinh-tuyen-nat/02-06-lab-2-duong-vao-labflow-49264368.mp4","durationSec":418.72,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":104.97,"ten":"Ôn nhanh · hôm nay · Bìa · Lab 2"},
+        {"t":104.97,"den":194.83,"ten":"Hệ thống: Internet trong một hộp · Sáu yêu cầu"},
+        {"t":194.83,"den":296.19,"ten":"Cách làm · Làm mẫu R3, đúng một dòng: laptop qua IPv4"},
+        {"t":296.19,"den":418.72,"ten":"Đi xa hơn · Bắt tay làm lab"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Lab 2, phần hai của dự án xuyên khoá."},
         {"t":9.62,"vi":"Chương 2 cho bạn: chia subnet, bảng định tuyến, NAT, IPv6 và BGP."},
@@ -3270,8 +3518,22 @@
         {"t":408.31,"vi":"Chương 3 là DNS tới tận gốc, bắt đầu bằng bài 3.1: một cái tên được phân giải qua những máy nào."}
       ]
     },
-    "netdev-3-1-phan-giai": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/networking-for-developers/03-dns-toi-tan-goc/03-01-phan-giai-ten-4b27cb0a.mp4","durationSec":1126.72,"nguonCau":"srt",
-      "parts": [],
+    "netdev-3-1-phan-giai": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/networking-for-developers/03-dns-toi-tan-goc/03-01-phan-giai-ten-4b27cb0a.mp4","durationSec":1126.72,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":88.26,"ten":"Ôn nhanh · hôm nay · Bìa · phân giải tên"},
+        {"t":88.26,"den":204.19,"ten":"Bài này mang về gì · Bốn vai trong một lần tra tên"},
+        {"t":204.19,"den":296.54,"ten":"Phòng lab: một cây DNS riêng"},
+        {"t":296.54,"den":393.47,"ten":"Từng phần nghĩa là gì · Bằng tay: hỏi gốc trước"},
+        {"t":393.47,"den":491.29,"ten":"Chạy thật: ba câu hỏi bằng tay"},
+        {"t":491.29,"den":578.73,"ten":"Resolver thật sự đã gửi gì · Đọc bản bắt"},
+        {"t":578.73,"den":654.83,"ten":"Gốc thật: 13 tên, hơn hai nghìn máy"},
+        {"t":654.83,"den":753.13,"ten":"Chạy thật: dig +trace example.com"},
+        {"t":753.13,"den":840.07,"ten":"Mô phỏng: hai đường hỏi tên · Tên miền search và ndots"},
+        {"t":840.07,"den":915.98,"ten":"Máy chủ DNS của tôi là 127.0.0.53?"},
+        {"t":915.98,"den":992.61,"ten":"Nằm ở đâu trong máy · Thực hành 25 phút"},
+        {"t":992.61,"den":1078.65,"ten":"Chạy thật: lời giải · Ba câu tự kiểm"},
+        {"t":1078.65,"den":1126.72,"ten":"Tóm tắt & bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Chương 3 của khoá Networking for Developers: DNS tới tận gốc."},
         {"t":12.29,"vi":"Chương 2 cho ta địa chỉ, định tuyến, NAT và BGP. Và ta thấy DNS sập có thể là chuyện định tuyến."},
@@ -3445,8 +3707,19 @@
         {"t":1120.33,"vi":"Bài sau, 3.2: các loại bản ghi lập trình viên đụng tới."}
       ]
     },
-    "netdev-3-3-ttl-cache": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/networking-for-developers/03-dns-toi-tan-goc/03-03-ttl-cache-178579a5.mp4","durationSec":914.79,"nguonCau":"srt",
-      "parts": [],
+    "netdev-3-3-ttl-cache": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/networking-for-developers/03-dns-toi-tan-goc/03-03-ttl-cache-178579a5.mp4","durationSec":914.79,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":107.99,"ten":"Ôn nhanh · hôm nay · Bìa · TTL và cache"},
+        {"t":107.99,"den":198.93,"ten":"Chạy thật: TTL đếm ngược · Bên trong resolver"},
+        {"t":198.93,"den":278.16,"ten":"Mô phỏng: câu hỏi dừng ở lớp nào"},
+        {"t":278.16,"den":382.22,"ten":"Chạy thật: chuyển máy chủ sai thứ tự"},
+        {"t":382.22,"den":466.32,"ten":"Thứ tự đúng khi chuyển máy chủ"},
+        {"t":466.32,"den":557.38,"ten":"Xoá một tên là chưa đủ · Chạy thật: xoá tên, rồi xoá vùng"},
+        {"t":557.38,"den":637.48,"ten":"Trong ứng dụng: Java nhớ, Node hỏi mỗi lần"},
+        {"t":637.48,"den":720.7,"ten":"DNS chậm và thread pool của Node"},
+        {"t":720.7,"den":825.71,"ten":"Vì sao DNS chỉ được nửa pool · Thực hành 25 phút"},
+        {"t":825.71,"den":914.79,"ten":"Ba câu tự kiểm · Tóm tắt & bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 3.3 của khoá Networking for Developers."},
         {"t":10.87,"vi":"Bài trước ta đọc tệp vùng và mọi loại bản ghi."},
@@ -3596,8 +3869,19 @@
         {"t":907.51,"vi":"Bài sau, 3.4: anycast, GeoDNS và cân bằng tải bằng DNS."}
       ]
     },
-    "netdev-3-4-anycast-geodns": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/networking-for-developers/03-dns-toi-tan-goc/03-04-anycast-geodns-d4004fa6.mp4","durationSec":907.73,"nguonCau":"srt",
-      "parts": [],
+    "netdev-3-4-anycast-geodns": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/networking-for-developers/03-dns-toi-tan-goc/03-04-anycast-geodns-d4004fa6.mp4","durationSec":907.73,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":81.79,"ten":"Ôn nhanh · hôm nay · Bìa · anycast, GeoDNS, round robin"},
+        {"t":81.79,"den":165.45,"ten":"Anycast: hai điểm, một dải"},
+        {"t":165.45,"den":263.95,"ten":"Chạy thật: hai nơi trả lời · Router nhà mạng thấy hai đường"},
+        {"t":263.95,"den":352.38,"ten":"Chạy thật: rút pop1 · Anycast ngoài đời"},
+        {"t":352.38,"den":449.09,"ten":"Cùng tên, hai câu trả lời, hai máy · Chạy thật: GeoDNS"},
+        {"t":449.09,"den":543.45,"ten":"Chạy thật: người Việt Nam bị đưa sang Singapore"},
+        {"t":543.45,"den":619.57,"ten":"Vì sao curl mới chỉ mất 0,2 giây"},
+        {"t":619.57,"den":720.56,"ten":"Round robin không phải bộ cân bằng tải"},
+        {"t":720.56,"den":819.29,"ten":"Qua proxy hay không: điều gì đổi với bạn · Thực hành 25 phút"},
+        {"t":819.29,"den":907.73,"ten":"Ba câu tự kiểm · Tóm tắt & bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 3.4 của khoá Networking for Developers."},
         {"t":10.89,"vi":"Bài trước ta đo TTL đếm ngược, cache âm, và cache trong Java và Node."},
@@ -3740,8 +4024,14 @@
         {"t":899.77,"vi":"Bài sau, 3.5: DNSSEC, DoH, DoT, và các kiểu hỏng của DNS."}
       ]
     },
-    "netdev-3-6-lab-dns-labflow": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/networking-for-developers/03-dns-toi-tan-goc/03-06-lab-3-dns-labflow-2c5c66be.mp4","durationSec":424.59,"nguonCau":"srt",
-      "parts": [],
+    "netdev-3-6-lab-dns-labflow": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/networking-for-developers/03-dns-toi-tan-goc/03-06-lab-3-dns-labflow-2c5c66be.mp4","durationSec":424.59,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":103.49,"ten":"Ôn nhanh · hôm nay · Bìa · Lab 3"},
+        {"t":103.49,"den":183.76,"ten":"Hệ thống: phòng lab DNS · Sáu yêu cầu"},
+        {"t":183.76,"den":264.08,"ten":"Cách làm · Làm mẫu R1, chỉ một tên: www"},
+        {"t":264.08,"den":353.54,"ten":"Checklist bằng chứng R1–R6 · Đi xa hơn"},
+        {"t":353.54,"den":424.59,"ten":"Ba câu tự kiểm phương pháp · Tổng kết Chương 3 & chương sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Lab 3, phần ba của dự án xuyên khoá."},
         {"t":9.53,"vi":"Chương 3 cho bạn: phân giải tên, các loại bản ghi, TTL và cache, anycast, và DNSSEC."},
@@ -3809,8 +4099,16 @@
         {"t":416.28,"vi":"Chương 4 là TCP, bắt đầu bằng bài 4.1: bắt tay ba bước và đóng kết nối."}
       ]
     },
-    "netdev-4-1-bat-tay": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/networking-for-developers/04-tcp/04-01-bat-tay-ba-buoc-2d830bc7.mp4","durationSec":628.32,"nguonCau":"srt",
-      "parts": [],
+    "netdev-4-1-bat-tay": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/networking-for-developers/04-tcp/04-01-bat-tay-ba-buoc-2d830bc7.mp4","durationSec":628.32,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":82.17,"ten":"Ôn nhanh · hôm nay · Bìa · bắt tay ba bước"},
+        {"t":82.17,"den":161.73,"ten":"Bài này mang về gì · Bắt tay ba bước"},
+        {"t":161.73,"den":261.69,"ten":"Đọc trên dây · Chạy thật: một curl, mười gói"},
+        {"t":261.69,"den":339.73,"ten":"Chạy thật: đo bằng curl -w"},
+        {"t":339.73,"den":426.58,"ten":"Chạy thật: cổng đóng · Không ai trả lời: SYN truyền lại"},
+        {"t":426.58,"den":517.57,"ten":"RTT là cái sàn dưới mọi thứ · Nằm ở đâu trong máy"},
+        {"t":517.57,"den":628.32,"ten":"Lời giải · Ba câu tự kiểm"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Chương 4 của khoá Networking for Developers: TCP."},
         {"t":11.35,"vi":"Chương 3 đổi một cái tên thành địa chỉ."},
@@ -3922,8 +4220,16 @@
         {"t":621.77,"vi":"Bài sau, 4.2: độ tin cậy, số thứ tự, ACK và truyền lại."}
       ]
     },
-    "netdev-4-2-tin-cay": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/networking-for-developers/04-tcp/04-02-do-tin-cay-89eb0476.mp4","durationSec":611.7,"nguonCau":"srt",
-      "parts": [],
+    "netdev-4-2-tin-cay": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/networking-for-developers/04-tcp/04-02-do-tin-cay-89eb0476.mp4","durationSec":611.7,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":90.98,"ten":"Ôn nhanh · hôm nay · Bìa · độ tin cậy"},
+        {"t":90.98,"den":180.4,"ten":"Mô phỏng: write() thành các đoạn · Số thứ tự và ACK trên dây"},
+        {"t":180.4,"den":277.24,"ten":"ACK là tích luỹ · Mất gói: TCP truyền lại"},
+        {"t":277.24,"den":356.9,"ten":"Phục hồi nhanh: ACK trùng và SACK · Mô phỏng: một đoạn mất"},
+        {"t":356.9,"den":456.49,"ten":"Hai cách nhận ra mất gói · Nghẽn đầu hàng ở tầng TCP"},
+        {"t":456.49,"den":536.94,"ten":"Thực hành 25 phút · Chạy thật: lời giải"},
+        {"t":536.94,"den":611.7,"ten":"Ba câu tự kiểm · Tóm tắt & bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 4.2 của khoá Networking for Developers."},
         {"t":10.91,"vi":"Bài trước, ba gói mở một kết nối, và mỗi bên trao số thứ tự khởi đầu của nó."},
@@ -4019,8 +4325,16 @@
         {"t":605.55,"vi":"Bài sau, 4.3: kiểm soát luồng và kiểm soát tắc nghẽn."}
       ]
     },
-    "netdev-4-3-tac-nghen": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/networking-for-developers/04-tcp/04-03-kiem-soat-tac-nghen-ccc9c9c4.mp4","durationSec":623.66,"nguonCau":"srt",
-      "parts": [],
+    "netdev-4-3-tac-nghen": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/networking-for-developers/04-tcp/04-03-kiem-soat-tac-nghen-ccc9c9c4.mp4","durationSec":623.66,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":112.97,"ten":"Ôn nhanh · hôm nay · Bìa · kiểm soát luồng và tắc nghẽn"},
+        {"t":112.97,"den":197.76,"ten":"Mô phỏng: hai cái van"},
+        {"t":197.76,"den":289.36,"ten":"Chạy thật: cwnd lớn lên trong ss · Cú trèo nhìn thấy được"},
+        {"t":289.36,"den":371.9,"ten":"Chạy thật: cubic, và một cuộc đua · Ba cách tìm tốc độ đúng"},
+        {"t":371.9,"den":451.83,"ten":"Mô phỏng: răng cưa Reno và đường cong CUBIC"},
+        {"t":451.83,"den":538.97,"ten":"Thực hành 25 phút · Chạy thật: lời giải"},
+        {"t":538.97,"den":623.66,"ten":"Ba câu tự kiểm · Tóm tắt & bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 4.3 của khoá Networking for Developers."},
         {"t":10.89,"vi":"Bài trước, TCP đánh số byte, báo nhận, và gửi lại đoạn mất."},
@@ -4121,8 +4435,15 @@
         {"t":616.96,"vi":"Bài sau, 4.4: trạng thái kết nối, TIME_WAIT, và cạn cổng."}
       ]
     },
-    "netdev-4-4-trang-thai": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/networking-for-developers/04-tcp/04-04-trang-thai-time-wait-f2587d2d.mp4","durationSec":555.45,"nguonCau":"srt",
-      "parts": [],
+    "netdev-4-4-trang-thai": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/networking-for-developers/04-tcp/04-04-trang-thai-time-wait-f2587d2d.mp4","durationSec":555.45,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":90.79,"ten":"Ôn nhanh · hôm nay · Bìa · trạng thái và cạn cổng"},
+        {"t":90.79,"den":170.74,"ten":"Mô phỏng: một kết nối đi qua các trạng thái"},
+        {"t":170.74,"den":255.46,"ten":"Chạy thật: TIME-WAIT dồn ở client · Vì sao TIME_WAIT có mặt"},
+        {"t":255.46,"den":341.4,"ten":"Mô phỏng: hết cổng, và pool"},
+        {"t":341.4,"den":417.2,"ten":"Mô phỏng: hàng đợi accept đầy"},
+        {"t":417.2,"den":555.45,"ten":"Thực hành 25 phút · Chạy thật: lời giải"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 4.4 của khoá Networking for Developers."},
         {"t":11.18,"vi":"Bài trước là hai cửa sổ: cửa sổ nhận và cửa sổ tắc nghẽn, và vì sao lần tải lớn trèo dần."},
@@ -4226,8 +4547,16 @@
         {"t":548.17,"vi":"Bài sau, 4.5: keep-alive, pool kết nối và Nagle trong mã của bạn."}
       ]
     },
-    "netdev-4-5-keepalive-pool": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/networking-for-developers/04-tcp/04-05-keepalive-pool-13b51eed.mp4","durationSec":645.1,"nguonCau":"srt",
-      "parts": [],
+    "netdev-4-5-keepalive-pool": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/networking-for-developers/04-tcp/04-05-keepalive-pool-13b51eed.mp4","durationSec":645.1,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":96.58,"ten":"Ôn nhanh · hôm nay · Bìa · nơi TCP gặp mã của bạn"},
+        {"t":96.58,"den":173.79,"ten":"Chạy thật: curl dùng lại kết nối"},
+        {"t":173.79,"den":263.78,"ten":"Một pool trông ra sao · Hai timeout hay bị nhầm"},
+        {"t":263.78,"den":341.44,"ten":"Nagle và TCP_NODELAY · Chạy thật: Nagle bật và tắt"},
+        {"t":341.44,"den":434.44,"ten":"Nagle nhân delayed ACK: cú kẹt 40 ms · Kết nối chết âm thầm"},
+        {"t":434.44,"den":531.63,"ten":"Các timeout luôn phải đặt · Nằm ở đâu trong máy"},
+        {"t":531.63,"den":645.1,"ten":"Chạy thật: lời giải · Ba câu tự kiểm"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 4.5 của khoá Networking for Developers."},
         {"t":10.91,"vi":"Bài trước ta đọc trạng thái bằng ss, gặp TIME_WAIT, và dựng lại sự cố hết cổng."},
@@ -4348,8 +4677,15 @@
         {"t":637.05,"vi":"Bài sau là Lab 4: mổ xẻ TCP của LabFlow, đo thuế, và chẩn đoán hai sự cố."}
       ]
     },
-    "netdev-4-6-lab-tcp-labflow": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/networking-for-developers/04-tcp/04-06-lab-4-tcp-labflow-47991d2b.mp4","durationSec":492.45,"nguonCau":"srt",
-      "parts": [],
+    "netdev-4-6-lab-tcp-labflow": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/networking-for-developers/04-tcp/04-06-lab-4-tcp-labflow-47991d2b.mp4","durationSec":492.45,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":80.33,"ten":"Ôn nhanh · hôm nay · Bìa · Lab 4"},
+        {"t":80.33,"den":159.68,"ten":"Mô phỏng: ba lời than trên một đường đi"},
+        {"t":159.68,"den":238.35,"ten":"Sáu yêu cầu · phần hai · Mẫu báo cáo"},
+        {"t":238.35,"den":343.54,"ten":"Làm mẫu R2: thuế bắt tay"},
+        {"t":343.54,"den":426.28,"ten":"Đi xa hơn · Lab này chứng minh gì"},
+        {"t":426.28,"den":492.45,"ten":"Ba câu tự kiểm phương pháp · Tổng kết Chương 4 & chương sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Lab 4, phần bốn của dự án xuyên khoá."},
         {"t":9.78,"vi":"Chương 4 cho bạn: cú bắt tay, độ tin cậy, tắc nghẽn, trạng thái kết nối, và keep-alive với timeout."},
@@ -4438,8 +4774,15 @@
         {"t":484.16,"vi":"Chương 5 là UDP và QUIC, bắt đầu bằng bài 5.1: UDP, gửi rồi quên."}
       ]
     },
-    "netdev-5-1-udp": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/networking-for-developers/05-udp-va-quic/05-01-udp-5bca0ca5.mp4","durationSec":581.01,"nguonCau":"srt",
-      "parts": [],
+    "netdev-5-1-udp": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/networking-for-developers/05-udp-va-quic/05-01-udp-5bca0ca5.mp4","durationSec":581.01,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":96.27,"ten":"Ôn nhanh · hôm nay · Bìa · UDP: gửi rồi quên"},
+        {"t":96.27,"den":176.9,"ten":"UDP và TCP: giao kèo · Mô phỏng: header tám byte"},
+        {"t":176.9,"den":269.17,"ten":"Chạy thật: một gói đi, một gói về"},
+        {"t":269.17,"den":374.94,"ten":"Mô phỏng: gói biến mất giữa đường"},
+        {"t":374.94,"den":470.08,"ten":"Ứng dụng làm phần việc của TCP · Nằm ở đâu trong máy"},
+        {"t":470.08,"den":581.01,"ten":"Chạy thật: lời giải · Ba câu tự kiểm"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 5.1, mở đầu Chương 5 của khoá Networking for Developers."},
         {"t":12.87,"vi":"Chương 4 là mọi thứ TCP làm hộ bạn: bắt tay, giao hàng đáng tin, kiểm soát tắc nghẽn, và cái giá của chúng."},
@@ -4553,8 +4896,16 @@
         {"t":572.65,"vi":"Bài sau, 5.2: QUIC, làm tất cả những việc đó một lần, cho đúng, trên UDP."}
       ]
     },
-    "netdev-5-2-quic": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/networking-for-developers/05-udp-va-quic/05-02-quic-5e5d2bb0.mp4","durationSec":654.69,"nguonCau":"srt",
-      "parts": [],
+    "netdev-5-2-quic": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/networking-for-developers/05-udp-va-quic/05-02-quic-5e5d2bb0.mp4","durationSec":654.69,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":107.6,"ten":"Ôn nhanh · hôm nay · Bìa · QUIC"},
+        {"t":107.6,"den":197.02,"ten":"Từ Google 2012 tới RFC 9000 · Một cú bắt tay thay vì hai"},
+        {"t":197.02,"den":282.77,"ten":"Phía máy chủ thật trong lab · Chạy thật: nginx nghe QUIC"},
+        {"t":282.77,"den":372.41,"ten":"Chạy thật: Alt-Svc của site thật"},
+        {"t":372.41,"den":472.7,"ten":"Mô phỏng: một gói mất, ai phải chờ · Chuyển kết nối"},
+        {"t":472.7,"den":576.87,"ten":"Nằm ở đâu trong máy · Thực hành 20 phút"},
+        {"t":576.87,"den":654.69,"ten":"Ba câu tự kiểm · Tóm tắt & bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 5.2 của khoá Networking for Developers."},
         {"t":10.9,"vi":"Bài trước: UDP cho bạn gần như không gì."},
@@ -4662,8 +5013,15 @@
         {"t":647.18,"vi":"Bài sau, 5.3: UDP ngoài đời, tường lửa, NAT, và khi QUIC bị chặn."}
       ]
     },
-    "netdev-5-3-udp-thuc-te": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/networking-for-developers/05-udp-va-quic/05-03-udp-thuc-te-c9e66ae4.mp4","durationSec":579.61,"nguonCau":"srt",
-      "parts": [],
+    "netdev-5-3-udp-thuc-te": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/networking-for-developers/05-udp-va-quic/05-03-udp-thuc-te-c9e66ae4.mp4","durationSec":579.61,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":112.51,"ten":"Ôn nhanh · hôm nay · Bìa · UDP ngoài đời"},
+        {"t":112.51,"den":212.68,"ten":"Mô phỏng: tường lửa văn phòng · Đường lùi êm ru"},
+        {"t":212.68,"den":294,"ten":"Mô phỏng: chờ rồi lùi, hay đua"},
+        {"t":294,"den":370.89,"ten":"Chạy thật: router quên UDP sau 30 giây"},
+        {"t":370.89,"den":461.3,"ten":"Khi nào ép hay tắt HTTP/3 · Nằm ở đâu trong máy"},
+        {"t":461.3,"den":579.61,"ten":"Chạy thật: lời giải · Ba câu tự kiểm"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 5.3 của khoá Networking for Developers."},
         {"t":10.85,"vi":"Bài trước: QUIC bắt tay một vòng, bỏ nghẽn đầu hàng, và được quảng cáo qua Alt-Svc."},
@@ -4768,8 +5126,14 @@
         {"t":573.1,"vi":"Bài sau là Lab 5: UDP, QUIC và HTTP/3 của LabFlow."}
       ]
     },
-    "netdev-5-4-lab-udp-quic": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/networking-for-developers/05-udp-va-quic/05-04-lab-5-udp-quic-eb7ed1f1.mp4","durationSec":443.96,"nguonCau":"srt",
-      "parts": [],
+    "netdev-5-4-lab-udp-quic": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/networking-for-developers/05-udp-va-quic/05-04-lab-5-udp-quic-eb7ed1f1.mp4","durationSec":443.96,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":82.51,"ten":"Ôn nhanh · hôm nay · Bìa · Lab 5"},
+        {"t":82.51,"den":165.55,"ten":"Mô phỏng: ba quyết định trên bàn"},
+        {"t":165.55,"den":244.89,"ten":"Mẫu báo cáo · Thang điểm — 10 điểm"},
+        {"t":244.89,"den":332.11,"ten":"Checklist bằng chứng R1, R3 tới R6 · Gợi ý theo bậc"},
+        {"t":332.11,"den":443.96,"ten":"Lab này chứng minh gì · Bắt tay làm lab"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Lab 5, phần năm của dự án xuyên khoá."},
         {"t":9.66,"vi":"Chương 5 cho bạn: UDP gửi rồi quên, QUIC dựng lại trên UDP, và đường lùi khi QUIC bị chặn."},
@@ -4849,8 +5213,15 @@
         {"t":435.01,"vi":"Chương 6 là TLS và chứng chỉ, bắt đầu bằng bài 6.1: TLS bảo đảm điều gì."}
       ]
     },
-    "netdev-6-1-tls-la-gi": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/networking-for-developers/06-tls-va-chung-chi/06-01-tls-la-gi-26dbddb0.mp4","durationSec":548.07,"nguonCau":"srt",
-      "parts": [],
+    "netdev-6-1-tls-la-gi": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/networking-for-developers/06-tls-va-chung-chi/06-01-tls-la-gi-26dbddb0.mp4","durationSec":548.07,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":103.01,"ten":"Ôn nhanh · hôm nay · Bìa · TLS bảo đảm gì"},
+        {"t":103.01,"den":189.28,"ten":"TLS bảo đảm gì · Mô phỏng: ba kẻ trên đường"},
+        {"t":189.28,"den":283.54,"ten":"Chạy thật: openssl s_client · Trên dây: chỉ lời chào là chữ"},
+        {"t":283.54,"den":381.38,"ten":"Mô phỏng: người quan sát thấy gì"},
+        {"t":381.38,"den":470.95,"ten":"Mô phỏng: byte đi xuống ngăn xếp · Thực hành 20 phút"},
+        {"t":470.95,"den":548.07,"ten":"Ba câu tự kiểm · Tóm tắt & bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 6.1, mở đầu Chương 6 của khoá Networking for Developers."},
         {"t":12.47,"vi":"Chương 5 khép lại với QUIC, nơi TLS 1.3 nằm ngay trong cú bắt tay."},
@@ -4952,8 +5323,15 @@
         {"t":538.77,"vi":"Bài sau, 6.2: cú bắt tay TLS 1.3, từng bước, và giải mã HTTPS của chính bạn."}
       ]
     },
-    "netdev-6-4-loi-tls": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/networking-for-developers/06-tls-va-chung-chi/06-04-loi-tls-a93cba92.mp4","durationSec":581.45,"nguonCau":"srt",
-      "parts": [],
+    "netdev-6-4-loi-tls": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/networking-for-developers/06-tls-va-chung-chi/06-04-loi-tls-a93cba92.mp4","durationSec":581.45,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":88.14,"ten":"Ôn nhanh · hôm nay · Bìa · chẩn đoán lỗi TLS"},
+        {"t":88.14,"den":190.3,"ten":"Chạy thật: hết hạn và chưa hiệu lực"},
+        {"t":190.3,"den":268.95,"ten":"Chạy thật: sai tên và tự ký · Bảng chẩn đoán"},
+        {"t":268.95,"den":364.41,"ten":"Mô phỏng: một máy chủ, ba kết quả"},
+        {"t":364.41,"den":473.23,"ten":"mTLS trong một phút · Chạy thật: mTLS"},
+        {"t":473.23,"den":581.45,"ten":"Chạy thật: lời giải · Ba câu tự kiểm"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 6.4 của khoá Networking for Developers."},
         {"t":11.08,"vi":"Bài trước: chứng chỉ, chuỗi lá, trung gian, gốc, và lỗi thiếu trung gian."},
@@ -5060,8 +5438,14 @@
         {"t":575.68,"vi":"Bài sau là Lab 6: siết HTTPS của LabFlow."}
       ]
     },
-    "netdev-6-5-lab-tls-labflow": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/networking-for-developers/06-tls-va-chung-chi/06-05-lab-6-tls-labflow-3ca24e97.mp4","durationSec":434.98,"nguonCau":"srt",
-      "parts": [],
+    "netdev-6-5-lab-tls-labflow": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/networking-for-developers/06-tls-va-chung-chi/06-05-lab-6-tls-labflow-3ca24e97.mp4","durationSec":434.98,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":83.31,"ten":"Ôn nhanh · hôm nay · Bìa · Lab 6"},
+        {"t":83.31,"den":162.92,"ten":"Mô phỏng: ba việc cùng lúc"},
+        {"t":162.92,"den":243.99,"ten":"Mẫu báo cáo · Thang điểm — 10 điểm"},
+        {"t":243.99,"den":321.4,"ten":"Checklist bằng chứng R1, R3 tới R6 · Gợi ý theo bậc"},
+        {"t":321.4,"den":434.98,"ten":"Lab này chứng minh gì · Bắt tay làm lab"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Lab 6, phần sáu của dự án xuyên khoá."},
         {"t":9.46,"vi":"Chương 6 cho bạn: ba bảo đảm của TLS, cú bắt tay, chứng chỉ và chuỗi, và cách đọc mọi lỗi TLS."},
@@ -5139,8 +5523,15 @@
         {"t":424.27,"vi":"Chương 7 là HTTP, từ 1.1 tới 3, bắt đầu bằng bài 7.1: HTTP/1.1 trên dây."}
       ]
     },
-    "netdev-7-1-http11": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/networking-for-developers/07-http-tu-1-1-toi-3/07-01-http11-08fb3a3e.mp4","durationSec":538.34,"nguonCau":"srt",
-      "parts": [],
+    "netdev-7-1-http11": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/networking-for-developers/07-http-tu-1-1-toi-3/07-01-http11-08fb3a3e.mp4","durationSec":538.34,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":99.52,"ten":"Ôn nhanh · hôm nay · Bìa · HTTP/1.1 trên dây"},
+        {"t":99.52,"den":177.21,"ten":"HTTP/1.1 chỉ là văn bản · Chạy thật: gõ yêu cầu bằng nc"},
+        {"t":177.21,"den":252.47,"ten":"Cấu tạo một thông điệp"},
+        {"t":252.47,"den":328.71,"ten":"Chunked: thân chưa biết độ dài · Chạy thật: các khúc"},
+        {"t":328.71,"den":440.3,"ten":"Giới hạn đã định hình web cũ"},
+        {"t":440.3,"den":538.34,"ten":"Chạy thật: lời giải · Ba câu tự kiểm"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 7.1, mở đầu Chương 7 của khoá Networking for Developers."},
         {"t":13.05,"vi":"Chương 6 là đường hầm TLS. Hôm nay ta nhìn thứ đi bên trong đường hầm đó: HTTP."},
@@ -5235,8 +5626,15 @@
         {"t":530.27,"vi":"Bài sau, 7.2: HTTP/2, ghép kênh, HPACK, và vì sao server push bị bỏ."}
       ]
     },
-    "netdev-7-2-http2": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/networking-for-developers/07-http-tu-1-1-toi-3/07-02-http2-4b5410f8.mp4","durationSec":554.68,"nguonCau":"srt",
-      "parts": [],
+    "netdev-7-2-http2": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/networking-for-developers/07-http-tu-1-1-toi-3/07-02-http2-4b5410f8.mp4","durationSec":554.68,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":95.43,"ten":"Ôn nhanh · hôm nay · Bìa · HTTP/2"},
+        {"t":95.43,"den":175.28,"ten":"Chạy thật: ALPN chọn h2 · Từ văn bản sang frame nhị phân"},
+        {"t":175.28,"den":277.92,"ten":"Ghép kênh: đọc stream id · Chạy thật: stream 1, 3, 5"},
+        {"t":277.92,"den":366.46,"ten":"Chạy thật: HPACK đo được · Vì sao server push chết"},
+        {"t":366.46,"den":453.39,"ten":"Giới hạn HTTP/2 không sửa được · Nằm ở đâu trong máy"},
+        {"t":453.39,"den":554.68,"ten":"Chạy thật: lời giải · Ba câu tự kiểm"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 7.2 của khoá Networking for Developers."},
         {"t":10.91,"vi":"Bài trước: HTTP/1.1 là văn bản, một yêu cầu một lúc mỗi kết nối, nên sáu kết nối mỗi origin."},
@@ -5326,8 +5724,15 @@
         {"t":549.81,"vi":"Bài sau, 7.3: HTTP/3 trên QUIC."}
       ]
     },
-    "netdev-7-3-http3": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/networking-for-developers/07-http-tu-1-1-toi-3/07-03-http3-3508fe2b.mp4","durationSec":557.42,"nguonCau":"srt",
-      "parts": [],
+    "netdev-7-3-http3": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/networking-for-developers/07-http-tu-1-1-toi-3/07-03-http3-3508fe2b.mp4","durationSec":557.42,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":95.37,"ten":"Ôn nhanh · hôm nay · Bìa · HTTP/3"},
+        {"t":95.37,"den":185.55,"ten":"Mô phỏng: tráo ngăn xếp · Đường nâng cấp: h1, h2, h3"},
+        {"t":185.55,"den":282.59,"ten":"Phía máy chủ là UDP thật · Chạy thật: UDP và TCP 8443"},
+        {"t":282.59,"den":366.41,"ten":"QPACK: HPACK cho stream sai thứ tự"},
+        {"t":366.41,"den":470.89,"ten":"Nằm ở đâu trong máy · Thực hành 20 phút"},
+        {"t":470.89,"den":557.42,"ten":"Ba câu tự kiểm · Tóm tắt & bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 7.3 của khoá Networking for Developers."},
         {"t":10.96,"vi":"Bài trước: HTTP/2 ghép kênh trên một kết nối TCP, nên một gói mất vẫn kẹt mọi stream."},
@@ -5419,8 +5824,16 @@
         {"t":549.92,"vi":"Bài sau, 7.4: các header đổi hành vi, cache, nén, CORS và HSTS."}
       ]
     },
-    "netdev-7-4-header-quan-trong": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/networking-for-developers/07-http-tu-1-1-toi-3/07-04-header-quan-trong-75f3a696.mp4","durationSec":620.61,"nguonCau":"srt",
-      "parts": [],
+    "netdev-7-4-header-quan-trong": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/networking-for-developers/07-http-tu-1-1-toi-3/07-04-header-quan-trong-75f3a696.mp4","durationSec":620.61,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":99.54,"ten":"Ôn nhanh · hôm nay · Bìa · header đổi hành vi"},
+        {"t":99.54,"den":179.27,"ten":"Chạy thật: ETag rồi 304 · Mô phỏng: ba cách tránh tải lại"},
+        {"t":179.27,"den":266.93,"ten":"Nén · Chạy thật: nén đo được"},
+        {"t":266.93,"den":369.82,"ten":"Chạy thật: preflight · Mô phỏng: ai chặn CORS"},
+        {"t":369.82,"den":457.83,"ten":"Header bảo mật · Mô phỏng: HSTS bịt lần đầu bằng chữ"},
+        {"t":457.83,"den":578.68,"ten":"Thực hành 25 phút · Chạy thật: lời giải"},
+        {"t":578.68,"den":620.61,"ten":"Tóm tắt & bài sau"}
+      ],
       "cues": [
         {"t":5.75,"vi":"Chào bạn, đến với bài 7.4 của khoá Networking for Developers."},
         {"t":12.18,"vi":"Ba bài trước là cách HTTP đi trên dây: 1.1, 2, và 3."},
@@ -5521,8 +5934,14 @@
         {"t":611.04,"vi":"Bài sau, 7.5: proxy trên đường đi, và tìm IP client thật qua X-Forwarded-For."}
       ]
     },
-    "netdev-7-6-lab-http-labflow": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/networking-for-developers/07-http-tu-1-1-toi-3/07-06-lab-7-http-labflow-6c2f8da2.mp4","durationSec":432.12,"nguonCau":"srt",
-      "parts": [],
+    "netdev-7-6-lab-http-labflow": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/networking-for-developers/07-http-tu-1-1-toi-3/07-06-lab-7-http-labflow-6c2f8da2.mp4","durationSec":432.12,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":100.6,"ten":"Ôn nhanh · hôm nay · Bìa · Lab 7"},
+        {"t":100.6,"den":190.33,"ten":"Hệ thống: nginx qua các phiên bản và chuỗi proxy"},
+        {"t":190.33,"den":275.24,"ten":"Thang điểm — 10 điểm · Làm mẫu R3: HTTP/3 phía máy chủ"},
+        {"t":275.24,"den":370.19,"ten":"Gợi ý theo bậc · Đi xa hơn"},
+        {"t":370.19,"den":432.12,"ten":"Ba câu tự kiểm phương pháp · Tổng kết Chương 7 & chương sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Lab 7, phần bảy của dự án xuyên khoá."},
         {"t":9.78,"vi":"Chương 7 cho bạn: HTTP/1.1, 2 và 3 trên dây, các header đổi hành vi, và IP thật qua proxy."},
@@ -5591,8 +6010,16 @@
         {"t":423.4,"vi":"Chương 8 là CDN và cache, bắt đầu bằng bài 8.1: CDN hoạt động thế nào."}
       ]
     },
-    "netdev-8-1-cdn": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/networking-for-developers/08-cdn-va-cache/08-01-cdn-1b0480ec.mp4","durationSec":586.12,"nguonCau":"srt",
-      "parts": [],
+    "netdev-8-1-cdn": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/networking-for-developers/08-cdn-va-cache/08-01-cdn-1b0480ec.mp4","durationSec":586.12,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":90.97,"ten":"Ôn nhanh · hôm nay · Bìa · CDN hoạt động thế nào"},
+        {"t":90.97,"den":185.04,"ten":"CDN là bộ đệm gần người dùng · Mô phỏng: một IP, nhiều PoP"},
+        {"t":185.04,"den":265.25,"ten":"Chạy thật: MISS rồi HIT · TTL: tươi, rồi EXPIRED"},
+        {"t":265.25,"den":372.09,"ten":"Các trạng thái bạn sẽ gặp · Chạy thật: một CDN thật"},
+        {"t":372.09,"den":465.1,"ten":"CDN không làm gì · Mô phỏng: gỡ tải khỏi origin"},
+        {"t":465.1,"den":542.47,"ten":"Chạy thật: lời giải · Ba câu tự kiểm"},
+        {"t":542.47,"den":586.12,"ten":"Tóm tắt & bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 8.1, mở đầu Chương 8 của khoá Networking for Developers."},
         {"t":13.27,"vi":"Chương 7 khép lại với các header cache, và proxy đứng trên đường đi."},
@@ -5677,8 +6104,14 @@
         {"t":578.7,"vi":"Bài sau, 8.2: khoá cache, TTL, và xoá cache cho đúng."}
       ]
     },
-    "netdev-8-2-cache-dung": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/networking-for-developers/08-cdn-va-cache/08-02-cache-dung-46ba466c.mp4","durationSec":509.55,"nguonCau":"srt",
-      "parts": [],
+    "netdev-8-2-cache-dung": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/networking-for-developers/08-cdn-va-cache/08-02-cache-dung-46ba466c.mp4","durationSec":509.55,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":96.76,"ten":"Ôn nhanh · hôm nay · Bìa · cache cho đúng"},
+        {"t":96.76,"den":188.49,"ten":"Chạy thật: hai khoá cho một tệp"},
+        {"t":188.49,"den":270.53,"ten":"TTL và stale-while-revalidate"},
+        {"t":270.53,"den":362.63,"ten":"Bẫy cookie · Chạy thật: cookie và stale-while-revalidate"},
+        {"t":362.63,"den":509.55,"ten":"Thực hành 20 phút · Chạy thật: lời giải"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 8.2 của khoá Networking for Developers."},
         {"t":10.9,"vi":"Bài trước: CDN là bộ đệm biên, đọc HIT, MISS, EXPIRED trong một header."},
@@ -5767,8 +6200,14 @@
         {"t":502.88,"vi":"Bài sau, 8.3: khi proxy ghi đè header cache của bạn."}
       ]
     },
-    "netdev-8-3-nginx-nuot-header": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/networking-for-developers/08-cdn-va-cache/08-03-nginx-nuot-header-d5a2e4b5.mp4","durationSec":484.45,"nguonCau":"srt",
-      "parts": [],
+    "netdev-8-3-nginx-nuot-header": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/networking-for-developers/08-cdn-va-cache/08-03-nginx-nuot-header-d5a2e4b5.mp4","durationSec":484.45,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":101.63,"ten":"Ôn nhanh · hôm nay · Bìa · proxy ghi đè header"},
+        {"t":101.63,"den":211.58,"ten":"Mô phỏng: header qua bốn trạm · Lab: origin đúng, biên sai"},
+        {"t":211.58,"den":300.62,"ten":"Các chỉ thị nginx · Mô phỏng: add_header không cộng dồn"},
+        {"t":300.62,"den":382.88,"ten":"Mô phỏng: khoanh vùng tầng lỗi · Luật phòng ngừa"},
+        {"t":382.88,"den":484.45,"ten":"Chạy thật: lời giải · Ba câu tự kiểm"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 8.3 của khoá Networking for Developers."},
         {"t":10.75,"vi":"Bài trước: khoá cache, tên tệp có mã băm, stale-while-revalidate, và bẫy cookie."},
@@ -5856,8 +6295,15 @@
         {"t":475.96,"vi":"Bài sau, 8.4: giới hạn của CDN, timeout, cỡ thân, và thứ nên đi vòng qua biên."}
       ]
     },
-    "netdev-8-4-gioi-han-cdn": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/networking-for-developers/08-cdn-va-cache/08-04-gioi-han-cdn-da95a6fd.mp4","durationSec":542.41,"nguonCau":"srt",
-      "parts": [],
+    "netdev-8-4-gioi-han-cdn": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/networking-for-developers/08-cdn-va-cache/08-04-gioi-han-cdn-da95a6fd.mp4","durationSec":542.41,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":81.33,"ten":"Ôn nhanh · hôm nay · Bìa · giới hạn của CDN"},
+        {"t":81.33,"den":167.8,"ten":"Biên không chờ mãi · Các mã cổng"},
+        {"t":167.8,"den":245.44,"ten":"Mô phỏng: một proxy, ba kiểu hỏng"},
+        {"t":245.44,"den":338.19,"ten":"Chạy thật: 202 qua biên 1 giây · Giới hạn cỡ thân"},
+        {"t":338.19,"den":425.83,"ten":"Mô phỏng: 500 MB đi đường nào · Thứ không nên đi qua biên"},
+        {"t":425.83,"den":542.41,"ten":"Chạy thật: lời giải · Ba câu tự kiểm"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 8.4 của khoá Networking for Developers."},
         {"t":11.02,"vi":"Bài trước: tầng cuối chạm vào header thắng, và kiểm từng chặng bằng curl."},
@@ -5957,8 +6403,13 @@
         {"t":536.6,"vi":"Bài sau là Lab 8: kiểm toán tầng CDN của LabFlow."}
       ]
     },
-    "netdev-8-5-lab-cdn-labflow": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/networking-for-developers/08-cdn-va-cache/08-05-lab-8-cdn-labflow-169780f6.mp4","durationSec":373.13,"nguonCau":"srt",
-      "parts": [],
+    "netdev-8-5-lab-cdn-labflow": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/networking-for-developers/08-cdn-va-cache/08-05-lab-8-cdn-labflow-169780f6.mp4","durationSec":373.13,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":95.33,"ten":"Ôn nhanh · hôm nay · Bìa · Lab 8"},
+        {"t":95.33,"den":185.68,"ten":"Hệ thống: CDN thu nhỏ · Bốn yêu cầu"},
+        {"t":185.68,"den":263.88,"ten":"Làm mẫu R3: header bị nuốt · Checklist bằng chứng"},
+        {"t":263.88,"den":373.13,"ten":"Lab này chứng minh gì · Bắt tay làm lab"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Lab 8, phần tám của dự án xuyên khoá."},
         {"t":9.65,"vi":"Chương 8 cho bạn: CDN hoạt động thế nào, cache cho đúng, tầng nào ghi đè header, và giới hạn của biên."},
@@ -6023,8 +6474,14 @@
         {"t":363.19,"vi":"Chương 9 là kết nối thời gian thực, bắt đầu bằng bài 9.1: polling, long polling và Server-Sent Events."}
       ]
     },
-    "netdev-9-1-polling-sse": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/networking-for-developers/09-ket-noi-thoi-gian-thuc/09-01-polling-sse-4d6ad282.mp4","durationSec":510.47,"nguonCau":"srt",
-      "parts": [],
+    "netdev-9-1-polling-sse": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/networking-for-developers/09-ket-noi-thoi-gian-thuc/09-01-polling-sse-4d6ad282.mp4","durationSec":510.47,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":101.91,"ten":"Ôn nhanh · hôm nay · Polling, long polling và SSE"},
+        {"t":101.91,"den":201.12,"ten":"Mô phỏng: ba cách, cùng một bộ đếm"},
+        {"t":201.12,"den":295.1,"ten":"SSE: một kết nối, một dòng sự kiện · Chạy thật: dòng SSE"},
+        {"t":295.1,"den":371,"ten":"Chạy thật: qua proxy đệm · Nên chọn cái nào"},
+        {"t":371,"den":510.47,"ten":"Thực hành 25 phút · Chạy thật: lời giải"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 9.1, mở đầu Chương 9 của khoá Networking for Developers."},
         {"t":11.86,"vi":"Chương 8 là CDN, và giới hạn của biên với những thứ chảy liên tục."},
@@ -6117,8 +6574,15 @@
         {"t":502.43,"vi":"Bài sau, 9.2: WebSocket, cú nâng cấp, frame, và nhịp tim."}
       ]
     },
-    "netdev-9-2-websocket": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/networking-for-developers/09-ket-noi-thoi-gian-thuc/09-02-websocket-ed2e8680.mp4","durationSec":546.4,"nguonCau":"srt",
-      "parts": [],
+    "netdev-9-2-websocket": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/networking-for-developers/09-ket-noi-thoi-gian-thuc/09-02-websocket-ed2e8680.mp4","durationSec":546.4,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":104.49,"ten":"Ôn nhanh · hôm nay · WebSocket"},
+        {"t":104.49,"den":192.23,"ten":"Chạy thật: curl xin nâng cấp · Cú bắt tay chứng minh ý định"},
+        {"t":192.23,"den":271.14,"ten":"Chạy thật: client thô · Frame, mặt nạ và opcode"},
+        {"t":271.14,"den":346.63,"ten":"Chạy thật: tshark đọc khung trên dây"},
+        {"t":346.63,"den":435.75,"ten":"Chạy thật: nginx cắt socket im · WebSocket hay SSE"},
+        {"t":435.75,"den":546.4,"ten":"Chạy thật: lời giải · Ba câu tự kiểm"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 9.2 của khoá Networking for Developers."},
         {"t":10.6,"vi":"Bài trước: polling, long polling, và SSE đẩy tin một chiều, với cái bẫy proxy đệm."},
@@ -6212,8 +6676,15 @@
         {"t":540.06,"vi":"Bài sau, 9.3: mở rộng hàng vạn kết nối sống lâu."}
       ]
     },
-    "netdev-9-3-mo-rong-ws": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/networking-for-developers/09-ket-noi-thoi-gian-thuc/09-03-mo-rong-ket-noi-99301dda.mp4","durationSec":547.62,"nguonCau":"srt",
-      "parts": [],
+    "netdev-9-3-mo-rong-ws": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/networking-for-developers/09-ket-noi-thoi-gian-thuc/09-03-mo-rong-ket-noi-99301dda.mp4","durationSec":547.62,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":96.37,"ten":"Ôn nhanh · hôm nay · Mở rộng kết nối sống lâu"},
+        {"t":96.37,"den":173.82,"ten":"Chạy thật: trần fd trên máy nhà · Chạy thật: chạm trần"},
+        {"t":173.82,"den":275.57,"ten":"Chạy thật: ss đếm socket · Sticky session"},
+        {"t":275.57,"den":372.59,"ten":"Chạy thật: lịch lùi dần · Mô phỏng: bầy đàn nối lại"},
+        {"t":372.59,"den":468,"ten":"Bảng kiểm khi mở rộng · Thực hành 25 phút"},
+        {"t":468,"den":547.62,"ten":"Ba câu tự kiểm · Tóm tắt & bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 9.3 của khoá Networking for Developers."},
         {"t":10.58,"vi":"Bài trước: WebSocket nâng cấp bằng 101, đi bằng frame, và cần nhịp tim để proxy không cắt."},
@@ -6311,8 +6782,15 @@
         {"t":539.33,"vi":"Bài sau, 9.4: lướt qua WebRTC, xuyên NAT bằng STUN và TURN."}
       ]
     },
-    "netdev-9-4-webrtc": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/networking-for-developers/09-ket-noi-thoi-gian-thuc/09-04-webrtc-f37d6e02.mp4","durationSec":509.25,"nguonCau":"srt",
-      "parts": [],
+    "netdev-9-4-webrtc": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/networking-for-developers/09-ket-noi-thoi-gian-thuc/09-04-webrtc-f37d6e02.mp4","durationSec":509.25,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":97.78,"ten":"Ôn nhanh · hôm nay · Lướt qua WebRTC"},
+        {"t":97.78,"den":190.37,"ten":"STUN: địa chỉ công cộng của tôi là gì"},
+        {"t":190.37,"den":266.43,"ten":"Chạy thật: NAT đối xứng · ICE: thu và thử ứng viên"},
+        {"t":266.43,"den":345.93,"ten":"TURN: chuyển tiếp khi đường thẳng hỏng"},
+        {"t":345.93,"den":437.78,"ten":"Bạn gặp WebRTC ở đâu · Thực hành 20 phút"},
+        {"t":437.78,"den":509.25,"ten":"Ba câu tự kiểm · Tóm tắt & bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 9.4 của khoá Networking for Developers."},
         {"t":10.6,"vi":"Bài trước: mở rộng kết nối sống lâu, trần fd, sticky session, và nối lại có nhiễu."},
@@ -6406,8 +6884,14 @@
         {"t":503.24,"vi":"Tiếp theo là Lab 9: dựng tầng thời gian thực cho LabFlow."}
       ]
     },
-    "netdev-9-5-lab-realtime-labflow": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/networking-for-developers/09-ket-noi-thoi-gian-thuc/09-05-lab-9-realtime-labflow-68c1a9ed.mp4","durationSec":395.16,"nguonCau":"srt",
-      "parts": [],
+    "netdev-9-5-lab-realtime-labflow": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/networking-for-developers/09-ket-noi-thoi-gian-thuc/09-05-lab-9-realtime-labflow-68c1a9ed.mp4","durationSec":395.16,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":93.85,"ten":"Ôn nhanh · hôm nay · Bìa · Lab 9"},
+        {"t":93.85,"den":179.18,"ten":"Hệ thống · Bốn yêu cầu"},
+        {"t":179.18,"den":255.13,"ten":"Thang điểm — 10 điểm · Làm mẫu R2: WebSocket"},
+        {"t":255.13,"den":330.67,"ten":"Gợi ý · Lab này chứng minh gì"},
+        {"t":330.67,"den":395.16,"ten":"Ba câu tự kiểm phương pháp · Tổng kết Chương 9 & chương sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Lab 9, phần chín của dự án xuyên khoá."},
         {"t":9.92,"vi":"Chương 9 cho bạn: polling, long polling và SSE, WebSocket, mở rộng kết nối sống lâu, và WebRTC."},

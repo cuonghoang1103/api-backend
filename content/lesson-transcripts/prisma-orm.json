@@ -2,8 +2,17 @@
   "courseSlug": "prisma-orm",
   "sinhBoi": "scripts/phu-de-tu-video-rieng.mjs",
   "lessons": {
-    "pr-0-1-van-de": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/prisma-orm/00-prisma-giai-quyet-gi-cai-dat/00-03-prisma-giai-quyet-gi-16b67b98.mp4","durationSec":774.49,"nguonCau":"srt",
-      "parts": [],
+    "pr-0-1-van-de": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/prisma-orm/00-prisma-giai-quyet-gi-cai-dat/00-03-prisma-giai-quyet-gi-16b67b98.mp4","durationSec":774.49,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":82.54,"ten":"Chào bạn · nối từ bài bắt đầu · Bìa bài 0.1"},
+        {"t":82.54,"den":194.6,"ten":"Hai thứ tiếng, một người phiên dịch"},
+        {"t":194.6,"den":303.88,"ten":"TypeScript không biết gì về hàng ấy · Con bọ đi được bao xa"},
+        {"t":303.88,"den":396.73,"ten":"Prisma nằm ở đâu · Mô tả dữ liệu một lần: schema.prisma"},
+        {"t":396.73,"den":474.85,"ten":"Ba con bọ thành ba dòng đỏ · Ba việc Prisma làm tốt hơn"},
+        {"t":474.85,"den":570.61,"ten":"Ba việc Prisma không phải là · Prisma đứng cạnh hàng xóm"},
+        {"t":570.61,"den":684.34,"ten":"Quét cả bảng hay đi theo chỉ mục · Bẫy: ORM sẽ lo hiệu năng"},
+        {"t":684.34,"den":774.49,"ten":"Tự kiểm ba câu · Thực hành & tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 0.1 của khoá Prisma ORM trên cuongthai.com."},
         {"t":11.93,"vi":"Hai bài bắt đầu đã cho bạn ba hình ảnh: người phiên dịch, bản vẽ, và tờ hoá đơn SQL đọc được."},
@@ -138,8 +147,16 @@
         {"t":768.79,"vi":"Bài sau, ta cho Prisma chạy lên trên máy bạn."}
       ]
     },
-    "pr-0-2-cai-dat": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/prisma-orm/00-prisma-giai-quyet-gi-cai-dat/00-04-cho-prisma-chay-len-523587c8.mp4","durationSec":585.75,"nguonCau":"srt",
-      "parts": [],
+    "pr-0-2-cai-dat": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/prisma-orm/00-prisma-giai-quyet-gi-cai-dat/00-04-cho-prisma-chay-len-523587c8.mp4","durationSec":585.75,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":93.23,"ten":"Chào bạn · nối từ bài 0.1 · Bìa bài 0.2"},
+        {"t":93.23,"den":181.49,"ten":"Ba thứ, bốn bước · Bước một: cơ sở dữ liệu"},
+        {"t":181.49,"den":257.7,"ten":"Import trước khi generate · Cây thư mục mọc theo từng lệnh"},
+        {"t":257.7,"den":349.19,"ten":"Các tệp init sinh ra · DATABASE_URL tách từng khúc"},
+        {"t":349.19,"den":457.16,"ten":"Bẫy: tệp chấm env không có ở đó · Bước bốn: model đầu tiên"},
+        {"t":457.16,"den":547.54,"ten":"Bốn thứ sửa ngay ngày đầu · Kiểm lại cả chuỗi"},
+        {"t":547.54,"den":585.75,"ten":"Thực hành & tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 0.2 của khoá Prisma ORM."},
         {"t":10.21,"vi":"Bài trước, bạn thấy trình điều khiển thô để lọt ba con bọ, còn Prisma biến chúng thành ba dòng đỏ, và nó không tự thêm chỉ mục."},
@@ -242,8 +259,14 @@
         {"t":581.83,"vi":"Bài sau là năm phút đầu tiên của bạn."}
       ]
     },
-    "pr-0-3-nam-phut": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/prisma-orm/00-prisma-giai-quyet-gi-cai-dat/00-05-nam-phut-dau-tien-0422d470.mp4","durationSec":444.58,"nguonCau":"srt",
-      "parts": [],
+    "pr-0-3-nam-phut": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/prisma-orm/00-prisma-giai-quyet-gi-cai-dat/00-05-nam-phut-dau-tien-0422d470.mp4","durationSec":444.58,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":92.27,"ten":"Chào bạn · nối từ bài 0.2 · Bìa bài 0.3"},
+        {"t":92.27,"den":189.69,"ten":"Lược đồ có quan hệ · Bốn dòng làm việc thật"},
+        {"t":189.69,"den":275.63,"ten":"Bốn cách đọc · select hay include"},
+        {"t":275.63,"den":375.1,"ten":"Cuộc đua mất cập nhật · Bẫy: increment hay đọc rồi ghi"},
+        {"t":375.1,"den":444.58,"ten":"Tự kiểm ba câu · Thực hành & tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 0.3 của khoá Prisma ORM."},
         {"t":10.14,"vi":"Bài trước, bạn đã dựng PostgreSQL, chạy prisma init, viết model User và đọc tệp migration đầu tiên."},
@@ -327,8 +350,14 @@
         {"t":440.39,"vi":"Bài sau mở Chương 1: lệch trở kháng."}
       ]
     },
-    "pr-0-8-bat-dau-tai-day": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/prisma-orm/00-prisma-giai-quyet-gi-cai-dat/00-01-bat-dau-prisma-la-gi-c9a16945.mp4","durationSec":499.73,"nguonCau":"srt",
-      "parts": [],
+    "pr-0-8-bat-dau-tai-day": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/prisma-orm/00-prisma-giai-quyet-gi-cai-dat/00-01-bat-dau-prisma-la-gi-c9a16945.mp4","durationSec":499.73,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":116.24,"ten":"Chào bạn · khoá Prisma ORM · Bìa bài"},
+        {"t":116.24,"den":212.22,"ten":"Slide: ba hình ảnh · Định nghĩa trong một câu"},
+        {"t":212.22,"den":331.58,"ten":"Một truy vấn, một tờ hoá đơn · Những từ hay nhầm"},
+        {"t":331.58,"den":416.67,"ten":"Vì sao nó ra đời · Nó giúp gì cho bạn"},
+        {"t":416.67,"den":499.73,"ten":"Tự kiểm ba câu · Mười phút đầu tiên & tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với khoá Prisma ORM trên cuongthai.com, từ một tệp lược đồ tới chạy thật trên production."},
         {"t":14.65,"vi":"Khoá này dạy lớp nằm giữa mã TypeScript của bạn và cơ sở dữ liệu PostgreSQL."},
@@ -409,8 +438,14 @@
         {"t":494.49,"vi":"Bài sau kể sáu sự cố thật, và cách học không nản."}
       ]
     },
-    "pr-0-9-bat-dau-tai-day-2": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/prisma-orm/00-prisma-giai-quyet-gi-cai-dat/00-02-bat-dau-su-co-va-cach-hoc-ca67086a.mp4","durationSec":437.26,"nguonCau":"srt",
-      "parts": [],
+    "pr-0-9-bat-dau-tai-day-2": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/prisma-orm/00-prisma-giai-quyet-gi-cai-dat/00-02-bat-dau-su-co-va-cach-hoc-ca67086a.mp4","durationSec":437.26,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":83.85,"ten":"Chào bạn · nối từ bài trước · Bìa bài"},
+        {"t":83.85,"den":166.96,"ten":"Sáu sự cố thật · Dựng lại: quan hệ thiếu nửa kia"},
+        {"t":166.96,"den":271.53,"ten":"Dựng lại: đổi tên một giá trị enum"},
+        {"t":271.53,"den":366.16,"ten":"Hai lộ trình · Một buổi học 45 tới 60 phút"},
+        {"t":366.16,"den":437.26,"ten":"Tự kiểm ba câu · Thực hành & tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với phần hai của bài bắt đầu tại đây, khoá Prisma ORM."},
         {"t":11.43,"vi":"Bài trước, bạn thấy Prisma biến một tệp lược đồ thành client có kiểu, và mười tám dòng sinh ra hơn hai nghìn dòng kiểu."},
@@ -489,8 +524,14 @@
         {"t":426.74,"vi":"Bạn bấm liên kết Code Lab dưới video, làm module lược đồ cơ bản. Bài sau, 0.1, mở vấn đề ra bằng mã."}
       ]
     },
-    "pr-1-1-lech-tro-khang": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/prisma-orm/01-orm-la-gi/01-01-lech-tro-khang-634dcb8d.mp4","durationSec":474.83,"nguonCau":"srt",
-      "parts": [],
+    "pr-1-1-lech-tro-khang": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/prisma-orm/01-orm-la-gi/01-01-lech-tro-khang-634dcb8d.mp4","durationSec":474.83,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":109.33,"ten":"Chào bạn · mở Chương 1 · Bìa bài 1.1"},
+        {"t":109.33,"den":185.13,"ten":"Bảng bốn chỗ lệch · Bản sắc, chạy thật"},
+        {"t":185.13,"den":287.62,"ten":"N+1: hai trăm lẻ một chuyến đi · Vòng lặp ngây thơ, đếm thật"},
+        {"t":287.62,"den":372.02,"ten":"Độ hạt: địa chỉ để đâu · Chọn cách nào, khi nào"},
+        {"t":372.02,"den":474.83,"ten":"ORM thật ra làm gì · Tự kiểm ba câu"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 1.1, mở đầu Chương 1 của khoá Prisma ORM."},
         {"t":12.04,"vi":"Mục 0 đã cho bạn chạy mười bốn câu truy vấn và đọc từng câu SQL, từ create lồng nhau tới groupBy."},
@@ -577,8 +618,14 @@
         {"t":468.52,"vi":"Bài sau mở xem prisma generate thật sự viết ra gì."}
       ]
     },
-    "pr-1-2-generate-viet-gi": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/prisma-orm/01-orm-la-gi/01-02-generate-viet-gi-51102480.mp4","durationSec":378.69,"nguonCau":"srt",
-      "parts": [],
+    "pr-1-2-generate-viet-gi": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/prisma-orm/01-orm-la-gi/01-02-generate-viet-gi-51102480.mp4","durationSec":378.69,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":89.7,"ten":"Chào bạn · nối từ bài 1.1 · Bìa bài 1.2"},
+        {"t":89.7,"den":169.47,"ten":"Nó nằm đâu, to cỡ nào · Bốn loại thứ bên trong"},
+        {"t":169.47,"den":248.84,"ten":"Tự đọc 2 và 3: phương thức và kiểu Args"},
+        {"t":248.84,"den":339.55,"ten":"Sinh mã ra chỗ bạn nhìn thấy · Phần chạy mỏng hơn bạn tưởng"},
+        {"t":339.55,"den":378.69,"ten":"Thực hành & tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 1.2 của khoá Prisma ORM."},
         {"t":9.72,"vi":"Bài trước, bạn thấy Prisma không có câu truy vấn ẩn, và include gom N+1 thành hai câu."},
@@ -642,8 +689,14 @@
         {"t":372.26,"vi":"Bài sau theo một câu truy vấn đi từ JavaScript tới SQL."}
       ]
     },
-    "pr-1-3-thanh-sql": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/prisma-orm/01-orm-la-gi/01-03-thanh-sql-9f7a4592.mp4","durationSec":413.66,"nguonCau":"srt",
-      "parts": [],
+    "pr-1-3-thanh-sql": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/prisma-orm/01-orm-la-gi/01-03-thanh-sql-9f7a4592.mp4","durationSec":413.66,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":97.55,"ten":"Chào bạn · nối từ bài 1.2 · Bìa bài 1.3"},
+        {"t":97.55,"den":180.26,"ten":"Đường đi, từ đầu tới cuối · Pool sống trong engine"},
+        {"t":180.26,"den":257.52,"ten":"contains trên 120.000 hàng · Ba kiến trúc engine"},
+        {"t":257.52,"den":338.79,"ten":"CuongThai: bảy phút 502 · Đọc kế hoạch Prisma không chỉ"},
+        {"t":338.79,"den":413.66,"ten":"Tự kiểm ba câu · Thực hành & tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 1.3 của khoá Prisma ORM."},
         {"t":10.22,"vi":"Bài trước, ta mở thư mục client: phần lớn là kiểu, phần chạy mỏng, còn engine thì nặng mười chín megabyte."},
@@ -714,8 +767,14 @@
         {"t":408.71,"vi":"Bài sau mổ hai khối datasource và generator."}
       ]
     },
-    "pr-1-4-datasource-generator": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/prisma-orm/01-orm-la-gi/01-04-datasource-generator-3e7092c6.mp4","durationSec":391.9,"nguonCau":"srt",
-      "parts": [],
+    "pr-1-4-datasource-generator": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/prisma-orm/01-orm-la-gi/01-04-datasource-generator-3e7092c6.mp4","durationSec":391.9,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":92.74,"ten":"Chào bạn · nối từ bài 1.3 · Bìa bài 1.4"},
+        {"t":92.74,"den":168.71,"ten":"Xoá một người: có và không có khoá ngoại"},
+        {"t":168.71,"den":259.25,"ten":"generator: một hoặc nhiều · binaryTargets làm đúng như tên"},
+        {"t":259.25,"den":352.11,"ten":"prisma.config.ts đã có ở 6.19 · Tách lược đồ quá lớn"},
+        {"t":352.11,"den":391.9,"ten":"Thực hành & tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 1.4 của khoá Prisma ORM."},
         {"t":10.22,"vi":"Bài trước, ta theo một câu truy vấn qua engine: pool nằm trong engine, và engine gắn chặt với nền tảng nó được dựng cho."},
@@ -784,8 +843,13 @@
         {"t":380.03,"vi":"Bạn bấm liên kết Code Lab dưới video, làm module lược đồ cơ bản. Bài sau so ba luồng làm việc: db push, migrate và db pull."}
       ]
     },
-    "pr-1-5-ba-luong": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/prisma-orm/01-orm-la-gi/01-05-ba-luong-8517b2df.mp4","durationSec":386.22,"nguonCau":"srt",
-      "parts": [],
+    "pr-1-5-ba-luong": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/prisma-orm/01-orm-la-gi/01-05-ba-luong-8517b2df.mp4","durationSec":386.22,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":89.78,"ten":"Chào bạn · nối từ bài 1.4 · Bìa bài 1.5"},
+        {"t":89.78,"den":180.39,"ten":"Ba luồng trong một bảng · db push trên 120.200 hàng"},
+        {"t":180.39,"den":282.08,"ten":"Bước 1: SQL mà Prisma sẽ sinh"},
+        {"t":282.08,"den":386.22,"ten":"db pull: cơ sở dữ liệu là nguồn · Tự kiểm ba câu"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 1.5, bài cuối của Chương 1."},
         {"t":9.97,"vi":"Bài trước, ta mổ datasource và generator, và thấy một lệnh xoá có thể để lại hàng mồ côi."},
@@ -852,8 +916,13 @@
         {"t":374.68,"vi":"Bạn bấm liên kết Code Lab dưới video, làm module migration. Chương 2 bắt đầu với model, trường và chín kiểu vô hướng."}
       ]
     },
-    "pr-10-1-bon-ham-tho": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/prisma-orm/10-cua-thoat-hiem/10-01-bon-ham-tho-12b46e35.mp4","durationSec":301.65,"nguonCau":"srt",
-      "parts": [],
+    "pr-10-1-bon-ham-tho": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/prisma-orm/10-cua-thoat-hiem/10-01-bon-ham-tho-12b46e35.mp4","durationSec":301.65,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":78.39,"ten":"Chào bạn · mở Chương 10 · Bìa bài 10.1"},
+        {"t":78.39,"den":154.33,"ten":"Mỗi hàm thật sự gửi gì · Chuỗi người dùng đi đâu"},
+        {"t":154.33,"den":233.41,"ten":"Bộ lọc động vẫn giữ tham số · Tên cột không tham số hoá được"},
+        {"t":233.41,"den":301.65,"ten":"Tự kiểm ba câu · Thực hành & tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Chương 10 của khoá Prisma ORM: cửa thoát hiểm, SQL thô và phần mở rộng client."},
         {"t":14.27,"vi":"Chương 9 là hiệu năng: đo trước, N+1, chỉ mục, pool, và những truy vấn lẽ ra đừng gửi."},
@@ -916,8 +985,13 @@
         {"t":296.99,"vi":"Bài sau: kiểu trên $queryRaw chỉ là lời hứa."}
       ]
     },
-    "pr-10-2-kieu-la-loi-hua": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/prisma-orm/10-cua-thoat-hiem/10-02-kieu-la-loi-hua-27671367.mp4","durationSec":279.96,"nguonCau":"srt",
-      "parts": [],
+    "pr-10-2-kieu-la-loi-hua": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/prisma-orm/10-cua-thoat-hiem/10-02-kieu-la-loi-hua-27671367.mp4","durationSec":279.96,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":70.91,"ten":"Chào bạn · nối từ bài 10.1 · Bìa bài 10.2"},
+        {"t":70.91,"den":132.18,"ten":"Nhãn dán và cái hộp · Một: count là BigInt"},
+        {"t":132.18,"den":201.49,"ten":"Ba: SQL thô nói tên cột · Đặt lại một phép kiểm thật"},
+        {"t":201.49,"den":279.96,"ten":"Quy tắc · Tự kiểm ba câu"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 10.2."},
         {"t":8.03,"vi":"Bài trước: bốn hàm thô, cú tấn công chạy thật, và bộ lọc động vẫn giữ tham số."},
@@ -977,8 +1051,13 @@
         {"t":275.63,"vi":"Bài sau: năm thứ chỉ SQL nói được."}
       ]
     },
-    "pr-10-3-chi-sql-noi-duoc": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/prisma-orm/10-cua-thoat-hiem/10-03-chi-sql-noi-duoc-584abb98.mp4","durationSec":293.39,"nguonCau":"srt",
-      "parts": [],
+    "pr-10-3-chi-sql-noi-duoc": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/prisma-orm/10-cua-thoat-hiem/10-03-chi-sql-noi-duoc-584abb98.mp4","durationSec":293.39,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":75.25,"ten":"Chào bạn · nối từ bài 10.2 · Bìa bài 10.3"},
+        {"t":75.25,"den":149.6,"ten":"Hai: hàm cửa sổ · Cây bình luận, sâu bao nhiêu cũng được"},
+        {"t":149.6,"den":210.45,"ten":"Rào độ sâu không phải tuỳ chọn"},
+        {"t":210.45,"den":293.39,"ten":"Khi nào đừng với tới · Tự kiểm ba câu"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 10.3."},
         {"t":8.06,"vi":"Bài trước: kiểu trên $queryRaw chỉ là lời hứa: BigInt, Decimal, tên cột, và zod ở biên."},
@@ -1035,8 +1114,13 @@
         {"t":289.82,"vi":"Bài sau: TypedSQL."}
       ]
     },
-    "pr-10-4-typedsql": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/prisma-orm/10-cua-thoat-hiem/10-04-typedsql-6a92e4d1.mp4","durationSec":285.99,"nguonCau":"srt",
-      "parts": [],
+    "pr-10-4-typedsql": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/prisma-orm/10-cua-thoat-hiem/10-04-typedsql-6a92e4d1.mp4","durationSec":285.99,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":78.44,"ten":"Chào bạn · nối từ bài 10.3 · Bìa bài 10.4"},
+        {"t":78.44,"den":148.43,"ten":"Ba trạm của TypedSQL · Cơ sở dữ liệu nói kiểu là gì"},
+        {"t":148.43,"den":221.43,"ten":"Tham số tuỳ chọn, không SQL động"},
+        {"t":221.43,"den":285.99,"ten":"Tự kiểm ba câu · Thực hành & tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 10.4."},
         {"t":8.07,"vi":"Bài trước: năm thứ chỉ SQL nói được: LATERAL, hàm cửa sổ, CTE đệ quy, ON CONFLICT, và tìm kiếm toàn văn."},
@@ -1092,8 +1176,13 @@
         {"t":281.05,"vi":"Bài sau: $extends, xoá mềm phủ tới đâu."}
       ]
     },
-    "pr-10-5-extends": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/prisma-orm/10-cua-thoat-hiem/10-05-extends-fe8abe83.mp4","durationSec":284.29,"nguonCau":"srt",
-      "parts": [],
+    "pr-10-5-extends": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/prisma-orm/10-cua-thoat-hiem/10-05-extends-fe8abe83.mp4","durationSec":284.29,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":69.45,"ten":"Chào bạn · nối từ bài 10.4 · Bìa bài 10.5"},
+        {"t":69.45,"den":127.85,"ten":"Tám đường đọc, một tấm lọc · Nó ẩn gì, và không ẩn gì"},
+        {"t":127.85,"den":194.59,"ten":"Unique vẫn đếm hàng đã xoá · $use đã bị gỡ"},
+        {"t":194.59,"den":284.29,"ten":"Danh sách kiểm cho mọi extension query · Tự kiểm ba câu"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 10.5, bài cuối của Chương 10."},
         {"t":10.24,"vi":"Bài trước: TypedSQL, kiểu do chính cơ sở dữ liệu nói, và lần đổi tên bị bắt ngay lúc generate."},
@@ -1150,8 +1239,13 @@
         {"t":280.52,"vi":"Bài sau là trắc nghiệm Chương 10."}
       ]
     },
-    "pr-11-1-engine-trong-anh": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/prisma-orm/11-dua-len-production/11-01-engine-trong-anh-b23c209e.mp4","durationSec":336.23,"nguonCau":"srt",
-      "parts": [],
+    "pr-11-1-engine-trong-anh": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/prisma-orm/11-dua-len-production/11-01-engine-trong-anh-b23c209e.mp4","durationSec":336.23,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":84.3,"ten":"Chào bạn · mở Chương 11 · Bìa bài 11.1"},
+        {"t":84.3,"den":157.24,"ten":"Hai ảnh nền, đo thật · Cú hỏng, đúng như nó hiện ra"},
+        {"t":157.24,"den":238.79,"ten":"Ổ khoá ba răng · Khai báo target"},
+        {"t":238.79,"den":336.23,"ten":"Client không có engine · Tự kiểm ba câu"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Chương 11: đưa Prisma lên production."},
         {"t":11.08,"vi":"Chương 10 khép lại với cửa thoát hiểm: SQL thô, TypedSQL, và extension xoá mềm phủ tới đâu."},
@@ -1221,8 +1315,14 @@
         {"t":326.96,"vi":"Bạn bấm liên kết Code Lab dưới video, làm module triển khai. Bài sau: Dockerfile sinh mã đúng chỗ."}
       ]
     },
-    "pr-11-3-migration-khi-deploy": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/prisma-orm/11-dua-len-production/11-03-migration-khi-deploy-6f0ffd76.mp4","durationSec":344.14,"nguonCau":"srt",
-      "parts": [],
+    "pr-11-3-migration-khi-deploy": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/prisma-orm/11-dua-len-production/11-03-migration-khi-deploy-6f0ffd76.mp4","durationSec":344.14,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":75.44,"ten":"Chào bạn · nối từ bài 11.2 · Bìa bài 11.3"},
+        {"t":75.44,"den":144.62,"ten":"Đổi tên một bước · Mã cũ sống sót qua gì"},
+        {"t":144.62,"den":229.78,"ten":"ALTER tức thì làm đứng bảng · Hàng đợi khoá"},
+        {"t":229.78,"den":305.66,"ten":"Terminal: P3018 · Cổng kiểm"},
+        {"t":305.66,"den":344.14,"ten":"Thực hành & tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 11.3."},
         {"t":8.12,"vi":"Bài trước: Dockerfile ba tầng, schema trước install, và CLI thật ra vẫn nằm trong ảnh runtime."},
@@ -1304,8 +1404,13 @@
         {"t":338.73,"vi":"Bài sau: seed, data migration và nạp bù."}
       ]
     },
-    "pr-11-4-seed-va-nap-bu": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/prisma-orm/11-dua-len-production/11-04-seed-va-nap-bu-e4964f3b.mp4","durationSec":342.72,"nguonCau":"srt",
-      "parts": [],
+    "pr-11-4-seed-va-nap-bu": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/prisma-orm/11-dua-len-production/11-04-seed-va-nap-bu-e4964f3b.mp4","durationSec":342.72,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":93.09,"ten":"Chào bạn · nối từ bài 11.3 · Bìa bài 11.4"},
+        {"t":93.09,"den":176.75,"ten":"Bẫy update rỗng · Terminal: seed chạy lại"},
+        {"t":176.75,"den":247.65,"ten":"Gỡ, trong một cơ sở dữ liệu tạm"},
+        {"t":247.65,"den":342.72,"ten":"Nạp bù an toàn khi chạy hàng giờ · Tự kiểm ba câu"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 11.4."},
         {"t":8.35,"vi":"Bài trước: cửa sổ hai phiên bản, mở rộng rồi thu hẹp, và lock_timeout cho bảng lớn."},
@@ -1380,8 +1485,14 @@
         {"t":336.65,"vi":"Bài sau: một client, và nó nên chết như thế nào."}
       ]
     },
-    "pr-11-5-vong-doi-client": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/prisma-orm/11-dua-len-production/11-05-vong-doi-client-fac68577.mp4","durationSec":325.56,"nguonCau":"srt",
-      "parts": [],
+    "pr-11-5-vong-doi-client": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/prisma-orm/11-dua-len-production/11-05-vong-doi-client-fac68577.mp4","durationSec":325.56,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":78.98,"ten":"Chào bạn · nối từ bài 11.4 · Bìa bài 11.5"},
+        {"t":78.98,"den":146.18,"ten":"Hot reload và globalThis · Node là PID 1"},
+        {"t":146.18,"den":216.77,"ten":"Tắt: HTTP trước, Prisma sau · Sai thứ tự thì sao"},
+        {"t":216.77,"den":285.68,"ten":"Health check: sống chưa phải sẵn sàng"},
+        {"t":285.68,"den":325.56,"ten":"Thực hành & tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 11.5, bài cuối của Chương 11."},
         {"t":10.46,"vi":"Bài trước: seed bằng upsert, data migration được cả hoặc mất cả, và nạp bù tiếp được từ chỗ dừng."},
@@ -1446,8 +1557,13 @@
         {"t":320.87,"vi":"Bài sau: trắc nghiệm Chương 11."}
       ]
     },
-    "pr-12-1-nam-phut-dau": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/prisma-orm/12-chan-doan-di-tiep/12-01-nam-phut-dau-8b6dade3.mp4","durationSec":313.19,"nguonCau":"srt",
-      "parts": [],
+    "pr-12-1-nam-phut-dau": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/prisma-orm/12-chan-doan-di-tiep/12-01-nam-phut-dau-8b6dade3.mp4","durationSec":313.19,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":73.46,"ten":"Chào bạn · mở Chương 12 · Bìa bài 12.1"},
+        {"t":73.46,"den":136.6,"ten":"Thứ tự phân loại · Một sự cố dựng thật"},
+        {"t":136.6,"den":223.62,"ten":"Lệnh ba và bốn · Lỗi đầu tiên, không phải lỗi ồn nhất"},
+        {"t":223.62,"den":313.19,"ten":"Thói quen rút ngắn sự cố · Tự kiểm ba câu"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Chương 12, chương cuối: chẩn đoán Prisma, và đi tiếp về đâu."},
         {"t":12.48,"vi":"Chương 11 đã đưa Prisma lên production: engine trong ảnh, Dockerfile, cửa sổ deploy, nạp bù, và tắt máy đúng thứ tự."},
@@ -1517,8 +1633,13 @@
         {"t":309.04,"vi":"Bài sau: bảy hình dáng hỏng hóc."}
       ]
     },
-    "pr-12-2-bay-hinh-dang": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/prisma-orm/12-chan-doan-di-tiep/12-02-bay-hinh-dang-b514bb1b.mp4","durationSec":353.87,"nguonCau":"srt",
-      "parts": [],
+    "pr-12-2-bay-hinh-dang": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/prisma-orm/12-chan-doan-di-tiep/12-02-bay-hinh-dang-b514bb1b.mp4","durationSec":353.87,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":98.82,"ten":"Chào bạn · nối từ bài 12.1 · Bìa bài 12.2"},
+        {"t":98.82,"den":175.18,"ten":"Pool cạn · Giao dịch bỏ cuộc"},
+        {"t":175.18,"den":259.61,"ten":"Migration thất bại · Terminal: P3018 rồi P3009"},
+        {"t":259.61,"den":353.87,"ten":"Bản đồ mã lỗi · Tự kiểm ba câu"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 12.2."},
         {"t":8.25,"vi":"Bài trước: hỏi cái gì vừa đổi, phân loại theo thứ tự, và đọc lỗi đầu tiên chứ không phải lỗi ồn nhất."},
@@ -1589,8 +1710,13 @@
         {"t":349.63,"vi":"Bài sau: bộ công cụ chẩn đoán."}
       ]
     },
-    "pr-12-3-bo-cong-cu": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/prisma-orm/12-chan-doan-di-tiep/12-03-bo-cong-cu-77f8edb2.mp4","durationSec":327.92,"nguonCau":"srt",
-      "parts": [],
+    "pr-12-3-bo-cong-cu": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/prisma-orm/12-chan-doan-di-tiep/12-03-bo-cong-cu-77f8edb2.mp4","durationSec":327.92,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":72.83,"ten":"Chào bạn · nối từ bài 12.2 · Bìa bài 12.3"},
+        {"t":72.83,"den":162.69,"ten":"Schema có hợp lệ không · migrate status, và điểm mù"},
+        {"t":162.69,"den":231.42,"ten":"Terminal: migrate diff · Chiều nào quan trọng"},
+        {"t":231.42,"den":327.92,"ten":"Góc nhìn của cơ sở dữ liệu · Tự kiểm ba câu"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 12.3."},
         {"t":8.22,"vi":"Bài trước: bảy hình dáng hỏng hóc, có lỗi không mang mã, và quy trình dừng, đọc, kiểm, quyết."},
@@ -1659,8 +1785,13 @@
         {"t":324.87,"vi":"Bài sau: giám sát."}
       ]
     },
-    "pr-12-4-giam-sat": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/prisma-orm/12-chan-doan-di-tiep/12-04-giam-sat-237bbb1e.mp4","durationSec":293.34,"nguonCau":"srt",
-      "parts": [],
+    "pr-12-4-giam-sat": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/prisma-orm/12-chan-doan-di-tiep/12-04-giam-sat-237bbb1e.mp4","durationSec":293.34,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":67.04,"ten":"Chào bạn · nối từ bài 12.3 · Bìa bài 12.4"},
+        {"t":67.04,"den":131.47,"ten":"Terminal: $metrics · Xuất ra dạng Prometheus"},
+        {"t":131.47,"den":202.53,"ten":"Tám cảnh báo · Cảnh báo ổ đĩa không phải lý thuyết"},
+        {"t":202.53,"den":293.34,"ten":"Đừng cảnh báo những thứ này · Tự kiểm ba câu"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 12.4."},
         {"t":8.21,"vi":"Bài trước: bộ công cụ, và điểm mù của migrate status trước trôi dạt."},
@@ -1726,8 +1857,13 @@
         {"t":287.89,"vi":"Bài sau: giờ bạn biết gì, và đi tiếp về đâu."}
       ]
     },
-    "pr-12-5-ket-khoa": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/prisma-orm/12-chan-doan-di-tiep/12-05-ket-khoa-25fa8525.mp4","durationSec":276.01,"nguonCau":"srt",
-      "parts": [],
+    "pr-12-5-ket-khoa": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/prisma-orm/12-chan-doan-di-tiep/12-05-ket-khoa-25fa8525.mp4","durationSec":276.01,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":75.56,"ten":"Chào bạn · bài cuối khoá · Bìa bài 12.5"},
+        {"t":75.56,"den":155.66,"ten":"Sáu ý đáng giữ · Những con số khoá học đã đo"},
+        {"t":155.66,"den":219.26,"ten":"Xong là thế nào · Đi tiếp về đâu"},
+        {"t":219.26,"den":276.01,"ten":"Tự kiểm ba câu · Cảm ơn bạn"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 12.5, bài cuối của khoá Prisma ORM."},
         {"t":11.34,"vi":"Chương 12 vừa đi qua năm phút đầu tiên, bảy hình dáng hỏng hóc, bộ công cụ, và giám sát."},
@@ -1793,8 +1929,14 @@
         {"t":272.52,"vi":"Hẹn gặp lại ở khoá tiếp theo."}
       ]
     },
-    "pr-2-1-model-va-kieu": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/prisma-orm/02-ngon-ngu-luoc-do/02-01-model-va-kieu-eefcb380.mp4","durationSec":380.91,"nguonCau":"srt",
-      "parts": [],
+    "pr-2-1-model-va-kieu": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/prisma-orm/02-ngon-ngu-luoc-do/02-01-model-va-kieu-eefcb380.mp4","durationSec":380.91,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":82.41,"ten":"Chào bạn · mở Chương 2 · Bìa bài 2.1"},
+        {"t":82.41,"den":163.72,"ten":"Chín kiểu, một model, câu SQL · PostgreSQL thật sự tạo gì"},
+        {"t":163.72,"den":258.46,"ten":"Mười đồng mười xu · Bẫy tiền, đo thật"},
+        {"t":258.46,"den":339.49,"ten":"Bộ kiểm từ chối gì · Chú thích không chỉ là chú thích"},
+        {"t":339.49,"den":380.91,"ten":"Thực hành & tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 2.1, mở đầu Chương 2 của khoá Prisma ORM."},
         {"t":11.25,"vi":"Chương 1 cho ta thấy ORM là gì: lệch trở kháng, mã sinh ra, đường đi tới SQL, và ba luồng làm việc."},
@@ -1863,8 +2005,14 @@
         {"t":369.6,"vi":"Bạn bấm liên kết Code Lab dưới video, làm module lược đồ cơ bản. Bài sau đi qua đủ mọi thuộc tính a còng của trường."}
       ]
     },
-    "pr-2-2-thuoc-tinh-truong": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/prisma-orm/02-ngon-ngu-luoc-do/02-02-thuoc-tinh-truong-6c7f830f.mp4","durationSec":406.6,"nguonCau":"srt",
-      "parts": [],
+    "pr-2-2-thuoc-tinh-truong": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/prisma-orm/02-ngon-ngu-luoc-do/02-02-thuoc-tinh-truong-6c7f830f.mp4","durationSec":406.6,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":95.47,"ten":"Chào bạn · nối từ bài 2.1 · Bìa bài 2.2"},
+        {"t":95.47,"den":174.9,"ten":"Khoá tăng dần và khoá ngẫu nhiên · 100.000 hàng mỗi kiểu"},
+        {"t":174.9,"den":270.22,"ten":"Bẫy: thứ không phải Prisma · unique và tên ràng buộc"},
+        {"t":270.22,"den":364.57,"ten":"map: hai quy ước đặt tên · ignore"},
+        {"t":364.57,"den":406.6,"ten":"Thực hành & tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 2.2 của khoá Prisma ORM."},
         {"t":10.13,"vi":"Bài trước là chín kiểu vô hướng: tiền dùng Decimal, mỗi trường một dấu bổ nghĩa, và ba gạch chéo để ghi tài liệu."},
@@ -1933,8 +2081,14 @@
         {"t":396.14,"vi":"Bạn bấm liên kết Code Lab dưới video, làm module lược đồ cơ bản. Bài sau là các thuộc tính khối, hai a còng."}
       ]
     },
-    "pr-2-3-thuoc-tinh-khoi": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/prisma-orm/02-ngon-ngu-luoc-do/02-03-thuoc-tinh-khoi-11c7c076.mp4","durationSec":391.61,"nguonCau":"srt",
-      "parts": [],
+    "pr-2-3-thuoc-tinh-khoi": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/prisma-orm/02-ngon-ngu-luoc-do/02-03-thuoc-tinh-khoi-11c7c076.mp4","durationSec":391.61,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":88.01,"ten":"Chào bạn · nối từ bài 2.2 · Bìa bài 2.3"},
+        {"t":88.01,"den":164.5,"ten":"Tên khoá ghép · Bẫy unique, biên dịch thật"},
+        {"t":164.5,"den":262.23,"ten":"index quyết định độ trễ · Danh bạ xếp theo họ rồi tên"},
+        {"t":262.23,"den":350.25,"ten":"Chọn loại chỉ mục · Thứ lược đồ không nói được"},
+        {"t":350.25,"den":391.61,"ten":"Thực hành & tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 2.3 của khoá Prisma ORM."},
         {"t":10.06,"vi":"Bài trước là thuộc tính trường: khoá ngẫu nhiên làm chỉ mục phình, default phía client không tồn tại với psql, và updatedAt do ứng dụng đặt."},
@@ -2002,8 +2156,14 @@
         {"t":381.17,"vi":"Bạn bấm liên kết Code Lab dưới video, làm module lược đồ cơ bản. Bài sau là native type, và hai cái cắn đau."}
       ]
     },
-    "pr-2-4-native-type": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/prisma-orm/02-ngon-ngu-luoc-do/02-04-native-type-b39cf972.mp4","durationSec":384.7,"nguonCau":"srt",
-      "parts": [],
+    "pr-2-4-native-type": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/prisma-orm/02-ngon-ngu-luoc-do/02-04-native-type-b39cf972.mp4","durationSec":384.7,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":85.48,"ten":"Chào bạn · nối từ bài 2.3 · Bìa bài 2.4"},
+        {"t":85.48,"den":162.66,"ten":"Chọn kiểu thời gian · Cùng một khoảnh khắc, ghi hai lần"},
+        {"t":162.66,"den":258.18,"ten":"Hai phiên, một hàng · Lược đồ biết nghĩ về thời gian"},
+        {"t":258.18,"den":346.4,"ten":"Thu hẹp cột đang có dữ liệu"},
+        {"t":346.4,"den":384.7,"ten":"Thực hành & tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 2.4 của khoá Prisma ORM."},
         {"t":10.33,"vi":"Bài trước là thuộc tính khối: khoá ghép dùng tên trường, name khác map, và chỉ mục danh bạ xếp họ trước tên."},
@@ -2064,8 +2224,14 @@
         {"t":374.05,"vi":"Bạn bấm liên kết Code Lab dưới video, làm module lược đồ cơ bản. Bài sau là enum, Json, Bytes và Unsupported."}
       ]
     },
-    "pr-2-5-kieu-kho-chiu": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/prisma-orm/02-ngon-ngu-luoc-do/02-05-kieu-kho-chiu-dafc4696.mp4","durationSec":390,"nguonCau":"srt",
-      "parts": [],
+    "pr-2-5-kieu-kho-chiu": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/prisma-orm/02-ngon-ngu-luoc-do/02-05-kieu-kho-chiu-dafc4696.mp4","durationSec":390,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":83.59,"ten":"Chào bạn · nối từ bài 2.4 · Bìa bài 2.5"},
+        {"t":83.59,"den":175.06,"ten":"Enum là kiểu thật · Thêm một dòng, đổi tên tám dòng"},
+        {"t":175.06,"den":261.38,"ten":"Năm cổng xanh, seed vỡ · Union chép tay và kiểu import"},
+        {"t":261.38,"den":349.61,"ten":"Lọc trong Json và ba loại null"},
+        {"t":349.61,"den":390,"ten":"Thực hành & tóm tắt Chương 2"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 2.5, bài cuối của Chương 2."},
         {"t":9.81,"vi":"Bài trước là native type: khoảnh khắc dùng Timestamptz, UUID dùng kiểu Uuid, còn VarChar chỉ là một quy tắc."},
@@ -2129,8 +2295,14 @@
         {"t":380.19,"vi":"Bạn bấm liên kết Code Lab dưới video, làm module lược đồ cơ bản. Chương 3 bắt đầu với các quan hệ."}
       ]
     },
-    "pr-3-1-hai-phia": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/prisma-orm/03-quan-he/03-01-hai-phia-317d6a35.mp4","durationSec":356.46,"nguonCau":"srt",
-      "parts": [],
+    "pr-3-1-hai-phia": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/prisma-orm/03-quan-he/03-01-hai-phia-317d6a35.mp4","durationSec":356.46,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":78.76,"ten":"Chào bạn · mở Chương 3 · Bìa bài 3.1"},
+        {"t":78.76,"den":151.27,"ten":"Ba trường, một cột"},
+        {"t":151.27,"den":239.77,"ten":"Cách sửa nằm trong thông báo · Các tham số của relation"},
+        {"t":239.77,"den":316.33,"ten":"Client được gì từ mỗi phía · Ba cách gán một quan hệ"},
+        {"t":316.33,"den":356.46,"ten":"Thực hành & tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 3.1, mở đầu Chương 3 của khoá Prisma ORM."},
         {"t":11.06,"vi":"Chương 2 học trọn ngôn ngữ lược đồ: kiểu, thuộc tính trường, thuộc tính khối, native type và những kiểu khó chịu."},
@@ -2197,8 +2369,13 @@
         {"t":351.11,"vi":"Bài sau là một nhiều, và năm hành vi onDelete."}
       ]
     },
-    "pr-3-2-mot-nhieu": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/prisma-orm/03-quan-he/03-02-mot-nhieu-16c44ea9.mp4","durationSec":310.6,"nguonCau":"srt",
-      "parts": [],
+    "pr-3-2-mot-nhieu": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/prisma-orm/03-quan-he/03-02-mot-nhieu-16c44ea9.mp4","durationSec":310.6,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":74.99,"ten":"Chào bạn · nối từ bài 3.1 · Bìa bài 3.2"},
+        {"t":74.99,"den":157.78,"ten":"Một thí nghiệm, năm lược đồ · Xoá cha, năm kết cục"},
+        {"t":157.78,"den":240.22,"ten":"Mặc định của Prisma · SetNull trên quan hệ bắt buộc"},
+        {"t":240.22,"den":310.6,"ten":"Tự kiểm ba câu · Thực hành & tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 3.2 của khoá Prisma ORM."},
         {"t":10.1,"vi":"Bài trước: một khoá ngoại là ba trường, mọi quan hệ cần phía đối ứng, và connect kiểm tồn tại trước khi ghi."},
@@ -2252,8 +2429,13 @@
         {"t":305.7,"vi":"Bài sau là một một, và đặt khoá ở đâu."}
       ]
     },
-    "pr-3-3-mot-mot": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/prisma-orm/03-quan-he/03-03-mot-mot-591c77ef.mp4","durationSec":326.8,"nguonCau":"srt",
-      "parts": [],
+    "pr-3-3-mot-mot": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/prisma-orm/03-quan-he/03-03-mot-mot-591c77ef.mp4","durationSec":326.8,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":95.26,"ten":"Chào bạn · nối từ bài 3.2 · Bìa bài 3.3"},
+        {"t":95.26,"den":171.79,"ten":"Sai phía: User giữ khoá · Gà và trứng"},
+        {"t":171.79,"den":254.17,"ten":"Quan hệ không diễn đạt được · Chỉ mục unique làm gì lúc chạy"},
+        {"t":254.17,"den":326.8,"ten":"Tự kiểm ba câu · Thực hành & tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 3.3 của khoá Prisma ORM."},
         {"t":9.35,"vi":"Bài trước là một nhiều và năm hành vi onDelete: bắt buộc thì Restrict, tuỳ chọn thì SetNull, và PostgreSQL chạy Cascade."},
@@ -2314,8 +2496,13 @@
         {"t":322.26,"vi":"Bài sau là nhiều nhiều, ẩn so với tường minh."}
       ]
     },
-    "pr-3-4-nhieu-nhieu": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/prisma-orm/03-quan-he/03-04-nhieu-nhieu-a66bb6c7.mp4","durationSec":394.37,"nguonCau":"srt",
-      "parts": [],
+    "pr-3-4-nhieu-nhieu": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/prisma-orm/03-quan-he/03-04-nhieu-nhieu-a66bb6c7.mp4","durationSec":394.37,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":104.1,"ten":"Chào bạn · nối từ bài 3.3 · Bìa bài 3.4"},
+        {"t":104.1,"den":190.17,"ten":"SQL của connect, disconnect, set"},
+        {"t":190.17,"den":286.42,"ten":"Chuyển sang tường minh: migrate diff làm gì"},
+        {"t":286.42,"den":394.37,"ten":"Chọn thế nào · Tự kiểm ba câu"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 3.4 của khoá Prisma ORM."},
         {"t":9.61,"vi":"Bài trước là một một: thêm unique vào khoá ngoại, khoá đặt ở phía tuỳ chọn, và không bao giờ bắt buộc cả hai phía."},
@@ -2388,8 +2575,14 @@
         {"t":388.63,"vi":"Bài sau là tự quan hệ, và nhiều quan hệ giữa hai model."}
       ]
     },
-    "pr-3-5-tu-quan-he": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/prisma-orm/03-quan-he/03-05-tu-quan-he-a2a72027.mp4","durationSec":413.57,"nguonCau":"srt",
-      "parts": [],
+    "pr-3-5-tu-quan-he": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/prisma-orm/03-quan-he/03-05-tu-quan-he-a2a72027.mp4","durationSec":413.57,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":80.17,"ten":"Chào bạn · nối từ bài 3.4 · Bìa bài 3.5"},
+        {"t":80.17,"den":159.39,"ten":"Cha bắt buộc: hợp lệ, nhưng sai · include đọc độ sâu cố định"},
+        {"t":159.39,"den":248.84,"ten":"CTE đệ quy · Vì sao phải chặn"},
+        {"t":248.84,"den":341.74,"ten":"Lược đồ chặn gì, không chặn gì · Hai model, hai quan hệ"},
+        {"t":341.74,"den":413.57,"ten":"Tự kiểm ba câu · Thực hành & tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 3.5 của khoá Prisma ORM."},
         {"t":10.08,"vi":"Bài trước là nhiều nhiều: bảng ẩn hai cột A và B, set thay cả danh sách, và chuyển sang tường minh thì phải chép trước, xoá sau."},
@@ -2470,8 +2663,14 @@
         {"t":410.03,"vi":"Bài sau là trắc nghiệm Chương 3."}
       ]
     },
-    "pr-4-1-sau-cach-doc": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/prisma-orm/04-doc-va-ghi/04-01-sau-cach-doc-712c9871.mp4","durationSec":401.31,"nguonCau":"srt",
-      "parts": [],
+    "pr-4-1-sau-cach-doc": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/prisma-orm/04-doc-va-ghi/04-01-sau-cach-doc-712c9871.mp4","durationSec":401.31,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":107.99,"ten":"Chào bạn · mở Chương 4 · Bìa bài 4.1"},
+        {"t":107.99,"den":195.21,"ten":"Vì sao findUnique từ chối bộ lọc"},
+        {"t":195.21,"den":272.77,"ten":"Hàng \"đầu tiên\" là hàng nào? · findFirst thiếu orderBy"},
+        {"t":272.77,"den":356.1,"ten":"count và hai dạng khác · Câu hỏi có tồn tại không"},
+        {"t":356.1,"den":401.31,"ten":"Thực hành & tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Chương 4 của khoá Prisma ORM: đọc và ghi."},
         {"t":10.79,"vi":"Chương 3 đã dựng đủ các loại quan hệ: một nhiều, một một, nhiều nhiều, và tự quan hệ."},
@@ -2546,8 +2745,13 @@
         {"t":395.86,"vi":"Bài sau là select, include, và nắn hình kết quả."}
       ]
     },
-    "pr-4-2-select-include": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/prisma-orm/04-doc-va-ghi/04-02-select-include-d9cc2782.mp4","durationSec":360.72,"nguonCau":"srt",
-      "parts": [],
+    "pr-4-2-select-include": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/prisma-orm/04-doc-va-ghi/04-02-select-include-d9cc2782.mp4","durationSec":360.72,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":82.77,"ten":"Chào bạn · nối từ bài 4.1 · Bìa bài 4.2"},
+        {"t":82.77,"den":176.34,"ten":"Ba cách nắn một hàng · Luật của select và include"},
+        {"t":176.34,"den":267.36,"ten":"Lọc con không phải lọc cha · _count: con số không cần hàng"},
+        {"t":267.36,"den":360.72,"ten":"Chọn cho từng lời gọi · Tự kiểm ba câu"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 4.2 của khoá Prisma ORM."},
         {"t":10.33,"vi":"Bài trước là sáu cách để đọc: bao nhiêu hàng, không có thì sao, findFirst cần orderBy, findMany cần take."},
@@ -2615,8 +2819,13 @@
         {"t":357.31,"vi":"Bài sau là tạo hàng dữ liệu."}
       ]
     },
-    "pr-4-3-tao-hang": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/prisma-orm/04-doc-va-ghi/04-03-tao-hang-c39da189.mp4","durationSec":377.31,"nguonCau":"srt",
-      "parts": [],
+    "pr-4-3-tao-hang": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/prisma-orm/04-doc-va-ghi/04-03-tao-hang-c39da189.mp4","durationSec":377.31,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":80.94,"ten":"Chào bạn · nối từ bài 4.2 · Bìa bài 4.3"},
+        {"t":80.94,"den":177.9,"ten":"create lồng nhau · connectOrCreate: bài toán thẻ"},
+        {"t":177.9,"den":273.02,"ten":"createMany: hàng nghìn trong một câu"},
+        {"t":273.02,"den":377.31,"ten":"Giá trị mặc định · Tự kiểm ba câu"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 4.3 của khoá Prisma ORM."},
         {"t":10.15,"vi":"Bài trước là nắn hình kết quả: select, include, omit toàn cục cho mật khẩu, và _count thay cho đếm độ dài."},
@@ -2686,8 +2895,13 @@
         {"t":372.37,"vi":"Bài sau là cập nhật, và các toán tử nguyên tử."}
       ]
     },
-    "pr-4-4-cap-nhat": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/prisma-orm/04-doc-va-ghi/04-04-cap-nhat-e408b2ed.mp4","durationSec":371.08,"nguonCau":"srt",
-      "parts": [],
+    "pr-4-4-cap-nhat": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/prisma-orm/04-doc-va-ghi/04-04-cap-nhat-e408b2ed.mp4","durationSec":371.08,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":103.46,"ten":"Chào bạn · nối từ bài 4.3 · Bìa bài 4.4"},
+        {"t":103.46,"den":184.67,"ten":"Một lượt xem biến mất · Dựng lại cuộc đua"},
+        {"t":184.67,"den":275.09,"ten":"Các toán tử nguyên tử · upsert và bộ đếm theo ngày"},
+        {"t":275.09,"den":371.08,"ten":"Cập nhật có điều kiện · Tự kiểm ba câu"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 4.4 của khoá Prisma ORM."},
         {"t":10.34,"vi":"Bài trước là tạo hàng: create lồng là một giao dịch, connectOrCreate đua, và trên hai mươi hàng thì dùng createMany."},
@@ -2758,8 +2972,13 @@
         {"t":366.51,"vi":"Bài sau là xoá, và xoá mềm làm cho đúng."}
       ]
     },
-    "pr-4-5-xoa-mem": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/prisma-orm/04-doc-va-ghi/04-05-xoa-mem-4647ae70.mp4","durationSec":381.69,"nguonCau":"srt",
-      "parts": [],
+    "pr-4-5-xoa-mem": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/prisma-orm/04-doc-va-ghi/04-05-xoa-mem-4647ae70.mp4","durationSec":381.69,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":98.98,"ten":"Chào bạn · nối từ bài 4.4 · Bìa bài 4.5"},
+        {"t":98.98,"den":177.94,"ten":"Một hàng vào, bốn mươi tư nghìn hàng ra"},
+        {"t":177.94,"den":276.71,"ten":"Client extension: bộ lọc không ai quên được"},
+        {"t":276.71,"den":381.69,"ten":"Xoá thật, có chủ đích · Tự kiểm ba câu"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 4.5 của khoá Prisma ORM."},
         {"t":9.67,"vi":"Bài trước là cập nhật: updateMany thì kiểm count, trường tính từ chính nó thì dùng increment, điều kiện đặt trong where."},
@@ -2834,8 +3053,13 @@
         {"t":378.21,"vi":"Bài sau là trắc nghiệm Chương 4."}
       ]
     },
-    "pr-5-1-toan-tu-loc": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/prisma-orm/05-truy-van-sau/05-01-toan-tu-loc-60dba03f.mp4","durationSec":328.44,"nguonCau":"srt",
-      "parts": [],
+    "pr-5-1-toan-tu-loc": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/prisma-orm/05-truy-van-sau/05-01-toan-tu-loc-60dba03f.mp4","durationSec":328.44,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":79.95,"ten":"Chào bạn · mở Chương 5 · Bìa bài 5.1"},
+        {"t":79.95,"den":159.38,"ten":"So sánh: số, ngày, chuỗi · Chuỗi: câu SQL của từng toán tử"},
+        {"t":159.38,"den":243.02,"ten":"Chỉ mục trigram, đo thật · startsWith và chuyện collation"},
+        {"t":243.02,"den":328.44,"ten":"Ghép điều kiện, và undefined · Tự kiểm ba câu"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Chương 5 của khoá Prisma ORM: truy vấn sâu."},
         {"t":10.97,"vi":"Chương 4 đã đi hết đọc và ghi: sáu cách đọc, nắn hình kết quả, tạo, cập nhật nguyên tử, và xoá mềm."},
@@ -2900,8 +3124,13 @@
         {"t":325,"vi":"Bài sau là lọc theo quan hệ."}
       ]
     },
-    "pr-5-2-loc-quan-he": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/prisma-orm/05-truy-van-sau/05-02-loc-quan-he-c24995fb.mp4","durationSec":317.85,"nguonCau":"srt",
-      "parts": [],
+    "pr-5-2-loc-quan-he": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/prisma-orm/05-truy-van-sau/05-02-loc-quan-he-c24995fb.mp4","durationSec":317.85,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":86.93,"ten":"Chào bạn · nối từ bài 5.1 · Bìa bài 5.2"},
+        {"t":86.93,"den":169.1,"ten":"Giỏ trống, mọi quả đều chín · Bẫy every"},
+        {"t":169.1,"den":253.15,"ten":"Qua nhiều tầng · Bài toán đủ mọi thẻ"},
+        {"t":253.15,"den":317.85,"ten":"Tự kiểm ba câu · Thực hành & tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 5.2 của khoá Prisma ORM."},
         {"t":10.15,"vi":"Bài trước là các toán tử lọc: not bỏ null, contains cần chỉ mục trigram, và undefined nới rộng bộ lọc."},
@@ -2968,8 +3197,13 @@
         {"t":312.76,"vi":"Bài sau là sắp xếp, và phân trang sống sót được."}
       ]
     },
-    "pr-5-3-sap-xep-phan-trang": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/prisma-orm/05-truy-van-sau/05-03-sap-xep-phan-trang-7a131cad.mp4","durationSec":319.84,"nguonCau":"srt",
-      "parts": [],
+    "pr-5-3-sap-xep-phan-trang": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/prisma-orm/05-truy-van-sau/05-03-sap-xep-phan-trang-7a131cad.mp4","durationSec":319.84,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":75.56,"ten":"Chào bạn · nối từ bài 5.2 · Bìa bài 5.3"},
+        {"t":75.56,"den":157.7,"ten":"DESC đưa null lên đầu · Đi bộ qua từng trang, hay nhảy thẳng"},
+        {"t":157.7,"den":234.96,"ten":"Đo qua Prisma · Lỗi thứ hai: trôi"},
+        {"t":234.96,"den":319.84,"ten":"Đừng gửi tổng số kèm con trỏ · Tự kiểm ba câu"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 5.3 của khoá Prisma ORM."},
         {"t":10.14,"vi":"Bài trước là lọc theo quan hệ: some an toàn, every đúng với tập rỗng, và phải lọc cả cha lẫn con."},
@@ -3029,8 +3263,13 @@
         {"t":316.15,"vi":"Bài sau là tổng hợp và groupBy."}
       ]
     },
-    "pr-5-4-tong-hop": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/prisma-orm/05-truy-van-sau/05-04-tong-hop-d769c680.mp4","durationSec":336.65,"nguonCau":"srt",
-      "parts": [],
+    "pr-5-4-tong-hop": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/prisma-orm/05-truy-van-sau/05-04-tong-hop-d769c680.mp4","durationSec":336.65,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":75.95,"ten":"Chào bạn · nối từ bài 5.3 · Bìa bài 5.4"},
+        {"t":75.95,"den":145.46,"ten":"Hàng rơi vào nhóm"},
+        {"t":145.46,"den":228.25,"ten":"Câu SQL mà trang tổng quan thật sự cần"},
+        {"t":228.25,"den":336.65,"ten":"Khi nào thôi dùng groupBy · Chọn theo câu hỏi"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 5.4 của khoá Prisma ORM."},
         {"t":10.43,"vi":"Bài trước là phân trang: offset chậm dần theo độ sâu, con trỏ đi ngang, và skip một là bắt buộc."},
@@ -3098,8 +3337,14 @@
         {"t":331.54,"vi":"Bài sau là tìm kiếm, bốn cấp độ đo bằng số."}
       ]
     },
-    "pr-5-5-tim-kiem": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/prisma-orm/05-truy-van-sau/05-05-tim-kiem-8795c42a.mp4","durationSec":331.46,"nguonCau":"srt",
-      "parts": [],
+    "pr-5-5-tim-kiem": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/prisma-orm/05-truy-van-sau/05-05-tim-kiem-8795c42a.mp4","durationSec":331.46,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":77.08,"ten":"Chào bạn · nối từ bài 5.4 · Bìa bài 5.5"},
+        {"t":77.08,"den":153.49,"ten":"Cấp một: contains · Cấp một tốn gì, sai gì"},
+        {"t":153.49,"den":226.39,"ten":"Cấp ba: tìm kiếm toàn văn của PostgreSQL"},
+        {"t":226.39,"den":293.13,"ten":"Cấp bốn: máy tìm kiếm riêng · Bốn cấp cạnh nhau"},
+        {"t":293.13,"den":331.46,"ten":"Thực hành & tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 5.5 của khoá Prisma ORM."},
         {"t":10.33,"vi":"Bài trước là tổng hợp: aggregate là một câu, having lọc nhóm, và ngày trống cần generate_series."},
@@ -3161,8 +3406,14 @@
         {"t":327.58,"vi":"Bài sau là trắc nghiệm Chương 5."}
       ]
     },
-    "pr-6-1-migration-la-gi": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/prisma-orm/06-migration/06-01-migration-la-gi-cac728cd.mp4","durationSec":352.01,"nguonCau":"srt",
-      "parts": [],
+    "pr-6-1-migration-la-gi": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/prisma-orm/06-migration/06-01-migration-la-gi-cac728cd.mp4","durationSec":352.01,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":83.56,"ten":"Chào bạn · mở Chương 6 · Bìa bài 6.1"},
+        {"t":83.56,"den":167.58,"ten":"Nửa thứ hai: cái bảng · Hai nửa gặp nhau"},
+        {"t":167.58,"den":239.54,"ten":"Sửa một migration đã chạy: deploy có chết không?"},
+        {"t":239.54,"den":312.13,"ten":"Migration không phải là gì · Một lịch sử thật: kho CuongThai"},
+        {"t":312.13,"den":352.01,"ten":"Thực hành & tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Chương 6 của khoá Prisma ORM: migration."},
         {"t":10.75,"vi":"Chương 5 là truy vấn sâu: toán tử lọc, lọc theo quan hệ, phân trang, tổng hợp và tìm kiếm."},
@@ -3233,8 +3484,13 @@
         {"t":348.09,"vi":"Bài sau là shadow database."}
       ]
     },
-    "pr-6-2-shadow-database": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/prisma-orm/06-migration/06-02-shadow-database-d321d6df.mp4","durationSec":363.92,"nguonCau":"srt",
-      "parts": [],
+    "pr-6-2-shadow-database": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/prisma-orm/06-migration/06-02-shadow-database-d321d6df.mp4","durationSec":363.92,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":84.03,"ten":"Chào bạn · nối từ bài 6.1 · Bìa bài 6.2"},
+        {"t":84.03,"den":171.58,"ten":"Cái bóng sống vài giây · Bắt quả tang"},
+        {"t":171.58,"den":249.09,"ten":"Bẫy: shadow URL đang chứa dữ liệu"},
+        {"t":249.09,"den":363.92,"ten":"Production không dùng shadow"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 6.2 của khoá Prisma ORM."},
         {"t":10.14,"vi":"Bài trước: migration là một thư mục SQL cộng một bảng ghi nhớ, checksum là mã băm của tệp, và chỉ migrate dev phát hiện tệp bị sửa."},
@@ -3304,8 +3560,14 @@
         {"t":360.03,"vi":"Bài sau là migration viết tay."}
       ]
     },
-    "pr-6-3-viet-tay": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/prisma-orm/06-migration/06-03-viet-tay-a9e439c6.mp4","durationSec":355.73,"nguonCau":"srt",
-      "parts": [],
+    "pr-6-3-viet-tay": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/prisma-orm/06-migration/06-03-viet-tay-a9e439c6.mp4","durationSec":355.73,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":83.28,"ten":"Chào bạn · nối từ bài 6.2 · Bìa bài 6.3"},
+        {"t":83.28,"den":159.47,"ten":"Bước hai: sinh điểm khởi đầu · Đúng, và sẽ hỏng"},
+        {"t":159.47,"den":242.1,"ten":"Xoá rồi thêm, hay đổi nhãn · Năm thứ Prisma không khai được"},
+        {"t":242.1,"den":314.22,"ten":"Cái chỉ mục không được khoá bảng"},
+        {"t":314.22,"den":355.73,"ten":"Thực hành & tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 6.3 của khoá Prisma ORM."},
         {"t":10.13,"vi":"Bài trước: shadow database, lỗi P3014 trên database thuê, và một lịch sử không phát lại được khiến migrate dev hỏng mãi."},
@@ -3374,8 +3636,14 @@
         {"t":350.18,"vi":"Bài sau là trôi dạt, và tiếp quản database có sẵn."}
       ]
     },
-    "pr-6-4-troi-dat": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/prisma-orm/06-migration/06-04-troi-dat-f326302c.mp4","durationSec":407.18,"nguonCau":"srt",
-      "parts": [],
+    "pr-6-4-troi-dat": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/prisma-orm/06-migration/06-04-troi-dat-f326302c.mp4","durationSec":407.18,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":97.7,"ten":"Chào bạn · nối từ bài 6.3 · Bìa bài 6.4"},
+        {"t":97.7,"den":186.13,"ten":"Phát hiện: database so với lịch sử · Lệnh nào nhận ra?"},
+        {"t":186.13,"den":266.16,"ten":"Nhận nuôi, bước A: dòng lược đồ phải khớp thật"},
+        {"t":266.16,"den":365.04,"ten":"Migration nền là bản chụp của thứ Prisma thấy"},
+        {"t":365.04,"den":407.18,"ten":"Thực hành & tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 6.4 của khoá Prisma ORM."},
         {"t":10.42,"vi":"Bài trước: sinh SQL bằng migrate diff rồi sửa tay, đổi tên bằng RENAME, và CONCURRENTLY phải đứng riêng."},
@@ -3451,8 +3719,15 @@
         {"t":402.66,"vi":"Bài sau là migration trên production."}
       ]
     },
-    "pr-6-5-tren-production": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/prisma-orm/06-migration/06-05-tren-production-18219214.mp4","durationSec":476.17,"nguonCau":"srt",
-      "parts": [],
+    "pr-6-5-tren-production": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/prisma-orm/06-migration/06-05-tren-production-18219214.mp4","durationSec":476.17,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":81.1,"ten":"Chào bạn · nối từ bài 6.4 · Bìa bài 6.5"},
+        {"t":81.1,"den":159.77,"ten":"Script deploy của bài web, chạy thật"},
+        {"t":159.77,"den":246.44,"ten":"Mỗi câu lệnh tốn gì trên một triệu hàng"},
+        {"t":246.44,"den":323.56,"ten":"Nới thu: đổi tên một cột"},
+        {"t":323.56,"den":427.18,"ten":"Đánh dấu đã lùi, rồi thêm migration sửa mới?"},
+        {"t":427.18,"den":476.17,"ten":"Danh sách kiểm & thực hành"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 6.5, bài cuối của Chương 6."},
         {"t":9.88,"vi":"Bài trước: migrate status không thấy trôi dạt, diff thì thấy. Nhận nuôi một thay đổi, và dựng nền 0_init cho database có sẵn."},
@@ -3546,8 +3821,13 @@
         {"t":470.06,"vi":"Bài sau là trắc nghiệm Chương 6, rồi tới giao dịch và tranh chấp."}
       ]
     },
-    "pr-7-1-hai-dang": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/prisma-orm/07-giao-dich-tranh-chap/07-01-hai-dang-6bfabb95.mp4","durationSec":352.84,"nguonCau":"srt",
-      "parts": [],
+    "pr-7-1-hai-dang": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/prisma-orm/07-giao-dich-tranh-chap/07-01-hai-dang-6bfabb95.mp4","durationSec":352.84,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":78.47,"ten":"Chào bạn · mở Chương 7 · Bìa bài 7.1"},
+        {"t":78.47,"den":165.11,"ten":"Dạng tương tác · Cái lỗi tx"},
+        {"t":165.11,"den":258.15,"ten":"Chọn trong một bảng · Mười ô kết nối, hai mươi yêu cầu"},
+        {"t":258.15,"den":352.84,"ten":"Xếp thứ tự để hỏng còn cứu được · Tự kiểm ba câu"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Chương 7 của khoá Prisma ORM: giao dịch và tranh chấp."},
         {"t":11.7,"vi":"Chương 6 là migration: thư mục SQL, shadow database, viết tay, trôi dạt, và production."},
@@ -3613,8 +3893,13 @@
         {"t":348.22,"vi":"Bài sau là mức cô lập, dựng lại tận mắt."}
       ]
     },
-    "pr-7-2-muc-co-lap": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/prisma-orm/07-giao-dich-tranh-chap/07-02-muc-co-lap-45395c08.mp4","durationSec":330.81,"nguonCau":"srt",
-      "parts": [],
+    "pr-7-2-muc-co-lap": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/prisma-orm/07-giao-dich-tranh-chap/07-02-muc-co-lap-45395c08.mp4","durationSec":330.81,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":74.79,"ten":"Chào bạn · nối từ bài 7.1 · Bìa bài 7.2"},
+        {"t":74.79,"den":161.33,"ten":"Bẫy: mảng một câu không có giao dịch"},
+        {"t":161.33,"den":247.1,"ten":"Serializable: một bên hỏng · Hàm thử lại"},
+        {"t":247.1,"den":330.81,"ten":"Chọn theo thứ tự · Tự kiểm ba câu"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 7.2 của khoá Prisma ORM."},
         {"t":10.12,"vi":"Bài trước: dạng mảng và dạng tương tác, cái lỗi tx, và lời gọi HTTP làm nghẽn pool kết nối."},
@@ -3681,8 +3966,13 @@
         {"t":325.42,"vi":"Bài sau là khoá bi quan, lạc quan và advisory."}
       ]
     },
-    "pr-7-3-khoa": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/prisma-orm/07-giao-dich-tranh-chap/07-03-khoa-c16c4aa9.mp4","durationSec":349.74,"nguonCau":"srt",
-      "parts": [],
+    "pr-7-3-khoa": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/prisma-orm/07-giao-dich-tranh-chap/07-03-khoa-c16c4aa9.mp4","durationSec":349.74,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":80.96,"ten":"Chào bạn · nối từ bài 7.2 · Bìa bài 7.3"},
+        {"t":80.96,"den":170.32,"ten":"Ai phải đợi khoá hàng · SKIP LOCKED: hàng đợi cho bốn worker"},
+        {"t":170.32,"den":257.53,"ten":"Dạng không rò: khoá theo giao dịch · Hai mũi tên chờ nhau"},
+        {"t":257.53,"den":349.74,"ten":"Chọn thế nào · Tự kiểm ba câu"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 7.3 của khoá Prisma ORM."},
         {"t":10.08,"vi":"Bài trước: READ COMMITTED để lọt gì, lệch ghi làm hai admin thành ba, và Serializable cần thử lại."},
@@ -3754,8 +4044,13 @@
         {"t":343.87,"vi":"Bài sau là timeout, thử lại và tính idempotent."}
       ]
     },
-    "pr-7-4-timeout": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/prisma-orm/07-giao-dich-tranh-chap/07-04-timeout-b16d0712.mp4","durationSec":312.11,"nguonCau":"srt",
-      "parts": [],
+    "pr-7-4-timeout": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/prisma-orm/07-giao-dich-tranh-chap/07-04-timeout-b16d0712.mp4","durationSec":312.11,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":76.47,"ten":"Chào bạn · nối từ bài 7.3 · Bìa bài 7.4"},
+        {"t":76.47,"den":147.57,"ten":"maxWait, đo thật · Nhập dữ liệu trong một giao dịch"},
+        {"t":147.57,"den":221.05,"ten":"Bài toán thử lại · Xác nhận rơi trên đường về"},
+        {"t":221.05,"den":312.11,"ten":"Việc sau commit: outbox · Tự kiểm ba câu"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 7.4 của khoá Prisma ORM."},
         {"t":10.51,"vi":"Bài trước: FOR UPDATE với tấm vé cuối, SKIP LOCKED cho hàng đợi, advisory lock rò qua pool, và khoá chết."},
@@ -3815,8 +4110,13 @@
         {"t":307.18,"vi":"Bài sau là sáu bài toán tranh chấp, sáu lời giải."}
       ]
     },
-    "pr-7-5-sach-cong-thuc": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/prisma-orm/07-giao-dich-tranh-chap/07-05-sach-cong-thuc-ddddc2b3.mp4","durationSec":292.91,"nguonCau":"srt",
-      "parts": [],
+    "pr-7-5-sach-cong-thuc": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/prisma-orm/07-giao-dich-tranh-chap/07-05-sach-cong-thuc-ddddc2b3.mp4","durationSec":292.91,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":71.01,"ten":"Chào bạn · nối từ bài 7.4 · Bìa bài 7.5"},
+        {"t":71.01,"den":160.32,"ten":"Hai: slug duy nhất · Mười người, một ghế"},
+        {"t":160.32,"den":225.07,"ten":"Năm: hai trăm lệnh chuyển tiền · Sáu: hàng đợi việc"},
+        {"t":225.07,"den":292.91,"ten":"Tự kiểm ba câu · Thực hành & tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 7.5, bài cuối của Chương 7."},
         {"t":9.97,"vi":"Bài trước: ba cái timeout, chia lô thay vì nâng timeout, và khoá idempotent cho việc thử lại."},
@@ -3874,8 +4174,13 @@
         {"t":289.22,"vi":"Bài sau là trắc nghiệm Chương 7."}
       ]
     },
-    "pr-8-1-kieu-nen-import": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/prisma-orm/08-he-kieu-sinh-ra/08-01-kieu-nen-import-cb4617c0.mp4","durationSec":314.23,"nguonCau":"srt",
-      "parts": [],
+    "pr-8-1-kieu-nen-import": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/prisma-orm/08-he-kieu-sinh-ra/08-01-kieu-nen-import-cb4617c0.mp4","durationSec":314.23,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":79.96,"ten":"Chào bạn · mở Chương 8 · Bìa bài 8.1"},
+        {"t":79.96,"den":160.06,"ten":"Kiểu model và enum · Kiểu Args"},
+        {"t":160.06,"den":240.81,"ten":"Các lớp lỗi · Kiểu của chính client"},
+        {"t":240.81,"den":314.23,"ten":"Tự kiểm ba câu · Thực hành & tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Chương 8 của khoá Prisma ORM: hệ kiểu được sinh ra."},
         {"t":11.73,"vi":"Chương 7 là giao dịch và tranh chấp: hai dạng $transaction, mức cô lập, khoá hàng, và sáu bài toán chạy đồng thời."},
@@ -3941,8 +4246,13 @@
         {"t":309.81,"vi":"Bài sau: đặt tên cho hình dạng truy vấn."}
       ]
     },
-    "pr-8-2-getpayload": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/prisma-orm/08-he-kieu-sinh-ra/08-02-getpayload-f3e68159.mp4","durationSec":300.13,"nguonCau":"srt",
-      "parts": [],
+    "pr-8-2-getpayload": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/prisma-orm/08-he-kieu-sinh-ra/08-02-getpayload-f3e68159.mp4","durationSec":300.13,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":76.52,"ten":"Chào bạn · nối từ bài 8.1 · Bìa bài 8.2"},
+        {"t":76.52,"den":137.16,"ten":"Cách một: satisfies cộng GetPayload"},
+        {"t":137.16,"den":210.02,"ten":"Dấu hai chấm thay cho satisfies · Cách hai và ba"},
+        {"t":210.02,"den":300.13,"ten":"Khi nào vẫn viết tay · Tự kiểm ba câu"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 8.2."},
         {"t":7.84,"vi":"Bài trước: sáu nhóm kiểu do bộ sinh viết ra, DbNull khác JsonNull, và bắt lỗi theo lớp rồi theo mã."},
@@ -4006,8 +4316,13 @@
         {"t":294.19,"vi":"Bài sau: cái kiểu làm vỡ production."}
       ]
     },
-    "pr-8-3-su-co-enum": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/prisma-orm/08-he-kieu-sinh-ra/08-03-su-co-enum-18a80b89.mp4","durationSec":325.24,"nguonCau":"srt",
-      "parts": [],
+    "pr-8-3-su-co-enum": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/prisma-orm/08-he-kieu-sinh-ra/08-03-su-co-enum-18a80b89.mp4","durationSec":325.24,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":72.38,"ten":"Chào bạn · nối từ bài 8.2 · Bìa bài 8.3"},
+        {"t":72.38,"den":146.21,"ten":"Năm đèn xanh, một đèn đỏ · Cái đã vỡ: seed"},
+        {"t":146.21,"den":226.07,"ten":"Hai cách vá · Cái gì KHÔNG được kiểm kiểu?"},
+        {"t":226.07,"den":325.24,"ten":"Bốn chỗ khác bản chép tay ẩn nấp · Tự kiểm ba câu"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 8.3."},
         {"t":7.78,"vi":"Bài trước: đặt tên cho hình dạng truy vấn bằng satisfies cộng GetPayload, và vì sao dấu hai chấm làm kiểu nói dối."},
@@ -4077,8 +4392,13 @@
         {"t":320.23,"vi":"Bài sau: client extension, bốn loại."}
       ]
     },
-    "pr-8-4-extension": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/prisma-orm/08-he-kieu-sinh-ra/08-04-extension-42e4bead.mp4","durationSec":303.7,"nguonCau":"srt",
-      "parts": [],
+    "pr-8-4-extension": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/prisma-orm/08-he-kieu-sinh-ra/08-04-extension-42e4bead.mp4","durationSec":303.7,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":72.13,"ten":"Chào bạn · nối từ bài 8.3 · Bìa bài 8.4"},
+        {"t":72.13,"den":141,"ten":"Trường tính toán không phải cột · model và client"},
+        {"t":141,"den":208.69,"ten":"Bộ lọc tenant, và chỗ nó lọt · Yêu cầu đi qua các lớp"},
+        {"t":208.69,"den":303.7,"ten":"Thứ extension không làm được · Tự kiểm ba câu"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 8.4."},
         {"t":7.99,"vi":"Bài trước: năm phép kiểm xanh, một bước seed đỏ, vì tsc chưa từng mở tệp seed.ts."},
@@ -4143,8 +4463,13 @@
         {"t":298.97,"vi":"Bài sau: lược đồ lớn và trình soạn thảo ì."}
       ]
     },
-    "pr-8-5-luoc-do-lon": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/prisma-orm/08-he-kieu-sinh-ra/08-05-luoc-do-lon-d388fa16.mp4","durationSec":354.39,"nguonCau":"srt",
-      "parts": [],
+    "pr-8-5-luoc-do-lon": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/prisma-orm/08-he-kieu-sinh-ra/08-05-luoc-do-lon-d388fa16.mp4","durationSec":354.39,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":89.37,"ten":"Chào bạn · nối từ bài 8.4 · Bìa bài 8.5"},
+        {"t":89.37,"den":171.39,"ten":"Đồng hồ tsc theo số model · Kích thước lược đồ tốn gì"},
+        {"t":171.39,"den":258.93,"ten":"Đặt tên include sâu, đo thật · incremental: lần chạy thứ hai"},
+        {"t":258.93,"den":354.39,"ten":"Thứ không giúp, và trình soạn thảo · Tự kiểm ba câu"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 8.5, bài cuối của Chương 8."},
         {"t":10.22,"vi":"Bài trước: bốn loại extension."},
@@ -4215,8 +4540,13 @@
         {"t":350.38,"vi":"Bài sau là trắc nghiệm Chương 8."}
       ]
     },
-    "pr-9-1-do-truoc": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/prisma-orm/09-hieu-nang/09-01-do-truoc-cd97b1aa.mp4","durationSec":294.64,"nguonCau":"srt",
-      "parts": [],
+    "pr-9-1-do-truoc": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/prisma-orm/09-hieu-nang/09-01-do-truoc-cd97b1aa.mp4","durationSec":294.64,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":76.27,"ten":"Chào bạn · mở Chương 9 · Bìa bài 9.1"},
+        {"t":76.27,"den":137.87,"ten":"Bước một: bắt mọi truy vấn · Bước hai: xếp hạng theo tổng"},
+        {"t":137.87,"den":210.52,"ten":"Bước bốn: đọc kế hoạch · Bước năm: sửa rồi đo lại"},
+        {"t":210.52,"den":294.64,"ten":"Trên production: pg_stat_statements · Tự kiểm ba câu"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Chương 9 của khoá Prisma ORM: hiệu năng."},
         {"t":10.71,"vi":"Chương 8 là hệ kiểu được sinh ra: kiểu nên import, GetPayload, sự cố enum, bốn loại extension, và lược đồ lớn."},
@@ -4277,8 +4607,13 @@
         {"t":290.3,"vi":"Bài sau: N+1 ở đủ mọi dạng."}
       ]
     },
-    "pr-9-2-n-cong-1": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/prisma-orm/09-hieu-nang/09-02-n-cong-1-59fa6111.mp4","durationSec":319.11,"nguonCau":"srt",
-      "parts": [],
+    "pr-9-2-n-cong-1": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/prisma-orm/09-hieu-nang/09-02-n-cong-1-59fa6111.mp4","durationSec":319.11,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":77.43,"ten":"Chào bạn · nối từ bài 9.1 · Bìa bài 9.2"},
+        {"t":77.43,"den":160.22,"ten":"Đếm mũi tên trên từng làn · Dạng hai: Promise.all che giấu"},
+        {"t":160.22,"den":230.03,"ten":"Dạng bốn: vòng lặp ở phía gọi"},
+        {"t":230.03,"den":319.11,"ten":"Quy tắc · Tự kiểm ba câu"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 9.2."},
         {"t":7.88,"vi":"Bài trước: đếm truy vấn trước, xếp hạng theo tổng, dựng lại SQL, đọc kế hoạch, rồi đo lại cả trang."},
@@ -4336,8 +4671,13 @@
         {"t":313.21,"vi":"Bài sau: chỉ mục mà truy vấn Prisma dùng được."}
       ]
     },
-    "pr-9-3-chi-muc": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/prisma-orm/09-hieu-nang/09-03-chi-muc-1377fc8e.mp4","durationSec":340.32,"nguonCau":"srt",
-      "parts": [],
+    "pr-9-3-chi-muc": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/prisma-orm/09-hieu-nang/09-03-chi-muc-1377fc8e.mp4","durationSec":340.32,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":80.81,"ten":"Chào bạn · nối từ bài 9.2 · Bìa bài 9.3"},
+        {"t":80.81,"den":167.93,"ten":"Khoá ngoại không ai lập chỉ mục · Cây chỉ mục và thứ tự cột"},
+        {"t":167.93,"den":246.04,"ten":"Chiều sắp xếp trong @@index"},
+        {"t":246.04,"den":340.32,"ten":"Truy vấn không cây B nào cứu · Tự kiểm ba câu"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 9.3."},
         {"t":7.83,"vi":"Bài trước: năm dạng N+1, Promise.all che giấu, và _count không phải lúc nào cũng rẻ."},
@@ -4399,8 +4739,13 @@
         {"t":335.54,"vi":"Bài sau: connection pool, tính bằng số học."}
       ]
     },
-    "pr-9-4-connection-pool": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/prisma-orm/09-hieu-nang/09-04-connection-pool-9d76324a.mp4","durationSec":342.69,"nguonCau":"srt",
-      "parts": [],
+    "pr-9-4-connection-pool": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/prisma-orm/09-hieu-nang/09-04-connection-pool-9d76324a.mp4","durationSec":342.69,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":82.17,"ten":"Chào bạn · nối từ bài 9.3 · Bìa bài 9.4"},
+        {"t":82.17,"den":159.97,"ten":"Container báo bao nhiêu CPU · Phép tính"},
+        {"t":159.97,"den":248.46,"ten":"Xếp hàng trước quầy · Cùng tải, ba cỡ pool"},
+        {"t":248.46,"den":342.69,"ten":"Thứ tự làm · Tự kiểm ba câu"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 9.4."},
         {"t":8.07,"vi":"Bài trước: viết chỉ mục từ câu truy vấn, khoá ngoại chưa có chỉ mục, và chỉ mục một phần cần truy vấn lặp lại điều kiện."},
@@ -4465,8 +4810,13 @@
         {"t":331.22,"vi":"Bạn bấm liên kết Code Lab dưới video, làm module connection pooling, serverless và edge. Bài sau: câu truy vấn lẽ ra đừng gửi."}
       ]
     },
-    "pr-9-5-truy-van-khong-gui": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/prisma-orm/09-hieu-nang/09-05-truy-van-khong-gui-bf312a4b.mp4","durationSec":314.55,"nguonCau":"srt",
-      "parts": [],
+    "pr-9-5-truy-van-khong-gui": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/prisma-orm/09-hieu-nang/09-05-truy-van-khong-gui-bf312a4b.mp4","durationSec":314.55,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":77.48,"ten":"Chào bạn · nối từ bài 9.4 · Bìa bài 9.5"},
+        {"t":77.48,"den":146.67,"ten":"Hai: OFFSET đọc cả phần bỏ qua · Ba cách tới hàng một triệu"},
+        {"t":146.67,"den":228.67,"ten":"Ba: count là một lần quét · Bốn: ghi theo lô"},
+        {"t":228.67,"den":314.55,"ten":"Năm kỹ thuật, theo mức hay gặp · Tự kiểm ba câu"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 9.5, bài cuối của Chương 9."},
         {"t":10.06,"vi":"Bài trước: pool mặc định nhân theo số tiến trình, pool to hơn không nhanh hơn, và PgBouncer cần cờ pgbouncer=true."},

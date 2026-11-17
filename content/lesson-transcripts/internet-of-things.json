@@ -2,8 +2,16 @@
   "courseSlug": "internet-of-things",
   "sinhBoi": "scripts/phu-de-tu-video-rieng.mjs",
   "lessons": {
-    "iot102-gioi-thieu": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/internet-of-things/00-gioi-thieu-mon-hoc/00-01-gioi-thieu-iot102-bd244395.mp4","durationSec":813.17,"nguonCau":"srt",
-      "parts": [],
+    "iot102-gioi-thieu": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/internet-of-things/00-gioi-thieu-mon-hoc/00-01-gioi-thieu-iot102-bd244395.mp4","durationSec":813.17,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":181.45,"ten":"Mở đầu · bài này học gì"},
+        {"t":181.45,"den":360.14,"ten":"Tầng ba là dữ liệu và cloud"},
+        {"t":360.14,"den":513.14,"ten":"Hai khoá học trên edX của trường Curtin"},
+        {"t":513.14,"den":588.65,"ten":"Ví dụ Arduino"},
+        {"t":588.65,"den":686.79,"ten":"Trước khi kết thúc"},
+        {"t":686.79,"den":766.25,"ten":"Giờ tới lượt bạn"},
+        {"t":766.25,"den":813.17,"ten":"Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với môn IOT102, Internet vạn vật."},
         {"t":10.4,"vi":"Ở môn PRF192 bạn đã viết C: biến, vòng lặp, hàm. Nhưng chương trình của bạn mới chỉ in chữ ra màn hình."},
@@ -154,8 +162,15 @@
         {"t":804.44,"vi":"Bài sau, 1.1, mở cái máy bốn tầng ra xem kỹ: khái niệm và kiến trúc của IoT."}
       ]
     },
-    "iot102-khai-niem": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/internet-of-things/01-iot-la-gi/01-01-khai-niem-kien-truc-iot-1bed4a5a.mp4","durationSec":722.15,"nguonCau":"srt",
-      "parts": [],
+    "iot102-khai-niem": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/internet-of-things/01-iot-la-gi/01-01-khai-niem-kien-truc-iot-1bed4a5a.mp4","durationSec":722.15,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":179.7,"ten":"Mở đầu · bài này học gì"},
+        {"t":179.7,"den":291.51,"ten":"Ý một: Internet of Things là khi ta…"},
+        {"t":291.51,"den":467.38,"ten":"Ví dụ đơn giản là cái tủ lạnh"},
+        {"t":467.38,"den":569.25,"ten":"Board chỉ in ra dây Serial"},
+        {"t":569.25,"den":679.8,"ten":"Bẫy một. Đề cho câu IoT means the…"},
+        {"t":679.8,"den":722.15,"ten":"Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn. Bài trước ta biến một cái quạt thường thành một thing, bằng cảm biến, vi điều khiển và Wi-Fi."},
         {"t":12.55,"vi":"Ta cũng có bản đồ môn học: cái máy bốn tầng, bọc ngoài là bảo mật."},

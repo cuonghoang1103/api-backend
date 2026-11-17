@@ -2,8 +2,15 @@
   "courseSlug": "operating-systems-for-developers",
   "sinhBoi": "scripts/phu-de-tu-video-rieng.mjs",
   "lessons": {
-    "os-0-1-cai-dat": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/00-he-dieu-hanh-de-lam-gi/00-03-phong-lab-30304b73.mp4","durationSec":571.14,"nguonCau":"srt",
-      "parts": [],
+    "os-0-1-cai-dat": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/00-he-dieu-hanh-de-lam-gi/00-03-phong-lab-30304b73.mp4","durationSec":571.14,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":110.94,"ten":"Ôn nhanh · hôm nay · Vì sao cần một Linux vứt đi"},
+        {"t":110.94,"den":194.03,"ten":"Chạy thật: kiểm đồ nghề · Mô phỏng: --rm và -v"},
+        {"t":194.03,"den":313.73,"ten":"Chạy thật: một hộp có giới hạn"},
+        {"t":313.73,"den":426.6,"ten":"Luật vàng cho phòng lab · Thực hành 15 phút"},
+        {"t":426.6,"den":519.57,"ten":"Thuật ngữ trong bài · Tự kiểm nhanh"},
+        {"t":519.57,"den":571.14,"ten":"Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 0.1 của khoá Hệ điều hành cho lập trình viên."},
         {"t":11.4,"vi":"Bài trước mình xem bản đồ năm vùng của khoá, và nhịp học năm bước: slide, mô phỏng, đọc và chạy, thực hành, quiz."},
@@ -99,8 +106,16 @@
         {"t":563.75,"vi":"Bài sau, 0.2: vừa đủ ngôn ngữ C để đọc mọi ví dụ của khoá."}
       ]
     },
-    "os-0-2-c-toi-thieu": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/00-he-dieu-hanh-de-lam-gi/00-04-c-toi-thieu-9addca56.mp4","durationSec":653.61,"nguonCau":"srt",
-      "parts": [],
+    "os-0-2-c-toi-thieu": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/00-he-dieu-hanh-de-lam-gi/00-04-c-toi-thieu-9addca56.mp4","durationSec":653.61,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":106.43,"ten":"Ôn nhanh · hôm nay · Vì sao hệ điều hành nói tiếng C"},
+        {"t":106.43,"den":197.84,"ten":"Chạy thật: pointers.c · Ba vùng địa chỉ"},
+        {"t":197.84,"den":298.5,"ten":"Stack, heap, malloc và free · Chạy thật: gọi nhân từ C"},
+        {"t":298.5,"den":382.4,"ten":"Chạy thật: không có lưới an toàn · Chạy thật: con trỏ NULL"},
+        {"t":382.4,"den":501.06,"ten":"Java và JavaScript giấu đi · Thực hành 20 phút"},
+        {"t":501.06,"den":595.54,"ten":"Thuật ngữ trong bài · Tự kiểm nhanh"},
+        {"t":595.54,"den":653.61,"ten":"Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 0.2 của khoá Hệ điều hành cho lập trình viên."},
         {"t":11.34,"vi":"Bài trước mình dựng phòng lab: một container vứt đi được, cờ rm giữ nó sạch, cờ v giữ mã, và cpus, memory cho nó giới hạn."},
@@ -219,8 +234,18 @@
         {"t":645.39,"vi":"Không gian địa chỉ, thanh ghi, tệp đang mở, và một con số gọi là PID."}
       ]
     },
-    "os-0-8-bat-dau-tai-day": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/00-he-dieu-hanh-de-lam-gi/00-01-bat-dau-tai-day-c3ea1598.mp4","durationSec":903.14,"nguonCau":"srt",
-      "parts": [],
+    "os-0-8-bat-dau-tai-day": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/00-he-dieu-hanh-de-lam-gi/00-01-bat-dau-tai-day-c3ea1598.mp4","durationSec":903.14,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":98.31,"ten":"Chào khoá học · Những con số hằng ngày"},
+        {"t":98.31,"den":205.56,"ten":"Vì sao backend và bảo mật cần môn này"},
+        {"t":205.56,"den":310.92,"ten":"Hệ điều hành và nhân · Chạy thật: thấy lời gọi hệ thống"},
+        {"t":310.92,"den":413.7,"ten":"Nó từ đâu tới"},
+        {"t":413.7,"den":499.46,"ten":"Chạy thật: triết lý Unix · Mô phỏng: thang độ trễ"},
+        {"t":499.46,"den":633.76,"ten":"Therac-25: một race giết người"},
+        {"t":633.76,"den":723.27,"ten":"Chính các lỗi đó lúc hai giờ sáng · Thuật ngữ trong bài"},
+        {"t":723.27,"den":841.41,"ten":"Thực hành 10 phút · Tự kiểm nhanh"},
+        {"t":841.41,"den":903.14,"ten":"Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, chào mừng đến với khoá Hệ điều hành cho lập trình viên trên cuongthai.com."},
         {"t":12.31,"vi":"Khoá này giúp bạn đọc hiểu mọi con số của Linux, tự viết chương trình chạy song song rồi đo, và tái hiện được sự cố thật."},
@@ -369,8 +394,14 @@
         {"t":894.97,"vi":"Bài sau, Bắt đầu tại đây phần hai: học xong làm được gì, và học khoá này thế nào."}
       ]
     },
-    "os-0-9-bat-dau-hoc-xong": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/00-he-dieu-hanh-de-lam-gi/00-02-bat-dau-hoc-xong-fca45741.mp4","durationSec":488.75,"nguonCau":"srt",
-      "parts": [],
+    "os-0-9-bat-dau-hoc-xong": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/00-he-dieu-hanh-de-lam-gi/00-02-bat-dau-hoc-xong-fca45741.mp4","durationSec":488.75,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":171.79,"ten":"Ôn nhanh · hôm nay · Khoá này đưa bạn tới đâu"},
+        {"t":171.79,"den":276.74,"ten":"Điều kiện cần, nói thẳng · Vì sao người mới bỏ môn này"},
+        {"t":276.74,"den":353.26,"ten":"Chạy thật: container vứt đi · Thuật ngữ trong bài"},
+        {"t":353.26,"den":438.58,"ten":"Thực hành 5 phút · Tự kiểm nhanh"},
+        {"t":438.58,"den":488.75,"ten":"Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với phần hai của Bắt đầu tại đây, khoá Hệ điều hành cho lập trình viên."},
         {"t":12.08,"vi":"Bài trước, hệ điều hành là người quản lý toà nhà, và chương trình phải bấm chuông nhờ nhân qua lời gọi hệ thống."},
@@ -458,8 +489,18 @@
         {"t":479.6,"vi":"Bài sau, 0.1: dựng phòng lab, một Linux vứt đi được, có gcc, strace và đồng bọn."}
       ]
     },
-    "os-1-1-tien-trinh": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/01-tien-trinh/01-01-tien-trinh-la-gi-5ada7899.mp4","durationSec":751.96,"nguonCau":"srt",
-      "parts": [],
+    "os-1-1-tien-trinh": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/01-tien-trinh/01-01-tien-trinh-la-gi-5ada7899.mp4","durationSec":751.96,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":80.78,"ten":"Ôn nhanh · hôm nay · Tình huống: rò rỉ thật hay không?"},
+        {"t":80.78,"den":155.84,"ten":"Bài này cho bạn gì"},
+        {"t":155.84,"den":243.03,"ten":"Mô phỏng: hồ sơ task_struct"},
+        {"t":243.03,"den":340.77,"ten":"Chạy thật: ps và status · ps: bản tóm tắt một dòng"},
+        {"t":340.77,"den":447.7,"ten":"Chạy thật: cmdline, fd, maps, limits · fd: bảng tệp đang mở"},
+        {"t":447.7,"den":528.93,"ten":"RSS là bộ nhớ thật · VSZ thường nói dối"},
+        {"t":528.93,"den":612.63,"ten":"Thực hành: rò rỉ thật không?"},
+        {"t":612.63,"den":700.17,"ten":"Thuật ngữ trong bài · Tự kiểm nhanh"},
+        {"t":700.17,"den":751.96,"ten":"Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Chương 1, bài 1.1 của khoá Hệ điều hành cho lập trình viên."},
         {"t":12.27,"vi":"Mục 0 cho ta hình ảnh toà chung cư, và phòng lab vứt đi được."},
@@ -585,8 +626,16 @@
         {"t":748.08,"vi":"Tiến trình này đã ra đời như thế nào."}
       ]
     },
-    "os-1-2-fork-exec": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/01-tien-trinh/01-02-fork-exec-wait-d46ac558.mp4","durationSec":666.02,"nguonCau":"srt",
-      "parts": [],
+    "os-1-2-fork-exec": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/01-tien-trinh/01-02-fork-exec-wait-d46ac558.mp4","durationSec":666.02,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":122.68,"ten":"Ôn nhanh · hôm nay · Mô phỏng: shell chạy một lệnh"},
+        {"t":122.68,"den":206.56,"ten":"Mô phỏng: copy-on-write · Chạy thật: exec() giữ nguyên PID"},
+        {"t":206.56,"den":307.46,"ten":"Chạy thật: một shell sáu mươi dòng"},
+        {"t":307.46,"den":441.95,"ten":"Câu thi kinh điển: ba lần fork"},
+        {"t":441.95,"den":521.58,"ten":"Thực hành 20 phút"},
+        {"t":521.58,"den":611.96,"ten":"Thuật ngữ trong bài · Tự kiểm nhanh"},
+        {"t":611.96,"den":666.02,"ten":"Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 1.2 của khoá Hệ điều hành cho lập trình viên."},
         {"t":10.69,"vi":"Bài trước, tiến trình là chương trình đang chạy cộng bộ hồ sơ task_struct, đọc được qua thư mục proc, và RSS mới là bộ nhớ thật."},
@@ -719,8 +768,14 @@
         {"t":657.7,"vi":"Bài sau, 1.3: chế độ người dùng, chế độ nhân, và ranh giới của lời gọi hệ thống."}
       ]
     },
-    "os-1-3-che-do": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/01-tien-trinh/01-03-che-do-nguoi-dung-che-do-nhan-a95c51eb.mp4","durationSec":528.05,"nguonCau":"srt",
-      "parts": [],
+    "os-1-3-che-do": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/01-tien-trinh/01-03-che-do-nguoi-dung-che-do-nhan-a95c51eb.mp4","durationSec":528.05,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":138.63,"ten":"Ôn nhanh · hôm nay · Mô phỏng: căn phòng bọc đệm"},
+        {"t":138.63,"den":243.82,"ten":"Mô phỏng: lời gọi hàm và lời gọi hệ thống"},
+        {"t":243.82,"den":379.76,"ten":"Chạy thật: đếm syscall bằng strace -c"},
+        {"t":379.76,"den":473.26,"ten":"Thuật ngữ trong bài · Tự kiểm nhanh"},
+        {"t":473.26,"den":528.05,"ten":"Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 1.3 của khoá Hệ điều hành cho lập trình viên."},
         {"t":11.07,"vi":"Bài trước, mọi tiến trình ra đời bằng fork, exec và wait, và bên dưới là các lời gọi hệ thống clone, execve, wait4."},
@@ -815,8 +870,15 @@
         {"t":517.97,"vi":"Bài sau, 1.4: trạng thái tiến trình, tín hiệu, và vì sao exit một trăm ba mươi bảy nghĩa là OOM."}
       ]
     },
-    "os-1-4-vong-doi": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/01-tien-trinh/01-04-trang-thai-tin-hieu-ma-thoat-617613a4.mp4","durationSec":561.11,"nguonCau":"srt",
-      "parts": [],
+    "os-1-4-vong-doi": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/01-tien-trinh/01-04-trang-thai-tin-hieu-ma-thoat-617613a4.mp4","durationSec":561.11,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":111.28,"ten":"Ôn nhanh · hôm nay"},
+        {"t":111.28,"den":221.31,"ten":"Chạy thật: dừng rồi cho chạy tiếp"},
+        {"t":221.31,"den":304.89,"ten":"Bảng giải mã: vì sao 137 là OOM · Chạy thật: zombie"},
+        {"t":304.89,"den":413.22,"ten":"Chạy thật: mồ côi được PID 1 nhận nuôi"},
+        {"t":413.22,"den":507.19,"ten":"Thuật ngữ trong bài · Tự kiểm nhanh"},
+        {"t":507.19,"den":561.11,"ten":"Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 1.4 của khoá Hệ điều hành cho lập trình viên."},
         {"t":11.19,"vi":"Bài trước, mã của bạn chạy ở chế độ người dùng, vi phạm thì nhân biến thành tín hiệu, và mỗi syscall là một lần qua cửa có giá."},
@@ -928,8 +990,15 @@
         {"t":553.12,"vi":"Bài sau, 1.5: PID một, hệ thống init, và tiến trình trong container."}
       ]
     },
-    "os-1-5-pid1": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/01-tien-trinh/01-05-pid1-init-container-a0b51f59.mp4","durationSec":591.98,"nguonCau":"srt",
-      "parts": [],
+    "os-1-5-pid1": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/01-tien-trinh/01-05-pid1-init-container-a0b51f59.mp4","durationSec":591.98,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":101.6,"ten":"Ôn nhanh · hôm nay · Tình huống: dừng mất mười giây"},
+        {"t":101.6,"den":177.77,"ten":"Vấn đề 1: PID 1 lờ tín hiệu"},
+        {"t":177.77,"den":296.37,"ten":"Chạy thật: thêm handler SIGTERM"},
+        {"t":296.37,"den":436.92,"ten":"Chạy thật: bộ mặt kia của 137 — OOM · Hai bộ mặt của 137"},
+        {"t":436.92,"den":537.5,"ten":"Thuật ngữ trong bài · Tự kiểm nhanh"},
+        {"t":537.5,"den":591.98,"ten":"Tóm tắt · hết Chương 1"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 1.5, bài cuối của Chương 1, khoá Hệ điều hành cho lập trình viên."},
         {"t":13.01,"vi":"Bài trước, ta đọc mã thoát bằng quy tắc một trăm hai mươi tám cộng N, và thấy con mồ côi được PID một nhận nuôi."},
@@ -1033,8 +1102,14 @@
         {"t":585.65,"vi":"Phương pháp USE, và năm phút đầu tiên khi máy chủ có vấn đề."}
       ]
     },
-    "os-10-1-fd": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/10-cac-mo-hinh-io/10-01-ket-noi-la-fd-0197a6ae.mp4","durationSec":835.77,"nguonCau":"srt",
-      "parts": [],
+    "os-10-1-fd": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/10-cac-mo-hinh-io/10-01-ket-noi-la-fd-0197a6ae.mp4","durationSec":835.77,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":181.86,"ten":"Mở đầu · bài này học gì"},
+        {"t":181.86,"den":360.54,"ten":"Bind gắn cổng bảy nghìn"},
+        {"t":360.54,"den":528.38,"ten":"Định nghĩa: hàng chờ accept là các kết…"},
+        {"t":528.38,"den":662.18,"ten":"Trước khi mở"},
+        {"t":662.18,"den":835.77,"ten":"Thực hành hai mươi lăm phút"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Chương 10, bài 10.1."},
         {"t":9.05,"vi":"Chương 9 cho ta thấy: mọi thứ mở ra đều thành một file descriptor, kèm quyền của nó."},
@@ -1206,8 +1281,13 @@
         {"t":833.2,"vi":"Hẹn gặp bạn."}
       ]
     },
-    "os-10-2-blocking": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/10-cac-mo-hinh-io/10-02-nam-cach-cho-ed9e5593.mp4","durationSec":717.34,"nguonCau":"srt",
-      "parts": [],
+    "os-10-2-blocking": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/10-cac-mo-hinh-io/10-02-nam-cach-cho-ed9e5593.mp4","durationSec":717.34,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":183.29,"ten":"Mở đầu · bài này học gì"},
+        {"t":183.29,"den":359.05,"ten":"Kết quả: sáu byte sau một nghìn mili…"},
+        {"t":359.05,"den":535.72,"ten":"Stevens lưu ý"},
+        {"t":535.72,"den":717.34,"ten":"Các mô hình khác nhau ở chỗ ai…"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 10.2."},
         {"t":8.21,"vi":"Bài 10.1: một kết nối là một fd."},
@@ -1367,8 +1447,14 @@
         {"t":714.73,"vi":"Hẹn gặp bạn."}
       ]
     },
-    "os-10-3-epoll": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/10-cac-mo-hinh-io/10-03-select-poll-epoll-f67b6665.mp4","durationSec":835.94,"nguonCau":"srt",
-      "parts": [],
+    "os-10-3-epoll": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/10-cac-mo-hinh-io/10-03-select-poll-epoll-f67b6665.mp4","durationSec":835.94,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":181.99,"ten":"Mở đầu · bài này học gì"},
+        {"t":181.99,"den":358.37,"ten":"Nó đo một vòng chờ"},
+        {"t":358.37,"den":487.43,"ten":"Là backpressure, ở bài 10.8"},
+        {"t":487.43,"den":666.67,"ten":"Chạy thật chương trình trigger với ba chế…"},
+        {"t":666.67,"den":835.94,"ten":"Nhiều luồng chung một epoll"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 10.3."},
         {"t":8.23,"vi":"Bài 10.2: trong năm cách chờ, dồn kênh cho một luồng ngủ trên nhiều descriptor cùng lúc."},
@@ -1544,8 +1630,16 @@
         {"t":833.26,"vi":"Hẹn gặp bạn."}
       ]
     },
-    "os-10-4-io-uring": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/10-cac-mo-hinh-io/10-07-io-uring-858e2e2c.mp4","durationSec":908.17,"nguonCau":"srt",
-      "parts": [],
+    "os-10-4-io-uring": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/10-cac-mo-hinh-io/10-07-io-uring-858e2e2c.mp4","durationSec":908.17,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":176.43,"ten":"Mở đầu · bài này học gì"},
+        {"t":176.43,"den":254.97,"ten":"Đây là m5 uring của bài 10.2"},
+        {"t":254.97,"den":429.81,"ten":"Chạy thật, chưa có strace"},
+        {"t":429.81,"den":603.61,"ten":"Chạy thật. Hai máy chủ cùng lúc: echo…"},
+        {"t":603.61,"den":726.55,"ten":"Cuối cùng, không chép dữ liệu mà chẳng…"},
+        {"t":726.55,"den":836.68,"ten":"Thực hành ba mươi phút"},
+        {"t":836.68,"den":908.17,"ten":"Vì sao pread vẫn nhanh hơn?"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 10.7."},
         {"t":8.06,"vi":"Bài 10.6: tệp thường luôn sẵn sàng, nên Node phải đọc tệp trên thread pool."},
@@ -1716,8 +1810,15 @@
         {"t":905.34,"vi":"Hẹn gặp bạn."}
       ]
     },
-    "os-10-5-c10k": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/10-cac-mo-hinh-io/10-04-c10k-do-that-69fe99e7.mp4","durationSec":749.56,"nguonCau":"srt",
-      "parts": [],
+    "os-10-5-c10k": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/10-cac-mo-hinh-io/10-04-c10k-do-that-69fe99e7.mp4","durationSec":749.56,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":101.37,"ten":"Mở đầu · bài này học gì"},
+        {"t":101.37,"den":279.73,"ten":"Câu hỏi của bài"},
+        {"t":279.73,"den":457.46,"ten":"Nếu CPU khan hơn thì sao?"},
+        {"t":457.46,"den":574.1,"ten":"Đếm trong một giây"},
+        {"t":574.1,"den":674.65,"ten":"Thực hành ba mươi phút"},
+        {"t":674.65,"den":749.56,"ten":"Vì sao vẫn bị giết?"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 10.4."},
         {"t":8.23,"vi":"Bài 10.3: poll quét cả N, còn epoll chỉ trả về những fd đã sẵn sàng, dù có mười nghìn fd."},
@@ -1868,8 +1969,15 @@
         {"t":746.9,"vi":"Hẹn gặp bạn."}
       ]
     },
-    "os-10-6-runtime": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/10-cac-mo-hinh-io/10-05-cung-mot-epoll-c7283fd8.mp4","durationSec":1001.65,"nguonCau":"srt",
-      "parts": [],
+    "os-10-6-runtime": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/10-cac-mo-hinh-io/10-05-cung-mot-epoll-c7283fd8.mp4","durationSec":1001.65,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":150.96,"ten":"Mở đầu · bài này học gì"},
+        {"t":150.96,"den":324.89,"ten":"Trước khi đọc strace, xem bằng hình"},
+        {"t":324.89,"den":499.61,"ten":"Vẫn là thêm, chờ, đọc, ghi, gỡ"},
+        {"t":499.61,"den":643.79,"ten":"Là cách nginx tự dời mình ra cuối…"},
+        {"t":643.79,"den":821.3,"ten":"Mình chạy lại cả sáu"},
+        {"t":821.3,"den":1001.65,"ten":"Chi phí khác nhau theo runtime"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 10.5."},
         {"t":8.19,"vi":"Bài 10.4: mười nghìn kết nối, một vòng epoll rẻ hơn mười nghìn luồng rất nhiều."},
@@ -2061,8 +2169,15 @@
         {"t":999,"vi":"Hẹn gặp bạn."}
       ]
     },
-    "os-10-7-dia-mang": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/10-cac-mo-hinh-io/10-06-dia-trong-event-loop-bc613335.mp4","durationSec":939.84,"nguonCau":"srt",
-      "parts": [],
+    "os-10-7-dia-mang": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/10-cac-mo-hinh-io/10-06-dia-trong-event-loop-bc613335.mp4","durationSec":939.84,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":178.98,"ten":"Mở đầu · bài này học gì"},
+        {"t":178.98,"den":348.67,"ten":"Tệp thử sáu mươi tư mebibyte"},
+        {"t":348.67,"den":528.11,"ten":"Chạy thật. threads js đếm số luồng của…"},
+        {"t":528.11,"den":631.32,"ten":"Cái gì chạy trên pool?"},
+        {"t":631.32,"den":745.76,"ten":"Trước khi đọc"},
+        {"t":745.76,"den":939.84,"ten":"Thực hành ba mươi phút"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 10.6."},
         {"t":8.2,"vi":"Bài 10.5: Node, nginx, Netty, Go hay asyncio đều ngủ trong cùng một epoll."},
@@ -2247,8 +2362,16 @@
         {"t":931,"vi":"Bài sau: io uring, vòng đệm chung giữa ứng dụng và nhân, và sendfile. Hẹn gặp bạn."}
       ]
     },
-    "os-10-8-backpressure": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/10-cac-mo-hinh-io/10-08-backpressure-3ecbea57.mp4","durationSec":1086.47,"nguonCau":"srt",
-      "parts": [],
+    "os-10-8-backpressure": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/10-cac-mo-hinh-io/10-08-backpressure-3ecbea57.mp4","durationSec":1086.47,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":133.97,"ten":"Mở đầu · bài này học gì"},
+        {"t":133.97,"den":307.26,"ten":"Chạy thật, trong container vứt đi"},
+        {"t":307.26,"den":432.98,"ten":"Slide của bài web"},
+        {"t":432.98,"den":595.58,"ten":"Chạy thật. Chế độ none"},
+        {"t":595.58,"den":702.42,"ten":"Giờ tới những hạn chờ bạn thừa hưởng…"},
+        {"t":702.42,"den":876.2,"ten":"Cuối cùng là một lỗi rất hay gặp…"},
+        {"t":876.2,"den":1086.47,"ten":"Phớt lờ nó là dời hàng đợi vào…"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 10.8, bài cuối của Chương 10."},
         {"t":9.81,"vi":"Bài 10.3 và 10.4: một vòng epoll giữ được mười nghìn kết nối."},
@@ -2466,8 +2589,18 @@
         {"t":1083.84,"vi":"Hẹn gặp bạn."}
       ]
     },
-    "os-11-1-hanh-trinh": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/11-loi-goi-he-thong-va-ranh-gioi-nhan/11-01-hanh-trinh-8063fb1e.mp4","durationSec":1202.21,"nguonCau":"srt",
-      "parts": [],
+    "os-11-1-hanh-trinh": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/11-loi-goi-he-thong-va-ranh-gioi-nhan/11-01-hanh-trinh-8063fb1e.mp4","durationSec":1202.21,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":150.75,"ten":"Mở đầu · bài này học gì"},
+        {"t":150.75,"den":242.74,"ten":"Chạy thật trong container vứt đi"},
+        {"t":242.74,"den":417.27,"ten":"Cuối cùng là write và thoát"},
+        {"t":417.27,"den":596.11,"ten":"Tệp tiêu đề liệt kê các số trên…"},
+        {"t":596.11,"den":774.98,"ten":"Bên trái là các thanh ghi của bạn"},
+        {"t":774.98,"den":952.51,"ten":"Ngôn ngữ cấp cao đổi tiếp"},
+        {"t":952.51,"den":1035.09,"ten":"Mỗi dòng một lần write, tới nhân ngay"},
+        {"t":1035.09,"den":1124.62,"ten":"Bước một: chạy strace hello static hai lần"},
+        {"t":1124.62,"den":1202.21,"ten":"Vì sao lần write xảy ra bên trong…"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Chương 11: lời gọi hệ thống và ranh giới nhân."},
         {"t":10.41,"vi":"Bài 1.3: chương trình không tự chạm được vào đĩa, mạng hay màn hình. Nó phải xin nhân, qua một cánh cửa có người gác."},
@@ -2706,8 +2839,17 @@
         {"t":1195.09,"vi":"Bài sau: xuống dưới thư viện C, tự gọi syscall trần. Hẹn gặp bạn."}
       ]
     },
-    "os-11-2-strace-ltrace": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/11-loi-goi-he-thong-va-ranh-gioi-nhan/11-03-strace-ltrace-43ef6e61.mp4","durationSec":1225.74,"nguonCau":"srt",
-      "parts": [],
+    "os-11-2-strace-ltrace": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/11-loi-goi-he-thong-va-ranh-gioi-nhan/11-03-strace-ltrace-43ef6e61.mp4","durationSec":1225.74,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":182.46,"ten":"Mở đầu · bài này học gì"},
+        {"t":182.46,"den":277.6,"ten":"Đây là hang py"},
+        {"t":277.6,"den":411.95,"ten":"Chạy thật, tới example com"},
+        {"t":411.95,"den":590.05,"ten":"Vì sao? Chạy lại"},
+        {"t":590.05,"den":765.84,"ten":"Máy chủ ghi lần một"},
+        {"t":765.84,"den":884.84,"ten":"Đây là phương pháp"},
+        {"t":884.84,"den":1028.61,"ten":"Câu hỏi phần nào của chương trình gọi…"},
+        {"t":1028.61,"den":1225.74,"ten":"Thực hành ba mươi phút"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 11.3."},
         {"t":8.45,"vi":"Bài trước: printf, write, hàm syscall và lệnh máy tự viết đều tới cùng một lời gọi trong nhân."},
@@ -2963,8 +3105,16 @@
         {"t":1223.15,"vi":"Hẹn gặp bạn."}
       ]
     },
-    "os-11-3-raw": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/11-loi-goi-he-thong-va-ranh-gioi-nhan/11-02-raw-b1e95a28.mp4","durationSec":888.53,"nguonCau":"srt",
-      "parts": [],
+    "os-11-3-raw": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/11-loi-goi-he-thong-va-ranh-gioi-nhan/11-02-raw-b1e95a28.mp4","durationSec":888.53,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":154.44,"ten":"Mở đầu · bài này học gì"},
+        {"t":154.44,"den":294.83,"ten":"Chạy thật. Chương trình in bốn dòng"},
+        {"t":294.83,"den":412.64,"ten":"Bước cuối: không thư viện C"},
+        {"t":412.64,"den":525.22,"ten":"Chạy thật. objdump liệt kê hàm Node nhập…"},
+        {"t":525.22,"den":650.48,"ten":"Cuối cùng là Go"},
+        {"t":650.48,"den":732.82,"ten":"Bẫy. Lời gọi trần trả âm mã lỗi"},
+        {"t":732.82,"den":888.53,"ten":"Bước ba: chạy uv js dưới strace trừ…"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 11.2."},
         {"t":8.47,"vi":"Bài trước: hàm write của thư viện C chỉ là vài lệnh máy quanh một lệnh syscall."},
@@ -3142,8 +3292,17 @@
         {"t":879.39,"vi":"Bài sau: strace và ltrace thực chiến, tìm vì sao chương trình hỏng, treo hay chậm. Hẹn gặp bạn."}
       ]
     },
-    "os-11-4-seccomp": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/11-loi-goi-he-thong-va-ranh-gioi-nhan/11-07-seccomp-26713643.mp4","durationSec":1169.77,"nguonCau":"srt",
-      "parts": [],
+    "os-11-4-seccomp": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/11-loi-goi-he-thong-va-ranh-gioi-nhan/11-07-seccomp-26713643.mp4","durationSec":1169.77,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":164.41,"ten":"Mở đầu · bài này học gì"},
+        {"t":164.41,"den":279.39,"ten":"Vì sao? Một cách lách kinh điển là…"},
+        {"t":279.39,"den":458.48,"ten":"Mình chạy thêm, bài web không có"},
+        {"t":458.48,"den":634.7,"ten":"Curl báo bước đầu tiên bị hỏng"},
+        {"t":634.7,"den":787.65,"ten":"Hôm nay: ba trăm năm mươi chín lời…"},
+        {"t":787.65,"den":963.92,"ten":"Bước một: ghi. Chạy máy chủ dưới strace…"},
+        {"t":963.92,"den":1103.05,"ten":"Trên x86, nhớ cả các tên lời gọi…"},
+        {"t":1103.05,"den":1169.77,"ten":"Đáp án một"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 11.7, bài cuối của chương."},
         {"t":9.82,"vi":"Bài 11.1: mỗi lời gọi có một số hiệu, nhân tra bảng để tìm hàm xử lý."},
@@ -3369,8 +3528,16 @@
         {"t":1166.2,"vi":"Hẹn gặp bạn ở chương sau."}
       ]
     },
-    "os-11-5-chi-phi": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/11-loi-goi-he-thong-va-ranh-gioi-nhan/11-04-chi-phi-d7b84732.mp4","durationSec":1215.38,"nguonCau":"srt",
-      "parts": [],
+    "os-11-5-chi-phi": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/11-loi-goi-he-thong-va-ranh-gioi-nhan/11-04-chi-phi-d7b84732.mp4","durationSec":1215.38,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":180.93,"ten":"Mở đầu · bài này học gì"},
+        {"t":180.93,"den":358.74,"ten":"Ở đó một lời gọi hệ thống tốn…"},
+        {"t":358.74,"den":531.15,"ten":"Slide của bài web"},
+        {"t":531.15,"den":697.84,"ten":"Gộp kiểu gì cũng nhanh hơn"},
+        {"t":697.84,"den":876.4,"ten":"Mình chạy một lượt khởi động trước"},
+        {"t":876.4,"den":1005.5,"ten":"Một triệu lời gọi hàm mỗi giây gần…"},
+        {"t":1005.5,"den":1215.38,"ten":"Thực hành hai lăm tới ba mươi phút"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 11.4."},
         {"t":8.47,"vi":"Bài trước: strace đếm lời gọi hệ thống cho mỗi request."},
@@ -3621,8 +3788,19 @@
         {"t":1212.68,"vi":"Hẹn gặp bạn."}
       ]
     },
-    "os-11-6-errno-tin-hieu": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/11-loi-goi-he-thong-va-ranh-gioi-nhan/11-05-errno-tin-hieu-a4415fa0.mp4","durationSec":1284.87,"nguonCau":"srt",
-      "parts": [],
+    "os-11-6-errno-tin-hieu": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/11-loi-goi-he-thong-va-ranh-gioi-nhan/11-05-errno-tin-hieu-a4415fa0.mp4","durationSec":1284.87,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":120.42,"ten":"Mở đầu · bài này học gì"},
+        {"t":120.42,"den":298.54,"ten":"Chạy thật trong container"},
+        {"t":298.54,"den":390.33,"ten":"Bước một: read đang ngủ trong nhân"},
+        {"t":390.33,"den":483.82,"ten":"Để chạy lại"},
+        {"t":483.82,"den":660.33,"ten":"Vì sao poll không được chạy lại?"},
+        {"t":660.33,"den":775.07,"ten":"Chương trình gọi syscall trần sẽ thấy nhiều…"},
+        {"t":775.07,"den":851.17,"ten":"Phần cuối: ghi cho một bên đã bỏ…"},
+        {"t":851.17,"den":989.94,"ten":"Mình chạy thêm hai phép thử mà bài…"},
+        {"t":989.94,"den":1087.16,"ten":"Bẫy của bài"},
+        {"t":1087.16,"den":1284.87,"ten":"Thực hành hai mươi lăm phút"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 11.5."},
         {"t":8.45,"vi":"Bài 11.1: khi một lời gọi hỏng, nhân trả số âm, libc đổi thành trừ một kèm errno."},
@@ -3897,8 +4075,18 @@
         {"t":1275.86,"vi":"Bài sau: proc và sys, API thứ hai của nhân, và xem trước eBPF. Hẹn gặp bạn."}
       ]
     },
-    "os-11-7-proc-sys": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/11-loi-goi-he-thong-va-ranh-gioi-nhan/11-06-proc-sys-d2cc169e.mp4","durationSec":1215.08,"nguonCau":"srt",
-      "parts": [],
+    "os-11-7-proc-sys": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/11-loi-goi-he-thong-va-ranh-gioi-nhan/11-06-proc-sys-d2cc169e.mp4","durationSec":1215.08,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":143.01,"ten":"Mở đầu · bài này học gì"},
+        {"t":143.01,"den":304.03,"ten":"Chạy thật trong container"},
+        {"t":304.03,"den":387.89,"ten":"Nhìn một tiến trình đang chờ"},
+        {"t":387.89,"den":467.73,"ten":"Trước khi chạy"},
+        {"t":467.73,"den":645.67,"ten":"Mình chạy thêm một dòng Python để giải…"},
+        {"t":645.67,"den":735.26,"ten":"Node báo availableParallelism bằng một"},
+        {"t":735.26,"den":838.17,"ten":"Bẫy của bài"},
+        {"t":838.17,"den":1010.42,"ten":"Cuối cùng, bạn đọc bảng đếm một lần"},
+        {"t":1010.42,"den":1215.08,"ten":"Thực hành hai mươi lăm phút"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 11.6."},
         {"t":8.52,"vi":"Bài 11.3: ta gắn strace vào một tiến trình treo, thấy nó kẹt ở connect."},
@@ -4124,8 +4312,18 @@
         {"t":1212.37,"vi":"Hẹn gặp bạn."}
       ]
     },
-    "os-12-1-namespaces": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/12-container-nhin-tu-nhan/12-01-namespaces-758ef0b7.mp4","durationSec":1176.46,"nguonCau":"srt",
-      "parts": [],
+    "os-12-1-namespaces": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/12-container-nhin-tu-nhan/12-01-namespaces-758ef0b7.mp4","durationSec":1176.46,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":121.43,"ten":"Mở đầu · bài này học gì"},
+        {"t":121.43,"den":294.73,"ten":"Chạy thật trên máy của mình"},
+        {"t":294.73,"den":397.21,"ten":"Mỗi loại có một cờ riêng cho clone…"},
+        {"t":397.21,"den":571.35,"ten":"Bẫy một. unshare với cờ pid không chuyển…"},
+        {"t":571.35,"den":667.25,"ten":"Mount namespace. Bên trong"},
+        {"t":667.25,"den":822.8,"ten":"Giờ tới namespace không cần chút đặc quyền…"},
+        {"t":822.8,"den":998.47,"ten":"Cuối cùng giết hộp bằng SIGKILL"},
+        {"t":998.47,"den":1096.03,"ten":"Thực hành ba mươi phút"},
+        {"t":1096.03,"den":1176.46,"ten":"Câu hai: bạn gửi SIGTERM cho PID 1…"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Chương 12, bài 12.1."},
         {"t":9.49,"vi":"Bài 1.5: PID 1 là tiến trình đặc biệt."},
@@ -4361,8 +4559,16 @@
         {"t":1169.65,"vi":"Bài sau, 12.2: cgroup, giới hạn tài nguyên bằng tay."}
       ]
     },
-    "os-12-2-cgroups": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/12-container-nhin-tu-nhan/12-02-cgroups-4894c73c.mp4","durationSec":922.99,"nguonCau":"srt",
-      "parts": [],
+    "os-12-2-cgroups": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/12-container-nhin-tu-nhan/12-02-cgroups-4894c73c.mp4","durationSec":922.99,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":134.93,"ten":"Mở đầu · bài này học gì"},
+        {"t":134.93,"den":312.74,"ten":"Chạy thật trong một container lab vứt đi"},
+        {"t":312.74,"den":486.5,"ten":"Slide: hai trăm xin"},
+        {"t":486.5,"den":663.65,"ten":"Io.max giới hạn băng thông trên một thiết…"},
+        {"t":663.65,"den":744.08,"ten":"Docker pause ghi cgroup.freeze"},
+        {"t":744.08,"den":849.62,"ten":"Thực hành ba mươi phút"},
+        {"t":849.62,"den":922.99,"ten":"Vì sao, và sửa thế nào?"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 12.2."},
         {"t":8.5,"vi":"Bài 12.1: namespace đổi thứ một tiến trình nhìn thấy."},
@@ -4544,8 +4750,18 @@
         {"t":915.46,"vi":"Bài sau, 12.3: OverlayFS, các lớp của một ảnh container."}
       ]
     },
-    "os-12-3-overlayfs": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/12-container-nhin-tu-nhan/12-03-overlayfs-9609321f.mp4","durationSec":1230.71,"nguonCau":"srt",
-      "parts": [],
+    "os-12-3-overlayfs": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/12-container-nhin-tu-nhan/12-03-overlayfs-9609321f.mp4","durationSec":1230.71,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":121.36,"ten":"Mở đầu · bài này học gì"},
+        {"t":121.36,"den":298.41,"ten":"Chạy thật trong một container lab vứt đi"},
+        {"t":298.41,"den":475.44,"ten":"Mount overlay: lowerdir là hai lớp"},
+        {"t":475.44,"den":572.78,"ten":"Hệ quả: xoá tệp ở một lệnh Dockerfile…"},
+        {"t":572.78,"den":737.23,"ten":"Mình chạy thêm một thí nghiệm"},
+        {"t":737.23,"den":896.4,"ten":"Quay lại Docker"},
+        {"t":896.4,"den":1047.19,"ten":"Bước một là ảnh nền alpine"},
+        {"t":1047.19,"den":1150.44,"ten":"Thực hành hai mươi lăm đến ba mươi…"},
+        {"t":1150.44,"den":1230.71,"ten":"Câu hai: lệnh RUN cuối Dockerfile xoá cache…"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 12.3."},
         {"t":8.45,"vi":"Bài 12.1: namespace cho container góc nhìn riêng."},
@@ -4790,8 +5006,18 @@
         {"t":1221.59,"vi":"Bài sau, 12.4: tự viết một container tí hon bằng unshare, pivot_root và cgroup."}
       ]
     },
-    "os-12-4-mini": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/12-container-nhin-tu-nhan/12-04-mini-c1aaa415.mp4","durationSec":1281.05,"nguonCau":"srt",
-      "parts": [],
+    "os-12-4-mini": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/12-container-nhin-tu-nhan/12-04-mini-c1aaa415.mp4","durationSec":1281.05,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":180.09,"ten":"Mở đầu · bài này học gì"},
+        {"t":180.09,"den":349.85,"ten":"Giờ vào một container lab vứt đi"},
+        {"t":349.85,"den":450.97,"ten":"Bước một: ghi PID vào cgroup mini-box1"},
+        {"t":450.97,"den":630.01,"ten":"Mình chạy thêm một phép thử"},
+        {"t":630.01,"den":739.94,"ten":"Thước tác vụ"},
+        {"t":739.94,"den":918.48,"ten":"Chạy thật. Vòng lặp đếm tới ba trăm…"},
+        {"t":918.48,"den":1080.67,"ten":"Thiếu gì so với Docker?"},
+        {"t":1080.67,"den":1206.32,"ten":"Thực hành ba mươi đến bốn mươi phút"},
+        {"t":1206.32,"den":1281.05,"ten":"Đáp án một"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 12.4."},
         {"t":8.43,"vi":"Ba bài vừa rồi đã tháo một container ra từng mảnh."},
@@ -5033,8 +5259,15 @@
         {"t":1272.24,"vi":"Bài sau, 12.5: nối mạng cho container bằng tay, với veth, bridge và NAT."}
       ]
     },
-    "os-12-5-mang": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/12-container-nhin-tu-nhan/12-05-mang-9e624b3f.mp4","durationSec":984.5,"nguonCau":"srt",
-      "parts": [],
+    "os-12-5-mang": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/12-container-nhin-tu-nhan/12-05-mang-9e624b3f.mp4","durationSec":984.5,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":139.97,"ten":"Mở đầu · bài này học gì"},
+        {"t":139.97,"den":314.07,"ten":"Chạy thật trong một container lab vứt đi"},
+        {"t":314.07,"den":494.02,"ten":"Trong c1: địa chỉ 10.12.0.2"},
+        {"t":494.02,"den":671.84,"ten":"Chuỗi INPUT, nơi ufw đặt luật, không bao…"},
+        {"t":671.84,"den":789.02,"ten":"Slide: cùng output trên máy bài web"},
+        {"t":789.02,"den":984.5,"ten":"Thực hành hai mươi lăm đến ba mươi…"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 12.5."},
         {"t":8.46,"vi":"Bài 12.4: ta tự dựng một container."},
@@ -5211,8 +5444,18 @@
         {"t":976.24,"vi":"dockerd, containerd, shim, runc, và tệp config.json."}
       ]
     },
-    "os-12-6-runc": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/12-container-nhin-tu-nhan/12-06-runc-013c5a5a.mp4","durationSec":1347.2,"nguonCau":"srt",
-      "parts": [],
+    "os-12-6-runc": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/12-container-nhin-tu-nhan/12-06-runc-013c5a5a.mp4","durationSec":1347.2,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":182.56,"ten":"Mở đầu · bài này học gì"},
+        {"t":182.56,"den":356.16,"ten":"PID của sleep là 2384298"},
+        {"t":356.16,"den":532.18,"ten":"Config.json rất dài"},
+        {"t":532.18,"den":711.32,"ten":"Máy mình cài gói runc của Ubuntu bằng…"},
+        {"t":711.32,"den":886.61,"ten":"Bài web là PID 82"},
+        {"t":886.61,"den":1006.34,"ten":"Một cái bẫy quan trọng"},
+        {"t":1006.34,"den":1157.76,"ten":"Phần cuối: container không phải máy ảo"},
+        {"t":1157.76,"den":1261.98,"ten":"Thực hành ba mươi phút"},
+        {"t":1261.98,"den":1347.2,"ten":"Câu hai: vì sao cha của PID 1…"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 12.6."},
         {"t":8.53,"vi":"Bài 12.4 và 12.5: ta tự dựng một container bằng bốn mươi dòng shell, rồi tự nối mạng cho nó."},
@@ -5466,8 +5709,16 @@
         {"t":1341.22,"vi":"Nhiều container chung namespace, và viết Dockerfile cho đúng."}
       ]
     },
-    "os-12-7-pod-dockerfile": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/12-container-nhin-tu-nhan/12-07-pod-dockerfile-d8d3504e.mp4","durationSec":1176.77,"nguonCau":"srt",
-      "parts": [],
+    "os-12-7-pod-dockerfile": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/12-container-nhin-tu-nhan/12-07-pod-dockerfile-d8d3504e.mp4","durationSec":1176.77,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":178.72,"ten":"Mở đầu · bài này học gì"},
+        {"t":178.72,"den":355.04,"ten":"Container ba, đóng vai sidecar, gia nhập network…"},
+        {"t":355.04,"den":532.42,"ten":"Cách ba: cờ init. tini làm PID 1"},
+        {"t":532.42,"den":694.69,"ten":"Để ý core bằng unlimited"},
+        {"t":694.69,"den":868.84,"ten":"Bước cuối của checklist"},
+        {"t":868.84,"den":967.21,"ten":"Bên trong: docker-init là PID 1"},
+        {"t":967.21,"den":1176.77,"ten":"Thực hành ba mươi tới bốn mươi phút"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 12.7, bài cuối của Chương 12."},
         {"t":10.28,"vi":"Bài 12.6: docker run đi qua dockerd, containerd, shim, runc. Mọi thứ về container nằm trong config.json."},
@@ -5681,8 +5932,16 @@
         {"t":1174.13,"vi":"Hẹn gặp bạn."}
       ]
     },
-    "os-13-1-bo-nho": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/13-bao-mat-o-tang-he-dieu-hanh/13-01-doc-tep-nhi-phan-24f4949d.mp4","durationSec":1103.22,"nguonCau":"srt",
-      "parts": [],
+    "os-13-1-bo-nho": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/13-bao-mat-o-tang-he-dieu-hanh/13-01-doc-tep-nhi-phan-24f4949d.mp4","durationSec":1103.22,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":184.91,"ten":"Mở đầu · bài này học gì"},
+        {"t":184.91,"den":363.82,"ten":"Uname báo x86_64"},
+        {"t":363.82,"den":542.48,"ten":"Màn mov, smull là phép chia cho mười…"},
+        {"t":542.48,"den":719.45,"ten":"Call đẩy địa chỉ trả về lên stack"},
+        {"t":719.45,"den":899.32,"ten":"Để ý địa chỉ trong gdb luôn bắt…"},
+        {"t":899.32,"den":1034.94,"ten":"Nm xem ký hiệu"},
+        {"t":1034.94,"den":1103.22,"ten":"Vì sao, và nên lập luận theo cái…"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Chương 13: bảo mật ở tầng hệ điều hành."},
         {"t":9.92,"vi":"Đây là bài 13.1."},
@@ -5897,8 +6156,16 @@
         {"t":1100.58,"vi":"Hẹn gặp bạn."}
       ]
     },
-    "os-13-2-overflow": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/13-bao-mat-o-tang-he-dieu-hanh/13-02-tran-bo-dem-cee86ba4.mp4","durationSec":1091.19,"nguonCau":"srt",
-      "parts": [],
+    "os-13-2-overflow": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/13-bao-mat-o-tang-he-dieu-hanh/13-02-tran-bo-dem-cee86ba4.mp4","durationSec":1091.19,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":183.39,"ten":"Mở đầu · bài này học gì"},
+        {"t":183.39,"den":292.98,"ten":"Câu dưới: bốn chữ A thừa tràn sang…"},
+        {"t":292.98,"den":469.7,"ten":"Vì sao mười sáu byte vừa khít lại…"},
+        {"t":469.7,"den":647.92,"ten":"Chạy thêm: dựng với cờ z execstack"},
+        {"t":647.92,"den":825.77,"ten":"Không có dòng copied nào được in"},
+        {"t":825.77,"den":915.08,"ten":"Nó in cả ai đã free khối"},
+        {"t":915.08,"den":1091.19,"ten":"Thực hành khoảng ba mươi lăm phút"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 13.2."},
         {"t":8.4,"vi":"Bài 13.1: mỗi lời gọi hàm dựng một khung stack."},
@@ -6127,8 +6394,14 @@
         {"t":1088.58,"vi":"Hẹn gặp bạn."}
       ]
     },
-    "os-13-4-container-escape": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/13-bao-mat-o-tang-he-dieu-hanh/13-04-container-bao-mat-3590404a.mp4","durationSec":867.09,"nguonCau":"srt",
-      "parts": [],
+    "os-13-4-container-escape": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/13-bao-mat-o-tang-he-dieu-hanh/13-04-container-bao-mat-3590404a.mp4","durationSec":867.09,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":183.84,"ten":"Mở đầu · bài này học gì"},
+        {"t":183.84,"den":302.87,"ten":"Slide trái: mười bốn capability còn lại so…"},
+        {"t":302.87,"den":480.25,"ten":"Một cách khác để root trong container vô…"},
+        {"t":480.25,"den":659.83,"ten":"Container cứng hoá"},
+        {"t":659.83,"den":867.09,"ten":"Điều cần nhớ"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 13.4, bài cuối của Chương 13."},
         {"t":10.27,"vi":"Bài 13.3: SUID, capability, TOCTOU, bí mật rò qua /proc. Tất cả là chuyện quyền của một tiến trình."},
@@ -6299,8 +6572,17 @@
         {"t":864.44,"vi":"Hẹn gặp bạn."}
       ]
     },
-    "os-14-1-nhan": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/14-windows-va-macos-cho-lap-trinh-vien/14-01-ba-nhan-dd84bfac.mp4","durationSec":1016.46,"nguonCau":"srt",
-      "parts": [],
+    "os-14-1-nhan": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/14-windows-va-macos-cho-lap-trinh-vien/14-01-ba-nhan-dd84bfac.mp4","durationSec":1016.46,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":111.01,"ten":"Mở đầu · bài này học gì"},
+        {"t":111.01,"den":284.98,"ten":"Trước khi đọc bảng"},
+        {"t":284.98,"den":398.78,"ten":"Linux báo oops hoặc panic"},
+        {"t":398.78,"den":575.66,"ten":"Giờ đến Linux"},
+        {"t":575.66,"den":659.72,"ten":"Slide: bên trái là header của Linux arm64"},
+        {"t":659.72,"den":785.96,"ten":"Trước khi bẫy vào nhân"},
+        {"t":785.96,"den":963.69,"ten":"Thực hành khoảng hai mươi lăm phút"},
+        {"t":963.69,"den":1016.46,"ten":"Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Chương 14: Linux, macOS và Windows. Đây là bài 14.1."},
         {"t":12.88,"vi":"Chương 13 khép lại bằng container nhìn từ bảo mật."},
@@ -6479,8 +6761,15 @@
         {"t":1008.67,"vi":"Bài sau: tiến trình, luồng và tín hiệu trên ba hệ, đo thật. Hẹn gặp bạn."}
       ]
     },
-    "os-14-2-cong-cu": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/14-windows-va-macos-cho-lap-trinh-vien/14-03-dich-vu-quan-sat-63a0c3c1.mp4","durationSec":910.78,"nguonCau":"srt",
-      "parts": [],
+    "os-14-2-cong-cu": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/14-windows-va-macos-cho-lap-trinh-vien/14-03-dich-vu-quan-sat-63a0c3c1.mp4","durationSec":910.78,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":183.84,"ten":"Mở đầu · bài này học gì"},
+        {"t":183.84,"den":363.07,"ten":"Trong 724 tiến trình"},
+        {"t":363.07,"den":542.03,"ten":"Dòng MemoryMax, thứ plist không có"},
+        {"t":542.03,"den":689.59,"ten":"Kết quả: 99 lần epoll_pwait và 2 lần…"},
+        {"t":689.59,"den":868.3,"ten":"Thực hành khoảng hai mươi lăm tới ba…"},
+        {"t":868.3,"den":910.78,"ten":"Tờ khai là tệp unit, plist, khoá registry"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đây là bài 14.3."},
         {"t":8.51,"vi":"Bài 14.2 đo ba cách khởi động một chương trình, và thấy tín hiệu khác nhau giữa ba hệ."},
@@ -6651,8 +6940,14 @@
         {"t":902.24,"vi":"Bài sau: bộ nhớ trên ba hệ, page cache, bộ nhớ nén và swap. Hẹn gặp bạn."}
       ]
     },
-    "os-14-3-wsl": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/14-windows-va-macos-cho-lap-trinh-vien/14-06-wsl2-docker-desktop-08cd2ce8.mp4","durationSec":841.09,"nguonCau":"srt",
-      "parts": [],
+    "os-14-3-wsl": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/14-windows-va-macos-cho-lap-trinh-vien/14-06-wsl2-docker-desktop-08cd2ce8.mp4","durationSec":841.09,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":180.79,"ten":"Mở đầu · bài này học gì"},
+        {"t":180.79,"den":357.23,"ten":"Trên Windows, theo tài liệu"},
+        {"t":357.23,"den":532.9,"ten":"Bộ nhớ và CPU bị máy ảo giới…"},
+        {"t":532.9,"den":638.99,"ten":"Build bằng công cụ Linux trong WSL thì…"},
+        {"t":638.99,"den":841.09,"ten":"Thực hành khoảng hai mươi lăm phút"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đây là bài 14.6."},
         {"t":8.53,"vi":"Bài 14.5 thấy luật hoa thường của Mac lọt vào container, qua một thư mục chia sẻ."},
@@ -6798,8 +7093,15 @@
         {"t":832.2,"vi":"Bài sau: shell và trình quản lý gói, Bash, zsh và PowerShell. Hẹn gặp bạn."}
       ]
     },
-    "os-14-4-cross": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/14-windows-va-macos-cho-lap-trinh-vien/14-08-ma-chay-ba-he-a7c41d56.mp4","durationSec":882.28,"nguonCau":"srt",
-      "parts": [],
+    "os-14-4-cross": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/14-windows-va-macos-cho-lap-trinh-vien/14-08-ma-chay-ba-he-a7c41d56.mp4","durationSec":882.28,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":180.48,"ten":"Mở đầu · bài này học gì"},
+        {"t":180.48,"den":358.28,"ten":"So A.TXT với a.txt"},
+        {"t":358.28,"den":536.59,"ten":"Nhìn các byte của dòng đầu tiên"},
+        {"t":536.59,"den":665.4,"ten":"Windows, theo tài liệu, khoá bắt buộc"},
+        {"t":665.4,"den":837.41,"ten":"Thực hành khoảng ba mươi phút"},
+        {"t":837.41,"den":882.28,"ten":"Ba nhân, ba dòng họ"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đây là bài 14.8, bài cuối của Chương 14."},
         {"t":10.24,"vi":"Bảy bài trước so ba hệ ở nhân, tiến trình, dịch vụ, bộ nhớ, hệ thống tệp, máy ảo và shell."},
@@ -6964,8 +7266,15 @@
         {"t":873.6,"vi":"Chương sau: quan sát và tinh chỉnh hiệu năng, perf, flame graph và eBPF. Hẹn gặp bạn."}
       ]
     },
-    "os-14-6-bo-nho": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/14-windows-va-macos-cho-lap-trinh-vien/14-04-bo-nho-ba-he-5972cd1d.mp4","durationSec":854.21,"nguonCau":"srt",
-      "parts": [],
+    "os-14-6-bo-nho": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/14-windows-va-macos-cho-lap-trinh-vien/14-04-bo-nho-ba-he-5972cd1d.mp4","durationSec":854.21,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":178.83,"ten":"Mở đầu · bài này học gì"},
+        {"t":178.83,"den":302.58,"ten":"Để ý ô cuối mỗi hàng"},
+        {"t":302.58,"den":476.43,"ten":"Giờ đến Linux, máy nhà mình"},
+        {"t":476.43,"den":588.21,"ten":"CommitLimit là mức nhân bảo đảm được"},
+        {"t":588.21,"den":669.22,"ten":"Cái bẫy thứ nhất"},
+        {"t":669.22,"den":854.21,"ten":"Bước bốn: nhờ bạn dùng Windows mở Task…"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đây là bài 14.4."},
         {"t":8.45,"vi":"Bài 14.3 so người trông coi dịch vụ và hộp đồ nghề quan sát."},
@@ -7123,8 +7432,14 @@
         {"t":845.2,"vi":"Bài sau: hệ thống tệp và quyền, ext4, APFS và NTFS. Hẹn gặp bạn."}
       ]
     },
-    "os-14-7-file-system": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/14-windows-va-macos-cho-lap-trinh-vien/14-05-he-thong-tep-ba-he-d1e7573a.mp4","durationSec":806.11,"nguonCau":"srt",
-      "parts": [],
+    "os-14-7-file-system": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/14-windows-va-macos-cho-lap-trinh-vien/14-05-he-thong-tep-ba-he-d1e7573a.mp4","durationSec":806.11,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":175.98,"ten":"Mở đầu · bài này học gì"},
+        {"t":175.98,"den":354.59,"ten":"Slide của bài web"},
+        {"t":354.59,"den":532.64,"ten":"Giờ thử lớn hơn trên thư mục btrfs"},
+        {"t":532.64,"den":608.19,"ten":"Đường dẫn giới hạn 260 ký tự"},
+        {"t":608.19,"den":806.11,"ten":"Bước hai: tìm tên cấm trên Windows bằng…"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đây là bài 14.5."},
         {"t":8.48,"vi":"Bài 14.4 đọc đúng các con số bộ nhớ trên ba hệ, và thấy máy mình nén swap ngay trong RAM."},
@@ -7278,8 +7593,14 @@
         {"t":803.49,"vi":"Hẹn gặp bạn."}
       ]
     },
-    "os-14-8-shell": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/14-windows-va-macos-cho-lap-trinh-vien/14-07-shell-quan-ly-goi-bfaa9f8d.mp4","durationSec":786.57,"nguonCau":"srt",
-      "parts": [],
+    "os-14-8-shell": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/14-windows-va-macos-cho-lap-trinh-vien/14-07-shell-quan-ly-goi-bfaa9f8d.mp4","durationSec":786.57,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":182.18,"ten":"Mở đầu · bài này học gì"},
+        {"t":182.18,"den":356.13,"ten":"Slide của bài web"},
+        {"t":356.13,"den":527.55,"ten":"Bash trên máy mình"},
+        {"t":527.55,"den":604.42,"ten":"Cái bẫy: script bash dùng mapfile hay mảng…"},
+        {"t":604.42,"den":786.57,"ten":"Bước ba: chạy declare A trên Mac và…"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đây là bài 14.7."},
         {"t":8.46,"vi":"Bài 14.6 đo cái giá của ranh giới máy ảo, và chỗ nên để node_modules."},
@@ -7415,8 +7736,18 @@
         {"t":783.9,"vi":"Hẹn gặp bạn."}
       ]
     },
-    "os-15-1-perf": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/15-quan-sat-va-tinh-chinh/15-02-perf-flame-graph-04ccf9d6.mp4","durationSec":1371.41,"nguonCau":"srt",
-      "parts": [],
+    "os-15-1-perf": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/15-quan-sat-va-tinh-chinh/15-02-perf-flame-graph-04ccf9d6.mp4","durationSec":1371.41,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":134.63,"ten":"Mở đầu · bài này học gì"},
+        {"t":134.63,"den":311.48,"ten":"Cuối cùng đếm"},
+        {"t":311.48,"den":397.02,"ten":"Báo cáo phẳng đặt 86,89 phần trăm vào…"},
+        {"t":397.02,"den":574.67,"ten":"Vì sao? Phải xem perf đi dọc ngăn…"},
+        {"t":574.67,"den":751.58,"ten":"Đây là flame graph mình vẽ từ đúng…"},
+        {"t":751.58,"den":927.25,"ten":"Render_json đã lên 29,5 phần trăm total của…"},
+        {"t":927.25,"den":1105.17,"ten":"Mỗi mẫu chép một khúc ngăn xếp"},
+        {"t":1105.17,"den":1185.99,"ten":"Trên máy mình nó không bị inline"},
+        {"t":1185.99,"den":1371.41,"ten":"Bước ba: folded.py lấy self và total của…"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đây là bài 15.2."},
         {"t":8.47,"vi":"Bài 15.1 kết luận: event loop bị report làm bão hoà."},
@@ -7669,8 +8000,18 @@
         {"t":1368.8,"vi":"Hẹn gặp bạn."}
       ]
     },
-    "os-15-2-ebpf": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/15-quan-sat-va-tinh-chinh/15-05-ebpf-0858a195.mp4","durationSec":1303.74,"nguonCau":"srt",
-      "parts": [],
+    "os-15-2-ebpf": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/15-quan-sat-va-tinh-chinh/15-05-ebpf-0858a195.mp4","durationSec":1303.74,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":133.27,"ten":"Mở đầu · bài này học gì"},
+        {"t":133.27,"den":214.95,"ten":"Cuối cùng chỉ một bản tóm tắt đi…"},
+        {"t":214.95,"den":393.01,"ten":"Bẫy hai: PID mà công cụ in ra…"},
+        {"t":393.01,"den":534.21,"ten":"Vẫn có nhóm tám byte của eventfd"},
+        {"t":534.21,"den":711.97,"ten":"Đầu tiên là một request dữ liệu"},
+        {"t":711.97,"den":886.65,"ten":"Bốn mươi lần fork và exec mỗi giây"},
+        {"t":886.65,"den":1066.48,"ten":"Tám luồng: mọc thêm một cái bướu ở…"},
+        {"t":1066.48,"den":1245.96,"ten":"Hai: eBPF miễn phí"},
+        {"t":1245.96,"den":1303.74,"ten":"Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đây là bài 15.5."},
         {"t":8.48,"vi":"Bài 15.3 dùng offcputime, một công cụ eBPF, để đo thời gian chờ của từng luồng."},
@@ -7919,8 +8260,17 @@
         {"t":1301.09,"vi":"Hẹn gặp bạn."}
       ]
     },
-    "os-15-5-use-red": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/15-quan-sat-va-tinh-chinh/15-01-use-red-65247084.mp4","durationSec":1220.66,"nguonCau":"srt",
-      "parts": [],
+    "os-15-5-use-red": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/15-quan-sat-va-tinh-chinh/15-01-use-red-65247084.mp4","durationSec":1220.66,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":178.64,"ten":"Mở đầu · bài này học gì"},
+        {"t":178.64,"den":341,"ten":"Thứ tự: RED trước để biết dịch vụ…"},
+        {"t":341,"den":484.5,"ten":"Chạy thật, sáu giây sau khi ba thủ…"},
+        {"t":484.5,"den":657.27,"ten":"Cái bẫy của bài 2.3"},
+        {"t":657.27,"den":732.77,"ten":"Nó bị giới hạn bởi MỘT luồng"},
+        {"t":732.77,"den":910.72,"ten":"Bước bốn của bài tập"},
+        {"t":910.72,"den":1029.42,"ten":"Tải đưa vào là một trăm cộng hai…"},
+        {"t":1029.42,"den":1220.66,"ten":"Thực hành khoảng ba mươi phút"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đây là bài 15.1, bài mở đầu Chương 15: quan sát và tinh chỉnh hiệu năng."},
         {"t":12.3,"vi":"Bài 14.8 khép lại phần ba hệ điều hành."},
@@ -8147,8 +8497,16 @@
         {"t":1218.07,"vi":"Hẹn gặp bạn."}
       ]
     },
-    "os-15-6-off-cpu": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/15-quan-sat-va-tinh-chinh/15-03-off-cpu-c7a24fed.mp4","durationSec":953.45,"nguonCau":"srt",
-      "parts": [],
+    "os-15-6-off-cpu": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/15-quan-sat-va-tinh-chinh/15-03-off-cpu-c7a24fed.mp4","durationSec":953.45,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":184.35,"ten":"Mở đầu · bài này học gì"},
+        {"t":184.35,"den":360.97,"ten":"Không còn màu đỏ"},
+        {"t":360.97,"den":540,"ten":"Khi luồng quay lại"},
+        {"t":540,"den":626.21,"ten":"Profiler của người nghèo"},
+        {"t":626.21,"den":707.57,"ten":"Ví dụ ghi nối vào tệp mở bằng…"},
+        {"t":707.57,"den":849.54,"ten":"Cái bẫy của bài"},
+        {"t":849.54,"den":953.45,"ten":"Đáp án một"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đây là bài 15.3."},
         {"t":8.5,"vi":"Bài 15.2 dùng perf hỏi CPU: bạn đang chạy gì."},
@@ -8330,8 +8688,15 @@
         {"t":950.81,"vi":"Hẹn gặp bạn."}
       ]
     },
-    "os-15-7-profiler": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/15-quan-sat-va-tinh-chinh/15-04-profiler-ngon-ngu-fe1f4da3.mp4","durationSec":987.66,"nguonCau":"srt",
-      "parts": [],
+    "os-15-7-profiler": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/15-quan-sat-va-tinh-chinh/15-04-profiler-ngon-ngu-fe1f4da3.mp4","durationSec":987.66,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":180.97,"ten":"Mở đầu · bài này học gì"},
+        {"t":180.97,"den":358.14,"ten":"Mỗi yêu cầu khoảng mười một mili giây…"},
+        {"t":358.14,"den":454.59,"ten":"88 yêu cầu trong năm giây"},
+        {"t":454.59,"den":631.21,"ten":"Trước khi sửa gì, hãy so"},
+        {"t":631.21,"den":784.46,"ten":"Dump cho thấy luồng đang giữ GIL ở…"},
+        {"t":784.46,"den":987.66,"ten":"Thực hành khoảng bốn mươi lăm phút"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đây là bài 15.4."},
         {"t":8.51,"vi":"Bài 15.2 dùng perf nhìn runtime từ bên ngoài."},
@@ -8509,8 +8874,18 @@
         {"t":985.01,"vi":"Hẹn gặp bạn."}
       ]
     },
-    "os-2-1-phuong-phap": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/02-quan-sat-linux-hang-ngay/02-01-phuong-phap-use-a1d92bea.mp4","durationSec":888.01,"nguonCau":"srt",
-      "parts": [],
+    "os-2-1-phuong-phap": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/02-quan-sat-linux-hang-ngay/02-01-phuong-phap-use-a1d92bea.mp4","durationSec":888.01,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":120.88,"ten":"Ôn nhanh · hôm nay · Bìa · \"Chậm\" không phải chẩn đoán"},
+        {"t":120.88,"den":245.32,"ten":"USE: ba câu hỏi cho bốn tài nguyên"},
+        {"t":245.32,"den":343.97,"ten":"Bước 1–2 trên máy bài web"},
+        {"t":343.97,"den":428.02,"ten":"Bước 4–5: 300 % CPU là ba lõi, một tiến trình"},
+        {"t":428.02,"den":516.23,"ten":"Bước 8–9: loại trừ bộ nhớ và mạng"},
+        {"t":516.23,"den":615.34,"ten":"Trong container, free và load nói về máy chủ"},
+        {"t":615.34,"den":726.3,"ten":"Mô phỏng: điền bảng USE bằng bằng chứng thật"},
+        {"t":726.3,"den":832.51,"ten":"Thuật ngữ trong bài · Tự kiểm nhanh"},
+        {"t":832.51,"den":888.01,"ten":"Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Chương 2, bài 2.1 của khoá Hệ điều hành cho lập trình viên."},
         {"t":12.11,"vi":"Chương 1 cho ta tiến trình: hồ sơ trong proc, fork, exec, wait, tín hiệu, mã thoát một trăm ba mươi bảy, và PID một trong container."},
@@ -8663,8 +9038,21 @@
         {"t":878.92,"vi":"Bài sau, 2.2: ai ăn CPU. top, ps, pidstat, và cách đọc tải trung bình cho đúng."}
       ]
     },
-    "os-2-2-cpu": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/02-quan-sat-linux-hang-ngay/02-02-ai-an-cpu-2e34b590.mp4","durationSec":1191.95,"nguonCau":"srt",
-      "parts": [],
+    "os-2-2-cpu": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/02-quan-sat-linux-hang-ngay/02-02-ai-an-cpu-2e34b590.mp4","durationSec":1191.95,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":138.14,"ten":"Ôn nhanh · hôm nay · Bìa · Ai ăn CPU"},
+        {"t":138.14,"den":244.03,"ten":"Năm dòng đầu của top · us, sy, ni — ba chương trình, ba cột"},
+        {"t":244.03,"den":339.55,"ten":"wa, hi/si và st · Mô phỏng: sáu việc, hai lõi, một hàng đợi"},
+        {"t":339.55,"den":440.49,"ten":"Load average là hàng đợi, không phải phần trăm"},
+        {"t":440.49,"den":553.08,"ten":"Sáu vòng lặp trên hai lõi: load leo về 6"},
+        {"t":553.08,"den":645.86,"ten":"ps STAT: mỗi trạng thái một tiến trình"},
+        {"t":645.86,"den":741.95,"ten":"Chạy thật: ReDoS từ đầu tới cuối"},
+        {"t":741.95,"den":871.4,"ten":"Thời gian người dùng, không ngủ, perf gọi tên RegExp"},
+        {"t":871.4,"den":962.45,"ten":"26 zombie trong 1,5 giây — kill -9 vô tác dụng"},
+        {"t":962.45,"den":1037.59,"ten":"Thực hành: API đông cứng sau deploy"},
+        {"t":1037.59,"den":1133.62,"ten":"Thuật ngữ trong bài · Tự kiểm nhanh"},
+        {"t":1133.62,"den":1191.95,"ten":"Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 2.2 của khoá Hệ điều hành cho lập trình viên."},
         {"t":11.11,"vi":"Bài trước cho ta phương pháp USE và mười lệnh: một tài nguyên, một tiến trình, có bằng chứng."},
@@ -8880,8 +9268,19 @@
         {"t":1189.4,"vi":"Hẹn gặp bạn."}
       ]
     },
-    "os-2-3-bo-nho": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/02-quan-sat-linux-hang-ngay/02-03-bo-nho-3ca4af70.mp4","durationSec":967.37,"nguonCau":"srt",
-      "parts": [],
+    "os-2-3-bo-nho": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/02-quan-sat-linux-hang-ngay/02-03-bo-nho-3ca4af70.mp4","durationSec":967.37,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":83.11,"ten":"Ôn nhanh · hôm nay · Bìa · Bộ nhớ"},
+        {"t":83.11,"den":180.53,"ten":"Chạy thật: free -m trên máy mình"},
+        {"t":180.53,"den":266.17,"ten":"Chạy thật: page cache đầy lên, rỗng đi"},
+        {"t":266.17,"den":358.04,"ten":"Ghi tệp làm đầy page cache · Đọc từ cache nhanh gấp ba"},
+        {"t":358.04,"den":453.73,"ten":"Chạy thật: một vụ rò rỉ lớn dần"},
+        {"t":453.73,"den":559.8,"ten":"Sự cố: next build chết với exit 137"},
+        {"t":559.8,"den":670.06,"ten":"Một bản vừa 1 GB; hai bản song song bị giết"},
+        {"t":670.06,"den":769.98,"ten":"Tuần tự thì qua; trần heap thấp thì chết có tiếng"},
+        {"t":769.98,"den":869.81,"ten":"Thực hành: exit 137 chỉ trên máy nhỏ · Thuật ngữ trong bài"},
+        {"t":869.81,"den":967.37,"ten":"Tự kiểm nhanh · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 2.3 của khoá Hệ điều hành cho lập trình viên."},
         {"t":10.94,"vi":"Bài trước ta đọc CPU: us, sy, ni, load là một hàng đợi, và hai sự cố regex với zombie."},
@@ -9071,8 +9470,20 @@
         {"t":959.51,"vi":"Bài sau, 2.4: đầy đĩa, I/O chậm, và đêm Postgres chết. Hẹn gặp bạn."}
       ]
     },
-    "os-2-4-dia-io": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/02-quan-sat-linux-hang-ngay/02-04-day-dia-io-710d02d1.mp4","durationSec":949.08,"nguonCau":"srt",
-      "parts": [],
+    "os-2-4-dia-io": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/02-quan-sat-linux-hang-ngay/02-04-day-dia-io-710d02d1.mp4","durationSec":949.08,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":98.58,"ten":"Ôn nhanh · hôm nay · Bìa · Đầy đĩa và I/O chậm"},
+        {"t":98.58,"den":178.43,"ten":"df: dung lượng, inode, và 5 % cho root"},
+        {"t":178.43,"den":255.55,"ten":"Nó quay lại bốn lần nữa"},
+        {"t":255.55,"den":344.47,"ten":"Dựng lại: Postgres và build cache trên ổ 96 MB"},
+        {"t":344.47,"den":420.93,"ten":"Checkpoint PANIC, phục hồi không xong"},
+        {"t":420.93,"den":528.48,"ten":"docker system df: SIZE và RECLAIMABLE"},
+        {"t":528.48,"den":607.55,"ten":"Mô phỏng: tên, descriptor và khối · du tìm ai đang chiếm chỗ"},
+        {"t":607.55,"den":688.15,"ten":"Cắt qua /proc/PID/fd: lấy lại chỗ, không khởi động lại"},
+        {"t":688.15,"den":768.24,"ten":"I/O chậm: đọc iostat -x · Bảng tra: đĩa trên máy đang chạy"},
+        {"t":768.24,"den":858.05,"ten":"Thực hành: ba kiểu đầy đĩa · Thuật ngữ trong bài"},
+        {"t":858.05,"den":949.08,"ten":"Tự kiểm nhanh · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 2.4 của khoá Hệ điều hành cho lập trình viên."},
         {"t":11.13,"vi":"Bài trước là bộ nhớ: đọc available, page cache, và exit 137 của OOM killer."},
@@ -9252,8 +9663,17 @@
         {"t":940.56,"vi":"Bài sau, 2.5: cổng và file descriptor, EADDRINUSE và EMFILE. Hẹn gặp bạn."}
       ]
     },
-    "os-2-5-mang-fd": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/02-quan-sat-linux-hang-ngay/02-05-cong-va-fd-aedd6ea0.mp4","durationSec":788.57,"nguonCau":"srt",
-      "parts": [],
+    "os-2-5-mang-fd": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/02-quan-sat-linux-hang-ngay/02-05-cong-va-fd-aedd6ea0.mp4","durationSec":788.57,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":94.02,"ten":"Ôn nhanh · hôm nay · Bìa · Cổng và file descriptor"},
+        {"t":94.02,"den":175.15,"ten":"Chạy thật: ss -tulpn"},
+        {"t":175.15,"den":290.75,"ten":"Chạy thật: EADDRINUSE và ba cách tìm chủ cổng"},
+        {"t":290.75,"den":380.34,"ten":"Next.js tự đổi tên, mẫu tên hết khớp"},
+        {"t":380.34,"den":512.62,"ten":"TIME_WAIT là bình thường; dùng lại kết nối"},
+        {"t":512.62,"den":614.16,"ten":"Rò rỉ descriptor lấp bảng tới khi open() hỏng"},
+        {"t":614.16,"den":702.93,"ten":"Thực hành: cổng kẹt và EMFILE · Thuật ngữ trong bài"},
+        {"t":702.93,"den":788.57,"ten":"Tự kiểm nhanh · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 2.5 của khoá Hệ điều hành cho lập trình viên."},
         {"t":10.56,"vi":"Bài trước là đĩa: df, du, inode, và tệp đã xoá mà còn mở, tìm bằng lsof."},
@@ -9417,8 +9837,19 @@
         {"t":786.07,"vi":"Hẹn gặp bạn."}
       ]
     },
-    "os-2-6-nhat-ky": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/02-quan-sat-linux-hang-ngay/02-06-nhat-ky-da5485e7.mp4","durationSec":937.25,"nguonCau":"srt",
-      "parts": [],
+    "os-2-6-nhat-ky": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/02-quan-sat-linux-hang-ngay/02-06-nhat-ky-da5485e7.mp4","durationSec":937.25,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":90.06,"ten":"Ôn nhanh · hôm nay · Bìa · Nhật ký của hệ thống"},
+        {"t":90.06,"den":180.26,"ten":"Chạy thật: systemctl status và một vòng lặp sập"},
+        {"t":180.26,"den":281.53,"ten":"Bốn lần sập nhanh, rồi systemd bỏ cuộc"},
+        {"t":281.53,"den":380.44,"ten":"Chạy thật: nhân ghi lại những lần giết"},
+        {"t":380.44,"den":474.56,"ten":"Sự cố: log phình tới khi đầy đĩa"},
+        {"t":474.56,"den":566.01,"ten":"Dịch vụ lắm lời thêm 16 MB journal trong 20 giây"},
+        {"t":566.01,"den":666.5,"ten":"Log Docker lớn mãi nếu không đặt max-size"},
+        {"t":666.5,"den":758.91,"ten":"Chạy thật: logrotate"},
+        {"t":758.91,"den":840.23,"ten":"Thực hành: đọc log một VPS thật · Thuật ngữ trong bài"},
+        {"t":840.23,"den":937.25,"ten":"Tự kiểm nhanh · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 2.6 của khoá Hệ điều hành cho lập trình viên."},
         {"t":11.11,"vi":"Bài trước là cổng và file descriptor: ss, fuser, EADDRINUSE, EMFILE."},
@@ -9586,8 +10017,19 @@
         {"t":934.56,"vi":"Hẹn gặp bạn."}
       ]
     },
-    "os-2-7-doc-cung-claude": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/02-quan-sat-linux-hang-ngay/02-07-doc-cung-claude-c33d9133.mp4","durationSec":893.88,"nguonCau":"srt",
-      "parts": [],
+    "os-2-7-doc-cung-claude": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/02-quan-sat-linux-hang-ngay/02-07-doc-cung-claude-c33d9133.mp4","durationSec":893.88,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":106.37,"ten":"Ôn nhanh · hôm nay · Bìa · Đọc cùng Claude"},
+        {"t":106.37,"den":189.85,"ten":"Mô phỏng: bốn bước trên một bản ghi thật"},
+        {"t":189.85,"den":296.18,"ten":"Bản ghi 1 của bài web: máy Mac có sắp hết đĩa?"},
+        {"t":296.18,"den":426.67,"ten":"Bản ghi 2 của bài web: cái gì đang chạy?"},
+        {"t":426.67,"den":507.14,"ten":"Bản ghi 3 của bài web: máy chủ có khoẻ không?"},
+        {"t":507.14,"den":597.67,"ten":"Bản ghi 4 của bài web: deploy bằng rsync"},
+        {"t":597.67,"den":681.5,"ten":"Chạy thật: pkill -f tự giết, tái hiện"},
+        {"t":681.5,"den":768.3,"ten":"Triệu chứng → lệnh đầu tiên"},
+        {"t":768.3,"den":846.62,"ten":"Thuật ngữ trong bài · Tự kiểm nhanh"},
+        {"t":846.62,"den":893.88,"ten":"Tóm tắt Chương 2"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 2.7, bài cuối của Chương 2."},
         {"t":9.68,"vi":"Sáu bài vừa qua: phương pháp USE, CPU, bộ nhớ, đĩa, cổng và fd, nhật ký."},
@@ -9763,8 +10205,17 @@
         {"t":891.27,"vi":"Hẹn gặp bạn."}
       ]
     },
-    "os-3-1-luong": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/03-luong-va-lap-lich-cpu/03-01-luong-549019f8.mp4","durationSec":745.65,"nguonCau":"srt",
-      "parts": [],
+    "os-3-1-luong": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/03-luong-va-lap-lich-cpu/03-01-luong-549019f8.mp4","durationSec":745.65,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":99.79,"ten":"Ôn nhanh · hôm nay · Bìa · Luồng"},
+        {"t":99.79,"den":193.2,"ten":"Chạy thật: một tiến trình, bốn luồng"},
+        {"t":193.2,"den":291.63,"ten":"Chạy thật: nhân nhìn thấy gì"},
+        {"t":291.63,"den":371.37,"ten":"Bộ nhớ chung vừa là tính năng vừa là lỗi"},
+        {"t":371.37,"den":476.6,"ten":"Giới hạn luồng thật nằm chỗ khác"},
+        {"t":476.6,"den":562.91,"ten":"Chạy thật: mười nghìn tác vụ, hai cách"},
+        {"t":562.91,"den":654.32,"ten":"Thực hành: unable to create native thread"},
+        {"t":654.32,"den":745.65,"ten":"Tự kiểm nhanh · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Chương 3, bài 3.1 của khoá Hệ điều hành cho lập trình viên."},
         {"t":11.59,"vi":"Chương 2 cho ta đôi mắt: đo CPU, bộ nhớ, đĩa, cổng, và đọc log của một máy chủ thật."},
@@ -9916,8 +10367,16 @@
         {"t":736.85,"vi":"Bài sau, 3.2: bộ lập lịch quyết định luồng nào chạy, đo bằng nice thật. Hẹn gặp bạn."}
       ]
     },
-    "os-3-2-lap-lich": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/03-luong-va-lap-lich-cpu/03-02-lap-lich-38696442.mp4","durationSec":645.71,"nguonCau":"srt",
-      "parts": [],
+    "os-3-2-lap-lich": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/03-luong-va-lap-lich-cpu/03-02-lap-lich-38696442.mp4","durationSec":645.71,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":88.64,"ten":"Ôn nhanh · hôm nay · Bìa · Lập lịch"},
+        {"t":88.64,"den":167.83,"ten":"Mô phỏng: ba chính sách trên cùng bộ đề"},
+        {"t":167.83,"den":266.9,"ten":"Cả bảng: không chính sách nào thắng tất cả"},
+        {"t":266.9,"den":367.97,"ten":"Chạy thật: nice là phần chia khi tranh chấp"},
+        {"t":367.97,"den":465.26,"ten":"Chạy thật: thức dậy cạnh việc đốt CPU"},
+        {"t":465.26,"den":566.52,"ten":"Bảng tra: lập lịch trên máy đang chạy"},
+        {"t":566.52,"den":645.71,"ten":"Tự kiểm nhanh · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 3.2 của khoá Hệ điều hành cho lập trình viên."},
         {"t":10.48,"vi":"Bài trước: mỗi luồng là một task của nhân, và bộ lập lịch lập lịch task, không lập lịch tiến trình."},
@@ -10051,8 +10510,16 @@
         {"t":643.2,"vi":"Hẹn gặp bạn."}
       ]
     },
-    "os-3-3-context-switch": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/03-luong-va-lap-lich-cpu/03-03-chuyen-ngu-canh-bd3ffd5f.mp4","durationSec":676.84,"nguonCau":"srt",
-      "parts": [],
+    "os-3-3-context-switch": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/03-luong-va-lap-lich-cpu/03-03-chuyen-ngu-canh-bd3ffd5f.mp4","durationSec":676.84,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":101.89,"ten":"Ôn nhanh · hôm nay · Bìa · Cái giá của chuyển ngữ cảnh"},
+        {"t":101.89,"den":206.54,"ten":"Hai loại chuyển, hai câu chuyện"},
+        {"t":206.54,"den":298.14,"ten":"vmstat cs: máy rảnh và một cặp lắm lời"},
+        {"t":298.14,"den":413.53,"ten":"Chạy thật: tự nguyện hay bị giành?"},
+        {"t":413.53,"den":503.79,"ten":"Thêm luồng, việc độc lập: gần như miễn phí"},
+        {"t":503.79,"den":586.93,"ten":"Thực hành: pool 50 lên 500 làm p99 tệ hơn"},
+        {"t":586.93,"den":676.84,"ten":"Tự kiểm nhanh · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 3.3 của khoá Hệ điều hành cho lập trình viên."},
         {"t":11.51,"vi":"Bài trước: bộ lập lịch chia lượt, và nice là phần chia khi tranh chấp."},
@@ -10176,8 +10643,18 @@
         {"t":667.44,"vi":"Bài sau, 3.4: bạn thật sự có bao nhiêu lõi, nhất là trong container. Hẹn gặp bạn."}
       ]
     },
-    "os-3-4-da-loi": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/03-luong-va-lap-lich-cpu/03-04-da-loi-abdee44c.mp4","durationSec":769.14,"nguonCau":"srt",
-      "parts": [],
+    "os-3-4-da-loi": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/03-luong-va-lap-lich-cpu/03-04-da-loi-abdee44c.mp4","durationSec":769.14,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":106.63,"ten":"Ôn nhanh · hôm nay · Bìa · Mình có bao nhiêu lõi?"},
+        {"t":106.63,"den":184.71,"ten":"Chạy thật: lõi của máy và tăng tốc song song"},
+        {"t":184.71,"den":261.23,"ten":"Chạy thật: luồng chạy ở đâu, và di cư"},
+        {"t":261.23,"den":340.14,"ten":"NUMA: khi bộ nhớ không ở một chỗ"},
+        {"t":340.14,"den":431.81,"ten":"Chạy thật: quota trong container"},
+        {"t":431.81,"den":521.94,"ten":"Mô phỏng: quota hết, mọi người dừng"},
+        {"t":521.94,"den":646.29,"ten":"\"CPU mới 40 % mà p99 tệ quá\" · Bảng tra: lõi và giới hạn"},
+        {"t":646.29,"den":725.06,"ten":"Thuật ngữ trong bài · Tự kiểm nhanh"},
+        {"t":725.06,"den":769.14,"ten":"Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 3.4 của khoá Hệ điều hành cho lập trình viên."},
         {"t":11.73,"vi":"Bài trước: một lần chuyển ngữ cảnh chừng một micro giây, và thêm luồng chỉ hại khi có khoá chung."},
@@ -10314,8 +10791,17 @@
         {"t":759.01,"vi":"Bài sau, 3.5: event loop của Node và thread pool của Spring Boot, đo cạnh nhau. Hẹn gặp bạn."}
       ]
     },
-    "os-3-5-event-loop": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/03-luong-va-lap-lich-cpu/03-05-event-loop-304222d4.mp4","durationSec":756.27,"nguonCau":"srt",
-      "parts": [],
+    "os-3-5-event-loop": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/03-luong-va-lap-lich-cpu/03-05-event-loop-304222d4.mp4","durationSec":756.27,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":108.41,"ten":"Ôn nhanh · hôm nay · Bìa · Event loop vs thread pool"},
+        {"t":108.41,"den":216.75,"ten":"Mô phỏng: một luồng, một hàng callback"},
+        {"t":216.75,"den":347.84,"ten":"Node: một luồng JS, 100 lần chờ, 277 ms"},
+        {"t":347.84,"den":448.75,"ten":"Pool ẩn: 8 lần băm, 4 worker, 2 đợt"},
+        {"t":448.75,"den":548.09,"ten":"100 request, mỗi cái chờ 200 ms"},
+        {"t":548.09,"den":633.99,"ten":"Bảng tra: event loop và pool"},
+        {"t":633.99,"den":712.51,"ten":"Thuật ngữ trong bài · Tự kiểm nhanh"},
+        {"t":712.51,"den":756.27,"ten":"Tóm tắt Chương 3"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 3.5, bài cuối Chương 3."},
         {"t":9.71,"vi":"Ta đã có: luồng, lập lịch, chuyển ngữ cảnh, và số lõi thật trong container."},
@@ -10451,8 +10937,15 @@
         {"t":753.62,"vi":"Hẹn gặp bạn."}
       ]
     },
-    "os-4-2-java": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/04-tu-viet-chuong-trinh-dong-thoi/04-02-java-71e6b8c0.mp4","durationSec":580.97,"nguonCau":"srt",
-      "parts": [],
+    "os-4-2-java": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/04-tu-viet-chuong-trinh-dong-thoi/04-02-java-71e6b8c0.mp4","durationSec":580.97,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":94.3,"ten":"Ôn nhanh · hôm nay · Bìa · Java: năm cách chạy song song"},
+        {"t":94.3,"den":170.56,"ten":"Chạy thật: việc CPU qua năm API"},
+        {"t":170.56,"den":300.07,"ten":"Speedup: thread pool và parallelStream"},
+        {"t":300.07,"den":383.21,"ten":"Việc I/O: 100 lời gọi tới API chậm"},
+        {"t":383.21,"den":477.19,"ten":"Tự viết: luồng ảo với giới hạn 20"},
+        {"t":477.19,"den":580.97,"ten":"Thuật ngữ trong bài · Tự kiểm nhanh"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 4.2 của khoá Hệ điều hành cho lập trình viên."},
         {"t":11.76,"vi":"Bài trước bằng C: hàng đợi việc nhỏ thắng khối cố định, và siêu luồng không phải lõi thật."},
@@ -10564,8 +11057,16 @@
         {"t":578.29,"vi":"Hẹn gặp bạn."}
       ]
     },
-    "os-4-3-node": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/04-tu-viet-chuong-trinh-dong-thoi/04-03-node-4453f135.mp4","durationSec":639.06,"nguonCau":"srt",
-      "parts": [],
+    "os-4-3-node": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/04-tu-viet-chuong-trinh-dong-thoi/04-03-node-4453f135.mp4","durationSec":639.06,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":97.93,"ten":"Ôn nhanh · hôm nay · Bìa · Node: vượt qua một luồng JS"},
+        {"t":97.93,"den":179.19,"ten":"Chạy thật: worker_threads cho việc CPU"},
+        {"t":179.19,"den":306.33,"ten":"Chờ: một luồng JS, 1 000 lời gọi"},
+        {"t":306.33,"den":408.56,"ten":"cluster: nhiều tiến trình, một cổng"},
+        {"t":408.56,"den":524.64,"ten":"Tự viết: một pool worker cố định"},
+        {"t":524.64,"den":599.82,"ten":"Thuật ngữ trong bài · Tự kiểm nhanh"},
+        {"t":599.82,"den":639.06,"ten":"Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 4.3 của khoá Hệ điều hành cho lập trình viên."},
         {"t":11.77,"vi":"Bài trước là Java: pool cho việc CPU, luồng ảo cho việc chờ, Semaphore cho trần."},
@@ -10684,8 +11185,16 @@
         {"t":636.34,"vi":"Hẹn gặp bạn."}
       ]
     },
-    "os-4-4-python": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/04-tu-viet-chuong-trinh-dong-thoi/04-04-python-7cc83b1c.mp4","durationSec":627.58,"nguonCau":"srt",
-      "parts": [],
+    "os-4-4-python": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/04-tu-viet-chuong-trinh-dong-thoi/04-04-python-7cc83b1c.mp4","durationSec":627.58,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":102.28,"ten":"Ôn nhanh · hôm nay"},
+        {"t":102.28,"den":187.21,"ten":"Chạy thật: Python này có GIL không?"},
+        {"t":187.21,"den":296.5,"ten":"Việc CPU: luồng không cho gì, tiến trình cho lõi"},
+        {"t":296.5,"den":380.29,"ten":"Việc I/O: ở đây luồng CÓ giúp"},
+        {"t":380.29,"den":467.52,"ten":"Chạy thật: asyncio cho chờ, tiến trình cho CPU"},
+        {"t":467.52,"den":545.85,"ten":"Thực hành: co ảnh và gọi OCR · Thuật ngữ trong bài"},
+        {"t":545.85,"den":627.58,"ten":"Tự kiểm nhanh · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 4.4 của khoá Hệ điều hành cho lập trình viên."},
         {"t":11.51,"vi":"Bài trước là Node: worker cho CPU, cluster cho lõi, Promise all cho chờ."},
@@ -10809,8 +11318,15 @@
         {"t":618.53,"vi":"Bài sau, 4.5: đo lại bằng Amdahl, Gustafson, và Karp Flatt. Hẹn gặp bạn."}
       ]
     },
-    "os-4-5-so-sanh": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/04-tu-viet-chuong-trinh-dong-thoi/04-05-amdahl-bb7b7150.mp4","durationSec":639.2,"nguonCau":"srt",
-      "parts": [],
+    "os-4-5-so-sanh": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/04-tu-viet-chuong-trinh-dong-thoi/04-05-amdahl-bb7b7150.mp4","durationSec":639.2,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":89.23,"ten":"Ôn nhanh · hôm nay · Bìa · Khi nào song song giúp được"},
+        {"t":89.23,"den":175.75,"ten":"Mô phỏng: phần tuần tự đặt trần"},
+        {"t":175.75,"den":301.89,"ten":"Đo so với dự đoán"},
+        {"t":301.89,"den":411.94,"ten":"Karp–Flatt: phần tuần tự từ chính số đo"},
+        {"t":411.94,"den":530.71,"ten":"Cùng việc, bốn ngôn ngữ"},
+        {"t":530.71,"den":639.2,"ten":"Thuật ngữ trong bài · Tự kiểm nhanh"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 4.5 của khoá Hệ điều hành cho lập trình viên."},
         {"t":11.47,"vi":"Bốn bài vừa rồi ta đo: C, Java, Node, Python. Đường speedup nào cũng cong xuống."},
@@ -10931,8 +11447,16 @@
         {"t":636.52,"vi":"Hẹn gặp bạn."}
       ]
     },
-    "os-4-6-false-sharing": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/04-tu-viet-chuong-trinh-dong-thoi/04-06-false-sharing-e832ee42.mp4","durationSec":584.96,"nguonCau":"srt",
-      "parts": [],
+    "os-4-6-false-sharing": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/04-tu-viet-chuong-trinh-dong-thoi/04-06-false-sharing-e832ee42.mp4","durationSec":584.96,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":86.07,"ten":"Ôn nhanh · hôm nay · Bìa · False sharing"},
+        {"t":86.07,"den":165.15,"ten":"Chạy thật: quét khoảng cách"},
+        {"t":165.15,"den":251.22,"ten":"Mô phỏng: dòng cache bị giật qua lại"},
+        {"t":251.22,"den":342.35,"ten":"Tám luồng: càng nhiều luồng càng tệ"},
+        {"t":342.35,"den":431.77,"ten":"Chạy thật: cùng lỗi trong Java"},
+        {"t":431.77,"den":508.18,"ten":"Thực hành: 8 worker chậm hơn 4 · Thuật ngữ trong bài"},
+        {"t":508.18,"den":584.96,"ten":"Tự kiểm nhanh · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 4.6 của khoá Hệ điều hành cho lập trình viên."},
         {"t":11.75,"vi":"Bài trước: Amdahl, Gustafson, và đọc phần tuần tự từ số đo."},
@@ -11043,8 +11567,16 @@
         {"t":582.33,"vi":"Hẹn gặp bạn."}
       ]
     },
-    "os-4-7-pipeline": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/04-tu-viet-chuong-trinh-dong-thoi/04-07-pipeline-3ee48945.mp4","durationSec":681.53,"nguonCau":"srt",
-      "parts": [],
+    "os-4-7-pipeline": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/04-tu-viet-chuong-trinh-dong-thoi/04-07-pipeline-3ee48945.mp4","durationSec":681.53,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":91.62,"ten":"Ôn nhanh · hôm nay"},
+        {"t":91.62,"den":185.64,"ten":"Mô phỏng: hàng có giới hạn và không giới hạn"},
+        {"t":185.64,"den":279.47,"ten":"Có giới hạn và không: cùng tốc độ, khác RAM"},
+        {"t":279.47,"den":354.52,"ten":"Map-reduce trên một máy"},
+        {"t":354.52,"den":463.03,"ten":"Huỷ trong Java là lời đề nghị lịch sự"},
+        {"t":463.03,"den":578.64,"ten":"Chạy thật: ba tầng và một hạn chót"},
+        {"t":578.64,"den":681.53,"ten":"Thuật ngữ trong bài · Tự kiểm nhanh"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 4.7 của khoá Hệ điều hành cho lập trình viên."},
         {"t":11.72,"vi":"Các bài trước ta chia việc: hàng đợi việc, pool, worker, tiến trình."},
@@ -11169,8 +11701,16 @@
         {"t":671.4,"vi":"Bài sau, 4.8: dự án nhỏ, bộ phân tích log song song bằng Java và Node. Hẹn gặp bạn."}
       ]
     },
-    "os-4-8-du-an": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/04-tu-viet-chuong-trinh-dong-thoi/04-08-du-an-log-fe307b35.mp4","durationSec":625.63,"nguonCau":"srt",
-      "parts": [],
+    "os-4-8-du-an": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/04-tu-viet-chuong-trinh-dong-thoi/04-08-du-an-log-fe307b35.mp4","durationSec":625.63,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":99.9,"ten":"Ôn nhanh · hôm nay · Bìa · Bộ phân tích log song song"},
+        {"t":99.9,"den":181.9,"ten":"Việc: trả lời bốn câu về một ngày lưu lượng"},
+        {"t":181.9,"den":302.11,"ten":"Java: pool cố định, mỗi khoảng một Callable"},
+        {"t":302.11,"den":387.69,"ten":"Speedup: Node mở rộng, Java lạnh dừng ở 2×"},
+        {"t":387.69,"den":473.42,"ten":"Cái giá: bộ nhớ và thời gian CPU"},
+        {"t":473.42,"den":584.17,"ten":"Thực hành: 2 giờ sáng, lỗi API tăng vọt"},
+        {"t":584.17,"den":625.63,"ten":"Tóm tắt Chương 4"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 4.8, bài cuối Chương 4."},
         {"t":9.79,"vi":"Chương này ta tự viết song song bằng C, Java, Node, Python, rồi đo bằng Amdahl, và tránh false sharing."},
@@ -11289,8 +11829,15 @@
         {"t":622.99,"vi":"Hẹn gặp bạn."}
       ]
     },
-    "os-5-1-race": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/05-dong-bo-race-va-khoa/05-01-race-6422860d.mp4","durationSec":547.98,"nguonCau":"srt",
-      "parts": [],
+    "os-5-1-race": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/05-dong-bo-race-va-khoa/05-01-race-6422860d.mp4","durationSec":547.98,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":82.36,"ten":"Ôn nhanh · hôm nay · Bìa · Race condition tái hiện được"},
+        {"t":82.36,"den":164.98,"ten":"Chạy thật: một luồng đúng, nhiều luồng mất"},
+        {"t":164.98,"den":282.89,"ten":"Mô phỏng: hai luồng chèn nhau"},
+        {"t":282.89,"den":367.72,"ten":"Vì sao lỗi trốn: một lõi làm cửa sổ hiếm"},
+        {"t":367.72,"den":451.45,"ten":"\"Máy em chạy đúng\" chẳng chứng minh gì"},
+        {"t":451.45,"den":547.98,"ten":"Thuật ngữ trong bài · Tự kiểm nhanh"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Chương 5, bài 5.1 của khoá Hệ điều hành cho lập trình viên."},
         {"t":11.64,"vi":"Chương 4 ta chia việc sao cho các luồng không chung gì: hàng đợi, khoảng byte, cộng dồn cục bộ."},
@@ -11406,8 +11953,17 @@
         {"t":537.95,"vi":"Bài sau, 5.2: mutex, spinlock và biến điều kiện, và mỗi cái tốn bao nhiêu. Hẹn gặp bạn."}
       ]
     },
-    "os-5-2-mutex": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/05-dong-bo-race-va-khoa/05-02-mutex-543df99a.mp4","durationSec":752.29,"nguonCau":"srt",
-      "parts": [],
+    "os-5-2-mutex": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/05-dong-bo-race-va-khoa/05-02-mutex-543df99a.mp4","durationSec":752.29,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":97.64,"ten":"Ôn nhanh · hôm nay · Bìa · Mutex, spinlock, biến điều kiện"},
+        {"t":97.64,"den":175.53,"ten":"Chạy thật: năm chế độ, một và bốn luồng"},
+        {"t":175.53,"den":281.35,"ten":"Dùng chung mới đắt, không phải khoá"},
+        {"t":281.35,"den":383.43,"ten":"Chạy thật: 32 luồng trên 12 CPU"},
+        {"t":383.43,"den":474.9,"ten":"Chạy thật: Java synchronized và ReentrantLock"},
+        {"t":474.9,"den":557.13,"ten":"Chạy thật: chờ bằng while và bằng if"},
+        {"t":557.13,"den":636.34,"ten":"Bảng tra: chọn khoá · Thực hành: spinlock làm hỏng dịch vụ"},
+        {"t":636.34,"den":752.29,"ten":"Thuật ngữ trong bài · Tự kiểm nhanh"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 5.2 của khoá Hệ điều hành cho lập trình viên."},
         {"t":11.76,"vi":"Bài 5.1: counter cộng cộng là nạp, cộng, ghi. Bốn luồng thì mất gần một nửa số lần tăng."},
@@ -11542,8 +12098,18 @@
         {"t":743.04,"vi":"Bài sau, 5.3: semaphore, khoá đọc ghi, nguyên tử và CAS. Hẹn gặp bạn."}
       ]
     },
-    "os-5-3-semaphore": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/05-dong-bo-race-va-khoa/05-03-semaphore-de92f775.mp4","durationSec":821.7,"nguonCau":"srt",
-      "parts": [],
+    "os-5-3-semaphore": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/05-dong-bo-race-va-khoa/05-03-semaphore-de92f775.mp4","durationSec":821.7,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":80.88,"ten":"Ôn nhanh · hôm nay"},
+        {"t":80.88,"den":181.14,"ten":"Semaphore là bộ đếm giấy phép"},
+        {"t":181.14,"den":282.15,"ten":"Chạy thật: khoá đọc–ghi, 99 % đọc"},
+        {"t":282.15,"den":365.49,"ten":"CAS: đúng, nhưng phải thử lại"},
+        {"t":365.49,"den":445.27,"ten":"Chạy thật: cờ không bao giờ tới"},
+        {"t":445.27,"den":531.96,"ten":"Java: JIT kéo lệnh đọc ra; volatile sửa"},
+        {"t":531.96,"den":629.15,"ten":"Chạy thật: (0, 0) \"không thể\""},
+        {"t":629.15,"den":734.72,"ten":"Bảng tra: chọn công cụ · Thực hành: dịch vụ treo khi tắt"},
+        {"t":734.72,"den":821.7,"ten":"Tự kiểm nhanh · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 5.3 của khoá Hệ điều hành cho lập trình viên."},
         {"t":11.77,"vi":"Bài 5.2: mutex cho một luồng vào."},
@@ -11698,8 +12264,18 @@
         {"t":819.09,"vi":"Hẹn gặp bạn."}
       ]
     },
-    "os-5-4-backend": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/05-dong-bo-race-va-khoa/05-04-backend-a3d2478d.mp4","durationSec":828.91,"nguonCau":"srt",
-      "parts": [],
+    "os-5-4-backend": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/05-dong-bo-race-va-khoa/05-04-backend-a3d2478d.mp4","durationSec":828.91,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":109.99,"ten":"Ôn nhanh · hôm nay · Bìa · Cùng những lỗi đó trong backend"},
+        {"t":109.99,"den":192.45,"ten":"Chạy thật: Node một luồng bán ghế hai lần"},
+        {"t":192.45,"den":286.58,"ten":"PostgreSQL: đọc, kiểm, ghi — cả hai \"đã đặt\""},
+        {"t":286.58,"den":371.26,"ten":"Chạy thật: đặt điều kiện vào lệnh ghi"},
+        {"t":371.26,"den":484.75,"ten":"Chạy thật: idempotency key"},
+        {"t":484.75,"den":562.85,"ten":"Mô phỏng: hợp đồng thuê 2 giây"},
+        {"t":562.85,"den":646.88,"ten":"Nhả theo token; rào chính tài nguyên"},
+        {"t":646.88,"den":728.25,"ten":"Thực hành: sau đợt flash sale · Thuật ngữ trong bài"},
+        {"t":728.25,"den":828.91,"ten":"Tự kiểm nhanh · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 5.4, bài cuối của Chương 5."},
         {"t":9.91,"vi":"Ba bài trước: mất cập nhật, khoá, nguyên tử và compare and swap."},
@@ -11857,8 +12433,17 @@
         {"t":821.23,"vi":"Tiếp theo là bài kiểm tra Chương 5, rồi Chương 6: deadlock. Hẹn gặp bạn."}
       ]
     },
-    "os-6-1-deadlock": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/06-deadlock-va-bai-toan-kinh-dien/06-01-deadlock-e062b84a.mp4","durationSec":692.56,"nguonCau":"srt",
-      "parts": [],
+    "os-6-1-deadlock": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/06-deadlock-va-bai-toan-kinh-dien/06-01-deadlock-e062b84a.mp4","durationSec":692.56,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":109.84,"ten":"Ôn nhanh · hôm nay · Bìa · Deadlock: bốn điều kiện Coffman"},
+        {"t":109.84,"den":187.55,"ten":"Chạy thật: timeout giết nó, mã 124"},
+        {"t":187.55,"den":266.04,"ten":"Chạy thật: gdb, ai giữ cái gì · gdb gọi tên vòng chờ"},
+        {"t":266.04,"den":366.41,"ten":"Vẽ ra: đồ thị chờ có vòng · Bốn điều kiện Coffman"},
+        {"t":366.41,"den":443.86,"ten":"Java: jstack tìm ra giúp bạn"},
+        {"t":443.86,"den":528.66,"ten":"Phòng ngừa 1: một thứ tự khoá chung"},
+        {"t":528.66,"den":642.75,"ten":"Thực hành: worker thanh toán đứng hình · Thuật ngữ trong bài"},
+        {"t":642.75,"den":692.56,"ten":"Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Chương 6, bài 6.1 của khoá Hệ điều hành cho lập trình viên."},
         {"t":12.43,"vi":"Chương 5: mỗi vùng găng một khoá."},
@@ -11998,8 +12583,17 @@
         {"t":689.88,"vi":"Hẹn gặp bạn."}
       ]
     },
-    "os-6-2-livelock": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/06-deadlock-va-bai-toan-kinh-dien/06-02-livelock-226f4c59.mp4","durationSec":794.96,"nguonCau":"srt",
-      "parts": [],
+    "os-6-2-livelock": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/06-deadlock-va-bai-toan-kinh-dien/06-02-livelock-226f4c59.mp4","durationSec":794.96,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":95.43,"ten":"Ôn nhanh · hôm nay · Bìa · Livelock, đói, đảo ngược ưu tiên"},
+        {"t":95.43,"den":178.46,"ten":"Chạy thật: mốc deadlock — 0,00 s CPU"},
+        {"t":178.46,"den":276.6,"ten":"Mô phỏng: cùng nhịp và tung đồng xu"},
+        {"t":276.6,"den":357.51,"ten":"Chạy thật: người ghi bị đói"},
+        {"t":357.51,"den":452.64,"ten":"Mars Pathfinder, tháng 7/1997 · Chạy thật: H chờ 542 ms"},
+        {"t":452.64,"den":562.73,"ten":"Tái hiện trên một lõi: H chờ 540 ms"},
+        {"t":562.73,"den":673.06,"ten":"Bản sao trong backend · Bảng tra: không tiến, kiểu nào?"},
+        {"t":673.06,"den":794.96,"ten":"Thuật ngữ trong bài · Tự kiểm nhanh"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 6.2 của khoá Hệ điều hành cho lập trình viên."},
         {"t":11.73,"vi":"Bài 6.1: deadlock, bốn điều kiện Coffman, sửa bằng thứ tự khoá hoặc thử khoá rồi lùi lại."},
@@ -12144,8 +12738,16 @@
         {"t":792.26,"vi":"Hẹn gặp bạn."}
       ]
     },
-    "os-6-3-kinh-dien": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/06-deadlock-va-bai-toan-kinh-dien/06-03-kinh-dien-948e2da7.mp4","durationSec":663.37,"nguonCau":"srt",
-      "parts": [],
+    "os-6-3-kinh-dien": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/06-deadlock-va-bai-toan-kinh-dien/06-03-kinh-dien-948e2da7.mp4","durationSec":663.37,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":104.3,"ten":"Ôn nhanh · hôm nay · Bìa · Triết gia, đọc–ghi, bộ đệm"},
+        {"t":104.3,"den":195.08,"ten":"Chạy thật: ngây thơ — không bữa nào"},
+        {"t":195.08,"den":276.35,"ten":"Java xác nhận vòng, từng luồng · Chạy thật: sắp thứ tự đũa"},
+        {"t":276.35,"den":361.64,"ten":"Chạy thật: thử đũa thứ hai"},
+        {"t":361.64,"den":439.05,"ten":"Không deadlock chưa chắc đã không đói"},
+        {"t":439.05,"den":551.4,"ten":"Đọc–ghi — dạng đề thi · Trả lời khi đi thi hay phỏng vấn"},
+        {"t":551.4,"den":663.37,"ten":"Thuật ngữ trong bài · Tự kiểm nhanh"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 6.3 của khoá Hệ điều hành cho lập trình viên."},
         {"t":11.77,"vi":"Hai bài trước: deadlock và bốn điều kiện Coffman."},
@@ -12271,8 +12873,18 @@
         {"t":660.75,"vi":"Hẹn gặp bạn."}
       ]
     },
-    "os-6-4-banker": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/06-deadlock-va-bai-toan-kinh-dien/06-04-banker-1bf99e43.mp4","durationSec":836.56,"nguonCau":"srt",
-      "parts": [],
+    "os-6-4-banker": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/06-deadlock-va-bai-toan-kinh-dien/06-04-banker-1bf99e43.mp4","durationSec":836.56,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":97.37,"ten":"Ôn nhanh · hôm nay · Bìa · Phát hiện và tránh: Banker"},
+        {"t":97.37,"den":186.73,"ten":"Ý tưởng Banker (Dijkstra)"},
+        {"t":186.73,"den":275.09,"ten":"Thuật toán an toàn, từng bước · Chạy thật: cấp, chờ, từ chối"},
+        {"t":275.09,"den":359.76,"ten":"Phát hiện: không Max, chỉ Request hiện tại"},
+        {"t":359.76,"den":439.47,"ten":"Phát hiện sau deadlock_timeout = 1 s"},
+        {"t":439.47,"den":540.1,"ten":"Chạy thật: pool 2 kết nối treo 2 đơn"},
+        {"t":540.1,"den":615.64,"ten":"Banker nhìn pool — và cách sửa thật"},
+        {"t":615.64,"den":723.18,"ten":"Pool đói: /health sau báo cáo chậm"},
+        {"t":723.18,"den":836.56,"ten":"Thuật ngữ trong bài · Tự kiểm nhanh"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 6.4, bài cuối của Chương 6."},
         {"t":9.83,"vi":"Ba bài trước phòng deadlock bằng cách sửa mã: thứ tự khoá, thử khoá, người phục vụ."},
@@ -12444,8 +13056,17 @@
         {"t":829.3,"vi":"Tiếp theo là bài kiểm tra Chương 6, rồi Chương 7: bộ nhớ. Hẹn gặp bạn."}
       ]
     },
-    "os-7-1-khong-gian": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/07-bo-nho-ao-va-phan-trang/07-01-khong-gian-9d68d7a4.mp4","durationSec":724.84,"nguonCau":"srt",
-      "parts": [],
+    "os-7-1-khong-gian": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/07-bo-nho-ao-va-phan-trang/07-01-khong-gian-9d68d7a4.mp4","durationSec":724.84,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":101.37,"ten":"Ôn nhanh · hôm nay · Bìa · Không gian địa chỉ"},
+        {"t":101.37,"den":201.85,"ten":"Một chương trình, một địa chỉ mỗi vùng"},
+        {"t":201.85,"den":291.34,"ten":"Ánh xạ không phải là thường trú"},
+        {"t":291.34,"den":385.23,"ten":"Không PIE thì mã đứng yên · Chạy thật: stack 8 MiB và bờ vực"},
+        {"t":385.23,"den":473.83,"ten":"Runtime ném lỗi trước bờ vực"},
+        {"t":473.83,"den":565.48,"ten":"JVM rảnh: rất nhiều VSZ, ít RSS"},
+        {"t":565.48,"den":681.36,"ten":"Thực hành: bảng Grafana 3,2 GB trên VPS 2 GB"},
+        {"t":681.36,"den":724.84,"ten":"Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Chương 7, bài 7.1 của khoá Hệ điều hành cho lập trình viên."},
         {"t":11.17,"vi":"Chương 6 xong chuyện khoá và deadlock."},
@@ -12600,8 +13221,17 @@
         {"t":722.19,"vi":"Hẹn gặp bạn."}
       ]
     },
-    "os-7-2-phan-trang": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/07-bo-nho-ao-va-phan-trang/07-02-phan-trang-a6da2b17.mp4","durationSec":720.21,"nguonCau":"srt",
-      "parts": [],
+    "os-7-2-phan-trang": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/07-bo-nho-ao-va-phan-trang/07-02-phan-trang-a6da2b17.mp4","durationSec":720.21,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":88.44,"ten":"Ôn nhanh · hôm nay · Bìa · Phân trang, bảng trang, TLB"},
+        {"t":88.44,"den":173.28,"ten":"Chạy thật: cỡ trang và số bit địa chỉ"},
+        {"t":173.28,"den":250.66,"ten":"Chạy thật: dịch tay, nhân xác nhận · Dịch tay, nhân kiểm"},
+        {"t":250.66,"den":353.22,"ten":"Chạy thật: bảng trang tốn bao nhiêu"},
+        {"t":353.22,"den":445.81,"ten":"Cùng vòng lặp — chỉ đổi cỡ trang"},
+        {"t":445.81,"den":541.9,"ten":"THP trên máy của bài web"},
+        {"t":541.9,"den":635.22,"ten":"Điểm cần nhớ · Thực hành: chỉ mục 1 GB, huge page hay không"},
+        {"t":635.22,"den":720.21,"ten":"Tự kiểm nhanh · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 7.2 của khoá Hệ điều hành cho lập trình viên."},
         {"t":10.33,"vi":"Bài 7.1 kết thúc bằng một lời hứa: không địa chỉ nào ta in ra là địa chỉ RAM."},
@@ -12752,8 +13382,17 @@
         {"t":710.94,"vi":"Bài sau, 7.3: page fault, nạp theo yêu cầu, và copy on write. Hẹn gặp bạn."}
       ]
     },
-    "os-7-3-page-fault": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/07-bo-nho-ao-va-phan-trang/07-03-page-fault-2c47874e.mp4","durationSec":731.56,"nguonCau":"srt",
-      "parts": [],
+    "os-7-3-page-fault": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/07-bo-nho-ao-va-phan-trang/07-03-page-fault-2c47874e.mp4","durationSec":731.56,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":102.74,"ten":"Ôn nhanh · hôm nay"},
+        {"t":102.74,"den":193.15,"ten":"Chạy thật: đếm page fault"},
+        {"t":193.15,"den":268.67,"ten":"Chạy thật: major fault nguội và ấm"},
+        {"t":268.67,"den":352.6,"ten":"Đọc tuần tự che giấu nó: read-ahead · mmap hay read?"},
+        {"t":352.6,"den":439.84,"ten":"Copy-on-write, nhìn qua số khung"},
+        {"t":439.84,"den":525.99,"ten":"Redis thật: nạp, BGSAVE, ghi tiếp"},
+        {"t":525.99,"den":624.3,"ten":"RAM đầy: ai bị đuổi?"},
+        {"t":624.3,"den":731.56,"ten":"Thuật ngữ trong bài · Tự kiểm nhanh"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 7.3 của khoá Hệ điều hành cho lập trình viên."},
         {"t":10.3,"vi":"Bài 7.2: bảng trang, TLB, và một trang chưa chạm thì chưa có khung."},
@@ -12897,8 +13536,17 @@
         {"t":728.97,"vi":"Hẹn gặp bạn."}
       ]
     },
-    "os-7-4-allocator": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/07-bo-nho-ao-va-phan-trang/07-04-allocator-a9a78c21.mp4","durationSec":750.81,"nguonCau":"srt",
-      "parts": [],
+    "os-7-4-allocator": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/07-bo-nho-ao-va-phan-trang/07-04-allocator-a9a78c21.mp4","durationSec":750.81,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":92.48,"ten":"Ôn nhanh · hôm nay · Bìa · Bộ cấp phát và bộ gom rác"},
+        {"t":92.48,"den":184.04,"ten":"Chạy thật: malloc nào chạm tới nhân"},
+        {"t":184.04,"den":276.85,"ten":"Arena: một heap cho mỗi nhóm luồng"},
+        {"t":276.85,"den":359.25,"ten":"Phân mảnh, từng bước · Bộ nhớ trống mà không trả lại được"},
+        {"t":359.25,"den":436.83,"ten":"Heap đầy: V8 tự huỷ, mã 134"},
+        {"t":436.83,"den":516.36,"ten":"JVM mặc định: 25 % RAM, G1"},
+        {"t":516.36,"den":640.05,"ten":"Chạy thật: dùng sau khi free"},
+        {"t":640.05,"den":750.81,"ten":"Thuật ngữ trong bài · Tự kiểm nhanh"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 7.4, bài cuối của Chương 7."},
         {"t":9.74,"vi":"Ba bài trước: không gian địa chỉ, bảng trang, page fault. Tất cả ở phía nhân."},
@@ -13043,8 +13691,16 @@
         {"t":748.22,"vi":"Hẹn gặp bạn."}
       ]
     },
-    "os-8-1-page-cache": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/08-ap-luc-bo-nho-swap-cgroup-oom/08-01-page-cache-34d2249f.mp4","durationSec":667.69,"nguonCau":"srt",
-      "parts": [],
+    "os-8-1-page-cache": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/08-ap-luc-bo-nho-swap-cgroup-oom/08-01-page-cache-34d2249f.mp4","durationSec":667.69,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":103.9,"ten":"Ôn nhanh · hôm nay · Bìa · Page cache và free gần bằng 0"},
+        {"t":103.9,"den":179.79,"ten":"Bốn cột, một cột quan trọng · /proc/meminfo: nguồn của free"},
+        {"t":179.79,"den":257.29,"ten":"Trong container, free chỉ nhầm máy"},
+        {"t":257.29,"den":358.92,"ten":"Chạy thật: đẩy 1,2 GB tệp qua container 1 GiB"},
+        {"t":358.92,"den":453.64,"ten":"Mô phỏng: mốc nước high, low, min"},
+        {"t":453.64,"den":562.43,"ten":"Chạy thật: drop_caches bị từ chối — và đúng là vậy"},
+        {"t":562.43,"den":667.69,"ten":"Thuật ngữ trong bài · Tự kiểm nhanh"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Chương 8, bài 8.1 của khoá Hệ điều hành cho lập trình viên."},
         {"t":11.25,"vi":"Chương 7: trang, page fault, page cache nguội và ấm, bộ cấp phát."},
@@ -13192,8 +13848,16 @@
         {"t":665.08,"vi":"Hẹn gặp bạn."}
       ]
     },
-    "os-8-2-swap": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/08-ap-luc-bo-nho-swap-cgroup-oom/08-02-swap-713eb54b.mp4","durationSec":636.99,"nguonCau":"srt",
-      "parts": [],
+    "os-8-2-swap": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/08-ap-luc-bo-nho-swap-cgroup-oom/08-02-swap-713eb54b.mp4","durationSec":636.99,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":92.22,"ten":"Ôn nhanh · hôm nay · Bìa · Swap, swappiness, thrashing"},
+        {"t":92.22,"den":187.25,"ten":"Chạy thật: swap của máy nhà là zram"},
+        {"t":187.25,"den":278.23,"ten":"swappiness là một mức giá, không phải phần trăm"},
+        {"t":278.23,"den":356.37,"ten":"Mô phỏng: giá chạm một trang, thang log"},
+        {"t":356.37,"den":434.04,"ten":"Chạy thật: không swap vẫn thrash"},
+        {"t":434.04,"den":535.65,"ten":"zram và zswap: nén trước khi swap · Chạy gì trên máy chủ"},
+        {"t":535.65,"den":636.99,"ten":"Thuật ngữ trong bài · Tự kiểm nhanh"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 8.2 của khoá Hệ điều hành cho lập trình viên."},
         {"t":10.34,"vi":"Bài 8.1: page cache thu hồi được, và máy nhà đang dùng hết swap tám gigabyte."},
@@ -13330,8 +13994,16 @@
         {"t":634.36,"vi":"Hẹn gặp bạn."}
       ]
     },
-    "os-8-3-oom": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/08-ap-luc-bo-nho-swap-cgroup-oom/08-03-oom-2f4bc378.mp4","durationSec":655.64,"nguonCau":"srt",
-      "parts": [],
+    "os-8-3-oom": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/08-ap-luc-bo-nho-swap-cgroup-oom/08-03-oom-2f4bc378.mp4","durationSec":655.64,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":93.96,"ten":"Ôn nhanh · hôm nay · Bìa · OOM killer chọn nạn nhân"},
+        {"t":93.96,"den":187.07,"ten":"Chạy thật: máy nhà ở chế độ 0"},
+        {"t":187.07,"den":263.69,"ten":"Chạy thật: thất bại sớm · Thất bại sớm, hay chết muộn"},
+        {"t":263.69,"den":342.25,"ten":"Thí nghiệm: một CSDL và một API rò rỉ · Chạy thật: ai chết?"},
+        {"t":342.25,"den":428.7,"ten":"dmesg nói gì, từng trường"},
+        {"t":428.7,"den":548.16,"ten":"oom_score_adj −1000: kẻ rò rỉ chết"},
+        {"t":548.16,"den":655.64,"ten":"Thuật ngữ trong bài · Tự kiểm nhanh"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 8.3 của khoá Hệ điều hành cho lập trình viên."},
         {"t":10.33,"vi":"Bài 8.1: page cache thu hồi được, cache một mình không gây OOM."},
@@ -13467,8 +14139,15 @@
         {"t":647.29,"vi":"Bài sau, 8.4: sự cố exit một trăm ba mươi bảy, đo thật. Hẹn gặp bạn."}
       ]
     },
-    "os-8-4-exit137": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/08-ap-luc-bo-nho-swap-cgroup-oom/08-04-exit137-9268d34d.mp4","durationSec":941.64,"nguonCau":"srt",
-      "parts": [],
+    "os-8-4-exit137": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/08-ap-luc-bo-nho-swap-cgroup-oom/08-04-exit137-9268d34d.mp4","durationSec":941.64,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":94.86,"ten":"Mở đầu · bài này học gì"},
+        {"t":94.86,"den":272.17,"ten":"Bước hai a của deploy sh"},
+        {"t":272.17,"den":450.07,"ten":"Nó in tới một trăm chín mươi hai…"},
+        {"t":450.07,"den":626.4,"ten":"Heap cao hơn chỉ lấn sâu hơn vào…"},
+        {"t":626.4,"den":766.57,"ten":"Đoạn cuối, mình dùng số đo của bài…"},
+        {"t":766.57,"den":941.64,"ten":"Thực hành, ba mươi phút"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 8.4 của khoá Hệ điều hành cho lập trình viên."},
         {"t":10.42,"vi":"Bài 8.3: khi cgroup cạn, OOM killer giết kẻ lớn nhất, không phải kẻ có lỗi."},
@@ -13657,8 +14336,15 @@
         {"t":939.04,"vi":"Hẹn gặp bạn."}
       ]
     },
-    "os-8-5-gioi-han": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/08-ap-luc-bo-nho-swap-cgroup-oom/08-05-gioi-han-46effb7c.mp4","durationSec":864.99,"nguonCau":"srt",
-      "parts": [],
+    "os-8-5-gioi-han": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/08-ap-luc-bo-nho-swap-cgroup-oom/08-05-gioi-han-46effb7c.mp4","durationSec":864.99,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":97,"ten":"Mở đầu · bài này học gì"},
+        {"t":97,"den":274.26,"ten":"Mình chạy lại trên máy nhà"},
+        {"t":274.26,"den":434.76,"ten":"Khoảng năm trăm mười hai megabyte còn lại…"},
+        {"t":434.76,"den":610.18,"ten":"Vì sao không một trăm phần trăm?"},
+        {"t":610.18,"den":694.13,"ten":"Thẻ hai: earlyoom"},
+        {"t":694.13,"den":864.99,"ten":"Thực hành, ba mươi phút"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 8.5, bài cuối Chương 8 của khoá Hệ điều hành cho lập trình viên."},
         {"t":11.74,"vi":"Bài 8.4: một trăm ba mươi bảy là cgroup giết, một trăm ba mươi tư là V8 tự chết."},
@@ -13835,8 +14521,17 @@
         {"t":856.57,"vi":"Hết Chương 8. Chương 9: hệ thống tệp và quyền, bắt đầu từ inode. Hẹn gặp bạn."}
       ]
     },
-    "os-9-1-inode": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/09-he-thong-file-va-quyen/09-01-inode-ead5b52f.mp4","durationSec":679.01,"nguonCau":"srt",
-      "parts": [],
+    "os-9-1-inode": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/09-he-thong-file-va-quyen/09-01-inode-ead5b52f.mp4","durationSec":679.01,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":100.24,"ten":"Ôn nhanh · hôm nay · Bìa · Tên tệp chỉ là con trỏ"},
+        {"t":100.24,"den":178.95,"ten":"Một giao diện, nhiều hệ thống tệp: VFS"},
+        {"t":178.95,"den":259.14,"ten":"Inode: mọi thứ trừ cái tên"},
+        {"t":259.14,"den":351.09,"ten":"Chạy thật: rm xoá một cái tên"},
+        {"t":351.09,"den":438.34,"ten":"debugfs: thư mục là danh sách tên → inode"},
+        {"t":438.34,"den":514.13,"ten":"Số inode được dùng lại"},
+        {"t":514.13,"den":601.89,"ten":"Điểm cần nhớ · Thực hành: web trả 404 sau khi \"dọn\" release"},
+        {"t":601.89,"den":679.01,"ten":"Tự kiểm nhanh · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Chương 9, bài 9.1 của khoá Hệ điều hành cho lập trình viên."},
         {"t":11.23,"vi":"Chương 8 nói chuyện bộ nhớ: page cache, swap, OOM killer. Chương 9 là hệ thống tệp và quyền."},
@@ -13965,8 +14660,15 @@
         {"t":676.37,"vi":"Hẹn gặp bạn."}
       ]
     },
-    "os-9-2-fsync": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/09-he-thong-file-va-quyen/09-03-fsync-8148d743.mp4","durationSec":982.44,"nguonCau":"srt",
-      "parts": [],
+    "os-9-2-fsync": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/09-he-thong-file-va-quyen/09-03-fsync-8148d743.mp4","durationSec":982.44,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":160.71,"ten":"Mở đầu · bài này học gì"},
+        {"t":160.71,"den":337.42,"ten":"Chạy thật trong container phòng lab"},
+        {"t":337.42,"den":515.68,"ten":"Trên tmpfs của dev shm"},
+        {"t":515.68,"den":693.88,"ten":"Dòng hai: gắn bản chép. Nhân phát lại…"},
+        {"t":693.88,"den":822.83,"ten":"Mẫu bốn bước"},
+        {"t":822.83,"den":982.44,"ten":"Thực hành ba mươi phút"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 9.3 của khoá Hệ điều hành cho lập trình viên."},
         {"t":10.34,"vi":"Bài 9.2: fd trỏ tới mô tả tệp mở, rồi tới inode. Nhiều worker ghi chung một log thì phải mở với O APPEND."},
@@ -14168,8 +14870,15 @@
         {"t":979.84,"vi":"Hẹn gặp bạn."}
       ]
     },
-    "os-9-3-journaling": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/09-he-thong-file-va-quyen/09-04-journaling-f510653c.mp4","durationSec":868.2,"nguonCau":"srt",
-      "parts": [],
+    "os-9-3-journaling": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/09-he-thong-file-va-quyen/09-04-journaling-f510653c.mp4","durationSec":868.2,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":167.75,"ten":"Mở đầu · bài này học gì"},
+        {"t":167.75,"den":262.51,"ten":"Ta dựng tay đúng trạng thái sập nguy…"},
+        {"t":262.51,"den":441.57,"ten":"Bước một: chép mọi khối sắp đổi vào…"},
+        {"t":441.57,"den":618.22,"ten":"Chế độ ordered chặn dữ liệu cũ"},
+        {"t":618.22,"den":700.2,"ten":"Một lần chép đọc đầu đĩa lúc này"},
+        {"t":700.2,"den":868.2,"ten":"Thực hành ba mươi phút"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 9.4 của khoá Hệ điều hành cho lập trình viên."},
         {"t":10.33,"vi":"Bài 9.3: write chỉ chép vào page cache."},
@@ -14348,8 +15057,14 @@
         {"t":865.52,"vi":"Hẹn gặp bạn."}
       ]
     },
-    "os-9-4-quyen": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/09-he-thong-file-va-quyen/09-06-quyen-aa9ce378.mp4","durationSec":875.89,"nguonCau":"srt",
-      "parts": [],
+    "os-9-4-quyen": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/09-he-thong-file-va-quyen/09-06-quyen-aa9ce378.mp4","durationSec":875.89,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":183.15,"ten":"Mở đầu · bài này học gì"},
+        {"t":183.15,"den":360.79,"ten":"Bước một: dev có phải chủ không?"},
+        {"t":360.79,"den":539.6,"ten":"Dev chạy ls l"},
+        {"t":539.6,"den":710.98,"ten":"Env giờ là sáu không không"},
+        {"t":710.98,"den":875.89,"ten":"Thực hành hai mươi lăm phút"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 9.6 của khoá Hệ điều hành cho lập trình viên."},
         {"t":10.33,"vi":"Bài 9.1: thư mục là bảng tên trỏ tới inode."},
@@ -14529,8 +15244,15 @@
         {"t":873.34,"vi":"Hẹn gặp bạn."}
       ]
     },
-    "os-9-5-fd": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/09-he-thong-file-va-quyen/09-02-fd-476c9497.mp4","durationSec":581.78,"nguonCau":"srt",
-      "parts": [],
+    "os-9-5-fd": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/09-he-thong-file-va-quyen/09-02-fd-476c9497.mp4","durationSec":581.78,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":94.46,"ten":"Ôn nhanh · hôm nay · Bìa · Ba bảng giữa \"fd 3\" và cái đĩa"},
+        {"t":94.46,"den":189.36,"ten":"Mỗi tiến trình có một bảng fd"},
+        {"t":189.36,"den":273.99,"ten":"Chạy thật: dup, mở hai lần, O_APPEND"},
+        {"t":273.99,"den":352.6,"ten":"fork(): con chép bảng, dùng chung mô tả"},
+        {"t":352.6,"den":438.16,"ten":"Chạy thật: một bí mật lọt sang chương trình con"},
+        {"t":438.16,"den":581.78,"ten":"Thực hành: dòng đơn hàng bị mất trong log"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 9.2 của khoá Hệ điều hành cho lập trình viên."},
         {"t":10.34,"vi":"Bài 9.1: tên chỉ là con trỏ tới inode, và dữ liệu chỉ chết khi không còn tên lẫn không còn ai mở."},
@@ -14648,8 +15370,15 @@
         {"t":579.16,"vi":"Hẹn gặp bạn."}
       ]
     },
-    "os-9-6-mount": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/09-he-thong-file-va-quyen/09-05-mount-ab0111a4.mp4","durationSec":856.01,"nguonCau":"srt",
-      "parts": [],
+    "os-9-6-mount": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/09-he-thong-file-va-quyen/09-05-mount-ab0111a4.mp4","durationSec":856.01,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":182.29,"ten":"Mở đầu · bài này học gì"},
+        {"t":182.29,"den":260.45,"ten":"Df của đĩa gốc vẫn tính bốn mươi…"},
+        {"t":260.45,"den":440.26,"ten":"Giờ tới sự cố"},
+        {"t":440.26,"den":573.29,"ten":"Mountinfo của bản gắn một tệp"},
+        {"t":573.29,"den":681.77,"ten":"Một thư mục tải lên trên tmpfs"},
+        {"t":681.77,"den":856.01,"ten":"Thực hành hai mươi lăm phút"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 9.5 của khoá Hệ điều hành cho lập trình viên."},
         {"t":10.34,"vi":"Bài 9.1: tên tệp chỉ là con trỏ tới inode."},
@@ -14822,8 +15551,16 @@
         {"t":846.32,"vi":"Bài sau, 9.6: quyền, rwx, umask, setuid và sticky. Hẹn gặp bạn."}
       ]
     },
-    "os-9-7-capabilities": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/09-he-thong-file-va-quyen/09-07-capabilities-2efc4039.mp4","durationSec":993.2,"nguonCau":"srt",
-      "parts": [],
+    "os-9-7-capabilities": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/operating-systems-for-developers/09-he-thong-file-va-quyen/09-07-capabilities-2efc4039.mp4","durationSec":993.2,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":177.78,"ten":"Mở đầu · bài này học gì"},
+        {"t":177.78,"den":356.6,"ten":"Giờ capsh bỏ đúng chìa đó rồi chạy…"},
+        {"t":356.6,"den":515.75,"ten":"Hãy dùng getfacl"},
+        {"t":515.75,"den":694.41,"ten":"Dev tạo một user namespace bằng unshare"},
+        {"t":694.41,"den":808.19,"ten":"Với umask mặc định"},
+        {"t":808.19,"den":935.3,"ten":"Thực hành ba mươi lăm phút"},
+        {"t":935.3,"den":993.2,"ten":"Vì sao vẫn bị từ chối?"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 9.7, bài cuối của Chương 9."},
         {"t":9.79,"vi":"Bài 9.6: phép kiểm bốn bước, umask, sticky, setuid. Và root đọc được tệp không quyền nào."},

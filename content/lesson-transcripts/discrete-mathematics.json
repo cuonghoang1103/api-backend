@@ -2,8 +2,14 @@
   "courseSlug": "discrete-mathematics",
   "sinhBoi": "scripts/phu-de-tu-video-rieng.mjs",
   "lessons": {
-    "mad101-1-1-logic-menh-de": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/discrete-mathematics/01-logic-chung-minh/01-01-logic-menh-de-14b558dd.mp4","durationSec":633.05,"nguonCau":"srt",
-      "parts": [],
+    "mad101-1-1-logic-menh-de": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/discrete-mathematics/01-logic-chung-minh/01-01-logic-menh-de-14b558dd.mp4","durationSec":633.05,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":94.75,"ten":"Mở đầu · bài này học gì"},
+        {"t":94.75,"den":189.86,"ten":"Câu hỏi và câu ra lệnh cũng không…"},
+        {"t":189.86,"den":368.08,"ten":"Bẫy đề: hỏi giá trị của p kéo…"},
+        {"t":368.08,"den":545.69,"ten":"Kết quả sai khi vế trước đúng mà…"},
+        {"t":545.69,"den":633.05,"ten":"Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đây là bài 1.1 của MAD101: logic mệnh đề, bài khái niệm đầu tiên của Chương 1."},
         {"t":13.29,"vi":"Buổi trước bạn đã đi hết 26 khung slide Chương 1."},
@@ -137,8 +143,14 @@
         {"t":627.99,"vi":"Ta rút gọn biểu thức bằng luật, thay vì lập bảng."}
       ]
     },
-    "mad101-1-2-tuong-duong-vi-tu": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/discrete-mathematics/01-logic-chung-minh/01-02-tuong-duong-logic-vi-tu-ee578f45.mp4","durationSec":580.07,"nguonCau":"srt",
-      "parts": [],
+    "mad101-1-2-tuong-duong-vi-tu": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/discrete-mathematics/01-logic-chung-minh/01-02-tuong-duong-logic-vi-tu-ee578f45.mp4","durationSec":580.07,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":140.6,"ten":"Mở đầu · bài này học gì"},
+        {"t":140.6,"den":225.09,"ten":"Bẫy đề: phương án chỉ phủ định từng…"},
+        {"t":225.09,"den":360.52,"ten":"Bước ba, không p và đúng bằng không…"},
+        {"t":360.52,"den":536.15,"ten":"Bẫy đề: phủ định của mọi người đều…"},
+        {"t":536.15,"den":580.07,"ten":"Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đây là bài 1.2: tương đương logic và logic vị từ."},
         {"t":10.51,"vi":"Đây là bài khái niệm cuối của Chương 1."},
@@ -266,8 +278,27 @@
         {"t":572.5,"vi":"Hết Chương 1. Bài sau sang Chương 2: slide trường về tập hợp, buổi 9."}
       ]
     },
-    "mad101-flm-b001": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/discrete-mathematics/01-logic-chung-minh/01-00-session-1-slide-chuong-1-logic-6dac2161.mp4","durationSec":1960.55,"nguonCau":"srt",
-      "parts": [],
+    "mad101-flm-b001": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/discrete-mathematics/01-logic-chung-minh/01-00-session-1-slide-chuong-1-logic-6dac2161.mp4","durationSec":1960.55,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":131.29,"ten":"Mở đầu · bài này học gì"},
+        {"t":131.29,"den":306.29,"ten":"Ví dụ trên slide hỏi"},
+        {"t":306.29,"den":390.38,"ten":"Nhớ một câu thôi"},
+        {"t":390.38,"den":474.09,"ten":"Ví dụ một"},
+        {"t":474.09,"den":554,"ten":"Ví dụ trên slide lấy hai xâu bảy…"},
+        {"t":554,"den":688.96,"ten":"Ví dụ p hoặc không p"},
+        {"t":688.96,"den":824.16,"ten":"Ví dụ một"},
+        {"t":824.16,"den":911.04,"ten":"Ví dụ R của x"},
+        {"t":911.04,"den":987.12,"ten":"Ví dụ: x là số thực"},
+        {"t":987.12,"den":1071.1,"ten":"Ví dụ: viết lại biểu thức sao cho…"},
+        {"t":1071.1,"den":1158.78,"ten":"Ví dụ ba đổi chữ mọi thành có"},
+        {"t":1158.78,"den":1240.81,"ten":"Ví dụ một"},
+        {"t":1240.81,"den":1319.33,"ten":"Ví dụ hai"},
+        {"t":1319.33,"den":1496.79,"ten":"Ví dụ b"},
+        {"t":1496.79,"den":1588.87,"ten":"Thứ hai: ta đi bơi chỉ khi trời…"},
+        {"t":1588.87,"den":1679.9,"ten":"Bước một: p kéo theo q tương đương…"},
+        {"t":1679.9,"den":1764.2,"ten":"Chạy thật: modus ponens hợp lệ"},
+        {"t":1764.2,"den":1960.55,"ten":"Ví dụ hai"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đây là buổi một của MAD101."},
         {"t":9.02,"vi":"Mình đi trọn bộ slide Chương 1 của trường."},
@@ -682,8 +713,14 @@
         {"t":1953.45,"vi":"Bài sau, bài khái niệm 1.1 trên web, luyện thêm logic mệnh đề với nhiều bài tập hơn."}
       ]
     },
-    "mad101-gioi-thieu": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/discrete-mathematics/00-gioi-thieu-mon-hoc/00-01-bat-dau-tai-day-mad101-301233ea.mp4","durationSec":555.6,"nguonCau":"srt",
-      "parts": [],
+    "mad101-gioi-thieu": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/discrete-mathematics/00-gioi-thieu-mon-hoc/00-01-bat-dau-tai-day-mad101-301233ea.mp4","durationSec":555.6,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":116.26,"ten":"Mở đầu · bài này học gì"},
+        {"t":116.26,"den":294.12,"ten":"Ví dụ: đúng hoặc sai"},
+        {"t":294.12,"den":381.49,"ten":"Từ năm 2006 tới 2008"},
+        {"t":381.49,"den":513.75,"ten":"Bước một, xem slide của trường cùng video…"},
+        {"t":513.75,"den":555.6,"ten":"Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với MAD101, môn Toán rời rạc."},
         {"t":9.92,"vi":"Nghe chữ toán, nhiều bạn đã muốn lướt qua."},

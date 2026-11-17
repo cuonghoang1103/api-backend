@@ -21,6 +21,8 @@ import { sanitizeHtml, stripInlineColors, pickLang } from '@/lib/utils';
 import { useTranslation } from '@/context/LocaleContext';
 import { loadYouTubeAPI, isYouTubeUrl } from '@/lib/youtube-player';
 import MoiVaoPhongVideo from '@/components/academy/MoiVaoPhongVideo';
+import MucLucVideo from '@/components/academy/giaSu/MucLucVideo';
+import { useNutHoiSlide } from '@/components/academy/giaSu/nutHoiSlide';
 import LuyenTapCodeLab from '@/components/courses/LuyenTapCodeLab';
 import LessonQuizPlayer, { type QuizData } from './LessonQuizPlayer';
 import LessonPdfViewer from './LessonPdfViewer';
@@ -232,6 +234,8 @@ export default function LearnPageClient({ slug }: LearnPageClientProps) {
     }).catch(() => { /* vẫn còn link mở /os-lab, /cpu-lab trong khối */ });
     return () => { huy = true; don?.(); };
   }, [currentLesson?.id, currentLesson?.content, locale]);
+  /* "💬 Hỏi slide này" trên chú thích từng ảnh slide (17/11/2026) — xem `nutHoiSlide.ts`. */
+  useNutHoiSlide(() => khungNoiDungRef.current, currentLesson?.id ?? null, [currentLesson?.id, currentLesson?.content, locale]);
   // Only the setter is used now (we reset it on lesson change / completion);
   // the value itself is no longer read since we dropped the YouTube auto-mark.
   const [, setVideoCompleted] = useState(false);
@@ -1137,6 +1141,15 @@ export default function LearnPageClient({ slug }: LearnPageClientProps) {
                       );
                     })()}
                   </div>
+
+                  {/* 📑 Mục lục video + "Hỏi phần này" / "Hỏi đoạn đang xem" / "Tóm tắt video" (17/11/2026). Nó cũng
+                      công bố video cho gia sư ⇒ CuongMini nghe kèm phụ đề + giây đang xem ở mọi câu hỏi. */}
+                  <MucLucVideo
+                    lessonId={currentLesson.id}
+                    track={activeVideo?.url ? activeTrack : null}
+                    layGiay={layGiayVideo}
+                    tua={(g) => tuaToiMoc(g, null)}
+                  />
 
                   {/* 🏋️ Luyện tập trên Code Lab — NGAY dưới khung video (giọng
                       đọc cuối video chỉ vào đây). Khoá trong chương trình luyện

@@ -2,8 +2,19 @@
   "courseSlug": "programming-fundamentals",
   "sinhBoi": "scripts/phu-de-tu-video-rieng.mjs",
   "lessons": {
-    "prf192-0-0-slides-gioi-thieu-mon": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/programming-fundamentals/00-gioi-thieu-huong-dan-hoc/00-01-slide-gioi-thieu-mon-de3cca1e.mp4","durationSec":955.27,"nguonCau":"srt",
-      "parts": [],
+    "prf192-0-0-slides-gioi-thieu-mon": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/programming-fundamentals/00-gioi-thieu-huong-dan-hoc/00-01-slide-gioi-thieu-mon-de3cca1e.mp4","durationSec":955.27,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":97.42,"ten":"Chào môn PRF192 · Bìa · Programming Fundamentals using C"},
+        {"t":97.42,"den":187.79,"ten":"Vì sao học môn này (1/2) · Thấy bộ nhớ: biến và con trỏ"},
+        {"t":187.79,"den":295.27,"ten":"Vì sao học môn này (2/2) · Vì sao chọn C"},
+        {"t":295.27,"den":391.71,"ten":"Mục tiêu môn học · Mô tả môn · chín khối"},
+        {"t":391.71,"den":492.29,"ten":"Kế hoạch môn trên FLM · Tài liệu tham khảo"},
+        {"t":492.29,"den":573.07,"ten":"Chạy thật: chương trình kiểm tra công cụ · Nội quy lớp"},
+        {"t":573.07,"den":666.98,"ten":"Cách chấm điểm · Thấy công thức điểm chạy"},
+        {"t":666.98,"den":760.18,"ten":"Cách học · Chính sách học thuật"},
+        {"t":760.18,"den":870.95,"ten":"Cài công cụ · hỏi đáp"},
+        {"t":870.95,"den":955.27,"ten":"Tự kiểm tra · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài đầu tiên của môn PRF192, lập trình C căn bản."},
         {"t":11.4,"vi":"Đây là môn lập trình đầu tiên của ngành, và là nền cho Java ở PRO192, cấu trúc dữ liệu ở CSD201."},
@@ -171,8 +182,13 @@
         {"t":944.74,"vi":"Bạn mở Code Lab C ngay dưới video, làm vài bài in ra màn hình cho quen tay, rồi sang bài 0.1: bản đồ môn học."}
       ]
     },
-    "prf192-0-5-cai-dat-moi-truong": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/programming-fundamentals/00-gioi-thieu-huong-dan-hoc/00-06-cai-dat-cong-cu-1e307f11.mp4","durationSec":531.22,"nguonCau":"srt",
-      "parts": [],
+    "prf192-0-5-cai-dat-moi-truong": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/programming-fundamentals/00-gioi-thieu-huong-dan-hoc/00-06-cai-dat-cong-cu-1e307f11.mp4","durationSec":531.22,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":146.13,"ten":"Mở đầu · bài này học gì"},
+        {"t":146.13,"den":222.49,"ten":"Giờ mình chạy đúng đoạn mã đó bằng…"},
+        {"t":222.49,"den":365.39,"ten":"Giờ tới lựa chọn B, năm bước"},
+        {"t":365.39,"den":531.22,"ten":"Cuối cùng là gỡ lỗi"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 0.5 của môn PRF192: cài đặt công cụ lập trình C."},
         {"t":12.16,"vi":"Bài trước mình đã biết C ra đời khoảng năm 1972, và đi qua bản đồ mười chương của môn."},
@@ -271,8 +287,19 @@
         {"t":520.3,"vi":"Trong lúc cài, bạn vào Code Lab C ngay dưới video để chạy C trên trình duyệt. Bài sau: slide chương một, nhập môn lập trình."}
       ]
     },
-    "prf192-1-0a-slides-nhap-mon-lap-trinh": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/programming-fundamentals/01-nhap-mon-chuong-trinh-may-tinh/01-01-slide-nhap-mon-lap-trinh-33c79be8.mp4","durationSec":1463.8,"nguonCau":"srt",
-      "parts": [],
+    "prf192-1-0a-slides-nhap-mon-lap-trinh": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/programming-fundamentals/01-nhap-mon-chuong-trinh-may-tinh/01-01-slide-nhap-mon-lap-trinh-33c79be8.mp4","durationSec":1463.8,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":171.8,"ten":"Mở đầu · bài này học gì"},
+        {"t":171.8,"den":253.15,"ten":"Ví dụ như tệp"},
+        {"t":253.15,"den":349.89,"ten":"Ví dụ, sinh viên xếp hàng quá lâu…"},
+        {"t":349.89,"den":527.41,"ten":"Bước hai và ba gộp thành một dòng…"},
+        {"t":527.41,"den":700,"ten":"Đáp đủ hai chữ"},
+        {"t":700,"den":833.6,"ten":"Mình cho ba bước đó chạy"},
+        {"t":833.6,"den":982.5,"ten":"Bẫy thi: ổ cứng hay SSD không phải…"},
+        {"t":982.5,"den":1159.91,"ten":"Chạy thật chương trình in bit"},
+        {"t":1159.91,"den":1330.11,"ten":"Trong C, dấu và đặt trước tên biến…"},
+        {"t":1330.11,"den":1463.8,"ten":"Giờ tới lượt bạn, bốn việc"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, mình bắt đầu chương một của môn PRF192: chương trình và máy tính."},
         {"t":11.48,"vi":"Ở bài 0.5, bạn đã cài công cụ và chạy được chương trình C đầu tiên."},
@@ -559,8 +586,21 @@
         {"t":1453.38,"vi":"Bạn mở Code Lab C, làm vài bài in ra màn hình, rồi sang bài 1.0b: trình biên dịch và cấu trúc chương trình C."}
       ]
     },
-    "prf192-1-0b-slides-bien-dich-cau-truc-c": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/programming-fundamentals/01-nhap-mon-chuong-trinh-may-tinh/01-02-slide-bien-dich-cau-truc-c-580f0317.mp4","durationSec":1443.93,"nguonCau":"srt",
-      "parts": [],
+    "prf192-1-0b-slides-bien-dich-cau-truc-c": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/programming-fundamentals/01-nhap-mon-chuong-trinh-may-tinh/01-02-slide-bien-dich-cau-truc-c-580f0317.mp4","durationSec":1443.93,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":98.94,"ten":"Mở đầu · bài này học gì"},
+        {"t":98.94,"den":184.5,"ten":"Mình chạy đúng chương trình này bằng GCC…"},
+        {"t":184.5,"den":293.5,"ten":"Câu hỏi của mục này"},
+        {"t":293.5,"den":471.27,"ten":"Bẫy: C++ và Java mới hơn nhưng vẫn…"},
+        {"t":471.27,"den":556.31,"ten":"Slide ba mươi hai vẽ đúng dây chuyền…"},
+        {"t":556.31,"den":697.1,"ten":"Bẫy hay sai nhất"},
+        {"t":697.1,"den":868.39,"ten":"Câu hỏi rất có lý"},
+        {"t":868.39,"den":997.92,"ten":"Chạy thật ba ý của slide"},
+        {"t":997.92,"den":1084.66,"ten":"Bước một: tải và cài MinGW hoặc TDM-GCC"},
+        {"t":1084.66,"den":1185.87,"ten":"Bước bốn: viết Hello.c bằng trình soạn văn…"},
+        {"t":1185.87,"den":1364.88,"ten":"Thứ ba không hẳn là lỗi"},
+        {"t":1364.88,"den":1443.93,"ten":"Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, mình đi tiếp nửa sau bộ slide buổi một của PRF192."},
         {"t":10.87,"vi":"Bài 1.0a dừng ở lệnh máy: opcode cộng toán hạng, thứ duy nhất CPU hiểu."},
@@ -833,8 +873,14 @@
         {"t":1434.11,"vi":"Bạn mở Code Lab C luyện vài bài, rồi sang bài 1.1: lập trình là gì, máy tính chạy chương trình ra sao."}
       ]
     },
-    "prf192-1-1-lap-trinh-la-gi": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/programming-fundamentals/01-nhap-mon-chuong-trinh-may-tinh/01-03-lap-trinh-la-gi-5c678296.mp4","durationSec":678.23,"nguonCau":"srt",
-      "parts": [],
+    "prf192-1-1-lap-trinh-la-gi": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/programming-fundamentals/01-nhap-mon-chuong-trinh-may-tinh/01-03-lap-trinh-la-gi-5c678296.mp4","durationSec":678.23,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":113.35,"ten":"Mở đầu · bài này học gì"},
+        {"t":113.35,"den":191.26,"ten":"Bước một là bài toán thực tế"},
+        {"t":191.26,"den":314.73,"ten":"Giờ mình bảo sai"},
+        {"t":314.73,"den":490.03,"ten":"Bước một, đọc"},
+        {"t":490.03,"den":678.23,"ten":"Đọc kỹ dòng đầu tiên"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 1.1 của PRF192."},
         {"t":9.88,"vi":"Hai bài slide trước đã đi hết buổi một: máy tính có gì bên trong, và chữ C đi qua bốn bước để thành tệp chạy."},
@@ -964,8 +1010,14 @@
         {"t":669.34,"vi":"Bạn mở Code Lab C làm bài in dòng chữ của bạn, rồi sang bài 1.2: quy trình phát triển phần mềm."}
       ]
     },
-    "prf192-1-2-phat-trien-phan-mem": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/programming-fundamentals/01-nhap-mon-chuong-trinh-may-tinh/01-04-cac-buoc-phat-trien-ae451b34.mp4","durationSec":517.32,"nguonCau":"srt",
-      "parts": [],
+    "prf192-1-2-phat-trien-phan-mem": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/programming-fundamentals/01-nhap-mon-chuong-trinh-may-tinh/01-04-cac-buoc-phat-trien-ae451b34.mp4","durationSec":517.32,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":128.73,"ten":"Mở đầu · bài này học gì"},
+        {"t":128.73,"den":232.88,"ten":"Cuối cùng, số giây lẻ là số giây…"},
+        {"t":232.88,"den":312.38,"ten":"Phần hai của bài"},
+        {"t":312.38,"den":396.62,"ten":"Tóm lại, biên dịch bắt sớm lỗi cú…"},
+        {"t":396.62,"den":517.32,"ten":"Ví dụ một trăm ba mươi lăm phút…"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 1.2 của PRF192."},
         {"t":9.96,"vi":"Bài trước, mình thấy máy làm đúng y lời bạn, và một dòng thiếu ngoặc cho ra điểm trung bình mười tám."},
@@ -1066,8 +1118,12 @@
         {"t":508.92,"vi":"Bạn mở Code Lab C luyện đề đổi phút, rồi sang bài 1.3: cấu trúc một chương trình C."}
       ]
     },
-    "prf192-1-3-cau-truc-chuong-trinh-c": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/programming-fundamentals/01-nhap-mon-chuong-trinh-may-tinh/01-05-cau-truc-chuong-trinh-c-cfeda16e.mp4","durationSec":453.71,"nguonCau":"srt",
-      "parts": [],
+    "prf192-1-3-cau-truc-chuong-trinh-c": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/programming-fundamentals/01-nhap-mon-chuong-trinh-may-tinh/01-05-cau-truc-chuong-trinh-c-cfeda16e.mp4","durationSec":453.71,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":125.22,"ten":"Mở đầu · bài này học gì"},
+        {"t":125.22,"den":246.43,"ten":"Phần hai. Khi bạn chạy tệp"},
+        {"t":246.43,"den":453.71,"ten":"Phần bốn, return 0"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 1.3, bài cuối của chương một."},
         {"t":9.73,"vi":"Ở bài 1.1, mình dặn đừng vội hiểu dòng include hay return 0."},
@@ -1163,8 +1219,22 @@
         {"t":442.48,"vi":"Hết chương một. Bạn làm bài kiểm tra chương trên trang môn học, luyện Code Lab C, rồi sang chương hai: biến, kiểu dữ liệu và nhập xuất."}
       ]
     },
-    "prf192-2-0a-slides-bien-kieu-du-lieu": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/programming-fundamentals/02-bien-kieu-du-lieu-nhap-xuat/02-01-slide-bien-kieu-du-lieu-0530bd5e.mp4","durationSec":1585.73,"nguonCau":"srt",
-      "parts": [],
+    "prf192-2-0a-slides-bien-kieu-du-lieu": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/programming-fundamentals/02-bien-kieu-du-lieu-nhap-xuat/02-01-slide-bien-kieu-du-lieu-0530bd5e.mp4","durationSec":1585.73,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":174.52,"ten":"Mở đầu · bài này học gì"},
+        {"t":174.52,"den":280.56,"ten":"Hai từ phải tách bạch"},
+        {"t":280.56,"den":437.38,"ten":"Bẫy thi: biến không hẳn là ô nhớ"},
+        {"t":437.38,"den":598.05,"ten":"Slide tiếp theo nói hai kiểu số thực"},
+        {"t":598.05,"den":682.46,"ten":"Bài tập môn học và đề PE thì…"},
+        {"t":682.46,"den":819.87,"ten":"Vì sao nên dùng"},
+        {"t":819.87,"den":895.09,"ten":"Chạy thật chương trình in bit"},
+        {"t":895.09,"den":1026.16,"ten":"Bước hai, cộng một vào bit cuối, ở…"},
+        {"t":1026.16,"den":1103.4,"ten":"Cái bẫy là thế này"},
+        {"t":1103.4,"den":1240.73,"ten":"Chạy thật cả hai cách đọc"},
+        {"t":1240.73,"den":1324.78,"ten":"Chạy thật: biến c giữ chữ A hoa"},
+        {"t":1324.78,"den":1433.71,"ten":"Cái bẫy là mã sách"},
+        {"t":1433.71,"den":1585.73,"ten":"Chạy thật trên máy soạn bài"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, mình bắt đầu chương hai của PRF192: biến, kiểu dữ liệu và nhập xuất."},
         {"t":12.05,"vi":"Chương một dừng ở khung chương trình: include, hàm main, các câu lệnh, rồi return 0."},
@@ -1471,8 +1541,28 @@
         {"t":1574.89,"vi":"Bạn mở Code Lab C luyện vài bài, rồi sang bài 2.0b: literal, hằng, và nhập xuất với printf, scanf."}
       ]
     },
-    "prf192-2-0b-slides-literal-hang-nhap-xuat": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/programming-fundamentals/02-bien-kieu-du-lieu-nhap-xuat/02-02-slide-literal-hang-nhap-xuat-150679cf.mp4","durationSec":2081.81,"nguonCau":"srt",
-      "parts": [],
+    "prf192-2-0b-slides-literal-hang-nhap-xuat": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/programming-fundamentals/02-bien-kieu-du-lieu-nhap-xuat/02-02-slide-literal-hang-nhap-xuat-150679cf.mp4","durationSec":2081.81,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":131.09,"ten":"Mở đầu · bài này học gì"},
+        {"t":131.09,"den":214.53,"ten":"Chạy thật. Lần này numberOfClasses in ra số…"},
+        {"t":214.53,"den":329.49,"ten":"Chạy thật bốn tên sai mà bài web…"},
+        {"t":329.49,"den":475.63,"ten":"Chạy thật với rộng năm phẩy năm"},
+        {"t":475.63,"den":561.23,"ten":"Chạy thật trên terminal"},
+        {"t":561.23,"den":696.01,"ten":"Chạy thật. charVar một byte"},
+        {"t":696.01,"den":810.87,"ten":"Chạy thật trên máy Intel"},
+        {"t":810.87,"den":897.43,"ten":"Chạy thật bốn cách viết"},
+        {"t":897.43,"den":976.6,"ten":"Chạy thật từng nhóm"},
+        {"t":976.6,"den":1066.13,"ten":"Chạy thật bản gốc trên slide"},
+        {"t":1066.13,"den":1188.66,"ten":"Chạy thật sizeof từng literal"},
+        {"t":1188.66,"den":1285.8,"ten":"Chạy thật hai bản trên slide"},
+        {"t":1285.8,"den":1375.04,"ten":"Chạy thật: dòng đó ra năm"},
+        {"t":1375.04,"den":1453.28,"ten":"Chạy thật. Biến ch giữ ký tự ba:…"},
+        {"t":1453.28,"den":1535.66,"ten":"Chạy thật số hai trăm năm mươi lăm…"},
+        {"t":1535.66,"den":1666.92,"ten":"Vì sao scanf cần dấu và?"},
+        {"t":1666.92,"den":1807.23,"ten":"Chạy thật mã slide"},
+        {"t":1807.23,"den":1981.41,"ten":"Chạy thật. x bằng một, y bằng chín"},
+        {"t":1981.41,"den":2081.81,"ten":"Đáp án một, chạy thật"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đây là bài 2.0b của PRF192: literal, hằng, và nhập xuất bằng printf, scanf."},
         {"t":14.69,"vi":"Bài trước hỏi: máy lưu một con số thế nào."},
@@ -1860,8 +1950,13 @@
         {"t":2074.02,"vi":"Bạn mở Code Lab C luyện vài bài, rồi sang bài 2.1: biến và hằng số."}
       ]
     },
-    "prf192-2-1-bien-hang": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/programming-fundamentals/02-bien-kieu-du-lieu-nhap-xuat/02-03-bien-hang-c525b01c.mp4","durationSec":571.27,"nguonCau":"srt",
-      "parts": [],
+    "prf192-2-1-bien-hang": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/programming-fundamentals/02-bien-kieu-du-lieu-nhap-xuat/02-03-bien-hang-c525b01c.mp4","durationSec":571.27,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":103.54,"ten":"Mở đầu · bài này học gì"},
+        {"t":103.54,"den":264.53,"ten":"Chạy thật, bốn dòng in ra đúng bốn…"},
+        {"t":264.53,"den":364.15,"ten":"Bẫy ba là hằng số"},
+        {"t":364.15,"den":571.27,"ten":"Chạy thật. dem bằng không. Còn y in…"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 2.1: biến và hằng số."},
         {"t":9.57,"vi":"Hai bài slide trước đã nói biến là một ô nhớ có tên, có kiểu, có địa chỉ. Hôm nay mình không nhắc lại slide."},
@@ -1977,8 +2072,12 @@
         {"t":559.8,"vi":"Luyện thêm trên Code Lab C. Bài sau, 2.2: các kiểu dữ liệu, và vì sao không phẩy một cộng không phẩy hai không bằng không phẩy ba."}
       ]
     },
-    "prf192-2-2-kieu-du-lieu": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/programming-fundamentals/02-bien-kieu-du-lieu-nhap-xuat/02-04-kieu-du-lieu-c54c2707.mp4","durationSec":492,"nguonCau":"srt",
-      "parts": [],
+    "prf192-2-2-kieu-du-lieu": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/programming-fundamentals/02-bien-kieu-du-lieu-nhap-xuat/02-04-kieu-du-lieu-c54c2707.mp4","durationSec":492,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":114.76,"ten":"Mở đầu · bài này học gì"},
+        {"t":114.76,"den":291.3,"ten":"Chạy thật, ra đúng bốn dòng đó"},
+        {"t":291.3,"den":492,"ten":"In hai mươi chữ số sau dấu phẩy…"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 2.2: kiểu dữ liệu."},
         {"t":9.29,"vi":"Bài 2.0a đã đo bằng sizeof: int bốn byte, double tám byte, char một byte."},
@@ -2087,8 +2186,12 @@
         {"t":482.12,"vi":"Luyện thêm trên Code Lab C. Bài sau, 2.3: scanf và printf, nhập xuất cho đúng kiểu bài PE."}
       ]
     },
-    "prf192-2-3-scanf-printf": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/programming-fundamentals/02-bien-kieu-du-lieu-nhap-xuat/02-05-scanf-printf-5a646292.mp4","durationSec":379.04,"nguonCau":"srt",
-      "parts": [],
+    "prf192-2-3-scanf-printf": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/programming-fundamentals/02-bien-kieu-du-lieu-nhap-xuat/02-05-scanf-printf-5a646292.mp4","durationSec":379.04,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":101.37,"ten":"Mở đầu · bài này học gì"},
+        {"t":101.37,"den":221.05,"ten":"Chạy thật: ba dòng sau thẳng cột"},
+        {"t":221.05,"den":379.04,"ten":"Bẫy hai nguy hiểm hơn"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 2.3, bài cuối chương hai: scanf và printf."},
         {"t":10.8,"vi":"Bài 2.0b đã chạy thật ba bẫy: quên dấu và, chọn sai phần trăm, và phím ENTER còn sót. Mình không nhắc lại."},
@@ -2167,8 +2270,24 @@
         {"t":368.78,"vi":"Hết chương hai. Làm bài kiểm tra chương trên trang môn học, luyện Code Lab C, rồi sang chương ba: biểu thức và toán tử."}
       ]
     },
-    "prf192-3-0-slides-bieu-thuc-toan-tu": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/programming-fundamentals/03-bieu-thuc-toan-tu/03-01-slide-bieu-thuc-toan-tu-8d836d2a.mp4","durationSec":1722.42,"nguonCau":"srt",
-      "parts": [],
+    "prf192-3-0-slides-bieu-thuc-toan-tu": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/programming-fundamentals/03-bieu-thuc-toan-tu/03-01-slide-bieu-thuc-toan-tu-8d836d2a.mp4","durationSec":1722.42,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":100.51,"ten":"Mở đầu · bài này học gì"},
+        {"t":100.51,"den":263.51,"ten":"Ví dụ hai có thêm hàm sqrt"},
+        {"t":263.51,"den":373.09,"ten":"Chạy thật: mười chia ba ra ba"},
+        {"t":373.09,"den":453.35,"ten":"Chạy thật đúng mã slide"},
+        {"t":453.35,"den":544.64,"ten":"Chạy thật mã slide bốn mươi chín bằng…"},
+        {"t":544.64,"den":662.4,"ten":"Chạy thật mã slide năm mươi"},
+        {"t":662.4,"den":784.67,"ten":"Chạy thật: chương trình in an toàn"},
+        {"t":784.67,"den":894.51,"ten":"Chạy thật đúng mã slide"},
+        {"t":894.51,"den":985.12,"ten":"Chạy thật: mười hai dịch trái một ra…"},
+        {"t":985.12,"den":1147.55,"ten":"Bẫy dấu cách"},
+        {"t":1147.55,"den":1225.62,"ten":"Chạy thật mã slide năm mươi sáu"},
+        {"t":1225.62,"den":1371.46,"ten":"Ví dụ int với long ra long"},
+        {"t":1371.46,"den":1492.77,"ten":"Chạy thật mã slide năm mươi chín"},
+        {"t":1492.77,"den":1670.47,"ten":"Chạy thật: một"},
+        {"t":1670.47,"den":1722.42,"ten":"Trừ ba và trừ một"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đây là bài 3.0 của PRF192: biểu thức và toán tử."},
         {"t":11.48,"vi":"Chương hai dạy cách cất một giá trị vào ô nhớ."},
@@ -2526,8 +2645,13 @@
         {"t":1714.63,"vi":"Bạn mở Code Lab C luyện vài bài, rồi sang bài 3.1: các nhóm toán tử."}
       ]
     },
-    "prf192-3-1-toan-tu": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/programming-fundamentals/03-bieu-thuc-toan-tu/03-02-cac-nhom-toan-tu-df1be5f8.mp4","durationSec":329.76,"nguonCau":"srt",
-      "parts": [],
+    "prf192-3-1-toan-tu": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/programming-fundamentals/03-bieu-thuc-toan-tu/03-02-cac-nhom-toan-tu-df1be5f8.mp4","durationSec":329.76,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":77.19,"ten":"Mở đầu · bài này học gì"},
+        {"t":77.19,"den":144.6,"ten":"Chạy thật ví dụ của bài web"},
+        {"t":144.6,"den":221.14,"ten":"Chạy thật, chương trình in đúng bảng đó"},
+        {"t":221.14,"den":329.76,"ten":"Chạy thật với bảy phẩy năm"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 3.1: các nhóm toán tử."},
         {"t":9.49,"vi":"Bài 3.0 đã đi đủ mười tám slide: chia nguyên, đoản mạch, toán tử bit, ép kiểu. Mình không giảng lại slide."},
@@ -2601,8 +2725,11 @@
         {"t":321.54,"vi":"Bạn mở Code Lab C luyện vài bài, rồi sang bài 3.2: ép kiểu và thứ tự ưu tiên."}
       ]
     },
-    "prf192-3-2-uu-tien": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/programming-fundamentals/03-bieu-thuc-toan-tu/03-03-ep-kieu-thu-tu-uu-tien-df7fd65a.mp4","durationSec":333.45,"nguonCau":"srt",
-      "parts": [],
+    "prf192-3-2-uu-tien": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/programming-fundamentals/03-bieu-thuc-toan-tu/03-03-ep-kieu-thu-tu-uu-tien-df7fd65a.mp4","durationSec":333.45,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":183.09,"ten":"Mở đầu · bài này học gì"},
+        {"t":183.09,"den":333.45,"ten":"Chạy thật ra đúng bốn phẩy bảy và…"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 3.2, bài cuối chương ba: ép kiểu và thứ tự ưu tiên."},
         {"t":11.64,"vi":"Bài 3.0 đã giải năm câu của slide sáu mươi, và chạy thử cảnh báo của GCC."},
@@ -2672,8 +2799,21 @@
         {"t":326.17,"vi":"Bạn mở Code Lab C luyện vài bài, rồi sang chương bốn: cấu trúc điều khiển."}
       ]
     },
-    "prf192-4-0a-slides-cau-truc-re-nhanh": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/programming-fundamentals/04-cau-truc-dieu-khien/04-01-slide-cau-truc-re-nhanh-3102e24e.mp4","durationSec":1589.61,"nguonCau":"srt",
-      "parts": [],
+    "prf192-4-0a-slides-cau-truc-re-nhanh": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/programming-fundamentals/04-cau-truc-dieu-khien/04-01-slide-cau-truc-re-nhanh-3102e24e.mp4","durationSec":1589.61,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":182.41,"ten":"Mở đầu · bài này học gì"},
+        {"t":182.41,"den":357.26,"ten":"Mẹo khi bí bài"},
+        {"t":357.26,"den":471.22,"ten":"Kỳ sau học Java ở PRO192"},
+        {"t":471.22,"den":551.05,"ten":"Chạy thật tệp tuyetdoi chấm c"},
+        {"t":551.05,"den":679.77,"ten":"Chạy thật với trừ năm"},
+        {"t":679.77,"den":772.25,"ten":"Chạy thật mã của slide, bản có else"},
+        {"t":772.25,"den":871.65,"ten":"Chạy thật: nhập năm"},
+        {"t":871.65,"den":962.62,"ten":"Chạy thật: hai áo ra hai trăm bốn…"},
+        {"t":962.62,"den":1126.05,"ten":"Câu hỏi bên phải"},
+        {"t":1126.05,"den":1251.91,"ten":"Chạy thật bản dùng toán tử"},
+        {"t":1251.91,"den":1393.67,"ten":"Câu hỏi: nhập tám thì in gì?"},
+        {"t":1393.67,"den":1589.61,"ten":"Chạy thật mã slide"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đây là bài 4.0a của PRF192: cấu trúc rẽ nhánh."},
         {"t":11.37,"vi":"Tới giờ, mọi chương trình bạn viết đều chạy thẳng từ trên xuống, mỗi dòng đúng một lần."},
@@ -2995,8 +3135,22 @@
         {"t":1582.32,"vi":"Bạn mở Code Lab C luyện vài bài, rồi sang bài 4.0b: vòng lặp."}
       ]
     },
-    "prf192-4-0b-slides-vong-lap": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/programming-fundamentals/04-cau-truc-dieu-khien/04-02-slide-vong-lap-bba68fc8.mp4","durationSec":1617.35,"nguonCau":"srt",
-      "parts": [],
+    "prf192-4-0b-slides-vong-lap": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/programming-fundamentals/04-cau-truc-dieu-khien/04-02-slide-vong-lap-bba68fc8.mp4","durationSec":1617.35,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":97.3,"ten":"Mở đầu · bài này học gì"},
+        {"t":97.3,"den":221.54,"ten":"Trước khi viết mã"},
+        {"t":221.54,"den":330.99,"ten":"Chạy thật: S bằng năm nghìn không trăm…"},
+        {"t":330.99,"den":445.68,"ten":"Chạy thật cả ba biểu thức trong một…"},
+        {"t":445.68,"den":624.9,"ten":"Chạy thật ba dạng for"},
+        {"t":624.9,"den":751.52,"ten":"Chạy thật mã slide"},
+        {"t":751.52,"den":863.12,"ten":"Chạy thật với n bằng không"},
+        {"t":863.12,"den":1010.19,"ten":"Cuối cùng in sum"},
+        {"t":1010.19,"den":1106.96,"ten":"Chạy thật: bốn chữ số"},
+        {"t":1106.96,"den":1267.31,"ten":"Chạy thật hai mã slide"},
+        {"t":1267.31,"den":1346.58,"ten":"Chạy thật cả hai bản của slide"},
+        {"t":1346.58,"den":1443.96,"ten":"Chạy thật chương trình phải trong một giây"},
+        {"t":1443.96,"den":1617.35,"ten":"Chạy thật cả hai với cùng dữ liệu"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đây là bài 4.0b của PRF192: vòng lặp."},
         {"t":11.12,"vi":"Bài trước, chương trình biết chọn đường."},
@@ -3337,8 +3491,22 @@
         {"t":1608.89,"vi":"Bạn mở Code Lab C luyện vài bài, rồi sang bài 4.0c: phong cách lập trình và chạy tay."}
       ]
     },
-    "prf192-4-0c-slides-phong-cach-walkthrough-debug": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/programming-fundamentals/04-cau-truc-dieu-khien/04-03-slide-phong-cach-chay-tay-26878b82.mp4","durationSec":1581.94,"nguonCau":"srt",
-      "parts": [],
+    "prf192-4-0c-slides-phong-cach-walkthrough-debug": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/programming-fundamentals/04-cau-truc-dieu-khien/04-03-slide-phong-cach-chay-tay-26878b82.mp4","durationSec":1581.94,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":107.37,"ten":"Mở đầu · bài này học gì"},
+        {"t":107.37,"den":212.87,"ten":"Chạy thật để thấy"},
+        {"t":212.87,"den":303.58,"ten":"Bẫy một: đừng đặt tên là chữ l…"},
+        {"t":303.58,"den":477.57,"ten":"Giờ tới chỗ nguy hiểm"},
+        {"t":477.57,"den":590.6,"ten":"Slide Guidelines phần hai"},
+        {"t":590.6,"den":766.51,"ten":"Chạy thật quy tắc ba và bốn"},
+        {"t":766.51,"den":942.44,"ten":"Dòng cuối, a cộng b bằng hai mươi…"},
+        {"t":942.44,"den":1035.64,"ten":"Khung dưới đổi định dạng"},
+        {"t":1035.64,"den":1143.18,"ten":"Câu hỏi hai"},
+        {"t":1143.18,"den":1228.82,"ten":"Chạy thật xem gạch g mua được gì"},
+        {"t":1228.82,"den":1367.72,"ten":"Bước bốn: chạy trình gỡ lỗi"},
+        {"t":1367.72,"den":1540.71,"ten":"Phần hai: viết một chương trình có các…"},
+        {"t":1540.71,"den":1581.94,"ten":"Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đây là bài 4.0c của PRF192: phong cách lập trình, chạy tay và gỡ lỗi."},
         {"t":12.91,"vi":"Hai bài trước dạy máy làm gì."},
@@ -3664,8 +3832,13 @@
         {"t":1574.78,"vi":"Bạn mở Code Lab C luyện vài bài, rồi sang bài 4.1: rẽ nhánh."}
       ]
     },
-    "prf192-4-1-re-nhanh": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/programming-fundamentals/04-cau-truc-dieu-khien/04-04-re-nhanh-if-switch-9835403f.mp4","durationSec":454.94,"nguonCau":"srt",
-      "parts": [],
+    "prf192-4-1-re-nhanh": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/programming-fundamentals/04-cau-truc-dieu-khien/04-04-re-nhanh-if-switch-9835403f.mp4","durationSec":454.94,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":116.46,"ten":"Mở đầu · bài này học gì"},
+        {"t":116.46,"den":241.05,"ten":"Bẫy hai, giống bài bậc thang áo ở…"},
+        {"t":241.05,"den":415.73,"ten":"Chạy thật: tháng hai năm hai nghìn không…"},
+        {"t":415.73,"den":454.94,"ten":"Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 4.1: rẽ nhánh với if, else và switch."},
         {"t":11.18,"vi":"Bài 4.0a đã giảng slide của trường: lưu đồ, dangling else, toán tử ba ngôi, và switch rơi tầng. Mình không giảng lại."},
@@ -3762,8 +3935,13 @@
         {"t":447.71,"vi":"Bạn mở Code Lab C luyện vài bài, rồi sang bài 4.2: vòng lặp."}
       ]
     },
-    "prf192-4-2-vong-lap": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/programming-fundamentals/04-cau-truc-dieu-khien/04-05-vong-lap-for-while-do-1efd883d.mp4","durationSec":430.58,"nguonCau":"srt",
-      "parts": [],
+    "prf192-4-2-vong-lap": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/programming-fundamentals/04-cau-truc-dieu-khien/04-05-vong-lap-for-while-do-1efd883d.mp4","durationSec":430.58,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":89.12,"ten":"Mở đầu · bài này học gì"},
+        {"t":89.12,"den":219.03,"ten":"Chạy thật in tám, bốn, hai"},
+        {"t":219.03,"den":296.4,"ten":"Bẫy cuối. Vòng for cho x kiểu float…"},
+        {"t":296.4,"den":430.58,"ten":"Chạy thật với ma trận bốn nghìn chín…"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 4.2: vòng lặp for, while và do while."},
         {"t":11.27,"vi":"Bài 4.0b đã giảng slide: bảng vết, lệch một, break, continue và cờ."},
@@ -3858,8 +4036,12 @@
         {"t":423.59,"vi":"Bạn mở Code Lab C luyện vài bài, rồi sang Workshop 1 của chương bốn."}
       ]
     },
-    "prf192-4-workshop1": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/programming-fundamentals/04-cau-truc-dieu-khien/04-06-workshop-1-97fa4309.mp4","durationSec":283.88,"nguonCau":"srt",
-      "parts": [],
+    "prf192-4-workshop1": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/programming-fundamentals/04-cau-truc-dieu-khien/04-06-workshop-1-97fa4309.mp4","durationSec":283.88,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":63.6,"ten":"Mở đầu · bài này học gì"},
+        {"t":63.6,"den":215.75,"ten":"Bước hai: biến mỗi phần thành một bảng…"},
+        {"t":215.75,"den":283.88,"ten":"Chạy thật lời giải của mình"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Workshop 1 của chương bốn: máy tính bỏ túi và phân loại điểm."},
         {"t":11.16,"vi":"Đề có ba phần, gom đủ những gì đã học: biến, nhập xuất, biểu thức, rẽ nhánh và vòng lặp."},
@@ -3916,8 +4098,21 @@
         {"t":275.65,"vi":"Bạn mở Code Lab C làm và nộp Workshop 1, rồi sang chương năm: hàm và module."}
       ]
     },
-    "prf192-5-0a-slides-module-cohesion-coupling": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/programming-fundamentals/05-ham-module/05-01-slide-module-cohesion-coupling-de5b5513.mp4","durationSec":1594.12,"nguonCau":"srt",
-      "parts": [],
+    "prf192-5-0a-slides-module-cohesion-coupling": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/programming-fundamentals/05-ham-module/05-01-slide-module-cohesion-coupling-de5b5513.mp4","durationSec":1594.12,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":180.43,"ten":"Mở đầu · bài này học gì"},
+        {"t":180.43,"den":256.04,"ten":"Slide Contents, mục lục"},
+        {"t":256.04,"den":434.37,"ten":"Ví dụ nấu cơm chia thành sáu việc"},
+        {"t":434.37,"den":535.65,"ten":"Để ý việc nhập vẫn ở trong main"},
+        {"t":535.65,"den":651.98,"ten":"Chạy thật hàng hai của bảng"},
+        {"t":651.98,"den":830.23,"ten":"Slide tiếp theo cho sáu quy tắc"},
+        {"t":830.23,"den":961.63,"ten":"Dòng cuối là mẹo quan trọng nhất"},
+        {"t":961.63,"den":1040.04,"ten":"Chạy thật từng mẫu"},
+        {"t":1040.04,"den":1169.41,"ten":"Câu hỏi khi thiết kế"},
+        {"t":1169.41,"den":1348.38,"ten":"Chạy thật: A tăng bộ đếm hai lần"},
+        {"t":1348.38,"den":1432.19,"ten":"Đề hỏi vì sao đạt?"},
+        {"t":1432.19,"den":1594.12,"ten":"Bước một, động từ"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đây là bài 5.0a của PRF192."},
         {"t":10.05,"vi":"Mở màn chương năm: hàm và module."},
@@ -4256,8 +4451,20 @@
         {"t":1585.18,"vi":"Bạn mở Code Lab C luyện vài bài, rồi sang bài 5.0b: viết hàm C và prototype."}
       ]
     },
-    "prf192-5-0b-slides-ham-c-prototype": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/programming-fundamentals/05-ham-module/05-02-slide-ham-c-prototype-59df2c88.mp4","durationSec":1637.46,"nguonCau":"srt",
-      "parts": [],
+    "prf192-5-0b-slides-ham-c-prototype": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/programming-fundamentals/05-ham-module/05-02-slide-ham-c-prototype-59df2c88.mp4","durationSec":1637.46,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":91.04,"ten":"Mở đầu · bài này học gì"},
+        {"t":91.04,"den":260.46,"ten":"Ví dụ một"},
+        {"t":260.46,"den":438.4,"ten":"Chạy thật bốn bản"},
+        {"t":438.4,"den":611.24,"ten":"Là mã ASCII của A tới Y"},
+        {"t":611.24,"den":756.65,"ten":"Bước hai, tự làm bằng tay với n…"},
+        {"t":756.65,"den":904.96,"ten":"Chạy thật: chín"},
+        {"t":904.96,"den":1082.42,"ten":"Chạy thật: hai mũ mười là một nghìn…"},
+        {"t":1082.42,"den":1165.72,"ten":"Đầu hàm là int sumDivisors, int n"},
+        {"t":1165.72,"den":1306.81,"ten":"Bước một: trình biên dịch ghi nhận nguyên…"},
+        {"t":1306.81,"den":1450.01,"ten":"Ví dụ trên slide đặt hàm sumOddNumbers vào…"},
+        {"t":1450.01,"den":1637.46,"ten":"Chạy thật những luật dễ bị coi nhẹ"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đây là bài 5.0b của PRF192."},
         {"t":10.15,"vi":"Bài trước dạy chia chương trình thành module trên giấy."},
@@ -4601,8 +4808,20 @@
         {"t":1628.28,"vi":"Bạn luyện vài bài trên Code Lab C, rồi sang bài 5.0c: chuyện gì xảy ra trong bộ nhớ khi gọi hàm."}
       ]
     },
-    "prf192-5-0c-slides-stack-scope-walkthrough": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/programming-fundamentals/05-ham-module/05-03-slide-stack-scope-walkthrough-136f59bd.mp4","durationSec":1476.43,"nguonCau":"srt",
-      "parts": [],
+    "prf192-5-0c-slides-stack-scope-walkthrough": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/programming-fundamentals/05-ham-module/05-03-slide-stack-scope-walkthrough-136f59bd.mp4","durationSec":1476.43,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":180.58,"ten":"Mở đầu · bài này học gì"},
+        {"t":180.58,"den":358.58,"ten":"Bản đúng dùng phần trăm p"},
+        {"t":358.58,"den":443.46,"ten":"Main có x bằng năm, y bằng bảy"},
+        {"t":443.46,"den":580.51,"ten":"Bước một, Pick nouns, nhặt danh từ, thành…"},
+        {"t":580.51,"den":759.72,"ten":"Slide tiếp là mã C thật"},
+        {"t":759.72,"den":854.25,"ten":"Hàm docRac gọi ngay sau"},
+        {"t":854.25,"den":983.17,"ten":"Slide tiếp nhìn tầm nhìn theo mã nguồn"},
+        {"t":983.17,"den":1096.37,"ten":"Chạy thật, nhập mười hai, khớp slide"},
+        {"t":1096.37,"den":1210.86,"ten":"Chạy thật khớp"},
+        {"t":1210.86,"den":1388.93,"ten":"Chạy thật cả hai công thức trên năm…"},
+        {"t":1388.93,"den":1476.43,"ten":"Tự trả lời trước khi đáp án hiện…"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đây là bài 5.0c của PRF192, bài slide cuối của chương năm."},
         {"t":11.79,"vi":"Bài trước dạy viết hàm và nguyên mẫu."},
@@ -4891,8 +5110,12 @@
         {"t":1469.49,"vi":"Bạn luyện vài bài trên Code Lab C, rồi sang bài 5.1 về module."}
       ]
     },
-    "prf192-5-1-module": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/programming-fundamentals/05-ham-module/05-04-module-chia-nho-2fa0f15a.mp4","durationSec":421.78,"nguonCau":"srt",
-      "parts": [],
+    "prf192-5-1-module": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/programming-fundamentals/05-ham-module/05-04-module-chia-nho-2fa0f15a.mp4","durationSec":421.78,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":113.9,"ten":"Mở đầu · bài này học gì"},
+        {"t":113.9,"den":266.59,"ten":"Ví dụ hàm tongChuSo"},
+        {"t":266.59,"den":421.78,"ten":"Bẫy này rất hay gặp trong bài PE"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 5.1: module và tư duy chia nhỏ."},
         {"t":10.36,"vi":"Bài 5.0a đã giảng slide của trường về module, cohesion và coupling. Bài này cho bạn thấy tận mắt vì sao phải chia."},
@@ -4983,8 +5206,12 @@
         {"t":413.75,"vi":"Bạn mở Code Lab C luyện vài bài, rồi sang bài 5.2: định nghĩa và gọi hàm."}
       ]
     },
-    "prf192-5-2-ham": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/programming-fundamentals/05-ham-module/05-05-dinh-nghia-goi-ham-63ebae04.mp4","durationSec":338.14,"nguonCau":"srt",
-      "parts": [],
+    "prf192-5-2-ham": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/programming-fundamentals/05-ham-module/05-05-dinh-nghia-goi-ham-63ebae04.mp4","durationSec":338.14,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":73.29,"ten":"Mở đầu · bài này học gì"},
+        {"t":73.29,"den":148.26,"ten":"Bước một: main dừng lại ở dòng gọi"},
+        {"t":148.26,"den":338.14,"ten":"Bẫy một, ví dụ của bài web"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 5.2: định nghĩa và gọi hàm."},
         {"t":9.77,"vi":"Slide của trường đã giảng ở 5.0b và 5.0c: nguyên mẫu, tham số, đối số, và khung stack. Mình không giảng lại."},
@@ -5060,8 +5287,13 @@
         {"t":330.65,"vi":"Bạn mở Code Lab C luyện vài bài, rồi sang bài 5.3: phạm vi biến."}
       ]
     },
-    "prf192-5-workshop2": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/programming-fundamentals/05-ham-module/05-07-workshop-2-76f99fc7.mp4","durationSec":297.3,"nguonCau":"srt",
-      "parts": [],
+    "prf192-5-workshop2": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/programming-fundamentals/05-ham-module/05-07-workshop-2-76f99fc7.mp4","durationSec":297.3,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":68.77,"ten":"Mở đầu · bài này học gì"},
+        {"t":68.77,"den":132.09,"ten":"Câu hỏi đúng là"},
+        {"t":132.09,"den":193.79,"ten":"Chạy thật, gõ bảy"},
+        {"t":193.79,"den":297.3,"ten":"Chạy thật: máy in chữ nan"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Workshop 2 của chương năm: chương trình menu quản lý điểm sinh viên."},
         {"t":11.28,"vi":"Menu có bốn lựa chọn: nhập điểm, tính trung bình, tìm điểm cao nhất, và thoát. Mỗi chức năng là một hàm riêng."},
@@ -5129,8 +5361,21 @@
         {"t":289.57,"vi":"Bạn mở Code Lab C làm và nộp Workshop 2, rồi sang chương sáu: con trỏ."}
       ]
     },
-    "prf192-6-0a-slides-con-tro-co-ban": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/programming-fundamentals/06-con-tro/06-01-slide-con-tro-co-ban-75c817b7.mp4","durationSec":1535.02,"nguonCau":"srt",
-      "parts": [],
+    "prf192-6-0a-slides-con-tro-co-ban": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/programming-fundamentals/06-con-tro/06-01-slide-con-tro-co-ban-75c817b7.mp4","durationSec":1535.02,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":117.64,"ten":"Mở đầu · bài này học gì"},
+        {"t":117.64,"den":222.45,"ten":"Cuối cùng là số học và so sánh…"},
+        {"t":222.45,"den":398.12,"ten":"Chạy thật. Dòng địa chỉ của a và…"},
+        {"t":398.12,"den":493.37,"ten":"Chạy thật: đọc trực tiếp ra bảy"},
+        {"t":493.37,"den":572.38,"ten":"Bẫy thứ hai"},
+        {"t":572.38,"den":750.99,"ten":"Ví dụ int sao pn bằng và n"},
+        {"t":750.99,"den":849.54,"ten":"Vì con trỏ rộng tám byte trên máy…"},
+        {"t":849.54,"den":935.77,"ten":"Chạy thật mã slide"},
+        {"t":935.77,"den":1068.71,"ten":"Chạy thật khớp bảng vết"},
+        {"t":1068.71,"den":1243.95,"ten":"Trước khi xoá"},
+        {"t":1243.95,"den":1417.04,"ten":"Lớn hơn: a nằm sau b. Có dấu…"},
+        {"t":1417.04,"den":1535.02,"ten":"Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đây là bài 6.0a của PRF192, mở đầu chương sáu: con trỏ."},
         {"t":12.29,"vi":"Đây là chủ đề chia đôi môn học."},
@@ -5432,8 +5677,21 @@
         {"t":1528.07,"vi":"Bạn luyện vài bài trên Code Lab C, rồi sang bài 6.0b nhé."}
       ]
     },
-    "prf192-6-0b-slides-con-tro-cap-phat-dong": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/programming-fundamentals/06-con-tro/06-02-slide-con-tro-cap-phat-dong-f42266cd.mp4","durationSec":1556.94,"nguonCau":"srt",
-      "parts": [],
+    "prf192-6-0b-slides-con-tro-cap-phat-dong": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/programming-fundamentals/06-con-tro/06-02-slide-con-tro-cap-phat-dong-f42266cd.mp4","durationSec":1556.94,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":179.66,"ten":"Mở đầu · bài này học gì"},
+        {"t":179.66,"den":333.41,"ten":"P cộng cộng, ghi mười lăm"},
+        {"t":333.41,"den":425,"ten":"Chạy thật, nó trả một nghìn, rồi p…"},
+        {"t":425,"den":520.63,"ten":"Chạy thật mã slide"},
+        {"t":520.63,"den":605.53,"ten":"Chạy thật có in địa chỉ"},
+        {"t":605.53,"den":732.38,"ten":"Ví dụ, người dùng gõ số phần tử"},
+        {"t":732.38,"den":885.45,"ten":"Ví dụ xin năm nhân sizeof int"},
+        {"t":885.45,"den":979.55,"ten":"Ví dụ: xin năm số int"},
+        {"t":979.55,"den":1157.93,"ten":"Chạy thật. Sau free"},
+        {"t":1157.93,"den":1250.36,"ten":"Các phép tính đều qua dấu sao"},
+        {"t":1250.36,"den":1373.25,"ten":"Chạy thật với đúng đầu vào của slide"},
+        {"t":1373.25,"den":1556.94,"ten":"Ví dụ nhập DA"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đây là bài 6.0b của PRF192, nửa sau bộ slide con trỏ."},
         {"t":12.37,"vi":"Bài 6.0a dạy con trỏ là gì, dấu và, dấu sao. Bài này cho con trỏ đi làm việc thật."},
@@ -5749,8 +6007,13 @@
         {"t":1550.44,"vi":"Bạn luyện vài bài trên Code Lab C, rồi sang bài 6.1 nhé."}
       ]
     },
-    "prf192-6-1-con-tro": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/programming-fundamentals/06-con-tro/06-03-con-tro-9513485b.mp4","durationSec":437.47,"nguonCau":"srt",
-      "parts": [],
+    "prf192-6-1-con-tro": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/programming-fundamentals/06-con-tro/06-03-con-tro-9513485b.mp4","durationSec":437.47,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":107.64,"ten":"Mở đầu · bài này học gì"},
+        {"t":107.64,"den":213.34,"ten":"Chạy thật: năm"},
+        {"t":213.34,"den":388.98,"ten":"Bẫy tiếp theo hay gặp khi làm bài…"},
+        {"t":388.98,"den":437.47,"ten":"Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 6.1: con trỏ là gì."},
         {"t":9.49,"vi":"Slide của trường đã giảng ở 6.0a: khai báo, hai toán tử và với sao, và số học con trỏ. Mình không giảng lại."},
@@ -5847,8 +6110,13 @@
         {"t":429.46,"vi":"Bạn mở Code Lab C luyện vài bài, rồi sang bài 6.2: truyền tham chiếu bằng con trỏ."}
       ]
     },
-    "prf192-6-2-pass-by-reference": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/programming-fundamentals/06-con-tro/06-04-truyen-tham-chieu-85e3c7ad.mp4","durationSec":457.71,"nguonCau":"srt",
-      "parts": [],
+    "prf192-6-2-pass-by-reference": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/programming-fundamentals/06-con-tro/06-04-truyen-tham-chieu-85e3c7ad.mp4","durationSec":457.71,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":118.28,"ten":"Mở đầu · bài này học gì"},
+        {"t":118.28,"den":207.92,"ten":"Chạy thật ra hai, năm, chín"},
+        {"t":207.92,"den":386.57,"ten":"Chạy thật: hàm ghi nghiệm vào địa chỉ…"},
+        {"t":386.57,"den":457.71,"ten":"Gọi tăng của n, không có dấu và"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 6.2: truyền tham chiếu bằng con trỏ."},
         {"t":10.02,"vi":"Slide trường ở bài 6.0b đã giảng hàm hoán đổi và hàm chia trả thương với số dư. Mình không giảng lại."},
@@ -5949,8 +6217,13 @@
         {"t":449.5,"vi":"Bạn mở Code Lab C luyện vài bài, rồi sang bài 6.3: cấp phát động với malloc."}
       ]
     },
-    "prf192-6-3-malloc": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/programming-fundamentals/06-con-tro/06-05-cap-phat-dong-5e3afac4.mp4","durationSec":550.05,"nguonCau":"srt",
-      "parts": [],
+    "prf192-6-3-malloc": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/programming-fundamentals/06-con-tro/06-05-cap-phat-dong-5e3afac4.mp4","durationSec":550.05,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":98.34,"ten":"Mở đầu · bài này học gì"},
+        {"t":98.34,"den":212.91,"ten":"Chạy thật với năm số"},
+        {"t":212.91,"den":356.45,"ten":"Vì sao gấp đôi, không cộng một?"},
+        {"t":356.45,"den":550.05,"ten":"Là ma trận động"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 6.3: cấp phát động với malloc."},
         {"t":9.97,"vi":"Slide trường ở bài 6.0b đã giảng đủ bốn hàm: malloc, calloc, realloc và free."},
@@ -6063,8 +6336,20 @@
         {"t":543.27,"vi":"Bạn mở Code Lab C luyện vài bài, rồi sang chương bảy: thư viện chuẩn."}
       ]
     },
-    "prf192-7-0a-slides-thu-vien-chuan": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/programming-fundamentals/07-thu-vien-chuan-c/07-01-slide-thu-vien-chuan-d5e584db.mp4","durationSec":1515.94,"nguonCau":"srt",
-      "parts": [],
+    "prf192-7-0a-slides-thu-vien-chuan": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/programming-fundamentals/07-thu-vien-chuan-c/07-01-slide-thu-vien-chuan-d5e584db.mp4","durationSec":1515.94,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":179.48,"ten":"Mở đầu · bài này học gì"},
+        {"t":179.48,"den":294.8,"ten":"Thứ nhất, stdlib.h và math.h cho các hàm…"},
+        {"t":294.8,"den":425.54,"ten":"Bẫy một: abs của trừ hai chấm bảy…"},
+        {"t":425.54,"den":578.93,"ten":"Vì sao phải cộng một?"},
+        {"t":578.93,"den":754.35,"ten":"Bẫy hay gặp nhất"},
+        {"t":754.35,"den":930.06,"ten":"Hai mũ ba viết bằng dấu mũ ra…"},
+        {"t":930.06,"den":1032.94,"ten":"Dòng ba mươi hai đổi tick ra giây"},
+        {"t":1032.94,"den":1124.78,"ten":"Ví dụ với chữ A hoa in ra…"},
+        {"t":1124.78,"den":1222.46,"ten":"Ví dụ dùng ký tự dấu cách"},
+        {"t":1222.46,"den":1402.15,"ten":"Bẫy quan trọng"},
+        {"t":1402.15,"den":1515.94,"ten":"Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đây là bài 7.0a của PRF192, mở đầu chương bảy: thư viện chuẩn của C."},
         {"t":13.05,"vi":"Đến giờ bạn tự viết gần hết mọi thứ."},
@@ -6380,8 +6665,19 @@
         {"t":1509.02,"vi":"Bạn luyện vài bài trên Code Lab C, rồi sang bài 7.0b nhé."}
       ]
     },
-    "prf192-7-0b-slides-nhap-lieu-kiem-tra": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/programming-fundamentals/07-thu-vien-chuan-c/07-02-slide-nhap-lieu-kiem-tra-dd617c0d.mp4","durationSec":1332.92,"nguonCau":"srt",
-      "parts": [],
+    "prf192-7-0b-slides-nhap-lieu-kiem-tra": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/programming-fundamentals/07-thu-vien-chuan-c/07-02-slide-nhap-lieu-kiem-tra-dd617c0d.mp4","durationSec":1332.92,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":183.6,"ten":"Mở đầu · bài này học gì"},
+        {"t":183.6,"den":328.61,"ten":"Slide ba mươi lăm"},
+        {"t":328.61,"den":431.69,"ten":"Chạy thật, gõ A rồi Enter"},
+        {"t":431.69,"den":526.89,"ten":"Chạy thật cách hai"},
+        {"t":526.89,"den":687.18,"ten":"Chạy thật đúng gợi ý đó"},
+        {"t":687.18,"den":806.58,"ten":"Chạy thật bên trái"},
+        {"t":806.58,"den":888.12,"ten":"Chạy thật, có in thêm giá trị scanf…"},
+        {"t":888.12,"den":969.4,"ten":"Bẫy không có trên slide"},
+        {"t":969.4,"den":1146.06,"ten":"Chạy thật năm lần, cùng năm cách gõ"},
+        {"t":1146.06,"den":1332.92,"ten":"Để ý n bằng tám dính liền dấu…"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đây là bài 7.0b của PRF192: nhập liệu và kiểm tra dữ liệu vào."},
         {"t":12.46,"vi":"Bài trước ta dùng ctype.h để hỏi một ký tự là chữ hay số."},
@@ -6662,8 +6958,17 @@
         {"t":1327.42,"vi":"Bạn luyện thêm trên Code Lab C, rồi sang bài 7.0c nhé."}
       ]
     },
-    "prf192-7-0c-slides-xuat-dinh-dang": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/programming-fundamentals/07-thu-vien-chuan-c/07-03-slide-xuat-dinh-dang-fb910842.mp4","durationSec":881.84,"nguonCau":"srt",
-      "parts": [],
+    "prf192-7-0c-slides-xuat-dinh-dang": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/programming-fundamentals/07-thu-vien-chuan-c/07-03-slide-xuat-dinh-dang-fb910842.mp4","durationSec":881.84,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":96.2,"ten":"Mở đầu · bài này học gì"},
+        {"t":96.2,"den":221.92,"ten":"Chạy thật: màn hình không hiện chữ nào"},
+        {"t":221.92,"den":337.71,"ten":"Chạy thật: Hello"},
+        {"t":337.71,"den":448.27,"ten":"Chạy thật cả bảng"},
+        {"t":448.27,"den":581.03,"ten":"Bẫy lớn nhất"},
+        {"t":581.03,"den":691.43,"ten":"Chạy thật, gõ năm, một trăm ba lăm…"},
+        {"t":691.43,"den":772.28,"ten":"Ví dụ trên slide"},
+        {"t":772.28,"den":881.84,"ten":"Chạy thật: một triệu"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đây là bài 7.0c của PRF192: xuất dữ liệu có định dạng."},
         {"t":11.85,"vi":"Bài trước ta đưa dữ liệu vào chương trình."},
@@ -6846,8 +7151,14 @@
         {"t":876.55,"vi":"Bạn luyện thêm trên Code Lab C, rồi sang bài 7.1 nhé."}
       ]
     },
-    "prf192-7-1-stdlib-time": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/programming-fundamentals/07-thu-vien-chuan-c/07-04-stdlib-time-6b6d2697.mp4","durationSec":523.93,"nguonCau":"srt",
-      "parts": [],
+    "prf192-7-1-stdlib-time": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/programming-fundamentals/07-thu-vien-chuan-c/07-04-stdlib-time-6b6d2697.mp4","durationSec":523.93,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":95.66,"ten":"Mở đầu · bài này học gì"},
+        {"t":95.66,"den":188.07,"ten":"Chạy thật: sáu cột gần bằng nhau"},
+        {"t":188.07,"den":266.69,"ten":"Chạy thật tám trường hợp"},
+        {"t":266.69,"den":444.06,"ten":"Giờ ta in nó ra"},
+        {"t":444.06,"den":523.93,"ten":"Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 7.1: hai thư viện stdlib.h và time.h."},
         {"t":11.49,"vi":"Slide trường ở bài 7.0a đã giảng đủ rand, srand, abs và ba hàm thời gian."},
@@ -6959,8 +7270,14 @@
         {"t":515.21,"vi":"Bạn mở Code Lab C luyện vài bài, rồi sang bài 7.2: math.h và ctype.h."}
       ]
     },
-    "prf192-7-2-math-ctype": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/programming-fundamentals/07-thu-vien-chuan-c/07-05-math-ctype-b005faa0.mp4","durationSec":489.9,"nguonCau":"srt",
-      "parts": [],
+    "prf192-7-2-math-ctype": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/programming-fundamentals/07-thu-vien-chuan-c/07-05-math-ctype-b005faa0.mp4","durationSec":489.9,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":85,"ten":"Mở đầu · bài này học gì"},
+        {"t":85,"den":174.64,"ten":"Là một câu hỏi thi kinh điển"},
+        {"t":174.64,"den":255.81,"ten":"Vì sao máy lưu lệch"},
+        {"t":255.81,"den":343.87,"ten":"Chạy thật ba lần"},
+        {"t":343.87,"den":489.9,"ten":"Chạy thật với tên gõ lộn xộn"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 7.2: hai thư viện math.h và ctype.h."},
         {"t":11.38,"vi":"Slide trường ở bài 7.0a đã giảng đủ các hàm làm tròn, luỹ thừa, và bảng phân loại ký tự."},
@@ -7066,8 +7383,21 @@
         {"t":484.98,"vi":"Chương bảy xong, hẹn bạn ở chương tám: mảng."}
       ]
     },
-    "prf192-8-0c-slides-struct": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/programming-fundamentals/08-mang-struct/08-03-slide-struct-1ccb183b.mp4","durationSec":1568.39,"nguonCau":"srt",
-      "parts": [],
+    "prf192-8-0c-slides-struct": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/programming-fundamentals/08-mang-struct/08-03-slide-struct-1ccb183b.mp4","durationSec":1568.39,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":90.73,"ten":"Mở đầu · bài này học gì"},
+        {"t":90.73,"den":222.82,"ten":"Chạy thật: mã một linh một giờ mang…"},
+        {"t":222.82,"den":317.2,"ten":"Chạy thật in ba địa chỉ"},
+        {"t":317.2,"den":493.27,"ten":"Chạy thật in đúng một dòng"},
+        {"t":493.27,"den":669.4,"ten":"Hai byte ở giữa là byte đệm, padding"},
+        {"t":669.4,"den":780.81,"ten":"Vì phần trăm d in con số"},
+        {"t":780.81,"den":870.65,"ten":"Chạy thật: age vẫn hai hai"},
+        {"t":870.65,"den":954.84,"ten":"Chạy thật in địa chỉ"},
+        {"t":954.84,"den":1119.49,"ten":"Chạy thật: David ba"},
+        {"t":1119.49,"den":1298.08,"ten":"Bẫy một: in grade bằng phần trăm s"},
+        {"t":1298.08,"den":1392.85,"ten":"Đây là tìm tuyến tính của bài 8.0b"},
+        {"t":1392.85,"den":1568.39,"ten":"Bẫy cuối: đổi định dạng đọc tên thành…"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đây là bài 8.0c của PRF192: struct, kiểu dữ liệu do chính bạn định nghĩa."},
         {"t":13.21,"vi":"Bài 8.0b cho bạn mảng làm việc thật: tìm, sắp xếp, menu. Nhưng mảng chỉ chứa được những thứ cùng kiểu."},
@@ -7374,8 +7704,13 @@
         {"t":1559.78,"vi":"Bạn luyện thêm trên Code Lab C, rồi sang bài 8.1: mảng một chiều, ôn và làm nhiều bài dạng PE nhé."}
       ]
     },
-    "prf192-8-1-mang-1-chieu": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/programming-fundamentals/08-mang-struct/08-04-mang-1-chieu-2d3a76f8.mp4","durationSec":491.56,"nguonCau":"srt",
-      "parts": [],
+    "prf192-8-1-mang-1-chieu": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/programming-fundamentals/08-mang-struct/08-04-mang-1-chieu-2d3a76f8.mp4","durationSec":491.56,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":96.38,"ten":"Mở đầu · bài này học gì"},
+        {"t":96.38,"den":221.57,"ten":"Bẫy: công thức chỉ đúng ở hàm khai…"},
+        {"t":221.57,"den":317.43,"ten":"Chạy thật cả hai mảng đều đảo đúng"},
+        {"t":317.43,"den":491.56,"ten":"Chạy thật in năm dòng"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 8.1: mảng một chiều, phần làm bài."},
         {"t":10.39,"vi":"Slide trường ở bài 8.0a và 8.0b đã giảng đủ khai báo, ghi tràn, tìm kiếm và sắp xếp."},
@@ -7484,8 +7819,13 @@
         {"t":488.94,"vi":"Hẹn gặp lại."}
       ]
     },
-    "prf192-8-2-ma-tran": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/programming-fundamentals/08-mang-struct/08-05-ma-tran-ba517120.mp4","durationSec":416.86,"nguonCau":"srt",
-      "parts": [],
+    "prf192-8-2-ma-tran": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/programming-fundamentals/08-mang-struct/08-05-ma-tran-ba517120.mp4","durationSec":416.86,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":106.17,"ten":"Mở đầu · bài này học gì"},
+        {"t":106.17,"den":181.8,"ten":"Chạy thật, gõ hai hàng ba cột"},
+        {"t":181.8,"den":284.76,"ten":"Chạy thật: một bốn"},
+        {"t":284.76,"den":416.86,"ten":"Chạy thật khớp năm mươi tám"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 8.2: ma trận, tức là mảng hai chiều."},
         {"t":10.69,"vi":"Slide trường ở bài 8.0b đã cho bạn thấy ma trận nằm trong bộ nhớ thành một dải liền. Mình không giảng lại phần đó."},
@@ -7578,8 +7918,13 @@
         {"t":414.24,"vi":"Hẹn gặp lại."}
       ]
     },
-    "prf192-8-3-tim-sap-xep": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/programming-fundamentals/08-mang-struct/08-06-tim-sap-xep-73636de0.mp4","durationSec":450.14,"nguonCau":"srt",
-      "parts": [],
+    "prf192-8-3-tim-sap-xep": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/programming-fundamentals/08-mang-struct/08-06-tim-sap-xep-73636de0.mp4","durationSec":450.14,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":103.19,"ten":"Mở đầu · bài này học gì"},
+        {"t":103.19,"den":182.61,"ten":"Chạy thật với ba mươi"},
+        {"t":182.61,"den":264.05,"ten":"Chạy thật: cả mảng thành sáu số năm"},
+        {"t":264.05,"den":450.14,"ten":"Chạy thật: mười phần tử cần bốn mươi…"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 8.3: tìm kiếm tuyến tính và sắp xếp chọn, phần làm bài."},
         {"t":11.62,"vi":"Slide trường ở bài 8.0b đã chạy vết từng bước cả bốn thuật toán."},
@@ -7683,8 +8028,13 @@
         {"t":447.5,"vi":"Hẹn gặp lại."}
       ]
     },
-    "prf192-8-4-struct": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/programming-fundamentals/08-mang-struct/08-07-struct-10f9c01b.mp4","durationSec":425.69,"nguonCau":"srt",
-      "parts": [],
+    "prf192-8-4-struct": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/programming-fundamentals/08-mang-struct/08-07-struct-10f9c01b.mp4","durationSec":425.69,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":114.53,"ten":"Mở đầu · bài này học gì"},
+        {"t":114.53,"den":218.47,"ten":"Chạy thật ba sinh viên"},
+        {"t":218.47,"den":312.15,"ten":"Chạy thật: An tám rưỡi đứng đầu"},
+        {"t":312.15,"den":425.69,"ten":"Vì sao CPU thích địa chỉ căn chỉnh…"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 8.4: struct, phần làm bài."},
         {"t":10.26,"vi":"Slide trường ở bài 8.0c đã giảng đủ cách khai báo, byte đệm, mảng struct, và struct vào hàm là bản sao."},
@@ -7775,8 +8125,25 @@
         {"t":423.06,"vi":"Hẹn gặp lại."}
       ]
     },
-    "prf192-9-0b-slides-string-h-mang-chuoi": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/programming-fundamentals/09-chuoi/09-02-slide-string-h-mang-chuoi-5d4f825c.mp4","durationSec":1805.17,"nguonCau":"srt",
-      "parts": [],
+    "prf192-9-0b-slides-string-h-mang-chuoi": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/programming-fundamentals/09-chuoi/09-02-slide-string-h-mang-chuoi-5d4f825c.mp4","durationSec":1805.17,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":110.45,"ten":"Mở đầu · bài này học gì"},
+        {"t":110.45,"den":194.13,"ten":"Ví dụ: chuỗi Hi FPTU chấm than"},
+        {"t":194.13,"den":288.04,"ten":"Ví dụ: source là Hi FPTU chấm than"},
+        {"t":288.04,"den":370.12,"ten":"Trước khi strcpy"},
+        {"t":370.12,"den":476.54,"ten":"Bẫy thứ hai"},
+        {"t":476.54,"den":586.27,"ten":"Ví dụ: Welcome to FPT University chấm than"},
+        {"t":586.27,"den":686.2,"ten":"Ví dụ tìm FPT trong Welcome to FPT…"},
+        {"t":686.2,"den":786.35,"ten":"Chạy thật mã slide"},
+        {"t":786.35,"den":881.16,"ten":"Chạy thật lời giải"},
+        {"t":881.16,"den":960.89,"ten":"Chạy thật lTrim của slide"},
+        {"t":960.89,"den":1037.23,"ten":"Chạy thật với Hoa ba dấu cách"},
+        {"t":1037.23,"den":1214.58,"ten":"Chạy thật trim, in chuỗi sau mỗi bước"},
+        {"t":1214.58,"den":1292.51,"ten":"Chạy thật: câu slide ra sáu từ"},
+        {"t":1292.51,"den":1421.62,"ten":"Vì sao? Thay a bằng aa mà tìm…"},
+        {"t":1421.62,"den":1600.03,"ten":"Chạy thật: List of names"},
+        {"t":1600.03,"den":1805.17,"ten":"Gợi ý: hai vòng lồng"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đây là bài 9.0b của PRF192: các hàm xử lý chuỗi, và mảng các chuỗi."},
         {"t":13.22,"vi":"Bài trước kết thúc bằng một câu: dấu bằng, bằng bằng, dấu cộng đều không dùng được cho chuỗi."},
@@ -8109,8 +8476,14 @@
         {"t":1797.24,"vi":"Bài tiếp theo là video 9.1 về chuỗi, rồi Workshop bốn. Bạn luyện thêm trên Code Lab C nhé."}
       ]
     },
-    "prf192-9-1-chuoi": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/programming-fundamentals/09-chuoi/09-03-chuoi-4366649c.mp4","durationSec":571.7,"nguonCau":"srt",
-      "parts": [],
+    "prf192-9-1-chuoi": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/programming-fundamentals/09-chuoi/09-03-chuoi-4366649c.mp4","durationSec":571.7,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":110.59,"ten":"Mở đầu · bài này học gì"},
+        {"t":110.59,"den":194.91,"ten":"Chạy thật: lấy đủ Nguyen Van A"},
+        {"t":194.91,"den":274.71,"ten":"Chạy thật lần một"},
+        {"t":274.71,"den":390.68,"ten":"Bẫy tiếp theo"},
+        {"t":390.68,"den":571.7,"ten":"Chạy thật: mười nghìn ký tự chưa thấy…"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 9.1: chuỗi trong C, phần làm bài."},
         {"t":10.46,"vi":"Slide trường ở hai bài 9.0a và 9.0b đã giảng đủ: byte không cuối chuỗi, các cách nhập, và tám hàm string.h."},
@@ -8224,8 +8597,13 @@
         {"t":569.06,"vi":"Hẹn gặp lại."}
       ]
     },
-    "prf192-9-2-string-h": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/programming-fundamentals/09-chuoi/09-04-string-h-3a35472b.mp4","durationSec":508.51,"nguonCau":"srt",
-      "parts": [],
+    "prf192-9-2-string-h": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/programming-fundamentals/09-chuoi/09-04-string-h-3a35472b.mp4","durationSec":508.51,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":94.19,"ten":"Mở đầu · bài này học gì"},
+        {"t":94.19,"den":185.08,"ten":"Chạy thật: a là Hello FPT"},
+        {"t":185.08,"den":323.73,"ten":"Chạy thật: a là Hell"},
+        {"t":323.73,"den":508.51,"ten":"Chạy thật in p bằng nil"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 9.2: thư viện string.h, phần làm bài."},
         {"t":11.06,"vi":"Slide trường ở bài 9.0b đã giảng đủ tám hàm chuỗi, kèm các lỗi đè và tràn của strcpy."},
@@ -8325,8 +8703,12 @@
         {"t":505.88,"vi":"Hẹn gặp lại."}
       ]
     },
-    "prf192-9-workshop4": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/programming-fundamentals/09-chuoi/09-05-workshop4-52cfbfd9.mp4","durationSec":414.29,"nguonCau":"srt",
-      "parts": [],
+    "prf192-9-workshop4": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/programming-fundamentals/09-chuoi/09-05-workshop4-52cfbfd9.mp4","durationSec":414.29,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":171.4,"ten":"Mở đầu · bài này học gì"},
+        {"t":171.4,"den":290.91,"ten":"Chạy thật: chuỗi này có mười chín ký…"},
+        {"t":290.91,"den":414.29,"ten":"Trước khi nộp, thử các trường hợp biên"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Workshop 4: thao tác trên chuỗi."},
         {"t":9.42,"vi":"Bài này gom cả chương 9: đọc một dòng, duyệt từng ký tự tới byte không, và sửa chuỗi tại chỗ."},
@@ -8417,8 +8799,14 @@
         {"t":411.61,"vi":"Hẹn gặp lại."}
       ]
     },
-    "prf192-gioi-thieu": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/programming-fundamentals/00-gioi-thieu-huong-dan-hoc/00-02-gioi-thieu-mon-ban-do-63f7c996.mp4","durationSec":530.2,"nguonCau":"srt",
-      "parts": [],
+    "prf192-gioi-thieu": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/programming-fundamentals/00-gioi-thieu-huong-dan-hoc/00-02-gioi-thieu-mon-ban-do-63f7c996.mp4","durationSec":530.2,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":122.03,"ten":"Ôn nhanh · hôm nay · Vì sao lại là C?"},
+        {"t":122.03,"den":234.89,"ten":"C ở đâu hôm nay · Học xong làm được gì"},
+        {"t":234.89,"den":338.69,"ten":"Sự cố thật: khi viết C ẩu · Chạy thật: tràn bộ đệm"},
+        {"t":338.69,"den":445.11,"ten":"Học thế nào cho không nản · Học sâu thêm ở đâu"},
+        {"t":445.11,"den":530.2,"ten":"Tự kiểm tra · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 0.1 của môn PRF192."},
         {"t":10.19,"vi":"Bài trước mình đi hết mười bảy slide giới thiệu môn: chín khối kiến thức, công thức điểm có sàn FE, và chạy những chương trình C đầu tiên."},

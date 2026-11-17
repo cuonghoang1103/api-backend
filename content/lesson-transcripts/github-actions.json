@@ -2,8 +2,15 @@
   "courseSlug": "github-actions",
   "sinhBoi": "scripts/phu-de-tu-video-rieng.mjs",
   "lessons": {
-    "ga-0-1-may-toi-chay-duoc": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/github-actions/00-ci-giai-quyet-gi/00-04-may-toi-chay-duoc-23e3b9a0.mp4","durationSec":642.95,"nguonCau":"srt",
-      "parts": [],
+    "ga-0-1-may-toi-chay-duoc": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/github-actions/00-ci-giai-quyet-gi/00-04-may-toi-chay-duoc-23e3b9a0.mp4","durationSec":642.95,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":100.94,"ten":"Ôn nhanh · hôm nay · Cú hỏng: runner không giống máy bạn"},
+        {"t":100.94,"den":244.46,"ten":"Mô phỏng: hai cái máy, một commit"},
+        {"t":244.46,"den":347.47,"ten":"Sửa đúng chỗ · Chạy thật: bản sửa xanh trên máy sạch"},
+        {"t":347.47,"den":436.79,"ten":"Kho này chốt cửa ở đâu · Biến CI: khi nào được rẽ nhánh"},
+        {"t":436.79,"den":530.28,"ten":"Bẫy và câu phỏng vấn · Tóm tắt"},
+        {"t":530.28,"den":642.95,"ten":"Thực hành 15–20 phút · Ba câu tự kiểm & bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 0.1 của khoá GitHub Actions."},
         {"t":10.24,"vi":"Bài trước là bốn sự cố thật, và thói quen đọc một lần chạy đỏ: job, bước, rồi dòng lỗi đầu tiên."},
@@ -104,8 +111,16 @@
         {"t":636.51,"vi":"Bài sau, 0.2: workflow, job, bước, runner."}
       ]
     },
-    "ga-0-2-bon-tang": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/github-actions/00-ci-giai-quyet-gi/00-05-bon-tang-42cb0ad7.mp4","durationSec":653.92,"nguonCau":"srt",
-      "parts": [],
+    "ga-0-2-bon-tang": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/github-actions/00-ci-giai-quyet-gi/00-05-bon-tang-42cb0ad7.mp4","durationSec":653.92,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":87.92,"ten":"Ôn nhanh · hôm nay · Mô phỏng: bốn ranh giới thật"},
+        {"t":87.92,"den":163.73,"ten":"Bốn ranh giới: sự kiện, workflow, job, bước"},
+        {"t":163.73,"den":250.96,"ten":"Job không chia sẻ gì"},
+        {"t":250.96,"den":351.56,"ten":"runs-on: một dòng, nhiều giây"},
+        {"t":351.56,"den":447.33,"ten":"Runner thật ra là gì: bước Set up job"},
+        {"t":447.33,"den":546.87,"ten":"Bốn cặp từ hay nhầm · câu phỏng vấn · Tóm tắt"},
+        {"t":546.87,"den":653.92,"ten":"Thực hành 15–20 phút · Ba câu tự kiểm & bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 0.2 của khoá GitHub Actions."},
         {"t":10.07,"vi":"Bài trước, một tệp bị ignore làm máy sạch đỏ, và ta học phép thử bản clone sạch."},
@@ -216,8 +231,16 @@
         {"t":647.09,"vi":"Bài sau, 0.3: đọc một workflow thật, từng dòng một."}
       ]
     },
-    "ga-0-3-doc-mot-workflow": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/github-actions/00-ci-giai-quyet-gi/00-06-doc-mot-workflow-8751cc2b.mp4","durationSec":625.54,"nguonCau":"srt",
-      "parts": [],
+    "ga-0-3-doc-mot-workflow": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/github-actions/00-ci-giai-quyet-gi/00-06-doc-mot-workflow-8751cc2b.mp4","durationSec":625.54,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":111.33,"ten":"Ôn nhanh · hôm nay · Khối kích hoạt"},
+        {"t":111.33,"den":190.48,"ten":"timeout-minutes: hãy tự đặt"},
+        {"t":190.48,"den":296.4,"ten":"Liên kết chéo · Mô phỏng: mã thoát chảy qua một cái ống"},
+        {"t":296.4,"den":399.33,"ten":"Bước cố ý bỏ qua · Đọc mọi workflow bằng năm câu hỏi"},
+        {"t":399.33,"den":482.17,"ten":"Chạy thật: actionlint bắt lỗi trước khi push"},
+        {"t":482.17,"den":570.68,"ten":"Tóm tắt · Thực hành 15–20 phút"},
+        {"t":570.68,"den":625.54,"ten":"Ba câu tự kiểm & bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 0.3 của khoá GitHub Actions."},
         {"t":10,"vi":"Bài trước là bốn ranh giới: mỗi job là cả một cái máy, các bước dùng chung đĩa, và chỉ artifact vượt được ranh giới job."},
@@ -336,8 +359,16 @@
         {"t":618.85,"vi":"Bài sau, 0.4: khoá này đo cái gì, và theo thứ tự nào."}
       ]
     },
-    "ga-0-4-ban-do": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/github-actions/00-ci-giai-quyet-gi/00-07-ban-do-000c3691.mp4","durationSec":718.01,"nguonCau":"srt",
-      "parts": [],
+    "ga-0-4-ban-do": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/github-actions/00-ci-giai-quyet-gi/00-07-ban-do-000c3691.mp4","durationSec":718.01,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":102.06,"ten":"Ôn nhanh · hôm nay · Bản đồ 15 chương"},
+        {"t":102.06,"den":187.9,"ten":"Mười sáu chặng · Khoá này không phải gì · khoá bên cạnh"},
+        {"t":187.9,"den":269.75,"ten":"Thứ chuyển được là quan hệ · Mô phỏng: con số tới từ đâu"},
+        {"t":269.75,"den":385,"ten":"Chạy thật: tự đọc số đo từ API"},
+        {"t":385,"den":493.88,"ten":"Học xong mỗi phần, nói được gì khi phỏng vấn"},
+        {"t":493.88,"den":598.14,"ten":"Sai lầm hay gặp ở Mục 0 · Câu phỏng vấn: kể về một pipeline"},
+        {"t":598.14,"den":718.01,"ten":"Thực hành 15–20 phút · Ba câu tự kiểm & chương sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 0.4, bài cuối của Mục 0 khoá GitHub Actions."},
         {"t":11.61,"vi":"Bài trước mình đọc ci-lint.yml từng dòng: năm câu hỏi đọc mọi workflow, timeout tự đặt, và cái ống nuốt mã thoát khi thiếu pipefail."},
@@ -446,8 +477,19 @@
         {"t":705.36,"vi":"Xong Mục 0, bạn làm phần Thực hành ngay dưới video, rồi làm quiz Mục 0. Chương sau: tệp workflow, và những cái bẫy tới từ YAML."}
       ]
     },
-    "ga-0-5-bat-dau-tai-day": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/github-actions/00-ci-giai-quyet-gi/00-01-bat-dau-tai-day-ce420638.mp4","durationSec":976.01,"nguonCau":"srt",
-      "parts": [],
+    "ga-0-5-bat-dau-tai-day": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/github-actions/00-ci-giai-quyet-gi/00-01-bat-dau-tai-day-ce420638.mp4","durationSec":976.01,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":97.89,"ten":"Chào khoá · bài mở cửa · Mô phỏng: bếp trưởng nếm mọi món"},
+        {"t":97.89,"den":173.91,"ten":"CI giống bếp trưởng nếm mọi món"},
+        {"t":173.91,"den":259.96,"ten":"CI, Delivery, Deployment · Một commit đi qua pipeline"},
+        {"t":259.96,"den":364.68,"ten":"Chạy thật: workflow đầu tiên bằng act"},
+        {"t":364.68,"den":482.32,"ten":"CI ra đời trước GitHub Actions gần 30 năm"},
+        {"t":482.32,"den":570.26,"ten":"Bốn công cụ CI · Con số hiện nay"},
+        {"t":570.26,"den":673.17,"ten":"Vì sao công ty cần CI · Mô phỏng: việc hằng tuần của bạn"},
+        {"t":673.17,"den":802.37,"ten":"Câu phỏng vấn hay gặp · Khoá này đi qua 16 chặng"},
+        {"t":802.37,"den":907.94,"ten":"Tóm tắt năm ý · Thực hành 10 phút"},
+        {"t":907.94,"den":976.01,"ten":"Ba câu tự kiểm & bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, chào mừng đến với khoá GitHub Actions trên cuongthai.com."},
         {"t":10.86,"vi":"Khoá này đưa bạn từ con số không tới chỗ tự viết được một pipeline CI/CD, như người đi làm thật."},
@@ -593,8 +635,18 @@
         {"t":969.31,"vi":"Bài sau, Bắt đầu tại đây phần hai: sự cố thật khi không có CI."}
       ]
     },
-    "ga-0-6-bat-dau-khi-khong-co-ci": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/github-actions/00-ci-giai-quyet-gi/00-02-bat-dau-khi-khong-co-ci-b2522c7d.mp4","durationSec":853.74,"nguonCau":"srt",
-      "parts": [],
+    "ga-0-6-bat-dau-khi-khong-co-ci": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/github-actions/00-ci-giai-quyet-gi/00-02-bat-dau-khi-khong-co-ci-b2522c7d.mp4","durationSec":853.74,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":139.54,"ten":"Ôn nhanh · hôm nay · Mô phỏng: tám máy, một lần chép tay"},
+        {"t":139.54,"den":245.37,"ten":"tj-actions, tháng 3 năm 2025"},
+        {"t":245.37,"den":340.9,"ten":"Codecov 2021 · Mô phỏng: một cú push, hai workflow"},
+        {"t":340.9,"den":424.13,"ten":"Chính kho này: hai workflow đua nhau"},
+        {"t":424.13,"den":515.8,"ten":"Chạy thật: workflow mười dòng cứu buổi demo"},
+        {"t":515.8,"den":594.36,"ten":"Đọc một lần chạy đỏ: bốn bước"},
+        {"t":594.36,"den":690.49,"ten":"Hai lộ trình học · Câu phỏng vấn: chuỗi cung ứng"},
+        {"t":690.49,"den":790.15,"ten":"Tóm tắt · Thực hành 10–15 phút"},
+        {"t":790.15,"den":853.74,"ten":"Ba câu tự kiểm & bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Bắt đầu tại đây phần hai của khoá GitHub Actions."},
         {"t":11.01,"vi":"Bài trước là lý thuyết: CI là bếp trưởng nếm mọi món, còn Delivery và Deployment khác nhau ở một nút bấm."},
@@ -733,8 +785,17 @@
         {"t":846.12,"vi":"Bài sau, 0.1: máy tôi chạy được không phải lời khẳng định kiểm chứng được."}
       ]
     },
-    "ga-1-1-la-yaml": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/github-actions/01-tep-workflow/01-02-la-yaml-b1ad07fe.mp4","durationSec":842.73,"nguonCau":"srt",
-      "parts": [],
+    "ga-1-1-la-yaml": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/github-actions/01-tep-workflow/01-02-la-yaml-b1ad07fe.mp4","durationSec":842.73,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":121.37,"ten":"Ôn nhanh · hôm nay · Giải phẫu: tám khoá đọc mọi tệp"},
+        {"t":121.37,"den":206.08,"ten":"Mô phỏng: một cú push đi qua sáu chặng"},
+        {"t":206.08,"den":290.21,"ten":"Mô phỏng: người đọc chữ, máy đọc kiểu"},
+        {"t":290.21,"den":410.8,"ten":"Chạy thật: hai bộ phân tích, một tệp"},
+        {"t":410.8,"den":530.33,"ten":"run: > gập hai lệnh thành một"},
+        {"t":530.33,"den":622.31,"ten":"actionlint bắt 4 lỗi trước khi push"},
+        {"t":622.31,"den":712.61,"ten":"Câu phỏng vấn hay gặp · Tóm tắt"},
+        {"t":712.61,"den":842.73,"ten":"Thực hành 15–20 phút · Ba câu tự kiểm & bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Chương 1 của khoá GitHub Actions: tệp workflow, và những cái bẫy tới từ YAML."},
         {"t":14.42,"vi":"Mục 0 cho ta bốn ranh giới: workflow, job, bước, runner. Và năm câu hỏi để đọc mọi workflow."},
@@ -862,8 +923,15 @@
         {"t":836.58,"vi":"Bài sau, 1.2: cái gì khởi động một lần chạy."}
       ]
     },
-    "ga-1-5-bo-loc": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/github-actions/01-tep-workflow/01-06-bo-loc-0267111f.mp4","durationSec":498.34,"nguonCau":"srt",
-      "parts": [],
+    "ga-1-5-bo-loc": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/github-actions/01-tep-workflow/01-06-bo-loc-0267111f.mp4","durationSec":498.34,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":91.61,"ten":"Ôn nhanh · hôm nay · Mô phỏng: cái sàng paths"},
+        {"t":91.61,"den":173.49,"ten":"branches lọc nhánh đích"},
+        {"t":173.49,"den":249.38,"ten":"Bộ lọc giấu job không tồn tại"},
+        {"t":249.38,"den":343.98,"ten":"src/* khớp 1, src/** khớp nhiều"},
+        {"t":343.98,"den":441.07,"ten":"Câu phỏng vấn hay gặp · Tóm tắt Chương 1"},
+        {"t":441.07,"den":498.34,"ten":"Ba câu tự kiểm & chương sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 1.5, bài cuối Chương 1 của khoá GitHub Actions."},
         {"t":11.36,"vi":"Bài trước: pull_request chạy trên một commit gộp, nên hai nhánh xanh vẫn có thể cho một bản gộp đỏ."},
@@ -954,8 +1022,16 @@
         {"t":486.6,"vi":"Xong Chương 1, bạn làm phần Thực hành ngay dưới video, rồi làm quiz Chương 1. Chương sau: job, runner, và những cỗ máy ngồi chờ."}
       ]
     },
-    "ga-10-1-build-cu": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/github-actions/10-chan-doan-ca-that/10-02-build-cu-6ffeeec4.mp4","durationSec":630.09,"nguonCau":"srt",
-      "parts": [],
+    "ga-10-1-build-cu": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/github-actions/10-chan-doan-ca-that/10-02-build-cu-6ffeeec4.mp4","durationSec":630.09,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":108.18,"ten":"Ôn nhanh · hôm nay · Năm sự cố trong 60 ngày"},
+        {"t":108.18,"den":184.44,"ten":"Hồ sơ 10.1: GIF chết, tin nhắn biến mất"},
+        {"t":184.44,"den":260.27,"ten":"401 nghĩa là route CÓ; 404 nghĩa là KHÔNG"},
+        {"t":260.27,"den":384.81,"ten":"Tái lập: --no-build thì healthy mà vẫn 404"},
+        {"t":384.81,"den":481.58,"ten":"Kỹ thuật tổng quát · Liên kết chéo"},
+        {"t":481.58,"den":563.66,"ten":"Tóm tắt · Thực hành 15–20 phút"},
+        {"t":563.66,"den":630.09,"ten":"Ba câu tự kiểm & bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Chương 10 của khoá GitHub Actions: năm ca chẩn đoán thật."},
         {"t":11.68,"vi":"Chương 8 dạy đọc một run đỏ."},
@@ -1066,8 +1142,15 @@
         {"t":622.34,"vi":"Bài sau, 10.2: cái seed qua sạch checklist và vỡ ở prod."}
       ]
     },
-    "ga-10-2-seed-vo": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/github-actions/10-chan-doan-ca-that/10-03-seed-vo-ca99d834.mp4","durationSec":558.25,"nguonCau":"srt",
-      "parts": [],
+    "ga-10-2-seed-vo": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/github-actions/10-chan-doan-ca-that/10-03-seed-vo-ca99d834.mp4","durationSec":558.25,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":80.36,"ten":"Ôn nhanh · hôm nay · Hồ sơ 10.2: đổi tên một giá trị enum"},
+        {"t":80.36,"den":175.32,"ten":"Mô phỏng: sổ công thức chép tay trong kho"},
+        {"t":175.32,"den":276.44,"ten":"Chép tsconfig ngây thơ thì gặp TS6059"},
+        {"t":276.44,"den":384.4,"ten":"Chạy thật: in ✗ mà thoát 0, rồi vá cho nó đỏ"},
+        {"t":384.4,"den":506.05,"ten":"Liên kết chéo · Câu phỏng vấn hay gặp"},
+        {"t":506.05,"den":558.25,"ten":"Ba câu tự kiểm & bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn. Bài trước: một cú curl tách bốn trăm lẻ một với bốn trăm lẻ bốn, và smoke-test làm hỏng deploy khi gặp bản dựng cũ."},
         {"t":15.28,"vi":"Hôm nay, bài 10.2: đổi tên một giá trị enum."},
@@ -1165,8 +1248,15 @@
         {"t":552.22,"vi":"Bài sau, 10.3: cái smoke test không phát khói được."}
       ]
     },
-    "ga-10-3-checker-hong": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/github-actions/10-chan-doan-ca-that/10-04-checker-hong-132e34ad.mp4","durationSec":521.46,"nguonCau":"srt",
-      "parts": [],
+    "ga-10-3-checker-hong": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/github-actions/10-chan-doan-ca-that/10-04-checker-hong-132e34ad.mp4","durationSec":521.46,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":82.23,"ten":"Ôn nhanh · hôm nay"},
+        {"t":82.23,"den":171.04,"ten":"Mô phỏng: chuông báo khói hết pin"},
+        {"t":171.04,"den":249.55,"ten":"Bản vá, và bản vá meta"},
+        {"t":249.55,"den":352.1,"ten":"Chạy thật: bảng kiểm bộ kiểm"},
+        {"t":352.1,"den":466.06,"ten":"Liên kết chéo · Câu phỏng vấn hay gặp"},
+        {"t":466.06,"den":521.46,"ten":"Ba câu tự kiểm & bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn. Bài trước: checklist xanh chỉ là bằng chứng cho tệp nó đã mở, và seed in lỗi rồi thoát không là cú hỏng câm."},
         {"t":14.56,"vi":"Hôm nay, bài 10.3: một phép kiểm không thể hỏng còn tệ hơn không có phép kiểm nào, vì nó trông như một phép kiểm."},
@@ -1261,8 +1351,20 @@
         {"t":514.8,"vi":"Bài sau, 10.4: diệt theo tên trượt, hãy diệt theo cổng."}
       ]
     },
-    "ga-10-4-diet-cong": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/github-actions/10-chan-doan-ca-that/10-05-diet-cong-ee1cf4bb.mp4","durationSec":1000.64,"nguonCau":"srt",
-      "parts": [],
+    "ga-10-4-diet-cong": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/github-actions/10-chan-doan-ca-that/10-05-diet-cong-ee1cf4bb.mp4","durationSec":1000.64,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":111.07,"ten":"Ôn nhanh · hôm nay · Hồ sơ 10.4: sân chơi kẹt màn hình tải"},
+        {"t":111.07,"den":210.22,"ten":"Mô phỏng: thực đơn chép lúc mở cửa"},
+        {"t":210.22,"den":307.53,"ten":"Chạy thật: Next 14.2.35, tệp mới 404"},
+        {"t":307.53,"den":409.61,"ten":"next-server tự đổi tên: pkill trượt"},
+        {"t":409.61,"den":485.74,"ten":"Liên kết chéo · tiến trình & tín hiệu"},
+        {"t":485.74,"den":577.88,"ten":"Chạy thật: diệt theo cổng, hỏi lại · Ba nền tảng, ba bộ lệnh"},
+        {"t":577.88,"den":661.86,"ten":"Quy trình khởi động lại có hậu điều kiện"},
+        {"t":661.86,"den":743.39,"ten":"deploy.sh bước 4c, và vì sao prod không dính"},
+        {"t":743.39,"den":845.29,"ten":"Vì sao mất hai phiên, và cái bẫy · Câu phỏng vấn hay gặp"},
+        {"t":845.29,"den":931.95,"ten":"Tóm tắt · Thực hành 15–20 phút"},
+        {"t":931.95,"den":1000.64,"ten":"Ba câu tự kiểm & bài sau"}
+      ],
       "cues": [
         {"t":5.9,"vi":"Chào bạn. Bài trước: một phép kiểm chưa từng được thấy hỏng là đồ trang trí, nên phải kiểm chính bộ kiểm với đích hỏng và đích chết."},
         {"t":16.04,"vi":"Hôm nay, bài 10.4: sân chơi 3D kẹt ở màn hình tải, không một lỗi nào, và một cú diệt tiến trình không diệt được gì."},
@@ -1422,8 +1524,23 @@
         {"t":992.27,"vi":"Bài sau, 10.5: cú migration nửa vời, và câu resolve bạn không được chạy."}
       ]
     },
-    "ga-11-1-chot": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/github-actions/11-on-tong-giua-khoa/11-01-chot-21cda732.mp4","durationSec":1267.72,"nguonCau":"srt",
-      "parts": [],
+    "ga-11-1-chot": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/github-actions/11-on-tong-giua-khoa/11-01-chot-21cda732.mp4","durationSec":1267.72,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":80.29,"ten":"Ôn nhanh · hôm nay · Nửa khoá đầu là năm năng lực"},
+        {"t":80.29,"den":174.51,"ten":"Mô phỏng: một lần chạy đi qua tám ô"},
+        {"t":174.51,"den":277.02,"ten":"Muốn làm được việc này thì ôn chương nào"},
+        {"t":277.02,"den":356.52,"ten":"Ch 1 — YAML và trigger · Ch 2 — Mỗi job là một cỗ máy mới"},
+        {"t":356.52,"den":435.46,"ten":"Ch 3 — Biểu thức thay thành chữ trước shell"},
+        {"t":435.46,"den":520.63,"ten":"Ch 5 — Cache và artifact · Ch 6 — Che bí mật, quyền, token"},
+        {"t":520.63,"den":605.71,"ten":"Ch 7 — Đường tới hạn · Ch 8 — Mã thoát trước, log sau"},
+        {"t":605.71,"den":728.96,"ten":"Ch 9 — Một đường, một khoá, rollback"},
+        {"t":728.96,"den":825.65,"ten":"Một workflow CI mẫu gom cả nửa khoá"},
+        {"t":825.65,"den":938.51,"ten":"10 lỗi hay gặp nhất (1–5) · 10 lỗi hay gặp nhất (6–10)"},
+        {"t":938.51,"den":1024.35,"ten":"Checklist: tôi đã làm được chưa?"},
+        {"t":1024.35,"den":1129.94,"ten":"Câu phỏng vấn (2/2): kể một sự cố thật"},
+        {"t":1129.94,"den":1211.15,"ten":"Tóm tắt · Thực hành Chương 11: soát kho của bạn"},
+        {"t":1211.15,"den":1267.72,"ten":"Ba câu tự kiểm & bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Chương 11 của khoá GitHub Actions."},
         {"t":10.66,"vi":"Chương trước khép lại bằng năm ca chẩn đoán thật, và luật dừng lại khi migration hỏng."},
@@ -1642,8 +1759,18 @@
         {"t":1262.39,"vi":"Bài sau, 12.1: workflow dùng lại."}
       ]
     },
-    "ga-12-1-reusable-workflow": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/github-actions/12-tai-su-dung/12-02-reusable-workflow-10e8a866.mp4","durationSec":855.6,"nguonCau":"srt",
-      "parts": [],
+    "ga-12-1-reusable-workflow": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/github-actions/12-tai-su-dung/12-02-reusable-workflow-10e8a866.mp4","durationSec":855.6,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":88.57,"ten":"Ôn nhanh · hôm nay"},
+        {"t":88.57,"den":197.15,"ten":"Gọi một workflow = thêm một job"},
+        {"t":197.15,"den":285.91,"ten":"Chạy thật: act gọi workflow dùng lại"},
+        {"t":285.91,"den":367.83,"ten":"Chạy thật: env rỗng, boolean thật — và một chỗ act khác GitHub"},
+        {"t":367.83,"den":456.68,"ten":"Chạy thật: ma trận, và cái output sống sót"},
+        {"t":456.68,"den":562.7,"ten":"Chạy thật: secret rỗng vẫn xanh — và act không che"},
+        {"t":562.7,"den":653.82,"ten":"Chạy thật: đứt ống, xanh mà rỗng"},
+        {"t":653.82,"den":731.5,"ten":"Câu phỏng vấn hay gặp · Tóm tắt"},
+        {"t":731.5,"den":855.6,"ten":"Thực hành 15–20 phút · Ba câu tự kiểm & bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Chương 12 của khoá GitHub Actions."},
         {"t":10.53,"vi":"Chương trước gom nửa khoá đầu: tám ô của một lần chạy, và ba cột niềm tin."},
@@ -1796,8 +1923,19 @@
         {"t":846.59,"vi":"Bài sau, 12.2: composite action, một bước trong mắt GitHub, nhiều bước trong log."}
       ]
     },
-    "ga-12-3-action-js-docker": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/github-actions/12-tai-su-dung/12-04-action-js-docker-687dd79b.mp4","durationSec":1006.56,"nguonCau":"srt",
-      "parts": [],
+    "ga-12-3-action-js-docker": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/github-actions/12-tai-su-dung/12-04-action-js-docker-687dd79b.mp4","durationSec":1006.56,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":110.32,"ten":"Ôn nhanh · hôm nay · Mô phỏng: runner chỉ mở đúng một vali"},
+        {"t":110.32,"den":189.29,"ten":"JavaScript action: src/ → ncc → MỘT tệp dist/"},
+        {"t":189.29,"den":301.09,"ten":"Chạy thật: node --test, rồi ncc build"},
+        {"t":301.09,"den":400.78,"ten":"Chạy thật: thiếu vali, rồi dist/ cũ"},
+        {"t":400.78,"den":511.11,"ten":"Chạy thật: act dùng Node nào — và chỗ act khác GitHub"},
+        {"t":511.11,"den":632.22,"ten":"Chạy thật: Docker action trên act"},
+        {"t":632.22,"den":712.43,"ten":"Con trỏ di động: một tệp, hai SHA, hai bộ output"},
+        {"t":712.43,"den":832.82,"ten":"Mô phỏng: bốn mươi kho cùng đỏ, và luật phát hành"},
+        {"t":832.82,"den":936.14,"ten":"Tóm tắt · Thực hành 15–20 phút"},
+        {"t":936.14,"den":1006.56,"ten":"Ba câu tự kiểm & bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 12.3 của khoá GitHub Actions."},
         {"t":10.43,"vi":"Bài trước: composite action là một bước trong mắt GitHub, nhiều bước trong log."},
@@ -1937,8 +2075,17 @@
         {"t":999.17,"vi":"Bài sau, 12.4: mẫu cho tổ chức, và hoá đơn bảo trì."}
       ]
     },
-    "ga-12-4-mau-cho-to-chuc": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/github-actions/12-tai-su-dung/12-05-mau-cho-to-chuc-6e259c36.mp4","durationSec":776.72,"nguonCau":"srt",
-      "parts": [],
+    "ga-12-4-mau-cho-to-chuc": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/github-actions/12-tai-su-dung/12-05-mau-cho-to-chuc-6e259c36.mp4","durationSec":776.72,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":81.96,"ten":"Ôn nhanh · hôm nay"},
+        {"t":81.96,"den":201.34,"ten":"Năm cỡ tái sử dụng — chọn cỡ NHỎ NHẤT đủ dùng"},
+        {"t":201.34,"den":294.54,"ten":"Chạy thật: anchor chạy, merge key bị từ chối"},
+        {"t":294.54,"den":406.2,"ten":"Quy ước giữ thư viện dùng chung dễ đọc"},
+        {"t":406.2,"den":510.18,"ten":"Chạy thật: kiểm kê api-backend hôm nay"},
+        {"t":510.18,"den":619.72,"ten":"Hoá đơn bảo trì, đếm ra số · Câu phỏng vấn hay gặp"},
+        {"t":619.72,"den":708.99,"ten":"Tóm tắt · Thực hành 15–20 phút"},
+        {"t":708.99,"den":776.72,"ten":"Ba câu tự kiểm & bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 12.4 của khoá GitHub Actions."},
         {"t":10.42,"vi":"Bài trước: action JavaScript phải đóng gói dist, và cần job kiểm dist."},
@@ -2065,8 +2212,17 @@
         {"t":764.45,"vi":"Học xong bài này, bạn làm phần Thực hành ngay dưới video, rồi làm quiz Chương 12. Bài sau, 13.1: runner làm việc thế nào."}
       ]
     },
-    "ga-13-1-runner-hoat-dong": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/github-actions/13-runner-rieng/13-02-runner-hoat-dong-a78deee6.mp4","durationSec":775.79,"nguonCau":"srt",
-      "parts": [],
+    "ga-13-1-runner-hoat-dong": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/github-actions/13-runner-rieng/13-02-runner-hoat-dong-a78deee6.mp4","durationSec":775.79,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":135.39,"ten":"Ôn nhanh · hôm nay · Mô phỏng: tài xế tự hỏi tổng đài"},
+        {"t":135.39,"den":243.48,"ten":"Chạy thật: một mô hình thu nhỏ của chính mình"},
+        {"t":243.48,"den":329.16,"ten":"_diag: từ \"Listening for Jobs\" tới nhận job — 1 giây"},
+        {"t":329.16,"den":430.35,"ten":"Thư mục _work: còn nguyên cho job sau nếu máy còn sống"},
+        {"t":430.35,"den":542.54,"ten":"Đặt con số: $38 một tháng, hay một cỗ máy"},
+        {"t":542.54,"den":626.23,"ten":"Chạy thật: actionlint và nhãn tự đặt"},
+        {"t":626.23,"den":711.33,"ten":"Tóm tắt · Thực hành 15–20 phút"},
+        {"t":711.33,"den":775.79,"ten":"Ba câu tự kiểm & bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Chương 13 của khoá GitHub Actions."},
         {"t":9.35,"vi":"Chương trước khép lại bằng luật: chọn cơ chế tái sử dụng nhỏ nhất, và ghim luôn đi cùng Dependabot."},
@@ -2196,8 +2352,17 @@
         {"t":767.42,"vi":"Bài sau, 13.2: tự dựng runner ephemeral, trong container, cho đúng một job."}
       ]
     },
-    "ga-13-2-tu-dung-runner": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/github-actions/13-runner-rieng/13-03-tu-dung-runner-42646793.mp4","durationSec":777.46,"nguonCau":"srt",
-      "parts": [],
+    "ga-13-2-tu-dung-runner": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/github-actions/13-runner-rieng/13-03-tu-dung-runner-42646793.mp4","durationSec":777.46,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":133.16,"ten":"Ôn nhanh · hôm nay"},
+        {"t":133.16,"den":254.95,"ten":"Ảnh runner: tarball chính thức, người dùng không root"},
+        {"t":254.95,"den":352.97,"ten":"khoi-dong.sh: --ephemeral, nhãn riêng, lối gỡ khẩn"},
+        {"t":352.97,"den":436.86,"ten":"Ba cách hỏng lúc đăng ký — dừng ngay, đọc được"},
+        {"t":436.86,"den":547.1,"ten":"Liên kết chéo · người dùng, PID 1"},
+        {"t":547.1,"den":638.33,"ten":"Bền hay ephemeral: thứ gì mất theo job, thứ gì còn"},
+        {"t":638.33,"den":715.79,"ten":"Tóm tắt · Thực hành 15–20 phút"},
+        {"t":715.79,"den":777.46,"ten":"Ba câu tự kiểm & bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 13.2 của khoá GitHub Actions."},
         {"t":9.67,"vi":"Bài trước: runner kéo việc về qua một kết nối đi ra, Listener sinh Worker cho mỗi job."},
@@ -2328,8 +2493,17 @@
         {"t":769,"vi":"Bài sau, 13.3: bảo mật self-hosted, container job và service container."}
       ]
     },
-    "ga-13-3-bao-mat-self-hosted": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/github-actions/13-runner-rieng/13-04-bao-mat-self-hosted-00039ae9.mp4","durationSec":737.4,"nguonCau":"srt",
-      "parts": [],
+    "ga-13-3-bao-mat-self-hosted": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/github-actions/13-runner-rieng/13-04-bao-mat-self-hosted-00039ae9.mp4","durationSec":737.4,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":81.91,"ten":"Ôn nhanh · hôm nay · Mô phỏng: mã của người lạ vào máy bạn"},
+        {"t":81.91,"den":182.48,"ten":"Kho PUBLIC + self-hosted = máy bạn chạy mã người lạ"},
+        {"t":182.48,"den":282.96,"ten":"Hosted sạch sau mỗi job: hai job, hai máy, không dấu vết"},
+        {"t":282.96,"den":364.64,"ten":"Chạy thật: log che, /proc thì không"},
+        {"t":364.64,"den":467.45,"ten":"services: Postgres — runner tự chờ health-check"},
+        {"t":467.45,"den":548.57,"ten":"Không health-check: bước đầu tới TRƯỚC Postgres 1,1 giây"},
+        {"t":548.57,"den":671.67,"ten":"Câu phỏng vấn hay gặp · Tóm tắt"},
+        {"t":671.67,"den":737.4,"ten":"Ba câu tự kiểm & bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 13.3 của khoá GitHub Actions."},
         {"t":9.78,"vi":"Bài trước: runner ephemeral trong container, sống cho đúng một job rồi biến mất."},
@@ -2453,8 +2627,16 @@
         {"t":728.44,"vi":"Bài sau, 13.4: mở rộng runner, ARC, tự co giãn, và máy build ở nhà."}
       ]
     },
-    "ga-14-1-cong-chat-luong": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/github-actions/14-chat-luong-phat-hanh/14-02-cong-chat-luong-c993d167.mp4","durationSec":674.75,"nguonCau":"srt",
-      "parts": [],
+    "ga-14-1-cong-chat-luong": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/github-actions/14-chat-luong-phat-hanh/14-02-cong-chat-luong-c993d167.mp4","durationSec":674.75,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":121.96,"ten":"Ôn nhanh · hôm nay · Mô phỏng: cổng soát vé chỉ đọc tên"},
+        {"t":121.96,"den":219.29,"ten":"Job tổng hợp thiếu always() bị SKIP — skip = ĐẠT"},
+        {"t":219.29,"den":326.08,"ten":"Chạy thật: hai PR giả, hai job tổng hợp"},
+        {"t":326.08,"den":432.5,"ten":"Branch protection, ruleset, merge queue — có ở đâu"},
+        {"t":432.5,"den":523.62,"ten":"Khi nào dùng loại cổng nào — và khi nào KHÔNG"},
+        {"t":523.62,"den":614.62,"ten":"Tóm tắt · Thực hành 15–20 phút"},
+        {"t":614.62,"den":674.75,"ten":"Ba câu tự kiểm & bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Chương 14 của khoá GitHub Actions."},
         {"t":9.27,"vi":"Chương trước khép lại bằng đàn runner tự co giãn, và luật không bao giờ build trên VPS production."},
@@ -2577,8 +2759,16 @@
         {"t":669.28,"vi":"Bài sau, 14.2: bảo mật chuỗi cung ứng."}
       ]
     },
-    "ga-14-2-bao-mat-chuoi-cung-ung": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/github-actions/14-chat-luong-phat-hanh/14-03-bao-mat-chuoi-cung-ung-66932091.mp4","durationSec":677.33,"nguonCau":"srt",
-      "parts": [],
+    "ga-14-2-bao-mat-chuoi-cung-ung": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/github-actions/14-chat-luong-phat-hanh/14-03-bao-mat-chuoi-cung-ung-66932091.mp4","durationSec":677.33,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":129.2,"ten":"Ôn nhanh · hôm nay · Mô phỏng: bốn đường ống vào bếp"},
+        {"t":129.2,"den":263.46,"ten":"Tiêm lệnh qua tiêu đề PR — dựng lại VÔ HẠI"},
+        {"t":263.46,"den":340.71,"ten":"Chạy thật: actionlint bắt gì, bỏ gì"},
+        {"t":340.71,"den":435.83,"ten":"Dependabot sửa phụ thuộc CŨ, review chặn cái MỚI"},
+        {"t":435.83,"den":531.69,"ten":"Phòng thủ nhiều lớp — mỗi lớp một chỗ đặt"},
+        {"t":531.69,"den":618.03,"ten":"Tóm tắt · Thực hành 15–20 phút"},
+        {"t":618.03,"den":677.33,"ten":"Ba câu tự kiểm & bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 14.2 của khoá GitHub Actions."},
         {"t":9.85,"vi":"Bài trước: check đỏ không chặn gì nếu không có luật, và job tổng hợp phải có if always."},
@@ -2696,8 +2886,16 @@
         {"t":672.82,"vi":"Bài sau, 14.3: phát hành."}
       ]
     },
-    "ga-14-3-phat-hanh": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/github-actions/14-chat-luong-phat-hanh/14-04-phat-hanh-6bc65eea.mp4","durationSec":703.25,"nguonCau":"srt",
-      "parts": [],
+    "ga-14-3-phat-hanh": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/github-actions/14-chat-luong-phat-hanh/14-04-phat-hanh-6bc65eea.mp4","durationSec":703.25,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":113.83,"ten":"Ôn nhanh · hôm nay · Mô phỏng: hai máy đánh số bản"},
+        {"t":113.83,"den":227.25,"ten":"Tạo release từ một job: gh release create"},
+        {"t":227.25,"den":335.02,"ten":"Chạy thật: semantic-release ba lượt trên máy"},
+        {"t":335.02,"den":435.51,"ten":"Đẩy ảnh lên GHCR chỉ bằng GITHUB_TOKEN"},
+        {"t":435.51,"den":519.72,"ten":"Sửa một byte là attestation không còn khớp"},
+        {"t":519.72,"den":597.44,"ten":"Câu phỏng vấn hay gặp · Tóm tắt"},
+        {"t":597.44,"den":703.25,"ten":"Thực hành 15–20 phút · Ba câu tự kiểm & bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 14.3 của khoá GitHub Actions."},
         {"t":9.87,"vi":"Bài trước: pull request target, tiêm lệnh qua tiêu đề PR, và ba máy quét tĩnh."},
@@ -2825,8 +3023,15 @@
         {"t":697.6,"vi":"Bài sau, 14.4: CI cho monorepo."}
       ]
     },
-    "ga-14-4-monorepo": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/github-actions/14-chat-luong-phat-hanh/14-05-monorepo-e8e39125.mp4","durationSec":577.08,"nguonCau":"srt",
-      "parts": [],
+    "ga-14-4-monorepo": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/github-actions/14-chat-luong-phat-hanh/14-05-monorepo-e8e39125.mp4","durationSec":577.08,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":124.16,"ten":"Ôn nhanh · hôm nay · Mô phỏng: toà nhà ba căn hộ"},
+        {"t":124.16,"den":211.38,"ten":"Năm push: paths-filter nói \"đổi hết\", git diff nói đúng gói"},
+        {"t":211.38,"den":318.34,"ten":"Ma trận động từ JSON — mảng rỗng làm job hỏng"},
+        {"t":318.34,"den":396.31,"ten":"Áp chương này vào ci-lint.yml: năm thay đổi, theo thứ tự"},
+        {"t":396.31,"den":472.7,"ten":"Liên kết chéo · ruleset, CI đẩy ảnh · Câu phỏng vấn hay gặp"},
+        {"t":472.7,"den":577.08,"ten":"Thực hành 15–20 phút · Ba câu tự kiểm & bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 14.4, bài cuối Chương 14."},
         {"t":9.71,"vi":"Bài trước: phát hành bằng token của chính job, và attestation chứng minh nguồn gốc chứ không chứng minh tính đúng."},
@@ -2918,8 +3123,17 @@
         {"t":565.34,"vi":"Học xong bài này, bạn làm phần Thực hành ngay dưới video, rồi làm quiz Chương 14. Bài sau, 15.1: dự án cuối khoá bắt đầu."}
       ]
     },
-    "ga-15-1-ci-cho-pr": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/github-actions/15-du-an-cuoi-khoa/15-02-ci-cho-pr-64b52289.mp4","durationSec":738.29,"nguonCau":"srt",
-      "parts": [],
+    "ga-15-1-ci-cho-pr": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/github-actions/15-du-an-cuoi-khoa/15-02-ci-cho-pr-64b52289.mp4","durationSec":738.29,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":125.13,"ten":"Ôn nhanh · hôm nay"},
+        {"t":125.13,"den":241.7,"ten":"ch15-ci.yml: ba job song song, một job tổng hợp, khoá theo số PR"},
+        {"t":241.7,"den":320.86,"ten":"Bốn cách có cơ sở dữ liệu cho test"},
+        {"t":320.86,"den":414.6,"ten":"Cache npm đo thật: với app nhỏ, cache CHẬM hơn tự cài"},
+        {"t":414.6,"den":502.04,"ten":"Check tổng hợp: \"skip\" lọt qua, job always() mới chặn PR đỏ"},
+        {"t":502.04,"den":586.12,"ten":"Bẫy thứ hai: check bắt buộc trong workflow có paths"},
+        {"t":586.12,"den":678.11,"ten":"Tóm tắt · Thực hành 15–20 phút"},
+        {"t":678.11,"den":738.29,"ten":"Ba câu tự kiểm & bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Chương 15, dự án cuối khoá. Chương trước khép lại bằng kho nhiều gói: chỉ kiểm gói bị đổi, nhưng vẫn đúng một check bắt buộc."},
         {"t":15.36,"vi":"Mười bốn chương dạy từng mảnh."},
@@ -3053,8 +3267,17 @@
         {"t":730.08,"vi":"Bài sau, 15.2: dựng ảnh Docker một lần, hai kiến trúc, đẩy GHCR."}
       ]
     },
-    "ga-15-3-deploy-an-toan": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/github-actions/15-du-an-cuoi-khoa/15-04-deploy-an-toan-ed9a04a0.mp4","durationSec":801.63,"nguonCau":"srt",
-      "parts": [],
+    "ga-15-3-deploy-an-toan": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/github-actions/15-du-an-cuoi-khoa/15-04-deploy-an-toan-ed9a04a0.mp4","durationSec":801.63,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":122.48,"ten":"Ôn nhanh · hôm nay"},
+        {"t":122.48,"den":209.92,"ten":"Environment: gọi tên từ job thì lỗi, Deployments API thì tạo được"},
+        {"t":209.92,"den":298.57,"ten":"Chạy thật: VPS giả, khoá tạm, lần deploy đầu tiên"},
+        {"t":298.57,"den":383.84,"ten":"Chạy thật: đọc sổ deployment thật của ch15-production"},
+        {"t":383.84,"den":502.71,"ten":"Chạy thật: deploy thứ hai, sổ đưa ra đích quay lui"},
+        {"t":502.71,"den":604.77,"ten":"Khoá CI hủy mất bản trước; khoá deploy thì xếp hàng"},
+        {"t":604.77,"den":700.03,"ten":"Liên kết chéo · deploy qua SSH, cú lùi chạy được"},
+        {"t":700.03,"den":801.63,"ten":"Thực hành 15–20 phút · Ba câu tự kiểm & bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 15.3. Bài trước: dựng ảnh một lần, hai kiến trúc, deploy bằng tag sha, và một chữ ký kiểm chứng được."},
         {"t":15.36,"vi":"Hôm nay đưa ảnh ấy lên production."},
@@ -3187,8 +3410,16 @@
         {"t":795.53,"vi":"Bài sau, 15.4: vận hành pipeline khi nó đỏ."}
       ]
     },
-    "ga-15-4-van-hanh-pipeline": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/github-actions/15-du-an-cuoi-khoa/15-05-van-hanh-pipeline-8b92e12d.mp4","durationSec":688.52,"nguonCau":"srt",
-      "parts": [],
+    "ga-15-4-van-hanh-pipeline": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/github-actions/15-du-an-cuoi-khoa/15-05-van-hanh-pipeline-8b92e12d.mp4","durationSec":688.52,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":113.22,"ten":"Ôn nhanh · hôm nay"},
+        {"t":113.22,"den":196.21,"ten":"Chạy thật: ba lớp đầu của run đỏ, đọc qua REST"},
+        {"t":196.21,"den":292.2,"ten":"Chạy thật: bốn mươi lần mỗi bản"},
+        {"t":292.2,"den":408.54,"ten":"Dọn dẹp: cache và artifact có hạn mức — xoá đúng thứ của mình"},
+        {"t":408.54,"den":486.38,"ten":"Chạy thật: chấm api-backend theo checklist"},
+        {"t":486.38,"den":590.94,"ten":"10 câu phỏng vấn CI/CD (6–10)"},
+        {"t":590.94,"den":688.52,"ten":"Thực hành 15–20 phút · Ba câu tự kiểm & bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 15.4, bài dạy cuối cùng của khoá."},
         {"t":10,"vi":"Bài trước: deploy có khoá, smoke test so phiên bản, và tự quay lui trong vài giây."},
@@ -3314,8 +3545,16 @@
         {"t":685.26,"vi":"Chúc bạn làm thật tốt!"}
       ]
     },
-    "ga-2-1-may-moi": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/github-actions/02-job-runner/02-02-may-moi-6f18277d.mp4","durationSec":637.79,"nguonCau":"srt",
-      "parts": [],
+    "ga-2-1-may-moi": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/github-actions/02-job-runner/02-02-may-moi-6f18277d.mp4","durationSec":637.79,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":117.89,"ten":"Ôn nhanh · hôm nay · Mô phỏng: mỗi job một phòng thuê"},
+        {"t":117.89,"den":215.97,"ten":"Chạy thật: hai job, hai container · Máy \"mới\" đã bật sẵn"},
+        {"t":215.97,"den":299.46,"ten":"Nó khiến bạn mất gì · Dòng thời gian một job"},
+        {"t":299.46,"den":400.66,"ten":"Set up job là lý lịch cỗ máy · runs-on chọn loại máy"},
+        {"t":400.66,"den":477.77,"ten":"Gõ sai nhãn: xếp hàng mãi · Câu phỏng vấn hay gặp"},
+        {"t":477.77,"den":575.32,"ten":"Liên kết chéo · Tóm tắt"},
+        {"t":575.32,"den":637.79,"ten":"Ba câu tự kiểm & bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Chương 2 của khoá GitHub Actions: job, runner, và những cỗ máy ngồi chờ."},
         {"t":12.69,"vi":"Chương 1 là tệp workflow: bẫy YAML, cái gì khởi động một lần chạy, cron trễ tới đâu, commit gộp, và bộ lọc."},
@@ -3424,8 +3663,15 @@
         {"t":629.82,"vi":"Bài sau, 2.2: needs, và năm phút mười hai giây máy dựng xong sớm."}
       ]
     },
-    "ga-2-2-needs": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/github-actions/02-job-runner/02-03-needs-c7b7a50d.mp4","durationSec":482.75,"nguonCau":"srt",
-      "parts": [],
+    "ga-2-2-needs": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/github-actions/02-job-runner/02-03-needs-c7b7a50d.mp4","durationSec":482.75,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":96.97,"ten":"Ôn nhanh · hôm nay"},
+        {"t":96.97,"den":185,"ten":"Mỗi cạnh needs tốn ~3 giây · Bốn kênh qua ranh giới job"},
+        {"t":185,"den":261.03,"ten":"needs chỉ thấy cha trực tiếp"},
+        {"t":261.03,"den":346.82,"ten":"Job hỏng ⇒ job phụ thuộc bị SKIP · Bảng if: của job"},
+        {"t":346.82,"den":425.71,"ten":"Liên kết chéo · Tóm tắt"},
+        {"t":425.71,"den":482.75,"ten":"Ba câu tự kiểm & bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 2.2 của khoá GitHub Actions."},
         {"t":9.35,"vi":"Bài trước: mỗi job là một máy ảo riêng, mới tinh, và mọi thứ trên đĩa mất khi job xong."},
@@ -3526,8 +3772,15 @@
         {"t":477.12,"vi":"Bài sau, 2.3: cùng một lệnh trên ba nền tảng."}
       ]
     },
-    "ga-2-3-ba-nen-tang": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/github-actions/02-job-runner/02-04-ba-nen-tang-f3fdb8a9.mp4","durationSec":538.83,"nguonCau":"srt",
-      "parts": [],
+    "ga-2-3-ba-nen-tang": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/github-actions/02-job-runner/02-04-ba-nen-tang-f3fdb8a9.mp4","durationSec":538.83,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":82.46,"ten":"Ôn nhanh · hôm nay · Mô phỏng: mỗi nền tảng một hồ sơ"},
+        {"t":82.46,"den":193.32,"ten":"Giá mỗi phút: macOS ~10× Linux · Ba shell mặc định"},
+        {"t":193.32,"den":301.87,"ten":"Liên kết chéo · Chạy thật: Mac và Linux, cùng thư mục"},
+        {"t":301.87,"den":380.52,"ten":"bash 3.2 trên macOS · Liên kết chéo"},
+        {"t":380.52,"den":474.72,"ten":"Câu phỏng vấn hay gặp · Tóm tắt"},
+        {"t":474.72,"den":538.83,"ten":"Ba câu tự kiểm & bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 2.3 của khoá GitHub Actions."},
         {"t":9.84,"vi":"Bài trước: needs đợi tất cả, và job chậm nhất định nhịp. Trong ví dụ ấy, macOS là kẻ chậm nhất."},
@@ -3634,8 +3887,14 @@
         {"t":531.73,"vi":"Bài sau, 2.4: bước, mã thoát, và một bước hỏng mà vẫn xanh."}
       ]
     },
-    "ga-2-4-buoc-ma-thoat": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/github-actions/02-job-runner/02-05-buoc-ma-thoat-6ac5b726.mp4","durationSec":438.17,"nguonCau":"srt",
-      "parts": [],
+    "ga-2-4-buoc-ma-thoat": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/github-actions/02-job-runner/02-05-buoc-ma-thoat-6ac5b726.mp4","durationSec":438.17,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":96.18,"ten":"Ôn nhanh · hôm nay · Mô phỏng: đường ống chỉ báo trạm cuối"},
+        {"t":96.18,"den":183.51,"ten":"Chạy thật: pipefail, và set -e yếu hơn vẻ ngoài"},
+        {"t":183.51,"den":286.89,"ten":"continue-on-error: outcome ≠ conclusion"},
+        {"t":286.89,"den":382.6,"ten":"Câu phỏng vấn hay gặp · Tóm tắt"},
+        {"t":382.6,"den":438.17,"ten":"Ba câu tự kiểm & bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 2.4 của khoá GitHub Actions."},
         {"t":9.89,"vi":"Bài trước: trên Windows, một lệnh hỏng ở giữa script mà bước vẫn xanh."},
@@ -3723,8 +3982,14 @@
         {"t":432.17,"vi":"Bài sau, 2.5: ma trận, và cái giá của fail-fast."}
       ]
     },
-    "ga-2-5-ma-tran": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/github-actions/02-job-runner/02-06-ma-tran-ab93e208.mp4","durationSec":489.82,"nguonCau":"srt",
-      "parts": [],
+    "ga-2-5-ma-tran": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/github-actions/02-job-runner/02-06-ma-tran-ab93e208.mp4","durationSec":489.82,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":100.06,"ten":"Ôn nhanh · hôm nay · Ba job khai báo, năm job chạy"},
+        {"t":100.06,"den":198.06,"ten":"Ma trận nở: include / exclude"},
+        {"t":198.06,"den":298.19,"ten":"Mô phỏng: cái mặc định khiến bạn tốn · fail-fast bật và tắt"},
+        {"t":298.19,"den":384.68,"ten":"max-parallel: 1 · Câu phỏng vấn hay gặp"},
+        {"t":384.68,"den":489.82,"ten":"Thực hành 15–20 phút · Ba câu tự kiểm & bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 2.5, bài cuối của chương 2 trong khoá GitHub Actions."},
         {"t":11.94,"vi":"Bài trước: một bước qua khi shell thoát không, và pipefail quyết định shell thấy gì."},
@@ -3817,8 +4082,14 @@
         {"t":485.26,"vi":"Sau đó là bài kiểm tra chương 2 trên web."}
       ]
     },
-    "ga-3-2-context": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/github-actions/03-bieu-thuc-context/03-03-context-790db669.mp4","durationSec":405.11,"nguonCau":"srt",
-      "parts": [],
+    "ga-3-2-context": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/github-actions/03-bieu-thuc-context/03-03-context-790db669.mp4","durationSec":405.11,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":88.9,"ten":"Ôn nhanh · hôm nay · api-backend: 94 biểu thức"},
+        {"t":88.9,"den":185.02,"ten":"Bảng Context availability · Liên kết chéo"},
+        {"t":185.02,"den":270.44,"ten":"Vắng mặt ⇒ RỖNG · Chạy thật: mọi kiểu vắng mặt"},
+        {"t":270.44,"den":354.36,"ten":"Câu phỏng vấn hay gặp · Tóm tắt"},
+        {"t":354.36,"den":405.11,"ten":"Ba câu tự kiểm & bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 3.2 của khoá GitHub Actions."},
         {"t":9.72,"vi":"Bài trước: biểu thức là phép thay chữ, khoá mức job tính trên GitHub, khoá mức bước tính trên runner."},
@@ -3901,8 +4172,13 @@
         {"t":397.71,"vi":"Bài sau, 3.3: toán tử, ép kiểu, và điều kiện hỏng theo hướng mở."}
       ]
     },
-    "ga-3-3-ep-kieu": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/github-actions/03-bieu-thuc-context/03-04-ep-kieu-a01e4024.mp4","durationSec":386.65,"nguonCau":"srt",
-      "parts": [],
+    "ga-3-3-ep-kieu": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/github-actions/03-bieu-thuc-context/03-04-ep-kieu-a01e4024.mp4","durationSec":386.65,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":96.67,"ten":"Ôn nhanh · hôm nay · Mô phỏng: cân hai đĩa đổi ra số"},
+        {"t":96.67,"den":205.14,"ten":"Chỉ năm giá trị là SAI · 17 cách viết if:"},
+        {"t":205.14,"den":299.22,"ten":"Chạy thật: actionlint bắt chữ ngoài ngoặc"},
+        {"t":299.22,"den":386.65,"ten":"Thực hành 15–20 phút · Ba câu tự kiểm & bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 3.3 của khoá GitHub Actions."},
         {"t":9.48,"vi":"Bài trước: mỗi khoá chỉ thấy vài context, và context vắng mặt cho ra rỗng chứ không báo lỗi."},
@@ -3979,8 +4255,15 @@
         {"t":379.52,"vi":"Bài sau, 3.4: hàm, và hashFiles tái lập khớp chính xác."}
       ]
     },
-    "ga-4-1-action-la-gi": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/github-actions/04-action/04-02-action-la-gi-642708c3.mp4","durationSec":557.95,"nguonCau":"srt",
-      "parts": [],
+    "ga-4-1-action-la-gi": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/github-actions/04-action/04-02-action-la-gi-642708c3.mp4","durationSec":557.95,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":85.38,"ten":"Ôn nhanh · hôm nay · Một dòng uses: đi qua 5 chặng"},
+        {"t":85.38,"den":176.78,"ten":"Log Set up job: tải về đâu, thành SHA nào · Ba loại action"},
+        {"t":176.78,"den":261.23,"ten":"Liên kết chéo · Mô phỏng: thuê thợ vào nhà"},
+        {"t":261.23,"den":363.26,"ten":"Chạy thật: một action tự viết thấy gì"},
+        {"t":363.26,"den":447.48,"ten":"pre → main → post · Câu phỏng vấn hay gặp"},
+        {"t":447.48,"den":557.95,"ten":"Thực hành 15–20 phút · Ba câu tự kiểm & bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Chương 4 của khoá GitHub Actions: action."},
         {"t":10.63,"vi":"Chương 3 là biểu thức và context: thay chữ trước khi shell chạy, ép kiểu, hàm, và điều kiện."},
@@ -4063,8 +4346,15 @@
         {"t":549.62,"vi":"Bài sau, 4.2: a vê bốn là một con trỏ, không phải một phiên bản."}
       ]
     },
-    "ga-4-2-ghim": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/github-actions/04-action/04-03-ghim-3cf47931.mp4","durationSec":511.32,"nguonCau":"srt",
-      "parts": [],
+    "ga-4-2-ghim": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/github-actions/04-action/04-03-ghim-3cf47931.mp4","durationSec":511.32,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":103.44,"ten":"Ôn nhanh · hôm nay · api-backend: 21 lượt uses:, 0 ghim SHA"},
+        {"t":103.44,"den":193.74,"ten":"Mô phỏng: biển chỉ đường v4 · @v4: 15 bản, một chữ"},
+        {"t":193.74,"den":276.47,"ten":"tj-actions 03/2025 · Bốn cách ghim"},
+        {"t":276.47,"den":353.92,"ten":"SHA phải đủ 40 ký tự · Ghim SHA cần Dependabot"},
+        {"t":353.92,"den":450.9,"ten":"Câu phỏng vấn hay gặp · Tóm tắt"},
+        {"t":450.9,"den":511.32,"ten":"Ba câu tự kiểm & bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 4.2 của khoá GitHub Actions."},
         {"t":11.62,"vi":"Bài trước: uses là tải kho của người khác về rồi chạy mã của họ với tư cách là bạn, và thẻ được đổi thành SHA lúc chạy."},
@@ -4143,8 +4433,13 @@
         {"t":503.51,"vi":"Bài sau, 4.3: checkout, và cú clone nông gần như không tiết kiệm gì."}
       ]
     },
-    "ga-4-4-setup": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/github-actions/04-action/04-05-setup-d25f9f1d.mp4","durationSec":401.64,"nguonCau":"srt",
-      "parts": [],
+    "ga-4-4-setup": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/github-actions/04-action/04-05-setup-d25f9f1d.mp4","durationSec":401.64,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":80.75,"ten":"Ôn nhanh · hôm nay · Mô phỏng: kệ dụng cụ đặt sẵn"},
+        {"t":80.75,"den":198.78,"ten":"setup-node: có sẵn 1 giây, phải tải 4–5 giây"},
+        {"t":198.78,"den":279.86,"ten":"Tái lập khoá cũ: Windows khác vì CRLF"},
+        {"t":279.86,"den":401.64,"ten":"Câu phỏng vấn hay gặp · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 4.4 của khoá GitHub Actions."},
         {"t":9.8,"vi":"Bài trước: checkout xoá workspace, fetch đúng một commit, và để khoá nằm lại cho các bước sau."},
@@ -4215,8 +4510,14 @@
         {"t":395.06,"vi":"Bài sau, 4.5: tự viết lấy, và cú trôi dạt đo được."}
       ]
     },
-    "ga-4-5-tu-viet": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/github-actions/04-action/04-06-tu-viet-4e3555af.mp4","durationSec":436.62,"nguonCau":"srt",
-      "parts": [],
+    "ga-4-5-tu-viet": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/github-actions/04-action/04-06-tu-viet-4e3555af.mp4","durationSec":436.62,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":80.65,"ten":"Ôn nhanh · hôm nay · Mô phỏng: chín tờ công thức chép tay"},
+        {"t":80.65,"den":189.71,"ten":"Chín bản chép đã trôi thành hai phiên bản"},
+        {"t":189.71,"den":287.51,"ten":"Composite action: input vào, output ra"},
+        {"t":287.51,"den":379.93,"ten":"Câu phỏng vấn hay gặp · Tóm tắt"},
+        {"t":379.93,"den":436.62,"ten":"Ba câu tự kiểm & bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 4.5, bài cuối của chương 4 trong khoá GitHub Actions."},
         {"t":12.52,"vi":"Bài trước: họ action setup, tool cache, và khoá cache tính lại được tới từng ký tự."},
@@ -4292,8 +4593,13 @@
         {"t":427.32,"vi":"Học xong bài này, bạn làm phần Thực hành ngay dưới video, rồi làm bài kiểm tra chương 4 trên web."}
       ]
     },
-    "ga-5-1-cache-mua-gi": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/github-actions/05-cache-artifact/05-02-cache-mua-gi-04231c4d.mp4","durationSec":399.35,"nguonCau":"srt",
-      "parts": [],
+    "ga-5-1-cache-mua-gi": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/github-actions/05-cache-artifact/05-02-cache-mua-gi-04231c4d.mp4","durationSec":399.35,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":96.14,"ten":"Ôn nhanh · hôm nay"},
+        {"t":96.14,"den":194.88,"ten":"Mô phỏng: tủ nguyên liệu hay tủ món đã nấu"},
+        {"t":194.88,"den":288.28,"ten":"Máy cục bộ −40%, runner −22% · Cache chỉ chạm tới bước cài"},
+        {"t":288.28,"den":399.35,"ten":"Tóm tắt · Thực hành 15–20 phút"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Chương 5 của khoá GitHub Actions: cache và artifact."},
         {"t":10.79,"vi":"Chương 4 là action: ghim SHA, checkout, setup, và tự viết composite action."},
@@ -4368,8 +4674,13 @@
         {"t":392.5,"vi":"Bài sau, 5.2: khoá, restore-keys, và tính bất biến."}
       ]
     },
-    "ga-5-2-khoa-cache": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/github-actions/05-cache-artifact/05-03-khoa-cache-614cbc7c.mp4","durationSec":378.1,"nguonCau":"srt",
-      "parts": [],
+    "ga-5-2-khoa-cache": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/github-actions/05-cache-artifact/05-03-khoa-cache-614cbc7c.mp4","durationSec":378.1,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":81.71,"ten":"Ôn nhanh · hôm nay · Mô phỏng: tủ gửi đồ khắc tên"},
+        {"t":81.71,"den":174.06,"ten":"Khoá hằng đông cứng ở lần chạy đầu"},
+        {"t":174.06,"den":262.97,"ten":"Đọc được: nhánh mình, mặc định, gốc của PR"},
+        {"t":262.97,"den":378.1,"ten":"Tóm tắt · Thực hành 15–20 phút"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 5.2 của khoá GitHub Actions."},
         {"t":9.7,"vi":"Bài trước: cache npm giữ kho tải về, cache node_modules giữ cây đã dựng, và con số thuộc về cỗ máy đo nó."},
@@ -4441,8 +4752,14 @@
         {"t":371.91,"vi":"Bài sau, 5.3: một cái cache chết, và cách nó chết."}
       ]
     },
-    "ga-5-3-cache-chet": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/github-actions/05-cache-artifact/05-04-cache-chet-3b552d45.mp4","durationSec":436.7,"nguonCau":"srt",
-      "parts": [],
+    "ga-5-3-cache-chet": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/github-actions/05-cache-artifact/05-04-cache-chet-3b552d45.mp4","durationSec":436.7,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":87.39,"ten":"Ôn nhanh · hôm nay · Mô phỏng: tủ lạnh không cắm điện"},
+        {"t":87.39,"den":186.37,"ten":"Chạy thật: ba phép kiểm trên kho của khoá"},
+        {"t":186.37,"den":269.43,"ten":"Cache \"sống\" mà rỗng — 237 byte"},
+        {"t":269.43,"den":352.09,"ten":"Hai bẫy: đổi path là mục khác, khoá cũng khớp tiền tố"},
+        {"t":352.09,"den":436.7,"ten":"Thực hành 15–20 phút · Ba câu tự kiểm & bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 5.3 của khoá GitHub Actions."},
         {"t":9.66,"vi":"Bài trước: mục cache ghi một lần, khoá hằng đông cứng, và restore-keys là tiền tố."},
@@ -4533,8 +4850,13 @@
         {"t":430.14,"vi":"Bài sau, 5.4: artifact, và con số phải đo hai lần."}
       ]
     },
-    "ga-5-4-artifact": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/github-actions/05-cache-artifact/05-05-artifact-9ecdfeaf.mp4","durationSec":395.45,"nguonCau":"srt",
-      "parts": [],
+    "ga-5-4-artifact": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/github-actions/05-cache-artifact/05-05-artifact-9ecdfeaf.mp4","durationSec":395.45,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":90.74,"ten":"Ôn nhanh · hôm nay · Cache và artifact: hai lời hứa"},
+        {"t":90.74,"den":186.79,"ten":"Hình dạng quyết định giá"},
+        {"t":186.79,"den":270.96,"ten":"Zip mất bit chạy, bỏ file ẩn"},
+        {"t":270.96,"den":395.45,"ten":"Câu phỏng vấn hay gặp · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 5.4 của khoá GitHub Actions."},
         {"t":9.73,"vi":"Bài trước: một cái cache chết, ba phép kiểm, và quy tắc ba lần chạy."},
@@ -4610,8 +4932,13 @@
         {"t":388.95,"vi":"Bài sau, 5.5: giới hạn, thu hồi, và điểm hoà vốn."}
       ]
     },
-    "ga-5-5-hoa-von": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/github-actions/05-cache-artifact/05-06-hoa-von-c76fa167.mp4","durationSec":400.4,"nguonCau":"srt",
-      "parts": [],
+    "ga-5-5-hoa-von": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/github-actions/05-cache-artifact/05-06-hoa-von-c76fa167.mp4","durationSec":400.4,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":93.59,"ten":"Ôn nhanh · hôm nay · Mô phỏng: cán cân hoà vốn"},
+        {"t":93.59,"den":192.1,"ten":"Chạy thật: tính tỉ lệ trúng tối thiểu · Bảng quyết định"},
+        {"t":192.1,"den":275.86,"ten":"Đo cả kho bằng gh cache · Sai lầm hay gặp ở Chương 5"},
+        {"t":275.86,"den":400.4,"ten":"Câu phỏng vấn hay gặp · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 5.5, bài cuối của chương 5 trong khoá GitHub Actions."},
         {"t":12.07,"vi":"Chương này đã đẻ ra bốn con số: lãi của cache npm, của cache node_modules, của tsbuildinfo, và giá của lần trượt."},
@@ -4687,8 +5014,14 @@
         {"t":391.3,"vi":"Học xong bài này, bạn làm phần Thực hành ngay dưới video, rồi làm bài kiểm tra chương 5 trên web."}
       ]
     },
-    "ga-6-1-che-bi-mat": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/github-actions/06-bi-mat-quyen-token/06-02-che-bi-mat-5cd7d656.mp4","durationSec":418.06,"nguonCau":"srt",
-      "parts": [],
+    "ga-6-1-che-bi-mat": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/github-actions/06-bi-mat-quyen-token/06-02-che-bi-mat-5cd7d656.mp4","durationSec":418.06,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":102.91,"ten":"Ôn nhanh · hôm nay · Mô phỏng: tấm lưới lọc dòng log"},
+        {"t":102.91,"den":189.68,"ten":"add-mask nhiều dòng: chỉ dòng ĐẦU được đăng ký"},
+        {"t":189.68,"den":266.43,"ten":"Chạy thật: chín việc với một secret giả"},
+        {"t":266.43,"den":365.19,"ten":"Liên kết chéo · Câu phỏng vấn hay gặp"},
+        {"t":365.19,"den":418.06,"ten":"Ba câu tự kiểm & bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Chương 6 của khoá GitHub Actions: bí mật, quyền, và token."},
         {"t":11.79,"vi":"Chương 5 là cache và artifact: khoá, hoà vốn, và bàn giao giữa các job."},
@@ -4770,8 +5103,14 @@
         {"t":410.7,"vi":"Bài sau, 6.2: GITHUB_TOKEN, và cái ranh giới nó không vượt được."}
       ]
     },
-    "ga-6-2-token": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/github-actions/06-bi-mat-quyen-token/06-03-token-40e3223b.mp4","durationSec":399.48,"nguonCau":"srt",
-      "parts": [],
+    "ga-6-2-token": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/github-actions/06-bi-mat-quyen-token/06-03-token-40e3223b.mp4","durationSec":399.48,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":87.66,"ten":"Ôn nhanh · hôm nay · Mô phỏng: thẻ phòng khách sạn"},
+        {"t":87.66,"den":174.16,"ten":"Khối GITHUB_TOKEN Permissions, sáu cách khai"},
+        {"t":174.16,"den":266.72,"ten":"Ba loại token · Liên kết chéo"},
+        {"t":266.72,"den":347.63,"ten":"Câu phỏng vấn hay gặp · Tóm tắt"},
+        {"t":347.63,"den":399.48,"ten":"Ba câu tự kiểm & bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 6.2 của khoá GitHub Actions."},
         {"t":9.71,"vi":"Bài trước: ba dấu sao là phép tìm chuỗi chính xác trên log, và mọi phép biến đổi đều lọt."},
@@ -4846,8 +5185,14 @@
         {"t":392.45,"vi":"Bài sau, 6.3: OIDC, và cái bí mật bạn thôi phải lưu."}
       ]
     },
-    "ga-6-3-oidc": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/github-actions/06-bi-mat-quyen-token/06-04-oidc-4983eb04.mp4","durationSec":438.96,"nguonCau":"srt",
-      "parts": [],
+    "ga-6-3-oidc": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/github-actions/06-bi-mat-quyen-token/06-04-oidc-4983eb04.mp4","durationSec":438.96,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":98.39,"ten":"Ôn nhanh · hôm nay"},
+        {"t":98.39,"den":199.88,"ten":"Chạy thật: bước Kiểm, tự làm trên máy"},
+        {"t":199.88,"den":290.09,"ten":"Chạy thật: act không cấp OIDC · Thiếu id-token: write"},
+        {"t":290.09,"den":383.82,"ten":"Liên kết chéo · Câu phỏng vấn hay gặp"},
+        {"t":383.82,"den":438.96,"ten":"Ba câu tự kiểm & bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 6.3 của khoá GitHub Actions."},
         {"t":9.81,"vi":"Bài trước: GITHUB_TOKEN sống cùng job, chỉ cho một kho, và khối permissions quyết định nó mở được gì."},
@@ -4926,8 +5271,14 @@
         {"t":432,"vi":"Bài sau, 6.4: toàn bộ bề mặt tấn công, gói trong một trang."}
       ]
     },
-    "ga-6-4-be-mat": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/github-actions/06-bi-mat-quyen-token/06-05-be-mat-981721af.mp4","durationSec":440.97,"nguonCau":"srt",
-      "parts": [],
+    "ga-6-4-be-mat": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/github-actions/06-bi-mat-quyen-token/06-05-be-mat-981721af.mp4","durationSec":440.97,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":93.83,"ten":"Ôn nhanh · hôm nay · Mô phỏng: toà nhà ba lối vào"},
+        {"t":93.83,"den":188.18,"ten":"Bốn cách hàng một thành hàng hai"},
+        {"t":188.18,"den":275.32,"ten":"environment là cổng · Secret của environment"},
+        {"t":275.32,"den":384.19,"ten":"Liên kết chéo · Câu phỏng vấn hay gặp"},
+        {"t":384.19,"den":440.97,"ten":"Ba câu tự kiểm & bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 6.4 của khoá GitHub Actions."},
         {"t":10.06,"vi":"Bài trước: OIDC thay một bí mật sống lâu bằng một tấm vé có chữ ký, sống năm phút."},
@@ -5002,8 +5353,14 @@
         {"t":434.8,"vi":"Bài sau, 6.5: một script soát cả kho bằng một câu lệnh."}
       ]
     },
-    "ga-6-5-soat": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/github-actions/06-bi-mat-quyen-token/06-06-soat-47d80a16.mp4","durationSec":441.03,"nguonCau":"srt",
-      "parts": [],
+    "ga-6-5-soat": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/github-actions/06-bi-mat-quyen-token/06-06-soat-47d80a16.mp4","durationSec":441.03,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":88.69,"ten":"Ôn nhanh · hôm nay · Mô phỏng: đầu báo khói có nút thử"},
+        {"t":88.69,"den":173.28,"ten":"Cùng script, hai hệ điều hành"},
+        {"t":173.28,"den":252.96,"ten":"Chạy thật: bấm nút thử của đầu báo"},
+        {"t":252.96,"den":346.7,"ten":"Ba công cụ, ba độ sâu · Liên kết chéo"},
+        {"t":346.7,"den":441.03,"ten":"Thực hành 15–20 phút · Ba câu tự kiểm & chương sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 6.5, bài cuối của Chương 6."},
         {"t":9.88,"vi":"Bài trước kết luận: lớp chặn nào cũng cần một phép kiểm chạy được, đủ rẻ để chạy lại."},
@@ -5095,8 +5452,16 @@
         {"t":436.96,"vi":"Chương 7 bắt đầu từ đường tới hạn."}
       ]
     },
-    "ga-7-1-duong-toi-han": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/github-actions/07-toc-do-concurrency/07-02-duong-toi-han-aa344250.mp4","durationSec":590.84,"nguonCau":"srt",
-      "parts": [],
+    "ga-7-1-duong-toi-han": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/github-actions/07-toc-do-concurrency/07-02-duong-toi-han-aa344250.mp4","durationSec":590.84,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":80.16,"ten":"Ôn nhanh · hôm nay · Mô phỏng: ba bếp, một mâm cơm"},
+        {"t":80.16,"den":157.22,"ten":"Ba con số của một lần chạy"},
+        {"t":157.22,"den":260.59,"ten":"Bốn hình dạng đồ thị, bốn công thức cho cái sàn"},
+        {"t":260.59,"den":359.01,"ten":"Sân tập: dời MỘT cạnh needs"},
+        {"t":359.01,"den":448.11,"ten":"Bẫy: thêm needs cho ngăn nắp · Độ chùng là một ngân sách"},
+        {"t":448.11,"den":537.4,"ten":"Câu phỏng vấn hay gặp · Tóm tắt"},
+        {"t":537.4,"den":590.84,"ten":"Ba câu tự kiểm & bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Chương 7 của khoá GitHub Actions: tốc độ, concurrency, và cái giá của nó."},
         {"t":13.05,"vi":"Chương 6 là bí mật và quyền: che chỉ khớp chuỗi đã lưu, token có ranh giới, và OIDC thay bí mật dài hạn."},
@@ -5207,8 +5572,15 @@
         {"t":583.3,"vi":"Bài sau, 7.2: concurrency, và hai thiết lập ngược nhau đều đúng."}
       ]
     },
-    "ga-7-2-concurrency": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/github-actions/07-toc-do-concurrency/07-03-concurrency-6404254d.mp4","durationSec":609.94,"nguonCau":"srt",
-      "parts": [],
+    "ga-7-2-concurrency": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/github-actions/07-toc-do-concurrency/07-03-concurrency-6404254d.mp4","durationSec":609.94,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":114.91,"ten":"Ôn nhanh · hôm nay · Mô phỏng: cây cầu một làn"},
+        {"t":114.91,"den":196.79,"ten":"Chọn group và cancel-in-progress theo việc"},
+        {"t":196.79,"den":300.54,"ten":"Huỷ là dừng GIỮA bước"},
+        {"t":300.54,"den":401.76,"ten":"queue: max mới có, và actionlint chưa biết"},
+        {"t":401.76,"den":479.87,"ten":"concurrency ở mức job: chỉ khoá phần nguy hiểm"},
+        {"t":479.87,"den":609.94,"ten":"Tóm tắt · Thực hành 15–20 phút"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, mình tiếp Chương 7."},
         {"t":7.38,"vi":"Bài trước: đường tới hạn là cái sàn, và gỡ một cạnh needs thừa là phép tăng tốc miễn phí."},
@@ -5318,8 +5690,15 @@
         {"t":601.62,"vi":"Bài sau, 7.3: cùng một workflow, một trăm giây và một trăm sáu mươi giây."}
       ]
     },
-    "ga-7-3-phuong-sai": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/github-actions/07-toc-do-concurrency/07-04-phuong-sai-217fa62b.mp4","durationSec":503.01,"nguonCau":"srt",
-      "parts": [],
+    "ga-7-3-phuong-sai": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/github-actions/07-toc-do-concurrency/07-04-phuong-sai-217fa62b.mp4","durationSec":503.01,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":110.96,"ten":"Ôn nhanh · hôm nay · Mô phỏng: hai đám chấm trước và sau"},
+        {"t":110.96,"den":188.46,"ten":"Thời lượng là tín hiệu phân loại"},
+        {"t":188.46,"den":274.76,"ten":"Chạy thật: mười bốn lần chạy qua API công khai"},
+        {"t":274.76,"den":361.7,"ten":"Ở mức bước, phương sai nhỏ hơn"},
+        {"t":361.7,"den":447.5,"ten":"Câu phỏng vấn hay gặp · Tóm tắt"},
+        {"t":447.5,"den":503.01,"ten":"Ba câu tự kiểm & bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, mình tiếp Chương 7."},
         {"t":7.38,"vi":"Bài trước: concurrency quyết định lần chạy bị vượt mặt sẽ chết hay chờ, và xếp hàng không làm việc thành bất biến."},
@@ -5413,8 +5792,14 @@
         {"t":496.1,"vi":"Bài sau, 7.4: mọi phép tăng tốc khoá này đã đo, xếp hạng."}
       ]
     },
-    "ga-7-4-xep-hang": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/github-actions/07-toc-do-concurrency/07-05-xep-hang-95a78e83.mp4","durationSec":541.66,"nguonCau":"srt",
-      "parts": [],
+    "ga-7-4-xep-hang": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/github-actions/07-toc-do-concurrency/07-05-xep-hang-95a78e83.mp4","durationSec":541.66,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":124.04,"ten":"Ôn nhanh · hôm nay · Mô phỏng: cây cột dài nhất quyết định"},
+        {"t":124.04,"den":208.74,"ten":"Chạy thật: Amdahl trên đồ thị job"},
+        {"t":208.74,"den":321.07,"ten":"Tách ba việc ra ba job: đồng hồ −13%, máy-giây ×2"},
+        {"t":321.07,"den":413.2,"ten":"Những phép tăng tốc đo rồi mà KHÔNG khuyến nghị"},
+        {"t":413.2,"den":541.66,"ten":"Tóm tắt · Thực hành 15–20 phút"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, mình tiếp Chương 7."},
         {"t":7.55,"vi":"Bài trước: cùng một commit chạy từ ba mươi bảy tới bảy mươi bảy giây, nên phải đo theo cặp, so trung vị, và đo ở mức bước."},
@@ -5503,8 +5888,14 @@
         {"t":534.54,"vi":"Bài sau, 7.5: CI tốn gì, và nó đáng gì."}
       ]
     },
-    "ga-7-5-gia-tri": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/github-actions/07-toc-do-concurrency/07-06-gia-tri-1ffa19d7.mp4","durationSec":464.06,"nguonCau":"srt",
-      "parts": [],
+    "ga-7-5-gia-tri": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/github-actions/07-toc-do-concurrency/07-06-gia-tri-1ffa19d7.mp4","durationSec":464.06,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":96.94,"ten":"Ôn nhanh · hôm nay · Mô phỏng: những chiếc ly một phút"},
+        {"t":96.94,"den":195,"ten":"Nếu kho riêng tư: 76% tiền ở workflow phát hành"},
+        {"t":195,"den":296.09,"ten":"Mô phỏng: cái cân của CI"},
+        {"t":296.09,"den":407.85,"ten":"Liên kết chéo · Câu phỏng vấn hay gặp"},
+        {"t":407.85,"den":464.06,"ten":"Ba câu tự kiểm & bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đây là bài cuối của Chương 7."},
         {"t":8.23,"vi":"Bài trước: xếp phép tăng tốc theo giây đồng hồ trên đường tới hạn, rồi nhân với tần suất."},
@@ -5587,8 +5978,15 @@
         {"t":451.7,"vi":"Học xong bài này, bạn làm phần Thực hành ngay dưới video, rồi làm quiz Chương 7. Chương sau, 8.1: mã thoát, đo chứ không tra."}
       ]
     },
-    "ga-8-1-ma-thoat": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/github-actions/08-khi-ci-do/08-02-ma-thoat-e0f4cdbf.mp4","durationSec":634.75,"nguonCau":"srt",
-      "parts": [],
+    "ga-8-1-ma-thoat": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/github-actions/08-khi-ci-do/08-02-ma-thoat-e0f4cdbf.mp4","durationSec":634.75,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":118.4,"ten":"Ôn nhanh · hôm nay · Mô phỏng: cây thước mã thoát"},
+        {"t":118.4,"den":225.32,"ten":"Chạy thật: đẻ bảng bằng cách chạy từng ca"},
+        {"t":225.32,"den":339.09,"ten":"126 và 2: thiếu chmod, thiếu fi"},
+        {"t":339.09,"den":420.97,"ten":"Chạy thật: bóp V8, bóp container"},
+        {"t":420.97,"den":504.56,"ten":"Cái bẫy ống, lần thứ BA · Liên kết chéo"},
+        {"t":504.56,"den":634.75,"ten":"Tóm tắt · Thực hành 15–20 phút"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Chương 8 của khoá GitHub Actions: khi CI đỏ."},
         {"t":10.93,"vi":"Chương 7 là tốc độ và tiền: đường tới hạn, concurrency, phương sai, và giá trị thật của CI là một cỗ máy khác chạy cùng commit."},
@@ -5692,8 +6090,15 @@
         {"t":627.71,"vi":"Bài sau, 8.2: flake hay hỏng thật, quyết bằng số học."}
       ]
     },
-    "ga-8-2-flake": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/github-actions/08-khi-ci-do/08-03-flake-c7792bf8.mp4","durationSec":594.43,"nguonCau":"srt",
-      "parts": [],
+    "ga-8-2-flake": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/github-actions/08-khi-ci-do/08-03-flake-c7792bf8.mp4","durationSec":594.43,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":101.57,"ten":"Ôn nhanh · hôm nay · Mô phỏng: ba hàng đèn đỏ"},
+        {"t":101.57,"den":186.82,"ten":"Chạy thật: đếm đỏ bằng vòng lặp"},
+        {"t":186.82,"den":293.06,"ten":"Chạy thật: số học của chạy lại"},
+        {"t":293.06,"den":396.91,"ten":"Chạy thật: bài hẹn giờ trên Mac và trong Docker"},
+        {"t":396.91,"den":476.17,"ten":"Vá một flake, theo nguyên nhân · Liên kết chéo"},
+        {"t":476.17,"den":594.43,"ten":"Tóm tắt · Thực hành 15–20 phút"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, mình tiếp Chương 8."},
         {"t":7.43,"vi":"Bài trước: mã thoát gọi tên nguyên nhân."},
@@ -5815,8 +6220,14 @@
         {"t":587.19,"vi":"Bài sau, 8.3: tái lập nó, và cái phỏng đoán bị phép đo bác bỏ."}
       ]
     },
-    "ga-8-3-tai-lap": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/github-actions/08-khi-ci-do/08-04-tai-lap-b927aaf7.mp4","durationSec":513,"nguonCau":"srt",
-      "parts": [],
+    "ga-8-3-tai-lap": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/github-actions/08-khi-ci-do/08-04-tai-lap-b927aaf7.mp4","durationSec":513,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":106.87,"ten":"Ôn nhanh · hôm nay · Mô phỏng: hai cỗ máy và cái núm vặn"},
+        {"t":106.87,"den":214.42,"ten":"Hỏi máy trước khi đoán"},
+        {"t":214.42,"den":310.38,"ten":"act tái lập nhánh Node 20 đỏ ở máy"},
+        {"t":310.38,"den":399.63,"ten":"Chạy thật: docker run đúng ảnh"},
+        {"t":399.63,"den":513,"ten":"Tóm tắt · Thực hành 15–20 phút"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, mình tiếp Chương 8."},
         {"t":7.43,"vi":"Bài trước: flake có tỉ lệ, đo bằng vòng lặp, và chạy lại không chứng minh được gì."},
@@ -5912,8 +6323,15 @@
         {"t":506.66,"vi":"Bài sau, 8.4: đọc một lần chạy theo thứ tự phân loại."}
       ]
     },
-    "ga-8-4-thu-tu-doc": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/github-actions/08-khi-ci-do/08-05-thu-tu-doc-96e0f4b3.mp4","durationSec":599.33,"nguonCau":"srt",
-      "parts": [],
+    "ga-8-4-thu-tu-doc": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/github-actions/08-khi-ci-do/08-05-thu-tu-doc-96e0f4b3.mp4","durationSec":599.33,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":123.23,"ten":"Ôn nhanh · hôm nay · Mô phỏng: cái phễu sáu tầng"},
+        {"t":123.23,"den":202.95,"ten":"Đồ thị job: chỗ đỏ SỚM nhất"},
+        {"t":202.95,"den":314.88,"ten":"Bậc ba từ terminal: gh run view --log-failed"},
+        {"t":314.88,"den":413.87,"ten":"Chạy thật: tìm not ok thay vì đọc đáy"},
+        {"t":413.87,"den":534.75,"ten":"Liên kết chéo · Câu phỏng vấn hay gặp"},
+        {"t":534.75,"den":599.33,"ten":"Ba câu tự kiểm & bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, mình tiếp Chương 8."},
         {"t":7.59,"vi":"Bài trước: chỉ hỏng ở CI là khác biệt giữa hai máy."},
@@ -6011,8 +6429,14 @@
         {"t":591.94,"vi":"Bài sau, 8.5: kiểm chứng bản vá, và bài nghiệm thu cứu bạn."}
       ]
     },
-    "ga-8-5-kiem-ban-va": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/github-actions/08-khi-ci-do/08-06-kiem-ban-va-e5dc2da6.mp4","durationSec":461.88,"nguonCau":"srt",
-      "parts": [],
+    "ga-8-5-kiem-ban-va": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/github-actions/08-khi-ci-do/08-06-kiem-ban-va-e5dc2da6.mp4","durationSec":461.88,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":94.22,"ten":"Ôn nhanh · hôm nay · Mô phỏng: cái cặp bằng chứng"},
+        {"t":94.22,"den":205.28,"ten":"Ba lần chạy của một bản vá"},
+        {"t":205.28,"den":296.79,"ten":"Giữ lại điều kiện: bài nghiệm thu"},
+        {"t":296.79,"den":404.56,"ten":"Liên kết chéo · Câu phỏng vấn hay gặp"},
+        {"t":404.56,"den":461.88,"ten":"Ba câu tự kiểm & bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đây là bài cuối của Chương 8."},
         {"t":8.24,"vi":"Bài trước: đọc một run đỏ theo thứ tự, annotation trước, log sau cùng, và lỗi thật nằm phía trên dòng error."},
@@ -6102,8 +6526,14 @@
         {"t":448.38,"vi":"Học xong bài này, bạn làm phần Thực hành ngay dưới video, rồi quiz Chương 8. Chương sau, 9.1: push để deploy, và hai sự cố đã kết liễu nó."}
       ]
     },
-    "ga-9-1-push-de-deploy": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/github-actions/09-deploy-tu-ci/09-02-push-de-deploy-2cde542f.mp4","durationSec":506.77,"nguonCau":"srt",
-      "parts": [],
+    "ga-9-1-push-de-deploy": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/github-actions/09-deploy-tu-ci/09-02-push-de-deploy-2cde542f.mp4","durationSec":506.77,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":92.7,"ten":"Ôn nhanh · hôm nay · Mô phỏng: hai đầu bếp, một bàn"},
+        {"t":92.7,"den":188.82,"ten":"paths trùng nhau ⇒ hai deploy luôn chạy cùng lúc"},
+        {"t":188.82,"den":296.24,"ten":"Sân tập: ảnh mới + schema cũ 79 giây"},
+        {"t":296.24,"den":380.78,"ten":"Push-để-deploy an toàn khi nào · Liên kết chéo"},
+        {"t":380.78,"den":506.77,"ten":"Tóm tắt · Thực hành 15–20 phút"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Chương 9 của khoá GitHub Actions: deploy từ CI, và vì sao kho này đã thôi làm thế."},
         {"t":13.34,"vi":"Chương 8 là khi CI đỏ: mã thoát, flake, tái lập ở máy, và kiểm chứng bản vá bằng một cặp đỏ xanh."},
@@ -6199,8 +6629,16 @@
         {"t":501.22,"vi":"Bài sau, 9.2: dựng ở đây, ship ở kia."}
       ]
     },
-    "ga-9-2-o-dau": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/github-actions/09-deploy-tu-ci/09-03-o-dau-524f426c.mp4","durationSec":645.56,"nguonCau":"srt",
-      "parts": [],
+    "ga-9-2-o-dau": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/github-actions/09-deploy-tu-ci/09-03-o-dau-524f426c.mp4","durationSec":645.56,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":87.62,"ten":"Ôn nhanh · hôm nay"},
+        {"t":87.62,"den":183.47,"ten":"Chọn cái nào: đếm người, đếm máy, đếm số lần deploy"},
+        {"t":183.47,"den":258.6,"ten":"Ba nơi một bước có thể chạy · Phép đo trong lịch sử kho này"},
+        {"t":258.6,"den":357.94,"ten":"deploy-ghcr.yml: runner dựng 4 phút, việc thật đi qua SSH"},
+        {"t":357.94,"den":451.03,"ten":"Sự cố 18/08: build xanh, ảnh không chạy"},
+        {"t":451.03,"den":526.27,"ten":"Câu hỏi tổng quát · Liên kết chéo"},
+        {"t":526.27,"den":645.56,"ten":"Tóm tắt · Thực hành 15–20 phút"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, mình tiếp tục Chương 9."},
         {"t":8.17,"vi":"Bài trước, hai workflow đúng đua nhau vẫn ra một production sai."},
@@ -6324,8 +6762,15 @@
         {"t":641.49,"vi":"Bài sau, 9.3: rollback."}
       ]
     },
-    "ga-9-4-moi-truong": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/github-actions/09-deploy-tu-ci/09-05-moi-truong-8659dec1.mp4","durationSec":537.57,"nguonCau":"srt",
-      "parts": [],
+    "ga-9-4-moi-truong": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/github-actions/09-deploy-tu-ci/09-05-moi-truong-8659dec1.mp4","durationSec":537.57,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":103.39,"ten":"Ôn nhanh · hôm nay · Mô phỏng: bếp trưởng ký phiếu"},
+        {"t":103.39,"den":195.01,"ten":"Bốn luật của một environment"},
+        {"t":195.01,"den":277.46,"ten":"Chạy thật: đọc sổ deployment bằng API công khai"},
+        {"t":277.46,"den":367.95,"ten":"Khuôn mẫu cho một kho đã lớn lên"},
+        {"t":367.95,"den":485.02,"ten":"Liên kết chéo · Câu phỏng vấn hay gặp"},
+        {"t":485.02,"den":537.57,"ten":"Ba câu tự kiểm & bài sau"}
+      ],
       "cues": [
         {"t":5.25,"vi":"Chào bạn. Bài trước: rollback chỉ chạy khi đã từng được dùng, và bản trước là thứ production đang chạy."},
         {"t":13.65,"vi":"Còn Chương 6 đo được: không workflow nào ở kho này khai environment, vì mọi deploy đều bấm tay."},
@@ -6429,8 +6874,15 @@
         {"t":533.21,"vi":"Bài sau, 9.5: thông báo."}
       ]
     },
-    "ga-9-5-thong-bao": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/github-actions/09-deploy-tu-ci/09-06-thong-bao-d9f3f4b7.mp4","durationSec":550.22,"nguonCau":"srt",
-      "parts": [],
+    "ga-9-5-thong-bao": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/github-actions/09-deploy-tu-ci/09-06-thong-bao-d9f3f4b7.mp4","durationSec":550.22,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":117.43,"ten":"Ôn nhanh · hôm nay · Mô phỏng: cái chuông reo mỗi đĩa"},
+        {"t":117.43,"den":193.51,"ten":"Mẫu tin nhắn đơn lẻ"},
+        {"t":193.51,"den":312.77,"ten":"Chạy thật: tóm tắt, annotation, webhook chế độ khô"},
+        {"t":312.77,"den":401.64,"ten":"Chạy thật: grep khớp chưa chắc là gửi"},
+        {"t":401.64,"den":494.76,"ten":"Câu phỏng vấn hay gặp · Tóm tắt"},
+        {"t":494.76,"den":550.22,"ten":"Ba câu tự kiểm & bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn. Bài trước: environment giữ job ở cổng, và cổng chỉ đáng giá bằng thứ người duyệt đọc."},
         {"t":13.4,"vi":"Hôm nay, bài cuối Chương 9: thông báo."},

@@ -2,8 +2,28 @@
   "courseSlug": "academic-skills-for-university-success",
   "sinhBoi": "scripts/phu-de-tu-video-rieng.mjs",
   "lessons": {
-    "ssl101c-1-0a-slides-van-hoa-hoc-thuat-liem-chinh": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/academic-skills-for-university-success/01-thong-tin-ky-nang-so/01-01-van-hoa-hoc-thuat-tron-7061b51e.mp4","durationSec":2037.14,"nguonCau":"srt",
-      "parts": [],
+    "ssl101c-1-0a-slides-van-hoa-hoc-thuat-liem-chinh": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/academic-skills-for-university-success/01-thong-tin-ky-nang-so/01-01-van-hoa-hoc-thuat-tron-7061b51e.mp4","durationSec":2037.14,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":5.1,"den":80.44,"ten":"Phần 1 · Chào bạn · MOOC 1 · Slide 1: gọi lại một từ khoá"},
+        {"t":80.44,"den":222.53,"ten":"Phần 1 · Slide 2: ba câu hỏi phản tư"},
+        {"t":222.53,"den":338.52,"ten":"Phần 1 · Slide 4: bài luận mẫu và ba mục tiêu"},
+        {"t":338.52,"den":478.25,"ten":"Phần 1 · Slide 6: định nghĩa của Brick"},
+        {"t":478.25,"den":612.92,"ten":"Phần 1 · Slide 8: bốn giá trị cốt lõi của cộng đồng"},
+        {"t":612.92,"den":700.55,"ten":"Phần 1 · Tự kiểm · Tóm tắt"},
+        {"t":700.55,"den":781.6,"ten":"Phần 2 · Chào bạn · slide 10–18 · Slide 10: hành lang mười giá trị"},
+        {"t":781.6,"den":898.71,"ten":"Phần 2 · Slide 11: từ dấu hỏi tới tấm bằng"},
+        {"t":898.71,"den":973.78,"ten":"Phần 2 · Slide 13: bảy bước của năng lực thông tin"},
+        {"t":973.78,"den":1088.28,"ten":"Phần 2 · Slide 14: lặp lại — tận dụng để tự kiểm"},
+        {"t":1088.28,"den":1218.15,"ten":"Phần 2 · Slide 16: liêm chính học thuật — hai mục tiêu"},
+        {"t":1218.15,"den":1299,"ten":"Phần 2 · Slide 18: năm giá trị trung tâm cộng lòng can đảm"},
+        {"t":1299,"den":1376.19,"ten":"Phần 2 · Tự kiểm · Tóm tắt"},
+        {"t":1376.19,"den":1475.74,"ten":"Phần 3 · Chào bạn · slide 19–27 · Slide 19: một luật duy nhất"},
+        {"t":1475.74,"den":1555.97,"ten":"Phần 3 · Slide 20: năm dạng gian lận học thuật"},
+        {"t":1555.97,"den":1671.17,"ten":"Phần 3 · Slide 21: gian lận phá ba giá trị"},
+        {"t":1671.17,"den":1793.12,"ten":"Phần 3 · Slide 23: module hai — vật liệu thông tin"},
+        {"t":1793.12,"den":1915.48,"ten":"Phần 3 · Slide 25: sơ cấp, thứ cấp, tam cấp"},
+        {"t":1915.48,"den":2037.14,"ten":"Phần 3 · Slide 27: nguồn thông tin phổ biến ở đại học · Tự kiểm"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, mình bắt đầu chương một với bộ slide ôn tập của MOOC một, do trường soạn từ khoá học của Đại học Sydney."},
         {"t":14.63,"vi":"Tập trước mình đã biết môn có năm MOOC, ba cửa phải qua, và một điểm thưởng nếu xong MOOC đúng hạn."},
@@ -323,8 +343,27 @@
         {"t":2022.6,"vi":"Giờ bạn thử đọc một bài báo theo thứ tự bốn bước, rồi làm quiz chương một ngay dưới video nhé."}
       ]
     },
-    "ssl101c-1-0b-slides-loai-thong-tin-tim-danh-gia-nguon": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/academic-skills-for-university-success/01-thong-tin-ky-nang-so/01-02-loai-thong-tin-tron-44f3b648.mp4","durationSec":1782.27,"nguonCau":"srt",
-      "parts": [],
+    "ssl101c-1-0b-slides-loai-thong-tin-tim-danh-gia-nguon": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/academic-skills-for-university-success/01-thong-tin-ky-nang-so/01-02-loai-thong-tin-tron-44f3b648.mp4","durationSec":1782.27,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":5.1,"den":100.82,"ten":"Phần 1 · Chào bạn · bài 1.0b"},
+        {"t":100.82,"den":227.65,"ten":"Phần 1 · Slide 29: giáo trình · Slide 30: tài liệu môn học"},
+        {"t":227.65,"den":330.21,"ten":"Phần 1 · Slide 31: tóm tắt — viết cho ai"},
+        {"t":330.21,"den":455.73,"ten":"Phần 1 · Slide 33: sáu đặc điểm và mạng lưới tri thức"},
+        {"t":455.73,"den":556.81,"ten":"Phần 1 · Tự kiểm · Tóm tắt"},
+        {"t":556.81,"den":681.8,"ten":"Phần 2 · Slide 35: ba mục tiêu của mục 2.4"},
+        {"t":681.8,"den":791.43,"ten":"Phần 2 · Slide 37: bước hai — mình đã có gì"},
+        {"t":791.43,"den":868.72,"ten":"Phần 2 · Slide 39: bước bốn — từ đồng nghĩa"},
+        {"t":868.72,"den":980.82,"ten":"Phần 2 · Slide 40: bước năm — ghép từ khoá"},
+        {"t":980.82,"den":1095.53,"ten":"Phần 2 · Slide 42: chiến lược tìm là một kế hoạch"},
+        {"t":1095.53,"den":1191.18,"ten":"Phần 2 · Tự kiểm · Tóm tắt"},
+        {"t":1191.18,"den":1303.08,"ten":"Phần 3 · Slide 44: đánh giá thông tin — ba mục tiêu"},
+        {"t":1303.08,"den":1382.38,"ten":"Phần 3 · Slide 46: đánh giá tài nguyên web"},
+        {"t":1382.38,"den":1462.06,"ten":"Phần 3 · Slide 48: Wikipedia"},
+        {"t":1462.06,"den":1543.04,"ten":"Phần 3 · Slide 50: mức liên quan — một tiêu chí khác"},
+        {"t":1543.04,"den":1624.19,"ten":"Phần 3 · Slide 52: scan và skim · Slide 53: bảng kiểm bốn ô"},
+        {"t":1624.19,"den":1704.19,"ten":"Phần 3 · Slide 54: quản lý tệp · Slide 55: đặt tên tệp"},
+        {"t":1704.19,"den":1782.27,"ten":"Phần 3 · Tự kiểm · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, mình sang bài 1.0b, slide hai mươi tám tới năm mươi lăm của bộ MOOC một."},
         {"t":12.63,"vi":"Tập này đi slide hai mươi tám tới ba mươi tư."},
@@ -619,8 +658,26 @@
         {"t":1768.37,"vi":"Giờ bạn đổi tên năm tệp gần nhất theo đúng khuôn, rồi làm quiz chương một ngay dưới video nhé."}
       ]
     },
-    "ssl101c-1-0c-slides-quan-ly-thong-tin-trich-dan": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/academic-skills-for-university-success/05-liem-chinh-tranh-dao-van/05-01-thu-muc-tron-87e51267.mp4","durationSec":1585.45,"nguonCau":"srt",
-      "parts": [],
+    "ssl101c-1-0c-slides-quan-ly-thong-tin-trich-dan": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/academic-skills-for-university-success/05-liem-chinh-tranh-dao-van/05-01-thu-muc-tron-87e51267.mp4","durationSec":1585.45,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":5.1,"den":83.37,"ten":"Phần 1 · Chào bạn · mở Chương 5 · Slide 56: mục tiêu 3.3b"},
+        {"t":83.37,"den":174.48,"ten":"Phần 1 · Slide 57: bốn chữ C · Bổ sung: dựng cây thư mục"},
+        {"t":174.48,"den":254.27,"ten":"Phần 1 · Slide 58: mục tiêu 3.4a · Slide 59: ba bước đọc"},
+        {"t":254.27,"den":367.86,"ten":"Phần 1 · Slide 60: bước một · Minh hoạ: phễu bước một"},
+        {"t":367.86,"den":470.89,"ten":"Phần 1 · Slide 62: hai danh sách · Slide 63: tóm tắt ba bước"},
+        {"t":470.89,"den":565.64,"ten":"Phần 1 · Tóm tắt · Chào bạn · tập 2"},
+        {"t":565.64,"den":671.06,"ten":"Phần 2 · Slide 65: bước ba làm gì · Slide 66: bốn phase"},
+        {"t":671.06,"den":792.73,"ten":"Phần 2 · Bổ sung: bộ nhóm bản CNTT · Slide 68: phase 2, ma trận"},
+        {"t":792.73,"den":869.33,"ten":"Phần 2 · Slide 70: phase 4, ma trận đã điền"},
+        {"t":869.33,"den":974.81,"ten":"Phần 2 · Slide 71: tóm tắt bốn phase · Tự kiểm"},
+        {"t":974.81,"den":1096.95,"ten":"Phần 3 · Chào bạn · tập 3 · Slide 72: mục tiêu 4.1"},
+        {"t":1096.95,"den":1182.7,"ten":"Phần 3 · Slide 74: định nghĩa thứ hai · Slide 75: ba loại đạo văn"},
+        {"t":1182.7,"den":1261.85,"ten":"Phần 3 · Slide 76: cái gì phải trích nguồn"},
+        {"t":1261.85,"den":1364.35,"ten":"Phần 3 · Bổ sung: ba cách đưa nguồn vào bài · Slide 78: mục tiêu 4.2"},
+        {"t":1364.35,"den":1441,"ten":"Phần 3 · Mô phỏng: mắt người đọc chạy tới đâu · Slide 80: endnotes"},
+        {"t":1441,"den":1545.29,"ten":"Phần 3 · Slide 81: footnotes · Slide 82: in-text citing"},
+        {"t":1545.29,"den":1585.45,"ten":"Phần 3 · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, mình mở chương năm."},
         {"t":8.26,"vi":"Chương này quay lại nửa sau của bộ MOOC 1, slide năm mươi sáu tới một trăm lẻ chín."},
@@ -898,8 +955,24 @@
         {"t":1573.18,"vi":"Giờ mở một bài cũ của bạn và soát theo sáu mục của slide bảy mươi sáu nhé."}
       ]
     },
-    "ssl101c-1-0d-slides-trich-dan-ban-quyen-danh-tinh-so": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/academic-skills-for-university-success/05-liem-chinh-tranh-dao-van/05-02-trich-dan-tron-bd08f59d.mp4","durationSec":1481.17,"nguonCau":"srt",
-      "parts": [],
+    "ssl101c-1-0d-slides-trich-dan-ban-quyen-danh-tinh-so": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/academic-skills-for-university-success/05-liem-chinh-tranh-dao-van/05-02-trich-dan-tron-bd08f59d.mp4","durationSec":1481.17,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":5.1,"den":113.51,"ten":"Phần 1 · Chào bạn · bài 1.0d · Slide 83: mục tiêu 4.3a"},
+        {"t":113.51,"den":192.8,"ten":"Phần 1 · Slide 85: trích ngắn · Slide 86: trích dài"},
+        {"t":192.8,"den":271.13,"ten":"Phần 1 · Slide 87: danh mục và trích trong bài"},
+        {"t":271.13,"den":383.07,"ten":"Phần 1 · Bổ sung: bốn cách sửa trên một câu · Slide 89: mục tiêu 4.3c"},
+        {"t":383.07,"den":495.43,"ten":"Phần 1 · Bổ sung: năm bước trên một câu · Tự kiểm"},
+        {"t":495.43,"den":583.93,"ten":"Phần 2 · Chào bạn · tập 2 · Slide 91: mục tiêu 4.4a"},
+        {"t":583.93,"den":667.04,"ten":"Phần 2 · Slide 93: bảng so sánh · Minh hoạ: chọn công cụ theo nhu cầu"},
+        {"t":667.04,"den":742.78,"ten":"Phần 2 · Slide 94: mục tiêu 5.1a · Slide 95: bản quyền là gì"},
+        {"t":742.78,"den":838.15,"ten":"Phần 2 · Slide 96: mục tiêu 5.1b · Bổ sung: bốn viên gạch của CC"},
+        {"t":838.15,"den":933.48,"ten":"Phần 2 · Slide 98: mục tiêu 5.2 · Slide 99: mạng học tập cá nhân"},
+        {"t":933.48,"den":1046.09,"ten":"Phần 2 · Tóm tắt · Chào bạn · tập 3"},
+        {"t":1046.09,"den":1147.92,"ten":"Phần 3 · Slide 101: biết, cập nhật, làm chủ"},
+        {"t":1147.92,"den":1260.8,"ten":"Phần 3 · Bổ sung: bio yếu và bio mạnh · Slide 104: mục tiêu 5.4a"},
+        {"t":1260.8,"den":1367.25,"ten":"Phần 3 · Slide 106: mục tiêu 5.4b · Bổ sung: email xấu và email tốt"},
+        {"t":1367.25,"den":1481.17,"ten":"Phần 3 · Slide 109: bài diễn đàn · Tự kiểm"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, mình sang bài 1.0d, bài cuối của chương năm. Tập một: slide tám mươi ba tới chín mươi của bộ MOOC 1."},
         {"t":14.78,"vi":"Bài 1.0c vừa xong: đạo văn là gì, sáu thứ phải trích nguồn, và ba hệ trích dẫn."},
@@ -1164,8 +1237,27 @@
         {"t":1469.52,"vi":"Giờ tra tên mình trong cửa sổ ẩn danh, rồi làm quiz chương năm nhé."}
       ]
     },
-    "ssl101c-1-1-tim-danh-gia": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/academic-skills-for-university-success/01-thong-tin-ky-nang-so/01-02-loai-thong-tin-tron-44f3b648.mp4","durationSec":1782.27,"nguonCau":"srt",
-      "parts": [],
+    "ssl101c-1-1-tim-danh-gia": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/academic-skills-for-university-success/01-thong-tin-ky-nang-so/01-02-loai-thong-tin-tron-44f3b648.mp4","durationSec":1782.27,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":5.1,"den":100.82,"ten":"Phần 1 · Chào bạn · bài 1.0b"},
+        {"t":100.82,"den":227.65,"ten":"Phần 1 · Slide 29: giáo trình · Slide 30: tài liệu môn học"},
+        {"t":227.65,"den":330.21,"ten":"Phần 1 · Slide 31: tóm tắt — viết cho ai"},
+        {"t":330.21,"den":455.73,"ten":"Phần 1 · Slide 33: sáu đặc điểm và mạng lưới tri thức"},
+        {"t":455.73,"den":556.81,"ten":"Phần 1 · Tự kiểm · Tóm tắt"},
+        {"t":556.81,"den":681.8,"ten":"Phần 2 · Slide 35: ba mục tiêu của mục 2.4"},
+        {"t":681.8,"den":791.43,"ten":"Phần 2 · Slide 37: bước hai — mình đã có gì"},
+        {"t":791.43,"den":868.72,"ten":"Phần 2 · Slide 39: bước bốn — từ đồng nghĩa"},
+        {"t":868.72,"den":980.82,"ten":"Phần 2 · Slide 40: bước năm — ghép từ khoá"},
+        {"t":980.82,"den":1095.53,"ten":"Phần 2 · Slide 42: chiến lược tìm là một kế hoạch"},
+        {"t":1095.53,"den":1191.18,"ten":"Phần 2 · Tự kiểm · Tóm tắt"},
+        {"t":1191.18,"den":1303.08,"ten":"Phần 3 · Slide 44: đánh giá thông tin — ba mục tiêu"},
+        {"t":1303.08,"den":1382.38,"ten":"Phần 3 · Slide 46: đánh giá tài nguyên web"},
+        {"t":1382.38,"den":1462.06,"ten":"Phần 3 · Slide 48: Wikipedia"},
+        {"t":1462.06,"den":1543.04,"ten":"Phần 3 · Slide 50: mức liên quan — một tiêu chí khác"},
+        {"t":1543.04,"den":1624.19,"ten":"Phần 3 · Slide 52: scan và skim · Slide 53: bảng kiểm bốn ô"},
+        {"t":1624.19,"den":1704.19,"ten":"Phần 3 · Slide 54: quản lý tệp · Slide 55: đặt tên tệp"},
+        {"t":1704.19,"den":1782.27,"ten":"Phần 3 · Tự kiểm · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, mình sang bài 1.0b, slide hai mươi tám tới năm mươi lăm của bộ MOOC một."},
         {"t":12.63,"vi":"Tập này đi slide hai mươi tám tới ba mươi tư."},
@@ -1460,8 +1552,27 @@
         {"t":1768.37,"vi":"Giờ bạn đổi tên năm tệp gần nhất theo đúng khuôn, rồi làm quiz chương một ngay dưới video nhé."}
       ]
     },
-    "ssl101c-1-2-quan-ly-trich-dan": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/academic-skills-for-university-success/01-thong-tin-ky-nang-so/01-02-loai-thong-tin-tron-44f3b648.mp4","durationSec":1782.27,"nguonCau":"srt",
-      "parts": [],
+    "ssl101c-1-2-quan-ly-trich-dan": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/academic-skills-for-university-success/01-thong-tin-ky-nang-so/01-02-loai-thong-tin-tron-44f3b648.mp4","durationSec":1782.27,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":5.1,"den":100.82,"ten":"Phần 1 · Chào bạn · bài 1.0b"},
+        {"t":100.82,"den":227.65,"ten":"Phần 1 · Slide 29: giáo trình · Slide 30: tài liệu môn học"},
+        {"t":227.65,"den":330.21,"ten":"Phần 1 · Slide 31: tóm tắt — viết cho ai"},
+        {"t":330.21,"den":455.73,"ten":"Phần 1 · Slide 33: sáu đặc điểm và mạng lưới tri thức"},
+        {"t":455.73,"den":556.81,"ten":"Phần 1 · Tự kiểm · Tóm tắt"},
+        {"t":556.81,"den":681.8,"ten":"Phần 2 · Slide 35: ba mục tiêu của mục 2.4"},
+        {"t":681.8,"den":791.43,"ten":"Phần 2 · Slide 37: bước hai — mình đã có gì"},
+        {"t":791.43,"den":868.72,"ten":"Phần 2 · Slide 39: bước bốn — từ đồng nghĩa"},
+        {"t":868.72,"den":980.82,"ten":"Phần 2 · Slide 40: bước năm — ghép từ khoá"},
+        {"t":980.82,"den":1095.53,"ten":"Phần 2 · Slide 42: chiến lược tìm là một kế hoạch"},
+        {"t":1095.53,"den":1191.18,"ten":"Phần 2 · Tự kiểm · Tóm tắt"},
+        {"t":1191.18,"den":1303.08,"ten":"Phần 3 · Slide 44: đánh giá thông tin — ba mục tiêu"},
+        {"t":1303.08,"den":1382.38,"ten":"Phần 3 · Slide 46: đánh giá tài nguyên web"},
+        {"t":1382.38,"den":1462.06,"ten":"Phần 3 · Slide 48: Wikipedia"},
+        {"t":1462.06,"den":1543.04,"ten":"Phần 3 · Slide 50: mức liên quan — một tiêu chí khác"},
+        {"t":1543.04,"den":1624.19,"ten":"Phần 3 · Slide 52: scan và skim · Slide 53: bảng kiểm bốn ô"},
+        {"t":1624.19,"den":1704.19,"ten":"Phần 3 · Slide 54: quản lý tệp · Slide 55: đặt tên tệp"},
+        {"t":1704.19,"den":1782.27,"ten":"Phần 3 · Tự kiểm · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, mình sang bài 1.0b, slide hai mươi tám tới năm mươi lăm của bộ MOOC một."},
         {"t":12.63,"vi":"Tập này đi slide hai mươi tám tới ba mươi tư."},
@@ -1756,8 +1867,25 @@
         {"t":1768.37,"vi":"Giờ bạn đổi tên năm tệp gần nhất theo đúng khuôn, rồi làm quiz chương một ngay dưới video nhé."}
       ]
     },
-    "ssl101c-2-0a-slides-loai-van-de-nhiem-vu-mo-ta-phan-tich-polya": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/academic-skills-for-university-success/02-giai-quyet-van-de-sang-tao/02-01-loai-van-de-tron-a2a55c90.mp4","durationSec":1731.71,"nguonCau":"srt",
-      "parts": [],
+    "ssl101c-2-0a-slides-loai-van-de-nhiem-vu-mo-ta-phan-tich-polya": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/academic-skills-for-university-success/02-giai-quyet-van-de-sang-tao/02-01-loai-van-de-tron-a2a55c90.mp4","durationSec":1731.71,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":5.1,"den":109.86,"ten":"Phần 1 · Chào bạn · Chương 2 · Slide 1: bìa MOOC 2"},
+        {"t":109.86,"den":226.35,"ten":"Phần 1 · Slide 3: vấn đề là gì · Slide 4: vấn đề nhẹ kiến thức"},
+        {"t":226.35,"den":338.94,"ten":"Phần 1 · Slide 5: vấn đề nặng kiến thức · Slide 6: vấn đề rõ ràng"},
+        {"t":338.94,"den":449.11,"ten":"Phần 1 · Slide 7: vấn đề chưa rõ ràng · Slide 8: vấn đề quen dạng"},
+        {"t":449.11,"den":532.62,"ten":"Phần 1 · Slide 9: vấn đề lạ dạng · Tự kiểm"},
+        {"t":532.62,"den":657.47,"ten":"Phần 1 · Tóm tắt · Chào bạn · slide 10–17"},
+        {"t":657.47,"den":762.46,"ten":"Phần 2 · Slide 11: mục 2.1d — mục tiêu"},
+        {"t":762.46,"den":893.95,"ten":"Phần 2 · Slide 13: sáu động từ mô tả · Slide 14: trưng ra hay dùng"},
+        {"t":893.95,"den":1005.15,"ten":"Phần 2 · Slide 15: mục 2.3a — nhiệm vụ phân tích"},
+        {"t":1005.15,"den":1091.24,"ten":"Phần 2 · Slide 17: nhiệm vụ phân tích thật ra là gì · Tự kiểm"},
+        {"t":1091.24,"den":1166.57,"ten":"Phần 2 · Tóm tắt · Chào bạn · slide 18–25"},
+        {"t":1166.57,"den":1282.89,"ten":"Phần 3 · Slide 18: mục 2.3b — vấn đề phân tích"},
+        {"t":1282.89,"den":1404.48,"ten":"Phần 3 · Slide 20: bước 1 — nhận diện vấn đề"},
+        {"t":1404.48,"den":1515.3,"ten":"Phần 3 · Slide 22: bước 3 — đánh giá lời giải"},
+        {"t":1515.3,"den":1653.19,"ten":"Phần 3 · Slide 24: mục 2.4a — quy trình giải quyết vấn đề"},
+        {"t":1653.19,"den":1731.71,"ten":"Phần 3 · Tự kiểm · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, mình bắt đầu chương hai, ứng với bộ slide MOOC 2. Đây là tập một của bài 2.0a, slide một tới chín."},
         {"t":14.42,"vi":"Chương một dạy bạn tìm, đánh giá và quản lý thông tin."},
@@ -2041,8 +2169,26 @@
         {"t":1716.23,"vi":"Giờ bạn chọn một bài tập đang bí, chạy đủ bốn bước Pólya, nhớ bước nhìn lại, rồi làm quiz chương hai nhé."}
       ]
     },
-    "ssl101c-2-0b-slides-mo-hinh-hieu-van-de-bat-dau-tu-cai-da-biet": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/academic-skills-for-university-success/02-giai-quyet-van-de-sang-tao/02-02-mo-hinh-tron-d3dde543.mp4","durationSec":1686.72,"nguonCau":"srt",
-      "parts": [],
+    "ssl101c-2-0b-slides-mo-hinh-hieu-van-de-bat-dau-tu-cai-da-biet": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/academic-skills-for-university-success/02-giai-quyet-van-de-sang-tao/02-02-mo-hinh-tron-d3dde543.mp4","durationSec":1686.72,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":5.1,"den":103.73,"ten":"Phần 1 · Chào bạn · slide 26–31 · Slide 26: Dewey — năm bước"},
+        {"t":103.73,"den":198.11,"ten":"Phần 1 · Slide 27: design thinking — bốn cái tên"},
+        {"t":198.11,"den":297.88,"ten":"Phần 1 · Slide 29: tóm tắt — bốn bước của MOOC"},
+        {"t":297.88,"den":373.28,"ten":"Phần 1 · Slide 31: danh sách bốn mục thứ hai · Tự kiểm"},
+        {"t":373.28,"den":449.68,"ten":"Phần 1 · Tóm tắt · Chào bạn · slide 32–41"},
+        {"t":449.68,"den":565.63,"ten":"Phần 2 · Slide 32: mục 3.1a — hiểu vấn đề"},
+        {"t":565.63,"den":683.79,"ten":"Phần 2 · Slide 34: vấn đề thật là gì — con gấu xám"},
+        {"t":683.79,"den":771.91,"ten":"Phần 2 · Slide 36: tóm tắt — hiểu vấn đề"},
+        {"t":771.91,"den":860.55,"ten":"Phần 2 · Slide 38: mục 3.1c — kiểm tiêu chí chấm"},
+        {"t":860.55,"den":963.92,"ten":"Phần 2 · Slide 40: một rubric thật · Slide 41: phóng to tiêu chí một"},
+        {"t":963.92,"den":1048.47,"ten":"Phần 2 · Tự kiểm · Tóm tắt"},
+        {"t":1048.47,"den":1186.35,"ten":"Phần 3 · Chào bạn · slide 42–51"},
+        {"t":1186.35,"den":1297.02,"ten":"Phần 3 · Slide 44: mình đã biết gì? · Slide 45: biện hộ cho ý tưởng"},
+        {"t":1297.02,"den":1390.02,"ten":"Phần 3 · Slide 46: sẵn sàng đổi ý · Slide 47: đánh giá chiến lược"},
+        {"t":1390.02,"den":1496.19,"ten":"Phần 3 · Slide 48: tóm tắt — năm gạch"},
+        {"t":1496.19,"den":1603.1,"ten":"Phần 3 · Slide 50: chuyên gia làm được gì"},
+        {"t":1603.1,"den":1686.72,"ten":"Phần 3 · Tự kiểm · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, mình sang bài 2.0b."},
         {"t":8.6,"vi":"Tập này là slide hai mươi sáu tới ba mươi mốt của bộ MOOC 2."},
@@ -2313,8 +2459,26 @@
         {"t":1671.54,"vi":"Giờ bạn chọn một bài đang bí, liệt kê mọi công cụ môn đó đã dạy, thử từng cái, rồi làm quiz chương hai nhé."}
       ]
     },
-    "ssl101c-2-0c-slides-ca-dac-biet-suy-luan-sang-tao": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/academic-skills-for-university-success/02-giai-quyet-van-de-sang-tao/02-03-ca-dac-biet-tron-47874d61.mp4","durationSec":1611.5,"nguonCau":"srt",
-      "parts": [],
+    "ssl101c-2-0c-slides-ca-dac-biet-suy-luan-sang-tao": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/academic-skills-for-university-success/02-giai-quyet-van-de-sang-tao/02-03-ca-dac-biet-tron-47874d61.mp4","durationSec":1611.5,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":5.1,"den":86.34,"ten":"Phần 1 · Chào bạn · slide 52–59"},
+        {"t":86.34,"den":194.55,"ten":"Phần 1 · Slide 53: khối Toán, Khoa học & Kỹ thuật"},
+        {"t":194.55,"den":292.77,"ten":"Phần 1 · Slide 55: ba kỹ thuật với ca đặc biệt"},
+        {"t":292.77,"den":379.77,"ten":"Phần 1 · Slide 57: ca biết nói và ca phủ định"},
+        {"t":379.77,"den":463.18,"ten":"Phần 1 · Slide 59: mục 3.4c — so sánh có và không có vấn đề · Tự kiểm"},
+        {"t":463.18,"den":540.91,"ten":"Phần 1 · Tóm tắt · Chào bạn · slide 60–70"},
+        {"t":540.91,"den":632.43,"ten":"Phần 2 · Slide 60: mục 4.1a — tìm góc nhìn khác"},
+        {"t":632.43,"den":733.84,"ten":"Phần 2 · Slide 62: ghép các ngành khác nhau"},
+        {"t":733.84,"den":828.46,"ten":"Phần 2 · Slide 64: bằng chứng"},
+        {"t":828.46,"den":922.61,"ten":"Phần 2 · Slide 66: chất vấn giả định · Slide 67: suy luận diễn dịch"},
+        {"t":922.61,"den":1026.33,"ten":"Phần 2 · Slide 68: suy luận quy nạp · Slide 69: tầng và hệ thống"},
+        {"t":1026.33,"den":1140.97,"ten":"Phần 2 · Slide 70: tóm tắt suy luận · Tự kiểm"},
+        {"t":1140.97,"den":1268.7,"ten":"Phần 3 · Chào bạn · slide 71–76 · Slide 71: mục 4.2c — bài chín chấm"},
+        {"t":1268.7,"den":1371.18,"ten":"Phần 3 · Slide 72: mục 4.3a — chiến lược sáng tạo"},
+        {"t":1371.18,"den":1473.52,"ten":"Phần 3 · Slide 74: nhà khoa học bắt đầu từ đâu"},
+        {"t":1473.52,"den":1561.1,"ten":"Phần 3 · Slide 76: ý tưởng bất khả làm bậc đệm · Tự kiểm"},
+        {"t":1561.1,"den":1611.5,"ten":"Phần 3 · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, mình sang bài 2.0c."},
         {"t":8.78,"vi":"Tập này là slide năm mươi hai tới năm mươi chín của bộ MOOC 2."},
@@ -2581,8 +2745,23 @@
         {"t":1596.32,"vi":"Giờ bạn mở từ điển lấy một từ ngẫu nhiên, ép nó vào bài đang bí trong năm phút, rồi làm quiz chương hai nhé."}
       ]
     },
-    "ssl101c-2-0d-slides-danh-gia-truyen-dat-giai-phap-va-lam-viec-nhom": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/academic-skills-for-university-success/02-giai-quyet-van-de-sang-tao/02-04-danh-gia-tron-3253b3be.mp4","durationSec":1359.02,"nguonCau":"srt",
-      "parts": [],
+    "ssl101c-2-0d-slides-danh-gia-truyen-dat-giai-phap-va-lam-viec-nhom": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/academic-skills-for-university-success/02-giai-quyet-van-de-sang-tao/02-04-danh-gia-tron-3253b3be.mp4","durationSec":1359.02,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":5.1,"den":91.4,"ten":"Phần 1 · Chào bạn · slide 77–85 · Slide 77: làm ngược lại"},
+        {"t":91.4,"den":175.75,"ten":"Phần 1 · Slide 78: tóm tắt chiến lược sáng tạo"},
+        {"t":175.75,"den":309.74,"ten":"Phần 1 · Slide 80: mục 4.4a — đánh giá giải pháp"},
+        {"t":309.74,"den":396.67,"ten":"Phần 1 · Slide 83: đánh giá trong văn hoá học thuật (1)"},
+        {"t":396.67,"den":512.73,"ten":"Phần 1 · Slide 85: mục 4.4b — chiến lược đánh giá · Tự kiểm"},
+        {"t":512.73,"den":592.96,"ten":"Phần 2 · Chào bạn · slide 86–94"},
+        {"t":592.96,"den":686.66,"ten":"Phần 2 · Slide 88: đối tượng, con đường, ngành"},
+        {"t":686.66,"den":778.02,"ten":"Phần 2 · Slide 90: bằng lời · Slide 91: bằng số"},
+        {"t":778.02,"den":881.39,"ten":"Phần 2 · Slide 92: bằng hình · Slide 93: bằng chữ viết"},
+        {"t":881.39,"den":1013.27,"ten":"Phần 2 · Slide 94: tóm tắt — bốn hình thức đổi tên · Tự kiểm"},
+        {"t":1013.27,"den":1114.86,"ten":"Phần 3 · Chào bạn · slide 95–101 · Slide 95: mục 5.1b — viết và nói"},
+        {"t":1114.86,"den":1222.39,"ten":"Phần 3 · Slide 97: mục 5.3a — giải quyết vấn đề theo nhóm"},
+        {"t":1222.39,"den":1308.24,"ten":"Phần 3 · Slide 99: mục 5.3b — một slide chèn"},
+        {"t":1308.24,"den":1359.02,"ten":"Phần 3 · Tóm tắt · khép chương 2"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, mình sang bài cuối của chương hai, bài 2.0d. Tập này là slide bảy mươi bảy tới tám mươi lăm."},
         {"t":14.12,"vi":"Bài trước khép bằng bài chín chấm và hai chiến lược sáng tạo: ghép từ ngẫu nhiên và ý tưởng bất khả."},
@@ -2792,8 +2971,25 @@
         {"t":1346.24,"vi":"Giờ bạn làm quiz chương hai ngay dưới video, rồi học tiếp MOOC 2 trên Coursera nhé."}
       ]
     },
-    "ssl101c-2-1-dinh-nghia-van-de": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/academic-skills-for-university-success/02-giai-quyet-van-de-sang-tao/02-01-loai-van-de-tron-a2a55c90.mp4","durationSec":1731.71,"nguonCau":"srt",
-      "parts": [],
+    "ssl101c-2-1-dinh-nghia-van-de": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/academic-skills-for-university-success/02-giai-quyet-van-de-sang-tao/02-01-loai-van-de-tron-a2a55c90.mp4","durationSec":1731.71,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":5.1,"den":109.86,"ten":"Phần 1 · Chào bạn · Chương 2 · Slide 1: bìa MOOC 2"},
+        {"t":109.86,"den":226.35,"ten":"Phần 1 · Slide 3: vấn đề là gì · Slide 4: vấn đề nhẹ kiến thức"},
+        {"t":226.35,"den":338.94,"ten":"Phần 1 · Slide 5: vấn đề nặng kiến thức · Slide 6: vấn đề rõ ràng"},
+        {"t":338.94,"den":449.11,"ten":"Phần 1 · Slide 7: vấn đề chưa rõ ràng · Slide 8: vấn đề quen dạng"},
+        {"t":449.11,"den":532.62,"ten":"Phần 1 · Slide 9: vấn đề lạ dạng · Tự kiểm"},
+        {"t":532.62,"den":657.47,"ten":"Phần 1 · Tóm tắt · Chào bạn · slide 10–17"},
+        {"t":657.47,"den":762.46,"ten":"Phần 2 · Slide 11: mục 2.1d — mục tiêu"},
+        {"t":762.46,"den":893.95,"ten":"Phần 2 · Slide 13: sáu động từ mô tả · Slide 14: trưng ra hay dùng"},
+        {"t":893.95,"den":1005.15,"ten":"Phần 2 · Slide 15: mục 2.3a — nhiệm vụ phân tích"},
+        {"t":1005.15,"den":1091.24,"ten":"Phần 2 · Slide 17: nhiệm vụ phân tích thật ra là gì · Tự kiểm"},
+        {"t":1091.24,"den":1166.57,"ten":"Phần 2 · Tóm tắt · Chào bạn · slide 18–25"},
+        {"t":1166.57,"den":1282.89,"ten":"Phần 3 · Slide 18: mục 2.3b — vấn đề phân tích"},
+        {"t":1282.89,"den":1404.48,"ten":"Phần 3 · Slide 20: bước 1 — nhận diện vấn đề"},
+        {"t":1404.48,"den":1515.3,"ten":"Phần 3 · Slide 22: bước 3 — đánh giá lời giải"},
+        {"t":1515.3,"den":1653.19,"ten":"Phần 3 · Slide 24: mục 2.4a — quy trình giải quyết vấn đề"},
+        {"t":1653.19,"den":1731.71,"ten":"Phần 3 · Tự kiểm · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, mình bắt đầu chương hai, ứng với bộ slide MOOC 2. Đây là tập một của bài 2.0a, slide một tới chín."},
         {"t":14.42,"vi":"Chương một dạy bạn tìm, đánh giá và quản lý thông tin."},
@@ -3077,8 +3273,26 @@
         {"t":1716.23,"vi":"Giờ bạn chọn một bài tập đang bí, chạy đủ bốn bước Pólya, nhớ bước nhìn lại, rồi làm quiz chương hai nhé."}
       ]
     },
-    "ssl101c-2-2-sang-tao": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/academic-skills-for-university-success/02-giai-quyet-van-de-sang-tao/02-03-ca-dac-biet-tron-47874d61.mp4","durationSec":1611.5,"nguonCau":"srt",
-      "parts": [],
+    "ssl101c-2-2-sang-tao": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/academic-skills-for-university-success/02-giai-quyet-van-de-sang-tao/02-03-ca-dac-biet-tron-47874d61.mp4","durationSec":1611.5,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":5.1,"den":86.34,"ten":"Phần 1 · Chào bạn · slide 52–59"},
+        {"t":86.34,"den":194.55,"ten":"Phần 1 · Slide 53: khối Toán, Khoa học & Kỹ thuật"},
+        {"t":194.55,"den":292.77,"ten":"Phần 1 · Slide 55: ba kỹ thuật với ca đặc biệt"},
+        {"t":292.77,"den":379.77,"ten":"Phần 1 · Slide 57: ca biết nói và ca phủ định"},
+        {"t":379.77,"den":463.18,"ten":"Phần 1 · Slide 59: mục 3.4c — so sánh có và không có vấn đề · Tự kiểm"},
+        {"t":463.18,"den":540.91,"ten":"Phần 1 · Tóm tắt · Chào bạn · slide 60–70"},
+        {"t":540.91,"den":632.43,"ten":"Phần 2 · Slide 60: mục 4.1a — tìm góc nhìn khác"},
+        {"t":632.43,"den":733.84,"ten":"Phần 2 · Slide 62: ghép các ngành khác nhau"},
+        {"t":733.84,"den":828.46,"ten":"Phần 2 · Slide 64: bằng chứng"},
+        {"t":828.46,"den":922.61,"ten":"Phần 2 · Slide 66: chất vấn giả định · Slide 67: suy luận diễn dịch"},
+        {"t":922.61,"den":1026.33,"ten":"Phần 2 · Slide 68: suy luận quy nạp · Slide 69: tầng và hệ thống"},
+        {"t":1026.33,"den":1140.97,"ten":"Phần 2 · Slide 70: tóm tắt suy luận · Tự kiểm"},
+        {"t":1140.97,"den":1268.7,"ten":"Phần 3 · Chào bạn · slide 71–76 · Slide 71: mục 4.2c — bài chín chấm"},
+        {"t":1268.7,"den":1371.18,"ten":"Phần 3 · Slide 72: mục 4.3a — chiến lược sáng tạo"},
+        {"t":1371.18,"den":1473.52,"ten":"Phần 3 · Slide 74: nhà khoa học bắt đầu từ đâu"},
+        {"t":1473.52,"den":1561.1,"ten":"Phần 3 · Slide 76: ý tưởng bất khả làm bậc đệm · Tự kiểm"},
+        {"t":1561.1,"den":1611.5,"ten":"Phần 3 · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, mình sang bài 2.0c."},
         {"t":8.78,"vi":"Tập này là slide năm mươi hai tới năm mươi chín của bộ MOOC 2."},
@@ -3345,8 +3559,26 @@
         {"t":1596.32,"vi":"Giờ bạn mở từ điển lấy một từ ngẫu nhiên, ép nó vào bài đang bí trong năm phút, rồi làm quiz chương hai nhé."}
       ]
     },
-    "ssl101c-3-0-slides-tu-duy-phan-bien-5w1h-nguy-bien-thien-kien-toulmin": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/academic-skills-for-university-success/03-tu-duy-phan-bien/03-01-tu-duy-phan-bien-tron-d2c48530.mp4","durationSec":1826.5,"nguonCau":"srt",
-      "parts": [],
+    "ssl101c-3-0-slides-tu-duy-phan-bien-5w1h-nguy-bien-thien-kien-toulmin": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/academic-skills-for-university-success/03-tu-duy-phan-bien/03-01-tu-duy-phan-bien-tron-d2c48530.mp4","durationSec":1826.5,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":5.1,"den":113.32,"ten":"Phần 1 · Chào bạn · Chương 3 · Slide 1: bìa MOOC 3"},
+        {"t":113.32,"den":221.68,"ten":"Phần 1 · Slide 3: bảy chuẩn đầu ra"},
+        {"t":221.68,"den":310.46,"ten":"Phần 1 · Slide 5: định nghĩa tư duy phản biện · Tự kiểm"},
+        {"t":310.46,"den":398.92,"ten":"Phần 1 · Tóm tắt · Chào bạn · tập 2"},
+        {"t":398.92,"den":487.96,"ten":"Phần 2 · Slide 6: năm câu hỏi về nguồn"},
+        {"t":487.96,"den":610.97,"ten":"Phần 2 · Slide 7: vì sao cần tư duy phản biện"},
+        {"t":610.97,"den":737.01,"ten":"Phần 2 · Slide 8: bốn lợi ích · Bổ sung: ba kiểu suy luận"},
+        {"t":737.01,"den":824.9,"ten":"Phần 2 · Slide 9: phương pháp 5W1H"},
+        {"t":824.9,"den":904.27,"ten":"Phần 2 · Bổ sung: mười nguỵ biện"},
+        {"t":904.27,"den":1026.14,"ten":"Phần 2 · Slide 10: 5W1H bản tiếng Việt · Bổ sung: bốn thiên kiến"},
+        {"t":1026.14,"den":1119.11,"ten":"Phần 2 · Tự kiểm · Tóm tắt"},
+        {"t":1119.11,"den":1213.62,"ten":"Phần 3 · Chào bạn · tập 3 · Slide 11: kỹ năng sinh tồn ở đại học"},
+        {"t":1213.62,"den":1343.17,"ten":"Phần 3 · Bổ sung: tư duy hệ thống"},
+        {"t":1343.17,"den":1495.56,"ten":"Phần 3 · Slide 13: mẫu câu hỏi 1 tới 16 · Bổ sung: mô hình Toulmin"},
+        {"t":1495.56,"den":1620.42,"ten":"Phần 3 · Slide 14: mẫu câu hỏi 17 tới 28"},
+        {"t":1620.42,"den":1746.54,"ten":"Phần 3 · Slide 15: ca của Mohammed · Hướng nghĩ cho ca Mohammed"},
+        {"t":1746.54,"den":1826.5,"ten":"Phần 3 · Tự kiểm · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, mình sang chương ba, ứng với bộ slide MOOC 3. Đây là tập một của bài 3.0, slide một tới năm."},
         {"t":13.6,"vi":"Chương hai dạy giải quyết vấn đề, sáng tạo, và làm việc nhóm."},
@@ -3655,8 +3887,26 @@
         {"t":1814.27,"vi":"Giờ bạn viết một đoạn Toulmin cho ca Mohammed, rồi làm quiz chương ba nhé."}
       ]
     },
-    "ssl101c-3-1-lap-luan": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/academic-skills-for-university-success/03-tu-duy-phan-bien/03-01-tu-duy-phan-bien-tron-d2c48530.mp4","durationSec":1826.5,"nguonCau":"srt",
-      "parts": [],
+    "ssl101c-3-1-lap-luan": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/academic-skills-for-university-success/03-tu-duy-phan-bien/03-01-tu-duy-phan-bien-tron-d2c48530.mp4","durationSec":1826.5,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":5.1,"den":113.32,"ten":"Phần 1 · Chào bạn · Chương 3 · Slide 1: bìa MOOC 3"},
+        {"t":113.32,"den":221.68,"ten":"Phần 1 · Slide 3: bảy chuẩn đầu ra"},
+        {"t":221.68,"den":310.46,"ten":"Phần 1 · Slide 5: định nghĩa tư duy phản biện · Tự kiểm"},
+        {"t":310.46,"den":398.92,"ten":"Phần 1 · Tóm tắt · Chào bạn · tập 2"},
+        {"t":398.92,"den":487.96,"ten":"Phần 2 · Slide 6: năm câu hỏi về nguồn"},
+        {"t":487.96,"den":610.97,"ten":"Phần 2 · Slide 7: vì sao cần tư duy phản biện"},
+        {"t":610.97,"den":737.01,"ten":"Phần 2 · Slide 8: bốn lợi ích · Bổ sung: ba kiểu suy luận"},
+        {"t":737.01,"den":824.9,"ten":"Phần 2 · Slide 9: phương pháp 5W1H"},
+        {"t":824.9,"den":904.27,"ten":"Phần 2 · Bổ sung: mười nguỵ biện"},
+        {"t":904.27,"den":1026.14,"ten":"Phần 2 · Slide 10: 5W1H bản tiếng Việt · Bổ sung: bốn thiên kiến"},
+        {"t":1026.14,"den":1119.11,"ten":"Phần 2 · Tự kiểm · Tóm tắt"},
+        {"t":1119.11,"den":1213.62,"ten":"Phần 3 · Chào bạn · tập 3 · Slide 11: kỹ năng sinh tồn ở đại học"},
+        {"t":1213.62,"den":1343.17,"ten":"Phần 3 · Bổ sung: tư duy hệ thống"},
+        {"t":1343.17,"den":1495.56,"ten":"Phần 3 · Slide 13: mẫu câu hỏi 1 tới 16 · Bổ sung: mô hình Toulmin"},
+        {"t":1495.56,"den":1620.42,"ten":"Phần 3 · Slide 14: mẫu câu hỏi 17 tới 28"},
+        {"t":1620.42,"den":1746.54,"ten":"Phần 3 · Slide 15: ca của Mohammed · Hướng nghĩ cho ca Mohammed"},
+        {"t":1746.54,"den":1826.5,"ten":"Phần 3 · Tự kiểm · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, mình sang chương ba, ứng với bộ slide MOOC 3. Đây là tập một của bài 3.0, slide một tới năm."},
         {"t":13.6,"vi":"Chương hai dạy giải quyết vấn đề, sáng tạo, và làm việc nhóm."},
@@ -3965,8 +4215,26 @@
         {"t":1814.27,"vi":"Giờ bạn viết một đoạn Toulmin cho ca Mohammed, rồi làm quiz chương ba nhé."}
       ]
     },
-    "ssl101c-3-2-thien-kien": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/academic-skills-for-university-success/03-tu-duy-phan-bien/03-01-tu-duy-phan-bien-tron-d2c48530.mp4","durationSec":1826.5,"nguonCau":"srt",
-      "parts": [],
+    "ssl101c-3-2-thien-kien": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/academic-skills-for-university-success/03-tu-duy-phan-bien/03-01-tu-duy-phan-bien-tron-d2c48530.mp4","durationSec":1826.5,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":5.1,"den":113.32,"ten":"Phần 1 · Chào bạn · Chương 3 · Slide 1: bìa MOOC 3"},
+        {"t":113.32,"den":221.68,"ten":"Phần 1 · Slide 3: bảy chuẩn đầu ra"},
+        {"t":221.68,"den":310.46,"ten":"Phần 1 · Slide 5: định nghĩa tư duy phản biện · Tự kiểm"},
+        {"t":310.46,"den":398.92,"ten":"Phần 1 · Tóm tắt · Chào bạn · tập 2"},
+        {"t":398.92,"den":487.96,"ten":"Phần 2 · Slide 6: năm câu hỏi về nguồn"},
+        {"t":487.96,"den":610.97,"ten":"Phần 2 · Slide 7: vì sao cần tư duy phản biện"},
+        {"t":610.97,"den":737.01,"ten":"Phần 2 · Slide 8: bốn lợi ích · Bổ sung: ba kiểu suy luận"},
+        {"t":737.01,"den":824.9,"ten":"Phần 2 · Slide 9: phương pháp 5W1H"},
+        {"t":824.9,"den":904.27,"ten":"Phần 2 · Bổ sung: mười nguỵ biện"},
+        {"t":904.27,"den":1026.14,"ten":"Phần 2 · Slide 10: 5W1H bản tiếng Việt · Bổ sung: bốn thiên kiến"},
+        {"t":1026.14,"den":1119.11,"ten":"Phần 2 · Tự kiểm · Tóm tắt"},
+        {"t":1119.11,"den":1213.62,"ten":"Phần 3 · Chào bạn · tập 3 · Slide 11: kỹ năng sinh tồn ở đại học"},
+        {"t":1213.62,"den":1343.17,"ten":"Phần 3 · Bổ sung: tư duy hệ thống"},
+        {"t":1343.17,"den":1495.56,"ten":"Phần 3 · Slide 13: mẫu câu hỏi 1 tới 16 · Bổ sung: mô hình Toulmin"},
+        {"t":1495.56,"den":1620.42,"ten":"Phần 3 · Slide 14: mẫu câu hỏi 17 tới 28"},
+        {"t":1620.42,"den":1746.54,"ten":"Phần 3 · Slide 15: ca của Mohammed · Hướng nghĩ cho ca Mohammed"},
+        {"t":1746.54,"den":1826.5,"ten":"Phần 3 · Tự kiểm · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, mình sang chương ba, ứng với bộ slide MOOC 3. Đây là tập một của bài 3.0, slide một tới năm."},
         {"t":13.6,"vi":"Chương hai dạy giải quyết vấn đề, sáng tạo, và làm việc nhóm."},
@@ -4275,8 +4543,24 @@
         {"t":1814.27,"vi":"Giờ bạn viết một đoạn Toulmin cho ca Mohammed, rồi làm quiz chương ba nhé."}
       ]
     },
-    "ssl101c-4-0a-slides-tinh-huong-tu-tu-de-cuong-mon-hoc-ghi-chep-dien-dan": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/academic-skills-for-university-success/04-giao-tiep/04-01-tinh-huong-tu-tu-tron-189c3ab5.mp4","durationSec":1621.12,"nguonCau":"srt",
-      "parts": [],
+    "ssl101c-4-0a-slides-tinh-huong-tu-tu-de-cuong-mon-hoc-ghi-chep-dien-dan": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/academic-skills-for-university-success/04-giao-tiep/04-01-tinh-huong-tu-tu-tron-189c3ab5.mp4","durationSec":1621.12,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":5.1,"den":143.22,"ten":"Phần 1 · Chào bạn · Chương 4 · Slide 1: bìa MOOC 4"},
+        {"t":143.22,"den":241.05,"ten":"Phần 1 · Slide 3: ba điều rút ra · Slide 4: hỏi và đáp"},
+        {"t":241.05,"den":369.05,"ten":"Phần 1 · Slide 5: mục tiêu 2.1a · Slide 6: định nghĩa và sáu yếu tố"},
+        {"t":369.05,"den":479.15,"ten":"Phần 1 · Bổ sung: một thông điệp, ba tình huống"},
+        {"t":479.15,"den":557.31,"ten":"Phần 1 · Tự kiểm · Tóm tắt"},
+        {"t":557.31,"den":651.1,"ten":"Phần 2 · Chào bạn · tập 2 · Slide 8: buổi giảng"},
+        {"t":651.1,"den":779.61,"ten":"Phần 2 · Slide 9: buổi luyện tập · Slide 10: buổi thảo luận chuyên đề"},
+        {"t":779.61,"den":904.15,"ten":"Phần 2 · Slide 11: bài đánh giá"},
+        {"t":904.15,"den":1028.32,"ten":"Phần 2 · Slide 13: mục tiêu 2.1c"},
+        {"t":1028.32,"den":1130.07,"ten":"Phần 2 · Tự kiểm · Tóm tắt"},
+        {"t":1130.07,"den":1226.79,"ten":"Phần 3 · Slide 15: mục tiêu 2.3a · Slide 16: ghi chép dạng dàn ý"},
+        {"t":1226.79,"den":1335.36,"ten":"Phần 3 · Slide 17: phương pháp Cornell"},
+        {"t":1335.36,"den":1445.14,"ten":"Phần 3 · Slide 19: chuẩn bị và tham gia · Slide 20: mục tiêu 2.3b"},
+        {"t":1445.14,"den":1543.26,"ten":"Phần 3 · Slide 21: diễn đàn hỏi đáp"},
+        {"t":1543.26,"den":1621.12,"ten":"Phần 3 · Tự kiểm · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, mình sang chương bốn, ứng với bộ slide MOOC 4, sáu mươi tư slide."},
         {"t":11.64,"vi":"Đây là tập một của bài 4.0a, slide một tới bảy."},
@@ -4543,8 +4827,26 @@
         {"t":1612.41,"vi":"Rồi làm quiz chương bốn nhé."}
       ]
     },
-    "ssl101c-4-0b-slides-de-bai-nghien-cuu-dan-y-mach-lac": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/academic-skills-for-university-success/04-giao-tiep/04-02-de-bai-tron-6be1a01c.mp4","durationSec":1760.02,"nguonCau":"srt",
-      "parts": [],
+    "ssl101c-4-0b-slides-de-bai-nghien-cuu-dan-y-mach-lac": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/academic-skills-for-university-success/04-giao-tiep/04-02-de-bai-tron-6be1a01c.mp4","durationSec":1760.02,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":5.1,"den":80.72,"ten":"Phần 1 · Chào bạn · bài 4.0b · Slide 22: mục tiêu 2.4a"},
+        {"t":80.72,"den":175.44,"ten":"Phần 1 · Slide 23: đề xuất và khẳng định"},
+        {"t":175.44,"den":297.11,"ten":"Phần 1 · Slide 24: tóm tắt làm việc nhóm · Slide 25: mục tiêu 3.2a"},
+        {"t":297.11,"den":408.44,"ten":"Phần 1 · Slide 26: phân tích đề bài · Bổ sung: bóc một đề mẫu"},
+        {"t":408.44,"den":530.18,"ten":"Phần 1 · Slide 27: khám phá đề bài · Slide 28: tóm tắt bóc đề"},
+        {"t":530.18,"den":614.83,"ten":"Phần 1 · Tự kiểm · Tóm tắt"},
+        {"t":614.83,"den":692.75,"ten":"Phần 2 · Chào bạn · tập 2 · Slide 29: mục tiêu 3.2b"},
+        {"t":692.75,"den":795.03,"ten":"Phần 2 · Slide 30: hai loại báo cáo · Slide 31: mục tiêu 3.3a"},
+        {"t":795.03,"den":903.25,"ten":"Phần 2 · Slide 32: tóm tắt nghiên cứu · Bổ sung: hai thứ tự làm bài"},
+        {"t":903.25,"den":1008.91,"ten":"Phần 2 · Slide 33: mục tiêu 3.3b · Slide 34: nghiên cứu nằm ở đâu"},
+        {"t":1008.91,"den":1092.52,"ten":"Phần 2 · Tự kiểm · Tóm tắt"},
+        {"t":1092.52,"den":1222.9,"ten":"Phần 3 · Chào bạn · tập 3 · Slide 35: mục tiêu 3.4a"},
+        {"t":1222.9,"den":1333.55,"ten":"Phần 3 · Bổ sung: một dàn ý mẫu · Slide 37: hai hình dạng báo cáo"},
+        {"t":1333.55,"den":1418.28,"ten":"Phần 3 · Slide 38: mục tiêu 3.4b · Slide 39: slide 37 in lại"},
+        {"t":1418.28,"den":1540.85,"ten":"Phần 3 · Slide 40: mục tiêu 4.2a · Slide 41: tóm tắt viết nháp"},
+        {"t":1540.85,"den":1638.34,"ten":"Phần 3 · Slide 42: mục tiêu 4.2c · Slide 43: mạch lạc và liên kết"},
+        {"t":1638.34,"den":1760.02,"ten":"Phần 3 · Bổ sung: sửa một đoạn văn rời · Tự kiểm"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, mình sang bài 4.0b."},
         {"t":9.08,"vi":"Đây là tập một, slide hai mươi hai tới hai mươi tám của bộ MOOC 4."},
@@ -4860,8 +5162,25 @@
         {"t":1744.17,"vi":"Giờ lấy một bài viết của bạn, soát hai lượt: một lượt mạch lạc, một lượt liên kết. Rồi làm quiz chương bốn nhé."}
       ]
     },
-    "ssl101c-4-0c-slides-hoan-thien-bai-viet-va-thuyet-trinh": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/academic-skills-for-university-success/04-giao-tiep/04-03-hoan-thien-tron-3a80a87b.mp4","durationSec":1629.78,"nguonCau":"srt",
-      "parts": [],
+    "ssl101c-4-0c-slides-hoan-thien-bai-viet-va-thuyet-trinh": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/academic-skills-for-university-success/04-giao-tiep/04-03-hoan-thien-tron-3a80a87b.mp4","durationSec":1629.78,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":5.1,"den":132.34,"ten":"Phần 1 · Chào bạn · bài 4.0c · Slide 44: mục tiêu 4.3a"},
+        {"t":132.34,"den":238.85,"ten":"Phần 1 · Bổ sung: thử ba tiêu đề · Slide 46: mục tiêu 4.3c"},
+        {"t":238.85,"den":319.49,"ten":"Phần 1 · Slide 48: biên tập ngôn ngữ · Slide 49: mục tiêu 4.4a"},
+        {"t":319.49,"den":432.81,"ten":"Phần 1 · Slide 50: soát trước khi nộp · Tự kiểm"},
+        {"t":432.81,"den":508.62,"ten":"Phần 2 · Chào bạn · tập 2 · Slide 51: mục tiêu 5.2a"},
+        {"t":508.62,"den":599.54,"ten":"Phần 2 · Slide 52: tình huống tu từ của buổi nói"},
+        {"t":599.54,"den":707.68,"ten":"Phần 2 · Slide 54: lập kế hoạch thuyết trình"},
+        {"t":707.68,"den":801.7,"ten":"Phần 2 · Slide 55: mục tiêu 5.3a"},
+        {"t":801.7,"den":880.26,"ten":"Phần 2 · Tự kiểm · Tóm tắt"},
+        {"t":880.26,"den":960.39,"ten":"Phần 3 · Chào bạn · tập 3 · Slide 57: mục tiêu 5.3b"},
+        {"t":960.39,"den":1063.99,"ten":"Phần 3 · Slide 58: viết kịch bản · Bổ sung: từ kịch bản tới tấm thẻ"},
+        {"t":1063.99,"den":1182.02,"ten":"Phần 3 · Slide 59: mục tiêu 5.3c · Slide 60: luyện tập kịch bản"},
+        {"t":1182.02,"den":1284.18,"ten":"Phần 3 · Bổ sung: tập bốn buổi · Slide 61: mục tiêu 5.4a"},
+        {"t":1284.18,"den":1396.52,"ten":"Phần 3 · Slide 62: bảy luật trình bày · Slide 63: mục tiêu 5.4b"},
+        {"t":1396.52,"den":1514.93,"ten":"Phần 3 · Slide 64: sáu chiến lược tương tác"},
+        {"t":1514.93,"den":1629.78,"ten":"Phần 3 · Khép MOOC 4: sáu con số · Tự kiểm"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, mình sang bài 4.0c, bài cuối của chương bốn. Đây là tập một: slide bốn mươi bốn tới năm mươi của bộ MOOC 4."},
         {"t":15.33,"vi":"Bài 4.0b vừa xong: lập dàn ý, viết nháp, mạch lạc và liên kết."},
@@ -5158,8 +5477,24 @@
         {"t":1617.85,"vi":"Giờ ghi sáu con số của dải này vào sổ, rồi làm quiz chương bốn nhé."}
       ]
     },
-    "ssl101c-4-1-giao-tiep-hoc-thuat": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/academic-skills-for-university-success/04-giao-tiep/04-01-tinh-huong-tu-tu-tron-189c3ab5.mp4","durationSec":1621.12,"nguonCau":"srt",
-      "parts": [],
+    "ssl101c-4-1-giao-tiep-hoc-thuat": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/academic-skills-for-university-success/04-giao-tiep/04-01-tinh-huong-tu-tu-tron-189c3ab5.mp4","durationSec":1621.12,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":5.1,"den":143.22,"ten":"Phần 1 · Chào bạn · Chương 4 · Slide 1: bìa MOOC 4"},
+        {"t":143.22,"den":241.05,"ten":"Phần 1 · Slide 3: ba điều rút ra · Slide 4: hỏi và đáp"},
+        {"t":241.05,"den":369.05,"ten":"Phần 1 · Slide 5: mục tiêu 2.1a · Slide 6: định nghĩa và sáu yếu tố"},
+        {"t":369.05,"den":479.15,"ten":"Phần 1 · Bổ sung: một thông điệp, ba tình huống"},
+        {"t":479.15,"den":557.31,"ten":"Phần 1 · Tự kiểm · Tóm tắt"},
+        {"t":557.31,"den":651.1,"ten":"Phần 2 · Chào bạn · tập 2 · Slide 8: buổi giảng"},
+        {"t":651.1,"den":779.61,"ten":"Phần 2 · Slide 9: buổi luyện tập · Slide 10: buổi thảo luận chuyên đề"},
+        {"t":779.61,"den":904.15,"ten":"Phần 2 · Slide 11: bài đánh giá"},
+        {"t":904.15,"den":1028.32,"ten":"Phần 2 · Slide 13: mục tiêu 2.1c"},
+        {"t":1028.32,"den":1130.07,"ten":"Phần 2 · Tự kiểm · Tóm tắt"},
+        {"t":1130.07,"den":1226.79,"ten":"Phần 3 · Slide 15: mục tiêu 2.3a · Slide 16: ghi chép dạng dàn ý"},
+        {"t":1226.79,"den":1335.36,"ten":"Phần 3 · Slide 17: phương pháp Cornell"},
+        {"t":1335.36,"den":1445.14,"ten":"Phần 3 · Slide 19: chuẩn bị và tham gia · Slide 20: mục tiêu 2.3b"},
+        {"t":1445.14,"den":1543.26,"ten":"Phần 3 · Slide 21: diễn đàn hỏi đáp"},
+        {"t":1543.26,"den":1621.12,"ten":"Phần 3 · Tự kiểm · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, mình sang chương bốn, ứng với bộ slide MOOC 4, sáu mươi tư slide."},
         {"t":11.64,"vi":"Đây là tập một của bài 4.0a, slide một tới bảy."},
@@ -5426,8 +5761,26 @@
         {"t":1612.41,"vi":"Rồi làm quiz chương bốn nhé."}
       ]
     },
-    "ssl101c-4-2-cau-truc-lap-luan": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/academic-skills-for-university-success/04-giao-tiep/04-02-de-bai-tron-6be1a01c.mp4","durationSec":1760.02,"nguonCau":"srt",
-      "parts": [],
+    "ssl101c-4-2-cau-truc-lap-luan": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/academic-skills-for-university-success/04-giao-tiep/04-02-de-bai-tron-6be1a01c.mp4","durationSec":1760.02,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":5.1,"den":80.72,"ten":"Phần 1 · Chào bạn · bài 4.0b · Slide 22: mục tiêu 2.4a"},
+        {"t":80.72,"den":175.44,"ten":"Phần 1 · Slide 23: đề xuất và khẳng định"},
+        {"t":175.44,"den":297.11,"ten":"Phần 1 · Slide 24: tóm tắt làm việc nhóm · Slide 25: mục tiêu 3.2a"},
+        {"t":297.11,"den":408.44,"ten":"Phần 1 · Slide 26: phân tích đề bài · Bổ sung: bóc một đề mẫu"},
+        {"t":408.44,"den":530.18,"ten":"Phần 1 · Slide 27: khám phá đề bài · Slide 28: tóm tắt bóc đề"},
+        {"t":530.18,"den":614.83,"ten":"Phần 1 · Tự kiểm · Tóm tắt"},
+        {"t":614.83,"den":692.75,"ten":"Phần 2 · Chào bạn · tập 2 · Slide 29: mục tiêu 3.2b"},
+        {"t":692.75,"den":795.03,"ten":"Phần 2 · Slide 30: hai loại báo cáo · Slide 31: mục tiêu 3.3a"},
+        {"t":795.03,"den":903.25,"ten":"Phần 2 · Slide 32: tóm tắt nghiên cứu · Bổ sung: hai thứ tự làm bài"},
+        {"t":903.25,"den":1008.91,"ten":"Phần 2 · Slide 33: mục tiêu 3.3b · Slide 34: nghiên cứu nằm ở đâu"},
+        {"t":1008.91,"den":1092.52,"ten":"Phần 2 · Tự kiểm · Tóm tắt"},
+        {"t":1092.52,"den":1222.9,"ten":"Phần 3 · Chào bạn · tập 3 · Slide 35: mục tiêu 3.4a"},
+        {"t":1222.9,"den":1333.55,"ten":"Phần 3 · Bổ sung: một dàn ý mẫu · Slide 37: hai hình dạng báo cáo"},
+        {"t":1333.55,"den":1418.28,"ten":"Phần 3 · Slide 38: mục tiêu 3.4b · Slide 39: slide 37 in lại"},
+        {"t":1418.28,"den":1540.85,"ten":"Phần 3 · Slide 40: mục tiêu 4.2a · Slide 41: tóm tắt viết nháp"},
+        {"t":1540.85,"den":1638.34,"ten":"Phần 3 · Slide 42: mục tiêu 4.2c · Slide 43: mạch lạc và liên kết"},
+        {"t":1638.34,"den":1760.02,"ten":"Phần 3 · Bổ sung: sửa một đoạn văn rời · Tự kiểm"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, mình sang bài 4.0b."},
         {"t":9.08,"vi":"Đây là tập một, slide hai mươi hai tới hai mươi tám của bộ MOOC 4."},
@@ -5743,8 +6096,26 @@
         {"t":1744.17,"vi":"Giờ lấy một bài viết của bạn, soát hai lượt: một lượt mạch lạc, một lượt liên kết. Rồi làm quiz chương bốn nhé."}
       ]
     },
-    "ssl101c-5-0a-slides-capstone-phat-bieu-van-de-nguyen-nhan-he-qua-doan-boi-canh-smart": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/academic-skills-for-university-success/06-capstone/06-01-capstone-tron-46fa2911.mp4","durationSec":1697.73,"nguonCau":"srt",
-      "parts": [],
+    "ssl101c-5-0a-slides-capstone-phat-bieu-van-de-nguyen-nhan-he-qua-doan-boi-canh-smart": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/academic-skills-for-university-success/06-capstone/06-01-capstone-tron-46fa2911.mp4","durationSec":1697.73,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":5.1,"den":98.27,"ten":"Phần 1 · Chào bạn · mở Chương 6 · Slide 1: bìa MOOC 5"},
+        {"t":98.27,"den":189.57,"ten":"Phần 1 · Slide 3: bốn luật của khoá · Slide 4: mục tiêu 1.2a"},
+        {"t":189.57,"den":279.36,"ten":"Phần 1 · Slide 5: ba bước chọn vấn đề · Slide 6: ví dụ giáo viên mới"},
+        {"t":279.36,"den":391.24,"ten":"Phần 1 · Slide 7: mục tiêu 1.3a · Slide 8: năm câu hỏi"},
+        {"t":391.24,"den":485.87,"ten":"Phần 1 · Tự kiểm · Tóm tắt"},
+        {"t":485.87,"den":588.34,"ten":"Phần 2 · Slide 9: mục tiêu 1.4a · Slide 10: công thức ba cột"},
+        {"t":588.34,"den":698.06,"ten":"Phần 2 · Slide 11: ba bản mẫu · Bổ sung: viết lại bốn lượt"},
+        {"t":698.06,"den":804.79,"ten":"Phần 2 · Slide 12: mục tiêu 2.1a · Slide 13: sáu gạch nguồn tin"},
+        {"t":804.79,"den":914.08,"ten":"Phần 2 · Slide 14: mục tiêu 2.2a · Slide 15: gắn cặp hay tách rời"},
+        {"t":914.08,"den":1026.24,"ten":"Phần 2 · Bổ sung: vốn từ nhân quả · Tự kiểm"},
+        {"t":1026.24,"den":1112.09,"ten":"Phần 3 · Chào bạn · ôn tập trước · Slide 16: mục tiêu 3.1a"},
+        {"t":1112.09,"den":1222.8,"ten":"Phần 3 · Slide 17: một hiện trạng, bốn mong muốn"},
+        {"t":1222.8,"den":1318.69,"ten":"Phần 3 · Slide 18: bốn luật · Slide 19: mục tiêu 3.2a"},
+        {"t":1318.69,"den":1422.28,"ten":"Phần 3 · Slide 20: sáu định nghĩa · Bổ sung: so hai hành động"},
+        {"t":1422.28,"den":1530.81,"ten":"Phần 3 · Slide 21: mục tiêu 4.1a · Slide 22: SMART của bộ slide này"},
+        {"t":1530.81,"den":1653.22,"ten":"Phần 3 · Bổ sung: một mục tiêu SMART · Slide 23: mục tiêu 4.2a"},
+        {"t":1653.22,"den":1697.73,"ten":"Phần 3 · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, mình mở chương sáu, chương cuối: MOOC 5, dự án capstone."},
         {"t":10.58,"vi":"Tập này là slide một tới tám."},
@@ -6031,8 +6402,25 @@
         {"t":1684.63,"vi":"Giờ viết thử một mục tiêu SMART cho dự án của bạn, nhớ chữ A là Agreed nhé."}
       ]
     },
-    "ssl101c-5-0b-slides-capstone-ke-hoach-hanh-dong-nguon-luc-de-xuat-storyboard-kich-ban-ghi-hinh": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/academic-skills-for-university-success/06-capstone/06-02-ke-hoach-tron-2d25cb2f.mp4","durationSec":1500.1,"nguonCau":"srt",
-      "parts": [],
+    "ssl101c-5-0b-slides-capstone-ke-hoach-hanh-dong-nguon-luc-de-xuat-storyboard-kich-ban-ghi-hinh": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/academic-skills-for-university-success/06-capstone/06-02-ke-hoach-tron-2d25cb2f.mp4","durationSec":1500.1,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":5.1,"den":84.4,"ten":"Phần 1 · Chào bạn · mở bài 5.0b"},
+        {"t":84.4,"den":178.71,"ten":"Phần 1 · Slide 25: mục tiêu 4.3a"},
+        {"t":178.71,"den":255.13,"ten":"Phần 1 · Slide 27: bốn nhóm nguồn lực · Bổ sung: phép tính sức chứa"},
+        {"t":255.13,"den":337.35,"ten":"Phần 1 · Slide 28: mục tiêu 4.4a"},
+        {"t":337.35,"den":433.99,"ten":"Phần 1 · Slide 30: ba cấu trúc tiêu đề · Slide 31: bốn phép soát"},
+        {"t":433.99,"den":511.75,"ten":"Phần 1 · Tự kiểm · Tóm tắt"},
+        {"t":511.75,"den":635.78,"ten":"Phần 2 · Chào bạn · ôn tập trước · Slide 32: mục tiêu 5.1a"},
+        {"t":635.78,"den":749.21,"ten":"Phần 2 · Bổ sung: khung kể chuyện · Slide 34: mục tiêu 5.2a"},
+        {"t":749.21,"den":842.35,"ten":"Phần 2 · Slide 36: sáu luật storyboard · Slide 37: thu thập tư liệu"},
+        {"t":842.35,"den":927.22,"ten":"Phần 2 · Bổ sung: phân xử tư liệu · Slide 38: tóm tắt storyboard"},
+        {"t":927.22,"den":1022.3,"ten":"Phần 2 · Tự kiểm · Tóm tắt"},
+        {"t":1022.3,"den":1107.28,"ten":"Phần 3 · Slide 39: mục tiêu 5.2b · Slide 40: năm kỹ thuật soạn"},
+        {"t":1107.28,"den":1221.54,"ten":"Phần 3 · Bổ sung: câu viết và câu nói · Slide 41: nháp, đọc to, cắt"},
+        {"t":1221.54,"den":1329.34,"ten":"Phần 3 · Slide 43: bản lặp · Slide 44: mục tiêu 5.2c"},
+        {"t":1329.34,"den":1432.51,"ten":"Phần 3 · Slide 46: chunking · Bổ sung: một cảnh đã chunk"},
+        {"t":1432.51,"den":1500.1,"ten":"Phần 3 · Tự kiểm · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, mình mở bài 5.0b, nửa sau của MOOC 5."},
         {"t":10.48,"vi":"Tập này là slide hai mươi bốn tới ba mươi mốt."},
@@ -6304,8 +6692,26 @@
         {"t":1488.91,"vi":"Giờ chunk thử một đoạn kịch bản của bạn rồi đọc to lên nhé."}
       ]
     },
-    "ssl101c-5-1-tranh-dao-van": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/academic-skills-for-university-success/05-liem-chinh-tranh-dao-van/05-01-thu-muc-tron-87e51267.mp4","durationSec":1585.45,"nguonCau":"srt",
-      "parts": [],
+    "ssl101c-5-1-tranh-dao-van": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/academic-skills-for-university-success/05-liem-chinh-tranh-dao-van/05-01-thu-muc-tron-87e51267.mp4","durationSec":1585.45,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":5.1,"den":83.37,"ten":"Phần 1 · Chào bạn · mở Chương 5 · Slide 56: mục tiêu 3.3b"},
+        {"t":83.37,"den":174.48,"ten":"Phần 1 · Slide 57: bốn chữ C · Bổ sung: dựng cây thư mục"},
+        {"t":174.48,"den":254.27,"ten":"Phần 1 · Slide 58: mục tiêu 3.4a · Slide 59: ba bước đọc"},
+        {"t":254.27,"den":367.86,"ten":"Phần 1 · Slide 60: bước một · Minh hoạ: phễu bước một"},
+        {"t":367.86,"den":470.89,"ten":"Phần 1 · Slide 62: hai danh sách · Slide 63: tóm tắt ba bước"},
+        {"t":470.89,"den":565.64,"ten":"Phần 1 · Tóm tắt · Chào bạn · tập 2"},
+        {"t":565.64,"den":671.06,"ten":"Phần 2 · Slide 65: bước ba làm gì · Slide 66: bốn phase"},
+        {"t":671.06,"den":792.73,"ten":"Phần 2 · Bổ sung: bộ nhóm bản CNTT · Slide 68: phase 2, ma trận"},
+        {"t":792.73,"den":869.33,"ten":"Phần 2 · Slide 70: phase 4, ma trận đã điền"},
+        {"t":869.33,"den":974.81,"ten":"Phần 2 · Slide 71: tóm tắt bốn phase · Tự kiểm"},
+        {"t":974.81,"den":1096.95,"ten":"Phần 3 · Chào bạn · tập 3 · Slide 72: mục tiêu 4.1"},
+        {"t":1096.95,"den":1182.7,"ten":"Phần 3 · Slide 74: định nghĩa thứ hai · Slide 75: ba loại đạo văn"},
+        {"t":1182.7,"den":1261.85,"ten":"Phần 3 · Slide 76: cái gì phải trích nguồn"},
+        {"t":1261.85,"den":1364.35,"ten":"Phần 3 · Bổ sung: ba cách đưa nguồn vào bài · Slide 78: mục tiêu 4.2"},
+        {"t":1364.35,"den":1441,"ten":"Phần 3 · Mô phỏng: mắt người đọc chạy tới đâu · Slide 80: endnotes"},
+        {"t":1441,"den":1545.29,"ten":"Phần 3 · Slide 81: footnotes · Slide 82: in-text citing"},
+        {"t":1545.29,"den":1585.45,"ten":"Phần 3 · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, mình mở chương năm."},
         {"t":8.26,"vi":"Chương này quay lại nửa sau của bộ MOOC 1, slide năm mươi sáu tới một trăm lẻ chín."},
@@ -6583,8 +6989,26 @@
         {"t":1573.18,"vi":"Giờ mở một bài cũ của bạn và soát theo sáu mục của slide bảy mươi sáu nhé."}
       ]
     },
-    "ssl101c-6-1-capstone": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/academic-skills-for-university-success/06-capstone/06-01-capstone-tron-46fa2911.mp4","durationSec":1697.73,"nguonCau":"srt",
-      "parts": [],
+    "ssl101c-6-1-capstone": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/academic-skills-for-university-success/06-capstone/06-01-capstone-tron-46fa2911.mp4","durationSec":1697.73,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":5.1,"den":98.27,"ten":"Phần 1 · Chào bạn · mở Chương 6 · Slide 1: bìa MOOC 5"},
+        {"t":98.27,"den":189.57,"ten":"Phần 1 · Slide 3: bốn luật của khoá · Slide 4: mục tiêu 1.2a"},
+        {"t":189.57,"den":279.36,"ten":"Phần 1 · Slide 5: ba bước chọn vấn đề · Slide 6: ví dụ giáo viên mới"},
+        {"t":279.36,"den":391.24,"ten":"Phần 1 · Slide 7: mục tiêu 1.3a · Slide 8: năm câu hỏi"},
+        {"t":391.24,"den":485.87,"ten":"Phần 1 · Tự kiểm · Tóm tắt"},
+        {"t":485.87,"den":588.34,"ten":"Phần 2 · Slide 9: mục tiêu 1.4a · Slide 10: công thức ba cột"},
+        {"t":588.34,"den":698.06,"ten":"Phần 2 · Slide 11: ba bản mẫu · Bổ sung: viết lại bốn lượt"},
+        {"t":698.06,"den":804.79,"ten":"Phần 2 · Slide 12: mục tiêu 2.1a · Slide 13: sáu gạch nguồn tin"},
+        {"t":804.79,"den":914.08,"ten":"Phần 2 · Slide 14: mục tiêu 2.2a · Slide 15: gắn cặp hay tách rời"},
+        {"t":914.08,"den":1026.24,"ten":"Phần 2 · Bổ sung: vốn từ nhân quả · Tự kiểm"},
+        {"t":1026.24,"den":1112.09,"ten":"Phần 3 · Chào bạn · ôn tập trước · Slide 16: mục tiêu 3.1a"},
+        {"t":1112.09,"den":1222.8,"ten":"Phần 3 · Slide 17: một hiện trạng, bốn mong muốn"},
+        {"t":1222.8,"den":1318.69,"ten":"Phần 3 · Slide 18: bốn luật · Slide 19: mục tiêu 3.2a"},
+        {"t":1318.69,"den":1422.28,"ten":"Phần 3 · Slide 20: sáu định nghĩa · Bổ sung: so hai hành động"},
+        {"t":1422.28,"den":1530.81,"ten":"Phần 3 · Slide 21: mục tiêu 4.1a · Slide 22: SMART của bộ slide này"},
+        {"t":1530.81,"den":1653.22,"ten":"Phần 3 · Bổ sung: một mục tiêu SMART · Slide 23: mục tiêu 4.2a"},
+        {"t":1653.22,"den":1697.73,"ten":"Phần 3 · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, mình mở chương sáu, chương cuối: MOOC 5, dự án capstone."},
         {"t":10.58,"vi":"Tập này là slide một tới tám."},
@@ -6871,8 +7295,15 @@
         {"t":1684.63,"vi":"Giờ viết thử một mục tiêu SMART cho dự án của bạn, nhớ chữ A là Agreed nhé."}
       ]
     },
-    "ssl101c-chuan-dau-ra": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/academic-skills-for-university-success/00-gioi-thieu-huong-dan-hoc/00-01-gioi-thieu-mon-hoc-9861f5ee.mp4","durationSec":498.15,"nguonCau":"srt",
-      "parts": [],
+    "ssl101c-chuan-dau-ra": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/academic-skills-for-university-success/00-gioi-thieu-huong-dan-hoc/00-01-gioi-thieu-mon-hoc-9861f5ee.mp4","durationSec":498.15,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":83.84,"ten":"Chào bạn · SSL101c · Đại học không chỉ là trung học khó hơn"},
+        {"t":83.84,"den":178.73,"ten":"Bản đồ môn: bốn kỹ năng, liêm chính, capstone"},
+        {"t":178.73,"den":254.08,"ten":"Học trên Coursera: năm MOOC"},
+        {"t":254.08,"den":356.46,"ten":"Ba cửa phải qua · Chuẩn đầu ra: năm CLO"},
+        {"t":356.46,"den":454.43,"ten":"Học MOOC sao cho hiệu quả · Tự kiểm"},
+        {"t":454.43,"den":498.15,"ten":"Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài đầu tiên của môn SSL101c, Academic Skills for University Success, tức Kỹ năng học tập ở Đại học."},
         {"t":16.33,"vi":"Môn này dạy cách học ở đại học: tìm thông tin, giải vấn đề, nghĩ phản biện, trình bày rõ ràng, và làm tất cả một cách trung thực."},
@@ -6956,8 +7387,15 @@
         {"t":487.87,"vi":"Giờ bạn vào Coursera, nhận lời mời của lớp và đăng ký đủ năm MOOC, rồi hẵng sang bài đầu tiên của chương một nhé."}
       ]
     },
-    "ssl101c-dieu-kien-qua-mon": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/academic-skills-for-university-success/00-gioi-thieu-huong-dan-hoc/00-01-gioi-thieu-mon-hoc-9861f5ee.mp4","durationSec":498.15,"nguonCau":"srt",
-      "parts": [],
+    "ssl101c-dieu-kien-qua-mon": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/academic-skills-for-university-success/00-gioi-thieu-huong-dan-hoc/00-01-gioi-thieu-mon-hoc-9861f5ee.mp4","durationSec":498.15,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":83.84,"ten":"Chào bạn · SSL101c · Đại học không chỉ là trung học khó hơn"},
+        {"t":83.84,"den":178.73,"ten":"Bản đồ môn: bốn kỹ năng, liêm chính, capstone"},
+        {"t":178.73,"den":254.08,"ten":"Học trên Coursera: năm MOOC"},
+        {"t":254.08,"den":356.46,"ten":"Ba cửa phải qua · Chuẩn đầu ra: năm CLO"},
+        {"t":356.46,"den":454.43,"ten":"Học MOOC sao cho hiệu quả · Tự kiểm"},
+        {"t":454.43,"den":498.15,"ten":"Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài đầu tiên của môn SSL101c, Academic Skills for University Success, tức Kỹ năng học tập ở Đại học."},
         {"t":16.33,"vi":"Môn này dạy cách học ở đại học: tìm thông tin, giải vấn đề, nghĩ phản biện, trình bày rõ ràng, và làm tất cả một cách trung thực."},
@@ -7041,8 +7479,15 @@
         {"t":487.87,"vi":"Giờ bạn vào Coursera, nhận lời mời của lớp và đăng ký đủ năm MOOC, rồi hẵng sang bài đầu tiên của chương một nhé."}
       ]
     },
-    "ssl101c-gioi-thieu": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/academic-skills-for-university-success/00-gioi-thieu-huong-dan-hoc/00-01-gioi-thieu-mon-hoc-9861f5ee.mp4","durationSec":498.15,"nguonCau":"srt",
-      "parts": [],
+    "ssl101c-gioi-thieu": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/academic-skills-for-university-success/00-gioi-thieu-huong-dan-hoc/00-01-gioi-thieu-mon-hoc-9861f5ee.mp4","durationSec":498.15,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":83.84,"ten":"Chào bạn · SSL101c · Đại học không chỉ là trung học khó hơn"},
+        {"t":83.84,"den":178.73,"ten":"Bản đồ môn: bốn kỹ năng, liêm chính, capstone"},
+        {"t":178.73,"den":254.08,"ten":"Học trên Coursera: năm MOOC"},
+        {"t":254.08,"den":356.46,"ten":"Ba cửa phải qua · Chuẩn đầu ra: năm CLO"},
+        {"t":356.46,"den":454.43,"ten":"Học MOOC sao cho hiệu quả · Tự kiểm"},
+        {"t":454.43,"den":498.15,"ten":"Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài đầu tiên của môn SSL101c, Academic Skills for University Success, tức Kỹ năng học tập ở Đại học."},
         {"t":16.33,"vi":"Môn này dạy cách học ở đại học: tìm thông tin, giải vấn đề, nghĩ phản biện, trình bày rõ ràng, và làm tất cả một cách trung thực."},
@@ -7126,8 +7571,13 @@
         {"t":487.87,"vi":"Giờ bạn vào Coursera, nhận lời mời của lớp và đăng ký đủ năm MOOC, rồi hẵng sang bài đầu tiên của chương một nhé."}
       ]
     },
-    "ssl101c-n1-1-ghi-chep": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/academic-skills-for-university-success/07-nang-cao-ghi-chep/07-01-ghi-chep-34a7ecbc.mp4","durationSec":231.36,"nguonCau":"srt",
-      "parts": [],
+    "ssl101c-n1-1-ghi-chep": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/academic-skills-for-university-success/07-nang-cao-ghi-chep/07-01-ghi-chep-34a7ecbc.mp4","durationSec":231.36,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":82.31,"ten":"Chào bạn · mở Nâng cao · Vì sao chép slide không đủ"},
+        {"t":82.31,"den":154.56,"ten":"Minh hoạ: một trang Cornell · SQ3R: đọc chủ động"},
+        {"t":154.56,"den":203.17,"ten":"Sợi chỉ chung: truy hồi · Tự kiểm"},
+        {"t":203.17,"den":231.36,"ten":"Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, phần slide của môn đã xong."},
         {"t":8.42,"vi":"Mình mở ba bài nâng cao, bài một: ghi chép và đọc chủ động."},
@@ -7170,8 +7620,13 @@
         {"t":226.67,"vi":"Buổi học tới, thử ghi một trang Cornell nhé."}
       ]
     },
-    "ssl101c-n2-1-thoi-gian": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/academic-skills-for-university-success/08-to-chuc-thoi-gian/08-01-thoi-gian-432010fd.mp4","durationSec":261.04,"nguonCau":"srt",
-      "parts": [],
+    "ssl101c-n2-1-thoi-gian": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/academic-skills-for-university-success/08-to-chuc-thoi-gian/08-01-thoi-gian-432010fd.mp4","durationSec":261.04,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":57.52,"ten":"Chào bạn · mở Nâng cao 2 · Kỹ năng ẩn: ~100 giờ tự học"},
+        {"t":57.52,"den":133.38,"ten":"Ma trận Eisenhower: ưu tiên · Minh hoạ: phân loại việc SV"},
+        {"t":133.38,"den":197.77,"ten":"Pomodoro: tập trung sâu · Chữa trì hoãn: thu nhỏ"},
+        {"t":197.77,"den":261.04,"ten":"Tự kiểm · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, bài nâng cao hai: quản lý thời gian tự học."},
         {"t":10,"vi":"Bài này cũng đi theo đúng chữ của bài web, không có slide trường."},
@@ -7218,8 +7673,13 @@
         {"t":254.77,"vi":"Tối nay, xếp một lượt Pomodoro cho một việc ở ô hai nhé."}
       ]
     },
-    "ssl101c-n3-1-ai-dao-duc": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/academic-skills-for-university-success/09-nang-cao-ai-dao-duc/09-01-ai-dao-duc-f002829e.mp4","durationSec":266.75,"nguonCau":"srt",
-      "parts": [],
+    "ssl101c-n3-1-ai-dao-duc": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/academic-skills-for-university-success/09-nang-cao-ai-dao-duc/09-01-ai-dao-duc-f002829e.mp4","durationSec":266.75,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":58.69,"ten":"Chào bạn · mở Nâng cao 3 (bài cuối) · Thế lưỡng nan hiện đại"},
+        {"t":58.69,"den":137.4,"ten":"Gia sư ↔ người viết thuê · Hai mối nguy ngoài việc bị bắt"},
+        {"t":137.4,"den":201.03,"ten":"Bài kiểm trung thực · Tự kiểm"},
+        {"t":201.03,"den":266.75,"ten":"Chúc mừng hoàn thành SSL101c · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, bài nâng cao ba, cũng là bài cuối của khoá: AI là bạn học, không phải lối tắt."},
         {"t":12.24,"vi":"Bài web gọi AI và liêm chính học thuật là thế lưỡng nan hiện đại."},
@@ -7265,8 +7725,15 @@
         {"t":262.39,"vi":"Chúc bạn vững vàng ở mọi môn phía trước."}
       ]
     },
-    "ssl101c-tai-lieu": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/academic-skills-for-university-success/00-gioi-thieu-huong-dan-hoc/00-01-gioi-thieu-mon-hoc-9861f5ee.mp4","durationSec":498.15,"nguonCau":"srt",
-      "parts": [],
+    "ssl101c-tai-lieu": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/academic-skills-for-university-success/00-gioi-thieu-huong-dan-hoc/00-01-gioi-thieu-mon-hoc-9861f5ee.mp4","durationSec":498.15,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":83.84,"ten":"Chào bạn · SSL101c · Đại học không chỉ là trung học khó hơn"},
+        {"t":83.84,"den":178.73,"ten":"Bản đồ môn: bốn kỹ năng, liêm chính, capstone"},
+        {"t":178.73,"den":254.08,"ten":"Học trên Coursera: năm MOOC"},
+        {"t":254.08,"den":356.46,"ten":"Ba cửa phải qua · Chuẩn đầu ra: năm CLO"},
+        {"t":356.46,"den":454.43,"ten":"Học MOOC sao cho hiệu quả · Tự kiểm"},
+        {"t":454.43,"den":498.15,"ten":"Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài đầu tiên của môn SSL101c, Academic Skills for University Success, tức Kỹ năng học tập ở Đại học."},
         {"t":16.33,"vi":"Môn này dạy cách học ở đại học: tìm thông tin, giải vấn đề, nghĩ phản biện, trình bày rõ ràng, và làm tất cả một cách trung thực."},

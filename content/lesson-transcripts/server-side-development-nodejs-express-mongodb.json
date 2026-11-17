@@ -2,8 +2,15 @@
   "courseSlug": "server-side-development-nodejs-express-mongodb",
   "sinhBoi": "scripts/phu-de-tu-video-rieng.mjs",
   "lessons": {
-    "sdn302-2-1-express-routing": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/server-side-development-nodejs-express-mongodb/02-express-routing-middleware/02-01-express-routing-app-dau-tien-4dc9cbb2.mp4","durationSec":608.75,"nguonCau":"srt",
-      "parts": [],
+    "sdn302-2-1-express-routing": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/server-side-development-nodejs-express-mongodb/02-express-routing-middleware/02-01-express-routing-app-dau-tien-4dc9cbb2.mp4","durationSec":608.75,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":103.83,"ten":"Chào bạn · SDN302 Bài 2.1 · Một lệnh, cả dự án, mười lỗ hổng"},
+        {"t":103.83,"den":201.77,"ten":"Vì sao cần Express · App Express đầu tiên"},
+        {"t":201.77,"den":293.53,"ten":"Slide: kết quả chạy thật · Giải phẫu một route"},
+        {"t":293.53,"den":393.17,"ten":"Mỗi tài nguyên một router · Mô phỏng: đường dẫn ghép lại"},
+        {"t":393.17,"den":496.47,"ten":"Slide: Generator · Mỗi tệp làm gì"},
+        {"t":496.47,"den":608.75,"ten":"Nâng cấp trước khi xây tiếp · Bài tập: router orders"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 2.1 của môn SDN302: định tuyến với Express."},
         {"t":12.57,"vi":"Bài trước, ở video Node.js 3.5, mình đã dựng server chỉ với module http: tự đọc URL, tự viết header, và một khối if rất dài."},
@@ -95,8 +102,21 @@
         {"t":604.39,"vi":"Rồi sang chương ba: MongoDB."}
       ]
     },
-    "sdn302-3-1-mongodb-crud": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/server-side-development-nodejs-express-mongodb/03-mongodb-mongoose/03-01-nosql-mongodb-crud-tron-5c25662d.mp4","durationSec":1128.7,"nguonCau":"srt",
-      "parts": [],
+    "sdn302-3-1-mongodb-crud": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/server-side-development-nodejs-express-mongodb/03-mongodb-mongoose/03-01-nosql-mongodb-crud-tron-5c25662d.mp4","durationSec":1128.7,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":5.1,"den":103.54,"ten":"Phần 1 · Chào bạn · SDN302 Bài 3.1 · Một đơn hàng, hai cách cất"},
+        {"t":103.54,"den":193.5,"ten":"Phần 1 · Ví dụ: tủ hồ sơ · Quan hệ đối chiếu MongoDB"},
+        {"t":193.5,"den":288.87,"ten":"Phần 1 · JSON trên màn hình, BSON trên đĩa · Chạy MongoDB và mongosh"},
+        {"t":288.87,"den":384.32,"ten":"Phần 1 · Create: insertOne, insertMany · Read: find có điều kiện"},
+        {"t":384.32,"den":487.16,"ten":"Phần 1 · Toán tử cập nhật · Đọc kết quả cập nhật"},
+        {"t":487.16,"den":596.82,"ten":"Phần 1 · Slide: ba lỗi im lặng · Bài tập: ba truy vấn"},
+        {"t":596.82,"den":688.17,"ten":"Phần 2 · Chào bạn · SDN302 Bài 3.1, phần 2"},
+        {"t":688.17,"den":792.91,"ten":"Phần 2 · Slide: ObjectId thật · Chuỗi không phải ObjectId"},
+        {"t":792.91,"den":891.07,"ten":"Phần 2 · Slide: đo khi đọc · Đo khi đổi dữ liệu dùng chung"},
+        {"t":891.07,"den":975.23,"ten":"Phần 2 · Mô phỏng: chỉ mục hoạt động thế nào"},
+        {"t":975.23,"den":1061.69,"ten":"Phần 2 · Slide: explain thật · Chỉ mục làm gì và không làm gì"},
+        {"t":1061.69,"den":1128.7,"ten":"Phần 2 · Tự kiểm · Tóm tắt & luyện tập"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 3.1 của môn SDN302, mở đầu chương MongoDB."},
         {"t":12.32,"vi":"Bài trước, ở video Node.js 5.3, mình đã học middleware: thứ tự trong tệp là thứ tự chạy, và express.json phải đứng trước route."},
@@ -271,8 +291,21 @@
         {"t":1115.56,"vi":"Bài sau: Mongoose, đặt một schema đứng trước MongoDB để chặn dữ liệu sai."}
       ]
     },
-    "sdn302-3-2-mongoose": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/server-side-development-nodejs-express-mongodb/03-mongodb-mongoose/03-02-mongoose-schema-model-tron-22eff65b.mp4","durationSec":1073.64,"nguonCau":"srt",
-      "parts": [],
+    "sdn302-3-2-mongoose": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/server-side-development-nodejs-express-mongodb/03-mongodb-mongoose/03-02-mongoose-schema-model-tron-22eff65b.mp4","durationSec":1073.64,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":5.1,"den":100.88,"ten":"Phần 1 · Chào bạn · SDN302 Bài 3.2 · Người gác cửa trước MongoDB"},
+        {"t":100.88,"den":182.96,"ten":"Phần 1 · ODM, schema, model · Driver và Mongoose, chạy thật"},
+        {"t":182.96,"den":274.65,"ten":"Phần 1 · Chạy thật: schema làm việc"},
+        {"t":274.65,"den":354.92,"ten":"Phần 1 · CRUD với async await · Chạy thật: CRUD bằng Mongoose"},
+        {"t":354.92,"den":445.17,"ten":"Phần 1 · Bẫy: cập nhật bỏ qua validator"},
+        {"t":445.17,"den":521.44,"ten":"Phần 1 · Bẫy: thêm unique quá muộn · Bài tập: schema Book"},
+        {"t":521.44,"den":620.05,"ten":"Phần 1 · Tóm tắt & luyện tập · Chào bạn · SDN302 Bài 3.2, phần 2"},
+        {"t":620.05,"den":719.11,"ten":"Phần 2 · Bìa phần 2 · Tham chiếu chỉ lưu id"},
+        {"t":719.11,"den":796.42,"ten":"Phần 2 · Slide: ba lần gọi · Chạy thật: populate trong route Express"},
+        {"t":796.42,"den":879.29,"ten":"Phần 2 · Giấu bí mật ngay ở schema"},
+        {"t":879.29,"den":985.2,"ten":"Phần 2 · Đọc code: tìm await trong vòng lặp · Slide: code hai cách"},
+        {"t":985.2,"den":1073.64,"ten":"Phần 2 · Bài tập: bình luận kèm tên · Tự kiểm"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 3.2 của môn SDN302: Mongoose."},
         {"t":10.73,"vi":"Bài trước mình đã làm CRUD trong mongosh, thấy MongoDB nhận cả trường gõ sai lẫn giá lưu thành chữ, rồi học nhúng, tham chiếu và chỉ mục."},
@@ -436,8 +469,20 @@
         {"t":1061.52,"vi":"Bài sau, mình ráp mọi thứ thành một REST API hoàn chỉnh theo MVC."}
       ]
     },
-    "sdn302-4-1-rest-mvc": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/server-side-development-nodejs-express-mongodb/04-rest-api-mvc-templating/04-01-rest-api-mvc-tron-c8bfbb78.mp4","durationSec":984.11,"nguonCau":"srt",
-      "parts": [],
+    "sdn302-4-1-rest-mvc": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/server-side-development-nodejs-express-mongodb/04-rest-api-mvc-templating/04-01-rest-api-mvc-tron-c8bfbb78.mp4","durationSec":984.11,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":5.1,"den":92.3,"ten":"Phần 1 · Chào bạn · SDN302 Bài 4.1 · Một tệp route làm mọi thứ"},
+        {"t":92.3,"den":188.93,"ten":"Phần 1 · Ví dụ: nhà hàng · Bốn tầng, một chiều"},
+        {"t":188.93,"den":269.45,"ten":"Phần 1 · Tầng model · Tầng service"},
+        {"t":269.45,"den":348.73,"ten":"Phần 1 · Controller: endpoint create đúng cách · Routes và app"},
+        {"t":348.73,"den":432.29,"ten":"Phần 1 · Mã trạng thái · Chạy thật: đủ CRUD bằng curl"},
+        {"t":432.29,"den":527.15,"ten":"Phần 1 · Bài tập: đoán mã trạng thái · Tự kiểm, tóm tắt & luyện tập"},
+        {"t":527.15,"den":613.41,"ten":"Phần 2 · Lỗi của client, server nhận năm trăm · Bìa phần 2"},
+        {"t":613.41,"den":702.83,"ten":"Phần 2 · Mô phỏng: lỗi nào thành mã nào · Bảng ánh xạ"},
+        {"t":702.83,"den":792.74,"ten":"Phần 2 · Vì sao không kiểm trước rồi mới tạo · Phân trang"},
+        {"t":792.74,"den":879.5,"ten":"Phần 2 · Slide: các trang chạy thật · Cái giá của skip"},
+        {"t":879.5,"den":984.11,"ten":"Phần 2 · Slide: Express 4 và 5 · Bài tập: ánh xạ lỗi"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 4.1 của môn SDN302, mở đầu chương bốn."},
         {"t":11.91,"vi":"Chương ba mình đã có Mongoose: schema chặn dữ liệu sai, populate có chọn trường, và tránh lỗi N cộng một."},
@@ -591,8 +636,14 @@
         {"t":972.48,"vi":"Bài sau: EJS và Handlebars, khi server tự render HTML."}
       ]
     },
-    "sdn302-4-2-templating": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/server-side-development-nodejs-express-mongodb/04-rest-api-mvc-templating/04-02-template-ejs-handlebars-973a212f.mp4","durationSec":503.17,"nguonCau":"srt",
-      "parts": [],
+    "sdn302-4-2-templating": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/server-side-development-nodejs-express-mongodb/04-rest-api-mvc-templating/04-02-template-ejs-handlebars-973a212f.mp4","durationSec":503.17,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":89.89,"ten":"Chào bạn · SDN302 Bài 4.2 · Cùng dữ liệu, hai kiểu trả lời"},
+        {"t":89.89,"den":185.49,"ten":"Hai cách dựng trang · EJS: cài đặt và render"},
+        {"t":185.49,"den":294.55,"ten":"HTML trình duyệt nhận được"},
+        {"t":294.55,"den":390.77,"ten":"Slide: form chạy thật · Handlebars: cài đặt"},
+        {"t":390.77,"den":503.17,"ten":"Slide: bẫy và cách sửa · EJS hay Handlebars"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 4.2 của môn SDN302."},
         {"t":9.99,"vi":"Bài 4.1 mình đã dựng REST API bốn tầng, một hình dạng lỗi, và phân trang."},
@@ -682,8 +733,16 @@
         {"t":498.48,"vi":"Bài sau, chương năm: mật khẩu và session."}
       ]
     },
-    "sdn302-5-1-passwords-sessions": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/server-side-development-nodejs-express-mongodb/05-xac-thuc-bao-mat/05-01-mat-khau-session-passport-f35cee3b.mp4","durationSec":685.17,"nguonCau":"srt",
-      "parts": [],
+    "sdn302-5-1-passwords-sessions": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/server-side-development-nodejs-express-mongodb/05-xac-thuc-bao-mat/05-01-mat-khau-session-passport-f35cee3b.mp4","durationSec":685.17,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":97.16,"ten":"Chào bạn · SDN302 Bài 5.1 · Đăng nhập xong, cookie đổi số"},
+        {"t":97.16,"den":196.04,"ten":"Hai luật không thoả hiệp · Model User"},
+        {"t":196.04,"den":294.33,"ten":"MongoDB thật sự lưu gì"},
+        {"t":294.33,"den":380.82,"ten":"Mô phỏng: cookie đi về · express-session lưu trong MongoDB"},
+        {"t":380.82,"den":485.98,"ten":"Route: login, me, logout · Chạy bằng curl"},
+        {"t":485.98,"den":588.67,"ten":"Chạy thật: khởi động lại server · Bẫy: MemoryStore mặc định"},
+        {"t":588.67,"den":685.17,"ten":"Bài tập · Tự kiểm"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với chương năm của môn SDN302: xác thực và bảo mật."},
         {"t":11.2,"vi":"Chương bốn mình dựng REST API theo MVC và trang HTML bằng EJS."},
@@ -792,8 +851,21 @@
         {"t":677.37,"vi":"Bài 5.2: token thay cho session, CORS, upload và tải file, và HTTPS."}
       ]
     },
-    "sdn302-5-2-jwt-cors": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/server-side-development-nodejs-express-mongodb/05-xac-thuc-bao-mat/05-02-jwt-https-cors-upload-tron-a91538d9.mp4","durationSec":1111.64,"nguonCau":"srt",
-      "parts": [],
+    "sdn302-5-2-jwt-cors": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/server-side-development-nodejs-express-mongodb/05-xac-thuc-bao-mat/05-02-jwt-https-cors-upload-tron-a91538d9.mp4","durationSec":1111.64,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":5.1,"den":95.2,"ten":"Phần 1 · Chào bạn · SDN302 Bài 5.2 · Đã có CORS, server vẫn chạy"},
+        {"t":95.2,"den":186.86,"ten":"Phần 1 · Luồng token · Đăng nhập và requireAuth"},
+        {"t":186.86,"den":267.57,"ten":"Phần 1 · Chạy thật: ba token hỏng · Mô phỏng: token có ba phần"},
+        {"t":267.57,"den":362.76,"ten":"Phần 1 · Khoá bí mật nằm trong .env · CORS giải quyết chuyện gì"},
+        {"t":362.76,"den":451.64,"ten":"Phần 1 · Preflight · Mô phỏng: hỏi trước rồi mới gửi"},
+        {"t":451.64,"den":558.62,"ten":"Phần 1 · Các bẫy CORS · Tự kiểm phần 1"},
+        {"t":558.62,"den":655.15,"ten":"Phần 2 · Chào bạn · Bài 5.2 phần 2 · Hai dấu chấm, lộ cả mã nguồn"},
+        {"t":655.15,"den":733.43,"ten":"Phần 2 · Giới hạn không phải tuỳ chọn · Chạy thật: một ảnh giả"},
+        {"t":733.43,"den":812.17,"ten":"Phần 2 · Path traversal, chạy thật"},
+        {"t":812.17,"den":914.65,"ten":"Phần 2 · Cùng request qua HTTPS · Mô phỏng: một mạng đứng giữa"},
+        {"t":914.65,"den":1001.28,"ten":"Phần 2 · Chuyển hướng HTTP sang HTTPS · Trên production"},
+        {"t":1001.28,"den":1111.64,"ten":"Phần 2 · Bài tập · Tự kiểm"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 5.2 của môn SDN302."},
         {"t":10.1,"vi":"Bài 5.1: bcrypt, session lưu trong MongoDB, cookie chỉ chứa id, và Passport đổi id phiên khi đăng nhập."},
@@ -966,8 +1038,18 @@
         {"t":1101.9,"vi":"Chương sáu: tích hợp React và triển khai."}
       ]
     },
-    "sdn302-6-1-react-deploy": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/server-side-development-nodejs-express-mongodb/06-tich-hop-react-trien-khai/06-01-noi-react-trien-khai-1c31b932.mp4","durationSec":810.42,"nguonCau":"srt",
-      "parts": [],
+    "sdn302-6-1-react-deploy": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/server-side-development-nodejs-express-mongodb/06-tich-hop-react-trien-khai/06-01-noi-react-trien-khai-1c31b932.mp4","durationSec":810.42,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":103.59,"ten":"Chào bạn · SDN302 Bài 6.1 · Failed to fetch"},
+        {"t":103.59,"den":191.95,"ten":"Cả vòng · Gọi API từ React"},
+        {"t":191.95,"den":280.7,"ten":"Chạy trong trình duyệt thật · Cùng trang, sai origin"},
+        {"t":280.7,"den":356.27,"ten":"Đọc lỗi CORS trong ba bước"},
+        {"t":356.27,"den":462.35,"ten":"Cấu hình nằm trong môi trường"},
+        {"t":462.35,"den":549.96,"ten":"Mô phỏng: bốn bước, năm chỗ hỏng"},
+        {"t":549.96,"den":642.85,"ten":"Hỏng 3: cổng viết cứng · Hỏng 4: không tới được database"},
+        {"t":642.85,"den":732.37,"ten":"Backend-as-a-Service · Cái gì ăn điểm"},
+        {"t":732.37,"den":810.42,"ten":"Tự kiểm · Tóm tắt bài 6.1 & luyện tập"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 6.1 của môn SDN302."},
         {"t":10.29,"vi":"Bài 5.2: token ký id, khoá nằm trong tệp env, CORS là luật đọc của trình duyệt, và HTTPS giấu token khỏi mạng."},
@@ -1098,8 +1180,23 @@
         {"t":804.01,"vi":"Tiếp theo: checklist project, sáu cổng phải qua trước khi nộp."}
       ]
     },
-    "sdn302-8-1-nestjs-hono": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/server-side-development-nodejs-express-mongodb/08-nestjs-hono-production/08-01-nestjs-hono-aggregation-tron-81280167.mp4","durationSec":1299.97,"nguonCau":"srt",
-      "parts": [],
+    "sdn302-8-1-nestjs-hono": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/server-side-development-nodejs-express-mongodb/08-nestjs-hono-production/08-01-nestjs-hono-aggregation-tron-81280167.mp4","durationSec":1299.97,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":5.1,"den":106.51,"ten":"Phần 1 · Chào bạn · SDN302 Bài 8.1 · Khởi động xanh, request đầu 500"},
+        {"t":106.51,"den":202.36,"ten":"Phần 1 · Vì sao cần thêm một framework · Một API, ba framework"},
+        {"t":202.36,"den":298.18,"ten":"Phần 1 · NestJS: ba loại mảnh ghép · Service và module"},
+        {"t":298.18,"den":383.11,"ten":"Phần 1 · Dependency injection: ai tạo service"},
+        {"t":383.11,"den":481.23,"ten":"Phần 1 · Chạy thật: ba cột, ba framework"},
+        {"t":481.23,"den":561.62,"ten":"Phần 1 · Hono: cùng API, ít dòng · Đo thật: mỗi cái tốn gì"},
+        {"t":561.62,"den":662.21,"ten":"Phần 1 · Mô phỏng: con số nào đáng lo · Chọn cái nào, khi nào"},
+        {"t":662.21,"den":742.41,"ten":"Phần 1 · Tóm tắt phần 1 & luyện tập · Chào bạn · Bài 8.1 phần 2"},
+        {"t":742.41,"den":837.45,"ten":"Phần 2 · find thấy 39, aggregate thấy 0"},
+        {"t":837.45,"den":933.65,"ten":"Phần 2 · Pipeline của bài, chạy thật"},
+        {"t":933.65,"den":1023.07,"ten":"Phần 2 · Kéo về Node, hay để MongoDB đếm"},
+        {"t":1023.07,"den":1110.53,"ten":"Phần 2 · lookup trên mọi đơn hàng"},
+        {"t":1110.53,"den":1217.19,"ten":"Phần 2 · Ba bẫy trả sai mà không báo lỗi · Trong một route Express"},
+        {"t":1217.19,"den":1299.97,"ten":"Phần 2 · Tự kiểm · Tóm tắt bài 8.1 & luyện tập"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 8.1 của môn SDN302."},
         {"t":10.35,"vi":"Tới giờ bạn đã dựng cả một API bằng Express và Mongoose: route, controller, service, model, xác thực, rồi đưa lên mạng."},
@@ -1324,8 +1421,15 @@
         {"t":1288.75,"vi":"Bài sau: 8.2, gia cố API cho production."}
       ]
     },
-    "sdn302-chong-mat-diem": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/server-side-development-nodejs-express-mongodb/00-gioi-thieu-huong-dan-hoc/00-05-chon-de-tai-va-mat-diem-a978a37a.mp4","durationSec":583.26,"nguonCau":"srt",
-      "parts": [],
+    "sdn302-chong-mat-diem": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/server-side-development-nodejs-express-mongodb/00-gioi-thieu-huong-dan-hoc/00-05-chon-de-tai-va-mat-diem-a978a37a.mp4","durationSec":583.26,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":99.21,"ten":"Chào bạn · SDN302 Bài 0.5 · Chạy được mà vẫn mất điểm"},
+        {"t":99.21,"den":207.85,"ten":"Project tốt trông thế nào · Rubric sáu phép thử"},
+        {"t":207.85,"den":323.6,"ten":"Slide: kết quả chấm · Ngân hàng mười hai đề tài"},
+        {"t":323.6,"den":409.81,"ten":"Bảy kiểu mất điểm, năm tới bảy · Chạy thật: API cờ đỏ"},
+        {"t":409.81,"den":494.89,"ten":"Cùng request, cờ xanh · Cờ xanh, cờ đỏ, công thức"},
+        {"t":494.89,"den":583.26,"ten":"Bài tập: chấm hai đề tài · Tự kiểm"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 0.5 của môn SDN302."},
         {"t":10.18,"vi":"Bài trước mình đã xem một request đi qua năm hộp, hai cổng điểm bốn của Practical và Final, và tám chuẩn đầu ra."},
@@ -1419,8 +1523,17 @@
         {"t":573.01,"vi":"Bài sau, mình viết app Express đầu tiên, tách route bằng Router, và chạy thật Express Generator."}
       ]
     },
-    "sdn302-chuan-dau-ra": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/server-side-development-nodejs-express-mongodb/00-gioi-thieu-huong-dan-hoc/00-01-gioi-thieu-sdn302-2a7cdc68.mp4","durationSec":690.23,"nguonCau":"srt",
-      "parts": [],
+    "sdn302-chuan-dau-ra": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/server-side-development-nodejs-express-mongodb/00-gioi-thieu-huong-dan-hoc/00-01-gioi-thieu-sdn302-2a7cdc68.mp4","durationSec":690.23,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":108.46,"ten":"Chào bạn · môn SDN302 · Sau cú bấm, chuyện gì xảy ra"},
+        {"t":108.46,"den":186,"ten":"Từ FER202 sang SDN302 · Một request đi qua server"},
+        {"t":186,"den":283.05,"ten":"Chạy thật: một request đi qua từng tầng"},
+        {"t":283.05,"den":362.76,"ten":"Môn học trong bốn con số · Năm thành phần điểm"},
+        {"t":362.76,"den":448.79,"ten":"Mô phỏng: trên năm vẫn rớt · Chạy thật: máy tính điểm"},
+        {"t":448.79,"den":570.07,"ten":"Progress Test và chuẩn đầu ra · Tám chuẩn đầu ra"},
+        {"t":570.07,"den":651.73,"ten":"Bẫy: đọc backend như frontend · Bài tập: qua hay rớt"},
+        {"t":651.73,"den":690.23,"ten":"Tóm tắt & luyện tập"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với môn SDN302 trên cuongthai.com: phát triển phía server với Node.js, Express và MongoDB."},
         {"t":15.77,"vi":"Môn này giúp bạn ba việc: tự xây một REST API thật, làm chủ MongoDB, và qua được hai bài thi thực hành có cổng điểm."},
@@ -1539,8 +1652,17 @@
         {"t":681.75,"vi":"Bài sau, mình chọn đề tài project cho đúng cỡ, và xem bảy kiểu mất điểm hay gặp nhất."}
       ]
     },
-    "sdn302-dieu-kien-qua-mon": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/server-side-development-nodejs-express-mongodb/00-gioi-thieu-huong-dan-hoc/00-01-gioi-thieu-sdn302-2a7cdc68.mp4","durationSec":690.23,"nguonCau":"srt",
-      "parts": [],
+    "sdn302-dieu-kien-qua-mon": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/server-side-development-nodejs-express-mongodb/00-gioi-thieu-huong-dan-hoc/00-01-gioi-thieu-sdn302-2a7cdc68.mp4","durationSec":690.23,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":108.46,"ten":"Chào bạn · môn SDN302 · Sau cú bấm, chuyện gì xảy ra"},
+        {"t":108.46,"den":186,"ten":"Từ FER202 sang SDN302 · Một request đi qua server"},
+        {"t":186,"den":283.05,"ten":"Chạy thật: một request đi qua từng tầng"},
+        {"t":283.05,"den":362.76,"ten":"Môn học trong bốn con số · Năm thành phần điểm"},
+        {"t":362.76,"den":448.79,"ten":"Mô phỏng: trên năm vẫn rớt · Chạy thật: máy tính điểm"},
+        {"t":448.79,"den":570.07,"ten":"Progress Test và chuẩn đầu ra · Tám chuẩn đầu ra"},
+        {"t":570.07,"den":651.73,"ten":"Bẫy: đọc backend như frontend · Bài tập: qua hay rớt"},
+        {"t":651.73,"den":690.23,"ten":"Tóm tắt & luyện tập"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với môn SDN302 trên cuongthai.com: phát triển phía server với Node.js, Express và MongoDB."},
         {"t":15.77,"vi":"Môn này giúp bạn ba việc: tự xây một REST API thật, làm chủ MongoDB, và qua được hai bài thi thực hành có cổng điểm."},
@@ -1659,8 +1781,17 @@
         {"t":681.75,"vi":"Bài sau, mình chọn đề tài project cho đúng cỡ, và xem bảy kiểu mất điểm hay gặp nhất."}
       ]
     },
-    "sdn302-gioi-thieu": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/server-side-development-nodejs-express-mongodb/00-gioi-thieu-huong-dan-hoc/00-01-gioi-thieu-sdn302-2a7cdc68.mp4","durationSec":690.23,"nguonCau":"srt",
-      "parts": [],
+    "sdn302-gioi-thieu": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/server-side-development-nodejs-express-mongodb/00-gioi-thieu-huong-dan-hoc/00-01-gioi-thieu-sdn302-2a7cdc68.mp4","durationSec":690.23,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":108.46,"ten":"Chào bạn · môn SDN302 · Sau cú bấm, chuyện gì xảy ra"},
+        {"t":108.46,"den":186,"ten":"Từ FER202 sang SDN302 · Một request đi qua server"},
+        {"t":186,"den":283.05,"ten":"Chạy thật: một request đi qua từng tầng"},
+        {"t":283.05,"den":362.76,"ten":"Môn học trong bốn con số · Năm thành phần điểm"},
+        {"t":362.76,"den":448.79,"ten":"Mô phỏng: trên năm vẫn rớt · Chạy thật: máy tính điểm"},
+        {"t":448.79,"den":570.07,"ten":"Progress Test và chuẩn đầu ra · Tám chuẩn đầu ra"},
+        {"t":570.07,"den":651.73,"ten":"Bẫy: đọc backend như frontend · Bài tập: qua hay rớt"},
+        {"t":651.73,"den":690.23,"ten":"Tóm tắt & luyện tập"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với môn SDN302 trên cuongthai.com: phát triển phía server với Node.js, Express và MongoDB."},
         {"t":15.77,"vi":"Môn này giúp bạn ba việc: tự xây một REST API thật, làm chủ MongoDB, và qua được hai bài thi thực hành có cổng điểm."},
@@ -1779,8 +1910,14 @@
         {"t":681.75,"vi":"Bài sau, mình chọn đề tài project cho đúng cỡ, và xem bảy kiểu mất điểm hay gặp nhất."}
       ]
     },
-    "sdn302-goc-0-course-intro": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/server-side-development-nodejs-express-mongodb/00-gioi-thieu-huong-dan-hoc/G00-01-course-introduction-b71bbbfd.mp4","durationSec":457.09,"nguonCau":"srt",
-      "parts": [],
+    "sdn302-goc-0-course-intro": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/server-side-development-nodejs-express-mongodb/00-gioi-thieu-huong-dan-hoc/G00-01-course-introduction-b71bbbfd.mp4","durationSec":457.09,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":103.89,"ten":"Chào bạn · SDN302 · Slide 1–2: tên môn, vì sao học"},
+        {"t":103.89,"den":207.65,"ten":"Slide 5–7: mô tả môn · Slide 8–9: kế hoạch và tài liệu"},
+        {"t":207.65,"den":310.83,"ten":"Slide 11 và 13: luật lớp, cách học"},
+        {"t":310.83,"den":417.14,"ten":"Mô phỏng: qua hay trượt"},
+        {"t":417.14,"den":457.09,"ten":"Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với SDN302, môn phát triển phía server bằng Node, Express và MongoDB. Đây là tập đầu của loạt video giảng đúng slide của trường."},
         {"t":19.7,"vi":"Ở FER202 bạn đã dựng giao diện React và gọi API bằng fetch."},
@@ -1848,8 +1985,13 @@
         {"t":451.08,"vi":"Giờ hãy cài công cụ, rồi làm phần luyện tập của bài ngay dưới video nhé."}
       ]
     },
-    "sdn302-goc-1-1-back-end": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/server-side-development-nodejs-express-mongodb/00-gioi-thieu-huong-dan-hoc/G01-01-back-end-development-3e4a2ac7.mp4","durationSec":373.91,"nguonCau":"srt",
-      "parts": [],
+    "sdn302-goc-1-1-back-end": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/server-side-development-nodejs-express-mongodb/00-gioi-thieu-huong-dan-hoc/G01-01-back-end-development-3e4a2ac7.mp4","durationSec":373.91,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":85.97,"ten":"Chào bạn · Slot 1.1 · Slide 1–2: mục tiêu buổi học"},
+        {"t":85.97,"den":181.89,"ten":"Slide 3–4: front-end và back-end"},
+        {"t":181.89,"den":275.36,"ten":"Slide 10–12: ngôn ngữ, framework, quản lý phiên bản"},
+        {"t":275.36,"den":373.91,"ten":"Mô phỏng: ống CI CD · Slide 18: tóm tắt của slide"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Slot một chấm một của SDN302: back-end development, phát triển phía sau."},
         {"t":13.25,"vi":"Tập trước ta đã thuộc công thức điểm và hai cổng bốn điểm."},
@@ -1905,8 +2047,26 @@
         {"t":369.01,"vi":"Giờ hãy làm phần luyện tập của bài ngay dưới video nhé."}
       ]
     },
-    "sdn302-goc-1-2-nodejs": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/server-side-development-nodejs-express-mongodb/01-nen-tang-nodejs/G01-02-nodejs-tron-7c9db77a.mp4","durationSec":1633.56,"nguonCau":"srt",
-      "parts": [],
+    "sdn302-goc-1-2-nodejs": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/server-side-development-nodejs-express-mongodb/01-nen-tang-nodejs/G01-02-nodejs-tron-7c9db77a.mp4","durationSec":1633.56,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":5.1,"den":105.9,"ten":"Phần 1 · Chào bạn · Slot 1.2 · Slide 1–2: mục tiêu"},
+        {"t":105.9,"den":198.46,"ten":"Phần 1 · Slide 4: năm đặc điểm"},
+        {"t":198.46,"den":300.07,"ten":"Phần 1 · Slide 7: kiến trúc Node"},
+        {"t":300.07,"den":376.56,"ten":"Phần 1 · Mô phỏng: nhiều luồng ngồi chờ ‖ một luồng"},
+        {"t":376.56,"den":463.22,"ten":"Phần 1 · Slide 12–13: npm và package.json"},
+        {"t":463.22,"den":567.75,"ten":"Phần 1 · Tự kiểm · Tóm tắt"},
+        {"t":567.75,"den":658.88,"ten":"Phần 2 · Chào bạn · Slot 1.2 phần 2"},
+        {"t":658.88,"den":774.39,"ten":"Phần 2 · Mô phỏng: năm bước của event loop"},
+        {"t":774.39,"den":897.23,"ten":"Phần 2 · Mô phỏng: một vòng event loop · Slide 19: cài môi trường"},
+        {"t":897.23,"den":1017.08,"ten":"Phần 2 · Slide 22: tách thành module"},
+        {"t":1017.08,"den":1094.72,"ten":"Phần 2 · Slide 25–27: hai hàm viết theo callback · Tự kiểm"},
+        {"t":1094.72,"den":1173.85,"ten":"Phần 2 · Tóm tắt · Chào bạn · Slot 1.2 phần 3"},
+        {"t":1173.85,"den":1250.91,"ten":"Phần 3 · Slide 28: vì sao cần Promise · Slide 29: Promise là gì"},
+        {"t":1250.91,"den":1362.66,"ten":"Phần 3 · Slide 30: state và result · Slide 31: hai hàm trả về Promise"},
+        {"t":1362.66,"den":1452.61,"ten":"Phần 3 · Mô phỏng: nghiệm đi đường nào · Slide 33: async await"},
+        {"t":1452.61,"den":1535.01,"ten":"Phần 3 · Slide 35: try catch và await, chạy thật"},
+        {"t":1535.01,"den":1633.56,"ten":"Phần 3 · Tự kiểm · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Slot một chấm hai của SDN302: chính Node.js."},
         {"t":11.95,"vi":"Tập trước ta đã chốt một bẫy thi: Node.js là môi trường chạy, còn Express mới là framework."},
@@ -2154,8 +2314,19 @@
         {"t":1623.39,"vi":"Giờ hãy làm phần luyện tập của bài ngay dưới video nhé."}
       ]
     },
-    "sdn302-goc-11-https": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/server-side-development-nodejs-express-mongodb/05-xac-thuc-bao-mat/G11-https-tron-e6ca785e.mp4","durationSec":916.16,"nguonCau":"srt",
-      "parts": [],
+    "sdn302-goc-11-https": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/server-side-development-nodejs-express-mongodb/05-xac-thuc-bao-mat/G11-https-tron-e6ca785e.mp4","durationSec":916.16,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":5.1,"den":83.39,"ten":"Phần 1 · Chào bạn · Slot 11 HTTPS (1/2) · Slide 1–3: HTTPS là gì"},
+        {"t":83.39,"den":173.05,"ten":"Phần 1 · Slide 4: bắt tay HTTPS 4 giai đoạn"},
+        {"t":173.05,"den":259.27,"ten":"Phần 1 · Slide 7–8: trao khoá rồi đổi sang đối xứng"},
+        {"t":259.27,"den":361.33,"ten":"Phần 1 · Slide 9–12: tạo chứng chỉ bằng OpenSSL"},
+        {"t":361.33,"den":491.41,"ten":"Phần 1 · Slide 13–14: https.createServer · chuyển 301"},
+        {"t":491.41,"den":570.32,"ten":"Phần 1 · Tóm tắt phần 1 · Chào bạn · Slot 11 HTTPS (2/2)"},
+        {"t":570.32,"den":671.6,"ten":"Phần 2 · Slide 16–18: đăng nhập một lần"},
+        {"t":671.6,"den":765.71,"ten":"Phần 2 · Slide 20–21: OAuth 1.0 · Slide 22: OAuth 2.0"},
+        {"t":765.71,"den":867.69,"ten":"Phần 2 · Mô phỏng: OAuth 1 vs OAuth 2 · Tự kiểm"},
+        {"t":867.69,"den":916.16,"ten":"Phần 2 · Tóm tắt phần 2 · hết Slot 11"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, Slot mười một, HTTPS và bảo mật đường truyền, phần một trên hai. Đây là lớp bảo vệ cho mọi thứ ta vừa học."},
         {"t":15.11,"vi":"Ta xem HTTPS bảo vệ đường truyền thế nào, mã hoá đối xứng với bất đối xứng, cách tạo chứng chỉ, và chạy HTTPS trong Node."},
@@ -2265,8 +2436,18 @@
         {"t":909.2,"vi":"Hẹn gặp lại bạn."}
       ]
     },
-    "sdn302-goc-12-upload-download": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/server-side-development-nodejs-express-mongodb/05-xac-thuc-bao-mat/G12-upload-tron-a04715ca.mp4","durationSec":890.37,"nguonCau":"srt",
-      "parts": [],
+    "sdn302-goc-12-upload-download": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/server-side-development-nodejs-express-mongodb/05-xac-thuc-bao-mat/G12-upload-tron-a04715ca.mp4","durationSec":890.37,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":5.1,"den":119.14,"ten":"Phần 1 · Chào bạn · Slot 12 Upload (1/2) · Slide 1–3: upload là gì"},
+        {"t":119.14,"den":215.9,"ten":"Phần 1 · Mô phỏng: luồng upload một tệp · Slide 7–8: uploadRoutes.js"},
+        {"t":215.9,"den":303.66,"ten":"Phần 1 · Demo 1: upload một tệp · Slide 9: server.js ráp router"},
+        {"t":303.66,"den":414.59,"ten":"Phần 1 · Slide 10–11: client React · Tự kiểm"},
+        {"t":414.59,"den":494.21,"ten":"Phần 1 · Tóm tắt phần 1 · Chào bạn · Slot 12 Upload (2/2)"},
+        {"t":494.21,"den":592.26,"ten":"Phần 2 · Slide 12–13: upload nhiều tệp · Demo 2: bẫy trùng tên tệp"},
+        {"t":592.26,"den":680.52,"ten":"Phần 2 · Slide 14–15: React nhiều tệp · Slide 16–17: download là gì"},
+        {"t":680.52,"den":785.66,"ten":"Phần 2 · Slide 18–20: liệt kê & tải tệp"},
+        {"t":785.66,"den":890.37,"ten":"Phần 2 · Tự kiểm · Tóm tắt · hết Slot 12"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, Slot mười hai, upload và download file, phần một trên hai. Ta học cách server nhận tệp mà người dùng gửi lên."},
         {"t":14.31,"vi":"Công cụ chính là Multer. Phần một lo upload một tệp, dựng route, và một client React gọi lên; phần hai lo nhiều tệp và download."},
@@ -2366,8 +2547,14 @@
         {"t":883.37,"vi":"Hẹn gặp lại bạn."}
       ]
     },
-    "sdn302-goc-13-cors": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/server-side-development-nodejs-express-mongodb/05-xac-thuc-bao-mat/G13-cors-79744fa6.mp4","durationSec":476.19,"nguonCau":"srt",
-      "parts": [],
+    "sdn302-goc-13-cors": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/server-side-development-nodejs-express-mongodb/05-xac-thuc-bao-mat/G13-cors-79744fa6.mp4","durationSec":476.19,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":91.93,"ten":"Chào bạn · Slot 13 CORS · Slide 1–3: CORS là gì"},
+        {"t":91.93,"den":194.28,"ten":"Slide 4: bốn header Access-Control"},
+        {"t":194.28,"den":290.92,"ten":"Demo: CORS chạy thật · Slide 6: cài & dùng cors"},
+        {"t":290.92,"den":379.41,"ten":"Slide 7–11: thử endpoint bằng Postman"},
+        {"t":379.41,"den":476.19,"ten":"Tự kiểm · Tóm tắt Slot 13"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, Slot mười ba, CORS."},
         {"t":8.43,"vi":"Ta học vì sao trình duyệt chặn một trang gọi sang API ở origin khác, và cách mở đúng cửa."},
@@ -2426,8 +2613,22 @@
         {"t":474.4,"vi":"Hẹn gặp lại bạn."}
       ]
     },
-    "sdn302-goc-15-16-baas": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/server-side-development-nodejs-express-mongodb/06-tich-hop-react-trien-khai/G15-16-baas-tron-4d87eb63.mp4","durationSec":1218.67,"nguonCau":"srt",
-      "parts": [],
+    "sdn302-goc-15-16-baas": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/server-side-development-nodejs-express-mongodb/06-tich-hop-react-trien-khai/G15-16-baas-tron-4d87eb63.mp4","durationSec":1218.67,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":5.1,"den":115.33,"ten":"Phần 1 · Chào bạn · Slot 15–16 BaaS (1/3)"},
+        {"t":115.33,"den":193.46,"ten":"Phần 1 · Mô phỏng: tự dựng vs BaaS · Slide 6–7: vì sao dùng BaaS"},
+        {"t":193.46,"den":278.77,"ten":"Phần 1 · Slide 8–9: BaaS cung cấp gì · Slide 10–12: PaaS, IaaS, SaaS"},
+        {"t":278.77,"den":369.14,"ten":"Phần 1 · Mô phỏng: bậc thang 4 mô hình · Tự kiểm"},
+        {"t":369.14,"den":480.26,"ten":"Phần 1 · Tóm tắt phần 1 · Chào bạn · Slot 15–16 BaaS (2/3) Heroku"},
+        {"t":480.26,"den":578.43,"ten":"Phần 2 · Demo: 2 lỗi triển khai chạy thật"},
+        {"t":578.43,"den":654.32,"ten":"Phần 2 · Slide 15–16: tạo tài khoản & app · Slide 17–19: Heroku CLI"},
+        {"t":654.32,"den":732.91,"ten":"Phần 2 · Slide 20–21: deploy bằng Git"},
+        {"t":732.91,"den":837.72,"ten":"Phần 2 · Tự kiểm · Tóm tắt phần 2"},
+        {"t":837.72,"den":937.13,"ten":"Phần 3 · Chào bạn · Slot 15–16 BaaS (3/3) Firebase"},
+        {"t":937.13,"den":1027.42,"ten":"Phần 3 · Mô phỏng: 8 dịch vụ lõi Firebase"},
+        {"t":1027.42,"den":1120.04,"ten":"Phần 3 · Mô phỏng: static vs Cloud Function"},
+        {"t":1120.04,"den":1218.67,"ten":"Phần 3 · Tự kiểm · Tóm tắt phần 3 & Slot"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, Slot mười lăm và mười sáu, Backend as a Service. Ta học cách thuê back-end thay vì tự dựng từng mảnh."},
         {"t":13.38,"vi":"Đây là phần một trên ba. Phần một lo khái niệm BaaS và ba mô hình đám mây: PaaS, IaaS, SaaS."},
@@ -2589,8 +2790,23 @@
         {"t":1211.74,"vi":"Hẹn gặp lại bạn."}
       ]
     },
-    "sdn302-goc-17-19-nestjs-hono": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/server-side-development-nodejs-express-mongodb/08-nestjs-hono-production/G17-19-nest-tron-878b4a8f.mp4","durationSec":1269.29,"nguonCau":"srt",
-      "parts": [],
+    "sdn302-goc-17-19-nestjs-hono": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/server-side-development-nodejs-express-mongodb/08-nestjs-hono-production/G17-19-nest-tron-878b4a8f.mp4","durationSec":1269.29,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":5.1,"den":121.38,"ten":"Phần 1 · Chào bạn · Slot 17–19 (1/3) NestJS · Slide 1–3: NestJS là gì"},
+        {"t":121.38,"den":212.25,"ten":"Phần 1 · Mô phỏng: kiến trúc NestJS · Slide 6–8: CLI & NestFactory"},
+        {"t":212.25,"den":296.81,"ten":"Phần 1 · Slide 9–14: Hot Reload (HMR)"},
+        {"t":296.81,"den":403.05,"ten":"Phần 1 · Tự kiểm · Tóm tắt phần 1"},
+        {"t":403.05,"den":510.24,"ten":"Phần 2 · Chào bạn · Slot 17–19 (2/3) CRUD mèo"},
+        {"t":510.24,"den":591.23,"ten":"Phần 2 · Slide 19: service CRUD · Mô phỏng: luồng CRUD NestJS"},
+        {"t":591.23,"den":693.52,"ten":"Phần 2 · Slide 20–21: controller & bẫy @Param"},
+        {"t":693.52,"den":784.07,"ten":"Phần 2 · Slide 22–23: Postman & tài liệu · Tự kiểm"},
+        {"t":784.07,"den":865.56,"ten":"Phần 2 · Tóm tắt phần 2 · Chào bạn · Slot 17–19 (3/3) Hono"},
+        {"t":865.56,"den":944.55,"ten":"Phần 3 · Slide 24–25: Hono là gì · Slide 26: trả JSON"},
+        {"t":944.55,"den":1043.39,"ten":"Phần 3 · Mô phỏng: cùng code chạy khắp runtime"},
+        {"t":1043.39,"den":1127.09,"ten":"Phần 3 · Slide 27–28: request/response"},
+        {"t":1127.09,"den":1221.86,"ten":"Phần 3 · Slide 31: Hono vs Nest · Tự kiểm"},
+        {"t":1221.86,"den":1269.29,"ten":"Phần 3 · Tóm tắt phần 3 & Slot"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, Slot mười bảy tới mười chín, hai framework mới ngoài Express: NestJS và Hono. Phần một trên ba lo NestJS."},
         {"t":15.25,"vi":"NestJS có cấu trúc, dùng TypeScript, hợp app lớn. Phần một đi từ khái niệm, công cụ CLI, NestFactory, cho tới Hot Reload."},
@@ -2746,8 +2962,20 @@
         {"t":1262.46,"vi":"Hẹn gặp lại."}
       ]
     },
-    "sdn302-goc-2-1-api": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/server-side-development-nodejs-express-mongodb/01-nen-tang-nodejs/G01-03-using-api-tron-cd37d247.mp4","durationSec":1014.68,"nguonCau":"srt",
-      "parts": [],
+    "sdn302-goc-2-1-api": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/server-side-development-nodejs-express-mongodb/01-nen-tang-nodejs/G01-03-using-api-tron-cd37d247.mp4","durationSec":1014.68,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":5.1,"den":92.2,"ten":"Phần 1 · Chào bạn · Slot 2.1 · Slide 1–2: mục tiêu"},
+        {"t":92.2,"den":178.97,"ten":"Phần 1 · Slide 5: API là gì · Minh hoạ: thực đơn nhà hàng"},
+        {"t":178.97,"den":274.04,"ten":"Phần 1 · Slide 7: ví dụ SOAP · Slide 8: REST API"},
+        {"t":274.04,"den":363.4,"ten":"Phần 1 · So sánh: cùng một việc, hai kiểu gửi"},
+        {"t":363.4,"den":483.99,"ten":"Phần 1 · Slide 13: RESTful API · Tự kiểm"},
+        {"t":483.99,"den":568.15,"ten":"Phần 2 · Chào bạn · Slot 2.1 phần 2 · Slide 14–15: API gateway làm gì"},
+        {"t":568.15,"den":644.04,"ten":"Phần 2 · Mô phỏng: một request qua gateway"},
+        {"t":644.04,"den":766.9,"ten":"Phần 2 · Bổ sung của bài web: CRUD và method"},
+        {"t":766.9,"den":853.56,"ten":"Phần 2 · Slide 23–25: XML · Chạy thật: cùng dữ liệu, JSON và XML"},
+        {"t":853.56,"den":956.91,"ten":"Phần 2 · Slide 26–27: so sánh JSON và XML · Slide 28: tóm tắt"},
+        {"t":956.91,"den":1014.68,"ten":"Phần 2 · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Slot hai chấm một của SDN302: dùng API."},
         {"t":11.3,"vi":"Slot trước ta đã thuộc callback, Promise và async await. Hôm nay sẽ thấy vì sao cần chúng: dữ liệu đi qua mạng."},
@@ -2909,8 +3137,36 @@
         {"t":1004.52,"vi":"Giờ hãy làm phần luyện tập của bài ngay dưới video nhé."}
       ]
     },
-    "sdn302-goc-2-2-node-http": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/server-side-development-nodejs-express-mongodb/01-nen-tang-nodejs/G01-04-node-http-tron-649187f9.mp4","durationSec":2572.67,"nguonCau":"srt",
-      "parts": [],
+    "sdn302-goc-2-2-node-http": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/server-side-development-nodejs-express-mongodb/01-nen-tang-nodejs/G01-04-node-http-tron-649187f9.mp4","durationSec":2572.67,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":5.1,"den":126.67,"ten":"Phần 1 · Chào bạn · Slot 2.2 phần 1 · Slide 1–2: sáu mục tiêu"},
+        {"t":126.67,"den":239.51,"ten":"Phần 1 · Mô phỏng: HTTP 1.1 và HTTP 2"},
+        {"t":239.51,"den":333.14,"ten":"Phần 1 · Chạy thật: ba phần của một response"},
+        {"t":333.14,"den":423.03,"ten":"Phần 1 · Slide 9–10: GET và POST · Slide 11–12: PUT và DELETE"},
+        {"t":423.03,"den":502.15,"ten":"Phần 1 · Slide 13–15: HEAD, OPTIONS, PATCH"},
+        {"t":502.15,"den":597.85,"ten":"Phần 1 · Chạy thật: PUT, PATCH, DELETE hai lần"},
+        {"t":597.85,"den":715.88,"ten":"Phần 1 · Bổ sung của bài web: nhóm mã, 401 và 403 · Tự kiểm"},
+        {"t":715.88,"den":818.88,"ten":"Phần 2 · Chào bạn · Slot 2.2 phần 2 · Slide 17: module http"},
+        {"t":818.88,"den":913,"ten":"Phần 2 · Slide 18: server đầu tiên · Chạy thật: code slide 18"},
+        {"t":913,"den":992.33,"ten":"Phần 2 · Slide 19: chạy server · Slide 20–21: Postman"},
+        {"t":992.33,"den":1087.63,"ten":"Phần 2 · Slide 22–23: hai trang HTML"},
+        {"t":1087.63,"den":1162.64,"ten":"Phần 2 · Mô phỏng: năm request, bốn nhánh"},
+        {"t":1162.64,"den":1254.91,"ten":"Phần 2 · Slide 25: kết quả trên slide · Slide 26: bài tập"},
+        {"t":1254.91,"den":1333.71,"ten":"Phần 2 · Tóm tắt · Chào bạn · Slot 2.2 phần 3"},
+        {"t":1333.71,"den":1426.94,"ten":"Phần 3 · Slide 27–28: module fs, đọc tệp · Slide 29: ghi tệp"},
+        {"t":1426.94,"den":1525.19,"ten":"Phần 3 · Slide 30–31: bất đồng bộ và đồng bộ"},
+        {"t":1525.19,"den":1619.38,"ten":"Phần 3 · Slide 33: quyền tệp · Mô phỏng: cộng bit thành số quyền"},
+        {"t":1619.38,"den":1701.29,"ten":"Phần 3 · Chạy thật: chmod · Slide 35–36: vì sao cần stream"},
+        {"t":1701.29,"den":1779.78,"ten":"Phần 3 · Slide 37: read stream đếm từ · Chạy thật: stream và readFile"},
+        {"t":1779.78,"den":1872.48,"ten":"Phần 3 · Slide 38: write stream · Slide 39: code Fibonacci"},
+        {"t":1872.48,"den":1966.59,"ten":"Phần 3 · Tự kiểm · Tóm tắt"},
+        {"t":1966.59,"den":2081.16,"ten":"Phần 4 · Chào bạn · Slot 2.2 phần 4 · Slide 40–41: fs và path"},
+        {"t":2081.16,"den":2157.59,"ten":"Phần 4 · Slide 45: index.js của file server"},
+        {"t":2157.59,"den":2271.43,"ten":"Phần 4 · Mô phỏng: bốn việc chạy đua · Slide 46: ảnh chụp kết quả"},
+        {"t":2271.43,"den":2396.62,"ten":"Phần 4 · Chạy thật: dirname và resolve"},
+        {"t":2396.62,"den":2482.37,"ten":"Phần 4 · Slide 50: ảnh chụp xác nhận · Slide 51: bài tập REST API"},
+        {"t":2482.37,"den":2572.67,"ten":"Phần 4 · Tự kiểm · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, bắt đầu Slot hai chấm hai: Node và HTTP. Bộ này có năm mươi hai slide, mình chia làm bốn tập."},
         {"t":14.18,"vi":"Tập trước: API gateway là cửa chính, bốn method GET, POST, PUT, DELETE, và JSON gọn hơn XML."},
@@ -3347,8 +3603,27 @@
         {"t":2562.52,"vi":"Giờ hãy làm phần luyện tập của bài ngay dưới video nhé."}
       ]
     },
-    "sdn302-goc-3-1-expressjs": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/server-side-development-nodejs-express-mongodb/02-express-routing-middleware/G02-01-expressjs-tron-6d231f82.mp4","durationSec":1635.8,"nguonCau":"srt",
-      "parts": [],
+    "sdn302-goc-3-1-expressjs": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/server-side-development-nodejs-express-mongodb/02-express-routing-middleware/G02-01-expressjs-tron-6d231f82.mp4","durationSec":1635.8,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":5.1,"den":98.8,"ten":"Phần 1 · Chào bạn · Slot 3.1 phần 1 · Slide 1–2: bìa và mục tiêu"},
+        {"t":98.8,"den":216.63,"ten":"Phần 1 · Slide 4: vì sao Express (nửa code) · Slide 5: cấu trúc dự án"},
+        {"t":216.63,"den":294.19,"ten":"Phần 1 · Slide 8: semantic versioning"},
+        {"t":294.19,"den":400.92,"ten":"Phần 1 · Slide 10–11: routing và trang 404"},
+        {"t":400.92,"den":525.08,"ten":"Phần 1 · Slide 14: năm đăng ký trên /articles"},
+        {"t":525.08,"den":611.94,"ten":"Phần 1 · Tóm tắt · Chào bạn · Slot 3.1 phần 2"},
+        {"t":611.94,"den":694.56,"ten":"Phần 2 · Slide 16: middleware là gì · Slide 17: năm loại middleware"},
+        {"t":694.56,"den":772.05,"ten":"Phần 2 · Slide 18: tự viết middleware"},
+        {"t":772.05,"den":856.07,"ten":"Phần 2 · Slide 20–21: bảng 7 route RESTful"},
+        {"t":856.07,"den":934.6,"ten":"Phần 2 · Slide 24–25: GET all và body parser"},
+        {"t":934.6,"den":1044.16,"ten":"Phần 2 · Slide 27–28: PUT và DELETE cả tập"},
+        {"t":1044.16,"den":1178.14,"ten":"Phần 2 · Slide 32: DELETE /:id, xong CRUD · Tự kiểm"},
+        {"t":1178.14,"den":1253.75,"ten":"Phần 3 · Chào bạn · Slot 3.1 phần 3 · Slide 33–34: hai bài tập"},
+        {"t":1253.75,"den":1342.42,"ten":"Phần 3 · Slide 36: cài generator, express -h"},
+        {"t":1342.42,"den":1417.67,"ten":"Phần 3 · Slide 40: express.Router() · Slide 41–42: chuỗi get và post"},
+        {"t":1417.67,"den":1496.88,"ten":"Phần 3 · Slide 45: route /:id và đường tương đối"},
+        {"t":1496.88,"den":1579.17,"ten":"Phần 3 · Slide 49–50: hai bài tập middleware · Tự kiểm"},
+        {"t":1579.17,"den":1635.8,"ten":"Phần 3 · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Slot ba chấm một: ExpressJS, phần một trong ba."},
         {"t":11.64,"vi":"Tập trước hết Slot hai chấm hai: module http thuần, tự phân tích URL, tự ghi header, tự phục vụ tệp."},
@@ -3606,8 +3881,29 @@
         {"t":1627.33,"vi":"Giờ làm phần luyện tập dưới video nhé."}
       ]
     },
-    "sdn302-goc-3-2-nosql-mongodb": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/server-side-development-nodejs-express-mongodb/03-mongodb-mongoose/G03-01-nosql-mongodb-tron-5750dee5.mp4","durationSec":1765.23,"nguonCau":"srt",
-      "parts": [],
+    "sdn302-goc-3-2-nosql-mongodb": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/server-side-development-nodejs-express-mongodb/03-mongodb-mongoose/G03-01-nosql-mongodb-tron-5750dee5.mp4","durationSec":1765.23,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":5.1,"den":80.64,"ten":"Phần 1 · Chào bạn · Slot 3.2 phần 1 · Slide 1–2: bìa và 6 mục tiêu"},
+        {"t":80.64,"den":156.48,"ten":"Phần 1 · Slide 4: serialization (chạy thật)"},
+        {"t":156.48,"den":240.83,"ten":"Phần 1 · Slide 7: bốn loại NoSQL · Slide 8–9: key-value và document"},
+        {"t":240.83,"den":321.4,"ten":"Phần 1 · Slide 12: SQL và NoSQL dùng ở đâu"},
+        {"t":321.4,"den":422.25,"ten":"Phần 1 · Slide 15–16: điểm mạnh và vì sao NoSQL"},
+        {"t":422.25,"den":514.9,"ten":"Phần 1 · Tóm tắt · Chào bạn · Slot 3.2 phần 2"},
+        {"t":514.9,"den":603.27,"ten":"Phần 2 · Slide 18: mongosh là gì · Slide 19: mongosh in gì khi mở"},
+        {"t":603.27,"den":685.85,"ten":"Phần 2 · Slide 23: xem và chuyển database"},
+        {"t":685.85,"den":778.9,"ten":"Phần 2 · Mô phỏng: một phiên mongosh (minh hoạ)"},
+        {"t":778.9,"den":887.88,"ten":"Phần 2 · Slide 29: ObjectId (soi mâu thuẫn)"},
+        {"t":887.88,"den":974.81,"ten":"Phần 2 · Tóm tắt · Chào bạn · Slot 3.2 phần 3"},
+        {"t":974.81,"den":1062.2,"ten":"Phần 3 · Slide 30: CRUD là gì · Slide 31–32: Create (insert)"},
+        {"t":1062.2,"den":1151.24,"ten":"Phần 3 · Slide 35–36: lọc bằng nhau và $in"},
+        {"t":1151.24,"den":1256.52,"ten":"Phần 3 · Slide 38–39: Update (updateOne)"},
+        {"t":1256.52,"den":1353.55,"ten":"Phần 3 · Mô phỏng: $set so với replaceOne"},
+        {"t":1353.55,"den":1442.43,"ten":"Phần 3 · Tóm tắt · Chào bạn · Slot 3.2 phần 4 (cuối)"},
+        {"t":1442.43,"den":1533.58,"ten":"Phần 4 · Slide 45: ánh xạ quan hệ · Slide 46–47: nhúng (embed)"},
+        {"t":1533.58,"den":1614.19,"ten":"Phần 4 · Slide 48: nhúng mọi thứ ⇒ trùng lặp"},
+        {"t":1614.19,"den":1715.43,"ten":"Phần 4 · Quy tắc: nhúng nhỏ · tham chiếu lớn · Slide 51–52: luyện tập"},
+        {"t":1715.43,"den":1765.23,"ten":"Phần 4 · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Slot ba chấm hai: NoSQL và MongoDB, phần một trong bốn."},
         {"t":11.74,"vi":"Slot ba chấm một ExpressJS đã xong."},
@@ -3898,8 +4194,29 @@
         {"t":1757,"vi":"Luyện tập ngay dưới video nhé."}
       ]
     },
-    "sdn302-goc-3-3-node-mongodb": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/server-side-development-nodejs-express-mongodb/03-mongodb-mongoose/G03-05-nodejs-mongodb-tron-bc6c2ff6.mp4","durationSec":1912.06,"nguonCau":"srt",
-      "parts": [],
+    "sdn302-goc-3-3-node-mongodb": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/server-side-development-nodejs-express-mongodb/03-mongodb-mongoose/G03-05-nodejs-mongodb-tron-bc6c2ff6.mp4","durationSec":1912.06,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":5.1,"den":108.5,"ten":"Phần 1 · Chào bạn · Slot 3.3 phần 1 · Slide 1–2: mục tiêu"},
+        {"t":108.5,"den":187.38,"ten":"Phần 1 · Slide 5–6: ba bước kết nối · Mô phỏng: vòng đời một kết nối"},
+        {"t":187.38,"den":274.58,"ten":"Phần 1 · Slide 7–9: chuỗi kết nối · Slide 10: liệt kê database"},
+        {"t":274.58,"den":393.57,"ten":"Phần 1 · Slide 11–13: tạo database & collection"},
+        {"t":393.57,"den":479.27,"ten":"Phần 1 · Tóm tắt · Chào bạn · Slot 3.3 phần 2"},
+        {"t":479.27,"den":601.07,"ten":"Phần 2 · Slide 14: CRUD trong MongoDB"},
+        {"t":601.07,"den":712.68,"ten":"Phần 2 · Mô phỏng: bẫy thiếu await (chạy thật JS)"},
+        {"t":712.68,"den":805.19,"ten":"Phần 2 · Slide 23–25: toán tử so sánh · Slide 26: so khớp regex"},
+        {"t":805.19,"den":880.53,"ten":"Phần 2 · Slide 27–28: sắp xếp · Mô phỏng: bảng truy vấn 5 sản phẩm"},
+        {"t":880.53,"den":984.02,"ten":"Phần 2 · Tự kiểm · Tóm tắt"},
+        {"t":984.02,"den":1077.12,"ten":"Phần 3 · Chào bạn · Slot 3.3 phần 3 · Slide 29: Delete"},
+        {"t":1077.12,"den":1198.43,"ten":"Phần 3 · Slide 32: Drop Collection · Slide 33–34: updateOne + $set"},
+        {"t":1198.43,"den":1277.73,"ten":"Phần 3 · Mô phỏng: $inc +125 (chạy thật JS) · Slide 36–37: limit"},
+        {"t":1277.73,"den":1361.01,"ten":"Phần 3 · Slide 38: skip trước limit"},
+        {"t":1361.01,"den":1469.27,"ten":"Phần 3 · Tự kiểm · Tóm tắt"},
+        {"t":1469.27,"den":1545.57,"ten":"Phần 4 · Chào bạn · Slot 3.3 phần 4 (cuối)"},
+        {"t":1545.57,"den":1645.95,"ten":"Phần 4 · Slide 41: bốn khoá tham số · Slide 42: tương đương SQL"},
+        {"t":1645.95,"den":1730.23,"ten":"Phần 4 · Slide 44: mã aggregate + kết quả"},
+        {"t":1730.23,"den":1806.32,"ten":"Phần 4 · Mô phỏng: JSON kết quả (chạy thật JS) · Slide 45: bài tập"},
+        {"t":1806.32,"den":1912.06,"ten":"Phần 4 · Tự kiểm · Tóm tắt Slot 3.3"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, sang Slot ba chấm ba: NodeJS với MongoDB. Đây là deck mới, phần một trong bốn."},
         {"t":13.12,"vi":"Slot ba chấm hai làm MongoDB qua shell."},
@@ -4181,8 +4498,24 @@
         {"t":1903.28,"vi":"Luyện tập ngay dưới video nhé."}
       ]
     },
-    "sdn302-goc-4-1-mongoose": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/server-side-development-nodejs-express-mongodb/03-mongodb-mongoose/G04-01-mongoose-tron-a34a98bf.mp4","durationSec":1417.45,"nguonCau":"srt",
-      "parts": [],
+    "sdn302-goc-4-1-mongoose": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/server-side-development-nodejs-express-mongodb/03-mongodb-mongoose/G04-01-mongoose-tron-a34a98bf.mp4","durationSec":1417.45,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":5.1,"den":113.93,"ten":"Phần 1 · Chào bạn · Slot 4.1 phần 1 · Slide 3–4: Mongoose là ODM"},
+        {"t":113.93,"den":202.07,"ten":"Phần 1 · Slide 6: vì sao cần Mongoose · Slide 7–8: cài đặt & cấu hình"},
+        {"t":202.07,"den":299.81,"ten":"Phần 1 · Slide 9: schema là gì · Slide 10–13: MVC"},
+        {"t":299.81,"den":413.48,"ten":"Phần 1 · Slide 14: model là gì"},
+        {"t":413.48,"den":521.35,"ten":"Phần 1 · Tự kiểm · Tóm tắt"},
+        {"t":521.35,"den":598.53,"ten":"Phần 2 · Chào bạn · Slot 4.1 phần 2 · Slide 16–18: thêm tài liệu"},
+        {"t":598.53,"den":693.69,"ten":"Phần 2 · Slide 19: server.js · Slide 20: đọc tài liệu"},
+        {"t":693.69,"den":792.03,"ten":"Phần 2 · Mô phỏng: updateOne bỏ qua validator (chạy thật JS)"},
+        {"t":792.03,"den":871.83,"ten":"Phần 2 · Mô phỏng: create thiếu dữ liệu (chạy thật JS)"},
+        {"t":871.83,"den":979.03,"ten":"Phần 2 · Tự kiểm · Tóm tắt"},
+        {"t":979.03,"den":1089.93,"ten":"Phần 3 · Chào bạn · Slot 4.1 phần 3 (cuối)"},
+        {"t":1089.93,"den":1170.01,"ten":"Phần 3 · Slide 29: populate"},
+        {"t":1170.01,"den":1283.32,"ten":"Phần 3 · Slide 30–31: middleware"},
+        {"t":1283.32,"den":1367.97,"ten":"Phần 3 · Slide 34–35: Query & bài tập · Tự kiểm"},
+        {"t":1367.97,"den":1417.45,"ten":"Phần 3 · Tóm tắt Slot 4.1"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, sang Slot bốn chấm một: Mongoose. Đây là phần một trong ba, slide một tới mười lăm."},
         {"t":12.99,"vi":"Mongoose là thư viện mà gần như mọi project và bài thi thực hành của môn này đều dùng để nói chuyện với MongoDB."},
@@ -4390,8 +4723,18 @@
         {"t":1409.34,"vi":"Luyện tập ngay dưới video nhé."}
       ]
     },
-    "sdn302-goc-5-1-population": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/server-side-development-nodejs-express-mongodb/03-mongodb-mongoose/G05-01-population-tron-3b216d66.mp4","durationSec":816.58,"nguonCau":"srt",
-      "parts": [],
+    "sdn302-goc-5-1-population": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/server-side-development-nodejs-express-mongodb/03-mongodb-mongoose/G05-01-population-tron-3b216d66.mp4","durationSec":816.58,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":5.1,"den":116.08,"ten":"Phần 1 · Chào bạn · Slot 5.1 population (1/2)"},
+        {"t":116.08,"den":209.37,"ten":"Phần 1 · Slide 6–8: cơ chế ref & populate()"},
+        {"t":209.37,"den":333.5,"ten":"Phần 1 · Mô phỏng: bẫy exec(callback) vs await"},
+        {"t":333.5,"den":412.28,"ten":"Phần 1 · Tóm tắt phần 1 · Chào bạn · Slot 5.1 population (2/2 · cuối)"},
+        {"t":412.28,"den":495.58,"ten":"Phần 2 · Slide 10: lợi ích & N+1"},
+        {"t":495.58,"den":572.31,"ten":"Phần 2 · Slide 13: hai thành phần · Slide 14–15: ví dụ trọn vẹn"},
+        {"t":572.31,"den":676.54,"ten":"Phần 2 · Mô phỏng: bước 2 populate & ref treo (chạy thật JS)"},
+        {"t":676.54,"den":765.91,"ten":"Phần 2 · Slide 17–18: bài tập & tóm tắt slide · Tự kiểm"},
+        {"t":765.91,"den":816.58,"ten":"Phần 2 · Tóm tắt Slot 5.1"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, Slot năm chấm một: Mongoose population, phần một trong hai."},
         {"t":10.7,"vi":"Đây là phần đào sâu đúng hàm populate mà Slot trước đã hé mở."},
@@ -4502,8 +4845,18 @@
         {"t":806.8,"vi":"Hết Slot năm chấm một, luyện tập ngay dưới video."}
       ]
     },
-    "sdn302-goc-6-restful-api": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/server-side-development-nodejs-express-mongodb/04-rest-api-mvc-templating/G06-restful-api-tron-a5ec867d.mp4","durationSec":784.02,"nguonCau":"srt",
-      "parts": [],
+    "sdn302-goc-6-restful-api": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/server-side-development-nodejs-express-mongodb/04-rest-api-mvc-templating/G06-restful-api-tron-a5ec867d.mp4","durationSec":784.02,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":5.1,"den":102.97,"ten":"Phần 1 · Chào bạn · Slot 6 RESTful API (1/2)"},
+        {"t":102.97,"den":190.56,"ten":"Phần 1 · Slide 6–7: 6 ràng buộc & luật thực hành"},
+        {"t":190.56,"den":301.8,"ten":"Phần 1 · Slide 9–10: Node cho API & cách nối"},
+        {"t":301.8,"den":379.31,"ten":"Phần 1 · Tóm tắt phần 1 · Chào bạn · Slot 6 RESTful API (2/2)"},
+        {"t":379.31,"den":489.03,"ten":"Phần 2 · Slide 11–12: dựng model (validator · ref)"},
+        {"t":489.03,"den":573.38,"ten":"Phần 2 · Mô phỏng: mã trạng thái (chạy thật JS)"},
+        {"t":573.38,"den":660.08,"ten":"Phần 2 · Slide 16–20: thử bằng Postman"},
+        {"t":660.08,"den":737.71,"ten":"Phần 2 · Slide 21–22: bài tập & tóm tắt · Tự kiểm"},
+        {"t":737.71,"den":784.02,"ten":"Phần 2 · Tóm tắt Slot 6"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, Slot sáu: RESTful API với Express, MongoDB và Mongoose, phần một trong hai."},
         {"t":12.7,"vi":"Đây là hình dạng của phần lớn đề Practical Exam."},
@@ -4610,8 +4963,18 @@
         {"t":767.99,"vi":"Slot sau là EJS: template engine để server tự render HTML, chính là chữ View của MVC. Nhớ luyện tập dưới video."}
       ]
     },
-    "sdn302-goc-7-ejs": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/server-side-development-nodejs-express-mongodb/04-rest-api-mvc-templating/G07-ejs-tron-72ea60c8.mp4","durationSec":820.48,"nguonCau":"srt",
-      "parts": [],
+    "sdn302-goc-7-ejs": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/server-side-development-nodejs-express-mongodb/04-rest-api-mvc-templating/G07-ejs-tron-72ea60c8.mp4","durationSec":820.48,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":5.1,"den":126.07,"ten":"Phần 1 · Chào bạn · Slot 7 EJS (1/2)"},
+        {"t":126.07,"den":208.53,"ten":"Phần 1 · Slide 7–8: res.render · app.js"},
+        {"t":208.53,"den":293.31,"ten":"Phần 1 · Slide 9–10: tuỳ chọn của EJS · Slide 11: bảng thẻ EJS"},
+        {"t":293.31,"den":376.34,"ten":"Phần 1 · Mô phỏng: thoát HTML vs thô · XSS (chạy thật JS) · Tự kiểm"},
+        {"t":376.34,"den":451.42,"ten":"Phần 1 · Tóm tắt phần 1 · Chào bạn · Slot 7 EJS (2/2)"},
+        {"t":451.42,"den":545.57,"ten":"Phần 2 · Slide 12–13: EJS vs JSX · chọn khi nào"},
+        {"t":545.57,"den":629.62,"ten":"Phần 2 · Slide 14–15: demo · data.json"},
+        {"t":629.62,"den":730.35,"ten":"Phần 2 · Mô phỏng: render danh sách (chạy thật JS)"},
+        {"t":730.35,"den":820.48,"ten":"Phần 2 · Tự kiểm · Tóm tắt Slot 7"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, Slot bảy EJS, phần một trong hai."},
         {"t":9.43,"vi":"EJS là template engine biến dữ liệu thành HTML ngay trên server."},
@@ -4720,8 +5083,17 @@
         {"t":813.61,"vi":"Hẹn gặp lại."}
       ]
     },
-    "sdn302-goc-8-handlebars": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/server-side-development-nodejs-express-mongodb/04-rest-api-mvc-templating/G08-handlebars-tron-7c97aa7f.mp4","durationSec":767.72,"nguonCau":"srt",
-      "parts": [],
+    "sdn302-goc-8-handlebars": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/server-side-development-nodejs-express-mongodb/04-rest-api-mvc-templating/G08-handlebars-tron-7c97aa7f.mp4","durationSec":767.72,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":5.1,"den":113.16,"ten":"Phần 1 · Chào bạn · Slot 8 Handlebars (1/2)"},
+        {"t":113.16,"den":190.68,"ten":"Phần 1 · Slide 6: template engine · thoát vs thô"},
+        {"t":190.68,"den":282.19,"ten":"Phần 1 · Slide 7–8: cài đặt · ví dụ cơ bản"},
+        {"t":282.19,"den":366.32,"ten":"Phần 1 · Slide 9: helper (capitalize) · Tự kiểm"},
+        {"t":366.32,"den":482.47,"ten":"Phần 1 · Tóm tắt phần 1 · Chào bạn · Slot 8 Handlebars (2/2)"},
+        {"t":482.47,"den":600.88,"ten":"Phần 2 · Mô phỏng: #if & #each (chạy thật JS)"},
+        {"t":600.88,"den":677.84,"ten":"Phần 2 · Mô phỏng: hai hook (chạy thật JS)"},
+        {"t":677.84,"den":767.72,"ten":"Phần 2 · Tự kiểm · Tóm tắt Slot 8"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, Slot tám Handlebars, phần một trong hai. Đây là template engine thứ hai của môn, sau EJS ở Slot bảy."},
         {"t":14.07,"vi":"Phần một: Handlebars là gì, vì sao dùng, hai kiểu ngoặc nhọn thoát và thô, cài đặt, ví dụ cơ bản và helper."},
@@ -4831,8 +5203,33 @@
         {"t":760.87,"vi":"Hẹn gặp lại."}
       ]
     },
-    "sdn302-goc-9-10-auth": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/server-side-development-nodejs-express-mongodb/05-xac-thuc-bao-mat/G0910-auth-tron-3757915b.mp4","durationSec":2272.02,"nguonCau":"srt",
-      "parts": [],
+    "sdn302-goc-9-10-auth": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/server-side-development-nodejs-express-mongodb/05-xac-thuc-bao-mat/G0910-auth-tron-3757915b.mp4","durationSec":2272.02,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":5.1,"den":91.15,"ten":"Phần 1 · Chào bạn · Slot 9–10 Xác thực (1/5)"},
+        {"t":91.15,"den":190.24,"ten":"Phần 1 · Slide 5–7: kỹ thuật · mã hoá vs băm"},
+        {"t":190.24,"den":288.93,"ten":"Phần 1 · Slide 8–10: Basic authentication"},
+        {"t":288.93,"den":397.74,"ten":"Phần 1 · Slide 11–13: Express · middleware auth · Tự kiểm"},
+        {"t":397.74,"den":510.41,"ten":"Phần 1 · Tóm tắt phần 1 · Chào bạn · Slot 9–10 Xác thực (2/5)"},
+        {"t":510.41,"den":639.94,"ten":"Phần 2 · Slide 16: ba cờ bảo mật"},
+        {"t":639.94,"den":738.09,"ten":"Phần 2 · Mô phỏng: cookie thật (Node chạy thật)"},
+        {"t":738.09,"den":836.03,"ten":"Phần 2 · Tự kiểm · Tóm tắt phần 2"},
+        {"t":836.03,"den":937.85,"ten":"Phần 3 · Chào bạn · Slot 9–10 Xác thực (3/5)"},
+        {"t":937.85,"den":1032.3,"ten":"Phần 3 · Slide 26–27: express-session · options"},
+        {"t":1032.3,"den":1128.96,"ten":"Phần 3 · Mô phỏng: cơ chế session (Node chạy thật)"},
+        {"t":1128.96,"den":1215.38,"ten":"Phần 3 · Slide 34–35: đọc lại · bảo vệ"},
+        {"t":1215.38,"den":1309.91,"ten":"Phần 3 · Tự kiểm · Tóm tắt phần 3"},
+        {"t":1309.91,"den":1433.06,"ten":"Phần 4 · Chào bạn · Slot 9–10 Xác thực (4/5)"},
+        {"t":1433.06,"den":1514.05,"ten":"Phần 4 · Slide 44: cấu hình strategy"},
+        {"t":1514.05,"den":1598.35,"ten":"Phần 4 · Slide 45–46: serialize · thứ tự middleware"},
+        {"t":1598.35,"den":1690.09,"ten":"Phần 4 · Slide 47–48: authenticate · bài tập"},
+        {"t":1690.09,"den":1787.93,"ten":"Phần 4 · Tự kiểm · Tóm tắt phần 4"},
+        {"t":1787.93,"den":1867.07,"ten":"Phần 5 · Chào bạn · Slot 9–10 Xác thực (5/5) · Slide 53–54: JWT là gì"},
+        {"t":1867.07,"den":1951.36,"ten":"Phần 5 · Mô phỏng: luồng xác thực bằng token"},
+        {"t":1951.36,"den":2032.76,"ten":"Phần 5 · Slide 58: chữ ký và thời gian"},
+        {"t":2032.76,"den":2131.93,"ten":"Phần 5 · Slide 59–60: jsonwebtoken · bảo vệ route"},
+        {"t":2131.93,"den":2223.58,"ten":"Phần 5 · Slide 63–64: bài tập · tóm tắt Slot · Tự kiểm"},
+        {"t":2223.58,"den":2272.02,"ten":"Phần 5 · Tóm tắt phần 5"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, Slot chín và mười, Xác thực và bảo mật, phần một trong năm."},
         {"t":10.72,"vi":"Đây là bộ slide dài nhất của môn."},
@@ -5110,8 +5507,15 @@
         {"t":2264.99,"vi":"Hẹn gặp lại bạn."}
       ]
     },
-    "sdn302-ngan-hang-de-tai": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/server-side-development-nodejs-express-mongodb/00-gioi-thieu-huong-dan-hoc/00-05-chon-de-tai-va-mat-diem-a978a37a.mp4","durationSec":583.26,"nguonCau":"srt",
-      "parts": [],
+    "sdn302-ngan-hang-de-tai": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/server-side-development-nodejs-express-mongodb/00-gioi-thieu-huong-dan-hoc/00-05-chon-de-tai-va-mat-diem-a978a37a.mp4","durationSec":583.26,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":99.21,"ten":"Chào bạn · SDN302 Bài 0.5 · Chạy được mà vẫn mất điểm"},
+        {"t":99.21,"den":207.85,"ten":"Project tốt trông thế nào · Rubric sáu phép thử"},
+        {"t":207.85,"den":323.6,"ten":"Slide: kết quả chấm · Ngân hàng mười hai đề tài"},
+        {"t":323.6,"den":409.81,"ten":"Bảy kiểu mất điểm, năm tới bảy · Chạy thật: API cờ đỏ"},
+        {"t":409.81,"den":494.89,"ten":"Cùng request, cờ xanh · Cờ xanh, cờ đỏ, công thức"},
+        {"t":494.89,"den":583.26,"ten":"Bài tập: chấm hai đề tài · Tự kiểm"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 0.5 của môn SDN302."},
         {"t":10.18,"vi":"Bài trước mình đã xem một request đi qua năm hộp, hai cổng điểm bốn của Practical và Final, và tám chuẩn đầu ra."},
@@ -5205,8 +5609,16 @@
         {"t":573.01,"vi":"Bài sau, mình viết app Express đầu tiên, tách route bằng Router, và chạy thật Express Generator."}
       ]
     },
-    "sdn302-project-checklist": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/server-side-development-nodejs-express-mongodb/06-tich-hop-react-trien-khai/06-02-checklist-project-d65052a6.mp4","durationSec":679.18,"nguonCau":"srt",
-      "parts": [],
+    "sdn302-project-checklist": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/server-side-development-nodejs-express-mongodb/06-tich-hop-react-trien-khai/06-02-checklist-project-d65052a6.mp4","durationSec":679.18,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":89.7,"ten":"Chào bạn · Mốc project · Chạy được, mà không trên sáu"},
+        {"t":89.7,"den":188.62,"ten":"Sáu cổng, sáu chuẩn đầu ra · Dự án mẫu Book Club API"},
+        {"t":188.62,"den":274.46,"ten":"Cổng 2: REST theo MVC · Cổng 3: population chạy thật"},
+        {"t":274.46,"den":370.55,"ten":"Cổng 5: validation và một error handler"},
+        {"t":370.55,"den":470.07,"ten":"Dự án chạy được: không trên sáu · Dự án mẫu: sáu trên sáu"},
+        {"t":470.07,"den":550.69,"ten":"Rồi cố ý cho một ca lỗi · Mô phỏng: thứ tự demo"},
+        {"t":550.69,"den":679.18,"ten":"Bẫy làm trần điểm thấp · Bài tập"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đây là mốc project của môn SDN302."},
         {"t":9.96,"vi":"Bài 6.1: trang React gọi API qua CORS, cấu hình nằm trong môi trường, và năm kiểu hỏng khi lên host."},

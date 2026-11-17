@@ -2,8 +2,17 @@
   "courseSlug": "software-testing",
   "sinhBoi": "scripts/phu-de-tu-video-rieng.mjs",
   "lessons": {
-    "swt301-agile-quadrants": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/13-agile-testing/13-01-agile-nen-tang-tron-c2756066.mp4","durationSec":1293.48,"nguonCau":"srt",
-      "parts": [],
+    "swt301-agile-quadrants": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/13-agile-testing/13-01-agile-nen-tang-tron-c2756066.mp4","durationSec":1293.48,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":183.98,"ten":"Mở đầu · bài này học gì"},
+        {"t":183.98,"den":362.41,"ten":"Hãy nghĩ tới một cái cân"},
+        {"t":362.41,"den":491.84,"ten":"Điều khách tin hôm nay có thể đổi…"},
+        {"t":491.84,"den":662.7,"ten":"Tóm lại: Agile Tester là chứng chỉ mở…"},
+        {"t":662.7,"den":842.27,"ten":"Hai nguyên tắc hay vào đề thi là…"},
+        {"t":842.27,"den":1010.19,"ten":"Nghiệp vụ hỏi"},
+        {"t":1010.19,"den":1175.61,"ten":"Phản hồi thường xuyên còn giúp tập trung…"},
+        {"t":1175.61,"den":1293.48,"ten":"Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Chương 9 của khoá SWT301: kiểm thử trong Agile."},
         {"t":12.12,"vi":"Ở Chương 2, mình đã học các mô hình vòng đời: tuần tự như waterfall và V-model, và lặp, tăng dần như Agile."},
@@ -167,8 +176,14 @@
         {"t":1272.49,"vi":"Bài 9.2 mình đi vào các cách tiếp cận cụ thể: XP, Scrum và Kanban. Giờ bạn mở Quiz 9 ngay dưới bài, làm các câu về whole team và phản hồi sớm rồi hẵng xem tiếp nhé."}
       ]
     },
-    "swt301-agile-release-iteration-planning": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/13-agile-testing/13-06-release-iteration-planning-cb13196d.mp4","durationSec":680.86,"nguonCau":"srt",
-      "parts": [],
+    "swt301-agile-release-iteration-planning": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/13-agile-testing/13-06-release-iteration-planning-cb13196d.mp4","durationSec":680.86,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":181.25,"ten":"Mở đầu · bài này học gì"},
+        {"t":181.25,"den":357.16,"ten":"Slide sáu mươi chín"},
+        {"t":357.16,"den":472.73,"ten":"Có test basis và test oracle đầy đủ…"},
+        {"t":472.73,"den":631.3,"ten":"Cuối cùng soát năng lực kiểm thử"},
+        {"t":631.3,"den":680.86,"ten":"Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 9.4, bài cuối của phần Agile có slide."},
         {"t":10.99,"vi":"Bài trước mình học ba thực hành: user story, retrospective và CI."},
@@ -253,8 +268,15 @@
         {"t":675.48,"vi":"Giờ bạn mở Quiz 9 ngay dưới bài rồi hẵng xem tiếp nhé."}
       ]
     },
-    "swt301-agile-risk-estimation": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/13-agile-testing/13-10-rui-ro-poker-tron-7c249c6e.mp4","durationSec":814.49,"nguonCau":"srt",
-      "parts": [],
+    "swt301-agile-risk-estimation": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/13-agile-testing/13-10-rui-ro-poker-tron-7c249c6e.mp4","durationSec":814.49,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":102.63,"ten":"Mở đầu · bài này học gì"},
+        {"t":102.63,"den":280.45,"ten":"Bài tập A"},
+        {"t":280.45,"den":455.16,"ten":"Bài tập B"},
+        {"t":455.16,"den":537.65,"ten":"Phân vùng tương đương và giá trị biên…"},
+        {"t":537.65,"den":716.51,"ten":"Bài tập C, charter cho US-17"},
+        {"t":716.51,"den":814.49,"ten":"Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 9.7, bài cuối của Chương 9."},
         {"t":10.04,"vi":"Bài trước mình học viết test trước code."},
@@ -352,8 +374,14 @@
         {"t":799.73,"vi":"Giờ bạn mở Quiz 9 ngay dưới bài, làm các câu về cả chương rồi hẵng sang phần luyện tập tổng hợp nhé."}
       ]
     },
-    "swt301-agile-testing-status-roles": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/13-agile-testing/13-07-testing-trong-agile-tron-3436b141.mp4","durationSec":764.16,"nguonCau":"srt",
-      "parts": [],
+    "swt301-agile-testing-status-roles": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/13-agile-testing/13-07-testing-trong-agile-tron-3436b141.mp4","durationSec":764.16,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":183.35,"ten":"Mở đầu · bài này học gì"},
+        {"t":183.35,"den":348.91,"ten":"Hướng nghiệp vụ"},
+        {"t":348.91,"den":491.89,"ten":"Vì vậy phải tự động hoá ở mọi…"},
+        {"t":491.89,"den":666.59,"ten":"Bài tập. Đội FU Bookstore cam kết hai…"},
+        {"t":666.59,"den":764.16,"ten":"Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 9.5 của Chương 9."},
         {"t":9.07,"vi":"Các bài trước bám theo slide của thầy cô."},
@@ -433,8 +461,16 @@
         {"t":753.28,"vi":"Giờ bạn mở Quiz 9 ngay dưới bài rồi hẵng xem tiếp nhé."}
       ]
     },
-    "swt301-agile-user-stories-ci": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/13-agile-testing/13-05-user-story-retro-ci-tron-cbf67601.mp4","durationSec":882.54,"nguonCau":"srt",
-      "parts": [],
+    "swt301-agile-user-stories-ci": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/13-agile-testing/13-05-user-story-retro-ci-tron-cbf67601.mp4","durationSec":882.54,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":119.13,"ten":"Mở đầu · bài này học gì"},
+        {"t":119.13,"den":249.65,"ten":"Ví dụ phi chức năng của chính syllabus"},
+        {"t":249.65,"den":428.66,"ten":"Bài tập. Story của Mary"},
+        {"t":428.66,"den":505.87,"ten":"Dùng checklist hoặc phân vai khi phù hợp"},
+        {"t":505.87,"den":683.6,"ten":"Cuối cùng developer nhận kết quả test"},
+        {"t":683.6,"den":828.27,"ten":"Bài tập thứ hai"},
+        {"t":828.27,"den":882.54,"ten":"Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 9.3: ba thực hành nơi tester Agile khẳng định chỗ đứng của mình."},
         {"t":12.83,"vi":"Ở bài 9.2 mình đã gặp bốn thực hành chung trên bánh xe."},
@@ -539,8 +575,17 @@
         {"t":867.6,"vi":"Giờ bạn mở Quiz 9 ngay dưới bài, làm các câu về user story, retrospective và CI rồi hẵng xem tiếp nhé."}
       ]
     },
-    "swt301-agile-xp-scrum-kanban": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/13-agile-testing/13-03-xp-scrum-kanban-tron-a7acd0ca.mp4","durationSec":1120.88,"nguonCau":"srt",
-      "parts": [],
+    "swt301-agile-xp-scrum-kanban": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/13-agile-testing/13-03-xp-scrum-kanban-tron-a7acd0ca.mp4","durationSec":1120.88,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":176.45,"ten":"Mở đầu · bài này học gì"},
+        {"t":176.45,"den":345.61,"ten":"Bốn: lập kế hoạch hai tầng. Release planning…"},
+        {"t":345.61,"den":441.44,"ten":"Nhóm lập kế hoạch"},
+        {"t":441.44,"den":618.68,"ten":"Tóm lại: Agile là chiếc ô chung"},
+        {"t":618.68,"den":796.52,"ten":"Một trăm phần trăm unit test pass thì…"},
+        {"t":796.52,"den":892.66,"ten":"Kanban, slide bốn mươi bốn, là chữ Nhật…"},
+        {"t":892.66,"den":1070.49,"ten":"Bài tập. Bảng của một đội có giới…"},
+        {"t":1070.49,"den":1120.88,"ten":"Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 9.2 của Chương 9: các cách tiếp cận Agile."},
         {"t":11.22,"vi":"Bài 9.1 mình đã học bốn giá trị, mười hai nguyên tắc, whole team và phản hồi sớm."},
@@ -680,8 +725,18 @@
         {"t":1107.46,"vi":"Giờ bạn mở Quiz 9 ngay dưới bài, làm các câu về XP, Scrum, Kanban rồi hẵng xem tiếp nhé."}
       ]
     },
-    "swt301-blackbox-bva-template": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/06-thiet-ke-test-black-box/06-03-bva-va-condition-template-tron-6ec1228a.mp4","durationSec":1281.52,"nguonCau":"srt",
-      "parts": [],
+    "swt301-blackbox-bva-template": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/06-thiet-ke-test-black-box/06-03-bva-va-condition-template-tron-6ec1228a.mp4","durationSec":1281.52,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":171.94,"ten":"Mở đầu · bài này học gì"},
+        {"t":171.94,"den":350.64,"ten":"Giờ đến ví dụ xuyên suốt"},
+        {"t":350.64,"den":432.96,"ten":"IP mười ba dưới một"},
+        {"t":432.96,"den":607.69,"ten":"Tóm lại, BVA mở rộng EP cho vùng…"},
+        {"t":607.69,"den":786.76,"ten":"Ví dụ của thầy cô"},
+        {"t":786.76,"den":901.95,"ten":"Câu hai: khi chỉ có ít thời gian…"},
+        {"t":901.95,"den":1078.32,"ten":"Giờ đến đề thật"},
+        {"t":1078.32,"den":1238.59,"ten":"Test mười, file lớn hơn mười megabyte một…"},
+        {"t":1238.59,"den":1281.52,"ten":"Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 4.3, phần một."},
         {"t":9.56,"vi":"Bài trước mình chia giá trị thành các vùng, mỗi vùng test một giá trị."},
@@ -843,8 +898,16 @@
         {"t":1267.52,"vi":"Giờ bạn mở Quiz 4 ngay dưới Chương bốn, làm các câu về giá trị biên, rồi hẵng sang bài sau nhé."}
       ]
     },
-    "swt301-blackbox-decision-state": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/06-thiet-ke-test-black-box/06-04-bang-quyet-dinh-tron-7fdb20f1.mp4","durationSec":820.67,"nguonCau":"srt",
-      "parts": [],
+    "swt301-blackbox-decision-state": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/06-thiet-ke-test-black-box/06-04-bang-quyet-dinh-tron-7fdb20f1.mp4","durationSec":820.67,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":179.36,"ten":"Ở quán trà sữa gần trường"},
+        {"t":179.36,"den":269.09,"ten":"Nhớ: hàng đầu có khối dài hai mũ…"},
+        {"t":269.09,"den":359.18,"ten":"Lật từng cột"},
+        {"t":359.18,"den":499.06,"ten":"Phần hai sẽ nói về rút gọn đầu…"},
+        {"t":499.06,"den":671.67,"ten":"Ví dụ: ta gộp rule ba và bảy…"},
+        {"t":671.67,"den":780.9,"ten":"Hai test đã có cho rule một và…"},
+        {"t":780.9,"den":820.67,"ten":"Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Ở quán trà sữa gần trường: sinh viên được giảm 20%, người thất nghiệp cũng được giảm 20%, nhưng một người không thể vừa là sinh viên vừa đang đi làm."},
         {"t":18.99,"vi":"Nếu chỉ kiểm tra từng ô nhập như EP và BVA, bạn sẽ không thấy lỗi nằm ở chỗ ghép các điều kiện lại với nhau."},
@@ -955,8 +1018,13 @@
         {"t":808.08,"vi":"Còn bây giờ bạn mở Quiz 4 ngay dưới bài, làm các câu về decision table nhé."}
       ]
     },
-    "swt301-blackbox-ep-bva": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/06-thiet-ke-test-black-box/06-02-equivalence-partitioning-43ce2a07.mp4","durationSec":542.5,"nguonCau":"srt",
-      "parts": [],
+    "swt301-blackbox-ep-bva": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/06-thiet-ke-test-black-box/06-02-equivalence-partitioning-43ce2a07.mp4","durationSec":542.5,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":180.67,"ten":"Mở đầu · bài này học gì"},
+        {"t":180.67,"den":296.33,"ten":"Slide hai mươi hỏi hai câu"},
+        {"t":296.33,"den":473.7,"ten":"Bước một, chia vùng"},
+        {"t":473.7,"den":542.5,"ten":"Câu hai: form có ô tuổi một vùng…"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 4.2. Bài trước mình biết black-box nghĩ ra test từ yêu cầu."},
         {"t":12.34,"vi":"Hôm nay là kỹ thuật black-box đầu tiên, equivalence partitioning, và bạn sẽ dùng nó trong mọi đề thực hành câu ba."},
@@ -1035,8 +1103,14 @@
         {"t":534.51,"vi":"Giờ bạn mở Quiz 4 ngay dưới Chương bốn, làm các câu về EP, rồi hẵng sang bài sau nhé."}
       ]
     },
-    "swt301-blackbox-state-transition": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/06-thiet-ke-test-black-box/06-05-chuyen-trang-thai-tron-33e0f880.mp4","durationSec":722.99,"nguonCau":"srt",
-      "parts": [],
+    "swt301-blackbox-state-transition": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/06-thiet-ke-test-black-box/06-05-chuyen-trang-thai-tron-33e0f880.mp4","durationSec":722.99,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":165.8,"ten":"Bạn nhập sai PIN ở cây ATM"},
+        {"t":165.8,"den":278.42,"ten":"Câu hỏi đầu"},
+        {"t":278.42,"den":456.71,"ten":"Tóm lại phần một"},
+        {"t":456.71,"den":631.71,"ten":"Đã đi qua mọi trạng thái, một"},
+        {"t":631.71,"den":722.99,"ten":"Ba, mỗi test bắt đầu ở trạng thái…"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Bạn nhập sai PIN ở cây ATM. Lần đầu, máy bảo nhập lại. Lần thứ hai cũng vậy."},
         {"t":11.6,"vi":"Lần thứ ba, máy nuốt thẻ. Cùng một thao tác, kết quả lại khác nhau."},
@@ -1141,8 +1215,13 @@
         {"t":710.47,"vi":"Còn bây giờ bạn mở Quiz 4 ngay dưới bài, làm các câu về state transition nhé."}
       ]
     },
-    "swt301-blackbox-use-case": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/06-thiet-ke-test-black-box/06-06-use-case-on-tong-hop-0493915b.mp4","durationSec":582.36,"nguonCau":"srt",
-      "parts": [],
+    "swt301-blackbox-use-case": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/06-thiet-ke-test-black-box/06-06-use-case-on-tong-hop-0493915b.mp4","durationSec":582.36,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":184.61,"ten":"Mỗi nút trên cây ATM đều chạy đúng"},
+        {"t":184.61,"den":364.07,"ten":"Câu hai, slide bảy mươi bảy"},
+        {"t":364.07,"den":531.88,"ten":"Đáp án C, ba"},
+        {"t":531.88,"den":582.36,"ten":"Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Mỗi nút trên cây ATM đều chạy đúng, nhưng khách vẫn không rút được tiền, vì lỗi nằm ở chỗ nối giữa các bước: đưa thẻ, nhập PIN, chọn số tiền, nhận tiền."},
         {"t":17.93,"vi":"Use case testing sinh ra cho đúng chuyện đó: test hệ thống theo từng giao dịch, từ đầu đến cuối, đúng cách một người dùng thật dùng nó."},
@@ -1224,8 +1303,13 @@
         {"t":570.13,"vi":"Chương bốn gần xong. Còn bây giờ bạn mở Quiz 4 ngay dưới bài, làm trọn một lượt, xem lại các câu sai, rồi sang Chương năm, white-box nhé."}
       ]
     },
-    "swt301-books-guide": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/00-gioi-thieu-mon-hoc/00-06-tai-lieu-sach-ke-hoach-hoc-14d8c44c.mp4","durationSec":530.95,"nguonCau":"srt",
-      "parts": [],
+    "swt301-books-guide": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/00-gioi-thieu-mon-hoc/00-06-tai-lieu-sach-ke-hoach-hoc-14d8c44c.mp4","durationSec":530.95,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":142.64,"ten":"Mở đầu · bài này học gì"},
+        {"t":142.64,"den":294.53,"ten":"Giờ tới công cụ"},
+        {"t":294.53,"den":473.49,"ten":"Giờ tới cách học"},
+        {"t":473.49,"den":530.95,"ten":"Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với video cuối của Mục 0 trong khoá SWT301, gộp ba bài 0.4, 0.6 và 0.7."},
         {"t":16.51,"vi":"Bài trước mình đã học mười ba mẹo làm trắc nghiệm, và chữa một câu FE thật bằng cách loại trừ."},
@@ -1298,8 +1382,19 @@
         {"t":517.44,"vi":"Giờ bạn mở thư mục môn học trên máy, đối chiếu với tấm bản đồ ở bài 0.4 trên web, đánh dấu những gì mình đã có, rồi hẵng sang Chương một nhé."}
       ]
     },
-    "swt301-bug-lifecycle": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/10-quan-ly-test/10-10-quan-ly-defect-tron-af42e78a.mp4","durationSec":1492.82,"nguonCau":"srt",
-      "parts": [],
+    "swt301-bug-lifecycle": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/10-quan-ly-test/10-10-quan-ly-defect-tron-af42e78a.mp4","durationSec":1492.82,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":179.21,"ten":"Bạn nhắn cho developer"},
+        {"t":179.21,"den":271.69,"ten":"Cụm đánh giá"},
+        {"t":271.69,"den":445.58,"ten":"So với slide chín mươi ba"},
+        {"t":445.58,"den":555.84,"ten":"Cột năm nay thấp hơn hẳn"},
+        {"t":555.84,"den":727.13,"ten":"Tóm lại. Incident là sự kiện cần điều…"},
+        {"t":727.13,"den":903.9,"ten":"Hai ô còn lại dễ hơn"},
+        {"t":903.9,"den":1078.73,"ten":"Giờ đưa defect DEF hai không bốn một…"},
+        {"t":1078.73,"den":1255.2,"ten":"Phần còn lại"},
+        {"t":1255.2,"den":1430.4,"ten":"Bao phủ có trọng số bằng tổng trọng…"},
+        {"t":1430.4,"den":1492.82,"ten":"Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5,"vi":"Bạn nhắn cho developer: app hỏng rồi, sửa gấp đi. Chỉ một dòng, và bạn thấy mình đã báo lỗi xong."},
         {"t":13.09,"vi":"Developer hỏi lại: hỏng ở đâu, máy nào, bấm gì, mong đợi gì?"},
@@ -1508,8 +1603,17 @@
         {"t":1484.57,"vi":"Mời bạn xem tiếp."}
       ]
     },
-    "swt301-ch1-slides-2023": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/01-nen-tang-kiem-thu/01-06-bo-sung-slide-2023-tron-f6de8fb7.mp4","durationSec":1135.74,"nguonCau":"srt",
-      "parts": [],
+    "swt301-ch1-slides-2023": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/01-nen-tang-kiem-thu/01-06-bo-sung-slide-2023-tron-f6de8fb7.mp4","durationSec":1135.74,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":183.12,"ten":"Mở đầu · bài này học gì"},
+        {"t":183.12,"den":358.25,"ten":"Reusability và testability ngày nay là đặc tính…"},
+        {"t":358.25,"den":450.1,"ten":"Slide ba mươi mốt đặt strategy ở cấp…"},
+        {"t":450.1,"den":625.5,"ten":"Tóm lại. Fault là defect. Reliability là xác…"},
+        {"t":625.5,"den":736.13,"ten":"Số món đặt lớn hơn chín mươi chín…"},
+        {"t":736.13,"den":914.56,"ten":"Vì sao kết quả mong đợi phải có…"},
+        {"t":914.56,"den":1086,"ten":"Hết chi phí hay thời gian chỉ là…"},
+        {"t":1086,"den":1135.74,"ten":"Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5,"vi":"Chào bạn, đến với bài 1.6 của Chương một, bài bổ sung. Bài trước mình học tâm lý của tester, các mức độc lập và quy tắc đạo đức."},
         {"t":16.35,"vi":"Hôm nay mình quay lại bộ slide cũ năm hai nghìn không trăm hai mươi ba."},
@@ -1653,8 +1757,18 @@
         {"t":1124.47,"vi":"Phần bổ sung tiếp theo của bộ cũ nằm ở bài 2.7."}
       ]
     },
-    "swt301-ch2-slides-2023": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/02-kiem-thu-xuyen-suot-sdlc/02-07-bo-sung-slide-2023-tron-26a23dcd.mp4","durationSec":1207.28,"nguonCau":"srt",
-      "parts": [],
+    "swt301-ch2-slides-2023": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/02-kiem-thu-xuyen-suot-sdlc/02-07-bo-sung-slide-2023-tron-26a23dcd.mp4","durationSec":1207.28,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":104.25,"ten":"Mở đầu · bài này học gì"},
+        {"t":104.25,"den":284.17,"ten":"Vì sao in the large nằm trên system…"},
+        {"t":284.17,"den":459.68,"ten":"Trạng thái kết thúc"},
+        {"t":459.68,"den":539.74,"ten":"Slide hai mươi mốt là bài tập mười…"},
+        {"t":539.74,"den":717.34,"ten":"Tóm lại. V-model cũ có năm cấp vì…"},
+        {"t":717.34,"den":889.78,"ten":"Định danh và phiên bản"},
+        {"t":889.78,"den":1067.22,"ten":"Bảy loại bạn đã học ở bài 2.4"},
+        {"t":1067.22,"den":1156.79,"ten":"Năm bẫy. In the large là system integration"},
+        {"t":1156.79,"den":1207.28,"ten":"Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5,"vi":"Chào bạn, đến với bài 2.7 của Chương hai, bài bổ sung. Bài trước mình học bảo trì và kế hoạch test tổng thể."},
         {"t":14.27,"vi":"Hôm nay là bộ slide cũ năm hai nghìn không trăm hai mươi ba, tám mươi sáu trang, trong đó ba mươi mốt trang có nội dung mới."},
@@ -1803,8 +1917,17 @@
         {"t":1195.37,"vi":"Phần bổ sung tiếp theo của bộ cũ là bài 3.5, ở Chương ba."}
       ]
     },
-    "swt301-ch3-slides-2023": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/04-kiem-thu-tinh/04-05-bo-sung-slide-2023-tron-27fb11d9.mp4","durationSec":1143.32,"nguonCau":"srt",
-      "parts": [],
+    "swt301-ch3-slides-2023": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/04-kiem-thu-tinh/04-05-bo-sung-slide-2023-tron-27fb11d9.mp4","durationSec":1143.32,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":183.69,"ten":"Mở đầu · bài này học gì"},
+        {"t":183.69,"den":359.69,"ten":"Syllabus hiện hành thêm một điều kiện"},
+        {"t":359.69,"den":485.06,"ten":"Mẹo nhớ: walkthrough là tác giả dắt bạn…"},
+        {"t":485.06,"den":657.93,"ten":"Tóm lại. Bốn loại review của CTFL là…"},
+        {"t":657.93,"den":834.74,"ten":"Vì sao quản lý đứng ngoài?"},
+        {"t":834.74,"den":974.22,"ten":"Nhớ ba trang bằng ba chữ"},
+        {"t":974.22,"den":1101.82,"ten":"Ví dụ gọi tên loại review"},
+        {"t":1101.82,"den":1143.32,"ten":"Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5,"vi":"Chào bạn, đến với bài 3.5 của Chương ba, bài bổ sung. Bài trước mình học phân tích tĩnh: luồng dữ liệu, luồng điều khiển và độ phức tạp cyclomatic."},
         {"t":18.18,"vi":"Hôm nay là bộ slide cũ SWT3 năm hai nghìn không trăm hai mươi ba, bốn mươi ba trang, khoảng một phần ba không được giữ lại."},
@@ -1937,8 +2060,12 @@
         {"t":1129.04,"vi":"Giờ bạn mở Quiz ba ở cuối Chương ba, làm trọn một lượt rồi sang phần Lab một về review code."}
       ]
     },
-    "swt301-ch4-slides-2023": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/06-thiet-ke-test-black-box/06-07-bo-sung-slide-2023-09a069bf.mp4","durationSec":564.52,"nguonCau":"srt",
-      "parts": [],
+    "swt301-ch4-slides-2023": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/06-thiet-ke-test-black-box/06-07-bo-sung-slide-2023-09a069bf.mp4","durationSec":564.52,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":184.65,"ten":"Trước bộ slide hiện tại"},
+        {"t":184.65,"den":357.47,"ten":"Trang mười bảy"},
+        {"t":357.47,"den":564.52,"ten":"Nếu hệ thống thật kiểm thứ tự khác…"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Trước bộ slide hiện tại, môn học dùng một bộ slide cũ năm hai nghìn không trăm hai mươi ba. Phần lớn trang black-box của nó xuất hiện lại gần nguyên văn ở các bài từ 4.1 đến 4.4, nên bài này chỉ lấy những trang dạy điều mới."},
         {"t":24.98,"vi":"Trước hết là bảng đổi từ cũ sang từ hiện hành, để bạn đọc đề cũ không bị lạc."},
@@ -2005,8 +2132,13 @@
         {"t":556.4,"vi":"Còn bây giờ bạn mở Quiz 4 ngay dưới Chương bốn, làm trọn một lượt rồi sang Chương năm nhé."}
       ]
     },
-    "swt301-ch5-slides-2023": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/07-thiet-ke-test-white-box/07-03-bo-sung-2023-mcdc-lcsaj-a99d6f34.mp4","durationSec":448.42,"nguonCau":"srt",
-      "parts": [],
+    "swt301-ch5-slides-2023": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/07-thiet-ke-test-white-box/07-03-bo-sung-2023-mcdc-lcsaj-a99d6f34.mp4","durationSec":448.42,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":177.28,"ten":"Mở đầu · bài này học gì"},
+        {"t":177.28,"den":268.8,"ten":"Ví dụ A AND B"},
+        {"t":268.8,"den":406.18,"ten":"Điều thứ tư là kéo theo multiple condition…"},
+        {"t":406.18,"den":448.42,"ten":"Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, bài cuối của Chương năm là phần bổ sung từ bộ slide cũ năm 2023. Phần lớn các trang trùng với bài năm chấm một và năm chấm hai."},
         {"t":17.84,"vi":"Chỉ vài trang là mới: bảy kỹ thuật white-box của chuẩn BS 7925-2, MC/DC, LCSAJ, và error guessing."},
@@ -2067,8 +2199,18 @@
         {"t":439.68,"vi":"Giờ bạn mở Quiz 5 ngay dưới Chương năm, làm hết các câu về white-box rồi hẵng sang Chương sáu nhé."}
       ]
     },
-    "swt301-ch7-slides-2023": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/10-quan-ly-test/10-12-bo-sung-slide-2023-tron-70c41f8e.mp4","durationSec":1379.8,"nguonCau":"srt",
-      "parts": [],
+    "swt301-ch7-slides-2023": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/10-quan-ly-test/10-12-bo-sung-slide-2023-tron-70c41f8e.mp4","durationSec":1379.8,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":183.09,"ten":"Trước bộ slide hiện tại"},
+        {"t":183.09,"den":354.7,"ten":"Configuration identification, định danh"},
+        {"t":354.7,"den":481.87,"ten":"Ví dụ release notes liệt kê defect đã…"},
+        {"t":481.87,"den":597.33,"ten":"Tóm lại. Có thêm một nấc buddy trên…"},
+        {"t":597.33,"den":776.49,"ten":"Thứ nhất, nó có thêm phụ thuộc mà…"},
+        {"t":776.49,"den":951.03,"ten":"Cộng bốn chu kỳ"},
+        {"t":951.03,"den":1095.03,"ten":"Hành động khả dĩ"},
+        {"t":1095.03,"den":1270.79,"ten":"Ví dụ: siết entry hay exit criteria"},
+        {"t":1270.79,"den":1379.8,"ten":"Câu ba: đường test đã chạy tăng dốc…"}
+      ],
       "cues": [
         {"t":5,"vi":"Trước bộ slide hiện tại, môn này dùng một bộ SWT5 cũ, năm mươi sáu trang, từ năm hai nghìn không trăm hai mươi ba."},
         {"t":15.64,"vi":"Phần lớn đã được dạy trong Bài bảy chấm một đến bảy chấm sáu."},
@@ -2224,8 +2366,15 @@
         {"t":1369.61,"vi":"Chương tám là công cụ và tự động hoá."}
       ]
     },
-    "swt301-ch8-slides-2023": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/11-cong-cu-tu-dong-hoa/11-12-bo-sung-slide-2023-32022291.mp4","durationSec":717.71,"nguonCau":"srt",
-      "parts": [],
+    "swt301-ch8-slides-2023": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/11-cong-cu-tu-dong-hoa/11-12-bo-sung-slide-2023-32022291.mp4","durationSec":717.71,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":169.12,"ten":"Trước bộ slide hiện nay"},
+        {"t":169.12,"den":250.28,"ten":"Ví dụ một báo cáo hoá đơn có…"},
+        {"t":250.28,"den":422.72,"ten":"Ví dụ: driver là một lớp test JUnit…"},
+        {"t":422.72,"den":555.43,"ten":"Phần cuối của bộ cũ"},
+        {"t":555.43,"den":674.09,"ten":"Ví dụ có lời giải"},
+        {"t":674.09,"den":717.71,"ten":"Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Trước bộ slide hiện nay, môn SWT301 dùng một bộ cũ, ba mươi hai trang, tên là ISTQB ISEB Foundation Exam Practice, Chapter sáu. Khoảng một phần ba trang giống hệt bài tám chấm hai đến tám chấm bốn."},
         {"t":23.01,"vi":"Phần còn lại dạy công cụ theo cách của syllabus cũ, hai nghìn không trăm năm và hai nghìn không trăm mười một: mỗi trang một loại công cụ, rồi đến đưa công cụ vào tổ chức."},
@@ -2308,8 +2457,15 @@
         {"t":712.84,"vi":"Bạn có thể làm Quiz tám ngay dưới bài để ôn nhé."}
       ]
     },
-    "swt301-choosing-test-techniques": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/08-ky-thuat-dua-kinh-nghiem/08-02-chon-ky-thuat-tron-47693d83.mp4","durationSec":897.71,"nguonCau":"srt",
-      "parts": [],
+    "swt301-choosing-test-techniques": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/08-ky-thuat-dua-kinh-nghiem/08-02-chon-ky-thuat-tron-47693d83.mp4","durationSec":897.71,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":132.87,"ten":"Bạn đã có cả một hộp đồ nghề"},
+        {"t":132.87,"den":312.32,"ten":"Giờ đến câu hỏi chính"},
+        {"t":312.32,"den":423.25,"ten":"Mười bốn, loại defect dự kiến"},
+        {"t":423.25,"den":597.38,"ten":"Tóm lại: không có kỹ thuật nào tốt…"},
+        {"t":597.38,"den":775.65,"ten":"Yếu tố: độ phức tạp"},
+        {"t":775.65,"den":897.71,"ten":"Sai: kỹ năng của tester là một yếu…"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Bạn đã có cả một hộp đồ nghề: phân vùng tương đương, giá trị biên, bảng quyết định, chuyển trạng thái, use case, các độ phủ white-box, đoán lỗi, khám phá và checklist."},
         {"t":18.5,"vi":"Câu hỏi thực tế là: ở đây mình dùng cái nào?"},
@@ -2423,8 +2579,15 @@
         {"t":882.92,"vi":"Chương sáu đến đây là hết. Bạn mở Quiz sáu ngay dưới bài, làm trọn một lượt, rồi sang bài lab hai nhé."}
       ]
     },
-    "swt301-chuan-dau-ra": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/00-gioi-thieu-mon-hoc/00-03-clo-business-outcomes-muc-k-tron-d479c177.mp4","durationSec":815.28,"nguonCau":"srt",
-      "parts": [],
+    "swt301-chuan-dau-ra": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/00-gioi-thieu-mon-hoc/00-03-clo-business-outcomes-muc-k-tron-d479c177.mp4","durationSec":815.28,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":180.98,"ten":"Mở đầu · bài này học gì"},
+        {"t":180.98,"den":276.05,"ten":"Nó dành cho tester"},
+        {"t":276.05,"den":397.55,"ten":"Giờ tới phần quan trọng nhất"},
+        {"t":397.55,"den":569.38,"ten":"Tóm lại: CLO là chuẩn đầu ra nhà…"},
+        {"t":569.38,"den":744.99,"ten":"Slide mười hai tới mười tám liệt kê…"},
+        {"t":744.99,"den":815.28,"ten":"Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 0.3, phần một trên hai, của khoá SWT301."},
         {"t":12.42,"vi":"Bài trước mình đã xem điểm môn nằm ở đâu: Lab, thuyết trình, Progress Test, và hai bài thi cuối kỳ PE và FE, mỗi bài có sàn bốn điểm."},
@@ -2533,8 +2696,18 @@
         {"t":798.3,"vi":"Giờ bạn mở bài 0.3 trên khoá học, che mức K ở cuối mỗi dòng mục tiêu, tự đoán bằng động từ, rồi hẵng sang bài tiếp nhé."}
       ]
     },
-    "swt301-ci-automation": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/11-cong-cu-tu-dong-hoa/11-10-pyramid-ci-tron-b8171095.mp4","durationSec":1138.88,"nguonCau":"srt",
-      "parts": [],
+    "swt301-ci-automation": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/11-cong-cu-tu-dong-hoa/11-10-pyramid-ci-tron-b8171095.mp4","durationSec":1138.88,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":92.48,"ten":"Các bài tám chấm một đến tám chấm…"},
+        {"t":92.48,"den":215.62,"ten":"Vì sao hình tháp?"},
+        {"t":215.62,"den":290.69,"ten":"Mình chạy thật một script Node"},
+        {"t":290.69,"den":367.44,"ten":"Giờ đến CI"},
+        {"t":367.44,"den":539.86,"ten":"Bước bốn upload-artifact, với điều kiện if always"},
+        {"t":539.86,"den":719.5,"ten":"Đáp án B"},
+        {"t":719.5,"den":875.88,"ten":"Nó gọi thư viện client của Selenium"},
+        {"t":875.88,"den":1050.64,"ten":"Chạy thật bằng mvn test"},
+        {"t":1050.64,"den":1138.88,"ten":"Câu ba, đề tiếng Anh"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Các bài tám chấm một đến tám chấm bốn trả lời: có những công cụ nào và đưa chúng vào thế nào."},
         {"t":12.38,"vi":"Bài tám chấm năm đã chạy thật một unit test framework."},
@@ -2678,8 +2851,13 @@
         {"t":1119.46,"vi":"Tập tám chấm bảy bổ sung bộ slide hai nghìn không trăm hai mươi ba, rồi ta sang Lab ba. Bạn có thể làm Quiz tám ngay dưới bài, và luyện JUnit trên Code Lab nhé."}
       ]
     },
-    "swt301-configuration-management": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/10-quan-ly-test/10-08-quan-ly-cau-hinh-8cee12a8.mp4","durationSec":531.5,"nguonCau":"srt",
-      "parts": [],
+    "swt301-configuration-management": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/10-quan-ly-test/10-08-quan-ly-cau-hinh-8cee12a8.mp4","durationSec":531.5,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":177.66,"ten":"Nhóm bạn làm bài tập lớn"},
+        {"t":177.66,"den":314.16,"ten":"Tám: sếp hỏi"},
+        {"t":314.16,"den":489.52,"ten":"Bước một: xem hồ sơ cấu hình"},
+        {"t":489.52,"den":531.5,"ten":"Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5,"vi":"Nhóm bạn làm bài tập lớn. Trong thư mục chung có final, final hai, final final, final THẬT, và final final hai THẬT sửa."},
         {"t":13.75,"vi":"Cả nhóm cùng sửa, và đến hôm nộp không ai biết bản nào là bản đúng."},
@@ -2743,8 +2921,22 @@
         {"t":528.24,"vi":"Mời bạn xem tiếp."}
       ]
     },
-    "swt301-cyclomatic-complexity": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/07-thiet-ke-test-white-box/07-02-cyclomatic-complexity-tron-c66acde9.mp4","durationSec":1440.73,"nguonCau":"srt",
-      "parts": [],
+    "swt301-cyclomatic-complexity": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/07-thiet-ke-test-white-box/07-02-cyclomatic-complexity-tron-c66acde9.mp4","durationSec":1440.73,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":107.47,"ten":"Mở đầu · bài này học gì"},
+        {"t":107.47,"den":209.68,"ten":"Ví dụ một"},
+        {"t":209.68,"den":327.25,"ten":"Ví dụ hai, slide chín mươi ba"},
+        {"t":327.25,"den":418.31,"ten":"Ví dụ bốn, slide chín mươi lăm"},
+        {"t":418.31,"den":529.32,"ten":"Tóm lại, V(G) bằng E trừ N cộng…"},
+        {"t":529.32,"den":636.06,"ten":"Ví dụ sáu"},
+        {"t":636.06,"den":732.37,"ten":"Bẫy ở mức tiếp theo"},
+        {"t":732.37,"den":875.46,"ten":"Ta giải trọn một đề thi thực hành…"},
+        {"t":875.46,"den":952.82,"ten":"Chạy thật: ba trên ba test pass"},
+        {"t":952.82,"den":1117.84,"ten":"Tóm lại, IF không có ELSE làm statement…"},
+        {"t":1117.84,"den":1260.32,"ten":"Chạy thật bằng JUnit năm"},
+        {"t":1260.32,"den":1389.97,"ten":"Chạy thật: mười trên mười test pass"},
+        {"t":1389.97,"den":1440.73,"ten":"Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, bài năm chấm hai là bài kiếm điểm nhiều nhất của kỳ thi thực hành: cho một đoạn code, bạn phải vẽ đồ thị luồng, tính V(G) và tìm số test tối thiểu."},
         {"t":17.27,"vi":"Trước hết là con đường đời thường."},
@@ -2948,8 +3140,13 @@
         {"t":1426.56,"vi":"Giờ bạn mở Quiz 5 ngay dưới Chương năm, làm hết các câu về coverage rồi hẵng sang bài sau nhé."}
       ]
     },
-    "swt301-dieu-kien-qua-mon": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/00-gioi-thieu-mon-hoc/00-02-dieu-kien-qua-mon-cau-truc-diem-3f4a96e8.mp4","durationSec":471.08,"nguonCau":"srt",
-      "parts": [],
+    "swt301-dieu-kien-qua-mon": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/00-gioi-thieu-mon-hoc/00-02-dieu-kien-qua-mon-cau-truc-diem-3f4a96e8.mp4","durationSec":471.08,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":119.69,"ten":"Mở đầu · bài này học gì"},
+        {"t":119.69,"den":251.34,"ten":"Giờ tới phần quan trọng"},
+        {"t":251.34,"den":413.28,"ten":"Ví dụ đề FE số một trong Phòng…"},
+        {"t":413.28,"den":471.08,"ten":"Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 0.2 của khoá SWT301, môn Kiểm thử phần mềm."},
         {"t":12.98,"vi":"Bài trước mình đã biết SWT301 bám syllabus ISTQB CTFL, và sáu chương CTFL nằm trên tám chương đầu của khoá học."},
@@ -3023,8 +3220,17 @@
         {"t":455.09,"vi":"Giờ bạn mở Phòng thi SWT301 trên cuongthai.com, xem thử một đề FE và một đề PE thật, chỉ xem hình dạng chưa cần làm, rồi hẵng sang bài 0.3 nhé."}
       ]
     },
-    "swt301-experience-based": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/08-ky-thuat-dua-kinh-nghiem/08-01-dua-kinh-nghiem-tron-b7bb4a0d.mp4","durationSec":1165.68,"nguonCau":"srt",
-      "parts": [],
+    "swt301-experience-based": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/08-ky-thuat-dua-kinh-nghiem/08-01-dua-kinh-nghiem-tron-b7bb4a0d.mp4","durationSec":1165.68,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":137.66,"ten":"Bạn đã học xong hai họ kỹ thuật…"},
+        {"t":137.66,"den":226.06,"ten":"Giờ đến kỹ thuật thứ nhất"},
+        {"t":226.06,"den":402.41,"ten":"Bước một: lập danh sách các sai sót"},
+        {"t":402.41,"den":533.68,"ten":"Gạch ba: các test không chính thức được…"},
+        {"t":533.68,"den":705.09,"ten":"Tóm lại: kỹ thuật dựa kinh nghiệm lấy…"},
+        {"t":705.09,"den":880.14,"ten":"Cuối phiếu: bốn bug"},
+        {"t":880.14,"den":1054.83,"ten":"Mục ba mươi bảy"},
+        {"t":1054.83,"den":1165.68,"ten":"Bốn: error guessing không phải kỹ thuật lập…"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Bạn đã học xong hai họ kỹ thuật có công thức: black-box lấy test từ đặc tả, white-box lấy test từ code. Giờ đến họ thứ ba, và nó không có công thức nào cả."},
         {"t":16.85,"vi":"Slide một trăm."},
@@ -3157,8 +3363,32 @@
         {"t":1155.74,"vi":"Bạn có thể làm Quiz sáu ngay dưới bài để ôn nhé."}
       ]
     },
-    "swt301-fe1-sp26-chua-tron-de": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/17-chua-de-fe/05-fe1-sp26-re-tron-c85205a7.mp4","durationSec":3762.35,"nguonCau":"srt",
-      "parts": [],
+    "swt301-fe1-sp26-chua-tron-de": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/17-chua-de-fe/05-fe1-sp26-re-tron-c85205a7.mp4","durationSec":3762.35,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":178.28,"ten":"Mở đầu · bài này học gì"},
+        {"t":178.28,"den":354.46,"ten":"C, Regression testing là test lại sau khi…"},
+        {"t":354.46,"den":533.31,"ten":"Mẹo nhớ: mở"},
+        {"t":533.31,"den":707.4,"ten":"A, khéo léo giao tiếp"},
+        {"t":707.4,"den":871.31,"ten":"Câu 13. Việc test lại một chương trình…"},
+        {"t":871.31,"den":1051.13,"ten":"Tổng kết phần một"},
+        {"t":1051.13,"den":1230.6,"ten":"A, Top down"},
+        {"t":1230.6,"den":1406.02,"ten":"Mẹo: validation đi với right product"},
+        {"t":1406.02,"den":1581.15,"ten":"B, đứng giữa hoà giải mọi người"},
+        {"t":1581.15,"den":1755.52,"ten":"D, vượt giới hạn mảng"},
+        {"t":1755.52,"den":1934.89,"ten":"Mẹo: scribe gần với chữ script"},
+        {"t":1934.89,"den":2107.34,"ten":"Từ vựng: in isolation là tách riêng"},
+        {"t":2107.34,"den":2283.59,"ten":"Từ vựng: falls below là xuống dưới"},
+        {"t":2283.59,"den":2456.41,"ten":"Câu 38. Số đơn hàng trong hệ thống…"},
+        {"t":2456.41,"den":2634.04,"ten":"A, chín, mười, mười một, hai mươi hai"},
+        {"t":2634.04,"den":2752.82,"ten":"D, cung cấp thông tin để ra quyết…"},
+        {"t":2752.82,"den":2929.86,"ten":"Tổng kết phần ba"},
+        {"t":2929.86,"den":3103.74,"ten":"QC soi sản phẩm đã làm ra"},
+        {"t":3103.74,"den":3266.61,"ten":"Câu 50. Đúng hay sai: Nếu kiểm thử…"},
+        {"t":3266.61,"den":3445.81,"ten":"Bộ đáp án gốc thuộc câu hỏi"},
+        {"t":3445.81,"den":3625.22,"ten":"Controlled library là kho lưu có kiểm soát"},
+        {"t":3625.22,"den":3717.56,"ten":"A, một nhóm nhỏ để tìm cách dùng…"},
+        {"t":3717.56,"den":3762.35,"ten":"Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đây là phần một trên bốn của loạt chữa trọn đề thi cuối kỳ FE số một, môn SWT301."},
         {"t":14.55,"vi":"Đây là đề SP26, đợt thi lại RE, đề mới nhất trong Phòng thi trên web: sáu mươi câu trắc nghiệm, làm trong sáu mươi phút."},
@@ -3751,8 +3981,34 @@
         {"t":3745.55,"vi":"Giờ bạn vào Phòng thi trên cuongthai.com, làm lại đề FE số một bấm giờ sáu mươi phút, rồi sang đề FE số hai. Chúc bạn thi tốt!"}
       ]
     },
-    "swt301-fe2-sp26-chua-tron-de": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/17-chua-de-fe/01-fe2-sp26-fe-tron-fe97634a.mp4","durationSec":3958.44,"nguonCau":"srt",
-      "parts": [],
+    "swt301-fe2-sp26-chua-tron-de": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/17-chua-de-fe/01-fe2-sp26-fe-tron-fe97634a.mp4","durationSec":3958.44,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":181.89,"ten":"Mở đầu · bài này học gì"},
+        {"t":181.89,"den":358.17,"ten":"A, phải hiểu tài liệu đặc tả và…"},
+        {"t":358.17,"den":535.24,"ten":"Từ cần nhớ"},
+        {"t":535.24,"den":714.74,"ten":"Nhiều người cùng dùng thì nghĩ ngay tới…"},
+        {"t":714.74,"den":886.47,"ten":"Ý này ở Chương hai, bài 2.5"},
+        {"t":886.47,"den":1009.95,"ten":"Mẹo: càng xa người viết code thì càng…"},
+        {"t":1009.95,"den":1184.17,"ten":"Trước khi kết thúc"},
+        {"t":1184.17,"den":1361.31,"ten":"Câu số mười bảy"},
+        {"t":1361.31,"den":1539,"ten":"C, test procedure specification"},
+        {"t":1539,"den":1714.84,"ten":"B: s là bốn và năm"},
+        {"t":1714.84,"den":1893.95,"ten":"Ý này ở Chương ba, bài 3.3"},
+        {"t":1893.95,"den":1977.75,"ten":"Ý này ở Chương ba, bài 3.2"},
+        {"t":1977.75,"den":2157.56,"ten":"Tổng kết phần hai"},
+        {"t":2157.56,"den":2336.53,"ten":"B, lỗi yêu cầu, và C, lỗi thiết…"},
+        {"t":2336.53,"den":2511.27,"ten":"C, model based"},
+        {"t":2511.27,"den":2626.7,"ten":"Từ cần nhớ"},
+        {"t":2626.7,"den":2804.23,"ten":"Ví dụ tuổi hợp lệ từ mười tám…"},
+        {"t":2804.23,"den":2896.32,"ten":"A nói một, hai, ba đúng, bốn sai"},
+        {"t":2896.32,"den":3069.55,"ten":"Trước khi kết thúc"},
+        {"t":3069.55,"den":3246.01,"ten":"Mẹo: rò rỉ bộ nhớ chỉ lộ ra…"},
+        {"t":3246.01,"den":3422.08,"ten":"Ý ba, thông tin lỗi, như mật độ…"},
+        {"t":3422.08,"den":3600.11,"ten":"Từ cần nhớ"},
+        {"t":3600.11,"den":3780.08,"ten":"Xét từng ý"},
+        {"t":3780.08,"den":3907.6,"ten":"Mẹo: chữ best hỏi cách tự động và…"},
+        {"t":3907.6,"den":3958.44,"ten":"Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đây là tập một trên bốn: chữa trọn đề thi cuối kỳ FE số hai của môn SWT301."},
         {"t":14.22,"vi":"Đây là đề SP26, kỳ gần nhất trong Phòng thi trên web: sáu mươi câu trắc nghiệm, làm trong sáu mươi phút."},
@@ -4393,8 +4649,34 @@
         {"t":3950.54,"vi":"Chúc bạn thi tốt!"}
       ]
     },
-    "swt301-fe25-sp26-chua-tron-de": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/17-chua-de-fe/01-fe25-sp26-tron-0b0596b6.mp4","durationSec":4071.81,"nguonCau":"srt",
-      "parts": [],
+    "swt301-fe25-sp26-chua-tron-de": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/17-chua-de-fe/01-fe25-sp26-tron-0b0596b6.mp4","durationSec":4071.81,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":181.13,"ten":"Mở đầu · bài này học gì"},
+        {"t":181.13,"den":357.96,"ten":"A, test sớm"},
+        {"t":357.96,"den":537.67,"ten":"B sửa xong rồi mới giao"},
+        {"t":537.67,"den":713.39,"ten":"Ý này ở Chương một, bài 1.2"},
+        {"t":713.39,"den":892.4,"ten":"Mẹo: thấy cụm entire system và meets specifications…"},
+        {"t":892.4,"den":971.03,"ten":"Đề hỏi: khi kiểm thử bảo trì"},
+        {"t":971.03,"den":1146.87,"ten":"Tổng kết phần một"},
+        {"t":1146.87,"den":1324.6,"ten":"C, do ban quản lý"},
+        {"t":1324.6,"den":1498,"ten":"Câu này gặp trong chín đề"},
+        {"t":1498,"den":1670.94,"ten":"Xét từng ý"},
+        {"t":1670.94,"den":1848.6,"ten":"A, giải thích mục tiêu"},
+        {"t":1848.6,"den":1949.22,"ten":"Từ cần nhớ"},
+        {"t":1949.22,"den":2129.04,"ten":"Trước khi kết thúc"},
+        {"t":2129.04,"den":2303.16,"ten":"Câu số ba mươi hai, câu tính"},
+        {"t":2303.16,"den":2480.32,"ten":"A, lớn: chưa chắc. Một hàm dài nhưng…"},
+        {"t":2480.32,"den":2658.36,"ten":"C cho ước lượng là phân bổ lại…"},
+        {"t":2658.36,"den":2836.19,"ten":"Từ cần nhớ"},
+        {"t":2836.19,"den":2988.99,"ten":"Từ cần nhớ"},
+        {"t":2988.99,"den":3166.81,"ten":"Trước khi kết thúc"},
+        {"t":3166.81,"den":3343.8,"ten":"Câu này gặp trong sáu đề"},
+        {"t":3343.8,"den":3517.97,"ten":"Câu số năm mươi"},
+        {"t":3517.97,"den":3696.94,"ten":"Kiểm soát cấu hình là giữ các hạng…"},
+        {"t":3696.94,"den":3875.02,"ten":"A, analyst, người phân tích"},
+        {"t":3875.02,"den":3957.79,"ten":"B, scribe: đúng, thư ký ghi lại mọi…"},
+        {"t":3957.79,"den":4071.81,"ten":"Là phần thống kê"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đây là tập một trên bốn: chữa trọn đề thi cuối kỳ FE số hai mươi lăm của môn SWT301."},
         {"t":14.75,"vi":"Đây là đề SP26, kỳ gần nhất trong Phòng thi trên web: sáu mươi câu trắc nghiệm, làm trong sáu mươi phút."},
@@ -5066,8 +5348,12 @@
         {"t":4063.9,"vi":"Chúc bạn thi tốt!"}
       ]
     },
-    "swt301-final-exam-fe-guide": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/16-thi-cuoi-ky/16-02-thi-fe-073949c6.mp4","durationSec":373.02,"nguonCau":"srt",
-      "parts": [],
+    "swt301-final-exam-fe-guide": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/16-thi-cuoi-ky/16-02-thi-fe-073949c6.mp4","durationSec":373.02,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":147.13,"ten":"Mở đầu · bài này học gì"},
+        {"t":147.13,"den":318.83,"ten":"Ví dụ câu này"},
+        {"t":318.83,"den":373.02,"ten":"Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với tập cuối của phần thi: bài thi lý thuyết FE. Tập trước mình có checklist ngày thi PE và hai mươi hai đề PE thật."},
         {"t":15.69,"vi":"FE là nửa còn lại của cột Final."},
@@ -5113,8 +5399,11 @@
         {"t":370.21,"vi":"Chúc bạn thi tốt."}
       ]
     },
-    "swt301-final-exam-pe": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/16-thi-cuoi-ky/16-01-thi-pe-c1fb22cf.mp4","durationSec":325.09,"nguonCau":"srt",
-      "parts": [],
+    "swt301-final-exam-pe": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/16-thi-cuoi-ky/16-01-thi-pe-c1fb22cf.mp4","durationSec":325.09,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":173.48,"ten":"Mở đầu · bài này học gì"},
+        {"t":173.48,"den":325.09,"ten":"Là công cụ để luyện"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với phần thi cuối kỳ."},
         {"t":7.77,"vi":"Ở phần PE, mình đã đi qua bốn đề cũ: FA23 giải trọn, rồi SU24, FALL24 và SPRING25 theo kỹ thuật."},
@@ -5161,8 +5450,16 @@
         {"t":311.22,"vi":"Tập sau là bài thi lý thuyết FE: cấu trúc đề, chương nào nhiều câu, và kế hoạch hai tuần cuối. Bạn mở Phòng thi làm đề PE8 có bấm giờ ngay hôm nay nhé."}
       ]
     },
-    "swt301-fundamentals-principles": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/01-nen-tang-kiem-thu/01-01-kiem-thu-la-gi-tron-0b8c0572.mp4","durationSec":1029.46,"nguonCau":"srt",
-      "parts": [],
+    "swt301-fundamentals-principles": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/01-nen-tang-kiem-thu/01-01-kiem-thu-la-gi-tron-0b8c0572.mp4","durationSec":1029.46,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":160.8,"ten":"Mở đầu · bài này học gì"},
+        {"t":160.8,"den":328.99,"ten":"Trước khi làm câu hỏi"},
+        {"t":328.99,"den":468.46,"ten":"Slide mười sáu hỏi vị trí của bước…"},
+        {"t":468.46,"den":646.47,"ten":"Tóm lại: theo ISTQB"},
+        {"t":646.47,"den":768.73,"ten":"Mâu thuẫn được gỡ trước khi ai đó…"},
+        {"t":768.73,"den":942.55,"ten":"Bước hai là debugging, việc của developer"},
+        {"t":942.55,"den":1029.46,"ten":"Năm, người dùng thật chê form đăng ký…"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Chương một của khoá SWT301, bài 1.1, phần một: kiểm thử là gì."},
         {"t":14.29,"vi":"Mục 0 mình đã biết Chương một chiếm tám trên bốn mươi câu của đề, và học mười ba mẹo đọc đề như gạch chân chữ NOT và BEST."},
@@ -5302,8 +5599,13 @@
         {"t":1014.41,"vi":"Giờ bạn mở Quiz 1 ngay dưới bài, làm các câu về mục tiêu và debugging, rồi hẵng sang bài 1.2 nhé."}
       ]
     },
-    "swt301-gioi-thieu": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/00-gioi-thieu-mon-hoc/00-01-gioi-thieu-swt301-istqb-697a1638.mp4","durationSec":491.02,"nguonCau":"srt",
-      "parts": [],
+    "swt301-gioi-thieu": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/00-gioi-thieu-mon-hoc/00-01-gioi-thieu-swt301-istqb-697a1638.mp4","durationSec":491.02,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":178.87,"ten":"Mở đầu · bài này học gì"},
+        {"t":178.87,"den":351.37,"ten":"Nhánh Agile: Agile Tester bậc nền tảng"},
+        {"t":351.37,"den":432.17,"ten":"Sau đó là Chương bảy"},
+        {"t":432.17,"den":491.02,"ten":"Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, chào mừng đến với bài 0.1, bài mở đầu của khoá SWT301, môn Kiểm thử phần mềm."},
         {"t":15.01,"vi":"Khoá này đi cùng bạn suốt môn học: giảng tiếng Việt, bám đúng từng slide của trường, giải mọi câu hỏi trên slide, có Lab, đề PE và đề FE để ôn."},
@@ -5372,8 +5674,13 @@
         {"t":476.11,"vi":"Giờ bạn mở trang khoá học SWT301 trên cuongthai.com, đi một vòng mục lục bên trái, tìm đủ các phần vừa nói, rồi hẵng sang bài 0.2 nhé."}
       ]
     },
-    "swt301-how-to-study": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/00-gioi-thieu-mon-hoc/00-06-tai-lieu-sach-ke-hoach-hoc-14d8c44c.mp4","durationSec":530.95,"nguonCau":"srt",
-      "parts": [],
+    "swt301-how-to-study": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/00-gioi-thieu-mon-hoc/00-06-tai-lieu-sach-ke-hoach-hoc-14d8c44c.mp4","durationSec":530.95,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":142.64,"ten":"Mở đầu · bài này học gì"},
+        {"t":142.64,"den":294.53,"ten":"Giờ tới công cụ"},
+        {"t":294.53,"den":473.49,"ten":"Giờ tới cách học"},
+        {"t":473.49,"den":530.95,"ten":"Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với video cuối của Mục 0 trong khoá SWT301, gộp ba bài 0.4, 0.6 và 0.7."},
         {"t":16.51,"vi":"Bài trước mình đã học mười ba mẹo làm trắc nghiệm, và chữa một câu FE thật bằng cách loại trừ."},
@@ -5446,8 +5753,16 @@
         {"t":517.44,"vi":"Giờ bạn mở thư mục môn học trên máy, đối chiếu với tấm bản đồ ở bài 0.4 trên web, đánh dấu những gì mình đã có, rồi hẵng sang Chương một nhé."}
       ]
     },
-    "swt301-istqb-exam-strategy": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/00-gioi-thieu-mon-hoc/00-05-de-istqb-va-fe-tron-12b69dc5.mp4","durationSec":1060.82,"nguonCau":"srt",
-      "parts": [],
+    "swt301-istqb-exam-strategy": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/00-gioi-thieu-mon-hoc/00-05-de-istqb-va-fe-tron-12b69dc5.mp4","durationSec":1060.82,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":178.82,"ten":"Mở đầu · bài này học gì"},
+        {"t":178.82,"den":355.71,"ten":"Bộ slide năm 2023 ghi dòng này là…"},
+        {"t":355.71,"den":458.54,"ten":"Ở hội đồng kiểm thử Ai Cập lúc…"},
+        {"t":458.54,"den":635.82,"ten":"Tóm lại: đề CTFL có bốn mươi câu"},
+        {"t":635.82,"den":808.65,"ten":"B thiếu giá trị không hợp lệ"},
+        {"t":808.65,"den":981.85,"ten":"Hỏi static analysis tìm được gì"},
+        {"t":981.85,"den":1060.82,"ten":"Câu một chọn C"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 0.5, phần một trên hai, của khoá SWT301."},
         {"t":12.45,"vi":"Bài trước mình đã học các mức K: K1 nhớ, K2 hiểu, K3 áp dụng, và bảy mục K3 là chỗ phải luyện tay nhiều nhất."},
@@ -5597,8 +5912,23 @@
         {"t":1040.73,"vi":"Giờ bạn vào Phòng thi SWT301, làm thử mười câu đầu của một đề FE, bấm giờ mười phút, áp dụng các mẹo vừa học, rồi hẵng sang video tiếp nhé."}
       ]
     },
-    "swt301-junit-hands-on": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/11-cong-cu-tu-dong-hoa/11-07-hands-on-build-xml-tron-b6db1b3d.mp4","durationSec":1838.61,"nguonCau":"srt",
-      "parts": [],
+    "swt301-junit-hands-on": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/11-cong-cu-tu-dong-hoa/11-07-hands-on-build-xml-tron-b6db1b3d.mp4","durationSec":1838.61,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":177.07,"ten":"Mở đầu · bài này học gì"},
+        {"t":177.07,"den":280.35,"ten":"Lệnh ant jacoco-report chạy cả chuỗi"},
+        {"t":280.35,"den":458.72,"ten":"Mình chạy thật ant compile-tests"},
+        {"t":458.72,"den":539.82,"ten":"Ba câu tự kiểm"},
+        {"t":539.82,"den":717.47,"ten":"Tóm lại: kit của môn gồm build.xml"},
+        {"t":717.47,"den":820.94,"ten":"Test thứ năm là test biên của ta"},
+        {"t":820.94,"den":900.15,"ten":"Tổng kết: Tests run năm, Failures một"},
+        {"t":900.15,"den":1079.57,"ten":"Vì sao ra âm một?"},
+        {"t":1079.57,"den":1247.05,"ten":"Không phải JUnit chạy lại một test"},
+        {"t":1247.05,"den":1322.54,"ten":"Dependency duy nhất là junit-jupiter"},
+        {"t":1322.54,"den":1499.29,"ten":"Cuối cùng là test tham số hoá"},
+        {"t":1499.29,"den":1576.24,"ten":"Về assertion: lớp đổi từ org.junit.Assert sang Assertions…"},
+        {"t":1576.24,"den":1751.17,"ten":"Bẫy một: thiếu vintage engine"},
+        {"t":1751.17,"den":1838.61,"ten":"AssertAll gom nhiều kiểm tra"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Bài trước ta chọn công cụ trên giấy."},
         {"t":8.45,"vi":"Hôm nay là bài thực hành: ta mở bộ công cụ build của chính môn học, và chạy nó thật. Thư mục 04.Samples có đúng ba file, và đó chính là bộ công cụ của Lab hai."},
@@ -5834,8 +6164,12 @@
         {"t":1821.45,"vi":"Luôn đọc số test đã chạy. Và phủ một trăm phần trăm chưa chắc đã bắt được lỗi. Bạn có thể làm Quiz tám ngay dưới bài để ôn nhé."}
       ]
     },
-    "swt301-lab1-pe-question1": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/05-lab1-review-code-phan-tich-tinh/05-10-pe-cau-1-391b2536.mp4","durationSec":407.27,"nguonCau":"srt",
-      "parts": [],
+    "swt301-lab1-pe-question1": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/05-lab1-review-code-phan-tich-tinh/05-10-pe-cau-1-391b2536.mp4","durationSec":407.27,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":182.85,"ten":"Mở đầu · bài này học gì"},
+        {"t":182.85,"den":292.45,"ten":"Ba lỗi hợp lệ bổ sung ghi thành…"},
+        {"t":292.45,"den":407.27,"ten":"Ví dụ VIP ra hai trăm bốn mươi…"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Lab 1, bài cuối, 1.10."},
         {"t":9.47,"vi":"Mọi đề thi thực hành SWT301 gần đây đều mở đầu bằng câu review code: class này có sáu defect về chuẩn code, logic và best practice."},
@@ -5894,8 +6228,12 @@
         {"t":394.95,"vi":"Giờ bạn mở Quiz của Lab 1 ngay dưới, rồi vào Phòng thi SWT301 thử một câu review code có bấm giờ hai mươi phút nhé."}
       ]
     },
-    "swt301-lab1-review-checklist": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/05-lab1-review-code-phan-tich-tinh/05-07-de-bai-checklist-9a42b426.mp4","durationSec":443.37,"nguonCau":"srt",
-      "parts": [],
+    "swt301-lab1-review-checklist": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/05-lab1-review-code-phan-tich-tinh/05-07-de-bai-checklist-9a42b426.mp4","durationSec":443.37,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":182.55,"ten":"Mở đầu · bài này học gì"},
+        {"t":182.55,"den":354.65,"ten":"Xử lý ngoại lệ đúng"},
+        {"t":354.65,"den":443.37,"ten":"Ngược lại, dòng bảy sáu chứa cả mật…"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Lab 1, bài 1.7."},
         {"t":9.2,"vi":"Đây là nơi Chương ba trở thành kỹ năng."},
@@ -5963,8 +6301,15 @@
         {"t":434.29,"vi":"Giờ bạn mở trang bài ngay dưới, tải file checklist, và đổi tên nó theo class trước khi bắt đầu nhé."}
       ]
     },
-    "swt301-lab1-static-analysis": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/05-lab1-review-code-phan-tich-tinh/05-09-phan-tich-tinh-tron-e635f61c.mp4","durationSec":694.74,"nguonCau":"srt",
-      "parts": [],
+    "swt301-lab1-static-analysis": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/05-lab1-review-code-phan-tich-tinh/05-09-phan-tich-tinh-tron-e635f61c.mp4","durationSec":694.74,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":172.09,"ten":"Mở đầu · bài này học gì"},
+        {"t":172.09,"den":260.24,"ten":"Cũng trong IntelliJ"},
+        {"t":260.24,"den":439.4,"ten":"Tóm lại: Lab 1 phần này đòi năm…"},
+        {"t":439.4,"den":568.46,"ten":"Hãy tắt luật đó thay vì chìm trong…"},
+        {"t":568.46,"den":643.85,"ten":"Bẫy trong đề FE"},
+        {"t":643.85,"den":694.74,"ten":"Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Lab 1, bài 1.9, phần một. Bài trước con người đọc ra hai mươi chín defect."},
         {"t":13.46,"vi":"Hôm nay là nửa còn lại của kiểm thử tĩnh: chọn một công cụ phân tích tĩnh, chạy trên code thật, và log defect lên JIRA."},
@@ -6057,8 +6402,14 @@
         {"t":680.04,"vi":"Giờ bạn mở trang bài ngay dưới, chạy một công cụ trên code của mình, và log issue đầu tiên lên JIRA nhé."}
       ]
     },
-    "swt301-lab1-worked-review": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/05-lab1-review-code-phan-tich-tinh/05-08-review-reviewcode-tron-b95d5c0c.mp4","durationSec":731.14,"nguonCau":"srt",
-      "parts": [],
+    "swt301-lab1-worked-review": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/05-lab1-review-code-phan-tich-tinh/05-08-review-reviewcode-tron-b95d5c0c.mp4","durationSec":731.14,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":178.69,"ten":"Mở đầu · bài này học gì"},
+        {"t":178.69,"den":321.94,"ten":"Dòng chín ba tới chín tám mở một…"},
+        {"t":321.94,"den":496.67,"ten":"Tóm lại: đọc theo từng khối thì gần…"},
+        {"t":496.67,"den":675.55,"ten":"Import từng class một"},
+        {"t":675.55,"den":731.14,"ten":"Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Lab 1, bài 1.8, phần một. Bài trước bạn có checklist và mẫu báo cáo."},
         {"t":12.95,"vi":"Hôm nay là đáp án để đối chiếu bài của mình: đọc trọn file ReviewCode theo từng khối, và log mọi defect."},
@@ -6162,8 +6513,16 @@
         {"t":715.11,"vi":"Giờ bạn mở trang bài ngay dưới, chép class đã sửa về máy, và tự biên dịch một lần để thấy không còn cảnh báo nào nhé."}
       ]
     },
-    "swt301-lab2-blackbox": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/09-lab2-unit-test/09-07-lab2-black-box-tron-8e58b396.mp4","durationSec":870.12,"nguonCau":"srt",
-      "parts": [],
+    "swt301-lab2-blackbox": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/09-lab2-unit-test/09-07-lab2-black-box-tron-8e58b396.mp4","durationSec":870.12,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":180.62,"ten":"Mở đầu · bài này học gì"},
+        {"t":180.62,"den":316.57,"ten":"Slide mười một chấm theo số trang thiết…"},
+        {"t":316.57,"den":405.45,"ten":"Bước hai: chạy file SQL tạo chi tiết…"},
+        {"t":405.45,"den":572.66,"ten":"Tóm lại: bản black-box chỉ đọc thiết kế"},
+        {"t":572.66,"den":687.45,"ten":"Biên hợp lệ là tháng một và tháng…"},
+        {"t":687.45,"den":830.17,"ten":"Bài tập. Action số mười ba"},
+        {"t":830.17,"den":870.12,"ten":"Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài L2.7 của Lab 2, phần một."},
         {"t":9.79,"vi":"Bài trước là bản white-box: test chính code của bạn bằng JUnit, JaCoCo chứng minh C0 và C1 một trăm phần trăm, và ca biên bắt được bug mà coverage không thấy."},
@@ -6261,8 +6620,15 @@
         {"t":847.89,"vi":"Bài sau, L2.8, mình điền từng ô của template Unit Test Case, xem sheet mẫu mười ba UTCID, và làm sheet cho hàm countCharacters của đề PE, có JUnit và JaCoCo chạy thật."}
       ]
     },
-    "swt301-lab2-chia-viec-5-thanh-vien": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/swt301-lab2/01-lab2-unit-test-labflow/01-04-phan-cua-tung-thanh-vien-1266d16d.mp4","durationSec":623.87,"nguonCau":"srt",
-      "parts": [],
+    "swt301-lab2-chia-viec-5-thanh-vien": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/swt301-lab2/01-lab2-unit-test-labflow/01-04-phan-cua-tung-thanh-vien-1266d16d.mp4","durationSec":623.87,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":102.3,"ten":"Mở đầu · bài này học gì"},
+        {"t":102.3,"den":216.08,"ten":"Bẫy: email phải thuộc tên miền trường"},
+        {"t":216.08,"den":305.87,"ten":"Bẫy: danh sách vai trò rỗng"},
+        {"t":305.87,"den":484.52,"ten":"Bẫy riêng của thành viên bốn"},
+        {"t":484.52,"den":566.84,"ten":"Dán link Pull Request vào thẻ của mình…"},
+        {"t":566.84,"den":623.87,"ten":"Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 2.4 của loạt SWT301, Lab 2 unit test."},
         {"t":12.98,"vi":"Bài trước mình đã làm trọn một vòng với hàm login: đọc code, chọn biên, viết test theo mẫu sắp đặt, hành động, khẳng định, và chạy ra kết quả thật."},
@@ -6353,8 +6719,16 @@
         {"t":613.11,"vi":"Giờ bạn mở Docs số 3, gửi cho từng bạn đúng mục hàm của bạn ấy, hẹn giờ kiểm bài, rồi hẵng sang bài mới nhé."}
       ]
     },
-    "swt301-lab2-guide-appendix": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/09-lab2-unit-test/09-04-phu-luc-tron-dc9f14aa.mp4","durationSec":885.29,"nguonCau":"srt",
-      "parts": [],
+    "swt301-lab2-guide-appendix": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/09-lab2-unit-test/09-04-phu-luc-tron-dc9f14aa.mp4","durationSec":885.29,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":183.16,"ten":"Mở đầu · bài này học gì"},
+        {"t":183.16,"den":281.52,"ten":"Dòng OrderDao stub là stub"},
+        {"t":281.52,"den":369.95,"ten":"Bài tập nhỏ"},
+        {"t":369.95,"den":511.17,"ten":"Tóm lại: ba lớp với giao diện rõ…"},
+        {"t":511.17,"den":637.33,"ten":"Ví dụ ma trận trên slide là phép…"},
+        {"t":637.33,"den":811.2,"ten":"Ví dụ: một lệnh if không có else"},
+        {"t":811.2,"den":885.29,"ten":"Câu hai, mình tính nhanh một chút nhé"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài L2.4 của Lab 2, phần một."},
         {"t":9.79,"vi":"Bài trước mình đã học ma trận PCL, bốn bước rút test case, hai mươi lăm testing concern và sáu tình huống hay quên ca."},
@@ -6466,8 +6840,17 @@
         {"t":865.79,"vi":"Bài sau, L2.5, là bộ slide How to write PCL: đọc Detailed Design thế nào để điền PCL, với mười hai quy tắc. Làm quiz Lab 2 dưới video nhé."}
       ]
     },
-    "swt301-lab2-guide-pcl-rules": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/09-lab2-unit-test/09-03-pcl-ma-tran-tron-e23c07b0.mp4","durationSec":1198.38,"nguonCau":"srt",
-      "parts": [],
+    "swt301-lab2-guide-pcl-rules": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/09-lab2-unit-test/09-03-pcl-ma-tran-tron-e23c07b0.mp4","durationSec":1198.38,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":93.94,"ten":"Mở đầu · bài này học gì"},
+        {"t":93.94,"den":238.5,"ten":"Ví dụ là một hàm lấy b chia…"},
+        {"t":238.5,"den":407.03,"ten":"Giờ tới cách tạo test case"},
+        {"t":407.03,"den":521.8,"ten":"Bước ba dành cho một lưu đồ khác"},
+        {"t":521.8,"den":687.26,"ten":"Tóm lại: PCL là ma trận"},
+        {"t":687.26,"den":821.21,"ten":"Mã hoá ký tự đúng"},
+        {"t":821.21,"den":996.57,"ten":"Ví dụ bên bị gọi là hàm checkItem"},
+        {"t":996.57,"den":1198.38,"ten":"Tình huống năm"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài L2.3 của Lab 2, phần một."},
         {"t":9.63,"vi":"Bài trước là quy trình sáu bước, với quy tắc PCL viết từ thiết kế và trước khi code, rồi test động tới khi C0 và C1 đạt một trăm phần trăm."},
@@ -6626,8 +7009,19 @@
         {"t":1178.06,"vi":"Bài sau, L2.4, là phụ lục: thứ tự unit test giữa ba lớp, các loại checklist, và định nghĩa chính xác C0, C1, RC0. Làm quiz Lab 2 dưới video nhé."}
       ]
     },
-    "swt301-lab2-guide-process": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/09-lab2-unit-test/09-02-huong-dan-unit-test-tron-fdfa126f.mp4","durationSec":1272,"nguonCau":"srt",
-      "parts": [],
+    "swt301-lab2-guide-process": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/09-lab2-unit-test/09-02-huong-dan-unit-test-tron-fdfa126f.mp4","durationSec":1272,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":182.23,"ten":"Mở đầu · bài này học gì"},
+        {"t":182.23,"den":289.62,"ten":"Biểu đồ một"},
+        {"t":289.62,"den":464.08,"ten":"Vì sao duy nhất?"},
+        {"t":464.08,"den":566.1,"ten":"Ô màu cam là batch main unit"},
+        {"t":566.1,"den":695.3,"ten":"Tóm lại: bộ hướng dẫn là cuốn công…"},
+        {"t":695.3,"den":818.85,"ten":"Bước một, tạo PCL"},
+        {"t":818.85,"den":901.13,"ten":"Bước ba, viết code từ Detailed Design và…"},
+        {"t":901.13,"den":1077.43,"ten":"Bước năm, test động, phần dài nhất"},
+        {"t":1077.43,"den":1224.1,"ten":"Đề thi hỏi ở mức K2"},
+        {"t":1224.1,"den":1272,"ten":"Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài L2.2 của Lab 2, phần một."},
         {"t":9.64,"vi":"Bài trước mình đã có tấm bản đồ: hai biến thể white-box và black-box, điểm chấm theo kích thước code hay thiết kế, và file nào học ở bài nào."},
@@ -6796,8 +7190,17 @@
         {"t":1252.53,"vi":"Bài sau, L2.3, mình học hình dạng của PCL, một ma trận, và công thức bốn bước để rút test case không thừa không thiếu. Làm quiz Lab 2 dưới video nhé."}
       ]
     },
-    "swt301-lab2-how-to-write-pcl": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/09-lab2-unit-test/09-05-cach-viet-pcl-tron-64fe9ef8.mp4","durationSec":1049.37,"nguonCau":"srt",
-      "parts": [],
+    "swt301-lab2-how-to-write-pcl": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/09-lab2-unit-test/09-05-cach-viet-pcl-tron-64fe9ef8.mp4","durationSec":1049.37,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":80.1,"ten":"Mở đầu · bài này học gì"},
+        {"t":80.1,"den":185.26,"ten":"Ý thứ hai mới quan trọng"},
+        {"t":185.26,"den":333.2,"ten":"Ví dụ xuyên suốt là method getAccountTransferSummaryList"},
+        {"t":333.2,"den":446.6,"ten":"Ví dụ có lời giải"},
+        {"t":446.6,"den":618,"ten":"Tóm lại: đọc thiết kế theo bốn bước"},
+        {"t":618,"den":796.7,"ten":"Tám, xác nhận thiết kế giao diện của…"},
+        {"t":796.7,"den":969.45,"ten":"Cột năm, recordsLimit là chữ ABC, mong đợi…"},
+        {"t":969.45,"den":1049.37,"ten":"Đáp án là B"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài L2.5 của Lab 2, phần một."},
         {"t":9.76,"vi":"Ba bài trước mình đã học xong bộ hướng dẫn của Hitachi, kết thúc bằng các loại checklist, bốn chữ phân loại và công thức C0, C1, RC0."},
@@ -6931,8 +7334,12 @@
         {"t":1040.32,"vi":"Làm quiz Lab 2 dưới video nhé."}
       ]
     },
-    "swt301-lab2-labflow-chay-app-test": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/swt301-lab2/01-lab2-unit-test-labflow/01-01b-labflow-demo-ben-trong-code-94a054b8.mp4","durationSec":451.47,"nguonCau":"srt",
-      "parts": [],
+    "swt301-lab2-labflow-chay-app-test": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/swt301-lab2/01-lab2-unit-test-labflow/01-01b-labflow-demo-ben-trong-code-94a054b8.mp4","durationSec":451.47,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":183.41,"ten":"Mở đầu · bài này học gì"},
+        {"t":183.41,"den":356.1,"ten":"App trả về token kiểu Bearer"},
+        {"t":356.1,"den":451.47,"ten":"Từng bước cài đặt cho cả hai hệ…"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đây là phần hai của bài 2.1 trong loạt SWT301, Lab 2 unit test."},
         {"t":13.91,"vi":"Phần một mình đã đi hết câu chuyện nghiệp vụ: năm vai người dùng, hành trình đặt phòng của sinh viên, các luật BR và mô hình dữ liệu."},
@@ -7001,8 +7408,13 @@
         {"t":438.62,"vi":"Giờ bạn mở project Lab2 trên CT Work, đọc Docs số 8 và 13, cài máy và tìm hàm của mình cho xong, rồi hẵng sang bài mới nhé."}
       ]
     },
-    "swt301-lab2-labflow-nghiep-vu": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/swt301-lab2/01-lab2-unit-test-labflow/01-01-labflow-demo-nghiep-vu-du-lieu-61a536fd.mp4","durationSec":515.16,"nguonCau":"srt",
-      "parts": [],
+    "swt301-lab2-labflow-nghiep-vu": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/swt301-lab2/01-lab2-unit-test-labflow/01-01-labflow-demo-nghiep-vu-du-lieu-61a536fd.mp4","durationSec":515.16,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":141.59,"ten":"Mở đầu · bài này học gì"},
+        {"t":141.59,"den":318.15,"ten":"Bước một, đăng ký"},
+        {"t":318.15,"den":465.06,"ten":"Cụm lịch: giờ mở cửa theo từng thứ…"},
+        {"t":465.06,"den":515.16,"ten":"Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 2.1 của loạt video SWT301, Lab 2: unit test trên dự án LabFlow Demo."},
         {"t":16.18,"vi":"Loạt này có sáu video, viết cho nhóm trưởng, để bạn hiểu trọn Lab 2, giảng lại được cho bốn bạn trong nhóm, và tự tin thuyết trình."},
@@ -7081,8 +7493,13 @@
         {"t":502.6,"vi":"Giờ bạn mở README và file ERD của repo, tự kể lại hành trình đặt phòng cho một bạn trong nhóm nghe, rồi hẵng sang video tiếp theo nhé."}
       ]
     },
-    "swt301-lab2-overview": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/09-lab2-unit-test/09-01-tong-quan-lab-2-68c166b8.mp4","durationSec":626.55,"nguonCau":"srt",
-      "parts": [],
+    "swt301-lab2-overview": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/09-lab2-unit-test/09-01-tong-quan-lab-2-68c166b8.mp4","durationSec":626.55,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":180.79,"ten":"Mở đầu · bài này học gì"},
+        {"t":180.79,"den":334.37,"ten":"Sản phẩm nộp là sheet Unit Test Case…"},
+        {"t":334.37,"den":509.88,"ten":"Cuối cùng là bằng chứng"},
+        {"t":509.88,"den":626.55,"ten":"Mây-rây mô-ra và bun-ki mô-ra là phủ câu…"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Lab 2 của môn SWT301, bài L2.1."},
         {"t":11.84,"vi":"Ba chương vừa rồi bạn đã học cách thiết kế test: phân vùng tương đương và giá trị biên, độ phủ câu lệnh và quyết định, rồi cách chọn kỹ thuật cho từng tình huống."},
@@ -7160,8 +7577,14 @@
         {"t":620.68,"vi":"Làm thử quiz Lab 2 dưới video để chắc phần tổng quan nhé."}
       ]
     },
-    "swt301-lab2-report51-a-z": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/swt301-lab2/01-lab2-unit-test-labflow/01-02-lab2-va-report-51-04ab87ac.mp4","durationSec":618.36,"nguonCau":"srt",
-      "parts": [],
+    "swt301-lab2-report51-a-z": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/swt301-lab2/01-lab2-unit-test-labflow/01-02-lab2-va-report-51-04ab87ac.mp4","durationSec":618.36,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":97.46,"ten":"Mở đầu · bài này học gì"},
+        {"t":97.46,"den":273.12,"ten":"Ví dụ: hai người đặt cùng một phòng…"},
+        {"t":273.12,"den":438.95,"ten":"Log message là thông điệp được ghi lại"},
+        {"t":438.95,"den":559.74,"ten":"Ví dụ mẫu của nhóm có tới mười…"},
+        {"t":559.74,"den":618.36,"ten":"Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 2.2 của loạt SWT301, Lab 2 unit test."},
         {"t":12.9,"vi":"Bài trước mình đã biết LabFlow Demo chia ba tầng, nhóm test 24 hàm ở tầng service, và chạy mvnw test ra BUILD SUCCESS."},
@@ -7265,8 +7688,12 @@
         {"t":604.48,"vi":"Giờ bạn mở Docs số 2 trên project Lab2, đọc lại mục ba tới sáu, rồi tự xếp N A B cho các biên trong hàm của mình, rồi hẵng sang bài mới nhé."}
       ]
     },
-    "swt301-lab2-report51-ct-work-excel": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/swt301-lab2/01-lab2-unit-test-labflow/01-05-dien-51-ct-work-xuat-excel-1441b27d.mp4","durationSec":446.42,"nguonCau":"srt",
-      "parts": [],
+    "swt301-lab2-report51-ct-work-excel": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/swt301-lab2/01-lab2-unit-test-labflow/01-05-dien-51-ct-work-xuat-excel-1441b27d.mp4","durationSec":446.42,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":180.42,"ten":"Mở đầu · bài này học gì"},
+        {"t":180.42,"den":354.4,"ten":"Nhóm trưởng bấm nút Table để xem cả…"},
+        {"t":354.4,"den":446.42,"ten":"Đến lượt bạn, nhóm trưởng"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 2.5, bài cuối của loạt SWT301, Lab 2 unit test."},
         {"t":13.79,"vi":"Bài trước mình đã đi qua phần của năm thành viên, bẫy của từng hàm, và cách nộp bằng Pull Request vào nhánh lab2-unit-test."},
@@ -7334,8 +7761,16 @@
         {"t":443.04,"vi":"Chúc cả nhóm thuyết trình thật tốt."}
       ]
     },
-    "swt301-lab2-template-worked": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/09-lab2-unit-test/09-08-template-unit-test-case-tron-ce323336.mp4","durationSec":885.63,"nguonCau":"srt",
-      "parts": [],
+    "swt301-lab2-template-worked": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/09-lab2-unit-test/09-08-template-unit-test-case-tron-ce323336.mp4","durationSec":885.63,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":167.38,"ten":"Mở đầu · bài này học gì"},
+        {"t":167.38,"den":243.02,"ten":"Bên dưới là ma trận bạn đã quen…"},
+        {"t":243.02,"den":414.94,"ten":"Ví dụ có lời giải một"},
+        {"t":414.94,"den":582.64,"ten":"Câu hai, mình tính tiếp nhé"},
+        {"t":582.64,"den":753.91,"ten":"Số một làm câu chữ thường sai"},
+        {"t":753.91,"den":847.49,"ten":"Đáng học là sheet chat"},
+        {"t":847.49,"den":885.63,"ten":"Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài L2.8 của Lab 2, phần một."},
         {"t":9.78,"vi":"Bài trước mình đã phân tích action số một thành mười bảy tag, và hẹn gộp chúng thành mười ba test case."},
@@ -7436,8 +7871,13 @@
         {"t":873.78,"vi":"Bạn mở đề PE FA23 trong Phòng thi và tự làm lại câu hai nhé."}
       ]
     },
-    "swt301-lab2-unit-test-points": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/09-lab2-unit-test/09-09-unit-test-points-5a865713.mp4","durationSec":485.62,"nguonCau":"srt",
-      "parts": [],
+    "swt301-lab2-unit-test-points": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/09-lab2-unit-test/09-09-unit-test-points-5a865713.mp4","durationSec":485.62,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":176.14,"ten":"Mở đầu · bài này học gì"},
+        {"t":176.14,"den":258,"ten":"Phần quy tắc biên"},
+        {"t":258,"den":425.05,"ten":"Ví dụ adapter"},
+        {"t":425.05,"den":485.62,"ten":"Câu hai, mức K3"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài L2.9, bài cuối phần lý thuyết của Lab 2."},
         {"t":10.85,"vi":"Bài trước mình đã điền template từng ô, và giải câu hai đề PE với hàm countCharacters chỉ cần một test case."},
@@ -7501,8 +7941,13 @@
         {"t":480.08,"vi":"Làm quiz Lab 2 dưới video trước khi sang loạt đó nhé."}
       ]
     },
-    "swt301-lab2-vi-du-login": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/swt301-lab2/01-lab2-unit-test-labflow/01-03-vi-du-tron-vong-login-d39b134d.mp4","durationSec":557.65,"nguonCau":"srt",
-      "parts": [],
+    "swt301-lab2-vi-du-login": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/swt301-lab2/01-lab2-unit-test-labflow/01-03-vi-du-tron-vong-login-d39b134d.mp4","durationSec":557.65,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":183.84,"ten":"Mở đầu · bài này học gì"},
+        {"t":183.84,"den":317.87,"ten":"Hai case N"},
+        {"t":317.87,"den":489.83,"ten":"Phần hai, Act, nghĩa là hành động"},
+        {"t":489.83,"den":557.65,"ten":"Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 2.3 của loạt SWT301, Lab 2 unit test."},
         {"t":12.81,"vi":"Bài trước mình đã đọc hiểu báo cáo 5.1: Condition, Confirmation, ba loại N A B, và chuẩn 100 test case trên một nghìn dòng."},
@@ -7600,8 +8045,15 @@
         {"t":544.06,"vi":"Giờ bạn mở file AuthServiceLoginTest, viết tiếp UTCID06 tới 13 theo Docs số 4, chạy cho xanh, rồi hẵng sang bài mới nhé."}
       ]
     },
-    "swt301-lab2-whitebox": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/09-lab2-unit-test/09-06-lab2-white-box-c4d2606e.mp4","durationSec":588.81,"nguonCau":"srt",
-      "parts": [],
+    "swt301-lab2-whitebox": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/09-lab2-unit-test/09-06-lab2-white-box-c4d2606e.mp4","durationSec":588.81,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":127.55,"ten":"Mở đầu · bài này học gì"},
+        {"t":127.55,"den":282.24,"ten":"Ví dụ thiết kế ca từ thiết kế…"},
+        {"t":282.24,"den":361.25,"ten":"Bước một, mỗi kết quả quyết định một…"},
+        {"t":361.25,"den":456.59,"ten":"Mình cố ý gài một bug"},
+        {"t":456.59,"den":548.89,"ten":"Ví dụ vào công ty từ năm hai…"},
+        {"t":548.89,"den":588.81,"ten":"Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài L2.6 của Lab 2."},
         {"t":8.78,"vi":"Bài trước mình đã có mười hai quy tắc viết PCL, vòng review, và cái bẫy giá trị biên bốn, năm, mười, mười một."},
@@ -7674,8 +8126,12 @@
         {"t":580.87,"vi":"Bạn thử viết ngay PCL cho một method của mình rồi chạy JaCoCo nhé."}
       ]
     },
-    "swt301-lab25-cong-cu": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/03-lab1-project-tool/03-03-cong-cu-dae2d2f3.mp4","durationSec":337.36,"nguonCau":"srt",
-      "parts": [],
+    "swt301-lab25-cong-cu": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/03-lab1-project-tool/03-03-cong-cu-dae2d2f3.mp4","durationSec":337.36,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":75.51,"ten":"Mở đầu · bài này học gì"},
+        {"t":75.51,"den":250.01,"ten":"Bước một, dựng server bằng Docker"},
+        {"t":250.01,"den":337.36,"ten":"Là lý do báo cáo do người viết"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Lab 1, bài ba."},
         {"t":8.98,"vi":"Bài trước bạn đã chạy project mẫu với một trăm mười hai test xanh."},
@@ -7730,8 +8186,12 @@
         {"t":328.84,"vi":"Giờ bạn mở trang công cụ ngay dưới, dựng SonarQube và quét project mẫu một lượt nhé."}
       ]
     },
-    "swt301-lab25-de-bai": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/03-lab1-project-tool/03-01-de-bai-fdd25379.mp4","durationSec":304.74,"nguonCau":"srt",
-      "parts": [],
+    "swt301-lab25-de-bai": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/03-lab1-project-tool/03-01-de-bai-fdd25379.mp4","durationSec":304.74,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":87.37,"ten":"Mở đầu · bài này học gì"},
+        {"t":87.37,"den":262.12,"ten":"Phần hai giới thiệu công cụ"},
+        {"t":262.12,"den":304.74,"ten":"Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Lab 1 của môn Kiểm thử phần mềm."},
         {"t":9.76,"vi":"Bạn vừa học xong Chương một và Chương hai, và đây là lúc dùng chúng trên một phần mềm thật."},
@@ -7777,8 +8237,12 @@
         {"t":294.99,"vi":"Giờ bạn mở trang đề bài ngay dưới, đọc lại form, và hỏi cô một câu về chữ level trước khi bắt tay vào nhé."}
       ]
     },
-    "swt301-lab25-phan-tich-defect": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/03-lab1-project-tool/03-04-phan-tich-defect-784e7b1f.mp4","durationSec":348.51,"nguonCau":"srt",
-      "parts": [],
+    "swt301-lab25-phan-tich-defect": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/03-lab1-project-tool/03-04-phan-tich-defect-784e7b1f.mp4","durationSec":348.51,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":182.66,"ten":"Mở đầu · bài này học gì"},
+        {"t":182.66,"den":310.09,"ten":"Sau đó mỗi lớp test xoá hết rồi…"},
+        {"t":310.09,"den":348.51,"ten":"Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Lab 1, bài bốn."},
         {"t":8.52,"vi":"Bài trước bạn đã có công cụ trong tay."},
@@ -7831,8 +8295,12 @@
         {"t":340.88,"vi":"Giờ bạn mở trang phân tích defect ngay dưới, rồi thử đào một trong ba manh mối nhé."}
       ]
     },
-    "swt301-lab25-project-mau": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/03-lab1-project-tool/03-02-project-mau-562cddc3.mp4","durationSec":298.14,"nguonCau":"srt",
-      "parts": [],
+    "swt301-lab25-project-mau": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/03-lab1-project-tool/03-02-project-mau-562cddc3.mp4","durationSec":298.14,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":95.58,"ten":"Mở đầu · bài này học gì"},
+        {"t":95.58,"den":259.21,"ten":"Vì sao nghiệp vụ này dễ ra defect?"},
+        {"t":259.21,"den":298.14,"ten":"Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Lab 1, bài hai."},
         {"t":8.68,"vi":"Bài trước mình có ba mảnh ghép: project, công cụ và báo cáo."},
@@ -7876,8 +8344,14 @@
         {"t":289.08,"vi":"Giờ bạn mở trang project mẫu ngay dưới, clone về, và chạy cho một trăm mười hai test xanh hết nhé."}
       ]
     },
-    "swt301-lab25-slide-bai-mau": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/03-lab1-project-tool/03-06-slide-bai-mau-tron-dafb311f.mp4","durationSec":801.11,"nguonCau":"srt",
-      "parts": [],
+    "swt301-lab25-slide-bai-mau": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/03-lab1-project-tool/03-06-slide-bai-mau-tron-dafb311f.mp4","durationSec":801.11,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":179.42,"ten":"Mở đầu · bài này học gì"},
+        {"t":179.42,"den":358.68,"ten":"Từ slide mười một là phần của Thành…"},
+        {"t":358.68,"den":538.46,"ten":"Câu hai: BUG-06 không làm hỏng dữ liệu"},
+        {"t":538.46,"den":712.05,"ten":"BUG-11: thủ thư không huỷ được đặt chỗ…"},
+        {"t":712.05,"den":801.11,"ten":"Đến lượt bạn"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Lab 1, bài sáu, phần một. Bài trước mình có bố cục và khối mẫu defect."},
         {"t":12.51,"vi":"Hôm nay mình mở một bài làm hoàn chỉnh: bộ sáu mươi tám slide cho project thư viện, năm thành viên, mỗi người ba defect."},
@@ -7990,8 +8464,13 @@
         {"t":787.9,"vi":"Giờ bạn mở Quiz của Lab 1 ngay dưới, làm trọn một lượt, rồi hẵng sang Chương ba nhé."}
       ]
     },
-    "swt301-lab25-viet-bao-cao": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/03-lab1-project-tool/03-05-viet-bao-cao-277fd3ca.mp4","durationSec":316.23,"nguonCau":"srt",
-      "parts": [],
+    "swt301-lab25-viet-bao-cao": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/03-lab1-project-tool/03-05-viet-bao-cao-277fd3ca.mp4","durationSec":316.23,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":82.68,"ten":"Mở đầu · bài này học gì"},
+        {"t":82.68,"den":179.52,"ten":"Là kết quả mong đợi"},
+        {"t":179.52,"den":271.54,"ten":"Trước khi nộp, đi một vòng checklist"},
+        {"t":271.54,"den":316.23,"ten":"Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Lab 1, bài năm."},
         {"t":8.5,"vi":"Bài trước bạn đã đi trọn vòng một defect."},
@@ -8041,8 +8520,12 @@
         {"t":308.22,"vi":"Giờ bạn mở trang viết báo cáo ngay dưới, chép khối mẫu defect vào tài liệu của nhóm nhé."}
       ]
     },
-    "swt301-lab3-labflow-report52": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/12-lab3-bao-cao-integration-system/12-06-lab3-labflow-report52-a6b47684.mp4","durationSec":493.57,"nguonCau":"srt",
-      "parts": [],
+    "swt301-lab3-labflow-report52": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/12-lab3-bao-cao-integration-system/12-06-lab3-labflow-report52-a6b47684.mp4","durationSec":493.57,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":180.14,"ten":"Mở đầu · bài này học gì"},
+        {"t":180.14,"den":357.88,"ten":"Cách hai, tự động"},
+        {"t":357.88,"den":493.57,"ten":"Hai, TV1 chạy Round 1 cho AT1 tới…"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài ba chấm bốn của Lab 3."},
         {"t":8.7,"vi":"Bài trước mình đã đọc một báo cáo 5.2 thật của nhóm mẫu, thấy cả điều nên học lẫn những lỗi như Sub total chỉ cộng năm mươi lăm trên hai trăm sáu mươi hai case."},
@@ -8099,8 +8582,15 @@
         {"t":483.32,"vi":"Giờ bạn mở quiz Lab 3 ngay dưới bài, làm cho chắc rồi hẵng sang Lab 4, system test với Report 5.3 nhé."}
       ]
     },
-    "swt301-lab3-report-templates": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/12-lab3-bao-cao-integration-system/12-01-template-report5-tron-ff7e327f.mp4","durationSec":941.97,"nguonCau":"srt",
-      "parts": [],
+    "swt301-lab3-report-templates": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/12-lab3-bao-cao-integration-system/12-01-template-report5-tron-ff7e327f.mp4","durationSec":941.97,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":184.07,"ten":"Mở đầu · bài này học gì"},
+        {"t":184.07,"den":363.84,"ten":"Guideline tự giải thích cách làm"},
+        {"t":363.84,"den":541.25,"ten":"Sang câu số hai nhé"},
+        {"t":541.25,"den":717.38,"ten":"Mô tả: test xem form Company"},
+        {"t":717.38,"den":875.37,"ten":"Thêm sheet, thêm dòng mà không nới vùng…"},
+        {"t":875.37,"den":941.97,"ten":"Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài ba chấm một của Lab 3: bộ ba template Report 5."},
         {"t":11.01,"vi":"Ở Lab 2, bạn đã điền Report 5.1 cho unit test."},
@@ -8229,8 +8719,15 @@
         {"t":928.01,"vi":"Giờ bạn mở quiz Lab 3 ngay dưới bài, làm các câu về ba template rồi hẵng xem tiếp nhé."}
       ]
     },
-    "swt301-lab3-sample-review": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/12-lab3-bao-cao-integration-system/12-04-doc-bao-cao-that-tron-f6620c2b.mp4","durationSec":842.77,"nguonCau":"srt",
-      "parts": [],
+    "swt301-lab3-sample-review": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/12-lab3-bao-cao-integration-system/12-04-doc-bao-cao-that-tron-f6620c2b.mp4","durationSec":842.77,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":144.31,"ten":"Mở đầu · bài này học gì"},
+        {"t":144.31,"den":319.66,"ten":"Thứ hai: thông báo mong đợi chính xác"},
+        {"t":319.66,"den":479.68,"ten":"FT06 TC04 mong đợi chỉ là một mục…"},
+        {"t":479.68,"den":643.22,"ten":"Vì sao? Công thức là SUM C10 đến…"},
+        {"t":643.22,"den":789.77,"ten":"Cuối cùng, không có dữ liệu cá nhân…"},
+        {"t":789.77,"den":842.77,"ten":"Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài ba chấm ba, bài cuối của Lab 3: đọc một báo cáo test thật."},
         {"t":11.44,"vi":"Hai bài trước mình dựng khuôn rồi điền một sheet Report 5.2 từ đầu."},
@@ -8327,8 +8824,14 @@
         {"t":826.28,"vi":"Giờ bạn mở quiz Lab 3 ngay dưới bài, làm các câu về cách đọc báo cáo rồi hẵng sang Chương 9, kiểm thử trong Agile, nhé."}
       ]
     },
-    "swt301-lab3-worked-example": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/12-lab3-bao-cao-integration-system/12-03-vi-du-report52-88361687.mp4","durationSec":638.98,"nguonCau":"srt",
-      "parts": [],
+    "swt301-lab3-worked-example": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/12-lab3-bao-cao-integration-system/12-03-vi-du-report52-88361687.mp4","durationSec":638.98,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":106.84,"ten":"Mở đầu · bài này học gì"},
+        {"t":106.84,"den":247.38,"ten":"Bước hai, các test case"},
+        {"t":247.38,"den":372.3,"ten":"Bước ba, bảng vòng test"},
+        {"t":372.3,"den":549.9,"ten":"Bước năm, cùng chức năng ở hai cấp…"},
+        {"t":549.9,"den":638.98,"ten":"Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài ba chấm hai của Lab 3."},
         {"t":8.52,"vi":"Bài trước mình đã mở ba template Report 5 và chỉ ra bốn lỗi công thức nằm sẵn trong đó."},
@@ -8407,8 +8910,12 @@
         {"t":631.21,"vi":"Giờ bạn mở quiz Lab 3 ngay dưới bài, làm các câu về điền sheet rồi hẵng xem tiếp nhé."}
       ]
     },
-    "swt301-lab4-chia-viec-ct-work": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/18-lab4-bao-cao-system-test/18-08-chia-viec-ct-work-9e68e7cc.mp4","durationSec":412.05,"nguonCau":"srt",
-      "parts": [],
+    "swt301-lab4-chia-viec-ct-work": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/18-lab4-bao-cao-system-test/18-08-chia-viec-ct-work-9e68e7cc.mp4","durationSec":412.05,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":177.61,"ten":"Mở đầu · bài này học gì"},
+        {"t":177.61,"den":357.23,"ten":"Xong sheet nào thì thêm vào Record of…"},
+        {"t":357.23,"den":412.05,"ten":"Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài bốn chấm năm, bài cuối của Lab 4."},
         {"t":9.82,"vi":"Bài trước mình đã biết cách chạy từng round, chụp Evidence, mở Bug và tính hai tỉ lệ coverage."},
@@ -8464,8 +8971,18 @@
         {"t":408.46,"vi":"Chúc nhóm bạn thuyết trình thật tốt."}
       ]
     },
-    "swt301-lab4-de-bai": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/18-lab4-bao-cao-system-test/18-01-de-bai-lab4-tron-63aacfbe.mp4","durationSec":1122.45,"nguonCau":"srt",
-      "parts": [],
+    "swt301-lab4-de-bai": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/18-lab4-bao-cao-system-test/18-01-de-bai-lab4-tron-63aacfbe.mp4","durationSec":1122.45,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":147.73,"ten":"Mở đầu · bài này học gì"},
+        {"t":147.73,"den":319.46,"ten":"Thứ hai, ảnh bằng chứng, gọi là Evidence"},
+        {"t":319.46,"den":430.72,"ten":"Ví dụ mười sáu case"},
+        {"t":430.72,"den":523.18,"ten":"Vì sao phải thêm Postman?"},
+        {"t":523.18,"den":686.92,"ten":"Tóm lại phần này"},
+        {"t":686.92,"den":831.52,"ten":"Câu cô gần như chắc chắn hỏi"},
+        {"t":831.52,"den":955.89,"ten":"Trước khi nộp, đi qua checklist này"},
+        {"t":955.89,"den":1072.73,"ten":"Vì sao case này là system test mà…"},
+        {"t":1072.73,"den":1122.45,"ten":"Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài bốn chấm một, bài mở đầu của Lab 4 trong môn SWT301."},
         {"t":13.03,"vi":"Ở Lab 3, mình đã điền Report 5.2, test các module ghép lại với nhau, và sửa những công thức đếm sai nằm sẵn trong template."},
@@ -8608,8 +9125,16 @@
         {"t":1106.07,"vi":"Giờ bạn mở quiz Lab 4 ngay dưới bài, làm các câu về system test và Report 5.3 rồi hẵng sang bài bốn chấm hai nhé."}
       ]
     },
-    "swt301-lab4-doc-mau-abclinic": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/18-lab4-bao-cao-system-test/18-03-doc-mau-abclinic-tron-f2fbf570.mp4","durationSec":909.1,"nguonCau":"srt",
-      "parts": [],
+    "swt301-lab4-doc-mau-abclinic": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/18-lab4-bao-cao-system-test/18-03-doc-mau-abclinic-tron-f2fbf570.mp4","durationSec":909.1,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":183.71,"ten":"Mở đầu · bài này học gì"},
+        {"t":183.71,"den":271.34,"ten":"Một ticket đi từ bệnh nhân"},
+        {"t":271.34,"den":425.4,"ten":"Giờ đến lượt đọc thứ hai"},
+        {"t":425.4,"den":521.66,"ten":"Tóm lại phần này"},
+        {"t":521.66,"den":687.63,"ten":"Mở sheet PatientFlow, bảng đếm theo vòng"},
+        {"t":687.63,"den":859.68,"ten":"Bốn vòng không thấy lỗi nào"},
+        {"t":859.68,"den":909.1,"ten":"Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài bốn chấm hai của Lab 4."},
         {"t":8.89,"vi":"Bài trước mình đã biết Lab 4 nộp gì, năm vai chia cho năm người, và system test khác integration test ở đâu."},
@@ -8721,8 +9246,13 @@
         {"t":893.93,"vi":"Giờ bạn mở quiz Lab 4 ngay dưới bài, làm câu về các lỗi của tệp mẫu rồi hẵng sang bài bốn chấm ba nhé."}
       ]
     },
-    "swt301-lab4-round-evidence-thong-ke": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/18-lab4-bao-cao-system-test/18-07-round-evidence-thong-ke-1eab9d76.mp4","durationSec":497.54,"nguonCau":"srt",
-      "parts": [],
+    "swt301-lab4-round-evidence-thong-ke": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/18-lab4-bao-cao-system-test/18-07-round-evidence-thong-ke-1eab9d76.mp4","durationSec":497.54,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":172.38,"ten":"Mở đầu · bài này học gì"},
+        {"t":172.38,"den":347.8,"ten":"Ví dụ LAB4_SB7_R1.png"},
+        {"t":347.8,"den":459.75,"ten":"Các ô đếm viết đúng"},
+        {"t":459.75,"den":497.54,"ten":"Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài bốn chấm bốn của Lab 4."},
         {"t":8.78,"vi":"Bài trước mình đã viết mười sáu case cho workflow StudentBooking, chạy thật, và tìm được một lỗi ở SB7."},
@@ -8794,8 +9324,16 @@
         {"t":487.74,"vi":"Giờ bạn mở quiz Lab 4 ngay dưới bài, làm các câu về round và coverage rồi hẵng sang bài bốn chấm năm nhé."}
       ]
     },
-    "swt301-lab4-viet-test-case": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/18-lab4-bao-cao-system-test/18-05-viet-case-studentbooking-tron-bbf88eb1.mp4","durationSec":977.86,"nguonCau":"srt",
-      "parts": [],
+    "swt301-lab4-viet-test-case": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/18-lab4-bao-cao-system-test/18-05-viet-case-studentbooking-tron-bbf88eb1.mp4","durationSec":977.86,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":125.8,"ten":"Mở đầu · bài này học gì"},
+        {"t":125.8,"den":303.16,"ten":"Bước một của SB1"},
+        {"t":303.16,"den":479.69,"ten":"SB7 tìm phòng trống vào ngày D"},
+        {"t":479.69,"den":581.7,"ten":"SB14 gom ba lỗi nhập"},
+        {"t":581.7,"den":758.43,"ten":"Mình chạy thật, cả ba đều khớp"},
+        {"t":758.43,"den":931.41,"ten":"Vì vậy SB13 dùng mười ba ngày"},
+        {"t":931.41,"den":977.86,"ten":"Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài bốn chấm ba của Lab 4."},
         {"t":8.74,"vi":"Bài trước mình đã học cách viết case từ tệp mẫu, và mười chín lỗi không được chép."},
@@ -8916,8 +9454,12 @@
         {"t":959.47,"vi":"Giờ bạn mở quiz Lab 4 ngay dưới bài, làm các câu về cách viết case và lỗi SB7, rồi tự viết case cho workflow của mình trên CT Work nhé."}
       ]
     },
-    "swt301-levels-overview-matrix": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/02-kiem-thu-xuyen-suot-sdlc/02-06-bang-tong-quan-dbee7dcd.mp4","durationSec":292.84,"nguonCau":"srt",
-      "parts": [],
+    "swt301-levels-overview-matrix": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/02-kiem-thu-xuyen-suot-sdlc/02-06-bang-tong-quan-dbee7dcd.mp4","durationSec":292.84,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":179.36,"ten":"Mở đầu · bài này học gì"},
+        {"t":179.36,"den":252.6,"ten":"Dừng video lại và làm thử nhé"},
+        {"t":252.6,"den":292.84,"ten":"Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 2.6, bài ôn của Chương hai."},
         {"t":10.14,"vi":"Mình đã đi qua mô hình vòng đời, bốn cấp test, bốn loại test, và kiểm thử bảo trì."},
@@ -8960,8 +9502,12 @@
         {"t":283.45,"vi":"Giờ bạn mở Quiz 2 ngay dưới Chương hai, làm trọn một lượt và xem lại câu sai, rồi hẵng sang Lab 1 nhé."}
       ]
     },
-    "swt301-maintenance-test-plan": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/02-kiem-thu-xuyen-suot-sdlc/02-05-bao-tri-test-plan-f1554a17.mp4","durationSec":420.17,"nguonCau":"srt",
-      "parts": [],
+    "swt301-maintenance-test-plan": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/02-kiem-thu-xuyen-suot-sdlc/02-05-bao-tri-test-plan-f1554a17.mp4","durationSec":420.17,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":182.68,"ten":"Mở đầu · bài này học gì"},
+        {"t":182.68,"den":359.56,"ten":"Test chiều sâu ở hàm làm tròn với…"},
+        {"t":359.56,"den":420.17,"ten":"Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 2.5, bài cuối của Chương hai."},
         {"t":10.4,"vi":"Bài trước mình đã có bốn loại test và cặp confirmation với regression."},
@@ -9021,8 +9567,21 @@
         {"t":411.22,"vi":"Giờ bạn mở Quiz 2 ngay dưới Chương hai, làm hết các câu còn lại, rồi hẵng sang bài 2.6 nhé."}
       ]
     },
-    "swt301-pe-fa23": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/15-thi-thuc-hanh-pe/15-01-de-fa23-tron-f5a6646a.mp4","durationSec":1499.99,"nguonCau":"srt",
-      "parts": [],
+    "swt301-pe-fa23": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/15-thi-thuc-hanh-pe/15-01-de-fa23-tron-f5a6646a.mp4","durationSec":1499.99,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":87.15,"ten":"Mở đầu · bài này học gì"},
+        {"t":87.15,"den":183.09,"ten":"Bước một, biên dịch trong đầu"},
+        {"t":183.09,"den":327.36,"ten":"Bước ba, đầu vào xấu"},
+        {"t":327.36,"den":471.13,"ten":"Chạy thật: âm ba thì báo No values…"},
+        {"t":471.13,"den":583.73,"ten":"Tóm lại: câu một FA23 có mười lỗi…"},
+        {"t":583.73,"den":671.59,"ten":"Bước một, vẽ đồ thị"},
+        {"t":671.59,"den":849.92,"ten":"Bước bốn, chọn ít đường nhất"},
+        {"t":849.92,"den":1020.26,"ten":"Test xanh không có nghĩa là đủ độ…"},
+        {"t":1020.26,"den":1167.33,"ten":"Luật hai: Chi tiết bắt buộc"},
+        {"t":1167.33,"den":1264.08,"ten":"Bước hai, bảng 3.2"},
+        {"t":1264.08,"den":1443.98,"ten":"Một lựa chọn nữa"},
+        {"t":1443.98,"den":1499.99,"ten":"Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài PE-1, đề FA23."},
         {"t":9.41,"vi":"Đây là đề kinh điển ba, ba, bốn, và template bài làm được làm ra chính cho đề này."},
@@ -9202,8 +9761,18 @@
         {"t":1489.37,"vi":"Giờ bạn làm trọn đề PE8 trong Phòng thi có bấm giờ nhé."}
       ]
     },
-    "swt301-pe-fall24": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/15-thi-thuc-hanh-pe/15-03-de-fall24-tron-71555798.mp4","durationSec":1288.79,"nguonCau":"srt",
-      "parts": [],
+    "swt301-pe-fall24": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/15-thi-thuc-hanh-pe/15-03-de-fall24-tron-71555798.mp4","durationSec":1288.79,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":182.33,"ten":"Mở đầu · bài này học gì"},
+        {"t":182.33,"den":297.34,"ten":"Kỹ thuật ba"},
+        {"t":297.34,"den":388.24,"ten":"Chạy thật bốn lượt"},
+        {"t":388.24,"den":567.95,"ten":"Tóm lại: đề FALL24 tám mươi lăm phút"},
+        {"t":567.95,"den":735.83,"ten":"Mức giảm lớn nhất là VIP hai mươi…"},
+        {"t":735.83,"den":898.85,"ten":"Mỗi test một dòng tóm tắt, ví dụ"},
+        {"t":898.85,"den":1069.3,"ten":"Tóm lại: liệt kê chín quyết định; chứng…"},
+        {"t":1069.3,"den":1245.8,"ten":"Hậu điều kiện nói tổng cuối đã gồm…"},
+        {"t":1245.8,"den":1288.79,"ten":"Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài PE-3, đề FALL24."},
         {"t":9.1,"vi":"Ba tập trước, đề SU24, mình học tách nguyên nhân gốc, đếm test bắt buộc, và mẹo chiều cao hai trăm."},
@@ -9354,8 +9923,18 @@
         {"t":1277.08,"vi":"Bạn làm trọn đề PE11 có bấm giờ tám mươi lăm phút nhé."}
       ]
     },
-    "swt301-pe-how-it-works": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/15-thi-thuc-hanh-pe/15-00-pe-van-hanh-the-nao-tron-7ba82706.mp4","durationSec":1130.54,"nguonCau":"srt",
-      "parts": [],
+    "swt301-pe-how-it-works": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/15-thi-thuc-hanh-pe/15-00-pe-van-hanh-the-nao-tron-7ba82706.mp4","durationSec":1130.54,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":160.03,"ten":"Mở đầu · bài này học gì"},
+        {"t":160.03,"den":331.42,"ten":"Cuối cùng, điều kiện qua"},
+        {"t":331.42,"den":509.96,"ten":"Sheet Q3.2 là mười test case"},
+        {"t":509.96,"den":596.16,"ten":"Tóm lại: PE chiếm hai mươi lăm phần…"},
+        {"t":596.16,"den":671.23,"ten":"Bước một, biên dịch trong đầu"},
+        {"t":671.23,"den":755.26,"ten":"Bước hai, tính V(G) bằng số quyết định…"},
+        {"t":755.26,"den":929.82,"ten":"Bước ba: gộp hợp lệ"},
+        {"t":929.82,"den":1090.82,"ten":"Đề FALL24 tám mươi lăm phút"},
+        {"t":1090.82,"den":1130.54,"ten":"Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với phần thi thực hành PE của môn SWT301."},
         {"t":11.45,"vi":"Ở dự án luyện MystBloom, mình đã review LoginServlet tìm mười bảy lỗi, thiết kế black-box cho Đăng ký và Đăng nhập, rồi viết integration test, charter khám phá và defect report."},
@@ -9496,8 +10075,18 @@
         {"t":1113.26,"vi":"Tập sau mình giải trọn đề FA23 đúng như trong phòng thi, bắt đầu từ câu một. Bạn mở sẵn đề PE8 trong Phòng thi để làm theo nhé."}
       ]
     },
-    "swt301-pe-sp25": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/15-thi-thuc-hanh-pe/15-04-de-sp25-tron-c31729d7.mp4","durationSec":1270.57,"nguonCau":"srt",
-      "parts": [],
+    "swt301-pe-sp25": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/15-thi-thuc-hanh-pe/15-04-de-sp25-tron-c31729d7.mp4","durationSec":1270.57,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":100.77,"ten":"Mở đầu · bài này học gì"},
+        {"t":100.77,"den":277.8,"ten":"Bẫy lớn nhất"},
+        {"t":277.8,"den":379.46,"ten":"Cuối cùng một đoạn về đội"},
+        {"t":379.46,"den":556.78,"ten":"Tóm lại: gạch dưới từng ràng buộc của…"},
+        {"t":556.78,"den":727.11,"ten":"Chuyển khoản: bối cảnh ở trang một nói…"},
+        {"t":727.11,"den":899.51,"ten":"Tự kiểm hai câu"},
+        {"t":899.51,"den":1032.37,"ten":"Mình đo thật bằng JaCoCo"},
+        {"t":1032.37,"den":1207.44,"ten":"Mình chạy cả mười hai ca bằng JUnit"},
+        {"t":1207.44,"den":1270.57,"ten":"Dừng video lại và chọn đáp án nhé"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài PE-4, đề SPRING25, đề mới nhất trong thư mục môn."},
         {"t":11.1,"vi":"Ba tập trước, đề FALL24, mình viết báo cáo defect, test JUnit với một nhánh chết, và test case theo use case."},
@@ -9637,8 +10226,19 @@
         {"t":1259.68,"vi":"Bạn làm trọn đề PE7 có bấm giờ tám mươi phút nhé."}
       ]
     },
-    "swt301-pe-su24-pe1": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/15-thi-thuc-hanh-pe/15-02-de-su24-tron-aa57c4ba.mp4","durationSec":1350.21,"nguonCau":"srt",
-      "parts": [],
+    "swt301-pe-su24-pe1": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/15-thi-thuc-hanh-pe/15-02-de-su24-tron-aa57c4ba.mp4","durationSec":1350.21,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":185,"ten":"Mở đầu · bài này học gì"},
+        {"t":185,"den":356.44,"ten":"Các số sau toàn không"},
+        {"t":356.44,"den":529.2,"ten":"Tự kiểm hai câu"},
+        {"t":529.2,"den":615.78,"ten":"Nút: một nút bắt đầu"},
+        {"t":615.78,"den":786.92,"ten":"Cái bẫy: chỉ cần statement coverage thì tám…"},
+        {"t":786.92,"den":873.58,"ten":"Rubric của Phòng thi cho đề PE14 câu…"},
+        {"t":873.58,"den":1039.91,"ten":"Tóm lại: đọc lưu đồ thành danh sách…"},
+        {"t":1039.91,"den":1125.83,"ten":"Biểu đồ trẻ em in ra không đọc…"},
+        {"t":1125.83,"den":1299.49,"ten":"Mình chạy một script nhỏ để kiểm cả…"},
+        {"t":1299.49,"den":1350.21,"ten":"Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài PE-2, đề SU24 PE1."},
         {"t":11.15,"vi":"Ba tập trước mình đã giải trọn đề FA23 từng dòng."},
@@ -9797,8 +10397,25 @@
         {"t":1329.74,"vi":"Tập sau là đề FALL24, một dạng khác hẳn: ba, năm, hai điểm, nộp file Word, câu một là báo cáo defect. Bạn làm câu ba trong đề PE14 rồi so với trang bài học nhé."}
       ]
     },
-    "swt301-pe23-su26-chua-tron-de": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/15-thi-thuc-hanh-pe/15-06-de-su26-pe23-0-tron-0696c3f5.mp4","durationSec":2299.07,"nguonCau":"srt",
-      "parts": [],
+    "swt301-pe23-su26-chua-tron-de": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/15-thi-thuc-hanh-pe/15-06-de-su26-pe23-0-tron-0696c3f5.mp4","durationSec":2299.07,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":183.21,"ten":"Mở đầu · bài này học gì"},
+        {"t":183.21,"den":356.03,"ten":"Bản đề duy nhất mình có là bản…"},
+        {"t":356.03,"den":525.53,"ten":"Bước sáu tính phí"},
+        {"t":525.53,"den":705.35,"ten":"Câu ba: một điểm phần A"},
+        {"t":705.35,"den":811.18,"ten":"Bước một: có lỗi biên dịch nào không?"},
+        {"t":811.18,"den":954.54,"ten":"Bước ba, đối chiếu đặc tả bằng vài…"},
+        {"t":954.54,"den":1035.7,"ten":"Mình chạy thật với một chuỗi INTERNAL tạo…"},
+        {"t":1035.7,"den":1130.76,"ten":"Là biên năm trăm dòng mười"},
+        {"t":1130.76,"den":1309.55,"ten":"Tóm lại: bốn bước"},
+        {"t":1309.55,"den":1438.65,"ten":"Dòng chín là điều kiện ghép thứ ba"},
+        {"t":1438.65,"den":1612.57,"ten":"Bẫy chữ before"},
+        {"t":1612.57,"den":1784.46,"ten":"Cuối cùng mình vét cạn mọi tổ hợp…"},
+        {"t":1784.46,"den":1952.38,"ten":"Chuyển liên ngân hàng"},
+        {"t":1952.38,"den":2123.44,"ten":"Rút gọn bước một"},
+        {"t":2123.44,"den":2236.42,"ten":"Thêm số tiền nhỏ nhất là một đồng"},
+        {"t":2236.42,"den":2299.07,"ten":"Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn. Đây là loạt chữa đề thi thực hành SWT301 kỳ Summer hai nghìn không trăm hai mươi sáu, đề số một, trong Phòng thi là đề PE23."},
         {"t":17.78,"vi":"Ba câu: câu một ba điểm, review hàm calcFee tính phí chuyển tiền."},
@@ -10097,8 +10714,14 @@
         {"t":2290.47,"vi":"Chúc bạn thi thực hành thật tốt."}
       ]
     },
-    "swt301-pe24-su26-0-doc-de": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/15-thi-thuc-hanh-pe/15-05-de-su26-pe24-0-b61c6f07.mp4","durationSec":575.31,"nguonCau":"srt",
-      "parts": [],
+    "swt301-pe24-su26-0-doc-de": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/15-thi-thuc-hanh-pe/15-05-de-su26-pe24-0-b61c6f07.mp4","durationSec":575.31,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":88.62,"ten":"Mở đầu · bài này học gì"},
+        {"t":88.62,"den":264.26,"ten":"Bẫy nằm ở chữ từ khoá"},
+        {"t":264.26,"den":440.86,"ten":"Câu ba, bốn điểm"},
+        {"t":440.86,"den":521.2,"ten":"Rubric của Phòng thi"},
+        {"t":521.2,"den":575.31,"ten":"Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn. Đây là loạt chữa đề thi thực hành SWT301 mới nhất: đề kỳ Summer hai nghìn không trăm hai mươi sáu, đề số hai."},
         {"t":16.33,"vi":"Ba câu: câu một ba điểm, review lớp CartCalculator."},
@@ -10178,8 +10801,13 @@
         {"t":568.16,"vi":"Tập sau là câu một: tìm mười một lỗi trong CartCalculator, có chạy thật."}
       ]
     },
-    "swt301-pe24-su26-1-review-cartcalculator": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/15-thi-thuc-hanh-pe/15-05-de-su26-pe24-1-6cadf598.mp4","durationSec":453.59,"nguonCau":"srt",
-      "parts": [],
+    "swt301-pe24-su26-1-review-cartcalculator": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/15-thi-thuc-hanh-pe/15-05-de-su26-pe24-1-6cadf598.mp4","durationSec":453.59,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":105.42,"ten":"Mở đầu · bài này học gì"},
+        {"t":105.42,"den":247.18,"ten":"Bước hai, chạy tay hàm main"},
+        {"t":247.18,"den":397.45,"ten":"Bước bốn, quy ước"},
+        {"t":397.45,"den":453.59,"ten":"Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với tập một: câu một của đề PE Summer hai nghìn không trăm hai mươi sáu, đề số hai."},
         {"t":12.71,"vi":"Ba điểm, tìm ít nhất tám lỗi."},
@@ -10254,8 +10882,13 @@
         {"t":445.59,"vi":"Tập sau là câu hai: số test tối thiểu cho calcBaggageFee, MC/DC, và JaCoCo chạy thật."}
       ]
     },
-    "swt301-pe24-su26-2-mcdc-calcbaggagefee": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/15-thi-thuc-hanh-pe/15-05-de-su26-pe24-2-7a499b07.mp4","durationSec":469.29,"nguonCau":"srt",
-      "parts": [],
+    "swt301-pe24-su26-2-mcdc-calcbaggagefee": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/15-thi-thuc-hanh-pe/15-05-de-su26-pe24-2-7a499b07.mp4","durationSec":469.29,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":129.21,"ten":"Mở đầu · bài này học gì"},
+        {"t":129.21,"den":305.51,"ten":"Giờ đến MC/DC"},
+        {"t":305.51,"den":413.4,"ten":"Phần xác nhận"},
+        {"t":413.4,"den":469.29,"ten":"Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với tập hai: câu hai, ba điểm. Đề đòi số test case tối thiểu để đạt một trăm phần trăm phủ câu lệnh, một trăm phần trăm phủ quyết định, và MC/DC cho điều kiện ghép."},
         {"t":19.98,"vi":"Hàm calcBaggageFee nhận cân nặng hợp lệ từ một đến bốn mươi ký, cờ hạng Business và cờ hội viên."},
@@ -10321,8 +10954,12 @@
         {"t":460.14,"vi":"Tập sau là câu ba, bốn điểm: test hộp đen cho hoàn tiền vé, bảng quyết định rút gọn và giá trị biên."}
       ]
     },
-    "swt301-pe24-su26-3-ticket-refund-black-box": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/15-thi-thuc-hanh-pe/15-05-de-su26-pe24-3-bc94f038.mp4","durationSec":463.56,"nguonCau":"srt",
-      "parts": [],
+    "swt301-pe24-su26-3-ticket-refund-black-box": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/15-thi-thuc-hanh-pe/15-05-de-su26-pe24-3-bc94f038.mp4","durationSec":463.56,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":175.81,"ten":"Mở đầu · bài này học gì"},
+        {"t":175.81,"den":350.93,"ten":"Không bảo hiểm"},
+        {"t":350.93,"den":463.56,"ten":"Các bước thực hiện ghi đủ cả năm…"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với tập ba: câu ba, bốn điểm, nhiều điểm nhất đề."},
         {"t":10.79,"vi":"Chức năng yêu cầu hoàn tiền vé máy bay, năm ô nhập và một nút Request Refund."},
@@ -10390,8 +11027,15 @@
         {"t":460.22,"vi":"Chúc bạn thi thực hành thật tốt."}
       ]
     },
-    "swt301-practice-mystbloom-blackbox": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/14-du-an-luyen-mystbloom/14-03-black-box-dang-ky-dang-nhap-tron-35faac80.mp4","durationSec":848.49,"nguonCau":"srt",
-      "parts": [],
+    "swt301-practice-mystbloom-blackbox": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/14-du-an-luyen-mystbloom/14-03-black-box-dang-ky-dang-nhap-tron-35faac80.mp4","durationSec":848.49,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":181.82,"ten":"Mở đầu · bài này học gì"},
+        {"t":181.82,"den":350.72,"ten":"Email có phân vùng hợp lệ VP ba"},
+        {"t":350.72,"den":527.35,"ten":"Đến lượt bạn"},
+        {"t":527.35,"den":704.53,"ten":"Hai ca lạ"},
+        {"t":704.53,"den":805.52,"ten":"Thêm một vai trò lạ"},
+        {"t":805.52,"den":848.49,"ten":"Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5,"vi":"Chào bạn, đến với bài P.3 của dự án MystBloom."},
         {"t":9.64,"vi":"Bài trước bạn đọc code để tìm lỗi."},
@@ -10496,8 +11140,17 @@
         {"t":830.9,"vi":"Bài P.4 dùng những lỗi đã thấy để viết integration test cho luồng quên mật khẩu, một charter khám phá, và hai defect report."}
       ]
     },
-    "swt301-practice-mystbloom-integration": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/14-du-an-luyen-mystbloom/14-04-integration-charter-defect-tron-f7ef69fb.mp4","durationSec":1069.42,"nguonCau":"srt",
-      "parts": [],
+    "swt301-practice-mystbloom-integration": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/14-du-an-luyen-mystbloom/14-04-integration-charter-defect-tron-f7ef69fb.mp4","durationSec":1069.42,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":83.75,"ten":"Mở đầu · bài này học gì"},
+        {"t":83.75,"den":254.28,"ten":"Chạy thật. Nhập email"},
+        {"t":254.28,"den":400.01,"ten":"Test này fail"},
+        {"t":400.01,"den":501.69,"ten":"Tổng kết: sáu ca"},
+        {"t":501.69,"den":676.1,"ten":"Phần hai làm hai việc còn lại"},
+        {"t":676.1,"den":853.97,"ten":"Thử năm: gửi hai request đăng nhập gần…"},
+        {"t":853.97,"den":1025.08,"ten":"Hai, nhập email Admin và mật khẩu đúng"},
+        {"t":1025.08,"den":1069.42,"ten":"Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5,"vi":"Chào bạn, đến với phần một của bài P.4."},
         {"t":9.36,"vi":"Hai bài trước bạn đã đọc code tìm lỗi và thiết kế test từ luật."},
@@ -10650,8 +11303,13 @@
         {"t":1060.9,"vi":"Chúc bạn thi tốt."}
       ]
     },
-    "swt301-practice-mystbloom-intro": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/14-du-an-luyen-mystbloom/14-01-lam-quen-mystbloom-fa05da06.mp4","durationSec":490.66,"nguonCau":"srt",
-      "parts": [],
+    "swt301-practice-mystbloom-intro": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/14-du-an-luyen-mystbloom/14-01-lam-quen-mystbloom-fa05da06.mp4","durationSec":490.66,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":108.95,"ten":"Mở đầu · bài này học gì"},
+        {"t":108.95,"den":287.12,"ten":"Giờ mình đi theo một request đăng nhập…"},
+        {"t":287.12,"den":445.5,"ten":"Đừng sửa, hãy nhớ lại"},
+        {"t":445.5,"den":490.66,"ten":"Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5,"vi":"Chào bạn, đến với dự án luyện tập của khoá SWT301, bài P.1. Mấy chương vừa rồi bạn học kỹ thuật trên ví dụ nhỏ, còn đề PE thì cho một lớp và một form."},
         {"t":20.23,"vi":"Hôm nay mình đưa bạn lên một ứng dụng web thật."},
@@ -10714,8 +11372,13 @@
         {"t":480.9,"vi":"Bạn mở bài thực hành P.1 ngay dưới video để lấy danh sách file cần đọc, rồi sang bài P.2 nhé."}
       ]
     },
-    "swt301-practice-mystbloom-review": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/14-du-an-luyen-mystbloom/14-02-review-loginservlet-dao-bc3da16d.mp4","durationSec":543.73,"nguonCau":"srt",
-      "parts": [],
+    "swt301-practice-mystbloom-review": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/14-du-an-luyen-mystbloom/14-02-review-loginservlet-dao-bc3da16d.mp4","durationSec":543.73,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":183.72,"ten":"Mở đầu · bài này học gì"},
+        {"t":183.72,"den":362.17,"ten":"Lỗi mười hai"},
+        {"t":362.17,"den":437.19,"ten":"Form có kiểm bằng JavaScript"},
+        {"t":437.19,"den":543.73,"ten":"Ví dụ ghi điểm"}
+      ],
       "cues": [
         {"t":5,"vi":"Chào bạn, đến với bài P.2 của dự án MystBloom."},
         {"t":9.84,"vi":"Bài trước bạn đã chạy app và thấy hai lỗi bằng mắt."},
@@ -10793,8 +11456,13 @@
         {"t":533.49,"vi":"Bài P.3 dùng chính các luật còn thiếu ở lỗi mười một để thiết kế test black-box cho đăng ký và đăng nhập."}
       ]
     },
-    "swt301-psychology-ethics": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/01-nen-tang-kiem-thu/01-05-tam-ly-doc-lap-dao-duc-db73c082.mp4","durationSec":551.69,"nguonCau":"srt",
-      "parts": [],
+    "swt301-psychology-ethics": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/01-nen-tang-kiem-thu/01-05-tam-ly-doc-lap-dao-duc-db73c082.mp4","durationSec":551.69,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":182.48,"ten":"Mở đầu · bài này học gì"},
+        {"t":182.48,"den":357.98,"ten":"Hiểu cảm xúc của người kia"},
+        {"t":357.98,"den":488.29,"ten":"Colleagues, công bằng, hỗ trợ đồng nghiệp và…"},
+        {"t":488.29,"den":551.69,"ten":"Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 1.5, bài cuối của Chương một."},
         {"t":10.56,"vi":"Bài trước mình đã đi trọn bảy hoạt động của quy trình test và bảng truy vết."},
@@ -10883,8 +11551,18 @@
         {"t":538.8,"vi":"Giờ bạn mở Quiz 1 ngay dưới bài, làm trọn các câu hỏi trên slide của Chương một, đặt mục tiêu từ tám mươi phần trăm, rồi hẵng sang Chương hai nhé."}
       ]
     },
-    "swt301-review-types-techniques": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/04-kiem-thu-tinh/04-03-loai-review-tron-0c49ce28.mp4","durationSec":1319.92,"nguonCau":"srt",
-      "parts": [],
+    "swt301-review-types-techniques": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/04-kiem-thu-tinh/04-03-loai-review-tron-0c49ce28.mp4","durationSec":1319.92,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":182.77,"ten":"Mở đầu · bài này học gì"},
+        {"t":182.77,"den":351.38,"ten":"Mẹo nhớ: so với walkthrough"},
+        {"t":351.38,"den":434.94,"ten":"Dấu hiệu trong đề"},
+        {"t":434.94,"den":613.46,"ten":"Phần hai, mình xem vì sao inspection chỉ…"},
+        {"t":613.46,"den":774.6,"ten":"Đáp án là C"},
+        {"t":774.6,"den":954.16,"ten":"Tóm lại: review thường chốt thời gian và…"},
+        {"t":954.16,"den":1128.25,"ten":"Đây là kỹ thuật tổng quát hiệu quả…"},
+        {"t":1128.25,"den":1265.61,"ten":"Trong yêu cầu"},
+        {"t":1265.61,"den":1319.92,"ten":"Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 3.3, phần một."},
         {"t":9.1,"vi":"Bài trước mình có quy trình chung năm hoạt động và sáu vai trò."},
@@ -11064,8 +11742,16 @@
         {"t":1305.37,"vi":"Giờ bạn mở Quiz 3 ngay dưới Chương ba, làm các câu về kỹ thuật review, rồi hẵng sang bài 3.4 nhé."}
       ]
     },
-    "swt301-risk-based-testing": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/10-quan-ly-test/10-09-rui-ro-risk-based-testing-tron-badea805.mp4","durationSec":832.96,"nguonCau":"srt",
-      "parts": [],
+    "swt301-risk-based-testing": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/10-quan-ly-test/10-09-rui-ro-risk-based-testing-tron-badea805.mp4","durationSec":832.96,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":107.5,"ten":"Bạn chỉ còn ba ngày để ôn một…"},
+        {"t":107.5,"den":283.3,"ten":"Ví dụ: phần mềm có thể không làm…"},
+        {"t":283.3,"den":408.48,"ten":"Kết quả phân tích rủi ro được dùng…"},
+        {"t":408.48,"den":484.13,"ten":"Bước một, ai chấm"},
+        {"t":484.13,"den":594.41,"ten":"Bước một, nhận diện bằng brainstorm và đi…"},
+        {"t":594.41,"den":768.93,"ten":"Bước năm, bảng này đổi plan thế nào"},
+        {"t":768.93,"den":832.96,"ten":"Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5,"vi":"Bạn chỉ còn ba ngày để ôn một môn có bốn mươi chương."},
         {"t":9.46,"vi":"Không thể ôn hết. Bạn ôn chương nào trước?"},
@@ -11171,8 +11857,16 @@
         {"t":821.42,"vi":"Tập sau là Bài bảy chấm sáu: quản lý defect, mời bạn xem tiếp."}
       ]
     },
-    "swt301-sdlc-models": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/02-kiem-thu-xuyen-suot-sdlc/02-01-mo-hinh-vong-doi-tron-d7f801e5.mp4","durationSec":950.36,"nguonCau":"srt",
-      "parts": [],
+    "swt301-sdlc-models": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/02-kiem-thu-xuyen-suot-sdlc/02-01-mo-hinh-vong-doi-tron-d7f801e5.mp4","durationSec":950.36,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":182.76,"ten":"Mở đầu · bài này học gì"},
+        {"t":182.76,"den":361.43,"ten":"Chính là nguyên tắc ba"},
+        {"t":361.43,"den":453.95,"ten":"Đáp án là B"},
+        {"t":453.95,"den":632.03,"ten":"Tóm lại: kiểm thử tốt có bốn đặc…"},
+        {"t":632.03,"den":811.22,"ten":"Viết test trước code và tự động hoá"},
+        {"t":811.22,"den":894.58,"ten":"Dừng video lại và làm thử nhé"},
+        {"t":894.58,"den":950.36,"ten":"Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Chương hai của khoá SWT301, bài 2.1, phần một. Chương một mình đã biết kiểm thử là gì, bảy nguyên tắc, và quy trình bảy hoạt động."},
         {"t":19.39,"vi":"Chương hai đặt kiểm thử vào vòng đời phát triển, gồm bốn khối: mô hình vòng đời, cấp test, loại test, và kiểm thử bảo trì."},
@@ -11304,8 +11998,15 @@
         {"t":934.66,"vi":"Giờ bạn mở Quiz 2 ngay dưới Chương hai, làm các câu về RUP, Scrum và Kanban, rồi hẵng sang bài 2.2 nhé."}
       ]
     },
-    "swt301-seven-principles": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/01-nen-tang-kiem-thu/01-03-bay-nguyen-tac-tron-8774c750.mp4","durationSec":752.21,"nguonCau":"srt",
-      "parts": [],
+    "swt301-seven-principles": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/01-nen-tang-kiem-thu/01-03-bay-nguyen-tac-tron-8774c750.mp4","durationSec":752.21,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":184.99,"ten":"Mở đầu · bài này học gì"},
+        {"t":184.99,"den":321.21,"ten":"Câu đúng duy nhất"},
+        {"t":321.21,"den":414.5,"ten":"Tóm lại: nguyên tắc một"},
+        {"t":414.5,"den":593.08,"ten":"Ví dụ review yêu cầu"},
+        {"t":593.08,"den":706.74,"ten":"Lãnh đạo vẫn chê nhóm bỏ sót nhiều"},
+        {"t":706.74,"den":752.21,"ten":"Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 1.3, phần một."},
         {"t":9.51,"vi":"Bài trước mình đã thấy lỗi phát hiện càng muộn càng đắt, và nguyên nhân gốc là rễ cây phải nhổ."},
@@ -11414,8 +12115,14 @@
         {"t":737.38,"vi":"Giờ bạn mở Quiz 1 ngay dưới bài, làm hết các câu về bảy nguyên tắc, rồi hẵng sang bài 1.4 nhé."}
       ]
     },
-    "swt301-static-analysis": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/04-kiem-thu-tinh/04-04-phan-tich-tinh-tron-f6b9a160.mp4","durationSec":788.35,"nguonCau":"srt",
-      "parts": [],
+    "swt301-static-analysis": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/04-kiem-thu-tinh/04-04-phan-tich-tinh-tron-f6b9a160.mp4","durationSec":788.35,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":180.73,"ten":"Mở đầu · bài này học gì"},
+        {"t":180.73,"den":316.05,"ten":"Quy tắc gán chắc chắn của Java chính…"},
+        {"t":316.05,"den":493.12,"ten":"Tóm lại: phân tích tĩnh là công cụ…"},
+        {"t":493.12,"den":672.34,"ten":"Đếm trên đồ thị của slide có mười…"},
+        {"t":672.34,"den":788.35,"ten":"Bốn, anomaly chưa chắc là defect, còn dùng…"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 3.4, phần một, bài cuối của Chương ba. Ba bài trước là review, con người đọc."},
         {"t":13.78,"vi":"Bài này là nhánh còn lại: phân tích tĩnh, công cụ đọc code như trình biên dịch vẫn làm, mà không chạy nó."},
@@ -11527,8 +12234,16 @@
         {"t":773.05,"vi":"Giờ bạn mở Quiz 3 ngay dưới Chương ba, làm trọn một lượt và xem lại câu sai, rồi hẵng sang Lab 1.7 nhé."}
       ]
     },
-    "swt301-static-reviews": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/04-kiem-thu-tinh/04-02-quy-trinh-review-tron-50fe705e.mp4","durationSec":897.73,"nguonCau":"srt",
-      "parts": [],
+    "swt301-static-reviews": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/04-kiem-thu-tinh/04-02-quy-trinh-review-tron-50fe705e.mp4","durationSec":897.73,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":179.96,"ten":"Mở đầu · bài này học gì"},
+        {"t":179.96,"den":351.29,"ten":"Slide hai mươi tám là initiate review"},
+        {"t":351.29,"den":442.4,"ten":"A là bước bốn"},
+        {"t":442.4,"den":612.54,"ten":"Bước bốn so với exit để quyết định"},
+        {"t":612.54,"den":705.18,"ten":"Slide bốn lăm là reviewers"},
+        {"t":705.18,"den":848.82,"ten":"Bẫy là C"},
+        {"t":848.82,"den":897.73,"ten":"Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 3.2, phần một."},
         {"t":9.08,"vi":"Bài trước mình biết review là nhánh kiểm thử tĩnh do con người làm."},
@@ -11652,8 +12367,15 @@
         {"t":883.63,"vi":"Giờ bạn mở Quiz 3 ngay dưới Chương ba, làm các câu về vai trò, rồi hẵng sang bài 3.3 nhé."}
       ]
     },
-    "swt301-static-testing-basics": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/04-kiem-thu-tinh/04-01-kiem-thu-tinh-tron-0afa2f51.mp4","durationSec":829.01,"nguonCau":"srt",
-      "parts": [],
+    "swt301-static-testing-basics": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/04-kiem-thu-tinh/04-01-kiem-thu-tinh-tron-0afa2f51.mp4","durationSec":829.01,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":178.8,"ten":"Mở đầu · bài này học gì"},
+        {"t":178.8,"den":313.94,"ten":"Sửa một defect ở khâu yêu cầu hay…"},
+        {"t":313.94,"den":493.09,"ten":"Tóm lại: kiểm thử tĩnh là kiểm thử…"},
+        {"t":493.09,"den":672.14,"ten":"Là lệch chuẩn code"},
+        {"t":672.14,"den":786.62,"ten":"Đến lượt bạn"},
+        {"t":786.62,"den":829.01,"ten":"Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Chương ba của khoá SWT301, bài 3.1, phần một."},
         {"t":12.52,"vi":"Ở Lab 1, bạn đã thấy lời hứa: tìm defect mà không cần chạy chương trình thì rẻ hơn."},
@@ -11767,8 +12489,15 @@
         {"t":814.77,"vi":"Giờ bạn mở Quiz 3 ngay dưới Chương ba, làm các câu về tĩnh và động, rồi hẵng sang bài 3.2 nhé."}
       ]
     },
-    "swt301-system-acceptance": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/02-kiem-thu-xuyen-suot-sdlc/02-03-system-acceptance-tron-39f778c2.mp4","durationSec":880.41,"nguonCau":"srt",
-      "parts": [],
+    "swt301-system-acceptance": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/02-kiem-thu-xuyen-suot-sdlc/02-03-system-acceptance-tron-39f778c2.mp4","durationSec":880.41,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":180.34,"ten":"Mở đầu · bài này học gì"},
+        {"t":180.34,"den":358.95,"ten":"Nếu ở cấp này mà ra rất nhiều…"},
+        {"t":358.95,"den":535.82,"ten":"Câu một là A, UAT"},
+        {"t":535.82,"den":711.53,"ten":"Không hoàn thành tác vụ đầu-cuối là lỗi…"},
+        {"t":711.53,"den":831.97,"ten":"Không có thời lượng cố định"},
+        {"t":831.97,"den":880.41,"ten":"Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 2.3, phần một."},
         {"t":9.24,"vi":"Bài trước mình đã có component testing, integration testing, và cặp stub với driver."},
@@ -11882,8 +12611,13 @@
         {"t":866.13,"vi":"Giờ bạn mở Quiz 2 ngay dưới Chương hai, làm phần cấp test cho hết, rồi hẵng sang bài 2.4 nhé."}
       ]
     },
-    "swt301-tai-lieu-cong-cu": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/00-gioi-thieu-mon-hoc/00-06-tai-lieu-sach-ke-hoach-hoc-14d8c44c.mp4","durationSec":530.95,"nguonCau":"srt",
-      "parts": [],
+    "swt301-tai-lieu-cong-cu": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/00-gioi-thieu-mon-hoc/00-06-tai-lieu-sach-ke-hoach-hoc-14d8c44c.mp4","durationSec":530.95,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":142.64,"ten":"Mở đầu · bài này học gì"},
+        {"t":142.64,"den":294.53,"ten":"Giờ tới công cụ"},
+        {"t":294.53,"den":473.49,"ten":"Giờ tới cách học"},
+        {"t":473.49,"den":530.95,"ten":"Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với video cuối của Mục 0 trong khoá SWT301, gộp ba bài 0.4, 0.6 và 0.7."},
         {"t":16.51,"vi":"Bài trước mình đã học mười ba mẹo làm trắc nghiệm, và chữa một câu FE thật bằng cách loại trừ."},
@@ -11956,8 +12690,20 @@
         {"t":517.44,"vi":"Giờ bạn mở thư mục môn học trên máy, đối chiếu với tấm bản đồ ở bài 0.4 trên web, đánh dấu những gì mình đã có, rồi hẵng sang Chương một nhé."}
       ]
     },
-    "swt301-tdd-bdd": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/13-agile-testing/13-08-tdd-atdd-bdd-tron-4c957fe8.mp4","durationSec":1427.44,"nguonCau":"srt",
-      "parts": [],
+    "swt301-tdd-bdd": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/13-agile-testing/13-08-tdd-atdd-bdd-tron-4c957fe8.mp4","durationSec":1427.44,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":183.6,"ten":"Mở đầu · bài này học gì"},
+        {"t":183.6,"den":312.29,"ten":"Red: viết một test fail cho hành vi…"},
+        {"t":312.29,"den":412.92,"ten":"Bài tập vừa rồi chính là ATDD"},
+        {"t":412.92,"den":493.62,"ten":"Bước cuối của bài tập một"},
+        {"t":493.62,"den":669.24,"ten":"Bài tập hai"},
+        {"t":669.24,"den":749.39,"ten":"Đến lượt bạn"},
+        {"t":749.39,"den":920.94,"ten":"Phần hai mình học test pyramid"},
+        {"t":920.94,"den":1094.35,"ten":"Quadrant ba, hướng nghiệp vụ và phê bình…"},
+        {"t":1094.35,"den":1270.33,"ten":"Phiên exploratory là phê bình tính năng đã…"},
+        {"t":1270.33,"den":1381.71,"ten":"Test chức năng và prototype thuộc quadrant hai"},
+        {"t":1381.71,"den":1427.44,"ten":"Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 9.6 của Chương 9, phần một."},
         {"t":10.02,"vi":"Bài 9.5 nói tự động hoá hồi quy là sống còn."},
@@ -12147,8 +12893,17 @@
         {"t":1410.59,"vi":"Bài sau, 9.7, là bài cuối của chương: rủi ro chất lượng, planning poker, acceptance criteria và exploratory testing."}
       ]
     },
-    "swt301-test-levels": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/02-kiem-thu-xuyen-suot-sdlc/02-02-cap-test-tron-4be339ef.mp4","durationSec":1228.59,"nguonCau":"srt",
-      "parts": [],
+    "swt301-test-levels": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/02-kiem-thu-xuyen-suot-sdlc/02-02-cap-test-tron-4be339ef.mp4","durationSec":1228.59,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":183.58,"ten":"Mở đầu · bài này học gì"},
+        {"t":183.58,"den":362.86,"ten":"Thường do developer làm, hay theo cách TDD"},
+        {"t":362.86,"den":443.22,"ten":"Đáp án là B, test-driven development"},
+        {"t":443.22,"den":620.44,"ten":"Phần hai, mình sang integration testing, big-bang, top-down…"},
+        {"t":620.44,"den":794.77,"ten":"Dễ khoanh vùng lỗi"},
+        {"t":794.77,"den":973.73,"ten":"Tóm lại: integration testing test chỗ giao tiếp…"},
+        {"t":973.73,"den":1134.41,"ten":"Slide bảy mươi"},
+        {"t":1134.41,"den":1228.59,"ten":"Bẫy kinh điển cuối bài"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 2.2, phần một trên ba."},
         {"t":9.7,"vi":"Bài trước mình đã có các mô hình vòng đời, và chữ V ghép mỗi mức phát triển với một cấp test."},
@@ -12313,8 +13068,17 @@
         {"t":1213.28,"vi":"Giờ bạn mở Quiz 2 ngay dưới Chương hai, làm các câu về integration testing, rồi hẵng sang bài 2.3 nhé."}
       ]
     },
-    "swt301-test-monitoring-control": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/10-quan-ly-test/10-06-giam-sat-kiem-soat-tron-708359bd.mp4","durationSec":1122.84,"nguonCau":"srt",
-      "parts": [],
+    "swt301-test-monitoring-control": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/10-quan-ly-test/10-06-giam-sat-kiem-soat-tron-708359bd.mp4","durationSec":1122.84,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":179.28,"ten":"Bạn lái xe từ Hà Nội vào Huế…"},
+        {"t":179.28,"den":350.99,"ten":"Năm, mức hoàn thành công việc, phân bổ…"},
+        {"t":350.99,"den":477.27,"ten":"Trong Agile, báo cáo tiến độ có thể…"},
+        {"t":477.27,"den":571.75,"ten":"Tóm lại. Monitoring cho biết ta đang ở…"},
+        {"t":571.75,"den":738.17,"ten":"Ví dụ có ba mươi test case"},
+        {"t":738.17,"den":914.1,"ten":"Tác động trực tiếp"},
+        {"t":914.1,"den":1058.77,"ten":"B và D chỉ là số đo thông…"},
+        {"t":1058.77,"den":1122.84,"ten":"Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5,"vi":"Bạn lái xe từ Hà Nội vào Huế theo một lộ trình đã vạch."},
         {"t":9.83,"vi":"Trên đường, GPS cho bạn biết đang ở đâu so với lộ trình: đã đi được bao nhiêu, còn bao lâu, có kẹt xe phía trước không."},
@@ -12457,8 +13221,21 @@
         {"t":1106.4,"vi":"Giờ bạn làm các câu về giám sát và báo cáo trong Quiz bảy ngay dưới Chương bảy. Tập sau là Bài bảy chấm bốn: quản lý cấu hình."}
       ]
     },
-    "swt301-test-organisation": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/10-quan-ly-test/10-01-to-chuc-kiem-thu-tron-264b6afd.mp4","durationSec":1505.17,"nguonCau":"srt",
-      "parts": [],
+    "swt301-test-organisation": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/10-quan-ly-test/10-01-to-chuc-kiem-thu-tron-264b6afd.mp4","durationSec":1505.17,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":138.41,"ten":"Bạn viết xong một đoạn văn dài"},
+        {"t":138.41,"den":316.27,"ten":"Vì sao? Vì người viết và người test…"},
+        {"t":316.27,"den":492.98,"ten":"Nhược điểm: người tester duy nhất giữa đám…"},
+        {"t":492.98,"den":665.73,"ten":"Biểu hiện: hai bên chỉ bàn giao cho…"},
+        {"t":665.73,"den":758.17,"ten":"Hình dung đơn giản"},
+        {"t":758.17,"den":856.56,"ten":"Sang phần hai"},
+        {"t":856.56,"den":964.54,"ten":"Cuối cùng là con người"},
+        {"t":964.54,"den":1064.28,"ten":"Tóm lại. Bậc năm là bên thứ ba:…"},
+        {"t":1064.28,"den":1241.34,"ten":"Vì sao các đáp án khác sai?"},
+        {"t":1241.34,"den":1339.09,"ten":"Hai là bậc hai"},
+        {"t":1339.09,"den":1451.2,"ten":"Một việc hay bị nhầm"},
+        {"t":1451.2,"den":1505.17,"ten":"Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5,"vi":"Bạn viết xong một đoạn văn dài, đọc lại hai lần và thấy hoàn hảo."},
         {"t":9.85,"vi":"Đưa cho bạn cùng bàn, cậu ấy chỉ ra ba lỗi chính tả chỉ trong một phút."},
@@ -12655,8 +13432,25 @@
         {"t":1496.66,"vi":"Mời bạn xem tiếp."}
       ]
     },
-    "swt301-test-plan-risk": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/10-quan-ly-test/10-03-ke-hoach-test-tron-bcdf8633.mp4","durationSec":2158.12,"nguonCau":"srt",
-      "parts": [],
+    "swt301-test-plan-risk": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/10-quan-ly-test/10-03-ke-hoach-test-tron-bcdf8633.mp4","durationSec":2158.12,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":181.92,"ten":"Trước một chuyến đi chơi xa"},
+        {"t":181.92,"den":352.34,"ten":"Syllabus kể ra bảy loại chính"},
+        {"t":352.34,"den":460.24,"ten":"Sản phẩm: yêu cầu rõ ràng như phần…"},
+        {"t":460.24,"den":547.04,"ten":"Tóm lại. Test plan là tài liệu sống:…"},
+        {"t":547.04,"den":638.17,"ten":"Ví dụ: một test dựng dữ liệu"},
+        {"t":638.17,"den":784.86,"ten":"Bước hai: lặp lại"},
+        {"t":784.86,"den":962.23,"ten":"Tóm lại, lịch thực thi dựa trên hai…"},
+        {"t":962.23,"den":1139.48,"ten":"Slide bốn mươi bốn, nhóm ba"},
+        {"t":1139.48,"den":1244.59,"ten":"Bản hai dài tám mươi nghìn dòng"},
+        {"t":1244.59,"den":1418.68,"ten":"Một kỹ thuật nữa là ước lượng ba…"},
+        {"t":1418.68,"den":1596.37,"ten":"Tóm lại. Công sức test chịu bốn nhóm…"},
+        {"t":1596.37,"den":1676.96,"ten":"Consultative là D"},
+        {"t":1676.96,"den":1815.24,"ten":"Bước một: đọc hết các mũi tên"},
+        {"t":1815.24,"den":1957.71,"ten":"Bước một: đọc cột phụ thuộc"},
+        {"t":1957.71,"den":2104.66,"ten":"Cuối cùng là câu ẩn"},
+        {"t":2104.66,"den":2158.12,"ten":"Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5,"vi":"Trước một chuyến đi chơi xa, bạn không chỉ xách ba lô lên và đi."},
         {"t":9.64,"vi":"Bạn nghĩ đi đâu, đi bao lâu, mang gì, ai lo vé, và nếu trời mưa thì sao."},
@@ -12933,8 +13727,16 @@
         {"t":2140.7,"vi":"Giờ bạn mở Quiz bảy ngay dưới Chương bảy, làm các câu về test plan và ước lượng, rồi sang Bài bảy chấm ba: giám sát và kiểm soát test."}
       ]
     },
-    "swt301-test-process": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/01-nen-tang-kiem-thu/01-04-quy-trinh-test-tron-17b7c18b.mp4","durationSec":860.61,"nguonCau":"srt",
-      "parts": [],
+    "swt301-test-process": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/01-nen-tang-kiem-thu/01-04-quy-trinh-test-tron-17b7c18b.mp4","durationSec":860.61,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":122.08,"ten":"Mở đầu · bài này học gì"},
+        {"t":122.08,"den":298.15,"ten":"Bước một, test planning, lập kế hoạch"},
+        {"t":298.15,"den":374.95,"ten":"Bước năm, test implementation, triển khai, trả lời…"},
+        {"t":374.95,"den":548.04,"ten":"Tóm lại: quy trình test tuỳ ngữ cảnh…"},
+        {"t":548.04,"den":726.04,"ten":"Báo cáo tổng kết có ở cả giám…"},
+        {"t":726.04,"den":811.93,"ten":"Yêu cầu R3"},
+        {"t":811.93,"den":860.61,"ten":"Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 1.4, phần một."},
         {"t":9.44,"vi":"Bài trước là bảy nguyên tắc kiểm thử."},
@@ -13051,8 +13853,14 @@
         {"t":845.94,"vi":"Giờ bạn mở Quiz 1 ngay dưới bài, làm các câu việc này ở bước nào, rồi hẵng sang bài 1.5 nhé."}
       ]
     },
-    "swt301-test-technique-categories": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/06-thiet-ke-test-black-box/06-01-phan-loai-ky-thuat-test-14331385.mp4","durationSec":563.96,"nguonCau":"srt",
-      "parts": [],
+    "swt301-test-technique-categories": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/06-thiet-ke-test-black-box/06-01-phan-loai-ky-thuat-test-14331385.mp4","durationSec":563.96,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":178.44,"ten":"Mở đầu · bài này học gì"},
+        {"t":178.44,"den":263.9,"ten":"Slide sáu vẽ ba hình cho dễ nhớ"},
+        {"t":263.9,"den":440.49,"ten":"Vì sao cần cả hai?"},
+        {"t":440.49,"den":521.64,"ten":"Slide mười ba"},
+        {"t":521.64,"den":563.96,"ten":"Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 4.1 của khoá SWT301, bài mở đầu Chương 4. Bài trước mình học kiểm thử tĩnh, tức là không chạy phần mềm."},
         {"t":18.05,"vi":"Từ hôm nay là kiểm thử động: chạy phần mềm thật, và câu hỏi lớn là chạy với những giá trị nào?"},
@@ -13135,8 +13943,14 @@
         {"t":555.75,"vi":"Giờ bạn mở Quiz 4 ngay dưới Chương bốn, làm các câu phân loại, rồi hẵng sang bài sau nhé."}
       ]
     },
-    "swt301-test-types": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/02-kiem-thu-xuyen-suot-sdlc/02-04-loai-test-tron-e8cf8a1d.mp4","durationSec":762.11,"nguonCau":"srt",
-      "parts": [],
+    "swt301-test-types": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/02-kiem-thu-xuyen-suot-sdlc/02-04-loai-test-tron-e8cf8a1d.mp4","durationSec":762.11,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":178.45,"ten":"Mở đầu · bài này học gì"},
+        {"t":178.45,"den":357.88,"ten":"Hiệu năng gồm test thời gian đáp ứng"},
+        {"t":357.88,"den":534.96,"ten":"Tóm lại: cấp test là ở đâu"},
+        {"t":534.96,"den":710.63,"ten":"Tranh trên slide"},
+        {"t":710.63,"den":762.11,"ten":"Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 2.4, phần một."},
         {"t":9.57,"vi":"Bài trước mình đã đi đủ bốn cấp test, từ component lên tới acceptance."},
@@ -13250,8 +14064,16 @@
         {"t":746.29,"vi":"Giờ bạn mở Quiz 2 ngay dưới Chương hai, làm các câu về confirmation và regression, rồi hẵng sang bài 2.5 nhé."}
       ]
     },
-    "swt301-tools-benefits-risks": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/11-cong-cu-tu-dong-hoa/11-05-loi-ich-rui-ro-tu-dong-hoa-tron-88cb9acb.mp4","durationSec":916.2,"nguonCau":"srt",
-      "parts": [],
+    "swt301-tools-benefits-risks": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/11-cong-cu-tu-dong-hoa/11-05-loi-ich-rui-ro-tu-dong-hoa-tron-88cb9acb.mp4","durationSec":916.2,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":181.45,"ten":"Mở đầu · bài này học gì"},
+        {"t":181.45,"den":359.12,"ten":"Hãng làm công cụ phá sản"},
+        {"t":359.12,"den":457.64,"ten":"Script chung đọc dữ liệu vào"},
+        {"t":457.64,"den":629.87,"ten":"Quay lại đăng nhập"},
+        {"t":629.87,"den":760.82,"ten":"Từ sơ đồ nhập PIN ở Chương bốn"},
+        {"t":760.82,"den":863.46,"ten":"Bẫy: ai cần lập trình? Cả data-driven lẫn…"},
+        {"t":863.46,"den":916.2,"ten":"Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Bài trước ta biết có những công cụ gì."},
         {"t":8.47,"vi":"Hôm nay là câu hỏi khó hơn: mua một công cụ thì dễ, nhưng khai thác được giá trị từ nó mới khó."},
@@ -13367,8 +14189,21 @@
         {"t":906.13,"vi":"Bạn có thể làm Quiz tám ngay dưới bài để ôn nhé."}
       ]
     },
-    "swt301-tools-by-activity": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/11-cong-cu-tu-dong-hoa/11-02-cong-cu-theo-hoat-dong-tron-051f5458.mp4","durationSec":1531.52,"nguonCau":"srt",
-      "parts": [],
+    "swt301-tools-by-activity": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/11-cong-cu-tu-dong-hoa/11-02-cong-cu-theo-hoat-dong-tron-051f5458.mp4","durationSec":1531.52,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":168.99,"ten":"Mở đầu · bài này học gì"},
+        {"t":168.99,"den":346.02,"ten":"Không có nó"},
+        {"t":346.02,"den":441.56,"ten":"Mô hình đổi thì công cụ sinh lại…"},
+        {"t":441.56,"den":528.23,"ten":"Ví dụ ba dòng"},
+        {"t":528.23,"den":614.99,"ten":"Ví dụ JaCoCo cho Java, Istanbul cho JavaScript"},
+        {"t":614.99,"den":794.6,"ten":"Tóm lại: nhóm một lo quản lý"},
+        {"t":794.6,"den":878.11,"ten":"Công cụ giả lập nhiều người dùng hoặc…"},
+        {"t":878.11,"den":1047.75,"ten":"Mình chạy thật một chương trình Java cố…"},
+        {"t":1047.75,"den":1225.75,"ten":"Mình chạy thật cùng một ngày"},
+        {"t":1225.75,"den":1404.09,"ten":"Theo dõi bug từ New tới Closed"},
+        {"t":1404.09,"den":1479.24,"ten":"Ba câu tự kiểm"},
+        {"t":1479.24,"den":1531.52,"ten":"Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Bài trước ta thấy sáu nhóm công cụ."},
         {"t":8.42,"vi":"Hôm nay đi vào bên trong từng nhóm, và đề thi gần như luôn hỏi một kiểu: công cụ nào hỗ trợ việc này, hoặc công cụ nào thường do developer dùng."},
@@ -13557,8 +14392,13 @@
         {"t":1511.45,"vi":"Tập sau là lợi ích và rủi ro của tự động hoá, cùng capture replay, data-driven và keyword-driven chạy thật bằng Java. Bạn có thể làm Quiz tám ngay dưới bài để ôn nhé."}
       ]
     },
-    "swt301-tools-pyramid": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/11-cong-cu-tu-dong-hoa/11-01-vi-sao-can-cong-cu-a5fd3f12.mp4","durationSec":682.38,"nguonCau":"srt",
-      "parts": [],
+    "swt301-tools-pyramid": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/11-cong-cu-tu-dong-hoa/11-01-vi-sao-can-cong-cu-a5fd3f12.mp4","durationSec":682.38,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":180.33,"ten":"Chương bảy dạy bạn quản lý test"},
+        {"t":180.33,"den":348.12,"ten":"Bài này lo nhánh đầu tiên bên phải"},
+        {"t":348.12,"den":521.48,"ten":"Ví dụ thứ nhất, công cụ hiệu năng"},
+        {"t":521.48,"den":682.38,"ten":"JaCoCo: nhóm thực thi và ghi log"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chương bảy dạy bạn quản lý test: kế hoạch, ước lượng, theo dõi rủi ro và lỗi."},
         {"t":11.21,"vi":"Nhưng mọi kế hoạch đều giả định một điều: có ai đó thật sự ngồi chạy test."},
@@ -13660,8 +14500,15 @@
         {"t":677.69,"vi":"Bạn có thể làm Quiz tám ngay dưới bài để ôn nhé."}
       ]
     },
-    "swt301-tools-selection-pilot": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/11-cong-cu-tu-dong-hoa/11-06-chon-cong-cu-va-pilot-tron-9558c91a.mp4","durationSec":868.12,"nguonCau":"srt",
-      "parts": [],
+    "swt301-tools-selection-pilot": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/11-cong-cu-tu-dong-hoa/11-06-chon-cong-cu-va-pilot-tron-9558c91a.mp4","durationSec":868.12,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":182.63,"ten":"Mở đầu · bài này học gì"},
+        {"t":182.63,"den":315.43,"ten":"Chín: ưu nhược điểm của các mô hình…"},
+        {"t":315.43,"den":495.02,"ten":"Bước hai: tỉ lệ chi phí lợi ích"},
+        {"t":495.02,"den":672.22,"ten":"Hai: đánh giá độ khớp của công cụ…"},
+        {"t":672.22,"den":813.47,"ten":"Triển khai từng bước"},
+        {"t":813.47,"den":868.12,"ten":"Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Bài trước ta thấy lợi ích và rủi ro của tự động hoá, và rằng mua công cụ thì dễ, dùng được mới khó."},
         {"t":13.36,"vi":"Hôm nay là nửa sau của chương: làm thế nào để dùng công cụ cho hiệu quả."},
@@ -13766,8 +14613,13 @@
         {"t":847.33,"vi":"Tập sau chuyển sang hands-on JUnit: build file của môn, JUnit bốn, JUnit năm với Maven, và JaCoCo, kèm cả test đỏ. Bạn có thể làm Quiz tám ngay dưới bài để ôn nhé."}
       ]
     },
-    "swt301-whitebox-coverage": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/07-thiet-ke-test-white-box/07-01-white-box-coverage-03fe7b6e.mp4","durationSec":520.2,"nguonCau":"srt",
-      "parts": [],
+    "swt301-whitebox-coverage": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/07-thiet-ke-test-white-box/07-01-white-box-coverage-03fe7b6e.mp4","durationSec":520.2,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":184.14,"ten":"Mở đầu · bài này học gì"},
+        {"t":184.14,"den":349.05,"ten":"Trục ngang là độ sâu cấu trúc"},
+        {"t":349.05,"den":475.84,"ten":"Cuối cùng là đường đi"},
+        {"t":475.84,"den":520.2,"ten":"Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài năm chấm một."},
         {"t":8.48,"vi":"Chương bốn là black-box: nghĩ test từ đặc tả, không cần biết bên trong code ra sao."},
@@ -13847,8 +14699,16 @@
         {"t":511.75,"vi":"Giờ bạn mở Quiz 5 ngay dưới Chương năm, làm các câu về coverage rồi hẵng sang bài sau nhé."}
       ]
     },
-    "swt301-why-testing-necessary": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/01-nen-tang-kiem-thu/01-02-vi-sao-can-kiem-thu-tron-967b92a7.mp4","durationSec":885.04,"nguonCau":"srt",
-      "parts": [],
+    "swt301-why-testing-necessary": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/software-testing/01-nen-tang-kiem-thu/01-02-vi-sao-can-kiem-thu-tron-967b92a7.mp4","durationSec":885.04,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":91.26,"ten":"Mở đầu · bài này học gì"},
+        {"t":91.26,"den":169.37,"ten":"Ví dụ tester hỏi làm sao test được…"},
+        {"t":169.37,"den":341.63,"ten":"Giờ tới ba từ quan trọng nhất"},
+        {"t":341.63,"den":483.46,"ten":"Đến lượt bạn"},
+        {"t":483.46,"den":661.19,"ten":"Vì sao? Vì sửa muộn kéo theo cả…"},
+        {"t":661.19,"den":841.15,"ten":"Slide năm mươi mốt hỏi phát biểu nào…"},
+        {"t":841.15,"den":885.04,"ten":"Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 1.2, phần một."},
         {"t":9.73,"vi":"Bài trước mình đã biết kiểm thử đo chất lượng chứ không tự nâng chất lượng, và testing khác debugging."},

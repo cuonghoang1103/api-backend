@@ -2,8 +2,13 @@
   "courseSlug": "socket-io",
   "sinhBoi": "scripts/phu-de-tu-video-rieng.mjs",
   "lessons": {
-    "io-0-0-start-here-2": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/socket-io/00-socket-io-la-gi/00-02-bon-tang-va-cach-hoc-a86ec265.mp4","durationSec":492.01,"nguonCau":"srt",
-      "parts": [],
+    "io-0-0-start-here-2": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/socket-io/00-socket-io-la-gi/00-02-bon-tang-va-cach-hoc-a86ec265.mp4","durationSec":492.01,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":105.77,"ten":"Mở đầu · bài này học gì"},
+        {"t":105.77,"den":191.12,"ten":"Slide này chốt bốn tầng"},
+        {"t":191.12,"den":356.91,"ten":"Slide này giữ lại đoạn mã và output…"},
+        {"t":356.91,"den":492.01,"ten":"Ví dụ, bài cũ ghi ngắt kết nối…"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với phần hai của bài Bắt đầu tại đây, khoá Socket.IO."},
         {"t":10.99,"vi":"Bài trước mình đo: short polling trễ gần một giây rưỡi, còn WebSocket thô chết hẳn khi server sập, Socket.IO thì tự nối lại."},
@@ -89,8 +94,12 @@
         {"t":483.21,"vi":"Bài sau, 0.1: Socket.IO là engine.io được bọc bởi namespace và room."}
       ]
     },
-    "io-0-2-long-poll": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/socket-io/00-socket-io-la-gi/00-04-long-polling-chua-chet-18892bee.mp4","durationSec":451.93,"nguonCau":"srt",
-      "parts": [],
+    "io-0-2-long-poll": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/socket-io/00-socket-io-la-gi/00-04-long-polling-chua-chet-18892bee.mp4","durationSec":451.93,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":183.62,"ten":"Mở đầu · bài này học gì"},
+        {"t":183.62,"den":353.6,"ten":"Phần chữ thật của một trăm tin chỉ…"},
+        {"t":353.6,"den":451.93,"ten":"Thuật ngữ: long-polling"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 0.2 của khoá Socket.IO."},
         {"t":10.02,"vi":"Bài trước: Socket.IO là engine.io bọc bởi socket.io, kết nối đi HTTP trước rồi nâng cấp, và client chết thì server mất tới tám mươi lăm giây mới biết."},
@@ -166,8 +175,12 @@
         {"t":446.45,"vi":"Bài sau, 0.3: thứ trên dây, ba packet thật."}
       ]
     },
-    "io-0-3-tren-day": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/socket-io/00-socket-io-la-gi/00-05-thu-tren-day-83438822.mp4","durationSec":478.4,"nguonCau":"srt",
-      "parts": [],
+    "io-0-3-tren-day": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/socket-io/00-socket-io-la-gi/00-05-thu-tren-day-83438822.mp4","durationSec":478.4,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":182.3,"ten":"Mở đầu · bài này học gì"},
+        {"t":182.3,"den":293.74,"ten":"Một kết nối engine.io có thể chở nhiều…"},
+        {"t":293.74,"den":478.4,"ten":"Slide này là pha polling"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 0.3, bài cuối của Mục 0 khoá Socket.IO."},
         {"t":11.4,"vi":"Bài trước: client luôn đi polling trước rồi nâng cấp, polling tốn gần gấp mười byte, và sau proxy xoá header chỉ client mặc định sống."},
@@ -245,8 +258,12 @@
         {"t":472.42,"vi":"Bài sau mở Chương 1: connect, năm event trong chín mili giây."}
       ]
     },
-    "io-1-1-connect": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/socket-io/01-vong-doi-connection/01-01-connect-52374761.mp4","durationSec":384.28,"nguonCau":"srt",
-      "parts": [],
+    "io-1-1-connect": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/socket-io/01-vong-doi-connection/01-01-connect-52374761.mp4","durationSec":384.28,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":110.42,"ten":"Mở đầu · bài này học gì"},
+        {"t":110.42,"den":243.42,"ten":"Slide này là output thật và sơ đồ…"},
+        {"t":243.42,"den":384.28,"ten":"Slide này đặt hai phiên bản cạnh nhau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 1.1, mở đầu Chương 1 khoá Socket.IO: vòng đời một kết nối."},
         {"t":12.6,"vi":"Mục 0 cho bạn bốn tầng, cú nâng cấp từ polling, và cách đọc chữ số đầu mỗi khung trên dây."},
@@ -317,8 +334,12 @@
         {"t":380.04,"vi":"Bài sau: bốn lý do disconnect."}
       ]
     },
-    "io-1-2-disconnect": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/socket-io/01-vong-doi-connection/01-02-disconnect-8c1fb15e.mp4","durationSec":492.75,"nguonCau":"srt",
-      "parts": [],
+    "io-1-2-disconnect": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/socket-io/01-vong-doi-connection/01-02-disconnect-8c1fb15e.mp4","durationSec":492.75,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":156.52,"ten":"Mở đầu · bài này học gì"},
+        {"t":156.52,"den":336.06,"ten":"Cuối cùng, server tắt có trật tự như…"},
+        {"t":336.06,"den":492.75,"ten":"Khi connection, nếu còn hẹn giờ thì huỷ…"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 1.2 khoá Socket.IO."},
         {"t":9.67,"vi":"Bài trước mình đo lúc sinh: năm event trong khoảng mười mili giây, server luôn ở polling khi connection, và không await trước socket on."},
@@ -412,8 +433,12 @@
         {"t":488.3,"vi":"Bài sau: reconnect thật sự làm gì."}
       ]
     },
-    "io-1-3-reconnect": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/socket-io/01-vong-doi-connection/01-03-reconnect-069c0643.mp4","durationSec":462.03,"nguonCau":"srt",
-      "parts": [],
+    "io-1-3-reconnect": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/socket-io/01-vong-doi-connection/01-03-reconnect-069c0643.mp4","durationSec":462.03,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":133.72,"ten":"Mở đầu · bài này học gì"},
+        {"t":133.72,"den":269.5,"ten":"Vì sao trong event reconnect"},
+        {"t":269.5,"den":462.03,"ten":"Slide này giữ lại output đó"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 1.3 khoá Socket.IO."},
         {"t":9.71,"vi":"Bài trước mình đo các cách một kết nối chết: chủ động thì không nối lại, bất ngờ thì client tự nối lại, và presence cần chờ hai giây."},
@@ -499,8 +524,12 @@
         {"t":449.86,"vi":"Bạn mở Code Lab Socket.IO, mô đun reconnection và độ tin cậy để luyện. Bài sau: xác thực, middleware chạy trước connection."}
       ]
     },
-    "io-1-4-auth": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/socket-io/01-vong-doi-connection/01-04-auth-74cc65f7.mp4","durationSec":457.35,"nguonCau":"srt",
-      "parts": [],
+    "io-1-4-auth": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/socket-io/01-vong-doi-connection/01-04-auth-74cc65f7.mp4","durationSec":457.35,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":183.94,"ten":"Mở đầu · bài này học gì"},
+        {"t":183.94,"den":266.01,"ten":"Đây là trang thật trong Chromium"},
+        {"t":266.01,"den":457.35,"ten":"Slide này đặt hai phiên bản cạnh nhau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 1.4 khoá Socket.IO."},
         {"t":9.76,"vi":"Bài trước: reconnect mang đường ống về, nhưng id mới, room trống, tin lúc vắng mặt mất."},
@@ -589,8 +618,13 @@
         {"t":452.54,"vi":"Bài sau: trạng thái sống sót qua reconnect."}
       ]
     },
-    "io-10-1-cay": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/socket-io/10-chan-doan/10-01-cay-quyet-dinh-c0c6a332.mp4","durationSec":453.71,"nguonCau":"srt",
-      "parts": [],
+    "io-10-1-cay": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/socket-io/10-chan-doan/10-01-cay-quyet-dinh-c0c6a332.mp4","durationSec":453.71,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":183.72,"ten":"Mở đầu · bài này học gì"},
+        {"t":183.72,"den":286.1,"ten":"Chỉ câu bốn bắt được"},
+        {"t":286.1,"den":390.19,"ten":"Bẫy: cây là bảng kiểm"},
+        {"t":390.19,"den":453.71,"ten":"Thực hành hai mươi phút"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 10.1 khoá Socket.IO, mở đầu Chương 10."},
         {"t":11.06,"vi":"Bài trước khép Chương 9: thiết bị có client chính thức thì dùng, bo nói EIO ba bị từ chối, socket.io viết tay chỉ mười ba dòng."},
@@ -678,8 +712,14 @@
         {"t":441.84,"vi":"Bạn mở Code Lab Socket.IO, mô đun testing and debugging realtime để luyện. Bài sau: câu một, client có kết nối không."}
       ]
     },
-    "io-10-2-q1": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/socket-io/10-chan-doan/10-02-q1-connected-b76b0e06.mp4","durationSec":576.7,"nguonCau":"srt",
-      "parts": [],
+    "io-10-2-q1": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/socket-io/10-chan-doan/10-02-q1-connected-b76b0e06.mp4","durationSec":576.7,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":128.77,"ten":"Mở đầu · bài này học gì"},
+        {"t":128.77,"den":307.49,"ten":"Chạy thật sửa ba điều của bài web"},
+        {"t":307.49,"den":386.72,"ten":"Đây là lỗi thật của kho"},
+        {"t":386.72,"den":507.07,"ten":"Cuối cùng là cái cờ"},
+        {"t":507.07,"den":576.7,"ten":"Thực hành hai mươi phút"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 10.2 khoá Socket.IO."},
         {"t":9.77,"vi":"Bài trước: cây bốn câu hỏi, dừng ở câu đỏ đầu tiên."},
@@ -782,8 +822,12 @@
         {"t":564.95,"vi":"Bạn mở Code Lab Socket.IO, mô đun reconnection and reliability để luyện. Bài sau: câu hai, sự kiện có trên dây không."}
       ]
     },
-    "io-10-3-q2": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/socket-io/10-chan-doan/10-03-q2-tren-day-ca2e7318.mp4","durationSec":503.01,"nguonCau":"srt",
-      "parts": [],
+    "io-10-3-q2": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/socket-io/10-chan-doan/10-03-q2-tren-day-ca2e7318.mp4","durationSec":503.01,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":182.02,"ten":"Mở đầu · bài này học gì"},
+        {"t":182.02,"den":360.64,"ten":"Khung có trên dây"},
+        {"t":360.64,"den":503.01,"ten":"Liên kết chéo"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 10.3 khoá Socket.IO."},
         {"t":9.76,"vi":"Bài trước, câu một: từ chối xác thực là một trăm lẻ một cộng gói bốn mươi tư. Và client của kho không lùi về polling sau proxy bỏ Upgrade."},
@@ -873,8 +917,13 @@
         {"t":490.69,"vi":"Bạn mở Code Lab Socket.IO, mô đun emitting and receiving events để luyện. Bài sau: câu ba và câu bốn, handler và tác dụng."}
       ]
     },
-    "io-10-4-q34": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/socket-io/10-chan-doan/10-04-q3-q4-handler-fd3dec67.mp4","durationSec":531.84,"nguonCau":"srt",
-      "parts": [],
+    "io-10-4-q34": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/socket-io/10-chan-doan/10-04-q3-q4-handler-fd3dec67.mp4","durationSec":531.84,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":183.17,"ten":"Mở đầu · bài này học gì"},
+        {"t":183.17,"den":334.41,"ten":"Off với arrow mới không gỡ được gì"},
+        {"t":334.41,"den":462.23,"ten":"Một: dk ghep"},
+        {"t":462.23,"den":531.84,"ten":"Thực hành hai mươi lăm phút"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 10.4 khoá Socket.IO."},
         {"t":9.78,"vi":"Bài trước, câu hai: khung có mà không handler là phía nhận, không khung là phía gửi, dữ liệu sai là luật JSON."},
@@ -972,8 +1021,13 @@
         {"t":520.72,"vi":"Bạn mở Code Lab Socket.IO, mô đun testing and debugging realtime để luyện. Bài sau: những lỗi chỉ cụm mới có."}
       ]
     },
-    "io-10-5-cluster-bugs": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/socket-io/10-chan-doan/10-05-bug-cum-3f8d6f72.mp4","durationSec":513.49,"nguonCau":"srt",
-      "parts": [],
+    "io-10-5-cluster-bugs": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/socket-io/10-chan-doan/10-05-bug-cum-3f8d6f72.mp4","durationSec":513.49,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":181.59,"ten":"Mở đầu · bài này học gì"},
+        {"t":181.59,"den":359.64,"ten":"Từ bản sửa ngày mười ba tháng mười…"},
+        {"t":359.64,"den":438.13,"ten":"Liên kết chéo"},
+        {"t":438.13,"den":513.49,"ten":"Thực hành ba mươi phút"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 10.5, bài cuối của Chương 10."},
         {"t":9.77,"vi":"Bài trước: một dòng log trả lời câu ba, gắn handler trước mọi await, handler async nào cũng try catch, và ack ok chưa phải dòng đã ghi."},
@@ -1062,8 +1116,12 @@
         {"t":501.38,"vi":"Bạn mở Code Lab Socket.IO, mô đun scaling with the Redis adapter để luyện. Bài sau mở Chương 11: cái gì sống sót qua đo lường."}
       ]
     },
-    "io-11-1-song-qua": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/socket-io/11-song-qua-do-luong/11-01-song-qua-do-luong-f5adac7d.mp4","durationSec":471.26,"nguonCau":"srt",
-      "parts": [],
+    "io-11-1-song-qua": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/socket-io/11-song-qua-do-luong/11-01-song-qua-do-luong-f5adac7d.mp4","durationSec":471.26,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":179.8,"ten":"Mở đầu · bài này học gì"},
+        {"t":179.8,"den":355.85,"ten":"Sid đổi và không phát lại"},
+        {"t":355.85,"den":471.26,"ten":"Tự kiểm ba câu"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 11.1, bài giảng cuối của khoá Socket.IO."},
         {"t":11.33,"vi":"Chương trước: cây bốn câu hỏi, và ba lỗi chỉ cụm mới có, tái hiện bằng worker thật và nginx thật."},
@@ -1138,8 +1196,11 @@
         {"t":459.39,"vi":"Bạn mở Code Lab Socket.IO, mô đun production patterns and security để luyện. Bài sau là đề thi cuối khoá, chúc bạn làm tốt."}
       ]
     },
-    "io-2-1-overhead": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/socket-io/02-transport-upgrade/02-01-overhead-8c1a6446.mp4","durationSec":392.6,"nguonCau":"srt",
-      "parts": [],
+    "io-2-1-overhead": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/socket-io/02-transport-upgrade/02-01-overhead-8c1a6446.mp4","durationSec":392.6,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":183.32,"ten":"Mở đầu · bài này học gì"},
+        {"t":183.32,"den":392.6,"ten":"WebSocket: packet ba mươi ba byte"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 2.1, mở đầu Chương 2 khoá Socket.IO: transport và cú nâng cấp."},
         {"t":12.95,"vi":"Chương 1 theo một kết nối từ lúc sinh tới lúc chết: năm event lúc connect, lý do disconnect, reconnect, xác thực, và trạng thái qua mỗi lần nối lại."},
@@ -1207,8 +1268,12 @@
         {"t":381.18,"vi":"Bạn mở Code Lab Socket.IO, mô đun nền tảng WebSocket và realtime để luyện. Bài sau: pingInterval và pingTimeout."}
       ]
     },
-    "io-2-2-ping": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/socket-io/02-transport-upgrade/02-02-ping-f943c71a.mp4","durationSec":349.65,"nguonCau":"srt",
-      "parts": [],
+    "io-2-2-ping": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/socket-io/02-transport-upgrade/02-02-ping-f943c71a.mp4","durationSec":349.65,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":117.3,"ten":"Mở đầu · bài này học gì"},
+        {"t":117.3,"den":296.32,"ten":"Slide này là output và biểu đồ của…"},
+        {"t":296.32,"den":349.65,"ten":"Mạng khựng một chút là bị báo chết…"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 2.2 khoá Socket.IO."},
         {"t":9.69,"vi":"Bài trước: ở tầng Socket.IO hai transport ghi cùng số byte."},
@@ -1271,8 +1336,11 @@
         {"t":339.23,"vi":"Bạn mở Code Lab Socket.IO, mô đun reconnection và độ tin cậy để luyện. Bài sau: sticky sessions."}
       ]
     },
-    "io-2-3-sticky": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/socket-io/02-transport-upgrade/02-03-sticky-5ab50bad.mp4","durationSec":358.46,"nguonCau":"srt",
-      "parts": [],
+    "io-2-3-sticky": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/socket-io/02-transport-upgrade/02-03-sticky-5ab50bad.mp4","durationSec":358.46,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":156.18,"ten":"Mở đầu · bài này học gì"},
+        {"t":156.18,"den":358.46,"ten":"Slide này giữ lại output đó"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 2.3 khoá Socket.IO."},
         {"t":9.79,"vi":"Bài trước: nhịp tim. Phát hiện chậm nhất bằng tổng hai số, timeout ngắn gây chết nhầm, và nhịp tim phải ngắn hơn timeout của proxy."},
@@ -1339,8 +1407,11 @@
         {"t":354.04,"vi":"Bài sau: chẩn đoán transport bằng curl."}
       ]
     },
-    "io-2-4-curl": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/socket-io/02-transport-upgrade/02-04-curl-648179d1.mp4","durationSec":334.94,"nguonCau":"srt",
-      "parts": [],
+    "io-2-4-curl": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/socket-io/02-transport-upgrade/02-04-curl-648179d1.mp4","durationSec":334.94,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":149.93,"ten":"Mở đầu · bài này học gì"},
+        {"t":149.93,"den":334.94,"ten":"Bước hai, POST một packet CONNECT với token…"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 2.4 khoá Socket.IO."},
         {"t":9.78,"vi":"Bài trước: polling cần sticky, round-robin cho Session ID unknown, và phép kiểm đúng là một sid với nhiều request."},
@@ -1400,8 +1471,11 @@
         {"t":329.22,"vi":"Bài sau: binary payload, không phải base64."}
       ]
     },
-    "io-2-5-binary": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/socket-io/02-transport-upgrade/02-05-binary-88c9c9a1.mp4","durationSec":325.18,"nguonCau":"srt",
-      "parts": [],
+    "io-2-5-binary": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/socket-io/02-transport-upgrade/02-05-binary-88c9c9a1.mp4","durationSec":325.18,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":182.08,"ten":"Mở đầu · bài này học gì"},
+        {"t":182.08,"den":325.18,"ten":"Slide này giữ output đó"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 2.5, bài cuối Chương 2 khoá Socket.IO."},
         {"t":11.17,"vi":"Bài trước: bộ chẩn đoán bằng curl."},
@@ -1460,8 +1534,12 @@
         {"t":320.71,"vi":"Chương sau: room, thứ bạn thật sự cần."}
       ]
     },
-    "io-3-1-room": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/socket-io/03-room-namespace/03-01-room-3df22048.mp4","durationSec":442.23,"nguonCau":"srt",
-      "parts": [],
+    "io-3-1-room": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/socket-io/03-room-namespace/03-01-room-3df22048.mp4","durationSec":442.23,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":179.63,"ten":"Mở đầu · bài này học gì"},
+        {"t":179.63,"den":358.11,"ten":"Phần hai: phát tới A thì socket một…"},
+        {"t":358.11,"den":442.23,"ten":"Không. Join không gửi khung nào"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 3.1, mở đầu Chương 3 khoá Socket.IO."},
         {"t":11.12,"vi":"Chương trước: transport. Polling và WebSocket, nhịp tim, sticky session, và dữ liệu nhị phân đi trên dây thế nào."},
@@ -1543,8 +1621,13 @@
         {"t":436.73,"vi":"Bài sau: namespace, công cụ bạn có lẽ không cần."}
       ]
     },
-    "io-3-2-namespace": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/socket-io/03-room-namespace/03-02-namespace-35bf12df.mp4","durationSec":459.91,"nguonCau":"srt",
-      "parts": [],
+    "io-3-2-namespace": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/socket-io/03-room-namespace/03-02-namespace-35bf12df.mp4","durationSec":459.91,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":181.74,"ten":"Mở đầu · bài này học gì"},
+        {"t":181.74,"den":300.09,"ten":"Gói thứ hai mang thêm tiền tố admin…"},
+        {"t":300.09,"den":383.73,"ten":"Bẫy một: dùng namespace như tên bộ sưu…"},
+        {"t":383.73,"den":459.91,"ten":"Thực hành mười lăm phút"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 3.2 khoá Socket.IO."},
         {"t":9.75,"vi":"Bài trước: room là nhãn chuỗi chỉ server thấy."},
@@ -1627,8 +1710,12 @@
         {"t":455.84,"vi":"Bài sau: vòng đời của một room."}
       ]
     },
-    "io-3-3-room-lifecycle": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/socket-io/03-room-namespace/03-03-room-lifecycle-3ca7659b.mp4","durationSec":420.5,"nguonCau":"srt",
-      "parts": [],
+    "io-3-3-room-lifecycle": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/socket-io/03-room-namespace/03-03-room-lifecycle-3ca7659b.mp4","durationSec":420.5,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":184.73,"ten":"Mở đầu · bài này học gì"},
+        {"t":184.73,"den":343.75,"ten":"Dọn khi adapter báo delete-room"},
+        {"t":343.75,"den":420.5,"ten":"Thực hành mười lăm phút"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 3.3 khoá Socket.IO."},
         {"t":9.78,"vi":"Bài trước: namespace là bức tường ở cấp kết nối, đi chung một ống, và kho này không dùng cái nào."},
@@ -1706,8 +1793,13 @@
         {"t":416.3,"vi":"Bài sau: ngữ nghĩa của broadcast."}
       ]
     },
-    "io-3-4-broadcast": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/socket-io/03-room-namespace/03-04-broadcast-5a55790d.mp4","durationSec":473.43,"nguonCau":"srt",
-      "parts": [],
+    "io-3-4-broadcast": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/socket-io/03-room-namespace/03-04-broadcast-5a55790d.mp4","durationSec":473.43,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":183.56,"ten":"Mở đầu · bài này học gì"},
+        {"t":183.56,"den":265.73,"ten":"Phát lại bằng io.to"},
+        {"t":265.73,"den":393.06,"ten":"Vì sao chỉ một?"},
+        {"t":393.06,"den":473.43,"ten":"Thực hành mười lăm phút"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 3.4 khoá Socket.IO."},
         {"t":9.78,"vi":"Bài trước: room tạo ở join đầu, xoá ở leave cuối, adapter có báo delete-room, còn Map state của bạn thì phải tự dọn."},
@@ -1787,8 +1879,12 @@
         {"t":462.05,"vi":"Bạn mở Code Lab Socket.IO, mô đun broadcast và acknowledgement để luyện. Bài sau: đặt tên event sao cho scale được."}
       ]
     },
-    "io-3-5-event-name": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/socket-io/03-room-namespace/03-05-event-name-71328f27.mp4","durationSec":467.46,"nguonCau":"srt",
-      "parts": [],
+    "io-3-5-event-name": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/socket-io/03-room-namespace/03-05-event-name-71328f27.mp4","durationSec":467.46,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":179.76,"ten":"Mở đầu · bài này học gì"},
+        {"t":179.76,"den":357.89,"ten":"Slide giữ lại kết quả đó"},
+        {"t":357.89,"den":467.46,"ten":"Cả hai handler chạy với mọi update"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 3.5, bài cuối Chương 3 khoá Socket.IO."},
         {"t":11.15,"vi":"Bài trước: tám kiểu emit. socket.to loại một socket chứ không loại người, volatile vứt gói khi transport bận, và một emit với mảng room."},
@@ -1874,8 +1970,14 @@
         {"t":461.96,"vi":"Chương sau: presence, và cái bẫy chi phí bình phương."}
       ]
     },
-    "io-4-1-presence-naive": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/socket-io/04-presence/04-01-presence-ngay-tho-644114b6.mp4","durationSec":656.85,"nguonCau":"srt",
-      "parts": [],
+    "io-4-1-presence-naive": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/socket-io/04-presence/04-01-presence-ngay-tho-644114b6.mp4","durationSec":656.85,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":172.63,"ten":"Mở đầu · bài này học gì"},
+        {"t":172.63,"den":352.1,"ten":"Chạy thật. Tệp may41.mjs là server presence"},
+        {"t":352.1,"den":450.44,"ten":"Bản audience chỉ khoảng một giây"},
+        {"t":450.44,"den":581.37,"ten":"Một ý ở frontend"},
+        {"t":581.37,"den":656.85,"ten":"Thực hành hai mươi phút"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 4.1 khoá Socket.IO, mở đầu Chương 4 về presence."},
         {"t":11.94,"vi":"Bài trước: tên event viết dạng miền hai chấm động từ, chỉ sáu tên dành riêng là ném lỗi, còn reconnect thì nghe ở socket.io."},
@@ -1983,8 +2085,14 @@
         {"t":653.37,"vi":"Bài sau: tính audience."}
       ]
     },
-    "io-4-3-multi-tab": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/socket-io/04-presence/04-03-nhieu-tab-9fab4773.mp4","durationSec":617.54,"nguonCau":"srt",
-      "parts": [],
+    "io-4-3-multi-tab": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/socket-io/04-presence/04-03-nhieu-tab-9fab4773.mp4","durationSec":617.54,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":179.91,"ten":"Mở đầu · bài này học gì"},
+        {"t":179.91,"den":356.37,"ten":"Chạy bằng node"},
+        {"t":356.37,"den":456.53,"ten":"Bảng thông tin cuộc chat thì dùng lastSeen"},
+        {"t":456.53,"den":540.98,"ten":"Trước khi thêm cái thứ hai"},
+        {"t":540.98,"den":617.54,"ten":"Thực hành hai mươi phút"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 4.3 khoá Socket.IO."},
         {"t":9.74,"vi":"Bài trước: audience là bạn bè hợp người cùng chat, trừ người bị chặn. Trong bão, nút thắt là pool. Thứ cất trên socket phải kiểm lại trước khi phát."},
@@ -2100,8 +2208,13 @@
         {"t":611.82,"vi":"Bài sau: typing indicator, mỗi phím gõ tốn bao nhiêu."}
       ]
     },
-    "io-4-4-typing": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/socket-io/04-presence/04-04-typing-518f506e.mp4","durationSec":538.79,"nguonCau":"srt",
-      "parts": [],
+    "io-4-4-typing": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/socket-io/04-presence/04-04-typing-518f506e.mp4","durationSec":538.79,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":113.12,"ten":"Mở đầu · bài này học gì"},
+        {"t":113.12,"den":288.58,"ten":"Vì sao socket.to?"},
+        {"t":288.58,"den":464.36,"ten":"Mã giới hạn rất ngắn"},
+        {"t":464.36,"den":538.79,"ten":"Thực hành hai mươi phút"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 4.4 khoá Socket.IO."},
         {"t":9.8,"vi":"Bài trước: offline thuộc về người chứ không thuộc về socket."},
@@ -2205,8 +2318,13 @@
         {"t":533.89,"vi":"Bài sau: read receipt, ba mức đã xem."}
       ]
     },
-    "io-4-5-read-receipt": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/socket-io/04-presence/04-05-read-receipt-1b431bc4.mp4","durationSec":520.19,"nguonCau":"srt",
-      "parts": [],
+    "io-4-5-read-receipt": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/socket-io/04-presence/04-05-read-receipt-1b431bc4.mp4","durationSec":520.19,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":175.41,"ten":"Mở đầu · bài này học gì"},
+        {"t":175.41,"den":351.61,"ten":"Mức một: chỉ ack sau khi ghi xong"},
+        {"t":351.61,"den":442.92,"ten":"Bài web nói ứng dụng cho tắt read…"},
+        {"t":442.92,"den":520.19,"ten":"Thực hành hai mươi phút"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 4.5, bài cuối của Chương 4."},
         {"t":9.77,"vi":"Bài trước: gửi typing ở mọi phím tốn năm trăm bốn mươi chín gói."},
@@ -2303,8 +2421,13 @@
         {"t":514.35,"vi":"Chương sau: Redis adapter, khi một server không còn đủ."}
       ]
     },
-    "io-5-1-vi-sao": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/socket-io/05-redis-adapter-cluster/05-01-vi-sao-redis-adapter-62773377.mp4","durationSec":665.36,"nguonCau":"srt",
-      "parts": [],
+    "io-5-1-vi-sao": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/socket-io/05-redis-adapter-cluster/05-01-vi-sao-redis-adapter-62773377.mp4","durationSec":665.36,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":178.19,"ten":"Mở đầu · bài này học gì"},
+        {"t":178.19,"den":357.46,"ten":"Tức là adapter chở tin phát đi"},
+        {"t":357.46,"den":528.44,"ten":"Phát hai nghìn lần"},
+        {"t":528.44,"den":665.36,"ten":"Thuật ngữ: worker"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 5.1 khoá Socket.IO, mở đầu Chương 5."},
         {"t":10.97,"vi":"Chương 4 làm presence: phát cho đúng người, đếm tab theo user, gõ phím có giới hạn, đã xem phải chờ tab hiện."},
@@ -2422,8 +2545,14 @@
         {"t":653.15,"vi":"Bạn mở Code Lab Socket.IO, mô đun scaling with the Redis adapter để luyện. Bài sau: bốn method của adapter đi xuyên worker."}
       ]
     },
-    "io-5-2-adapter-api": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/socket-io/05-redis-adapter-cluster/05-02-adapter-api-2dfe16cf.mp4","durationSec":686.8,"nguonCau":"srt",
-      "parts": [],
+    "io-5-2-adapter-api": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/socket-io/05-redis-adapter-cluster/05-02-adapter-api-2dfe16cf.mp4","durationSec":686.8,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":177.87,"ten":"Mở đầu · bài này học gì"},
+        {"t":177.87,"den":270.9,"ten":"Sự thật có giá"},
+        {"t":270.9,"den":447.06,"ten":"Câu hỏi hay gặp nhất"},
+        {"t":447.06,"den":614.54,"ten":"Cấm kiểu tại chỗ"},
+        {"t":614.54,"den":686.8,"ten":"Thực hành hai mươi phút"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 5.2 khoá Socket.IO."},
         {"t":9.75,"vi":"Bài trước: không adapter thì bốn worker chỉ phát tới hai trên tám người. Redis adapter phát một lần, mọi worker phát lại. Nhưng bảng room vẫn nằm tại chỗ."},
@@ -2543,8 +2672,13 @@
         {"t":675.19,"vi":"Bạn mở Code Lab Socket.IO, mô đun scaling with the Redis adapter để luyện. Bài sau: chuyện gì xảy ra khi Redis chết."}
       ]
     },
-    "io-5-3-redis-down": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/socket-io/05-redis-adapter-cluster/05-03-redis-chet-29b5396c.mp4","durationSec":608.22,"nguonCau":"srt",
-      "parts": [],
+    "io-5-3-redis-down": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/socket-io/05-redis-adapter-cluster/05-03-redis-chet-29b5396c.mp4","durationSec":608.22,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":176.11,"ten":"Mở đầu · bài này học gì"},
+        {"t":176.11,"den":348.98,"ten":"Lượt hai có handler như kho"},
+        {"t":348.98,"den":522.32,"ten":"Bảng room mới trống trơn"},
+        {"t":522.32,"den":608.22,"ten":"Vì sao người dùng nối sớm không nhận…"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 5.3 khoá Socket.IO."},
         {"t":9.77,"vi":"Bài trước: bảng tại chỗ chỉ nói cho một worker."},
@@ -2647,8 +2781,12 @@
         {"t":595.9,"vi":"Bạn mở Code Lab Socket.IO, mô đun scaling with the Redis adapter để luyện. Bài sau: danh sách năm việc phải xong trước khi thêm worker."}
       ]
     },
-    "io-5-4-checklist": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/socket-io/05-redis-adapter-cluster/05-04-checklist-scale-e0691dbe.mp4","durationSec":487.51,"nguonCau":"srt",
-      "parts": [],
+    "io-5-4-checklist": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/socket-io/05-redis-adapter-cluster/05-04-checklist-scale-e0691dbe.mp4","durationSec":487.51,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":181.68,"ten":"Mở đầu · bài này học gì"},
+        {"t":181.68,"den":355.71,"ten":"Hai mươi client cùng thấy transport close"},
+        {"t":355.71,"den":487.51,"ten":"Thuật ngữ: sticky session"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 5.4 khoá Socket.IO."},
         {"t":9.77,"vi":"Bài trước: Redis chết thì phát tại chỗ vẫn sống, phát qua worker thì mất hoặc trễ."},
@@ -2734,8 +2872,13 @@
         {"t":475.44,"vi":"Bạn mở Code Lab Socket.IO, mô đun production patterns and security để luyện. Bài sau: những lựa chọn thay cho Redis adapter."}
       ]
     },
-    "io-5-5-alt": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/socket-io/05-redis-adapter-cluster/05-05-lua-chon-thay-redis-ef42717f.mp4","durationSec":523.92,"nguonCau":"srt",
-      "parts": [],
+    "io-5-5-alt": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/socket-io/05-redis-adapter-cluster/05-05-lua-chon-thay-redis-ef42717f.mp4","durationSec":523.92,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":177.8,"ten":"Mở đầu · bài này học gì"},
+        {"t":177.8,"den":347.34,"ten":"Postgres chỉ chậm hơn Redis không phẩy một…"},
+        {"t":347.34,"den":451.68,"ten":"Bốn lượt: memory"},
+        {"t":451.68,"den":523.92,"ten":"Thực hành hai mươi phút"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 5.5, bài cuối Chương 5 khoá Socket.IO."},
         {"t":11.15,"vi":"Bài trước: năm việc trước khi thêm worker."},
@@ -2823,8 +2966,13 @@
         {"t":511.03,"vi":"Bạn mở Code Lab Socket.IO, mô đun scaling with the Redis adapter để luyện. Chương sau: mức bảo đảm giao tin, bắt đầu từ at most once."}
       ]
     },
-    "io-6-2-ack-retry": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/socket-io/06-ack-giao-hang/06-02-ack-retry-ad054eae.mp4","durationSec":565.14,"nguonCau":"srt",
-      "parts": [],
+    "io-6-2-ack-retry": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/socket-io/06-ack-giao-hang/06-02-ack-retry-ad054eae.mp4","durationSec":565.14,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":178.69,"ten":"Mở đầu · bài này học gì"},
+        {"t":178.69,"den":280.31,"ten":"Quên ack: ba lần hết giờ"},
+        {"t":280.31,"den":458.34,"ten":"Phần hai giả một đường mạng chậm"},
+        {"t":458.34,"den":565.14,"ten":"Có chắc tin chưa được lưu không?"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 6.2 khoá Socket.IO."},
         {"t":9.78,"vi":"Bài trước: emit là bắn rồi quên."},
@@ -2928,8 +3076,13 @@
         {"t":552.83,"vi":"Bạn mở Code Lab Socket.IO, mô đun broadcasting acknowledgements để luyện. Bài sau: exactly-once, chỉ có khi có lớp khử trùng."}
       ]
     },
-    "io-6-4-ordering": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/socket-io/06-ack-giao-hang/06-04-thu-tu-e9163650.mp4","durationSec":495.48,"nguonCau":"srt",
-      "parts": [],
+    "io-6-4-ordering": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/socket-io/06-ack-giao-hang/06-04-thu-tu-e9163650.mp4","durationSec":495.48,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":128.22,"ten":"Mở đầu · bài này học gì"},
+        {"t":128.22,"den":301.75,"ten":"Bẫy kinh điển"},
+        {"t":301.75,"den":421.39,"ten":"Luật theo tính năng"},
+        {"t":421.39,"den":495.48,"ten":"Thực hành hai mươi phút"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 6.4 khoá Socket.IO."},
         {"t":9.77,"vi":"Bài trước: đúng một lần cần lớp khử trùng ở mọi chỗ gây tác dụng."},
@@ -3017,8 +3170,13 @@
         {"t":482.27,"vi":"Bạn mở Code Lab Socket.IO, mô đun scaling with the Redis adapter để luyện. Bài sau: khi nào nên dùng HTTP thay cho socket.io."}
       ]
     },
-    "io-6-5-vs-http": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/socket-io/06-ack-giao-hang/06-05-http-hay-socket-e6e1df81.mp4","durationSec":563.21,"nguonCau":"srt",
-      "parts": [],
+    "io-6-5-vs-http": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/socket-io/06-ack-giao-hang/06-05-http-hay-socket-e6e1df81.mp4","durationSec":563.21,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":181.91,"ten":"Mở đầu · bài này học gì"},
+        {"t":181.91,"den":353.14,"ten":"Kết nối mới"},
+        {"t":353.14,"den":480.14,"ten":"Đổi lại là HTTP thường"},
+        {"t":480.14,"den":563.21,"ten":"Thực hành hai mươi lăm phút"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 6.5, bài cuối Chương 6 khoá Socket.IO."},
         {"t":11.16,"vi":"Bài trước: một socket giữ thứ tự, nhưng handler async và hai worker thì không."},
@@ -3111,8 +3269,13 @@
         {"t":547.51,"vi":"Bạn mở Code Lab Socket.IO, mô đun production patterns and security để luyện. Hết Chương 6. Bài sau sang Chương 7: signalling, socket.io làm gì trong một cuộc gọi video."}
       ]
     },
-    "io-7-1-signalling": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/socket-io/07-webrtc-signalling/07-01-signalling-f01be334.mp4","durationSec":553.06,"nguonCau":"srt",
-      "parts": [],
+    "io-7-1-signalling": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/socket-io/07-webrtc-signalling/07-01-signalling-f01be334.mp4","durationSec":553.06,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":109.79,"ten":"Mở đầu · bài này học gì"},
+        {"t":109.79,"den":288.44,"ten":"Slide này là hình vừa rồi"},
+        {"t":288.44,"den":466.86,"ten":"Sửa bài web"},
+        {"t":466.86,"den":553.06,"ten":"Mọi byte qua server nhân theo người xem"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 7.1, bài mở đầu Chương 7 khoá Socket.IO."},
         {"t":11.26,"vi":"Bài trước: ba câu hỏi để chọn HTTP hay socket."},
@@ -3203,8 +3366,13 @@
         {"t":539.13,"vi":"Bạn mở Code Lab Socket.IO, mô đun emitting and receiving events để luyện chuyển tiếp event. Bài sau: SDP và ICE, cái nằm trong gói bạn chuyển tiếp."}
       ]
     },
-    "io-7-2-sdp-ice": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/socket-io/07-webrtc-signalling/07-02-sdp-va-ice-1ebf8916.mp4","durationSec":559.47,"nguonCau":"srt",
-      "parts": [],
+    "io-7-2-sdp-ice": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/socket-io/07-webrtc-signalling/07-02-sdp-va-ice-1ebf8916.mp4","durationSec":559.47,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":181.55,"ten":"Mở đầu · bài này học gì"},
+        {"t":181.55,"den":355.9,"ten":"Mã băm của offer An gửi và của…"},
+        {"t":355.9,"den":473.08,"ten":"Lớp CuocGoi bắt lỗi rồi từ chối"},
+        {"t":473.08,"den":559.47,"ten":"Thực hành hai mươi lăm phút"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 7.2 khoá Socket.IO."},
         {"t":9.79,"vi":"Bài trước: một cuộc gọi có hai tầng."},
@@ -3290,8 +3458,13 @@
         {"t":553.01,"vi":"Bài sau: room cho cuộc gọi, incoming, ringing và busy."}
       ]
     },
-    "io-7-3-room-call": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/socket-io/07-webrtc-signalling/07-03-room-cuoc-goi-13f2cb3c.mp4","durationSec":506.85,"nguonCau":"srt",
-      "parts": [],
+    "io-7-3-room-call": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/socket-io/07-webrtc-signalling/07-03-room-cuoc-goi-13f2cb3c.mp4","durationSec":506.85,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":168.96,"ten":"Mở đầu · bài này học gì"},
+        {"t":168.96,"den":266.34,"ten":"Chạy thật. Lệnh đầu: An đang nói với…"},
+        {"t":266.34,"den":427.33,"ten":"Vì sao? Không event nào báo cho tab…"},
+        {"t":427.33,"den":506.85,"ten":"Thực hành hai mươi lăm phút"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 7.3 khoá Socket.IO."},
         {"t":9.74,"vi":"Bài trước mình bóc lá thư: SDP khoảng một ki-lô-byte rưỡi khi gọi thoại, sáu khi có hình. Ba loại ứng viên ICE."},
@@ -3381,8 +3554,14 @@
         {"t":493.43,"vi":"Bạn mở Code Lab Socket.IO, mô đun rooms and namespaces để luyện room theo người dùng. Bài sau: TURN và NAT, khi hai trình duyệt không nối thẳng được."}
       ]
     },
-    "io-7-4-turn": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/socket-io/07-webrtc-signalling/07-04-turn-nat-6f14eacf.mp4","durationSec":651.2,"nguonCau":"srt",
-      "parts": [],
+    "io-7-4-turn": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/socket-io/07-webrtc-signalling/07-04-turn-nat-6f14eacf.mp4","durationSec":651.2,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":148.52,"ten":"Mở đầu · bài này học gì"},
+        {"t":148.52,"den":245.23,"ten":"Chạy thật. Vẫn mã gọi của kho ở…"},
+        {"t":245.23,"den":380.6,"ten":"Bẫy thứ hai nằm ở cách chạy coturn"},
+        {"t":380.6,"den":560.28,"ten":"Cuối cùng là trần băng thông"},
+        {"t":560.28,"den":651.2,"ten":"Khoảng một phẩy không hai"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 7.4 khoá Socket.IO."},
         {"t":9.78,"vi":"Bài trước: cuộc gọi đi vào room user, nên mọi tab cùng reo. Và hai lỗi thật của kho khi đóng hay khi sập một tab."},
@@ -3488,8 +3667,13 @@
         {"t":645.38,"vi":"Bài sau: gọi nhóm, và vì sao SFU là con thú khác."}
       ]
     },
-    "io-7-5-sfu": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/socket-io/07-webrtc-signalling/07-05-goi-nhom-sfu-8081f26e.mp4","durationSec":566.22,"nguonCau":"srt",
-      "parts": [],
+    "io-7-5-sfu": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/socket-io/07-webrtc-signalling/07-05-goi-nhom-sfu-8081f26e.mp4","durationSec":566.22,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":137.55,"ten":"Mở đầu · bài này học gì"},
+        {"t":137.55,"den":314.48,"ten":"Chạy thật. Mỗi người là một tab Chromium"},
+        {"t":314.48,"den":490.34,"ten":"Mọi thứ còn lại là các event socket.io"},
+        {"t":490.34,"den":566.22,"ten":"Thực hành bốn mươi phút"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 7.5, bài cuối Chương 7 khoá Socket.IO."},
         {"t":11.06,"vi":"Bài trước: khi không có đường thẳng, TURN chở mọi byte. Kho có một cuộc gọi treo mãi, và trần max-bps làm hình video nhỏ lại."},
@@ -3589,8 +3773,14 @@
         {"t":552.31,"vi":"Bạn mở Code Lab Socket.IO, mô đun production patterns and security để luyện cấu hình dịch vụ. Chương sau: hai WebSocket server trong một kho, và vì sao."}
       ]
     },
-    "io-8-1-hai-ws": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/socket-io/08-soan-thao-cong-tac/08-01-nhieu-websocket-server-4d5d7561.mp4","durationSec":668.74,"nguonCau":"srt",
-      "parts": [],
+    "io-8-1-hai-ws": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/socket-io/08-soan-thao-cong-tac/08-01-nhieu-websocket-server-4d5d7561.mp4","durationSec":668.74,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":181.76,"ten":"Mở đầu · bài này học gì"},
+        {"t":181.76,"den":265.56,"ten":"Gateway ghi chú thấy đúng đường của mình"},
+        {"t":265.56,"den":428.78,"ten":"Một đường không ai nhận"},
+        {"t":428.78,"den":593.53,"ten":"Vì sao ghi chú không đi socket.io?"},
+        {"t":593.53,"den":668.74,"ten":"Thực hành hai mươi phút"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 8.1, mở đầu Chương 8 khoá Socket.IO."},
         {"t":11.05,"vi":"Chương trước, socket.io chỉ chở thư báo hiệu cho WebRTC."},
@@ -3706,8 +3896,14 @@
         {"t":655.22,"vi":"Bạn mở Code Lab Socket.IO, mô đun production patterns and security để luyện. Bài sau: CRDT so với event, vì sao hợp nhất được tự động."}
       ]
     },
-    "io-8-2-crdt": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/socket-io/08-soan-thao-cong-tac/08-02-crdt-va-event-67babc4a.mp4","durationSec":585.19,"nguonCau":"srt",
-      "parts": [],
+    "io-8-2-crdt": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/socket-io/08-soan-thao-cong-tac/08-02-crdt-va-event-67babc4a.mp4","durationSec":585.19,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":133.87,"ten":"Mở đầu · bài này học gì"},
+        {"t":133.87,"den":303.64,"ten":"Chạy thật. Server socket.io chỉ chuyển tiếp event"},
+        {"t":303.64,"den":400.03,"ten":"Vì sao khác nhau?"},
+        {"t":400.03,"den":508.59,"ten":"Bẫy cuối. JSON chấm stringify một update năm…"},
+        {"t":508.59,"den":585.19,"ten":"Thực hành hai mươi phút"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 8.2 khoá Socket.IO."},
         {"t":9.7,"vi":"Bài trước: một HTTP server, bốn WebSocket server, mỗi cái nhận đúng đường của mình."},
@@ -3809,8 +4005,14 @@
         {"t":572.56,"vi":"Bạn mở Code Lab Socket.IO, mô đun emitting and receiving events để luyện. Bài sau: giao thức đồng bộ nhị phân của Yjs, bóc từng byte."}
       ]
     },
-    "io-8-3-protocol": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/socket-io/08-soan-thao-cong-tac/08-03-giao-thuc-dong-bo-yjs-f47444e0.mp4","durationSec":551.44,"nguonCau":"srt",
-      "parts": [],
+    "io-8-3-protocol": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/socket-io/08-soan-thao-cong-tac/08-03-giao-thuc-dong-bo-yjs-f47444e0.mp4","durationSec":551.44,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":112.62,"ten":"Mở đầu · bài này học gì"},
+        {"t":112.62,"den":233.72,"ten":"Cuối cùng là state vector dài một byte"},
+        {"t":233.72,"den":361.17,"ten":"Vì sao An nhận lại chính update của…"},
+        {"t":361.17,"den":480.19,"ten":"Bẫy cuối. Lab có thêm một đường Hocuspocus…"},
+        {"t":480.19,"den":551.44,"ten":"Thực hành hai mươi lăm phút"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 8.3 khoá Socket.IO."},
         {"t":9.77,"vi":"Bài trước: event có vị trí làm hai bản trôi xa, còn Y.Doc hội tụ vì mỗi ký tự có ID là client và clock."},
@@ -3911,8 +4113,13 @@
         {"t":539.96,"vi":"Bạn mở Code Lab Socket.IO, mô đun testing and debugging realtime để luyện. Bài sau: lưu Y.Doc lúc nào cho đúng."}
       ]
     },
-    "io-8-5-auth": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/socket-io/08-soan-thao-cong-tac/08-05-quyen-theo-tai-lieu-3a45fba6.mp4","durationSec":523.79,"nguonCau":"srt",
-      "parts": [],
+    "io-8-5-auth": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/socket-io/08-soan-thao-cong-tac/08-05-quyen-theo-tai-lieu-3a45fba6.mp4","durationSec":523.79,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":125.76,"ten":"Mở đầu · bài này học gì"},
+        {"t":125.76,"den":304.8,"ten":"Chạy thật. An xin token cho ghi chú…"},
+        {"t":304.8,"den":443.73,"ten":"Mở notes-collaboration gateway, dòng hai trăm"},
+        {"t":443.73,"den":523.79,"ten":"Thực hành ba mươi phút"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 8.5, bài cuối Chương 8 khoá Socket.IO."},
         {"t":11.16,"vi":"Bài trước: kho lưu Y.Doc sau một giây rưỡi, trần mười giây, và các tab đang mở là bản dự phòng khi server sập."},
@@ -3998,8 +4205,13 @@
         {"t":510.89,"vi":"Bạn mở Code Lab Socket.IO, mô đun authentication and middleware để luyện. Chương sau: WebSocket thô, khi socket.io không có sẵn."}
       ]
     },
-    "io-9-1-vi-sao": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/socket-io/09-raw-websocket/09-01-vi-sao-device-gateway-dai-23dde081.mp4","durationSec":602.63,"nguonCau":"srt",
-      "parts": [],
+    "io-9-1-vi-sao": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/socket-io/09-raw-websocket/09-01-vi-sao-device-gateway-dai-23dde081.mp4","durationSec":602.63,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":183.97,"ten":"Mở đầu · bài này học gì"},
+        {"t":183.97,"den":363.17,"ten":"Bộ chuyển theo trường t"},
+        {"t":363.17,"den":535.43,"ten":"Liệt kê thư mục mã của nó"},
+        {"t":535.43,"den":602.63,"ten":"Thực hành hai mươi phút"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 9.1, mở đầu Chương 9 khoá Socket.IO."},
         {"t":11.14,"vi":"Chương trước, ghi chú cộng tác đi Yjs qua Hocuspocus, không đi event socket.io. Lưu có debounce, quyền kiểm theo từng tài liệu."},
@@ -4101,8 +4313,13 @@
         {"t":590.13,"vi":"Bạn mở Code Lab Socket.IO, mô đun production patterns and security để luyện. Bài sau: logic reconnect, và cơn bão kết nối lại."}
       ]
     },
-    "io-9-2-reconnect": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/socket-io/09-raw-websocket/09-02-reconnect-thu-cong-e7877648.mp4","durationSec":520.77,"nguonCau":"srt",
-      "parts": [],
+    "io-9-2-reconnect": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/socket-io/09-raw-websocket/09-02-reconnect-thu-cong-e7877648.mp4","durationSec":520.77,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":184.32,"ten":"Mở đầu · bài này học gì"},
+        {"t":184.32,"den":361.8,"ten":"Ba trăm bo"},
+        {"t":361.8,"den":449.13,"ten":"Kho chỉ log nối và ngắt"},
+        {"t":449.13,"den":520.77,"ten":"Thực hành ba mươi phút"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 9.2 khoá Socket.IO."},
         {"t":9.69,"vi":"Bài trước mình đếm device gateway: chỉ chừng tám phần trăm là phần socket.io làm hộ, và reconnect ở server là không dòng nào."},
@@ -4196,8 +4413,13 @@
         {"t":508.24,"vi":"Bạn mở Code Lab Socket.IO, mô đun reconnection and reliability để luyện. Bài sau: message framing, JSON không miễn phí."}
       ]
     },
-    "io-9-3-framing": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/socket-io/09-raw-websocket/09-03-message-framing-d947a8d5.mp4","durationSec":529.9,"nguonCau":"srt",
-      "parts": [],
+    "io-9-3-framing": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/socket-io/09-raw-websocket/09-03-message-framing-d947a8d5.mp4","durationSec":529.9,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":180.57,"ten":"Mở đầu · bài này học gì"},
+        {"t":180.57,"den":354.39,"ten":"Script mã rồi giải hai trăm nghìn lần…"},
+        {"t":354.39,"den":458.12,"ten":"Kho này làm đúng bảng đó"},
+        {"t":458.12,"den":529.9,"ten":"Thực hành hai mươi phút"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 9.3 khoá Socket.IO."},
         {"t":9.77,"vi":"Bài trước, ba trăm bo mạch nối lại cố định ba giây làm server không bao giờ hội tụ, vì bcrypt chặn event loop."},
@@ -4284,8 +4506,12 @@
         {"t":517.51,"vi":"Bạn mở Code Lab Socket.IO, mô đun testing and debugging realtime để luyện. Bài sau: cây cầu sang socket.io cho dashboard."}
       ]
     },
-    "io-9-4-bridge": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/socket-io/09-raw-websocket/09-04-bridge-dashboard-01eedffa.mp4","durationSec":503.03,"nguonCau":"srt",
-      "parts": [],
+    "io-9-4-bridge": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/socket-io/09-raw-websocket/09-04-bridge-dashboard-01eedffa.mp4","durationSec":503.03,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":180.89,"ten":"Mở đầu · bài này học gì"},
+        {"t":180.89,"den":357.36,"ten":"Người thứ ba"},
+        {"t":357.36,"den":503.03,"ten":"Liên kết chéo"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 9.4 khoá Socket.IO."},
         {"t":9.74,"vi":"Bài trước: telemetry đi JSON một lần mỗi giây, tiếng nói đi khung nhị phân, và gateway bỏ qua khung hỏng thay vì cắt kết nối."},

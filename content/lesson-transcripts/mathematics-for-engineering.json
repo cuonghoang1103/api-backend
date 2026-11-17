@@ -2,8 +2,15 @@
   "courseSlug": "mathematics-for-engineering",
   "sinhBoi": "scripts/phu-de-tu-video-rieng.mjs",
   "lessons": {
-    "mae101-1-1-gioi-han": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/mathematics-for-engineering/01-gioi-han/01-02-gioi-han-c6915096.mp4","durationSec":658.68,"nguonCau":"srt",
-      "parts": [],
+    "mae101-1-1-gioi-han": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/mathematics-for-engineering/01-gioi-han/01-02-gioi-han-c6915096.mp4","durationSec":658.68,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":132.24,"ten":"Mở đầu · bài này học gì"},
+        {"t":132.24,"den":210.62,"ten":"Bẫy thi: đề cho f(1) bằng bốn rồi…"},
+        {"t":210.62,"den":287.44,"ten":"Ví dụ một của bài"},
+        {"t":287.44,"den":367.8,"ten":"Slide 5 nhắc ba kiểu giới hạn không…"},
+        {"t":367.8,"den":495.23,"ten":"Ví dụ: x² cộng một"},
+        {"t":495.23,"den":658.68,"ten":"Giờ mình chạy thật tệp Python"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn. Bài trước mình đã lướt cả mười bảy slide của chương giới hạn."},
         {"t":10.18,"vi":"Bạn đã gặp lỗ thủng, giới hạn một phía, và ba kiểu giới hạn không tồn tại."},
@@ -127,8 +134,14 @@
         {"t":650.13,"vi":"Bài sau, 1.2: cách tính giới hạn bằng luật và phép thay trực tiếp, kèm nhiều bài giải mẫu."}
       ]
     },
-    "mae101-1-2-tinh-gioi-han": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/mathematics-for-engineering/01-gioi-han/01-03-tinh-gioi-han-16ddaa40.mp4","durationSec":546.96,"nguonCau":"srt",
-      "parts": [],
+    "mae101-1-2-tinh-gioi-han": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/mathematics-for-engineering/01-gioi-han/01-03-tinh-gioi-han-16ddaa40.mp4","durationSec":546.96,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":82.74,"ten":"Mở đầu · bài này học gì"},
+        {"t":82.74,"den":163.01,"ten":"Vì sao được phép thay số?"},
+        {"t":163.01,"den":251.21,"ten":"Slide 8 làm mẫu với x² trừ chín"},
+        {"t":251.21,"den":375.89,"ten":"Ví dụ thứ hai của bài web"},
+        {"t":375.89,"den":546.96,"ten":"Ví dụ sin x chia x"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn. Bài trước mình đã hiểu giới hạn là xu hướng gần a, không phải giá trị tại a."},
         {"t":11.58,"vi":"Mình cũng đã đọc giới hạn trên đồ thị, và thuộc hai giới hạn đặc biệt."},

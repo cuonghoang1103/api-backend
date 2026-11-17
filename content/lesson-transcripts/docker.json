@@ -2,8 +2,17 @@
   "courseSlug": "docker",
   "sinhBoi": "scripts/phu-de-tu-video-rieng.mjs",
   "lessons": {
-    "dk-0-1-van-de": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/docker/00-intro/00-04-van-de-952a9b4a.mp4","durationSec":773.9,"nguonCau":"srt",
-      "parts": [],
+    "dk-0-1-van-de": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/docker/00-intro/00-04-van-de-952a9b4a.mp4","durationSec":773.9,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":101.9,"ten":"Ôn nhanh · hôm nay · Cú hỏng 1: máy tôi chạy được mà"},
+        {"t":101.9,"den":211.12,"ten":"Chạy thật: môi trường là những tệp cụ thể"},
+        {"t":211.12,"den":288.98,"ten":"Cú hỏng 3: máy trôi dạt dưới chân ứng dụng"},
+        {"t":288.98,"den":375.8,"ten":"Slide: bốn thứ Docker cho, bốn thứ nó không phải"},
+        {"t":375.8,"den":467.4,"ten":"Slide: bản một câu · Khi nào dùng Docker, khi nào không"},
+        {"t":467.4,"den":560.13,"ten":"Slide: khoá dành cho ai, lộ trình"},
+        {"t":560.13,"den":660.13,"ten":"Bẫy: học thuộc lệnh trước mô hình · Thực hành 15–20 phút"},
+        {"t":660.13,"den":773.9,"ten":"Ba câu tự kiểm · Liên kết khoá khác"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 0.1 của khoá Docker."},
         {"t":9.31,"vi":"Bài trước: một tuần đồ án không có Docker, những sự cố thật, cách đọc lỗi từ cuối, và mốc một với container đầu tiên."},
@@ -118,8 +127,19 @@
         {"t":764.33,"vi":"Bài sau, bài 0.2: cài Docker trên Linux, Mac và Windows, và bạn vừa cài chính xác những gì."}
       ]
     },
-    "dk-0-2-cai-dat": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/docker/00-intro/00-05-cai-dat-d859476c.mp4","durationSec":1003.29,"nguonCau":"srt",
-      "parts": [],
+    "dk-0-2-cai-dat": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/docker/00-intro/00-05-cai-dat-d859476c.mp4","durationSec":1003.29,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":97.49,"ten":"Ôn nhanh · hôm nay · Ba câu hỏi khó hiểu"},
+        {"t":97.49,"den":198.02,"ten":"Slide: Linux thẳng, Mac và Windows qua máy ảo"},
+        {"t":198.02,"den":319.07,"ten":"Ubuntu: cài từ kho apt chính thức"},
+        {"t":319.07,"den":419.22,"ten":"Kiểm một bản cài Linux: ba câu hỏi"},
+        {"t":419.22,"den":515.6,"ten":"Chạy thật: macOS — máy ảo có RAM riêng"},
+        {"t":515.6,"den":649,"ten":"Windows: sống bên trong WSL2"},
+        {"t":649,"den":755.69,"ten":"Slide: hai chương trình · DockerRootDir và system df"},
+        {"t":755.69,"den":838.46,"ten":"Slide: hello-world năm bước"},
+        {"t":838.46,"den":940.39,"ten":"Thực hành 15–20 phút · Ba câu tự kiểm"},
+        {"t":940.39,"den":1003.29,"ten":"Liên kết khoá khác · Tóm tắt & luyện tập"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 0.2 của khoá Docker."},
         {"t":9.18,"vi":"Bài trước: ba cú hỏng có chung một gốc, môi trường không nằm trong thứ đem đi."},
@@ -282,8 +302,20 @@
         {"t":992.89,"vi":"Bài sau, bài 0.3: năm phút đầu tiên, chạy một web server và một cơ sở dữ liệu thật ngay trên máy bạn."}
       ]
     },
-    "dk-0-3-nam-phut": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/docker/00-intro/00-06-nam-phut-c773c026.mp4","durationSec":1034.5,"nguonCau":"srt",
-      "parts": [],
+    "dk-0-3-nam-phut": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/docker/00-intro/00-06-nam-phut-c773c026.mp4","durationSec":1034.5,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":147.42,"ten":"Ôn nhanh · hôm nay · Chạy thật: một web server, một câu lệnh"},
+        {"t":147.42,"den":240.57,"ten":"Mô phỏng: -p như gõ cửa máy · Chạy thật: hai nửa của -p"},
+        {"t":240.57,"den":345.69,"ten":"Slide: các cách viết -p"},
+        {"t":345.69,"den":431.25,"ten":"Chạy thật: đi vào bên trong"},
+        {"t":431.25,"den":529.81,"ten":"Chạy thật: docker top trên Mac"},
+        {"t":529.81,"den":619.35,"ten":"Mô phỏng: vì sao mv làm hỏng bind mount tệp lẻ"},
+        {"t":619.35,"den":705.84,"ten":"Chạy thật: một cơ sở dữ liệu, một câu lệnh"},
+        {"t":705.84,"den":803.62,"ten":"Slide: Postgres một lệnh, dữ liệu ở volume vô danh"},
+        {"t":803.62,"den":907.14,"ten":"Bẫy: port is already allocated · Thực hành 15–20 phút"},
+        {"t":907.14,"den":983.85,"ten":"Ba câu tự kiểm · Liên kết khoá khác"},
+        {"t":983.85,"den":1034.5,"ten":"Tóm tắt & luyện tập"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 0.3, bài cuối của Mục 0 khoá Docker."},
         {"t":10.95,"vi":"Bài trước: lệnh docker chỉ là máy khách, trên Mac có một máy ảo Linux với RAM riêng, và hello-world là năm bước gói trong một lệnh."},
@@ -430,8 +462,21 @@
         {"t":1024.83,"vi":"Bài sau mở Chương 1, bài 1.1: container thật ra được làm bằng gì, namespace và cgroup."}
       ]
     },
-    "dk-0-5-bat-dau-tai-day": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/docker/00-intro/00-01-bat-dau-tai-day-e2e7f706.mp4","durationSec":1153.64,"nguonCau":"srt",
-      "parts": [],
+    "dk-0-5-bat-dau-tai-day": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/docker/00-intro/00-01-bat-dau-tai-day-e2e7f706.mp4","durationSec":1153.64,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":143.63,"ten":"Chào khoá Docker · Có thể bạn đã gặp Docker rồi"},
+        {"t":143.63,"den":220.06,"ten":"Slide: thùng hàng tiêu chuẩn"},
+        {"t":220.06,"den":309.69,"ten":"Ba định nghĩa · Slide: image là cái khuôn"},
+        {"t":309.69,"den":418.82,"ten":"Slide: sáu cái tên Docker · Mô phỏng 3D: máy ảo và container"},
+        {"t":418.82,"den":557.4,"ten":"Slide: container không phải máy ảo · Slide: 45 năm dọn đường"},
+        {"t":557.4,"den":633.68,"ten":"Slide: sau 2013, thành chuẩn chung"},
+        {"t":633.68,"den":715.86,"ten":"Slide: máy em chạy được mà thầy"},
+        {"t":715.86,"den":807.42,"ten":"Slide: Docker dùng để làm gì"},
+        {"t":807.42,"den":911.84,"ten":"Slide: Docker giúp gì cho BẠN · Slide: lộ trình 17 phần"},
+        {"t":911.84,"den":995.93,"ten":"Bẫy: bắt đầu sai chỗ · Chạy thật: hello-world"},
+        {"t":995.93,"den":1092.03,"ten":"Thực hành 10 phút · Ba câu tự kiểm"},
+        {"t":1092.03,"den":1153.64,"ten":"Liên kết khoá khác · Tóm tắt & luyện tập"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, chào mừng bạn đến với khoá Docker trên cuongthai.com."},
         {"t":10.34,"vi":"Học xong khoá này, bạn tự viết được Dockerfile tốt, dùng Compose dựng cả một hệ thống thật, đưa lên máy chủ, và chẩn đoán sự cố container."},
@@ -614,8 +659,17 @@
         {"t":1143.24,"vi":"Bài sau là Bắt đầu tại đây phần hai: những sự cố có thật khi không có Docker, và cách học để không bỏ cuộc."}
       ]
     },
-    "dk-0-6-bat-dau-khi-khong-co": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/docker/00-intro/00-02-bat-dau-khi-khong-co-4af94ed7.mp4","durationSec":833.91,"nguonCau":"srt",
-      "parts": [],
+    "dk-0-6-bat-dau-khi-khong-co": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/docker/00-intro/00-02-bat-dau-khi-khong-co-4af94ed7.mp4","durationSec":833.91,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":105.57,"ten":"Ôn nhanh · hôm nay · Mô phỏng: một tuần đồ án nhóm"},
+        {"t":105.57,"den":223.07,"ten":"Slide: không Docker và có Docker · Slide: ba sự cố có thật"},
+        {"t":223.07,"den":349.9,"ten":"Slide: bốn sự cố của một dự án sinh viên"},
+        {"t":349.9,"den":427.4,"ten":"Slide: vì sao người mới hay bỏ"},
+        {"t":427.4,"den":527.08,"ten":"Chạy thật: bốn lỗi, đọc cụm cuối"},
+        {"t":527.08,"den":615.45,"ten":"Bảy lời khuyên để học không nản"},
+        {"t":615.45,"den":727.9,"ten":"Slide: nhịp buổi học và năm mốc"},
+        {"t":727.9,"den":833.91,"ten":"Ba câu tự kiểm · Liên kết khoá khác"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với phần hai của bài Bắt đầu tại đây, khoá Docker."},
         {"t":10.48,"vi":"Bài trước: Docker là thùng hàng tiêu chuẩn cho phần mềm."},
@@ -764,8 +818,18 @@
         {"t":823.7,"vi":"Bài sau, bài 0.1: soi kỹ ba cú hỏng quen thuộc mà Docker chấm dứt, và Docker không phải là cái gì."}
       ]
     },
-    "dk-1-1-container-la-gi": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/docker/01-mo-hinh/01-02-container-la-gi-582522a4.mp4","durationSec":855.81,"nguonCau":"srt",
-      "parts": [],
+    "dk-1-1-container-la-gi": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/docker/01-mo-hinh/01-02-container-la-gi-582522a4.mp4","durationSec":855.81,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":103.4,"ten":"Ôn nhanh · hôm nay · Không có đối tượng container nào"},
+        {"t":103.4,"den":180.03,"ten":"Slide: tiến trình đeo hai lớp kính"},
+        {"t":180.03,"den":288.15,"ten":"Slide: bảy namespace riêng, trừ user"},
+        {"t":288.15,"den":376.86,"ten":"Slide: chỉ có một nhân · Slide: cgroup là vài tệp"},
+        {"t":376.86,"den":473.32,"ten":"Chạy thật: đọc giới hạn ra từ cgroup"},
+        {"t":473.32,"den":581.21,"ten":"Chạy thật: chạm trần, exit 137"},
+        {"t":581.21,"den":666,"ten":"Chạy thật: một cờ là tường biến mất"},
+        {"t":666,"den":778.29,"ten":"Thực hành 15–20 phút · Ba câu tự kiểm"},
+        {"t":778.29,"den":855.81,"ten":"Liên kết khoá khác · Tóm tắt & luyện tập"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 1.1, bài mở đầu Chương 1 của khoá Docker: mô hình tư duy."},
         {"t":12.7,"vi":"Mục 0 đã cho bạn chạy nginx và PostgreSQL bằng một lệnh, và thấy cùng một tiến trình mang hai số PID, một ở máy chủ, một trong container."},
@@ -887,8 +951,17 @@
         {"t":850.19,"vi":"Bài sau, bài 1.2: image là những chồng tầng."}
       ]
     },
-    "dk-1-3-vong-doi": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/docker/01-mo-hinh/01-04-vong-doi-0a601470.mp4","durationSec":798.9,"nguonCau":"srt",
-      "parts": [],
+    "dk-1-3-vong-doi": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/docker/01-mo-hinh/01-04-vong-doi-0a601470.mp4","durationSec":798.9,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":93.34,"ten":"Ôn nhanh · hôm nay · Chạy thật: run là ba lệnh"},
+        {"t":93.34,"den":178.44,"ten":"Slide: run là pull, create, start"},
+        {"t":178.44,"den":281.35,"ten":"Mô phỏng: stop là một cuộc thương lượng"},
+        {"t":281.35,"den":364.29,"ten":"Slide: SIGTERM, chờ, SIGKILL · PID 1 là đặc biệt"},
+        {"t":364.29,"den":458.82,"ten":"Slide: PID 1 phải tự bắt SIGTERM"},
+        {"t":458.82,"den":561.18,"ten":"Slide: ba cách sửa · Chạy thật: mã thoát kể chuyện"},
+        {"t":561.18,"den":672.64,"ten":"Slide: bảng mã thoát · Thực hành 15–20 phút"},
+        {"t":672.64,"den":798.9,"ten":"Ba câu tự kiểm · Liên kết khoá khác"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 1.3 của khoá Docker."},
         {"t":9.03,"vi":"Bài trước: image là chồng tầng chỉ đọc, container thêm một tầng ghi được, ghi lần đầu chép trọn tệp, xoá chỉ là dấu whiteout."},
@@ -1014,8 +1087,16 @@
         {"t":790.96,"vi":"Bài sau, bài 1.4: tầng ghi được, và vì sao dữ liệu của bạn biến mất."}
       ]
     },
-    "dk-1-4-tang-ghi-duoc": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/docker/01-mo-hinh/01-05-tang-ghi-duoc-e9409b22.mp4","durationSec":702.45,"nguonCau":"srt",
-      "parts": [],
+    "dk-1-4-tang-ghi-duoc": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/docker/01-mo-hinh/01-05-tang-ghi-duoc-e9409b22.mp4","durationSec":702.45,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":112.13,"ten":"Ôn nhanh · hôm nay"},
+        {"t":112.13,"den":202.55,"ten":"Slide: restart giữ, rm xoá"},
+        {"t":202.55,"den":328.21,"ten":"Slide: volume vô danh mới · Slide: ba đường ra khỏi tầng ghi"},
+        {"t":328.21,"den":417.44,"ten":"Chạy thật: docker cp cứu tệp từ container đã dừng"},
+        {"t":417.44,"den":506.45,"ten":"Chạy thật: commit, save và export · Slide: save và export"},
+        {"t":506.45,"den":595.54,"ten":"Bẫy: volume vô danh lặng lẽ ngốn đĩa · Thực hành 15–20 phút"},
+        {"t":595.54,"den":702.45,"ten":"Ba câu tự kiểm · Liên kết khoá khác"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 1.4 của khoá Docker."},
         {"t":9.12,"vi":"Bài trước: vòng đời container từ created tới exited, docker stop là SIGTERM rồi SIGKILL, và PID 1 phải tự bắt tín hiệu."},
@@ -1132,8 +1213,17 @@
         {"t":696.56,"vi":"Bài sau, bài 1.5: ai thật sự chạy cái container."}
       ]
     },
-    "dk-1-5-ngan-xep-runtime": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/docker/01-mo-hinh/01-06-ngan-xep-runtime-86ec1ed5.mp4","durationSec":714.68,"nguonCau":"srt",
-      "parts": [],
+    "dk-1-5-ngan-xep-runtime": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/docker/01-mo-hinh/01-06-ngan-xep-runtime-86ec1ed5.mp4","durationSec":714.68,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":87,"ten":"Ôn nhanh · hôm nay · Mô phỏng: dây chuyền chạy một container"},
+        {"t":87,"den":187.11,"ten":"Slide: bốn chương trình xếp chồng"},
+        {"t":187.11,"den":278.11,"ten":"Slide: cha của shim là systemd"},
+        {"t":278.11,"den":373.15,"ten":"Quyền ghi docker.sock là quyền root"},
+        {"t":373.15,"den":462.25,"ten":"Slide: live-restore trong daemon.json"},
+        {"t":462.25,"den":546.17,"ten":"Chạy thật: đổi cái runtime"},
+        {"t":546.17,"den":653.73,"ten":"Thực hành 15–20 phút · Ba câu tự kiểm"},
+        {"t":653.73,"den":714.68,"ten":"Liên kết khoá khác · Tóm tắt & luyện tập"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 1.5, bài cuối của Chương 1."},
         {"t":9.97,"vi":"Bài trước: tầng ghi sống theo container, rm là mất, và volume vô danh bị bỏ rơi chứ không bị xoá."},
@@ -1234,8 +1324,13 @@
         {"t":705.32,"vi":"Hết Chương 1. Chương 2 bắt đầu với bài 2.1: docker run, những cờ bạn dùng mỗi ngày."}
       ]
     },
-    "dk-10-1-ban-ve": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/docker/10-stack-that/10-02-ban-ve-f1944fe0.mp4","durationSec":426.05,"nguonCau":"srt",
-      "parts": [],
+    "dk-10-1-ban-ve": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/docker/10-stack-that/10-02-ban-ve-f1944fe0.mp4","durationSec":426.05,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":116.34,"ten":"Ôn nhanh · hôm nay · Mô phỏng: một toà nhà, một cửa chính"},
+        {"t":116.34,"den":207.83,"ten":"Slide: hai mạng là một chính sách"},
+        {"t":207.83,"den":328.05,"ten":"Chạy thật: ai chờ ai · Slide: thứ tự khởi động có điều kiện"},
+        {"t":328.05,"den":426.05,"ten":"Ba câu tự kiểm · Liên kết khoá khác"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Chương 10: một stack thật. Bài 10.1."},
         {"t":10.48,"vi":"Chín chương vừa rồi là từng mảnh: mạng, volume, healthcheck, job migrate, nhiều tệp compose."},
@@ -1309,8 +1404,14 @@
         {"t":419.55,"vi":"Bài sau, bài 10.2: tầng dữ liệu, Postgres và Redis."}
       ]
     },
-    "dk-10-2-tang-du-lieu": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/docker/10-stack-that/10-03-tang-du-lieu-0a9f01bf.mp4","durationSec":492.61,"nguonCau":"srt",
-      "parts": [],
+    "dk-10-2-tang-du-lieu": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/docker/10-stack-that/10-03-tang-du-lieu-0a9f01bf.mp4","durationSec":492.61,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":87.65,"ten":"Ôn nhanh · hôm nay · Mô phỏng: mật khẩu khắc lúc đúc két"},
+        {"t":87.65,"den":200.67,"ten":"Chạy thật: initdb.d chạy đúng một lần"},
+        {"t":200.67,"den":297.08,"ten":"Chạy thật: sửa đúng chỗ mật khẩu sống"},
+        {"t":297.08,"den":388.38,"ten":"Slide: Redis · Slide: nâng 16 lên 17"},
+        {"t":388.38,"den":492.61,"ten":"Ba câu tự kiểm · Liên kết khoá khác"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 10.2."},
         {"t":8.03,"vi":"Bài 10.1: bản vẽ bảy dịch vụ, hai mạng, và cơ sở dữ liệu nằm sâu trong mạng private."},
@@ -1390,8 +1491,15 @@
         {"t":486.57,"vi":"Bài sau, bài 10.3: API, worker, và migration."}
       ]
     },
-    "dk-10-3-api-migration": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/docker/10-stack-that/10-04-api-migration-4ff61bf3.mp4","durationSec":619.77,"nguonCau":"srt",
-      "parts": [],
+    "dk-10-3-api-migration": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/docker/10-stack-that/10-04-api-migration-4ff61bf3.mp4","durationSec":619.77,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":82.12,"ten":"Ôn nhanh · hôm nay · Mô phỏng: một khuôn, ba người"},
+        {"t":82.12,"den":164.16,"ten":"Bẫy: alpine thiếu openssl"},
+        {"t":164.16,"den":257.47,"ten":"Chạy thật: tái hiện sự cố libc"},
+        {"t":257.47,"den":390.94,"ten":"Slide: một ảnh, bốn vai"},
+        {"t":390.94,"den":513.42,"ten":"Slide: P3018 rồi P3009 · Chạy thật: seed và cái bẫy tsx"},
+        {"t":513.42,"den":619.77,"ten":"Ba câu tự kiểm · Liên kết khoá khác"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 10.3."},
         {"t":8.01,"vi":"Bài 10.2: tầng dữ liệu, và vì sao đổi mật khẩu trong .env làm hỏng migrate."},
@@ -1488,8 +1596,14 @@
         {"t":612.75,"vi":"Bài sau, bài 10.4: frontend, Next.js trong container."}
       ]
     },
-    "dk-10-4-frontend": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/docker/10-stack-that/10-05-frontend-5dc8c2de.mp4","durationSec":479.7,"nguonCau":"srt",
-      "parts": [],
+    "dk-10-4-frontend": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/docker/10-stack-that/10-05-frontend-5dc8c2de.mp4","durationSec":479.7,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":85.57,"ten":"Ôn nhanh · hôm nay · Mô phỏng: chữ in lên bánh lúc nướng"},
+        {"t":85.57,"den":176.03,"ten":"Chạy thật: standalone tiết kiệm được gì"},
+        {"t":176.03,"den":257.25,"ten":"Slide: NEXT_PUBLIC nướng lúc build"},
+        {"t":257.25,"den":369.3,"ten":"Bẫy: HOSTNAME · Slide: HOSTNAME"},
+        {"t":369.3,"den":479.7,"ten":"Ba câu tự kiểm · Liên kết khoá khác"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 10.4."},
         {"t":8.07,"vi":"Bài 10.3: một API thật, Express với Prisma, một ảnh ba vai, và migration không làm sập site."},
@@ -1562,8 +1676,16 @@
         {"t":472.69,"vi":"Bài sau, bài 10.5: nginx đứng trước, và lắp cả cái tệp."}
       ]
     },
-    "dk-10-5-nginx-lap-rap": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/docker/10-stack-that/10-06-nginx-lap-rap-9c924fd7.mp4","durationSec":659.74,"nguonCau":"srt",
-      "parts": [],
+    "dk-10-5-nginx-lap-rap": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/docker/10-stack-that/10-06-nginx-lap-rap-9c924fd7.mp4","durationSec":659.74,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":105.17,"ten":"Ôn nhanh · hôm nay · Mô phỏng: quầy lễ tân của toà nhà"},
+        {"t":105.17,"den":220.56,"ten":"Chạy thật: một dấu gạch chéo · Slide: dấu / cuối proxy_pass"},
+        {"t":220.56,"den":310.15,"ten":"Slide: Linux đọc bản cũ, Mac mất tệp"},
+        {"t":310.15,"den":400.57,"ten":"Chạy thật: hai đính chính của bài web"},
+        {"t":400.57,"den":480.38,"ten":"Slide: build, migrate riêng, up, smoke test"},
+        {"t":480.38,"den":591.8,"ten":"Slide: đo, đừng đoán · Thực hành 15–20 phút"},
+        {"t":591.8,"den":659.74,"ten":"Liên kết khoá khác · Tóm tắt & luyện tập"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 10.5, bài cuối của chương 10."},
         {"t":10,"vi":"Bài 10.4: Next.js trong container, ảnh standalone, bẫy NEXT_PUBLIC, và bẫy HOSTNAME."},
@@ -1678,8 +1800,14 @@
         {"t":656.23,"vi":"Bài sau là quiz chương 10."}
       ]
     },
-    "dk-11-1-restart": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/docker/11-production/11-02-restart-14f735f0.mp4","durationSec":480.08,"nguonCau":"srt",
-      "parts": [],
+    "dk-11-1-restart": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/docker/11-production/11-02-restart-14f735f0.mp4","durationSec":480.08,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":87.5,"ten":"Ôn nhanh · hôm nay · Mô phỏng: người gõ cửa kiên nhẫn"},
+        {"t":87.5,"den":170.56,"ten":"Chạy thật: đo độ trễ bằng docker events"},
+        {"t":170.56,"den":260.57,"ten":"Slide: bảng đọc ba con số"},
+        {"t":260.57,"den":375.11,"ten":"Slide: khởi động lại máy · Unit systemd chạy compose"},
+        {"t":375.11,"den":480.08,"ten":"Ba câu tự kiểm · Liên kết khoá khác"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với chương 11: chạy trên production. Bài đầu tiên, bài 11.1."},
         {"t":12.35,"vi":"Chương 10 đã lắp xong một stack thật: nginx, web, api, worker, Postgres, Redis, và một lượt deploy có smoke test."},
@@ -1761,8 +1889,14 @@
         {"t":472.71,"vi":"Bài sau, bài 11.2: hạn mức, và mã thoát 137."}
       ]
     },
-    "dk-11-2-han-muc-137": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/docker/11-production/11-03-han-muc-137-4492eb54.mp4","durationSec":499.92,"nguonCau":"srt",
-      "parts": [],
+    "dk-11-2-han-muc-137": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/docker/11-production/11-03-han-muc-137-4492eb54.mp4","durationSec":499.92,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":131.76,"ten":"Ôn nhanh · hôm nay · Mô phỏng: cái ly và cái vòi"},
+        {"t":131.76,"den":210.11,"ten":"Slide: ba bằng chứng · Slide: deploy.resources"},
+        {"t":210.11,"den":320.58,"ten":"Slide: hết CPU chậm, hết RAM chết"},
+        {"t":320.58,"den":427.56,"ten":"Slide: Node 20+ đọc cgroup · Thực hành 15–20 phút"},
+        {"t":427.56,"den":499.92,"ten":"Liên kết khoá khác · Tóm tắt & luyện tập"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 11.2."},
         {"t":8.4,"vi":"Bài 11.1: unless-stopped, độ trễ nhân đôi, và ba con số RestartCount, ExitCode, OOMKilled."},
@@ -1843,8 +1977,14 @@
         {"t":492.87,"vi":"Bài sau, bài 11.3: log, xoay log, và cái đĩa đầy."}
       ]
     },
-    "dk-11-3-log": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/docker/11-production/11-04-log-660a78ad.mp4","durationSec":489.59,"nguonCau":"srt",
-      "parts": [],
+    "dk-11-3-log": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/docker/11-production/11-04-log-660a78ad.mp4","durationSec":489.59,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":120.56,"ten":"Ôn nhanh · hôm nay · Mô phỏng: cuộn giấy hoá đơn"},
+        {"t":120.56,"den":203.73,"ten":"Slide: 33 MB và 2,6 MB · Chạy thật: không bảng nào đếm log"},
+        {"t":203.73,"den":298.89,"ten":"Chạy thật: compose và daemon.json · Slide: rm không trả chỗ"},
+        {"t":298.89,"den":380.84,"ten":"Chạy thật: log đáng đọc · Thực hành 15–20 phút"},
+        {"t":380.84,"den":489.59,"ten":"Ba câu tự kiểm · Liên kết khoá khác"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 11.3."},
         {"t":8.46,"vi":"Bài 11.2: hạn mức bộ nhớ, mã thoát 137, và OOMKilled."},
@@ -1935,8 +2075,15 @@
         {"t":482.22,"vi":"Bài sau, bài 11.4: cập nhật, CI CD, và quay lui."}
       ]
     },
-    "dk-11-4-cap-nhat-quay-lui": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/docker/11-production/11-05-cap-nhat-quay-lui-e39e4962.mp4","durationSec":570.74,"nguonCau":"srt",
-      "parts": [],
+    "dk-11-4-cap-nhat-quay-lui": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/docker/11-production/11-05-cap-nhat-quay-lui-e39e4962.mp4","durationSec":570.74,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":81.72,"ten":"Ôn nhanh · hôm nay · Mô phỏng: đổi ca ở quầy thu ngân"},
+        {"t":81.72,"den":172.84,"ten":"Chạy thật: đo khoảng trống · Slide: khoảng trống khi tráo"},
+        {"t":172.84,"den":268.66,"ten":"Slide: bắt SIGTERM · Slide: dựng ở máy khác"},
+        {"t":268.66,"den":350.24,"ten":"Chạy thật: bản hỏng và quay lui · Slide: tag theo commit"},
+        {"t":350.24,"den":462.62,"ten":"Slide: up --wait · Chạy thật: không còn ảnh mồ côi"},
+        {"t":462.62,"den":570.74,"ten":"Ba câu tự kiểm · Liên kết khoá khác"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 11.4."},
         {"t":8.37,"vi":"Bài 11.3: log không tự xoay, max-size, và truncate khi đĩa đã đầy."},
@@ -2032,8 +2179,14 @@
         {"t":563.35,"vi":"Bài sau, bài 11.5: đĩa, dọn dẹp, và biết trước người dùng."}
       ]
     },
-    "dk-11-5-dia-giam-sat": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/docker/11-production/11-06-dia-giam-sat-4d558fad.mp4","durationSec":450.69,"nguonCau":"srt",
-      "parts": [],
+    "dk-11-5-dia-giam-sat": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/docker/11-production/11-06-dia-giam-sat-4d558fad.mp4","durationSec":450.69,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":88.32,"ten":"Ôn nhanh · hôm nay · Mô phỏng: nhà kho bốn đống"},
+        {"t":88.32,"den":167.77,"ten":"Slide: bốn thứ phình ra · Slide: thang prune"},
+        {"t":167.77,"den":270.47,"ten":"Chạy thật: bộ đệm build trên builder riêng"},
+        {"t":270.47,"den":346.02,"ten":"Slide: năm phép kiểm · Thực hành 15–20 phút"},
+        {"t":346.02,"den":450.69,"ten":"Ba câu tự kiểm · Liên kết khoá khác"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 11.5, bài cuối của chương 11."},
         {"t":10.16,"vi":"Bài 11.4: tag theo commit, up wait, và quay lui trong nửa giây."},
@@ -2102,8 +2255,15 @@
         {"t":441.96,"vi":"Bài sau là quiz chương 11. Chương 12 sẽ là chẩn đoán: khi mọi thứ hỏng thì bắt đầu từ đâu."}
       ]
     },
-    "dk-12-1-phuong-phap": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/docker/12-chan-doan/12-02-phuong-phap-97be4202.mp4","durationSec":508.13,"nguonCau":"srt",
-      "parts": [],
+    "dk-12-1-phuong-phap": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/docker/12-chan-doan/12-02-phuong-phap-97be4202.mp4","durationSec":508.13,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":82.68,"ten":"Ôn nhanh · hôm nay · Mô phỏng: toà nhà bốn tầng"},
+        {"t":82.68,"den":171.82,"ten":"Chạy thật: ba lệnh đầu tiên"},
+        {"t":171.82,"den":259.66,"ten":"Slide: ngã ba STATUS · Chạy thật: tự tay gây từng mã thoát"},
+        {"t":259.66,"den":343.25,"ten":"Slide: bảng mã thoát"},
+        {"t":343.25,"den":439.42,"ten":"Thực hành 15–20 phút · Ba câu tự kiểm"},
+        {"t":439.42,"den":508.13,"ten":"Liên kết khoá khác · Tóm tắt & luyện tập"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với chương 12: chẩn đoán container. Bài đầu tiên, bài 12.1."},
         {"t":12.28,"vi":"Chương 11 đã đưa stack lên production: restart, hạn mức, log, quay lui, và giám sát."},
@@ -2194,8 +2354,14 @@
         {"t":502.24,"vi":"Bài sau, bài 12.2: nó không khởi động được."}
       ]
     },
-    "dk-12-2-khong-khoi-dong": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/docker/12-chan-doan/12-03-khong-khoi-dong-36b3d7ed.mp4","durationSec":542.19,"nguonCau":"srt",
-      "parts": [],
+    "dk-12-2-khong-khoi-dong": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/docker/12-chan-doan/12-03-khong-khoi-dong-36b3d7ed.mp4","durationSec":542.19,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":101.84,"ten":"Ôn nhanh · hôm nay · Mô phỏng: đọc từ cuối dòng lỗi"},
+        {"t":101.84,"den":195.22,"ten":"Chạy thật: exec format error"},
+        {"t":195.22,"den":316.63,"ten":"Slide: 127 khác 126 · Chạy thật: shebang CRLF"},
+        {"t":316.63,"den":439.41,"ten":"Slide: hai câu báo cổng · Chạy thật: hai kiểu hỏng im lặng"},
+        {"t":439.41,"den":542.19,"ten":"Ba câu tự kiểm · Liên kết khoá khác"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 12.2."},
         {"t":8.46,"vi":"Bài 12.1: bốn tầng, ba lệnh đầu tiên, và cột STATUS. Created nghĩa là mã của bạn chưa chạy dòng nào."},
@@ -2285,8 +2451,14 @@
         {"t":535.93,"vi":"Bài sau, bài 12.3: nó khởi động, rồi chết."}
       ]
     },
-    "dk-12-3-khoi-dong-roi-chet": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/docker/12-chan-doan/12-04-khoi-dong-roi-chet-0524fe40.mp4","durationSec":500.38,"nguonCau":"srt",
-      "parts": [],
+    "dk-12-3-khoi-dong-roi-chet": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/docker/12-chan-doan/12-04-khoi-dong-roi-chet-0524fe40.mp4","durationSec":500.38,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":115.49,"ten":"Ôn nhanh · hôm nay · Mô phỏng: hộp đen của container"},
+        {"t":115.49,"den":200.98,"ten":"Slide: vòng lặp chờ gấp đôi · Chạy thật: tự tay gây lại lỗi"},
+        {"t":200.98,"den":283.12,"ten":"Chạy thật: thoát 0 ngay lập tức · Slide: exit 0 ngay"},
+        {"t":283.12,"den":399.58,"ten":"Slide: bộ kiểm hỏng · Chạy thật: không chịu dừng"},
+        {"t":399.58,"den":500.38,"ten":"Ba câu tự kiểm · Liên kết khoá khác"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 12.3."},
         {"t":8.46,"vi":"Bài 12.2: lỗi trước khi mã chạy."},
@@ -2381,8 +2553,14 @@
         {"t":493.28,"vi":"Bài sau, bài 12.4: bản dựng hỏng, hoặc chỉ hỏng trên CI."}
       ]
     },
-    "dk-12-4-dung-hong": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/docker/12-chan-doan/12-05-dung-hong-34fe9c35.mp4","durationSec":544.7,"nguonCau":"srt",
-      "parts": [],
+    "dk-12-4-dung-hong": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/docker/12-chan-doan/12-05-dung-hong-34fe9c35.mp4","durationSec":544.7,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":119.11,"ten":"Ôn nhanh · hôm nay · Mô phỏng: cái thùng gửi cho BuildKit"},
+        {"t":119.11,"den":221.75,"ten":"Slide: đọc từ dưới lên · Chạy thật: dừng trước bước hỏng"},
+        {"t":221.75,"den":325.71,"ten":"Slide: không nằm trong ngữ cảnh"},
+        {"t":325.71,"den":446.77,"ten":"Slide: .dockerignore đúng chỗ"},
+        {"t":446.77,"den":544.7,"ten":"Ba câu tự kiểm · Liên kết khoá khác"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 12.4."},
         {"t":8.46,"vi":"Bài 12.3: container lên rồi chết."},
@@ -2481,8 +2659,14 @@
         {"t":538.73,"vi":"Bài sau, bài 12.5: giờ bạn biết những gì."}
       ]
     },
-    "dk-12-5-ket-khoa": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/docker/12-chan-doan/12-06-ket-khoa-a26725d8.mp4","durationSec":447,"nguonCau":"srt",
-      "parts": [],
+    "dk-12-5-ket-khoa": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/docker/12-chan-doan/12-06-ket-khoa-a26725d8.mp4","durationSec":447,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":102.22,"ten":"Ôn nhanh · hôm nay · Mô phỏng: cả khoá trong ba câu"},
+        {"t":102.22,"den":193.15,"ten":"Chạy thật: một sự cố tổng hợp"},
+        {"t":193.15,"den":288.86,"ten":"Slide: mười hai luật · Slide: sự cố thật"},
+        {"t":288.86,"den":388.07,"ten":"Thực hành 15–20 phút · Ba câu tự kiểm"},
+        {"t":388.07,"den":447,"ten":"Liên kết khoá khác · Tóm tắt & luyện tập"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 12.5, bài khép lại phần chính của khoá."},
         {"t":10.37,"vi":"Mười ba phần trước, container là một hộp đen: chạy hoặc không. Giờ nó là một tiến trình trong các namespace, trên một hệ tệp ghép từ nhiều tầng, nối vào một bridge, với hạn mức do bạn chọn."},
@@ -2554,8 +2738,15 @@
         {"t":438.19,"vi":"Phần sau của khoá, từ chương 13, là Docker trong việc hằng ngày, bắt đầu bằng Dev Containers."}
       ]
     },
-    "dk-13-1-dev-containers": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/docker/13-phat-trien/13-02-dev-containers-ef16afe9.mp4","durationSec":505.02,"nguonCau":"srt",
-      "parts": [],
+    "dk-13-1-dev-containers": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/docker/13-phat-trien/13-02-dev-containers-ef16afe9.mp4","durationSec":505.02,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":95.34,"ten":"Ôn nhanh · hôm nay · Mô phỏng: cái xưởng cạnh nhà"},
+        {"t":95.34,"den":190.86,"ten":"Slide: devcontainer.json"},
+        {"t":190.86,"den":266.03,"ten":"Slide: lần đầu và lần sau · Chạy thật: giá của một feature"},
+        {"t":266.03,"den":350.77,"ten":"Chạy thật: cái bẫy ai cũng gặp"},
+        {"t":350.77,"den":451.6,"ten":"Thực hành 15–20 phút · Ba câu tự kiểm"},
+        {"t":451.6,"den":505.02,"ten":"Liên kết khoá khác · Tóm tắt & luyện tập"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với chương 13: Docker trong vòng lặp phát triển hằng ngày."},
         {"t":10.47,"vi":"Bài đầu tiên, bài 13.1."},
@@ -2637,8 +2828,14 @@
         {"t":494.65,"vi":"Bài sau, bài 13.2: sửa mã thấy ngay, với hot reload, compose watch và trình gỡ lỗi trong container."}
       ]
     },
-    "dk-13-2-hot-reload-debug": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/docker/13-phat-trien/13-03-hot-reload-debug-532a02fe.mp4","durationSec":531.9,"nguonCau":"srt",
-      "parts": [],
+    "dk-13-2-hot-reload-debug": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/docker/13-phat-trien/13-03-hot-reload-debug-532a02fe.mp4","durationSec":531.9,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":142.07,"ten":"Ôn nhanh · hôm nay · Mô phỏng: cửa kính và người đưa thư"},
+        {"t":142.07,"den":238.57,"ten":"Slide: bind mount phủ lên"},
+        {"t":238.57,"den":315.34,"ten":"Chạy thật: từ lúc lưu tới lúc thấy chữ mới · Slide: đo thật"},
+        {"t":315.34,"den":437.68,"ten":"Chạy thật: trình gỡ lỗi trong container"},
+        {"t":437.68,"den":531.9,"ten":"Ba câu tự kiểm · Tóm tắt & luyện tập"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 13.2."},
         {"t":8.41,"vi":"Bài 13.1: dev container, mã ở máy bạn, công cụ ở trong container."},
@@ -2719,8 +2916,14 @@
         {"t":523.65,"vi":"Bài sau, bài 13.3: dịch vụ thật cho test, Postgres dùng một lần rồi vứt."}
       ]
     },
-    "dk-13-3-db-that-cho-test": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/docker/13-phat-trien/13-04-db-that-cho-test-4ad9ab78.mp4","durationSec":485.46,"nguonCau":"srt",
-      "parts": [],
+    "dk-13-3-db-that-cho-test": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/docker/13-phat-trien/13-04-db-that-cho-test-4ad9ab78.mp4","durationSec":485.46,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":102.43,"ten":"Ôn nhanh · hôm nay · Mô phỏng: cái bàn thử dùng một lần"},
+        {"t":102.43,"den":204.02,"ten":"Chạy thật: Postgres khởi động hai lần"},
+        {"t":204.02,"den":281.44,"ten":"Slide: 15× trên Linux"},
+        {"t":281.44,"den":379.88,"ten":"Slide: compose.test.yaml · Slide: Testcontainers"},
+        {"t":379.88,"den":485.46,"ten":"Ba câu tự kiểm · Liên kết khoá khác"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 13.3."},
         {"t":8.47,"vi":"Bài 13.2: lưu là thấy ngay, bẫy node_modules, và trình gỡ lỗi trong container."},
@@ -2797,8 +3000,15 @@
         {"t":476.95,"vi":"Bài sau, bài 13.4: Docker trên Mac và Windows thật ra là một máy ảo Linux."}
       ]
     },
-    "dk-13-4-mac-windows": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/docker/13-phat-trien/13-05-mac-windows-8ea32dd1.mp4","durationSec":570.78,"nguonCau":"srt",
-      "parts": [],
+    "dk-13-4-mac-windows": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/docker/13-phat-trien/13-05-mac-windows-8ea32dd1.mp4","durationSec":570.78,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":114.32,"ten":"Ôn nhanh · hôm nay · Mô phỏng: căn phòng kín trong nhà"},
+        {"t":114.32,"den":198.56,"ten":"Slide: máy ảo Linux · Chạy thật: ba nghìn tệp nhỏ"},
+        {"t":198.56,"den":280.4,"ten":"Slide: Windows và WSL2 · Chạy thật: gọi về máy của chính bạn"},
+        {"t":280.4,"den":365.73,"ten":"Slide: host.docker.internal · Chạy thật: chip dưới đáy ảnh"},
+        {"t":365.73,"den":448.47,"ten":"Slide: Desktop, OrbStack, Colima · Thực hành 15–20 phút"},
+        {"t":448.47,"den":570.78,"ten":"Ba câu tự kiểm · Liên kết khoá khác"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 13.4, bài cuối của chương 13."},
         {"t":10.28,"vi":"Bài 13.3: Postgres thật cho test, bật trong một giây, và tmpfs chỉ nhanh trên Linux."},
@@ -2875,8 +3085,16 @@
         {"t":561.16,"vi":"Bài sau là quiz chương 13. Chương 14 dùng Docker cho mọi việc, bắt đầu bằng chạy công cụ mà không cần cài."}
       ]
     },
-    "dk-14-1-cong-cu-khong-cai": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/docker/14-moi-viec/14-02-cong-cu-khong-cai-47927ab8.mp4","durationSec":600.51,"nguonCau":"srt",
-      "parts": [],
+    "dk-14-1-cong-cu-khong-cai": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/docker/14-moi-viec/14-02-cong-cu-khong-cai-47927ab8.mp4","durationSec":600.51,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":99.65,"ten":"Ôn nhanh · hôm nay · Mô phỏng: tiệm cho mượn đồ nghề"},
+        {"t":99.65,"den":185.44,"ten":"Chạy thật: -it trong script"},
+        {"t":185.44,"den":267.34,"ten":"Slide: hai bản Node · Chạy thật: bốn việc, bốn ảnh nhỏ"},
+        {"t":267.34,"den":346.08,"ten":"Slide: hộp đồ nghề · Chạy thật: tệp thuộc root"},
+        {"t":346.08,"den":448.62,"ten":"Slide: quên -u · Chạy thật: gói thành hàm zsh"},
+        {"t":448.62,"den":548.11,"ten":"Thực hành 15–20 phút · Ba câu tự kiểm"},
+        {"t":548.11,"den":600.51,"ten":"Liên kết khoá khác · Tóm tắt & luyện tập"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với chương 14: Docker cho mọi việc. Bài đầu tiên, 14.1."},
         {"t":12.01,"vi":"Chương 13 đưa Docker vào vòng lặp phát triển: dev container, sửa mã thấy ngay, Postgres thật cho test, và máy ảo sau Docker Desktop."},
@@ -2979,8 +3197,16 @@
         {"t":593.95,"vi":"Bài sau: mọi loại cơ sở dữ liệu và hạ tầng, mỗi thứ một lệnh."}
       ]
     },
-    "dk-14-2-kho-du-lieu-mot-lenh": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/docker/14-moi-viec/14-03-kho-du-lieu-mot-lenh-1ecd8494.mp4","durationSec":630.47,"nguonCau":"srt",
-      "parts": [],
+    "dk-14-2-kho-du-lieu-mot-lenh": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/docker/14-moi-viec/14-03-kho-du-lieu-mot-lenh-1ecd8494.mp4","durationSec":630.47,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":96.1,"ten":"Ôn nhanh · hôm nay · Mô phỏng: bảng tám công tắc"},
+        {"t":96.1,"den":202.93,"ten":"Chạy thật: phép dò giết RabbitMQ · Slide: tám dịch vụ"},
+        {"t":202.93,"den":280.31,"ten":"Slide: biến môi trường và init"},
+        {"t":280.31,"den":388.06,"ten":"Chạy thật: dump và restore qua docker exec"},
+        {"t":388.06,"den":472.06,"ten":"Slide: Mailpit và S3 · Chạy thật: ảnh biến mất"},
+        {"t":472.06,"den":570.88,"ten":"Thực hành 15–20 phút · Ba câu tự kiểm"},
+        {"t":570.88,"den":630.47,"ten":"Liên kết khoá khác · Tóm tắt & luyện tập"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 14.2."},
         {"t":8.49,"vi":"Bài 14.1: mượn công cụ bằng một lệnh, --rm, gắn thư mục, và -u trên Linux."},
@@ -3084,8 +3310,15 @@
         {"t":623.96,"vi":"Bài sau: tự host dịch vụ, có HTTPS tự động."}
       ]
     },
-    "dk-14-3-tu-host": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/docker/14-moi-viec/14-04-tu-host-a6328e21.mp4","durationSec":516.4,"nguonCau":"srt",
-      "parts": [],
+    "dk-14-3-tu-host": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/docker/14-moi-viec/14-04-tu-host-a6328e21.mp4","durationSec":516.4,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":102.75,"ten":"Ôn nhanh · hôm nay · Mô phỏng: một cửa trước"},
+        {"t":102.75,"den":185.82,"ten":"Slide: Caddy và nginx · Chạy thật: HTTPS mà máy chưa tin"},
+        {"t":185.82,"den":268.63,"ten":"Slide: ba dịch vụ đáng tự host · Chạy thật: sao lưu bằng tar"},
+        {"t":268.63,"den":356.07,"ten":"Chạy thật: mv và mount tệp đơn · Slide: gắn thư mục"},
+        {"t":356.07,"den":462.11,"ten":"Thực hành 15–20 phút · Ba câu tự kiểm"},
+        {"t":462.11,"den":516.4,"ten":"Liên kết khoá khác · Tóm tắt & luyện tập"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 14.3."},
         {"t":8.42,"vi":"Bài 14.2: mỗi cơ sở dữ liệu một lệnh, init chỉ chạy khi thư mục rỗng, và một ảnh có thể biến mất."},
@@ -3171,8 +3404,15 @@
         {"t":510.3,"vi":"Bài sau: GPU và AI cục bộ trong container."}
       ]
     },
-    "dk-15-1-buildx-bake": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/docker/15-nang-cao/15-02-buildx-bake-1d7a71e6.mp4","durationSec":538.54,"nguonCau":"srt",
-      "parts": [],
+    "dk-15-1-buildx-bake": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/docker/15-nang-cao/15-02-buildx-bake-1d7a71e6.mp4","durationSec":538.54,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":100.03,"ten":"Ôn nhanh · hôm nay · Mô phỏng: xưởng dựng của riêng bạn"},
+        {"t":100.03,"den":183.42,"ten":"Slide: builder và node"},
+        {"t":183.42,"den":279.74,"ten":"Chạy thật: một tệp bake · Slide: khối của tệp bake"},
+        {"t":279.74,"den":375.02,"ten":"Slide: --secret · Chạy thật: --ssh và cổng chặn Dockerfile"},
+        {"t":375.02,"den":479.86,"ten":"Slide: attestation trong chỉ mục · Thực hành 15–20 phút"},
+        {"t":479.86,"den":538.54,"ten":"Liên kết khoá khác · Tóm tắt & luyện tập"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với chương 15: nâng cao. Bài đầu tiên, 15.1."},
         {"t":11.38,"vi":"Chương 14 dùng Docker cho mọi việc: công cụ, cơ sở dữ liệu, tự host, và GPU."},
@@ -3255,8 +3495,15 @@
         {"t":532.59,"vi":"Bài sau: bảo mật sâu hơn, ai mới thật sự là root."}
       ]
     },
-    "dk-15-2-rootless-podman": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/docker/15-nang-cao/15-03-rootless-podman-dbb2e6eb.mp4","durationSec":538.91,"nguonCau":"srt",
-      "parts": [],
+    "dk-15-2-rootless-podman": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/docker/15-nang-cao/15-03-rootless-podman-dbb2e6eb.mp4","durationSec":538.91,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":97.81,"ten":"Ôn nhanh · hôm nay · Mô phỏng: chìa khoá vạn năng"},
+        {"t":97.81,"den":184.98,"ten":"Slide: nhóm docker là root · Chạy thật: Docker rootless"},
+        {"t":184.98,"den":290.43,"ten":"Chạy thật: cài rootless cần gì"},
+        {"t":290.43,"den":367.77,"ten":"Slide: seccomp, capability, LSM"},
+        {"t":367.77,"den":481.41,"ten":"Slide: chọn gì khi nào · Thực hành 15–20 phút"},
+        {"t":481.41,"den":538.91,"ten":"Liên kết khoá khác · Tóm tắt & luyện tập"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 15.2."},
         {"t":8.47,"vi":"Bài 15.1: builder riêng, bake, bí mật lúc build không để lại dấu vết."},
@@ -3344,8 +3591,15 @@
         {"t":533.16,"vi":"Bài sau: nhiều máy ở mức nhẹ, Docker Swarm."}
       ]
     },
-    "dk-15-3-swarm": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/docker/15-nang-cao/15-04-swarm-7d862698.mp4","durationSec":534.15,"nguonCau":"srt",
-      "parts": [],
+    "dk-15-3-swarm": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/docker/15-nang-cao/15-04-swarm-7d862698.mp4","durationSec":534.15,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":101.87,"ten":"Ôn nhanh · hôm nay · Mô phỏng: người quản lý và ba người thợ"},
+        {"t":101.87,"den":195.58,"ten":"Slide: manager và worker · Chạy thật: một service ba bản"},
+        {"t":195.58,"den":291.83,"ten":"Slide: tự dựng lại"},
+        {"t":291.83,"den":384.93,"ten":"Slide: secret · Chạy thật: stack deploy"},
+        {"t":384.93,"den":478.42,"ten":"Thực hành 15–20 phút · Ba câu tự kiểm"},
+        {"t":478.42,"den":534.15,"ten":"Liên kết khoá khác · Tóm tắt & luyện tập"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 15.3."},
         {"t":8.3,"vi":"Bài 15.2: ở trong nhóm docker là làm root, rootless và Podman đẩy root vào một user namespace."},
@@ -3435,8 +3689,14 @@
         {"t":527.08,"vi":"Bài sau: từ Compose tới Kubernetes, và khi nào bạn không cần nó."}
       ]
     },
-    "dk-15-4-kubernetes": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/docker/15-nang-cao/15-05-kubernetes-ea0e887f.mp4","durationSec":497.8,"nguonCau":"srt",
-      "parts": [],
+    "dk-15-4-kubernetes": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/docker/15-nang-cao/15-05-kubernetes-ea0e887f.mp4","durationSec":497.8,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":88.16,"ten":"Ôn nhanh · hôm nay"},
+        {"t":88.16,"den":180.79,"ten":"Slide: kind · Chạy thật: kubectl sinh YAML"},
+        {"t":180.79,"den":275.69,"ten":"Slide: tự lành, rollout, undo"},
+        {"t":275.69,"den":391.65,"ten":"Slide: Kompose · Slide: khi nào KHÔNG cần"},
+        {"t":391.65,"den":497.8,"ten":"Ba câu tự kiểm · Liên kết khoá khác"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 15.4, bài cuối của chương 15."},
         {"t":10.21,"vi":"Bài 15.3: Swarm giữ đúng số bản, cập nhật cuốn chiếu không rớt request, và stack deploy đọc gần nguyên tệp compose."},
@@ -3519,8 +3779,18 @@
         {"t":487.57,"vi":"Bài sau là quiz chương 15. Rồi chương 16: dự án cuối khoá, đóng gói và đưa một ứng dụng thật lên production."}
       ]
     },
-    "dk-2-1-docker-run": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/docker/02-chay-container/02-02-docker-run-4f53f3f3.mp4","durationSec":935.49,"nguonCau":"srt",
-      "parts": [],
+    "dk-2-1-docker-run": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/docker/02-chay-container/02-02-docker-run-4f53f3f3.mp4","durationSec":935.49,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":87.64,"ten":"Ôn nhanh · hôm nay · Mô phỏng: tên ảnh là bức tường"},
+        {"t":87.64,"den":220.11,"ten":"Chạy thật: cờ đặt sai chỗ"},
+        {"t":220.11,"den":317.17,"ten":"Slide: giải phẫu câu lệnh"},
+        {"t":317.17,"den":418,"ten":"Slide: bảng cờ chạy · mạng · dữ liệu"},
+        {"t":418,"den":499.99,"ten":"Slide: -p mở cho cả LAN · Chạy thật: -v gõ nhầm và --mount"},
+        {"t":499.99,"den":592.56,"ten":"Slide: bảng cờ cấu hình · giới hạn · ghi đè"},
+        {"t":592.56,"den":701.99,"ten":"Chạy thật: ENTRYPOINT + CMD · Slide: ENTRYPOINT + CMD"},
+        {"t":701.99,"den":815.74,"ten":"Bẫy: -p 5432 trên máy chủ công khai · Thực hành 15–20 phút"},
+        {"t":815.74,"den":935.49,"ten":"Ba câu tự kiểm · Liên kết khoá khác"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, chào mừng tới Chương 2: làm việc với container hằng ngày."},
         {"t":10.39,"vi":"Chương 1 cho ta mô hình: container là tiến trình bị cô lập, ảnh là chồng tầng, tầng ghi mất cùng rm, và một chồng chương trình chạy nó."},
@@ -3662,8 +3932,17 @@
         {"t":929.68,"vi":"Bài sau, bài 2.2: quan sát một container đang chạy."}
       ]
     },
-    "dk-2-2-quan-sat": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/docker/02-chay-container/02-03-quan-sat-ad36fd15.mp4","durationSec":770.75,"nguonCau":"srt",
-      "parts": [],
+    "dk-2-2-quan-sat": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/docker/02-chay-container/02-03-quan-sat-ad36fd15.mp4","durationSec":770.75,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":89.74,"ten":"Ôn nhanh · hôm nay · Mô phỏng: sáu câu hỏi, sáu câu lệnh"},
+        {"t":89.74,"den":201.63,"ten":"Chạy thật: docker logs và hai luồng"},
+        {"t":201.63,"den":280.25,"ten":"Slide: docker logs = stdout + stderr của PID 1"},
+        {"t":280.25,"den":376.31,"ten":"Slide: tệp log và bộ đệm"},
+        {"t":376.31,"den":485.82,"ten":"Chạy thật: đọc một vòng lặp sập"},
+        {"t":485.82,"den":563.81,"ten":"Slide: đọc output từng cột"},
+        {"t":563.81,"den":663.5,"ten":"Bẫy: bộ đệm làm log trông như rỗng · Thực hành 15–20 phút"},
+        {"t":663.5,"den":770.75,"ten":"Ba câu tự kiểm · Liên kết khoá khác"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 2.2."},
         {"t":7.78,"vi":"Bài trước: cờ đứng trước tên ảnh, -p thêm 127.0.0.1 là chỉ mình bạn, và ENTRYPOINT cộng CMD là lệnh chạy thật."},
@@ -3791,8 +4070,16 @@
         {"t":764.24,"vi":"Bài sau, bài 2.3: vào bên trong, kể cả khi không có shell nào."}
       ]
     },
-    "dk-2-3-vao-ben-trong": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/docker/02-chay-container/02-04-vao-ben-trong-11b1897b.mp4","durationSec":703.99,"nguonCau":"srt",
-      "parts": [],
+    "dk-2-3-vao-ben-trong": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/docker/02-chay-container/02-04-vao-ben-trong-11b1897b.mp4","durationSec":703.99,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":117.99,"ten":"Ôn nhanh · hôm nay · Mô phỏng: ba cửa vào một container"},
+        {"t":117.99,"den":205.24,"ten":"Slide: exec mở tiến trình MỚI"},
+        {"t":205.24,"den":293.13,"ten":"Slide: đo thật tín hiệu vào attach"},
+        {"t":293.13,"den":400.27,"ten":"Chạy thật: ảnh không có shell nào"},
+        {"t":400.27,"den":476.36,"ten":"Chạy thật: nsenter mượn qua Docker"},
+        {"t":476.36,"den":589.65,"ten":"Bẫy: vá container bằng exec · Thực hành 15–20 phút"},
+        {"t":589.65,"den":703.99,"ten":"Ba câu tự kiểm · Liên kết khoá khác"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 2.3."},
         {"t":7.76,"vi":"Bài trước: sáu câu hỏi, sáu lệnh."},
@@ -3894,8 +4181,17 @@
         {"t":697.66,"vi":"Bài sau, bài 2.4: môi trường, người dùng và tham số."}
       ]
     },
-    "dk-2-4-moi-truong-nguoi-dung": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/docker/02-chay-container/02-05-moi-truong-nguoi-dung-4c88dbe0.mp4","durationSec":719.82,"nguonCau":"srt",
-      "parts": [],
+    "dk-2-4-moi-truong-nguoi-dung": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/docker/02-chay-container/02-05-moi-truong-nguoi-dung-4c88dbe0.mp4","durationSec":719.82,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":89.59,"ten":"Ôn nhanh · hôm nay · Mô phỏng: bốn nguồn biến môi trường"},
+        {"t":89.59,"den":176.82,"ten":"Chạy thật: ai thắng · Chạy thật: --env-file đọc nguyên văn"},
+        {"t":176.82,"den":260.91,"ten":"Slide: --env-file giữ NGUYÊN VĂN"},
+        {"t":260.91,"den":338.38,"ten":"Slide: ai gõ docker cũng đọc được"},
+        {"t":338.38,"den":428.08,"ten":"Slide: root ghi tệp trên Linux"},
+        {"t":428.08,"den":539.74,"ten":"Chạy thật: múi giờ · Slide: TZ chỉ ăn khi ảnh có tzdata"},
+        {"t":539.74,"den":651.24,"ten":"Thực hành 15–20 phút · Ba câu tự kiểm"},
+        {"t":651.24,"den":719.82,"ten":"Liên kết khoá khác · Tóm tắt & luyện tập"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 2.4."},
         {"t":7.87,"vi":"Bài trước: exec mở tiến trình mới, attach nối vào PID 1, và container phụ cứu ta khi ảnh không có shell."},
@@ -4011,8 +4307,16 @@
         {"t":712.68,"vi":"Bài sau, bài 2.5: giới hạn, chính sách khởi động lại và healthcheck."}
       ]
     },
-    "dk-2-5-gioi-han-restart": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/docker/02-chay-container/02-06-gioi-han-restart-07b12045.mp4","durationSec":766.88,"nguonCau":"srt",
-      "parts": [],
+    "dk-2-5-gioi-han-restart": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/docker/02-chay-container/02-06-gioi-han-restart-07b12045.mp4","durationSec":766.88,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":83.19,"ten":"Ôn nhanh · hôm nay · Mô phỏng: trần bộ nhớ như cái ly"},
+        {"t":83.19,"den":177.19,"ten":"Slide: không có --memory = lấy cả cái máy"},
+        {"t":177.19,"den":272.72,"ten":"Slide: thử chạm trần · Chạy thật: CPU và tự định kích thước"},
+        {"t":272.72,"den":379.82,"ten":"Slide: --cpus là hạn ngạch cứng"},
+        {"t":379.82,"den":500.74,"ten":"Slide: restart lùi dần và chỉ nhìn mã thoát"},
+        {"t":500.74,"den":641.21,"ten":"Slide: healthcheck chỉ BÁO"},
+        {"t":641.21,"den":766.88,"ten":"Ba câu tự kiểm · Liên kết khoá khác"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 2.5, bài cuối của Chương 2."},
         {"t":10.02,"vi":"Bài trước: -e thắng --env-file, biến môi trường không phải bí mật, và tham số sau tên ảnh thay CMD."},
@@ -4125,8 +4429,17 @@
         {"t":758.76,"vi":"Hết Chương 2. Chương 3 bắt đầu với bài 3.1: đọc một cái tên ảnh."}
       ]
     },
-    "dk-3-1-ten-anh": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/docker/03-anh-registry/03-02-ten-anh-2bcf08a1.mp4","durationSec":748.64,"nguonCau":"srt",
-      "parts": [],
+    "dk-3-1-ten-anh": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/docker/03-anh-registry/03-02-ten-anh-2bcf08a1.mp4","durationSec":748.64,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":88.25,"ten":"Ôn nhanh · hôm nay · Mô phỏng: mổ một cái tên ảnh"},
+        {"t":88.25,"den":193.19,"ten":"Chạy thật: bốn cách viết, một ảnh"},
+        {"t":193.19,"den":291.97,"ten":"Slide: có dấu chấm mới là registry"},
+        {"t":291.97,"den":380.7,"ten":"Chuyện thật năm 2025: chủ không gian tên đổi luật"},
+        {"t":380.7,"den":466.96,"ten":"Slide: một tag trỏ tới một chỉ mục"},
+        {"t":466.96,"den":570.07,"ten":"Slide: nguồn gốc nằm ở annotation"},
+        {"t":570.07,"den":686.91,"ten":"Thực hành 15–20 phút · Ba câu tự kiểm"},
+        {"t":686.91,"den":748.64,"ten":"Liên kết khoá khác · Tóm tắt & luyện tập"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, chào mừng tới Chương 3: ảnh, tag và registry."},
         {"t":9.68,"vi":"Chương 2 cho ta các cờ của docker run, sáu câu hỏi quan sát, các cửa vào, và giới hạn với healthcheck."},
@@ -4239,8 +4552,17 @@
         {"t":742.51,"vi":"Bài sau, bài 3.2: tag thì di chuyển, digest thì không."}
       ]
     },
-    "dk-3-2-tag-digest": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/docker/03-anh-registry/03-03-tag-digest-28a813ea.mp4","durationSec":708.94,"nguonCau":"srt",
-      "parts": [],
+    "dk-3-2-tag-digest": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/docker/03-anh-registry/03-03-tag-digest-28a813ea.mp4","durationSec":708.94,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":94.61,"ten":"Ôn nhanh · hôm nay · Mô phỏng: nhãn dán và vân tay"},
+        {"t":94.61,"den":182.08,"ten":"Slide: docker tag dời nhãn không cảnh báo"},
+        {"t":182.08,"den":274.62,"ten":"Chạy thật: :latest nhảy một phiên bản lớn"},
+        {"t":274.62,"den":361.29,"ten":"Chạy thật: tự tính một digest"},
+        {"t":361.29,"den":451.05,"ten":"Chạy thật: hai loại digest, và cái nào thắng"},
+        {"t":451.05,"den":546.63,"ten":"Chạy thật: đặt tag cho ảnh của chính bạn"},
+        {"t":546.63,"den":647.58,"ten":"Thực hành 15–20 phút · Ba câu tự kiểm"},
+        {"t":647.58,"den":708.94,"ten":"Liên kết khoá khác · Tóm tắt & luyện tập"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 3.2."},
         {"t":7.77,"vi":"Bài trước: một cái tên ảnh là bốn trường, một tag trỏ tới một chỉ mục, và nguồn gốc ảnh nằm ở annotation."},
@@ -4349,8 +4671,16 @@
         {"t":702.04,"vi":"Bài sau, bài 3.3: registry, Hub, GHCR và của riêng bạn."}
       ]
     },
-    "dk-3-3-registry": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/docker/03-anh-registry/03-04-registry-da86f6f7.mp4","durationSec":749.95,"nguonCau":"srt",
-      "parts": [],
+    "dk-3-3-registry": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/docker/03-anh-registry/03-04-registry-da86f6f7.mp4","durationSec":749.95,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":144.22,"ten":"Ôn nhanh · hôm nay · Mô phỏng: ba kho, một API"},
+        {"t":144.22,"den":281.27,"ten":"Slide: config.json chỉ base64"},
+        {"t":281.27,"den":370.89,"ten":"Slide: registry chỉ là một API HTTP · Slide: Mounted from"},
+        {"t":370.89,"den":476.95,"ten":"Slide: Hub đếm lượt kéo"},
+        {"t":476.95,"den":572.03,"ten":"Slide: gương kéo xuyên cho cả nhóm · Registry nào, khi nào"},
+        {"t":572.03,"den":683.99,"ten":"Thực hành 15–20 phút · Ba câu tự kiểm"},
+        {"t":683.99,"den":749.95,"ten":"Liên kết khoá khác · Tóm tắt & luyện tập"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 3.3."},
         {"t":8.21,"vi":"Bài trước: tag di chuyển, digest đứng yên, và ta đã tự băm một manifest lấy từ một registry cục bộ."},
@@ -4448,8 +4778,16 @@
         {"t":742.03,"vi":"Bài sau, bài 3.4: ảnh đa kiến trúc và lỗi exec format error."}
       ]
     },
-    "dk-3-4-da-kien-truc": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/docker/03-anh-registry/03-05-da-kien-truc-5bcba61c.mp4","durationSec":676.39,"nguonCau":"srt",
-      "parts": [],
+    "dk-3-4-da-kien-truc": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/docker/03-anh-registry/03-05-da-kien-truc-5bcba61c.mp4","durationSec":676.39,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":103.74,"ten":"Ôn nhanh · hôm nay · Mô phỏng: một tên, nhiều kiến trúc"},
+        {"t":103.74,"den":191.95,"ten":"Chạy thật: hai lỗi thật trên máy Mac"},
+        {"t":191.95,"den":287.1,"ten":"Slide: mỗi máy chọn mục khớp CPU"},
+        {"t":287.1,"den":378.31,"ten":"Slide: Rosetta gần như miễn phí, QEMU thì không"},
+        {"t":378.31,"den":461.3,"ten":"Slide: một lệnh dựng hai kiến trúc · Slide: biên dịch chéo"},
+        {"t":461.3,"den":563.89,"ten":"Bẫy: dựng trên Mac, VPS x86 chết · Thực hành 15–20 phút"},
+        {"t":563.89,"den":676.39,"ten":"Ba câu tự kiểm · Liên kết khoá khác"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 3.4."},
         {"t":7.86,"vi":"Bài trước: registry chỉ là một API, push hỏi trước rồi mới tải, và một gương biến hai mươi lượt kéo thành một."},
@@ -4545,8 +4883,15 @@
         {"t":669.58,"vi":"Bài sau, bài 3.5: giữ cho var lib docker khỏi nuốt cả cái đĩa."}
       ]
     },
-    "dk-3-5-don-dia": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/docker/03-anh-registry/03-06-don-dia-7f6ad025.mp4","durationSec":578.2,"nguonCau":"srt",
-      "parts": [],
+    "dk-3-5-don-dia": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/docker/03-anh-registry/03-06-don-dia-7f6ad025.mp4","durationSec":578.2,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":115.34,"ten":"Ôn nhanh · hôm nay · Mô phỏng: cái đĩa đầy dần"},
+        {"t":115.34,"den":209.07,"ten":"Slide: máy dựng ôm 355 GB bộ đệm"},
+        {"t":209.07,"den":330.26,"ten":"Chạy thật: nhìn -a lấy mất bản quay lui"},
+        {"t":330.26,"den":409.83,"ten":"Slide: volume prune chỉ xoá vô danh"},
+        {"t":409.83,"den":508.45,"ten":"Thực hành 15–20 phút · Ba câu tự kiểm"},
+        {"t":508.45,"den":578.2,"ten":"Liên kết khoá khác · Tóm tắt & luyện tập"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 3.5, bài cuối của Chương 3."},
         {"t":9.73,"vi":"Bài trước: một tag đa kiến trúc là một chỉ mục, mỗi máy tự chọn trang của mình, và dựng chéo cho ra một ảnh chạy được ở mọi nơi."},
@@ -4639,8 +4984,16 @@
         {"t":569.02,"vi":"Hết Chương 3. Chương 4 bắt đầu với bài 4.1: Dockerfile đầu tiên, và ngữ cảnh dựng."}
       ]
     },
-    "dk-4-1-dockerfile-dau-tien": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/docker/04-dockerfile/04-02-dockerfile-dau-tien-5d2ee647.mp4","durationSec":681.28,"nguonCau":"srt",
-      "parts": [],
+    "dk-4-1-dockerfile-dau-tien": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/docker/04-dockerfile/04-02-dockerfile-dau-tien-5d2ee647.mp4","durationSec":681.28,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":111.78,"ten":"Ôn nhanh · hôm nay · Chạy thật: một ứng dụng thật"},
+        {"t":111.78,"den":224.65,"ten":"Chạy thật: dựng, chạy, gọi"},
+        {"t":224.65,"den":310.75,"ten":"Slide: dấu chấm cuối lệnh là ngữ cảnh"},
+        {"t":310.75,"den":402.32,"ten":"Slide: không .dockerignore là 398 MB"},
+        {"t":402.32,"den":484.84,"ten":"Slide: danh sách không được lên xe"},
+        {"t":484.84,"den":575.61,"ten":"Bẫy: COPY ../shared · Thực hành 15–20 phút"},
+        {"t":575.61,"den":681.28,"ten":"Ba câu tự kiểm · Liên kết khoá khác"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, chào mừng tới Chương 4: tự viết Dockerfile."},
         {"t":9.53,"vi":"Chương 3 cho ta tên ảnh, tag và digest, registry, ảnh đa kiến trúc, và cách giữ đĩa khỏi đầy."},
@@ -4742,8 +5095,16 @@
         {"t":674.82,"vi":"Bài sau, bài 4.2: mọi chỉ thị, và nó thật sự làm gì."}
       ]
     },
-    "dk-4-2-cac-chi-thi": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/docker/04-dockerfile/04-03-cac-chi-thi-52c004a3.mp4","durationSec":675.97,"nguonCau":"srt",
-      "parts": [],
+    "dk-4-2-cac-chi-thi": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/docker/04-dockerfile/04-03-cac-chi-thi-52c004a3.mp4","durationSec":675.97,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":106.5,"ten":"Ôn nhanh · hôm nay · Mô phỏng: chỉ thị nhóm theo cái giá"},
+        {"t":106.5,"den":198.51,"ten":"Slide: RUN — mỗi dòng một shell mới"},
+        {"t":198.51,"den":321.33,"ten":"Chạy thật: ADD tự bung nén, và ADD url đổi dưới chân bạn"},
+        {"t":321.33,"den":411.22,"ten":"Slide: siêu dữ liệu 0 byte"},
+        {"t":411.22,"den":505,"ten":"Chạy thật: VOLUME trong ảnh của bạn"},
+        {"t":505,"den":607.18,"ten":"Thực hành 15–20 phút · Ba câu tự kiểm"},
+        {"t":607.18,"den":675.97,"ten":"Liên kết khoá khác · Tóm tắt & luyện tập"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 4.2."},
         {"t":7.87,"vi":"Bài trước: Dockerfile đầu tiên, dấu chấm là ngữ cảnh dựng, và .dockerignore viết trước Dockerfile."},
@@ -4851,8 +5212,17 @@
         {"t":669.81,"vi":"Bài sau, bài 4.3: CMD, ENTRYPOINT và script entrypoint."}
       ]
     },
-    "dk-4-3-cmd-entrypoint": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/docker/04-dockerfile/04-04-cmd-entrypoint-5d9bdea8.mp4","durationSec":775.39,"nguonCau":"srt",
-      "parts": [],
+    "dk-4-3-cmd-entrypoint": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/docker/04-dockerfile/04-04-cmd-entrypoint-5d9bdea8.mp4","durationSec":775.39,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":140.98,"ten":"Ôn nhanh · hôm nay · Mô phỏng: lệnh chạy = ENTRYPOINT + CMD"},
+        {"t":140.98,"den":288.5,"ten":"Slide: lệnh cuối = ENTRYPOINT + CMD"},
+        {"t":288.5,"den":372.43,"ten":"Slide: Alpine exec giùm — Debian thì KHÔNG"},
+        {"t":372.43,"den":452.06,"ten":"Chạy thật: mẫu script entrypoint"},
+        {"t":452.06,"den":530.17,"ten":"Slide: chuẩn bị xong, exec \"$@\" · Bài toán npm start"},
+        {"t":530.17,"den":647.19,"ten":"Bẫy: mảng JSON bằng nháy đơn · Thực hành 15–20 phút"},
+        {"t":647.19,"den":722.89,"ten":"Ba câu tự kiểm · Liên kết khoá khác"},
+        {"t":722.89,"den":775.39,"ten":"Tóm tắt & luyện tập"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 4.3."},
         {"t":8.03,"vi":"Bài trước: chỉ RUN, COPY, ADD thêm byte, RUN có thể nói dối, và COPY --chown thay cho RUN chown."},
@@ -4952,8 +5322,16 @@
         {"t":766.94,"vi":"Bài sau, bài 4.4: ARG và ENV, lúc dựng so với lúc chạy."}
       ]
     },
-    "dk-4-4-arg-env": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/docker/04-dockerfile/04-05-arg-env-31622f22.mp4","durationSec":714.14,"nguonCau":"srt",
-      "parts": [],
+    "dk-4-4-arg-env": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/docker/04-dockerfile/04-05-arg-env-31622f22.mp4","durationSec":714.14,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":115.57,"ten":"Ôn nhanh · hôm nay · Mô phỏng: hai thời điểm"},
+        {"t":115.57,"den":226.26,"ten":"Slide: ARG sống lúc dựng, ENV đi theo ảnh"},
+        {"t":226.26,"den":302,"ten":"Chạy thật: phạm vi của ARG"},
+        {"t":302,"den":424.15,"ten":"Chạy thật: ARG có sẵn"},
+        {"t":424.15,"den":507.85,"ten":"Slide: bí mật qua --build-arg ở lại trong ảnh"},
+        {"t":507.85,"den":604.19,"ten":"Bẫy: ARG cho URL của frontend · Thực hành 15–20 phút"},
+        {"t":604.19,"den":714.14,"ten":"Ba câu tự kiểm · Liên kết khoá khác"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 4.4."},
         {"t":8.07,"vi":"Bài trước: lệnh chạy là ENTRYPOINT cộng CMD, luôn viết dạng exec, và script entrypoint kết thúc bằng exec \"$@\"."},
@@ -5068,8 +5446,18 @@
         {"t":705.5,"vi":"Bài sau, bài 4.5: công thức cho Node, Next.js, Python, Go và trang tĩnh."}
       ]
     },
-    "dk-4-5-cong-thuc": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/docker/04-dockerfile/04-06-cong-thuc-088cceec.mp4","durationSec":858.33,"nguonCau":"srt",
-      "parts": [],
+    "dk-4-5-cong-thuc": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/docker/04-dockerfile/04-06-cong-thuc-088cceec.mp4","durationSec":858.33,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":135.74,"ten":"Ôn nhanh · hôm nay"},
+        {"t":135.74,"den":234.77,"ten":"Chạy thật: công thức 2 · Next.js standalone"},
+        {"t":234.77,"den":315.07,"ten":"Chạy thật: ba cái bẫy Next.js · Slide: ba cái bẫy Next.js"},
+        {"t":315.07,"den":392.34,"ten":"Chạy thật: công thức 3 · Python"},
+        {"t":392.34,"den":486.85,"ten":"Slide: công thức 3 · Python · Chạy thật: công thức 4 · Go"},
+        {"t":486.85,"den":596.98,"ten":"Chạy thật: công thức 5 · trang tĩnh sau nginx"},
+        {"t":596.98,"den":672.51,"ten":"Slide: năm điểm chung"},
+        {"t":672.51,"den":776.45,"ten":"Thực hành 15–20 phút · Ba câu tự kiểm"},
+        {"t":776.45,"den":858.33,"ten":"Liên kết khoá khác · Tóm tắt & luyện tập"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 4.5."},
         {"t":7.96,"vi":"Bài trước: ARG chỉ sống lúc dựng, ENV đi vào mọi container, bí mật đi qua secret mount, và NODE_ENV chỉ đặt ở stage cuối."},
@@ -5195,8 +5583,15 @@
         {"t":852.32,"vi":"Bài sau, bài 4.6: kiểm tra cả chương Dockerfile."}
       ]
     },
-    "dk-5-2-thu-tu": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/docker/05-cache/05-03-thu-tu-2fdb057b.mp4","durationSec":533.38,"nguonCau":"srt",
-      "parts": [],
+    "dk-5-2-thu-tu": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/docker/05-cache/05-03-thu-tu-2fdb057b.mp4","durationSec":533.38,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":100.61,"ten":"Ôn nhanh · hôm nay · Mô phỏng: cùng chỉ thị, khác thứ tự"},
+        {"t":100.61,"den":189.63,"ten":"Slide: đổi chỗ một dòng COPY"},
+        {"t":189.63,"den":281.84,"ten":"Sắp lại một Dockerfile Node + Prisma"},
+        {"t":281.84,"den":381.19,"ten":"Slide: gộp RUN theo tần suất đổi"},
+        {"t":381.19,"den":471.88,"ten":"Thực hành 15–20 phút · Ba câu tự kiểm"},
+        {"t":471.88,"den":533.38,"ten":"Liên kết khoá khác · Tóm tắt & luyện tập"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 5.2."},
         {"t":7.87,"vi":"Bài trước: mỗi bước có một khoá, COPY khoá theo nội dung tệp, và cú trượt đầu tiên kéo mọi bước sau trượt theo."},
@@ -5277,8 +5672,16 @@
         {"t":526.05,"vi":"Bài sau, bài 5.3: cache mount, giữ lại phần đã tải giữa các lượt dựng."}
       ]
     },
-    "dk-5-5-chan-doan-dung-cham": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/docker/05-cache/05-06-chan-doan-dung-cham-36fa5176.mp4","durationSec":619.57,"nguonCau":"srt",
-      "parts": [],
+    "dk-5-5-chan-doan-dung-cham": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/docker/05-cache/05-06-chan-doan-dung-cham-36fa5176.mp4","durationSec":619.57,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":89.47,"ten":"Ôn nhanh · hôm nay · Chạy thật: ba phép đo"},
+        {"t":89.47,"den":172.93,"ten":"Chạy thật: tìm cái bước đắt tiền · Mô phỏng: biểu đồ thác"},
+        {"t":172.93,"den":283.17,"ten":"Slide: bảy nguyên nhân và dấu hiệu"},
+        {"t":283.17,"den":365.77,"ten":"Slide: ngữ cảnh 515 MB và giả lập amd64"},
+        {"t":365.77,"den":453.09,"ten":"Slide: --check và đồ thị dựng · Chạy thật: danh sách kiểm"},
+        {"t":453.09,"den":547.62,"ten":"Thực hành 15–20 phút · Ba câu tự kiểm"},
+        {"t":547.62,"den":619.57,"ten":"Liên kết khoá khác · Tóm tắt & luyện tập"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 5.5, bài cuối của Chương 5."},
         {"t":9.63,"vi":"Bốn bài trước: khoá cache, thứ tự, cache mount, và mang cache qua CI."},
@@ -5374,8 +5777,15 @@
         {"t":614.02,"vi":"Bài sau, bài 5.6: kiểm tra cả Chương 5."}
       ]
     },
-    "dk-6-1-multi-stage": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/docker/06-anh-nho-an-toan/06-02-multi-stage-47873f12.mp4","durationSec":569.6,"nguonCau":"srt",
-      "parts": [],
+    "dk-6-1-multi-stage": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/docker/06-anh-nho-an-toan/06-02-multi-stage-47873f12.mp4","durationSec":569.6,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":113.04,"ten":"Ôn nhanh · hôm nay · Mô phỏng: hai căn bếp"},
+        {"t":113.04,"den":196.51,"ten":"Slide: stage sau bắt đầu trống · Slide: 1,88 GB xuống 467 MB"},
+        {"t":196.51,"den":275.74,"ten":"Slide: COPY --from lấy được từ đâu"},
+        {"t":275.74,"den":370.55,"ten":"Chạy thật: bí mật ở stage dựng biến mất"},
+        {"t":370.55,"den":459.53,"ten":"Bẫy: node_modules chưa tỉa · Thực hành 15–20 phút"},
+        {"t":459.53,"den":569.6,"ten":"Ba câu tự kiểm · Liên kết khoá khác"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Chương 6: ảnh nhỏ và an toàn."},
         {"t":9.23,"vi":"Bài 6.1."},
@@ -5467,8 +5877,17 @@
         {"t":563.5,"vi":"Bài sau, bài 6.2: chọn ảnh nền, và cái bẫy musl."}
       ]
     },
-    "dk-6-2-chon-anh-nen": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/docker/06-anh-nho-an-toan/06-03-chon-anh-nen-5f9a43d8.mp4","durationSec":698.41,"nguonCau":"srt",
-      "parts": [],
+    "dk-6-2-chon-anh-nen": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/docker/06-anh-nho-an-toan/06-03-chon-anh-nen-5f9a43d8.mp4","durationSec":698.41,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":97.57,"ten":"Ôn nhanh · hôm nay · Chạy thật: bốn ảnh nền, hai cột"},
+        {"t":97.57,"den":181.02,"ten":"Mô phỏng: cùng điện, khác phích cắm"},
+        {"t":181.02,"den":262.22,"ten":"Chạy thật: tệp có thật mà báo không có"},
+        {"t":262.22,"den":350.61,"ten":"Slide: sự cố thật, 502 bảy phút"},
+        {"t":350.61,"den":442.61,"ten":"Chạy thật: chốt kiểm một giây"},
+        {"t":442.61,"den":521.2,"ten":"Chạy thật: đếm lỗ hổng bằng Trivy · Ghim ảnh nền"},
+        {"t":521.2,"den":627.99,"ten":"Bẫy: đổi sang Alpine vì lượt dựng xanh"},
+        {"t":627.99,"den":698.41,"ten":"Liên kết khoá khác · Tóm tắt & luyện tập"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, bài 6.2."},
         {"t":7.26,"vi":"Bài 6.1: stage cuối bắt đầu trống, chỉ thứ COPY --from mới sang."},
@@ -5580,8 +5999,16 @@
         {"t":692.56,"vi":"Bài sau, bài 6.3: tìm ra và cắt đi những megabyte."}
       ]
     },
-    "dk-6-3-cat-kich-thuoc": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/docker/06-anh-nho-an-toan/06-04-cat-kich-thuoc-42f5cd5f.mp4","durationSec":662.4,"nguonCau":"srt",
-      "parts": [],
+    "dk-6-3-cat-kich-thuoc": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/docker/06-anh-nho-an-toan/06-04-cat-kich-thuoc-42f5cd5f.mp4","durationSec":662.4,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":93.79,"ten":"Ôn nhanh · hôm nay · Mô phỏng: tìm tầng béo"},
+        {"t":93.79,"den":191.53,"ten":"Slide: đo trước khi cắt · Tám việc có tác dụng, theo thứ tự"},
+        {"t":191.53,"den":289.89,"ten":"Slide: ảnh 667 MB thay vì 243 MB"},
+        {"t":289.89,"den":375.66,"ten":"Slide: devOptional · Chạy thật: bỏ CLI, vẫn chạy thật"},
+        {"t":375.66,"den":467.71,"ten":"Slide: thang giảm cân · Chạy thật: cổng kích thước và .Size"},
+        {"t":467.71,"den":554.25,"ten":"Ba thứ không đáng bận tâm · Thực hành 15–20 phút"},
+        {"t":554.25,"den":662.4,"ten":"Ba câu tự kiểm · Liên kết khoá khác"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, bài 6.3."},
         {"t":7.24,"vi":"Bài 6.1 tách stage, bài 6.2 chọn ảnh nền."},
@@ -5685,8 +6112,16 @@
         {"t":656.54,"vi":"Bài sau, bài 6.4: chạy một container cho an toàn."}
       ]
     },
-    "dk-6-5-quet-chuoi-cung-ung": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/docker/06-anh-nho-an-toan/06-06-quet-chuoi-cung-ung-f84a0ca2.mp4","durationSec":648.32,"nguonCau":"srt",
-      "parts": [],
+    "dk-6-5-quet-chuoi-cung-ung": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/docker/06-anh-nho-an-toan/06-06-quet-chuoi-cung-ung-f84a0ca2.mp4","durationSec":648.32,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":115.84,"ten":"Ôn nhanh · hôm nay · Mô phỏng: băng chuyền chuỗi cung ứng"},
+        {"t":115.84,"den":206.63,"ten":"Slide: chuỗi cung ứng · Slide: 12 lỗi có bản vá ⇒ còn 1"},
+        {"t":206.63,"den":303.38,"ten":"Slide: lỗi nằm trong npm · Chạy thật: bỏ npm khỏi stage chạy"},
+        {"t":303.38,"den":386.83,"ten":"Slide: cổng CI hợp lý"},
+        {"t":386.83,"den":482.98,"ten":"Chạy thật: .trivyignore, con dao hai lưỡi"},
+        {"t":482.98,"den":583.41,"ten":"Thực hành 15–20 phút · Ba câu tự kiểm"},
+        {"t":583.41,"den":648.32,"ten":"Liên kết khoá khác · Tóm tắt & luyện tập"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, bài 6.5, bài cuối của Chương 6."},
         {"t":9.43,"vi":"Bài 6.4 khoá tiến trình lúc chạy."},
@@ -5784,8 +6219,16 @@
         {"t":641.11,"vi":"Hết Chương 6. Chương 7: dữ liệu, với volume, bind mount và tmpfs."}
       ]
     },
-    "dk-7-1-ba-cach-gan": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/docker/07-du-lieu/07-02-ba-cach-gan-e64b0f8f.mp4","durationSec":595.64,"nguonCau":"srt",
-      "parts": [],
+    "dk-7-1-ba-cach-gan": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/docker/07-du-lieu/07-02-ba-cach-gan-e64b0f8f.mp4","durationSec":595.64,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":85.56,"ten":"Ôn nhanh · hôm nay · Mô phỏng: bàn làm việc của container"},
+        {"t":85.56,"den":165.86,"ten":"Slide: tầng ghi chết theo docker rm"},
+        {"t":165.86,"den":256.8,"ten":"Slide: đọc -v theo bên trái dấu hai chấm"},
+        {"t":256.8,"den":351.21,"ten":"Slide: volume vô danh = dữ liệu mồ côi"},
+        {"t":351.21,"den":442.48,"ten":"Chạy thật: chép cả chủ sở hữu · Chọn cái nào"},
+        {"t":442.48,"den":528.36,"ten":"Thực hành 15–20 phút · Ba câu tự kiểm"},
+        {"t":528.36,"den":595.64,"ten":"Liên kết khoá khác · Tóm tắt & luyện tập"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Chương 7: dữ liệu."},
         {"t":8.55,"vi":"Bài 7.1."},
@@ -5873,8 +6316,16 @@
         {"t":590.84,"vi":"Bài sau, bài 7.2: volume, đào sâu."}
       ]
     },
-    "dk-7-3-bind-mount": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/docker/07-du-lieu/07-04-bind-mount-ed8caad2.mp4","durationSec":637.13,"nguonCau":"srt",
-      "parts": [],
+    "dk-7-3-bind-mount": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/docker/07-du-lieu/07-04-bind-mount-ed8caad2.mp4","durationSec":637.13,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":96.94,"ten":"Ôn nhanh · hôm nay · Mô phỏng: ô cửa nhìn ra thư mục của bạn"},
+        {"t":96.94,"den":180.33,"ten":"Slide: sửa trên máy, container thấy ngay"},
+        {"t":180.33,"den":258.9,"ten":"Chạy thật: nửa sau của bẫy, cờ -V"},
+        {"t":258.9,"den":339.35,"ten":"Slide: bẫy 2 và 3, root và SELinux"},
+        {"t":339.35,"den":422.99,"ten":"Slide: gắn MỘT TỆP là gắn theo INODE"},
+        {"t":422.99,"den":528.17,"ten":"Slide: để cái gì ở đâu, theo máy"},
+        {"t":528.17,"den":637.13,"ten":"Ba câu tự kiểm · Liên kết khoá khác"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, bài 7.3."},
         {"t":7.19,"vi":"Bài 7.2 đào sâu volume. Bài 7.1 đã nói bind mount không bao giờ chép, nó chỉ che."},
@@ -5971,8 +6422,15 @@
         {"t":630.43,"vi":"Bài sau, bài 7.4: tmpfs, gốc chỉ đọc, và bí mật."}
       ]
     },
-    "dk-7-4-tmpfs-bi-mat": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/docker/07-du-lieu/07-05-tmpfs-bi-mat-eab8c7f0.mp4","durationSec":581.3,"nguonCau":"srt",
-      "parts": [],
+    "dk-7-4-tmpfs-bi-mat": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/docker/07-du-lieu/07-05-tmpfs-bi-mat-eab8c7f0.mp4","durationSec":581.3,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":97.69,"ten":"Ôn nhanh · hôm nay · Mô phỏng: tấm bảng trắng"},
+        {"t":97.69,"den":190.78,"ten":"Chạy thật: restart cũng xoá · Slide: tmpfs là RAM"},
+        {"t":190.78,"den":305.71,"ten":"Chạy thật: gốc chỉ đọc, lỗ ghi tối thiểu"},
+        {"t":305.71,"den":381.42,"ten":"Chạy thật: -e hiện nguyên trong inspect"},
+        {"t":381.42,"den":475.52,"ten":"Slide: docker cp vào tmpfs · Bẫy: tmpfs không đặt size"},
+        {"t":475.52,"den":581.3,"ten":"Ba câu tự kiểm · Liên kết khoá khác"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, bài 7.4."},
         {"t":7.41,"vi":"Bài 6.4 đã dùng --read-only và tmpfs để khoá nginx."},
@@ -6067,8 +6525,15 @@
         {"t":575.62,"vi":"Bài sau, bài 7.5: sao lưu, khôi phục, di chuyển."}
       ]
     },
-    "dk-7-5-sao-luu": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/docker/07-du-lieu/07-06-sao-luu-d8575a60.mp4","durationSec":556.18,"nguonCau":"srt",
-      "parts": [],
+    "dk-7-5-sao-luu": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/docker/07-du-lieu/07-06-sao-luu-d8575a60.mp4","durationSec":556.18,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":86.03,"ten":"Ôn nhanh · hôm nay · Mô phỏng: bản sao và hy vọng"},
+        {"t":86.03,"den":161.39,"ten":"Slide: volume :ro + thư mục máy + tar"},
+        {"t":161.39,"den":253.25,"ten":"Chạy thật: tar thư mục dữ liệu, khi đã dừng"},
+        {"t":253.25,"den":368.82,"ten":"Slide: docker exec -t · Chạy thật: chuyển volume, rồi so md5"},
+        {"t":368.82,"den":459.09,"ten":"Slide: set -e + .part · Bẫy: bản sao lưu chưa từng khôi phục"},
+        {"t":459.09,"den":556.18,"ten":"Ba câu tự kiểm · Liên kết khoá khác"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, bài 7.5, bài cuối của Chương 7."},
         {"t":9.05,"vi":"Bốn bài vừa rồi đã đặt dữ liệu vào đúng chỗ: volume, bind mount, tmpfs. Giờ là phần người ta hay bỏ qua."},
@@ -6154,8 +6619,16 @@
         {"t":552.14,"vi":"Hết Chương 7. Chương 8: mạng."}
       ]
     },
-    "dk-8-1-mang-bridge": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/docker/08-mang/08-02-mang-bridge-f92fe76f.mp4","durationSec":582.55,"nguonCau":"srt",
-      "parts": [],
+    "dk-8-1-mang-bridge": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/docker/08-mang/08-02-mang-bridge-f92fe76f.mp4","durationSec":582.55,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":87.27,"ten":"Ôn nhanh · hôm nay"},
+        {"t":87.27,"den":162.7,"ten":"Chạy thật: lần theo sợi dây veth"},
+        {"t":162.7,"den":242.59,"ten":"Năm driver · Slide: năm driver"},
+        {"t":242.59,"den":330.05,"ten":"Chạy thật: đọc /etc/resolv.conf"},
+        {"t":330.05,"den":414.67,"ten":"Slide: hai mạng = hai card mạng"},
+        {"t":414.67,"den":514.49,"ten":"Thực hành 15–20 phút · Ba câu tự kiểm"},
+        {"t":514.49,"den":582.55,"ten":"Liên kết khoá khác · Tóm tắt & luyện tập"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Chương 8: mạng."},
         {"t":8.23,"vi":"Bài 8.1."},
@@ -6242,8 +6715,18 @@
         {"t":576.14,"vi":"Bài sau, bài 8.2: công bố cổng, và cái bẫy tường lửa."}
       ]
     },
-    "dk-8-2-cong-bo-cong": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/docker/08-mang/08-03-cong-bo-cong-695a2b45.mp4","durationSec":871.49,"nguonCau":"srt",
-      "parts": [],
+    "dk-8-2-cong-bo-cong": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/docker/08-mang/08-03-cong-bo-cong-695a2b45.mp4","durationSec":871.49,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":96.19,"ten":"Ôn nhanh · hôm nay · Mô phỏng: ngôi nhà nhiều cửa"},
+        {"t":96.19,"den":190.07,"ten":"Slide: EXPOSE chỉ là ghi chú"},
+        {"t":190.07,"den":312.54,"ten":"Slide: -p đọc trái = máy chủ · Chạy thật: viết ngược hai số"},
+        {"t":312.54,"den":405.53,"ten":"Slide: gói tin bị bẻ hướng ngay ở cửa"},
+        {"t":405.53,"den":498.72,"ten":"Slide: mỗi -p là một dòng DNAT · Slide: sự cố 5432:5432"},
+        {"t":498.72,"den":583.93,"ten":"Chạy thật: hai kiểu cổng bận"},
+        {"t":583.93,"den":709.8,"ten":"Bẫy: Up mà không có mạng · Thực hành 15–20 phút"},
+        {"t":709.8,"den":807.76,"ten":"Ba câu tự kiểm · Liên kết khoá khác"},
+        {"t":807.76,"den":871.49,"ten":"Tóm tắt & luyện tập"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 8.2 của chương mạng."},
         {"t":9.2,"vi":"Bài 8.1: mỗi container có namespace mạng riêng, và gọi nhau bằng tên trên mạng tự tạo."},
@@ -6367,8 +6850,17 @@
         {"t":865.09,"vi":"Bài sau, bài 8.3: container nói chuyện với nhau."}
       ]
     },
-    "dk-8-3-goi-nhau": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/docker/08-mang/08-04-goi-nhau-54560389.mp4","durationSec":723.55,"nguonCau":"srt",
-      "parts": [],
+    "dk-8-3-goi-nhau": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/docker/08-mang/08-04-goi-nhau-54560389.mp4","durationSec":723.55,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":115.23,"ten":"Ôn nhanh · hôm nay · Mô phỏng: cuốn danh bạ của mạng"},
+        {"t":115.23,"den":210.32,"ten":"Slide: DNS nhúng 127.0.0.11 · Chạy thật: mở nắp DNS nhúng"},
+        {"t":210.32,"den":315.96,"ten":"Chạy thật: một container, nhiều tên"},
+        {"t":315.96,"den":393.48,"ten":"Slide: proxy không gọi nổi tên CSDL"},
+        {"t":393.48,"den":498.71,"ten":"Chạy thật: Up chưa có nghĩa là sẵn sàng"},
+        {"t":498.71,"den":581.29,"ten":"Slide: --link vs mạng tự tạo · Thực hành 15–20 phút"},
+        {"t":581.29,"den":661.63,"ten":"Ba câu tự kiểm · Liên kết khoá khác"},
+        {"t":661.63,"den":723.55,"ten":"Tóm tắt & luyện tập"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 8.3."},
         {"t":8.21,"vi":"Bài 8.1: mạng tự tạo có DNS nhúng."},
@@ -6469,8 +6961,14 @@
         {"t":715.92,"vi":"Bài sau, bài 8.4: localhost, máy chủ, và --network host."}
       ]
     },
-    "dk-9-1-file-dau-tien": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/docker/09-compose/09-02-file-dau-tien-f123364f.mp4","durationSec":514.33,"nguonCau":"srt",
-      "parts": [],
+    "dk-9-1-file-dau-tien": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/docker/09-compose/09-02-file-dau-tien-f123364f.mp4","durationSec":514.33,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":92.39,"ten":"Ôn nhanh · hôm nay · Mô phỏng: bảy lệnh, một tệp"},
+        {"t":92.39,"den":195.84,"ten":"Chạy thật: up xanh hết, rồi kiểm lại"},
+        {"t":195.84,"den":308.25,"ten":"Slide: một lệnh up, mọi thứ có tiền tố"},
+        {"t":308.25,"den":417.12,"ten":"Slide: lệnh hằng ngày và chữ -v"},
+        {"t":417.12,"den":514.33,"ten":"Ba câu tự kiểm · Liên kết khoá khác"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Chương 9: Compose."},
         {"t":8.17,"vi":"Bài 9.1."},
@@ -6556,8 +7054,15 @@
         {"t":509.17,"vi":"Bài sau, bài 9.2: tra cứu một dịch vụ."}
       ]
     },
-    "dk-9-2-tra-cuu-dich-vu": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/docker/09-compose/09-03-tra-cuu-dich-vu-fb17806d.mp4","durationSec":551.78,"nguonCau":"srt",
-      "parts": [],
+    "dk-9-2-tra-cuu-dich-vu": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/docker/09-compose/09-03-tra-cuu-dich-vu-fb17806d.mp4","durationSec":551.78,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":103.78,"ten":"Ôn nhanh · hôm nay · Mô phỏng: một dịch vụ là một cái tủ"},
+        {"t":103.78,"den":179.72,"ten":"Chạy thật: YAML tự đổi giá trị"},
+        {"t":179.72,"den":269.32,"ten":"Slide: YAML tự đổi kiểu dữ liệu"},
+        {"t":269.32,"den":349.88,"ten":"Chạy thật: config -q đầu mỗi script"},
+        {"t":349.88,"den":472.12,"ten":"Thực hành 15–20 phút · Ba câu tự kiểm"},
+        {"t":472.12,"den":551.78,"ten":"Liên kết khoá khác · Tóm tắt & luyện tập"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 9.2."},
         {"t":8.19,"vi":"Bài 9.1: một tệp compose thay bảy lệnh, mọi thứ mang tên dự án, và Started chưa phải đang chạy."},
@@ -6633,8 +7138,15 @@
         {"t":544.12,"vi":"Bài sau, bài 9.3: depends_on, healthcheck, và thứ tự khởi động."}
       ]
     },
-    "dk-9-3-thu-tu-khoi-dong": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/docker/09-compose/09-04-thu-tu-khoi-dong-4107d086.mp4","durationSec":567.54,"nguonCau":"srt",
-      "parts": [],
+    "dk-9-3-thu-tu-khoi-dong": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/docker/09-compose/09-04-thu-tu-khoi-dong-4107d086.mp4","durationSec":567.54,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":104.23,"ten":"Ôn nhanh · hôm nay · Mô phỏng: đèn bật chưa phải đèn xanh"},
+        {"t":104.23,"den":197.68,"ten":"Slide: depends_on trần"},
+        {"t":197.68,"den":283.25,"ten":"Slide: có và không có start_interval"},
+        {"t":283.25,"den":380.12,"ten":"Slide: pg_isready qua socket · Chạy thật: job migrate"},
+        {"t":380.12,"den":458.48,"ten":"Slide: app vẫn phải tự thử lại · Thực hành 15–20 phút"},
+        {"t":458.48,"den":567.54,"ten":"Ba câu tự kiểm · Liên kết khoá khác"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 9.3."},
         {"t":7.83,"vi":"Bài 9.1: up xanh hết mà api chết với ECONNREFUSED, chạy lại vài lần mới được."},
@@ -6729,8 +7241,15 @@
         {"t":560.93,"vi":"Bài sau, bài 9.4: biến, tệp .env, và profile."}
       ]
     },
-    "dk-9-4-bien-profile": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/docker/09-compose/09-05-bien-profile-b5f98792.mp4","durationSec":592.91,"nguonCau":"srt",
-      "parts": [],
+    "dk-9-4-bien-profile": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/docker/09-compose/09-05-bien-profile-b5f98792.mp4","durationSec":592.91,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":103.78,"ten":"Ôn nhanh · hôm nay · Mô phỏng: hai cái .env, hai người đọc"},
+        {"t":103.78,"den":215.08,"ten":"Slide: hai cái .env · Chạy thật: sáu dạng nội suy"},
+        {"t":215.08,"den":307.48,"ten":"Slide: shell > --env-file > .env > YAML"},
+        {"t":307.48,"den":405.47,"ten":"Chạy thật: phụ thuộc vào một dịch vụ có profile"},
+        {"t":405.47,"den":522.67,"ten":"Slide: secrets là tệp · Thực hành 15–20 phút"},
+        {"t":522.67,"den":592.91,"ten":"Liên kết khoá khác · Tóm tắt & luyện tập"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 9.4."},
         {"t":8.07,"vi":"Bài 9.2: docker compose config cho xem tệp đúng như Compose làm."},
@@ -6829,8 +7348,14 @@
         {"t":587.39,"vi":"Bài sau, bài 9.5: nhiều tệp, dev với prod."}
       ]
     },
-    "dk-9-5-nhieu-file": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/docker/09-compose/09-06-nhieu-file-c8832626.mp4","durationSec":505.54,"nguonCau":"srt",
-      "parts": [],
+    "dk-9-5-nhieu-file": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/docker/09-compose/09-06-nhieu-file-c8832626.mp4","durationSec":505.54,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":92.77,"ten":"Ôn nhanh · hôm nay · Mô phỏng: giấy can chồng lên tờ nền"},
+        {"t":92.77,"den":204.29,"ten":"Slide: override tự nạp · Chạy thật: luật hợp nhất"},
+        {"t":204.29,"den":292.22,"ten":"Slide: !reset và !override · Chạy thật: include và extends"},
+        {"t":292.22,"den":402.51,"ten":"Slide: nền + dev + prod · Bẫy: đổi cổng kiểu ngây thơ"},
+        {"t":402.51,"den":505.54,"ten":"Ba câu tự kiểm · Liên kết khoá khác"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài cuối của Chương 9, bài 9.5."},
         {"t":10.02,"vi":"Bài 9.4: biến, tệp .env, và profile."},

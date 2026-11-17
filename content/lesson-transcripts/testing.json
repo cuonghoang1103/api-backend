@@ -2,8 +2,17 @@
   "courseSlug": "testing",
   "sinhBoi": "scripts/phu-de-tu-video-rieng.mjs",
   "lessons": {
-    "tst-0-1-kim-tu-thap": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/testing/00-vi-sao-phai-test/00-04-kim-tu-thap-test-38c435a2.mp4","durationSec":718.97,"nguonCau":"srt",
-      "parts": [],
+    "tst-0-1-kim-tu-thap": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/testing/00-vi-sao-phai-test/00-04-kim-tu-thap-test-38c435a2.mp4","durationSec":718.97,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":108.97,"ten":"Ôn nhanh · hôm nay · Bìa · kim tự tháp và chiếc cúp"},
+        {"t":108.97,"den":215.51,"ten":"Chạy thật: đo hai cấp · Số đo của khoá"},
+        {"t":215.51,"den":292.24,"ten":"Mỗi cấp mua gì, tốn gì · Mô phỏng: kim tự tháp và cây kem"},
+        {"t":292.24,"den":392.32,"ten":"Kim tự tháp test · Dạng sai: cây kem ốc quế"},
+        {"t":392.32,"den":479.83,"ten":"Tháp và cúp: đồng ý nhiều hơn · Test LabFlow Lite nằm đâu"},
+        {"t":479.83,"den":569.51,"ten":"Năm kinh nghiệm dùng ngay · Thực hành: xếp 8 test"},
+        {"t":569.51,"den":675.2,"ten":"Đáp án 8 test · Ba câu tự kiểm"},
+        {"t":675.2,"den":718.97,"ten":"Tóm tắt & bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 0.2 của khoá Testing."},
         {"t":9.12,"vi":"Bài trước mình đã xem LabFlow Lite có bốn tầng, và tầng luật nằm giữa là chỗ đáng test nhất."},
@@ -118,8 +127,18 @@
         {"t":712.21,"vi":"Bài sau, 0.3: cài Vitest và tạo dự án LabFlow Lite."}
       ]
     },
-    "tst-0-2-cai-dat": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/testing/00-vi-sao-phai-test/00-05-cai-dat-vitest-labflow-lite-1bf1fdc2.mp4","durationSec":786.1,"nguonCau":"srt",
-      "parts": [],
+    "tst-0-2-cai-dat": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/testing/00-vi-sao-phai-test/00-05-cai-dat-vitest-labflow-lite-1bf1fdc2.mp4","durationSec":786.1,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":103.83,"ten":"Ôn nhanh · hôm nay · Bìa · cài đặt"},
+        {"t":103.83,"den":187.17,"ten":"Bước 1: bốn lệnh tạo dự án · Chạy thật: dựng dự án từ số 0"},
+        {"t":187.17,"den":276.15,"ten":"package.json sau bốn lệnh · vitest.config.js: một dòng"},
+        {"t":276.15,"den":393.14,"ten":"Tệp test Vitest đầu tiên · npm test: ba tick xanh"},
+        {"t":393.14,"den":481.71,"ten":"Slide: đọc lỗi cố ý · Chỉ chạy thứ bạn cần"},
+        {"t":481.71,"den":564.62,"ten":"Chạy thật: watch đỏ trong một giây"},
+        {"t":564.62,"den":659.73,"ten":"Vitest, Jest hay node:test · TypeScript: chỉ đổi đuôi tệp"},
+        {"t":659.73,"den":743.78,"ten":"Chạy thật: lời giải · Ba câu tự kiểm"},
+        {"t":743.78,"den":786.1,"ten":"Tóm tắt & bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 0.3 của khoá Testing."},
         {"t":8.9,"vi":"Bài trước mình đã đo thật: cùng một luật, unit test nhanh hơn test HTTP vài chục lần."},
@@ -258,8 +277,17 @@
         {"t":778.76,"vi":"Bài sau, 1.1: giải phẫu một test, chuẩn bị, hành động, khẳng định."}
       ]
     },
-    "tst-0-3-gioi-thieu-du-an": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/testing/00-vi-sao-phai-test/00-03-ve-khoa-hoc-labflow-lite-f408cd28.mp4","durationSec":781.35,"nguonCau":"srt",
-      "parts": [],
+    "tst-0-3-gioi-thieu-du-an": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/testing/00-vi-sao-phai-test/00-03-ve-khoa-hoc-labflow-lite-f408cd28.mp4","durationSec":781.35,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":100.48,"ten":"Ôn nhanh · hôm nay · Bìa · bạn sẽ xây gì"},
+        {"t":100.48,"den":180.35,"ten":"Mô phỏng: bốn tầng LabFlow Lite · Dự án: LabFlow Lite"},
+        {"t":180.35,"den":275.68,"ten":"Các luật nghiệp vụ · Vì sao không dùng Notes API"},
+        {"t":275.68,"den":387.4,"ten":"Dự án lớn dần theo chương · Chạy thật: đích đến cuối khoá"},
+        {"t":387.4,"den":504.27,"ten":"Lộ trình 2/2: giao diện, chất lượng, đội · Tự kiểm hai phút"},
+        {"t":504.27,"den":589.3,"ten":"Công cụ và phiên bản · Bạn sẽ dùng ở đâu"},
+        {"t":589.3,"den":681.09,"ten":"Một bài gồm năm khối · Thực hành 10 phút"},
+        {"t":681.09,"den":781.35,"ten":"Ba câu tự kiểm · Tóm tắt & bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 0.1 của khoá Testing."},
         {"t":9.42,"vi":"Bài trước mình đã thấy: mỗi thảm hoạ thiếu đúng một test rẻ, và test phải cô lập khỏi hệ thống thật."},
@@ -386,8 +414,20 @@
         {"t":773.62,"vi":"Bài sau, 0.2: kim tự tháp test và chiếc cúp, đo thật trên LabFlow Lite."}
       ]
     },
-    "tst-0-8-bat-dau-tai-day": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/testing/00-vi-sao-phai-test/00-01-bat-dau-kiem-thu-la-gi-d954d05d.mp4","durationSec":1172.56,"nguonCau":"srt",
-      "parts": [],
+    "tst-0-8-bat-dau-tai-day": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/testing/00-vi-sao-phai-test/00-01-bat-dau-kiem-thu-la-gi-d954d05d.mp4","durationSec":1172.56,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":86.68,"ten":"Chào bạn · khoá Testing · Bìa · bốn câu hỏi"},
+        {"t":86.68,"den":185.57,"ten":"Mô phỏng: nếm nồi canh · Ngày nào bạn cũng test"},
+        {"t":185.57,"den":300.59,"ten":"Test tự động là mã chạy mã · Chạy thật: test đầu tiên"},
+        {"t":300.59,"den":410.08,"ten":"Thủ công và tự động · Testing, debugging, QA"},
+        {"t":410.08,"den":498.01,"ten":"Mô phỏng: error → defect → failure · Error, defect, failure"},
+        {"t":498.01,"den":599.36,"ten":"Verification và validation · Unit, integration, end-to-end"},
+        {"t":599.36,"den":723.88,"ten":"Lịch sử (1/2): con bướm tới JUnit"},
+        {"t":723.88,"den":846.97,"ten":"Vì sao tự động hoá ra đời · Testing giúp gì cho bạn"},
+        {"t":846.97,"den":934.43,"ten":"Câu hỏi phỏng vấn · Test đầu tiên trong 10 phút"},
+        {"t":934.43,"den":1068.17,"ten":"Thực hành 10 phút · Chạy thật: cố ý làm hỏng"},
+        {"t":1068.17,"den":1172.56,"ten":"Ba câu tự kiểm · Tóm tắt & luyện tập"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với khoá Testing trên cuongthai.com."},
         {"t":9.06,"vi":"Khoá này dạy bạn tự viết test bắt được lỗi thật, đọc hiểu bộ test người khác hay AI viết, và cho nó chạy tự động trong CI."},
@@ -584,8 +624,19 @@
         {"t":1164.07,"vi":"Bài sau: những sự cố có thật vì thiếu test, và một lộ trình học không làm bạn bỏ cuộc."}
       ]
     },
-    "tst-0-9-bat-dau-khi-khong-co": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/testing/00-vi-sao-phai-test/00-02-bat-dau-khi-khong-co-test-d10d5534.mp4","durationSec":968.82,"nguonCau":"srt",
-      "parts": [],
+    "tst-0-9-bat-dau-khi-khong-co": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/testing/00-vi-sao-phai-test/00-02-bat-dau-khi-khong-co-test-d10d5534.mp4","durationSec":968.82,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":103.34,"ten":"Ôn nhanh · hôm nay · Bìa · cuộc sống không có test"},
+        {"t":103.34,"den":207.27,"ten":"Knight Capital 2012 · Therac-25: tranh chấp"},
+        {"t":207.27,"den":292.18,"ten":"Mô phỏng: hộp 16 bit bị tràn · Ariane 5: 37 giây"},
+        {"t":292.18,"den":400.9,"ten":"Mars Climate Orbiter: hai đơn vị"},
+        {"t":400.9,"den":508.29,"ten":"Chạy thật: cái bẫy trường 21"},
+        {"t":508.29,"den":597.4,"ten":"Gần nhà: chính trang web này · Minh hoạ A: sửa một, hỏng ba"},
+        {"t":597.4,"den":697.07,"ten":"Minh hoạ B: lần merge giết đăng nhập"},
+        {"t":697.07,"den":774.26,"ten":"Hai lộ trình · Đọc test đỏ không hoảng"},
+        {"t":774.26,"den":877.9,"ten":"Khi bí, và các cột mốc · Thực hành 15 phút"},
+        {"t":877.9,"den":968.82,"ten":"Ba câu tự kiểm · Tóm tắt & bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài Bắt đầu tại đây phần hai của khoá Testing."},
         {"t":9.99,"vi":"Bài trước mình đã học: một test so thực tế với mong đợi, như đặt hai thứ lên bàn cân."},
@@ -743,8 +794,16 @@
         {"t":961.31,"vi":"Bài sau, 0.1: dự án bạn sẽ test suốt khoá, và bản đồ mọi chương."}
       ]
     },
-    "tst-1-1-cau-truc": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/testing/01-unit-test-dau-tien/01-01-giai-phau-mot-test-165ba1fb.mp4","durationSec":699.94,"nguonCau":"srt",
-      "parts": [],
+    "tst-1-1-cau-truc": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/testing/01-unit-test-dau-tien/01-01-giai-phau-mot-test-165ba1fb.mp4","durationSec":699.94,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":114.4,"ten":"Ôn nhanh · hôm nay · Bìa · giải phẫu một test"},
+        {"t":114.4,"den":222.86,"ten":"Mã cần test (2/2): duyệt và đặt phòng"},
+        {"t":222.86,"den":304.64,"ten":"Arrange · Act · Assert · Chạy thật: test không khẳng định gì"},
+        {"t":304.64,"den":396.3,"ten":"Biến \"không khẳng định\" thành lỗi"},
+        {"t":396.3,"den":507.02,"ten":"FIRST: năm tính chất · Từ JUnit (SWT301) sang Vitest"},
+        {"t":507.02,"den":608.75,"ten":"Thực hành (15 phút) · Thực hành 15 phút"},
+        {"t":608.75,"den":699.94,"ten":"Ba câu tự kiểm · Tóm tắt & luyện tập"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 1.1, bài đầu tiên của Chương 1 khoá Testing."},
         {"t":11.5,"vi":"Bài trước mình đã dựng LabFlow Lite từ thư mục trống, chạy ba test xanh với npm test."},
@@ -874,8 +933,17 @@
         {"t":695.29,"vi":"Bài sau: matcher nói đúng điều bạn muốn."}
       ]
     },
-    "tst-1-2-matcher": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/testing/01-unit-test-dau-tien/01-02-matcher-noi-dung-dieu-ban-muon-22e52f9a.mp4","durationSec":704.16,"nguonCau":"srt",
-      "parts": [],
+    "tst-1-2-matcher": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/testing/01-unit-test-dau-tien/01-02-matcher-noi-dung-dieu-ban-muon-22e52f9a.mp4","durationSec":704.16,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":98.91,"ten":"Ôn nhanh · hôm nay · Bìa · matcher"},
+        {"t":98.91,"den":194.69,"ten":"Mô phỏng: hai hộp giống hệt · toBe dùng Object.is"},
+        {"t":194.69,"den":286.02,"ten":"toStrictEqual bắt khoá thừa"},
+        {"t":286.02,"den":371.71,"ten":"toBeCloseTo: so có sai số · Bẫy truthy: xanh vì lý do sai"},
+        {"t":371.71,"den":452.97,"ten":"Ba cách nói lỗi nào · Snapshot: Vitest viết giá trị mong đợi"},
+        {"t":452.97,"den":534.7,"ten":"Bẫy snapshot: -u · Bảng tra nhanh"},
+        {"t":534.7,"den":612.47,"ten":"Thực hành 15 phút · Chạy thật: lời giải + đột biến"},
+        {"t":612.47,"den":704.16,"ten":"Ba câu tự kiểm · Tóm tắt & luyện tập"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 1.2 của khoá Testing."},
         {"t":9.18,"vi":"Bài trước mình đã học ba khay của một test: chuẩn bị, hành động, khẳng định."},
@@ -1002,8 +1070,15 @@
         {"t":700.12,"vi":"Bài sau: đặt tên và sắp xếp test."}
       ]
     },
-    "tst-1-3-ten-test": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/testing/01-unit-test-dau-tien/01-03-dat-ten-va-sap-xep-test-928567d9.mp4","durationSec":550.13,"nguonCau":"srt",
-      "parts": [],
+    "tst-1-3-ten-test": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/testing/01-unit-test-dau-tien/01-03-dat-ten-va-sap-xep-test-928567d9.mp4","durationSec":550.13,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":114.99,"ten":"Ôn nhanh · hôm nay · Bìa · đặt tên và sắp xếp"},
+        {"t":114.99,"den":199.17,"ten":"Cùng một bug, hai cái tên · Một mẫu đặt tên"},
+        {"t":199.17,"den":306.48,"ten":"it.each: một bảng, nhiều test"},
+        {"t":306.48,"den":398.81,"ten":".only: im ở máy, lỗi ở CI · Tệp test nằm ở đâu"},
+        {"t":398.81,"den":504.21,"ten":"Thực hành 15 phút · Chạy thật: trước và sau it.each"},
+        {"t":504.21,"den":550.13,"ten":"Tóm tắt & luyện tập"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 1.3 của khoá Testing."},
         {"t":9.14,"vi":"Bài trước mình đã chọn matcher đúng câu hỏi: toBe cho giá trị, toEqual cho đối tượng, toBeCloseTo cho số thập phân."},
@@ -1106,8 +1181,17 @@
         {"t":540.28,"vi":"Bài sau: chọn giá trị nào để đưa vào bảng, với phân vùng, giá trị biên, bảng quyết định và thuộc tính."}
       ]
     },
-    "tst-1-4-ham-thuan": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/testing/01-unit-test-dau-tien/01-04-test-ham-thuan-70aeb69d.mp4","durationSec":755.1,"nguonCau":"srt",
-      "parts": [],
+    "tst-1-4-ham-thuan": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/testing/01-unit-test-dau-tien/01-04-test-ham-thuan-70aeb69d.mp4","durationSec":755.1,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":111.29,"ten":"Ôn nhanh · hôm nay · Bìa · hàm thuần và giá trị biên"},
+        {"t":111.29,"den":211.13,"ten":"Phân vùng tương đương"},
+        {"t":211.13,"den":300.76,"ten":"Sáu giá trị biên thành một bảng"},
+        {"t":300.76,"den":382.81,"ten":"checkSlot: biên theo từng luật · Bảng quyết định"},
+        {"t":382.81,"den":477.52,"ten":"Bảng quyết định thành it.each · Test theo thuộc tính"},
+        {"t":477.52,"den":562.52,"ten":"Phản ví dụ, tìm tự động · Kỹ thuật nào cho luật nào"},
+        {"t":562.52,"den":695.97,"ten":"Thực hành 20 phút · Chạy thật: lời giải và đột biến"},
+        {"t":695.97,"den":755.1,"ten":"Tóm tắt & luyện tập"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 1.4 của khoá Testing."},
         {"t":9.28,"vi":"Bài trước mình biến tên test thành bản chẩn đoán: đơn vị, tình huống, kết quả mong đợi."},
@@ -1239,8 +1323,14 @@
         {"t":744.78,"vi":"Bài sau là Lab 1: một script cài tám con bug vào luật của LabFlow Lite, và bộ test của bạn phải bắt từng con."}
       ]
     },
-    "tst-1-5-lab-quy-tac": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/testing/01-unit-test-dau-tien/01-05-lab-1-quy-tac-40f86eb0.mp4","durationSec":411.24,"nguonCau":"srt",
-      "parts": [],
+    "tst-1-5-lab-quy-tac": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/testing/01-unit-test-dau-tien/01-05-lab-1-quy-tac-40f86eb0.mp4","durationSec":411.24,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":107.36,"ten":"Ôn nhanh · hôm nay · Bìa · Lab 1"},
+        {"t":107.36,"den":209.57,"ten":"Cách kiểm thử đột biến làm việc · Chạy thật: lần thử đầu 1/8"},
+        {"t":209.57,"den":289.33,"ten":"Chạy thật: mẫu một luật ⇒ 2/8 · Lời giải tham khảo: 8 trên 8"},
+        {"t":289.33,"den":373.55,"ten":"Thang chấm 10 điểm · Gợi ý, từ nhẹ tới mạnh"},
+        {"t":373.55,"den":411.24,"ten":"Trước khi gọi là xong"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Lab 1 của khoá Testing."},
         {"t":8.59,"vi":"Bài trước mình chọn giá trị bằng phân vùng, giá trị biên, bảng quyết định và thuộc tính."},
@@ -1322,8 +1412,13 @@
         {"t":404.66,"vi":"Chương 2: test mã bất đồng bộ, thời gian, lỗi và số ngẫu nhiên."}
       ]
     },
-    "tst-10-1-tdd": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/testing/10-tdd-doi-that/10-01-tdd-88c65917.mp4","durationSec":382.9,"nguonCau":"srt",
-      "parts": [],
+    "tst-10-1-tdd": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/testing/10-tdd-doi-that/10-01-tdd-88c65917.mp4","durationSec":382.9,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":98.5,"ten":"Ôn nhanh · hôm nay · Bìa · TDD"},
+        {"t":98.5,"den":178.01,"ten":"Mô phỏng + chạy thật: bảy vòng đỏ, xanh"},
+        {"t":178.01,"den":255.54,"ten":"Refactor, rồi đo bằng Stryker"},
+        {"t":255.54,"den":382.9,"ten":"Khi nào TDD giúp, khi nào cản · Thực hành (15 phút)"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Chương 10 của khoá Testing: TDD và testing trong đội thật."},
         {"t":11.53,"vi":"Tới giờ, ta viết test sau khi mã đã có, rồi đo nó bằng độ phủ, đột biến, và đưa vào CI."},
@@ -1392,8 +1487,13 @@
         {"t":370.77,"vi":"Học xong bài này, bạn mở Code Lab Testing ngay dưới video, bài 10.1. Bài sau, 10.2: thêm test cho mã cũ chưa có test."}
       ]
     },
-    "tst-10-2-code-cu": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/testing/10-tdd-doi-that/10-02-code-cu-a6e35728.mp4","durationSec":315.37,"nguonCau":"srt",
-      "parts": [],
+    "tst-10-2-code-cu": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/testing/10-tdd-doi-that/10-02-code-cu-a6e35728.mp4","durationSec":315.37,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":97.03,"ten":"Ôn nhanh · hôm nay · Bìa · code cũ"},
+        {"t":97.03,"den":160.94,"ten":"Link seam · Characterization test"},
+        {"t":160.94,"den":249.03,"ten":"Golden master: 10/10 · Hành vi lạ: chốt trước, sửa sau"},
+        {"t":249.03,"den":315.37,"ten":"Chạy thật: golden master qua múi giờ và refactor"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 10.2 của khoá Testing."},
         {"t":9.28,"vi":"Bài trước, ta viết test trước mã, và mã mới sinh ra đã có test."},
@@ -1451,8 +1551,13 @@
         {"t":303.78,"vi":"Học xong bài này, bạn mở Code Lab Testing ngay dưới video, bài 10.2. Bài sau, 10.3: review test trong pull request."}
       ]
     },
-    "tst-10-3-review": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/testing/10-tdd-doi-that/10-03-review-d0035185.mp4","durationSec":310.93,"nguonCau":"srt",
-      "parts": [],
+    "tst-10-3-review": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/testing/10-tdd-doi-that/10-03-review-d0035185.mp4","durationSec":310.93,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":72.77,"ten":"Ôn nhanh · hôm nay · Bìa · review test"},
+        {"t":72.77,"den":141.48,"ten":"Mô phỏng + chạy thật: mỗi vấn đề một lần chạy"},
+        {"t":141.48,"den":215.79,"ten":"Chạy thật: retry che id ngẫu nhiên · Retry che một test sai"},
+        {"t":215.79,"den":310.93,"ten":"Thực hành 15 phút · Chạy thật: lời giải th103"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 10.3 của khoá Testing."},
         {"t":9.31,"vi":"Hai bài trước, bạn tự viết test: trước mã mới, và quanh mã cũ."},
@@ -1511,8 +1616,13 @@
         {"t":298.71,"vi":"Học xong bài này, bạn mở Code Lab Testing ngay dưới video, bài 10.3. Bài sau, 10.4: câu hỏi phỏng vấn về testing."}
       ]
     },
-    "tst-10-4-phong-van": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/testing/10-tdd-doi-that/10-04-phong-van-7b8ed3c9.mp4","durationSec":290.3,"nguonCau":"srt",
-      "parts": [],
+    "tst-10-4-phong-van": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/testing/10-tdd-doi-that/10-04-phong-van-7b8ed3c9.mp4","durationSec":290.3,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":82.63,"ten":"Ôn nhanh · hôm nay · Bìa · phỏng vấn"},
+        {"t":82.63,"den":141.96,"ten":"Khung trả lời · Câu yếu và câu mạnh"},
+        {"t":141.96,"den":221.07,"ten":"Test chập chờn · TDD và code cũ"},
+        {"t":221.07,"den":290.3,"ten":"Hai bài nộp · Luyện tập"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 10.4 của khoá Testing."},
         {"t":9.28,"vi":"Ba bài vừa rồi: TDD, mã cũ, và review test trong pull request."},
@@ -1569,8 +1679,13 @@
         {"t":282.76,"vi":"Tiếp theo là Lab 10: tính năng viết test trước, mã cũ được ghim, refactor an toàn."}
       ]
     },
-    "tst-10-5-lab-tdd-code-cu": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/testing/10-tdd-doi-that/10-05-lab-10-tdd-code-cu-49df5b91.mp4","durationSec":271.76,"nguonCau":"srt",
-      "parts": [],
+    "tst-10-5-lab-tdd-code-cu": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/testing/10-tdd-doi-that/10-05-lab-10-tdd-code-cu-49df5b91.mp4","durationSec":271.76,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":71.51,"ten":"Ôn nhanh · hôm nay · Bìa · Lab 10"},
+        {"t":71.51,"den":129.93,"ten":"Tám con bug được cài · Chạy thật: lần thử đầu 1/8"},
+        {"t":129.93,"den":192.12,"ten":"Chạy thật: cái ghim bắt một thay đổi vô hại"},
+        {"t":192.12,"den":271.76,"ten":"Thang chấm 10 điểm · Gợi ý, từ nhẹ tới mạnh"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Lab 10 của khoá Testing."},
         {"t":8.67,"vi":"Chương 10 cho bạn TDD, cách ghim mã cũ, review test, và trả lời phỏng vấn bằng số đo."},
@@ -1621,8 +1736,13 @@
         {"t":264.85,"vi":"Tiếp theo là Quiz Chương 10, rồi Chương 11: dự án cuối khoá."}
       ]
     },
-    "tst-11-1-ke-hoach": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/testing/11-du-an-cuoi-khoa/11-01-ke-hoach-b9905f95.mp4","durationSec":326.01,"nguonCau":"srt",
-      "parts": [],
+    "tst-11-1-ke-hoach": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/testing/11-du-an-cuoi-khoa/11-01-ke-hoach-b9905f95.mp4","durationSec":326.01,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":77.35,"ten":"Ôn nhanh · hôm nay · Bìa · chiến lược test"},
+        {"t":77.35,"den":150.94,"ten":"Mô phỏng + chạy thật: 12 bug, 5 tầng · Ma trận bắt lỗi"},
+        {"t":150.94,"den":218.11,"ten":"Nhãn tiêu chí trên test"},
+        {"t":218.11,"den":326.01,"ten":"Thực hành (15 phút) · Thực hành 15 phút"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Chương 11 của khoá Testing: dự án cuối khoá."},
         {"t":10.75,"vi":"Mười chương qua, bạn đã test ở mọi tầng, đo bộ test, và đưa nó vào CI."},
@@ -1683,8 +1803,13 @@
         {"t":313.51,"vi":"Học xong bài này, bạn mở Code Lab Testing ngay dưới video, bài 11.1. Bài sau, 11.2: test backend từ đầu tới cuối."}
       ]
     },
-    "tst-11-2-backend": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/testing/11-du-an-cuoi-khoa/11-02-backend-eb3835d1.mp4","durationSec":310.86,"nguonCau":"srt",
-      "parts": [],
+    "tst-11-2-backend": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/testing/11-du-an-cuoi-khoa/11-02-backend-eb3835d1.mp4","durationSec":310.86,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":68.6,"ten":"Ôn nhanh · hôm nay · Bìa · backend"},
+        {"t":68.6,"den":156.29,"ten":"Mô phỏng + chạy thật: đột biến sống vì múi giờ"},
+        {"t":156.29,"den":218.73,"ten":"Chỉ PostgreSQL thật mới thấy · Ngày từ driver"},
+        {"t":218.73,"den":310.86,"ten":"Thực hành 15 phút · Chạy thật: lời giải th112"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 11.2 của khoá Testing."},
         {"t":9.34,"vi":"Bài trước, ta lập kế hoạch test cho US-11: Đặt phòng của tôi, và huỷ."},
@@ -1740,8 +1865,13 @@
         {"t":298.58,"vi":"Học xong bài này, bạn mở Code Lab Testing ngay dưới video, bài 11.2. Bài sau, 11.3: frontend và luồng đầy đủ."}
       ]
     },
-    "tst-11-3-frontend": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/testing/11-du-an-cuoi-khoa/11-03-frontend-3f2a51b6.mp4","durationSec":306.65,"nguonCau":"srt",
-      "parts": [],
+    "tst-11-3-frontend": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/testing/11-du-an-cuoi-khoa/11-03-frontend-3f2a51b6.mp4","durationSec":306.65,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":76.68,"ten":"Ôn nhanh · hôm nay · Bìa · frontend"},
+        {"t":76.68,"den":148.53,"ten":"Mô phỏng + chạy thật: client giả không dựng URL"},
+        {"t":148.53,"den":217.86,"ten":"Hai cái bẫy của Playwright · Va chạm mã phòng"},
+        {"t":217.86,"den":306.65,"ten":"Thực hành 15 phút · Chạy thật: lời giải th113"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 11.3 của khoá Testing."},
         {"t":9.13,"vi":"Backend của US-11 đã được test, tới tận PostgreSQL thật."},
@@ -1799,8 +1929,13 @@
         {"t":293.83,"vi":"Học xong bài này, bạn mở Code Lab Testing ngay dưới video, bài 11.3. Bài sau, 11.4: đưa vào CI, và checklist cuối."}
       ]
     },
-    "tst-11-4-ci": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/testing/11-du-an-cuoi-khoa/11-04-ci-b3bde5fb.mp4","durationSec":339.98,"nguonCau":"srt",
-      "parts": [],
+    "tst-11-4-ci": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/testing/11-du-an-cuoi-khoa/11-04-ci-b3bde5fb.mp4","durationSec":339.98,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":82.86,"ten":"Ôn nhanh · hôm nay · Bìa · CI và checklist"},
+        {"t":82.86,"den":181.89,"ten":"Bánh cóc · Chạy thật: bánh cóc bắt một lần tụt"},
+        {"t":181.89,"den":268.45,"ten":"Tổng duyệt: xanh, rồi đỏ đúng lý do · Chạy ban đêm"},
+        {"t":268.45,"den":339.98,"ten":"Chạy thật: lời giải th114 · Ba câu tự kiểm & bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 11.4, bài cuối của phần dự án."},
         {"t":10.43,"vi":"Ba bài vừa rồi: kế hoạch, backend tới PostgreSQL thật, và màn hình cùng một hành trình trình duyệt."},
@@ -1865,8 +2000,13 @@
         {"t":327.88,"vi":"Học xong bài này, bạn mở Code Lab Testing ngay dưới video, bài 11.4. Bài sau: dự án cuối khoá, chấm trên thang một trăm."}
       ]
     },
-    "tst-11-5-du-an-cuoi-khoa": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/testing/11-du-an-cuoi-khoa/11-05-du-an-cuoi-khoa-f01a1758.mp4","durationSec":266.22,"nguonCau":"srt",
-      "parts": [],
+    "tst-11-5-du-an-cuoi-khoa": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/testing/11-du-an-cuoi-khoa/11-05-du-an-cuoi-khoa-f01a1758.mp4","durationSec":266.22,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":73.24,"ten":"Ôn nhanh · hôm nay · Bìa · dự án cuối khoá"},
+        {"t":73.24,"den":137.97,"ten":"Tám tệp nộp · Thang 100"},
+        {"t":137.97,"den":201.08,"ten":"Bản thử đầu: 42/100 · Ba thói quen thả lọt bug"},
+        {"t":201.08,"den":266.22,"ten":"Kể dự án bằng con số · Làm dự án cuối khoá"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với dự án cuối khoá Testing."},
         {"t":8.54,"vi":"Bốn bài vừa rồi: kế hoạch, backend, frontend, và CI cho US-11."},
@@ -1916,8 +2056,13 @@
         {"t":259.52,"vi":"Tiếp theo là bài thi cuối khoá, rồi bài cuối: học tiếp gì sau khoá này."}
       ]
     },
-    "tst-11-7-hoc-tiep": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/testing/11-du-an-cuoi-khoa/11-07-hoc-tiep-2c5d6513.mp4","durationSec":258.35,"nguonCau":"srt",
-      "parts": [],
+    "tst-11-7-hoc-tiep": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/testing/11-du-an-cuoi-khoa/11-07-hoc-tiep-2c5d6513.mp4","durationSec":258.35,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":89.51,"ten":"Ôn nhanh · hôm nay · Bìa · học tiếp"},
+        {"t":89.51,"den":151.82,"ten":"Test và observability · Mở rộng mã đã có test"},
+        {"t":151.82,"den":209.13,"ten":"Thứ tự nên làm · Giữ bộ test trung thực"},
+        {"t":209.13,"den":258.35,"ten":"Ba câu tự kiểm & lời chào"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đây là bài cuối của khoá Testing."},
         {"t":8.53,"vi":"Từ unit test đầu tiên tới dự án cuối khoá: một tính năng thật, test ở mọi tầng, đưa ra sau một check bắt buộc duy nhất."},
@@ -1962,8 +2107,16 @@
         {"t":250.46,"vi":"Hẹn gặp bạn ở khoá tiếp theo, với cùng một câu hỏi: bug nào làm nó đỏ?"}
       ]
     },
-    "tst-2-1-async": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/testing/02-bat-dong-bo-thoi-gian-loi/02-01-test-ma-bat-dong-bo-7d6ea6d3.mp4","durationSec":621.89,"nguonCau":"srt",
-      "parts": [],
+    "tst-2-1-async": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/testing/02-bat-dong-bo-thoi-gian-loi/02-01-test-ma-bat-dong-bo-7d6ea6d3.mp4","durationSec":621.89,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":104.98,"ten":"Ôn nhanh · hôm nay · Bìa · test mã bất đồng bộ"},
+        {"t":104.98,"den":193.18,"ten":"Chạy thật: quên await · Bẫy 1: .then không await"},
+        {"t":193.18,"den":277.71,"ten":"requireAssertions bắt luôn bẫy 1"},
+        {"t":277.71,"den":363.95,"ten":"Mô phỏng + chạy thật: hai sinh viên, một khung giờ"},
+        {"t":363.95,"den":452.08,"ten":"Chạy thật: it.fails · it.fails: ghi nhận bug trung thực"},
+        {"t":452.08,"den":528.03,"ten":"Thực hành (15 phút) · Thực hành 15 phút"},
+        {"t":528.03,"den":621.89,"ten":"Ba câu tự kiểm · Tóm tắt & luyện tập"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 2.1, bài đầu tiên của Chương 2 khoá Testing."},
         {"t":11.23,"vi":"Chương 1 test các hàm thuần: cùng đầu vào, cùng đầu ra, có ngay lập tức."},
@@ -2076,8 +2229,16 @@
         {"t":613.13,"vi":"Bài sau: kiểm soát thời gian, với đồng hồ giả, ngày giờ đóng băng và cái bẫy múi giờ bảy."}
       ]
     },
-    "tst-2-2-thoi-gian": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/testing/02-bat-dong-bo-thoi-gian-loi/02-02-kiem-soat-thoi-gian-6dec79d9.mp4","durationSec":642.67,"nguonCau":"srt",
-      "parts": [],
+    "tst-2-2-thoi-gian": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/testing/02-bat-dong-bo-thoi-gian-loi/02-02-kiem-soat-thoi-gian-6dec79d9.mp4","durationSec":642.67,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":93.54,"ten":"Ôn nhanh · hôm nay · Bìa · kiểm soát thời gian"},
+        {"t":93.54,"den":175.37,"ten":"Múi giờ: hai cách đếm số ngày"},
+        {"t":175.37,"den":281.61,"ten":"Cùng test, hai múi giờ"},
+        {"t":281.61,"den":373.4,"ten":"Biên thời gian: 61, 60, 59 phút"},
+        {"t":373.4,"den":457.67,"ten":"Chạy thật: retry thật 3 giây, giả vài mili giây"},
+        {"t":457.67,"den":546.13,"ten":"Thực hành (15 phút) · Thực hành 15 phút"},
+        {"t":546.13,"den":642.67,"ten":"Ba câu tự kiểm · Tóm tắt & luyện tập"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 2.2 của khoá Testing."},
         {"t":9.04,"vi":"Bài trước mình await mọi promise, và thấy thiếu một chữ await là test xanh mà sai."},
@@ -2190,8 +2351,15 @@
         {"t":635.4,"vi":"Bài sau: test lỗi và các nhánh thất bại, cả nhánh catch không ai từng đi qua."}
       ]
     },
-    "tst-2-3-loi": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/testing/02-bat-dong-bo-thoi-gian-loi/02-03-test-loi-nhanh-that-bai-e8646900.mp4","durationSec":562.84,"nguonCau":"srt",
-      "parts": [],
+    "tst-2-3-loi": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/testing/02-bat-dong-bo-thoi-gian-loi/02-03-test-loi-nhanh-that-bai-e8646900.mp4","durationSec":562.84,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":90.59,"ten":"Ôn nhanh · hôm nay · Bìa · test lỗi và nhánh thất bại"},
+        {"t":90.59,"den":182.3,"ten":"Khẳng định một lỗi · Nhánh catch không ai test"},
+        {"t":182.3,"den":304.87,"ten":"Đi tới bằng một repository hỏng"},
+        {"t":304.87,"den":389.32,"ten":"Bẫy: try/catch xanh khi không có gì bị ném · Hai cách sửa"},
+        {"t":389.32,"den":471.28,"ten":"Thực hành (15 phút) · Thực hành 15 phút"},
+        {"t":471.28,"den":562.84,"ten":"Ba câu tự kiểm · Tóm tắt & luyện tập"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 2.3 của khoá Testing."},
         {"t":9.15,"vi":"Bài trước mình biến thời gian thành đầu vào: đóng băng đồng hồ, và chạy test dưới múi giờ UTC."},
@@ -2295,26 +2463,14 @@
         {"t":555.26,"vi":"Bài sau: số ngẫu nhiên, mã định danh, và cách đo rồi chữa một test chập chờn."}
       ]
     },
-    "tst-2-4-ngau-nhien": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/testing/02-bat-dong-bo-thoi-gian-loi/02-04-ngau-nhien-bat-dinh-b1722761.mp4","durationSec":537.36,"nguonCau":"srt",
+    "tst-2-4-ngau-nhien": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/testing/02-bat-dong-bo-thoi-gian-loi/02-04-ngau-nhien-bat-dinh-b1722761.mp4","durationSec":537.36,"nguonCau":"srt","nguonPhan":"canh",
       "parts": [
-        {"t":5.1,"den":36.05,"ten":"Ôn nhanh · hôm nay"},
-        {"t":36.05,"den":49.18,"ten":"Bìa · ngẫu nhiên và bất định"},
-        {"t":49.18,"den":69.05,"ten":"Bài này mang về gì"},
-        {"t":69.05,"den":95.75,"ten":"Mã đặt chỗ của LabFlow Lite"},
-        {"t":95.75,"den":157.93,"ten":"Chạy thật: đo một test chập chờn"},
-        {"t":157.93,"den":176.72,"ten":"Test chập chờn: cùng mã, khác kết quả"},
-        {"t":176.72,"den":207.41,"ten":"Cách 1 và 2: tiêm, hoặc seed"},
-        {"t":207.41,"den":235.17,"ten":"Cách 3: spy Math.random, và trả lại"},
-        {"t":235.17,"den":265.95,"ten":"Chạy thật: ba cách trong một tệp"},
-        {"t":265.95,"den":300.19,"ten":"Chạy thật: spy không được trả lại"},
-        {"t":300.19,"den":316.95,"ten":"Rò rỉ: mock không được trả lại"},
-        {"t":316.95,"den":343.15,"ten":"Mã định danh và đồng hồ làm tham số"},
-        {"t":343.15,"den":372.33,"ten":"Khi giá trị buộc phải ngẫu nhiên"},
-        {"t":372.33,"den":389.49,"ten":"Thực hành (15 phút)"},
-        {"t":389.49,"den":422.08,"ten":"Thực hành 15 phút"},
-        {"t":422.08,"den":441.67,"ten":"Chạy thật: lời giải th24 + 100 lần"},
-        {"t":441.67,"den":491.44,"ten":"Ba câu tự kiểm"},
-        {"t":491.44,"den":537.36,"ten":"Tóm tắt & luyện tập"}
+        {"t":0,"den":95.75,"ten":"Ôn nhanh · hôm nay · Bìa · ngẫu nhiên và bất định"},
+        {"t":95.75,"den":176.72,"ten":"Chạy thật: đo một test chập chờn"},
+        {"t":176.72,"den":265.95,"ten":"Cách 1 và 2: tiêm, hoặc seed"},
+        {"t":265.95,"den":343.15,"ten":"Chạy thật: spy không được trả lại"},
+        {"t":343.15,"den":422.08,"ten":"Khi giá trị buộc phải ngẫu nhiên · Thực hành (15 phút)"},
+        {"t":422.08,"den":537.36,"ten":"Chạy thật: lời giải th24 + 100 lần · Ba câu tự kiểm"}
       ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 2.4, bài cuối của Chương 2."},
@@ -2401,8 +2557,13 @@
         {"t":528.94,"vi":"Bài sau là Lab 2: bất đồng bộ, thời gian và lỗi, với tám con đột biến chờ bạn diệt."}
       ]
     },
-    "tst-2-5-lab-bat-dong-bo": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/testing/02-bat-dong-bo-thoi-gian-loi/02-05-lab-2-bat-dong-bo-a2817904.mp4","durationSec":382.04,"nguonCau":"srt",
-      "parts": [],
+    "tst-2-5-lab-bat-dong-bo": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/testing/02-bat-dong-bo-thoi-gian-loi/02-05-lab-2-bat-dong-bo-a2817904.mp4","durationSec":382.04,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":82.48,"ten":"Ôn nhanh · hôm nay · Bìa · Lab 2"},
+        {"t":82.48,"den":194.93,"ten":"Tám con bug được cài · Chạy thật: lần thử đầu 0/8"},
+        {"t":194.93,"den":281.49,"ten":"Lần thử đầu: 0 trên 8 · Chạy thật: mẫu một luật ⇒ 1/8"},
+        {"t":281.49,"den":382.04,"ten":"Gợi ý, từ nhẹ tới mạnh · Làm Lab 2"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Lab 2 của khoá Testing."},
         {"t":8.46,"vi":"Chương 2 dạy bạn chờ đúng cách, đóng băng đồng hồ, thắp sáng nhánh catch, và kiểm soát ngẫu nhiên."},
@@ -2477,8 +2638,15 @@
         {"t":373.07,"vi":"Chương 3: những đồ giả tự dựng của chương này sẽ có tên gọi và công cụ đàng hoàng, test double."}
       ]
     },
-    "tst-3-1-phan-loai": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/testing/03-mock-stub-spy/03-01-stub-mock-spy-fake-2745a39e.mp4","durationSec":494.7,"nguonCau":"srt",
-      "parts": [],
+    "tst-3-1-phan-loai": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/testing/03-mock-stub-spy/03-01-stub-mock-spy-fake-2745a39e.mp4","durationSec":494.7,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":98.4,"ten":"Ôn nhanh · hôm nay · Bìa · stub, mock, spy, fake"},
+        {"t":98.4,"den":184.69,"ten":"Năm loại đồ đóng thế"},
+        {"t":184.69,"den":259.85,"ten":"Dummy và stub · Spy và mock với vi.fn"},
+        {"t":259.85,"den":338.97,"ten":"Chạy thật: cài bug người nhận — ai nhận ra?"},
+        {"t":338.97,"den":443.9,"ten":"Thực hành 15 phút · Chạy thật: lời giải th31"},
+        {"t":443.9,"den":494.7,"ten":"Tóm tắt & luyện tập"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 3.1, bài đầu tiên của Chương 3 khoá Testing."},
         {"t":11.15,"vi":"Chương 2 đã dựng vài đồ giả bằng tay: repository trong bộ nhớ, repository cố ý hỏng, đồng hồ giả."},
@@ -2560,8 +2728,15 @@
         {"t":483.83,"vi":"Bài sau: khi mã import thẳng phụ thuộc và nói chuyện HTTP, với vi.mock, vi.hoisted và MSW."}
       ]
     },
-    "tst-3-2-mock-module": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/testing/03-mock-stub-spy/03-02-mock-module-va-http-4cdc8b1a.mp4","durationSec":513.32,"nguonCau":"srt",
-      "parts": [],
+    "tst-3-2-mock-module": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/testing/03-mock-stub-spy/03-02-mock-module-va-http-4cdc8b1a.mp4","durationSec":513.32,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":82.86,"ten":"Ôn nhanh · hôm nay · Bìa · mock module và HTTP"},
+        {"t":82.86,"den":159.57,"ten":"vi.mock thay một module"},
+        {"t":159.57,"den":247.15,"ten":"Bẫy hoisting · Mô phỏng + chạy thật: MSW, trạm chặn mạng"},
+        {"t":247.15,"den":342.33,"ten":"Chạy thật: tên tuỳ chọn cũ, test chạm ra internet"},
+        {"t":342.33,"den":464.7,"ten":"Thực hành (15 phút) · Thực hành 15 phút"},
+        {"t":464.7,"den":513.32,"ten":"Tóm tắt & luyện tập"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 3.2 của khoá Testing."},
         {"t":9.07,"vi":"Bài trước mình gọi tên năm đồ đóng thế: dummy, stub, spy, mock, fake."},
@@ -2651,8 +2826,14 @@
         {"t":505.26,"vi":"Bài sau: khi mock làm test vô giá trị, đo bằng một bug được cài và một thay đổi vô hại."}
       ]
     },
-    "tst-3-3-qua-da": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/testing/03-mock-stub-spy/03-03-mock-qua-da-1806dc42.mp4","durationSec":440.66,"nguonCau":"srt",
-      "parts": [],
+    "tst-3-3-qua-da": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/testing/03-mock-stub-spy/03-03-mock-qua-da-1806dc42.mp4","durationSec":440.66,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":86.08,"ten":"Ôn nhanh · hôm nay · Bìa · khi mock làm test vô giá trị"},
+        {"t":86.08,"den":176.51,"ten":"Cùng tình huống, dùng fake · Mô phỏng: cái cân bị buộc dây"},
+        {"t":176.51,"den":270.72,"ten":"Cài một bug: ai nhận ra? · Một test quá chi tiết"},
+        {"t":270.72,"den":355.12,"ten":"Thực hành (15 phút) · Thực hành 15 phút"},
+        {"t":355.12,"den":440.66,"ten":"Ba câu tự kiểm · Tóm tắt & luyện tập"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 3.3 của khoá Testing."},
         {"t":9.02,"vi":"Bài trước mình thay cả module bằng vi.mock, và giả mạng bằng MSW."},
@@ -2733,8 +2914,14 @@
         {"t":433.95,"vi":"Bài sau: thiết kế mã dễ test, để ngay từ đầu không cần tới mock."}
       ]
     },
-    "tst-3-4-thiet-ke": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/testing/03-mock-stub-spy/03-04-thiet-ke-de-test-4395b46c.mp4","durationSec":440.63,"nguonCau":"srt",
-      "parts": [],
+    "tst-3-4-thiet-ke": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/testing/03-mock-stub-spy/03-04-thiet-ke-de-test-4395b46c.mp4","durationSec":440.63,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":118.87,"ten":"Ôn nhanh · hôm nay · Bìa · thiết kế code dễ test"},
+        {"t":118.87,"den":209.38,"ten":"Test nó không có đồ đóng thế"},
+        {"t":209.38,"den":287.16,"ten":"Lõi thuần: không cần đồ đóng thế"},
+        {"t":287.16,"den":398.44,"ten":"Thực hành (15 phút) · Thực hành 15 phút"},
+        {"t":398.44,"den":440.63,"ten":"Tóm tắt & luyện tập"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 3.4 của khoá Testing."},
         {"t":9.1,"vi":"Bài trước mình đo hai kiểu thất bại của mock tràn lan: bỏ lọt bug thật, và kêu vì thay đổi vô hại."},
@@ -2813,8 +3000,13 @@
         {"t":432.59,"vi":"Bài sau là Lab 3: tám con bug nằm ở mã nối, ai nhận thư gì và hợp đồng HTTP."}
       ]
     },
-    "tst-3-5-lab-test-double": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/testing/03-mock-stub-spy/03-05-lab-3-do-dong-the-6a644681.mp4","durationSec":382.29,"nguonCau":"srt",
-      "parts": [],
+    "tst-3-5-lab-test-double": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/testing/03-mock-stub-spy/03-05-lab-3-do-dong-the-6a644681.mp4","durationSec":382.29,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":108.44,"ten":"Ôn nhanh · hôm nay · Bìa · Lab 3"},
+        {"t":108.44,"den":189.08,"ten":"Chạy thật: lần thử đầu 0/8"},
+        {"t":189.08,"den":286.5,"ten":"Lần thử đầu: 0 trên 8 · Chạy thật: mẫu một luật ⇒ 1/8"},
+        {"t":286.5,"den":382.29,"ten":"Gợi ý, từ nhẹ tới mạnh · Làm Lab 3"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Lab 3 của khoá Testing."},
         {"t":8.36,"vi":"Chương 3 dạy bạn năm đồ đóng thế, MSW cho HTTP, hai phép thử cho mỗi test, và thiết kế mã để cần ít đồ giả hơn."},
@@ -2883,8 +3075,15 @@
         {"t":371.47,"vi":"Chương 4: thay repository trong bộ nhớ bằng PostgreSQL thật, và chính test tranh chấp ở bài 2.1 sẽ chuyển xanh."}
       ]
     },
-    "tst-4-1-vi-sao": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/testing/04-tich-hop-csdl-that/04-01-vi-sao-csdl-that-33701b58.mp4","durationSec":475.55,"nguonCau":"srt",
-      "parts": [],
+    "tst-4-1-vi-sao": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/testing/04-tich-hop-csdl-that/04-01-vi-sao-csdl-that-33701b58.mp4","durationSec":475.55,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":97.98,"ten":"Ôn nhanh · hôm nay · Bìa · vì sao CSDL thật"},
+        {"t":97.98,"den":176.5,"ten":"BR-04 nằm trong cơ sở dữ liệu"},
+        {"t":176.5,"den":257.65,"ten":"Lỗi tranh chấp trên PostgreSQL thật"},
+        {"t":257.65,"den":354.66,"ten":"Bug chỉ CSDL thật mới lộ · Cái giá, đo bằng số"},
+        {"t":354.66,"den":431.57,"ten":"Chạy thật: lời giải th41 · Ba câu tự kiểm"},
+        {"t":431.57,"den":475.55,"ten":"Tóm tắt & luyện tập"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 4.1 của khoá Testing, mở đầu Chương 4."},
         {"t":11.05,"vi":"Chương 2 để lại một lỗi tranh chấp: hai lượt đặt cùng lúc, cả hai cùng thắng."},
@@ -2962,8 +3161,14 @@
         {"t":466.39,"vi":"Bài sau: dựng một PostgreSQL dùng một lần cho test bằng Docker Compose, dữ liệu nằm trong RAM."}
       ]
     },
-    "tst-4-2-docker-db": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/testing/04-tich-hop-csdl-that/04-02-postgres-dung-mot-lan-55874352.mp4","durationSec":439.93,"nguonCau":"srt",
-      "parts": [],
+    "tst-4-2-docker-db": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/testing/04-tich-hop-csdl-that/04-02-postgres-dung-mot-lan-55874352.mp4","durationSec":439.93,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":98.98,"ten":"Ôn nhanh · hôm nay · Bìa · Postgres dùng một lần"},
+        {"t":98.98,"den":178.01,"ten":"Mô phỏng + chạy thật: vòng đời một container dùng một lần"},
+        {"t":178.01,"den":272.91,"ten":"Chạy test tích hợp với nó · Chạy thật: tmpfs so với ổ đĩa"},
+        {"t":272.91,"den":399.36,"ten":"Thực hành (15 phút) · Thực hành 15 phút"},
+        {"t":399.36,"den":439.93,"ten":"Tóm tắt & luyện tập"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 4.2 của khoá Testing."},
         {"t":9.18,"vi":"Bài trước, ràng buộc EXCLUDE để cơ sở dữ liệu chặn lỗi tranh chấp, và SQLite không đóng thế được PostgreSQL."},
@@ -3039,8 +3244,14 @@
         {"t":431.88,"vi":"Bài sau: Testcontainers, để chính lần chạy test tự bật và tự tắt cơ sở dữ liệu."}
       ]
     },
-    "tst-4-3-testcontainers": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/testing/04-tich-hop-csdl-that/04-03-testcontainers-0029e949.mp4","durationSec":408.71,"nguonCau":"srt",
-      "parts": [],
+    "tst-4-3-testcontainers": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/testing/04-tich-hop-csdl-that/04-03-testcontainers-0029e949.mp4","durationSec":408.71,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":83.68,"ten":"Ôn nhanh · hôm nay · Bìa · Testcontainers"},
+        {"t":83.68,"den":167.78,"ten":"Mô phỏng + chạy thật: đèn vòng đời quanh lượt test"},
+        {"t":167.78,"den":245.37,"ten":"Lần chạy thật · Compose hay Testcontainers?"},
+        {"t":245.37,"den":369.29,"ten":"Thực hành (15 phút) · Thực hành 15 phút"},
+        {"t":369.29,"den":408.71,"ten":"Tóm tắt & luyện tập"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 4.3 của khoá Testing."},
         {"t":8.92,"vi":"Bài trước, bạn tự bật PostgreSQL bằng Docker Compose trước khi chạy test, rồi tự tắt nó sau."},
@@ -3113,8 +3324,14 @@
         {"t":397.52,"vi":"Bài sau: cô lập. Khi nhiều test dùng chung một cơ sở dữ liệu, dữ liệu của test này rò sang test khác thế nào, và chặn ra sao."}
       ]
     },
-    "tst-4-4-co-lap": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/testing/04-tich-hop-csdl-that/04-04-co-lap-7afcee59.mp4","durationSec":456.68,"nguonCau":"srt",
-      "parts": [],
+    "tst-4-4-co-lap": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/testing/04-tich-hop-csdl-that/04-04-co-lap-7afcee59.mp4","durationSec":456.68,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":119.51,"ten":"Ôn nhanh · hôm nay · Bìa · cô lập"},
+        {"t":119.51,"den":233.5,"ten":"Test sau thừa hưởng dòng của test trước"},
+        {"t":233.5,"den":316.9,"ten":"Cả hai đều chạy — đo bằng số"},
+        {"t":316.9,"den":415.29,"ten":"Thực hành 15 phút · Chạy thật: lời giải th44"},
+        {"t":415.29,"den":456.68,"ten":"Tóm tắt & luyện tập"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 4.4 của khoá Testing."},
         {"t":9.29,"vi":"Hai bài trước, ta có một PostgreSQL dùng một lần, bằng Compose hoặc Testcontainers, mỗi lần chạy một schema mới."},
@@ -3201,8 +3418,13 @@
         {"t":447.55,"vi":"Bài sau là Lab 4: test tích hợp cho adapter PostgreSQL, và tám con bug nấp trong SQL."}
       ]
     },
-    "tst-4-5-lab-tich-hop": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/testing/04-tich-hop-csdl-that/04-05-lab-4-adapter-postgres-d891258a.mp4","durationSec":378.27,"nguonCau":"srt",
-      "parts": [],
+    "tst-4-5-lab-tich-hop": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/testing/04-tich-hop-csdl-that/04-05-lab-4-adapter-postgres-d891258a.mp4","durationSec":378.27,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":105.88,"ten":"Ôn nhanh · hôm nay · Bìa · Lab 4"},
+        {"t":105.88,"den":187.05,"ten":"Chạy thật: lần thử đầu 0/8"},
+        {"t":187.05,"den":288.49,"ten":"Lần thử đầu: 0 trên 8 · Chạy thật: mẫu một luật ⇒ 1/8"},
+        {"t":288.49,"den":378.27,"ten":"Gợi ý, từ nhẹ tới mạnh · Làm Lab 4"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Lab 4 của khoá Testing."},
         {"t":8.56,"vi":"Chương 4 cho bạn adapter PostgreSQL, ràng buộc EXCLUDE, một PostgreSQL dùng một lần, và hai cách cô lập test."},
@@ -3265,8 +3487,13 @@
         {"t":367.32,"vi":"Chương 5: test API bằng Supertest, từ 201 và Location tới 401, 403 và 404."}
       ]
     },
-    "tst-5-1-supertest": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/testing/05-test-api-http/05-01-supertest-b771a92e.mp4","durationSec":392.5,"nguonCau":"srt",
-      "parts": [],
+    "tst-5-1-supertest": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/testing/05-test-api-http/05-01-supertest-b771a92e.mp4","durationSec":392.5,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":89.47,"ten":"Ôn nhanh · hôm nay · Bìa · Supertest"},
+        {"t":89.47,"den":180.53,"ten":"Mô phỏng + chạy thật: hai đường vào cùng một ứng dụng"},
+        {"t":180.53,"den":281.12,"ten":"Mô phỏng + chạy thật: test chỉ nhìn mã trạng thái"},
+        {"t":281.12,"den":392.5,"ten":"Chạy thật: lời giải th51 · Ba câu tự kiểm"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 5.1 của khoá Testing, mở đầu Chương 5."},
         {"t":10.99,"vi":"Chương 4 test adapter PostgreSQL bằng cơ sở dữ liệu thật, và Lab 4 diệt tám con bug nấp trong SQL."},
@@ -3337,8 +3564,13 @@
         {"t":385.55,"vi":"Ai được làm gì, và vì sao 404 đôi khi đúng hơn 403."}
       ]
     },
-    "tst-5-2-xac-thuc": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/testing/05-test-api-http/05-02-xac-thuc-phan-quyen-1b46950f.mp4","durationSec":393.02,"nguonCau":"srt",
-      "parts": [],
+    "tst-5-2-xac-thuc": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/testing/05-test-api-http/05-02-xac-thuc-phan-quyen-1b46950f.mp4","durationSec":393.02,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":90.27,"ten":"Ôn nhanh · hôm nay · Bìa · xác thực và phân quyền"},
+        {"t":90.27,"den":176.29,"ten":"Hai câu hỏi, hai mã trạng thái"},
+        {"t":176.29,"den":280.96,"ten":"Lượt đặt của người khác trông như không tồn tại"},
+        {"t":280.96,"den":393.02,"ten":"Chạy thật: lời giải th52 · Ba câu tự kiểm"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 5.2 của khoá Testing."},
         {"t":9.14,"vi":"Bài trước, Supertest gửi HTTP thật vào ứng dụng, và ta khẳng định cả mã trạng thái, Location lẫn body."},
@@ -3407,8 +3639,13 @@
         {"t":387.83,"vi":"400 hay 422, và một định dạng lỗi chung."}
       ]
     },
-    "tst-5-3-validation": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/testing/05-test-api-http/05-03-validation-8825e510.mp4","durationSec":360.86,"nguonCau":"srt",
-      "parts": [],
+    "tst-5-3-validation": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/testing/05-test-api-http/05-03-validation-8825e510.mp4","durationSec":360.86,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":92.67,"ten":"Ôn nhanh · hôm nay · Bìa · kiểm dữ liệu vào"},
+        {"t":92.67,"den":169.89,"ten":"Từ lỗi của Zod tới phản hồi 400"},
+        {"t":169.89,"den":261.42,"ten":"Mười test kiểm dữ liệu, đều xanh · 400 hay 422?"},
+        {"t":261.42,"den":360.86,"ten":"Chạy thật: lời giải th53 · Ba câu tự kiểm"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 5.3 của khoá Testing."},
         {"t":9.02,"vi":"Bài trước test ai được làm gì: 401, 403, và 404 cho dữ liệu người khác."},
@@ -3472,8 +3709,13 @@
         {"t":355.27,"vi":"Contract test và OpenAPI bắt chuyện đó."}
       ]
     },
-    "tst-5-4-hop-dong": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/testing/05-test-api-http/05-04-hop-dong-openapi-57f68a88.mp4","durationSec":375.93,"nguonCau":"srt",
-      "parts": [],
+    "tst-5-4-hop-dong": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/testing/05-test-api-http/05-04-hop-dong-openapi-57f68a88.mp4","durationSec":375.93,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":88.48,"ten":"Ôn nhanh · hôm nay · Bìa · contract test"},
+        {"t":88.48,"den":180.34,"ten":"Kiểm một phản hồi thật · Kiểm mọi loại phản hồi"},
+        {"t":180.34,"den":274.05,"ten":"Bug hai: đổi tên trông vô hại"},
+        {"t":274.05,"den":375.93,"ten":"Chạy thật: lời giải th54 · Ba câu tự kiểm"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 5.4 của khoá Testing."},
         {"t":9.36,"vi":"Ba bài trước, ta test API từ ngoài vào: 201 kèm Location, 401, 403, 404, rồi 400 và 422 với một định dạng lỗi."},
@@ -3538,8 +3780,13 @@
         {"t":368.96,"vi":"Bài sau là Lab 5: tám con bug ở route, xác thực và mã lỗi của API."}
       ]
     },
-    "tst-5-5-lab-api": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/testing/05-test-api-http/05-05-lab-5-test-api-1a9c6cbb.mp4","durationSec":364.14,"nguonCau":"srt",
-      "parts": [],
+    "tst-5-5-lab-api": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/testing/05-test-api-http/05-05-lab-5-test-api-1a9c6cbb.mp4","durationSec":364.14,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":105.23,"ten":"Ôn nhanh · hôm nay · Bìa · Lab 5"},
+        {"t":105.23,"den":187.89,"ten":"Chạy thật: lần thử đầu 0/8"},
+        {"t":187.89,"den":283.06,"ten":"Lần thử đầu: 0 trên 8 · Chạy thật: mẫu một luật ⇒ 1/8"},
+        {"t":283.06,"den":364.14,"ten":"Gợi ý, từ nhẹ tới mạnh · Làm Lab 5"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Lab 5 của khoá Testing."},
         {"t":8.53,"vi":"Chương 5 cho bạn Supertest, token thật với 401, 403, 404, kiểm dữ liệu vào với 400 và 422, và hợp đồng OpenAPI."},
@@ -3605,8 +3852,13 @@
         {"t":356.49,"vi":"Chương 6: test giao diện React như người dùng thật, bằng Testing Library."}
       ]
     },
-    "tst-6-1-testing-library": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/testing/06-test-component-react/06-01-testing-library-cb1d4934.mp4","durationSec":408.53,"nguonCau":"srt",
-      "parts": [],
+    "tst-6-1-testing-library": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/testing/06-test-component-react/06-01-testing-library-cb1d4934.mp4","durationSec":408.53,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":92.77,"ten":"Ôn nhanh · hôm nay · Bìa · Testing Library"},
+        {"t":92.77,"den":173.17,"ten":"Thứ tự ưu tiên của truy vấn"},
+        {"t":173.17,"den":260.92,"ten":"getBy, queryBy, findBy"},
+        {"t":260.92,"den":408.53,"ten":"Thực hành (15 phút) · Thực hành 15 phút"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 6.1 của khoá Testing, mở đầu Chương 6."},
         {"t":11.02,"vi":"Chương 5 test API từ bên ngoài: Supertest, 401, 403, 404, 400, 422, và hợp đồng OpenAPI."},
@@ -3682,8 +3934,13 @@
         {"t":401.35,"vi":"Bài sau: người dùng gõ, bấm, chờ. user-event và giao diện bất đồng bộ."}
       ]
     },
-    "tst-6-2-tuong-tac": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/testing/06-test-component-react/06-02-tuong-tac-fcf55b0f.mp4","durationSec":349.51,"nguonCau":"srt",
-      "parts": [],
+    "tst-6-2-tuong-tac": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/testing/06-test-component-react/06-02-tuong-tac-fcf55b0f.mp4","durationSec":349.51,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":80.34,"ten":"Ôn nhanh · hôm nay · Bìa · sự kiện và giao diện bất đồng bộ"},
+        {"t":80.34,"den":159.34,"ten":"Gõ, bấm, rồi kiểm cả hai phía · Lỗi mà người dùng tìm được"},
+        {"t":159.34,"den":247.16,"ten":"Giữ promise lại: test trạng thái đang bận"},
+        {"t":247.16,"den":349.51,"ten":"Chạy thật: lời giải th62 · Ba câu tự kiểm"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 6.2 của khoá Testing."},
         {"t":8.67,"vi":"Bài trước, ta tìm phần tử như người dùng: theo vai trò và nhãn, và dọn document sau mỗi test."},
@@ -3751,8 +4008,14 @@
         {"t":342.06,"vi":"MSW đứng ở vị trí mạng, và bốn trạng thái người dùng thấy."}
       ]
     },
-    "tst-6-3-api-gia": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/testing/06-test-component-react/06-03-api-gia-66d7aa70.mp4","durationSec":361.47,"nguonCau":"srt",
-      "parts": [],
+    "tst-6-3-api-gia": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/testing/06-test-component-react/06-03-api-gia-66d7aa70.mp4","durationSec":361.47,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":82.89,"ten":"Ôn nhanh · hôm nay · Bìa · component có gọi API"},
+        {"t":82.89,"den":155.96,"ten":"Một màn hình, bốn trạng thái · MSW trả lời request thật"},
+        {"t":155.96,"den":230.92,"ten":"Năm test, đều xanh"},
+        {"t":230.92,"den":324.92,"ten":"Thực hành 15 phút · Chạy thật: lời giải th63"},
+        {"t":324.92,"den":361.47,"ten":"Tóm tắt & luyện tập"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 6.3 của khoá Testing."},
         {"t":8.88,"vi":"Bài trước, ta gõ và bấm bằng user-event, await mọi findBy, và giữ promise lại để thấy trạng thái đang bận."},
@@ -3823,8 +4086,13 @@
         {"t":351.38,"vi":"Bài sau: Next.js. Client component, server component và route handler, mỗi loại một cách test."}
       ]
     },
-    "tst-6-4-nextjs": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/testing/06-test-component-react/06-04-nextjs-b52379b7.mp4","durationSec":378.25,"nguonCau":"srt",
-      "parts": [],
+    "tst-6-4-nextjs": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/testing/06-test-component-react/06-04-nextjs-b52379b7.mp4","durationSec":378.25,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":89.8,"ten":"Ôn nhanh · hôm nay · Bìa · Next.js"},
+        {"t":89.8,"den":166.66,"ten":"Mô phỏng: bản đồ một ứng dụng Next.js"},
+        {"t":166.66,"den":247.97,"ten":"Server component bất đồng bộ: await rồi render"},
+        {"t":247.97,"den":378.25,"ten":"Thực hành 15 phút · Chạy thật: lời giải th64"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 6.4 của khoá Testing."},
         {"t":9.29,"vi":"Ba bài trước test component chạy trên trình duyệt: tìm theo vai trò, gõ bằng user-event, và giả mạng bằng MSW."},
@@ -3894,8 +4162,13 @@
         {"t":370.88,"vi":"Bài sau là Lab 6: tám con bug trong form và danh sách, có hai con về trợ năng."}
       ]
     },
-    "tst-6-5-lab-react": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/testing/06-test-component-react/06-05-lab-6-react-59562b19.mp4","durationSec":335.85,"nguonCau":"srt",
-      "parts": [],
+    "tst-6-5-lab-react": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/testing/06-test-component-react/06-05-lab-6-react-59562b19.mp4","durationSec":335.85,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":96.27,"ten":"Ôn nhanh · hôm nay · Bìa · Lab 6"},
+        {"t":96.27,"den":168.34,"ten":"Chạy thật: lần thử đầu 1/8"},
+        {"t":168.34,"den":252.8,"ten":"Lần thử đầu: 1 trên 8 · Chạy thật: mẫu một luật ⇒ 2/8"},
+        {"t":252.8,"den":335.85,"ten":"Gợi ý, từ nhẹ tới mạnh · Làm Lab 6"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Lab 6 của khoá Testing."},
         {"t":8.51,"vi":"Chương 6 cho bạn Testing Library theo vai trò và nhãn, user-event, MSW cho màn hình gọi API, và cách test trong Next.js."},
@@ -3960,8 +4233,14 @@
         {"t":327.99,"vi":"Chương 7: Playwright, test trong trình duyệt thật, từ đăng nhập tới khi admin duyệt."}
       ]
     },
-    "tst-7-1-playwright": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/testing/07-e2e-playwright/07-01-playwright-b4a2a286.mp4","durationSec":385.17,"nguonCau":"srt",
-      "parts": [],
+    "tst-7-1-playwright": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/testing/07-e2e-playwright/07-01-playwright-b4a2a286.mp4","durationSec":385.17,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":88.99,"ten":"Ôn nhanh · hôm nay · Bìa · Playwright"},
+        {"t":88.99,"den":169.4,"ten":"Một cấu hình bật mọi thứ"},
+        {"t":169.4,"den":257.79,"ten":"Strict mode: một locator, một phần tử"},
+        {"t":257.79,"den":347.04,"ten":"Thực hành 15 phút · Chạy thật: lời giải th71"},
+        {"t":347.04,"den":385.17,"ten":"Tóm tắt & luyện tập"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 7.1 của khoá Testing, mở đầu Chương 7."},
         {"t":11.05,"vi":"Chương 6 test component trong một DOM giả: vai trò, nhãn, user-event, MSW, và biết unit test dừng ở đâu."},
@@ -4034,8 +4313,13 @@
         {"t":376.33,"vi":"Bài sau: hành trình thật từ đăng nhập tới admin duyệt, và đăng nhập một lần cho cả bộ test."}
       ]
     },
-    "tst-7-2-luong": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/testing/07-e2e-playwright/07-02-luong-nguoi-dung-1ea6de82.mp4","durationSec":356.09,"nguonCau":"srt",
-      "parts": [],
+    "tst-7-2-luong": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/testing/07-e2e-playwright/07-02-luong-nguoi-dung-1ea6de82.mp4","durationSec":356.09,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":80.39,"ten":"Ôn nhanh · hôm nay · Bìa · luồng người dùng thật"},
+        {"t":80.39,"den":162.23,"ten":"Project: setup trước, rồi tới test"},
+        {"t":162.23,"den":259.96,"ten":"Mô phỏng + chạy thật: setup hỏng thì đỏ một chỗ"},
+        {"t":259.96,"den":356.09,"ten":"Chạy thật: lời giải th72 · Ba câu tự kiểm"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 7.2 của khoá Testing."},
         {"t":9.14,"vi":"Bài trước, một lệnh bật cả hệ thống, locator theo vai trò và nhãn, và assertion biết chờ."},
@@ -4100,8 +4384,13 @@
         {"t":350.31,"vi":"Bài sau: test e2e chập chờn, và cách làm chúng ổn định."}
       ]
     },
-    "tst-7-3-on-dinh": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/testing/07-e2e-playwright/07-03-on-dinh-e16c5ac7.mp4","durationSec":346.9,"nguonCau":"srt",
-      "parts": [],
+    "tst-7-3-on-dinh": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/testing/07-e2e-playwright/07-03-on-dinh-e16c5ac7.mp4","durationSec":346.9,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":76.93,"ten":"Ôn nhanh · hôm nay · Bìa · test e2e ổn định"},
+        {"t":76.93,"den":163.15,"ten":"Mô phỏng + chạy thật: một mã, ba lịch chạy"},
+        {"t":163.15,"den":253.71,"ten":"Mô phỏng + chạy thật: lần đỏ để lại bằng chứng"},
+        {"t":253.71,"den":346.9,"ten":"Chạy thật: lời giải th73 · Ba câu tự kiểm"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 7.3 của khoá Testing."},
         {"t":8.96,"vi":"Bài trước, ta đăng nhập một lần, dùng lại phiên, và theo một lượt đặt qua hai người trong hai context."},
@@ -4170,8 +4459,13 @@
         {"t":340.56,"vi":"Bài sau: nhiều trình duyệt, điện thoại, và so ảnh chụp màn hình."}
       ]
     },
-    "tst-7-4-da-trinh-duyet": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/testing/07-e2e-playwright/07-04-da-trinh-duyet-9fff3191.mp4","durationSec":398.09,"nguonCau":"srt",
-      "parts": [],
+    "tst-7-4-da-trinh-duyet": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/testing/07-e2e-playwright/07-04-da-trinh-duyet-9fff3191.mp4","durationSec":398.09,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":80.53,"ten":"Ôn nhanh · hôm nay · Bìa · trình duyệt, thiết bị, hình ảnh"},
+        {"t":80.53,"den":164.74,"ten":"Chạy thật: một preset điện thoại là gì"},
+        {"t":164.74,"den":241.51,"ten":"So sánh ảnh chụp · Chạy thật: test điểm ảnh thấy gì"},
+        {"t":241.51,"den":398.09,"ten":"Thực hành 15 phút · Chạy thật: Firefox đỏ, đọc error context"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 7.4 của khoá Testing."},
         {"t":9.29,"vi":"Bài trước, mỗi test có dữ liệu riêng, ta chờ bằng assertion, và đọc trace trước khi đoán."},
@@ -4245,8 +4539,13 @@
         {"t":389.75,"vi":"Tiếp theo là Lab 7: bạn viết bộ test đầu cuối cho LabFlow, và chấm bằng lỗi cài sẵn."}
       ]
     },
-    "tst-7-5-lab-e2e": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/testing/07-e2e-playwright/07-05-lab-7-e2e-7dbbbe98.mp4","durationSec":331.55,"nguonCau":"srt",
-      "parts": [],
+    "tst-7-5-lab-e2e": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/testing/07-e2e-playwright/07-05-lab-7-e2e-7dbbbe98.mp4","durationSec":331.55,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":71.62,"ten":"Ôn nhanh · hôm nay · Bìa · Lab 7"},
+        {"t":71.62,"den":162.23,"ten":"Tám con bug được cài · Chạy thật: lần thử đầu 2/8"},
+        {"t":162.23,"den":247.28,"ten":"Lần thử đầu: 2 trên 8 · Chạy thật: mẫu một luật ⇒ 4/8"},
+        {"t":247.28,"den":331.55,"ten":"Gợi ý, từ nhẹ tới mạnh · Làm Lab 7"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Lab 7 của khoá Testing."},
         {"t":8.59,"vi":"Chương 7 cho bạn Playwright, phiên lưu sẵn, dữ liệu riêng cho mỗi test, và năm project trình duyệt."},
@@ -4309,8 +4608,14 @@
         {"t":323.61,"vi":"Tiếp theo là Quiz Chương 7, rồi Chương 8: độ phủ, đột biến và test chập chờn."}
       ]
     },
-    "tst-8-1-do-phu": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/testing/08-do-phu-chat-luong-flaky/08-01-do-phu-bd1e1bc2.mp4","durationSec":465.2,"nguonCau":"srt",
-      "parts": [],
+    "tst-8-1-do-phu": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/testing/08-do-phu-chat-luong-flaky/08-01-do-phu-bd1e1bc2.mp4","durationSec":465.2,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":81.43,"ten":"Ôn nhanh · hôm nay · Bìa · độ phủ"},
+        {"t":81.43,"den":177.83,"ten":"Đọc báo cáo · Mô phỏng + chạy thật: tệp vô hình"},
+        {"t":177.83,"den":258.98,"ten":"Mô phỏng + chạy thật: 100% mà bug vẫn lọt"},
+        {"t":258.98,"den":335.38,"ten":"Ngưỡng là bánh cóc · Chạy thật: ngưỡng đỏ, rồi bánh cóc"},
+        {"t":335.38,"den":465.2,"ten":"Thực hành 15 phút · Chạy thật: lời giải th81"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Chương 8 của khoá Testing: chất lượng của chính bộ test."},
         {"t":11.16,"vi":"Bảy chương qua, ta viết test từ unit tới trình duyệt, và chấm bằng đột biến cài sẵn."},
@@ -4388,8 +4693,14 @@
         {"t":456.83,"vi":"Bài sau, 8.2: đo đúng thứ độ phủ không đo được, test có nhận ra bug hay không."}
       ]
     },
-    "tst-8-2-mutation": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/testing/08-do-phu-chat-luong-flaky/08-02-mutation-f48dbf95.mp4","durationSec":444.64,"nguonCau":"srt",
-      "parts": [],
+    "tst-8-2-mutation": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/testing/08-do-phu-chat-luong-flaky/08-02-mutation-f48dbf95.mp4","durationSec":444.64,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":82.88,"ten":"Ôn nhanh · hôm nay · Bìa · mutation testing"},
+        {"t":82.88,"den":157.88,"ten":"Mô phỏng + chạy thật: Stryker làm hỏng mã giúp bạn"},
+        {"t":157.88,"den":237.59,"ten":"Chạy thật: bộ test thật, 88,96%"},
+        {"t":237.59,"den":320.41,"ten":"Đột biến tương đương"},
+        {"t":320.41,"den":444.64,"ten":"Thực hành (15 phút) · Thực hành 15 phút"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 8.2 của khoá Testing."},
         {"t":8.9,"vi":"Bài trước, một bộ test 100 phần trăm độ phủ vẫn để lọt hai bug cài sẵn. Độ phủ chỉ cho biết cái gì đã chạy."},
@@ -4469,8 +4780,14 @@
         {"t":433.1,"vi":"Học xong bài này, bạn mở Code Lab Testing ngay dưới video, bài 8.2. Bài sau, 8.3: test chập chờn, tìm và sửa."}
       ]
     },
-    "tst-8-3-flaky": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/testing/08-do-phu-chat-luong-flaky/08-03-flaky-8c85b092.mp4","durationSec":441.66,"nguonCau":"srt",
-      "parts": [],
+    "tst-8-3-flaky": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/testing/08-do-phu-chat-luong-flaky/08-03-flaky-8c85b092.mp4","durationSec":441.66,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":104.74,"ten":"Ôn nhanh · hôm nay · Bìa · test chập chờn"},
+        {"t":104.74,"den":205.51,"ten":"Mô phỏng + chạy thật: đếm \"thỉnh thoảng\" thành con số"},
+        {"t":205.51,"den":291.59,"ten":"Nguyên nhân 5: tranh chấp, test nói đúng"},
+        {"t":291.59,"den":389.8,"ten":"Năm nguyên nhân, năm cách sửa · Thực hành (15 phút)"},
+        {"t":389.8,"den":441.66,"ten":"Ba câu tự kiểm & bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 8.3 của khoá Testing."},
         {"t":9.07,"vi":"Hai bài trước đo bộ test bằng độ phủ và bằng đột biến."},
@@ -4548,8 +4865,13 @@
         {"t":430.78,"vi":"Học xong bài này, bạn mở Code Lab Testing ngay dưới video, bài 8.3. Bài sau, 8.4: giữ bộ test chạy nhanh."}
       ]
     },
-    "tst-8-4-toc-do": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/testing/08-do-phu-chat-luong-flaky/08-04-toc-do-15fdc019.mp4","durationSec":376.4,"nguonCau":"srt",
-      "parts": [],
+    "tst-8-4-toc-do": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/testing/08-do-phu-chat-luong-flaky/08-04-toc-do-15fdc019.mp4","durationSec":376.4,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":95.68,"ten":"Ôn nhanh · hôm nay · Bìa · giữ bộ test nhanh"},
+        {"t":95.68,"den":174.23,"ten":"Mô phỏng + chạy thật: song song che việc chờ"},
+        {"t":174.23,"den":256.26,"ten":"Worker, isolate và pool: đo rồi mới chọn"},
+        {"t":256.26,"den":376.4,"ten":"Thực hành 15 phút · Chạy thật: lời giải th84"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 8.4 của khoá Testing."},
         {"t":9.16,"vi":"Bài trước, ta đếm và sửa test chập chờn, và thấy retry giấu bug ra sao."},
@@ -4619,8 +4941,13 @@
         {"t":366.47,"vi":"Tiếp theo là Lab 8: từ 100 phần trăm độ phủ và ba trên tám đột biến, tới tám trên tám ở mọi thứ tự."}
       ]
     },
-    "tst-8-5-lab-chat-luong": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/testing/08-do-phu-chat-luong-flaky/08-05-lab-8-chat-luong-03723d6d.mp4","durationSec":346.75,"nguonCau":"srt",
-      "parts": [],
+    "tst-8-5-lab-chat-luong": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/testing/08-do-phu-chat-luong-flaky/08-05-lab-8-chat-luong-03723d6d.mp4","durationSec":346.75,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":90.44,"ten":"Ôn nhanh · hôm nay · Bìa · Lab 8"},
+        {"t":90.44,"den":170.41,"ten":"Tám con bug được cài · Chạy thật: lần thử đầu, xanh và 100%"},
+        {"t":170.41,"den":252.77,"ten":"Lần thử đầu: xanh, 100%, và yếu"},
+        {"t":252.77,"den":346.75,"ten":"Gợi ý, từ nhẹ tới mạnh · Làm Lab 8"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Lab 8 của khoá Testing."},
         {"t":8.53,"vi":"Chương 8 cho bạn ba công cụ đo chính bộ test: độ phủ, đột biến, và thứ tự xáo trộn."},
@@ -4683,8 +5010,14 @@
         {"t":340.03,"vi":"Tiếp theo là Quiz Chương 8, rồi Chương 9: đưa bộ test này vào CI."}
       ]
     },
-    "tst-9-1-github-actions": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/testing/09-test-trong-ci/09-01-github-actions-402c2c0f.mp4","durationSec":429.23,"nguonCau":"srt",
-      "parts": [],
+    "tst-9-1-github-actions": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/testing/09-test-trong-ci/09-01-github-actions-402c2c0f.mp4","durationSec":429.23,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":92.95,"ten":"Ôn nhanh · hôm nay · Bìa · GitHub Actions"},
+        {"t":92.95,"den":201.41,"ten":"Mô phỏng + chạy thật: act chạy workflow trong Docker"},
+        {"t":201.41,"den":277.65,"ten":"Cache phần tải về, không cache node_modules"},
+        {"t":277.65,"den":366.96,"ten":"Một cái bẫy nữa: it.only · Thực hành (15 phút)"},
+        {"t":366.96,"den":429.23,"ten":"Ba câu tự kiểm & bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Chương 9 của khoá Testing: test trong CI."},
         {"t":9.97,"vi":"Tới giờ, test chỉ chạy khi có người nhớ gõ lệnh."},
@@ -4752,8 +5085,13 @@
         {"t":417,"vi":"Học xong bài này, bạn mở Code Lab Testing ngay dưới video, bài 9.1. Bài sau, 9.2: báo cáo, annotation và artifact."}
       ]
     },
-    "tst-9-2-bao-cao": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/testing/09-test-trong-ci/09-02-bao-cao-0da58f15.mp4","durationSec":373.12,"nguonCau":"srt",
-      "parts": [],
+    "tst-9-2-bao-cao": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/testing/09-test-trong-ci/09-02-bao-cao-0da58f15.mp4","durationSec":373.12,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":105.37,"ten":"Ôn nhanh · hôm nay · Bìa · báo cáo"},
+        {"t":105.37,"den":189.87,"ten":"Đọc lượt đỏ theo thứ tự"},
+        {"t":189.87,"den":275.46,"ten":"Bản tóm tắt nói dối · Artifact: giữ bằng chứng"},
+        {"t":275.46,"den":373.12,"ten":"Thực hành 15 phút · Chạy thật: đọc artifact"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 9.2 của khoá Testing."},
         {"t":9.1,"vi":"Bài trước, workflow chạy thật bằng act: cache, PostgreSQL, Playwright."},
@@ -4825,8 +5163,13 @@
         {"t":361.45,"vi":"Học xong bài này, bạn mở Code Lab Testing ngay dưới video, bài 9.2. Bài sau, 9.3: check bắt buộc và bảo vệ nhánh."}
       ]
     },
-    "tst-9-3-bat-buoc": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/testing/09-test-trong-ci/09-03-bat-buoc-90e773b3.mp4","durationSec":327.32,"nguonCau":"srt",
-      "parts": [],
+    "tst-9-3-bat-buoc": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/testing/09-test-trong-ci/09-03-bat-buoc-90e773b3.mp4","durationSec":327.32,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":77.44,"ten":"Ôn nhanh · hôm nay · Bìa · check bắt buộc"},
+        {"t":77.44,"den":147.97,"ten":"Từ pull request tới nút Merge"},
+        {"t":147.97,"den":220.95,"ten":"Bị bỏ qua tính là đạt · Chạy thật: ống tee nuốt mã thoát"},
+        {"t":220.95,"den":327.32,"ten":"Thực hành (15 phút) · Thực hành 15 phút"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 9.3 của khoá Testing."},
         {"t":8.95,"vi":"Bài trước, một pull request làm ba job đỏ, và lần chạy tự giải thích được."},
@@ -4887,8 +5230,13 @@
         {"t":315.26,"vi":"Học xong bài này, bạn mở Code Lab Testing ngay dưới video, bài 9.3. Bài sau, 9.4: ma trận và chia nhỏ test trong CI."}
       ]
     },
-    "tst-9-4-ma-tran": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/testing/09-test-trong-ci/09-04-ma-tran-e03a1a8e.mp4","durationSec":373.06,"nguonCau":"srt",
-      "parts": [],
+    "tst-9-4-ma-tran": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/testing/09-test-trong-ci/09-04-ma-tran-e03a1a8e.mp4","durationSec":373.06,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":94.4,"ten":"Ôn nhanh · hôm nay · Bìa · matrix và shard"},
+        {"t":94.4,"den":188.85,"ten":"Matrix các bản Node · EBADENGINE chỉ là cảnh báo"},
+        {"t":188.85,"den":278.12,"ten":"Chia theo thời gian · Shard trong CI"},
+        {"t":278.12,"den":373.06,"ten":"Thực hành 15 phút · Chạy thật: hai shard"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 9.4 của khoá Testing."},
         {"t":9.28,"vi":"Bài trước, một cổng ci-ok duy nhất quyết định mọi lần merge, và luôn chạy."},
@@ -4950,8 +5298,13 @@
         {"t":361.78,"vi":"Học xong bài này, bạn mở Code Lab Testing ngay dưới video, bài 9.4. Tiếp theo là Lab 9: sửa một pipeline hỏng."}
       ]
     },
-    "tst-9-5-lab-ci": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/testing/09-test-trong-ci/09-05-lab-9-ci-de6a191b.mp4","durationSec":322.16,"nguonCau":"srt",
-      "parts": [],
+    "tst-9-5-lab-ci": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/testing/09-test-trong-ci/09-05-lab-9-ci-de6a191b.mp4","durationSec":322.16,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":86.13,"ten":"Ôn nhanh · hôm nay · Bìa · Lab 9"},
+        {"t":86.13,"den":162.12,"ten":"Chạy thật: máy chấm, 0/8 rồi 2/8 · actionlint, rồi tám luật"},
+        {"t":162.12,"den":234.06,"ten":"Bản thử đầu: 2/8 · CSDL sót lại"},
+        {"t":234.06,"den":322.16,"ten":"Thang chấm 10 điểm · Gợi ý, từ nhẹ tới mạnh"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Lab 9 của khoá Testing."},
         {"t":8.52,"vi":"Chương 9 cho bạn workflow chạy bằng act, báo cáo, cổng ci-ok, matrix và shard."},

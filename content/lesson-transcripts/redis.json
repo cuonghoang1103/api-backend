@@ -2,8 +2,16 @@
   "courseSlug": "redis",
   "sinhBoi": "scripts/phu-de-tu-video-rieng.mjs",
   "lessons": {
-    "rd-0-0-start-here-1": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/redis/00-redis-giai-quyet-gi/00-01-bat-dau-tai-day-1-aa90792f.mp4","durationSec":622.78,"nguonCau":"srt",
-      "parts": [],
+    "rd-0-0-start-here-1": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/redis/00-redis-giai-quyet-gi/00-01-bat-dau-tai-day-1-aa90792f.mp4","durationSec":622.78,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":80.97,"ten":"Chào khoá Redis"},
+        {"t":80.97,"den":167.23,"ten":"Một cơ sở dữ liệu sống trong bộ nhớ"},
+        {"t":167.23,"den":261.82,"ten":"Mô phỏng: nếu một nano giây dài một giây"},
+        {"t":261.82,"den":359.93,"ten":"Chạy thật: bốn bài toán, mỗi bài một hai lệnh"},
+        {"t":359.93,"den":441.91,"ten":"Redis so với Memcached · Bẫy hay gặp khi mới biết Redis"},
+        {"t":441.91,"den":533.41,"ten":"Thuật ngữ trong bài · Thực hành 15 phút"},
+        {"t":533.41,"den":622.78,"ten":"Tự kiểm nhanh · Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, chào mừng đến với khoá Redis trên cuongthai.com."},
         {"t":9.87,"vi":"Khoá có mười ba mục, đi từ số không tới mức tự vận hành được Redis trong production."},
@@ -112,8 +120,15 @@
         {"t":615.68,"vi":"Bài sau: những nền tảng cần biết trước, và cách học khoá này cho hiệu quả."}
       ]
     },
-    "rd-0-0-start-here-2": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/redis/00-redis-giai-quyet-gi/00-02-bat-dau-tai-day-2-0e79225d.mp4","durationSec":508.61,"nguonCau":"srt",
-      "parts": [],
+    "rd-0-0-start-here-2": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/redis/00-redis-giai-quyet-gi/00-02-bat-dau-tai-day-2-0e79225d.mp4","durationSec":508.61,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":82.5,"ten":"Ôn nhanh · hôm nay · Bạn cần gì trước Chương 1"},
+        {"t":82.5,"den":178.73,"ten":"Mô phỏng: ba ý tưởng mang theo suốt khoá"},
+        {"t":178.73,"den":284.5,"ten":"Chạy thật: khoá phẳng và TTL · Mười ba chương phía trước"},
+        {"t":284.5,"den":376.95,"ten":"Cách học khoá này · Liên kết chéo: học đâu thêm"},
+        {"t":376.95,"den":469.77,"ten":"Thực hành 15 phút · Tự kiểm nhanh"},
+        {"t":469.77,"den":508.61,"ten":"Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài thứ hai của phần Bắt đầu tại đây, khoá Redis."},
         {"t":11.1,"vi":"Bài trước: Redis sống trong RAM nên trả lời trong micro giây, là một hộp công cụ cấu trúc dữ liệu, và là bạn đồng hành của PostgreSQL."},
@@ -200,8 +215,16 @@
         {"t":501.77,"vi":"Bài sau: Redis giải quyết bài toán gì, nhìn từ một trang web chậm."}
       ]
     },
-    "rd-0-1-van-de": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/redis/00-redis-giai-quyet-gi/00-03-redis-giai-quyet-gi-561d4298.mp4","durationSec":664.27,"nguonCau":"srt",
-      "parts": [],
+    "rd-0-1-van-de": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/redis/00-redis-giai-quyet-gi/00-03-redis-giai-quyet-gi-561d4298.mp4","durationSec":664.27,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":84.11,"ten":"Ôn nhanh · hôm nay · Mô phỏng: bức tường mang tên cái đĩa"},
+        {"t":84.11,"den":189.48,"ten":"Chạy thật: tự đo lấy · Ba việc Redis làm tốt hơn mọi thứ"},
+        {"t":189.48,"den":268.42,"ten":"Chạy thật: bảng xếp hạng trong hai lệnh"},
+        {"t":268.42,"den":357.74,"ten":"Chạy thật: Map trong ứng dụng hay Redis"},
+        {"t":357.74,"den":450.23,"ten":"Khoá này KHÔNG phải cái gì"},
+        {"t":450.23,"den":567.57,"ten":"Liên kết chéo: học đâu thêm · Thuật ngữ trong bài"},
+        {"t":567.57,"den":664.27,"ten":"Tự kiểm nhanh · Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 0.1 của khoá Redis."},
         {"t":9.3,"vi":"Bài trước mình mang theo ba ý: một luồng, không gian khoá phẳng, và TTL trên phần lớn khoá."},
@@ -299,8 +322,17 @@
         {"t":656.86,"vi":"Bài sau: cho Redis chạy lên trên máy bạn, bằng Docker hoặc cài trực tiếp."}
       ]
     },
-    "rd-0-2-cai-dat": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/redis/00-redis-giai-quyet-gi/00-04-cho-redis-chay-len-da2e2b7f.mp4","durationSec":741.59,"nguonCau":"srt",
-      "parts": [],
+    "rd-0-2-cai-dat": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/redis/00-redis-giai-quyet-gi/00-04-cho-redis-chay-len-da2e2b7f.mp4","durationSec":741.59,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":97.39,"ten":"Ôn nhanh · hôm nay · Mô phỏng: cái 127.0.0.1 trước số cổng"},
+        {"t":97.39,"den":172.47,"ten":"Chạy thật: Docker trong hai mươi giây"},
+        {"t":172.47,"den":262.37,"ten":"Cài trực tiếp: Ubuntu, macOS, Windows"},
+        {"t":262.37,"den":338.17,"ten":"redis-cli và những cờ đáng biết"},
+        {"t":338.17,"den":430.92,"ten":"Chạy thật: kiểm xem nó chạy thật"},
+        {"t":430.92,"den":539.57,"ten":"Chạy thật: CONFIG SET và CONFIG REWRITE"},
+        {"t":539.57,"den":645.65,"ten":"Liên kết chéo: học đâu thêm · Thuật ngữ trong bài"},
+        {"t":645.65,"den":741.59,"ten":"Tự kiểm nhanh · Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 0.2 của khoá Redis."},
         {"t":9.4,"vi":"Bài trước: Redis sống trong RAM, mạng mới là cái giá, nó làm tốt ba việc, và luôn đo trước khi thêm nó."},
@@ -416,8 +448,16 @@
         {"t":735.98,"vi":"Bài sau: năm phút đầu tiên của bạn với redis-cli."}
       ]
     },
-    "rd-0-3-nam-phut": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/redis/00-redis-giai-quyet-gi/00-05-nam-phut-dau-tien-f1f9996a.mp4","durationSec":652.5,"nguonCau":"srt",
-      "parts": [],
+    "rd-0-3-nam-phut": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/redis/00-redis-giai-quyet-gi/00-05-nam-phut-dau-tien-f1f9996a.mp4","durationSec":652.5,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":122.26,"ten":"Ôn nhanh · hôm nay · Chạy thật: khoá và giá trị"},
+        {"t":122.26,"den":198.74,"ten":"Chạy thật: bộ đếm"},
+        {"t":198.74,"den":275.54,"ten":"Chạy thật: list và set · Chạy thật: sorted set và hash"},
+        {"t":275.54,"den":366.95,"ten":"Chọn cấu trúc theo câu hỏi"},
+        {"t":366.95,"den":469.55,"ten":"Hai lệnh đừng chạy trên production"},
+        {"t":469.55,"den":567.18,"ten":"Liên kết chéo: học đâu thêm · Thuật ngữ trong bài"},
+        {"t":567.18,"den":652.5,"ten":"Tự kiểm nhanh · Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 0.3, bài cuối của Mục 0."},
         {"t":10.26,"vi":"Bài trước Redis đã chạy, gắn ở 127.0.0.1, có maxmemory và chính sách đẩy khoá."},
@@ -538,8 +578,16 @@
         {"t":646.15,"vi":"Bài sau mở Chương 1: một luồng, và vì sao thế lại nhanh."}
       ]
     },
-    "rd-1-1-mot-luong": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/redis/01-mo-hinh-thuc-thi/01-01-mot-luong-9aac34b2.mp4","durationSec":623.53,"nguonCau":"srt",
-      "parts": [],
+    "rd-1-1-mot-luong": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/redis/01-mo-hinh-thuc-thi/01-01-mot-luong-9aac34b2.mp4","durationSec":623.53,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":122.79,"ten":"Ôn nhanh · hôm nay · Mô phỏng: một quầy, mười nghìn khách"},
+        {"t":122.79,"den":218.24,"ten":"Chạy thật: một luồng, một triệu lệnh mỗi giây"},
+        {"t":218.24,"den":305.01,"ten":"Chạy thật: chỗ Redis CÓ dùng luồng"},
+        {"t":305.01,"den":392.26,"ten":"Chạy thật: cái hệ quả bạn phải sống chung"},
+        {"t":392.26,"den":486.19,"ten":"Bẫy: tưởng máy to hơn sẽ chữa được"},
+        {"t":486.19,"den":581.57,"ten":"Thực hành: đo cú chặn · Tự kiểm nhanh"},
+        {"t":581.57,"den":623.53,"ten":"Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Chương 1 của khoá Redis, bài 1.1."},
         {"t":10.48,"vi":"Mục 0 đã cho Redis chạy, và bạn đã thấy: KEYS sao trên một triệu khoá làm mọi client khác phải chờ."},
@@ -651,8 +699,16 @@
         {"t":616.18,"vi":"Bài sau: theo chân một câu lệnh từ socket tới câu trả lời, từng bước."}
       ]
     },
-    "rd-1-2-vong-doi-lenh": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/redis/01-mo-hinh-thuc-thi/01-02-vong-doi-lenh-e8778870.mp4","durationSec":617.9,"nguonCau":"srt",
-      "parts": [],
+    "rd-1-2-vong-doi-lenh": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/redis/01-mo-hinh-thuc-thi/01-02-vong-doi-lenh-e8778870.mp4","durationSec":617.9,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":90.3,"ten":"Ôn nhanh · hôm nay · Mô phỏng: đường đi của một lệnh SET"},
+        {"t":90.3,"den":190.27,"ten":"Chạy thật: CLIENT LIST, bộ đệm của từng kết nối"},
+        {"t":190.27,"den":277.72,"ten":"Chạy thật: bên đăng ký chậm bị vứt trong im lặng"},
+        {"t":277.72,"den":390.7,"ten":"Chạy thật: nhân bản xảy ra SAU câu trả lời"},
+        {"t":390.7,"den":482.74,"ten":"Bẫy: coi OK là bảo đảm độ bền · Liên kết chéo: học đâu thêm"},
+        {"t":482.74,"den":571.35,"ten":"Thực hành: đi theo một câu lệnh · Tự kiểm nhanh"},
+        {"t":571.35,"den":617.9,"ten":"Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 1.2 của khoá Redis."},
         {"t":9.32,"vi":"Bài trước: một luồng lặp mãi bốn bước, epoll, đọc, thực thi, trả lời."},
@@ -763,8 +819,16 @@
         {"t":611.3,"vi":"Bài sau: RESP, giao thức mà bạn đọc được bằng mắt thường."}
       ]
     },
-    "rd-1-3-resp": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/redis/01-mo-hinh-thuc-thi/01-03-resp-bf194751.mp4","durationSec":601.51,"nguonCau":"srt",
-      "parts": [],
+    "rd-1-3-resp": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/redis/01-mo-hinh-thuc-thi/01-03-resp-bf194751.mp4","durationSec":601.51,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":116.33,"ten":"Ôn nhanh · hôm nay · Mô phỏng: một lệnh biến thành byte"},
+        {"t":116.33,"den":197.82,"ten":"Năm kiểu của RESP2, đầy đủ"},
+        {"t":197.82,"den":303.82,"ten":"Vì sao thiết kế lại như vậy · Chạy thật: RESP3 thêm gì"},
+        {"t":303.82,"den":401.87,"ten":"Chạy thật: ba lỗi giao thức bạn sẽ gặp"},
+        {"t":401.87,"den":480.11,"ten":"Chạy thật: cùng giao thức qua TLS"},
+        {"t":480.11,"den":558.84,"ten":"Thực hành: tự tay nói RESP · Tự kiểm nhanh"},
+        {"t":558.84,"den":601.51,"ten":"Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 1.3 của khoá Redis."},
         {"t":9.31,"vi":"Bài trước theo chân một lệnh SET: đọc vào bộ đệm truy vấn, phân tích RESP, thực thi, rồi trả lời. Và chữ OK tới trước độ bền."},
@@ -867,8 +931,16 @@
         {"t":595.71,"vi":"Bài sau: pipeline, biến một trăm vòng đi về thành một."}
       ]
     },
-    "rd-1-4-pipeline": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/redis/01-mo-hinh-thuc-thi/01-04-pipeline-87a4b4ad.mp4","durationSec":615.13,"nguonCau":"srt",
-      "parts": [],
+    "rd-1-4-pipeline": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/redis/01-mo-hinh-thuc-thi/01-04-pipeline-87a4b4ad.mp4","durationSec":615.13,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":87.09,"ten":"Ôn nhanh · hôm nay · Mô phỏng: vì sao pipeline chạy được"},
+        {"t":87.09,"den":173.66,"ten":"Chạy thật: đo bằng số · Trong ứng dụng của bạn"},
+        {"t":173.66,"den":266.33,"ten":"Chạy thật: lệnh nhiều tham số thắng pipeline"},
+        {"t":266.33,"den":353.8,"ten":"Chạy thật: pipeline KHÔNG phải giao dịch"},
+        {"t":353.8,"den":430.65,"ten":"Bẫy: vòng for có await bên trong"},
+        {"t":430.65,"den":525.61,"ten":"Thuật ngữ trong bài · Thực hành: nhanh gấp 50 lần"},
+        {"t":525.61,"den":615.13,"ten":"Tự kiểm nhanh · Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 1.4 của khoá Redis."},
         {"t":9.8,"vi":"Bài trước: mọi lệnh là một mảng, từ đầu của lỗi là mã. Và bài 0.1 đo được: Redis xong trong vài micro giây, phần còn lại là mạng."},
@@ -963,8 +1035,15 @@
         {"t":609.44,"vi":"Bài sau: client, bể kết nối, và thời gian chờ."}
       ]
     },
-    "rd-1-5-client-pool": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/redis/01-mo-hinh-thuc-thi/01-05-client-pool-77824ffd.mp4","durationSec":650.85,"nguonCau":"srt",
-      "parts": [],
+    "rd-1-5-client-pool": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/redis/01-mo-hinh-thuc-thi/01-05-client-pool-77824ffd.mp4","durationSec":650.85,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":101.1,"ten":"Ôn nhanh · hôm nay · Mô phỏng: một kết nối thường là đủ"},
+        {"t":101.1,"den":205.95,"ten":"Chạy thật: đếm kết nối · Những lệnh bắt cóc một kết nối"},
+        {"t":205.95,"den":315.6,"ten":"Chạy thật: duplicate(), một kết nối riêng"},
+        {"t":315.6,"den":455,"ten":"Chạy thật: kết nối lại sau CLIENT KILL"},
+        {"t":455,"den":565.23,"ten":"Liên kết chéo: học đâu thêm · Thuật ngữ trong bài"},
+        {"t":565.23,"den":650.85,"ten":"Tự kiểm nhanh · Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 1.5, bài cuối Chương 1 của khoá Redis."},
         {"t":10.74,"vi":"Bài trước: pipeline gửi nhiều lệnh trước khi đọc trả lời, và lệnh nhiều tham số như MGET còn tốt hơn."},
@@ -1071,8 +1150,13 @@
         {"t":645.87,"vi":"Bài sau mở Chương 2: thiết kế tên khoá."}
       ]
     },
-    "rd-10-1-cau-hinh": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/redis/10-van-hanh-bao-mat-acl/10-01-cau-hinh-da5f25fc.mp4","durationSec":377.17,"nguonCau":"srt",
-      "parts": [],
+    "rd-10-1-cau-hinh": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/redis/10-van-hanh-bao-mat-acl/10-01-cau-hinh-da5f25fc.mp4","durationSec":377.17,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":102.39,"ten":"Ôn nhanh · hôm nay · Mô phỏng: bốn nguồn cấu hình"},
+        {"t":102.39,"den":224.08,"ten":"Chạy thật: đọc cấu hình đang sống"},
+        {"t":224.08,"den":314.26,"ten":"Liên kết chéo: học đâu thêm · Thuật ngữ trong bài"},
+        {"t":314.26,"den":377.17,"ten":"Tự kiểm nhanh · Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với chương 10 của khoá Redis: vận hành, bảo mật và ACL. Bài đầu tiên, 10.1."},
         {"t":14.04,"vi":"Chương trước: bộ nhớ, đẩy khoá, RDB, AOF, và khôi phục. Nhiều lần ta vấp vì CONFIG SET không sống qua khởi động lại."},
@@ -1150,8 +1234,13 @@
         {"t":370.3,"vi":"Bài sau: phơi ra mạng, vì sao Redis từng bị tấn công nhiều đến thế."}
       ]
     },
-    "rd-10-2-phoi-ra-mang": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/redis/10-van-hanh-bao-mat-acl/10-02-phoi-ra-mang-88888de2.mp4","durationSec":412.07,"nguonCau":"srt",
-      "parts": [],
+    "rd-10-2-phoi-ra-mang": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/redis/10-van-hanh-bao-mat-acl/10-02-phoi-ra-mang-88888de2.mp4","durationSec":412.07,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":116.02,"ten":"Ôn nhanh · hôm nay · Mô phỏng: một Redis mở toang"},
+        {"t":116.02,"den":210.71,"ten":"Chạy thật: Redis 7 đã chặn ghi tệp tuỳ ý"},
+        {"t":210.71,"den":293.17,"ten":"Bẫy: container công bố cổng ra mọi giao diện"},
+        {"t":293.17,"den":412.07,"ten":"Thực hành: khoá cửa một máy · Tự kiểm nhanh"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 10.2 của khoá Redis."},
         {"t":8.79,"vi":"Bài trước: tệp cấu hình, bốn nguồn, và trôi cấu hình."},
@@ -1228,8 +1317,13 @@
         {"t":406.54,"vi":"Bài sau: ACL, người dùng, nhóm lệnh và mẫu khoá."}
       ]
     },
-    "rd-10-3-acl": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/redis/10-van-hanh-bao-mat-acl/10-03-acl-adb0e8c9.mp4","durationSec":391.46,"nguonCau":"srt",
-      "parts": [],
+    "rd-10-3-acl": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/redis/10-van-hanh-bao-mat-acl/10-03-acl-adb0e8c9.mp4","durationSec":391.46,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":114.72,"ten":"Ôn nhanh · hôm nay · Mô phỏng: ba cửa của một yêu cầu"},
+        {"t":114.72,"den":209.27,"ten":"Chạy thật: các nhóm lệnh"},
+        {"t":209.27,"den":290.54,"ten":"Bẫy: để nguyên người dùng default"},
+        {"t":290.54,"den":391.46,"ten":"Thực hành: giới hạn ba dịch vụ · Tự kiểm nhanh"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 10.3 của khoá Redis."},
         {"t":8.79,"vi":"Bài trước: phơi ra mạng. bind, protected-mode, và mật khẩu phải dài, ngẫu nhiên."},
@@ -1304,8 +1398,13 @@
         {"t":385.43,"vi":"Bài sau: làm cứng, lệnh nguy hiểm, tiến trình và container."}
       ]
     },
-    "rd-10-4-lam-cung": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/redis/10-van-hanh-bao-mat-acl/10-04-lam-cung-48e5793d.mp4","durationSec":397.44,"nguonCau":"srt",
-      "parts": [],
+    "rd-10-4-lam-cung": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/redis/10-van-hanh-bao-mat-acl/10-04-lam-cung-48e5793d.mp4","durationSec":397.44,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":95.21,"ten":"Ôn nhanh · hôm nay · Mô phỏng: các lớp làm cứng"},
+        {"t":95.21,"den":206.31,"ten":"Chạy thật: cách đúng là ACL"},
+        {"t":206.31,"den":288.25,"ten":"Bẫy: giới hạn container không phải maxmemory"},
+        {"t":288.25,"den":397.44,"ten":"Thực hành: làm cứng một bản triển khai · Tự kiểm nhanh"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 10.4 của khoá Redis."},
         {"t":8.83,"vi":"Bài trước: ACL, mỗi dịch vụ một người dùng, trừ nhóm dangerous, và tắt default."},
@@ -1383,8 +1482,13 @@
         {"t":391.27,"vi":"Bài sau: kết nối, giới hạn, hạn giờ và họ lệnh CLIENT."}
       ]
     },
-    "rd-10-5-ket-noi": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/redis/10-van-hanh-bao-mat-acl/10-05-ket-noi-09f8bcf6.mp4","durationSec":409.73,"nguonCau":"srt",
-      "parts": [],
+    "rd-10-5-ket-noi": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/redis/10-van-hanh-bao-mat-acl/10-05-ket-noi-09f8bcf6.mp4","durationSec":409.73,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":96,"ten":"Ôn nhanh · hôm nay · Mô phỏng: ba giới hạn phải khớp"},
+        {"t":96,"den":194.04,"ten":"Chạy thật: vượt maxclients · Bẫy: một chỗ rò kết nối"},
+        {"t":194.04,"den":293.86,"ten":"Chạy thật: kết nối rảnh và đặt tên · Chọn cỡ một gáo kết nối"},
+        {"t":293.86,"den":409.73,"ten":"Thực hành: tìm chỗ rò · Tự kiểm nhanh"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 10.5, bài cuối chương vận hành và bảo mật."},
         {"t":10.9,"vi":"Bài trước: làm cứng. ACL gỡ lệnh nguy hiểm, không chạy root, và maxmemory dưới giới hạn container."},
@@ -1467,8 +1571,13 @@
         {"t":401.23,"vi":"Hết chương 10. Bài sau, chương 11: nhân bản, bản sao đuổi kịp và bám theo ra sao."}
       ]
     },
-    "rd-11-1-nhan-ban": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/redis/11-nhan-ban-sentinel-cluster/11-01-nhan-ban-c4320e05.mp4","durationSec":411.84,"nguonCau":"srt",
-      "parts": [],
+    "rd-11-1-nhan-ban": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/redis/11-nhan-ban-sentinel-cluster/11-01-nhan-ban-c4320e05.mp4","durationSec":411.84,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":117.6,"ten":"Ôn nhanh · hôm nay · Mô phỏng: đồng bộ đầy đủ"},
+        {"t":117.6,"den":213.42,"ten":"Chạy thật: lần đồng bộ đầu tiên"},
+        {"t":213.42,"den":336.81,"ten":"Chạy thật: bản sao của bản sao · Liên kết chéo: học đâu thêm"},
+        {"t":336.81,"den":411.84,"ten":"Tự kiểm nhanh · Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với chương 11 của khoá Redis: mở rộng, với nhân bản, Sentinel và Cluster."},
         {"t":13.87,"vi":"Bài đầu tiên, 11.1."},
@@ -1543,8 +1652,14 @@
         {"t":405.32,"vi":"Bài sau: nhân bản cho bạn cái gì, và không cho cái gì."}
       ]
     },
-    "rd-11-2-gioi-han-nhan-ban": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/redis/11-nhan-ban-sentinel-cluster/11-02-gioi-han-nhan-ban-5676e77d.mp4","durationSec":469.25,"nguonCau":"srt",
-      "parts": [],
+    "rd-11-2-gioi-han-nhan-ban": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/redis/11-nhan-ban-sentinel-cluster/11-02-gioi-han-nhan-ban-5676e77d.mp4","durationSec":469.25,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":122.21,"ten":"Ôn nhanh · hôm nay · Mô phỏng: đã xác nhận, rồi mất"},
+        {"t":122.21,"den":197.59,"ten":"Chạy thật: lượt ghi đã trả OK, rồi mất"},
+        {"t":197.59,"den":280.51,"ten":"Chạy thật: đọc từ bản sao"},
+        {"t":280.51,"den":401.33,"ten":"Bẫy: bản sao không phải sẵn sàng cao"},
+        {"t":401.33,"den":469.25,"ten":"Tự kiểm nhanh · Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 11.2 của khoá Redis: nhân bản cho bạn cái gì, và không cho cái gì."},
         {"t":13.24,"vi":"Bài trước: dựng một bản sao, đồng bộ đầy đủ, đồng bộ một phần, và backlog."},
@@ -1645,8 +1760,13 @@
         {"t":464.71,"vi":"Bài sau: Sentinel, tự động chuyển đổi."}
       ]
     },
-    "rd-11-3-sentinel": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/redis/11-nhan-ban-sentinel-cluster/11-03-sentinel-8ce699a6.mp4","durationSec":443.97,"nguonCau":"srt",
-      "parts": [],
+    "rd-11-3-sentinel": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/redis/11-nhan-ban-sentinel-cluster/11-03-sentinel-8ce699a6.mp4","durationSec":443.97,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":117.92,"ten":"Ôn nhanh · hôm nay · Mô phỏng: bốn việc của Sentinel"},
+        {"t":117.92,"den":221.13,"ten":"Mô phỏng: quorum và đa số"},
+        {"t":221.13,"den":307.21,"ten":"Chạy thật: một cú hỏng thật · Chạy thật: phía thiểu số"},
+        {"t":307.21,"den":443.97,"ten":"Thuật ngữ trong bài · Thực hành: sống sót qua một cú hỏng"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 11.3 của khoá Redis: Sentinel, tự động chuyển đổi."},
         {"t":11.73,"vi":"Bài trước: nhân bản không giữ chắc lượt ghi, và không tự thăng cấp bản sao."},
@@ -1741,8 +1861,14 @@
         {"t":436.1,"vi":"Bài sau: Cluster, mười sáu nghìn ba trăm tám mươi tư ô, và cái giá của chúng."}
       ]
     },
-    "rd-11-4-cluster": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/redis/11-nhan-ban-sentinel-cluster/11-04-cluster-986dd652.mp4","durationSec":422.92,"nguonCau":"srt",
-      "parts": [],
+    "rd-11-4-cluster": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/redis/11-nhan-ban-sentinel-cluster/11-04-cluster-986dd652.mp4","durationSec":422.92,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":100.12,"ten":"Ôn nhanh · hôm nay · Mô phỏng: khoá về ô, ô về nút"},
+        {"t":100.12,"den":175.36,"ten":"Chạy thật: MOVED · Chạy thật: lệnh nhiều khoá"},
+        {"t":175.36,"den":270.46,"ten":"Chạy thật: thêm nút, cân bằng lại"},
+        {"t":270.46,"den":354.61,"ten":"Liên kết chéo: học đâu thêm · Thuật ngữ trong bài"},
+        {"t":354.61,"den":422.92,"ten":"Tự kiểm nhanh · Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 11.4 của khoá Redis: Cluster, mười sáu nghìn ba trăm tám mươi tư ô, và cái giá của chúng."},
         {"t":14.35,"vi":"Bài trước: Sentinel, quorum và đa số, và khách phải hỏi Sentinel bản chính ở đâu."},
@@ -1832,8 +1958,14 @@
         {"t":417.74,"vi":"Bài sau: chọn kiến trúc, một cách thành thật."}
       ]
     },
-    "rd-11-5-chon-kien-truc": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/redis/11-nhan-ban-sentinel-cluster/11-05-chon-kien-truc-72f10c47.mp4","durationSec":423.25,"nguonCau":"srt",
-      "parts": [],
+    "rd-11-5-chon-kien-truc": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/redis/11-nhan-ban-sentinel-cluster/11-05-chon-kien-truc-72f10c47.mp4","durationSec":423.25,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":95.65,"ten":"Ôn nhanh · hôm nay · Chạy thật: một máy làm được bao nhiêu"},
+        {"t":95.65,"den":171.45,"ten":"Năm kiến trúc · Quyết định, theo thứ tự"},
+        {"t":171.45,"den":265.43,"ten":"Chạy thật: phép tính dung lượng · Bốn điều nên biết"},
+        {"t":265.43,"den":349.95,"ten":"Liên kết chéo: học đâu thêm · Thuật ngữ trong bài"},
+        {"t":349.95,"den":423.25,"ten":"Tự kiểm nhanh · Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 11.5, bài cuối chương 11 của khoá Redis: chọn kiến trúc, một cách thành thật."},
         {"t":13.32,"vi":"Bài trước: Cluster, mười sáu nghìn ba trăm tám mươi tư ô, MOVED, và nhãn băm."},
@@ -1920,8 +2052,13 @@
         {"t":415.05,"vi":"Hết chương 11. Chương sau: chẩn đoán Redis, bắt đầu từ năm phút đầu của một sự cố."}
       ]
     },
-    "rd-12-2-bay-hinh-dang": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/redis/12-chan-doan-va-di-tiep/12-02-bay-hinh-dang-15c5cca0.mp4","durationSec":394.07,"nguonCau":"srt",
-      "parts": [],
+    "rd-12-2-bay-hinh-dang": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/redis/12-chan-doan-va-di-tiep/12-02-bay-hinh-dang-15c5cca0.mp4","durationSec":394.07,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":111.18,"ten":"Ôn nhanh · hôm nay · Hình dáng 1: cái lệnh chặn"},
+        {"t":111.18,"den":220.46,"ten":"Hình dáng 3: chỗ rò kết nối · Hình dáng 4: cú khựng vì fork"},
+        {"t":220.46,"den":326.03,"ten":"Bẫy: dừng ở nguyên nhân đầu tiên"},
+        {"t":326.03,"den":394.07,"ten":"Tự kiểm nhanh · Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 12.2 của khoá Redis: bảy hình dáng hỏng hóc, và cách phân biệt chúng."},
         {"t":12.49,"vi":"Bài trước: khối phân loại, và bốn câu hỏi sống, bận, đầy, kết nối."},
@@ -2006,8 +2143,13 @@
         {"t":389.62,"vi":"Bài sau: bộ công cụ chẩn đoán."}
       ]
     },
-    "rd-12-3-bo-cong-cu": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/redis/12-chan-doan-va-di-tiep/12-03-bo-cong-cu-de08dfb2.mp4","durationSec":355,"nguonCau":"srt",
-      "parts": [],
+    "rd-12-3-bo-cong-cu": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/redis/12-chan-doan-va-di-tiep/12-03-bo-cong-cu-de08dfb2.mp4","durationSec":355,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":78.55,"ten":"Ôn nhanh · hôm nay · Chạy thật: các cờ của redis-cli"},
+        {"t":78.55,"den":174.63,"ten":"Chạy thật: LATENCY, MEMORY, OBJECT"},
+        {"t":174.63,"den":248.29,"ten":"Đáng cài thêm · Liên kết chéo: học đâu thêm"},
+        {"t":248.29,"den":355,"ten":"Thực hành: chọn đúng công cụ · Tự kiểm nhanh"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 12.3 của khoá Redis: bộ công cụ chẩn đoán."},
         {"t":11.03,"vi":"Bài trước: bảy hình dáng hỏng hóc, mỗi cái một chữ ký số liệu."},
@@ -2084,8 +2226,13 @@
         {"t":349.29,"vi":"Bài sau: giám sát, để biết trước khi người dùng báo."}
       ]
     },
-    "rd-12-5-ket-khoa": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/redis/12-chan-doan-va-di-tiep/12-05-ket-khoa-8fb1ef7f.mp4","durationSec":410.34,"nguonCau":"srt",
-      "parts": [],
+    "rd-12-5-ket-khoa": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/redis/12-chan-doan-va-di-tiep/12-05-ket-khoa-8fb1ef7f.mp4","durationSec":410.34,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":107.78,"ten":"Ôn nhanh · hôm nay · Tấm bản đồ"},
+        {"t":107.78,"den":200.62,"ten":"Chạy thật: dự án tổng kết, phần một"},
+        {"t":200.62,"den":295.77,"ten":"Đi tiếp về đâu · Bẫy: coi Redis chỉ là một cái cache"},
+        {"t":295.77,"den":410.34,"ten":"Dự án tổng kết, có chấm điểm · Tự kiểm nhanh"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 12.5, bài cuối của khoá Redis: bạn đã biết những gì, và đi tiếp về đâu."},
         {"t":13.33,"vi":"Bài trước: mười hai chỉ số, tám cảnh báo, và một cuốn sổ tay."},
@@ -2163,8 +2310,15 @@
         {"t":406.28,"vi":"Hẹn gặp lại ở khoá sau."}
       ]
     },
-    "rd-2-1-dat-ten-khoa": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/redis/02-khoa-ttl-het-han/02-01-dat-ten-khoa-2fd7b991.mp4","durationSec":624.67,"nguonCau":"srt",
-      "parts": [],
+    "rd-2-1-dat-ten-khoa": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/redis/02-khoa-ttl-het-han/02-01-dat-ten-khoa-2fd7b991.mp4","durationSec":624.67,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":132.2,"ten":"Ôn nhanh · hôm nay · Mô phỏng: tên khoá là schema"},
+        {"t":132.2,"den":240.69,"ten":"Chạy thật: một cái khoá tốn bao nhiêu"},
+        {"t":240.69,"den":325.25,"ten":"Chạy thật: tiền tố phiên bản và khoá đã băm"},
+        {"t":325.25,"den":435.74,"ten":"Độ dài khoá, và chỗ nó thôi quan trọng"},
+        {"t":435.74,"den":538.31,"ten":"Liên kết chéo: học đâu thêm · Thuật ngữ trong bài"},
+        {"t":538.31,"den":624.67,"ten":"Tự kiểm nhanh · Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Chương 2 của khoá Redis, bài 2.1."},
         {"t":10.52,"vi":"Chương 1 đã xong: một luồng, vòng đời một lệnh, RESP, pipeline, và kết nối."},
@@ -2258,8 +2412,16 @@
         {"t":619.28,"vi":"Bài sau: hết hạn thật sự hoạt động ra sao."}
       ]
     },
-    "rd-2-2-het-han": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/redis/02-khoa-ttl-het-han/02-02-het-han-610eff97.mp4","durationSec":626.44,"nguonCau":"srt",
-      "parts": [],
+    "rd-2-2-het-han": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/redis/02-khoa-ttl-het-han/02-02-het-han-610eff97.mp4","durationSec":626.44,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":93.34,"ten":"Ôn nhanh · hôm nay · Mô phỏng: lười, và lấy mẫu chủ động"},
+        {"t":93.34,"den":187.72,"ten":"Chạy thật: sáu cách đặt TTL"},
+        {"t":187.72,"den":269.2,"ten":"Chạy thật: tuỳ chọn của EXPIRE và PERSIST"},
+        {"t":269.2,"den":371.98,"ten":"Chạy thật: bản sao KHÔNG tự làm hết hạn khoá"},
+        {"t":371.98,"den":447.46,"ten":"Bẫy: làm mới phiên bằng một lệnh SET trơn"},
+        {"t":447.46,"den":527.69,"ten":"Thuật ngữ trong bài · Thực hành: hành vi của TTL"},
+        {"t":527.69,"den":626.44,"ten":"Tự kiểm nhanh · Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 2.2 của khoá Redis."},
         {"t":9.81,"vi":"Bài trước: tên khoá là schema, tiền tố nói cái gì xoá được, và mọi khoá từ đầu vào người dùng phải có TTL."},
@@ -2359,8 +2521,16 @@
         {"t":618.45,"vi":"Bài sau: tìm và xoá khoá một cách an toàn, SCAN và UNLINK."}
       ]
     },
-    "rd-2-3-scan-unlink": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/redis/02-khoa-ttl-het-han/02-03-scan-unlink-1d508de8.mp4","durationSec":574.13,"nguonCau":"srt",
-      "parts": [],
+    "rd-2-3-scan-unlink": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/redis/02-khoa-ttl-het-han/02-03-scan-unlink-1d508de8.mp4","durationSec":574.13,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":116.42,"ten":"Ôn nhanh · hôm nay · Mô phỏng: con trỏ SCAN đi qua bảng băm"},
+        {"t":116.42,"den":193.11,"ten":"Chạy thật: COUNT và TYPE"},
+        {"t":193.11,"den":284.98,"ten":"Chạy thật: DEL so với UNLINK"},
+        {"t":284.98,"den":372.76,"ten":"Chạy thật: xoá theo mẫu, cho đúng · Chạy thật: FLUSHDB ASYNC"},
+        {"t":372.76,"den":455.48,"ten":"Bẫy: dừng vòng SCAN khi gặp mẻ rỗng"},
+        {"t":455.48,"den":534.65,"ten":"Thực hành: quét và xoá an toàn · Tự kiểm nhanh"},
+        {"t":534.65,"den":574.13,"ten":"Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 2.3 của khoá Redis."},
         {"t":9.02,"vi":"Bài trước: hết hạn là lười và lấy mẫu, SET trơn xoá TTL, và bản sao chờ DEL từ máy chính."},
@@ -2466,8 +2636,15 @@
         {"t":566.71,"vi":"Bài sau: thông báo không gian khoá, nghe Redis kể chuyện gì xảy ra với khoá."}
       ]
     },
-    "rd-2-4-thong-bao": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/redis/02-khoa-ttl-het-han/02-04-thong-bao-4814b0a0.mp4","durationSec":528.25,"nguonCau":"srt",
-      "parts": [],
+    "rd-2-4-thong-bao": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/redis/02-khoa-ttl-het-han/02-04-thong-bao-4814b0a0.mp4","durationSec":528.25,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":119.8,"ten":"Ôn nhanh · hôm nay · Chạy thật: bật nó lên"},
+        {"t":119.8,"den":234.9,"ten":"Bảng cờ, đầy đủ · Chạy thật: chuỗi cờ chỉ có x"},
+        {"t":234.9,"den":319.82,"ten":"Ba việc nó làm tốt, một việc không"},
+        {"t":319.82,"den":412.45,"ten":"Bẫy: dùng sự kiện expired để nhả tài nguyên"},
+        {"t":412.45,"den":489.47,"ten":"Thực hành: theo dõi không gian khoá · Tự kiểm nhanh"},
+        {"t":489.47,"den":528.25,"ten":"Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 2.4 của khoá Redis."},
         {"t":9.18,"vi":"Bài trước: SCAN tới khi con trỏ về không, UNLINK thay DEL, và bật bốn thiết lập lazyfree."},
@@ -2564,8 +2741,15 @@
         {"t":521.66,"vi":"Bài sau: các cơ sở dữ liệu đánh số, và những lệnh khoá còn lại."}
       ]
     },
-    "rd-2-5-db-lenh-khoa": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/redis/02-khoa-ttl-het-han/02-05-db-lenh-khoa-c6c740ed.mp4","durationSec":527.56,"nguonCau":"srt",
-      "parts": [],
+    "rd-2-5-db-lenh-khoa": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/redis/02-khoa-ttl-het-han/02-05-db-lenh-khoa-c6c740ed.mp4","durationSec":527.56,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":98.63,"ten":"Ôn nhanh · hôm nay · Mô phỏng: mười sáu ngăn kéo, một cái tủ"},
+        {"t":98.63,"den":176.93,"ten":"Chạy thật: SELECT là trạng thái của từng kết nối"},
+        {"t":176.93,"den":273,"ten":"Chạy thật: DUMP, RESTORE và MIGRATE"},
+        {"t":273,"den":360.59,"ten":"Chạy thật: tìm khoá đang ăn bộ nhớ"},
+        {"t":360.59,"den":453.8,"ten":"Liên kết chéo: học đâu thêm · Thuật ngữ trong bài"},
+        {"t":453.8,"den":527.56,"ten":"Tự kiểm nhanh · Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 2.5, bài cuối Chương 2 của khoá Redis."},
         {"t":10.51,"vi":"Bài trước: thông báo không gian khoá, tiện cho vô hiệu hoá cache, nhưng giao hàng nhiều nhất một lần."},
@@ -2654,8 +2838,16 @@
         {"t":521.92,"vi":"Bài sau mở Chương 3: chuỗi, và ba cách mã hoá của nó."}
       ]
     },
-    "rd-3-1-chuoi": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/redis/03-chuoi-bo-dem-bitmap-hll/03-01-chuoi-58b39d23.mp4","durationSec":604.89,"nguonCau":"srt",
-      "parts": [],
+    "rd-3-1-chuoi": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/redis/03-chuoi-bo-dem-bitmap-hll/03-01-chuoi-58b39d23.mp4","durationSec":604.89,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":88.34,"ten":"Ôn nhanh · hôm nay · Mô phỏng: một lệnh SET, ba cách cất"},
+        {"t":88.34,"den":215.76,"ten":"Chạy thật: OBJECT ENCODING"},
+        {"t":215.76,"den":299.06,"ten":"Chạy thật: đọc và ghi một PHẦN của chuỗi"},
+        {"t":299.06,"den":383.82,"ten":"Cái gì thuộc về một chuỗi, cái gì không"},
+        {"t":383.82,"den":483.28,"ten":"Bẫy: cất JSON trong chuỗi rồi sửa MỘT trường"},
+        {"t":483.28,"den":567.28,"ten":"Thực hành: chuỗi và cách mã hoá · Tự kiểm nhanh"},
+        {"t":567.28,"den":604.89,"ten":"Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 3.1, mở đầu Chương 3 của khoá Redis."},
         {"t":10.5,"vi":"Bài trước: cơ sở dữ liệu đánh số không phải không gian tên, và bộ công cụ trong này có gì."},
@@ -2765,8 +2957,15 @@
         {"t":596.45,"vi":"Bài sau: bộ đếm không thể sai, và vì sao đọc rồi ghi lại là cách đếm sai âm thầm nhất."}
       ]
     },
-    "rd-3-5-gioi-han-tan-suat": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/redis/03-chuoi-bo-dem-bitmap-hll/03-05-gioi-han-tan-suat-db93a54d.mp4","durationSec":572.02,"nguonCau":"srt",
-      "parts": [],
+    "rd-3-5-gioi-han-tan-suat": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/redis/03-chuoi-bo-dem-bitmap-hll/03-05-gioi-han-tan-suat-db93a54d.mp4","durationSec":572.02,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":85.5,"ten":"Ôn nhanh · hôm nay"},
+        {"t":85.5,"den":184.82,"ten":"Chạy thật: cửa sổ cố định, hai câu lệnh"},
+        {"t":184.82,"den":272.76,"ten":"Chạy thật: nhật ký cửa sổ trượt, chính xác và có giá"},
+        {"t":272.76,"den":350.8,"ten":"Chọn khoá, thứ quan trọng hơn cả thuật toán"},
+        {"t":350.8,"den":453.84,"ten":"Bẫy: kiểm giới hạn rồi mới tăng"},
+        {"t":453.84,"den":572.02,"ten":"Thực hành: dựng một bộ giới hạn tần suất · Tự kiểm nhanh"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 3.5, bài cuối Chương 3 của khoá Redis."},
         {"t":10.51,"vi":"Bài trước: HyperLogLog đếm số thứ khác nhau trong mười hai ki-lô-bai, nhưng sai khi có người đối chiếu."},
@@ -2868,8 +3067,14 @@
         {"t":565.68,"vi":"Bài sau mở Chương 4: list, làm hàng đợi và dòng tin có trần."}
       ]
     },
-    "rd-4-3-zset": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/redis/04-list-set-sorted-set/04-03-zset-550d5665.mp4","durationSec":521.98,"nguonCau":"srt",
-      "parts": [],
+    "rd-4-3-zset": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/redis/04-list-set-sorted-set/04-03-zset-550d5665.mp4","durationSec":521.98,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":117.21,"ten":"Ôn nhanh · hôm nay · Mô phỏng: hai cấu trúc giả vờ là một"},
+        {"t":117.21,"den":219.1,"ten":"Chạy thật: một triệu phần tử, vẫn vài micro giây"},
+        {"t":219.1,"den":308.46,"ten":"Chạy thật: ZRANGE, một lệnh, bốn cách cắt"},
+        {"t":308.46,"den":408.64,"ten":"Chạy thật: lấy ra, cắt bớt và kết hợp"},
+        {"t":408.64,"den":521.98,"ten":"Thực hành: bảng xếp hạng và truy vấn khoảng · Tự kiểm nhanh"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 4.3 của khoá Redis."},
         {"t":8.86,"vi":"Bài trước: set trả lời câu có trong đó không trong một bước, và đại số tập hợp ngay trong Redis."},
@@ -2970,8 +3175,14 @@
         {"t":515.66,"vi":"Bài sau: sorted set trong thực tế, năm khuôn mẫu dùng hằng ngày."}
       ]
     },
-    "rd-4-5-chon-cau-truc": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/redis/04-list-set-sorted-set/04-05-chon-cau-truc-d2cfccb2.mp4","durationSec":458.03,"nguonCau":"srt",
-      "parts": [],
+    "rd-4-5-chon-cau-truc": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/redis/04-list-set-sorted-set/04-05-chon-cau-truc-d2cfccb2.mp4","durationSec":458.03,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":112.22,"ten":"Ôn nhanh · hôm nay · Chạy thật: một bài toán, ba cấu trúc"},
+        {"t":112.22,"den":187.64,"ten":"Mô phỏng: chọn theo câu hỏi, đừng chọn theo hình dạng"},
+        {"t":187.64,"den":289.56,"ten":"Chạy thật: món quà geo · Bẫy: khoá geo không bao giờ quên"},
+        {"t":289.56,"den":384.79,"ten":"Liên kết chéo: học đâu thêm · Thuật ngữ trong bài"},
+        {"t":384.79,"den":458.03,"ten":"Tự kiểm nhanh · Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 4.5, bài cuối Chương 4 của khoá Redis."},
         {"t":10.7,"vi":"Ba bài trước: list, set, sorted set, và năm khuôn mẫu của sorted set."},
@@ -3057,8 +3268,13 @@
         {"t":451.79,"vi":"Bài sau mở Chương 5: hash, một đối tượng sửa được từng trường."}
       ]
     },
-    "rd-5-1-hash": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/redis/05-hash-mo-hinh-doi-tuong/05-01-hash-f8ef6faf.mp4","durationSec":393.36,"nguonCau":"srt",
-      "parts": [],
+    "rd-5-1-hash": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/redis/05-hash-mo-hinh-doi-tuong/05-01-hash-f8ef6faf.mp4","durationSec":393.36,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":109.57,"ten":"Ôn nhanh · hôm nay · Mô phỏng: một khối, hay từng ngăn kéo"},
+        {"t":109.57,"den":198.44,"ten":"Chạy thật: lần ghi bị mất"},
+        {"t":198.44,"den":289.4,"ten":"Bẫy: mọi thứ trả về đều là chuỗi"},
+        {"t":289.4,"den":393.36,"ten":"Thực hành: mô hình hoá một người dùng bằng hash"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 5.1, mở đầu Chương 5 của khoá Redis."},
         {"t":10.74,"vi":"Chương trước: list, set, sorted set, chọn theo câu hỏi, và geo là một sorted set đội lốt."},
@@ -3133,8 +3349,14 @@
         {"t":387.26,"vi":"Bài sau: mã hoá và bộ nhớ, cái mẹo tiết kiệm hàng gigabyte."}
       ]
     },
-    "rd-5-2-ma-hoa-bo-nho": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/redis/05-hash-mo-hinh-doi-tuong/05-02-ma-hoa-bo-nho-2096ac07.mp4","durationSec":443.34,"nguonCau":"srt",
-      "parts": [],
+    "rd-5-2-ma-hoa-bo-nho": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/redis/05-hash-mo-hinh-doi-tuong/05-02-ma-hoa-bo-nho-2096ac07.mp4","durationSec":443.34,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":112.74,"ten":"Ôn nhanh · hôm nay"},
+        {"t":112.74,"den":204.32,"ten":"Chạy thật: một triệu đối tượng, hai cách cất"},
+        {"t":204.32,"den":288.57,"ten":"Chạy thật: tìm xem bộ nhớ đang làm gì"},
+        {"t":288.57,"den":378.47,"ten":"Liên kết chéo: học đâu thêm · Thuật ngữ trong bài"},
+        {"t":378.47,"den":443.34,"ten":"Tự kiểm nhanh · Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 5.2 của khoá Redis."},
         {"t":9.06,"vi":"Bài trước: hash cho sửa từng trường mà không mất lần ghi, và mọi giá trị trả về là chuỗi."},
@@ -3219,8 +3441,13 @@
         {"t":436.98,"vi":"Bài sau: mô hình hoá một đối tượng, hash, JSON hay khoá rời."}
       ]
     },
-    "rd-5-3-mo-hinh-doi-tuong": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/redis/05-hash-mo-hinh-doi-tuong/05-03-mo-hinh-doi-tuong-19ab84c3.mp4","durationSec":401.56,"nguonCau":"srt",
-      "parts": [],
+    "rd-5-3-mo-hinh-doi-tuong": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/redis/05-hash-mo-hinh-doi-tuong/05-03-mo-hinh-doi-tuong-19ab84c3.mp4","durationSec":401.56,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":80.59,"ten":"Ôn nhanh · hôm nay"},
+        {"t":80.59,"den":182.96,"ten":"Mô phỏng: quyết bằng ba câu hỏi"},
+        {"t":182.96,"den":263.29,"ten":"Chạy thật: đặt tên khoá để một năm sau vẫn tìm ra"},
+        {"t":263.29,"den":401.56,"ten":"Thuật ngữ trong bài"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 5.3 của khoá Redis."},
         {"t":8.93,"vi":"Bài trước: hash nhỏ là listpack, và gom gáo cắt bộ nhớ gần bốn lần."},
@@ -3299,8 +3526,14 @@
         {"t":394.97,"vi":"Bài sau: HEXPIRE, TTL cho từng trường, cuối cùng cũng có."}
       ]
     },
-    "rd-5-5-hash-thuc-te": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/redis/05-hash-mo-hinh-doi-tuong/05-05-hash-thuc-te-fa0de268.mp4","durationSec":457.58,"nguonCau":"srt",
-      "parts": [],
+    "rd-5-5-hash-thuc-te": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/redis/05-hash-mo-hinh-doi-tuong/05-05-hash-thuc-te-fa0de268.mp4","durationSec":457.58,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":112.74,"ten":"Ôn nhanh · hôm nay · Mô phỏng: bốn hash, và thứ chặn mỗi cái"},
+        {"t":112.74,"den":189.68,"ten":"Chạy thật: giỏ hàng mà hai tab không phá được"},
+        {"t":189.68,"den":280.86,"ten":"Chạy thật: cấu hình nạp lại không cần deploy"},
+        {"t":280.86,"den":388.5,"ten":"Liên kết chéo: Academy và Courses · Thuật ngữ trong bài"},
+        {"t":388.5,"den":457.58,"ten":"Tự kiểm nhanh · Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 5.5, bài cuối Chương 5 của khoá Redis."},
         {"t":10.84,"vi":"Bài trước: HEXPIRE cho TTL từng trường, và nhớ kiểm phiên bản máy chủ."},
@@ -3386,8 +3619,14 @@
         {"t":450.4,"vi":"Bài sau mở Chương 6: bốn khuôn làm bộ đệm, và bạn đang dùng khuôn nào."}
       ]
     },
-    "rd-6-1-bon-khuon": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/redis/06-lam-bo-dem-cho-dung/06-01-bon-khuon-e1b55880.mp4","durationSec":444.9,"nguonCau":"srt",
-      "parts": [],
+    "rd-6-1-bon-khuon": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/redis/06-lam-bo-dem-cho-dung/06-01-bon-khuon-e1b55880.mp4","durationSec":444.9,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":100.59,"ten":"Ôn nhanh · hôm nay · Mô phỏng: bốn hình dáng của một bộ đệm"},
+        {"t":100.59,"den":185.33,"ten":"Chạy thật: cache-aside, trượt rồi trúng"},
+        {"t":185.33,"den":294.96,"ten":"Chạy thật: write-behind làm mất dữ liệu"},
+        {"t":294.96,"den":383.77,"ten":"Liên kết chéo: Academy và Courses · Thuật ngữ trong bài"},
+        {"t":383.77,"den":444.9,"ten":"Tự kiểm nhanh · Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 6.1, mở đầu Chương 6 của khoá Redis: bộ đệm."},
         {"t":11.75,"vi":"Chương trước: hash cho phiên, giỏ hàng, bộ đếm, cấu hình."},
@@ -3466,8 +3705,15 @@
         {"t":439.58,"vi":"Bài sau: đẩy khoá cũ, năm chiến lược, xếp hạng."}
       ]
     },
-    "rd-6-2-day-khoa-cu": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/redis/06-lam-bo-dem-cho-dung/06-02-day-khoa-cu-97b6cc90.mp4","durationSec":540.21,"nguonCau":"srt",
-      "parts": [],
+    "rd-6-2-day-khoa-cu": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/redis/06-lam-bo-dem-cho-dung/06-02-day-khoa-cu-97b6cc90.mp4","durationSec":540.21,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":108.29,"ten":"Ôn nhanh · hôm nay"},
+        {"t":108.29,"den":188.02,"ten":"Chạy thật: xoá, đừng cập nhật"},
+        {"t":188.02,"den":299.83,"ten":"Chạy thật: khoá có phiên bản"},
+        {"t":299.83,"den":378.09,"ten":"Bẫy: đệm danh sách, rồi chỉ vô hiệu từng mục"},
+        {"t":378.09,"den":470.17,"ten":"Liên kết chéo: học đâu thêm · Thuật ngữ trong bài"},
+        {"t":470.17,"den":540.21,"ten":"Tự kiểm nhanh · Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 6.2 của khoá Redis."},
         {"t":8.84,"vi":"Bài trước: bốn khuôn bộ đệm, cache-aside là mặc định, và write-behind làm mất dữ liệu."},
@@ -3572,8 +3818,15 @@
         {"t":533.07,"vi":"Bài sau: giẫm đạp, khi một lần trượt bộ đệm hạ gục cơ sở dữ liệu."}
       ]
     },
-    "rd-6-3-giam-dap": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/redis/06-lam-bo-dem-cho-dung/06-03-giam-dap-8bd30900.mp4","durationSec":546.24,"nguonCau":"srt",
-      "parts": [],
+    "rd-6-3-giam-dap": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/redis/06-lam-bo-dem-cho-dung/06-03-giam-dap-8bd30900.mp4","durationSec":546.24,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":105.71,"ten":"Ôn nhanh · hôm nay · Mô phỏng: hai trăm khách, một khoá nóng"},
+        {"t":105.71,"den":190.97,"ten":"Ba nguyên nhân, ba cách chữa"},
+        {"t":190.97,"den":272.18,"ten":"Chạy thật: một lượt duy nhất bằng khoá"},
+        {"t":272.18,"den":350.2,"ten":"Chạy thật: tính sớm theo xác suất, và phục vụ đồ ôi"},
+        {"t":350.2,"den":439.11,"ten":"Bẫy: xuyên thủng bộ đệm · Liên kết chéo: học đâu thêm"},
+        {"t":439.11,"den":546.24,"ten":"Thực hành: sống sót qua đàn giẫm đạp · Tự kiểm nhanh"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 6.3 của khoá Redis."},
         {"t":8.96,"vi":"Bài trước: năm chiến lược đẩy khoá cũ."},
@@ -3684,8 +3937,14 @@
         {"t":539.96,"vi":"Bài sau: nhất quán, khi bộ đệm và cơ sở dữ liệu nói khác nhau."}
       ]
     },
-    "rd-6-4-nhat-quan": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/redis/06-lam-bo-dem-cho-dung/06-04-nhat-quan-7cffbf71.mp4","durationSec":510.99,"nguonCau":"srt",
-      "parts": [],
+    "rd-6-4-nhat-quan": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/redis/06-lam-bo-dem-cho-dung/06-04-nhat-quan-7cffbf71.mp4","durationSec":510.99,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":110.89,"ten":"Ôn nhanh · hôm nay · Mô phỏng: bốn thứ tự ghi"},
+        {"t":110.89,"den":198.12,"ten":"Chạy thật: cuộc đua sống sót qua thứ tự tốt nhất"},
+        {"t":198.12,"den":314.34,"ten":"Chạy thật: bản sao đọc chậm, bộ đệm ôi"},
+        {"t":314.34,"den":393.35,"ten":"Bẫy: đuổi theo nhất quán hoàn hảo"},
+        {"t":393.35,"den":510.99,"ten":"Thực hành: tìm ra lượt đọc ôi · Tự kiểm nhanh"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 6.4 của khoá Redis."},
         {"t":8.83,"vi":"Bài trước: giẫm đạp. Rắc nhiễu, khoá một lượt có mã thông báo, và phục vụ đồ ôi."},
@@ -3787,8 +4046,14 @@
         {"t":505.74,"vi":"Bài sau: đo bộ đệm, xem nó có giúp gì không đã."}
       ]
     },
-    "rd-7-1-multi": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/redis/07-tinh-nguyen-tu/07-01-multi-a72e83d4.mp4","durationSec":441.56,"nguonCau":"srt",
-      "parts": [],
+    "rd-7-1-multi": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/redis/07-tinh-nguyen-tu/07-01-multi-a72e83d4.mp4","durationSec":441.56,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":98.74,"ten":"Ôn nhanh · hôm nay"},
+        {"t":98.74,"den":200.75,"ten":"Chạy thật: cô lập là có thật · Chạy thật: không có quay lui"},
+        {"t":200.75,"den":292.13,"ten":"Chạy thật: thư viện khách giấu lỗi trong mảng"},
+        {"t":292.13,"den":377.77,"ten":"Liên kết chéo: học đâu thêm · Thuật ngữ trong bài"},
+        {"t":377.77,"den":441.56,"ten":"Tự kiểm nhanh · Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với chương 7 của khoá Redis: tính nguyên tử. Bài đầu tiên, 7.1."},
         {"t":12.42,"vi":"Chương trước khép lại bộ đệm: đẩy khoá cũ, giẫm đạp, nhất quán, và đo xem nó có giúp gì."},
@@ -3882,8 +4147,13 @@
         {"t":435.36,"vi":"Bài sau: WATCH, kiểm soát đồng thời lạc quan mà không cần khoá."}
       ]
     },
-    "rd-7-2-watch": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/redis/07-tinh-nguyen-tu/07-02-watch-34fc00c9.mp4","durationSec":418.11,"nguonCau":"srt",
-      "parts": [],
+    "rd-7-2-watch": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/redis/07-tinh-nguyen-tu/07-02-watch-34fc00c9.mp4","durationSec":418.11,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":104.11,"ten":"Ôn nhanh · hôm nay · Mô phỏng: vòng so-sánh-rồi-tráo"},
+        {"t":104.11,"den":189.82,"ten":"Vòng lặp thử lại, viết cho đúng"},
+        {"t":189.82,"den":282.25,"ten":"Chạy thật: quên UNWATCH, phép canh rò rỉ"},
+        {"t":282.25,"den":418.11,"ten":"Thuật ngữ trong bài · Thực hành: dựng một vòng lặp CAS"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 7.2 của khoá Redis."},
         {"t":9.18,"vi":"Bài trước: MULTI xếp hàng, EXEC chạy liền, không quay lui. Và trong khối không đọc rồi rẽ nhánh được."},
@@ -3973,8 +4243,15 @@
         {"t":412.87,"vi":"Bài sau: Lua, chuyển logic vào bên trong máy chủ."}
       ]
     },
-    "rd-7-3-lua": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/redis/07-tinh-nguyen-tu/07-03-lua-3ba19b19.mp4","durationSec":512.9,"nguonCau":"srt",
-      "parts": [],
+    "rd-7-3-lua": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/redis/07-tinh-nguyen-tu/07-03-lua-3ba19b19.mp4","durationSec":512.9,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":87.04,"ten":"Ôn nhanh · hôm nay · Mô phỏng: MULTI, WATCH và Lua"},
+        {"t":87.04,"den":170.1,"ten":"Chạy thật: KEYS và ARGV không phải một thứ"},
+        {"t":170.1,"den":246.28,"ten":"Chạy thật: call với pcall"},
+        {"t":246.28,"den":349.98,"ten":"Chạy thật: cái script không chịu dừng"},
+        {"t":349.98,"den":444.11,"ten":"Liên kết chéo: học đâu thêm · Thuật ngữ trong bài"},
+        {"t":444.11,"den":512.9,"ten":"Tự kiểm nhanh · Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 7.3 của khoá Redis."},
         {"t":8.98,"vi":"Bài trước: WATCH canh khoá, EXEC trả nil khi có người đổi."},
@@ -4078,8 +4355,14 @@
         {"t":506.68,"vi":"Bài sau: Redis Functions, script sống hẳn trên máy chủ."}
       ]
     },
-    "rd-7-4-functions": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/redis/07-tinh-nguyen-tu/07-04-functions-4d7b2663.mp4","durationSec":418.57,"nguonCau":"srt",
-      "parts": [],
+    "rd-7-4-functions": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/redis/07-tinh-nguyen-tu/07-04-functions-4d7b2663.mp4","durationSec":418.57,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":94.75,"ten":"Ôn nhanh · hôm nay · Mô phỏng: script phù du, function bền"},
+        {"t":94.75,"den":173.22,"ten":"Chạy thật: nạp một lần, gọi bằng tên"},
+        {"t":173.22,"den":262.5,"ten":"Chạy thật: vận hành thư viện · Nên dùng cái nào"},
+        {"t":262.5,"den":346.09,"ten":"Liên kết chéo: học đâu thêm · Thuật ngữ trong bài"},
+        {"t":346.09,"den":418.57,"ten":"Tự kiểm nhanh · Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 7.4 của khoá Redis."},
         {"t":9.07,"vi":"Bài trước: script Lua, đọc rẽ ghi nguyên tử."},
@@ -4161,8 +4444,14 @@
         {"t":413.23,"vi":"Bài sau: khoá phân tán, và điều nó không thể hứa."}
       ]
     },
-    "rd-7-5-khoa-phan-tan": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/redis/07-tinh-nguyen-tu/07-05-khoa-phan-tan-4d1e1a9b.mp4","durationSec":474.62,"nguonCau":"srt",
-      "parts": [],
+    "rd-7-5-khoa-phan-tan": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/redis/07-tinh-nguyen-tu/07-05-khoa-phan-tan-4d1e1a9b.mp4","durationSec":474.62,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":116.44,"ten":"Ôn nhanh · hôm nay · Chạy thật: bạn có cần cái khoá không"},
+        {"t":116.44,"den":224.07,"ten":"Mô phỏng: bài toán TTL không giải được"},
+        {"t":224.07,"den":314.12,"ten":"Chạy thật: chó canh gia hạn khoá · Redlock, nói thật"},
+        {"t":314.12,"den":400.29,"ten":"Liên kết chéo: học đâu thêm · Thuật ngữ trong bài"},
+        {"t":400.29,"den":474.62,"ten":"Tự kiểm nhanh · Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 7.5, bài cuối chương tính nguyên tử."},
         {"t":10.23,"vi":"Ba bài trước: WATCH, Lua, và Functions."},
@@ -4253,8 +4542,14 @@
         {"t":466.72,"vi":"Hết chương 7. Bài sau, chương 8: Pub Sub, bắn rồi quên, và cái giá của nó."}
       ]
     },
-    "rd-8-1-pubsub": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/redis/08-pubsub-va-stream/08-01-pubsub-d27b2c27.mp4","durationSec":419.92,"nguonCau":"srt",
-      "parts": [],
+    "rd-8-1-pubsub": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/redis/08-pubsub-va-stream/08-01-pubsub-d27b2c27.mp4","durationSec":419.92,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":89.42,"ten":"Ôn nhanh · hôm nay · Mô phỏng: toả ra các socket đang nối"},
+        {"t":89.42,"den":187.71,"ten":"Chạy thật: nhiều nhất một lần"},
+        {"t":187.71,"den":270.89,"ten":"Pub/Sub trong Cluster · Pub/Sub thật sự giỏi việc gì"},
+        {"t":270.89,"den":356.61,"ten":"Liên kết chéo: học đâu thêm · Thuật ngữ trong bài"},
+        {"t":356.61,"den":419.92,"ten":"Tự kiểm nhanh · Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với chương 8 của khoá Redis: Pub Sub và Stream. Bài đầu tiên, 8.1."},
         {"t":12.84,"vi":"Chương trước: tính nguyên tử."},
@@ -4345,8 +4640,14 @@
         {"t":415.2,"vi":"Bài sau: Stream, cuốn nhật ký biết nhớ."}
       ]
     },
-    "rd-8-3-consumer-group": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/redis/08-pubsub-va-stream/08-03-consumer-group-9eb4d3c6.mp4","durationSec":431.84,"nguonCau":"srt",
-      "parts": [],
+    "rd-8-3-consumer-group": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/redis/08-pubsub-va-stream/08-03-consumer-group-9eb4d3c6.mp4","durationSec":431.84,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":97.84,"ten":"Ôn nhanh · hôm nay"},
+        {"t":97.84,"den":202.67,"ten":"Chạy thật: PEL, phần làm cho nó thành hàng đợi"},
+        {"t":202.67,"den":286.13,"ten":"Chạy thật: ack trong finally"},
+        {"t":286.13,"den":372.37,"ten":"Liên kết chéo: học đâu thêm · Thuật ngữ trong bài"},
+        {"t":372.37,"den":431.84,"ten":"Tự kiểm nhanh · Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 8.3 của khoá Redis."},
         {"t":8.96,"vi":"Bài trước: Stream, nhật ký chỉ ghi thêm."},
@@ -4431,8 +4732,14 @@
         {"t":425.54,"vi":"Bài sau: khi một worker chết, đòi việc, thử lại và thư chết."}
       ]
     },
-    "rd-8-4-xclaim": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/redis/08-pubsub-va-stream/08-04-xclaim-27dd7df2.mp4","durationSec":360.46,"nguonCau":"srt",
-      "parts": [],
+    "rd-8-4-xclaim": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/redis/08-pubsub-va-stream/08-04-xclaim-27dd7df2.mp4","durationSec":360.46,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":90.26,"ten":"Ôn nhanh · hôm nay · Mô phỏng: vòng đời một mục bị bỏ rơi"},
+        {"t":90.26,"den":165.1,"ten":"Chạy thật: đòi việc về"},
+        {"t":165.1,"den":250.23,"ten":"Bẫy: min-idle ngắn hơn handler chậm nhất"},
+        {"t":250.23,"den":323.76,"ten":"Thực hành: hồi phục từ một worker đã chết · Tự kiểm nhanh"},
+        {"t":323.76,"den":360.46,"ten":"Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 8.4 của khoá Redis."},
         {"t":9.25,"vi":"Bài trước: nhóm tiêu thụ, PEL, XACK. Và worker khởi động lại với tên mới thì việc cũ kẹt lại."},
@@ -4505,8 +4812,13 @@
         {"t":353.71,"vi":"Bài sau: chọn giữa Pub Sub, Stream, list, hay một broker thật."}
       ]
     },
-    "rd-8-5-chon-cong-cu": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/redis/08-pubsub-va-stream/08-05-chon-cong-cu-d299fc6a.mp4","durationSec":410.79,"nguonCau":"srt",
-      "parts": [],
+    "rd-8-5-chon-cong-cu": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/redis/08-pubsub-va-stream/08-05-chon-cong-cu-d299fc6a.mp4","durationSec":410.79,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":86.78,"ten":"Ôn nhanh · hôm nay · Mô phỏng: ba câu hỏi quyết định"},
+        {"t":86.78,"den":183.14,"ten":"Chạy thật: ghi một trăm nghìn tin"},
+        {"t":183.14,"den":274.07,"ten":"Đặt cạnh Kafka, RabbitMQ và BullMQ"},
+        {"t":274.07,"den":410.79,"ten":"Thuật ngữ trong bài"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 8.5, bài cuối chương Pub Sub và Stream."},
         {"t":10.92,"vi":"Bốn bài trước: Pub Sub, Stream, nhóm tiêu thụ, và tiến trình quét với thư chết."},
@@ -4593,8 +4905,14 @@
         {"t":404.57,"vi":"Hết chương 8. Bài sau, chương 9: bộ nhớ thật sự đi đâu."}
       ]
     },
-    "rd-9-2-day-khoa": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/redis/09-bo-nho-va-luu-lau-dai/09-02-day-khoa-ef37f6ad.mp4","durationSec":436.2,"nguonCau":"srt",
-      "parts": [],
+    "rd-9-2-day-khoa": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/redis/09-bo-nho-va-luu-lau-dai/09-02-day-khoa-ef37f6ad.mp4","durationSec":436.2,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":94.7,"ten":"Ôn nhanh · hôm nay · Mô phỏng: chạm trần, rồi sao"},
+        {"t":94.7,"den":201.76,"ten":"Chạy thật: allkeys-lru và cái bẫy volatile"},
+        {"t":201.76,"den":282.27,"ten":"Chạy thật: một lượt quét đánh lừa LRU"},
+        {"t":282.27,"den":369.71,"ten":"Liên kết chéo: học đâu thêm · Thuật ngữ trong bài"},
+        {"t":369.71,"den":436.2,"ten":"Tự kiểm nhanh · Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 9.2 của khoá Redis."},
         {"t":9.18,"vi":"Bài trước: bốn con số bộ nhớ, chi phí phụ, phân mảnh, và cú fork."},
@@ -4683,8 +5001,13 @@
         {"t":430.43,"vi":"Bài sau: RDB, ảnh chụp, fork và sao chép khi ghi."}
       ]
     },
-    "rd-9-3-rdb": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/redis/09-bo-nho-va-luu-lau-dai/09-03-rdb-6b5a47ad.mp4","durationSec":410.44,"nguonCau":"srt",
-      "parts": [],
+    "rd-9-3-rdb": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/redis/09-bo-nho-va-luu-lau-dai/09-03-rdb-6b5a47ad.mp4","durationSec":410.44,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":105.63,"ten":"Ôn nhanh · hôm nay · Mô phỏng: fork và sao chép khi ghi"},
+        {"t":105.63,"den":183.98,"ten":"Chạy thật: SAVE chặn, BGSAVE không"},
+        {"t":183.98,"den":273.5,"ten":"Chạy thật: hai thiết lập của máy chủ"},
+        {"t":273.5,"den":410.44,"ten":"Thuật ngữ trong bài · Thực hành: chụp, fork và khôi phục"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 9.3 của khoá Redis."},
         {"t":8.98,"vi":"Hai bài trước: bộ nhớ đi đâu, và chuyện gì xảy ra khi chạm trần."},
@@ -4770,8 +5093,13 @@
         {"t":405.5,"vi":"Bài sau: AOF, cuốn nhật ký mọi lượt ghi."}
       ]
     },
-    "rd-9-4-aof": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/redis/09-bo-nho-va-luu-lau-dai/09-04-aof-f1b6a995.mp4","durationSec":398.32,"nguonCau":"srt",
-      "parts": [],
+    "rd-9-4-aof": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/redis/09-bo-nho-va-luu-lau-dai/09-04-aof-f1b6a995.mp4","durationSec":398.32,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":96.87,"ten":"Ôn nhanh · hôm nay · Mô phỏng: ảnh chụp so với nhật ký"},
+        {"t":96.87,"den":192.91,"ten":"Chạy thật: appendfsync, thiết lập thật sự quan trọng"},
+        {"t":192.91,"den":285.68,"ten":"Bẫy: AOF đang tồn tại chưa chắc đang chạy"},
+        {"t":285.68,"den":398.32,"ten":"Thực hành: đo độ bền của chính bạn · Tự kiểm nhanh"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 9.4 của khoá Redis."},
         {"t":8.81,"vi":"Bài trước: RDB, ảnh chụp theo mốc save."},
@@ -4854,8 +5182,14 @@
         {"t":393.38,"vi":"Bài sau: chọn tư thế bền vững, và khôi phục."}
       ]
     },
-    "rd-9-5-tu-the-ben": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/redis/09-bo-nho-va-luu-lau-dai/09-05-tu-the-ben-95342d7d.mp4","durationSec":388.75,"nguonCau":"srt",
-      "parts": [],
+    "rd-9-5-tu-the-ben": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/redis/09-bo-nho-va-luu-lau-dai/09-05-tu-the-ben-95342d7d.mp4","durationSec":388.75,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":102.31,"ten":"Ôn nhanh · hôm nay · Mô phỏng: bốn tư thế"},
+        {"t":102.31,"den":187.04,"ten":"Chạy thật: sao lưu cho đúng"},
+        {"t":187.04,"den":265.08,"ten":"Redis có phải một cơ sở dữ liệu không?"},
+        {"t":265.08,"den":350.95,"ten":"Thực hành: làm mất rồi lấy lại · Tự kiểm nhanh"},
+        {"t":350.95,"den":388.75,"ten":"Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 9.5, bài cuối chương bộ nhớ và lưu lâu dài."},
         {"t":11.16,"vi":"Hai bài trước: RDB chụp theo mốc, AOF ghi từng lệnh. Và CONFIG SET không sống qua khởi động lại."},

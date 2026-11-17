@@ -2,8 +2,16 @@
   "courseSlug": "linux-bash",
   "sinhBoi": "scripts/phu-de-tu-video-rieng.mjs",
   "lessons": {
-    "lnx-0-1-gioi-thieu-lo-trinh": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/linux-bash/00-gioi-thieu-shell-cai-dat/00-04-gioi-thieu-lo-trinh-86e1bd95.mp4","durationSec":708.72,"nguonCau":"srt",
-      "parts": [],
+    "lnx-0-1-gioi-thieu-lo-trinh": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/linux-bash/00-gioi-thieu-shell-cai-dat/00-04-gioi-thieu-lo-trinh-86e1bd95.mp4","durationSec":708.72,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":114.92,"ten":"Ôn nhanh · hôm nay · Vì sao giao diện chữ vẫn thắng"},
+        {"t":114.92,"den":219.24,"ten":"Mô phỏng: một vòng lặp đổi đuôi · Chạy thật: từng mảnh một"},
+        {"t":219.24,"den":296.06,"ten":"Vì sao dấu nháy quan trọng · Terminal hay công cụ đồ hoạ"},
+        {"t":296.06,"den":403.05,"ten":"Khoá này cho ai · Học xong bạn đọc được gì"},
+        {"t":403.05,"den":505.99,"ten":"Lộ trình 17 phần · Bash, và những shell khác"},
+        {"t":505.99,"den":606,"ten":"Cái bẫy khoá này phá · Thực hành 15–20 phút"},
+        {"t":606,"den":708.72,"ten":"Thuật ngữ trong bài · Ba câu tự kiểm"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 0.1 của khoá Linux và Bash."},
         {"t":9.83,"vi":"Bài trước: một biến rỗng biến rm thành xoá cả máy, và một thông báo lỗi luôn có ba mảnh cộng một mã thoát."},
@@ -115,8 +123,16 @@
         {"t":701.48,"vi":"Bài sau, bài 0.2: kernel, shell, terminal, ba thứ người ta hay lẫn."}
       ]
     },
-    "lnx-0-2-kernel-shell-terminal": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/linux-bash/00-gioi-thieu-shell-cai-dat/00-05-kernel-shell-terminal-4c4c71d9.mp4","durationSec":730.83,"nguonCau":"srt",
-      "parts": [],
+    "lnx-0-2-kernel-shell-terminal": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/linux-bash/00-gioi-thieu-shell-cai-dat/00-05-kernel-shell-terminal-4c4c71d9.mp4","durationSec":730.83,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":85.45,"ten":"Ôn nhanh · hôm nay · Bốn lớp sau cửa sổ đen"},
+        {"t":85.45,"den":197.97,"ten":"Chạy thật: lớp nào đang nói"},
+        {"t":197.97,"den":291.12,"ten":"Chạy thật: type và dpkg · Triết lý Unix"},
+        {"t":291.12,"den":377.15,"ten":"Mọi thứ là một file · Chạy thật: đọc kernel như đọc chữ"},
+        {"t":377.15,"den":473.77,"ten":"Bấm Enter: năm bước · Chạy thật: nhìn bước hai bằng set -x"},
+        {"t":473.77,"den":610.68,"ten":"Các distro khác nhau ở đâu · Thực hành 15–20 phút"},
+        {"t":610.68,"den":730.83,"ten":"Thuật ngữ trong bài · Ba câu tự kiểm"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 0.2 của khoá Linux và Bash."},
         {"t":9.78,"vi":"Bài trước: terminal thắng khi việc lặp lại, và một vòng for có echo đứng trước để xem trước rồi mới làm thật."},
@@ -228,8 +244,17 @@
         {"t":721.9,"vi":"Bài sau, bài 0.3: có một shell Linux thật trên mọi loại máy, Mac, Windows hay Docker."}
       ]
     },
-    "lnx-0-3-cai-dat": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/linux-bash/00-gioi-thieu-shell-cai-dat/00-06-cai-dat-6878e2ca.mp4","durationSec":941.78,"nguonCau":"srt",
-      "parts": [],
+    "lnx-0-3-cai-dat": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/linux-bash/00-gioi-thieu-shell-cai-dat/00-06-cai-dat-6878e2ca.mp4","durationSec":941.78,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":84.92,"ten":"Ôn nhanh · hôm nay · Bốn đường có một shell Linux"},
+        {"t":84.92,"den":217.99,"ten":"Windows: WSL2 · Mô phỏng: ranh giới /mnt/c"},
+        {"t":217.99,"den":340.13,"ten":"Lệnh WSL bạn sẽ dùng · macOS: zsh và bash 3.2"},
+        {"t":340.13,"den":441.61,"ten":"Chạy thật trên Mac: script bash 5 vỡ · Có bash 5 trên Mac"},
+        {"t":441.61,"den":571.4,"ten":"Bẫy: dấu thăng trong zsh · Linux: bạn đã ở sẵn đó"},
+        {"t":571.4,"den":688.68,"ten":"Mô phỏng: vòng đời một container"},
+        {"t":688.68,"den":813.62,"ten":"Kiểm xem đã sẵn sàng chưa · Chạy thật: ảnh Ubuntu gốc"},
+        {"t":813.62,"den":941.78,"ten":"Thuật ngữ trong bài · Ba câu tự kiểm"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 0.3 của khoá Linux và Bash."},
         {"t":9.72,"vi":"Bài trước: bốn lớp sau cửa sổ đen, cd bắt buộc là builtin, và set -x cho thấy lệnh sau khai triển."},
@@ -371,8 +396,16 @@
         {"t":935.02,"vi":"Bài sau, bài 0.4: bộ lệnh sinh tồn và cách học khoá này."}
       ]
     },
-    "lnx-0-4-cach-hoc": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/linux-bash/00-gioi-thieu-shell-cai-dat/00-07-cach-hoc-04abe230.mp4","durationSec":686.38,"nguonCau":"srt",
-      "parts": [],
+    "lnx-0-4-cach-hoc": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/linux-bash/00-gioi-thieu-shell-cai-dat/00-07-cach-hoc-04abe230.mp4","durationSec":686.38,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":90.48,"ten":"Ôn nhanh · hôm nay · Sáu cách tra cứu"},
+        {"t":90.48,"den":185.91,"ten":"Chạy thật: tìm một cờ · Tìm một cờ trong 10 giây"},
+        {"t":185.91,"den":286.21,"ten":"Đọc lệnh lạ từng chặng · Mô phỏng: bảy phím cứu hộ"},
+        {"t":286.21,"den":377.2,"ten":"Bảng bảy phím cứu hộ · Mô phỏng: ba chốt trước nút Enter"},
+        {"t":377.2,"den":460.24,"ten":"Ba dấu nối lệnh · Nhịp học cả khoá"},
+        {"t":460.24,"den":571.49,"ten":"Sai lầm hay gặp ở Mục 0 · Thực hành 15–20 phút"},
+        {"t":571.49,"den":686.38,"ten":"Thuật ngữ trong bài · Ba câu tự kiểm"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 0.4, bài cuối của Mục 0, khoá Linux và Bash."},
         {"t":11.45,"vi":"Bài trước: mỗi người đã có một shell Linux thật, WSL2, Mac hay container Docker vứt đi."},
@@ -477,8 +510,19 @@
         {"t":678.89,"vi":"Bài sau mở Chương 1, bài 1.1: dấu nhắc, và ba lệnh đầu tiên của bạn."}
       ]
     },
-    "lnx-0-5-bat-dau-tai-day": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/linux-bash/00-gioi-thieu-shell-cai-dat/00-01-bat-dau-tai-day-48d9d700.mp4","durationSec":1221.51,"nguonCau":"srt",
-      "parts": [],
+    "lnx-0-5-bat-dau-tai-day": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/linux-bash/00-gioi-thieu-shell-cai-dat/00-01-bat-dau-tai-day-48d9d700.mp4","durationSec":1221.51,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":144.74,"ten":"Chào khoá học · Cái cửa sổ đen"},
+        {"t":144.74,"den":263.37,"ten":"Shell là người phục vụ · Năm thứ hay bị gọi chung là Linux"},
+        {"t":263.37,"den":394.41,"ten":"Chạy thật: một lệnh, hai họ · Vì sao có nhiều shell"},
+        {"t":394.41,"den":553.61,"ten":"Lịch sử 1964 → 1989"},
+        {"t":553.61,"den":668.6,"ten":"Lịch sử 1991 → 2019"},
+        {"t":668.6,"den":785.21,"ten":"Cây họ Unix · Triết lý Unix: một ống dẫn"},
+        {"t":785.21,"den":863.22,"ten":"Con số có nguồn"},
+        {"t":863.22,"den":978.21,"ten":"Giúp gì cho chính bạn · Lộ trình 17 phần"},
+        {"t":978.21,"den":1082.73,"ten":"Thực hành 10 phút · Đối chiếu: chạy thật"},
+        {"t":1082.73,"den":1221.51,"ten":"Thuật ngữ trong bài · Ba câu tự kiểm"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, chào mừng tới khoá Linux và Bash trên cuongthai.com."},
         {"t":9.73,"vi":"Khoá này đưa bạn từ dấu nhắc đầu tiên tới chỗ tự vận hành một máy chủ: đọc log, viết script chạy production, xử lý sự cố."},
@@ -657,8 +701,19 @@
         {"t":1211.29,"vi":"Bài sau, Bắt đầu tại đây phần hai: những sự cố thật vì không hiểu một dòng shell, và cách học không bỏ cuộc."}
       ]
     },
-    "lnx-0-6-bat-dau-khi-khong-co": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/linux-bash/00-gioi-thieu-shell-cai-dat/00-02-bat-dau-khi-khong-co-9a5df388.mp4","durationSec":1077.88,"nguonCau":"srt",
-      "parts": [],
+    "lnx-0-6-bat-dau-khi-khong-co": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/linux-bash/00-gioi-thieu-shell-cai-dat/00-02-bat-dau-khi-khong-co-9a5df388.mp4","durationSec":1077.88,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":89.87,"ten":"Ôn nhanh · hôm nay · Steam 2015: một biến rỗng"},
+        {"t":89.87,"den":182.66,"ten":"Mô phỏng: shell viết lại dòng lệnh"},
+        {"t":182.66,"den":342.71,"ten":"Chạy thật: không có echo · Bốn sự cố thật nữa"},
+        {"t":342.71,"den":465.31,"ten":"Chạy thật: rm nhận được gì · Sự cố của một dự án sinh viên"},
+        {"t":465.31,"den":555.01,"ten":"Minh hoạ: máy em chạy được mà"},
+        {"t":555.01,"den":652.25,"ten":"Vì sao người mới bỏ cuộc"},
+        {"t":652.25,"den":752.29,"ten":"Đọc thông báo lỗi · Mười thông báo lỗi hay gặp"},
+        {"t":752.29,"den":845.65,"ten":"Khi bí: tra, rồi hỏi · Mẹo cho người thấy tiếng Anh khó"},
+        {"t":845.65,"den":968.92,"ten":"Lộ trình và nhịp một buổi học · Thực hành 10 phút"},
+        {"t":968.92,"den":1077.88,"ten":"Thuật ngữ trong bài · Ba câu tự kiểm"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với phần hai của Bắt đầu tại đây, khoá Linux và Bash."},
         {"t":10.52,"vi":"Bài trước: bốn lớp sau cửa sổ đen, terminal, shell, chương trình, kernel. Và Linux nói đúng chỉ là kernel."},
@@ -841,8 +896,17 @@
         {"t":1067.08,"vi":"Bài sau, bài 0.1: khoá này dành cho ai, terminal giỏi hơn ở đâu, và bản đồ đầy đủ của 17 phần."}
       ]
     },
-    "lnx-1-1-dau-nhac-ba-lenh": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/linux-bash/01-shell-he-thong-file/01-02-dau-nhac-ba-lenh-cfa1a541.mp4","durationSec":821.38,"nguonCau":"srt",
-      "parts": [],
+    "lnx-1-1-dau-nhac-ba-lenh": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/linux-bash/01-shell-he-thong-file/01-02-dau-nhac-ba-lenh-cfa1a541.mp4","durationSec":821.38,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":103.08,"ten":"Ôn nhanh · hôm nay · Dấu nhắc là thanh trạng thái"},
+        {"t":103.08,"den":207.17,"ten":"ls giấu tệp dấu chấm · cd di chuyển, cd - quay lại"},
+        {"t":207.17,"den":287.07,"ten":"Hình dạng của mọi câu lệnh"},
+        {"t":287.07,"den":370.98,"ten":"clear, history, !! · Hỏi type trước khi tra cứu"},
+        {"t":370.98,"den":492,"ten":"man chia mục có đánh số · Đọc trang man trong less"},
+        {"t":492,"den":596.76,"ten":"Không nhớ tên lệnh: apropos · Chạy thật: chín lệnh"},
+        {"t":596.76,"den":714.02,"ten":"Trên macOS và WSL khác gì · Thực hành 15–20 phút"},
+        {"t":714.02,"den":821.38,"ten":"Thuật ngữ trong bài · Ba câu tự kiểm"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 1.1, mở đầu Chương 1 của khoá Linux và Bash."},
         {"t":11.58,"vi":"Mục 0 đã cho bạn một shell thật, một container được phép phá, và bộ lệnh sinh tồn: tra trong năm giây, thoát khỏi mọi thứ."},
@@ -974,8 +1038,15 @@
         {"t":813.73,"vi":"Bài sau, bài 1.2: đường dẫn tuyệt đối, tương đối, và các lối tắt."}
       ]
     },
-    "lnx-1-2-duong-dan": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/linux-bash/01-shell-he-thong-file/01-03-duong-dan-0e0186cc.mp4","durationSec":664.48,"nguonCau":"srt",
-      "parts": [],
+    "lnx-1-2-duong-dan": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/linux-bash/01-shell-he-thong-file/01-03-duong-dan-0e0186cc.mp4","durationSec":664.48,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":137.42,"ten":"Ôn nhanh · hôm nay · Một cây, một gốc"},
+        {"t":137.42,"den":256.64,"ten":"Tuyệt đối và tương đối"},
+        {"t":256.64,"den":366.43,"ten":"Vì sao cần chấm gạch chéo · Đọc một đường dẫn dài"},
+        {"t":366.43,"den":453.91,"ten":"Chạy thật: bẫy tên có gạch · Trên macOS và WSL khác gì"},
+        {"t":453.91,"den":551.47,"ten":"Bẫy: dấu gạch chéo ở cuối · Thực hành 15–20 phút"},
+        {"t":551.47,"den":664.48,"ten":"Thuật ngữ trong bài · Ba câu tự kiểm"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 1.2 của khoá Linux và Bash."},
         {"t":9.72,"vi":"Bài trước: đọc dấu nhắc, pwd để biết mình ở đâu, ls -A để thấy tệp dấu chấm, cd gạch ngang để quay lại."},
@@ -1085,8 +1156,16 @@
         {"t":657.65,"vi":"Bài sau, bài 1.3: cây thư mục, mỗi thư mục gốc để làm gì."}
       ]
     },
-    "lnx-1-3-cay-thu-muc": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/linux-bash/01-shell-he-thong-file/01-04-cay-thu-muc-5f03b511.mp4","durationSec":692.95,"nguonCau":"srt",
-      "parts": [],
+    "lnx-1-3-cay-thu-muc": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/linux-bash/01-shell-he-thong-file/01-04-cay-thu-muc-5f03b511.mp4","durationSec":692.95,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":125.03,"ten":"Ôn nhanh · hôm nay · Mô phỏng: toà nhà thư mục gốc"},
+        {"t":125.03,"den":207.12,"ten":"Đặt tệp đúng chỗ · Chương trình sống ở đâu"},
+        {"t":207.12,"den":315.43,"ten":"Chạy thật: vì sao bin là lối tắt · Những thư mục ảo"},
+        {"t":315.43,"den":401.34,"ten":"Những thư mục tạm · Tệp mới đi đâu: năm câu hỏi"},
+        {"t":401.34,"den":490.36,"ten":"Chạy thật: hình dạng của var · Ba máy, ba tấm bản đồ"},
+        {"t":490.36,"den":584.91,"ten":"Liên kết chéo · Thực hành 15–20 phút"},
+        {"t":584.91,"den":692.95,"ten":"Thuật ngữ trong bài · Ba câu tự kiểm"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 1.3 của khoá Linux và Bash."},
         {"t":9.6,"vi":"Bài trước: một cây, gốc là gạch chéo."},
@@ -1207,8 +1286,19 @@
         {"t":684.85,"vi":"Bài sau, bài 1.4: nhìn cho kỹ một tệp với ls -l, lệnh file và stat."}
       ]
     },
-    "lnx-10-1-dia-day": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/linux-bash/10-dia-goi-phan-mem-log/10-02-dia-day-c78d70e4.mp4","durationSec":953.35,"nguonCau":"srt",
-      "parts": [],
+    "lnx-10-1-dia-day": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/linux-bash/10-dia-goi-phan-mem-log/10-02-dia-day-c78d70e4.mp4","durationSec":953.35,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":114.34,"ten":"Ôn nhanh · hôm nay · Mô phỏng: cái thùng đĩa"},
+        {"t":114.34,"den":205.03,"ten":"Đọc df từng cột, và df -i · Chạy thật: df, df -i, tệp thưa"},
+        {"t":205.03,"den":299.52,"ten":"du -d1 | sort -h: theo nhánh lớn nhất"},
+        {"t":299.52,"den":376.45,"ten":"Hết inode, không phải hết byte"},
+        {"t":376.45,"den":473.3,"ten":"rm tệp log đang mở: df không nhúc nhích"},
+        {"t":473.3,"den":570,"ten":"Ổ gắn đè che dữ liệu cũ"},
+        {"t":570,"den":659.3,"ten":"Thứ gì thật sự làm đầy máy chủ"},
+        {"t":659.3,"den":763.77,"ten":"Chạy thật: chốt chặn không làm tròn mà lọt"},
+        {"t":763.77,"den":847.31,"ten":"Thực hành 15–20 phút · Thuật ngữ trong bài"},
+        {"t":847.31,"den":953.35,"ten":"Ba câu tự kiểm · Tóm tắt & luyện tập"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 10.1, mở đầu chương 10 về đĩa, gói phần mềm và log."},
         {"t":12.12,"vi":"Bài trước khép chương mạng: gói tin có ba chỗ để chết, và tcpdump trên máy chủ cho biết nó có tới hay không."},
@@ -1359,8 +1449,20 @@
         {"t":945.15,"vi":"Bài sau, 10.2: gói phần mềm, apt, dnf, và thứ không nên cài toàn cục."}
       ]
     },
-    "lnx-10-2-goi-phan-mem": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/linux-bash/10-dia-goi-phan-mem-log/10-03-goi-phan-mem-2ed94c8d.mp4","durationSec":1033.38,"nguonCau":"srt",
-      "parts": [],
+    "lnx-10-2-goi-phan-mem": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/linux-bash/10-dia-goi-phan-mem-log/10-03-goi-phan-mem-2ed94c8d.mp4","durationSec":1033.38,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":108.58,"ten":"Ôn nhanh · hôm nay · Mô phỏng: thủ kho và cuốn sổ"},
+        {"t":108.58,"den":212.52,"ten":"Chạy thật: bốn chặng trên Ubuntu 24.04"},
+        {"t":212.52,"den":298.22,"ten":"remove, purge, autoremove"},
+        {"t":298.22,"den":389.05,"ten":"Gói nào sở hữu tệp này · Chạy thật: policy và dpkg -S"},
+        {"t":389.05,"den":471.26,"ten":"Chạy thật: hold chặn cả bản vá · Một chữ ký bảo vệ cả chuỗi"},
+        {"t":471.26,"den":560.84,"ten":"Chạy thật: tự kiểm như apt kiểm"},
+        {"t":560.84,"den":657.03,"ten":"Cùng việc, bốn trình quản lý gói"},
+        {"t":657.03,"den":740.97,"ten":"Tệp tải về: sha256sum, rồi gpg · Chạy thật: sha256sum -c"},
+        {"t":740.97,"den":842.82,"ten":"Chạy thật: gpg verify danh sách ISO"},
+        {"t":842.82,"den":926.61,"ten":"Thực hành 15–20 phút · Thuật ngữ trong bài"},
+        {"t":926.61,"den":1033.38,"ten":"Ba câu tự kiểm · Tóm tắt & luyện tập"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 10.2 của khoá Linux và Bash."},
         {"t":9.74,"vi":"Bài trước: df đếm khối, du cộng tệp, khoảng chênh là manh mối. Và bộ đệm gói của apt là một trong sáu kẻ ăn đĩa."},
@@ -1537,8 +1639,19 @@
         {"t":1026.8,"vi":"Bài sau, 10.3: log, journalctl, var log, và việc xoay vòng."}
       ]
     },
-    "lnx-10-3-log-journalctl": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/linux-bash/10-dia-goi-phan-mem-log/10-04-log-journalctl-8d1488ee.mp4","durationSec":1010.73,"nguonCau":"srt",
-      "parts": [],
+    "lnx-10-3-log-journalctl": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/linux-bash/10-dia-goi-phan-mem-log/10-04-log-journalctl-8d1488ee.mp4","durationSec":1010.73,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":112.41,"ten":"Ôn nhanh · hôm nay · Mô phỏng: phễu bốn trục lọc"},
+        {"t":112.41,"den":242.03,"ten":"Chạy thật: hai hệ thống trên một máy"},
+        {"t":242.03,"den":325.17,"ten":"Mức ưu tiên 0 đến 7"},
+        {"t":325.17,"den":421.36,"ten":"Mỗi dòng log là một bản ghi có trường"},
+        {"t":421.36,"den":540.9,"ten":"Journal cần trần · Chạy thật: mức trần journald áp dụng"},
+        {"t":540.9,"den":647.78,"ten":"Chạy thật: ba cách xoay một tệp đang mở"},
+        {"t":647.78,"den":738.09,"ten":"Container giờ UTC, máy +07 · Chạy thật: múi giờ và journal"},
+        {"t":738.09,"den":871.41,"ten":"Trên macOS và WSL khác gì · Liên kết chéo"},
+        {"t":871.41,"den":955.15,"ten":"Thuật ngữ trong bài · Ba câu tự kiểm"},
+        {"t":955.15,"den":1010.73,"ten":"Tóm tắt & luyện tập"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 10.3, bài cuối của chương 10."},
         {"t":10.1,"vi":"Bài trước: apt đi bốn chặng, dpkg ghi sổ từng tệp, và một lệnh hold chặn cả bản vá an ninh."},
@@ -1703,8 +1816,19 @@
         {"t":1001.87,"vi":"Chương sau, bài 11.1: unit của systemd, chạy ứng dụng của bạn như một dịch vụ."}
       ]
     },
-    "lnx-11-2-cron-timer": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/linux-bash/11-systemd-cron-quan-tri/11-03-cron-timer-227d5e27.mp4","durationSec":931.35,"nguonCau":"srt",
-      "parts": [],
+    "lnx-11-2-cron-timer": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/linux-bash/11-systemd-cron-quan-tri/11-03-cron-timer-227d5e27.mp4","durationSec":931.35,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":117.1,"ten":"Ôn nhanh · hôm nay · Mô phỏng: hai chiếc ba lô môi trường"},
+        {"t":117.1,"den":227,"ten":"Chạy thật: crontab chỉ bắt lỗi thô"},
+        {"t":227,"den":308.67,"ten":"Chạy tay được, cron thì không"},
+        {"t":308.67,"den":398.23,"ten":"Chạy thật: node chạy tay được, cron thì không"},
+        {"t":398.23,"den":486.4,"ten":"Timer là một cặp unit · Chạy thật: dựng một timer"},
+        {"t":486.4,"den":582.43,"ten":"Máy ở UTC, bạn ở +07"},
+        {"t":582.43,"den":703.23,"ten":"Công việc không chạy: cái thang · flock: bản thứ hai tự lui"},
+        {"t":703.23,"den":799.72,"ten":"Liên kết chéo · Thực hành 15–20 phút"},
+        {"t":799.72,"den":877.58,"ten":"Thuật ngữ trong bài · Ba câu tự kiểm"},
+        {"t":877.58,"den":931.35,"ten":"Tóm tắt & luyện tập"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 11.2 của khoá Linux và Bash."},
         {"t":10.18,"vi":"Bài trước: một tệp unit biến ứng dụng thành dịch vụ, nhớ daemon-reload, và enable khác start."},
@@ -1852,8 +1976,21 @@
         {"t":922.81,"vi":"Bài sau, 11.3: gia cố một máy chủ, giờ đầu tiên và nếp thường ngày sau đó."}
       ]
     },
-    "lnx-11-3-gia-co-may-chu": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/linux-bash/11-systemd-cron-quan-tri/11-04-gia-co-may-chu-78e17ab5.mp4","durationSec":1233.48,"nguonCau":"srt",
-      "parts": [],
+    "lnx-11-3-gia-co-may-chu": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/linux-bash/11-systemd-cron-quan-tri/11-04-gia-co-may-chu-78e17ab5.mp4","durationSec":1233.48,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":112.54,"ten":"Ôn nhanh · hôm nay · Mô phỏng: bức xạ nền của internet"},
+        {"t":112.54,"den":216.5,"ten":"Chạy thật: một cơn dò thu nhỏ"},
+        {"t":216.5,"den":300.93,"ten":"Mô phỏng: sợi dây cứu mạng · Chạy thật: tệp 99- thua tệp 50-"},
+        {"t":300.93,"den":407.98,"ten":"sshd: giá trị đầu tiên thắng"},
+        {"t":407.98,"den":521.28,"ten":"Chạy thật: cổng nào đang mở thật"},
+        {"t":521.28,"den":611.81,"ten":"Bước 3: tường lửa, và cú hoàn tác hẹn sẵn"},
+        {"t":611.81,"den":727.58,"ten":"Chạy thật: bot bị cấm · Cập nhật bảo mật tự động"},
+        {"t":727.58,"den":854.34,"ten":"Chạy thật: unattended-upgrades"},
+        {"t":854.34,"den":958.68,"ten":"Giờ đầu tiên: tám việc theo thứ tự"},
+        {"t":958.68,"den":1084.62,"ten":"Trên macOS và WSL khác gì · Liên kết chéo"},
+        {"t":1084.62,"den":1170.3,"ten":"Thuật ngữ trong bài · Ba câu tự kiểm"},
+        {"t":1170.3,"den":1233.48,"ten":"Tóm tắt & luyện tập"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 11.3 của khoá Linux và Bash."},
         {"t":9.99,"vi":"Bài trước: cron và timer chạy việc theo giờ, cron hỏng vì môi trường, và flock chặn chạy chồng."},
@@ -2050,8 +2187,19 @@
         {"t":1224.56,"vi":"Bài sau, 12.1, mở đầu Chương 12: một phương pháp chẩn đoán cho cái máy bạn chưa từng thấy."}
       ]
     },
-    "lnx-12-1-phuong-phap": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/linux-bash/12-chan-doan-may-chu/12-02-phuong-phap-54eb8797.mp4","durationSec":1014.48,"nguonCau":"srt",
-      "parts": [],
+    "lnx-12-1-phuong-phap": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/linux-bash/12-chan-doan-may-chu/12-02-phuong-phap-54eb8797.mp4","durationSec":1014.48,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":128.82,"ten":"Ôn nhanh · hôm nay"},
+        {"t":128.82,"den":236.95,"ten":"Cuộc quét sáu mươi giây · Chạy thật: cuộc quét trên vps-1"},
+        {"t":236.95,"den":343.69,"ten":"Đọc một cuộc quét · USE: dùng, nghẽn, lỗi"},
+        {"t":343.69,"den":442.38,"ten":"Chạy thật: vài ô của bảng USE · Ba câu hỏi chẻ đôi bài toán"},
+        {"t":442.38,"den":536.45,"ten":"Cái gì đã đổi? · Chạy thật: dựng lại mốc thời gian"},
+        {"t":536.45,"den":624.27,"ten":"Luật khởi động lại, và nhật ký sự cố"},
+        {"t":624.27,"den":723.22,"ten":"Bảng tra: triệu chứng → lệnh đầu tiên · Khi bạn bí thật sự"},
+        {"t":723.22,"den":819.05,"ten":"Chạy thật: cuộc quét trong một container"},
+        {"t":819.05,"den":908.44,"ten":"Thực hành 15–20 phút · Thuật ngữ trong bài"},
+        {"t":908.44,"den":1014.48,"ten":"Ba câu tự kiểm · Tóm tắt & luyện tập"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 12.1, mở đầu Chương 12 của khoá Linux và Bash."},
         {"t":11.7,"vi":"Bài trước mình gia cố một máy chủ: chỉ nhận khoá SSH, nghiệm thu bằng sshd trừ T, và giữ một terminal thứ hai."},
@@ -2215,8 +2363,19 @@
         {"t":1008.34,"vi":"Bài sau, 12.2: sách công thức cho khi nó chết."}
       ]
     },
-    "lnx-12-2-no-chet": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/linux-bash/12-chan-doan-may-chu/12-03-no-chet-09ab5fdf.mp4","durationSec":974.15,"nguonCau":"srt",
-      "parts": [],
+    "lnx-12-2-no-chet": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/linux-bash/12-chan-doan-may-chu/12-03-no-chet-09ab5fdf.mp4","durationSec":974.15,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":127.73,"ten":"Ôn nhanh · hôm nay"},
+        {"t":127.73,"den":244.34,"ten":"Chạy thật: bốn unit hỏng, mỗi cái một mã"},
+        {"t":244.34,"den":330.22,"ten":"Chạy thật: ai đang giữ cổng"},
+        {"t":330.22,"den":439.27,"ten":"Chạy thật: refused, timeout, reset, tên"},
+        {"t":439.27,"den":546.79,"ten":"Chạy thật: nginx 502, 504 và localhost"},
+        {"t":546.79,"den":640.77,"ten":"Chạy thật: mỗi kiểu hỏng container trông ra sao"},
+        {"t":640.77,"den":733.51,"ten":"Công thức 6: không SSH được · macOS, và cái bẫy 127.0.0.1"},
+        {"t":733.51,"den":827.55,"ten":"Liên kết chéo · Thực hành 15–20 phút"},
+        {"t":827.55,"den":915.15,"ten":"Thuật ngữ trong bài · Ba câu tự kiểm"},
+        {"t":915.15,"den":974.15,"ten":"Tóm tắt & luyện tập"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 12.2 của khoá Linux và Bash."},
         {"t":10.15,"vi":"Bài trước: quan sát trước khi đụng, cuộc quét sáu mươi giây, hỏi cái gì đã đổi, và đổi một thứ mỗi lần."},
@@ -2372,8 +2531,20 @@
         {"t":968,"vi":"Bài sau, 12.3: sách công thức cho khi nó chậm."}
       ]
     },
-    "lnx-12-4-no-la": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/linux-bash/12-chan-doan-may-chu/12-05-no-la-6389f693.mp4","durationSec":1208.78,"nguonCau":"srt",
-      "parts": [],
+    "lnx-12-4-no-la": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/linux-bash/12-chan-doan-may-chu/12-05-no-la-6389f693.mp4","durationSec":1208.78,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":112.61,"ten":"Ôn nhanh · hôm nay"},
+        {"t":112.61,"den":247.82,"ten":"Chạy thật: namei, noexec và chỉ đọc"},
+        {"t":247.82,"den":334.52,"ten":"Chạy thật: CRLF, mã 127 và 126"},
+        {"t":334.52,"den":423.7,"ten":"Chạy thật: bảng băm cũ của shell"},
+        {"t":423.7,"den":553.3,"ten":"Chạy thật: tiến trình già hơn mã"},
+        {"t":553.3,"den":662.92,"ten":"Chạy thật: đồng hồ làm hỏng TLS theo hai chiều"},
+        {"t":662.92,"den":794.38,"ten":"Công thức 6: máy tôi chạy được mà"},
+        {"t":794.38,"den":905.5,"ten":"Công thức 7: zombie không giết được"},
+        {"t":905.5,"den":1001.77,"ten":"Bảng cờ của bài · Bẫy: máy hỏng rồi, hay chắc tại cache"},
+        {"t":1001.77,"den":1095.86,"ten":"Thực hành 15–20 phút · Thuật ngữ trong bài"},
+        {"t":1095.86,"den":1208.78,"ten":"Ba câu tự kiểm · Tóm tắt & luyện tập"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 12.4 của khoá Linux và Bash."},
         {"t":10.01,"vi":"Bài trước là nhánh nó chậm: load đếm cả hàng chờ đĩa, đọc available chứ không đọc free, và rảnh mà chậm là đang chờ."},
@@ -2578,8 +2749,16 @@
         {"t":1201.52,"vi":"Bài sau, 12.5: giờ bạn làm được gì, và học tiếp cái gì."}
       ]
     },
-    "lnx-12-5-tong-ket": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/linux-bash/12-chan-doan-may-chu/12-06-tong-ket-7625f830.mp4","durationSec":763.6,"nguonCau":"srt",
-      "parts": [],
+    "lnx-12-5-tong-ket": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/linux-bash/12-chan-doan-may-chu/12-06-tong-ket-7625f830.mp4","durationSec":763.6,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":126.19,"ten":"Ôn nhanh · hôm nay · Mô phỏng: bốn trạm của chặng leo"},
+        {"t":126.19,"den":241.17,"ten":"Những câu lệnh gánh phần lớn công việc"},
+        {"t":241.17,"den":347.27,"ten":"Sai lầm hay gặp khi chẩn đoán"},
+        {"t":347.27,"den":473.97,"ten":"Chạy thật: bộ đồ nghề sweep.sh"},
+        {"t":473.97,"den":572.71,"ten":"Đi tiếp hướng nào — liên kết chéo"},
+        {"t":572.71,"den":659.36,"ten":"Thực hành 15–20 phút · Thuật ngữ trong bài"},
+        {"t":659.36,"den":763.6,"ten":"Ba câu tự kiểm · Tóm tắt & luyện tập"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 12.5 của khoá Linux và Bash."},
         {"t":10.02,"vi":"Bài trước là nhánh nó lạ: namei tìm thư mục cha thiếu x, cat trừ A lật tẩy CRLF, và một tiến trình già hơn chính mã của nó."},
@@ -2699,8 +2878,19 @@
         {"t":753.28,"vi":"Bài sau, 13.1: mở màn chương Bash nâng cao, với mảng chỉ số, mảng kết hợp, mapfile và nameref."}
       ]
     },
-    "lnx-13-1-mang-mang-ket-hop": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/linux-bash/13-bash-nang-cao/13-02-mang-mang-ket-hop-5b686a26.mp4","durationSec":1021.38,"nguonCau":"srt",
-      "parts": [],
+    "lnx-13-1-mang-mang-ket-hop": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/linux-bash/13-bash-nang-cao/13-02-mang-mang-ket-hop-5b686a26.mp4","durationSec":1021.38,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":122.02,"ten":"Ôn nhanh · hôm nay"},
+        {"t":122.02,"den":226.5,"ten":"Chạy thật: lỗ, lát cắt, và cái nháy của unset"},
+        {"t":226.5,"den":346.57,"ten":"Chạy thật: từ điển, và bốn bài học trong output"},
+        {"t":346.57,"den":421.95,"ten":"Chạy thật: quên trừ A, và declare trong hàm"},
+        {"t":421.95,"den":526.25,"ten":"Chạy thật: bash, cut sort uniq, và awk"},
+        {"t":526.25,"den":625.8,"ten":"Chạy thật: mapfile đủ các cờ · Nameref và thuộc tính"},
+        {"t":625.8,"den":750.86,"ten":"Chạy thật: nameref và thuộc tính · Trên macOS và WSL khác gì"},
+        {"t":750.86,"den":884.92,"ten":"Khi nào dùng mảng, và khi nào không · Liên kết chéo"},
+        {"t":884.92,"den":964.54,"ten":"Thuật ngữ trong bài · Ba câu tự kiểm"},
+        {"t":964.54,"den":1021.38,"ten":"Tóm tắt & luyện tập"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 13.1 của khoá Linux và Bash, bài mở đầu chương Bash nâng cao."},
         {"t":12.24,"vi":"Bài trước mình nhìn lại cả chặng đường: bốn cung đường, năm thói quen, và bốn chương mới. Bài 6.2 và 6.5 đã dạy luật quan trọng nhất của mảng."},
@@ -2878,8 +3068,19 @@
         {"t":1009.85,"vi":"Bài sau, 13.2: luồng nâng cao, với file descriptor, process substitution, heredoc, fifo và coproc."}
       ]
     },
-    "lnx-13-2-luong-nang-cao": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/linux-bash/13-bash-nang-cao/13-03-luong-nang-cao-6345a9f9.mp4","durationSec":1037.57,"nguonCau":"srt",
-      "parts": [],
+    "lnx-13-2-luong-nang-cao": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/linux-bash/13-bash-nang-cao/13-03-luong-nang-cao-6345a9f9.mp4","durationSec":1037.57,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":120.87,"ten":"Ôn nhanh · hôm nay · Mô phỏng: bảng fd như một bảng ổ cắm"},
+        {"t":120.87,"den":225.72,"ten":"Chạy thật: /proc/$$/fd, tee cả script, /dev/tcp"},
+        {"t":225.72,"den":329.91,"ten":"Chạy thật: thứ tự chính là ý nghĩa"},
+        {"t":329.91,"den":429.13,"ten":"Chạy thật: /dev/fd/63, diff, tee và mã thoát mất"},
+        {"t":429.13,"den":530.48,"ten":"Chạy thật: chữ host biến mất · mkfifo và coproc"},
+        {"t":530.48,"den":639.69,"ten":"Chạy thật: ống có tên và bc đồng hành"},
+        {"t":639.69,"den":749.6,"ten":"Chạy thật: bốn tên tệp hiểm, năm cách đếm"},
+        {"t":749.6,"den":892.08,"ten":"Khi nào dùng cái nào · Liên kết chéo"},
+        {"t":892.08,"den":977.32,"ten":"Thuật ngữ trong bài · Ba câu tự kiểm"},
+        {"t":977.32,"den":1037.57,"ten":"Tóm tắt & luyện tập"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 13.2 của khoá Linux và Bash."},
         {"t":10.02,"vi":"Bài trước: mảng có lỗ, declare trừ A cho từ điển, mapfile, nameref, và awk nhanh hơn vòng lặp bash ba mươi lần."},
@@ -3044,8 +3245,20 @@
         {"t":1025.66,"vi":"Bài sau, 13.3: chạy song song và nhanh, với fork, xargs trừ P, wait trừ n, GNU parallel, và cách đo."}
       ]
     },
-    "lnx-13-3-song-song-toc-do": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/linux-bash/13-bash-nang-cao/13-04-song-song-toc-do-b910de22.mp4","durationSec":1078.36,"nguonCau":"srt",
-      "parts": [],
+    "lnx-13-3-song-song-toc-do": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/linux-bash/13-bash-nang-cao/13-04-song-song-toc-do-b910de22.mp4","durationSec":1078.36,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":132.47,"ten":"Ôn nhanh · hôm nay · Mô phỏng: đi chợ mười nghìn lần"},
+        {"t":132.47,"den":243.24,"ten":"Chạy thật: tám cặp, mười nghìn vòng"},
+        {"t":243.24,"den":330.22,"ten":"Một lần awk thay hai vạn lần gọi"},
+        {"t":330.22,"den":438.29,"ten":"xargs -P: thiếu -n1 thì không có gì để chia"},
+        {"t":438.29,"den":536.15,"ten":"wait -n: hàng đợi ba làn, biết việc nào hỏng"},
+        {"t":536.15,"den":638.73,"ten":"GNU parallel: giữ thứ tự, gắn nhãn, ghi nhật ký"},
+        {"t":638.73,"den":738.05,"ten":"Đo cho đúng: real, user và hyperfine"},
+        {"t":738.05,"den":836.5,"ten":"Trên macOS và WSL khác gì"},
+        {"t":836.5,"den":939.76,"ten":"Liên kết chéo · Thực hành 15–20 phút"},
+        {"t":939.76,"den":1016.97,"ten":"Thuật ngữ trong bài · Ba câu tự kiểm"},
+        {"t":1016.97,"den":1078.36,"ten":"Tóm tắt & luyện tập"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 13.3 của khoá Linux và Bash."},
         {"t":9.99,"vi":"Bài trước: bảng file descriptor, chuyển hướng đọc từ trái sang phải, process substitution, heredoc có nháy, FIFO và coproc."},
@@ -3224,8 +3437,20 @@
         {"t":1067.54,"vi":"Bài sau, 13.4: script mức chuyên gia, với cờ dài, stack trace, log có mức, kiểm thử và lint."}
       ]
     },
-    "lnx-13-4-script-chuyen-nghiep": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/linux-bash/13-bash-nang-cao/13-05-script-chuyen-nghiep-bc023227.mp4","durationSec":1016.67,"nguonCau":"srt",
-      "parts": [],
+    "lnx-13-4-script-chuyen-nghiep": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/linux-bash/13-bash-nang-cao/13-05-script-chuyen-nghiep-bc023227.mp4","durationSec":1016.67,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":118.62,"ten":"Ôn nhanh · hôm nay · Mô phỏng: ba giờ sáng, script hỏng"},
+        {"t":118.62,"den":235.93,"ten":"Chạy thật: inherit_errexit · Mô phỏng: hợp đồng mã thoát"},
+        {"t":235.93,"den":321.01,"ten":"Mô phỏng: getopts đọc từng mẩu · Chạy thật: sáu lời gọi"},
+        {"t":321.01,"den":410.47,"ten":"Stack trace: FUNCNAME + BASH_LINENO + BASH_SOURCE"},
+        {"t":410.47,"den":497.25,"ten":"Log có mức, bẫy debug, khoá"},
+        {"t":497.25,"den":580.8,"ten":"Chạy thật: bats với lệnh giả"},
+        {"t":580.8,"den":673.62,"ten":"Chạy thật: một lệnh lint · Khi nào thôi viết bash"},
+        {"t":673.62,"den":750.67,"ten":"Chạy thật: Python đếm IP · Trên macOS và WSL khác gì"},
+        {"t":750.67,"den":879.24,"ten":"Khi nào dùng cái nào · Liên kết chéo"},
+        {"t":879.24,"den":956.66,"ten":"Thuật ngữ trong bài · Ba câu tự kiểm"},
+        {"t":956.66,"den":1016.67,"ten":"Tóm tắt & luyện tập"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 13.4 của khoá Linux và Bash."},
         {"t":10.14,"vi":"Bài trước: mỗi đô la ngoặc là một lần fork, xargs trừ n một trừ P chia việc ra mọi nhân, và luôn đo bằng hyperfine."},
@@ -3394,8 +3619,26 @@
         {"t":1004.07,"vi":"Sau bài kiểm tra Chương 13 là Chương 14, Linux chuyên sâu. Bài 14.1: bên trong nhân, với system call, namespaces và cgroups."}
       ]
     },
-    "lnx-14-1-ben-trong-nhan": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/linux-bash/14-linux-chuyen-sau/14-02-ben-trong-nhan-2d2f4c7a.mp4","durationSec":1716.88,"nguonCau":"srt",
-      "parts": [],
+    "lnx-14-1-ben-trong-nhan": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/linux-bash/14-linux-chuyen-sau/14-02-ben-trong-nhan-2d2f4c7a.mp4","durationSec":1716.88,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":89.41,"ten":"Ôn nhanh · hôm nay · Mô phỏng: một tiến trình, ba lớp bọc"},
+        {"t":89.41,"den":200.94,"ten":"Mô phỏng: hai mươi năm, năm mảnh · Mô phỏng: gõ cửa nhân"},
+        {"t":200.94,"den":326.73,"ten":"Mọi việc thật đều đi qua một syscall"},
+        {"t":326.73,"den":419.76,"ten":"Bảy cờ strace hay dùng"},
+        {"t":419.76,"den":500.98,"ten":"Chạy thật: /proc, /sys và sysctl"},
+        {"t":500.98,"den":596.67,"ten":"Mô phỏng: một tiến trình, hai số PID"},
+        {"t":596.67,"den":711.82,"ten":"Chạy thật: unshare"},
+        {"t":711.82,"den":796.22,"ten":"Chạy thật: lsns, nsenter, root giả"},
+        {"t":796.22,"den":886.75,"ten":"Mô phỏng: ba cái hộp có trần"},
+        {"t":886.75,"den":973.81,"ten":"Chạy thật: cgroup bằng tay"},
+        {"t":973.81,"den":1082.47,"ten":"Tám tệp cgroup cần thuộc"},
+        {"t":1082.47,"den":1168.46,"ten":"Chạy thật: systemd-run và choom"},
+        {"t":1168.46,"den":1319.99,"ten":"root được chẻ thành ~41 capability"},
+        {"t":1319.99,"den":1417.79,"ten":"Mô phỏng: một container trong năm lệnh"},
+        {"t":1417.79,"den":1548.05,"ten":"Liên kết chéo · Thực hành 15–20 phút"},
+        {"t":1548.05,"den":1637.38,"ten":"Thuật ngữ trong bài · Ba câu tự kiểm"},
+        {"t":1637.38,"den":1716.88,"ten":"Tóm tắt & luyện tập"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 14.1 của khoá Linux và Bash, bài mở đầu Chương 14: Linux chuyên sâu."},
         {"t":13.14,"vi":"Bài trước: getopts có trừ hai chấm cho cờ dài, stack trace đọc từ dưới lên, và bats với lệnh giả đứng trước trong PATH."},
@@ -3670,8 +3913,23 @@
         {"t":1706.08,"vi":"Bài sau, 14.2: hiệu năng theo phương pháp USE, CPU, bộ nhớ, đĩa và mạng, xuống tới từng hàm."}
       ]
     },
-    "lnx-14-2-hieu-nang": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/linux-bash/14-linux-chuyen-sau/14-03-hieu-nang-9d0ff792.mp4","durationSec":1304.71,"nguonCau":"srt",
-      "parts": [],
+    "lnx-14-2-hieu-nang": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/linux-bash/14-linux-chuyen-sau/14-03-hieu-nang-9d0ff792.mp4","durationSec":1304.71,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":90.88,"ten":"Ôn nhanh · hôm nay · Mô phỏng: bảng đèn USE"},
+        {"t":90.88,"den":184.31,"ten":"USE: mỗi tài nguyên, hỏi đúng ba câu"},
+        {"t":184.31,"den":262.67,"ten":"Hộp đồ nghề sysstat"},
+        {"t":262.67,"den":348.54,"ten":"\"CPU rảnh 90%\" mà một lõi đã kịch trần"},
+        {"t":348.54,"den":429.71,"ten":"Mô phỏng: hai mươi việc, mười lõi"},
+        {"t":429.71,"den":541.63,"ten":"Chạy thật: vmstat, PSI, load"},
+        {"t":541.63,"den":619.62,"ten":"Chạy thật: perf stat, record, report"},
+        {"t":619.62,"den":712.73,"ten":"Mô phỏng: đọc một flame graph · Chạy thật: bộ nhớ theo USE"},
+        {"t":712.73,"den":822.64,"ten":"Đĩa: đọc await và aqu-sz, đừng chỉ %util"},
+        {"t":822.64,"den":928.01,"ten":"Mạng: băng thông, lỗi, hàng đợi — %ifutil ảo"},
+        {"t":928.01,"den":1028.9,"ten":"Trọn cuộc quét USE trong một container"},
+        {"t":1028.9,"den":1152.3,"ten":"Liên kết chéo · Thực hành 15–20 phút"},
+        {"t":1152.3,"den":1235.34,"ten":"Thuật ngữ trong bài · Ba câu tự kiểm"},
+        {"t":1235.34,"den":1304.71,"ten":"Tóm tắt & luyện tập"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 14.2 của khoá Linux và Bash."},
         {"t":10.03,"vi":"Bài trước: mọi việc thật đều qua một syscall, container là tiến trình trong namespace mới, và cgroup đặt trần cho RAM, CPU, số tiến trình."},
@@ -3886,8 +4144,22 @@
         {"t":1294.57,"vi":"Bài sau, 14.3: đĩa và hệ thống tệp, phân vùng, fstab, LVM, swap và checksum."}
       ]
     },
-    "lnx-14-3-luu-tru": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/linux-bash/14-linux-chuyen-sau/14-04-luu-tru-265a8950.mp4","durationSec":1249.61,"nguonCau":"srt",
-      "parts": [],
+    "lnx-14-3-luu-tru": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/linux-bash/14-linux-chuyen-sau/14-04-luu-tru-265a8950.mp4","durationSec":1249.61,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":96.15,"ten":"Ôn nhanh · hôm nay · Mô phỏng: năm tầng từ đĩa tới thư mục"},
+        {"t":96.15,"den":178.86,"ten":"Từ đĩa tới thư mục: năm tầng"},
+        {"t":178.86,"den":278.2,"ten":"Tập chia đĩa trên một FILE, không sợ hỏng"},
+        {"t":278.2,"den":396.42,"ten":"Chạy thật: mkfs, UUID, inode"},
+        {"t":396.42,"den":487.02,"ten":"Chạy thật: findmnt --verify, mount -a"},
+        {"t":487.02,"den":636.66,"ten":"LVM: nới ổ đĩa khi app vẫn đang chạy"},
+        {"t":636.66,"den":724.75,"ten":"Sáu lệnh LVM cần thuộc"},
+        {"t":724.75,"den":817.72,"ten":"Chạy thật: XFS không thu nhỏ, swap file"},
+        {"t":817.72,"den":898.13,"ten":"Chạy thật: sha256sum, b3sum, rsync -c"},
+        {"t":898.13,"den":976.09,"ten":"Dọn theo thứ tự ngược · Trên macOS và WSL khác gì"},
+        {"t":976.09,"den":1093.6,"ten":"Liên kết chéo · Thực hành 15–20 phút"},
+        {"t":1093.6,"den":1178.06,"ten":"Thuật ngữ trong bài · Ba câu tự kiểm"},
+        {"t":1178.06,"den":1249.61,"ten":"Tóm tắt & luyện tập"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 14.3 của khoá Linux và Bash."},
         {"t":10.03,"vi":"Bài trước: phương pháp USE, mpstat tìm lõi kịch trần, r và PSI đo bão hoà, perf gọi tên hàm, và với đĩa thì đọc await, aqu-sz."},
@@ -4078,8 +4350,22 @@
         {"t":1237.89,"vi":"Bài sau, 14.4: bảo mật sâu, khoá SSH, nftables, fail2ban, SELinux, sudo hẹp và lynis."}
       ]
     },
-    "lnx-14-4-bao-mat-sau": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/linux-bash/14-linux-chuyen-sau/14-05-bao-mat-sau-246a7eb0.mp4","durationSec":1318.61,"nguonCau":"srt",
-      "parts": [],
+    "lnx-14-4-bao-mat-sau": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/linux-bash/14-linux-chuyen-sau/14-05-bao-mat-sau-246a7eb0.mp4","durationSec":1318.61,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":91.63,"ten":"Ôn nhanh · hôm nay"},
+        {"t":91.63,"den":192.4,"ten":"Bảo mật là nhiều lớp, mỗi lớp phải KIỂM được"},
+        {"t":192.4,"den":292.47,"ten":"SSH: khoá ed25519, nghiệm thu bằng sshd -T"},
+        {"t":292.47,"den":393.92,"ten":"Mô phỏng: gói tin đi qua chuỗi luật"},
+        {"t":393.92,"den":477.83,"ten":"Chạy thật: nft -c, thử từ máy khác, tập cấm"},
+        {"t":477.83,"den":581.64,"ten":"fail2ban cho log của chính app bạn"},
+        {"t":581.64,"den":715.19,"ten":"SELinux: nhãn quyết định, không phải rwx"},
+        {"t":715.19,"den":833.96,"ten":"sudo \"hẹp\" mà vẫn thành root: find, less *"},
+        {"t":833.96,"den":962.55,"ten":"lynis chấm điểm; auditd ghi ai sửa gì"},
+        {"t":962.55,"den":1076.42,"ten":"Mô phỏng: đừng tự khoá mình ở ngoài"},
+        {"t":1076.42,"den":1158.62,"ten":"Thực hành 15–20 phút"},
+        {"t":1158.62,"den":1244.28,"ten":"Thuật ngữ trong bài · Ba câu tự kiểm"},
+        {"t":1244.28,"den":1318.61,"ten":"Tóm tắt & luyện tập"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 14.4 của khoá Linux và Bash, bài cuối Chương 14."},
         {"t":11.59,"vi":"Bài trước: tập chia đĩa trên một tệp loop, fstab bằng UUID kèm nofail, lvextend trừ r nới ổ khi đang ghi, và checksum là bằng chứng duy nhất."},
@@ -4284,8 +4570,22 @@
         {"t":1309.26,"vi":"Bài 15.1: macOS, một Unix thật với zsh, bash 3.2 và công cụ BSD."}
       ]
     },
-    "lnx-15-1-macos-zsh-bsd": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/linux-bash/15-macos-windows/15-02-macos-zsh-bsd-9748d1fb.mp4","durationSec":1274.96,"nguonCau":"srt",
-      "parts": [],
+    "lnx-15-1-macos-zsh-bsd": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/linux-bash/15-macos-windows/15-02-macos-zsh-bsd-9748d1fb.mp4","durationSec":1274.96,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":88.58,"ten":"Ôn nhanh · hôm nay · Mô phỏng: cùng họ, khác nhà"},
+        {"t":88.58,"den":171.88,"ten":"Cùng họ, khác nhà · Chạy thật: Darwin, không có /proc"},
+        {"t":171.88,"den":268.11,"ten":"Vì sao zsh mặc định, và /bin/bash là đồ 2007"},
+        {"t":268.11,"den":354.57,"ten":"zsh không phải bash: bốn chỗ hay vấp"},
+        {"t":354.57,"den":467.56,"ten":"Chạy thật: z1.sh qua hai shell · BSD và GNU: bảng đo thật"},
+        {"t":467.56,"den":565.39,"ten":"Chạy thật: cùng việc, hai bộ công cụ"},
+        {"t":565.39,"den":665.59,"ten":"Lỗi thật khi đem lệnh GNU sang Mac"},
+        {"t":665.59,"den":760.65,"ten":"Thứ đã giống nhau — và khác biệt không phát ra tiếng"},
+        {"t":760.65,"den":873.36,"ten":"Một script chạy được cả hai nơi"},
+        {"t":873.36,"den":959.82,"ten":"Bảng cờ shell dùng trên Mac · Chạy thử từng bước trên Mac"},
+        {"t":959.82,"den":1036.11,"ten":"Trên Linux và WSL thì sao · Liên kết chéo"},
+        {"t":1036.11,"den":1141.53,"ten":"Thực hành 15–20 phút · Thuật ngữ trong bài"},
+        {"t":1141.53,"den":1274.96,"ten":"Ba câu tự kiểm · Tóm tắt & luyện tập"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 15.1 của khoá Linux và Bash, bài mở đầu Chương 15: macOS và Windows."},
         {"t":13.73,"vi":"Chương trước ta mở nắp nhân Linux, đo hiệu năng theo USE, nới ổ bằng LVM, và gia cố máy chủ từng lớp, lớp nào cũng có bằng chứng."},
@@ -4482,8 +4782,21 @@
         {"t":1265.21,"vi":"Bài sau, 15.2: công cụ của macOS, Homebrew, launchd, và những lệnh chỉ Mac có."}
       ]
     },
-    "lnx-15-2-macos-cong-cu": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/linux-bash/15-macos-windows/15-03-macos-cong-cu-e5e1a6a2.mp4","durationSec":1166.36,"nguonCau":"srt",
-      "parts": [],
+    "lnx-15-2-macos-cong-cu": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/linux-bash/15-macos-windows/15-03-macos-cong-cu-e5e1a6a2.mp4","durationSec":1166.36,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":117.41,"ten":"Ôn nhanh · hôm nay · Mô phỏng: ba chỗ Mac làm thay"},
+        {"t":117.41,"den":204.34,"ten":"Chạy thật: Homebrew và cái bất ngờ của PATH"},
+        {"t":204.34,"den":297.07,"ten":"Lệnh brew hằng ngày"},
+        {"t":297.07,"den":394.8,"ten":"Chạy thật: caveats và Brewfile"},
+        {"t":394.8,"den":474.57,"ten":"Mô phỏng: cron bỏ qua, launchd chạy bù"},
+        {"t":474.57,"den":579.08,"ten":"Chạy thật: brew services và launchctl"},
+        {"t":579.08,"den":663.96,"ten":"Chạy thật: plutil, và chạy như launchd chạy"},
+        {"t":663.96,"den":799.74,"ten":"Chạy thật: pbcopy, mdfind, caffeinate, defaults, security"},
+        {"t":799.74,"den":894.53,"ten":"Chạy thật: chẩn đoán trên Mac · Trên Linux và WSL thì sao"},
+        {"t":894.53,"den":1007.28,"ten":"Liên kết chéo · Thực hành 15–20 phút"},
+        {"t":1007.28,"den":1094.07,"ten":"Thuật ngữ trong bài · Ba câu tự kiểm"},
+        {"t":1094.07,"den":1166.36,"ten":"Tóm tắt & luyện tập"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 15.2 của khoá Linux và Bash."},
         {"t":9.99,"vi":"Bài trước: Mac là Unix nhưng không phải Linux, zsh khác bash, công cụ BSD khác cờ, và một script chạy được hai nơi nhờ dò khả năng."},
@@ -4669,8 +4982,19 @@
         {"t":1156.09,"vi":"Bài sau, 15.3: Windows, WSL2, Git Bash, và lỗi CRLF từ đầu tới cuối."}
       ]
     },
-    "lnx-15-3-windows-wsl2": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/linux-bash/15-macos-windows/15-04-windows-wsl2-0bff6af8.mp4","durationSec":1030.01,"nguonCau":"srt",
-      "parts": [],
+    "lnx-15-3-windows-wsl2": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/linux-bash/15-macos-windows/15-04-windows-wsl2-0bff6af8.mp4","durationSec":1030.01,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":147.26,"ten":"Ôn nhanh · hôm nay · Mô phỏng: một ký tự vô hình"},
+        {"t":147.26,"den":263.43,"ten":"WSL2 là một máy ảo Linux thật — chỉ là rất nhẹ"},
+        {"t":263.43,"den":363.04,"ten":"wsl.conf cho MỘT distro, .wslconfig cho CẢ máy ảo"},
+        {"t":363.04,"den":460.85,"ten":"Chạy thật: ba lỗi, một ký tự · Chạy thật: \\r trong tệp .env"},
+        {"t":460.85,"den":566.77,"ten":"Mô phỏng: CRLF đi đường nào tới máy chủ"},
+        {"t":566.77,"den":649.96,"ten":"Chạy thật: autocrlf, .gitattributes, renormalize"},
+        {"t":649.96,"den":747.6,"ten":"Bảng cờ: WSL và kiểu xuống dòng"},
+        {"t":747.6,"den":873.14,"ten":"Liên kết chéo · Thực hành 15–20 phút"},
+        {"t":873.14,"den":959.96,"ten":"Thuật ngữ trong bài · Ba câu tự kiểm"},
+        {"t":959.96,"den":1030.01,"ten":"Tóm tắt & luyện tập"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 15.3 của khoá Linux và Bash."},
         {"t":10.02,"vi":"Bài trước: Homebrew, launchd chạy việc dưới PATH trơn, và những lệnh chỉ Mac có như pbcopy hay security."},
@@ -4828,8 +5152,20 @@
         {"t":1023.34,"vi":"Bài sau, 15.4: PowerShell cho người đã biết bash."}
       ]
     },
-    "lnx-15-4-powershell-cho-nguoi-biet-bash": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/linux-bash/15-macos-windows/15-05-powershell-884a6bce.mp4","durationSec":1060.9,"nguonCau":"srt",
-      "parts": [],
+    "lnx-15-4-powershell-cho-nguoi-biet-bash": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/linux-bash/15-macos-windows/15-05-powershell-884a6bce.mp4","durationSec":1060.9,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":115.75,"ten":"Ôn nhanh · hôm nay · Mô phỏng: cột chữ và thuộc tính"},
+        {"t":115.75,"den":218.71,"ten":"Chạy thật: cùng đáp án, khác cơ chế"},
+        {"t":218.71,"den":312.63,"ten":"Chạy thật: tên đoán được, biến đi qua ranh giới"},
+        {"t":312.63,"den":401.09,"ten":"Chạy thật: lọc, đếm, JSON không cần jq"},
+        {"t":401.09,"den":480.38,"ten":"Mô phỏng: cổng && xét cái gì · Chạy thật: && và bí danh"},
+        {"t":480.38,"den":571.52,"ten":"Chạy script .ps1: tham số, mã thoát, execution policy"},
+        {"t":571.52,"den":655.37,"ten":"Đừng vớ cái búa to nhất · Khi nào dùng cái nào"},
+        {"t":655.37,"den":763.99,"ten":"Bảng cờ: tham số PowerShell dùng suốt"},
+        {"t":763.99,"den":846.72,"ten":"Trên macOS, Linux và WSL thì sao · Liên kết chéo"},
+        {"t":846.72,"den":950.47,"ten":"Thực hành 15–20 phút · Thuật ngữ trong bài"},
+        {"t":950.47,"den":1060.9,"ten":"Ba câu tự kiểm · Tóm tắt & luyện tập"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 15.4, bài cuối của Chương 15."},
         {"t":10.21,"vi":"Bài trước: WSL2 là Linux thật trên Windows, mã để trong thư mục nhà Linux, và một ký tự vô hình làm vỡ script trên máy chủ."},
@@ -4993,8 +5329,23 @@
         {"t":1052.7,"vi":"Chương sau, Chương 16, ghép mọi thứ thành một dự án: dựng một máy chủ từ con số không."}
       ]
     },
-    "lnx-16-1-dung-may": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/linux-bash/16-du-an-cuoi-khoa/16-02-dung-may-81d8a754.mp4","durationSec":1478.42,"nguonCau":"srt",
-      "parts": [],
+    "lnx-16-1-dung-may": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/linux-bash/16-du-an-cuoi-khoa/16-02-dung-may-81d8a754.mp4","durationSec":1478.42,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":136.24,"ten":"Ôn nhanh · hôm nay"},
+        {"t":136.24,"den":241.7,"ten":"Chạy thật: kho datlich"},
+        {"t":241.7,"den":365.05,"ten":"Chạy thật: quyền tối thiểu là một dòng Permission denied"},
+        {"t":365.05,"den":456.49,"ten":"Mô phỏng: hàm cai qua ba lần chạy"},
+        {"t":456.49,"den":536.75,"ten":"bootstrap.sh: bảy bước, gần như mọi chương của khoá"},
+        {"t":536.75,"den":656.71,"ten":"Lần 1 hỏng giữa chừng, lần 2 đi tiếp, lần 3: 0 thay đổi"},
+        {"t":656.71,"den":738.37,"ten":"Mô phỏng: ba lần chạy trên một bảng"},
+        {"t":738.37,"den":864.33,"ten":"SSH chỉ bằng khoá — nghiệm thu bằng sshd -T"},
+        {"t":864.33,"den":968.69,"ten":"Mô phỏng: vì sao grep -q làm ống vỡ"},
+        {"t":968.69,"den":1078.01,"ten":"Chạy thật: tường lửa nhìn từ một máy khác"},
+        {"t":1078.01,"den":1189.21,"ten":"Bảng cờ: các lệnh của bài · Trên macOS và WSL khác gì"},
+        {"t":1189.21,"den":1267.13,"ten":"Khi nào dùng script bootstrap — và khi nào không"},
+        {"t":1267.13,"den":1358.96,"ten":"Thực hành 15–20 phút · Thuật ngữ trong bài"},
+        {"t":1358.96,"den":1478.42,"ten":"Ba câu tự kiểm · Tóm tắt & luyện tập"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Chương 16, bài 16.1 của khoá Linux và Bash."},
         {"t":11,"vi":"Đây là dự án cuối khoá."},
@@ -5224,8 +5575,22 @@
         {"t":1469.48,"vi":"Bài sau, 16.2: script deploy mức production, và unit systemd chạy ứng dụng."}
       ]
     },
-    "lnx-16-2-deploy-script": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/linux-bash/16-du-an-cuoi-khoa/16-03-deploy-script-898a95ec.mp4","durationSec":1334.52,"nguonCau":"srt",
-      "parts": [],
+    "lnx-16-2-deploy-script": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/linux-bash/16-du-an-cuoi-khoa/16-03-deploy-script-898a95ec.mp4","durationSec":1334.52,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":145.68,"ten":"Ôn nhanh · hôm nay · Mô phỏng: một lần deploy ngây thơ"},
+        {"t":145.68,"den":239.03,"ten":"deploy.sh: đọc từ trên xuống · Chạy thật: hợp đồng mã thoát"},
+        {"t":239.03,"den":338.94,"ten":"Mỗi bản một thư mục; current chỉ là mũi tên"},
+        {"t":338.94,"den":445.79,"ten":"Chạy thật: strace soi ln và mv -T"},
+        {"t":445.79,"den":533.53,"ten":"Chạy thật: hai bản tốt, một bản hỏng"},
+        {"t":533.53,"den":637.48,"ten":"Chạy thật: gói hỏng, khoá, quay lui, dọn bản cũ"},
+        {"t":637.48,"den":727.22,"ten":"Chạy thật: dựng lại lỗi StartLimitBurst"},
+        {"t":727.22,"den":837.95,"ten":"Chạy thật: readlink -f trả lời cả cho thứ không tồn tại"},
+        {"t":837.95,"den":933.07,"ten":"Từng chỉ thị, và vì sao nó ở đây"},
+        {"t":933.07,"den":1050.52,"ten":"Chạy thật: status, show, ps, security"},
+        {"t":1050.52,"den":1185.31,"ten":"Khi nào dùng cách này — và khi nào đi tiếp · Liên kết chéo"},
+        {"t":1185.31,"den":1266.73,"ten":"Thuật ngữ trong bài · Ba câu tự kiểm"},
+        {"t":1266.73,"den":1334.52,"ten":"Tóm tắt & luyện tập"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 16.2 của khoá Linux và Bash."},
         {"t":10.15,"vi":"Bài trước, bootstrap.sh dựng máy chủ: ba người dùng, SSH chỉ bằng khoá, tường lửa mở hai cổng, và lần chạy cuối nói không thay đổi."},
@@ -5428,8 +5793,22 @@
         {"t":1324.33,"vi":"Bài sau, 16.3: tự động hoá và giám sát, sao lưu, xoay vòng log, cảnh báo và báo cáo buổi sáng."}
       ]
     },
-    "lnx-16-3-tu-dong-hoa-giam-sat": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/linux-bash/16-du-an-cuoi-khoa/16-04-tu-dong-hoa-giam-sat-18b70258.mp4","durationSec":1248.81,"nguonCau":"srt",
-      "parts": [],
+    "lnx-16-3-tu-dong-hoa-giam-sat": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/linux-bash/16-du-an-cuoi-khoa/16-04-tu-dong-hoa-giam-sat-18b70258.mp4","durationSec":1248.81,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":138.97,"ten":"Ôn nhanh · hôm nay · Mô phỏng: một tuần không ai trông"},
+        {"t":138.97,"den":224.83,"ten":"Chạy thật: sao lưu, rồi khôi phục thử"},
+        {"t":224.83,"den":314.33,"ten":"Mô phỏng: hai đồng hồ lệch bảy giờ"},
+        {"t":314.33,"den":430.26,"ten":"Chạy 10 lần, còn đúng 7 — và luật 5 lần/10 giây"},
+        {"t":430.26,"den":506.08,"ten":"Chạy thật: cái bẫy không có postrotate"},
+        {"t":506.08,"den":609.73,"ten":"Chạy thật: cấu hình đúng, có SIGHUP"},
+        {"t":609.73,"den":700.45,"ten":"giam-sat.sh: từng dòng"},
+        {"t":700.45,"den":781.53,"ten":"Mô phỏng: trạng thái, không phải sự kiện"},
+        {"t":781.53,"den":868.88,"ten":"Chạy thật: mức 6, và tiền tố <3>"},
+        {"t":868.88,"den":956.9,"ten":"Bảng cờ: journalctl trong script · Trên macOS và WSL khác gì"},
+        {"t":956.9,"den":1101.42,"ten":"Khi nào cần một hệ thống giám sát thật · Liên kết chéo"},
+        {"t":1101.42,"den":1187.63,"ten":"Thuật ngữ trong bài · Ba câu tự kiểm"},
+        {"t":1187.63,"den":1248.81,"ten":"Tóm tắt & luyện tập"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 16.3 của khoá Linux và Bash."},
         {"t":10.01,"vi":"Bài trước, deploy.sh: mỗi bản một thư mục, một mũi tên current, health check tự quay lui, và unit systemd có trần bộ nhớ."},
@@ -5614,8 +5993,23 @@
         {"t":1239.26,"vi":"Bài sau, 16.4, bài cuối của khoá: tuần đầu trên production, tám sự cố kinh điển dựng lại thật."}
       ]
     },
-    "lnx-16-4-su-co-tuan-dau": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/linux-bash/16-du-an-cuoi-khoa/16-05-su-co-tuan-dau-300f3648.mp4","durationSec":1369.42,"nguonCau":"srt",
-      "parts": [],
+    "lnx-16-4-su-co-tuan-dau": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/linux-bash/16-du-an-cuoi-khoa/16-05-su-co-tuan-dau-300f3648.mp4","durationSec":1369.42,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":122.89,"ten":"Ôn nhanh · hôm nay"},
+        {"t":122.89,"den":235.71,"ten":"Đĩa đầy mà rm không trả chỗ: lsof -a +L1"},
+        {"t":235.71,"den":313.88,"ten":"Mô phỏng: tên, inode và fd"},
+        {"t":313.88,"den":409.97,"ten":"Chạy thật: hết inode khi còn byte trống"},
+        {"t":409.97,"den":513.23,"ten":"Mô phỏng: cái trần rò và cái trần thật"},
+        {"t":513.23,"den":622.06,"ten":"Cổng bị chiếm · file của root: hai kiểu \"app chết\""},
+        {"t":622.06,"den":740.49,"ten":"Chạy thật: đọc được, ghi thì 502"},
+        {"t":740.49,"den":843.18,"ten":"Múi giờ · CRLF · config không ăn: ba lỗi \"im lặng\""},
+        {"t":843.18,"den":923.86,"ten":"Chạy thật: một script lưu trên Windows"},
+        {"t":923.86,"den":1003.71,"ten":"Chạy thật: đã ghi không phải là đã có hiệu lực"},
+        {"t":1003.71,"den":1091.43,"ten":"Ghi lại: một bản postmortem năm dòng"},
+        {"t":1091.43,"den":1215.55,"ten":"Khi nào dùng sổ tay này · Liên kết chéo"},
+        {"t":1215.55,"den":1304.6,"ten":"Thuật ngữ trong bài · Ba câu tự kiểm"},
+        {"t":1304.6,"den":1369.42,"ten":"Tóm tắt & lời chào cuối khoá"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 16.4, bài giảng cuối cùng của khoá Linux và Bash."},
         {"t":11.24,"vi":"Bài trước, máy chủ có bốn thói quen tự chạy: sao lưu có kiểm, xoay vòng log có SIGHUP, giám sát chỉ báo khi đổi, và báo cáo buổi sáng."},
@@ -5810,8 +6204,18 @@
         {"t":1359.61,"vi":"Bài sau, 16.5 trên web: bài thi cuối khoá, hai mươi câu, ba mươi phút. Chúc bạn làm bài tốt."}
       ]
     },
-    "lnx-2-1-tao-chep-chuyen-xoa": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/linux-bash/02-file-thu-muc/02-02-tao-chep-chuyen-xoa-274e8ef9.mp4","durationSec":864.13,"nguonCau":"srt",
-      "parts": [],
+    "lnx-2-1-tao-chep-chuyen-xoa": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/linux-bash/02-file-thu-muc/02-02-tao-chep-chuyen-xoa-274e8ef9.mp4","durationSec":864.13,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":82.88,"ten":"Ôn nhanh · hôm nay · Năm lệnh, mỗi lệnh một cờ"},
+        {"t":82.88,"den":182.37,"ten":"Chạy thật: mkdir -p chạy lại vẫn vậy"},
+        {"t":182.37,"den":299.69,"ten":"Chạy thật: dấu gạch chéo trên GNU"},
+        {"t":299.69,"den":390.27,"ten":"Chạy thật: những cái cờ vừa đổi · rm chỉ gạch cái tên"},
+        {"t":390.27,"den":478.14,"ten":"Chạy thật: rm không có thùng rác · Biến rỗng: rm -rf \"$X\"/*"},
+        {"t":478.14,"den":561.85,"ten":"Ba lưới an toàn · Chạy thật: rm -I và trash-cli"},
+        {"t":561.85,"den":664.89,"ten":"macOS và WSL · Chạy thật trên Mac: bản BSD"},
+        {"t":664.89,"den":747.81,"ten":"Liên kết chéo · Thực hành 15–20 phút"},
+        {"t":747.81,"den":864.13,"ten":"Thuật ngữ trong bài · Ba câu tự kiểm"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, mở Chương 2 của khoá Linux và Bash: làm việc với tệp và thư mục."},
         {"t":11.17,"vi":"Bài trước: ls -l in tám cột, mtime là nội dung, ctime là inode, và rm chỉ gỡ một cái tên."},
@@ -5948,8 +6352,19 @@
         {"t":855.82,"vi":"Bài sau, bài 2.2: glob. Shell khai triển dấu sao, và lệnh không bao giờ thấy nó."}
       ]
     },
-    "lnx-2-2-glob-ky-tu-dai-dien": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/linux-bash/02-file-thu-muc/02-03-glob-64988bbf.mp4","durationSec":884.52,"nguonCau":"srt",
-      "parts": [],
+    "lnx-2-2-glob-ky-tu-dai-dien": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/linux-bash/02-file-thu-muc/02-03-glob-64988bbf.mp4","durationSec":884.52,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":103.84,"ten":"Ôn nhanh · hôm nay · Mô phỏng: dấu sao biến mất ở đâu"},
+        {"t":103.84,"den":200.8,"ten":"Chạy thật: echo và set -x · Bốn ký tự đại diện"},
+        {"t":200.8,"den":276.31,"ten":"Ngoặc nhọn không phải glob · Glob không khớp gì"},
+        {"t":276.31,"den":378.74,"ten":"Chạy thật: nullglob và failglob · Tệp ẩn vô hình với glob"},
+        {"t":378.74,"den":461.59,"ten":"extglob và globstar · Chạy thật: quên globstar, và symlink"},
+        {"t":461.59,"den":538.43,"ten":"extglob: mẫu biết nói trừ ra · Glob và regex"},
+        {"t":538.43,"den":628.44,"ten":"Chạy thật: catalog.txt lọt lưới"},
+        {"t":628.44,"den":708.62,"ten":"Sắp xếp không như bạn nghĩ"},
+        {"t":708.62,"den":797.71,"ten":"Thực hành 15–20 phút · Thuật ngữ trong bài"},
+        {"t":797.71,"den":884.52,"ten":"Ba câu tự kiểm · Tóm tắt & luyện tập"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 2.2 của khoá Linux và Bash."},
         {"t":9.63,"vi":"Bài trước: cp -a giữ giờ, mv ghi đè im lặng, rm chỉ gỡ một cái tên. Và thói quen rẻ nhất là ls đúng cái mẫu trước."},
@@ -6090,8 +6505,17 @@
         {"t":876.85,"vi":"Bài sau, bài 2.3: find, một cỗ máy tìm kiếm thật sự cho hệ thống tệp."}
       ]
     },
-    "lnx-2-3-find": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/linux-bash/02-file-thu-muc/02-04-find-a8cc265d.mp4","durationSec":776.34,"nguonCau":"srt",
-      "parts": [],
+    "lnx-2-3-find": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/linux-bash/02-file-thu-muc/02-04-find-a8cc265d.mp4","durationSec":776.34,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":96.1,"ten":"Ôn nhanh · hôm nay · Giải phẫu một lệnh find"},
+        {"t":96.1,"den":206.86,"ten":"Những phép thử bạn thật sự dùng · +n, -n và n"},
+        {"t":206.86,"den":308.27,"ten":"Thứ tự viết = thứ tự chạy · Chạy thật: thiếu ngoặc"},
+        {"t":308.27,"den":419.31,"ten":"Chạy thật: 5.000 tệp, một ký tự · -print0 và xargs -0"},
+        {"t":419.31,"den":499.44,"ten":"Chạy thật: -prune và -maxdepth"},
+        {"t":499.44,"den":597.89,"ten":"Công thức đáng giữ · Chạy thật trên Mac: find của BSD"},
+        {"t":597.89,"den":682.49,"ten":"Thực hành 15–20 phút · Thuật ngữ trong bài"},
+        {"t":682.49,"den":776.34,"ten":"Ba câu tự kiểm · Tóm tắt & luyện tập"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 2.3 của khoá Linux và Bash."},
         {"t":9.55,"vi":"Bài trước: shell khai triển glob trước khi lệnh chạy, và mẫu dành cho chương trình khác phải nằm trong nháy."},
@@ -6222,8 +6646,18 @@
         {"t":767.67,"vi":"Bài sau, bài 2.4: liên kết và kho nén, inode, symlink, và tar mà không phải tra lại."}
       ]
     },
-    "lnx-2-4-lien-ket-va-nen": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/linux-bash/02-file-thu-muc/02-05-lien-ket-va-nen-26468612.mp4","durationSec":994.8,"nguonCau":"srt",
-      "parts": [],
+    "lnx-2-4-lien-ket-va-nen": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/linux-bash/02-file-thu-muc/02-05-lien-ket-va-nen-26468612.mp4","durationSec":994.8,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":114.12,"ten":"Ôn nhanh · hôm nay · Tên tệp không phải là tệp"},
+        {"t":114.12,"den":235.11,"ten":"Các hệ quả, từng cái một · Chạy thật: nhân nói ra luật"},
+        {"t":235.11,"den":322.52,"ten":"Chạy thật: đọc và đi theo liên kết · Deploy nguyên tử"},
+        {"t":322.52,"den":409.25,"ten":"Chạy thật: tráo một con trỏ"},
+        {"t":409.25,"den":517.85,"ten":"tar: hai ý tưởng, không phải một · Các cờ của tar"},
+        {"t":517.85,"den":634.7,"ten":"Chạy thật: --strip-components · Chọn bộ nén nào"},
+        {"t":634.7,"den":733.26,"ten":"Luôn -t trước -x · Chạy thật: ba việc của -t, và -cfz"},
+        {"t":733.26,"den":869.93,"ten":"Chạy thật trên Mac · Liên kết chéo"},
+        {"t":869.93,"den":994.8,"ten":"Thuật ngữ trong bài · Ba câu tự kiểm"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 2.4, bài cuối Chương 2 của khoá Linux và Bash."},
         {"t":11.61,"vi":"Bài trước: find đi khắp cây, -exec cộng gom đường dẫn, và -print0 với xargs -0 giữ tên nguyên vẹn."},
@@ -6371,8 +6805,16 @@
         {"t":985.06,"vi":"Bài sau mở Chương 3, bài 3.1: ba dòng chuẩn stdin, stdout, stderr, và mọi cách chuyển hướng chúng."}
       ]
     },
-    "lnx-3-1-dong-chuan-chuyen-huong": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/linux-bash/03-van-ban-ong-dan-chuyen-huong/03-02-dong-chuan-chuyen-huong-4dea393e.mp4","durationSec":671.63,"nguonCau":"srt",
-      "parts": [],
+    "lnx-3-1-dong-chuan-chuyen-huong": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/linux-bash/03-van-ban-ong-dan-chuyen-huong/03-02-dong-chuan-chuyen-huong-4dea393e.mp4","durationSec":671.63,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":107.29,"ten":"Ôn nhanh · hôm nay · Ba dòng chuẩn"},
+        {"t":107.29,"den":194.28,"ten":"Tai nạn kinh điển: sort f > f"},
+        {"t":194.28,"den":281.76,"ten":"Mô phỏng: đấu dây từ trái sang phải"},
+        {"t":281.76,"den":366.15,"ten":"Chạy thật: rót vào stdin, và sọt rác · Heredoc"},
+        {"t":366.15,"den":467.67,"ten":"Chạy thật: có nháy và không nháy"},
+        {"t":467.67,"den":562.88,"ten":"Liên kết chéo · Thực hành 15–20 phút"},
+        {"t":562.88,"den":671.63,"ten":"Thuật ngữ trong bài · Ba câu tự kiểm"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, mở Chương 3 của khoá Linux và Bash: văn bản và ống dẫn."},
         {"t":10.39,"vi":"Chương 2 khép lại với liên kết: một cái tên khác với thứ nó gọi tên, và tar chỉ gói, còn nén là chuyện riêng."},
@@ -6476,8 +6918,16 @@
         {"t":664.88,"vi":"Bài sau, bài 3.2: ống dẫn, hai chương trình chạy cùng một lúc."}
       ]
     },
-    "lnx-3-2-ong-dan": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/linux-bash/03-van-ban-ong-dan-chuyen-huong/03-03-ong-dan-0d7d722a.mp4","durationSec":663.5,"nguonCau":"srt",
-      "parts": [],
+    "lnx-3-2-ong-dan": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/linux-bash/03-van-ban-ong-dan-chuyen-huong/03-03-ong-dan-0d7d722a.mp4","durationSec":663.5,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":94.95,"ten":"Ôn nhanh · hôm nay · Hai chương trình, cùng một lúc"},
+        {"t":94.95,"den":190.8,"ten":"Chạy thật: 141 và một phần nghìn giây"},
+        {"t":190.8,"den":266.41,"ten":"stderr không đi qua ống · Chạy thật: cái bẫy bộ đệm"},
+        {"t":266.41,"den":360.89,"ten":"Cái bẫy shell con · Chạy thật: giữ được biến, và <(…)"},
+        {"t":360.89,"den":465.62,"ten":"Chạy thật: xargs · Đọc một chuỗi ống thật"},
+        {"t":465.62,"den":557.16,"ten":"Liên kết chéo · Thực hành 15–20 phút"},
+        {"t":557.16,"den":663.5,"ten":"Thuật ngữ trong bài · Ba câu tự kiểm"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 3.2 của khoá Linux và Bash."},
         {"t":9.57,"vi":"Bài trước: mọi chương trình có fd 0, 1, 2, và một chương trình không biết output của nó đi đâu."},
@@ -6590,8 +7040,15 @@
         {"t":657.29,"vi":"Bài sau, bài 3.3: grep, và vừa đủ biểu thức chính quy."}
       ]
     },
-    "lnx-3-3-grep-regex": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/linux-bash/03-van-ban-ong-dan-chuyen-huong/03-04-grep-regex-15f284b3.mp4","durationSec":609.42,"nguonCau":"srt",
-      "parts": [],
+    "lnx-3-3-grep-regex": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/linux-bash/03-van-ban-ong-dan-chuyen-huong/03-04-grep-regex-15f284b3.mp4","durationSec":609.42,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":108.17,"ten":"Ôn nhanh · hôm nay · Ba phương ngữ, một lệnh"},
+        {"t":108.17,"den":187.79,"ten":"Những mảnh regex bạn thật sự cần"},
+        {"t":187.79,"den":296.39,"ten":"Chạy thật: ranh giới, neo, ngoặc vuông"},
+        {"t":296.39,"den":407.11,"ten":"Chạy thật: kho mã, -Fxf, ripgrep · Mac: BSD grep"},
+        {"t":407.11,"den":494.77,"ten":"Liên kết chéo · Thực hành 15–20 phút"},
+        {"t":494.77,"den":609.42,"ten":"Thuật ngữ trong bài · Ba câu tự kiểm"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 3.3 của khoá Linux và Bash."},
         {"t":9.55,"vi":"Bài trước: mọi khâu của chuỗi ống chạy cùng lúc, pipefail bắt khâu hỏng, và chỉ fd 1 đi vào ống."},
@@ -6699,8 +7156,16 @@
         {"t":600.11,"vi":"Bài sau, bài 3.4: bộ công cụ nhỏ, cut, sort, uniq, tr, wc và họ hàng."}
       ]
     },
-    "lnx-3-4-bo-cong-cu-nho": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/linux-bash/03-van-ban-ong-dan-chuyen-huong/03-05-bo-cong-cu-nho-045855f6.mp4","durationSec":659.95,"nguonCau":"srt",
-      "parts": [],
+    "lnx-3-4-bo-cong-cu-nho": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/linux-bash/03-van-ban-ong-dan-chuyen-huong/03-05-bo-cong-cu-nho-045855f6.mp4","durationSec":659.95,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":93.04,"ten":"Ôn nhanh · hôm nay · Mô phỏng: từ vựng và câu"},
+        {"t":93.04,"den":191.03,"ten":"Chạy thật: cut và dấu cách · sort so sánh CHỮ"},
+        {"t":191.03,"den":286.8,"ten":"Đếm theo nhóm trong năm chặng"},
+        {"t":286.8,"den":387.24,"ten":"comm, paste, join · Chạy thật: comm, paste, join"},
+        {"t":387.24,"den":483.76,"ten":"Chạy thật: diff, cmp, patch · Chạy thật trên Mac"},
+        {"t":483.76,"den":568.95,"ten":"Thực hành 15–20 phút · Thuật ngữ trong bài"},
+        {"t":568.95,"den":659.95,"ten":"Ba câu tự kiểm · Tóm tắt & luyện tập"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 3.4 của khoá Linux và Bash."},
         {"t":9.66,"vi":"Bài trước: grep in những dòng khớp mẫu, mặc định dùng -E, và mã thoát 2 nghĩa là lỗi."},
@@ -6814,8 +7279,15 @@
         {"t":652.02,"vi":"Bài sau, bài 3.5: sed, sửa một dòng dữ liệu mà bạn không hề mở tệp ra."}
       ]
     },
-    "lnx-3-5-sed": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/linux-bash/03-van-ban-ong-dan-chuyen-huong/03-06-sed-19c120a6.mp4","durationSec":574,"nguonCau":"srt",
-      "parts": [],
+    "lnx-3-5-sed": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/linux-bash/03-van-ban-ong-dan-chuyen-huong/03-06-sed-19c120a6.mp4","durationSec":574,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":88.85,"ten":"Ôn nhanh · hôm nay"},
+        {"t":88.85,"den":176.06,"ten":"Chạy thật: lệnh thay thế"},
+        {"t":176.06,"den":279.43,"ten":"Nhóm bắt giữ, & và \\1 · Chạy thật: \\1, & và \\&"},
+        {"t":279.43,"den":380.32,"ten":"Chạy thật: inode mới, và nhiều tệp · Công thức đáng giữ"},
+        {"t":380.32,"den":468.86,"ten":"Liên kết chéo · Thực hành 15–20 phút"},
+        {"t":468.86,"den":574,"ten":"Thuật ngữ trong bài · Ba câu tự kiểm"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 3.5 của khoá Linux và Bash."},
         {"t":9.64,"vi":"Bài trước: mười công cụ nhỏ, sort trước uniq, và diff -u cho thấy chính xác cái gì đã đổi."},
@@ -6906,8 +7378,15 @@
         {"t":567.46,"vi":"Bài sau, bài 3.6: awk, cả một ngôn ngữ gói trong một dòng."}
       ]
     },
-    "lnx-3-6-awk": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/linux-bash/03-van-ban-ong-dan-chuyen-huong/03-07-awk-47040662.mp4","durationSec":634.98,"nguonCau":"srt",
-      "parts": [],
+    "lnx-3-6-awk": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/linux-bash/03-van-ban-ong-dan-chuyen-huong/03-07-awk-47040662.mp4","durationSec":634.98,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":95.53,"ten":"Ôn nhanh · hôm nay · awk cắt sẵn mỗi dòng thành trường"},
+        {"t":95.53,"den":193.35,"ten":"Chạy thật: mẫu và hành động · BEGIN trước, END sau"},
+        {"t":193.35,"den":307.23,"ten":"Mảng liên kết · Chạy thật: nhóm và cộng dồn"},
+        {"t":307.23,"den":419.43,"ten":"Chạy thật: hàm chuỗi, NR==FNR, -v · Nháy đơn, -v, và awk nào"},
+        {"t":419.43,"den":530.89,"ten":"Chạy thật: bẫy dấu nháy · Liên kết chéo"},
+        {"t":530.89,"den":634.98,"ten":"Thuật ngữ trong bài · Ba câu tự kiểm"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 3.6 của khoá Linux và Bash."},
         {"t":9.57,"vi":"Bài trước: sed đọc một dòng, kiểm địa chỉ, chạy lệnh, rồi in."},
@@ -7015,8 +7494,16 @@
         {"t":625.22,"vi":"Bài sau mở Chương 4, bài 4.1: mô hình quyền, và rwx nghĩa là gì trên một thư mục."}
       ]
     },
-    "lnx-4-1-mo-hinh-quyen": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/linux-bash/04-quyen-nguoi-dung-sudo/04-02-mo-hinh-quyen-c1e64054.mp4","durationSec":676.56,"nguonCau":"srt",
-      "parts": [],
+    "lnx-4-1-mo-hinh-quyen": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/linux-bash/04-quyen-nguoi-dung-sudo/04-02-mo-hinh-quyen-c1e64054.mp4","durationSec":676.56,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":90.56,"ten":"Ôn nhanh · hôm nay · Mười ký tự"},
+        {"t":90.56,"den":202.94,"ten":"Nhân chỉ chọn một lớp · Mô phỏng: nhân quyết định"},
+        {"t":202.94,"den":304.62,"ten":"rwx trên thư mục · Chạy thật: chỉ x, rồi chỉ r"},
+        {"t":304.62,"den":397.02,"ten":"Chạy thật: xoá tệp chỉ đọc của root"},
+        {"t":397.02,"den":491.16,"ten":"Chạy thật: con số hệ tám · Chạy thật trên Mac · Fedora · WSL"},
+        {"t":491.16,"den":570.01,"ten":"Thực hành 15–20 phút"},
+        {"t":570.01,"den":676.56,"ten":"Thuật ngữ trong bài · Ba câu tự kiểm"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 4.1 của khoá Linux và Bash, mở đầu Chương 4: quyền, người dùng và sudo."},
         {"t":14.05,"vi":"Bài trước: awk cắt dòng thành trường, END cộng dồn, và mảng liên kết nhóm dữ liệu trong một lượt đọc."},
@@ -7135,8 +7622,16 @@
         {"t":668.29,"vi":"Bài sau, bài 4.2: chmod, chown và umask, đổi thứ bạn vừa đọc ra."}
       ]
     },
-    "lnx-4-2-chmod-chown-umask": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/linux-bash/04-quyen-nguoi-dung-sudo/04-03-chmod-chown-umask-0196d7f1.mp4","durationSec":656.09,"nguonCau":"srt",
-      "parts": [],
+    "lnx-4-2-chmod-chown-umask": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/linux-bash/04-quyen-nguoi-dung-sudo/04-03-chmod-chown-umask-0196d7f1.mp4","durationSec":656.09,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":96.07,"ten":"Ôn nhanh · hôm nay · chmod: hai cú pháp"},
+        {"t":96.07,"den":184.54,"ten":"Cái bẫy của -R · Chạy thật: X hoa trước và sau khi lỡ"},
+        {"t":184.54,"den":287.62,"ten":"Chạy thật: ai đổi được chủ, ai đổi được nhóm"},
+        {"t":287.62,"den":385.02,"ten":"Chạy thật: bốn mặt nạ · Chạy thật: vì sao umask là 0002"},
+        {"t":385.02,"den":461.23,"ten":"Chạy thật: khoá SSH bị bỏ qua"},
+        {"t":461.23,"den":545.46,"ten":"Liên kết chéo · Thực hành 15–20 phút"},
+        {"t":545.46,"den":656.09,"ten":"Thuật ngữ trong bài · Ba câu tự kiểm"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 4.2 của khoá Linux và Bash."},
         {"t":9.77,"vi":"Bài trước: nhân chọn đúng một lớp, x trên thư mục là đi xuyên qua, và xoá là sửa thư mục."},
@@ -7235,8 +7730,16 @@
         {"t":649.89,"vi":"Bài sau, bài 4.3: setuid, setgid và bit dính."}
       ]
     },
-    "lnx-4-3-bit-dac-biet": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/linux-bash/04-quyen-nguoi-dung-sudo/04-04-bit-dac-biet-2512131f.mp4","durationSec":625.93,"nguonCau":"srt",
-      "parts": [],
+    "lnx-4-3-bit-dac-biet": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/linux-bash/04-quyen-nguoi-dung-sudo/04-04-bit-dac-biet-2512131f.mp4","durationSec":625.93,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":92.44,"ten":"Ôn nhanh · hôm nay · setuid: passwd chạy như root"},
+        {"t":92.44,"den":175.16,"ten":"Mô phỏng: thư mục dùng chung · setgid trên thư mục"},
+        {"t":175.16,"den":250.98,"ten":"Bit dính · Chạy thật: 777 và 1777"},
+        {"t":250.98,"den":345.48,"ten":"Chạy thật: chữ hoa, và setgid giữ lại"},
+        {"t":345.48,"den":442.1,"ten":"Rà setuid, và capability · Chạy thật: danh sách setuid"},
+        {"t":442.1,"den":535.98,"ten":"Thực hành 15–20 phút · Thuật ngữ trong bài"},
+        {"t":535.98,"den":625.93,"ten":"Ba câu tự kiểm · Tóm tắt & luyện tập"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 4.3 của khoá Linux và Bash."},
         {"t":9.66,"vi":"Bài trước: chmod hệ tám và ký hiệu, chữ X hoa, umask gỡ bit, và đổi chủ cần root."},
@@ -7342,8 +7845,16 @@
         {"t":620.2,"vi":"Bài sau, bài 4.4: người dùng, nhóm và sudo."}
       ]
     },
-    "lnx-4-4-nguoi-dung-nhom-sudo": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/linux-bash/04-quyen-nguoi-dung-sudo/04-05-nguoi-dung-nhom-sudo-04b6d366.mp4","durationSec":623.18,"nguonCau":"srt",
-      "parts": [],
+    "lnx-4-4-nguoi-dung-nhom-sudo": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/linux-bash/04-quyen-nguoi-dung-sudo/04-05-nguoi-dung-nhom-sudo-04b6d366.mp4","durationSec":623.18,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":93.34,"ten":"Ôn nhanh · hôm nay · /etc/passwd: bảy trường"},
+        {"t":93.34,"den":169.19,"ten":"Nhóm chính, nhóm phụ · Chạy thật: shadow, group, id"},
+        {"t":169.19,"den":250.06,"ten":"Chạy thật: tai nạn -G · Nhóm mới chưa vào shell đang chạy"},
+        {"t":250.06,"den":337.13,"ten":"Chạy thật: shell cũ, đăng nhập mới · sudo và su"},
+        {"t":337.13,"den":422.19,"ten":"sudoers: ai, máy, chạy như, lệnh"},
+        {"t":422.19,"den":504.81,"ten":"Liên kết chéo · Thực hành 15–20 phút"},
+        {"t":504.81,"den":623.18,"ten":"Thuật ngữ trong bài · Ba câu tự kiểm"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 4.4 của khoá Linux và Bash."},
         {"t":9.82,"vi":"Bài trước: setuid trao quyền của chủ tệp, setgid cho thư mục cả đội, bit dính cho thư mục ai cũng ghi, và ACL."},
@@ -7452,8 +7963,15 @@
         {"t":615.51,"vi":"Bài sau, bài 4.5: chẩn đoán Permission denied, thay vì vớ lấy sudo."}
       ]
     },
-    "lnx-4-5-chan-doan-permission-denied": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/linux-bash/04-quyen-nguoi-dung-sudo/04-06-chan-doan-permission-denied-24965d2e.mp4","durationSec":595.03,"nguonCau":"srt",
-      "parts": [],
+    "lnx-4-5-chan-doan-permission-denied": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/linux-bash/04-quyen-nguoi-dung-sudo/04-06-chan-doan-permission-denied-24965d2e.mp4","durationSec":595.03,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":108.84,"ten":"Ôn nhanh · hôm nay · Sáu bước"},
+        {"t":108.84,"den":209.06,"ten":"Chạy thật: bước một, ai đang chạy"},
+        {"t":209.06,"den":305.36,"ten":"Chạy thật: không phải chuyện bit · Chỉ đọc, bất biến, noexec"},
+        {"t":305.36,"den":404.72,"ten":"Chạy thật: một ví dụ từ đầu tới cuối · macOS và Fedora"},
+        {"t":404.72,"den":498.66,"ten":"Thực hành 15–20 phút · Thuật ngữ trong bài"},
+        {"t":498.66,"den":595.03,"ten":"Ba câu tự kiểm · Tóm tắt & luyện tập"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 4.5, bài cuối của Chương 4."},
         {"t":10.01,"vi":"Bài trước: người dùng là một UID, luôn -aG, nhóm mới chỉ tới ở lần đăng nhập mới, và sudoers cấp quyền hẹp."},
@@ -7551,8 +8069,15 @@
         {"t":586.61,"vi":"Bài sau mở Chương 5, bài 5.1: tiến trình là gì, và nhìn vào nó bằng cách nào."}
       ]
     },
-    "lnx-5-1-tien-trinh-la-gi": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/linux-bash/05-tien-trinh-job-tin-hieu/05-02-tien-trinh-la-gi-693899e9.mp4","durationSec":593.48,"nguonCau":"srt",
-      "parts": [],
+    "lnx-5-1-tien-trinh-la-gi": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/linux-bash/05-tien-trinh-job-tin-hieu/05-02-tien-trinh-la-gi-693899e9.mp4","durationSec":593.48,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":102.29,"ten":"Ôn nhanh · hôm nay · Cả máy là một cây"},
+        {"t":102.29,"den":190.57,"ten":"Mô phỏng: một lệnh ra đời"},
+        {"t":190.57,"den":279.62,"ten":"Chạy thật: ps · Năm trạng thái"},
+        {"t":279.62,"den":355.48,"ten":"Xác sống và PID 1 · Chạy thật: xác sống không giết được"},
+        {"t":355.48,"den":483.26,"ten":"Chạy thật: đọc /proc · Chạy thật trên Mac"},
+        {"t":483.26,"den":593.48,"ten":"Thuật ngữ trong bài · Ba câu tự kiểm"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 5.1, mở đầu Chương 5: tiến trình, job và tín hiệu."},
         {"t":12.08,"vi":"Chương trước: quyền, người dùng, sudo, và sáu bước chẩn đoán Permission denied."},
@@ -7658,8 +8183,15 @@
         {"t":585.2,"vi":"Bài sau, bài 5.2: nhìn một hệ thống đang chạy, top, tải trung bình và bộ nhớ."}
       ]
     },
-    "lnx-5-2-top-tai-bo-nho": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/linux-bash/05-tien-trinh-job-tin-hieu/05-03-top-tai-bo-nho-d4c1c73c.mp4","durationSec":550.71,"nguonCau":"srt",
-      "parts": [],
+    "lnx-5-2-top-tai-bo-nho": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/linux-bash/05-tien-trinh-job-tin-hieu/05-03-top-tai-bo-nho-d4c1c73c.mp4","durationSec":550.71,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":81.09,"ten":"Ôn nhanh · hôm nay · top: năm dòng đầu"},
+        {"t":81.09,"den":159.26,"ten":"Tải là hàng đợi · Mô phỏng: tải là hàng đợi"},
+        {"t":159.26,"den":254.44,"ten":"Chạy thật: nice và renice · free: đọc available"},
+        {"t":254.44,"den":334.04,"ten":"Chạy thật: một vụ OOM · ulimit"},
+        {"t":334.04,"den":443.08,"ten":"Chạy thật trên Mac · Liên kết chéo"},
+        {"t":443.08,"den":550.71,"ten":"Thuật ngữ trong bài · Ba câu tự kiểm"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 5.2 của khoá Linux và Bash."},
         {"t":9.64,"vi":"Bài trước: cả máy là một cây tiến trình, một lệnh ra đời qua fork và exec, và xác sống chỉ cha nó dọn được."},
@@ -7747,8 +8279,15 @@
         {"t":544.1,"vi":"Bài sau, bài 5.3: tín hiệu, Ctrl-C thật ra gửi cái gì."}
       ]
     },
-    "lnx-5-3-tin-hieu": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/linux-bash/05-tien-trinh-job-tin-hieu/05-04-tin-hieu-7f02cbec.mp4","durationSec":586.8,"nguonCau":"srt",
-      "parts": [],
+    "lnx-5-3-tin-hieu": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/linux-bash/05-tien-trinh-job-tin-hieu/05-04-tin-hieu-7f02cbec.mp4","durationSec":586.8,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":83.91,"ten":"Ôn nhanh · hôm nay · Những tín hiệu bạn sẽ gặp"},
+        {"t":83.91,"den":175.95,"ten":"Mã thoát 128 + N"},
+        {"t":175.95,"den":271.09,"ten":"pgrep -f khớp chính bạn · Chạy thật: pkill tự bắn vào chân"},
+        {"t":271.09,"den":366.27,"ten":"Thang leo · Chạy thật: hỏi lịch sự trước"},
+        {"t":366.27,"den":474.55,"ten":"Chạy thật trên Mac · Liên kết chéo"},
+        {"t":474.55,"den":586.8,"ten":"Thuật ngữ trong bài · Ba câu tự kiểm"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 5.3 của khoá Linux và Bash."},
         {"t":9.63,"vi":"Bài trước: tải là hàng đợi, đọc available chứ không đọc free, và OOM killer để lại mã 137."},
@@ -7849,8 +8388,16 @@
         {"t":579.17,"vi":"Bài sau, bài 5.4: job, chạy nền, và sống sót khi terminal đóng lại."}
       ]
     },
-    "lnx-5-4-job-chay-nen": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/linux-bash/05-tien-trinh-job-tin-hieu/05-05-job-chay-nen-37c4edf2.mp4","durationSec":767.3,"nguonCau":"srt",
-      "parts": [],
+    "lnx-5-4-job-chay-nen": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/linux-bash/05-tien-trinh-job-tin-hieu/05-05-job-chay-nen-37c4edf2.mp4","durationSec":767.3,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":102.42,"ten":"Ôn nhanh · hôm nay · Tiền cảnh, hậu cảnh, treo lại"},
+        {"t":102.42,"den":210.73,"ten":"Chạy nền với dấu và, $! và wait · Chạy thật: $! và wait"},
+        {"t":210.73,"den":327.69,"ten":"Mô phỏng: chuyện gì xảy ra khi mạng rớt"},
+        {"t":327.69,"den":425.32,"ten":"Ba cách tách rời, sống sót tới đâu"},
+        {"t":425.32,"den":528.22,"ten":"tmux: các phím cần nhớ · Chạy thật: tmux trong container"},
+        {"t":528.22,"den":656.72,"ten":"Chạy thật trên Mac, và WSL · Liên kết chéo"},
+        {"t":656.72,"den":767.3,"ten":"Thuật ngữ trong bài · Ba câu tự kiểm"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 5.4, bài cuối của chương 5."},
         {"t":10,"vi":"Bài trước: Ctrl-C là SIGINT tới cả nhóm tiền cảnh, mã 128 cộng N, và TERM trước, -9 sau."},
@@ -7982,8 +8529,16 @@
         {"t":759.99,"vi":"Bài sau, bài 6.1, mở chương 6: biến, thay thế lệnh và số học."}
       ]
     },
-    "lnx-6-1-bien-thay-the-lenh": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/linux-bash/06-bien-dau-nhay-khai-trien/06-02-bien-thay-the-lenh-4571fcc9.mp4","durationSec":671.12,"nguonCau":"srt",
-      "parts": [],
+    "lnx-6-1-bien-thay-the-lenh": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/linux-bash/06-bien-dau-nhay-khai-trien/06-02-bien-thay-the-lenh-4571fcc9.mp4","durationSec":671.12,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":92.67,"ten":"Ôn nhanh · hôm nay · Mô phỏng: shell viết lại dòng lệnh"},
+        {"t":92.67,"den":174.91,"ten":"Chạy thật: dấu cách và ranh giới tên"},
+        {"t":174.91,"den":266.92,"ten":"Số học: chỉ số nguyên · Chạy thật: số nguyên cắt phần lẻ"},
+        {"t":266.92,"den":356.07,"ten":"Mô phỏng: fork chép môi trường · Chạy thật: ai thấy biến nào"},
+        {"t":356.07,"den":450.85,"ten":"Chạy thật: tham số, và SCRIPT_DIR qua symlink"},
+        {"t":450.85,"den":565.7,"ten":"Chạy thật trên Mac, và WSL · Liên kết chéo"},
+        {"t":565.7,"den":671.12,"ten":"Thuật ngữ trong bài · Ba câu tự kiểm"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với chương 6 của khoá Linux và Bash."},
         {"t":9.23,"vi":"Chương trước: tiến trình, tín hiệu, và job. Ctrl-Z, chạy nền, tmux để sống sót khi mạng rớt."},
@@ -8107,8 +8662,16 @@
         {"t":664.26,"vi":"Bài sau, bài 6.2: dấu nháy, luật duy nhất làm script thôi vỡ."}
       ]
     },
-    "lnx-6-2-dau-nhay": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/linux-bash/06-bien-dau-nhay-khai-trien/06-03-dau-nhay-49a17cb4.mp4","durationSec":639.6,"nguonCau":"srt",
-      "parts": [],
+    "lnx-6-2-dau-nhay": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/linux-bash/06-bien-dau-nhay-khai-trien/06-03-dau-nhay-49a17cb4.mp4","durationSec":639.6,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":97.51,"ten":"Ôn nhanh · hôm nay · Mô phỏng: dấu nháy là một lớp màng"},
+        {"t":97.51,"den":196.21,"ten":"Chạy thật: cắt từ và glob · Toàn bộ thứ tự khai triển"},
+        {"t":196.21,"den":286.03,"ten":"Ba loại nháy · Chạy thật: ba loại nháy"},
+        {"t":286.03,"den":365.19,"ten":"Chạy thật: ba cách viết, ba kết quả"},
+        {"t":365.19,"den":466.29,"ten":"IFS, và zsh thì không cắt"},
+        {"t":466.29,"den":553.31,"ten":"Liên kết chéo · Thực hành 15–20 phút"},
+        {"t":553.31,"den":639.6,"ten":"Ba câu tự kiểm · Tóm tắt & luyện tập"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 6.2."},
         {"t":7.83,"vi":"Bài trước: shell viết lại dòng lệnh trước khi chạy."},
@@ -8226,8 +8789,16 @@
         {"t":631.93,"vi":"Bài sau, bài 6.3: khai triển tham số, xử lý chuỗi mà không rời khỏi bash."}
       ]
     },
-    "lnx-6-3-khai-trien-tham-so": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/linux-bash/06-bien-dau-nhay-khai-trien/06-04-khai-trien-tham-so-9e9bf532.mp4","durationSec":606.12,"nguonCau":"srt",
-      "parts": [],
+    "lnx-6-3-khai-trien-tham-so": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/linux-bash/06-bien-dau-nhay-khai-trien/06-04-khai-trien-tham-so-9e9bf532.mp4","durationSec":606.12,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":84,"ten":"Ôn nhanh · hôm nay · Bốn toán tử mặc định"},
+        {"t":84,"den":159.62,"ten":"Chạy thật: cấu hình bắt buộc"},
+        {"t":159.62,"den":253.49,"ten":"Thăng xén trái, phần trăm xén phải"},
+        {"t":253.49,"den":342.87,"ten":"Độ dài, cắt lát, hoa thường"},
+        {"t":342.87,"den":426.19,"ten":"Chạy thật: đo một lần fork"},
+        {"t":426.19,"den":501.23,"ten":"Liên kết chéo · Thực hành 15–20 phút"},
+        {"t":501.23,"den":606.12,"ten":"Thuật ngữ trong bài · Ba câu tự kiểm"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 6.3."},
         {"t":7.78,"vi":"Bài trước: nháy kép quanh mọi phép khai triển, nháy kép a còng cho tham số và mảng, và thứ tự sáu bước."},
@@ -8335,8 +8906,15 @@
         {"t":600.4,"vi":"Bài sau, bài 6.4: mã thoát, điều kiện và case."}
       ]
     },
-    "lnx-6-4-ma-thoat-dieu-kien": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/linux-bash/06-bien-dau-nhay-khai-trien/06-05-ma-thoat-dieu-kien-c3a6e243.mp4","durationSec":594.6,"nguonCau":"srt",
-      "parts": [],
+    "lnx-6-4-ma-thoat-dieu-kien": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/linux-bash/06-bien-dau-nhay-khai-trien/06-05-ma-thoat-dieu-kien-c3a6e243.mp4","durationSec":594.6,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":95.77,"ten":"Ôn nhanh · hôm nay · Mô phỏng: mã thoát là một cái đèn"},
+        {"t":95.77,"den":193.83,"ten":"Chạy thật: những mã bạn sẽ gặp · && và || không phải if"},
+        {"t":193.83,"den":284.03,"ten":"if chạy một lệnh, [ ] so với [[ ]] · Chuỗi so với số"},
+        {"t":284.03,"den":370.23,"ten":"Phép thử tệp và case"},
+        {"t":370.23,"den":491.33,"ten":"Chạy thật: sh trên Ubuntu và trên Mac · Liên kết chéo"},
+        {"t":491.33,"den":594.6,"ten":"Thuật ngữ trong bài · Ba câu tự kiểm"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 6.4."},
         {"t":7.97,"vi":"Bài trước: xử lý chuỗi bằng khai triển tham số."},
@@ -8448,8 +9026,17 @@
         {"t":588.17,"vi":"Bài sau, bài 6.5: vòng lặp và hàm, khép lại chương 6."}
       ]
     },
-    "lnx-7-1-khung-script": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/linux-bash/07-viet-script-production/07-02-khung-script-2225b784.mp4","durationSec":671.97,"nguonCau":"srt",
-      "parts": [],
+    "lnx-7-1-khung-script": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/linux-bash/07-viet-script-production/07-02-khung-script-2225b784.mp4","durationSec":671.97,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":84.6,"ten":"Ôn nhanh · hôm nay · Dòng shebang"},
+        {"t":84.6,"den":180.55,"ten":"set -euo pipefail, từng cờ một · Chạy thật: một chữ gõ sai"},
+        {"t":180.55,"den":270.78,"ten":"Ba chỗ -e không kích hoạt"},
+        {"t":270.78,"den":349.21,"ten":"Chạy thật: bộ khung hoạt động"},
+        {"t":349.21,"den":431.39,"ten":"Script từ Windows · Chạy thật: gạch chéo r vô hình"},
+        {"t":431.39,"den":512.47,"ten":"Trên macOS và WSL · Chạy thật trên Mac"},
+        {"t":512.47,"den":592.1,"ten":"Thực hành 15–20 phút · Thuật ngữ trong bài"},
+        {"t":592.1,"den":671.97,"ten":"Ba câu tự kiểm · Tóm tắt & luyện tập"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với chương 7: viết script cho production."},
         {"t":9.8,"vi":"Chương trước: biến, dấu nháy, khai triển, mã thoát, vòng lặp và hàm."},
@@ -8577,8 +9164,14 @@
         {"t":665.38,"vi":"Bài sau, bài 7.2: tham số, tuỳ chọn và kiểm tính hợp lệ."}
       ]
     },
-    "lnx-7-2-tham-so-kiem-tra": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/linux-bash/07-viet-script-production/07-03-tham-so-kiem-tra-08de0a06.mp4","durationSec":491.02,"nguonCau":"srt",
-      "parts": [],
+    "lnx-7-2-tham-so-kiem-tra": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/linux-bash/07-viet-script-production/07-03-tham-so-kiem-tra-08de0a06.mp4","durationSec":491.02,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":89.84,"ten":"Ôn nhanh · hôm nay · Mô phỏng: bốn cánh cửa"},
+        {"t":89.84,"den":181.97,"ten":"Chạy thật: ba cách viết, ba kết quả · getopts: cờ ngắn"},
+        {"t":181.97,"den":286.75,"ten":"Chạy thật: năm lời gọi · Bốn cửa"},
+        {"t":286.75,"den":403.82,"ten":"Chạy thật: chế độ chạy thử"},
+        {"t":403.82,"den":491.02,"ten":"Thuật ngữ trong bài · Ba câu tự kiểm"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 7.2."},
         {"t":7.89,"vi":"Bài trước: shebang env bash, set trừ E e u o pipefail có ba lỗ, và đừng đặt cd giữa chuỗi và."},
@@ -8677,8 +9270,15 @@
         {"t":485.71,"vi":"Bài sau, bài 7.3: trap, tệp tạm và khoá."}
       ]
     },
-    "lnx-7-4-go-loi-script": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/linux-bash/07-viet-script-production/07-05-go-loi-script-64fbb499.mp4","durationSec":517.55,"nguonCau":"srt",
-      "parts": [],
+    "lnx-7-4-go-loi-script": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/linux-bash/07-viet-script-production/07-05-go-loi-script-64fbb499.mp4","durationSec":517.55,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":94.66,"ten":"Ôn nhanh · hôm nay · Mô phỏng: năm tia X cho một script"},
+        {"t":94.66,"den":171.79,"ten":"Chạy thật: đọc một vệt trace · Năm bậc gỡ lỗi"},
+        {"t":171.79,"den":247.11,"ten":"ShellCheck · Chạy thật: ShellCheck trên năm lỗi"},
+        {"t":247.11,"den":341.23,"ten":"Tay chạy được, cron hỏng"},
+        {"t":341.23,"den":422.02,"ten":"Liên kết chéo · Thực hành 15–20 phút"},
+        {"t":422.02,"den":517.55,"ten":"Thuật ngữ trong bài · Ba câu tự kiểm"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 7.4."},
         {"t":8,"vi":"Bài trước: trap EXIT dọn dẹp mọi lối ra, mktemp, flock, và chạy lại an toàn."},
@@ -8767,8 +9367,15 @@
         {"t":510.03,"vi":"Bài sau, bài 7.5: một script hoàn chỉnh, và khi nào bash là công cụ sai."}
       ]
     },
-    "lnx-7-5-script-hoan-chinh": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/linux-bash/07-viet-script-production/07-06-script-hoan-chinh-c75705dd.mp4","durationSec":507.62,"nguonCau":"srt",
-      "parts": [],
+    "lnx-7-5-script-hoan-chinh": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/linux-bash/07-viet-script-production/07-06-script-hoan-chinh-c75705dd.mp4","durationSec":507.62,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":84.69,"ten":"Ôn nhanh · hôm nay · Mô phỏng: chín khối, chín bài"},
+        {"t":84.69,"den":160.48,"ten":"Chạy thật: chạy thử trọn vẹn"},
+        {"t":160.48,"den":256.82,"ten":"Chạy lại bản cũ lộ lỗi thật · Chạy thật: dựng lại ba lỗi"},
+        {"t":256.82,"den":335.98,"ten":"Chạy thật: bảng kiểm trên chính script này"},
+        {"t":335.98,"den":423.08,"ten":"Thực hành cả chương · Thực hành 15–20 phút"},
+        {"t":423.08,"den":507.62,"ten":"Ba câu tự kiểm · Tóm tắt & luyện tập"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 7.5, bài cuối của chương 7."},
         {"t":9.67,"vi":"Bốn bài trước: bộ khung, cửa trước, dọn dẹp, và gỡ lỗi bằng công cụ."},
@@ -8859,8 +9466,16 @@
         {"t":500.37,"vi":"Bài sau, bài 8.1, mở chương 8: PATH, và vì sao có command not found."}
       ]
     },
-    "lnx-8-1-path": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/linux-bash/08-moi-truong-path-khoi-dong/08-02-path-94d84be7.mp4","durationSec":606.36,"nguonCau":"srt",
-      "parts": [],
+    "lnx-8-1-path": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/linux-bash/08-moi-truong-path-khoi-dong/08-02-path-94d84be7.mp4","durationSec":606.36,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":88.16,"ten":"Ôn nhanh · hôm nay · PATH thật ra là gì"},
+        {"t":88.16,"den":178.41,"ten":"Thứ tự tra cứu đầy đủ · Chạy thật: type, command -v, which"},
+        {"t":178.41,"den":255.97,"ten":"Thứ tự quyết định phiên bản · Chạy thật: thêm vào đầu"},
+        {"t":255.97,"den":334.35,"ten":"Chạy thật: ls của người lạ · Các mục của PATH đến từ đâu"},
+        {"t":334.35,"den":428.21,"ten":"Chạy thật: sudo chạy nhầm phiên bản"},
+        {"t":428.21,"den":508.89,"ten":"Liên kết chéo · Thực hành 15–20 phút"},
+        {"t":508.89,"den":606.36,"ten":"Thuật ngữ trong bài · Ba câu tự kiểm"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với chương 8: môi trường, PATH và tệp khởi động."},
         {"t":10.27,"vi":"Chương trước: một script production chín khối, và env trừ i tái hiện chuyện tay chạy được mà cron hỏng."},
@@ -8970,8 +9585,15 @@
         {"t":599.27,"vi":"Bài sau, bài 8.2: tệp khởi động, rốt cuộc tệp nào được đọc."}
       ]
     },
-    "lnx-8-4-tuy-bien-shell": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/linux-bash/08-moi-truong-path-khoi-dong/08-05-tuy-bien-shell-65dcfbfe.mp4","durationSec":549.23,"nguonCau":"srt",
-      "parts": [],
+    "lnx-8-4-tuy-bien-shell": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/linux-bash/08-moi-truong-path-khoi-dong/08-05-tuy-bien-shell-65dcfbfe.mp4","durationSec":549.23,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":84.99,"ten":"Ôn nhanh · hôm nay · Mô phỏng: bí danh chỉ thay chữ"},
+        {"t":84.99,"den":174.16,"ten":"Chạy thật: bí danh và hàm · Dấu nhắc PS1"},
+        {"t":174.16,"den":262.08,"ten":"Mô phỏng: readline đếm sai · Lịch sử: ghi ngay mỗi lệnh"},
+        {"t":262.08,"den":356.65,"ten":"Chạy thật: terminal bị giết · Dotfile gọn gàng"},
+        {"t":356.65,"den":438.44,"ten":"Liên kết chéo · Thực hành 15–20 phút"},
+        {"t":438.44,"den":549.23,"ten":"Thuật ngữ trong bài · Ba câu tự kiểm"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 8.4, bài cuối của chương 8."},
         {"t":9.81,"vi":"Bài trước: môi trường chỉ chảy xuống, đóng băng lúc exec, và bí mật đặt trong tệp 600 riêng."},
@@ -9068,8 +9690,20 @@
         {"t":541.95,"vi":"Chương sau, bài 9.1: mạng nhìn từ shell, giao diện, cổng và DNS."}
       ]
     },
-    "lnx-9-1-giao-dien-cong-dns": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/linux-bash/09-mang-may-tu-xa/09-02-giao-dien-cong-dns-3b03dddb.mp4","durationSec":1073.96,"nguonCau":"srt",
-      "parts": [],
+    "lnx-9-1-giao-dien-cong-dns": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/linux-bash/09-mang-may-tu-xa/09-02-giao-dien-cong-dns-3b03dddb.mp4","durationSec":1073.96,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":107.17,"ten":"Ôn nhanh · hôm nay · Mô phỏng: bốn bệnh, một câu than"},
+        {"t":107.17,"den":212.5,"ten":"Chạy thật: ip trên máy khách · ss: ai đang lắng nghe"},
+        {"t":212.5,"den":317.51,"ten":"Chạy thật: ss trên máy chủ · 127.0.0.1 hay 0.0.0.0"},
+        {"t":317.51,"den":425.48,"ten":"Mô phỏng: cửa nhìn vào trong"},
+        {"t":425.48,"den":523.34,"ten":"Một câu hỏi DNS đi năm chặng · Chạy thật: dig và getent"},
+        {"t":523.34,"den":629.92,"ten":"Bốn cách hỏi một cái tên · Chạy thật: tệp hosts nói dối"},
+        {"t":629.92,"den":743.34,"ten":"Thang bốn bậc · Chạy thật: leo thang và tcpdump"},
+        {"t":743.34,"den":840.95,"ten":"Trên macOS và WSL · Liên kết chéo"},
+        {"t":840.95,"den":932.06,"ten":"Thực hành 15–20 phút"},
+        {"t":932.06,"den":1020.96,"ten":"Thuật ngữ trong bài · Ba câu tự kiểm"},
+        {"t":1020.96,"den":1073.96,"ten":"Tóm tắt & luyện tập"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 9.1, bài đầu tiên của chương 9: mạng và máy từ xa."},
         {"t":11.7,"vi":"Bài trước mình tuỳ biến shell: bí danh thay chữ, hàm nhận tham số, dấu nhắc và lịch sử ghi ngay sau mỗi lệnh."},
@@ -9218,8 +9852,17 @@
         {"t":1067.87,"vi":"Bài sau, 9.2: curl, những cờ thật sự quan trọng."}
       ]
     },
-    "lnx-9-2-curl": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/linux-bash/09-mang-may-tu-xa/09-03-curl-97b01ec9.mp4","durationSec":822.94,"nguonCau":"srt",
-      "parts": [],
+    "lnx-9-2-curl": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/linux-bash/09-mang-may-tu-xa/09-03-curl-97b01ec9.mp4","durationSec":822.94,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":112.8,"ten":"Ôn nhanh · hôm nay · Mô phỏng: mặc định nói dối"},
+        {"t":112.8,"den":191.89,"ten":"Lưu output: -o hay -O · Một request HTTPS, bốn chặng"},
+        {"t":191.89,"den":279.77,"ten":"Chạy thật: đo bốn chặng · curl -v: ba loại dòng"},
+        {"t":279.77,"den":374.36,"ten":"Chạy thật: -v, -I, --resolve"},
+        {"t":374.36,"den":482.94,"ten":"Mã thoát gọi tên tầng · Chạy thật: bốn kiểu hỏng"},
+        {"t":482.94,"den":600.56,"ten":"Chạy thật: bẫy $? · Chạy thật: phép kiểm sức khoẻ"},
+        {"t":600.56,"den":707.63,"ten":"Liên kết chéo · Thực hành 15–20 phút"},
+        {"t":707.63,"den":822.94,"ten":"Thuật ngữ trong bài · Ba câu tự kiểm"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 9.2 của khoá Linux và Bash."},
         {"t":9.65,"vi":"Bài trước: \"không kết nối được\" là bốn bệnh, leo thang ping, nc, curl. Và cột Local Address quyết định ai với tới được."},
@@ -9351,8 +9994,20 @@
         {"t":816.18,"vi":"Bài sau, 9.3: SSH, khoá, tệp cấu hình và đường hầm."}
       ]
     },
-    "lnx-9-3-ssh": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/linux-bash/09-mang-may-tu-xa/09-04-ssh-04e0775c.mp4","durationSec":1026.95,"nguonCau":"srt",
-      "parts": [],
+    "lnx-9-3-ssh": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/linux-bash/09-mang-may-tu-xa/09-04-ssh-04e0775c.mp4","durationSec":1026.95,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":95.63,"ten":"Ôn nhanh · hôm nay · Mô phỏng: ổ khoá và chìa"},
+        {"t":95.63,"den":193.25,"ten":"Sinh khoá, cài khoá, quyền · Chạy thật: sinh và cài khoá"},
+        {"t":193.25,"den":282.5,"ten":"~/.ssh/config: một chữ thay cả dòng"},
+        {"t":282.5,"den":367.09,"ten":"Match exec: mạng trường chặn 22"},
+        {"t":367.09,"den":451.85,"ten":"Mô phỏng: agent và -A · Đường hầm -L, -R, -D"},
+        {"t":451.85,"den":562.18,"ten":"Chạy thật: ba loại đường hầm · Chạy thật: lệnh ở đầu xa"},
+        {"t":562.18,"den":657.46,"ten":"sshd: file 99- thua file 50-"},
+        {"t":657.46,"den":738.89,"ten":"Khi SSH hỏng: đọc đúng câu lỗi · Chạy thật: bốn lỗi dựng lại"},
+        {"t":738.89,"den":891.68,"ten":"Trên macOS, Windows và WSL · Liên kết chéo"},
+        {"t":891.68,"den":975.38,"ten":"Thuật ngữ trong bài · Ba câu tự kiểm"},
+        {"t":975.38,"den":1026.95,"ten":"Tóm tắt & luyện tập"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 9.3 của khoá Linux và Bash."},
         {"t":9.56,"vi":"Bài trước: curl -sSfL, mốc thời gian cộng dồn, và mã thoát gọi tên tầng hỏng."},
@@ -9506,8 +10161,18 @@
         {"t":1019.33,"vi":"Bài sau, 9.4: chuyển tệp bằng scp, rsync, và dấu gạch chéo cuối."}
       ]
     },
-    "lnx-9-5-tuong-lua": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/linux-bash/09-mang-may-tu-xa/09-06-tuong-lua-5edeaa2f.mp4","durationSec":798.06,"nguonCau":"srt",
-      "parts": [],
+    "lnx-9-5-tuong-lua": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/linux-bash/09-mang-may-tu-xa/09-06-tuong-lua-5edeaa2f.mp4","durationSec":798.06,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":109.89,"ten":"Ôn nhanh · hôm nay · Mô phỏng: ba chỗ vứt gói tin"},
+        {"t":109.89,"den":210.93,"ten":"Chạy thật: dựng ufw · Chạy thật: ai qua, ai bị vứt"},
+        {"t":210.93,"den":306.12,"ten":"ufw, firewalld, nftables · Chạy thật: DROP so với REJECT"},
+        {"t":306.12,"den":383.98,"ten":"DROP chờ, REJECT trả lời ngay · Mô phỏng: Docker đi vòng ufw"},
+        {"t":383.98,"den":466.88,"ten":"Chạy thật: bảng kiểm và check-port · fail2ban và chiều đi ra"},
+        {"t":466.88,"den":554.2,"ten":"Ubuntu 24.04: cổng SSH do systemd giữ"},
+        {"t":554.2,"den":664.7,"ten":"Liên kết chéo · Thực hành 15–20 phút"},
+        {"t":664.7,"den":745.83,"ten":"Thuật ngữ trong bài · Ba câu tự kiểm"},
+        {"t":745.83,"den":798.06,"ten":"Tóm tắt & luyện tập"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 9.5, bài cuối của chương 9."},
         {"t":9.98,"vi":"Bài trước: dấu gạch chéo cuối nguồn, rsync delete với nguồn rỗng xoá sạch đích, và luôn chạy thử trước."},

@@ -2,8 +2,14 @@
   "courseSlug": "java-web-application-development",
   "sinhBoi": "scripts/phu-de-tu-video-rieng.mjs",
   "lessons": {
-    "prj301-ai-prompt": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/10-ai-trong-java-web/10-05-prompt-engineering-java-web-d96d7509.mp4","durationSec":826.52,"nguonCau":"srt",
-      "parts": [],
+    "prj301-ai-prompt": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/10-ai-trong-java-web/10-05-prompt-engineering-java-web-d96d7509.mp4","durationSec":826.52,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":183.69,"ten":"Mở đầu · bài này học gì"},
+        {"t":183.69,"den":328,"ten":"Dòng 21: mở kết nối"},
+        {"t":328,"den":507.75,"ten":"Trước khi đo"},
+        {"t":507.75,"den":655.57,"ten":"Thử với dòng try mở ngoặc này"},
+        {"t":655.57,"den":826.52,"ten":"Ví dụ: thẻ phần trăm bằng thành đô…"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn. Bài 10.D dựng một tác tử viết mã, dùng trình biên dịch Java làm giám khảo."},
         {"t":11.82,"vi":"Hôm nay là bài 10.1: dùng AI cho công việc Java web hằng ngày, sao cho đúng."},
@@ -173,8 +179,15 @@
         {"t":821.22,"vi":"Bài sau: 10.2, gọi LLM từ một servlet."}
       ]
     },
-    "prj301-ai-s15": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/10-ai-trong-java-web/10-03-tai-lieu-buoi-15-query-agent-1a5fbb82.mp4","durationSec":1020.6,"nguonCau":"srt",
-      "parts": [],
+    "prj301-ai-s15": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/10-ai-trong-java-web/10-03-tai-lieu-buoi-15-query-agent-1a5fbb82.mp4","durationSec":1020.6,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":178.35,"ten":"Mở đầu · bài này học gì"},
+        {"t":178.35,"den":356.95,"ten":"Bạn vừa thấy"},
+        {"t":356.95,"den":499.19,"ten":"DatabaseInfo là interface chứa tên máy"},
+        {"t":499.19,"den":674.32,"ten":"Câu hỏi nằm trong thẻ question"},
+        {"t":674.32,"den":851.4,"ten":"Lần chạy một"},
+        {"t":851.4,"den":1020.6,"ten":"Gộp lại, có năm lớp giữa chữ model…"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn. Bài 10.B dùng trợ lý Jeddict AI trong NetBeans, và luôn biên dịch, chạy thử mọi thứ AI sinh ra."},
         {"t":14.04,"vi":"Hôm nay là tài liệu AI buổi 15: Database Query Agent, tức tác tử truy vấn cơ sở dữ liệu."},
@@ -372,8 +385,16 @@
         {"t":1014.38,"vi":"Bài sau: tài liệu buổi 51, AI agent viết mã trong servlet."}
       ]
     },
-    "prj301-ai-s3": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/10-ai-trong-java-web/10-01-tai-lieu-buoi-3-prompt-ec1ea451.mp4","durationSec":951.44,"nguonCau":"srt",
-      "parts": [],
+    "prj301-ai-s3": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/10-ai-trong-java-web/10-01-tai-lieu-buoi-3-prompt-ec1ea451.mp4","durationSec":951.44,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":139.02,"ten":"Mở đầu · bài này học gì"},
+        {"t":139.02,"den":303.77,"ten":"Chạy thật: lục chuỗi trong tệp class"},
+        {"t":303.77,"den":412.88,"ten":"Câu hỏi mẫu nói về MySQL"},
+        {"t":412.88,"den":591.41,"ten":"Chạy thật với john_doe"},
+        {"t":591.41,"den":699.95,"ten":"Để ý: timeout luôn đặt"},
+        {"t":699.95,"den":843.49,"ten":"Chạy thật với giới hạn 12"},
+        {"t":843.49,"den":951.44,"ten":"Bài tập theo khuôn của bài"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn. Bài 9.2 đã cho servlet trả JSON, trình duyệt gọi bằng fetch, và mọi API vẫn phải kiểm session."},
         {"t":14.5,"vi":"Hôm nay mở đầu Chương 10: AI trong ứng dụng Java web."},
@@ -544,8 +565,15 @@
         {"t":945.51,"vi":"Bài sau: tài liệu buổi 8, trợ lý Jeddict AI trong NetBeans."}
       ]
     },
-    "prj301-ai-s51": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/10-ai-trong-java-web/10-04-tai-lieu-buoi-51-code-agent-8cdb2d71.mp4","durationSec":796.43,"nguonCau":"srt",
-      "parts": [],
+    "prj301-ai-s51": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/10-ai-trong-java-web/10-04-tai-lieu-buoi-51-code-agent-8cdb2d71.mp4","durationSec":796.43,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":145.04,"ten":"Mở đầu · bài này học gì"},
+        {"t":145.04,"den":264.16,"ten":"Bước bốn: gỡ lỗi và kiểm thử"},
+        {"t":264.16,"den":441.51,"ten":"Thứ nhất, câu trả lời bị cắt"},
+        {"t":441.51,"den":619.41,"ten":"Hết ba lượt thì ghi log gave up"},
+        {"t":619.41,"den":699.28,"ten":"Agent báo biên dịch được"},
+        {"t":699.28,"den":796.43,"ten":"Chạy thật: năm lỗi"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn. Bài 10.C dựng rào chắn cho câu SQL do AI viết, vì chữ model viết là dữ liệu không đáng tin."},
         {"t":13.61,"vi":"Hôm nay là tài liệu AI buổi 51: tác tử viết mã, chạy ngay trong một servlet."},
@@ -704,8 +732,16 @@
         {"t":790.33,"vi":"Bài sau: 10.1, prompt engineering cho công việc Java web."}
       ]
     },
-    "prj301-ai-s8": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/10-ai-trong-java-web/10-02-tai-lieu-buoi-8-jeddict-e8b957a0.mp4","durationSec":778.13,"nguonCau":"srt",
-      "parts": [],
+    "prj301-ai-s8": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/10-ai-trong-java-web/10-02-tai-lieu-buoi-8-jeddict-e8b957a0.mp4","durationSec":778.13,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":112.02,"ten":"Mở đầu · bài này học gì"},
+        {"t":112.02,"den":204.9,"ten":"Bước một: cài plugin. Có hai cách"},
+        {"t":204.9,"den":347.24,"ten":"Câu hỏi quan trọng nhất"},
+        {"t":347.24,"den":422.73,"ten":"Chạy thật: javac SumTest. Năm lỗi"},
+        {"t":422.73,"den":498.87,"ten":"Chạy thật cả hai bản"},
+        {"t":498.87,"den":656.57,"ten":"Bước bốn: các tính năng thêm"},
+        {"t":656.57,"den":778.13,"ten":"Bài tập: viết bài test JUnit cho hàm…"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn. Bài 10.A cho thấy prompt là chữ do mã ghép, và mọi câu trả lời của AI đều phải kiểm."},
         {"t":12.96,"vi":"Hôm nay là tài liệu AI buổi 8: Jeddict AI Assistant, một plugin gắn AI vào NetBeans."},
@@ -849,8 +885,15 @@
         {"t":771.05,"vi":"Bài sau: tài liệu buổi 15, Database Query Agent, lỗ hổng và rào chắn."}
       ]
     },
-    "prj301-ai-servlet": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/10-ai-trong-java-web/10-06-goi-llm-tu-servlet-a701cbb4.mp4","durationSec":906.64,"nguonCau":"srt",
-      "parts": [],
+    "prj301-ai-servlet": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/10-ai-trong-java-web/10-06-goi-llm-tu-servlet-a701cbb4.mp4","durationSec":906.64,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":136.28,"ten":"Mở đầu · bài này học gì"},
+        {"t":136.28,"den":314.2,"ten":"Cuối cùng extractText bóc phần chữ trong JSON…"},
+        {"t":314.2,"den":493.73,"ten":"Chỉ servlet nói chuyện với nhà cung cấp"},
+        {"t":493.73,"den":667.96,"ten":"Quy tắc năm"},
+        {"t":667.96,"den":805.24,"ten":"Lớp phòng thủ thứ hai"},
+        {"t":805.24,"den":906.64,"ten":"Thực hành nhé"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn. Bài 10.1 dạy cách hỏi AI để viết mã cho đúng, và cách kiểm lại mã đó."},
         {"t":12.03,"vi":"Hôm nay là bài 10.2: đưa AI vào chính ứng dụng của bạn, gọi nó từ một servlet."},
@@ -1040,8 +1083,15 @@
         {"t":902.36,"vi":"Bài sau: 10.3, thực hành Chương 10."}
       ]
     },
-    "prj301-ajax-json": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/09-ghep-front-end-back-end/09-02-ajax-json-ac96adbc.mp4","durationSec":516.5,"nguonCau":"srt",
-      "parts": [],
+    "prj301-ajax-json": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/09-ghep-front-end-back-end/09-02-ajax-json-ac96adbc.mp4","durationSec":516.5,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":86.17,"ten":"Mở đầu · bài này học gì"},
+        {"t":86.17,"den":179.1,"ten":"Cuối cùng ghi thẳng một chuỗi JSON vào…"},
+        {"t":179.1,"den":255.57,"ten":"Cuối cùng chỉ đổi chữ trong thẻ span"},
+        {"t":255.57,"den":340.39,"ten":"Cái bẫy làm ai cũng bất ngờ"},
+        {"t":340.39,"den":428.69,"ten":"Cái bẫy bảo mật"},
+        {"t":428.69,"den":516.5,"ten":"Bài tập: viết api check-email trả về available"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn. Bài 9.1 đã đưa ảnh lên server: form multipart, chú thích MultipartConfig, và năm bước lưu ảnh an toàn."},
         {"t":14.74,"vi":"Nhưng mỗi lần bấm Lưu, cả trang vẫn nạp lại từ đầu."},
@@ -1138,8 +1188,13 @@
         {"t":509.12,"vi":"Bài sau mở đầu Chương 10: AI trong ứng dụng Java web, bắt đầu với prompt engineering."}
       ]
     },
-    "prj301-application-scope": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/04-bon-pham-vi-scope/04-04-pham-vi-application-servletcontext-81a36344.mp4","durationSec":310.53,"nguonCau":"srt",
-      "parts": [],
+    "prj301-application-scope": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/04-bon-pham-vi-scope/04-04-pham-vi-application-servletcontext-81a36344.mp4","durationSec":310.53,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":84.54,"ten":"Ôn nhanh · hôm nay · Một đối tượng mọi người chia sẻ"},
+        {"t":84.54,"den":166,"ten":"Công dụng 2: bộ đếm toàn site"},
+        {"t":166,"den":232.2,"ten":"Chọn phạm vi · ★ Trường của servlet là application trá hình"},
+        {"t":232.2,"den":310.53,"ten":"Thực hành: tự gây mất lượt · Tự kiểm nhanh"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 4.3 của môn PRJ301."},
         {"t":10.08,"vi":"Bài 4.2 dùng cookie cho tiện lợi và session cho danh tính của từng người."},
@@ -1201,8 +1256,16 @@
         {"t":304.52,"vi":"Bạn làm phần thực hành, rồi sang bài 4.4: thực hành Chương 4."}
       ]
     },
-    "prj301-asm-1": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/11-assignment-a-z/11-01-asm-doc-de-tac-nhan-90a49c30.mp4","durationSec":1149.29,"nguonCau":"srt",
-      "parts": [],
+    "prj301-asm-1": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/11-assignment-a-z/11-01-asm-doc-de-tac-nhan-90a49c30.mp4","durationSec":1149.29,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":123.97,"ten":"Mở đầu · bài này học gì"},
+        {"t":123.97,"den":302.8,"ten":"Phần hai là báo cáo"},
+        {"t":302.8,"den":481.09,"ten":"Phần này đúng"},
+        {"t":481.09,"den":654.66,"ten":"Filter theo nghiệp vụ một điểm rưỡi"},
+        {"t":654.66,"den":781.1,"ten":"Mỗi chức năng có một mã"},
+        {"t":781.1,"den":953.69,"ten":"Ví dụ: một bác sĩ không thể có…"},
+        {"t":953.69,"den":1149.29,"ten":"Tuần bốn: đăng nhập"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với chuỗi Assignment PRJ301 từ A tới Z, bài một trên sáu."},
         {"t":12.08,"vi":"Bài trước, mình đã làm sáu bài tập AI an toàn: hợp đồng JSON, ý định thay câu SQL, giới hạn tần suất."},
@@ -1421,8 +1484,19 @@
         {"t":1141.29,"vi":"Bài sau, ASM.2: thiết kế cơ sở dữ liệu SQL Server và khung project MVC."}
       ]
     },
-    "prj301-asm-2": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/11-assignment-a-z/11-02-asm-csdl-khung-mvc-2e96ff56.mp4","durationSec":1316.19,"nguonCau":"srt",
-      "parts": [],
+    "prj301-asm-2": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/11-assignment-a-z/11-02-asm-csdl-khung-mvc-2e96ff56.mp4","durationSec":1316.19,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":144.37,"ten":"Mở đầu · bài này học gì"},
+        {"t":144.37,"den":319.62,"ten":"Ví dụ phòng khám và chuyên khoa của…"},
+        {"t":319.62,"den":492.65,"ten":"Ràng buộc CK_Appointment_result"},
+        {"t":492.65,"den":668.39,"ten":"Bẫy chữ N chỉ nằm trong script viết…"},
+        {"t":668.39,"den":764.53,"ten":"Tạo sẵn các gói và thư mục trước…"},
+        {"t":764.53,"den":895.62,"ten":"Vì sao mọi JSP nằm dưới WEB-INF?"},
+        {"t":895.62,"den":1072.58,"ten":"Trước khi cả nhóm chia nhau làm"},
+        {"t":1072.58,"den":1166.01,"ten":"Attribute của session thì càng ít càng tốt"},
+        {"t":1166.01,"den":1276.38,"ten":"Thực hành cho đề tài của bạn"},
+        {"t":1276.38,"den":1316.19,"ten":"Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài hai trong chuỗi Assignment PRJ301 từ A tới Z."},
         {"t":11.51,"vi":"Bài trước, mình đọc đề, viết bảng tác nhân, bảng chức năng, và hai luật quan trọng nhất."},
@@ -1663,8 +1737,20 @@
         {"t":1311.23,"vi":"Bài sau: vẽ wireframe từng trang trước khi viết JSP."}
       ]
     },
-    "prj301-asm-3": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/11-assignment-a-z/11-04-asm-chuc-nang-loi-59c53ed7.mp4","durationSec":1366.25,"nguonCau":"srt",
-      "parts": [],
+    "prj301-asm-3": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/11-assignment-a-z/11-04-asm-chuc-nang-loi-59c53ed7.mp4","durationSec":1366.25,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":160.09,"ten":"Mở đầu · bài này học gì"},
+        {"t":160.09,"den":241.4,"ten":"Chạy thật: tải tệp từ CDN"},
+        {"t":241.4,"den":344.28,"ten":"Giờ tới CRUD dịch vụ khám"},
+        {"t":344.28,"den":523.76,"ten":"Chạy thật: tìm chữ siêu âm"},
+        {"t":523.76,"den":692.87,"ten":"Xoá thì sao?"},
+        {"t":692.87,"den":870.11,"ten":"Chạy thật trên trang lễ tân"},
+        {"t":870.11,"den":1037.49,"ten":"Map lỗi không rỗng thì controller đặt mã…"},
+        {"t":1037.49,"den":1126.36,"ten":"Sang phần lễ tân"},
+        {"t":1126.36,"den":1208.04,"ten":"Phần cuối là hoá đơn"},
+        {"t":1208.04,"den":1324.66,"ten":"Chạy thật chỉ ra bốn"},
+        {"t":1324.66,"den":1366.25,"ten":"Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài ba trong chuỗi Assignment PRJ301 từ A tới Z."},
         {"t":11.31,"vi":"Bài trước, mình vẽ wireframe cho từng trang, rồi biến một wireframe thành trang JSP chạy thật."},
@@ -1929,8 +2015,20 @@
         {"t":1358.85,"vi":"Bài sau: ASM.4, thay lối tắt tạm bằng đăng nhập thật, vai trò, và Filter."}
       ]
     },
-    "prj301-asm-4": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/11-assignment-a-z/11-05-asm-dang-nhap-phan-quyen-0b0ea00f.mp4","durationSec":1257.19,"nguonCau":"srt",
-      "parts": [],
+    "prj301-asm-4": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/11-assignment-a-z/11-05-asm-dang-nhap-phan-quyen-0b0ea00f.mp4","durationSec":1257.19,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":87.96,"ten":"Mở đầu · bài này học gì"},
+        {"t":87.96,"den":171.33,"ten":"Bước một: trang công khai như trang chủ"},
+        {"t":171.33,"den":282.47,"ten":"Chạy thật: băm cùng một mật khẩu hai…"},
+        {"t":282.47,"den":402.32,"ten":"Cuối cùng so bằng MessageDigest.isEqual"},
+        {"t":402.32,"den":530.21,"ten":"Chạy thật. Mình gửi một form sai mọi…"},
+        {"t":530.21,"den":621.29,"ten":"Cuối cùng, tham số next chỉ được nhận…"},
+        {"t":621.29,"den":722.68,"ten":"Giờ tới hai Filter"},
+        {"t":722.68,"den":821.04,"ten":"Chạy thật. Bệnh nhân bn.minh đã đăng nhập"},
+        {"t":821.04,"den":998.51,"ten":"Chạy thật. Bệnh nhân bn.minh mở lịch số…"},
+        {"t":998.51,"den":1132.93,"ten":"Nếu không, chữ tiếng Việt bị giải mã…"},
+        {"t":1132.93,"den":1257.19,"ten":"Chạy thật: 404"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài bốn trong chuỗi Assignment PRJ301 từ A tới Z."},
         {"t":11.46,"vi":"Bài trước, mình làm đủ chức năng lõi: CRUD dịch vụ, phân trang, custom tag, và đặt lịch không trùng giờ."},
@@ -2154,8 +2252,22 @@
         {"t":1251.21,"vi":"Bài sau, ASM.5, mình nối thanh toán sandbox VNPay."}
       ]
     },
-    "prj301-asm-5": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/11-assignment-a-z/11-06-asm-thanh-toan-vnpay-b942d234.mp4","durationSec":1473.31,"nguonCau":"srt",
-      "parts": [],
+    "prj301-asm-5": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/11-assignment-a-z/11-06-asm-thanh-toan-vnpay-b942d234.mp4","durationSec":1473.31,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":99.2,"ten":"Mở đầu · bài này học gì"},
+        {"t":99.2,"den":271.88,"ten":"Bước một: bệnh nhân bấm nút"},
+        {"t":271.88,"den":360.86,"ten":"Chạy thật thì xoá nó đi"},
+        {"t":360.86,"den":438.97,"ten":"Vì sao POST?"},
+        {"t":438.97,"den":546.05,"ten":"Giờ tới hàm paymentUrl trong PaymentService"},
+        {"t":546.05,"den":667.24,"ten":"Chạy thật. Bạn Lan bấm thanh toán hoá…"},
+        {"t":667.24,"den":801.75,"ten":"Chạy thật: HashMap trả các tên theo thứ…"},
+        {"t":801.75,"den":928.12,"ten":"Giờ tới trái tim của bài"},
+        {"t":928.12,"den":1080.79,"ten":"Chạy thật. Trên trang cổng"},
+        {"t":1080.79,"den":1260.36,"ten":"Cuối cùng là VnpayReturnController"},
+        {"t":1260.36,"den":1338.75,"ten":"Bạn chỉ đổi URL và hai giá trị…"},
+        {"t":1338.75,"den":1415.65,"ten":"Chạy thật với hoá đơn HD2 của bạn…"},
+        {"t":1415.65,"den":1473.31,"ten":"Vì sao tiền không bị ghi hai lần?"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài năm trong chuỗi Assignment PRJ301 từ A tới Z."},
         {"t":11.46,"vi":"Bài trước, mình làm mật khẩu băm, đăng nhập thật, và hai Filter: vai trò rồi chủ sở hữu."},
@@ -2438,8 +2550,19 @@
         {"t":1466.93,"vi":"Bài sau, ASM.6, mình hoàn thiện báo cáo và chuẩn bị bảo vệ."}
       ]
     },
-    "prj301-asm-6": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/11-assignment-a-z/11-07-asm-bao-cao-bao-ve-813046c4.mp4","durationSec":1426.62,"nguonCau":"srt",
-      "parts": [],
+    "prj301-asm-6": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/11-assignment-a-z/11-07-asm-bao-cao-bao-ve-813046c4.mp4","durationSec":1426.62,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":169.52,"ten":"Mở đầu · bài này học gì"},
+        {"t":169.52,"den":254.75,"ten":"Là AdminReportController, gắn vào đường dẫn admin reports"},
+        {"t":254.75,"den":341.78,"ten":"Chạy thật nhé"},
+        {"t":341.78,"den":513.72,"ten":"Mình thử các ca biên như người chấm…"},
+        {"t":513.72,"den":691.26,"ten":"Cách tránh: dựng ERD từ script cuối cùng"},
+        {"t":691.26,"den":835.5,"ten":"Ba: lời nhắn commit có mã use case"},
+        {"t":835.5,"den":921.22,"ten":"Là đăng ký có lỗi rồi thành công"},
+        {"t":921.22,"den":1065.77,"ten":"Là mười lăm câu hội đồng hay hỏi"},
+        {"t":1065.77,"den":1242.71,"ten":"Ví dụ: đổi đặt trước ba mươi ngày…"},
+        {"t":1242.71,"den":1426.62,"ten":"Mỗi dòng đã từng làm mất điểm của…"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài cuối trong chuỗi Assignment PRJ301 từ A tới Z."},
         {"t":11.45,"vi":"Bài trước, mình nối nút thanh toán với cổng VNPay sandbox."},
@@ -2714,8 +2837,18 @@
         {"t":1420.44,"vi":"Bài sau là phần Nâng cao: bảo mật web, vận hành, và Spring Boot."}
       ]
     },
-    "prj301-asm-wireframe": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/11-assignment-a-z/11-03-asm-wireframe-7d8be15c.mp4","durationSec":1177.92,"nguonCau":"srt",
-      "parts": [],
+    "prj301-asm-wireframe": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/11-assignment-a-z/11-03-asm-wireframe-7d8be15c.mp4","durationSec":1177.92,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":105.79,"ten":"Mở đầu · bài này học gì"},
+        {"t":105.79,"den":212.19,"ten":"Ví dụ hôm nay cố ý không phải…"},
+        {"t":212.19,"den":390.17,"ten":"Vì sao đáng bỏ ra một buổi tối?"},
+        {"t":390.17,"den":563.33,"ten":"Số năm, phân trang sáu phòng mỗi trang,…"},
+        {"t":563.33,"den":741.64,"ten":"Trong DAO, ghi chú số ba đi vào…"},
+        {"t":741.64,"den":920.19,"ten":"Thêm c:param page bằng số trang muốn tới"},
+        {"t":920.19,"den":1013.41,"ten":"Đưa AI cả ba thứ"},
+        {"t":1013.41,"den":1130.38,"ten":"Giờ tới lượt bạn"},
+        {"t":1130.38,"den":1177.92,"ten":"Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài hai bê trong chuỗi Assignment PRJ301 từ A tới Z."},
         {"t":11.55,"vi":"Bài trước, mình viết setup.sql có bảy bảng, dựng khung project MVC, và chạy trang chủ đầu tiên từ SQL Server."},
@@ -2941,8 +3074,18 @@
         {"t":1169.06,"vi":"Bài sau: ASM.3, dựng các chức năng lõi của phòng khám bằng Bootstrap 5, CRUD, và phân trang."}
       ]
     },
-    "prj301-bat-dau-tai-day": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/00-gioi-thieu-huong-dan-hoc/00-01-bat-dau-tai-day-5a991b1d.mp4","durationSec":900.13,"nguonCau":"srt",
-      "parts": [],
+    "prj301-bat-dau-tai-day": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/00-gioi-thieu-huong-dan-hoc/00-01-bat-dau-tai-day-5a991b1d.mp4","durationSec":900.13,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":101.18,"ten":"Chào môn PRJ301 · Bấm \"Đăng nhập\" thì chuyện gì xảy ra?"},
+        {"t":101.18,"den":237.67,"ten":"PRJ301 trong một bức tranh"},
+        {"t":237.67,"den":366.57,"ten":"Lịch sử ngắn có mốc năm"},
+        {"t":366.57,"den":450.54,"ten":"Mô phỏng: CGI ↔ Servlet · javax hay jakarta?"},
+        {"t":450.54,"den":547.98,"ten":"Chạy thật: servlet javax trên Tomcat 10 ⇒ 404"},
+        {"t":547.98,"den":648.82,"ten":"Lý do 2: PE 30% + FE 20%"},
+        {"t":648.82,"den":735.79,"ten":"Lý do 4: phỏng vấn hỏi đúng những thứ này"},
+        {"t":735.79,"den":852.83,"ten":"Các bài trên web này vận hành thế nào · Thực hành: săn javax"},
+        {"t":852.83,"den":900.13,"ten":"Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài đầu tiên của môn PRJ301, Java Web Application Development, tức là phát triển ứng dụng web bằng Java."},
         {"t":16.78,"vi":"Môn PRO192 dạy bạn Java, môn DBI202 dạy bạn SQL."},
@@ -3079,20 +3222,14 @@
         {"t":889.08,"vi":"Bạn làm phần thực hành và quiz ngay dưới video này, rồi sang bài Bắt đầu tại đây phần hai: học PRJ301 thế nào cho khỏi nản."}
       ]
     },
-    "prj301-buoi-dau-tien": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/00-gioi-thieu-huong-dan-hoc/00-05-buoi-thuc-hanh-dau-tien-e154ff81.mp4","durationSec":649.38,"nguonCau":"thoigian",
+    "prj301-buoi-dau-tien": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/00-gioi-thieu-huong-dan-hoc/00-05-buoi-thuc-hanh-dau-tien-e154ff81.mp4","durationSec":649.38,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":27.9,"ten":"Chào bạn · Mục 0 PRJ301"},
-        {"t":27.9,"den":58.69,"ten":"\"Hello world\" mà có ích"},
-        {"t":58.69,"den":111.81,"ten":"Ba file và một vòng đi–về"},
-        {"t":111.81,"den":159.75,"ten":"Bước 1 — Tạo project kiểu Ant"},
-        {"t":159.75,"den":204.68,"ten":"Bước 2 — Form: index.jsp"},
-        {"t":204.68,"den":272.4,"ten":"Bước 3 — Bộ điều khiển: HelloServlet"},
-        {"t":272.4,"den":303.26,"ten":"Bước 4 — Trang kết quả: result.jsp"},
+        {"t":0,"den":111.81,"ten":"Chào bạn · Mục 0 PRJ301 · \"Hello world\" mà có ích"},
+        {"t":111.81,"den":204.68,"ten":"Bước 1 — Tạo project kiểu Ant · Bước 2 — Form: index.jsp"},
+        {"t":204.68,"den":303.26,"ten":"Bước 3 — Bộ điều khiển: HelloServlet"},
         {"t":303.26,"den":399.64,"ten":"Bước 5 — Chạy và đọc HTTP thật"},
-        {"t":399.64,"den":455.11,"ten":"Bước 6 — Đóng WAR, deploy không cần NetBeans"},
-        {"t":455.1,"den":528.34,"ten":"Ba bài tập nhỏ"},
-        {"t":528.34,"den":590.19,"ten":"Áp dụng vào Assignment — mẫu Nhà trọ"},
-        {"t":590.19,"den":649.38,"ten":"Tóm tắt"}
+        {"t":399.64,"den":528.34,"ten":"Bước 6 — Đóng WAR, deploy không cần NetBeans"},
+        {"t":528.34,"den":649.38,"ten":"Áp dụng vào Assignment — mẫu Nhà trọ · Tóm tắt"}
       ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Buổi thực hành đầu tiên, bài cuối của Mục 0 môn PRJ301."},
@@ -3164,28 +3301,20 @@
         {"t":638.52,"vi":"Giờ bạn làm phần Thực hành ngay dưới video, làm đủ ba bài tập nhỏ và đóng thử một file WAR, rồi hẵng sang Chương 1 nhé."}
       ]
     },
-    "prj301-cai-dat": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/00-gioi-thieu-huong-dan-hoc/00-03-cai-moi-truong-jdk-tomcat-netbeans-tron-ff1aa80f.mp4","durationSec":1425.79,"nguonCau":"srt",
+    "prj301-cai-dat": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/00-gioi-thieu-huong-dan-hoc/00-03-cai-moi-truong-jdk-tomcat-netbeans-tron-ff1aa80f.mp4","durationSec":1425.79,"nguonCau":"srt","nguonPhan":"canh",
       "parts": [
-        {"t":5.1,"den":33.16,"ten":"Phần 1 · Chào bạn · Mục 0 PRJ301"},
-        {"t":33.16,"den":80.25,"ten":"Phần 1 · Cài một lần, kiểm bằng một request thật"},
+        {"t":5.1,"den":80.25,"ten":"Phần 1 · Chào bạn · Mục 0 PRJ301"},
         {"t":80.25,"den":166.96,"ten":"Phần 1 · Bạn đang cài những gì"},
-        {"t":166.96,"den":230.73,"ten":"Phần 1 · Bước 1 — JDK 17"},
-        {"t":230.73,"den":314.67,"ten":"Phần 1 · Bước 2 — Tomcat 10.1"},
+        {"t":166.96,"den":314.67,"ten":"Phần 1 · Bước 1 — JDK 17 · Bước 2 — Tomcat 10.1"},
         {"t":314.67,"den":405.92,"ten":"Phần 1 · Bước 3 — NetBeans và gắn Tomcat"},
-        {"t":405.92,"den":461.59,"ten":"Phần 1 · Thực hành"},
-        {"t":461.59,"den":528.42,"ten":"Phần 1 · Áp dụng vào Assignment — mẫu Nhà trọ"},
-        {"t":528.42,"den":590.53,"ten":"Phần 1 · Tóm tắt"},
-        {"t":590.53,"den":616.61,"ten":"Phần 2 · Chào bạn · Mục 0 PRJ301"},
-        {"t":616.61,"den":650.19,"ten":"Phần 2 · SSMS vào được, mà Java thì không"},
-        {"t":650.19,"den":753.28,"ten":"Phần 2 · SQL Server trên Windows, giống phòng lab"},
+        {"t":405.92,"den":528.42,"ten":"Phần 1 · Thực hành · Áp dụng vào Assignment — mẫu Nhà trọ"},
+        {"t":528.42,"den":616.61,"ten":"Phần 1 · Tóm tắt · Chào bạn · Mục 0 PRJ301"},
+        {"t":616.61,"den":753.28,"ten":"Phần 2 · SSMS vào được, mà Java thì không"},
         {"t":753.28,"den":862.96,"ten":"Phần 2 · SQL Server trên Mac, bằng Docker"},
-        {"t":862.96,"den":917.36,"ten":"Phần 2 · Driver JDBC: một file jar"},
-        {"t":917.36,"den":994.02,"ten":"Phần 2 · Phép thử duy nhất: ba file"},
-        {"t":994.02,"den":1062.36,"ten":"Phần 2 · Kết quả thật: ba tên sinh viên"},
-        {"t":1062.36,"den":1121.83,"ten":"Phần 2 · Lỗi số một, xem tận mắt: javax trên Tomcat 10"},
+        {"t":862.96,"den":994.02,"ten":"Phần 2 · Driver JDBC: một file jar · Phép thử duy nhất: ba file"},
+        {"t":994.02,"den":1121.83,"ten":"Phần 2 · Kết quả thật: ba tên sinh viên"},
         {"t":1121.83,"den":1238.9,"ten":"Phần 2 · Bảng lỗi kinh điển"},
-        {"t":1238.9,"den":1292.89,"ten":"Phần 2 · Thực hành"},
-        {"t":1292.89,"den":1358.51,"ten":"Phần 2 · Áp dụng vào Assignment — mẫu Nhà trọ"},
+        {"t":1238.9,"den":1358.51,"ten":"Phần 2 · Thực hành · Áp dụng vào Assignment — mẫu Nhà trọ"},
         {"t":1358.51,"den":1425.79,"ten":"Phần 2 · Tóm tắt"}
       ],
       "cues": [
@@ -3398,28 +3527,20 @@
         {"t":1409.23,"vi":"Giờ bạn làm phần Thực hành ngay dưới video: chạy phép thử ba file cho tới khi thấy ba tên sinh viên, rồi hẵng sang bài tiếp theo nhé."}
       ]
     },
-    "prj301-cai-moi-truong": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/00-gioi-thieu-huong-dan-hoc/00-03-cai-moi-truong-jdk-tomcat-netbeans-tron-ff1aa80f.mp4","durationSec":1425.79,"nguonCau":"srt",
+    "prj301-cai-moi-truong": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/00-gioi-thieu-huong-dan-hoc/00-03-cai-moi-truong-jdk-tomcat-netbeans-tron-ff1aa80f.mp4","durationSec":1425.79,"nguonCau":"srt","nguonPhan":"canh",
       "parts": [
-        {"t":5.1,"den":33.16,"ten":"Phần 1 · Chào bạn · Mục 0 PRJ301"},
-        {"t":33.16,"den":80.25,"ten":"Phần 1 · Cài một lần, kiểm bằng một request thật"},
+        {"t":5.1,"den":80.25,"ten":"Phần 1 · Chào bạn · Mục 0 PRJ301"},
         {"t":80.25,"den":166.96,"ten":"Phần 1 · Bạn đang cài những gì"},
-        {"t":166.96,"den":230.73,"ten":"Phần 1 · Bước 1 — JDK 17"},
-        {"t":230.73,"den":314.67,"ten":"Phần 1 · Bước 2 — Tomcat 10.1"},
+        {"t":166.96,"den":314.67,"ten":"Phần 1 · Bước 1 — JDK 17 · Bước 2 — Tomcat 10.1"},
         {"t":314.67,"den":405.92,"ten":"Phần 1 · Bước 3 — NetBeans và gắn Tomcat"},
-        {"t":405.92,"den":461.59,"ten":"Phần 1 · Thực hành"},
-        {"t":461.59,"den":528.42,"ten":"Phần 1 · Áp dụng vào Assignment — mẫu Nhà trọ"},
-        {"t":528.42,"den":590.53,"ten":"Phần 1 · Tóm tắt"},
-        {"t":590.53,"den":616.61,"ten":"Phần 2 · Chào bạn · Mục 0 PRJ301"},
-        {"t":616.61,"den":650.19,"ten":"Phần 2 · SSMS vào được, mà Java thì không"},
-        {"t":650.19,"den":753.28,"ten":"Phần 2 · SQL Server trên Windows, giống phòng lab"},
+        {"t":405.92,"den":528.42,"ten":"Phần 1 · Thực hành · Áp dụng vào Assignment — mẫu Nhà trọ"},
+        {"t":528.42,"den":616.61,"ten":"Phần 1 · Tóm tắt · Chào bạn · Mục 0 PRJ301"},
+        {"t":616.61,"den":753.28,"ten":"Phần 2 · SSMS vào được, mà Java thì không"},
         {"t":753.28,"den":862.96,"ten":"Phần 2 · SQL Server trên Mac, bằng Docker"},
-        {"t":862.96,"den":917.36,"ten":"Phần 2 · Driver JDBC: một file jar"},
-        {"t":917.36,"den":994.02,"ten":"Phần 2 · Phép thử duy nhất: ba file"},
-        {"t":994.02,"den":1062.36,"ten":"Phần 2 · Kết quả thật: ba tên sinh viên"},
-        {"t":1062.36,"den":1121.83,"ten":"Phần 2 · Lỗi số một, xem tận mắt: javax trên Tomcat 10"},
+        {"t":862.96,"den":994.02,"ten":"Phần 2 · Driver JDBC: một file jar · Phép thử duy nhất: ba file"},
+        {"t":994.02,"den":1121.83,"ten":"Phần 2 · Kết quả thật: ba tên sinh viên"},
         {"t":1121.83,"den":1238.9,"ten":"Phần 2 · Bảng lỗi kinh điển"},
-        {"t":1238.9,"den":1292.89,"ten":"Phần 2 · Thực hành"},
-        {"t":1292.89,"den":1358.51,"ten":"Phần 2 · Áp dụng vào Assignment — mẫu Nhà trọ"},
+        {"t":1238.9,"den":1358.51,"ten":"Phần 2 · Thực hành · Áp dụng vào Assignment — mẫu Nhà trọ"},
         {"t":1358.51,"den":1425.79,"ten":"Phần 2 · Tóm tắt"}
       ],
       "cues": [
@@ -3632,8 +3753,14 @@
         {"t":1409.23,"vi":"Giờ bạn làm phần Thực hành ngay dưới video: chạy phép thử ba file cho tới khi thấy ba tên sinh viên, rồi hẵng sang bài tiếp theo nhé."}
       ]
     },
-    "prj301-cau-truc-deploy": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/01-web-hoat-dong-ra-sao/01-03-cau-truc-du-an-web-xml-trien-khai-418aee22.mp4","durationSec":499.02,"nguonCau":"srt",
-      "parts": [],
+    "prj301-cau-truc-deploy": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/01-web-hoat-dong-ra-sao/01-03-cau-truc-du-an-web-xml-trien-khai-418aee22.mp4","durationSec":499.02,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":108.8,"ten":"Ôn nhanh · hôm nay · Vì sao phải đúng bố cục"},
+        {"t":108.8,"den":206.2,"ten":"WEB-INF: trình duyệt không vào được · web.xml ↔ annotation"},
+        {"t":206.2,"den":297.63,"ten":"Mẫu URL: Tomcat chọn servlet thế nào"},
+        {"t":297.63,"den":385.22,"ten":"Bẫy context path"},
+        {"t":385.22,"den":499.02,"ten":"Thực hành: servlet nào nhận URL này? · Tự kiểm nhanh"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 1.2 của môn PRJ301."},
         {"t":10,"vi":"Bài trước mình đã viết servlet đầu tiên, và thấy dữ liệu GET nằm trên URL còn POST nằm trong thân."},
@@ -3715,8 +3842,13 @@
         {"t":490.45,"vi":"Bạn làm phần thực hành dưới video, rồi sang bài 1.3: thực hành, thuật ngữ và tóm tắt chương một."}
       ]
     },
-    "prj301-cookie-session": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/04-bon-pham-vi-scope/04-03-cookie-session-thuc-te-183bf2b6.mp4","durationSec":292.05,"nguonCau":"srt",
-      "parts": [],
+    "prj301-cookie-session": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/04-bon-pham-vi-scope/04-03-cookie-session-thuc-te-183bf2b6.mp4","durationSec":292.05,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":87.07,"ten":"Ôn nhanh · hôm nay"},
+        {"t":87.07,"den":161.94,"ten":"maxAge quyết định tất cả · Cookie ↔ session"},
+        {"t":161.94,"den":236.3,"ten":"Bẫy đơn vị: giây và phút"},
+        {"t":236.3,"den":292.05,"ten":"Tự kiểm nhanh · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 4.2 của môn PRJ301."},
         {"t":10.18,"vi":"Bài 4.1 trả lời theo góc độ phạm vi: session cho người đăng nhập, application cho mọi người."},
@@ -3771,8 +3903,18 @@
         {"t":284.32,"vi":"Bạn làm phần thực hành, rồi sang bài 4.3: phạm vi application và ServletContext."}
       ]
     },
-    "prj301-cs1-on": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/13-chuyen-sau-servlet-spring-boot/13-03-cs1-on-bai-tap-7c319116.mp4","durationSec":1041.77,"nguonCau":"srt",
-      "parts": [],
+    "prj301-cs1-on": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/13-chuyen-sau-servlet-spring-boot/13-03-cs1-on-bai-tap-7c319116.mp4","durationSec":1041.77,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":184.09,"ten":"Mở đầu · bài này học gì"},
+        {"t":184.09,"den":355.99,"ten":"Jackson biến nó thành JSON"},
+        {"t":355.99,"den":442.36,"ten":"Endpoint /inside đọc context path từ request"},
+        {"t":442.36,"den":520.42,"ten":"Chạy thật: APPLICATION FAILED TO START"},
+        {"t":520.42,"den":605.36,"ten":"Chạy thật: ứng dụng lại không khởi động"},
+        {"t":605.36,"den":724.77,"ten":"Chạy thật: APPLICATION FAILED TO START"},
+        {"t":724.77,"den":801.13,"ten":"Chạy thật với SPRING_PROFILES_ACTIVE bằng prod"},
+        {"t":801.13,"den":977.4,"ten":"Chạy thật bản gốc"},
+        {"t":977.4,"den":1041.77,"ten":"Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn. Đây là phần bài tập của CS.1, deck Chuyên sâu một: từ Tomcat tới Spring Boot."},
         {"t":12.58,"vi":"Hai phần trước ta đã thấy: starter kéo về cả bộ thư viện, tự cấu hình có điều kiện, và cấu hình xếp thành nhiều lớp."},
@@ -3990,8 +4132,17 @@
         {"t":1032.19,"vi":"Dưới video có quiz CS.1. Bài sau, CS.2: Spring MVC, DispatcherServlet và Thymeleaf."}
       ]
     },
-    "prj301-cs2-on": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/13-chuyen-sau-servlet-spring-boot/13-07-cs2-on-bai-tap-21fe09a9.mp4","durationSec":1093.2,"nguonCau":"srt",
-      "parts": [],
+    "prj301-cs2-on": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/13-chuyen-sau-servlet-spring-boot/13-07-cs2-on-bai-tap-21fe09a9.mp4","durationSec":1093.2,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":183.65,"ten":"Mở đầu · bài này học gì"},
+        {"t":183.65,"den":361.78,"ten":"POST có Valid RequestBody"},
+        {"t":361.78,"den":519.85,"ten":"Luật hai ô không gắn được lên một…"},
+        {"t":519.85,"den":632.49,"ten":"Chạy thật trong Chromium"},
+        {"t":632.49,"den":748.97,"ten":"Chạy thật. Không header: 403"},
+        {"t":748.97,"den":927.16,"ten":"Chạy thật. Slot T2-09: 409"},
+        {"t":927.16,"den":1022.06,"ten":"Phần thêm: không tham số"},
+        {"t":1022.06,"den":1093.2,"ten":"Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn. Đây là phần bài tập của CS.2, deck Chuyên sâu hai về Spring MVC."},
         {"t":12.11,"vi":"Hai phần trước ta đã thấy DispatcherServlet, form có kiểm dữ liệu, Post Redirect Get, và lỗi dạng ProblemDetail."},
@@ -4202,8 +4353,13 @@
         {"t":1083.89,"vi":"Dưới video có quiz CS.2. Bài sau, CS.3: dữ liệu với HikariCP, Flyway và JdbcTemplate."}
       ]
     },
-    "prj301-custom-tag": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/03-jsp-el-jstl/03-11-custom-tag-tag-file-18540938.mp4","durationSec":265.38,"nguonCau":"srt",
-      "parts": [],
+    "prj301-custom-tag": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/03-jsp-el-jstl/03-11-custom-tag-tag-file-18540938.mp4","durationSec":265.38,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":77.7,"ten":"Ôn nhanh · hôm nay · Khi copy-paste trong View thành vấn đề"},
+        {"t":77.7,"den":133.15,"ten":"Chạy thật: thẻ sản phẩm · Đường đầy đủ: SimpleTagSupport"},
+        {"t":133.15,"den":211.24,"ten":"Nên dùng cái nào · Bẫy và ★ component"},
+        {"t":211.24,"den":265.38,"ten":"Tự kiểm nhanh · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 3.5 của môn PRJ301."},
         {"t":10.06,"vi":"Bài 3.F đã đi theo slide: TLD, tag handler, và vòng đời cổ điển của một thẻ."},
@@ -4252,8 +4408,13 @@
         {"t":259.54,"vi":"Bạn làm phần thực hành, rồi sang bài 3.6: thực hành cả Chương 3."}
       ]
     },
-    "prj301-dieu-kien-qua-mon": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/00-gioi-thieu-huong-dan-hoc/00-07-dieu-kien-qua-mon-bcef847b.mp4","durationSec":372.72,"nguonCau":"srt",
-      "parts": [],
+    "prj301-dieu-kien-qua-mon": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/00-gioi-thieu-huong-dan-hoc/00-07-dieu-kien-qua-mon-bcef847b.mp4","durationSec":372.72,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":124.47,"ten":"Ôn nhanh · hôm nay · Các con số của môn"},
+        {"t":124.47,"den":205.22,"ten":"Trung bình 5 chưa phải toàn bộ luật"},
+        {"t":205.22,"den":310.73,"ten":"Chuẩn bị PE: tám khối Practice Classwork"},
+        {"t":310.73,"den":372.72,"ten":"Tự kiểm nhanh · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 0.2 của môn PRJ301: điều kiện qua môn và cấu trúc điểm."},
         {"t":13.33,"vi":"Bài trước mình đã xem bản đồ môn và một MVC tí hon chạy thật: Controller, Model và View."},
@@ -4317,8 +4478,13 @@
         {"t":366.32,"vi":"Bài sau là Chương một: học theo từng slide bộ prj1 của trường."}
       ]
     },
-    "prj301-el": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/03-jsp-el-jstl/03-09-expression-language-day-du-f1150401.mp4","durationSec":323.54,"nguonCau":"srt",
-      "parts": [],
+    "prj301-el": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/03-jsp-el-jstl/03-09-expression-language-day-du-f1150401.mp4","durationSec":323.54,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":89.72,"ten":"Ôn nhanh · hôm nay · dollar user chấm name thực sự làm gì"},
+        {"t":89.72,"den":181.27,"ten":"Các toán tử · Đối tượng ngầm định"},
+        {"t":181.27,"den":266.92,"ten":"Hàm fn và trường tĩnh · Bẫy: lỗi im lặng và lỗi 500"},
+        {"t":266.92,"den":323.54,"ten":"Tự kiểm nhanh · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 3.3 của môn PRJ301."},
         {"t":9.82,"vi":"Bài 3.1 mới cho thấy dollar user chấm name."},
@@ -4382,8 +4548,13 @@
         {"t":313.51,"vi":"Đối tượng thiếu thì in rỗng, thuộc tính sai thì lỗi 500. Bài sau là 3.4: JSTL core, định dạng và hàm."}
       ]
     },
-    "prj301-filter": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/08-filter-listener/08-03-filter-a0679425.mp4","durationSec":509.57,"nguonCau":"srt",
-      "parts": [],
+    "prj301-filter": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/08-filter-listener/08-03-filter-a0679425.mp4","durationSec":509.57,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":99.32,"ten":"Mở đầu · bài này học gì"},
+        {"t":99.32,"den":272.99,"ten":"Chạy thật trên Tomcat 10.1"},
+        {"t":272.99,"den":373.71,"ten":"Chạy thật: tên vẫn vỡ. Lạ hơn"},
+        {"t":373.71,"den":509.57,"ten":"Chạy thật: login 200"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn. Bài 8.A đã đi hết slide Filter, bài 8.B đi hết slide Listener."},
         {"t":12.45,"vi":"Bài này đi chậm lại với Filter, theo đúng cách bạn sẽ dùng trong bài lab và đề PE."},
@@ -4479,8 +4650,13 @@
         {"t":503.15,"vi":"Bài sau, 8.2: Listener, phản ứng với sự kiện của container."}
       ]
     },
-    "prj301-front-controller": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/06-kien-truc-mvc/06-03-front-controller-thuc-chien-6201cf43.mp4","durationSec":319.18,"nguonCau":"srt",
-      "parts": [],
+    "prj301-front-controller": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/06-kien-truc-mvc/06-03-front-controller-thuc-chien-6201cf43.mp4","durationSec":319.18,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":94.3,"ten":"Ôn nhanh · hôm nay · Mười hai servlet, hay một?"},
+        {"t":94.3,"den":160.17,"ten":"Một handler làm đầy đủ · Bố cục người chấm mong đợi"},
+        {"t":160.17,"den":236.2,"ten":"Front controller hay mỗi hành động một servlet · Hai cái bẫy"},
+        {"t":236.2,"den":319.18,"ten":"Thực hành: OrderController · Tự kiểm nhanh"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 6.2 của môn PRJ301."},
         {"t":9.99,"vi":"Bài 6.1 cho thấy ba vai trò phối hợp trong một lần đăng nhập, và giới thiệu front controller."},
@@ -4533,8 +4709,12 @@
         {"t":313.52,"vi":"Bạn làm phần thực hành, rồi sang bài 6.3: thực hành Chương 6."}
       ]
     },
-    "prj301-gioi-thieu": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/00-gioi-thieu-huong-dan-hoc/00-06-gioi-thieu-ban-do-mon-7753d0fc.mp4","durationSec":340.46,"nguonCau":"srt",
-      "parts": [],
+    "prj301-gioi-thieu": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/00-gioi-thieu-huong-dan-hoc/00-06-gioi-thieu-ban-do-mon-7753d0fc.mp4","durationSec":340.46,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":135.18,"ten":"Ôn nhanh · hôm nay · Nơi mọi thứ hội tụ"},
+        {"t":135.18,"den":227.86,"ten":"Bản đồ môn học · Học bằng cách xây và refresh"},
+        {"t":227.86,"den":340.46,"ten":"Thực hành: thêm một phòng · Tự kiểm nhanh"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 0.1 của môn PRJ301: giới thiệu môn và bản đồ môn học."},
         {"t":13.32,"vi":"Bài trước mình đã thấy bảy mươi phần trăm điểm là thực hành, và bốn luật học: làm hỏng, nhìn HTTP, sổ lỗi, lát cắt dọc."},
@@ -4593,8 +4773,16 @@
         {"t":332.16,"vi":"Bạn làm phần thực hành dưới video, rồi sang bài 0.2: điều kiện qua môn và cấu trúc điểm."}
       ]
     },
-    "prj301-hoc-the-nao": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/00-gioi-thieu-huong-dan-hoc/00-02-hoc-prj301-the-nao-ff527251.mp4","durationSec":673.98,"nguonCau":"srt",
-      "parts": [],
+    "prj301-hoc-the-nao": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/00-gioi-thieu-huong-dan-hoc/00-02-hoc-prj301-the-nao-ff527251.mp4","durationSec":673.98,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":132.35,"ten":"Ôn nhanh · hôm nay · Môn làm, không phải môn đọc"},
+        {"t":132.35,"den":211.39,"ten":"PE làm một mình · 60 buổi ↔ các chương"},
+        {"t":211.39,"den":322.52,"ten":"Luật 1: gõ, chạy, làm hỏng — chạy thật"},
+        {"t":322.52,"den":422.24,"ten":"Luật 3 và 4: sổ lỗi, lát cắt dọc · Nhịp mỗi tuần"},
+        {"t":422.24,"den":511.05,"ten":"Chuẩn bị PE 85 phút · Chuẩn bị FE 60 phút"},
+        {"t":511.05,"den":603.92,"ten":"Dùng AI cho đúng · Thực hành: tuần đầu tiên"},
+        {"t":603.92,"den":673.98,"ten":"Tự kiểm nhanh · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài Bắt đầu tại đây phần hai của môn PRJ301."},
         {"t":11.36,"vi":"Bài trước mình đã đi theo một request: trình duyệt, Tomcat, servlet, cơ sở dữ liệu, rồi quay về."},
@@ -4703,8 +4891,13 @@
         {"t":664.98,"vi":"Bạn làm phần thực hành ngay dưới video, rồi sang bài Cài môi trường để có Tomcat chạy trên máy của mình."}
       ]
     },
-    "prj301-http-servlet": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/01-web-hoat-dong-ra-sao/01-02-http-servlet-dau-tien-fd0c2a4a.mp4","durationSec":407.82,"nguonCau":"srt",
-      "parts": [],
+    "prj301-http-servlet": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/01-web-hoat-dong-ra-sao/01-02-http-servlet-dau-tien-fd0c2a4a.mp4","durationSec":407.82,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":119.13,"ten":"Ôn nhanh · hôm nay · Một trang web đến với bạn thế nào"},
+        {"t":119.13,"den":224.91,"ten":"Mã trạng thái: 200, 404, 500, 302"},
+        {"t":224.91,"den":339.53,"ten":"Bẫy: thiếu charset với tiếng Việt · ★ HTTP không trạng thái"},
+        {"t":339.53,"den":407.82,"ten":"Tự kiểm nhanh · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 1.1 của môn PRJ301."},
         {"t":10.29,"vi":"Bài trước mình đã đi hết mười sáu slide đầu: request có method, URL, header và thân; response có mã trạng thái."},
@@ -4780,8 +4973,14 @@
         {"t":398.21,"vi":"Bạn làm phần thực hành dưới video, rồi sang bài 1.2: cấu trúc dự án, web.xml và triển khai."}
       ]
     },
-    "prj301-init-context-validation": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/02-servlet-chuyen-sau/02-05-init-param-servletcontext-validate-cb41d960.mp4","durationSec":424.94,"nguonCau":"srt",
-      "parts": [],
+    "prj301-init-context-validation": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/02-servlet-chuyen-sau/02-05-init-param-servletcontext-validate-cb41d960.mp4","durationSec":424.94,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":93.87,"ten":"Ôn nhanh · hôm nay · Cấu hình viết cứng trong mã"},
+        {"t":93.87,"den":174.53,"ten":"Chạy thật: đọc cấu hình trong init"},
+        {"t":174.53,"den":258.08,"ten":"Mẫu kiểm dữ liệu phía máy chủ"},
+        {"t":258.08,"den":358.22,"ten":"Bẫy: parseInt với null và chuỗi rỗng"},
+        {"t":358.22,"den":424.94,"ten":"Tự kiểm nhanh · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 2.3 của môn PRJ301."},
         {"t":10.07,"vi":"Bài trước mình đã đọc tham số, đặt bảng mã UTF-8, và luôn kiểm dữ liệu ở máy chủ."},
@@ -4862,8 +5061,13 @@
         {"t":419.31,"vi":"Bạn làm phần thực hành dưới video, rồi sang bài ôn tập chương hai."}
       ]
     },
-    "prj301-jdbc-crud": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/05-jdbc-mau-dao/05-05-statement-resultset-crud-53a6274e.mp4","durationSec":339.04,"nguonCau":"srt",
-      "parts": [],
+    "prj301-jdbc-crud": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/05-jdbc-mau-dao/05-05-statement-resultset-crud-53a6274e.mp4","durationSec":339.04,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":82.02,"ten":"Ôn nhanh · hôm nay · Ba loại statement"},
+        {"t":82.02,"den":178.97,"ten":"Một DAO đầy đủ · Sửa, xoá: con số cho biết có khớp không"},
+        {"t":178.97,"den":260.5,"ten":"Các bẫy sinh dữ liệu sai âm thầm · ★ Chèn theo lô"},
+        {"t":260.5,"den":339.04,"ten":"Thực hành: CategoryDAO · Tự kiểm nhanh"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 5.3 của môn PRJ301."},
         {"t":10,"vi":"Bài 5.2 lo phần kết nối: driver, chuỗi kết nối, và các lỗi hay gặp."},
@@ -4931,8 +5135,13 @@
         {"t":332.45,"vi":"Bạn làm phần thực hành, rồi sang bài 5.4: giao dịch và connection pool."}
       ]
     },
-    "prj301-jdbc-dao": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/05-jdbc-mau-dao/05-03-ket-noi-csdl-an-toan-55e33fe4.mp4","durationSec":273.55,"nguonCau":"srt",
-      "parts": [],
+    "prj301-jdbc-dao": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/05-jdbc-mau-dao/05-03-ket-noi-csdl-an-toan-55e33fe4.mp4","durationSec":273.55,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":90.34,"ten":"Ôn nhanh · hôm nay · Năm bước trong một khối"},
+        {"t":90.34,"den":151.42,"ten":"Luôn PreparedStatement · Đòn phá dữ liệu: DROP TABLE"},
+        {"t":151.42,"den":222.88,"ten":"★ Connection pool · Thực hành: ProductDAO"},
+        {"t":222.88,"den":273.55,"ten":"Tự kiểm nhanh · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 5.1 của môn PRJ301."},
         {"t":10.24,"vi":"Hai bài theo slide đã cho năm bước JDBC và một cuộc SQL injection thật."},
@@ -4985,8 +5194,13 @@
         {"t":265.67,"vi":"Bạn làm phần thực hành, rồi sang bài 5.2: driver JDBC và kết nối SQL Server."}
       ]
     },
-    "prj301-jdbc-driver": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/05-jdbc-mau-dao/05-04-driver-jdbc-ket-noi-sql-server-b65b8641.mp4","durationSec":350.33,"nguonCau":"srt",
-      "parts": [],
+    "prj301-jdbc-driver": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/05-jdbc-mau-dao/05-04-driver-jdbc-ket-noi-sql-server-b65b8641.mp4","durationSec":350.33,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":97.59,"ten":"Ôn nhanh · hôm nay · Bốn loại driver: một xu hướng"},
+        {"t":97.59,"den":188.32,"ten":"Giải mã chuỗi kết nối"},
+        {"t":188.32,"den":261.19,"ten":"Bẫy: kết nối không bao giờ đóng"},
+        {"t":261.19,"den":350.33,"ten":"Thực hành: kết nối và chẩn đoán · Tự kiểm nhanh"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 5.2 của môn PRJ301."},
         {"t":10.05,"vi":"Bài 5.1 gói JDBC thành ba luật: năm bước, PreparedStatement, và DAO."},
@@ -5051,8 +5265,13 @@
         {"t":342.8,"vi":"Bạn làm phần thực hành, rồi sang bài 5.3: Statement, ResultSet và CRUD."}
       ]
     },
-    "prj301-jpa": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/07-jpa-anh-xa-doi-tuong/07-02-entity-entitymanager-9eaed73f.mp4","durationSec":330.9,"nguonCau":"srt",
-      "parts": [],
+    "prj301-jpa": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/07-jpa-anh-xa-doi-tuong/07-02-entity-entitymanager-9eaed73f.mp4","durationSec":330.9,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":86.71,"ten":"Ôn nhanh · hôm nay · Thôi viết SQL bằng tay"},
+        {"t":86.71,"den":170.7,"ten":"find — chọn theo khoá chính · persist — thêm"},
+        {"t":170.7,"den":241.62,"ten":"remove — xoá · JPQL — truy vấn trên entity"},
+        {"t":241.62,"den":330.9,"ten":"★ Bẫy N+1 · Tự kiểm nhanh"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn. Ở bài 7.A ta đã đi hết mười chín slide JPA và đọc SQL thật trong log."},
         {"t":12.61,"vi":"Bài này đi chậm lại ở hai thứ cốt lõi: lớp entity, và bốn cổng của EntityManager."},
@@ -5116,8 +5335,14 @@
         {"t":323.73,"vi":"Bài sau, 7.2: persistence.xml, JPQL và quan hệ."}
       ]
     },
-    "prj301-jpa-sau": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/07-jpa-anh-xa-doi-tuong/07-03-persistence-jpql-quan-he-6c1fe127.mp4","durationSec":459.58,"nguonCau":"srt",
-      "parts": [],
+    "prj301-jpa-sau": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/07-jpa-anh-xa-doi-tuong/07-03-persistence-jpql-quan-he-6c1fe127.mp4","durationSec":459.58,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":95.55,"ten":"Ôn nhanh · hôm nay · persistence.xml"},
+        {"t":95.55,"den":185.91,"ten":"Đừng để nó xoá bảng · Vòng đời EntityManager"},
+        {"t":185.91,"den":282.13,"ten":"JPQL — SQL trên đối tượng · JPQL không phải SQL"},
+        {"t":282.13,"den":387.45,"ten":"LAZY và EAGER · Bẫy: JSP sau khi đóng EntityManager"},
+        {"t":387.45,"den":459.58,"ten":"Tự kiểm nhanh · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn. Bài 7.1 cho thấy annotation Entity và em.find."},
         {"t":10.86,"vi":"Nằm giữa hai dòng đó là cấu hình, một giao dịch, và phần ánh xạ quan hệ, lý do ORM tồn tại."},
@@ -5197,8 +5422,13 @@
         {"t":455.42,"vi":"Bài sau, 7.3: thực hành Chương 7."}
       ]
     },
-    "prj301-jsp": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/03-jsp-el-jstl/03-07-jsp-lam-view-el-jstl-2f22cf84.mp4","durationSec":272.04,"nguonCau":"srt",
-      "parts": [],
+    "prj301-jsp": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/03-jsp-el-jstl/03-07-jsp-lam-view-el-jstl-2f22cf84.mp4","durationSec":272.04,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":62.46,"ten":"Ôn nhanh · hôm nay · Vì sao không nhồi HTML vào servlet"},
+        {"t":62.46,"den":138.32,"ten":"Controller chuẩn bị, View hiển thị"},
+        {"t":138.32,"den":218.26,"ten":"Bẫy: scriptlet · ★ Vì sao View phải \"ngốc\""},
+        {"t":218.26,"den":272.04,"ten":"Tự kiểm nhanh · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 3.1 của môn PRJ301."},
         {"t":10.08,"vi":"Qua sáu bài theo slide, bạn đã thấy JSP dịch sang servlet, EL đọc dữ liệu, JSTL lặp và rẽ nhánh, và cả thẻ tự viết."},
@@ -5246,8 +5476,13 @@
         {"t":260.93,"vi":"Bạn làm phần thực hành dưới video, rồi sang bài 3.2: bên trong một JSP, chỉ thị, scriptlet và đối tượng ngầm định."}
       ]
     },
-    "prj301-jsp-sau": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/03-jsp-el-jstl/03-08-ben-trong-mot-jsp-00514805.mp4","durationSec":347.12,"nguonCau":"srt",
-      "parts": [],
+    "prj301-jsp-sau": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/03-jsp-el-jstl/03-08-ben-trong-mot-jsp-00514805.mp4","durationSec":347.12,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":76.21,"ten":"Ôn nhanh · hôm nay · JSP là một servlet trá hình"},
+        {"t":76.21,"den":152.06,"ten":"Ba cách dùng JSP · Bốn loại thẻ JSP"},
+        {"t":152.06,"den":228.04,"ten":"Chín đối tượng ngầm định · Cấu hình JSP trong web.xml"},
+        {"t":228.04,"den":347.12,"ten":"Hai cơ chế include · ★ Đọc tệp Java sinh ra một lần"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 3.2 của môn PRJ301."},
         {"t":10,"vi":"Bài trước, JSP chỉ làm View: servlet chuẩn bị dữ liệu, JSP hiển thị bằng EL và JSTL."},
@@ -5307,8 +5542,13 @@
         {"t":342.64,"vi":"Bài sau là 3.3: Expression Language đầy đủ."}
       ]
     },
-    "prj301-jstl": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/03-jsp-el-jstl/03-10-jstl-core-dinh-dang-ham-3cb87ca4.mp4","durationSec":259.6,"nguonCau":"srt",
-      "parts": [],
+    "prj301-jstl": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/03-jsp-el-jstl/03-10-jstl-core-dinh-dang-ham-3cb87ca4.mp4","durationSec":259.6,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":67.53,"ten":"Ôn nhanh · hôm nay · Khai taglib và jar"},
+        {"t":67.53,"den":123.83,"ten":"Thẻ core bạn thật sự dùng · Định dạng số, tiền, ngày"},
+        {"t":123.83,"den":179.89,"ten":"Vì sao dùng c:out thay dollar trần"},
+        {"t":179.89,"den":259.6,"ten":"Thực hành: bảng đơn hàng · Tự kiểm nhanh"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 3.4 của môn PRJ301."},
         {"t":10.08,"vi":"EL hiển thị một giá trị. JSTL thêm vòng lặp và điều kiện mà một view được phép dùng."},
@@ -5358,8 +5598,13 @@
         {"t":253.24,"vi":"Bạn làm phần thực hành dưới video, rồi sang bài 3.5: custom tag."}
       ]
     },
-    "prj301-listener": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/08-filter-listener/08-04-listener-23d36334.mp4","durationSec":493.07,"nguonCau":"srt",
-      "parts": [],
+    "prj301-listener": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/08-filter-listener/08-04-listener-23d36334.mp4","durationSec":493.07,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":121.47,"ten":"Mở đầu · bài này học gì"},
+        {"t":121.47,"den":301.33,"ten":"Chạy thật: vừa triển khai"},
+        {"t":301.33,"den":376.96,"ten":"Filter được kích hoạt bởi một request khớp…"},
+        {"t":376.96,"den":493.07,"ten":"Chạy thật: gỡ ứng dụng, Tomcat in WARNING"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn. Bài 8.1 dựng filter đăng nhập, filter tiếng Việt, và tránh hai cái bẫy."},
         {"t":12.03,"vi":"Filter phản ứng với từng request."},
@@ -5456,8 +5701,13 @@
         {"t":485.72,"vi":"Bài sau, 8.3: thực hành filter và listener, cùng thuật ngữ và tóm tắt chương."}
       ]
     },
-    "prj301-mvc": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/06-kien-truc-mvc/06-02-model-view-controller-phoi-hop-60ce828a.mp4","durationSec":268.15,"nguonCau":"srt",
-      "parts": [],
+    "prj301-mvc": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/06-kien-truc-mvc/06-02-model-view-controller-phoi-hop-60ce828a.mp4","durationSec":268.15,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":93.03,"ten":"Ôn nhanh · hôm nay · Ba vai trò, mỗi cái một việc"},
+        {"t":93.03,"den":154.67,"ten":"Forward sau POST: F5 thì sao? · View được bảo vệ"},
+        {"t":154.67,"den":216.74,"ten":"★ Front Controller · Thực hành: đăng xuất theo MVC"},
+        {"t":216.74,"den":268.15,"ten":"Tự kiểm nhanh · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 6.1 của môn PRJ301."},
         {"t":10.03,"vi":"Bài 6.A đi hết bộ slide MVC và dựng một ứng dụng quản lý thiết bị."},
@@ -5512,8 +5762,17 @@
         {"t":261.55,"vi":"Bạn làm phần thực hành, rồi sang bài 6.2: front controller trong thực chiến."}
       ]
     },
-    "prj301-nang-cao": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/12-nang-cao-bao-mat-spring/12-01-bao-mat-van-hanh-spring-df6b2cba.mp4","durationSec":1121.93,"nguonCau":"srt",
-      "parts": [],
+    "prj301-nang-cao": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/12-nang-cao-bao-mat-spring/12-01-bao-mat-van-hanh-spring-df6b2cba.mp4","durationSec":1121.93,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":85.27,"ten":"Mở đầu · bài này học gì"},
+        {"t":85.27,"den":263.68,"ten":"Phần hai, vận hành"},
+        {"t":263.68,"den":441.34,"ten":"Giờ admin đăng nhập và mở trang bình…"},
+        {"t":441.34,"den":566.81,"ten":"Thẻ c:if chỉ in nó khi vai trò…"},
+        {"t":566.81,"den":740.9,"ten":"Sang phần hai"},
+        {"t":740.9,"den":822.3,"ten":"Tệp catalina là nhật ký của chính Tomcat"},
+        {"t":822.3,"den":972.74,"ten":"Quay lại lỗi Coment"},
+        {"t":972.74,"den":1121.93,"ten":"Thực hành: soát chính Assignment của bạn theo…"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với phần Nâng cao của môn PRJ301."},
         {"t":9.83,"vi":"Chuỗi Assignment vừa xong: một web MVC trọn vẹn, có đăng nhập, Filter, thanh toán và báo cáo."},
@@ -5763,19 +6022,14 @@
         {"t":1117.03,"vi":"Bài sau là loạt Chuyên sâu, từ Tomcat tới Spring."}
       ]
     },
-    "prj301-nt-0-1": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/90-du-an-nha-tro-khoi-dong/90-01-de-bai-tac-nhan-use-case-5bf99240.mp4","durationSec":698.63,"nguonCau":"thoigian",
+    "prj301-nt-0-1": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/90-du-an-nha-tro-khoi-dong/90-01-de-bai-tac-nhan-use-case-5bf99240.mp4","durationSec":698.63,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":32.03,"ten":"Chào bạn · Dự án Nhà trọ SV"},
-        {"t":32.02,"den":76.57,"ten":"Vì sao đọc đề trước khi code"},
-        {"t":76.57,"den":157.13,"ten":"Đọc đề, đọc chậm: hai phần, mười yêu cầu"},
-        {"t":157.13,"den":221.46,"ten":"Yêu cầu 1.1 — bốn tác nhân"},
-        {"t":221.46,"den":308,"ten":"Yêu cầu 1.2 — mười lăm use case"},
-        {"t":308,"den":379.19,"ten":"Hai luật thầy hay hỏi và vòng đời trạng thái"},
-        {"t":379.19,"den":416.95,"ten":"Đề nào cũng một bộ xương"},
+        {"t":0,"den":157.13,"ten":"Chào bạn · Dự án Nhà trọ SV · Vì sao đọc đề trước khi code"},
+        {"t":157.13,"den":308,"ten":"Yêu cầu 1.1 — bốn tác nhân · Yêu cầu 1.2 — mười lăm use case"},
+        {"t":308,"den":416.95,"ten":"Hai luật thầy hay hỏi và vòng đời trạng thái"},
         {"t":416.95,"den":493.79,"ten":"Chia việc theo chức năng, không theo tầng"},
         {"t":493.79,"den":585.33,"ten":"Kế hoạch năm chặng và thang tự chấm"},
-        {"t":585.33,"den":648.54,"ten":"Thực hành"},
-        {"t":648.54,"den":698.63,"ten":"Tóm tắt"}
+        {"t":585.33,"den":698.63,"ten":"Thực hành · Tóm tắt"}
       ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với tập đầu tiên của loạt video dự án thực chiến môn PRJ301: Quản lý nhà trọ sinh viên."},
@@ -5859,17 +6113,12 @@
         {"t":685.92,"vi":"Giờ bạn mở CT Work, vào trang Phân tích của dự án, đọc kỹ use case của chính mình và tự viết luật cho từng cái, rồi hẵng sang tập tiếp theo nhé."}
       ]
     },
-    "prj301-nt-0-2": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/90-du-an-nha-tro-khoi-dong/90-02-ban-do-mot-request-70f5a4d2.mp4","durationSec":630.67,"nguonCau":"thoigian",
+    "prj301-nt-0-2": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/90-du-an-nha-tro-khoi-dong/90-02-ban-do-mot-request-70f5a4d2.mp4","durationSec":630.67,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":29.62,"ten":"Chào bạn · Dự án Nhà trọ SV"},
-        {"t":29.62,"den":73.16,"ten":"Hộp đen ở giữa"},
-        {"t":73.16,"den":177.44,"ten":"Một request đi qua mười tầng"},
-        {"t":177.44,"den":229.13,"ten":"Cùng bức tranh đó, gọi theo MVC"},
-        {"t":229.12,"den":320.31,"ten":"Cây thư mục bản Ant"},
-        {"t":320.31,"den":381.24,"ten":"Bảng URL: mười chín dòng, ba khu"},
-        {"t":381.24,"den":460.38,"ten":"Bảy quy ước code mà review sẽ kiểm"},
-        {"t":460.38,"den":515.83,"ten":"Bản đồ chạy thật trên khung"},
-        {"t":515.83,"den":575.06,"ten":"Thực hành"},
+        {"t":0,"den":177.44,"ten":"Chào bạn · Dự án Nhà trọ SV · Hộp đen ở giữa"},
+        {"t":177.44,"den":320.31,"ten":"Cùng bức tranh đó, gọi theo MVC · Cây thư mục bản Ant"},
+        {"t":320.31,"den":460.38,"ten":"Bảng URL: mười chín dòng, ba khu"},
+        {"t":460.38,"den":575.06,"ten":"Bản đồ chạy thật trên khung · Thực hành"},
         {"t":575.06,"den":630.67,"ten":"Tóm tắt"}
       ],
       "cues": [
@@ -5939,18 +6188,13 @@
         {"t":618.6,"vi":"Giờ bạn mở bảng URL trên CT Work, tìm mọi dòng mang tên mình, và tự kể lại đường đi của từng dòng, rồi hẵng sang bài tiếp theo nhé."}
       ]
     },
-    "prj301-nt-0-3": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/90-du-an-nha-tro-khoi-dong/90-03-doc-loi-log-tomcat-404-500-617043f7.mp4","durationSec":622.9,"nguonCau":"thoigian",
+    "prj301-nt-0-3": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/90-du-an-nha-tro-khoi-dong/90-03-doc-loi-log-tomcat-404-500-617043f7.mp4","durationSec":622.9,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":32.49,"ten":"Chào bạn · Dự án Nhà trọ SV"},
-        {"t":32.48,"den":70.46,"ten":"Ba mươi phút hay ba mươi giây"},
-        {"t":70.46,"den":118.87,"ten":"Trang 500 cố ý không nói gì"},
-        {"t":118.87,"den":164.02,"ten":"Lỗi thật nằm ở đâu"},
-        {"t":164.02,"den":256.66,"ten":"Mổ một dòng log thật"},
+        {"t":0,"den":118.87,"ten":"Chào bạn · Dự án Nhà trọ SV · Ba mươi phút hay ba mươi giây"},
+        {"t":118.87,"den":256.66,"ten":"Lỗi thật nằm ở đâu · Mổ một dòng log thật"},
         {"t":256.66,"den":354.82,"ten":"Năm ca bệnh thật của khung Nhà trọ"},
-        {"t":354.82,"den":424,"ten":"404: hai khuôn mặt, bốn nguyên nhân"},
-        {"t":424,"den":469.93,"ten":"Đọc mã trạng thái trước tiên"},
-        {"t":469.93,"den":510.51,"ten":"Quy trình năm bước, và cách hỏi cho đúng"},
-        {"t":510.51,"den":571,"ten":"Thực hành"},
+        {"t":354.82,"den":469.93,"ten":"404: hai khuôn mặt, bốn nguyên nhân"},
+        {"t":469.93,"den":571,"ten":"Quy trình năm bước, và cách hỏi cho đúng · Thực hành"},
         {"t":571,"den":622.9,"ten":"Tóm tắt"}
       ],
       "cues": [
@@ -6018,16 +6262,13 @@
         {"t":615.64,"vi":"Sửa lại cho chạy, ghi hai dòng log vào sổ tay, rồi hẵng sang tập tiếp theo nhé."}
       ]
     },
-    "prj301-nt-0-4": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/90-du-an-nha-tro-khoi-dong/90-04-git-mot-the-mot-nhanh-mot-pr-05012c4f.mp4","durationSec":549.22,"nguonCau":"thoigian",
+    "prj301-nt-0-4": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/90-du-an-nha-tro-khoi-dong/90-04-git-mot-the-mot-nhanh-mot-pr-05012c4f.mp4","durationSec":549.22,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":25.4,"ten":"Chào bạn · Dự án Nhà trọ SV"},
-        {"t":25.4,"den":82.35,"ten":"Vì sao nhóm bắt buộc dùng Git"},
+        {"t":0,"den":82.35,"ten":"Chào bạn · Dự án Nhà trọ SV · Vì sao nhóm bắt buộc dùng Git"},
         {"t":82.35,"den":171.82,"ten":"Một thẻ, một nhánh, một Pull Request"},
-        {"t":171.82,"den":237.87,"ten":"Những thứ không bao giờ lên GitHub"},
-        {"t":237.87,"den":304.37,"ten":"Vòng một thẻ, lặp mỗi ngày"},
+        {"t":171.82,"den":304.37,"ten":"Những thứ không bao giờ lên GitHub"},
         {"t":304.37,"den":404.94,"ten":"Trên web: chương Khởi động nhanh của khoá Git"},
-        {"t":404.94,"den":442.6,"ten":"Commit hiện thẳng trên thẻ CT Work"},
-        {"t":442.6,"den":502.58,"ten":"Bài luyện trước khi code thật"},
+        {"t":404.94,"den":502.58,"ten":"Commit hiện thẳng trên thẻ CT Work"},
         {"t":502.58,"den":549.22,"ten":"Tóm tắt"}
       ],
       "cues": [
@@ -6091,19 +6332,13 @@
         {"t":536.75,"vi":"Giờ bạn mở thẻ luyện Git của mình trên CT Work, làm đủ năm bước của bài luyện, chụp màn hình gửi vào thẻ, rồi hẵng sang chương tiếp theo nhé."}
       ]
     },
-    "prj301-nt-k-1": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/91-nhap-vai-1-khung-csdl-tai-khoan/91-03-nt24-layout-chung-75043da0.mp4","durationSec":554.79,"nguonCau":"thoigian",
+    "prj301-nt-k-1": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/91-nhap-vai-1-khung-csdl-tai-khoan/91-03-nt24-layout-chung-75043da0.mp4","durationSec":554.79,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":30.1,"ten":"Chào bạn · Đổi vai sang Khoa"},
-        {"t":30.1,"den":67.61,"ten":"Thẻ NT-24 và nhánh mới"},
-        {"t":67.61,"den":130.78,"ten":"Vẽ trước: bìa vở và giấy nhắn"},
-        {"t":130.78,"den":196.71,"ten":"Flash và Web: đồ nghề cho mọi servlet sau này"},
-        {"t":196.71,"den":273.59,"ten":"_top.jspf: navbar biết bạn là ai"},
-        {"t":273.59,"den":320.62,"ten":"_bottom, app.css, trang 403 và chỗ để dành"},
-        {"t":320.62,"den":383.69,"ten":"Chạy thử: 200, 404 của nhóm, điện thoại"},
-        {"t":383.69,"den":430.73,"ten":"Ba commit nhỏ, Pull Request #2"},
-        {"t":430.73,"den":466.81,"ten":"🧪 Thực hành"},
-        {"t":466.81,"den":509.83,"ten":"Tự kiểm: ba câu hỏi"},
-        {"t":509.83,"den":554.79,"ten":"Tóm tắt"}
+        {"t":0,"den":130.78,"ten":"Chào bạn · Đổi vai sang Khoa · Thẻ NT-24 và nhánh mới"},
+        {"t":130.78,"den":273.59,"ten":"Flash và Web: đồ nghề cho mọi servlet sau này"},
+        {"t":273.59,"den":383.69,"ten":"_bottom, app.css, trang 403 và chỗ để dành"},
+        {"t":383.69,"den":466.81,"ten":"Ba commit nhỏ, Pull Request #2 · 🧪 Thực hành"},
+        {"t":466.81,"den":554.79,"ten":"Tự kiểm: ba câu hỏi · Tóm tắt"}
       ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với tập RP1.3. Tập trước Long đã đưa setup.sql vào repo qua Pull Request số một, và khung đã chạy ra năm phòng trống."},
@@ -6167,19 +6402,14 @@
         {"t":543.78,"vi":"Giờ bạn mở thẻ của mình trên CT Work, làm trang thử với ba mảnh và một thông báo flash, rồi hẵng sang tập tiếp theo nhé."}
       ]
     },
-    "prj301-nt-k-2": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/91-nhap-vai-1-khung-csdl-tai-khoan/91-04-nt30-dang-ky-1-bam-mat-khau-transaction-0f7e35b3.mp4","durationSec":562.27,"nguonCau":"thoigian",
+    "prj301-nt-k-2": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/91-nhap-vai-1-khung-csdl-tai-khoan/91-04-nt30-dang-ky-1-bam-mat-khau-transaction-0f7e35b3.mp4","durationSec":562.27,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":35.66,"ten":"Chào bạn · Đăng ký người thuê, phần 1"},
-        {"t":35.66,"den":80.08,"ten":"Thẻ NT-30: hai người đang chờ"},
-        {"t":80.09,"den":148.96,"ten":"Băm mật khẩu: máy xay chỉ quay một chiều"},
-        {"t":148.96,"den":222.86,"ten":"Gõ PasswordHasher"},
-        {"t":222.86,"den":268.12,"ten":"Chạy tay: hai mã khác nhau, kiểm được mã mẫu"},
-        {"t":268.12,"den":314.43,"ten":"Account không mang mã băm; SqlErrors đọc tên luật"},
+        {"t":0,"den":80.08,"ten":"Chào bạn · Đăng ký người thuê, phần 1"},
+        {"t":80.09,"den":222.86,"ten":"Băm mật khẩu: máy xay chỉ quay một chiều · Gõ PasswordHasher"},
+        {"t":222.86,"den":314.43,"ten":"Chạy tay: hai mã khác nhau, kiểm được mã mẫu"},
         {"t":314.43,"den":393.68,"ten":"registerTenant: hai INSERT, một transaction"},
-        {"t":393.68,"den":438.5,"ten":"Thử rollback thật: không có tài khoản mồ côi"},
-        {"t":438.5,"den":478.98,"ten":"🧪 Thực hành"},
-        {"t":478.98,"den":515.79,"ten":"Tự kiểm: ba câu hỏi"},
-        {"t":515.79,"den":562.27,"ten":"Tóm tắt"}
+        {"t":393.68,"den":478.98,"ten":"Thử rollback thật: không có tài khoản mồ côi · 🧪 Thực hành"},
+        {"t":478.98,"den":562.27,"ten":"Tự kiểm: ba câu hỏi · Tóm tắt"}
       ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với tập RP1.4. Tập trước Khoa đã làm bộ khung trang chung, với navbar theo vai trò, thông báo flash, và lớp tiện ích Web."},
@@ -6247,18 +6477,14 @@
         {"t":551.38,"vi":"Giờ bạn mở thẻ của mình trên CT Work, tự chạy PasswordHasher và phép thử rollback, rồi hẵng sang tập tiếp theo nhé."}
       ]
     },
-    "prj301-nt-k-3": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/91-nhap-vai-1-khung-csdl-tai-khoan/91-05-nt30-dang-ky-2-kiem-server-prg-7f6256ee.mp4","durationSec":527.42,"nguonCau":"thoigian",
+    "prj301-nt-k-3": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/91-nhap-vai-1-khung-csdl-tai-khoan/91-05-nt30-dang-ky-2-kiem-server-prg-7f6256ee.mp4","durationSec":527.42,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":35.32,"ten":"Chào bạn · Đăng ký người thuê, phần 2"},
-        {"t":35.32,"den":81.28,"ten":"Vẽ trước: đường đi của một lần đăng ký"},
+        {"t":0,"den":81.28,"ten":"Chào bạn · Đăng ký người thuê, phần 2"},
         {"t":81.28,"den":168.5,"ten":"AuthService.register: mọi kiểm tra ở server"},
-        {"t":168.5,"den":220.24,"ten":"RegisterController: mỏng, đúng khuôn"},
-        {"t":220.24,"den":272.17,"ten":"register.jsp: lỗi dưới từng ô, giữ chữ đã gõ"},
+        {"t":168.5,"den":272.17,"ten":"RegisterController: mỏng, đúng khuôn"},
         {"t":272.17,"den":357.48,"ten":"Chạy thử sáu kịch bản bằng curl"},
-        {"t":357.48,"den":400.52,"ten":"Pull Request #3 và người đang chờ"},
-        {"t":400.52,"den":435.32,"ten":"🧪 Thực hành"},
-        {"t":435.32,"den":482.5,"ten":"Tự kiểm: ba câu hỏi"},
-        {"t":482.5,"den":527.42,"ten":"Tóm tắt"}
+        {"t":357.48,"den":435.32,"ten":"Pull Request #3 và người đang chờ · 🧪 Thực hành"},
+        {"t":435.32,"den":527.42,"ten":"Tự kiểm: ba câu hỏi · Tóm tắt"}
       ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với tập RP1.5. Tập trước Khoa đã có PasswordHasher và hàm lưu người thuê bằng một transaction, rollback chạy thật."},
@@ -6321,20 +6547,14 @@
         {"t":517.47,"vi":"Giờ bạn mở thẻ của mình trên CT Work, viết sáu kịch bản curl cho form của bạn, rồi hẵng sang tập tiếp theo nhé."}
       ]
     },
-    "prj301-nt-l-1": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/91-nhap-vai-1-khung-csdl-tai-khoan/91-01-nt21-tao-repo-tu-khung-acc36838.mp4","durationSec":589.13,"nguonCau":"thoigian",
+    "prj301-nt-l-1": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/91-nhap-vai-1-khung-csdl-tai-khoan/91-01-nt21-tao-repo-tu-khung-acc36838.mp4","durationSec":589.13,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":39.76,"ten":"Chào bạn · Loạt nhập vai bắt đầu"},
-        {"t":39.76,"den":89.51,"ten":"Một file zip, ba cái máy"},
-        {"t":89.51,"den":144.27,"ten":"Thẻ NT-21: đọc \"Xong khi\" trước"},
-        {"t":144.27,"den":198.82,"ten":"Mở khung, sửa Missing Server, soát đường dẫn jar"},
-        {"t":198.81,"den":251.36,"ten":"Đọc .gitignore từng dòng"},
-        {"t":251.36,"den":306.12,"ten":"Mật khẩu ở đâu, nếu không ở trong repo?"},
-        {"t":306.12,"den":359.27,"ten":"Commit đầu tiên — ngoại lệ duy nhất lên thẳng main"},
-        {"t":359.26,"den":392.72,"ten":"Clean and Build: khung build được trên máy sạch"},
-        {"t":392.72,"den":454.65,"ten":"Lên GitHub private, mời đủ bốn người"},
-        {"t":454.65,"den":503.38,"ten":"🧪 Thực hành"},
-        {"t":503.38,"den":548.86,"ten":"Tự kiểm: ba câu hỏi"},
-        {"t":548.86,"den":589.13,"ten":"Tóm tắt"}
+        {"t":0,"den":89.51,"ten":"Chào bạn · Loạt nhập vai bắt đầu · Một file zip, ba cái máy"},
+        {"t":89.51,"den":198.82,"ten":"Thẻ NT-21: đọc \"Xong khi\" trước"},
+        {"t":198.81,"den":306.12,"ten":"Đọc .gitignore từng dòng"},
+        {"t":306.12,"den":392.72,"ten":"Commit đầu tiên — ngoại lệ duy nhất lên thẳng main"},
+        {"t":392.72,"den":503.38,"ten":"Lên GitHub private, mời đủ bốn người · 🧪 Thực hành"},
+        {"t":503.38,"den":589.13,"ten":"Tự kiểm: ba câu hỏi · Tóm tắt"}
       ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với loạt nhập vai dự án Nhà trọ sinh viên của môn PRJ301."},
@@ -6396,19 +6616,13 @@
         {"t":578.82,"vi":"Giờ bạn mở thẻ của mình trên CT Work, làm lại đúng các bước này trên repo nháp, rồi hẵng sang tập tiếp theo nhé."}
       ]
     },
-    "prj301-nt-l-2": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/91-nhap-vai-1-khung-csdl-tai-khoan/91-02-nt22-setup-sql-pr-dau-tien-0695ccdc.mp4","durationSec":603.67,"nguonCau":"thoigian",
+    "prj301-nt-l-2": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/91-nhap-vai-1-khung-csdl-tai-khoan/91-02-nt22-setup-sql-pr-dau-tien-0695ccdc.mp4","durationSec":603.67,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":33.62,"ten":"Chào bạn · Pull Request đầu tiên"},
-        {"t":33.61,"den":76.98,"ten":"Thẻ NT-22: ba dòng \"Xong khi\""},
-        {"t":76.98,"den":110.32,"ten":"Mở nhánh đầu tiên"},
-        {"t":110.32,"den":177.5,"ten":"Vì sao setup.sql chạy lại được"},
-        {"t":177.5,"den":253.41,"ten":"Bốn luật không bao giờ phá"},
-        {"t":253.41,"den":296.86,"ten":"Dữ liệu mẫu kể sẵn một câu chuyện"},
-        {"t":296.86,"den":357.2,"ten":"Chạy hai lần, rồi thử phá"},
-        {"t":357.2,"den":406.39,"ten":"Khung chạy lần đầu: năm phòng trống"},
-        {"t":406.39,"den":475.91,"ten":"Hai commit, Pull Request #1, merge"},
-        {"t":475.9,"den":519.4,"ten":"🧪 Thực hành"},
-        {"t":519.4,"den":562.94,"ten":"Tự kiểm: ba câu hỏi"},
+        {"t":0,"den":110.32,"ten":"Chào bạn · Pull Request đầu tiên"},
+        {"t":110.32,"den":253.41,"ten":"Vì sao setup.sql chạy lại được · Bốn luật không bao giờ phá"},
+        {"t":253.41,"den":357.2,"ten":"Dữ liệu mẫu kể sẵn một câu chuyện"},
+        {"t":357.2,"den":475.91,"ten":"Khung chạy lần đầu: năm phòng trống"},
+        {"t":475.9,"den":562.94,"ten":"🧪 Thực hành · Tự kiểm: ba câu hỏi"},
         {"t":562.94,"den":603.67,"ten":"Tóm tắt"}
       ],
       "cues": [
@@ -6475,18 +6689,12 @@
         {"t":591.75,"vi":"Giờ bạn mở thẻ của mình trên CT Work, chạy setup.sql và mười bốn phép thử trên máy bạn, rồi hẵng sang tập tiếp theo nhé."}
       ]
     },
-    "prj301-nt-t-1": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/91-nhap-vai-1-khung-csdl-tai-khoan/91-06-nt31-dang-nhap-1-mot-cau-bao-loi-288b0774.mp4","durationSec":515.06,"nguonCau":"thoigian",
+    "prj301-nt-t-1": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/91-nhap-vai-1-khung-csdl-tai-khoan/91-06-nt31-dang-nhap-1-mot-cau-bao-loi-288b0774.mp4","durationSec":515.06,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":29.71,"ten":"Chào bạn · Đổi vai sang Tú"},
-        {"t":29.71,"den":67.22,"ten":"Thẻ NT-31 và những gì đã có trên main"},
-        {"t":67.22,"den":122.83,"ten":"Vẽ trước: anh bảo vệ không được lỡ lời"},
-        {"t":122.83,"den":186.04,"ten":"AccountDAO: Tú viết thêm vào file của Khoa"},
-        {"t":186.04,"den":261.58,"ten":"AuthService.login: bốn nhánh, hai câu trả lời"},
-        {"t":261.58,"den":324.15,"ten":"LoginController và login.jsp"},
-        {"t":324.15,"den":400.9,"ten":"Chạy thử: ba vai trò, bốn kiểu sai, bốn lần bấm giờ"},
-        {"t":400.9,"den":432.29,"ten":"🧪 Thực hành"},
-        {"t":432.29,"den":468.68,"ten":"Tự kiểm: ba câu hỏi"},
-        {"t":468.68,"den":515.06,"ten":"Tóm tắt"}
+        {"t":0,"den":122.83,"ten":"Chào bạn · Đổi vai sang Tú"},
+        {"t":122.83,"den":261.58,"ten":"AccountDAO: Tú viết thêm vào file của Khoa"},
+        {"t":261.58,"den":400.9,"ten":"LoginController và login.jsp"},
+        {"t":400.9,"den":515.06,"ten":"🧪 Thực hành · Tự kiểm: ba câu hỏi"}
       ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với tập RP1.6. Tập trước Khoa đã xong trang đăng ký, và PasswordHasher của Khoa đã nằm trên main."},
@@ -6549,16 +6757,12 @@
         {"t":504.58,"vi":"Giờ bạn mở thẻ của mình trên CT Work, đo thời gian đăng nhập sai trên bản của bạn, rồi hẵng sang tập tiếp theo nhé."}
       ]
     },
-    "prj301-nt-t-2": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/91-nhap-vai-1-khung-csdl-tai-khoan/91-07-nt31-dang-nhap-2-session-moi-dang-xuat-4f5f1989.mp4","durationSec":456.61,"nguonCau":"thoigian",
+    "prj301-nt-t-2": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/91-nhap-vai-1-khung-csdl-tai-khoan/91-07-nt31-dang-nhap-2-session-moi-dang-xuat-4f5f1989.mp4","durationSec":456.61,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":33.46,"ten":"Chào bạn · Sáu dòng nguy hiểm nhất"},
-        {"t":33.46,"den":122.71,"ten":"Session fixation: đổi ổ khoá khi vào nhà"},
-        {"t":122.71,"den":192.28,"ten":"Open redirect: chỉ quay về đường dẫn nội bộ"},
-        {"t":192.28,"den":258.13,"ten":"LogoutController: chỉ POST, xoá sạch phiên"},
-        {"t":258.12,"den":300.37,"ten":"Chạy thử: 405, 302, thông báo một lần"},
-        {"t":300.37,"den":336.22,"ten":"Pull Request #4"},
-        {"t":336.22,"den":373.16,"ten":"🧪 Thực hành"},
-        {"t":373.16,"den":415.17,"ten":"Tự kiểm: ba câu hỏi"},
+        {"t":0,"den":122.71,"ten":"Chào bạn · Sáu dòng nguy hiểm nhất"},
+        {"t":122.71,"den":258.13,"ten":"Open redirect: chỉ quay về đường dẫn nội bộ"},
+        {"t":258.12,"den":336.22,"ten":"Chạy thử: 405, 302, thông báo một lần · Pull Request #4"},
+        {"t":336.22,"den":415.17,"ten":"🧪 Thực hành · Tự kiểm: ba câu hỏi"},
         {"t":415.17,"den":456.61,"ten":"Tóm tắt"}
       ],
       "cues": [
@@ -6626,18 +6830,13 @@
         {"t":445.58,"vi":"Giờ bạn mở thẻ của mình trên CT Work, thử mã phiên và bốn giá trị next trên bản của bạn, rồi hẵng sang tập tiếp theo nhé."}
       ]
     },
-    "prj301-nt-t-3": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/91-nhap-vai-1-khung-csdl-tai-khoan/91-08-nt41-authorization-filter-dfe9b85f.mp4","durationSec":562.39,"nguonCau":"thoigian",
+    "prj301-nt-t-3": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/91-nhap-vai-1-khung-csdl-tai-khoan/91-08-nt41-authorization-filter-dfe9b85f.mp4","durationSec":562.39,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":30.1,"ten":"Chào bạn · Người gác cửa"},
-        {"t":30.1,"den":80.22,"ten":"Thẻ NT-41 và danh sách việc khung để lại"},
-        {"t":80.22,"den":136.53,"ten":"Vẽ trước: một người gác, ba câu hỏi"},
-        {"t":136.53,"den":241.94,"ten":"Gõ AuthorizationFilter"},
-        {"t":241.94,"den":288.13,"ten":"web.xml: thứ tự khai báo là thứ tự chạy"},
-        {"t":288.13,"den":372.04,"ten":"Chạy thử: 302, 403, 404 và người bị khoá giữa chừng"},
-        {"t":372.04,"den":421.65,"ten":"Pull Request #5 — khép lại chương một"},
-        {"t":421.65,"den":461.81,"ten":"🧪 Thực hành"},
-        {"t":461.81,"den":509.27,"ten":"Tự kiểm: ba câu hỏi"},
-        {"t":509.27,"den":562.39,"ten":"Tóm tắt chương RP1"}
+        {"t":0,"den":80.22,"ten":"Chào bạn · Người gác cửa"},
+        {"t":80.22,"den":241.94,"ten":"Vẽ trước: một người gác, ba câu hỏi · Gõ AuthorizationFilter"},
+        {"t":241.94,"den":372.04,"ten":"web.xml: thứ tự khai báo là thứ tự chạy"},
+        {"t":372.04,"den":461.81,"ten":"Pull Request #5 — khép lại chương một · 🧪 Thực hành"},
+        {"t":461.81,"den":562.39,"ten":"Tự kiểm: ba câu hỏi · Tóm tắt chương RP1"}
       ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với tập RP1.8, tập cuối của chương nhập vai đầu tiên."},
@@ -6708,8 +6907,14 @@
         {"t":551.76,"vi":"Giờ bạn mở thẻ của mình trên CT Work, thêm thử khu staff vào filter trên bản nháp, rồi hẵng sang chương tiếp theo nhé."}
       ]
     },
-    "prj301-on-ch1": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/01-web-hoat-dong-ra-sao/01-04-thuc-hanh-chuong-1-379dcb5f.mp4","durationSec":569.91,"nguonCau":"srt",
-      "parts": [],
+    "prj301-on-ch1": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/01-web-hoat-dong-ra-sao/01-04-thuc-hanh-chuong-1-379dcb5f.mp4","durationSec":569.91,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":97.46,"ten":"Ôn nhanh · hôm nay · Bài 1 · Gọi tên từng dòng"},
+        {"t":97.46,"den":243.59,"ten":"Bài 2 · Trang động biết kiểm tra dữ liệu"},
+        {"t":243.59,"den":336.69,"ten":"Bài 4 · Đoán trước rồi kiểm chứng"},
+        {"t":336.69,"den":445.49,"ten":"Bài 6 · Form tìm kiếm dùng GET · 🗂 Thuật ngữ Anh → Việt"},
+        {"t":445.49,"den":569.91,"ten":"📌 Tám điều cần nhớ của Chương 1 · Tự kiểm nhanh"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 1.3, bài thực hành cuối Chương 1."},
         {"t":10.31,"vi":"Chương này mình đã đọc request và response, chọn method, đọc mã trạng thái, và biết bố cục một ứng dụng web."},
@@ -6812,8 +7017,16 @@
         {"t":559.96,"vi":"Chương 2 đi sâu vào servlet: vòng đời, tham số, forward và redirect, bắt đầu từ bộ slide prj1 phần hai."}
       ]
     },
-    "prj301-on-ch10": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/10-ai-trong-java-web/10-07-thuc-hanh-chuong-10-9bf117a2.mp4","durationSec":926.61,"nguonCau":"srt",
-      "parts": [],
+    "prj301-on-ch10": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/10-ai-trong-java-web/10-07-thuc-hanh-chuong-10-9bf117a2.mp4","durationSec":926.61,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":120.88,"ten":"Mở đầu · bài này học gì"},
+        {"t":120.88,"den":235.09,"ten":"Chạy thật trên Chromium"},
+        {"t":235.09,"den":381.28,"ten":"Chạy thật trên SQL Server"},
+        {"t":381.28,"den":539.89,"ten":"Chạy thật. Bản v1 qua 13 trên 16"},
+        {"t":539.89,"den":677.13,"ten":"Chạy thật, cùng một trình duyệt"},
+        {"t":677.13,"den":850.97,"ten":"Bước một: tạo khoá trên trang quản trị…"},
+        {"t":850.97,"den":926.61,"ten":"Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 10.3, bài thực hành cuối Chương 10 về AI trong ứng dụng Java web."},
         {"t":12.23,"vi":"Bài 10.2 đã gọi AI từ một servlet, với timeout, khoá ở server và lỗi thân thiện."},
@@ -6993,8 +7206,15 @@
         {"t":918.5,"vi":"Sau đó là ba đề luyện PE, mỗi đề 85 phút, rồi tới thi cuối kỳ. Chúc bạn học tốt."}
       ]
     },
-    "prj301-on-ch2": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/02-servlet-chuyen-sau/02-06-thuc-hanh-chuong-2-25a47bc4.mp4","durationSec":640.72,"nguonCau":"srt",
-      "parts": [],
+    "prj301-on-ch2": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/02-servlet-chuyen-sau/02-06-thuc-hanh-chuong-2-25a47bc4.mp4","durationSec":640.72,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":101.71,"ten":"Ôn nhanh · hôm nay · Bài 1 · Servlet nào trả lời?"},
+        {"t":101.71,"den":230.53,"ten":"Bài 2 · Bộ đếm có cấu hình, vòng đời gọn"},
+        {"t":230.53,"den":360.39,"ten":"Bài 4 · Form đăng ký đủ loại ô"},
+        {"t":360.39,"den":460.46,"ten":"Bài 6 · Welcome file và trang lỗi"},
+        {"t":460.46,"den":584.04,"ten":"🗂 Thuật ngữ Anh → Việt · 📌 Tám điều cần nhớ của Chương 2"},
+        {"t":584.04,"den":640.72,"ten":"Tự kiểm nhanh · Kết chương"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 2.4, bài thực hành cuối Chương 2."},
         {"t":10.31,"vi":"Chương này đã biến HTTP thành Java: doGet và doPost, vòng đời, header, form, web.xml và tệp WAR."},
@@ -7107,8 +7327,15 @@
         {"t":632.77,"vi":"Chương 3 chuyển sang JSP, EL và JSTL, bắt đầu từ bộ slide prj3 phần một."}
       ]
     },
-    "prj301-on-ch3": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/03-jsp-el-jstl/03-12-thuc-hanh-chuong-3-30a8c280.mp4","durationSec":594.9,"nguonCau":"srt",
-      "parts": [],
+    "prj301-on-ch3": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/03-jsp-el-jstl/03-12-thuc-hanh-chuong-3-30a8c280.mp4","durationSec":594.9,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":103.02,"ten":"Ôn nhanh · hôm nay · Bài 1 · Danh sách xe nhóm theo loại"},
+        {"t":103.02,"den":209.2,"ten":"Bài 2 · Form đặt xe giữ giá trị"},
+        {"t":209.2,"den":300.67,"ten":"Bài 4 · Thẻ phân trang bằng Java · Bài 5 · Bỏ scriptlet"},
+        {"t":300.67,"den":409.85,"ten":"Bài 6 · Một bố cục cho mọi trang · Bài 7 · Năm lỗi kinh điển"},
+        {"t":409.85,"den":530.89,"ten":"🗂 Thuật ngữ Anh → Việt · 📌 Tám điều cần nhớ của Chương 3"},
+        {"t":530.89,"den":594.9,"ten":"Tự kiểm nhanh · Kết chương"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 3.6, bài thực hành cuối Chương 3."},
         {"t":10.52,"vi":"Chương này cho bạn bốn công cụ làm view: JSP, EL để đọc, JSTL để lặp và định dạng, và thẻ tự làm."},
@@ -7203,8 +7430,14 @@
         {"t":586.57,"vi":"Chương 4 là bốn phạm vi, session và cookie: cách web ghi nhớ người dùng giữa các request."}
       ]
     },
-    "prj301-on-ch4": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/04-bon-pham-vi-scope/04-05-thuc-hanh-chuong-4-e588d9cd.mp4","durationSec":495.32,"nguonCau":"srt",
-      "parts": [],
+    "prj301-on-ch4": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/04-bon-pham-vi-scope/04-05-thuc-hanh-chuong-4-e588d9cd.mp4","durationSec":495.32,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":81.83,"ten":"Ôn nhanh · hôm nay"},
+        {"t":81.83,"den":194.91,"ten":"Bài 2 · Giỏ hàng trong session"},
+        {"t":194.91,"den":283.31,"ten":"Bài 4 · Tên tiếng Việt trong cookie"},
+        {"t":283.31,"den":379.38,"ten":"Bài 6 · Gia cố cookie session · 🗂 Thuật ngữ Anh → Việt"},
+        {"t":379.38,"den":495.32,"ten":"📌 Tám điều cần nhớ của Chương 4 · Tự kiểm nhanh"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 4.4, bài thực hành cuối Chương 4."},
         {"t":10.31,"vi":"Chương này cho bạn bốn phạm vi, session, cookie và ServletContext."},
@@ -7293,8 +7526,14 @@
         {"t":487.1,"vi":"Chương 5 là JDBC: nối ứng dụng với cơ sở dữ liệu thật, thay cho Catalog viết cứng hôm nay."}
       ]
     },
-    "prj301-on-ch5": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/05-jdbc-mau-dao/05-07-thuc-hanh-chuong-5-197acaa2.mp4","durationSec":448.84,"nguonCau":"srt",
-      "parts": [],
+    "prj301-on-ch5": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/05-jdbc-mau-dao/05-07-thuc-hanh-chuong-5-197acaa2.mp4","durationSec":448.84,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":107.84,"ten":"Ôn nhanh · hôm nay · Bài 1 · Sửa chuỗi kết nối"},
+        {"t":107.84,"den":225.49,"ten":"Bài 3 · Đọc ResultSet cho đúng"},
+        {"t":225.49,"den":309.83,"ten":"Bài 6 · Tìm, sắp xếp, phân trang"},
+        {"t":309.83,"den":394.17,"ten":"🗂 Thuật ngữ Anh → Việt · 📌 Tám điều cần nhớ của Chương 5"},
+        {"t":394.17,"den":448.84,"ten":"Tự kiểm nhanh · Kết chương"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 5.5, bài thực hành cuối Chương 5."},
         {"t":9.93,"vi":"Chương này biến cơ sở dữ liệu thành đối tượng Java: kết nối, PreparedStatement, ResultSet, đóng tài nguyên, giao dịch, và DAO."},
@@ -7371,8 +7610,14 @@
         {"t":441.28,"vi":"Chương 6 là kiến trúc MVC: ghép controller, DAO và JSP thành một ứng dụng hoàn chỉnh."}
       ]
     },
-    "prj301-on-ch6": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/06-kien-truc-mvc/06-05-thuc-hanh-chuong-6-4c13e26a.mp4","durationSec":461.8,"nguonCau":"srt",
-      "parts": [],
+    "prj301-on-ch6": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/06-kien-truc-mvc/06-05-thuc-hanh-chuong-6-4c13e26a.mp4","durationSec":461.8,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":124.95,"ten":"Ôn nhanh · hôm nay · Bài 1 · Dòng này thuộc về đâu?"},
+        {"t":124.95,"den":210.51,"ten":"Bài 3 · Forward hay redirect sau POST?"},
+        {"t":210.51,"den":324.76,"ten":"Bài 5 · Front controller làm lộ trang"},
+        {"t":324.76,"den":410.48,"ten":"🗂 Thuật ngữ Anh → Việt · 📌 Tám điều cần nhớ của Chương 6"},
+        {"t":410.48,"den":461.8,"ten":"Tự kiểm nhanh · Kết chương"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 6.4, bài thực hành cuối Chương 6."},
         {"t":10.02,"vi":"Bài 6.A dựng một ứng dụng MVC trọn vẹn."},
@@ -7451,8 +7696,13 @@
         {"t":453.99,"vi":"Chương 7 là JPA: để framework ánh xạ đối tượng và bảng, thay cho JDBC viết tay."}
       ]
     },
-    "prj301-on-ch7": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/07-jpa-anh-xa-doi-tuong/07-04-thuc-hanh-chuong-7-cc0c1e6f.mp4","durationSec":524.83,"nguonCau":"srt",
-      "parts": [],
+    "prj301-on-ch7": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/07-jpa-anh-xa-doi-tuong/07-04-thuc-hanh-chuong-7-cc0c1e6f.mp4","durationSec":524.83,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":159.06,"ten":"Mở đầu · bài này học gì"},
+        {"t":159.06,"den":262.01,"ten":"Chạy thật: SELECT sao hỏng. Accounts là tên…"},
+        {"t":262.01,"den":351.19,"ten":"Chạy thật: một câu lấy thiết bị"},
+        {"t":351.19,"den":524.83,"ten":"Chạy thật: thêm Nguyễn Lan trả 302"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 7.3, bài thực hành cuối Chương 7 về JPA."},
         {"t":10.96,"vi":"Bảy bài tập này bắt bạn đoán trước: entity hỏng báo lỗi gì, câu JPQL thành câu SQL nào, cái gì được lưu."},
@@ -7545,8 +7795,14 @@
         {"t":516.69,"vi":"Chương 8 là Filter và Listener: mã chạy trước mọi request, và mã phản ứng với sự kiện của Tomcat."}
       ]
     },
-    "prj301-on-ch8": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/08-filter-listener/08-05-thuc-hanh-chuong-8-ac6ba15e.mp4","durationSec":599.61,"nguonCau":"srt",
-      "parts": [],
+    "prj301-on-ch8": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/08-filter-listener/08-05-thuc-hanh-chuong-8-ac6ba15e.mp4","durationSec":599.61,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":106.16,"ten":"Mở đầu · bài này học gì"},
+        {"t":106.16,"den":191.18,"ten":"Chạy thật: curl bỏ cuộc sau năm mươi…"},
+        {"t":191.18,"den":276.02,"ten":"Chạy thật. Khách xin trang admin"},
+        {"t":276.02,"den":393.78,"ten":"Chạy thật: 200"},
+        {"t":393.78,"den":599.61,"ten":"Chạy thật: khách xem JSP có session nhưng…"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 8.3, bài thực hành cuối Chương 8 về filter và listener."},
         {"t":11.79,"vi":"Bảy bài tập dùng filter và listener như một dự án PRJ301 thật."},
@@ -7655,8 +7911,13 @@
         {"t":592.8,"vi":"Chương 9 ghép front-end với back-end, mở đầu bằng tải tệp lên với MultipartConfig."}
       ]
     },
-    "prj301-pagination": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/06-kien-truc-mvc/06-04-tim-kiem-sap-xep-phan-trang-768020af.mp4","durationSec":295.54,"nguonCau":"srt",
-      "parts": [],
+    "prj301-pagination": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/06-kien-truc-mvc/06-04-tim-kiem-sap-xep-phan-trang-768020af.mp4","durationSec":295.54,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":91.96,"ten":"Ôn nhanh · hôm nay"},
+        {"t":91.96,"den":153.66,"ten":"Controller: đừng bao giờ tin URL"},
+        {"t":153.66,"den":219,"ten":"Kiểu injection mà PreparedStatement không chặn"},
+        {"t":219,"den":295.54,"ten":"Thực hành: lọc theo loại · Tự kiểm nhanh"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 6.3 của môn PRJ301."},
         {"t":10.05,"vi":"Bài 6.2 cho bạn một front controller cho mỗi thực thể."},
@@ -7711,8 +7972,13 @@
         {"t":289.82,"vi":"Bạn làm phần thực hành, rồi sang bài 6.4: thực hành Chương 6."}
       ]
     },
-    "prj301-request-response": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/02-servlet-chuyen-sau/02-04-request-response-chuyen-sau-64431edf.mp4","durationSec":392.08,"nguonCau":"srt",
-      "parts": [],
+    "prj301-request-response": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/02-servlet-chuyen-sau/02-04-request-response-chuyen-sau-64431edf.mp4","durationSec":392.08,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":106.38,"ten":"Ôn nhanh · hôm nay · Bốn phương thức đọc dữ liệu vào"},
+        {"t":106.38,"den":219.91,"ten":"GET và POST ở mức mã · Điều khiển response"},
+        {"t":219.91,"den":319.42,"ten":"Bẫy: điều hướng rồi quên return · ★ Đừng tin getParameter"},
+        {"t":319.42,"den":392.08,"ten":"Tự kiểm nhanh · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 2.2 của môn PRJ301."},
         {"t":10.05,"vi":"Bài trước mình đã thấy dữ liệu rò khi lưu vào trường của servlet, và phân biệt forward với redirect."},
@@ -7782,8 +8048,13 @@
         {"t":382.26,"vi":"Bạn làm phần thực hành dưới video, rồi sang bài 2.3: tham số khởi tạo, ServletContext và kiểm tra form."}
       ]
     },
-    "prj301-scope": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/04-bon-pham-vi-scope/04-02-bon-pham-vi-3a72c3db.mp4","durationSec":234.93,"nguonCau":"srt",
-      "parts": [],
+    "prj301-scope": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/04-bon-pham-vi-scope/04-02-bon-pham-vi-3a72c3db.mp4","durationSec":234.93,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":63.68,"ten":"Ôn nhanh · hôm nay · Bốn phạm vi"},
+        {"t":63.68,"den":134.3,"ten":"Chạy thật: bốn bộ đếm · Đăng nhập dùng session"},
+        {"t":134.3,"den":191.03,"ten":"★ Session thật sự hoạt động thế nào"},
+        {"t":191.03,"den":234.93,"ten":"Tự kiểm nhanh · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 4.1 của môn PRJ301."},
         {"t":10.24,"vi":"Bài trước theo slide: một session giữ dữ liệu qua nhiều request, nhận diện bằng JSESSIONID."},
@@ -7831,8 +8102,13 @@
         {"t":227.97,"vi":"Bạn làm phần thực hành, rồi sang bài 4.2: cookie và session trong thực tế."}
       ]
     },
-    "prj301-servlet-sau": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/02-servlet-chuyen-sau/02-03-vong-doi-tham-so-forward-redirect-4b55bc27.mp4","durationSec":376.77,"nguonCau":"srt",
-      "parts": [],
+    "prj301-servlet-sau": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/02-servlet-chuyen-sau/02-03-vong-doi-tham-so-forward-redirect-4b55bc27.mp4","durationSec":376.77,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":105.71,"ten":"Ôn nhanh · hôm nay · Vòng đời và một đối tượng dùng chung"},
+        {"t":105.71,"den":222.69,"ten":"Đọc tham số từ form"},
+        {"t":222.69,"den":308.78,"ten":"★ Mẫu Post-Redirect-Get (PRG)"},
+        {"t":308.78,"den":376.77,"ten":"Tự kiểm nhanh · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 2.1 của môn PRJ301."},
         {"t":10.04,"vi":"Qua bộ slide prj1 mình đã có vòng đời init, service, destroy, và web.xml cùng tệp WAR."},
@@ -7903,8 +8179,17 @@
         {"t":368.48,"vi":"Bạn làm phần thực hành dưới video, rồi sang bài 2.2: đối tượng request và response chuyên sâu."}
       ]
     },
-    "prj301-slide-cs1-1": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/13-chuyen-sau-servlet-spring-boot/13-01-slide-cs1-1-tomcat-spring-3328b50e.mp4","durationSec":1133.6,"nguonCau":"srt",
-      "parts": [],
+    "prj301-slide-cs1-1": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/13-chuyen-sau-servlet-spring-boot/13-01-slide-cs1-1-tomcat-spring-3328b50e.mp4","durationSec":1133.6,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":183.43,"ten":"Mở đầu · bài này học gì"},
+        {"t":183.43,"den":361.96,"ten":"Slide ba: bên trong Tomcat là một cây…"},
+        {"t":361.96,"den":537.24,"ten":"Bốn thông số đọc từ property server.tomcat"},
+        {"t":537.24,"den":711.53,"ten":"Năm 1999, J2EE 1.2 chuẩn hoá servlet và…"},
+        {"t":711.53,"den":793.27,"ten":"Ý tưởng IoC, đảo ngược điều khiển"},
+        {"t":793.27,"den":973.11,"ten":"Phần ba là phần thưởng thật"},
+        {"t":973.11,"den":1074.92,"ten":"Đọc phần Description"},
+        {"t":1074.92,"den":1133.6,"ten":"Vì sao nguy hiểm?"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, mình vào phần Chuyên sâu."},
         {"t":7.77,"vi":"Bài trước, A.1, ta mới nhìn Spring Boot qua minh hoạ."},
@@ -8112,8 +8397,23 @@
         {"t":1125.68,"vi":"Bài sau, phần hai của CS.1: starter, tự cấu hình, và Tomcat nằm trong tệp jar."}
       ]
     },
-    "prj301-slide-cs1-2": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/13-chuyen-sau-servlet-spring-boot/13-02-slide-cs1-2-tomcat-spring-18c8a535.mp4","durationSec":1549.28,"nguonCau":"srt",
-      "parts": [],
+    "prj301-slide-cs1-2": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/13-chuyen-sau-servlet-spring-boot/13-02-slide-cs1-2-tomcat-spring-18c8a535.mp4","durationSec":1549.28,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":90.41,"ten":"Mở đầu · bài này học gì"},
+        {"t":90.41,"den":227.14,"ten":"Ví dụ: nếu có lớp A trên classpath"},
+        {"t":227.14,"den":354.13,"ten":"Ví dụ, spring-boot-tomcat khởi động Tomcat"},
+        {"t":354.13,"den":465.27,"ten":"Chạy thật ứng dụng dieu-kien"},
+        {"t":465.27,"den":585.59,"ten":"Chạy thật dieu-kien với gạch gạch debug"},
+        {"t":585.59,"den":731.12,"ten":"Chạy thật ứng dụng hello"},
+        {"t":731.12,"den":822.84,"ten":"Chạy thật hai endpoint đó trên Tomcat nhúng"},
+        {"t":822.84,"den":942.77,"ten":"Chạy thật. Gọi /hello không có tham số:…"},
+        {"t":942.77,"den":1057.7,"ten":"Bẫy đồ án"},
+        {"t":1057.7,"den":1135.6,"ten":"Chạy thật ứng dụng cau-hinh"},
+        {"t":1135.6,"den":1228.69,"ten":"Chạy thật: APPLICATION FAILED TO START"},
+        {"t":1228.69,"den":1348.01,"ten":"Chạy thật bt-profile với profile prod"},
+        {"t":1348.01,"den":1511.27,"ten":"Chạy thật. Lệnh mvn package không in gì…"},
+        {"t":1511.27,"den":1549.28,"ten":"Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn. Đây là phần hai của CS.1, mười hai slide cuối của deck Chuyên sâu một."},
         {"t":11.71,"vi":"Phần một cho thấy hai container: Tomcat lo request, Spring lo đối tượng."},
@@ -8384,8 +8684,17 @@
         {"t":1538.97,"vi":"Bài sau là bài tập CS.1: tự chuyển HelloServlet, dời cấu hình sang YAML, sửa lỗi hai bean, và đổi bean bằng profile."}
       ]
     },
-    "prj301-slide-cs2-1": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/13-chuyen-sau-servlet-spring-boot/13-05-slide-cs2-1-spring-mvc-a14a11c7.mp4","durationSec":1222.65,"nguonCau":"srt",
-      "parts": [],
+    "prj301-slide-cs2-1": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/13-chuyen-sau-servlet-spring-boot/13-05-slide-cs2-1-spring-mvc-a14a11c7.mp4","durationSec":1222.65,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":182.8,"ten":"Mở đầu · bài này học gì"},
+        {"t":182.8,"den":355.82,"ten":"Giờ chạy thật bản Spring Boot"},
+        {"t":355.82,"den":535.6,"ten":"DispatcherServlet tìm các bean này theo kiểu"},
+        {"t":535.6,"den":710.99,"ten":"Đúng cơ chế error-page trong web.xml ở Chương…"},
+        {"t":710.99,"den":889.72,"ten":"Khởi động thật"},
+        {"t":889.72,"den":981.01,"ten":"Thẻ tr có th"},
+        {"t":981.01,"den":1080.9,"ten":"Bẫy đồ án"},
+        {"t":1080.9,"den":1222.65,"ten":"Chạy thật trong Chromium"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn. Hôm nay mình mở deck Chuyên sâu hai về Spring MVC, mười hai slide đầu."},
         {"t":12,"vi":"Ở Chương 6, bạn đã tự viết một front controller."},
@@ -8619,507 +8928,20 @@
         {"t":1214.51,"vi":"Bài sau là phần hai: PRG với flash, trang lỗi, mã trạng thái REST và ProblemDetail."}
       ]
     },
-    "prj301-slide-cs2-2": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/13-chuyen-sau-servlet-spring-boot/13-06-slide-cs2-2-spring-mvc-499dc890.mp4","durationSec":1243.88,"nguonCau":"srt",
-      "parts": [],
-      "cues": [
-        {"t":5.1,"vi":"Chào bạn. Đây là phần hai của deck Chuyên sâu hai về Spring MVC, từ slide mười ba tới hai mươi bốn."},
-        {"t":13.15,"vi":"Phần một đã chuyển trang danh sách và cái form của bài 6.A sang Spring Boot. Form sai thì hiện lại kèm lỗi từng ô."},
-        {"t":21.42,"vi":"Hôm nay ta hoàn thiện phía HTML: luật nghiệp vụ, Post Redirect Get, và trang lỗi."},
-        {"t":28.53,"vi":"Rồi dựng một API JSON nói thật: mã trạng thái đúng, lỗi từng ô, và một định dạng lỗi chuẩn tên là ProblemDetail."},
-        {"t":39.15,"vi":"Thử đoán trước nhé. Gửi lệnh xoá thiết bị số mười ba, hai lần liên tiếp. Máy chủ nên trả gì?"},
-        {"t":46.57,"vi":"Chạy thật. Lần đầu: 204 No Content."},
-        {"t":50.44,"vi":"Xoá xong, không có gì để trả về."},
-        {"t":53.84,"vi":"Lần hai: 404, kèm một body JSON có detail, instance, status và title."},
-        {"t":62.09,"vi":"Nhiều đồ án trả 200 cho cả hai lần, kèm chữ success bằng false. Trình duyệt và front-end không phân biệt được."},
-        {"t":70.21,"vi":"Cuối bài, bạn sẽ tự viết được cái 404 đó, và biết vì sao mỗi kết cục cần một mã riêng."},
-        {"t":79.05,"vi":"Slide mười ba. Annotation như NotBlank chỉ kiểm từng giá trị một."},
-        {"t":84.51,"vi":"Luật cần tới CSDL, như mã này đã có chưa, hay lab này có tồn tại không, thì thuộc về service."},
-        {"t":92.53,"vi":"Service chuẩn hoá mã thành chữ hoa."},
-        {"t":95.2,"vi":"Nếu existsByCode trả true, nó ném DuplicateCodeException."},
-        {"t":99.99,"vi":"Nó có Transactional, nên phép kiểm và câu insert nằm trong cùng một giao dịch."},
-        {"t":105.85,"vi":"Controller bắt ngoại lệ, gọi rejectValue cho ô mã thiết bị."},
-        {"t":110.43,"vi":"Thông báo hiện ngay cạnh ô đó, y như lỗi kiểm tra."},
-        {"t":114.39,"vi":"Ràng buộc UNIQUE trên bảng vẫn là tuyến chặn cuối."},
-        {"t":118.03,"vi":"Hai request cùng lúc có thể cùng qua phép kiểm."},
-        {"t":121.21,"vi":"Luật nằm ở service, controller chỉ dịch ngoại lệ thành thông báo."},
-        {"t":125.93,"vi":"Đúng phân vai của Chương 6."},
-        {"t":129.52,"vi":"Chạy thật. Đây là DeviceService của bản Boot, phương thức create."},
-        {"t":134.92,"vi":"Gửi form với mã esp-01 viết thường."},
-        {"t":137.83,"vi":"Mã ESP-01 đã có trong dữ liệu mẫu."},
-        {"t":141.26,"vi":"Kết quả: 200, form hiện lại."},
-        {"t":144.19,"vi":"Dòng lỗi báo ESP-01 already exists, mã đã thành chữ hoa."},
-        {"t":149.81,"vi":"Gửi đúng body đó cho bản 6.A trên Tomcat."},
-        {"t":153.41,"vi":"Cùng thông báo, cùng vị trí, chỉ khác URL có tiền tố mvc-thiet-bi."},
-        {"t":159.16,"vi":"Hai bản, hai công nghệ, cùng một luật."},
-        {"t":162.48,"vi":"Vì luật nằm ở service, không nằm trong trang."},
-        {"t":167.66,"vi":"Slide mười bốn: POST hợp lệ thì lưu, rồi redirect."},
-        {"t":172.97,"vi":"Controller đặt thông báo vào RedirectAttributes, bằng addFlashAttribute, rồi trả chuỗi redirect devices."},
-        {"t":180.96,"vi":"Chuỗi bắt đầu bằng redirect hai chấm chính là sendRedirect."},
-        {"t":185.13,"vi":"Trình duyệt nhận 302."},
-        {"t":187.46,"vi":"Trình duyệt tự GET trang danh sách."},
-        {"t":189.94,"vi":"Trang này đọc thông báo một lần, rồi Spring xoá nó."},
-        {"t":193.75,"vi":"Đúng cơ chế flash bạn tự viết ở bài 6.A, bằng hai hàm flash và moveFlash quanh session."},
-        {"t":200.9,"vi":"Bấm F5 lúc này chỉ lặp lại cái GET vô hại."},
-        {"t":204.65,"vi":"Không có INSERT lần hai."},
-        {"t":208.28,"vi":"Chạy thật ba request. Một, POST thêm OSC-02, Máy hiện sóng Siglent. Kết quả 302, body rỗng."},
-        {"t":218.21,"vi":"Hai, trình duyệt tự GET danh sách."},
-        {"t":221.01,"vi":"Dòng flash ghi Added OSC-02, tổng giờ là mười hai thiết bị."},
-        {"t":226.05,"vi":"Thiết bị mới nằm ở trang ba."},
-        {"t":228.28,"vi":"Ba, bấm F5. Vẫn trang đó, nhưng dòng flash đã biến mất."},
-        {"t":233.75,"vi":"Đếm trong PostgreSQL: mười hai dòng."},
-        {"t":236.95,"vi":"F5 không thêm bản ghi nào."},
-        {"t":239.19,"vi":"Giờ là bẫy hay gặp ở bài thi."},
-        {"t":241.73,"vi":"Mình cố tình dùng model addAttribute, rồi trả redirect."},
-        {"t":246.34,"vi":"Kết quả: trang danh sách không có dòng flash nào."},
-        {"t":250.05,"vi":"Model thuộc về request POST, redirect là request mới."},
-        {"t":255.12,"vi":"Nhớ nhé. Redirect thì dùng addFlashAttribute."},
-        {"t":259.2,"vi":"Hiện view ngay trong cùng request thì dùng Model."},
-        {"t":264.25,"vi":"Slide mười lăm là một bất ngờ đo được."},
-        {"t":267.22,"vi":"Nhìn lại Location của request vừa rồi, và thanh địa chỉ của Chromium."},
-        {"t":272.63,"vi":"Nó có thêm chấm phẩy jsessionid bằng một mã dài."},
-        {"t":276.34,"vi":"Mã phiên nằm ngay trên URL."},
-        {"t":278.83,"vi":"Vì sao? Cất flash cần session, nên session được tạo trong chính request đó."},
-        {"t":285.25,"vi":"Tomcat chưa biết trình duyệt có nhận cookie không."},
-        {"t":288.66,"vi":"Nên nó gửi cookie, và chèn luôn mã phiên vào URL cho chắc."},
-        {"t":293.45,"vi":"Đó là viết lại URL, URL rewriting ở Chương 4."},
-        {"t":298.44,"vi":"Mã phiên trên URL lọt vào lịch sử trình duyệt, log máy chủ, và header Referer."},
-        {"t":304.67,"vi":"Ai có nó là chiếm được phiên."},
-        {"t":306.96,"vi":"Sửa bằng một dòng: tracking-modes bằng cookie."},
-        {"t":310.7,"vi":"Bật dòng này cho mọi ứng dụng Boot có session."},
-        {"t":315.62,"vi":"Ba response thật đặt cạnh nhau."},
-        {"t":318.1,"vi":"Bên trái là POST thêm thiết bị đầu tiên, chưa có cookie."},
-        {"t":322.81,"vi":"Có Set-Cookie, và Location mang chấm phẩy jsessionid."},
-        {"t":327.33,"vi":"Ở giữa là POST sửa thiết bị số năm, gửi kèm cookie. Location sạch, không có Set-Cookie."},
-        {"t":335.38,"vi":"Bên phải: cùng ứng dụng, chạy lại với tracking-modes bằng cookie, qua biến môi trường."},
-        {"t":342.08,"vi":"Lại POST đầu tiên, chưa có cookie."},
-        {"t":345.57,"vi":"Vẫn có Set-Cookie, nhưng Location đã sạch."},
-        {"t":349.15,"vi":"Bài web đo điều này trên ứng dụng bài tập."},
-        {"t":352.09,"vi":"Ở đây mình đo lại ngay trên thiet-bi-boot, kết quả giống nhau."},
-        {"t":357.81,"vi":"Slide mười sáu. Trong controller HTML, thiết bị không tồn tại thì ném ResponseStatusException với NOT_FOUND."},
-        {"t":367,"vi":"Thêm tệp templates error 404 chấm html."},
-        {"t":371.7,"vi":"Spring Boot tự chọn trang theo mã trạng thái."},
-        {"t":374.56,"vi":"Đây là bản hiện đại của thẻ error-page trong web.xml."},
-        {"t":379.39,"vi":"Thứ tự tìm: error 404 trước, rồi error 4xx, rồi error chấm html."},
-        {"t":387.01,"vi":"Không có trang nào thì hiện Whitelabel Error Page."},
-        {"t":390.42,"vi":"Thông báo của ngoại lệ mặc định không được đưa ra trang."},
-        {"t":394.06,"vi":"Chi tiết bên trong ở lại máy chủ, an toàn hơn."},
-        {"t":397.68,"vi":"Và một điều đo được: thiếu header Accept text html thì cùng lỗi đó trả về JSON."},
-        {"t":406.48,"vi":"Chạy thật trong Chromium: mở trang sửa của thiết bị số chín mươi chín."},
-        {"t":411.37,"vi":"Trang 404 của chính mình, với đường dẫn devices edit, và liên kết quay về danh sách."},
-        {"t":418.23,"vi":"Curl cùng URL, có Accept text html: status 404, đúng HTML của tệp error 404."},
-        {"t":428.13,"vi":"Giờ GET vào devices create, URL chỉ nhận POST."},
-        {"t":433.16,"vi":"Kết quả 405, header Allow bằng POST."},
-        {"t":437.39,"vi":"Không có tệp error 405, nên Boot hiện Whitelabel Error Page, ghi rõ Method Not Allowed."},
-        {"t":445.01,"vi":"Cuối cùng, gọi lại edit chín mươi chín nhưng bỏ header Accept, như Postman hay curl mặc định."},
-        {"t":452.2,"vi":"Cùng lỗi đó trả về JSON bốn khoá: timestamp, status, error, path."},
-        {"t":458.63,"vi":"Vì vậy Postman thấy JSON, còn trình duyệt thấy trang HTML."},
-        {"t":465.66,"vi":"Slide mười bảy chuyển sang API."},
-        {"t":468.65,"vi":"RestController trả về đối tượng, Jackson ghi đối tượng đó thành JSON."},
-        {"t":474.03,"vi":"API dùng cùng DeviceService với các trang HTML."},
-        {"t":478.51,"vi":"Chỉ có view khác, như hai view JSP và JSON ở bài 6.A."},
-        {"t":484.57,"vi":"PathVariable lấy số từ đường dẫn."},
-        {"t":487.33,"vi":"API devices năm thì id bằng năm."},
-        {"t":490.43,"vi":"Quan trọng nhất: trả record DTO nhỏ, không trả entity."},
-        {"t":495.71,"vi":"Entity lộ mọi cột, kể cả cột mật khẩu thêm sau này."},
-        {"t":499.65,"vi":"Nó có thể lặp vòng giữa Lab và Device."},
-        {"t":502.82,"vi":"Và với quan hệ lười, nó hỏng khi ra khỏi giao dịch."},
-        {"t":506.82,"vi":"Slide hai mươi hai đo lỗi đó."},
-        {"t":510.88,"vi":"Đây là DeviceApiController và DeviceDto thật."},
-        {"t":514.79,"vi":"Phương thức of chép đúng năm trường client cần."},
-        {"t":517.78,"vi":"Gọi GET api devices trang một."},
-        {"t":520.99,"vi":"Status 200, Content-Type application json."},
-        {"t":525.1,"vi":"Body có mảng items bốn thiết bị, rồi page, totalPages và total bằng mười một."},
-        {"t":531.66,"vi":"Hình dạng này là của bạn. Nó không phụ thuộc lớp Page của Spring Data."},
-        {"t":537.18,"vi":"Gọi API devices năm. Tên là Router Cisco 4321, đúng tên form HTML vừa sửa vài request trước."},
-        {"t":547.04,"vi":"Một CSDL, một service, hai giao diện."},
-        {"t":552.69,"vi":"Slide mười tám. Mỗi kết cục có mã trạng thái riêng."},
-        {"t":556.83,"vi":"Đọc bảng từng dòng."},
-        {"t":558.39,"vi":"GET thấy là 200 kèm body. POST tạo mới là 201 kèm header Location."},
-        {"t":564.75,"vi":"Xoá xong là 204, không có body."},
-        {"t":568.85,"vi":"Dữ liệu sai là 400. Không có tài nguyên là 404."},
-        {"t":573.64,"vi":"Trùng với dữ liệu đang có là 409."},
-        {"t":576.89,"vi":"Sai method là 405 kèm Allow."},
-        {"t":579.78,"vi":"Sai Content-Type là 415."},
-        {"t":583.36,"vi":"Tạo mới trả ResponseEntity created."},
-        {"t":586.26,"vi":"Client biết ngay id và URL của bản ghi mới, khỏi phải đoán."},
-        {"t":591.47,"vi":"Lỗi kinh điển của đồ án: cái gì cũng trả 200, kèm success bằng false. Front-end và công cụ giám sát đều không biết có lỗi."},
-        {"t":602.44,"vi":"Chạy thật. POST một body JSON: lcd-01, Màn hình LCD 16x2, lab số ba."},
-        {"t":612.04,"vi":"Status 201. Location trỏ tới api devices mười ba."},
-        {"t":617.86,"vi":"Body là DTO, mã đã thành chữ hoa."},
-        {"t":621.14,"vi":"Xoá thiết bị mười ba: 204, không có body."},
-        {"t":625.78,"vi":"Xoá lần nữa: 404, Content-Type application problem cộng json."},
-        {"t":631.98,"vi":"Đây chính là phép thử đầu bài."},
-        {"t":634.23,"vi":"Các mã này theo RFC 9110, chuẩn HTTP Semantics, cùng chuẩn với Chương 1."},
-        {"t":643.08,"vi":"Slide mười chín. Record DeviceRequest lặp lại luật của form, cho client gửi JSON."},
-        {"t":650.28,"vi":"Đặt Valid lên tham số RequestBody."},
-        {"t":652.67,"vi":"Body sai sẽ không bao giờ tới được phương thức của bạn."},
-        {"t":657.03,"vi":"Spring trả 400. Mặc định nó chỉ nói Invalid request content, không nói ô nào sai."},
-        {"t":663.98,"vi":"Nên ApiErrors ghi đè handleMethodArgumentNotValid."},
-        {"t":667.99,"vi":"Nó gom lỗi từng ô vào một TreeMap."},
-        {"t":670.91,"vi":"TreeMap xếp khoá theo thứ tự, nên JSON giống nhau mỗi lần chạy."},
-        {"t":675.62,"vi":"Rồi setProperty thêm khoá errors."},
-        {"t":678.69,"vi":"Thông báo mặc định là tiếng Anh của Hibernate Validator."},
-        {"t":682.7,"vi":"Muốn đổi thì dùng message, hoặc tệp ValidationMessages."},
-        {"t":688.63,"vi":"Chạy thật. Gửi body có mã là lcd1, tên rỗng, số lượng một nghìn, và thiếu labId."},
-        {"t":696.09,"vi":"Status 400. Detail ghi bốn ô sai."},
-        {"t":700.15,"vi":"Khoá errors liệt kê đủ bốn ô, xếp theo bảng chữ cái. Ô thiếu labId báo must not be null."},
-        {"t":707.43,"vi":"Front-end chỉ việc đọc errors, rồi đặt từng thông báo cạnh ô của nó."},
-        {"t":712.53,"vi":"Giờ gửi một JSON bị cắt dở. Body còn không đọc được, nên chẳng có gì để kiểm."},
-        {"t":719.22,"vi":"Vẫn 400, nhưng detail là Failed to read request, và không có khoá errors."},
-        {"t":727.39,"vi":"Slide hai mươi. Một RestControllerAdvice đổi từng ngoại lệ nghiệp vụ thành một ProblemDetail."},
-        {"t":734.64,"vi":"ProblemDetail là body lỗi theo chuẩn RFC 9457, gửi dưới kiểu application problem cộng json."},
-        {"t":742.87,"vi":"Bảng dưới là các trường: type, title, status, detail, instance."},
-        {"t":749.52,"vi":"Controller chỉ ném DeviceNotFoundException hay DuplicateCodeException."},
-        {"t":754.66,"vi":"Advice quyết định mã và câu chữ."},
-        {"t":758.22,"vi":"basePackageClasses giới hạn advice trong gói API."},
-        {"t":762.04,"vi":"Controller HTML vẫn giữ trang lỗi của nó."},
-        {"t":765.38,"vi":"Nếu dự án bạn gặp dùng Boot 3, JSON có thêm type bằng about blank, và thứ tự trường khác. Client đọc theo tên thì không sao."},
-        {"t":776.57,"vi":"Đây là ApiErrors thật. Ba phương thức ExceptionHandler, mỗi cái một ngoại lệ, một mã."},
-        {"t":783.75,"vi":"Gọi GET api devices chín mươi chín: 404, title Device not found, instance là đường dẫn vừa gọi."},
-        {"t":792.67,"vi":"POST mã OSC-01 đã có: 409, title báo mã trùng."},
-        {"t":798.69,"vi":"Dữ liệu hợp lệ, nhưng đụng với bản ghi đang có."},
-        {"t":802.39,"vi":"POST với labId chín: 400, Unknown lab."},
-        {"t":807.01,"vi":"Đây là lỗi đầu vào, chứ không phải không tìm thấy thiết bị."},
-        {"t":810.86,"vi":"Để ý thứ tự trường: detail, instance, status, title. Jackson 3 xếp theo bảng chữ cái."},
-        {"t":819.09,"vi":"Một chỗ đổi ngoại lệ thành response cho cả API."},
-        {"t":823.13,"vi":"Controller vẫn mỏng."},
-        {"t":826.38,"vi":"Slide hai mươi mốt. Có một property tên spring mvc problemdetails enabled, mặc định false."},
-        {"t":834.31,"vi":"Bật lên thì các lỗi của chính Spring, như 400, 404, 405, 415, đều trả dạng problem cộng json."},
-        {"t":844.73,"vi":"Nhưng chỉ khi ứng dụng chưa tự có bean ResponseEntityExceptionHandler."},
-        {"t":849.11,"vi":"ApiErrors kế thừa đúng lớp đó."},
-        {"t":852.07,"vi":"Thêm nữa, 405 xảy ra trước khi chọn được controller."},
-        {"t":856.92,"vi":"Advice giới hạn theo gói không bắt được nó."},
-        {"t":859.96,"vi":"Chọn một: chỉ bật property cho ứng dụng nhỏ, hoặc một advice toàn cục của bạn, không lọc theo gói."},
-        {"t":868.84,"vi":"Ứng dụng nhỏ loi-problem không có advice nào, chỉ bật property. Bốn lỗi của Spring, chạy thật."},
-        {"t":876.34,"vi":"items abc: 400, không đổi được thành số."},
-        {"t":880.76,"vi":"DELETE: 405. Đường không có: 404. Gửi text plain: 415."},
-        {"t":887.95,"vi":"Cả bốn đều là application problem cộng json."},
-        {"t":891.97,"vi":"Không một dòng mã xử lý lỗi nào."},
-        {"t":894.25,"vi":"Tắt property, chạy lại items abc."},
-        {"t":897.72,"vi":"Giờ là JSON mặc định kiểu Boot: timestamp, status, error, path."},
-        {"t":903.68,"vi":"Vì sao có điều kiện? Đọc thẳng bytecode của Boot 4.1.1 bằng javap."},
-        {"t":909.67,"vi":"Có hai annotation điều kiện."},
-        {"t":911.97,"vi":"Một là property phải bật. Hai là chưa có bean ResponseEntityExceptionHandler."},
-        {"t":917.86,"vi":"Quay lại thiet-bi-boot. PATCH api devices năm: 405, nhưng là JSON mặc định, không phải ProblemDetail."},
-        {"t":927.94,"vi":"Mình thử thêm gửi text plain vào API."},
-        {"t":931.16,"vi":"Lần này ApiErrors bắt được, ra ProblemDetail 415."},
-        {"t":936.12,"vi":"Vì 415 nảy sinh lúc đọc RequestBody, tức là sau khi đã chọn controller."},
-        {"t":944.08,"vi":"Slide hai mươi hai: bảy lỗi làm mất điểm trong đồ án."},
-        {"t":947.62,"vi":"Mỗi lỗi có triệu chứng, nguyên nhân và cách sửa."},
-        {"t":951.15,"vi":"Một, LazyInitializationException."},
-        {"t":954.08,"vi":"Controller đọc quan hệ lười sau khi giao dịch đã đóng."},
-        {"t":957.9,"vi":"Lát nữa ta đo thật."},
-        {"t":959.6,"vi":"Hai, trả entity thẳng ra JSON, sửa bằng record DTO. Ba, quên BindingResult ngay sau Valid."},
-        {"t":968.33,"vi":"Bốn, hiện view ngay sau POST thành công, F5 là lưu hai lần. Sửa bằng PRG."},
-        {"t":975.71,"vi":"Năm, luật nghiệp vụ trong controller, nên lặp giữa HTML và API. Đẩy nó vào Service."},
-        {"t":983.62,"vi":"Sáu, lỗi nào cũng trả 200. Bảy, dùng Map of làm body JSON, thứ tự khoá đổi giữa các lần chạy."},
-        {"t":992.06,"vi":"Trước buổi demo, gửi mỗi form một lần để trống, một lần trùng mã, và bấm F5 sau khi lưu."},
-        {"t":999.55,"vi":"Gọi API với id sai và method sai, rồi đọc mã trạng thái trong tab Network."},
-        {"t":1007.46,"vi":"Đo thật lỗi số một. Mình cho service nạp lab bằng getReferenceById, thay cho findById."},
-        {"t":1015.25,"vi":"getReferenceById không chạy câu SELECT nào."},
-        {"t":1017.71,"vi":"Nó trả về một proxy rỗng, chờ lúc cần mới nạp."},
-        {"t":1021.46,"vi":"POST tạo LCD-01 qua API. Kết quả: 500 Internal Server Error."},
-        {"t":1028.9,"vi":"Log ghi LazyInitializationException, không khởi tạo được proxy Lab số ba, no session."},
-        {"t":1035.9,"vi":"DeviceDto gọi getLab getName ngoài giao dịch."},
-        {"t":1039.57,"vi":"Lúc đó không còn session của Hibernate để nạp."},
-        {"t":1043.01,"vi":"Còn điều tệ hơn. Hỏi thẳng PostgreSQL: LCD-01 đã được lưu."},
-        {"t":1048.94,"vi":"Client nhận 500, tưởng là thất bại, nên gửi lại. Lần sau sẽ là 409 trùng mã."},
-        {"t":1056.33,"vi":"Cách sửa: nạp đủ dữ liệu trong service bằng findById, hoặc dựng DTO ngay trong giao dịch."},
-        {"t":1064.5,"vi":"Slide hai mươi ba là bảng đối chiếu."},
-        {"t":1067.55,"vi":"Bên trái là PRJ301, bên phải là Spring MVC."},
-        {"t":1072.36,"vi":"WebServlet cộng service thành Controller cộng RequestMapping."},
-        {"t":1077.03,"vi":"getParameter thành RequestParam."},
-        {"t":1079.99,"vi":"setAttribute thành model addAttribute."},
-        {"t":1082.83,"vi":"forward tới JSP thành trả về tên view."},
-        {"t":1086.37,"vi":"sendRedirect thành chuỗi redirect hai chấm."},
-        {"t":1088.87,"vi":"Flash tự viết thành addFlashAttribute."},
-        {"t":1092.73,"vi":"sendError 404 thành ResponseStatusException."},
-        {"t":1097.24,"vi":"error-page thành tệp error 404 chấm html, và ControllerAdvice."},
-        {"t":1103.19,"vi":"Filter phân quyền thành interceptor, và đúng hơn là Spring Security ở CS.4."},
-        {"t":1109.59,"vi":"Cột phải không xoá cột trái."},
-        {"t":1111.99,"vi":"Spring MVC vẫn chạy trên HttpServletRequest, session và filter."},
-        {"t":1118.89,"vi":"Slide cuối tóm cả deck. DispatcherServlet là front controller, các chiến lược làm phần việc."},
-        {"t":1126.18,"vi":"Controller trả tên view cho Thymeleaf."},
-        {"t":1129.52,"vi":"RestController trả đối tượng cho Jackson."},
-        {"t":1132.94,"vi":"HTML: lỗi thì hiện lại form, đúng thì PRG kèm flash. API: mã trạng thái thật, và ProblemDetail từ một advice."},
-        {"t":1143.54,"vi":"LabFlow là React cộng REST. Mỗi tính năng một RestController, request và response là record DTO có Valid."},
-        {"t":1153.22,"vi":"Một GlobalApiErrors kế thừa ResponseEntityExceptionHandler."},
-        {"t":1157.94,"vi":"Tạo mới thì 201 kèm Location."},
-        {"t":1160.93,"vi":"Deck tiếp theo, CS.3, mở DeviceRepository: nó thật ra làm gì, gửi câu SQL nào, và vì sao open-in-view bị tắt."},
-        {"t":1173,"vi":"Ba câu tự kiểm nhé."},
-        {"t":1175.02,"vi":"Câu một: sau POST thành công, bạn gọi model addAttribute rồi trả redirect."},
-        {"t":1181.42,"vi":"Trang danh sách có hiện thông báo không?"},
-        {"t":1184.03,"vi":"Không. Model thuộc về request POST."},
-        {"t":1187.12,"vi":"Phải dùng addFlashAttribute."},
-        {"t":1190.21,"vi":"Câu hai: tạo mới thành công qua API thì trả mã nào, kèm header gì?"},
-        {"t":1197.08,"vi":"201 Created, kèm header Location trỏ tới tài nguyên mới."},
-        {"t":1201.71,"vi":"Câu ba: dữ liệu hợp lệ nhưng mã đã tồn tại."},
-        {"t":1205.66,"vi":"Mã nào?"},
-        {"t":1206.84,"vi":"409 Conflict."},
-        {"t":1210.8,"vi":"Tóm lại: luật cần CSDL đặt ở service, controller đổi ngoại lệ thành lỗi của ô bằng rejectValue."},
-        {"t":1218.89,"vi":"POST hợp lệ thì PRG kèm addFlashAttribute."},
-        {"t":1222.93,"vi":"Bật tracking-modes bằng cookie để URL không mang mã phiên."},
-        {"t":1227.97,"vi":"API trả DTO và mã trạng thái thật."},
-        {"t":1231.11,"vi":"Một RestControllerAdvice đổi mọi lỗi thành ProblemDetail."},
-        {"t":1235.3,"vi":"Bài sau là phần bài tập của CS.2: tự làm mã trạng thái REST, PRG, và interceptor."}
-      ]
-    },
-    "prj301-slide-cs3-2": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/13-chuyen-sau-servlet-spring-boot/13-10-slide-cs3-2-du-lieu-03557478.mp4","durationSec":1341.76,"nguonCau":"srt",
-      "parts": [],
-      "cues": [
-        {"t":5.1,"vi":"Chào bạn. Đây là deck Chuyên sâu ba, về dữ liệu, phần hai, từ slide mười ba tới hai mươi tư."},
-        {"t":12.79,"vi":"Phần một đã làm mã dữ liệu ngắn lại: JdbcTemplate, JdbcClient, rồi repository của Spring Data JPA."},
-        {"t":21.25,"vi":"Phần hai đo hai cách mã ngắn làm hỏng việc."},
-        {"t":24.33,"vi":"Nó gửi nhiều SQL hơn bạn tưởng."},
-        {"t":27.09,"vi":"Và nó không phải một giao dịch khi bạn tưởng là một."},
-        {"t":30.13,"vi":"Mọi con số hôm nay do ứng dụng đang chạy in ra: số câu SQL Hibernate đếm, và số dư đọc lại từ CSDL."},
-        {"t":40.47,"vi":"Thử đoán nhé. Trang danh sách in tên và loại của một nghìn người, thuộc ba trăm lớp. Nó gửi bao nhiêu câu SQL?"},
-        {"t":48.9,"vi":"Chạy thật với đúng đoạn mã của slide mười ba."},
-        {"t":52.34,"vi":"Hibernate đếm được ba trăm linh một câu."},
-        {"t":55.17,"vi":"Cùng dữ liệu, thêm join fetch vào câu truy vấn: chỉ một câu. Lần đo đầu, một trăm bảy mươi mili giây so với mười lăm."},
-        {"t":64.17,"vi":"Trên CSDL tám dòng của bạn, cả hai đều nhanh."},
-        {"t":68.19,"vi":"Lỗi này chỉ lộ ra khi dữ liệu thật đổ vào."},
-        {"t":71.48,"vi":"Hết phần này, bạn sẽ biết cách đếm, cách sửa, và vì sao EAGER không phải cách sửa."},
-        {"t":79.82,"vi":"Slide mười ba: N cộng một, đếm được bằng log SQL."},
-        {"t":84.97,"vi":"Service nạp mọi người bằng findAll, in một dòng đánh dấu, rồi đọc tên loại của từng người."},
-        {"t":91.33,"vi":"Vì type là LAZY, mỗi người chỉ giữ một proxy, tức một đối tượng thay thế chưa có dữ liệu."},
-        {"t":98.55,"vi":"Lần đầu chạm vào mỗi mã loại khác nhau, Hibernate gửi thêm một câu SELECT."},
-        {"t":104.06,"vi":"Kết quả: một câu lấy tám người, cộng ba câu, mỗi loại một câu."},
-        {"t":109.26,"vi":"Tổng là bốn."},
-        {"t":110.48,"vi":"Vì sao ba mà không phải tám?"},
-        {"t":112.82,"vi":"Trong một session, Hibernate nhớ loại đã nạp và dùng lại."},
-        {"t":117.29,"vi":"Một nghìn người, ba trăm lớp, thì ba trăm linh một câu, đúng như bạn vừa thấy."},
-        {"t":124.46,"vi":"Chạy thật. Bên trái là phương thức nPlusOne trong ReportService."},
-        {"t":129.41,"vi":"Gọi /n-plus-1 bằng curl. JSON trả về sqlStatements bằng bốn, kèm tám dòng tên và loại."},
-        {"t":137.33,"vi":"Log của ứng dụng: câu đầu lấy bảng human."},
-        {"t":140.96,"vi":"Dòng đánh dấu in ra ngay sau đó."},
-        {"t":143.41,"vi":"Rồi ba câu giống hệt nhau, chỉ khác tham số typeid."},
-        {"t":147.63,"vi":"Đó là dấu hiệu nhận ra N cộng một."},
-        {"t":150.42,"vi":"So với bài 7.A, EclipseLink trên SQL Server, quan hệ EAGER. Cùng một mẫu: một câu cho Human, ba câu cho HumanType."},
-        {"t":161.63,"vi":"Câu phỏng vấn gần như chắc gặp: N cộng một là gì? Trả lời bằng phép đo: bật log SQL, đếm số câu mỗi request."},
-        {"t":172.43,"vi":"Slide mười bốn: sửa N cộng một bằng JOIN FETCH, hoặc EntityGraph."},
-        {"t":178.91,"vi":"Cách một: viết join fetch h.type trong JPQL."},
-        {"t":183.59,"vi":"Hibernate nạp loại cùng lúc với người."},
-        {"t":186.49,"vi":"Cách hai: chú thích EntityGraph với attributePaths bằng type."},
-        {"t":191.22,"vi":"Cùng tác dụng, không phải viết JPQL."},
-        {"t":194.46,"vi":"Cả hai sinh đúng một câu SQL có join humantype."},
-        {"t":198.78,"vi":"Bảng bên phải: n-plus-1 bốn câu, join-fetch một câu, entity-graph một câu."},
-        {"t":205.57,"vi":"Còn eager, tức ManyToOne để mặc định, vẫn bốn câu. Các câu chỉ chạy sớm hơn, ngay trong findAll."},
-        {"t":213.49,"vi":"Vì thế EAGER không chữa N cộng một."},
-        {"t":216.6,"vi":"Quy ước: mọi ManyToOne đặt LAZY, chỗ nào cần thì fetch."},
-        {"t":222.01,"vi":"Bài 7.A đo EclipseLink với EAGER cũng ra một cộng ba câu, y như Hibernate ở đây."},
-        {"t":230.6,"vi":"Chạy thật ba endpoint. Bên trái là HumanRepository với hai phương thức mới."},
-        {"t":236.26,"vi":"Gọi /join-fetch: sqlStatements bằng một."},
-        {"t":240.54,"vi":"Log có đúng một câu, kèm join humantype."},
-        {"t":243.92,"vi":"Gọi /entity-graph: cũng một câu, SQL giống hệt."},
-        {"t":249.18,"vi":"Giờ là HumanEager, ánh xạ thứ hai của cùng bảng human, giữ ManyToOne mặc định."},
-        {"t":255.46,"vi":"Gọi /eager: vẫn bốn câu. Nhìn kỹ log: cả bốn câu chạy trước dòng đánh dấu."},
-        {"t":262.16,"vi":"Nghĩa là mọi màn hình nạp người đều trả giá, kể cả màn hình không bao giờ hiện loại."},
-        {"t":269.27,"vi":"Slide mười lăm: N cộng một trên collection, và Hibernate sáu trở lên tự bỏ bản trùng."},
-        {"t":276.04,"vi":"Lần này đi ngược lại: lấy ba loại, rồi gọi getHumans().size() cho từng loại."},
-        {"t":282,"vi":"Mỗi loại một câu lấy danh sách người."},
-        {"t":284.62,"vi":"Lại là bốn câu."},
-        {"t":286.21,"vi":"Sửa bằng left join fetch t.humans."},
-        {"t":289.62,"vi":"Không viết DISTINCT."},
-        {"t":291.54,"vi":"Câu SQL trả tám dòng, mỗi người một dòng, loại bị lặp lại. Vậy mà danh sách chỉ có ba đối tượng."},
-        {"t":299.72,"vi":"EclipseLink ở bài 7.A trả cả bản lặp, tám kết quả. Phải thêm DISTINCT mới còn ba."},
-        {"t":306.54,"vi":"Từ Hibernate sáu, không cần DISTINCT nữa."},
-        {"t":310.16,"vi":"Tài liệu cũ cho Hibernate năm vẫn dạy thêm, giờ là thừa."},
-        {"t":314.49,"vi":"Bẫy phân trang: đừng ghép join fetch collection với Pageable."},
-        {"t":319.11,"vi":"Một trang mười đối tượng cha không phải mười dòng đã join."},
-        {"t":324.13,"vi":"Chạy thật. Gọi /types/n-plus-1: bốn câu, và ba dòng đếm người theo loại."},
-        {"t":330.64,"vi":"Log xen kẽ: dòng type một, một câu SELECT."},
-        {"t":334.44,"vi":"Dòng type hai, một câu. Dòng type ba, một câu."},
-        {"t":339.11,"vi":"Gọi /types/join-fetch: một câu, left join human. Dòng đánh dấu báo ba đối tượng HumanType."},
-        {"t":346.67,"vi":"Bài 7.A, case types-fetch: không DISTINCT ra tám kết quả, có DISTINCT ra ba."},
-        {"t":354.03,"vi":"Log EclipseLink có hai câu SQL."},
-        {"t":357.13,"vi":"Câu sau chỉ khác đúng chữ DISTINCT."},
-        {"t":361.5,"vi":"Thêm một phép đo ngoài bài. Chèn thêm để có ba trăm lớp, một nghìn người, bằng psql."},
-        {"t":368.5,"vi":"Gọi n-plus-1 rồi join-fetch, hai lượt. N cộng một ra ba trăm linh một câu."},
-        {"t":375.1,"vi":"Join fetch ra một câu."},
-        {"t":376.97,"vi":"Lượt đầu, một trăm bảy mươi mili giây so với mười lăm."},
-        {"t":380.27,"vi":"Ở đây CSDL nằm cùng máy, qua mạng thật còn chậm hơn."},
-        {"t":385.53,"vi":"Cách giảm thứ ba, Hibernate gọi là batch fetching."},
-        {"t":389.71,"vi":"Đặt default_batch_fetch_size bằng mười sáu, mã giữ nguyên."},
-        {"t":394.28,"vi":"Chạy lại: ba trăm linh một câu còn hai mươi."},
-        {"t":397.67,"vi":"Mỗi câu lấy tối đa mười sáu loại một lượt."},
-        {"t":400.63,"vi":"Trên tám dòng thì còn hai câu: một câu lấy người, một câu lấy loại với typeid bằng any."},
-        {"t":407.82,"vi":"Batch fetching là lưới an toàn."},
-        {"t":410.08,"vi":"Cách sửa chính vẫn là fetch đúng chỗ cần."},
-        {"t":414.62,"vi":"Slide mười sáu: Transactional, đo lại bài chuyển tiền của chương năm."},
-        {"t":419.98,"vi":"Hai tài khoản An và Bình, mỗi người một trăm."},
-        {"t":423.59,"vi":"Cột balance có ràng buộc CHECK, tối đa một trăm năm mươi."},
-        {"t":428.28,"vi":"Chuyển quá năm mươi thì bước cộng cho Bình hỏng, vì Bình vượt trần."},
-        {"t":432.84,"vi":"Phương thức transfer có Transactional: Spring mở giao dịch trước, commit sau, rollback nếu có ngoại lệ runtime."},
-        {"t":441.43,"vi":"Bảng kết quả: chuyển ba mươi thì commit, còn bảy mươi và một trăm ba mươi."},
-        {"t":447.1,"vi":"Chuyển tám mươi có giao dịch: rollback, cả hai về một trăm, tổng hai trăm."},
-        {"t":453.04,"vi":"Không có annotation: bước trừ đã tự commit."},
-        {"t":456.94,"vi":"An còn hai mươi, tổng một trăm hai mươi."},
-        {"t":459.82,"vi":"Tám mươi biến mất."},
-        {"t":461.33,"vi":"Đúng setAutoCommit false, commit, rollback của bài chương năm, nhưng không một dòng nào trong service."},
-        {"t":470.62,"vi":"Chạy thật. Trước hết là servlet của bài thực hành chương năm, trên Tomcat và SQL Server."},
-        {"t":477.68,"vi":"Không giao dịch, chuyển tám mươi: FAILED mid-way, NOT undone. An hai mươi, tổng một trăm hai mươi."},
-        {"t":485.71,"vi":"Có giao dịch: ROLLBACK, tổng vẫn hai trăm."},
-        {"t":489.69,"vi":"Giờ là bản Spring Boot, ứng dụng chuyen-tien."},
-        {"t":493.49,"vi":"Chế độ tx, ba mươi: log có Creating new transaction, rồi Initiating transaction commit."},
-        {"t":500.91,"vi":"Chế độ tx, tám mươi: hai bước chạy trong giao dịch, bước cộng hỏng, rồi Initiating transaction rollback."},
-        {"t":509.04,"vi":"Số dư một trăm, một trăm."},
-        {"t":511.48,"vi":"Chế độ no-tx, tám mươi: không có dòng giao dịch nào, transaction active bằng false."},
-        {"t":518.51,"vi":"Tổng một trăm hai mươi."},
-        {"t":521.74,"vi":"Slide mười bảy: rollback với RuntimeException, còn ngoại lệ checked thì không."},
-        {"t":528.34,"vi":"LimitException kế thừa Exception, tức là ngoại lệ checked. Nó được ném sau bước trừ tiền."},
-        {"t":534.73,"vi":"Tài liệu tham khảo của Spring ghi rõ quy tắc này: RuntimeException hay Error gây rollback, ngoại lệ checked thì không."},
-        {"t":543.24,"vi":"Chế độ checked: ngoại lệ bay ra, nhưng Spring commit. An hai mươi, tổng một trăm hai mươi."},
-        {"t":550.83,"vi":"Chế độ checked-fixed, thêm rollbackFor bằng Exception: rollback, tổng hai trăm."},
-        {"t":557.63,"vi":"Bẫy đồ án kinh điển: tự viết NotEnoughStockException kế thừa Exception, rồi tin là đơn hàng đã rollback."},
-        {"t":565.54,"vi":"Hai cách đúng: cho ngoại lệ nghiệp vụ kế thừa RuntimeException, hoặc ghi rollbackFor. Rồi kiểm bằng cách đọc lại dữ liệu."},
-        {"t":575.67,"vi":"Chạy thật chế độ checked, tám mươi."},
-        {"t":578.17,"vi":"Kết quả là LimitException, amount 80 is over the limit of 50."},
-        {"t":584.52,"vi":"Số dư An hai mươi, Bình một trăm, tổng một trăm hai mươi."},
-        {"t":590.82,"vi":"Log: Creating new transaction, trừ tám mươi, rồi Initiating transaction commit."},
-        {"t":596.32,"vi":"Có ngoại lệ mà vẫn commit."},
-        {"t":598.58,"vi":"Chế độ checked-fixed: cùng ngoại lệ, nhưng log ghi Initiating transaction rollback."},
-        {"t":605.15,"vi":"Tổng hai trăm."},
-        {"t":606.58,"vi":"Để ý cuối dòng Creating: dấu trừ rồi java.lang.Exception."},
-        {"t":612.1,"vi":"Đó là luật rollback Spring đọc từ rollbackFor."},
-        {"t":616.98,"vi":"Slide mười tám: REQUIRED nhập vào, REQUIRES_NEW tách ra."},
-        {"t":622.87,"vi":"Propagation quyết định phương thức Transactional làm gì khi đã có sẵn một giao dịch."},
-        {"t":628.51,"vi":"REQUIRED là mặc định: có sẵn thì nhập vào, chưa có thì mở mới."},
-        {"t":633.73,"vi":"REQUIRES_NEW thì treo giao dịch đang có, mở giao dịch mới, và commit riêng."},
-        {"t":640.39,"vi":"transferWithAudit ghi nhật ký qua AuditService, một bean khác đánh dấu REQUIRES_NEW, rồi chuyển tám mươi."},
-        {"t":647.7,"vi":"Log kể theo thứ tự: tạo giao dịch ngoài, treo nó, tạo giao dịch cho nhật ký, commit, rồi tiếp tục giao dịch ngoài."},
-        {"t":656.47,"vi":"Bước cộng hỏng, giao dịch ngoài rollback."},
-        {"t":659.57,"vi":"Tiền về nguyên, nhưng nhật ký vẫn còn."},
-        {"t":662.56,"vi":"Dùng REQUIRES_NEW cho thứ phải sống sót khi nghiệp vụ hỏng: nhật ký kiểm toán, đếm số lần đăng nhập sai."},
-        {"t":671.59,"vi":"Chạy thật chế độ audit, tám mươi."},
-        {"t":674.44,"vi":"Số dư một trăm, một trăm. Mảng audit có một dòng: transfer of 80 requested."},
-        {"t":681.49,"vi":"Log đầy đủ hơn slide một chút."},
-        {"t":684.01,"vi":"Giao dịch ngoài mượn một kết nối của pool."},
-        {"t":686.86,"vi":"Khi treo nó, giao dịch mới mượn thêm kết nối thứ hai, một PgConnection khác hẳn."},
-        {"t":692.76,"vi":"Nghĩa là trong lúc REQUIRES_NEW chạy, một request giữ hai kết nối."},
-        {"t":698.24,"vi":"Pool chỉ có mười, nên giữ phần này thật ngắn."},
-        {"t":701.57,"vi":"Commit nhật ký xong, giao dịch ngoài tiếp tục, rồi rollback trên kết nối thứ nhất."},
-        {"t":709,"vi":"Slide mười chín: nuốt lỗi bên trong, và UnexpectedRollbackException."},
-        {"t":715.04,"vi":"transferSwallow trừ tiền, rồi gọi credits.credit qua một bean khác, cũng Transactional, mặc định REQUIRED."},
-        {"t":723,"vi":"Bước cộng hỏng. Bên ngoài bắt lỗi, in một dòng, rồi đi tiếp như chưa có gì."},
-        {"t":729.12,"vi":"Nhưng khi phần bên trong hỏng, nó đã đánh dấu cả giao dịch chung là rollback-only, tức là chỉ được rollback."},
-        {"t":736.81,"vi":"Log ghi: Participating in existing transaction."},
-        {"t":741.05,"vi":"Rồi Participating transaction failed, marking existing transaction as rollback-only."},
-        {"t":747.91,"vi":"Tới cuối, Spring ghi: giao dịch chung đã bị đánh dấu rollback-only, nhưng mã bên ngoài lại yêu cầu commit."},
-        {"t":755.89,"vi":"Thế là rollback."},
-        {"t":757.44,"vi":"Bên gọi tưởng ổn, lại nhận về UnexpectedRollbackException, một ngoại lệ nó chưa từng ném."},
-        {"t":764.06,"vi":"Hai thiết kế trung thực: để lỗi lan lên, hoặc nếu phần bên trong thật sự độc lập thì cho nó REQUIRES_NEW."},
-        {"t":773.4,"vi":"Chạy thật chế độ swallow, tám mươi."},
-        {"t":776.07,"vi":"Bên trái là CreditService: một phương thức Transactional gọi dao.credit."},
-        {"t":781.92,"vi":"JSON: result là UnexpectedRollbackException."},
-        {"t":786.32,"vi":"Số dư một trăm, một trăm, tổng hai trăm."},
-        {"t":789.84,"vi":"Log thật có thêm dòng Setting JDBC transaction rollback-only."},
-        {"t":795.07,"vi":"Đó là lúc dấu được đặt lên kết nối."},
-        {"t":797.78,"vi":"Dòng caught DataIntegrityViolationException in ra sau đó, transaction active vẫn true."},
-        {"t":804.42,"vi":"Nhưng đã quá muộn."},
-        {"t":807.98,"vi":"Slide hai mươi: tự gọi this.method thì không có giao dịch."},
-        {"t":812.41,"vi":"transferViaThis không có annotation, và nó gọi this.transfer, một phương thức có Transactional."},
-        {"t":820.63,"vi":"Transactional hoạt động qua một proxy bọc bean."},
-        {"t":823.81,"vi":"Chỉ lời gọi từ ngoài vào mới đi qua proxy."},
-        {"t":827.07,"vi":"Còn this là đối tượng thật, không phải proxy."},
-        {"t":830.57,"vi":"Nên transfer chạy mà không có giao dịch nào."},
-        {"t":833.69,"vi":"Log thật: mọi dòng in transaction active bằng false."},
-        {"t":837.86,"vi":"An hai mươi, tổng một trăm hai mươi."},
-        {"t":840.91,"vi":"Cách sửa, theo thứ tự nên dùng: tách phương thức sang một bean khác, rồi gọi qua bean đó."},
-        {"t":847.36,"vi":"Hoặc đặt Transactional lên chính phương thức được gọi từ ngoài."},
-        {"t":851.23,"vi":"Hoặc mở giao dịch bằng mã với TransactionTemplate."},
-        {"t":854.76,"vi":"Cùng luật proxy áp cho Async, Cacheable, và PreAuthorize ở CS.4."},
-        {"t":860.88,"vi":"Phương thức private cũng không bao giờ có giao dịch."},
-        {"t":865.61,"vi":"Chạy thật chế độ self, tám mươi."},
-        {"t":868.04,"vi":"Không có dòng Creating new transaction nào, ba dòng đều false."},
-        {"t":873.36,"vi":"Giờ thử điều sinh viên hay làm khi tự kiểm: chuyển ba mươi, trường hợp suôn sẻ."},
-        {"t":878.95,"vi":"Kết quả returned normally. An bảy mươi, Bình một trăm ba mươi, tổng hai trăm."},
-        {"t":885.25,"vi":"Trông hoàn hảo."},
-        {"t":886.53,"vi":"Nhưng log vẫn ghi transaction active bằng false."},
-        {"t":890.37,"vi":"Lỗi vẫn nằm đó, chỉ là chưa có gì hỏng để lộ ra."},
-        {"t":894.39,"vi":"Bài học: kiểm service ghi dữ liệu bằng cả trường hợp hỏng, rồi đọc lại số dư, như cột total ở đây."},
-        {"t":903.57,"vi":"Slide hai mươi mốt: open-in-view mặc định bật, và vì sao nên tắt."},
-        {"t":909.22,"vi":"Ứng dụng oiv-mac-dinh không đặt gì."},
-        {"t":912.2,"vi":"Lúc khởi động, Boot ghi một dòng WARN."},
-        {"t":915.29,"vi":"Câu cảnh báo nói open-in-view đang bật mặc định, nên câu truy vấn có thể chạy trong lúc dựng view."},
-        {"t":922.09,"vi":"Gọi /humans/2: trả 200. Nhưng câu SELECT humantype chạy trong controller, sau khi service đã trả về."},
-        {"t":930.61,"vi":"Nghĩa là SQL nằm ngoài mọi giao dịch, và một kết nối của pool bị giữ suốt cả request."},
-        {"t":937.25,"vi":"human-jpa đặt open-in-view bằng false."},
-        {"t":941.05,"vi":"Cùng mã controller, giờ hỏng: LazyInitializationException, no session, lỗi 500."},
-        {"t":947.94,"vi":"Tắt nó không tạo ra vấn đề, mà làm vấn đề lộ ra."},
-        {"t":951.92,"vi":"Cách sửa là nạp đủ trong service."},
-        {"t":954.68,"vi":"Đồ án: đặt open-in-view bằng false từ ngày đầu, và service trả DTO."},
-        {"t":962.62,"vi":"Chạy thật. Bên trái là HumanController của oiv-mac-dinh."},
-        {"t":967.26,"vi":"Log khởi động có đúng dòng WARN của JpaBaseConfiguration."},
-        {"t":972.58,"vi":"Gọi /humans/2: name Elon, type teacher."},
-        {"t":976,"vi":"Log có câu lấy human, dòng của controller, rồi câu lấy humantype."},
-        {"t":981.8,"vi":"Cùng request gửi tới human-jpa: HTTP 500. Log báo Could not initialize proxy, HumanType số hai, no session."},
-        {"t":992.18,"vi":"Đọc kỹ thứ tự: dòng của controller in ra trước."},
-        {"t":995.95,"vi":"Lỗi đến ngay khi nó chạm getType().getName()."},
-        {"t":1000.96,"vi":"Slide hai mươi hai: ddl-auto, ai được phép sửa bảng?"},
-        {"t":1006.89,"vi":"none: Hibernate không đụng vào bảng."},
-        {"t":1009.43,"vi":"Dùng khi đã có Flyway."},
-        {"t":1011.9,"vi":"validate: chỉ so entity với bảng, khác thì dừng. Đây là lựa chọn cho dự án thật có Flyway."},
-        {"t":1019.16,"vi":"update: tự ALTER thêm cột, không có lịch sử, không ai duyệt. Không dùng cho CSDL dùng chung."},
-        {"t":1027.3,"vi":"create và create-drop xoá rồi tạo lại bảng, chỉ để demo và test."},
-        {"t":1032.88,"vi":"ddl-validate thêm field email vào entity, nhưng quên migration. Flyway chạy V1, V2, rồi Hibernate từ chối."},
-        {"t":1043.55,"vi":"Schema validation: missing column email in table human."},
-        {"t":1048.25,"vi":"Ứng dụng dừng lúc khởi động, thay vì lỗi 500 ở truy vấn đầu tiên."},
-        {"t":1052.82,"vi":"Mỗi schema một chủ: Flyway viết, Hibernate kiểm."},
-        {"t":1058.9,"vi":"Chạy thật. Bên trái là entity Human có field email, và application.yml với ddl-auto bằng validate."},
-        {"t":1067.76,"vi":"Lần khởi động đầu: Flyway lên phiên bản hai, rồi Application run failed, thiếu cột email."},
-        {"t":1074.91,"vi":"Thêm V3__add_email.sql, khởi động lại cùng CSDL."},
-        {"t":1080.62,"vi":"Flyway chạy đúng V3, ứng dụng lên."},
-        {"t":1083.71,"vi":"Gọi /emails: tám người, email đều null, vì cột vừa thêm còn trống."},
-        {"t":1089.99,"vi":"Thêm một phép đo ngoài bài: CSDL mới, đặt ddl-auto bằng update. Ứng dụng lên, không báo lỗi gì."},
-        {"t":1098.77,"vi":"Nhưng psql cho thấy bảng đã bị sửa: thêm cột email, và humanname đổi từ một trăm thành hai trăm năm mươi lăm ký tự."},
-        {"t":1107.45,"vi":"Lịch sử Flyway vẫn chỉ hai dòng."},
-        {"t":1110.08,"vi":"Máy bạn cùng nhóm sẽ có bảng khác máy bạn."},
-        {"t":1112.88,"vi":"Đó là lý do không dùng update."},
-        {"t":1117.14,"vi":"Slide hai mươi ba: sáu triệu chứng hay gặp ở tầng dữ liệu, mỗi cái kèm nguyên nhân đã đo."},
-        {"t":1123.35,"vi":"Trang danh sách chậm dần khi dữ liệu lớn: N cộng một. Bật log SQL, đếm câu, rồi fetch đúng chỗ."},
-        {"t":1133.72,"vi":"LazyInitializationException, no session: đọc quan hệ LAZY ngoài giao dịch."},
-        {"t":1137.84,"vi":"Nạp trong service, đừng bật lại open-in-view."},
-        {"t":1141.52,"vi":"Lỗi giữa chừng mà dữ liệu ghi một nửa: thiếu annotation, tự gọi, hoặc ngoại lệ checked."},
-        {"t":1149.98,"vi":"UnexpectedRollbackException: bắt lỗi của phương thức REQUIRED bên trong."},
-        {"t":1153.58,"vi":"Đừng nuốt lỗi."},
-        {"t":1154.87,"vi":"Ứng dụng không khởi động sau khi thêm field: validate đang làm đúng việc."},
-        {"t":1159.91,"vi":"Viết migration mới, không sửa tệp cũ."},
-        {"t":1162.99,"vi":"Trả entity thẳng ra JSON: lặp vô hạn theo quan hệ hai chiều, lộ mọi cột. Hãy trả record DTO."},
-        {"t":1171.37,"vi":"Hai thói quen chặn cả sáu: bật log SQL ở profile dev, và kiểm service bằng cách đọc lại dữ liệu."},
-        {"t":1180.71,"vi":"Slide hai mươi tư: sáu thói quen PRJ301, và thứ thay chúng trong Spring Boot 4.1."},
-        {"t":1189.9,"vi":"DBContext với DriverManager thành pool HikariCP."},
-        {"t":1192.19,"vi":"setup.sql chạy tay thành Flyway, cộng validate."},
-        {"t":1196.6,"vi":"HumanDAO bằng JDBC thành JdbcTemplate, JdbcClient, hoặc JpaRepository."},
-        {"t":1202.51,"vi":"SQLException thành DataAccessException."},
-        {"t":1205.93,"vi":"JPQL và persistence.xml thành derived query, Query, Pageable. setAutoCommit thành Transactional, kèm luật proxy."},
-        {"t":1216.82,"vi":"Câu phỏng vấn: N cộng một là gì, sửa sao? Một câu danh sách cộng N câu quan hệ."},
-        {"t":1223.74,"vi":"Sửa bằng join fetch, EntityGraph, hoặc DTO."},
-        {"t":1227.7,"vi":"Câu thứ hai: Transactional không chạy?"},
-        {"t":1230.94,"vi":"Nghĩ tới proxy: tự gọi, ngoại lệ checked, phương thức private."},
-        {"t":1236.21,"vi":"Với LabFlow: Flyway từ ngày đầu, open-in-view tắt, ManyToOne LAZY, service trả DTO, Transactional ở service chứ không ở controller."},
-        {"t":1249.96,"vi":"Ba câu tự kiểm nhé."},
-        {"t":1251.98,"vi":"Câu một: ManyToOne để mặc định là EAGER."},
-        {"t":1255.83,"vi":"Danh sách tám người, ba loại, gửi mấy câu SQL?"},
-        {"t":1260.48,"vi":"Vẫn bốn câu. EAGER chỉ đẩy ba câu lấy loại lên sớm, ngay trong findAll."},
-        {"t":1266.79,"vi":"Câu hai: service Transactional ném một ngoại lệ kế thừa Exception, sau bước trừ tiền. Dữ liệu ra sao?"},
-        {"t":1274.9,"vi":"Spring commit bước trừ tiền."},
-        {"t":1277.22,"vi":"Muốn rollback thì ghi rollbackFor, hoặc kế thừa RuntimeException."},
-        {"t":1282.26,"vi":"Câu ba: một phương thức không annotation gọi this.transfer có Transactional."},
-        {"t":1288.3,"vi":"Có giao dịch không?"},
-        {"t":1289.92,"vi":"Không. this không đi qua proxy, nên mỗi UPDATE tự commit."},
-        {"t":1296.76,"vi":"Tóm lại: N cộng một đếm bằng log SQL."},
-        {"t":1300.66,"vi":"Sửa bằng join fetch, EntityGraph, hoặc DTO. EAGER không phải cách sửa."},
-        {"t":1307.6,"vi":"Transactional là một proxy. Runtime thì rollback, checked thì commit, tự gọi thì không có giao dịch."},
-        {"t":1315.78,"vi":"REQUIRED nhập vào giao dịch chung, lỗi bên trong bị nuốt thành UnexpectedRollbackException."},
-        {"t":1321.1,"vi":"REQUIRES_NEW commit riêng."},
-        {"t":1324.34,"vi":"open-in-view đặt false, nạp đủ trong service."},
-        {"t":1327.85,"vi":"Flyway sở hữu schema, Hibernate chỉ validate."},
-        {"t":1332.51,"vi":"Bài sau là bài tập của deck Chuyên sâu ba: DAO bằng JdbcClient, sửa N cộng một, thêm migration, sửa lỗi tự gọi."}
-      ]
-    },
-    "prj301-slide-prj1-1": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/01-web-hoat-dong-ra-sao/01-01-slide-prj1-1-web-hoat-dong-ac007213.mp4","durationSec":1019.19,"nguonCau":"srt",
-      "parts": [],
+    "prj301-slide-prj1-1": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/01-web-hoat-dong-ra-sao/01-01-slide-prj1-1-web-hoat-dong-ac007213.mp4","durationSec":1019.19,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":100.8,"ten":"Ôn nhanh · hôm nay · Slide 1 · Session 1"},
+        {"t":100.8,"den":181.72,"ten":"Slide 3 · What is HTML? · Slide 4 · HTML Tags"},
+        {"t":181.72,"den":292.03,"ten":"Slide 5 · HTML Documents = Web Pages"},
+        {"t":292.03,"den":379.46,"ten":"Slide 7 · Web page example · Slide 8 · What a Servlet is"},
+        {"t":379.46,"den":468.42,"ten":"Chạy thật: HelloServlet đọc tên trên URL"},
+        {"t":468.42,"den":559.14,"ten":"Slide 10 · Architecture of the Servlet Package"},
+        {"t":559.14,"den":645.75,"ten":"Chạy thật: đủ bảy method trên một servlet"},
+        {"t":645.75,"den":736.32,"ten":"Slide 13 · Idempotency and Safety"},
+        {"t":736.32,"den":853.97,"ten":"Slide 15 · HTTP 1.1 Status Codes"},
+        {"t":853.97,"den":941.25,"ten":"Chạy thật: cookie JSESSIONID"},
+        {"t":941.25,"den":1019.19,"ten":"Tự kiểm nhanh · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Chương 1 của môn PRJ301: web hoạt động ra sao."},
         {"t":11.61,"vi":"Ở Mục 0 mình đã thấy một servlet thật trả về trang HTML, và luật đọc slide nhưng gõ jakarta."},
@@ -9287,8 +9109,16 @@
         {"t":1009.36,"vi":"Bạn làm phần thực hành dưới video, rồi sang bài 1.1: HTTP, request, response và servlet đầu tiên."}
       ]
     },
-    "prj301-slide-prj1-2": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/02-servlet-chuyen-sau/02-01-slide-prj1-2-servlet-vong-doi-form-05a4e764.mp4","durationSec":692.8,"nguonCau":"srt",
-      "parts": [],
+    "prj301-slide-prj1-2": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/02-servlet-chuyen-sau/02-01-slide-prj1-2-servlet-vong-doi-form-05a4e764.mp4","durationSec":692.8,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":119.63,"ten":"Ôn nhanh · hôm nay · Slide 17 · A Simple Servlet"},
+        {"t":119.63,"den":229.39,"ten":"Slide 19 · The Servlet Life Cycle"},
+        {"t":229.39,"den":327.06,"ten":"Slide 21 · Request Headers"},
+        {"t":327.06,"den":410.43,"ten":"Slide 24 · HTTP Response · Chạy thật: tự viết response"},
+        {"t":410.43,"den":511.78,"ten":"Slide 26 · HTML Form Inputs (text)"},
+        {"t":511.78,"den":613.39,"ten":"Slide 30 · Form trong trình duyệt · Slide 31 · Form Data"},
+        {"t":613.39,"den":692.8,"ten":"Tự kiểm nhanh · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Chương 2 của môn PRJ301: servlet chuyên sâu."},
         {"t":11.49,"vi":"Chương 1 mình đã đọc request, response, method và mã trạng thái, và dựng được ứng dụng web đúng bố cục."},
@@ -9410,8 +9240,15 @@
         {"t":683.89,"vi":"Bạn làm phần thực hành dưới video, rồi sang bài 2.B: cấu trúc ứng dụng web, web.xml và WAR."}
       ]
     },
-    "prj301-slide-prj1-3": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/02-servlet-chuyen-sau/02-02-slide-prj1-3-web-xml-war-4e47fd49.mp4","durationSec":561.78,"nguonCau":"srt",
-      "parts": [],
+    "prj301-slide-prj1-3": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/02-servlet-chuyen-sau/02-02-slide-prj1-3-web-xml-war-4e47fd49.mp4","durationSec":561.78,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":86.82,"ten":"Ôn nhanh · hôm nay · Slide 32 · Web application"},
+        {"t":86.82,"den":176.53,"ten":"Slide 34 · Thư mục đặc biệt dưới context root"},
+        {"t":176.53,"den":251.86,"ten":"Slide 37 · <servlet> và các phần tử con"},
+        {"t":251.86,"den":330.95,"ten":"Slide 38 · web.xml đơn giản · Slide 39 · Welcome Files"},
+        {"t":330.95,"den":419.07,"ten":"Slide 40 · A WAR Is Not a JAR · Slide 41 · WAR file"},
+        {"t":419.07,"den":561.78,"ten":"Slide 43 · Summary · Thực hành: tự đóng WAR và deploy"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 2.B, phần cuối của bộ slide prj1."},
         {"t":10.39,"vi":"Bài trước mình đã đi qua vòng đời servlet, các header, và đọc form bằng getParameter."},
@@ -9497,8 +9334,15 @@
         {"t":552.97,"vi":"Bạn làm phần thực hành dưới video, rồi sang bài 2.1: vòng đời, tham số, forward và redirect."}
       ]
     },
-    "prj301-slide-prj10-1": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/08-filter-listener/08-01-slide-prj10-1-filter-27038f49.mp4","durationSec":889.52,"nguonCau":"srt",
-      "parts": [],
+    "prj301-slide-prj10-1": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/08-filter-listener/08-01-slide-prj10-1-filter-27038f49.mp4","durationSec":889.52,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":103.2,"ten":"Mở đầu · bài này học gì"},
+        {"t":103.2,"den":266.33,"ten":"Chạy thật một filter tên GateFilter"},
+        {"t":266.33,"den":442.2,"ten":"Bước ba là bước hay quên nhất"},
+        {"t":442.2,"den":620.78,"ten":"Trong doFilter: ép kiểu request"},
+        {"t":620.78,"den":732.62,"ten":"Slide mười sáu"},
+        {"t":732.62,"den":889.52,"ten":"Chạy thật: trang JSP viết test.com hai lần"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Chương 8 của môn PRJ301: Filter và Listener."},
         {"t":11.41,"vi":"Ở Chương 6, servlet nào cần bảo vệ cũng mở đầu bằng mấy dòng kiểm session. doPost nào cũng gọi setCharacterEncoding."},
@@ -9657,8 +9501,15 @@
         {"t":881.68,"vi":"Bài sau, 8.B: event listener, những sự kiện của ứng dụng, session và request."}
       ]
     },
-    "prj301-slide-prj11-1": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/08-filter-listener/08-02-slide-prj11-1-listener-2c7a9720.mp4","durationSec":1013.7,"nguonCau":"srt",
-      "parts": [],
+    "prj301-slide-prj11-1": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/08-filter-listener/08-02-slide-prj11-1-listener-2c7a9720.mp4","durationSec":1013.7,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":177.9,"ten":"Mở đầu · bài này học gì"},
+        {"t":177.9,"den":354.31,"ten":"Thứ tự này đúng như lúc bạn viết…"},
+        {"t":354.31,"den":531.09,"ten":"CSDL khởi động lại là kết nối chết…"},
+        {"t":531.09,"den":699.13,"ten":"Trong Assignment, đó là cảnh listener không làm…"},
+        {"t":699.13,"den":803.79,"ten":"Chạy thật bằng servlet theme"},
+        {"t":803.79,"den":1013.7,"ten":"Cuối cùng gỡ ứng dụng"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, tiếp tục Chương 8."},
         {"t":7.53,"vi":"Bài trước, filter bọc quanh từng request: đi tiếp bằng chain.doFilter, hoặc chặn lại."},
@@ -9840,8 +9691,15 @@
         {"t":1007.18,"vi":"Bài sau, 8.1: filter trong thực tế, mã chạy trước mọi request."}
       ]
     },
-    "prj301-slide-prj2-1": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/05-jdbc-mau-dao/05-01-slide-prj2-1-jdbc-driver-dfe1e62f.mp4","durationSec":564.92,"nguonCau":"srt",
-      "parts": [],
+    "prj301-slide-prj2-1": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/05-jdbc-mau-dao/05-01-slide-prj2-1-jdbc-driver-dfe1e62f.mp4","durationSec":564.92,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":85.73,"ten":"Ôn nhanh · hôm nay"},
+        {"t":85.73,"den":167.38,"ten":"Slide 3–4 · Mục tiêu · Nội dung · Slide 5 · Database và DBMS"},
+        {"t":167.38,"den":265.3,"ten":"Slide 7 · Ba nhóm câu lệnh SQL"},
+        {"t":265.3,"den":345.79,"ten":"Slide 10 · Hai phần của JDBC API"},
+        {"t":345.79,"den":432.77,"ten":"Slide 12 · Bốn loại driver"},
+        {"t":432.77,"den":564.92,"ten":"Slide 16 · Type 3: Network Protocol"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Chương 5 của môn PRJ301: JDBC."},
         {"t":10.86,"vi":"Tới giờ servlet chỉ trả lời bằng dữ liệu viết cứng trong Java, như Catalog ở bài thực hành Chương 4."},
@@ -9933,8 +9791,18 @@
         {"t":557.26,"vi":"Bài sau, 5.B: năm bước JDBC thành mã chạy thật, PreparedStatement, và ResultSet."}
       ]
     },
-    "prj301-slide-prj3-1": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/03-jsp-el-jstl/03-01-slide-prj3-1-jsp-dich-sang-servlet-2322fb2b.mp4","durationSec":906.25,"nguonCau":"srt",
-      "parts": [],
+    "prj301-slide-prj3-1": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/03-jsp-el-jstl/03-01-slide-prj3-1-jsp-dich-sang-servlet-2322fb2b.mp4","durationSec":906.25,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":97.04,"ten":"Ôn nhanh · hôm nay · Slide 1 · JavaServer Pages (JSP)"},
+        {"t":97.04,"den":205.28,"ten":"Slide 3 · Objectives (2) · Slide 4 · What JSP technology is"},
+        {"t":205.28,"den":316.28,"ten":"Slide 6 · Translation Time"},
+        {"t":316.28,"den":398.89,"ten":"Slide 8 · How JSP Works? · Slide 9 · JSP Elements"},
+        {"t":398.89,"den":482.86,"ten":"Slide 10 · HTML Comment · Slide 11 · Declaration"},
+        {"t":482.86,"den":590.59,"ten":"Slide 12 · Declaration Demo · Slide 13 · Expression"},
+        {"t":590.59,"den":694.47,"ten":"Slide 15 · Scriptlet · Slide 16 · Scriptlet Demo"},
+        {"t":694.47,"den":797.5,"ten":"Chạy thật: đối tượng thật sau mỗi biến"},
+        {"t":797.5,"den":906.25,"ten":"Slide 19 · Class Hierarchy · Tự kiểm nhanh"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Chương 3 của môn PRJ301: JSP, EL và JSTL."},
         {"t":12.25,"vi":"Ở Chương 2, mọi trang đều đi ra từ out.println, Java bọc ngoài và HTML bị nhét vào trong chuỗi."},
@@ -10087,8 +9955,17 @@
         {"t":899.5,"vi":"Bài sau là 3.B: slide hai mươi tới ba mươi bảy, về chỉ thị, include và forward."}
       ]
     },
-    "prj301-slide-prj3-2": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/03-jsp-el-jstl/03-02-slide-prj3-2-chi-thi-include-forward-16147087.mp4","durationSec":845.53,"nguonCau":"srt",
-      "parts": [],
+    "prj301-slide-prj3-2": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/03-jsp-el-jstl/03-02-slide-prj3-2-chi-thi-include-forward-16147087.mp4","durationSec":845.53,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":97.78,"ten":"Ôn nhanh · hôm nay · Slide 20 · JSP Directives"},
+        {"t":97.78,"den":173.85,"ten":"Slide 22 · import attribute"},
+        {"t":173.85,"den":289.38,"ten":"★ Bẫy contentType làm vỡ tiếng Việt"},
+        {"t":289.38,"den":403.75,"ten":"Chạy thật: isThreadSafe, info, buffer, trim"},
+        {"t":403.75,"den":511.79,"ten":"Slide 27 · The taglib Directive"},
+        {"t":511.79,"den":618.47,"ten":"Slide 30 · Standard actions syntax · Slide 31 · jsp:include"},
+        {"t":618.47,"den":710.71,"ten":"Slide 33 · include tĩnh (sơ đồ)"},
+        {"t":710.71,"den":845.53,"ten":"Slide 35 · jsp:forward demo · Slide 36–37 · Summary · Q&A"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 3.B của môn PRJ301."},
         {"t":9.35,"vi":"Bài trước mình đã thấy Tomcat dịch mỗi JSP thành một servlet, với scriptlet, biểu thức và khai báo."},
@@ -10240,8 +10117,15 @@
         {"t":839.22,"vi":"Bài sau là 3.C: Expression Language, cách viết trang không cần scriptlet."}
       ]
     },
-    "prj301-slide-prj4-1": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/06-kien-truc-mvc/06-01-slide-prj4-1-mvc-428db7a7.mp4","durationSec":539.96,"nguonCau":"srt",
-      "parts": [],
+    "prj301-slide-prj4-1": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/06-kien-truc-mvc/06-01-slide-prj4-1-mvc-428db7a7.mp4","durationSec":539.96,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":81.22,"ten":"Ôn nhanh · hôm nay · Slide 1–2 · MVC Architecture · Mục tiêu"},
+        {"t":81.22,"den":183.6,"ten":"Slide 4 · Model 1 và Model 2 · Slide 5 · The Model"},
+        {"t":183.6,"den":282.47,"ten":"Slide 7 · The Controller · Slide 8 · MVC2 · front controller"},
+        {"t":282.47,"den":374.86,"ten":"Slide 10 · Luồng điều khiển · Slide 10 · Model từ chối"},
+        {"t":374.86,"den":452.36,"ten":"Slide 12 · Dùng ở đâu · Slide 13 · MVC trong Java desktop"},
+        {"t":452.36,"den":539.96,"ten":"Slide 15 · Tổng kết · Tự kiểm nhanh"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Chương 6 của môn PRJ301: kiến trúc MVC."},
         {"t":11.21,"vi":"Các chương trước cho bạn từng mảnh: servlet đọc request, JSP vẽ HTML, DAO nói chuyện với SQL Server."},
@@ -10331,8 +10215,17 @@
         {"t":533.41,"vi":"Bài sau, 6.1: model, view, controller phối hợp với nhau."}
       ]
     },
-    "prj301-slide-prj6-1": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/03-jsp-el-jstl/03-03-slide-prj6-1-expression-language-f163fb8c.mp4","durationSec":799.93,"nguonCau":"srt",
-      "parts": [],
+    "prj301-slide-prj6-1": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/03-jsp-el-jstl/03-03-slide-prj6-1-expression-language-f163fb8c.mp4","durationSec":799.93,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":90.93,"ten":"Ôn nhanh · hôm nay · Slide 1 · Expression Language"},
+        {"t":90.93,"den":183.42,"ten":"Slide 3 · What is Unified EL? · Slide 4 · History of the EL"},
+        {"t":183.42,"den":278.85,"ten":"Slide 6 · jsp:useBean · Slide 7 · useBean and Scope"},
+        {"t":278.85,"den":380.21,"ten":"Slide 9 · jsp:setProperty · Slide 10 · jsp:getProperty"},
+        {"t":380.21,"den":465.24,"ten":"Slide 13 · EL and JavaBeans · Slide 14 · Advantages (1)"},
+        {"t":465.24,"den":575.51,"ten":"Slide 16 · Advantages (3) · Slide 17 · Advantages (4)"},
+        {"t":575.51,"den":683.04,"ten":"Slide 19 · How bean properties are accessed"},
+        {"t":683.04,"den":799.93,"ten":"Slide 22 · EL Operators · Slide 23 · Conditional evaluation"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 3.C của môn PRJ301: Expression Language, viết tắt EL."},
         {"t":12.71,"vi":"Hai bài trước mình dùng scriptlet và biểu thức Java."},
@@ -10471,8 +10364,14 @@
         {"t":792.45,"vi":"Bài sau là 3.D: JSTL, thư viện thẻ chuẩn, nơi c:if và c:forEach thay scriptlet."}
       ]
     },
-    "prj301-slide-prj7-2": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/03-jsp-el-jstl/03-05-slide-prj7-2-jstl-url-fmt-fn-326c71f9.mp4","durationSec":482.99,"nguonCau":"srt",
-      "parts": [],
+    "prj301-slide-prj7-2": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/03-jsp-el-jstl/03-05-slide-prj7-2-jstl-url-fmt-fn-326c71f9.mp4","durationSec":482.99,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":90.44,"ten":"Ôn nhanh · hôm nay · Slide 17 · c:import"},
+        {"t":90.44,"den":174.14,"ten":"Slide 19 · cú pháp c:import · Slide 20 · c:url"},
+        {"t":174.14,"den":270.64,"ten":"Slide 23 · fmt: i18n · Slide 24 · fmt:bundle"},
+        {"t":270.64,"den":353.69,"ten":"Slide 27 · SQL actions · Slide 28–30 · XML actions"},
+        {"t":353.69,"den":482.99,"ten":"Slide 32 · Functions (2) · Slide 33 · How to use JSTL"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 3.E của môn PRJ301, nửa sau của JSTL."},
         {"t":11.66,"vi":"Bài trước mình đã có c:out, c:if, c:choose và c:forEach cho mọi trang."},
@@ -10559,8 +10458,13 @@
         {"t":478.11,"vi":"Bài sau là 3.F: tự viết thẻ của riêng bạn, custom tag."}
       ]
     },
-    "prj301-slide-prj9-1": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/03-jsp-el-jstl/03-06-slide-prj9-1-custom-tag-a1d601f3.mp4","durationSec":407.07,"nguonCau":"srt",
-      "parts": [],
+    "prj301-slide-prj9-1": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/03-jsp-el-jstl/03-06-slide-prj9-1-custom-tag-a1d601f3.mp4","durationSec":407.07,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":91.01,"ten":"Ôn nhanh · hôm nay · Slide 1–2 · Custom Tags · Objectives"},
+        {"t":91.01,"den":183.7,"ten":"Slide 5–6 · Custom Tags · Slide 7 · Development process"},
+        {"t":183.7,"den":280.83,"ten":"Slide 9 · Custom Tag Example"},
+        {"t":280.83,"den":407.07,"ten":"★ Tag pooling: đối tượng thẻ được dùng lại"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 3.F của môn PRJ301: tự viết thẻ của riêng bạn."},
         {"t":11.65,"vi":"Hai bài trước mình dùng JSTL, một thư viện thẻ có sẵn. Mỗi thẻ JSTL thật ra là một lớp Java."},
@@ -10627,8 +10531,13 @@
         {"t":397.95,"vi":"Bài sau là 3.1: JSP làm view với EL và JSTL, gộp mọi thứ của chương vào một khuôn MVC."}
       ]
     },
-    "prj301-transaction-pool": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/05-jdbc-mau-dao/05-06-giao-dich-connection-pool-aa7ee457.mp4","durationSec":324.32,"nguonCau":"srt",
-      "parts": [],
+    "prj301-transaction-pool": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/java-web-application-development/05-jdbc-mau-dao/05-06-giao-dich-connection-pool-aa7ee457.mp4","durationSec":324.32,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":86.14,"ten":"Ôn nhanh · hôm nay · Hai câu cập nhật không được nửa vời"},
+        {"t":86.14,"den":172.89,"ten":"Chi tiết quyết định: cùng một Connection"},
+        {"t":172.89,"den":243.38,"ten":"Bẫy: quên khôi phục autoCommit · ★ Mức cô lập"},
+        {"t":243.38,"den":324.32,"ten":"Thực hành: chuyển tiền · Tự kiểm nhanh"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 5.4 của môn PRJ301."},
         {"t":10.11,"vi":"DAO ở bài 5.3 xử lý mỗi lần một câu lệnh."},

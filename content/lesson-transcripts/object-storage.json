@@ -2,8 +2,13 @@
   "courseSlug": "object-storage",
   "sinhBoi": "scripts/phu-de-tu-video-rieng.mjs",
   "lessons": {
-    "os-0-0-bat-dau-tai-day": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/object-storage/00-object-storage-la-gi/00-01-object-storage-la-gi-e458968e.mp4","durationSec":568.59,"nguonCau":"srt",
-      "parts": [],
+    "os-0-0-bat-dau-tai-day": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/object-storage/00-object-storage-la-gi/00-01-object-storage-la-gi-e458968e.mp4","durationSec":568.59,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":97.71,"ten":"Mở đầu · bài này học gì"},
+        {"t":97.71,"den":277.69,"ten":"Slide này ghép bốn mảnh"},
+        {"t":277.69,"den":449.02,"ten":"Mười lần xem, mười lần thấy ảnh"},
+        {"t":449.02,"den":568.59,"ten":"Thuật ngữ: object storage"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với khoá Object Storage trên cường thái chấm com."},
         {"t":9.78,"vi":"Đây là bài đầu tiên của khoá."},
@@ -99,8 +104,12 @@
         {"t":558.7,"vi":"Bạn mở Code Lab Object Storage, mô đun nền tảng. Bài sau: tiền, an toàn, và cách học khoá này."}
       ]
     },
-    "os-0-0b-vi-sao-quan-trong": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/object-storage/00-object-storage-la-gi/00-02-vi-sao-quan-trong-7cc493db.mp4","durationSec":509.49,"nguonCau":"srt",
-      "parts": [],
+    "os-0-0b-vi-sao-quan-trong": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/object-storage/00-object-storage-la-gi/00-02-vi-sao-quan-trong-7cc493db.mp4","durationSec":509.49,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":149.67,"ten":"Mở đầu · bài này học gì"},
+        {"t":149.67,"den":322.66,"ten":"Giờ tới an toàn"},
+        {"t":322.66,"den":509.49,"ten":"Chương 3 là URL và quyền truy cập"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Bài trước: object là cả tệp, key là cái tên, bucket là cái kệ."},
         {"t":10.9,"vi":"Đổi ảnh nghĩa là tải lên cả tệp mới."},
@@ -191,8 +200,12 @@
         {"t":503.45,"vi":"Bài sau: 0.1, object storage so với hệ thống tệp."}
       ]
     },
-    "os-0-1-vs-fs": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/object-storage/00-object-storage-la-gi/00-03-vs-file-system-8551dd59.mp4","durationSec":451.29,"nguonCau":"srt",
-      "parts": [],
+    "os-0-1-vs-fs": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/object-storage/00-object-storage-la-gi/00-03-vs-file-system-8551dd59.mp4","durationSec":451.29,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":88.06,"ten":"Mở đầu · bài này học gì"},
+        {"t":88.06,"den":263.81,"ten":"Chạy thật trên MinIO"},
+        {"t":263.81,"den":451.29,"ten":"MinIO qua HTTP trên cùng máy"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Hai bài trước: object là cả tệp, key là tên, bucket là kệ. Egress là dòng tiền gây sốc."},
         {"t":13.05,"vi":"Và một dòng bucket policy có thể mở toang mọi tệp cho người lạ."},
@@ -277,8 +290,12 @@
         {"t":444.39,"vi":"Bài sau: 0.2, mô hình ba tầng bucket, key, object."}
       ]
     },
-    "os-1-1-client": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/object-storage/01-s3-api/01-01-khoi-tao-client-c17297f9.mp4","durationSec":475.7,"nguonCau":"srt",
-      "parts": [],
+    "os-1-1-client": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/object-storage/01-s3-api/01-01-khoi-tao-client-c17297f9.mp4","durationSec":475.7,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":182.79,"ten":"Mở đầu · bài này học gì"},
+        {"t":182.79,"den":325.19,"ten":"Nhánh R2 thật đặt region theo biến môi…"},
+        {"t":325.19,"den":475.7,"ten":"Bẫy lớn nhất"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Bài trước: key tối đa một nghìn không trăm hai mươi tư byte, metadata riêng khoảng hai kilobyte."},
         {"t":11.96,"vi":"ETag chỉ là MD5 khi tải một lượt, và kho đặt key bằng hàm build key, database nhớ mọi key."},
@@ -357,8 +374,12 @@
         {"t":463.57,"vi":"Bạn mở Code Lab Object Storage, mô đun AWS SDK cho JavaScript, luyện dựng client cho chắc. Bài sau là bốn lệnh cơ bản."}
       ]
     },
-    "os-1-2-ops": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/object-storage/01-s3-api/01-02-bon-operation-fc4a38a9.mp4","durationSec":412.25,"nguonCau":"srt",
-      "parts": [],
+    "os-1-2-ops": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/object-storage/01-s3-api/01-02-bon-operation-fc4a38a9.mp4","durationSec":412.25,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":89.24,"ten":"Mở đầu · bài này học gì"},
+        {"t":89.24,"den":266.85,"ten":"Chạy thật: có content type và cache control…"},
+        {"t":266.85,"den":412.25,"ten":"Bài web cũ bảo xem mảng Deleted để…"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Bài trước: SDK v3 chia nhỏ theo dịch vụ, và client chỉ dựng một lần ở lần gọi đầu."},
         {"t":12.42,"vi":"MinIO cục bộ phải dùng path style, còn endpoint thì không bao giờ là URL công khai."},
@@ -431,8 +452,13 @@
         {"t":400.92,"vi":"Bạn mở Code Lab Object Storage, mô đun upload và download object, luyện bốn lệnh này. Bài sau là multipart cho tệp lớn."}
       ]
     },
-    "os-1-3-multipart": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/object-storage/01-s3-api/01-03-multipart-upload-2d3794a6.mp4","durationSec":412.62,"nguonCau":"srt",
-      "parts": [],
+    "os-1-3-multipart": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/object-storage/01-s3-api/01-03-multipart-upload-2d3794a6.mp4","durationSec":412.62,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":90.97,"ten":"Mở đầu · bài này học gì"},
+        {"t":90.97,"den":186.15,"ten":"Bước một, báo trước với kho"},
+        {"t":186.15,"den":361.26,"ten":"Giả lập trình duyệt sập"},
+        {"t":361.26,"den":412.62,"ten":"Câu ba: Complete bị lỗi thì upload dở…"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Bài trước: PUT thay cả object, thân GET chỉ đọc một lần, HEAD không tốn byte thân."},
         {"t":12.07,"vi":"Và delete thì im lặng, mảng Deleted không đếm được object thật."},
@@ -506,8 +532,12 @@
         {"t":407.35,"vi":"Hết Chương 1, chương sau là những điều riêng của R2."}
       ]
     },
-    "os-2-1-egress": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/object-storage/02-r2-specifics/02-01-zero-egress-98eb5bfc.mp4","durationSec":416.92,"nguonCau":"srt",
-      "parts": [],
+    "os-2-1-egress": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/object-storage/02-r2-specifics/02-01-zero-egress-98eb5bfc.mp4","durationSec":416.92,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":179.88,"ten":"Mở đầu · bài này học gì"},
+        {"t":179.88,"den":357.78,"ten":"Slide này ghi lại ứng dụng nặng request"},
+        {"t":357.78,"den":416.92,"ten":"Miễn phí. Class A là ghi và liệt…"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Bài trước: multipart chia tệp thành phần từ năm megabyte, và không có gì tồn tại trước Complete."},
         {"t":12.47,"vi":"ETag gạch N là MD5 của các MD5, còn upload mồ côi vẫn bị tính tiền tới khi bị huỷ."},
@@ -581,8 +611,11 @@
         {"t":404.8,"vi":"Bạn mở Code Lab Object Storage, mô đun về những điều riêng của Cloudflare R2, luyện tính hoá đơn. Bài sau là những điểm lạ của R2."}
       ]
     },
-    "os-2-2-quirks": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/object-storage/02-r2-specifics/02-02-r2-quirks-91a6b51f.mp4","durationSec":379.92,"nguonCau":"srt",
-      "parts": [],
+    "os-2-2-quirks": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/object-storage/02-r2-specifics/02-02-r2-quirks-91a6b51f.mp4","durationSec":379.92,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":183.73,"ten":"Mở đầu · bài này học gì"},
+        {"t":183.73,"den":379.92,"ten":"Requester pays, tagging và object lock thì không…"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Bài trước: egress của S3 là chín xu một gigabyte, của R2 là không đồng. Egress quyết định tỉ lệ hoá đơn."},
         {"t":14.14,"vi":"Không egress thì R2 chỉ rẻ hơn một đến hai lần, và xoá object trên R2 là miễn phí."},
@@ -650,8 +683,12 @@
         {"t":375.01,"vi":"Bài sau là access key và cách xoay khoá."}
       ]
     },
-    "os-2-3-keys": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/object-storage/02-r2-specifics/02-03-access-key-rotation-3ca0c539.mp4","durationSec":384.32,"nguonCau":"srt",
-      "parts": [],
+    "os-2-3-keys": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/object-storage/02-r2-specifics/02-03-access-key-rotation-3ca0c539.mp4","durationSec":384.32,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":149.2,"ten":"Mở đầu · bài này học gì"},
+        {"t":149.2,"den":257.88,"ten":"Bước hai là giai đoạn chồng lấn"},
+        {"t":257.88,"den":384.32,"ten":"Thứ hai, frontend từng lùi về API endpoint…"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Bài trước: region của R2 là auto, path style chỉ đổi URL API, còn tên miền riêng là một con đường khác."},
         {"t":14.4,"vi":"Và với header lạ, MinIO không thay được R2: năm header thì lệch bốn."},
@@ -718,8 +755,13 @@
         {"t":373.03,"vi":"Bạn mở Code Lab Object Storage, mô đun bảo mật và phân quyền, luyện cho chắc. Hết Chương 2, chương sau là ba loại URL."}
       ]
     },
-    "os-3-1-three-urls": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/object-storage/03-url-access/03-01-ba-loai-url-76cd1624.mp4","durationSec":550.27,"nguonCau":"srt",
-      "parts": [],
+    "os-3-1-three-urls": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/object-storage/03-url-access/03-01-ba-loai-url-76cd1624.mp4","durationSec":550.27,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":167.15,"ten":"Mở đầu · bài này học gì"},
+        {"t":167.15,"den":333.22,"ten":"Mình chạy lại ngay đây"},
+        {"t":333.22,"den":506.54,"ten":"Tổng kết theo việc"},
+        {"t":506.54,"den":550.27,"ten":"Tới lượt bạn"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 3.1 của khoá Object Storage."},
         {"t":9.51,"vi":"Bài trước là access key: mỗi việc một token, xoay có chồng lấn."},
@@ -815,8 +857,13 @@
         {"t":545.06,"vi":"Bài sau: Cache-Control theo từng loại nội dung."}
       ]
     },
-    "os-3-2-cache": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/object-storage/03-url-access/03-02-cache-control-409c6f9e.mp4","durationSec":530.37,"nguonCau":"srt",
-      "parts": [],
+    "os-3-2-cache": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/object-storage/03-url-access/03-02-cache-control-409c6f9e.mp4","durationSec":530.37,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":125.55,"ten":"Mở đầu · bài này học gì"},
+        {"t":125.55,"den":242.84,"ten":"Bẫy: nhà máy đổi công thức nhưng giữ…"},
+        {"t":242.84,"den":410.9,"ten":"Bẫy thứ hai"},
+        {"t":410.9,"den":530.37,"ten":"Khoá cache, TTL và xoá cache cho đúng…"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 3.2 của khoá Object Storage."},
         {"t":9.75,"vi":"Bài trước: một object có ba URL, và chỉ đường CDN là có cache."},
@@ -916,8 +963,12 @@
         {"t":524.76,"vi":"Bài sau: signed URL cho object riêng tư."}
       ]
     },
-    "os-3-3-signed": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/object-storage/03-url-access/03-03-signed-url-c8b95217.mp4","durationSec":507.41,"nguonCau":"srt",
-      "parts": [],
+    "os-3-3-signed": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/object-storage/03-url-access/03-03-signed-url-c8b95217.mp4","durationSec":507.41,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":145.8,"ten":"Mở đầu · bài này học gì"},
+        {"t":145.8,"den":320.55,"ten":"Mình chạy lại ngay đây"},
+        {"t":320.55,"den":507.41,"ten":"Bạn gặp kiểu này hằng ngày"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 3.3 của khoá Object Storage."},
         {"t":9.6,"vi":"Bài trước: Cache-Control đặt lúc tải lên, và dữ liệu riêng thì không bao giờ public."},
@@ -1006,8 +1057,13 @@
         {"t":501.83,"vi":"Hết Chương 3, chương sau là upload thẳng từ trình duyệt."}
       ]
     },
-    "os-4-1-vi-sao": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/object-storage/04-presigned-upload/04-01-vi-sao-tai-thang-12c7a778.mp4","durationSec":537.86,"nguonCau":"srt",
-      "parts": [],
+    "os-4-1-vi-sao": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/object-storage/04-presigned-upload/04-01-vi-sao-tai-thang-12c7a778.mp4","durationSec":537.86,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":153.42,"ten":"Mở đầu · bài này học gì"},
+        {"t":153.42,"den":288.27,"ten":"Mình chạy lại ngay đây"},
+        {"t":288.27,"den":417.19,"ten":"Cuối cùng gọi bước báo xong"},
+        {"t":417.19,"den":537.86,"ten":"Vì sao giữ cả tệp trong RAM lại…"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 4.1 của khoá Object Storage."},
         {"t":9.56,"vi":"Chương 3 vừa xong: ba loại URL, Cache-Control, và signed URL để tải về."},
@@ -1104,8 +1160,12 @@
         {"t":524.59,"vi":"Bạn mở Code Lab Object Storage, mô đun tải lên thẳng từ trình duyệt, luyện cho chắc. Bài sau: lỗi signableHeaders và trang HTML nằm trong key video."}
       ]
     },
-    "os-4-2-sigv4-bug": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/object-storage/04-presigned-upload/04-02-loi-signableheaders-b5b01e7c.mp4","durationSec":483.05,"nguonCau":"srt",
-      "parts": [],
+    "os-4-2-sigv4-bug": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/object-storage/04-presigned-upload/04-02-loi-signableheaders-b5b01e7c.mp4","durationSec":483.05,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":143.5,"ten":"Mở đầu · bài này học gì"},
+        {"t":143.5,"den":270.63,"ten":"Mình chạy lại"},
+        {"t":270.63,"den":483.05,"ten":"Cái bẫy thứ hai"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 4.2 của khoá Object Storage."},
         {"t":9.43,"vi":"Bài trước: tệp lớn thì máy chủ chỉ ký, trình duyệt PUT thẳng vào bucket."},
@@ -1188,8 +1248,14 @@
         {"t":471.58,"vi":"Bạn mở Code Lab Object Storage, mô đun bảo mật và phân quyền, luyện cho chắc. Hết Chương 4, chương sau là CORS cho trình duyệt."}
       ]
     },
-    "os-5-1-vi-sao-cors": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/object-storage/05-cors/05-01-vi-sao-cors-0c3c533a.mp4","durationSec":522.63,"nguonCau":"srt",
-      "parts": [],
+    "os-5-1-vi-sao-cors": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/object-storage/05-cors/05-01-vi-sao-cors-0c3c533a.mp4","durationSec":522.63,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":92.29,"ten":"Mở đầu · bài này học gì"},
+        {"t":92.29,"den":178.56,"ten":"Một người tự lái xe chở thẳng tới…"},
+        {"t":178.56,"den":270.9,"ten":"Mình chạy lại từng bước"},
+        {"t":270.9,"den":445.47,"ten":"Chạy thật. Trang www gọi GET bằng URL…"},
+        {"t":445.47,"den":522.63,"ten":"Câu một: tải lên từ www bị chặn"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 5.1 của khoá Object Storage."},
         {"t":9.57,"vi":"Chương trước, máy chủ ký URL và trình duyệt PUT thẳng vào bucket."},
@@ -1284,8 +1350,12 @@
         {"t":511.43,"vi":"Bạn mở Code Lab Object Storage, mô đun tải thẳng từ trình duyệt, luyện cho chắc. Bài sau: cache preflight và đọc ETag."}
       ]
     },
-    "os-5-2-preflight": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/object-storage/05-cors/05-02-cache-preflight-569794e0.mp4","durationSec":483.31,"nguonCau":"srt",
-      "parts": [],
+    "os-5-2-preflight": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/object-storage/05-cors/05-02-cache-preflight-569794e0.mp4","durationSec":483.31,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":179.84,"ten":"Mở đầu · bài này học gì"},
+        {"t":179.84,"den":328.51,"ten":"Hai lệnh PUT vào cùng một URL"},
+        {"t":328.51,"den":483.31,"ten":"Chạy thật. Lệnh PUT thứ nhất thành công"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 5.2 của khoá Object Storage."},
         {"t":9.47,"vi":"Bài trước: trước mỗi lệnh PUT, trình duyệt gửi preflight hỏi bucket."},
@@ -1368,8 +1438,13 @@
         {"t":472.33,"vi":"Bạn mở Code Lab Object Storage, mô đun tải thẳng từ trình duyệt, luyện cho chắc. Bài sau: bốn kiểu lỗi CORS gặp mãi."}
       ]
     },
-    "os-5-3-common-bugs": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/object-storage/05-cors/05-03-bug-cors-pho-bien-d4b473f8.mp4","durationSec":552.38,"nguonCau":"srt",
-      "parts": [],
+    "os-5-3-common-bugs": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/object-storage/05-cors/05-03-bug-cors-pho-bien-d4b473f8.mp4","durationSec":552.38,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":163.85,"ten":"Mở đầu · bài này học gì"},
+        {"t":163.85,"den":315.5,"ten":"Chạy thật. Đặt một quy tắc có hai…"},
+        {"t":315.5,"den":494.76,"ten":"Chạy thật. Trỏ lệnh PUT vào một cổng…"},
+        {"t":494.76,"den":552.38,"ten":"Kiểu bốn: ETag chưa có trong ExposeHeaders"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 5.3 của khoá Object Storage."},
         {"t":9.71,"vi":"Bài trước: trình duyệt nhớ preflight theo origin và URL, nên URL ký sẵn mới luôn có preflight mới."},
@@ -1464,8 +1539,12 @@
         {"t":540.89,"vi":"Bạn mở Code Lab Object Storage, mô đun tải thẳng từ trình duyệt, luyện cho chắc. Hết Chương 5, chương sau là lifecycle và dọn rác."}
       ]
     },
-    "os-6-1-abort": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/object-storage/06-lifecycle/06-01-abort-multipart-do-1d0207df.mp4","durationSec":436.94,"nguonCau":"srt",
-      "parts": [],
+    "os-6-1-abort": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/object-storage/06-lifecycle/06-01-abort-multipart-do-1d0207df.mp4","durationSec":436.94,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":181.59,"ten":"Mở đầu · bài này học gì"},
+        {"t":181.59,"den":259.99,"ten":"Vẫn phải học luật"},
+        {"t":259.99,"den":436.94,"ten":"Chạy thật. Ngưỡng hai mươi tư giờ: không…"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 6.1 của khoá Object Storage."},
         {"t":9.06,"vi":"Chương trước mình học CORS: trình duyệt hỏi trước, và bốn kiểu lỗi gặp mãi."},
@@ -1543,8 +1622,12 @@
         {"t":425.3,"vi":"Bạn mở Code Lab Object Storage, mô đun lifecycle, chi phí và hiệu năng, luyện cho chắc. Bài sau: hết hạn object theo tuổi."}
       ]
     },
-    "os-6-2-expiration": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/object-storage/06-lifecycle/06-02-het-han-theo-tuoi-c742a033.mp4","durationSec":404.27,"nguonCau":"srt",
-      "parts": [],
+    "os-6-2-expiration": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/object-storage/06-lifecycle/06-02-het-han-theo-tuoi-c742a033.mp4","durationSec":404.27,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":97.23,"ten":"Mở đầu · bài này học gì"},
+        {"t":97.23,"den":214.85,"ten":"Ai đó treo biển ghi report mà thiếu…"},
+        {"t":214.85,"den":404.27,"ten":"Chạy thật. Thư mục tmp đang có một…"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 6.2 của khoá Object Storage."},
         {"t":9.55,"vi":"Bài trước: lần tải dở để lại phần ẩn, và luật huỷ theo số ngày."},
@@ -1615,8 +1698,12 @@
         {"t":391.69,"vi":"Bạn mở Code Lab Object Storage, mô đun lifecycle, chi phí và hiệu năng, luyện cho chắc. Bài sau: object mồ côi giữa database và bucket."}
       ]
     },
-    "os-6-3-orphans": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/object-storage/06-lifecycle/06-03-object-mo-coi-ec58d876.mp4","durationSec":395.12,"nguonCau":"srt",
-      "parts": [],
+    "os-6-3-orphans": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/object-storage/06-lifecycle/06-03-object-mo-coi-ec58d876.mp4","durationSec":395.12,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":179.63,"ten":"Mở đầu · bài này học gì"},
+        {"t":179.63,"den":298.81,"ten":"Chạy thật. Dựng dữ liệu: mười chín row"},
+        {"t":298.81,"den":395.12,"ten":"Vì sao hai lệnh ghi vào hai nơi…"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 6.3 của khoá Object Storage."},
         {"t":9.63,"vi":"Bài trước: luật hết hạn theo prefix, và header x-amz-expiration là bằng chứng."},

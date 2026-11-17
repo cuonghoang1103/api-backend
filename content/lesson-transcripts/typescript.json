@@ -2,8 +2,13 @@
   "courseSlug": "typescript",
   "sinhBoi": "scripts/phu-de-tu-video-rieng.mjs",
   "lessons": {
-    "typescript-0-1-gioi-thieu": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/00-gioi-thieu-huong-dan-hoc/00-01-gioi-thieu-labflow-14ef290d.mp4","durationSec":224.48,"nguonCau":"srt",
-      "parts": [],
+    "typescript-0-1-gioi-thieu": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/00-gioi-thieu-huong-dan-hoc/00-01-gioi-thieu-labflow-14ef290d.mp4","durationSec":224.48,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":58.53,"ten":"Bìa bài · Bài này bạn mang về gì"},
+        {"t":58.53,"den":117.08,"ten":"Dự án LabFlow TS · Dự án trên đĩa"},
+        {"t":117.08,"den":170.62,"ten":"JavaScript nói gì · TypeScript nói gì"},
+        {"t":170.62,"den":224.48,"ten":"Bảng điểm · Lộ trình toàn khoá"}
+      ],
       "cues": [
         {"t":5,"vi":"Trước khi viết dòng kiểu nào: cuối khoá bạn làm ra gì, làm trên dự án nào, và TypeScript có đáng học không."},
         {"t":13.44,"vi":"Mọi câu trả lời ở đây đều bằng số đo thật trên chính dự án đó."},
@@ -46,8 +51,13 @@
         {"t":220.72,"vi":"Chương 1 sẽ đưa nó lên mười."}
       ]
     },
-    "typescript-0-2-cach-hoc": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/00-gioi-thieu-huong-dan-hoc/00-02-cach-hoc-doc-trinh-bien-dich-40ec39e5.mp4","durationSec":260.61,"nguonCau":"srt",
-      "parts": [],
+    "typescript-0-2-cach-hoc": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/00-gioi-thieu-huong-dan-hoc/00-02-cach-hoc-doc-trinh-bien-dich-40ec39e5.mp4","durationSec":260.61,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":64.08,"ten":"Bìa bài · Bài này bạn mang về gì"},
+        {"t":64.08,"den":126.68,"ten":"Đọc một lỗi như địa chỉ · Chế độ pretty & mã thoát"},
+        {"t":126.68,"den":190.89,"ten":"Sửa lỗi đầu tiên trước · Pretty chỉ chỗ khai báo luật"},
+        {"t":190.89,"den":260.61,"ten":"Trình soạn thảo & cổng kiểm · Tự kiểm điều mình đoán"}
+      ],
       "cues": [
         {"t":5,"vi":"Phần lớn thời gian làm việc với TypeScript là đọc lời trình biên dịch nói."},
         {"t":10.82,"vi":"Bài này biến bức tường chữ đỏ thành một kỹ năng: đọc mỗi thông báo như một địa chỉ, đúng thứ tự."},
@@ -97,8 +107,13 @@
         {"t":253.8,"vi":"Điều không bao giờ làm: dán any hay ts-ignore chỉ để cho hết đỏ."}
       ]
     },
-    "typescript-0-3-cai-dat": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/00-gioi-thieu-huong-dan-hoc/00-03-cai-dat-node-typescript-0b0f595a.mp4","durationSec":219.72,"nguonCau":"srt",
-      "parts": [],
+    "typescript-0-3-cai-dat": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/00-gioi-thieu-huong-dan-hoc/00-03-cai-dat-node-typescript-0b0f595a.mp4","durationSec":219.72,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":55.15,"ten":"Bìa bài · Bài này bạn mang về gì"},
+        {"t":55.15,"den":105.63,"ten":"Cài TypeScript, ghim bản · Tệp tsconfig của khoá"},
+        {"t":105.63,"den":159.75,"ten":"Cố ý làm đỏ · npm scripts & test"},
+        {"t":159.75,"den":219.72,"ten":"Bẫy b và c · VS Code so với npx tsc"}
+      ],
       "cues": [
         {"t":5,"vi":"Bài này biến một thư mục trống thành dự án TypeScript dùng suốt khoá."},
         {"t":10.14,"vi":"Mọi slide đều chạy thật trong môi trường sạch với Node 22.23.3 và TypeScript 7.0.2, nên output của bạn sẽ khớp."},
@@ -137,8 +152,13 @@
         {"t":210.24,"vi":"TypeScript 7 chỉ mất sáu đến bảy giây, nhanh hơn khoảng tám đến chín lần, nhưng tốn nhiều bộ nhớ đỉnh hơn."}
       ]
     },
-    "typescript-0-4-mo-hinh": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/00-gioi-thieu-huong-dan-hoc/00-04-mo-hinh-bien-dich-chay-cbae4501.mp4","durationSec":241.25,"nguonCau":"srt",
-      "parts": [],
+    "typescript-0-4-mo-hinh": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/00-gioi-thieu-huong-dan-hoc/00-04-mo-hinh-bien-dich-chay-cbae4501.mp4","durationSec":241.25,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":57.38,"ten":"Bìa bài · Bài này bạn mang về gì"},
+        {"t":57.38,"den":116.52,"ten":"Xoá kiểu, nhìn tận mắt"},
+        {"t":116.52,"den":180.87,"ten":"Bẫy 2: kiểu không phải giá trị · Bẫy 3: as là lời hứa"},
+        {"t":180.87,"den":241.25,"ten":"Công cụ nào kiểm, công cụ nào chạy · Ba câu than kinh điển"}
+      ],
       "cues": [
         {"t":5,"vi":"Nếu chỉ giữ lại một ý của Mục 0, hãy giữ ý này."},
         {"t":8.92,"vi":"Kiểu sống lúc trình biên dịch đọc code; dữ liệu sống lúc Node chạy code."},
@@ -186,8 +206,13 @@
         {"t":235.81,"vi":"Dòng tám qua tsc nhờ hai lần as, rồi sập trong Node."}
       ]
     },
-    "typescript-0-8-bat-dau-tai-day": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/00-gioi-thieu-huong-dan-hoc/00-08-bat-dau-typescript-la-gi-87a8df6b.mp4","durationSec":357.73,"nguonCau":"srt",
-      "parts": [],
+    "typescript-0-8-bat-dau-tai-day": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/00-gioi-thieu-huong-dan-hoc/00-08-bat-dau-typescript-la-gi-87a8df6b.mp4","durationSec":357.73,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":87.32,"ten":"Chào bạn · khoá TypeScript · Bìa bài"},
+        {"t":87.32,"den":180.18,"ten":"Slide: ba hình ảnh · Hàm LabFlow trong JavaScript"},
+        {"t":180.18,"den":264.56,"ten":"Những từ người ta hay nhầm · Có kiểu mà không cần file ts"},
+        {"t":264.56,"den":357.73,"ten":"Vì sao nó ra đời · Nó cho bạn những gì"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với khoá TypeScript, từ số 0 tới chuyên sâu, trên cuongthai.com."},
         {"t":11.75,"vi":"Khoá này dạy bạn gõ kiểu cho code: đặt nhãn cho giá trị, để máy bắt lỗi trước khi chương trình chạy."},
@@ -248,8 +273,13 @@
         {"t":352.95,"vi":"Bài sau nói vì sao TypeScript đáng học cho đi làm."}
       ]
     },
-    "typescript-0-9-bat-dau-tai-day-2": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/00-gioi-thieu-huong-dan-hoc/00-09-vi-sao-nen-hoc-typescript-6692198b.mp4","durationSec":280.54,"nguonCau":"srt",
-      "parts": [],
+    "typescript-0-9-bat-dau-tai-day-2": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/00-gioi-thieu-huong-dan-hoc/00-09-vi-sao-nen-hoc-typescript-6692198b.mp4","durationSec":280.54,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":65.09,"ten":"Bìa bài · Bài này bạn mang về gì"},
+        {"t":65.09,"den":133.85,"ten":"Sự cố thật của trang này · Phiên bản thu nhỏ"},
+        {"t":133.85,"den":213.73,"ten":"Cách sửa thật · Lỗi sập hay gặp nhất"},
+        {"t":213.73,"den":280.54,"ten":"Hai minh hoạ thường gặp · Vì sao người ta bỏ cuộc"}
+      ],
       "cues": [
         {"t":5,"vi":"Bài trước nói TypeScript là gì."},
         {"t":7.82,"vi":"Bài này cho thấy nó đáng giá đến đâu."},
@@ -300,8 +330,13 @@
         {"t":269.91,"vi":"Dù chọn đường nào, bài nào cũng cùng một nhịp: slide, bài đọc gõ lại và chạy, thực hành, Code Lab, rồi lab và quiz."}
       ]
     },
-    "typescript-1-1-ba-con-bug": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/01-vi-sao-typescript/01-01-ba-con-bug-18971679.mp4","durationSec":255.52,"nguonCau":"srt",
-      "parts": [],
+    "typescript-1-1-ba-con-bug": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/01-vi-sao-typescript/01-01-ba-con-bug-18971679.mp4","durationSec":255.52,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":62.53,"ten":"Bìa bài · Bài này bạn mang về gì"},
+        {"t":62.53,"den":121.91,"ten":"Bug 1: lỗi gõ · Bug 1 trong TypeScript"},
+        {"t":121.91,"den":183.48,"ten":"Bug 2 trong TypeScript · Bug 3: giá trị sai"},
+        {"t":183.48,"den":255.52,"ten":"Dời lỗi sang trái · Bẫy: biên dịch không phải test"}
+      ],
       "cues": [
         {"t":5,"vi":"Chương 1 trả lời một câu hỏi bằng chứng cứ: vì sao người ta thêm kiểu vào JavaScript?"},
         {"t":12.32,"vi":"Ta lấy code LabFlow thật, mắc ba lỗi hay gặp nhất, xem Node làm gì, rồi xem trình biên dịch làm gì."},
@@ -344,8 +379,13 @@
         {"t":246.72,"vi":"Bài sau: những gì tsc không chứng minh được, khi dữ liệu đến từ bên ngoài code của bạn."}
       ]
     },
-    "typescript-1-2-chung-minh-gi": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/01-vi-sao-typescript/01-02-chung-minh-gi-31e5608c.mp4","durationSec":284.61,"nguonCau":"srt",
-      "parts": [],
+    "typescript-1-2-chung-minh-gi": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/01-vi-sao-typescript/01-02-chung-minh-gi-31e5608c.mp4","durationSec":284.61,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":66.38,"ten":"Bìa bài · Bài này bạn mang về gì"},
+        {"t":66.38,"den":133.63,"ten":"Nó không thấy: dữ liệu từ ngoài · Bẫy: as là một lời hứa"},
+        {"t":133.63,"den":196.7,"ten":"Lỗ hổng 2 và 3: dấu than & any · Logic sai vẫn biên dịch"},
+        {"t":196.7,"den":284.61,"ten":"Phép sửa ở biên: type guard · Dùng guard trước khi gọi"}
+      ],
       "cues": [
         {"t":5,"vi":"Bài một chấm một cho thấy TypeScript bắt lỗi."},
         {"t":9.26,"vi":"Bài này vạch ranh giới cho sức mạnh đó."},
@@ -392,8 +432,13 @@
         {"t":276.86,"vi":"Vậy hãy kiểm biên lúc chạy, thì phần bên trong chương trình mới thật sự được chứng minh."}
       ]
     },
-    "typescript-1-3-suy-luan-kieu": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/01-vi-sao-typescript/01-03-suy-luan-kieu-d40fca69.mp4","durationSec":260.33,"nguonCau":"srt",
-      "parts": [],
+    "typescript-1-3-suy-luan-kieu": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/01-vi-sao-typescript/01-03-suy-luan-kieu-d40fca69.mp4","durationSec":260.33,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":65.48,"ten":"Bìa bài · Bài này bạn mang về gì"},
+        {"t":65.48,"den":133,"ten":"let và const: nới rộng · Một kiểu trả về được suy ra"},
+        {"t":133,"den":196.49,"ten":"Phép sửa: nói rõ kiểu trả về · Object nới rộng thuộc tính"},
+        {"t":196.49,"den":260.33,"ten":"Kiểu theo ngữ cảnh · Chỗ suy luận dừng lại"}
+      ],
       "cues": [
         {"t":5,"vi":"Nỗi sợ hay gặp là TypeScript làm code dài gấp đôi vì biến nào cũng phải ghi kiểu."},
         {"t":11.16,"vi":"Không phải vậy: trình biên dịch tự suy ra hầu hết kiểu từ chính giá trị bạn đã viết. Bài này cho thấy nó suy ra gì, và chỗ nào nó dừng."},
@@ -437,8 +482,13 @@
         {"t":251.09,"vi":"Khi phỏng vấn, câu bạn có ghi kiểu cho mọi thứ không có câu trả lời tốt: không, chỉ ghi ở mép module."}
       ]
     },
-    "typescript-1-4-any-unknown": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/01-vi-sao-typescript/01-04-any-unknown-880cfe54.mp4","durationSec":252.98,"nguonCau":"srt",
-      "parts": [],
+    "typescript-1-4-any-unknown": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/01-vi-sao-typescript/01-04-any-unknown-880cfe54.mp4","durationSec":252.98,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":65.35,"ten":"Bìa bài · Bài này bạn mang về gì"},
+        {"t":65.35,"den":123.44,"ten":"any lan ra từ JSON.parse · Bằng chứng: hỏi tsc kiểu đã suy"},
+        {"t":123.44,"den":186.46,"ten":"unknown là cửa an toàn · Thu hẹp unknown trước khi dùng"},
+        {"t":186.46,"den":252.98,"ten":"Ba con đường chuyển sang TypeScript"}
+      ],
       "cues": [
         {"t":5,"vi":"Bài cuối Chương 1 nói về hai lối thoát hiểm."},
         {"t":8.8,"vi":"Chúng trông giống nhau, đều nói tôi chưa biết kiểu, nhưng hành xử ngược nhau."},
@@ -478,8 +528,15 @@
         {"t":246.06,"vi":"Và đo từng bước. Lab 1 cho bạn tập trọn thứ tự đó trên LabFlow."}
       ]
     },
-    "typescript-1-6-lab-chuyen-doi": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/01-vi-sao-typescript/01-06-lab-chuyen-doi-6b673708.mp4","durationSec":546.83,"nguonCau":"srt",
-      "parts": [],
+    "typescript-1-6-lab-chuyen-doi": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/01-vi-sao-typescript/01-06-lab-chuyen-doi-6b673708.mp4","durationSec":546.83,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":85.11,"ten":"Chào · Lab 1 · Bìa Lab 1"},
+        {"t":85.11,"den":167.96,"ten":"Nhiệm vụ — bốn việc cùng lúc"},
+        {"t":167.96,"den":268.58,"ten":"Vì sao test không nạp được · Tám lời gọi sai"},
+        {"t":268.58,"den":381.38,"ten":"Thang chấm mười điểm · Hai lần thử thường gặp"},
+        {"t":381.38,"den":482.11,"ten":"Gợi ý — mở từng cái một · Lời giải tham khảo: mười trên mười"},
+        {"t":482.11,"den":546.83,"ten":"Trước khi coi là xong · Tóm tắt & luyện tiếp"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Lab 1 của khoá TypeScript, bài thực hành lớn đầu tiên."},
         {"t":11.13,"vi":"Bài trước mình đã thấy any là công tắc tắt kiểm tra, còn unknown là cửa an toàn."},
@@ -575,8 +632,12 @@
         {"t":539.81,"vi":"Bài sau mở Chương 2: kiểu nguyên thuỷ, chú thích kiểu, và strict null checks."}
       ]
     },
-    "typescript-10-1-es-modules": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/10-module-tep-khai-bao/10-01-import-export-40cdc619.mp4","durationSec":156.98,"nguonCau":"srt",
-      "parts": [],
+    "typescript-10-1-es-modules": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/10-module-tep-khai-bao/10-01-import-export-40cdc619.mp4","durationSec":156.98,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":58.79,"ten":"Bìa bài · Bạn sẽ học gì ở chương này"},
+        {"t":58.79,"den":101.57,"ten":"Export: named, default, và kiểu"},
+        {"t":101.57,"den":156.98,"ten":"Biên giới module, nhìn một lượt · Luyện tập & tiếp theo"}
+      ],
       "cues": [
         {"t":5,"vi":"Các chương trước gõ kiểu bên trong một dự án; vài chương tới đưa kiểu qua các biên giới: giữa tệp, package và môi trường chạy."},
         {"t":15.03,"vi":"Bắt đầu từ hệ module: một giá trị và một kiểu rời một tệp và vào một tệp khác ra sao."},
@@ -598,8 +659,12 @@
         {"t":144.85,"vi":"Tiếp, bài 10.2: tệp khai báo, cách bạn cho kiểu một package JavaScript không có kiểu, để một import không kiểu thôi là any."}
       ]
     },
-    "typescript-10-2-declaration-files": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/10-module-tep-khai-bao/10-02-declaration-files-1e54d96a.mp4","durationSec":152.89,"nguonCau":"srt",
-      "parts": [],
+    "typescript-10-2-declaration-files": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/10-module-tep-khai-bao/10-02-declaration-files-1e54d96a.mp4","durationSec":152.89,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":50.95,"ten":"Bìa bài · Một import không kiểu là unknown"},
+        {"t":50.95,"den":98.42,"ten":"Sidecar .d.ts cho một tệp tương đối"},
+        {"t":98.42,"den":152.89,"ten":"Ba cách một package có kiểu · Luyện tập & tiếp theo"}
+      ],
       "cues": [
         {"t":5,"vi":"Rất nhiều JavaScript ngoài kia không có kiểu: một package cũ, một script vendor, một tệp nhóm bạn chưa chuyển."},
         {"t":13.48,"vi":"Một tệp khai báo, đê ti ét, là cách bạn cho nó kiểu mà không chạm vào JavaScript: kiểu một bên, code chạy một bên."},
@@ -621,8 +686,12 @@
         {"t":140.36,"vi":"Tiếp, bài 10.3: bổ sung, thêm một trường vào một kiểu bạn không sở hữu, như Request chấm user trên Express, mà không fork thư viện."}
       ]
     },
-    "typescript-10-3-augmentation": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/10-module-tep-khai-bao/10-03-augmentation-f38e1e04.mp4","durationSec":162.46,"nguonCau":"srt",
-      "parts": [],
+    "typescript-10-3-augmentation": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/10-module-tep-khai-bao/10-03-augmentation-f38e1e04.mp4","durationSec":162.46,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":52.17,"ten":"Bìa bài · Khai báo gộp: cơ chế"},
+        {"t":52.17,"den":105.7,"ten":"declare global: mở rộng một kiểu toàn cục · Không có bổ sung"},
+        {"t":105.7,"den":162.46,"ten":"Bổ sung: các luật · Luyện tập & tiếp theo"}
+      ],
       "cues": [
         {"t":5,"vi":"Đôi khi bạn cần thêm một trường vào một kiểu bạn không sở hữu: một env var đã biết trên process chấm env, một user trên Express Request."},
         {"t":16.1,"vi":"Bổ sung cho bạn mở rộng một interface có sẵn từ tệp của chính bạn, mà không sửa thư viện."},
@@ -644,8 +713,12 @@
         {"t":150.39,"vi":"Tiếp, bài 10.4: một package giao kiểu của nó thế nào ngay từ đầu, đóng gói sẵn, từ at types, và TypeScript tìm chúng ra sao."}
       ]
     },
-    "typescript-10-4-types-from-packages": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/10-module-tep-khai-bao/10-04-types-from-packages-87b139cb.mp4","durationSec":149.94,"nguonCau":"srt",
-      "parts": [],
+    "typescript-10-4-types-from-packages": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/10-module-tep-khai-bao/10-04-types-from-packages-87b139cb.mp4","durationSec":149.94,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":46.37,"ten":"Bìa bài · Kiểu đóng gói sẵn: node:path"},
+        {"t":46.37,"den":95.21,"ten":"Kiểu là thật — một lời gọi sai bị bắt"},
+        {"t":95.21,"den":149.94,"ten":"Đóng gói sẵn, @types, hay tự viết · Luyện tập & Lab 10"}
+      ],
       "cues": [
         {"t":5,"vi":"Phần lớn kiểu bạn dùng không do bạn viết; chúng đi cùng các package bạn cài."},
         {"t":10.55,"vi":"Bài này là cách đó chạy: một package mang kiểu thế nào, TypeScript tìm chúng ra sao, và làm gì khi một package không có."},
@@ -667,8 +740,15 @@
         {"t":135.12,"vi":"Tiếp là Lab 10: một module JavaScript không kiểu thật, labflow-slug, giao mà không có kiểu; bạn viết labflow-slug chấm đê ti ét gõ kiểu cả bốn export."}
       ]
     },
-    "typescript-10-6-lab-viet-dts": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/10-module-tep-khai-bao/10-06-lab-viet-dts-08a672d4.mp4","durationSec":480.37,"nguonCau":"srt",
-      "parts": [],
+    "typescript-10-6-lab-viet-dts": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/10-module-tep-khai-bao/10-06-lab-viet-dts-08a672d4.mp4","durationSec":480.37,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":86.6,"ten":"Chào · Lab 10 · Bìa Lab 10"},
+        {"t":86.6,"den":166.06,"ten":"Nhiệm vụ · Module thật — và lỗi TS7016"},
+        {"t":166.06,"den":250.45,"ten":"Tám lời gọi sai · Lần thử A — any ở một tham số (8/10)"},
+        {"t":250.45,"den":326.28,"ten":"Khi đi làm: kiểu đến từ đâu · Gợi ý — mở từng cái một"},
+        {"t":326.28,"den":417.45,"ten":"Lời giải tham khảo: mười trên mười · Gõ lại lời giải"},
+        {"t":417.45,"den":480.37,"ten":"Trước khi coi là xong · Tóm tắt & luyện tiếp"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Lab 10 của khoá TypeScript, bài thực hành cuối Chương 10 về module và tệp khai báo."},
         {"t":13.91,"vi":"Chương này mình đã thấy tệp chấm d chấm ts chỉ chứa kiểu, không chứa mã, và lỗi TS7016 khi một package không có kiểu."},
@@ -738,8 +818,12 @@
         {"t":469.92,"vi":"Bài sau mở Chương 11: gõ kiểu một backend Node và Express, nơi các khai báo này gặp một framework thật."}
       ]
     },
-    "typescript-11-1-express-handlers": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/11-go-kieu-node-express/11-01-express-request-response-7d01d260.mp4","durationSec":172.18,"nguonCau":"srt",
-      "parts": [],
+    "typescript-11-1-express-handlers": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/11-go-kieu-node-express/11-01-express-request-response-7d01d260.mp4","durationSec":172.18,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":63.21,"ten":"Bìa bài · Bạn sẽ học gì ở chương này"},
+        {"t":63.21,"den":109.78,"ten":"Một handler với params có kiểu"},
+        {"t":109.78,"den":172.18,"ten":"Một handler, nhìn một lượt · Luyện tập & tiếp theo"}
+      ],
       "cues": [
         {"t":5,"vi":"Chương 10 đưa kiểu qua các package; giờ chúng gặp một backend thật."},
         {"t":10.2,"vi":"Một handler Express là một hàm của một request và một response, và gõ kiểu nó là nơi phần lớn an toàn kiểu của backend đến từ."},
@@ -761,8 +845,12 @@
         {"t":163.15,"vi":"Tiếp, bài 11.2: gõ kiểu response, để res chấm json được kiểm với dáng route hứa gửi."}
       ]
     },
-    "typescript-11-2-typed-responses": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/11-go-kieu-node-express/11-02-typed-responses-e8a70e74.mp4","durationSec":143.26,"nguonCau":"srt",
-      "parts": [],
+    "typescript-11-2-typed-responses": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/11-go-kieu-node-express/11-02-typed-responses-e8a70e74.mp4","durationSec":143.26,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":45.89,"ten":"Bìa bài · res.json kiểm dáng"},
+        {"t":45.89,"den":87.02,"ten":"Một trường sai kiểu bị từ chối"},
+        {"t":87.02,"den":143.26,"ten":"Response, nhìn một lượt · Luyện tập & tiếp theo"}
+      ],
       "cues": [
         {"t":5,"vi":"Một handler đọc một request có kiểu; nó cũng nên gửi một response có kiểu."},
         {"t":10.7,"vi":"Khi kiểu response là một phần của handler, res chấm json kiểm thứ bạn gửi khớp dáng route hứa."},
@@ -784,8 +872,12 @@
         {"t":129.61,"vi":"Tiếp, bài 11.3: envelope API, một kiểu kết quả hoặc là thành công có data hoặc là thất bại có error, để client buộc phải xử lý cả hai."}
       ]
     },
-    "typescript-11-3-api-envelope-errors": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/11-go-kieu-node-express/11-03-api-result-envelope-ec7991ef.mp4","durationSec":156.85,"nguonCau":"srt",
-      "parts": [],
+    "typescript-11-3-api-envelope-errors": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/11-go-kieu-node-express/11-03-api-result-envelope-ec7991ef.mp4","durationSec":156.85,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":55.2,"ten":"Bìa bài · ApiResult: ok với data, hoặc một error"},
+        {"t":55.2,"den":100.42,"ten":"Bạn không đọc được data mà không kiểm · Lỗi cũng có kiểu"},
+        {"t":100.42,"den":156.85,"ten":"Envelope, nhìn một lượt · Luyện tập & tiếp theo"}
+      ],
       "cues": [
         {"t":5,"vi":"Một endpoint thật không phải lúc nào cũng thành công; cách gõ kiểu điều đó gọn nhất là một envelope kết quả."},
         {"t":13.58,"vi":"Mọi response hoặc là một thành công có data hoặc là một thất bại có error."},
@@ -807,8 +899,12 @@
         {"t":144.67,"vi":"Tiếp, bài 11.4: tầng service và config, một config chỉ đọc dựng một lần, và một service trả một envelope thay vì ném."}
       ]
     },
-    "typescript-11-4-services-and-config": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/11-go-kieu-node-express/11-04-services-config-9fb9cbfc.mp4","durationSec":163.47,"nguonCau":"srt",
-      "parts": [],
+    "typescript-11-4-services-and-config": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/11-go-kieu-node-express/11-04-services-config-9fb9cbfc.mp4","durationSec":163.47,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":55.43,"ten":"Bìa bài · Một config chỉ-đọc, dựng một lần"},
+        {"t":55.43,"den":108.41,"ten":"Chỉ-đọc nghĩa là nó không trôi"},
+        {"t":108.41,"den":163.47,"ten":"Các tầng, nhìn một lượt · Luyện tập & Lab 11"}
+      ],
       "cues": [
         {"t":5,"vi":"Dưới các handler là hai tầng có kiểu: cấu hình, đọc một lần từ môi trường, và service, nơi việc thật xảy ra."},
         {"t":13.72,"vi":"Gõ kiểu cả hai giữ một handler trung thực: nó đọc một config không sửa được và gọi một service mà kết quả nó phải xử lý."},
@@ -830,8 +926,14 @@
         {"t":150.22,"vi":"Tiếp là Lab 11: một handler POST bookings có kiểu, một body CreateBooking đã kiểm, một response ApiResult của Booking, và một lỗi có kiểu."}
       ]
     },
-    "typescript-11-6-lab-handler-co-kieu": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/11-go-kieu-node-express/11-06-lab-handler-co-kieu-788391e7.mp4","durationSec":453.2,"nguonCau":"srt",
-      "parts": [],
+    "typescript-11-6-lab-handler-co-kieu": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/11-go-kieu-node-express/11-06-lab-handler-co-kieu-788391e7.mp4","durationSec":453.2,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":86.54,"ten":"Chào · Lab 11 · Bìa Lab 11"},
+        {"t":86.54,"den":165.86,"ten":"Nhiệm vụ · Bản stub — gọi thử thật"},
+        {"t":165.86,"den":259.71,"ten":"Tám cách dùng sai · Thang chấm"},
+        {"t":259.71,"den":352.42,"ten":"Kiểu của req.body chỉ là lời hứa · Gợi ý — mở từng cái một"},
+        {"t":352.42,"den":453.2,"ten":"Gõ lại lời giải — và gọi thử thật · Trước khi coi là xong"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Lab 11 của khoá TypeScript, bài thực hành cuối Chương 11 về backend Node và Express."},
         {"t":14.57,"vi":"Chương này mình đã gõ kiểu cho request, response, và một phong bì kết quả ApiResult: hoặc ok kèm data, hoặc lỗi kèm mã."},
@@ -903,8 +1005,12 @@
         {"t":444.98,"vi":"Bài sau mở Chương 12: gõ kiểu React, nơi cùng các model này đi sang phía giao diện."}
       ]
     },
-    "typescript-12-1-components-props": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/12-go-kieu-react/12-01-typing-props-6164f4a8.mp4","durationSec":169.17,"nguonCau":"srt",
-      "parts": [],
+    "typescript-12-1-components-props": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/12-go-kieu-react/12-01-typing-props-6164f4a8.mp4","durationSec":169.17,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":60.4,"ten":"Bìa bài · Bạn sẽ học gì ở chương này"},
+        {"t":60.4,"den":107.63,"ten":"Một component là một hàm của props có kiểu"},
+        {"t":107.63,"den":169.17,"ten":"Một component, nhìn một lượt — và bẫy React.FC"}
+      ],
       "cues": [
         {"t":5,"vi":"Chương 11 gõ kiểu một backend; giờ cùng các kiểu đó đi sang frontend."},
         {"t":10.87,"vi":"Một component React là một hàm của một đối số, props của nó, trả về một element."},
@@ -927,8 +1033,13 @@
         {"t":158.18,"vi":"Tiếp, bài 12.2: hook, useState suy ra state và gõ kiểu setter, và một state nullable buộc bạn xử lý chưa tải xong."}
       ]
     },
-    "typescript-12-2-hooks": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/12-go-kieu-react/12-02-typing-hooks-4e5cdcfe.mp4","durationSec":151.48,"nguonCau":"srt",
-      "parts": [],
+    "typescript-12-2-hooks": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/12-go-kieu-react/12-02-typing-hooks-4e5cdcfe.mp4","durationSec":151.48,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":44.71,"ten":"Bìa bài · Hook là hàm generic"},
+        {"t":44.71,"den":95.31,"ten":"useState suy ra, và setter cũng được kiểm"},
+        {"t":95.31,"den":125.85,"ten":"Nhìn một lượt — và bẫy stale closure"},
+        {"t":125.85,"den":151.48,"ten":"Luyện tập & tiếp theo"}
+      ],
       "cues": [
         {"t":5,"vi":"Hook là các hàm generic, nên chúng được gõ kiểu như mọi thứ ở Chương 6."},
         {"t":10.71,"vi":"Đa số thời gian suy kiểu làm việc."},
@@ -950,8 +1061,12 @@
         {"t":139.72,"vi":"Tiếp, bài 12.3: sự kiện, target chấm value là một string có kiểu, cùng bài học với params Express, giờ trên DOM."}
       ]
     },
-    "typescript-12-3-events": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/12-go-kieu-react/12-03-typing-events-7d6d6c05.mp4","durationSec":150.28,"nguonCau":"srt",
-      "parts": [],
+    "typescript-12-3-events": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/12-go-kieu-react/12-03-typing-events-7d6d6c05.mp4","durationSec":150.28,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":49.14,"ten":"Bìa bài · Một change handler: target.value là một string"},
+        {"t":49.14,"den":117.83,"ten":"Sự kiện có kiểu từ chối một lần đọc sai"},
+        {"t":117.83,"den":150.28,"ten":"Luyện tập & tiếp theo"}
+      ],
       "cues": [
         {"t":5,"vi":"Một handler nhận một sự kiện, và một sự kiện có kiểu là nơi frontend gặp DOM một cách an toàn."},
         {"t":12.73,"vi":"Trong mô hình của ta, một ChangeEvent mang một target với một value, một string, đúng dáng mà kiểu React thật cho bạn."},
@@ -973,8 +1088,12 @@
         {"t":138.22,"vi":"Tiếp, bài 12.4: một context có kiểu buộc phép kiểm không provider, và một component generic thích ứng với mọi dữ liệu."}
       ]
     },
-    "typescript-12-4-context-generics": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/12-go-kieu-react/12-04-context-generics-f99590eb.mp4","durationSec":167.23,"nguonCau":"srt",
-      "parts": [],
+    "typescript-12-4-context-generics": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/12-go-kieu-react/12-04-context-generics-f99590eb.mp4","durationSec":167.23,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":55.39,"ten":"Bìa bài · Một context có kiểu buộc phép kiểm null"},
+        {"t":55.39,"den":106.18,"ten":"Hook guard trả về một giá trị không null"},
+        {"t":106.18,"den":167.23,"ten":"Nhìn một lượt — và bẫy mặc định nghe hợp lý"}
+      ],
       "cues": [
         {"t":5.21,"vi":"Hai pattern đưa generic của Chương 6 vào làm việc trong React."},
         {"t":9.51,"vi":"Một context có kiểu buộc bên tiêu thụ xử lý trường hợp không provider, và một component generic thích ứng với dữ liệu bạn đưa vào."},
@@ -996,8 +1115,14 @@
         {"t":162.33,"vi":"Tiếp: Lab 12, một BookingForm có kiểu."}
       ]
     },
-    "typescript-12-6-lab-form-co-kieu": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/12-go-kieu-react/12-06-lab-form-co-kieu-b9109f28.mp4","durationSec":444.08,"nguonCau":"srt",
-      "parts": [],
+    "typescript-12-6-lab-form-co-kieu": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/12-go-kieu-react/12-06-lab-form-co-kieu-b9109f28.mp4","durationSec":444.08,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":82.39,"ten":"Chào · Lab 12 · Bìa Lab 12"},
+        {"t":82.39,"den":175.34,"ten":"Dữ liệu đi qua form — mỗi chặng một kiểu · Nhiệm vụ"},
+        {"t":175.34,"den":260.45,"ten":"Chấm bản stub: ba điểm · Tám cách dùng sai"},
+        {"t":260.45,"den":344.56,"ten":"Lần thử B — seats tuỳ chọn (9,5) · Gợi ý — mở từng cái một"},
+        {"t":344.56,"den":444.08,"ten":"Gõ lại lời giải — và gõ thử thật · Trước khi coi là xong"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Lab 12 của khoá TypeScript, bài thực hành cuối Chương 12 về React."},
         {"t":12.89,"vi":"Chương này mình đã gõ kiểu cho props, cho hook, và cho sự kiện thay đổi của một ô nhập."},
@@ -1067,8 +1192,12 @@
         {"t":435.24,"vi":"Bài sau mở Chương 13: vì sao kiểu thôi chưa đủ, và phải kiểm dữ liệu lúc chạy bằng Zod."}
       ]
     },
-    "typescript-13-1-boundary-zod": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/13-validate-runtime-zod-prisma/13-01-why-runtime-validation-e42e6a16.mp4","durationSec":165,"nguonCau":"srt",
-      "parts": [],
+    "typescript-13-1-boundary-zod": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/13-validate-runtime-zod-prisma/13-01-why-runtime-validation-e42e6a16.mp4","durationSec":165,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":63.88,"ten":"Bìa bài · Một schema validate và suy ra"},
+        {"t":63.88,"den":109.09,"ten":"Kiểu suy ra có đúng các trường schema"},
+        {"t":109.09,"den":165,"ten":"Zod, nhìn một lượt · Luyện tập & tiếp theo"}
+      ],
       "cues": [
         {"t":5,"vi":"Kiểu bị xoá lúc chạy, nên dữ liệu từ ngoài, một body request, một tệp, một API, không được thứ gì mà trình biên dịch để lại kiểm."},
         {"t":15.98,"vi":"as T là một lời hứa, không phải một phép kiểm; Zod đóng lỗ hổng: một schema validate dữ liệu và suy ra kiểu."},
@@ -1091,8 +1220,12 @@
         {"t":152.8,"vi":"Tiếp, bài 13.2: parse ném, nhưng safeParse trả một kết quả discriminated bạn thu hẹp, union của Chương 5, áp cho validate."}
       ]
     },
-    "typescript-13-2-parse-safeparse": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/13-validate-runtime-zod-prisma/13-02-parse-vs-safeparse-643719e9.mp4","durationSec":152.35,"nguonCau":"srt",
-      "parts": [],
+    "typescript-13-2-parse-safeparse": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/13-validate-runtime-zod-prisma/13-02-parse-vs-safeparse-643719e9.mp4","durationSec":152.35,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":52.45,"ten":"Bìa bài · safeParse trả một kết quả discriminated"},
+        {"t":52.45,"den":102.87,"ten":"Bạn không đọc được data mà không kiểm"},
+        {"t":102.87,"den":152.35,"ten":"Nhìn một lượt · Luyện tập & tiếp theo"}
+      ],
       "cues": [
         {"t":5.01,"vi":"Một schema có thể thất bại, và có hai cách xử lý."},
         {"t":8.91,"vi":"parse ném khi dữ liệu không hợp lệ, tốt khi một thất bại là ngoại lệ."},
@@ -1115,8 +1248,12 @@
         {"t":142.25,"vi":"Tiếp, bài 13.3: định nghĩa schema một lần và suy kiểu từ nó, để một bản chép tay không bao giờ trôi."}
       ]
     },
-    "typescript-13-3-schema-source-of-truth": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/13-validate-runtime-zod-prisma/13-03-single-source-of-truth-7ec46642.mp4","durationSec":155.66,"nguonCau":"srt",
-      "parts": [],
+    "typescript-13-3-schema-source-of-truth": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/13-validate-runtime-zod-prisma/13-03-single-source-of-truth-7ec46642.mp4","durationSec":155.66,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":50.77,"ten":"Bìa bài · Suy kiểu ra, đừng chép nó"},
+        {"t":50.77,"den":102.28,"ten":"Một bản chép tay trôi dạt · Kiểu được tính không thể trôi"},
+        {"t":102.28,"den":155.66,"ten":"Nhìn một lượt · Luyện tập & tiếp theo"}
+      ],
       "cues": [
         {"t":5,"vi":"Một khi một schema vừa validate vừa suy kiểu, bạn có một lựa chọn: viết kiểu bằng tay nữa, hay suy nó từ schema."},
         {"t":13.9,"vi":"Hãy suy nó; một bản chép tay là một nguồn sự thật thứ hai, và hai nguồn thì trôi."},
@@ -1140,8 +1277,12 @@
         {"t":144.68,"vi":"Tiếp, bài 13.4: Prisma sinh kiểu cho các model CSDL của bạn, người anh em phía máy chủ của Zod ở biên."}
       ]
     },
-    "typescript-13-4-types-from-prisma": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/13-validate-runtime-zod-prisma/13-04-types-from-prisma-4c4771d4.mp4","durationSec":159.45,"nguonCau":"srt",
-      "parts": [],
+    "typescript-13-4-types-from-prisma": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/13-validate-runtime-zod-prisma/13-04-types-from-prisma-4c4771d4.mp4","durationSec":159.45,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":53.06,"ten":"Bìa bài · Kiểu sinh mô tả model"},
+        {"t":53.06,"den":105.29,"ten":"Bạn không tạo được một trường server sở hữu"},
+        {"t":105.29,"den":159.45,"ten":"Nhìn một lượt · Luyện tập & Lab 13"}
+      ],
       "cues": [
         {"t":5,"vi":"Zod sở hữu dáng dữ liệu đi vào; Prisma sở hữu dáng dữ liệu trong CSDL."},
         {"t":12.75,"vi":"prisma generate viết một client có kiểu từ schema của bạn."},
@@ -1165,8 +1306,14 @@
         {"t":153.97,"vi":"Tiếp: Lab 13, một schema là nguồn sự thật duy nhất."}
       ]
     },
-    "typescript-13-6-lab-schema-nguon-su-that": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/13-validate-runtime-zod-prisma/13-06-lab-schema-nguon-su-that-979dcdd1.mp4","durationSec":439.05,"nguonCau":"srt",
-      "parts": [],
+    "typescript-13-6-lab-schema-nguon-su-that": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/13-validate-runtime-zod-prisma/13-06-lab-schema-nguon-su-that-979dcdd1.mp4","durationSec":439.05,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":95.37,"ten":"Chào · Lab 13 · Bìa Lab 13"},
+        {"t":95.37,"den":172.02,"ten":"Nhiệm vụ · Bản stub — một biên không phải biên"},
+        {"t":172.02,"den":293.51,"ten":"Thang chấm · Lần thử A — có schema nhưng chỉ ép (7/10)"},
+        {"t":293.51,"den":377.46,"ten":"Gợi ý — mở từng cái một · Lời giải tham khảo: mười trên mười"},
+        {"t":377.46,"den":439.05,"ten":"Trước khi coi là xong · Tóm tắt & luyện tiếp"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Lab 13 của khoá TypeScript, bài thực hành cuối Chương 13 về kiểm dữ liệu lúc chạy."},
         {"t":14.19,"vi":"Chương này mình đã thấy kiểu bị xoá trước khi Node chạy, nên dữ liệu từ ngoài vào phải được kiểm bằng một schema như Zod."},
@@ -1240,8 +1387,12 @@
         {"t":429.55,"vi":"Bài sau mở Chương 14: class và decorator, và một BookingService đứng trên repository."}
       ]
     },
-    "typescript-14-1-classes-access": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/14-class-decorator/14-01-classes-fields-3875dec1.mp4","durationSec":149.61,"nguonCau":"srt",
-      "parts": [],
+    "typescript-14-1-classes-access": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/14-class-decorator/14-01-classes-fields-3875dec1.mp4","durationSec":149.61,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":50.21,"ten":"Bìa bài · Một class gom dữ liệu và thao tác"},
+        {"t":50.21,"den":96.47,"ten":"private giấu phần trong"},
+        {"t":96.47,"den":149.61,"ten":"Nhìn một lượt · Luyện tập & tiếp theo"}
+      ],
       "cues": [
         {"t":5,"vi":"Một class gom dữ liệu với các thao tác trên nó, và TypeScript thêm modifier truy cập nói ai được chạm gì."},
         {"t":13.75,"vi":"private giấu một trường trong class, readonly cố định nó sau khi dựng, protected chia nó với lớp con."},
@@ -1263,8 +1414,12 @@
         {"t":137.14,"vi":"Tiếp, bài 14.2: abstract class đặt tên một dáng mà lớp con phải điền, và implements kiểm một class với một interface."}
       ]
     },
-    "typescript-14-2-abstract-implements": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/14-class-decorator/14-02-abstract-implements-2d293afe.mp4","durationSec":148.02,"nguonCau":"srt",
-      "parts": [],
+    "typescript-14-2-abstract-implements": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/14-class-decorator/14-02-abstract-implements-2d293afe.mp4","durationSec":148.02,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":45.09,"ten":"Bìa bài · Một abstract class đặt tên dáng"},
+        {"t":45.09,"den":94.28,"ten":"Một abstract class không dựng được"},
+        {"t":94.28,"den":148.02,"ten":"Nhìn một lượt · Luyện tập & tiếp theo"}
+      ],
       "cues": [
         {"t":5,"vi":"Một abstract class đặt tên dáng mà lớp con phải điền, một số method được viết, số khác để abstract cho lớp con cung cấp."},
         {"t":14.9,"vi":"implements là nửa kia: nó kiểm một class khớp một interface."},
@@ -1286,8 +1441,12 @@
         {"t":137.79,"vi":"Tiếp, bài 14.3: dấu thăng private là một trường chính ngôn ngữ giấu lúc chạy, mạnh hơn private lúc biên dịch."}
       ]
     },
-    "typescript-14-3-hash-private-static": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/14-class-decorator/14-03-private-getters-static-b22e7b9b.mp4","durationSec":155.19,"nguonCau":"srt",
-      "parts": [],
+    "typescript-14-3-hash-private-static": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/14-class-decorator/14-03-private-getters-static-b22e7b9b.mp4","durationSec":155.19,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":53.81,"ten":"Bìa bài · Dấu thăng private được ép lúc chạy"},
+        {"t":53.81,"den":103.76,"ten":"Dấu thăng private không đọc được từ ngoài"},
+        {"t":103.76,"den":155.19,"ten":"Nhìn một lượt · Luyện tập & tiếp theo"}
+      ],
       "cues": [
         {"t":5,"vi":"private của bài 14.1 là một phép kiểm lúc biên dịch, bị xoá ở output."},
         {"t":11.74,"vi":"Dấu thăng private khác: nó là một trường JavaScript chính ngôn ngữ giấu lúc chạy, không code nào ngoài class với tới được, bao giờ."},
@@ -1309,8 +1468,12 @@
         {"t":143.54,"vi":"Tiếp, bài 14.4: decorator, một hàm bọc một method hay class, tính năng class cuối và một chuẩn TC39."}
       ]
     },
-    "typescript-14-4-decorators": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/14-class-decorator/14-04-decorators-facd5035.mp4","durationSec":157.59,"nguonCau":"srt",
-      "parts": [],
+    "typescript-14-4-decorators": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/14-class-decorator/14-04-decorators-facd5035.mp4","durationSec":157.59,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":56.38,"ten":"Bìa bài · Một method decorator bọc method"},
+        {"t":56.38,"den":108.76,"ten":"Sai đích là một lỗi biên dịch · Context gõ kiểu cái đích"},
+        {"t":108.76,"den":157.59,"ten":"Nhìn một lượt · Luyện tập & tiếp theo"}
+      ],
       "cues": [
         {"t":5.41,"vi":"Một decorator là một hàm bọc một thành viên class, một method, một field, chính class, để thêm hành vi mà không đổi thân nó."},
         {"t":15.29,"vi":"TypeScript dùng decorator chuẩn TC39, không cờ experimentalDecorators."},
@@ -1332,8 +1495,15 @@
         {"t":151.68,"vi":"Tiếp: Lab 14, một service trên một repo abstract."}
       ]
     },
-    "typescript-14-6-lab-service-repo": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/14-class-decorator/14-06-lab-service-repo-41db28f1.mp4","durationSec":486.59,"nguonCau":"srt",
-      "parts": [],
+    "typescript-14-6-lab-service-repo": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/14-class-decorator/14-06-lab-service-repo-41db28f1.mp4","durationSec":486.59,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":86.05,"ten":"Chào · Lab 14 · Bìa Lab 14"},
+        {"t":86.05,"den":168.05,"ten":"Nhiệm vụ · Bản stub — một service không có ranh giới"},
+        {"t":168.05,"den":268.4,"ten":"Thang chấm · Lần thử A — Booking vẫn là any (7,5)"},
+        {"t":268.4,"den":366.23,"ten":"Gợi ý — mở từng cái một · Lời giải tham khảo: mười trên mười"},
+        {"t":366.23,"den":443.98,"ten":"Vì sao phụ thuộc repo abstract — cắm bản giả để test"},
+        {"t":443.98,"den":486.59,"ten":"Tóm tắt & luyện tiếp"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Lab 14 của khoá TypeScript, bài thực hành cuối Chương 14 về class."},
         {"t":13.31,"vi":"Chương này mình đã học class abstract, implements, và hai kiểu riêng tư: private của TypeScript và dấu thăng của JavaScript."},
@@ -1408,8 +1578,12 @@
         {"t":478.91,"vi":"Bài sau mở Chương 15: hiệu năng build, làm tsc chạy nhanh trên dự án lớn."}
       ]
     },
-    "typescript-15-1-where-time-goes": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/15-hieu-nang-build/15-01-build-pipeline-6aa341b6.mp4","durationSec":153.8,"nguonCau":"srt",
-      "parts": [],
+    "typescript-15-1-where-time-goes": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/15-hieu-nang-build/15-01-build-pipeline-6aa341b6.mp4","durationSec":153.8,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":55.99,"ten":"Bìa bài · Tắt skipLibCheck: .d.ts của dependency lộ ra"},
+        {"t":55.99,"den":100.52,"ten":"Bật skipLibCheck: .d.ts bị bỏ qua"},
+        {"t":100.52,"den":153.8,"ten":"Nhìn một lượt · Luyện tập & tiếp theo"}
+      ],
       "cues": [
         {"t":5,"vi":"Một lượt kiểm kiểu làm ba việc: phân tích các tệp, nối các tên, và kiểm các kiểu."},
         {"t":11.36,"vi":"Trên một dự án lớn phần lớn thời gian ở bước check."},
@@ -1432,8 +1606,12 @@
         {"t":144.98,"vi":"Tiếp, bài 15.2: chỉ build thứ đã đổi với incremental build và project references."}
       ]
     },
-    "typescript-15-2-incremental-references": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/15-hieu-nang-build/15-02-incremental-references-de8c95c7.mp4","durationSec":147.3,"nguonCau":"srt",
-      "parts": [],
+    "typescript-15-2-incremental-references": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/15-hieu-nang-build/15-02-incremental-references-de8c95c7.mp4","durationSec":147.3,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":52.39,"ten":"Bìa bài · Build đầu làm việc"},
+        {"t":52.39,"den":99.55,"ten":"Build thứ hai gần như tức thời"},
+        {"t":99.55,"den":147.3,"ten":"Nhìn một lượt · Tiếp theo"}
+      ],
       "cues": [
         {"t":5,"vi":"Việc rẻ nhất là việc bạn không lặp lại."},
         {"t":7.98,"vi":"Một build incremental nhớ thứ nó đã kiểm lần trước trong một tệp tsbuildinfo, nên một build thứ hai không thay đổi gần như tức thời."},
@@ -1455,8 +1633,12 @@
         {"t":133.55,"vi":"Tiếp, bài 15.3: tách kiểm kiểu, chậm, toàn chương trình, khỏi transpile, nhanh, từng tệp, nên vòng dev của bạn không chờ bộ kiểm."}
       ]
     },
-    "typescript-15-3-isolated-modules": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/15-hieu-nang-build/15-03-isolated-modules-254e423b.mp4","durationSec":163.15,"nguonCau":"srt",
-      "parts": [],
+    "typescript-15-3-isolated-modules": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/15-hieu-nang-build/15-03-isolated-modules-254e423b.mp4","durationSec":163.15,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":56.57,"ten":"Bìa bài · Một transpiler từng tệp mù qua các tệp"},
+        {"t":56.57,"den":106.77,"ten":"export type làm ý định rõ ràng · Hai việc, tách ra"},
+        {"t":106.77,"den":163.15,"ten":"Nhìn một lượt · Luyện tập & tiếp theo"}
+      ],
       "cues": [
         {"t":5,"vi":"Hai việc khác nhau ẩn trong compile: kiểm các kiểu, chậm, cần cả chương trình, và transpile sang JavaScript, nhanh, từng tệp một."},
         {"t":15.02,"vi":"Build hiện đại tách chúng, một transpiler nhanh từng tệp, như esbuild, swc, type-stripping của Node, phát ra code, còn tsc trừ trừ noEmit kiểm kiểu song song."},
@@ -1478,8 +1660,12 @@
         {"t":153.36,"vi":"Tiếp, bài 15.4: cùng ý tưởng trên import; import type giữ một kiểu ra hẳn ngoài đồ thị module."}
       ]
     },
-    "typescript-15-4-import-type": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/15-hieu-nang-build/15-04-trimming-the-graph-5cd8aa62.mp4","durationSec":146.95,"nguonCau":"srt",
-      "parts": [],
+    "typescript-15-4-import-type": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/15-hieu-nang-build/15-04-trimming-the-graph-5cd8aa62.mp4","durationSec":146.95,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":50.32,"ten":"Bìa bài · Một value import của một kiểu bị từ chối"},
+        {"t":50.32,"den":95.32,"ten":"import type bị xoá · Đồ thị nhỏ hơn, mọi thứ nhanh hơn"},
+        {"t":95.32,"den":146.95,"ten":"Nhìn một lượt · Luyện tập & Lab 15"}
+      ],
       "cues": [
         {"t":5,"vi":"Mỗi import là một cạnh trong đồ thị module của build, một tệp bundler phải nạp, parse và đi theo."},
         {"t":12.51,"vi":"Nhưng một type bạn import chỉ tồn tại lúc biên dịch; nó không nên để lại cạnh nào cả."},
@@ -1501,8 +1687,14 @@
         {"t":141.29,"vi":"Tiếp: Lab 15, một module biên sẵn sàng transpile."}
       ]
     },
-    "typescript-15-6-lab-bien-transpile": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/15-hieu-nang-build/15-06-lab-bien-transpile-b7a05d99.mp4","durationSec":454.54,"nguonCau":"srt",
-      "parts": [],
+    "typescript-15-6-lab-bien-transpile": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/15-hieu-nang-build/15-06-lab-bien-transpile-b7a05d99.mp4","durationSec":454.54,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":95.64,"ten":"Chào · Lab 15 · Bìa Lab 15"},
+        {"t":95.64,"den":177.66,"ten":"Nhiệm vụ · Bản stub — không build, cũng không chạy"},
+        {"t":177.66,"den":271.91,"ten":"Thang chấm · Lần thử A — sửa import, quên export (6/10)"},
+        {"t":271.91,"den":387.54,"ten":"Lời giải tham khảo: mười trên mười"},
+        {"t":387.54,"den":454.54,"ten":"Trước khi coi là xong · Tóm tắt & luyện tiếp"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Lab 15 của khoá TypeScript, bài thực hành cuối Chương 15 về hiệu năng build."},
         {"t":13.71,"vi":"Chương này mình đã tách việc kiểm kiểu khỏi việc xoá kiểu, để một công cụ nhanh xử lý từng tệp riêng."},
@@ -1581,8 +1773,12 @@
         {"t":444.84,"vi":"Bài sau mở Chương 16: làm cho trạng thái sai không thể biểu diễn được, rồi tới dự án cuối khoá."}
       ]
     },
-    "typescript-16-1-illegal-states": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/16-kien-truc-type-driven/16-01-make-illegal-states-unrepresentable-79b841b2.mp4","durationSec":182.55,"nguonCau":"srt",
-      "parts": [],
+    "typescript-16-1-illegal-states": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/16-kien-truc-type-driven/16-01-make-illegal-states-unrepresentable-79b841b2.mp4","durationSec":182.55,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":57.34,"ten":"Bìa bài · Một branded type: không phải mọi string"},
+        {"t":57.34,"den":112.27,"ten":"Một string thường bị từ chối"},
+        {"t":112.27,"den":182.55,"ten":"Nhìn một lượt · Luyện tập & tiếp theo"}
+      ],
       "cues": [
         {"t":5,"vi":"Lỗi tốt nhất là lỗi hệ kiểu không cho bạn viết."},
         {"t":9.74,"vi":"Tư duy type-driven nắn các kiểu để một giá trị sai ngay từ đầu không tồn tại được. Một mã lab chưa từng được validate, một slot vừa trống vừa đã đặt, một kết quả có data ở nhánh error của nó."},
@@ -1604,8 +1800,12 @@
         {"t":170.38,"vi":"Tiếp, bài 16.2: ba kiểu đặc biệt, any không an toàn, unknown an toàn, never bất khả, và khi nào mỗi cái thuộc về."}
       ]
     },
-    "typescript-16-2-any-unknown-never": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/16-kien-truc-type-driven/16-02-any-unknown-never-79f2a91e.mp4","durationSec":154.83,"nguonCau":"srt",
-      "parts": [],
+    "typescript-16-2-any-unknown-never": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/16-kien-truc-type-driven/16-02-any-unknown-never-79f2a91e.mp4","durationSec":154.83,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":51.76,"ten":"Bìa bài · unknown: nhận gì cũng được, rồi thu hẹp"},
+        {"t":51.76,"den":100.4,"ten":"never: phép kiểm vét cạn · any: công tắc bạn hiếm khi tắt"},
+        {"t":100.4,"den":154.83,"ten":"Nhìn một lượt · Luyện tập & tiếp theo"}
+      ],
       "cues": [
         {"t":5,"vi":"Ba kiểu đặc biệt nằm ở rìa của hệ thống."},
         {"t":7.95,"vi":"any tắt kiểm, gì cũng được, và bug cũng vậy; unknown là bản an toàn, nó nhận gì cũng được nhưng bắt bạn thu hẹp trước khi dùng."},
@@ -1628,8 +1828,12 @@
         {"t":143.68,"vi":"Tiếp, bài 16.3: kiểu sống ở đâu, type so với interface, barrel file, và cách tổ chức chúng trong một codebase lớn dần."}
       ]
     },
-    "typescript-16-3-organizing-types": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/16-kien-truc-type-driven/16-03-organizing-types-291790d5.mp4","durationSec":153.23,"nguonCau":"srt",
-      "parts": [],
+    "typescript-16-3-organizing-types": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/16-kien-truc-type-driven/16-03-organizing-types-291790d5.mp4","durationSec":153.23,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":48.42,"ten":"Bìa bài · type so với interface: khai lại"},
+        {"t":48.42,"den":99.19,"ten":"interface: khai báo gộp · Kiểu sống ở đâu"},
+        {"t":99.19,"den":153.23,"ten":"Nhìn một lượt · Luyện tập & tiếp theo"}
+      ],
       "cues": [
         {"t":5,"vi":"Khi một codebase lớn dần, kiểu sống ở đâu quan trọng ngang với nó nói gì."},
         {"t":10.5,"vi":"Hai câu hỏi lặp lại mãi: type hay interface, và một kiểu dùng chung nên nằm đâu để mọi người import cùng một cái."},
@@ -1651,8 +1855,12 @@
         {"t":141.08,"vi":"Tiếp, bài 16.4: bức tranh toàn cảnh, thói quen của mọi chương khớp vào một codebase type-driven ra sao, và đi đâu sau khoá này."}
       ]
     },
-    "typescript-16-4-whole-picture": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/16-kien-truc-type-driven/16-04-the-whole-picture-d7b333b5.mp4","durationSec":155.67,"nguonCau":"srt",
-      "parts": [],
+    "typescript-16-4-whole-picture": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/16-kien-truc-type-driven/16-04-the-whole-picture-d7b333b5.mp4","durationSec":155.67,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":49.3,"ten":"Bìa bài · Mọi thói quen, trong một lát"},
+        {"t":49.3,"den":96.05,"ten":"discriminant vẫn làm việc"},
+        {"t":96.05,"den":155.67,"ten":"Đi đâu tiếp · Luyện tập & Dự án cuối khoá"}
+      ],
       "cues": [
         {"t":5.11,"vi":"Mười sáu chương, một ý tưởng: để trình biên dịch giữ các bất biến để bạn không phải giữ."},
         {"t":12.34,"vi":"Mọi thói quen bạn học là một cách chuyển một lớp bug từ lúc chạy sang lúc biên dịch, và chúng ghép được."},
@@ -1675,8 +1883,16 @@
         {"t":145.01,"vi":"Tiếp: Dự án cuối khoá, lắp LabFlow TS full-stack và chấm nó trên thang 100, capstone và mảnh hồ sơ của bạn."}
       ]
     },
-    "typescript-16-6-du-an-cuoi-khoa": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/16-kien-truc-type-driven/16-06-du-an-cuoi-khoa-d0ff87c1.mp4","durationSec":650.67,"nguonCau":"srt",
-      "parts": [],
+    "typescript-16-6-du-an-cuoi-khoa": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/16-kien-truc-type-driven/16-06-du-an-cuoi-khoa-d0ff87c1.mp4","durationSec":650.67,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":99.01,"ten":"Chào · Dự án cuối khoá · Bìa dự án"},
+        {"t":99.01,"den":195.57,"ten":"Bên trong dự án · Chấm trên thang một trăm"},
+        {"t":195.57,"den":278.15,"ten":"Phần B — sáu mươi test chạy thật"},
+        {"t":278.15,"den":388.06,"ten":"Dữ liệu xấu — mỗi tầng chặn phần của nó"},
+        {"t":388.06,"den":482.75,"ten":"Thử phá — một lỗi kiểu kéo 100 xuống 80 · Kể theo STAR"},
+        {"t":482.75,"den":557.81,"ten":"Năm thói quen — mỗi cái là một dòng có thật · Đưa lên GitHub"},
+        {"t":557.81,"den":650.67,"ten":"Đi tiếp từ đây · Khép lại khoá học"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài cuối cùng của khoá TypeScript: dự án cuối khoá LabFlow TS full-stack."},
         {"t":12.93,"vi":"Mười sáu chương, mười lăm lab có chấm."},
@@ -1770,8 +1986,13 @@
         {"t":646.2,"vi":"Cảm ơn bạn đã đi cùng mình tới tận đây."}
       ]
     },
-    "typescript-2-1-primitive": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/02-he-kieu-co-ban/02-01-primitive-chu-thich-strict-null-b3cdbe0e.mp4","durationSec":251.41,"nguonCau":"srt",
-      "parts": [],
+    "typescript-2-1-primitive": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/02-he-kieu-co-ban/02-01-primitive-chu-thich-strict-null-b3cdbe0e.mp4","durationSec":251.41,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":66.7,"ten":"Bìa bài · Bài này mang về gì"},
+        {"t":66.7,"den":126.96,"ten":"Chú thích & string viết thường · Ba sự thật về số"},
+        {"t":126.96,"den":187.6,"ten":"Dấu hỏi không phải hoặc-undefined"},
+        {"t":187.6,"den":251.41,"ten":"Ba cách sửa: kiểm, ?. và ?? · Bẫy: || thay vì ??"}
+      ],
       "cues": [
         {"t":5,"vi":"Chương 2 dựng lịch phòng của LabFlow bằng kiểu chính xác."},
         {"t":9.23,"vi":"Bài đầu tiên nói về lỗi sập hay gặp nhất của JavaScript: đọc thuộc tính của null hay undefined."},
@@ -1814,8 +2035,13 @@
         {"t":246.27,"vi":"Bài sau: mảng, tuple và readonly cho lịch phòng."}
       ]
     },
-    "typescript-2-2-mang-tuple": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/02-he-kieu-co-ban/02-02-mang-tuple-readonly-66100ee8.mp4","durationSec":240.4,"nguonCau":"srt",
-      "parts": [],
+    "typescript-2-2-mang-tuple": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/02-he-kieu-co-ban/02-02-mang-tuple-readonly-66100ee8.mp4","durationSec":240.4,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":57.19,"ten":"Bìa bài · Bài này mang về gì"},
+        {"t":57.19,"den":115.63,"ten":"readonly: lời hứa vào kiểu · Trả về mảng mới"},
+        {"t":115.63,"den":181.72,"ten":"readonly bị xoá lúc chạy"},
+        {"t":181.72,"den":240.4,"ten":"Bẫy: tuple thường vẫn có push"}
+      ],
       "cues": [
         {"t":5,"vi":"LabFlow đầy danh sách: các lượt đặt trong ngày, các phòng, hai đầu của một ca."},
         {"t":11.14,"vi":"Bài này cho mỗi thứ đúng kiểu, và chặn một bug thật."},
@@ -1855,8 +2081,13 @@
         {"t":236.55,"vi":"Bài sau: unknown, never và void."}
       ]
     },
-    "typescript-2-3-kieu-dac-biet": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/02-he-kieu-co-ban/02-03-any-unknown-never-void-74c05d11.mp4","durationSec":229.93,"nguonCau":"srt",
-      "parts": [],
+    "typescript-2-3-kieu-dac-biet": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/02-he-kieu-co-ban/02-03-any-unknown-never-void-74c05d11.mp4","durationSec":229.93,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":59.62,"ten":"Bìa bài · Bài này mang về gì"},
+        {"t":59.62,"den":118.73,"ten":"Ba lỗi nói điều gì · void: không có gì để dùng"},
+        {"t":118.73,"den":170.21,"ten":"never: hàm không bao giờ trở về"},
+        {"t":170.21,"den":229.93,"ten":"Một người thêm LAB_CLOSED · Bẫy: mảng rỗng từ chối mọi thứ"}
+      ],
       "cues": [
         {"t":5,"vi":"Phần lớn kiểu mô tả dữ liệu; bốn kiểu này mô tả tình huống."},
         {"t":9.63,"vi":"Có thể là bất cứ gì, đừng kiểm nữa, không có gì để dùng, và điều này không thể xảy ra."},
@@ -1896,8 +2127,13 @@
         {"t":225.59,"vi":"Bài sau: literal types và as const."}
       ]
     },
-    "typescript-2-4-literal-as-const": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/02-he-kieu-co-ban/02-04-literal-as-const-9ddef6c3.mp4","durationSec":241.59,"nguonCau":"srt",
-      "parts": [],
+    "typescript-2-4-literal-as-const": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/02-he-kieu-co-ban/02-04-literal-as-const-9ddef6c3.mp4","durationSec":241.59,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":59.66,"ten":"Bìa bài · Bài này mang về gì"},
+        {"t":59.66,"den":117.05,"ten":"Bug: danh sách chép tay · Một nguồn sự thật"},
+        {"t":117.05,"den":179.14,"ten":"Bẫy: includes không biên dịch được"},
+        {"t":179.14,"den":241.59,"ten":"Vì sao không dùng enum"}
+      ],
       "cues": [
         {"t":5,"vi":"Bài cuối Chương 2 nói về các danh sách đóng: vai trò, trạng thái, mã phòng."},
         {"t":10.53,"vi":"Bạn sẽ viết danh sách đó một lần, để Node dùng được lúc chạy còn TypeScript suy ra kiểu từ chính nó."},
@@ -1937,8 +2173,15 @@
         {"t":237.58,"vi":"Lab 2 ráp các mảnh này lại với nhau."}
       ]
     },
-    "typescript-2-6-lab-lich-phong": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/02-he-kieu-co-ban/02-06-lab-lich-phong-62460496.mp4","durationSec":513.75,"nguonCau":"srt",
-      "parts": [],
+    "typescript-2-6-lab-lich-phong": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/02-he-kieu-co-ban/02-06-lab-lich-phong-62460496.mp4","durationSec":513.75,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":99.5,"ten":"Chào · Lab 2 · Bìa Lab 2"},
+        {"t":99.5,"den":201.56,"ten":"Bật strict: mười lỗi, hai nhóm · Mảng thường và tuple"},
+        {"t":201.56,"den":291.3,"ten":"Chấm nguyên trạng: một điểm · Ba bug chỉ test mới thấy"},
+        {"t":291.3,"den":390.17,"ten":"Lần thử A — test xanh, bảo vệ bằng không"},
+        {"t":390.17,"den":472.17,"ten":"Lời giải tham khảo: mười trên mười"},
+        {"t":472.17,"den":513.75,"ten":"Tóm tắt & luyện tiếp"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Lab 2 của khoá TypeScript, bài thực hành cuối Chương 2."},
         {"t":11.03,"vi":"Bài trước mình đã viết danh sách phòng một lần bằng as const, rồi suy ra kiểu từ chính nó, nên hai thứ không bao giờ lệch."},
@@ -2026,8 +2269,13 @@
         {"t":507.45,"vi":"Bài sau mở Chương 3, Hàm: gõ kiểu tham số và giá trị trả về."}
       ]
     },
-    "typescript-3-1-tham-so": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/03-ham/03-01-go-kieu-tham-so-bd80c528.mp4","durationSec":244.06,"nguonCau":"srt",
-      "parts": [],
+    "typescript-3-1-tham-so": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/03-ham/03-01-go-kieu-tham-so-bd80c528.mp4","durationSec":244.06,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":60.06,"ten":"Bìa bài · Bài này mang về gì"},
+        {"t":60.06,"den":120.4,"ten":"TypeScript đếm: mặc định bắt buộc"},
+        {"t":120.4,"den":182.3,"ten":"Giá trị mặc định · Bẫy: mặc định không thay null"},
+        {"t":182.3,"den":244.06,"ten":"Hai cờ cạnh nhau: dùng options object"}
+      ],
       "cues": [
         {"t":5,"vi":"Chương 3 nói về hàm, nơi code của hai người gặp nhau."},
         {"t":8.9,"vi":"Bài đầu tiên nói về danh sách tham số: hợp đồng giữa một hàm và mọi người gọi nó."},
@@ -2067,8 +2315,13 @@
         {"t":240.31,"vi":"Bài sau: hàm như một giá trị."}
       ]
     },
-    "typescript-3-2-callback": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/03-ham/03-02-ham-la-gia-tri-6be17a4f.mp4","durationSec":231.87,"nguonCau":"srt",
-      "parts": [],
+    "typescript-3-2-callback": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/03-ham/03-02-ham-la-gia-tri-6be17a4f.mp4","durationSec":231.87,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":63.96,"ten":"Bìa bài · Bài này mang về gì"},
+        {"t":63.96,"den":117.93,"ten":"Kiểu hàm: đặt tên cho hình dạng luật"},
+        {"t":117.93,"den":175.87,"ten":"Ít tham số thì vừa, thừa thì không · Một hàm trả về luật"},
+        {"t":175.87,"den":231.87,"ten":"Function không phải một kiểu hàm · Bẫy: map với parseInt"}
+      ],
       "cues": [
         {"t":5,"vi":"Trong JavaScript hàm là một giá trị: cất được, truyền được, trả về được."},
         {"t":11.12,"vi":"Bài này gán kiểu cho những giá trị đó; LabFlow sẽ kiểm một yêu cầu đặt phòng bằng một danh sách hàm luật."},
@@ -2108,8 +2361,13 @@
         {"t":228.7,"vi":"Lab 3 ráp tất cả lại."}
       ]
     },
-    "typescript-3-3-overload-void": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/03-ham/03-03-overload-void-6aec6f31.mp4","durationSec":218.08,"nguonCau":"srt",
-      "parts": [],
+    "typescript-3-3-overload-void": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/03-ham/03-03-overload-void-6aec6f31.mp4","durationSec":218.08,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":59.71,"ten":"Bìa bài · Bài này mang về gì"},
+        {"t":59.71,"den":115,"ten":"Overload: hai chữ ký, một cài đặt"},
+        {"t":115,"den":161.24,"ten":"Thứ tự quan trọng: khớp đầu tiên thắng"},
+        {"t":161.24,"den":218.08,"ten":"void: tôi sẽ bỏ qua thứ bạn trả"}
+      ],
       "cues": [
         {"t":5,"vi":"Hai tính năng trông nâng cao nhưng giải thích code hằng ngày."},
         {"t":8.73,"vi":"overload cho một hàm nhiều dáng có kiểu."},
@@ -2149,8 +2407,13 @@
         {"t":214.53,"vi":"Một luật lint bắt phần còn lại."}
       ]
     },
-    "typescript-3-4-this": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/03-ham/03-04-this-tham-so-an-9ced5121.mp4","durationSec":226.74,"nguonCau":"srt",
-      "parts": [],
+    "typescript-3-4-this": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/03-ham/03-04-this-tham-so-an-9ced5121.mp4","durationSec":226.74,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":58.05,"ten":"Bìa bài · Bài này mang về gì"},
+        {"t":58.05,"den":114.52,"ten":"Tách method ra khỏi object · this do cách gọi quyết định"},
+        {"t":114.52,"den":169.12,"ten":"Tham số this: TS2684 · Bẫy: callback lọt qua"},
+        {"t":169.12,"den":226.74,"ten":"Một arrow trong object literal"}
+      ],
       "cues": [
         {"t":5,"vi":"Mọi hàm thường đều có một đầu vào ẩn tên là this."},
         {"t":9.09,"vi":"Ta lấy validator của LabFlow, gọi method run theo năm cách."},
@@ -2190,8 +2453,15 @@
         {"t":217.57,"vi":"Và nếu từ Java sang: một method tham chiếu vẫn gắn object, còn validator chấm run thì không."}
       ]
     },
-    "typescript-3-6-lab-luat-dat-phong": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/03-ham/03-06-lab-luat-dat-phong-4a742e6a.mp4","durationSec":458.96,"nguonCau":"srt",
-      "parts": [],
+    "typescript-3-6-lab-luat-dat-phong": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/03-ham/03-06-lab-luat-dat-phong-4a742e6a.mp4","durationSec":458.96,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":98.43,"ten":"Chào · Lab 3 · Bìa Lab 3"},
+        {"t":98.43,"den":179.21,"ten":"Function và Rule — hai cái ổ cắm"},
+        {"t":179.21,"den":260.15,"ten":"Chấm nguyên trạng: một điểm · Thang chấm"},
+        {"t":260.15,"den":342.37,"ten":"Lần thử B — hai lỗ hổng còn lại · Gợi ý — mở từng cái một"},
+        {"t":342.37,"den":419.45,"ten":"Gõ lại lời giải — từng kiểu chặn gì · Trước khi coi là xong"},
+        {"t":419.45,"den":458.96,"ten":"Tóm tắt & luyện tiếp"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Lab 3 của khoá TypeScript, bài thực hành cuối Chương 3 về hàm."},
         {"t":11.5,"vi":"Bài trước mình đã thấy this là một tham số ẩn, và khai nó ra thì tsc chặn được lời gọi bị tách rời."},
@@ -2267,8 +2537,13 @@
         {"t":451.41,"vi":"Bài sau mở Chương 4: dáng của object, trường bắt buộc, tuỳ chọn và chỉ đọc."}
       ]
     },
-    "typescript-4-1-dang-object": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/04-object-interface-type-alias/04-01-dang-object-65a1b01b.mp4","durationSec":243.12,"nguonCau":"srt",
-      "parts": [],
+    "typescript-4-1-dang-object": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/04-object-interface-type-alias/04-01-dang-object-65a1b01b.mp4","durationSec":243.12,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":63.3,"ten":"Bìa bài · Bài này mang về gì"},
+        {"t":63.3,"den":123.61,"ten":"Mô tả dáng một lần, đặt tên"},
+        {"t":123.61,"den":185.51,"ten":"Bẫy: lỗi gõ cần một literal tươi"},
+        {"t":185.51,"den":243.12,"ten":"readonly tới tận bên trong"}
+      ],
       "cues": [
         {"t":5,"vi":"Chương 4 nói về dữ liệu; gần như mọi giá trị trong ứng dụng thật là object."},
         {"t":11.09,"vi":"Một phòng lab, một người dùng, một lượt đặt."},
@@ -2308,8 +2583,13 @@
         {"t":239.38,"vi":"Bài sau: interface so với type."}
       ]
     },
-    "typescript-4-2-interface-vs-type": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/04-object-interface-type-alias/04-02-interface-vs-type-c293307b.mp4","durationSec":230.57,"nguonCau":"srt",
-      "parts": [],
+    "typescript-4-2-interface-vs-type": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/04-object-interface-type-alias/04-02-interface-vs-type-c293307b.mp4","durationSec":230.57,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":60.4,"ten":"Bìa bài · Bài này mang về gì"},
+        {"t":60.4,"den":117.73,"ten":"Khác biệt 1 — interface cùng tên gộp"},
+        {"t":117.73,"den":174.87,"ten":"Khác biệt 2 — chỉ type đặt tên union"},
+        {"t":174.87,"den":230.57,"ten":"Quy tắc khoá này dùng"}
+      ],
       "cues": [
         {"t":5.24,"vi":"TypeScript cho bạn hai cách đặt tên một dáng: interface và type."},
         {"t":9.93,"vi":"Với object bình thường chúng làm cùng một việc."},
@@ -2349,8 +2629,13 @@
         {"t":223.91,"vi":"Bài sau: dựng dáng lớn từ dáng nhỏ bằng extends và intersection."}
       ]
     },
-    "typescript-4-3-extends-intersection": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/04-object-interface-type-alias/04-03-extends-intersection-fff0472d.mp4","durationSec":206.38,"nguonCau":"srt",
-      "parts": [],
+    "typescript-4-3-extends-intersection": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/04-object-interface-type-alias/04-03-extends-intersection-fff0472d.mp4","durationSec":206.38,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":60.42,"ten":"Bìa bài · Bài này mang về gì"},
+        {"t":60.42,"den":102.67,"ten":"extends mang theo những gì"},
+        {"t":102.67,"den":153.45,"ten":"Toán tử giao: A và B · Một góc nhìn, suy ra bằng spread"},
+        {"t":153.45,"den":206.38,"ten":"Và nghĩa là và, hoặc nghĩa là hoặc"}
+      ],
       "cues": [
         {"t":5,"vi":"Bản ghi nào LabFlow lưu cũng có id và thời điểm tạo."},
         {"t":9.37,"vi":"Chép hai dòng đó vào mọi kiểu vẫn chạy, cho tới khi một bản chép bị đổi."},
@@ -2387,8 +2672,13 @@
         {"t":202.73,"vi":"Bài sau: từ điển và Record."}
       ]
     },
-    "typescript-4-4-index-record": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/04-object-interface-type-alias/04-04-index-record-67fd7ebb.mp4","durationSec":194.71,"nguonCau":"srt",
-      "parts": [],
+    "typescript-4-4-index-record": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/04-object-interface-type-alias/04-04-index-record-67fd7ebb.mp4","durationSec":194.71,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":53.75,"ten":"Bìa bài · Bài này mang về gì"},
+        {"t":53.75,"den":106.38,"ten":"Index signature: khoá chuỗi nào cũng được"},
+        {"t":106.38,"den":160.8,"ten":"Bốn lớp chặn, không cần kiểm"},
+        {"t":160.8,"den":194.71,"ten":"Khoá số: Record của number, và Map · Từ điển nào, khi nào"}
+      ],
       "cues": [
         {"t":5,"vi":"Có những object là từ điển: khoá là dữ liệu, không phải tên trường."},
         {"t":10.34,"vi":"Mã phòng sang thông tin phòng, mã phòng sang số chỗ đã đặt, id sang người dùng."},
@@ -2425,8 +2715,14 @@
         {"t":187.35,"vi":"Tiếp theo: Lab 4, nơi cả Chương 4 thành mô hình dữ liệu của LabFlow."}
       ]
     },
-    "typescript-4-6-lab-mo-hinh-du-lieu": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/04-object-interface-type-alias/04-06-lab-mo-hinh-du-lieu-2c53ca03.mp4","durationSec":472.26,"nguonCau":"srt",
-      "parts": [],
+    "typescript-4-6-lab-mo-hinh-du-lieu": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/04-object-interface-type-alias/04-06-lab-mo-hinh-du-lieu-2c53ca03.mp4","durationSec":472.26,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":95.68,"ten":"Chào · Lab 4 · Bìa Lab 4"},
+        {"t":95.68,"den":190.17,"ten":"Kiểu là cái rây · Hợp lệ không có nghĩa là chính xác"},
+        {"t":190.17,"den":293.4,"ten":"Thang chấm · Hai lần thử thường gặp"},
+        {"t":293.4,"den":411.9,"ten":"Gợi ý — mở từng cái một · Lời giải tham khảo: mười trên mười"},
+        {"t":411.9,"den":472.26,"ten":"Trước khi coi là xong · Tóm tắt & luyện tiếp"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Lab 4 của khoá TypeScript, bài thực hành cuối Chương 4 về object."},
         {"t":11.86,"vi":"Bài trước mình đã so index signature, một từ điển mở, với Record theo một tập khoá đóng."},
@@ -2501,8 +2797,13 @@
         {"t":467.21,"vi":"Bài sau mở Chương 5: union và thu hẹp kiểu."}
       ]
     },
-    "typescript-5-1-union-narrowing": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/05-union-literal-thu-hep/05-01-union-thu-hep-f9744f82.mp4","durationSec":218.16,"nguonCau":"srt",
-      "parts": [],
+    "typescript-5-1-union-narrowing": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/05-union-literal-thu-hep/05-01-union-thu-hep-f9744f82.mp4","durationSec":218.16,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":50.91,"ten":"Bìa bài · Bài này mang về gì"},
+        {"t":50.91,"den":113.02,"ten":"JavaScript: một hàm, hai dáng"},
+        {"t":113.02,"den":175.25,"ten":"Tính đúng-sai, và bẫy số 0"},
+        {"t":175.25,"den":218.16,"ten":"Guard nào, khi nào · Luyện tập & bài tiếp"}
+      ],
       "cues": [
         {"t":5,"vi":"Dữ liệu thật là cái này hoặc cái kia: mã phòng là chuỗi hoặc số, ghi chú là chữ hoặc null."},
         {"t":12.11,"vi":"Kiểu union nói một trong các kiểu này; thu hẹp là cách dùng nó an toàn."},
@@ -2536,8 +2837,13 @@
         {"t":207.37,"vi":"Tiếp, bài 5.2: thu hẹp theo giá trị — SlotResult theo nhãn ok, một switch không cần default, in và instanceof."}
       ]
     },
-    "typescript-5-2-literal-union": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/05-union-literal-thu-hep/05-02-thu-hep-gia-tri-c1a9a407.mp4","durationSec":214.26,"nguonCau":"srt",
-      "parts": [],
+    "typescript-5-2-literal-union": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/05-union-literal-thu-hep/05-02-thu-hep-gia-tri-c1a9a407.mp4","durationSec":214.26,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":70.31,"ten":"Bìa bài · Bài này mang về gì"},
+        {"t":70.31,"den":130.74,"ten":"Thu hẹp union literal bằng switch"},
+        {"t":130.74,"den":190.41,"ten":"So với một literal ngoài union · Phép bằng thu hẹp cả hai vế"},
+        {"t":190.41,"den":214.26,"ten":"Luyện tập & bài tiếp"}
+      ],
       "cues": [
         {"t":5,"vi":"Bài 5.1 thu hẹp theo kiểu; phần lớn union của LabFlow lại thu hẹp theo giá trị."},
         {"t":12.1,"vi":"Một vai trò là một trong ba chuỗi, một kết quả gắn nhãn ok hay không, một biến catch là unknown tới khi bạn hỏi."},
@@ -2571,8 +2877,13 @@
         {"t":208.79,"vi":"Cùng type predicate: phép thu hẹp có tên dùng lại được."}
       ]
     },
-    "typescript-5-3-discriminated-union": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/05-union-literal-thu-hep/05-03-discriminated-union-ba62e30e.mp4","durationSec":223.74,"nguonCau":"srt",
-      "parts": [],
+    "typescript-5-3-discriminated-union": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/05-union-literal-thu-hep/05-03-discriminated-union-ba62e30e.mp4","durationSec":223.74,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":50.2,"ten":"Bìa bài · Khuôn mẫu: một nhãn chung"},
+        {"t":50.2,"den":112.45,"ten":"Discriminated union · Không nhãn, không thu hẹp"},
+        {"t":112.45,"den":158.59,"ten":"Bẫy: predicate được tin, không được kiểm"},
+        {"t":158.59,"den":223.74,"ten":"Giải phẫu một discriminated union · Từ Java sang (PRO192)"}
+      ],
       "cues": [
         {"t":5,"vi":"Một lượt đặt không phải một cờ: nó đang nháp, rồi không hợp lệ với một lý do, hoặc chờ và đã xác nhận với một bản ghi."},
         {"t":14.96,"vi":"Và có thể bị huỷ, với bản ghi và một lý do; một discriminated union mô hình hoá đúng điều đó."},
@@ -2606,8 +2917,13 @@
         {"t":213.44,"vi":"Tiếp, bài 5.4: never và assertNever biến thêm một trạng thái thành lỗi biên dịch, không phải bug âm thầm."}
       ]
     },
-    "typescript-5-4-exhaustiveness": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/05-union-literal-thu-hep/05-04-exhaustiveness-never-a670cfec.mp4","durationSec":223.85,"nguonCau":"srt",
-      "parts": [],
+    "typescript-5-4-exhaustiveness": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/05-union-literal-thu-hep/05-04-exhaustiveness-never-a670cfec.mp4","durationSec":223.85,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":68.07,"ten":"Bìa bài · switch đầy đủ"},
+        {"t":68.07,"den":113.37,"ten":"Vì sao chạy được: never là kiểu rỗng"},
+        {"t":113.37,"den":158.31,"ten":"Một sự cố thật trên website này"},
+        {"t":158.31,"den":223.85,"ten":"Assertion function: thu hẹp bằng cách không ném"}
+      ],
       "cues": [
         {"t":5,"vi":"Một union lớn lên: ai đó thêm EXPIRED vào một trạng thái, một bậc plan mới, một mã thứ năm."},
         {"t":12.83,"vi":"Điều gì xảy ra với mười switch từng xử lý tập cũ?"},
@@ -2641,8 +2957,14 @@
         {"t":216.91,"vi":"Và cả describe với assertNever lẫn Record đóng của bạn phải hoá đỏ."}
       ]
     },
-    "typescript-5-6-lab-may-trang-thai": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/05-union-literal-thu-hep/05-06-lab-may-trang-thai-e27e005a.mp4","durationSec":454.34,"nguonCau":"srt",
-      "parts": [],
+    "typescript-5-6-lab-may-trang-thai": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/05-union-literal-thu-hep/05-06-lab-may-trang-thai-e27e005a.mp4","durationSec":454.34,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":80.63,"ten":"Chào · Lab 5 · Bìa Lab 5"},
+        {"t":80.63,"den":171.39,"ten":"Nhiệm vụ · Bản khởi đầu — một object rộng"},
+        {"t":171.39,"den":258.19,"ten":"Phần F — thêm một trạng thái · Tám cách dùng sai"},
+        {"t":258.19,"den":343.94,"ten":"Lần thử B — assertNever, bảng mở (9/10)"},
+        {"t":343.94,"den":454.34,"ten":"Gõ lại lời giải — từng kiểu chặn gì · Trước khi coi là xong"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Lab 5 của khoá TypeScript, bài thực hành cuối Chương 5."},
         {"t":11.12,"vi":"Bài trước mình đã dùng never để kiểm tra đầy đủ: thêm một trường hợp mà quên xử lý, tsc báo đỏ ngay."},
@@ -2718,8 +3040,13 @@
         {"t":447.38,"vi":"Bài sau mở Chương 6: generics, Result và một repository có kiểu."}
       ]
     },
-    "typescript-6-1-why-generics": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/06-generics/06-01-why-generics-c820b0c3.mp4","durationSec":212.91,"nguonCau":"srt",
-      "parts": [],
+    "typescript-6-1-why-generics": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/06-generics/06-01-why-generics-c820b0c3.mp4","durationSec":212.91,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":53.08,"ten":"Bìa bài · Bạn sẽ học gì ở chương này"},
+        {"t":53.08,"den":102.49,"ten":"Cách cẩu thả: any vứt kiểu đi · Cách đúng: một tham số kiểu"},
+        {"t":102.49,"den":146.53,"ten":"Bạn hiếm khi viết tham số kiểu: suy kiểu"},
+        {"t":146.53,"den":212.91,"ten":"Hai tham số kiểu · Dạng nào, khi nào"}
+      ],
       "cues": [
         {"t":5,"vi":"Bạn viết đi viết lại cùng một hàm: phần tử đầu của mảng, một repository, một kết quả, mỗi cái nên chạy cho mọi kiểu mà vẫn giữ kiểu."},
         {"t":16.05,"vi":"Cách cẩu thả là any: nó biên dịch, rồi vứt kiểu đi."},
@@ -2750,8 +3077,13 @@
         {"t":203.59,"vi":"Tiếp, bài 6.2 ràng buộc T bằng extends, và đọc kiểu một thuộc tính bằng keyof và T chỉ mục K."}
       ]
     },
-    "typescript-6-2-constraints-keyof": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/06-generics/06-02-constraints-keyof-38cccf05.mp4","durationSec":178.54,"nguonCau":"srt",
-      "parts": [],
+    "typescript-6-2-constraints-keyof": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/06-generics/06-02-constraints-keyof-38cccf05.mp4","durationSec":178.54,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":44.81,"ten":"Bìa bài · T trơn không đọc được thuộc tính"},
+        {"t":44.81,"den":90.35,"ten":"Một ràng buộc: kiểu nào có một id"},
+        {"t":90.35,"den":133.3,"ten":"Truy cập theo chỉ mục như một kiểu"},
+        {"t":133.3,"den":178.54,"ten":"Công cụ nào, khi nào · Luyện tập & tiếp theo"}
+      ],
       "cues": [
         {"t":5,"vi":"Một tham số kiểu trơn mạnh vì nó không biết gì; nhưng trong hàm bạn không đọc được thuộc tính nào của nó."},
         {"t":12.78,"vi":"Một ràng buộc nói: kiểu nào có ít nhất thế này."},
@@ -2780,8 +3112,13 @@
         {"t":167.09,"vi":"Tiếp, bài 6.3: type alias, interface và class đều nhận tham số kiểu, như Result và Repo, với tham số kiểu mặc định."}
       ]
     },
-    "typescript-6-3-generic-types-classes": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/06-generics/06-03-generic-interfaces-classes-2ad3ae23.mp4","durationSec":203.71,"nguonCau":"srt",
-      "parts": [],
+    "typescript-6-3-generic-types-classes": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/06-generics/06-03-generic-interfaces-classes-2ad3ae23.mp4","durationSec":203.71,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":49.36,"ten":"Bìa bài · type alias generic — và một mặc định"},
+        {"t":49.36,"den":91.55,"ten":"Đè cái mặc định · Một interface generic"},
+        {"t":91.55,"den":153.25,"ten":"Một class generic: repository"},
+        {"t":153.25,"den":203.71,"ten":"Loại generic nào, khi nào · Luyện tập & tiếp theo"}
+      ],
       "cues": [
         {"t":5,"vi":"Tham số kiểu không chỉ dành cho hàm: một type alias, một interface và một class đều nhận được."},
         {"t":12.96,"vi":"Đó là cách Map, Promise và Array được khai báo, và cách bạn viết Result và Repo của LabFlow."},
@@ -2813,8 +3150,13 @@
         {"t":193.54,"vi":"Nhớ: alias, interface và class đều nhận tham số kiểu; tiếp là bài 6.4 về suy kiểu và các bẫy generic."}
       ]
     },
-    "typescript-6-4-generics-in-practice": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/06-generics/06-04-generics-in-practice-1edaf2c6.mp4","durationSec":190.77,"nguonCau":"srt",
-      "parts": [],
+    "typescript-6-4-generics-in-practice": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/06-generics/06-04-generics-in-practice-1edaf2c6.mp4","durationSec":190.77,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":47.57,"ten":"Bìa bài · Suy kiểu làm việc"},
+        {"t":47.57,"den":94.12,"ten":"Bẫy 1: generic chỉ-trả-về không kiểm gì"},
+        {"t":94.12,"den":143.57,"ten":"Bẫy 3: literal nới rộng · const type parameter giữ literal"},
+        {"t":143.57,"den":190.77,"ten":"Mùi generic & cách sửa · Luyện tập & Lab 6"}
+      ],
       "cues": [
         {"t":5.19,"vi":"Generics dễ viết và dễ dùng sai; suy kiểu làm phần lớn việc, nên generic gần như vô hình."},
         {"t":12.48,"vi":"Nhưng một generic có thể trông an toàn mà không kiểm gì."},
@@ -2842,8 +3184,14 @@
         {"t":178.87,"vi":"Tiếp là Lab 6: dựng Result, Repo và groupBy; bản any được 4.5, ràng buộc bắt kiểu sai, bản tham khảo được 10."}
       ]
     },
-    "typescript-6-6-lab-repository-generic": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/06-generics/06-06-lab-repository-generic-4bd615a6.mp4","durationSec":456.1,"nguonCau":"srt",
-      "parts": [],
+    "typescript-6-6-lab-repository-generic": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/06-generics/06-06-lab-repository-generic-4bd615a6.mp4","durationSec":456.1,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":98.62,"ten":"Chào · Lab 6 · Bìa Lab 6"},
+        {"t":98.62,"den":183.49,"ten":"Bản khởi đầu — any ở khắp nơi · Chấm nguyên trạng: 4,5"},
+        {"t":183.49,"den":275.42,"ten":"Lần thử A: không ràng buộc, một phép ép (6,5)"},
+        {"t":275.42,"den":391.57,"ten":"Gợi ý — mở từng cái một · Lời giải tham khảo: mười trên mười"},
+        {"t":391.57,"den":456.1,"ten":"Trước khi coi là xong · Tóm tắt & luyện tiếp"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Lab 6 của khoá TypeScript, bài thực hành cuối Chương 6 về generics."},
         {"t":12.31,"vi":"Chương này mình đã thấy generic giữ kiểu đi xuyên qua hàm, ràng buộc bằng extends, và keyof để chọn đúng khoá."},
@@ -2915,8 +3263,13 @@
         {"t":448.69,"vi":"Bài sau mở Chương 7: mapped types, conditional types và template literal types."}
       ]
     },
-    "typescript-7-1-mapped-types": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/07-kieu-nang-cao/07-01-mapped-types-7be81f10.mp4","durationSec":189.94,"nguonCau":"srt",
-      "parts": [],
+    "typescript-7-1-mapped-types": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/07-kieu-nang-cao/07-01-mapped-types-7be81f10.mp4","durationSec":189.94,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":47.71,"ten":"Bìa bài · Bạn sẽ học gì ở chương này"},
+        {"t":47.71,"den":89.63,"ten":"Vấn đề: hai kiểu phải khớp, bằng tay"},
+        {"t":89.63,"den":128.32,"ten":"Readonly, viết đầy đủ · Record cũng là một mapped type"},
+        {"t":128.32,"den":189.94,"ten":"Biến đổi cả giá trị, không chỉ khoá"}
+      ],
       "cues": [
         {"t":5,"vi":"Chương 6 làm kiểu dùng lại được qua nhiều kiểu; Chương 7 làm những kiểu tính ra từ kiểu khác."},
         {"t":12.1,"vi":"Đó là bộ máy đằng sau Partial, Readonly, Record và hệ sự kiện có kiểu của Lab 7."},
@@ -2947,8 +3300,13 @@
         {"t":179.78,"vi":"Tiếp, bài 7.2: một mapped type thêm hoặc gỡ được hai modifier mà mọi trường mang, dấu hỏi và readonly."}
       ]
     },
-    "typescript-7-2-mapping-modifiers": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/07-kieu-nang-cao/07-02-mapping-modifiers-d6547043.mp4","durationSec":165.5,"nguonCau":"srt",
-      "parts": [],
+    "typescript-7-2-mapping-modifiers": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/07-kieu-nang-cao/07-02-mapping-modifiers-d6547043.mp4","durationSec":165.5,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":53.18,"ten":"Bìa bài · Thêm optional: Partial — một PATCH body"},
+        {"t":53.18,"den":92.53,"ten":"Gỡ optional: Required · Gỡ readonly: một bản sao sửa được"},
+        {"t":92.53,"den":136.29,"ten":"Cả hai cùng lúc · Modifier nào, khi nào"},
+        {"t":136.29,"den":165.5,"ten":"Luyện tập & tiếp theo"}
+      ],
       "cues": [
         {"t":5,"vi":"Một mapped type làm hơn việc chép kiểu của một trường: nó đổi được hai modifier mà mọi thuộc tính mang, optional và readonly."},
         {"t":15.1,"vi":"Thêm optional là có một PATCH body; gỡ nó thì mọi trường bắt buộc; gỡ readonly thì một kiểu đóng băng thành một bản nháp."},
@@ -2973,8 +3331,13 @@
         {"t":155.25,"vi":"Tiếp, bài 7.3: một conditional type chọn một kiểu theo điều kiện, và infer rút một kiểu ra khỏi kiểu khác."}
       ]
     },
-    "typescript-7-3-conditional-infer": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/07-kieu-nang-cao/07-03-conditional-types-infer-59295ed2.mp4","durationSec":191.64,"nguonCau":"srt",
-      "parts": [],
+    "typescript-7-3-conditional-infer": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/07-kieu-nang-cao/07-03-conditional-types-infer-59295ed2.mp4","durationSec":191.64,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":53.9,"ten":"Bìa bài · Một điều kiện ở tầng kiểu"},
+        {"t":53.9,"den":94.81,"ten":"infer: bắt một kiểu trong một mẫu"},
+        {"t":94.81,"den":143.49,"ten":"Conditional distribute qua một union"},
+        {"t":143.49,"den":191.64,"ten":"Mẫu nào, khi nào · Luyện tập & tiếp theo"}
+      ],
       "cues": [
         {"t":5,"vi":"Mapped type dựng lại một dáng; conditional type chọn một kiểu dựa trên một điều kiện, một if ở tầng kiểu."},
         {"t":13.01,"vi":"Viết T extends U rồi X nếu đúng, Y nếu không, và kết quả phụ thuộc T."},
@@ -3002,8 +3365,13 @@
         {"t":181.58,"vi":"Tiếp, bài 7.4: template literal types dựng kiểu chuỗi từ kiểu khác, nên một lỗi gõ là lỗi biên dịch."}
       ]
     },
-    "typescript-7-4-template-literal-types": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/07-kieu-nang-cao/07-04-template-literal-types-6623909a.mp4","durationSec":184.73,"nguonCau":"srt",
-      "parts": [],
+    "typescript-7-4-template-literal-types": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/07-kieu-nang-cao/07-04-template-literal-types-6623909a.mp4","durationSec":184.73,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":48.11,"ten":"Bìa bài · Một chuỗi cho mỗi thành viên union"},
+        {"t":48.11,"den":88.34,"ten":"Hai union: mọi tổ hợp · Biến đổi chuỗi"},
+        {"t":88.34,"den":130.74,"ten":"Đổi tên khoá với as · Cái được: một lỗi gõ bị bắt"},
+        {"t":130.74,"den":184.73,"ten":"Mẫu nào, khi nào · Luyện tập & Lab 7"}
+      ],
       "cues": [
         {"t":5,"vi":"Một template literal type dựng một kiểu chuỗi từ kiểu khác, như một template string dựng một giá trị."},
         {"t":13.3,"vi":"booking cộng một action biến một union action thành một union tên sự kiện; hai union cho mọi tổ hợp."},
@@ -3031,8 +3399,14 @@
         {"t":171.41,"vi":"Tiếp là Lab 7: gộp tên sự kiện template literal, một bản đồ payload, một PayloadOf conditional, và hai mapped type thành một hệ sự kiện có kiểu."}
       ]
     },
-    "typescript-7-6-lab-he-su-kien": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/07-kieu-nang-cao/07-06-lab-he-su-kien-19151a83.mp4","durationSec":467.09,"nguonCau":"srt",
-      "parts": [],
+    "typescript-7-6-lab-he-su-kien": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/07-kieu-nang-cao/07-06-lab-he-su-kien-19151a83.mp4","durationSec":467.09,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":101.17,"ten":"Chào · Lab 7 · Bìa Lab 7"},
+        {"t":101.17,"den":205.14,"ten":"Bản khởi đầu — string và any · Chấm nguyên trạng: năm điểm"},
+        {"t":205.14,"den":284.9,"ten":"Lần thử B — Patch lỏng (9,5) · Gợi ý — mở từng cái một"},
+        {"t":284.9,"den":409.87,"ten":"Lời giải tham khảo: mười trên mười"},
+        {"t":409.87,"den":467.09,"ten":"Trước khi coi là xong · Tóm tắt & luyện tiếp"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Lab 7 của khoá TypeScript, bài thực hành cuối Chương 7 về kiểu nâng cao."},
         {"t":12.43,"vi":"Chương này mình đã học mapped type, conditional type với infer, và template literal type."},
@@ -3100,8 +3474,13 @@
         {"t":459.9,"vi":"Bài sau mở Chương 8: utility types, những mapped type đã được đặt tên sẵn."}
       ]
     },
-    "typescript-8-1-partial-required-readonly": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/08-utility-types/08-01-partial-required-readonly-8a6affdf.mp4","durationSec":227.69,"nguonCau":"srt",
-      "parts": [],
+    "typescript-8-1-partial-required-readonly": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/08-utility-types/08-01-partial-required-readonly-8a6affdf.mp4","durationSec":227.69,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":60.52,"ten":"Bìa bài · Bạn sẽ học gì ở chương này"},
+        {"t":60.52,"den":113.03,"ten":"Partial: mọi trường tuỳ chọn · Required: mọi trường bắt buộc"},
+        {"t":113.03,"den":161.5,"ten":"Readonly: mọi trường đóng băng · Utility type lồng được"},
+        {"t":161.5,"den":227.69,"ten":"Cái nào trong ba, khi nào · Luyện tập & tiếp theo"}
+      ],
       "cues": [
         {"t":5,"vi":"Chương 7 dựng mapped type bằng tay; Chương 8 là thư viện của chúng."},
         {"t":11.06,"vi":"TypeScript dựng sẵn những cái hay dùng kèm tên: Partial, Required, Readonly, Pick, Omit, Record, nên bạn viết một từ thay vì một mapped hay conditional type."},
@@ -3129,8 +3508,13 @@
         {"t":215.4,"vi":"Tiếp, bài 8.2: Pick và Omit nắn một kiểu thành kiểu khác, tạo DTO, bản công khai, trái tim của một tầng API có kiểu."}
       ]
     },
-    "typescript-8-2-pick-omit": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/08-utility-types/08-02-pick-omit-50c09010.mp4","durationSec":185.89,"nguonCau":"srt",
-      "parts": [],
+    "typescript-8-2-pick-omit": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/08-utility-types/08-02-pick-omit-50c09010.mp4","durationSec":185.89,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":46.12,"ten":"Bìa bài · Omit: một kiểu trừ vài khoá"},
+        {"t":46.12,"den":91.48,"ten":"Omit từ chối các trường nó đã bỏ"},
+        {"t":91.48,"den":140.95,"ten":"Omit chặn một vụ lộ lúc biên dịch"},
+        {"t":140.95,"den":185.89,"ten":"Pick hay Omit, khi nào · Luyện tập & tiếp theo"}
+      ],
       "cues": [
         {"t":5,"vi":"Một API gần như không bao giờ gửi hay nhận cả một model."},
         {"t":9.69,"vi":"Một body tạo bỏ những trường server sở hữu; một bản công khai giấu password hash."},
@@ -3158,8 +3542,13 @@
         {"t":178.52,"vi":"Tiếp, bài 8.3: Record, utility cho một bảng phải có một mục cho mỗi khoá."}
       ]
     },
-    "typescript-8-3-record": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/08-utility-types/08-03-record-c08ae083.mp4","durationSec":180.05,"nguonCau":"srt",
-      "parts": [],
+    "typescript-8-3-record": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/08-utility-types/08-03-record-c08ae083.mp4","durationSec":180.05,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":51.72,"ten":"Bìa bài · Một bảng phải đầy đủ"},
+        {"t":51.72,"den":101.39,"ten":"Bỏ sót một khoá là một lỗi · Chế độ mở: khoá string"},
+        {"t":101.39,"den":153.93,"ten":"Chế độ mở từ chối một lần đọc không chặn"},
+        {"t":153.93,"den":180.05,"ten":"Luyện tập & tiếp theo"}
+      ],
       "cues": [
         {"t":5,"vi":"Record dựng một bảng: Record của Keys và V là một object với một mục kiểu V cho mỗi khoá."},
         {"t":12.16,"vi":"Bạn đã gặp nó như một mapped type ở bài 7.1; ở đây nó là công cụ hằng ngày cho một bảng tra."},
@@ -3184,8 +3573,13 @@
         {"t":167.22,"vi":"Tiếp, bài 8.4: các utility lọc union, Exclude và NonNullable, và đọc kiểu ra từ hàm, ReturnType, Parameters và Awaited."}
       ]
     },
-    "typescript-8-4-exclude-returntype-awaited": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/08-utility-types/08-04-exclude-returntype-awaited-ede820d2.mp4","durationSec":184.77,"nguonCau":"srt",
-      "parts": [],
+    "typescript-8-4-exclude-returntype-awaited": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/08-utility-types/08-04-exclude-returntype-awaited-ede820d2.mp4","durationSec":184.77,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":60.83,"ten":"Bìa bài · Exclude: bỏ thành viên khỏi một union"},
+        {"t":60.83,"den":110.29,"ten":"NonNullable: bỏ null và undefined"},
+        {"t":110.29,"den":161.99,"ten":"Parameters & Awaited · Đọc kiểu, đừng khai lại"},
+        {"t":161.99,"den":184.77,"ten":"Luyện tập & Lab 8"}
+      ],
       "cues": [
         {"t":5,"vi":"Những utility cuối làm hai việc: lọc một union, và đọc một kiểu ra từ mã có sẵn."},
         {"t":12.07,"vi":"Exclude và NonNullable bỏ thành viên khỏi một union; ReturnType, Parameters và Awaited rút kết quả, tham số và giá trị đã resolve ra từ một hàm."},
@@ -3211,8 +3605,14 @@
         {"t":174.91,"vi":"Tiếp là Lab 8: dựng lại Partial, Pick, Omit từ số 0, rồi dùng chúng dựng tầng DTO của API."}
       ]
     },
-    "typescript-8-6-lab-utility-dto": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/08-utility-types/08-06-lab-utility-dto-f8c6e41d.mp4","durationSec":466.46,"nguonCau":"srt",
-      "parts": [],
+    "typescript-8-6-lab-utility-dto": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/08-utility-types/08-06-lab-utility-dto-f8c6e41d.mp4","durationSec":466.46,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":97.88,"ten":"Chào · Lab 8 · Bìa Lab 8"},
+        {"t":97.88,"den":203.03,"ten":"Bản khởi đầu — mọi thứ là any · Chấm nguyên trạng: năm điểm"},
+        {"t":203.03,"den":287.15,"ten":"Lần thử B — MyPick không ràng buộc (9,5)"},
+        {"t":287.15,"den":405.23,"ten":"Lời giải tham khảo: mười trên mười · MyOmit chạy từng bước"},
+        {"t":405.23,"den":466.46,"ten":"Trước khi coi là xong · Tóm tắt & luyện tiếp"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Lab 8 của khoá TypeScript, bài thực hành cuối Chương 8 về utility types."},
         {"t":12.48,"vi":"Chương này bạn đã dùng Partial, Pick, Omit, Record và Exclude, những mapped type được đặt tên sẵn."},
@@ -3284,8 +3684,13 @@
         {"t":457.5,"vi":"Bài sau mở Chương 9: tsc và tsconfig, những cờ làm tất cả những điều này trở nên strict."}
       ]
     },
-    "typescript-9-1-tsc-and-tsconfig": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/09-tsconfig-trinh-bien-dich/09-01-tsconfig-tour-16af93eb.mp4","durationSec":180.72,"nguonCau":"srt",
-      "parts": [],
+    "typescript-9-1-tsc-and-tsconfig": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/09-tsconfig-trinh-bien-dich/09-01-tsconfig-tour-16af93eb.mp4","durationSec":180.72,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":51.92,"ten":"Bìa bài · Bạn sẽ học gì ở chương này"},
+        {"t":51.92,"den":99.43,"ten":"Kiểu bị xoá — thấy tận mắt · Lỗ hổng: tsc chỉ kiểm dự án"},
+        {"t":99.43,"den":150.7,"ten":"Bịt lỗ hổng: một config thứ hai"},
+        {"t":150.7,"den":180.72,"ten":"Luyện tập & tiếp theo"}
+      ],
       "cues": [
         {"t":5,"vi":"Tám chương bạn đã viết kiểu; chương này nói về công cụ kiểm chúng và tệp cấu hình nó."},
         {"t":11.55,"vi":"tsc đọc code, kiểm kiểu, và trong khoá này không sinh ra gì; Node tự chạy tệp ti ét."},
@@ -3310,8 +3715,12 @@
         {"t":171.75,"vi":"Tiếp, bài 9.2: cờ strict, một công tắc bật các phép kiểm đã bắt phần lớn bug trong khoá này."}
       ]
     },
-    "typescript-9-2-strict-mode": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/09-tsconfig-trinh-bien-dich/09-02-strict-mode-72857e70.mp4","durationSec":162.72,"nguonCau":"srt",
-      "parts": [],
+    "typescript-9-2-strict-mode": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/09-tsconfig-trinh-bien-dich/09-02-strict-mode-72857e70.mp4","durationSec":162.72,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":54.27,"ten":"Bìa bài · noImplicitAny: không any âm thầm"},
+        {"t":54.27,"den":105.6,"ten":"strictNullChecks: null là kiểu riêng"},
+        {"t":105.6,"den":162.72,"ten":"Chiếc ô strict bật những gì · Luyện tập & tiếp theo"}
+      ],
       "cues": [
         {"t":5.05,"vi":"Một cờ, strict, bật các phép kiểm làm TypeScript đáng dùng; nó là một chiếc ô trên vài cờ."},
         {"t":12.27,"vi":"Hai cái bạn cảm nhận rõ nhất là noImplicitAny, không giá trị nào lọt vào mà không có kiểu, và strictNullChecks, null và undefined là kiểu riêng."},
@@ -3334,8 +3743,12 @@
         {"t":150.02,"vi":"Tiếp, bài 9.3: các cờ an toàn không nằm trong chiếc ô strict nhưng đáng thêm, noUncheckedIndexedAccess, noImplicitReturns, noUnusedLocals."}
       ]
     },
-    "typescript-9-3-extra-safety-flags": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/09-tsconfig-trinh-bien-dich/09-03-safety-flags-91bfcc9e.mp4","durationSec":157.79,"nguonCau":"srt",
-      "parts": [],
+    "typescript-9-3-extra-safety-flags": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/09-tsconfig-trinh-bien-dich/09-03-safety-flags-91bfcc9e.mp4","durationSec":157.79,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":53.28,"ten":"Bìa bài · noUncheckedIndexedAccess: một truy cập có thể hụt"},
+        {"t":53.28,"den":104.96,"ten":"noImplicitReturns: mọi nhánh phải trả về"},
+        {"t":104.96,"den":157.79,"ten":"Ngoài strict — khi nào thêm cái nào · Luyện tập & tiếp theo"}
+      ],
       "cues": [
         {"t":5,"vi":"strict không phải là hết; một nhúm cờ nằm ngoài chiếc ô vì chúng chặt hơn mức hầu hết dự án muốn mặc định."},
         {"t":13.19,"vi":"Nhưng trên một mã nguồn bạn trân trọng, chúng bắt bug thật."},
@@ -3357,8 +3770,12 @@
         {"t":145.76,"vi":"Tiếp, bài 9.4: các cờ tả thế giới code bạn chạy trong đó, target, lib và module, và noEmit, cái làm tsc thành một cổng CI."}
       ]
     },
-    "typescript-9-4-target-lib-module": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/09-tsconfig-trinh-bien-dich/09-04-target-lib-module-237067e3.mp4","durationSec":172.45,"nguonCau":"srt",
-      "parts": [],
+    "typescript-9-4-target-lib-module": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/09-tsconfig-trinh-bien-dich/09-04-target-lib-module-237067e3.mp4","durationSec":172.45,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":56.34,"ten":"Bìa bài · lib: những API nào tồn tại"},
+        {"t":56.34,"den":114.46,"ten":"target so với lib: cú pháp so với API"},
+        {"t":114.46,"den":172.45,"ten":"noEmit: cổng CI · Luyện tập & Lab 9"}
+      ],
       "cues": [
         {"t":5,"vi":"Nhóm cờ cuối tả thế giới code bạn chạy trong đó."},
         {"t":8.6,"vi":"target và lib nói bạn viết cho JavaScript nào; module nói import phân giải ra sao; và noEmit nói tsc nên kiểm mà không sinh một tệp nào."},
@@ -3381,8 +3798,14 @@
         {"t":163.94,"vi":"Bật strict và các cờ thêm, đóng lỗ hổng seed, và làm tsc noEmit qua như một cổng CI."}
       ]
     },
-    "typescript-9-6-lab-siet-strict": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/09-tsconfig-trinh-bien-dich/09-06-lab-siet-strict-46d37a2d.mp4","durationSec":482.57,"nguonCau":"srt",
-      "parts": [],
+    "typescript-9-6-lab-siet-strict": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/typescript/09-tsconfig-trinh-bien-dich/09-06-lab-siet-strict-46d37a2d.mp4","durationSec":482.57,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":103.29,"ten":"Chào · Lab 9 · Bìa Lab 9"},
+        {"t":103.29,"den":196.14,"ten":"Bản lỏng — cổng CI vẫn xanh · Bật strict — ba lỗi hiện ra"},
+        {"t":196.14,"den":289.5,"ten":"strict là một chùm cờ — và cờ nằm ngoài · Tám cách dùng lỏng"},
+        {"t":289.5,"den":378.79,"ten":"Lần thử B — seed vẫn chép tay (9/10)"},
+        {"t":378.79,"den":482.57,"ten":"Gõ lại lời giải · Trước khi coi là xong"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Lab 9 của khoá TypeScript, bài thực hành cuối Chương 9 về tsconfig và trình biên dịch."},
         {"t":14.35,"vi":"Chương này mình đã thấy strict là cả một nhóm cờ, và có những cờ an toàn thêm như noUncheckedIndexedAccess."},

@@ -7,8 +7,7 @@ import { X } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { MessageCircle } from 'lucide-react';
-import LottieClient from '@/components/ui/LottieClient';
-import type { LottieRefCurrentProps } from 'lottie-react';
+import { CuongMiniRobot, type CamXucCuongMini } from '@/components/cuongmini/CuongMiniRobot';
 import { useChatStore } from '@/store/chatStore';
 import { useMusicStore } from '@/store/musicStore';
 import { useReduceAnimations } from '@/hooks/useIsTouch';
@@ -48,7 +47,12 @@ export default function FloatingAIAssistant() {
  // quãng cuộn xuống mục gia sư cuối bài càng dài — tức chỗ nó CẦN nhất lại
  // đang là chỗ duy nhất nó bị ẩn. `dangHocBai` do `CourseTutor` ghi vào kho
  // khi bài được mở, nên ngoại lệ này chỉ mở đúng lúc đang học.
- const dangHocBai = !!useGiaSuBaiStore((st) => st.bai);
+ //
+ // ⚠️ 17/11/2026: nhận trang học theo ĐƯỜNG DẪN trước, kho `bai` chỉ là đường phụ. `bai` do `CourseTutor` ghi SAU khi
+ // khoá + bài tải xong, nên chỉ dựa vào nó thì trên máy cảm ứng nút bị ẩn suốt lúc tải rồi mới bật ra — một phần của
+ // lỗi "icon hiện rồi biến" (docs/so-loi.md).
+ const laTrangHoc = /^\/courses\/[^/]+\/learn(?:\/|$)/.test(pathname ?? '');
+ const dangHocBai = !!useGiaSuBaiStore((st) => st.bai) || laTrangHoc;
  const hiddenOnMobile =
    pathname !== '/' &&
    !dangHocBai &&
@@ -88,25 +92,25 @@ export default function FloatingAIAssistant() {
    || hiddenOnMobile,
  );
 
- const { isStreaming, robotEmotion } = useChatStore();
+ // Selector RIÊNG từng trường: `useChatStore()` trần đăng ký cả kho chat, nên MỖI mẩu chữ AI chảy về ở bất kỳ đâu
+ // cũng vẽ lại nút này (và trước 17/11 còn khởi động lại vòng nhún framer của nó — robot giật).
+ const isStreaming = useChatStore((s) => s.isStreaming);
+ const robotEmotion = useChatStore((s) => s.robotEmotion);
  // When a track is loaded the mobile music bar sits above the bottom nav;
  // lift the robot above the bar too so it never overlaps it (mobile only —
  // see `.ai-robot-fab` in globals.css). 84px ≈ the mini-bar's height.
  const musicActive = useMusicStore((s) => !!s.currentTrack);
- // On touch / reduced-motion devices, render the idle bubble WITHOUT the
- // always-looping framer animations (this component is mounted on every page,
- // so those infinite loops run globally). Desktop/fine-pointer is unaffected.
+ // Máy cảm ứng / giảm chuyển động: CuongMini đứng yên (CSS `prefers-reduced-motion` lo phần còn lại).
  const reduceAnim = useReduceAnimations();
- const lottieRef = useRef<LottieRefCurrentProps>(null);
 
   const [isOpen, setIsOpen] = useState(false);
   const [showTooltip, setShowTooltip] = useState(false);
   const [tooltipMessage, setTooltipMessage] = useState('');
-  const [robotData, setRobotData] = useState<object | null>(null);
-  // "Người dùng đã tỏ ý quan tâm tới con robot chưa?" — cờ mở cửa cho 360KB
-  // Lottie. Bật bởi: rê chuột vào, focus bàn phím, bấm mở chat, hoặc AI bắt
-  // đầu trả lời. Xem khối useEffect nạp hoạt hình để biết vì sao.
-  const [wantsAnim, setWantsAnim] = useState(false);
+  const [hover, setHover] = useState(false);
+  /** Vừa bấm ⇒ CuongMini nhảy tưng một nhịp. */
+  const [vuaBam, setVuaBam] = useState(false);
+  /** Mờ dần khi xuất hiện — CHỈ lần đầu trong một lần tải trang (xem chú thích ở JSX). */
+  const [lanDau, setLanDau] = useState(() => { const l = !daHienLanDau; daHienLanDau = true; return l; });
   const idleTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const tooltipTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -115,92 +119,19 @@ export default function FloatingAIAssistant() {
     : robotEmotion === 'typing'
     ? 'typing'
     : 'idle';
+  const mood: CamXucCuongMini = robotState === 'thinking' ? 'nghi' : robotState === 'typing' ? 'noi' : vuaBam ? 'vui' : 'thuong';
 
-  // ─── Nạp hoạt hình robot: CHỈ KHI NGƯỜI DÙNG CHẠM TỚI NÓ ──────────────────
-  //
-  // Con robot là TRANG TRÍ, nhưng nó gắn trong layout gốc, nên trước
-  // 23/08/2026 nó kéo nguyên chuỗi này ngay khi mount, trên MỌI trang:
-  //
-  //   fetch('/animations/robot.json')  → 60KB
-  //   → setRobotData → LottieClient render → import('lottie-react')
-  //   → chunk lottie-web              → 300KB   (đo thật: dc112a36….js)
-  //
-  // Bước đầu (cùng ngày) là hoãn tới `requestIdleCallback`. Đo lại bằng
-  // Chromium thật cho thấy hoãn KHÔNG ĐỦ: máy để không thì trình duyệt rảnh
-  // gần như tức thì, chunk vẫn về ở mốc +740ms. Ra khỏi đường găng, nhưng
-  // 360KB vẫn đi — mà đại đa số khách chẳng bao giờ đụng vào con robot.
-  //
-  // Nay nó đợi một TÍN HIỆU QUAN TÂM. Bốn cửa mở, phủ hết các lối vào thật:
-  //
-  //   · rê chuột vào nút   → `onMouseEnter`
-  //   · đi bằng bàn phím   → `onFocus`   (không có cái này thì người dùng
-  //                          bàn phím vĩnh viễn thấy ảnh tĩnh)
-  //   · bấm mở chat        → `handleOpen`
-  //   · AI bắt đầu trả lời → `robotState !== 'idle'` ở effect ngay dưới; lúc
-  //                          này con robot đang DIỄN ĐẠT trạng thái (nghĩ /
-  //                          gõ), nên hoạt hình mới có nghĩa
-  //
-  // Rê chuột tới lúc bấm thường cách nhau vài trăm ms, đủ để chunk về kịp —
-  // và trong lúc chờ thì `/robot-avatar.png` (16KB) vẫn đang hiển thị, nên
-  // không có khoảng trống nào.
-  //
-  // Hai cửa chặn TUYỆT ĐỐI, đặt trước cả `wantsAnim`:
-  //
-  // 1. `hidden` → trên /admin, /creator, và trên điện thoại ở mọi trang không
-  //    phải '/', con robot còn không được vẽ. Tải hoạt hình cho một thứ
-  //    `return null` là lãng phí thuần tuý.
-  //
-  // 2. `reduceAnim` → máy cảm ứng và người bật prefers-reduced-motion vốn đã
-  //    không được xem hoạt hình lặp (xem các `animate={reduceAnim ? undefined
-  //    : …}` ở dưới). Với họ Lottie chỉ vẽ ra một khung hình đứng yên — đúng
-  //    bằng thứ ảnh PNG đang làm. Đây là nhóm hưởng lợi nhiều nhất: máy yếu,
-  //    mạng chậm, và trên cảm ứng thì "rê chuột" cũng không tồn tại.
-  //
-  // ⚠️ ĐỪNG gỡ mấy điều kiện này rồi để lại mỗi cái fetch. Chuỗi
-  // `robotData → LottieClient → import()` mới là chỗ tốn 300KB; fetch 60KB
-  // chỉ là ngòi nổ.
+  /*
+   * ── Nút nổi CÓ MẶT hay không: báo cho kho gia sư ──
+   * "Hỏi phần này" ở mục lục video mở KHUNG ROBOT khi nút này đang hiện; người dùng đã ẩn trợ lý (hoặc trang ẩn nó)
+   * thì mục gia sư cuối bài tự cuộn tới thay. Thiếu cờ này thì bấm "Hỏi phần này" lúc trợ lý bị ẩn là không có gì xảy ra.
+   */
+  const datRobotSan = useGiaSuBaiStore((s) => s.datRobotSan);
+  const sanSang = !hidden && !isLanding;
   useEffect(() => {
-    if (hidden || isLanding || reduceAnim || robotData || !wantsAnim) return;
-
-    let alive = true;
-    fetch('/animations/robot.json')
-      .then((res) => res.json())
-      .then((data) => {
-        if (alive) setRobotData(data);
-      })
-      // Im lặng: robot là trang trí, hỏng nó không đáng bẩn console của người
-      // dùng. Không có robotData thì ảnh PNG ở dưới vẫn hiển thị và nút vẫn
-      // bấm được — mất hoạt hình, không mất chức năng.
-      .catch(() => {});
-
-    return () => {
-      alive = false;
-    };
-  }, [hidden, isLanding, reduceAnim, robotData, wantsAnim]);
-
-  // AI đang nghĩ / đang gõ ⇒ mở cửa cho hoạt hình dù người dùng chưa rê chuột.
-  // Đây là lúc DUY NHẤT con robot mang thông tin chứ không chỉ trang trí:
-  // `robotState` điều khiển pause/tốc độ ở effect ngay dưới, và một ảnh tĩnh
-  // thì không nói được "đang xử lý".
-  useEffect(() => {
-    if (robotState !== 'idle') setWantsAnim(true);
-  }, [robotState]);
-
-  // Control Lottie playback based on state
-  useEffect(() => {
-    const lottie = lottieRef.current;
-    if (!lottie || !robotData) return;
-
-    if (robotState === 'thinking') {
-      lottie.pause();
-    } else if (robotState === 'typing') {
-      lottie.setSpeed(1.5);
-      lottie.play();
-    } else {
-      lottie.setSpeed(1);
-      lottie.play();
-    }
-  }, [robotState, robotData]);
+    datRobotSan(sanSang);
+    return () => datRobotSan(false);
+  }, [sanSang, datRobotSan]);
 
   const scheduleTooltip = useCallback(() => {
     if (idleTimerRef.current) clearTimeout(idleTimerRef.current);
@@ -219,7 +150,9 @@ export default function FloatingAIAssistant() {
     // On routes where the bubble is hidden, don't schedule idle tooltips —
     // otherwise a pending tooltip could flash the instant we navigate back to
     // a visible route. (The hook itself still runs; only its body is gated.)
-    if (hidden || isLanding || isOpen) {
+    // Trang học: KHÔNG hiện câu mời ngẫu nhiên — người học đang xem video, một bong bóng bật lên mỗi 6–8 s là đúng thứ
+    // "hiện rồi biến" làm phiền nhất.
+    if (hidden || isLanding || isOpen || laTrangHoc) {
       setShowTooltip(false);
       if (idleTimerRef.current) clearTimeout(idleTimerRef.current);
       if (tooltipTimerRef.current) clearTimeout(tooltipTimerRef.current);
@@ -230,11 +163,10 @@ export default function FloatingAIAssistant() {
       if (idleTimerRef.current) clearTimeout(idleTimerRef.current);
       if (tooltipTimerRef.current) clearTimeout(tooltipTimerRef.current);
     };
-  }, [hidden, isLanding, isOpen, scheduleTooltip]);
+  }, [hidden, isLanding, isOpen, laTrangHoc, scheduleTooltip]);
 
   const handleMouseEnter = () => {
-    // Tín hiệu quan tâm đầu tiên và phổ biến nhất — bắt đầu kéo Lottie về.
-    setWantsAnim(true);
+    setHover(true);
     if (!isOpen) {
       setShowTooltip(false);
       if (idleTimerRef.current) clearTimeout(idleTimerRef.current);
@@ -243,23 +175,32 @@ export default function FloatingAIAssistant() {
   };
 
   const handleMouseLeave = () => {
-    if (!isOpen) scheduleTooltip();
+    setHover(false);
+    if (!isOpen && !laTrangHoc) scheduleTooltip();
   };
 
   const handleOpen = () => {
-    // Bấm thẳng mà không rê (bàn phím, hoặc chuột đi rất nhanh) vẫn phải mở
-    // cửa cho hoạt hình.
-    setWantsAnim(true);
     setIsOpen(true);
     setShowTooltip(false);
+    setVuaBam(true);
+    window.setTimeout(() => setVuaBam(false), 950);
   };
+
+  /* "Hỏi phần này" / "Hỏi slide này" / phím tắt ⇒ mở khung (ChatModal tự chuyển về chế độ gia sư). */
+  const moYeuCau = useGiaSuBaiStore((s) => s.moYeuCau);
+  const daThayYeuCau = useRef(moYeuCau);
+  useEffect(() => {
+    if (moYeuCau === daThayYeuCau.current) return;
+    daThayYeuCau.current = moYeuCau;
+    if (sanSang) { setIsOpen(true); setShowTooltip(false); }
+  }, [moYeuCau, sanSang]);
 
   // Note: the messaging widget sits above the AI robot (bottom-24 vs
   // bottom-6), so they don't overlap and the AI robot stays put.
 
   const handleClose = () => {
     setIsOpen(false);
-    if (!isLanding) scheduleTooltip();
+    if (!isLanding && !laTrangHoc) scheduleTooltip();
   };
 
   // Route-based hide happens HERE — after every hook has run — so the hook
@@ -293,15 +234,24 @@ export default function FloatingAIAssistant() {
     );
   }
 
+  /*
+   * ⚠️⚠️ NÚT NỔI PHẢI ĐỨNG YÊN MỘT CHỖ, MỘT HÌNH (17/11/2026 — "icon hiện rồi biến").
+   *
+   * Ba thứ từng làm nó chớp tắt, đều đã gỡ:
+   *   1. Đổi ẢNH: `robot-avatar.png` → Lottie khi rê chuột / khi AI trả lời. `LottieClient` vẽ một ô `visibility:hidden`
+   *      ở lần vẽ đầu rồi `next/dynamic` trả `null` tới khi chunk lottie-web (~300 KB) về ⇒ con robot BIẾN MẤT một
+   *      nhịp rồi hiện lại thành hình khác. Nay là SVG CuongMini nội tuyến — không có gì phải tải.
+   *   2. Bật vào từ 0: `motion.div initial={{ scale: 0, opacity: 0 }}` + trễ 0,5 s chạy lại MỖI LẦN nút gắn lại
+   *      (ẩn/hiện theo trang, máy cảm ứng chờ kho `bai`). Nay chỉ mờ dần MỘT lần mỗi lần tải trang (`daHienLanDau`).
+   *   3. Máy cảm ứng: nút trên trang học chỉ hiện SAU khi `CourseTutor` gắn xong và ghi `bai` vào kho — tức là ẩn suốt
+   *      lúc tải khoá rồi mới bật ra. Nay nhận trang học theo ĐƯỜNG DẪN (`laTrangHoc`), biết ngay từ lần vẽ đầu.
+   */
   return (
     <>
-      {/* Floating Robot */}
-      <motion.div
-        className="ai-robot-fab fixed bottom-6 right-6 z-[100]"
+      <div
+        className={`ai-robot-fab fixed bottom-6 right-6 z-[100] ${lanDau && !reduceAnim ? 'cmr-fab-vao' : ''}`}
+        onAnimationEnd={(e) => { if (e.target === e.currentTarget) setLanDau(false); }}
         style={{ ['--music-offset' as string]: musicActive ? '84px' : '0px' } as React.CSSProperties}
-        initial={{ scale: 0, opacity: 0, y: 20 }}
-        animate={{ scale: 1, opacity: 1, y: 0 }}
-        transition={{ delay: 0.5, type: 'spring', stiffness: 300, damping: 20 }}
       >
         {/* Tooltip bubble */}
         <AnimatePresence>
@@ -325,14 +275,8 @@ export default function FloatingAIAssistant() {
           )}
         </AnimatePresence>
 
-        {/* Robot container */}
         <div className="group/rb relative flex flex-col items-end">
-          {/* Nút ẩn NGAY TẠI ĐÂY.
-              Người dùng báo "nhiều lúc nó rất rối muốn tắt không được" — và
-              đúng là không có đường nào tắt. Bắt họ đi tìm trong Cài đặt →
-              Giao diện là bắt rời trang đang đọc, đúng lúc thứ làm phiền đang
-              che mất nội dung. Hiện khi rê chuột, để nó không thành một dấu X
-              lúc nào cũng lơ lửng cạnh con robot. */}
+          {/* Nút ẩn NGAY TẠI ĐÂY — hiện khi rê chuột (người dùng: "muốn tắt không được"). */}
           <button
             type="button"
             onClick={(e) => {
@@ -346,104 +290,30 @@ export default function FloatingAIAssistant() {
           >
             <X aria-hidden className="h-3.5 w-3.5" />
           </button>
-          {/* Thinking bubble */}
-          <AnimatePresence>
-            {robotState === 'thinking' && (
-              <motion.div
-                initial={{ opacity: 0, scale: 0.8, y: 8 }}
-                animate={{ opacity: 1, scale: 1, y: 0 }}
-                exit={{ opacity: 0, scale: 0.8, y: 8 }}
-                className="absolute -top-14 right-0 mb-2"
-              >
-                <div className="bg-darkcard border border-neon-violet/30 rounded-2xl px-3 py-2 shadow-xl">
-                  <div className="flex gap-1">
-                    {[0, 1, 2].map((i) => (
-                      <motion.div
-                        key={i}
-                        className="w-1.5 h-1.5 rounded-full bg-neon-violet"
-                        animate={reduceAnim ? undefined : { y: [0, -3, 0], opacity: [0.3, 1, 0.3] }}
-                        transition={reduceAnim ? undefined : { duration: 0.8, repeat: Infinity, delay: i * 0.15 }}
-                      />
-                    ))}
-                  </div>
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
 
-          {/* Lottie Robot Button */}
-          <motion.button
+          <button
+            type="button"
             onClick={handleOpen}
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
-            // Người đi bằng Tab không bao giờ bắn `mouseenter`. Thiếu dòng này
-            // thì họ vĩnh viễn chỉ thấy ảnh tĩnh.
-            onFocus={() => setWantsAnim(true)}
-            whileHover={{ scale: 1.12 }}
-            whileTap={{ scale: 0.92 }}
-            animate={
-              reduceAnim
-                ? undefined
-                : robotState === 'thinking'
-                ? { rotate: [-3, 3, -3], transition: { duration: 0.5, repeat: Infinity } }
-                : { y: [0, -4, 0], transition: { duration: 3, repeat: Infinity, ease: 'easeInOut' } }
-            }
-            className="relative w-20 h-20 cursor-pointer focus:outline-none"
-            style={{ filter: 'drop-shadow(0 8px 32px rgba(139, 92, 246, 0.4))' }}
-            aria-label="Open Ai CuongMini"
+            onFocus={() => setHover(true)}
+            onBlur={() => setHover(false)}
+            className="cmr-fab relative flex h-20 w-20 cursor-pointer items-center justify-center rounded-3xl focus:outline-none focus-visible:ring-2 focus-visible:ring-neon-violet"
+            aria-label={laTrangHoc ? 'Mở CuongMini — gia sư bài học (phím A)' : 'Mở trợ lý CuongMini'}
+            title={laTrangHoc ? 'Hỏi CuongMini về bài này (phím A)' : 'Trợ lý CuongMini'}
           >
-            {/* Glow ring */}
-            <motion.div
-              animate={reduceAnim ? undefined : { scale: [1, 1.12, 1], opacity: [0.25, 0.5, 0.25] }}
-              transition={reduceAnim ? undefined : { duration: 2.5, repeat: Infinity }}
-              className="absolute inset-0 rounded-3xl bg-gradient-to-br from-neon-indigo via-neon-violet to-neon-fuchsia"
-            />
+            <span className="cmr-fab-nen" aria-hidden />
+            <CuongMiniRobot mood={mood} size={66} hover={hover && !reduceAnim} chopMat={!reduceAnim} />
+          </button>
 
-            {/* Ảnh tĩnh là TRẠNG THÁI MẶC ĐỊNH, không phải khung chờ.
-                `robot-avatar.png` (16KB, có sẵn trong `public/`) là thứ khách
-                thấy cho tới khi họ rê chuột / focus / mở chat — xem effect nạp
-                hoạt hình ở trên. Với `reduceAnim` (cảm ứng, hoặc đã xin bớt
-                chuyển động) thì đây là bản CUỐI CÙNG: không hoạt hình, và cũng
-                không tải 360KB về. */}
-            <div className="relative w-full h-full rounded-3xl overflow-hidden">
-              {robotData ? (
-                <LottieClient
-                  lottieRef={lottieRef}
-                  animationData={robotData}
-                  loop
-                  autoplay
-                  style={{ width: '100%', height: '100%' }}
-                />
-              ) : (
-                /* eslint-disable-next-line @next/next/no-img-element */
-                <img
-                  src="/robot-avatar.png"
-                  alt=""
-                  aria-hidden
-                  width={80}
-                  height={80}
-                  className="h-full w-full object-contain"
-                />
-              )}
-            </div>
-          </motion.button>
-
-          {/* Streaming dot */}
+          {/* Chấm "đang trả lời" — CSS thuần, không vòng lặp framer. */}
           {isStreaming && (
-            <motion.div
-              animate={reduceAnim ? undefined : { scale: [1, 1.3, 1] }}
-              transition={reduceAnim ? undefined : { duration: 1, repeat: Infinity }}
-              className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 rounded-full border-2 border-darkbg flex items-center justify-center"
-            >
-              <motion.div
-                animate={reduceAnim ? undefined : { opacity: [0.4, 1] }}
-                transition={reduceAnim ? undefined : { duration: 0.5, repeat: Infinity }}
-                className="w-2 h-2 bg-white rounded-full"
-              />
-            </motion.div>
+            <span className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full border-2 border-darkbg bg-red-500" aria-hidden>
+              <span className="h-2 w-2 animate-pulse rounded-full bg-white" />
+            </span>
           )}
         </div>
-      </motion.div>
+      </div>
 
       {/* Chat Modal */}
       <AnimatePresence>
@@ -452,3 +322,6 @@ export default function FloatingAIAssistant() {
     </>
   );
 }
+
+/** Nút nổi đã hiện ít nhất một lần trong lần tải trang này ⇒ những lần gắn lại sau không mờ dần nữa. */
+let daHienLanDau = false;

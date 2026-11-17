@@ -138,9 +138,9 @@ export default function MoiVaoPhongVideo({ lessonId, duongDanVe, track }: {
           </p>
           {coPd && rieng ? (
             <p className="mt-1 text-sm leading-relaxed text-text-secondary">
-              Trong phòng: phụ đề tiếng Việt bấm được để tua, mục lục theo đúng các phần của video,
-              và gia sư AI <strong className="text-text-primary">đã đọc lời giảng video này</strong> —
-              hỏi kiểu &ldquo;chỗ 3:20 em chưa hiểu&rdquo;, xin tóm tắt, giải thích thuật ngữ, vẽ sơ đồ.
+              Gia sư CuongMini <strong className="text-text-primary">đã đọc lời giảng video này</strong> — ngay ở
+              trang này bạn hỏi được từng phần qua mục lục dưới video. Phòng học thêm phụ đề tiếng Việt chạy theo
+              video (bấm câu nào tua tới đó) và khung hỏi đáp rộng bên cạnh.
             </p>
           ) : coPd ? (
             <p className="mt-1 text-sm leading-relaxed text-text-secondary">

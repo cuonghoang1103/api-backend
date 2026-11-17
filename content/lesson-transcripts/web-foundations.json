@@ -2,18 +2,11 @@
   "courseSlug": "web-foundations",
   "sinhBoi": "scripts/phu-de-tu-video-rieng.mjs",
   "lessons": {
-    "wf-0-0-slides": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/00-gioi-thieu-nen-tang-cai-dat/00-00-slide-tong-quan-muc-0-78214476.mp4","durationSec":288.59,"nguonCau":"thoigian",
+    "wf-0-0-slides": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/00-gioi-thieu-nen-tang-cai-dat/00-00-slide-tong-quan-muc-0-78214476.mp4","durationSec":288.59,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":16.43,"ten":"Bắt đầu từ đâu"},
-        {"t":16.43,"den":31.46,"ten":"Nội dung"},
-        {"t":31.45,"den":61.35,"ten":"Khoá này dành cho ai"},
-        {"t":61.34,"den":89.85,"ten":"Gõ một địa chỉ — rồi chuyện gì xảy ra"},
-        {"t":89.85,"den":122.13,"ten":"Client và Server"},
-        {"t":122.13,"den":146.67,"ten":"Frontend · Backend · Full-stack"},
-        {"t":146.67,"den":170.71,"ten":"Bốn phần mềm cần cài"},
-        {"t":170.71,"den":192.19,"ten":"Kiểm đã cài xong chưa"},
-        {"t":192.19,"den":225.2,"ten":"DevTools"},
-        {"t":225.2,"den":253.17,"ten":"Cách học để không bỏ cuộc"},
+        {"t":0,"den":89.85,"ten":"Bắt đầu từ đâu · Nội dung"},
+        {"t":89.85,"den":170.71,"ten":"Client và Server · Frontend · Backend · Full-stack"},
+        {"t":170.71,"den":253.17,"ten":"Kiểm đã cài xong chưa · DevTools"},
         {"t":253.17,"den":288.59,"ten":"Bản đồ cả khoá"}
       ],
       "cues": [
@@ -62,16 +55,12 @@
         {"t":280.88,"vi":"Giờ thì vào bài đầu tiên thôi. Hẹn gặp bạn ở bài 0.1."}
       ]
     },
-    "wf-0-1-gioi-thieu-lo-trinh": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/00-gioi-thieu-nen-tang-cai-dat/00-01-khoa-nay-cho-ai-va-lo-trinh-86e7d064.mp4","durationSec":308.71,"nguonCau":"thoigian",
+    "wf-0-1-gioi-thieu-lo-trinh": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/00-gioi-thieu-nen-tang-cai-dat/00-01-khoa-nay-cho-ai-va-lo-trinh-86e7d064.mp4","durationSec":308.71,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":29.92,"ten":"Vì sao có khoá này"},
-        {"t":29.92,"den":73.82,"ten":"Lập trình web là gì"},
-        {"t":73.82,"den":100.49,"ten":"Vì sao học nền tảng trước"},
-        {"t":100.49,"den":159.61,"ten":"Lộ trình toàn khoá"},
-        {"t":159.61,"den":201.26,"ten":"Bốn tầng của một ứng dụng web"},
-        {"t":201.26,"den":239.34,"ten":"Cái bẫy: xem thay vì gõ"},
-        {"t":239.34,"den":281.71,"ten":"Bài tập"},
-        {"t":281.71,"den":308.71,"ten":"Tóm tắt"}
+        {"t":0,"den":73.82,"ten":"Vì sao có khoá này · Lập trình web là gì"},
+        {"t":73.82,"den":159.61,"ten":"Vì sao học nền tảng trước · Lộ trình toàn khoá"},
+        {"t":159.61,"den":239.34,"ten":"Bốn tầng của một ứng dụng web · Cái bẫy: xem thay vì gõ"},
+        {"t":239.34,"den":308.71,"ten":"Bài tập · Tóm tắt"}
       ],
       "cues": [
         {"t":5.1,"vi":"Bạn đã bao giờ mở một khoá Node.js hay Next.js, rồi thấy lạc lối chỉ sau mười phút chưa?"},
@@ -126,19 +115,12 @@
         {"t":298.52,"vi":"Bài tiếp theo, chúng ta sẽ xem web hoạt động thế nào trong một bức tranh. Hẹn gặp bạn ở bài 0.2."}
       ]
     },
-    "wf-0-2-web-hoat-dong": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/00-gioi-thieu-nen-tang-cai-dat/00-02-web-hoat-dong-the-nao-fa1a0076.mp4","durationSec":418.85,"nguonCau":"thoigian",
+    "wf-0-2-web-hoat-dong": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/00-gioi-thieu-nen-tang-cai-dat/00-02-web-hoat-dong-the-nao-fa1a0076.mp4","durationSec":418.85,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":36.58,"ten":"Chuyện gì xảy ra khi bấm Enter"},
-        {"t":36.58,"den":67.51,"ten":"Chặng 1 — Tra DNS"},
-        {"t":67.51,"den":100.14,"ten":"Chặng 2 — Mở kết nối"},
-        {"t":100.14,"den":135.27,"ten":"Chặng 3 & 4 — Request và response"},
-        {"t":135.27,"den":177.83,"ten":"Request chỉ là văn bản"},
-        {"t":177.83,"den":210.48,"ten":"Chặng 4 — Trình duyệt vẽ trang"},
-        {"t":210.48,"den":242.99,"ten":"Chặng 5 — Thêm request, dữ liệu JSON"},
-        {"t":242.99,"den":288.77,"ten":"Bẫy: một trang = một request?"},
-        {"t":288.77,"den":330.12,"ten":"Client và server — ai làm gì"},
-        {"t":330.11,"den":382.03,"ten":"Bài tập"},
-        {"t":382.03,"den":418.85,"ten":"Tóm tắt"}
+        {"t":0,"den":100.14,"ten":"Chuyện gì xảy ra khi bấm Enter · Chặng 1 — Tra DNS"},
+        {"t":100.14,"den":177.83,"ten":"Chặng 3 & 4 — Request và response · Request chỉ là văn bản"},
+        {"t":177.83,"den":288.77,"ten":"Chặng 4 — Trình duyệt vẽ trang"},
+        {"t":288.77,"den":418.85,"ten":"Client và server — ai làm gì · Bài tập"}
       ],
       "cues": [
         {"t":5.1,"vi":"Bạn gõ cuongthai.com vào thanh địa chỉ, bấm Enter, và chưa tới một giây sau trang web đã hiện ra."},
@@ -208,19 +190,12 @@
         {"t":408.68,"vi":"Bài tiếp theo, mình sẽ cài đặt máy của bạn bằng các công cụ miễn phí. Hẹn gặp bạn ở bài 0.3."}
       ]
     },
-    "wf-0-3-cai-dat-may": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/00-gioi-thieu-nen-tang-cai-dat/00-03-cai-dat-may-9ce4ec71.mp4","durationSec":424.9,"nguonCau":"thoigian",
+    "wf-0-3-cai-dat-may": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/00-gioi-thieu-nen-tang-cai-dat/00-03-cai-dat-may-9ce4ec71.mp4","durationSec":424.9,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":36.34,"ten":"Bộ đồ nghề của bạn"},
-        {"t":36.34,"den":74.01,"ten":"① Trình duyệt + DevTools"},
-        {"t":74.01,"den":107.86,"ten":"② VS Code + 2 tiện ích"},
-        {"t":107.86,"den":154.85,"ten":"③ Node.js & npm"},
-        {"t":154.85,"den":194.22,"ten":"④ Git & GitHub"},
-        {"t":194.22,"den":222.52,"ten":"Terminal trong một phút"},
-        {"t":222.52,"den":268.64,"ten":"Vấp đầu tiên: command not found"},
-        {"t":268.64,"den":301.3,"ten":"Kiểm trước khi tin"},
-        {"t":301.3,"den":342.58,"ten":"Bẫy: hướng dẫn sai phiên bản"},
-        {"t":342.58,"den":393.21,"ten":"Bài tập"},
-        {"t":393.21,"den":424.9,"ten":"Tóm tắt"}
+        {"t":0,"den":107.86,"ten":"Bộ đồ nghề của bạn · ① Trình duyệt + DevTools"},
+        {"t":107.86,"den":194.22,"ten":"③ Node.js & npm · ④ Git & GitHub"},
+        {"t":194.22,"den":301.3,"ten":"Terminal trong một phút · Vấp đầu tiên: command not found"},
+        {"t":301.3,"den":424.9,"ten":"Bẫy: hướng dẫn sai phiên bản · Bài tập"}
       ],
       "cues": [
         {"t":5.1,"vi":"Trước khi gõ dòng code đầu tiên, bạn cần một bộ đồ nghề, giống như người thợ mộc cần cưa và búa vậy."},
@@ -299,19 +274,12 @@
         {"t":415.06,"vi":"Bài tiếp theo, mình sẽ nói về cách học khoá này mà không bỏ cuộc. Hẹn gặp bạn ở bài 0.4."}
       ]
     },
-    "wf-0-4-cach-hoc": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/00-gioi-thieu-nen-tang-cai-dat/00-04-cach-hoc-khong-bo-cuoc-f1e5e262.mp4","durationSec":417.33,"nguonCau":"thoigian",
+    "wf-0-4-cach-hoc": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/00-gioi-thieu-nen-tang-cai-dat/00-04-cach-hoc-khong-bo-cuoc-f1e5e262.mp4","durationSec":417.33,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":27.13,"ten":"Người học xong và người bỏ cuộc"},
-        {"t":27.13,"den":70.77,"ten":"Thói quen 1 — Xây, đừng chỉ xem"},
-        {"t":70.77,"den":112.99,"ten":"Thói quen 2 — Lỗi là chỉ dẫn"},
-        {"t":112.99,"den":149.41,"ten":"Thói quen 3 — DevTools & console.log"},
-        {"t":149.4,"den":181.88,"ten":"Thói quen 4 — Tài liệu, MDN trước tiên"},
-        {"t":181.88,"den":214.93,"ten":"Thói quen 5 — Đều đặn thắng dồn dập"},
-        {"t":214.93,"den":242.68,"ten":"Vòng lặp học mỗi bài"},
-        {"t":242.67,"den":300.7,"ten":"Bị kẹt? Bốn bước theo thứ tự"},
-        {"t":300.7,"den":341.69,"ten":"Cái bẫy: hỏi AI lấy đáp án"},
-        {"t":341.69,"den":388.53,"ten":"Bài tập"},
-        {"t":388.53,"den":417.33,"ten":"Tóm tắt"}
+        {"t":0,"den":112.99,"ten":"Người học xong và người bỏ cuộc"},
+        {"t":112.99,"den":214.93,"ten":"Thói quen 3 — DevTools & console.log"},
+        {"t":214.93,"den":300.7,"ten":"Vòng lặp học mỗi bài · Bị kẹt? Bốn bước theo thứ tự"},
+        {"t":300.7,"den":417.33,"ten":"Cái bẫy: hỏi AI lấy đáp án · Bài tập"}
       ],
       "cues": [
         {"t":5.1,"vi":"Hai người cùng bắt đầu một khoá lập trình, cùng ngày, cùng tài liệu."},
@@ -388,21 +356,12 @@
         {"t":408.02,"vi":"Chương sau, ta mở bộ đồ nghề, bắt đầu với terminal. Hẹn gặp bạn ở bài 1.1."}
       ]
     },
-    "wf-1-0-slides": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/01-bo-cong-cu/01-00-slide-tong-quan-chuong-1-5b2b8524.mp4","durationSec":411.52,"nguonCau":"thoigian",
+    "wf-1-0-slides": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/01-bo-cong-cu/01-00-slide-tong-quan-chuong-1-5b2b8524.mp4","durationSec":411.52,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":24.05,"ten":"Chương 1 — Bộ công cụ"},
-        {"t":24.05,"den":49.37,"ten":"Nội dung chương"},
-        {"t":49.37,"den":86.82,"ten":"Terminal — mười lệnh đủ dùng"},
-        {"t":86.82,"den":115.9,"ten":"Hai mẹo tiết kiệm nửa thời gian gõ"},
-        {"t":115.9,"den":146.13,"ten":"VS Code — cài bốn tiện ích này trước"},
-        {"t":146.13,"den":174.93,"ten":"Phím tắt VS Code đáng thuộc"},
-        {"t":174.93,"den":208.12,"ten":"Git — ba vùng phải hiểu"},
-        {"t":208.12,"den":237.72,"ten":"Git — bốn lệnh gỡ khi lỡ tay"},
-        {"t":237.72,"den":272.17,"ten":".gitignore — làm trước lần add đầu"},
-        {"t":272.17,"den":300.44,"ten":"GitHub — đẩy mã lên lần đầu"},
-        {"t":300.44,"den":344.97,"ten":"Node & npm"},
-        {"t":344.97,"den":374.68,"ten":"Ba file quyết định mọi thứ"},
-        {"t":374.68,"den":411.52,"ten":"Tự luyện"}
+        {"t":0,"den":86.82,"ten":"Chương 1 — Bộ công cụ · Nội dung chương"},
+        {"t":86.82,"den":174.93,"ten":"Hai mẹo tiết kiệm nửa thời gian gõ"},
+        {"t":174.93,"den":272.17,"ten":"Git — ba vùng phải hiểu · Git — bốn lệnh gỡ khi lỡ tay"},
+        {"t":272.17,"den":411.52,"ten":"GitHub — đẩy mã lên lần đầu · Node & npm"}
       ],
       "cues": [
         {"t":5.2,"vi":"Chào bạn, đây là Chương 1 của khoá Nền tảng Web: bộ công cụ của người làm web."},
@@ -470,16 +429,12 @@
         {"t":402.03,"vi":"Làm xong bốn bài này là bạn nắm chắc bộ công cụ. Hẹn gặp bạn ở bài 1.1, terminal."}
       ]
     },
-    "wf-1-1-terminal": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/01-bo-cong-cu/01-01-terminal-2596d7e8.mp4","durationSec":443.98,"nguonCau":"thoigian",
+    "wf-1-1-terminal": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/01-bo-cong-cu/01-01-terminal-2596d7e8.mp4","durationSec":443.98,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":31.41,"ten":"Hai cách làm cùng một việc"},
-        {"t":31.41,"den":81.18,"ten":"Tôi đang ở đâu? pwd và ls"},
-        {"t":81.17,"den":134.79,"ten":"Di chuyển: cd, cat, clear"},
-        {"t":134.79,"den":186.89,"ten":"Tạo, chuyển, chép, xoá"},
-        {"t":186.89,"den":234.46,"ten":"Đường dẫn tuyệt đối vs tương đối"},
-        {"t":234.46,"den":282.22,"ten":"Shell đọc một đường dẫn thế nào"},
-        {"t":282.22,"den":344.53,"ten":"Lỗi hay gặp: gõ sai tên & dấu cách"},
-        {"t":344.52,"den":404.62,"ten":"Bài tập"},
+        {"t":0,"den":81.18,"ten":"Hai cách làm cùng một việc · Tôi đang ở đâu? pwd và ls"},
+        {"t":81.17,"den":186.89,"ten":"Di chuyển: cd, cat, clear · Tạo, chuyển, chép, xoá"},
+        {"t":186.89,"den":282.22,"ten":"Đường dẫn tuyệt đối vs tương đối"},
+        {"t":282.22,"den":404.62,"ten":"Lỗi hay gặp: gõ sai tên & dấu cách · Bài tập"},
         {"t":404.62,"den":443.98,"ten":"Tóm tắt"}
       ],
       "cues": [
@@ -552,18 +507,12 @@
         {"t":434.28,"vi":"Bài sau, mình mở VS Code, xưởng làm việc mỗi ngày của bạn. Hẹn gặp bạn ở bài 1.2."}
       ]
     },
-    "wf-1-2-vscode": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/01-bo-cong-cu/01-02-vs-code-04d15579.mp4","durationSec":452.66,"nguonCau":"thoigian",
+    "wf-1-2-vscode": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/01-bo-cong-cu/01-02-vs-code-04d15579.mp4","durationSec":452.66,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":34.35,"ten":"Một xưởng đầy đồ nghề"},
-        {"t":34.35,"den":75.37,"ten":"Mở thư mục, đừng mở file"},
-        {"t":75.37,"den":133.61,"ten":"Bốn vùng làm việc"},
-        {"t":133.61,"den":177.39,"ten":"Ba extension cho ngày đầu"},
-        {"t":177.39,"den":213.37,"ten":"Format On Save: code tự thẳng hàng"},
-        {"t":213.37,"den":269.81,"ten":"Bốn phím tắt tiết kiệm hàng giờ"},
-        {"t":269.81,"den":311.54,"ten":"Tìm khắp dự án, đổi tên an toàn"},
-        {"t":311.54,"den":352.5,"ten":"Cái bẫy: hai chục extension"},
-        {"t":352.49,"den":417.37,"ten":"Bài tập"},
-        {"t":417.37,"den":452.66,"ten":"Tóm tắt"}
+        {"t":0,"den":133.61,"ten":"Một xưởng đầy đồ nghề · Mở thư mục, đừng mở file"},
+        {"t":133.61,"den":213.37,"ten":"Ba extension cho ngày đầu"},
+        {"t":213.37,"den":311.54,"ten":"Bốn phím tắt tiết kiệm hàng giờ"},
+        {"t":311.54,"den":452.66,"ten":"Cái bẫy: hai chục extension · Bài tập"}
       ],
       "cues": [
         {"t":5.1,"vi":"Lần đầu mở VS Code, bạn thấy cả chục biểu tượng, menu, bảng điều khiển, và chẳng biết bắt đầu từ đâu."},
@@ -637,19 +586,13 @@
         {"t":443.4,"vi":"Bài sau, mình học Git, cỗ máy thời gian cho code của bạn. Hẹn gặp bạn ở bài 1.3."}
       ]
     },
-    "wf-1-3-git": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/01-bo-cong-cu/01-03-git-co-may-thoi-gian-2c15c648.mp4","durationSec":470.45,"nguonCau":"thoigian",
+    "wf-1-3-git": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/01-bo-cong-cu/01-03-git-co-may-thoi-gian-2c15c648.mp4","durationSec":470.45,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":44.74,"ten":"Lưu là ghi đè"},
-        {"t":44.74,"den":97.23,"ten":"Ba vùng — mô hình tư duy"},
-        {"t":97.23,"den":144.91,"ten":"Commit đầu tiên"},
-        {"t":144.91,"den":184.35,"ten":"Vòng lặp hằng ngày"},
-        {"t":184.35,"den":227.95,"ten":"Đọc git status"},
-        {"t":227.95,"den":269.46,"ten":"Hoàn tác, an toàn"},
-        {"t":269.47,"den":295.28,"ten":"Thông điệp commit"},
-        {"t":295.28,"den":350.59,"ten":".gitignore và bẫy git add ."},
-        {"t":350.59,"den":378.35,"ten":"Branch, trong một đoạn"},
-        {"t":378.35,"den":433.99,"ten":"Bài tập"},
-        {"t":433.99,"den":470.45,"ten":"Tóm tắt"}
+        {"t":0,"den":97.23,"ten":"Lưu là ghi đè · Ba vùng — mô hình tư duy"},
+        {"t":97.23,"den":184.35,"ten":"Commit đầu tiên · Vòng lặp hằng ngày"},
+        {"t":184.35,"den":269.46,"ten":"Đọc git status · Hoàn tác, an toàn"},
+        {"t":269.47,"den":350.59,"ten":"Thông điệp commit · .gitignore và bẫy git add ."},
+        {"t":350.59,"den":470.45,"ten":"Branch, trong một đoạn · Bài tập"}
       ],
       "cues": [
         {"t":5.1,"vi":"Hôm qua trang web của bạn chạy ngon lành. Hôm nay bạn sửa thêm vài dòng, bấm lưu, và mọi thứ vỡ tung."},
@@ -728,18 +671,12 @@
         {"t":460.45,"vi":"Bài sau, mình đưa repo này lên GitHub, mã của bạn trên đám mây. Hẹn gặp bạn ở bài 1.4."}
       ]
     },
-    "wf-1-4-github": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/01-bo-cong-cu/01-04-github-42dec16e.mp4","durationSec":430.02,"nguonCau":"thoigian",
+    "wf-1-4-github": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/01-bo-cong-cu/01-04-github-42dec16e.mp4","durationSec":430.02,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":36.86,"ten":"Laptop chết, Git mất theo"},
-        {"t":36.86,"den":62.87,"ten":"Từ cần học: remote"},
-        {"t":62.87,"den":94.51,"ten":"Tạo repo trống trên GitHub"},
-        {"t":94.51,"den":144.36,"ten":"Lần đầu: nối remote và push"},
-        {"t":144.36,"den":182.95,"ten":"Commit ở máy, push mới lên mạng"},
-        {"t":182.95,"den":226.34,"ten":"Clone và pull"},
-        {"t":226.34,"den":264.51,"ten":"Tầng cộng tác & pull request"},
-        {"t":264.51,"den":291.43,"ten":"Mẹo hồ sơ: repo + README"},
-        {"t":291.43,"den":339.4,"ten":"Bẫy: Public hay Private?"},
-        {"t":339.4,"den":392.5,"ten":"Bài tập"},
+        {"t":0,"den":94.51,"ten":"Laptop chết, Git mất theo · Từ cần học: remote"},
+        {"t":94.51,"den":182.95,"ten":"Lần đầu: nối remote và push"},
+        {"t":182.95,"den":264.51,"ten":"Clone và pull · Tầng cộng tác & pull request"},
+        {"t":264.51,"den":392.5,"ten":"Mẹo hồ sơ: repo + README · Bẫy: Public hay Private?"},
         {"t":392.5,"den":430.02,"ten":"Tóm tắt"}
       ],
       "cues": [
@@ -815,18 +752,13 @@
         {"t":419.28,"vi":"Bài sau, mình làm quen với Node và npm để chạy JavaScript và cài thư viện. Hẹn gặp bạn ở bài 1.5."}
       ]
     },
-    "wf-1-5-node-npm": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/01-bo-cong-cu/01-05-node-va-npm-7e83c3bc.mp4","durationSec":491.49,"nguonCau":"thoigian",
+    "wf-1-5-node-npm": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/01-bo-cong-cu/01-05-node-va-npm-7e83c3bc.mp4","durationSec":491.49,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":36.78,"ten":"JavaScript rời trình duyệt"},
-        {"t":36.78,"den":80.59,"ten":"Node chạy file JavaScript"},
-        {"t":80.59,"den":129.93,"ten":"package.json: chứng minh thư của dự án"},
-        {"t":129.93,"den":191.74,"ten":"Cài thư viện: dependencies & devDependencies"},
-        {"t":191.74,"den":248.48,"ten":"npm install thật ra làm gì"},
-        {"t":248.48,"den":296.1,"ten":"node_modules vs package-lock.json"},
-        {"t":296.1,"den":345.52,"ten":"Scripts: lối tắt của dự án"},
-        {"t":345.52,"den":397.3,"ten":"Bẫy: dấu mũ và npm ci"},
-        {"t":397.3,"den":454.06,"ten":"Bài tập"},
-        {"t":454.06,"den":491.49,"ten":"Tóm tắt"}
+        {"t":0,"den":80.59,"ten":"JavaScript rời trình duyệt · Node chạy file JavaScript"},
+        {"t":80.59,"den":191.74,"ten":"package.json: chứng minh thư của dự án"},
+        {"t":191.74,"den":296.1,"ten":"npm install thật ra làm gì"},
+        {"t":296.1,"den":397.3,"ten":"Scripts: lối tắt của dự án · Bẫy: dấu mũ và npm ci"},
+        {"t":397.3,"den":491.49,"ten":"Bài tập · Tóm tắt"}
       ],
       "cues": [
         {"t":5.1,"vi":"Từ đầu khoá tới giờ, JavaScript của bạn luôn chạy bên trong trình duyệt: mở trang web, mở Console, rồi gõ vào."},
@@ -906,8 +838,15 @@
         {"t":482,"vi":"Bài sau là bài kiểm tra chương 1, gom lại cả bộ công cụ. Hẹn gặp bạn ở bài 1.6."}
       ]
     },
-    "wf-10-0-slides": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/10-thinking-debugging/10-00-slide-tong-quan-chuong-10-6435aba3.mp4","durationSec":469.16,"nguonCau":"srt",
-      "parts": [],
+    "wf-10-0-slides": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/10-thinking-debugging/10-00-slide-tong-quan-chuong-10-6435aba3.mp4","durationSec":469.16,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":83.24,"ten":"Chương 10 — Tư duy, gỡ lỗi & Git · Nội dung chương"},
+        {"t":83.24,"den":158.28,"ten":"Chia nhỏ — kỹ năng quan trọng nhất"},
+        {"t":158.28,"den":238.76,"ten":"Đọc thông báo lỗi — từ trên xuống ⭐"},
+        {"t":238.76,"den":318.2,"ten":"console.log cho ra thông tin · Rubber duck — nói thành lời"},
+        {"t":318.2,"den":417.11,"ten":"Quy trình Git thật · Viết lời nhắn commit"},
+        {"t":417.11,"den":469.16,"ten":"Học tiếp gì sau khoá này"}
+      ],
       "cues": [
         {"t":5.2,"vi":"Chào bạn, đây là Chương 10 của khoá Nền tảng Web: tư duy lập trình, gỡ lỗi và quy trình Git."},
         {"t":12.93,"vi":"Chương 9 mình đã học TypeScript cơ bản: thêm kiểu cho JavaScript để bắt lỗi ngay khi gõ, thay vì lúc chạy."},
@@ -980,8 +919,14 @@
         {"t":459.11,"vi":"Hẹn gặp bạn ở bài 10.1: tư duy như một lập trình viên, chạy thói quen bốn bước trên hai bài toán thật."}
       ]
     },
-    "wf-10-1-think-like-a-programmer": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/10-thinking-debugging/10-01-tu-duy-nhu-lap-trinh-vien-80e172c7.mp4","durationSec":545.62,"nguonCau":"srt",
-      "parts": [],
+    "wf-10-1-think-like-a-programmer": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/10-thinking-debugging/10-01-tu-duy-nhu-lap-trinh-vien-80e172c7.mp4","durationSec":545.62,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":80.59,"ten":"Mở bài · Lập trình là nghĩ trước, gõ sau"},
+        {"t":80.59,"den":206.09,"ten":"Thói quen bốn bước · Kế hoạch đúng… cho một ca"},
+        {"t":206.09,"den":307.6,"ten":"Dò tay trước khi tin · Ca biên thành phép kiểm"},
+        {"t":307.6,"den":415.86,"ten":"Sửa từng phép kiểm hỏng một · Khi bị kẹt"},
+        {"t":415.86,"den":545.62,"ten":"Bài tập · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 10.1 của khoá Nền tảng Web: tư duy như một lập trình viên."},
         {"t":12.31,"vi":"Ở bài 10.0 mình đã lướt mười hai slide của chương: chương này không dạy cú pháp mới, mà dạy cách làm việc."},
@@ -1062,8 +1007,14 @@
         {"t":536.79,"vi":"Bài sau, 10.2, mình học cách đọc một thông báo lỗi và vòng lặp gỡ lỗi, thay vì sợ nó."}
       ]
     },
-    "wf-10-2-reading-errors-debugging": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/10-thinking-debugging/10-02-doc-loi-va-go-loi-1771a17f.mp4","durationSec":582.41,"nguonCau":"srt",
-      "parts": [],
+    "wf-10-2-reading-errors-debugging": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/10-thinking-debugging/10-02-doc-loi-va-go-loi-1771a17f.mp4","durationSec":582.41,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":169.36,"ten":"Mở bài · Thông điệp lỗi là manh mối"},
+        {"t":169.36,"den":251.48,"ten":"Sáu tên lỗi hay gặp · Lỗi từ mã bất đồng bộ"},
+        {"t":251.48,"den":386.11,"ten":"Bug không ném lỗi · Breakpoint: dừng và nhìn"},
+        {"t":386.11,"den":521.42,"ten":"git bisect — tìm KHI NÀO hỏng · Bài tập"},
+        {"t":521.42,"den":582.41,"ten":"Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 10.2 của khoá Nền tảng Web: đọc lỗi và vòng lặp gỡ lỗi."},
         {"t":12.33,"vi":"Bài trước mình học thói quen bốn bước: nói lại, kế hoạch, cho một ca chạy, rồi mở rộng và viết test."},
@@ -1149,8 +1100,15 @@
         {"t":573.34,"vi":"Bài sau, 10.3, mình học quy trình Git khi làm nhóm: nhánh, pull request, merge và gỡ xung đột."}
       ]
     },
-    "wf-10-3-git-workflow": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/10-thinking-debugging/10-03-quy-trinh-git-6ef77580.mp4","durationSec":545.51,"nguonCau":"srt",
-      "parts": [],
+    "wf-10-3-git-workflow": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/10-thinking-debugging/10-03-quy-trinh-git-6ef77580.mp4","durationSec":545.51,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":83.38,"ten":"Mở bài · Cách bố trí: origin + hai bản sao"},
+        {"t":83.38,"den":207.57,"ten":"Một nhánh cho mỗi thay đổi · Push thẳng bị từ chối"},
+        {"t":207.57,"den":293.91,"ten":"Merge main vào nhánh của mình · Xung đột thật: cùng một dòng"},
+        {"t":293.91,"den":396.89,"ten":"Gỡ: quyết định mã phải là gì · Vòng lặp mỗi ngày"},
+        {"t":396.89,"den":474.91,"ten":"Bài tập"},
+        {"t":474.91,"den":545.51,"ten":"Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 10.3 của khoá Nền tảng Web: quy trình Git cho công việc thật."},
         {"t":12.13,"vi":"Bài trước mình học đọc lỗi: stack trace, breakpoint, và vòng lặp giả thuyết, kiểm, sửa."},
@@ -1227,8 +1185,14 @@
         {"t":534.85,"vi":"Bài sau, 10.4, mình học cách tự học sau khi khoá kết thúc: đọc tài liệu, thu nhỏ một lỗi, đặt câu hỏi tốt."}
       ]
     },
-    "wf-10-4-keep-learning": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/10-thinking-debugging/10-04-cach-tiep-tuc-hoc-19bfb318.mp4","durationSec":582.07,"nguonCau":"srt",
-      "parts": [],
+    "wf-10-4-keep-learning": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/10-thinking-debugging/10-04-cach-tiep-tuc-hoc-19bfb318.mp4","durationSec":582.07,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":143.76,"ten":"Mở bài · Khoá hết; việc học thì không"},
+        {"t":143.76,"den":241.51,"ten":"Một lỗi trốn trong chương trình lớn"},
+        {"t":241.51,"den":377.7,"ten":"Đọc tài liệu trước khi đoán"},
+        {"t":377.7,"den":519.41,"ten":"Đọc mã của người khác · Bài tập"},
+        {"t":519.41,"den":582.07,"ten":"Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 10.4 của khoá Nền tảng Web: cách tiếp tục học."},
         {"t":11.29,"vi":"Bài trước mình học quy trình Git khi làm nhóm: nhánh, pull request, merge, và gỡ xung đột."},
@@ -1305,8 +1269,14 @@
         {"t":570.68,"vi":"Bài sau, 10.5, là bài cuối chương: bức tranh full-stack, gom cả khoá vào một app và đi theo một cú bấm từ đầu tới cuối."}
       ]
     },
-    "wf-10-5-full-stack-picture": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/10-thinking-debugging/10-05-buc-tranh-full-stack-d17f0783.mp4","durationSec":596.23,"nguonCau":"srt",
-      "parts": [],
+    "wf-10-5-full-stack-picture": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/10-thinking-debugging/10-05-buc-tranh-full-stack-d17f0783.mp4","durationSec":596.23,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":135.16,"ten":"Mở bài · Một cú bấm, mọi chương"},
+        {"t":135.16,"den":267,"ten":"Đăng nhập: hai log, một câu chuyện"},
+        {"t":267,"den":387.95,"ten":"Khi máy chủ nói KHÔNG · API không quan tâm ai gọi nó"},
+        {"t":387.95,"den":527.6,"ten":"Điều tiếp theo · Bài tập"},
+        {"t":527.6,"den":596.23,"ten":"Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 10.5 của khoá Nền tảng Web, cũng là bài cuối chương: bức tranh full-stack."},
         {"t":13.34,"vi":"Bài trước mình học cách tự học: dựng dự án, thu nhỏ lỗi, đọc tài liệu, đặt câu hỏi tốt, và đọc mã nguồn."},
@@ -1391,8 +1361,14 @@
         {"t":589.27,"vi":"Hẹn gặp bạn ở khoá Node.js. Cảm ơn bạn đã đi cùng cả khoá."}
       ]
     },
-    "wf-11-0-slides": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/11-javascript-nang-cao/11-00-slide-tong-quan-0910d1e1.mp4","durationSec":420.44,"nguonCau":"srt",
-      "parts": [],
+    "wf-11-0-slides": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/11-javascript-nang-cao/11-00-slide-tong-quan-0910d1e1.mp4","durationSec":420.44,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":105.85,"ten":"Chương 11 — JavaScript nâng cao · Nội dung chương"},
+        {"t":105.85,"den":195.69,"ten":"Bẫy closure kinh điển — var vs let ⭐"},
+        {"t":195.69,"den":273.46,"ten":"Chuỗi prototype · Bất biến — luật sống còn với React ⭐"},
+        {"t":273.46,"den":369.7,"ten":"Spread chỉ chép NÔNG · Map và Set"},
+        {"t":369.7,"den":420.44,"ten":"Tự luyện"}
+      ],
       "cues": [
         {"t":5.2,"vi":"Chào bạn, đây là Chương 11 của khoá Nền tảng Web: JavaScript nâng cao."},
         {"t":11.2,"vi":"Chương 10 vừa rồi mình học tư duy và gỡ lỗi."},
@@ -1463,8 +1439,15 @@
         {"t":417.84,"vi":"Hẹn gặp bạn ở đó."}
       ]
     },
-    "wf-11-1-closure": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/11-javascript-nang-cao/11-01-closure-86aae3da.mp4","durationSec":589.46,"nguonCau":"srt",
-      "parts": [],
+    "wf-11-1-closure": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/11-javascript-nang-cao/11-01-closure-86aae3da.mp4","durationSec":589.46,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":82.1,"ten":"Mở bài · Một hàm nhớ được quá khứ"},
+        {"t":82.1,"den":205.38,"ten":"Bước 0 — phạm vi: nhìn ra ngoài"},
+        {"t":205.38,"den":300.63,"ten":"Công dụng 1 — state riêng tư · Công dụng 2 — hàm sinh hàm"},
+        {"t":300.63,"den":396.03,"ten":"Công dụng 3 — handler là closure"},
+        {"t":396.03,"den":528.95,"ten":"Closure giữ CÁI BIẾN, không giữ giá trị · Bài tập"},
+        {"t":528.95,"den":589.46,"ten":"Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 11.1 của khoá Nền tảng Web: closure, đọc là cờ-lô-giơ."},
         {"t":13.37,"vi":"Ở bài 11.0 mình đã lướt qua mười hai slide của chương."},
@@ -1562,8 +1545,14 @@
         {"t":581.04,"vi":"Bài sau, 11.2, mình học về this, một từ khoá làm rối không biết bao nhiêu người."}
       ]
     },
-    "wf-11-2-this": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/11-javascript-nang-cao/11-02-this-03b84534.mp4","durationSec":448.1,"nguonCau":"srt",
-      "parts": [],
+    "wf-11-2-this": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/11-javascript-nang-cao/11-02-this-03b84534.mp4","durationSec":448.1,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":114.19,"ten":"Mở bài · Cùng một hàm, kết quả khác nhau"},
+        {"t":114.19,"den":215.7,"ten":"Mất this khi tách method khỏi object"},
+        {"t":215.7,"den":294.36,"ten":"call · apply · bind — tự đặt this · Callback làm rơi this"},
+        {"t":294.36,"den":390.78,"ten":"this trong handler DOM · Bài tập"},
+        {"t":390.78,"den":448.1,"ten":"Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 11.2 của khoá Nền tảng Web: this, bốn luật giải thích tất cả."},
         {"t":13.05,"vi":"Bài trước mình đã học closure: hàm nhớ được những biến ở nơi nó sinh ra."},
@@ -1639,8 +1628,13 @@
         {"t":438.6,"vi":"Bài sau, 11.3, mình học prototype và class, thứ thật sự đứng sau object trong JavaScript."}
       ]
     },
-    "wf-11-3-prototype-class": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/11-javascript-nang-cao/11-03-prototype-class-88f256a3.mp4","durationSec":481.66,"nguonCau":"srt",
-      "parts": [],
+    "wf-11-3-prototype-class": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/11-javascript-nang-cao/11-03-prototype-class-88f256a3.mp4","durationSec":481.66,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":139.32,"ten":"Mở bài · Method map nằm ở đâu?"},
+        {"t":139.32,"den":250.65,"ten":"Trước class: hàm khởi tạo + prototype"},
+        {"t":250.65,"den":358.43,"ten":"Kế thừa: extends · super · ghi đè"},
+        {"t":358.43,"den":481.66,"ten":"Bài tập · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 11.3: prototype và class."},
         {"t":10.3,"vi":"Bài trước mình đã học this, do cách gọi quyết định, với bốn luật."},
@@ -1716,8 +1710,13 @@
         {"t":471.4,"vi":"Bài sau, 11.4, mình học Map, Set và tư duy bất biến, thứ quyết định cách bạn cập nhật state trong React."}
       ]
     },
-    "wf-11-4-map-set-immutable": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/11-javascript-nang-cao/11-04-map-set-immutable-d1353118.mp4","durationSec":438.5,"nguonCau":"srt",
-      "parts": [],
+    "wf-11-4-map-set-immutable": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/11-javascript-nang-cao/11-04-map-set-immutable-d1353118.mp4","durationSec":438.5,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":121.73,"ten":"Mở bài · Sửa một cái mà cả loạt cùng đổi"},
+        {"t":121.73,"den":223.7,"ten":"Bất biến với object: thay, đừng sửa · Bất biến với mảng"},
+        {"t":223.7,"den":328.25,"ten":"Map — bảng khoá/giá trị · Set — tập hợp giá trị duy nhất"},
+        {"t":328.25,"den":438.5,"ten":"Bài tập · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 11.4: Map, Set và tư duy bất biến."},
         {"t":10.98,"vi":"Bài trước mình đã học prototype và class, cỗ máy đứng sau mọi object."},
@@ -1790,8 +1789,14 @@
         {"t":427.81,"vi":"Bài cuối chương, 11.5, mình học biểu thức chính quy, hay gọi là regex, chỉ cần bảy ký hiệu là đủ dùng."}
       ]
     },
-    "wf-11-5-regex": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/11-javascript-nang-cao/11-05-regex-49bd44bd.mp4","durationSec":534.74,"nguonCau":"srt",
-      "parts": [],
+    "wf-11-5-regex": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/11-javascript-nang-cao/11-05-regex-49bd44bd.mp4","durationSec":534.74,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":133.62,"ten":"Mở bài · Regex là gì?"},
+        {"t":133.62,"den":224.12,"ten":"Neo ^ $ — khớp CẢ chuỗi · Nhóm bắt, replace và matchAll"},
+        {"t":224.12,"den":343.45,"ten":"Tham lam vs lười · Ba bẫy phải tránh"},
+        {"t":343.45,"den":473.58,"ten":"Regex với tiếng Việt (Unicode) · Bài tập"},
+        {"t":473.58,"den":534.74,"ten":"Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 11.5, bài cuối chương: biểu thức chính quy, hay gọi là regex."},
         {"t":13.19,"vi":"Bài trước mình đã học Map, Set và tư duy bất biến."},
@@ -1873,8 +1878,14 @@
         {"t":521.72,"vi":"Giờ bạn đã ĐỌC được JavaScript của người khác: closure, this, prototype, Map, Set và regex. Hẹn gặp bạn ở Chương 12, CSS nâng cao."}
       ]
     },
-    "wf-12-0-slides": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/12-css-advanced/12-00-slide-tong-quan-chuong-12-02558b24.mp4","durationSec":401.88,"nguonCau":"srt",
-      "parts": [],
+    "wf-12-0-slides": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/12-css-advanced/12-00-slide-tong-quan-chuong-12-02558b24.mp4","durationSec":401.88,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":80.5,"ten":"Chương 12 — CSS nâng cao · Nội dung chương"},
+        {"t":80.5,"den":165.78,"ten":"Năm giá trị của position · Vì sao z-index 9999 vẫn thua"},
+        {"t":165.78,"den":253.83,"ten":"Thang z-index có tên · Transition"},
+        {"t":253.83,"den":335.6,"ten":"BEM — Block, Element, Modifier · Ba cách cô lập CSS"},
+        {"t":335.6,"den":401.88,"ten":"Chế độ tối làm cho tử tế · Tự luyện"}
+      ],
       "cues": [
         {"t":5.2,"vi":"Chào bạn, đây là Chương 12 của khoá Nền tảng Web: CSS nâng cao."},
         {"t":11.17,"vi":"Chương 11 mình vừa học JavaScript nâng cao: closure, this, prototype, và cách đọc code của người khác."},
@@ -1943,8 +1954,14 @@
         {"t":393.18,"vi":"Hẹn gặp bạn ở bài 12.1: đặt phần tử chính xác, và quyết định cái nào nằm trên."}
       ]
     },
-    "wf-12-1-position-stacking": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/12-css-advanced/12-01-position-stacking-a64a3874.mp4","durationSec":548.93,"nguonCau":"srt",
-      "parts": [],
+    "wf-12-1-position-stacking": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/12-css-advanced/12-01-position-stacking-a64a3874.mp4","durationSec":548.93,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":119.44,"ten":"Mở bài · Nó bị header che"},
+        {"t":119.44,"den":216.86,"ten":"absolute cần cha có định vị · sticky và bẫy overflow"},
+        {"t":216.86,"den":320.79,"ten":"Vì sao z-index 9999 vẫn thua · Thứ gì tạo ngữ cảnh xếp chồng"},
+        {"t":320.79,"den":413.91,"ten":"Cách sửa: đưa phần tử ra ngoài · Thang z-index có tên"},
+        {"t":413.91,"den":548.93,"ten":"Bài tập · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 12.1 của khoá Nền tảng Web: position và ngữ cảnh xếp chồng."},
         {"t":12.78,"vi":"Ở bài 12.0 mình đã lướt qua cả chương: xếp lớp, chuyển động, đặt tên và token."},
@@ -2023,8 +2040,14 @@
         {"t":540.29,"vi":"Bài sau, 12.2, mình học transition và animation: làm chuyển động mượt mà không giật."}
       ]
     },
-    "wf-12-2-transition-animation": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/12-css-advanced/12-02-transition-animation-4ceff026.mp4","durationSec":492.5,"nguonCau":"srt",
-      "parts": [],
+    "wf-12-2-transition-animation": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/12-css-advanced/12-02-transition-animation-4ceff026.mp4","durationSec":492.5,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":119.95,"ten":"Mở bài · Chuyển động biết giải thích"},
+        {"t":119.95,"den":215.51,"ten":"Vì sao height: auto không animate"},
+        {"t":215.51,"den":310.1,"ten":"Thuộc tính rẻ và thuộc tính đắt · Chờ transition kết thúc"},
+        {"t":310.1,"den":429.17,"ten":"Tôn trọng prefers-reduced-motion · Bài tập"},
+        {"t":429.17,"den":492.5,"ten":"Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 12.2 của khoá Nền tảng Web: transition và animation."},
         {"t":11.93,"vi":"Bài trước mình đã học xếp lớp: position, ngữ cảnh xếp chồng, và vì sao z-index to vẫn thua."},
@@ -2096,8 +2119,14 @@
         {"t":482.7,"vi":"Bài sau, 12.3, mình học cách đặt tên và tổ chức CSS để cả nhóm còn sửa được sau một năm."}
       ]
     },
-    "wf-12-3-css-architecture": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/12-css-advanced/12-03-css-architecture-be539b94.mp4","durationSec":477.66,"nguonCau":"srt",
-      "parts": [],
+    "wf-12-3-css-architecture": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/12-css-advanced/12-03-css-architecture-be539b94.mp4","durationSec":477.66,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":115.45,"ten":"Mở bài · CSS vỡ ở chỗ không ai sửa"},
+        {"t":115.45,"den":215.89,"ten":"Công cụ 1 — đặt tên BEM · Công cụ 2 — cascade layer"},
+        {"t":215.89,"den":311.16,"ten":"Công cụ 3 — :where() và :is()"},
+        {"t":311.16,"den":417,"ten":"Cấu trúc file mở rộng được · Bài tập"},
+        {"t":417,"den":477.66,"ten":"Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 12.3 của khoá Nền tảng Web: đặt tên và tổ chức CSS."},
         {"t":12.51,"vi":"Bài trước mình đã học transition và animation: chuyển động mượt, và chỉ nên animate transform với opacity."},
@@ -2172,8 +2201,14 @@
         {"t":467.89,"vi":"Bài sau, 12.4, mình học design token và chế độ sáng tối: đổi cả giao diện chỉ bằng vài biến."}
       ]
     },
-    "wf-12-4-tokens-theming": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/12-css-advanced/12-04-tokens-theming-3a56d0d0.mp4","durationSec":522.08,"nguonCau":"srt",
-      "parts": [],
+    "wf-12-4-tokens-theming": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/12-css-advanced/12-04-tokens-theming-3a56d0d0.mp4","durationSec":522.08,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":103.24,"ten":"Mở bài · Một chỗ cho mọi quyết định"},
+        {"t":103.24,"den":205.61,"ten":"Ba tầng: nguyên thuỷ, ngữ nghĩa, component"},
+        {"t":205.61,"den":324.35,"ten":"Nút chuyển nhớ lựa chọn · Bẫy custom property"},
+        {"t":324.35,"den":453.68,"ten":"Tương phản: đo, đừng đoán · Bài tập"},
+        {"t":453.68,"den":522.08,"ten":"Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 12.4 của khoá Nền tảng Web, cũng là bài cuối chương: design token và chế độ sáng tối."},
         {"t":15.14,"vi":"Bài trước mình đã học đặt tên và tổ chức CSS: BEM, cascade layer, và CSS Modules."},
@@ -2245,8 +2280,13 @@
         {"t":519.95,"vi":"Hẹn gặp lại."}
       ]
     },
-    "wf-13-0-slides": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/13-testing/13-00-slide-tong-quan-b22f3b7f.mp4","durationSec":397.44,"nguonCau":"srt",
-      "parts": [],
+    "wf-13-0-slides": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/13-testing/13-00-slide-tong-quan-b22f3b7f.mp4","durationSec":397.44,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":111.48,"ten":"Chương 13 — Kiểm thử · Nội dung chương"},
+        {"t":111.48,"den":202.9,"ten":"Tháp ba tầng · Arrange · Act · Assert"},
+        {"t":202.9,"den":292.11,"ten":"Tìm phần tử như một CON NGƯỜI ⭐⭐ · get · query · find"},
+        {"t":292.11,"den":397.44,"ten":"Điều khiển thời gian, chạy trong CI"}
+      ],
       "cues": [
         {"t":5.2,"vi":"Chào bạn, đến với Chương 13 của khoá Nền tảng Web: kiểm thử, tiếng Anh là testing."},
         {"t":12.13,"vi":"Chương 12 vừa rồi mình học CSS nâng cao."},
@@ -2311,8 +2351,15 @@
         {"t":389.39,"vi":"Giờ thì bắt đầu với bài 13.1: kiểm thử để làm gì. Hẹn gặp bạn ở đó."}
       ]
     },
-    "wf-13-1-why-test": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/13-testing/13-01-vi-sao-test-1f07fe94.mp4","durationSec":587.8,"nguonCau":"srt",
-      "parts": [],
+    "wf-13-1-why-test": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/13-testing/13-01-vi-sao-test-1f07fe94.mp4","durationSec":587.8,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":92.62,"ten":"Mở bài · Bạn chỉ kiểm lại được những gì mình nhớ"},
+        {"t":92.62,"den":186.9,"ten":"Ví dụ: giỏ hàng có bốn luật"},
+        {"t":186.9,"den":287.28,"ten":"Một lỗi hồi quy, bị bắt · Đọc một báo cáo đỏ"},
+        {"t":287.28,"den":363.18,"ten":"Kim tự tháp test — thời gian đo thật"},
+        {"t":363.18,"den":459.44,"ten":"Test cho bạn gì — và không cho gì · Nên kiểm gì, bỏ qua gì"},
+        {"t":459.44,"den":587.8,"ten":"Bài tập · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 13.1 của khoá Nền tảng Web: kiểm thử để làm gì."},
         {"t":11.97,"vi":"Ở bài 13.0 mình đã lướt mười hai slide của chương: kim tự tháp ba tầng, Arrange Act Assert, và luật kiểm bộ kiểm."},
@@ -2399,8 +2446,15 @@
         {"t":578.04,"vi":"Bài sau, 13.2, ta biến những trường hợp đó thành code Vitest thật đầu tiên. Hẹn gặp bạn ở đó."}
       ]
     },
-    "wf-13-2-unit-tests": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/13-testing/13-02-unit-test-e395cf39.mp4","durationSec":498.34,"nguonCau":"srt",
-      "parts": [],
+    "wf-13-2-unit-tests": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/13-testing/13-02-unit-test-e395cf39.mp4","durationSec":498.34,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":82.39,"ten":"Mở bài · Cài và chạy Vitest"},
+        {"t":82.39,"den":169.75,"ten":"Giải phẫu một test — Arrange · Act · Assert"},
+        {"t":169.75,"den":244.9,"ten":"Lỗi cũng là một phần của hợp đồng"},
+        {"t":244.9,"den":326.78,"ten":"Chọn matcher — toBe, toEqual, toBeCloseTo"},
+        {"t":326.78,"den":435.38,"ten":"Đặt tên test · Bài tập"},
+        {"t":435.38,"den":498.34,"ten":"Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 13.2 của khoá Nền tảng Web: những unit test đầu tiên."},
         {"t":12.16,"vi":"Bài trước ta đã biết vì sao cần test, đọc một báo cáo đỏ, và chọn trường hợp test trên giấy."},
@@ -2484,8 +2538,14 @@
         {"t":487.96,"vi":"Bài sau, 13.3, ta rời các hàm thuần để kiểm giao diện như cách người dùng nhìn thấy. Hẹn gặp bạn ở đó."}
       ]
     },
-    "wf-13-3-testing-library": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/13-testing/13-03-testing-library-2653f11d.mp4","durationSec":534.92,"nguonCau":"srt",
-      "parts": [],
+    "wf-13-3-testing-library": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/13-testing/13-03-testing-library-2653f11d.mp4","durationSec":534.92,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":86.1,"ten":"Mở bài · jsdom là gì"},
+        {"t":86.1,"den":180.63,"ten":"Component được kiểm — form đăng ký"},
+        {"t":180.63,"den":302.41,"ten":"Bốn test trong jsdom · Chọn truy vấn — tốt nhất xếp trước"},
+        {"t":302.41,"den":404.78,"ten":"Khi truy vấn thất bại, đọc danh sách vai trò ⭐⭐"},
+        {"t":404.78,"den":534.92,"ten":"Bài tập · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 13.3 của khoá Nền tảng Web: kiểm giao diện theo cách người dùng thấy."},
         {"t":13.14,"vi":"Hai bài trước ta đã viết unit test cho các hàm thuần: chuẩn bị, gọi, khẳng định."},
@@ -2558,8 +2618,15 @@
         {"t":523.79,"vi":"Bài sau, bài cuối chương, 13.4, ta giả lập mạng và thời gian, rồi chạy tất cả trong CI. Hẹn gặp bạn ở đó."}
       ]
     },
-    "wf-13-4-mocking-ci": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/13-testing/13-04-mocking-ci-66a9f7a0.mp4","durationSec":565.02,"nguonCau":"srt",
-      "parts": [],
+    "wf-13-4-mocking-ci": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/13-testing/13-04-mocking-ci-66a9f7a0.mp4","durationSec":565.02,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":84.1,"ten":"Mở bài · Vì sao không gọi API thật?"},
+        {"t":84.1,"den":191.27,"ten":"Viết code test được — tiêm phụ thuộc"},
+        {"t":191.27,"den":288.53,"ten":"Điều khiển thời gian — đồng hồ giả · Một lệnh, một mã thoát"},
+        {"t":288.53,"den":379.71,"ten":"Tích hợp liên tục với GitHub Actions"},
+        {"t":379.71,"den":483.15,"ten":"Giả cái gì, không giả cái gì · Bài tập"},
+        {"t":483.15,"den":565.02,"ten":"Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 13.4, bài cuối của Chương 13: giả lập và chạy test trong CI."},
         {"t":13.53,"vi":"Ba bài trước ta đã viết unit test, test giao diện trong jsdom, và học tìm phần tử như người dùng."},
@@ -2641,8 +2708,15 @@
         {"t":554.37,"vi":"Chúc mừng bạn đã đi hết một chương mà rất nhiều lập trình viên đi làm vẫn còn thiếu. Hẹn gặp bạn ở khoá tiếp theo."}
       ]
     },
-    "wf-14-0-slides": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/14-ship/14-00-slide-tong-quan-chuong-14-6a09e061.mp4","durationSec":533.63,"nguonCau":"srt",
-      "parts": [],
+    "wf-14-0-slides": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/14-ship/14-00-slide-tong-quan-chuong-14-6a09e061.mp4","durationSec":533.63,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":80.27,"ten":"Chương 14 — Đưa sản phẩm lên mạng · Nội dung chương"},
+        {"t":80.27,"den":160.26,"ten":"Dev server và bản build là HAI chương trình"},
+        {"t":160.26,"den":248.06,"ten":"Biến môi trường — chỗ gây sự cố thật ⭐⭐"},
+        {"t":248.06,"den":342.87,"ten":"Nếu lỡ lộ khoá · Deploy — chọn thứ đơn giản nhất đủ dùng"},
+        {"t":342.87,"den":425.3,"ten":"Bẫy 404 khi tải lại trang ⭐"},
+        {"t":425.3,"den":533.63,"ten":"Đo hiệu năng — Core Web Vitals · Bốn cách sửa đáng làm trước"}
+      ],
       "cues": [
         {"t":5.2,"vi":"Chào bạn, đây là Chương 14 của khoá Nền tảng Web: đưa sản phẩm lên mạng. Và cũng là chương cuối cùng."},
         {"t":14.04,"vi":"Chương 13 mình đã học kiểm thử: vì sao cần test, unit test, Testing Library, và chạy test tự động trong CI."},
@@ -2720,8 +2794,15 @@
         {"t":521.8,"vi":"Hẹn gặp bạn ở bài 14.1: bản dựng production thật ra làm gì, và vì sao file bạn gõ không phải file người dùng tải về."}
       ]
     },
-    "wf-14-1-build": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/14-ship/14-01-ban-dung-production-78736083.mp4","durationSec":644.49,"nguonCau":"srt",
-      "parts": [],
+    "wf-14-1-build": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/14-ship/14-01-ban-dung-production-78736083.mp4","durationSec":644.49,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":99.12,"ten":"Mở bài · File bạn viết ≠ file người dùng tải"},
+        {"t":99.12,"den":199.08,"ten":"Dev và production — hai nhóm người khác nhau"},
+        {"t":199.08,"den":278.83,"ten":"vite build — và báo cáo dung lượng · Bên trong thư mục dist/"},
+        {"t":278.83,"den":394.84,"ten":"Bốn việc của một bản dựng"},
+        {"t":394.84,"den":511.2,"ten":"Vì sao băm tên lại an toàn cho cache · Ba cái bẫy thường gặp"},
+        {"t":511.2,"den":644.49,"ten":"Bài tập · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 14.1 của khoá Nền tảng Web: bản dựng production thật ra làm gì."},
         {"t":13.07,"vi":"Ở bài 14.0 mình đã lướt mười hai slide của chương cuối: build, biến môi trường, deploy, và đo hiệu năng."},
@@ -2832,8 +2913,15 @@
         {"t":633.08,"vi":"Bài sau, 14.2, mình học về biến môi trường và khoá bí mật: vì sao một khoá để nhầm chỗ lại tốn tiền thật."}
       ]
     },
-    "wf-14-2-env-secrets": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/14-ship/14-02-bien-moi-truong-bi-mat-abc837ee.mp4","durationSec":618.29,"nguonCau":"srt",
-      "parts": [],
+    "wf-14-2-env-secrets": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/14-ship/14-02-bien-moi-truong-bi-mat-abc837ee.mp4","durationSec":618.29,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":95.68,"ten":"Mở bài · Cùng một code, ba nơi khác nhau"},
+        {"t":95.68,"den":184.04,"ten":"Vì sao cấu hình nằm trong môi trường"},
+        {"t":184.04,"den":322.12,"ten":"Máy chủ: đọc một lần, dừng sớm"},
+        {"t":322.12,"den":421.57,"ten":"Giá trị nào công khai, giá trị nào bí mật"},
+        {"t":421.57,"den":549.47,"ten":"Khi lộ khoá — xoay khoá trước · Bài tập"},
+        {"t":549.47,"den":618.29,"ten":"Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 14.2 của khoá Nền tảng Web: biến môi trường và khoá bí mật."},
         {"t":12.7,"vi":"Bài trước mình đã thấy bản dựng làm bốn việc, và một việc nữa: nó nướng các biến môi trường thẳng vào file người dùng tải về."},
@@ -2921,8 +3009,15 @@
         {"t":605.93,"vi":"Bài sau, 14.3, mình đưa thư mục dist lên hosting thật, với tên miền và HTTPS, và gỡ bẫy 404 kinh điển."}
       ]
     },
-    "wf-14-3-deploy": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/14-ship/14-03-dua-len-hosting-f3a9cc59.mp4","durationSec":611.58,"nguonCau":"srt",
-      "parts": [],
+    "wf-14-3-deploy": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/14-ship/14-03-dua-len-hosting-f3a9cc59.mp4","durationSec":611.58,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":89.61,"ten":"Mở bài · Deploy nghĩa là gì"},
+        {"t":89.61,"den":196.32,"ten":"Deploy gồm bốn bước · Hosting ở đâu"},
+        {"t":196.32,"den":323.35,"ten":"Một máy chủ tĩnh trong ba mươi dòng"},
+        {"t":323.35,"den":414.03,"ten":"Header lưu đệm — nhanh mà không bao giờ cũ"},
+        {"t":414.03,"den":543.12,"ten":"HTTPS, tên miền, và biến môi trường trên host · Bài tập"},
+        {"t":543.12,"den":611.58,"ten":"Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 14.3 của khoá Nền tảng Web: đưa lên hosting."},
         {"t":11.47,"vi":"Bài trước mình đã giữ bí mật ở lại máy chủ, và thấy mọi thứ trong bundle đều công khai."},
@@ -3013,8 +3108,15 @@
         {"t":601.34,"vi":"Bài cuối của khoá, 14.4, mình đo xem trang có thật sự nhanh không, bằng Core Web Vitals và Lighthouse."}
       ]
     },
-    "wf-14-4-performance": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/14-ship/14-04-do-hieu-nang-3a2cfb5f.mp4","durationSec":677.94,"nguonCau":"srt",
-      "parts": [],
+    "wf-14-4-performance": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/14-ship/14-04-do-hieu-nang-3a2cfb5f.mp4","durationSec":677.94,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":89.53,"ten":"Mở bài · Đo thứ người dùng cảm nhận"},
+        {"t":89.53,"den":191.56,"ten":"Core Web Vitals — bằng lời đơn giản"},
+        {"t":191.56,"den":288.09,"ten":"Đo bằng chính cảm biến của trình duyệt"},
+        {"t":288.09,"den":396.97,"ten":"Sửa 1 — ảnh (LCP 12,3s → 1,2s)"},
+        {"t":396.97,"den":519.21,"ten":"Sửa 3 — tác vụ dài (TBT 1150ms → 0)"},
+        {"t":519.21,"den":677.94,"ten":"Bài tập · Tóm tắt & hoàn thành khoá"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 14.4, bài cuối cùng của khoá Nền tảng Web: đo hiệu năng."},
         {"t":12.6,"vi":"Bài trước mình đã đưa trang lên hosting, với HTTPS, và kiểm chứng bằng smoke test."},
@@ -3115,20 +3217,13 @@
         {"t":674.13,"vi":"Hẹn gặp lại bạn ở những khoá sau nhé."}
       ]
     },
-    "wf-2-0-slides": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/02-html/02-00-slide-tong-quan-chuong-2-113b6ec9.mp4","durationSec":510.17,"nguonCau":"thoigian",
+    "wf-2-0-slides": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/02-html/02-00-slide-tong-quan-chuong-2-113b6ec9.mp4","durationSec":510.17,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":35.76,"ten":"Chương 2 — HTML"},
-        {"t":35.75,"den":62.32,"ten":"Nội dung chương"},
-        {"t":62.32,"den":114.82,"ten":"Một phần tử HTML gồm gì"},
-        {"t":114.82,"den":164.85,"ten":"Bộ khung một trang"},
-        {"t":164.85,"den":215,"ten":"Chữ, liên kết, ảnh"},
-        {"t":215,"den":261.4,"ten":"Thẻ ngữ nghĩa — đặt tên đúng cho từng vùng"},
-        {"t":261.4,"den":312.91,"ten":"Biểu mẫu — phần quan trọng nhất"},
-        {"t":312.91,"den":353.61,"ten":"Các loại input hay dùng"},
-        {"t":353.61,"den":398.56,"ten":"HTML khác JSX ở bốn chỗ"},
-        {"t":398.56,"den":433.14,"ten":"Bảng và media"},
-        {"t":433.14,"den":467.79,"ten":"Khả năng tiếp cận — bốn việc rẻ mà hiệu quả"},
-        {"t":467.79,"den":510.17,"ten":"Tự luyện"}
+        {"t":0,"den":114.82,"ten":"Chương 2 — HTML · Nội dung chương"},
+        {"t":114.82,"den":215,"ten":"Bộ khung một trang · Chữ, liên kết, ảnh"},
+        {"t":215,"den":312.91,"ten":"Thẻ ngữ nghĩa — đặt tên đúng cho từng vùng"},
+        {"t":312.91,"den":398.56,"ten":"Các loại input hay dùng · HTML khác JSX ở bốn chỗ"},
+        {"t":398.56,"den":510.17,"ten":"Bảng và media · Khả năng tiếp cận — bốn việc rẻ mà hiệu quả"}
       ],
       "cues": [
         {"t":5.2,"vi":"Chào bạn, đây là Chương 2 của khoá Nền tảng Web: HTML, cấu trúc của mọi trang web."},
@@ -3203,16 +3298,12 @@
         {"t":500.39,"vi":"Làm xong bốn bài là bạn nắm chắc HTML. Hẹn gặp bạn ở bài 2.1: HTML là gì."}
       ]
     },
-    "wf-2-1-html-basics": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/02-html/02-01-html-co-ban-6cffebb5.mp4","durationSec":422.04,"nguonCau":"thoigian",
+    "wf-2-1-html-basics": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/02-html/02-01-html-co-ban-6cffebb5.mp4","durationSec":422.04,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":45.11,"ten":"Trình duyệt biết cái nào là cái nào?"},
-        {"t":45.11,"den":96.32,"ten":"Giải phẫu một phần tử"},
-        {"t":96.32,"den":154.13,"ten":"Thuộc tính và lồng nhau"},
-        {"t":154.13,"den":215.17,"ten":"Bộ khung của mọi trang"},
-        {"t":215.17,"den":274.6,"ten":"Trình duyệt dựng trang thế nào"},
-        {"t":274.6,"den":327.02,"ten":"Cái bẫy: HTML không bao giờ báo lỗi"},
-        {"t":327.01,"den":385.15,"ten":"Bài tập"},
-        {"t":385.15,"den":422.04,"ten":"Tóm tắt"}
+        {"t":0,"den":96.32,"ten":"Trình duyệt biết cái nào là cái nào? · Giải phẫu một phần tử"},
+        {"t":96.32,"den":215.17,"ten":"Thuộc tính và lồng nhau · Bộ khung của mọi trang"},
+        {"t":215.17,"den":327.02,"ten":"Trình duyệt dựng trang thế nào"},
+        {"t":327.01,"den":422.04,"ten":"Bài tập · Tóm tắt"}
       ],
       "cues": [
         {"t":5.1,"vi":"Mở bất kỳ trang web nào, bạn thấy tiêu đề, đoạn văn, hình ảnh, nút bấm. Nhưng trình duyệt làm sao biết cái nào là cái nào?"},
@@ -3280,16 +3371,12 @@
         {"t":411.49,"vi":"Bài sau, mình học chữ, liên kết và ảnh, những nội dung bạn viết nhiều nhất. Hẹn gặp bạn ở bài 2.2."}
       ]
     },
-    "wf-2-2-text-links-images": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/02-html/02-02-chu-lien-ket-anh-93d4ed0b.mp4","durationSec":479.19,"nguonCau":"thoigian",
+    "wf-2-2-text-links-images": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/02-html/02-02-chu-lien-ket-anh-93d4ed0b.mp4","durationSec":479.19,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":36.71,"ten":"Bóc lớp áo của một trang web"},
-        {"t":36.71,"den":101.71,"ten":"Tiêu đề và đoạn văn"},
-        {"t":101.71,"den":138.89,"ten":"Danh sách: có thứ tự và không"},
-        {"t":138.89,"den":191.27,"ten":"Liên kết: chữ “hyper” trong HTML"},
-        {"t":191.27,"den":256.32,"ten":"Đường dẫn tương đối và tuyệt đối"},
-        {"t":256.32,"den":311.76,"ten":"Ảnh: src, alt, width và height"},
-        {"t":311.76,"den":374.75,"ten":"alt: đôi mắt của người khiếm thị"},
-        {"t":374.75,"den":436.44,"ten":"Bài tập"},
+        {"t":0,"den":101.71,"ten":"Bóc lớp áo của một trang web · Tiêu đề và đoạn văn"},
+        {"t":101.71,"den":191.27,"ten":"Danh sách: có thứ tự và không"},
+        {"t":191.27,"den":311.76,"ten":"Đường dẫn tương đối và tuyệt đối"},
+        {"t":311.76,"den":436.44,"ten":"alt: đôi mắt của người khiếm thị · Bài tập"},
         {"t":436.44,"den":479.19,"ten":"Tóm tắt"}
       ],
       "cues": [
@@ -3363,17 +3450,12 @@
         {"t":469.08,"vi":"Bài sau, mình học cấu trúc ngữ nghĩa, để cả trang có một ý nghĩa thật. Hẹn gặp bạn ở bài 2.3."}
       ]
     },
-    "wf-2-3-semantic-html": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/02-html/02-03-html-ngu-nghia-859f27d9.mp4","durationSec":438.57,"nguonCau":"thoigian",
+    "wf-2-3-semantic-html": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/02-html/02-03-html-ngu-nghia-859f27d9.mp4","durationSec":438.57,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":41.11,"ten":"Hai trang giống hệt nhau?"},
-        {"t":41.11,"den":83.77,"ten":"div: cái hộp không nhãn"},
-        {"t":83.77,"den":143.42,"ten":"Bảy phần tử địa danh"},
-        {"t":143.42,"den":192.5,"ten":"Từ biển div tới bộ khung thật"},
-        {"t":192.5,"den":248.35,"ten":"Máy đọc trang của bạn thế nào"},
-        {"t":248.35,"den":299.03,"ten":"Ngữ nghĩa cấp chữ · khi nào div vẫn ổn"},
-        {"t":299.03,"den":354.27,"ten":"Cái bẫy: div bấm được"},
-        {"t":354.27,"den":406.54,"ten":"Bài tập"},
-        {"t":406.54,"den":438.57,"ten":"Tóm tắt"}
+        {"t":0,"den":83.77,"ten":"Hai trang giống hệt nhau? · div: cái hộp không nhãn"},
+        {"t":83.77,"den":192.5,"ten":"Bảy phần tử địa danh · Từ biển div tới bộ khung thật"},
+        {"t":192.5,"den":299.03,"ten":"Máy đọc trang của bạn thế nào"},
+        {"t":299.03,"den":438.57,"ten":"Cái bẫy: div bấm được · Bài tập"}
       ],
       "cues": [
         {"t":5.1,"vi":"Bạn nhìn thử hai trang web này nhé: cùng logo, cùng thực đơn, cùng bài viết. Bằng mắt thường, chúng giống hệt nhau."},
@@ -3445,18 +3527,13 @@
         {"t":429.32,"vi":"Bài sau, mình học biểu mẫu, cách web thu thập dữ liệu. Hẹn gặp bạn ở bài 2.4."}
       ]
     },
-    "wf-2-4-forms": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/02-html/02-04-bieu-mau-forms-dd8ae1d9.mp4","durationSec":423.55,"nguonCau":"thoigian",
+    "wf-2-4-forms": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/02-html/02-04-bieu-mau-forms-dd8ae1d9.mp4","durationSec":423.55,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":40.12,"ten":"Ở đâu cũng có biểu mẫu"},
-        {"t":40.12,"den":81.72,"ten":"Cái vỏ form · action · method · name"},
-        {"t":81.72,"den":125.9,"ten":"label và input luôn đi cặp"},
-        {"t":125.9,"den":175.6,"ten":"Các type input hay dùng"},
-        {"t":175.6,"den":213.23,"ten":"textarea · select · button"},
-        {"t":213.23,"den":251.82,"ten":"Kiểm tra miễn phí từ trình duyệt"},
-        {"t":251.82,"den":299.7,"ten":"Bấm Gửi: dữ liệu đi đâu?"},
-        {"t":299.7,"den":340.8,"ten":"Bẫy: kiểm ở trình duyệt ≠ bảo mật"},
-        {"t":340.8,"den":392.77,"ten":"Bài tập"},
-        {"t":392.77,"den":423.55,"ten":"Tóm tắt"}
+        {"t":0,"den":81.72,"ten":"Ở đâu cũng có biểu mẫu"},
+        {"t":81.72,"den":175.6,"ten":"label và input luôn đi cặp · Các type input hay dùng"},
+        {"t":175.6,"den":251.82,"ten":"textarea · select · button"},
+        {"t":251.82,"den":340.8,"ten":"Bấm Gửi: dữ liệu đi đâu? · Bẫy: kiểm ở trình duyệt ≠ bảo mật"},
+        {"t":340.8,"den":423.55,"ten":"Bài tập · Tóm tắt"}
       ],
       "cues": [
         {"t":5.1,"vi":"Ô đăng nhập Gmail, ô tìm kiếm trên Shopee, trang thanh toán khi bạn mua hàng. Ba thứ này có một điểm chung."},
@@ -3530,16 +3607,12 @@
         {"t":413.96,"vi":"Bài sau, mình học bảng, đa phương tiện và khả năng tiếp cận. Hẹn gặp bạn ở bài 2.5."}
       ]
     },
-    "wf-2-5-tables-media-a11y": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/02-html/02-05-bang-media-tiep-can-3b87b1b3.mp4","durationSec":477.07,"nguonCau":"thoigian",
+    "wf-2-5-tables-media-a11y": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/02-html/02-05-bang-media-tiep-can-3b87b1b3.mp4","durationSec":477.07,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":46.08,"ten":"Trang đẹp mà khoá cửa"},
-        {"t":46.08,"den":99.99,"ten":"Bảng: hàng, cột, ô"},
-        {"t":99.99,"den":151.09,"ten":"Máy đọc bảng · đừng dàn trang bằng bảng"},
-        {"t":151.09,"den":203.86,"ten":"Video và âm thanh"},
-        {"t":203.86,"den":270.37,"ten":"Danh sách kiểm khả năng tiếp cận"},
-        {"t":270.37,"den":335.28,"ten":"Bốn phép kiểm trong năm phút"},
-        {"t":335.28,"den":385.42,"ten":"Bẫy: chữ gợi ý không phải nhãn"},
-        {"t":385.42,"den":439.18,"ten":"Bài tập"},
+        {"t":0,"den":99.99,"ten":"Trang đẹp mà khoá cửa · Bảng: hàng, cột, ô"},
+        {"t":99.99,"den":203.86,"ten":"Máy đọc bảng · đừng dàn trang bằng bảng · Video và âm thanh"},
+        {"t":203.86,"den":335.28,"ten":"Danh sách kiểm khả năng tiếp cận"},
+        {"t":335.28,"den":439.18,"ten":"Bẫy: chữ gợi ý không phải nhãn · Bài tập"},
         {"t":439.18,"den":477.07,"ten":"Tóm tắt"}
       ],
       "cues": [
@@ -3613,22 +3686,14 @@
         {"t":467.65,"vi":"Vậy là xong phần HTML. Bài sau là bài kiểm tra Chương 2, rồi mình sang Chương 3: CSS."}
       ]
     },
-    "wf-3-0-slides": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/03-css/03-00-slide-tong-quan-chuong-3-d1f14e8c.mp4","durationSec":592.74,"nguonCau":"thoigian",
+    "wf-3-0-slides": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/03-css/03-00-slide-tong-quan-chuong-3-d1f14e8c.mp4","durationSec":592.74,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":38.73,"ten":"Chương 3 — CSS & responsive"},
-        {"t":38.73,"den":71.14,"ten":"Nội dung chương"},
-        {"t":71.14,"den":106.02,"ten":"Ba cách gắn CSS"},
-        {"t":106.02,"den":148.09,"ten":"Bộ chọn — bốn loại dùng nhiều nhất"},
-        {"t":148.09,"den":186.87,"ten":"Xếp tầng & độ ưu tiên"},
-        {"t":186.87,"den":235.49,"ten":"Box model — một dòng chữa hết phiền"},
-        {"t":235.49,"den":297.96,"ten":"Flexbox — xếp theo một chiều ⭐"},
-        {"t":297.96,"den":335.48,"ten":"Canh giữa — bài toán kinh điển"},
-        {"t":335.48,"den":382.96,"ten":"CSS Grid — dàn trang hai chiều"},
-        {"t":382.96,"den":444.35,"ten":"Responsive — mobile first ⭐⭐"},
-        {"t":444.35,"den":479.22,"ten":"Đơn vị — dùng cái nào khi nào"},
-        {"t":479.22,"den":509.16,"ten":"Biến CSS — đổi màu cả trang"},
-        {"t":509.16,"den":550.76,"ten":"Bốn lỗi CSS hay gặp"},
-        {"t":550.76,"den":592.74,"ten":"Tự luyện"}
+        {"t":0,"den":106.02,"ten":"Chương 3 — CSS & responsive · Nội dung chương"},
+        {"t":106.02,"den":186.87,"ten":"Bộ chọn — bốn loại dùng nhiều nhất · Xếp tầng & độ ưu tiên"},
+        {"t":186.87,"den":297.96,"ten":"Box model — một dòng chữa hết phiền"},
+        {"t":297.96,"den":382.96,"ten":"Canh giữa — bài toán kinh điển"},
+        {"t":382.96,"den":479.22,"ten":"Responsive — mobile first ⭐⭐ · Đơn vị — dùng cái nào khi nào"},
+        {"t":479.22,"den":592.74,"ten":"Biến CSS — đổi màu cả trang · Bốn lỗi CSS hay gặp"}
       ],
       "cues": [
         {"t":5.2,"vi":"Chào bạn, đây là Chương 3 của khoá Nền tảng Web: CSS và thiết kế responsive."},
@@ -3722,16 +3787,12 @@
         {"t":583,"vi":"Làm xong năm bài là bạn dàn được một trang thật. Hẹn gặp bạn ở bài 3.1: CSS căn bản."}
       ]
     },
-    "wf-3-1-css-basics": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/03-css/03-01-css-can-ban-11bf5f6c.mp4","durationSec":457.12,"nguonCau":"thoigian",
+    "wf-3-1-css-basics": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/03-css/03-01-css-can-ban-11bf5f6c.mp4","durationSec":457.12,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":52.96,"ten":"Một HTML, ba bộ áo"},
-        {"t":52.96,"den":107.07,"ten":"Ba cách gắn CSS"},
-        {"t":107.07,"den":158.38,"ten":"Hình dạng một quy tắc"},
-        {"t":158.38,"den":220.42,"ten":"Ba bộ chọn dùng hằng ngày"},
-        {"t":220.42,"den":285.87,"ten":"Xếp tầng: luật nào thắng?"},
-        {"t":285.87,"den":317.65,"ten":"Trình duyệt chọn luật thắng"},
-        {"t":317.65,"den":359.5,"ten":"Cái bẫy !important"},
-        {"t":359.5,"den":418.26,"ten":"Bài tập"},
+        {"t":0,"den":107.07,"ten":"Một HTML, ba bộ áo · Ba cách gắn CSS"},
+        {"t":107.07,"den":220.42,"ten":"Hình dạng một quy tắc · Ba bộ chọn dùng hằng ngày"},
+        {"t":220.42,"den":317.65,"ten":"Xếp tầng: luật nào thắng? · Trình duyệt chọn luật thắng"},
+        {"t":317.65,"den":418.26,"ten":"Cái bẫy !important · Bài tập"},
         {"t":418.26,"den":457.12,"ten":"Tóm tắt"}
       ],
       "cues": [
@@ -3808,18 +3869,12 @@
         {"t":447.69,"vi":"Bài sau, mình học box model: mọi phần tử là một cái hộp. Hẹn gặp bạn ở bài 3.2."}
       ]
     },
-    "wf-3-2-box-model": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/03-css/03-02-box-model-59ea8288.mp4","durationSec":408.14,"nguonCau":"thoigian",
+    "wf-3-2-box-model": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/03-css/03-02-box-model-59ea8288.mp4","durationSec":408.14,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":35.41,"ten":"300px mà lại rộng 342px?"},
-        {"t":35.41,"den":78.57,"ten":"Bốn lớp của một cái hộp"},
-        {"t":78.57,"den":115.3,"ten":"Bốn lớp viết bằng CSS"},
-        {"t":115.3,"den":166.4,"ten":"Cái bẫy: width đo cái gì?"},
-        {"t":166.4,"den":208.59,"ten":"Bẫy hai cột 50%"},
-        {"t":208.59,"den":241.01,"ten":"Cú pháp rút gọn"},
-        {"t":241.01,"den":276.09,"ten":"Margin dọc bị gộp"},
-        {"t":276.09,"den":310.69,"ten":"Soi hộp bằng DevTools"},
-        {"t":310.69,"den":372.98,"ten":"Bài tập"},
-        {"t":372.98,"den":408.14,"ten":"Tóm tắt"}
+        {"t":0,"den":115.3,"ten":"300px mà lại rộng 342px? · Bốn lớp của một cái hộp"},
+        {"t":115.3,"den":208.59,"ten":"Cái bẫy: width đo cái gì? · Bẫy hai cột 50%"},
+        {"t":208.59,"den":310.69,"ten":"Cú pháp rút gọn · Margin dọc bị gộp"},
+        {"t":310.69,"den":408.14,"ten":"Bài tập · Tóm tắt"}
       ],
       "cues": [
         {"t":5.1,"vi":"Bạn viết CSS cho một cái thẻ, đặt width 300px cho gọn gàng."},
@@ -3888,19 +3943,12 @@
         {"t":398.27,"vi":"Bài sau, mình học Flexbox, cách xếp mọi thứ theo hàng hoặc cột. Hẹn gặp bạn ở bài 3.3."}
       ]
     },
-    "wf-3-3-flexbox": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/03-css/03-03-flexbox-df2c317e.mp4","durationSec":419.27,"nguonCau":"thoigian",
+    "wf-3-3-flexbox": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/03-css/03-03-flexbox-df2c317e.mp4","durationSec":419.27,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":37.95,"ten":"Căn giữa một cái hộp — khó thế sao?"},
-        {"t":37.95,"den":71.96,"ten":"Một dòng CSS để bắt đầu"},
-        {"t":71.96,"den":105.72,"ten":"Hai trục — ý tưởng cốt lõi"},
-        {"t":105.72,"den":138.35,"ten":"justify-content — dọc theo trục chính"},
-        {"t":138.35,"den":168.88,"ten":"align-items — cắt ngang trục chính"},
-        {"t":168.88,"den":200.05,"ten":"gap và flex-wrap"},
-        {"t":200.05,"den":236.07,"ten":"Cú căn giữa hoàn hảo"},
-        {"t":236.06,"den":273.06,"ten":"Nở ra: flex: 1"},
-        {"t":273.06,"den":320.94,"ten":"Bẫy: đổi sang column"},
-        {"t":320.93,"den":383.63,"ten":"Bài tập"},
-        {"t":383.63,"den":419.27,"ten":"Tóm tắt"}
+        {"t":0,"den":105.72,"ten":"Căn giữa một cái hộp — khó thế sao?"},
+        {"t":105.72,"den":200.05,"ten":"justify-content — dọc theo trục chính"},
+        {"t":200.05,"den":320.94,"ten":"Cú căn giữa hoàn hảo · Nở ra: flex: 1"},
+        {"t":320.93,"den":419.27,"ten":"Bài tập · Tóm tắt"}
       ],
       "cues": [
         {"t":5.1,"vi":"Suốt nhiều năm, căn giữa một cái hộp là chuyện vặt mà làm dân web khổ sở nhất."},
@@ -3972,18 +4020,13 @@
         {"t":408.92,"vi":"Bài sau, mình học CSS Grid, dàn trang hai chiều với cả hàng và cột. Hẹn gặp bạn ở bài 3.4."}
       ]
     },
-    "wf-3-4-css-grid": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/03-css/03-04-css-grid-139de453.mp4","durationSec":424.81,"nguonCau":"thoigian",
+    "wf-3-4-css-grid": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/03-css/03-04-css-grid-139de453.mp4","durationSec":424.81,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":37.96,"ten":"Vì sao cần Grid?"},
-        {"t":37.96,"den":83.74,"ten":"Bật lưới: display grid"},
-        {"t":83.74,"den":128.34,"ten":"Đơn vị fr: chia phần"},
-        {"t":128.34,"den":164.37,"ten":"repeat() và thanh bên cố định"},
-        {"t":164.37,"den":207.32,"ten":"Phần tử trải nhiều ô"},
-        {"t":207.32,"den":258.77,"ten":"Lưới tự đổi số cột"},
-        {"t":258.77,"den":305.29,"ten":"Grid hay Flexbox?"},
-        {"t":305.29,"den":341.09,"ten":"Bẫy: coi hai cái là đối thủ"},
-        {"t":341.09,"den":388.77,"ten":"Bài tập"},
-        {"t":388.77,"den":424.81,"ten":"Tóm tắt"}
+        {"t":0,"den":83.74,"ten":"Vì sao cần Grid? · Bật lưới: display grid"},
+        {"t":83.74,"den":164.37,"ten":"Đơn vị fr: chia phần · repeat() và thanh bên cố định"},
+        {"t":164.37,"den":258.77,"ten":"Phần tử trải nhiều ô · Lưới tự đổi số cột"},
+        {"t":258.77,"den":341.09,"ten":"Grid hay Flexbox? · Bẫy: coi hai cái là đối thủ"},
+        {"t":341.09,"den":424.81,"ten":"Bài tập · Tóm tắt"}
       ],
       "cues": [
         {"t":5.1,"vi":"Bạn muốn dựng một thư viện ảnh: mười tấm ảnh xếp thành hàng, hàng nào cũng thẳng cột với hàng trên."},
@@ -4052,18 +4095,13 @@
         {"t":414.94,"vi":"Bài sau, mình học thiết kế responsive: một trang, vừa mọi màn hình. Hẹn gặp bạn ở bài 3.5."}
       ]
     },
-    "wf-3-5-responsive": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/03-css/03-05-responsive-5a99ecdc.mp4","durationSec":486.4,"nguonCau":"thoigian",
+    "wf-3-5-responsive": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/03-css/03-05-responsive-5a99ecdc.mp4","durationSec":486.4,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":41.15,"ten":"Một trang, mọi màn hình"},
-        {"t":41.15,"den":85.46,"ten":"Bước 0: thẻ meta viewport"},
-        {"t":85.46,"den":140.14,"ten":"Đơn vị tương đối thay cho px"},
-        {"t":140.14,"den":175.33,"ten":"Ảnh không bao giờ tràn"},
-        {"t":175.33,"den":230.46,"ten":"Media query: CSS theo chiều rộng"},
-        {"t":230.46,"den":273.95,"ten":"Vì sao mobile-first?"},
-        {"t":273.95,"den":315.62,"ten":"Đặt điểm ngắt ở đâu?"},
-        {"t":315.62,"den":358.65,"ten":"Bẫy: chỉ kéo hẹp cửa sổ"},
-        {"t":358.64,"den":389.72,"ten":"Framework đứng trên nền này"},
-        {"t":389.72,"den":447.87,"ten":"Bài tập"},
+        {"t":0,"den":85.46,"ten":"Một trang, mọi màn hình · Bước 0: thẻ meta viewport"},
+        {"t":85.46,"den":175.33,"ten":"Đơn vị tương đối thay cho px · Ảnh không bao giờ tràn"},
+        {"t":175.33,"den":273.95,"ten":"Media query: CSS theo chiều rộng · Vì sao mobile-first?"},
+        {"t":273.95,"den":358.65,"ten":"Đặt điểm ngắt ở đâu? · Bẫy: chỉ kéo hẹp cửa sổ"},
+        {"t":358.64,"den":447.87,"ten":"Framework đứng trên nền này · Bài tập"},
         {"t":447.87,"den":486.4,"ten":"Tóm tắt"}
       ],
       "cues": [
@@ -4136,8 +4174,15 @@
         {"t":476.52,"vi":"Bài sau, 3.6, là bài kiểm tra chương ba. Xem lại bài cũ một chút rồi vào làm nhé, hẹn gặp bạn."}
       ]
     },
-    "wf-3-5b-wireframes": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/03-css/03-05b-wireframes-37b711b5.mp4","durationSec":667.41,"nguonCau":"srt",
-      "parts": [],
+    "wf-3-5b-wireframes": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/03-css/03-05b-wireframes-37b711b5.mp4","durationSec":667.41,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":134.04,"ten":"Mở bài · Cách nhanh nhất để dựng SAI trang"},
+        {"t":134.04,"den":245.98,"ten":"Năm từ hay bị lẫn · Vì sao lập trình viên nên vẽ"},
+        {"t":245.98,"den":380.35,"ten":"Năm quy ước làm wireframe dễ đọc"},
+        {"t":380.35,"den":521.75,"ten":"Từ wireframe thành HTML và CSS"},
+        {"t":521.75,"den":605.01,"ten":"Bài tập"},
+        {"t":605.01,"den":667.41,"ten":"Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 3.5b của khoá Nền tảng Web: wireframe, vẽ trang trước khi code."},
         {"t":12.53,"vi":"Bài 3.5 mình đã học thiết kế responsive: một trang HTML tự tái định hình cho mọi màn hình, mobile-first và media query."},
@@ -4240,30 +4285,15 @@
         {"t":665.39,"vi":"Hẹn gặp lại."}
       ]
     },
-    "wf-4-0-slides": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/04-javascript/04-00-slide-tong-quan-chuong-4-72523006.mp4","durationSec":654.8,"nguonCau":"thoigian",
+    "wf-4-0-slides": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/04-javascript/04-00-slide-tong-quan-chuong-4-72523006.mp4","durationSec":654.8,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":34,"ten":"Chương 4 — JavaScript nền tảng"},
-        {"t":34,"den":61.14,"ten":"Nội dung chương"},
-        {"t":61.13,"den":89.22,"ten":"JavaScript chạy ở đâu?"},
-        {"t":89.22,"den":120.64,"ten":"Biến — cái hộp có dán nhãn"},
-        {"t":120.64,"den":150.65,"ten":"const không phải \"đóng băng\""},
-        {"t":150.65,"den":182.21,"ten":"Các kiểu dữ liệu gặp đầu tiên"},
-        {"t":182.21,"den":211.87,"ten":"Chuỗi và template literal ⭐"},
-        {"t":211.87,"den":242.57,"ten":"Bẫy: dấu + vừa cộng vừa nối"},
-        {"t":242.57,"den":269.59,"ten":"So sánh: === chứ không phải =="},
-        {"t":269.59,"den":307.1,"ten":"Điều kiện ⭐"},
-        {"t":307.1,"den":332.84,"ten":"Vòng lặp"},
-        {"t":332.84,"den":358.99,"ten":"Hàm — khối việc đặt tên được"},
-        {"t":358.99,"den":388.57,"ten":"Arrow function ⭐"},
-        {"t":388.57,"den":414.91,"ten":"Mảng — danh sách theo thứ tự"},
-        {"t":414.91,"den":447.28,"ten":"map · filter · find ⭐⭐"},
-        {"t":447.28,"den":478.51,"ten":"reduce · sort và hai cái bẫy"},
-        {"t":478.51,"den":508.33,"ten":"Object · destructuring · spread ⭐"},
-        {"t":508.33,"den":542.26,"ten":"DOM — nối JavaScript với HTML"},
-        {"t":542.26,"den":567.41,"ten":"Bốn lỗi người mới hay gặp"},
-        {"t":567.41,"den":590.58,"ten":"Gặp lại ở FER202 chỗ nào"},
-        {"t":590.58,"den":618.93,"ten":"Tự luyện trong Console"},
-        {"t":618.93,"den":654.8,"ten":"Học thêm ở đâu"}
+        {"t":0,"den":89.22,"ten":"Chương 4 — JavaScript nền tảng · Nội dung chương"},
+        {"t":89.22,"den":182.21,"ten":"Biến — cái hộp có dán nhãn · const không phải \"đóng băng\""},
+        {"t":182.21,"den":269.59,"ten":"Chuỗi và template literal ⭐ · Bẫy: dấu + vừa cộng vừa nối"},
+        {"t":269.59,"den":358.99,"ten":"Điều kiện ⭐ · Vòng lặp"},
+        {"t":358.99,"den":447.28,"ten":"Arrow function ⭐ · Mảng — danh sách theo thứ tự"},
+        {"t":447.28,"den":542.26,"ten":"reduce · sort và hai cái bẫy"},
+        {"t":542.26,"den":654.8,"ten":"Bốn lỗi người mới hay gặp · Gặp lại ở FER202 chỗ nào"}
       ],
       "cues": [
         {"t":5.2,"vi":"Chào bạn, đây là Chương 4 của khoá Nền tảng Web: JavaScript nền tảng."},
@@ -4359,18 +4389,13 @@
         {"t":640.67,"vi":"Trước khi sang bài 4.1: mỗi bài trong chương này đều có bài luyện trên Code Lab, bấm link ngay dưới bài giảng, học xong bài nào luyện bài đó từ dễ đến khó nhé."}
       ]
     },
-    "wf-4-1-variables-types": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/04-javascript/04-01-bien-va-kieu-du-lieu-0f25100d.mp4","durationSec":477.98,"nguonCau":"thoigian",
+    "wf-4-1-variables-types": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/04-javascript/04-01-bien-va-kieu-du-lieu-0f25100d.mp4","durationSec":477.98,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":36.96,"ten":"Trang web nhớ dữ liệu ở đâu?"},
-        {"t":36.96,"den":89.26,"ten":"Hộp có nhãn: const và let"},
-        {"t":89.26,"den":140.84,"ten":"const khoá cái tên, không khoá giá trị"},
-        {"t":140.84,"den":189.06,"ten":"Chọn const, let hay var"},
-        {"t":189.06,"den":246.56,"ten":"Năm kiểu dữ liệu đầu tiên"},
-        {"t":246.56,"den":288.63,"ten":"Làm việc với chuỗi"},
-        {"t":288.63,"den":323.32,"ten":"Bẫy: dấu cộng mang hai vai"},
-        {"t":323.32,"den":376.05,"ten":"Bẫy: hai dấu bằng và ba dấu bằng"},
-        {"t":376.05,"den":435.98,"ten":"Bài tập"},
-        {"t":435.98,"den":477.98,"ten":"Tóm tắt"}
+        {"t":0,"den":89.26,"ten":"Trang web nhớ dữ liệu ở đâu? · Hộp có nhãn: const và let"},
+        {"t":89.26,"den":189.06,"ten":"const khoá cái tên, không khoá giá trị"},
+        {"t":189.06,"den":288.63,"ten":"Năm kiểu dữ liệu đầu tiên · Làm việc với chuỗi"},
+        {"t":288.63,"den":376.05,"ten":"Bẫy: dấu cộng mang hai vai"},
+        {"t":376.05,"den":477.98,"ten":"Bài tập · Tóm tắt"}
       ],
       "cues": [
         {"t":5.1,"vi":"Bạn vào một trang bán hàng, bấm thêm vào giỏ ba lần, và con số trên giỏ hàng nhảy từ không lên ba."},
@@ -4448,19 +4473,13 @@
         {"t":465.71,"vi":"Trước khi qua bài mới, bạn bấm vào link Code Lab ngay dưới bài giảng này, luyện các bài về biến và kiểu dữ liệu từ dễ đến khó cho chắc nhé."}
       ]
     },
-    "wf-4-2-conditions-loops": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/04-javascript/04-02-dieu-kien-va-vong-lap-15a306e0.mp4","durationSec":481.83,"nguonCau":"thoigian",
+    "wf-4-2-conditions-loops": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/04-javascript/04-02-dieu-kien-va-vong-lap-15a306e0.mp4","durationSec":481.83,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":33.49,"ten":"Code biết rẽ nhánh và lặp lại"},
-        {"t":33.5,"den":76.32,"ten":"So sánh và luật ba dấu bằng"},
-        {"t":76.32,"den":115.24,"ten":"Toán tử logic: VÀ, HOẶC, KHÔNG"},
-        {"t":115.24,"den":174.48,"ten":"if / else if / else"},
-        {"t":174.48,"den":232.4,"ten":"Giá trị nào được tính là sai?"},
-        {"t":232.4,"den":269.44,"ten":"Bẫy: || làm giá trị mặc định"},
-        {"t":269.44,"den":314.9,"ten":"Vòng for: biết trước số lần"},
-        {"t":314.9,"den":357.09,"ten":"Vòng while và vòng lặp vô hạn"},
-        {"t":357.09,"den":391.61,"ten":"for...of: đi qua từng phần tử"},
-        {"t":391.61,"den":438.95,"ten":"Bài tập"},
-        {"t":438.95,"den":481.83,"ten":"Tóm tắt"}
+        {"t":0,"den":115.24,"ten":"Code biết rẽ nhánh và lặp lại · So sánh và luật ba dấu bằng"},
+        {"t":115.24,"den":232.4,"ten":"if / else if / else · Giá trị nào được tính là sai?"},
+        {"t":232.4,"den":314.9,"ten":"Bẫy: || làm giá trị mặc định · Vòng for: biết trước số lần"},
+        {"t":314.9,"den":391.61,"ten":"Vòng while và vòng lặp vô hạn"},
+        {"t":391.61,"den":481.83,"ten":"Bài tập · Tóm tắt"}
       ],
       "cues": [
         {"t":5.1,"vi":"Mở một trang bán hàng: nếu bạn đã đăng nhập, trang hiện bảng điều khiển. Chưa đăng nhập thì hiện nút đăng nhập."},
@@ -4542,20 +4561,13 @@
         {"t":469.51,"vi":"Trước khi qua bài mới, bạn bấm vào link Code Lab ngay dưới bài giảng này, luyện các bài về điều kiện và vòng lặp từ dễ đến khó cho chắc nhé."}
       ]
     },
-    "wf-4-3-functions": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/04-javascript/04-03-ham-functions-1944e96c.mp4","durationSec":494.25,"nguonCau":"thoigian",
+    "wf-4-3-functions": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/04-javascript/04-03-ham-functions-1944e96c.mp4","durationSec":494.25,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":37.93,"ten":"Chép dán ba lần, sửa sót một chỗ"},
-        {"t":37.93,"den":67.13,"ten":"Hàm là một cỗ máy"},
-        {"t":67.13,"den":107.9,"ten":"Khai báo và gọi hàm"},
-        {"t":107.9,"den":147.5,"ten":"Gọi hàm: nhảy vào rồi quay về"},
-        {"t":147.5,"den":177.25,"ten":"Quên return: ra undefined"},
-        {"t":177.25,"den":224.93,"ten":"Hàm mũi tên: dạng ngắn hiện đại"},
-        {"t":224.93,"den":256.11,"ten":"Tham số mặc định"},
-        {"t":256.11,"den":303.3,"ten":"Phạm vi: những chiếc hộp lồng nhau"},
-        {"t":303.29,"den":348.77,"ten":"function hay arrow? Và thói quen tốt"},
-        {"t":348.77,"den":390.5,"ten":"Bẫy: arrow có ngoặc nhọn"},
-        {"t":390.5,"den":449.8,"ten":"Bài tập"},
-        {"t":449.8,"den":494.25,"ten":"Tóm tắt"}
+        {"t":0,"den":107.9,"ten":"Chép dán ba lần, sửa sót một chỗ · Hàm là một cỗ máy"},
+        {"t":107.9,"den":224.93,"ten":"Gọi hàm: nhảy vào rồi quay về · Quên return: ra undefined"},
+        {"t":224.93,"den":303.3,"ten":"Tham số mặc định · Phạm vi: những chiếc hộp lồng nhau"},
+        {"t":303.29,"den":390.5,"ten":"function hay arrow? Và thói quen tốt"},
+        {"t":390.5,"den":494.25,"ten":"Bài tập · Tóm tắt"}
       ],
       "cues": [
         {"t":5.1,"vi":"Giả sử trang bán hàng của bạn cần tính tiền sau thuế ở ba chỗ: giỏ hàng, trang thanh toán, và email hoá đơn."},
@@ -4636,16 +4648,12 @@
         {"t":483.09,"vi":"Trước khi qua bài mới, bạn bấm vào link Code Lab ngay dưới bài giảng này, luyện các bài viết hàm từ dễ đến khó cho chắc nhé."}
       ]
     },
-    "wf-4-4-arrays-objects": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/04-javascript/04-04-mang-va-doi-tuong-6f0bf3ad.mp4","durationSec":504.89,"nguonCau":"thoigian",
+    "wf-4-4-arrays-objects": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/04-javascript/04-04-mang-va-doi-tuong-6f0bf3ad.mp4","durationSec":504.89,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":45.39,"ten":"Dữ liệu thật trông ra sao?"},
-        {"t":45.39,"den":100.74,"ten":"Mảng: dãy ô có chỉ số"},
-        {"t":100.74,"den":162.74,"ten":"Băng chuyền: forEach và map"},
-        {"t":162.74,"den":210.6,"ten":"filter lọc, reduce gộp"},
-        {"t":210.6,"den":268.1,"ten":"Đối tượng: thẻ hồ sơ có nhãn"},
-        {"t":268.1,"den":335.3,"ten":"Mảng các đối tượng"},
-        {"t":335.3,"den":389.37,"ten":"Bẫy: spread chỉ chép nông"},
-        {"t":389.37,"den":457.46,"ten":"Bài tập"},
+        {"t":0,"den":100.74,"ten":"Dữ liệu thật trông ra sao? · Mảng: dãy ô có chỉ số"},
+        {"t":100.74,"den":210.6,"ten":"Băng chuyền: forEach và map · filter lọc, reduce gộp"},
+        {"t":210.6,"den":335.3,"ten":"Đối tượng: thẻ hồ sơ có nhãn · Mảng các đối tượng"},
+        {"t":335.3,"den":457.46,"ten":"Bẫy: spread chỉ chép nông · Bài tập"},
         {"t":457.46,"den":504.89,"ten":"Tóm tắt"}
       ],
       "cues": [
@@ -4719,18 +4727,13 @@
         {"t":495.7,"vi":"Bài sau, 4.5, mình dùng DOM để JavaScript đọc và thay đổi trang web đang hiển thị. Hẹn gặp bạn nhé."}
       ]
     },
-    "wf-4-5-dom-events": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/04-javascript/04-05-dom-va-su-kien-5f23a086.mp4","durationSec":570.31,"nguonCau":"thoigian",
+    "wf-4-5-dom-events": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/04-javascript/04-05-dom-va-su-kien-5f23a086.mp4","durationSec":570.31,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":44.07,"ten":"Vì sao bấm nút mà trang đứng im?"},
-        {"t":44.07,"den":95.66,"ten":"DOM: cây đối tượng dựng từ HTML"},
-        {"t":95.66,"den":154.37,"ten":"Tìm phần tử: querySelector"},
-        {"t":154.37,"den":208.97,"ten":"Đọc và đổi: textContent, classList, value"},
-        {"t":208.96,"den":271.14,"ten":"Sự kiện: addEventListener"},
-        {"t":271.14,"den":320.86,"ten":"Ghép lại: bộ đếm sống"},
-        {"t":320.86,"den":380.24,"ten":"event.target và sự kiện nổi bọt"},
-        {"t":380.24,"den":442.24,"ten":"Bẫy: script chạy khi DOM chưa có"},
-        {"t":442.24,"den":470.2,"ten":"Cây cầu sang React"},
-        {"t":470.2,"den":522.24,"ten":"Bài tập"},
+        {"t":0,"den":95.66,"ten":"Vì sao bấm nút mà trang đứng im?"},
+        {"t":95.66,"den":208.97,"ten":"Tìm phần tử: querySelector"},
+        {"t":208.96,"den":320.86,"ten":"Sự kiện: addEventListener · Ghép lại: bộ đếm sống"},
+        {"t":320.86,"den":442.24,"ten":"event.target và sự kiện nổi bọt"},
+        {"t":442.24,"den":522.24,"ten":"Cây cầu sang React · Bài tập"},
         {"t":522.24,"den":570.31,"ten":"Tóm tắt"}
       ],
       "cues": [
@@ -4813,23 +4816,15 @@
         {"t":561.6,"vi":"Luyện tìm phần tử, đổi nội dung và bắt sự kiện từ dễ đến khó, rồi hẵng sang bài mới cho chắc."}
       ]
     },
-    "wf-5-0-slides": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/05-js-bat-dong-bo/05-00-slide-tong-quan-chuong-5-fd671076.mp4","durationSec":631.7,"nguonCau":"thoigian",
+    "wf-5-0-slides": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/05-js-bat-dong-bo/05-00-slide-tong-quan-chuong-5-fd671076.mp4","durationSec":631.7,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":49.49,"ten":"Chương 5 — JavaScript bất đồng bộ"},
-        {"t":49.49,"den":78.34,"ten":"Nội dung chương"},
-        {"t":78.34,"den":117.63,"ten":"JavaScript chỉ có MỘT luồng"},
-        {"t":117.63,"den":177.15,"ten":"Event loop — ai chạy trước, ai chạy sau"},
-        {"t":177.15,"den":213.24,"ten":"Callback — cách cũ, và vì sao nó khổ"},
-        {"t":213.24,"den":248.58,"ten":"Promise — lời hứa có ba trạng thái"},
-        {"t":248.58,"den":295.11,"ten":"async / await ⭐"},
-        {"t":295.11,"den":340.05,"ten":"Bắt lỗi: try / catch quanh await"},
-        {"t":340.05,"den":383.86,"ten":"fetch — gọi API thật ⭐⭐"},
-        {"t":383.86,"den":421.24,"ten":"Chạy song song: Promise.all"},
-        {"t":421.24,"den":465.31,"ten":"ES Modules — tách mã ra nhiều file ⭐"},
-        {"t":465.31,"den":502.4,"ten":"Bốn bẫy bất đồng bộ hay gặp"},
-        {"t":502.4,"den":541.08,"ten":"Chương này gặp lại ở FER202 chỗ nào"},
-        {"t":541.08,"den":585.96,"ten":"Tự luyện với API công khai"},
-        {"t":585.96,"den":631.7,"ten":"Học thêm ở đâu"}
+        {"t":0,"den":117.63,"ten":"Chương 5 — JavaScript bất đồng bộ · Nội dung chương"},
+        {"t":117.63,"den":213.24,"ten":"Event loop — ai chạy trước, ai chạy sau"},
+        {"t":213.24,"den":295.11,"ten":"Promise — lời hứa có ba trạng thái · async / await ⭐"},
+        {"t":295.11,"den":383.86,"ten":"Bắt lỗi: try / catch quanh await · fetch — gọi API thật ⭐⭐"},
+        {"t":383.86,"den":465.31,"ten":"Chạy song song: Promise.all"},
+        {"t":465.31,"den":541.08,"ten":"Bốn bẫy bất đồng bộ hay gặp"},
+        {"t":541.08,"den":631.7,"ten":"Tự luyện với API công khai · Học thêm ở đâu"}
       ],
       "cues": [
         {"t":5.2,"vi":"Chào bạn, đây là Chương 5 của khoá Nền tảng Web: JavaScript bất đồng bộ và modules."},
@@ -4918,16 +4913,12 @@
         {"t":625.48,"vi":"Hẹn gặp bạn ở bài 5.1: Đồng bộ và bất đồng bộ, event loop."}
       ]
     },
-    "wf-5-1-event-loop": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/05-js-bat-dong-bo/05-01-event-loop-948d6cfc.mp4","durationSec":453.26,"nguonCau":"thoigian",
+    "wf-5-1-event-loop": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/05-js-bat-dong-bo/05-01-event-loop-948d6cfc.mp4","durationSec":453.26,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":39.93,"ten":"Chờ máy chủ mà trang không đơ"},
-        {"t":39.93,"den":82.89,"ten":"Đơn luồng: đồng bộ thì chặn"},
-        {"t":82.89,"den":127.12,"ten":"Đời thường: quán cà phê một thu ngân"},
-        {"t":127.12,"den":171.42,"ten":"Mô hình: bốn vùng"},
-        {"t":171.42,"den":240.01,"ten":"Chạy từng dòng: setTimeout 0 mili giây"},
-        {"t":240.01,"den":294.73,"ten":"Hai hàng đợi: promise chen trước"},
-        {"t":294.73,"den":342.04,"ten":"Vì sao vòng lặp nặng làm treo trang"},
-        {"t":342.04,"den":409.23,"ten":"Bài tập"},
+        {"t":0,"den":82.89,"ten":"Chờ máy chủ mà trang không đơ · Đơn luồng: đồng bộ thì chặn"},
+        {"t":82.89,"den":171.42,"ten":"Đời thường: quán cà phê một thu ngân · Mô hình: bốn vùng"},
+        {"t":171.42,"den":294.73,"ten":"Chạy từng dòng: setTimeout 0 mili giây"},
+        {"t":294.73,"den":409.23,"ten":"Vì sao vòng lặp nặng làm treo trang · Bài tập"},
         {"t":409.23,"den":453.26,"ten":"Tóm tắt"}
       ],
       "cues": [
@@ -4994,18 +4985,13 @@
         {"t":441.41,"vi":"Học xong event loop rồi, bạn bấm vào link Code Lab ngay dưới bài giảng này, luyện đoán thứ tự in ra từ dễ đến khó, rồi hẵng sang bài mới cho chắc nhé."}
       ]
     },
-    "wf-5-2-promises": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/05-js-bat-dong-bo/05-02-promise-83e3e77d.mp4","durationSec":502.25,"nguonCau":"thoigian",
+    "wf-5-2-promises": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/05-js-bat-dong-bo/05-02-promise-83e3e77d.mp4","durationSec":502.25,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":45.57,"ten":"Phiếu hẹn ở quán trà sữa"},
-        {"t":45.57,"den":85.71,"ten":"Ba trạng thái của một Promise"},
-        {"t":85.71,"den":125.13,"ten":"then, catch và finally"},
-        {"t":125.12,"den":165.21,"ten":"Nối chuỗi: băng chuyền nhiều trạm"},
-        {"t":165.21,"den":209.97,"ten":"Callback hell: kim tự tháp"},
-        {"t":209.97,"den":245.53,"ten":"Lỗi rơi xuống catch gần nhất"},
-        {"t":245.52,"den":302.63,"ten":"Promise đến từ đâu"},
-        {"t":302.63,"den":345.76,"ten":"Bẫy: quên return trong then"},
-        {"t":345.76,"den":384.94,"ten":"Promise.all: chờ nhiều phiếu một lúc"},
-        {"t":384.94,"den":451.26,"ten":"Bài tập"},
+        {"t":0,"den":85.71,"ten":"Phiếu hẹn ở quán trà sữa · Ba trạng thái của một Promise"},
+        {"t":85.71,"den":165.21,"ten":"then, catch và finally · Nối chuỗi: băng chuyền nhiều trạm"},
+        {"t":165.21,"den":245.53,"ten":"Callback hell: kim tự tháp · Lỗi rơi xuống catch gần nhất"},
+        {"t":245.52,"den":345.76,"ten":"Promise đến từ đâu · Bẫy: quên return trong then"},
+        {"t":345.76,"den":451.26,"ten":"Promise.all: chờ nhiều phiếu một lúc · Bài tập"},
         {"t":451.26,"den":502.25,"ten":"Tóm tắt"}
       ],
       "cues": [
@@ -5078,16 +5064,12 @@
         {"t":490.04,"vi":"Học xong Promise rồi, bạn bấm vào link Code Lab ngay dưới bài giảng này, luyện then, catch và nối chuỗi từ dễ đến khó, rồi hẵng sang bài mới cho chắc nhé."}
       ]
     },
-    "wf-5-3-async-await": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/05-js-bat-dong-bo/05-03-async-await-db98526a.mp4","durationSec":544.79,"nguonCau":"thoigian",
+    "wf-5-3-async-await": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/05-js-bat-dong-bo/05-03-async-await-db98526a.mp4","durationSec":544.79,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":50.46,"ten":"Viết bất đồng bộ như code thường"},
-        {"t":50.45,"den":105.03,"ten":"Bức tranh lớn: async và await là gì"},
-        {"t":105.03,"den":157.72,"ten":"Dịch chuỗi then sang await từng dòng"},
-        {"t":157.72,"den":212.9,"ten":"await: gập sách, nhường luồng chính"},
-        {"t":212.9,"den":261.3,"ten":"Lỗi: try / catch quen thuộc"},
-        {"t":261.3,"den":322.74,"ten":"Bẫy hiệu năng: tuần tự hay song song"},
-        {"t":322.74,"den":368.81,"ten":"Bẫy: quên await"},
-        {"t":368.8,"den":409.86,"ten":"Bẫy: await trong forEach"},
+        {"t":0,"den":105.03,"ten":"Viết bất đồng bộ như code thường"},
+        {"t":105.03,"den":212.9,"ten":"Dịch chuỗi then sang await từng dòng"},
+        {"t":212.9,"den":322.74,"ten":"Lỗi: try / catch quen thuộc"},
+        {"t":322.74,"den":409.86,"ten":"Bẫy: quên await · Bẫy: await trong forEach"},
         {"t":409.86,"den":487.69,"ten":"Bài tập"},
         {"t":487.69,"den":544.79,"ten":"Tóm tắt"}
       ],
@@ -5159,18 +5141,13 @@
         {"t":530.54,"vi":"Học xong async await rồi, bạn bấm vào link Code Lab ngay dưới bài giảng này, luyện viết lại chuỗi then, try catch và Promise.all từ dễ đến khó, rồi hẵng sang bài mới cho chắc nhé."}
       ]
     },
-    "wf-5-4-fetch-apis": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/05-js-bat-dong-bo/05-04-fetch-api-d673c1bd.mp4","durationSec":575.92,"nguonCau":"thoigian",
+    "wf-5-4-fetch-apis": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/05-js-bat-dong-bo/05-04-fetch-api-d673c1bd.mp4","durationSec":575.92,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":46.75,"ten":"Dữ liệu nằm trên máy chủ"},
-        {"t":46.75,"den":105.39,"ten":"Bức tranh lớn: một chuyến đi về"},
-        {"t":105.39,"den":154.95,"ten":"GET với await: hai lần chờ"},
-        {"t":154.95,"den":192.43,"ten":"Tab Network: nhìn tận mắt request"},
-        {"t":192.43,"den":233.91,"ten":"Dựng danh sách lên trang"},
-        {"t":233.91,"den":300.4,"ten":"Bẫy lớn nhất: 404 vẫn không reject"},
-        {"t":300.4,"den":332.08,"ten":"Bẫy: quên await trước res.json()"},
-        {"t":332.08,"den":381.05,"ten":"Lỗi mạng, CORS và try catch"},
-        {"t":381.05,"den":441.49,"ten":"Gửi dữ liệu bằng POST"},
-        {"t":441.49,"den":519.87,"ten":"Bài tập"},
+        {"t":0,"den":105.39,"ten":"Dữ liệu nằm trên máy chủ · Bức tranh lớn: một chuyến đi về"},
+        {"t":105.39,"den":192.43,"ten":"GET với await: hai lần chờ"},
+        {"t":192.43,"den":300.4,"ten":"Dựng danh sách lên trang"},
+        {"t":300.4,"den":381.05,"ten":"Bẫy: quên await trước res.json()"},
+        {"t":381.05,"den":519.87,"ten":"Gửi dữ liệu bằng POST · Bài tập"},
         {"t":519.87,"den":575.92,"ten":"Tóm tắt"}
       ],
       "cues": [
@@ -5244,18 +5221,13 @@
         {"t":562.36,"vi":"Học xong fetch rồi, bạn bấm vào link Code Lab ngay dưới bài giảng này, luyện gọi API, kiểm res.ok và dựng danh sách từ dễ đến khó, rồi hẵng sang bài mới cho chắc nhé."}
       ]
     },
-    "wf-5-5-es-modules": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/05-js-bat-dong-bo/05-05-es-modules-cc00ad5c.mp4","durationSec":559.39,"nguonCau":"thoigian",
+    "wf-5-5-es-modules": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/05-js-bat-dong-bo/05-05-es-modules-cc00ad5c.mp4","durationSec":559.39,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":48.49,"ten":"Một file ba trăm dòng"},
-        {"t":48.49,"den":93.8,"ten":"Bức tranh lớn: mỗi file là một module"},
-        {"t":93.8,"den":149.56,"ten":"Xuất có tên: named export"},
-        {"t":149.56,"den":196.67,"ten":"Xuất mặc định: export default"},
-        {"t":196.67,"den":238,"ten":"Chạy trong trình duyệt: script type module"},
-        {"t":238,"den":281.69,"ten":"Sơ đồ phụ thuộc: module chạy một lần"},
-        {"t":281.69,"den":351.71,"ten":"Ba cái bẫy hay gặp"},
-        {"t":351.7,"den":383.38,"ten":"Module gặp npm"},
-        {"t":383.38,"den":426.46,"ten":"Cây cầu sang React"},
-        {"t":426.46,"den":495.82,"ten":"Bài tập"},
+        {"t":0,"den":93.8,"ten":"Một file ba trăm dòng"},
+        {"t":93.8,"den":196.67,"ten":"Xuất có tên: named export · Xuất mặc định: export default"},
+        {"t":196.67,"den":281.69,"ten":"Chạy trong trình duyệt: script type module"},
+        {"t":281.69,"den":383.38,"ten":"Ba cái bẫy hay gặp · Module gặp npm"},
+        {"t":383.38,"den":495.82,"ten":"Cây cầu sang React · Bài tập"},
         {"t":495.82,"den":559.39,"ten":"Tóm tắt"}
       ],
       "cues": [
@@ -5334,8 +5306,14 @@
         {"t":549.23,"vi":"Luyện tách code thành module, dùng cả kiểu có tên lẫn kiểu mặc định, từ dễ đến khó, rồi hẵng sang bài mới cho chắc."}
       ]
     },
-    "wf-6-0-slides": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/06-http-api/06-00-slide-tong-quan-chuong-6-967752c7.mp4","durationSec":502.28,"nguonCau":"srt",
-      "parts": [],
+    "wf-6-0-slides": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/06-http-api/06-00-slide-tong-quan-chuong-6-967752c7.mp4","durationSec":502.28,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":116.28,"ten":"Chương 6 — HTTP & API · Nội dung chương"},
+        {"t":116.28,"den":204.39,"ten":"HTTP method — các động từ · Mã trạng thái — nhớ theo nhóm"},
+        {"t":204.39,"den":281.57,"ten":"401 · 403 · 404 — ba cái hay nhầm"},
+        {"t":281.57,"den":405.36,"ten":"JSON — định dạng trao đổi của cả web"},
+        {"t":405.36,"den":502.28,"ten":"Chương này gặp lại ở FER202 chỗ nào"}
+      ],
       "cues": [
         {"t":5.2,"vi":"Chào bạn, đây là Chương 6 của khoá Nền tảng Web: HTTP và API."},
         {"t":11.58,"vi":"Mọi ứng dụng web là các máy tính trò chuyện với nhau: trình duyệt gửi một request, máy chủ trả về một response."},
@@ -5424,8 +5402,16 @@
         {"t":494.73,"vi":"Hẹn gặp bạn ở bài 6.1: Request và response, hình dạng của HTTP."}
       ]
     },
-    "wf-6-1-request-response": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/06-http-api/06-01-request-response-6729038e.mp4","durationSec":716.03,"nguonCau":"srt",
-      "parts": [],
+    "wf-6-1-request-response": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/06-http-api/06-01-request-response-6729038e.mp4","durationSec":716.03,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":89.29,"ten":"Một lần bấm Enter · Đời thường: phiếu gọi món"},
+        {"t":89.29,"den":177.14,"ten":"Bước 0: giải phẫu một URL"},
+        {"t":177.14,"den":305.62,"ten":"HTTP chỉ là chữ · Giải phẫu một request"},
+        {"t":305.62,"den":430.5,"ten":"Giải phẫu một response · curl cho thấy cả hai chiều"},
+        {"t":430.5,"den":517.62,"ten":"Phi trạng thái: máy chủ không nhớ"},
+        {"t":517.62,"den":655.06,"ten":"HTTP/1.1, HTTP/2, HTTP/3 · Bài tập"},
+        {"t":655.06,"den":716.03,"ten":"Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Bạn gõ một địa chỉ vào trình duyệt rồi bấm Enter, và chưa tới một giây sau, cả trang web hiện ra."},
         {"t":12.86,"vi":"Nhìn từ ngoài thì đó là phép màu."},
@@ -5542,8 +5528,15 @@
         {"t":701.08,"vi":"Học xong request và response rồi, bạn bấm vào link Code Lab ngay dưới bài giảng này, luyện đọc và viết HTTP thô từ dễ đến khó, rồi hẵng sang bài mới cho chắc nhé."}
       ]
     },
-    "wf-6-2-http-methods": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/06-http-api/06-02-http-methods-22691d7f.mp4","durationSec":627.65,"nguonCau":"srt",
-      "parts": [],
+    "wf-6-2-http-methods": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/06-http-api/06-02-http-methods-22691d7f.mp4","durationSec":627.65,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":109.51,"ten":"Từ đầu tiên của mọi request · Một địa chỉ, nhiều hành động"},
+        {"t":109.51,"den":253.87,"ten":"POST: lần nào cũng tạo · PUT thay thế, PATCH sửa một phần"},
+        {"t":253.87,"den":356.99,"ten":"DELETE hai lần, và 405 · An toàn và idempotent"},
+        {"t":356.99,"den":483.9,"ten":"Vì sao GET không được đổi dữ liệu"},
+        {"t":483.9,"den":566.97,"ten":"Bài tập"},
+        {"t":566.97,"den":627.65,"ten":"Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Từ đầu tiên của mọi request là method, như GET hay POST."},
         {"t":9.7,"vi":"Nó nói với máy chủ bạn định làm gì với địa chỉ theo sau: đọc, tạo thứ mới, thay thế, sửa một phần, hay xoá."},
@@ -5644,8 +5637,16 @@
         {"t":614.56,"vi":"Học xong method rồi, bạn bấm vào link Code Lab ngay dưới bài giảng này, luyện chọn đúng method từ dễ đến khó, rồi hẵng sang bài mới cho chắc nhé."}
       ]
     },
-    "wf-6-3-status-codes": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/06-http-api/06-03-status-codes-d4221d70.mp4","durationSec":736.28,"nguonCau":"srt",
-      "parts": [],
+    "wf-6-3-status-codes": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/06-http-api/06-03-status-codes-d4221d70.mp4","durationSec":736.28,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":101.6,"ten":"Ba chữ số quyết định tất cả · Bước 1: chữ số đầu là họ"},
+        {"t":101.6,"den":212.12,"ten":"Bước 2: mười bốn mã thật · Bản đồ các mã hay gặp"},
+        {"t":212.12,"den":330.73,"ten":"Bước 3: phần thân và header giải thích mã"},
+        {"t":330.73,"den":414.49,"ten":"Hai cái bẫy khi tự viết API"},
+        {"t":414.49,"den":543.04,"ten":"Bước 5: fetch thấy gì · Bước 6: một hàm cho mọi kết quả"},
+        {"t":543.04,"den":659.7,"ten":"Bài tập"},
+        {"t":659.7,"den":736.28,"ten":"Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Mỗi lần bạn gọi một API, câu trả lời mở đầu bằng đúng ba chữ số."},
         {"t":10.82,"vi":"Chỉ nhìn ba chữ số đó, bạn đã biết thành công hay thất bại, lỗi của bạn hay lỗi của máy chủ, và có nên thử lại hay không."},
@@ -5755,8 +5756,16 @@
         {"t":723.19,"vi":"Học xong mã trạng thái rồi, bạn bấm vào link Code Lab ngay dưới bài giảng này, luyện chọn đúng mã từ dễ đến khó, rồi hẵng sang bài mới cho chắc nhé."}
       ]
     },
-    "wf-6-4-headers-json": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/06-http-api/06-04-headers-json-2720b28f.mp4","durationSec":706.81,"nguonCau":"srt",
-      "parts": [],
+    "wf-6-4-headers-json": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/06-http-api/06-04-headers-json-2720b28f.mp4","durationSec":706.81,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":111.66,"ten":"Một dòng header bị quên · Bước 1: những header bạn sẽ gặp"},
+        {"t":111.66,"den":191.87,"ten":"Bước 2: Content-Type — cách đọc phần thân"},
+        {"t":191.87,"den":279.2,"ten":"Bước 3: Accept — xin một định dạng · Bước 4: ETag và 304"},
+        {"t":279.2,"den":374.67,"ten":"Trình duyệt tự làm giúp bạn"},
+        {"t":374.67,"den":489.45,"ten":"Bước 5: JSON — thứ gì sống sót"},
+        {"t":489.45,"den":629.2,"ten":"Bước 7: header nào do ai đặt · Bài tập"},
+        {"t":629.2,"den":706.81,"ten":"Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Bạn gửi một sản phẩm có tên và giá, mà máy chủ báo thiếu tên. Bạn nhìn code: tên rõ ràng đã gửi rồi."},
         {"t":13.53,"vi":"Rất nhiều lỗi kiểu API không trả gì có chung một thủ phạm: một dòng header bị quên."},
@@ -5858,8 +5867,15 @@
         {"t":694.91,"vi":"Học xong header và JSON rồi, bạn bấm vào link Code Lab ngay dưới bài giảng này, luyện từ dễ đến khó, rồi hẵng sang bài mới cho chắc nhé."}
       ]
     },
-    "wf-6-5-rest-params-query": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/06-http-api/06-05-rest-params-query-b65c278c.mp4","durationSec":713.94,"nguonCau":"srt",
-      "parts": [],
+    "wf-6-5-rest-params-query": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/06-http-api/06-05-rest-params-query-b65c278c.mp4","durationSec":713.94,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":128.39,"ten":"Địa chỉ đoán được · Bước 1: tài nguyên là danh từ"},
+        {"t":128.39,"den":239.72,"ten":"Bước 2: đường dẫn hay query string?"},
+        {"t":239.72,"den":331.13,"ten":"Bước 4: mã hoá — URL chở được gì"},
+        {"t":331.13,"den":479.38,"ten":"Bước 5: mọi giá trị đều là chuỗi"},
+        {"t":479.38,"den":633.89,"ten":"Bước 7: cả chương trong một request · Bài tập"},
+        {"t":633.89,"den":713.94,"ten":"Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Hãy so hai API. API thứ nhất có các địa chỉ getProducts, deleteProduct, updateProductPrice."},
         {"t":13.94,"vi":"API thứ hai chỉ có products, và products số ba."},
@@ -5960,8 +5976,15 @@
         {"t":699.67,"vi":"Học xong REST rồi, bạn bấm vào link Code Lab ngay dưới bài giảng này, luyện thiết kế địa chỉ và đọc query từ dễ đến khó, rồi hẵng sang chương mới cho chắc nhé."}
       ]
     },
-    "wf-7-0-slides": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/07-xac-thuc-bao-mat/07-00-slide-tong-quan-chuong-7-176e871c.mp4","durationSec":617.36,"nguonCau":"srt",
-      "parts": [],
+    "wf-7-0-slides": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/07-xac-thuc-bao-mat/07-00-slide-tong-quan-chuong-7-176e871c.mp4","durationSec":617.36,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":97.43,"ten":"Chương 7 — Xác thực & bảo mật · Nội dung chương"},
+        {"t":97.43,"den":197.91,"ten":"Xác thực vs phân quyền · HTTP không nhớ — nên cần cookie"},
+        {"t":197.91,"den":305.3,"ten":"Token & JWT ⭐ · Session hay Token — chọn cái nào"},
+        {"t":305.3,"den":395.93,"ten":"Mật khẩu — ba luật không được phá"},
+        {"t":395.93,"den":500.84,"ten":"HTTPS — vì sao bắt buộc · CORS — lỗi bạn chắc chắn sẽ gặp ⭐"},
+        {"t":500.84,"den":617.36,"ten":"Ba lỗ hổng phải biết tên · Tự luyện"}
+      ],
       "cues": [
         {"t":5.2,"vi":"Chào bạn, đây là Chương 7 của khoá Nền tảng Web: Xác thực và bảo mật."},
         {"t":11.11,"vi":"Chương 6 mình đã học HTTP: mỗi lần trình duyệt nói chuyện với máy chủ là một request và một response, và HTTP phi trạng thái, nghĩa là máy chủ trả lời xong là quên sạch."},
@@ -6056,8 +6079,14 @@
         {"t":610.19,"vi":"Hẹn gặp bạn ở bài 7.1: xác thực và phân quyền, trên một app Node thật."}
       ]
     },
-    "wf-7-1-auth-basics": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/07-xac-thuc-bao-mat/07-01-xac-thuc-phan-quyen-68804ed6.mp4","durationSec":614.01,"nguonCau":"srt",
-      "parts": [],
+    "wf-7-1-auth-basics": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/07-xac-thuc-bao-mat/07-01-xac-thuc-phan-quyen-68804ed6.mp4","durationSec":614.01,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":144.54,"ten":"Mở bài · HTTP quên bạn"},
+        {"t":144.54,"den":266.63,"ten":"Bốn cách danh tính đi kèm request · Base64 không phải mã hoá"},
+        {"t":266.63,"den":391,"ten":"Xác thực trước, phân quyền sau · Đừng tin điều client tự nói"},
+        {"t":391,"den":474.65,"ten":"Một câu cho cả hai lỗi · Đăng nhập thật thêm gì"},
+        {"t":474.65,"den":614.01,"ten":"Bài tập · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 7.1 của khoá Nền tảng Web."},
         {"t":9.53,"vi":"Bài trước mình đã lướt tổng quan cả Chương 7: cookie, token, mật khẩu, HTTPS và CORS đều là câu trả lời cho hai câu hỏi."},
@@ -6155,8 +6184,15 @@
         {"t":599.54,"vi":"Học xong xác thực và phân quyền rồi, bạn bấm vào link Code Lab ngay dưới bài giảng này, luyện module 7.1 từ dễ đến khó, rồi hẵng sang bài mới cho chắc nhé."}
       ]
     },
-    "wf-7-2-cookies-sessions": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/07-xac-thuc-bao-mat/07-02-cookie-va-phien-d5c012be.mp4","durationSec":619.04,"nguonCau":"srt",
-      "parts": [],
+    "wf-7-2-cookies-sessions": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/07-xac-thuc-bao-mat/07-02-cookie-va-phien-d5c012be.mp4","durationSec":619.04,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":97.88,"ten":"Mở bài · Luồng của một phiên"},
+        {"t":97.88,"den":184.12,"ten":"Đọc Set-Cookie"},
+        {"t":184.12,"den":295.09,"ten":"HttpOnly trong trình duyệt thật · Đăng xuất cho thật"},
+        {"t":295.09,"den":414.25,"ten":"CSRF — cookie tự động quay lại hại bạn · Ba lớp chống CSRF"},
+        {"t":414.25,"den":544.93,"ten":"Cookie, localStorage hay sessionStorage · Bài tập"},
+        {"t":544.93,"den":619.04,"ten":"Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 7.2 của khoá Nền tảng Web."},
         {"t":9.46,"vi":"Bài trước mình đã phân biệt xác thực và phân quyền, và thấy rằng bằng chứng danh tính phải đi kèm mọi request, theo bốn cách."},
@@ -6246,8 +6282,14 @@
         {"t":605.63,"vi":"Học xong cookie và phiên rồi, bạn bấm vào link Code Lab ngay dưới bài giảng này, luyện module 7.2 từ dễ đến khó, rồi hẵng sang bài mới cho chắc nhé."}
       ]
     },
-    "wf-7-3-jwt": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/07-xac-thuc-bao-mat/07-03-jwt-08fa2b4f.mp4","durationSec":576.64,"nguonCau":"srt",
-      "parts": [],
+    "wf-7-3-jwt": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/07-xac-thuc-bao-mat/07-03-jwt-08fa2b4f.mp4","durationSec":576.64,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":114.64,"ten":"Mở bài · Ba phần, hai dấu chấm"},
+        {"t":114.64,"den":250.11,"ten":"Ai cũng đọc được · Token được tạo và kiểm thế nào"},
+        {"t":250.11,"den":345.71,"ten":"Thư viện làm đúng việc này · Gửi đi: Authorization Bearer"},
+        {"t":345.71,"den":497.43,"ten":"Phiên hay token? · Bài tập"},
+        {"t":497.43,"den":576.64,"ten":"Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 7.3 của khoá Nền tảng Web."},
         {"t":9.41,"vi":"Bài trước mình đã học phiên: máy chủ giữ sự thật trong một bản ghi, còn trình duyệt chỉ giữ một id ngẫu nhiên trong cookie."},
@@ -6325,8 +6367,14 @@
         {"t":563.32,"vi":"Hiểu JWT rồi, bạn bấm vào link Code Lab ngay dưới bài giảng này, luyện module 7.3 từ dễ đến khó, rồi hẵng sang bài mới cho chắc nhé."}
       ]
     },
-    "wf-7-4-passwords": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/07-xac-thuc-bao-mat/07-04-mat-khau-6ed77806.mp4","durationSec":588.42,"nguonCau":"srt",
-      "parts": [],
+    "wf-7-4-passwords": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/07-xac-thuc-bao-mat/07-04-mat-khau-6ed77806.mp4","durationSec":588.42,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":99.65,"ten":"Mở bài · Vì sao cột mật khẩu quan trọng"},
+        {"t":99.65,"den":195.51,"ten":"Hash không phải mã hoá · Hash thường gục trước bảng tra"},
+        {"t":195.51,"den":321.58,"ten":"Mỗi người một muối · Tốc độ: ở đây nhanh là xấu"},
+        {"t":321.58,"den":450.62,"ten":"Bên trong một hash bcrypt · Lưu và kiểm — như app của chương"},
+        {"t":450.62,"den":588.42,"ten":"Bài tập · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 7.4 của khoá Nền tảng Web."},
         {"t":9.54,"vi":"Bài trước mình đã học JWT: token tự mang thông tin và chữ ký, mà điểm yếu là không đăng xuất ngay được."},
@@ -6405,8 +6453,15 @@
         {"t":574.72,"vi":"Biết lưu mật khẩu đúng rồi, bạn bấm vào link Code Lab ngay dưới bài giảng này, luyện module 7.4 từ dễ đến khó, rồi hẵng sang bài mới cho chắc nhé."}
       ]
     },
-    "wf-7-5-https-cors": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/07-xac-thuc-bao-mat/07-05-https-va-cors-1bd63b10.mp4","durationSec":636.3,"nguonCau":"srt",
-      "parts": [],
+    "wf-7-5-https-cors": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/07-xac-thuc-bao-mat/07-05-https-va-cors-1bd63b10.mp4","durationSec":636.3,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":142.67,"ten":"Mở bài · HTTPS thêm gì cho HTTP"},
+        {"t":142.67,"den":232.62,"ten":"Chứng chỉ sai thì dừng mọi thứ"},
+        {"t":232.62,"den":346.19,"ten":"Origin và chính sách cùng origin"},
+        {"t":346.19,"den":461.47,"ten":"Preflight — hỏi trước bằng OPTIONS · Cookie qua các origin"},
+        {"t":461.47,"den":547.13,"ten":"Bài tập"},
+        {"t":547.13,"den":636.3,"ten":"Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 7.5 của khoá Nền tảng Web, bài cuối của Chương 7."},
         {"t":11.75,"vi":"Bài trước mình đã học lưu mật khẩu: hash chứ không mã hoá, mỗi người một muối, và dùng hàm hash chậm như bcrypt."},
@@ -6490,8 +6545,16 @@
         {"t":623.12,"vi":"Học xong HTTPS và CORS rồi, bạn bấm vào link Code Lab ngay dưới bài giảng này, luyện module 7.5 và cả bộ đề Chương 7 từ dễ đến khó nhé."}
       ]
     },
-    "wf-8-0-slides": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/08-du-lieu-sql/08-00-slide-tong-quan-chuong-8-adb4ccba.mp4","durationSec":668.25,"nguonCau":"srt",
-      "parts": [],
+    "wf-8-0-slides": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/08-du-lieu-sql/08-00-slide-tong-quan-chuong-8-adb4ccba.mp4","durationSec":668.25,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":93.77,"ten":"Chương 8 — Dữ liệu & SQL · Nội dung chương"},
+        {"t":93.77,"den":209.15,"ten":"Vì sao không lưu vào file cho xong"},
+        {"t":209.15,"den":318.37,"ten":"SELECT — câu lệnh dùng nhiều nhất"},
+        {"t":318.37,"den":397.46,"ten":"Thay đổi dữ liệu — và bẫy quên WHERE · Quan hệ — ba kiểu"},
+        {"t":397.46,"den":502.2,"ten":"JOIN — ghép dữ liệu từ nhiều bảng"},
+        {"t":502.2,"den":614.07,"ten":"SQL Injection — và cách chặn"},
+        {"t":614.07,"den":668.25,"ten":"Tự luyện"}
+      ],
       "cues": [
         {"t":5.2,"vi":"Chào bạn, đây là Chương 8 của khoá Nền tảng Web: Dữ liệu và SQL."},
         {"t":11.15,"vi":"Chương 7 mình đã học xác thực và bảo mật: cookie, JWT, và cách băm mật khẩu thay vì lưu mật khẩu thô."},
@@ -6605,8 +6668,16 @@
         {"t":660.65,"vi":"Hẹn gặp bạn ở bài 8.1: vì sao cần cơ sở dữ liệu, và bên trong nó có gì."}
       ]
     },
-    "wf-8-1-databases": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/08-du-lieu-sql/08-01-vi-sao-can-co-so-du-lieu-742ee6ee.mp4","durationSec":721.85,"nguonCau":"srt",
-      "parts": [],
+    "wf-8-1-databases": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/08-du-lieu-sql/08-01-vi-sao-can-co-so-du-lieu-742ee6ee.mp4","durationSec":721.85,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":131.47,"ten":"Ôn nhanh và nối sang bài mới · Mảng trong bộ nhớ quên sạch"},
+        {"t":131.47,"den":232.3,"ten":"Thí nghiệm: file JSON dưới tải"},
+        {"t":232.3,"den":344.46,"ten":"Bảng, dòng, cột · Đọc định nghĩa một bảng"},
+        {"t":344.46,"den":447.92,"ten":"Ràng buộc từ chối dữ liệu sai"},
+        {"t":447.92,"den":572.93,"ten":"Quan hệ hay tài liệu?"},
+        {"t":572.93,"den":649.44,"ten":"Bài tập"},
+        {"t":649.44,"den":721.85,"ten":"Tóm tắt"}
+      ],
       "cues": [
         {"t":5,"vi":"Chào bạn, đến với bài 8.1 của khoá Nền tảng Web: vì sao cần cơ sở dữ liệu, và bên trong nó có gì."},
         {"t":13.83,"vi":"Ở bài 8.0 mình đã lướt mười ba slide của cả chương: bảng, SELECT, JOIN, rồi Prisma."},
@@ -6718,8 +6789,15 @@
         {"t":717.27,"vi":"Làm xong rồi hẵng sang bài mới cho chắc nhé."}
       ]
     },
-    "wf-8-2-select": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/08-du-lieu-sql/08-02-select-dat-cau-hoi-30a0cd14.mp4","durationSec":685.67,"nguonCau":"srt",
-      "parts": [],
+    "wf-8-2-select": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/08-du-lieu-sql/08-02-select-dat-cau-hoi-30a0cd14.mp4","durationSec":685.67,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":104.66,"ten":"Ôn nhanh và nối sang bài mới"},
+        {"t":104.66,"den":239.78,"ten":"WHERE — lọc dòng · LIKE · IN · BETWEEN"},
+        {"t":239.78,"den":366.41,"ten":"NULL là “chưa biết”"},
+        {"t":366.41,"den":500.48,"ten":"Thứ tự SQL thật sự chạy · Chỉ mục — tìm nhanh như mục lục"},
+        {"t":500.48,"den":606.96,"ten":"Bài tập"},
+        {"t":606.96,"den":685.67,"ten":"Tóm tắt"}
+      ],
       "cues": [
         {"t":5,"vi":"Chào bạn, đến với bài 8.2 của khoá Nền tảng Web: SELECT, cách đặt câu hỏi cho cơ sở dữ liệu."},
         {"t":13.27,"vi":"Ở bài 8.1, mình đã thấy dữ liệu nằm trong các bảng, có khoá chính và những ràng buộc bảo vệ."},
@@ -6831,8 +6909,15 @@
         {"t":680.95,"vi":"Làm xong rồi hẵng sang bài mới cho chắc nhé."}
       ]
     },
-    "wf-8-3-crud": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/08-du-lieu-sql/08-03-insert-update-delete-giao-dich-ef9b61dd.mp4","durationSec":660.08,"nguonCau":"srt",
-      "parts": [],
+    "wf-8-3-crud": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/08-du-lieu-sql/08-03-insert-update-delete-giao-dich-ef9b61dd.mp4","durationSec":660.08,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":80.54,"ten":"Ôn nhanh và nối sang bài mới · Ghi là lúc dữ liệu bị hỏng"},
+        {"t":80.54,"den":163.17,"ten":"INSERT · UPDATE · DELETE · RETURNING"},
+        {"t":163.17,"den":310.58,"ten":"Bẫy: quên WHERE · Giao dịch: tất cả hoặc không"},
+        {"t":310.58,"den":439.6,"ten":"Khuôn BEGIN · COMMIT · ROLLBACK · SQL injection — ghép chuỗi"},
+        {"t":439.6,"den":584.95,"ten":"Tham số — dữ liệu đi riêng · Bài tập"},
+        {"t":584.95,"den":660.08,"ten":"Tóm tắt"}
+      ],
       "cues": [
         {"t":5,"vi":"Chào bạn, đến với bài 8.3 của khoá Nền tảng Web: INSERT, UPDATE, DELETE và giao dịch."},
         {"t":12.86,"vi":"Ở bài 8.2, mình mới chỉ đọc dữ liệu bằng SELECT: lọc, sắp xếp, gom nhóm, và xem kế hoạch truy vấn."},
@@ -6939,8 +7024,15 @@
         {"t":655.51,"vi":"Làm xong rồi hẵng sang bài mới cho chắc nhé."}
       ]
     },
-    "wf-8-4-relationships-joins": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/08-du-lieu-sql/08-04-quan-he-va-join-38ff92f3.mp4","durationSec":645.24,"nguonCau":"srt",
-      "parts": [],
+    "wf-8-4-relationships-joins": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/08-du-lieu-sql/08-04-quan-he-va-join-38ff92f3.mp4","durationSec":645.24,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":136.94,"ten":"Ôn nhanh và nối sang bài mới · Mỗi thông tin chỉ lưu một nơi"},
+        {"t":136.94,"den":221.11,"ten":"INNER JOIN và LEFT JOIN"},
+        {"t":221.11,"den":361.76,"ten":"Đếm dòng liên quan, kể cả số không"},
+        {"t":361.76,"den":496.4,"ten":"Xoá dòng cha thì sao? · N+1 truy vấn (đo thật)"},
+        {"t":496.4,"den":573.22,"ten":"Bài tập"},
+        {"t":573.22,"den":645.24,"ten":"Tóm tắt"}
+      ],
       "cues": [
         {"t":5,"vi":"Chào bạn, đến với bài 8.4 của khoá Nền tảng Web: quan hệ và JOIN."},
         {"t":11.03,"vi":"Ở bài 8.3 mình đã ghi dữ liệu an toàn: đúng WHERE, giao dịch, và tham số thay vì ghép chuỗi."},
@@ -7055,8 +7147,16 @@
         {"t":640.66,"vi":"Làm xong rồi hẵng sang bài mới cho chắc nhé."}
       ]
     },
-    "wf-8-5-orm-prisma": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/08-du-lieu-sql/08-05-orm-voi-prisma-54568a72.mp4","durationSec":777.9,"nguonCau":"srt",
-      "parts": [],
+    "wf-8-5-orm-prisma": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/08-du-lieu-sql/08-05-orm-voi-prisma-54568a72.mp4","durationSec":777.9,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":85.21,"ten":"Ôn nhanh và nối sang bài mới"},
+        {"t":85.21,"den":239.7,"ten":"ORM làm gì — năm bước · Lược đồ và db push"},
+        {"t":239.7,"den":333.69,"ten":"Đọc: mỗi lời gọi kèm câu SQL thật"},
+        {"t":333.69,"den":427.09,"ten":"Ghi và những lỗi nên chờ sẵn"},
+        {"t":427.09,"den":528.08,"ten":"Kiểu dữ liệu bắt lỗi trước khi chạy"},
+        {"t":528.08,"den":693.29,"ten":"ORM cho bạn gì, lấy của bạn gì · Bài tập"},
+        {"t":693.29,"den":777.9,"ten":"Tóm tắt"}
+      ],
       "cues": [
         {"t":5,"vi":"Chào bạn, đến với bài 8.5 của khoá Nền tảng Web: ORM với Prisma, viết JavaScript thay cho chuỗi SQL."},
         {"t":14.44,"vi":"Ở bài 8.4 mình đã nối các bảng bằng JOIN, và thấy lỗi N cộng một truy vấn làm trang chậm."},
@@ -7166,8 +7266,13 @@
         {"t":773.53,"vi":"Làm xong rồi hẵng sang bài mới cho chắc nhé."}
       ]
     },
-    "wf-9-0-slides": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/09-typescript/09-00-slide-tong-quan-chuong-9-ea60bd2d.mp4","durationSec":320.63,"nguonCau":"srt",
-      "parts": [],
+    "wf-9-0-slides": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/09-typescript/09-00-slide-tong-quan-chuong-9-ea60bd2d.mp4","durationSec":320.63,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":97.15,"ten":"Chương 9 — TypeScript cơ bản · Nội dung chương"},
+        {"t":97.15,"den":165.94,"ten":"Kiểu cơ bản · Suy luận kiểu — đừng gõ thừa"},
+        {"t":165.94,"den":231.61,"ten":"type vs interface · Hàm có kiểu"},
+        {"t":231.61,"den":320.63,"ten":"TypeScript trong thực tế · Ba lỗi TypeScript hay gặp nhất"}
+      ],
       "cues": [
         {"t":5.2,"vi":"Chào bạn, đây là Chương 9 của khoá Nền tảng Web: TypeScript cơ bản."},
         {"t":10.76,"vi":"Chương 8 mình đã học cơ sở dữ liệu và SQL, và Prisma gắn kiểu cho dữ liệu."},
@@ -7214,8 +7319,13 @@
         {"t":312.4,"vi":"Hẹn gặp bạn ở bài 9.1: vì sao dùng TypeScript, và cái lỗi đầu tiên nó chặn được."}
       ]
     },
-    "wf-9-1-why-typescript": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/09-typescript/09-01-why-typescript-2860d065.mp4","durationSec":532.19,"nguonCau":"srt",
-      "parts": [],
+    "wf-9-1-why-typescript": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/09-typescript/09-01-why-typescript-2860d065.mp4","durationSec":532.19,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":121.24,"ten":"Mở bài · Một con số sai lặng lẽ"},
+        {"t":121.24,"den":266.67,"ten":"Bước 2 — cùng đoạn mã, có kiểu"},
+        {"t":266.67,"den":392.78,"ten":"Bước 4 — kiểu biến mất khi chạy"},
+        {"t":392.78,"den":532.19,"ten":"Bài tập · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 9.1 của khoá Nền tảng Web: vì sao dùng TypeScript."},
         {"t":11.34,"vi":"Ở bài 9.0 mình đã lướt mười hai slide của chương."},
@@ -7298,8 +7408,14 @@
         {"t":524.03,"vi":"Bài sau, 9.2, mình học các kiểu cơ bản và cách TypeScript tự suy luận kiểu cho bạn."}
       ]
     },
-    "wf-9-2-basic-types": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/09-typescript/09-02-basic-types-f99c4251.mp4","durationSec":470.31,"nguonCau":"srt",
-      "parts": [],
+    "wf-9-2-basic-types": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/09-typescript/09-02-basic-types-f99c4251.mp4","durationSec":470.31,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":97.48,"ten":"Mở bài · TypeScript tự biết kiểu?"},
+        {"t":97.48,"den":197.53,"ten":"Bước 2 — suy luận kiểu · Bước 3 — năm lỗi kiểu cơ bản bắt"},
+        {"t":197.53,"den":290.67,"ten":"Bước 4 — union & thu hẹp kiểu · Bước 5 — kiểu literal"},
+        {"t":290.67,"den":406.68,"ten":"Bước 6 — any và unknown · Bài tập"},
+        {"t":406.68,"den":470.31,"ten":"Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 9.2 của khoá Nền tảng Web: các kiểu cơ bản của TypeScript."},
         {"t":12.17,"vi":"Bài trước mình đã thấy TypeScript bắt lỗi trước khi chạy, và kiểu thì bị xoá khi chương trình chạy."},
@@ -7371,8 +7487,13 @@
         {"t":462.66,"vi":"Bài sau, 9.3, mình học interface, cách mô tả hình dáng của cả một object."}
       ]
     },
-    "wf-9-3-interfaces": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/09-typescript/09-03-interfaces-a9e43212.mp4","durationSec":478.68,"nguonCau":"srt",
-      "parts": [],
+    "wf-9-3-interfaces": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/09-typescript/09-03-interfaces-a9e43212.mp4","durationSec":478.68,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":104.15,"ten":"Mở bài · Làm sao mô tả một object?"},
+        {"t":104.15,"den":240.72,"ten":"Bước 2 — năm lỗi hình dáng bắt"},
+        {"t":240.72,"den":339.57,"ten":"Bước 4 — trường kind & never · Bước 5 — interface hay type?"},
+        {"t":339.57,"den":478.68,"ten":"Bài tập · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 9.3 của khoá Nền tảng Web: interface, ngôi sao của cả chương."},
         {"t":12.58,"vi":"Bài trước mình đã học các kiểu cơ bản, union, và cách TypeScript suy luận kiểu."},
@@ -7442,8 +7563,13 @@
         {"t":471.83,"vi":"Bài sau, 9.4, mình học gắn kiểu cho hàm và nếm thử generic."}
       ]
     },
-    "wf-9-4-functions-generics": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/09-typescript/09-04-functions-generics-53048181.mp4","durationSec":409.95,"nguonCau":"srt",
-      "parts": [],
+    "wf-9-4-functions-generics": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/09-typescript/09-04-functions-generics-53048181.mp4","durationSec":409.95,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":99.82,"ten":"Mở bài · Generic là gì?"},
+        {"t":99.82,"den":227.38,"ten":"Bước 2 — tham số tuỳ chọn & void"},
+        {"t":227.38,"den":348.97,"ten":"Bước 5 — ràng buộc & bẫy · Bài tập"},
+        {"t":348.97,"den":409.95,"ten":"Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 9.4 của khoá Nền tảng Web: gắn kiểu cho hàm, và nếm thử generic."},
         {"t":13.19,"vi":"Bài trước mình đã học interface, và discriminated union với trường kind."},
@@ -7501,8 +7627,13 @@
         {"t":398.92,"vi":"Bài sau, 9.5, bài cuối chương: TypeScript trong một dự án thật, với tsconfig, strict, và kiểm dữ liệu ở ranh giới."}
       ]
     },
-    "wf-9-5-ts-in-practice": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/09-typescript/09-05-ts-in-practice-12e9e780.mp4","durationSec":451.71,"nguonCau":"srt",
-      "parts": [],
+    "wf-9-5-ts-in-practice": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/web-foundations/09-typescript/09-05-ts-in-practice-12e9e780.mp4","durationSec":451.71,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":113.15,"ten":"Mở bài · strict TẮT vs BẬT"},
+        {"t":113.15,"den":211.53,"ten":"Bước 2 — dự án: tsconfig, build, chạy"},
+        {"t":211.53,"den":330.84,"ten":"Bước 4 — chạy TypeScript trực tiếp"},
+        {"t":330.84,"den":451.71,"ten":"Bài tập · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 9.5 của khoá Nền tảng Web: TypeScript trong một dự án thật."},
         {"t":12.56,"vi":"Đây là bài cuối của chương."},

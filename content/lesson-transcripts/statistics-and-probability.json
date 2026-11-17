@@ -2,8 +2,14 @@
   "courseSlug": "statistics-and-probability",
   "sinhBoi": "scripts/phu-de-tu-video-rieng.mjs",
   "lessons": {
-    "mas291-bayes": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/statistics-and-probability/15-xac-suat/15-02-bayes-dcc792c8.mp4","durationSec":601.48,"nguonCau":"srt",
-      "parts": [],
+    "mas291-bayes": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/statistics-and-probability/15-xac-suat/15-02-bayes-dcc792c8.mp4","durationSec":601.48,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":100.71,"ten":"Mở đầu · bài này học gì"},
+        {"t":100.71,"den":195.72,"ten":"Câu hỏi đầu tiên"},
+        {"t":195.72,"den":375.13,"ten":"Giờ mình giải bài xét nghiệm theo đúng…"},
+        {"t":375.13,"den":545.23,"ten":"Chữ given that báo hiệu Bayes"},
+        {"t":545.23,"den":601.48,"ten":"Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 2.2 của môn MAS291, xác suất thống kê."},
         {"t":11.27,"vi":"Bài trước mình đã có đủ bộ quy tắc: biến cố đối, quy tắc cộng, quy tắc nhân, và xác suất có điều kiện."},
@@ -121,8 +127,14 @@
         {"t":591.85,"vi":"Bài sau, 3.1: biến ngẫu nhiên rời rạc, kỳ vọng, phương sai, cùng hai phân phối nhị thức và Poisson."}
       ]
     },
-    "mas291-gioi-thieu": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/statistics-and-probability/01-gioi-thieu-mon-hoc/01-01-gioi-thieu-ban-do-mon-c649cdd0.mp4","durationSec":666.93,"nguonCau":"srt",
-      "parts": [],
+    "mas291-gioi-thieu": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/statistics-and-probability/01-gioi-thieu-mon-hoc/01-01-gioi-thieu-ban-do-mon-c649cdd0.mp4","durationSec":666.93,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":167.79,"ten":"Mở đầu · bài này học gì"},
+        {"t":167.79,"den":268.33,"ten":"Câu hỏi của de Méré là bài tập…"},
+        {"t":268.33,"den":417.12,"ten":"Vì sao kỹ sư phải nắm chắc thống…"},
+        {"t":417.12,"den":536.6,"ten":"Mình chạy thật một tệp Python nhỏ"},
+        {"t":536.6,"den":666.93,"ten":"Giờ tới lượt bạn"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 0.1 của môn MAS291, xác suất thống kê."},
         {"t":11.25,"vi":"Đây là môn toán của kỳ bốn. Môn học trước là MAE101, vì chương phân phối liên tục sẽ dùng tích phân."},
@@ -245,8 +257,13 @@
         {"t":657.93,"vi":"Bài sau, 1.1: tổng thể, mẫu, các loại biến, và ký hiệu tổng Σ mà cả môn dùng."}
       ]
     },
-    "mas291-tong-the-mau": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/statistics-and-probability/14-vai-tro-thong-ke/14-01-tong-the-mau-bien-sigma-141f4c68.mp4","durationSec":550.84,"nguonCau":"srt",
-      "parts": [],
+    "mas291-tong-the-mau": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/statistics-and-probability/14-vai-tro-thong-ke/14-01-tong-the-mau-bien-sigma-141f4c68.mp4","durationSec":550.84,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":184.53,"ten":"Mở đầu · bài này học gì"},
+        {"t":184.53,"den":277.45,"ten":"Phần này mình bổ sung ngoài bài web"},
+        {"t":277.45,"den":457.18,"ten":"Vì sao phải phân loại?"},
+        {"t":457.18,"den":550.84,"ten":"Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 1.1 của môn MAS291, xác suất thống kê."},
         {"t":11.27,"vi":"Bài trước: thống kê đi từ dữ liệu suy ra cái toàn thể."},
@@ -342,8 +359,14 @@
         {"t":542.02,"vi":"Bài sau, 2.1: toàn bộ quy tắc xác suất, bắt đầu từ không gian mẫu khi tung hai con xúc xắc."}
       ]
     },
-    "mas291-xac-suat-co-ban": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/statistics-and-probability/15-xac-suat/15-01-quy-tac-xac-suat-9ff9f2de.mp4","durationSec":613.14,"nguonCau":"srt",
-      "parts": [],
+    "mas291-xac-suat-co-ban": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/statistics-and-probability/15-xac-suat/15-01-quy-tac-xac-suat-9ff9f2de.mp4","durationSec":613.14,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":141.1,"ten":"Mở đầu · bài này học gì"},
+        {"t":141.1,"den":247.96,"ten":"Ví dụ 3 của bài web"},
+        {"t":247.96,"den":359.16,"ten":"Ví dụ 4"},
+        {"t":359.16,"den":447.61,"ten":"Là cái bẫy mà bài web cảnh báo"},
+        {"t":447.61,"den":613.14,"ten":"Giờ mình kiểm cả bốn ví dụ bằng…"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 2.1 của môn MAS291, xác suất thống kê."},
         {"t":11.26,"vi":"Bài trước mình đã phân biệt tổng thể với mẫu, tham số với thống kê, và đọc trôi chảy ký hiệu tổng Σ."},

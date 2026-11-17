@@ -2,8 +2,13 @@
   "courseSlug": "introduction-to-computer-science",
   "sinhBoi": "scripts/phu-de-tu-video-rieng.mjs",
   "lessons": {
-    "csi104-0-5-bat-dau-tu-so-0": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-computer-science/00-gioi-thieu-huong-dan-hoc/00-05-hanh-trinh-3d-vao-may-tinh-acb9795a.mp4","durationSec":215.52,"nguonCau":"srt",
-      "parts": [],
+    "csi104-0-5-bat-dau-tu-so-0": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-computer-science/00-gioi-thieu-huong-dan-hoc/00-05-hanh-trinh-3d-vao-may-tinh-acb9795a.mp4","durationSec":215.52,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":55.86,"ten":"Chiếc máy trên bàn · Bo mạch chủ"},
+        {"t":55.86,"den":116.35,"ten":"Bên trong con chip · Một lõi CPU"},
+        {"t":116.35,"den":189.9,"ten":"ALU: cộng bằng cổng logic · Cổng logic và transistor"},
+        {"t":189.9,"den":215.52,"ten":"Lùi ra ngoài"}
+      ],
       "cues": [
         {"t":5.2,"vi":"Bạn bấm chạy một dòng code và máy làm theo."},
         {"t":9.09,"vi":"Nhưng bên trong cái hộp này, thứ gì thật sự chạy nó?"},

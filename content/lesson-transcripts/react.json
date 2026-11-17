@@ -2,8 +2,21 @@
   "courseSlug": "react",
   "sinhBoi": "scripts/phu-de-tu-video-rieng.mjs",
   "lessons": {
-    "rx-0-1-cai-dat": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/react/00-vi-sao-react/00-04-cai-dat-vite-typescript-4d032dac.mp4","durationSec":1288.54,"nguonCau":"srt",
-      "parts": [],
+    "rx-0-1-cai-dat": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/react/00-vi-sao-react/00-04-cai-dat-vite-typescript-4d032dac.mp4","durationSec":1288.54,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":107.29,"ten":"Ôn nhanh · hôm nay"},
+        {"t":107.29,"den":209.9,"ten":"Slide: npm create vite, hai câu hỏi"},
+        {"t":209.9,"den":326.85,"ten":"Chạy thật: cài, chạy dev, xem phiên bản"},
+        {"t":326.85,"den":442.96,"ten":"Chạy thật hôm nay: CRA và Vite"},
+        {"t":442.96,"den":544.57,"ten":"Slide: bạn chỉ sống trong src · Từng tệp làm gì"},
+        {"t":544.57,"den":629.09,"ten":"Slide: từ index.html tới App"},
+        {"t":629.09,"den":720.62,"ten":"Chạy thật: trình duyệt nhận được gì"},
+        {"t":720.62,"den":818.54,"ten":"Slide: trang mặc định của Vite"},
+        {"t":818.54,"den":906.14,"ten":"Slide: vite build KHÔNG kiểm kiểu"},
+        {"t":906.14,"den":1061.06,"ten":"Chạy thật: phép kiểm thứ ba là lint"},
+        {"t":1061.06,"den":1167.66,"ten":"Chạy thật: test hai thấy trang của test một"},
+        {"t":1167.66,"den":1288.54,"ten":"Tự kiểm nhanh · Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 0.1 của khoá React."},
         {"t":9.07,"vi":"Bài trước mình thấy trang jQuery nói dối sau một lần Huỷ, còn bản React giữ một nguồn sự thật, và mình bàn cách học không kiệt sức."},
@@ -207,8 +220,21 @@
         {"t":1278.58,"vi":"Bài sau, 0.2: JSX giải thích cho rõ, nó biến thành gì, và cái gì thật sự hiện lên màn hình."}
       ]
     },
-    "rx-0-2-jsx": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/react/00-vi-sao-react/00-05-jsx-giai-thich-cho-ro-d3c0aa8d.mp4","durationSec":1139.33,"nguonCau":"srt",
-      "parts": [],
+    "rx-0-2-jsx": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/react/00-vi-sao-react/00-05-jsx-giai-thich-cho-ro-d3c0aa8d.mp4","durationSec":1139.33,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":101.9,"ten":"Ôn nhanh · hôm nay · Ba cái bẫy JSX của người mới"},
+        {"t":101.9,"den":217.06,"ten":"Chạy thật: tsc dịch JSX ra gì · Chạy thật: runtime cổ điển"},
+        {"t":217.06,"den":292.38,"ten":"Chạy thật: Vite gửi gì khi phát triển"},
+        {"t":292.38,"den":383.55,"ten":"Slide: phần tử chỉ là một object"},
+        {"t":383.55,"den":475.06,"ten":"Slide: bốn luật JSX · Chạy thật: luật một và hai"},
+        {"t":475.06,"den":581.22,"ten":"Chạy thật: luật ba và bốn"},
+        {"t":581.22,"den":685.87,"ten":"Chạy thật: A tới F · Bẫy: số 0 lạc trên thanh menu"},
+        {"t":685.87,"den":769.87,"ten":"Điều kiện: ba mẫu, khi nào dùng mẫu nào"},
+        {"t":769.87,"den":868.36,"ten":"Chạy thật: lớp phủ lỗi của Vite"},
+        {"t":868.36,"den":967.75,"ten":"Phỏng vấn: Fragment để làm gì? · Chạy thử: từ HTML sang JSX"},
+        {"t":967.75,"den":1074.96,"ten":"Thực hành: chứng minh bằng test · Tự kiểm nhanh"},
+        {"t":1074.96,"den":1139.33,"ten":"Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 0.2 của khoá React."},
         {"t":9.04,"vi":"Bài trước bạn tạo dự án phong-kham bằng Vite, thấy trình duyệt nhận JSX đã dịch thành jsxDEV, và biết tsc -b mới kiểm kiểu."},
@@ -389,8 +415,21 @@
         {"t":1131.21,"vi":"Bài sau, 0.3: JavaScript bạn cần cho React, chạy thật trên danh sách bác sĩ."}
       ]
     },
-    "rx-0-3-js-cho-react": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/react/00-vi-sao-react/00-06-javascript-cho-react-11759ba9.mp4","durationSec":1165.47,"nguonCau":"srt",
-      "parts": [],
+    "rx-0-3-js-cho-react": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/react/00-vi-sao-react/00-06-javascript-cho-react-11759ba9.mp4","durationSec":1165.47,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":131.3,"ten":"Ôn nhanh · hôm nay · React khó, hay JavaScript khó?"},
+        {"t":131.3,"den":221.26,"ten":"Slide: destructuring và spread · Chạy thật: destructuring"},
+        {"t":221.26,"den":302.29,"ten":"Chạy thật: spread và rest"},
+        {"t":302.29,"den":395.09,"ten":"Chạy thật: cùng giá trị hay cùng object?"},
+        {"t":395.09,"den":483.07,"ten":"Slide: bốn hàm thay cho vòng for"},
+        {"t":483.07,"den":592.55,"ten":"Bẫy: sắp xếp thẳng trên mảng state"},
+        {"t":592.55,"den":703.89,"ten":"Phỏng vấn: || và ?? khác nhau? · Slide: import và export"},
+        {"t":703.89,"den":832.69,"ten":"Chạy thật: closure nhớ nơi nó được tạo"},
+        {"t":832.69,"den":925.4,"ten":"Chạy thật: TypeScript tối thiểu"},
+        {"t":925.4,"den":1003.58,"ten":"Thực hành: bốn hàm tiện ích + test · Slide: tự gõ tiếp dự án"},
+        {"t":1003.58,"den":1097.63,"ten":"Tự gõ dự án: mẫu một phần + kết quả đạt · Tự kiểm nhanh"},
+        {"t":1097.63,"den":1165.47,"ten":"Tóm tắt · chương sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 0.3, bài cuối của Mục 0."},
         {"t":9.84,"vi":"Bài trước bạn thấy JSX thành lời gọi hàm, phần tử chỉ là object, và số không lạc trên trang vì hai dấu và."},
@@ -570,8 +609,21 @@
         {"t":1153.13,"vi":"Chương 1 bắt đầu từ chính dự án đó: bài 1.1, component là hàm, đặt tên, mỗi tệp một component, và giữ cho thuần khiết."}
       ]
     },
-    "rx-0-8-bat-dau-tai-day": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/react/00-vi-sao-react/00-01-bat-dau-tai-day-react-la-gi-a3451ab3.mp4","durationSec":1188.16,"nguonCau":"srt",
-      "parts": [],
+    "rx-0-8-bat-dau-tai-day": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/react/00-vi-sao-react/00-01-bat-dau-tai-day-react-la-gi-a3451ab3.mp4","durationSec":1188.16,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":89.74,"ten":"Chào bạn · khoá React · Tự sửa trang thì quên một bước"},
+        {"t":89.74,"den":174.42,"ten":"Mô phỏng: giao diện là hàm của dữ liệu"},
+        {"t":174.42,"den":269.12,"ten":"Bốn từ bạn sẽ nghe suốt khoá"},
+        {"t":269.12,"den":351.91,"ten":"Chạy thật: bấm Đặt, chỉ dữ liệu đổi"},
+        {"t":351.91,"den":497.75,"ten":"Thư viện, không phải framework trọn gói"},
+        {"t":497.75,"den":603.55,"ten":"Ba mốc ảnh hưởng tới mã bạn đọc"},
+        {"t":603.55,"den":714.39,"ten":"Vì sao công ty vẫn tuyển React"},
+        {"t":714.39,"den":818.66,"ten":"React, Vue, Angular, Svelte — đánh đổi"},
+        {"t":818.66,"den":900.64,"ten":"Slide: FER202 dạy nền đúng"},
+        {"t":900.64,"den":989.67,"ten":"Slide: khoá đưa bạn tới đâu · Phỏng vấn: vì sao khai tử CRA?"},
+        {"t":989.67,"den":1110.29,"ten":"Thực hành: tự kiểm hai khẳng định · Tự kiểm nhanh"},
+        {"t":1110.29,"den":1188.16,"ten":"Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, chào mừng bạn đến với khoá React trên cuongthai.com."},
         {"t":10.41,"vi":"Khoá này dạy React theo đúng cách các công ty đang làm năm 2026: Vite, TypeScript, React 19, và bộ thư viện đi kèm."},
@@ -748,8 +800,19 @@
         {"t":1176,"vi":"Bài sau, Bắt đầu tại đây phần hai: mình chạy thật một trang không cấu trúc để thấy nó sai ở đâu, rồi bàn cách học không kiệt sức."}
       ]
     },
-    "rx-0-9-bat-dau-khi-khong-co": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/react/00-vi-sao-react/00-02-bat-dau-tai-day-khong-cau-truc-a119dbb3.mp4","durationSec":928.03,"nguonCau":"srt",
-      "parts": [],
+    "rx-0-9-bat-dau-khi-khong-co": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/react/00-vi-sao-react/00-02-bat-dau-tai-day-khong-cau-truc-a119dbb3.mp4","durationSec":928.03,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":80.46,"ten":"Ôn nhanh · hôm nay · Tuần 1: bạn A viết nút Đặt"},
+        {"t":80.46,"den":182.22,"ten":"Tuần 3: bạn B thêm nút Huỷ"},
+        {"t":182.22,"den":299.27,"ten":"Mô phỏng: lỗi nằm ở cấu trúc"},
+        {"t":299.27,"den":376.01,"ten":"Chạy thật: test và trình duyệt"},
+        {"t":376.01,"den":497.42,"ten":"Nói công bằng cho jQuery · Bẫy: lưu một sự thật hai lần"},
+        {"t":497.42,"den":574.85,"ten":"Ở FER202 thế này — đi làm thế kia"},
+        {"t":574.85,"den":672.94,"ten":"Slide: tối thiểu trước, đầy đủ sau"},
+        {"t":672.94,"den":758.47,"ten":"Slide: dự án Đặt lịch phòng khám An Tâm"},
+        {"t":758.47,"den":870.85,"ten":"Thực hành: tái hiện bug jQuery · Tự kiểm nhanh"},
+        {"t":870.85,"den":928.03,"ten":"Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với phần hai của Bắt đầu tại đây, khoá React."},
         {"t":9.74,"vi":"Bài trước mình nói: giao diện là hàm của state."},
@@ -903,8 +966,20 @@
         {"t":918.42,"vi":"Bài sau, 0.1: mình cài đặt thật dự án bằng Vite và TypeScript, và đo so với Create React App."}
       ]
     },
-    "rx-1-1-component": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/react/01-component-va-props/01-02-component-la-ham-afc26ff5.mp4","durationSec":1025.14,"nguonCau":"srt",
-      "parts": [],
+    "rx-1-1-component": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/react/01-component-va-props/01-02-component-la-ham-afc26ff5.mp4","durationSec":1025.14,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":94.5,"ten":"Ôn nhanh · hôm nay"},
+        {"t":94.5,"den":187.58,"ten":"Chạy thật: tách Header ra tệp riêng"},
+        {"t":187.58,"den":291.83,"ten":"Chạy thật: chữ hoa thành gì khi biên dịch"},
+        {"t":291.83,"den":373.7,"ten":"Slide: mỗi component một tệp · Bốn quy ước, và lý do"},
+        {"t":373.7,"den":463.14,"ten":"Slide: React tự gọi hàm của bạn"},
+        {"t":463.14,"den":585.93,"ten":"Slide: component phải thuần"},
+        {"t":585.93,"den":685.21,"ten":"Slide: component bên trong component"},
+        {"t":685.21,"den":766.76,"ten":"Chạy thật: class component cũ"},
+        {"t":766.76,"den":852.44,"ten":"Khi nào viết component, khi nào không"},
+        {"t":852.44,"den":965.08,"ten":"Thực hành: tách trang, chứng minh không đổi · Tự kiểm nhanh"},
+        {"t":965.08,"den":1025.14,"ten":"Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Chương 1 của khoá React, bài 1.1."},
         {"t":9.95,"vi":"Hết Mục 0, bạn có dự án phong-kham với trang chủ tĩnh, dữ liệu sáu bác sĩ, và các hàm tiện ích có test."},
@@ -1070,8 +1145,20 @@
         {"t":1014.82,"vi":"Bài sau, 1.2: props và kiểu TypeScript của chúng, truyền dữ liệu xuống, children, và props chỉ đọc."}
       ]
     },
-    "rx-1-2-props": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/react/01-component-va-props/01-03-props-va-kieu-4d3afae8.mp4","durationSec":992.35,"nguonCau":"srt",
-      "parts": [],
+    "rx-1-2-props": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/react/01-component-va-props/01-03-props-va-kieu-4d3afae8.mp4","durationSec":992.35,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":95.92,"ten":"Ôn nhanh · hôm nay · Mô phỏng: props chảy một chiều"},
+        {"t":95.92,"den":175.19,"ten":"Slide: props là MỘT object cha đưa xuống con"},
+        {"t":175.19,"den":259.75,"ten":"Slide: interface, dấu hỏi và giá trị mặc định"},
+        {"t":259.75,"den":378.87,"ten":"Chạy thật: Record bắt nhãn bị quên"},
+        {"t":378.87,"den":491.33,"ten":"Chạy thật: PropTypes trong React 19"},
+        {"t":491.33,"den":598.75,"ten":"Mô phỏng: children là khe cắm · Slide: bẫy && và số 0"},
+        {"t":598.75,"den":687.73,"ten":"Bẫy: chữ \"0\" lạc trong ô tóm tắt"},
+        {"t":687.73,"den":766.34,"ten":"Mô phỏng: cùng một mảng trong bộ nhớ"},
+        {"t":766.34,"den":849.11,"ten":"Khi nào dùng props, khi nào không"},
+        {"t":849.11,"den":940.81,"ten":"Thực hành: thẻ bác sĩ có kiểu · Tự kiểm nhanh"},
+        {"t":940.81,"den":992.35,"ten":"Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 1.2 của khoá React."},
         {"t":8.76,"vi":"Bài trước, mình cắt trang chủ thành Header, Footer, và mọi component đều vẽ chữ cố định."},
@@ -1253,8 +1340,18 @@
         {"t":984.75,"vi":"Bài sau, 1.3: vẽ danh sách bằng map, và vì sao mỗi phần tử cần một key."}
       ]
     },
-    "rx-1-3-danh-sach": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/react/01-component-va-props/01-04-danh-sach-va-key-1eadd8f7.mp4","durationSec":863.6,"nguonCau":"srt",
-      "parts": [],
+    "rx-1-3-danh-sach": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/react/01-component-va-props/01-04-danh-sach-va-key-1eadd8f7.mp4","durationSec":863.6,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":83.24,"ten":"Ôn nhanh · hôm nay · Móc: ghi chú y tế nằm nhầm dòng"},
+        {"t":83.24,"den":164.99,"ten":"Chạy thật: DanhSachBacSi trên trang chủ"},
+        {"t":164.99,"den":255.96,"ten":"Chạy thật: ba test cho danh sách"},
+        {"t":255.96,"den":353.81,"ten":"Slide: key={index} và một lần chèn lên đầu"},
+        {"t":353.81,"den":455.74,"ten":"Bẫy: ô tick nhảy dòng · Slide: React ghép cũ và mới theo key"},
+        {"t":455.74,"den":541.44,"ten":"Chạy thật: key={Math.random()} · Slide: chọn key"},
+        {"t":541.44,"den":656.86,"ten":"Khi nào dùng loại key nào · Slide: key đặt ở đâu"},
+        {"t":656.86,"den":771.48,"ten":"Ở FER202 thế này — đi làm thế kia"},
+        {"t":771.48,"den":863.6,"ten":"Tự kiểm nhanh · Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 1.3 của khoá React."},
         {"t":8.84,"vi":"Bài trước mình dựng TheBacSi, một thẻ có kiểu, vẽ được bất kỳ bác sĩ nào."},
@@ -1423,8 +1520,13 @@
         {"t":854.42,"vi":"Bài sau, 1.4: từ một bản mock-up tới cây component, chia nhỏ giao diện có phương pháp."}
       ]
     },
-    "rx-10-1-thiet-ke": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/react/10-du-an-giua-khoa/10-01-thiet-ke-cd4d0041.mp4","durationSec":304.49,"nguonCau":"srt",
-      "parts": [],
+    "rx-10-1-thiet-ke": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/react/10-du-an-giua-khoa/10-01-thiet-ke-cd4d0041.mp4","durationSec":304.49,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":90.79,"ten":"Ôn nhanh · hôm nay · Slide: năm bước thiết kế"},
+        {"t":90.79,"den":183.09,"ten":"Slide: cây component"},
+        {"t":183.09,"den":246.63,"ten":"Ở FER202 thế này — đi làm thế kia"},
+        {"t":246.63,"den":304.49,"ten":"Thực hành: thiết kế ngày nghỉ của bác sĩ · Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn. Chín chương vừa rồi bạn gõ theo."},
         {"t":8.52,"vi":"Chương này đảo ngược: dự án giữa khoá, bạn tự dựng."},
@@ -1482,8 +1584,13 @@
         {"t":298.84,"vi":"Bài sau, mười chấm hai: dựng tính năng qua bốn mốc."}
       ]
     },
-    "rx-10-2-xay-dung": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/react/10-du-an-giua-khoa/10-03-xay-dung-64d929f2.mp4","durationSec":397.75,"nguonCau":"srt",
-      "parts": [],
+    "rx-10-2-xay-dung": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/react/10-du-an-giua-khoa/10-03-xay-dung-64d929f2.mp4","durationSec":397.75,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":91.12,"ten":"Ôn nhanh · hôm nay · Slide: bốn mốc"},
+        {"t":91.12,"den":186.55,"ten":"Mã thật: useLichTuan và một ô · Slide: lưới là bảng thật"},
+        {"t":186.55,"den":274.53,"ten":"Slide: chặn trùng hai lớp · Mã thật: đổi giờ và lớp máy chủ"},
+        {"t":274.53,"den":397.75,"ten":"Ở FER202 thế này — đi làm thế kia"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn. Thiết kế ở bài trước đã nằm trên bàn."},
         {"t":8.96,"vi":"Giờ dựng nó."},
@@ -1564,8 +1671,14 @@
         {"t":390.02,"vi":"Bài sau, mười chấm ba: Profiler, khả năng tiếp cận, và test biết cắn."}
       ]
     },
-    "rx-10-3-chat-luong": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/react/10-du-an-giua-khoa/10-04-chat-luong-e5699a06.mp4","durationSec":414.58,"nguonCau":"srt",
-      "parts": [],
+    "rx-10-3-chat-luong": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/react/10-du-an-giua-khoa/10-04-chat-luong-e5699a06.mp4","durationSec":414.58,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":88.8,"ten":"Ôn nhanh · hôm nay · Slide: Profiler khi đổi tuần"},
+        {"t":88.8,"den":173.49,"ten":"Chạy thật: sau khi sửa"},
+        {"t":173.49,"den":267.95,"ten":"Chạy thật: một test chập chờn"},
+        {"t":267.95,"den":349.15,"ten":"Chạy thật: bẫy once của MSW"},
+        {"t":349.15,"den":414.58,"ten":"Thực hành: chọn một ô có render thừa không"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn. Tính năng đã chạy: đặt được, đổi giờ được, thấy được 409."},
         {"t":11.86,"vi":"Đa số sinh viên dừng ở đây."},
@@ -1643,8 +1756,13 @@
         {"t":407.23,"vi":"Bài sau, mười chấm bốn: build, deploy, và rubric tự chấm."}
       ]
     },
-    "rx-10-4-tong-ket": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/react/10-du-an-giua-khoa/10-05-tong-ket-7cb78407.mp4","durationSec":362.76,"nguonCau":"srt",
-      "parts": [],
+    "rx-10-4-tong-ket": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/react/10-du-an-giua-khoa/10-05-tong-ket-7cb78407.mp4","durationSec":362.76,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":110.9,"ten":"Ôn nhanh · hôm nay · Slide: thứ gì vào dist"},
+        {"t":110.9,"den":191.02,"ten":"Slide: nginx đúng · Mã thật: cấu hình và header"},
+        {"t":191.02,"den":279.01,"ten":"Slide: checklist · Slide: rubric tự chấm"},
+        {"t":279.01,"den":362.76,"ten":"Tự gõ tiếp dự án — bước 4/4"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn. Một tính năng chưa xong khi test xanh trên laptop."},
         {"t":9.65,"vi":"Nó xong khi một người lạ mở được liên kết tới nó."},
@@ -1710,8 +1828,13 @@
         {"t":357.16,"vi":"Hết Chương 10. Chương 11: bên trong React."}
       ]
     },
-    "rx-11-1-virtual-dom": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/react/11-react-ben-trong/11-02-virtual-dom-ab28d0a7.mp4","durationSec":402.74,"nguonCau":"srt",
-      "parts": [],
+    "rx-11-1-virtual-dom": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/react/11-react-ben-trong/11-02-virtual-dom-ab28d0a7.mp4","durationSec":402.74,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":80.73,"ten":"Ôn nhanh · hôm nay · Slide: JSX chỉ là một object"},
+        {"t":80.73,"den":158.02,"ten":"Mã thật: BangDem và MutationObserver"},
+        {"t":158.02,"den":267.72,"ten":"Slide: khác loại thẻ ở cùng chỗ"},
+        {"t":267.72,"den":402.74,"ten":"Slide: batching · Ở FER202 thế này — đi làm thế kia"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn. Bạn đã gọi setState cả trăm lần và màn hình đổi theo."},
         {"t":10.05,"vi":"Chương này mở nắp React: nó gọi hàm nào, so cái gì với cái gì, và sửa DOM bao nhiêu chỗ."},
@@ -1796,8 +1919,13 @@
         {"t":396.66,"vi":"Bài sau, mười một chấm hai: key và danh tính component."}
       ]
     },
-    "rx-11-2-key-identity": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/react/11-react-ben-trong/11-03-key-identity-b3a532a2.mp4","durationSec":415.85,"nguonCau":"srt",
-      "parts": [],
+    "rx-11-2-key-identity": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/react/11-react-ben-trong/11-03-key-identity-b3a532a2.mp4","durationSec":415.85,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":93.87,"ten":"Mở đầu · bài này học gì"},
+        {"t":93.87,"den":205.82,"ten":"Giờ tới ứng dụng thật"},
+        {"t":205.82,"den":349.68,"ten":"Bẫy đáng nhớ nhất bài"},
+        {"t":349.68,"den":415.85,"ten":"Thực hành. Chép DanhSachGhiChu"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn. Bài trước để lại một luật: cùng loại, cùng vị trí thì React giữ."},
         {"t":11.31,"vi":"Bài này xem mặt trái của luật đó, bằng một bug thật trong ứng dụng đặt lịch."},
@@ -1873,8 +2001,16 @@
         {"t":408.16,"vi":"Bài sau, mười một chấm ba: StrictMode, useRef và useLayoutEffect."}
       ]
     },
-    "rx-11-4-portal-error-boundary": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/react/11-react-ben-trong/11-05-portal-error-boundary-894fa25f.mp4","durationSec":984.2,"nguonCau":"srt",
-      "parts": [],
+    "rx-11-4-portal-error-boundary": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/react/11-react-ben-trong/11-05-portal-error-boundary-894fa25f.mp4","durationSec":984.2,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":174.1,"ten":"Mở đầu · bài này học gì"},
+        {"t":174.1,"den":352.68,"ten":"Bẫy hay gặp"},
+        {"t":352.68,"den":529.57,"ten":"Đăng nhập, đặt lịch chín giờ ba mươi…"},
+        {"t":529.57,"den":706.03,"ten":"GetDerivedStateFromError đổi state để vẽ màn dự phòng"},
+        {"t":706.03,"den":796.19,"ten":"Vì sao hộp lỗi biến mất khi đổi…"},
+        {"t":796.19,"den":894.08,"ten":"Cuối cùng, createRoot của React mười chín nhận…"},
+        {"t":894.08,"den":984.2,"ten":"Thực hành: dùng lại HopXacNhan cho việc thứ…"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn. Bài trước: StrictMode, useRef, và useLayoutEffect đo trước khi vẽ."},
         {"t":12.19,"vi":"Hôm nay là hai công cụ cuối của chương, cùng ra đời từ React mười sáu: portal và error boundary."},
@@ -2080,8 +2216,15 @@
         {"t":978.09,"vi":"Bài sau, mười một chấm năm: tự dựng năm nâng cấp bên trong cho ứng dụng đặt lịch."}
       ]
     },
-    "rx-11-5-du-an": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/react/11-react-ben-trong/11-06-du-an-081b0a01.mp4","durationSec":935.87,"nguonCau":"srt",
-      "parts": [],
+    "rx-11-5-du-an": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/react/11-react-ben-trong/11-06-du-an-081b0a01.mp4","durationSec":935.87,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":178.63,"ten":"Mở đầu · bài này học gì"},
+        {"t":178.63,"den":357.07,"ten":"Tệp thứ tư kiểm chú thích"},
+        {"t":357.07,"den":530.95,"ten":"Việc ba là hộp xác nhận"},
+        {"t":530.95,"den":690.89,"ten":"Cả dự án"},
+        {"t":690.89,"den":849.26,"ten":"Bẫy của bài"},
+        {"t":849.26,"den":935.87,"ten":"Thực hành: một lượt tự kiểm chỉ dùng…"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn. Đây là bài cuối của Chương mười một: tự dựng năm nâng cấp bên trong cho ứng dụng đặt lịch."},
         {"t":11.98,"vi":"Không có khái niệm mới. Bốn bài trước để lại năm công cụ: key, ref, portal, error boundary, và useLayoutEffect."},
@@ -2266,8 +2409,17 @@
         {"t":927.33,"vi":"Bài sau, mười hai chấm một, mở Chương mười hai: Suspense cho dữ liệu, và hàm use."}
       ]
     },
-    "rx-12-1-suspense-use": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/react/12-react-19-concurrent/12-02-suspense-use-0ffcdece.mp4","durationSec":1032.48,"nguonCau":"srt",
-      "parts": [],
+    "rx-12-1-suspense-use": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/react/12-react-19-concurrent/12-02-suspense-use-0ffcdece.mp4","durationSec":1032.48,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":181.75,"ten":"Mở đầu · bài này học gì"},
+        {"t":181.75,"den":267.8,"ten":"Suspense không mới"},
+        {"t":267.8,"den":422.14,"ten":"Mình chạy lại ba cách đó trong Chromium…"},
+        {"t":422.14,"den":598.67,"ten":"Bẫy thứ nhất"},
+        {"t":598.67,"den":706.82,"ten":"Mở bác sĩ chín mươi chín"},
+        {"t":706.82,"den":886.57,"ten":"Bẫy thứ hai"},
+        {"t":886.57,"den":983.56,"ten":"Tsc không in gì"},
+        {"t":983.56,"den":1032.48,"ten":"Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn. Bài này mở Chương mười hai: những thứ mới của React mười chín."},
         {"t":10.74,"vi":"Từ Chương sáu, màn hình nào tải dữ liệu cũng mở đầu bằng ba dòng if: đang tải, lỗi, rồi mới tới nội dung."},
@@ -2471,8 +2623,17 @@
         {"t":1027.64,"vi":"Gõ phím là việc khẩn, danh sách thì chờ được."}
       ]
     },
-    "rx-12-2-transition": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/react/12-react-19-concurrent/12-03-transition-72caea7f.mp4","durationSec":1135.36,"nguonCau":"srt",
-      "parts": [],
+    "rx-12-2-transition": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/react/12-react-19-concurrent/12-03-transition-72caea7f.mp4","durationSec":1135.36,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":129.25,"ten":"Mở đầu · bài này học gì"},
+        {"t":129.25,"den":308.83,"ten":"Trước khi sửa, phải đo được"},
+        {"t":308.83,"den":478.73,"ten":"Ở đây DanhSach bọc memo"},
+        {"t":478.73,"den":655.26,"ten":"Khi các transition cuối cùng commit"},
+        {"t":655.26,"den":828.91,"ten":"Đo: gõ nguyen"},
+        {"t":828.91,"den":1003.57,"ten":"Dòng cuối đọc cho trung thực"},
+        {"t":1003.57,"den":1090.46,"ten":"Hai câu phỏng vấn hay gặp"},
+        {"t":1090.46,"den":1135.36,"ten":"Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn. Bài trước, Suspense cho cây component chờ dữ liệu, và hai request hết xếp hàng."},
         {"t":12.53,"vi":"Chương tám đo ô tìm trên một nghìn bác sĩ, rồi kết luận: gõ phím là chỗ cần sửa tiếp."},
@@ -2697,8 +2858,16 @@
         {"t":1129.3,"vi":"useOptimistic, useActionState, và form action."}
       ]
     },
-    "rx-12-3-actions": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/react/12-react-19-concurrent/12-04-actions-ff53ba86.mp4","durationSec":1034.13,"nguonCau":"srt",
-      "parts": [],
+    "rx-12-3-actions": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/react/12-react-19-concurrent/12-04-actions-ff53ba86.mp4","durationSec":1034.13,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":182.81,"ten":"Mở đầu · bài này học gì"},
+        {"t":182.81,"den":361.95,"ten":"Ô đỏ dưới cùng là một cái bẫy"},
+        {"t":361.95,"den":537.65,"ten":"Toàn bộ logic là một hàm, guiGopY"},
+        {"t":537.65,"den":634.8,"ten":"Đi làm năm hai nghìn không trăm hai…"},
+        {"t":634.8,"den":813.12,"ten":"Bẫy hay gặp"},
+        {"t":813.12,"den":946.55,"ten":"Chạy trên dự án sau bước hai"},
+        {"t":946.55,"den":1034.13,"ten":"Thực hành: cố tình làm hỏng việc huỷ…"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn. Hai bài trước lo chuyện đọc: dữ liệu chưa về, và danh sách vẽ chậm."},
         {"t":11.2,"vi":"Bài này lo chuyện ghi: gửi một thứ lên máy chủ, và quyết định màn hình hiện gì trong lúc chờ."},
@@ -2894,8 +3063,16 @@
         {"t":1025.87,"vi":"Bài sau, mười hai chấm bốn: React Compiler cho cả ứng dụng, và Server Components ở mức khái niệm."}
       ]
     },
-    "rx-12-4-compiler-rsc": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/react/12-react-19-concurrent/12-05-compiler-rsc-4ac41a25.mp4","durationSec":1163.39,"nguonCau":"srt",
-      "parts": [],
+    "rx-12-4-compiler-rsc": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/react/12-react-19-concurrent/12-05-compiler-rsc-4ac41a25.mp4","durationSec":1163.39,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":167.23,"ten":"Mở đầu · bài này học gì"},
+        {"t":167.23,"den":343.33,"ten":"Trước khi tin bản build"},
+        {"t":343.33,"den":520.88,"ten":"Với một nghìn bác sĩ"},
+        {"t":520.88,"den":700.17,"ten":"Trong mã có hook"},
+        {"t":700.17,"den":874.83,"ten":"Ô vàng là điều cần nhớ"},
+        {"t":874.83,"den":1053.93,"ten":"Bài đếm được sáu mươi tám request"},
+        {"t":1053.93,"den":1163.39,"ten":"Chạy mười bốn test tiêu chí của cả…"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn. Đây là bài cuối của Chương mười hai."},
         {"t":8.78,"vi":"Chương tám đã thử React Compiler trên hai tệp, và tìm ra cái bẫy Babel tám làm nó âm thầm bỏ qua TheBacSi."},
@@ -3106,8 +3283,19 @@
         {"t":1159.17,"vi":"Mở đầu bằng compound component và hook headless."}
       ]
     },
-    "rx-13-1-compound-headless": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/react/13-mau-thiet-ke-kien-truc/13-02-compound-headless-784bb0a5.mp4","durationSec":1450.34,"nguonCau":"srt",
-      "parts": [],
+    "rx-13-1-compound-headless": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/react/13-mau-thiet-ke-kien-truc/13-02-compound-headless-784bb0a5.mp4","durationSec":1450.34,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":180.1,"ten":"Mở đầu · bài này học gì"},
+        {"t":180.1,"den":354.11,"ten":"Compound component là một bộ component chia sẻ…"},
+        {"t":354.11,"den":482.91,"ten":"Điều khiển và không điều khiển là ý…"},
+        {"t":482.91,"den":637.53,"ten":"Bẫy cần nhớ"},
+        {"t":637.53,"den":811.38,"ten":"Vì sao phần đọc URL nằm trong một…"},
+        {"t":811.38,"den":898.18,"ten":"Thiếu nó, nhấn chuột làm ô gõ mất…"},
+        {"t":898.18,"den":985.36,"ten":"Chạy thật: mười trên mười xanh"},
+        {"t":985.36,"den":1123.93,"ten":"Vì sao phải giữ đúng thẻ?"},
+        {"t":1123.93,"den":1274.21,"ten":"Bẫy hay gặp"},
+        {"t":1274.21,"den":1450.34,"ten":"Ví dụ: Radix, React Aria, Headless UI, Downshift"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn. Chương mười ba: mẫu thiết kế và kiến trúc."},
         {"t":9.54,"vi":"Bài trước, ta bật React Compiler cho cả ứng dụng, và viết một test canh để không component nào bị bỏ qua."},
@@ -3374,8 +3562,21 @@
         {"t":1441.42,"vi":"Bài sau: custom hook tốt và không tốt, rồi CSS Modules so với Tailwind, đo trên chính ứng dụng này."}
       ]
     },
-    "rx-13-2-hook-styling": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/react/13-mau-thiet-ke-kien-truc/13-03-hook-styling-04ed4abf.mp4","durationSec":1555.99,"nguonCau":"srt",
-      "parts": [],
+    "rx-13-2-hook-styling": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/react/13-mau-thiet-ke-kien-truc/13-03-hook-styling-04ed4abf.mp4","durationSec":1555.99,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":130.76,"ten":"Mở đầu · bài này học gì"},
+        {"t":130.76,"den":242.89,"ten":"Phần tiếp theo cho thấy vì sao"},
+        {"t":242.89,"den":404.18,"ten":"Cuối cùng in cả mảng ra"},
+        {"t":404.18,"den":522.18,"ten":"Ví dụ này cố tình viết sai"},
+        {"t":522.18,"den":671.2,"ten":"Giờ tới tiêu chí quan trọng hơn"},
+        {"t":671.2,"den":808.31,"ten":"Chuyển sang styling"},
+        {"t":808.31,"den":914.99,"ten":"Một điểm yếu"},
+        {"t":914.99,"den":1094.18,"ten":"Giờ tới điểm yếu, có đo"},
+        {"t":1094.18,"den":1197.04,"ten":"Phần lớn là biến theme và các khai…"},
+        {"t":1197.04,"den":1278.82,"ten":"Bẫy: bộ quét chữ sinh thêm lớp"},
+        {"t":1278.82,"den":1446.35,"ten":"Vì sao? Utility của Bootstrap gần ý tưởng…"},
+        {"t":1446.35,"den":1555.99,"ten":"Thực hành: tìm và sửa một lỗi chép…"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn. Bài mười ba chấm hai: custom hook tốt, và chuyện styling."},
         {"t":11.13,"vi":"Bài trước, ta dựng ba mẫu dùng lại: Tabs compound, hook headless cho ô tìm nhanh, và nút đa hình."},
@@ -3673,8 +3874,22 @@
         {"t":1552.56,"vi":"Đo, virtualize, rồi đo lại."}
       ]
     },
-    "rx-14-1-xac-thuc": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/react/14-len-production/14-02-xac-thuc-e3356ccc.mp4","durationSec":1995.89,"nguonCau":"srt",
-      "parts": [],
+    "rx-14-1-xac-thuc": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/react/14-len-production/14-02-xac-thuc-e3356ccc.mp4","durationSec":1995.89,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":118.47,"ten":"Mở đầu · bài này học gì"},
+        {"t":118.47,"den":279.63,"ten":"Trước khi định nghĩa, xem một mô phỏng"},
+        {"t":279.63,"den":454.07,"ten":"Bẫy hay gặp"},
+        {"t":454.07,"den":592.19,"ten":"CapAccess cấp token sống theo thoiHanAccess"},
+        {"t":592.19,"den":764.73,"ten":"Là BroadcastChannel, kênh có sẵn của trình duyệt…"},
+        {"t":764.73,"den":936.29,"ten":"Lời giải là đảo phụ thuộc"},
+        {"t":936.29,"den":1113.58,"ten":"Vì sao phải gỡ?"},
+        {"t":1113.58,"den":1219.17,"ten":"401 thứ hai thấy promise đó và chờ"},
+        {"t":1219.17,"den":1393.95,"ten":"Bẫy: cùng cuộc đua đó"},
+        {"t":1393.95,"den":1523.13,"ten":"Sau F5, cổng tin cái tên đã persist…"},
+        {"t":1523.13,"den":1702.8,"ten":"Vì sao lịch của chị Ánh lại hiện?"},
+        {"t":1702.8,"den":1875.42,"ten":"Access token trong bộ nhớ"},
+        {"t":1875.42,"den":1995.89,"ten":"Đạt khi tsc sạch"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn. Bài mười bốn chấm một, bài mở đầu Chương mười bốn, chương cuối của khoá."},
         {"t":11.3,"vi":"Bài trước, ta lọc HTML bằng DOMPurify và cho ứng dụng nói được tiếng Anh."},
@@ -4055,8 +4270,22 @@
         {"t":1990.53,"vi":"Hết giờ, thử lại có trần, mất mạng, và Idempotency-Key."}
       ]
     },
-    "rx-14-2-api-that": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/react/14-len-production/14-03-api-that-db8edc37.mp4","durationSec":2026.71,"nguonCau":"srt",
-      "parts": [],
+    "rx-14-2-api-that": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/react/14-len-production/14-03-api-that-db8edc37.mp4","durationSec":2026.71,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":116.81,"ten":"Mở đầu · bài này học gì"},
+        {"t":116.81,"den":290.96,"ten":"Trước khi xem mã, xem một mô phỏng"},
+        {"t":290.96,"den":466.87,"ten":"Cả hai đều truyền cause"},
+        {"t":466.87,"den":643.6,"ten":"Vì sao cần phần ngẫu nhiên?"},
+        {"t":643.6,"den":788.63,"ten":"Dưới là số đo"},
+        {"t":788.63,"den":963.16,"ten":"Bẫy thứ nhất"},
+        {"t":963.16,"den":1139.34,"ten":"Không có tạm dừng"},
+        {"t":1139.34,"den":1318.43,"ten":"Vẽ nó trong RanhGioiLoi"},
+        {"t":1318.43,"den":1495.69,"ten":"Máy chủ treo mãi thì sao?"},
+        {"t":1495.69,"den":1648.92,"ten":"Các tệp *.local ghi đè, và không commit"},
+        {"t":1648.92,"den":1735.22,"ten":"Bẫy một: khoá API trả tiền trong VITE_"},
+        {"t":1735.22,"den":1902.11,"ten":"Vì sao khác?"},
+        {"t":1902.11,"den":2026.71,"ten":"Thực hành, mười lăm tới hai mươi phút"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn. Bài mười bốn chấm hai, bài thứ hai của chương cuối."},
         {"t":9.97,"vi":"Bài trước, ứng dụng có đăng nhập thật: token, 401 tự làm mới, và đăng xuất ở mọi tab."},
@@ -4463,8 +4692,24 @@
         {"t":2016.5,"vi":"Bài sau: build và deploy. Bỏ MSW, ngân sách bundle, header bảo mật, CSP và CI/CD."}
       ]
     },
-    "rx-14-3-build-deploy": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/react/14-len-production/14-04-build-deploy-41ce3559.mp4","durationSec":1982.95,"nguonCau":"srt",
-      "parts": [],
+    "rx-14-3-build-deploy": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/react/14-len-production/14-04-build-deploy-41ce3559.mp4","durationSec":1982.95,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":112.89,"ten":"Mở đầu · bài này học gì"},
+        {"t":112.89,"den":290.13,"ten":"Trước khi xem mã, xem một mô phỏng"},
+        {"t":290.13,"den":465.78,"ten":"Cái giá đó chỉ bản demo trả"},
+        {"t":465.78,"den":645.58,"ten":"Đây là tệp phan-tich.html thật"},
+        {"t":645.58,"den":730.26,"ten":"Chạy trên bản build production"},
+        {"t":730.26,"den":902.22,"ten":"Ví dụ này lấy từ bài web"},
+        {"t":902.22,"den":1078.5,"ten":"Thêm một location cho đuôi map"},
+        {"t":1078.5,"den":1153.82,"ten":"Ba mươi test của tính năng đặt lịch…"},
+        {"t":1153.82,"den":1262.41,"ten":"Bẫy hay gặp"},
+        {"t":1262.41,"den":1436.67,"ten":"Tsc, vitest, build production với VITE_PHIEN_BAN bằng mã…"},
+        {"t":1436.67,"den":1551.69,"ten":"Slide hai mươi mốt"},
+        {"t":1551.69,"den":1698.63,"ten":"Vì sao trang demo trên Pages không trắng?"},
+        {"t":1698.63,"den":1793.48,"ten":"Vì sao? Bản demo trên lớp deploy một…"},
+        {"t":1793.48,"den":1873.54,"ten":"Ví dụ thật"},
+        {"t":1873.54,"den":1982.95,"ten":"Thực hành, mười lăm tới hai mươi phút"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn. Bài mười bốn chấm ba, bài thứ ba của chương cuối."},
         {"t":9.86,"vi":"Bài trước, ứng dụng học cách sống sót trước API thật: hết giờ, thử lại, mất mạng, và biến môi trường của Vite."},
@@ -4844,8 +5089,19 @@
         {"t":1973.75,"vi":"Bài sau, bài cuối của khoá: checklist production, checklist phỏng vấn middle, và mười lăm câu kèm ý trả lời."}
       ]
     },
-    "rx-14-4-phong-van": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/react/14-len-production/14-05-phong-van-af0aa288.mp4","durationSec":1265.84,"nguonCau":"srt",
-      "parts": [],
+    "rx-14-4-phong-van": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/react/14-len-production/14-05-phong-van-af0aa288.mp4","durationSec":1265.84,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":102.31,"ten":"Mở đầu · bài này học gì"},
+        {"t":102.31,"den":279.68,"ten":"Ví dụ dòng phiên"},
+        {"t":279.68,"den":358.91,"ten":"Nó là luật bảo vệ nhánh"},
+        {"t":358.91,"den":535.36,"ten":"Đầu tiên là CV"},
+        {"t":535.36,"den":711.58,"ten":"Hỏi ngược: bên mình có dùng refresh token…"},
+        {"t":711.58,"den":890.27,"ten":"Fetch trong effect nghĩa là tự viết tay"},
+        {"t":890.27,"den":986.72,"ten":"Câu mười lăm"},
+        {"t":986.72,"den":1136.65,"ten":"Ví dụ con bug đăng xuất"},
+        {"t":1136.65,"den":1226.28,"ten":"Cuối cùng nói phần nằm ngoài frontend"},
+        {"t":1226.28,"den":1265.84,"ten":"Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn. Bài mười bốn chấm bốn, bài cuối cùng của khoá React."},
         {"t":10.21,"vi":"Bạn đã dựng một ứng dụng đặt lịch khám từ con số không: mười lăm chương, hơn hai trăm test."},
@@ -5084,8 +5340,17 @@
         {"t":1256.53,"vi":"Hết khoá React. Tiếp theo là bài thi cuối khoá: hai mươi câu, ba mươi phút. Chúc bạn phỏng vấn tốt!"}
       ]
     },
-    "rx-2-1-use-state": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/react/02-state-va-su-kien/02-02-use-state-a8c21b6f.mp4","durationSec":704.01,"nguonCau":"srt",
-      "parts": [],
+    "rx-2-1-use-state": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/react/02-state-va-su-kien/02-02-use-state-a8c21b6f.mp4","durationSec":704.01,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":101.15,"ten":"Ôn nhanh · hôm nay · Slide: vì sao biến thường không đủ"},
+        {"t":101.15,"den":179.61,"ten":"Slide: useState đưa cho bạn cái gì"},
+        {"t":179.61,"den":286.77,"ten":"Slide: render thật sự là gì · Slide: state là một ảnh chụp"},
+        {"t":286.77,"den":381.58,"ten":"Mô phỏng: hàng đợi hàm cập nhật"},
+        {"t":381.58,"den":472.99,"ten":"Chạy thật: đếm commit bằng Profiler"},
+        {"t":472.99,"den":571.24,"ten":"Chạy thật: hook trong if · Ở FER202 thế này — đi làm thế kia"},
+        {"t":571.24,"den":657.84,"ten":"Thực hành: bộ đếm hàng chờ · Tự kiểm nhanh"},
+        {"t":657.84,"den":704.01,"ten":"Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Chương 2 của khoá React, bài 2.1."},
         {"t":9.93,"vi":"Hết Chương 1, trang chủ là một cây component có kiểu và có test."},
@@ -5209,8 +5474,16 @@
         {"t":695.82,"vi":"Bài sau, 2.2: xử lý sự kiện, truyền hàm, nổi bọt, và chặn form tải lại trang."}
       ]
     },
-    "rx-2-2-su-kien": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/react/02-state-va-su-kien/02-03-su-kien-b4102126.mp4","durationSec":624.34,"nguonCau":"srt",
-      "parts": [],
+    "rx-2-2-su-kien": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/react/02-state-va-su-kien/02-03-su-kien-b4102126.mp4","durationSec":624.34,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":100.04,"ten":"Ôn nhanh · hôm nay"},
+        {"t":100.04,"den":177.67,"ten":"Slide: ba cách viết handler"},
+        {"t":177.67,"den":262.09,"ten":"Slide: sự kiện nổi bọt · Mô phỏng: nổi bọt qua các tầng"},
+        {"t":262.09,"den":350.76,"ten":"Chạy thật: thiếu preventDefault"},
+        {"t":350.76,"den":426.73,"ten":"Slide: kiểu sự kiện trong TypeScript"},
+        {"t":426.73,"den":539.24,"ten":"Ở FER202 thế này — đi làm thế kia"},
+        {"t":539.24,"den":624.34,"ten":"Tự kiểm nhanh · Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 2.2 của khoá React."},
         {"t":8.71,"vi":"Bài trước, state và hàm set làm màn hình đổi."},
@@ -5322,8 +5595,16 @@
         {"t":616.83,"vi":"Bài sau, 2.3: cập nhật object và mảng trong state mà không sửa thẳng."}
       ]
     },
-    "rx-2-4-dat-state": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/react/02-state-va-su-kien/02-05-dat-state-f1e23e22.mp4","durationSec":616.46,"nguonCau":"srt",
-      "parts": [],
+    "rx-2-4-dat-state": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/react/02-state-va-su-kien/02-05-dat-state-f1e23e22.mp4","durationSec":616.46,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":126.52,"ten":"Ôn nhanh · hôm nay · Slide: anh em cần chung dữ liệu"},
+        {"t":126.52,"den":211.04,"ten":"Slide: KhuBacSi giữ bốn mẩu state"},
+        {"t":211.04,"den":304.11,"ten":"Chạy thật: chậm một phím"},
+        {"t":304.11,"den":392.22,"ten":"Slide: state đặt càng thấp càng tốt"},
+        {"t":392.22,"den":490.14,"ten":"Câu hỏi trước mỗi useState"},
+        {"t":490.14,"den":576.17,"ten":"Thực hành: hộp xác nhận đặt lịch · Tự kiểm nhanh"},
+        {"t":576.17,"den":616.46,"ten":"Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 2.4 của khoá React."},
         {"t":8.56,"vi":"Giờ bạn đã biết tạo state và đổi nó cho đúng."},
@@ -5444,8 +5725,15 @@
         {"t":608.8,"vi":"Bài sau, 2.5: dựng trọn màn hình bác sĩ, lọc, tìm, chi tiết và yêu thích."}
       ]
     },
-    "rx-2-5-man-hinh-bac-si": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/react/02-state-va-su-kien/02-06-man-hinh-bac-si-446cd3a5.mp4","durationSec":490.56,"nguonCau":"srt",
-      "parts": [],
+    "rx-2-5-man-hinh-bac-si": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/react/02-state-va-su-kien/02-06-man-hinh-bac-si-446cd3a5.mp4","durationSec":490.56,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":95.26,"ten":"Ôn nhanh · hôm nay · Slide: kết quả chương"},
+        {"t":95.26,"den":210.49,"ten":"Mô phỏng: lên kế hoạch trước khi gõ"},
+        {"t":210.49,"den":286.05,"ten":"Chạy thật: lời giải trên máy mình"},
+        {"t":286.05,"den":365.04,"ten":"Slide: sáu sai lầm của Chương 2"},
+        {"t":365.04,"den":449.09,"ten":"Thực hành: chỉ hiện yêu thích · Tự kiểm nhanh"},
+        {"t":449.09,"den":490.56,"ten":"Tóm tắt · hết Chương 2"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 2.5, bài cuối của Chương 2."},
         {"t":9.81,"vi":"Bốn bài vừa rồi: state và ảnh chụp, sự kiện, cập nhật bất biến, và state nên ở đâu."},
@@ -5544,8 +5832,16 @@
         {"t":485.37,"vi":"Chương 3: form đặt lịch, với React Hook Form và Zod."}
       ]
     },
-    "rx-3-1-controlled": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/react/03-form/03-02-controlled-bd4a545e.mp4","durationSec":672.97,"nguonCau":"srt",
-      "parts": [],
+    "rx-3-1-controlled": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/react/03-form/03-02-controlled-bd4a545e.mp4","durationSec":672.97,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":93.66,"ten":"Ôn nhanh · hôm nay · Slide: ô input vốn đã có bộ nhớ"},
+        {"t":93.66,"den":189.52,"ten":"Chạy thật: không kiểm soát, đọc bằng ref"},
+        {"t":189.52,"den":276.28,"ten":"Slide: thứ chỉ ô kiểm soát làm được, và cái giá"},
+        {"t":276.28,"den":385.68,"ten":"Chạy thật: hai cảnh báo"},
+        {"t":385.68,"den":493.22,"ten":"Slide: useRef, chiếc hộp không gây render"},
+        {"t":493.22,"den":591,"ten":"Ở FER202 thế này — đi làm thế kia"},
+        {"t":591,"den":672.97,"ten":"Tự kiểm nhanh · Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Chương 3 của khoá React, bài 3.1."},
         {"t":9.84,"vi":"Hết Chương 2, màn hình bác sĩ đã biết nghe."},
@@ -5676,8 +5972,17 @@
         {"t":665.55,"vi":"Bài sau, 3.2: React Hook Form cộng Zod, một schema cho cả luật lẫn kiểu."}
       ]
     },
-    "rx-3-2-react-hook-form": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/react/03-form/03-03-react-hook-form-eab97e65.mp4","durationSec":707.85,"nguonCau":"srt",
-      "parts": [],
+    "rx-3-2-react-hook-form": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/react/03-form/03-03-react-hook-form-eab97e65.mp4","durationSec":707.85,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":94.73,"ten":"Ôn nhanh · hôm nay · Chạy thật: cùng một form, ba cách viết"},
+        {"t":94.73,"den":170.27,"ten":"Chạy thật: cài ba gói · Mô phỏng: từ register tới onGui"},
+        {"t":170.27,"den":263.22,"ten":"Slide: Zod, một schema cho luật, kiểu và câu báo lỗi"},
+        {"t":263.22,"den":351.48,"ten":"Chạy thật: làm sạch và đường dẫn lỗi"},
+        {"t":351.48,"den":436.68,"ten":"Chạy thật: TypeScript canh tên trường"},
+        {"t":436.68,"den":529.27,"ten":"Slide: watch và useWatch · Chạy thật: watch 15, useWatch 0"},
+        {"t":529.27,"den":630.59,"ten":"Ở FER202 thế này — đi làm thế kia"},
+        {"t":630.59,"den":707.85,"ten":"Tự kiểm nhanh · Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 3.2 của khoá React."},
         {"t":8.82,"vi":"Bài 3.1 dừng ở một vấn đề: form tự viết render lại mỗi phím, rải luật khắp các câu if, và không có kiểu nối ô với dữ liệu."},
@@ -5805,8 +6110,16 @@
         {"t":700.4,"vi":"Bài sau, 3.3: lỗi đúng chỗ, trạng thái đang gửi, và không gửi hai lần."}
       ]
     },
-    "rx-3-3-loi": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/react/03-form/03-04-loi-4b4f6a29.mp4","durationSec":624.13,"nguonCau":"srt",
-      "parts": [],
+    "rx-3-3-loi": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/react/03-form/03-04-loi-4b4f6a29.mp4","durationSec":624.13,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":116.77,"ten":"Ôn nhanh · hôm nay"},
+        {"t":116.77,"den":200.53,"ten":"Slide: bốn trạng thái của một lần gửi"},
+        {"t":200.53,"den":310.08,"ten":"Chạy thật: bấm đúp chuột thật"},
+        {"t":310.08,"den":416.43,"ten":"Slide: chốt ref đặt sai chỗ · Chạy thật: chốt ref đúng chỗ"},
+        {"t":416.43,"den":508.46,"ten":"Chạy thật: lỗi máy chủ dưới đúng ô"},
+        {"t":508.46,"den":583.46,"ten":"Thực hành: tự kiểm form của bạn · Tự kiểm nhanh"},
+        {"t":583.46,"den":624.13,"ten":"Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 3.3 của khoá React."},
         {"t":8.79,"vi":"Một form kiểm dữ liệu đúng vẫn có thể là một form tồi."},
@@ -5929,8 +6242,17 @@
         {"t":616.14,"vi":"Bài sau, 3.4: gõ tiếng Việt và bẫy bộ gõ, composition, Enter, và NFC."}
       ]
     },
-    "rx-3-4-tieng-viet": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/react/03-form/03-05-tieng-viet-f312feb5.mp4","durationSec":845.7,"nguonCau":"srt",
-      "parts": [],
+    "rx-3-4-tieng-viet": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/react/03-form/03-05-tieng-viet-f312feb5.mp4","durationSec":845.7,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":80.56,"ten":"Ôn nhanh · hôm nay · Slide: ba sự kiện composition"},
+        {"t":80.56,"den":158.76,"ten":"Chạy thật: gõ “cảm” kiểu VNI trong Chromium"},
+        {"t":158.76,"den":250.82,"ten":"Chạy thật: Enter khi đang soạn"},
+        {"t":250.82,"den":407.3,"ten":"Chạy thật: “Nnguyễn” · Slide: NFC 6 đơn vị, NFD 8 đơn vị"},
+        {"t":407.3,"den":514.14,"ten":"Slide: regex tên · Chạy thật: ba regex tên"},
+        {"t":514.14,"den":622.34,"ten":"Slide: sai lầm hay gặp ở Chương 3"},
+        {"t":622.34,"den":729.67,"ten":"Slide: kết quả chương · Slide: tự gõ tiếp dự án"},
+        {"t":729.67,"den":845.7,"ten":"Thực hành: ô chat hỗ trợ · Tự kiểm nhanh"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 3.4, bài cuối của Chương 3."},
         {"t":9.74,"vi":"Phần lớn bài hướng dẫn form được thử bởi người gõ tiếng Anh."},
@@ -6092,8 +6414,18 @@
         {"t":838.7,"vi":"Chương sau, bài 4.1: useEffect, dependency và cleanup."}
       ]
     },
-    "rx-4-1-use-effect": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/react/04-effect/04-02-use-effect-adfde3cd.mp4","durationSec":801.47,"nguonCau":"srt",
-      "parts": [],
+    "rx-4-1-use-effect": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/react/04-effect/04-02-use-effect-adfde3cd.mp4","durationSec":801.47,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":95.01,"ten":"Ôn nhanh · hôm nay"},
+        {"t":95.01,"den":220.05,"ten":"Hình dạng của mọi effect"},
+        {"t":220.05,"den":311.75,"ten":"Slide: mảng dependency quyết định khi nào chạy lại"},
+        {"t":311.75,"den":392.52,"ten":"Slide: cleanup chạy trước lần setup kế tiếp, và khi gỡ"},
+        {"t":392.52,"den":492.16,"ten":"Slide: Strict Mode chạy thử setup, cleanup, setup"},
+        {"t":492.16,"den":595.46,"ten":"Slide: thiếu cleanup, đồng hồ chạy gấp đôi"},
+        {"t":595.46,"den":677.21,"ten":"Ở FER202 thế này — đi làm thế kia"},
+        {"t":677.21,"den":761.66,"ten":"Thực hành: tiêu đề tab quầy lễ tân · Tự kiểm nhanh"},
+        {"t":761.66,"den":801.47,"ten":"Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Chương 4 của khoá React: effect."},
         {"t":9.09,"vi":"Chương 1 nói component phải thuần."},
@@ -6239,8 +6571,15 @@
         {"t":796.11,"vi":"Bài sau, 4.2: có thể bạn không cần effect."}
       ]
     },
-    "rx-4-2-khong-can": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/react/04-effect/04-03-khong-can-9394d33f.mp4","durationSec":624.1,"nguonCau":"srt",
-      "parts": [],
+    "rx-4-2-khong-can": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/react/04-effect/04-03-khong-can-9394d33f.mp4","durationSec":624.1,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":119.21,"ten":"Ôn nhanh · hôm nay"},
+        {"t":119.21,"den":195.45,"ten":"Slide: nhật ký thật · Chạy thật: oxlint bắt khuôn này"},
+        {"t":195.45,"den":323.14,"ten":"Chạy thật: reset bằng effect và bằng key"},
+        {"t":323.14,"den":421.94,"ten":"Slide: câu trả lời cũ đè câu trả lời mới"},
+        {"t":421.94,"den":509.53,"ten":"Slide: ba câu hỏi trước khi viết effect"},
+        {"t":509.53,"den":624.1,"ten":"Thực hành: review bằng đo đạc · Tự kiểm nhanh"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 4.2."},
         {"t":7.87,"vi":"Học xong useEffect, nhiều người dùng nó như câu lệnh: khi cái kia đổi thì chạy cái này."},
@@ -6366,8 +6705,16 @@
         {"t":618.25,"vi":"Bài sau, 4.3: vòng lặp vô hạn và closure cũ."}
       ]
     },
-    "rx-4-3-vong-lap": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/react/04-effect/04-04-vong-lap-0c9f78bd.mp4","durationSec":683.45,"nguonCau":"srt",
-      "parts": [],
+    "rx-4-3-vong-lap": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/react/04-effect/04-04-vong-lap-0c9f78bd.mp4","durationSec":683.45,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":116.92,"ten":"Ôn nhanh · hôm nay · Slide: setState trong effect không mảng"},
+        {"t":116.92,"den":203.84,"ten":"Slide: object tạo trong render là mới mỗi lần"},
+        {"t":203.84,"den":285.78,"ten":"Slide: hàm khai trong component cũng mới"},
+        {"t":285.78,"den":381.4,"ten":"Chạy thật: interval kẹt ở 1 · Slide: useEffectEvent"},
+        {"t":381.4,"den":493.56,"ten":"Chạy thật: bật âm thanh không hẹn giờ lại"},
+        {"t":493.56,"den":610.11,"ten":"Ở FER202 thế này — đi làm thế kia"},
+        {"t":610.11,"den":683.45,"ten":"Tự kiểm nhanh · Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 4.3."},
         {"t":7.83,"vi":"Hai lỗi chiếm phần lớn thời gian người ta mất vào effect."},
@@ -6491,8 +6838,17 @@
         {"t":679.17,"vi":"Bài sau, 4.4: hook tự viết."}
       ]
     },
-    "rx-4-4-custom-hook": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/react/04-effect/04-05-custom-hook-98172737.mp4","durationSec":730.04,"nguonCau":"srt",
-      "parts": [],
+    "rx-4-4-custom-hook": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/react/04-effect/04-05-custom-hook-98172737.mp4","durationSec":730.04,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":120.42,"ten":"Ôn nhanh · hôm nay"},
+        {"t":120.42,"den":199.76,"ten":"Slide: useDebounce · Chạy thật: gõ nhanh, lọc một lần"},
+        {"t":199.76,"den":284.84,"ten":"Slide: useLocalStorage · Chạy thật: bản nháp qua lần tải lại"},
+        {"t":284.84,"den":384.58,"ten":"Slide: đồng hồ mở cửa · Chạy thật: nhãn tự chuyển lúc 7:30"},
+        {"t":384.58,"den":508.64,"ten":"Chạy thật: oxlint bắt hook trong if"},
+        {"t":508.64,"den":584.8,"ten":"Tự gõ tiếp dự án: bốn hook"},
+        {"t":584.8,"den":691.67,"ten":"Phỏng vấn: ba câu hay gặp · Thực hành: đếm giây xem hồ sơ"},
+        {"t":691.67,"den":730.04,"ten":"Tóm tắt · chương sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 4.4, bài cuối của Chương 4."},
         {"t":9.9,"vi":"Ba bài trước viết effect thẳng trong component."},
@@ -6636,8 +6992,15 @@
         {"t":723.45,"vi":"Chương sau, bài 5.1: context mà không render lại ồ ạt."}
       ]
     },
-    "rx-5-1-context": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/react/05-chia-se-state/05-02-context-ad6166b1.mp4","durationSec":634.19,"nguonCau":"srt",
-      "parts": [],
+    "rx-5-1-context": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/react/05-chia-se-state/05-02-context-ad6166b1.mp4","durationSec":634.19,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":107.11,"ten":"Ôn nhanh · hôm nay · Slide: prop drilling"},
+        {"t":107.11,"den":190.5,"ten":"Slide: context trong ba bước"},
+        {"t":190.5,"den":280.05,"ten":"Slide: mặc định null cộng hook ném lỗi"},
+        {"t":280.05,"den":394.78,"ten":"Chạy thật: đếm render · Slide: tách context"},
+        {"t":394.78,"den":508.1,"ten":"Khi nào Context là đủ · Ở FER202 thế này — đi làm thế kia"},
+        {"t":508.1,"den":634.19,"ten":"Thực hành: chế độ chữ to · Tự kiểm nhanh"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Chương 5 của khoá React: state dùng chung."},
         {"t":9.74,"vi":"Nâng state lên ở bài 2.4 có một điểm yếu: state phải đi xuống qua mọi component ở giữa, kể cả những component chẳng dùng nó."},
@@ -6749,8 +7112,15 @@
         {"t":628.53,"vi":"Bài sau, 5.2: useReducer cho state phức tạp."}
       ]
     },
-    "rx-5-3-zustand": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/react/05-chia-se-state/05-04-zustand-5a132d77.mp4","durationSec":584.38,"nguonCau":"srt",
-      "parts": [],
+    "rx-5-3-zustand": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/react/05-chia-se-state/05-04-zustand-5a132d77.mp4","durationSec":584.38,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":91.31,"ten":"Ôn nhanh · hôm nay · Slide: store nằm ngoài cây"},
+        {"t":91.31,"den":195.48,"ten":"Chạy thật: cài và tạo store · Slide: selector hẹp"},
+        {"t":195.48,"den":275.21,"ten":"Slide: selector trả object mới"},
+        {"t":275.21,"den":390.16,"ten":"Chạy thật: lưu và nạp lại · Slide: test phải tự dọn"},
+        {"t":390.16,"den":466.54,"ten":"Ở FER202 thế này — đi làm thế kia"},
+        {"t":466.54,"den":584.38,"ten":"Thực hành: so sánh bác sĩ · Tự kiểm nhanh"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 5.3."},
         {"t":7.79,"vi":"Bài 5.1 dừng ở một giới hạn: context không cho component nghe một lát của giá trị."},
@@ -6854,8 +7224,15 @@
         {"t":579.89,"vi":"Bài sau, 5.4: URL là state."}
       ]
     },
-    "rx-5-4-url-state": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/react/05-chia-se-state/05-05-url-state-b93e1845.mp4","durationSec":544.1,"nguonCau":"srt",
-      "parts": [],
+    "rx-5-4-url-state": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/react/05-chia-se-state/05-05-url-state-b93e1845.mp4","durationSec":544.1,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":111.62,"ten":"Ôn nhanh · hôm nay · Slide: F5 xoá useState, URL thì còn"},
+        {"t":111.62,"den":189.46,"ten":"Slide: URLSearchParams · Chạy thật: đọc và ghi query string"},
+        {"t":189.46,"den":270.72,"ten":"Slide: useBoLocUrl · Chạy thật: hook và cái bẫy pushState"},
+        {"t":270.72,"den":351.18,"ten":"Chạy thật: bảy mục lịch sử cho một lần tìm"},
+        {"t":351.18,"den":469.44,"ten":"Ở FER202 thế này — đi làm thế kia"},
+        {"t":469.44,"den":544.1,"ten":"Tự kiểm nhanh · Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 5.4."},
         {"t":7.96,"vi":"Có những state không phải của ứng dụng hay của người dùng."},
@@ -6956,8 +7333,14 @@
         {"t":534.86,"vi":"Bài sau, 5.5: tự dựng luồng đặt lịch bốn bước, store dùng chung và bộ lọc trên URL."}
       ]
     },
-    "rx-5-5-du-an": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/react/05-chia-se-state/05-06-du-an-f2cf8504.mp4","durationSec":446.54,"nguonCau":"srt",
-      "parts": [],
+    "rx-5-5-du-an": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/react/05-chia-se-state/05-06-du-an-f2cf8504.mp4","durationSec":446.54,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":103.18,"ten":"Ôn nhanh · hôm nay · Slide: kết quả chương"},
+        {"t":103.18,"den":218.25,"ten":"Lên kế hoạch trước khi gõ · Slide: tự gõ tiếp dự án"},
+        {"t":218.25,"den":316.68,"ten":"Slide: sáu sai lầm, lần cuối"},
+        {"t":316.68,"den":407.89,"ten":"Thực hành: đặt lịch từ khung chi tiết · Tự kiểm nhanh"},
+        {"t":407.89,"den":446.54,"ten":"Tóm tắt · chương sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 5.5, bài cuối của Chương 5."},
         {"t":9.67,"vi":"Bốn bài, bốn chỗ ở cho state."},
@@ -7034,8 +7417,16 @@
         {"t":440.05,"vi":"Chương sau, bài 6.1: fetch trong effect, và vì sao đau đầu."}
       ]
     },
-    "rx-6-1-fetch": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/react/06-lay-du-lieu/06-02-fetch-41cd527c.mp4","durationSec":711.58,"nguonCau":"srt",
-      "parts": [],
+    "rx-6-1-fetch": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/react/06-lay-du-lieu/06-02-fetch-41cd527c.mp4","durationSec":711.58,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":103.29,"ten":"Ôn nhanh · hôm nay · Slide: state server chỉ là bản chụp"},
+        {"t":103.29,"den":192.82,"ten":"Chạy thật: cài MSW và sáu API"},
+        {"t":192.82,"den":326.55,"ten":"Chạy thật: 404 vẫn là “thành công”"},
+        {"t":326.55,"den":411.39,"ten":"Slide: câu trả lời về sau cùng thì thắng"},
+        {"t":411.39,"den":524.12,"ten":"Chạy thật: StrictMode, hai request khi dev"},
+        {"t":524.12,"den":635.41,"ten":"Ở FER202 thế này — đi làm thế kia"},
+        {"t":635.41,"den":711.58,"ten":"Tự kiểm nhanh · Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Chương 6: lấy dữ liệu từ máy chủ."},
         {"t":9.51,"vi":"Mọi danh sách trong ứng dụng tới giờ đều lấy từ một tệp TypeScript."},
@@ -7153,8 +7544,16 @@
         {"t":707.44,"vi":"Bài sau, 6.2: TanStack Query."}
       ]
     },
-    "rx-6-2-tanstack": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/react/06-lay-du-lieu/06-03-tanstack-a0c2a10a.mp4","durationSec":627.52,"nguonCau":"srt",
-      "parts": [],
+    "rx-6-2-tanstack": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/react/06-lay-du-lieu/06-03-tanstack-a0c2a10a.mp4","durationSec":627.52,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":101.85,"ten":"Ôn nhanh · hôm nay · Slide: useQuery — một key, một hàm tải"},
+        {"t":101.85,"den":208.82,"ten":"Chạy thật: useBacSi và hồ sơ không còn cuộc đua"},
+        {"t":208.82,"den":297.99,"ten":"Slide: vòng đời một mục cache"},
+        {"t":297.99,"den":382.65,"ten":"Chạy thật: status, fetchStatus, enabled"},
+        {"t":382.65,"den":485.33,"ten":"Chạy thật: DevTools trong Chromium và cái giá"},
+        {"t":485.33,"den":589.82,"ten":"Phỏng vấn: staleTime khác gcTime"},
+        {"t":589.82,"den":627.52,"ten":"Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn. Bài 6.1 kết thúc bằng năm thứ mà một hook fetch tự viết vẫn thiếu."},
         {"t":11.93,"vi":"Cache dùng chung, gộp request trùng, thử lại, làm mới khi quay lại, làm cũ sau khi ghi."},
@@ -7273,8 +7672,14 @@
         {"t":621.92,"vi":"Bài sau, 6.3: mutation và cập nhật lạc quan."}
       ]
     },
-    "rx-6-3-mutation": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/react/06-lay-du-lieu/06-04-mutation-26ec8cbf.mp4","durationSec":506.2,"nguonCau":"srt",
-      "parts": [],
+    "rx-6-3-mutation": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/react/06-lay-du-lieu/06-04-mutation-26ec8cbf.mp4","durationSec":506.2,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":96.7,"ten":"Ôn nhanh · hôm nay · Slide: ghi là mutation"},
+        {"t":96.7,"den":178.91,"ten":"Reducer co lại · Slide: 409 nghĩa là lưới giờ đã cũ"},
+        {"t":178.91,"den":282.53,"ten":"Slide: mutation không gộp trùng"},
+        {"t":282.53,"den":374.24,"ten":"Slide: thiếu cancelQueries · Chạy thật: màn hình nháy ngược"},
+        {"t":374.24,"den":506.2,"ten":"Phỏng vấn: optimistic update"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn. Bài 6.2 cho ứng dụng đọc dữ liệu qua cache TanStack Query."},
         {"t":10.97,"vi":"Đọc mới là một nửa. Bệnh nhân đặt lịch và huỷ lịch: họ ghi lên máy chủ."},
@@ -7365,8 +7770,16 @@
         {"t":501.18,"vi":"Bài sau, 6.4: đang tải, lỗi và rỗng."}
       ]
     },
-    "rx-7-1-router": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/react/07-dinh-tuyen-va-cau-truc/07-02-router-af67c20d.mp4","durationSec":715.11,"nguonCau":"srt",
-      "parts": [],
+    "rx-7-1-router": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/react/07-dinh-tuyen-va-cau-truc/07-02-router-af67c20d.mp4","durationSec":715.11,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":105.68,"ten":"Ôn nhanh · hôm nay"},
+        {"t":105.68,"den":201.34,"ten":"Chạy thật: trộn hai bản là sập"},
+        {"t":201.34,"den":321.02,"ten":"Chạy thật: bảng route và useParams"},
+        {"t":321.02,"den":423.08,"ten":"Chạy thật: NavLink và useNavigate · Slide: useSearchParams"},
+        {"t":423.08,"den":510.77,"ten":"Chạy thật: test route không cần trình duyệt"},
+        {"t":510.77,"den":623.75,"ten":"Ở FER202 thế này — đi làm thế kia"},
+        {"t":623.75,"den":715.11,"ten":"Tự kiểm nhanh · Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Chương 7. Tới giờ, phòng khám là một trang dài: danh sách, luồng đặt lịch, lịch hẹn chồng lên nhau."},
         {"t":14.55,"vi":"Ứng dụng thật có nhiều trang: danh sách lưu được, trang chi tiết gửi được cho bạn bè, nút Back về đúng chỗ."},
@@ -7487,8 +7900,14 @@
         {"t":708.17,"vi":"Bài sau, 7.2: layout, route lồng nhau và trang cần đăng nhập."}
       ]
     },
-    "rx-7-2-layout": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/react/07-dinh-tuyen-va-cau-truc/07-03-layout-043a571a.mp4","durationSec":478.25,"nguonCau":"srt",
-      "parts": [],
+    "rx-7-2-layout": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/react/07-dinh-tuyen-va-cau-truc/07-03-layout-043a571a.mp4","durationSec":478.25,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":91.71,"ten":"Ôn nhanh · hôm nay · Slide: layout route"},
+        {"t":91.71,"den":182.38,"ten":"Chạy thật: route lồng trên Chromium"},
+        {"t":182.38,"den":265.29,"ten":"Chạy thật: cổng đăng nhập · Slide: quên replace"},
+        {"t":265.29,"den":366.9,"ten":"Slide: middleware · Chạy thật: loader chạy 1 lần so với 0"},
+        {"t":366.9,"den":478.25,"ten":"Thực hành: trang Tài khoản · Tự kiểm nhanh"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn. Bài 7.1 kết thúc ở chỗ hơi ngượng: trang nào cũng tự vẽ Menu. Năm trang, năm bản sao."},
         {"t":13.45,"vi":"Ứng dụng thật có một cái khung đứng yên, và phần ruột thay đổi."},
@@ -7580,8 +7999,14 @@
         {"t":472.31,"vi":"Bài sau, 7.3: cấu trúc dự án mở rộng được."}
       ]
     },
-    "rx-7-3-cau-truc": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/react/07-dinh-tuyen-va-cau-truc/07-04-cau-truc-8e8023d1.mp4","durationSec":494.03,"nguonCau":"srt",
-      "parts": [],
+    "rx-7-3-cau-truc": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/react/07-dinh-tuyen-va-cau-truc/07-04-cau-truc-8e8023d1.mp4","durationSec":494.03,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":88.8,"ten":"Ôn nhanh · hôm nay · Slide: theo loại → theo tính năng"},
+        {"t":88.8,"den":195.56,"ten":"Slide: alias, build xanh chưa chắc"},
+        {"t":195.56,"den":317.27,"ten":"Slide: mỗi tính năng một cửa"},
+        {"t":317.27,"den":411.88,"ten":"Ở FER202 thế này — đi làm thế kia"},
+        {"t":411.88,"den":494.03,"ten":"Tự kiểm nhanh · Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn. Dự án phòng khám giờ có bảy mươi lăm tệp trong src, xếp theo loại: components, hooks, logic, store."},
         {"t":15.33,"vi":"Rồi một ticket tới: lọc bác sĩ theo số năm kinh nghiệm."},
@@ -7675,8 +8100,14 @@
         {"t":487.51,"vi":"Bài sau, 7.4: từ React sang Next.js."}
       ]
     },
-    "rx-7-4-sang-nextjs": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/react/07-dinh-tuyen-va-cau-truc/07-05-sang-nextjs-11e40fdb.mp4","durationSec":438.81,"nguonCau":"srt",
-      "parts": [],
+    "rx-7-4-sang-nextjs": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/react/07-dinh-tuyen-va-cau-truc/07-05-sang-nextjs-11e40fdb.mp4","durationSec":438.81,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":91.07,"ten":"Ôn nhanh · hôm nay · Slide: máy chủ gửi về cái gì"},
+        {"t":91.07,"den":184.14,"ten":"Slide: route ↔ thư mục"},
+        {"t":184.14,"den":273.54,"ten":"Slide: Server Component mặc định"},
+        {"t":273.54,"den":358.68,"ten":"Ở FER202 thế này — đi làm thế kia · Phỏng vấn: CSR, SSR, SSG"},
+        {"t":358.68,"den":438.81,"ten":"Tự kiểm nhanh · Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn. Tin tuyển dụng ghi React, rồi hai dòng sau ghi Next.js."},
         {"t":10.94,"vi":"Chúng không phải đối thủ."},
@@ -7761,8 +8192,13 @@
         {"t":429.94,"vi":"Bài sau, 7.5: tự dựng bảy route, một layout, cổng đăng nhập và thư mục theo tính năng."}
       ]
     },
-    "rx-7-5-du-an": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/react/07-dinh-tuyen-va-cau-truc/07-06-du-an-7de49d96.mp4","durationSec":369.17,"nguonCau":"srt",
-      "parts": [],
+    "rx-7-5-du-an": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/react/07-dinh-tuyen-va-cau-truc/07-06-du-an-7de49d96.mp4","durationSec":369.17,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":104.06,"ten":"Ôn nhanh · hôm nay · Slide: bảy trang dưới một layout"},
+        {"t":104.06,"den":207.27,"ten":"Slide: tự gõ tiếp dự án · Tự gõ: đỏ → xanh, lời giải che"},
+        {"t":207.27,"den":294.08,"ten":"Ở FER202 thế này — đi làm thế kia"},
+        {"t":294.08,"den":369.17,"ten":"Tự kiểm nhanh · Tóm tắt · chương sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn. Bài dự án của Chương 7: biến cái trang dài thành một ứng dụng có địa chỉ."},
         {"t":11.26,"vi":"Mọi màn hình có URL riêng. Luồng đặt lịch sống qua F5 và qua liên kết chia sẻ ở mọi bước."},
@@ -7830,8 +8266,14 @@
         {"t":362.49,"vi":"Chương sau, Chương 8: hiệu năng, bắt đầu bằng chia gói theo route."}
       ]
     },
-    "rx-8-1-do": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/react/08-hieu-nang-va-tiep-can/08-02-do-4955bb35.mp4","durationSec":435.72,"nguonCau":"srt",
-      "parts": [],
+    "rx-8-1-do": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/react/08-hieu-nang-va-tiep-can/08-02-do-4955bb35.mp4","durationSec":435.72,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":92.48,"ten":"Ôn nhanh · hôm nay · Slide: đo trước, sửa một chỗ"},
+        {"t":92.48,"den":167.98,"ten":"Chạy thật: bác sĩ giả và tham số nhieu"},
+        {"t":167.98,"den":248.42,"ten":"Slide: một trái tim, 200 thẻ · Chạy thật: đếm trong Vitest"},
+        {"t":248.42,"den":339.98,"ten":"Chạy thật: Chromium, CPU chậm 4× · Slide: đọc số"},
+        {"t":339.98,"den":435.72,"ten":"Phỏng vấn: trang chậm, bắt đầu từ đâu"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Chương 8: hiệu năng."},
         {"t":9.22,"vi":"React chậm, bọc hết bằng useCallback đi."},
@@ -7912,8 +8354,14 @@
         {"t":426.69,"vi":"Bài sau, 8.2: memo, useMemo, useCallback, chỉ ở chỗ số đo bảo cần."}
       ]
     },
-    "rx-8-3-lazy": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/react/08-hieu-nang-va-tiep-can/08-04-lazy-812b0aa4.mp4","durationSec":481.18,"nguonCau":"srt",
-      "parts": [],
+    "rx-8-3-lazy": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/react/08-hieu-nang-va-tiep-can/08-04-lazy-812b0aa4.mp4","durationSec":481.18,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":85.82,"ten":"Ôn nhanh · hôm nay · Slide: bundle có gì"},
+        {"t":85.82,"den":172.64,"ten":"Chạy thật: lần thử đầu · Slide: barrel kéo zod về"},
+        {"t":172.64,"den":256.84,"ten":"Chạy thật: file nào tải, lúc nào"},
+        {"t":256.84,"den":344.55,"ten":"Slide: React.lazy + Suspense · Chạy thật: lazy ở đâu"},
+        {"t":344.55,"den":481.18,"ten":"Ở FER202 thế này — đi làm thế kia"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn. Bài 8.1 và 8.2 bàn về việc xảy ra sau khi trang đã tải."},
         {"t":11.09,"vi":"Bài này bàn về chính việc tải trang."},
@@ -8001,8 +8449,14 @@
         {"t":475.5,"vi":"Bài sau, 8.4: component dễ tiếp cận."}
       ]
     },
-    "rx-8-4-a11y": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/react/08-hieu-nang-va-tiep-can/08-05-a11y-92e0b037.mp4","durationSec":418.72,"nguonCau":"srt",
-      "parts": [],
+    "rx-8-4-a11y": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/react/08-hieu-nang-va-tiep-can/08-05-a11y-92e0b037.mp4","durationSec":418.72,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":92.3,"ten":"Ôn nhanh · hôm nay · Slide: axe 0 lỗi, bàn phím 0 cách chọn"},
+        {"t":92.3,"den":182.84,"ten":"Mã thật: radio và bản ARIA · Slide: năm lỗi hay gặp"},
+        {"t":182.84,"den":278.1,"ten":"Chạy thật: axe trong Chromium"},
+        {"t":278.1,"den":379.14,"ten":"Ở FER202 thế này — đi làm thế kia · Phỏng vấn: dễ tiếp cận"},
+        {"t":379.14,"den":418.72,"ten":"Tóm tắt · hết Chương 8"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn. Ba bài trước đo tốc độ."},
         {"t":8.32,"vi":"Bài này đo một thứ khác: ai đặt lịch được."},
@@ -8089,8 +8543,14 @@
         {"t":410.11,"vi":"Hết Chương 8. Bài sau, chín chấm một: Testing Library căn bản, hỏi theo vai trò."}
       ]
     },
-    "rx-9-1-testing-library": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/react/09-test-react/09-02-testing-library-89f46af4.mp4","durationSec":493.26,"nguonCau":"srt",
-      "parts": [],
+    "rx-9-1-testing-library": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/react/09-test-react/09-02-testing-library-89f46af4.mp4","durationSec":493.26,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":86.33,"ten":"Ôn nhanh · hôm nay · Slide: hỏi theo vai trò"},
+        {"t":86.33,"den":187.55,"ten":"Slide: getBy, queryBy, findBy · Slide: đọc danh sách vai trò"},
+        {"t":187.55,"den":289.04,"ten":"Mã thật: test form đặt lịch"},
+        {"t":289.04,"den":365.35,"ten":"Slide: rút chuỗi lỗi ra trước"},
+        {"t":365.35,"den":493.26,"ten":"Ở FER202 thế này — đi làm thế kia"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn. Tới giờ bạn kiểm ứng dụng bằng cách mở trình duyệt, bấm và nhìn. Lần thứ bốn mươi thì không ai làm nổi."},
         {"t":13.27,"vi":"Test là một chương trình nhỏ bấm và nhìn thay bạn, mỗi lần bạn lưu tệp."},
@@ -8183,8 +8643,14 @@
         {"t":486.28,"vi":"Bài sau, chín chấm hai: test giao diện bất đồng bộ và gọi API."}
       ]
     },
-    "rx-9-2-async": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/react/09-test-react/09-03-async-8fda94a3.mp4","durationSec":415.05,"nguonCau":"srt",
-      "parts": [],
+    "rx-9-2-async": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/react/09-test-react/09-03-async-8fda94a3.mp4","durationSec":415.05,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":103.49,"ten":"Ôn nhanh · hôm nay · Slide: findBy hỏi lại"},
+        {"t":103.49,"den":183.91,"ten":"Slide: client của app thử lại"},
+        {"t":183.91,"den":260.52,"ten":"Slide: đồng hồ giả và user-event · Slide: state dùng chung"},
+        {"t":260.52,"den":355.43,"ten":"Chạy thật: Suspense và use() trong act"},
+        {"t":355.43,"den":415.05,"ten":"Thực hành: thông báo nổi tự ẩn · Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn. Gần như mọi bug người dùng báo đều nằm ở một khoảnh khắc ở giữa."},
         {"t":10.46,"vi":"Danh sách lúc đang tải, trang khi máy chủ báo lỗi, thông báo lẽ ra phải biến mất sau năm giây."},
@@ -8264,8 +8730,14 @@
         {"t":409.58,"vi":"Bài sau, chín chấm ba: test hook tự viết."}
       ]
     },
-    "rx-9-3-hook": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/react/09-test-react/09-04-hook-2c57a0f1.mp4","durationSec":318.5,"nguonCau":"srt",
-      "parts": [],
+    "rx-9-3-hook": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/react/09-test-react/09-04-hook-2c57a0f1.mp4","durationSec":318.5,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":68.96,"ten":"Ôn nhanh · hôm nay · Slide: renderHook"},
+        {"t":68.96,"den":133.62,"ten":"Slide: wrapper · Chạy thật: thiếu wrapper, có wrapper"},
+        {"t":133.62,"den":212.6,"ten":"Chạy thật: hai bất ngờ của useDatLich"},
+        {"t":212.6,"den":281.57,"ten":"Phỏng vấn: test custom hook · Tự gõ tiếp dự án — bước 3/4"},
+        {"t":281.57,"den":318.5,"ten":"Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn. Hook tự viết là logic không có màn hình."},
         {"t":9.34,"vi":"Không nút để bấm, không chữ để đọc."},
@@ -8329,8 +8801,13 @@
         {"t":310.95,"vi":"Bài sau, chín chấm bốn: độ phủ, test gì, và hai mươi câu phỏng vấn."}
       ]
     },
-    "rx-9-4-phong-van": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/react/09-test-react/09-05-phong-van-6820655e.mp4","durationSec":355.14,"nguonCau":"srt",
-      "parts": [],
+    "rx-9-4-phong-van": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/react/09-test-react/09-05-phong-van-6820655e.mp4","durationSec":355.14,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":79.56,"ten":"Ôn nhanh · hôm nay · Slide: độ phủ trước và sau"},
+        {"t":79.56,"den":186.85,"ten":"Slide: độ phủ nói dối hai chiều · Slide: báo cáo HTML"},
+        {"t":186.85,"den":265.45,"ten":"Slide: test gì, bỏ gì · Chạy thật: chín lần cố ý làm hỏng"},
+        {"t":265.45,"den":355.14,"ten":"Phỏng vấn: độ phủ bao nhiêu · Tự gõ tiếp dự án — bước 4/4"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn. Giờ dự án có hơn một trăm test xanh."},
         {"t":9.22,"vi":"Đủ chưa? Có đúng những cái cần không?"},

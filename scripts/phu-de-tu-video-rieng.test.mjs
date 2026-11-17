@@ -8,8 +8,8 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import {
-  canCanhTheoSrt, cauTuSrt, cauTuThoiGian, chiMucUrl, docSrt, dungMuc, giaySrt, phanTuThoiGian,
-  thoiGianKhopVideo, vietJson,
+  canCanhTheoSrt, cauTuSrt, cauTuThoiGian, chiaChuong, chiaTheoCau, chiMucUrl, docSrt, dungMuc, giaySrt, gopCanh,
+  phanTuThoiGian, tenTuCau, thoiGianKhopVideo, vietJson,
 } from './phu-de-tu-video-rieng.lib.mjs';
 
 const tg = (tong, canh) => ({ bai: 'x', fps: 30, moDau: 4.6, tong, canh });
@@ -87,7 +87,9 @@ test('dungMuc: video thường dùng mốc chính xác + các phần', () => {
   assert.equal(muc.nguonCau, 'thoigian');
   assert.equal(muc.videoUrl, 'https://cdn/x.mp4');
   assert.equal(muc.cues.length, 3);
-  assert.equal(muc.parts.length, 2);
+  // Video 60 s, hai cảnh 15 s + 40 s ⇒ GỘP thành một chương (ngưỡng 25 s), bắt đầu từ 0:00.
+  assert.deepEqual(muc.parts, [{ t: 0, den: 60, ten: 'Chào bạn · Git là gì' }]);
+  assert.equal(muc.nguonPhan, 'canh');
   assert.equal(muc.lang, 'vi');
 });
 
@@ -99,10 +101,55 @@ test('dungMuc: thoigian lệch ⇒ câu từ SRT, các phần CĂN THEO SRT (m�
   });
   assert.equal(muc.nguonCau, 'srt');
   assert.match(canhBao.join(' '), /thời lượng lệch/);
-  assert.deepEqual(muc.parts, [
+  assert.deepEqual(canCanhTheoSrt([{ tg: TG, tienTo: '' }], docSrt(srtLech), 50), [
     { t: 5.1, den: 19, ten: 'Chào bạn' },
     { t: 19, den: 50, ten: 'Git là gì' },
   ]);
+  assert.deepEqual(muc.parts, [{ t: 0, den: 50, ten: 'Chào bạn · Git là gì' }]);
+});
+
+test('dungMuc: chỉ có KỊCH BẢN (thoigian.json ở máy dựng khác) ⇒ câu từ SRT, cảnh căn theo SRT', () => {
+  const kb = { chiKichBan: true, canh: TG.canh.map((c) => ({ id: c.id, ten: c.ten, cau: c.cau.map((k) => ({ hien: k.hien })) })) };
+  const { muc, canhBao } = dungMuc({ thongTin: { r2Url: 'u', thoiLuongGiay: 60 }, srt: SRT, phan: [{ thoiGian: kb, thoiLuongGiay: 60 }] });
+  assert.equal(muc.nguonCau, 'srt');
+  assert.match(canhBao.join(' '), /chỉ có kịch bản/);
+  assert.equal(muc.nguonPhan, 'canh');
+  assert.equal(muc.parts[0].ten, 'Chào bạn · Git là gì');
+});
+
+test('tenTuCau: bỏ lời đệm, cắt ở dấu ngắt ý, ≤ 8 từ, viết hoa chữ đầu', () => {
+  assert.equal(tenTuCau('Rồi, giờ ta xem SLO là gì: một con số mà team cam kết.'), 'Giờ ta xem SLO là gì');
+  assert.equal(tenTuCau('Tiếp theo, URL có năm phần. Scheme là giao thức nào.'), 'URL có năm phần');
+  assert.equal(tenTuCau('Mười cờ là đủ cho cả khoá dùng suốt từ đầu tới cuối không cần thêm'), 'Mười cờ là đủ cho cả khoá dùng…');
+});
+
+test('chiaTheoCau: cắt ở câu CHUYỂN Ý sau ngưỡng, có Mở đầu + Tóm tắt, đoạn cuối ngắn thì gộp', () => {
+  const cues = [];
+  for (let t = 5; t < 600; t += 10) cues.push({ t, vi: `Câu số ${t} nói về một ý trong bài.` });
+  cues[0].vi = 'Chào bạn, đến với bài 1.1 của khoá.';
+  cues.find((c) => c.t === 125).vi = 'Tiếp theo, ta dựng máy chủ tấm gương.';
+  cues.find((c) => c.t === 275).vi = 'Bây giờ đọc response từng dòng.';
+  cues.find((c) => c.t === 545).vi = 'Tóm lại, HTTP chỉ là một định dạng thư.';
+  const ra = chiaTheoCau(cues, 600);
+  assert.equal(ra[0].ten, 'Mở đầu · bài này học gì');
+  assert.equal(ra[1].t, 125);
+  assert.equal(ra[1].ten, 'Ta dựng máy chủ tấm gương');
+  assert.equal(ra[2].t, 275);
+  assert.ok(ra.every((p, i) => i === 0 || p.t === ra[i - 1].den), 'các chương nối liền');
+  assert.equal(ra.at(-1).den, 600);
+  assert.ok(ra.every((p) => p.den - p.t <= 240), 'không chương nào quá 4 phút');
+});
+
+test('gopCanh: cảnh 20–50 s gộp thành chương ≥ 75 s, tên bỏ cảnh vô nghĩa ("Bìa", "s01")', () => {
+  const canh = [
+    { t: 4.6, den: 30, ten: 'Ôn nhanh · hôm nay' }, { t: 30, den: 40, ten: 'Bìa' }, { t: 40, den: 90, ten: 'Bài này mang về gì' },
+    { t: 90, den: 140, ten: 'Chạy thật: curl -i' }, { t: 140, den: 200, ten: 's01' }, { t: 200, den: 400, ten: 'Tóm tắt' },
+  ];
+  const ra = gopCanh(canh, [], 400);
+  assert.deepEqual(ra.map((p) => [p.t, p.den]), [[4.6, 90], [90, 200], [200, 400]]);
+  assert.equal(ra[0].ten, 'Ôn nhanh · hôm nay · Bài này mang về gì');
+  assert.equal(ra[1].ten, 'Chạy thật: curl -i');
+  assert.equal(chiaChuong({ parts: canh, cues: [], thoiLuong: 400 })[0].t, 0, 'chương đầu bắt đầu từ 0:00');
 });
 
 test('canCanhTheoSrt: khớp quá ít cảnh ⇒ không đoán, trả []', () => {

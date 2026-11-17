@@ -2,8 +2,13 @@
   "courseSlug": "authentication",
   "sinhBoi": "scripts/phu-de-tu-video-rieng.mjs",
   "lessons": {
-    "auth-0-1-giao-thuc-quen": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/authentication/00-bai-toan-moi-truong-chay-duoc/00-01-giao-thuc-quen-b5b0b5c8.mp4","durationSec":254.23,"nguonCau":"srt",
-      "parts": [],
+    "auth-0-1-giao-thuc-quen": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/authentication/00-bai-toan-moi-truong-chay-duoc/00-01-giao-thuc-quen-b5b0b5c8.mp4","durationSec":254.23,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":68.93,"ten":"Chào · bài 0.1 · Quán ăn: thu ngân quên mọi gương mặt"},
+        {"t":68.93,"den":129.59,"ten":"Thử 1: nhớ người theo địa chỉ IP"},
+        {"t":129.59,"den":191.95,"ten":"Thử 3: client mang theo bằng chứng"},
+        {"t":191.95,"den":254.23,"ten":"Cả khoá trên một tấm bản đồ · Tự kiểm"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, vào bài không một của khoá Authentication."},
         {"t":9.5,"vi":"HTTP không nhớ gì giữa hai request."},
@@ -56,8 +61,13 @@
         {"t":248.77,"vi":"Bài sau, ta tách chữ đăng nhập thành ba bài toán riêng."}
       ]
     },
-    "auth-0-2-ba-bai-toan": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/authentication/00-bai-toan-moi-truong-chay-duoc/00-02-ba-bai-toan-98844e01.mp4","durationSec":264.95,"nguonCau":"srt",
-      "parts": [],
+    "auth-0-2-ba-bai-toan": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/authentication/00-bai-toan-moi-truong-chay-duoc/00-02-ba-bai-toan-98844e01.mp4","durationSec":264.95,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":65.84,"ten":"Chào · bài 0.2 · Quầy lễ tân với ba phép kiểm"},
+        {"t":65.84,"den":133.03,"ten":"Cổng 2: chứng minh đi — 401 khi không chứng minh được"},
+        {"t":133.03,"den":201.59,"ten":"403: biết bạn là ai, và câu trả lời là không"},
+        {"t":201.59,"den":264.95,"ten":"Chạy thật: cả ma trận trong một vòng lặp · Tự kiểm"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, bài không hai. Câu hỏi người dùng đăng nhập chưa thật ra giấu ba câu hỏi khác nhau."},
         {"t":12.25,"vi":"Lẫn chúng với nhau sinh ra con bug nghiêm trọng phổ biến nhất trên web."},
@@ -111,8 +121,14 @@
         {"t":258.82,"vi":"Bài sau: một cái đăng nhập chạy được, mà vẫn sai sáu chỗ."}
       ]
     },
-    "auth-0-3-dang-nhap-sai": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/authentication/00-bai-toan-moi-truong-chay-duoc/00-03-dang-nhap-sai-b78ac393.mp4","durationSec":278.84,"nguonCau":"srt",
-      "parts": [],
+    "auth-0-3-dang-nhap-sai": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/authentication/00-bai-toan-moi-truong-chay-duoc/00-03-dang-nhap-sai-b78ac393.mp4","durationSec":278.84,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":62.99,"ten":"Chào · bài 0.3 · Mười phút tới một dự án chạy được"},
+        {"t":62.99,"den":119.73,"ten":"Chạy thật: nó chạy. Đó mới là vấn đề."},
+        {"t":119.73,"den":187.27,"ten":"Lỗ 3: mã phiên là Date.now()"},
+        {"t":187.27,"den":250.13,"ten":"Lỗ 6: không gì chặn số lần thử · Sáu lỗ, một lộ trình"},
+        {"t":250.13,"den":278.84,"ten":"Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, bài không ba, bài cuối của Mục không."},
         {"t":8.65,"vi":"Ta dựng cái đăng nhập đơn giản nhất có thể, chạy nó, rồi tấn công bằng sáu script nhỏ."},
@@ -163,8 +179,13 @@
         {"t":272.3,"vi":"Hết Mục không. Tiếp theo, Chương một dựng các nguyên hàm bên dưới."}
       ]
     },
-    "auth-0-8-bat-dau-tai-day": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/authentication/00-bai-toan-moi-truong-chay-duoc/00-08-bat-dau-tai-day-1-44ea33fb.mp4","durationSec":288.61,"nguonCau":"srt",
-      "parts": [],
+    "auth-0-8-bat-dau-tai-day": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/authentication/00-bai-toan-moi-truong-chay-duoc/00-08-bat-dau-tai-day-1-44ea33fb.mp4","durationSec":288.61,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":85.48,"ten":"Chào bạn · khoá Authentication · Ba hình ảnh đời thường"},
+        {"t":85.48,"den":164.12,"ten":"Bảy cặp từ người ta hay lẫn"},
+        {"t":164.12,"den":240.55,"ten":"Chạy thật: con dấu bắt thẻ giả"},
+        {"t":240.55,"den":288.61,"ten":"Tự kiểm · Tóm tắt & luyện tập"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với khoá Authentication, từ số 0 tới production, trên cuongthai.com."},
         {"t":12.63,"vi":"Trước khi làm bất kỳ chức năng đăng nhập nào, ta cần biết xác thực thật ra là gì."},
@@ -218,8 +239,13 @@
         {"t":281.99,"vi":"Bài sau, ta xem chuyện gì xảy ra khi tất cả những điều này làm sai."}
       ]
     },
-    "auth-0-9-bat-dau-su-co": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/authentication/00-bai-toan-moi-truong-chay-duoc/00-09-bat-dau-tai-day-2-c84b7308.mp4","durationSec":260.34,"nguonCau":"srt",
-      "parts": [],
+    "auth-0-9-bat-dau-su-co": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/authentication/00-bai-toan-moi-truong-chay-duoc/00-09-bat-dau-tai-day-2-c84b7308.mp4","durationSec":260.34,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":71.64,"ten":"Tiếp tục phần mở đầu · Sự cố 1/2: cách lưu và ghi log"},
+        {"t":71.64,"den":148.65,"ten":"Quy luật: đời của một tín vật"},
+        {"t":148.65,"den":214.1,"ten":"Một tình huống bạn có thể thấy quen · Hai lộ trình qua khoá"},
+        {"t":214.1,"den":260.34,"ten":"Tự kiểm · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, mình học tiếp phần mở đầu của khoá Authentication."},
         {"t":10.18,"vi":"Bài trước nói xác thực là gì."},
@@ -266,8 +292,13 @@
         {"t":254.53,"vi":"Bài sau, bài không một: một giao thức quên sạch mọi thứ."}
       ]
     },
-    "auth-1-1-tin-vat-mang-theo": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/authentication/01-tin-vat-nguyen-ham/01-01-tin-vat-mang-theo-c6ea6c0d.mp4","durationSec":235.67,"nguonCau":"srt",
-      "parts": [],
+    "auth-1-1-tin-vat-mang-theo": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/authentication/01-tin-vat-nguyen-ham/01-01-tin-vat-mang-theo-c6ea6c0d.mp4","durationSec":235.67,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":59.95,"ten":"Chào · Chương 1 · Vé xi-nê là một tín vật bearer"},
+        {"t":59.95,"den":121.01,"ten":"Chạy thật: một token, hai máy"},
+        {"t":121.01,"den":188.28,"ten":"Thiết kế cho bản sao chắc chắn sẽ có"},
+        {"t":188.28,"den":235.67,"ten":"Tự kiểm · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, vào Chương một của khoá Authentication: tín vật, và những nguyên hàm bên dưới."},
         {"t":12.2,"vi":"Chương này nói về tín vật bạn mang theo ở mọi request, và vài nguyên hàm mà tín vật an toàn nào cũng dựng từ đó."},
@@ -309,8 +340,13 @@
         {"t":226.66,"vi":"Bài sau: token sinh ra từ đâu, và vì sao bộ sinh ngẫu nhiên quyết định nó có bị đoán hay không."}
       ]
     },
-    "auth-1-2-ngau-nhien": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/authentication/01-tin-vat-nguyen-ham/01-02-ngau-nhien-635082bb.mp4","durationSec":243.27,"nguonCau":"srt",
-      "parts": [],
+    "auth-1-2-ngau-nhien": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/authentication/01-tin-vat-nguyen-ham/01-02-ngau-nhien-635082bb.mp4","durationSec":243.27,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":62.8,"ten":"Chào · bài 1.2 · Xổ số quay vs bảng in sẵn"},
+        {"t":62.8,"den":134.51,"ten":"Ba giá trị chưa đủ, bốn thì đủ"},
+        {"t":134.51,"den":200.49,"ten":"Va chạm: nghịch lý ngày sinh"},
+        {"t":200.49,"den":243.27,"ten":"Tự kiểm · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, bài một chấm hai."},
         {"t":7.3,"vi":"Mã phiên, link đặt lại và API key đều là chuỗi ngẫu nhiên."},
@@ -353,8 +389,13 @@
         {"t":236.8,"vi":"Bài sau: có token tốt rồi, so sánh nó thế nào để không làm rò."}
       ]
     },
-    "auth-1-3-so-sanh-hang-thoi-gian": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/authentication/01-tin-vat-nguyen-ham/01-03-so-sanh-hang-thoi-gian-fc6d45d1.mp4","durationSec":273.04,"nguonCau":"srt",
-      "parts": [],
+    "auth-1-3-so-sanh-hang-thoi-gian": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/authentication/01-tin-vat-nguyen-ham/01-03-so-sanh-hang-thoi-gian-fc6d45d1.mp4","durationSec":273.04,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":69.03,"ten":"Chào · bài 1.3 · Ổ khoá kêu tách ở mỗi chữ số đúng"},
+        {"t":69.03,"den":128.89,"ten":"Đo đúng: === trên token 64 ký tự"},
+        {"t":128.89,"den":185.6,"ten":"timingSafeEqual, và bẫy độ dài"},
+        {"t":185.6,"den":273.04,"ten":"Nơi con bug thật sự sống: chữ ký webhook"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, bài một chấm ba, bài mẫu của Chương một."},
         {"t":8.99,"vi":"Hệ đăng nhập nào cũng phải so sánh bí mật."},
@@ -407,8 +448,13 @@
         {"t":269.25,"vi":"Bài sau: băm, MAC và chữ ký."}
       ]
     },
-    "auth-1-4-bam-mac-chu-ky": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/authentication/01-tin-vat-nguyen-ham/01-04-bam-mac-chu-ky-65bf5134.mp4","durationSec":272.37,"nguonCau":"srt",
-      "parts": [],
+    "auth-1-4-bam-mac-chu-ky": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/authentication/01-tin-vat-nguyen-ham/01-04-bam-mac-chu-ky-65bf5134.mp4","durationSec":272.37,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":64.04,"ten":"Chào · bài 1.4 · Vân tay, dấu niêm, dấu công chứng"},
+        {"t":64.04,"den":131.73,"ten":"Vì sao sha256(secret + message) vỡ · Giả mạo, thật sự"},
+        {"t":131.73,"den":202.58,"ten":"Chọn khoá khi nhiều dịch vụ cùng kiểm"},
+        {"t":202.58,"den":272.37,"ten":"Công cụ nào cho câu hỏi nào · Tự kiểm"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, bài một chấm bốn."},
         {"t":7.34,"vi":"Ba công cụ đều cho ra một chuỗi byte ngắn, nhưng trả lời ba câu hỏi khác nhau."},
@@ -457,8 +503,13 @@
         {"t":264.7,"vi":"Bài sau: những bí mật rò ra mà chẳng cần ai tấn công, log, lỗi, git và bundle."}
       ]
     },
-    "auth-1-5-bi-mat-ro-o-dau": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/authentication/01-tin-vat-nguyen-ham/01-05-bi-mat-ro-o-dau-86c66918.mp4","durationSec":260.78,"nguonCau":"srt",
-      "parts": [],
+    "auth-1-5-bi-mat-ro-o-dau": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/authentication/01-tin-vat-nguyen-ham/01-05-bi-mat-ro-o-dau-86c66918.mp4","durationSec":260.78,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":69.24,"ten":"Chào · bài 1.5 · Bốn nơi một bí mật sống"},
+        {"t":69.24,"den":132.08,"ten":"Deny-list và allow-list"},
+        {"t":132.08,"den":196.72,"ten":"Git: bí mật đã commit là commit mãi mãi"},
+        {"t":196.72,"den":260.78,"ten":"Env là di truyền · lộ rồi thì xoay khoá · Tự kiểm"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, bài một chấm năm, bài cuối phần lý thuyết của Chương một."},
         {"t":10.33,"vi":"Những chỗ rò thật sự xảy ra chẳng cần kẻ tấn công nào: một dòng log, một báo cáo lỗi, lịch sử git, một bundle."},
@@ -504,8 +555,14 @@
         {"t":251.95,"vi":"Tiếp theo là Lab một: bạn tự dựng bộ công cụ của LabFlow ID, và một script sẽ chấm."}
       ]
     },
-    "auth-1-7-lab-bo-cong-cu": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/authentication/01-tin-vat-nguyen-ham/01-07-lab-bo-cong-cu-d9bab715.mp4","durationSec":203.88,"nguonCau":"srt",
-      "parts": [],
+    "auth-1-7-lab-bo-cong-cu": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/authentication/01-tin-vat-nguyen-ham/01-07-lab-bo-cong-cu-d9bab715.mp4","durationSec":203.88,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":46.93,"ten":"Chào · Lab 1 · Nhiệm vụ: sáu hàm"},
+        {"t":46.93,"den":91.2,"ten":"Bắt đầu từ bản khởi đầu rỗng"},
+        {"t":91.2,"den":136.71,"ten":"Một lần thử \"chạy được\": 2 trên 10"},
+        {"t":136.71,"den":181,"ten":"Rubric: máy chấm chính là rubric · Gợi ý, từ nhẹ tới mạnh"},
+        {"t":181,"den":203.88,"ten":"Checklist trước khi nộp"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Lab một của Chương một, bài có máy chấm tự động."},
         {"t":10.4,"vi":"Lab này biến Chương một thành mã bạn giữ lại."},
@@ -545,8 +602,13 @@
         {"t":196.44,"vi":"Rồi làm quiz chương, và sang Chương hai, phần mật khẩu. Hẹn gặp bạn ở đó."}
       ]
     },
-    "auth-10-1-nhoi-tin-vat": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/authentication/10-cac-cu-tan-cong/10-01-nhoi-tin-vat-0ae7bbc7.mp4","durationSec":222.68,"nguonCau":"srt",
-      "parts": [],
+    "auth-10-1-nhoi-tin-vat": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/authentication/10-cac-cu-tan-cong/10-01-nhoi-tin-vat-0ae7bbc7.mp4","durationSec":222.68,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":63.06,"ten":"Chào · bài 10.1 · Nhồi tín vật là gì"},
+        {"t":63.06,"den":118.04,"ten":"Cách sửa sai: khoá tài khoản"},
+        {"t":118.04,"den":177.3,"ten":"Thách đố, đừng khoá, con người"},
+        {"t":177.3,"den":222.68,"ten":"Tự kiểm · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, chương mười là tấn công."},
         {"t":8.69,"vi":"Chín chương trước dựng phòng thủ; giờ ta xem những cú một dịch vụ danh tính thật gặp."},
@@ -582,8 +644,13 @@
         {"t":216.67,"vi":"Bài sau: lừa đảo chuyển tiếp nguyên trang đăng nhập thật của bạn."}
       ]
     },
-    "auth-10-2-lua-dao": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/authentication/10-cac-cu-tan-cong/10-02-lua-dao-4a82a426.mp4","durationSec":231.58,"nguonCau":"srt",
-      "parts": [],
+    "auth-10-2-lua-dao": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/authentication/10-cac-cu-tan-cong/10-02-lua-dao-4a82a426.mp4","durationSec":231.58,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":66.1,"ten":"Chào · bài 10.2 · Relay chạy thế nào"},
+        {"t":66.1,"den":128.21,"ten":"Mật khẩu là một bí mật phát lại được"},
+        {"t":128.21,"den":186.22,"ten":"Gắn origin là một tính chất, không phải lời khuyên"},
+        {"t":186.22,"den":231.58,"ten":"Tự kiểm · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, bài mười chấm hai."},
         {"t":7.94,"vi":"Lừa đảo cũ chìa ra một trang đăng nhập giả và hy vọng bạn gõ mật khẩu vào."},
@@ -618,8 +685,13 @@
         {"t":225.7,"vi":"Bài sau: một khi phiên bị trộm, nó bị trộm qua kênh nào."}
       ]
     },
-    "auth-10-3-cap-phien": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/authentication/10-cac-cu-tan-cong/10-03-cap-phien-012addef.mp4","durationSec":250.65,"nguonCau":"srt",
-      "parts": [],
+    "auth-10-3-cap-phien": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/authentication/10-cac-cu-tan-cong/10-03-cap-phien-012addef.mp4","durationSec":250.65,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":72.77,"ten":"Chào · bài 10.3 · Kênh 1 — XSS"},
+        {"t":72.77,"den":136.21,"ten":"Kênh 3 — thiết bị · Kênh 4 — log và URL"},
+        {"t":136.21,"den":197.5,"ten":"Vì sao không localStorage · Phát hiện cái lọt qua"},
+        {"t":197.5,"den":250.65,"ten":"Tự kiểm · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, bài mười chấm ba. Sau một relay hay một XSS, kẻ tấn công không muốn mật khẩu của bạn — họ muốn phiên của bạn."},
         {"t":14.84,"vi":"Một cookie phiên bị trộm chính là bạn, như chương ba đã nói: không cần mật khẩu, không cần yếu tố thứ hai. Bài này vẽ bốn kênh một token bị trộm qua."},
@@ -653,8 +725,13 @@
         {"t":246.71,"vi":"Bài sau: đánh vào tầng con người."}
       ]
     },
-    "auth-10-4-tang-con-nguoi": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/authentication/10-cac-cu-tan-cong/10-04-tang-con-nguoi-bbdf3fbd.mp4","durationSec":240,"nguonCau":"srt",
-      "parts": [],
+    "auth-10-4-tang-con-nguoi": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/authentication/10-cac-cu-tan-cong/10-04-tang-con-nguoi-bbdf3fbd.mp4","durationSec":240,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":66.11,"ten":"Chào · bài 10.4 · Mệt mỏi MFA — push bombing"},
+        {"t":66.11,"den":131.45,"ten":"Vì sao ghép số chặn được · Kênh 2 — bàn hỗ trợ"},
+        {"t":131.45,"den":194.93,"ten":"Kênh 3 — nhà mạng (SIM swap) · Vì sao SMS là yếu tố yếu"},
+        {"t":194.93,"den":240,"ten":"Tự kiểm · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, bài mười chấm bốn."},
         {"t":7.85,"vi":"Đôi khi trang đăng nhập kín như bưng, và kẻ tấn công đi vòng qua nó — qua con người."},
@@ -693,8 +770,13 @@
         {"t":233.25,"vi":"Bài sau: chiếm tài khoản trước, và những cuộc đua chẳng ai kiểm thử."}
       ]
     },
-    "auth-10-5-chiem-truoc-va-dua": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/authentication/10-cac-cu-tan-cong/10-05-chiem-truoc-va-dua-422320ec.mp4","durationSec":244.55,"nguonCau":"srt",
-      "parts": [],
+    "auth-10-5-chiem-truoc-va-dua": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/authentication/10-cac-cu-tan-cong/10-05-chiem-truoc-va-dua-422320ec.mp4","durationSec":244.55,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":66.92,"ten":"Chào · bài 10.5 · Chiếm tài khoản trước"},
+        {"t":66.92,"den":131.28,"ten":"Cách sửa: không gộp vào chưa xác minh"},
+        {"t":131.28,"den":197.02,"ten":"Đo thật: gộp, và cuộc đua · Nguyên tử ở cơ sở dữ liệu"},
+        {"t":197.02,"den":244.55,"ten":"Tự kiểm · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, bài mười chấm năm, bài cuối chương. Nó nói về hai cú tấn công nấp trong vòng đời tài khoản."},
         {"t":12.97,"vi":"Chiếm trước, khi kẻ tấn công ở trong tài khoản trước khi nạn nhân từng tới."},
@@ -734,8 +816,14 @@
         {"t":240.86,"vi":"Chương sau là vận hành phòng thủ."}
       ]
     },
-    "auth-10-7-lab-chong-nhoi": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/authentication/10-cac-cu-tan-cong/10-07-lab-chong-nhoi-8a55ee1c.mp4","durationSec":212.34,"nguonCau":"srt",
-      "parts": [],
+    "auth-10-7-lab-chong-nhoi": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/authentication/10-cac-cu-tan-cong/10-07-lab-chong-nhoi-8a55ee1c.mp4","durationSec":212.34,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":47.79,"ten":"Chào · Lab 10 · Tín hiệu và ba kết cục"},
+        {"t":47.79,"den":94.21,"ten":"Các luật, theo thứ tự · Luật quan trọng nhất"},
+        {"t":94.21,"den":141.15,"ten":"Chỗ tinh tế: thách đố đã giải · Đo thật: máy chấm"},
+        {"t":141.15,"den":186.25,"ten":"Bản yếu và vì sao nó hỏng · Xong khi nào"},
+        {"t":186.25,"den":212.34,"ten":"Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Lab mười. Bạn viết decide, hàm phòng thủ LabFlow trước một đợt nhồi mật khẩu."},
         {"t":13.49,"vi":"Mà không khoá những người dùng thật kẻ tấn công đang dội qua."},
@@ -768,19 +856,12 @@
         {"t":208.26,"vi":"Chương sau: vận hành phòng thủ."}
       ]
     },
-    "auth-11-1-bi-mat": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/authentication/11-van-hanh/11-01-bi-mat-55c4841e.mp4","durationSec":236.27,"nguonCau":"srt",
+    "auth-11-1-bi-mat": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/authentication/11-van-hanh/11-01-bi-mat-55c4841e.mp4","durationSec":236.27,"nguonCau":"srt","nguonPhan":"canh",
       "parts": [
-        {"t":5.1,"den":29.04,"ten":"Chào · bài 11.1"},
-        {"t":29.04,"den":49.1,"ten":"Môi trường, không phải mã"},
-        {"t":49.1,"den":68.05,"ten":"Hỏng nhanh khi thiếu một bí mật"},
-        {"t":68.05,"den":90.39,"ten":"Cái banner bạn ĐƯỢC phép log"},
-        {"t":90.39,"den":113.82,"ten":"Vì sao kho mã là vĩnh viễn"},
-        {"t":113.82,"den":129.79,"ten":"Đo thật: khởi động"},
-        {"t":129.79,"den":149.5,"ten":"Bí mật thực sự sống ở đâu"},
-        {"t":149.5,"den":166.58,"ten":"Một bí mật, một chỗ"},
-        {"t":166.58,"den":189.09,"ten":"Khi một cái rò"},
-        {"t":189.09,"den":209.91,"ten":"Tự kiểm"},
-        {"t":209.91,"den":236.27,"ten":"Tóm tắt"}
+        {"t":0,"den":68.05,"ten":"Chào · bài 11.1 · Môi trường, không phải mã"},
+        {"t":68.05,"den":129.79,"ten":"Cái banner bạn ĐƯỢC phép log · Vì sao kho mã là vĩnh viễn"},
+        {"t":129.79,"den":189.09,"ten":"Bí mật thực sự sống ở đâu · Một bí mật, một chỗ"},
+        {"t":189.09,"den":236.27,"ten":"Tự kiểm · Tóm tắt"}
       ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, chương mười một là vận hành."},
@@ -816,8 +897,13 @@
         {"t":229.67,"vi":"Bài sau: xoay một cái khoá mà không đá tất cả mọi người ra ngoài."}
       ]
     },
-    "auth-11-2-xoay-khoa": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/authentication/11-van-hanh/11-02-xoay-khoa-e627b16d.mp4","durationSec":233.04,"nguonCau":"srt",
-      "parts": [],
+    "auth-11-2-xoay-khoa": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/authentication/11-van-hanh/11-02-xoay-khoa-e627b16d.mp4","durationSec":233.04,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":65.25,"ten":"Chào · bài 11.2 · Mẹo là một cửa sổ chồng"},
+        {"t":65.25,"den":125.74,"ten":"Ba pha · Vì sao giới thiệu trước kích hoạt"},
+        {"t":125.74,"den":186.99,"ten":"Cửa sổ dài bao lâu · Rò nghĩa là xoay ngay"},
+        {"t":186.99,"den":233.04,"ten":"Tự kiểm · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, bài mười một chấm hai."},
         {"t":7.78,"vi":"Mọi khoá ký được xoay theo lịch, và ngay lập tức nếu nó rò."},
@@ -852,8 +938,13 @@
         {"t":227.68,"vi":"Bài sau: giới hạn tần suất sống nổi với lưu lượng thật."}
       ]
     },
-    "auth-11-3-gioi-han-tan-suat": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/authentication/11-van-hanh/11-03-gioi-han-tan-suat-71a14d21.mp4","durationSec":250.58,"nguonCau":"srt",
-      "parts": [],
+    "auth-11-3-gioi-han-tan-suat": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/authentication/11-van-hanh/11-03-gioi-han-tan-suat-71a14d21.mp4","durationSec":250.58,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":67.95,"ten":"Chào · bài 11.3 · Cái đếm phải chung"},
+        {"t":67.95,"den":133.66,"ten":"Đo thật: bộ giới hạn · Giới hạn theo đúng khoá"},
+        {"t":133.66,"den":184.51,"ten":"Nói cho client biết · Rìa cửa sổ và hình dạng tốt hơn"},
+        {"t":184.51,"den":250.58,"ten":"Giới hạn tần suất là một lớp · Tự kiểm"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, bài mười một chấm ba."},
         {"t":8.34,"vi":"Chương mười phòng thủ nhồi bằng một quyết định; bài này là cái đếm sau nó."},
@@ -894,19 +985,12 @@
         {"t":243.08,"vi":"Bài sau: nhật ký kiểm toán — ghi gì, và tuyệt đối không ghi gì."}
       ]
     },
-    "auth-11-4-nhat-ky-kiem-toan": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/authentication/11-van-hanh/11-04-nhat-ky-kiem-toan-77cc9732.mp4","durationSec":248.32,"nguonCau":"srt",
+    "auth-11-4-nhat-ky-kiem-toan": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/authentication/11-van-hanh/11-04-nhat-ky-kiem-toan-77cc9732.mp4","durationSec":248.32,"nguonCau":"srt","nguonPhan":"canh",
       "parts": [
-        {"t":5.1,"den":25.19,"ten":"Chào · bài 11.4"},
-        {"t":25.19,"den":47.23,"ten":"Ghi gì"},
-        {"t":47.23,"den":68.24,"ten":"Tuyệt đối không ghi gì"},
-        {"t":68.24,"den":88.24,"ten":"Bẫy \"log mọi thứ\""},
-        {"t":88.24,"den":114.98,"ten":"Đo thật: thô so với an toàn"},
-        {"t":114.98,"den":135.67,"ten":"Allow-list, không phải deny-list"},
-        {"t":135.67,"den":156.77,"ten":"Mức độ dẫn phản ứng"},
-        {"t":156.77,"den":179.48,"ten":"Nhật ký phải chống sửa"},
-        {"t":179.48,"den":201.31,"ten":"Riêng tư nữa, không chỉ bí mật"},
-        {"t":201.31,"den":220.1,"ten":"Tự kiểm"},
-        {"t":220.1,"den":248.32,"ten":"Tóm tắt"}
+        {"t":0,"den":68.24,"ten":"Chào · bài 11.4 · Ghi gì"},
+        {"t":68.24,"den":135.67,"ten":"Bẫy \"log mọi thứ\" · Đo thật: thô so với an toàn"},
+        {"t":135.67,"den":201.31,"ten":"Mức độ dẫn phản ứng · Nhật ký phải chống sửa"},
+        {"t":201.31,"den":248.32,"ten":"Tự kiểm · Tóm tắt"}
       ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, bài mười một chấm bốn."},
@@ -945,19 +1029,12 @@
         {"t":237.62,"vi":"Nhật ký kiểm toán được đọc sau một vụ rò — nó không được gây ra vụ tiếp theo. Bài sau: sáu tín hiệu và runbook."}
       ]
     },
-    "auth-11-5-giam-sat": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/authentication/11-van-hanh/11-05-giam-sat-b9e887e3.mp4","durationSec":250.91,"nguonCau":"srt",
+    "auth-11-5-giam-sat": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/authentication/11-van-hanh/11-05-giam-sat-b9e887e3.mp4","durationSec":250.91,"nguonCau":"srt","nguonPhan":"canh",
       "parts": [
-        {"t":5.1,"den":31.84,"ten":"Chào · bài 11.5"},
-        {"t":31.84,"den":54.65,"ten":"Sáu tín hiệu"},
-        {"t":54.65,"den":76.94,"ten":"Bốn hành động"},
-        {"t":76.94,"den":98.2,"ten":"Chỉ page cho việc cần người ngay"},
-        {"t":98.2,"den":120.16,"ten":"Đo thật: cuốn runbook"},
-        {"t":120.16,"den":140.28,"ten":"Một tín hiệu lạ không bị bỏ qua"},
-        {"t":140.28,"den":160.59,"ten":"Mệt mỏi cảnh báo là kẻ thù"},
-        {"t":160.59,"den":182.85,"ten":"Runbook có bước, không chỉ một tuyến"},
-        {"t":182.85,"den":203.87,"ten":"Nó nối mọi chương"},
-        {"t":203.87,"den":222.79,"ten":"Tự kiểm"},
-        {"t":222.79,"den":250.91,"ten":"Tóm tắt"}
+        {"t":0,"den":76.94,"ten":"Chào · bài 11.5 · Sáu tín hiệu"},
+        {"t":76.94,"den":140.28,"ten":"Chỉ page cho việc cần người ngay · Đo thật: cuốn runbook"},
+        {"t":140.28,"den":203.87,"ten":"Mệt mỏi cảnh báo là kẻ thù"},
+        {"t":203.87,"den":250.91,"ten":"Tự kiểm · Tóm tắt"}
       ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, bài mười một chấm năm."},
@@ -993,16 +1070,12 @@
         {"t":243.48,"vi":"Đó là vận hành. Bài sau là Lab mười một: bạn viết safeAudit và triage."}
       ]
     },
-    "auth-11-7-lab-audit-runbook": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/authentication/11-van-hanh/11-07-lab-audit-runbook-031e3475.mp4","durationSec":201.81,"nguonCau":"srt",
+    "auth-11-7-lab-audit-runbook": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/authentication/11-van-hanh/11-07-lab-audit-runbook-031e3475.mp4","durationSec":201.81,"nguonCau":"srt","nguonPhan":"canh",
       "parts": [
-        {"t":5.1,"den":25.64,"ten":"Chào · Lab 11"},
-        {"t":25.64,"den":45.9,"ten":"safeAudit — giữ các trường an toàn"},
-        {"t":45.9,"den":68.35,"ten":"safeAudit — bỏ mọi bí mật"},
-        {"t":68.35,"den":88.1,"ten":"triage — bốn hành động"},
-        {"t":88.1,"den":110.97,"ten":"Sáu phép, 10 điểm, đạt 7"},
-        {"t":110.97,"den":128.52,"ten":"Đo thật: máy chấm"},
-        {"t":128.52,"den":149.51,"ten":"Bản yếu và vì sao nó hỏng"},
-        {"t":149.51,"den":174.35,"ten":"Xong khi nào"},
+        {"t":0,"den":45.9,"ten":"Chào · Lab 11 · safeAudit — giữ các trường an toàn"},
+        {"t":45.9,"den":88.1,"ten":"safeAudit — bỏ mọi bí mật · triage — bốn hành động"},
+        {"t":88.1,"den":128.52,"ten":"Sáu phép, 10 điểm, đạt 7 · Đo thật: máy chấm"},
+        {"t":128.52,"den":174.35,"ten":"Bản yếu và vì sao nó hỏng · Xong khi nào"},
         {"t":174.35,"den":201.81,"ten":"Tóm tắt"}
       ],
       "cues": [
@@ -1031,8 +1104,13 @@
         {"t":192.23,"vi":"Làm xong lab này và quiz chương, bạn đã nắm chắc vận hành. Chương sau: chẩn đoán, và bắt đầu từ đâu."}
       ]
     },
-    "auth-12-1-nam-phut-dau": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/authentication/12-chan-doan/12-01-nam-phut-dau-e20c48e2.mp4","durationSec":231.1,"nguonCau":"srt",
-      "parts": [],
+    "auth-12-1-nam-phut-dau": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/authentication/12-chan-doan/12-01-nam-phut-dau-e20c48e2.mp4","durationSec":231.1,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":67.32,"ten":"Chào · bài 12.1 · Đo trước khi đoán"},
+        {"t":67.32,"den":126.85,"ten":"500 — một phụ thuộc sập · 403 so với 401"},
+        {"t":126.85,"den":187.44,"ten":"Đo thật: cây quyết định · Một request một lần"},
+        {"t":187.44,"den":231.1,"ten":"Tự kiểm · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, chương mười hai là chẩn đoán."},
         {"t":8.76,"vi":"Không phải tính năng mới — nó là tìm lỗi nhanh khi thứ bạn dựng hỏng, và soát một hệ bạn không viết."},
@@ -1064,8 +1142,13 @@
         {"t":227.2,"vi":"Bài sau: tám hình dạng hỏng."}
       ]
     },
-    "auth-12-2-tam-hinh-dang": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/authentication/12-chan-doan/12-02-tam-hinh-dang-d538baf4.mp4","durationSec":207.63,"nguonCau":"srt",
-      "parts": [],
+    "auth-12-2-tam-hinh-dang": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/authentication/12-chan-doan/12-02-tam-hinh-dang-d538baf4.mp4","durationSec":207.63,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":51.4,"ten":"Chào · bài 12.2 · Tất cả đăng xuất, hoặc chỉ login mới hỏng"},
+        {"t":51.4,"den":119.85,"ten":"Chạy, rồi 401 sau 15 phút · Chạy Postman, hỏng trình duyệt"},
+        {"t":119.85,"den":162.36,"ten":"Đo thật: tám dáng"},
+        {"t":162.36,"den":207.63,"ten":"Tự kiểm · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, bài mười hai chấm hai."},
         {"t":8.46,"vi":"Dáng của ai bị ảnh hưởng và khi nào chỉ ra nguyên nhân nhanh hơn bất kỳ thông điệp lỗi đơn lẻ nào."},
@@ -1096,8 +1179,13 @@
         {"t":204.28,"vi":"Bài sau: hộp đồ nghề."}
       ]
     },
-    "auth-12-3-hop-do-nghe": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/authentication/12-chan-doan/12-03-hop-do-nghe-83bf5f7c.mp4","durationSec":242.07,"nguonCau":"srt",
-      "parts": [],
+    "auth-12-3-hop-do-nghe": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/authentication/12-chan-doan/12-03-hop-do-nghe-83bf5f7c.mp4","durationSec":242.07,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":64.76,"ten":"Chào · bài 12.3 · Giải một JWT bằng tay"},
+        {"t":64.76,"den":125.69,"ten":"Đừng bao giờ tin một token đã giải · Kiểm một cookie"},
+        {"t":125.69,"den":193.73,"ten":"curl lấy mã và header · Đo thời gian, và endpoint JWKS"},
+        {"t":193.73,"den":242.07,"ten":"Tự kiểm · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, bài mười hai chấm ba."},
         {"t":8.19,"vi":"Bạn không cần đội backend nói cho bạn cái gì trong một token hay một cookie đặt đúng không — câu trả lời hiện ra nếu bạn biết nhìn đâu."},
@@ -1133,19 +1221,12 @@
         {"t":236.23,"vi":"Tự trả lời lấy. Bài sau: soát một kho mã bạn không viết."}
       ]
     },
-    "auth-12-4-soat-kho-ma": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/authentication/12-chan-doan/12-04-soat-kho-ma-5069f11f.mp4","durationSec":236.21,"nguonCau":"srt",
+    "auth-12-4-soat-kho-ma": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/authentication/12-chan-doan/12-04-soat-kho-ma-5069f11f.mp4","durationSec":236.21,"nguonCau":"srt","nguonPhan":"canh",
       "parts": [
-        {"t":5.1,"den":25.9,"ten":"Chào · bài 12.4"},
-        {"t":25.9,"den":45.49,"ten":"Bắt đầu ở cổng, không phải tính năng"},
-        {"t":45.49,"den":67.9,"ten":"Lần theo token"},
-        {"t":67.9,"den":89.12,"ten":"Đo thật: grep các phản mẫu"},
-        {"t":89.12,"den":113.48,"ten":"Kiểm đường khôi phục"},
-        {"t":113.48,"den":131.22,"ten":"Đọc cấu hình, không chỉ mã"},
-        {"t":131.22,"den":151.02,"ten":"Tin dữ liệu, không tin câu chuyện của mã"},
-        {"t":151.02,"den":169.75,"ten":"Xác minh cái chắn"},
-        {"t":169.75,"den":191.78,"ten":"Viết nó xuống"},
-        {"t":191.78,"den":212.13,"ten":"Tự kiểm"},
-        {"t":212.13,"den":236.21,"ten":"Tóm tắt"}
+        {"t":0,"den":67.9,"ten":"Chào · bài 12.4 · Bắt đầu ở cổng, không phải tính năng"},
+        {"t":67.9,"den":131.22,"ten":"Đo thật: grep các phản mẫu · Kiểm đường khôi phục"},
+        {"t":131.22,"den":191.78,"ten":"Tin dữ liệu, không tin câu chuyện của mã · Xác minh cái chắn"},
+        {"t":191.78,"den":236.21,"ten":"Tự kiểm · Tóm tắt"}
       ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, bài mười hai chấm bốn."},
@@ -1183,8 +1264,13 @@
         {"t":232.48,"vi":"Bài sau: dựng cái gì trước."}
       ]
     },
-    "auth-12-5-loi-ket": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/authentication/12-chan-doan/12-05-loi-ket-e529f026.mp4","durationSec":255.95,"nguonCau":"srt",
-      "parts": [],
+    "auth-12-5-loi-ket": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/authentication/12-chan-doan/12-05-loi-ket-e529f026.mp4","durationSec":255.95,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":73.49,"ten":"Chào · bài 12.5 · Đừng dựng nó từ đầu"},
+        {"t":73.49,"den":139.24,"ten":"Phân quyền không phải chuyện gắn sau"},
+        {"t":139.24,"den":207.92,"ten":"Các hằng số · Đo thật: dự án cuối"},
+        {"t":207.92,"den":255.95,"ten":"Tự kiểm · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, bài mười hai chấm năm."},
         {"t":8.13,"vi":"Mười hai chương dựng một dịch vụ danh tính từ một mật khẩu tới production."},
@@ -1221,18 +1307,12 @@
         {"t":252.27,"vi":"Bài sau là dự án cuối khoá."}
       ]
     },
-    "auth-12-7-lab-du-an-cuoi-khoa": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/authentication/12-chan-doan/12-07-lab-du-an-cuoi-khoa-3b27e77e.mp4","durationSec":237.44,"nguonCau":"srt",
+    "auth-12-7-lab-du-an-cuoi-khoa": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/authentication/12-chan-doan/12-07-lab-du-an-cuoi-khoa-3b27e77e.mp4","durationSec":237.44,"nguonCau":"srt","nguonPhan":"canh",
       "parts": [
-        {"t":5.1,"den":29.31,"ten":"Chào · Lab 12"},
-        {"t":29.31,"den":60.03,"ten":"Mười hai kịch bản"},
-        {"t":60.03,"den":77.79,"ten":"Chuẩn bị"},
-        {"t":77.79,"den":101.33,"ten":"Bản tham khảo đạt 100"},
-        {"t":101.33,"den":122.92,"ten":"Build yếu đạt 25"},
-        {"t":122.92,"den":144.42,"ten":"Đo thật: cả khoá dưới tấn công"},
-        {"t":144.42,"den":164.33,"ten":"Mỗi lỗi là một chương"},
-        {"t":164.33,"den":186.77,"ten":"Kể thành một câu chuyện STAR"},
-        {"t":186.77,"den":210.95,"ten":"Xong khi nào"},
-        {"t":210.95,"den":237.44,"ten":"Tóm tắt"}
+        {"t":0,"den":60.03,"ten":"Chào · Lab 12 · Mười hai kịch bản"},
+        {"t":60.03,"den":122.92,"ten":"Chuẩn bị · Bản tham khảo đạt 100"},
+        {"t":122.92,"den":186.77,"ten":"Đo thật: cả khoá dưới tấn công · Mỗi lỗi là một chương"},
+        {"t":186.77,"den":237.44,"ten":"Xong khi nào · Tóm tắt"}
       ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Lab mười hai, dự án cuối. LabFlow ID v1.0: mọi thứ nối lại và chấm bởi khoảng mười hai kịch bản tấn công thật — mỗi cái một chương."},
@@ -1268,8 +1348,13 @@
         {"t":232.83,"vi":"Đó là cả khoá, được chứng minh."}
       ]
     },
-    "auth-2-1-da-co-csdl": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/authentication/02-mat-khau/02-01-da-co-csdl-d96c5877.mp4","durationSec":226.4,"nguonCau":"srt",
-      "parts": [],
+    "auth-2-1-da-co-csdl": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/authentication/02-mat-khau/02-01-da-co-csdl-d96c5877.mp4","durationSec":226.4,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":67.83,"ten":"Chào · bài 2.1 · Tủ chìa khoá bị chụp ảnh"},
+        {"t":67.83,"den":123.25,"ten":"Vì sao không muối sụp nhanh"},
+        {"t":123.25,"den":179.53,"ten":"Các con số từ đâu ra"},
+        {"t":179.53,"den":226.4,"ten":"Tự kiểm · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, bài hai chấm một, mở đầu Chương hai về mật khẩu."},
         {"t":9.71,"vi":"Chương này bắt đầu từ một giả định khó chịu: bảng người dùng của bạn đã bị chép đi rồi."},
@@ -1312,8 +1397,13 @@
         {"t":221.56,"vi":"Bài sau: chọn và chỉnh hàm băm bằng phép đo."}
       ]
     },
-    "auth-2-2-chon-va-chinh": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/authentication/02-mat-khau/02-02-chon-va-chinh-bd48eb7f.mp4","durationSec":237.44,"nguonCau":"srt",
-      "parts": [],
+    "auth-2-2-chon-va-chinh": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/authentication/02-mat-khau/02-02-chon-va-chinh-bd48eb7f.mp4","durationSec":237.44,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":64.43,"ten":"Chào · bài 2.2 · Két hẹn giờ"},
+        {"t":64.43,"den":120.02,"ten":"Đo: tune.mjs · Vì sao có ngân sách bộ nhớ"},
+        {"t":120.02,"den":178.32,"ten":"Đọc chuỗi theo tên, không theo vị trí"},
+        {"t":178.32,"den":237.44,"ten":"Các con số đi đâu: một hằng số · Tự kiểm"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, bài hai chấm hai. Bài trước nói mỗi lần đoán phải đắt."},
         {"t":10.23,"vi":"Bài này quyết định đắt cỡ nào, bằng thuật toán nào, và chứng minh con số trên đúng cái máy sẽ chạy LabFlow ID."},
@@ -1354,8 +1444,13 @@
         {"t":232.56,"vi":"Bài sau: làm chính luồng đăng nhập thôi rò rỉ."}
       ]
     },
-    "auth-2-3-luong-dang-nhap": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/authentication/02-mat-khau/02-03-luong-dang-nhap-243a147e.mp4","durationSec":220.69,"nguonCau":"srt",
-      "parts": [],
+    "auth-2-3-luong-dang-nhap": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/authentication/02-mat-khau/02-03-luong-dang-nhap-243a147e.mp4","durationSec":220.69,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":55.53,"ten":"Chào · bài 2.3 · Lễ tân kiểm quá nhanh"},
+        {"t":55.53,"den":109.7,"ten":"Băm giả cho người dùng không tồn tại"},
+        {"t":109.7,"den":162.85,"ten":"Một mật khẩu dài thật ra tốn gì"},
+        {"t":162.85,"den":220.69,"ten":"Pepper hay không? Quyết định của LabFlow ID · Tự kiểm"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, bài hai chấm ba. Có hàm băm tốt rồi, chính đoạn mã đăng nhập vẫn có thể rò."},
         {"t":12.05,"vi":"Bài này viết lại luồng đăng nhập để mọi lần thất bại cho cùng một câu trả lời, tốn cùng thời gian, và đọc cùng một chuỗi byte."},
@@ -1388,8 +1483,13 @@
         {"t":214.87,"vi":"Bài sau: những mật khẩu nào phải từ chối ngay từ đầu."}
       ]
     },
-    "auth-2-4-chinh-sach": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/authentication/02-mat-khau/02-04-chinh-sach-1517c50d.mp4","durationSec":232.74,"nguonCau":"srt",
-      "parts": [],
+    "auth-2-4-chinh-sach": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/authentication/02-mat-khau/02-04-chinh-sach-1517c50d.mp4","durationSec":232.74,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":63.36,"ten":"Chào · bài 2.4 · Ổ khoá cổng chung"},
+        {"t":63.36,"den":118.72,"ten":"Luật pha trộn có loại được mật khẩu phổ biến?"},
+        {"t":118.72,"den":170.41,"ten":"Khi dịch vụ kiểm rò rỉ treo"},
+        {"t":170.41,"den":232.74,"ten":"Tài khoản cũ: 123456 của Bình · Tự kiểm"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, bài hai chấm bốn. Hàm băm chậm không cứu được mật khẩu nằm trong danh sách của mọi kẻ tấn công."},
         {"t":13.69,"vi":"Bài này quyết định LabFlow ID từ chối mật khẩu nào, dựa trên hướng dẫn NIST hiện hành và dữ liệu rò rỉ thật, thay vì thói quen."},
@@ -1424,8 +1524,13 @@
         {"t":224.12,"vi":"Bài sau: chuyển các dòng MD5 và bcrypt cũ sang argon2id mà không bắt ai đặt lại."}
       ]
     },
-    "auth-2-5-chuyen-doi": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/authentication/02-mat-khau/02-05-chuyen-doi-fa6e1d93.mp4","durationSec":223.86,"nguonCau":"srt",
-      "parts": [],
+    "auth-2-5-chuyen-doi": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/authentication/02-mat-khau/02-05-chuyen-doi-fa6e1d93.mp4","durationSec":223.86,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":58.59,"ten":"Chào · bài 2.5 · Thay ổ khoá cả một toà nhà"},
+        {"t":58.59,"den":107.94,"ten":"Bọc, từng bước · 1.003 dòng cũ, chuyển thật"},
+        {"t":107.94,"den":161.12,"ten":"Ashley Madison, 2015: cái cột họ giữ lại"},
+        {"t":161.12,"den":223.86,"ten":"Cái đuôi dài · Tự kiểm"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, bài hai chấm năm. Hệ thống thật hiếm khi bắt đầu sạch sẽ."},
         {"t":10.65,"vi":"Hệ thống đặt phòng cũ của LabFlow lưu MD5 không muối."},
@@ -1461,8 +1566,13 @@
         {"t":216.96,"vi":"Bài sau là Lab hai: dựng module mật khẩu và bảo vệ nó trước máy chấm."}
       ]
     },
-    "auth-2-7-lab-luu-mat-khau": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/authentication/02-mat-khau/02-07-lab-luu-mat-khau-d7bad138.mp4","durationSec":191.41,"nguonCau":"srt",
-      "parts": [],
+    "auth-2-7-lab-luu-mat-khau": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/authentication/02-mat-khau/02-07-lab-luu-mat-khau-d7bad138.mp4","durationSec":191.41,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":43.66,"ten":"Chào · Lab 2 · Nhiệm vụ"},
+        {"t":43.66,"den":98.36,"ten":"Chuẩn bị · Chín phép chấm, và mỗi cái nghĩa là gì"},
+        {"t":98.36,"den":147.5,"ten":"Vì sao từng cái trượt"},
+        {"t":147.5,"den":191.41,"ten":"Checklist trước khi nộp · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Lab hai, bài có máy chấm tự động."},
         {"t":9.18,"vi":"Lab này biến năm bài của Chương hai thành một module: bốn hàm lưu, kiểm, nâng cấp và từ chối mật khẩu."},
@@ -1493,8 +1603,13 @@
         {"t":184.01,"vi":"Chương sau chuyển sang phiên và cookie — giữ cho người dùng đăng nhập một lần."}
       ]
     },
-    "auth-3-1-bang-phien": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/authentication/03-phien-cookie/03-01-bang-phien-c73e5bef.mp4","durationSec":194.87,"nguonCau":"srt",
-      "parts": [],
+    "auth-3-1-bang-phien": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/authentication/03-phien-cookie/03-01-bang-phien-c73e5bef.mp4","durationSec":194.87,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":56.77,"ten":"Chào · bài 3.1 · Một tấm vé gửi đồ"},
+        {"t":56.77,"den":95.81,"ten":"Mỗi cột trả lời một câu hỏi"},
+        {"t":95.81,"den":138.82,"ten":"Phép kiểm, trong load()"},
+        {"t":138.82,"den":194.87,"ten":"Bẫy: một hạn mà máy chủ không bao giờ kiểm · Tự kiểm"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, bài ba chấm một. Chương ba bịt lỗ bốn và năm: phiên không bao giờ kết thúc, và token để JavaScript giữ."},
         {"t":14.63,"vi":"Nó bắt đầu từ câu trả lời lâu đời nhất cho HTTP hay quên, vẫn đúng cho phần lớn sản phẩm: một dòng trên máy chủ."},
@@ -1529,8 +1644,13 @@
         {"t":188.64,"vi":"Bài sau: chính cái cookie mang token, thử trong trình duyệt thật."}
       ]
     },
-    "auth-3-2-thuoc-tinh-cookie": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/authentication/03-phien-cookie/03-02-thuoc-tinh-cookie-eb996401.mp4","durationSec":223.1,"nguonCau":"srt",
-      "parts": [],
+    "auth-3-2-thuoc-tinh-cookie": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/authentication/03-phien-cookie/03-02-thuoc-tinh-cookie-eb996401.mp4","durationSec":223.1,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":56.42,"ten":"Chào · bài 3.2 · Một chiếc vòng tay ở lễ hội"},
+        {"t":56.42,"den":109.7,"ten":"Chromium 156 làm gì với mỗi Set-Cookie"},
+        {"t":109.7,"den":165.97,"ten":"Đọc kết quả SameSite"},
+        {"t":165.97,"den":223.1,"ten":"Mỗi thuộc tính chặn gì, và không chặn gì · Tự kiểm"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, bài ba chấm hai. Token phiên giờ đi trong cookie."},
         {"t":9.54,"vi":"Mỗi thuộc tính trên cookie đó là một quyết định bảo mật nhỏ."},
@@ -1567,8 +1687,13 @@
         {"t":217.84,"vi":"Bài sau: cấp phiên mới ở mỗi lần đổi đặc quyền."}
       ]
     },
-    "auth-3-3-tai-sinh-phien": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/authentication/03-phien-cookie/03-03-tai-sinh-phien-f76675e1.mp4","durationSec":206.68,"nguonCau":"srt",
-      "parts": [],
+    "auth-3-3-tai-sinh-phien": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/authentication/03-phien-cookie/03-03-tai-sinh-phien-f76675e1.mp4","durationSec":206.68,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":62.42,"ten":"Chào · bài 3.3 · Thẻ khách sạn, lập trình lại khi nhận phòng"},
+        {"t":62.42,"den":112.99,"ten":"v0.3: start() luôn cấp phiên mới"},
+        {"t":112.99,"den":161.03,"ten":"Mỗi lần đổi đặc quyền nhận một phiên mới"},
+        {"t":161.03,"den":206.68,"ten":"Tự kiểm · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, bài ba chấm ba. Bài này nói về một đòn tấn công chẳng cần mật khẩu, chẳng cần bẻ khoá."},
         {"t":12.99,"vi":"Kẻ tấn công đưa bạn một phiên rồi chờ bạn đăng nhập."},
@@ -1599,8 +1724,13 @@
         {"t":199.07,"vi":"Bài sau: đòn tấn công cưỡi lên cookie trình duyệt tự gửi, đó là CSRF."}
       ]
     },
-    "auth-3-4-csrf": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/authentication/03-phien-cookie/03-04-csrf-0ea75648.mp4","durationSec":238.32,"nguonCau":"srt",
-      "parts": [],
+    "auth-3-4-csrf": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/authentication/03-phien-cookie/03-04-csrf-0ea75648.mp4","durationSec":238.32,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":63.19,"ten":"Chào · bài 3.4 · Một tờ có chữ ký trong phong bì người khác"},
+        {"t":63.19,"den":117.4,"ten":"Đọc ma trận · CORS không phải một lớp phòng CSRF"},
+        {"t":117.4,"den":175.07,"ten":"Vì sao same-site cũng bị từ chối · Lớp 3: một token đồng bộ"},
+        {"t":175.07,"den":238.32,"ten":"Nó đã xảy ra: ING Direct, 2008 · Tự kiểm"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, bài ba chấm bốn. Cookie được trình duyệt tự gửi, và sự tiện lợi đó chính là thứ CSRF lợi dụng."},
         {"t":14.22,"vi":"Bài này tấn công LabFlow từ một site khác trong trình duyệt thật, và xếp hạng các lớp phòng theo cái giá và chỗ hở của chúng."},
@@ -1639,8 +1769,13 @@
         {"t":232.6,"vi":"Bài sau: ta quyết định chính cái phiên nên sống ở đâu."}
       ]
     },
-    "auth-3-5-phien-song-o-dau": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/authentication/03-phien-cookie/03-05-phien-song-o-dau-195f2adc.mp4","durationSec":214.36,"nguonCau":"srt",
-      "parts": [],
+    "auth-3-5-phien-song-o-dau": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/authentication/03-phien-cookie/03-05-phien-song-o-dau-195f2adc.mp4","durationSec":214.36,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":60.54,"ten":"Chào · bài 3.5"},
+        {"t":60.54,"den":116.08,"ten":"Đọc các con số"},
+        {"t":116.08,"den":171.72,"ten":"Bẫy: Map trong bộ nhớ · Bảng quyết định"},
+        {"t":171.72,"den":214.36,"ten":"Tự kiểm · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, bài ba chấm năm. Dòng phiên có thể nằm trong cơ sở dữ liệu, trong Redis, hoặc ngay trong chính cookie."},
         {"t":13.9,"vi":"Bài này đo cả ba trên cùng những câu hỏi, và kết thúc bằng một lựa chọn cho LabFlow ID mà bạn bảo vệ được."},
@@ -1675,8 +1810,13 @@
         {"t":209.8,"vi":"Bài sau là Lab ba: bạn tự dựng lớp phiên."}
       ]
     },
-    "auth-3-7-lab-phien-cookie": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/authentication/03-phien-cookie/03-07-lab-phien-cookie-7eb22ec3.mp4","durationSec":182.4,"nguonCau":"srt",
-      "parts": [],
+    "auth-3-7-lab-phien-cookie": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/authentication/03-phien-cookie/03-07-lab-phien-cookie-7eb22ec3.mp4","durationSec":182.4,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":43.76,"ten":"Chào · Lab 3 · Nhiệm vụ"},
+        {"t":43.76,"den":89.83,"ten":"Chuẩn bị: chép, rồi chấm bản rỗng"},
+        {"t":89.83,"den":137.39,"ten":"Vì sao từng cái trượt"},
+        {"t":137.39,"den":182.4,"ten":"Checklist trước khi nộp · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Lab ba, bài có máy chấm tự động."},
         {"t":9.06,"vi":"Lab này biến Chương ba thành một hàm trả về năm phương thức."},
@@ -1706,8 +1846,13 @@
         {"t":175.57,"vi":"Chương sau mổ xẻ token: mở một JWT ra từ bên trong."}
       ]
     },
-    "auth-4-1-giai-ma-bang-tay": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/authentication/04-token-jwt/04-01-giai-ma-bang-tay-0c6472ba.mp4","durationSec":222.77,"nguonCau":"srt",
-      "parts": [],
+    "auth-4-1-giai-ma-bang-tay": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/authentication/04-token-jwt/04-01-giai-ma-bang-tay-0c6472ba.mp4","durationSec":222.77,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":62.01,"ten":"Chào · bài 4.1"},
+        {"t":62.01,"den":123.02,"ten":"Giải mã, rồi sửa payload là vỡ niêm phong"},
+        {"t":123.02,"den":175.86,"ten":"LabFlow ID phát một cái thật"},
+        {"t":175.86,"den":222.77,"ten":"Tự kiểm · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, bài bốn chấm một. Chương bốn mổ cái token ra."},
         {"t":9.63,"vi":"Một JWT không có gì thần kỳ và không hề được mã hoá: nó là ba chuỗi base64url nối nhau bằng dấu chấm."},
@@ -1740,8 +1885,13 @@
         {"t":216.37,"vi":"Bài sau: cái trường trong header mà kẻ tấn công mê nhất — alg."}
       ]
     },
-    "auth-4-2-truong-alg": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/authentication/04-token-jwt/04-02-truong-alg-d58ec6cf.mp4","durationSec":208.56,"nguonCau":"srt",
-      "parts": [],
+    "auth-4-2-truong-alg": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/authentication/04-token-jwt/04-02-truong-alg-d58ec6cf.mp4","durationSec":208.56,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":58.42,"ten":"Chào · bài 4.2 · Ai quyết định ổ khoá trên cửa?"},
+        {"t":58.42,"den":112.98,"ten":"Đòn 1 — alg: none · Đòn 2 — nhầm lẫn thuật toán"},
+        {"t":112.98,"den":164.81,"ten":"Thứ tự các phép kiểm · Chuẩn nói gì"},
+        {"t":164.81,"den":208.56,"ten":"Tự kiểm · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, bài bốn chấm hai. Header có một trường alg, và một thiết kế hấp dẫn nhưng sai để cái token tự chọn cách nó được kiểm."},
         {"t":15.31,"vi":"Hai cú giả mạo sống trong lỗi đó."},
@@ -1774,8 +1924,13 @@
         {"t":202.49,"vi":"Bài sau: bảy claim, và cú tấn công cho mỗi cái bạn bỏ qua."}
       ]
     },
-    "auth-4-3-cac-claim": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/authentication/04-token-jwt/04-03-cac-claim-00b42b79.mp4","durationSec":231.03,"nguonCau":"srt",
-      "parts": [],
+    "auth-4-3-cac-claim": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/authentication/04-token-jwt/04-03-cac-claim-00b42b79.mp4","durationSec":231.03,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":58.13,"ten":"Chào · bài 4.3 · Một lá thư có ký nhưng quên ghi gửi cho ai"},
+        {"t":58.13,"den":123.59,"ten":"Bỏ một cái, và đây là cú tấn công"},
+        {"t":123.59,"den":183.2,"ten":"nbf, và cửa sổ sống · Thu hồi một JWT thì khó"},
+        {"t":183.2,"den":231.03,"ten":"Tự kiểm · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, bài bốn chấm ba. Một chữ ký hợp lệ chỉ chứng minh token không bị sửa."},
         {"t":11.72,"vi":"Nó không nói ai đúc ra, dành cho ai, hay còn hạn không. Đó là các claim, và bỏ bất kỳ cái nào trong bảy cái là mở một lỗ cụ thể, có tên."},
@@ -1812,8 +1967,13 @@
         {"t":225.3,"vi":"Bài sau: khoá, kid, JWKS và xoay vòng."}
       ]
     },
-    "auth-4-4-khoa-va-jwks": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/authentication/04-token-jwt/04-04-khoa-va-jwks-cdd917b1.mp4","durationSec":248.11,"nguonCau":"srt",
-      "parts": [],
+    "auth-4-4-khoa-va-jwks": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/authentication/04-token-jwt/04-04-khoa-va-jwks-cdd917b1.mp4","durationSec":248.11,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":69.68,"ten":"Chào · bài 4.4 · Một công chứng viên và một cuốn sổ mẫu dấu"},
+        {"t":69.68,"den":123.43,"ten":"Xác minh theo kid, bằng jose"},
+        {"t":123.43,"den":185.12,"ten":"Bẫy: kid cũng là đầu vào của kẻ tấn công"},
+        {"t":185.12,"den":248.11,"ten":"Vì sao dùng khoá công khai cho một nền tảng · Tự kiểm"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, bài bốn chấm bốn. Một bí mật HMAC dùng chung nghĩa là mọi bộ xác minh cũng giả mạo được."},
         {"t":13.11,"vi":"Ký bằng khoá công khai sửa điều đó: LabFlow ID giữ khoá riêng, và công bố khoá công khai dưới dạng JWKS."},
@@ -1853,8 +2013,13 @@
         {"t":243.35,"vi":"Bài sau: trình duyệt nên cất token ở đâu."}
       ]
     },
-    "auth-4-5-cat-token-o-dau": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/authentication/04-token-jwt/04-05-cat-token-o-dau-8e6b847b.mp4","durationSec":243.41,"nguonCau":"srt",
-      "parts": [],
+    "auth-4-5-cat-token-o-dau": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/authentication/04-token-jwt/04-05-cat-token-o-dau-8e6b847b.mp4","durationSec":243.41,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":65.69,"ten":"Chào · bài 4.5 · Ví, két, hay người giữ xe?"},
+        {"t":65.69,"den":124.26,"ten":"Nó đọc được gì, và không đọc được gì"},
+        {"t":124.26,"den":184.21,"ten":"Một mẫu an toàn thường gặp · LabFlow ID phát nó ra sao"},
+        {"t":184.21,"den":243.41,"ten":"Tự kiểm · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, bài bốn chấm năm. Bạn có một token."},
         {"t":9.33,"vi":"Giờ là câu hỏi khó: trình duyệt đặt nó ở đâu?"},
@@ -1888,8 +2053,13 @@
         {"t":237,"vi":"Bài sau là Lab bốn: bạn tự viết bộ xác minh JWT."}
       ]
     },
-    "auth-4-7-lab-kiem-jwt": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/authentication/04-token-jwt/04-07-lab-kiem-jwt-75619a01.mp4","durationSec":208.91,"nguonCau":"srt",
-      "parts": [],
+    "auth-4-7-lab-kiem-jwt": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/authentication/04-token-jwt/04-07-lab-kiem-jwt-75619a01.mp4","durationSec":208.91,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":48,"ten":"Chào · Lab 4 · Nhiệm vụ — makeVerifier"},
+        {"t":48,"den":108.99,"ten":"Bản khởi đầu · Chín phép chấm, mười điểm, đạt là bảy"},
+        {"t":108.99,"den":163.34,"ten":"Nó trượt ở đâu · Bản tham khảo — src/jwt/verify.js — 10 / 10"},
+        {"t":163.34,"den":208.91,"ten":"Checklist trước khi nộp · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Lab bốn. Bạn viết hàm quyết định một token có đáng tin không."},
         {"t":11.67,"vi":"Một máy chấm đúc cả một rổ hơn hai mươi token thù địch — none, nhầm lẫn, kid lạ, claim sai."},
@@ -1922,8 +2092,13 @@
         {"t":201.33,"vi":"Chương sau: hai token, và vì sao cần một cái sống ngắn với một cái làm mới."}
       ]
     },
-    "auth-5-1-hai-token": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/authentication/05-refresh-xoay-thu-hoi/05-01-hai-token-489bee78.mp4","durationSec":224.24,"nguonCau":"srt",
-      "parts": [],
+    "auth-5-1-hai-token": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/authentication/05-refresh-xoay-thu-hoi/05-01-hai-token-489bee78.mp4","durationSec":224.24,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":62.28,"ten":"Chào · bài 5.1 · Một vé ngày và một thẻ hội viên"},
+        {"t":62.28,"den":120.31,"ten":"Vì sao không một token cho cả hai việc"},
+        {"t":120.31,"den":176.62,"ten":"Cú đổi refresh · Lưu bằng digest, không bao giờ lưu token"},
+        {"t":176.62,"den":224.24,"ten":"Tự kiểm · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, bài năm chấm một. Access token phải ngắn, để một cái bị trộm chết nhanh."},
         {"t":12.01,"vi":"Nhưng đăng nhập lại mỗi mười lăm phút thì không chịu nổi."},
@@ -1955,8 +2130,13 @@
         {"t":219.04,"vi":"Bài sau: xoay vòng, và cú tái dùng tố giác kẻ cắp."}
       ]
     },
-    "auth-5-2-xoay-vong": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/authentication/05-refresh-xoay-thu-hoi/05-02-xoay-vong-d9ef988e.mp4","durationSec":218.17,"nguonCau":"srt",
-      "parts": [],
+    "auth-5-2-xoay-vong": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/authentication/05-refresh-xoay-thu-hoi/05-02-xoay-vong-d9ef988e.mp4","durationSec":218.17,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":62.15,"ten":"Chào · bài 5.2 · Một quyển séc, mỗi lần một cuống"},
+        {"t":62.15,"den":113.6,"ten":"Chuỗi trong bảng · Một kẻ cắp phát lại token cũ"},
+        {"t":113.6,"den":172.49,"ten":"Vì sao đăng xuất cả người thật · Chuẩn nói gì"},
+        {"t":172.49,"den":218.17,"ten":"Tự kiểm · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, bài năm chấm hai. Một refresh token dài hạn là miếng mồi ngon."},
         {"t":10.99,"vi":"Xoay vòng làm nó dùng một lần: mỗi lần refresh đúc một cái mới và tiêu cái cũ."},
@@ -1991,8 +2171,13 @@
         {"t":212.57,"vi":"Bài sau: năm sự kiện bắt buộc phải kết thúc một phiên."}
       ]
     },
-    "auth-5-3-nam-su-kien": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/authentication/05-refresh-xoay-thu-hoi/05-03-nam-su-kien-ee09e179.mp4","durationSec":229.2,"nguonCau":"srt",
-      "parts": [],
+    "auth-5-3-nam-su-kien": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/authentication/05-refresh-xoay-thu-hoi/05-03-nam-su-kien-ee09e179.mp4","durationSec":229.2,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":66.4,"ten":"Chào · bài 5.3"},
+        {"t":66.4,"den":122.25,"ten":"Sự kiện 1 — đăng xuất (thiết bị này)"},
+        {"t":122.25,"den":178.2,"ten":"Sự kiện 5 — thu hồi từ trang thiết bị · Cửa sổ access token"},
+        {"t":178.2,"den":229.2,"ten":"Tự kiểm · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, bài năm chấm ba. Đăng nhập là một đường; đăng xuất thì có tới năm."},
         {"t":11.48,"vi":"Một phiên phải kết thúc khi đăng xuất tường minh, đăng xuất mọi nơi, đổi mật khẩu, phát hiện trộm, và hết hạn thường."},
@@ -2031,8 +2216,13 @@
         {"t":223.17,"vi":"Bài sau: trang thiết bị, nơi người dùng tự nhìn và tự cắt."}
       ]
     },
-    "auth-5-4-danh-sach-thiet-bi": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/authentication/05-refresh-xoay-thu-hoi/05-04-danh-sach-thiet-bi-e1bafea8.mp4","durationSec":214.33,"nguonCau":"srt",
-      "parts": [],
+    "auth-5-4-danh-sach-thiet-bi": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/authentication/05-refresh-xoay-thu-hoi/05-04-danh-sach-thiet-bi-e1bafea8.mp4","durationSec":214.33,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":59.11,"ten":"Chào · bài 5.4 · Một họ, một thiết bị"},
+        {"t":59.11,"den":106.99,"ten":"Có phải bạn không? · Ba thiết bị, được liệt kê"},
+        {"t":106.99,"den":161.22,"ten":"Giới hạn theo chủ · Vì sao người dùng cần nó"},
+        {"t":161.22,"den":214.33,"ten":"Tự kiểm · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, bài năm chấm bốn. Các họ đã cho bạn một dòng cho mỗi lần đăng nhập, trên một thiết bị."},
         {"t":12.97,"vi":"Gộp chúng lại là bạn có một trang thiết bị của bạn."},
@@ -2063,8 +2253,13 @@
         {"t":207.06,"vi":"Bài sau: cuộc đua refresh, và cú cảnh báo giả giết chết cả tính năng."}
       ]
     },
-    "auth-5-5-cuoc-dua-refresh": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/authentication/05-refresh-xoay-thu-hoi/05-05-cuoc-dua-refresh-c8b0cc2d.mp4","durationSec":218.33,"nguonCau":"srt",
-      "parts": [],
+    "auth-5-5-cuoc-dua-refresh": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/authentication/05-refresh-xoay-thu-hoi/05-05-cuoc-dua-refresh-c8b0cc2d.mp4","durationSec":218.33,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":58.67,"ten":"Chào · bài 5.5 · Hai tab, một cookie"},
+        {"t":58.67,"den":109.33,"ten":"Cảnh báo giả còn tệ hơn không có · Cửa sổ ân hạn"},
+        {"t":109.33,"den":165.55,"ten":"Cửa sổ ân hạn không được là một lỗ hổng · Đo thật"},
+        {"t":165.55,"den":218.33,"ten":"Tự kiểm · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, bài năm chấm năm. Hai tab của một trình duyệt cùng thấy access token hết hạn, và cùng refresh với cùng cookie."},
         {"t":14.84,"vi":"Xoay vòng ngây thơ thấy cái thứ hai là tái dùng và thu hồi họ, đăng xuất một người chẳng làm gì sai."},
@@ -2096,8 +2291,13 @@
         {"t":212.57,"vi":"Bài sau là Lab năm: bạn tự dựng lớp refresh token."}
       ]
     },
-    "auth-5-7-lab-xoay-vong": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/authentication/05-refresh-xoay-thu-hoi/05-07-lab-xoay-vong-4dcacfdb.mp4","durationSec":205,"nguonCau":"srt",
-      "parts": [],
+    "auth-5-7-lab-xoay-vong": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/authentication/05-refresh-xoay-thu-hoi/05-07-lab-xoay-vong-4dcacfdb.mp4","durationSec":205,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":46.69,"ten":"Chào · Lab 5 · Nhiệm vụ — refreshLayer"},
+        {"t":46.69,"den":100.35,"ten":"Bản khởi đầu · Tám phép chấm, mười điểm, đạt là bảy"},
+        {"t":100.35,"den":155.55,"ten":"Nó trượt ở đâu"},
+        {"t":155.55,"den":205,"ten":"Checklist trước khi nộp · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Lab năm. Bạn viết cái lớp xoay refresh token, phát hiện tái dùng như trộm."},
         {"t":12.78,"vi":"Nó phải sống qua cuộc đua trình duyệt, và liệt kê rồi thu hồi thiết bị."},
@@ -2129,8 +2329,13 @@
         {"t":199.48,"vi":"Chương sau: vòng đời tài khoản, từ đăng ký tới xoá."}
       ]
     },
-    "auth-6-1-dang-ky": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/authentication/06-vong-doi-tai-khoan/06-01-dang-ky-ca4a9a2e.mp4","durationSec":199.75,"nguonCau":"srt",
-      "parts": [],
+    "auth-6-1-dang-ky": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/authentication/06-vong-doi-tai-khoan/06-01-dang-ky-ca4a9a2e.mp4","durationSec":199.75,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":46.25,"ten":"Chào · bài 6.1 · Một tấm thẻ thư viện mang tên bạn"},
+        {"t":46.25,"den":99.99,"ten":"Một tài khoản mới bắt đầu chưa xác minh"},
+        {"t":99.99,"den":152.57,"ten":"Vì sao băm ở cả hai nhánh"},
+        {"t":152.57,"den":199.75,"ten":"Tự kiểm · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, bài sáu chấm một. Đăng ký trông như phần dễ, nhưng nó trao thứ người dùng không đổi rẻ được: danh tính của họ."},
         {"t":14.93,"vi":"Và nó là cơ hội đầu tiên để rò ai đã đăng ký."},
@@ -2164,8 +2369,13 @@
         {"t":193.31,"vi":"Bài sau: xác minh email, và cái máy quét bấm hộ mọi đường dẫn."}
       ]
     },
-    "auth-6-2-xac-minh-email": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/authentication/06-vong-doi-tai-khoan/06-02-xac-minh-email-a9794203.mp4","durationSec":193.31,"nguonCau":"srt",
-      "parts": [],
+    "auth-6-2-xac-minh-email": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/authentication/06-vong-doi-tai-khoan/06-02-xac-minh-email-a9794203.mp4","durationSec":193.31,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":55.9,"ten":"Chào · bài 6.2 · Một người đưa hàng cần chữ ký"},
+        {"t":55.9,"den":110.26,"ten":"Vì sao không dùng một JWT · Cái máy quét bấm trước"},
+        {"t":110.26,"den":165.47,"ten":"Sửa cái hình dạng, không phải cái đoán"},
+        {"t":165.47,"den":193.31,"ten":"Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, bài sáu chấm hai. Xác minh trả lời một câu: người này có đọc được thư ở địa chỉ đó không?"},
         {"t":12.98,"vi":"Đặt lại mật khẩu dựng trên câu trả lời đó."},
@@ -2197,8 +2407,13 @@
         {"t":186.93,"vi":"Bài sau: luồng reset, cánh cửa bị tấn công nhiều nhất của bạn."}
       ]
     },
-    "auth-6-3-dat-lai-mat-khau": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/authentication/06-vong-doi-tai-khoan/06-03-dat-lai-mat-khau-a06d0b8f.mp4","durationSec":206.03,"nguonCau":"srt",
-      "parts": [],
+    "auth-6-3-dat-lai-mat-khau": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/authentication/06-vong-doi-tai-khoan/06-03-dat-lai-mat-khau-a06d0b8f.mp4","durationSec":206.03,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":60.73,"ten":"Chào · bài 6.3 · Chìa dự phòng dưới thảm"},
+        {"t":60.73,"den":107.96,"ten":"Cái token là bài 6.2, ngắn hơn"},
+        {"t":107.96,"den":160.8,"ten":"Chứng minh đo được · Đừng đăng nhập họ từ cái link"},
+        {"t":160.8,"den":206.03,"ten":"Tự kiểm · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, bài sáu chấm ba. Reset là một đường vòng quanh mật khẩu — một cửa trước thứ hai."},
         {"t":12.57,"vi":"Nó bị tấn công nhiều hơn ô đăng nhập, vì một lỗ hổng ở đây trao cả tài khoản mà chẳng cần mật khẩu."},
@@ -2231,8 +2446,13 @@
         {"t":199.74,"vi":"Bài sau: dò tài khoản, và cái rò không câu chữ nào đóng được."}
       ]
     },
-    "auth-6-4-do-tai-khoan": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/authentication/06-vong-doi-tai-khoan/06-04-do-tai-khoan-0ce5e512.mp4","durationSec":205.36,"nguonCau":"srt",
-      "parts": [],
+    "auth-6-4-do-tai-khoan": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/authentication/06-vong-doi-tai-khoan/06-04-do-tai-khoan-0ce5e512.mp4","durationSec":205.36,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":50.11,"ten":"Chào · bài 6.4 · Hai cái chuông cửa"},
+        {"t":50.11,"den":91.4,"ten":"Rò câu chữ là nửa dễ · Cú rò thời gian mà câu chữ để ngỏ"},
+        {"t":91.4,"den":139.01,"ten":"Cách sửa: ra ngoài đường phản hồi · Cửa kia: đăng ký"},
+        {"t":139.01,"den":205.36,"ten":"Bẫy: \"vá thông điệp là dò đã đóng\" · Tự kiểm"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, bài sáu chấm bốn. Dò tài khoản là biết email nào có tài khoản — một danh sách bạn chưa bao giờ định công bố."},
         {"t":14.78,"vi":"Ai cũng vá câu chữ. Nhưng gần như không ai đo cái đồng hồ."},
@@ -2270,8 +2490,13 @@
         {"t":200.29,"vi":"Bài sau: đổi địa chỉ, và kết thúc tài khoản."}
       ]
     },
-    "auth-6-5-doi-email-va-xoa": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/authentication/06-vong-doi-tai-khoan/06-05-doi-email-va-xoa-6c2620d7.mp4","durationSec":205.05,"nguonCau":"srt",
-      "parts": [],
+    "auth-6-5-doi-email-va-xoa": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/authentication/06-vong-doi-tai-khoan/06-05-doi-email-va-xoa-6c2620d7.mp4","durationSec":205.05,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":56.82,"ten":"Chào · bài 6.5"},
+        {"t":56.82,"den":102.83,"ten":"updateEmail xoá cờ đã-xác-minh · Báo cả địa chỉ cũ nữa"},
+        {"t":102.83,"den":158.01,"ten":"Xoá-mềm, không phải một DELETE cứng"},
+        {"t":158.01,"den":205.05,"ten":"Tự kiểm · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, bài sáu chấm năm. Vòng đời kết thúc bằng hai hành động người ta coi là thường nhật, còn kẻ tấn công coi là một món quà."},
         {"t":15.08,"vi":"Đó là đổi email, và xoá tài khoản."},
@@ -2303,8 +2528,13 @@
         {"t":199.3,"vi":"Bài sau là Lab sáu: bạn tự dựng lớp vòng đời tài khoản."}
       ]
     },
-    "auth-6-7-lab-vong-doi": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/authentication/06-vong-doi-tai-khoan/06-07-lab-vong-doi-1317ebad.mp4","durationSec":191.69,"nguonCau":"srt",
-      "parts": [],
+    "auth-6-7-lab-vong-doi": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/authentication/06-vong-doi-tai-khoan/06-07-lab-vong-doi-1317ebad.mp4","durationSec":191.69,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":44.4,"ten":"Chào · Lab 6 · Hình dạng"},
+        {"t":44.4,"den":100.02,"ten":"issueToken · consumeToken"},
+        {"t":100.02,"den":147.34,"ten":"Chấm thế nào · Lần thử đầu \"chạy được\": 3 / 10"},
+        {"t":147.34,"den":191.69,"ten":"Xong khi nào · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Lab sáu. Bạn viết cái lớp đứng sau xác minh email và đặt lại mật khẩu."},
         {"t":12.12,"vi":"Phát một token một lần, tiêu nó một lần, và yêu cầu reset mà không lộ email có tồn tại hay không."},
@@ -2336,8 +2566,13 @@
         {"t":187.32,"vi":"Chương sau: yếu tố thứ hai, và passkey."}
       ]
     },
-    "auth-7-1-yeu-to-thu-hai": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/authentication/07-yeu-to-thu-hai-passkey/07-01-yeu-to-thu-hai-6cba7199.mp4","durationSec":185.55,"nguonCau":"srt",
-      "parts": [],
+    "auth-7-1-yeu-to-thu-hai": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/authentication/07-yeu-to-thu-hai-passkey/07-01-yeu-to-thu-hai-6cba7199.mp4","durationSec":185.55,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":53.18,"ten":"Chào · bài 7.1 · Một cái khoá và một cái chốt"},
+        {"t":53.18,"den":104.06,"ten":"Nó phòng được cái gì · Nó không phòng được cái gì"},
+        {"t":104.06,"den":142.92,"ten":"TOTP, push, hay passkey · SMS là cái yếu"},
+        {"t":142.92,"den":185.55,"ten":"Tự kiểm · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, bài bảy chấm một. Một yếu tố thứ hai chặn kẻ tấn công đã có mật khẩu — một cái bị lộ, bị lừa, hay dùng lại."},
         {"t":15.2,"vi":"Nhưng nó không chặn kẻ đã có thiết bị."},
@@ -2368,8 +2603,13 @@
         {"t":180,"vi":"Bài sau: TOTP nhìn từ bên trong, trong ba mươi dòng."}
       ]
     },
-    "auth-7-2-totp": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/authentication/07-yeu-to-thu-hai-passkey/07-02-totp-82e1f5df.mp4","durationSec":210.52,"nguonCau":"srt",
-      "parts": [],
+    "auth-7-2-totp": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/authentication/07-yeu-to-thu-hai-passkey/07-02-totp-82e1f5df.mp4","durationSec":210.52,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":63.63,"ten":"Chào · bài 7.2 · Hai cái đồng hồ, một bí mật"},
+        {"t":63.63,"den":122.38,"ten":"TOTP: counter chính là đồng hồ (RFC 6238)"},
+        {"t":122.38,"den":180.96,"ten":"So trong hằng thời gian · Phát lại, và cú đốt một bước"},
+        {"t":180.96,"den":210.52,"ten":"Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, bài bảy chấm hai. Sáu chữ số trong app xác thực của bạn không phải phép màu, cũng không phải một lời gọi mạng."},
         {"t":14.63,"vi":"Chúng là HMAC của bí mật với cửa sổ ba mươi giây hiện tại, cắt còn sáu chữ số."},
@@ -2406,8 +2646,13 @@
         {"t":203.62,"vi":"Bài sau: đăng ký nó, và cái đường khôi phục bạn chắc chắn sẽ cần."}
       ]
     },
-    "auth-7-3-dang-ky-va-khoi-phuc": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/authentication/07-yeu-to-thu-hai-passkey/07-03-dang-ky-va-khoi-phuc-b1ac5c53.mp4","durationSec":212.51,"nguonCau":"srt",
-      "parts": [],
+    "auth-7-3-dang-ky-va-khoi-phuc": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/authentication/07-yeu-to-thu-hai-passkey/07-03-dang-ky-va-khoi-phuc-b1ac5c53.mp4","durationSec":212.51,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":58.53,"ten":"Chào · bài 7.3 · Xác nhận trước khi tin"},
+        {"t":58.53,"den":112.33,"ten":"Đăng ký, đo qua HTTP · Mã khôi phục: cái đường quay lại"},
+        {"t":112.33,"den":162.89,"ten":"Step-up nhận cái nào cũng được"},
+        {"t":162.89,"den":212.51,"ten":"Tự kiểm · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, bài bảy chấm ba. Bật một yếu tố thứ hai là hai bước người ta thường làm sai."},
         {"t":12.08,"vi":"Xác nhận yếu tố chạy được trước khi tin nó, và trao một đường quay lại cho cái ngày mất điện thoại — vì ngày đó sẽ tới."},
@@ -2441,8 +2686,13 @@
         {"t":206.57,"vi":"Bài sau: passkey, và một dòng duy nhất giết chết lừa đảo."}
       ]
     },
-    "auth-7-4-passkey": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/authentication/07-yeu-to-thu-hai-passkey/07-04-passkey-0196d466.mp4","durationSec":220.55,"nguonCau":"srt",
-      "parts": [],
+    "auth-7-4-passkey": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/authentication/07-yeu-to-thu-hai-passkey/07-04-passkey-0196d466.mp4","durationSec":220.55,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":63.22,"ten":"Chào · bài 7.4 · Một con dấu sáp, không phải một từ chung"},
+        {"t":63.22,"den":115.97,"ten":"Hai nghi thức · Một dòng: expectedOrigin"},
+        {"t":115.97,"den":172.19,"ten":"Vì sao lừa đảo chết · Trình duyệt cũng thi hành điều đó"},
+        {"t":172.19,"den":220.55,"ten":"Tự kiểm · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, bài bảy chấm bốn. Mọi yếu tố tới giờ đều lừa được: một mật khẩu, một mã TOTP, một cú chạm push."},
         {"t":14.69,"vi":"Cả ba đều chuyển tiếp được tới site thật, bởi một bản giả thuyết phục."},
@@ -2476,8 +2726,13 @@
         {"t":215.93,"vi":"Bài sau: đưa passkey lên production."}
       ]
     },
-    "auth-7-5-trien-khai-passkey": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/authentication/07-yeu-to-thu-hai-passkey/07-05-trien-khai-passkey-8bcb71ed.mp4","durationSec":213.56,"nguonCau":"srt",
-      "parts": [],
+    "auth-7-5-trien-khai-passkey": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/authentication/07-yeu-to-thu-hai-passkey/07-05-trien-khai-passkey-8bcb71ed.mp4","durationSec":213.56,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":62.48,"ten":"Chào · bài 7.5 · Một dòng cho mỗi bộ xác thực"},
+        {"t":62.48,"den":114.01,"ten":"Bốn tuyến, hai nghi thức"},
+        {"t":114.01,"den":169.25,"ten":"Cổng vào vẫn không được rò · Di trú khỏi mật khẩu"},
+        {"t":169.25,"den":213.56,"ten":"Tự kiểm · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, bài bảy chấm năm. Bài trước cho thấy vì sao passkey chạy."},
         {"t":11.12,"vi":"Đây là cách chúng sống trong một hệ thật."},
@@ -2509,8 +2764,13 @@
         {"t":208.23,"vi":"Bài sau là Lab bảy: bạn tự viết TOTP từ gốc."}
       ]
     },
-    "auth-7-7-lab-totp": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/authentication/07-yeu-to-thu-hai-passkey/07-07-lab-totp-b6ac71e7.mp4","durationSec":190.4,"nguonCau":"srt",
-      "parts": [],
+    "auth-7-7-lab-totp": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/authentication/07-yeu-to-thu-hai-passkey/07-07-lab-totp-b6ac71e7.mp4","durationSec":190.4,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":49.96,"ten":"Chào · Lab 7 · Bạn dựng gì"},
+        {"t":49.96,"den":92.98,"ten":"Chấm thế nào: 6 phép, 10 điểm, đạt 7"},
+        {"t":92.98,"den":144.3,"ten":"Lần thử đầu \"chạy được\": 5,5 / 10"},
+        {"t":144.3,"den":190.4,"ten":"Xong khi nào · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Lab bảy. Bạn viết TOTP: base32, HOTP với HMAC và cắt động, TOTP với đồng hồ làm counter, và xác minh với cửa sổ lệch."},
         {"t":17.93,"vi":"Máy chấm kiểm bạn với các vector công bố của RFC bốn hai hai sáu và RFC sáu hai ba tám."},
@@ -2542,8 +2802,13 @@
         {"t":184.91,"vi":"Chương sau: OAuth hai chấm một và OpenID Connect."}
       ]
     },
-    "auth-8-1-oauth-la-gi": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/authentication/08-oauth-oidc/08-01-oauth-la-gi-56582458.mp4","durationSec":204.87,"nguonCau":"srt",
-      "parts": [],
+    "auth-8-1-oauth-la-gi": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/authentication/08-oauth-oidc/08-01-oauth-la-gi-56582458.mp4","durationSec":204.87,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":63.97,"ten":"Chào · bài 8.1 · Một chìa valet"},
+        {"t":63.97,"den":125.14,"ten":"Bốn vai · OIDC bằng OAuth cộng danh tính"},
+        {"t":125.14,"den":176.17,"ten":"Vì sao implicit đã chết · Trong LabFlow"},
+        {"t":176.17,"den":204.87,"ten":"Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, bài tám chấm một. OAuth là uỷ quyền truy cập: cho một app hành động trên tài nguyên của bạn ở một nơi khác, mà không cần mật khẩu."},
         {"t":16.08,"vi":"Nó không phải đăng nhập, không phải OpenID Connect, và không phải một phiên — dù cả ba đều đi nhờ nó."},
@@ -2571,8 +2836,13 @@
         {"t":198.47,"vi":"Bài sau: luồng authorization code kèm PKCE, từng bước một."}
       ]
     },
-    "auth-8-2-luong-code-pkce": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/authentication/08-oauth-oidc/08-02-luong-code-pkce-ea894979.mp4","durationSec":185.34,"nguonCau":"srt",
-      "parts": [],
+    "auth-8-2-luong-code-pkce": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/authentication/08-oauth-oidc/08-02-luong-code-pkce-ea894979.mp4","durationSec":185.34,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":45.47,"ten":"Chào · bài 8.2 · Bắt đầu: verifier và challenge"},
+        {"t":45.47,"den":85.34,"ten":"Authorize: người dùng duyệt · Code trở về trong trình duyệt"},
+        {"t":85.34,"den":126.36,"ten":"Token: đổi code cộng verifier lấy token"},
+        {"t":126.36,"den":185.34,"ten":"Ngắn hạn, dùng một lần · Tự kiểm"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, bài tám chấm hai. Đây là luồng duy nhất OAuth hai chấm một còn giữ."},
         {"t":11.01,"vi":"Người dùng uỷ quyền ở provider; client nhận một code ngắn trong trình duyệt."},
@@ -2599,8 +2869,13 @@
         {"t":180.83,"vi":"Bài sau: state, nonce và redirect_uri."}
       ]
     },
-    "auth-8-3-state-nonce-redirect": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/authentication/08-oauth-oidc/08-03-state-nonce-redirect-b813fdce.mp4","durationSec":201.68,"nguonCau":"srt",
-      "parts": [],
+    "auth-8-3-state-nonce-redirect": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/authentication/08-oauth-oidc/08-03-state-nonce-redirect-b813fdce.mp4","durationSec":201.68,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":60.24,"ten":"Chào · bài 8.3 · state: CSRF ở callback"},
+        {"t":60.24,"den":114.07,"ten":"nonce: phát lại ID token · nonce, đo được"},
+        {"t":114.07,"den":172.49,"ten":"redirect_uri, đo được · Ba tham số, ba lớp"},
+        {"t":172.49,"den":201.68,"ten":"Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, bài tám chấm ba. Ba tham số trông như giấy tờ sổ sách thực ra mỗi cái là một lớp phòng."},
         {"t":12.8,"vi":"state chặn CSRF ở callback; nonce chặn phát lại ID token; và một redirect_uri khớp chính xác chặn trộm token qua open redirect."},
@@ -2628,8 +2903,13 @@
         {"t":197.18,"vi":"Bài sau: ID token, và bảy phép kiểm."}
       ]
     },
-    "auth-8-4-id-token": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/authentication/08-oauth-oidc/08-04-id-token-6df2c83d.mp4","durationSec":205.88,"nguonCau":"srt",
-      "parts": [],
+    "auth-8-4-id-token": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/authentication/08-oauth-oidc/08-04-id-token-6df2c83d.mp4","durationSec":205.88,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":57.34,"ten":"Chào · bài 8.4 · Thẻ lên máy bay so với thẻ căn cước"},
+        {"t":57.34,"den":119.9,"ten":"Access token: khán giả là API · Bảy phép kiểm"},
+        {"t":119.9,"den":175.27,"ten":"aud và nonce mới là cái tinh vi · Một lõi thuần, kiểm được"},
+        {"t":175.27,"den":205.88,"ten":"Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, bài tám chấm bốn. Hai token trở về, cho hai việc."},
         {"t":9.8,"vi":"ID token nói cho client biết ai đã đăng nhập; access token để client gọi máy chủ tài nguyên."},
@@ -2660,8 +2940,13 @@
         {"t":201.92,"vi":"Bài sau: làm một client thật."}
       ]
     },
-    "auth-8-5-lam-client-that": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/authentication/08-oauth-oidc/08-05-lam-client-that-c47d7e01.mp4","durationSec":202.05,"nguonCau":"srt",
-      "parts": [],
+    "auth-8-5-lam-client-that": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/authentication/08-oauth-oidc/08-05-lam-client-that-c47d7e01.mp4","durationSec":202.05,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":63.5,"ten":"Chào · bài 8.5 · Nối theo sub, không theo email"},
+        {"t":63.5,"den":120.46,"ten":"Giữ một đường vào không qua provider · Gỡ nối"},
+        {"t":120.46,"den":174.34,"ten":"Token không phải là phiên · Chỉ xin đúng phạm vi bạn cần"},
+        {"t":174.34,"den":202.05,"ten":"Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, bài tám chấm năm. Luồng đường thuận là phần dễ."},
         {"t":9.81,"vi":"Một client thật phải nối một danh tính liên kết vào một tài khoản nội bộ, cho người dùng gỡ nối."},
@@ -2691,8 +2976,13 @@
         {"t":196.56,"vi":"Bài sau là Lab tám: bạn viết bộ kiểm ID token."}
       ]
     },
-    "auth-8-7-lab-id-token": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/authentication/08-oauth-oidc/08-07-lab-id-token-0f24e2a1.mp4","durationSec":168.61,"nguonCau":"srt",
-      "parts": [],
+    "auth-8-7-lab-id-token": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/authentication/08-oauth-oidc/08-07-lab-id-token-0f24e2a1.mp4","durationSec":168.61,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":41.59,"ten":"Chào · Lab 8 · Bạn dựng gì"},
+        {"t":41.59,"den":85.12,"ten":"Thứ tự quan trọng · Chuẩn bị"},
+        {"t":85.12,"den":128.44,"ten":"Lần thử \"đăng nhập được\": 3 / 10"},
+        {"t":128.44,"den":168.61,"ten":"Xong khi nào · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Lab tám. Bạn viết phần xác minh ID token của client: bảy phép kiểm, dạng một hàm thuần."},
         {"t":14.15,"vi":"Máy chấm đưa một token hợp lệ, và một token bị sửa cho mỗi phép."},
@@ -2722,8 +3012,13 @@
         {"t":164.78,"vi":"Chương sau: mô hình phân quyền."}
       ]
     },
-    "auth-9-1-phan-quyen-la-gi": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/authentication/09-phan-quyen/09-01-phan-quyen-la-gi-2e04c3f9.mp4","durationSec":193.07,"nguonCau":"srt",
-      "parts": [],
+    "auth-9-1-phan-quyen-la-gi": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/authentication/09-phan-quyen/09-01-phan-quyen-la-gi-2e04c3f9.mp4","durationSec":193.07,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":64.64,"ten":"Chào · bài 9.1 · OWASP hạng một"},
+        {"t":64.64,"den":104.39,"ten":"Vì sao nó hay bị quên · Ba luật cấu trúc"},
+        {"t":104.39,"den":148.13,"ten":"Thế giới LabFlow · Một quyết định, năm câu trả lời"},
+        {"t":148.13,"den":193.07,"ten":"Tự kiểm · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, bài chín chấm một."},
         {"t":7.99,"vi":"Tám chương đầu trả lời đây là ai bằng mật mã và chuẩn."},
@@ -2752,8 +3047,13 @@
         {"t":186.52,"vi":"Bài sau: RBAC, và vì sao một boolean thành bốn mươi boolean."}
       ]
     },
-    "auth-9-2-rbac": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/authentication/09-phan-quyen/09-02-rbac-3e5d8aaa.mp4","durationSec":233.48,"nguonCau":"srt",
-      "parts": [],
+    "auth-9-2-rbac": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/authentication/09-phan-quyen/09-02-rbac-3e5d8aaa.mp4","durationSec":233.48,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":69.46,"ten":"Chào · bài 9.2 · Bảng cấp quyền"},
+        {"t":69.46,"den":130.79,"ten":"Cái boolean rồi sẽ mục rữa · Bảng chính là nguồn duy nhất"},
+        {"t":130.79,"den":190.09,"ten":"Lại là từ chối mặc định · Trong ma trận"},
+        {"t":190.09,"den":233.48,"ten":"Tự kiểm · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, bài chín chấm hai."},
         {"t":7.84,"vi":"Kiểm soát truy cập theo vai: một người có một vai, một vai cấp một tập hành động cố định."},
@@ -2792,8 +3092,13 @@
         {"t":227.64,"vi":"Bài sau: phần phân quyền mà một vai không diễn đạt nổi."}
       ]
     },
-    "auth-9-3-abac-rebac": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/authentication/09-phan-quyen/09-03-abac-rebac-2090ee99.mp4","durationSec":248.13,"nguonCau":"srt",
-      "parts": [],
+    "auth-9-3-abac-rebac": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/authentication/09-phan-quyen/09-03-abac-rebac-2090ee99.mp4","durationSec":248.13,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":69.11,"ten":"Chào · bài 9.3 · ABAC: thuộc tính quyết định"},
+        {"t":69.11,"den":132.13,"ten":"ReBAC: quan hệ quyết định · ReBAC có phạm vi, RBAC thì không"},
+        {"t":132.13,"den":199.65,"ten":"Giữ cho thuộc tính đáng tin"},
+        {"t":199.65,"den":248.13,"ten":"Tự kiểm · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, bài chín chấm ba. Riêng vai không nói được bạn được huỷ lượt đặt của mình, hay trưởng khoa được huỷ lượt đặt trong khoa của họ."},
         {"t":16.08,"vi":"Cái đầu phụ thuộc một thuộc tính, là ai sở hữu; cái sau phụ thuộc một quan hệ, là ai đứng đầu khoa của phòng."},
@@ -2831,8 +3136,13 @@
         {"t":243.15,"vi":"Bài sau: ranh giới tenant không bao giờ được rò."}
       ]
     },
-    "auth-9-4-nhieu-tenant": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/authentication/09-phan-quyen/09-04-nhieu-tenant-3c3d15f3.mp4","durationSec":244.51,"nguonCau":"srt",
-      "parts": [],
+    "auth-9-4-nhieu-tenant": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/authentication/09-phan-quyen/09-04-nhieu-tenant-3c3d15f3.mp4","durationSec":244.51,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":69.63,"ten":"Chào · bài 9.4 · Tenant được kiểm TRƯỚC TIÊN"},
+        {"t":69.63,"den":132.21,"ten":"Cú rò bạn không thấy: 403"},
+        {"t":132.21,"den":193.39,"ten":"Nạp, rồi mới so sánh · Demo HTTP"},
+        {"t":193.39,"den":244.51,"ten":"Tự kiểm · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, bài chín chấm bốn."},
         {"t":8.22,"vi":"LabFlow ID phục vụ FPT HCM và FPT HN từ một lần triển khai, một cơ sở dữ liệu."},
@@ -2867,8 +3177,13 @@
         {"t":238.16,"vi":"Bài sau: cổng duy nhất nằm ở đâu để không tuyến nào quên nó."}
       ]
     },
-    "auth-9-5-dat-phep-kiem-o-dau": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/authentication/09-phan-quyen/09-05-dat-phep-kiem-o-dau-93d59934.mp4","durationSec":230.29,"nguonCau":"srt",
-      "parts": [],
+    "auth-9-5-dat-phep-kiem-o-dau": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/authentication/09-phan-quyen/09-05-dat-phep-kiem-o-dau-93d59934.mp4","durationSec":230.29,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":70.28,"ten":"Chào · bài 9.5 · Không nằm trong thân controller"},
+        {"t":70.28,"den":124.87,"ten":"Cổng tự nạp tài nguyên · Một chỗ, ba mã trạng thái"},
+        {"t":124.87,"den":182.97,"ten":"Test cái cổng, không test bốn mươi tuyến"},
+        {"t":182.97,"den":230.29,"ten":"Tự kiểm · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, bài chín chấm năm."},
         {"t":7.91,"vi":"can là một hàm quyết định sạch."},
@@ -2903,8 +3218,13 @@
         {"t":223.7,"vi":"Bài sau là Lab chín: bạn viết can và máy chấm cho mọi vai đấu với nó."}
       ]
     },
-    "auth-9-7-lab-can": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/authentication/09-phan-quyen/09-07-lab-can-3af134d7.mp4","durationSec":195.17,"nguonCau":"srt",
-      "parts": [],
+    "auth-9-7-lab-can": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/authentication/09-phan-quyen/09-07-lab-can-3af134d7.mp4","durationSec":195.17,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":60.95,"ten":"Chào · Lab 9 · Chuẩn bị"},
+        {"t":60.95,"den":108.29,"ten":"Sáu phép, 10 điểm, đạt 7 · Con bug nổi tiếng: tenant sau vai"},
+        {"t":108.29,"den":168.64,"ten":"Giữ cho dữ liệu đáng tin"},
+        {"t":168.64,"den":195.17,"ten":"Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Lab chín. Bạn viết can, hàm duy nhất sau mọi quyết định phân quyền trong LabFlow."},
         {"t":13.01,"vi":"Máy chấm cho mỗi vai đấu với một lượt đặt, và kiểm cả bốn mô hình cộng từ chối mặc định: RBAC, ABAC, ReBAC và ranh giới tenant."},

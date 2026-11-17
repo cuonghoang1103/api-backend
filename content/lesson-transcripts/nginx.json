@@ -2,8 +2,14 @@
   "courseSlug": "nginx",
   "sinhBoi": "scripts/phu-de-tu-video-rieng.mjs",
   "lessons": {
-    "nginx-0-0-bat-dau-1": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nginx/00-bai-toan-va-ban-dung/00-01-bat-dau-tai-day-1-4c2e4aed.mp4","durationSec":436.24,"nguonCau":"srt",
-      "parts": [],
+    "nginx-0-0-bat-dau-1": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nginx/00-bai-toan-va-ban-dung/00-01-bat-dau-tai-day-1-4c2e4aed.mp4","durationSec":436.24,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":87.39,"ten":"Chào bạn · khoá Nginx · Bài này mang về gì"},
+        {"t":87.39,"den":177.29,"ten":"Nginx đứng ở đâu · Reverse proxy trong một câu"},
+        {"t":177.29,"den":276.01,"ten":"Chạy thật: một proxy trong ba mươi giây"},
+        {"t":276.01,"den":354.85,"ten":"Vì sao đáng học · Cùng ý tưởng ở mọi nền tảng"},
+        {"t":354.85,"den":436.24,"ten":"Tự kiểm ba câu · Thực hành & tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, chào mừng đến với khoá Nginx của CuongThai."},
         {"t":9.48,"vi":"Học xong khoá này, bạn tự đọc, tự viết và tự gỡ lỗi được một tệp cấu hình Nginx thật, không phải chép từ blog về."},
@@ -71,8 +77,13 @@
         {"t":430.95,"vi":"Bài sau: nền tảng cần biết và cách học khoá này."}
       ]
     },
-    "nginx-0-0-bat-dau-2": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nginx/00-bai-toan-va-ban-dung/00-02-bat-dau-tai-day-2-b38f837d.mp4","durationSec":402.67,"nguonCau":"srt",
-      "parts": [],
+    "nginx-0-0-bat-dau-2": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nginx/00-bai-toan-va-ban-dung/00-02-bat-dau-tai-day-2-b38f837d.mp4","durationSec":402.67,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":91.3,"ten":"Chào bạn · nối từ bài trước · Bài này mang về gì"},
+        {"t":91.3,"den":181.51,"ten":"Không cần · Hai cách có Nginx"},
+        {"t":181.51,"den":263.21,"ten":"Vòng học trên slide · Chạy thật: vòng học bắt một lỗi"},
+        {"t":263.21,"den":402.67,"ten":"Sửa, reload, và reload không tức thì · Đọc con số trong khoá"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài bắt đầu thứ hai của khoá Nginx."},
         {"t":9.3,"vi":"Bài trước mình đã thấy Nginx là reverse proxy, đứng trước ứng dụng, và chạy thử một cấu hình mười dòng."},
@@ -140,8 +151,14 @@
         {"t":396.92,"vi":"Bài sau là bài 0.1: Nginx giải bài toán gì."}
       ]
     },
-    "nginx-0-1-bai-toan": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nginx/00-bai-toan-va-ban-dung/00-03-bai-toan-21b3c780.mp4","durationSec":445.7,"nguonCau":"srt",
-      "parts": [],
+    "nginx-0-1-bai-toan": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nginx/00-bai-toan-va-ban-dung/00-03-bai-toan-21b3c780.mp4","durationSec":445.7,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":83.75,"ten":"Chào bạn · nối từ bài trước · Bài này mang về gì"},
+        {"t":83.75,"den":173.1,"ten":"Một tệp, hai máy chủ · Chạy thật: đo bằng ApacheBench"},
+        {"t":173.1,"den":251.27,"ten":"Cách đo đổi câu chuyện · Bộ nhớ quyết định kiến trúc"},
+        {"t":251.27,"den":343.11,"ten":"Bốn việc của Nginx · Không có và có Nginx"},
+        {"t":343.11,"den":445.7,"ten":"Tự kiểm ba câu · Thực hành & tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 0.1 của khoá Nginx."},
         {"t":9.31,"vi":"Bài trước mình đã có vòng học: sửa, nginx -t, reload, curl, và chạy mọi thứ bằng người dùng thường ở cổng 8080."},
@@ -210,8 +227,15 @@
         {"t":432.11,"vi":"Vì sao một vòng lặp nặng chặn cả máy chủ Node, xem khoá Node.js, bài 2.4. Cách đo cho đúng trước khi kết luận, xem bài 16.1 cùng khoá."}
       ]
     },
-    "nginx-0-2-cai-va-chay": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nginx/00-bai-toan-va-ban-dung/00-04-cai-va-chay-6521d6ef.mp4","durationSec":476.47,"nguonCau":"srt",
-      "parts": [],
+    "nginx-0-2-cai-va-chay": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nginx/00-bai-toan-va-ban-dung/00-04-cai-va-chay-6521d6ef.mp4","durationSec":476.47,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":80.91,"ten":"Chào bạn · nối từ bài 0.1 · Bài này mang về gì"},
+        {"t":80.91,"den":168.9,"ten":"Hai phút để có một máy chủ · Bốn thói quen"},
+        {"t":168.9,"den":245.09,"ten":"Cái vừa khởi động · Liên kết chéo"},
+        {"t":245.09,"den":335.3,"ten":"Permission denied là chuyện của worker"},
+        {"t":335.3,"den":433.98,"ten":"Tệp pid · Ba lệnh nên thuộc"},
+        {"t":433.98,"den":476.47,"ten":"Thực hành & tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 0.2 của khoá Nginx."},
         {"t":9.16,"vi":"Bài trước mình đo được: Nginx phục vụ tệp nhanh hơn, tốn ít bộ nhớ hơn nhiều, nhưng thêm một chặng proxy thì luôn chậm đi một chút."},
@@ -297,8 +321,14 @@
         {"t":470.25,"vi":"Bài sau: tệp cấu hình nhỏ nhất, và cách Nginx đọc nó."}
       ]
     },
-    "nginx-0-3-cau-hinh-dau-tien": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nginx/00-bai-toan-va-ban-dung/00-05-cau-hinh-dau-tien-d37c16fe.mp4","durationSec":459.35,"nguonCau":"srt",
-      "parts": [],
+    "nginx-0-3-cau-hinh-dau-tien": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nginx/00-bai-toan-va-ban-dung/00-05-cau-hinh-dau-tien-d37c16fe.mp4","durationSec":459.35,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":80.26,"ten":"Chào bạn · nối từ bài 0.2 · Bài này mang về gì"},
+        {"t":80.26,"den":176.15,"ten":"Mười dòng, mỗi dòng một lý do · Một cây ngữ cảnh"},
+        {"t":176.15,"den":273.05,"ten":"Mô phỏng: thừa hưởng chảy xuống cây · Thừa hưởng, đo thật"},
+        {"t":273.05,"den":362.82,"ten":"Liên kết chéo · Vô hướng và mảng"},
+        {"t":362.82,"den":459.35,"ten":"Thuật ngữ · Tự kiểm ba câu"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 0.3, bài cuối của Mục 0."},
         {"t":9.84,"vi":"Bài trước: master là root và không phục vụ gì, worker phục vụ mọi request, và reload thay worker mà không rớt kết nối."},
@@ -377,8 +407,15 @@
         {"t":454.14,"vi":"Chương 1: một request tìm ra khối server thế nào."}
       ]
     },
-    "nginx-1-1-listen": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nginx/01-chon-khoi-server/01-01-listen-c0e114a3.mp4","durationSec":535.09,"nguonCau":"srt",
-      "parts": [],
+    "nginx-1-1-listen": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nginx/01-chon-khoi-server/01-01-listen-c0e114a3.mp4","durationSec":535.09,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":103.84,"ten":"Chào bạn · nối từ Mục 0 · Bài này mang về gì"},
+        {"t":103.84,"den":179.55,"ten":"listen khai báo gì · Liên kết chéo"},
+        {"t":179.55,"den":254.65,"ten":"Chạy thật: ba khối, hai địa chỉ"},
+        {"t":254.65,"den":337.56,"ten":"127.0.0.1 là bảo mật thật · Cờ thuộc về cổng"},
+        {"t":337.56,"den":432.42,"ten":"Cổng bị chiếm · IPv6 cần dòng riêng"},
+        {"t":432.42,"den":535.09,"ten":"Tự kiểm ba câu · Thực hành & tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Chương 1, bài 1.1 của khoá Nginx."},
         {"t":10.4,"vi":"Mục 0 mình đã có tệp cấu hình chạy được: một cây ngữ cảnh, thừa hưởng đi xuống, và add_header thì thay thế cả bộ."},
@@ -455,8 +492,14 @@
         {"t":530.14,"vi":"Bài sau: server_name, và bốn mức ưu tiên."}
       ]
     },
-    "nginx-1-2-server-name": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nginx/01-chon-khoi-server/01-02-server-name-4c763e91.mp4","durationSec":399.76,"nguonCau":"srt",
-      "parts": [],
+    "nginx-1-2-server-name": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nginx/01-chon-khoi-server/01-02-server-name-4c763e91.mp4","durationSec":399.76,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":95.76,"ten":"Chào bạn · nối từ bài 1.1 · Bài này mang về gì"},
+        {"t":95.76,"den":200.63,"ten":"Mô phỏng: bậc thang bốn mức · Bốn mức"},
+        {"t":200.63,"den":280.81,"ten":"Tên chính xác miễn phí, dấu sao ở đầu mút"},
+        {"t":280.81,"den":358.09,"ten":"Luật mang theo · Thuật ngữ"},
+        {"t":358.09,"den":399.76,"ten":"Thực hành & tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 1.2 của khoá Nginx."},
         {"t":9.1,"vi":"Bài trước: chặng một là khớp socket."},
@@ -516,8 +559,13 @@
         {"t":393.22,"vi":"Bài sau: máy chủ mặc định, và cái trang bạn không định công bố."}
       ]
     },
-    "nginx-1-3-may-chu-mac-dinh": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nginx/01-chon-khoi-server/01-03-may-chu-mac-dinh-86830df2.mp4","durationSec":381.8,"nguonCau":"srt",
-      "parts": [],
+    "nginx-1-3-may-chu-mac-dinh": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nginx/01-chon-khoi-server/01-03-may-chu-mac-dinh-86830df2.mp4","durationSec":381.8,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":96.16,"ten":"Chào bạn · nối từ bài 1.2 · Bài này mang về gì"},
+        {"t":96.16,"den":196.9,"ten":"Ba cổng, ba hành vi · Cổng nào cũng có mặc định"},
+        {"t":196.9,"den":284.67,"ten":"Cổng 443 vẫn cần chứng chỉ · Liên kết chéo"},
+        {"t":284.67,"den":381.8,"ten":"Thuật ngữ · Tự kiểm ba câu"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 1.3 của khoá Nginx."},
         {"t":9.09,"vi":"Bài trước: bốn mức chính xác, đại diện đầu, đại diện cuối, regex. Xếp theo loại, và regex không bao giờ thắng đại diện."},
@@ -579,8 +627,14 @@
         {"t":376.91,"vi":"Bài sau: header Host là đầu vào của client."}
       ]
     },
-    "nginx-1-4-host-la-dau-vao": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nginx/01-chon-khoi-server/01-04-host-la-dau-vao-e0de1d21.mp4","durationSec":428.81,"nguonCau":"srt",
-      "parts": [],
+    "nginx-1-4-host-la-dau-vao": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nginx/01-chon-khoi-server/01-04-host-la-dau-vao-e0de1d21.mp4","durationSec":428.81,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":84.56,"ten":"Chào bạn · nối từ bài 1.3 · Bài này mang về gì"},
+        {"t":84.56,"den":172.19,"ten":"Một request, hai Host · Bốn biến, bốn nguồn"},
+        {"t":172.19,"den":263.72,"ten":"Chỗ thoát ra: cú chuyển hướng"},
+        {"t":263.72,"den":348.35,"ten":"Liên kết chéo · Hai chỗ rò nữa"},
+        {"t":348.35,"den":428.81,"ten":"Tự kiểm ba câu · Thực hành & tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 1.4 của khoá Nginx."},
         {"t":9.37,"vi":"Bài trước: cổng nào cũng có một máy chủ mặc định, và một mặc định trả 444 chặn được người lạ gõ thẳng IP."},
@@ -646,8 +700,14 @@
         {"t":423,"vi":"Bài sau: bố cục ba site, đấu dây từ đầu tới cuối."}
       ]
     },
-    "nginx-10-1-log-mac-dinh-bo-sot": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nginx/10-log-va-quan-sat/10-01-log-mac-dinh-bo-sot-aa7fc953.mp4","durationSec":421.3,"nguonCau":"srt",
-      "parts": [],
+    "nginx-10-1-log-mac-dinh-bo-sot": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nginx/10-log-va-quan-sat/10-01-log-mac-dinh-bo-sot-aa7fc953.mp4","durationSec":421.3,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":97.91,"ten":"Chào bạn · nối từ Chương 9 · Bài này mang về gì"},
+        {"t":97.91,"den":180.68,"ten":"Cùng ba request, hai định dạng · Một dòng, từng trường"},
+        {"t":180.68,"den":282.22,"ten":"Năm request mặc định không giải thích được"},
+        {"t":282.22,"den":380.05,"ten":"Một định dạng đáng dùng · Liên kết chéo"},
+        {"t":380.05,"den":421.3,"ten":"Thực hành & tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 10.1 của khoá Nginx, bài đầu tiên của Chương 10: log, và nhìn thấy chuyện đang xảy ra."},
         {"t":13.81,"vi":"Chương trước: bốn cách chọn máy, hash consistent, máy chết không ai thấy lỗi, keepalive, và deploy không rớt request nào."},
@@ -719,8 +779,15 @@
         {"t":414.5,"vi":"Bài sau: log JSON, và cái escape quyết định máy có đọc nổi không."}
       ]
     },
-    "nginx-10-2-log-json-escape": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nginx/10-log-va-quan-sat/10-02-log-json-escape-3d27db9e.mp4","durationSec":455.85,"nguonCau":"srt",
-      "parts": [],
+    "nginx-10-2-log-json-escape": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nginx/10-log-va-quan-sat/10-02-log-json-escape-3d27db9e.mp4","durationSec":455.85,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":93.95,"ten":"Chào bạn · nối từ bài 10.1 · Bài này mang về gì"},
+        {"t":93.95,"den":170.62,"ten":"Ba kiểu escape, ba request · Đọc ba kiểu"},
+        {"t":170.62,"den":255.93,"ten":"Dòng hỏng là dòng bạn không thử"},
+        {"t":255.93,"den":335.79,"ten":"Tốn bao nhiêu, đo thật · Có thật sự đọc được không"},
+        {"t":335.79,"den":416.51,"ten":"Liên kết chéo · Thuật ngữ"},
+        {"t":416.51,"den":455.85,"ten":"Thực hành & tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 10.2 của khoá Nginx."},
         {"t":9.35,"vi":"Bài trước: định dạng cho proxy ghi hai thời gian, máy nào, hai mã, hai đường dẫn."},
@@ -799,8 +866,14 @@
         {"t":449.91,"vi":"Bài sau: không ghi log, và ghi log thật sự tốn bao nhiêu."}
       ]
     },
-    "nginx-10-4-error-log-va-cac-muc": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nginx/10-log-va-quan-sat/10-04-error-log-va-cac-muc-609bccf6.mp4","durationSec":449.41,"nguonCau":"srt",
-      "parts": [],
+    "nginx-10-4-error-log-va-cac-muc": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nginx/10-log-va-quan-sat/10-04-error-log-va-cac-muc-609bccf6.mp4","durationSec":449.41,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":94.01,"ten":"Chào bạn · nối từ bài 10.3 · Bài này mang về gì"},
+        {"t":94.01,"den":187.15,"ten":"Một dòng, mổ ra từng mảnh · Bốn errno, bốn mã trạng thái"},
+        {"t":187.15,"den":277.83,"ten":"debug: một request nhỏ xíu, đo thật"},
+        {"t":277.83,"den":361.44,"ten":"Chạy thật: một dòng, bốn errno, năm mức, debug"},
+        {"t":361.44,"den":449.41,"ten":"Tự kiểm ba câu · Thực hành & tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 10.4 của khoá Nginx."},
         {"t":9.35,"vi":"Bài trước: tắt access log không nhanh hơn chút nào, buffer bằng tiết kiệm syscall chứ không tiết kiệm thời gian."},
@@ -880,8 +953,14 @@
         {"t":441.45,"vi":"Bài sau: stub_status, bảy con số, và con số cho biết bạn đang rơi mất lưu lượng."}
       ]
     },
-    "nginx-10-5-stub-status": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nginx/10-log-va-quan-sat/10-05-stub-status-3ecdd472.mp4","durationSec":460.92,"nguonCau":"srt",
-      "parts": [],
+    "nginx-10-5-stub-status": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nginx/10-log-va-quan-sat/10-05-stub-status-3ecdd472.mp4","durationSec":460.92,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":106.43,"ten":"Chào bạn · nối từ bài 10.4 · Bài này mang về gì"},
+        {"t":106.43,"den":185.99,"ten":"Bật nó lên · Bảy con số"},
+        {"t":185.99,"den":277.66,"ten":"accepts khác handled · Cảnh báo trên khoảng cách"},
+        {"t":277.66,"den":365.15,"ten":"Một con số suy ra: request mỗi kết nối"},
+        {"t":365.15,"den":460.92,"ten":"Tự kiểm ba câu · Thực hành & tóm tắt Chương 10"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 10.5, bài cuối của Chương 10."},
         {"t":9.73,"vi":"Bài trước: error log, crit giấu cả một sự cố, debug tám mươi lăm dòng cho một request, và warn là mức đúng cho production."},
@@ -961,8 +1040,14 @@
         {"t":453.11,"vi":"Chương sau, chương cuối: chẩn đoán, bắt Nginx khai ra khối nào đã xử lý request."}
       ]
     },
-    "nginx-11-1-bat-nginx-khai-ra": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nginx/11-chan-doan/11-01-bat-nginx-khai-ra-49d85c39.mp4","durationSec":418.47,"nguonCau":"srt",
-      "parts": [],
+    "nginx-11-1-bat-nginx-khai-ra": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nginx/11-chan-doan/11-01-bat-nginx-khai-ra-49d85c39.mp4","durationSec":418.47,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":97.51,"ten":"Chào bạn · nối từ Chương 10 · Bài này mang về gì"},
+        {"t":97.51,"den":174.45,"ten":"Phiên bản ngây thơ · add_header thay thế, không cộng dồn"},
+        {"t":174.45,"den":254.14,"ten":"Năm dòng chứng minh gì"},
+        {"t":254.14,"den":335.57,"ten":"Đọc từ phía client · Rồi khoá lại, hoặc gỡ đi"},
+        {"t":335.57,"den":418.47,"ten":"Tự kiểm ba câu · Thực hành & tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 11.1 của khoá Nginx, bài đầu của chương cuối: chẩn đoán."},
         {"t":12,"vi":"Chương trước: log ghi đúng trường, JSON đúng cách, error log ở mức warn, và khoảng cách accepts trừ handled."},
@@ -1031,8 +1116,14 @@
         {"t":411.63,"vi":"Bài sau: nginx -t chứng minh được gì, và không chứng minh được gì."}
       ]
     },
-    "nginx-11-2-nginx-t-chung-minh-gi": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nginx/11-chan-doan/11-02-nginx-t-chung-minh-gi-6acdd7f1.mp4","durationSec":394.73,"nguonCau":"srt",
-      "parts": [],
+    "nginx-11-2-nginx-t-chung-minh-gi": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nginx/11-chan-doan/11-02-nginx-t-chung-minh-gi-6acdd7f1.mp4","durationSec":394.73,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":92.21,"ten":"Chào bạn · nối từ bài 11.1 · Bài này mang về gì"},
+        {"t":92.21,"den":180.76,"ten":"Tám cấu hình hỏng qua nginx -t · Bốn cái lọt qua, chạy thật"},
+        {"t":180.76,"den":259.79,"ten":"Lệnh kiểm đọc ĐĨA, máy chủ chạy BỘ NHỚ"},
+        {"t":259.79,"den":353.36,"ten":"Hai câu hỏi, hai công cụ · Liên kết chéo"},
+        {"t":353.36,"den":394.73,"ten":"Thực hành & tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 11.2 của khoá Nginx."},
         {"t":9.57,"vi":"Bài trước: một add_header có always ở mức server, mỗi location ghi tên vào một biến, và máy chủ tự khai khối nào đã trả lời."},
@@ -1097,8 +1188,14 @@
         {"t":390.09,"vi":"Bài sau: đọc một cấu hình do người khác viết."}
       ]
     },
-    "nginx-11-3-doc-cau-hinh-nguoi-khac-viet": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nginx/11-chan-doan/11-03-doc-cau-hinh-nguoi-khac-viet-fea5b81d.mp4","durationSec":432.75,"nguonCau":"srt",
-      "parts": [],
+    "nginx-11-3-doc-cau-hinh-nguoi-khac-viet": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nginx/11-chan-doan/11-03-doc-cau-hinh-nguoi-khac-viet-fea5b81d.mp4","durationSec":432.75,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":87.85,"ten":"Chào bạn · nối từ bài 11.2 · Bài này mang về gì"},
+        {"t":87.85,"den":175.14,"ten":"nginx -T: toàn bộ, đã bung · Bản sao lưu lại khớp mẫu"},
+        {"t":175.14,"den":259.4,"ten":"Hai lệnh grep đáng chạy"},
+        {"t":259.4,"den":350.11,"ten":"Chạy thật: -T, bản sao lưu, tên trùng, kế thừa"},
+        {"t":350.11,"den":432.75,"ten":"Tự kiểm ba câu · Thực hành & tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 11.3 của khoá Nginx."},
         {"t":9.57,"vi":"Bài trước: nginx -t chỉ trả lời có nạp được không."},
@@ -1172,8 +1269,14 @@
         {"t":427.56,"vi":"Bài sau: đi từ một mã trạng thái tới đúng nguyên nhân."}
       ]
     },
-    "nginx-11-4-tu-ma-trang-thai-toi-nguyen-nhan": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nginx/11-chan-doan/11-04-tu-ma-trang-thai-toi-nguyen-nhan-5e35df3d.mp4","durationSec":429.89,"nguonCau":"srt",
-      "parts": [],
+    "nginx-11-4-tu-ma-trang-thai-toi-nguyen-nhan": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nginx/11-chan-doan/11-04-tu-ma-trang-thai-toi-nguyen-nhan-5e35df3d.mp4","durationSec":429.89,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":93.6,"ten":"Chào bạn · nối từ bài 11.3 · Bài này mang về gì"},
+        {"t":93.6,"den":192.7,"ten":"Bảy request vào một máy chủ"},
+        {"t":192.7,"den":281.2,"ten":"Cú 403 không nói thiếu quyền nào · 502, 504, 499, và 413"},
+        {"t":281.2,"den":385.24,"ten":"Cái thang chẩn đoán · Liên kết chéo"},
+        {"t":385.24,"den":429.89,"ten":"Thực hành & tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 11.4 của khoá Nginx."},
         {"t":9.58,"vi":"Bài trước: đọc bản bung của nginx -T hoa, danh sách tệp thật sự được đọc, và một proxy_set_header làm mất cả ba cái khác."},
@@ -1240,8 +1343,15 @@
         {"t":422.86,"vi":"Bài sau, bài cuối khoá: một cấu hình production, và phép thử chứng minh nó."}
       ]
     },
-    "nginx-11-5-cau-hinh-production": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nginx/11-chan-doan/11-05-cau-hinh-production-79f3385a.mp4","durationSec":517.89,"nguonCau":"srt",
-      "parts": [],
+    "nginx-11-5-cau-hinh-production": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nginx/11-chan-doan/11-05-cau-hinh-production-79f3385a.mp4","durationSec":517.89,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":94.59,"ten":"Chào bạn · nối từ bài 11.4 · Bài này mang về gì"},
+        {"t":94.59,"den":192.82,"ten":"Khối http · Cổng 80 và khối mặc định 443"},
+        {"t":192.82,"den":287.32,"ten":"Hai snippet, vì một luật · Nghiệm thu 1 tới 6"},
+        {"t":287.32,"den":365.03,"ten":"Cách sửa, và thứ thật sự bắt được nó · Phần còn lại, và log"},
+        {"t":365.03,"den":474.37,"ten":"Cả khoá trên một trang · Liên kết chéo"},
+        {"t":474.37,"den":517.89,"ten":"Thực hành & khép lại khoá"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 11.5, bài cuối cùng của khoá Nginx."},
         {"t":10.74,"vi":"Bài trước: mã trạng thái chỉ là một họ, dòng error log mới là nguyên nhân, và cái thang chẩn đoán năm bậc."},
@@ -1327,8 +1437,14 @@
         {"t":513.69,"vi":"Cảm ơn bạn đã học cùng mình tới tận đây."}
       ]
     },
-    "nginx-2-1-bon-loai-location": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nginx/02-location-nao-thang/02-01-bon-loai-location-c3628408.mp4","durationSec":408.52,"nguonCau":"srt",
-      "parts": [],
+    "nginx-2-1-bon-loai-location": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nginx/02-location-nao-thang/02-01-bon-loai-location-c3628408.mp4","durationSec":408.52,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":104.12,"ten":"Chào bạn · nối từ Chương 1 · Bài này mang về gì"},
+        {"t":104.12,"den":180.36,"ten":"Thuật toán năm bước · Mô phỏng: năm bước cho /a/x.php"},
+        {"t":180.36,"den":285.02,"ten":"Đọc ngược bốn dòng · Độ dài và vị trí"},
+        {"t":285.02,"den":367.89,"ten":"Dùng ngoài đời · Liên kết chéo"},
+        {"t":367.89,"den":408.52,"ten":"Thực hành & tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Chương 2, bài 2.1 của khoá Nginx."},
         {"t":9.98,"vi":"Chương 1 đã chốt khối server: socket trước, Host sau, không khớp thì về mặc định của nhóm."},
@@ -1399,8 +1515,13 @@
         {"t":402.48,"vi":"Bài sau: cái URI đem ra khớp không phải cái đã được gửi lên."}
       ]
     },
-    "nginx-2-2-uri-duoc-chuan-hoa": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nginx/02-location-nao-thang/02-02-uri-duoc-chuan-hoa-caf17fb5.mp4","durationSec":352.57,"nguonCau":"srt",
-      "parts": [],
+    "nginx-2-2-uri-duoc-chuan-hoa": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nginx/02-location-nao-thang/02-02-uri-duoc-chuan-hoa-caf17fb5.mp4","durationSec":352.57,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":84.86,"ten":"Chào bạn · nối từ bài 2.1 · Bài này mang về gì"},
+        {"t":84.86,"den":179.57,"ten":"Tám cách viết · Liên kết chéo"},
+        {"t":179.57,"den":254.1,"ten":"Chữ hoa và byte rỗng · Mỗi dạng nằm ở đâu"},
+        {"t":254.1,"den":352.57,"ten":"Thuật ngữ · Tự kiểm ba câu"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 2.2 của khoá Nginx."},
         {"t":9.05,"vi":"Bài trước: thuật toán năm bước."},
@@ -1457,8 +1578,13 @@
         {"t":346.25,"vi":"Bài sau: chọn một khối cũng là chọn luôn những chỉ thị có hiệu lực."}
       ]
     },
-    "nginx-2-3-chon-khoi-chon-luon-chi-thi": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nginx/02-location-nao-thang/02-03-chon-khoi-chon-luon-chi-thi-0174a436.mp4","durationSec":335.66,"nguonCau":"srt",
-      "parts": [],
+    "nginx-2-3-chon-khoi-chon-luon-chi-thi": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nginx/02-location-nao-thang/02-03-chon-khoi-chon-luon-chi-thi-0174a436.mp4","durationSec":335.66,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":82.7,"ten":"Chào bạn · nối từ bài 2.2 · Bài này mang về gì"},
+        {"t":82.7,"den":160.02,"ten":"Mô phỏng: danh sách bị thay cả bộ · Hai luật thừa hưởng"},
+        {"t":160.02,"den":236.74,"ten":"Cách chữa: một snippet · Chính phép chọn khối cũng trượt"},
+        {"t":236.74,"den":335.66,"ten":"Thuật ngữ · Tự kiểm ba câu"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 2.3 của khoá Nginx."},
         {"t":8.99,"vi":"Bài trước: location khớp trên $uri đã chuẩn hoá."},
@@ -1514,8 +1640,13 @@
         {"t":324.31,"vi":"Bạn mở Code Lab Nginx, module nén, header và hiệu năng. Bài sau: root và alias, và dấu gạch chéo thiếu làm rò rỉ tệp."}
       ]
     },
-    "nginx-2-4-root-va-alias": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nginx/02-location-nao-thang/02-04-root-va-alias-d330adaf.mp4","durationSec":346.12,"nguonCau":"srt",
-      "parts": [],
+    "nginx-2-4-root-va-alias": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nginx/02-location-nao-thang/02-04-root-va-alias-d330adaf.mp4","durationSec":346.12,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":88.12,"ten":"Chào bạn · nối từ bài 2.3 · Bài này mang về gì"},
+        {"t":88.12,"den":177.81,"ten":"Đường dẫn Nginx dựng ra · Mô phỏng: alias cắt và dán"},
+        {"t":177.81,"den":254.38,"ten":"Dấu gạch chéo làm rò rỉ · Vì sao, và cách vá"},
+        {"t":254.38,"den":346.12,"ten":"Thuật ngữ · Tự kiểm ba câu"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 2.4 của khoá Nginx."},
         {"t":9.11,"vi":"Bài trước: một location là một phạm vi, và chỉ thị mảng như add_header bị thay cả bộ."},
@@ -1574,8 +1705,13 @@
         {"t":341.15,"vi":"Bài sau: try_files, và cú chuyển hướng nội bộ."}
       ]
     },
-    "nginx-2-5-try-files-chuyen-huong-noi-bo": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nginx/02-location-nao-thang/02-05-try-files-chuyen-huong-noi-bo-caadc204.mp4","durationSec":350.65,"nguonCau":"srt",
-      "parts": [],
+    "nginx-2-5-try-files-chuyen-huong-noi-bo": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nginx/02-location-nao-thang/02-05-try-files-chuyen-huong-noi-bo-caadc204.mp4","durationSec":350.65,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":81.08,"ten":"Chào bạn · nối từ bài 2.4 · Bài này mang về gì"},
+        {"t":81.08,"den":165.21,"ten":"Bốn luật · Mô phỏng: khớp lại từ đầu"},
+        {"t":165.21,"den":251.53,"ten":"index và error_page cũng vậy · Dựng vòng lặp cố ý"},
+        {"t":251.53,"den":350.65,"ten":"Tự kiểm ba câu · Thực hành & tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 2.5, bài cuối của Chương 2."},
         {"t":9.81,"vi":"Bài trước: root nối thêm, alias thay thế, và một dấu gạch chéo thiếu làm rò rỉ tệp."},
@@ -1629,8 +1765,13 @@
         {"t":341.01,"vi":"Dự phòng cho ứng dụng một trang và tệp tĩnh trên máy chủ thật, xem khoá Deploy lên VPS, bài 12.4."}
       ]
     },
-    "nginx-3-1-proxy-pass": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nginx/03-reverse-proxy/03-01-proxy-pass-3ba3d503.mp4","durationSec":385.12,"nguonCau":"srt",
-      "parts": [],
+    "nginx-3-1-proxy-pass": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nginx/03-reverse-proxy/03-01-proxy-pass-3ba3d503.mp4","durationSec":385.12,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":81.76,"ten":"Chào bạn · nối từ Chương 2 · Bài này mang về gì"},
+        {"t":81.76,"den":158.35,"ten":"Mô phỏng: cắt và dán đường dẫn · Bốn cách viết, đo thật"},
+        {"t":158.35,"den":264.96,"ten":"Liên kết chéo · Chạy thật: lệch dấu gạch chéo"},
+        {"t":264.96,"den":385.12,"ten":"Dạng nào cho tình huống nào · Thuật ngữ"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Chương 3, bài 3.1 của khoá Nginx."},
         {"t":10.03,"vi":"Chương 2 chốt location nào thắng, và root với alias biến URI thành đường dẫn trên đĩa: root nối thêm, alias thay thế."},
@@ -1690,8 +1831,13 @@
         {"t":379.84,"vi":"Bài sau: mặc định Nginx gửi gì lên upstream."}
       ]
     },
-    "nginx-3-3-dem-va-luong-chay": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nginx/03-reverse-proxy/03-03-dem-va-luong-chay-ef062884.mp4","durationSec":338.19,"nguonCau":"srt",
-      "parts": [],
+    "nginx-3-3-dem-va-luong-chay": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nginx/03-reverse-proxy/03-03-dem-va-luong-chay-ef062884.mp4","durationSec":338.19,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":86.86,"ten":"Chào bạn · nối từ bài 3.2 · Bài này mang về gì"},
+        {"t":86.86,"den":168.65,"ten":"Cách đo · Sáu cấu hình, bấm giờ"},
+        {"t":168.65,"den":237.45,"ten":"Cái gì thật sự giữ luồng · Chữa cho một phản hồi"},
+        {"t":237.45,"den":338.19,"ten":"Thuật ngữ · Tự kiểm ba câu"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 3.3 của khoá Nginx."},
         {"t":8.95,"vi":"Bài trước: mặc định Nginx nói HTTP 1.0 với upstream, thay Host, thêm connection close, và bỏ header có gạch dưới."},
@@ -1748,8 +1894,13 @@
         {"t":333.71,"vi":"Bài sau: timeout, và cú hai trăm nói dối."}
       ]
     },
-    "nginx-3-4-timeout": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nginx/03-reverse-proxy/03-04-timeout-a0f55111.mp4","durationSec":339.38,"nguonCau":"srt",
-      "parts": [],
+    "nginx-3-4-timeout": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nginx/03-reverse-proxy/03-04-timeout-a0f55111.mp4","durationSec":339.38,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":80.57,"ten":"Chào bạn · nối từ bài 3.3 · Bài này mang về gì"},
+        {"t":80.57,"den":157.01,"ten":"Mô phỏng: ba đồng hồ trên trục thời gian"},
+        {"t":157.01,"den":246.45,"ten":"Đọc error log, đừng đọc mã · Bẫy: cú 200 nói dối"},
+        {"t":246.45,"den":339.38,"ten":"Thuật ngữ · Tự kiểm ba câu"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 3.4 của khoá Nginx."},
         {"t":9.06,"vi":"Bài trước: đo tại socket, upstream HTTP 1.0 cộng buffering thì giữ luồng, gzip cũng giữ, và X-Accel-Buffering chữa cho từng tuyến."},
@@ -1811,8 +1962,13 @@
         {"t":333.27,"vi":"Bài sau: WebSocket, cú nâng cấp mà Nginx cố ý gỡ đi."}
       ]
     },
-    "nginx-3-5-websocket": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nginx/03-reverse-proxy/03-05-websocket-728b4202.mp4","durationSec":336.27,"nguonCau":"srt",
-      "parts": [],
+    "nginx-3-5-websocket": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nginx/03-reverse-proxy/03-05-websocket-728b4202.mp4","durationSec":336.27,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":83.5,"ten":"Chào bạn · nối từ bài 3.4 · Bài này mang về gì"},
+        {"t":83.5,"den":153.32,"ten":"Cái bắt tay · Liên kết chéo"},
+        {"t":153.32,"den":239.61,"ten":"Vì sao Nginx gỡ · Ba dòng và một map"},
+        {"t":239.61,"den":336.27,"ten":"Thuật ngữ · Tự kiểm ba câu"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 3.5, bài cuối của Chương 3."},
         {"t":9.73,"vi":"Bài trước: mỗi timeout là một khoảng, error log gọi tên giai đoạn, và một cú hai trăm có thể rỗng."},
@@ -1865,8 +2021,13 @@
         {"t":331.65,"vi":"Chương 4: tệp tĩnh, từ URI tới byte."}
       ]
     },
-    "nginx-4-1-tu-uri-toi-byte": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nginx/04-tep-tinh/04-01-tu-uri-toi-byte-33c5bab2.mp4","durationSec":360.66,"nguonCau":"srt",
-      "parts": [],
+    "nginx-4-1-tu-uri-toi-byte": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nginx/04-tep-tinh/04-01-tu-uri-toi-byte-33c5bab2.mp4","durationSec":360.66,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":92.2,"ten":"Chào bạn · nối từ Chương 3 · Bài này mang về gì"},
+        {"t":92.2,"den":180.86,"ten":"Mô phỏng: dò bảng kiểu · Đo trên sáu tệp"},
+        {"t":180.86,"den":273.93,"ten":"Liên kết chéo · Một thư mục, ba kiểu"},
+        {"t":273.93,"den":360.66,"ten":"Thuật ngữ · Tự kiểm ba câu"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 4.1 của khoá Nginx, mở đầu Chương 4: tệp tĩnh."},
         {"t":12.07,"vi":"Chương trước: proxy_pass cắt dán đường dẫn, header bị thay, đệm và gzip giữ luồng, timeout đo khoảng lặng, WebSocket cần ba dòng."},
@@ -1931,8 +2092,14 @@
         {"t":354.01,"vi":"Bài sau: ETag dựng từ mtime, và vì sao deploy làm hỏng bộ đệm."}
       ]
     },
-    "nginx-4-3-nen": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nginx/04-tep-tinh/04-03-nen-3adbe748.mp4","durationSec":313.67,"nguonCau":"srt",
-      "parts": [],
+    "nginx-4-3-nen": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nginx/04-tep-tinh/04-03-nen-3adbe748.mp4","durationSec":313.67,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":70.14,"ten":"Chào bạn · nối từ bài 4.2 · Bài này mang về gì"},
+        {"t":70.14,"den":144,"ten":"Số byte gần như nhau · Mô phỏng: bếp nấu từng đơn"},
+        {"t":144,"den":212.08,"ten":"Chạy thật: ETag đổi theo · Giữ tệp nén khớp với tệp gốc"},
+        {"t":212.08,"den":275.91,"ten":"Đừng nén thứ đã nén · Thuật ngữ"},
+        {"t":275.91,"den":313.67,"ten":"Thực hành & tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 4.3 của khoá Nginx."},
         {"t":9.09,"vi":"Bài trước: ETag làm từ thời điểm sửa và kích thước, deploy đặt lại nó, và expires với add_header cho hai dòng Cache-Control."},
@@ -1984,8 +2151,13 @@
         {"t":302.08,"vi":"Bạn mở Code Lab Nginx, module nén, header và hiệu năng. Bài sau: sendfile và open_file_cache, đếm bằng lời gọi hệ thống."}
       ]
     },
-    "nginx-4-4-sendfile-va-open-file-cache": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nginx/04-tep-tinh/04-04-sendfile-open-file-cache-b9e56e73.mp4","durationSec":288.48,"nguonCau":"srt",
-      "parts": [],
+    "nginx-4-4-sendfile-va-open-file-cache": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nginx/04-tep-tinh/04-04-sendfile-open-file-cache-b9e56e73.mp4","durationSec":288.48,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":69.84,"ten":"Chào bạn · nối từ bài 4.3 · Bài này mang về gì"},
+        {"t":69.84,"den":141.05,"ten":"Mô phỏng: múc xô hay mở ống · sendfile: 186 thành 3"},
+        {"t":141.05,"den":210.73,"ten":"Chạy thật: deploy dưới cache · Bẫy: cache phục vụ tệp CŨ"},
+        {"t":210.73,"den":288.48,"ten":"Thuật ngữ · Tự kiểm ba câu"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 4.4 của khoá Nginx."},
         {"t":9.37,"vi":"Bài trước: nén tại chỗ chậm khoảng ba mươi lần, nén sẵn lúc dựng thì gần như miễn phí, và tệp mjs không được nén."},
@@ -2034,8 +2206,14 @@
         {"t":277.47,"vi":"Bạn mở Code Lab Nginx, module nén, header và hiệu năng. Bài sau: một khối tệp tĩnh production, ráp lại và đem đo."}
       ]
     },
-    "nginx-4-5-khoi-tinh-production": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nginx/04-tep-tinh/04-05-khoi-tinh-production-4c57a469.mp4","durationSec":311.38,"nguonCau":"srt",
-      "parts": [],
+    "nginx-4-5-khoi-tinh-production": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nginx/04-tep-tinh/04-05-khoi-tinh-production-4c57a469.mp4","durationSec":311.38,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":68.67,"ten":"Chào bạn · nối từ bài 4.4 · Bài này mang về gì"},
+        {"t":68.67,"den":142.9,"ten":"Bốn location, bốn chính sách · Mô phỏng: bốn quầy đóng dấu"},
+        {"t":142.9,"den":212.27,"ten":"Tải lên: script không bao giờ chạy · Liên kết chéo"},
+        {"t":212.27,"den":278.33,"ten":"always: cái nào cần, cái nào cấm · Thuật ngữ"},
+        {"t":278.33,"den":311.38,"ten":"Thực hành & tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 4.5, bài cuối của Chương 4."},
         {"t":10.01,"vi":"Bài trước: sendfile biến một trăm tám mươi sáu lời gọi thành ba, và open_file_cache phục vụ tệp cũ sau deploy."},
@@ -2090,8 +2268,13 @@
         {"t":307.13,"vi":"Chương sau: bộ đệm đặt trước ứng dụng."}
       ]
     },
-    "nginx-5-1-bat-bo-dem": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nginx/05-bo-dem-truoc-ung-dung/05-01-bat-bo-dem-45868cec.mp4","durationSec":287.77,"nguonCau":"srt",
-      "parts": [],
+    "nginx-5-1-bat-bo-dem": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nginx/05-bo-dem-truoc-ung-dung/05-01-bat-bo-dem-45868cec.mp4","durationSec":287.77,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":72.79,"ten":"Chào bạn · nối từ Chương 4 · Bài này mang về gì"},
+        {"t":72.79,"den":134.97,"ten":"Mô phỏng: tủ có nhãn · Nhìn thấy nó chạy"},
+        {"t":134.97,"den":205.98,"ten":"Khoá: có query, không có Host · Liên kết chéo"},
+        {"t":205.98,"den":287.77,"ten":"Thuật ngữ · Tự kiểm ba câu"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 5.1 của khoá Nginx, mở đầu Chương 5: bộ đệm đặt trước ứng dụng."},
         {"t":13.13,"vi":"Chương trước: đuôi tệp quyết định kiểu, ETag làm từ mtime, nén sẵn lúc dựng, sendfile, và một khối tĩnh production."},
@@ -2145,8 +2328,13 @@
         {"t":283.04,"vi":"Bài sau: cái gì được cache, và vụ rò rỉ."}
       ]
     },
-    "nginx-5-2-cai-gi-duoc-cache": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nginx/05-bo-dem-truoc-ung-dung/05-02-cai-gi-duoc-cache-6f03c7b1.mp4","durationSec":271.88,"nguonCau":"srt",
-      "parts": [],
+    "nginx-5-2-cai-gi-duoc-cache": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nginx/05-bo-dem-truoc-ung-dung/05-02-cai-gi-duoc-cache-6f03c7b1.mp4","durationSec":271.88,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":64.38,"ten":"Chào bạn · nối từ bài 5.1 · Bài này mang về gì"},
+        {"t":64.38,"den":119.2,"ten":"Phương thức · Mô phỏng: quầy phát theo số phòng"},
+        {"t":119.2,"den":188.6,"ten":"Vụ rò rỉ · Vì sao Authorization không bảo vệ"},
+        {"t":188.6,"den":271.88,"ten":"Thuật ngữ · Tự kiểm ba câu"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 5.2 của khoá Nginx."},
         {"t":9.1,"vi":"Bài trước: ba chỉ thị bật bộ đệm, khoá có query nhưng không có Host, mỗi câu trả lời là một tệp."},
@@ -2202,8 +2390,13 @@
         {"t":267.62,"vi":"Bài sau: ai quyết định giữ bao lâu."}
       ]
     },
-    "nginx-5-3-ai-quyet-dinh-thoi-han": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nginx/05-bo-dem-truoc-ung-dung/05-03-ai-quyet-dinh-thoi-han-7750b4b1.mp4","durationSec":370.1,"nguonCau":"srt",
-      "parts": [],
+    "nginx-5-3-ai-quyet-dinh-thoi-han": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nginx/05-bo-dem-truoc-ung-dung/05-03-ai-quyet-dinh-thoi-han-7750b4b1.mp4","durationSec":370.1,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":89.16,"ten":"Chào bạn · nối từ bài 5.2 · Bài này mang về gì"},
+        {"t":89.16,"den":182.11,"ten":"Dàn thí nghiệm · Bốn trường hợp, bấm giờ"},
+        {"t":182.11,"den":278.01,"ten":"Liên kết chéo · Chạy thật: cái bẫy"},
+        {"t":278.01,"den":370.1,"ten":"Thuật ngữ · Tự kiểm ba câu"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 5.3 của khoá Nginx."},
         {"t":9.06,"vi":"Bài trước: Nginx không bao giờ nhìn ai đang hỏi."},
@@ -2264,8 +2457,13 @@
         {"t":361.33,"vi":"Bạn mở Code Lab Nginx, module bộ đệm, tự bấm giờ cả bốn dòng. Bài sau: cơn giẫm đạp."}
       ]
     },
-    "nginx-5-4-con-giam-dap": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nginx/05-bo-dem-truoc-ung-dung/05-04-con-giam-dap-77524bb7.mp4","durationSec":325.28,"nguonCau":"srt",
-      "parts": [],
+    "nginx-5-4-con-giam-dap": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nginx/05-bo-dem-truoc-ung-dung/05-04-con-giam-dap-77524bb7.mp4","durationSec":325.28,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":89.49,"ten":"Chào bạn · nối từ bài 5.3 · Bài này mang về gì"},
+        {"t":89.49,"den":155.7,"ten":"Hai mươi request, đếm thật · Một đi, mười chín chờ"},
+        {"t":155.7,"den":240.3,"ten":"Cái giá của việc chờ · Liên kết chéo"},
+        {"t":240.3,"den":325.28,"ten":"Thuật ngữ · Tự kiểm ba câu"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 5.4 của khoá Nginx."},
         {"t":9.33,"vi":"Bài trước: X-Accel-Expires thắng Cache-Control, Cache-Control thắng cấu hình, và ignore bỏ luôn cả private."},
@@ -2324,8 +2522,13 @@
         {"t":321.32,"vi":"Bài sau: phục vụ bản cũ."}
       ]
     },
-    "nginx-6-1-chuoi-chung-chi": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nginx/06-tls-va-http2/06-01-chuoi-chung-chi-81e2731f.mp4","durationSec":420.73,"nguonCau":"srt",
-      "parts": [],
+    "nginx-6-1-chuoi-chung-chi": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nginx/06-tls-va-http2/06-01-chuoi-chung-chi-81e2731f.mp4","durationSec":420.73,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":96.78,"ten":"Chào bạn · mở Chương 6 · Bài này mang về gì"},
+        {"t":96.78,"den":191.57,"ten":"Ví dụ: giấy giới thiệu hai chữ ký"},
+        {"t":191.57,"den":283.9,"ten":"Đo thật: fullchain và chỉ lá · SNI: bạn nhận chứng chỉ nào"},
+        {"t":283.9,"den":420.73,"ten":"Hai khoá trong một khối"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 6.1 của khoá Nginx, mở đầu Chương 6: TLS và HTTP/2."},
         {"t":13.23,"vi":"Chương trước: bộ đệm trước ứng dụng, cái khoá, chuỗi ưu tiên thời hạn, cơn giẫm đạp, và phục vụ bản cũ khi backend ngã."},
@@ -2400,8 +2603,13 @@
         {"t":415.75,"vi":"Bài sau: giao thức và bộ mã nào thật sự được dùng."}
       ]
     },
-    "nginx-6-2-giao-thuc-va-bo-ma": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nginx/06-tls-va-http2/06-02-giao-thuc-va-bo-ma-ccbdb08b.mp4","durationSec":335.65,"nguonCau":"srt",
-      "parts": [],
+    "nginx-6-2-giao-thuc-va-bo-ma": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nginx/06-tls-va-http2/06-02-giao-thuc-va-bo-ma-ccbdb08b.mp4","durationSec":335.65,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":96.02,"ten":"Chào bạn · nối từ bài 6.1 · Bài này mang về gì"},
+        {"t":96.02,"den":172.93,"ten":"Đo từ cả hai phía · Tám mươi chín bộ mã"},
+        {"t":172.93,"den":248.44,"ten":"Bí mật chuyển tiếp · Liên kết chéo"},
+        {"t":248.44,"den":335.65,"ten":"Thuật ngữ · Tự kiểm ba câu"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 6.2 của khoá Nginx."},
         {"t":9.1,"vi":"Bài trước: luôn trỏ vào fullchain, mã hai mươi mốt là thiếu trung gian, và gia hạn xong phải nạp lại."},
@@ -2460,8 +2668,13 @@
         {"t":331.7,"vi":"Bài sau: cái bắt tay tốn gì."}
       ]
     },
-    "nginx-6-4-http2": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nginx/06-tls-va-http2/06-04-http2-12b6e765.mp4","durationSec":372.69,"nguonCau":"srt",
-      "parts": [],
+    "nginx-6-4-http2": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nginx/06-tls-va-http2/06-04-http2-12b6e765.mp4","durationSec":372.69,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":96.5,"ten":"Chào bạn · nối từ bài 6.3 · Bài này mang về gì"},
+        {"t":96.5,"den":174.29,"ten":"Bật lên rồi xác nhận · Chạy thật: năm mươi tệp và HPACK"},
+        {"t":174.29,"den":259.82,"ten":"Năm mươi tệp · HPACK: cookie gửi một lần"},
+        {"t":259.82,"den":372.69,"ten":"Đo ở chỗ người dùng đứng · Thuật ngữ"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 6.4 của khoá Nginx."},
         {"t":9.33,"vi":"Bài trước: một cú bắt tay tốn vài mili giây, request trên kết nối đã mở rẻ hơn rất nhiều, nên tái dùng kết nối là tất cả."},
@@ -2520,8 +2733,13 @@
         {"t":367.04,"vi":"Bài sau: chuyển hướng sang HTTPS và HSTS."}
       ]
     },
-    "nginx-6-5-chuyen-huong-va-hsts": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nginx/06-tls-va-http2/06-05-chuyen-huong-va-hsts-44a0a41d.mp4","durationSec":369.54,"nguonCau":"srt",
-      "parts": [],
+    "nginx-6-5-chuyen-huong-va-hsts": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nginx/06-tls-va-http2/06-05-chuyen-huong-va-hsts-44a0a41d.mp4","durationSec":369.54,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":94.11,"ten":"Chào bạn · nối từ bài 6.4 · Bài này mang về gì"},
+        {"t":94.11,"den":186.65,"ten":"Hai khối cổng 80 · Chạy thật: hai khối"},
+        {"t":186.65,"den":282.19,"ten":"Liên kết chéo · HSTS: làm gì, bắt đầu từ đâu"},
+        {"t":282.19,"den":369.54,"ten":"Thuật ngữ · Tự kiểm ba câu"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 6.5 của khoá Nginx, bài cuối Chương 6."},
         {"t":11.06,"vi":"Bài trước: HTTP/2 dùng một kết nối, HPACK nén header lặp lại còn vài byte, và phải đo trên mạng thật."},
@@ -2578,8 +2796,14 @@
         {"t":363.26,"vi":"Chương sau: giới hạn tần suất, kết nối và kích thước."}
       ]
     },
-    "nginx-7-1-limit-req": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nginx/07-gioi-han/07-01-limit-req-d781db97.mp4","durationSec":464.35,"nguonCau":"srt",
-      "parts": [],
+    "nginx-7-1-limit-req": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nginx/07-gioi-han/07-01-limit-req-d781db97.mp4","durationSec":464.35,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":106.34,"ten":"Chào bạn · nối từ bài 6.5 · Bài này mang về gì"},
+        {"t":106.34,"den":204.99,"ten":"Cái xô rỉ trong cấu hình · Bẫy: limit_req không thấy return"},
+        {"t":204.99,"den":284.18,"ten":"Mười request liên tiếp · Mười request cùng lúc"},
+        {"t":284.18,"den":363.29,"ten":"Đọc cái mức bạn vừa đặt · 503 hay 429, và dòng log"},
+        {"t":363.29,"den":464.35,"ten":"Thuật ngữ · Tự kiểm ba câu"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 7.1 của khoá Nginx, mở đầu Chương 7 về giới hạn."},
         {"t":11.08,"vi":"Bài trước, mình khép lại phần TLS: đích chuyển hướng phải là hằng số, ACME đứng trước cú chuyển hướng, và HSTS bắt đầu từ ba trăm giây."},
@@ -2658,8 +2882,14 @@
         {"t":458.46,"vi":"Bài sau: khoá giới hạn theo cái gì, và cái khoá giả mạo được."}
       ]
     },
-    "nginx-7-2-khoa-gioi-han": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nginx/07-gioi-han/07-02-khoa-gioi-han-2c547525.mp4","durationSec":460.13,"nguonCau":"srt",
-      "parts": [],
+    "nginx-7-2-khoa-gioi-han": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nginx/07-gioi-han/07-02-khoa-gioi-han-2c547525.mp4","durationSec":460.13,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":99.91,"ten":"Chào bạn · nối từ bài 7.1 · Bài này mang về gì"},
+        {"t":99.91,"den":194.31,"ten":"Ai là client khi mọi người chung proxy"},
+        {"t":194.31,"den":287.22,"ten":"Cách chữa: sửa remote_addr"},
+        {"t":287.22,"den":367.63,"ten":"Định cỡ vùng nhớ · Một câu hỏi trước khi tin giới hạn"},
+        {"t":367.63,"den":460.13,"ten":"Thuật ngữ · Tự kiểm ba câu"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 7.2 của khoá Nginx."},
         {"t":9.18,"vi":"Bài trước: limit_req bỏ qua return, burst thì xếp hàng còn nodelay cho qua ngay, và mã từ chối nên là 429."},
@@ -2741,8 +2971,14 @@
         {"t":454.46,"vi":"Bài sau: limit_conn, và cái đòn mà nó không chặn được."}
       ]
     },
-    "nginx-7-3-limit-conn": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nginx/07-gioi-han/07-03-limit-conn-c7a57930.mp4","durationSec":438.56,"nguonCau":"srt",
-      "parts": [],
+    "nginx-7-3-limit-conn": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nginx/07-gioi-han/07-03-limit-conn-c7a57930.mp4","durationSec":438.56,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":96.73,"ten":"Chào bạn · nối từ bài 7.2 · Bài này mang về gì"},
+        {"t":96.73,"den":175.13,"ten":"Nó chạy: sáu request chậm, một IP"},
+        {"t":175.13,"den":268.47,"ten":"Băng thông mỗi kết nối: limit_rate · Cái đòn nó không chặn"},
+        {"t":268.47,"den":346.59,"ten":"Những điều xung quanh · Mỗi giới hạn bảo vệ cái gì"},
+        {"t":346.59,"den":438.56,"ten":"Thuật ngữ · Tự kiểm ba câu"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 7.3 của khoá Nginx."},
         {"t":9.3,"vi":"Bài trước: cái khoá mới là chỗ giới hạn hỏng."},
@@ -2822,8 +3058,14 @@
         {"t":432.08,"vi":"Bài sau: kích thước request, và cú từ chối tới trước lượt tải lên."}
       ]
     },
-    "nginx-7-5-lop-phong-thu": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nginx/07-gioi-han/07-05-lop-phong-thu-579ec091.mp4","durationSec":438.34,"nguonCau":"srt",
-      "parts": [],
+    "nginx-7-5-lop-phong-thu": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nginx/07-gioi-han/07-05-lop-phong-thu-579ec091.mp4","durationSec":438.34,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":86.61,"ten":"Chào bạn · nối từ bài 7.4 · Bài này mang về gì"},
+        {"t":86.61,"den":162.16,"ten":"Khối server · Chạy thật: dò từng tuyến"},
+        {"t":162.16,"den":247.12,"ten":"Từng tuyến, đem dò · Năm mươi cùng lúc, năm mươi lần lượt"},
+        {"t":247.12,"den":327.99,"ten":"Dòng KHÔNG đúng · Một vùng là một ngân sách chung"},
+        {"t":327.99,"den":438.34,"ten":"Liên kết chéo · Thuật ngữ"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 7.5, bài cuối của Chương 7."},
         {"t":9.78,"vi":"Bài trước: khai độ dài thì cú 413 tới trước khi tải một byte, chunked thì đốt băng thông trước, và ứng dụng không bao giờ thấy cú 413."},
@@ -2896,8 +3138,14 @@
         {"t":431.48,"vi":"Hết Chương 7. Bài sau sang Chương 8: rewrite và bốn cái cờ của nó."}
       ]
     },
-    "nginx-8-1-rewrite": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nginx/08-viet-lai-va-anh-xa/08-01-rewrite-8ed271f0.mp4","durationSec":438.63,"nguonCau":"srt",
-      "parts": [],
+    "nginx-8-1-rewrite": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nginx/08-viet-lai-va-anh-xa/08-01-rewrite-8ed271f0.mp4","durationSec":438.63,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":99.59,"ten":"Chào bạn · nối từ Chương 7 · Bài này mang về gì"},
+        {"t":99.59,"den":190.15,"ten":"Giải phẫu một lệnh rewrite"},
+        {"t":190.15,"den":273.1,"ten":"last và break: request đi đâu"},
+        {"t":273.1,"den":354.14,"ten":"Đúng, sai, và thường là không cần"},
+        {"t":354.14,"den":438.63,"ten":"Thuật ngữ · Tự kiểm ba câu"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 8.1, mở đầu Chương 8 của khoá Nginx."},
         {"t":10.66,"vi":"Chương 7 đã ráp bốn giới hạn: tần suất, kết nối, thời lượng, kích thước. Danh tính trước, mỗi mục đích một vùng, và luôn đem dò."},
@@ -2971,8 +3219,13 @@
         {"t":432.44,"vi":"Bài sau: vì sao if là quỷ dữ, đo bằng ba cách."}
       ]
     },
-    "nginx-8-2-if-la-quy-du": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nginx/08-viet-lai-va-anh-xa/08-02-if-la-quy-du-5e4435e9.mp4","durationSec":392.17,"nguonCau":"srt",
-      "parts": [],
+    "nginx-8-2-if-la-quy-du": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nginx/08-viet-lai-va-anh-xa/08-02-if-la-quy-du-5e4435e9.mp4","durationSec":392.17,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":100.29,"ten":"Chào bạn · nối từ bài 8.1 · Bài này mang về gì"},
+        {"t":100.29,"den":196.42,"ten":"Mô phỏng: phòng trong phòng"},
+        {"t":196.42,"den":274.92,"ten":"Chạy thật: ba phép dò và map · Viết gì thay thế: map"},
+        {"t":274.92,"den":392.17,"ten":"Luật · Liên kết chéo"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 8.2 của khoá Nginx."},
         {"t":9.28,"vi":"Bài trước: cái cờ quyết định lệnh rewrite."},
@@ -3043,8 +3296,13 @@
         {"t":387,"vi":"Bài sau: map, cái bảng tra thay thế mọi cái if."}
       ]
     },
-    "nginx-8-3-map": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nginx/08-viet-lai-va-anh-xa/08-03-map-f5738ef5.mp4","durationSec":392.28,"nguonCau":"srt",
-      "parts": [],
+    "nginx-8-3-map": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nginx/08-viet-lai-va-anh-xa/08-03-map-f5738ef5.mp4","durationSec":392.28,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":96.94,"ten":"Chào bạn · nối từ bài 8.2 · Bài này mang về gì"},
+        {"t":96.94,"den":203.93,"ten":"Bốn kiểu khoá, đo thật · Một lần tra chạy thế nào"},
+        {"t":203.93,"den":288.12,"ten":"Phép và mà Nginx không có"},
+        {"t":288.12,"den":392.28,"ten":"Liên kết chéo · Thuật ngữ"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 8.3 của khoá Nginx."},
         {"t":9.38,"vi":"Bài trước: khối if là một location lồng."},
@@ -3113,8 +3371,14 @@
         {"t":385.64,"vi":"Bài sau: return, error_page, và những khối không ai gọi tới được."}
       ]
     },
-    "nginx-8-4-return-error-page": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nginx/08-viet-lai-va-anh-xa/08-04-return-error-page-869bc6c4.mp4","durationSec":439.64,"nguonCau":"srt",
-      "parts": [],
+    "nginx-8-4-return-error-page": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nginx/08-viet-lai-va-anh-xa/08-04-return-error-page-869bc6c4.mp4","durationSec":439.64,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":91.88,"ten":"Chào bạn · nối từ bài 8.3 · Bài này mang về gì"},
+        {"t":91.88,"den":181.86,"ten":"Vì sao trang lỗi in uri của chính nó"},
+        {"t":181.86,"den":277.23,"ten":"X-Accel-Redirect"},
+        {"t":277.23,"den":355.59,"ten":"return, khi nào là đủ · Khuôn cho production"},
+        {"t":355.59,"den":439.64,"ten":"Tự kiểm ba câu · Thực hành & tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 8.4 của khoá Nginx."},
         {"t":9.38,"vi":"Bài trước: map là cái bảng tra."},
@@ -3190,8 +3454,14 @@
         {"t":433.17,"vi":"Bài sau: một cuộc chuyển đổi URL thật, ráp lại và đem đo."}
       ]
     },
-    "nginx-8-5-chuyen-doi-url": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nginx/08-viet-lai-va-anh-xa/08-05-chuyen-doi-url-3bfaa5ef.mp4","durationSec":413.89,"nguonCau":"srt",
-      "parts": [],
+    "nginx-8-5-chuyen-doi-url": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nginx/08-viet-lai-va-anh-xa/08-05-chuyen-doi-url-3bfaa5ef.mp4","durationSec":413.89,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":80.54,"ten":"Chào bạn · nối từ bài 8.4 · Bài này mang về gì"},
+        {"t":80.54,"den":161.25,"ten":"Tám phép dò · Vì sao là hình dạng này"},
+        {"t":161.25,"den":257.7,"ten":"Phép dò tìm ra vấn đề"},
+        {"t":257.7,"den":338.77,"ten":"Luật cho một cuộc chuyển đổi"},
+        {"t":338.77,"den":413.89,"ten":"Tự kiểm ba câu · Thực hành & tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 8.5, bài cuối của Chương 8."},
         {"t":9.86,"vi":"Bài trước: không dấu bằng thì error_page giữ mã, bằng trần thì lấy mã handler, internal là 404 từ bên ngoài, và X-Accel-Redirect để Nginx gửi tệp."},
@@ -3261,8 +3531,14 @@
         {"t":406.63,"vi":"Hết Chương 8. Bài sau sang Chương 9: khối upstream và bốn cách chọn máy."}
       ]
     },
-    "nginx-9-1-khoi-upstream": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nginx/09-can-bang-tai/09-01-khoi-upstream-18df4ed5.mp4","durationSec":427.34,"nguonCau":"srt",
-      "parts": [],
+    "nginx-9-1-khoi-upstream": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nginx/09-can-bang-tai/09-01-khoi-upstream-18df4ed5.mp4","durationSec":427.34,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":104.45,"ten":"Chào bạn · nối từ Chương 8 · Bài này mang về gì"},
+        {"t":104.45,"den":199.8,"ten":"Bốn thuật toán, ba mươi request · Đọc bốn con số"},
+        {"t":199.8,"den":276.5,"ten":"Chạy thật: đếm bốn cách, down, backup, máy chậm"},
+        {"t":276.5,"den":388.15,"ten":"Chọn cách nào · Một header biến câu hỏi thành phép đếm"},
+        {"t":388.15,"den":427.34,"ten":"Thực hành & tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 9.1 của khoá Nginx, bài đầu tiên của Chương 9: cân bằng tải."},
         {"t":12.2,"vi":"Chương trước mình viết lại và chuyển hướng URL: bảng tra map, return, error_page, và một cuộc chuyển đổi URL đo bằng curl."},
@@ -3342,8 +3618,14 @@
         {"t":420.46,"vi":"Bài sau: định tuyến dính, và cái chữ cứu được bốn mươi bảy phần trăm người dùng."}
       ]
     },
-    "nginx-9-2-dinh-tuyen-dinh": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nginx/09-can-bang-tai/09-02-dinh-tuyen-dinh-6ca53eb8.mp4","durationSec":450.84,"nguonCau":"srt",
-      "parts": [],
+    "nginx-9-2-dinh-tuyen-dinh": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nginx/09-can-bang-tai/09-02-dinh-tuyen-dinh-6ca53eb8.mp4","durationSec":450.84,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":84.35,"ten":"Chào bạn · nối từ bài 9.1 · Bài này mang về gì"},
+        {"t":84.35,"den":170.81,"ten":"Mô phỏng: chia dư hay vòng tròn"},
+        {"t":170.81,"den":247.39,"ten":"Đọc 72% so với 25% · Chạy thật: ghim, thêm máy, giết máy"},
+        {"t":247.39,"den":344,"ten":"ip_hash băm theo mạng, không theo người"},
+        {"t":344,"den":450.84,"ten":"Liên kết chéo · Thuật ngữ"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 9.2 của khoá Nginx."},
         {"t":9.37,"vi":"Bài trước: round robin chia đều, weight đổi tỉ lệ, least_conn đếm việc đang làm, và ip_hash dồn một địa chỉ vào một máy."},
@@ -3423,8 +3705,15 @@
         {"t":444.33,"vi":"Bài sau: khi một backend chết, ba mươi request mà không lỗi nào."}
       ]
     },
-    "nginx-9-3-khi-backend-chet": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nginx/09-can-bang-tai/09-03-khi-backend-chet-1cd02858.mp4","durationSec":478.89,"nguonCau":"srt",
-      "parts": [],
+    "nginx-9-3-khi-backend-chet": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nginx/09-can-bang-tai/09-03-khi-backend-chet-1cd02858.mp4","durationSec":478.89,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":99.49,"ten":"Chào bạn · nối từ bài 9.2 · Bài này mang về gì"},
+        {"t":99.49,"den":180.76,"ten":"Giết một trong ba, vẫn gửi tiếp"},
+        {"t":180.76,"den":267.35,"ten":"Kiểm tra thụ động là gì và không là gì"},
+        {"t":267.35,"den":362.84,"ten":"Cú gửi lại đặt đơn hai lần · Những thứ bể máy không cứu được"},
+        {"t":362.84,"den":438.99,"ten":"Liên kết chéo · Thuật ngữ"},
+        {"t":438.99,"den":478.89,"ten":"Thực hành & tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 9.3 của khoá Nginx."},
         {"t":9.27,"vi":"Bài trước: hash ghim người dùng vào một máy, consistent chỉ dời hai mươi lăm phần trăm khi thêm máy, và máy chết chỉ dời người của nó."},
@@ -3511,8 +3800,15 @@
         {"t":472.52,"vi":"Bài sau: một trăm lẻ một request, một kết nối TCP."}
       ]
     },
-    "nginx-9-4-tai-dung-ket-noi": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nginx/09-can-bang-tai/09-04-tai-dung-ket-noi-c3b86d21.mp4","durationSec":456.63,"nguonCau":"srt",
-      "parts": [],
+    "nginx-9-4-tai-dung-ket-noi": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nginx/09-can-bang-tai/09-04-tai-dung-ket-noi-c3b86d21.mp4","durationSec":456.63,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":99.16,"ten":"Chào bạn · nối từ bài 9.3 · Bài này mang về gì"},
+        {"t":99.16,"den":176.99,"ten":"Một upstream tự đếm kết nối"},
+        {"t":176.99,"den":262.83,"ten":"Vì sao cần từng dòng"},
+        {"t":262.83,"den":342.39,"ten":"keepalive 32 không phải 32 kết nối"},
+        {"t":342.39,"den":417.49,"ten":"Liên kết chéo · Thuật ngữ"},
+        {"t":417.49,"den":456.63,"ten":"Thực hành & tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 9.4 của khoá Nginx."},
         {"t":9.37,"vi":"Bài trước: giết một máy, request đầu được gửi lại, máy chết nghỉ mười giây, và POST không bao giờ được gửi lại."},
@@ -3588,8 +3884,14 @@
         {"t":451.34,"vi":"Bài sau: deploy mà không rớt một request nào."}
       ]
     },
-    "nginx-9-5-deploy-khong-rot-request": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nginx/09-can-bang-tai/09-05-deploy-khong-rot-request-495e2be3.mp4","durationSec":482.61,"nguonCau":"srt",
-      "parts": [],
+    "nginx-9-5-deploy-khong-rot-request": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nginx/09-can-bang-tai/09-05-deploy-khong-rot-request-495e2be3.mp4","durationSec":482.61,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":95.58,"ten":"Chào bạn · nối từ bài 9.4 · Bài này mang về gì"},
+        {"t":95.58,"den":200.39,"ten":"Nạp lại ba lần dưới tải · Nạp lại thật sự làm gì"},
+        {"t":200.39,"den":281.85,"ten":"Khởi động lại không phải nạp lại"},
+        {"t":281.85,"den":371.63,"ten":"Nạp lại CÓ phân giải lại tên · Các kiểu deploy"},
+        {"t":371.63,"den":482.61,"ten":"Liên kết chéo · Thuật ngữ"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 9.5, bài cuối của Chương 9."},
         {"t":9.72,"vi":"Bài trước: không keepalive thì mỗi request một kết nối mới, đủ ba dòng thì một trăm lẻ một request đi qua một kết nối."},

@@ -2,40 +2,16 @@
   "courseSlug": "git",
   "sinhBoi": "scripts/phu-de-tu-video-rieng.mjs",
   "lessons": {
-    "git-0-0-slides": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/00-gioi-thieu/00-00-slide-muc-0-2b478792.mp4","durationSec":633.41,"nguonCau":"thoigian",
+    "git-0-0-slides": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/00-gioi-thieu/00-00-slide-muc-0-2b478792.mp4","durationSec":633.41,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":32.36,"ten":"Chào bạn · Mục 0 trong 31 slide"},
-        {"t":32.36,"den":50.23,"ten":"Git là gì? Nút “lưu game” cho cả thư mục"},
-        {"t":50.23,"den":66.65,"ten":"Git ≠ GitHub — ai ở đâu?"},
-        {"t":66.65,"den":81.27,"ten":"Git và GitHub — so từng dòng"},
-        {"t":81.27,"den":111.87,"ten":"Lịch sử: từ email vá lỗi tới 180 triệu lập trình viên"},
-        {"t":111.87,"den":130.71,"ten":"Vì sao Git ra đời?"},
-        {"t":130.71,"den":150.22,"ten":"Trước Git · Sau Git — một tuần đồ án nhóm"},
-        {"t":150.22,"den":167.6,"ten":"Git dùng để làm gì?"},
-        {"t":167.6,"den":190.65,"ten":"Quan trọng tới mức nào? Con số có nguồn"},
-        {"t":190.64,"den":209.78,"ten":"Git giúp gì cho BẠN — từ năm nhất tới đi làm"},
-        {"t":209.78,"den":232.14,"ten":"Chuyện có thật khi thiếu lưới an toàn"},
-        {"t":232.14,"den":248.42,"ten":"Tình huống minh hoạ — rất có thể là nhóm bạn"},
-        {"t":248.42,"den":267.26,"ten":"Vì sao người mới hay bỏ Git — và cách chữa"},
-        {"t":267.26,"den":286.59,"ten":"Lộ trình: tối thiểu 1 tuần · đầy đủ vài tuần"},
-        {"t":286.59,"den":306.17,"ten":"Nhịp một buổi học và các mốc “mình làm được”"},
-        {"t":306.17,"den":324.33,"ten":"Mục 0 — Bắt đầu với Git"},
-        {"t":324.33,"den":342.82,"ten":"Bản đồ Mục 0"},
-        {"t":342.82,"den":360.77,"ten":"Khoá này viết cho ai?"},
-        {"t":360.77,"den":383.16,"ten":"Lộ trình toàn khoá — 17 phần"},
-        {"t":383.15,"den":401.84,"ten":"Ba chương mới 14–16"},
-        {"t":401.84,"den":419.87,"ten":"Bạn đã từng tự làm “quản lý phiên bản”"},
-        {"t":419.87,"den":438.81,"ten":"Bốn thứ thư mục “final_v2” không làm được"},
-        {"t":438.81,"den":456.54,"ten":"Ba thế hệ quản lý phiên bản"},
-        {"t":456.54,"den":472.65,"ten":"Git ≠ GitHub"},
-        {"t":472.65,"den":488.01,"ten":"Cài Git — mỗi hệ điều hành một cách"},
-        {"t":488.01,"den":511.5,"ten":"git config — 6 dòng cài một lần"},
-        {"t":511.5,"den":532.9,"ten":"Khoá SSH: một cặp, hai nửa"},
-        {"t":532.9,"den":556.68,"ten":"Khoá SSH — output thật"},
-        {"t":556.68,"den":573.48,"ten":"Sân tập thu-git: phá thoải mái, cứu được hết"},
-        {"t":573.48,"den":588.99,"ten":"Ba câu hỏi trước khi bấm Enter"},
-        {"t":588.99,"den":599.07,"ten":"Bảng tra nhanh Mục 0"},
-        {"t":599.07,"den":633.41,"ten":"Thực hành Mục 0 (30 phút)"}
+        {"t":0,"den":81.27,"ten":"Chào bạn · Mục 0 trong 31 slide"},
+        {"t":81.27,"den":167.6,"ten":"Lịch sử: từ email vá lỗi tới 180 triệu lập trình viên"},
+        {"t":167.6,"den":248.42,"ten":"Quan trọng tới mức nào? Con số có nguồn"},
+        {"t":248.42,"den":324.33,"ten":"Vì sao người mới hay bỏ Git — và cách chữa"},
+        {"t":324.33,"den":401.84,"ten":"Bản đồ Mục 0 · Khoá này viết cho ai?"},
+        {"t":401.84,"den":488.01,"ten":"Bạn đã từng tự làm “quản lý phiên bản”"},
+        {"t":488.01,"den":573.48,"ten":"git config — 6 dòng cài một lần · Khoá SSH: một cặp, hai nửa"},
+        {"t":573.48,"den":633.41,"ten":"Ba câu hỏi trước khi bấm Enter · Bảng tra nhanh Mục 0"}
       ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 0.0 của khoá Git và GitHub: cả Mục 0 trong ba mươi mốt slide."},
@@ -107,17 +83,12 @@
         {"t":620.24,"vi":"Mỗi bài trong Mục 0 đều có phần Thực hành ngay dưới bài trên cuongthai.com. Bắt đầu bằng buổi này, rồi sang bài 0.1 nhé."}
       ]
     },
-    "git-0-1-gioi-thieu-lo-trinh": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/00-gioi-thieu/00-01-gioi-thieu-lo-trinh-092463fe.mp4","durationSec":532.15,"nguonCau":"thoigian",
+    "git-0-1-gioi-thieu-lo-trinh": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/00-gioi-thieu/00-01-gioi-thieu-lo-trinh-092463fe.mp4","durationSec":532.15,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":36.86,"ten":"Chào bạn · ôn nhanh 0.0"},
-        {"t":36.86,"den":76.17,"ten":"Năm lệnh và những lời đồn"},
-        {"t":76.17,"den":130.34,"ten":"Một ý tưởng: ảnh chụp và con trỏ"},
-        {"t":130.34,"den":195.29,"ten":"Khoá này viết cho ai"},
-        {"t":195.29,"den":250.87,"ten":"Học xong bạn làm được gì"},
-        {"t":250.87,"den":307.07,"ten":"Bản đồ toàn khoá"},
-        {"t":307.07,"den":360.96,"ten":"Nửa sau bản đồ"},
-        {"t":360.96,"den":413.6,"ten":"Khoá học khác tài liệu chính thức"},
-        {"t":413.6,"den":475.9,"ten":"Thực hành"},
+        {"t":0,"den":130.34,"ten":"Chào bạn · ôn nhanh 0.0 · Năm lệnh và những lời đồn"},
+        {"t":130.34,"den":250.87,"ten":"Khoá này viết cho ai · Học xong bạn làm được gì"},
+        {"t":250.87,"den":360.96,"ten":"Bản đồ toàn khoá · Nửa sau bản đồ"},
+        {"t":360.96,"den":475.9,"ten":"Khoá học khác tài liệu chính thức · Thực hành"},
         {"t":475.9,"den":532.15,"ten":"Tóm tắt"}
       ],
       "cues": [
@@ -182,17 +153,12 @@
         {"t":518.17,"vi":"Xem xong bản đồ rồi, bạn mở phần Thực hành ngay dưới video này, ghi ba khoảnh khắc Git của nhóm và gắn số chương, rồi hẵng sang bài 0.2 nhé."}
       ]
     },
-    "git-0-2-van-de-git-giai-quyet": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/00-gioi-thieu/00-02-van-de-git-giai-quyet-9f1cde28.mp4","durationSec":516.51,"nguonCau":"thoigian",
+    "git-0-2-van-de-git-giai-quyet": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/00-gioi-thieu/00-02-van-de-git-giai-quyet-9f1cde28.mp4","durationSec":516.51,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":27.75,"ten":"Chào bạn · ôn nhanh 0.1"},
-        {"t":27.75,"den":62.36,"ten":"Báo cáo final final v2"},
-        {"t":62.35,"den":129.19,"ten":"Bốn thứ thư mục không làm được"},
-        {"t":129.19,"den":192.63,"ten":"Ba thế hệ quản lý phiên bản"},
-        {"t":192.63,"den":233.25,"ten":"Ba mục tiêu khi Git ra đời"},
-        {"t":233.24,"den":290.47,"ten":"Git không phải Dropbox, cũng không phải GitHub"},
-        {"t":290.47,"den":357.16,"ten":"Kể lại chuyện báo cáo bằng Git"},
-        {"t":357.16,"den":410.39,"ten":"Năm từ cần cho Chương 1"},
-        {"t":410.39,"den":461.19,"ten":"Thực hành"},
+        {"t":0,"den":129.19,"ten":"Chào bạn · ôn nhanh 0.1 · Báo cáo final final v2"},
+        {"t":129.19,"den":233.25,"ten":"Ba thế hệ quản lý phiên bản · Ba mục tiêu khi Git ra đời"},
+        {"t":233.24,"den":357.16,"ten":"Git không phải Dropbox, cũng không phải GitHub"},
+        {"t":357.16,"den":461.19,"ten":"Năm từ cần cho Chương 1 · Thực hành"},
         {"t":461.19,"den":516.51,"ten":"Tóm tắt"}
       ],
       "cues": [
@@ -257,19 +223,13 @@
         {"t":503.77,"vi":"Hiểu vấn đề rồi, bạn làm phần Thực hành ngay dưới video, dựng lại câu chuyện báo cáo bằng ba commit, rồi hẵng sang bài 0.3 nhé."}
       ]
     },
-    "git-0-3-cai-dat-cau-hinh": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/00-gioi-thieu/00-03-cai-dat-cau-hinh-add5d86a.mp4","durationSec":528.31,"nguonCau":"thoigian",
+    "git-0-3-cai-dat-cau-hinh": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/00-gioi-thieu/00-03-cai-dat-cau-hinh-add5d86a.mp4","durationSec":528.31,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":28.48,"ten":"Chào bạn · ôn nhanh 0.2"},
-        {"t":28.48,"den":54.32,"ten":"Mười lăm phút đỡ một năm bực"},
-        {"t":54.32,"den":109.62,"ten":"Cài đặt — Windows, Mac, Linux"},
-        {"t":109.62,"den":137.59,"ten":"Danh tính: tên và email"},
-        {"t":137.59,"den":191.22,"ten":"Bốn thiết lập chặn lỗi"},
-        {"t":191.21,"den":242.19,"ten":"Vì sao ký tự xuống dòng quan trọng"},
-        {"t":242.19,"den":290.87,"ten":"Đọc lại cấu hình — ba mức"},
-        {"t":290.87,"den":354.82,"ten":"Khoá SSH: một cặp, hai nửa"},
-        {"t":354.82,"den":414.7,"ten":"Nạp khoá lên GitHub và kiểm tra"},
-        {"t":414.7,"den":468.62,"ten":"Thực hành"},
-        {"t":468.62,"den":528.31,"ten":"Tóm tắt"}
+        {"t":0,"den":109.62,"ten":"Chào bạn · ôn nhanh 0.2 · Mười lăm phút đỡ một năm bực"},
+        {"t":109.62,"den":191.22,"ten":"Danh tính: tên và email · Bốn thiết lập chặn lỗi"},
+        {"t":191.21,"den":290.87,"ten":"Vì sao ký tự xuống dòng quan trọng"},
+        {"t":290.87,"den":414.7,"ten":"Khoá SSH: một cặp, hai nửa · Nạp khoá lên GitHub và kiểm tra"},
+        {"t":414.7,"den":528.31,"ten":"Thực hành · Tóm tắt"}
       ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 0.3 của khoá Git và GitHub."},
@@ -329,19 +289,13 @@
         {"t":516.63,"vi":"Cài xong rồi, bạn làm phần Thực hành ngay dưới video, đến khi GitHub chào đúng tên bạn, rồi hẵng sang bài 0.4 nhé."}
       ]
     },
-    "git-0-4-cach-hoc": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/00-gioi-thieu/00-04-cach-hoc-56a82474.mp4","durationSec":452.52,"nguonCau":"thoigian",
+    "git-0-4-cach-hoc": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/00-gioi-thieu/00-04-cach-hoc-56a82474.mp4","durationSec":452.52,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":28.97,"ten":"Chào bạn · ôn nhanh 0.3"},
-        {"t":28.97,"den":49.49,"ten":"Git là kỹ năng của đôi tay"},
-        {"t":49.49,"den":88.32,"ten":"Dựng sân tập thu-git"},
-        {"t":88.32,"den":132.66,"ten":"Sinh lịch sử để nghịch"},
-        {"t":132.66,"den":178.25,"ten":"Ba câu hỏi trước khi bấm Enter"},
-        {"t":178.25,"den":230.41,"ten":"Thử phá rồi cứu bằng reflog"},
-        {"t":230.41,"den":273.05,"ten":"Luật về việc bị mất"},
-        {"t":273.05,"den":320.08,"ten":"Khi lạc: bộ ba chẩn đoán"},
-        {"t":320.08,"den":356.28,"ten":"Nhịp học cả khoá"},
-        {"t":356.28,"den":399.04,"ten":"Thực hành"},
-        {"t":399.04,"den":452.52,"ten":"Tóm tắt Mục 0"}
+        {"t":0,"den":88.32,"ten":"Chào bạn · ôn nhanh 0.3 · Git là kỹ năng của đôi tay"},
+        {"t":88.32,"den":178.25,"ten":"Sinh lịch sử để nghịch · Ba câu hỏi trước khi bấm Enter"},
+        {"t":178.25,"den":273.05,"ten":"Thử phá rồi cứu bằng reflog · Luật về việc bị mất"},
+        {"t":273.05,"den":356.28,"ten":"Khi lạc: bộ ba chẩn đoán · Nhịp học cả khoá"},
+        {"t":356.28,"den":452.52,"ten":"Thực hành · Tóm tắt Mục 0"}
       ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 0.4, bài cuối của Mục 0 trong khoá Git và GitHub."},
@@ -399,21 +353,14 @@
         {"t":440.39,"vi":"Xong Mục 0 rồi, bạn làm phần Thực hành ngay dưới video, phá thu-git rồi cứu nó bằng reflog, trước khi sang chương mới nhé."}
       ]
     },
-    "git-0-5-bat-dau-tai-day": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/00-gioi-thieu/00-05-bat-dau-tai-day-4369ac28.mp4","durationSec":611.16,"nguonCau":"thoigian",
+    "git-0-5-bat-dau-tai-day": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/00-gioi-thieu/00-05-bat-dau-tai-day-4369ac28.mp4","durationSec":611.16,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":29.95,"ten":"Chào bạn · Bắt đầu tại đây"},
-        {"t":29.95,"den":68.49,"ten":"Ba dòng lệnh chép của bạn"},
-        {"t":68.49,"den":119.67,"ten":"Git là gì — ba hình ảnh đời thường"},
-        {"t":119.67,"den":163.97,"ten":"Định nghĩa: hệ quản lý phiên bản phân tán"},
-        {"t":163.97,"den":210.14,"ten":"GitHub là gì"},
-        {"t":210.14,"den":253.22,"ten":"Git và GitHub — so từng dòng"},
-        {"t":253.22,"den":334.76,"ten":"Git ra đời thế nào — chuyện có thật"},
-        {"t":334.76,"den":379.72,"ten":"Vì sao nó ra đời — mục tiêu thiết kế"},
-        {"t":379.72,"den":425.08,"ten":"Quan trọng tới mức nào — con số"},
-        {"t":425.08,"den":475.55,"ten":"Git giúp gì cho chính bạn"},
-        {"t":475.55,"den":511.02,"ten":"Bắt đầu sai chỗ: Upload files"},
-        {"t":511.02,"den":562.76,"ten":"Thực hành · 10 phút"},
-        {"t":562.76,"den":611.16,"ten":"Tóm tắt"}
+        {"t":0,"den":119.67,"ten":"Chào bạn · Bắt đầu tại đây · Ba dòng lệnh chép của bạn"},
+        {"t":119.67,"den":210.14,"ten":"Định nghĩa: hệ quản lý phiên bản phân tán · GitHub là gì"},
+        {"t":210.14,"den":334.76,"ten":"Git và GitHub — so từng dòng"},
+        {"t":334.76,"den":425.08,"ten":"Vì sao nó ra đời — mục tiêu thiết kế"},
+        {"t":425.08,"den":511.02,"ten":"Git giúp gì cho chính bạn · Bắt đầu sai chỗ: Upload files"},
+        {"t":511.02,"den":611.16,"ten":"Thực hành · 10 phút · Tóm tắt"}
       ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 0.5 của khoá Git và GitHub: Bắt đầu tại đây, phần một."},
@@ -484,18 +431,13 @@
         {"t":601.85,"vi":"Làm phần Thực hành: tạo tài khoản GitHub, tìm commit đầu tiên của Git, rồi hẵng sang bài mới nhé."}
       ]
     },
-    "git-0-6-bat-dau-khi-khong-co-git": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/00-gioi-thieu/00-06-khi-khong-co-git-3a31aaae.mp4","durationSec":548.11,"nguonCau":"thoigian",
+    "git-0-6-bat-dau-khi-khong-co-git": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/00-gioi-thieu/00-06-khi-khong-co-git-3a31aaae.mp4","durationSec":548.11,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":30.71,"ten":"Chào bạn · Bắt đầu tại đây (2/2)"},
-        {"t":30.71,"den":85.56,"ten":"Một tuần đồ án không có Git"},
-        {"t":85.56,"den":134.48,"ten":"Toy Story 2 suýt bị xoá sạch (1998)"},
-        {"t":134.48,"den":186.89,"ten":"GitLab.com mất sáu giờ dữ liệu (2017)"},
-        {"t":186.89,"den":251.82,"ten":"Uber 2016 · 28,65 triệu bí mật"},
-        {"t":251.82,"den":295.21,"ten":"Tình huống minh hoạ — rất có thể là nhóm bạn"},
-        {"t":295.2,"den":350.02,"ten":"Vì sao người mới hay bỏ Git"},
-        {"t":350.02,"den":399.26,"ten":"Bảy lời khuyên + Git chỉ đường"},
-        {"t":399.26,"den":448.4,"ten":"Lộ trình tối thiểu · nhịp một buổi học"},
-        {"t":448.4,"den":498.54,"ten":"Thực hành · commit đầu tiên hôm nay"},
+        {"t":0,"den":85.56,"ten":"Chào bạn · Bắt đầu tại đây (2/2)"},
+        {"t":85.56,"den":186.89,"ten":"Toy Story 2 suýt bị xoá sạch (1998)"},
+        {"t":186.89,"den":295.21,"ten":"Uber 2016 · 28,65 triệu bí mật"},
+        {"t":295.2,"den":399.26,"ten":"Vì sao người mới hay bỏ Git · Bảy lời khuyên + Git chỉ đường"},
+        {"t":399.26,"den":498.54,"ten":"Lộ trình tối thiểu · nhịp một buổi học"},
         {"t":498.53,"den":548.11,"ten":"Tóm tắt"}
       ],
       "cues": [
@@ -562,8 +504,14 @@
         {"t":536.3,"vi":"Bạn mở bài này trên cuongthai.com, ngay dưới video, làm phần Thực hành để có commit đầu tiên, rồi hẵng sang bài mới nhé."}
       ]
     },
-    "git-1-0-slides": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/02-mo-hinh/02-00-slide-chuong-1-f65e82d2.mp4","durationSec":390.13,"nguonCau":"srt",
-      "parts": [],
+    "git-1-0-slides": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/02-mo-hinh/02-00-slide-chuong-1-f65e82d2.mp4","durationSec":390.13,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":96.51,"ten":"Chào bạn · Chương 1 trong 16 slide · Bản đồ chương"},
+        {"t":96.51,"den":171.9,"ten":"git status là bản đồ ba cây"},
+        {"t":171.9,"den":248.19,"ten":"Gọi tên commit · Vòng lặp hằng ngày"},
+        {"t":248.19,"den":340.72,"ten":"Lời nhắn commit tốt · Conventional Commits"},
+        {"t":340.72,"den":390.13,"ten":"Thực hành chương 1 (30 phút)"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Chương 1 của khoá Git và GitHub: cả chương trong mười sáu slide."},
         {"t":12.63,"vi":"Chương Khởi động nhanh đã đưa cả nhóm lên GitHub, và bạn đã gõ add, commit, push mỗi ngày."},
@@ -622,8 +570,16 @@
         {"t":385.6,"vi":"Bắt đầu từ bài 1.1 nhé."}
       ]
     },
-    "git-1-1-ba-cai-cay": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/02-mo-hinh/02-01-ba-cai-cay-dbccd0a2.mp4","durationSec":616.46,"nguonCau":"srt",
-      "parts": [],
+    "git-1-1-ba-cai-cay": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/02-mo-hinh/02-01-ba-cai-cay-dbccd0a2.mp4","durationSec":616.46,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":99.81,"ten":"Chào bạn · Chương 1 Bài 1.1 · Một file hiện hai lần"},
+        {"t":99.81,"den":195.89,"ten":"Ba cái cây là gì · Slide: vòng tuần hoàn ba cây"},
+        {"t":195.89,"den":273.52,"ten":"Chạy thật: tạo ba phiên bản"},
+        {"t":273.52,"den":392.19,"ten":"Đọc git status như bản đồ"},
+        {"t":392.19,"den":487.6,"ten":"Dạng ngắn: hai cột · Lỗi kinh điển: add rồi sửa tiếp"},
+        {"t":487.6,"den":563.9,"ten":"Thực hành · Tự kiểm"},
+        {"t":563.9,"den":616.46,"ten":"Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Chương 1 của khoá Git và GitHub, bài 1.1: ba cái cây."},
         {"t":12.45,"vi":"Ở chương Khởi động nhanh, cả nhóm đã gõ add, commit, push mỗi ngày, và bài 0.4 đã dựng sân tập thu-git."},
@@ -729,8 +685,16 @@
         {"t":604.03,"vi":"Hiểu ba cây rồi, bạn làm phần Thực hành ngay dưới video, rồi vào Code Lab Git luyện đọc MM, M và hai dấu hỏi cho thật nhanh nhé."}
       ]
     },
-    "git-1-2-commit-la-gi": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/02-mo-hinh/02-02-commit-la-gi-dcbf0aa6.mp4","durationSec":635.2,"nguonCau":"srt",
-      "parts": [],
+    "git-1-2-commit-la-gi": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/02-mo-hinh/02-02-commit-la-gi-dcbf0aa6.mp4","durationSec":635.2,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":96.83,"ten":"Chào bạn · Bài 1.2 · Ảnh chụp, không phải biên lai"},
+        {"t":96.83,"den":174.94,"ten":"Bốn phần của một commit · Chạy thật: mở commit bằng cat-file"},
+        {"t":174.94,"den":253.97,"ten":"Lần xuống: commit → tree → blob"},
+        {"t":253.97,"den":368.73,"ten":"Slide: đổi một byte là đổi cả tên"},
+        {"t":368.73,"den":473.66,"ten":"Chạy thật: chỉ sửa lời nhắn, mã vẫn đổi"},
+        {"t":473.66,"den":555.62,"ten":"SHA-1 và chuyện đụng độ · Thực hành"},
+        {"t":555.62,"den":635.2,"ten":"Tự kiểm · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 1.2 của khoá Git và GitHub."},
         {"t":9.71,"vi":"Bài trước mình đã gặp ba cái cây, và biết git commit biến index thành một tấm ảnh rồi dời HEAD tới đó."},
@@ -837,8 +801,16 @@
         {"t":623.57,"vi":"Hiểu commit rồi, bạn làm phần Thực hành ngay dưới video, lần tay từ HEAD xuống blob, rồi vào Code Lab Git luyện thêm nhé."}
       ]
     },
-    "git-1-3-vong-lap-hang-ngay": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/02-mo-hinh/02-03-vong-lap-hang-ngay-9310713b.mp4","durationSec":657.57,"nguonCau":"srt",
-      "parts": [],
+    "git-1-3-vong-lap-hang-ngay": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/02-mo-hinh/02-03-vong-lap-hang-ngay-9310713b.mp4","durationSec":657.57,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":80.9,"ten":"Chào bạn · Bài 1.3 · Bốn lệnh, chín mươi phần trăm"},
+        {"t":80.9,"den":174.31,"ten":"Ba khuôn mặt của git diff · Đọc một diff thật"},
+        {"t":174.31,"den":284.76,"ten":"Slide: đọc một diff trong mười giây"},
+        {"t":284.76,"den":366.19,"ten":"Slide: một file, hai commit gọn gàng · Chạy thật: git add -p"},
+        {"t":366.19,"den":464.87,"ten":"Commit, và đọc dòng xác nhận"},
+        {"t":464.87,"den":582.98,"ten":"Bẫy: commit -am theo phản xạ"},
+        {"t":582.98,"den":657.57,"ten":"Tự kiểm · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 1.3 của khoá Git và GitHub."},
         {"t":9.71,"vi":"Bài trước mình đã mở một commit ra: một tấm ảnh trọn dự án, gọi tên bằng mã băm, nối về commit cha."},
@@ -948,8 +920,15 @@
         {"t":645.51,"vi":"Quen tay rồi, bạn làm phần Thực hành dưới video, chẻ một file bừa bộn thành hai commit, rồi vào Code Lab Git luyện add -p nhé."}
       ]
     },
-    "git-1-5-gitignore": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/02-mo-hinh/02-05-gitignore-0f36059a.mp4","durationSec":609.19,"nguonCau":"srt",
-      "parts": [],
+    "git-1-5-gitignore": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/02-mo-hinh/02-05-gitignore-0f36059a.mp4","durationSec":609.19,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":114.69,"ten":"Chào bạn · Bài 1.5 · Vạch ranh giới cho kho mã"},
+        {"t":114.69,"den":208.63,"ten":"Bí mật đã commit: xoay trước, dọn sau"},
+        {"t":208.63,"den":321.81,"ten":"Giới hạn của dấu chấm than"},
+        {"t":321.81,"den":439.48,"ten":"Bí mật vẫn nằm trong quá khứ · Ba tầng ignore"},
+        {"t":439.48,"den":519.62,"ten":"Bẫy: ignore luôn lockfile · Thực hành"},
+        {"t":519.62,"den":609.19,"ten":"Tự kiểm · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 1.5, bài cuối của Chương 1."},
         {"t":9.8,"vi":"Bài trước mình đã viết lời nhắn commit nói vì sao, theo quy ước Conventional Commits."},
@@ -1039,8 +1018,14 @@
         {"t":596.4,"vi":"Xong Chương 1 rồi, bạn làm phần Thực hành dưới video, rồi làm bài kiểm tra Chương 1 và luyện Code Lab Git trước khi sang Chương 2 nhé."}
       ]
     },
-    "git-10-0-slides": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/11-kho-lon/11-00-slide-chuong-10-e353d4b4.mp4","durationSec":425.5,"nguonCau":"srt",
-      "parts": [],
+    "git-10-0-slides": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/11-kho-lon/11-00-slide-chuong-10-e353d4b4.mp4","durationSec":425.5,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":97.83,"ten":"Chào bạn · Chương 10 trong 18 slide · Bản đồ chương"},
+        {"t":97.83,"den":189.14,"ten":"Luật của worktree · submodule = gitlink"},
+        {"t":189.14,"den":264.69,"ten":"Chọn cái nào · partial clone + sparse"},
+        {"t":264.69,"den":375.68,"ten":"Git LFS: con trỏ trong Git · LFS không có hiệu lực ngược"},
+        {"t":375.68,"den":425.5,"ten":"Thực hành chương 10 (40 phút)"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Chương 10 của khoá Git và GitHub: kho mã lớn và quy trình nâng cao, cả chương trong mười tám slide."},
         {"t":14.78,"vi":"Chương 9 mở thư mục chấm git: bốn đối tượng, packfile, và lúc một commit mới thật sự biến mất."},
@@ -1110,8 +1095,15 @@
         {"t":420.83,"vi":"Bài kế là 10.1. Hẹn gặp bạn."}
       ]
     },
-    "git-10-1-worktree": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/11-kho-lon/11-01-worktree-d954fbe3.mp4","durationSec":565.94,"nguonCau":"srt",
-      "parts": [],
+    "git-10-1-worktree": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/11-kho-lon/11-01-worktree-d954fbe3.mp4","durationSec":565.94,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":80.48,"ten":"Chào bạn · Bài 10.1 · Lỗi production giữa lúc làm dở"},
+        {"t":80.48,"den":163.32,"ten":"Chạy thật: mở worktree thứ hai"},
+        {"t":163.32,"den":274.55,"ten":"Slide: một .git, nhiều thư mục làm việc"},
+        {"t":274.55,"den":386.53,"ten":"Slide: luật của worktree · Chạy thật: những thứ cần biết"},
+        {"t":386.53,"den":489.75,"ten":"Chỗ nó thật sự giúp, và cách bố trí · Khi nào KHÔNG nên dùng"},
+        {"t":489.75,"den":565.94,"ten":"Tự kiểm ba câu · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 10.1, bài mở đầu Chương 10: kho mã lớn và quy trình nâng cao."},
         {"t":12.86,"vi":"Chương 9 mở nắp capo: thư mục chấm git, bốn đối tượng, packfile và gc."},
@@ -1202,8 +1194,16 @@
         {"t":557.49,"vi":"Bạn làm phần Thực hành dưới video, rồi vào Code Lab Git luyện vá gấp trong worktree nhé."}
       ]
     },
-    "git-10-2-submodule-subtree": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/11-kho-lon/11-02-submodule-subtree-c2d1b810.mp4","durationSec":693.08,"nguonCau":"srt",
-      "parts": [],
+    "git-10-2-submodule-subtree": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/11-kho-lon/11-02-submodule-subtree-c2d1b810.mp4","durationSec":693.08,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":86.79,"ten":"Chào bạn · Bài 10.2 · Một thư viện, ba ứng dụng"},
+        {"t":86.79,"den":185.45,"ten":"Chạy thật: thêm một submodule · Slide: gitlink mode 160000"},
+        {"t":185.45,"den":282.05,"ten":"Chạy thật: bạn An clone thường"},
+        {"t":282.05,"den":388.44,"ten":"Slide: bẫy push kho cha trước kho con"},
+        {"t":388.44,"den":493.91,"ten":"Slide: subtree chép mã vào kho · Chạy thật: subtree"},
+        {"t":493.91,"den":612.7,"ten":"Chạy thật: gỡ một submodule"},
+        {"t":612.7,"den":693.08,"ten":"Tự kiểm ba câu · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 10.2 của Chương 10."},
         {"t":9.14,"vi":"Bài trước: worktree, mở nhiều nhánh cùng lúc mà vẫn một kho."},
@@ -1315,8 +1315,16 @@
         {"t":684.34,"vi":"Bạn làm phần Thực hành dưới video, rồi vào Code Lab Git luyện submodule và subtree nhé."}
       ]
     },
-    "git-10-3-monorepo-lfs": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/11-kho-lon/11-03-monorepo-lfs-af561eab.mp4","durationSec":695.5,"nguonCau":"srt",
-      "parts": [],
+    "git-10-3-monorepo-lfs": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/11-kho-lon/11-03-monorepo-lfs-af561eab.mp4","durationSec":695.5,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":100.03,"ten":"Chào bạn · Bài 10.3 · Khi kho lớn hơn phần việc"},
+        {"t":100.03,"den":215.31,"ten":"Chạy thật: sparse-checkout"},
+        {"t":215.31,"den":311.12,"ten":"Slide: CI chỉ chạy phần đã đổi"},
+        {"t":311.12,"den":403.65,"ten":"Chạy thật: máy chưa có git-lfs"},
+        {"t":403.65,"den":513.42,"ten":"Slide: LFS không có hiệu lực ngược"},
+        {"t":513.42,"den":614.98,"ten":"Đo trước, chọn công cụ sau · Bẫy: bật LFS tưởng kho nhỏ lại"},
+        {"t":614.98,"den":695.5,"ten":"Tự kiểm ba câu · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 10.3, bài cuối của Chương 10."},
         {"t":9.98,"vi":"Bài trước: submodule ghim một commit, subtree chép file thật, và gói npm thường thắng cả hai."},
@@ -1429,8 +1437,15 @@
         {"t":687.8,"vi":"Bạn làm phần Thực hành dưới video, rồi vào Code Lab Git luyện sparse-checkout nhé."}
       ]
     },
-    "git-11-0-slides": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/12-nen-tang-github/12-00-slide-chuong-11-2a86bef3.mp4","durationSec":519.36,"nguonCau":"srt",
-      "parts": [],
+    "git-11-0-slides": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/12-nen-tang-github/12-00-slide-chuong-11-2a86bef3.mp4","durationSec":519.36,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":103.32,"ten":"Chào bạn · Chương 11 trong 18 slide · Bản đồ chương"},
+        {"t":103.32,"den":203.69,"ten":"Một issue làm được việc · Projects: bảng kanban tự chạy"},
+        {"t":203.69,"den":302.92,"ten":"Giải phẫu ci.yml · Kiểm trên máy trước khi push"},
+        {"t":302.92,"den":378.95,"ten":"Secrets & quyền · CI chặn merge"},
+        {"t":378.95,"den":468.18,"ten":"Dependabot và push protection · Quyền, SECURITY.md, nhật ký"},
+        {"t":468.18,"den":519.36,"ten":"Thực hành chương 11 (60 phút)"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Chương 11 của khoá Git và GitHub: nền tảng GitHub, cả chương trong mười tám slide."},
         {"t":13.66,"vi":"Chương trước đi vào kho lớn: worktree, submodule, sparse-checkout."},
@@ -1510,8 +1525,17 @@
         {"t":514.99,"vi":"Bài kế là 11.1. Hẹn gặp bạn."}
       ]
     },
-    "git-11-1-issue-projects-gh": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/12-nen-tang-github/12-01-issue-projects-gh-f1bf49b3.mp4","durationSec":731.34,"nguonCau":"srt",
-      "parts": [],
+    "git-11-1-issue-projects-gh": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/12-nen-tang-github/12-01-issue-projects-gh-f1bf49b3.mp4","durationSec":731.34,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":83.62,"ten":"Chào bạn · Bài 11.1 · Báo lỗi rơi trong nhóm chat"},
+        {"t":83.62,"den":171.59,"ten":"Slide: một issue làm được việc · Chạy thật: issue #12"},
+        {"t":171.59,"den":263.41,"ten":"Nhãn: ba trục · Slide: milestone và Projects"},
+        {"t":263.41,"den":344.15,"ten":"Chạy thật: mẫu issue · Slide: issue → nhánh → PR → tự đóng"},
+        {"t":344.15,"den":428.86,"ten":"Chạy thật: Closes #12 · Bốn kiểu tham chiếu"},
+        {"t":428.86,"den":538.63,"ten":"Slide: CLI gh · Chạy thật: help của gh"},
+        {"t":538.63,"den":644.51,"ten":"Issue, discussion hay pull request · Thực hành"},
+        {"t":644.51,"den":731.34,"ten":"Tự kiểm · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 11.1, bài đầu của Chương 11: nền tảng GitHub."},
         {"t":12.28,"vi":"Chương 6 bạn đã mở pull request, và thấy dòng closes số một tự đóng một issue."},
@@ -1617,8 +1641,19 @@
         {"t":720.81,"vi":"Bạn làm phần Thực hành dưới video, rồi vào Code Lab Git luyện viết một issue và một lời nhắn có Closes nhé."}
       ]
     },
-    "git-11-2-actions": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/12-nen-tang-github/12-02-actions-3f2eca1d.mp4","durationSec":824.49,"nguonCau":"srt",
-      "parts": [],
+    "git-11-2-actions": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/12-nen-tang-github/12-02-actions-3f2eca1d.mp4","durationSec":824.49,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":92.84,"ten":"Chào bạn · Bài 11.2 · \"Chạy được trên máy em\""},
+        {"t":92.84,"den":168.5,"ten":"Slide: sự kiện → workflow → job → step"},
+        {"t":168.5,"den":262.53,"ten":"Chạy thật: file ci.yml của thu-git · Các trigger"},
+        {"t":262.53,"den":340.39,"ten":"Chạy thật: một lượt xanh · Slide: cache"},
+        {"t":340.39,"den":418.54,"ten":"Slide: matrix · Chạy thật: bắt \"chạy được trên máy em\""},
+        {"t":418.54,"den":499.02,"ten":"Slide: secrets & quyền · Chạy thật: che chỉ là khớp chuỗi"},
+        {"t":499.02,"den":576.38,"ten":"Slide + chạy thật: kiểm trước khi push · Đọc một lần hỏng"},
+        {"t":576.38,"den":671.02,"ten":"Slide: CI chặn merge, và ba sai lầm"},
+        {"t":671.02,"den":769.16,"ten":"Thực hành · Tự kiểm"},
+        {"t":769.16,"den":824.49,"ten":"Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 11.2: GitHub Actions, CI từ số không."},
         {"t":11.58,"vi":"Bài 11.1 nối issue với mã nguồn."},
@@ -1744,8 +1779,24 @@
         {"t":815.47,"vi":"Bạn làm phần Thực hành dưới video, rồi vào Code Lab Git luyện đọc một file workflow nhé."}
       ]
     },
-    "git-11-4-bao-mat-kho": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/12-nen-tang-github/12-03-bao-mat-kho-tron-5c9c5ad9.mp4","durationSec":1410.52,"nguonCau":"srt",
-      "parts": [],
+    "git-11-4-bao-mat-kho": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/12-nen-tang-github/12-03-bao-mat-kho-tron-5c9c5ad9.mp4","durationSec":1410.52,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":5.1,"den":92.85,"ten":"Phần 1 · Chào bạn · Bài 11.3, phần 1 · Laptop của một bạn bị mất"},
+        {"t":92.85,"den":176.95,"ten":"Phần 1 · Slide: sáu lớp · Lớp 1: xác thực hai lớp"},
+        {"t":176.95,"den":272.81,"ten":"Phần 1 · Chạy thật: bật 2FA · Passkey, và thứ 2FA không bảo vệ"},
+        {"t":272.81,"den":355.86,"ten":"Phần 1 · Lớp 2: ai vào được · Slide: năm vai trò"},
+        {"t":355.86,"den":441.64,"ten":"Phần 1 · Chạy thật: tổ chức của nhóm"},
+        {"t":441.64,"den":543.82,"ten":"Phần 1 · Lớp 3: mã bạn không tự viết"},
+        {"t":543.82,"den":649.54,"ten":"Phần 1 · Slide + chạy thật: dependabot.yml · Thực hành"},
+        {"t":649.54,"den":748.99,"ten":"Phần 1 · Tự kiểm · Tóm tắt"},
+        {"t":748.99,"den":857.93,"ten":"Phần 2 · Chào bạn · Bài 11.3, phần 2 · \"Em xoá .env ở commit sau rồi\""},
+        {"t":857.93,"den":960.77,"ten":"Phần 2 · Slide: push protection"},
+        {"t":960.77,"den":1036.43,"ten":"Phần 2 · Chạy thật: bí mật ở commit cũ hơn"},
+        {"t":1036.43,"den":1117.74,"ten":"Phần 2 · Khoá thật đã lên: thu hồi trước"},
+        {"t":1117.74,"den":1228.69,"ten":"Phần 2 · Slide: SECURITY.md và nhật ký · Lớp 6: security log"},
+        {"t":1228.69,"den":1321.25,"ten":"Phần 2 · Slide: không lớp nào đủ một mình · Thực hành"},
+        {"t":1321.25,"den":1410.52,"ten":"Phần 2 · Tự kiểm · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 11.3: bảo mật và quản trị kho trên GitHub."},
         {"t":11.72,"vi":"Bài dài nên chia hai phần, đây là phần một."},
@@ -1949,8 +2000,15 @@
         {"t":1399.08,"vi":"Bạn làm phần Thực hành dưới video, rồi vào Code Lab Git nhé."}
       ]
     },
-    "git-12-0-slides": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/13-hook-ky/13-00-slide-chuong-12-f6162b42.mp4","durationSec":504.83,"nguonCau":"srt",
-      "parts": [],
+    "git-12-0-slides": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/13-hook-ky/13-00-slide-chuong-12-f6162b42.mp4","durationSec":504.83,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":114.11,"ten":"Chào bạn · Chương 12 trong 18 slide · Bản đồ chương"},
+        {"t":114.11,"den":192.59,"ten":"Hook là một file · pre-commit chặn xung đột và file lớn"},
+        {"t":192.59,"den":283.07,"ten":".git/hooks không đi theo clone"},
+        {"t":283.07,"den":379.23,"ten":"Tác giả là chữ tự khai · Ký bằng khoá SSH"},
+        {"t":379.23,"den":465.97,"ten":"Rebase và chữ ký · Máy chủ từ chối: pre-receive"},
+        {"t":465.97,"den":504.83,"ten":"Thực hành chương 12 (40 phút)"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Chương 12 của khoá Git và GitHub: hook, ký commit và tự động hoá, cả chương trong mười tám slide."},
         {"t":15.27,"vi":"Chương 11 đưa nhóm lên GitHub: issue, Actions, và sáu lớp bảo mật kho."},
@@ -2019,8 +2077,16 @@
         {"t":500.09,"vi":"Bài kế là 12.1. Hẹn gặp bạn."}
       ]
     },
-    "git-12-1-hooks": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/13-hook-ky/13-01-hooks-1a36fcde.mp4","durationSec":737.61,"nguonCau":"srt",
-      "parts": [],
+    "git-12-1-hooks": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/13-hook-ky/13-01-hooks-1a36fcde.mp4","durationSec":737.61,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":112.99,"ten":"Chào bạn · Bài 12.1 · Ký hiệu xung đột lên main"},
+        {"t":112.99,"den":212.38,"ten":"Chạy thật: hook là một file · Những hook đáng biết"},
+        {"t":212.38,"den":307.31,"ten":"Chạy thật: pre-commit chặn sai lầm tệ nhất"},
+        {"t":307.31,"den":422.46,"ten":"Chạy thật: .git/hooks không được chia sẻ · Chạy thật: husky"},
+        {"t":422.46,"den":535.73,"ten":"Chạy thật: lint-staged · Chạy thật: commit-msg ép quy ước"},
+        {"t":535.73,"den":656.97,"ten":"Bỏ qua, một cách có chủ ý · Thực hành"},
+        {"t":656.97,"den":737.61,"ten":"Tự kiểm · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 12.1, bài đầu của Chương 12: hook, ký commit và tự động hoá."},
         {"t":13.94,"vi":"Chương 11 có CI: một máy tự kiểm mỗi pull request, vài phút sau mới có kết quả."},
@@ -2130,8 +2196,17 @@
         {"t":729.94,"vi":"Bạn làm phần Thực hành dưới video, rồi vào Code Lab Git luyện viết một hook nhé."}
       ]
     },
-    "git-12-2-ky-commit": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/13-hook-ky/13-02-ky-commit-d1963ef4.mp4","durationSec":771.93,"nguonCau":"srt",
-      "parts": [],
+    "git-12-2-ky-commit": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/13-hook-ky/13-02-ky-commit-d1963ef4.mp4","durationSec":771.93,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":81.11,"ten":"Chào bạn · Bài 12.2 · Chạy thật: commit dưới tên Linus"},
+        {"t":81.11,"den":165.77,"ten":"Tên trên phong bì, và con dấu"},
+        {"t":165.77,"den":258.15,"ten":"Chạy thật: xác minh ở máy mình · Slide + chạy thật: đọc %G?"},
+        {"t":258.15,"den":349.99,"ten":"Chạy thật: G không nói về tên tác giả"},
+        {"t":349.99,"den":443.97,"ten":"Slide: Signing key và nhãn Verified · Vigilant mode"},
+        {"t":443.97,"den":544.72,"ten":"Chạy thật: ký tag phát hành"},
+        {"t":544.72,"den":684.44,"ten":"Những thứ chữ ký không giải quyết · Thực hành"},
+        {"t":684.44,"den":771.93,"ten":"Tự kiểm · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 12.2: ký commit, chứng minh ai đã viết gì."},
         {"t":11.49,"vi":"Bài 12.1 dùng hook để chặn lỗi sớm trên máy bạn, và thấy hook bỏ qua được."},
@@ -2243,8 +2318,22 @@
         {"t":769.62,"vi":"nhé."}
       ]
     },
-    "git-12-4-chinh-sach-may-chu": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/13-hook-ky/13-03-chinh-sach-may-chu-tron-fbb170f1.mp4","durationSec":1210.07,"nguonCau":"srt",
-      "parts": [],
+    "git-12-4-chinh-sach-may-chu": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/13-hook-ky/13-03-chinh-sach-may-chu-tron-fbb170f1.mp4","durationSec":1210.07,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":5.1,"den":91.38,"ten":"Phần 1 · Chào bạn · Bài 12.3, phần 1 · Ba đường vòng qua hook"},
+        {"t":91.38,"den":203.81,"ten":"Phần 1 · Slide + chạy thật: ba chỗ một phép kiểm chạy"},
+        {"t":203.81,"den":286.49,"ten":"Phần 1 · Máy chủ từ chối một lần push thế nào"},
+        {"t":286.49,"den":393.95,"ten":"Phần 1 · Hook pre-receive của sân tập"},
+        {"t":393.95,"den":475.14,"ten":"Phần 1 · Chạy thật: đã ký vẫn bị từ chối"},
+        {"t":475.14,"den":573.4,"ten":"Phần 1 · Thực hành · Tự kiểm"},
+        {"t":573.4,"den":663.02,"ten":"Phần 1 · Tóm tắt · Chào bạn · Bài 12.3, phần 2"},
+        {"t":663.02,"den":753.31,"ten":"Phần 2 · Slide: github.com không cho pre-receive · Các luật dựng sẵn"},
+        {"t":753.31,"den":831.44,"ten":"Phần 2 · Chạy thật: push ruleset tự làm · Job CI kiểm lại mọi thứ"},
+        {"t":831.44,"den":946.16,"ten":"Phần 2 · Chạy thật: fetch-depth và dải ba chấm"},
+        {"t":946.16,"den":1050.45,"ten":"Phần 2 · Slide + chạy thật: pre-push và post-merge"},
+        {"t":1050.45,"den":1157.29,"ten":"Phần 2 · Cách nghĩ · Thực hành"},
+        {"t":1157.29,"den":1210.07,"ten":"Phần 2 · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 12.3: cưỡng chế thật, bằng hook phía máy chủ, ruleset và CI."},
         {"t":13.35,"vi":"Bài dài nên chia hai phần, đây là phần một."},
@@ -2409,8 +2498,13 @@
         {"t":1198.63,"vi":"Bạn làm phần Thực hành dưới video, rồi vào Code Lab Git nhé."}
       ]
     },
-    "git-13-0-slides": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/14-cuu-ho/14-00-slide-chuong-13-3f9c6329.mp4","durationSec":352.42,"nguonCau":"srt",
-      "parts": [],
+    "git-13-0-slides": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/14-cuu-ho/14-00-slide-chuong-13-3f9c6329.mp4","durationSec":352.42,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":81.19,"ten":"Chào bạn · Chương 13 trong 18 slide · Bản đồ chương"},
+        {"t":81.19,"den":160.61,"ten":"Sơ đồ chọn lệnh cứu · Công thức 1: nhầm nhánh"},
+        {"t":160.61,"den":242,"ten":"Công thức 5: HEAD lìa cành · Công thức 6: lỡ drop stash"},
+        {"t":242,"den":352.42,"ten":"push không deploy · Tự review diff"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Chương 13 của khoá Git và GitHub: cứu hộ, và Git trong quy trình thật, cả chương trong mười tám slide."},
         {"t":15.13,"vi":"Chương 12 dựng hàng rào: hook, chữ ký, và luật phía máy chủ."},
@@ -2472,8 +2566,23 @@
         {"t":349.84,"vi":"Hẹn gặp bạn."}
       ]
     },
-    "git-13-1-cuu-ho": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/14-cuu-ho/14-01-cuu-ho-tron-7f3e75ba.mp4","durationSec":1343.28,"nguonCau":"srt",
-      "parts": [],
+    "git-13-1-cuu-ho": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/14-cuu-ho/14-01-cuu-ho-tron-7f3e75ba.mp4","durationSec":1343.28,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":5.1,"den":86.8,"ten":"Phần 1 · Chào bạn · Bài 13.1 · Một giờ sáng, code vừa biến mất"},
+        {"t":86.8,"den":193.34,"ten":"Phần 1 · Slide: luật sống sót · Chạy thật: thứ chưa commit mất thật"},
+        {"t":193.34,"den":282.19,"ten":"Phần 1 · Chạy thật: phòng thí nghiệm thảm hoạ"},
+        {"t":282.19,"den":366.19,"ten":"Phần 1 · Bẫy: đảo thứ tự hai lệnh"},
+        {"t":366.19,"den":467.08,"ten":"Phần 1 · Chạy thật: công thức 2 · Slide: công thức 3, xoá nhầm nhánh"},
+        {"t":467.08,"den":578.06,"ten":"Phần 1 · Slide: HEAD lìa cành, và tôi đã commit ở đó"},
+        {"t":578.06,"den":662.23,"ten":"Phần 1 · Tự kiểm ba câu · Tóm tắt"},
+        {"t":662.23,"den":767.06,"ten":"Phần 2 · Chào bạn · Bài 13.1 phần 2"},
+        {"t":767.06,"den":858.04,"ten":"Phần 2 · Chạy thật: merge đã xong, dùng ORIG_HEAD"},
+        {"t":858.04,"den":959.93,"ten":"Phần 2 · Chạy thật: commit tồi đã push, revert"},
+        {"t":959.93,"den":1067.74,"ten":"Phần 2 · Khi máy bạn cũng mất: hỏi GitHub"},
+        {"t":1067.74,"den":1192.31,"ten":"Phần 2 · Chạy thật: kho trông như bị hỏng · Slide: lỡ drop stash"},
+        {"t":1192.31,"den":1298.44,"ten":"Phần 2 · Slide: danh sách kiểm lúc hoảng · Thực hành"},
+        {"t":1298.44,"den":1343.28,"ten":"Phần 2 · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 13.1, bài mở đầu Chương 13: cứu hộ, và Git trong quy trình thật."},
         {"t":13.56,"vi":"Chương 12 dựng hàng rào: hook ở máy, chữ ký trên commit, và luật ở phía máy chủ."},
@@ -2687,8 +2796,16 @@
         {"t":1330.74,"vi":"Bạn làm phần Thực hành dưới video, rồi vào Code Lab Git luyện cứu kho nhé."}
       ]
     },
-    "git-13-2-quy-trinh-that": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/14-cuu-ho/14-03-quy-trinh-that-25f276f6.mp4","durationSec":611.66,"nguonCau":"srt",
-      "parts": [],
+    "git-13-2-quy-trinh-that": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/14-cuu-ho/14-03-quy-trinh-that-25f276f6.mp4","durationSec":611.66,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":102.94,"ten":"Chào bạn · Bài 13.2 · Push lên main thì web tự cập nhật?"},
+        {"t":102.94,"den":217.35,"ten":"Slide: push không deploy · Chạy thật: push kích hoạt cái gì?"},
+        {"t":217.35,"den":319.51,"ten":"Slide: tự review diff, năm phút đáng giá nhất"},
+        {"t":319.51,"den":397.18,"ten":"Slide: agent AI, mỗi phiên một worktree"},
+        {"t":397.18,"den":494.17,"ten":"Mỗi chương xuất hiện ở đâu trong một tuần"},
+        {"t":494.17,"den":570.07,"ten":"Thực hành · Tự kiểm ba câu"},
+        {"t":570.07,"den":611.66,"ten":"Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 13.2, bài khép lại Chương 13."},
         {"t":10.48,"vi":"Bài 13.1 là sách công thức cứu hộ: tấm bản đồ, abort, ORIG_HEAD, revert, fsck."},
@@ -2800,8 +2917,13 @@
         {"t":604.19,"vi":"Bạn làm phần Thực hành dưới video, rồi vào Code Lab Git luyện tự review nhé."}
       ]
     },
-    "git-14-0-slides": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/15-cong-cu-hang-ngay/15-00-slide-chuong-14-4c40b84f.mp4","durationSec":361.47,"nguonCau":"srt",
-      "parts": [],
+    "git-14-0-slides": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/15-cong-cu-hang-ngay/15-00-slide-chuong-14-4c40b84f.mp4","durationSec":361.47,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":84.95,"ten":"Chào bạn · Chương 14 trong 18 slide · Bản đồ chương"},
+        {"t":84.95,"den":162.69,"ten":"Mỗi nút là một lệnh · Merge editor ba khung"},
+        {"t":162.69,"den":235.06,"ten":"GUI để nhìn, terminal để hiểu · Các tầng cấu hình"},
+        {"t":235.06,"den":361.47,"ten":"CRLF và LF · autocrlf và .gitattributes"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Chương 14 của khoá Git và GitHub: Git hằng ngày trong công cụ, cả chương trong mười tám slide."},
         {"t":14.63,"vi":"Chương 13 là cứu hộ và quy trình thật: sơ đồ chọn lệnh cứu, push không deploy, tự review diff."},
@@ -2865,8 +2987,16 @@
         {"t":356.78,"vi":"Bài kế là 14.1. Hẹn gặp bạn."}
       ]
     },
-    "git-14-1-vs-code": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/15-cong-cu-hang-ngay/15-01-vs-code-1bf34c4a.mp4","durationSec":648.42,"nguonCau":"srt",
-      "parts": [],
+    "git-14-1-vs-code": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/15-cong-cu-hang-ngay/15-01-vs-code-1bf34c4a.mp4","durationSec":648.42,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":95.86,"ten":"Chào bạn · Bài 14.1 · Một giờ sáng, nút Commit"},
+        {"t":95.86,"den":196,"ten":"Panel chính là ba cây"},
+        {"t":196,"den":275.99,"ten":"Chạy thật: VS Code stage từng dòng bằng cách nào"},
+        {"t":275.99,"den":354.84,"ten":"Chạy thật: Discard và Undo Last Commit"},
+        {"t":354.84,"den":429.96,"ten":"Slide: merge editor ba khung"},
+        {"t":429.96,"den":528.12,"ten":"Chạy thật: đang rebase thì không commit"},
+        {"t":528.12,"den":648.42,"ten":"Thực hành · Tự kiểm ba câu"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 14.1, bài mở đầu Chương 14: Git hằng ngày trong công cụ."},
         {"t":13.16,"vi":"Chương 13 là cứu hộ: tấm bản đồ, reflog, ORIG_HEAD, và quy trình thật của một trang web."},
@@ -2979,8 +3109,16 @@
         {"t":640.57,"vi":"Bạn làm phần Thực hành dưới video, rồi vào Code Lab Git luyện stage từng dòng nhé."}
       ]
     },
-    "git-14-2-gitlens-desktop": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/15-cong-cu-hang-ngay/15-02-gitlens-desktop-508e8b9c.mp4","durationSec":554.95,"nguonCau":"srt",
-      "parts": [],
+    "git-14-2-gitlens-desktop": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/15-cong-cu-hang-ngay/15-02-gitlens-desktop-508e8b9c.mp4","durationSec":554.95,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":95.64,"ten":"Chào bạn · Bài 14.2 · Màn hình mình thấy, màn hình cậu không"},
+        {"t":95.64,"den":178.05,"ten":"Git Graph: bản đồ cả kho"},
+        {"t":178.05,"den":265.01,"ten":"GitHub Desktop cho bạn sợ terminal"},
+        {"t":265.01,"den":353.15,"ten":"lazygit: phím đáng học trước"},
+        {"t":353.15,"den":430.08,"ten":"Chạy thật: incoming và outgoing · Chọn công cụ theo câu hỏi"},
+        {"t":430.08,"den":512.89,"ten":"Thực hành · Tự kiểm ba câu"},
+        {"t":512.89,"den":554.95,"ten":"Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 14.2, nhìn lịch sử bằng đồ hoạ."},
         {"t":10.59,"vi":"Bài 14.1: mỗi nút VS Code là một lệnh Git, Stage Selected Ranges, và merge editor ba khung."},
@@ -3069,8 +3207,16 @@
         {"t":547.24,"vi":"Bạn làm phần Thực hành dưới video, rồi vào Code Lab Git luyện đọc đồ thị nhé."}
       ]
     },
-    "git-14-3-cau-hinh": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/15-cong-cu-hang-ngay/15-03-cau-hinh-58a74f50.mp4","durationSec":597.06,"nguonCau":"srt",
-      "parts": [],
+    "git-14-3-cau-hinh": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/15-cong-cu-hang-ngay/15-03-cau-hinh-58a74f50.mp4","durationSec":597.06,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":90.46,"ten":"Chào bạn · Bài 14.3 · Ba tuần commit dưới cái tên sai"},
+        {"t":90.46,"den":177.72,"ten":"Chạy thật: hỏi Git mỗi giá trị từ đâu ra"},
+        {"t":177.72,"den":267.17,"ten":"Slide: alias và sáu thiết lập"},
+        {"t":267.17,"den":395.11,"ten":"Chạy thật: rerere nhớ cách giải xung đột"},
+        {"t":395.11,"den":477.16,"ten":"Slide: hai cái bẫy, đều im lặng · Chạy thật: hai cái bẫy"},
+        {"t":477.16,"den":555.87,"ten":"Thực hành · Tự kiểm ba câu"},
+        {"t":555.87,"den":597.06,"ten":"Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 14.3, cấu hình Git một lần cho mọi kho bạn sẽ mở."},
         {"t":11.92,"vi":"Bài 14.2: năm công cụ nhìn lịch sử, incoming và outgoing, và terminal là trọng tài."},
@@ -3167,8 +3313,17 @@
         {"t":589.03,"vi":"Bạn làm phần Thực hành dưới video, rồi vào Code Lab Git luyện cấu hình nhé."}
       ]
     },
-    "git-14-4-windows-crlf": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/15-cong-cu-hang-ngay/15-04-windows-crlf-7ed30b2c.mp4","durationSec":681.58,"nguonCau":"srt",
-      "parts": [],
+    "git-14-4-windows-crlf": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/15-cong-cu-hang-ngay/15-04-windows-crlf-7ed30b2c.mp4","durationSec":681.58,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":85.85,"ten":"Chào bạn · Bài 14.4 · Mở file, lưu, không sửa chữ nào"},
+        {"t":85.85,"den":191.17,"ten":"Slide: CRLF và LF · Chạy thật: thấy ký tự vô hình"},
+        {"t":191.17,"den":285.9,"ten":"Slide: autocrlf của máy, .gitattributes của kho"},
+        {"t":285.9,"den":365.82,"ten":"Slide: chuẩn hoá bằng renormalize"},
+        {"t":365.82,"den":462.47,"ten":"Chạy thật: đổi tên chỉ khác hoa thường"},
+        {"t":462.47,"den":542.09,"ten":"Chuyện này hỏng thế nào trong đồ án"},
+        {"t":542.09,"den":634.65,"ten":"Thực hành · Tự kiểm ba câu"},
+        {"t":634.65,"den":681.58,"ten":"Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 14.4, bài cuối Chương 14."},
         {"t":10.53,"vi":"Bài 14.3: các tầng cấu hình, --show-origin, alias, và hai danh tính với includeIf."},
@@ -3271,8 +3426,14 @@
         {"t":673.35,"vi":"Bạn làm phần Thực hành dưới video, rồi vào Code Lab Git luyện chuẩn hoá xuống dòng nhé."}
       ]
     },
-    "git-15-0-slides": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/16-github-sinh-vien/16-00-slide-chuong-15-91948e35.mp4","durationSec":493.81,"nguonCau":"srt",
-      "parts": [],
+    "git-15-0-slides": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/16-github-sinh-vien/16-00-slide-chuong-15-91948e35.mp4","durationSec":493.81,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":101.52,"ten":"Chào bạn · Chương 15 trong 18 slide · Bản đồ chương"},
+        {"t":101.52,"den":199.77,"ten":"Profile README · README dự án tốt và tệ"},
+        {"t":199.77,"den":283.5,"ten":"Luồng deploy bằng Actions · Base path và trang trắng"},
+        {"t":283.5,"den":375.92,"ten":"Giới hạn của Pages · Student Developer Pack"},
+        {"t":375.92,"den":493.81,"ten":"PR mã nguồn mở đầu tiên · Fork, upstream và đồng bộ"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Chương 15 của khoá Git và GitHub: GitHub cho sinh viên, cả chương trong mười tám slide."},
         {"t":13.93,"vi":"Chương 14 đưa Git vào công cụ hằng ngày: VS Code, giao diện đồ hoạ, và cấu hình."},
@@ -3340,8 +3501,18 @@
         {"t":488.71,"vi":"Bài kế là 15.1. Hẹn gặp bạn."}
       ]
     },
-    "git-15-1-ho-so-github": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/16-github-sinh-vien/16-01-ho-so-github-09bfb0fc.mp4","durationSec":758.3,"nguonCau":"srt",
-      "parts": [],
+    "git-15-1-ho-so-github": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/16-github-sinh-vien/16-01-ho-so-github-09bfb0fc.mp4","durationSec":758.3,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":119.38,"ten":"Chào bạn · Bài 15.1 · Bốn mươi hồ sơ, ba mươi giây"},
+        {"t":119.38,"den":202.15,"ten":"Slide: profile README · Chạy thật: profile README"},
+        {"t":202.15,"den":277.94,"ten":"Bức tường huy hiệu · Minh hoạ: sáu repo ghim"},
+        {"t":277.94,"den":358.06,"ten":"Slide: README tốt và tệ"},
+        {"t":358.06,"den":446.42,"ten":"Slide: license và topics · Chạy thật: topics và LICENSE"},
+        {"t":446.42,"den":534.79,"ten":"Đồ án ở trường không chỉ của bạn"},
+        {"t":534.79,"den":620.21,"ten":"Chạy thật: Phần mình làm phải khớp lịch sử"},
+        {"t":620.21,"den":711.9,"ten":"Thực hành · Tự kiểm"},
+        {"t":711.9,"den":758.3,"ten":"Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 15.1, bài đầu của Chương 15: GitHub cho sinh viên."},
         {"t":12.46,"vi":"Chương 14 bạn đã dựng hai danh tính bằng includeIf, một cho việc học, một cho việc làm thêm."},
@@ -3457,8 +3628,18 @@
         {"t":749.84,"vi":"Bạn làm phần Thực hành dưới video, rồi vào Code Lab Git luyện kiểm danh tính commit nhé."}
       ]
     },
-    "git-15-2-github-pages": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/16-github-sinh-vien/16-02-github-pages-8b2f9a92.mp4","durationSec":791.36,"nguonCau":"srt",
-      "parts": [],
+    "git-15-2-github-pages": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/16-github-sinh-vien/16-02-github-pages-8b2f9a92.mp4","durationSec":791.36,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":84.01,"ten":"Chào bạn · Bài 15.2 · Một cú bấm, một trang trắng"},
+        {"t":84.01,"den":170.53,"ten":"Slide: hai cách xuất bản"},
+        {"t":170.53,"den":246.46,"ten":"Slide: base path · Chạy thật: trang trắng"},
+        {"t":246.46,"den":348.56,"ten":"Chạy thật: một dòng base · Bẫy: đường dẫn gõ tay trong JSX"},
+        {"t":348.56,"den":431.15,"ten":"Tải lại một đường dẫn sâu · Slide: workflow deploy"},
+        {"t":431.15,"den":517.33,"ten":"Chạy thật: dist không vào Git, actionlint"},
+        {"t":517.33,"den":606.94,"ten":"Chạy thật: DNS và base gạch chéo · Slide: giới hạn của Pages"},
+        {"t":606.94,"den":706.19,"ten":"Bẫy: vì sao link portfolio hỏng · Thực hành"},
+        {"t":706.19,"den":791.36,"ten":"Tự kiểm · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 15.2."},
         {"t":8.27,"vi":"Bài 15.1 bạn đã viết README có dòng Demo."},
@@ -3574,8 +3755,17 @@
         {"t":784.23,"vi":"Bạn làm phần Thực hành dưới video, rồi vào Code Lab Git luyện tiếp nhé."}
       ]
     },
-    "git-15-3-student-pack-codespaces": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/16-github-sinh-vien/16-03-student-pack-codespaces-a270da67.mp4","durationSec":722.67,"nguonCau":"srt",
-      "parts": [],
+    "git-15-3-student-pack-codespaces": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/16-github-sinh-vien/16-03-student-pack-codespaces-a270da67.mp4","durationSec":722.67,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":82.41,"ten":"Chào bạn · Bài 15.3 · Gói quà chưa ai mở"},
+        {"t":82.41,"den":178.21,"ten":"Slide: Student Developer Pack"},
+        {"t":178.21,"den":291.73,"ten":"Tổ hợp cho một sinh viên web · Slide: Codespaces"},
+        {"t":291.73,"den":384.95,"ten":"Chạy thật: một codespace thu nhỏ"},
+        {"t":384.95,"den":475.48,"ten":"Chạy thật: gh codespace · Hạn mức: giờ lõi"},
+        {"t":475.48,"den":554.64,"ten":"Slide: Copilot cho sinh viên"},
+        {"t":554.64,"den":647.81,"ten":"Bẫy: phí phạm Pack thế nào · Thực hành"},
+        {"t":647.81,"den":722.67,"ten":"Tự kiểm · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 15.3."},
         {"t":8.31,"vi":"Bài 15.2, portfolio đã lên GitHub Pages."},
@@ -3675,8 +3865,17 @@
         {"t":715.55,"vi":"Bạn làm phần Thực hành dưới video, rồi vào Code Lab Git luyện tiếp nhé."}
       ]
     },
-    "git-15-4-dong-gop-ma-nguon-mo": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/16-github-sinh-vien/16-04-dong-gop-ma-nguon-mo-dc558d03.mp4","durationSec":677.31,"nguonCau":"srt",
-      "parts": [],
+    "git-15-4-dong-gop-ma-nguon-mo": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/16-github-sinh-vien/16-04-dong-gop-ma-nguon-mo-dc558d03.mp4","durationSec":677.31,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":92.51,"ten":"Chào bạn · Bài 15.4 · Dòng mạnh nhất trên hồ sơ"},
+        {"t":92.51,"den":171.9,"ten":"Chạy thật: tìm issue còn trống · Chạy thật: đọc trước khi gõ"},
+        {"t":171.9,"den":248.05,"ten":"Chạy thật: hỏi trên issue · Chạy thật: fork, clone, upstream"},
+        {"t":248.05,"den":323.26,"ten":"Slide: tam giác fork · Chạy thật: nhánh riêng và sign-off"},
+        {"t":323.26,"den":440.87,"ten":"Chạy thật: PR nhỏ có Fixes #12 · Chạy thật: giữ fork đồng bộ"},
+        {"t":440.87,"den":516.78,"ten":"Chạy thật: gh repo sync · Chạy thật: review tới khi merge"},
+        {"t":516.78,"den":603.29,"ten":"Bẫy: lần đóng góp đầu hỏng thế nào · Thực hành"},
+        {"t":603.29,"den":677.31,"ten":"Tự kiểm · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 15.4, bài cuối của Chương 15."},
         {"t":10.79,"vi":"Bài 5.4 đã dựng phần cơ học fork và upstream, Chương 6 dạy chính pull request."},
@@ -3787,8 +3986,14 @@
         {"t":668.83,"vi":"Bạn làm phần Thực hành dưới video, rồi tìm một good first issue thật và hỏi nhận nhé."}
       ]
     },
-    "git-16-0-slides": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/17-du-an-nhom/17-00-slide-chuong-16-e57c8219.mp4","durationSec":459.95,"nguonCau":"srt",
-      "parts": [],
+    "git-16-0-slides": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/17-du-an-nhom/17-00-slide-chuong-16-e57c8219.mp4","durationSec":459.95,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":101.33,"ten":"Chào bạn · Chương 16 trong 18 slide · Bản đồ chương"},
+        {"t":101.33,"den":192.26,"ten":"Ngày 0: repo có gì · Chủ repo quyết định luật nào bật được"},
+        {"t":192.26,"den":276.27,"ten":"CI tối thiểu và bẫy 0 test · Vòng đời một việc"},
+        {"t":276.27,"den":356.49,"ten":"Bảng Projects · v1.0.0 → hotfix → cherry-pick"},
+        {"t":356.49,"den":459.95,"ten":"Bảng tra nhanh Chương 16 · Sau khoá này: học gì tiếp"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Chương 16, chương cuối của khoá Git và GitHub: dự án nhóm cuối khoá, cả chương trong mười tám slide."},
         {"t":15.35,"vi":"Mười lăm chương trước là từng mảnh: commit, nhánh, pull request, review, tag, hook, CI, cứu hộ."},
@@ -3852,8 +4057,25 @@
         {"t":454.56,"vi":"Bài kế là 16.1. Hẹn gặp bạn."}
       ]
     },
-    "git-16-1-khoi-tao-repo-nhom": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/17-du-an-nhom/17-01-khoi-tao-repo-nhom-tron-96a10418.mp4","durationSec":1477.59,"nguonCau":"srt",
-      "parts": [],
+    "git-16-1-khoi-tao-repo-nhom": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/17-du-an-nhom/17-01-khoi-tao-repo-nhom-tron-96a10418.mp4","durationSec":1477.59,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":5.1,"den":93.91,"ten":"Phần 1 · Chào bạn · Bài 16.1 · Một giờ quyết định ba tuần"},
+        {"t":93.91,"den":174.49,"ten":"Phần 1 · Chương này chạy thế nào · Slide: ba tuần của nhóm 5"},
+        {"t":174.49,"den":269.31,"ten":"Phần 1 · Slide: chủ repo quyết định luật nào bật được"},
+        {"t":269.31,"den":363.16,"ten":"Phần 1 · Chạy thật: tổ chức và quyền · Slide: Ngày 0, repo có gì"},
+        {"t":363.16,"den":473,"ten":"Phần 1 · Chạy thật: ba tệp đầu tiên"},
+        {"t":473,"den":565.57,"ten":"Phần 1 · CONTRIBUTING.md: cả bộ luật trong một trang"},
+        {"t":565.57,"den":659.59,"ten":"Phần 1 · Thực hành · Tự kiểm"},
+        {"t":659.59,"den":755.97,"ten":"Phần 1 · Tóm tắt · Chào bạn · Bài 16.1b"},
+        {"t":755.97,"den":849.19,"ten":"Phần 2 · \"Làm cái lịch\" · Slide: ba tệp khuôn"},
+        {"t":849.19,"den":936.9,"ten":"Phần 2 · Ảnh thật: biểu mẫu trên máy chủ · Mẫu pull request"},
+        {"t":936.9,"den":1016.61,"ten":"Phần 2 · CODEOWNERS: review tự tìm đúng người"},
+        {"t":1016.61,"den":1100.23,"ten":"Phần 2 · Chạy thật: ci.yml · Chạy thật: không test mà CI vẫn xanh"},
+        {"t":1100.23,"den":1220.94,"ten":"Phần 2 · Chạy thật: một test thật · Chạy thật: push bộ khung"},
+        {"t":1220.94,"den":1299.16,"ten":"Phần 2 · Ảnh thật: luật của main trên máy chủ"},
+        {"t":1299.16,"den":1387.48,"ten":"Phần 2 · Ngày 0 hỏng thế nào · Thực hành"},
+        {"t":1387.48,"den":1477.59,"ten":"Phần 2 · Tự kiểm · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Chương 16, chương cuối của khoá Git và GitHub: dự án nhóm cuối khoá."},
         {"t":12.52,"vi":"Chương 15 dựng hồ sơ GitHub và đóng góp mã nguồn mở."},
@@ -4092,8 +4314,23 @@
         {"t":1462.27,"vi":"Bạn làm phần Thực hành dưới video, rồi vào Code Lab Git luyện viết ci.yml và luật cho main nhé."}
       ]
     },
-    "git-16-2-sprint-mo-phong": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/17-du-an-nhom/17-02-sprint-mo-phong-tron-094de273.mp4","durationSec":1293.21,"nguonCau":"srt",
-      "parts": [],
+    "git-16-2-sprint-mo-phong": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/17-du-an-nhom/17-02-sprint-mo-phong-tron-094de273.mp4","durationSec":1293.21,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":5.1,"den":84.17,"ten":"Phần 1 · Chào bạn · Bài 16.2a · Sprint 1: bốn ngày"},
+        {"t":84.17,"den":200.9,"ten":"Phần 1 · Kế hoạch: bốn issue · Chạy thật: mọi người lấy repo về"},
+        {"t":200.9,"den":301.78,"ten":"Phần 1 · Chạy thật: test ở máy rồi mới push"},
+        {"t":301.78,"den":431.31,"ten":"Phần 1 · Chạy thật: Linh, Cường, Trang làm y như vậy"},
+        {"t":431.31,"den":536.03,"ten":"Phần 1 · Bẫy: nhánh càng lâu, va chạm càng to · Thực hành"},
+        {"t":536.03,"den":620.75,"ten":"Phần 1 · Tóm tắt · Chào bạn · Bài 16.2b"},
+        {"t":620.75,"den":710.52,"ten":"Phần 2 · 10:00 thứ Sáu · Ảnh thật: yêu cầu sửa"},
+        {"t":710.52,"den":788.81,"ten":"Phần 2 · Chạy thật: squash #6 và lời nhắn"},
+        {"t":788.81,"den":901.18,"ten":"Phần 2 · Slide: xung đột thật trong config.js"},
+        {"t":901.18,"den":976.54,"ten":"Phần 2 · Chạy thật: test trước khi commit merge"},
+        {"t":976.54,"den":1059.5,"ten":"Phần 2 · Chạy thật: main thẳng tắp · Chạy thật: dọn nhánh sau squash"},
+        {"t":1059.5,"den":1154.36,"ten":"Phần 2 · Ảnh thật: đồ thị của main · Slide: bảng Projects tự chạy"},
+        {"t":1154.36,"den":1241.71,"ten":"Phần 2 · Thực hành · Tự kiểm"},
+        {"t":1241.71,"den":1293.21,"ten":"Phần 2 · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 16.2: một sprint trọn vẹn, chạy thật, từ bốn cái laptop khác nhau."},
         {"t":13.37,"vi":"Bài 16.1 đã dựng repo tự giữ luật: mẫu, CODEOWNERS, CI có test thật, và main bị khoá."},
@@ -4288,8 +4525,23 @@
         {"t":1278.66,"vi":"Bạn làm phần Thực hành dưới video, rồi vào Code Lab Git luyện giải xung đột giữ cả hai phía nhé."}
       ]
     },
-    "git-16-3-phat-hanh-hotfix": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/17-du-an-nhom/17-03-phat-hanh-hotfix-tron-ca8f4b80.mp4","durationSec":1290.99,"nguonCau":"srt",
-      "parts": [],
+    "git-16-3-phat-hanh-hotfix": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/17-du-an-nhom/17-03-phat-hanh-hotfix-tron-ca8f4b80.mp4","durationSec":1290.99,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":5.1,"den":93.38,"ten":"Phần 1 · Chào bạn · Bài 16.3a · \"Thầy chấm bản nào?\""},
+        {"t":93.38,"den":202.92,"ten":"Phần 1 · Chạy thật: main xanh, đọc lại lịch sử"},
+        {"t":202.92,"den":288.92,"ten":"Phần 1 · Commit phát hành cũng đi qua PR · Chạy thật: tag v1.0.0"},
+        {"t":288.92,"den":408.94,"ten":"Phần 1 · Chạy thật: describe, một tên đọc được"},
+        {"t":408.94,"den":485.5,"ten":"Phần 1 · Chạy thật: không ai dời được v1.0.0 · Phát hành hỏng thế nào"},
+        {"t":485.5,"den":573.72,"ten":"Phần 1 · Thực hành · Tự kiểm"},
+        {"t":573.72,"den":660.13,"ten":"Phần 1 · Tóm tắt · Chào bạn · Bài 16.3b"},
+        {"t":660.13,"den":768.77,"ten":"Phần 2 · Thứ Hai: main đã đi tiếp, rồi một báo lỗi"},
+        {"t":768.77,"den":884.48,"ten":"Phần 2 · Hotfix từ tag, không từ main · Chạy thật: một dòng, một test"},
+        {"t":884.48,"den":982.37,"ten":"Phần 2 · Hotfix cũng cần một người đọc"},
+        {"t":982.37,"den":1068.69,"ten":"Phần 2 · Ảnh thật: PR #16 và ô lời nhắn · Chạy thật: bức tranh cuối"},
+        {"t":1068.69,"den":1149.64,"ten":"Phần 2 · Chạy thật: chứng minh mỗi phiên bản chứa gì"},
+        {"t":1149.64,"den":1231.01,"ten":"Phần 2 · Thực hành · Tự kiểm"},
+        {"t":1231.01,"den":1290.99,"ten":"Phần 2 · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 16.3: chốt bản nộp và sửa nó mà không nộp kèm việc làm dở."},
         {"t":12.85,"vi":"Bài 16.2 đã chạy trọn sprint đầu: bốn pull request squash vào main, một xung đột giải ở máy, nhánh dọn sạch."},
@@ -4472,8 +4724,23 @@
         {"t":1277.59,"vi":"Bạn làm phần Thực hành dưới video, rồi vào Code Lab Git luyện hotfix từ tag nhé."}
       ]
     },
-    "git-16-4-su-co-nhom": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/17-du-an-nhom/17-04-su-co-nhom-tron-984aba84.mp4","durationSec":1283.24,"nguonCau":"srt",
-      "parts": [],
+    "git-16-4-su-co-nhom": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/17-du-an-nhom/17-04-su-co-nhom-tron-984aba84.mp4","durationSec":1283.24,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":5.1,"den":88.98,"ten":"Phần 1 · Chào bạn · Bài 16.4a · Hai câu hỏi trước mọi cách cứu"},
+        {"t":88.98,"den":187.36,"ten":"Phần 1 · 1. Bị force-push đè: triệu chứng"},
+        {"t":187.36,"den":310.49,"ten":"Phần 1 · 1. Phòng: --force-with-lease · 2. Lỡ commit .env"},
+        {"t":310.49,"den":391.83,"ten":"Phần 1 · 3. Merge main sai hướng"},
+        {"t":391.83,"den":496.99,"ten":"Phần 1 · 4. Tệp 200 MB · 4. Cứu: dựng lại commit không có tệp đó"},
+        {"t":496.99,"den":575.39,"ten":"Phần 1 · Thực hành · Tự kiểm"},
+        {"t":575.39,"den":672.93,"ten":"Phần 1 · Tóm tắt · Chào bạn · Bài 16.4b"},
+        {"t":672.93,"den":784.71,"ten":"Phần 2 · 5. Máy phòng lab · 5. Chẩn đoán: ai, lấy từ đâu"},
+        {"t":784.71,"den":869.32,"ten":"Phần 2 · 6. Xoá nhầm nhánh · 6. Bị xoá trên máy chủ"},
+        {"t":869.32,"den":957.57,"ten":"Phần 2 · 7. \"Tôi làm trên main suốt hai tuần\" · 7. Cứu bằng bốn nước"},
+        {"t":957.57,"den":1034.72,"ten":"Phần 2 · 8. Xung đột package-lock.json · 8. Lối tắt hấp dẫn"},
+        {"t":1034.72,"den":1141.48,"ten":"Phần 2 · 8. Cách an toàn hơn · Sai lầm gốc đằng sau cả tám"},
+        {"t":1141.48,"den":1223.69,"ten":"Phần 2 · Thực hành · Tự kiểm"},
+        {"t":1223.69,"den":1283.24,"ten":"Phần 2 · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 16.4: tám sự cố mà hầu hết đồ án nhóm nào cũng gặp."},
         {"t":12.47,"vi":"Chương 13 là sách công thức cho tai nạn của một người."},
@@ -4659,8 +4926,13 @@
         {"t":1269.89,"vi":"Bạn làm phần Thực hành dưới video, rồi vào Code Lab Git luyện đủ tám sự cố nhé."}
       ]
     },
-    "git-18-0-slides": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/18-tai-nan-nhom/18-00-slide-chuong-18-f7b15952.mp4","durationSec":366.67,"nguonCau":"srt",
-      "parts": [],
+    "git-18-0-slides": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/18-tai-nan-nhom/18-00-slide-chuong-18-f7b15952.mp4","durationSec":366.67,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":89.39,"ten":"Chào bạn · Chương 18 trong 17 slide · Slide 1: bìa"},
+        {"t":89.39,"den":168.92,"ten":"Slide 4: .gitignore vô tác dụng với tệp đã theo dõi"},
+        {"t":168.92,"den":247.52,"ten":"Slide 8: PR để lâu · Slide 9: pull = fetch + merge"},
+        {"t":247.52,"den":366.67,"ten":"Slide 12: reset hay revert · Slide 13: merge có rào chắn"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Chương 18 của khoá Git và GitHub: tai nạn Git thật của nhóm, cả chương trong mười bảy slide."},
         {"t":14.58,"vi":"Chương 16 dựng kho nhóm cho đúng, và chương Khởi động nhanh đưa cả nhóm lên GitHub."},
@@ -4716,8 +4988,21 @@
         {"t":361.18,"vi":"Bạn làm Thực hành dưới video, rồi vào Code Lab Git nhé."}
       ]
     },
-    "git-18-1-lo-commit-build": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/18-tai-nan-nhom/18-01-lo-commit-build-tron-28930533.mp4","durationSec":1143.02,"nguonCau":"srt",
-      "parts": [],
+    "git-18-1-lo-commit-build": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/18-tai-nan-nhom/18-01-lo-commit-build-tron-28930533.mp4","durationSec":1143.02,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":5.1,"den":114.29,"ten":"Phần 1 · Chào bạn · Bài 18.1 · Hai ngày trước hạn nộp"},
+        {"t":114.29,"den":193.29,"ten":"Phần 1 · Slide: ba loại tệp trong dự án NetBeans"},
+        {"t":193.29,"den":301.5,"ten":"Phần 1 · Chạy thật: An bấm Build rồi git add ."},
+        {"t":301.5,"den":399.92,"ten":"Phần 1 · Chạy thật: lần pull thứ hai bị chặn"},
+        {"t":399.92,"den":492.08,"ten":"Phần 1 · Chạy thật: cái bẫy .gitignore · Thực hành (bước 1–3)"},
+        {"t":492.08,"den":574.53,"ten":"Phần 1 · Tự kiểm ba câu · Tóm tắt"},
+        {"t":574.53,"den":683.97,"ten":"Phần 2 · Chào bạn · Bài 18.1 phần 2"},
+        {"t":683.97,"den":766.4,"ten":"Phần 2 · Chạy thật: gỡ khỏi index, giữ trên đĩa"},
+        {"t":766.4,"den":853.53,"ten":"Phần 2 · Chạy thật: đồng đội chịu gì · Chạy thật: Chi pull êm"},
+        {"t":853.53,"den":972.78,"ten":"Phần 2 · Chạy thật: mật khẩu còn trong lịch sử"},
+        {"t":972.78,"den":1063.38,"ten":"Phần 2 · Phòng ngừa · Thực hành (bước 4–5)"},
+        {"t":1063.38,"den":1143.02,"ten":"Phần 2 · Tự kiểm ba câu · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 18.1, bài mở đầu Chương 18: những tai nạn Git có thật của một nhóm sinh viên."},
         {"t":15.02,"vi":"Chương 16 dựng kho nhóm cho đúng: luật bảo vệ nhánh, CODEOWNERS, CI, rồi một sprint chạy thật."},
@@ -4899,8 +5184,16 @@
         {"t":1130.61,"vi":"Bạn làm phần Thực hành dưới video, rồi vào Code Lab Git luyện tiếp nhé."}
       ]
     },
-    "git-18-2-xung-dot-web-xml": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/18-tai-nan-nhom/18-02-xung-dot-web-xml-eedd4101.mp4","durationSec":633.49,"nguonCau":"srt",
-      "parts": [],
+    "git-18-2-xung-dot-web-xml": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/18-tai-nan-nhom/18-02-xung-dot-web-xml-eedd4101.mp4","durationSec":633.49,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":82.15,"ten":"Chào bạn · Bài 18.2 · Những tệp thuộc về tất cả"},
+        {"t":82.15,"den":211.89,"ten":"Chạy thật: hai nhánh, hai servlet"},
+        {"t":211.89,"den":295.24,"ten":"Chạy thật: đưa main vào nhánh · Chạy thật: đọc xung đột"},
+        {"t":295.24,"den":393.58,"ten":"Chạy thật: cái bẫy xoá dấu hiệu · Chạy thật: giải theo nghĩa"},
+        {"t":393.58,"den":496.11,"ten":"Chạy thật: vì sao để lâu thì tệ hơn"},
+        {"t":496.11,"den":593.2,"ten":"Thực hành · Tự kiểm ba câu"},
+        {"t":593.2,"den":633.49,"ten":"Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 18.2 của chương tai nạn Git trong nhóm."},
         {"t":10.67,"vi":"Bài 18.1: build lọt vào kho, gỡ bằng rm --cached, và mật khẩu phải xoay vòng chứ không chỉ xoá."},
@@ -4996,8 +5289,15 @@
         {"t":626.37,"vi":"Bạn làm phần Thực hành dưới video, rồi vào Code Lab Git luyện tiếp nhé."}
       ]
     },
-    "git-18-3-keo-main-va-push-tu-choi": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/18-tai-nan-nhom/18-03-keo-main-va-push-tu-choi-8fc77859.mp4","durationSec":609.86,"nguonCau":"srt",
-      "parts": [],
+    "git-18-3-keo-main-va-push-tu-choi": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/18-tai-nan-nhom/18-03-keo-main-va-push-tu-choi-8fc77859.mp4","durationSec":609.86,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":115.62,"ten":"Chào bạn · Bài 18.3 · Bốn thông báo đáng sợ"},
+        {"t":115.62,"den":210.34,"ten":"Hai thông báo, hai lý do · Chạy thật: nước đi an toàn"},
+        {"t":210.34,"den":315.48,"ten":"Chạy thật: đường stash · Slide: hai người cùng đẩy lên main"},
+        {"t":315.48,"den":409.7,"ten":"Chạy thật: merge hay rebase · Chạy thật: tai nạn C, --force"},
+        {"t":409.7,"den":533.25,"ten":"Chạy thật: --force-with-lease cũng có giới hạn · Phòng ngừa"},
+        {"t":533.25,"den":609.86,"ten":"Tự kiểm ba câu · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 18.3."},
         {"t":8.4,"vi":"Bài 18.2: hai người cùng sửa web.xml, đoán trước bằng merge-tree, và giải theo nghĩa chứ không theo dấu hiệu."},
@@ -5105,8 +5405,15 @@
         {"t":602.22,"vi":"Bạn làm phần Thực hành dưới video, rồi vào Code Lab Git luyện tiếp nhé."}
       ]
     },
-    "git-18-4-sua-nham-tren-main": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/18-tai-nan-nhom/18-04-sua-nham-tren-main-685d61e8.mp4","durationSec":558.14,"nguonCau":"srt",
-      "parts": [],
+    "git-18-4-sua-nham-tren-main": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/18-tai-nan-nhom/18-04-sua-nham-tren-main-685d61e8.mp4","durationSec":558.14,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":111,"ten":"Chào bạn · Bài 18.4 · Một câu hỏi trước mọi lệnh"},
+        {"t":111,"den":201.37,"ten":"Chạy thật: trường hợp 1, chưa push"},
+        {"t":201.37,"den":283.46,"ten":"Chạy thật: khi reset đi trước"},
+        {"t":283.46,"den":394.43,"ten":"Chạy thật: kiểm sau khi revert · Slide: reset hay revert"},
+        {"t":394.43,"den":486.64,"ten":"Chạy thật: lưới an toàn cục bộ · Thực hành"},
+        {"t":486.64,"den":558.14,"ten":"Tự kiểm ba câu · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 18.4."},
         {"t":8.34,"vi":"Bài 18.3: bốn thông báo khi pull và push, và vì sao --force không phải cách sửa rejected."},
@@ -5212,26 +5519,15 @@
         {"t":551.02,"vi":"Bạn làm phần Thực hành dưới video, rồi vào Code Lab Git luyện tiếp nhé."}
       ]
     },
-    "git-18-5-tu-merge-khong-review": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/18-tai-nan-nhom/18-05-tu-merge-khong-review-13e10b03.mp4","durationSec":651.34,"nguonCau":"srt",
+    "git-18-5-tu-merge-khong-review": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/18-tai-nan-nhom/18-05-tu-merge-khong-review-13e10b03.mp4","durationSec":651.34,"nguonCau":"srt","nguonPhan":"canh",
       "parts": [
-        {"t":5.1,"den":27.55,"ten":"Chào bạn · Bài 18.5"},
-        {"t":27.55,"den":49.77,"ten":"Thay đổi bé tí"},
-        {"t":49.77,"den":68.83,"ten":"Slide: merge không qua PR và merge có rào chắn"},
-        {"t":68.83,"den":102.58,"ten":"Chạy thật: Bình tự merge"},
-        {"t":102.58,"den":146.75,"ten":"Chạy thật: nhận ra sau đó"},
-        {"t":146.75,"den":184.62,"ten":"Chạy thật: tên đẹp không có nghĩa là đã review"},
-        {"t":184.62,"den":223.52,"ten":"Chạy thật: rào chắn mô phỏng của lab"},
-        {"t":223.52,"den":264.03,"ten":"Chạy thật: hook chép từ bài web"},
-        {"t":264.03,"den":300.38,"ten":"Ảnh thật: luật bảo vệ main trên Forgejo"},
-        {"t":300.38,"den":325.75,"ten":"Chạy thật: main từ chối push thẳng"},
-        {"t":325.75,"den":359.63,"ten":"Chạy thật: đi qua pull request"},
-        {"t":359.63,"den":392.25,"ten":"Chạy thật: một lượt duyệt thật"},
-        {"t":392.25,"den":440.9,"ten":"Minh hoạ: bật ruleset trên GitHub"},
-        {"t":440.9,"den":483.41,"ten":"CODEOWNERS: tệp chung có người review đích danh"},
-        {"t":483.41,"den":515.69,"ten":"Năm câu hỏi review"},
-        {"t":515.69,"den":570.63,"ten":"Thực hành"},
-        {"t":570.63,"den":606.42,"ten":"Tự kiểm ba câu"},
-        {"t":606.42,"den":651.34,"ten":"Tóm tắt"}
+        {"t":0,"den":102.58,"ten":"Chào bạn · Bài 18.5 · Thay đổi bé tí"},
+        {"t":102.58,"den":184.62,"ten":"Chạy thật: nhận ra sau đó"},
+        {"t":184.62,"den":264.03,"ten":"Chạy thật: rào chắn mô phỏng của lab"},
+        {"t":264.03,"den":359.63,"ten":"Ảnh thật: luật bảo vệ main trên Forgejo"},
+        {"t":359.63,"den":440.9,"ten":"Chạy thật: một lượt duyệt thật"},
+        {"t":440.9,"den":570.63,"ten":"CODEOWNERS: tệp chung có người review đích danh"},
+        {"t":570.63,"den":651.34,"ten":"Tự kiểm ba câu · Tóm tắt"}
       ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 18.5."},
@@ -5341,8 +5637,15 @@
         {"t":644.22,"vi":"Bạn làm phần Thực hành dưới video, rồi vào Code Lab Git luyện tiếp nhé."}
       ]
     },
-    "git-18-6-hoan-tac-merge": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/18-tai-nan-nhom/18-06-hoan-tac-merge-9e3e3e00.mp4","durationSec":560.7,"nguonCau":"srt",
-      "parts": [],
+    "git-18-6-hoan-tac-merge": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/18-tai-nan-nhom/18-06-hoan-tac-merge-9e3e3e00.mp4","durationSec":560.7,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":127.76,"ten":"Chào bạn · Bài 18.6 · Rút lại được không?"},
+        {"t":127.76,"den":220.55,"ten":"Chạy thật: một commit merge có hai cha"},
+        {"t":220.55,"den":295.75,"ten":"Chạy thật: cái bẫy Already up to date"},
+        {"t":295.75,"den":399.89,"ten":"Chạy thật: revert cái revert"},
+        {"t":399.89,"den":488.52,"ten":"Phòng ngừa · Thực hành"},
+        {"t":488.52,"den":560.7,"ten":"Tự kiểm ba câu · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 18.6."},
         {"t":8.5,"vi":"Bài 18.5: Bình tự merge, hai servlet cùng giành gạch home, và luật bảo vệ main chặn đường tắt."},
@@ -5441,8 +5744,16 @@
         {"t":553.57,"vi":"Bạn làm phần Thực hành dưới video, rồi vào Code Lab Git luyện tiếp nhé."}
       ]
     },
-    "git-18-7-buoi-cuu-ho-nhom": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/18-tai-nan-nhom/18-07-buoi-cuu-ho-nhom-ae7a0a02.mp4","durationSec":609.34,"nguonCau":"srt",
-      "parts": [],
+    "git-18-7-buoi-cuu-ho-nhom": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/18-tai-nan-nhom/18-07-buoi-cuu-ho-nhom-ae7a0a02.mp4","durationSec":609.34,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":81.08,"ten":"Chào bạn · Bài 18.7 · Đêm trước hạn nộp"},
+        {"t":81.08,"den":168.75,"ten":"Chạy thật: cái đêm đó · Chạy thật: bước 1, nhìn đừng gõ"},
+        {"t":168.75,"den":287.64,"ten":"Chẩn đoán trong một câu · Chạy thật: bước 2, cất việc"},
+        {"t":287.64,"den":396.15,"ten":"Chạy thật: kiểm lại · Thứ tự là điều quan trọng"},
+        {"t":396.15,"den":474.52,"ten":"Chạy thật: tự chạy lab với nhom-mini.sh"},
+        {"t":474.52,"den":567.45,"ten":"Thực hành · Tự kiểm ba câu"},
+        {"t":567.45,"den":609.34,"ten":"Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 18.7, bài cuối của chương tai nạn Git trong nhóm."},
         {"t":11.67,"vi":"Sáu bài vừa qua, mỗi bài một tai nạn: build trong kho, xung đột web.xml, pull và push bị chặn, commit nhầm trên main, tự merge, và hoàn tác merge."},
@@ -5532,8 +5843,14 @@
         {"t":602.21,"vi":"Bạn làm phần Thực hành dưới video, rồi vào Code Lab Git luyện tiếp nhé."}
       ]
     },
-    "git-2-0-slides": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/03-doc-lich-su/03-00-slide-chuong-2-6f8023d4.mp4","durationSec":450.42,"nguonCau":"srt",
-      "parts": [],
+    "git-2-0-slides": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/03-doc-lich-su/03-00-slide-chuong-2-6f8023d4.mp4","durationSec":450.42,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":91.63,"ten":"Chào bạn · Chương 2 trong 18 slide · Bản đồ chương"},
+        {"t":91.63,"den":179.1,"ten":"Khoảng hai chấm · log --graph"},
+        {"t":179.1,"den":254.54,"ten":"git blame · blame -w"},
+        {"t":254.54,"den":335.59,"ten":"bisect chia đôi · git bisect run"},
+        {"t":335.59,"den":450.42,"ten":"Bảng tra nhanh Chương 2 · Thực hành chương 2 (30 phút)"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Chương 2 của khoá Git và GitHub: cả chương trong mười tám slide."},
         {"t":12.14,"vi":"Chương 1 đã mở nắp Git: ba cái cây, commit là tấm ảnh, vòng lặp add commit, lời nhắn, và gitignore."},
@@ -5600,8 +5917,16 @@
         {"t":446.37,"vi":"Bắt đầu từ bài 2.1 nhé."}
       ]
     },
-    "git-2-1-git-log": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/03-doc-lich-su/03-01-git-log-de085e31.mp4","durationSec":672.49,"nguonCau":"srt",
-      "parts": [],
+    "git-2-1-git-log": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/03-doc-lich-su/03-01-git-log-de085e31.mp4","durationSec":672.49,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":88.53,"ten":"Chào bạn · Bài 2.1 · Bức tường chữ"},
+        {"t":88.53,"den":195.56,"ten":"Nén lại: --oneline · Slide: năm bộ lọc"},
+        {"t":195.56,"den":282.89,"ten":"Hai gạch: đường dẫn hay nhánh?"},
+        {"t":282.89,"den":370.14,"ten":"Mô phỏng: A..B trên đồ thị · Trước push, sau fetch"},
+        {"t":370.14,"den":470.4,"ten":"Slide: log --graph · Chạy thật: --graph --all"},
+        {"t":470.4,"den":595.62,"ten":"Hai bản tóm tắt đáng biết"},
+        {"t":595.62,"den":672.49,"ten":"Tự kiểm · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 2.1 của khoá Git và GitHub, bài đầu tiên của Chương 2."},
         {"t":11.91,"vi":"Chương 1 đã mở nắp Git: mỗi commit là một tấm ảnh trọn dự án, nối về commit cha bằng mã băm."},
@@ -5717,8 +6042,17 @@
         {"t":661.14,"vi":"Bạn làm phần Thực hành dưới video, đoán trước hai chiều của khoảng hai chấm, rồi vào Code Lab Git luyện lọc lịch sử nhé."}
       ]
     },
-    "git-2-2-show-va-diff": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/03-doc-lich-su/03-02-show-va-diff-85511b1b.mp4","durationSec":648.68,"nguonCau":"srt",
-      "parts": [],
+    "git-2-2-show-va-diff": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/03-doc-lich-su/03-02-show-va-diff-85511b1b.mp4","durationSec":648.68,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":83.96,"ten":"Chào bạn · Bài 2.2 · Ba câu hỏi về quá khứ"},
+        {"t":83.96,"den":177.77,"ten":"Chạy thật: git show · Năm biến thể của git show"},
+        {"t":177.77,"den":263.73,"ten":"Chạy thật: file như nó từng có"},
+        {"t":263.73,"den":340.3,"ten":"Slide: hai chấm vs ba chấm · Mô phỏng: đầu mút hay điểm rẽ?"},
+        {"t":340.3,"den":417.46,"ten":"Ba chấm trong đời thật · Cờ -w: bỏ qua khoảng trắng"},
+        {"t":417.46,"den":506.21,"ten":"Theo từ, và đổi tên · Tôi và máy chủ khác nhau gì?"},
+        {"t":506.21,"den":594.68,"ten":"Thực hành · Tự kiểm"},
+        {"t":594.68,"den":648.68,"ten":"Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 2.2 của khoá Git và GitHub."},
         {"t":9.86,"vi":"Bài trước, git log cho bạn biết có những commit nào: lọc theo file, tác giả, ngày, và khoảng A hai chấm B."},
@@ -5808,8 +6142,17 @@
         {"t":635.02,"vi":"Bạn làm phần Thực hành dưới video, giải thích được vì sao hai chấm hiện một file như bị xoá, rồi vào Code Lab Git luyện show và diff nhé."}
       ]
     },
-    "git-2-3-blame-va-pickaxe": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/03-doc-lich-su/03-03-blame-va-cuoc-chim-8065e9c7.mp4","durationSec":708.2,"nguonCau":"srt",
-      "parts": [],
+    "git-2-3-blame-va-pickaxe": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/03-doc-lich-su/03-03-blame-va-cuoc-chim-8065e9c7.mp4","durationSec":708.2,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":80.98,"ten":"Chào bạn · Bài 2.3 · Cái này ở đây làm gì thế?"},
+        {"t":80.98,"den":157.02,"ten":"Chạy thật: blame trên refreshToken"},
+        {"t":157.02,"den":241.24,"ten":"Chạy thật: thêm -w · Chạy thật: -C theo dấu mã dời file"},
+        {"t":241.24,"den":332.72,"ten":"Bỏ qua commit định dạng, vĩnh viễn · Slide: cái cuốc chim"},
+        {"t":332.72,"den":440.08,"ten":"-S hay -G: đếm hay khớp dòng? · Bẫy: hai lần -S"},
+        {"t":440.08,"den":527.72,"ten":"Slide: --follow · Chạy thật: --follow"},
+        {"t":527.72,"den":616.18,"ten":"Quy trình, và cái bẫy đổ lỗi · Thực hành"},
+        {"t":616.18,"den":708.2,"ten":"Tự kiểm · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 2.3 của khoá Git và GitHub."},
         {"t":9.46,"vi":"Bài trước, git show mở một commit ra, còn diff hai chấm và ba chấm so hai thời điểm bất kỳ."},
@@ -5917,8 +6260,16 @@
         {"t":696.21,"vi":"Bạn làm phần Thực hành dưới video, cho blame -w tìm ra tác giả thật, rồi vào Code Lab Git luyện blame và cuốc chim nhé."}
       ]
     },
-    "git-2-4-bisect": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/03-doc-lich-su/03-04-bisect-3d768c1e.mp4","durationSec":590.83,"nguonCau":"srt",
-      "parts": [],
+    "git-2-4-bisect": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/03-doc-lich-su/03-04-bisect-3d768c1e.mp4","durationSec":590.83,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":92.42,"ten":"Chào bạn · Bài 2.4 · Trò chơi đoán số"},
+        {"t":92.42,"den":199.31,"ten":"Slide: mỗi câu trả lời vứt một nửa"},
+        {"t":199.31,"den":297.31,"ten":"Phiên làm tay: tới thủ phạm · Luôn kết thúc bằng reset"},
+        {"t":297.31,"den":373.6,"ten":"Chạy thật: bisect run · Bẫy: quên mã 125 thì đổ oan"},
+        {"t":373.6,"den":459.32,"ten":"Skip, terms và vài thứ hữu ích"},
+        {"t":459.32,"den":539.82,"ten":"Thực hành · Tự kiểm"},
+        {"t":539.82,"den":590.83,"ten":"Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 2.4 của khoá Git và GitHub."},
         {"t":9.71,"vi":"Bài trước, blame với cờ -w và cái cuốc chim -S dẫn bạn từ một dòng mã tới commit đã sinh ra nó."},
@@ -6018,8 +6369,16 @@
         {"t":578.68,"vi":"Bạn làm phần Thực hành dưới video, cho bisect tìm ra commit mười ba bằng tay rồi bằng run, rồi vào Code Lab Git luyện bisect nhé."}
       ]
     },
-    "git-2-5-dieu-tra-thuc-te": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/03-doc-lich-su/03-05-dieu-tra-thuc-te-fb5ed8a6.mp4","durationSec":685.94,"nguonCau":"srt",
-      "parts": [],
+    "git-2-5-dieu-tra-thuc-te": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/03-doc-lich-su/03-05-dieu-tra-thuc-te-fb5ed8a6.mp4","durationSec":685.94,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":99.23,"ten":"Chào bạn · Bài 2.5 · Báo cáo lỗi"},
+        {"t":99.23,"den":193.93,"ten":"Bước 2: ai viết dòng đó · Đọc lời nhắn: vì sao có cờ đó"},
+        {"t":193.93,"den":307.61,"ten":"Bước 3: ngã cụt, đọc log trên file · Bước 4: cái cuốc chim"},
+        {"t":307.61,"den":416.36,"ten":"Bisect: phương pháp thứ hai"},
+        {"t":416.36,"den":505.69,"ten":"Bước 7: bản vá và lời nhắn · Slide: năm lệnh, một thủ phạm"},
+        {"t":505.69,"den":600.42,"ten":"Cái bẫy và thói quen · Thực hành"},
+        {"t":600.42,"den":685.94,"ten":"Tự kiểm · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 2.5 của khoá Git và GitHub, bài cuối của Chương 2."},
         {"t":11.43,"vi":"Bài trước, git bisect tìm ra commit gây lỗi trong vài bước, và bisect run để máy tự trả lời."},
@@ -6129,8 +6488,14 @@
         {"t":673.31,"vi":"Bạn làm phần Thực hành dưới video, tự điều tra con lỗi 2400 giờ, rồi vào Code Lab Git luyện trên một kho đã gieo sẵn lỗi nhé."}
       ]
     },
-    "git-3-0-slides": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/04-nhanh-hop-nhat/04-00-slide-chuong-3-7d4139fb.mp4","durationSec":390.72,"nguonCau":"srt",
-      "parts": [],
+    "git-3-0-slides": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/04-nhanh-hop-nhat/04-00-slide-chuong-3-7d4139fb.mp4","durationSec":390.72,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":81.9,"ten":"Chào bạn · Chương 3 trong 18 slide · Bản đồ chương"},
+        {"t":81.9,"den":167.07,"ten":"Commit mới chỉ dời nhánh HEAD đang trỏ · Detached HEAD"},
+        {"t":167.07,"den":253.34,"ten":"Đọc vùng xung đột · Bốn bước giải xung đột"},
+        {"t":253.34,"den":335.63,"ten":"rebase -i · 5 commit → 2"},
+        {"t":335.63,"den":390.72,"ten":"Thực hành chương 3 (40 phút)"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Chương 3 của khoá Git và GitHub: cả chương trong mười tám slide."},
         {"t":11.76,"vi":"Chương 2 đã dạy bạn đọc lịch sử: log, show và diff, blame, cái cuốc chim, và bisect."},
@@ -6198,8 +6563,16 @@
         {"t":385.11,"vi":"Bài kế là 3.1: nhánh là gì. Hẹn gặp bạn."}
       ]
     },
-    "git-3-1-nhanh-la-gi": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/04-nhanh-hop-nhat/04-01-nhanh-la-gi-4514c18b.mp4","durationSec":599.04,"nguonCau":"srt",
-      "parts": [],
+    "git-3-1-nhanh-la-gi": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/04-nhanh-hop-nhat/04-01-nhanh-la-gi-4514c18b.mp4","durationSec":599.04,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":98.49,"ten":"Chào bạn · Bài 3.1 · Photocopy hay đánh dấu trang?"},
+        {"t":98.49,"den":188.62,"ten":"Slide: một nhánh, một file · HEAD: con trỏ tới con trỏ"},
+        {"t":188.62,"den":267.05,"ten":"Tạo, chuyển, và một lần switch làm gì"},
+        {"t":267.05,"den":355.02,"ten":"Đặt tên nhánh · Liệt kê và dọn dẹp"},
+        {"t":355.02,"den":458.78,"ten":"Slide: HEAD lìa cành · Chạy thật: lìa cành rồi cứu"},
+        {"t":458.78,"den":550.47,"ten":"Thực hành · Tự kiểm"},
+        {"t":550.47,"den":599.04,"ten":"Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 3.1 của khoá Git và GitHub, bài đầu tiên của Chương 3."},
         {"t":11.82,"vi":"Chương 2 đã dạy bạn đọc lịch sử: log, show, blame, bisect, trên một đường commit đã có sẵn."},
@@ -6306,8 +6679,15 @@
         {"t":586.61,"vi":"Bạn làm phần Thực hành dưới video, đếm đúng bốn mươi mốt byte và tự cứu một commit lìa cành, rồi vào Code Lab Git luyện nhánh nhé."}
       ]
     },
-    "git-3-2-hai-kieu-merge": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/04-nhanh-hop-nhat/04-02-hai-kieu-merge-bd26469b.mp4","durationSec":548.88,"nguonCau":"srt",
-      "parts": [],
+    "git-3-2-hai-kieu-merge": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/04-nhanh-hop-nhat/04-02-hai-kieu-merge-bd26469b.mp4","durationSec":548.88,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":101.09,"ten":"Chào bạn · Bài 3.2 · Một lệnh, hai việc"},
+        {"t":101.09,"den":176.1,"ten":"Slide: hai cha · Chạy thật: bốn bước ba chiều"},
+        {"t":176.1,"den":281.44,"ten":"Vì sao cần tổ tiên chung · Soi commit hai cha"},
+        {"t":281.44,"den":373.21,"ten":"--ff-only và --squash · Huỷ bỏ và soi xét"},
+        {"t":373.21,"den":470.09,"ten":"Bẫy: merge sạch vẫn hỏng · Thực hành"},
+        {"t":470.09,"den":548.88,"ten":"Tự kiểm · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 3.2 của khoá Git và GitHub."},
         {"t":9.45,"vi":"Bài trước, một nhánh là một file bốn mươi mốt byte, và commit chỉ dời nhánh mà HEAD đang trỏ."},
@@ -6408,8 +6788,15 @@
         {"t":537.56,"vi":"Bạn làm phần Thực hành dưới video, tự tạo một lần tua thẳng và một lần ba chiều, rồi vào Code Lab Git luyện merge nhé."}
       ]
     },
-    "git-3-3-xung-dot": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/04-nhanh-hop-nhat/04-03-xung-dot-ec3baa07.mp4","durationSec":583.32,"nguonCau":"srt",
-      "parts": [],
+    "git-3-3-xung-dot": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/04-nhanh-hop-nhat/04-03-xung-dot-ec3baa07.mp4","durationSec":583.32,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":100.78,"ten":"Chào bạn · Bài 3.3 · Một câu hỏi, không phải một lỗi"},
+        {"t":100.78,"den":194.99,"ten":"Đọc các ký hiệu · Slide: zdiff3"},
+        {"t":194.99,"den":270.17,"ten":"Slide: bốn bước · Chạy thật: giải xung đột"},
+        {"t":270.17,"den":381.8,"ten":"Khi một bên đơn giản là đúng"},
+        {"t":381.8,"den":502.39,"ten":"Bẫy: commit luôn cả ký hiệu · Ngăn rẻ hơn giải"},
+        {"t":502.39,"den":583.32,"ten":"Tự kiểm · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 3.3 của khoá Git và GitHub."},
         {"t":9.89,"vi":"Bài trước, hợp nhất ba chiều ghép hai bên lại, và nếu hai bên chạm những vùng khác nhau thì Git tự làm xong."},
@@ -6504,8 +6891,15 @@
         {"t":571.75,"vi":"Bạn làm phần Thực hành dưới video, tự tạo rồi giải một xung đột, rồi vào Code Lab Git luyện giải xung đột nhé."}
       ]
     },
-    "git-3-4-rebase-vs-merge": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/04-nhanh-hop-nhat/04-04-rebase-vs-merge-eacd755a.mp4","durationSec":568.35,"nguonCau":"srt",
-      "parts": [],
+    "git-3-4-rebase-vs-merge": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/04-nhanh-hop-nhat/04-04-rebase-vs-merge-eacd755a.mp4","durationSec":568.35,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":80.79,"ten":"Chào bạn · Bài 3.4 · Nút thắt hay nối dài"},
+        {"t":80.79,"den":169.93,"ten":"Chạy thật: bốn bước của rebase · Slide: hai hình dạng"},
+        {"t":169.93,"den":271.78,"ten":"Luật vàng, chạy thật · Ranh giới thực dụng"},
+        {"t":271.78,"den":383.19,"ten":"Slide: nhãn bị đảo · Chạy thật: xung đột khi rebase"},
+        {"t":383.19,"den":491.09,"ten":"Rebase lên một gốc khác: --onto"},
+        {"t":491.09,"den":568.35,"ten":"Tự kiểm · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 3.4 của khoá Git và GitHub."},
         {"t":9.69,"vi":"Bài trước, bạn đã đọc và giải xung đột, và biết git merge có thể dừng lại để hỏi."},
@@ -6604,8 +6998,15 @@
         {"t":557.41,"vi":"Bạn làm phần Thực hành dưới video, so hai danh sách mã băm trước và sau rebase, rồi vào Code Lab Git luyện rebase nhé."}
       ]
     },
-    "git-3-5-rebase-tuong-tac": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/04-nhanh-hop-nhat/04-05-rebase-tuong-tac-50b1c740.mp4","durationSec":545.14,"nguonCau":"srt",
-      "parts": [],
+    "git-3-5-rebase-tuong-tac": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/04-nhanh-hop-nhat/04-05-rebase-tuong-tac-50b1c740.mp4","durationSec":545.14,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":95.52,"ten":"Chào bạn · Bài 3.5 · Bản nháp và bản nộp"},
+        {"t":95.52,"den":181.94,"ten":"Slide: sáu lệnh chính · Chạy thật: 5 commit thành 2"},
+        {"t":181.94,"den":276.39,"ten":"Bẫy: squash khi ý là fixup · Đổi thứ tự và bỏ commit"},
+        {"t":276.39,"den":375,"ten":"--fixup và --autosquash · Slide: reflog vẫn nhớ"},
+        {"t":375,"den":463.89,"ten":"Luật an toàn, và dọn tới mức nào · Thực hành"},
+        {"t":463.89,"den":545.14,"ten":"Tự kiểm · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 3.5 của khoá Git và GitHub, bài cuối của Chương 3."},
         {"t":11.7,"vi":"Bài trước, rebase phát lại commit của bạn lên gốc mới, và luật vàng: chỉ làm với commit chưa ai khác có."},
@@ -6698,8 +7099,13 @@
         {"t":533.57,"vi":"Bạn làm phần Thực hành dưới video, gộp bốn commit thành hai rồi tự cứu, sau đó vào Code Lab Git luyện rebase tương tác nhé."}
       ]
     },
-    "git-4-0-slides": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/05-hoan-tac/05-00-slide-chuong-4-ebbd259a.mp4","durationSec":370.6,"nguonCau":"srt",
-      "parts": [],
+    "git-4-0-slides": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/05-hoan-tac/05-00-slide-chuong-4-ebbd259a.mp4","durationSec":370.6,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":94.77,"ten":"Chào bạn · Chương 4 trong 18 slide · Bản đồ chương"},
+        {"t":94.77,"den":169.34,"ten":"Đã push chưa · Reset dời nhánh trước"},
+        {"t":169.34,"den":249.26,"ten":"git revert · Nhánh chung"},
+        {"t":249.26,"den":370.6,"ten":"git stash · Bên trong stash"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Chương 4 của khoá Git và GitHub: cả chương trong mười tám slide."},
         {"t":12,"vi":"Chương 3 đã dạy nhánh, merge, xung đột, rebase, và rebase tương tác."},
@@ -6768,8 +7174,14 @@
         {"t":368.03,"vi":"Hẹn gặp bạn."}
       ]
     },
-    "git-4-1-ban-do-hoan-tac": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/05-hoan-tac/05-01-ban-do-hoan-tac-67e4b0a6.mp4","durationSec":473.38,"nguonCau":"srt",
-      "parts": [],
+    "git-4-1-ban-do-hoan-tac": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/05-hoan-tac/05-01-ban-do-hoan-tac-67e4b0a6.mp4","durationSec":473.38,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":100.97,"ten":"Chào bạn · Bài 4.1 · Một đống hỗn độn, hay một tấm bản đồ"},
+        {"t":100.97,"den":196.25,"ten":"Chạy thật: bảng đo sáu lệnh"},
+        {"t":196.25,"den":291.27,"ten":"Chọn theo thứ bạn thật sự muốn · Slide: đã push chưa"},
+        {"t":291.27,"den":406.96,"ten":"Tên gọi, cũ và mới · Bẫy: reset --hard cho sạch sẽ"},
+        {"t":406.96,"den":473.38,"ten":"Tự kiểm · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 4.1 của khoá Git và GitHub, bài đầu của chương hoàn tác."},
         {"t":12.03,"vi":"Bài 1.1, bạn đã biết ba cái cây."},
@@ -6859,8 +7271,15 @@
         {"t":461.2,"vi":"Bạn làm phần Thực hành dưới video, viết ra giấy năm đáp án rồi tự chấm, sau đó vào Code Lab Git luyện chọn đúng cách hoàn tác nhé."}
       ]
     },
-    "git-4-2-reset": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/05-hoan-tac/05-02-reset-3c8156b1.mp4","durationSec":495.22,"nguonCau":"srt",
-      "parts": [],
+    "git-4-2-reset": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/05-hoan-tac/05-02-reset-3c8156b1.mp4","durationSec":495.22,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":92.45,"ten":"Chào bạn · Bài 4.2 · Một lệnh, ba độ sâu"},
+        {"t":92.45,"den":178.53,"ten":"Slide: --mixed · Chạy thật: --mixed"},
+        {"t":178.53,"den":263.21,"ten":"Slide: dời nhánh trước · Dùng hằng ngày: gộp commit"},
+        {"t":263.21,"den":352.99,"ten":"Vì sao --hard nguy hiểm nhất"},
+        {"t":352.99,"den":430.78,"ten":"Bẫy: reset --hard origin/main · Thực hành"},
+        {"t":430.78,"den":495.22,"ten":"Tự kiểm · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 4.2 của khoá Git và GitHub."},
         {"t":9.71,"vi":"Bài trước, bản đồ hoàn tác cho thấy reset có ba chế độ, đụng vào số cây khác nhau."},
@@ -6960,8 +7379,15 @@
         {"t":485.81,"vi":"Bạn làm phần Thực hành dưới video, gộp hai commit thành một, rồi vào Code Lab Git luyện reset nhé."}
       ]
     },
-    "git-4-3-revert": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/05-hoan-tac/05-03-revert-6a9154bc.mp4","durationSec":546,"nguonCau":"srt",
-      "parts": [],
+    "git-4-3-revert": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/05-hoan-tac/05-03-revert-6a9154bc.mp4","durationSec":546,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":104.12,"ten":"Chào bạn · Bài 4.3 · Hoàn tác bằng cách đi tới"},
+        {"t":104.12,"den":195.34,"ten":"Slide: nhánh chung"},
+        {"t":195.34,"den":282.01,"ten":"Slide: revert một commit merge"},
+        {"t":282.01,"den":372.66,"ten":"Revert chính cái revert · Xung đột trong lúc revert"},
+        {"t":372.66,"den":472.32,"ten":"Những thứ revert không hoàn tác được · Trong lúc sự cố"},
+        {"t":472.32,"den":546,"ten":"Tự kiểm · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 4.3 của khoá Git và GitHub."},
         {"t":9.71,"vi":"Bài trước, reset dời nhánh lùi lại và viết lại lịch sử, nên chỉ dùng cho nhánh cục bộ."},
@@ -7057,8 +7483,15 @@
         {"t":535.1,"vi":"Bạn làm phần Thực hành dưới video, revert rồi áp lại một commit đã push, sau đó vào Code Lab Git luyện revert nhé."}
       ]
     },
-    "git-4-4-reflog": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/05-hoan-tac/05-04-reflog-7728b37e.mp4","durationSec":501.32,"nguonCau":"srt",
-      "parts": [],
+    "git-4-4-reflog": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/05-hoan-tac/05-04-reflog-7728b37e.mp4","durationSec":501.32,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":86.69,"ten":"Chào bạn · Bài 4.4 · Đọc reflog"},
+        {"t":86.69,"den":190.12,"ten":"Cứu hộ 1: một lần reset --hard hỏng · Slide: nhánh đã xoá"},
+        {"t":190.12,"den":300,"ten":"Cứu hộ 3: một lần rebase đi sai"},
+        {"t":300,"den":378.72,"ten":"Các giới hạn, cho chính xác · Hai thói quen"},
+        {"t":378.72,"den":458.42,"ten":"Thực hành · Tự kiểm"},
+        {"t":458.42,"den":501.32,"ten":"Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 4.4 của khoá Git và GitHub."},
         {"t":9.85,"vi":"Bài 4.2, reset --hard đã vứt hai commit."},
@@ -7149,8 +7582,15 @@
         {"t":490.18,"vi":"Bạn làm phần Thực hành dưới video, làm mất hai commit rồi tự cứu, sau đó vào Code Lab Git luyện ba kiểu cứu hộ nhé."}
       ]
     },
-    "git-4-5-stash": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/05-hoan-tac/05-05-stash-c3a4bfc2.mp4","durationSec":480.05,"nguonCau":"srt",
-      "parts": [],
+    "git-4-5-stash": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/05-hoan-tac/05-05-stash-c3a4bfc2.mp4","durationSec":480.05,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":91.67,"ten":"Chào bạn · Bài 4.5 · Đang dở thì lỗi gấp ập tới"},
+        {"t":91.67,"den":174.63,"ten":"Pop trần làm mất phần chia staging"},
+        {"t":174.63,"den":254.14,"ten":"Quản lý nhiều stash · File chưa theo dõi và file bị ignore"},
+        {"t":254.14,"den":342.81,"ten":"Slide: bên trong stash · Chạy thật: stash nằm ở đâu"},
+        {"t":342.81,"den":438.86,"ten":"Bẫy: đống stash · Thực hành"},
+        {"t":438.86,"den":480.05,"ten":"Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 4.5 của khoá Git và GitHub, bài cuối của Chương 4."},
         {"t":11.74,"vi":"Bài trước, reflog cứu mọi thứ đã commit."},
@@ -7236,8 +7676,13 @@
         {"t":470.23,"vi":"Bạn làm phần Thực hành dưới video, cất rồi lấy lại cái bàn bừa, sau đó vào Code Lab Git luyện stash nhé."}
       ]
     },
-    "git-5-0-slides": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/06-remote-github/06-00-slide-chuong-5-3b5eef19.mp4","durationSec":397.13,"nguonCau":"srt",
-      "parts": [],
+    "git-5-0-slides": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/06-remote-github/06-00-slide-chuong-5-3b5eef19.mp4","durationSec":397.13,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":98.43,"ten":"Chào bạn · Chương 5 trong 18 slide · Bản đồ chương"},
+        {"t":98.43,"den":184.84,"ten":"git fetch · pull: merge hay rebase"},
+        {"t":184.84,"den":272.96,"ten":"Khoá ed25519 và lỗi · push -u"},
+        {"t":272.96,"den":397.13,"ten":"Tam giác fork · Đồng bộ fork"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Chương 5 của khoá Git và GitHub: cả chương trong mười tám slide."},
         {"t":12.01,"vi":"Chương 4 là lưới an toàn: reset, revert, reflog, stash. Và một lằn ranh: commit đã push hay chưa."},
@@ -7307,8 +7752,16 @@
         {"t":391.23,"vi":"Bài kế là 5.1: remote, fetch, pull. Hẹn gặp bạn."}
       ]
     },
-    "git-5-1-remote-fetch-pull": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/06-remote-github/06-01-remote-fetch-pull-e4cd2cb6.mp4","durationSec":703.33,"nguonCau":"srt",
-      "parts": [],
+    "git-5-1-remote-fetch-pull": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/06-remote-github/06-01-remote-fetch-pull-e4cd2cb6.mp4","durationSec":703.33,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":117.64,"ten":"Chào bạn · Bài 5.1 · Up to date, mà không phải"},
+        {"t":117.64,"den":208.65,"ten":"Slide: ba thứ mang tên main · Đo thật ba cái main"},
+        {"t":208.65,"den":322.42,"ten":"git fetch: tải về, không đụng gì"},
+        {"t":322.42,"den":399.54,"ten":"Slide: pull = fetch + tích hợp · Chạy thật: ba kiểu pull"},
+        {"t":399.54,"den":499.96,"ten":"Chạy thật: pull trần trên Git 2.51 · Đọc trạng thái phân ly"},
+        {"t":499.96,"den":628.54,"ten":"Clone, nhìn qua lăng kính này"},
+        {"t":628.54,"den":703.33,"ten":"Tự kiểm · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 5.1 của khoá Git và GitHub, bài mở đầu Chương 5: remote."},
         {"t":12.51,"vi":"Chương 4 đã vẽ một lằn ranh: commit đã push hay chưa. Đã push thì chỉ revert, chưa push thì reset thoải mái."},
@@ -7423,8 +7876,17 @@
         {"t":693.83,"vi":"Bạn làm phần Thực hành dưới video với một máy chủ giả, rồi vào Code Lab Git luyện fetch và pull nhé."}
       ]
     },
-    "git-5-2-xac-thuc": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/06-remote-github/06-02-xac-thuc-28186923.mp4","durationSec":756.75,"nguonCau":"srt",
-      "parts": [],
+    "git-5-2-xac-thuc": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/06-remote-github/06-02-xac-thuc-28186923.mp4","durationSec":756.75,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":96.52,"ten":"Chào bạn · Bài 5.2 · Mật khẩu không dùng được"},
+        {"t":96.52,"den":186.78,"ten":"Slide: SSH hay HTTPS + token · Kho đang dùng cái nào?"},
+        {"t":186.78,"den":285.65,"ten":"Slide: khoá ed25519 và đọc lỗi"},
+        {"t":285.65,"den":385.16,"ten":"Mạng chặn cổng 22 · Slide: token fine-grained"},
+        {"t":385.16,"den":482.42,"ten":"Credential helper · Bẫy: credential.helper store"},
+        {"t":482.42,"den":617.04,"ten":"Đọc lỗi xác thực · Hai tài khoản trên một máy"},
+        {"t":617.04,"den":711.85,"ten":"Thực hành · Tự kiểm"},
+        {"t":711.85,"den":756.75,"ten":"Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 5.2 của khoá Git và GitHub."},
         {"t":9.69,"vi":"Bài trước: origin chỉ là biệt danh của một URL, và fetch đổi điều bạn biết chứ không đổi thứ bạn có."},
@@ -7548,8 +8010,16 @@
         {"t":747.3,"vi":"Bạn làm phần Thực hành dưới video với tài khoản GitHub của mình, rồi vào Code Lab Git luyện tiếp nhé."}
       ]
     },
-    "git-5-3-push": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/06-remote-github/06-03-push-9d211b94.mp4","durationSec":659.53,"nguonCau":"srt",
-      "parts": [],
+    "git-5-3-push": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/06-remote-github/06-03-push-9d211b94.mp4","durationSec":659.53,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":108.35,"ten":"Chào bạn · Bài 5.3 · Push là fetch đảo chiều"},
+        {"t":108.35,"den":195.78,"ten":"Slide: push -u · Slide: ba lời từ chối"},
+        {"t":195.78,"den":296.41,"ten":"Cách đáp đúng · Cách đáp sai: --force"},
+        {"t":296.41,"den":400.51,"ten":"Push sang tên khác, và xoá · Slide: xoá rồi tỉa"},
+        {"t":400.51,"den":482.44,"ten":"--follow-tags và --tags · Slide: tag không tự đi theo commit"},
+        {"t":482.44,"den":585.66,"ten":"Kiểm gì trước mỗi lần push · Thực hành"},
+        {"t":585.66,"den":659.53,"ten":"Tự kiểm · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 5.3 của khoá Git và GitHub."},
         {"t":9.46,"vi":"Bài trước ta đã cho máy chủ biết mình là ai, bằng khoá SSH hoặc token."},
@@ -7669,8 +8139,16 @@
         {"t":650.93,"vi":"Bạn làm phần Thực hành dưới video, rồi vào Code Lab Git luyện xử lý ba lời từ chối nhé."}
       ]
     },
-    "git-5-4-fork-upstream": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/06-remote-github/06-04-fork-upstream-7fe8375c.mp4","durationSec":593.76,"nguonCau":"srt",
-      "parts": [],
+    "git-5-4-fork-upstream": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/06-remote-github/06-04-fork-upstream-7fe8375c.mp4","durationSec":593.76,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":85.84,"ten":"Chào bạn · Bài 5.4 · Push vào kho của người khác"},
+        {"t":85.84,"den":185.5,"ten":"Slide: tam giác · Chạy thật: thiết lập hai remote"},
+        {"t":185.5,"den":279.69,"ten":"Pull request trên máy chủ"},
+        {"t":279.69,"den":366.49,"ten":"Main của fork bị trôi dạt · Đáp lại review"},
+        {"t":366.49,"den":457.13,"ten":"Lấy pull request của người khác · Năm sai lầm"},
+        {"t":457.13,"den":549.77,"ten":"Thực hành · Tự kiểm"},
+        {"t":549.77,"den":593.76,"ten":"Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 5.4, bài cuối của Chương 5."},
         {"t":9.95,"vi":"Bài trước: push, ba lời từ chối, tag, và xoá nhánh trên máy chủ."},
@@ -7771,8 +8249,13 @@
         {"t":584.75,"vi":"Bạn làm phần Thực hành dưới video với một fork giả, rồi vào Code Lab Git luyện đồng bộ fork nhé."}
       ]
     },
-    "git-6-0-slides": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/07-pull-request/07-00-slide-chuong-6-59b3404b.mp4","durationSec":382.64,"nguonCau":"srt",
-      "parts": [],
+    "git-6-0-slides": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/07-pull-request/07-00-slide-chuong-6-59b3404b.mp4","durationSec":382.64,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":92.64,"ten":"Chào bạn · Chương 6 trong 17 slide · Bản đồ chương"},
+        {"t":92.64,"den":180.76,"ten":"PR nhỏ vs PR to · Một trang PR có gì"},
+        {"t":180.76,"den":264.32,"ten":"Nút 1: merge commit · Nút 2 và 3"},
+        {"t":264.32,"den":382.64,"ten":"CODEOWNERS · Kiểm tra bắt buộc"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Chương 6 của khoá Git và GitHub: pull request và code review, cả chương trong mười bảy slide."},
         {"t":14.7,"vi":"Chương 5 nối máy bạn với máy chủ: fetch, pull, push, và fork. Bài 5.4 kết thúc đúng lúc một pull request được mở."},
@@ -7836,8 +8319,17 @@
         {"t":377.88,"vi":"Bài kế là 6.1. Hẹn gặp bạn."}
       ]
     },
-    "git-6-1-giai-phau-pr": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/07-pull-request/07-01-giai-phau-pr-10ef451a.mp4","durationSec":719.08,"nguonCau":"srt",
-      "parts": [],
+    "git-6-1-giai-phau-pr": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/07-pull-request/07-01-giai-phau-pr-10ef451a.mp4","durationSec":719.08,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":106.07,"ten":"Chào bạn · Bài 6.1 · Một pull request tám trăm dòng"},
+        {"t":106.07,"den":181.54,"ten":"Slide: PR nhỏ vs PR to · Chạy thật: chẻ thành ba"},
+        {"t":181.54,"den":277.61,"ten":"Slide: một trang PR có gì · Pull request thật trên máy chủ"},
+        {"t":277.61,"den":364.49,"ten":"Chạy thật: mẫu pull request · Liên kết issue"},
+        {"t":364.49,"den":465.17,"ten":"Tiêu đề quan trọng hơn vẻ ngoài"},
+        {"t":465.17,"den":540.8,"ten":"Slide: vòng đời một pull request · Pull request nháp"},
+        {"t":540.8,"den":636.9,"ten":"Bẫy: pull request nhân tiện · Thực hành"},
+        {"t":636.9,"den":719.08,"ten":"Tự kiểm · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 6.1, bài đầu của Chương 6."},
         {"t":9.9,"vi":"Chương 5 dạy push và fork. Bài 5.4 dừng đúng lúc Cường mở một pull request vào kho của người khác."},
@@ -7951,8 +8443,17 @@
         {"t":707.7,"vi":"Bạn làm phần Thực hành dưới video, rồi vào Code Lab Git luyện đo và dọn một nhánh trước khi mở pull request nhé."}
       ]
     },
-    "git-6-2-review": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/07-pull-request/07-02-review-f9afbc40.mp4","durationSec":786.63,"nguonCau":"srt",
-      "parts": [],
+    "git-6-2-review": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/07-pull-request/07-02-review-f9afbc40.mp4","durationSec":786.63,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":89.12,"ten":"Chào bạn · Bài 6.2 · Test xanh, mà vẫn sai"},
+        {"t":89.12,"den":167.57,"ten":"Slide: ba loại verdict · Chạy thật: tác giả không tự duyệt"},
+        {"t":167.57,"den":261.21,"ten":"Chạy thật: thứ tự đọc một pull request"},
+        {"t":261.21,"den":358.66,"ten":"Chạy thật: một lượt review, ba bình luận"},
+        {"t":358.66,"den":490.83,"ten":"Diễn đạt thế nào · Request changes chặn merge"},
+        {"t":490.83,"den":577.96,"ten":"Chạy thật: chỉ xem phần đổi"},
+        {"t":577.96,"den":703.02,"ten":"Vài lệnh gh · Bẫy: chỉ soi kiểu cách"},
+        {"t":703.02,"den":786.63,"ten":"Tự kiểm · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 6.2."},
         {"t":8.22,"vi":"Bài trước, Cường mở pull request số hai: nhỏ, có mô tả, test ở máy xanh, Closes số một."},
@@ -8081,8 +8582,16 @@
         {"t":776.51,"vi":"Bạn làm phần Thực hành dưới video, rồi vào Code Lab Git luyện kéo pull request về máy và soát nó nhé."}
       ]
     },
-    "git-6-3-chien-luoc-merge": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/07-pull-request/07-03-chien-luoc-merge-14ba7427.mp4","durationSec":721.22,"nguonCau":"srt",
-      "parts": [],
+    "git-6-3-chien-luoc-merge": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/07-pull-request/07-03-chien-luoc-merge-14ba7427.mp4","durationSec":721.22,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":90.91,"ten":"Chào bạn · Bài 6.3 · Cùng một pull request, ba nút"},
+        {"t":90.91,"den":219.5,"ten":"Slide: nút 1, merge commit · Chạy thật: merge commit"},
+        {"t":219.5,"den":312.23,"ten":"Chạy thật: rebase · Slide: chọn cái nào"},
+        {"t":312.23,"den":447.63,"ten":"Chạy thật: chọn một kiểu cho nhóm · Slide: hệ quả trên máy"},
+        {"t":447.63,"den":538.6,"ten":"Chạy thật: auto-merge · Chạy thật: Cường dọn máy"},
+        {"t":538.6,"den":638.08,"ten":"Bẫy: squash một nhánh có nhánh con · Thực hành"},
+        {"t":638.08,"den":721.22,"ten":"Tự kiểm · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 6.3."},
         {"t":8.23,"vi":"Bài trước, pull request số hai đi qua một vòng review: một chỗ chặn, hai commit sửa, và một lượt Approve."},
@@ -8196,8 +8705,18 @@
         {"t":710.67,"vi":"Bạn làm phần Thực hành dưới video, rồi vào Code Lab Git luyện merge một nhánh ba cách và so đồ thị nhé."}
       ]
     },
-    "git-6-4-bao-ve-nhanh": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/07-pull-request/07-04-bao-ve-nhanh-3c8ee819.mp4","durationSec":828.11,"nguonCau":"srt",
-      "parts": [],
+    "git-6-4-bao-ve-nhanh": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/07-pull-request/07-04-bao-ve-nhanh-3c8ee819.mp4","durationSec":828.11,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":84.39,"ten":"Chào bạn · Bài 6.4 · Tối thứ Sáu, sửa gấp trên main"},
+        {"t":84.39,"den":165.69,"ten":"Slide: nhánh bảo vệ · Chạy thật: luật bảo vệ main"},
+        {"t":165.69,"den":263.73,"ten":"Chạy thật: một lần push bị chặn · Kiểm gói tài khoản trước"},
+        {"t":263.73,"den":361.16,"ten":"Chạy thật: CODEOWNERS tự mời · Slide: kiểm tra bắt buộc"},
+        {"t":361.16,"den":451.16,"ten":"Chạy thật: check chờ mãi · Chạy thật: duyệt cũ tự bị huỷ"},
+        {"t":451.16,"den":545.26,"ten":"Chạy thật: nhánh đã cũ · Quyền vượt luật của admin"},
+        {"t":545.26,"den":628.43,"ten":"Những luật tốn nhiều hơn cho lại · Ruleset, cơ chế đời mới"},
+        {"t":628.43,"den":740.84,"ten":"Cấu hình khởi đầu, và cái bẫy · Thực hành"},
+        {"t":740.84,"den":828.11,"ten":"Tự kiểm · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 6.4, bài cuối của Chương 6."},
         {"t":10.67,"vi":"Bài trước: ba nút merge, squash cho đồ án, và auto-merge chờ CI xanh rồi tự merge."},
@@ -8333,8 +8852,14 @@
         {"t":818.02,"vi":"Bạn làm phần Thực hành dưới video, rồi vào Code Lab Git luyện đọc lời từ chối của máy chủ nhé."}
       ]
     },
-    "git-7-0-slides": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/08-quy-trinh-nhom/08-00-slide-chuong-7-30cb99b6.mp4","durationSec":402.14,"nguonCau":"srt",
-      "parts": [],
+    "git-7-0-slides": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/08-quy-trinh-nhom/08-00-slide-chuong-7-30cb99b6.mp4","durationSec":402.14,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":86.17,"ten":"Chào bạn · Chương 7 trong 18 slide · Bản đồ chương"},
+        {"t":86.17,"den":179.48,"ten":"Trunk-based · git-flow"},
+        {"t":179.48,"den":259.58,"ten":"Semver · Sắp tag"},
+        {"t":259.58,"den":343.32,"ten":"Cắt một bản phát hành · Hotfix từ tag đang chạy"},
+        {"t":343.32,"den":402.14,"ten":"Thực hành chương 7 (40 phút)"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Chương 7 của khoá Git và GitHub: quy trình nhóm, tag và phát hành, cả chương trong mười tám slide."},
         {"t":14.62,"vi":"Chương 6 dạy một pull request đi từ nhánh tới main: review, ba nút merge, nhánh bảo vệ."},
@@ -8399,8 +8924,15 @@
         {"t":399.49,"vi":"Hẹn gặp bạn."}
       ]
     },
-    "git-7-1-chien-luoc-nhanh": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/08-quy-trinh-nhom/08-01-chien-luoc-nhanh-3a6bc93d.mp4","durationSec":619.61,"nguonCau":"srt",
-      "parts": [],
+    "git-7-1-chien-luoc-nhanh": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/08-quy-trinh-nhom/08-01-chien-luoc-nhanh-3a6bc93d.mp4","durationSec":619.61,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":83.57,"ten":"Chào bạn · Bài 7.1 · Ba sơ đồ, cãi nhau mãi"},
+        {"t":83.57,"den":162.04,"ten":"Slide: GitHub flow · Chạy thật: GitHub flow"},
+        {"t":162.04,"den":320.97,"ten":"Chạy thật: trunk-based và cờ tính năng · Slide: git-flow"},
+        {"t":320.97,"den":408.89,"ten":"Slide: chọn qua ba câu hỏi · Đồ án SWP391 thì chọn gì"},
+        {"t":408.89,"den":539.22,"ten":"Chạy thật: lọc nhánh theo tiền tố"},
+        {"t":539.22,"den":619.61,"ten":"Tự kiểm · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 7.1, bài đầu của Chương 7."},
         {"t":9.87,"vi":"Chương 6 dạy một pull request đi vào main: review, ba nút merge, và luật bảo vệ nhánh."},
@@ -8494,8 +9026,16 @@
         {"t":609.98,"vi":"Bạn làm phần Thực hành dưới video, rồi vào Code Lab Git luyện dựng đồ thị nhánh theo từng mô hình nhé."}
       ]
     },
-    "git-7-2-tag-semver": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/08-quy-trinh-nhom/08-02-tag-semver-b1c9d334.mp4","durationSec":698.18,"nguonCau":"srt",
-      "parts": [],
+    "git-7-2-tag-semver": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/08-quy-trinh-nhom/08-02-tag-semver-b1c9d334.mp4","durationSec":698.18,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":100.98,"ten":"Chào bạn · Bài 7.2 · Sáu tháng nữa, v1.5.0 là gì?"},
+        {"t":100.98,"den":193.67,"ten":"Chạy thật: hai loại tag · Slide: semver"},
+        {"t":193.67,"den":291.21,"ten":"Conventional Commits tính ra số · Slide: git describe"},
+        {"t":291.21,"den":376.72,"ten":"Slide: sắp tag như người đọc số · Chạy thật: bẫy sắp xếp"},
+        {"t":376.72,"den":475.7,"ten":"Chạy thật: tag không tự đi theo push"},
+        {"t":475.7,"den":618.57,"ten":"Chạy thật: để công cụ gắn tag"},
+        {"t":618.57,"den":698.18,"ten":"Tự kiểm · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 7.2."},
         {"t":7.87,"vi":"Bài trước: ba chiến lược nhánh, và cái bẫy quên merge ngược hotfix của git-flow."},
@@ -8595,8 +9135,16 @@
         {"t":685.68,"vi":"Bạn làm phần Thực hành dưới video, giữ lại v1.0.0 cho bài 7.3, rồi vào Code Lab Git luyện gắn tag nhé."}
       ]
     },
-    "git-7-3-phat-hanh-changelog": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/08-quy-trinh-nhom/08-03-phat-hanh-changelog-979d2495.mp4","durationSec":635.5,"nguonCau":"srt",
-      "parts": [],
+    "git-7-3-phat-hanh-changelog": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/08-quy-trinh-nhom/08-03-phat-hanh-changelog-979d2495.mp4","durationSec":635.5,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":114.35,"ten":"Chào bạn · Bài 7.3 · Hai sản phẩm của một bản phát hành"},
+        {"t":114.35,"den":204.6,"ten":"Một changelog đáng công bố · GitHub Releases"},
+        {"t":204.6,"den":312.21,"ten":"Chạy thật: npm version minor"},
+        {"t":312.21,"den":400.6,"ten":"Bẫy: hotfix từ main · Slide: cherry-pick -x về main"},
+        {"t":400.6,"den":490.89,"ten":"Chạy thật: cherry-pick sang nhánh bảo trì"},
+        {"t":490.89,"den":591.57,"ten":"Thực hành · Tự kiểm"},
+        {"t":591.57,"den":635.5,"ten":"Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 7.3, bài cuối của Chương 7."},
         {"t":10.12,"vi":"Bài trước: tag nhẹ và tag annotated, semver, git describe, và vì sao không dời một tag đã công bố."},
@@ -8688,8 +9236,14 @@
         {"t":626.07,"vi":"Bạn làm phần Thực hành dưới video, rồi vào Code Lab Git luyện một vụ hotfix trọn vẹn nhé."}
       ]
     },
-    "git-8-0-slides": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/09-viet-lai-lich-su/09-00-slide-chuong-8-d341c7c9.mp4","durationSec":399.11,"nguonCau":"srt",
-      "parts": [],
+    "git-8-0-slides": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/09-viet-lai-lich-su/09-00-slide-chuong-8-d341c7c9.mp4","durationSec":399.11,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":94.25,"ten":"Chào bạn · Chương 8 trong 18 slide · Bản đồ chương"},
+        {"t":94.25,"den":187.4,"ten":"Amend commit đã push · Hai máy, một nhánh"},
+        {"t":187.4,"den":267.72,"ten":"Đọc, tích hợp, push lại · Bị force-push đè"},
+        {"t":267.72,"den":352.75,"ten":"git filter-repo · --sensitive-data-removal"},
+        {"t":352.75,"den":399.11,"ten":"Thực hành chương 8 (30 phút)"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Chương 8 của khoá Git và GitHub: viết lại lịch sử an toàn, cả chương trong mười tám slide."},
         {"t":14.66,"vi":"Chương 7 đóng dấu các bản phát hành bằng tag, và vá production bằng hotfix cùng cherry-pick."},
@@ -8754,8 +9308,15 @@
         {"t":393,"vi":"Bài kế là 8.1. Hẹn gặp bạn."}
       ]
     },
-    "git-8-1-amend": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/09-viet-lai-lich-su/09-01-amend-39564eb7.mp4","durationSec":534.19,"nguonCau":"srt",
-      "parts": [],
+    "git-8-1-amend": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/09-viet-lai-lich-su/09-01-amend-39564eb7.mp4","durationSec":534.19,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":97.99,"ten":"Chào bạn · Bài 8.1 · Nửa giây sau mới thấy lỗi"},
+        {"t":97.99,"den":179.61,"ten":"Chạy thật: sửa lời nhắn · Slide: amend --no-edit"},
+        {"t":179.61,"den":293.33,"ten":"Chạy thật: hai dấu thời gian · Ranh giới an toàn"},
+        {"t":293.33,"den":391.14,"ten":"Slide: amend commit đã push"},
+        {"t":391.14,"den":468.02,"ten":"Bẫy: amend để gỡ bí mật · Thực hành"},
+        {"t":468.02,"den":534.19,"ten":"Tự kiểm · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 8.1, bài đầu của Chương 8."},
         {"t":9.94,"vi":"Chương 7 dạy phát hành: tag, changelog, hotfix và cherry-pick."},
@@ -8852,8 +9413,17 @@
         {"t":527.11,"vi":"Bạn làm phần Thực hành dưới video, rồi vào Code Lab Git luyện amend nhé."}
       ]
     },
-    "git-8-2-force-with-lease": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/09-viet-lai-lich-su/09-02-force-with-lease-eeb7f09f.mp4","durationSec":677.38,"nguonCau":"srt",
-      "parts": [],
+    "git-8-2-force-with-lease": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/09-viet-lai-lich-su/09-02-force-with-lease-eeb7f09f.mp4","durationSec":677.38,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":80.17,"ten":"Chào bạn · Bài 8.2 · Bảng thông báo chung"},
+        {"t":80.17,"den":169.04,"ten":"Chạy thật: máy Cường · Slide: --force vs --force-with-lease"},
+        {"t":169.04,"den":264.61,"ten":"Chạy thật: --force-with-lease hỏi trước"},
+        {"t":264.61,"den":348.96,"ten":"Slide: bẫy IDE fetch nền · Chạy thật: lease gật đầu"},
+        {"t":348.96,"den":428.51,"ten":"Chạy thật: --force-if-includes · Khi nào force-push là ổn"},
+        {"t":428.51,"den":510.27,"ten":"Slide: bị đè thì cứu thế nào"},
+        {"t":510.27,"den":605.41,"ten":"Bẫy: bị từ chối thì --force · Thực hành"},
+        {"t":605.41,"den":677.38,"ten":"Tự kiểm · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 8.2."},
         {"t":8.05,"vi":"Bài trước: amend dựng commit mới, và amend một commit đã push thì push thường bị từ chối."},
@@ -8975,8 +9545,17 @@
         {"t":668.65,"vi":"Bạn làm phần Thực hành dưới video, rồi vào Code Lab Git tạo ra stale info và cứu hộ nhé."}
       ]
     },
-    "git-8-3-go-bi-mat": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/09-viet-lai-lich-su/09-03-go-bi-mat-33e25efe.mp4","durationSec":701.18,"nguonCau":"srt",
-      "parts": [],
+    "git-8-3-go-bi-mat": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/09-viet-lai-lich-su/09-03-go-bi-mat-33e25efe.mp4","durationSec":701.18,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":86.83,"ten":"Chào bạn · Bài 8.3 · Bước một không phải Git"},
+        {"t":86.83,"den":176.13,"ten":"Slide: sáu bước theo thứ tự · Slide: xoá dòng rồi commit"},
+        {"t":176.13,"den":292.91,"ten":"Chạy thật: tìm mọi bản sao · Slide: filter-repo đổi mã băm"},
+        {"t":292.91,"den":378.44,"ten":"Chạy thật: cách B, thay chữ"},
+        {"t":378.44,"den":472.24,"ten":"Slide: còn sót ở ba chỗ · Chạy thật: máy chủ vẫn giữ"},
+        {"t":472.24,"den":565.19,"ten":"Bẫy: cú cứu hộ mang khoá quay lại"},
+        {"t":565.19,"den":658.05,"ten":"Thực hành · Tự kiểm ba câu"},
+        {"t":658.05,"den":701.18,"ten":"Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 8.3, bài cuối của Chương 8."},
         {"t":10.44,"vi":"Hai bài trước: amend, và force-push an toàn với --force-with-lease."},
@@ -9095,8 +9674,14 @@
         {"t":692.01,"vi":"Bạn làm phần Thực hành dưới video, rồi vào Code Lab Git luyện dọn một vụ lộ khoá nhé."}
       ]
     },
-    "git-9-0-slides": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/10-ruot-gan/10-00-slide-chuong-9-b4745628.mp4","durationSec":381.84,"nguonCau":"srt",
-      "parts": [],
+    "git-9-0-slides": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/10-ruot-gan/10-00-slide-chuong-9-b4745628.mp4","durationSec":381.84,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":85.11,"ten":"Chào bạn · Chương 9 trong 18 slide · Bản đồ chương"},
+        {"t":85.11,"den":174.78,"ten":"objects/ — mỗi đối tượng một file · Bốn loại đối tượng"},
+        {"t":174.78,"den":255.43,"ten":"index là một file thật"},
+        {"t":255.43,"den":331.53,"ten":"Delta · gc --prune=now và reflog"},
+        {"t":331.53,"den":381.84,"ten":"Thực hành chương 9 (40 phút)"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Chương 9 của khoá Git và GitHub: bên dưới nắp capo, cả chương trong mười tám slide."},
         {"t":13.54,"vi":"Chương 8 viết lại lịch sử: amend, force push an toàn, và gỡ một khoá bị lộ."},
@@ -9158,8 +9743,17 @@
         {"t":379.28,"vi":"Hẹn gặp bạn."}
       ]
     },
-    "git-9-1-thu-muc-git": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/10-ruot-gan/10-01-thu-muc-git-7343d66b.mp4","durationSec":668.86,"nguonCau":"srt",
-      "parts": [],
+    "git-9-1-thu-muc-git": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/10-ruot-gan/10-01-thu-muc-git-7343d66b.mp4","durationSec":668.86,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":87.06,"ten":"Chào bạn · Bài 9.1 · Một câu than thành câu hỏi kiểm được"},
+        {"t":87.06,"den":180.22,"ten":"Chạy thật: ls -F .git · Slide: thứ gì nằm ở đâu"},
+        {"t":180.22,"den":267.08,"ten":"Slide: HEAD và nhánh là file một dòng"},
+        {"t":267.08,"den":355.62,"ten":"Slide: objects/ — mỗi đối tượng một file"},
+        {"t":355.62,"den":456.45,"ten":"Chạy thật: đọc index · Chạy thật: phần còn lại"},
+        {"t":456.45,"den":537.75,"ten":"Chứng minh: tạo nhánh bằng echo · Bẫy: sửa tay trong .git"},
+        {"t":537.75,"den":625.01,"ten":"Thực hành · Tự kiểm ba câu"},
+        {"t":625.01,"den":668.86,"ten":"Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 9.1, bài mở đầu Chương 9: bên dưới nắp capo của Git."},
         {"t":12.13,"vi":"Chương 8 vừa xong: amend, force-push an toàn, và gỡ một khoá bị lộ bằng filter-repo."},
@@ -9266,8 +9860,17 @@
         {"t":660.3,"vi":"Bạn làm phần Thực hành dưới video, rồi vào Code Lab Git luyện đọc thư mục chấm git nhé."}
       ]
     },
-    "git-9-2-bon-doi-tuong": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/10-ruot-gan/10-02-bon-doi-tuong-edf10d8b.mp4","durationSec":705.59,"nguonCau":"srt",
-      "parts": [],
+    "git-9-2-bon-doi-tuong": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/10-ruot-gan/10-02-bon-doi-tuong-edf10d8b.mp4","durationSec":705.59,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":85.71,"ten":"Chào bạn · Bài 9.2 · Bốn loại thứ, và chỉ bốn"},
+        {"t":85.71,"den":208.24,"ten":"Bốn thẻ định nghĩa · Slide: một commit mở bung ra"},
+        {"t":208.24,"den":301,"ten":"Slide: hai commit dùng chung blob · Chạy thật: commit đầu"},
+        {"t":301,"den":416.03,"ten":"Bẫy: tưởng Git lưu việc đổi tên · Slide: năm lệnh tầng thấp"},
+        {"t":416.03,"den":494.8,"ten":"Chạy thật: cái header đi vào mã băm"},
+        {"t":494.8,"den":572.01,"ten":"Slide: tag có chú thích là đối tượng"},
+        {"t":572.01,"den":659.05,"ten":"Thực hành · Tự kiểm ba câu"},
+        {"t":659.05,"den":705.59,"ten":"Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 9.2 của Chương 9."},
         {"t":8.91,"vi":"Bài trước mình mở thư mục chấm git: nhánh là file một dòng, HEAD là file một dòng, và objects là kho đối tượng."},
@@ -9379,8 +9982,16 @@
         {"t":697.18,"vi":"Bạn làm phần Thực hành dưới video, rồi vào Code Lab Git luyện dựng commit bằng tay nhé."}
       ]
     },
-    "git-9-3-packfile-gc": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/10-ruot-gan/10-03-packfile-gc-e69ab832.mp4","durationSec":696.24,"nguonCau":"srt",
-      "parts": [],
+    "git-9-3-packfile-gc": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/10-ruot-gan/10-03-packfile-gc-e69ab832.mp4","durationSec":696.24,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":122.94,"ten":"Chào bạn · Bài 9.3 · Mười năm lịch sử, bốn mươi megabyte"},
+        {"t":122.94,"den":204.17,"ten":"Slide: rời → packfile · Chạy thật: git gc gói lại"},
+        {"t":204.17,"den":293.68,"ten":"Chạy thật: đọc delta · Ảnh chụp hay bản khác biệt?"},
+        {"t":293.68,"den":387.87,"ten":"git gc thật ra làm gì · Chạy thật: --prune=now và reflog"},
+        {"t":387.87,"den":505.63,"ten":"Đo một kho mã · Chạy thật: thứ làm kho phình to"},
+        {"t":505.63,"den":618.63,"ten":"Bảo trì, theo cách đời mới · Bẫy: --depth 1 trong CI"},
+        {"t":618.63,"den":696.24,"ten":"Tự kiểm ba câu · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 9.3, bài cuối của Chương 9."},
         {"t":9.93,"vi":"Bài trước: bốn đối tượng, và một commit dựng bằng tay."},
@@ -9497,8 +10108,20 @@
         {"t":687.92,"vi":"Bạn làm phần Thực hành dưới video, rồi vào Code Lab Git luyện đo và dọn một kho nhé."}
       ]
     },
-    "git-kd-0-slides": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/01-khoi-dong-nhanh/01-00-slide-khoi-dong-nhanh-751b1960.mp4","durationSec":901.1,"nguonCau":"srt",
-      "parts": [],
+    "git-kd-0-slides": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/01-khoi-dong-nhanh/01-00-slide-khoi-dong-nhanh-751b1960.mp4","durationSec":901.1,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":80.3,"ten":"Chào bạn · KĐ.0 trong 35 slide · Bản đồ chương"},
+        {"t":80.3,"den":159.6,"ten":"Chuyện thật: một buổi tối, bảy cái bẫy"},
+        {"t":159.6,"den":252.93,"ten":"Mở terminal đúng thư mục · Email commit lấy từ GitHub"},
+        {"t":252.93,"den":348.86,"ten":"Đăng nhập GitHub qua HTTPS · Lần push đầu trên Windows"},
+        {"t":348.86,"den":430.19,"ten":"Trưởng nhóm tạo repo: hai cách"},
+        {"t":430.19,"den":506.6,"ten":"Git không lưu thư mục rỗng · master hay main"},
+        {"t":506.6,"den":584.41,"ten":"Collaborator làm được gì · Clone một lần, đừng tải ZIP"},
+        {"t":584.41,"den":676.61,"ten":"Việc một lần, việc mỗi ngày · Sổ chung, tờ nháp, thư viện"},
+        {"t":676.61,"den":770.27,"ten":"Lấy code của bạn vào nhánh mình"},
+        {"t":770.27,"den":863.05,"ten":"Bảng lỗi thật (2/2) · Nối GitHub với CT Work"},
+        {"t":863.05,"den":901.1,"ten":"Thực hành cả nhóm (60 phút)"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với chương Khởi động nhanh của khoá Git và GitHub: cả chương trong ba mươi lăm slide."},
         {"t":12.87,"vi":"Mục 0 vừa rồi đã cài Git, đặt danh tính, và dựng sân tập thu-git cho riêng bạn."},
@@ -9659,20 +10282,14 @@
         {"t":889.95,"vi":"Mỗi bài KĐ.1 tới KĐ.10 đều có video riêng và phần Thực hành ngay dưới bài. Bắt đầu từ KĐ.1 nhé."}
       ]
     },
-    "git-kd-1-kiem-tra-cai-dat": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/01-khoi-dong-nhanh/01-01-cai-va-kiem-tra-git-b050d93e.mp4","durationSec":570.87,"nguonCau":"thoigian",
+    "git-kd-1-kiem-tra-cai-dat": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/01-khoi-dong-nhanh/01-01-cai-va-kiem-tra-git-b050d93e.mp4","durationSec":570.87,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":38.19,"ten":"Chào bạn · Khởi động nhanh"},
-        {"t":38.19,"den":80.71,"ten":"Một buổi tối, bảy cái bẫy"},
-        {"t":80.71,"den":119.42,"ten":"Git, GitHub và gh khác nhau thế nào"},
-        {"t":119.42,"den":200.54,"ten":"Windows: sáu màn hình đáng đọc"},
-        {"t":200.54,"den":240.32,"ten":"Mac: hai cách, cách nào cũng một lệnh"},
-        {"t":240.32,"den":275.86,"ten":"Kiểm tra: cùng một lệnh ở mọi máy"},
-        {"t":275.86,"den":327.35,"ten":"Gõ lệnh vào cửa sổ nào?"},
-        {"t":327.35,"den":393.32,"ten":"Năm lệnh để biết mình đang ở đâu"},
-        {"t":393.32,"den":448.8,"ten":"Mở đúng thư mục, khỏi phải gõ"},
-        {"t":448.8,"den":478.11,"ten":"Lỗi kinh điển: cửa sổ cũ"},
-        {"t":478.11,"den":518.48,"ten":"Thực hành"},
-        {"t":518.48,"den":570.87,"ten":"Tóm tắt"}
+        {"t":0,"den":80.71,"ten":"Chào bạn · Khởi động nhanh · Một buổi tối, bảy cái bẫy"},
+        {"t":80.71,"den":200.54,"ten":"Git, GitHub và gh khác nhau thế nào"},
+        {"t":200.54,"den":275.86,"ten":"Mac: hai cách, cách nào cũng một lệnh"},
+        {"t":275.86,"den":393.32,"ten":"Gõ lệnh vào cửa sổ nào? · Năm lệnh để biết mình đang ở đâu"},
+        {"t":393.32,"den":478.11,"ten":"Mở đúng thư mục, khỏi phải gõ · Lỗi kinh điển: cửa sổ cũ"},
+        {"t":478.11,"den":570.87,"ten":"Thực hành · Tóm tắt"}
       ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài KĐ.1 của khoá Git và GitHub, chương Khởi động nhanh: cả nhóm lên GitHub từ số 0."},
@@ -9751,18 +10368,13 @@
         {"t":555.32,"vi":"Học xong phần cài đặt rồi, bạn mở bài KĐ.1 trên cuongthai.com, ngay dưới video này, làm phần Thực hành để kiểm máy của cả nhóm, rồi hẵng sang bài mới nhé."}
       ]
     },
-    "git-kd-10-noi-ct-work": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/01-khoi-dong-nhanh/01-10-noi-ct-work-93b74622.mp4","durationSec":479.69,"nguonCau":"thoigian",
+    "git-kd-10-noi-ct-work": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/01-khoi-dong-nhanh/01-10-noi-ct-work-93b74622.mp4","durationSec":479.69,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":26.6,"ten":"Mở bài"},
-        {"t":26.6,"den":62.51,"ten":"NT-34 xong thật chưa?"},
-        {"t":62.51,"den":105.63,"ten":"Webhook là gì"},
-        {"t":105.63,"den":147.13,"ten":"Bước 1: admin CT Work lấy URL và Secret"},
-        {"t":147.13,"den":201.32,"ten":"Bước 2: chủ repo thêm webhook"},
+        {"t":0,"den":105.63,"ten":"Mở bài · NT-34 xong thật chưa?"},
+        {"t":105.63,"den":201.32,"ten":"Bước 1: admin CT Work lấy URL và Secret"},
         {"t":201.32,"den":279.16,"ten":"Mã thẻ trong mọi cái tên"},
-        {"t":279.16,"den":328.05,"ten":"Báo cáo Đóng góp và Tác giả Git"},
-        {"t":328.05,"den":370.08,"ten":"Theo dự án, không theo máy"},
-        {"t":370.08,"den":407.27,"ten":"Thực hành cho cả nhóm"},
-        {"t":407.27,"den":479.69,"ten":"Tóm tắt · ghi vào sổ tay"}
+        {"t":279.16,"den":370.08,"ten":"Báo cáo Đóng góp và Tác giả Git · Theo dự án, không theo máy"},
+        {"t":370.08,"den":479.69,"ten":"Thực hành cho cả nhóm · Tóm tắt · ghi vào sổ tay"}
       ],
       "cues": [
         {"t":5,"vi":"Chào bạn, đến với bài KĐ.10, bài cuối của chương Khởi động nhanh."},
@@ -9825,18 +10437,12 @@
         {"t":470.87,"vi":"Xong chương này, bạn sang Chương 1, Mô hình của Git, để hiểu sâu những lệnh đã dùng mỗi ngày."}
       ]
     },
-    "git-kd-2-danh-tinh": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/01-khoi-dong-nhanh/01-02-danh-tinh-git-0e687bc2.mp4","durationSec":485.72,"nguonCau":"thoigian",
+    "git-kd-2-danh-tinh": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/01-khoi-dong-nhanh/01-02-danh-tinh-git-0e687bc2.mp4","durationSec":485.72,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":33.99,"ten":"Chào bạn · ôn nhanh KĐ.1"},
-        {"t":33.99,"den":71.82,"ten":"Lệnh đầu tiên của nhóm trưởng"},
-        {"t":71.82,"den":117.66,"ten":"Danh tính khác đăng nhập"},
-        {"t":117.66,"den":162.64,"ten":"Vì sao \"key does not contain a section\""},
-        {"t":162.64,"den":220.19,"ten":"Email lấy từ GitHub → Settings → Emails"},
-        {"t":220.19,"den":276.37,"ten":"Cài đặt một lần cho mỗi máy"},
-        {"t":276.37,"den":319.75,"ten":"Đọc lại thứ mình vừa đặt"},
-        {"t":319.75,"den":365.34,"ten":"Kiểm trên một commit thật"},
-        {"t":365.34,"den":392.3,"ten":"Phiên bản im lặng của lỗi này"},
-        {"t":392.3,"den":435.12,"ten":"Thực hành"},
+        {"t":0,"den":117.66,"ten":"Chào bạn · ôn nhanh KĐ.1 · Lệnh đầu tiên của nhóm trưởng"},
+        {"t":117.66,"den":220.19,"ten":"Vì sao \"key does not contain a section\""},
+        {"t":220.19,"den":319.75,"ten":"Cài đặt một lần cho mỗi máy · Đọc lại thứ mình vừa đặt"},
+        {"t":319.75,"den":435.12,"ten":"Kiểm trên một commit thật · Phiên bản im lặng của lỗi này"},
         {"t":435.12,"den":485.72,"ten":"Tóm tắt"}
       ],
       "cues": [
@@ -9902,18 +10508,12 @@
         {"t":469,"vi":"Học xong phần danh tính rồi, bạn mở bài KĐ.2 trên cuongthai.com, ngay dưới video này, làm phần Thực hành và kiểm email của một bạn khác trong nhóm, rồi hẵng sang bài mới nhé."}
       ]
     },
-    "git-kd-3-dang-nhap-github": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/01-khoi-dong-nhanh/01-03-dang-nhap-github-c2549ca8.mp4","durationSec":483.51,"nguonCau":"thoigian",
+    "git-kd-3-dang-nhap-github": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/01-khoi-dong-nhanh/01-03-dang-nhap-github-c2549ca8.mp4","durationSec":483.51,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":30.06,"ten":"Chào bạn · ôn nhanh KĐ.2"},
-        {"t":30.06,"den":65.17,"ten":"Ba vấn đề, một gốc"},
-        {"t":65.17,"den":113.65,"ten":"Mật khẩu không dùng được trong terminal"},
-        {"t":113.65,"den":176.74,"ten":"Windows: Git Credential Manager lo ở lần push đầu"},
-        {"t":176.74,"den":229.23,"ten":"gh trên Windows: cài riêng, menu có thể treo"},
-        {"t":229.23,"den":285.9,"ten":"Mac: gh auth login và Keychain"},
-        {"t":285.9,"den":355.12,"ten":"Lỗi 403: máy đang nhớ một người khác"},
-        {"t":355.12,"den":378.93,"ten":"Hai thói quen an toàn"},
-        {"t":378.93,"den":424.87,"ten":"Thực hành"},
-        {"t":424.87,"den":483.51,"ten":"Tóm tắt"}
+        {"t":0,"den":113.65,"ten":"Chào bạn · ôn nhanh KĐ.2 · Ba vấn đề, một gốc"},
+        {"t":113.65,"den":229.23,"ten":"Windows: Git Credential Manager lo ở lần push đầu"},
+        {"t":229.23,"den":355.12,"ten":"Mac: gh auth login và Keychain"},
+        {"t":355.12,"den":483.51,"ten":"Hai thói quen an toàn · Thực hành"}
       ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài KĐ.3 của khoá Git và GitHub, chương Khởi động nhanh."},
@@ -9975,19 +10575,12 @@
         {"t":466.31,"vi":"Học xong phần đăng nhập rồi, bạn mở bài KĐ.3 trên cuongthai.com, ngay dưới video này, làm phần Thực hành để chắc máy mình đang nhớ đúng tài khoản, rồi hẵng sang bài mới nhé."}
       ]
     },
-    "git-kd-4-truong-nhom-tao-repo": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/01-khoi-dong-nhanh/01-04-truong-nhom-tao-repo-ab1a6988.mp4","durationSec":564.63,"nguonCau":"thoigian",
+    "git-kd-4-truong-nhom-tao-repo": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/01-khoi-dong-nhanh/01-04-truong-nhom-tao-repo-ab1a6988.mp4","durationSec":564.63,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":35.21,"ten":"Chào bạn · ôn nhanh KĐ.3"},
-        {"t":35.2,"den":71.4,"ten":"Một người, một lần"},
-        {"t":71.4,"den":128.36,"ten":"Cách 1: tạo trên github.com"},
-        {"t":128.36,"den":171.88,"ten":"Cách 2: sáu bước từ terminal"},
-        {"t":171.87,"den":258.13,"ten":".gitignore trước lần add đầu tiên"},
-        {"t":258.13,"den":283.51,"ten":"Commit trước, ignore sau"},
-        {"t":283.51,"den":331.28,"ten":"Git không lưu thư mục rỗng"},
-        {"t":331.28,"den":396.66,"ten":"Nối với GitHub và push"},
-        {"t":396.66,"den":445.24,"ten":"Con đường lai bị gãy: README + git init"},
-        {"t":445.24,"den":462.79,"ten":"Lối tắt: gh repo create"},
-        {"t":462.78,"den":507.69,"ten":"Thực hành"},
+        {"t":0,"den":128.36,"ten":"Chào bạn · ôn nhanh KĐ.3 · Một người, một lần"},
+        {"t":128.36,"den":258.13,"ten":"Cách 2: sáu bước từ terminal"},
+        {"t":258.13,"den":396.66,"ten":"Commit trước, ignore sau · Git không lưu thư mục rỗng"},
+        {"t":396.66,"den":507.69,"ten":"Con đường lai bị gãy: README + git init"},
         {"t":507.69,"den":564.63,"ten":"Tóm tắt"}
       ],
       "cues": [
@@ -10059,18 +10652,12 @@
         {"t":549.35,"vi":"Học xong phần tạo repo rồi, bạn mở bài KĐ.4 trên cuongthai.com, ngay dưới video này, làm phần Thực hành với GitHub giả trên máy, rồi hẵng sang bài mới nhé."}
       ]
     },
-    "git-kd-5-moi-thanh-vien": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/01-khoi-dong-nhanh/01-05-moi-thanh-vien-b04bfe42.mp4","durationSec":446.1,"nguonCau":"thoigian",
+    "git-kd-5-moi-thanh-vien": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/01-khoi-dong-nhanh/01-05-moi-thanh-vien-b04bfe42.mp4","durationSec":446.1,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":34.49,"ten":"Chào bạn · ôn nhanh KĐ.4"},
-        {"t":34.49,"den":73.79,"ten":"Mở link, ra trang 404"},
-        {"t":73.79,"den":102.78,"ten":"Trước khi mời: gom username GitHub"},
-        {"t":102.78,"den":156.54,"ten":"Nhóm trưởng: Settings → Collaborators → Add people"},
-        {"t":156.54,"den":202.35,"ten":"Từng thành viên: chấp nhận lời mời"},
-        {"t":202.35,"den":256.3,"ten":"Chứng minh mình có quyền — trước khi clone"},
-        {"t":256.3,"den":317.76,"ten":"Collaborator làm được gì"},
-        {"t":317.76,"den":344.32,"ten":"Đừng chia nhau mật khẩu nhóm trưởng"},
-        {"t":344.31,"den":389.02,"ten":"Thực hành"},
-        {"t":389.02,"den":446.1,"ten":"Tóm tắt"}
+        {"t":0,"den":102.78,"ten":"Chào bạn · ôn nhanh KĐ.4 · Mở link, ra trang 404"},
+        {"t":102.78,"den":202.35,"ten":"Nhóm trưởng: Settings → Collaborators → Add people"},
+        {"t":202.35,"den":317.76,"ten":"Chứng minh mình có quyền — trước khi clone"},
+        {"t":317.76,"den":446.1,"ten":"Đừng chia nhau mật khẩu nhóm trưởng · Thực hành"}
       ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài KĐ.5 của khoá Git và GitHub, chương Khởi động nhanh."},
@@ -10128,17 +10715,13 @@
         {"t":429.77,"vi":"Học xong phần mời thành viên rồi, cả nhóm mở bài KĐ.5 trên cuongthai.com, ngay dưới video này, làm phần Thực hành để ai cũng có quyền vào repo, rồi hẵng sang bài mới nhé."}
       ]
     },
-    "git-kd-6-clone-du-an": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/01-khoi-dong-nhanh/01-06-clone-du-an-a890188f.mp4","durationSec":522.85,"nguonCau":"thoigian",
+    "git-kd-6-clone-du-an": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/01-khoi-dong-nhanh/01-06-clone-du-an-a890188f.mp4","durationSec":522.85,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":29.5,"ten":"Mở bài"},
-        {"t":29.5,"den":73.36,"ten":"Chuyện của Huy: pull rồi mà code vẫn cũ"},
-        {"t":73.36,"den":133.19,"ten":"Clone khác tải ZIP ở đâu"},
+        {"t":0,"den":133.19,"ten":"Mở bài · Chuyện của Huy: pull rồi mà code vẫn cũ"},
         {"t":133.19,"den":219.69,"ten":"Clone đúng chỗ — một lần cho mỗi máy"},
         {"t":219.69,"den":297.21,"ten":"cd vào trong và ba lệnh kiểm"},
-        {"t":297.21,"den":352,"ten":"Mở đúng thư mục trong NetBeans"},
-        {"t":352,"den":401.88,"ten":"Tệp duy nhất bạn tự tạo: db.properties"},
-        {"t":401.88,"den":453.43,"ten":"Thực hành 15 phút"},
-        {"t":453.43,"den":522.85,"ten":"Tóm tắt · ghi vào sổ tay"}
+        {"t":297.21,"den":401.88,"ten":"Mở đúng thư mục trong NetBeans"},
+        {"t":401.88,"den":522.85,"ten":"Thực hành 15 phút · Tóm tắt · ghi vào sổ tay"}
       ],
       "cues": [
         {"t":5,"vi":"Chào bạn, đến với bài KĐ.6 của khoá Git và GitHub."},
@@ -10213,19 +10796,13 @@
         {"t":511.82,"vi":"Bài sau, KĐ.7, mình tách bạch việc làm một lần và việc làm mỗi ngày, rồi đi trọn một thẻ việc từ đầu tới cuối."}
       ]
     },
-    "git-kd-7-mot-lan-va-moi-ngay": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/01-khoi-dong-nhanh/01-07-mot-lan-va-moi-ngay-6a7f8e9b.mp4","durationSec":586.73,"nguonCau":"thoigian",
+    "git-kd-7-mot-lan-va-moi-ngay": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/01-khoi-dong-nhanh/01-07-mot-lan-va-moi-ngay-6a7f8e9b.mp4","durationSec":586.73,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":27.04,"ten":"Mở bài"},
-        {"t":27.04,"den":58.75,"ten":"Ba câu hỏi nhiều nhất"},
-        {"t":58.75,"den":121.27,"ten":"Một lần mỗi máy · một lần mỗi dự án · mỗi ngày"},
-        {"t":121.27,"den":158.68,"ten":"Ba hình ảnh: sổ chung, tờ nháp, thư viện"},
-        {"t":158.68,"den":221.72,"ten":"Bước 1–2: đứng trên sổ, lấy tờ nháp"},
-        {"t":221.72,"den":293.59,"ten":"Bước 3–4: làm việc rồi chụp ảnh"},
-        {"t":293.59,"den":363.18,"ten":"Bước 5: origin, -u, upstream"},
-        {"t":363.18,"den":420,"ten":"Bước 6–7: pull request, review, merge"},
-        {"t":420,"den":475.94,"ten":"Bước 8: về sổ chung, dọn dẹp"},
-        {"t":475.93,"den":523.65,"ten":"Thực hành: một thẻ thật nhỏ"},
-        {"t":523.64,"den":586.73,"ten":"Tóm tắt · ghi vào sổ tay"}
+        {"t":0,"den":121.27,"ten":"Mở bài · Ba câu hỏi nhiều nhất"},
+        {"t":121.27,"den":221.72,"ten":"Ba hình ảnh: sổ chung, tờ nháp, thư viện"},
+        {"t":221.72,"den":363.18,"ten":"Bước 3–4: làm việc rồi chụp ảnh"},
+        {"t":363.18,"den":475.94,"ten":"Bước 6–7: pull request, review, merge"},
+        {"t":475.93,"den":586.73,"ten":"Thực hành: một thẻ thật nhỏ · Tóm tắt · ghi vào sổ tay"}
       ],
       "cues": [
         {"t":5,"vi":"Chào bạn, đến với bài KĐ.7 của khoá Git và GitHub."},
@@ -10308,18 +10885,13 @@
         {"t":576.9,"vi":"Bài sau, KĐ.8: lấy code của bạn cùng nhóm về, merge main vào nhánh mình, và gỡ xung đột đầu tiên."}
       ]
     },
-    "git-kd-8-lay-code-cua-ban": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/01-khoi-dong-nhanh/01-08-lay-code-cua-ban-d85d677a.mp4","durationSec":495.15,"nguonCau":"thoigian",
+    "git-kd-8-lay-code-cua-ban": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/01-khoi-dong-nhanh/01-08-lay-code-cua-ban-d85d677a.mp4","durationSec":495.15,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":28.3,"ten":"Mở bài"},
-        {"t":28.3,"den":58.83,"ten":"Thứ Năm của Huy"},
-        {"t":58.83,"den":102.5,"ten":"Luật hai bước"},
-        {"t":102.5,"den":131.87,"ten":"Thông báo đỏ 1: pull trên nhánh chưa từng push"},
-        {"t":131.87,"den":187.16,"ten":"Thông báo đỏ 2: sửa dở chặn pull"},
-        {"t":187.15,"den":234.87,"ten":"Hai bước, lần này sạch"},
-        {"t":234.87,"den":317.95,"ten":"Xung đột đầu tiên, bình tĩnh"},
+        {"t":0,"den":102.5,"ten":"Mở bài · Thứ Năm của Huy"},
+        {"t":102.5,"den":187.16,"ten":"Thông báo đỏ 1: pull trên nhánh chưa từng push"},
+        {"t":187.15,"den":317.95,"ten":"Hai bước, lần này sạch · Xung đột đầu tiên, bình tĩnh"},
         {"t":317.94,"den":397.87,"ten":"Pull rồi mà NetBeans vẫn cũ — kiểm sáu bước"},
-        {"t":397.87,"den":435.52,"ten":"Thực hành: tự tạo một xung đột"},
-        {"t":435.52,"den":495.15,"ten":"Tóm tắt · ghi vào sổ tay"}
+        {"t":397.87,"den":495.15,"ten":"Thực hành: tự tạo một xung đột · Tóm tắt · ghi vào sổ tay"}
       ],
       "cues": [
         {"t":5,"vi":"Chào bạn, đến với bài KĐ.8 của khoá Git và GitHub."},
@@ -10386,16 +10958,12 @@
         {"t":485.78,"vi":"Bài sau, KĐ.9, là phòng khám lỗi: những thông báo đỏ nhóm đã gặp thật, và cách sửa từng cái."}
       ]
     },
-    "git-kd-9-loi-thuong-gap": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/01-khoi-dong-nhanh/01-09-loi-thuong-gap-1162b854.mp4","durationSec":577.07,"nguonCau":"thoigian",
+    "git-kd-9-loi-thuong-gap": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/git/01-khoi-dong-nhanh/01-09-loi-thuong-gap-1162b854.mp4","durationSec":577.07,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":27.72,"ten":"Mở bài"},
-        {"t":27.72,"den":66.17,"ten":"Luật trước mọi cách sửa"},
-        {"t":66.17,"den":140.59,"ten":"Lỗi trước khi kịp bắt đầu"},
+        {"t":0,"den":140.59,"ten":"Mở bài · Luật trước mọi cách sửa"},
         {"t":140.59,"den":248.56,"ten":"Đăng nhập và quyền truy cập"},
-        {"t":248.56,"den":293.34,"ten":"master, main và invalid reference"},
-        {"t":293.34,"den":412.12,"ten":"Lỗi của vòng lặp hằng ngày"},
-        {"t":412.12,"den":476.76,"ten":"Chỉ Windows: đường dẫn dài và Wi-Fi trường"},
-        {"t":476.76,"den":512.75,"ten":"Thực hành: cố ý làm hỏng"},
+        {"t":248.56,"den":412.12,"ten":"master, main và invalid reference"},
+        {"t":412.12,"den":512.75,"ten":"Chỉ Windows: đường dẫn dài và Wi-Fi trường"},
         {"t":512.75,"den":577.07,"ten":"Tóm tắt · ghi vào sổ tay"}
       ],
       "cues": [

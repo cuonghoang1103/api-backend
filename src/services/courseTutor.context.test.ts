@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import {
   boNgonNguKhac, vanBanBai, chonNgu, quizTuDuLieuBai, vanTayBai, khoaCacheCoVanTay, plain, TRAN_NOI_DUNG,
+  doanSlide, docSlideHoi,
 } from './courseTutor.context.js';
 
 // Đúng hình dạng bài SWT301: ảnh slide dùng chung, rồi cặp khối EN/VI, và
@@ -58,4 +59,25 @@ test('khoá cache đổi khi nội dung đổi và vừa cột VarChar(40)', () 
   const b = khoaCacheCoVanTay('start', vanTayBai('t', '<p>mới</p>'));
   assert.notEqual(a, b);
   assert.ok(khoaCacheCoVanTay('x'.repeat(40), vanTayBai(1)).length <= 40);
+});
+
+// "Hỏi slide này" (17/11/2026): đúng markup `_slides.mjs` sinh — ảnh + chú thích, rồi cặp khối giảng EN/VI.
+const haiSlide = (bo: string, n: number, ten: string, vi: string) =>
+  `<div class="anh-slide"><img src="x/${n}.webp" alt="${bo} slide ${n}: ${ten}" /><p class="chu-thich">📑 <strong>${bo}</strong> · slide ${n}/21 — ${ten}</p></div>\n`
+  + `<div class="ml-en giang"><p>EN text ${n}</p></div>\n<div class="ml-vi giang"><p>${vi}</p></div>`;
+
+test('doanSlide: trích ĐÚNG phần giảng của slide được hỏi, một thứ tiếng; slide 2 không nhầm slide 21', () => {
+  const html = [haiSlide('SWT0', 2, 'ISTQB', 'Giảng slide hai'), haiSlide('SWT0', 3, 'Test levels', 'Giảng slide ba'),
+    haiSlide('SWT0', 21, 'Tổng kết', 'Giảng slide hai mươi mốt')].join('\n');
+  assert.equal(doanSlide(html, { bo: 'SWT0', so: 2 }, false), 'Giảng slide hai');
+  assert.equal(doanSlide(html, { bo: 'SWT0', so: 21 }, false), 'Giảng slide hai mươi mốt');
+  assert.equal(doanSlide(html, { bo: 'SWT0', so: 3 }, true), 'EN text 3');
+  assert.equal(doanSlide(html, { bo: 'SWT1', so: 2 }, false), '', 'bộ khác ⇒ rỗng, không đoán');
+});
+
+test('docSlideHoi: không tin client', () => {
+  assert.deepEqual(docSlideHoi({ bo: 'SWT0', so: 2, ten: '  ISTQB  ' }), { bo: 'SWT0', so: 2, ten: 'ISTQB' });
+  assert.equal(docSlideHoi({ bo: 'SWT0', so: 0 }), undefined);
+  assert.equal(docSlideHoi({ bo: '<script>', so: 2 }), undefined);
+  assert.equal(docSlideHoi('rác'), undefined);
 });

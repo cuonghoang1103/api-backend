@@ -8,9 +8,10 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 
 import {
-  chonNguonPhuDe, chuanTrack, chuCau, docPhan, dungKhoiPhuDe, khoaCacheTheoTrack, laTrackRieng,
+  chonNguonPhuDe, chuanTrack, chuCau, docDoanHoi, docPhan, dungKhoiPhuDe, khoaCacheDoan, khoaCacheTheoTrack, laTrackRieng,
+  rutGonPhuDe,
 } from './phuDeRieng.js';
-import { themPhongVideoRieng } from '../courseTutor.service.js';
+import { cacheKeyHopLe, themPhongVideoRieng } from '../courseTutor.service.js';
 
 const rieng = { videoUrl: 'https://media/x-1.mp4', cues: [] as unknown[] };
 const yt = { cues: [] as unknown[] };
@@ -91,4 +92,42 @@ test('lời dặn video riêng: có phần ⇒ bắt dùng y nguyên danh sách 
   assert.match(themPhongVideoRieng(true), /VIETNAMESE/);
   assert.doesNotMatch(themPhongVideoRieng(false), /CÁC PHẦN CỦA VIDEO"/);
   assert.doesNotMatch(themPhongVideoRieng(false), /learning BOTH the subject knowledge AND English/);
+});
+
+test('docDoanHoi: không tin client — số hữu hạn, den > tu, tối đa 10 phút, tên gọn', () => {
+  assert.deepEqual(docDoanHoi({ tu: 200, den: 310.04, ten: '  Git   là gì ' }), { tu: 200, den: 310, ten: 'Git là gì' });
+  assert.deepEqual(docDoanHoi({ tu: 0, den: 5000 }), { tu: 0, den: 600 }, 'cắt ở 10 phút');
+  assert.equal(docDoanHoi({ tu: 50, den: 40 }), undefined);
+  assert.equal(docDoanHoi({ tu: -1, den: 40 }), undefined);
+  assert.equal(docDoanHoi({ tu: 'x', den: 40 }), undefined);
+  assert.equal(docDoanHoi(null), undefined);
+});
+
+test('khối phụ đề: ĐOẠN NGƯỜI HỌC ĐANG HỎI đủ từng câu trong đoạn (kèm câu đang nói dở), thắng cửa sổ quanh giây', () => {
+  const s = dungKhoiPhuDe({
+    cues: [{ t: 5, vi: 'Mở đầu.' }, { t: 190, vi: 'Câu nói dở trước mốc.' }, { t: 205, vi: 'Git là nút lưu game.' },
+      { t: 300, vi: 'Commit là một lần lưu.' }, { t: 400, vi: 'Ngoài đoạn.' }],
+    doan: { tu: 200, den: 320, ten: 'Git là gì' }, giay: 10, banKinhGiay: 100, tran: 14_000, tiengViet: true,
+  });
+  assert.match(s, /ĐOẠN NGƯỜI HỌC ĐANG HỎI \("Git là gì", \[3:20 - 5:20\] — đủ từng câu\):\n\[3:10\] Câu nói dở trước mốc\.\n\[3:25\] Git là nút lưu game\.\n\[5:00\] Commit là một lần lưu\./);
+  assert.doesNotMatch(s.split('PHỤ ĐỀ TOÀN VIDEO')[0], /Ngoài đoạn/);
+  assert.doesNotMatch(s, /ĐOẠN NGƯỜI HỌC ĐANG XEM/, 'đã có đoạn hỏi thì không thêm cửa sổ quanh giây');
+});
+
+test('rutGonPhuDe: video dài vẫn PHỦ TỚI CUỐI (giữ 1/k câu), không cắt cụt nửa sau', () => {
+  const dong = Array.from({ length: 900 }, (_, i) => `[${i}:00] câu số ${i} của bài giảng khá dài một chút`);
+  const { text, buoc } = rutGonPhuDe(dong, 14_000);
+  assert.ok(text.length <= 14_000);
+  assert.ok(buoc > 1);
+  assert.match(text, new RegExp(`\\[${Math.floor(899 / buoc) * buoc}:00\\]`), 'còn câu gần cuối video');
+  assert.deepEqual(rutGonPhuDe(['a', 'b'], 100), { text: 'a\nb', buoc: 1 });
+});
+
+test('cacheKeyHopLe: khoá theo đoạn phải KHỚP mốc của đoạn — lệch thì bỏ cache', () => {
+  const doan = { tu: 200, den: 320 };
+  assert.equal(cacheKeyHopLe({ cacheKey: khoaCacheDoan('pgt', doan), doan }), 'pgt@200-320');
+  assert.equal(cacheKeyHopLe({ cacheKey: 'pgt@0-60', doan }), undefined);
+  assert.equal(cacheKeyHopLe({ cacheKey: 'start', doan }), undefined, 'chip của bài không dùng cho câu hỏi theo đoạn');
+  assert.equal(cacheKeyHopLe({ cacheKey: 'start' }), 'start');
+  assert.equal(cacheKeyHopLe({ cacheKey: 'pgt@200-320' }), undefined, 'khoá đoạn mà không có đoạn ⇒ bỏ');
 });

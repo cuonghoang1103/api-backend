@@ -2,8 +2,17 @@
   "courseSlug": "api-design",
   "sinhBoi": "scripts/phu-de-tu-video-rieng.mjs",
   "lessons": {
-    "api-0-1-http": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/api-design/00-vi-sao-thiet-ke-api/00-03-http-ban-that-su-can-b180b083.mp4","durationSec":718.48,"nguonCau":"srt",
-      "parts": [],
+    "api-0-1-http": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/api-design/00-vi-sao-thiet-ke-api/00-03-http-ban-that-su-can-b180b083.mp4","durationSec":718.48,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":98.79,"ten":"Ôn nhanh · hôm nay · Bài này bạn mang về gì"},
+        {"t":98.79,"den":179.84,"ten":"Slide: lá thư và thư trả lời"},
+        {"t":179.84,"den":264.88,"ten":"Chạy thật: tấm gương phản chiếu"},
+        {"t":264.88,"den":349.91,"ten":"URL có năm phần · Request, từng dòng"},
+        {"t":349.91,"den":433.04,"ten":"Mã trạng thái kể câu chuyện · Những header bạn sẽ gặp"},
+        {"t":433.04,"den":518.1,"ten":"Mô phỏng: server không nhớ bạn · HTTP không giữ trạng thái"},
+        {"t":518.1,"den":630.67,"ten":"Bẫy: quên Content-Type · Chạy thật: bẫy Content-Type"},
+        {"t":630.67,"den":718.48,"ten":"Ba câu tự kiểm · Tóm tắt & luyện tập"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 0.1 của khoá API và System Design."},
         {"t":10.88,"vi":"Bài trước, mình đã xem năm sự cố API có thật, và gặp lại lời khuyên: khi kẹt, hãy đọc response trước tiên."},
@@ -135,8 +144,15 @@
         {"t":711.53,"vi":"Bài sau: công cụ, gồm curl chuyên sâu, HTTPie, Postman và Bruno."}
       ]
     },
-    "api-0-2-bo-cong-cu": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/api-design/00-vi-sao-thiet-ke-api/00-04-cong-cu-curl-httpie-postman-bruno-8c41205e.mp4","durationSec":580.35,"nguonCau":"srt",
-      "parts": [],
+    "api-0-2-bo-cong-cu": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/api-design/00-vi-sao-thiet-ke-api/00-04-cong-cu-curl-httpie-postman-bruno-8c41205e.mp4","durationSec":580.35,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":86.92,"ten":"Ôn nhanh · hôm nay · Bài này bạn mang về gì"},
+        {"t":86.92,"den":170.78,"ten":"Mười cờ curl · curl --json"},
+        {"t":170.78,"den":266.62,"ten":"Chạy thật: curl trong script · Windows: hai cái bẫy"},
+        {"t":266.62,"den":347.62,"ten":"Chạy thật: HTTPie và cái bẫy sắp xếp"},
+        {"t":347.62,"den":439.09,"ten":"Bruno · Khi nào dùng cái nào"},
+        {"t":439.09,"den":580.35,"ten":"Slide: bẫy dấu nháy · Thực hành 15 phút"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 0.2 của khoá API và System Design."},
         {"t":10.87,"vi":"Bài trước, mình dựng máy chủ tấm gương, đọc curl -i và curl -v từng dòng, và gặp bẫy quên Content-Type."},
@@ -240,8 +256,17 @@
         {"t":571.92,"vi":"Bài sau, bài 0.3, ta dựng khung LabFlow API để chĩa mọi công cụ này vào."}
       ]
     },
-    "api-0-3-du-an-labflow": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/api-design/00-vi-sao-thiet-ke-api/00-05-dung-khung-labflow-api-c986a715.mp4","durationSec":700.7,"nguonCau":"srt",
-      "parts": [],
+    "api-0-3-du-an-labflow": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/api-design/00-vi-sao-thiet-ke-api/00-05-dung-khung-labflow-api-c986a715.mp4","durationSec":700.7,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":92.16,"ten":"Ôn nhanh · hôm nay · Bài này bạn mang về gì"},
+        {"t":92.16,"den":175.58,"ten":"Bước 2: tạo dự án, cài Express 5"},
+        {"t":175.58,"den":264.57,"ten":"Ba tệp, ba nhiệm vụ · Gõ mã: db.js và server.js"},
+        {"t":264.57,"den":365.01,"ten":"app.js (1/2): các route"},
+        {"t":365.01,"den":445.1,"ten":"Bước 4: chạy và tự khởi động lại"},
+        {"t":445.1,"den":525.37,"ten":"Tìm thấy và không tìm thấy · Không có lưới hứng: HTML"},
+        {"t":525.37,"den":605.26,"ten":"Hai lỗi ngày đầu · Thực hành 15–20 phút"},
+        {"t":605.26,"den":700.7,"ten":"Ba câu tự kiểm · Tóm tắt & luyện tập"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 0.3 của khoá API và System Design."},
         {"t":10.83,"vi":"Bài trước, mình đã có mười cờ curl, HTTPie, và biết lưu request vào Bruno ngay cạnh mã nguồn."},
@@ -366,8 +391,18 @@
         {"t":691.75,"vi":"Tiếp theo là quiz Mục 0, rồi Chương 1 biến các endpoint này thành một thiết kế tài nguyên thật sự."}
       ]
     },
-    "api-0-8-bat-dau-tai-day": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/api-design/00-vi-sao-thiet-ke-api/00-01-bat-dau-api-la-gi-cdaa6f16.mp4","durationSec":888.92,"nguonCau":"srt",
-      "parts": [],
+    "api-0-8-bat-dau-tai-day": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/api-design/00-vi-sao-thiet-ke-api/00-01-bat-dau-api-la-gi-cdaa6f16.mp4","durationSec":888.92,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":90.09,"ten":"Chào bạn · khoá API Design · Bìa · bốn câu hỏi"},
+        {"t":90.09,"den":201.8,"ten":"Mô phỏng: đi ăn nhà hàng · Slide: ví dụ nhà hàng"},
+        {"t":201.8,"den":293.75,"ten":"Chạy thật: một lần gọi API · Năm từ hay dùng lẫn"},
+        {"t":293.75,"den":413.28,"ten":"Bốn kiểu API · HTTP không phải REST"},
+        {"t":413.28,"den":501.8,"ten":"Lịch sử (2/2): hợp đồng thành tài liệu"},
+        {"t":501.8,"den":577.98,"ten":"Viết endpoint khác thiết kế API · Gặp ở đâu khi đi làm"},
+        {"t":577.98,"den":665.36,"ten":"Học xong làm được gì · Dự án xuyên khoá: LabFlow"},
+        {"t":665.36,"den":797.28,"ten":"Lộ trình bốn giai đoạn · Cần biết gì trước"},
+        {"t":797.28,"den":888.92,"ten":"Ba câu tự kiểm · Tóm tắt & luyện tập"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với khoá API và System Design trên cuongthai.com."},
         {"t":10.68,"vi":"Khoá này dạy bạn làm việc với API như một tech lead: tự thiết kế, đọc hiểu, và vận hành được nó."},
@@ -528,8 +563,17 @@
         {"t":881.01,"vi":"Bài sau: những sự cố API có thật, và một kế hoạch học giúp bạn không bỏ cuộc."}
       ]
     },
-    "api-0-9-bat-dau-khi-khong-co": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/api-design/00-vi-sao-thiet-ke-api/00-02-bat-dau-khi-api-hong-df05e843.mp4","durationSec":773.37,"nguonCau":"srt",
-      "parts": [],
+    "api-0-9-bat-dau-khi-khong-co": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/api-design/00-vi-sao-thiet-ke-api/00-02-bat-dau-khi-api-hong-df05e843.mp4","durationSec":773.37,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":84.85,"ten":"Ôn nhanh · hôm nay · Bìa · ba phần của bài"},
+        {"t":84.85,"den":161.22,"ten":"USPS 2018: đăng nhập là xem được tất cả"},
+        {"t":161.22,"den":271.02,"ten":"T-Mobile 2023: một API, sáu tuần lặng lẽ"},
+        {"t":271.02,"den":386.33,"ten":"Khuôn chung sau các tin tức · Mô phỏng: năm lỗ trên một API"},
+        {"t":386.33,"den":477.2,"ten":"Slide: thảm hoạ ngày demo · Vì sao người ta bỏ cuộc"},
+        {"t":477.2,"den":574.35,"ten":"Hai kế hoạch thật thà · Khi bị kẹt: đọc response trước"},
+        {"t":574.35,"den":684.17,"ten":"Mười hai từ cần biết · Các cột mốc để đánh dấu"},
+        {"t":684.17,"den":773.37,"ten":"Ba câu tự kiểm · Tóm tắt & luyện tập"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài Bắt đầu tại đây phần hai, của khoá API và System Design."},
         {"t":11.98,"vi":"Bài trước, mình đã thấy API là một hợp đồng bốn điều khoản: được hỏi gì, hỏi thế nào, nhận lại gì, cái gì có thể hỏng."},
@@ -669,8 +713,16 @@
         {"t":764.45,"vi":"Bài sau, bài 0.1, ta mở một request và response HTTP trần ra và đọc từng dòng."}
       ]
     },
-    "api-1-1-tai-nguyen": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/api-design/01-tai-nguyen-phuong-thuc/01-01-mo-hinh-hoa-tai-nguyen-824f080c.mp4","durationSec":640.23,"nguonCau":"srt",
-      "parts": [],
+    "api-1-1-tai-nguyen": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/api-design/01-tai-nguyen-phuong-thuc/01-01-mo-hinh-hoa-tai-nguyen-824f080c.mp4","durationSec":640.23,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":95.58,"ten":"Ôn Mục 0 · vào Chương 1 · Bài này bạn mang về gì"},
+        {"t":95.58,"den":190.41,"ten":"Slide: hành động thành vật · Bộ sưu tập và phần tử"},
+        {"t":190.41,"den":273.2,"ten":"Luật URL của LabFlow · Bản đồ LabFlow cuối Chương 1"},
+        {"t":273.2,"den":363.12,"ten":"Chạy thật: lồng nhau hay bộ lọc · URL lồng hay bộ lọc"},
+        {"t":363.12,"den":441.57,"ten":"Dừng ở một tầng · Hành động không phải CRUD"},
+        {"t":441.57,"den":560.87,"ten":"Slide: huỷ thật · Bẫy: URL theo màn hình hay theo bảng"},
+        {"t":560.87,"den":640.23,"ten":"Ba câu tự kiểm · Tóm tắt & luyện tập"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Chương 1 của khoá API và System Design: tài nguyên và phương thức."},
         {"t":12.37,"vi":"Mục 0 cho ta ba thứ: API là một hợp đồng, HTTP đọc được từng dòng, và một khung LabFlow chạy thật ở cổng 4000."},
@@ -780,8 +832,17 @@
         {"t":632.2,"vi":"Bài sau: phương thức nào cho việc nào, và những lời hứa tên là safe và idempotent."}
       ]
     },
-    "api-1-2-phuong-thuc": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/api-design/01-tai-nguyen-phuong-thuc/01-02-phuong-thuc-va-cam-ket-25cf9320.mp4","durationSec":703.97,"nguonCau":"srt",
-      "parts": [],
+    "api-1-2-phuong-thuc": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/api-design/01-tai-nguyen-phuong-thuc/01-02-phuong-thuc-va-cam-ket-25cf9320.mp4","durationSec":703.97,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":93.98,"ten":"Ôn nhanh · hôm nay · Bài này bạn mang về gì"},
+        {"t":93.98,"den":205.71,"ten":"Slide: bấm hai lần · Hai lời hứa trong chuẩn HTTP"},
+        {"t":205.71,"den":286.99,"ten":"Slide: response bị mất"},
+        {"t":286.99,"den":364.27,"ten":"PUT hai lần = cùng trạng thái"},
+        {"t":364.27,"den":449.64,"ten":"PATCH với JSON Merge Patch · PUT so với PATCH"},
+        {"t":449.64,"den":527.9,"ten":"DELETE hai lần: vẫn idempotent · HEAD, OPTIONS và 405"},
+        {"t":527.9,"den":611.16,"ten":"Bẫy · Thực hành 15–20 phút"},
+        {"t":611.16,"den":703.97,"ten":"Ba câu tự kiểm · Tóm tắt & luyện tập"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 1.2 của khoá API và System Design."},
         {"t":10.83,"vi":"Bài trước, mình biến yêu cầu thành danh từ: bộ sưu tập và phần tử, lồng tối đa một tầng, và huỷ lượt đặt bằng một hành động riêng."},
@@ -910,8 +971,17 @@
         {"t":698.85,"vi":"Bài sau: những mã trạng thái thật sự có ý nghĩa."}
       ]
     },
-    "api-1-3-status": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/api-design/01-tai-nguyen-phuong-thuc/01-03-ma-trang-thai-co-y-nghia-d7c8dfd2.mp4","durationSec":710.29,"nguonCau":"srt",
-      "parts": [],
+    "api-1-3-status": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/api-design/01-tai-nguyen-phuong-thuc/01-03-ma-trang-thai-co-y-nghia-d7c8dfd2.mp4","durationSec":710.29,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":104.68,"ten":"Ôn nhanh · hôm nay · Bài này bạn mang về gì"},
+        {"t":104.68,"den":196.62,"ten":"Slide: văn phòng lab · Mô phỏng: chọn mã 4xx trong mười giây"},
+        {"t":196.62,"den":288.64,"ten":"Chạy thật: 201, 400 và 422 · 400: chính request bị hỏng"},
+        {"t":288.64,"den":370.6,"ten":"Chạy thật: 401, 403, 404, 410 · 401 so với 403"},
+        {"t":370.6,"den":448.2,"ten":"Chạy thật: 409 rồi 201 · 409 Conflict: mã của đặt trùng"},
+        {"t":448.2,"den":541.04,"ten":"5xx: nói ít thôi · Một bộ xử lý lỗi cho tất cả"},
+        {"t":541.04,"den":616.63,"ten":"Slide: bẫy 200 · Bảng tra nhanh"},
+        {"t":616.63,"den":710.29,"ten":"Ba câu tự kiểm · Tóm tắt & luyện tập"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 1.3 của khoá API và System Design."},
         {"t":10.78,"vi":"Bài trước, mình thấy POST gửi hai lần sinh bản song sinh, PUT thì không, và DELETE trả 204 rồi 404 mà vẫn idempotent."},
@@ -1035,8 +1105,16 @@
         {"t":704.76,"vi":"Bài sau: đặt tên, kiểu chữ, ngày giờ, tiền và id."}
       ]
     },
-    "api-1-4-dat-ten": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/api-design/01-tai-nguyen-phuong-thuc/01-04-dat-ten-kieu-chu-nhat-quan-37c9a59f.mp4","durationSec":664.77,"nguonCau":"srt",
-      "parts": [],
+    "api-1-4-dat-ten": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/api-design/01-tai-nguyen-phuong-thuc/01-04-dat-ten-kieu-chu-nhat-quan-37c9a59f.mp4","durationSec":664.77,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":104.27,"ten":"Ôn nhanh · hôm nay · Bài này bạn mang về gì"},
+        {"t":104.27,"den":210.78,"ten":"Slide: ba cách viết · Mỗi chỗ một kiểu chữ"},
+        {"t":210.78,"den":312.29,"ten":"Cái gì phân biệt hoa thường · Bẫy: bộ lọc gõ sai bị lờ"},
+        {"t":312.29,"den":419.65,"ten":"Chạy thật: cùng mã, hai múi giờ"},
+        {"t":419.65,"den":508.44,"ten":"Id: chuỗi, không phải số lớn · null, thiếu trường, rỗng"},
+        {"t":508.44,"den":620.37,"ten":"Hướng dẫn đặt tên LabFlow · Thực hành 15–20 phút"},
+        {"t":620.37,"den":664.77,"ten":"Tóm tắt & luyện tập"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 1.4 của khoá API và System Design."},
         {"t":10.73,"vi":"Bài trước, mình đi trọn bộ mã trạng thái: 201 kèm Location, 400 với 422, 401 với 403, 404 với 410, và 409 của chuyện đặt trùng."},
@@ -1156,8 +1234,13 @@
         {"t":657.79,"vi":"Tiếp theo là lab của chương: thiết kế và dựng tài nguyên báo hỏng thiết bị."}
       ]
     },
-    "api-1-5-lab": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/api-design/01-tai-nguyen-phuong-thuc/01-05-lab-1-bao-hong-thiet-bi-fd603344.mp4","durationSec":431.34,"nguonCau":"srt",
-      "parts": [],
+    "api-1-5-lab": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/api-design/01-tai-nguyen-phuong-thuc/01-05-lab-1-bao-hong-thiet-bi-fd603344.mp4","durationSec":431.34,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":117.66,"ten":"Ôn Chương 1 · vào lab · Yêu cầu từ quản lý lab"},
+        {"t":117.66,"den":207.54,"ten":"Phần A: thiết kế trước khi viết mã"},
+        {"t":207.54,"den":287.68,"ten":"Phần C: đường suôn sẻ · Phần C: từng lỗi"},
+        {"t":287.68,"den":431.34,"ten":"Nộp bài và thử thách thêm · Bắt tay làm lab"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Lab 1 của khoá API và System Design."},
         {"t":10.16,"vi":"Chương 1 cho ta bốn công cụ: tài nguyên là danh từ, phương thức có lời hứa, mã trạng thái có ý nghĩa, và một hướng dẫn đặt tên."},
@@ -1236,8 +1319,14 @@
         {"t":423.49,"vi":"Tiếp theo là bài kiểm tra Chương 1, rồi Chương 2: lỗi, kiểm dữ liệu và phản hồi."}
       ]
     },
-    "api-10-1-hang-doi": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/api-design/10-bat-dong-bo-thoi-gian-thuc/10-01-api-bat-dong-bo-202-00a6c46c.mp4","durationSec":472.08,"nguonCau":"srt",
-      "parts": [],
+    "api-10-1-hang-doi": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/api-design/10-bat-dong-bo-thoi-gian-thuc/10-01-api-bat-dong-bo-202-00a6c46c.mp4","durationSec":472.08,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":92.53,"ten":"Ôn nhanh · hôm nay · Chờ bên trong một request"},
+        {"t":92.53,"den":192.9,"ten":"Mô phỏng: ba bên cùng giữ một kết nối"},
+        {"t":192.9,"den":308.34,"ten":"Chạy thật: 202 và một client hỏi lại · Tài nguyên công việc"},
+        {"t":308.34,"den":385.25,"ten":"Huỷ, thời hạn giữ, cú bấm thứ hai · Luyện tập 30–40 phút"},
+        {"t":385.25,"den":472.08,"ten":"Ba câu tự kiểm · Tóm tắt & luyện tập"}
+      ],
       "cues": [
         {"t":5.54,"vi":"Chào bạn, đến với bài 10.1, mở đầu Chương 10 của khoá API và System Design: bất đồng bộ và thời gian thực."},
         {"t":16.1,"vi":"Học xong chương này, bạn mở được một việc dài thành việc nền, chạy nó trong hàng đợi thật, và viết hợp đồng cho sự kiện."},
@@ -1304,8 +1393,14 @@
         {"t":462.69,"vi":"Tiếp theo, bài 10.2: khởi động lại API, giết worker, việc thật sự chạy ở đâu."}
       ]
     },
-    "api-10-1-worker": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/api-design/10-bat-dong-bo-thoi-gian-thuc/10-02-hang-doi-va-worker-8fbc7b53.mp4","durationSec":476.9,"nguonCau":"srt",
-      "parts": [],
+    "api-10-1-worker": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/api-design/10-bat-dong-bo-thoi-gian-thuc/10-02-hang-doi-va-worker-8fbc7b53.mp4","durationSec":476.9,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":102.86,"ten":"Ôn nhanh · hôm nay · Lời hứa chết cùng tiến trình"},
+        {"t":102.86,"den":193.41,"ten":"Chạy thật: khởi động lại là mất"},
+        {"t":193.41,"den":287.58,"ten":"Thử lại, và thêm worker · Chạy thật: giết worker giữa chừng"},
+        {"t":287.58,"den":388.22,"ten":"Chạy thật: thêm worker, giữ nguyên API"},
+        {"t":388.22,"den":476.9,"ten":"Ba câu tự kiểm · Tóm tắt & luyện tập"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 10.2 của khoá API và System Design."},
         {"t":11.01,"vi":"Bài trước thiết kế phần client thấy: 202, tài nguyên công việc, huỷ, thời hạn giữ."},
@@ -1379,8 +1474,13 @@
         {"t":469.16,"vi":"Tiếp theo, bài 10.3: hợp đồng sự kiện mà các đội khác đọc."}
       ]
     },
-    "api-10-2-su-kien": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/api-design/10-bat-dong-bo-thoi-gian-thuc/10-03-hop-dong-su-kien-e5a31806.mp4","durationSec":406.53,"nguonCau":"srt",
-      "parts": [],
+    "api-10-2-su-kien": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/api-design/10-bat-dong-bo-thoi-gian-thuc/10-03-hop-dong-su-kien-e5a31806.mp4","durationSec":406.53,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":135.74,"ten":"Ôn nhanh · hôm nay · Một sự kiện, và hợp đồng của nó"},
+        {"t":135.74,"den":212.36,"ten":"Mỏng hay dày, và đổi một sự kiện · Mô phỏng: ít nhất một lần"},
+        {"t":212.36,"den":323.6,"ten":"Phía phát: sự kiện không bao giờ rời đi"},
+        {"t":323.6,"den":406.53,"ten":"Ba câu tự kiểm · Tóm tắt & luyện tập"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 10.3 của khoá API và System Design."},
         {"t":10.84,"vi":"Hai bài trước: việc nền với 202, hàng đợi và worker."},
@@ -1440,8 +1540,14 @@
         {"t":397.63,"vi":"Tiếp theo, bài 10.4: đẩy sự kiện lên màn hình bằng polling, SSE hay WebSocket."}
       ]
     },
-    "api-10-3-realtime": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/api-design/10-bat-dong-bo-thoi-gian-thuc/10-04-polling-sse-websocket-9edf4948.mp4","durationSec":428.25,"nguonCau":"srt",
-      "parts": [],
+    "api-10-3-realtime": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/api-design/10-bat-dong-bo-thoi-gian-thuc/10-04-polling-sse-websocket-9edf4948.mp4","durationSec":428.25,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":95.68,"ten":"Ôn nhanh · hôm nay · Bốn client, cùng ba mươi sự kiện"},
+        {"t":95.68,"den":200.13,"ten":"Chạy thật: bốn client, và một giờ yên lặng"},
+        {"t":200.13,"den":277.84,"ten":"Bẫy: chạy với curl, hỏng trên trình duyệt"},
+        {"t":277.84,"den":354.59,"ten":"Chạy thật: vé, và hai instance · Luyện tập 30–40 phút"},
+        {"t":354.59,"den":428.25,"ten":"Ba câu tự kiểm · Chọn cái nào, và tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 10.4 của khoá API và System Design."},
         {"t":10.84,"vi":"Bài trước viết hợp đồng cho sự kiện."},
@@ -1505,8 +1611,14 @@
         {"t":420.29,"vi":"Tiếp theo, bài 10.5: webhook, đẩy sự kiện tới server của người khác."}
       ]
     },
-    "api-10-4-nhan-webhook": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/api-design/10-bat-dong-bo-thoi-gian-thuc/10-06-webhook-ben-nhan-ab35871e.mp4","durationSec":465.56,"nguonCau":"srt",
-      "parts": [],
+    "api-10-4-nhan-webhook": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/api-design/10-bat-dong-bo-thoi-gian-thuc/10-06-webhook-ben-nhan-ab35871e.mp4","durationSec":465.56,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":103.18,"ten":"Ôn nhanh · hôm nay · Năm bước của bên nhận"},
+        {"t":103.18,"den":189.42,"ten":"Byte thô, hàng giả và hàng phát lại"},
+        {"t":189.42,"den":286.02,"ten":"Trả lời trước, làm sau — đo ba cách"},
+        {"t":286.02,"den":385.09,"ten":"Tin huỷ tới trước tin đặt · Chạy thật: thứ tự sai"},
+        {"t":385.09,"den":465.56,"ten":"Ba câu tự kiểm · Tóm tắt & luyện tập"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 10.6 của khoá API và System Design."},
         {"t":10.91,"vi":"Bài trước LabFlow là bên gửi: ký HMAC, thử lại, và ghi nhật ký giao."},
@@ -1588,8 +1700,13 @@
         {"t":458.74,"vi":"Tiếp theo, Lab 10: báo cáo sử dụng chạy nền, có webhook báo xong."}
       ]
     },
-    "api-10-4-webhook": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/api-design/10-bat-dong-bo-thoi-gian-thuc/10-05-webhook-ben-gui-de51a407.mp4","durationSec":400.03,"nguonCau":"srt",
-      "parts": [],
+    "api-10-4-webhook": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/api-design/10-bat-dong-bo-thoi-gian-thuc/10-05-webhook-ben-gui-de51a407.mp4","durationSec":400.03,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":134.19,"ten":"Ôn nhanh · hôm nay · Đăng ký: một URL là một bề mặt tấn công"},
+        {"t":134.19,"den":217.53,"ten":"Từ một sự kiện tới một POST có chữ ký"},
+        {"t":217.53,"den":320.58,"ten":"Chạy thật: bên nhận bảo trì · Thử lại mà nhìn thấy được"},
+        {"t":320.58,"den":400.03,"ten":"Ba câu tự kiểm · Tóm tắt & luyện tập"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 10.5 của khoá API và System Design."},
         {"t":10.89,"vi":"Bài trước đẩy sự kiện lên màn hình bằng SSE và WebSocket."},
@@ -1651,8 +1768,13 @@
         {"t":393.6,"vi":"Tiếp theo, bài 10.6: phía bên kia, nhận webhook an toàn."}
       ]
     },
-    "api-10-7-lab": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/api-design/10-bat-dong-bo-thoi-gian-thuc/10-07-lab-10-bao-cao-viec-nen-5f9bc5e4.mp4","durationSec":425,"nguonCau":"srt",
-      "parts": [],
+    "api-10-7-lab": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/api-design/10-bat-dong-bo-thoi-gian-thuc/10-07-lab-10-bao-cao-viec-nen-5f9bc5e4.mp4","durationSec":425,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":80.82,"ten":"Ôn Chương 10 · vào lab · Điểm xuất phát và bảy nhiệm vụ"},
+        {"t":80.82,"den":162.21,"ten":"Chạy thật: điểm xuất phát · Mô phỏng: làm mẫu một dòng"},
+        {"t":162.21,"den":275.47,"ten":"Thang chấm và script chấm · Lời giải tham khảo"},
+        {"t":275.47,"den":425,"ten":"Lab này cho thấy gì · Bắt tay làm lab"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Lab 10 của khoá API và System Design."},
         {"t":10.21,"vi":"Chương 10 cho ta: việc nền trả 202, worker và thử lại, hợp đồng sự kiện, SSE và WebSocket, rồi webhook có chữ ký ở cả hai phía."},
@@ -1719,8 +1841,13 @@
         {"t":420.72,"vi":"Tiếp theo: bài kiểm tra Chương 10."}
       ]
     },
-    "api-11-1-khung": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/api-design/11-phong-van-system-design/11-01-khung-phong-van-1523a3c7.mp4","durationSec":398.62,"nguonCau":"srt",
-      "parts": [],
+    "api-11-1-khung": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/api-design/11-phong-van-system-design/11-01-khung-phong-van-1523a3c7.mp4","durationSec":398.62,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":101.01,"ten":"Ôn nhanh · hôm nay · Người phỏng vấn thật ra chấm gì"},
+        {"t":101.01,"den":179.12,"ten":"Mô phỏng: bảng trắng có gì"},
+        {"t":179.12,"den":265.87,"ten":"Ước lượng — rồi so với số đo · Hợp đồng trên bảng"},
+        {"t":265.87,"den":398.62,"ten":"Thang chấm, và phần tiếp theo · Luyện tập 30 phút"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Chương 11 của khoá API và System Design: phỏng vấn thiết kế API."},
         {"t":12.95,"vi":"Mười chương trước cho bạn đủ linh kiện: hợp đồng, lỗi, phân trang, idempotency, bảo mật, cache, hàng đợi, webhook."},
@@ -1788,8 +1915,13 @@
         {"t":392.4,"vi":"Tiếp theo, bài 11.2: phỏng vấn rút gọn đường dẫn."}
       ]
     },
-    "api-11-2-chuyen-huong": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/api-design/11-phong-van-system-design/11-03-rut-gon-link-2-601cc105.mp4","durationSec":358.35,"nguonCau":"srt",
-      "parts": [],
+    "api-11-2-chuyen-huong": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/api-design/11-phong-van-system-design/11-03-rut-gon-link-2-601cc105.mp4","durationSec":358.35,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":102.46,"ten":"Ôn nhanh · hôm nay · Mô phỏng: trình duyệt được phép nhớ gì"},
+        {"t":102.46,"den":179.37,"ten":"301 hay 302? Năm lượt bấm, hai trình duyệt"},
+        {"t":179.37,"den":287.71,"ten":"Đường nóng: lượt bấm đi đâu · Các câu hỏi thêm"},
+        {"t":287.71,"den":358.35,"ten":"Ba câu tự kiểm · Tóm tắt & luyện tập"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 11.3 của khoá API và System Design."},
         {"t":11.21,"vi":"Bài trước: hợp đồng của dịch vụ rút gọn đường dẫn, và một triệu mã ngắn sinh theo ba cách."},
@@ -1850,8 +1982,13 @@
         {"t":354.09,"vi":"Tiếp theo, bài 11.4."}
       ]
     },
-    "api-11-2-rut-gon-link": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/api-design/11-phong-van-system-design/11-02-rut-gon-link-1-08e1a906.mp4","durationSec":382.83,"nguonCau":"srt",
-      "parts": [],
+    "api-11-2-rut-gon-link": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/api-design/11-phong-van-system-design/11-02-rut-gon-link-1-08e1a906.mp4","durationSec":382.83,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":101.05,"ten":"Ôn nhanh · hôm nay · Năm phút đầu"},
+        {"t":101.05,"den":190.97,"ten":"Chạy thật: mỗi dòng là một quyết định"},
+        {"t":190.97,"den":268.21,"ten":"Chạy thật: một triệu mã, ba cách"},
+        {"t":268.21,"den":382.83,"ten":"Luyện tập 30 phút · Ba câu tự kiểm"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 11.2 của khoá API và System Design."},
         {"t":11.25,"vi":"Bài trước cho ta kế hoạch năm bước và thang chấm sáu dòng."},
@@ -1918,8 +2055,13 @@
         {"t":378.62,"vi":"Tiếp theo, bài 11.3."}
       ]
     },
-    "api-11-3-chat": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/api-design/11-phong-van-system-design/11-05-chat-900db171.mp4","durationSec":280.75,"nguonCau":"srt",
-      "parts": [],
+    "api-11-3-chat": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/api-design/11-phong-van-system-design/11-05-chat-900db171.mp4","durationSec":280.75,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":78.2,"ten":"Ôn nhanh · hôm nay · Gửi qua HTTP, nhận qua socket"},
+        {"t":78.2,"den":150.36,"ten":"Chạy thật: điện thoại gửi hai lần"},
+        {"t":150.36,"den":217.65,"ten":"Nhiều thiết bị, “đã xem”, nhóm · Tóm tắt"},
+        {"t":217.65,"den":280.75,"ten":"Ba câu tự kiểm · Tóm tắt & luyện tập"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 11.5 của khoá API và System Design."},
         {"t":11.32,"vi":"Bài trước: news feed, đẩy hay kéo, và trang xê dịch khi có bài mới."},
@@ -1971,8 +2113,13 @@
         {"t":276.55,"vi":"Tiếp theo, bài 11.6."}
       ]
     },
-    "api-11-3-feed-chat": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/api-design/11-phong-van-system-design/11-04-news-feed-d9643ca2.mp4","durationSec":305.77,"nguonCau":"srt",
-      "parts": [],
+    "api-11-3-feed-chat": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/api-design/11-phong-van-system-design/11-04-news-feed-d9643ca2.mp4","durationSec":305.77,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":68.33,"ten":"Ôn nhanh · hôm nay · Làm rõ, rồi hợp đồng"},
+        {"t":68.33,"den":146.2,"ten":"Mô phỏng: toả bài khi ghi, hay khi đọc"},
+        {"t":146.2,"den":214.24,"ten":"Cách lai · Chạy thật: trang xê dịch khi có bài mới"},
+        {"t":214.24,"den":305.77,"ten":"Luyện tập 30 phút · Ba câu tự kiểm"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 11.4 của khoá API và System Design."},
         {"t":11.37,"vi":"Hai bài trước: dịch vụ rút gọn đường dẫn, từ mã ngắn tới 301 hay 302."},
@@ -2028,8 +2175,13 @@
         {"t":301.61,"vi":"Tiếp theo, bài 11.5."}
       ]
     },
-    "api-11-4-dat-lich": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/api-design/11-phong-van-system-design/11-06-dat-lich-e3afeb70.mp4","durationSec":320.95,"nguonCau":"srt",
-      "parts": [],
+    "api-11-4-dat-lich": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/api-design/11-phong-van-system-design/11-06-dat-lich-e3afeb70.mp4","durationSec":320.95,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":91.02,"ten":"Ôn nhanh · hôm nay · Mang bằng chứng, không mang tính năng"},
+        {"t":91.02,"den":159.81,"ten":"Chạy thật: bốn cách xử lý"},
+        {"t":159.81,"den":254.25,"ten":"Chạy thật: giữ chỗ hết hạn · Giữ chỗ hết hạn — và cái bẫy"},
+        {"t":254.25,"den":320.95,"ten":"Ba câu tự kiểm · Tóm tắt & luyện tập"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 11.6 của khoá API và System Design."},
         {"t":11.24,"vi":"Ba bài trước: rút gọn đường dẫn, news feed, chat."},
@@ -2085,8 +2237,14 @@
         {"t":317.35,"vi":"Tiếp theo, Lab 11."}
       ]
     },
-    "api-11-7-lab": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/api-design/11-phong-van-system-design/11-07-lab-11-phong-van-thu-a7f93014.mp4","durationSec":366.53,"nguonCau":"srt",
-      "parts": [],
+    "api-11-7-lab": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/api-design/11-phong-van-system-design/11-07-lab-11-phong-van-thu-a7f93014.mp4","durationSec":366.53,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":93.85,"ten":"Ôn Chương 11 · vào lab"},
+        {"t":93.85,"den":170.08,"ten":"Kịch bản của người phỏng vấn"},
+        {"t":170.08,"den":252.3,"ten":"Mô phỏng: làm mẫu một dòng · Lời giải tham khảo"},
+        {"t":252.3,"den":327.44,"ten":"Bắt tay làm lab · Ba câu tự kiểm"},
+        {"t":327.44,"den":366.53,"ten":"Tóm tắt & luyện tập"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Lab 11 của khoá API và System Design."},
         {"t":10.17,"vi":"Chương 11 cho ta: kế hoạch năm bước, rút gọn đường dẫn, news feed, chat, và hệ thống đặt lịch."},
@@ -2150,8 +2308,13 @@
         {"t":358.84,"vi":"Tiếp theo: bài kiểm tra Chương 11, rồi Chương 12, dự án cuối khoá."}
       ]
     },
-    "api-12-1-thiet-ke": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/api-design/12-du-an-cuoi-khoa/12-01-ke-hoach-du-an-f099cf61.mp4","durationSec":357.35,"nguonCau":"srt",
-      "parts": [],
+    "api-12-1-thiet-ke": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/api-design/12-du-an-cuoi-khoa/12-01-ke-hoach-du-an-f099cf61.mp4","durationSec":357.35,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":78.17,"ten":"Ôn nhanh · hôm nay · Học xong Chương 12 bạn làm được"},
+        {"t":78.17,"den":166.69,"ten":"Mô phỏng: mọi thứ còn nằm trong RAM"},
+        {"t":166.69,"den":246.45,"ten":"Đo được: hai instance RAM sau proxy · Lược đồ giữ được luật"},
+        {"t":246.45,"den":357.35,"ten":"Luyện tập 30 phút · Ba câu tự kiểm"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Chương 12 của khoá API và System Design: dự án cuối khoá."},
         {"t":12.06,"vi":"Suốt mười một chương, LabFlow giữ dữ liệu trong mảng JavaScript."},
@@ -2209,8 +2372,13 @@
         {"t":353.25,"vi":"Tiếp theo, bài 12.2."}
       ]
     },
-    "api-12-11-migration": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/api-design/12-du-an-cuoi-khoa/12-02-migration-63b4fbbc.mp4","durationSec":360.82,"nguonCau":"srt",
-      "parts": [],
+    "api-12-11-migration": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/api-design/12-du-an-cuoi-khoa/12-02-migration-63b4fbbc.mp4","durationSec":360.82,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":111.28,"ten":"Ôn nhanh · hôm nay · Mô phỏng: bộ chạy migration"},
+        {"t":111.28,"den":210.16,"ten":"Chạy, rồi chạy lại"},
+        {"t":210.16,"den":284.67,"ten":"Migration khoá production"},
+        {"t":284.67,"den":360.82,"ten":"Ba câu tự kiểm · Tóm tắt & luyện tập"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 12.2 của khoá API và System Design."},
         {"t":11.16,"vi":"Bài trước quyết định bảng là gì."},
@@ -2276,8 +2444,13 @@
         {"t":356.76,"vi":"Tiếp theo, bài 12.3."}
       ]
     },
-    "api-12-2-xay-dung": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/api-design/12-du-an-cuoi-khoa/12-03-dung-tren-postgresql-e94d8f5e.mp4","durationSec":370.15,"nguonCau":"srt",
-      "parts": [],
+    "api-12-2-xay-dung": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/api-design/12-du-an-cuoi-khoa/12-03-dung-tren-postgresql-e94d8f5e.mp4","durationSec":370.15,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":103.67,"ten":"Ôn nhanh · hôm nay · Một giao diện, hai kho, cùng bộ test"},
+        {"t":103.67,"den":183.44,"ten":"Bảy pool thành một, có kích thước"},
+        {"t":183.44,"den":265.37,"ten":"Một lượt đặt là một transaction: năm mươi cùng lúc"},
+        {"t":265.37,"den":370.15,"ten":"Luyện tập 30 phút · Ba câu tự kiểm"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 12.3 của khoá API và System Design."},
         {"t":11.01,"vi":"Bài trước đưa lược đồ vào CSDL bằng migration."},
@@ -2344,8 +2517,13 @@
         {"t":365.78,"vi":"Tiếp theo, bài 12.4."}
       ]
     },
-    "api-12-3-mo-rong": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/api-design/12-du-an-cuoi-khoa/12-05-cache-outbox-hang-doi-6054de64.mp4","durationSec":361.37,"nguonCau":"srt",
-      "parts": [],
+    "api-12-3-mo-rong": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/api-design/12-du-an-cuoi-khoa/12-05-cache-outbox-hang-doi-6054de64.mp4","durationSec":361.37,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":87.76,"ten":"Ôn nhanh · hôm nay · Chạy thật: cache cho danh sách phòng"},
+        {"t":87.76,"den":194.5,"ten":"Mô phỏng: có sự kiện khi và chỉ khi có lượt đặt"},
+        {"t":194.5,"den":285.62,"ten":"Email trong request, hay trong hàng đợi?"},
+        {"t":285.62,"den":361.37,"ten":"Ba câu tự kiểm · Tóm tắt & luyện tập"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 12.5 của khoá API và System Design."},
         {"t":11.31,"vi":"Bài trước đưa mọi trạng thái dùng chung về PostgreSQL và Redis."},
@@ -2402,8 +2580,13 @@
         {"t":357.23,"vi":"Tiếp theo, bài 12.6."}
       ]
     },
-    "api-12-4-tong-ket": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/api-design/12-du-an-cuoi-khoa/12-09-cau-chuyen-phong-van-02302e7d.mp4","durationSec":287.4,"nguonCau":"srt",
-      "parts": [],
+    "api-12-4-tong-ket": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/api-design/12-du-an-cuoi-khoa/12-09-cau-chuyen-phong-van-02302e7d.mp4","durationSec":287.4,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":63.91,"ten":"Ôn nhanh · hôm nay"},
+        {"t":63.91,"den":143.26,"ten":"Chạy thật: kích thước sản phẩm, đếm chứ không ước"},
+        {"t":143.26,"den":223.05,"ten":"Ba câu chuyện STAR · Dòng CV có con số bảo vệ được"},
+        {"t":223.05,"den":287.4,"ten":"Ba câu tự kiểm · Tóm tắt & luyện tập"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 12.9 của khoá API và System Design."},
         {"t":11.88,"vi":"LabFlow giờ làm đúng những gì nó hứa."},
@@ -2460,8 +2643,13 @@
         {"t":283.11,"vi":"Tiếp theo, bài cuối: học tiếp gì."}
       ]
     },
-    "api-12-5-chia-se": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/api-design/12-du-an-cuoi-khoa/12-04-hai-instance-mot-su-that-8a83594f.mp4","durationSec":363.24,"nguonCau":"srt",
-      "parts": [],
+    "api-12-5-chia-se": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/api-design/12-du-an-cuoi-khoa/12-04-hai-instance-mot-su-that-8a83594f.mp4","durationSec":363.24,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":82.54,"ten":"Ôn nhanh · hôm nay"},
+        {"t":82.54,"den":176.87,"ten":"Mô phỏng: một xô token dùng chung"},
+        {"t":176.87,"den":255,"ten":"Idempotency và ETag mọi instance cùng thấy"},
+        {"t":255,"den":363.24,"ten":"Luyện tập 25 phút · Ba câu tự kiểm"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 12.4 của khoá API và System Design."},
         {"t":11.38,"vi":"Đưa dữ liệu vào PostgreSQL đã sửa những lỗi ồn ào nhất của bài 12.1."},
@@ -2522,8 +2710,13 @@
         {"t":359.06,"vi":"Tiếp theo, bài 12.5."}
       ]
     },
-    "api-12-6-do-tai": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/api-design/12-du-an-cuoi-khoa/12-06-do-tai-lai-6484267e.mp4","durationSec":334.04,"nguonCau":"srt",
-      "parts": [],
+    "api-12-6-do-tai": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/api-design/12-du-an-cuoi-khoa/12-06-do-tai-lai-6484267e.mp4","durationSec":334.04,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":73.18,"ten":"Ôn nhanh · hôm nay · Mô phỏng: một phép so công bằng"},
+        {"t":73.18,"den":156.55,"ten":"Chạy thật: một kết quả thô, trước và sau"},
+        {"t":156.55,"den":258.2,"ten":"Chạy thật: hợp đồng cuối cùng · Hợp đồng cuối cùng: 2.4.0"},
+        {"t":258.2,"den":334.04,"ten":"Ba câu tự kiểm · Tóm tắt & luyện tập"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 12.6 của khoá API và System Design."},
         {"t":11.32,"vi":"Chuyển sang PostgreSQL thêm vào mỗi request những chặng mạng, transaction và một lần tra người dùng."},
@@ -2578,8 +2771,14 @@
         {"t":329.73,"vi":"Tiếp theo, bài 12.7."}
       ]
     },
-    "api-12-7-trien-khai": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/api-design/12-du-an-cuoi-khoa/12-07-checklist-trien-khai-9f391d0c.mp4","durationSec":421.93,"nguonCau":"srt",
-      "parts": [],
+    "api-12-7-trien-khai": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/api-design/12-du-an-cuoi-khoa/12-07-checklist-trien-khai-9f391d0c.mp4","durationSec":421.93,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":101.27,"ten":"Ôn nhanh · hôm nay · Bảy mục, và mục đầu tiên đo được"},
+        {"t":101.27,"den":183.78,"ten":"Health không phải readiness · Mô phỏng: tắt êm theo thứ tự"},
+        {"t":183.78,"den":278.07,"ten":"Tắt êm, đo dưới tải · Chạy thật: log và metrics"},
+        {"t":278.07,"den":379.08,"ten":"Sao lưu chứng minh bằng khôi phục, và smoke test"},
+        {"t":379.08,"den":421.93,"ten":"Tóm tắt & luyện tập"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 12.7 của khoá API và System Design."},
         {"t":12.58,"vi":"Mã qua hết test vẫn có thể hỏng ngày triển khai: thiếu một bí mật, request tới instance đang tắt, bản sao lưu chưa ai khôi phục."},
@@ -2636,8 +2835,13 @@
         {"t":418.21,"vi":"Tiếp theo, Lab 12."}
       ]
     },
-    "api-12-8-hoc-tiep": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/api-design/12-du-an-cuoi-khoa/12-10-hoc-tiep-gi-1e767a4a.mp4","durationSec":215.84,"nguonCau":"srt",
-      "parts": [],
+    "api-12-8-hoc-tiep": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/api-design/12-du-an-cuoi-khoa/12-10-hoc-tiep-gi-1e767a4a.mp4","durationSec":215.84,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":69.37,"ten":"Ôn nhanh · hôm nay · Bạn làm được gì"},
+        {"t":69.37,"den":126.31,"ten":"Mô phỏng: ba con đường · Ba con đường cho ba tháng tới"},
+        {"t":126.31,"den":193.99,"ten":"Giữ LabFlow sống: sáu phần mở rộng"},
+        {"t":193.99,"den":215.84,"ten":"Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài cuối của khoá API và System Design."},
         {"t":10.22,"vi":"Bạn bắt đầu bằng curl và một route."},
@@ -2673,8 +2877,13 @@
         {"t":208.62,"vi":"Mở Code Lab ngay dưới video để luyện thêm, rồi làm bài thi cuối khoá."}
       ]
     },
-    "api-12-9-lab": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/api-design/12-du-an-cuoi-khoa/12-08-lab-12-bao-hong-postgresql-5f31f7cd.mp4","durationSec":335.68,"nguonCau":"srt",
-      "parts": [],
+    "api-12-9-lab": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/api-design/12-du-an-cuoi-khoa/12-08-lab-12-bao-hong-postgresql-5f31f7cd.mp4","durationSec":335.68,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":88.4,"ten":"Ôn Chương 12 · vào lab"},
+        {"t":88.4,"den":158.01,"ten":"Bản khởi đầu được không điểm · Ba việc"},
+        {"t":158.01,"den":228.23,"ten":"Thang chấm mười điểm · Mô phỏng: thang chấm"},
+        {"t":228.23,"den":335.68,"ten":"Bắt tay làm lab · Ba câu tự kiểm"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Lab 12 của khoá API và System Design."},
         {"t":10.5,"vi":"Lượt đặt, phòng, thiết bị và người dùng đã nằm trong PostgreSQL."},
@@ -2734,8 +2943,19 @@
         {"t":329.65,"vi":"Tiếp theo: rà soát, tài liệu, và câu chuyện phỏng vấn."}
       ]
     },
-    "api-2-1-problem-details": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/api-design/02-loi-kiem-du-lieu-phan-hoi/02-01-problem-details-mot-dinh-dang-loi-bb276c28.mp4","durationSec":909.95,"nguonCau":"srt",
-      "parts": [],
+    "api-2-1-problem-details": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/api-design/02-loi-kiem-du-lieu-phan-hoi/02-01-problem-details-mot-dinh-dang-loi-bb276c28.mp4","durationSec":909.95,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":117.8,"ten":"Ôn nhanh · hôm nay · Bài này bạn mang về gì"},
+        {"t":117.8,"den":196.42,"ten":"Slide: bộ mã chung · Chạy thật: lỗi 413 hoá 500"},
+        {"t":196.42,"den":277.62,"ten":"RFC 9457 là gì · Giải phẫu một problem"},
+        {"t":277.62,"den":362.52,"ten":"Luật đi kèm năm trường · Trường mở rộng và JSON Pointer"},
+        {"t":362.52,"den":458.84,"ten":"Mô phỏng: pointer trỏ vào ô nhập · Dựng: problems.js"},
+        {"t":458.84,"den":534.88,"ten":"Chạy thật: 404 và 409 · Chạy thật: lỗi từng trường và 413"},
+        {"t":534.88,"den":615.02,"ten":"Chạy thật: header vẫn còn · Header đặt trước vẫn sống"},
+        {"t":615.02,"den":702.01,"ten":"Chạy thật: client đọc problem · Client đọc problem"},
+        {"t":702.01,"den":809.45,"ten":"400 hay 422, và Spring · Thực hành 15–20 phút"},
+        {"t":809.45,"den":909.95,"ten":"Ba câu tự kiểm · Tóm tắt & luyện tập"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Chương 2 của khoá API và System Design, bài 2.1."},
         {"t":11.65,"vi":"Chương 1 khép lại với LabFlow có tài nguyên rõ ràng, phương thức đúng nghĩa, và mã trạng thái nói thật."},
@@ -2877,8 +3097,19 @@
         {"t":903.63,"vi":"Bài sau, 2.2: sáu request lẽ ra không bao giờ được chạy."}
       ]
     },
-    "api-2-2-validation": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/api-design/02-loi-kiem-du-lieu-phan-hoi/02-02-kiem-du-lieu-vao-ngay-cua-f77bc50c.mp4","durationSec":976.44,"nguonCau":"srt",
-      "parts": [],
+    "api-2-2-validation": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/api-design/02-loi-kiem-du-lieu-phan-hoi/02-02-kiem-du-lieu-vao-ngay-cua-f77bc50c.mp4","durationSec":976.44,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":121.94,"ten":"Ôn nhanh · hôm nay · Bài này bạn mang về gì"},
+        {"t":121.94,"den":212.31,"ten":"Slide: cửa toà nhà lab · Chạy thật: tấn công thiết bị"},
+        {"t":212.31,"den":302.71,"ten":"Sáu request đã chạy · Nhìn gần hai lỗ"},
+        {"t":302.71,"den":393.29,"ten":"Bức tường if và một schema"},
+        {"t":393.29,"den":482.82,"ten":"Strict, strip hay loose"},
+        {"t":482.82,"den":559.02,"ten":"Lắp vào: route chỉ đọc req.valid · Hai chỗ sửa ở tệp bài 2.1"},
+        {"t":559.02,"den":658.27,"ten":"Chạy thật: tấn công lại · Chạy thật: cửa 415 và 413"},
+        {"t":658.27,"den":759.68,"ten":"Ba mươi tháng hai và một thay đổi hợp đồng"},
+        {"t":759.68,"den":881.89,"ten":"Bẫy: ép kiểu, và dùng bản gốc · Phỏng vấn và đi làm"},
+        {"t":881.89,"den":976.44,"ten":"Ba câu tự kiểm · Tóm tắt & luyện tập"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 2.2 của khoá API và System Design."},
         {"t":10.62,"vi":"Bài trước, mọi lỗi của LabFlow đã có một hình dạng chuẩn RFC 9457, sinh ra từ một tệp duy nhất."},
@@ -3038,8 +3269,17 @@
         {"t":970.53,"vi":"Bài sau, 2.3: cái gì đi ra trong các response thành công."}
       ]
     },
-    "api-2-3-envelope": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/api-design/02-loi-kiem-du-lieu-phan-hoi/02-03-hinh-dang-phan-hoi-f9572233.mp4","durationSec":731.24,"nguonCau":"srt",
-      "parts": [],
+    "api-2-3-envelope": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/api-design/02-loi-kiem-du-lieu-phan-hoi/02-03-hinh-dang-phan-hoi-f9572233.mp4","durationSec":731.24,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":116.55,"ten":"Ôn nhanh · hôm nay · Bài này bạn mang về gì"},
+        {"t":116.55,"den":215.14,"ten":"Slide: hoá đơn và sổ cái · Chạy thật: GET /me rò rỉ"},
+        {"t":215.14,"den":293.85,"ten":"Vấn đề 2 và 3 · Luật 1: views.js"},
+        {"t":293.85,"den":389.5,"ten":"Luật 2: một hình dạng cho cả đời · Luật 3: bọc danh sách"},
+        {"t":389.5,"den":467.65,"ten":"Slide: chạy thử · Chạy thật: envelope luôn 200"},
+        {"t":467.65,"den":557.24,"ten":"Chạy thật: 204, đẹp và gọn · Mã trạng thái và body phải khớp"},
+        {"t":557.24,"den":639,"ten":"Phỏng vấn và đi làm · Thực hành 15–20 phút"},
+        {"t":639,"den":731.24,"ten":"Ba câu tự kiểm · Tóm tắt & luyện tập"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 2.3 của khoá API và System Design."},
         {"t":10.63,"vi":"Hai bài vừa qua làm cho request sai thất bại gọn gàng: một định dạng lỗi chuẩn, và chốt kiểm ngay ở cửa."},
@@ -3151,8 +3391,18 @@
         {"t":724.42,"vi":"Bài sau, 2.4: lỗi cho ứng dụng song ngữ, và chữ tiếng Việt."}
       ]
     },
-    "api-2-4-i18n": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/api-design/02-loi-kiem-du-lieu-phan-hoi/02-04-loi-cho-ung-dung-song-ngu-ccc809c6.mp4","durationSec":851.48,"nguonCau":"srt",
-      "parts": [],
+    "api-2-4-i18n": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/api-design/02-loi-kiem-du-lieu-phan-hoi/02-04-loi-cho-ung-dung-song-ngu-ccc809c6.mp4","durationSec":851.48,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":113.33,"ten":"Ôn nhanh · hôm nay · Bài này bạn mang về gì"},
+        {"t":113.33,"den":218.41,"ten":"Cái gì được dịch · Hai nơi để dịch"},
+        {"t":218.41,"den":310.15,"ten":"messages.js: một danh mục"},
+        {"t":310.15,"den":402.92,"ten":"Slide: một lỗi, hai ngôn ngữ"},
+        {"t":402.92,"den":503.83,"ten":"Zod hai thứ tiếng · Mô phỏng: hai chữ trông y hệt"},
+        {"t":503.83,"den":592.71,"ten":"Hai chuỗi trông giống nhau · Cách sửa một: NFC ở cửa"},
+        {"t":592.71,"den":688.22,"ten":"Sắp xếp và định dạng · Bẫy: dịch cả mã, quên Vary"},
+        {"t":688.22,"den":802.9,"ten":"Thực hành 15–20 phút · Ba câu tự kiểm"},
+        {"t":802.9,"den":851.48,"ten":"Tóm tắt & luyện tập"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 2.4 của khoá API và System Design."},
         {"t":10.8,"vi":"Tới giờ, lỗi của LabFlow có một hình dạng chuẩn, request được kiểm ở cửa, và response đi qua view."},
@@ -3277,8 +3527,14 @@
         {"t":843.01,"vi":"Bài sau là Lab 2: dùng mọi thứ của chương này trên tính năng báo hỏng thiết bị."}
       ]
     },
-    "api-2-5-lab": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/api-design/02-loi-kiem-du-lieu-phan-hoi/02-05-lab-2-bao-hong-phien-ban-2-14f1b19d.mp4","durationSec":507.23,"nguonCau":"srt",
-      "parts": [],
+    "api-2-5-lab": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/api-design/02-loi-kiem-du-lieu-phan-hoi/02-05-lab-2-bao-hong-phien-ban-2-14f1b19d.mp4","durationSec":507.23,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":87.71,"ten":"Ôn Chương 2 · vào lab · Yêu cầu"},
+        {"t":87.71,"den":195.96,"ten":"Mô phỏng: điền bảng thiết kế"},
+        {"t":195.96,"den":298.35,"ten":"Chạy thật: mã khởi đầu trượt ở đâu · Lời giải mẫu — đọc sau"},
+        {"t":298.35,"den":386.77,"ten":"Phần C: transcript, phần hai"},
+        {"t":386.77,"den":507.23,"ten":"Bắt tay làm lab · Ba câu tự kiểm"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Lab 2 của khoá API và System Design."},
         {"t":9.97,"vi":"Chương 2 cho ta bốn công cụ: lỗi chuẩn RFC 9457, schema ở cửa, view với hình dạng ổn định, và lỗi hai thứ tiếng."},
@@ -3365,8 +3621,15 @@
         {"t":500.02,"vi":"Tiếp theo là bài kiểm tra Chương 2, rồi Chương 3: danh sách lớn và phân trang."}
       ]
     },
-    "api-3-1-offset": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/api-design/03-danh-sach-phan-trang-loc-sap-xep/03-01-phan-trang-offset-c6dc94cf.mp4","durationSec":603.14,"nguonCau":"srt",
-      "parts": [],
+    "api-3-1-offset": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/api-design/03-danh-sach-phan-trang-loc-sap-xep/03-01-phan-trang-offset-c6dc94cf.mp4","durationSec":603.14,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":108.3,"ten":"Ôn Chương 2 · vào Chương 3 · Bài này bạn mang về gì"},
+        {"t":108.3,"den":211.48,"ten":"Slide: vé gọi số · Dữ liệu mẫu cố định"},
+        {"t":211.48,"den":297.71,"ten":"Chạy thật: trang đầu, offset, giới hạn · Slide: chạy thử"},
+        {"t":297.71,"den":383.12,"ten":"Chạy thật: trang sâu trên PostgreSQL · Trang sâu"},
+        {"t":383.12,"den":463,"ten":"Tổng số · Hai cái bẫy"},
+        {"t":463,"den":603.14,"ten":"Thực hành 15–20 phút · Ba câu tự kiểm"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Chương 3 của khoá API và System Design, bài 3.1."},
         {"t":11.44,"vi":"Chương 2 cho LabFlow lỗi chuẩn, chốt kiểm ở cửa, view ổn định, và câu báo lỗi hai thứ tiếng."},
@@ -3470,8 +3733,15 @@
         {"t":594.89,"vi":"Bài sau, 3.2: phục vụ đúng trang sâu đó trong chưa tới một phần mười mili giây."}
       ]
     },
-    "api-3-2-cursor": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/api-design/03-danh-sach-phan-trang-loc-sap-xep/03-02-phan-trang-con-tro-451e5560.mp4","durationSec":544.73,"nguonCau":"srt",
-      "parts": [],
+    "api-3-2-cursor": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/api-design/03-danh-sach-phan-trang-loc-sap-xep/03-02-phan-trang-con-tro-451e5560.mp4","durationSec":544.73,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":94.47,"ten":"Ôn nhanh · hôm nay · Bài này bạn mang về gì"},
+        {"t":94.47,"den":178.6,"ten":"Slide: dấu trang · paging.js: mã hoá, giải mã, so sánh"},
+        {"t":178.6,"den":255.34,"ten":"Slide: con trỏ · Chạy thật: thí nghiệm lần nữa"},
+        {"t":255.34,"den":351.35,"ten":"Slide: con trỏ sai, hết danh sách"},
+        {"t":351.35,"den":467.19,"ten":"Hai cái bẫy · Phỏng vấn và đi làm"},
+        {"t":467.19,"den":544.73,"ten":"Ba câu tự kiểm · Tóm tắt & luyện tập"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 3.2 của khoá API và System Design."},
         {"t":10.63,"vi":"Bài trước, offset cho ta bản trùng bk_196 khi danh sách đổi, và một trang sâu tốn sáu mươi hai mili giây."},
@@ -3563,8 +3833,15 @@
         {"t":537.21,"vi":"Bài sau, 3.3: thêm bộ lọc, và con trỏ thuộc về đúng truy vấn của nó."}
       ]
     },
-    "api-3-3-loc": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/api-design/03-danh-sach-phan-trang-loc-sap-xep/03-03-tham-so-loc-va-tim-kiem-7752ec22.mp4","durationSec":574.57,"nguonCau":"srt",
-      "parts": [],
+    "api-3-3-loc": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/api-design/03-danh-sach-phan-trang-loc-sap-xep/03-03-tham-so-loc-va-tim-kiem-7752ec22.mp4","durationSec":574.57,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":99.72,"ten":"Ôn nhanh · hôm nay · Bài này bạn mang về gì"},
+        {"t":99.72,"den":197.58,"ten":"Mô phỏng: khoảng chồng lên · Schema"},
+        {"t":197.58,"den":284.17,"ten":"Chạy thật: bộ lọc, khoảng, tìm kiếm · Slide: chạy thử"},
+        {"t":284.17,"den":372.52,"ten":"Slide: hai bất ngờ · Chạy thật: con trỏ thuộc về truy vấn"},
+        {"t":372.52,"den":500.55,"ten":"Bộ lọc cần index · Hai cái bẫy"},
+        {"t":500.55,"den":574.57,"ten":"Ba câu tự kiểm · Tóm tắt & luyện tập"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 3.3 của khoá API và System Design."},
         {"t":10.53,"vi":"Bài trước, con trỏ là một dấu trang: không trùng, và trang sâu tốn như trang đầu."},
@@ -3656,8 +3933,14 @@
         {"t":566.81,"vi":"Bài sau, 3.4: sắp xếp, trường rút gọn, include, và vấn đề N cộng một."}
       ]
     },
-    "api-3-4-sap-xep": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/api-design/03-danh-sach-phan-trang-loc-sap-xep/03-04-sap-xep-chon-truong-nhung-quan-he-f0b3db9f.mp4","durationSec":481.23,"nguonCau":"srt",
-      "parts": [],
+    "api-3-4-sap-xep": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/api-design/03-danh-sach-phan-trang-loc-sap-xep/03-04-sap-xep-chon-truong-nhung-quan-he-f0b3db9f.mp4","durationSec":481.23,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":96.72,"ten":"Ôn nhanh · hôm nay · Bài này bạn mang về gì"},
+        {"t":96.72,"den":182.68,"ten":"Chạy thật: sort và con trỏ của nó · Slide: sort và con trỏ"},
+        {"t":182.68,"den":281.64,"ten":"Mô phỏng: người đưa thư"},
+        {"t":281.64,"den":360.73,"ten":"Vấn đề N+1, đo được · Bẫy"},
+        {"t":360.73,"den":481.23,"ten":"Thực hành 15–20 phút · Ba câu tự kiểm"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 3.4 của khoá API và System Design."},
         {"t":10.78,"vi":"Bài trước, bộ lọc có tên, có kiểu, kết hợp AND, và con trỏ gắn với đúng truy vấn bằng dấu vân tay."},
@@ -3741,8 +4024,14 @@
         {"t":477.03,"vi":"Tiếp theo là Lab 3: danh sách bảo trì."}
       ]
     },
-    "api-3-5-lab": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/api-design/03-danh-sach-phan-trang-loc-sap-xep/03-05-lab-3-danh-sach-bao-tri-15ed2bcb.mp4","durationSec":446.19,"nguonCau":"srt",
-      "parts": [],
+    "api-3-5-lab": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/api-design/03-danh-sach-phan-trang-loc-sap-xep/03-05-lab-3-danh-sach-bao-tri-15ed2bcb.mp4","durationSec":446.19,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":80.92,"ten":"Ôn Chương 3 · vào lab · Yêu cầu"},
+        {"t":80.92,"den":167.47,"ten":"Mô phỏng: điền bảng thiết kế · Phần A: thiết kế trước"},
+        {"t":167.47,"den":250.15,"ten":"Chạy thật: mã khởi đầu và một cái bẫy"},
+        {"t":250.15,"den":330.46,"ten":"Phần C: transcript, phần hai"},
+        {"t":330.46,"den":446.19,"ten":"Bắt tay làm lab · Ba câu tự kiểm"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Lab 3 của khoá API và System Design."},
         {"t":10.1,"vi":"Chương 3 cho ta bốn công cụ: phân trang con trỏ, bộ lọc có kiểu, sắp xếp có khoá phụ, và include không dính N cộng một."},
@@ -3818,8 +4107,16 @@
         {"t":439.04,"vi":"Tiếp theo là bài kiểm tra Chương 3, rồi Chương 4: phiên bản và tiến hoá."}
       ]
     },
-    "api-4-1-thay-doi": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/api-design/04-versioning-tien-hoa-api/04-01-thay-doi-pha-vo-va-khong-pha-vo-0798c71a.mp4","durationSec":603.28,"nguonCau":"srt",
-      "parts": [],
+    "api-4-1-thay-doi": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/api-design/04-versioning-tien-hoa-api/04-01-thay-doi-pha-vo-va-khong-pha-vo-0798c71a.mp4","durationSec":603.28,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":80.29,"ten":"Ôn Chương 3 · vào Chương 4 · Bài này bạn mang về gì"},
+        {"t":80.29,"den":176.17,"ten":"Thời khoá biểu trên cửa · Client không bao giờ cập nhật"},
+        {"t":176.17,"den":260.27,"ten":"Chạy thật: mốc, add, rename · Slide: kết quả 1/2"},
+        {"t":260.27,"den":346.87,"ten":"Chạy thật: client kiểm response quá chặt"},
+        {"t":346.87,"den":427.2,"ten":"Bảng phân loại · Bẫy"},
+        {"t":427.2,"den":519.9,"ten":"Phỏng vấn và đi làm · Thực hành 15–20 phút"},
+        {"t":519.9,"den":603.28,"ten":"Ba câu tự kiểm · Tóm tắt & luyện tập"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Chương 4 của khoá API và System Design, bài 4.1."},
         {"t":11.87,"vi":"Chương 3 cho LabFlow danh sách tử tế: con trỏ, bộ lọc có kiểu, sort, fields và include."},
@@ -3916,8 +4213,15 @@
         {"t":596.42,"vi":"Tiếp theo, bài 4.2: phục vụ v1 và v2 từ một bộ route."}
       ]
     },
-    "api-4-2-chien-luoc": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/api-design/04-versioning-tien-hoa-api/04-02-chien-luoc-danh-phien-ban-22be1a97.mp4","durationSec":574.32,"nguonCau":"srt",
-      "parts": [],
+    "api-4-2-chien-luoc": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/api-design/04-versioning-tien-hoa-api/04-02-chien-luoc-danh-phien-ban-22be1a97.mp4","durationSec":574.32,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":101.2,"ten":"Ôn nhanh · hôm nay · Bài này bạn mang về gì"},
+        {"t":101.2,"den":198.69,"ten":"Bốn chỗ đặt phiên bản · Stripe và lựa chọn của LabFlow"},
+        {"t":198.69,"den":278.71,"ten":"Một bộ route · View theo phiên bản"},
+        {"t":278.71,"den":363.99,"ten":"Chạy thật: hai hình dạng, một cơ sở dữ liệu"},
+        {"t":363.99,"den":488.17,"ten":"Slide: đường cũ và client cũ · Bẫy"},
+        {"t":488.17,"den":574.32,"ten":"Ba câu tự kiểm · Tóm tắt & luyện tập"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 4.2 của khoá API và System Design."},
         {"t":10.83,"vi":"Bài trước, một client cũ gặp năm thay đổi: thêm thì ổn, đổi tên ra Invalid Date, enum mới làm sập."},
@@ -4014,8 +4318,16 @@
         {"t":569.07,"vi":"Tiếp theo, bài 4.3: khai tử các đường cũ."}
       ]
     },
-    "api-4-3-deprecation": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/api-design/04-versioning-tien-hoa-api/04-03-khai-tu-co-bao-truoc-6e01a052.mp4","durationSec":620.63,"nguonCau":"srt",
-      "parts": [],
+    "api-4-3-deprecation": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/api-design/04-versioning-tien-hoa-api/04-03-khai-tu-co-bao-truoc-6e01a052.mp4","durationSec":620.63,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":94.53,"ten":"Ôn nhanh · hôm nay · Bài này bạn mang về gì"},
+        {"t":94.53,"den":191.97,"ten":"Mô phỏng: đồng hồ khai tử · Hai header"},
+        {"t":191.97,"den":273.04,"ten":"Một middleware · Chạy thật: ba tín hiệu"},
+        {"t":273.04,"den":368.72,"ten":"Chạy thật: ai còn gọi · Slide: đo trước khi tắt"},
+        {"t":368.72,"den":458.93,"ten":"Slide: ngày sau Sunset · Kế hoạch khai tử"},
+        {"t":458.93,"den":539.49,"ten":"Phỏng vấn và đi làm · Thực hành 15–20 phút"},
+        {"t":539.49,"den":620.63,"ten":"Ba câu tự kiểm · Tóm tắt & luyện tập"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 4.3 của khoá API và System Design."},
         {"t":10.78,"vi":"Bài trước, LabFlow phục vụ v1 và v2 từ một router, còn các đường cũ không số vẫn trả lời như v1."},
@@ -4115,8 +4427,16 @@
         {"t":612.87,"vi":"Tiếp theo, bài 4.4: client di động và desktop không chịu cập nhật."}
       ]
     },
-    "api-4-4-app-di-dong": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/api-design/04-versioning-tien-hoa-api/04-04-client-khong-chiu-cap-nhat-a84b4ea0.mp4","durationSec":603.65,"nguonCau":"srt",
-      "parts": [],
+    "api-4-4-app-di-dong": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/api-design/04-versioning-tien-hoa-api/04-04-client-khong-chiu-cap-nhat-a84b4ea0.mp4","durationSec":603.65,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":104.79,"ten":"Ôn nhanh · hôm nay · Bài này bạn mang về gì"},
+        {"t":104.79,"den":198.75,"ten":"Thế giới API của bạn sống · Công cụ 2: cấu hình từ xa"},
+        {"t":198.75,"den":288.15,"ten":"Công cụ 3: chốt chặn · Chạy thật: chốt phiên bản"},
+        {"t":288.15,"den":398.88,"ten":"Chạy thật: check-in chỉ ở v2"},
+        {"t":398.88,"den":475.08,"ten":"Bẫy · Phỏng vấn và đi làm"},
+        {"t":475.08,"den":564.99,"ten":"Thực hành 15–20 phút · Ba câu tự kiểm"},
+        {"t":564.99,"den":603.65,"ten":"Tóm tắt & luyện tập"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 4.4 của khoá API và System Design."},
         {"t":10.73,"vi":"Bài trước, đường cũ báo ngày kết thúc bằng Deprecation và Sunset, có báo cáo ai còn gọi, rồi trả 410 vào đúng ngày."},
@@ -4221,8 +4541,14 @@
         {"t":598.65,"vi":"Tiếp theo là Lab 4: thiết bị, phiên bản hai."}
       ]
     },
-    "api-4-5-lab": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/api-design/04-versioning-tien-hoa-api/04-05-lab-4-thiet-bi-phien-ban-2-16f134da.mp4","durationSec":483.73,"nguonCau":"srt",
-      "parts": [],
+    "api-4-5-lab": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/api-design/04-versioning-tien-hoa-api/04-05-lab-4-thiet-bi-phien-ban-2-16f134da.mp4","durationSec":483.73,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":105.3,"ten":"Ôn Chương 4 · vào lab · Yêu cầu"},
+        {"t":105.3,"den":195.29,"ten":"Mô phỏng: điền bảng thiết kế · Phần A: thiết kế trước"},
+        {"t":195.29,"den":285.63,"ten":"Chạy thật: mã khởi đầu · Lời giải mẫu — đọc sau"},
+        {"t":285.63,"den":360.65,"ten":"Phần C: transcript, phần hai"},
+        {"t":360.65,"den":483.73,"ten":"Bắt tay làm lab · Ba câu tự kiểm"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Lab 4 của khoá API và System Design."},
         {"t":10.38,"vi":"Chương 4 cho ta bốn thứ: phân loại thay đổi, một router cho v1 và v2, khai tử có báo trước, và ứng dụng cũ vẫn chạy."},
@@ -4298,8 +4624,15 @@
         {"t":475.42,"vi":"Tiếp theo là bài kiểm tra Chương 4, rồi Chương 5: tin cậy, idempotency và thử lại."}
       ]
     },
-    "api-5-1-idempotency": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/api-design/05-tin-cay-idempotency-thu-lai/05-01-idempotency-key-cho-post-06e44112.mp4","durationSec":508.89,"nguonCau":"srt",
-      "parts": [],
+    "api-5-1-idempotency": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/api-design/05-tin-cay-idempotency-thu-lai/05-01-idempotency-key-cho-post-06e44112.mp4","durationSec":508.89,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":99.85,"ten":"Ôn Chương 4 · vào Chương 5 · Bài này bạn mang về gì"},
+        {"t":99.85,"den":201.95,"ten":"Vì sao chỉ POST cần thứ này · Công tắc làm mất câu trả lời"},
+        {"t":201.95,"den":279.25,"ten":"Slide: không khoá · Một middleware"},
+        {"t":279.25,"den":354.98,"ten":"Chạy thật: dùng sai và đang chạy"},
+        {"t":354.98,"den":465.81,"ten":"Phỏng vấn và đi làm · Thực hành 15–20 phút"},
+        {"t":465.81,"den":508.89,"ten":"Tóm tắt & luyện tập"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Chương 5 của khoá API và System Design, bài 5.1."},
         {"t":11.77,"vi":"Chương 4 dạy đổi API mà không làm gãy client: phân loại thay đổi, v1 và v2, khai tử, và ứng dụng cũ vẫn chạy."},
@@ -4390,8 +4723,14 @@
         {"t":502.22,"vi":"Tiếp theo, bài 5.2: khi nào và bao lâu một lần thì thử lại."}
       ]
     },
-    "api-5-2-retry": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/api-design/05-tin-cay-idempotency-thu-lai/05-02-thu-lai-lui-dan-timeout-9dc1f56a.mp4","durationSec":495.22,"nguonCau":"srt",
-      "parts": [],
+    "api-5-2-retry": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/api-design/05-tin-cay-idempotency-thu-lai/05-02-thu-lai-lui-dan-timeout-9dc1f56a.mp4","durationSec":495.22,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":85.39,"ten":"Ôn nhanh · hôm nay · Mô phỏng: ba đám đông sau một sự cố"},
+        {"t":85.39,"den":176.24,"ten":"Ba luật trước khi viết mã · Hàm client"},
+        {"t":176.24,"den":286.62,"ten":"Chạy thật: timeout cộng cùng một khoá"},
+        {"t":286.62,"den":379.41,"ten":"Slide: ba chính sách · Đọc các con số"},
+        {"t":379.41,"den":495.22,"ten":"Thực hành 15–20 phút · Ba câu tự kiểm"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 5.2 của khoá API và System Design."},
         {"t":10.78,"vi":"Bài trước, Idempotency-Key làm việc gửi lại POST trở nên an toàn: mất câu trả lời vẫn chỉ một lượt đặt."},
@@ -4480,8 +4819,14 @@
         {"t":487.87,"vi":"Tiếp theo, bài 5.3: khi client không lịch sự, giới hạn tần suất."}
       ]
     },
-    "api-5-3-rate-limit": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/api-design/05-tin-cay-idempotency-thu-lai/05-03-gioi-han-tan-suat-va-han-muc-6fcc1b3c.mp4","durationSec":496.74,"nguonCau":"srt",
-      "parts": [],
+    "api-5-3-rate-limit": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/api-design/05-tin-cay-idempotency-thu-lai/05-03-gioi-han-tan-suat-va-han-muc-6fcc1b3c.mp4","durationSec":496.74,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":106.64,"ten":"Ôn nhanh · hôm nay · Bài này bạn mang về gì"},
+        {"t":106.64,"den":189.36,"ten":"Xô token · Chạy thật: theo người dùng"},
+        {"t":189.36,"den":292.48,"ten":"Slide: theo người dùng · Cái bẫy proxy"},
+        {"t":292.48,"den":367.96,"ten":"Slide: đo ba cách · Bẫy"},
+        {"t":367.96,"den":496.74,"ten":"Thực hành 15–20 phút · Ba câu tự kiểm"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 5.3 của khoá API và System Design."},
         {"t":10.62,"vi":"Bài trước dạy client lùi lại cho lịch sự: timeout, lùi dần, jitter."},
@@ -4564,8 +4909,14 @@
         {"t":490.05,"vi":"Tiếp theo, bài 5.4: hai người cùng sửa một thiết bị."}
       ]
     },
-    "api-5-4-dong-thoi": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/api-design/05-tin-cay-idempotency-thu-lai/05-04-dong-thoi-khoa-lac-quan-etag-960d09ad.mp4","durationSec":429.99,"nguonCau":"srt",
-      "parts": [],
+    "api-5-4-dong-thoi": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/api-design/05-tin-cay-idempotency-thu-lai/05-04-dong-thoi-khoa-lac-quan-etag-960d09ad.mp4","durationSec":429.99,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":100.57,"ten":"Ôn nhanh · hôm nay · Bài này bạn mang về gì"},
+        {"t":100.57,"den":178.39,"ten":"Chạy thật: hai cửa sổ, không bảo vệ · Slide: mất cập nhật"},
+        {"t":178.39,"den":264.98,"ten":"Chạy thật: có If-Match · Slide: có If-Match"},
+        {"t":264.98,"den":356.63,"ten":"Bẫy · Phỏng vấn và đi làm"},
+        {"t":356.63,"den":429.99,"ten":"Ba câu tự kiểm · Tóm tắt & luyện tập"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 5.4 của khoá API và System Design."},
         {"t":10.83,"vi":"Ba bài trước: gửi lại an toàn bằng khoá, thử lại có lùi dần, và giới hạn tần suất bằng xô token."},
@@ -4648,8 +4999,13 @@
         {"t":424.62,"vi":"Tiếp theo là Lab 5: báo hỏng sống sót dưới tầng hầm."}
       ]
     },
-    "api-5-5-lab": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/api-design/05-tin-cay-idempotency-thu-lai/05-05-lab-5-bao-hong-tang-ham-b31544c3.mp4","durationSec":389,"nguonCau":"srt",
-      "parts": [],
+    "api-5-5-lab": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/api-design/05-tin-cay-idempotency-thu-lai/05-05-lab-5-bao-hong-tang-ham-b31544c3.mp4","durationSec":389,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":84.28,"ten":"Ôn Chương 5 · vào lab · Yêu cầu"},
+        {"t":84.28,"den":190.17,"ten":"Mô phỏng: điền bảng thiết kế · Phần A và Phần B"},
+        {"t":190.17,"den":269.44,"ten":"Lời giải mẫu — đọc sau · Phần C: transcript"},
+        {"t":269.44,"den":389,"ten":"Slide: thang chấm · Bắt tay làm lab"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Lab 5 của khoá API và System Design."},
         {"t":10.18,"vi":"Chương 5 cho ta bốn công cụ: idempotency key, thử lại có lùi dần, xô token, và ETag với If-Match."},
@@ -4714,8 +5070,16 @@
         {"t":382,"vi":"Tiếp theo là bài kiểm tra Chương 5, rồi Chương 6: bảo mật cho API."}
       ]
     },
-    "api-6-1-xac-thuc": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/api-design/06-bao-mat-api/06-01-xac-thuc-session-jwt-api-key-7962b967.mp4","durationSec":634.56,"nguonCau":"srt",
-      "parts": [],
+    "api-6-1-xac-thuc": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/api-design/06-bao-mat-api/06-01-xac-thuc-session-jwt-api-key-7962b967.mp4","durationSec":634.56,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":130.11,"ten":"Ôn nhanh · hôm nay · Bài này bạn mang về gì"},
+        {"t":130.11,"den":221.76,"ten":"Bốn cách nói tôi là ai · Mật khẩu: chỉ băm"},
+        {"t":221.76,"den":306.7,"ten":"Đăng nhập ⇒ JWT 15 phút · Chạy thật: đăng nhập"},
+        {"t":306.7,"den":391.55,"ten":"Tự tấn công token · Chạy thật: token giả và dò mật khẩu"},
+        {"t":391.55,"den":468.48,"ten":"Chạy thật: hết hạn, API key, production · Bẫy"},
+        {"t":468.48,"den":558.85,"ten":"Phỏng vấn và đi làm · Thực hành 20 phút"},
+        {"t":558.85,"den":634.56,"ten":"Ba câu tự kiểm · Tóm tắt & luyện tập"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 6.1, mở đầu Chương 6 của khoá API và System Design: bảo mật."},
         {"t":12.95,"vi":"Chương 5 làm LabFlow tin cậy: idempotency, thử lại, giới hạn tần suất, ETag."},
@@ -4813,8 +5177,14 @@
         {"t":628.49,"vi":"Tiếp theo, bài 6.2: ai được đụng vào bản ghi nào."}
       ]
     },
-    "api-6-2-phan-quyen": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/api-design/06-bao-mat-api/06-02-phan-quyen-bola-b94de1e8.mp4","durationSec":483.14,"nguonCau":"srt",
-      "parts": [],
+    "api-6-2-phan-quyen": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/api-design/06-bao-mat-api/06-02-phan-quyen-bola-b94de1e8.mp4","durationSec":483.14,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":108.43,"ten":"Ôn nhanh · hôm nay · Bài này bạn mang về gì"},
+        {"t":108.43,"den":203.83,"ten":"Ba tầng \"tôi có được không?\" · Biên nhận viết nhanh"},
+        {"t":203.83,"den":304.47,"ten":"Vá: một chính sách, hỏi ở mọi nơi · Chứng minh cho mọi người"},
+        {"t":304.47,"den":410.97,"ten":"Bẫy · Phỏng vấn và đi làm"},
+        {"t":410.97,"den":483.14,"ten":"Ba câu tự kiểm · Tóm tắt & luyện tập"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 6.2 của khoá API và System Design."},
         {"t":10.78,"vi":"Bài trước trả lời ai đang gọi: mật khẩu băm, JWT có chữ ký, API key."},
@@ -4909,8 +5279,16 @@
         {"t":474.8,"vi":"Tiếp theo, bài 6.3: cả mười rủi ro OWASP API thành một bộ kiểm tự động."}
       ]
     },
-    "api-6-3-owasp-api": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/api-design/06-bao-mat-api/06-03-owasp-api-top-10-d34671b6.mp4","durationSec":601.75,"nguonCau":"srt",
-      "parts": [],
+    "api-6-3-owasp-api": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/api-design/06-bao-mat-api/06-03-owasp-api-top-10-d34671b6.mp4","durationSec":601.75,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":86.56,"ten":"Ôn nhanh · hôm nay · Bài này bạn mang về gì"},
+        {"t":86.56,"den":202.93,"ten":"Mô phỏng: mười rủi ro trên đường đi của request"},
+        {"t":202.93,"den":285.41,"ten":"API6: luồng nghiệp vụ cần giới hạn · API7: SSRF"},
+        {"t":285.41,"den":361.6,"ten":"Chạy thật: SSRF trước và sau · Bộ kiểm: Top 10 thành script"},
+        {"t":361.6,"den":443.46,"ten":"Chạy thật: chín FAIL thành mọi kiểm đạt · Bẫy"},
+        {"t":443.46,"den":561.57,"ten":"Phỏng vấn và đi làm · Thực hành 20 phút"},
+        {"t":561.57,"den":601.75,"ten":"Tóm tắt & luyện tập"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 6.3 của khoá API và System Design."},
         {"t":10.78,"vi":"Hai bài trước: xác thực bằng JWT, và phân quyền theo đối tượng với một bảng chính sách."},
@@ -5003,8 +5381,15 @@
         {"t":593.87,"vi":"Tiếp theo, bài 6.4: CORS và CSRF, đo trong một trình duyệt thật."}
       ]
     },
-    "api-6-4-cors": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/api-design/06-bao-mat-api/06-04-cors-csrf-trinh-duyet-e49cdd4b.mp4","durationSec":577.8,"nguonCau":"srt",
-      "parts": [],
+    "api-6-4-cors": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/api-design/06-bao-mat-api/06-04-cors-csrf-trinh-duyet-e49cdd4b.mp4","durationSec":577.8,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":127.86,"ten":"Ôn nhanh · hôm nay · Bài này bạn mang về gì"},
+        {"t":127.86,"den":216.1,"ten":"Origin và chính sách cùng nguồn"},
+        {"t":216.1,"den":310.64,"ten":"Chạy thật: ba lần hỏi bằng curl · Một trình duyệt thật"},
+        {"t":310.64,"den":407.04,"ten":"Lỗi nguy hiểm, và CSRF · Chạy thật: phản chiếu mọi origin"},
+        {"t":407.04,"den":491.5,"ten":"Phỏng vấn và đi làm · Thực hành 15–20 phút"},
+        {"t":491.5,"den":577.8,"ten":"Ba câu tự kiểm · Tóm tắt & luyện tập"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 6.4 của khoá API và System Design."},
         {"t":10.84,"vi":"Bài trước đặt mười rủi ro OWASP lên LabFlow."},
@@ -5097,8 +5482,13 @@
         {"t":570.48,"vi":"Tiếp theo là Lab 6: soát bảo mật LabFlow, tìm ra, chứng minh, và vá lại."}
       ]
     },
-    "api-6-5-lab": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/api-design/06-bao-mat-api/06-05-lab-6-soat-bao-mat-31057b4d.mp4","durationSec":462.97,"nguonCau":"srt",
-      "parts": [],
+    "api-6-5-lab": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/api-design/06-bao-mat-api/06-05-lab-6-soat-bao-mat-31057b4d.mp4","durationSec":462.97,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":102.41,"ten":"Ôn Chương 6 · vào lab · Những gì đang bị bật"},
+        {"t":102.41,"den":219.79,"ten":"Chạy thật: điểm xuất phát · Mô phỏng: điền FINDINGS"},
+        {"t":219.79,"den":321.88,"ten":"Lời giải mẫu — đọc sau · Phần C: transcript"},
+        {"t":321.88,"den":462.97,"ten":"Slide: thang chấm · Bắt tay làm lab"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Lab 6 của khoá API và System Design."},
         {"t":9.97,"vi":"Chương 6 cho ta bốn lớp: JWT có chữ ký, chính sách theo đối tượng, Top 10 của OWASP với bộ kiểm, và CORS theo danh sách cho phép."},
@@ -5172,8 +5562,15 @@
         {"t":454.61,"vi":"Tiếp theo là bài kiểm tra Chương 6, rồi Chương 7: tài liệu và hợp đồng."}
       ]
     },
-    "api-7-1-kiem-hop-dong": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/api-design/07-tai-lieu-hop-dong/07-02-kiem-hop-dong-9002a127.mp4","durationSec":515.43,"nguonCau":"srt",
-      "parts": [],
+    "api-7-1-kiem-hop-dong": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/api-design/07-tai-lieu-hop-dong/07-02-kiem-hop-dong-9002a127.mp4","durationSec":515.43,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":114.07,"ten":"Ôn nhanh · hôm nay · Bài này bạn mang về gì"},
+        {"t":114.07,"den":190.38,"ten":"Vì sao tài liệu bị lệch · Bộ kiểm"},
+        {"t":190.38,"den":287.64,"ten":"Slide: lần chạy đầu · Chạy thật: hai kiểu lệch"},
+        {"t":287.64,"den":389.53,"ten":"Chạy thật: mười chín ✓, và thứ lint không thấy"},
+        {"t":389.53,"den":477.48,"ten":"Luyện tập 20–30 phút · Ba câu tự kiểm"},
+        {"t":477.48,"den":515.43,"ten":"Tóm tắt & luyện tập"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 7.2 của khoá API và System Design."},
         {"t":10.78,"vi":"Bài trước kết thúc với một tài liệu lint sạch: năm trăm hai mươi ba dòng, không lỗi."},
@@ -5263,8 +5660,15 @@
         {"t":506.36,"vi":"Tiếp theo, bài 7.3: sinh tài liệu, client có kiểu và bộ validate từ cùng một tệp."}
       ]
     },
-    "api-7-1-openapi": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/api-design/07-tai-lieu-hop-dong/07-01-viet-openapi-3-1-fa926e81.mp4","durationSec":625.32,"nguonCau":"srt",
-      "parts": [],
+    "api-7-1-openapi": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/api-design/07-tai-lieu-hop-dong/07-01-viet-openapi-3-1-fa926e81.mp4","durationSec":625.32,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":96.07,"ten":"Ôn nhanh · hôm nay · Học xong Chương 7"},
+        {"t":96.07,"den":214.79,"ten":"Mô phỏng: hợp đồng như bản vẽ nhà · OpenAPI trong một hình"},
+        {"t":214.79,"den":302.21,"ten":"Một thao tác, từng mảnh · Schema: JSON Schema 2020-12"},
+        {"t":302.21,"den":391.87,"ten":"Chạy thật: lint bản nháp đầu · Slide: bản nháp đầu"},
+        {"t":391.87,"den":475.39,"ten":"Chạy thật: hai bẫy và tài liệu sạch · Bẫy"},
+        {"t":475.39,"den":625.32,"ten":"Phỏng vấn và đi làm · Luyện tập 20–30 phút"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 7.1, mở đầu Chương 7 của khoá API và System Design: tài liệu và hợp đồng."},
         {"t":15.13,"vi":"Chương 6 khoá LabFlow lại: JWT, chính sách theo đối tượng, Top 10 của OWASP, CORS."},
@@ -5349,8 +5753,15 @@
         {"t":616.81,"vi":"Tiếp theo, bài 7.2: một tài liệu hợp lệ vẫn có thể nói sai về server."}
       ]
     },
-    "api-7-2-sinh-code": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/api-design/07-tai-lieu-hop-dong/07-03-sinh-docs-client-validator-7121c960.mp4","durationSec":561.09,"nguonCau":"srt",
-      "parts": [],
+    "api-7-2-sinh-code": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/api-design/07-tai-lieu-hop-dong/07-03-sinh-docs-client-validator-7121c960.mp4","durationSec":561.09,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":85.31,"ten":"Ôn nhanh · hôm nay · Mô phỏng: một tệp, ba sản phẩm"},
+        {"t":85.31,"den":166.17,"ten":"Một tệp, ba sản phẩm · Tài liệu do server công bố"},
+        {"t":166.17,"den":269.39,"ten":"Kiểu cho client · Chạy thật: kiểu và một client"},
+        {"t":269.39,"den":365.8,"ten":"Khi hợp đồng thay đổi · Chạy thật: đổi period thành slot"},
+        {"t":365.8,"den":484.81,"ten":"Chạy thật: spec so với Zod · Bẫy, phỏng vấn và đi làm"},
+        {"t":484.81,"den":561.09,"ten":"Ba câu tự kiểm · Tóm tắt & luyện tập"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 7.3 của khoá API và System Design."},
         {"t":10.77,"vi":"Bài trước chứng minh tài liệu khớp server: mười chín dấu tích, và một lỗi 415 thật."},
@@ -5442,8 +5853,15 @@
         {"t":551.85,"vi":"Tiếp theo, bài 7.4: thiết kế trước, mock, luật phong cách và cổng chặn thay đổi phá vỡ."}
       ]
     },
-    "api-7-3-design-first": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/api-design/07-tai-lieu-hop-dong/07-04-design-first-mock-cong-chan-a223eea2.mp4","durationSec":574.15,"nguonCau":"srt",
-      "parts": [],
+    "api-7-3-design-first": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/api-design/07-tai-lieu-hop-dong/07-04-design-first-mock-cong-chan-a223eea2.mp4","durationSec":574.15,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":86.55,"ten":"Ôn nhanh · hôm nay · Mô phỏng: hai con đường"},
+        {"t":86.55,"den":167.64,"ten":"Hai cách có hợp đồng · Code-first: Zod xuất ra gì"},
+        {"t":167.64,"den":260.49,"ten":"Chạy thật: schema mà Zod sinh ra · Mock từ tài liệu: Prism"},
+        {"t":260.49,"den":356.06,"ten":"Bộ luật phong cách: Spectral"},
+        {"t":356.06,"den":445.69,"ten":"Chạy thật: bốn đề xuất, bốn phán quyết · Bẫy và phỏng vấn"},
+        {"t":445.69,"den":574.15,"ten":"Luyện tập 25–35 phút · Ba câu tự kiểm"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 7.4 của khoá API và System Design."},
         {"t":10.93,"vi":"Bài trước sinh ba thứ từ một tệp: trang tài liệu, client có kiểu, và phép so với Zod."},
@@ -5540,8 +5958,16 @@
         {"t":566.91,"vi":"Tiếp theo, bài 7.5: GraphQL và gRPC, đo trên cùng dữ liệu."}
       ]
     },
-    "api-7-4-khac": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/api-design/07-tai-lieu-hop-dong/07-05-graphql-va-grpc-0a994e98.mp4","durationSec":569.63,"nguonCau":"srt",
-      "parts": [],
+    "api-7-4-khac": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/api-design/07-tai-lieu-hop-dong/07-05-graphql-va-grpc-0a994e98.mp4","durationSec":569.63,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":89.76,"ten":"Ôn nhanh · hôm nay · Mô phỏng: đếm lượt đi-về và byte"},
+        {"t":89.76,"den":174.42,"ten":"Ba cách phục vụ cùng dữ liệu"},
+        {"t":174.42,"den":257.36,"ten":"Cái giá của GraphQL · Chạy thật: ba cái giá"},
+        {"t":257.36,"den":336.65,"ten":"gRPC: phương thức, số, luồng"},
+        {"t":336.65,"den":439.81,"ten":"Chạy thật: đo trên một máy · Chọn thế nào — LabFlow chọn gì"},
+        {"t":439.81,"den":531.59,"ten":"Luyện tập 25–35 phút · Ba câu tự kiểm"},
+        {"t":531.59,"den":569.63,"ten":"Tóm tắt & luyện tập"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 7.5 của khoá API và System Design."},
         {"t":10.81,"vi":"Bốn bài trước xây quanh REST và OpenAPI: viết, kiểm, sinh mã, chặn thay đổi phá vỡ."},
@@ -5629,8 +6055,14 @@
         {"t":562.53,"vi":"Tiếp theo là Lab 7: hàng chờ thiết kế trước, từ hợp đồng tới mã chạy thật."}
       ]
     },
-    "api-7-6-lab": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/api-design/07-tai-lieu-hop-dong/07-06-lab-7-hang-cho-thiet-ke-truoc-baecc817.mp4","durationSec":478.92,"nguonCau":"srt",
-      "parts": [],
+    "api-7-6-lab": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/api-design/07-tai-lieu-hop-dong/07-06-lab-7-hang-cho-thiet-ke-truoc-baecc817.mp4","durationSec":478.92,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":85.54,"ten":"Ôn Chương 7 · vào lab · Yêu cầu của khoa"},
+        {"t":85.54,"den":165.48,"ten":"Mô phỏng: bốn chặng, bốn cổng"},
+        {"t":165.48,"den":272.24,"ten":"Chạy thật: điểm xuất phát · Mô phỏng: điền DESIGN.md"},
+        {"t":272.24,"den":349.89,"ten":"Phần C — chứng minh · Mô phỏng: thang chấm mười điểm"},
+        {"t":349.89,"den":478.92,"ten":"Bắt tay làm lab · Ba câu tự kiểm"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Lab 7 của khoá API và System Design."},
         {"t":10.11,"vi":"Chương 7 cho ta đủ đồ nghề: OpenAPI 3.1, lint, kiểm hợp đồng, client có kiểu, mock, luật phong cách, và cổng chặn phá vỡ."},
@@ -5708,8 +6140,15 @@
         {"t":472.26,"vi":"Tiếp theo là bài kiểm tra Chương 7, rồi Chương 8: tư duy hệ thống."}
       ]
     },
-    "api-8-1-so-lieu": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/api-design/08-tu-duy-he-thong/08-01-ngan-sach-do-tre-0d5bdb6b.mp4","durationSec":588.29,"nguonCau":"srt",
-      "parts": [],
+    "api-8-1-so-lieu": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/api-design/08-tu-duy-he-thong/08-01-ngan-sach-do-tre-0d5bdb6b.mp4","durationSec":588.29,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":91.08,"ten":"Ôn nhanh · hôm nay · Học xong Chương 8"},
+        {"t":91.08,"den":172.45,"ten":"Một request, nhiều chặng"},
+        {"t":172.45,"den":285.06,"ten":"Số đo trên chính máy này · Chạy thật: bảng độ trễ"},
+        {"t":285.06,"den":391.68,"ten":"Server-Timing · Chạy thật: Server-Timing"},
+        {"t":391.68,"den":504.71,"ten":"Một server có đủ không? · Bẫy và phỏng vấn"},
+        {"t":504.71,"den":588.29,"ten":"Ba câu tự kiểm · Tóm tắt & luyện tập"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 8.1, mở đầu Chương 8 của khoá API và System Design: tư duy hệ thống."},
         {"t":13.92,"vi":"Bảy chương trước hỏi API có đúng không: hợp đồng, lỗi, phân trang, phiên bản, tin cậy, bảo mật, tài liệu."},
@@ -5799,8 +6238,14 @@
         {"t":580.51,"vi":"Tiếp theo, bài 8.2: bài test tải lúc bảy giờ sáng, và nút thắt nó tìm ra."}
       ]
     },
-    "api-8-2-mot-may": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/api-design/08-tu-duy-he-thong/08-02-test-tai-nut-that-918bbcc0.mp4","durationSec":478.36,"nguonCau":"srt",
-      "parts": [],
+    "api-8-2-mot-may": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/api-design/08-tu-duy-he-thong/08-02-test-tai-nut-that-918bbcc0.mp4","durationSec":478.36,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":104.12,"ten":"Ôn nhanh · hôm nay · Bài này bạn mang về gì"},
+        {"t":104.12,"den":201.56,"ten":"Chạy thật: autocannon · Bài test bảy giờ"},
+        {"t":201.56,"den":293.37,"ten":"Vì sao: một luồng, và scryptSync giữ nó"},
+        {"t":293.37,"den":400.33,"ten":"Bốn luồng, và ai dùng chung · Bẫy và phỏng vấn"},
+        {"t":400.33,"den":478.36,"ten":"Ba câu tự kiểm · Tóm tắt & luyện tập"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 8.2 của khoá API và System Design."},
         {"t":10.77,"vi":"Bài trước đo từng chặng: scrypt ba mươi mili giây, mọi thứ khác dưới một mili giây."},
@@ -5879,8 +6324,14 @@
         {"t":470.04,"vi":"Tiếp theo, bài 8.3: chậm do thiết kế, kích thước payload, chọn trường và nén."}
       ]
     },
-    "api-8-2-payload": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/api-design/08-tu-duy-he-thong/08-03-payload-truong-nen-01d29041.mp4","durationSec":454.72,"nguonCau":"srt",
-      "parts": [],
+    "api-8-2-payload": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/api-design/08-tu-duy-he-thong/08-03-payload-truong-nen-01d29041.mp4","durationSec":454.72,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":103.97,"ten":"Ôn nhanh · hôm nay · Bài này bạn mang về gì"},
+        {"t":103.97,"den":190.96,"ten":"Câu trả lời của LabFlow to cỡ nào?"},
+        {"t":190.96,"den":291.38,"ten":"Chạy thật: qua đường một megabit · Sửa trong hợp đồng"},
+        {"t":291.38,"den":377.76,"ten":"Server cũng trả tiền cho byte"},
+        {"t":377.76,"den":454.72,"ten":"Ba câu tự kiểm · Tóm tắt & luyện tập"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 8.3 của khoá API và System Design."},
         {"t":10.63,"vi":"Bài trước sửa một server chậm: scrypt chặn event loop."},
@@ -5955,8 +6406,15 @@
         {"t":445.9,"vi":"Tiếp theo, bài 8.4: hai bản LabFlow sau một bộ cân bằng tải, và bốn thứ hỏng."}
       ]
     },
-    "api-8-3-mo-rong": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/api-design/08-tu-duy-he-thong/08-04-mo-rong-ngang-2328b7a4.mp4","durationSec":492.56,"nguonCau":"srt",
-      "parts": [],
+    "api-8-3-mo-rong": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/api-design/08-tu-duy-he-thong/08-04-mo-rong-ngang-2328b7a4.mp4","durationSec":492.56,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":105.54,"ten":"Ôn nhanh · hôm nay · Bài này bạn mang về gì"},
+        {"t":105.54,"den":181.65,"ten":"Hai bản sau một bộ cân bằng tải · Chạy thật: bốn thứ hỏng"},
+        {"t":181.65,"den":264.3,"ten":"Thứ hỏng: trạng thái trong RAM của một tiến trình"},
+        {"t":264.3,"den":359.24,"ten":"Chạy thật: bảng khoá dùng chung"},
+        {"t":359.24,"den":450.92,"ten":"Luyện tập 25–35 phút · Ba câu tự kiểm"},
+        {"t":450.92,"den":492.56,"ten":"Tóm tắt & luyện tập"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 8.4 của khoá API và System Design."},
         {"t":10.84,"vi":"Hai bài trước làm một tiến trình nhanh hơn: scrypt bất đồng bộ, payload nhỏ và nén."},
@@ -6036,8 +6494,15 @@
         {"t":484.24,"vi":"Tiếp theo, bài 8.5: SLO, ngân sách lỗi, và quá tải thì từ chối thế nào."}
       ]
     },
-    "api-8-4-kha-dung": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/api-design/08-tu-duy-he-thong/08-05-slo-ngan-sach-loi-bo-bot-tai-75adbc7b.mp4","durationSec":592.59,"nguonCau":"srt",
-      "parts": [],
+    "api-8-4-kha-dung": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/api-design/08-tu-duy-he-thong/08-05-slo-ngan-sach-loi-bo-bot-tai-75adbc7b.mp4","durationSec":592.59,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":109,"ten":"Ôn nhanh · hôm nay · Bài này bạn mang về gì"},
+        {"t":109,"den":187.5,"ten":"SLI, SLO, SLA · Chạy thật: ngân sách và một phép dò"},
+        {"t":187.5,"den":302.34,"ten":"Đo SLI như người dùng"},
+        {"t":302.34,"den":404.89,"ten":"Bỏ bớt tải: nói không thật nhanh"},
+        {"t":404.89,"den":491.84,"ten":"Phỏng vấn · Luyện tập 25–35 phút"},
+        {"t":491.84,"den":592.59,"ten":"Ba câu tự kiểm · Tóm tắt & luyện tập"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 8.5 của khoá API và System Design."},
         {"t":10.8,"vi":"Bài trước chạy hai bản và đưa trạng thái ra ngoài."},
@@ -6120,8 +6585,15 @@
         {"t":584.9,"vi":"Tiếp theo, bài 8.6: cơ sở dữ liệu sập, suy giảm có chủ đích."}
       ]
     },
-    "api-8-4-suy-giam": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/api-design/08-tu-duy-he-thong/08-06-suy-giam-co-chu-dich-readiness-6d70cdfc.mp4","durationSec":583.17,"nguonCau":"srt",
-      "parts": [],
+    "api-8-4-suy-giam": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/api-design/08-tu-duy-he-thong/08-06-suy-giam-co-chu-dich-readiness-6d70cdfc.mp4","durationSec":583.17,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":113.97,"ten":"Ôn nhanh · hôm nay · Bài này bạn mang về gì"},
+        {"t":113.97,"den":189.13,"ten":"Quyết định theo từng endpoint"},
+        {"t":189.13,"den":273.78,"ten":"Chạy thật: ghi bị từ chối, ready báo đi vòng"},
+        {"t":273.78,"den":384.84,"ten":"Viết vào hợp đồng · Một ứng dụng biết đọc hợp đồng"},
+        {"t":384.84,"den":490.39,"ten":"Hai tình huống, đã đo · Phỏng vấn"},
+        {"t":490.39,"den":583.17,"ten":"Ba câu tự kiểm · Tóm tắt & luyện tập"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 8.6 của khoá API và System Design."},
         {"t":10.78,"vi":"Bài trước viết SLO, và từ chối nhanh bằng 503 khi quá tải."},
@@ -6224,8 +6696,14 @@
         {"t":578.12,"vi":"Đo, sửa, và viết vào hợp đồng."}
       ]
     },
-    "api-8-7-lab": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/api-design/08-tu-duy-he-thong/08-07-lab-8-bao-cao-dung-phong-9ceb4f5f.mp4","durationSec":436.05,"nguonCau":"srt",
-      "parts": [],
+    "api-8-7-lab": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/api-design/08-tu-duy-he-thong/08-07-lab-8-bao-cao-dung-phong-9ceb4f5f.mp4","durationSec":436.05,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":90.57,"ten":"Ôn Chương 8 · vào lab · Câu chuyện và sáu nhiệm vụ"},
+        {"t":90.57,"den":181.14,"ten":"Chạy thật: điểm xuất phát · Mô phỏng: làm mẫu một dòng"},
+        {"t":181.14,"den":273.76,"ten":"Nhiệm vụ 3–4: một lượt quét, rồi cache"},
+        {"t":273.76,"den":369.27,"ten":"Mô phỏng: thang chấm mười điểm · Slide: thang chấm"},
+        {"t":369.27,"den":436.05,"ten":"Ba câu tự kiểm · Lab này cho thấy"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Lab 8 của khoá API và System Design."},
         {"t":10.09,"vi":"Chương 8 cho ta: ngân sách độ trễ, test tải, payload, hai bản, SLO và bỏ bớt tải, suy giảm có chủ đích."},
@@ -6304,8 +6782,15 @@
         {"t":428.81,"vi":"Tiếp theo, bài kiểm tra Chương 8, rồi Chương 9: dữ liệu khi lớn lên."}
       ]
     },
-    "api-9-1-cache": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/api-design/09-du-lieu-khi-lon-len/09-01-cache-http-etag-304-14148819.mp4","durationSec":499.9,"nguonCau":"srt",
-      "parts": [],
+    "api-9-1-cache": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/api-design/09-du-lieu-khi-lon-len/09-01-cache-http-etag-304-14148819.mp4","durationSec":499.9,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":87.37,"ten":"Ôn nhanh · hôm nay · Học xong Chương 9"},
+        {"t":87.37,"den":170.61,"ten":"Mô phỏng: ai được giữ câu trả lời · Ai được giữ, và bao lâu"},
+        {"t":170.61,"den":249.71,"ten":"Chạy thật: hai kiểu 304 · Chạy thật: 304 khi có tải"},
+        {"t":249.71,"den":332.38,"ten":"Một 304 tiết kiệm được gì"},
+        {"t":332.38,"den":422.4,"ten":"Header làm lộ dữ liệu · Phỏng vấn"},
+        {"t":422.4,"den":499.9,"ten":"Ba câu tự kiểm · Tóm tắt & luyện tập"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 9.1, mở đầu Chương 9 của khoá API và System Design: dữ liệu khi lớn lên."},
         {"t":14.22,"vi":"Chương 8 giữ cho một server sống: đo độ trễ, test tải, hai bản, bỏ bớt tải, suy giảm có chủ đích."},
@@ -6391,8 +6876,14 @@
         {"t":491.8,"vi":"Tiếp theo, bài 9.2: cache Redis trước một truy vấn chậm, và cú giẫm đạp."}
       ]
     },
-    "api-9-1-server-cache": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/api-design/09-du-lieu-khi-lon-len/09-02-cache-redis-giam-dap-3e4528a2.mp4","durationSec":419.01,"nguonCau":"srt",
-      "parts": [],
+    "api-9-1-server-cache": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/api-design/09-du-lieu-khi-lon-len/09-02-cache-redis-giam-dap-3e4528a2.mp4","durationSec":419.01,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":103.36,"ten":"Ôn nhanh · hôm nay · Một câu hỏi đắt"},
+        {"t":103.36,"den":202.17,"ten":"Chạy thật: trúng, trượt và tải đều · Trúng, trượt, tải đều"},
+        {"t":202.17,"den":300.82,"ten":"Chạy thật: đếm truy vấn khi khoá hết hạn · Cú giẫm đạp"},
+        {"t":300.82,"den":379.99,"ten":"Luyện tập 30–40 phút · Ba câu tự kiểm"},
+        {"t":379.99,"den":419.01,"ten":"Tóm tắt & luyện tập"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 9.2 của khoá API và System Design."},
         {"t":10.22,"vi":"Bài trước dùng cache HTTP: client và CDN giữ câu trả lời, server trả 304."},
@@ -6467,8 +6958,13 @@
         {"t":412.37,"vi":"Tiếp theo, bài 9.3: một bản sao đọc, và ghi chú biến mất."}
       ]
     },
-    "api-9-2-db-doc": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/api-design/09-du-lieu-khi-lon-len/09-03-doc-sau-ghi-ban-sao-f186489d.mp4","durationSec":384.93,"nguonCau":"srt",
-      "parts": [],
+    "api-9-2-db-doc": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/api-design/09-du-lieu-khi-lon-len/09-03-doc-sau-ghi-ban-sao-f186489d.mp4","durationSec":384.93,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":99.57,"ten":"Ôn nhanh · hôm nay · Một primary thật, một replica thật"},
+        {"t":99.57,"den":201.22,"ten":"Ghi vào primary, đọc từ replica"},
+        {"t":201.22,"den":305.25,"ten":"Token, đo thật · Chạy thật: token nhất quán"},
+        {"t":305.25,"den":384.93,"ten":"Ba câu tự kiểm · Tóm tắt & luyện tập"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 9.3 của khoá API và System Design."},
         {"t":10.77,"vi":"Hai bài trước giữ câu trả lời trong cache, và ghi rõ nó được cũ tới đâu."},
@@ -6532,8 +7028,13 @@
         {"t":377.82,"vi":"Tiếp theo, bài 9.4: định danh và phân trang sống sót qua sharding."}
       ]
     },
-    "api-9-3-sharding": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/api-design/09-du-lieu-khi-lon-len/09-04-dinh-danh-phan-trang-sharding-eaba749a.mp4","durationSec":423.04,"nguonCau":"srt",
-      "parts": [],
+    "api-9-3-sharding": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/api-design/09-du-lieu-khi-lon-len/09-04-dinh-danh-phan-trang-sharding-eaba749a.mp4","durationSec":423.04,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":84.69,"ten":"Ôn nhanh · hôm nay · bigint, UUIDv4 hay UUIDv7?"},
+        {"t":84.69,"den":191.81,"ten":"Chạy thật: một triệu lần chèn, ba kiểu định danh"},
+        {"t":191.81,"den":300.83,"ten":"Chạy thật: hai mảnh, ba cách · Trang 1000 qua hai mảnh"},
+        {"t":300.83,"den":423.04,"ten":"Luyện tập 30–40 phút · Ba câu tự kiểm"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 9.4 của khoá API và System Design."},
         {"t":10.95,"vi":"Bài trước chia đọc và ghi giữa primary và replica."},
@@ -6602,8 +7103,13 @@
         {"t":414.36,"vi":"Tiếp theo, bài 9.5: tài liệu hay bảng, quyết định bằng mẫu truy cập của API."}
       ]
     },
-    "api-9-4-nosql": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/api-design/09-du-lieu-khi-lon-len/09-05-sql-vs-nosql-tu-api-a3302136.mp4","durationSec":344.86,"nguonCau":"srt",
-      "parts": [],
+    "api-9-4-nosql": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/api-design/09-du-lieu-khi-lon-len/09-05-sql-vs-nosql-tu-api-a3302136.mp4","durationSec":344.86,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":105.56,"ten":"Ôn nhanh · hôm nay · Cùng dữ liệu, hai hình dạng"},
+        {"t":105.56,"den":186.14,"ten":"Chạy thật: bốn request, hai cách · Bốn request, hai cách"},
+        {"t":186.14,"den":273.04,"ten":"Quyết định theo mẫu truy cập · Luyện tập 25–35 phút"},
+        {"t":273.04,"den":344.86,"ten":"Ba câu tự kiểm · Tóm tắt & luyện tập"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 9.5 của khoá API và System Design."},
         {"t":10.84,"vi":"Bốn bài trước: cache HTTP, Redis, bản sao đọc, định danh và phân mảnh."},
@@ -6666,8 +7172,13 @@
         {"t":336.92,"vi":"Tiếp theo, Lab 9: một luồng ghi chú cache được, nhất quán và sẵn sàng phân mảnh."}
       ]
     },
-    "api-9-6-lab": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/api-design/09-du-lieu-khi-lon-len/09-06-lab-9-luong-ghi-chu-516834a1.mp4","durationSec":353.2,"nguonCau":"srt",
-      "parts": [],
+    "api-9-6-lab": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/api-design/09-du-lieu-khi-lon-len/09-06-lab-9-luong-ghi-chu-516834a1.mp4","durationSec":353.2,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":83.95,"ten":"Ôn Chương 9 · vào lab · Điểm xuất phát và sáu nhiệm vụ"},
+        {"t":83.95,"den":162.52,"ten":"Chạy thật: điểm xuất phát · Mô phỏng: làm mẫu một dòng"},
+        {"t":162.52,"den":277.03,"ten":"Số đo của lời giải · Mô phỏng: thang chấm mười điểm"},
+        {"t":277.03,"den":353.2,"ten":"Ba câu tự kiểm · Tóm tắt & luyện tập"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Lab 9 của khoá API và System Design."},
         {"t":10.13,"vi":"Chương 9 cho ta: cache HTTP và 304, Redis và single-flight, bản sao đọc và token nhất quán, UUIDv7 và cursor qua phân mảnh."},

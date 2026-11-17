@@ -2,17 +2,12 @@
   "courseSlug": "elementary-japanese-1-a11",
   "sinhBoi": "scripts/phu-de-tu-video-rieng.mjs",
   "lessons": {
-    "jpd113-bai-1-ngu-phap": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/03-bai-1/03-01-chao-lan-dau-noi-ten-hoi-ten-9bb5aac4.mp4","durationSec":560.91,"nguonCau":"thoigian",
+    "jpd113-bai-1-ngu-phap": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/03-bai-1/03-01-chao-lan-dau-noi-ten-hoi-ten-9bb5aac4.mp4","durationSec":560.91,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":33.11,"ten":"Chào bạn · ôn nhanh chữ cái"},
-        {"t":33.11,"den":71.08,"ten":"Ngày đầu vào lớp"},
-        {"t":71.08,"den":117.35,"ten":"Lượt một: chào lần đầu"},
-        {"t":117.35,"den":178.79,"ten":"Lượt hai: nói tên"},
-        {"t":178.79,"den":235.53,"ten":"Hỏi tên và chữ さん"},
-        {"t":235.53,"den":291.59,"ten":"Lượt ba: xin được giúp đỡ"},
-        {"t":291.59,"den":330.09,"ten":"Bốn câu nhỏ rất hay gặp"},
-        {"t":330.09,"den":391.07,"ten":"Hội thoại mẫu: Wan và Marco"},
-        {"t":391.07,"den":421.95,"ten":"Bốn lỗi hay mắc"},
+        {"t":0,"den":117.35,"ten":"Chào bạn · ôn nhanh chữ cái · Ngày đầu vào lớp"},
+        {"t":117.35,"den":235.53,"ten":"Lượt hai: nói tên · Hỏi tên và chữ さん"},
+        {"t":235.53,"den":330.09,"ten":"Lượt ba: xin được giúp đỡ · Bốn câu nhỏ rất hay gặp"},
+        {"t":330.09,"den":421.95,"ten":"Hội thoại mẫu: Wan và Marco · Bốn lỗi hay mắc"},
         {"t":421.95,"den":500.45,"ten":"Bài tập: tự giới thiệu, hỏi tên, đáp lại"},
         {"t":500.45,"den":560.91,"ten":"Tóm tắt"}
       ],
@@ -71,17 +66,12 @@
         {"t":550.16,"vi":"Giờ bạn làm ngay phần dịch Việt sang Nhật và trắc nghiệm của buổi một, ngay dưới video, rồi hẵng sang bài mới cho chắc nhé."}
       ]
     },
-    "jpd113-bai-2-3-ngu-phap": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/04-bai-2/04-01-hoi-cho-toa-nha-tang-may-1ffaa516.mp4","durationSec":507.48,"nguonCau":"thoigian",
+    "jpd113-bai-2-3-ngu-phap": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/04-bai-2/04-01-hoi-cho-toa-nha-tang-may-1ffaa516.mp4","durationSec":507.48,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":35.89,"ten":"Chào bạn · ôn nhanh Bài 1"},
-        {"t":35.88,"den":61.77,"ten":"Lạc trong toà nhà"},
-        {"t":61.77,"den":129.64,"ten":"Ba chỗ cố định: ここ そこ あそこ"},
-        {"t":129.64,"den":186.29,"ten":"Hỏi chỗ: N は どこですか"},
-        {"t":186.29,"den":256.71,"ten":"Hỏi tầng: 何階"},
-        {"t":256.71,"den":316.54,"ten":"Sơ đồ ひかりデパート"},
-        {"t":316.54,"den":347.36,"ten":"Hội thoại ở ひかりデパート"},
-        {"t":347.36,"den":379.09,"ten":"Bốn lỗi hay mắc"},
-        {"t":379.09,"den":448.13,"ten":"Bài tập: hỏi chỗ, đọc tầng"},
+        {"t":0,"den":129.64,"ten":"Chào bạn · ôn nhanh Bài 1 · Lạc trong toà nhà"},
+        {"t":129.64,"den":256.71,"ten":"Hỏi chỗ: N は どこですか · Hỏi tầng: 何階"},
+        {"t":256.71,"den":347.36,"ten":"Sơ đồ ひかりデパート · Hội thoại ở ひかりデパート"},
+        {"t":347.36,"den":448.13,"ten":"Bốn lỗi hay mắc · Bài tập: hỏi chỗ, đọc tầng"},
         {"t":448.13,"den":507.48,"ten":"Tóm tắt"}
       ],
       "cues": [
@@ -130,17 +120,12 @@
         {"t":499.48,"vi":"Giờ bạn làm ngay phần hỏi chỗ và đọc tầng dưới video, rồi hẵng sang bài mới cho chắc nhé."}
       ]
     },
-    "jpd113-dem-tang": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/04-bai-2/04-01-hoi-cho-toa-nha-tang-may-1ffaa516.mp4","durationSec":507.48,"nguonCau":"thoigian",
+    "jpd113-dem-tang": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/04-bai-2/04-01-hoi-cho-toa-nha-tang-may-1ffaa516.mp4","durationSec":507.48,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":35.89,"ten":"Chào bạn · ôn nhanh Bài 1"},
-        {"t":35.88,"den":61.77,"ten":"Lạc trong toà nhà"},
-        {"t":61.77,"den":129.64,"ten":"Ba chỗ cố định: ここ そこ あそこ"},
-        {"t":129.64,"den":186.29,"ten":"Hỏi chỗ: N は どこですか"},
-        {"t":186.29,"den":256.71,"ten":"Hỏi tầng: 何階"},
-        {"t":256.71,"den":316.54,"ten":"Sơ đồ ひかりデパート"},
-        {"t":316.54,"den":347.36,"ten":"Hội thoại ở ひかりデパート"},
-        {"t":347.36,"den":379.09,"ten":"Bốn lỗi hay mắc"},
-        {"t":379.09,"den":448.13,"ten":"Bài tập: hỏi chỗ, đọc tầng"},
+        {"t":0,"den":129.64,"ten":"Chào bạn · ôn nhanh Bài 1 · Lạc trong toà nhà"},
+        {"t":129.64,"den":256.71,"ten":"Hỏi chỗ: N は どこですか · Hỏi tầng: 何階"},
+        {"t":256.71,"den":347.36,"ten":"Sơ đồ ひかりデパート · Hội thoại ở ひかりデパート"},
+        {"t":347.36,"den":448.13,"ten":"Bốn lỗi hay mắc · Bài tập: hỏi chỗ, đọc tầng"},
         {"t":448.13,"den":507.48,"ten":"Tóm tắt"}
       ],
       "cues": [
@@ -189,18 +174,13 @@
         {"t":499.48,"vi":"Giờ bạn làm ngay phần hỏi chỗ và đọc tầng dưới video, rồi hẵng sang bài mới cho chắc nhé."}
       ]
     },
-    "jpd113-dong-tu-thuong-gap": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/05-bai-3/05-03-dong-tu-masu-tro-tu-e-o-ac6e1651.mp4","durationSec":624.04,"nguonCau":"thoigian",
+    "jpd113-dong-tu-thuong-gap": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/05-bai-3/05-03-dong-tu-masu-tro-tu-e-o-ac6e1651.mp4","durationSec":624.04,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":37.07,"ten":"Chào bạn · ôn nhanh"},
-        {"t":37.07,"den":74.24,"ten":"Kể cuối tuần cho bạn Nhật"},
-        {"t":74.23,"den":132.06,"ten":"Bước 1: đuôi ます"},
-        {"t":132.06,"den":199.97,"ten":"Phủ định ません và hỏi ますか"},
-        {"t":199.97,"den":288.56,"ten":"Mười bốn động từ cần thuộc"},
+        {"t":0,"den":132.06,"ten":"Chào bạn · ôn nhanh · Kể cuối tuần cho bạn Nhật"},
+        {"t":132.06,"den":288.56,"ten":"Phủ định ません và hỏi ますか · Mười bốn động từ cần thuộc"},
         {"t":288.56,"den":368.54,"ten":"Bước 2: trợ từ へ (hướng đi)"},
-        {"t":368.54,"den":440.62,"ten":"Bước 3: trợ từ を (cái bị tác động)"},
-        {"t":440.62,"den":476.75,"ten":"Hội thoại: Anna và Nataphon"},
-        {"t":476.75,"den":507.24,"ten":"Bốn lỗi hay mắc"},
-        {"t":507.23,"den":568.82,"ten":"Bài tập: nói câu có động từ"},
+        {"t":368.54,"den":476.75,"ten":"Bước 3: trợ từ を (cái bị tác động)"},
+        {"t":476.75,"den":568.82,"ten":"Bốn lỗi hay mắc · Bài tập: nói câu có động từ"},
         {"t":568.82,"den":624.04,"ten":"Tóm tắt"}
       ],
       "cues": [
@@ -259,20 +239,13 @@
         {"t":615.86,"vi":"Giờ bạn làm ngay phần ghép câu và chia động từ dưới video, rồi hẵng sang bài mới cho chắc nhé."}
       ]
     },
-    "jpd113-idou-full": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/05-bai-3/05-05-ya-nado-nani-mo-doko-e-mo-3111190d.mp4","durationSec":625.7,"nguonCau":"thoigian",
+    "jpd113-idou-full": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/05-bai-3/05-05-ya-nado-nani-mo-doko-e-mo-3111190d.mp4","durationSec":625.7,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":35.09,"ten":"Chào bạn · ôn nhanh"},
-        {"t":35.09,"den":62.93,"ten":"Cuối tuần của bạn thế nào"},
-        {"t":62.93,"den":160.1,"ten":"Từ ăn uống và giải trí"},
-        {"t":160.1,"den":219.73,"ten":"や〜など: vài ví dụ"},
-        {"t":219.73,"den":257.89,"ten":"や khác と"},
-        {"t":257.89,"den":326.7,"ten":"何も・どこへも + ません"},
-        {"t":326.7,"den":385.39,"ten":"Cặp hỏi – đáp"},
-        {"t":385.39,"den":408.28,"ten":"Ba tiếng phản ứng"},
-        {"t":408.28,"den":456.5,"ten":"Bài mẫu: cuối tuần của tôi"},
-        {"t":456.5,"den":486.79,"ten":"Hội thoại: nghỉ hè không đi đâu"},
-        {"t":486.79,"den":512.92,"ten":"Bốn lỗi hay mắc"},
-        {"t":512.91,"den":576.5,"ten":"Bài tập: や, 何も, どこへも"},
+        {"t":0,"den":160.1,"ten":"Chào bạn · ôn nhanh · Cuối tuần của bạn thế nào"},
+        {"t":160.1,"den":257.89,"ten":"や〜など: vài ví dụ · や khác と"},
+        {"t":257.89,"den":385.39,"ten":"何も・どこへも + ません · Cặp hỏi – đáp"},
+        {"t":385.39,"den":486.79,"ten":"Ba tiếng phản ứng · Bài mẫu: cuối tuần của tôi"},
+        {"t":486.79,"den":576.5,"ten":"Bốn lỗi hay mắc · Bài tập: や, 何も, どこへも"},
         {"t":576.49,"den":625.7,"ten":"Tóm tắt"}
       ],
       "cues": [
@@ -335,25 +308,16 @@
         {"t":616.75,"vi":"Giờ bạn làm ngay phần chọn ya, to và ghép câu phủ định dưới video, rồi hẵng sang bài mới cho chắc nhé."}
       ]
     },
-    "jpd113-kanji-so-thoi-gian": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/05-bai-3/05-06-chu-han-gio-thu-buoi-5756ffaf.mp4","durationSec":780.32,"nguonCau":"thoigian",
+    "jpd113-kanji-so-thoi-gian": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/05-bai-3/05-06-chu-han-gio-thu-buoi-5756ffaf.mp4","durationSec":780.32,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":37.74,"ten":"Chào bạn · ôn nhanh"},
-        {"t":37.74,"den":78.72,"ten":"Chữ Hán trong đề thi"},
-        {"t":78.72,"den":122.33,"ten":"Chữ 1/11 · thời (時)"},
-        {"t":122.32,"den":165.25,"ten":"Chữ 2/11 · phân (分)"},
-        {"t":165.25,"den":209.41,"ten":"Chữ 3/11 · nguyệt (月)"},
-        {"t":209.41,"den":246.4,"ten":"Chữ 4/11 · hoả (火)"},
-        {"t":246.4,"den":284.75,"ten":"Chữ 5/11 · thuỷ (水)"},
-        {"t":284.75,"den":326.3,"ten":"Chữ 6/11 · mộc (木)"},
-        {"t":326.3,"den":367.94,"ten":"Chữ 7/11 · kim (金)"},
-        {"t":367.94,"den":405.82,"ten":"Chữ 8/11 · thổ (土)"},
-        {"t":405.82,"den":443.61,"ten":"Chữ 9/11 · diệu (曜)"},
-        {"t":443.6,"den":482.74,"ten":"Chữ 10/11 · triêu (朝)"},
-        {"t":482.74,"den":518.76,"ten":"Chữ 11/11 · vãn (晩)"},
-        {"t":518.76,"den":555.02,"ten":"Cặp chữ dễ nhầm"},
-        {"t":555.02,"den":614.17,"ten":"Đọc câu không furigana"},
-        {"t":614.17,"den":677.99,"ten":"Bốn lỗi hay mắc"},
-        {"t":677.99,"den":729.07,"ten":"Bài tập: viết và nhận mặt chữ"},
+        {"t":0,"den":122.33,"ten":"Chào bạn · ôn nhanh · Chữ Hán trong đề thi"},
+        {"t":122.32,"den":209.41,"ten":"Chữ 2/11 · phân (分) · Chữ 3/11 · nguyệt (月)"},
+        {"t":209.41,"den":284.75,"ten":"Chữ 4/11 · hoả (火) · Chữ 5/11 · thuỷ (水)"},
+        {"t":284.75,"den":367.94,"ten":"Chữ 6/11 · mộc (木) · Chữ 7/11 · kim (金)"},
+        {"t":367.94,"den":443.61,"ten":"Chữ 8/11 · thổ (土) · Chữ 9/11 · diệu (曜)"},
+        {"t":443.6,"den":518.76,"ten":"Chữ 10/11 · triêu (朝) · Chữ 11/11 · vãn (晩)"},
+        {"t":518.76,"den":614.17,"ten":"Cặp chữ dễ nhầm · Đọc câu không furigana"},
+        {"t":614.17,"den":729.07,"ten":"Bốn lỗi hay mắc · Bài tập: viết và nhận mặt chữ"},
         {"t":729.06,"den":780.32,"ten":"Tóm tắt"}
       ],
       "cues": [
@@ -431,18 +395,12 @@
         {"t":771.26,"vi":"Giờ bạn làm ngay phần viết chữ và đọc câu không furigana dưới video, rồi hẵng sang bài mới cho chắc nhé."}
       ]
     },
-    "jpd113-kochira-dokono-nanno": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/04-bai-2/04-05-nha-hang-goi-mon-nan-no-doko-no-f8d19240.mp4","durationSec":497.79,"nguonCau":"thoigian",
+    "jpd113-kochira-dokono-nanno": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/04-bai-2/04-05-nha-hang-goi-mon-nan-no-doko-no-f8d19240.mp4","durationSec":497.79,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":31.91,"ten":"Chào bạn · ôn nhanh"},
-        {"t":31.91,"den":58.16,"ten":"Thực đơn trước mặt"},
-        {"t":58.16,"den":111.55,"ten":"Món ăn và cơm"},
-        {"t":111.55,"den":155.31,"ten":"Đồ uống"},
-        {"t":155.31,"den":219.3,"ten":"Cách gọi món"},
-        {"t":219.3,"den":253.2,"ten":"何の N: món gì"},
-        {"t":253.2,"den":332.29,"ten":"どこの N: của nước nào"},
-        {"t":332.29,"den":364.35,"ten":"Hội thoại gọi món"},
-        {"t":364.35,"den":390.74,"ten":"Bốn lỗi hay mắc"},
-        {"t":390.74,"den":444.98,"ten":"Bài tập: gọi món và hỏi"},
+        {"t":0,"den":111.55,"ten":"Chào bạn · ôn nhanh · Thực đơn trước mặt"},
+        {"t":111.55,"den":219.3,"ten":"Đồ uống · Cách gọi món"},
+        {"t":219.3,"den":332.29,"ten":"何の N: món gì · どこの N: của nước nào"},
+        {"t":332.29,"den":444.98,"ten":"Hội thoại gọi món · Bốn lỗi hay mắc"},
         {"t":444.98,"den":497.79,"ten":"Tóm tắt"}
       ],
       "cues": [
@@ -493,17 +451,12 @@
         {"t":489.49,"vi":"Giờ bạn làm ngay phần gọi món và hỏi nguồn gốc dưới video, rồi hẵng sang bài mới cho chắc nhé."}
       ]
     },
-    "jpd113-kono-sono-ano": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/04-bai-2/04-02-do-vat-gan-xa-kore-sore-are-14a6f348.mp4","durationSec":472.36,"nguonCau":"thoigian",
+    "jpd113-kono-sono-ano": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/04-bai-2/04-02-do-vat-gan-xa-kore-sore-are-14a6f348.mp4","durationSec":472.36,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":33.77,"ten":"Chào bạn · ôn nhanh"},
-        {"t":33.77,"den":59.39,"ten":"Bàn đầy đồ lạ"},
-        {"t":59.39,"den":131.41,"ten":"Ba cái cố định: これ それ あれ"},
-        {"t":131.41,"den":186.9,"ten":"Đi kèm danh từ: この その あの"},
-        {"t":186.9,"den":246.28,"ten":"Đồ điện tử và đồ dùng"},
-        {"t":246.27,"den":309.95,"ten":"Quần áo và phụ kiện"},
-        {"t":309.94,"den":334.36,"ten":"Hội thoại ở cửa hàng"},
-        {"t":334.36,"den":365.48,"ten":"Bốn lỗi hay mắc"},
-        {"t":365.48,"den":419.82,"ten":"Bài tập: hỏi và gọi tên đồ vật"},
+        {"t":0,"den":131.41,"ten":"Chào bạn · ôn nhanh · Bàn đầy đồ lạ"},
+        {"t":131.41,"den":246.28,"ten":"Đi kèm danh từ: この その あの · Đồ điện tử và đồ dùng"},
+        {"t":246.27,"den":334.36,"ten":"Quần áo và phụ kiện · Hội thoại ở cửa hàng"},
+        {"t":334.36,"den":419.82,"ten":"Bốn lỗi hay mắc · Bài tập: hỏi và gọi tên đồ vật"},
         {"t":419.82,"den":472.36,"ten":"Tóm tắt"}
       ],
       "cues": [
@@ -553,18 +506,13 @@
         {"t":463.74,"vi":"Giờ bạn làm ngay phần chọn câu và gọi tên đồ vật dưới video, rồi hẵng sang bài mới cho chắc nhé."}
       ]
     },
-    "jpd113-masu-form": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/05-bai-3/05-03-dong-tu-masu-tro-tu-e-o-ac6e1651.mp4","durationSec":624.04,"nguonCau":"thoigian",
+    "jpd113-masu-form": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/05-bai-3/05-03-dong-tu-masu-tro-tu-e-o-ac6e1651.mp4","durationSec":624.04,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":37.07,"ten":"Chào bạn · ôn nhanh"},
-        {"t":37.07,"den":74.24,"ten":"Kể cuối tuần cho bạn Nhật"},
-        {"t":74.23,"den":132.06,"ten":"Bước 1: đuôi ます"},
-        {"t":132.06,"den":199.97,"ten":"Phủ định ません và hỏi ますか"},
-        {"t":199.97,"den":288.56,"ten":"Mười bốn động từ cần thuộc"},
+        {"t":0,"den":132.06,"ten":"Chào bạn · ôn nhanh · Kể cuối tuần cho bạn Nhật"},
+        {"t":132.06,"den":288.56,"ten":"Phủ định ません và hỏi ますか · Mười bốn động từ cần thuộc"},
         {"t":288.56,"den":368.54,"ten":"Bước 2: trợ từ へ (hướng đi)"},
-        {"t":368.54,"den":440.62,"ten":"Bước 3: trợ từ を (cái bị tác động)"},
-        {"t":440.62,"den":476.75,"ten":"Hội thoại: Anna và Nataphon"},
-        {"t":476.75,"den":507.24,"ten":"Bốn lỗi hay mắc"},
-        {"t":507.23,"den":568.82,"ten":"Bài tập: nói câu có động từ"},
+        {"t":368.54,"den":476.75,"ten":"Bước 3: trợ từ を (cái bị tác động)"},
+        {"t":476.75,"den":568.82,"ten":"Bốn lỗi hay mắc · Bài tập: nói câu có động từ"},
         {"t":568.82,"den":624.04,"ten":"Tóm tắt"}
       ],
       "cues": [
@@ -623,17 +571,12 @@
         {"t":615.86,"vi":"Giờ bạn làm ngay phần ghép câu và chia động từ dưới video, rồi hẵng sang bài mới cho chắc nhé."}
       ]
     },
-    "jpd113-mo-ka": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/03-bai-1/03-05-so-thich-to-mo-giong-nhau-1925ebe6.mp4","durationSec":458.14,"nguonCau":"thoigian",
+    "jpd113-mo-ka": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/03-bai-1/03-05-so-thich-to-mo-giong-nhau-1925ebe6.mp4","durationSec":458.14,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":31.63,"ten":"Chào bạn · ôn nhanh"},
-        {"t":31.63,"den":56.46,"ten":"Cùng sở thích"},
-        {"t":56.46,"den":130.86,"ten":"Mười từ sở thích"},
-        {"t":130.86,"den":172.5,"ten":"Hỏi sở thích: 趣味は何ですか"},
-        {"t":172.5,"den":216.34,"ten":"Trợ từ と: nối hai danh từ"},
-        {"t":216.34,"den":276.22,"ten":"Trợ từ も: cũng"},
-        {"t":276.22,"den":303.08,"ten":"Hội thoại: cùng sở thích"},
-        {"t":303.08,"den":340.73,"ten":"Bốn lỗi hay mắc"},
-        {"t":340.73,"den":405.48,"ten":"Bài tập: sở thích, と, も"},
+        {"t":0,"den":130.86,"ten":"Chào bạn · ôn nhanh · Cùng sở thích"},
+        {"t":130.86,"den":216.34,"ten":"Hỏi sở thích: 趣味は何ですか · Trợ từ と: nối hai danh từ"},
+        {"t":216.34,"den":303.08,"ten":"Trợ từ も: cũng · Hội thoại: cùng sở thích"},
+        {"t":303.08,"den":405.48,"ten":"Bốn lỗi hay mắc · Bài tập: sở thích, と, も"},
         {"t":405.48,"den":458.14,"ten":"Tóm tắt"}
       ],
       "cues": [
@@ -681,18 +624,13 @@
         {"t":448.81,"vi":"Giờ bạn làm ngay phần ghép câu và trắc nghiệm của buổi năm dưới video, rồi hẵng sang bài mới cho chắc nhé."}
       ]
     },
-    "jpd113-ngay-gio-tuoi": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/05-bai-3/05-01-doc-gio-phut-hoi-gio-mo-cua-ff768edb.mp4","durationSec":586.9,"nguonCau":"thoigian",
+    "jpd113-ngay-gio-tuoi": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/05-bai-3/05-01-doc-gio-phut-hoi-gio-mo-cua-ff768edb.mp4","durationSec":586.9,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":33.75,"ten":"Chào bạn · ôn nhanh"},
-        {"t":33.75,"den":66.57,"ten":"Gọi điện hỏi thư viện"},
-        {"t":66.57,"den":143.67,"ten":"Đọc giờ: số cộng じ"},
+        {"t":0,"den":143.67,"ten":"Chào bạn · ôn nhanh · Gọi điện hỏi thư viện"},
         {"t":143.67,"den":226.62,"ten":"Đọc phút: ぷん và ふん"},
-        {"t":226.62,"den":278.13,"ten":"Rưỡi, sáng và chiều"},
-        {"t":278.13,"den":317.95,"ten":"Hỏi giờ: 今、何時ですか"},
+        {"t":226.62,"den":317.95,"ten":"Rưỡi, sáng và chiều · Hỏi giờ: 今、何時ですか"},
         {"t":317.95,"den":394.66,"ten":"Mẫu 〜から〜まで"},
-        {"t":394.66,"den":436.45,"ten":"Hội thoại: gọi điện hỏi bệnh viện"},
-        {"t":436.45,"den":469.4,"ten":"Bốn lỗi hay mắc"},
-        {"t":469.4,"den":532.99,"ten":"Bài tập: đọc đồng hồ, hỏi giờ mở cửa"},
+        {"t":394.66,"den":532.99,"ten":"Hội thoại: gọi điện hỏi bệnh viện · Bốn lỗi hay mắc"},
         {"t":532.99,"den":586.9,"ten":"Tóm tắt"}
       ],
       "cues": [
@@ -747,19 +685,13 @@
         {"t":579.52,"vi":"Giờ bạn làm ngay phần luyện đọc giờ dưới video, rồi hẵng sang bài mới cho chắc nhé."}
       ]
     },
-    "jpd113-quoc-tich-nghe-nghiep": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/03-bai-1/03-02-ten-nuoc-nguoi-nuoc-nao-khong-phai-6d511c3e.mp4","durationSec":537.48,"nguonCau":"thoigian",
+    "jpd113-quoc-tich-nghe-nghiep": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/03-bai-1/03-02-ten-nuoc-nguoi-nuoc-nao-khong-phai-6d511c3e.mp4","durationSec":537.48,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":35.15,"ten":"Chào bạn · ôn nhanh"},
-        {"t":35.15,"den":64.52,"ten":"Bạn mới đến từ đâu"},
-        {"t":64.52,"den":138.8,"ten":"Chín tên nước"},
-        {"t":138.8,"den":196.3,"ten":"Thêm 人: người nước nào"},
-        {"t":196.3,"den":246.53,"ten":"Hỏi quê: お国はどちら"},
+        {"t":0,"den":138.8,"ten":"Chào bạn · ôn nhanh · Bạn mới đến từ đâu"},
+        {"t":138.8,"den":246.53,"ten":"Thêm 人: người nước nào · Hỏi quê: お国はどちら"},
         {"t":246.53,"den":322.9,"ten":"Câu hỏi có hay không: ですか"},
-        {"t":322.9,"den":347.6,"ten":"そうですか và あっ"},
-        {"t":347.6,"den":385.41,"ten":"Hội thoại: Daniel và Anna"},
-        {"t":385.41,"den":418.04,"ten":"Bốn lỗi hay mắc"},
-        {"t":418.04,"den":481.53,"ten":"Bài tập: hỏi quê và trả lời không phải"},
-        {"t":481.53,"den":537.48,"ten":"Tóm tắt"}
+        {"t":322.9,"den":418.04,"ten":"そうですか và あっ · Hội thoại: Daniel và Anna"},
+        {"t":418.04,"den":537.48,"ten":"Bài tập: hỏi quê và trả lời không phải · Tóm tắt"}
       ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Bài 1 của môn JPD113, khoá tiếng Nhật Dekiru. Hôm nay là buổi hai: tên các nước và hỏi quê của một người."},
@@ -809,20 +741,14 @@
         {"t":528.15,"vi":"Giờ bạn làm ngay phần điền chữ và trắc nghiệm của buổi hai dưới video, rồi hẵng sang bài mới cho chắc nhé."}
       ]
     },
-    "jpd113-so-dem-day-du": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/04-bai-2/04-03-so-dem-va-gia-tien-e30b88f5.mp4","durationSec":597.47,"nguonCau":"thoigian",
+    "jpd113-so-dem-day-du": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/04-bai-2/04-03-so-dem-va-gia-tien-e30b88f5.mp4","durationSec":597.47,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":36.85,"ten":"Chào bạn · ôn nhanh"},
-        {"t":36.85,"den":66.92,"ten":"Bảng giá ở tiệm bánh"},
-        {"t":66.92,"den":98.32,"ten":"Chỗ 1: hàng chục"},
+        {"t":0,"den":98.32,"ten":"Chào bạn · ôn nhanh · Bảng giá ở tiệm bánh"},
         {"t":98.32,"den":179.73,"ten":"Chỗ 2: hàng trăm"},
-        {"t":179.73,"den":228.66,"ten":"Chỗ 3: hàng nghìn"},
-        {"t":228.66,"den":288.05,"ten":"Chỗ 4: đọc theo vạn"},
-        {"t":288.05,"den":340.05,"ten":"Chỗ 5: yên và chữ いくら"},
-        {"t":340.05,"den":397.37,"ten":"Luyện đọc bảng giá"},
-        {"t":397.37,"den":441.67,"ten":"Hội thoại ở tiệm bánh"},
-        {"t":441.67,"den":474.43,"ten":"Bốn lỗi hay mắc"},
-        {"t":474.43,"den":545.15,"ten":"Bài tập: đọc giá, hỏi giá, tính tiền"},
-        {"t":545.15,"den":597.47,"ten":"Tóm tắt"}
+        {"t":179.73,"den":288.05,"ten":"Chỗ 3: hàng nghìn · Chỗ 4: đọc theo vạn"},
+        {"t":288.05,"den":397.37,"ten":"Chỗ 5: yên và chữ いくら · Luyện đọc bảng giá"},
+        {"t":397.37,"den":474.43,"ten":"Hội thoại ở tiệm bánh · Bốn lỗi hay mắc"},
+        {"t":474.43,"den":597.47,"ten":"Bài tập: đọc giá, hỏi giá, tính tiền · Tóm tắt"}
       ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Bài 2 của môn JPD113, khoá tiếng Nhật Dekiru. Hôm nay là buổi ba: số và giá tiền."},
@@ -879,17 +805,12 @@
         {"t":588.7,"vi":"Giờ bạn làm ngay phần đọc giá và viết cách đọc ngay dưới video, rồi hẵng sang bài mới cho chắc nhé."}
       ]
     },
-    "jpd113-speaking-cau-hoi-khong-tranh": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/05-bai-3/05-07-on-bai-3-luyen-thi-noi-jpd113-58ec7b29.mp4","durationSec":533.56,"nguonCau":"thoigian",
+    "jpd113-speaking-cau-hoi-khong-tranh": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/05-bai-3/05-07-on-bai-3-luyen-thi-noi-jpd113-58ec7b29.mp4","durationSec":533.56,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":36.82,"ten":"Chào bạn · ôn nhanh"},
-        {"t":36.82,"den":70.71,"ten":"Điểm bị mất oan"},
-        {"t":70.71,"den":132.96,"ten":"Đề thi gồm ba phần"},
-        {"t":132.96,"den":178.2,"ten":"Reading: cách chấm"},
-        {"t":178.2,"den":219.3,"ten":"Talking: cách chấm"},
-        {"t":219.3,"den":261.49,"ten":"Presenting: chào vào và ra"},
-        {"t":261.49,"den":373.42,"ten":"Luyện sáu dạng câu hỏi"},
-        {"t":373.42,"den":415.73,"ten":"Chốt lỗi toàn Bài 3"},
-        {"t":415.73,"den":469.6,"ten":"Bài tập: thi thử và tự thu âm"},
+        {"t":0,"den":132.96,"ten":"Chào bạn · ôn nhanh · Điểm bị mất oan"},
+        {"t":132.96,"den":219.3,"ten":"Reading: cách chấm · Talking: cách chấm"},
+        {"t":219.3,"den":373.42,"ten":"Presenting: chào vào và ra · Luyện sáu dạng câu hỏi"},
+        {"t":373.42,"den":469.6,"ten":"Chốt lỗi toàn Bài 3 · Bài tập: thi thử và tự thu âm"},
         {"t":469.59,"den":533.56,"ten":"Tóm tắt"}
       ],
       "cues": [
@@ -940,17 +861,12 @@
         {"t":522.55,"vi":"Giờ bạn làm ngay phần thu âm trả lời mười dạng câu hỏi và đề luyện tổng hợp ngay dưới video, rồi hẵng đi thi cho chắc nhé."}
       ]
     },
-    "jpd113-speaking-cau-truc": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/05-bai-3/05-07-on-bai-3-luyen-thi-noi-jpd113-58ec7b29.mp4","durationSec":533.56,"nguonCau":"thoigian",
+    "jpd113-speaking-cau-truc": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/05-bai-3/05-07-on-bai-3-luyen-thi-noi-jpd113-58ec7b29.mp4","durationSec":533.56,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":36.82,"ten":"Chào bạn · ôn nhanh"},
-        {"t":36.82,"den":70.71,"ten":"Điểm bị mất oan"},
-        {"t":70.71,"den":132.96,"ten":"Đề thi gồm ba phần"},
-        {"t":132.96,"den":178.2,"ten":"Reading: cách chấm"},
-        {"t":178.2,"den":219.3,"ten":"Talking: cách chấm"},
-        {"t":219.3,"den":261.49,"ten":"Presenting: chào vào và ra"},
-        {"t":261.49,"den":373.42,"ten":"Luyện sáu dạng câu hỏi"},
-        {"t":373.42,"den":415.73,"ten":"Chốt lỗi toàn Bài 3"},
-        {"t":415.73,"den":469.6,"ten":"Bài tập: thi thử và tự thu âm"},
+        {"t":0,"den":132.96,"ten":"Chào bạn · ôn nhanh · Điểm bị mất oan"},
+        {"t":132.96,"den":219.3,"ten":"Reading: cách chấm · Talking: cách chấm"},
+        {"t":219.3,"den":373.42,"ten":"Presenting: chào vào và ra · Luyện sáu dạng câu hỏi"},
+        {"t":373.42,"den":469.6,"ten":"Chốt lỗi toàn Bài 3 · Bài tập: thi thử và tự thu âm"},
         {"t":469.59,"den":533.56,"ten":"Tóm tắt"}
       ],
       "cues": [
@@ -1001,20 +917,14 @@
         {"t":522.55,"vi":"Giờ bạn làm ngay phần thu âm trả lời mười dạng câu hỏi và đề luyện tổng hợp ngay dưới video, rồi hẵng đi thi cho chắc nhé."}
       ]
     },
-    "jpd113-tien-gia-ca": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/04-bai-2/04-03-so-dem-va-gia-tien-e30b88f5.mp4","durationSec":597.47,"nguonCau":"thoigian",
+    "jpd113-tien-gia-ca": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/04-bai-2/04-03-so-dem-va-gia-tien-e30b88f5.mp4","durationSec":597.47,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":36.85,"ten":"Chào bạn · ôn nhanh"},
-        {"t":36.85,"den":66.92,"ten":"Bảng giá ở tiệm bánh"},
-        {"t":66.92,"den":98.32,"ten":"Chỗ 1: hàng chục"},
+        {"t":0,"den":98.32,"ten":"Chào bạn · ôn nhanh · Bảng giá ở tiệm bánh"},
         {"t":98.32,"den":179.73,"ten":"Chỗ 2: hàng trăm"},
-        {"t":179.73,"den":228.66,"ten":"Chỗ 3: hàng nghìn"},
-        {"t":228.66,"den":288.05,"ten":"Chỗ 4: đọc theo vạn"},
-        {"t":288.05,"den":340.05,"ten":"Chỗ 5: yên và chữ いくら"},
-        {"t":340.05,"den":397.37,"ten":"Luyện đọc bảng giá"},
-        {"t":397.37,"den":441.67,"ten":"Hội thoại ở tiệm bánh"},
-        {"t":441.67,"den":474.43,"ten":"Bốn lỗi hay mắc"},
-        {"t":474.43,"den":545.15,"ten":"Bài tập: đọc giá, hỏi giá, tính tiền"},
-        {"t":545.15,"den":597.47,"ten":"Tóm tắt"}
+        {"t":179.73,"den":288.05,"ten":"Chỗ 3: hàng nghìn · Chỗ 4: đọc theo vạn"},
+        {"t":288.05,"den":397.37,"ten":"Chỗ 5: yên và chữ いくら · Luyện đọc bảng giá"},
+        {"t":397.37,"den":474.43,"ten":"Hội thoại ở tiệm bánh · Bốn lỗi hay mắc"},
+        {"t":474.43,"den":597.47,"ten":"Bài tập: đọc giá, hỏi giá, tính tiền · Tóm tắt"}
       ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Bài 2 của môn JPD113, khoá tiếng Nhật Dekiru. Hôm nay là buổi ba: số và giá tiền."},
@@ -1071,20 +981,13 @@
         {"t":588.7,"vi":"Giờ bạn làm ngay phần đọc giá và viết cách đọc ngay dưới video, rồi hẵng sang bài mới cho chắc nhé."}
       ]
     },
-    "jpd113-to-ya-nado": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/05-bai-3/05-05-ya-nado-nani-mo-doko-e-mo-3111190d.mp4","durationSec":625.7,"nguonCau":"thoigian",
+    "jpd113-to-ya-nado": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/05-bai-3/05-05-ya-nado-nani-mo-doko-e-mo-3111190d.mp4","durationSec":625.7,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":35.09,"ten":"Chào bạn · ôn nhanh"},
-        {"t":35.09,"den":62.93,"ten":"Cuối tuần của bạn thế nào"},
-        {"t":62.93,"den":160.1,"ten":"Từ ăn uống và giải trí"},
-        {"t":160.1,"den":219.73,"ten":"や〜など: vài ví dụ"},
-        {"t":219.73,"den":257.89,"ten":"や khác と"},
-        {"t":257.89,"den":326.7,"ten":"何も・どこへも + ません"},
-        {"t":326.7,"den":385.39,"ten":"Cặp hỏi – đáp"},
-        {"t":385.39,"den":408.28,"ten":"Ba tiếng phản ứng"},
-        {"t":408.28,"den":456.5,"ten":"Bài mẫu: cuối tuần của tôi"},
-        {"t":456.5,"den":486.79,"ten":"Hội thoại: nghỉ hè không đi đâu"},
-        {"t":486.79,"den":512.92,"ten":"Bốn lỗi hay mắc"},
-        {"t":512.91,"den":576.5,"ten":"Bài tập: や, 何も, どこへも"},
+        {"t":0,"den":160.1,"ten":"Chào bạn · ôn nhanh · Cuối tuần của bạn thế nào"},
+        {"t":160.1,"den":257.89,"ten":"や〜など: vài ví dụ · や khác と"},
+        {"t":257.89,"den":385.39,"ten":"何も・どこへも + ません · Cặp hỏi – đáp"},
+        {"t":385.39,"den":486.79,"ten":"Ba tiếng phản ứng · Bài mẫu: cuối tuần của tôi"},
+        {"t":486.79,"den":576.5,"ten":"Bốn lỗi hay mắc · Bài tập: や, 何も, どこへも"},
         {"t":576.49,"den":625.7,"ten":"Tóm tắt"}
       ],
       "cues": [
@@ -1147,18 +1050,12 @@
         {"t":616.75,"vi":"Giờ bạn làm ngay phần chọn ya, to và ghép câu phủ định dưới video, rồi hẵng sang bài mới cho chắc nhé."}
       ]
     },
-    "jpd113-tro-tu-wo-ni-de-e": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/05-bai-3/05-04-tro-tu-ni-de-ke-mot-ngay-e9d43a33.mp4","durationSec":543.29,"nguonCau":"thoigian",
+    "jpd113-tro-tu-wo-ni-de-e": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/05-bai-3/05-04-tro-tu-ni-de-ke-mot-ngay-e9d43a33.mp4","durationSec":543.29,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":39.47,"ten":"Chào bạn · ôn nhanh"},
-        {"t":39.47,"den":69.92,"ten":"Giám thị hỏi về một ngày"},
-        {"t":69.92,"den":129.19,"ten":"Trợ từ に: mốc thời gian"},
-        {"t":129.19,"den":180.06,"ten":"Khi nào KHÔNG dùng に"},
-        {"t":180.06,"den":240.11,"ten":"Trợ từ で: nơi diễn ra hành động"},
-        {"t":240.11,"den":291.04,"ten":"So sánh に · へ · で · を"},
-        {"t":291.04,"den":352.55,"ten":"Bài mẫu: Một ngày của tôi"},
-        {"t":352.55,"den":382.23,"ten":"Hội thoại: buổi sáng của Lin"},
-        {"t":382.23,"den":411.66,"ten":"Bốn lỗi hay mắc"},
-        {"t":411.66,"den":488.23,"ten":"Bài tập: kể một ngày của bạn"},
+        {"t":0,"den":129.19,"ten":"Chào bạn · ôn nhanh · Giám thị hỏi về một ngày"},
+        {"t":129.19,"den":240.11,"ten":"Khi nào KHÔNG dùng に · Trợ từ で: nơi diễn ra hành động"},
+        {"t":240.11,"den":352.55,"ten":"So sánh に · へ · で · を · Bài mẫu: Một ngày của tôi"},
+        {"t":352.55,"den":488.23,"ten":"Hội thoại: buổi sáng của Lin · Bốn lỗi hay mắc"},
         {"t":488.23,"den":543.29,"ten":"Tóm tắt"}
       ],
       "cues": [
@@ -1215,18 +1112,12 @@
         {"t":534.73,"vi":"Giờ bạn làm ngay phần chọn trợ từ và ghép câu ngay dưới video, rồi hẵng sang bài mới cho chắc nhé."}
       ]
     },
-    "jpd113-tu-de-hoi": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/04-bai-2/04-05-nha-hang-goi-mon-nan-no-doko-no-f8d19240.mp4","durationSec":497.79,"nguonCau":"thoigian",
+    "jpd113-tu-de-hoi": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/04-bai-2/04-05-nha-hang-goi-mon-nan-no-doko-no-f8d19240.mp4","durationSec":497.79,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":31.91,"ten":"Chào bạn · ôn nhanh"},
-        {"t":31.91,"den":58.16,"ten":"Thực đơn trước mặt"},
-        {"t":58.16,"den":111.55,"ten":"Món ăn và cơm"},
-        {"t":111.55,"den":155.31,"ten":"Đồ uống"},
-        {"t":155.31,"den":219.3,"ten":"Cách gọi món"},
-        {"t":219.3,"den":253.2,"ten":"何の N: món gì"},
-        {"t":253.2,"den":332.29,"ten":"どこの N: của nước nào"},
-        {"t":332.29,"den":364.35,"ten":"Hội thoại gọi món"},
-        {"t":364.35,"den":390.74,"ten":"Bốn lỗi hay mắc"},
-        {"t":390.74,"den":444.98,"ten":"Bài tập: gọi món và hỏi"},
+        {"t":0,"den":111.55,"ten":"Chào bạn · ôn nhanh · Thực đơn trước mặt"},
+        {"t":111.55,"den":219.3,"ten":"Đồ uống · Cách gọi món"},
+        {"t":219.3,"den":332.29,"ten":"何の N: món gì · どこの N: của nước nào"},
+        {"t":332.29,"den":444.98,"ten":"Hội thoại gọi món · Bốn lỗi hay mắc"},
         {"t":444.98,"den":497.79,"ten":"Tóm tắt"}
       ],
       "cues": [
@@ -1277,18 +1168,13 @@
         {"t":489.49,"vi":"Giờ bạn làm ngay phần gọi món và hỏi nguồn gốc dưới video, rồi hẵng sang bài mới cho chắc nhé."}
       ]
     },
-    "jpd113-tu-trong-ngon-ngu-khac": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/04-bai-2/04-06-cua-ai-tieng-gi-tong-hop-bai-2-d458598d.mp4","durationSec":549.41,"nguonCau":"thoigian",
+    "jpd113-tu-trong-ngon-ngu-khac": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/04-bai-2/04-06-cua-ai-tieng-gi-tong-hop-bai-2-d458598d.mp4","durationSec":549.41,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":36.86,"ten":"Chào bạn · ôn nhanh"},
-        {"t":36.86,"den":64.69,"ten":"Chiếc ví bị bỏ quên"},
-        {"t":64.69,"den":111.96,"ten":"だれの: hỏi của ai"},
-        {"t":111.96,"den":169.74,"ten":"〜語で: hỏi từ trong tiếng khác"},
-        {"t":169.74,"den":210.43,"ten":"Tổng hợp: một cuộc mua sắm"},
+        {"t":0,"den":111.96,"ten":"Chào bạn · ôn nhanh · Chiếc ví bị bỏ quên"},
+        {"t":111.96,"den":210.43,"ten":"〜語で: hỏi từ trong tiếng khác · Tổng hợp: một cuộc mua sắm"},
         {"t":210.43,"den":287.06,"ten":"Chữ Hán số và tiền"},
-        {"t":287.06,"den":327.42,"ten":"Khuôn đề thi nói Bài 2"},
-        {"t":327.42,"den":378.48,"ten":"Luyện bốn câu hay hỏi"},
-        {"t":378.48,"den":408.46,"ten":"Bốn lỗi hay mắc"},
-        {"t":408.46,"den":488.4,"ten":"Bài tập: của ai, tiếng gì, tự nói"},
+        {"t":287.06,"den":378.48,"ten":"Khuôn đề thi nói Bài 2 · Luyện bốn câu hay hỏi"},
+        {"t":378.48,"den":488.4,"ten":"Bốn lỗi hay mắc · Bài tập: của ai, tiếng gì, tự nói"},
         {"t":488.4,"den":549.41,"ten":"Tóm tắt"}
       ],
       "cues": [
@@ -1341,20 +1227,14 @@
         {"t":539.78,"vi":"Giờ bạn làm ngay phần hỏi của ai, hỏi tiếng gì và tự nói Bài 2 dưới video, rồi hẵng sang Bài 3 cho chắc nhé."}
       ]
     },
-    "jpd113-youbi": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/05-bai-3/05-02-thu-thang-ngay-lich-nam-642c87c7.mp4","durationSec":656.06,"nguonCau":"thoigian",
+    "jpd113-youbi": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/05-bai-3/05-02-thu-thang-ngay-lich-nam-642c87c7.mp4","durationSec":656.06,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":35.19,"ten":"Chào bạn · ôn nhanh"},
-        {"t":35.19,"den":63.69,"ten":"Lịch của trường"},
-        {"t":63.69,"den":151.33,"ten":"Bảng 1: bảy thứ"},
+        {"t":0,"den":151.33,"ten":"Chào bạn · ôn nhanh · Lịch của trường"},
         {"t":151.33,"den":227.52,"ten":"Bảng 2: mười hai tháng"},
         {"t":227.52,"den":338.9,"ten":"Bảng 3: các ngày"},
-        {"t":338.9,"den":400.39,"ten":"Nói ngày: tháng trước, ngày sau"},
-        {"t":400.39,"den":453.61,"ten":"Mẫu いつからいつまで"},
-        {"t":453.61,"den":483.63,"ten":"Hội thoại: lịch của trường"},
-        {"t":483.63,"den":502.66,"ten":"Hội thoại: nghỉ xuân của Park"},
-        {"t":502.66,"den":536.16,"ten":"Bốn lỗi hay mắc"},
-        {"t":536.16,"den":601.5,"ten":"Bài tập: đọc ngày, hỏi bao giờ"},
-        {"t":601.5,"den":656.06,"ten":"Tóm tắt"}
+        {"t":338.9,"den":453.61,"ten":"Nói ngày: tháng trước, ngày sau · Mẫu いつからいつまで"},
+        {"t":453.61,"den":536.16,"ten":"Hội thoại: lịch của trường · Hội thoại: nghỉ xuân của Park"},
+        {"t":536.16,"den":656.06,"ten":"Bài tập: đọc ngày, hỏi bao giờ · Tóm tắt"}
       ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Bài 3 của môn JPD113, khoá tiếng Nhật Dekiru. Hôm nay là buổi hai: thứ, tháng và ngày."},

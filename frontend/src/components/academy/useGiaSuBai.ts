@@ -25,7 +25,8 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { toast } from 'react-hot-toast';
 import { api } from '@/lib/api';
-import { khoaGiaSu, useGiaSuBaiStore, type LuotGiaSu } from '@/store/giaSuBaiStore';
+import { khoaGiaSu, useGiaSuBaiStore, type LuotGiaSu, type NguCanhHoi } from '@/store/giaSuBaiStore';
+import { mocDoan } from '@/lib/mucLucVideo';
 
 /** Câu quiz truyền vào để gia sư biết "câu N" là gì (dùng ở Đề luyện cuối chương). */
 export interface TutorQuizItem {
@@ -64,10 +65,44 @@ export interface TuyChonHoi {
   refresh?: boolean;
   /** Gửi lịch sử RỖNG — xem ghi chú ở `hoiTiengAnh`. */
   noHistory?: boolean;
+  /**
+   * Ngữ cảnh gắn vào lượt này (đoạn video / slide). Bỏ trống ⇒ dùng chip đang GHIM ở ô nhập (nếu có) rồi gỡ nó.
+   * `null` ⇒ cố ý không gắn gì (kể cả khi đang ghim).
+   */
+  nguCanh?: NguCanhHoi | null;
+  /** Câu hỏi đã tự nêu mốc/slide (chip hỏi nhanh) ⇒ không nối thêm "(về đoạn …)" vào cuối. */
+  cauDaCoNguCanh?: boolean;
 }
 
-export function useGiaSuBai({ lessonId, quizContext, autoAsk, phongVideo, phuDeGiay, videoTrack }: {
+/**
+ * Câu gõ tay + chip đang ghim ⇒ câu hỏi TỰ ĐỦ NGHĨA. Nối mốc/slide vào chữ chứ không chỉ gửi tham số: câu hỏi được lưu
+ * vào "Câu hỏi thường gặp" cho người sau đọc, và nằm trong lịch sử gửi lại ở các lượt sau — "phần này" trơ trọi thì cả
+ * hai đều mất nghĩa.
+ */
+export function cauKemNguCanh(q: string, nc?: NguCanhHoi | null): string {
+  if (!nc) return q;
+  if (nc.loai === 'doan') {
+    return `${q}\n\n(Hỏi về đoạn ${mocDoan(nc.doan)}${nc.doan.ten ? ` “${nc.doan.ten}”` : ''} của video.)`;
+  }
+  const sl = nc.slide;
+  return `${q}\n\n(Hỏi về slide ${sl.so}${sl.tong ? `/${sl.tong}` : ''} của bộ ${sl.bo}${sl.ten ? ` — “${sl.ten}”` : ''}.)`;
+}
+
+/** Thân request cho ngữ cảnh đã ghim — máy chủ tự cắt phụ đề/phần giảng (xem `docDoanHoi`, `docSlideHoi`). */
+function thanNguCanh(nc?: NguCanhHoi | null): Record<string, unknown> {
+  if (!nc) return {};
+  if (nc.loai === 'doan') return { doan: nc.doan };
+  return { slide: { bo: nc.slide.bo, so: nc.slide.so, ...(nc.slide.ten ? { ten: nc.slide.ten } : {}) } };
+}
+
+export function useGiaSuBai({ lessonId, quizContext, autoAsk, phongVideo, phuDeGiay, videoTrack, nhanCauCho }: {
   lessonId: number;
+  /**
+   * Vỏ này nhận "câu chờ" (`cauCho` trong kho — nút "Tóm tắt video" ở mục lục) khi nào: 'robot' = khi nút trợ lý nổi
+   * đang hiện, 'cuoiBai' = khi KHÔNG có nó. Hai vỏ chung một mạch hội thoại nên ai bắn cũng hiện ở cả hai; chia vai để
+   * cờ "đang hỏi" (khoá ô nhập, CuongMini đang nghĩ) nằm đúng ở vỏ người học đang nhìn.
+   */
+  nhanCauCho?: 'robot' | 'cuoiBai';
   quizContext?: TutorQuizItem[];
   /** Câu hỏi bắn đi NGAY khi `key` đổi — nút "Hỏi AI vì sao sai" ở từng câu quiz. */
   autoAsk?: { key: number; text: string } | null;
@@ -92,6 +127,23 @@ export function useGiaSuBai({ lessonId, quizContext, autoAsk, phongVideo, phuDeG
   const turns = useGiaSuBaiStore((s) => s.cuoc[khoa] ?? RONG);
   const datCuoc = useGiaSuBaiStore((s) => s.datCuoc);
   const xoaCuoc = useGiaSuBaiStore((s) => s.xoaCuoc);
+  const ghim = useGiaSuBaiStore((s) => s.ghim[khoa]);
+  const datGhimKho = useGiaSuBaiStore((s) => s.datGhim);
+
+  /*
+   * ── VIDEO ĐANG PHÁT trên trang học (17/11/2026) ──
+   * Trang `learn` công bố video của bài vào kho; ở đây (cả mục cuối bài lẫn con robot) đọc lại để gửi kèm phụ đề +
+   * giây đang xem — người học hỏi "đoạn vừa rồi" là gia sư biết đoạn nào. Phòng học video truyền `phongVideo` thẳng
+   * qua props thì props thắng. Đề luyện (`inQuiz`) không kèm video: ngữ cảnh của nó là đề.
+   * Chỉ bật khi video CÓ phụ đề: không có thì lời dặn phòng video sẽ bắt gia sư nói "chưa nghe được video" ở mọi câu.
+   */
+  const videoKho = useGiaSuBaiStore((s) => s.video);
+  const videoBai = !phongVideo && !inQuiz && videoKho?.lessonId === lessonId && videoKho.coPhuDe ? videoKho : null;
+  const coVideo = !!phongVideo || !!videoBai;
+  const videoBaiRef = useRef(videoBai);
+  videoBaiRef.current = videoBai;
+  /** Số lần hỏi hỏng — con robot đổi mặt "bối rối" mỗi khi số này tăng. */
+  const [soLoi, datSoLoi] = useState(0);
 
   const [question, setQuestion] = useState('');
   const [asking, setAsking] = useState(false);
@@ -115,6 +167,8 @@ export function useGiaSuBai({ lessonId, quizContext, autoAsk, phongVideo, phuDeG
    */
   const turnsRef = useRef<LuotGiaSu[]>(turns);
   turnsRef.current = turns;
+  const ghimRef = useRef(ghim);
+  ghimRef.current = ghim;
 
   /*
    * ⚠️ GIÂY ĐANG XEM ĐI QUA REF, KHÔNG QUA DEPENDENCY.
@@ -129,6 +183,21 @@ export function useGiaSuBai({ lessonId, quizContext, autoAsk, phongVideo, phuDeG
   giayRef.current = phuDeGiay;
   const trackRef = useRef(videoTrack);
   trackRef.current = videoTrack;
+
+  /** Phần thân request về video — đọc MỚI NHẤT lúc gửi (giây đang xem đổi mỗi giây). */
+  const thanVideo = useCallback((): Record<string, unknown> => {
+    if (phongVideo) {
+      return {
+        phongVideo: true,
+        ...(giayRef.current != null ? { phuDeGiay: Math.round(giayRef.current) } : {}),
+        ...(trackRef.current ? { videoTrack: trackRef.current } : {}),
+      };
+    }
+    const v = videoBaiRef.current;
+    if (!v) return {};
+    const g = v.layGiay();
+    return { phongVideo: true, videoTrack: v.track, ...(g != null && Number.isFinite(g) ? { phuDeGiay: Math.round(g) } : {}) };
+  }, [phongVideo]);
 
   /* Đổi bài ⇒ dọn ô nhập. KHÔNG dọn hội thoại: người học quay lại bài cũ thì
      mạch chat cũ vẫn còn, đó là điều mong đợi chứ không phải rác. */
@@ -174,6 +243,7 @@ export function useGiaSuBai({ lessonId, quizContext, autoAsk, phongVideo, phuDeG
   /** SSE: đọc luồng, dồn delta vào lượt trợ lý ở vị trí `aIdx`. Ném lỗi để caller lùi. */
   const chayStream = useCallback(async (
     aIdx: number, q: string, history: LuotGiaSu[], english: boolean, images: string[], cacheKey?: string, refresh?: boolean,
+    nguCanh?: NguCanhHoi | null,
   ) => {
     /*
      * ⚠️ ĐƯỜNG DẪN TUYỆT ĐỐI, dựng từ `baseURL` của axios.
@@ -192,7 +262,8 @@ export function useGiaSuBai({ lessonId, quizContext, autoAsk, phongVideo, phuDeG
         question: q, history: history.map(toMsg), english, cacheKey, refresh,
         ...(images.length ? { images } : {}),
         ...(inQuiz ? { quizContext } : {}),
-        ...(phongVideo ? { phongVideo: true, ...(giayRef.current != null ? { phuDeGiay: Math.round(giayRef.current) } : {}), ...(trackRef.current ? { videoTrack: trackRef.current } : {}) } : {}),
+        ...thanVideo(),
+        ...thanNguCanh(nguCanh),
       }),
     });
     if (!res.ok || !res.body) throw new Error(`HTTP ${res.status}`);
@@ -229,7 +300,7 @@ export function useGiaSuBai({ lessonId, quizContext, autoAsk, phongVideo, phuDeG
     }
     if (!acc.trim()) throw new Error('empty stream');
     patch(aIdx, { content: acc, streaming: false });
-  }, [lessonId, inQuiz, quizContext, patch, phongVideo]);
+  }, [lessonId, inQuiz, quizContext, patch, thanVideo]);
 
   /** Hỏi một câu. `showUser:false` + `english:true` là lúc bấm "Bản tiếng Anh". */
   const hoi = useCallback(async (text: string, opts?: TuyChonHoi) => {
@@ -244,6 +315,10 @@ export function useGiaSuBai({ lessonId, quizContext, autoAsk, phongVideo, phuDeG
     const showUser = opts?.showUser !== false;
     const cacheKey = opts?.cacheKey;
     const refresh = !!opts?.refresh;
+    /* Ngữ cảnh của lượt: chỉ định rõ > chip đang ghim (chỉ lượt NGƯỜI DÙNG hỏi mới lấy chip — dịch lại / hỏi lại mới
+       dựng lại câu cũ, không được vơ chip của câu đang soạn dở). */
+    const nguCanh = opts?.nguCanh !== undefined ? opts.nguCanh : (showUser ? (ghimRef.current ?? null) : null);
+    const cauGui = opts?.cauDaCoNguCanh || !showUser ? q : cauKemNguCanh(q, nguCanh);
 
     setAsking(true);
     /* CHỐT ảnh ngay tại đây rồi dọn ô. Đọc `anhDan` ở trong `catch` (đường lùi
@@ -251,24 +326,27 @@ export function useGiaSuBai({ lessonId, quizContext, autoAsk, phongVideo, phuDeG
        tức đúng lúc khó đối chứng nhất. Lượt DỊCH LẠI / HỎI LẠI MỚI thì không
        kèm ảnh: nó dựng lại một câu trả lời cũ, không phải hỏi thêm. */
     const anhGui = showUser ? anhDan : [];
-    if (showUser) { setQuestion(''); datAnhDan([]); }
+    if (showUser) { setQuestion(''); datAnhDan([]); if (ghimRef.current) datGhimKho(khoa, null); }
 
     const history = opts?.noHistory ? [] : turnsRef.current.filter((t) => !t.streaming);
     const aIdx = history.length + (showUser ? 1 : 0); // vị trí lượt trợ lý mới
 
     datCuoc(khoa, (t) => {
-      const base = showUser ? [...t, { role: 'user' as const, content: q, ...(anhGui.length ? { anh: anhGui } : {}) }] : [...t];
+      const base = showUser
+        ? [...t, { role: 'user' as const, content: cauGui, ...(anhGui.length ? { anh: anhGui } : {}), ...(nguCanh ? { nguCanh } : {}) }]
+        : [...t];
       return [...base, {
         role: 'assistant' as const, content: '', streaming: true,
         /* ⚠️ GIỮ `srcQuestion` cả cho lượt tiếng Anh. Để `undefined` thì nút
            "Hỏi lại mới" không hiện trên chính lượt tiếng Anh — tức đúng lượt
            đang giữ mục cache hỏng lại không sinh lại được. */
-        english, srcQuestion: q, srcCacheKey: cacheKey,
+        english, srcQuestion: cauGui, srcCacheKey: cacheKey,
+        ...(nguCanh ? { nguCanh } : {}),
       }];
     });
 
     try {
-      await chayStream(aIdx, q, history, english, anhGui, cacheKey, refresh);
+      await chayStream(aIdx, cauGui, history, english, anhGui, cacheKey, refresh, nguCanh);
     } catch {
       // SSE hỏng/không hỗ trợ → POST thường, không để gia sư chết.
       try {
@@ -277,20 +355,25 @@ export function useGiaSuBai({ lessonId, quizContext, autoAsk, phongVideo, phuDeG
           /* Đường lùi PHẢI mang theo y hệt cờ phòng video. Thiếu nó thì lúc SSE
              hỏng gia sư vẫn trả lời, nhưng trả lời MÙ phụ đề — không mốc thời
              gian, không trích dẫn — và trông y như model tự dưng kém đi. */
-          { question: q, history: history.map(toMsg), english, cacheKey, refresh,
+          { question: cauGui, history: history.map(toMsg), english, cacheKey, refresh,
             ...(anhGui.length ? { images: anhGui } : {}),
             ...(inQuiz ? { quizContext } : {}),
-            ...(phongVideo ? { phongVideo: true, ...(giayRef.current != null ? { phuDeGiay: Math.round(giayRef.current) } : {}), ...(trackRef.current ? { videoTrack: trackRef.current } : {}) } : {}) },
+            ...thanVideo(),
+            ...thanNguCanh(nguCanh) },
           { timeout: 240_000 });
         patch(aIdx, { content: r.data.data.answer, streaming: false, cached: !!r.data.data.cached });
       } catch (e: unknown) {
         const status = (e as { response?: { status?: number } })?.response?.status;
         datCuoc(khoa, (t) => t.slice(0, showUser ? -2 : -1)); // gỡ bubble hỏng
-        if (showUser) setQuestion(q);
+        if (showUser) {
+          setQuestion(opts?.cauDaCoNguCanh ? '' : q);
+          if (nguCanh && opts?.nguCanh === undefined) datGhimKho(khoa, nguCanh); // trả chip về ô nhập
+        }
+        datSoLoi((n) => n + 1);
         toast.error(status === 403 ? 'Hỏi AI là tính năng Pro.' : 'AI chưa trả lời được. Thử lại nhé.');
       }
     } finally { setAsking(false); }
-  }, [asking, lessonId, inQuiz, quizContext, chayStream, patch, datCuoc, khoa, anhDan, phongVideo]);
+  }, [asking, lessonId, inQuiz, quizContext, chayStream, patch, datCuoc, khoa, anhDan, thanVideo, datGhimKho]);
 
   /*
    * ⚠️⚠️ GỬI LỊCH SỬ RỖNG. Đo thật 05/09/2026: gửi kèm lịch sử thì model trả
@@ -305,7 +388,7 @@ export function useGiaSuBai({ lessonId, quizContext, autoAsk, phongVideo, phuDeG
     const t = turnsRef.current[aIdx];
     if (!t?.srcQuestion || asking) return;
     patch(aIdx, { enDone: true });
-    void hoi(t.srcQuestion, { english: true, showUser: false, cacheKey: t.srcCacheKey, noHistory: true });
+    void hoi(t.srcQuestion, { english: true, showUser: false, cacheKey: t.srcCacheKey, noHistory: true, nguCanh: t.nguCanh ?? null });
   }, [asking, hoi, patch]);
 
   /*
@@ -321,7 +404,7 @@ export function useGiaSuBai({ lessonId, quizContext, autoAsk, phongVideo, phuDeG
     if (!t?.srcQuestion || asking) return;
     void hoi(t.srcQuestion, {
       english: !!t.english, showUser: false,
-      cacheKey: t.srcCacheKey, refresh: true, noHistory: true,
+      cacheKey: t.srcCacheKey, refresh: true, noHistory: true, nguCanh: t.nguCanh ?? null,
     });
   }, [asking, hoi]);
 
@@ -350,6 +433,16 @@ export function useGiaSuBai({ lessonId, quizContext, autoAsk, phongVideo, phuDeG
     });
   }, [datCuoc, khoa]);
 
+  /* Câu chờ ("Tóm tắt video" ở mục lục) — xem `nhanCauCho`. `layCauCho` xoá ngay khi lấy ⇒ không bao giờ bắn đôi. */
+  const coCauCho = useGiaSuBaiStore((s) => s.cauCho?.lessonId === lessonId);
+  const robotSan = useGiaSuBaiStore((s) => s.robotSan);
+  useEffect(() => {
+    if (!nhanCauCho || !coCauCho || inQuiz || asking) return;
+    if ((nhanCauCho === 'robot') !== robotSan) return;
+    const c = useGiaSuBaiStore.getState().layCauCho(lessonId);
+    if (c) void hoi(c.cau, { cacheKey: c.cacheKey, nguCanh: null });
+  }, [nhanCauCho, coCauCho, robotSan, inQuiz, asking, lessonId, hoi]);
+
   /* Nút "Hỏi AI vì sao sai" ở từng câu quiz bắn qua đây. Chỉ chạy khi `key`
      ĐỔI — nếu theo dõi cả `text` thì một lần re-render đổi chuỗi (ví dụ đổi
      ngôn ngữ) sẽ tự hỏi lại, mà mỗi lượt là một lần tính tiền. */
@@ -367,6 +460,14 @@ export function useGiaSuBai({ lessonId, quizContext, autoAsk, phongVideo, phuDeG
     hoi, hoiTiengAnh, hoiLaiMoi, nhoLaiCauCu,
     anhDan, themAnh, boAnh, danVao, MAX_ANH,
     xoaHoiThoai: useCallback(() => xoaCuoc(khoa), [xoaCuoc, khoa]),
+    /** Chip ngữ cảnh đang ghim ở ô nhập (đoạn video / slide). */
+    ghim,
+    boGhim: useCallback(() => datGhimKho(khoa, null), [datGhimKho, khoa]),
+    /** Gia sư đang nghe kèm video (phòng video, hoặc video có phụ đề đang phát trên trang học). */
+    coVideo,
+    /** Video của trang học (để tua khi bấm mốc trong câu trả lời) — null ở phòng video / bài không video. */
+    videoBai,
+    soLoi,
   };
 }
 

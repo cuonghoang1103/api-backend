@@ -2,8 +2,30 @@
   "courseSlug": "communication-and-in-group-working-skills",
   "sinhBoi": "scripts/phu-de-tu-video-rieng.mjs",
   "lessons": {
-    "ssg104-1-1-nhom-doi": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/communication-and-in-group-working-skills/01-buoi-1-tong-quan-nhom-doi/01-01-dinh-nghia-nhom-doi-tron-6f1cb5d5.mp4","durationSec":2043.8,"nguonCau":"srt",
-      "parts": [],
+    "ssg104-1-1-nhom-doi": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/communication-and-in-group-working-skills/01-buoi-1-tong-quan-nhom-doi/01-01-dinh-nghia-nhom-doi-tron-6f1cb5d5.mp4","durationSec":2043.8,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":5.1,"den":100.78,"ten":"Phần 1 · Chào bạn · Bài S1.1"},
+        {"t":100.78,"den":186.02,"ten":"Phần 1 · Slide 2: bốn nội quy nuôi điểm tham gia"},
+        {"t":186.02,"den":284.07,"ten":"Phần 1 · Slide 4–5: mô tả môn, lý thuyết và thực hành"},
+        {"t":284.07,"den":392.76,"ten":"Phần 1 · Slide 7: Activity lập nhóm năm đến bảy người"},
+        {"t":392.76,"den":479.86,"ten":"Phần 1 · Slide 10–11: nhóm là gì?"},
+        {"t":479.86,"den":573.96,"ten":"Phần 1 · Slide 13: nhóm chính thức và phi chính thức"},
+        {"t":573.96,"den":677.31,"ten":"Phần 1 · Tự kiểm · Tóm tắt"},
+        {"t":677.31,"den":754.97,"ten":"Phần 2 · Chào bạn · Phần 2"},
+        {"t":754.97,"den":854.59,"ten":"Phần 2 · Slide 17: định nghĩa đội · Slide 18: ba đặc điểm về bản sắc"},
+        {"t":854.59,"den":950.36,"ten":"Phần 2 · Slide 19: bốn đặc điểm về hành vi"},
+        {"t":950.36,"den":1060.87,"ten":"Phần 2 · Slide 21: người ta bảo vệ thứ mình góp tay làm"},
+        {"t":1060.87,"den":1146.05,"ten":"Phần 2 · Slide 23–24: khi nào làm một mình, khi nào lập đội"},
+        {"t":1146.05,"den":1273.56,"ten":"Phần 2 · Slide 25–26: cấu trúc phân cấp năm tầng"},
+        {"t":1273.56,"den":1375.64,"ten":"Phần 2 · Tự kiểm · Tóm tắt"},
+        {"t":1375.64,"den":1453.75,"ten":"Phần 3 · Chào bạn · Phần 3"},
+        {"t":1453.75,"den":1573.34,"ten":"Phần 3 · Slide 30–31: đội chức năng và đội dự án"},
+        {"t":1573.34,"den":1730.37,"ten":"Phần 3 · Slide 34–35: đội hợp đồng và đội hỗn hợp"},
+        {"t":1730.37,"den":1820.96,"ten":"Phần 3 · Slide 37–38: đội tự quản và đội tự tổ chức"},
+        {"t":1820.96,"den":1897.52,"ten":"Phần 3 · Slide 39–40: vì sao chỉ một số đội thành công"},
+        {"t":1897.52,"den":1988.07,"ten":"Phần 3 · Slide 41: tự kiểm trước khi rời lớp · Tự kiểm"},
+        {"t":1988.07,"den":2043.8,"ten":"Phần 3 · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài đầu tiên của Buổi 1, môn SSG104: bộ slide Defining Teams and Groups, định nghĩa nhóm và đội."},
         {"t":15.82,"vi":"Ở Mục 0, mình đã biết tám mươi phần trăm điểm là quá trình."},
@@ -307,8 +329,21 @@
         {"t":2029.44,"vi":"Giờ bạn làm quiz Chương 1 ngay dưới bài để kiểm lại cả ba phần, rồi hẵng sang bài hợp tác nhé."}
       ]
     },
-    "ssg104-2-1-giao-tiep": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/communication-and-in-group-working-skills/04-buoi-4-nhom-doi-hanh-dong/04-01-giao-tiep-phi-ngon-ngu-tron-f0c88cc7.mp4","durationSec":1144.47,"nguonCau":"srt",
-      "parts": [],
+    "ssg104-2-1-giao-tiep": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/communication-and-in-group-working-skills/04-buoi-4-nhom-doi-hanh-dong/04-01-giao-tiep-phi-ngon-ngu-tron-f0c88cc7.mp4","durationSec":1144.47,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":5.1,"den":88.04,"ten":"Phần 1 · Chào bạn · Buổi 4 · Slide 1–3: bìa, ba mục tiêu, dàn ý"},
+        {"t":88.04,"den":200.88,"ten":"Phần 1 · Slide 4: phi ngôn ngữ là gì"},
+        {"t":200.88,"den":283.76,"ten":"Phần 1 · Slide 6: không gian, bốn vùng · Slide 7: môi trường"},
+        {"t":283.76,"den":372.57,"ten":"Phần 1 · Slide 8: di chuyển, những hành vi nên tránh"},
+        {"t":372.57,"den":469.13,"ten":"Phần 1 · Slide 10: cử chỉ ba bước · Slide 11: nét mặt và ánh mắt"},
+        {"t":469.13,"den":552.79,"ten":"Phần 1 · Tự kiểm · Tóm tắt"},
+        {"t":552.79,"den":652.53,"ten":"Phần 2 · Chào bạn · Bài 14 phần 2 · Slide 12: công cụ trực quan"},
+        {"t":652.53,"den":747.04,"ten":"Phần 2 · Slide 14: mục đích rõ, gần như tự nói"},
+        {"t":747.04,"den":832.07,"ten":"Phần 2 · Slide 16: bốn tiêu chí làm công cụ trực quan"},
+        {"t":832.07,"den":946.2,"ten":"Phần 2 · Slide 18: dùng PowerPoint làm công cụ trực quan"},
+        {"t":946.2,"den":1067.89,"ten":"Phần 2 · Slide 21: ba chiến lược với khán giả"},
+        {"t":1067.89,"den":1144.47,"ten":"Phần 2 · Tự kiểm · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, mình sang Buổi bốn, và mở đầu bằng bài mười bốn: giao tiếp phi ngôn ngữ."},
         {"t":11.78,"vi":"Buổi ba mình đã học quyền lực trong nhóm, xung đột và thương lượng, rồi xử lý căng thẳng."},
@@ -501,8 +536,30 @@
         {"t":1132.95,"vi":"Rồi làm activity và quiz chương ngay dưới video nhé."}
       ]
     },
-    "ssg104-3-1-lanh-dao": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/communication-and-in-group-working-skills/03-buoi-3-ly-thuyet-nhom-doi/03-02-lanh-dao-doi-da-dang-tron-389348d5.mp4","durationSec":2053.82,"nguonCau":"srt",
-      "parts": [],
+    "ssg104-3-1-lanh-dao": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/communication-and-in-group-working-skills/03-buoi-3-ly-thuyet-nhom-doi/03-02-lanh-dao-doi-da-dang-tron-389348d5.mp4","durationSec":2053.82,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":5.1,"den":121.24,"ten":"Phần 1 · Chào bạn · Bài 10–11 · Slide 1–3: hai bài trong một bộ slide"},
+        {"t":121.24,"den":221.61,"ten":"Phần 1 · Slide 6: lãnh đạo và quản lý không thay nhau được"},
+        {"t":221.61,"den":323.81,"ten":"Phần 1 · Slide 8: con đường tới vị trí"},
+        {"t":323.81,"den":416.98,"ten":"Phần 1 · Slide 10: quá trình lãnh đạo, năm thành phần"},
+        {"t":416.98,"den":531.64,"ten":"Phần 1 · Slide 12: bối cảnh, quá trình, hệ quả"},
+        {"t":531.64,"den":621.15,"ten":"Phần 1 · Slide 14: hai con đường trở thành người lãnh đạo · Tự kiểm"},
+        {"t":621.15,"den":711.88,"ten":"Phần 1 · Tóm tắt · Chào bạn · Bài 10–11 phần 2"},
+        {"t":711.88,"den":824.22,"ten":"Phần 2 · Slide 15: chỉ định và tự nổi lên"},
+        {"t":824.22,"den":905.91,"ten":"Phần 2 · Slide 17: quan hệ quyền lực lãnh đạo – người theo"},
+        {"t":905.91,"den":994.68,"ten":"Phần 2 · Slide 18–19: thảo luận và bài về nhà"},
+        {"t":994.68,"den":1084.66,"ten":"Phần 2 · Slide 20–21: làm việc trong đội đa dạng"},
+        {"t":1084.66,"den":1163.05,"ten":"Phần 2 · Slide 23: ngữ cảnh thấp và ngữ cảnh cao"},
+        {"t":1163.05,"den":1244.07,"ten":"Phần 2 · Slide 24: phát triển trí tuệ văn hoá"},
+        {"t":1244.07,"den":1337.61,"ten":"Phần 2 · Slide 26: đầu, thân, tim · Tự kiểm"},
+        {"t":1337.61,"den":1421.17,"ten":"Phần 2 · Tóm tắt · Chào bạn · Bài 10–11 phần 3"},
+        {"t":1421.17,"den":1545.8,"ten":"Phần 3 · Slide 27: sáu chiều văn hoá khác biệt"},
+        {"t":1545.8,"den":1661.58,"ten":"Phần 3 · Slide 29: chủ nghĩa cá nhân · Slide 30: nam tính"},
+        {"t":1661.58,"den":1777.89,"ten":"Phần 3 · Slide 31: né tránh bất định · Slide 32: định hướng dài hạn"},
+        {"t":1777.89,"den":1911.6,"ten":"Phần 3 · Slide 33: định hướng thời gian"},
+        {"t":1911.6,"den":2010.13,"ten":"Phần 3 · Slide 35–36: câu hỏi ôn và Q&A · Tự kiểm"},
+        {"t":2010.13,"den":2053.82,"ten":"Phần 3 · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, mình sang bài mười và mười một của Buổi ba: lãnh đạo, và làm việc trong đội đa dạng."},
         {"t":12.68,"vi":"Bài trước mình đã học ba dạng quyền lực, năm nền tảng quyền lực, và cách dùng quyền lực có đạo đức."},
@@ -818,8 +875,24 @@
         {"t":2041.71,"vi":"Rồi làm activity và quiz chương ngay dưới video nhé."}
       ]
     },
-    "ssg104-4-1-xung-dot": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/communication-and-in-group-working-skills/03-buoi-3-ly-thuyet-nhom-doi/03-03-xung-dot-thuong-luong-tron-ecf63eab.mp4","durationSec":1514.99,"nguonCau":"srt",
-      "parts": [],
+    "ssg104-4-1-xung-dot": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/communication-and-in-group-working-skills/03-buoi-3-ly-thuyet-nhom-doi/03-03-xung-dot-thuong-luong-tron-ecf63eab.mp4","durationSec":1514.99,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":5.1,"den":146.13,"ten":"Phần 1 · Chào bạn · Bài 12"},
+        {"t":146.13,"den":277.02,"ten":"Phần 1 · Slide 4: mặt tích cực, đường chữ U ngược"},
+        {"t":277.02,"den":352.79,"ten":"Phần 1 · Slide 6: năm loại xung đột"},
+        {"t":352.79,"den":455.07,"ten":"Phần 1 · Slide 7–8: mô hình bốn giai đoạn"},
+        {"t":455.07,"den":548.93,"ten":"Phần 1 · Slide 10: giai đoạn 2, hình dung vấn đề"},
+        {"t":548.93,"den":636.34,"ten":"Phần 1 · Slide 12: giai đoạn 4, kết cục · Tự kiểm"},
+        {"t":636.34,"den":720.43,"ten":"Phần 1 · Tóm tắt · Chào bạn · Bài 12 phần 2"},
+        {"t":720.43,"den":799.09,"ten":"Phần 2 · Slide 13: lưới năm cách giải quyết xung đột"},
+        {"t":799.09,"den":888.66,"ten":"Phần 2 · Slide 13: lúc nào chọn cách nào"},
+        {"t":888.66,"den":990.04,"ten":"Phần 2 · Slide 14: phòng ngừa và làm giảm"},
+        {"t":990.04,"den":1108.08,"ten":"Phần 2 · Slide 16: phòng ngừa 3–4, đối thoại và tránh thế được mất"},
+        {"t":1108.08,"den":1206.6,"ten":"Phần 2 · Slide 18: làm giảm 3–4, người nối nhịp và hạn chế tương tác"},
+        {"t":1206.6,"den":1300.99,"ten":"Phần 2 · Slide 20: làm giảm 6–7, bên thứ ba và mục tiêu cấp cao hơn"},
+        {"t":1300.99,"den":1430.16,"ten":"Phần 2 · Slide 22: làm giảm 9, đào tạo và cả dải chín cách"},
+        {"t":1430.16,"den":1514.99,"ten":"Phần 2 · Tự kiểm · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, mình sang bài mười hai của Buổi ba: xung đột và thương lượng."},
         {"t":10.41,"vi":"Bài trước mình đã học lãnh đạo, giao tiếp ngữ cảnh thấp và cao, và sáu chiều văn hoá."},
@@ -1055,8 +1128,20 @@
         {"t":1498.03,"vi":"Tuần này, hãy cùng nhóm làm một bảng chia việc có ghi rõ thế nào là xong. Rồi làm activity và quiz chương ngay dưới video nhé."}
       ]
     },
-    "ssg104-5-1-thuyet-trinh": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/communication-and-in-group-working-skills/04-buoi-4-nhom-doi-hanh-dong/04-02-thuyet-trinh-thuyet-phuc-tron-79b2ae81.mp4","durationSec":1166.34,"nguonCau":"srt",
-      "parts": [],
+    "ssg104-5-1-thuyet-trinh": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/communication-and-in-group-working-skills/04-buoi-4-nhom-doi-hanh-dong/04-02-thuyet-trinh-thuyet-phuc-tron-79b2ae81.mp4","durationSec":1166.34,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":5.1,"den":88.87,"ten":"Phần 1 · Chào bạn · Bài 15 · Slide 1–3: bìa, dàn ý, năm mục tiêu"},
+        {"t":88.87,"den":196.15,"ten":"Phần 1 · Slide 4: thuyết phục là gì"},
+        {"t":196.15,"den":311.37,"ten":"Phần 1 · Slide 6: chịu nghe, rồi chịu làm"},
+        {"t":311.37,"den":441.6,"ten":"Phần 1 · Slide 8: tháp nhu cầu Maslow"},
+        {"t":441.6,"den":518.98,"ten":"Phần 1 · Tự kiểm · Tóm tắt"},
+        {"t":518.98,"den":663.97,"ten":"Phần 2 · Chào bạn · Bài 15 phần 2"},
+        {"t":663.97,"den":742.03,"ten":"Phần 2 · Slide 12: mười một điều cấm, từ sáu tới mười một"},
+        {"t":742.03,"den":859.85,"ten":"Phần 2 · Slide 13: elevator speech là gì"},
+        {"t":859.85,"den":968.34,"ten":"Phần 2 · Slide 16: mổ xẻ một elevator speech mẫu"},
+        {"t":968.34,"den":1090.75,"ten":"Phần 2 · Slide 18: bốn ý cần nhớ · Slide 19–20: hai bài tập, hỏi đáp"},
+        {"t":1090.75,"den":1166.34,"ten":"Phần 2 · Tự kiểm · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, mình sang bài mười lăm: thuyết trình thuyết phục."},
         {"t":9.15,"vi":"Bài mười bốn mình đã học tám loại phi ngôn ngữ, công cụ trực quan, và ba chiến lược với khán giả."},
@@ -1255,8 +1340,21 @@
         {"t":1148.74,"vi":"Giờ hãy viết, đếm từ, và nói thành tiếng elevator speech của bạn trong ba mươi giây. Rồi làm activity và quiz chương ngay dưới video nhé."}
       ]
     },
-    "ssg104-6-1-viet-hop": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/communication-and-in-group-working-skills/04-buoi-4-nhom-doi-hanh-dong/04-03-cuoc-hop-tron-3fd7f048.mp4","durationSec":1150.14,"nguonCau":"srt",
-      "parts": [],
+    "ssg104-6-1-viet-hop": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/communication-and-in-group-working-skills/04-buoi-4-nhom-doi-hanh-dong/04-03-cuoc-hop-tron-3fd7f048.mp4","durationSec":1150.14,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":5.1,"den":80.52,"ten":"Phần 1 · Chào bạn · Bài 16 · Slide 1–3: bìa, dàn ý, ba mục tiêu"},
+        {"t":80.52,"den":181.26,"ten":"Phần 1 · Slide 4: cuộc họp là gì · Slide 5: trước cuộc họp"},
+        {"t":181.26,"den":271.35,"ten":"Phần 1 · Slide 6–7: chọn cách họp, thảo luận"},
+        {"t":271.35,"den":368.38,"ten":"Phần 1 · Slide 9: sáu thành phần của chương trình họp"},
+        {"t":368.38,"den":489.72,"ten":"Phần 1 · Slide 11: chọn chỗ họp, hình dạng cái bàn"},
+        {"t":489.72,"den":572.29,"ten":"Phần 1 · Tự kiểm · Tóm tắt"},
+        {"t":572.29,"den":685.2,"ten":"Phần 2 · Chào bạn · Bài 16 phần 2 · Slide 13: tám kiểu điều hành hỏng"},
+        {"t":685.2,"den":794.1,"ten":"Phần 2 · Slide 14: nguyên tắc điều hành, từ một tới tám"},
+        {"t":794.1,"den":908.32,"ten":"Phần 2 · Slide 16: giao tiếp sau cuộc họp"},
+        {"t":908.32,"den":1008.99,"ten":"Phần 2 · Slide 18: dùng công nghệ"},
+        {"t":1008.99,"den":1103.75,"ten":"Phần 2 · Slide 20–21: câu hỏi ôn và suy ngẫm, hỏi đáp · Tự kiểm"},
+        {"t":1103.75,"den":1150.14,"ten":"Phần 2 · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, mình sang bài mười sáu: nhóm và cuộc họp."},
         {"t":9.01,"vi":"Bài mười lăm mình đã học thuyết phục, mười một điều cấm khi nói, và elevator speech ba mươi giây."},
@@ -1468,8 +1566,30 @@
         {"t":1137.83,"vi":"Rồi làm activity và quiz chương ngay dưới video nhé."}
       ]
     },
-    "ssg104-b1-l1-nhom-doi": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/communication-and-in-group-working-skills/01-buoi-1-tong-quan-nhom-doi/01-01-dinh-nghia-nhom-doi-tron-6f1cb5d5.mp4","durationSec":2043.8,"nguonCau":"srt",
-      "parts": [],
+    "ssg104-b1-l1-nhom-doi": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/communication-and-in-group-working-skills/01-buoi-1-tong-quan-nhom-doi/01-01-dinh-nghia-nhom-doi-tron-6f1cb5d5.mp4","durationSec":2043.8,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":5.1,"den":100.78,"ten":"Phần 1 · Chào bạn · Bài S1.1"},
+        {"t":100.78,"den":186.02,"ten":"Phần 1 · Slide 2: bốn nội quy nuôi điểm tham gia"},
+        {"t":186.02,"den":284.07,"ten":"Phần 1 · Slide 4–5: mô tả môn, lý thuyết và thực hành"},
+        {"t":284.07,"den":392.76,"ten":"Phần 1 · Slide 7: Activity lập nhóm năm đến bảy người"},
+        {"t":392.76,"den":479.86,"ten":"Phần 1 · Slide 10–11: nhóm là gì?"},
+        {"t":479.86,"den":573.96,"ten":"Phần 1 · Slide 13: nhóm chính thức và phi chính thức"},
+        {"t":573.96,"den":677.31,"ten":"Phần 1 · Tự kiểm · Tóm tắt"},
+        {"t":677.31,"den":754.97,"ten":"Phần 2 · Chào bạn · Phần 2"},
+        {"t":754.97,"den":854.59,"ten":"Phần 2 · Slide 17: định nghĩa đội · Slide 18: ba đặc điểm về bản sắc"},
+        {"t":854.59,"den":950.36,"ten":"Phần 2 · Slide 19: bốn đặc điểm về hành vi"},
+        {"t":950.36,"den":1060.87,"ten":"Phần 2 · Slide 21: người ta bảo vệ thứ mình góp tay làm"},
+        {"t":1060.87,"den":1146.05,"ten":"Phần 2 · Slide 23–24: khi nào làm một mình, khi nào lập đội"},
+        {"t":1146.05,"den":1273.56,"ten":"Phần 2 · Slide 25–26: cấu trúc phân cấp năm tầng"},
+        {"t":1273.56,"den":1375.64,"ten":"Phần 2 · Tự kiểm · Tóm tắt"},
+        {"t":1375.64,"den":1453.75,"ten":"Phần 3 · Chào bạn · Phần 3"},
+        {"t":1453.75,"den":1573.34,"ten":"Phần 3 · Slide 30–31: đội chức năng và đội dự án"},
+        {"t":1573.34,"den":1730.37,"ten":"Phần 3 · Slide 34–35: đội hợp đồng và đội hỗn hợp"},
+        {"t":1730.37,"den":1820.96,"ten":"Phần 3 · Slide 37–38: đội tự quản và đội tự tổ chức"},
+        {"t":1820.96,"den":1897.52,"ten":"Phần 3 · Slide 39–40: vì sao chỉ một số đội thành công"},
+        {"t":1897.52,"den":1988.07,"ten":"Phần 3 · Slide 41: tự kiểm trước khi rời lớp · Tự kiểm"},
+        {"t":1988.07,"den":2043.8,"ten":"Phần 3 · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài đầu tiên của Buổi 1, môn SSG104: bộ slide Defining Teams and Groups, định nghĩa nhóm và đội."},
         {"t":15.82,"vi":"Ở Mục 0, mình đã biết tám mươi phần trăm điểm là quá trình."},
@@ -1773,8 +1893,15 @@
         {"t":2029.44,"vi":"Giờ bạn làm quiz Chương 1 ngay dưới bài để kiểm lại cả ba phần, rồi hẵng sang bài hợp tác nhé."}
       ]
     },
-    "ssg104-b1-l2-hop-tac": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/communication-and-in-group-working-skills/01-buoi-1-tong-quan-nhom-doi/01-02-hop-tac-f288d370.mp4","durationSec":634.98,"nguonCau":"srt",
-      "parts": [],
+    "ssg104-b1-l2-hop-tac": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/communication-and-in-group-working-skills/01-buoi-1-tong-quan-nhom-doi/01-02-hop-tac-f288d370.mp4","durationSec":634.98,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":122.42,"ten":"Chào bạn · Bài S1.2 · Slide 1–2: hợp tác là gì"},
+        {"t":122.42,"den":225.16,"ten":"Slide 5–6: hợp tác hay phản bội"},
+        {"t":225.16,"den":339.44,"ten":"Slide 7: ba định hướng giá trị xã hội"},
+        {"t":339.44,"den":459.06,"ten":"Slide 9: khả năng đồng cảm · Slide 10: năm yếu tố tình huống"},
+        {"t":459.06,"den":542.36,"ten":"Slide 11: ba câu hỏi thảo luận · Slide 12: tự kiểm cuối bài"},
+        {"t":542.36,"den":634.98,"ten":"Tự kiểm · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài hai của Buổi 1, môn SSG104: bộ slide Cooperation, hợp tác."},
         {"t":13.46,"vi":"Bài trước mình đã học đội là nhóm làm việc gắn kết và có mục đích, vì sao đội chỉ năm đến bảy người, và năm mô hình đội."},
@@ -1879,8 +2006,22 @@
         {"t":624.07,"vi":"Giờ bạn vào nhóm chat, mỗi người viết một câu cam kết cho phần việc tuần này, có hạn chót rõ ràng, rồi hẵng sang bài sau nhé."}
       ]
     },
-    "ssg104-b1-l3-tam-ly-nhom": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/communication-and-in-group-working-skills/01-buoi-1-tong-quan-nhom-doi/01-03-tam-ly-hoc-nhom-tron-5b287c5c.mp4","durationSec":1301.16,"nguonCau":"srt",
-      "parts": [],
+    "ssg104-b1-l3-tam-ly-nhom": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/communication-and-in-group-working-skills/01-buoi-1-tong-quan-nhom-doi/01-03-tam-ly-hoc-nhom-tron-5b287c5c.mp4","durationSec":1301.16,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":5.1,"den":85.71,"ten":"Phần 1 · Chào bạn · Bài S1.3 · Slide 1–3: bốn mục tiêu"},
+        {"t":85.71,"den":181.06,"ten":"Phần 1 · Slide 4–5: nhóm tác động lên ta thế nào"},
+        {"t":181.06,"den":324.83,"ten":"Phần 1 · Slide 7–8: kết giao và cái tôi là chúng ta"},
+        {"t":324.83,"den":452.47,"ten":"Phần 1 · Slide 11: hai thành tố của làm việc đội"},
+        {"t":452.47,"den":552.39,"ten":"Phần 1 · Tự kiểm · Tóm tắt"},
+        {"t":552.39,"den":634.91,"ten":"Phần 2 · Chào bạn · Bài S1.3 phần 2"},
+        {"t":634.91,"den":714.74,"ten":"Phần 2 · Slide 15: phân cực nhóm"},
+        {"t":714.74,"den":815.47,"ten":"Phần 2 · Slide 16: hiệu ứng tri thức chung"},
+        {"t":815.47,"den":972.1,"ten":"Phần 2 · Slide 17: groupthink là gì"},
+        {"t":972.1,"den":1055.1,"ten":"Phần 2 · Slide 19: phá groupthink"},
+        {"t":1055.1,"den":1138.09,"ten":"Phần 2 · Slide 20: câu hỏi thảo luận 1–3"},
+        {"t":1138.09,"den":1250.64,"ten":"Phần 2 · Slide 21–22: câu hỏi 4–6 và hỏi đáp · Tự kiểm"},
+        {"t":1250.64,"den":1301.16,"ten":"Phần 2 · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài ba của Buổi 1: bộ slide The Psychology of Groups, tâm lý học nhóm."},
         {"t":12.04,"vi":"Bài trước mình đã chơi thế lưỡng nan của người tù, gặp ba định hướng giá trị xã hội, và năm yếu tố làm hợp tác tăng hay giảm."},
@@ -2083,8 +2224,24 @@
         {"t":1286.15,"vi":"Giờ bạn cùng nhóm làm activity thảo luận và quiz chương ngay dưới video, rồi hẹn bạn ở bài bốn nhé."}
       ]
     },
-    "ssg104-b1-l4-so-sanh-xa-hoi": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/communication-and-in-group-working-skills/01-buoi-1-tong-quan-nhom-doi/01-04-so-sanh-xa-hoi-tron-03f0913d.mp4","durationSec":1468.37,"nguonCau":"srt",
-      "parts": [],
+    "ssg104-b1-l4-so-sanh-xa-hoi": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/communication-and-in-group-working-skills/01-buoi-1-tong-quan-nhom-doi/01-04-so-sanh-xa-hoi-tron-03f0913d.mp4","durationSec":1468.37,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":5.1,"den":107.63,"ten":"Phần 1 · Chào bạn · Bài S1.4 · Slide 1–4: mục tiêu và định nghĩa"},
+        {"t":107.63,"den":188.04,"ten":"Phần 1 · Slide 5–6: quảng cáo và sự tương đồng"},
+        {"t":188.04,"den":317.35,"ten":"Phần 1 · Slide 7–8: liên quan và hai hướng"},
+        {"t":317.35,"den":407.02,"ten":"Phần 1 · Slide 10–11: ba hệ quả và huy hiệu"},
+        {"t":407.02,"den":544.54,"ten":"Phần 1 · Slide 12: mô hình SEM"},
+        {"t":544.54,"den":651.62,"ten":"Phần 1 · Slide 15: SEM trong tổ chức · Tự kiểm"},
+        {"t":651.62,"den":743.89,"ten":"Phần 1 · Tóm tắt · Chào bạn · Bài S1.4 phần 2"},
+        {"t":743.89,"den":836.83,"ten":"Phần 2 · Slide 16–17: mục tiêu làm chủ và tư duy phát triển"},
+        {"t":836.83,"den":919.24,"ten":"Phần 2 · Slide 18–19: bốn yếu tố và hiệu ứng N"},
+        {"t":919.24,"den":996.51,"ten":"Phần 2 · Slide 20–21: tính cục bộ"},
+        {"t":996.51,"den":1079.39,"ten":"Phần 2 · Slide 22: gần một chuẩn mốc"},
+        {"t":1079.39,"den":1158.7,"ten":"Phần 2 · Slide 23: ranh giới nhóm xã hội"},
+        {"t":1158.7,"den":1244.19,"ten":"Phần 2 · Slide 24–25: ếch và ao, Dunning-Kruger"},
+        {"t":1244.19,"den":1371.45,"ten":"Phần 2 · Slide 26: kết luận · Slide 27–28: thảo luận và hỏi đáp"},
+        {"t":1371.45,"den":1468.37,"ten":"Phần 2 · Tự kiểm · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài bốn, bài cuối của Buổi 1: bộ slide Social Comparison, so sánh xã hội."},
         {"t":12.77,"vi":"Bài trước mình đã thấy ba cách nhóm quyết định tồi: phân cực nhóm, hồ sơ ẩn, và groupthink."},
@@ -2301,8 +2458,26 @@
         {"t":1452.96,"vi":"Giờ bạn làm activity và quiz chương ngay dưới video, rồi hẹn bạn ở Buổi 2: lối tư duy và tư duy sáng tạo."}
       ]
     },
-    "ssg104-b2-l5-6-tu-duy": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/communication-and-in-group-working-skills/02-buoi-2-tu-duy-phan-tich/02-01-loi-tu-duy-sang-tao-tron-af759457.mp4","durationSec":1754.13,"nguonCau":"srt",
-      "parts": [],
+    "ssg104-b2-l5-6-tu-duy": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/communication-and-in-group-working-skills/02-buoi-2-tu-duy-phan-tich/02-01-loi-tu-duy-sang-tao-tron-af759457.mp4","durationSec":1754.13,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":5.1,"den":141.19,"ten":"Phần 1 · Chào bạn · Buổi 2 · Slide 1–3: hai chủ đề, năm mục tiêu"},
+        {"t":141.19,"den":237.41,"ten":"Phần 1 · Slide 7: mục tiêu học tập và ba lĩnh vực"},
+        {"t":237.41,"den":339.6,"ten":"Phần 1 · Slide 9–10: sáu bậc, mỗi bậc một việc"},
+        {"t":339.6,"den":478.86,"ten":"Phần 1 · Slide 11–12: sáng tạo là kỹ năng"},
+        {"t":478.86,"den":565.89,"ten":"Phần 1 · Tự kiểm · Tóm tắt"},
+        {"t":565.89,"den":682.04,"ten":"Phần 2 · Chào bạn · Bài S2.5–6 phần 2"},
+        {"t":682.04,"den":810,"ten":"Phần 2 · Slide 16: ba cách kích thích sáng tạo"},
+        {"t":810,"den":915.35,"ten":"Phần 2 · Slide 18: muốn có ý hay, hãy có thật nhiều ý"},
+        {"t":915.35,"den":996.99,"ten":"Phần 2 · Slide 20–21: tưởng tượng, nói và viết"},
+        {"t":996.99,"den":1086.35,"ten":"Phần 2 · Slide 22–23: vẽ, học, vận động, nghỉ"},
+        {"t":1086.35,"den":1173.61,"ten":"Phần 2 · Tự kiểm · Tóm tắt"},
+        {"t":1173.61,"den":1274.28,"ten":"Phần 3 · Chào bạn · Bài S2.5–6 phần 3"},
+        {"t":1274.28,"den":1363.54,"ten":"Phần 3 · Slide 27–28: lầm tưởng ba và bốn"},
+        {"t":1363.54,"den":1477.72,"ten":"Phần 3 · Slide 29–31: phần tiếp và năm mục tiêu"},
+        {"t":1477.72,"den":1565.35,"ten":"Phần 3 · Slide 33–34: Activity và bảy quy tắc"},
+        {"t":1565.35,"den":1649.01,"ten":"Phần 3 · Slide 35: kỹ thuật brainstorming"},
+        {"t":1649.01,"den":1754.13,"ten":"Phần 3 · Slide 36: hỏi đáp · Tự kiểm"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Buổi 2 của môn: Thinking and Analysis, tư duy và phân tích."},
         {"t":11.29,"vi":"Buổi 1 mình đã học nhóm và đội, hợp tác, tâm lý nhóm, và so sánh xã hội."},
@@ -2592,8 +2767,23 @@
         {"t":1737.99,"vi":"Giờ nhóm bạn chạy Activity sáng kiến xã hội bằng bảy quy tắc và năm bước ấy, rồi làm quiz chương ngay dưới video nhé."}
       ]
     },
-    "ssg104-b2-l7-de-xuat": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/communication-and-in-group-working-skills/02-buoi-2-tu-duy-phan-tich/02-02-de-xuat-kinh-doanh-tron-a59bdbfe.mp4","durationSec":1395.63,"nguonCau":"srt",
-      "parts": [],
+    "ssg104-b2-l7-de-xuat": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/communication-and-in-group-working-skills/02-buoi-2-tu-duy-phan-tich/02-02-de-xuat-kinh-doanh-tron-a59bdbfe.mp4","durationSec":1395.63,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":5.1,"den":101.69,"ten":"Phần 1 · Chào bạn · Bài S2.7 · Slide 1–3: đề xuất kinh doanh là gì"},
+        {"t":101.69,"den":221.8,"ten":"Phần 1 · Slide 4–5: bốn thành phần và ý tưởng"},
+        {"t":221.8,"den":308.18,"ten":"Phần 1 · Slide 7: mục một tới năm"},
+        {"t":308.18,"den":451.97,"ten":"Phần 1 · Slide 8: mục sáu tới mười · Slide 9: ethos, pathos, logos"},
+        {"t":451.97,"den":564.34,"ten":"Phần 1 · Slide 10: chuyên nghiệp"},
+        {"t":564.34,"den":659.18,"ten":"Phần 1 · Tự kiểm · Tóm tắt"},
+        {"t":659.18,"den":764.05,"ten":"Phần 2 · Chào bạn · Bài S2.7 phần 2 · Slide 13: các mẫu trang bìa"},
+        {"t":764.05,"den":851.03,"ten":"Phần 2 · Slide 14: tóm tắt cho lãnh đạo"},
+        {"t":851.03,"den":1008.57,"ten":"Phần 2 · Slide 15: bối cảnh · Slide 16: nội dung đề xuất, 5W1H"},
+        {"t":1008.57,"den":1088.59,"ten":"Phần 2 · Slide 17: phân tích thị trường"},
+        {"t":1088.59,"den":1179,"ten":"Phần 2 · Slide 18: lợi ích"},
+        {"t":1179,"den":1255.87,"ten":"Phần 2 · Slide 19: bắt đầu thực hành"},
+        {"t":1255.87,"den":1339.83,"ten":"Phần 2 · Slide 20: hỏi đáp và tự kiểm · Tự kiểm"},
+        {"t":1339.83,"den":1395.63,"ten":"Phần 2 · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài bảy của Buổi 2: bộ slide Business Proposal, đề xuất kinh doanh."},
         {"t":12.1,"vi":"Bài trước mình đã học thang Bloom, cách kích thích sáng tạo, và kỹ thuật brainstorming để nhóm sinh ra nhiều ý tưởng."},
@@ -2830,8 +3020,18 @@
         {"t":1384.46,"vi":"Rồi làm activity và quiz chương ngay dưới video nhé."}
       ]
     },
-    "ssg104-b2-l7-de-xuat-2": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/communication-and-in-group-working-skills/02-buoi-2-tu-duy-phan-tich/02-03-de-xuat-kinh-doanh-tiep-503ac9dd.mp4","durationSec":1009.04,"nguonCau":"srt",
-      "parts": [],
+    "ssg104-b2-l7-de-xuat-2": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/communication-and-in-group-working-skills/02-buoi-2-tu-duy-phan-tich/02-03-de-xuat-kinh-doanh-tiep-503ac9dd.mp4","durationSec":1009.04,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":133.04,"ten":"Chào bạn · Bài S2.7 (tiếp) · Slide 1–2: mục bảy, tiến độ"},
+        {"t":133.04,"den":229.93,"ten":"Slide 4: mục tám, kế hoạch tiếp thị"},
+        {"t":229.93,"den":335.03,"ten":"Slide 5: thực hành tiến độ và tiếp thị"},
+        {"t":335.03,"den":497.36,"ten":"Slide 7: mẫu số liệu tài chính"},
+        {"t":497.36,"den":577.8,"ten":"Slide 9: mục mười, kết luận"},
+        {"t":577.8,"den":685.39,"ten":"Slide 11–12: thuyết phục và logo nhóm"},
+        {"t":685.39,"den":819.59,"ten":"Slide 14: đề xuất thuyết phục thường ngắn"},
+        {"t":819.59,"den":932.94,"ten":"Slide 16–17: bản mẫu và luật nộp"},
+        {"t":932.94,"den":1009.04,"ten":"Tự kiểm · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bộ slide Business Proposal phần tiếp theo."},
         {"t":9.73,"vi":"Hai tập trước mình đã đi xong mục một tới sáu: trang bìa, tóm tắt, bối cảnh, năm W một H, thị trường, và tính năng khác lợi ích."},
@@ -3003,8 +3203,22 @@
         {"t":1002.39,"vi":"Rồi làm activity và quiz chương ngay dưới video nhé."}
       ]
     },
-    "ssg104-b2-l8-phan-bien": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/communication-and-in-group-working-skills/02-buoi-2-tu-duy-phan-tich/02-04-tu-duy-phan-bien-tron-17a917cc.mp4","durationSec":1362.24,"nguonCau":"srt",
-      "parts": [],
+    "ssg104-b2-l8-phan-bien": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/communication-and-in-group-working-skills/02-buoi-2-tu-duy-phan-tich/02-04-tu-duy-phan-bien-tron-17a917cc.mp4","durationSec":1362.24,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":5.1,"den":103.75,"ten":"Phần 1 · Chào bạn · Bài S2.8 · Slide 1–3: mở bài và lời trích"},
+        {"t":103.75,"den":256.97,"ten":"Phần 1 · Slide 5: tư duy phản biện là gì · Slide 6: LÀ và KHÔNG PHẢI"},
+        {"t":256.97,"den":357.93,"ten":"Phần 1 · Slide 7: hoạt động tự đánh giá"},
+        {"t":357.93,"den":524.12,"ten":"Phần 1 · Slide 9: logic là gì · Slide 10: sáu câu hỏi của logic"},
+        {"t":524.12,"den":609.16,"ten":"Phần 1 · Slide 11–12: giải quyết vấn đề"},
+        {"t":609.16,"den":696.98,"ten":"Phần 1 · Tự kiểm · Tóm tắt"},
+        {"t":696.98,"den":804.98,"ten":"Phần 2 · Chào bạn · Bài S2.8 phần 2"},
+        {"t":804.98,"den":911.11,"ten":"Phần 2 · Slide 14: bốn chiến lược đánh giá thông tin"},
+        {"t":911.11,"den":997.16,"ten":"Phần 2 · Slide 16: B, soi xét lập luận"},
+        {"t":997.16,"den":1082.55,"ten":"Phần 2 · Slide 17–18: C, làm rõ suy nghĩ"},
+        {"t":1082.55,"den":1178.52,"ten":"Phần 2 · Slide 19: D, thói quen của trí óc"},
+        {"t":1178.52,"den":1281.59,"ten":"Phần 2 · Slide 22: tự rèn thành người phản biện"},
+        {"t":1281.59,"den":1362.24,"ten":"Phần 2 · Tự kiểm · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài tám, bài cuối của Buổi 2: Critical Thinking Skills, kỹ năng tư duy phản biện."},
         {"t":12.94,"vi":"Cả buổi này đi theo một mạch."},
@@ -3236,8 +3450,30 @@
         {"t":1350.6,"vi":"Rồi làm activity và quiz chương ngay dưới video nhé."}
       ]
     },
-    "ssg104-b3-l10-11-lanh-dao": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/communication-and-in-group-working-skills/03-buoi-3-ly-thuyet-nhom-doi/03-02-lanh-dao-doi-da-dang-tron-389348d5.mp4","durationSec":2053.82,"nguonCau":"srt",
-      "parts": [],
+    "ssg104-b3-l10-11-lanh-dao": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/communication-and-in-group-working-skills/03-buoi-3-ly-thuyet-nhom-doi/03-02-lanh-dao-doi-da-dang-tron-389348d5.mp4","durationSec":2053.82,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":5.1,"den":121.24,"ten":"Phần 1 · Chào bạn · Bài 10–11 · Slide 1–3: hai bài trong một bộ slide"},
+        {"t":121.24,"den":221.61,"ten":"Phần 1 · Slide 6: lãnh đạo và quản lý không thay nhau được"},
+        {"t":221.61,"den":323.81,"ten":"Phần 1 · Slide 8: con đường tới vị trí"},
+        {"t":323.81,"den":416.98,"ten":"Phần 1 · Slide 10: quá trình lãnh đạo, năm thành phần"},
+        {"t":416.98,"den":531.64,"ten":"Phần 1 · Slide 12: bối cảnh, quá trình, hệ quả"},
+        {"t":531.64,"den":621.15,"ten":"Phần 1 · Slide 14: hai con đường trở thành người lãnh đạo · Tự kiểm"},
+        {"t":621.15,"den":711.88,"ten":"Phần 1 · Tóm tắt · Chào bạn · Bài 10–11 phần 2"},
+        {"t":711.88,"den":824.22,"ten":"Phần 2 · Slide 15: chỉ định và tự nổi lên"},
+        {"t":824.22,"den":905.91,"ten":"Phần 2 · Slide 17: quan hệ quyền lực lãnh đạo – người theo"},
+        {"t":905.91,"den":994.68,"ten":"Phần 2 · Slide 18–19: thảo luận và bài về nhà"},
+        {"t":994.68,"den":1084.66,"ten":"Phần 2 · Slide 20–21: làm việc trong đội đa dạng"},
+        {"t":1084.66,"den":1163.05,"ten":"Phần 2 · Slide 23: ngữ cảnh thấp và ngữ cảnh cao"},
+        {"t":1163.05,"den":1244.07,"ten":"Phần 2 · Slide 24: phát triển trí tuệ văn hoá"},
+        {"t":1244.07,"den":1337.61,"ten":"Phần 2 · Slide 26: đầu, thân, tim · Tự kiểm"},
+        {"t":1337.61,"den":1421.17,"ten":"Phần 2 · Tóm tắt · Chào bạn · Bài 10–11 phần 3"},
+        {"t":1421.17,"den":1545.8,"ten":"Phần 3 · Slide 27: sáu chiều văn hoá khác biệt"},
+        {"t":1545.8,"den":1661.58,"ten":"Phần 3 · Slide 29: chủ nghĩa cá nhân · Slide 30: nam tính"},
+        {"t":1661.58,"den":1777.89,"ten":"Phần 3 · Slide 31: né tránh bất định · Slide 32: định hướng dài hạn"},
+        {"t":1777.89,"den":1911.6,"ten":"Phần 3 · Slide 33: định hướng thời gian"},
+        {"t":1911.6,"den":2010.13,"ten":"Phần 3 · Slide 35–36: câu hỏi ôn và Q&A · Tự kiểm"},
+        {"t":2010.13,"den":2053.82,"ten":"Phần 3 · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, mình sang bài mười và mười một của Buổi ba: lãnh đạo, và làm việc trong đội đa dạng."},
         {"t":12.68,"vi":"Bài trước mình đã học ba dạng quyền lực, năm nền tảng quyền lực, và cách dùng quyền lực có đạo đức."},
@@ -3553,8 +3789,24 @@
         {"t":2041.71,"vi":"Rồi làm activity và quiz chương ngay dưới video nhé."}
       ]
     },
-    "ssg104-b3-l12-xung-dot": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/communication-and-in-group-working-skills/03-buoi-3-ly-thuyet-nhom-doi/03-03-xung-dot-thuong-luong-tron-ecf63eab.mp4","durationSec":1514.99,"nguonCau":"srt",
-      "parts": [],
+    "ssg104-b3-l12-xung-dot": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/communication-and-in-group-working-skills/03-buoi-3-ly-thuyet-nhom-doi/03-03-xung-dot-thuong-luong-tron-ecf63eab.mp4","durationSec":1514.99,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":5.1,"den":146.13,"ten":"Phần 1 · Chào bạn · Bài 12"},
+        {"t":146.13,"den":277.02,"ten":"Phần 1 · Slide 4: mặt tích cực, đường chữ U ngược"},
+        {"t":277.02,"den":352.79,"ten":"Phần 1 · Slide 6: năm loại xung đột"},
+        {"t":352.79,"den":455.07,"ten":"Phần 1 · Slide 7–8: mô hình bốn giai đoạn"},
+        {"t":455.07,"den":548.93,"ten":"Phần 1 · Slide 10: giai đoạn 2, hình dung vấn đề"},
+        {"t":548.93,"den":636.34,"ten":"Phần 1 · Slide 12: giai đoạn 4, kết cục · Tự kiểm"},
+        {"t":636.34,"den":720.43,"ten":"Phần 1 · Tóm tắt · Chào bạn · Bài 12 phần 2"},
+        {"t":720.43,"den":799.09,"ten":"Phần 2 · Slide 13: lưới năm cách giải quyết xung đột"},
+        {"t":799.09,"den":888.66,"ten":"Phần 2 · Slide 13: lúc nào chọn cách nào"},
+        {"t":888.66,"den":990.04,"ten":"Phần 2 · Slide 14: phòng ngừa và làm giảm"},
+        {"t":990.04,"den":1108.08,"ten":"Phần 2 · Slide 16: phòng ngừa 3–4, đối thoại và tránh thế được mất"},
+        {"t":1108.08,"den":1206.6,"ten":"Phần 2 · Slide 18: làm giảm 3–4, người nối nhịp và hạn chế tương tác"},
+        {"t":1206.6,"den":1300.99,"ten":"Phần 2 · Slide 20: làm giảm 6–7, bên thứ ba và mục tiêu cấp cao hơn"},
+        {"t":1300.99,"den":1430.16,"ten":"Phần 2 · Slide 22: làm giảm 9, đào tạo và cả dải chín cách"},
+        {"t":1430.16,"den":1514.99,"ten":"Phần 2 · Tự kiểm · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, mình sang bài mười hai của Buổi ba: xung đột và thương lượng."},
         {"t":10.41,"vi":"Bài trước mình đã học lãnh đạo, giao tiếp ngữ cảnh thấp và cao, và sáu chiều văn hoá."},
@@ -3790,8 +4042,22 @@
         {"t":1498.03,"vi":"Tuần này, hãy cùng nhóm làm một bảng chia việc có ghi rõ thế nào là xong. Rồi làm activity và quiz chương ngay dưới video nhé."}
       ]
     },
-    "ssg104-b3-l13-cang-thang": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/communication-and-in-group-working-skills/03-buoi-3-ly-thuyet-nhom-doi/03-04-cang-thang-trong-nhom-tron-baec037d.mp4","durationSec":1152.98,"nguonCau":"srt",
-      "parts": [],
+    "ssg104-b3-l13-cang-thang": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/communication-and-in-group-working-skills/03-buoi-3-ly-thuyet-nhom-doi/03-04-cang-thang-trong-nhom-tron-baec037d.mp4","durationSec":1152.98,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":5.1,"den":90.5,"ten":"Phần 1 · Chào bạn · Bài 13 · Slide 1–2: bìa và ba mục tiêu"},
+        {"t":90.5,"den":179.3,"ten":"Phần 1 · Slide 3: câu của Marilu Henner, hai đòn bẩy"},
+        {"t":179.3,"den":291.3,"ten":"Phần 1 · Slide 5: khi nào bình thường, khi nào là vấn đề"},
+        {"t":291.3,"den":402.28,"ten":"Phần 1 · Slide 7: căng thẳng tích cực · Slide 8: mười sáu triệu chứng"},
+        {"t":402.28,"den":482.28,"ten":"Phần 1 · Slide 9: căng thẳng mạn tính"},
+        {"t":482.28,"den":571.35,"ten":"Phần 1 · Tự kiểm · Tóm tắt"},
+        {"t":571.35,"den":668.22,"ten":"Phần 2 · Chào bạn · Bài 13 phần 2"},
+        {"t":668.22,"den":756.76,"ten":"Phần 2 · Slide 13: quản lý thời gian · Slide 14: kết nối xã hội"},
+        {"t":756.76,"den":836.76,"ten":"Phần 2 · Slide 15: chậm lại, cắt bớt phân tâm"},
+        {"t":836.76,"den":917.72,"ten":"Phần 2 · Slide 17: thiền · Slide 18: tìm chỗ dựa"},
+        {"t":917.72,"den":1009.98,"ten":"Phần 2 · Slide 19: phòng tư vấn của trường"},
+        {"t":1009.98,"den":1105.08,"ten":"Phần 2 · Slide 21–22: hoạt động thư giãn, hỏi đáp · Tự kiểm"},
+        {"t":1105.08,"den":1152.98,"ten":"Phần 2 · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, mình tới bài mười ba, bài cuối của Buổi ba: xử lý căng thẳng trong nhóm."},
         {"t":11.64,"vi":"Bài trước mình đã học lưới năm cách giải quyết xung đột, bốn chiến lược phòng ngừa, và chín chiến lược làm giảm."},
@@ -3975,8 +4241,26 @@
         {"t":1135.91,"vi":"Tuần này, chọn hai cách hợp với lối sống của bạn và làm đều một tuần. Rồi làm activity và quiz chương ngay dưới video nhé."}
       ]
     },
-    "ssg104-b3-l9-quyen-luc": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/communication-and-in-group-working-skills/03-buoi-3-ly-thuyet-nhom-doi/03-01-quyen-luc-trong-nhom-tron-19214c88.mp4","durationSec":1748.01,"nguonCau":"srt",
-      "parts": [],
+    "ssg104-b3-l9-quyen-luc": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/communication-and-in-group-working-skills/03-buoi-3-ly-thuyet-nhom-doi/03-01-quyen-luc-trong-nhom-tron-19214c88.mp4","durationSec":1748.01,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":5.1,"den":129.34,"ten":"Phần 1 · Chào bạn · Buổi 3 · Bài 9"},
+        {"t":129.34,"den":229.95,"ten":"Phần 1 · Slide 5–6: định nghĩa quyền lực, ba dạng"},
+        {"t":229.95,"den":354.3,"ten":"Phần 1 · Slide 8: quyền lực tự thân"},
+        {"t":354.3,"den":453.92,"ten":"Phần 1 · Slide 10: quyền lực và áp bức"},
+        {"t":453.92,"den":536.16,"ten":"Phần 1 · Slide 12: năm nền tảng quyền lực"},
+        {"t":536.16,"den":649.08,"ten":"Phần 1 · Slide 14: quyền lực chuyên môn"},
+        {"t":649.08,"den":761.26,"ten":"Phần 1 · Slide 16: quyền lực cưỡng chế"},
+        {"t":761.26,"den":852.46,"ten":"Phần 1 · Thử đoán nền tảng quyền lực · Tự kiểm"},
+        {"t":852.46,"den":932.01,"ten":"Phần 1 · Tóm tắt · Chào bạn · Bài S3.9 phần 2"},
+        {"t":932.01,"den":1014.94,"ten":"Phần 2 · Slide 18: hệ quả của quyền lực"},
+        {"t":1014.94,"den":1124.99,"ten":"Phần 2 · Slide 19: sự phụ thuộc quyền lực"},
+        {"t":1124.99,"den":1262.34,"ten":"Phần 2 · Slide 22: lý do hai, bản chất mối quan hệ"},
+        {"t":1262.34,"den":1345.2,"ten":"Phần 2 · Slide 24: bảy chiến thuật quyền lực"},
+        {"t":1345.2,"den":1435.51,"ten":"Phần 2 · Slide 25: dùng quyền lực nể phục có đạo đức"},
+        {"t":1435.51,"den":1540.2,"ten":"Phần 2 · Slide 27: dùng quyền lực chính danh có đạo đức"},
+        {"t":1540.2,"den":1656.59,"ten":"Phần 2 · Slide 29: dùng quyền lực cưỡng chế có đạo đức"},
+        {"t":1656.59,"den":1748.01,"ten":"Phần 2 · Tự kiểm · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, mình bắt đầu Buổi ba của môn: lý thuyết nhóm và đội."},
         {"t":9.83,"vi":"Buổi hai mình đã rèn cách nghĩ: tư duy sáng tạo, viết đề xuất, và tư duy phản biện."},
@@ -4278,8 +4562,21 @@
         {"t":1736.02,"vi":"Rồi làm activity và quiz chương ngay dưới video nhé."}
       ]
     },
-    "ssg104-b4-l14-phi-ngon-ngu": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/communication-and-in-group-working-skills/04-buoi-4-nhom-doi-hanh-dong/04-01-giao-tiep-phi-ngon-ngu-tron-f0c88cc7.mp4","durationSec":1144.47,"nguonCau":"srt",
-      "parts": [],
+    "ssg104-b4-l14-phi-ngon-ngu": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/communication-and-in-group-working-skills/04-buoi-4-nhom-doi-hanh-dong/04-01-giao-tiep-phi-ngon-ngu-tron-f0c88cc7.mp4","durationSec":1144.47,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":5.1,"den":88.04,"ten":"Phần 1 · Chào bạn · Buổi 4 · Slide 1–3: bìa, ba mục tiêu, dàn ý"},
+        {"t":88.04,"den":200.88,"ten":"Phần 1 · Slide 4: phi ngôn ngữ là gì"},
+        {"t":200.88,"den":283.76,"ten":"Phần 1 · Slide 6: không gian, bốn vùng · Slide 7: môi trường"},
+        {"t":283.76,"den":372.57,"ten":"Phần 1 · Slide 8: di chuyển, những hành vi nên tránh"},
+        {"t":372.57,"den":469.13,"ten":"Phần 1 · Slide 10: cử chỉ ba bước · Slide 11: nét mặt và ánh mắt"},
+        {"t":469.13,"den":552.79,"ten":"Phần 1 · Tự kiểm · Tóm tắt"},
+        {"t":552.79,"den":652.53,"ten":"Phần 2 · Chào bạn · Bài 14 phần 2 · Slide 12: công cụ trực quan"},
+        {"t":652.53,"den":747.04,"ten":"Phần 2 · Slide 14: mục đích rõ, gần như tự nói"},
+        {"t":747.04,"den":832.07,"ten":"Phần 2 · Slide 16: bốn tiêu chí làm công cụ trực quan"},
+        {"t":832.07,"den":946.2,"ten":"Phần 2 · Slide 18: dùng PowerPoint làm công cụ trực quan"},
+        {"t":946.2,"den":1067.89,"ten":"Phần 2 · Slide 21: ba chiến lược với khán giả"},
+        {"t":1067.89,"den":1144.47,"ten":"Phần 2 · Tự kiểm · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, mình sang Buổi bốn, và mở đầu bằng bài mười bốn: giao tiếp phi ngôn ngữ."},
         {"t":11.78,"vi":"Buổi ba mình đã học quyền lực trong nhóm, xung đột và thương lượng, rồi xử lý căng thẳng."},
@@ -4472,8 +4769,20 @@
         {"t":1132.95,"vi":"Rồi làm activity và quiz chương ngay dưới video nhé."}
       ]
     },
-    "ssg104-b4-l15-thuyet-phuc": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/communication-and-in-group-working-skills/04-buoi-4-nhom-doi-hanh-dong/04-02-thuyet-trinh-thuyet-phuc-tron-79b2ae81.mp4","durationSec":1166.34,"nguonCau":"srt",
-      "parts": [],
+    "ssg104-b4-l15-thuyet-phuc": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/communication-and-in-group-working-skills/04-buoi-4-nhom-doi-hanh-dong/04-02-thuyet-trinh-thuyet-phuc-tron-79b2ae81.mp4","durationSec":1166.34,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":5.1,"den":88.87,"ten":"Phần 1 · Chào bạn · Bài 15 · Slide 1–3: bìa, dàn ý, năm mục tiêu"},
+        {"t":88.87,"den":196.15,"ten":"Phần 1 · Slide 4: thuyết phục là gì"},
+        {"t":196.15,"den":311.37,"ten":"Phần 1 · Slide 6: chịu nghe, rồi chịu làm"},
+        {"t":311.37,"den":441.6,"ten":"Phần 1 · Slide 8: tháp nhu cầu Maslow"},
+        {"t":441.6,"den":518.98,"ten":"Phần 1 · Tự kiểm · Tóm tắt"},
+        {"t":518.98,"den":663.97,"ten":"Phần 2 · Chào bạn · Bài 15 phần 2"},
+        {"t":663.97,"den":742.03,"ten":"Phần 2 · Slide 12: mười một điều cấm, từ sáu tới mười một"},
+        {"t":742.03,"den":859.85,"ten":"Phần 2 · Slide 13: elevator speech là gì"},
+        {"t":859.85,"den":968.34,"ten":"Phần 2 · Slide 16: mổ xẻ một elevator speech mẫu"},
+        {"t":968.34,"den":1090.75,"ten":"Phần 2 · Slide 18: bốn ý cần nhớ · Slide 19–20: hai bài tập, hỏi đáp"},
+        {"t":1090.75,"den":1166.34,"ten":"Phần 2 · Tự kiểm · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, mình sang bài mười lăm: thuyết trình thuyết phục."},
         {"t":9.15,"vi":"Bài mười bốn mình đã học tám loại phi ngôn ngữ, công cụ trực quan, và ba chiến lược với khán giả."},
@@ -4672,8 +4981,21 @@
         {"t":1148.74,"vi":"Giờ hãy viết, đếm từ, và nói thành tiếng elevator speech của bạn trong ba mươi giây. Rồi làm activity và quiz chương ngay dưới video nhé."}
       ]
     },
-    "ssg104-b4-l16-cuoc-hop": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/communication-and-in-group-working-skills/04-buoi-4-nhom-doi-hanh-dong/04-03-cuoc-hop-tron-3fd7f048.mp4","durationSec":1150.14,"nguonCau":"srt",
-      "parts": [],
+    "ssg104-b4-l16-cuoc-hop": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/communication-and-in-group-working-skills/04-buoi-4-nhom-doi-hanh-dong/04-03-cuoc-hop-tron-3fd7f048.mp4","durationSec":1150.14,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":5.1,"den":80.52,"ten":"Phần 1 · Chào bạn · Bài 16 · Slide 1–3: bìa, dàn ý, ba mục tiêu"},
+        {"t":80.52,"den":181.26,"ten":"Phần 1 · Slide 4: cuộc họp là gì · Slide 5: trước cuộc họp"},
+        {"t":181.26,"den":271.35,"ten":"Phần 1 · Slide 6–7: chọn cách họp, thảo luận"},
+        {"t":271.35,"den":368.38,"ten":"Phần 1 · Slide 9: sáu thành phần của chương trình họp"},
+        {"t":368.38,"den":489.72,"ten":"Phần 1 · Slide 11: chọn chỗ họp, hình dạng cái bàn"},
+        {"t":489.72,"den":572.29,"ten":"Phần 1 · Tự kiểm · Tóm tắt"},
+        {"t":572.29,"den":685.2,"ten":"Phần 2 · Chào bạn · Bài 16 phần 2 · Slide 13: tám kiểu điều hành hỏng"},
+        {"t":685.2,"den":794.1,"ten":"Phần 2 · Slide 14: nguyên tắc điều hành, từ một tới tám"},
+        {"t":794.1,"den":908.32,"ten":"Phần 2 · Slide 16: giao tiếp sau cuộc họp"},
+        {"t":908.32,"den":1008.99,"ten":"Phần 2 · Slide 18: dùng công nghệ"},
+        {"t":1008.99,"den":1103.75,"ten":"Phần 2 · Slide 20–21: câu hỏi ôn và suy ngẫm, hỏi đáp · Tự kiểm"},
+        {"t":1103.75,"den":1150.14,"ten":"Phần 2 · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, mình sang bài mười sáu: nhóm và cuộc họp."},
         {"t":9.01,"vi":"Bài mười lăm mình đã học thuyết phục, mười một điều cấm khi nói, và elevator speech ba mươi giây."},
@@ -4885,8 +5207,20 @@
         {"t":1137.83,"vi":"Rồi làm activity và quiz chương ngay dưới video nhé."}
       ]
     },
-    "ssg104-b4-l17-viet-chuyen-nghiep": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/communication-and-in-group-working-skills/04-buoi-4-nhom-doi-hanh-dong/04-04-viet-chuyen-nghiep-tron-544286cd.mp4","durationSec":1069.06,"nguonCau":"srt",
-      "parts": [],
+    "ssg104-b4-l17-viet-chuyen-nghiep": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/communication-and-in-group-working-skills/04-buoi-4-nhom-doi-hanh-dong/04-04-viet-chuyen-nghiep-tron-544286cd.mp4","durationSec":1069.06,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":5.1,"den":91.67,"ten":"Phần 1 · Chào bạn · Bài 17 · Slide 1–3: bìa, dàn ý, năm mục tiêu"},
+        {"t":91.67,"den":194.35,"ten":"Phần 1 · Slide 4: mở đầu · Slide 5: nghĩ rồi mới viết"},
+        {"t":194.35,"den":317.4,"ten":"Phần 1 · Slide 6: tư duy phản biện khi viết · Slide 7: ba thiên kiến"},
+        {"t":317.4,"den":403.06,"ten":"Phần 1 · Slide 8–9: ba nỗi sợ viết và cách chữa"},
+        {"t":403.06,"den":545.03,"ten":"Phần 1 · Slide 10: bảng kiểm mười hai mục"},
+        {"t":545.03,"den":624.28,"ten":"Phần 1 · Tự kiểm · Tóm tắt"},
+        {"t":624.28,"den":706.81,"ten":"Phần 2 · Chào bạn · Bài 17 phần 2"},
+        {"t":706.81,"den":803.71,"ten":"Phần 2 · Slide 15–16: sáu mục kiểm cụ thể"},
+        {"t":803.71,"den":901.02,"ten":"Phần 2 · Slide 18: rà văn phong, từ bảy tới mười hai"},
+        {"t":901.02,"den":997.17,"ten":"Phần 2 · Slide 21: năm ý cần nhớ · Slide 22–23: ba bài tập, hỏi đáp"},
+        {"t":997.17,"den":1069.06,"ten":"Phần 2 · Tự kiểm · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, mình sang bài mười bảy: viết chuyên nghiệp."},
         {"t":9.11,"vi":"Bài mười sáu mình đã học chương trình họp, tám kiểu điều hành hỏng, và biên bản sau họp."},
@@ -5084,8 +5418,19 @@
         {"t":1057.77,"vi":"Rồi làm activity và quiz chương ngay dưới video nhé."}
       ]
     },
-    "ssg104-b4-l18-email-thu": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/communication-and-in-group-working-skills/04-buoi-4-nhom-doi-hanh-dong/04-05-email-thu-tron-e6a8ed11.mp4","durationSec":878.42,"nguonCau":"srt",
-      "parts": [],
+    "ssg104-b4-l18-email-thu": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/communication-and-in-group-working-skills/04-buoi-4-nhom-doi-hanh-dong/04-05-email-thu-tron-e6a8ed11.mp4","durationSec":878.42,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":5.1,"den":86.65,"ten":"Phần 1 · Chào bạn · Bài 18 · Slide 1–3: bìa, ba mục tiêu, email"},
+        {"t":86.65,"den":166.07,"ten":"Phần 1 · Slide 4–5: quy tắc một, lời chào"},
+        {"t":166.07,"den":246.41,"ten":"Phần 1 · Slide 7–8: chữ ký, tránh viết tắt, viết ngắn"},
+        {"t":246.41,"den":346.39,"ten":"Phần 1 · Slide 10: quy tắc bảy tới mười"},
+        {"t":346.39,"den":442.42,"ten":"Phần 1 · Tự kiểm · Tóm tắt"},
+        {"t":442.42,"den":535.14,"ten":"Phần 2 · Slide 13: memo và thư · Slide 14: định dạng memo"},
+        {"t":535.14,"den":618.6,"ten":"Phần 2 · Slide 15: năm phẩm chất của memo"},
+        {"t":618.6,"den":703.66,"ten":"Phần 2 · Slide 17: bức thư mẫu ghi số"},
+        {"t":703.66,"den":804.08,"ten":"Phần 2 · Slide 19: năm yêu cầu cho một hình ảnh tích cực"},
+        {"t":804.08,"den":878.42,"ten":"Phần 2 · Tự kiểm · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, mình sang bài mười tám: email và thư công việc."},
         {"t":9.35,"vi":"Bài mười bảy mình đã học chuẩn bị viết, rồi rà bốn nhóm tổng quát, kiểm sáu mục cụ thể, và mười hai điểm văn phong."},
@@ -5241,8 +5586,15 @@
         {"t":861.26,"vi":"Trước khi viết, hỏi người đọc ở bên trong hay bên ngoài, rồi chọn memo hay thư. Rồi làm activity và quiz chương ngay dưới video nhé."}
       ]
     },
-    "ssg104-b4-l19-bao-cao": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/communication-and-in-group-working-skills/04-buoi-4-nhom-doi-hanh-dong/04-06-bao-cao-258b288a.mp4","durationSec":597.22,"nguonCau":"srt",
-      "parts": [],
+    "ssg104-b4-l19-bao-cao": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/communication-and-in-group-working-skills/04-buoi-4-nhom-doi-hanh-dong/04-06-bao-cao-258b288a.mp4","durationSec":597.22,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":100.5,"ten":"Chào bạn · Bài 19 · Slide 1–3: bìa, dàn ý, ba mục tiêu"},
+        {"t":100.5,"den":196.85,"ten":"Slide 5: cỡ và chức năng của báo cáo"},
+        {"t":196.85,"den":302.16,"ten":"Slide 8: báo cáo tổ chức quanh sáu yếu tố"},
+        {"t":302.16,"den":407.22,"ten":"Slide 10–11: bảng kiểm, điểm một tới mười"},
+        {"t":407.22,"den":528.02,"ten":"Slide 13–15: activity và hai bài tập"},
+        {"t":528.02,"den":597.22,"ten":"Tự kiểm · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, mình sang bài mười chín, bài cuối của buổi bốn: viết báo cáo."},
         {"t":10.82,"vi":"Bài mười tám mình đã học mười ba quy tắc email, định dạng memo, và mười lăm thành phần của bức thư."},
@@ -5354,8 +5706,18 @@
         {"t":590.96,"vi":"Rồi làm activity và quiz chương ngay dưới video nhé."}
       ]
     },
-    "ssg104-b5-l20-nghe-nghiep": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/communication-and-in-group-working-skills/05-buoi-5-kham-pha-nghe-nghiep/05-01-phat-trien-nghe-nghiep-19c51c9e.mp4","durationSec":876.31,"nguonCau":"srt",
-      "parts": [],
+    "ssg104-b5-l20-nghe-nghiep": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/communication-and-in-group-working-skills/05-buoi-5-kham-pha-nghe-nghiep/05-01-phat-trien-nghe-nghiep-19c51c9e.mp4","durationSec":876.31,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":106.84,"ten":"Chào bạn · Bài 20 · Slide 1–3: bìa, hai mục tiêu, câu mở đầu"},
+        {"t":106.84,"den":218.84,"ten":"Slide 4: phát triển nghề nghiệp là gì"},
+        {"t":218.84,"den":335.38,"ten":"Slide 6: bản đồ nghề nghiệp bốn bước · Slide 7–8: vòng PDCA"},
+        {"t":335.38,"den":433.96,"ten":"Minh hoạ: một vòng PDCA hai tuần"},
+        {"t":433.96,"den":524.31,"ten":"Slide 10–11: bảy nguồn tìm việc"},
+        {"t":524.31,"den":639.02,"ten":"Slide 12: mười kỹ năng hàng đầu năm 2025"},
+        {"t":639.02,"den":754.49,"ten":"Slide 13: cách tiếp cận tổng thể với thị trường lao động"},
+        {"t":754.49,"den":832.17,"ten":"Slide 15–16: câu kết và hỏi đáp · Tự kiểm"},
+        {"t":832.17,"den":876.31,"ten":"Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, mình sang buổi năm, buổi cuối của môn, mở đầu bằng bài hai mươi: phát triển nghề nghiệp."},
         {"t":13.46,"vi":"Bài mười chín mình đã học báo cáo, mười tám loại theo chức năng, và bảng kiểm mười bốn điểm."},
@@ -5502,8 +5864,25 @@
         {"t":870.5,"vi":"Rồi làm activity và quiz chương ngay dưới video nhé."}
       ]
     },
-    "ssg104-b5-l21-22-cv": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/communication-and-in-group-working-skills/05-buoi-5-kham-pha-nghe-nghiep/05-02-cv-thu-xin-viec-tron-d704b88b.mp4","durationSec":1482.26,"nguonCau":"srt",
-      "parts": [],
+    "ssg104-b5-l21-22-cv": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/communication-and-in-group-working-skills/05-buoi-5-kham-pha-nghe-nghiep/05-02-cv-thu-xin-viec-tron-d704b88b.mp4","durationSec":1482.26,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":5.1,"den":119.84,"ten":"Phần 1 · Chào bạn · Bài 21–22 · Slide 1–3: bìa, bốn mục tiêu, dàn ý"},
+        {"t":119.84,"den":248.1,"ten":"Phần 1 · Slide 6: CV là gì · Slide 7: mục đích và nội dung"},
+        {"t":248.1,"den":344.17,"ten":"Phần 1 · Slide 9: phần mở đầu và học vấn"},
+        {"t":344.17,"den":439.96,"ten":"Phần 1 · Slide 11: năm điều phải tránh · Slide 12: trau chuốt CV"},
+        {"t":439.96,"den":525.91,"ten":"Phần 1 · Slide 13: bảy mục của một CV"},
+        {"t":525.91,"den":647.67,"ten":"Phần 1 · Slide 14: mười lời khuyên cho CV thành công"},
+        {"t":647.67,"den":722.98,"ten":"Phần 1 · Slide 16: như hẹn hò trên mạng, và activity tạo CV"},
+        {"t":722.98,"den":818.57,"ten":"Phần 1 · Tự kiểm · Tóm tắt"},
+        {"t":818.57,"den":896.06,"ten":"Phần 2 · Slide 17–18: mở phần thư xin việc"},
+        {"t":896.06,"den":972.81,"ten":"Phần 2 · Slide 19: thư xin việc là gì · Slide 20: năm đặc điểm đầu"},
+        {"t":972.81,"den":1093.67,"ten":"Phần 2 · Slide 21: năm đặc điểm nữa · Slide 22: thư mẫu của sinh viên"},
+        {"t":1093.67,"den":1171.12,"ten":"Phần 2 · Slide 23: cùng lá thư, thành khuôn · Slide 24: LinkedIn"},
+        {"t":1171.12,"den":1278.22,"ten":"Phần 2 · Slide 25: AIDA · Slide 26: chú ý và quan tâm"},
+        {"t":1278.22,"den":1353.96,"ten":"Phần 2 · Slide 28–29: khung một lá thư xin việc"},
+        {"t":1353.96,"den":1439.51,"ten":"Phần 2 · Slide 30: activity viết thư xin việc · Slide 31: hỏi đáp"},
+        {"t":1439.51,"den":1482.26,"ten":"Phần 2 · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, mình sang bài hai mươi mốt, hai mươi hai: CV và thư xin việc."},
         {"t":10.9,"vi":"Tập này là nửa đầu, phần CV."},
@@ -5768,8 +6147,19 @@
         {"t":1468.33,"vi":"Giờ thì viết nháp lá thư của bạn, rồi làm activity và quiz chương ngay dưới video nhé."}
       ]
     },
-    "ssg104-b5-l23-phong-van": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/communication-and-in-group-working-skills/05-buoi-5-kham-pha-nghe-nghiep/05-03-chuan-bi-phong-van-tron-0cc5945f.mp4","durationSec":1023.15,"nguonCau":"srt",
-      "parts": [],
+    "ssg104-b5-l23-phong-van": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/communication-and-in-group-working-skills/05-buoi-5-kham-pha-nghe-nghiep/05-03-chuan-bi-phong-van-tron-0cc5945f.mp4","durationSec":1023.15,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":5.1,"den":117.06,"ten":"Phần 1 · Chào bạn · Bài 23 · Slide 1–3: bìa, dàn ý, ba mục tiêu"},
+        {"t":117.06,"den":204.23,"ten":"Phần 1 · Slide 5–6: mở phần một, ba tiêu đề"},
+        {"t":204.23,"den":325.94,"ten":"Phần 1 · Slide 8: chín bước trong buổi phỏng vấn"},
+        {"t":325.94,"den":417.33,"ten":"Phần 1 · Slide 10: activity, vì sao bạn hợp · Tự kiểm"},
+        {"t":417.33,"den":529.42,"ten":"Phần 1 · Tóm tắt · Chào bạn · câu hỏi phỏng vấn"},
+        {"t":529.42,"den":605.8,"ten":"Phần 2 · Slide 12: ba loại câu hỏi"},
+        {"t":605.8,"den":734.25,"ten":"Phần 2 · Slide 14: năm câu hỏi theo hành vi"},
+        {"t":734.25,"den":845.6,"ten":"Phần 2 · Slide 16: chín câu thảo luận"},
+        {"t":845.6,"den":951.95,"ten":"Phần 2 · Slide 18: bốn nguyên tắc cần nhớ"},
+        {"t":951.95,"den":1023.15,"ten":"Phần 2 · Tự kiểm · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, mình sang bài hai mươi ba, bài cuối của môn: chuẩn bị phỏng vấn xin việc."},
         {"t":11.23,"vi":"Bài trước mình đã học CV và thư xin việc, công thức AIDA, và khung ba đoạn của lá thư."},
@@ -5961,8 +6351,15 @@
         {"t":1005.07,"vi":"Môn SSG104 khép lại ở đây. Hãy luyện chín câu ở slide mười sáu với bạn cùng nhóm, rồi làm activity và quiz chương ngay dưới video nhé."}
       ]
     },
-    "ssg104-chuan-dau-ra": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/communication-and-in-group-working-skills/00-gioi-thieu-huong-dan-hoc/00-01-gioi-thieu-mon-hoc-3a16e22a.mp4","durationSec":593.46,"nguonCau":"srt",
-      "parts": [],
+    "ssg104-chuan-dau-ra": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/communication-and-in-group-working-skills/00-gioi-thieu-huong-dan-hoc/00-01-gioi-thieu-mon-hoc-3a16e22a.mp4","durationSec":593.46,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":122.9,"ten":"Chào bạn · SSG104"},
+        {"t":122.9,"den":209.2,"ten":"Bản đồ môn: ba cụm, sáu chủ đề và phần nghề nghiệp"},
+        {"t":209.2,"den":305.71,"ten":"Cách tính điểm: tám mươi phần trăm là quá trình"},
+        {"t":305.71,"den":401.41,"ten":"Bài thi cuối kỳ: nhanh và rộng"},
+        {"t":401.41,"den":499.31,"ten":"Tài liệu và công cụ làm nhóm"},
+        {"t":499.31,"den":593.46,"ten":"Tự kiểm · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài đầu tiên của môn SSG104, Communication and In-group Working Skills, tức Kỹ năng giao tiếp và làm việc nhóm."},
         {"t":16.26,"vi":"Đây là môn dạy bạn nói cho người khác hiểu, nghe cho đúng, viết cho chuyên nghiệp, và cùng một nhóm làm ra một kết quả chung."},
@@ -6049,8 +6446,15 @@
         {"t":581.64,"vi":"Giờ bạn lập nhóm chat với các bạn cùng nhóm, thống nhất một công cụ chia việc như Trello, rồi hẵng sang bài đầu tiên của Buổi 1 nhé."}
       ]
     },
-    "ssg104-dieu-kien-qua-mon": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/communication-and-in-group-working-skills/00-gioi-thieu-huong-dan-hoc/00-01-gioi-thieu-mon-hoc-3a16e22a.mp4","durationSec":593.46,"nguonCau":"srt",
-      "parts": [],
+    "ssg104-dieu-kien-qua-mon": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/communication-and-in-group-working-skills/00-gioi-thieu-huong-dan-hoc/00-01-gioi-thieu-mon-hoc-3a16e22a.mp4","durationSec":593.46,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":122.9,"ten":"Chào bạn · SSG104"},
+        {"t":122.9,"den":209.2,"ten":"Bản đồ môn: ba cụm, sáu chủ đề và phần nghề nghiệp"},
+        {"t":209.2,"den":305.71,"ten":"Cách tính điểm: tám mươi phần trăm là quá trình"},
+        {"t":305.71,"den":401.41,"ten":"Bài thi cuối kỳ: nhanh và rộng"},
+        {"t":401.41,"den":499.31,"ten":"Tài liệu và công cụ làm nhóm"},
+        {"t":499.31,"den":593.46,"ten":"Tự kiểm · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài đầu tiên của môn SSG104, Communication and In-group Working Skills, tức Kỹ năng giao tiếp và làm việc nhóm."},
         {"t":16.26,"vi":"Đây là môn dạy bạn nói cho người khác hiểu, nghe cho đúng, viết cho chuyên nghiệp, và cùng một nhóm làm ra một kết quả chung."},
@@ -6137,8 +6541,15 @@
         {"t":581.64,"vi":"Giờ bạn lập nhóm chat với các bạn cùng nhóm, thống nhất một công cụ chia việc như Trello, rồi hẵng sang bài đầu tiên của Buổi 1 nhé."}
       ]
     },
-    "ssg104-gioi-thieu": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/communication-and-in-group-working-skills/00-gioi-thieu-huong-dan-hoc/00-01-gioi-thieu-mon-hoc-3a16e22a.mp4","durationSec":593.46,"nguonCau":"srt",
-      "parts": [],
+    "ssg104-gioi-thieu": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/communication-and-in-group-working-skills/00-gioi-thieu-huong-dan-hoc/00-01-gioi-thieu-mon-hoc-3a16e22a.mp4","durationSec":593.46,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":122.9,"ten":"Chào bạn · SSG104"},
+        {"t":122.9,"den":209.2,"ten":"Bản đồ môn: ba cụm, sáu chủ đề và phần nghề nghiệp"},
+        {"t":209.2,"den":305.71,"ten":"Cách tính điểm: tám mươi phần trăm là quá trình"},
+        {"t":305.71,"den":401.41,"ten":"Bài thi cuối kỳ: nhanh và rộng"},
+        {"t":401.41,"den":499.31,"ten":"Tài liệu và công cụ làm nhóm"},
+        {"t":499.31,"den":593.46,"ten":"Tự kiểm · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài đầu tiên của môn SSG104, Communication and In-group Working Skills, tức Kỹ năng giao tiếp và làm việc nhóm."},
         {"t":16.26,"vi":"Đây là môn dạy bạn nói cho người khác hiểu, nghe cho đúng, viết cho chuyên nghiệp, và cùng một nhóm làm ra một kết quả chung."},
@@ -6225,8 +6636,18 @@
         {"t":581.64,"vi":"Giờ bạn lập nhóm chat với các bạn cùng nhóm, thống nhất một công cụ chia việc như Trello, rồi hẵng sang bài đầu tiên của Buổi 1 nhé."}
       ]
     },
-    "ssg104-n1-1-nghe-nghiep": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/communication-and-in-group-working-skills/05-buoi-5-kham-pha-nghe-nghiep/05-01-phat-trien-nghe-nghiep-19c51c9e.mp4","durationSec":876.31,"nguonCau":"srt",
-      "parts": [],
+    "ssg104-n1-1-nghe-nghiep": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/communication-and-in-group-working-skills/05-buoi-5-kham-pha-nghe-nghiep/05-01-phat-trien-nghe-nghiep-19c51c9e.mp4","durationSec":876.31,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":106.84,"ten":"Chào bạn · Bài 20 · Slide 1–3: bìa, hai mục tiêu, câu mở đầu"},
+        {"t":106.84,"den":218.84,"ten":"Slide 4: phát triển nghề nghiệp là gì"},
+        {"t":218.84,"den":335.38,"ten":"Slide 6: bản đồ nghề nghiệp bốn bước · Slide 7–8: vòng PDCA"},
+        {"t":335.38,"den":433.96,"ten":"Minh hoạ: một vòng PDCA hai tuần"},
+        {"t":433.96,"den":524.31,"ten":"Slide 10–11: bảy nguồn tìm việc"},
+        {"t":524.31,"den":639.02,"ten":"Slide 12: mười kỹ năng hàng đầu năm 2025"},
+        {"t":639.02,"den":754.49,"ten":"Slide 13: cách tiếp cận tổng thể với thị trường lao động"},
+        {"t":754.49,"den":832.17,"ten":"Slide 15–16: câu kết và hỏi đáp · Tự kiểm"},
+        {"t":832.17,"den":876.31,"ten":"Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, mình sang buổi năm, buổi cuối của môn, mở đầu bằng bài hai mươi: phát triển nghề nghiệp."},
         {"t":13.46,"vi":"Bài mười chín mình đã học báo cáo, mười tám loại theo chức năng, và bảng kiểm mười bốn điểm."},
@@ -6373,8 +6794,15 @@
         {"t":870.5,"vi":"Rồi làm activity và quiz chương ngay dưới video nhé."}
       ]
     },
-    "ssg104-tai-lieu": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/communication-and-in-group-working-skills/00-gioi-thieu-huong-dan-hoc/00-01-gioi-thieu-mon-hoc-3a16e22a.mp4","durationSec":593.46,"nguonCau":"srt",
-      "parts": [],
+    "ssg104-tai-lieu": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/communication-and-in-group-working-skills/00-gioi-thieu-huong-dan-hoc/00-01-gioi-thieu-mon-hoc-3a16e22a.mp4","durationSec":593.46,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":122.9,"ten":"Chào bạn · SSG104"},
+        {"t":122.9,"den":209.2,"ten":"Bản đồ môn: ba cụm, sáu chủ đề và phần nghề nghiệp"},
+        {"t":209.2,"den":305.71,"ten":"Cách tính điểm: tám mươi phần trăm là quá trình"},
+        {"t":305.71,"den":401.41,"ten":"Bài thi cuối kỳ: nhanh và rộng"},
+        {"t":401.41,"den":499.31,"ten":"Tài liệu và công cụ làm nhóm"},
+        {"t":499.31,"den":593.46,"ten":"Tự kiểm · Tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài đầu tiên của môn SSG104, Communication and In-group Working Skills, tức Kỹ năng giao tiếp và làm việc nhóm."},
         {"t":16.26,"vi":"Đây là môn dạy bạn nói cho người khác hiểu, nghe cho đúng, viết cho chuyên nghiệp, và cùng một nhóm làm ra một kết quả chung."},

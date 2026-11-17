@@ -2,8 +2,14 @@
   "courseSlug": "nextjs",
   "sinhBoi": "scripts/phu-de-tu-video-rieng.mjs",
   "lessons": {
-    "nextjs-0-0-bat-dau-2": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/00-gioi-thieu/00-02-bat-dau-tai-day-2-13c2dbb6.mp4","durationSec":472.06,"nguonCau":"srt",
-      "parts": [],
+    "nextjs-0-0-bat-dau-2": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/00-gioi-thieu/00-02-bat-dau-tai-day-2-13c2dbb6.mp4","durationSec":472.06,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":97.88,"ten":"Chào bạn · nối từ phần một · Bài này mang về gì"},
+        {"t":97.88,"den":190.77,"ten":"Học theo thứ tự · Chạy thật: hai sự cố của chính trang này"},
+        {"t":190.77,"den":280.24,"ten":"Sự cố 2: NEXT_PUBLIC_"},
+        {"t":280.24,"den":358.16,"ten":"Cách nghĩ khi học · Một lời về AI"},
+        {"t":358.16,"den":472.06,"ten":"Thuật ngữ · Liên kết chéo"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với phần hai của Bắt đầu tại đây, khoá Next.js."},
         {"t":10.54,"vi":"Phần một, mình thấy React một mình gửi về một trang rỗng, còn Next.js gửi HTML có sẵn nội dung, nhưng vẫn tải JavaScript."},
@@ -86,8 +92,14 @@
         {"t":466.93,"vi":"Bài sau: về khoá học này và bản đồ toàn khoá."}
       ]
     },
-    "nextjs-0-2-react-vs-nextjs": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/00-gioi-thieu/00-04-react-vs-nextjs-ca5ddae1.mp4","durationSec":473.09,"nguonCau":"srt",
-      "parts": [],
+    "nextjs-0-2-react-vs-nextjs": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/00-gioi-thieu/00-04-react-vs-nextjs-ca5ddae1.mp4","durationSec":473.09,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":103.94,"ten":"Chào bạn · nối từ bài 0.1 · Bài này mang về gì"},
+        {"t":103.94,"den":210.05,"ten":"Chạy thật: bạn gọi, nó gọi · Ai tạo ra chúng, và vì sao"},
+        {"t":210.05,"den":321.84,"ten":"Năm thứ Next.js thêm vào · App Router và Pages Router"},
+        {"t":321.84,"den":432.83,"ten":"Bẫy: hai lỗi trên slide · cuongthai.com được lắp ra sao"},
+        {"t":432.83,"den":473.09,"ten":"Thực hành & tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 0.2 của khoá Next.js."},
         {"t":9.73,"vi":"Bài trước mình thấy hydration: HTML có sẵn cái nút, nhưng phải có JavaScript mới bấm được."},
@@ -162,8 +174,14 @@
         {"t":468.66,"vi":"Bài sau: cài đặt và vòng lặp phát triển."}
       ]
     },
-    "nextjs-0-3-cai-dat": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/00-gioi-thieu/00-05-cai-dat-c3fb108a.mp4","durationSec":452.69,"nguonCau":"srt",
-      "parts": [],
+    "nextjs-0-3-cai-dat": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/00-gioi-thieu/00-05-cai-dat-c3fb108a.mp4","durationSec":452.69,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":92.89,"ten":"Chào bạn · nối từ bài 0.2 · Bài này mang về gì"},
+        {"t":92.89,"den":184.33,"ten":"Chạy thật: create-next-app từng câu hỏi"},
+        {"t":184.33,"den":260.19,"ten":"Chạy thật: dev server và Fast Refresh"},
+        {"t":260.19,"den":345.97,"ten":"Ba lệnh đừng lẫn lộn · build rồi start"},
+        {"t":345.97,"den":452.69,"ten":"Liên kết chéo · Thuật ngữ"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 0.3 của khoá Next.js."},
         {"t":9.79,"vi":"Bài trước: React là thư viện bạn gọi, Next.js là framework gọi bạn, và Next.js 16 từ chối build mã kiểu Pages Router trong app/."},
@@ -237,8 +255,13 @@
         {"t":449.03,"vi":"Bài sau: cách học khoá này."}
       ]
     },
-    "nextjs-0-4-cach-hoc": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/00-gioi-thieu/00-06-cach-hoc-f7bc2b74.mp4","durationSec":386.76,"nguonCau":"srt",
-      "parts": [],
+    "nextjs-0-4-cach-hoc": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/00-gioi-thieu/00-06-cach-hoc-f7bc2b74.mp4","durationSec":386.76,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":85.98,"ten":"Chào bạn · nối từ bài 0.3 · Bài này mang về gì"},
+        {"t":85.98,"den":187.04,"ten":"Vòng lặp hiệu quả · Chạy thật: cố ý làm hỏng ba lần"},
+        {"t":187.04,"den":286.35,"ten":"Lỗi ba: TypeScript bắt lỗi gõ sai"},
+        {"t":286.35,"den":386.76,"ten":"Liên kết chéo · Thuật ngữ"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 0.4, bài cuối của Mục 0, khoá Next.js."},
         {"t":11.41,"vi":"Bài trước bạn đã có dự án chạy được: create-next-app trả lời từng câu, Fast Refresh giữ state, và ba lệnh dev, build, start."},
@@ -304,8 +327,13 @@
         {"t":381.67,"vi":"Bài sau mở Chương 1: React thật sự làm gì."}
       ]
     },
-    "nextjs-1-1-react-lam-gi": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/01-jsx-mo-hinh-render/01-01-react-lam-gi-5cbeb5b7.mp4","durationSec":364.9,"nguonCau":"srt",
-      "parts": [],
+    "nextjs-1-1-react-lam-gi": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/01-jsx-mo-hinh-render/01-01-react-lam-gi-5cbeb5b7.mp4","durationSec":364.9,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":83.47,"ten":"Chào bạn · mở Chương 1 · Bài này mang về gì"},
+        {"t":83.47,"den":173.55,"ten":"Cách React: mô tả kết quả · Mô phỏng: hai cây, một chỗ khác"},
+        {"t":173.55,"den":264.59,"ten":"Đo: React chạm vào gì · Vòng lặp bốn từ"},
+        {"t":264.59,"den":364.9,"ten":"Liên kết chéo · Thuật ngữ"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 1.1, mở đầu Chương 1 của khoá Next.js: JSX và mô hình render."},
         {"t":13.52,"vi":"Mục 0 đã cho bạn dự án chạy được và cách học: gõ, cố ý làm hỏng, đọc trọn lỗi."},
@@ -372,8 +400,14 @@
         {"t":359.86,"vi":"Bài sau: JSX là JavaScript trá hình."}
       ]
     },
-    "nextjs-1-2-jsx-la-javascript": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/01-jsx-mo-hinh-render/01-02-jsx-la-javascript-1c46b48b.mp4","durationSec":399.15,"nguonCau":"srt",
-      "parts": [],
+    "nextjs-1-2-jsx-la-javascript": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/01-jsx-mo-hinh-render/01-02-jsx-la-javascript-1c46b48b.mp4","durationSec":399.15,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":103.25,"ten":"Chào bạn · nối từ bài 1.1 · Bài này mang về gì"},
+        {"t":103.25,"den":188.52,"ten":"Chạy trình biên dịch thật · Thẻ, thuộc tính, con đi đâu"},
+        {"t":188.52,"den":265.97,"ten":"Chạy thật: chữ hoa, và class · Chữ hoa quyết định"},
+        {"t":265.97,"den":358.9,"ten":"Trình biên dịch làm gì · Liên kết chéo"},
+        {"t":358.9,"den":399.15,"ten":"Thực hành & tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 1.2 của khoá Next.js."},
         {"t":9.72,"vi":"Bài trước: bạn mô tả giao diện, React so cây cũ với cây mới và chỉ đổi đúng một nút chữ trong DOM."},
@@ -434,8 +468,15 @@
         {"t":393.72,"vi":"Bài sau: nhét giá trị vào JSX bằng dấu ngoặc nhọn."}
       ]
     },
-    "nextjs-1-3-ngoac-nhon": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/01-jsx-mo-hinh-render/01-03-ngoac-nhon-f0eab968.mp4","durationSec":541.78,"nguonCau":"srt",
-      "parts": [],
+    "nextjs-1-3-ngoac-nhon": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/01-jsx-mo-hinh-render/01-03-ngoac-nhon-f0eab968.mp4","durationSec":541.78,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":104.53,"ten":"Chào bạn · nối từ bài 1.2 · Bài này mang về gì"},
+        {"t":104.53,"den":194.88,"ten":"Làm thật: trang Card trong dự án · Cửa sổ trở lại JavaScript"},
+        {"t":194.88,"den":293.55,"ten":"Cái giá: build hỏng · Mô phỏng: phễu lọc của React"},
+        {"t":293.55,"den":388.69,"ten":"Thuộc tính là props"},
+        {"t":388.69,"den":501.96,"ten":"Bốn vị trí, một luật · cuongthai.com làm thế nào"},
+        {"t":501.96,"den":541.78,"ten":"Thực hành & tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 1.3 của khoá Next.js."},
         {"t":9.71,"vi":"Bài trước: JSX chỉ là lời gọi hàm trả về một object, thuộc tính thành props, và chữ hoa đầu tên quyết định đó là component."},
@@ -526,8 +567,14 @@
         {"t":536.37,"vi":"Bài sau: danh sách, điều kiện, và cái bẫy số không."}
       ]
     },
-    "nextjs-1-4-danh-sach-dieu-kien": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/01-jsx-mo-hinh-render/01-04-danh-sach-dieu-kien-d2af7f39.mp4","durationSec":455.01,"nguonCau":"srt",
-      "parts": [],
+    "nextjs-1-4-danh-sach-dieu-kien": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/01-jsx-mo-hinh-render/01-04-danh-sach-dieu-kien-d2af7f39.mp4","durationSec":455.01,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":96.91,"ten":"Chào bạn · nối từ bài 1.3 · Bài này mang về gì"},
+        {"t":96.91,"den":203.22,"ten":"Danh sách bằng map · map, không phải forEach"},
+        {"t":203.22,"den":285.26,"ten":"Đo thật: xoá dòng đầu · Điều kiện: hai dấu và, ba ngôi"},
+        {"t":285.26,"den":367.5,"ten":"Bẫy số 0 và cách sửa · Tách lên trên return"},
+        {"t":367.5,"den":455.01,"ten":"Tự kiểm ba câu · Thực hành & tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 1.4 của khoá Next.js."},
         {"t":9.65,"vi":"Bài trước: ngoặc nhọn chỉ nhận biểu thức, không nhận câu lệnh. Và React không vẽ null, false, nhưng vẫn vẽ số không."},
@@ -611,8 +658,15 @@
         {"t":450.05,"vi":"Bài sau: luật của JSX và mô hình tư duy."}
       ]
     },
-    "nextjs-1-5-luat-jsx": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/01-jsx-mo-hinh-render/01-05-luat-jsx-48483f49.mp4","durationSec":514.95,"nguonCau":"srt",
-      "parts": [],
+    "nextjs-1-5-luat-jsx": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/01-jsx-mo-hinh-render/01-05-luat-jsx-48483f49.mp4","durationSec":514.95,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":88.83,"ten":"Chào bạn · nối từ bài 1.4 · Bài này mang về gì"},
+        {"t":88.83,"den":181.89,"ten":"Mô phỏng: một cửa, một giá trị · Luật 1: đúng một gốc"},
+        {"t":181.89,"den":285.25,"ten":"Luật 2: đóng mọi thẻ · Luật 3: props camelCase"},
+        {"t":285.25,"den":381.54,"ten":"Chạy thật: component viết thường"},
+        {"t":381.54,"den":470.72,"ten":"Mang sang Chương 2 · Liên kết chéo"},
+        {"t":470.72,"den":514.95,"ten":"Thực hành & tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 1.5, bài cuối của Chương 1 khoá Next.js."},
         {"t":11.07,"vi":"Bài trước: danh sách vẽ bằng map kèm key ổn định, điều kiện dùng hai dấu và hoặc ba ngôi, và cái bẫy số không trơ trọi."},
@@ -698,29 +752,14 @@
         {"t":503.24,"vi":"Bạn mở Code Lab Next.js, module nền tảng và dựng dự án để luyện cả Chương 1. Chương sau: props, đầu vào của component."}
       ]
     },
-    "nextjs-10-1-fetch-trong-server-component": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/10-fetch-cache-revalidate/10-01-fetch-trong-server-component-bc64bea9.mp4","durationSec":609.48,"nguonCau":"thoigian",
+    "nextjs-10-1-fetch-trong-server-component": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/10-fetch-cache-revalidate/10-01-fetch-trong-server-component-bc64bea9.mp4","durationSec":609.48,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":28.49,"ten":"Chào bạn · nối từ bài 9.5"},
-        {"t":28.49,"den":38.43,"ten":"Bìa"},
-        {"t":38.43,"den":59.88,"ten":"Bài này mang về gì"},
-        {"t":59.88,"den":101.84,"ten":"Mô phỏng: hai nhà hàng, ba trạng thái và một"},
-        {"t":101.84,"den":128.88,"ten":"Chương 5 và bây giờ: HTML chứa gì"},
-        {"t":128.88,"den":173.97,"ten":"Gõ thật: đoạn mã của bài, và nó chạy LÚC NÀO"},
-        {"t":173.97,"den":184.86,"ten":"Đoạn mã của bài, và nó chạy lúc nào"},
-        {"t":184.86,"den":214.09,"ten":"Chạy thật: một dòng để render mỗi request"},
-        {"t":214.09,"den":221.13,"ten":"Một dòng: render theo từng request"},
-        {"t":221.13,"den":273.41,"ten":"Đo trong Chromium: cùng khoảng chờ, khác màn hình"},
-        {"t":273.41,"den":281.18,"ten":"Đo trong Chromium"},
-        {"t":281.18,"den":301.83,"ten":"Khi nào vẫn fetch ở trình duyệt"},
-        {"t":301.83,"den":352.43,"ten":"Chạy thật: lời gọi nào được gộp"},
-        {"t":352.43,"den":359.9,"ten":"Gộp lời gọi: fetch có, axios không"},
-        {"t":359.9,"den":409.92,"ten":"Mô phỏng: thác nước, theo log thật"},
-        {"t":409.92,"den":419.08,"ten":"Thác nước: số đo"},
-        {"t":419.08,"den":449.17,"ten":"Bẫy: gọi route API của chính mình"},
-        {"t":449.17,"den":471.51,"ten":"Bảng tóm tắt"},
-        {"t":471.51,"den":496.71,"ten":"Liên kết chéo"},
-        {"t":496.71,"den":511.88,"ten":"Thuật ngữ"},
-        {"t":511.88,"den":561.59,"ten":"Tự kiểm ba câu"},
+        {"t":0,"den":101.84,"ten":"Chào bạn · nối từ bài 9.5 · Bài này mang về gì"},
+        {"t":101.84,"den":184.86,"ten":"Chương 5 và bây giờ: HTML chứa gì"},
+        {"t":184.86,"den":273.41,"ten":"Chạy thật: một dòng để render mỗi request"},
+        {"t":273.41,"den":352.43,"ten":"Đo trong Chromium · Khi nào vẫn fetch ở trình duyệt"},
+        {"t":352.43,"den":449.17,"ten":"Gộp lời gọi: fetch có, axios không"},
+        {"t":449.17,"den":561.59,"ten":"Bảng tóm tắt · Liên kết chéo"},
         {"t":561.59,"den":609.48,"ten":"Thực hành & tóm tắt"}
       ],
       "cues": [
@@ -793,28 +832,14 @@
         {"t":596.44,"vi":"Bạn mở Code Lab Next.js, module Server Component và lấy dữ liệu để luyện. Bài sau: cache, nói thẳng, vì mặc định đã đổi qua các phiên bản."}
       ]
     },
-    "nextjs-10-2-cache": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/10-fetch-cache-revalidate/10-02-cache-a1b47e41.mp4","durationSec":540.66,"nguonCau":"thoigian",
+    "nextjs-10-2-cache": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/10-fetch-cache-revalidate/10-02-cache-a1b47e41.mp4","durationSec":540.66,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":30.79,"ten":"Chào bạn · nối từ bài 10.1"},
-        {"t":30.79,"den":41.62,"ten":"Bìa"},
-        {"t":41.62,"den":62.67,"ten":"Bài này mang về gì"},
-        {"t":62.67,"den":117.76,"ten":"Mô phỏng: bốn chỗ giữ bản sao của một giá"},
-        {"t":117.76,"den":170.14,"ten":"Chạy thật: một tệp, Next.js 14 và 16"},
-        {"t":170.14,"den":178.09,"ten":"Một tệp, hai phiên bản"},
-        {"t":178.09,"den":202.87,"ten":"Đừng dựa vào mặc định — hãy nói rõ"},
-        {"t":202.87,"den":250.12,"ten":"Chạy thật: ba tuỳ chọn, từng request"},
-        {"t":250.12,"den":256.81,"ten":"Ba tuỳ chọn: số đo"},
-        {"t":256.81,"den":278.91,"ten":"Không cache mặc định chưa chắc là mới"},
-        {"t":278.91,"den":300.19,"ten":"Gộp request khác Data Cache"},
-        {"t":300.19,"den":312,"ten":"Bốn tầng cache"},
-        {"t":312,"den":354.96,"ten":"Chạy thật: Router Cache khi bấm Back"},
-        {"t":354.96,"den":362.5,"ten":"Router Cache: số đo"},
-        {"t":362.5,"den":386.09,"ten":"Bẫy: máy chủ đúng, màn hình sai"},
-        {"t":386.09,"den":406.57,"ten":"Bảng tóm tắt, đo trên cả hai bản"},
-        {"t":406.57,"den":431.41,"ten":"Liên kết chéo"},
-        {"t":431.41,"den":446.05,"ten":"Thuật ngữ"},
-        {"t":446.05,"den":497.06,"ten":"Tự kiểm ba câu"},
-        {"t":497.06,"den":540.66,"ten":"Thực hành & tóm tắt"}
+        {"t":0,"den":117.76,"ten":"Chào bạn · nối từ bài 10.1 · Bài này mang về gì"},
+        {"t":117.76,"den":202.87,"ten":"Chạy thật: một tệp, Next.js 14 và 16"},
+        {"t":202.87,"den":278.91,"ten":"Chạy thật: ba tuỳ chọn, từng request · Ba tuỳ chọn: số đo"},
+        {"t":278.91,"den":354.96,"ten":"Gộp request khác Data Cache · Bốn tầng cache"},
+        {"t":354.96,"den":431.41,"ten":"Router Cache: số đo · Bẫy: máy chủ đúng, màn hình sai"},
+        {"t":431.41,"den":540.66,"ten":"Thuật ngữ · Tự kiểm ba câu"}
       ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 10.2 của khoá Next.js."},
@@ -874,27 +899,13 @@
         {"t":526.93,"vi":"Bạn mở Code Lab Next.js, module cache, revalidate và độ mới của dữ liệu để luyện. Bài sau: revalidate, làm mới theo thời gian và theo yêu cầu."}
       ]
     },
-    "nextjs-10-3-revalidate": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/10-fetch-cache-revalidate/10-03-revalidate-a36cfa45.mp4","durationSec":499.48,"nguonCau":"thoigian",
+    "nextjs-10-3-revalidate": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/10-fetch-cache-revalidate/10-03-revalidate-a36cfa45.mp4","durationSec":499.48,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":28.47,"ten":"Chào bạn · nối từ bài 10.2"},
-        {"t":28.47,"den":39.67,"ten":"Bìa"},
-        {"t":39.67,"den":62.13,"ten":"Bài này mang về gì"},
-        {"t":62.13,"den":103.8,"ten":"Mô phỏng: đồng hồ cát và cái chuông"},
-        {"t":103.8,"den":127.2,"ten":"Theo thời gian: tối đa N giây một lần"},
-        {"t":127.2,"den":170.72,"ten":"Chạy thật: ai thấy trang cũ, ai phải chờ"},
-        {"t":170.72,"den":181.23,"ten":"Số đo: ai thấy trang cũ"},
-        {"t":181.22,"den":190.32,"ten":"Cùng câu chuyện, vẽ thành dòng thời gian"},
-        {"t":190.32,"den":208.75,"ten":"Theo yêu cầu: xoá đúng lúc dữ liệu đổi"},
-        {"t":208.75,"den":234.88,"ten":"Bẫy Next.js 16: revalidateTag cần hai đối số"},
-        {"t":234.88,"den":275.76,"ten":"Chạy thật: theo nhãn và theo đường dẫn"},
-        {"t":275.76,"den":283.79,"ten":"Số đo: theo nhãn và theo đường dẫn"},
-        {"t":283.79,"den":301.31,"ten":"Cách nào hợp với dữ liệu của bạn"},
-        {"t":301.31,"den":331.79,"ten":"Chạy thật: lối tắt force-dynamic tốn bao nhiêu"},
-        {"t":331.79,"den":341.57,"ten":"Bẫy force-dynamic: số đo"},
-        {"t":341.57,"den":364.1,"ten":"Bảng tóm tắt"},
-        {"t":364.1,"den":383.91,"ten":"Liên kết chéo"},
-        {"t":383.91,"den":399.98,"ten":"Thuật ngữ"},
-        {"t":399.98,"den":453.46,"ten":"Tự kiểm ba câu"},
+        {"t":0,"den":103.8,"ten":"Chào bạn · nối từ bài 10.2 · Bài này mang về gì"},
+        {"t":103.8,"den":181.23,"ten":"Theo thời gian: tối đa N giây một lần"},
+        {"t":181.22,"den":275.76,"ten":"Cùng câu chuyện, vẽ thành dòng thời gian"},
+        {"t":275.76,"den":364.1,"ten":"Số đo: theo nhãn và theo đường dẫn"},
+        {"t":364.1,"den":453.46,"ten":"Liên kết chéo · Thuật ngữ"},
         {"t":453.45,"den":499.48,"ten":"Thực hành & tóm tắt"}
       ],
       "cues": [
@@ -953,28 +964,13 @@
         {"t":486.02,"vi":"Bạn mở Code Lab Next.js, module cache, revalidate và độ mới của dữ liệu để luyện. Bài sau: streaming, đừng bắt cả trang chờ truy vấn chậm nhất."}
       ]
     },
-    "nextjs-10-4-streaming-suspense": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/10-fetch-cache-revalidate/10-04-streaming-suspense-865c9b90.mp4","durationSec":488.47,"nguonCau":"thoigian",
+    "nextjs-10-4-streaming-suspense": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/10-fetch-cache-revalidate/10-04-streaming-suspense-865c9b90.mp4","durationSec":488.47,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":30.34,"ten":"Chào bạn · nối từ bài 10.3"},
-        {"t":30.34,"den":42.92,"ten":"Bìa"},
-        {"t":42.92,"den":65.86,"ten":"Bài này mang về gì"},
-        {"t":65.86,"den":109.25,"ten":"Mô phỏng: đường ống HTML, theo mốc thật"},
-        {"t":109.25,"den":126.79,"ten":"Vấn đề: byte đầu chờ truy vấn chậm nhất"},
-        {"t":126.79,"den":151.78,"ten":"Cần gạt 1: loading.tsx"},
-        {"t":151.78,"den":168.68,"ten":"Cần gạt 2: Suspense quanh phần chậm"},
-        {"t":168.68,"den":206.67,"ten":"Chạy thật: ba trang, từng mẩu, ảnh lúc 300 ms"},
-        {"t":206.67,"den":213.37,"ten":"Đặt cạnh nhau"},
-        {"t":213.37,"den":233.12,"ten":"Streaming nằm trong HTML ra sao"},
-        {"t":233.12,"den":252.45,"ten":"Bẫy: tắt JavaScript thì fallback ở mãi"},
-        {"t":252.44,"den":281.53,"ten":"Chạy thật: mã của bài, chép nguyên"},
-        {"t":281.53,"den":288.99,"ten":"Mã của bài, chạy nguyên văn"},
-        {"t":288.99,"den":327.98,"ten":"Mô phỏng: hộp anh em và hộp lồng nhau"},
-        {"t":327.98,"den":336.57,"ten":"Thác nước giữa các component"},
-        {"t":336.57,"den":357.22,"ten":"Đặt ranh giới ở đâu"},
-        {"t":357.22,"den":365.01,"ten":"Bảng tóm tắt"},
-        {"t":365.01,"den":383.9,"ten":"Liên kết chéo"},
-        {"t":383.9,"den":397.61,"ten":"Thuật ngữ"},
-        {"t":397.6,"den":445.65,"ten":"Tự kiểm ba câu"},
+        {"t":0,"den":109.25,"ten":"Chào bạn · nối từ bài 10.3 · Bài này mang về gì"},
+        {"t":109.25,"den":206.67,"ten":"Vấn đề: byte đầu chờ truy vấn chậm nhất"},
+        {"t":206.67,"den":288.99,"ten":"Đặt cạnh nhau · Streaming nằm trong HTML ra sao"},
+        {"t":288.99,"den":365.01,"ten":"Mô phỏng: hộp anh em và hộp lồng nhau"},
+        {"t":365.01,"den":445.65,"ten":"Liên kết chéo · Thuật ngữ"},
         {"t":445.65,"den":488.47,"ten":"Thực hành & tóm tắt"}
       ],
       "cues": [
@@ -1034,28 +1030,13 @@
         {"t":476.5,"vi":"Bạn mở Code Lab Next.js, module streaming và giao diện tải dần để luyện. Bài sau: khi cache cắn, dữ liệu cũ trong thực tế."}
       ]
     },
-    "nextjs-10-5-staleness-thuc-te": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/10-fetch-cache-revalidate/10-05-staleness-thuc-te-627c821d.mp4","durationSec":499.54,"nguonCau":"thoigian",
+    "nextjs-10-5-staleness-thuc-te": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/10-fetch-cache-revalidate/10-05-staleness-thuc-te-627c821d.mp4","durationSec":499.54,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":28.09,"ten":"Chào bạn · nối từ bài 10.4"},
-        {"t":28.09,"den":39.88,"ten":"Bìa"},
-        {"t":39.88,"den":61.22,"ten":"Bài này mang về gì"},
-        {"t":61.22,"den":78.55,"ten":"Triệu chứng: sửa DB rồi, trang vẫn cũ"},
-        {"t":78.55,"den":121.57,"ten":"Mô phỏng: máy dò bốn tầng"},
-        {"t":121.57,"den":128.91,"ten":"Bản cũ nằm ở đâu, và dấu hiệu"},
-        {"t":128.91,"den":187.96,"ten":"Chạy thật: đo chính trang cuongthai.com"},
-        {"t":187.96,"den":196.23,"ten":"Đo trang này: danh sách cache hai phút"},
-        {"t":196.23,"den":213.43,"ten":"Mạng phân phối lưu cả lỗi 404"},
-        {"t":213.43,"den":247.13,"ten":"Mô phỏng: ngăn kéo quên tên chủ"},
-        {"t":247.13,"den":297.06,"ten":"Chạy thật: hai cookie, ba trang"},
-        {"t":297.06,"den":306.47,"ten":"Lá chắn của Next.js"},
-        {"t":306.47,"den":315.04,"ten":"Chỗ rò: cache tự quản"},
-        {"t":315.04,"den":325.76,"ten":"Khuôn của kho trên Next.js 14"},
-        {"t":325.76,"den":344.93,"ten":"Ngân sách độ cũ cho từng màn hình"},
-        {"t":344.93,"den":367.79,"ten":"Danh sách kiểm"},
-        {"t":367.79,"den":389.96,"ten":"Liên kết chéo"},
-        {"t":389.96,"den":402.97,"ten":"Thuật ngữ"},
-        {"t":402.97,"den":455.68,"ten":"Tự kiểm ba câu"},
-        {"t":455.68,"den":499.54,"ten":"Thực hành & tóm tắt"}
+        {"t":0,"den":121.57,"ten":"Chào bạn · nối từ bài 10.4 · Bài này mang về gì"},
+        {"t":121.57,"den":213.43,"ten":"Bản cũ nằm ở đâu, và dấu hiệu"},
+        {"t":213.43,"den":297.06,"ten":"Mô phỏng: ngăn kéo quên tên chủ"},
+        {"t":297.06,"den":389.96,"ten":"Lá chắn của Next.js · Chỗ rò: cache tự quản"},
+        {"t":389.96,"den":499.54,"ten":"Thuật ngữ · Tự kiểm ba câu"}
       ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 10.5, bài cuối của chương 10."},
@@ -1113,31 +1094,14 @@
         {"t":484.58,"vi":"Bạn mở Code Lab Next.js, module cache, revalidate và độ mới của dữ liệu để luyện. Hết chương 10. Chương sau: định tuyến chuyên sâu, bắt đầu từ segment catch-all."}
       ]
     },
-    "nextjs-11-1-catch-all": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/11-dinh-tuyen-chuyen-sau/11-01-catch-all-a9759f55.mp4","durationSec":606.19,"nguonCau":"thoigian",
+    "nextjs-11-1-catch-all": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/11-dinh-tuyen-chuyen-sau/11-01-catch-all-a9759f55.mp4","durationSec":606.19,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":32.55,"ten":"Chào bạn · nối từ bài 10.5"},
-        {"t":32.55,"den":46.75,"ten":"Bìa"},
-        {"t":46.75,"den":68.59,"ten":"Bài này mang về gì"},
-        {"t":68.59,"den":107.11,"ten":"Mô phỏng: đoàn toa URL và ba cái cổng"},
-        {"t":107.11,"den":127.86,"ten":"Một đoạn hay sâu bao nhiêu cũng được"},
-        {"t":127.86,"den":170.66,"ten":"Gõ thật: đoạn mã của bài vào dự án TypeScript"},
-        {"t":170.65,"den":181.45,"ten":"Mã của bài, chép nguyên: TS7031"},
-        {"t":181.45,"den":210.11,"ten":"Chromium thật: bốn URL, hai trang"},
-        {"t":210.11,"den":220.52,"ten":"Catch-all ba chấm: đo thật"},
-        {"t":220.52,"den":230.75,"ten":"Optional catch-all: đo thật"},
-        {"t":230.75,"den":253.86,"ten":"Ma trận: ba dạng, cùng các URL"},
-        {"t":253.86,"den":277.3,"ten":"Cụ thể hơn thì thắng"},
-        {"t":277.3,"den":298.9,"ten":"Lỗi build: page.tsx cạnh hai lớp ngoặc"},
-        {"t":298.9,"den":324.06,"ten":"Chuỗi, và còn mã hoá"},
-        {"t":324.06,"den":366,"ten":"Mô phỏng: dây chuyền từ URL tới cơ sở dữ liệu"},
-        {"t":366,"den":401.96,"ten":"Chạy thật: Prisma, NaN và trang năm trăm"},
-        {"t":401.96,"den":412.93,"ten":"Bẫy Number: năm trăm lẽ ra là bốn trăm lẻ bốn"},
-        {"t":412.93,"den":440.04,"ten":"Chốt chặn hai dòng"},
-        {"t":440.04,"den":469.27,"ten":"Trên cuongthai.com"},
-        {"t":469.27,"den":496.7,"ten":"Liên kết chéo"},
-        {"t":496.7,"den":510.78,"ten":"Thuật ngữ"},
-        {"t":510.78,"den":559.57,"ten":"Tự kiểm ba câu"},
-        {"t":559.57,"den":606.19,"ten":"Thực hành & tóm tắt"}
+        {"t":0,"den":107.11,"ten":"Chào bạn · nối từ bài 10.5 · Bài này mang về gì"},
+        {"t":107.11,"den":210.11,"ten":"Một đoạn hay sâu bao nhiêu cũng được"},
+        {"t":210.11,"den":298.9,"ten":"Catch-all ba chấm: đo thật · Optional catch-all: đo thật"},
+        {"t":298.9,"den":401.96,"ten":"Chuỗi, và còn mã hoá"},
+        {"t":401.96,"den":496.7,"ten":"Bẫy Number: năm trăm lẽ ra là bốn trăm lẻ bốn"},
+        {"t":496.7,"den":606.19,"ten":"Thuật ngữ · Tự kiểm ba câu"}
       ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 11.1, bài mở đầu chương 11 của khoá Next.js: định tuyến chuyên sâu."},
@@ -1203,28 +1167,13 @@
         {"t":593.85,"vi":"Bạn mở Code Lab Next.js, module định tuyến nâng cao để luyện. Bài sau: generateStaticParams, dựng sẵn các route động lúc build."}
       ]
     },
-    "nextjs-11-2-generate-static-params": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/11-dinh-tuyen-chuyen-sau/11-02-generate-static-params-2bb6397e.mp4","durationSec":523.2,"nguonCau":"thoigian",
+    "nextjs-11-2-generate-static-params": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/11-dinh-tuyen-chuyen-sau/11-02-generate-static-params-2bb6397e.mp4","durationSec":523.2,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":28.51,"ten":"Chào bạn · nối từ bài 11.1"},
-        {"t":28.51,"den":40.38,"ten":"Bìa"},
-        {"t":40.37,"den":65.15,"ten":"Bài này mang về gì"},
-        {"t":65.15,"den":116.03,"ten":"Mô phỏng: tiệm bánh nướng sẵn"},
-        {"t":116.03,"den":131.79,"ten":"Route động, trang tĩnh"},
-        {"t":131.79,"den":173.38,"ten":"Gõ thật: generateStaticParams và lần build"},
-        {"t":173.38,"den":184.46,"ten":"Mã của bài: thêm kiểu và một API giả"},
-        {"t":184.46,"den":194.54,"ten":"Đo thật: next build làm gì"},
-        {"t":194.54,"den":212.99,"ten":"Đo thật: người xem nhận HTML của lần build"},
-        {"t":212.99,"den":254.75,"ten":"Chạy thật: khoá thêm sau build, và bốn trăm lẻ bốn bị lưu"},
-        {"t":254.75,"den":263.34,"ten":"Slug thêm sau build"},
-        {"t":263.34,"den":281.88,"ten":"Bất ngờ: bốn trăm lẻ bốn cũng được lưu"},
-        {"t":281.88,"den":301.79,"ten":"dynamicParams bằng false: danh sách trắng"},
-        {"t":301.79,"den":337.54,"ten":"Mô phỏng: kệ trang cao dần theo bảng"},
-        {"t":337.54,"den":348.28,"ten":"Bẫy: dựng sẵn mọi hàng"},
-        {"t":348.28,"den":369.27,"ten":"Bốn luật, đã đo"},
-        {"t":369.27,"den":391.73,"ten":"Trên cuongthai.com"},
-        {"t":391.73,"den":413.16,"ten":"Liên kết chéo"},
-        {"t":413.16,"den":428.73,"ten":"Thuật ngữ"},
-        {"t":428.73,"den":476.13,"ten":"Tự kiểm ba câu"},
+        {"t":0,"den":116.03,"ten":"Chào bạn · nối từ bài 11.1 · Bài này mang về gì"},
+        {"t":116.03,"den":194.54,"ten":"Route động, trang tĩnh"},
+        {"t":194.54,"den":281.88,"ten":"Đo thật: người xem nhận HTML của lần build"},
+        {"t":281.88,"den":369.27,"ten":"dynamicParams bằng false: danh sách trắng"},
+        {"t":369.27,"den":476.13,"ten":"Trên cuongthai.com · Liên kết chéo"},
         {"t":476.13,"den":523.2,"ten":"Thực hành & tóm tắt"}
       ],
       "cues": [
@@ -1286,30 +1235,14 @@
         {"t":511.09,"vi":"Bạn mở Code Lab Next.js, module định tuyến nâng cao để luyện. Bài sau: Route Handler, một API nằm ngay cạnh các trang của bạn."}
       ]
     },
-    "nextjs-11-3-route-handlers": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/11-dinh-tuyen-chuyen-sau/11-03-route-handlers-97b4da4f.mp4","durationSec":570.08,"nguonCau":"thoigian",
+    "nextjs-11-3-route-handlers": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/11-dinh-tuyen-chuyen-sau/11-03-route-handlers-97b4da4f.mp4","durationSec":570.08,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":32.04,"ten":"Chào bạn · nối từ bài 11.2"},
-        {"t":32.04,"den":43.14,"ten":"Bìa"},
-        {"t":43.14,"den":63.8,"ten":"Bài này mang về gì"},
-        {"t":63.8,"den":105.1,"ten":"Mô phỏng: quầy phát hàng chỉ nhận GET"},
-        {"t":105.1,"den":126.47,"ten":"Một thư mục có thể là endpoint"},
-        {"t":126.47,"den":167.54,"ten":"Gõ thật: hai đoạn mã của bài qua tsc"},
-        {"t":167.54,"den":176.07,"ten":"Mã của bài, biên dịch thật"},
-        {"t":176.07,"den":187.18,"ten":"Đo thật: những phương thức không viết"},
-        {"t":187.18,"den":234.2,"ten":"Chạy thật: GET có bị cache không, 16 và 14"},
-        {"t":234.2,"den":243.89,"ten":"GET có bị cache không: 16 và 14"},
-        {"t":243.89,"den":283.1,"ten":"Chạy thật: body đưa thẳng vào cơ sở dữ liệu"},
-        {"t":283.1,"den":294.76,"ten":"POST: body thẳng vào cơ sở dữ liệu"},
-        {"t":294.76,"den":307.24,"ten":"page.tsx cạnh route.ts: lỗi build"},
-        {"t":307.24,"den":338.77,"ten":"Khi nào thật sự cần Route Handler"},
-        {"t":338.77,"den":378.82,"ten":"Mô phỏng và chạy thật: proxy giấu khoá"},
-        {"t":378.82,"den":388.6,"ten":"Proxy giấu khoá: đo thật"},
-        {"t":388.6,"den":412.08,"ten":"Route Handler hay Server Action"},
-        {"t":412.08,"den":435.29,"ten":"Trên cuongthai.com"},
-        {"t":435.29,"den":457.43,"ten":"Liên kết chéo"},
-        {"t":457.43,"den":472.71,"ten":"Thuật ngữ"},
-        {"t":472.71,"den":522.38,"ten":"Tự kiểm ba câu"},
-        {"t":522.38,"den":570.08,"ten":"Thực hành & tóm tắt"}
+        {"t":0,"den":105.1,"ten":"Chào bạn · nối từ bài 11.2 · Bài này mang về gì"},
+        {"t":105.1,"den":187.18,"ten":"Một thư mục có thể là endpoint"},
+        {"t":187.18,"den":283.1,"ten":"Chạy thật: GET có bị cache không, 16 và 14"},
+        {"t":283.1,"den":378.82,"ten":"POST: body thẳng vào cơ sở dữ liệu"},
+        {"t":378.82,"den":457.43,"ten":"Proxy giấu khoá: đo thật · Route Handler hay Server Action"},
+        {"t":457.43,"den":570.08,"ten":"Thuật ngữ · Tự kiểm ba câu"}
       ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 11.3 của khoá Next.js."},
@@ -1372,27 +1305,13 @@
         {"t":557.53,"vi":"Bạn mở Code Lab Next.js, module API route và fullstack để luyện. Bài sau: parallel route, nhiều vùng độc lập trong một layout."}
       ]
     },
-    "nextjs-11-4-parallel-routes": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/11-dinh-tuyen-chuyen-sau/11-04-parallel-routes-90330305.mp4","durationSec":496.52,"nguonCau":"thoigian",
+    "nextjs-11-4-parallel-routes": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/11-dinh-tuyen-chuyen-sau/11-04-parallel-routes-90330305.mp4","durationSec":496.52,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":30.01,"ten":"Chào bạn · nối từ bài 11.3"},
-        {"t":30.01,"den":40.63,"ten":"Bìa"},
-        {"t":40.63,"den":65.22,"ten":"Bài này mang về gì"},
-        {"t":65.21,"den":100.16,"ten":"Mô phỏng: bảng điều khiển ba ngăn"},
-        {"t":100.16,"den":125.23,"ten":"Khe là thư mục mang a còng"},
-        {"t":125.23,"den":157.21,"ten":"Gõ thật: layout của bài qua tsc"},
-        {"t":157.21,"den":164.59,"ten":"Layout của bài: TS7031 ba lần"},
-        {"t":164.59,"den":196.22,"ten":"Chạy thật: mỗi khe stream riêng"},
-        {"t":196.21,"den":204.51,"ten":"Đo thật: mỗi khe stream riêng"},
-        {"t":204.51,"den":225.7,"ten":"Đo thật: mỗi khe hỏng riêng"},
-        {"t":225.7,"den":279.51,"ten":"Chạy thật: thiếu default.tsx, 16 và 14"},
-        {"t":279.51,"den":293.77,"ten":"default.tsx: bản 16 không cho build"},
-        {"t":293.77,"den":303.68,"ten":"Cùng thư mục trên Next.js 14"},
-        {"t":303.67,"den":336.63,"ten":"Mô phỏng: điều hướng mềm và tải cứng"},
-        {"t":336.63,"den":345.78,"ten":"Mềm và cứng: một URL, hai màn hình"},
-        {"t":345.78,"den":365.36,"ten":"Khi nào parallel route đáng dùng"},
-        {"t":365.36,"den":388.19,"ten":"Liên kết chéo"},
-        {"t":388.19,"den":403.2,"ten":"Thuật ngữ"},
-        {"t":403.2,"den":446.88,"ten":"Tự kiểm ba câu"},
+        {"t":0,"den":100.16,"ten":"Chào bạn · nối từ bài 11.3 · Bài này mang về gì"},
+        {"t":100.16,"den":196.22,"ten":"Khe là thư mục mang a còng · Gõ thật: layout của bài qua tsc"},
+        {"t":196.21,"den":279.51,"ten":"Đo thật: mỗi khe stream riêng · Đo thật: mỗi khe hỏng riêng"},
+        {"t":279.51,"den":365.36,"ten":"default.tsx: bản 16 không cho build"},
+        {"t":365.36,"den":446.88,"ten":"Liên kết chéo · Thuật ngữ"},
         {"t":446.88,"den":496.52,"ten":"Thực hành & tóm tắt"}
       ],
       "cues": [
@@ -1450,30 +1369,14 @@
         {"t":485.88,"vi":"Bạn mở Code Lab Next.js, module định tuyến nâng cao để luyện. Bài sau: intercepting route, mẫu modal."}
       ]
     },
-    "nextjs-12-1-server-action-la-gi": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/12-server-actions/12-01-server-action-la-gi-3e088c8b.mp4","durationSec":595.8,"nguonCau":"thoigian",
+    "nextjs-12-1-server-action-la-gi": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/12-server-actions/12-01-server-action-la-gi-3e088c8b.mp4","durationSec":595.8,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":30.42,"ten":"Chào bạn · nối từ bài 11.5"},
-        {"t":30.42,"den":42.42,"ten":"Bìa"},
-        {"t":42.42,"den":63.41,"ten":"Bài này mang về gì"},
-        {"t":63.41,"den":106.8,"ten":"Mô phỏng: nút chuông gọi bếp"},
-        {"t":106.8,"den":128.36,"ten":"Cách cũ so với Server Action"},
-        {"t":128.36,"den":150.71,"ten":"Chỉ thị use server đặt ở đâu"},
-        {"t":150.71,"den":196.98,"ten":"Gõ thật: đoạn mã của bài qua tsc"},
-        {"t":196.98,"den":205.58,"ten":"Mã của bài, biên dịch thật"},
-        {"t":205.58,"den":245.83,"ten":"Chạy thật: trình duyệt nhận được gì"},
-        {"t":245.83,"den":257.55,"ten":"Thứ đi xuống: một id"},
-        {"t":257.55,"den":303.35,"ten":"Chạy thật: hai cách gọi trong Chromium"},
-        {"t":303.35,"den":314.19,"ten":"Hai cách gọi, một kiểu yêu cầu"},
-        {"t":314.19,"den":348.61,"ten":"Mô phỏng và đo: lần lượt từng lời gọi"},
-        {"t":348.61,"den":356.77,"ten":"Lần lượt từng lời gọi"},
-        {"t":356.77,"den":380.08,"ten":"Tham số phải đóng gói được"},
-        {"t":380.07,"den":409.83,"ten":"Chạy thật: curl gọi thẳng action"},
-        {"t":409.82,"den":421.57,"ten":"Một endpoint công khai"},
-        {"t":421.57,"den":442.97,"ten":"Id của action: ai có, khi nào đổi"},
-        {"t":442.97,"den":468.33,"ten":"Trên cuongthai.com"},
-        {"t":468.33,"den":489.74,"ten":"Liên kết chéo"},
-        {"t":489.74,"den":504.9,"ten":"Thuật ngữ"},
-        {"t":504.9,"den":550.02,"ten":"Tự kiểm ba câu"},
+        {"t":0,"den":106.8,"ten":"Chào bạn · nối từ bài 11.5 · Bài này mang về gì"},
+        {"t":106.8,"den":196.98,"ten":"Cách cũ so với Server Action · Chỉ thị use server đặt ở đâu"},
+        {"t":196.98,"den":303.35,"ten":"Mã của bài, biên dịch thật"},
+        {"t":303.35,"den":380.08,"ten":"Hai cách gọi, một kiểu yêu cầu"},
+        {"t":380.07,"den":468.33,"ten":"Chạy thật: curl gọi thẳng action · Một endpoint công khai"},
+        {"t":468.33,"den":550.02,"ten":"Liên kết chéo · Thuật ngữ"},
         {"t":550.02,"den":595.8,"ten":"Thực hành & tóm tắt"}
       ],
       "cues": [
@@ -1541,28 +1444,13 @@
         {"t":584.07,"vi":"Bạn mở Code Lab Next.js, module Server Action và mẫu ghi dữ liệu để luyện. Bài sau: form gửi tới một Server Action."}
       ]
     },
-    "nextjs-12-2-form-action": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/12-server-actions/12-02-form-action-842634df.mp4","durationSec":513.59,"nguonCau":"thoigian",
+    "nextjs-12-2-form-action": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/12-server-actions/12-02-form-action-842634df.mp4","durationSec":513.59,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":30.09,"ten":"Chào bạn · nối từ bài 12.1"},
-        {"t":30.09,"den":41.72,"ten":"Bìa"},
-        {"t":41.71,"den":59.9,"ten":"Bài này mang về gì"},
-        {"t":59.9,"den":95.9,"ten":"Mô phỏng: tờ phiếu FormData"},
-        {"t":95.9,"den":118.26,"ten":"Mã của bài, biên dịch thật"},
-        {"t":118.26,"den":158.37,"ten":"Gõ thật: form của bài qua tsc"},
-        {"t":158.37,"den":179.27,"ten":"Trước khi có JavaScript"},
-        {"t":179.27,"den":211.55,"ten":"Chạy thật: FormData chứa gì"},
-        {"t":211.55,"den":219.38,"ten":"FormData chứa gì"},
-        {"t":219.38,"den":257.41,"ten":"Mô phỏng: một form, hai làn"},
-        {"t":257.41,"den":270.28,"ten":"Bật và tắt JavaScript"},
-        {"t":270.28,"den":301.5,"ten":"Chạy thật: tắt JavaScript và curl"},
-        {"t":301.5,"den":311.98,"ten":"Không JavaScript, nhìn bằng curl"},
-        {"t":311.98,"den":328.57,"ten":"Tham số thêm: bind"},
-        {"t":328.57,"den":366.81,"ten":"Chạy thật: id truyền bằng bind có bị giấu không"},
-        {"t":366.81,"den":378.57,"ten":"Id truyền bằng bind: không bị giấu"},
-        {"t":378.57,"den":397.05,"ten":"Bẫy: trường không có mặt"},
-        {"t":397.05,"den":413.86,"ten":"Liên kết chéo"},
-        {"t":413.86,"den":427.48,"ten":"Thuật ngữ"},
-        {"t":427.48,"den":472.39,"ten":"Tự kiểm ba câu"},
+        {"t":0,"den":95.9,"ten":"Chào bạn · nối từ bài 12.1 · Bài này mang về gì"},
+        {"t":95.9,"den":179.27,"ten":"Mã của bài, biên dịch thật · Gõ thật: form của bài qua tsc"},
+        {"t":179.27,"den":257.41,"ten":"Chạy thật: FormData chứa gì · FormData chứa gì"},
+        {"t":257.41,"den":366.81,"ten":"Bật và tắt JavaScript · Chạy thật: tắt JavaScript và curl"},
+        {"t":366.81,"den":472.39,"ten":"Id truyền bằng bind: không bị giấu"},
         {"t":472.39,"den":513.59,"ten":"Thực hành & tóm tắt"}
       ],
       "cues": [
@@ -1627,28 +1515,13 @@
         {"t":501.92,"vi":"Bạn mở Code Lab Next.js, module Server Action và mẫu ghi dữ liệu để luyện. Bài sau: sau khi ghi, làm mới cache."}
       ]
     },
-    "nextjs-12-3-revalidate-sau-ghi": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/12-server-actions/12-03-revalidate-sau-ghi-06fd2ccc.mp4","durationSec":468.13,"nguonCau":"thoigian",
+    "nextjs-12-3-revalidate-sau-ghi": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/12-server-actions/12-03-revalidate-sau-ghi-06fd2ccc.mp4","durationSec":468.13,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":28.43,"ten":"Chào bạn · nối từ bài 12.2"},
-        {"t":28.43,"den":38.72,"ten":"Bìa"},
-        {"t":38.72,"den":58.36,"ten":"Bài này mang về gì"},
-        {"t":58.36,"den":91.28,"ten":"Mô phỏng: bảng giá dán cửa"},
-        {"t":91.28,"den":116.75,"ten":"Mã của bài, biên dịch thật"},
-        {"t":116.75,"den":151.63,"ten":"Chạy thật: ghi mà không revalidate"},
-        {"t":151.63,"den":161.93,"ten":"Ghi mà không revalidate"},
-        {"t":161.93,"den":183.57,"ten":"Chạy thật: thêm revalidatePath"},
-        {"t":183.57,"den":193.98,"ten":"revalidatePath dựng lại ngay"},
-        {"t":193.98,"den":215.24,"ten":"Path hay tag"},
-        {"t":215.24,"den":243.23,"ten":"Mô phỏng: hai cách xé tờ dán"},
-        {"t":243.23,"den":277.55,"ten":"Chạy thật: revalidateTag max và updateTag"},
-        {"t":277.55,"den":285.65,"ten":"revalidateTag max và updateTag"},
-        {"t":285.65,"den":313.05,"ten":"Chạy thật: redirect trong try catch"},
-        {"t":313.04,"den":320.23,"ten":"redirect ném lỗi"},
-        {"t":320.23,"den":343.5,"ten":"Trên cuongthai.com"},
-        {"t":343.5,"den":361.72,"ten":"Liên kết chéo"},
-        {"t":361.71,"den":377.68,"ten":"Thuật ngữ"},
-        {"t":377.68,"den":424.01,"ten":"Tự kiểm ba câu"},
-        {"t":424.01,"den":468.13,"ten":"Thực hành & tóm tắt"}
+        {"t":0,"den":91.28,"ten":"Chào bạn · nối từ bài 12.2 · Bài này mang về gì"},
+        {"t":91.28,"den":183.57,"ten":"Mã của bài, biên dịch thật"},
+        {"t":183.57,"den":277.55,"ten":"revalidatePath dựng lại ngay · Path hay tag"},
+        {"t":277.55,"den":361.72,"ten":"revalidateTag max và updateTag"},
+        {"t":361.71,"den":468.13,"ten":"Thuật ngữ · Tự kiểm ba câu"}
       ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 12.3 của khoá Next.js."},
@@ -1704,8 +1577,14 @@
         {"t":456.76,"vi":"Bạn mở Code Lab Next.js, module cache và revalidate để luyện. Bài sau: trạng thái chờ và lỗi với useActionState."}
       ]
     },
-    "nextjs-12-4-useactionstate-useformstatus": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/12-server-actions/12-04-useactionstate-useformstatus-9c0a95e5.mp4","durationSec":403.5,"nguonCau":"srt",
-      "parts": [],
+    "nextjs-12-4-useactionstate-useformstatus": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/12-server-actions/12-04-useactionstate-useformstatus-9c0a95e5.mp4","durationSec":403.5,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":95.51,"ten":"Chào bạn · nối từ bài 12.3 · Bài này mang về gì"},
+        {"t":95.51,"den":172.35,"ten":"Chạy thật: pending giữa chừng · pending, đo giữa chừng"},
+        {"t":172.35,"den":259.57,"ten":"Mô phỏng: đèn báo bận trong hộp form"},
+        {"t":259.57,"den":361.64,"ten":"Trả lỗi về, đừng ném · Hai hook, hai câu hỏi"},
+        {"t":361.64,"den":403.5,"ten":"Thực hành & tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 12.4 của khoá Next.js."},
         {"t":10.01,"vi":"Bài trước: ghi xong phải revalidate thứ đang hiện dữ liệu, và redirect ném lỗi nên phải đặt ngoài try catch."},
@@ -1780,27 +1659,13 @@
         {"t":391.08,"vi":"Bạn mở Code Lab Next.js, module Server Action và mẫu ghi dữ liệu để luyện. Bài sau: bảo mật, vì action là endpoint công khai."}
       ]
     },
-    "nextjs-12-5-bao-mat-action": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/12-server-actions/12-05-bao-mat-action-550b117a.mp4","durationSec":457.36,"nguonCau":"thoigian",
+    "nextjs-12-5-bao-mat-action": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/12-server-actions/12-05-bao-mat-action-550b117a.mp4","durationSec":457.36,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":30.87,"ten":"Chào bạn · nối từ bài 12.4"},
-        {"t":30.87,"den":42.6,"ten":"Bìa"},
-        {"t":42.6,"den":62.36,"ten":"Bài này mang về gì"},
-        {"t":62.36,"den":94.89,"ten":"Mô phỏng: quầy có hai cửa"},
-        {"t":94.89,"den":117.98,"ten":"Mã của bài, biên dịch thật"},
-        {"t":117.98,"den":130.39,"ten":"Giấu nút không phải là bảo vệ"},
-        {"t":130.39,"den":173.51,"ten":"Chạy thật: tấn công action A và B"},
-        {"t":173.51,"den":182.24,"ten":"Action A bị tấn công"},
-        {"t":182.24,"den":193.26,"ten":"Action B: tham số userId"},
-        {"t":193.26,"den":228.27,"ten":"Chạy thật: bản đúng chịu cùng đòn"},
-        {"t":228.27,"den":238.53,"ten":"Action C: phiên, truy vấn khoanh, kiểm đầu vào"},
-        {"t":238.53,"den":278.46,"ten":"Chạy thật: Next.js tự chặn gì"},
-        {"t":278.46,"den":291.29,"ten":"Next.js tự kiểm gì, và không bao giờ kiểm gì"},
-        {"t":291.29,"den":311.38,"ten":"Bốn câu hỏi cho mọi action ghi dữ liệu"},
-        {"t":311.38,"den":330.42,"ten":"Trên cuongthai.com"},
-        {"t":330.42,"den":354.22,"ten":"Liên kết chéo"},
-        {"t":354.22,"den":367.51,"ten":"Thuật ngữ"},
-        {"t":367.51,"den":410.16,"ten":"Tự kiểm ba câu"},
-        {"t":410.16,"den":457.36,"ten":"Thực hành & tóm tắt"}
+        {"t":0,"den":94.89,"ten":"Chào bạn · nối từ bài 12.4 · Bài này mang về gì"},
+        {"t":94.89,"den":173.51,"ten":"Mã của bài, biên dịch thật · Giấu nút không phải là bảo vệ"},
+        {"t":173.51,"den":278.46,"ten":"Action A bị tấn công · Action B: tham số userId"},
+        {"t":278.46,"den":354.22,"ten":"Next.js tự kiểm gì, và không bao giờ kiểm gì"},
+        {"t":354.22,"den":457.36,"ten":"Thuật ngữ · Tự kiểm ba câu"}
       ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 12.5, bài cuối của chương Server Action."},
@@ -1852,27 +1717,13 @@
         {"t":445,"vi":"Bạn mở Code Lab Next.js, module Server Action và mẫu ghi dữ liệu để luyện. Chương sau: làm đẹp giao diện, bắt đầu với Tailwind."}
       ]
     },
-    "nextjs-13-1-styling-va-tailwind": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/13-styling-tailwind/13-01-styling-va-tailwind-48978ed0.mp4","durationSec":514.41,"nguonCau":"thoigian",
+    "nextjs-13-1-styling-va-tailwind": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/13-styling-tailwind/13-01-styling-va-tailwind-48978ed0.mp4","durationSec":514.41,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":31.62,"ten":"Chào bạn · mở giai đoạn 4"},
-        {"t":31.62,"den":42.9,"ten":"Bìa"},
-        {"t":42.9,"den":63.26,"ten":"Bài này mang về gì"},
-        {"t":63.26,"den":87.23,"ten":"Một cái nút, bốn cách tô"},
-        {"t":87.23,"den":106.83,"ten":"Đo thật: HTML và CSS sau build"},
-        {"t":106.83,"den":145.26,"ten":"Chạy thật: CSS Module hỏng, rồi sửa"},
-        {"t":145.26,"den":157.79,"ten":"Dòng mẫu làm hỏng CSS Module"},
-        {"t":157.79,"den":182.6,"ten":"Tailwind được nối thế nào: bản 3 và bản 4"},
-        {"t":182.6,"den":219.17,"ten":"Mô phỏng: máy quét chữ"},
-        {"t":219.17,"den":239.44,"ten":"Bộ quét chỉ giữ thứ nó thấy"},
-        {"t":239.44,"den":277.62,"ten":"Chạy thật: lớp ghép từ biến"},
-        {"t":277.62,"den":289.5,"ten":"Bẫy: tên lớp ghép từ biến"},
-        {"t":289.5,"den":301.05,"ten":"Cách sửa, và vì sao lỗi trốn được"},
-        {"t":301.05,"den":323.53,"ten":"Tailwind 3: mảng content quyết định"},
-        {"t":323.53,"den":346.37,"ten":"cuongthai.com hôm nay: 7 lớp không tồn tại"},
-        {"t":346.37,"den":384.89,"ten":"Vì sao khoá này dùng Tailwind"},
-        {"t":384.89,"den":408.66,"ten":"Liên kết chéo"},
-        {"t":408.66,"den":423.1,"ten":"Thuật ngữ"},
-        {"t":423.1,"den":468.95,"ten":"Tự kiểm ba câu"},
+        {"t":0,"den":87.23,"ten":"Chào bạn · mở giai đoạn 4 · Bài này mang về gì"},
+        {"t":87.23,"den":182.6,"ten":"Đo thật: HTML và CSS sau build"},
+        {"t":182.6,"den":277.62,"ten":"Mô phỏng: máy quét chữ · Bộ quét chỉ giữ thứ nó thấy"},
+        {"t":277.62,"den":384.89,"ten":"Bẫy: tên lớp ghép từ biến"},
+        {"t":384.89,"den":468.95,"ten":"Liên kết chéo · Thuật ngữ"},
         {"t":468.95,"den":514.41,"ten":"Thực hành & tóm tắt"}
       ],
       "cues": [
@@ -1928,26 +1779,12 @@
         {"t":502.27,"vi":"Bạn mở Code Lab Next.js, module Styling và thư viện giao diện để luyện. Bài sau: nền tảng Tailwind, responsive và trạng thái."}
       ]
     },
-    "nextjs-13-2-tailwind-nen-tang": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/13-styling-tailwind/13-02-tailwind-nen-tang-aefa074c.mp4","durationSec":430.1,"nguonCau":"thoigian",
+    "nextjs-13-2-tailwind-nen-tang": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/13-styling-tailwind/13-02-tailwind-nen-tang-aefa074c.mp4","durationSec":430.1,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":27.57,"ten":"Chào bạn · nối từ bài 13.1"},
-        {"t":27.57,"den":38.68,"ten":"Bìa"},
-        {"t":38.68,"den":57.61,"ten":"Bài này mang về gì"},
-        {"t":57.61,"den":79.23,"ten":"Một lớp = một luật đọc được"},
-        {"t":79.23,"den":113.32,"ten":"Mô phỏng: kéo bề rộng, lưới đổi cột"},
-        {"t":113.32,"den":126.72,"ten":"Responsive: đo ở ba bề rộng"},
-        {"t":126.72,"den":140.96,"ten":"Tiền tố max-md: có tồn tại"},
-        {"t":140.96,"den":161.03,"ten":"Trạng thái: hover, focus, disabled"},
-        {"t":161.03,"den":188.4,"ten":"Chạy thật: rê chuột, bấm Tab, nút tắt"},
-        {"t":188.4,"den":217.33,"ten":"Mô phỏng: thứ tự viết so với thứ tự trong bảng kiểu"},
-        {"t":217.33,"den":231.16,"ten":"Bẫy: hai lớp cùng một thuộc tính"},
-        {"t":231.16,"den":262.6,"ten":"Chạy thật: hàm cn gỡ xung đột"},
-        {"t":262.6,"den":275.47,"ten":"cn() = clsx + tailwind-merge"},
-        {"t":275.47,"den":290.68,"ten":"Mã của bài: class= không phải JSX"},
-        {"t":290.68,"den":305.85,"ten":"Đọc một chuỗi lớp Tailwind"},
-        {"t":305.85,"den":325.88,"ten":"Liên kết chéo"},
-        {"t":325.88,"den":338.3,"ten":"Thuật ngữ"},
-        {"t":338.3,"den":385.41,"ten":"Tự kiểm ba câu"},
+        {"t":0,"den":113.32,"ten":"Chào bạn · nối từ bài 13.1 · Bài này mang về gì"},
+        {"t":113.32,"den":188.4,"ten":"Responsive: đo ở ba bề rộng · Tiền tố max-md: có tồn tại"},
+        {"t":188.4,"den":275.47,"ten":"Mô phỏng: thứ tự viết so với thứ tự trong bảng kiểu"},
+        {"t":275.47,"den":385.41,"ten":"Mã của bài: class= không phải JSX"},
         {"t":385.41,"den":430.1,"ten":"Thực hành & tóm tắt"}
       ],
       "cues": [
@@ -1999,25 +1836,12 @@
         {"t":419.04,"vi":"Bạn mở Code Lab Next.js, module Styling để luyện tiếp. Bài sau: dark mode, và bật tắt sao cho không nháy."}
       ]
     },
-    "nextjs-13-3-dark-mode": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/13-styling-tailwind/13-03-dark-mode-6a280357.mp4","durationSec":418.9,"nguonCau":"thoigian",
+    "nextjs-13-3-dark-mode": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/13-styling-tailwind/13-03-dark-mode-6a280357.mp4","durationSec":418.9,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":28.61,"ten":"Chào bạn · nối từ bài 13.2"},
-        {"t":28.61,"den":39.44,"ten":"Bìa"},
-        {"t":39.44,"den":60.04,"ten":"Bài này mang về gì"},
-        {"t":60.04,"den":83.3,"ten":"Mặc định của Tailwind 4: theo hệ điều hành"},
-        {"t":83.3,"den":117.54,"ten":"Mô phỏng: dark: nối dây vào công tắc nào"},
-        {"t":117.54,"den":130.34,"ten":"Đổi dark: sang class bằng một dòng CSS"},
-        {"t":130.33,"den":154.67,"ten":"Vì sao bị nháy"},
-        {"t":154.67,"den":187.07,"ten":"Chạy thật: đo cú nháy ở 600 ms"},
-        {"t":187.07,"den":196.88,"ten":"Số đo ở 600 ms"},
-        {"t":196.88,"den":210.91,"ten":"Hai phiên bản đặt cạnh nhau"},
-        {"t":210.91,"den":240.33,"ten":"Chạy thật: lỗi hydrate và cách sửa"},
-        {"t":240.33,"den":251.02,"ten":"Cái giá: lỗi hydrate, và cách sửa"},
-        {"t":251.02,"den":272.74,"ten":"next-themes: script, lưu trữ, ba trạng thái"},
-        {"t":272.74,"den":294.14,"ten":"Ba trạng thái, và cách cuongthai.com khởi động giao diện"},
-        {"t":294.14,"den":313.12,"ten":"Liên kết chéo"},
-        {"t":313.12,"den":327.02,"ten":"Thuật ngữ"},
-        {"t":327.02,"den":373.18,"ten":"Tự kiểm ba câu"},
+        {"t":0,"den":83.3,"ten":"Chào bạn · nối từ bài 13.2 · Bài này mang về gì"},
+        {"t":83.3,"den":187.07,"ten":"Mô phỏng: dark: nối dây vào công tắc nào"},
+        {"t":187.07,"den":272.74,"ten":"Số đo ở 600 ms · Hai phiên bản đặt cạnh nhau"},
+        {"t":272.74,"den":373.18,"ten":"Ba trạng thái, và cách cuongthai.com khởi động giao diện"},
         {"t":373.18,"den":418.9,"ten":"Thực hành & tóm tắt"}
       ],
       "cues": [
@@ -2066,25 +1890,12 @@
         {"t":406,"vi":"Bạn mở Code Lab Next.js, module Styling để luyện. Bài sau: theme bằng biến CSS, và cái bẫy đặt tên mà cuongthai.com từng dính."}
       ]
     },
-    "nextjs-13-4-theme-css-variables": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/13-styling-tailwind/13-04-theme-css-variables-686664bf.mp4","durationSec":397.19,"nguonCau":"thoigian",
+    "nextjs-13-4-theme-css-variables": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/13-styling-tailwind/13-04-theme-css-variables-686664bf.mp4","durationSec":397.19,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":30.39,"ten":"Chào bạn · nối từ bài 13.3"},
-        {"t":30.39,"den":40.13,"ten":"Bìa"},
-        {"t":40.13,"den":60.38,"ten":"Bài này mang về gì"},
-        {"t":60.38,"den":93.92,"ten":"Mô phỏng: núm theme và các token"},
-        {"t":93.92,"den":107.34,"ten":"Token + đổi một class = ba theme"},
-        {"t":107.34,"den":130.13,"ten":"Đặt tên token theo vai trò"},
-        {"t":130.13,"den":146.16,"ten":"Nối token vào Tailwind 4: @theme inline"},
-        {"t":146.16,"den":160.46,"ten":"Tailwind 3: màu trong config, và bẫy độ trong suốt"},
-        {"t":160.46,"den":188.71,"ten":"Chạy thật: class dark toàn trang chiếm Notes"},
-        {"t":188.71,"den":199.46,"ten":"Tái hiện bẫy: class dark toàn trang"},
-        {"t":199.46,"den":230.26,"ten":"Mô phỏng: dark: lan xuống mọi con cháu"},
-        {"t":230.25,"den":241.11,"ten":"Vì sao: dark: khớp mọi con cháu của .dark"},
-        {"t":241.11,"den":260.72,"ten":"cuongthai.com hôm nay"},
-        {"t":260.72,"den":272.47,"ten":"Công thức theme bằng biến CSS"},
-        {"t":272.47,"den":294.27,"ten":"Liên kết chéo"},
-        {"t":294.27,"den":307.88,"ten":"Thuật ngữ"},
-        {"t":307.88,"den":353.96,"ten":"Tự kiểm ba câu"},
+        {"t":0,"den":93.92,"ten":"Chào bạn · nối từ bài 13.3 · Bài này mang về gì"},
+        {"t":93.92,"den":188.71,"ten":"Token + đổi một class = ba theme"},
+        {"t":188.71,"den":272.47,"ten":"Tái hiện bẫy: class dark toàn trang"},
+        {"t":272.47,"den":353.96,"ten":"Liên kết chéo · Thuật ngữ"},
         {"t":353.96,"den":397.19,"ten":"Thực hành & tóm tắt"}
       ],
       "cues": [
@@ -2131,25 +1942,12 @@
         {"t":385.67,"vi":"Bạn mở Code Lab Next.js, module Styling để luyện. Bài sau: style ở quy mô lớn, và cái bẫy chữ đen trên nền đen."}
       ]
     },
-    "nextjs-13-5-scale-va-bay-mau": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/13-styling-tailwind/13-05-scale-va-bay-mau-bff45398.mp4","durationSec":388.76,"nguonCau":"thoigian",
+    "nextjs-13-5-scale-va-bay-mau": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/13-styling-tailwind/13-05-scale-va-bay-mau-bff45398.mp4","durationSec":388.76,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":30.49,"ten":"Chào bạn · nối từ bài 13.4"},
-        {"t":30.49,"den":40.89,"ten":"Bìa"},
-        {"t":40.89,"den":59.78,"ten":"Bài này mang về gì"},
-        {"t":59.78,"den":86.64,"ten":"Mô phỏng: ma trận biến thể"},
-        {"t":86.64,"den":100.45,"ten":"Biến thể một lần với cva"},
-        {"t":100.45,"den":115.38,"ten":"Dòng dùng của bài: className"},
-        {"t":115.38,"den":150.97,"ten":"Chạy thật: bốn bề mặt, hai theme"},
-        {"t":150.97,"den":161.32,"ten":"Bốn bề mặt, đo ở hai theme"},
-        {"t":161.32,"den":182.09,"ten":"Luật chữ đen trên nền đen"},
-        {"t":182.09,"den":195.78,"ten":"Sửa bài web: D đọc được, chỉ là không theo theme"},
-        {"t":195.78,"den":229.37,"ten":"Chạy thật: phím Tab và vòng focus"},
-        {"t":229.37,"den":240.38,"ten":"Vòng focus: focus-visible cho bàn phím"},
-        {"t":240.38,"den":259.63,"ten":"cuongthai.com: cùng những lỗi này trong lịch sử"},
-        {"t":259.63,"den":271.02,"ten":"Ràng buộc thắng kỷ luật"},
-        {"t":271.02,"den":289.56,"ten":"Liên kết chéo"},
-        {"t":289.56,"den":302.57,"ten":"Thuật ngữ"},
-        {"t":302.57,"den":345.53,"ten":"Tự kiểm ba câu"},
+        {"t":0,"den":86.64,"ten":"Chào bạn · nối từ bài 13.4 · Bài này mang về gì"},
+        {"t":86.64,"den":182.09,"ten":"Biến thể một lần với cva · Dòng dùng của bài: className"},
+        {"t":182.09,"den":259.63,"ten":"Sửa bài web: D đọc được, chỉ là không theo theme"},
+        {"t":259.63,"den":345.53,"ten":"Ràng buộc thắng kỷ luật · Liên kết chéo"},
         {"t":345.53,"den":388.76,"ten":"Thực hành & tóm tắt"}
       ],
       "cues": [
@@ -2196,25 +1994,12 @@
         {"t":376.91,"vi":"Bạn mở Code Lab Next.js, module Styling để luyện. Chương sau: state, bắt đầu với hai loại state và cái sai khi trộn lẫn."}
       ]
     },
-    "nextjs-14-1-hai-loai-state": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/14-quan-ly-state/14-01-hai-loai-state-59017403.mp4","durationSec":405.23,"nguonCau":"thoigian",
+    "nextjs-14-1-hai-loai-state": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/14-quan-ly-state/14-01-hai-loai-state-59017403.mp4","durationSec":405.23,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":28.91,"ten":"Chào bạn · nối từ bài 13.5"},
-        {"t":28.91,"den":40.88,"ten":"Bìa"},
-        {"t":40.88,"den":60.08,"ten":"Bài này mang về gì"},
-        {"t":60.08,"den":105.66,"ten":"Mô phỏng: sổ kho và hai bản photo"},
-        {"t":105.66,"den":127.53,"ten":"Không phải state nào cũng là một thứ"},
-        {"t":127.52,"den":150.45,"ten":"Cái sai kinh điển, và tsc nói gì"},
-        {"t":150.45,"den":164.22,"ten":"Hai component, hai bản sao"},
-        {"t":164.22,"den":206.9,"ten":"Chạy thật: hai bản sao lệch nhau"},
-        {"t":206.9,"den":217.84,"ten":"Số đo: hai bản sao và một lần đọc"},
-        {"t":217.84,"den":238.29,"ten":"State máy chủ là bài toán cache"},
-        {"t":238.29,"den":251.92,"ten":"HTML chở gì"},
-        {"t":251.92,"den":273.38,"ten":"Bộ công cụ của chương"},
-        {"t":273.38,"den":293.37,"ten":"cuongthai.com: một store giữ nhầm loại"},
-        {"t":293.37,"den":311.05,"ten":"Liên kết chéo"},
-        {"t":311.05,"den":323.33,"ten":"Thuật ngữ"},
-        {"t":323.33,"den":367.87,"ten":"Tự kiểm ba câu"},
-        {"t":367.87,"den":405.23,"ten":"Thực hành & tóm tắt"}
+        {"t":0,"den":105.66,"ten":"Chào bạn · nối từ bài 13.5 · Bài này mang về gì"},
+        {"t":105.66,"den":206.9,"ten":"Không phải state nào cũng là một thứ"},
+        {"t":206.9,"den":293.37,"ten":"Số đo: hai bản sao và một lần đọc"},
+        {"t":293.37,"den":405.23,"ten":"Liên kết chéo · Thuật ngữ"}
       ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 14.1, mở đầu chương quản lý state của khoá Next.js."},
@@ -2262,26 +2047,13 @@
         {"t":393.33,"vi":"Bạn mở Code Lab Next.js, module lấy dữ liệu với Server Components để luyện. Bài sau: state client toàn cục với Zustand."}
       ]
     },
-    "nextjs-14-2-zustand": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/14-quan-ly-state/14-02-zustand-7e4f1454.mp4","durationSec":464.67,"nguonCau":"thoigian",
+    "nextjs-14-2-zustand": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/14-quan-ly-state/14-02-zustand-7e4f1454.mp4","durationSec":464.67,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":28.62,"ten":"Chào bạn · nối từ bài 14.1"},
-        {"t":28.62,"den":42.75,"ten":"Bìa"},
-        {"t":42.75,"den":64.27,"ten":"Bài này mang về gì"},
-        {"t":64.27,"den":101.73,"ten":"Mô phỏng: bảng tin và người đăng ký"},
-        {"t":101.73,"den":120.29,"ten":"Store vài dòng, và tsc nói gì"},
-        {"t":120.29,"den":141.93,"ten":"Store là một module"},
-        {"t":141.93,"den":155.79,"ten":"Selector, đo thật"},
-        {"t":155.79,"den":189.86,"ten":"Chạy thật: đếm từng lần render"},
-        {"t":189.86,"den":203.13,"ten":"Bẫy một: đọc cả store"},
-        {"t":203.13,"den":223.59,"ten":"Bẫy hai: selector trả object mới"},
-        {"t":223.59,"den":265.96,"ten":"Chạy thật: một store cho mọi request"},
-        {"t":265.96,"den":276.63,"ten":"Store trên máy chủ là của mọi request"},
-        {"t":276.63,"den":299.59,"ten":"persist: lúc nào giá trị thật sự tới"},
-        {"t":299.59,"den":320.92,"ten":"Cờ isHydrated không bao giờ bật"},
-        {"t":320.92,"den":341.1,"ten":"cuongthai.com: công cụ nào giữ gì"},
-        {"t":341.1,"den":359.46,"ten":"Liên kết chéo"},
-        {"t":359.46,"den":373.29,"ten":"Thuật ngữ"},
-        {"t":373.29,"den":420.24,"ten":"Tự kiểm ba câu"},
+        {"t":0,"den":101.73,"ten":"Chào bạn · nối từ bài 14.1 · Bài này mang về gì"},
+        {"t":101.73,"den":189.86,"ten":"Store vài dòng, và tsc nói gì · Store là một module"},
+        {"t":189.86,"den":265.96,"ten":"Bẫy một: đọc cả store · Bẫy hai: selector trả object mới"},
+        {"t":265.96,"den":341.1,"ten":"Store trên máy chủ là của mọi request"},
+        {"t":341.1,"den":420.24,"ten":"Liên kết chéo · Thuật ngữ"},
         {"t":420.24,"den":464.67,"ten":"Thực hành & tóm tắt"}
       ],
       "cues": [
@@ -2335,26 +2107,12 @@
         {"t":451.95,"vi":"Bạn mở Code Lab Next.js, module Client Components and Interactivity để luyện. Bài sau: state máy chủ phía client với TanStack Query."}
       ]
     },
-    "nextjs-14-3-tanstack-query": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/14-quan-ly-state/14-03-tanstack-query-f4ce18bc.mp4","durationSec":420.79,"nguonCau":"thoigian",
+    "nextjs-14-3-tanstack-query": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/14-quan-ly-state/14-03-tanstack-query-f4ce18bc.mp4","durationSec":420.79,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":30.42,"ten":"Chào bạn · nối từ bài 14.2"},
-        {"t":30.42,"den":45.22,"ten":"Bìa"},
-        {"t":45.22,"den":64.44,"ten":"Bài này mang về gì"},
-        {"t":64.45,"den":100.13,"ten":"Mô phỏng: quầy thư viện"},
-        {"t":100.13,"den":118.74,"ten":"Đoạn mã của bài, và bản build nói gì"},
-        {"t":118.73,"den":135.86,"ten":"Provider: một QueryClient cho mỗi tab"},
-        {"t":135.86,"den":149.62,"ten":"Cùng key, một request"},
-        {"t":149.62,"den":190.46,"ten":"Chạy thật: sang trang rồi quay về"},
-        {"t":190.46,"den":202.8,"ten":"Hiện ngay, tải lại phía sau"},
-        {"t":202.8,"den":223.05,"ten":"Tải lại khi quay về tab"},
-        {"t":223.05,"den":260.1,"ten":"Chạy thật: cuộc đua biến mất"},
-        {"t":260.09,"den":271.38,"ten":"Cuộc đua, đã hết"},
-        {"t":271.38,"den":291.61,"ten":"Bẫy: key có thứ mới mỗi lần render"},
-        {"t":291.61,"den":312.28,"ten":"Với Server Component: trang đầu từ máy chủ"},
-        {"t":312.28,"den":329.21,"ten":"Liên kết chéo"},
-        {"t":329.21,"den":342.99,"ten":"Thuật ngữ"},
-        {"t":342.99,"den":383.39,"ten":"Tự kiểm ba câu"},
-        {"t":383.39,"den":420.79,"ten":"Thực hành & tóm tắt"}
+        {"t":0,"den":100.13,"ten":"Chào bạn · nối từ bài 14.2 · Bài này mang về gì"},
+        {"t":100.13,"den":190.46,"ten":"Đoạn mã của bài, và bản build nói gì"},
+        {"t":190.46,"den":271.38,"ten":"Hiện ngay, tải lại phía sau · Tải lại khi quay về tab"},
+        {"t":271.38,"den":420.79,"ten":"Bẫy: key có thứ mới mỗi lần render"}
       ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 14.3 của khoá Next.js."},
@@ -2405,25 +2163,12 @@
         {"t":409.57,"vi":"Bạn mở Code Lab Next.js, module Caching and Revalidation để luyện. Bài sau: mutation và vô hiệu hoá cache."}
       ]
     },
-    "nextjs-14-4-mutations": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/14-quan-ly-state/14-04-mutations-fa195a59.mp4","durationSec":391.05,"nguonCau":"thoigian",
+    "nextjs-14-4-mutations": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/14-quan-ly-state/14-04-mutations-fa195a59.mp4","durationSec":391.05,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":26.05,"ten":"Chào bạn · nối từ bài 14.3"},
-        {"t":26.05,"den":36.93,"ten":"Bìa"},
-        {"t":36.93,"den":55.42,"ten":"Bài này mang về gì"},
-        {"t":55.42,"den":86.38,"ten":"Mô phỏng: bảng menu quán cà phê"},
-        {"t":86.38,"den":104.58,"ten":"Hook của bài: biên dịch được, không nhận nổi một bài"},
-        {"t":104.57,"den":117.77,"ten":"Ghi mà không vô hiệu hoá"},
-        {"t":117.77,"den":152.87,"ten":"Chạy thật: ghi, rồi màn hình nói gì"},
-        {"t":152.87,"den":164.71,"ten":"fetch không ném lỗi với mã năm trăm"},
-        {"t":164.71,"den":196.55,"ten":"Chạy thật: lạc quan, có và không quay lui"},
-        {"t":196.55,"den":206.59,"ten":"Lạc quan mà không quay lui"},
-        {"t":206.59,"den":224.57,"ten":"Lạc quan có quay lui: đủ bốn bước"},
-        {"t":224.57,"den":248.59,"ten":"Mô phỏng: bản chụp sai hình"},
-        {"t":248.59,"den":267.81,"ten":"cuongthai.com: quay lui làm trống danh sách"},
-        {"t":267.81,"den":281.62,"ten":"Hai đường ghi, một luật"},
-        {"t":281.62,"den":298.5,"ten":"Liên kết chéo"},
-        {"t":298.5,"den":311.63,"ten":"Thuật ngữ"},
-        {"t":311.63,"den":351.33,"ten":"Tự kiểm ba câu"},
+        {"t":0,"den":86.38,"ten":"Chào bạn · nối từ bài 14.3 · Bài này mang về gì"},
+        {"t":86.38,"den":164.71,"ten":"Hook của bài: biên dịch được, không nhận nổi một bài"},
+        {"t":164.71,"den":248.59,"ten":"Chạy thật: lạc quan, có và không quay lui"},
+        {"t":248.59,"den":351.33,"ten":"cuongthai.com: quay lui làm trống danh sách"},
         {"t":351.33,"den":391.05,"ten":"Thực hành & tóm tắt"}
       ],
       "cues": [
@@ -2474,23 +2219,12 @@
         {"t":379.01,"vi":"Bạn mở Code Lab Next.js, module Server Actions and Mutation Patterns để luyện. Bài sau: chọn đúng công cụ cho từng mảnh state."}
       ]
     },
-    "nextjs-14-5-chon-cong-cu": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/14-quan-ly-state/14-05-chon-cong-cu-7e74b232.mp4","durationSec":390.42,"nguonCau":"thoigian",
+    "nextjs-14-5-chon-cong-cu": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/14-quan-ly-state/14-05-chon-cong-cu-7e74b232.mp4","durationSec":390.42,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":26.66,"ten":"Chào bạn · nối từ bài 14.4"},
-        {"t":26.66,"den":38.12,"ten":"Bìa"},
-        {"t":38.12,"den":57.01,"ten":"Bài này mang về gì"},
-        {"t":57.01,"den":97.51,"ten":"Mô phỏng: bốn bậc cầu thang"},
-        {"t":97.51,"den":113.13,"ten":"Bảng quyết định"},
-        {"t":113.13,"den":130.35,"ten":"Giữ state cục bộ, đo bằng render"},
-        {"t":130.35,"den":178.84,"ten":"Chạy thật: bộ lọc ở ba chỗ"},
-        {"t":178.84,"den":191.68,"ten":"URL làm state"},
-        {"t":191.68,"den":204.43,"ten":"Nửa vời: useState và replaceState"},
-        {"t":204.43,"den":223.45,"ten":"useSearchParams cần ranh giới Suspense"},
-        {"t":223.45,"den":247.49,"ten":"cuongthai.com, từng mảnh"},
-        {"t":247.49,"den":269.26,"ten":"Hai luật chặn phần lớn rắc rối"},
-        {"t":269.26,"den":287.88,"ten":"Liên kết chéo"},
-        {"t":287.88,"den":301.51,"ten":"Thuật ngữ"},
-        {"t":301.51,"den":345.36,"ten":"Tự kiểm ba câu"},
+        {"t":0,"den":97.51,"ten":"Chào bạn · nối từ bài 14.4 · Bài này mang về gì"},
+        {"t":97.51,"den":178.84,"ten":"Bảng quyết định · Giữ state cục bộ, đo bằng render"},
+        {"t":178.84,"den":269.26,"ten":"URL làm state · Nửa vời: useState và replaceState"},
+        {"t":269.26,"den":345.36,"ten":"Liên kết chéo · Thuật ngữ"},
         {"t":345.36,"den":390.42,"ten":"Thực hành & tóm tắt"}
       ],
       "cues": [
@@ -2537,26 +2271,13 @@
         {"t":375.64,"vi":"Bạn mở Code Lab Next.js, module Client Components and Interactivity để luyện. Chương sau: xác thực, bắt đầu với session, JWT và token nằm ở đâu."}
       ]
     },
-    "nextjs-15-1-nen-tang-auth": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/15-auth-middleware/15-01-nen-tang-auth-dbe39e80.mp4","durationSec":531.07,"nguonCau":"thoigian",
+    "nextjs-15-1-nen-tang-auth": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/15-auth-middleware/15-01-nen-tang-auth-dbe39e80.mp4","durationSec":531.07,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":27.55,"ten":"Chào bạn · nối từ bài 14.5"},
-        {"t":27.55,"den":39.82,"ten":"Bìa"},
-        {"t":39.82,"den":64.02,"ten":"Bài này mang về gì"},
-        {"t":64.02,"den":111.11,"ten":"Mô phỏng: hai kiểu vé gửi xe"},
-        {"t":111.11,"den":140.49,"ten":"Hai câu hỏi, hai mô hình"},
-        {"t":140.49,"den":166.3,"ten":"Bốn bước của một request đã xác thực"},
-        {"t":166.3,"den":213.14,"ten":"Chạy thật: mổ một JWT"},
-        {"t":213.14,"den":225.25,"ten":"JWT có ký, không mã hoá"},
-        {"t":225.25,"den":252.89,"ten":"Đăng xuất, rồi dùng bản chép"},
-        {"t":252.88,"den":276.2,"ten":"Bằng chứng nằm ở đâu"},
-        {"t":276.2,"den":326.42,"ten":"Chạy thật: một vụ XSS"},
-        {"t":326.42,"den":340.2,"ten":"Một XSS, hai cách cất"},
-        {"t":340.2,"den":372.78,"ten":"Luật, và chỗ luật không che"},
-        {"t":372.78,"den":394.47,"ten":"Bẫy: trang chỉ được che bằng một liên kết ẩn"},
-        {"t":394.46,"den":416.98,"ten":"cuongthai.com cất token ở đâu"},
-        {"t":416.98,"den":436.53,"ten":"Liên kết chéo"},
-        {"t":436.53,"den":449.96,"ten":"Thuật ngữ"},
-        {"t":449.96,"den":492.8,"ten":"Tự kiểm ba câu"},
+        {"t":0,"den":111.11,"ten":"Chào bạn · nối từ bài 14.5 · Bài này mang về gì"},
+        {"t":111.11,"den":213.14,"ten":"Hai câu hỏi, hai mô hình"},
+        {"t":213.14,"den":326.42,"ten":"JWT có ký, không mã hoá · Đăng xuất, rồi dùng bản chép"},
+        {"t":326.42,"den":416.98,"ten":"Một XSS, hai cách cất · Luật, và chỗ luật không che"},
+        {"t":416.98,"den":492.8,"ten":"Liên kết chéo · Thuật ngữ"},
         {"t":492.8,"den":531.07,"ten":"Thực hành & tóm tắt"}
       ],
       "cues": [
@@ -2618,8 +2339,14 @@
         {"t":520.47,"vi":"Bạn mở Code Lab Next.js, module xác thực và cơ sở dữ liệu để luyện. Bài sau: cookie trong App Router."}
       ]
     },
-    "nextjs-15-2-cookies": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/15-auth-middleware/15-02-cookies-3f6b0169.mp4","durationSec":492,"nguonCau":"srt",
-      "parts": [],
+    "nextjs-15-2-cookies": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/15-auth-middleware/15-02-cookies-3f6b0169.mp4","durationSec":492,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":108.94,"ten":"Chào bạn · nối từ bài 15.1 · Bài này mang về gì"},
+        {"t":108.94,"den":208.11,"ten":"Đọc ở đâu, ghi ở đâu"},
+        {"t":208.11,"den":321.12,"ten":"Server Action đặt cookie · Mọi Set-Cookie trên đường truyền"},
+        {"t":321.12,"den":407.43,"ten":"Bảng SameSite"},
+        {"t":407.43,"den":492,"ten":"Tự kiểm ba câu · Thực hành & tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 15.2 của khoá Next.js."},
         {"t":10.02,"vi":"Bài trước ta mổ một JWT: có chữ ký nhưng ai cũng đọc được, và token phải nằm trong cookie httpOnly."},
@@ -2710,26 +2437,13 @@
         {"t":486.27,"vi":"Bài sau: middleware, chặn request trước khi tới trang."}
       ]
     },
-    "nextjs-15-3-middleware": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/15-auth-middleware/15-03-middleware-4ac6f314.mp4","durationSec":431.9,"nguonCau":"thoigian",
+    "nextjs-15-3-middleware": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/15-auth-middleware/15-03-middleware-4ac6f314.mp4","durationSec":431.9,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":25.85,"ten":"Chào bạn · nối từ bài 15.2"},
-        {"t":25.85,"den":38.22,"ten":"Bìa"},
-        {"t":38.22,"den":59.97,"ten":"Bài này mang về gì"},
-        {"t":59.97,"den":95.06,"ten":"Mô phỏng: bảo vệ cổng và quầy từng phòng"},
-        {"t":95.06,"den":116.61,"ten":"Nó nằm ở đâu trên request"},
-        {"t":116.61,"den":140.91,"ten":"Tệp của bài trên Next.js 16.4.6"},
-        {"t":140.91,"den":176.04,"ten":"Chạy thật: ba lượt vào trang dashboard"},
-        {"t":176.04,"den":185.3,"ten":"Một phép kiểm có mặt cho lọt gì"},
-        {"t":185.3,"den":196.51,"ten":"Ba lượt trong Chromium"},
-        {"t":196.5,"den":229.57,"ten":"Chạy thật: matcher và số lần proxy chạy"},
-        {"t":229.57,"den":239.54,"ten":"Matcher quyết định số lần chạy"},
-        {"t":239.54,"den":260.96,"ten":"Bẫy: một lỗ trong matcher là một trang công khai"},
-        {"t":260.96,"den":291.8,"ten":"Chạy trên Edge thì không kiểm được, đo thật"},
-        {"t":291.8,"den":316.42,"ten":"cuongthai.com: middleware tin một cookie vai trò"},
-        {"t":316.42,"den":338.82,"ten":"Liên kết chéo"},
-        {"t":338.82,"den":351.36,"ten":"Thuật ngữ"},
-        {"t":351.36,"den":396.19,"ten":"Tự kiểm ba câu"},
-        {"t":396.19,"den":431.9,"ten":"Thực hành & tóm tắt"}
+        {"t":0,"den":95.06,"ten":"Chào bạn · nối từ bài 15.2 · Bài này mang về gì"},
+        {"t":95.06,"den":176.04,"ten":"Nó nằm ở đâu trên request · Tệp của bài trên Next.js 16.4.6"},
+        {"t":176.04,"den":260.96,"ten":"Một phép kiểm có mặt cho lọt gì · Ba lượt trong Chromium"},
+        {"t":260.96,"den":338.82,"ten":"Chạy trên Edge thì không kiểm được, đo thật"},
+        {"t":338.82,"den":431.9,"ten":"Thuật ngữ · Tự kiểm ba câu"}
       ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 15.3 của khoá Next.js."},
@@ -2780,8 +2494,15 @@
         {"t":420.1,"vi":"Bạn mở Code Lab Next.js, module Edge Functions và kiến trúc middleware để luyện. Bài sau: đọc người dùng hiện tại trên server."}
       ]
     },
-    "nextjs-15-4-doc-nguoi-dung": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/15-auth-middleware/15-04-doc-nguoi-dung-7e5615ba.mp4","durationSec":520.63,"nguonCau":"srt",
-      "parts": [],
+    "nextjs-15-4-doc-nguoi-dung": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/15-auth-middleware/15-04-doc-nguoi-dung-7e5615ba.mp4","durationSec":520.63,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":95.52,"ten":"Chào bạn · nối từ bài 15.3 · Bài này mang về gì"},
+        {"t":95.52,"den":198.99,"ten":"Một hàm, dùng khắp nơi trên server"},
+        {"t":198.99,"den":279.31,"ten":"Năm component, một request"},
+        {"t":279.31,"den":364.77,"ten":"Chạy thật: sửa form ẩn trong DevTools"},
+        {"t":364.77,"den":443.42,"ten":"Đời thật, nếu… thì sao, góc kẻ xấu · Liên kết chéo"},
+        {"t":443.42,"den":520.63,"ten":"Tự kiểm ba câu · Thực hành & tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 15.4 của khoá Next.js."},
         {"t":9.95,"vi":"Bài trước ta thấy proxy chỉ là cổng lạc quan: cookie giả vẫn lọt, và một lỗ trong matcher là một trang công khai."},
@@ -2880,8 +2601,15 @@
         {"t":508.88,"vi":"Bạn mở Code Lab Next.js, module xác thực và tích hợp cơ sở dữ liệu để luyện. Bài sau: token hết hạn, và refresh."}
       ]
     },
-    "nextjs-15-5-refresh-token": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/15-auth-middleware/15-05-refresh-token-869667a2.mp4","durationSec":496.21,"nguonCau":"srt",
-      "parts": [],
+    "nextjs-15-5-refresh-token": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/15-auth-middleware/15-05-refresh-token-869667a2.mp4","durationSec":496.21,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":102.44,"ten":"Chào bạn · nối từ bài 15.4 · Bài này mang về gì"},
+        {"t":102.44,"den":183.87,"ten":"Hai đồng hồ: cookie và token bên trong"},
+        {"t":183.87,"den":283.78,"ten":"Vá phần 1: một endpoint refresh"},
+        {"t":283.78,"den":373.71,"ten":"Đo thật: mỗi 401 tự refresh"},
+        {"t":373.71,"den":454.86,"ten":"Liên kết chéo · Thuật ngữ"},
+        {"t":454.86,"den":496.21,"ten":"Thực hành & tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 15.5 của khoá Next.js."},
         {"t":10.01,"vi":"Bài trước ta viết hàm đọc người dùng trên server, bọc trong cache, và thấy biến ở cấp module làm Binh thấy hồ sơ của An."},
@@ -2962,25 +2690,12 @@
         {"t":484.44,"vi":"Bạn mở Code Lab Next.js, module xác thực và tích hợp cơ sở dữ liệu để luyện. Bài sau mở Chương 16: hai cách dựng một form."}
       ]
     },
-    "nextjs-16-1-hai-cach-form": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/16-form-upload/16-01-hai-cach-form-343077fc.mp4","durationSec":414.63,"nguonCau":"thoigian",
+    "nextjs-16-1-hai-cach-form": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/16-form-upload/16-01-hai-cach-form-343077fc.mp4","durationSec":414.63,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":32.03,"ten":"Chào bạn · nối từ Chương 15"},
-        {"t":32.03,"den":41.27,"ten":"Bìa"},
-        {"t":41.26,"den":65.65,"ten":"Bài này mang về gì"},
-        {"t":65.65,"den":98.38,"ten":"Mô phỏng: phong bì in sẵn địa chỉ và phong bì trống"},
-        {"t":98.38,"den":118.17,"ten":"Hai form, cùng một việc đăng ký"},
-        {"t":118.17,"den":137.84,"ten":"Cách A: Server Action nhận FormData"},
-        {"t":137.84,"den":153.74,"ten":"Cách B: form client có kiểm soát"},
-        {"t":153.73,"den":195.44,"ten":"Chạy thật: tắt JavaScript, rồi làm chậm nó"},
-        {"t":195.44,"den":204.1,"ten":"Đo thật: JavaScript tắt"},
-        {"t":204.1,"den":212.19,"ten":"Đo thật: JavaScript chậm"},
-        {"t":212.19,"den":231.25,"ten":"Kiểm ở máy chủ là bắt buộc"},
-        {"t":231.25,"den":243.9,"ten":"Kết hợp: quy tắc ngón tay cái"},
-        {"t":243.9,"den":264.96,"ten":"cuongthai.com: toàn form client"},
-        {"t":264.96,"den":296.19,"ten":"Đời thật, nếu… thì sao, góc kẻ xấu"},
-        {"t":296.19,"den":314.82,"ten":"Liên kết chéo"},
-        {"t":314.82,"den":330.13,"ten":"Thuật ngữ"},
-        {"t":330.13,"den":375.08,"ten":"Tự kiểm ba câu"},
+        {"t":0,"den":98.38,"ten":"Chào bạn · nối từ Chương 15 · Bài này mang về gì"},
+        {"t":98.38,"den":195.44,"ten":"Hai form, cùng một việc đăng ký"},
+        {"t":195.44,"den":296.19,"ten":"Đo thật: JavaScript tắt · Đo thật: JavaScript chậm"},
+        {"t":296.19,"den":375.08,"ten":"Liên kết chéo · Thuật ngữ"},
         {"t":375.08,"den":414.63,"ten":"Thực hành & tóm tắt"}
       ],
       "cues": [
@@ -3031,25 +2746,12 @@
         {"t":403.85,"vi":"Bạn mở Code Lab Next.js, module Server Actions và mẫu ghi dữ liệu để luyện. Bài sau: react-hook-form."}
       ]
     },
-    "nextjs-16-2-react-hook-form": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/16-form-upload/16-02-react-hook-form-bb3059f0.mp4","durationSec":414.52,"nguonCau":"thoigian",
+    "nextjs-16-2-react-hook-form": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/16-form-upload/16-02-react-hook-form-bb3059f0.mp4","durationSec":414.52,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":27.74,"ten":"Chào bạn · nối từ bài 16.1"},
-        {"t":27.74,"den":39.58,"ten":"Bìa"},
-        {"t":39.58,"den":60.73,"ten":"Bài này mang về gì"},
-        {"t":60.73,"den":97.6,"ten":"Mô phỏng: chép lại cả bảng vs sổ tự giữ chữ"},
-        {"t":97.6,"den":114.35,"ten":"Kiểm soát vs không kiểm soát"},
-        {"t":114.35,"den":134.15,"ten":"Mã của bài trên Next.js 16.4.6"},
-        {"t":134.15,"den":165.99,"ten":"Chạy thật: gõ \"hello world\", đếm render"},
-        {"t":165.99,"den":176.52,"ten":"Đo thật: số lần render"},
-        {"t":176.52,"den":191.06,"ten":"Những mảnh bạn dùng"},
-        {"t":191.05,"den":209.31,"ten":"Cái giá: JavaScript trên trang"},
-        {"t":209.31,"den":231.35,"ten":"Bẫy: ô thiếu register biến mất lặng lẽ"},
-        {"t":231.35,"den":242.56,"ten":"Vẫn cần máy chủ"},
-        {"t":242.56,"den":262.69,"ten":"cuongthai.com: react-hook-form và Zod"},
-        {"t":262.69,"den":299.2,"ten":"Đời thật, nếu… thì sao, góc kẻ xấu"},
-        {"t":299.2,"den":315.54,"ten":"Liên kết chéo"},
-        {"t":315.54,"den":330.67,"ten":"Thuật ngữ"},
-        {"t":330.67,"den":374.68,"ten":"Tự kiểm ba câu"},
+        {"t":0,"den":97.6,"ten":"Chào bạn · nối từ bài 16.1 · Bài này mang về gì"},
+        {"t":97.6,"den":176.52,"ten":"Kiểm soát vs không kiểm soát"},
+        {"t":176.52,"den":262.69,"ten":"Những mảnh bạn dùng · Cái giá: JavaScript trên trang"},
+        {"t":262.69,"den":374.68,"ten":"Đời thật, nếu… thì sao, góc kẻ xấu · Liên kết chéo"},
         {"t":374.68,"den":414.52,"ten":"Thực hành & tóm tắt"}
       ],
       "cues": [
@@ -3100,27 +2802,13 @@
         {"t":402.5,"vi":"Bạn mở Code Lab Next.js, module tương tác phía client để luyện. Bài sau: validation với Zod, một schema cho cả hai phía."}
       ]
     },
-    "nextjs-16-3-zod": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/16-form-upload/16-03-zod-97efdbb8.mp4","durationSec":445.5,"nguonCau":"thoigian",
+    "nextjs-16-3-zod": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/16-form-upload/16-03-zod-97efdbb8.mp4","durationSec":445.5,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":27.4,"ten":"Chào bạn · nối từ bài 16.2"},
-        {"t":27.4,"den":38.73,"ten":"Bìa"},
-        {"t":38.73,"den":59.1,"ten":"Bài này mang về gì"},
-        {"t":59.1,"den":92.77,"ten":"Mô phỏng: một khuôn kiểm hàng ở hai cửa"},
-        {"t":92.77,"den":114.63,"ten":"Một schema, import hai lần"},
-        {"t":114.63,"den":134.23,"ten":"Mã của bài trên Zod 4.6.7"},
-        {"t":134.23,"den":165.11,"ten":"Chạy thật: chốt ở client, chốt ở server"},
-        {"t":165.11,"den":175.45,"ten":"Client: zodResolver"},
-        {"t":175.45,"den":190.96,"ten":"Server: safeParse"},
-        {"t":190.96,"den":230.89,"ten":"Chạy thật: FormData chỉ gửi chuỗi"},
-        {"t":230.89,"den":239.18,"ten":"Bẫy: FormData gửi chuỗi"},
-        {"t":239.18,"den":251.69,"ten":"Kiểu đầu vào khác kiểu đầu ra"},
-        {"t":251.69,"den":264.86,"ten":"Khoá lạ bị bỏ"},
-        {"t":264.86,"den":285.88,"ten":"cuongthai.com: một luật, viết hai lần"},
-        {"t":285.88,"den":323.62,"ten":"Đời thật, nếu… thì sao, góc kẻ xấu"},
-        {"t":323.62,"den":341.93,"ten":"Liên kết chéo"},
-        {"t":341.93,"den":357.44,"ten":"Thuật ngữ"},
-        {"t":357.44,"den":401.2,"ten":"Tự kiểm ba câu"},
-        {"t":401.2,"den":445.5,"ten":"Thực hành & tóm tắt"}
+        {"t":0,"den":92.77,"ten":"Chào bạn · nối từ bài 16.2 · Bài này mang về gì"},
+        {"t":92.77,"den":175.45,"ten":"Một schema, import hai lần · Mã của bài trên Zod 4.6.7"},
+        {"t":175.45,"den":251.69,"ten":"Server: safeParse · Chạy thật: FormData chỉ gửi chuỗi"},
+        {"t":251.69,"den":341.93,"ten":"Khoá lạ bị bỏ · cuongthai.com: một luật, viết hai lần"},
+        {"t":341.93,"den":445.5,"ten":"Thuật ngữ · Tự kiểm ba câu"}
       ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 16.3 của khoá Next.js."},
@@ -3173,28 +2861,13 @@
         {"t":433.56,"vi":"Bạn mở Code Lab Next.js, module Server Actions và mẫu ghi dữ liệu để luyện. Bài sau: upload tệp từ trình duyệt tới storage."}
       ]
     },
-    "nextjs-16-4-upload-file": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/16-form-upload/16-04-upload-file-6c6168f7.mp4","durationSec":449.92,"nguonCau":"thoigian",
+    "nextjs-16-4-upload-file": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/16-form-upload/16-04-upload-file-6c6168f7.mp4","durationSec":449.92,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":26.7,"ten":"Chào bạn · nối từ bài 16.3"},
-        {"t":26.7,"den":38.97,"ten":"Bìa"},
-        {"t":38.97,"den":62.75,"ten":"Bài này mang về gì"},
-        {"t":62.75,"den":96.7,"ten":"Mô phỏng: thùng hàng qua quầy lễ tân"},
-        {"t":96.7,"den":115.03,"ten":"Tệp nên nằm ở đâu"},
-        {"t":115.03,"den":129.04,"ten":"Mã của bài trên Next.js 16.4.6"},
-        {"t":129.04,"den":146.23,"ten":"Cách 1: đi qua máy chủ"},
-        {"t":146.23,"den":184.14,"ten":"Chạy thật: tệp 2 MB và tệp 40 MB"},
-        {"t":184.14,"den":192.27,"ten":"Đo thật: tệp 2 MB và Server Action"},
-        {"t":192.27,"den":204.79,"ten":"Đo thật: một tệp 40 MB tốn bao nhiêu bộ nhớ"},
-        {"t":204.79,"den":236.95,"ten":"Chạy thật: URL ký sẵn"},
-        {"t":236.95,"den":246.58,"ten":"Cách 2: URL ký sẵn"},
-        {"t":246.58,"den":256.83,"ten":"Chữ ký bảo vệ những gì"},
-        {"t":256.83,"den":278.47,"ten":"Lỗi thật: blob cộng tiền tố CDN"},
-        {"t":278.47,"den":296.24,"ten":"cuongthai.com: cả hai cách"},
-        {"t":296.24,"den":333.36,"ten":"Đời thật, nếu… thì sao, góc kẻ xấu"},
-        {"t":333.36,"den":352.57,"ten":"Liên kết chéo"},
-        {"t":352.57,"den":368.09,"ten":"Thuật ngữ"},
-        {"t":368.09,"den":407.11,"ten":"Tự kiểm ba câu"},
-        {"t":407.11,"den":449.92,"ten":"Thực hành & tóm tắt"}
+        {"t":0,"den":96.7,"ten":"Chào bạn · nối từ bài 16.3 · Bài này mang về gì"},
+        {"t":96.7,"den":184.14,"ten":"Tệp nên nằm ở đâu · Mã của bài trên Next.js 16.4.6"},
+        {"t":184.14,"den":278.47,"ten":"Đo thật: tệp 2 MB và Server Action"},
+        {"t":278.47,"den":368.09,"ten":"cuongthai.com: cả hai cách"},
+        {"t":368.09,"den":449.92,"ten":"Tự kiểm ba câu · Thực hành & tóm tắt"}
       ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 16.4 của khoá Next.js."},
@@ -3248,26 +2921,13 @@
         {"t":437.43,"vi":"Bạn mở Code Lab Next.js, module API route và phát triển full-stack để luyện. Bài sau: trải nghiệm upload và phần bảo mật không được bỏ."}
       ]
     },
-    "nextjs-16-5-upload-bao-mat": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/16-form-upload/16-05-upload-bao-mat-f64ecc5d.mp4","durationSec":410.06,"nguonCau":"thoigian",
+    "nextjs-16-5-upload-bao-mat": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/16-form-upload/16-05-upload-bao-mat-f64ecc5d.mp4","durationSec":410.06,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":31.6,"ten":"Chào bạn · nối từ bài 16.4"},
-        {"t":31.6,"den":41.85,"ten":"Bìa"},
-        {"t":41.85,"den":65.59,"ten":"Bài này mang về gì"},
-        {"t":65.59,"den":97.33,"ten":"Mô phỏng: bưu cục nhận kiện qua bốn cửa"},
-        {"t":97.33,"den":116.66,"ten":"Lớp UX"},
-        {"t":116.66,"den":127.56,"ten":"Khung an toàn của bài trên Next.js 16.4.6"},
-        {"t":127.56,"den":175.84,"ten":"Chạy thật: cùng ba đòn, hai endpoint"},
-        {"t":175.84,"den":185.82,"ten":"Đo thật: endpoint ngây thơ"},
-        {"t":185.82,"den":203.11,"ten":"Bốn phép kiểm trong máy chủ"},
-        {"t":203.11,"den":210.16,"ten":"Đo thật: endpoint an toàn"},
-        {"t":210.16,"den":223.21,"ten":"Ngửi byte: mấy byte đầu nói thật"},
-        {"t":223.21,"den":244.94,"ten":"cuongthai.com: chặn theo tên và kiểu khai"},
-        {"t":244.94,"den":256.17,"ten":"Upload ký sẵn cũng cần đủ bốn phép kiểm"},
-        {"t":256.17,"den":296.93,"ten":"Đời thật, nếu… thì sao, góc kẻ xấu"},
-        {"t":296.93,"den":315.69,"ten":"Liên kết chéo"},
-        {"t":315.69,"den":331.23,"ten":"Thuật ngữ"},
-        {"t":331.23,"den":368.13,"ten":"Tự kiểm ba câu"},
-        {"t":368.13,"den":410.06,"ten":"Thực hành & tóm tắt"}
+        {"t":0,"den":97.33,"ten":"Chào bạn · nối từ bài 16.4 · Bài này mang về gì"},
+        {"t":97.33,"den":175.84,"ten":"Lớp UX · Khung an toàn của bài trên Next.js 16.4.6"},
+        {"t":175.84,"den":256.17,"ten":"Đo thật: endpoint ngây thơ · Bốn phép kiểm trong máy chủ"},
+        {"t":256.17,"den":331.23,"ten":"Đời thật, nếu… thì sao, góc kẻ xấu · Liên kết chéo"},
+        {"t":331.23,"den":410.06,"ten":"Tự kiểm ba câu · Thực hành & tóm tắt"}
       ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 16.5, bài cuối Chương 16 của khoá Next.js."},
@@ -3315,29 +2975,13 @@
         {"t":397.09,"vi":"Bạn mở Code Lab Next.js, module API route và phát triển full-stack để luyện. Hết Chương 16, chương sau: render và SEO."}
       ]
     },
-    "nextjs-17-1-bon-cach-render": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/17-render-seo/17-01-bon-cach-render-441efb41.mp4","durationSec":512.32,"nguonCau":"thoigian",
+    "nextjs-17-1-bon-cach-render": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/17-render-seo/17-01-bon-cach-render-441efb41.mp4","durationSec":512.32,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":27.87,"ten":"Chào bạn · mở giai đoạn 5"},
-        {"t":27.87,"den":36.11,"ten":"Bìa"},
-        {"t":36.11,"den":58.51,"ten":"Bài này mang về gì"},
-        {"t":58.51,"den":94.24,"ten":"Mô phỏng: một nhà bếp, bốn quầy"},
-        {"t":94.24,"den":108.62,"ten":"Nhà bếp: bốn cách phục vụ cùng một món"},
-        {"t":108.62,"den":130.02,"ten":"Một trang, bốn cách: phòng lab"},
-        {"t":130.02,"den":164.73,"ten":"Chạy thật: build hỏi cơ sở dữ liệu"},
-        {"t":164.73,"den":174.93,"ten":"Nhật ký build"},
-        {"t":174.93,"den":199.76,"ten":"Đo: mỗi trang hai request"},
-        {"t":199.76,"den":225.94,"ten":"Chạy thật: tắt JavaScript"},
-        {"t":225.94,"den":235.66,"ten":"CSR: HTML ghi chữ loading"},
-        {"t":235.66,"den":270.62,"ten":"Chạy thật: ISR không phải đồng hồ"},
-        {"t":270.62,"den":282.09,"ten":"ISR: stale-while-revalidate"},
-        {"t":282.09,"den":303.42,"ten":"Nhật ký máy chủ: ai hỏi cơ sở dữ liệu"},
-        {"t":303.41,"den":320.73,"ten":"Header cho biết bạn nhận được gì"},
-        {"t":320.73,"den":342.54,"ten":"Chọn cách nào, với số đo của lab"},
-        {"t":342.54,"den":363.69,"ten":"cuongthai.com: phần lớn là trang client"},
-        {"t":363.69,"den":401.26,"ten":"Đời thật, nếu… thì sao, góc kẻ xấu"},
-        {"t":401.26,"den":421.58,"ten":"Liên kết chéo"},
-        {"t":421.58,"den":437.95,"ten":"Thuật ngữ"},
-        {"t":437.95,"den":474.66,"ten":"Tự kiểm ba câu"},
+        {"t":0,"den":94.24,"ten":"Chào bạn · mở giai đoạn 5 · Bài này mang về gì"},
+        {"t":94.24,"den":174.93,"ten":"Nhà bếp: bốn cách phục vụ cùng một món"},
+        {"t":174.93,"den":270.62,"ten":"Đo: mỗi trang hai request · Chạy thật: tắt JavaScript"},
+        {"t":270.62,"den":363.69,"ten":"ISR: stale-while-revalidate"},
+        {"t":363.69,"den":474.66,"ten":"Đời thật, nếu… thì sao, góc kẻ xấu · Liên kết chéo"},
         {"t":474.66,"den":512.32,"ten":"Thực hành & tóm tắt"}
       ],
       "cues": [
@@ -3399,29 +3043,13 @@
         {"t":501.52,"vi":"Bạn mở Code Lab Next.js, module cache và revalidate để luyện. Bài sau: tĩnh và động trong App Router."}
       ]
     },
-    "nextjs-17-2-tinh-vs-dong": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/17-render-seo/17-02-tinh-vs-dong-b9d4dde8.mp4","durationSec":449.52,"nguonCau":"thoigian",
+    "nextjs-17-2-tinh-vs-dong": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/17-render-seo/17-02-tinh-vs-dong-b9d4dde8.mp4","durationSec":449.52,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":26.77,"ten":"Chào bạn · nối từ 17.1"},
-        {"t":26.77,"den":34.68,"ten":"Bìa"},
-        {"t":34.68,"den":54.22,"ten":"Bài này mang về gì"},
-        {"t":54.22,"den":82.58,"ten":"Mô phỏng: bảng công tắc"},
-        {"t":82.58,"den":92.77,"ten":"Bảy route, một bảng build"},
-        {"t":92.77,"den":112.43,"ten":"Các công tắc trong mã"},
-        {"t":112.43,"den":142.62,"ten":"Chạy thật: fetch không tuỳ chọn"},
-        {"t":142.62,"den":152.53,"ten":"Bẫy: fetch không tuỳ chọn vẫn tĩnh"},
-        {"t":152.53,"den":174.51,"ten":"Mô phỏng: cây layout đổ màu"},
-        {"t":174.51,"den":185.78,"ten":"Bẫy: một cookie trong layout"},
-        {"t":185.78,"den":201.89,"ten":"Cùng trang sản phẩm, hai hình dạng"},
-        {"t":201.89,"den":224.47,"ten":"Chạy thật: đua byte đầu tiên"},
-        {"t":224.47,"den":233.69,"ten":"Số đo: động vs tĩnh"},
-        {"t":233.69,"den":263.86,"ten":"Bẫy: chỉ Suspense chưa đủ"},
-        {"t":263.86,"den":281.31,"ten":"Quyết định theo từng route"},
-        {"t":281.31,"den":299.71,"ten":"cuongthai.com: công tắc nằm ở đâu"},
-        {"t":299.71,"den":335.96,"ten":"Đời thật, nếu… thì sao, góc kẻ xấu"},
-        {"t":335.96,"den":354.32,"ten":"Liên kết chéo"},
-        {"t":354.32,"den":369.71,"ten":"Thuật ngữ"},
-        {"t":369.71,"den":407.58,"ten":"Tự kiểm ba câu"},
-        {"t":407.58,"den":449.52,"ten":"Thực hành & tóm tắt"}
+        {"t":0,"den":82.58,"ten":"Chào bạn · nối từ 17.1 · Bài này mang về gì"},
+        {"t":82.58,"den":174.51,"ten":"Bảy route, một bảng build · Các công tắc trong mã"},
+        {"t":174.51,"den":263.86,"ten":"Bẫy: một cookie trong layout"},
+        {"t":263.86,"den":354.32,"ten":"Quyết định theo từng route"},
+        {"t":354.32,"den":449.52,"ten":"Thuật ngữ · Tự kiểm ba câu"}
       ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 17.2 của khoá Next.js."},
@@ -3479,27 +3107,13 @@
         {"t":438.07,"vi":"Bạn mở Code Lab Next.js, module cache và revalidate để luyện. Bài sau: SEO, được máy tìm kiếm tìm thấy."}
       ]
     },
-    "nextjs-17-3-seo": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/17-render-seo/17-03-seo-8c5aeb47.mp4","durationSec":421.03,"nguonCau":"thoigian",
+    "nextjs-17-3-seo": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/17-render-seo/17-03-seo-8c5aeb47.mp4","durationSec":421.03,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":24.55,"ten":"Chào bạn · nối từ 17.2"},
-        {"t":24.55,"den":33.87,"ten":"Bìa"},
-        {"t":33.87,"den":57,"ten":"Bài này mang về gì"},
-        {"t":57,"den":85.61,"ten":"Mô phỏng: rô-bốt đọc trang"},
-        {"t":85.61,"den":108.41,"ten":"Googlebot nhận được gì"},
-        {"t":108.41,"den":126.75,"ten":"Tiêu đề động: generateMetadata"},
-        {"t":126.75,"den":138.16,"ten":"Sửa: cache, một truy vấn mỗi request"},
-        {"t":138.15,"den":151.62,"ten":"Bẫy: metadata trong trang use client"},
-        {"t":151.62,"den":167.54,"ten":"sitemap và robots"},
-        {"t":167.54,"den":200.33,"ten":"Chạy thật: robots chốt lúc build"},
-        {"t":200.33,"den":209.03,"ten":"Bẫy: robots đọc lúc build"},
-        {"t":209.03,"den":222.22,"ten":"Framework không làm hộ bạn"},
-        {"t":222.22,"den":253.54,"ten":"Chạy thật: cuongthai.com dưới mắt Googlebot"},
-        {"t":253.53,"den":262.99,"ten":"cuongthai.com dưới mắt Googlebot"},
-        {"t":262.99,"den":303.2,"ten":"Đời thật, nếu… thì sao, góc kẻ xấu"},
-        {"t":303.2,"den":324.25,"ten":"Liên kết chéo"},
-        {"t":324.25,"den":337.59,"ten":"Thuật ngữ"},
-        {"t":337.59,"den":376.51,"ten":"Tự kiểm ba câu"},
-        {"t":376.51,"den":421.03,"ten":"Thực hành & tóm tắt"}
+        {"t":0,"den":85.61,"ten":"Chào bạn · nối từ 17.2 · Bài này mang về gì"},
+        {"t":85.61,"den":167.54,"ten":"Googlebot nhận được gì · Tiêu đề động: generateMetadata"},
+        {"t":167.54,"den":253.54,"ten":"Chạy thật: robots chốt lúc build · Bẫy: robots đọc lúc build"},
+        {"t":253.53,"den":337.59,"ten":"cuongthai.com dưới mắt Googlebot"},
+        {"t":337.59,"den":421.03,"ten":"Tự kiểm ba câu · Thực hành & tóm tắt"}
       ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 17.3 của khoá Next.js."},
@@ -3549,27 +3163,12 @@
         {"t":408.68,"vi":"Bạn mở Code Lab Next.js, module Server Components và lấy dữ liệu để luyện. Bài sau: Open Graph, liên kết chia sẻ trông thế nào."}
       ]
     },
-    "nextjs-17-4-open-graph": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/17-render-seo/17-04-open-graph-b83c014f.mp4","durationSec":397.32,"nguonCau":"thoigian",
+    "nextjs-17-4-open-graph": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/17-render-seo/17-04-open-graph-b83c014f.mp4","durationSec":397.32,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":27.23,"ten":"Chào bạn · nối từ 17.3"},
-        {"t":27.23,"den":37.11,"ten":"Bìa"},
-        {"t":37.11,"den":60.49,"ten":"Bài này mang về gì"},
-        {"t":60.49,"den":89.94,"ten":"Mô phỏng: từ liên kết dán vào tới tấm thẻ"},
-        {"t":89.93,"den":99.36,"ten":"Từ liên kết tới tấm thẻ"},
-        {"t":99.36,"den":130.93,"ten":"Chạy thật: rô-bốt cào một trang sâu"},
-        {"t":130.93,"den":138.42,"ten":"Đo: rô-bốt đọc trang sâu"},
-        {"t":138.42,"den":159.98,"ten":"cuongthai.com: mọi liên kết mở về trang chủ"},
-        {"t":159.98,"den":178.78,"ten":"metadataBase: đường dẫn tương đối cần tên miền"},
-        {"t":178.78,"den":199.87,"ten":"Chạy thật: ảnh thẻ sinh cho từng bài"},
-        {"t":199.87,"den":208.3,"ten":"Ảnh thẻ cho từng bài"},
-        {"t":208.3,"den":226.17,"ten":"Sau khi sửa, còn một bẫy"},
-        {"t":226.17,"den":237.11,"ten":"Bẫy: nền tảng lưu tấm thẻ đầu tiên"},
-        {"t":237.11,"den":249.21,"ten":"cuongthai.com hôm nay"},
-        {"t":249.21,"den":283.65,"ten":"Đời thật, nếu… thì sao, góc kẻ xấu"},
-        {"t":283.65,"den":302.18,"ten":"Liên kết chéo"},
-        {"t":302.18,"den":317.4,"ten":"Thuật ngữ"},
-        {"t":317.4,"den":356.33,"ten":"Tự kiểm ba câu"},
-        {"t":356.33,"den":397.32,"ten":"Thực hành & tóm tắt"}
+        {"t":0,"den":89.94,"ten":"Chào bạn · nối từ 17.3 · Bài này mang về gì"},
+        {"t":89.93,"den":178.78,"ten":"Từ liên kết tới tấm thẻ"},
+        {"t":178.78,"den":283.65,"ten":"Chạy thật: ảnh thẻ sinh cho từng bài · Ảnh thẻ cho từng bài"},
+        {"t":283.65,"den":397.32,"ten":"Liên kết chéo · Thuật ngữ"}
       ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 17.4 của khoá Next.js."},
@@ -3618,24 +3217,12 @@
         {"t":385.75,"vi":"Bạn mở Code Lab Next.js, module Server Components và lấy dữ liệu để luyện. Bài sau: Google đo một trang tốt thế nào."}
       ]
     },
-    "nextjs-17-5-core-web-vitals": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/17-render-seo/17-05-core-web-vitals-db6f170c.mp4","durationSec":365.47,"nguonCau":"thoigian",
+    "nextjs-17-5-core-web-vitals": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/17-render-seo/17-05-core-web-vitals-db6f170c.mp4","durationSec":365.47,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":24.58,"ten":"Chào bạn · nối từ 17.4"},
-        {"t":24.58,"den":34.28,"ten":"Bìa"},
-        {"t":34.28,"den":53.51,"ten":"Bài này mang về gì"},
-        {"t":53.51,"den":85.9,"ten":"Mô phỏng: ba đồng hồ"},
-        {"t":85.9,"den":96.52,"ten":"Ba con số, ba cảm giác"},
-        {"t":96.52,"den":114.87,"ten":"Phòng lab: ảnh chậm, có và không có kích thước"},
-        {"t":114.86,"den":140.79,"ten":"Chạy thật: chữ bị xô xuống"},
-        {"t":140.79,"den":150.36,"ten":"Đo: CLS hai bên"},
-        {"t":150.36,"den":170.53,"ten":"INP: hàm bấm chặn màn hình"},
-        {"t":170.53,"den":186.04,"ten":"Cái gì kéo từng con số"},
-        {"t":186.04,"den":205.04,"ten":"Số đo phòng lab và số đo thực địa"},
-        {"t":205.04,"den":217.17,"ten":"cuongthai.com: số đo đến từ đâu"},
-        {"t":217.16,"den":248.87,"ten":"Đời thật, nếu… thì sao, góc kẻ xấu"},
-        {"t":248.87,"den":268.33,"ten":"Liên kết chéo"},
-        {"t":268.33,"den":283.48,"ten":"Thuật ngữ"},
-        {"t":283.48,"den":323.68,"ten":"Tự kiểm ba câu"},
+        {"t":0,"den":85.9,"ten":"Chào bạn · nối từ 17.4 · Bài này mang về gì"},
+        {"t":85.9,"den":170.53,"ten":"Ba con số, ba cảm giác"},
+        {"t":170.53,"den":248.87,"ten":"Cái gì kéo từng con số · Số đo phòng lab và số đo thực địa"},
+        {"t":248.87,"den":323.68,"ten":"Liên kết chéo · Thuật ngữ"},
         {"t":323.68,"den":365.47,"ten":"Thực hành & tóm tắt"}
       ],
       "cues": [
@@ -3682,28 +3269,13 @@
         {"t":354.01,"vi":"Bạn mở Code Lab Next.js, module Client Components và tương tác để luyện. Chương sau: hiệu năng, đo trước rồi mới sửa."}
       ]
     },
-    "nextjs-18-1-do-truoc": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/18-hieu-nang/18-01-do-truoc-2d0a006a.mp4","durationSec":451.32,"nguonCau":"thoigian",
+    "nextjs-18-1-do-truoc": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/18-hieu-nang/18-01-do-truoc-2d0a006a.mp4","durationSec":451.32,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":24.49,"ten":"Chào bạn · nối từ 17.5"},
-        {"t":24.49,"den":34.41,"ten":"Bìa"},
-        {"t":34.4,"den":54.56,"ten":"Bài này mang về gì"},
-        {"t":54.56,"den":86.01,"ten":"Mô phỏng: ống mạng 4G"},
-        {"t":86,"den":98.58,"ten":"Hai chỗ làm trang chậm"},
-        {"t":98.57,"den":125.02,"ten":"Chạy thật: một bài blog bình thường"},
-        {"t":125.02,"den":134.23,"ten":"Không có gì trông sai"},
-        {"t":134.23,"den":162.43,"ten":"Chạy thật: tab Network sắp theo cỡ"},
-        {"t":162.43,"den":170.85,"ten":"Đọc Network theo cỡ"},
-        {"t":170.85,"den":201.64,"ten":"Chạy thật: next build mất cột kích thước"},
-        {"t":201.64,"den":215,"ten":"Cột kích thước đã chuyển chỗ"},
-        {"t":215,"den":240.88,"ten":"Lighthouse trên bản build"},
-        {"t":240.88,"den":268.8,"ten":"Vì sao không đo trên next dev"},
-        {"t":268.8,"den":282.64,"ten":"Vòng lặp đo trước"},
-        {"t":282.64,"den":303.55,"ten":"cuongthai.com đo cùng cách"},
-        {"t":303.55,"den":336.56,"ten":"Đời thật, nếu… thì sao, góc kẻ xấu"},
-        {"t":336.56,"den":352.97,"ten":"Liên kết chéo"},
-        {"t":352.97,"den":366.85,"ten":"Thuật ngữ"},
-        {"t":366.85,"den":415.19,"ten":"Tự kiểm ba câu"},
-        {"t":415.19,"den":451.32,"ten":"Thực hành & tóm tắt"}
+        {"t":0,"den":86.01,"ten":"Chào bạn · nối từ 17.5 · Bài này mang về gì"},
+        {"t":86,"den":162.43,"ten":"Hai chỗ làm trang chậm · Chạy thật: một bài blog bình thường"},
+        {"t":162.43,"den":240.88,"ten":"Đọc Network theo cỡ"},
+        {"t":240.88,"den":336.56,"ten":"Vì sao không đo trên next dev · Vòng lặp đo trước"},
+        {"t":336.56,"den":451.32,"ten":"Liên kết chéo · Thuật ngữ"}
       ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Chương 18, chương hiệu năng."},
@@ -3759,28 +3331,13 @@
         {"t":440.77,"vi":"Bạn mở Code Lab Next.js, module hiệu năng và triển khai để luyện. Bài sau: component Image sửa tấm ảnh này."}
       ]
     },
-    "nextjs-18-2-next-image": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/18-hieu-nang/18-02-next-image-94df4d33.mp4","durationSec":463.63,"nguonCau":"thoigian",
+    "nextjs-18-2-next-image": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/18-hieu-nang/18-02-next-image-94df4d33.mp4","durationSec":463.63,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":23.81,"ten":"Chào bạn · nối từ 18.1"},
-        {"t":23.81,"den":34.33,"ten":"Bìa"},
-        {"t":34.33,"den":58.16,"ten":"Bài này mang về gì"},
-        {"t":58.16,"den":91.06,"ten":"Mô phỏng: cây thước chọn ảnh"},
-        {"t":91.06,"den":102.94,"ten":"Một import, một thẻ"},
-        {"t":102.93,"den":128.92,"ten":"Chạy thật: đổi img thành Image"},
-        {"t":128.91,"den":141.01,"ten":"Đo: cùng ảnh, ba cách"},
-        {"t":141.01,"den":162.22,"ten":"Cái bẫy: thiếu sizes"},
-        {"t":162.22,"den":198.24,"ten":"Chạy thật: máy tối ưu ảnh"},
-        {"t":198.24,"den":208.43,"ten":"Máy chủ làm gì"},
-        {"t":208.43,"den":229.44,"ten":"Tải lười"},
-        {"t":229.43,"den":254.13,"ten":"preload: một ảnh, không phải mười hai"},
-        {"t":254.13,"den":274.78,"ten":"Ảnh từ máy chủ khác"},
-        {"t":274.78,"den":288.96,"ten":"Rào chắn để làm gì"},
-        {"t":288.95,"den":312.87,"ten":"cuongthai.com: Image không tối ưu"},
-        {"t":312.87,"den":347.44,"ten":"Đời thật, nếu… thì sao, góc kẻ xấu"},
-        {"t":347.44,"den":367,"ten":"Liên kết chéo"},
-        {"t":367,"den":380.84,"ten":"Thuật ngữ"},
-        {"t":380.84,"den":425.54,"ten":"Tự kiểm ba câu"},
-        {"t":425.53,"den":463.63,"ten":"Thực hành & tóm tắt"}
+        {"t":0,"den":91.06,"ten":"Chào bạn · nối từ 18.1 · Bài này mang về gì"},
+        {"t":91.06,"den":198.24,"ten":"Một import, một thẻ · Chạy thật: đổi img thành Image"},
+        {"t":198.24,"den":274.78,"ten":"Máy chủ làm gì · Tải lười"},
+        {"t":274.78,"den":367,"ten":"Rào chắn để làm gì · cuongthai.com: Image không tối ưu"},
+        {"t":367,"den":463.63,"ten":"Thuật ngữ · Tự kiểm ba câu"}
       ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 18.2."},
@@ -3835,26 +3392,12 @@
         {"t":454.12,"vi":"Bạn mở Code Lab Next.js, module hiệu năng để luyện. Bài sau: gửi ít JavaScript hơn."}
       ]
     },
-    "nextjs-18-3-it-javascript": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/18-hieu-nang/18-03-it-javascript-7294a623.mp4","durationSec":430.73,"nguonCau":"thoigian",
+    "nextjs-18-3-it-javascript": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/18-hieu-nang/18-03-it-javascript-7294a623.mp4","durationSec":430.73,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":25.88,"ten":"Chào bạn · nối từ 18.2"},
-        {"t":25.88,"den":35.34,"ten":"Bìa"},
-        {"t":35.34,"den":56.5,"ten":"Bài này mang về gì"},
-        {"t":56.5,"den":89.54,"ten":"Mô phỏng: bếp và xe giao hàng"},
-        {"t":89.54,"den":101.07,"ten":"Ba công cụ"},
-        {"t":101.07,"den":122.62,"ten":"Chạy thật: cùng việc, hai chỗ"},
-        {"t":122.62,"den":149.1,"ten":"Chạy thật: bảng kích thước từng route"},
-        {"t":149.1,"den":161.82,"ten":"Công cụ một: ở máy chủ"},
-        {"t":161.82,"den":190.43,"ten":"Công cụ hai: next dynamic"},
-        {"t":190.43,"den":216.44,"ten":"Công cụ ba: route và Link"},
-        {"t":216.44,"den":234.9,"ten":"Bẫy import dùng chung"},
-        {"t":234.9,"den":264.35,"ten":"Cách import thư viện"},
-        {"t":264.35,"den":284.98,"ten":"cuongthai.com làm thế nào"},
-        {"t":284.98,"den":319.4,"ten":"Đời thật, nếu… thì sao, góc kẻ xấu"},
-        {"t":319.4,"den":334.62,"ten":"Liên kết chéo"},
-        {"t":334.62,"den":348.94,"ten":"Thuật ngữ"},
-        {"t":348.94,"den":394.48,"ten":"Tự kiểm ba câu"},
-        {"t":394.48,"den":430.73,"ten":"Thực hành & tóm tắt"}
+        {"t":0,"den":89.54,"ten":"Chào bạn · nối từ 18.2 · Bài này mang về gì"},
+        {"t":89.54,"den":190.43,"ten":"Ba công cụ · Chạy thật: cùng việc, hai chỗ"},
+        {"t":190.43,"den":284.98,"ten":"Công cụ ba: route và Link · Bẫy import dùng chung"},
+        {"t":284.98,"den":430.73,"ten":"Đời thật, nếu… thì sao, góc kẻ xấu · Liên kết chéo"}
       ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 18.3."},
@@ -3908,27 +3451,12 @@
         {"t":421.53,"vi":"Bạn mở Code Lab Next.js, module hiệu năng để luyện. Bài sau: font và tài nguyên tĩnh."}
       ]
     },
-    "nextjs-18-4-fonts-assets": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/18-hieu-nang/18-04-fonts-assets-e5ea96d0.mp4","durationSec":419.31,"nguonCau":"thoigian",
+    "nextjs-18-4-fonts-assets": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/18-hieu-nang/18-04-fonts-assets-e5ea96d0.mp4","durationSec":419.31,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":23.46,"ten":"Chào bạn · nối từ 18.3"},
-        {"t":23.46,"den":33.98,"ten":"Bìa"},
-        {"t":33.98,"den":56.4,"ten":"Bài này mang về gì"},
-        {"t":56.4,"den":68.28,"ten":"Bốn cách font làm hại trang"},
-        {"t":68.28,"den":94.63,"ten":"Chạy thật: hai cách nạp font"},
-        {"t":94.63,"den":106.21,"ten":"Tải lúc build, phục vụ bởi bạn"},
-        {"t":106.21,"den":120.31,"ten":"Font dự phòng không nhảy"},
-        {"t":120.31,"den":141.05,"ten":"subsets điều khiển tải trước"},
-        {"t":141.05,"den":178.53,"ten":"Mô phỏng: chuỗi yêu cầu"},
-        {"t":178.52,"den":188.2,"ten":"Import CSS: chữ đầu tiên chờ Google"},
-        {"t":188.2,"den":223.52,"ten":"Chạy thật: build mất mạng và thư mục public"},
-        {"t":223.52,"den":236.11,"ten":"Build cần Google"},
-        {"t":236.11,"den":251.43,"ten":"public đóng băng khi khởi động"},
-        {"t":251.43,"den":268.6,"ten":"cuongthai.com: font không dùng next font"},
-        {"t":268.6,"den":302.83,"ten":"Đời thật, nếu… thì sao, góc kẻ xấu"},
-        {"t":302.83,"den":319.34,"ten":"Liên kết chéo"},
-        {"t":319.34,"den":334.84,"ten":"Thuật ngữ"},
-        {"t":334.84,"den":381.94,"ten":"Tự kiểm ba câu"},
-        {"t":381.94,"den":419.31,"ten":"Thực hành & tóm tắt"}
+        {"t":0,"den":94.63,"ten":"Chào bạn · nối từ 18.3 · Bài này mang về gì"},
+        {"t":94.63,"den":178.53,"ten":"Tải lúc build, phục vụ bởi bạn · Font dự phòng không nhảy"},
+        {"t":178.52,"den":268.6,"ten":"Import CSS: chữ đầu tiên chờ Google"},
+        {"t":268.6,"den":419.31,"ten":"Đời thật, nếu… thì sao, góc kẻ xấu · Liên kết chéo"}
       ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 18.4."},
@@ -3978,26 +3506,12 @@
         {"t":409.96,"vi":"Bạn mở Code Lab Next.js, module hiệu năng để luyện. Bài sau: đo, một cách trung thực."}
       ]
     },
-    "nextjs-18-5-do-trung-thuc": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/18-hieu-nang/18-05-do-trung-thuc-372c2661.mp4","durationSec":428.98,"nguonCau":"thoigian",
+    "nextjs-18-5-do-trung-thuc": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/18-hieu-nang/18-05-do-trung-thuc-372c2661.mp4","durationSec":428.98,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":25.01,"ten":"Chào bạn · nối từ 18.4"},
-        {"t":25.01,"den":36.33,"ten":"Bìa"},
-        {"t":36.32,"den":60.57,"ten":"Bài này mang về gì"},
-        {"t":60.57,"den":72.72,"ten":"Bốn dụng cụ"},
-        {"t":72.72,"den":102,"ten":"Chạy thật: next analyze"},
-        {"t":102,"den":114.71,"ten":"Bộ phân tích"},
-        {"t":114.71,"den":139.6,"ten":"Chạy thật: đổi một thứ, build lại"},
-        {"t":139.6,"den":150.1,"ten":"Đổi một thứ rồi so"},
-        {"t":150.11,"den":173.64,"ten":"Đếm thẻ script là sai"},
-        {"t":173.64,"den":195.98,"ten":"Lighthouse dao động"},
-        {"t":195.98,"den":230.36,"ten":"Mô phỏng: bốn người cùng mở một trang"},
-        {"t":230.36,"den":243.64,"ten":"Máy bạn không phải bài kiểm tra"},
-        {"t":243.64,"den":266.97,"ten":"Dữ liệu thực địa"},
-        {"t":266.97,"den":278.46,"ten":"cuongthai.com: có phòng lab, chưa có thực địa"},
-        {"t":278.46,"den":310.64,"ten":"Đời thật, nếu… thì sao, góc kẻ xấu"},
-        {"t":310.64,"den":327.33,"ten":"Liên kết chéo"},
-        {"t":327.34,"den":342.52,"ten":"Thuật ngữ"},
-        {"t":342.52,"den":389.73,"ten":"Tự kiểm ba câu"},
+        {"t":0,"den":102,"ten":"Chào bạn · nối từ 18.4 · Bài này mang về gì"},
+        {"t":102,"den":195.98,"ten":"Bộ phân tích · Chạy thật: đổi một thứ, build lại"},
+        {"t":195.98,"den":278.46,"ten":"Mô phỏng: bốn người cùng mở một trang"},
+        {"t":278.46,"den":389.73,"ten":"Đời thật, nếu… thì sao, góc kẻ xấu · Liên kết chéo"},
         {"t":389.73,"den":428.98,"ten":"Thực hành & tóm tắt"}
       ],
       "cues": [
@@ -4049,26 +3563,12 @@
         {"t":419.18,"vi":"Bạn mở Code Lab Next.js, module theo dõi và tối ưu production để luyện. Chương sau: test."}
       ]
     },
-    "nextjs-19-1-vi-sao-test": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/19-kiem-thu/19-01-vi-sao-test-d656d169.mp4","durationSec":432.03,"nguonCau":"thoigian",
+    "nextjs-19-1-vi-sao-test": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/19-kiem-thu/19-01-vi-sao-test-d656d169.mp4","durationSec":432.03,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":21.75,"ten":"Chào bạn · nối từ 18.5"},
-        {"t":21.74,"den":33.12,"ten":"Bìa"},
-        {"t":33.12,"den":56.76,"ten":"Bài này mang về gì"},
-        {"t":56.76,"den":75.31,"ten":"Test là chuông báo cháy"},
-        {"t":75.31,"den":105.01,"ten":"Chạy thật: con bọ trong giỏ hàng"},
-        {"t":105.01,"den":116.04,"ten":"Con bọ"},
-        {"t":116.04,"den":150.88,"ten":"Chạy thật: ba loại test cùng đỏ"},
-        {"t":150.88,"den":160.43,"ten":"Ba loại test"},
-        {"t":160.43,"den":179.05,"ten":"Tốc độ và điều mỗi lần đỏ nói"},
-        {"t":179.05,"den":212.08,"ten":"Mô phỏng: tháp kiểm thử"},
-        {"t":212.08,"den":224.92,"ten":"Tháp kiểm thử"},
-        {"t":224.92,"den":243.6,"ten":"Sửa một dòng"},
-        {"t":243.6,"den":266.51,"ten":"Bẫy: test cách vẽ"},
-        {"t":266.51,"den":285.85,"ten":"Kho của chính khoá này"},
-        {"t":285.85,"den":317.34,"ten":"Đời thật, nếu… thì sao, góc kẻ xấu"},
-        {"t":317.34,"den":334.59,"ten":"Liên kết chéo"},
-        {"t":334.59,"den":347.75,"ten":"Thuật ngữ"},
-        {"t":347.75,"den":393.88,"ten":"Tự kiểm ba câu"},
+        {"t":0,"den":105.01,"ten":"Chào bạn · nối từ 18.5 · Bài này mang về gì"},
+        {"t":105.01,"den":212.08,"ten":"Con bọ · Chạy thật: ba loại test cùng đỏ"},
+        {"t":212.08,"den":317.34,"ten":"Tháp kiểm thử · Sửa một dòng"},
+        {"t":317.34,"den":393.88,"ten":"Liên kết chéo · Thuật ngữ"},
         {"t":393.88,"den":432.03,"ten":"Thực hành & tóm tắt"}
       ],
       "cues": [
@@ -4125,28 +3625,13 @@
         {"t":422.29,"vi":"Bạn mở Code Lab Next.js, module kiểm thử và đảm bảo chất lượng để luyện. Bài sau: Vitest."}
       ]
     },
-    "nextjs-19-2-unit-test-vitest": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/19-kiem-thu/19-02-unit-test-vitest-dc90e965.mp4","durationSec":462.2,"nguonCau":"thoigian",
+    "nextjs-19-2-unit-test-vitest": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/19-kiem-thu/19-02-unit-test-vitest-dc90e965.mp4","durationSec":462.2,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":23.62,"ten":"Chào bạn · nối từ 19.1"},
-        {"t":23.62,"den":38.25,"ten":"Bìa"},
-        {"t":38.25,"den":58.63,"ten":"Bài này mang về gì"},
-        {"t":58.63,"den":91.65,"ten":"Chạy thật: cài Vitest"},
-        {"t":91.65,"den":103.01,"ten":"Cài đặt"},
-        {"t":103.01,"den":120.01,"ten":"Tệp cấu hình"},
-        {"t":120.01,"den":147.9,"ten":"Chạy thật: bài test nhỏ nhất"},
-        {"t":147.9,"den":158.82,"ten":"Bài test nhỏ nhất"},
-        {"t":158.83,"den":180.57,"ten":"Ca mép"},
-        {"t":180.57,"den":201.19,"ten":"Chạy thật: chế độ theo dõi"},
-        {"t":201.19,"den":212.04,"ten":"Chế độ theo dõi"},
-        {"t":212.04,"den":234.61,"ten":"Bẫy: test xanh mà chưa kiểm gì"},
-        {"t":234.61,"den":263.55,"ten":"Mô phỏng: câu khẳng định chạy lúc nào"},
-        {"t":263.55,"den":277.21,"ten":"Luật"},
-        {"t":277.21,"den":297.2,"ten":"Route Handler là một hàm"},
-        {"t":297.2,"den":315.01,"ten":"Kho của chính khoá này"},
-        {"t":315.01,"den":346.65,"ten":"Đời thật, nếu… thì sao, góc kẻ xấu"},
-        {"t":346.65,"den":363.93,"ten":"Liên kết chéo"},
-        {"t":363.93,"den":379.52,"ten":"Thuật ngữ"},
-        {"t":379.52,"den":423.28,"ten":"Tự kiểm ba câu"},
+        {"t":0,"den":91.65,"ten":"Chào bạn · nối từ 19.1 · Bài này mang về gì"},
+        {"t":91.65,"den":180.57,"ten":"Cài đặt · Tệp cấu hình"},
+        {"t":180.57,"den":263.55,"ten":"Chạy thật: chế độ theo dõi · Chế độ theo dõi"},
+        {"t":263.55,"den":346.65,"ten":"Luật · Route Handler là một hàm"},
+        {"t":346.65,"den":423.28,"ten":"Liên kết chéo · Thuật ngữ"},
         {"t":423.28,"den":462.2,"ten":"Thực hành & tóm tắt"}
       ],
       "cues": [
@@ -4207,28 +3692,13 @@
         {"t":451.89,"vi":"Bạn mở Code Lab Next.js, module kiểm thử và đảm bảo chất lượng để luyện. Bài sau: test component."}
       ]
     },
-    "nextjs-19-3-react-testing-library": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/19-kiem-thu/19-03-react-testing-library-130f9ff4.mp4","durationSec":434.94,"nguonCau":"thoigian",
+    "nextjs-19-3-react-testing-library": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/19-kiem-thu/19-03-react-testing-library-130f9ff4.mp4","durationSec":434.94,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":23.16,"ten":"Chào bạn · nối từ 19.2"},
-        {"t":23.15,"den":34.18,"ten":"Bìa"},
-        {"t":34.18,"den":55,"ten":"Bài này mang về gì"},
-        {"t":55,"den":71.89,"ten":"Truy vấn như một người"},
-        {"t":71.89,"den":97.74,"ten":"Chạy thật: bài test của bài viết"},
-        {"t":97.74,"den":110.75,"ten":"Đỏ ngay từ đầu"},
-        {"t":110.74,"den":122.5,"ten":"Tệp cài đặt"},
-        {"t":122.5,"den":154.69,"ten":"Chạy thật: hai nút trông y hệt"},
-        {"t":154.69,"den":165.25,"ten":"Hai nút"},
-        {"t":165.25,"den":183.78,"ten":"Bẫy: getByTestId"},
-        {"t":183.78,"den":215.06,"ten":"Mô phỏng: gõ An123 hai cách"},
-        {"t":215.06,"den":227.71,"ten":"userEvent và fireEvent"},
-        {"t":227.71,"den":246.53,"ten":"Chờ cho đúng"},
-        {"t":246.53,"den":268.72,"ten":"Server Component bất đồng bộ"},
-        {"t":268.72,"den":288.3,"ten":"Kho của chính khoá này"},
-        {"t":288.3,"den":320.21,"ten":"Đời thật, nếu… thì sao, góc kẻ xấu"},
-        {"t":320.21,"den":337.48,"ten":"Liên kết chéo"},
-        {"t":337.48,"den":352.25,"ten":"Thuật ngữ"},
-        {"t":352.25,"den":396.03,"ten":"Tự kiểm ba câu"},
-        {"t":396.03,"den":434.94,"ten":"Thực hành & tóm tắt"}
+        {"t":0,"den":97.74,"ten":"Chào bạn · nối từ 19.2 · Bài này mang về gì"},
+        {"t":97.74,"den":183.78,"ten":"Đỏ ngay từ đầu · Tệp cài đặt"},
+        {"t":183.78,"den":268.72,"ten":"Mô phỏng: gõ An123 hai cách · userEvent và fireEvent"},
+        {"t":268.72,"den":352.25,"ten":"Kho của chính khoá này · Đời thật, nếu… thì sao, góc kẻ xấu"},
+        {"t":352.25,"den":434.94,"ten":"Tự kiểm ba câu · Thực hành & tóm tắt"}
       ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 19.3."},
@@ -4283,26 +3753,12 @@
         {"t":425.11,"vi":"Bạn mở Code Lab Next.js, module kiểm thử và đảm bảo chất lượng để luyện. Bài sau: Playwright."}
       ]
     },
-    "nextjs-19-4-playwright-e2e": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/19-kiem-thu/19-04-playwright-e2e-b6831a8e.mp4","durationSec":377.87,"nguonCau":"thoigian",
+    "nextjs-19-4-playwright-e2e": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/19-kiem-thu/19-04-playwright-e2e-b6831a8e.mp4","durationSec":377.87,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":24.16,"ten":"Chào bạn · nối từ 19.3"},
-        {"t":24.16,"den":37.56,"ten":"Bìa"},
-        {"t":37.56,"den":57.56,"ten":"Bài này mang về gì"},
-        {"t":57.56,"den":71.77,"ten":"Người máy dùng thử"},
-        {"t":71.77,"den":85.43,"ten":"Test bản build"},
-        {"t":85.43,"den":117.4,"ten":"Chạy thật: mật khẩu sai"},
-        {"t":117.4,"den":128.63,"ten":"Thông báo của chính Next.js"},
-        {"t":128.63,"den":140.33,"ten":"Thu hẹp lại"},
-        {"t":140.33,"den":169.82,"ten":"Mô phỏng: hai mươi lượt chạy"},
-        {"t":169.82,"den":182.24,"ten":"Chờ cố định"},
-        {"t":182.24,"den":200.19,"ten":"Máy chủ dev và bản build"},
-        {"t":200.19,"den":211.97,"ten":"Vitest chạy nhầm tệp"},
-        {"t":211.97,"den":231.16,"ten":"Kho của chính khoá này"},
-        {"t":231.16,"den":264.39,"ten":"Đời thật, nếu… thì sao, góc kẻ xấu"},
-        {"t":264.39,"den":283.58,"ten":"Liên kết chéo"},
-        {"t":283.58,"den":297.21,"ten":"Thuật ngữ"},
-        {"t":297.2,"den":340.44,"ten":"Tự kiểm ba câu"},
-        {"t":340.44,"den":377.87,"ten":"Thực hành & tóm tắt"}
+        {"t":0,"den":85.43,"ten":"Chào bạn · nối từ 19.3 · Bài này mang về gì"},
+        {"t":85.43,"den":169.82,"ten":"Chạy thật: mật khẩu sai · Thông báo của chính Next.js"},
+        {"t":169.82,"den":264.39,"ten":"Chờ cố định · Máy chủ dev và bản build"},
+        {"t":264.39,"den":377.87,"ten":"Liên kết chéo · Thuật ngữ"}
       ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 19.4."},
@@ -4349,26 +3805,12 @@
         {"t":367.84,"vi":"Bạn mở Code Lab Next.js, module kiểm thử và đảm bảo chất lượng để luyện. Bài sau: test cái gì."}
       ]
     },
-    "nextjs-19-5-test-cai-gi": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/19-kiem-thu/19-05-test-cai-gi-09eca3f3.mp4","durationSec":398.04,"nguonCau":"thoigian",
+    "nextjs-19-5-test-cai-gi": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/19-kiem-thu/19-05-test-cai-gi-09eca3f3.mp4","durationSec":398.04,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":25.59,"ten":"Chào bạn · nối từ 19.4"},
-        {"t":25.59,"den":37.05,"ten":"Bìa"},
-        {"t":37.05,"den":56.42,"ten":"Bài này mang về gì"},
-        {"t":56.42,"den":70.72,"ten":"Dồn công sức vào đâu"},
-        {"t":70.71,"den":87.87,"ten":"Kiểu và test bắt những thứ khác nhau"},
-        {"t":87.87,"den":122.92,"ten":"Chạy thật: tái hiện sự cố đổi tên enum"},
-        {"t":122.92,"den":133.72,"ten":"Tái hiện"},
-        {"t":133.72,"den":146.61,"ten":"Kho đã vá thế nào"},
-        {"t":146.61,"den":179.25,"ten":"Mô phỏng: bốn tấm lưới"},
-        {"t":179.25,"den":200.24,"ten":"Test hồi quy cho isHydrated"},
-        {"t":200.24,"den":220.17,"ten":"Chạy thật: độ phủ một trăm phần trăm"},
-        {"t":220.17,"den":230.1,"ten":"Độ phủ"},
-        {"t":230.1,"den":252.36,"ten":"Test chỉ có ích khi được chạy"},
-        {"t":252.36,"den":285.21,"ten":"Đời thật, nếu… thì sao, góc kẻ xấu"},
-        {"t":285.21,"den":303.94,"ten":"Liên kết chéo"},
-        {"t":303.94,"den":318.35,"ten":"Thuật ngữ"},
-        {"t":318.35,"den":359.1,"ten":"Tự kiểm ba câu"},
-        {"t":359.1,"den":398.04,"ten":"Thực hành & tóm tắt"}
+        {"t":0,"den":87.87,"ten":"Chào bạn · nối từ 19.4 · Bài này mang về gì"},
+        {"t":87.87,"den":179.25,"ten":"Chạy thật: tái hiện sự cố đổi tên enum · Tái hiện"},
+        {"t":179.25,"den":285.21,"ten":"Test hồi quy cho isHydrated"},
+        {"t":285.21,"den":398.04,"ten":"Liên kết chéo · Thuật ngữ"}
       ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 19.5, bài cuối của Chương 19."},
@@ -4420,8 +3862,14 @@
         {"t":387.75,"vi":"Bạn mở Code Lab Next.js, module kiểm thử và đảm bảo chất lượng để luyện. Chương sau: build và deploy."}
       ]
     },
-    "nextjs-2-1-props": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/02-component-props/02-01-props-f30d35e3.mp4","durationSec":477.32,"nguonCau":"srt",
-      "parts": [],
+    "nextjs-2-1-props": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/02-component-props/02-01-props-f30d35e3.mp4","durationSec":477.32,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":121.62,"ten":"Chào bạn · nối từ Chương 1 · Bài này mang về gì"},
+        {"t":121.62,"den":219.2,"ten":"Component là hàm, props là đối số"},
+        {"t":219.2,"den":297.41,"ten":"Chạy thật: ghi vào props · Props chỉ đọc"},
+        {"t":297.41,"den":377.43,"ten":"Dữ liệu di chuyển thế nào"},
+        {"t":377.43,"den":477.32,"ten":"Thuật ngữ · Tự kiểm ba câu"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 2.1, mở đầu Chương 2 của khoá Next.js."},
         {"t":11.07,"vi":"Chương trước: component là hàm trả về cây element, JSX chỉ là JavaScript, và React vẽ rồi vẽ lại mỗi khi dữ liệu đổi."},
@@ -4512,8 +3960,15 @@
         {"t":465.87,"vi":"Bạn mở Code Lab Next.js, module nền tảng và dựng dự án để luyện props. Bài sau: children và cách ghép component."}
       ]
     },
-    "nextjs-2-2-children-composition": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/02-component-props/02-02-children-composition-13944ccf.mp4","durationSec":495.37,"nguonCau":"srt",
-      "parts": [],
+    "nextjs-2-2-children-composition": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/02-component-props/02-02-children-composition-13944ccf.mp4","durationSec":495.37,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":108.92,"ten":"Chào bạn · nối từ bài 2.1 · Bài này mang về gì"},
+        {"t":108.92,"den":195.98,"ten":"Thứ bạn lồng thành children"},
+        {"t":195.98,"den":279.09,"ten":"Children không phải lúc nào cũng là mảng"},
+        {"t":279.09,"den":365.64,"ten":"Ghép thắng cấu hình · Một khung, mọi nội dung"},
+        {"t":365.64,"den":453.64,"ten":"Vì sao children bỏ qua lần vẽ lại · Liên kết chéo"},
+        {"t":453.64,"den":495.37,"ten":"Thực hành & tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 2.2 của khoá Next.js."},
         {"t":9.81,"vi":"Bài trước: props là đối số của component, dữ liệu chảy xuống một chiều, và props chỉ đọc."},
@@ -4608,8 +4063,15 @@
         {"t":484.82,"vi":"Bạn mở Code Lab Next.js, module nền tảng và dựng dự án để luyện ghép component. Bài sau: khuôn props."}
       ]
     },
-    "nextjs-2-3-khuon-props": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/02-component-props/02-03-khuon-props-e099237f.mp4","durationSec":494.62,"nguonCau":"srt",
-      "parts": [],
+    "nextjs-2-3-khuon-props": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/02-component-props/02-03-khuon-props-e099237f.mp4","durationSec":494.62,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":109.93,"ten":"Chào bạn · nối từ bài 2.2 · Bài này mang về gì"},
+        {"t":109.93,"den":185.78,"ten":"Mặc định là JavaScript thuần · Spread phần còn lại"},
+        {"t":185.78,"den":270.56,"ten":"Chạy thật: spread trên React 19 · Spread cắn hai lần"},
+        {"t":270.56,"den":355.57,"ten":"Gõ kiểu props · Sửa hiểu lầm: React.FC"},
+        {"t":355.57,"den":449.44,"ten":"Bảng kiểm gõ kiểu props · Liên kết chéo"},
+        {"t":449.44,"den":494.62,"ten":"Thực hành & tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 2.3 của khoá Next.js."},
         {"t":9.81,"vi":"Hai bài trước: props là đối số của component, còn children là khe để người gọi lấp nội dung."},
@@ -4707,8 +4169,14 @@
         {"t":483.61,"vi":"Bạn mở Code Lab Next.js, module nền tảng và dựng dự án để luyện khuôn props. Bài sau: tư duy theo component."}
       ]
     },
-    "nextjs-2-4-tu-duy-component": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/02-component-props/02-04-tu-duy-component-3db0a5ef.mp4","durationSec":458.92,"nguonCau":"srt",
-      "parts": [],
+    "nextjs-2-4-tu-duy-component": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/02-component-props/02-04-tu-duy-component-3db0a5ef.mp4","durationSec":458.92,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":103.6,"ten":"Chào bạn · nối từ bài 2.3 · Bài này mang về gì"},
+        {"t":103.6,"den":187.38,"ten":"Phương pháp: tìm danh từ, vẽ hộp · Từ hộp tới cây và props"},
+        {"t":187.38,"den":296.55,"ten":"Giữ component thuần · Chạy thật: dev vs production"},
+        {"t":296.55,"den":415.25,"ten":"Hydration hỏng · Component nên kết thúc ở đâu"},
+        {"t":415.25,"den":458.92,"ten":"Thực hành & tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 2.4, bài cuối của Chương 2."},
         {"t":9.78,"vi":"Ba bài vừa rồi: props, children, và bốn khuôn props. Bạn đã có đủ công cụ để viết từng component."},
@@ -4792,25 +4260,12 @@
         {"t":455.62,"vi":"Chương sau: state."}
       ]
     },
-    "nextjs-20-1-build-vs-start": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/20-build-deploy/20-01-build-vs-start-ed7f65da.mp4","durationSec":357.39,"nguonCau":"thoigian",
+    "nextjs-20-1-build-vs-start": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/20-build-deploy/20-01-build-vs-start-ed7f65da.mp4","durationSec":357.39,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":22.77,"ten":"Chào bạn · nối từ 19.5"},
-        {"t":22.77,"den":36.22,"ten":"Bìa"},
-        {"t":36.22,"den":60.46,"ten":"Bài này mang về gì"},
-        {"t":60.45,"den":76.51,"ten":"Ba lệnh"},
-        {"t":76.51,"den":90.33,"ten":"next build thật"},
-        {"t":90.33,"den":115.68,"ten":"Chạy thật: start khi chưa build"},
-        {"t":115.68,"den":123.77,"ten":"Ready rồi chết"},
-        {"t":123.77,"den":153.49,"ten":"Mô phỏng: nguồn, bản build, máy chủ"},
-        {"t":153.49,"den":167.28,"ten":"Production chạy bản build"},
-        {"t":167.28,"den":184.41,"ten":"Lỗi kiểu mà dev bỏ qua"},
-        {"t":184.41,"den":196.92,"ten":"Dev là một chương trình khác"},
-        {"t":196.92,"den":219.03,"ten":"Kho của chính khoá này"},
-        {"t":219.03,"den":248.66,"ten":"Đời thật, nếu… thì sao, góc kẻ xấu"},
-        {"t":248.66,"den":265.53,"ten":"Liên kết chéo"},
-        {"t":265.53,"den":279.89,"ten":"Thuật ngữ"},
-        {"t":279.89,"den":319.55,"ten":"Tự kiểm ba câu"},
-        {"t":319.55,"den":357.39,"ten":"Thực hành & tóm tắt"}
+        {"t":0,"den":76.51,"ten":"Chào bạn · nối từ 19.5 · Bài này mang về gì"},
+        {"t":76.51,"den":153.49,"ten":"next build thật · Chạy thật: start khi chưa build"},
+        {"t":153.49,"den":248.66,"ten":"Production chạy bản build · Lỗi kiểu mà dev bỏ qua"},
+        {"t":248.66,"den":357.39,"ten":"Liên kết chéo · Thuật ngữ"}
       ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Chương 20, chương cuối của khoá."},
@@ -4856,26 +4311,12 @@
         {"t":347.26,"vi":"Bạn mở Code Lab Next.js, module hiệu năng và triển khai production để luyện. Bài sau: biến môi trường."}
       ]
     },
-    "nextjs-20-2-env-next-public": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/20-build-deploy/20-02-env-next-public-580861a8.mp4","durationSec":370.05,"nguonCau":"thoigian",
+    "nextjs-20-2-env-next-public": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/20-build-deploy/20-02-env-next-public-580861a8.mp4","durationSec":370.05,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":23.98,"ten":"Chào bạn · nối từ 20.1"},
-        {"t":23.98,"den":35.41,"ten":"Bìa"},
-        {"t":35.41,"den":55.06,"ten":"Bài này mang về gì"},
-        {"t":55.06,"den":69.25,"ten":"Hai loại biến"},
-        {"t":69.25,"den":82.57,"ten":"Thí nghiệm"},
-        {"t":82.57,"den":110.31,"ten":"Mô phỏng: lò nướng build"},
-        {"t":110.31,"den":122.5,"ten":"Chỉ trang động đọc lúc chạy"},
-        {"t":122.5,"den":149.75,"ten":"Chạy thật: lỗi hydrate"},
-        {"t":149.75,"den":160.24,"ten":"Lỗi hydrate"},
-        {"t":160.24,"den":182.72,"ten":"Chạy thật: khoá ai cũng tải được"},
-        {"t":182.72,"den":193.13,"ten":"Khoá công khai"},
-        {"t":193.13,"den":205.38,"ten":"Build lại"},
-        {"t":205.38,"den":227.74,"ten":"Kho của chính khoá này"},
-        {"t":227.74,"den":258.55,"ten":"Đời thật, nếu… thì sao, góc kẻ xấu"},
-        {"t":258.55,"den":275.47,"ten":"Liên kết chéo"},
-        {"t":275.47,"den":290.62,"ten":"Thuật ngữ"},
-        {"t":290.62,"den":330.58,"ten":"Tự kiểm ba câu"},
-        {"t":330.58,"den":370.05,"ten":"Thực hành & tóm tắt"}
+        {"t":0,"den":82.57,"ten":"Chào bạn · nối từ 20.1 · Bài này mang về gì"},
+        {"t":82.57,"den":160.24,"ten":"Mô phỏng: lò nướng build · Chỉ trang động đọc lúc chạy"},
+        {"t":160.24,"den":258.55,"ten":"Chạy thật: khoá ai cũng tải được · Khoá công khai"},
+        {"t":258.55,"den":370.05,"ten":"Liên kết chéo · Thuật ngữ"}
       ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 20.2."},
@@ -4923,25 +4364,12 @@
         {"t":360.19,"vi":"Bạn mở Code Lab Next.js, module hiệu năng và triển khai production để luyện. Bài sau: Docker."}
       ]
     },
-    "nextjs-20-3-docker": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/20-build-deploy/20-03-docker-f718e117.mp4","durationSec":351.9,"nguonCau":"thoigian",
+    "nextjs-20-3-docker": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/20-build-deploy/20-03-docker-f718e117.mp4","durationSec":351.9,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":23.32,"ten":"Chào bạn · nối từ 20.2"},
-        {"t":23.32,"den":37.61,"ten":"Bìa"},
-        {"t":37.61,"den":58.37,"ten":"Bài này mang về gì"},
-        {"t":58.37,"den":73.61,"ten":"Ảnh, container, Dockerfile"},
-        {"t":73.62,"den":106.18,"ten":"Chạy thật: build xanh, container chết"},
-        {"t":106.18,"den":114.9,"ten":"Build xanh, container chết"},
-        {"t":114.89,"den":128.12,"ten":"Dời chú thích"},
-        {"t":128.12,"den":153.1,"ten":"Mô phỏng: ba tầng đóng gói"},
-        {"t":153.1,"den":162.69,"ten":"Nhiều tầng + standalone"},
-        {"t":162.69,"den":179.82,"ten":"NEXT_PUBLIC là tham số build"},
-        {"t":179.82,"den":193.49,"ten":"musl và glibc"},
-        {"t":193.49,"den":205.09,"ten":"Kho của chính khoá này"},
-        {"t":205.09,"den":237.91,"ten":"Đời thật, nếu… thì sao, góc kẻ xấu"},
-        {"t":237.91,"den":256.77,"ten":"Liên kết chéo"},
-        {"t":256.77,"den":270.44,"ten":"Thuật ngữ"},
-        {"t":270.44,"den":315.65,"ten":"Tự kiểm ba câu"},
-        {"t":315.65,"den":351.9,"ten":"Thực hành & tóm tắt"}
+        {"t":0,"den":106.18,"ten":"Chào bạn · nối từ 20.2 · Bài này mang về gì"},
+        {"t":106.18,"den":179.82,"ten":"Build xanh, container chết · Dời chú thích"},
+        {"t":179.82,"den":256.77,"ten":"musl và glibc · Kho của chính khoá này"},
+        {"t":256.77,"den":351.9,"ten":"Thuật ngữ · Tự kiểm ba câu"}
       ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 20.3."},
@@ -4986,26 +4414,12 @@
         {"t":341.75,"vi":"Bạn mở Code Lab Next.js, module hiệu năng và triển khai production để luyện. Bài sau: VPS."}
       ]
     },
-    "nextjs-20-4-vps-stale-build": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/20-build-deploy/20-04-vps-stale-build-49dc5006.mp4","durationSec":384.24,"nguonCau":"thoigian",
+    "nextjs-20-4-vps-stale-build": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/20-build-deploy/20-04-vps-stale-build-49dc5006.mp4","durationSec":384.24,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":20.63,"ten":"Chào bạn · nối từ 20.3"},
-        {"t":20.63,"den":36.26,"ten":"Bìa"},
-        {"t":36.26,"den":57.08,"ten":"Bài này mang về gì"},
-        {"t":57.08,"den":73.76,"ten":"VPS và một lần deploy"},
-        {"t":73.76,"den":101.37,"ten":"Mô phỏng: tem trên container"},
-        {"t":101.37,"den":128.93,"ten":"Chạy thật: build cũ và smoke test"},
-        {"t":128.93,"den":141.41,"ten":"Build cũ"},
-        {"t":141.41,"den":154.84,"ten":"Smoke test"},
-        {"t":154.84,"den":184.7,"ten":"Chạy thật: tệp gắn vào container"},
-        {"t":184.7,"den":198.67,"ten":"Tệp gắn theo inode"},
-        {"t":198.67,"den":218.32,"ten":"Lỗi bốn trăm lẻ bốn giữ một năm"},
-        {"t":218.32,"den":233.63,"ten":"Câu hỏi đầu tiên"},
-        {"t":233.63,"den":245.57,"ten":"Kho của chính khoá này"},
-        {"t":245.57,"den":275.82,"ten":"Đời thật, nếu… thì sao, góc kẻ xấu"},
-        {"t":275.82,"den":293.43,"ten":"Liên kết chéo"},
-        {"t":293.43,"den":306.6,"ten":"Thuật ngữ"},
-        {"t":306.6,"den":347.58,"ten":"Tự kiểm ba câu"},
-        {"t":347.58,"den":384.24,"ten":"Thực hành & tóm tắt"}
+        {"t":0,"den":101.37,"ten":"Chào bạn · nối từ 20.3 · Bài này mang về gì"},
+        {"t":101.37,"den":184.7,"ten":"Chạy thật: build cũ và smoke test · Build cũ"},
+        {"t":184.7,"den":275.82,"ten":"Tệp gắn theo inode · Lỗi bốn trăm lẻ bốn giữ một năm"},
+        {"t":275.82,"den":384.24,"ten":"Liên kết chéo · Thuật ngữ"}
       ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 20.4."},
@@ -5054,26 +4468,12 @@
         {"t":374.44,"vi":"Bạn mở Code Lab Next.js, module hiệu năng và triển khai production để luyện. Bài sau: bài cuối."}
       ]
     },
-    "nextjs-20-5-quy-trinh-an-toan": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/20-build-deploy/20-05-quy-trinh-an-toan-a27a0acd.mp4","durationSec":400.87,"nguonCau":"thoigian",
+    "nextjs-20-5-quy-trinh-an-toan": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/20-build-deploy/20-05-quy-trinh-an-toan-a27a0acd.mp4","durationSec":400.87,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":25.09,"ten":"Chào bạn · nối từ 20.4"},
-        {"t":25.09,"den":39.17,"ten":"Bìa"},
-        {"t":39.17,"den":60.29,"ten":"Bài này mang về gì"},
-        {"t":60.29,"den":76.08,"ten":"Mã, không phải dữ liệu"},
-        {"t":76.08,"den":105.53,"ten":"Chạy thật: migration rồi quay lui"},
-        {"t":105.52,"den":121.03,"ten":"Migration"},
-        {"t":121.03,"den":152.42,"ten":"Mô phỏng: mã quay lui, dữ liệu ở lại"},
-        {"t":152.42,"den":160.97,"ten":"Quay lui mã"},
-        {"t":160.97,"den":179.89,"ten":"Chạy thật: tráo về ảnh trước"},
-        {"t":179.89,"den":191.95,"ten":"Giữ ảnh trước"},
-        {"t":191.95,"den":207.34,"ten":"Deploy từ commit"},
-        {"t":207.33,"den":225.53,"ten":"Quy trình khó làm sai"},
-        {"t":225.53,"den":258.67,"ten":"Cả khoá trong một hơi thở"},
-        {"t":258.67,"den":290.17,"ten":"Đời thật, nếu… thì sao, góc kẻ xấu"},
-        {"t":290.17,"den":308.42,"ten":"Liên kết chéo"},
-        {"t":308.42,"den":321.82,"ten":"Thuật ngữ"},
-        {"t":321.81,"den":362.51,"ten":"Tự kiểm ba câu"},
-        {"t":362.51,"den":400.87,"ten":"Thực hành & lời chào"}
+        {"t":0,"den":105.53,"ten":"Chào bạn · nối từ 20.4 · Bài này mang về gì"},
+        {"t":105.52,"den":191.95,"ten":"Migration · Mô phỏng: mã quay lui, dữ liệu ở lại"},
+        {"t":191.95,"den":290.17,"ten":"Deploy từ commit · Quy trình khó làm sai"},
+        {"t":290.17,"den":400.87,"ten":"Liên kết chéo · Thuật ngữ"}
       ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 20.5, bài cuối cùng của khoá Next.js."},
@@ -5122,8 +4522,14 @@
         {"t":389.1,"vi":"Bạn đã đi hết khoá Next.js. Hãy mở Code Lab Next.js và dự án cuối khoá để luyện. Hẹn gặp bạn ở khoá tiếp theo."}
       ]
     },
-    "nextjs-3-1-usestate": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/03-state/03-01-usestate-d0d9ac0f.mp4","durationSec":452.44,"nguonCau":"srt",
-      "parts": [],
+    "nextjs-3-1-usestate": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/03-state/03-01-usestate-d0d9ac0f.mp4","durationSec":452.44,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":113.68,"ten":"Chào bạn · mở Chương 3 · Bài này mang về gì"},
+        {"t":113.68,"den":194.71,"ten":"Vì sao biến thường không nhớ"},
+        {"t":194.71,"den":285.11,"ten":"Mô phỏng: hàng đợi cập nhật · Đo thật: hai setter, tăng một"},
+        {"t":285.11,"den":367.6,"ten":"Chạy thật: ai bắt lỗi luật hook"},
+        {"t":367.6,"den":452.44,"ten":"Tự kiểm ba câu · Thực hành & tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 3.1, mở đầu Chương 3 của khoá Next.js."},
         {"t":11.06,"vi":"Chương 2: props đến từ cha, chỉ đọc, và component là một hàm thuần của props."},
@@ -5204,8 +4610,14 @@
         {"t":441.06,"vi":"Bạn mở Code Lab Next.js, module client component và tương tác để luyện useState. Bài sau: state là một ảnh chụp."}
       ]
     },
-    "nextjs-3-2-state-la-anh-chup": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/03-state/03-02-state-la-anh-chup-daeba597.mp4","durationSec":390.03,"nguonCau":"srt",
-      "parts": [],
+    "nextjs-3-2-state-la-anh-chup": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/03-state/03-02-state-la-anh-chup-daeba597.mp4","durationSec":390.03,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":85.51,"ten":"Chào bạn · nối từ bài 3.1 · Bài này mang về gì"},
+        {"t":85.51,"den":176.35,"ten":"Câu đố · Chạy thật: /anh-chup"},
+        {"t":176.35,"den":264.15,"ten":"Đọc ngay sau khi đặt · Hẹn giờ nhớ lần render của nó"},
+        {"t":264.15,"den":348.73,"ten":"Một lần render là một ảnh chụp · Liên kết chéo"},
+        {"t":348.73,"den":390.03,"ten":"Thực hành & tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 3.2 của khoá Next.js."},
         {"t":9.75,"vi":"Bài trước kết thúc bằng một điều lạ: setter không đổi biến bạn đang cầm."},
@@ -5280,8 +4692,13 @@
         {"t":378.35,"vi":"Bạn mở Code Lab Next.js, module client component và tương tác để luyện. Bài sau: cập nhật object và mảng mà không sửa thẳng."}
       ]
     },
-    "nextjs-3-3-khong-mutate": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/03-state/03-03-khong-mutate-19346a8b.mp4","durationSec":354.86,"nguonCau":"srt",
-      "parts": [],
+    "nextjs-3-3-khong-mutate": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/03-state/03-03-khong-mutate-19346a8b.mp4","durationSec":354.86,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":81.46,"ten":"Chào bạn · nối từ bài 3.2 · Bài này mang về gì"},
+        {"t":81.46,"den":177.5,"ten":"Sửa thẳng hỏng im lặng · Chạy thật: cú bất ngờ đến muộn"},
+        {"t":177.5,"den":248.91,"ten":"Mảng: an toàn vs sửa thẳng · push giấu, render sau lộ ra"},
+        {"t":248.91,"den":354.86,"ten":"Liên kết chéo · Thuật ngữ"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 3.3 của khoá Next.js."},
         {"t":9.75,"vi":"Bài 3.1 có một phép đo nhỏ: đặt lại đúng giá trị cũ thì React không render. React so bằng Object.is."},
@@ -5346,8 +4763,16 @@
         {"t":344.2,"vi":"Bạn mở Code Lab Next.js, module client component và tương tác để luyện. Bài sau: state nên nằm ở đâu."}
       ]
     },
-    "nextjs-3-4-state-o-dau": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/03-state/03-04-state-o-dau-d44ecc21.mp4","durationSec":581.38,"nguonCau":"srt",
-      "parts": [],
+    "nextjs-3-4-state-o-dau": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/03-state/03-04-state-o-dau-d44ecc21.mp4","durationSec":581.38,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":87.82,"ten":"Chào bạn · nối từ bài 3.3 · Bài này mang về gì"},
+        {"t":87.82,"den":180.94,"ten":"Mô phỏng: hai cuốn sổ · Chạy thật: hai giỏ lệch nhau"},
+        {"t":180.94,"den":277.89,"ten":"Mô phỏng: state cục bộ, ít render · Giữ state cục bộ"},
+        {"t":277.89,"den":367.01,"ten":"Làm thật: FilterablePage · Nâng state lên cha chung"},
+        {"t":367.01,"den":458.71,"ten":"Thang quyết định · Mô phỏng: máy phân loại"},
+        {"t":458.71,"den":540.49,"ten":"Liên kết chéo · Thuật ngữ"},
+        {"t":540.49,"den":581.38,"ten":"Thực hành & tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 3.4 của khoá Next.js, bài cuối của chương state."},
         {"t":11.49,"vi":"Bài trước: React so tham chiếu, không so nội dung. Nên state phải thay mới, không bao giờ sửa thẳng."},
@@ -5455,8 +4880,15 @@
         {"t":570.62,"vi":"Bạn mở Code Lab Next.js, module client component và tương tác để luyện. Bài sau sang Chương 4: xử lý sự kiện."}
       ]
     },
-    "nextjs-4-1-su-kien": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/04-su-kien-form/04-01-su-kien-02010a9b.mp4","durationSec":562.35,"nguonCau":"srt",
-      "parts": [],
+    "nextjs-4-1-su-kien": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/04-su-kien-form/04-01-su-kien-02010a9b.mp4","durationSec":562.35,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":88.21,"ten":"Chào bạn · nối từ Chương 3 · Bài này mang về gì"},
+        {"t":88.21,"den":183.17,"ten":"Truyền hàm, đừng gọi · Chạy thật: gọi ngay lúc render"},
+        {"t":183.17,"den":287.23,"ten":"Truyền tham số: bọc mũi tên · Chạy thật: object sự kiện"},
+        {"t":287.23,"den":374.64,"ten":"Một nghìn nút, đếm thật · Chạy thật: form tải lại trang"},
+        {"t":374.64,"den":460.51,"ten":"Khác HTML ở bốn điểm · Mô phỏng: bộ gõ đang ghép chữ"},
+        {"t":460.51,"den":562.35,"ten":"Thuật ngữ · Tự kiểm ba câu"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 4.1 của khoá Next.js, mở đầu Chương 4: sự kiện và form."},
         {"t":12.46,"vi":"Chương 3 khép lại bằng bài đặt state ở đâu: state ở cha chung, giá trị chảy xuống, thay đổi báo lên qua onChange."},
@@ -5552,8 +4984,14 @@
         {"t":551.98,"vi":"Bạn mở Code Lab Next.js, module client component và tương tác để luyện. Bài sau: input có kiểm soát."}
       ]
     },
-    "nextjs-4-2-input-co-kiem-soat": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/04-su-kien-form/04-02-input-co-kiem-soat-87018a50.mp4","durationSec":441.22,"nguonCau":"srt",
-      "parts": [],
+    "nextjs-4-2-input-co-kiem-soat": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/04-su-kien-form/04-02-input-co-kiem-soat-87018a50.mp4","durationSec":441.22,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":98.25,"ten":"Chào bạn · nối từ bài 4.1 · Bài này mang về gì"},
+        {"t":98.25,"den":180.33,"ten":"Trong HTML trông giống nhau · Làm thật: NameField"},
+        {"t":180.33,"den":257.8,"ten":"Mô phỏng: con trỏ nhảy · Con trỏ nhảy, đo thật"},
+        {"t":257.8,"den":336.19,"ten":"value mà thiếu onChange · Đừng bắt đầu từ null"},
+        {"t":336.19,"den":441.22,"ten":"Thuật ngữ · Tự kiểm ba câu"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 4.2 của khoá Next.js."},
         {"t":9.8,"vi":"Bài trước: truyền hàm chứ đừng gọi nó, và đọc chữ người dùng gõ bằng e chấm target chấm value."},
@@ -5637,8 +5075,14 @@
         {"t":429.08,"vi":"Bạn mở Code Lab Next.js, module client component và tương tác để luyện. Bài sau: một form thật, nhiều ô, một lần gửi."}
       ]
     },
-    "nextjs-4-4-controlled-vs-uncontrolled": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/04-su-kien-form/04-04-controlled-vs-uncontrolled-2556b553.mp4","durationSec":432.58,"nguonCau":"srt",
-      "parts": [],
+    "nextjs-4-4-controlled-vs-uncontrolled": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/04-su-kien-form/04-04-controlled-vs-uncontrolled-2556b553.mp4","durationSec":432.58,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":88.52,"ten":"Chào bạn · nối từ bài 4.3 · Bài này mang về gì"},
+        {"t":88.52,"den":166.62,"ten":"Không kiểm soát: DOM giữ giá trị · Render mỗi phím, đo thật"},
+        {"t":166.62,"den":247.98,"ten":"Mô phỏng: hộp ghi chú bên lề · Việc một: với tới nút DOM"},
+        {"t":247.98,"den":335.42,"ten":"Chạy thật: dữ liệu chưa tải xong · Bẫy dữ liệu chưa tải"},
+        {"t":335.42,"den":432.58,"ten":"Thuật ngữ · Tự kiểm ba câu"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 4.4 của khoá Next.js, bài cuối của Chương 4 và của giai đoạn một."},
         {"t":12.44,"vi":"Bài trước: một form thật là một object state, một handler theo name, một lần gửi, preventDefault ở dòng đầu."},
@@ -5717,8 +5161,15 @@
         {"t":420.38,"vi":"Bạn mở Code Lab Next.js, module client component và tương tác để luyện. Bài sau sang Chương 5: effect là gì, và chạy khi nào."}
       ]
     },
-    "nextjs-5-1-effect-la-gi": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/05-useeffect/05-01-effect-la-gi-7c8c4017.mp4","durationSec":544.61,"nguonCau":"srt",
-      "parts": [],
+    "nextjs-5-1-effect-la-gi": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/05-useeffect/05-01-effect-la-gi-7c8c4017.mp4","durationSec":544.61,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":109.36,"ten":"Chào bạn · nối từ bài 4.4 · Bài này mang về gì"},
+        {"t":109.36,"den":210.15,"ten":"Render thuần, effect là cửa thoát · Hình dạng: ba phần"},
+        {"t":210.15,"den":312.35,"ten":"Thứ tự đo được · Chạy thật: máy chủ không chạy effect"},
+        {"t":312.35,"den":407.39,"ten":"Sau khi vẽ không phải lời hứa · Mảng phụ thuộc đổi tất cả"},
+        {"t":407.39,"den":502.9,"ten":"State dẫn xuất qua effect, đo thật · Liên kết chéo"},
+        {"t":502.9,"den":544.61,"ten":"Thực hành & tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 5.1 của khoá Next.js, bài mở đầu Chương 5 về useEffect."},
         {"t":12.38,"vi":"Bài trước: ô có kiểm soát thì React giữ giá trị, ô không kiểm soát thì DOM giữ, và ref là cửa thoát tới nút DOM thật."},
@@ -5815,8 +5266,14 @@
         {"t":533.57,"vi":"Bạn mở Code Lab Next.js, module client component và tương tác để luyện. Bài sau: mảng phụ thuộc và hàm dọn dẹp."}
       ]
     },
-    "nextjs-5-2-phu-thuoc-don-dep": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/05-useeffect/05-02-phu-thuoc-don-dep-0e93e45b.mp4","durationSec":452.18,"nguonCau":"srt",
-      "parts": [],
+    "nextjs-5-2-phu-thuoc-don-dep": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/05-useeffect/05-02-phu-thuoc-don-dep-0e93e45b.mp4","durationSec":452.18,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":91.16,"ten":"Chào bạn · nối từ bài 5.1 · Bài này mang về gì"},
+        {"t":91.16,"den":180.43,"ten":"Ba dạng mảng, đo thật · React quyết bằng Object.is"},
+        {"t":180.43,"den":279.62,"ten":"Mô hình tư duy: mỗi giá trị một cặp"},
+        {"t":279.62,"den":360.98,"ten":"Chạy thật: xoá phụ thuộc cho im cảnh báo"},
+        {"t":360.98,"den":452.18,"ten":"Thuật ngữ · Tự kiểm ba câu"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 5.2 của khoá Next.js."},
         {"t":9.78,"vi":"Bài trước: render chỉ tính giao diện, effect chạy sau commit để đồng bộ với thứ nằm ngoài React, và không bao giờ chạy trên máy chủ."},
@@ -5894,8 +5351,14 @@
         {"t":440.62,"vi":"Bạn mở Code Lab Next.js, module client component và tương tác để luyện. Bài sau: vì sao effect chạy hai lần ở dev."}
       ]
     },
-    "nextjs-5-3-chay-hai-lan-dev": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/05-useeffect/05-03-chay-hai-lan-dev-9292f4bf.mp4","durationSec":418.7,"nguonCau":"srt",
-      "parts": [],
+    "nextjs-5-3-chay-hai-lan-dev": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/05-useeffect/05-03-chay-hai-lan-dev-9292f4bf.mp4","durationSec":418.7,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":88.41,"ten":"Chào bạn · nối từ bài 5.2 · Bài này mang về gì"},
+        {"t":88.41,"den":165.95,"ten":"Gắn, gỡ, gắn lại, đo thật · Vì sao React làm vậy"},
+        {"t":165.95,"den":245.22,"ten":"Thiếu cleanup nhân đôi ở dev"},
+        {"t":245.22,"den":326.52,"ten":"Bẫy chốt ref, đo thật · Cách chữa thành thật"},
+        {"t":326.52,"den":418.7,"ten":"Thuật ngữ · Tự kiểm ba câu"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 5.3 của khoá Next.js."},
         {"t":9.8,"vi":"Bài trước: mảng phụ thuộc quyết khi nào chạy lại, cleanup cũ luôn chạy trước effect mới, và thiếu cleanup thì rò rỉ."},
@@ -5969,8 +5432,15 @@
         {"t":407.72,"vi":"Bạn mở Code Lab Next.js, module client component và tương tác để luyện. Bài sau: những effect bạn không nên viết."}
       ]
     },
-    "nextjs-5-4-effect-khong-nen-viet": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/05-useeffect/05-04-effect-khong-nen-viet-30b92ca4.mp4","durationSec":482.09,"nguonCau":"srt",
-      "parts": [],
+    "nextjs-5-4-effect-khong-nen-viet": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/05-useeffect/05-04-effect-khong-nen-viet-30b92ca4.mp4","durationSec":482.09,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":92.13,"ten":"Chào bạn · nối từ bài 5.3 · Bài này mang về gì"},
+        {"t":92.13,"den":181.14,"ten":"Phản mẫu 1: dẫn xuất trong effect"},
+        {"t":181.14,"den":268.34,"ten":"Phản mẫu 3: logic sự kiện trong effect"},
+        {"t":268.34,"den":349.56,"ten":"Chuỗi effect · Mô phỏng: cái gì mới thật sự lặp"},
+        {"t":349.56,"den":442.6,"ten":"ESLint bắt, build thì không · Liên kết chéo"},
+        {"t":442.6,"den":482.09,"ten":"Thực hành & tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 5.4 của khoá Next.js."},
         {"t":9.67,"vi":"Bài trước: ở dev, Strict Mode gắn, gỡ rồi gắn lại để thử cleanup, và bị nhân đôi nghĩa là thiếu cleanup."},
@@ -6053,8 +5523,14 @@
         {"t":471.25,"vi":"Bạn mở Code Lab Next.js, module client component và tương tác để luyện. Bài sau: fetch dữ liệu và cuộc đua."}
       ]
     },
-    "nextjs-5-5-fetch-va-cuoc-dua": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/05-useeffect/05-05-fetch-va-cuoc-dua-1aba6a1a.mp4","durationSec":464.04,"nguonCau":"srt",
-      "parts": [],
+    "nextjs-5-5-fetch-va-cuoc-dua": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/05-useeffect/05-05-fetch-va-cuoc-dua-1aba6a1a.mp4","durationSec":464.04,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":94.56,"ten":"Chào bạn · nối từ bài 5.4 · Bài này mang về gì"},
+        {"t":94.56,"den":174.9,"ten":"Bản ngây thơ, và vì sao nó đua"},
+        {"t":174.9,"den":253.58,"ten":"Cách vá một: cờ ignore · Cách vá hai: AbortController"},
+        {"t":253.58,"den":349.1,"ten":"Lần chạy đôi ở dev · Trong Next.js thường bỏ qua tất cả"},
+        {"t":349.1,"den":464.04,"ten":"Liên kết chéo · Thuật ngữ"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 5.5 của khoá Next.js, bài cuối Chương 5."},
         {"t":11.11,"vi":"Bài trước: phần lớn effect là thừa."},
@@ -6141,8 +5617,14 @@
         {"t":451.53,"vi":"Bạn mở Code Lab Next.js, module Server Component và fetch dữ liệu để luyện. Chương sau: bộ đồ nghề hooks, mở đầu với useRef."}
       ]
     },
-    "nextjs-6-1-useref": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/06-hooks/06-01-useref-dcd15ce4.mp4","durationSec":506.59,"nguonCau":"srt",
-      "parts": [],
+    "nextjs-6-1-useref": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/06-hooks/06-01-useref-dcd15ce4.mp4","durationSec":506.59,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":104.84,"ten":"Chào bạn · nối từ bài 5.5 · Bài này mang về gì"},
+        {"t":104.84,"den":195.08,"ten":"Ref và state, đo thật · Chạy thật: ghi ref ba lần"},
+        {"t":195.08,"den":285.75,"ten":"Mô phỏng: id bộ hẹn giờ · Việc 1: nhớ id bộ hẹn giờ"},
+        {"t":285.75,"den":373.76,"ten":"Không chạm ref lúc render · Cần cả hai: state rồi soi gương"},
+        {"t":373.76,"den":506.59,"ten":"State hay ref: một luật · Liên kết chéo"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 6.1 của khoá Next.js, mở đầu Chương 6: hộp đồ nghề hook."},
         {"t":12.41,"vi":"Bài trước khép lại chương effect bằng fetch và cuộc đua: cờ bỏ qua, AbortController, và Server Component lấy dữ liệu ngay trên máy chủ."},
@@ -6225,8 +5707,15 @@
         {"t":495.44,"vi":"Bạn mở Code Lab Next.js, module client component và tương tác để luyện. Bài sau: useMemo và useCallback."}
       ]
     },
-    "nextjs-6-2-usememo-usecallback": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/06-hooks/06-02-usememo-usecallback-0bac820f.mp4","durationSec":566.32,"nguonCau":"srt",
-      "parts": [],
+    "nextjs-6-2-usememo-usecallback": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/06-hooks/06-02-usememo-usecallback-0bac820f.mp4","durationSec":566.32,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":99.68,"ten":"Chào bạn · nối từ bài 6.1 · Bài này mang về gì"},
+        {"t":99.68,"den":201.05,"ten":"Chạy thật: trang đo ghi nhớ"},
+        {"t":201.05,"den":292.07,"ten":"useCallback: y hệt, cho một hàm"},
+        {"t":292.07,"den":369.8,"ten":"Lý do 2: prop của con memo · Thiếu phụ thuộc: kết quả cũ"},
+        {"t":369.8,"den":455.36,"ten":"Chạy thật: bật React Compiler · React Compiler 1.0: bảng so"},
+        {"t":455.36,"den":566.32,"ten":"Liên kết chéo · Thuật ngữ"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 6.2 của khoá Next.js."},
         {"t":9.81,"vi":"Bài trước: ref là cùng một cái hộp ở mọi lần render, ghi vào không render lại, và có thể soi gương state sang ref."},
@@ -6321,8 +5810,14 @@
         {"t":556.13,"vi":"Bạn mở Code Lab Next.js, module client component và tương tác để luyện. Bài sau: useReducer."}
       ]
     },
-    "nextjs-6-3-usereducer": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/06-hooks/06-03-usereducer-69db0ee1.mp4","durationSec":487.03,"nguonCau":"srt",
-      "parts": [],
+    "nextjs-6-3-usereducer": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/06-hooks/06-03-usereducer-69db0ee1.mp4","durationSec":487.03,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":93.14,"ten":"Chào bạn · nối từ bài 6.2 · Bài này mang về gì"},
+        {"t":93.14,"den":179.79,"ten":"Reducer là hàm thuần · Nối dây bằng useReducer"},
+        {"t":179.79,"den":271.3,"ten":"Action có kiểu · Trạng thái không thể có, đo thật"},
+        {"t":271.3,"den":352.43,"ten":"useState hay useReducer · Bẫy: sửa thẳng state trong reducer"},
+        {"t":352.43,"den":487.03,"ten":"Vì sao dev thêm hai lần · Liên kết chéo"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 6.3 của khoá Next.js."},
         {"t":9.84,"vi":"Bài trước: useMemo nhớ giá trị, useCallback nhớ hàm, mảng phụ thuộc là khoá, và React Compiler làm phần lớn việc ấy hộ ta."},
@@ -6401,8 +5896,14 @@
         {"t":476.93,"vi":"Bạn mở Code Lab Next.js, module client component và tương tác để luyện. Bài sau: useContext."}
       ]
     },
-    "nextjs-6-4-usecontext": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/06-hooks/06-04-usecontext-e3f99fd1.mp4","durationSec":494.09,"nguonCau":"srt",
-      "parts": [],
+    "nextjs-6-4-usecontext": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/06-hooks/06-04-usecontext-e3f99fd1.mp4","durationSec":494.09,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":97.18,"ten":"Chào bạn · nối từ bài 6.3 · Bài này mang về gì"},
+        {"t":97.18,"den":184.3,"ten":"Prop drilling và lối tắt · Ba bước: tạo, cung cấp, đọc"},
+        {"t":184.3,"den":284.12,"ten":"Lỗi trong đoạn mã của bài · Chạy thật: đếm lần render"},
+        {"t":284.12,"den":385.74,"ten":"Tạo với undefined, hook ném lỗi"},
+        {"t":385.74,"den":494.09,"ten":"Liên kết chéo · Thuật ngữ"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 6.4 của khoá Next.js."},
         {"t":9.81,"vi":"Bài trước: reducer gom mọi chuyển trạng thái vào một hàm thuần, và một trường status loại bỏ trạng thái vô lý."},
@@ -6484,8 +5985,15 @@
         {"t":484,"vi":"Bạn mở Code Lab Next.js, module client component và tương tác để luyện. Bài sau: hook tự viết."}
       ]
     },
-    "nextjs-6-5-custom-hooks": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/06-hooks/06-05-custom-hooks-63cdb111.mp4","durationSec":487.07,"nguonCau":"srt",
-      "parts": [],
+    "nextjs-6-5-custom-hooks": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/06-hooks/06-05-custom-hooks-63cdb111.mp4","durationSec":487.07,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":87.59,"ten":"Chào bạn · nối từ bài 6.4 · Bài này mang về gì"},
+        {"t":87.59,"den":176.1,"ten":"Tách ra, rồi chạy next build"},
+        {"t":176.1,"den":259.46,"ten":"Cái gì làm một hàm thành hook · Mỗi lần gọi có state riêng"},
+        {"t":259.46,"den":339.22,"ten":"Luật: state ghép theo thứ tự"},
+        {"t":339.22,"den":445.54,"ten":"Đủ bộ đồ nghề hook · Liên kết chéo"},
+        {"t":445.54,"den":487.07,"ten":"Thực hành & tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 6.5, bài cuối của Chương 6."},
         {"t":9.69,"vi":"Bài trước: context đưa giá trị đi xa không cần chuyền tay, mọi chỗ đọc render lại khi giá trị đổi, và trong Next.js nó chỉ chạy ở client."},
@@ -6560,8 +6068,15 @@
         {"t":476.12,"vi":"Bạn mở Code Lab Next.js, module client component và tương tác để luyện. Bài sau mở Chương 7: reconciliation."}
       ]
     },
-    "nextjs-7-2-key": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/07-danh-sach-key-hieu-nang/07-02-key-e2a25440.mp4","durationSec":499.25,"nguonCau":"srt",
-      "parts": [],
+    "nextjs-7-2-key": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/07-danh-sach-key-hieu-nang/07-02-key-e2a25440.mp4","durationSec":499.25,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":96.41,"ten":"Chào bạn · nối từ bài 7.1 · Bài này mang về gì"},
+        {"t":96.41,"den":173.06,"ten":"Key làm gì · Lỗi key bằng chỉ số, đo thật"},
+        {"t":173.06,"den":258.99,"ten":"React đã làm gì với DOM · Luật cho key"},
+        {"t":258.99,"den":348.04,"ten":"Key sinh lúc render: Math.random · Duy nhất giữa anh em"},
+        {"t":348.04,"den":460.95,"ten":"Key dùng để làm gì · Dấu hiệu lỗi key"},
+        {"t":460.95,"den":499.25,"ten":"Thực hành & tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 7.2 của khoá Next.js."},
         {"t":9.76,"vi":"Bài trước: React so cây cũ với cây mới theo vị trí rồi theo type."},
@@ -6651,8 +6166,14 @@
         {"t":488.18,"vi":"Bạn mở Code Lab Next.js, module client component và tương tác để luyện. Bài sau: vì sao component render lại."}
       ]
     },
-    "nextjs-7-3-vi-sao-render-lai": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/07-danh-sach-key-hieu-nang/07-03-vi-sao-render-lai-a0e96498.mp4","durationSec":426.16,"nguonCau":"srt",
-      "parts": [],
+    "nextjs-7-3-vi-sao-render-lai": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/07-danh-sach-key-hieu-nang/07-03-vi-sao-render-lai-a0e96498.mp4","durationSec":426.16,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":95.55,"ten":"Chào bạn · nối từ bài 7.2 · Bài này mang về gì"},
+        {"t":95.55,"den":181.37,"ten":"Các nguyên nhân · Nguyên nhân hai: cha render, con render"},
+        {"t":181.37,"den":265.24,"ten":"Khi nào nó thật sự là vấn đề"},
+        {"t":265.24,"den":344.89,"ten":"Đếm trên next start · Bẫy: tối ưu theo số lần render"},
+        {"t":344.89,"den":426.16,"ten":"Tự kiểm ba câu · Thực hành & tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 7.3 của khoá Next.js."},
         {"t":9.78,"vi":"Bài trước: key là danh tính của phần tử trong danh sách, lấy từ dữ liệu. Key đổi thì React gỡ rồi gắn lại."},
@@ -6724,8 +6245,14 @@
         {"t":414.37,"vi":"Bạn mở Code Lab Next.js, module client component và tương tác để luyện. Bài sau: React.memo và bỏ qua render lại."}
       ]
     },
-    "nextjs-7-4-react-memo": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/07-danh-sach-key-hieu-nang/07-04-react-memo-6b266d63.mp4","durationSec":448.42,"nguonCau":"srt",
-      "parts": [],
+    "nextjs-7-4-react-memo": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/07-danh-sach-key-hieu-nang/07-04-react-memo-6b266d63.mp4","durationSec":448.42,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":96.02,"ten":"Chào bạn · nối từ bài 7.3 · Bài này mang về gì"},
+        {"t":96.02,"den":189.37,"ten":"React.memo làm gì · Bẫy: props phải ổn định"},
+        {"t":189.37,"den":281.21,"ten":"Cái giá: năm trăm hàng"},
+        {"t":281.21,"den":366.01,"ten":"React.memo thật ra làm gì · Bẫy: memo và hàm mới từ cha"},
+        {"t":366.01,"den":448.42,"ten":"Tự kiểm ba câu · Thực hành & tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 7.4 của khoá Next.js."},
         {"t":9.76,"vi":"Bài trước: cha render thì mọi con render, props có đổi hay không. Và cách sửa đầu tiên là dời state xuống."},
@@ -6804,8 +6331,14 @@
         {"t":437.85,"vi":"Bạn mở Code Lab Next.js, module hiệu năng và triển khai production để luyện. Bài sau: đo, đừng đoán."}
       ]
     },
-    "nextjs-7-5-do-dung-doan": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/07-danh-sach-key-hieu-nang/07-05-do-dung-doan-988bc221.mp4","durationSec":435.36,"nguonCau":"srt",
-      "parts": [],
+    "nextjs-7-5-do-dung-doan": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/07-danh-sach-key-hieu-nang/07-05-do-dung-doan-988bc221.mp4","durationSec":435.36,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":92.47,"ten":"Chào bạn · nối từ bài 7.4 · Bài này mang về gì"},
+        {"t":92.47,"den":186.55,"ten":"React DevTools Profiler · Một component chậm, đo thật"},
+        {"t":186.55,"den":276.09,"ten":"Trước và sau: con số chứng minh · Đo trên production"},
+        {"t":276.09,"den":351.48,"ten":"Đo trước khi tối ưu · Hết Giai đoạn 2"},
+        {"t":351.48,"den":435.36,"ten":"Tự kiểm ba câu · Thực hành & tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 7.5, bài cuối của Chương 7."},
         {"t":9.75,"vi":"Bài trước: React.memo bỏ qua render khi props bằng nhau nông, nhưng memo hỏng còn chậm hơn không memo."},
@@ -6883,30 +6416,15 @@
         {"t":422.15,"vi":"Bạn mở Code Lab Next.js, module hiệu năng và triển khai production để luyện. Bài sau mở Chương 8: từ ứng dụng React tới framework Next.js."}
       ]
     },
-    "nextjs-8-1-tu-react-toi-nextjs": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/08-app-router/08-01-tu-react-toi-nextjs-82dbbf5f.mp4","durationSec":659.53,"nguonCau":"thoigian",
+    "nextjs-8-1-tu-react-toi-nextjs": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/08-app-router/08-01-tu-react-toi-nextjs-82dbbf5f.mp4","durationSec":659.53,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":32.74,"ten":"Chào bạn · mở giai đoạn ba"},
-        {"t":32.73,"den":44.51,"ten":"Bìa"},
-        {"t":44.51,"den":64.28,"ten":"Bài này mang về gì"},
-        {"t":64.28,"den":105.25,"ten":"Mô phỏng: đầu bếp và nhà hàng"},
-        {"t":105.25,"den":132.07,"ten":"React là một thư viện"},
-        {"t":132.07,"den":163.57,"ten":"Next.js thêm gì lên trên React"},
-        {"t":163.57,"den":203.42,"ten":"Hai bộ định tuyến, chọn App Router"},
-        {"t":203.42,"den":242.85,"ten":"Mô phỏng: thư mục mọc thành URL"},
-        {"t":242.85,"den":270.11,"ten":"Một thư mục là một route"},
-        {"t":270.11,"den":306.89,"ten":"Chạy thật: build, curl, Chromium"},
-        {"t":306.88,"den":318.48,"ten":"Đo: đường dẫn nào có, cái nào không"},
-        {"t":318.48,"den":349.47,"ten":"Trang nhỏ nhất và root layout"},
-        {"t":349.46,"den":394.51,"ten":"Chạy thật: máy chủ chạy trước"},
-        {"t":394.51,"den":410.86,"ten":"Máy chủ trước, đo ba cách"},
-        {"t":410.86,"den":442.81,"ten":"React một trang vs Next.js"},
-        {"t":442.81,"den":476.14,"ten":"cuongthai.com được dựng như vậy"},
-        {"t":476.14,"den":508.42,"ten":"Chạy thật: mang thói quen Vite sang"},
-        {"t":508.42,"den":525.11,"ten":"Bẫy: thói quen phía trình duyệt"},
-        {"t":525.11,"den":550.13,"ten":"Liên kết chéo"},
-        {"t":550.13,"den":566.87,"ten":"Thuật ngữ"},
-        {"t":566.87,"den":614.03,"ten":"Tự kiểm ba câu"},
-        {"t":614.03,"den":659.53,"ten":"Thực hành & tóm tắt"}
+        {"t":0,"den":105.25,"ten":"Chào bạn · mở giai đoạn ba · Bài này mang về gì"},
+        {"t":105.25,"den":203.42,"ten":"React là một thư viện · Next.js thêm gì lên trên React"},
+        {"t":203.42,"den":306.89,"ten":"Mô phỏng: thư mục mọc thành URL · Một thư mục là một route"},
+        {"t":306.88,"den":394.51,"ten":"Đo: đường dẫn nào có, cái nào không"},
+        {"t":394.51,"den":476.14,"ten":"Máy chủ trước, đo ba cách · React một trang vs Next.js"},
+        {"t":476.14,"den":566.87,"ten":"Chạy thật: mang thói quen Vite sang"},
+        {"t":566.87,"den":659.53,"ten":"Tự kiểm ba câu · Thực hành & tóm tắt"}
       ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 8.1 của khoá Next.js, cũng là bài mở đầu giai đoạn ba."},
@@ -6982,8 +6500,16 @@
         {"t":646.78,"vi":"Bạn mở Code Lab Next.js, module nền tảng và cài đặt dự án để luyện. Bài sau: các tệp quy ước page, layout, loading và error."}
       ]
     },
-    "nextjs-8-2-cac-file-quy-uoc": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/08-app-router/08-02-cac-file-quy-uoc-55de9219.mp4","durationSec":608.64,"nguonCau":"srt",
-      "parts": [],
+    "nextjs-8-2-cac-file-quy-uoc": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/08-app-router/08-02-cac-file-quy-uoc-55de9219.mp4","durationSec":608.64,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":94.99,"ten":"Chào bạn · nối từ bài 8.1 · Bài này mang về gì"},
+        {"t":94.99,"den":184.19,"ten":"Chạy thật: tệp nào thành đường dẫn"},
+        {"t":184.19,"den":271.28,"ten":"Các tệp xếp chồng ra sao · Chạy thật: loading truyền dần"},
+        {"t":271.28,"den":354.4,"ten":"Chạy thật: lỗi, digest, reset và retry"},
+        {"t":354.4,"den":450.78,"ten":"Chạy thật: notFound dưới loading"},
+        {"t":450.78,"den":560.83,"ten":"Trên cuongthai.com · Liên kết chéo"},
+        {"t":560.83,"den":608.64,"ten":"Thực hành & tóm tắt"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 8.2 của khoá Next.js."},
         {"t":9.71,"vi":"Bài trước: một thư mục trong app/ là một đoạn đường dẫn, tệp page làm cho nó vào được, và trang chạy ở máy chủ trước."},
@@ -7084,27 +6610,13 @@
         {"t":596.92,"vi":"Bạn mở Code Lab Next.js, module định tuyến bằng tệp và route động để luyện. Bài sau: layout lồng, giao diện đứng yên khi chuyển trang."}
       ]
     },
-    "nextjs-8-3-layout-long": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/08-app-router/08-03-layout-long-eb720958.mp4","durationSec":477.6,"nguonCau":"thoigian",
+    "nextjs-8-3-layout-long": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/08-app-router/08-03-layout-long-eb720958.mp4","durationSec":477.6,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":28.68,"ten":"Chào bạn · nối từ bài 8.2"},
-        {"t":28.68,"den":40.65,"ten":"Bìa"},
-        {"t":40.65,"den":61.38,"ten":"Bài này mang về gì"},
-        {"t":61.38,"den":87.42,"ten":"Hình dạng một layout"},
-        {"t":87.42,"den":107.07,"ten":"Layout lồng theo thư mục"},
-        {"t":107.07,"den":135.34,"ten":"Mô phỏng: khung đứng yên, trang tráo vào"},
-        {"t":135.34,"den":168,"ten":"Chạy thật: Link giữ layout, thẻ a thì không"},
-        {"t":168,"den":176.68,"ten":"Đo: Link giữ layout"},
-        {"t":176.68,"den":204,"ten":"Vì sao: chỉ tráo cái khe"},
-        {"t":204,"den":222.99,"ten":"Đối chiếu: thẻ a phá sạch"},
-        {"t":222.99,"den":243.67,"ten":"layout khác template"},
-        {"t":243.67,"den":276.81,"ten":"Chạy thật: máy chủ render lại những gì"},
-        {"t":276.81,"den":285.5,"ten":"Máy chủ chỉ render trang"},
-        {"t":285.5,"den":312.37,"ten":"Bẫy: đọc route hiện tại trong layout"},
-        {"t":312.37,"den":338.26,"ten":"Bẫy: chú thích sau children"},
-        {"t":338.26,"den":358.84,"ten":"cuongthai.com dựa vào điều này"},
-        {"t":358.84,"den":378.72,"ten":"Liên kết chéo"},
-        {"t":378.72,"den":391.76,"ten":"Thuật ngữ"},
-        {"t":391.76,"den":435.64,"ten":"Tự kiểm ba câu"},
+        {"t":0,"den":87.42,"ten":"Chào bạn · nối từ bài 8.2 · Bài này mang về gì"},
+        {"t":87.42,"den":168,"ten":"Layout lồng theo thư mục"},
+        {"t":168,"den":243.67,"ten":"Đo: Link giữ layout · Vì sao: chỉ tráo cái khe"},
+        {"t":243.67,"den":338.26,"ten":"Chạy thật: máy chủ render lại những gì"},
+        {"t":338.26,"den":435.64,"ten":"cuongthai.com dựa vào điều này · Liên kết chéo"},
         {"t":435.64,"den":477.6,"ten":"Thực hành & tóm tắt"}
       ],
       "cues": [
@@ -7164,30 +6676,14 @@
         {"t":465,"vi":"Bạn mở Code Lab Next.js, module định tuyến bằng tệp và route động để luyện. Bài sau: điều hướng bằng Link, useRouter và liên kết đang chọn."}
       ]
     },
-    "nextjs-8-4-dieu-huong-link": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/08-app-router/08-04-dieu-huong-link-3cfea476.mp4","durationSec":529.27,"nguonCau":"thoigian",
+    "nextjs-8-4-dieu-huong-link": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/08-app-router/08-04-dieu-huong-link-3cfea476.mp4","durationSec":529.27,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":27.97,"ten":"Chào bạn · nối từ bài 8.3"},
-        {"t":27.97,"den":38.17,"ten":"Bìa"},
-        {"t":38.17,"den":60.18,"ten":"Bài này mang về gì"},
-        {"t":60.18,"den":96,"ten":"Mô phỏng: hai làn đường"},
-        {"t":96,"den":118.39,"ten":"Link, đừng dùng thẻ a trần"},
-        {"t":118.39,"den":153.84,"ten":"Chạy thật: Link vs thẻ a"},
-        {"t":153.84,"den":165.48,"ten":"Đo: Link vs thẻ a"},
-        {"t":165.47,"den":196.84,"ten":"Chạy thật: tải trước khi bấm"},
-        {"t":196.84,"den":208.97,"ten":"Prefetch: tải trước khi bấm"},
-        {"t":208.97,"den":227.34,"ten":"Điều hướng bằng mã: useRouter"},
-        {"t":227.34,"den":258.42,"ten":"Chạy thật: push và replace"},
-        {"t":258.42,"den":281.33,"ten":"Các phương thức của router"},
-        {"t":281.33,"den":305.17,"ten":"Liên kết đang chọn: usePathname"},
-        {"t":305.17,"den":325.26,"ten":"redirect phía máy chủ"},
-        {"t":325.26,"den":352.05,"ten":"Chạy thật: import nhầm next/router"},
-        {"t":352.05,"den":364.68,"ten":"Bẫy: next/router"},
-        {"t":364.68,"den":384.87,"ten":"Bẫy: thiếu use client"},
-        {"t":384.87,"den":405.83,"ten":"Trên cuongthai.com"},
-        {"t":405.83,"den":429.39,"ten":"Liên kết chéo"},
-        {"t":429.39,"den":442.28,"ten":"Thuật ngữ"},
-        {"t":442.28,"den":483.95,"ten":"Tự kiểm ba câu"},
-        {"t":483.95,"den":529.27,"ten":"Thực hành & tóm tắt"}
+        {"t":0,"den":96,"ten":"Chào bạn · nối từ bài 8.3 · Bài này mang về gì"},
+        {"t":96,"den":196.84,"ten":"Link, đừng dùng thẻ a trần · Chạy thật: Link vs thẻ a"},
+        {"t":196.84,"den":281.33,"ten":"Prefetch: tải trước khi bấm · Điều hướng bằng mã: useRouter"},
+        {"t":281.33,"den":364.68,"ten":"Liên kết đang chọn: usePathname · redirect phía máy chủ"},
+        {"t":364.68,"den":442.28,"ten":"Bẫy: thiếu use client · Trên cuongthai.com"},
+        {"t":442.28,"den":529.27,"ten":"Tự kiểm ba câu · Thực hành & tóm tắt"}
       ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 8.4 của khoá Next.js."},
@@ -7250,30 +6746,14 @@
         {"t":517.14,"vi":"Bạn mở Code Lab Next.js, module định tuyến bằng tệp và route động để luyện. Bài sau: route group, segment động và metadata."}
       ]
     },
-    "nextjs-8-5-route-group-metadata": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/08-app-router/08-05-route-group-metadata-c7585404.mp4","durationSec":532.34,"nguonCau":"thoigian",
+    "nextjs-8-5-route-group-metadata": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/08-app-router/08-05-route-group-metadata-c7585404.mp4","durationSec":532.34,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":27.68,"ten":"Chào bạn · nối từ bài 8.4"},
-        {"t":27.68,"den":36.63,"ten":"Bìa"},
-        {"t":36.63,"den":59.46,"ten":"Bài này mang về gì"},
-        {"t":59.45,"den":92.53,"ten":"Mô phỏng: thư mục bốc hơi khỏi URL"},
-        {"t":92.53,"den":109.46,"ten":"Route group: thư mục trong ngoặc tròn"},
-        {"t":109.45,"den":128.48,"ten":"Hai công cụ trông giống, làm việc ngược nhau"},
-        {"t":128.48,"den":155.15,"ten":"Bẫy: hai nhóm cùng một URL"},
-        {"t":155.15,"den":180.86,"ten":"Mô phỏng: cái khuôn [slug]"},
-        {"t":180.86,"den":198.93,"ten":"Segment động: một thư mục, nhiều trang"},
-        {"t":198.93,"den":220.79,"ten":"params là một Promise"},
-        {"t":220.79,"den":243.38,"ten":"Chạy thật: slug có dấu"},
-        {"t":243.38,"den":262.07,"ten":"URL có dấu tới nơi còn mã hoá"},
-        {"t":262.07,"den":288.63,"ten":"Metadata: tiêu đề và SEO từ route"},
-        {"t":288.63,"den":314.69,"ten":"generateMetadata: tiêu đề theo dữ liệu"},
-        {"t":314.69,"den":353.37,"ten":"Chạy thật: metadata truyền sau"},
-        {"t":353.37,"den":367.49,"ten":"Metadata truyền sau: bot khác trình duyệt"},
-        {"t":367.49,"den":387.58,"ten":"Bẫy: metadata trong trang use client"},
-        {"t":387.58,"den":408.78,"ten":"Trên cuongthai.com"},
-        {"t":408.78,"den":431.93,"ten":"Liên kết chéo"},
-        {"t":431.93,"den":444.74,"ten":"Thuật ngữ"},
-        {"t":444.74,"den":485.28,"ten":"Tự kiểm ba câu"},
-        {"t":485.28,"den":532.34,"ten":"Thực hành & tóm tắt"}
+        {"t":0,"den":92.53,"ten":"Chào bạn · nối từ bài 8.4 · Bài này mang về gì"},
+        {"t":92.53,"den":180.86,"ten":"Route group: thư mục trong ngoặc tròn"},
+        {"t":180.86,"den":262.07,"ten":"Segment động: một thư mục, nhiều trang"},
+        {"t":262.07,"den":353.37,"ten":"Metadata: tiêu đề và SEO từ route"},
+        {"t":353.37,"den":431.93,"ten":"Metadata truyền sau: bot khác trình duyệt"},
+        {"t":431.93,"den":532.34,"ten":"Thuật ngữ · Tự kiểm ba câu"}
       ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 8.5, bài cuối của chương 8."},
@@ -7335,29 +6815,14 @@
         {"t":519.97,"vi":"Bạn mở Code Lab Next.js, module định tuyến bằng tệp và route động để luyện. Hết chương 8. Bài sau: mặc định là Server Component."}
       ]
     },
-    "nextjs-9-1-mac-dinh-la-server-component": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/09-server-client/09-01-mac-dinh-la-server-component-34c8f8f1.mp4","durationSec":535.15,"nguonCau":"thoigian",
+    "nextjs-9-1-mac-dinh-la-server-component": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/09-server-client/09-01-mac-dinh-la-server-component-34c8f8f1.mp4","durationSec":535.15,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":30.93,"ten":"Chào bạn · nối từ bài 8.5"},
-        {"t":30.93,"den":42.16,"ten":"Bìa"},
-        {"t":42.16,"den":62.98,"ten":"Bài này mang về gì"},
-        {"t":62.98,"den":109.82,"ten":"Mô phỏng: bếp nấu sẵn, khách chỉ nhận đĩa"},
-        {"t":109.82,"den":137.65,"ten":"SPA cổ điển vs mặc định App Router"},
-        {"t":137.65,"den":161.72,"ten":"Chạy ở máy chủ nghĩa là gì"},
-        {"t":161.72,"den":199.15,"ten":"Gõ thật: component async đọc tệp và khoá bí mật"},
-        {"t":199.15,"den":209.45,"ten":"Component async: tệp, bí mật, thư viện"},
-        {"t":209.45,"den":240.89,"ten":"Chạy thật: log đi đâu"},
-        {"t":240.89,"den":248.41,"ten":"Đo: log ở terminal máy chủ"},
-        {"t":248.41,"den":276.1,"ten":"Đo: cái gì tới trình duyệt"},
-        {"t":276.1,"den":311.76,"ten":"Chạy thật: RSC payload, thứ thật sự đi qua"},
-        {"t":311.76,"den":323.3,"ten":"Thứ đi qua: HTML và RSC payload"},
-        {"t":323.3,"den":341.56,"ten":"Ba cái lợi"},
-        {"t":341.56,"den":365.27,"ten":"Cái giá: không tương tác"},
-        {"t":365.27,"den":384.47,"ten":"Được và không được"},
-        {"t":384.47,"den":411.19,"ten":"Bẫy: thêm use client để dập lỗi"},
-        {"t":411.18,"den":434.83,"ten":"Liên kết chéo"},
-        {"t":434.83,"den":448.52,"ten":"Thuật ngữ"},
-        {"t":448.52,"den":490.29,"ten":"Tự kiểm ba câu"},
-        {"t":490.28,"den":535.15,"ten":"Thực hành & tóm tắt"}
+        {"t":0,"den":109.82,"ten":"Chào bạn · nối từ bài 8.5 · Bài này mang về gì"},
+        {"t":109.82,"den":199.15,"ten":"SPA cổ điển vs mặc định App Router"},
+        {"t":199.15,"den":276.1,"ten":"Component async: tệp, bí mật, thư viện"},
+        {"t":276.1,"den":365.27,"ten":"Chạy thật: RSC payload, thứ thật sự đi qua"},
+        {"t":365.27,"den":448.52,"ten":"Được và không được · Bẫy: thêm use client để dập lỗi"},
+        {"t":448.52,"den":535.15,"ten":"Tự kiểm ba câu · Thực hành & tóm tắt"}
       ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 9.1, bài mở đầu chương 9 của khoá Next.js."},
@@ -7422,28 +6887,13 @@
         {"t":522.59,"vi":"Bạn mở Code Lab Next.js, module Server Component và lấy dữ liệu để luyện. Bài sau: use client, chọn đưa component ra trình duyệt."}
       ]
     },
-    "nextjs-9-2-use-client": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/09-server-client/09-02-use-client-720d44bc.mp4","durationSec":532.63,"nguonCau":"thoigian",
+    "nextjs-9-2-use-client": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/09-server-client/09-02-use-client-720d44bc.mp4","durationSec":532.63,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":28.3,"ten":"Chào bạn · nối từ bài 9.1"},
-        {"t":28.3,"den":40.96,"ten":"Bìa"},
-        {"t":40.96,"den":65.26,"ten":"Bài này mang về gì"},
-        {"t":65.26,"den":102.96,"ten":"Mô phỏng: món bày sẵn, lọ tiêu tới sau"},
-        {"t":102.96,"den":130.72,"ten":"Cần tương tác thì chọn ra client"},
-        {"t":130.72,"den":167.17,"ten":"Gõ thật: trang server, một nút client"},
-        {"t":167.17,"den":180.39,"ten":"Đo: vẫn render ở máy chủ"},
-        {"t":180.39,"den":209.01,"ten":"Chạy thật: rồi nó sống trong trình duyệt"},
-        {"t":209.01,"den":220.22,"ten":"Đo: sống trong trình duyệt"},
-        {"t":220.22,"den":243.5,"ten":"Đo: chỉ thị gửi đi những gì"},
-        {"t":243.5,"den":271.85,"ten":"Ai làm được gì"},
-        {"t":271.85,"den":297.96,"ten":"Quy tắc ngón tay cái"},
-        {"t":297.96,"den":323.82,"ten":"Chỉ thị đánh dấu một ranh giới"},
-        {"t":323.82,"den":342.29,"ten":"Đo: phải là câu lệnh đầu tiên"},
-        {"t":342.29,"den":380.09,"ten":"Chạy thật: localStorage trong thân component"},
-        {"t":380.09,"den":390.77,"ten":"Bẫy: localStorage trong thân"},
-        {"t":390.77,"den":413.75,"ten":"Cách chữa: mã trình duyệt chạy sau hydrate"},
-        {"t":413.75,"den":433.89,"ten":"Liên kết chéo"},
-        {"t":433.89,"den":446.67,"ten":"Thuật ngữ"},
-        {"t":446.67,"den":489.26,"ten":"Tự kiểm ba câu"},
+        {"t":0,"den":102.96,"ten":"Chào bạn · nối từ bài 9.1 · Bài này mang về gì"},
+        {"t":102.96,"den":180.39,"ten":"Cần tương tác thì chọn ra client"},
+        {"t":180.39,"den":271.85,"ten":"Chạy thật: rồi nó sống trong trình duyệt"},
+        {"t":271.85,"den":380.09,"ten":"Quy tắc ngón tay cái · Chỉ thị đánh dấu một ranh giới"},
+        {"t":380.09,"den":489.26,"ten":"Bẫy: localStorage trong thân"},
         {"t":489.26,"den":532.63,"ten":"Thực hành & tóm tắt"}
       ],
       "cues": [
@@ -7506,27 +6956,13 @@
         {"t":521.14,"vi":"Bạn mở Code Lab Next.js, module Client Component và tương tác để luyện. Bài sau: hai loại component ghép với nhau ra sao."}
       ]
     },
-    "nextjs-9-3-ranh-gioi-ghep": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/09-server-client/09-03-ranh-gioi-ghep-09642f92.mp4","durationSec":475.97,"nguonCau":"thoigian",
+    "nextjs-9-3-ranh-gioi-ghep": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/09-server-client/09-03-ranh-gioi-ghep-09642f92.mp4","durationSec":475.97,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":28.34,"ten":"Chào bạn · nối từ bài 9.2"},
-        {"t":28.34,"den":40.49,"ten":"Bìa"},
-        {"t":40.49,"den":60.66,"ten":"Bài này mang về gì"},
-        {"t":60.66,"den":106.9,"ten":"Mô phỏng: hộp kính client và cái khe"},
-        {"t":106.9,"den":132.93,"ten":"Chạy thật: import kéo ranh giới xuống"},
-        {"t":132.93,"den":141.57,"ten":"Đo: ranh giới lan theo import"},
-        {"t":141.57,"den":176.38,"ten":"Chạy thật: tệp client import thứ chỉ ở máy chủ"},
-        {"t":176.38,"den":187.78,"ten":"Đo: import thứ chỉ ở máy chủ"},
-        {"t":187.78,"den":211.22,"ten":"Mẫu khe cắm: truyền kết quả máy chủ làm children"},
-        {"t":211.22,"den":227.8,"ten":"Đo: nội dung trong khe vẫn ở máy chủ"},
-        {"t":227.8,"den":257.26,"ten":"Chạy thật: đóng mở vỏ client"},
-        {"t":257.26,"den":268.62,"ten":"Đo: vỏ client không gọi máy chủ"},
-        {"t":268.62,"den":291.37,"ten":"Ba cách hai loại gặp nhau"},
-        {"t":291.37,"den":311.76,"ten":"Đặt Server Component trong Client Component"},
-        {"t":311.76,"den":331.64,"ten":"Bẫy ngay trong đoạn mã của bài"},
-        {"t":331.64,"den":353.01,"ten":"Bẫy: vỏ client bọc cả trang"},
-        {"t":353.01,"den":373.29,"ten":"Liên kết chéo"},
-        {"t":373.28,"den":386.83,"ten":"Thuật ngữ"},
-        {"t":386.83,"den":431.73,"ten":"Tự kiểm ba câu"},
+        {"t":0,"den":106.9,"ten":"Chào bạn · nối từ bài 9.2 · Bài này mang về gì"},
+        {"t":106.9,"den":187.78,"ten":"Chạy thật: import kéo ranh giới xuống"},
+        {"t":187.78,"den":268.62,"ten":"Mẫu khe cắm: truyền kết quả máy chủ làm children"},
+        {"t":268.62,"den":353.01,"ten":"Ba cách hai loại gặp nhau"},
+        {"t":353.01,"den":431.73,"ten":"Liên kết chéo · Thuật ngữ"},
         {"t":431.73,"den":475.97,"ten":"Thực hành & tóm tắt"}
       ],
       "cues": [
@@ -7584,26 +7020,12 @@
         {"t":464.28,"vi":"Bạn mở Code Lab Next.js, module Server Component và lấy dữ liệu để luyện. Bài sau: thứ gì qua được ranh giới dưới dạng props."}
       ]
     },
-    "nextjs-9-4-props-serialize": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/09-server-client/09-04-props-serialize-a67192f4.mp4","durationSec":458.34,"nguonCau":"thoigian",
+    "nextjs-9-4-props-serialize": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/09-server-client/09-04-props-serialize-a67192f4.mp4","durationSec":458.34,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":30.28,"ten":"Chào bạn · nối từ bài 9.3"},
-        {"t":30.28,"den":42.24,"ten":"Bìa"},
-        {"t":42.24,"den":63.75,"ten":"Bài này mang về gì"},
-        {"t":63.75,"den":107.62,"ten":"Mô phỏng: quầy bưu điện ở ranh giới"},
-        {"t":107.62,"den":132.66,"ten":"Props phải sống sót qua đường truyền"},
-        {"t":132.66,"den":166.1,"ten":"Chạy thật: thứ gì tới trình duyệt"},
-        {"t":166.1,"den":177.39,"ten":"Đo: thứ tới trình duyệt"},
-        {"t":177.39,"den":210.7,"ten":"Chạy thật: bốn thứ không qua được"},
-        {"t":210.7,"den":221.63,"ten":"Đo: truyền một hàm"},
-        {"t":221.63,"den":233.95,"ten":"Đo: thực thể class và Symbol"},
-        {"t":233.95,"den":254.17,"ten":"Cách chữa khi cần một hàm"},
-        {"t":254.17,"den":277.39,"ten":"Thứ gì qua được ranh giới"},
-        {"t":277.38,"den":308.59,"ten":"Chạy thật: cả dòng dữ liệu đi xuống trình duyệt"},
-        {"t":308.59,"den":317.96,"ten":"Bẫy: cả dòng dữ liệu lộ ra"},
-        {"t":317.96,"den":337.45,"ten":"Cách chữa: nắn dáng tường minh ở ranh giới"},
-        {"t":337.45,"den":355.45,"ten":"Liên kết chéo"},
-        {"t":355.45,"den":370.17,"ten":"Thuật ngữ"},
-        {"t":370.17,"den":416.61,"ten":"Tự kiểm ba câu"},
+        {"t":0,"den":107.62,"ten":"Chào bạn · nối từ bài 9.3 · Bài này mang về gì"},
+        {"t":107.62,"den":210.7,"ten":"Props phải sống sót qua đường truyền"},
+        {"t":210.7,"den":308.59,"ten":"Đo: truyền một hàm · Đo: thực thể class và Symbol"},
+        {"t":308.59,"den":416.61,"ten":"Bẫy: cả dòng dữ liệu lộ ra"},
         {"t":416.61,"den":458.34,"ten":"Thực hành & tóm tắt"}
       ],
       "cues": [
@@ -7658,26 +7080,13 @@
         {"t":445.79,"vi":"Bạn mở Code Lab Next.js, module Server Component và lấy dữ liệu để luyện. Bài sau: đặt ranh giới ở đâu trong thực tế, và đo cái giá."}
       ]
     },
-    "nextjs-9-5-dat-ranh-gioi": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/09-server-client/09-05-dat-ranh-gioi-b6fc4008.mp4","durationSec":483.51,"nguonCau":"thoigian",
+    "nextjs-9-5-dat-ranh-gioi": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/nextjs/09-server-client/09-05-dat-ranh-gioi-b6fc4008.mp4","durationSec":483.51,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":29.67,"ten":"Chào bạn · nối từ bài 9.4"},
-        {"t":29.67,"den":45.06,"ten":"Bìa"},
-        {"t":45.06,"den":66.08,"ten":"Bài này mang về gì"},
-        {"t":66.07,"den":102.05,"ten":"Mô phỏng: thân máy chủ, lá client"},
-        {"t":102.05,"den":125.17,"ten":"Đẩy ranh giới client xuống lá"},
-        {"t":125.17,"den":164.97,"ten":"Chạy thật: cùng một trang, hai ranh giới"},
-        {"t":164.97,"den":173.83,"ten":"Đo: cùng trang, hai ranh giới"},
-        {"t":173.83,"den":195.77,"ten":"Đọc số này ở đâu trong Next.js 16"},
-        {"t":195.77,"den":212.83,"ten":"Nên và tránh"},
-        {"t":212.83,"den":232.2,"ten":"Bẫy ngay trong đoạn mã của bài"},
-        {"t":232.2,"den":260.49,"ten":"Hydrate: đường nối máy chủ và trình duyệt"},
-        {"t":260.49,"den":297.15,"ten":"Sự cố thật của cuongthai.com"},
-        {"t":297.15,"den":324.25,"ten":"Quyết định đặt ranh giới ở đâu"},
-        {"t":324.25,"den":357.71,"ten":"Bẫy: ranh giới vạch theo tệp"},
-        {"t":357.71,"den":380.39,"ten":"Liên kết chéo"},
-        {"t":380.39,"den":393.93,"ten":"Thuật ngữ"},
-        {"t":393.93,"den":437.84,"ten":"Tự kiểm ba câu"},
-        {"t":437.84,"den":483.51,"ten":"Thực hành & tóm tắt"}
+        {"t":0,"den":102.05,"ten":"Chào bạn · nối từ bài 9.4 · Bài này mang về gì"},
+        {"t":102.05,"den":195.77,"ten":"Đẩy ranh giới client xuống lá"},
+        {"t":195.77,"den":297.15,"ten":"Nên và tránh · Bẫy ngay trong đoạn mã của bài"},
+        {"t":297.15,"den":380.39,"ten":"Quyết định đặt ranh giới ở đâu"},
+        {"t":380.39,"den":483.51,"ten":"Thuật ngữ · Tự kiểm ba câu"}
       ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 9.5, bài cuối của chương 9."},

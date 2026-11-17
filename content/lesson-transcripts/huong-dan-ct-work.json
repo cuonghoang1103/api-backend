@@ -2,17 +2,12 @@
   "courseSlug": "huong-dan-ct-work",
   "sinhBoi": "scripts/phu-de-tu-video-rieng.mjs",
   "lessons": {
-    "ctw-01-bat-dau": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/huong-dan-ct-work/01-nguoi-moi-va-thanh-vien/01-01-bat-dau-8715d6aa.mp4","durationSec":441.98,"nguonCau":"thoigian",
+    "ctw-01-bat-dau": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/huong-dan-ct-work/01-nguoi-moi-va-thanh-vien/01-01-bat-dau-8715d6aa.mp4","durationSec":441.98,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":31.25,"ten":"Mở đầu"},
-        {"t":31.25,"den":58.21,"ten":"Nhóm chat lộn xộn"},
-        {"t":58.21,"den":113.73,"ten":"Ba tầng cần nhớ"},
-        {"t":113.73,"den":157.87,"ten":"Trang không gian"},
-        {"t":157.87,"den":191.17,"ten":"Tạo không gian mới"},
-        {"t":191.17,"den":255.97,"ten":"Tạo dự án từ mẫu"},
-        {"t":255.97,"den":304.75,"ten":"Đi một vòng thanh bên"},
-        {"t":304.75,"den":342.91,"ten":"Hai phím cứu cánh"},
-        {"t":342.91,"den":395.88,"ten":"Tự làm thử"},
+        {"t":0,"den":113.73,"ten":"Mở đầu · Nhóm chat lộn xộn"},
+        {"t":113.73,"den":191.17,"ten":"Trang không gian · Tạo không gian mới"},
+        {"t":191.17,"den":304.75,"ten":"Tạo dự án từ mẫu · Đi một vòng thanh bên"},
+        {"t":304.75,"den":395.88,"ten":"Hai phím cứu cánh · Tự làm thử"},
         {"t":395.88,"den":441.98,"ten":"Tóm tắt"}
       ],
       "cues": [
@@ -76,17 +71,12 @@
         {"t":430.23,"vi":"Còn bây giờ, bạn mở CT Work theo link ngay dưới video, tạo không gian và dự án đầu tiên của nhóm mình, rồi hẵng sang tập sau cho chắc nhé."}
       ]
     },
-    "ctw-02-board-hang-ngay": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/huong-dan-ct-work/01-nguoi-moi-va-thanh-vien/01-02-board-hang-ngay-08fb4f11.mp4","durationSec":359.97,"nguonCau":"thoigian",
+    "ctw-02-board-hang-ngay": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/huong-dan-ct-work/01-nguoi-moi-va-thanh-vien/01-02-board-hang-ngay-08fb4f11.mp4","durationSec":359.97,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":24.99,"ten":"Mở đầu"},
-        {"t":24.99,"den":54.45,"ten":"Board là gì"},
-        {"t":54.45,"den":120.66,"ten":"Đọc một thẻ"},
-        {"t":120.66,"den":158.42,"ten":"Chip \"Chờ…\""},
-        {"t":158.42,"den":193.63,"ten":"Kéo thẻ"},
-        {"t":193.63,"den":230.21,"ten":"Lọc nhanh"},
-        {"t":230.21,"den":266.07,"ten":"Nhóm theo"},
-        {"t":266.06,"den":312.96,"ten":"Tự làm thử"},
-        {"t":312.96,"den":359.97,"ten":"Tóm tắt"}
+        {"t":0,"den":120.66,"ten":"Mở đầu · Board là gì"},
+        {"t":120.66,"den":193.63,"ten":"Chip \"Chờ…\" · Kéo thẻ"},
+        {"t":193.63,"den":266.07,"ten":"Lọc nhanh · Nhóm theo"},
+        {"t":266.06,"den":359.97,"ten":"Tự làm thử · Tóm tắt"}
       ],
       "cues": [
         {"t":5,"vi":"Chào bạn, đến với tập hai của loạt Hướng dẫn CT Work."},
@@ -138,16 +128,11 @@
         {"t":348.69,"vi":"Còn bây giờ, bạn mở CT Work theo link dưới video, tạo vài thẻ cho nhóm và tập kéo, lọc, nhóm theo người, rồi hẵng sang tập sau nhé."}
       ]
     },
-    "ctw-03-the-viec-chi-tiet": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/huong-dan-ct-work/01-nguoi-moi-va-thanh-vien/01-03-the-viec-chi-tiet-2218a669.mp4","durationSec":368.26,"nguonCau":"thoigian",
+    "ctw-03-the-viec-chi-tiet": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/huong-dan-ct-work/01-nguoi-moi-va-thanh-vien/01-03-the-viec-chi-tiet-2218a669.mp4","durationSec":368.26,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":25.55,"ten":"Mở đầu"},
-        {"t":25.55,"den":54.45,"ten":"Thẻ viết cụt lủn"},
-        {"t":54.45,"den":119.64,"ten":"Mở thẻ: mô tả và chi tiết"},
-        {"t":119.64,"den":153.11,"ten":"Chia việc con"},
-        {"t":153.11,"den":192,"ten":"Liên kết chặn"},
-        {"t":192,"den":233.35,"ten":"Bình luận và nhắc tên"},
-        {"t":233.35,"den":277.65,"ten":"Ghi giờ và lịch sử"},
-        {"t":277.65,"den":325.61,"ten":"Tự làm thử"},
+        {"t":0,"den":119.64,"ten":"Mở đầu · Thẻ viết cụt lủn"},
+        {"t":119.64,"den":233.35,"ten":"Chia việc con · Liên kết chặn"},
+        {"t":233.35,"den":325.61,"ten":"Ghi giờ và lịch sử · Tự làm thử"},
         {"t":325.61,"den":368.26,"ten":"Tóm tắt"}
       ],
       "cues": [
@@ -200,17 +185,12 @@
         {"t":357.14,"vi":"Còn bây giờ, bạn mở CT Work theo link dưới video, viết lại cho thật đủ một thẻ việc của nhóm mình, rồi hẵng sang tập sau nhé."}
       ]
     },
-    "ctw-04-tro-chuyen-docs-hop": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/huong-dan-ct-work/01-nguoi-moi-va-thanh-vien/01-04-tro-chuyen-docs-hop-47ada212.mp4","durationSec":351.22,"nguonCau":"thoigian",
+    "ctw-04-tro-chuyen-docs-hop": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/huong-dan-ct-work/01-nguoi-moi-va-thanh-vien/01-04-tro-chuyen-docs-hop-47ada212.mp4","durationSec":351.22,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":28.6,"ten":"Mở đầu"},
-        {"t":28.6,"den":56.99,"ten":"Năm cái app cho một nhóm"},
-        {"t":56.99,"den":96.81,"ten":"Kênh trò chuyện"},
-        {"t":96.81,"den":126.95,"ten":"Gửi tin và gọi"},
-        {"t":126.95,"den":170.96,"ten":"Đọc Docs"},
-        {"t":170.96,"den":215.41,"ten":"Đi họp"},
-        {"t":215.41,"den":261.73,"ten":"Chuyện gì để ở đâu"},
-        {"t":261.73,"den":307.56,"ten":"Tự làm thử"},
-        {"t":307.56,"den":351.22,"ten":"Tóm tắt"}
+        {"t":0,"den":96.81,"ten":"Mở đầu · Năm cái app cho một nhóm"},
+        {"t":96.81,"den":170.96,"ten":"Gửi tin và gọi · Đọc Docs"},
+        {"t":170.96,"den":261.73,"ten":"Đi họp · Chuyện gì để ở đâu"},
+        {"t":261.73,"den":351.22,"ten":"Tự làm thử · Tóm tắt"}
       ],
       "cues": [
         {"t":5,"vi":"Chào bạn, đến với tập bốn, tập cuối của phần dành cho thành viên nhóm."},
@@ -259,17 +239,12 @@
         {"t":339.9,"vi":"Còn bây giờ, bạn mở CT Work theo link dưới video, gửi tin đầu tiên vào kênh nhóm và viết trang quy ước, rồi hẵng sang tập sau nhé."}
       ]
     },
-    "ctw-05-moi-nhom-phan-quyen": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/huong-dan-ct-work/02-nhom-truong-va-admin/02-05-moi-nhom-phan-quyen-b663e440.mp4","durationSec":364.44,"nguonCau":"thoigian",
+    "ctw-05-moi-nhom-phan-quyen": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/huong-dan-ct-work/02-nhom-truong-va-admin/02-05-moi-nhom-phan-quyen-b663e440.mp4","durationSec":364.44,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":24.7,"ten":"Mở đầu"},
-        {"t":24.7,"den":58.45,"ten":"Chìa khoá và căn nhà"},
-        {"t":58.45,"den":101.59,"ten":"Mời bằng email"},
-        {"t":101.59,"den":138.58,"ten":"Link mời"},
-        {"t":138.58,"den":180,"ten":"Bốn vai trò không gian"},
-        {"t":180,"den":223.96,"ten":"Vai trò trong dự án và nhãn"},
-        {"t":223.96,"den":268.49,"ten":"Link công khai cho giảng viên"},
-        {"t":268.49,"den":317.07,"ten":"Tự làm thử"},
-        {"t":317.07,"den":364.44,"ten":"Tóm tắt"}
+        {"t":0,"den":101.59,"ten":"Mở đầu · Chìa khoá và căn nhà"},
+        {"t":101.59,"den":180,"ten":"Link mời · Bốn vai trò không gian"},
+        {"t":180,"den":268.49,"ten":"Vai trò trong dự án và nhãn · Link công khai cho giảng viên"},
+        {"t":268.49,"den":364.44,"ten":"Tự làm thử · Tóm tắt"}
       ],
       "cues": [
         {"t":5,"vi":"Chào bạn, đến với tập năm, mở đầu phần dành cho nhóm trưởng."},
@@ -322,17 +297,12 @@
         {"t":352.67,"vi":"Còn bây giờ, bạn mở CT Work theo link dưới video, mời đủ thành viên vào nhóm và gửi link chỉ xem cho giảng viên, rồi hẵng sang tập sau nhé."}
       ]
     },
-    "ctw-06-backlog-sprint-timeline": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/huong-dan-ct-work/02-nhom-truong-va-admin/02-06-backlog-sprint-timeline-3fe817cb.mp4","durationSec":398.06,"nguonCau":"thoigian",
+    "ctw-06-backlog-sprint-timeline": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/huong-dan-ct-work/02-nhom-truong-va-admin/02-06-backlog-sprint-timeline-3fe817cb.mp4","durationSec":398.06,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":27,"ten":"Mở đầu"},
-        {"t":27,"den":66.88,"ten":"Kho việc và những đợt chạy"},
-        {"t":66.87,"den":116.95,"ten":"Trang Backlog"},
-        {"t":116.95,"den":144.55,"ten":"Tạo thẻ và kéo vào sprint"},
-        {"t":144.55,"den":195.85,"ten":"Bắt đầu và kết thúc sprint"},
-        {"t":195.85,"den":253.83,"ten":"Dòng thời gian"},
-        {"t":253.83,"den":298.34,"ten":"Danh sách thẻ, JQL và Xuất"},
-        {"t":298.34,"den":347.31,"ten":"Tự làm thử"},
-        {"t":347.31,"den":398.06,"ten":"Tóm tắt"}
+        {"t":0,"den":116.95,"ten":"Mở đầu · Kho việc và những đợt chạy"},
+        {"t":116.95,"den":195.85,"ten":"Tạo thẻ và kéo vào sprint · Bắt đầu và kết thúc sprint"},
+        {"t":195.85,"den":298.34,"ten":"Dòng thời gian · Danh sách thẻ, JQL và Xuất"},
+        {"t":298.34,"den":398.06,"ten":"Tự làm thử · Tóm tắt"}
       ],
       "cues": [
         {"t":5,"vi":"Chào bạn, đến với tập sáu của loạt Hướng dẫn CT Work."},
@@ -385,18 +355,13 @@
         {"t":386.75,"vi":"Còn bây giờ, bạn mở CT Work theo link dưới video, xếp sprint đầu tiên cho nhóm mình và bấm Bắt đầu, rồi hẵng sang tập sau nhé."}
       ]
     },
-    "ctw-07-docs-so-do-hop": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/huong-dan-ct-work/02-nhom-truong-va-admin/02-07-docs-so-do-hop-c5ac3dca.mp4","durationSec":556.02,"nguonCau":"thoigian",
+    "ctw-07-docs-so-do-hop": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/huong-dan-ct-work/02-nhom-truong-va-admin/02-07-docs-so-do-hop-c5ac3dca.mp4","durationSec":556.02,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":30.8,"ten":"Mở đầu"},
-        {"t":30.8,"den":60.21,"ten":"Giấy tờ nằm rải rác"},
-        {"t":60.21,"den":96.36,"ten":"Ba chỗ, nối vào thẻ việc"},
-        {"t":96.36,"den":151.95,"ten":"Trang mới từ mẫu"},
-        {"t":151.95,"den":218.49,"ten":"Xin phê duyệt và xuất file"},
+        {"t":0,"den":96.36,"ten":"Mở đầu · Giấy tờ nằm rải rác"},
+        {"t":96.36,"den":218.49,"ten":"Trang mới từ mẫu · Xin phê duyệt và xuất file"},
         {"t":218.49,"den":302.8,"ten":"Sơ đồ viết bằng chữ"},
-        {"t":302.8,"den":356.99,"ten":"Lên lịch họp"},
-        {"t":356.99,"den":428.01,"ten":"Biên bản thành thẻ việc"},
-        {"t":428.01,"den":494.13,"ten":"Tự làm thử"},
-        {"t":494.13,"den":556.02,"ten":"Tóm tắt"}
+        {"t":302.8,"den":428.01,"ten":"Lên lịch họp · Biên bản thành thẻ việc"},
+        {"t":428.01,"den":556.02,"ten":"Tự làm thử · Tóm tắt"}
       ],
       "cues": [
         {"t":5,"vi":"Chào bạn, đến với tập bảy của loạt Hướng dẫn CT Work."},
@@ -466,18 +431,13 @@
         {"t":543.19,"vi":"Còn bây giờ, bạn mở dự án của nhóm theo link ngay dưới video, tạo trang SRS đầu tiên từ mẫu và lên lịch buổi họp tuần, rồi hẵng sang tập sau nhé."}
       ]
     },
-    "ctw-08-bao-cao-dong-gop": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/huong-dan-ct-work/02-nhom-truong-va-admin/02-08-bao-cao-dong-gop-fa796fad.mp4","durationSec":500.27,"nguonCau":"thoigian",
+    "ctw-08-bao-cao-dong-gop": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/huong-dan-ct-work/02-nhom-truong-va-admin/02-08-bao-cao-dong-gop-fa796fad.mp4","durationSec":500.27,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":28.39,"ten":"Mở đầu"},
-        {"t":28.38,"den":51.85,"ten":"Cảm giác hay số liệu?"},
-        {"t":51.85,"den":91.85,"ten":"Burndown và vận tốc"},
+        {"t":0,"den":91.85,"ten":"Mở đầu · Cảm giác hay số liệu?"},
         {"t":91.85,"den":172.77,"ten":"Sức khoẻ, Burndown, Vận tốc"},
-        {"t":172.77,"den":234.47,"ten":"Báo cáo tuần do AI viết"},
-        {"t":234.47,"den":293.35,"ten":"Đóng góp từng người"},
-        {"t":293.35,"den":338.24,"ten":"Khối lượng việc"},
-        {"t":338.24,"den":390.28,"ten":"Tổng quan nhóm và Nộp bài"},
-        {"t":390.28,"den":445.95,"ten":"Tự làm thử"},
-        {"t":445.94,"den":500.27,"ten":"Tóm tắt"}
+        {"t":172.77,"den":293.35,"ten":"Báo cáo tuần do AI viết · Đóng góp từng người"},
+        {"t":293.35,"den":390.28,"ten":"Khối lượng việc · Tổng quan nhóm và Nộp bài"},
+        {"t":390.28,"den":500.27,"ten":"Tự làm thử · Tóm tắt"}
       ],
       "cues": [
         {"t":5,"vi":"Chào bạn, đến với tập tám của loạt Hướng dẫn CT Work."},
@@ -544,20 +504,14 @@
         {"t":489.1,"vi":"Còn bây giờ, bạn mở Báo cáo của nhóm mình theo link dưới video, tạo báo cáo tuần đầu tiên gửi giảng viên, rồi hẵng sang tập sau nhé."}
       ]
     },
-    "ctw-09-giang-vien-lop-hoc": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/huong-dan-ct-work/03-giang-vien/03-09-giang-vien-lop-hoc-afeaf35e.mp4","durationSec":625.46,"nguonCau":"thoigian",
+    "ctw-09-giang-vien-lop-hoc": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/huong-dan-ct-work/03-giang-vien/03-09-giang-vien-lop-hoc-afeaf35e.mp4","durationSec":625.46,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":27.77,"ten":"Mở đầu"},
-        {"t":27.77,"den":60.05,"ten":"Một lớp, bảy nhóm"},
-        {"t":60.05,"den":109.02,"ten":"Lớp học nối với dự án nhóm"},
-        {"t":109.02,"den":170.72,"ten":"Trang Lớp học"},
-        {"t":170.72,"den":211.69,"ten":"Tạo lớp"},
+        {"t":0,"den":109.02,"ten":"Mở đầu · Một lớp, bảy nhóm"},
+        {"t":109.02,"den":211.69,"ten":"Trang Lớp học · Tạo lớp"},
         {"t":211.69,"den":286.87,"ten":"Giao bài tập"},
-        {"t":286.87,"den":359.72,"ten":"Điểm danh bằng QR"},
-        {"t":359.72,"den":400.38,"ten":"Sổ điểm"},
-        {"t":400.38,"den":463.08,"ten":"Quiz tự chấm"},
-        {"t":463.08,"den":517.4,"ten":"Trung tâm giảng dạy"},
-        {"t":517.4,"den":571.86,"ten":"Tự làm thử"},
-        {"t":571.86,"den":625.46,"ten":"Tóm tắt"}
+        {"t":286.87,"den":400.38,"ten":"Điểm danh bằng QR · Sổ điểm"},
+        {"t":400.38,"den":517.4,"ten":"Quiz tự chấm · Trung tâm giảng dạy"},
+        {"t":517.4,"den":625.46,"ten":"Tự làm thử · Tóm tắt"}
       ],
       "cues": [
         {"t":5,"vi":"Chào bạn, đến với tập chín của loạt Hướng dẫn CT Work."},
@@ -636,17 +590,12 @@
         {"t":614.12,"vi":"Còn bây giờ, bạn vào trang Lớp học theo link dưới video, tạo một lớp thử và mở điểm danh QR lần đầu, rồi hẵng sang tập sau nhé."}
       ]
     },
-    "ctw-10-cong-khach-hang": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/huong-dan-ct-work/04-khach-hang/04-10-cong-khach-hang-db469fcd.mp4","durationSec":432.13,"nguonCau":"thoigian",
+    "ctw-10-cong-khach-hang": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/huong-dan-ct-work/04-khach-hang/04-10-cong-khach-hang-db469fcd.mp4","durationSec":432.13,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":30.73,"ten":"Mở đầu"},
-        {"t":30.73,"den":62.19,"ten":"Khách hỏi mỗi ngày"},
-        {"t":62.18,"den":106.04,"ten":"Hai cửa: nhóm và khách"},
-        {"t":106.04,"den":153.31,"ten":"Board Kanban của dự án khách"},
-        {"t":153.31,"den":218.73,"ten":"Xem trước như khách"},
-        {"t":218.72,"den":290.49,"ten":"Mời khách và xin nghiệm thu"},
-        {"t":290.49,"den":329.46,"ten":"Tài liệu: cho khách hay nội bộ"},
-        {"t":329.46,"den":381.85,"ten":"Tự làm thử"},
-        {"t":381.85,"den":432.13,"ten":"Tóm tắt"}
+        {"t":0,"den":106.04,"ten":"Mở đầu · Khách hỏi mỗi ngày"},
+        {"t":106.04,"den":218.73,"ten":"Board Kanban của dự án khách · Xem trước như khách"},
+        {"t":218.72,"den":329.46,"ten":"Mời khách và xin nghiệm thu · Tài liệu: cho khách hay nội bộ"},
+        {"t":329.46,"den":432.13,"ten":"Tự làm thử · Tóm tắt"}
       ],
       "cues": [
         {"t":5,"vi":"Chào bạn, đến với tập mười của loạt video Hướng dẫn CT Work."},
@@ -704,18 +653,13 @@
         {"t":420.31,"vi":"Còn bây giờ, bạn mở CT Work theo link ngay dưới video, tạo một dự án khách thử và xem trước như khách, rồi hẵng sang tập sau cho chắc nhé."}
       ]
     },
-    "ctw-11-ai-agent-tich-hop": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/huong-dan-ct-work/05-nang-cao-ai-tich-hop/05-11-ai-agent-tich-hop-b6b82e63.mp4","durationSec":589.75,"nguonCau":"thoigian",
+    "ctw-11-ai-agent-tich-hop": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/huong-dan-ct-work/05-nang-cao-ai-tich-hop/05-11-ai-agent-tich-hop-b6b82e63.mp4","durationSec":589.75,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":34.2,"ten":"Mở đầu"},
-        {"t":34.2,"den":63.98,"ten":"Cuối sprint, ai cũng bận"},
-        {"t":63.98,"den":103.83,"ten":"Bản đồ bốn mảnh"},
+        {"t":0,"den":103.83,"ten":"Mở đầu · Cuối sprint, ai cũng bận"},
         {"t":103.83,"den":189.84,"ten":"Hỏi AI về dự án"},
         {"t":189.84,"den":280.29,"ten":"AI agent — đồng đội AI"},
-        {"t":280.29,"den":309.39,"ten":"Lọc Người và Agent"},
-        {"t":309.39,"den":344.19,"ten":"Báo cáo Người và Agent"},
-        {"t":344.19,"den":433.31,"ten":"GitHub, kênh chat, Microsoft và Google"},
-        {"t":433.3,"den":472.25,"ten":"Notion và Slack"},
-        {"t":472.25,"den":533.83,"ten":"Tự làm thử"},
+        {"t":280.29,"den":433.31,"ten":"Lọc Người và Agent · Báo cáo Người và Agent"},
+        {"t":433.3,"den":533.83,"ten":"Notion và Slack · Tự làm thử"},
         {"t":533.83,"den":589.75,"ten":"Tóm tắt"}
       ],
       "cues": [
@@ -788,16 +732,12 @@
         {"t":576.41,"vi":"Còn bây giờ, bạn mở CT Work theo link ngay dưới video, hỏi AI một câu về dự án của nhóm, rồi tự kiểm lại câu trả lời trước khi sang tập sau nhé."}
       ]
     },
-    "ctw-12-app-may-tinh-dien-thoai": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/huong-dan-ct-work/05-nang-cao-ai-tich-hop/05-12-app-may-tinh-dien-thoai-1d07a889.mp4","durationSec":434.39,"nguonCau":"thoigian",
+    "ctw-12-app-may-tinh-dien-thoai": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/huong-dan-ct-work/05-nang-cao-ai-tich-hop/05-12-app-may-tinh-dien-thoai-1d07a889.mp4","durationSec":434.39,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":32.91,"ten":"Mở đầu"},
-        {"t":32.91,"den":59.63,"ten":"Một tab giữa ba mươi tab"},
-        {"t":59.63,"den":95.27,"ten":"Ba cách mở, một dữ liệu"},
+        {"t":0,"den":95.27,"ten":"Mở đầu · Một tab giữa ba mươi tab"},
         {"t":95.27,"den":170.74,"ten":"Trang tải app"},
-        {"t":170.74,"den":220.51,"ten":"App desktop"},
-        {"t":220.51,"den":284.61,"ten":"Trên điện thoại"},
-        {"t":284.61,"den":335.27,"ten":"Phím tắt hay dùng"},
-        {"t":335.27,"den":388.22,"ten":"Tự làm thử"},
+        {"t":170.74,"den":284.61,"ten":"App desktop · Trên điện thoại"},
+        {"t":284.61,"den":388.22,"ten":"Phím tắt hay dùng · Tự làm thử"},
         {"t":388.22,"den":434.39,"ten":"Tóm tắt cả loạt"}
       ],
       "cues": [

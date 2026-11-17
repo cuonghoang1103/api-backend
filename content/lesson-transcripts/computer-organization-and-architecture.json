@@ -2,8 +2,20 @@
   "courseSlug": "computer-organization-and-architecture",
   "sinhBoi": "scripts/phu-de-tu-video-rieng.mjs",
   "lessons": {
-    "cea201-1-0a-slides-organization-architecture": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/computer-organization-and-architecture/01-gioi-thieu/01-01-slide-kien-truc-to-chuc-may-ias-1a924cdd.mp4","durationSec":1056.56,"nguonCau":"srt",
-      "parts": [],
+    "cea201-1-0a-slides-organization-architecture": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/computer-organization-and-architecture/01-gioi-thieu/01-01-slide-kien-truc-to-chuc-may-ias-1a924cdd.mp4","durationSec":1056.56,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":108.76,"ten":"Ôn nhanh · hôm nay · Slide 1 · bìa sách Stallings"},
+        {"t":108.76,"den":214.74,"ten":"Mô phỏng: phân loại A hay O · Slide 3 · IBM System/370"},
+        {"t":214.74,"den":319.89,"ten":"Slide 5 · bốn chức năng"},
+        {"t":319.89,"den":394.98,"ten":"Slide 8 · bốn thành phần của CPU"},
+        {"t":394.98,"den":495.6,"ten":"Slide 10 · Cache Memory · Slide 11 · Figure 1.2, máy đa lõi"},
+        {"t":495.6,"den":598.27,"ten":"Slide 13 · Figure 1.4, bên trong một lõi"},
+        {"t":598.27,"den":702.21,"ten":"Slide 16 · Figure 1.6, khuôn dạng từ nhớ"},
+        {"t":702.21,"den":819.81,"ten":"Mô phỏng: máy IAS chạy từng bước"},
+        {"t":819.81,"den":918.3,"ten":"Slide 20 · Figure 1.8, cổng và ô nhớ"},
+        {"t":918.3,"den":1008.22,"ten":"Bài tập: khuôn dạng IAS · Tự kiểm nhanh"},
+        {"t":1008.22,"den":1056.56,"ten":"Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 1.0a, phần đầu Chương 1 của CEA201."},
         {"t":10.91,"vi":"Bài mở đầu đã cho bạn toà nhà máy tính bảy tầng, và hai chữ kiến trúc với tổ chức."},
@@ -184,8 +196,20 @@
         {"t":1047.76,"vi":"Bài sau là nửa còn lại của Chương 1: định luật Moore, dòng chip Intel, hệ nhúng và ARM."}
       ]
     },
-    "cea201-1-0b-slides-moore-intel-arm": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/computer-organization-and-architecture/01-gioi-thieu/01-02-slide-moore-intel-nhung-arm-7a976efb.mp4","durationSec":1049.93,"nguonCau":"srt",
-      "parts": [],
+    "cea201-1-0b-slides-moore-intel-arm": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/computer-organization-and-architecture/01-gioi-thieu/01-02-slide-moore-intel-nhung-arm-7a976efb.mp4","durationSec":1049.93,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":90.83,"ten":"Ôn nhanh · hôm nay · Slide 23 · wafer, chip, gate"},
+        {"t":90.83,"den":195.5,"ten":"Slide 24 · chip trên bo mạch"},
+        {"t":195.5,"den":300.13,"ten":"Chạy thật: kiểm định luật Moore bằng số liệu"},
+        {"t":300.13,"den":379.19,"ten":"Slide 28 · Intel thập niên 1970"},
+        {"t":379.19,"den":502.96,"ten":"Slide 30 · Intel thập niên 1990 · Slide 31 · Intel gần đây"},
+        {"t":502.96,"den":619.51,"ten":"Slide 33 · mốc Intel (2/2) · Slide 34 · Embedded Systems"},
+        {"t":619.51,"den":701.84,"ten":"Slide 36 · Internet of Things"},
+        {"t":701.84,"den":805,"ten":"Slide 38 · Figure 1.14, vi điều khiển"},
+        {"t":805,"den":919.33,"ten":"Slide 41 · ARM Products"},
+        {"t":919.33,"den":1010.78,"ten":"Bài tập: tính trên bảng Intel · Tự kiểm nhanh"},
+        {"t":1010.78,"den":1049.93,"ten":"Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 1.0b, nửa sau Chương 1."},
         {"t":10.01,"vi":"Bài trước đã đi hết slide 1 tới 22: kiến trúc và tổ chức, bốn chức năng, máy IAS chạy từng bước, rồi xuống tới transistor."},
@@ -371,8 +395,13 @@
         {"t":1042.12,"vi":"Bài sau, mình xem lại cặp khái niệm kiến trúc và tổ chức bằng mô phỏng và nhiều ví dụ hơn."}
       ]
     },
-    "cea201-1-1-org-vs-arch": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/computer-organization-and-architecture/01-gioi-thieu/01-03-to-chuc-vs-kien-truc-119a118e.mp4","durationSec":351.89,"nguonCau":"srt",
-      "parts": [],
+    "cea201-1-1-org-vs-arch": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/computer-organization-and-architecture/01-gioi-thieu/01-03-to-chuc-vs-kien-truc-119a118e.mp4","durationSec":351.89,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":88.76,"ten":"Ôn nhanh · hôm nay · Ví dụ đời thường: lái ô tô"},
+        {"t":88.76,"den":168.12,"ten":"Chạy thật: lệnh nhân là kiến trúc"},
+        {"t":168.12,"den":238.63,"ten":"Vì sao phải tách hai chữ? · ⭐ Ngoài giáo trình: micro-op"},
+        {"t":238.63,"den":351.89,"ten":"Bài tập: gắn nhãn A hay O · Tự kiểm nhanh"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 1.1 của CEA201."},
         {"t":9.41,"vi":"Hai bài slide vừa rồi đã đi hết bốn mươi ba slide Chương 1: từ máy IAS tới định luật Moore và ARM."},
@@ -444,8 +473,13 @@
         {"t":342.26,"vi":"Bài sau là 1.2: bốn chức năng và cấu trúc phân cấp của máy tính, xem chúng diễn ra thật trong một cỗ máy tí hon."}
       ]
     },
-    "cea201-1-2-structure-function": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/computer-organization-and-architecture/01-gioi-thieu/01-04-cau-truc-va-chuc-nang-c60944b7.mp4","durationSec":328.52,"nguonCau":"srt",
-      "parts": [],
+    "cea201-1-2-structure-function": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/computer-organization-and-architecture/01-gioi-thieu/01-04-cau-truc-va-chuc-nang-c60944b7.mp4","durationSec":328.52,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":118.2,"ten":"Ôn nhanh · hôm nay · Bốn chức năng cơ bản"},
+        {"t":118.2,"den":196.87,"ten":"Cấu trúc: phân cấp các bộ phận"},
+        {"t":196.87,"den":292.55,"ten":"Bản đồ từ trên xuống của môn học"},
+        {"t":292.55,"den":328.52,"ten":"Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 1.2, bài cuối của Chương 1."},
         {"t":9.79,"vi":"Bài trước đã chốt kiến trúc là hợp đồng với lập trình viên, còn tổ chức là cách kỹ sư xây."},
@@ -511,8 +545,26 @@
         {"t":322.99,"vi":"CPI, MIPS, và định luật Amdahl."}
       ]
     },
-    "cea201-10-0a-slides-lenh-may-toan-hang-thao-tac": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/computer-organization-and-architecture/10-tap-lenh-dac-diem/10-01-slide-lenh-may-toan-hang-thao-tac-48043162.mp4","durationSec":2161.04,"nguonCau":"srt",
-      "parts": [],
+    "cea201-10-0a-slides-lenh-may-toan-hang-thao-tac": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/computer-organization-and-architecture/10-tap-lenh-dac-diem/10-01-slide-lenh-may-toan-hang-thao-tac-48043162.mp4","durationSec":2161.04,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":82.4,"ten":"Mở đầu · bài này học gì"},
+        {"t":82.4,"den":237.71,"ten":"Slide 2, Machine Instruction Characteristics, đặc điểm của…"},
+        {"t":237.71,"den":344.11,"ten":"Slide 4: toán hạng nguồn và kết quả…"},
+        {"t":344.11,"den":448.75,"ten":"Giờ ta giải mã thật một lệnh theo…"},
+        {"t":448.75,"den":557.13,"ten":"Slide 7, Instruction Types"},
+        {"t":557.13,"den":724.42,"ten":"Bẫy kép ở bảng này"},
+        {"t":724.42,"den":902.22,"ten":"Bẫy: trừ và chia không giao hoán"},
+        {"t":902.22,"den":991,"ten":"Registers: bao nhiêu thanh ghi lệnh gọi được"},
+        {"t":991,"den":1092.24,"ten":"Ví dụ 1995 thành hai byte"},
+        {"t":1092.24,"den":1269.6,"ten":"Ví dụ a"},
+        {"t":1269.6,"den":1352.97,"ten":"Thanh thứ tám in sai ba lỗi"},
+        {"t":1352.97,"den":1435.09,"ten":"Chạy thật bằng SSE2 trên CPU này"},
+        {"t":1435.09,"den":1613.96,"ten":"Bẫy: halfword trên ARM là 16 bit"},
+        {"t":1613.96,"den":1791.78,"ten":"NEG đổi dấu theo bù hai"},
+        {"t":1791.78,"den":1968.68,"ten":"Phần f, vào ra"},
+        {"t":1968.68,"den":2096.51,"ten":"Từ mã C ra lệnh máy"},
+        {"t":2096.51,"den":2161.04,"ten":"Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đây là bài 10.0a, mở đầu chương tập lệnh."},
         {"t":9.93,"vi":"Chương trước ta dựng cổng, bộ cộng, thanh ghi. Đó là phần cứng. Hôm nay ta lên đúng ranh giới giữa phần cứng và phần mềm."},
@@ -914,8 +966,16 @@
         {"t":2150.45,"vi":"Bài sau, 10.0b, ta đi kỹ từng loại thao tác, lời gọi thủ tục với ngăn xếp, và lệnh của x86, ARM."}
       ]
     },
-    "cea201-10-1-instruction-anatomy": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/computer-organization-and-architecture/10-tap-lenh-dac-diem/10-03-giai-phau-lenh-may-78e56de8.mp4","durationSec":790.06,"nguonCau":"srt",
-      "parts": [],
+    "cea201-10-1-instruction-anatomy": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/computer-organization-and-architecture/10-tap-lenh-dac-diem/10-03-giai-phau-lenh-may-78e56de8.mp4","durationSec":790.06,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":108.66,"ten":"Mở đầu · bài này học gì"},
+        {"t":108.66,"den":249.36,"ten":"Ví dụ cộng, nạp, cất hay nhảy"},
+        {"t":249.36,"den":336.47,"ten":"Slide 7, Instruction Types, chia lệnh thành bốn…"},
+        {"t":336.47,"den":423.1,"ten":"Slide 9, Table 13.1, so số địa chỉ…"},
+        {"t":423.1,"den":602.02,"ten":"Slide 5, Figure 13.2, A Simple Instruction Format"},
+        {"t":602.02,"den":749.3,"ten":"Vì vậy trang tải phần mềm thường có…"},
+        {"t":749.3,"den":790.06,"ten":"Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 10.1, bài khái niệm của Chương 10."},
         {"t":10.02,"vi":"Bài 10.0a và 10.0b đã đi qua slide về lệnh máy, kiểu dữ liệu và các loại thao tác."},
@@ -1074,8 +1134,26 @@
         {"t":783.61,"vi":"Bài sau là 11.0: các chế độ địa chỉ và khuôn dạng lệnh."}
       ]
     },
-    "cea201-11-0-slides-che-do-dia-chi-khuon-dang-lenh": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/computer-organization-and-architecture/11-tap-lenh-addressing/11-01-slide-che-do-dia-chi-khuon-dang-lenh-8d28b858.mp4","durationSec":2216.33,"nguonCau":"srt",
-      "parts": [],
+    "cea201-11-0-slides-che-do-dia-chi-khuon-dang-lenh": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/computer-organization-and-architecture/11-tap-lenh-addressing/11-01-slide-che-do-dia-chi-khuon-dang-lenh-8d28b858.mp4","durationSec":2216.33,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":83.19,"ten":"Mở đầu · bài này học gì"},
+        {"t":83.19,"den":180.82,"ten":"Slide 2, Addressing Modes, các chế độ địa…"},
+        {"t":180.82,"den":308.02,"ten":"Slide 4, Table 14.1, Basic Addressing Modes"},
+        {"t":308.02,"den":394.48,"ten":"Slide 5, Immediate Addressing, địa chỉ tức thời"},
+        {"t":394.48,"den":476.04,"ten":"Slide 7, Indirect Addressing, địa chỉ gián tiếp"},
+        {"t":476.04,"den":655.97,"ten":"Slide 9, Register Indirect Addressing, gián tiếp qua…"},
+        {"t":655.97,"den":831.1,"ten":"Chỉ đảo vai"},
+        {"t":831.1,"den":907.38,"ten":"Là độ dời"},
+        {"t":907.38,"den":1083.13,"ten":"Chạy thật ví dụ của bài web"},
+        {"t":1083.13,"den":1206.49,"ten":"Slide 19, Figure 14.4, ARM Load/Store Multiple Addressing"},
+        {"t":1206.49,"den":1294.26,"ten":"Bẫy đề: độ dài lệnh"},
+        {"t":1294.26,"den":1440.2,"ten":"Bẫy: số thao tác không phải lũy thừa…"},
+        {"t":1440.2,"den":1558.66,"ten":"Bẫy đề: nhiều khuôn dạng khác với độ…"},
+        {"t":1558.66,"den":1734.97,"ten":"Đầu tiên là các tiền tố"},
+        {"t":1734.97,"den":1911.11,"ten":"Dòng ba, quay 30"},
+        {"t":1911.11,"den":2088.52,"ten":"Ba bit đầu khác 111"},
+        {"t":2088.52,"den":2216.33,"ten":"Dừng video lại và làm thử nhé"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đây là bài 11.0, mở đầu chương 11 của môn CEA201."},
         {"t":11.4,"vi":"Chương trước ta biết một lệnh có mã thao tác và các trường toán hạng, rồi giải phẫu từng byte của lệnh thật."},
@@ -1496,8 +1574,25 @@
         {"t":2207.78,"vi":"Bài sau, 11.1, luyện tay các chế độ địa chỉ với công cụ Thử ngay trên web. Hẹn gặp bạn."}
       ]
     },
-    "cea201-12-0a-slides-to-chuc-cpu-thanh-ghi-pipeline": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/computer-organization-and-architecture/12-cau-truc-cpu/12-01-slide-to-chuc-cpu-thanh-ghi-pipeline-9f53fd40.mp4","durationSec":2147.04,"nguonCau":"srt",
-      "parts": [],
+    "cea201-12-0a-slides-to-chuc-cpu-thanh-ghi-pipeline": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/computer-organization-and-architecture/12-cau-truc-cpu/12-01-slide-to-chuc-cpu-thanh-ghi-pipeline-9f53fd40.mp4","durationSec":2147.04,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":90.58,"ten":"Mở đầu · bài này học gì"},
+        {"t":90.58,"den":211.8,"ten":"Slide 2, Processor Organization"},
+        {"t":211.8,"den":289.01,"ten":"Slide 4, Register Organization, tổ chức thanh ghi"},
+        {"t":289.01,"den":374.29,"ten":"Ví dụ con trỏ đoạn"},
+        {"t":374.29,"den":450.74,"ten":"Bẫy đề: cờ làm chương trình ít lệnh…"},
+        {"t":450.74,"den":586.75,"ten":"Bước hai: MAR đưa 300 ra bus địa…"},
+        {"t":586.75,"den":764.81,"ten":"Bẫy hay gặp nhất"},
+        {"t":764.81,"den":941.18,"ten":"Chữ nếu ở đây gồm hai điều kiện"},
+        {"t":941.18,"den":1020.55,"ten":"Slide 14, Figure 16.6, Data Flow, Indirect Cycle"},
+        {"t":1020.55,"den":1197.24,"ten":"Bước bốn: khối điều khiển nạp vào PC…"},
+        {"t":1197.24,"den":1373.49,"ten":"Lý do một"},
+        {"t":1373.49,"den":1549.83,"ten":"Mẹo vẽ trong phòng thi"},
+        {"t":1549.83,"den":1728.75,"ten":"Tăng tốc S bằng n nhân k"},
+        {"t":1728.75,"den":1906.77,"ten":"Cách chữa: tách cache lệnh và cache dữ…"},
+        {"t":1906.77,"den":2084.65,"ten":"Kết luận: RAW là giới hạn vật lý"},
+        {"t":2084.65,"den":2147.04,"ten":"Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đây là bài 12.0a, mở đầu chương cấu trúc và chức năng của bộ xử lý."},
         {"t":11.83,"vi":"Chương 3 coi CPU là một cái hộp biết thi hành lệnh."},
@@ -1881,8 +1976,25 @@
         {"t":2135.94,"vi":"Bài sau, 12.0b, ta học cách đối phó rẽ nhánh, dự đoán rẽ nhánh, và tổ chức CPU thật của x86 và ARM."}
       ]
     },
-    "cea201-12-0b-slides-re-nhanh-du-doan-to-chuc-cpu": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/computer-organization-and-architecture/12-cau-truc-cpu/12-02-slide-re-nhanh-du-doan-to-chuc-cpu-a2387125.mp4","durationSec":2150.04,"nguonCau":"srt",
-      "parts": [],
+    "cea201-12-0b-slides-re-nhanh-du-doan-to-chuc-cpu": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/computer-organization-and-architecture/12-cau-truc-cpu/12-02-slide-re-nhanh-du-doan-to-chuc-cpu-a2387125.mp4","durationSec":2150.04,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":177.29,"ten":"Mở đầu · bài này học gì"},
+        {"t":177.29,"den":348.98,"ten":"IBM 360/91 dùng cách này"},
+        {"t":348.98,"den":442.88,"ten":"Họ tĩnh: Predict never taken"},
+        {"t":442.88,"den":616.33,"ten":"Bẫy đề: hai cột không phải hai bộ…"},
+        {"t":616.33,"den":769.37,"ten":"Bảng này là một cái cache"},
+        {"t":769.37,"den":883.1,"ten":"Vì sao giải mã cần hai tầng?"},
+        {"t":883.1,"den":1058.44,"ten":"Bẫy đề: cả hai hình đều chưa phải…"},
+        {"t":1058.44,"den":1140.11,"ten":"Bảng b, chế độ 64 bit"},
+        {"t":1140.11,"den":1223.88,"ten":"Bẫy đề hay gặp"},
+        {"t":1223.88,"den":1375.31,"ten":"Bẫy đề: thanh ghi điều khiển không phải…"},
+        {"t":1375.31,"den":1551.87,"ten":"Bẫy đề: chia cho 0 là ngoại lệ"},
+        {"t":1551.87,"den":1675,"ten":"Hàm thứ nhất viết"},
+        {"t":1675,"den":1830.17,"ten":"Bẫy đề: bảy chế độ không phải bảy…"},
+        {"t":1830.17,"den":2004.07,"ten":"Bẫy đề: CPSR và SPSR cùng một khuôn…"},
+        {"t":2004.07,"den":2097.99,"ten":"Câu if trong C có ở bài rẽ…"},
+        {"t":2097.99,"den":2150.04,"ten":"Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đây là bài 12.0b, nửa sau chương cấu trúc và chức năng của bộ xử lý."},
         {"t":12.15,"vi":"Bài 12.0a dựng pipeline sáu tầng, và gặp ba loại xung đột: tài nguyên, dữ liệu, điều khiển."},
@@ -2258,8 +2370,14 @@
         {"t":2142.96,"vi":"Bài sau, 12.1, ta ôn lại thanh ghi và chu trình lệnh bằng các mô phỏng tương tác."}
       ]
     },
-    "cea201-12-1-registers-cycle": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/computer-organization-and-architecture/12-cau-truc-cpu/12-03-thanh-ghi-chu-trinh-lenh-10384951.mp4","durationSec":802.88,"nguonCau":"srt",
-      "parts": [],
+    "cea201-12-1-registers-cycle": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/computer-organization-and-architecture/12-cau-truc-cpu/12-03-thanh-ghi-chu-trinh-lenh-10384951.mp4","durationSec":802.88,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":183.62,"ten":"Mở đầu · bài này học gì"},
+        {"t":183.62,"den":358.5,"ten":"Nhớ theo hai cặp"},
+        {"t":358.5,"den":532.47,"ten":"Ba lệnh này chính là Add Count"},
+        {"t":532.47,"den":711.81,"ten":"Phần ngoài giáo trình"},
+        {"t":711.81,"den":802.88,"ten":"Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đây là bài 12.1, bài luyện tay về thanh ghi và chu trình lệnh."},
         {"t":11.17,"vi":"Hai bài 12.0a và 12.0b đã đi hết năm mươi sáu slide: thanh ghi, chu trình lệnh, pipeline, và rẽ nhánh."},
@@ -2401,8 +2519,13 @@
         {"t":793.77,"vi":"Bài sau, 12.2, ta xếp các bước này thành dây chuyền: pipeline. Hẹn gặp bạn."}
       ]
     },
-    "cea201-12-2-pipelining": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/computer-organization-and-architecture/12-cau-truc-cpu/12-04-pipeline-duong-ong-lenh-c0190d86.mp4","durationSec":608.97,"nguonCau":"srt",
-      "parts": [],
+    "cea201-12-2-pipelining": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/computer-organization-and-architecture/12-cau-truc-cpu/12-04-pipeline-duong-ong-lenh-c0190d86.mp4","durationSec":608.97,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":182.84,"ten":"Mở đầu · bài này học gì"},
+        {"t":182.84,"den":357.84,"ten":"Data, dữ liệu"},
+        {"t":357.84,"den":534.81,"ten":"Thấp hơn 1 vì CPU này là siêu…"},
+        {"t":534.81,"den":608.97,"ten":"Thông lượng, throughput"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đây là bài 12.2, bài cuối của chương 12, về pipeline."},
         {"t":11.59,"vi":"Bài 12.1 vừa theo một lệnh qua bốn bước: nạp, giải mã, nạp toán hạng, thực thi."},
@@ -2521,8 +2644,28 @@
         {"t":605.79,"vi":"Hẹn gặp bạn."}
       ]
     },
-    "cea201-13-0a-slides-risc-thong-ke-thanh-ghi": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/computer-organization-and-architecture/13-risc/13-01-slide-risc-thong-ke-thanh-ghi-aa478d40.mp4","durationSec":2201.9,"nguonCau":"srt",
-      "parts": [],
+    "cea201-13-0a-slides-risc-thong-ke-thanh-ghi": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/computer-organization-and-architecture/13-risc/13-01-slide-risc-thong-ke-thanh-ghi-aa478d40.mp4","durationSec":2201.9,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":95.4,"ten":"Mở đầu · bài này học gì"},
+        {"t":95.4,"den":188.07,"ten":"Slide 2, Table 17.1, đặc tính của vài…"},
+        {"t":188.07,"den":263.53,"ten":"Bẫy đề: dòng cache không phân biệt được…"},
+        {"t":263.53,"den":340.4,"ten":"Slide 4, Instruction Execution Characteristics, đặc tính thực…"},
+        {"t":340.4,"den":443.11,"ten":"Slide 5, Table 17.2, tần suất động có…"},
+        {"t":443.11,"den":525.09,"ten":"Bẫy đề: chỉ đọc hai cột đầu rồi…"},
+        {"t":525.09,"den":628.79,"ten":"Câu hỏi: vùng làm việc riêng của một…"},
+        {"t":628.79,"den":743.42,"ten":"Slide 8, Implications, hệ quả"},
+        {"t":743.42,"den":917.85,"ten":"Bẫy đề: hai cột này không phải RISC…"},
+        {"t":917.85,"den":1095.07,"ten":"Khi CWP đuổi kịp SWP"},
+        {"t":1095.07,"den":1206.05,"ten":"Biến toàn cục được trình biên dịch gán…"},
+        {"t":1206.05,"den":1319.63,"ten":"Vì sao dựng cái này?"},
+        {"t":1319.63,"den":1498.11,"ten":"Bẫy đề: hình b chỉ vẽ lần trúng…"},
+        {"t":1498.11,"den":1626.84,"ten":"Đo bằng perf trên một triệu phần tử"},
+        {"t":1626.84,"den":1759.27,"ten":"Bẫy chiều: số càng nhỏ thì mã máy…"},
+        {"t":1759.27,"den":1882.24,"ten":"Bẫy đề: đừng trình bày bốn ý này…"},
+        {"t":1882.24,"den":1962.46,"ten":"Bẫy đề: trích riêng phần a để nói…"},
+        {"t":1962.46,"den":2140.19,"ten":"Bẫy đề: chữ a đánh dấu máy RISC…"},
+        {"t":2140.19,"den":2201.9,"ten":"Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đây là bài 13.0a, mở đầu chương máy tính tập lệnh rút gọn, gọi tắt là RISC."},
         {"t":13.05,"vi":"Chương 12 vừa dựng pipeline, và thấy lệnh dài ngắn thất thường làm ống nghẽn."},
@@ -2924,8 +3067,28 @@
         {"t":2187.78,"vi":"Bài sau, 13.0b, là nửa sau chương: pipeline RISC, rẽ nhánh trễ, MIPS R4000, SPARC, và cuộc tranh luận RISC với CISC."}
       ]
     },
-    "cea201-13-0b-slides-dac-trung-risc-pipeline-tranh-luan": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/computer-organization-and-architecture/13-risc/13-02-slide-dac-trung-risc-pipeline-tranh-luan-675e85d3.mp4","durationSec":2481.54,"nguonCau":"srt",
-      "parts": [],
+    "cea201-13-0b-slides-dac-trung-risc-pipeline-tranh-luan": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/computer-organization-and-architecture/13-risc/13-02-slide-dac-trung-risc-pipeline-tranh-luan-675e85d3.mp4","durationSec":2481.54,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":111.72,"ten":"Mở đầu · bài này học gì"},
+        {"t":111.72,"den":217.14,"ten":"Bẫy đề: ống sâu hơn không tự ít…"},
+        {"t":217.14,"den":394.96,"ten":"Bẫy đề: pipeline không làm một lệnh nhanh…"},
+        {"t":394.96,"den":570.56,"ten":"ADD 1, rA hợp lệ vì nó chạy…"},
+        {"t":570.56,"den":750.18,"ten":"Khung b ra 8, khung c ra 6"},
+        {"t":750.18,"den":929.27,"ten":"Hộp ba: cùng kiến trúc và tập lệnh…"},
+        {"t":929.27,"den":1060.82,"ten":"Mười bốn lệnh, 46 byte"},
+        {"t":1060.82,"den":1146.99,"ten":"Bẫy đề: siêu pipeline vẫn chỉ cho một…"},
+        {"t":1146.99,"den":1277.62,"ten":"Bẫy đề: ba khung không phải ba bộ…"},
+        {"t":1277.62,"den":1409.63,"ten":"Bẫy đề: hai hàng không phải hai lệnh…"},
+        {"t":1409.63,"den":1490.09,"ten":"Bẫy đề: cửa sổ thanh ghi không nằm…"},
+        {"t":1490.09,"den":1661.84,"ten":"Bẫy đề: SPARC có 32 thanh ghi là…"},
+        {"t":1661.84,"den":1807.26,"ten":"Slide 37, Table 17.10, Synthesizing Other Addressing Modes…"},
+        {"t":1807.26,"den":1941.63,"ten":"Bẫy đề: 8 bit bỏ qua là lãng…"},
+        {"t":1941.63,"den":2073.39,"ten":"Bẫy đề: trạm giữ chỗ không phải hàng…"},
+        {"t":2073.39,"den":2251.02,"ten":"Bẫy đề: reorder buffer không sắp xếp lại…"},
+        {"t":2251.02,"den":2327.9,"ten":"ARM, RISC-V và Apple Silicon là RISC thuần,…"},
+        {"t":2327.9,"den":2431.29,"ten":"Bài tập kiểu FE, ba câu"},
+        {"t":2431.29,"den":2481.54,"ten":"Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đây là bài 13.0b, nửa sau chương máy tính tập lệnh rút gọn, RISC."},
         {"t":12.68,"vi":"Bài 13.0a đã đo chương trình thật và dựng tệp thanh ghi lớn."},
@@ -3350,8 +3513,14 @@
         {"t":2474,"vi":"Bài sau, 13.1, gói gọn RISC với CISC thành một bảng so sánh để đi thi."}
       ]
     },
-    "cea201-13-1-risc-cisc": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/computer-organization-and-architecture/13-risc/13-03-risc-vs-cisc-2501d419.mp4","durationSec":768.85,"nguonCau":"srt",
-      "parts": [],
+    "cea201-13-1-risc-cisc": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/computer-organization-and-architecture/13-risc/13-03-risc-vs-cisc-2501d419.mp4","durationSec":768.85,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":132.74,"ten":"Mở đầu · bài này học gì"},
+        {"t":132.74,"den":304.33,"ten":"Slide 2 chương 17"},
+        {"t":304.33,"den":386.66,"ten":"Với ARM64 và RISC-V"},
+        {"t":386.66,"den":564.2,"ten":"Câu hỏi ba của lab"},
+        {"t":564.2,"den":768.85,"ten":"Đời thật: iPhone"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đây là bài 13.1, bài cuối của chương 13: RISC đối đầu CISC."},
         {"t":12.63,"vi":"Hai bài slide vừa rồi đã đi qua thống kê lệnh, cửa sổ thanh ghi và pipeline RISC."},
@@ -3492,8 +3661,27 @@
         {"t":758.86,"vi":"Bài sau, 14.0a, ta sang bộ xử lý siêu vô hướng, chạy nhiều lệnh mỗi chu kỳ. Hẹn gặp bạn."}
       ]
     },
-    "cea201-14-0a-slides-superscalar-phu-thuoc-lenh-intel-core": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/computer-organization-and-architecture/14-ilp-superscalar/14-01-slide-superscalar-phu-thuoc-lenh-intel-core-a6fb21b0.mp4","durationSec":2143.07,"nguonCau":"srt",
-      "parts": [],
+    "cea201-14-0a-slides-superscalar-phu-thuoc-lenh-intel-core": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/computer-organization-and-architecture/14-ilp-superscalar/14-01-slide-superscalar-phu-thuoc-lenh-intel-core-a6fb21b0.mp4","durationSec":2143.07,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":110.7,"ten":"Mở đầu · bài này học gì"},
+        {"t":110.7,"den":224.71,"ten":"Slide 2, Superscalar Overview"},
+        {"t":224.71,"den":355.28,"ten":"Slide 4, Figure 18.2, Generic Superscalar Organization, degree…"},
+        {"t":355.28,"den":445.85,"ten":"Slide 5, Table 18.1, Reported Speedups of Superscalar-Like…"},
+        {"t":445.85,"den":544.47,"ten":"Slide 6, Figure 18.3, Comparison of Superscalar and…"},
+        {"t":544.47,"den":667.81,"ten":"Bẫy đề: không lối nào làm một lệnh…"},
+        {"t":667.81,"den":743.26,"ten":"Bẫy đề: đổi tên thanh ghi không gỡ…"},
+        {"t":743.26,"den":921.29,"ten":"Slide 9, Design Issues, Instruction-Level Parallelism and Machine…"},
+        {"t":921.29,"den":1095.97,"ten":"Là việc của reorder buffer"},
+        {"t":1095.97,"den":1172.68,"ten":"Bên phải là Commit, chốt"},
+        {"t":1172.68,"den":1349.46,"ten":"Bước hai, chạy cùng tám lệnh qua ba…"},
+        {"t":1349.46,"den":1450.21,"ten":"Vòng trungten: cả bốn cặp đều dùng một…"},
+        {"t":1450.21,"den":1563.55,"ten":"Bẫy đề: đây là máy lý tưởng"},
+        {"t":1563.55,"den":1739.19,"ten":"Cuối cùng, instruction reorder and commit"},
+        {"t":1739.19,"den":1871.28,"ten":"L1 data cache"},
+        {"t":1871.28,"den":1986.61,"ten":"Vì sao x86 cần predecode?"},
+        {"t":1986.61,"den":2085.79,"ten":"Bài tập kiểu FE"},
+        {"t":2085.79,"den":2143.07,"ten":"Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đây là bài 14.0a, mở đầu chương song song mức lệnh và bộ xử lý superscalar."},
         {"t":12.43,"vi":"Bài 12.2 đã dựng pipeline: tốt nhất một lệnh xong mỗi chu kỳ."},
@@ -3868,8 +4056,26 @@
         {"t":2131.72,"vi":"Bài sau, 14.0b, đi sâu đầu trước Intel Core, đổi tên với 128 thanh ghi vật lý, và pipeline ARM Cortex."}
       ]
     },
-    "cea201-14-0b-slides-intel-core-va-arm-cortex": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/computer-organization-and-architecture/14-ilp-superscalar/14-02-slide-intel-core-va-arm-cortex-0e1b7176.mp4","durationSec":2122,"nguonCau":"srt",
-      "parts": [],
+    "cea201-14-0b-slides-intel-core-va-arm-cortex": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/computer-organization-and-architecture/14-ilp-superscalar/14-02-slide-intel-core-va-arm-cortex-0e1b7176.mp4","durationSec":2122,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":109.91,"ten":"Mở đầu · bài này học gì"},
+        {"t":109.91,"den":289.48,"ten":"Bẫy đề: BTB không đoán nhảy hay không"},
+        {"t":289.48,"den":365.46,"ten":"Bộ giải mã dịch mỗi lệnh máy thành…"},
+        {"t":365.46,"den":460.9,"ten":"Vì sao không phải hai?"},
+        {"t":460.9,"den":603.03,"ten":"Vì sao 126?"},
+        {"t":603.03,"den":712.36,"ten":"Chạy thật: cửa sổ không theo thứ tự…"},
+        {"t":712.36,"den":890.87,"ten":"Bẫy: slide tên là đổi tên thanh ghi…"},
+        {"t":890.87,"den":1002.68,"ten":"Dưới F1 là BTB, GHB, RS"},
+        {"t":1002.68,"den":1080.26,"ten":"Bẫy: slide ghi F3"},
+        {"t":1080.26,"den":1257.58,"ten":"Bẫy đề: nói Cortex-A8 dùng đổi tên để…"},
+        {"t":1257.58,"den":1333.87,"ten":"Data source, tức RAW"},
+        {"t":1333.87,"den":1512.2,"ten":"Ví dụ nhiều chu kỳ"},
+        {"t":1512.2,"den":1664.31,"ten":"Chu kỳ 4"},
+        {"t":1664.31,"den":1839.21,"ten":"Bẫy: đừng cộng 10 tầng SIMD với 13…"},
+        {"t":1839.21,"den":1958.81,"ten":"Cả chương trong một câu"},
+        {"t":1958.81,"den":2069.24,"ten":"Bài tập kiểu FE trên Cortex-A8"},
+        {"t":2069.24,"den":2122,"ten":"Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đây là bài 14.0b, nửa sau chương song song mức lệnh, slide 21 tới 40."},
         {"t":13.15,"vi":"Bài 14.0a dừng ở Intel Core: đầu trước đúng thứ tự, năm cổng thực thi, và đổi tên thanh ghi cắt 12 chu kỳ còn 9."},
@@ -4233,8 +4439,15 @@
         {"t":2115.73,"vi":"Bài sau, 14.1, gom cả chương thành một bài khái niệm có lab chạy thử."}
       ]
     },
-    "cea201-14-1-ilp-superscalar": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/computer-organization-and-architecture/14-ilp-superscalar/14-03-ilp-superscalar-ce5f5d8d.mp4","durationSec":825.15,"nguonCau":"srt",
-      "parts": [],
+    "cea201-14-1-ilp-superscalar": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/computer-organization-and-architecture/14-ilp-superscalar/14-03-ilp-superscalar-ce5f5d8d.mp4","durationSec":825.15,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":130.09,"ten":"Mở đầu · bài này học gì"},
+        {"t":130.09,"den":208.36,"ten":"Bẫy đề: superscalar là phần cứng"},
+        {"t":208.36,"den":387.62,"ten":"Giờ ta đo giới hạn thứ nhất trên…"},
+        {"t":387.62,"den":561.15,"ten":"Bài 14.0a đã đo"},
+        {"t":561.15,"den":682.9,"ten":"Đuổi con trỏ qua 64 mebibyte"},
+        {"t":682.9,"den":825.15,"ten":"Vì sao chuyển sang đa nhân"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đây là bài 14.1, bài cuối của chương 14: song song mức lệnh và bộ xử lý superscalar."},
         {"t":13.43,"vi":"Hai bài slide vừa rồi đã đi qua năm ràng buộc, đổi tên thanh ghi, và hai con chip thật Intel Core, ARM Cortex."},
@@ -4394,189 +4607,24 @@
         {"t":821.95,"vi":"Hẹn gặp bạn."}
       ]
     },
-    "cea201-15-1-multicore": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/computer-organization-and-architecture/15-song-song-da-nhan/15-04-multicore-87d08bcc.mp4","durationSec":952.55,"nguonCau":"srt",
-      "parts": [],
-      "cues": [
-        {"t":5.1,"vi":"Chào bạn, đây là bài 15.1, bài cuối của chương 15: đa nhân, đa xử lý đối xứng và nhất quán cache."},
-        {"t":13.77,"vi":"Ba bài slide vừa rồi đã đi qua phân loại Flynn, giao thức MESI, đa luồng phần cứng, và chip đa nhân."},
-        {"t":21.91,"vi":"Hôm nay ta gom lại thành một bức tranh, đo lại trên chính máy này, rồi đi thêm một bước mà giáo trình chỉ nhắc qua."},
-        {"t":29.67,"vi":"Ba câu hỏi: vì sao cần nhiều nhân, các nhân giữ dữ liệu đồng bộ thế nào, và mỗi nhân thấy bộ nhớ theo thứ tự nào."},
-        {"t":39.69,"vi":"Năm 2004, chip Pentium 4 đã chạy 3,8 gigahertz."},
-        {"t":45.33,"vi":"Gần hai mươi năm sau, CPU ra năm 2022 của máy làm khoá học này tối đa 4,4 gigahertz."},
-        {"t":53.5,"vi":"Xung nhịp gần như đứng yên. Đẩy cao hơn thì chip nóng quá, bài 15.0c gọi đó là bức tường công suất."},
-        {"t":61.28,"vi":"Còn làm một nhân rộng hơn thì sao?"},
-        {"t":63.79,"vi":"Bài 14.1 đã đo: chương trình thường ngày chỉ đạt IPC từ 0,12 tới 2,72."},
-        {"t":70.97,"vi":"Nên ngành xoay hướng. Thay vì một nhân nhanh hơn, đặt nhiều nhân trên một chip, và chạy công việc song song."},
-        {"t":78.31,"vi":"Bài web gọi đây là cú xoay lớn, chuẩn đầu ra CLO9 của môn."},
-        {"t":85.29,"vi":"Bài web nêu ba hình thức. Ta xem từng hình."},
-        {"t":89.91,"vi":"Một, SMP, đa xử lý đối xứng."},
-        {"t":92.73,"vi":"Nhiều nhân giống hệt nhau, cùng dùng một bộ nhớ chính, quyền ngang nhau. Hệ điều hành điều phối."},
-        {"t":99.01,"vi":"Hai, đa nhân. Nhiều nhân nằm trên cùng một con chip, thường dùng chung cache L3. Laptop của bạn vừa là đa nhân, vừa là SMP."},
-        {"t":109.38,"vi":"Ba, GPU. Hàng nghìn nhân tí hon, làm cùng một phép trên một khối dữ liệu lớn."},
-        {"t":115.9,"vi":"Dùng cho đồ hoạ, và nay là huấn luyện AI."},
-        {"t":119.41,"vi":"Nhân CPU giống thợ cả, làm việc khó và rẽ nhánh nhiều."},
-        {"t":124.04,"vi":"Nhân GPU giống đội thợ đông, ai cũng làm đúng một động tác."},
-        {"t":129.96,"vi":"Slide 5 chương 20, bạn đã gặp ở bài 15.0a."},
-        {"t":134.74,"vi":"Một máy tính độc lập với năm đặc điểm."},
-        {"t":137.45,"vi":"Một, hai bộ xử lý trở lên, năng lực tương đương."},
-        {"t":141.63,"vi":"Hai, dùng chung bộ nhớ và thiết bị vào ra."},
-        {"t":145.06,"vi":"Thời gian truy cập bộ nhớ gần như bằng nhau với mọi bộ xử lý."},
-        {"t":149.23,"vi":"Ba, cùng truy cập được các thiết bị vào ra."},
-        {"t":152.9,"vi":"Bốn, bộ xử lý nào cũng làm được mọi việc."},
-        {"t":156.32,"vi":"Chính vì thế mới gọi là đối xứng."},
-        {"t":158.85,"vi":"Năm, một hệ điều hành chung điều khiển cả hệ thống."},
-        {"t":162.7,"vi":"Bẫy đề: đối xứng không có nghĩa là chạy cùng một chương trình."},
-        {"t":166.9,"vi":"Nghĩa là không có bộ xử lý chủ, bộ xử lý tớ."},
-        {"t":172.15,"vi":"Slide 9 chương 21 vẽ bốn cách bố trí cache trên một chip đa nhân."},
-        {"t":177.56,"vi":"Kiểu a: mỗi nhân chỉ có L1 riêng."},
-        {"t":180.94,"vi":"Kiểu b: mỗi nhân có thêm L2 riêng."},
-        {"t":184.33,"vi":"Kiểu c: L2 dùng chung cho mọi nhân."},
-        {"t":187.72,"vi":"Kiểu d: L1, L2 riêng từng nhân, và một L3 chung."},
-        {"t":193.19,"vi":"Máy làm khoá học này thuộc kiểu nào?"},
-        {"t":195.81,"vi":"Ta hỏi thẳng hệ điều hành."},
-        {"t":199.31,"vi":"Lệnh lscpu in bốn tầng cache."},
-        {"t":202,"vi":"L1 dữ liệu 48 kilobyte, L2 1,3 megabyte, L3 18 megabyte."},
-        {"t":209.46,"vi":"Thư mục hệ thống cho biết ai dùng chung."},
-        {"t":212.06,"vi":"L1 và L2 của CPU số 4 chỉ chung với CPU số 5, tức hai luồng của cùng một nhân."},
-        {"t":219.59,"vi":"Còn L3 chung cho cả mười hai CPU."},
-        {"t":223.16,"vi":"Vậy máy này là kiểu d trên slide."},
-        {"t":226.12,"vi":"Thêm một phép đo của bài 15.0a."},
-        {"t":229.36,"vi":"Ba tiến trình, mỗi tiến trình cần một giây CPU."},
-        {"t":233.2,"vi":"Dồn lên một nhân: chạy xen kẽ, xong sau 3,08 giây. Chia cho hai nhân: xong sau khoảng 1,5 giây."},
-        {"t":241.59,"vi":"Đó là song song thật, hai việc chạy cùng một lúc, không phải chia nhau từng lát thời gian."},
-        {"t":249.17,"vi":"Máy này cũng có một GPU, RTX 3060, lúc đo đang bận một trăm phần trăm vì đang dựng video."},
-        {"t":257.74,"vi":"Tính theo thông số của hãng, chưa đo. CPU sáu nhân, mỗi nhân ba mươi hai phép số thực một chu kỳ: khoảng 845 gigaflop."},
-        {"t":267.92,"vi":"GPU có 3584 nhân, mỗi nhân hai phép một chu kỳ, chạy 1,777 gigahertz: khoảng mười hai nghìn bảy trăm gigaflop."},
-        {"t":278.37,"vi":"Gấp khoảng mười lăm lần. Nhưng chỉ với việc làm cùng một phép trên rất nhiều số, như nhân ma trận."},
-        {"t":284.96,"vi":"Việc rẽ nhánh nhiều, phụ thuộc nhau, như trình biên dịch hay hệ điều hành, thì vẫn cần nhân CPU."},
-        {"t":293.72,"vi":"Giờ đến vấn đề trung tâm của bài."},
-        {"t":296.34,"vi":"Mỗi nhân có cache riêng."},
-        {"t":298.45,"vi":"Biến X bằng 7 trong bộ nhớ. Nhân A đọc X, chép về cache của A. Nhân B cũng đọc X, chép về cache của B."},
-        {"t":308.09,"vi":"Nhân A ghi X bằng 8. Cache của A cập nhật thành 8."},
-        {"t":312.87,"vi":"Nhưng cache của B vẫn giữ 7."},
-        {"t":315.45,"vi":"Bản sao của B đã cũ, mà B không hề biết."},
-        {"t":319.43,"vi":"Nếu B đọc X lúc này, B nhận số 7 trong khi giá trị đúng là 8."},
-        {"t":324.89,"vi":"Hai nhân thấy hai sự thật khác nhau."},
-        {"t":328.79,"vi":"Giao thức nhất quán cache sửa chuyện này."},
-        {"t":331.65,"vi":"Làm lại từ đầu, lần này có giao thức."},
-        {"t":334.72,"vi":"Trước khi ghi, nhân A phát một lời nhắn lên đường chung: ai đang giữ X thì bỏ đi."},
-        {"t":340.79,"vi":"Cache của B nghe thấy, đánh dấu bản của mình là không hợp lệ, Invalid."},
-        {"t":346.59,"vi":"Lần sau B đọc X, cache báo trượt."},
-        {"t":349.93,"vi":"B phải nạp lại, và nhận đúng số 8 từ cache của A."},
-        {"t":354.33,"vi":"Kết quả: mọi nhân thống nhất một giá trị."},
-        {"t":357.69,"vi":"Đó là ba thẻ của bài web: A ghi, giao thức vô hiệu bản của B, mọi nhân đồng thuận."},
-        {"t":365.67,"vi":"Giao thức phổ biến nhất là MESI, slide 18 chương 20. Mỗi dòng cache mang một trong bốn trạng thái."},
-        {"t":373.85,"vi":"Modified: dòng đã bị sửa, chỉ cache này có bản đúng, bộ nhớ chính đã cũ."},
-        {"t":380.23,"vi":"Exclusive: giống bộ nhớ chính, và không cache nào khác có."},
-        {"t":385.13,"vi":"Shared: giống bộ nhớ chính, và cache khác cũng có thể đang giữ."},
-        {"t":390.44,"vi":"Invalid: dòng không chứa dữ liệu hợp lệ."},
-        {"t":393.48,"vi":"Bản của B ở cảnh trước chính là trạng thái này."},
-        {"t":398.29,"vi":"Bài 15.0a đã chạy tay tám thao tác với ba bộ xử lý."},
-        {"t":402.98,"vi":"Ta xem lại vài bước then chốt."},
-        {"t":405.27,"vi":"Bước một, P1 đọc, không ai giữ, nên P1 vào Exclusive. Bước hai, P2 đọc, cả hai cùng sang Shared."},
-        {"t":414.73,"vi":"Bước ba, P1 ghi. P1 phát lệnh vô hiệu hoá, P2 rơi về Invalid, P1 lên Modified."},
-        {"t":423.03,"vi":"Bước bốn, P3 đọc. P1 đang giữ bản mới nhất, nên P1 ghi ngược ra bộ nhớ, rồi cả hai về Shared."},
-        {"t":431.64,"vi":"Tám thao tác, mười một giao dịch trên bus, và không lúc nào có hai bản khác nhau cùng hợp lệ."},
-        {"t":439.59,"vi":"Giao thức đúng, nhưng không miễn phí."},
-        {"t":442.39,"vi":"Mỗi lần dòng cache đổi chủ là mất thời gian."},
-        {"t":445.65,"vi":"Đo trên máy này: chuyền một dòng cache qua lại giữa hai nhân khác nhau mất khoảng 41 tới 48 nano giây mỗi lần."},
-        {"t":453.86,"vi":"Giữa hai luồng của cùng một nhân chỉ 17,1 nano giây, vì chúng dùng chung L1."},
-        {"t":460.14,"vi":"Chia sẻ giả: hai luồng tăng hai biến khác nhau, nhưng nằm cùng một dòng 64 byte."},
-        {"t":465.98,"vi":"Mất 5,5 tới 5,7 giây."},
-        {"t":468.86,"vi":"Dời hai biến cách nhau 136 byte, khác dòng: chỉ khoảng 1 giây."},
-        {"t":474.27,"vi":"Chậm hơn năm lần chỉ vì vị trí trong bộ nhớ."},
-        {"t":477.53,"vi":"Bộ đếm perf cho thấy lý do: 123 triệu lần dòng cache bị chuyển từ nhân kia sang, so với tám nghìn."},
-        {"t":486.98,"vi":"Bẫy lớn: có MESI rồi thì chương trình đa luồng tự đúng chứ?"},
-        {"t":491.67,"vi":"Không."},
-        {"t":492.48,"vi":"Hai luồng, mỗi luồng tăng biến x mười triệu lần."},
-        {"t":496.26,"vi":"Mong đợi hai mươi triệu."},
-        {"t":498.05,"vi":"Kết quả thật ba lần chạy: mất từ 46,5 tới 47,5 phần trăm số lần cộng."},
-        {"t":505.36,"vi":"Vì x cộng cộng là ba bước: nạp, cộng một, cất. Hai luồng cùng nạp số 7, cùng cất số 8."},
-        {"t":513.32,"vi":"MESI làm đúng từng bước, vẫn mất một lần cộng."},
-        {"t":517.1,"vi":"Dùng lệnh nguyên tử lock add thì đủ hai mươi triệu."},
-        {"t":520.75,"vi":"Nhất quán giữ cache đồng bộ, còn đúng đắn của chương trình là việc của bạn."},
-        {"t":527,"vi":"Bài web nhắc lại định luật Amdahl ở chương 2: thêm nhân chỉ giúp phần chạy song song được."},
-        {"t":533.06,"vi":"Hình a trên slide 4 chương 21: phần tuần tự bằng không thì tăng tốc thẳng tắp."},
-        {"t":538.69,"vi":"Mười phần trăm tuần tự, tám nhân chỉ khoảng 4,7 lần."},
-        {"t":543.01,"vi":"Công thức: tăng tốc bằng một chia cho phần tuần tự cộng phần song song chia số nhân."},
-        {"t":548.61,"vi":"Hình b thêm chi phí phối hợp giữa các nhân."},
-        {"t":551.72,"vi":"Đường cong lên đỉnh rồi đi xuống."},
-        {"t":554.12,"vi":"Thêm nhân còn làm chậm đi."},
-        {"t":557.75,"vi":"Bài 15.0c đã đo trên máy này."},
-        {"t":561.15,"vi":"Một việc chia đều cho một tới sáu nhân."},
-        {"t":563.79,"vi":"Không có phần tuần tự: sáu nhân nhanh 5,76 lần, sát con số sáu lý thuyết."},
-        {"t":569.89,"vi":"Thêm mười phần trăm tuần tự: sáu nhân chỉ còn 3,75 lần. Amdahl dự đoán 4,00."},
-        {"t":577.13,"vi":"Phần cứng cho bạn các nhân, nhưng thuật toán phải bộc lộ được song song. Đó là câu chốt của bài web."},
-        {"t":585.37,"vi":"Ngoài giáo trình: bài web nói nhất quán cache mới chỉ là một nửa."},
-        {"t":590.07,"vi":"Nửa kia là mô hình nhất quán bộ nhớ."},
-        {"t":592.86,"vi":"Phép thử kinh điển. Luồng một gán x bằng 1, rồi đọc y. Luồng hai gán y bằng 1, rồi đọc x."},
-        {"t":601.2,"vi":"Theo trực giác, ít nhất một luồng phải thấy số 1."},
-        {"t":604.76,"vi":"Cả hai cùng đọc được số 0 nghe thật vô lý."},
-        {"t":608.02,"vi":"Chạy thật một triệu lượt, hai luồng ghim hai nhân."},
-        {"t":611.53,"vi":"Đã chặn trình dịch đổi thứ tự, mã máy đúng một lệnh ghi rồi một lệnh đọc."},
-        {"t":616.3,"vi":"Cả hai cùng đọc số 0 xảy ra ở 21,958 tới 53,835 phần trăm số lượt."},
-        {"t":623.94,"vi":"Một hiện tượng có thật, đếm được."},
-        {"t":626.15,"vi":"Vì sao? Mỗi nhân có một bộ đệm ghi, store buffer. Lệnh ghi nằm chờ ở đó, lệnh đọc phía sau đi trước ra cache."},
-        {"t":635.5,"vi":"Cả hai luồng đều đọc trước khi lần ghi của bên kia lộ ra."},
-        {"t":639.53,"vi":"Cache vẫn nhất quán, nhưng thứ tự ghi rồi đọc đã bị đảo."},
-        {"t":645.21,"vi":"Cách sửa: chèn một hàng rào bộ nhớ, memory barrier. Trên x86, đó là lệnh mfence."},
-        {"t":653.17,"vi":"Thêm mfence giữa lệnh ghi và lệnh đọc: cả hai cùng đọc số 0 không còn lần nào trong ba triệu lượt."},
-        {"t":659.9,"vi":"Phép thử thứ hai: luồng một ghi dữ liệu rồi bật cờ."},
-        {"t":663.84,"vi":"Luồng hai thấy cờ rồi mới đọc dữ liệu."},
-        {"t":666.53,"vi":"Trên x86, thấy cờ mà dữ liệu còn cũ là không lần nào."},
-        {"t":672.07,"vi":"Mô hình của x86 tên là x86-TSO: chỉ cho lần đọc vượt lần ghi trước nó."},
-        {"t":678.78,"vi":"ARM yếu hơn. Mô hình liệt kê cho thấy ARM cho phép cả trường hợp thấy cờ mà dữ liệu cũ."},
-        {"t":685.96,"vi":"Máy này không có ARM, nên dòng đó là mô hình, không phải phép đo."},
-        {"t":691.43,"vi":"Vì vậy mã không dùng khoá, lock-free, phải tự chèn hàng rào. Trong ngôn ngữ C, kiểu nguyên tử atomic lo việc đó: trình dịch sinh lệnh xchg trên x86."},
-        {"t":705.33,"vi":"Đời thật: mở tab Hiệu năng của Trình quản lý tác vụ, bạn thấy biểu đồ riêng cho từng nhân."},
-        {"t":711.51,"vi":"Trình duyệt đang chạy hàng chục luồng trên đó."},
-        {"t":714.4,"vi":"Mọi cache của các nhân được MESI giữ thống nhất, mỗi giây hàng triệu lần mà bạn không hề hay biết."},
-        {"t":721.25,"vi":"Giả sử hai luồng cùng tăng một bộ đếm một triệu lần, không khoá. Kết quả nhỏ hơn hai triệu, và mỗi lần chạy ra một số khác."},
-        {"t":729.88,"vi":"Vì vậy phải dùng biến nguyên tử hoặc khoá."},
-        {"t":732.8,"vi":"Mã chạy đúng trên x86 vẫn có thể sai trên ARM, vì ARM sắp thứ tự bộ nhớ lỏng hơn."},
-        {"t":740.21,"vi":"Góc kẻ xấu: năm 2015, một người gửi cùng lúc nhiều lệnh chuyển số dư giữa hai thẻ quà tặng Starbucks."},
-        {"t":748.25,"vi":"Các lệnh cùng đọc số dư cũ."},
-        {"t":750.48,"vi":"Tiền được nhân lên từ hư không."},
-        {"t":752.61,"vi":"Cách phòng: máy chủ dùng giao dịch và khoá cơ sở dữ liệu, kiểm và trừ trong một thao tác."},
-        {"t":758.76,"vi":"Đa lõi và đồng bộ có ở khoá Hệ điều hành cho dev."},
-        {"t":762.54,"vi":"Tiến trình và luồng học tiếp ở môn OSG202."},
-        {"t":768.15,"vi":"Bài kiểu FE. Một chương trình có hai mươi phần trăm tuần tự."},
-        {"t":772.8,"vi":"Câu a: tăng tốc với bốn nhân."},
-        {"t":775.5,"vi":"Câu b: với tám nhân. Câu c: tối đa bao nhiêu?"},
-        {"t":780.46,"vi":"Làm mẫu câu a: một chia cho 0,2 cộng 0,8 chia 4."},
-        {"t":785.26,"vi":"Tức một chia 0,4, bằng 2,5 lần."},
-        {"t":789.01,"vi":"Dừng video lại và làm câu b, câu c nhé."},
-        {"t":795.65,"vi":"Câu b: một chia cho 0,2 cộng 0,1, tức một chia 0,3, khoảng 3,33 lần."},
-        {"t":803.26,"vi":"Gấp đôi số nhân, chỉ thêm khoảng 0,8 lần."},
-        {"t":806.84,"vi":"Câu c: số nhân rất lớn thì phần song song gần bằng không."},
-        {"t":810.87,"vi":"Còn một chia 0,2, bằng năm lần."},
-        {"t":814.15,"vi":"Không bao giờ vượt năm."},
-        {"t":817.37,"vi":"Ba câu tự kiểm, đúng kiểu đề thi bằng tiếng Anh."},
-        {"t":821.16,"vi":"Câu một. Vì sao ngành chuyển từ một nhân nhanh hơn sang nhiều nhân?"},
-        {"t":826.08,"vi":"Vì xung nhịp chạm giới hạn điện năng và nhiệt, còn song song mức lệnh trong một nhân đã gần cạn."},
-        {"t":832.64,"vi":"Câu hai. Giao thức nhất quán cache giải quyết vấn đề gì?"},
-        {"t":837.42,"vi":"Khi một nhân ghi vào dòng mà cache khác đang giữ, giao thức vô hiệu hoá các bản cũ, để mọi nhân thấy giá trị mới."},
-        {"t":845.74,"vi":"Câu ba. Trạng thái nào của MESI nghĩa là dòng đã sửa và chỉ có trong cache này?"},
-        {"t":852.41,"vi":"Modified."},
-        {"t":855.33,"vi":"Đây là bài cuối của phần chính."},
-        {"t":857.68,"vi":"Bài web khép lại bằng một lời tổng kết cả môn."},
-        {"t":861.05,"vi":"Bạn bắt đầu từ kiến trúc và tổ chức, rồi hiệu năng, Amdahl, và hệ thống kết nối."},
-        {"t":867.59,"vi":"Rồi phân cấp bộ nhớ: cache, bộ nhớ trong, đĩa. Sau đó là vào ra và chỗ phần cứng gặp hệ điều hành."},
-        {"t":875.69,"vi":"Rồi xuống tận đáy: logic số, cổng, mạch. Đi lên qua tập lệnh, cách định địa chỉ, cấu trúc CPU và pipeline."},
-        {"t":886.19,"vi":"Rồi RISC, siêu vô hướng, và cuối cùng là đa nhân."},
-        {"t":890.14,"vi":"Giờ bạn hiểu cỗ máy bên dưới mọi dòng mã bạn sẽ viết."},
-        {"t":893.81,"vi":"Phía sau còn phần thực hành hợp ngữ, các bài nâng cao và phần chuyên sâu."},
-        {"t":900.2,"vi":"Tóm tắt. Xung nhịp và song song mức lệnh chạm trần, nên ngành chuyển sang nhiều nhân: SMP, đa nhân, GPU."},
-        {"t":909.14,"vi":"Mỗi nhân có cache riêng. Giao thức nhất quán như MESI vô hiệu hoá bản cũ, để mọi nhân thấy cùng một giá trị."},
-        {"t":917.21,"vi":"Nhất quán có giá, như chia sẻ giả chậm năm lần."},
-        {"t":921.01,"vi":"Và nhất quán chưa phải đồng bộ: x cộng cộng vẫn mất số đếm."},
-        {"t":925.54,"vi":"Amdahl giới hạn tăng tốc. Mô hình nhất quán bộ nhớ quyết định thứ tự mỗi nhân thấy, hàng rào mfence giữ thứ tự đó."},
-        {"t":933.53,"vi":"Ôn slide 15.0a, 15.0b, 15.0c, rồi làm đề Chương 15 trong Phòng thi."},
-        {"t":942.09,"vi":"Bài sau, ASM.a, ta vào phần thực hành hợp ngữ: câu lệnh, chỉ thị và macro. Hẹn gặp bạn."}
-      ]
-    },
-    "cea201-2-0-slides-hieu-nang-amdahl": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/computer-organization-and-architecture/02-tien-hoa-hieu-nang/02-01-slide-hieu-nang-cpi-amdahl-d15b0c59.mp4","durationSec":1315.58,"nguonCau":"srt",
-      "parts": [],
+    "cea201-2-0-slides-hieu-nang-amdahl": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/computer-organization-and-architecture/02-tien-hoa-hieu-nang/02-01-slide-hieu-nang-cpi-amdahl-d15b0c59.mp4","durationSec":1315.58,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":86.21,"ten":"Ôn nhanh · hôm nay · Slide 1 · Performance Concepts"},
+        {"t":86.21,"den":162.59,"ten":"Slide 3 · Microprocessor Speed"},
+        {"t":162.59,"den":254.28,"ten":"Slide 5 · Figure 2.1, tốc độ thiết bị I/O"},
+        {"t":254.28,"den":344.84,"ten":"Slide 8 · Figure 2.2, xu hướng bộ xử lý"},
+        {"t":344.84,"den":445.85,"ten":"Slide 11 · Amdahl’s Law"},
+        {"t":445.85,"den":532.83,"ten":"Slide 13 · Figure 2.4, đường tăng tốc"},
+        {"t":532.83,"den":650.15,"ten":"Slide 15 · Figure 2.5, đồng hồ hệ thống"},
+        {"t":650.15,"den":741.3,"ten":"Bài mẫu: CPI trung bình và MIPS"},
+        {"t":741.3,"den":825.5,"ten":"Mô phỏng: lấy trung bình tốc độ"},
+        {"t":825.5,"den":910.82,"ten":"Slide 20 · Table 2.2, tốc độ: AM vs HM"},
+        {"t":910.82,"den":1008.15,"ten":"Slide 23 · Benchmark Principles · Slide 24 · SPEC"},
+        {"t":1008.15,"den":1111.18,"ten":"Slide 27 · Table 2.5 (B), dấu phẩy động"},
+        {"t":1111.18,"den":1187.32,"ten":"Slide 31 · Figure 2.7, lưu đồ SPEC"},
+        {"t":1187.32,"den":1271.32,"ten":"Bài tập: Amdahl kiểu FE · Tự kiểm nhanh"},
+        {"t":1271.32,"den":1315.58,"ten":"Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Chương 2 của CEA201."},
         {"t":8.95,"vi":"Chương 1 đã cho bạn kiến trúc và tổ chức, máy IAS, và thấy xung nhịp chững lại từ khoảng năm 2004."},
@@ -4820,8 +4868,13 @@
         {"t":1308.76,"vi":"Bài sau, mình ôn nhanh lịch sử máy tính và định luật Moore bằng mô phỏng."}
       ]
     },
-    "cea201-2-1-history-moore": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/computer-organization-and-architecture/02-tien-hoa-hieu-nang/02-02-lich-su-va-dinh-luat-moore-52e73e7c.mp4","durationSec":313.24,"nguonCau":"srt",
-      "parts": [],
+    "cea201-2-1-history-moore": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/computer-organization-and-architecture/02-tien-hoa-hieu-nang/02-02-lich-su-va-dinh-luat-moore-52e73e7c.mp4","durationSec":313.24,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":83.79,"ten":"Ôn nhanh · hôm nay · Bốn bước tiến hoá"},
+        {"t":83.79,"den":196.96,"ten":"Định luật Moore · ⭐ Ngoài giáo trình: Dennard scaling"},
+        {"t":196.96,"den":276.14,"ten":"Bài tập: tính theo định luật Moore · Tự kiểm nhanh"},
+        {"t":276.14,"den":313.24,"ten":"Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 2.1 của CEA201."},
         {"t":9.4,"vi":"Bài slide 2.0 đã cho bạn CPI, MIPS, định luật Amdahl, và vì sao xung nhịp chững lại."},
@@ -4878,8 +4931,13 @@
         {"t":304.16,"vi":"Bài sau là 2.2: tính thời gian CPU và định luật Amdahl, đo thật bằng chương trình chạy nhiều luồng."}
       ]
     },
-    "cea201-2-2-performance-amdahl": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/computer-organization-and-architecture/02-tien-hoa-hieu-nang/02-03-hieu-nang-cpi-mips-amdahl-ad864fa0.mp4","durationSec":397.46,"nguonCau":"srt",
-      "parts": [],
+    "cea201-2-2-performance-amdahl": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/computer-organization-and-architecture/02-tien-hoa-hieu-nang/02-03-hieu-nang-cpi-mips-amdahl-ad864fa0.mp4","durationSec":397.46,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":103.5,"ten":"Ôn nhanh · hôm nay · Máy nào nhanh hơn?"},
+        {"t":103.5,"den":197.49,"ten":"Thời gian CPU — ví dụ có lời giải"},
+        {"t":197.49,"den":275.42,"ten":"Chạy thật: đo Amdahl bằng nhiều luồng"},
+        {"t":275.42,"den":397.46,"ten":"Bài tập: hai câu tính kiểu FE · Tự kiểm nhanh"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 2.2, bài cuối của Chương 2."},
         {"t":9.78,"vi":"Bài trước kể chuyện Moore và vì sao xung nhịp dừng quanh bốn GHz."},
@@ -4956,8 +5014,20 @@
         {"t":389.41,"vi":"Chương 3 mở ra bên trong CPU: chu trình nạp và thi hành lệnh, ngắt, và bus."}
       ]
     },
-    "cea201-3-0a-slides-chu-trinh-lenh-ngat": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/computer-organization-and-architecture/03-tong-the-ket-noi/03-01-slide-chu-trinh-lenh-va-ngat-c9867b00.mp4","durationSec":987.93,"nguonCau":"srt",
-      "parts": [],
+    "cea201-3-0a-slides-chu-trinh-lenh-ngat": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/computer-organization-and-architecture/03-tong-the-ket-noi/03-01-slide-chu-trinh-lenh-va-ngat-c9867b00.mp4","durationSec":987.93,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":87.98,"ten":"Ôn nhanh · hôm nay · Slide 1 · A Top-Level View"},
+        {"t":87.98,"den":180.87,"ten":"Slide 3 · Figure 3.1, phần cứng vs phần mềm"},
+        {"t":180.87,"den":265.33,"ten":"Slide 6 · Figure 3.2, các thành phần"},
+        {"t":265.33,"den":366.71,"ten":"Slide 9 · Action Categories"},
+        {"t":366.71,"den":467.87,"ten":"Mô phỏng: sáu bước của Figure 3.5"},
+        {"t":467.87,"den":571.46,"ten":"Slide 12 · Figure 3.6, sơ đồ trạng thái"},
+        {"t":571.46,"den":652.35,"ten":"Slide 15 · Figure 3.8, chuyển điều khiển"},
+        {"t":652.35,"den":728.04,"ten":"Slide 18 · Figure 3.11, chờ I/O dài"},
+        {"t":728.04,"den":826.93,"ten":"Slide 20 · Figure 3.13, nhiều ngắt"},
+        {"t":826.93,"den":909.06,"ten":"Slide 23 · Figure 3.15, các mô-đun"},
+        {"t":909.06,"den":987.93,"ten":"Tự kiểm nhanh"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Chương 3 của CEA201."},
         {"t":8.87,"vi":"Chương 2 đã đo hiệu năng bằng CPI, MIPS và định luật Amdahl."},
@@ -5126,8 +5196,14 @@
         {"t":978.44,"vi":"Bài sau là nửa còn lại của Chương 3: bus, phân xử bus, PCI Express, và kết nối điểm điểm."}
       ]
     },
-    "cea201-3-1-components-cycle": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/computer-organization-and-architecture/03-tong-the-ket-noi/03-03-thanh-phan-va-chu-trinh-lenh-1573fc04.mp4","durationSec":456.22,"nguonCau":"srt",
-      "parts": [],
+    "cea201-3-1-components-cycle": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/computer-organization-and-architecture/03-tong-the-ket-noi/03-03-thanh-phan-va-chu-trinh-lenh-1573fc04.mp4","durationSec":456.22,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":88.33,"ten":"Mở đầu · bài này học gì"},
+        {"t":88.33,"den":177.62,"ten":"Bước một, nạp"},
+        {"t":177.62,"den":329.72,"ten":"Cuối cùng là interrupt check"},
+        {"t":329.72,"den":411.53,"ten":"Giờ tới lượt bạn"},
+        {"t":411.53,"den":456.22,"ten":"Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 3.1 của Chương 3."},
         {"t":8.96,"vi":"Hai tập slide vừa rồi đã đi qua chu trình lệnh, ngắt, rồi bus và PCI Express."},
@@ -5213,8 +5289,12 @@
         {"t":445.73,"vi":"Bài sau, 3.2, tính độ rộng bus: bao nhiêu dây địa chỉ thì đánh được bao nhiêu ô nhớ, và bus chở nhanh cỡ nào."}
       ]
     },
-    "cea201-3-2-bus": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/computer-organization-and-architecture/03-tong-the-ket-noi/03-04-bus-va-ket-noi-f377f39b.mp4","durationSec":454.25,"nguonCau":"srt",
-      "parts": [],
+    "cea201-3-2-bus": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/computer-organization-and-architecture/03-tong-the-ket-noi/03-04-bus-va-ket-noi-f377f39b.mp4","durationSec":454.25,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":155.38,"ten":"Mở đầu · bài này học gì"},
+        {"t":155.38,"den":330.63,"ten":"Vì sao n dây địa chỉ đánh được…"},
+        {"t":330.63,"den":454.25,"ten":"Nó lấy trộm vài chu kỳ bus của…"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 3.2, bài cuối của Chương 3."},
         {"t":9.81,"vi":"Bài 3.1 đã chốt ba thành phần, CPU, bộ nhớ, I/O, và vòng nạp, thực thi, kiểm ngắt."},
@@ -5306,8 +5386,22 @@
         {"t":446.05,"vi":"Chương 4 bước vào bộ nhớ cache: vì sao một bộ nhớ nhỏ mà nhanh lại làm cả máy chạy nhanh hơn."}
       ]
     },
-    "cea201-4-0b-slides-cache-anh-xa-truc-tiep": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/computer-organization-and-architecture/04-bo-nho-cache/04-02-slide-cache-anh-xa-truc-tiep-65de19ff.mp4","durationSec":1533.23,"nguonCau":"srt",
-      "parts": [],
+    "cea201-4-0b-slides-cache-anh-xa-truc-tiep": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/computer-organization-and-architecture/04-bo-nho-cache/04-02-slide-cache-anh-xa-truc-tiep-65de19ff.mp4","durationSec":1533.23,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":80.22,"ten":"Mở đầu · bài này học gì"},
+        {"t":80.22,"den":178.77,"ten":"Slide 2, Figure 5.1"},
+        {"t":178.77,"den":266.23,"ten":"Slide 4, Figure 5.2, hình hai cột mà…"},
+        {"t":266.23,"den":370.28,"ten":"Slide 6, Figure 5.4"},
+        {"t":370.28,"den":462.31,"ten":"Slide 8, yếu tố thứ nhất"},
+        {"t":462.31,"den":625.49,"ten":"Bẫy: nói cache logic tốt hơn vì nhanh…"},
+        {"t":625.49,"den":701.72,"ten":"Trước khi xem hình của sách"},
+        {"t":701.72,"den":881.46,"ten":"Ví dụ số"},
+        {"t":881.46,"den":1060.29,"ten":"Bước một, offset"},
+        {"t":1060.29,"den":1149.91,"ten":"Hình b: CAM vẫn là một bộ nhớ"},
+        {"t":1149.91,"den":1310.03,"ten":"Ví dụ địa chỉ 16339C"},
+        {"t":1310.03,"den":1485.42,"ten":"Bẫy: với kết hợp theo tập"},
+        {"t":1485.42,"den":1533.23,"ten":"Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đây là bài 4.0b: mở cache ra xem bên trong."},
         {"t":10.69,"vi":"Bài trước ta đã thấy chương trình có tính cục bộ, và bộ nhớ xếp thành kim tự tháp."},
@@ -5605,8 +5699,21 @@
         {"t":1524.68,"vi":"Bài sau, 4.0c, ta học kỹ kết hợp theo tập, thuật toán thay thế và chính sách ghi."}
       ]
     },
-    "cea201-4-0c-slides-set-associative-thay-the-ghi": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/computer-organization-and-architecture/04-bo-nho-cache/04-03-slide-set-associative-thay-the-ghi-4479be34.mp4","durationSec":1594.39,"nguonCau":"srt",
-      "parts": [],
+    "cea201-4-0c-slides-set-associative-thay-the-ghi": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/computer-organization-and-architecture/04-bo-nho-cache/04-03-slide-set-associative-thay-the-ghi-4479be34.mp4","durationSec":1594.39,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":84.4,"ten":"Mở đầu · bài này học gì"},
+        {"t":84.4,"den":211.84,"ten":"Bẫy: nhãn 16 kline Cache nghĩa là mười…"},
+        {"t":211.84,"den":321.54,"ten":"Bẫy: biểu đồ chỉ vẽ tỉ lệ trúng"},
+        {"t":321.54,"den":493.19,"ten":"Bẫy trắc nghiệm"},
+        {"t":493.19,"den":669.79,"ten":"Nhiều bộ xử lý chung một bus"},
+        {"t":669.79,"den":788.32,"ten":"Hai câu hỏi độc lập"},
+        {"t":788.32,"den":907.71,"ten":"Bẫy: đừng lẫn kích thước dòng với kích…"},
+        {"t":907.71,"den":1087.52,"ten":"Bẫy: đừng trích các con số này như…"},
+        {"t":1087.52,"den":1199.94,"ten":"Mỗi lời giải trong bảng là một khái…"},
+        {"t":1199.94,"den":1378.93,"ten":"Bẫy: CD bằng một nghĩa là cache tắt"},
+        {"t":1378.93,"den":1547.19,"ten":"Cache Unity là tách hay thống nhất của…"},
+        {"t":1547.19,"den":1594.39,"ten":"Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đây là bài 4.0c, nửa sau của chương cache."},
         {"t":10.34,"vi":"Bài trước ta đã tách địa chỉ cho ánh xạ trực tiếp, và thấy hai khối giẫm nhau một dòng."},
@@ -5918,8 +6025,15 @@
         {"t":1586.88,"vi":"Bài sau, 4.1, ta xem lại tính cục bộ và nguyên lý cache trên mã thật."}
       ]
     },
-    "cea201-4-1-locality": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/computer-organization-and-architecture/04-bo-nho-cache/04-04-tinh-cuc-bo-nguyen-ly-cache-8f3ef7cd.mp4","durationSec":577.25,"nguonCau":"srt",
-      "parts": [],
+    "cea201-4-1-locality": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/computer-organization-and-architecture/04-bo-nho-cache/04-04-tinh-cuc-bo-nguyen-ly-cache-8f3ef7cd.mp4","durationSec":577.25,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":92.06,"ten":"Mở đầu · bài này học gì"},
+        {"t":92.06,"den":190.53,"ten":"Ví dụ trên slide"},
+        {"t":190.53,"den":283.59,"ten":"Bước một chỉ khoảng ba trăm tám mươi…"},
+        {"t":283.59,"den":443.96,"ten":"Ví dụ của bài web"},
+        {"t":443.96,"den":536.12,"ten":"Giờ tới lượt bạn"},
+        {"t":536.12,"den":577.25,"ten":"Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 4.1."},
         {"t":8.06,"vi":"Ba tập slide vừa rồi đã đi hết Chương 4: phân cấp bộ nhớ, ánh xạ cache, thay thế và ghi."},
@@ -6035,8 +6149,14 @@
         {"t":568.66,"vi":"Bài sau, 4.2, ta luyện ánh xạ cache và thay thế, dạng bài tính hay gặp nhất trong đề."}
       ]
     },
-    "cea201-4-2-mapping": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/computer-organization-and-architecture/04-bo-nho-cache/04-05-anh-xa-cache-thay-the-daebefe6.mp4","durationSec":539.48,"nguonCau":"srt",
-      "parts": [],
+    "cea201-4-2-mapping": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/computer-organization-and-architecture/04-bo-nho-cache/04-05-anh-xa-cache-thay-the-daebefe6.mp4","durationSec":539.48,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":135.34,"ten":"Mở đầu · bài này học gì"},
+        {"t":135.34,"den":260.45,"ten":"Ví dụ bốn đường nghĩa là có bốn…"},
+        {"t":260.45,"den":419.52,"ten":"Mình chạy đúng phép cộng của lab"},
+        {"t":419.52,"den":498.74,"ten":"Giờ tới lượt bạn"},
+        {"t":498.74,"den":539.48,"ten":"Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 4.2, bài cuối của Chương 4."},
         {"t":9.77,"vi":"Bài 4.1 đã chốt: cache nhanh nhờ tính cục bộ, trượt thì nạp cả khối, và công thức AMAT."},
@@ -6150,8 +6270,22 @@
         {"t":530.54,"vi":"Chương 5 đi vào chính bộ nhớ trong: DRAM, SRAM, ROM, và cách sửa lỗi bộ nhớ."}
       ]
     },
-    "cea201-5-0a-slides-dram-sram-rom": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/computer-organization-and-architecture/05-bo-nho-trong/05-01-slide-dram-sram-rom-40d158d2.mp4","durationSec":1599.33,"nguonCau":"srt",
-      "parts": [],
+    "cea201-5-0a-slides-dram-sram-rom": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/computer-organization-and-architecture/05-bo-nho-trong/05-01-slide-dram-sram-rom-40d158d2.mp4","durationSec":1599.33,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":95.26,"ten":"Mở đầu · bài này học gì"},
+        {"t":95.26,"den":182.53,"ten":"Bẫy: Data in và Sense thường là cùng…"},
+        {"t":182.53,"den":277.2,"ten":"Bẫy: làm tươi không phải là bay hơi"},
+        {"t":277.2,"den":373.13,"ten":"Bẫy hay gặp"},
+        {"t":373.13,"den":456.07,"ten":"Bẫy: chừng nào còn điện nghĩa là SRAM…"},
+        {"t":456.07,"den":633.52,"ten":"Slide 8, Read Only Memory, ROM"},
+        {"t":633.52,"den":811.82,"ten":"Cập nhật firmware chính là xoá từng khối…"},
+        {"t":811.82,"den":887.34,"ten":"Bẫy bit và byte"},
+        {"t":887.34,"den":1061.24,"ten":"Bước ba: bốn hàng nhân hai cột"},
+        {"t":1061.24,"den":1234.94,"ten":"Cùng một thanh RAM"},
+        {"t":1234.94,"den":1408.5,"ten":"Vùng thuộc mọi vòng lẻ"},
+        {"t":1408.5,"den":1542.97,"ten":"Góc kẻ xấu"},
+        {"t":1542.97,"den":1599.33,"ten":"Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đây là bài 5.0a, mở đầu chương bộ nhớ trong."},
         {"t":10.26,"vi":"Chương trước ta đã hỏi cache tổ chức ra sao: tách địa chỉ, thay thế, chính sách ghi."},
@@ -6477,8 +6611,23 @@
         {"t":1589.6,"vi":"Bài sau, 5.0b, ta đi tiếp mã Hamming, rồi DDR SDRAM và các công nghệ nhớ mới."}
       ]
     },
-    "cea201-5-0b-slides-sua-loi-ddr-edram-cong-nghe-moi": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/computer-organization-and-architecture/05-bo-nho-trong/05-02-slide-sua-loi-ddr-flash-69031db6.mp4","durationSec":1525.72,"nguonCau":"srt",
-      "parts": [],
+    "cea201-5-0b-slides-sua-loi-ddr-edram-cong-nghe-moi": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/computer-organization-and-architecture/05-bo-nho-trong/05-02-slide-sua-loi-ddr-flash-69031db6.mp4","durationSec":1525.72,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":88.6,"ten":"Mở đầu · bài này học gì"},
+        {"t":88.6,"den":204.45,"ten":"Bẫy: vị trí đánh số từ 1"},
+        {"t":204.45,"den":291.61,"ten":"Bẫy kinh điển"},
+        {"t":291.61,"den":431.99,"ten":"Bẫy: DDR không phải đối thủ của SDRAM"},
+        {"t":431.99,"den":520.54,"ten":"Bẫy: trên chip"},
+        {"t":520.54,"den":606.11,"ten":"Bẫy: burst không làm byte đầu tới sớm…"},
+        {"t":606.11,"den":781.72,"ten":"Bẫy phổ biến nhất chương"},
+        {"t":781.72,"den":893.2,"ten":"Python tính: 3200 nhân 8 byte là 25,6…"},
+        {"t":893.2,"den":1023.87,"ten":"Bẫy: chip này không chứa lõi nào"},
+        {"t":1023.87,"den":1158.41,"ten":"Bẫy cực tính"},
+        {"t":1158.41,"den":1281.32,"ten":"Bẫy: có trục đảo chiều. Ở trục giá…"},
+        {"t":1281.32,"den":1382.7,"ten":"Bẫy: PCRAM không nung chảy khi đọc"},
+        {"t":1382.7,"den":1477.07,"ten":"Giờ tới lượt bạn"},
+        {"t":1477.07,"den":1525.72,"ten":"Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đây là bài 5.0b, nửa sau chương bộ nhớ trong."},
         {"t":10.4,"vi":"Bài trước ta đã mở ô nhớ DRAM, SRAM, họ ROM, và dựng bảng vị trí của mã Hamming."},
@@ -6770,8 +6919,14 @@
         {"t":1516.66,"vi":"Bài sau, 5.1, ta gom lại RAM, ROM, DRAM và SRAM bằng các lab ngắn."}
       ]
     },
-    "cea201-5-1-ram-rom": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/computer-organization-and-architecture/05-bo-nho-trong/05-03-ram-rom-dram-sram-024e24a6.mp4","durationSec":567.74,"nguonCau":"srt",
-      "parts": [],
+    "cea201-5-1-ram-rom": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/computer-organization-and-architecture/05-bo-nho-trong/05-03-ram-rom-dram-sram-024e24a6.mp4","durationSec":567.74,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":139.93,"ten":"Mở đầu · bài này học gì"},
+        {"t":139.93,"den":223.76,"ten":"Slide 7 so sánh hai loại"},
+        {"t":223.76,"den":401.68,"ten":"Vì sao máy có 31 GB RAM mà…"},
+        {"t":401.68,"den":523.74,"ten":"Góc kẻ xấu"},
+        {"t":523.74,"den":567.74,"ten":"Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 5.1."},
         {"t":8.16,"vi":"Hai tập slide vừa rồi đã đi hết Chương 6 của sách: ô nhớ, chip, sửa lỗi, DDR và flash."},
@@ -6872,8 +7027,14 @@
         {"t":559.52,"vi":"Bài sau, 5.2, ta ghép chip thành thanh RAM và xem mã sửa lỗi bắt bit lật ra sao."}
       ]
     },
-    "cea201-5-2-error-correction": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/computer-organization-and-architecture/05-bo-nho-trong/05-04-to-chuc-bo-nho-sua-loi-58580a8f.mp4","durationSec":552.09,"nguonCau":"srt",
-      "parts": [],
+    "cea201-5-2-error-correction": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/computer-organization-and-architecture/05-bo-nho-trong/05-04-to-chuc-bo-nho-sua-loi-58580a8f.mp4","durationSec":552.09,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":183,"ten":"Mở đầu · bài này học gì"},
+        {"t":183,"den":321.69,"ten":"Lật hai bit"},
+        {"t":321.69,"den":426.93,"ten":"Chạy thật ca lật hai bit"},
+        {"t":426.93,"den":507.69,"ten":"Giờ tới lượt bạn"},
+        {"t":507.69,"den":552.09,"ten":"Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 5.2, bài cuối của Chương 5."},
         {"t":9.81,"vi":"Bài trước ta đã phân biệt RAM với ROM, DRAM với SRAM, và đo chúng trên máy thật."},
@@ -6978,8 +7139,24 @@
         {"t":543.85,"vi":"Bài sau là quiz Chương 5, rồi sang Chương 6: đĩa từ, RAID và SSD."}
       ]
     },
-    "cea201-6-0a-slides-dia-tu-va-raid-0-1-2": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/computer-organization-and-architecture/06-bo-nho-ngoai/06-01-slide-dia-tu-raid-0-1-2-eaecbfda.mp4","durationSec":1543.45,"nguonCau":"srt",
-      "parts": [],
+    "cea201-6-0a-slides-dia-tu-va-raid-0-1-2": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/computer-organization-and-architecture/06-bo-nho-ngoai/06-01-slide-dia-tu-raid-0-1-2-eaecbfda.mp4","durationSec":1543.45,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":114.55,"ten":"Mở đầu · bài này học gì"},
+        {"t":114.55,"den":197.25,"ten":"Slide 2, Magnetic Disk"},
+        {"t":197.25,"den":276.84,"ten":"Bẫy: khi đọc hay ghi"},
+        {"t":276.84,"den":359.38,"ten":"Slide 5, Figure 7.2, bố cục dữ liệu…"},
+        {"t":359.38,"den":471.88,"ten":"Slide 6, Figure 7.3, hai cách bố trí…"},
+        {"t":471.88,"den":547.96,"ten":"Slide 8, Table 7.1"},
+        {"t":547.96,"den":642.23,"ten":"Bẫy: ổ có tám mặt thì có tám…"},
+        {"t":642.23,"den":820.44,"ten":"Bẫy: độ trễ quay trung bình là NỬA…"},
+        {"t":820.44,"den":984.57,"ten":"Chương trình C đọc một tệp lớn có…"},
+        {"t":984.57,"den":1089.14,"ten":"Vì sao dư thừa là bắt buộc?"},
+        {"t":1089.14,"den":1164.57,"ten":"Bẫy: hình b vẽ RAID 1 có chia…"},
+        {"t":1164.57,"den":1248.07,"ten":"Ví dụ strip 10"},
+        {"t":1248.07,"den":1407.18,"ten":"Bẫy: RAID 0 không có dư thừa"},
+        {"t":1407.18,"den":1491.89,"ten":"Giờ tới lượt bạn"},
+        {"t":1491.89,"den":1543.45,"ten":"Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đây là bài 6.0a, mở đầu chương bộ nhớ ngoài."},
         {"t":10.29,"vi":"Chương trước ta đã mở thanh RAM: DRAM, SRAM, ROM, mã Hamming và flash."},
@@ -7276,8 +7453,26 @@
         {"t":1533.94,"vi":"Bài sau, 6.0b, ta đi tiếp RAID 3 tới 6, SSD, đĩa quang và băng từ."}
       ]
     },
-    "cea201-6-0b-slides-raid-ssd-quang-bang-tu": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/computer-organization-and-architecture/06-bo-nho-ngoai/06-02-slide-raid-ssd-quang-bang-tu-151281cf.mp4","durationSec":2223.19,"nguonCau":"srt",
-      "parts": [],
+    "cea201-6-0b-slides-raid-ssd-quang-bang-tu": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/computer-organization-and-architecture/06-bo-nho-ngoai/06-02-slide-raid-ssd-quang-bang-tu-151281cf.mp4","durationSec":2223.19,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":96.19,"ten":"Mở đầu · bài này học gì"},
+        {"t":96.19,"den":219.47,"ten":"Bẫy: RAID 3 truyền khối lớn rất nhanh"},
+        {"t":219.47,"den":334.51,"ten":"Bẫy: chỉ ghi nhỏ mới bị phạt"},
+        {"t":334.51,"den":514.01,"ten":"Bẫy: RAID 5 chịu được một đĩa hỏng"},
+        {"t":514.01,"den":692.13,"ten":"Dùng cho dựng video"},
+        {"t":692.13,"den":773.52,"ten":"Gương thì luôn mất một nửa"},
+        {"t":773.52,"den":892.78,"ten":"Bẫy: chữ durability nghĩa là chịu va đập"},
+        {"t":892.78,"den":1029.86,"ten":"Bẫy: dòng giá đã cũ. Giá SSD đã…"},
+        {"t":1029.86,"den":1209.26,"ten":"Bẫy: flash mòn vì ghi và xoá"},
+        {"t":1209.26,"den":1384.1,"ten":"DVD hai mặt chứa tới 17 GB"},
+        {"t":1384.1,"den":1491.67,"ten":"4 byte ID"},
+        {"t":1491.67,"den":1668.8,"ten":"Vì sao truy cập chậm?"},
+        {"t":1668.8,"den":1750.43,"ten":"Bẫy: hình ghi lớp phủ 1,2"},
+        {"t":1750.43,"den":1876.11,"ten":"Bẫy: đừng viết băng từ đã lỗi thời"},
+        {"t":1876.11,"den":2050.75,"ten":"Ví dụ số rãnh"},
+        {"t":2050.75,"den":2170.08,"ten":"SSD dưới góc nhìn hệ điều hành có…"},
+        {"t":2170.08,"den":2223.19,"ten":"Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đây là bài 6.0b, nửa sau chương bộ nhớ ngoài."},
         {"t":10.52,"vi":"Bài trước ta đã mở đĩa từ, tính thời gian truy cập, và đi RAID 0, 1, 2."},
@@ -7689,8 +7884,15 @@
         {"t":2215.76,"vi":"Bài sau, 6.1, ta gom cả chương về đĩa từ trong một bài khái niệm ngắn."}
       ]
     },
-    "cea201-6-1-magnetic-disk": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/computer-organization-and-architecture/06-bo-nho-ngoai/06-03-dia-tu-cach-luu-du-lieu-36ae964b.mp4","durationSec":725.15,"nguonCau":"srt",
-      "parts": [],
+    "cea201-6-1-magnetic-disk": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/computer-organization-and-architecture/06-bo-nho-ngoai/06-03-dia-tu-cach-luu-du-lieu-36ae964b.mp4","durationSec":725.15,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":179.91,"ten":"Mở đầu · bài này học gì"},
+        {"t":179.91,"den":291.1,"ten":"Đề hay hỏi"},
+        {"t":291.1,"den":465.77,"ten":"Bẫy đề: độ trễ quay trung bình là…"},
+        {"t":465.77,"den":593.44,"ten":"Lần hai: 24 mili giây"},
+        {"t":593.44,"den":681.77,"ten":"Giờ tới lượt bạn"},
+        {"t":681.77,"den":725.15,"ten":"Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 6.1, đĩa từ và cách lưu dữ liệu."},
         {"t":10.24,"vi":"Hai bài slide trước đã đi hết Chương 7 của sách: đĩa từ, RAID, SSD, đĩa quang và băng từ."},
@@ -7829,8 +8031,15 @@
         {"t":718.18,"vi":"Bài sau là 6.2: RAID, SSD và lưu trữ quang."}
       ]
     },
-    "cea201-6-2-raid-ssd": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/computer-organization-and-architecture/06-bo-nho-ngoai/06-04-raid-ssd-luu-tru-quang-89d4c190.mp4","durationSec":695.19,"nguonCau":"srt",
-      "parts": [],
+    "cea201-6-2-raid-ssd": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/computer-organization-and-architecture/06-bo-nho-ngoai/06-04-raid-ssd-luu-tru-quang-89d4c190.mp4","durationSec":695.19,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":89.35,"ten":"Mở đầu · bài này học gì"},
+        {"t":89.35,"den":260.37,"ten":"Ý thứ hai là soi gương"},
+        {"t":260.37,"den":401.21,"ten":"RAID 5 XOR ba khối còn lại ở…"},
+        {"t":401.21,"den":557.89,"ten":"Bẫy: chữ durability nghĩa là chịu va đập"},
+        {"t":557.89,"den":650.91,"ten":"Giờ tới lượt bạn"},
+        {"t":650.91,"den":695.19,"ten":"Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 6.2, bài cuối của Chương 6."},
         {"t":9.79,"vi":"Bài trước ta thấy một đĩa từ chậm vì phải dịch cần và chờ đĩa quay."},
@@ -7951,8 +8160,28 @@
         {"t":687.5,"vi":"Bài sau là quiz Chương 6, rồi sang Chương 7: vào ra, ngắt và DMA."}
       ]
     },
-    "cea201-7-0a-slides-module-io-programmed-ngat-dma": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/computer-organization-and-architecture/07-nhap-xuat/07-01-slide-module-io-hoi-vong-ngat-d5793028.mp4","durationSec":2125.66,"nguonCau":"srt",
-      "parts": [],
+    "cea201-7-0a-slides-module-io-programmed-ngat-dma": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/computer-organization-and-architecture/07-nhap-xuat/07-01-slide-module-io-hoi-vong-ngat-d5793028.mp4","durationSec":2125.66,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":80.86,"ten":"Mở đầu · bài này học gì"},
+        {"t":80.86,"den":181.82,"ten":"Slide 2, Figure 8.1"},
+        {"t":181.82,"den":301.37,"ten":"Slide 4, Figure 8.2"},
+        {"t":301.37,"den":419.75,"ten":"Bẫy: IRA là 7 bit"},
+        {"t":419.75,"den":528.9,"ten":"Bẫy: thanh ghi của mô-đun nằm bên kia…"},
+        {"t":528.9,"den":613.54,"ten":"Slide 9, Table 8.1"},
+        {"t":613.54,"den":689.75,"ten":"Bẫy: Read và Write luôn gọi theo góc…"},
+        {"t":689.75,"den":862.59,"ten":"Bẫy kinh điển"},
+        {"t":862.59,"den":987.14,"ten":"Memory mapped I/O"},
+        {"t":987.14,"den":1160.4,"ten":"Bẫy: cột địa chỉ ở hình a chỉ…"},
+        {"t":1160.4,"den":1265.17,"ten":"Bẫy: ngắt không miễn phí. Một triệu ngắt…"},
+        {"t":1265.17,"den":1421.6,"ten":"Vì sao cất N cộng 1 mà không…"},
+        {"t":1421.6,"den":1539.53,"ten":"Bẫy: Daisy chain"},
+        {"t":1539.53,"den":1615.51,"ten":"Bẫy: 82C59A chỉ quản lý ai được xin…"},
+        {"t":1615.51,"den":1702.38,"ten":"Bẫy: Group A"},
+        {"t":1702.38,"den":1829.34,"ten":"Bẫy: 1X nghĩa là khi D6 bằng 1…"},
+        {"t":1829.34,"den":1970.44,"ten":"Bẫy: DMA không phải lúc nào cũng tốt…"},
+        {"t":1970.44,"den":2072.11,"ten":"Giờ tới lượt bạn"},
+        {"t":2072.11,"den":2125.66,"ten":"Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đây là bài 7.0a, mở đầu chương vào ra, tiếng Anh là Input/Output."},
         {"t":12.15,"vi":"Chương trước ta đã xem đĩa từ, RAID và SSD, nơi dữ liệu nằm lâu dài."},
@@ -8348,8 +8577,25 @@
         {"t":2114.6,"vi":"Bài sau, 7.0b, ta mổ DMA: ăn trộm nhịp, truy cập cache trực tiếp, kênh vào ra và các chuẩn ghép nối."}
       ]
     },
-    "cea201-7-0b-slides-dma-dca-kenh-io-chuan-ghep-noi": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/computer-organization-and-architecture/07-nhap-xuat/07-02-slide-dma-dca-kenh-chuan-ghep-noi-ffc918d5.mp4","durationSec":1863.22,"nguonCau":"srt",
-      "parts": [],
+    "cea201-7-0b-slides-dma-dca-kenh-io-chuan-ghep-noi": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/computer-organization-and-architecture/07-nhap-xuat/07-02-slide-dma-dca-kenh-chuan-ghep-noi-ffc918d5.mp4","durationSec":1863.22,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":98.58,"ten":"Mở đầu · bài này học gì"},
+        {"t":98.58,"den":201.42,"ten":"Bẫy: ăn trộm chu kỳ không phải là…"},
+        {"t":201.42,"den":381.35,"ten":"Bẫy: hình c không nhanh hơn hình b…"},
+        {"t":381.35,"den":469.76,"ten":"Khối trái: dữ liệu không đi qua"},
+        {"t":469.76,"den":647.38,"ten":"Bẫy: cột Status ghi Channel 0 request ở…"},
+        {"t":647.38,"den":723.64,"ten":"Mỗi gói Ethernet chở gói của tầng trên…"},
+        {"t":723.64,"den":824.85,"ten":"Bẫy: đừng lẫn hai bộ đệm. Bộ đệm…"},
+        {"t":824.85,"den":939.48,"ten":"Bẫy: mốc 2006 tới 2010 là của chiến…"},
+        {"t":939.48,"den":1119.13,"ten":"Bước một: CPU điều khiển trực tiếp thiết…"},
+        {"t":1119.13,"den":1282.6,"ten":"Từ 1,5 Mbps lên 10 Gbps là gấp…"},
+        {"t":1282.6,"den":1413.16,"ten":"Bẫy: slide ghi Mbps"},
+        {"t":1413.16,"den":1503.04,"ten":"Bẫy: \"tối đa mỗi thiết bị 300 Mbps\"…"},
+        {"t":1503.04,"den":1638.86,"ten":"Bẫy: 802.11ac đã cũ. Wi-Fi 6 là 802.11ax"},
+        {"t":1638.86,"den":1724.87,"ten":"Bẫy: slide ghi zEnterprise EC12"},
+        {"t":1724.87,"den":1811.62,"ten":"Giờ tới lượt bạn"},
+        {"t":1811.62,"den":1863.22,"ten":"Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đây là bài 7.0b, nửa sau của chương vào ra."},
         {"t":10.5,"vi":"Bài trước dừng ở slide 25, sơ đồ khối của DMA."},
@@ -8682,8 +8928,15 @@
         {"t":1856.55,"vi":"Bài sau, 7.1, ta ôn gọn mô-đun vào ra và ba kỹ thuật bằng mô phỏng."}
       ]
     },
-    "cea201-7-1-io-techniques": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/computer-organization-and-architecture/07-nhap-xuat/07-03-module-io-ba-ky-thuat-3bb0f1d3.mp4","durationSec":814.77,"nguonCau":"srt",
-      "parts": [],
+    "cea201-7-1-io-techniques": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/computer-organization-and-architecture/07-nhap-xuat/07-03-module-io-ba-ky-thuat-3bb0f1d3.mp4","durationSec":814.77,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":130.37,"ten":"Mở đầu · bài này học gì"},
+        {"t":130.37,"den":307.89,"ten":"Slide 8 liệt kê ba câu trả lời"},
+        {"t":307.89,"den":485.81,"ten":"Nhờ chúng, DMA tự biết chép vào đâu…"},
+        {"t":485.81,"den":663.41,"ten":"Polling: CPU chờ và kiểm. Đơn giản nhất"},
+        {"t":663.41,"den":765.53,"ten":"Giờ tới lượt bạn"},
+        {"t":765.53,"den":814.77,"ten":"Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 7.1, bài khái niệm khép lại Chương 7."},
         {"t":10.17,"vi":"Hai bài slide 7.0a và 7.0b đã đi qua từng trang về vào ra, ngắt và DMA."},
@@ -8837,8 +9090,24 @@
         {"t":807.74,"vi":"Bài sau là quiz Chương 7, rồi sang Chương 8: hệ điều hành và lập lịch."}
       ]
     },
-    "cea201-8-0a-slides-he-dieu-hanh-lap-lich": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/computer-organization-and-architecture/08-ho-tro-he-dieu-hanh/08-01-slide-he-dieu-hanh-lap-lich-c24bf988.mp4","durationSec":1844.8,"nguonCau":"srt",
-      "parts": [],
+    "cea201-8-0a-slides-he-dieu-hanh-lap-lich": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/computer-organization-and-architecture/08-ho-tro-he-dieu-hanh/08-01-slide-he-dieu-hanh-lap-lich-c24bf988.mp4","durationSec":1844.8,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":119.49,"ten":"Mở đầu · bài này học gì"},
+        {"t":119.49,"den":225.14,"ten":"Bẫy: hỏi giao diện nào ngăn phần cứng…"},
+        {"t":225.14,"den":311.64,"ten":"Bẫy: cùng ISA chưa chắc cùng ABI"},
+        {"t":311.64,"den":418.91,"ten":"Bẫy: hệ điều hành nằm chung bộ nhớ…"},
+        {"t":418.91,"den":595.41,"ten":"Slide 9, Figure 9.3"},
+        {"t":595.41,"den":675.82,"ten":"Việc một: lệnh hlt, dừng bộ xử lý"},
+        {"t":675.82,"den":848.23,"ten":"Bẫy: mức dùng CPU là thời gian bận…"},
+        {"t":848.23,"den":928.16,"ten":"Slide 15, Table 9.2"},
+        {"t":928.16,"den":1047.52,"ten":"Bẫy: đừng lấy trung bình mức CPU của…"},
+        {"t":1047.52,"den":1141.97,"ten":"Ví dụ: n người cùng đang dùng thì…"},
+        {"t":1141.97,"den":1293.1,"ten":"Bẫy kinh điển"},
+        {"t":1293.1,"den":1464.49,"ten":"Bẫy: tiến trình chờ bộ xử lý là…"},
+        {"t":1464.49,"den":1638.11,"ten":"Identifier là số pid"},
+        {"t":1638.11,"den":1795.2,"ten":"Tự kiểm năm giây"},
+        {"t":1795.2,"den":1844.8,"ten":"Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đây là bài 8.0a, mở đầu chương hỗ trợ hệ điều hành."},
         {"t":10.76,"vi":"Bảy chương trước nhìn máy từ phía phần cứng."},
@@ -9194,8 +9463,25 @@
         {"t":1835.21,"vi":"Bài sau, 8.0b, ta xem hệ điều hành quản lý bộ nhớ: hoán đổi, phân trang, bộ nhớ ảo và TLB."}
       ]
     },
-    "cea201-8-0b-slides-quan-ly-bo-nho-phan-trang-tlb-x86-arm": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/computer-organization-and-architecture/08-ho-tro-he-dieu-hanh/08-02-slide-quan-ly-bo-nho-phan-trang-tlb-b3ecde9c.mp4","durationSec":2224.01,"nguonCau":"srt",
-      "parts": [],
+    "cea201-8-0b-slides-quan-ly-bo-nho-phan-trang-tlb-x86-arm": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/computer-organization-and-architecture/08-ho-tro-he-dieu-hanh/08-02-slide-quan-ly-bo-nho-phan-trang-tlb-b3ecde9c.mp4","durationSec":2224.01,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":87.47,"ten":"Mở đầu · bài này học gì"},
+        {"t":87.47,"den":263.81,"ten":"Vì sao cần?"},
+        {"t":263.81,"den":387.88,"ten":"Slide 30, Figure 9.15"},
+        {"t":387.88,"den":562.41,"ten":"Bước một: độ lệch bằng log cơ số…"},
+        {"t":562.41,"den":676.62,"ten":"Bẫy đề: phân trang theo yêu cầu là…"},
+        {"t":676.62,"den":855.84,"ten":"Câu hỏi đằng sau"},
+        {"t":855.84,"den":986.26,"ten":"Thời gian truy cập"},
+        {"t":986.26,"den":1097.26,"ten":"Bẫy đề: phân đoạn có phân mảnh ngoài"},
+        {"t":1097.26,"den":1274.15,"ten":"Bẫy đề: hỏi kích thước tối đa của…"},
+        {"t":1274.15,"den":1377,"ten":"Base: địa chỉ bắt đầu của đoạn trong…"},
+        {"t":1377,"den":1555.08,"ten":"Bẫy đề: mọi truy cập đặt A"},
+        {"t":1555.08,"den":1733.46,"ten":"Để ý độ lệch được dùng hai kiểu"},
+        {"t":1733.46,"den":1859.09,"ten":"Dòng cuối: bảng mức 2 cần 1 kB"},
+        {"t":1859.09,"den":2036.47,"ten":"Bẫy đề: chẻ địa chỉ ARM thì hỏi…"},
+        {"t":2036.47,"den":2174.31,"ten":"Một chương trình lỗi ghi đè lên hệ…"},
+        {"t":2174.31,"den":2224.01,"ten":"Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đây là bài 8.0b, nửa sau của chương hỗ trợ hệ điều hành."},
         {"t":11.16,"vi":"Bài trước: hệ điều hành giành lại CPU, đa chương trình, và năm trạng thái tiến trình."},
@@ -9619,8 +9905,18 @@
         {"t":2215.34,"vi":"Bài sau, 8.1, ta gom cả chương lại: lập lịch, quản lý bộ nhớ và bộ nhớ ảo, kèm bài tập."}
       ]
     },
-    "cea201-8-1-os-support": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/computer-organization-and-architecture/08-ho-tro-he-dieu-hanh/08-03-lap-lich-quan-ly-bo-nho-bo-nho-ao-c81c5aed.mp4","durationSec":987.72,"nguonCau":"srt",
-      "parts": [],
+    "cea201-8-1-os-support": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/computer-organization-and-architecture/08-ho-tro-he-dieu-hanh/08-03-lap-lich-quan-ly-bo-nho-bo-nho-ao-c81c5aed.mp4","durationSec":987.72,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":181.85,"ten":"Mở đầu · bài này học gì"},
+        {"t":181.85,"den":260.57,"ten":"Ảnh a: A đang chạy và nắm quyền"},
+        {"t":260.57,"den":372.22,"ten":"Phần hai, bảo vệ bộ nhớ"},
+        {"t":372.22,"den":491.46,"ten":"Phần ba, bộ nhớ ảo"},
+        {"t":491.46,"den":646.15,"ten":"Bẫy đề: phân trang theo yêu cầu là…"},
+        {"t":646.15,"den":727.37,"ten":"Ví dụ T 1"},
+        {"t":727.37,"den":815.44,"ten":"Ví dụ: bộ định thời chỉ reo chuông"},
+        {"t":815.44,"den":937.94,"ten":"Giờ tới lượt bạn"},
+        {"t":937.94,"den":987.72,"ten":"Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 8.1, bài khái niệm khép lại Chương 8."},
         {"t":10.27,"vi":"Bài 8.0a nói hệ điều hành làm gì và lập lịch ra sao."},
@@ -9813,8 +10109,26 @@
         {"t":980.17,"vi":"Bài sau là quiz Chương 8, rồi sang Chương 9: đại số Boole và cổng logic."}
       ]
     },
-    "cea201-9-0a-slides-dai-so-boole-mach-to-hop": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/computer-organization-and-architecture/09-logic-so/09-01-slide-dai-so-boole-mach-to-hop-5679af60.mp4","durationSec":2030.12,"nguonCau":"srt",
-      "parts": [],
+    "cea201-9-0a-slides-dai-so-boole-mach-to-hop": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/computer-organization-and-architecture/09-logic-so/09-01-slide-dai-so-boole-mach-to-hop-5679af60.mp4","durationSec":2030.12,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":120.16,"ten":"Mở đầu · bài này học gì"},
+        {"t":120.16,"den":205.83,"ten":"Bẫy: đây không phải đại số thường"},
+        {"t":205.83,"den":327.52,"ten":"Bẫy: đề trích đúng ô in sai thì…"},
+        {"t":327.52,"den":405.14,"ten":"Bẫy: XOR ba đầu vào không phải đúng…"},
+        {"t":405.14,"den":496.13,"ten":"Slide 7, Figure 12.2"},
+        {"t":496.13,"den":673.05,"ten":"Bẫy: đại số Boole không có phép trừ"},
+        {"t":673.05,"den":803.81,"ten":"Câu thi hay gặp"},
+        {"t":803.81,"den":912.91,"ten":"Bước một của thiết kế"},
+        {"t":912.91,"den":1091.2,"ten":"Bẫy: hỏi tốc độ thì đếm tầng"},
+        {"t":1091.2,"den":1270.97,"ten":"Bìa là cái ống, không phải tờ giấy"},
+        {"t":1270.97,"den":1363.96,"ten":"Sáu mã từ 1010 tới 1111 không bao…"},
+        {"t":1363.96,"den":1516.97,"ten":"Bẫy: mọi nhóm phải chứa ít nhất một…"},
+        {"t":1516.97,"den":1656.89,"ten":"Bẫy: prime implicant có năm"},
+        {"t":1656.89,"den":1762.68,"ten":"Bẫy tên chân"},
+        {"t":1762.68,"den":1892.47,"ten":"Chuyển sang 01"},
+        {"t":1892.47,"den":1981.39,"ten":"Giờ tới lượt bạn"},
+        {"t":1981.39,"den":2030.12,"ten":"Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đây là bài 9.0a, mở đầu chương logic số."},
         {"t":10.37,"vi":"Chương trước ta xem hệ điều hành nhờ phần cứng: ngắt, bảo vệ bộ nhớ, phân trang."},
@@ -10206,8 +10520,26 @@
         {"t":2021.86,"vi":"Bài sau, 9.0b, ta xem bộ giải mã, ROM, bộ cộng, và mạch tuần tự biết nhớ."}
       ]
     },
-    "cea201-9-0b-slides-giai-ma-rom-cong-mach-tuan-tu": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/computer-organization-and-architecture/09-logic-so/09-02-slide-giai-ma-rom-cong-mach-tuan-tu-82e8fcee.mp4","durationSec":1988.22,"nguonCau":"srt",
-      "parts": [],
+    "cea201-9-0b-slides-giai-ma-rom-cong-mach-tuan-tu": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/computer-organization-and-architecture/09-logic-so/09-02-slide-giai-ma-rom-cong-mach-tuan-tu-82e8fcee.mp4","durationSec":1988.22,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":89.71,"ten":"Mở đầu · bài này học gì"},
+        {"t":89.71,"den":173.93,"ten":"Bẫy: chip thật thường có thêm chân enable"},
+        {"t":173.93,"den":257.45,"ten":"Bẫy: đếm nhầm số đường. Tám đường dùng…"},
+        {"t":257.45,"den":350.93,"ten":"Bẫy thi được ưa chuộng"},
+        {"t":350.93,"den":440.29,"ten":"Bẫy: mỗi cổng OR có mười sáu đầu…"},
+        {"t":440.29,"den":620.02,"ten":"Bẫy: viết C out bằng AB thôi"},
+        {"t":620.02,"den":798.45,"ten":"Bẫy: bốn khối nằm cạnh nhau nhưng không…"},
+        {"t":798.45,"den":884.01,"ten":"S và R cùng bằng 0 thì giữ…"},
+        {"t":884.01,"den":985.44,"ten":"Bẫy: đọc Q như thể nó bám theo…"},
+        {"t":985.44,"den":1084.44,"ten":"Bẫy: hình này kích theo mức"},
+        {"t":1084.44,"den":1261.57,"ten":"Bẫy: J-K theo mức với J bằng K…"},
+        {"t":1261.57,"den":1382.06,"ten":"Nhịp ba Load bằng 1, ra 1011 0110"},
+        {"t":1382.06,"den":1560.21,"ten":"Ví dụ trong CPU"},
+        {"t":1560.21,"den":1650.45,"ten":"Slide 52, Table 12.13, PLD Terminology, các thuật…"},
+        {"t":1650.45,"den":1830.02,"ten":"Bẫy: sáu đường dọc không phải sáu đầu…"},
+        {"t":1830.02,"den":1935.91,"ten":"Cách phòng: dùng thẻ có mã hoá kiểu…"},
+        {"t":1935.91,"den":1988.22,"ten":"Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đây là bài 9.0b, nửa sau của chương logic số."},
         {"t":10.78,"vi":"Bài trước ta có cổng, bảng chân trị, bìa Karnaugh và bộ dồn kênh."},
@@ -10583,8 +10915,16 @@
         {"t":1980.95,"vi":"Bài sau, 9.1, ta ôn lại cổng logic và đại số Boole bằng bài đọc và lab."}
       ]
     },
-    "cea201-9-1-boolean-gates": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/computer-organization-and-architecture/09-logic-so/09-03-dai-so-boole-cong-logic-fa096dc4.mp4","durationSec":874.1,"nguonCau":"srt",
-      "parts": [],
+    "cea201-9-1-boolean-gates": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/computer-organization-and-architecture/09-logic-so/09-03-dai-so-boole-cong-logic-fa096dc4.mp4","durationSec":874.1,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":183.32,"ten":"Mở đầu · bài này học gì"},
+        {"t":183.32,"den":316.24,"ten":"Muốn so hai số 4 bit"},
+        {"t":316.24,"den":495.47,"ten":"Bước một: hai số hạng đầu có chung…"},
+        {"t":495.47,"den":653.86,"ten":"Kết quả: XOR cần ít nhất 4 NAND"},
+        {"t":653.86,"den":729.2,"ten":"Bước cuối: mở công cụ phân tích mạch…"},
+        {"t":729.2,"den":828.47,"ten":"Giờ tới lượt bạn"},
+        {"t":828.47,"den":874.1,"ten":"Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 9.1, bài khái niệm đầu tiên của Chương 9."},
         {"t":10.52,"vi":"Bài 9.0a đi qua slide đại số Boole và mạch tổ hợp."},
@@ -10754,8 +11094,14 @@
         {"t":868.24,"vi":"Bài sau là 9.2: mạch tổ hợp và mạch tuần tự."}
       ]
     },
-    "cea201-9-2-circuits": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/computer-organization-and-architecture/09-logic-so/09-04-mach-to-hop-mach-tuan-tu-ff75a826.mp4","durationSec":704.93,"nguonCau":"srt",
-      "parts": [],
+    "cea201-9-2-circuits": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/computer-organization-and-architecture/09-logic-so/09-04-mach-to-hop-mach-tuan-tu-ff75a826.mp4","durationSec":704.93,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":182.16,"ten":"Mở đầu · bài này học gì"},
+        {"t":182.16,"den":354.8,"ten":"Đếm xem phải qua bao nhiêu tầng thì…"},
+        {"t":354.8,"den":532.32,"ten":"Sau đó D nhảy sang 1111 rồi 1000"},
+        {"t":532.32,"den":666.87,"ten":"Kết quả sai ngẫu nhiên"},
+        {"t":666.87,"den":704.93,"ten":"Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 9.2, bài khép lại Chương 9."},
         {"t":9.8,"vi":"Bài 9.1 dừng ở từng cổng một."},
@@ -10887,8 +11233,16 @@
         {"t":698.15,"vi":"Bài sau là quiz Chương 9, rồi sang Chương 10: lệnh máy và tập lệnh."}
       ]
     },
-    "cea201-gioi-thieu": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/computer-organization-and-architecture/00-gioi-thieu-mon-hoc/00-01-bat-dau-tai-day-cea201-39ea3402.mp4","durationSec":668.97,"nguonCau":"srt",
-      "parts": [],
+    "cea201-gioi-thieu": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/computer-organization-and-architecture/00-gioi-thieu-mon-hoc/00-01-bat-dau-tai-day-cea201-39ea3402.mp4","durationSec":668.97,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":83.44,"ten":"Chào bạn · CEA201 · Cùng một vòng lặp, chậm hơn hai mươi lần"},
+        {"t":83.44,"den":202.03,"ten":"CEA201 là gì · toà nhà máy tính"},
+        {"t":202.03,"den":289.93,"ten":"Máy tính ra đời và lớn lên thế nào"},
+        {"t":289.93,"den":427.13,"ten":"Bản đồ môn học · Khi người ta coi nhẹ phần cứng"},
+        {"t":427.13,"den":531.96,"ten":"Học xong làm được gì"},
+        {"t":531.96,"den":622.9,"ten":"Thực hành: đọc CPU của chính bạn · Tự kiểm nhanh"},
+        {"t":622.9,"den":668.97,"ten":"Tóm tắt · bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với CEA201, môn Tổ chức và Kiến trúc máy tính."},
         {"t":11.61,"vi":"PRF192 dạy bạn viết mã C. CSI104 cho bạn bức tranh lớn của ngành."},
@@ -11006,174 +11360,6 @@
         {"t":647.61,"vi":"Năm, học bằng đánh đổi, không học thuộc con số."},
         {"t":652.11,"vi":"Làm xong bài thực hành, bạn mở lab Thử ngay ngay dưới bài này, rồi sang bài kế tiếp cho chắc nhé."},
         {"t":658.96,"vi":"Bài sau, mình đi từng slide đầu tiên của Chương 1: kiến trúc, tổ chức, và cỗ máy IAS của von Neumann."}
-      ]
-    },
-    "cea201-n2-1-branch-prediction": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/computer-organization-and-architecture/17-nang-cao-cpu-hien-dai/17-01-du-doan-nhanh-suy-doan-639cb836.mp4","durationSec":853.33,"nguonCau":"srt",
-      "parts": [],
-      "cues": [
-        {"t":5.1,"vi":"Chào bạn, đây là bài N2.1, phần nâng cao hai: bên trong một CPU hiện đại."},
-        {"t":12.01,"vi":"Chương 12 dựng đường ống lệnh, và gặp xung đột điều khiển. Bài 12.0b có máy dự đoán hai bit."},
-        {"t":19.66,"vi":"Chương 14 cho CPU phát nhiều lệnh một chu kỳ, chạy ngoài thứ tự, và đổi tên thanh ghi."},
-        {"t":26.39,"vi":"Hôm nay ta ghép tất cả lại quanh một câu hỏi: gặp lệnh rẽ nhánh, CPU làm gì khi chưa biết đi đường nào?"},
-        {"t":34.24,"vi":"Ba câu hỏi: CPU đoán bằng cách nào, đoán giỏi tới đâu trên máy thật, và đoán sai thì mất bao nhiêu."},
-        {"t":43.53,"vi":"Hình dung đường ống lệnh như một băng chuyền."},
-        {"t":46.53,"vi":"Mỗi chu kỳ, một lệnh mới phải được nạp vào đầu ống."},
-        {"t":50.32,"vi":"Rồi tới một lệnh rẽ nhánh, ví dụ một câu if hay cuối một vòng lặp."},
-        {"t":55.35,"vi":"Lệnh này phải đi tới tầng thi hành thì mới biết có nhảy hay không."},
-        {"t":59.71,"vi":"Trong lúc đó, đầu ống nạp gì?"},
-        {"t":62.34,"vi":"Ống càng sâu thì khoảng chờ càng dài."},
-        {"t":65.23,"vi":"CPU ngày nay có hơn mười tầng trước khi biết kết quả."},
-        {"t":68.96,"vi":"Bài web trả lời bằng ba chữ: đoán, chạy trước, và hoàn tác nếu sai."},
-        {"t":76.09,"vi":"Mô hình nhỏ: ống bốn tầng là nạp, giải mã, thi hành, ghi. Lệnh rẽ nhánh biết kết quả ở tầng thi hành."},
-        {"t":84.37,"vi":"Cách A, không đoán. Lệnh I2 là jne."},
-        {"t":88.38,"vi":"Đầu ống đứng chờ tới khi I2 thi hành xong ở chu kỳ 4."},
-        {"t":92.32,"vi":"Lệnh đúng tiếp theo, Q1, chỉ được nạp ở chu kỳ 5."},
-        {"t":96.87,"vi":"Hai chu kỳ trống, gọi là bong bóng, mỗi lần gặp lệnh rẽ."},
-        {"t":101.46,"vi":"Cách B, đoán là có nhảy. Ngay chu kỳ 3, CPU nạp lệnh P1 ở đích nhảy, rồi P2, P3."},
-        {"t":110.38,"vi":"Tới chu kỳ 4, I2 thi hành xong, đúng là có nhảy. Không mất chu kỳ nào, P1 và P2 đi tiếp bình thường."},
-        {"t":119.27,"vi":"Cách C, đoán sai. P1 và P2 đã vào ống, nhưng đường thật lại là Q."},
-        {"t":125.97,"vi":"Chu kỳ 5, CPU xả bỏ P1 và P2, rồi nạp Q1. Mất đúng hai chu kỳ, bằng cách A."},
-        {"t":134.53,"vi":"Vậy đoán sai không tệ hơn đứng chờ, còn đoán đúng thì được không mất gì."},
-        {"t":139.34,"vi":"Đoán càng giỏi càng lời."},
-        {"t":142.93,"vi":"Bài web gom lại thành ba bước."},
-        {"t":145.6,"vi":"Bước một, đoán. Bộ dự đoán nhánh, tiếng Anh là branch predictor, đoán nhảy hay không nhảy, dựa vào lịch sử các lần trước."},
-        {"t":154.8,"vi":"Bước hai, suy đoán, tiếng Anh là speculation."},
-        {"t":159.14,"vi":"CPU chạy luôn đường đã đoán, giữ ống luôn đầy."},
-        {"t":162.65,"vi":"Kết quả của lệnh chạy suy đoán chưa được ghi chính thức."},
-        {"t":166.16,"vi":"Chúng chờ trong một hàng đợi theo đúng thứ tự."},
-        {"t":169.21,"vi":"Bước ba, kiểm. Đoán đúng thì xác nhận, gọi là commit. Đoán sai thì xả, gọi là flush, bỏ hết việc đã làm trên đường sai."},
-        {"t":179.3,"vi":"Thuật ngữ thi hay hỏi: nhảy là taken, không nhảy là not taken. Đoán sai gọi là misprediction."},
-        {"t":188.32,"vi":"Bài 12.0b có bộ đếm hai bit: bốn trạng thái từ mạnh không nhảy tới mạnh nhảy."},
-        {"t":194.53,"vi":"Phải sai hai lần mới đổi ý."},
-        {"t":196.79,"vi":"Thử nó với mẫu T, T, N lặp lại."},
-        {"t":200.05,"vi":"T là nhảy, N là không nhảy. Như một vòng lặp chỉ ba vòng."},
-        {"t":205.12,"vi":"Bộ đếm hai bit nhanh chóng tin là nhảy."},
-        {"t":208.05,"vi":"Nên cứ tới chữ N, nó sai. Mỗi chu kỳ ba lần, sai một."},
-        {"t":213.14,"vi":"Bên phải là bộ dự đoán có lịch sử."},
-        {"t":215.8,"vi":"Nó nhớ hai kết quả gần nhất, gọi là thanh ghi lịch sử LS."},
-        {"t":220.48,"vi":"Bốn giá trị LS chọn bốn bộ đếm hai bit khác nhau."},
-        {"t":224.44,"vi":"Mỗi ngữ cảnh có một bộ đếm riêng."},
-        {"t":226.85,"vi":"Bốn lần đầu nó còn đang học, sai ba lần. Từ lần thứ năm trở đi, nó không sai lần nào nữa."},
-        {"t":234.07,"vi":"Đếm từ lần năm tới lần mười lăm: bộ đếm hai bit sai bốn lần, bộ có lịch sử sai không lần."},
-        {"t":242.48,"vi":"Vì sao nó học được? Hãy nhìn bảng bốn bộ đếm sau mười lăm lần."},
-        {"t":247.37,"vi":"Khi LS là 1 1, nghĩa là hai lần trước đều nhảy, thì lần này luôn là N. Bộ đếm ô 1 1 ở mạnh không nhảy."},
-        {"t":255.92,"vi":"Khi LS là 1 0 hay 0 1, lần này luôn là T."},
-        {"t":260.22,"vi":"Hai ô đó ở mạnh nhảy."},
-        {"t":262.4,"vi":"Mẫu lặp lại nên mỗi ngữ cảnh luôn dẫn tới cùng một kết quả."},
-        {"t":266.58,"vi":"Bảng chỉ cần ghi nhớ."},
-        {"t":268.36,"vi":"Bộ dự đoán thật dùng lịch sử dài hơn nhiều, và nhiều bảng. Nhờ vậy bài web nói chúng đúng trên chín mươi lăm phần trăm."},
-        {"t":277.8,"vi":"Giờ đo trên CPU thật của máy này, Intel Core i5 thế hệ mười hai, trong container cea-lab."},
-        {"t":285.36,"vi":"Chương trình mau.c có một mảng một triệu byte 0 và 1."},
-        {"t":289.36,"vi":"Câu if xét từng byte, nên nhảy hay không phụ thuộc dữ liệu."},
-        {"t":293.42,"vi":"p byte đầu là ngẫu nhiên, rồi lặp lại y nguyên."},
-        {"t":296.9,"vi":"p bằng 2 là mẫu ngắn, p càng lớn càng khó nhớ."},
-        {"t":301.02,"vi":"Dịch ra hợp ngữ: lệnh cmp so byte với 0, rồi je nhảy. Đó chính là lệnh rẽ nhánh ta đang đo."},
-        {"t":308.79,"vi":"Mỗi lần chạy, lệnh je này thi hành 67 triệu lần."},
-        {"t":312.86,"vi":"Lệnh perf stat đếm số lần CPU đoán sai."},
-        {"t":318.02,"vi":"Kết quả. Từ p bằng 2 tới p bằng 4096, CPU đoán sai chưa tới 0,1 phần trăm."},
-        {"t":326.17,"vi":"Gần như hoàn hảo."},
-        {"t":327.8,"vi":"Mẫu dài 4096 kết quả ngẫu nhiên, nó vẫn nhớ được. Còn mô hình bộ đếm hai bit sai từ một nửa trở lên."},
-        {"t":336.6,"vi":"Tới p bằng 16384, đoán sai vọt lên 35,7 phần trăm."},
-        {"t":343.11,"vi":"Mẫu ngẫu nhiên hoàn toàn: 50 phần trăm, như tung đồng xu."},
-        {"t":347.29,"vi":"Cột chu kỳ cho mỗi lần cũng nhảy theo: từ khoảng 2,5 lên 15,6 chu kỳ."},
-        {"t":353.42,"vi":"Đồ thị so với mô hình của ta."},
-        {"t":355.73,"vi":"Lịch sử 4 bit gãy ở p bằng 16, 8 bit gãy quanh 256, 12 bit gãy ở 4096."},
-        {"t":364.6,"vi":"CPU thật vẫn đứng vững ở 4096."},
-        {"t":368.89,"vi":"Nghĩa là nó dùng lịch sử rất dài, dài hơn hẳn mười hai bit."},
-        {"t":373.26,"vi":"Còn với dữ liệu ngẫu nhiên thật, không bộ dự đoán nào cứu được."},
-        {"t":377.56,"vi":"Không có quy luật thì không có gì để học."},
-        {"t":382.09,"vi":"Câu của bài web, đúng trên chín mươi lăm phần trăm, có thật không? Đo bốn chương trình bình thường."},
-        {"t":389,"vi":"Trình dịch gcc dịch một tệp C: đúng 97,42 phần trăm. Đây là chương trình rẽ nhánh rất lộn xộn."},
-        {"t":396.96,"vi":"Python tính một tổng: đúng 99,98 phần trăm."},
-        {"t":401.12,"vi":"Lệnh sort sắp một triệu số, và gzip nén một tệp: cùng 99,7."},
-        {"t":406.85,"vi":"Dòng cuối là mau.c với dữ liệu ngẫu nhiên: chỉ đúng 80,62 phần trăm, dù cả chương trình còn nhiều lệnh rẽ dễ đoán khác."},
-        {"t":415.68,"vi":"Vậy chương trình thường ngày rất dễ đoán."},
-        {"t":418.33,"vi":"Kẻ thù là nhánh phụ thuộc dữ liệu ngẫu nhiên, nằm trong vòng lặp nóng."},
-        {"t":424.52,"vi":"Đoán sai tốn bao nhiêu? So hai lần chạy cùng một việc: mẫu p bằng 2, dễ đoán, với mẫu ngẫu nhiên."},
-        {"t":432.13,"vi":"Cả hai cùng nhảy một nửa số lần."},
-        {"t":434.63,"vi":"Bản ngẫu nhiên đoán sai thêm 33,6 triệu lần, và tốn thêm 973 triệu chu kỳ."},
-        {"t":441.41,"vi":"Chia ra: mỗi lần đoán sai mất khoảng 29 chu kỳ."},
-        {"t":445.69,"vi":"Ống bốn tầng của mô hình chỉ mất hai."},
-        {"t":448.37,"vi":"perf còn đếm được việc làm bị vứt."},
-        {"t":451.14,"vi":"CPU chia lệnh thành các phép nhỏ gọi là uop."},
-        {"t":454.18,"vi":"Ta so số uop đã phát với số uop xong thật."},
-        {"t":457.39,"vi":"Bản dễ đoán vứt 1,5 phần trăm."},
-        {"t":459.72,"vi":"Bản ngẫu nhiên vứt 75,2 phần trăm: ba phần tư công sức đổ đi."},
-        {"t":465.37,"vi":"Trung bình mỗi lần đoán sai vứt khoảng 39 uop."},
-        {"t":469.01,"vi":"Đó là cả một đoạn đường suy đoán bị xả."},
-        {"t":472.23,"vi":"Thêm một số đo nữa: IPC, số lệnh xong mỗi chu kỳ, rơi từ 2,57 xuống 0,41."},
-        {"t":481.16,"vi":"Vì sao mỗi lần sai lại vứt tới gần bốn mươi uop?"},
-        {"t":484.86,"vi":"Vì một nhân hiện đại làm bốn việc cùng lúc."},
-        {"t":487.66,"vi":"Một, superscalar: phát vài lệnh mỗi chu kỳ."},
-        {"t":491.69,"vi":"Bài 14.0a đo IPC 4,71 trên máy này."},
-        {"t":496.13,"vi":"Hai, out-of-order: lệnh nào sẵn dữ liệu thì chạy trước, không chờ thứ tự."},
-        {"t":502.14,"vi":"Ba, đổi tên thanh ghi, register renaming: bỏ các phụ thuộc giả giữa những lệnh dùng chung tên thanh ghi."},
-        {"t":509.62,"vi":"Bốn, suy đoán: đoán vượt qua lệnh rẽ để cửa sổ lệnh luôn đầy."},
-        {"t":514.59,"vi":"Cả bốn cùng nhau rút được nhiều song song từ một luồng lệnh."},
-        {"t":518.42,"vi":"Nhưng tất cả dựa trên đoán đúng."},
-        {"t":520.74,"vi":"Đoán sai một lần, mọi lệnh sau nhánh trong cửa sổ đều phải xả."},
-        {"t":525.17,"vi":"Cửa sổ càng rộng, đổ đi càng nhiều."},
-        {"t":529.73,"vi":"Bài web cảnh báo: nhánh khó đoán trong vòng lặp nóng có thể âm thầm giảm nửa hiệu năng. Ta đo."},
-        {"t":536.65,"vi":"Chương trình xacsuat.c cộng các số không âm trong một mảng."},
-        {"t":541.01,"vi":"Ta chỉnh q, phần trăm số không âm, từ 0 tới 100."},
-        {"t":545.4,"vi":"Đường đỏ là bản có câu if. Khi q bằng 0 hay 100, mỗi phần tử chỉ khoảng 0,3 nano giây."},
-        {"t":553.25,"vi":"Khi q bằng 50, khó đoán nhất, lên 4,13 nano giây. Chậm gần mười lăm lần, không chỉ một nửa."},
-        {"t":561.65,"vi":"Cùng một kết quả, cùng số phép cộng."},
-        {"t":564.58,"vi":"Chỉ khác là dữ liệu có dễ đoán hay không."},
-        {"t":567.58,"vi":"Đường xanh là bản không rẽ nhánh."},
-        {"t":570.11,"vi":"Nó gần như phẳng, từ 0,42 tới 0,76 nano giây, dù q là bao nhiêu."},
-        {"t":578.19,"vi":"Bản không rẽ nhánh viết thế nào?"},
-        {"t":580.55,"vi":"Thay câu if bằng một mặt nạ số học."},
-        {"t":583.34,"vi":"Dịch chuyển phải 31 bit lấy bit dấu."},
-        {"t":586.6,"vi":"Đảo bit, ta được mặt nạ toàn số 1 nếu số không âm, toàn số 0 nếu âm."},
-        {"t":591.89,"vi":"Dùng phép AND giữa số và mặt nạ, rồi cộng luôn. Hợp ngữ chỉ có bốn lệnh sar, not, and, add, không lệnh nhảy theo dữ liệu."},
-        {"t":602.14,"vi":"Bản có if thì có test rồi js: nhảy nếu số âm. Chính lệnh js đó bị đoán sai một nửa số lần."},
-        {"t":610.01,"vi":"Nhưng nhìn lại đồ thị: khi dữ liệu dễ đoán, bản có if lại nhanh hơn, 0,28 so với 0,48."},
-        {"t":618.16,"vi":"Không có cách nào thắng mọi lúc."},
-        {"t":620.23,"vi":"Ba cách hay dùng: sắp xếp dữ liệu như bài 12.0b, để trình dịch dùng cmov, hoặc tự viết mặt nạ."},
-        {"t":628.24,"vi":"Và luôn đo bằng perf trước khi sửa."},
-        {"t":631,"vi":"Chỉ sửa nhánh thật sự bị đoán sai nhiều."},
-        {"t":635.52,"vi":"Đời thật: trình duyệt tải trước trang bạn sắp bấm."},
-        {"t":638.93,"vi":"Ứng dụng xem phim tải trước tập sau."},
-        {"t":641.53,"vi":"Đó là suy đoán: làm trước, sai thì bỏ."},
-        {"t":645.13,"vi":"CPU cũng vậy: đoán hướng rẽ, chạy trước, đúng thì giữ kết quả, sai thì xả bỏ."},
-        {"t":651.81,"vi":"Giả sử dữ liệu ngẫu nhiên khiến CPU đoán sai liên tục."},
-        {"t":655.95,"vi":"Vòng lặp nóng chậm đi vài lần, như số đo trong bài."},
-        {"t":659.61,"vi":"Cách chữa là sắp xếp dữ liệu trước, hoặc viết phép chọn không rẽ nhánh."},
-        {"t":664.55,"vi":"Góc kẻ xấu: năm 2018, tấn công BranchScope đọc trạng thái bộ dự đoán dùng chung để biết chương trình nạn nhân đã rẽ hướng nào."},
-        {"t":673.97,"vi":"Hướng rẽ phụ thuộc bit bí mật thì bí mật bị lộ."},
-        {"t":677.43,"vi":"Cách phòng: cập nhật vi mã, mã hoá không rẽ nhánh theo bí mật."},
-        {"t":682.23,"vi":"Khi suy đoán thành lỗ hổng lớn, xem phần Nâng cao 3. Bộ dự đoán hai bit có ở bài 12.0b."},
-        {"t":691.5,"vi":"Bài tập. Một lệnh rẽ lặp mẫu T, T, T, N mãi mãi. Mọi bộ đếm bắt đầu ở yếu không nhảy."},
-        {"t":699.8,"vi":"Câu a, bộ đếm hai bit đơn sai mấy lần mỗi chu kỳ bốn lần?"},
-        {"t":704.52,"vi":"Câu b, bộ có lịch sử hai bit?"},
-        {"t":707.26,"vi":"Câu c, lịch sử ba bit?"},
-        {"t":710.04,"vi":"Làm mẫu câu b một bước: hãy ghi LS đứng trước mỗi kết quả."},
-        {"t":714.91,"vi":"Trước chữ N, hai lần vừa rồi là T, T, nên LS là 1 1."},
-        {"t":720.47,"vi":"Dừng video và làm phần còn lại."},
-        {"t":723.12,"vi":"Gợi ý: xem LS 1 1 còn đứng trước chữ nào nữa."},
-        {"t":729.82,"vi":"Đáp án. Câu a: sai một lần mỗi chu kỳ, đúng ở chữ N. Mô phỏng ra 4 trên 16."},
-        {"t":737.51,"vi":"Câu b: LS 1 1 đứng trước cả T thứ ba lẫn N."},
-        {"t":741.75,"vi":"Một bộ đếm phải học hai điều ngược nhau, nên sai 8 trên 16."},
-        {"t":746.58,"vi":"Lịch sử ngắn còn tệ hơn không có lịch sử."},
-        {"t":749.85,"vi":"Câu c: ba bit thì 1 1 1 chỉ đứng trước N, sai 0 trên 16."},
-        {"t":756.58,"vi":"Giờ là ba câu tự kiểm. Bạn trả lời trước khi nghe đáp án nhé."},
-        {"t":761.34,"vi":"Câu một. Khi CPU đoán sai một lệnh rẽ nhánh, các lệnh đã chạy suy đoán bị làm sao?"},
-        {"t":768.28,"vi":"Chúng bị xả, flush. Kết quả chưa được commit nên không ảnh hưởng chương trình, chỉ mất thời gian."},
-        {"t":775.75,"vi":"Câu hai. Vì sao bộ dự đoán dùng lịch sử đoán được mẫu T, T, N còn bộ đếm hai bit thì không?"},
-        {"t":783.49,"vi":"Vì mỗi ngữ cảnh lịch sử có bộ đếm riêng."},
-        {"t":786.79,"vi":"Bộ đếm hai bit chỉ có một, nên luôn sai ở chữ N."},
-        {"t":791.11,"vi":"Câu ba. Nhánh nào làm chương trình chậm nhất: nhánh luôn nhảy, hay nhánh nhảy ngẫu nhiên một nửa số lần?"},
-        {"t":798.41,"vi":"Nhánh ngẫu nhiên một nửa. Trên máy này nó làm vòng lặp chậm gần mười lăm lần."},
-        {"t":805.35,"vi":"Tóm tắt. Gặp lệnh rẽ, CPU không chờ."},
-        {"t":809.5,"vi":"Nó đoán, chạy suy đoán, rồi kiểm: đúng thì commit, sai thì flush."},
-        {"t":815.2,"vi":"Bộ dự đoán dùng lịch sử, nên học được mẫu."},
-        {"t":818.64,"vi":"CPU máy này nhớ mẫu dài 4096 lần, và đúng trên 97 phần trăm với chương trình thường."},
-        {"t":826.04,"vi":"Đoán sai mất khoảng 29 chu kỳ và vứt cả đoạn uop suy đoán."},
-        {"t":830.91,"vi":"Nhánh ngẫu nhiên trong vòng nóng có thể chậm hơn mười lần."},
-        {"t":834.08,"vi":"Thân thiện với nhánh: sắp xếp dữ liệu, dùng cmov hay mặt nạ, và luôn đo bằng perf trước."},
-        {"t":840.71,"vi":"Bài sau, N3.1, câu chuyện đổi chiều."},
-        {"t":844.4,"vi":"Việc chạy suy đoán bị vứt đi vẫn để lại dấu vết trong cache, và đó là Spectre. Hẹn gặp bạn."}
       ]
     }
   }

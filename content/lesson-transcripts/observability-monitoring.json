@@ -2,8 +2,15 @@
   "courseSlug": "observability-monitoring",
   "sinhBoi": "scripts/phu-de-tu-video-rieng.mjs",
   "lessons": {
-    "obs-0-1-vi-sao": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/observability-monitoring/00-truoc-khi-do/00-01-vi-sao-7bdfc9e8.mp4","durationSec":546.78,"nguonCau":"srt",
-      "parts": [],
+    "obs-0-1-vi-sao": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/observability-monitoring/00-truoc-khi-do/00-01-vi-sao-7bdfc9e8.mp4","durationSec":546.78,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":86.22,"ten":"Chào khoá · khoá này giúp gì · Căn phòng tối"},
+        {"t":86.22,"den":203.91,"ten":"Bốn sự cố có thật · Không phải hoàn hảo"},
+        {"t":203.91,"den":340.36,"ten":"Cái id nối các dòng log · Sáng chỗ từng đau, mù chỗ còn lại"},
+        {"t":340.36,"den":416.98,"ten":"Bẫy: health check xanh · Khoá này không phải là gì"},
+        {"t":416.98,"den":508.09,"ten":"Thực hành: đo khoảng mù · Ba câu tự kiểm"},
+        {"t":508.09,"den":546.78,"ten":"Tóm tắt & bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 0.1 của khoá Observability & Monitoring, dạy trên một backend Node.js chạy trên VPS."},
         {"t":15.56,"vi":"Observability nghĩa là quan sát được."},
@@ -100,8 +107,14 @@
         {"t":539.49,"vi":"Bài sau, 0.2: ba trụ cột của quan sát, và cái thứ tư ai cũng quên."}
       ]
     },
-    "obs-0-2-ba-tru-cot": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/observability-monitoring/00-truoc-khi-do/00-02-ba-tru-cot-e64ebfec.mp4","durationSec":519.72,"nguonCau":"srt",
-      "parts": [],
+    "obs-0-2-ba-tru-cot": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/observability-monitoring/00-truoc-khi-do/00-02-ba-tru-cot-e64ebfec.mp4","durationSec":519.72,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":130.5,"ten":"Ôn nhanh · hôm nay · Một cú hỏng, bốn ô cửa"},
+        {"t":130.5,"den":244.23,"ten":"Cái thứ tư: sự kiện thay đổi · Chọn trụ cột theo câu hỏi"},
+        {"t":244.23,"den":335.66,"ten":"Chạy thật: đếm bằng log và bằng bộ đếm"},
+        {"t":335.66,"den":433.76,"ten":"Hình dạng chi phí · Thực hành: ghép câu hỏi với trụ cột"},
+        {"t":433.76,"den":519.72,"ten":"Ba câu tự kiểm · Tóm tắt & bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 0.2 của khoá Observability & Monitoring."},
         {"t":11.13,"vi":"Bài trước, cả bốn sự cố đều do người dùng phát hiện, và log chỉ có ở những chỗ từng gây đau."},
@@ -195,8 +208,13 @@
         {"t":512.34,"vi":"Bài sau, 0.3: dựng bộ đồ nghề để đo, và kiểm nó trước khi tin."}
       ]
     },
-    "obs-0-3-dung-moi-truong": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/observability-monitoring/00-truoc-khi-do/00-03-dung-moi-truong-7a5b1693.mp4","durationSec":462.06,"nguonCau":"srt",
-      "parts": [],
+    "obs-0-3-dung-moi-truong": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/observability-monitoring/00-truoc-khi-do/00-03-dung-moi-truong-7a5b1693.mp4","durationSec":462.06,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":113.48,"ten":"Ôn nhanh · hôm nay · Vì sao phải tự đo"},
+        {"t":113.48,"den":238.8,"ten":"Một khung đo không nói dối · Chạy thật: kiểm đồ nghề"},
+        {"t":238.8,"den":316.21,"ten":"Chạy thật: hai con số còn lại · Bẫy: thời lượng âm"},
+        {"t":316.21,"den":462.06,"ten":"Thứ bạn chưa cần · Thực hành: dựng đồ nghề"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 0.3 của khoá Observability & Monitoring."},
         {"t":10.49,"vi":"Bài trước, ta gọi tên bốn ô cửa: log, chỉ số, trace, và sự kiện thay đổi."},
@@ -274,8 +292,13 @@
         {"t":453.73,"vi":"Bài sau, 0.4: cách học khoá này, và vì sao số của bạn sẽ khác số của khoá."}
       ]
     },
-    "obs-0-4-cach-hoc": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/observability-monitoring/00-truoc-khi-do/00-04-cach-hoc-9969e81d.mp4","durationSec":435.01,"nguonCau":"srt",
-      "parts": [],
+    "obs-0-4-cach-hoc": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/observability-monitoring/00-truoc-khi-do/00-04-cach-hoc-9969e81d.mp4","durationSec":435.01,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":117.18,"ten":"Ôn nhanh · hôm nay · Con số và lời đồn"},
+        {"t":117.18,"den":228.99,"ten":"Số của bạn sẽ khác · Chạy thật: tỉ lệ mới là bài học"},
+        {"t":228.99,"den":305.03,"ten":"Bẫy: con số rời điều kiện · Học xong làm được gì"},
+        {"t":305.03,"den":435.01,"ten":"Thực hành: chạy vòng lặp học · Ba câu tự kiểm"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 0.4, bài cuối của Mục 0 khoá Observability & Monitoring."},
         {"t":12.67,"vi":"Bài trước, ta dựng bộ đồ nghề bằng thứ có sẵn trong Node: hrtime, trễ vòng lặp, bộ nhớ, và writableLength."},
@@ -352,8 +375,14 @@
         {"t":427.15,"vi":"Bài sau, 1.1: từ console.log tới một dòng log mà máy đọc được."}
       ]
     },
-    "obs-1-1-tu-console-toi-json": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/observability-monitoring/01-log-co-cau-truc/01-01-tu-console-toi-json-6cd1389a.mp4","durationSec":453.43,"nguonCau":"srt",
-      "parts": [],
+    "obs-1-1-tu-console-toi-json": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/observability-monitoring/01-log-co-cau-truc/01-01-tu-console-toi-json-6cd1389a.mp4","durationSec":453.43,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":92.51,"ten":"Ôn nhanh · hôm nay · Hai độc giả của một dòng log"},
+        {"t":92.51,"den":212.7,"ten":"Mỗi dạng trả lời được gì · Chạy thật: regex hỏng lặng lẽ"},
+        {"t":212.7,"den":303.42,"ten":"Ba trường không được xê dịch · Bẫy: nội suy biến vào msg"},
+        {"t":303.42,"den":414.71,"ten":"Cái giá của việc đổi sang · Thực hành: truy vấn một trường"},
+        {"t":414.71,"den":453.43,"ten":"Tóm tắt & bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 1.1, mở đầu Chương 1 của khoá Observability & Monitoring."},
         {"t":13,"vi":"Mục 0 đã cho ta bốn ô cửa, bộ đồ nghề để tự đo, và vòng lặp học: đọc, chạy, đoán, phá."},
@@ -434,8 +463,14 @@
         {"t":445.66,"vi":"Bài sau, 1.2: cái gì thuộc về một dòng log, và cái gì tuyệt đối không."}
       ]
     },
-    "obs-1-2-cai-gi-thuoc-ve": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/observability-monitoring/01-log-co-cau-truc/01-02-cai-gi-thuoc-ve-df6cbb2d.mp4","durationSec":463.41,"nguonCau":"srt",
-      "parts": [],
+    "obs-1-2-cai-gi-thuoc-ve": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/observability-monitoring/01-log-co-cau-truc/01-02-cai-gi-thuoc-ve-df6cbb2d.mp4","durationSec":463.41,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":123.16,"ten":"Ôn nhanh · hôm nay · Một bí mật lọt vào kho log"},
+        {"t":123.16,"den":214.09,"ten":"Không bao giờ log · Chạy thật: tai nạn trông rất cẩn thận"},
+        {"t":214.09,"den":310.12,"ten":"Chạy thật: soát kho này · Bẫy: trường không giới hạn"},
+        {"t":310.12,"den":390.25,"ten":"Một route, trước và sau · Thực hành: soát một lời gọi log"},
+        {"t":390.25,"den":463.41,"ten":"Ba câu tự kiểm · Tóm tắt & bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 1.2 của khoá Observability & Monitoring."},
         {"t":10.97,"vi":"Bài trước, ta biến văn xuôi thành JSON, giữ ba trường ts, level, msg, và để phần biến thiên vào ngữ cảnh."},
@@ -523,8 +558,13 @@
         {"t":457.56,"vi":"Bài sau, 1.3: mức log, và vì sao ai cũng dùng sai."}
       ]
     },
-    "obs-1-3-muc-log": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/observability-monitoring/01-log-co-cau-truc/01-03-muc-log-84b1e420.mp4","durationSec":444.6,"nguonCau":"srt",
-      "parts": [],
+    "obs-1-3-muc-log": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/observability-monitoring/01-log-co-cau-truc/01-03-muc-log-84b1e420.mp4","durationSec":444.6,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":123.01,"ten":"Ôn nhanh · hôm nay · Bốn mức, bốn lời hứa"},
+        {"t":123.01,"den":227.32,"ten":"Mã thật: errorHandler của kho"},
+        {"t":227.32,"den":318.99,"ten":"Bẫy: debug đã tắt vẫn tốn tiền · Vì sao bốn mức là đủ"},
+        {"t":318.99,"den":444.6,"ten":"Thực hành: phân loại lại · Ba câu tự kiểm"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 1.3 của khoá Observability & Monitoring."},
         {"t":11.01,"vi":"Bài trước, ta chọn trường bằng bốn câu hỏi, và không bao giờ trải một object mình không tự dựng."},
@@ -607,8 +647,13 @@
         {"t":437.78,"vi":"Bài sau, 1.4: một dòng log thật sự tốn bao nhiêu, đo thật."}
       ]
     },
-    "obs-1-4-chi-phi-that": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/observability-monitoring/01-log-co-cau-truc/01-04-chi-phi-that-d30ad66b.mp4","durationSec":413.6,"nguonCau":"srt",
-      "parts": [],
+    "obs-1-4-chi-phi-that": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/observability-monitoring/01-log-co-cau-truc/01-04-chi-phi-that-d30ad66b.mp4","durationSec":413.6,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":107.95,"ten":"Ôn nhanh · hôm nay · Bóc một dòng log ra từng lớp"},
+        {"t":107.95,"den":197.64,"ten":"Đọc bốn con số · Chạy thật: cách chữa fastTs"},
+        {"t":197.64,"den":289.95,"ten":"Nano giây thành quyết định · Bẫy: cắt nhầm dòng"},
+        {"t":289.95,"den":413.6,"ten":"Thực hành: tái hiện chi phí · Ba câu tự kiểm"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 1.4 của khoá Observability & Monitoring."},
         {"t":10.62,"vi":"Bài trước: mức log là lời hứa, và dòng debug đã tắt vẫn có thể tốn tiền dựng ngữ cảnh."},
@@ -678,8 +723,15 @@
         {"t":406.29,"vi":"Bài sau, 1.5: stdout là một cái ống, và ống thì đầy được."}
       ]
     },
-    "obs-1-5-stdout-la-mot-cai-ong": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/observability-monitoring/01-log-co-cau-truc/01-05-stdout-la-mot-cai-ong-f49609ba.mp4","durationSec":543.54,"nguonCau":"srt",
-      "parts": [],
+    "obs-1-5-stdout-la-mot-cai-ong": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/observability-monitoring/01-log-co-cau-truc/01-05-stdout-la-mot-cai-ong-f49609ba.mp4","durationSec":543.54,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":117.45,"ten":"Ôn nhanh · hôm nay · Cái ống và cái xô"},
+        {"t":117.45,"den":231.02,"ten":"Chạy thật: cùng 20.000 dòng, ba đích"},
+        {"t":231.02,"den":321.39,"ten":"Đọc kết quả cho trung thực"},
+        {"t":321.39,"den":409.25,"ten":"Ba lớp phòng thủ · Bẫy: mấy dòng cuối của cú sập"},
+        {"t":409.25,"den":497.8,"ten":"Thực hành: tái hiện rò rỉ do nghẽn · Ba câu tự kiểm"},
+        {"t":497.8,"den":543.54,"ten":"Tóm tắt & chương sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 1.5, bài cuối Chương 1 của khoá Observability & Monitoring."},
         {"t":12.86,"vi":"Bài trước đo cái giá dựng một dòng log, khoảng một nghìn nano giây, và dấu thời gian là phần đắt nhất."},
@@ -770,8 +822,13 @@
         {"t":536.11,"vi":"Chương 2 bắt đầu với bài 2.1: Docker làm gì với dòng log của bạn."}
       ]
     },
-    "obs-10-1-danh-cho-ai": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/observability-monitoring/10-bang-theo-doi/10-01-danh-cho-ai-127da392.mp4","durationSec":363.35,"nguonCau":"srt",
-      "parts": [],
+    "obs-10-1-danh-cho-ai": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/observability-monitoring/10-bang-theo-doi/10-01-danh-cho-ai-127da392.mp4","durationSec":363.35,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":99.71,"ten":"Ôn nhanh · hôm nay · Cú hỏng: bảng tích tụ"},
+        {"t":99.71,"den":188.2,"ten":"Chạy thật: bảng 3 giờ sáng trên Grafana"},
+        {"t":188.2,"den":296.77,"ten":"Mỗi ô phải kiếm được chỗ đứng · Bẫy: ô thêm vào sau sự cố"},
+        {"t":296.77,"den":363.35,"ten":"Ba câu tự kiểm · Tóm tắt & bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với chương 10, bài 10.1 của khoá Observability & Monitoring."},
         {"t":12.68,"vi":"Chương 9: gần như không chỉ số nào nên gọi bạn dậy."},
@@ -841,8 +898,13 @@
         {"t":357.95,"vi":"Bài sau, bài 10.2: những đồ thị nói dối."}
       ]
     },
-    "obs-10-2-do-thi-noi-doi": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/observability-monitoring/10-bang-theo-doi/10-02-do-thi-noi-doi-eafca7d2.mp4","durationSec":386.19,"nguonCau":"srt",
-      "parts": [],
+    "obs-10-2-do-thi-noi-doi": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/observability-monitoring/10-bang-theo-doi/10-02-do-thi-noi-doi-eafca7d2.mp4","durationSec":386.19,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":104.22,"ten":"Ôn nhanh · hôm nay · Nói dối 1: trục y bị cắt cụt"},
+        {"t":104.22,"den":201.84,"ten":"Nói dối 2: lấy trung bình các phân vị"},
+        {"t":201.84,"den":295.06,"ten":"Nói dối 6: trung bình nấp trong chú giải · Bốn luật bố trí"},
+        {"t":295.06,"den":386.19,"ten":"Thực hành: săn ba lời nói dối · Ba câu tự kiểm"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 10.2 của khoá Observability & Monitoring."},
         {"t":11.34,"vi":"Bài trước: mỗi bảng một khán giả, một câu hỏi, và ô nào cũng phải kiếm được chỗ đứng."},
@@ -914,8 +976,13 @@
         {"t":378.89,"vi":"Bài sau, bài 10.3: từ bảng theo dõi tới nguyên nhân trong ba cú bấm."}
       ]
     },
-    "obs-10-3-ba-cu-bam": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/observability-monitoring/10-bang-theo-doi/10-03-ba-cu-bam-f9e482c3.mp4","durationSec":335.98,"nguonCau":"srt",
-      "parts": [],
+    "obs-10-3-ba-cu-bam": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/observability-monitoring/10-bang-theo-doi/10-03-ba-cu-bam-f9e482c3.mp4","durationSec":335.98,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":91.31,"ten":"Ôn nhanh · hôm nay · Cái khoảng trống cả khoá đang bịt lại"},
+        {"t":91.31,"den":168.72,"ten":"Bấm 1: chỉ số → trace (exemplar) · Bấm 2: trace → log"},
+        {"t":168.72,"den":239.63,"ten":"Nối cái gì trước · Bẫy: mối nối đứt trong im lặng"},
+        {"t":239.63,"den":335.98,"ten":"Thực hành: ba cú bấm, bấm giờ · Ba câu tự kiểm"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 10.3, bài cuối chương 10 của khoá Observability & Monitoring."},
         {"t":12.94,"vi":"Bài trước: đồ thị nói dối dù mọi con số đều đúng."},
@@ -978,8 +1045,14 @@
         {"t":328.94,"vi":"Chương sau, bài 11.1: chẩn đoán, từ cảnh báo tới nguyên nhân."}
       ]
     },
-    "obs-11-1-nam-phut-dau": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/observability-monitoring/11-chan-doan/11-01-nam-phut-dau-bd7902ca.mp4","durationSec":404.96,"nguonCau":"srt",
-      "parts": [],
+    "obs-11-1-nam-phut-dau": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/observability-monitoring/11-chan-doan/11-01-nam-phut-dau-bd7902ca.mp4","durationSec":404.96,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":94.64,"ten":"Ôn nhanh · hôm nay · Chuyện xảy ra khi không có quy trình"},
+        {"t":94.64,"den":170.08,"ten":"Chạy thật: bốn lệnh, lúc khoẻ"},
+        {"t":170.08,"den":254.06,"ten":"Chạy thật: bản dựng cũ · Mỗi câu trả lời loại bỏ cái gì"},
+        {"t":254.06,"den":340.49,"ten":"Hai việc trước khi đào sâu · Bẫy: thứ bạn vừa đụng vào"},
+        {"t":340.49,"den":404.96,"ten":"Ba câu tự kiểm · Tóm tắt & bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với chương 11, bài 11.1 của khoá Observability & Monitoring."},
         {"t":11.75,"vi":"Chương 10: bảng theo dõi, đồ thị nói dối, và ba cú bấm tới nguyên nhân."},
@@ -1058,8 +1131,13 @@
         {"t":398.82,"vi":"Bài sau, bài 11.2: bảy hình dạng của sự cố."}
       ]
     },
-    "obs-11-2-bay-hinh-dang": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/observability-monitoring/11-chan-doan/11-02-bay-hinh-dang-045c795c.mp4","durationSec":359.99,"nguonCau":"srt",
-      "parts": [],
+    "obs-11-2-bay-hinh-dang": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/observability-monitoring/11-chan-doan/11-02-bay-hinh-dang-045c795c.mp4","durationSec":359.99,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":77.18,"ten":"Ôn nhanh · hôm nay · Chạy thật: một ứng dụng, bảy kiểu hỏng"},
+        {"t":77.18,"den":157.95,"ten":"Hình 2 — con dốc · Hình 3 — răng cưa"},
+        {"t":157.95,"den":246.26,"ten":"Hình 5 — tương quan với tải · Hình 6 — cục bộ"},
+        {"t":246.26,"den":359.99,"ten":"Hình dạng chỉ chương cần mở · Thực hành: gọi tên hình dạng"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 11.2 của khoá Observability & Monitoring."},
         {"t":11.45,"vi":"Bài trước: năm phút đầu, bốn lệnh, và đừng thay đổi gì trước khi đọc."},
@@ -1127,8 +1205,13 @@
         {"t":354.82,"vi":"Bài sau, bài 11.3: bốn sự cố thật."}
       ]
     },
-    "obs-11-3-bon-su-co-that": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/observability-monitoring/11-chan-doan/11-03-bon-su-co-that-2ddd7a13.mp4","durationSec":364.35,"nguonCau":"srt",
-      "parts": [],
+    "obs-11-3-bon-su-co-that": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/observability-monitoring/11-chan-doan/11-03-bon-su-co-that-2ddd7a13.mp4","durationSec":364.35,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":125.32,"ten":"Ôn nhanh · hôm nay · Sự cố 1 — bản dựng cũ (02/07)"},
+        {"t":125.32,"den":216.11,"ten":"Sự cố 3 — deploy dựng nhầm ảnh (18/08)"},
+        {"t":216.11,"den":302.72,"ten":"Cái mẫu xuyên suốt cả bốn · Bẫy: hai triệu chứng, hai lỗi"},
+        {"t":302.72,"den":364.35,"ten":"Ba câu tự kiểm · Tóm tắt & bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 11.3 của khoá Observability & Monitoring."},
         {"t":11.53,"vi":"Bài trước: bảy hình dạng, mỗi cái một chỉ số xác nhận."},
@@ -1202,8 +1285,13 @@
         {"t":359.39,"vi":"Bài sau, bài 11.4: bản ghi lại."}
       ]
     },
-    "obs-11-4-ban-ghi-lai": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/observability-monitoring/11-chan-doan/11-04-ban-ghi-lai-b0bc9f80.mp4","durationSec":349.11,"nguonCau":"srt",
-      "parts": [],
+    "obs-11-4-ban-ghi-lai": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/observability-monitoring/11-chan-doan/11-04-ban-ghi-lai-b0bc9f80.mp4","durationSec":349.11,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":99.49,"ten":"Ôn nhanh · hôm nay · Đọc thật: bảng bài học của kho"},
+        {"t":99.49,"den":192.57,"ten":"Dòng thời gian mới là phần trả công"},
+        {"t":192.57,"den":286.34,"ten":"Ví dụ ngược: quyết định không chữa · Bẫy: cái nhìn hồi cố"},
+        {"t":286.34,"den":349.11,"ten":"Ba câu tự kiểm · Tóm tắt & chương sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 11.4, bài cuối chương 11 của khoá Observability & Monitoring."},
         {"t":13.56,"vi":"Bài trước: bốn sự cố thật, mỗi cái một phép kiểm một lệnh."},
@@ -1270,8 +1358,13 @@
         {"t":343.29,"vi":"Chương cuối, bài 12.1: mọi con số trong khoá."}
       ]
     },
-    "obs-12-1-moi-con-so": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/observability-monitoring/12-tong-ket/12-01-moi-con-so-efad8914.mp4","durationSec":415.98,"nguonCau":"srt",
-      "parts": [],
+    "obs-12-1-moi-con-so": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/observability-monitoring/12-tong-ket/12-01-moi-con-so-efad8914.mp4","durationSec":415.98,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":110.92,"ten":"Ôn nhanh · hôm nay · Log: dựng, ghi, phình, nén"},
+        {"t":110.92,"den":214.07,"ten":"Chỉ số: trung bình, histogram, nhãn"},
+        {"t":214.07,"den":318.01,"ten":"Tám điều trái niềm tin (5–8)"},
+        {"t":318.01,"den":415.98,"ten":"Thực hành: bảng một trang của bạn · Ba câu tự kiểm"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với chương cuối, bài 12.1 của khoá Observability & Monitoring."},
         {"t":12.66,"vi":"Khoá được dựng trên một luật: không khẳng định gì về chi phí hay hành vi mà không có phép đo."},
@@ -1343,8 +1436,13 @@
         {"t":410.66,"vi":"Bài sau, bài 12.2: dựng cái gì trước."}
       ]
     },
-    "obs-12-2-dung-cai-gi-truoc": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/observability-monitoring/12-tong-ket/12-02-dung-cai-gi-truoc-2984280d.mp4","durationSec":368.46,"nguonCau":"srt",
-      "parts": [],
+    "obs-12-2-dung-cai-gi-truoc": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/observability-monitoring/12-tong-ket/12-02-dung-cai-gi-truoc-2984280d.mp4","durationSec":368.46,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":81.88,"ten":"Ôn nhanh · hôm nay"},
+        {"t":81.88,"den":178.93,"ten":"Ngày 1: một request từ đầu tới cuối"},
+        {"t":178.93,"den":265.85,"ten":"Tháng 2–3: chiều sâu · ĐỪNG dựng cái gì"},
+        {"t":265.85,"den":368.46,"ten":"Thực hành: kế hoạch của bạn · Ba câu tự kiểm"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 12.2, bài video cuối cùng của khoá Observability & Monitoring."},
         {"t":13.44,"vi":"Bài trước: mọi con số, và vì sao tỉ lệ bền vững còn số tuyệt đối thì không."},
@@ -1415,8 +1513,15 @@
         {"t":364.21,"vi":"Chúc bạn nhìn thấy backend của mình thật rõ."}
       ]
     },
-    "obs-2-1-docker-bat-log": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/observability-monitoring/02-duong-ong-log/02-01-docker-bat-log-53dfa2dc.mp4","durationSec":457.55,"nguonCau":"srt",
-      "parts": [],
+    "obs-2-1-docker-bat-log": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/observability-monitoring/02-duong-ong-log/02-01-docker-bat-log-53dfa2dc.mp4","durationSec":457.55,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":81.33,"ten":"Ôn nhanh · hôm nay · Trọn con đường của một dòng log"},
+        {"t":81.33,"den":164.6,"ten":"Chạy thật: tệp json-file trên đĩa"},
+        {"t":164.6,"den":246.69,"ten":"Ở lưu lượng thật"},
+        {"t":246.69,"den":329.68,"ten":"Mấy trình ghi khác · Bẫy: stderr không phải mức log"},
+        {"t":329.68,"den":418.77,"ten":"Thực hành: tìm tệp json-file · Ba câu tự kiểm"},
+        {"t":418.77,"den":457.55,"ten":"Tóm tắt & bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 2.1, mở đầu Chương 2 của khoá Observability & Monitoring."},
         {"t":12.45,"vi":"Chương 1 dừng đúng lúc dòng log rời tiến trình: fd một là cái ống, và bên đọc chậm làm phình bộ nhớ ứng dụng."},
@@ -1490,8 +1595,14 @@
         {"t":452.28,"vi":"Bài sau, 2.2: xoay vòng, hoặc là đĩa đầy."}
       ]
     },
-    "obs-2-2-xoay-vong": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/observability-monitoring/02-duong-ong-log/02-02-xoay-vong-41e24aef.mp4","durationSec":511.87,"nguonCau":"srt",
-      "parts": [],
+    "obs-2-2-xoay-vong": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/observability-monitoring/02-duong-ong-log/02-02-xoay-vong-41e24aef.mp4","durationSec":511.87,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":93.77,"ten":"Ôn nhanh · hôm nay · Ổ đĩa đầy dần"},
+        {"t":93.77,"den":175.61,"ten":"Ba điểm yếu của việc dọn hằng tuần"},
+        {"t":175.61,"den":275.55,"ten":"Chạy thật: xoay vòng trên máy nhà · Cách chữa, đặt đúng tệp"},
+        {"t":275.55,"den":394.67,"ten":"Hai điều cấp daemon không làm · Chọn con số cho trung thực"},
+        {"t":394.67,"den":511.87,"ten":"Thực hành: đặt trần cho log · Ba câu tự kiểm"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 2.2 của khoá Observability & Monitoring."},
         {"t":10.99,"vi":"Bài trước, json-file bọc dòng log thành một phẩy sáu hai lần, và năm mươi request mỗi giây đủ ghi hơn năm GiB một ngày."},
@@ -1591,8 +1702,14 @@
         {"t":505.86,"vi":"Bài sau, 2.3: trình thu log, đưa log rời khỏi cái máy."}
       ]
     },
-    "obs-2-3-trinh-thu-log": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/observability-monitoring/02-duong-ong-log/02-03-trinh-thu-log-86398a93.mp4","durationSec":521.96,"nguonCau":"srt",
-      "parts": [],
+    "obs-2-3-trinh-thu-log": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/observability-monitoring/02-duong-ong-log/02-03-trinh-thu-log-86398a93.mp4","durationSec":521.96,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":130.09,"ten":"Ôn nhanh · hôm nay · Bốn lý do, chỉ một là ổ đĩa"},
+        {"t":130.09,"den":230.87,"ten":"Ba lựa chọn trong sổ tay của kho"},
+        {"t":230.87,"den":312.31,"ten":"Chạy thật: dấu chấm than quyết định"},
+        {"t":312.31,"den":397.05,"ten":"Giao kèo giao hàng · Bẫy: chỉ thu một container"},
+        {"t":397.05,"den":521.96,"ten":"Thực hành: shipper sống qua khởi động lại · Ba câu tự kiểm"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 2.3 của khoá Observability & Monitoring."},
         {"t":10.91,"vi":"Bài trước kết thúc ở một đánh đổi không thắng được tại chỗ: một ổ có trần, và một tuần lịch sử, trên cùng một VPS."},
@@ -1682,8 +1799,14 @@
         {"t":514.64,"vi":"Bài sau, 2.4: LogQL, hỏi một câu và nhận được câu trả lời."}
       ]
     },
-    "obs-2-4-logql": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/observability-monitoring/02-duong-ong-log/02-04-logql-11957591.mp4","durationSec":454.64,"nguonCau":"srt",
-      "parts": [],
+    "obs-2-4-logql": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/observability-monitoring/02-duong-ong-log/02-04-logql-11957591.mp4","durationSec":454.64,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":125.5,"ten":"Ôn nhanh · hôm nay · Một luồng là một bộ nhãn"},
+        {"t":125.5,"den":225.01,"ten":"Chạy thật: đếm luồng trên Loki · Quy tắc chọn nhãn"},
+        {"t":225.01,"den":300.6,"ten":"Chạy thật: từ dòng log ra con số"},
+        {"t":300.6,"den":380.61,"ten":"Bẫy: nhãn chỉ áp từ hôm nay · Thực hành: bốn truy vấn LogQL"},
+        {"t":380.61,"den":454.64,"ten":"Ba câu tự kiểm · Tóm tắt & bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 2.4 của khoá Observability & Monitoring."},
         {"t":11.16,"vi":"Bài trước, shipper đọc đuôi tệp, giữ dòng hỏng, và tắt mười giây vẫn không mất dòng nào."},
@@ -1765,8 +1888,14 @@
         {"t":448.32,"vi":"Bài sau, 2.5: giữ log bao lâu, và cái đó tốn bao nhiêu."}
       ]
     },
-    "obs-2-5-luu-tru": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/observability-monitoring/02-duong-ong-log/02-05-luu-tru-30323d24.mp4","durationSec":456.59,"nguonCau":"srt",
-      "parts": [],
+    "obs-2-5-luu-tru": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/observability-monitoring/02-duong-ong-log/02-05-luu-tru-30323d24.mp4","durationSec":456.59,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":120.74,"ten":"Ôn nhanh · hôm nay · Đọc ở đâu, tốn ở đâu"},
+        {"t":120.74,"den":205.9,"ten":"Hai con số, hai quyết định · Bốn bậc lưu trữ"},
+        {"t":205.9,"den":290.15,"ten":"Cái thật sự đẩy hoá đơn lên"},
+        {"t":290.15,"den":373.31,"ten":"Bẫy: thời hạn lưu không phải là xoá"},
+        {"t":373.31,"den":456.59,"ten":"Ba câu tự kiểm · Tóm tắt & chương sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 2.5, bài cuối Chương 2 của khoá Observability & Monitoring."},
         {"t":12.66,"vi":"Bài trước, ta hỏi Loki bằng LogQL, và thấy nhãn có chặn quan trọng thế nào."},
@@ -1850,8 +1979,13 @@
         {"t":450.24,"vi":"Chương 3 bắt đầu với bài 3.1: cái id chẳng đi tới đâu."}
       ]
     },
-    "obs-3-1-id-di-den-hu-vo": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/observability-monitoring/03-correlation/03-01-id-di-den-hu-vo-e1db1496.mp4","durationSec":453.96,"nguonCau":"srt",
-      "parts": [],
+    "obs-3-1-id-di-den-hu-vo": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/observability-monitoring/03-correlation/03-01-id-di-den-hu-vo-e1db1496.mp4","durationSec":453.96,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":99.93,"ten":"Ôn nhanh · hôm nay · Mò kim đáy bể"},
+        {"t":99.93,"den":206.07,"ten":"Chạy thật: rồi chẳng có gì đọc nó"},
+        {"t":206.07,"den":332.67,"ten":"Câu trả lời đúng cần gì · Một id hay nhiều?"},
+        {"t":332.67,"den":453.96,"ten":"Thực hành: đóng khoảng trống · Ba câu tự kiểm"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 3.1, mở đầu Chương 3 của khoá Observability & Monitoring."},
         {"t":12.37,"vi":"Chương 1 và 2 lo cho dòng log được ghi, được thu, và hỏi được bằng LogQL."},
@@ -1933,8 +2067,14 @@
         {"t":446.75,"vi":"Bài sau, 3.2: AsyncLocalStorage, và nó thật sự tốn bao nhiêu."}
       ]
     },
-    "obs-3-2-asynclocalstorage": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/observability-monitoring/03-correlation/03-02-asynclocalstorage-4a35e407.mp4","durationSec":487.8,"nguonCau":"srt",
-      "parts": [],
+    "obs-3-2-asynclocalstorage": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/observability-monitoring/03-correlation/03-02-asynclocalstorage-4a35e407.mp4","durationSec":487.8,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":109.9,"ten":"Ôn nhanh · hôm nay · Chiếc ba lô đi theo request"},
+        {"t":109.9,"den":193.89,"ten":"Chạy thật: nó tốn bao nhiêu · Ba phát hiện"},
+        {"t":193.89,"den":301.77,"ten":"Chạy thật: cắm vào kho"},
+        {"t":301.77,"den":402.26,"ten":"Chạy thật: bẫy ngữ cảnh mượn"},
+        {"t":402.26,"den":487.8,"ten":"Ba câu tự kiểm · Tóm tắt & bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 3.2 của khoá Observability & Monitoring."},
         {"t":10.87,"vi":"Bài trước, request id được sinh rồi vứt đi, và biến cấp module thì sai một cách tự tin."},
@@ -2012,8 +2152,14 @@
         {"t":478.09,"vi":"Bài sau, 3.3: đưa id đi qua ranh giới, từ proxy tới cơ sở dữ liệu, hàng đợi và worker."}
       ]
     },
-    "obs-3-3-qua-ranh-gioi": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/observability-monitoring/03-correlation/03-03-qua-ranh-gioi-e6df4ab6.mp4","durationSec":467.56,"nguonCau":"srt",
-      "parts": [],
+    "obs-3-3-qua-ranh-gioi": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/observability-monitoring/03-correlation/03-03-qua-ranh-gioi-e6df4ab6.mp4","durationSec":467.56,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":116.8,"ten":"Ôn nhanh · hôm nay · Bốn ranh giới, mỗi cái đánh rơi gì"},
+        {"t":116.8,"den":218.55,"ten":"Chạy thật: hai dòng cấu hình nối hai log"},
+        {"t":218.55,"den":297.49,"ten":"Ranh giới ba: hàng đợi · Ranh giới bốn: HTTP gửi đi"},
+        {"t":297.49,"den":381.56,"ten":"Bẫy: X-Forwarded-For là một danh sách"},
+        {"t":381.56,"den":467.56,"ten":"Ba câu tự kiểm · Tóm tắt & bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 3.3 của khoá Observability & Monitoring."},
         {"t":10.94,"vi":"Bài trước, chiếc ba lô AsyncLocalStorage đưa request id tới mọi dòng log trong tiến trình, chỉ tốn vài trăm nano giây."},
@@ -2095,8 +2241,14 @@
         {"t":459.26,"vi":"Bài sau, 3.4: W3C Trace Context, cái id mà người khác cũng hiểu."}
       ]
     },
-    "obs-3-4-trace-context": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/observability-monitoring/03-correlation/03-04-trace-context-1530092f.mp4","durationSec":477.24,"nguonCau":"srt",
-      "parts": [],
+    "obs-3-4-trace-context": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/observability-monitoring/03-correlation/03-04-trace-context-1530092f.mp4","durationSec":477.24,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":83.11,"ten":"Ôn nhanh · hôm nay · Mổ cái header traceparent"},
+        {"t":83.11,"den":177.52,"ten":"Vì sao không dùng header riêng · Sống chung với request id"},
+        {"t":177.52,"den":279.16,"ten":"Chạy thật: trace đi qua hai dịch vụ"},
+        {"t":279.16,"den":359.03,"ten":"Hôm nay bạn có cần không · Bẫy: trace id không phải bí mật"},
+        {"t":359.03,"den":477.24,"ten":"Thực hành: traceparent qua một chặng · Ba câu tự kiểm"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 3.4 của khoá Observability & Monitoring."},
         {"t":11.11,"vi":"Bài trước, ta đưa request id qua nginx, Postgres, hàng đợi và HTTP gửi đi."},
@@ -2176,8 +2328,14 @@
         {"t":470,"vi":"Bài sau, 3.5: correlation mua được gì, một sự cố kể hai lần."}
       ]
     },
-    "obs-3-5-mot-su-co-ke-hai-lan": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/observability-monitoring/03-correlation/03-05-mot-su-co-ke-hai-lan-bed44c95.mp4","durationSec":522.32,"nguonCau":"srt",
-      "parts": [],
+    "obs-3-5-mot-su-co-ke-hai-lan": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/observability-monitoring/03-correlation/03-05-mot-su-co-ke-hai-lan-bed44c95.mp4","durationSec":522.32,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":128.77,"ten":"Ôn nhanh · hôm nay · Sự cố lúc 14:07"},
+        {"t":128.77,"den":235.76,"ten":"Cùng sự cố, với ba thay đổi"},
+        {"t":235.76,"den":323.22,"ten":"Cái gì thật sự tạo ra khác biệt"},
+        {"t":323.22,"den":399.85,"ten":"Tính sổ cho sòng phẳng · Bẫy: correlation là một năng lực"},
+        {"t":399.85,"den":522.32,"ten":"Thực hành: gỡ lỗi bằng id · Ba câu tự kiểm"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 3.5, bài cuối Chương 3 của khoá Observability & Monitoring."},
         {"t":12.36,"vi":"Ba bài vừa rồi: AsyncLocalStorage gắn id vào mọi dòng, id đi qua nginx và lời gọi ra ngoài, và traceparent cho id người khác cũng hiểu."},
@@ -2268,8 +2426,15 @@
         {"t":514.47,"vi":"Chương 4 bắt đầu với bài 4.1: chỉ số là gì, và bốn loại của nó."}
       ]
     },
-    "obs-4-1-bon-loai-chi-so": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/observability-monitoring/04-chi-so/04-01-bon-loai-chi-so-4470b512.mp4","durationSec":537.66,"nguonCau":"srt",
-      "parts": [],
+    "obs-4-1-bon-loai-chi-so": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/observability-monitoring/04-chi-so/04-01-bon-loai-chi-so-4470b512.mp4","durationSec":537.66,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":109.44,"ten":"Ôn nhanh · hôm nay · Log và chỉ số: cái bạn đánh đổi"},
+        {"t":109.44,"den":185.35,"ten":"Counter: đọc tốc độ, không đọc giá trị"},
+        {"t":185.35,"den":284.11,"ten":"Làm sai: activeUsers khai là Counter"},
+        {"t":284.11,"den":365.23,"ten":"Mã: Counter + Histogram + một middleware"},
+        {"t":365.23,"den":454.19,"ten":"Bẫy: Summary không gộp được · Thực hành: chỉ số đầu tiên"},
+        {"t":454.19,"den":537.66,"ten":"Ba câu tự kiểm · Tóm tắt & bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 4.1, mở đầu Chương 4 của khoá Observability & Monitoring."},
         {"t":12.81,"vi":"Chương 2 và 3 ta làm log: log có cấu trúc, gom về một chỗ, và một id nối mọi dòng của một request."},
@@ -2369,8 +2534,14 @@
         {"t":532.36,"vi":"Bài sau, bài 4.2: vì sao trung bình nói dối."}
       ]
     },
-    "obs-4-2-trung-binh-noi-doi": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/observability-monitoring/04-chi-so/04-02-trung-binh-noi-doi-f3948f1f.mp4","durationSec":499.86,"nguonCau":"srt",
-      "parts": [],
+    "obs-4-2-trung-binh-noi-doi": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/observability-monitoring/04-chi-so/04-02-trung-binh-noi-doi-f3948f1f.mp4","durationSec":499.86,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":109.26,"ten":"Ôn nhanh · hôm nay · Hình dạng của lưu lượng thật"},
+        {"t":109.26,"den":196.49,"ten":"Đọc các con số như những khẳng định"},
+        {"t":196.49,"den":328.5,"ten":"Đặt gì lên bảng theo dõi · PromQL: p50, p99 và tỉ số"},
+        {"t":328.5,"den":423.5,"ten":"Bẫy: lấy trung bình các p99 theo thời gian"},
+        {"t":423.5,"den":499.86,"ten":"Ba câu tự kiểm · Tóm tắt & bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 4.2 của khoá Observability & Monitoring."},
         {"t":11.2,"vi":"Bài trước: bốn loại chỉ số, đọc counter qua rate, và Histogram cộng ô được giữa các thực thể."},
@@ -2456,8 +2627,14 @@
         {"t":492.6,"vi":"Bài sau, bài 4.3: histogram, các ô và cách phân vị được tính ra."}
       ]
     },
-    "obs-4-3-histogram": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/observability-monitoring/04-chi-so/04-03-histogram-7a9d0dd6.mp4","durationSec":460.91,"nguonCau":"srt",
-      "parts": [],
+    "obs-4-3-histogram": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/observability-monitoring/04-chi-so/04-03-histogram-7a9d0dd6.mp4","durationSec":460.91,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":99.98,"ten":"Ôn nhanh · hôm nay · Cơ chế: một hàng counter tích luỹ"},
+        {"t":99.98,"den":181.48,"ten":"Chạy thật: phần chẳng ai nhắc"},
+        {"t":181.48,"den":265.87,"ten":"Chạy thật: chọn ô cho tử tế · Chọn ô cho một dịch vụ thật"},
+        {"t":265.87,"den":375.16,"ten":"Mã: ô suy ra từ phép đo · Bẫy: đổi ô làm cong đồ thị"},
+        {"t":375.16,"den":460.91,"ten":"Ba câu tự kiểm · Tóm tắt & bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 4.3 của khoá Observability & Monitoring."},
         {"t":10.95,"vi":"Bài trước: trung bình nói dối, ta cần p50 và p99, và phân vị phải tính sau cùng."},
@@ -2539,8 +2716,14 @@
         {"t":454.11,"vi":"Bài sau, bài 4.4: lực lượng nhãn, thứ nhân số chuỗi lên."}
       ]
     },
-    "obs-4-4-luc-luong-nhan": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/observability-monitoring/04-chi-so/04-04-luc-luong-nhan-b074364e.mp4","durationSec":485.27,"nguonCau":"srt",
-      "parts": [],
+    "obs-4-4-luc-luong-nhan": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/observability-monitoring/04-chi-so/04-04-luc-luong-nhan-b074364e.mp4","durationSec":485.27,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":108.6,"ten":"Ôn nhanh · hôm nay · Phép nhân"},
+        {"t":108.6,"den":210.63,"ten":"Cái tai nạn: req.path"},
+        {"t":210.63,"den":288.11,"ten":"Chuyện gì xảy ra khi vượt lằn ranh"},
+        {"t":288.11,"den":368.72,"ten":"Một câu hỏi trước khi viết nhãn"},
+        {"t":368.72,"den":485.27,"ten":"Thực hành: đếm chuỗi · Ba câu tự kiểm"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 4.4 của khoá Observability & Monitoring."},
         {"t":11.25,"vi":"Bài 2.4 đã đo cái bẫy lực lượng nhãn trong Loki."},
@@ -2620,8 +2803,14 @@
         {"t":479.17,"vi":"Bài sau, bài 4.5: thu thập cái gì, và bỏ qua cái gì."}
       ]
     },
-    "obs-4-5-thu-thap-cai-gi": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/observability-monitoring/04-chi-so/04-05-thu-thap-cai-gi-4503ee1e.mp4","durationSec":465.25,"nguonCau":"srt",
-      "parts": [],
+    "obs-4-5-thu-thap-cai-gi": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/observability-monitoring/04-chi-so/04-05-thu-thap-cai-gi-4503ee1e.mp4","durationSec":465.25,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":105.2,"ten":"Ôn nhanh · hôm nay · Bốn tín hiệu vàng"},
+        {"t":105.2,"den":194.45,"ten":"Mười hai chỉ số là đủ · Chạy thật: mọi chỉ số đều xanh"},
+        {"t":194.45,"den":301.18,"ten":"Bỏ cái gì ra ngoài · Phơi /metrics ra — cho đúng người"},
+        {"t":301.18,"den":381.32,"ten":"Chạy thật: luật nginx chặn được ai"},
+        {"t":381.32,"den":465.25,"ten":"Ba câu tự kiểm · Tóm tắt & chương sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 4.5, bài cuối Chương 4 của khoá Observability & Monitoring."},
         {"t":12.81,"vi":"Ta đã có bốn loại chỉ số, các phân vị, histogram, và luật nhân của nhãn."},
@@ -2710,8 +2899,14 @@
         {"t":455.62,"vi":"Chương 5 nói về những chỉ số chỉ Node.js mới nói được, bắt đầu từ độ trễ vòng lặp sự kiện."}
       ]
     },
-    "obs-5-1-tre-vong-lap": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/observability-monitoring/05-chi-so-nodejs/05-01-tre-vong-lap-d7deddc2.mp4","durationSec":448.95,"nguonCau":"srt",
-      "parts": [],
+    "obs-5-1-tre-vong-lap": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/observability-monitoring/05-chi-so-nodejs/05-01-tre-vong-lap-d7deddc2.mp4","durationSec":448.95,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":102.17,"ten":"Ôn nhanh · hôm nay · Một luồng, nhiều nhân"},
+        {"t":102.17,"den":207.74,"ten":"Đọc ba dòng đó · Độ trễ là gì, cho chính xác"},
+        {"t":207.74,"den":287.99,"ten":"Cắm nó vào — và đừng quên reset"},
+        {"t":287.99,"den":372.6,"ten":"Bẫy: phép kiểm sức khoẻ nói dối · Thực hành: tạo một cú đơ"},
+        {"t":372.6,"den":448.95,"ten":"Ba câu tự kiểm · Tóm tắt & bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 5.1, mở đầu Chương 5 của khoá Observability & Monitoring."},
         {"t":12.72,"vi":"Chương 4 kết thúc bằng một khẳng định: phần trăm CPU là chỉ số bão hoà sai với Node, độ trễ vòng lặp sự kiện mới đúng."},
@@ -2789,8 +2984,13 @@
         {"t":442.94,"vi":"Bài sau, bài 5.2: bộ nhớ, và cách đọc nó cho đúng."}
       ]
     },
-    "obs-5-2-bo-nho": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/observability-monitoring/05-chi-so-nodejs/05-02-bo-nho-da5ccfa2.mp4","durationSec":422.71,"nguonCau":"srt",
-      "parts": [],
+    "obs-5-2-bo-nho": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/observability-monitoring/05-chi-so-nodejs/05-02-bo-nho-da5ccfa2.mp4","durationSec":422.71,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":109.32,"ten":"Ôn nhanh · hôm nay · Năm con số"},
+        {"t":109.32,"den":204.09,"ten":"Ba phát hiện trái trực giác · Đọc một đồ thị thật"},
+        {"t":204.09,"den":298.1,"ten":"Chạy thật: cái bẫy hạn mức container"},
+        {"t":298.1,"den":422.71,"ten":"Thực hành: hai kiểu rò rỉ · Ba câu tự kiểm"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 5.2 của khoá Observability & Monitoring."},
         {"t":11.02,"vi":"Bài trước: độ trễ vòng lặp là chỉ số duy nhất nghĩa là đang đơ."},
@@ -2864,8 +3064,14 @@
         {"t":416.19,"vi":"Bài sau, bài 5.3: thu gom rác, cái răng cưa ấy tốn bao nhiêu."}
       ]
     },
-    "obs-5-4-be-va-handle": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/observability-monitoring/05-chi-so-nodejs/05-04-be-va-handle-591d2fe5.mp4","durationSec":463.95,"nguonCau":"srt",
-      "parts": [],
+    "obs-5-4-be-va-handle": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/observability-monitoring/05-chi-so-nodejs/05-04-be-va-handle-591d2fe5.mp4","durationSec":463.95,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":101.87,"ten":"Ôn nhanh · hôm nay · Bể là một hàng đợi bạn không thấy"},
+        {"t":101.87,"den":193.98,"ten":"Chạy thật: bể 9, 20, 40 · Cái chỉ số giải quyết chuyện đó"},
+        {"t":193.98,"den":308.65,"ten":"Chọn cỡ bể cho trung thực · Cái bể còn lại: HTTP gửi đi"},
+        {"t":308.65,"den":389.58,"ten":"Bẫy: chữ ký chỉ sai hướng · Thực hành: cái gì chờ cái gì"},
+        {"t":389.58,"den":463.95,"ten":"Ba câu tự kiểm · Tóm tắt & bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 5.4 của khoá Observability & Monitoring."},
         {"t":11.18,"vi":"Bài 5.1 tới 5.3 nói về bão hoà của luồng CPU và của bộ nhớ."},
@@ -2948,8 +3154,13 @@
         {"t":456.55,"vi":"Bài sau, bài 5.5: bật hết lên, gom cả chương vào một bảng theo dõi."}
       ]
     },
-    "obs-5-5-bat-het-len": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/observability-monitoring/05-chi-so-nodejs/05-05-bat-het-len-cb2f287e.mp4","durationSec":425.86,"nguonCau":"srt",
-      "parts": [],
+    "obs-5-5-bat-het-len": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/observability-monitoring/05-chi-so-nodejs/05-05-bat-het-len-cb2f287e.mp4","durationSec":425.86,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":93.15,"ten":"Ôn nhanh · hôm nay · Chạy thật: cái một dòng"},
+        {"t":93.15,"den":201.94,"ten":"Chạy thật: biến thể lag nào thấy cú chặn"},
+        {"t":201.94,"den":278.55,"ten":"Bản thân lượt quét, và hai kiểu hỏng"},
+        {"t":278.55,"den":425.86,"ten":"Chuyện này để bạn ở đâu · Thực hành: bật và ánh xạ"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 5.5, bài cuối Chương 5 của khoá Observability & Monitoring."},
         {"t":12.55,"vi":"Bốn bài vừa rồi: độ trễ vòng lặp, năm con số bộ nhớ, thu gom rác, bể và handle."},
@@ -3026,8 +3237,13 @@
         {"t":419.25,"vi":"Chương 6 bắt đầu với trace: thời gian đi đâu bên trong một request."}
       ]
     },
-    "obs-6-1-span-la-gi": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/observability-monitoring/06-trace/06-01-span-la-gi-6b9ea163.mp4","durationSec":435.01,"nguonCau":"srt",
-      "parts": [],
+    "obs-6-1-span-la-gi": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/observability-monitoring/06-trace/06-01-span-la-gi-6b9ea163.mp4","durationSec":435.01,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":103.98,"ten":"Ôn nhanh · hôm nay · Log đã ghép là một danh sách"},
+        {"t":103.98,"den":204.4,"ten":"Bốn trường làm cho nó chạy được"},
+        {"t":204.4,"den":317.59,"ten":"Năm loại span · Ba trụ cột giờ đứng ở đâu"},
+        {"t":317.59,"den":435.01,"ten":"Thực hành: hai span, một cây · Ba câu tự kiểm"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 6.1, mở đầu Chương 6 của khoá Observability & Monitoring."},
         {"t":13.21,"vi":"Correlation cho bạn mọi dòng log của một request."},
@@ -3103,8 +3319,14 @@
         {"t":427.44,"vi":"Bài sau, bài 6.2: OpenTelemetry trong Node, tự động và thủ công."}
       ]
     },
-    "obs-6-2-otel-trong-node": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/observability-monitoring/06-trace/06-02-otel-trong-node-70ef51cc.mp4","durationSec":478.31,"nguonCau":"srt",
-      "parts": [],
+    "obs-6-2-otel-trong-node": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/observability-monitoring/06-trace/06-02-otel-trong-node-70ef51cc.mp4","durationSec":478.31,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":127.5,"ten":"Ôn nhanh · hôm nay · Cơ chế: viết lại module lúc nạp"},
+        {"t":127.5,"den":208.57,"ten":"Chạy thật: được gì mà không viết span nào"},
+        {"t":208.57,"den":288.88,"ten":"Cái span duy nhất đáng viết tay"},
+        {"t":288.88,"den":385.24,"ten":"Bẫy: dữ liệu cá nhân trong span"},
+        {"t":385.24,"den":478.31,"ten":"Ba câu tự kiểm · Tóm tắt & bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 6.2 của khoá Observability & Monitoring."},
         {"t":12.39,"vi":"Bài trước: một span là một khoảng thời gian có cha, và một trace là cây các span."},
@@ -3179,8 +3401,13 @@
         {"t":470.89,"vi":"Bài sau, bài 6.3: lấy mẫu, giữ trace nào và bỏ trace nào."}
       ]
     },
-    "obs-6-3-lay-mau": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/observability-monitoring/06-trace/06-03-lay-mau-aab07b31.mp4","durationSec":455.34,"nguonCau":"srt",
-      "parts": [],
+    "obs-6-3-lay-mau": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/observability-monitoring/06-trace/06-03-lay-mau-aab07b31.mp4","durationSec":455.34,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":103.9,"ten":"Ôn nhanh · hôm nay · Hai chỗ bạn quyết định được"},
+        {"t":103.9,"den":215.85,"ten":"Đọc những con số đó · Chạy thật: lấy mẫu đầu một phần trăm"},
+        {"t":215.85,"den":331.48,"ten":"Cái bẫy ở giữa: trace thủng lỗ · Chọn thế nào"},
+        {"t":331.48,"den":455.34,"ten":"Thực hành: phép tính của bạn · Ba câu tự kiểm"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 6.3 của khoá Observability & Monitoring."},
         {"t":10.93,"vi":"Bài 6.1 đo được một trace nặng hai nghìn tám trăm hai mươi byte, gấp mười tám lần một dòng log."},
@@ -3258,8 +3485,13 @@
         {"t":450.25,"vi":"Bài sau, bài 6.4: đọc biểu đồ thác."}
       ]
     },
-    "obs-7-1-loi-khong-phai-log": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/observability-monitoring/07-loi-sentry/07-01-loi-khong-phai-log-beba26bb.mp4","durationSec":422.68,"nguonCau":"srt",
-      "parts": [],
+    "obs-7-1-loi-khong-phai-log": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/observability-monitoring/07-loi-sentry/07-01-loi-khong-phai-log-beba26bb.mp4","durationSec":422.68,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":114.56,"ten":"Ôn nhanh · hôm nay · Cùng một cú hỏng, bốn lăng kính"},
+        {"t":114.56,"den":202.16,"ten":"Chạy thật: kho đã làm đúng điều gì"},
+        {"t":202.16,"den":302.14,"ten":"Cái dòng vẫn còn thiếu · Khi nào một lỗi không phải một lỗi"},
+        {"t":302.14,"den":422.68,"ten":"Thực hành: ba lần ném, một vấn đề · Ba câu tự kiểm"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 7.1, mở đầu Chương 7 của khoá Observability & Monitoring."},
         {"t":12.68,"vi":"Bài 0.2 gọi đây là trụ cột thứ tư mà ai cũng quên: theo dõi lỗi."},
@@ -3334,8 +3566,13 @@
         {"t":416.26,"vi":"Bài sau, bài 7.2: gom nhóm, khi nó gom quá nhiều hay quá ít."}
       ]
     },
-    "obs-7-2-gom-nhom": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/observability-monitoring/07-loi-sentry/07-02-gom-nhom-a75c5993.mp4","durationSec":336.13,"nguonCau":"srt",
-      "parts": [],
+    "obs-7-2-gom-nhom": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/observability-monitoring/07-loi-sentry/07-02-gom-nhom-a75c5993.mp4","durationSec":336.13,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":114.21,"ten":"Ôn nhanh · hôm nay · Dấu vân tay được tính thế nào"},
+        {"t":114.21,"den":184.08,"ten":"Hỏng kiểu 2: gộp quá to"},
+        {"t":184.08,"den":267.2,"ten":"Khi nào nên ghi đè · Bẫy: vấn đề lặng lẽ biến mất"},
+        {"t":267.2,"den":336.13,"ten":"Ba câu tự kiểm · Tóm tắt & bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 7.2 của khoá Observability & Monitoring."},
         {"t":10.98,"vi":"Bài trước: gom nhóm chính là toàn bộ sản phẩm của một trình theo dõi lỗi."},
@@ -3404,8 +3641,13 @@
         {"t":329.92,"vi":"Bài sau, bài 7.3: dữ liệu cá nhân trong sự kiện lỗi."}
       ]
     },
-    "obs-7-3-pii": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/observability-monitoring/07-loi-sentry/07-03-pii-ed255851.mp4","durationSec":368.7,"nguonCau":"srt",
-      "parts": [],
+    "obs-7-3-pii": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/observability-monitoring/07-loi-sentry/07-03-pii-ed255851.mp4","durationSec":368.7,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":105.6,"ten":"Ôn nhanh · hôm nay · Chạy thật: SDK cấu hình lỏng gửi gì"},
+        {"t":105.6,"den":188.39,"ten":"Chạy thật: ba đường rò vẫn còn"},
+        {"t":188.39,"den":290.35,"ten":"Định danh người dùng: ngoại lệ có chủ ý"},
+        {"t":290.35,"den":368.7,"ten":"Ba câu tự kiểm · Tóm tắt & bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 7.3 của khoá Observability & Monitoring."},
         {"t":11.11,"vi":"Bài 1.2 dựng kỷ luật dữ liệu cá nhân cho log."},
@@ -3465,8 +3707,13 @@
         {"t":361.21,"vi":"Bài sau, bài 7.4: release, source map, và nối lỗi với log và trace."}
       ]
     },
-    "obs-7-4-release-va-noi-lai": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/observability-monitoring/07-loi-sentry/07-04-release-va-noi-lai-8b11ef74.mp4","durationSec":357.99,"nguonCau":"srt",
-      "parts": [],
+    "obs-7-4-release-va-noi-lai": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/observability-monitoring/07-loi-sentry/07-04-release-va-noi-lai-8b11ef74.mp4","durationSec":357.99,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":87.65,"ten":"Ôn nhanh · hôm nay · Bản phát hành làm bốn việc"},
+        {"t":87.65,"den":186.69,"ten":"Chạy thật: source map · Bốn dòng nối mọi thứ lại"},
+        {"t":186.69,"den":288,"ten":"Trả cái khoá đó về cho người dùng"},
+        {"t":288,"den":357.99,"ten":"Ba câu tự kiểm · Tóm tắt & bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 7.4 của khoá Observability & Monitoring."},
         {"t":11.23,"vi":"Chương 1 tới 7 đã dựng ra bốn hệ thống: log, chỉ số, trace, và theo dõi lỗi."},
@@ -3533,8 +3780,13 @@
         {"t":351.57,"vi":"Bài sau, bài 7.5: theo dõi lỗi mà không cần nhà cung cấp."}
       ]
     },
-    "obs-7-5-khong-can-nha-cung-cap": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/observability-monitoring/07-loi-sentry/07-05-khong-can-nha-cung-cap-0e297b5b.mp4","durationSec":381.98,"nguonCau":"srt",
-      "parts": [],
+    "obs-7-5-khong-can-nha-cung-cap": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/observability-monitoring/07-loi-sentry/07-05-khong-can-nha-cung-cap-0e297b5b.mp4","durationSec":381.98,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":110.87,"ten":"Ôn nhanh · hôm nay · Chạy thật: DSN chỉ là một URL"},
+        {"t":110.87,"den":205.18,"ten":"Khi nào tự dựng · Chạy thật: một phép kiểm tắt có chủ ý"},
+        {"t":205.18,"den":308.4,"ten":"Cái mẫu, tổng quát hoá"},
+        {"t":308.4,"den":381.98,"ten":"Ba câu tự kiểm · Tóm tắt & chương sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 7.5, bài cuối Chương 7 của khoá Observability & Monitoring."},
         {"t":12.87,"vi":"Bốn bài vừa rồi: lỗi là sự kiện, gom nhóm, dữ liệu cá nhân, và bản phát hành nối bốn trụ cột."},
@@ -3600,8 +3852,13 @@
         {"t":376.07,"vi":"Chương 8: health check, khi một phép kiểm sức khoẻ nói dối."}
       ]
     },
-    "obs-8-1-bon-luot-tham-do": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/observability-monitoring/08-suc-khoe/08-01-bon-luot-tham-do-84cbf6af.mp4","durationSec":361.45,"nguonCau":"srt",
-      "parts": [],
+    "obs-8-1-bon-luot-tham-do": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/observability-monitoring/08-suc-khoe/08-01-bon-luot-tham-do-84cbf6af.mp4","durationSec":361.45,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":94.84,"ten":"Ôn nhanh · hôm nay · Chạy thật: kho có những gì"},
+        {"t":94.84,"den":184.68,"ten":"Vì sao sự phân biệt này không câu nệ"},
+        {"t":184.68,"den":287.46,"ten":"Thứ mọi lượt thăm dò KHÔNG được làm"},
+        {"t":287.46,"den":361.45,"ten":"Ba câu tự kiểm · Tóm tắt & bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 8.1, mở đầu Chương 8 của khoá Observability & Monitoring."},
         {"t":12.81,"vi":"Bài 0.1 mở đầu khoá bằng một phép kiểm sức khoẻ trả về ok trong khi trang thì hỏng."},
@@ -3671,8 +3928,13 @@
         {"t":354.49,"vi":"Bài sau, bài 8.2: từ bàn vào chân, khi readiness phải biết thêm."}
       ]
     },
-    "obs-8-2-tu-ban-vao-chan": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/observability-monitoring/08-suc-khoe/08-02-tu-ban-vao-chan-f5120b9a.mp4","durationSec":392.33,"nguonCau":"srt",
-      "parts": [],
+    "obs-8-2-tu-ban-vao-chan": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/observability-monitoring/08-suc-khoe/08-02-tu-ban-vao-chan-f5120b9a.mp4","durationSec":392.33,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":89.26,"ten":"Ôn nhanh · hôm nay · Chạy thật: ba dòng đáng quan tâm"},
+        {"t":89.26,"den":173,"ten":"Chạy thật: Docker có khởi động lại không?"},
+        {"t":173,"den":277.63,"ten":"Cách chữa là một từ · Làm cho liveness mang một ý nghĩa"},
+        {"t":277.63,"den":392.33,"ten":"Thực hành: đo, đừng tin · Ba câu tự kiểm"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 8.2 của khoá Observability & Monitoring."},
         {"t":11.18,"vi":"Bài trước: liveness không được phụ thuộc gì bên ngoài, vì trượt nghĩa là khởi động lại."},
@@ -3739,8 +4001,13 @@
         {"t":387.55,"vi":"Bài sau, bài 8.3: cửa sổ deploy."}
       ]
     },
-    "obs-8-3-cua-so-deploy": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/observability-monitoring/08-suc-khoe/08-03-cua-so-deploy-756b0fd7.mp4","durationSec":343.51,"nguonCau":"srt",
-      "parts": [],
+    "obs-8-3-cua-so-deploy": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/observability-monitoring/08-suc-khoe/08-03-cua-so-deploy-756b0fd7.mp4","durationSec":343.51,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":101.59,"ten":"Ôn nhanh · hôm nay · Hai cửa sổ mà request chết"},
+        {"t":101.59,"den":186.76,"ten":"Kho làm gì khi tắt máy"},
+        {"t":186.76,"den":275.87,"ten":"Chạy thật: SIGKILL tới sau mười giây"},
+        {"t":275.87,"den":343.51,"ten":"Ba câu tự kiểm · Tóm tắt & bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 8.3 của khoá Observability & Monitoring."},
         {"t":11.04,"vi":"Hai bài vừa rồi: bốn lượt thăm dò, và liveness không được phụ thuộc gì bên ngoài."},
@@ -3804,8 +4071,13 @@
         {"t":336.34,"vi":"Bài sau, bài 8.4: một lượt kiểm sau deploy nên đi sâu tới đâu."}
       ]
     },
-    "obs-8-4-kiem-sau-toi-dau": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/observability-monitoring/08-suc-khoe/08-04-kiem-sau-toi-dau-3eb4a518.mp4","durationSec":350.39,"nguonCau":"srt",
-      "parts": [],
+    "obs-8-4-kiem-sau-toi-dau": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/observability-monitoring/08-suc-khoe/08-04-kiem-sau-toi-dau-3eb4a518.mp4","durationSec":350.39,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":109.2,"ten":"Ôn nhanh · hôm nay · Cái thang độ sâu"},
+        {"t":109.2,"den":199.74,"ten":"Ba luật nó tuân theo · Chạy thật: bản dựng cũ"},
+        {"t":199.74,"den":278.83,"ten":"Bẫy: kiểm từ BÊN TRONG container"},
+        {"t":278.83,"den":350.39,"ten":"Ba câu tự kiểm · Tóm tắt & bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 8.4 của khoá Observability & Monitoring."},
         {"t":11.32,"vi":"Bài 0.1 mở đầu bằng một cú hỏng: health trả ok, Postgres trả lời, mà một route trả bốn không bốn vì bản dựng đã cũ."},
@@ -3871,8 +4143,13 @@
         {"t":345.44,"vi":"Bài sau, bài 8.5: kiểm từ bên ngoài."}
       ]
     },
-    "obs-8-5-kiem-tu-ben-ngoai": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/observability-monitoring/08-suc-khoe/08-05-kiem-tu-ben-ngoai-31de3f91.mp4","durationSec":345.17,"nguonCau":"srt",
-      "parts": [],
+    "obs-8-5-kiem-tu-ben-ngoai": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/observability-monitoring/08-suc-khoe/08-05-kiem-tu-ben-ngoai-31de3f91.mp4","durationSec":345.17,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":101.18,"ten":"Ôn nhanh · hôm nay · Bảy tầng giữa người dùng và mã của bạn"},
+        {"t":101.18,"den":183.65,"ten":"Chạy thật: uptime trên một nginx có TLS"},
+        {"t":183.65,"den":271.84,"ten":"Theo dõi tổng hợp: mức ba, một cách an toàn"},
+        {"t":271.84,"den":345.17,"ten":"Ba câu tự kiểm · Tóm tắt & chương sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 8.5, bài cuối Chương 8 của khoá Observability & Monitoring."},
         {"t":12.79,"vi":"Bài trước kết thúc ở một điểm mù: mọi phép kiểm trong kho đều chạy bên trong container."},
@@ -3929,8 +4206,13 @@
         {"t":340.05,"vi":"Chương 9: cảnh báo, khi nào nên gọi người dậy."}
       ]
     },
-    "obs-9-2-nguong-suy-ra": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/observability-monitoring/09-canh-bao/09-02-nguong-suy-ra-8dab70eb.mp4","durationSec":408.11,"nguonCau":"srt",
-      "parts": [],
+    "obs-9-2-nguong-suy-ra": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/observability-monitoring/09-canh-bao/09-02-nguong-suy-ra-8dab70eb.mp4","durationSec":408.11,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":95.18,"ten":"Ôn nhanh · hôm nay"},
+        {"t":95.18,"den":178.44,"ten":"Cách 2 — từ mức người dùng chịu được"},
+        {"t":178.44,"den":268.76,"ten":"Chạy thật: promtool test rules · Buổi rà soát ngưỡng"},
+        {"t":268.76,"den":408.11,"ten":"Bẫy: hai tuần vừa rồi không bình thường"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 9.2 của khoá Observability & Monitoring."},
         {"t":11.13,"vi":"Bài trước: cảnh báo là lời hứa đánh thức ai đó, và for phải dài hơn cửa sổ rate."},
@@ -4001,8 +4283,14 @@
         {"t":401.48,"vi":"Bài sau, bài 9.3: SLO và tốc độ đốt ngân sách lỗi."}
       ]
     },
-    "obs-9-3-slo-va-toc-do-dot": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/observability-monitoring/09-canh-bao/09-03-slo-va-toc-do-dot-8e58dd38.mp4","durationSec":497.24,"nguonCau":"srt",
-      "parts": [],
+    "obs-9-3-slo-va-toc-do-dot": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/observability-monitoring/09-canh-bao/09-03-slo-va-toc-do-dot-8e58dd38.mp4","durationSec":497.24,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":103.64,"ten":"Ôn nhanh · hôm nay · Ba thuật ngữ: SLI, SLO, ngân sách lỗi"},
+        {"t":103.64,"den":215.27,"ten":"Tốc độ đốt · Hai cảnh báo thay cho cả tá"},
+        {"t":215.27,"den":314.61,"ten":"Chạy thật: hỏng một phần, và lúc đã khỏi"},
+        {"t":314.61,"den":426.54,"ten":"Chọn SLI cho kho này · Bẫy: cửa sổ trượt 30 ngày"},
+        {"t":426.54,"den":497.24,"ten":"Ba câu tự kiểm · Tóm tắt & bài sau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 9.3 của khoá Observability & Monitoring."},
         {"t":11.06,"vi":"Bài trước: ngưỡng suy ra từ dữ liệu, từ yêu cầu người dùng, và từ tốc độ thay đổi."},
@@ -4087,8 +4375,14 @@
         {"t":491.09,"vi":"Bài sau, bài 9.4: mệt mỏi cảnh báo và lịch trực."}
       ]
     },
-    "obs-9-4-met-moi-va-truc-ca": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/observability-monitoring/09-canh-bao/09-04-met-moi-va-truc-ca-89c9d44c.mp4","durationSec":501.88,"nguonCau":"srt",
-      "parts": [],
+    "obs-9-4-met-moi-va-truc-ca": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/observability-monitoring/09-canh-bao/09-04-met-moi-va-truc-ca-89c9d44c.mp4","durationSec":501.88,"nguonCau":"srt","nguonPhan":"canh",
+      "parts": [
+        {"t":0,"den":86.19,"ten":"Ôn nhanh · hôm nay · Sự suy tàn, trong năm bước"},
+        {"t":86.19,"den":199.81,"ten":"Bốn nguyên nhân, mỗi cái cần gì"},
+        {"t":199.81,"den":308.44,"ten":"Trực ca khi không có ca trực nào"},
+        {"t":308.44,"den":384.55,"ten":"Buổi rà soát hằng tháng, mười phút"},
+        {"t":384.55,"den":501.88,"ten":"Thực hành: gom, ức chế, xoá một cảnh báo · Ba câu tự kiểm"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 9.4, bài cuối chương 9 của khoá Observability & Monitoring."},
         {"t":12.9,"vi":"Bài trước: SLO, ngân sách lỗi, và hai cảnh báo tốc độ đốt thay cho cả tá."},

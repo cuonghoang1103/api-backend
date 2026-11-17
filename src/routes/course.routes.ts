@@ -7,7 +7,8 @@ import { authenticate, optionalAuth, requireAdmin } from '../middleware/auth.js'
 import { AppError } from '../middleware/errorHandler.js';
 import { isProEffective } from '../services/pro.service.js';
 import { askCourseTutor, streamCourseTutor } from '../services/courseTutor.service.js';
-import { chuanTrack } from '../services/video/phuDeRieng.js';
+import { chuanTrack, docDoanHoi } from '../services/video/phuDeRieng.js';
+import { docSlideHoi } from '../services/courseTutor.context.js';
 import { uploadDocument, deleteByUrl, UploadError } from '../storage/uploadService.js';
 import { getStorageProvider } from '../storage/StorageProvider.js';
 import { buildKey } from '../storage/keys.js';
@@ -3435,6 +3436,9 @@ router.post('/lessons/:id(\\d+)/ai/ask', authenticate, async (req, res: Response
         ? Math.max(0, Math.floor(Number(req.body.phuDeGiay))) : undefined,
       // Track đang xem (VI = video riêng R2 ⇒ phụ đề riêng). Thiếu ⇒ YouTube như cũ.
       videoTrack: chuanTrack(req.body?.videoTrack),
+      // "Hỏi phần này" / "Hỏi đoạn đang xem" / "Hỏi slide này" (17/11/2026) — chỉ mốc + số, máy chủ tự cắt chữ.
+      doan: docDoanHoi(req.body?.doan),
+      slide: docSlideHoi(req.body?.slide),
     });
     res.json({ success: true, data: out });
     // Cả đường LÙI (không stream) cũng phải lưu. Chỉ gắn ở đường stream thì
@@ -3485,6 +3489,9 @@ router.post('/lessons/:id(\\d+)/ai/ask-stream', authenticate, async (req, res) =
           ? Math.max(0, Math.floor(Number(req.body.phuDeGiay))) : undefined,
         // Track đang xem (VI = video riêng R2 ⇒ phụ đề riêng). Thiếu ⇒ YouTube như cũ.
         videoTrack: chuanTrack(req.body?.videoTrack),
+        // "Hỏi phần này" / "Hỏi đoạn đang xem" / "Hỏi slide này" (17/11/2026) — chỉ mốc + số, máy chủ tự cắt chữ.
+        doan: docDoanHoi(req.body?.doan),
+        slide: docSlideHoi(req.body?.slide),
       },
       (delta) => send({ type: 'delta', text: delta }),
     );

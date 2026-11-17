@@ -68,6 +68,9 @@ describe('⭐ khối "Hỏi AI" phải ăn theo chủ đề của app', () => {
       for (const bien of bienDung(tep)) {
         // Token của chính app (`--ct-*`) thì không cần cầu nối.
         if (bien.startsWith('--ct-')) continue;
+        // Token RIÊNG của giao diện gia sư (`giaSu.css`, 17/11/2026) và của CuongMini (`cuongMiniRobot.css`): khai
+        // ngay trên `.gsb` / `.cmr`, mỗi cái đều có giá trị lùi (`var(--bg-card, #fff)`…) ⇒ không bao giờ "vứt cả khai báo".
+        if (bien.startsWith('--gsb-') || bien.startsWith('--cmr-')) continue;
         if (!CAU_NOI.includes(`${bien}:`)) thieu.push(`${path.basename(tep)} → ${bien}`);
       }
     }

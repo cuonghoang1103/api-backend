@@ -2,8 +2,12 @@
   "courseSlug": "tailwind-css",
   "sinhBoi": "scripts/phu-de-tu-video-rieng.mjs",
   "lessons": {
-    "tw-0-0-start-here-1": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/tailwind-css/00-tailwind-la-gi/00-01-tailwind-la-gi-dcca7564.mp4","durationSec":491.25,"nguonCau":"srt",
-      "parts": [],
+    "tw-0-0-start-here-1": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/tailwind-css/00-tailwind-la-gi/00-01-tailwind-la-gi-dcca7564.mp4","durationSec":491.25,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":133.22,"ten":"Mở đầu · bài này học gì"},
+        {"t":133.22,"den":312.38,"ten":"Giờ mình chạy thật"},
+        {"t":312.38,"den":491.25,"ten":"Thắng xung đột có chủ đích"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với khoá Tailwind CSS trên cường thái chấm com."},
         {"t":9.83,"vi":"Đây là bài đầu tiên của khoá."},
@@ -92,8 +96,12 @@
         {"t":484.84,"vi":"Bài sau: cần biết gì trước, và cách học khoá này mà không bị ngợp."}
       ]
     },
-    "tw-0-1-trinh-sinh": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/tailwind-css/00-tailwind-la-gi/00-03-trinh-sinh-9975131a.mp4","durationSec":412.04,"nguonCau":"srt",
-      "parts": [],
+    "tw-0-1-trinh-sinh": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/tailwind-css/00-tailwind-la-gi/00-03-trinh-sinh-9975131a.mp4","durationSec":412.04,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":182.91,"ten":"Mở đầu · bài này học gì"},
+        {"t":182.91,"den":343.11,"ten":"Giờ mình không sửa mã"},
+        {"t":343.11,"den":412.04,"ten":"Máy quét chưa bao giờ thấy tên lớp…"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 0.1. Phần bắt đầu tại đây đã cho bạn một luật CSS thuần: cùng độ mạnh thì luật đứng sau trong bảng kiểu thắng."},
         {"t":14.89,"vi":"Và một câu: Tailwind đọc mã như chữ, chỉ viết ra những lớp nó tìm thấy."},
@@ -165,8 +173,12 @@
         {"t":404.54,"vi":"Bài sau, 0.2: cái này khác gì inline style, đo lời phản đối."}
       ]
     },
-    "tw-0-2-phan-doi": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/tailwind-css/00-tailwind-la-gi/00-04-phan-doi-inline-style-745a0677.mp4","durationSec":422.45,"nguonCau":"srt",
-      "parts": [],
+    "tw-0-2-phan-doi": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/tailwind-css/00-tailwind-la-gi/00-04-phan-doi-inline-style-745a0677.mp4","durationSec":422.45,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":134.58,"ten":"Mở đầu · bài này học gì"},
+        {"t":134.58,"den":288.21,"ten":"Chạy thật trong Chromium"},
+        {"t":288.21,"den":422.45,"ten":"Cái bẫy là trả lời bằng khẩu hiệu"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 0.2. Bài trước chứng minh: Tailwind chỉ sinh lớp nó đọc được, và dùng lại lớp không tốn byte nào."},
         {"t":14.32,"vi":"Nhưng ai mới gặp Tailwind cũng nói một câu: viết lớp ngay trên thẻ thế này thì khác gì inline style."},
@@ -236,8 +248,12 @@
         {"t":409.29,"vi":"Bạn mở Code Lab Tailwind, module Interactive States and Transitions để luyện. Bài sau, 0.3: bốn bộ phận chuyển động, và cái nào hay hỏng."}
       ]
     },
-    "tw-0-3-bon-bo-phan": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/tailwind-css/00-tailwind-la-gi/00-05-bon-bo-phan-12ea5f50.mp4","durationSec":471.85,"nguonCau":"srt",
-      "parts": [],
+    "tw-0-3-bon-bo-phan": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/tailwind-css/00-tailwind-la-gi/00-05-bon-bo-phan-12ea5f50.mp4","durationSec":471.85,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":184.46,"ten":"Mở đầu · bài này học gì"},
+        {"t":184.46,"den":321.37,"ten":"Mọi thứ ở mọi nơi"},
+        {"t":321.37,"den":471.85,"ten":"Cái bẫy: nới glob cho chắc"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 0.3, bài cuối của Mục không."},
         {"t":9.51,"vi":"Bài trước đo được: lớp tiện ích là mũi tên trỏ vào bảng kiểu, nên nó làm được hover và điểm ngắt."},
@@ -315,8 +331,12 @@
         {"t":464.96,"vi":"Bài sau mở Chương một: mọi giá trị khoảng cách là con số nhân bốn pi ích."}
       ]
     },
-    "tw-1-1-nhan-bon": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/tailwind-css/01-cai-thang/01-01-nhan-bon-a51bdeb2.mp4","durationSec":464.39,"nguonCau":"srt",
-      "parts": [],
+    "tw-1-1-nhan-bon": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/tailwind-css/01-cai-thang/01-01-nhan-bon-a51bdeb2.mp4","durationSec":464.39,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":181.38,"ten":"Mở đầu · bài này học gì"},
+        {"t":181.38,"den":282.11,"ten":"Hai khoá không phải số"},
+        {"t":282.11,"den":464.39,"ten":"Vì sao thang lưu rem chứ không lưu…"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 1.1, bài đầu của Chương 1."},
         {"t":9.8,"vi":"Mục 0 đã cho bạn một câu: Tailwind là trình sinh, chỉ viết luật cho lớp nó tìm thấy."},
@@ -397,8 +417,12 @@
         {"t":452.18,"vi":"Bạn mở Code Lab Tailwind, module Layout and Spacing Fundamentals để luyện thang này. Bài sau, 1.2: chỗ cái thang hết, đo được."}
       ]
     },
-    "tw-1-2-thang-het": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/tailwind-css/01-cai-thang/01-02-thang-het-280e12d8.mp4","durationSec":437.76,"nguonCau":"srt",
-      "parts": [],
+    "tw-1-2-thang-het": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/tailwind-css/01-cai-thang/01-02-thang-het-280e12d8.mp4","durationSec":437.76,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":181.94,"ten":"Mở đầu · bài này học gì"},
+        {"t":181.94,"den":313.3,"ten":"Ba, mở rộng thang khi số lượt vượt…"},
+        {"t":313.3,"den":437.76,"ten":"Bẫy ở chiều ngược lại"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 1.2. Bài trước: mọi khoảng cách là khoá nhân bốn pi ích."},
         {"t":11.77,"vi":"Tailwind 3 lưu một danh sách ba mươi lăm khoá, Tailwind 4 lưu một công thức."},
@@ -477,8 +501,13 @@
         {"t":424.99,"vi":"Bạn mở Code Lab Tailwind, module Typography and Color Utilities để luyện. Bài sau, 1.3: thang màu, và cái bậc mà tương phản đạt."}
       ]
     },
-    "tw-1-4-bo-cuc": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/tailwind-css/01-cai-thang/01-04-bo-cuc-d1d1f98e.mp4","durationSec":395.09,"nguonCau":"srt",
-      "parts": [],
+    "tw-1-4-bo-cuc": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/tailwind-css/01-cai-thang/01-04-bo-cuc-d1d1f98e.mp4","durationSec":395.09,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":165.36,"ten":"Mở đầu · bài này học gì"},
+        {"t":165.36,"den":257.55,"ten":"Chạy thật. Một hàng rộng hai trăm hai…"},
+        {"t":257.55,"den":341.2,"ten":"Bẫy: dựng bảng bằng các hàng flex lồng…"},
+        {"t":341.2,"den":395.09,"ten":"Vì sao, sửa thế nào?"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 1.4. Bài trước: tương phản là một tỉ số, trên nền trắng thì slate-500 là sàn, và ranh giới dịch theo sắc màu."},
         {"t":15.76,"vi":"Ba bài vừa rồi đều cùng một cách: đọc thang từ mã, rồi đếm trên trang thật."},
@@ -550,8 +579,12 @@
         {"t":383.63,"vi":"Bạn mở Code Lab Tailwind, module Layout and Spacing Fundamentals để luyện flex và grid. Bài sau, 1.5: định cỡ."}
       ]
     },
-    "tw-1-5-dinh-co": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/tailwind-css/01-cai-thang/01-05-dinh-co-cec95942.mp4","durationSec":430.13,"nguonCau":"srt",
-      "parts": [],
+    "tw-1-5-dinh-co": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/tailwind-css/01-cai-thang/01-05-dinh-co-cec95942.mp4","durationSec":430.13,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":153.58,"ten":"Mở đầu · bài này học gì"},
+        {"t":153.58,"den":305.64,"ten":"Chạy thật. Một thanh bên rộng bốn trăm…"},
+        {"t":305.64,"den":430.13,"ten":"Bẫy: dùng h-screen cho khung ứng dụng"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 1.5, bài cuối của Chương 1."},
         {"t":9.39,"vi":"Bài trước: flex với items-center là một thành ngữ, và chiều rộng không phải cái sàn."},
@@ -621,8 +654,12 @@
         {"t":418.43,"vi":"Bạn mở Code Lab Tailwind, module Responsive Design Patterns để luyện. Bài sau, Chương 2 bài 2.1: năm hình dạng biến thể."}
       ]
     },
-    "tw-2-1-nam-hinh-dang": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/tailwind-css/02-bien-the/02-01-nam-hinh-dang-e0b1351c.mp4","durationSec":470.79,"nguonCau":"srt",
-      "parts": [],
+    "tw-2-1-nam-hinh-dang": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/tailwind-css/02-bien-the/02-01-nam-hinh-dang-e0b1351c.mp4","durationSec":470.79,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":183.72,"ten":"Mở đầu · bài này học gì"},
+        {"t":183.72,"den":358.55,"ten":"Hình dạng bốn"},
+        {"t":358.55,"den":470.79,"ten":"Khoá Next.js bài 13.2 dùng hover và responsive…"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Chương 2, bài 2.1."},
         {"t":8.66,"vi":"Bài trước: một nửa số khoá định cỡ không phải độ dài, mà so với thẻ cha, cửa sổ hoặc nội dung."},
@@ -705,8 +742,13 @@
         {"t":464.92,"vi":"Bài sau, 2.2: group và peer hỏng âm thầm."}
       ]
     },
-    "tw-2-2-group-peer": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/tailwind-css/02-bien-the/02-02-group-peer-0396166b.mp4","durationSec":499.01,"nguonCau":"srt",
-      "parts": [],
+    "tw-2-2-group-peer": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/tailwind-css/02-bien-the/02-02-group-peer-0396166b.mp4","durationSec":499.01,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":120.4,"ten":"Mở đầu · bài này học gì"},
+        {"t":120.4,"den":290.94,"ten":"Vì sao chuyện này tệ hơn một lỗi"},
+        {"t":290.94,"den":454.01,"ten":"Bài này đo ra nó"},
+        {"t":454.01,"den":499.01,"ten":"Hai group trần lồng nhau"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 2.2. Bài trước: một cú pháp tiền tố biên dịch ra năm hình dạng selector khác nhau."},
         {"t":13.27,"vi":"Khoảng trắng nghĩa là cần một tổ tiên, dấu ngã nghĩa là cần một anh em đứng trước."},
@@ -791,8 +833,12 @@
         {"t":486.06,"vi":"Bạn mở Code Lab Tailwind, module Interactive States and Transitions để luyện group và peer. Bài sau, 2.3: điểm ngắt thắng nhờ vị trí."}
       ]
     },
-    "tw-2-3-diem-ngat": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/tailwind-css/02-bien-the/02-03-diem-ngat-42326907.mp4","durationSec":473.07,"nguonCau":"srt",
-      "parts": [],
+    "tw-2-3-diem-ngat": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/tailwind-css/02-bien-the/02-03-diem-ngat-42326907.mp4","durationSec":473.07,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":172.64,"ten":"Mở đầu · bài này học gì"},
+        {"t":172.64,"den":265.76,"ten":"Chạy thật. Bốn hộp trên cùng một trang"},
+        {"t":265.76,"den":473.07,"ten":"Bẫy: đọc md là trên màn trung bình"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 2.3. Bài trước: group và peer hỏng âm thầm, vì selector chờ một thẻ thứ hai không có mặt."},
         {"t":14.36,"vi":"Và ở bài 2.1: điểm ngắt là hình dạng duy nhất không thêm độ đặc hiệu."},
@@ -875,8 +921,12 @@
         {"t":462.45,"vi":"Bạn mở Code Lab Tailwind, module Responsive Design Patterns để luyện. Bài sau, 2.4: chế độ tối."}
       ]
     },
-    "tw-2-4-che-do-toi": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/tailwind-css/02-bien-the/02-04-che-do-toi-d040c6a8.mp4","durationSec":467.83,"nguonCau":"srt",
-      "parts": [],
+    "tw-2-4-che-do-toi": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/tailwind-css/02-bien-the/02-04-che-do-toi-d040c6a8.mp4","durationSec":467.83,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":180.89,"ten":"Mở đầu · bài này học gì"},
+        {"t":180.89,"den":255.91,"ten":"Slide gom lại"},
+        {"t":255.91,"den":467.83,"ten":"Bẫy. Phép đo đầu tiên dùng một lớp…"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 2.4. Bài trước: điểm ngắt thắng nhờ vị trí trong tệp, và md là một ngưỡng, không phải một khoảng."},
         {"t":14.52,"vi":"Ở bài 2.1 còn một hình dạng chưa kể hết: dark, một phép thử tổ tiên."},
@@ -953,8 +1003,12 @@
         {"t":456.02,"vi":"Bạn mở Code Lab Tailwind, module Multi-Theme and Dynamic Theming Systems để luyện. Bài sau, 2.5: biến thể tuỳ ý."}
       ]
     },
-    "tw-2-5-bien-the-tuy-y": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/tailwind-css/02-bien-the/02-05-bien-the-tuy-y-b3106c20.mp4","durationSec":483.38,"nguonCau":"srt",
-      "parts": [],
+    "tw-2-5-bien-the-tuy-y": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/tailwind-css/02-bien-the/02-05-bien-the-tuy-y-b3106c20.mp4","durationSec":483.38,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":165.3,"ten":"Mở đầu · bài này học gì"},
+        {"t":165.3,"den":293.74,"ten":"Chạy thật. Một nút mở mục, mang aria-expanded"},
+        {"t":293.74,"den":483.38,"ten":"Bẫy. Một biểu thức ngoặc vuông dài lồng…"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 2.5, bài cuối của Chương 2."},
         {"t":9.31,"vi":"Bài trước: dark là một phép thử tổ tiên không có phạm vi, nên một lớp trên html bật cả ứng dụng."},
@@ -1037,8 +1091,13 @@
         {"t":471.92,"vi":"Bạn mở Code Lab Tailwind, module Interactive States and Transitions để luyện. Rồi làm bài kiểm tra Chương 2 trước khi sang Chương 3."}
       ]
     },
-    "tw-3-1-thu-tu-viet": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/tailwind-css/03-xung-dot/03-01-thu-tu-viet-29ec7165.mp4","durationSec":495.83,"nguonCau":"srt",
-      "parts": [],
+    "tw-3-1-thu-tu-viet": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/tailwind-css/03-xung-dot/03-01-thu-tu-viet-29ec7165.mp4","durationSec":495.83,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":179.88,"ten":"Mở đầu · bài này học gì"},
+        {"t":179.88,"den":259.69,"ten":"Chạy thật. Một component nút viết lớp nền…"},
+        {"t":259.69,"den":434.65,"ten":"Vì sao đây là vấn đề thiết kế"},
+        {"t":434.65,"den":495.83,"ten":"Câu hai: vì sao style padding hai pixel…"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, chào mừng tới Chương 3."},
         {"t":7.62,"vi":"Chương 2 kết thúc ở các biến thể: mỗi tiền tố biên dịch ra một selector, và vị trí trong tệp quyết định điểm ngắt nào thắng."},
@@ -1130,8 +1189,12 @@
         {"t":482.94,"vi":"Bạn mở Code Lab Tailwind, module Component Patterns and Reusability để luyện. Bài sau, 3.2: vì sao mt-8 thắng mt-32."}
       ]
     },
-    "tw-3-2-phep-sap": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/tailwind-css/03-xung-dot/03-02-phep-sap-5175f17d.mp4","durationSec":518.62,"nguonCau":"srt",
-      "parts": [],
+    "tw-3-2-phep-sap": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/tailwind-css/03-xung-dot/03-02-phep-sap-5175f17d.mp4","durationSec":518.62,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":183.9,"ten":"Mở đầu · bài này học gì"},
+        {"t":183.9,"den":332.5,"ten":"P-4 px-8 đo được mười sáu pixel trên"},
+        {"t":332.5,"den":518.62,"ten":"Bẫy một: bài web cũ cảnh báo thêm…"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 3.2. Bài trước: thứ tự viết trong class không làm gì, bảng kiểu mới phân xử, luật sinh sau thắng."},
         {"t":14.54,"vi":"Câu hỏi tiếp theo hiển nhiên: thứ tự sinh là gì? Tailwind sắp các luật theo quy tắc nào?"},
@@ -1216,8 +1279,13 @@
         {"t":506.29,"vi":"Bạn mở Code Lab Tailwind, module Component Patterns and Reusability để luyện. Bài sau, 3.3: đo mức phơi nhiễm của một kho mã."}
       ]
     },
-    "tw-3-3-phoi-nhiem": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/tailwind-css/03-xung-dot/03-03-phoi-nhiem-929718ba.mp4","durationSec":493.25,"nguonCau":"srt",
-      "parts": [],
+    "tw-3-3-phoi-nhiem": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/tailwind-css/03-xung-dot/03-03-phoi-nhiem-929718ba.mp4","durationSec":493.25,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":86.37,"ten":"Mở đầu · bài này học gì"},
+        {"t":86.37,"den":253.93,"ten":"Chạy thật. Tệp tron.cjs lấy đúng clsx và…"},
+        {"t":253.93,"den":431.9,"ten":"Vì sao sửa khi chưa có gì hỏng"},
+        {"t":431.9,"den":493.25,"ten":"Câu hai: sáu mươi sáu phần trăm phơi…"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 3.3. Hai bài trước mô tả một kiểu hỏng: lớp người gọi nối vào cuối có khi thắng, có khi thua, tuỳ phép sắp."},
         {"t":15.15,"vi":"Hôm nay câu hỏi khác: trong một ứng dụng thật, bao nhiêu chỗ đang đứng trong kiểu hỏng ấy?"},
@@ -1311,8 +1379,13 @@
         {"t":480.48,"vi":"Bạn mở Code Lab Tailwind, module Component Patterns and Reusability để luyện. Bài sau, 3.4: tailwind-merge khôi phục luật cái sau thắng."}
       ]
     },
-    "tw-3-4-twmerge": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/tailwind-css/03-xung-dot/03-04-twmerge-31dce333.mp4","durationSec":478.73,"nguonCau":"srt",
-      "parts": [],
+    "tw-3-4-twmerge": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/tailwind-css/03-xung-dot/03-04-twmerge-31dce333.mp4","durationSec":478.73,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":115.44,"ten":"Mở đầu · bài này học gì"},
+        {"t":115.44,"den":208.27,"ten":"Cuối cùng mt-4, mb-4, rồi my-8"},
+        {"t":208.27,"den":383.05,"ten":"Bẫy: cn với className đặt đầu"},
+        {"t":383.05,"den":478.73,"ten":"Thuật ngữ: twMerge"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 3.4. Ba bài vừa rồi dựng một vấn đề: thứ tự viết vô nghĩa, phép sắp tuỳ tiện, và hai phần ba cách soạn lớp của trang này phơi ra."},
         {"t":16.54,"vi":"Bài này là lời giải. Và lời giải là một thư viện, không phải một mẹo."},
@@ -1389,8 +1462,13 @@
         {"t":465.52,"vi":"Bạn mở Code Lab Tailwind, module Component Patterns and Reusability để luyện. Bài sau, 3.5: cái thang leo thang, và chỗ của important."}
       ]
     },
-    "tw-3-5-important": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/tailwind-css/03-xung-dot/03-05-important-1d527e08.mp4","durationSec":477.18,"nguonCau":"srt",
-      "parts": [],
+    "tw-3-5-important": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/tailwind-css/03-xung-dot/03-05-important-1d527e08.mp4","durationSec":477.18,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":115.07,"ten":"Mở đầu · bài này học gì"},
+        {"t":115.07,"den":223.96,"ten":"Trước khi đặt chân lên bậc nào"},
+        {"t":223.96,"den":303.05,"ten":"Chạy thật. Ô chọn của CT Work là…"},
+        {"t":303.05,"den":477.18,"ten":"Bẫy: dùng chấm than để thắng một luật…"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 3.5, bài cuối của Chương 3."},
         {"t":9.43,"vi":"Bài trước: hàm cn khôi phục luật viết cuối thì thắng, trừ vài chỗ mù."},
@@ -1471,8 +1549,13 @@
         {"t":465.82,"vi":"Bạn mở Code Lab Tailwind, module Advanced Patterns and Performance để luyện. Bài sau, 3.6: kiểm tra Chương 3."}
       ]
     },
-    "tw-4-1-do-canh-lop": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/tailwind-css/04-component/04-01-do-canh-lop-108a029b.mp4","durationSec":465.83,"nguonCau":"srt",
-      "parts": [],
+    "tw-4-1-do-canh-lop": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/tailwind-css/04-component/04-01-do-canh-lop-108a029b.mp4","durationSec":465.83,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":142.54,"ten":"Mở đầu · bài này học gì"},
+        {"t":142.54,"den":217.56,"ten":"Câu hỏi có ích không phải trải nghiệm…"},
+        {"t":217.56,"den":307.43,"ten":"Chạy thật. Tệp troi.cjs lấy mọi chuỗi className…"},
+        {"t":307.43,"den":465.83,"ten":"Bẫy: lấy độ dài làm thước đo"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Chương 4. Chương 3 vừa xong: thứ tự viết vô nghĩa, phép sắp tuỳ tiện, và tailwind-merge trả lại luật viết cuối thì thắng."},
         {"t":15.39,"vi":"Chương này hỏi câu tiếp theo: tái sử dụng nằm ở đâu cho đúng."},
@@ -1565,8 +1648,12 @@
         {"t":452.55,"vi":"Bạn mở Code Lab Tailwind, module Component Patterns and Reusability để luyện. Bài sau, 4.2: vì sao at apply phá đúng cái làm nó đáng giá."}
       ]
     },
-    "tw-4-2-apply": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/tailwind-css/04-component/04-02-apply-24083880.mp4","durationSec":475.92,"nguonCau":"srt",
-      "parts": [],
+    "tw-4-2-apply": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/tailwind-css/04-component/04-02-apply-24083880.mp4","durationSec":475.92,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":181.92,"ten":"Mở đầu · bài này học gì"},
+        {"t":181.92,"den":310.26,"ten":"Xoá một dòng có thể làm vỡ mọi…"},
+        {"t":310.26,"den":475.92,"ten":"Bẫy: at apply một lớp vốn cũng làm…"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 4.2. Bài 4.1 vừa đo: canh lớp có thật nhưng hiếm, và tín hiệu để tách là lặp lại, không phải độ dài."},
         {"t":15.41,"vi":"Thấy một chuỗi dài lặp mười hai lần, ai cũng nghĩ ngay một cách: gom vào một lớp CSS có tên bằng at apply."},
@@ -1641,8 +1728,12 @@
         {"t":463.48,"vi":"Bạn mở Code Lab Tailwind, module Component Patterns and Reusability để luyện. Bài sau, 4.3: prop className là một hợp đồng."}
       ]
     },
-    "tw-4-4-bien-the-cva": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/tailwind-css/04-component/04-04-bien-the-cva-cb586eaf.mp4","durationSec":456.26,"nguonCau":"srt",
-      "parts": [],
+    "tw-4-4-bien-the-cva": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/tailwind-css/04-component/04-04-bien-the-cva-cb586eaf.mp4","durationSec":456.26,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":167.92,"ten":"Mở đầu · bài này học gì"},
+        {"t":167.92,"den":342.17,"ten":"Chạy thật. Tệp bang.cjs viết cùng một nút…"},
+        {"t":342.17,"den":456.26,"ten":"Phòng: danh sách cho phép"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 4.4. Bài 4.3 vừa đo: component đóng, chỉ nhận prop có tên như variant và size, là hợp đồng không bao giờ phá."},
         {"t":16.51,"vi":"Nhưng ba variant nhân ba size là chín tổ hợp."},
@@ -1723,8 +1814,12 @@
         {"t":442.92,"vi":"Bạn mở Code Lab Tailwind, module Component Patterns and Reusability để luyện. Bài sau, 4.5: một cú tách thật, và con bọ đã gây ra nó."}
       ]
     },
-    "tw-4-5-primitives": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/tailwind-css/04-component/04-05-primitives-d2f4af33.mp4","durationSec":425.47,"nguonCau":"srt",
-      "parts": [],
+    "tw-4-5-primitives": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/tailwind-css/04-component/04-05-primitives-d2f4af33.mp4","durationSec":425.47,"nguonCau":"srt","nguonPhan":"cau",
+      "parts": [
+        {"t":0,"den":171.1,"ten":"Mở đầu · bài này học gì"},
+        {"t":171.1,"den":346.25,"ten":"Chạy thật. Lệnh git show mở trang thông…"},
+        {"t":346.25,"den":425.47,"ten":"Gói theo tính năng"}
+      ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với bài 4.5, bài cuối Chương 4."},
         {"t":9.39,"vi":"Bốn bài vừa rồi cho ta luật: tách khi lặp, đừng dùng at apply, giữ hợp đồng className, và ma trận biến thể."},

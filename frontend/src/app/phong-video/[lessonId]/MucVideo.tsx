@@ -23,7 +23,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { Loader2, ListVideo, Sparkles } from 'lucide-react';
 import ChatMarkdown from '@/components/chat/ChatMarkdown';
 import type { GiaSu } from './HoiAiVideo';
-import { bocPhan, moc, themLienKet, giayTuURL, type Phan } from './mocThoiGian';
+import { bocPhan, moc, themLienKet, giayTuURL, type Phan } from '@/lib/mocThoiGian';
 import type { PhanVideoRieng } from '@/lib/api';
 
 const CAU_TOM_TAT = 'Tóm tắt video này theo các phần có mốc thời gian.';

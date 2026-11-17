@@ -222,6 +222,9 @@ export default function ChatModal({ onClose }: ChatModalProps) {
      dùng bấm vào robot lúc đang học. Rời trang thì `baiDangHoc` thành null và
      nhánh dưới tự rơi về trợ lý chung, không cần dọn cờ này. */
   const [muonChung, datMuonChung] = useState(false);
+  /* "Hỏi phần này" / "Hỏi slide này" / phím tắt khi khung đang mở ở trợ lý chung ⇒ về lại gia sư bài. */
+  const moYeuCau = useGiaSuBaiStore((st) => st.moYeuCau);
+  useEffect(() => { if (moYeuCau) datMuonChung(false); }, [moYeuCau]);
   const cheDoGiaSu = !!baiDangHoc && !muonChung;
   /* Phóng to. Bài giảng có bảng, sơ đồ và công thức — 390px là chỗ người dùng
      phải cuộn ngang để đọc, đúng chữ "thô" trong lời than. */
@@ -706,6 +709,51 @@ finished: true,
   };
 
   const lastAssistantId = [...modalMessages].reverse().find(m => m.role === 'assistant')?.id ?? null;
+
+  /*
+   * ── CHẾ ĐỘ GIA SƯ: khung riêng, theo chủ đề, KHÔNG phủ tối trang (17/11/2026) ──
+   * Bấm mốc "▶ 3:20" trong câu trả lời là tua video của trang học — lớp phủ đen mờ + bấm-ra-ngoài-là-đóng thì người
+   * học không thấy video đang chạy tới đâu. Nên ở chế độ này khung là một bảng nổi bên phải, trang vẫn nhìn/bấm được;
+   * đầu khung (CuongMini + bài đang học) do `GiaSuTrongRobot` vẽ, ở đây chỉ gửi vào ba nút của khung.
+   */
+  if (cheDoGiaSu && baiDangHoc) {
+    const nut = (
+      <>
+        <button type="button" className="gsb-nut-tron" onClick={() => datMuonChung(true)}
+          title="Chuyển sang trợ lý chung" aria-label="Chuyển sang trợ lý chung">
+          <MessageSquare className="h-4 w-4" />
+        </button>
+        <button type="button" className="gsb-nut-tron hidden lg:inline-flex" onClick={() => datRong((v) => !v)}
+          title={rong ? 'Thu nhỏ khung' : 'Phóng to khung'} aria-label={rong ? 'Thu nhỏ khung' : 'Phóng to khung'}>
+          {rong ? <Minimize2 className="h-4 w-4" /> : <Maximize2 className="h-4 w-4" />}
+        </button>
+        <button type="button" className="gsb-nut-tron" onClick={onClose} title="Đóng (Esc)" aria-label="Đóng gia sư">
+          <X className="h-4 w-4" />
+        </button>
+      </>
+    );
+    return (
+      <motion.div
+        initial={{ opacity: 0, scale: 0.96, y: 16 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        exit={{ opacity: 0, scale: 0.96, y: 16 }}
+        transition={{ type: 'spring', stiffness: 380, damping: 32 }}
+        role="dialog"
+        aria-label="Gia sư bài học CuongMini"
+        onKeyDown={(e) => { if (e.key === 'Escape') onClose(); }}
+        className={`fixed bottom-24 right-6 z-[120] ${rong ? 'w-[760px] h-[720px]' : 'w-[420px] h-[620px]'} max-w-[calc(100vw-24px)] max-h-[calc(100dvh-120px)]
+          flex flex-col overflow-hidden rounded-2xl`}
+        style={{
+          contain: 'layout style',
+          background: 'var(--bg-card)',
+          border: '1px solid var(--border-color)',
+          boxShadow: '0 18px 48px rgba(0,0,0,0.28), 0 2px 8px rgba(0,0,0,0.12)',
+        }}
+      >
+        <GiaSuTrongRobot bai={baiDangHoc} rong={rong} nutPhai={nut} />
+      </motion.div>
+    );
+  }
 
   return (
     <>

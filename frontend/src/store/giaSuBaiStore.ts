@@ -55,6 +55,40 @@ export interface LuotGiaSu {
    * trong lịch sử là ~1.500 token nhân với mọi câu hỏi còn lại của buổi học.
    */
   anh?: string[];
+  /**
+   * Ngữ cảnh người học GHIM vào lượt hỏi này (một đoạn video / một slide) — CHỈ để hiện thành chip trong bong bóng.
+   * Câu hỏi gửi đi đã tự mang đủ mốc/số slide trong chữ, nên lịch sử gửi lên vẫn chỉ là `content`.
+   */
+  nguCanh?: NguCanhHoi;
+}
+
+/**
+ * Thứ người học bấm "Hỏi phần này" / "Hỏi đoạn đang xem" / "Hỏi slide này" — ghim vào ô nhập thành một chip gọn
+ * (không phải một bức tường chữ). Lượt hỏi kế tiếp mang nó theo rồi nó tự gỡ.
+ */
+export type NguCanhHoi =
+  | {
+    loai: 'doan';
+    /** Mốc + tên chương. Máy chủ tự cắt phụ đề trong đoạn — client không gửi chữ. */
+    doan: { tu: number; den: number; ten?: string };
+    /** Đoạn lấy đúng theo một chương của mục lục ⇒ chip hỏi nhanh được cache dùng chung. */
+    theoMucLuc?: boolean;
+  }
+  | { loai: 'slide'; slide: import('@/components/academy/docSlide').Slide };
+
+/**
+ * Video ĐANG PHÁT trên trang học — trang `learn` công bố, gia sư (cả mục cuối bài lẫn con robot) đọc để gửi kèm
+ * phụ đề + giây đang xem. Hàm đi qua kho (không phải số giây) để không ai phải re-render mỗi giây video chạy.
+ */
+export interface VideoDangHoc {
+  lessonId: number;
+  track: 'VI' | 'EN' | 'YT';
+  /** Video có phụ đề máy chủ đọc được — không có thì gia sư KHÔNG bật chế độ video (khỏi lời dặn "chưa nghe được"). */
+  coPhuDe: boolean;
+  thoiLuong?: number | null;
+  parts: { t: number; den?: number; ten: string }[];
+  layGiay: () => number | null;
+  tua: (giay: number) => void;
 }
 
 export interface BaiDangHoc {
@@ -83,15 +117,66 @@ interface GiaSuBaiState {
   bai: BaiDangHoc | null;
   datBai: (b: BaiDangHoc | null) => void;
 
+  video: VideoDangHoc | null;
+  datVideo: (v: VideoDangHoc | null) => void;
+
+  /** Chip ngữ cảnh đang ghim, theo KHOÁ cuộc (`khoaGiaSu`). */
+  ghim: Record<string, NguCanhHoi | undefined>;
+  datGhim: (khoa: string, g: NguCanhHoi | null) => void;
+
+  /**
+   * Yêu cầu MỞ gia sư (bấm "Hỏi phần này", phím tắt…). Bộ đếm tăng dần — nơi nghe so với số đã thấy, nên bấm hai lần
+   * cùng một chương vẫn mở lại được. `robotSan`: nút trợ lý nổi đang hiện ⇒ mở khung robot; không (người dùng ẩn
+   * trợ lý) ⇒ mục gia sư cuối bài tự cuộn tới.
+   */
+  moYeuCau: number;
+  yeuCauMo: () => void;
+  robotSan: boolean;
+  datRobotSan: (v: boolean) => void;
+
+  /**
+   * Câu hỏi CHỜ bắn ("Tóm tắt video" ở mục lục): nút ở ngoài không giữ hook gia sư, nên đặt câu vào đây và vỏ gia sư
+   * đang nhận (`nhanCauCho` — robot nếu nút nổi đang hiện, không thì mục cuối bài) lấy ra MỘT LẦN (`layCauCho` xoá ngay
+   * khi lấy, nên hai vỏ cùng mở cũng không bắn đôi — mỗi lượt là tiền).
+   */
+  cauCho: { lessonId: number; cau: string; cacheKey?: string } | null;
+  datCauCho: (c: { lessonId: number; cau: string; cacheKey?: string } | null) => void;
+  layCauCho: (lessonId: number) => { lessonId: number; cau: string; cacheKey?: string } | null;
+
   cuoc: Record<string, LuotGiaSu[]>;
   /** Cập nhật một cuộc. Nhận hàm để mọi chỗ ghi đều thuần và không giẫm nhau. */
   datCuoc: (khoa: string, f: (cu: LuotGiaSu[]) => LuotGiaSu[]) => void;
   xoaCuoc: (khoa: string) => void;
 }
 
-export const useGiaSuBaiStore = create<GiaSuBaiState>((set) => ({
+export const useGiaSuBaiStore = create<GiaSuBaiState>((set, get) => ({
   bai: null,
   datBai: (b) => set({ bai: b }),
+
+  video: null,
+  datVideo: (v) => set({ video: v }),
+
+  ghim: {},
+  datGhim: (khoa, g) => set((s) => {
+    if (!g && !(khoa in s.ghim)) return s;
+    const con = { ...s.ghim };
+    if (g) con[khoa] = g; else delete con[khoa];
+    return { ghim: con };
+  }),
+
+  moYeuCau: 0,
+  yeuCauMo: () => set((s) => ({ moYeuCau: s.moYeuCau + 1 })),
+  robotSan: false,
+  datRobotSan: (v) => set((s) => (s.robotSan === v ? s : { robotSan: v })),
+
+  cauCho: null,
+  datCauCho: (c) => set({ cauCho: c }),
+  layCauCho: (lessonId) => {
+    const c = get().cauCho;
+    if (!c || c.lessonId !== lessonId) return null;
+    set({ cauCho: null });
+    return c;
+  },
 
   cuoc: {},
   datCuoc: (khoa, f) => set((s) => ({ cuoc: { ...s.cuoc, [khoa]: f(s.cuoc[khoa] ?? []) } })),
@@ -104,3 +189,16 @@ export const useGiaSuBaiStore = create<GiaSuBaiState>((set) => ({
     return { cuoc: con };
   }),
 }));
+
+/** Mục gia sư cuối bài — đích cuộn tới khi không có nút trợ lý nổi (người dùng đã ẩn nó). */
+export const ID_GIA_SU_CUOI_BAI = 'gia-su-bai';
+
+/**
+ * Mở gia sư của một bài, tuỳ chọn ghim sẵn một ngữ cảnh (đoạn video / slide). Một lối cho mọi nút "Hỏi …":
+ * nút trợ lý nổi đang hiện ⇒ mở khung robot; không ⇒ cuộn tới mục gia sư cuối bài (nó tự đặt con trỏ vào ô nhập).
+ */
+export function moGiaSuBai(lessonId: number, nguCanh?: NguCanhHoi | null): void {
+  const s = useGiaSuBaiStore.getState();
+  if (nguCanh) s.datGhim(khoaGiaSu(lessonId), nguCanh);
+  s.yeuCauMo();
+}

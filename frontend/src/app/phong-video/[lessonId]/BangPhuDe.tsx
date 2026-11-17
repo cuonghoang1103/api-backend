@@ -13,7 +13,7 @@
 
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { chuCauPhuDe, type CauPhuDe } from '@/lib/api';
-import { moc } from './mocThoiGian';
+import { moc } from '@/lib/mocThoiGian';
 
 export default function BangPhuDe({ cues, dichVi, giay, hienDich, onTua }: {
   cues: CauPhuDe[];

@@ -1,0 +1,203 @@
+/*
+ * GIA SƯ BÀI HỌC — giao diện chung của khung robot nổi + mục cuối bài (17/11/2026).
+ *
+ * Người dùng: "nâng cấp chat AI cho đẹp, chuyên nghiệp, dễ đọc dễ học". Bản cũ trong khung robot là chữ 13px xanh
+ * lơ trên nền gần đen, cố định tối ở cả chủ đề sáng.
+ *
+ * ⚠️ CHỈ dùng biến chủ đề của web (`--bg-card`, `--text-primary`…) — đổi sáng/tối là tự theo. KHÔNG dùng `dark:` của
+ * Tailwind (dành riêng cho Notes, xem CLAUDE.md). App desktop bắc cầu các biến này sang token của nó (`.odin-giasu`).
+ */
+.gsb {
+  --gsb-nhan: var(--neon-violet, #8b5cf6);
+  --gsb-nhan-nhat: color-mix(in srgb, var(--gsb-nhan) 12%, transparent);
+  --gsb-nhan-vien: color-mix(in srgb, var(--gsb-nhan) 32%, transparent);
+  --gsb-nen: var(--bg-card, #fff);
+  --gsb-nen-2: var(--bg-surface, #f0f2f5);
+  --gsb-chu: var(--text-primary, #050505);
+  --gsb-chu-2: var(--text-secondary, #65676b);
+  --gsb-chu-3: var(--text-muted, #686b70);
+  --gsb-vien: var(--border-color, #dddfe2);
+  color: var(--gsb-chu);
+}
+
+/* ── Đầu khung ── */
+.gsb-dau {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 12px 10px 10px;
+  border-bottom: 1px solid var(--gsb-vien);
+  background: linear-gradient(180deg, var(--gsb-nhan-nhat), transparent);
+  flex-shrink: 0;
+}
+.gsb-dau-ten { font-size: 14px; font-weight: 700; line-height: 1.25; color: var(--gsb-chu); display: flex; align-items: center; gap: 6px; }
+.gsb-dau-phu { font-size: 12px; color: var(--gsb-chu-3); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.gsb-huy-hieu {
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 1px 7px; border-radius: 999px;
+  font-size: 10.5px; font-weight: 600; white-space: nowrap;
+  background: var(--gsb-nhan-nhat); color: var(--gsb-nhan);
+}
+.gsb-nut-tron {
+  display: inline-flex; align-items: center; justify-content: center;
+  height: 30px; min-width: 30px; padding: 0 8px; gap: 4px;
+  border-radius: 9px; border: 1px solid transparent;
+  font-size: 12px; font-weight: 500; color: var(--gsb-chu-2);
+  background: transparent; cursor: pointer; transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+.gsb-nut-tron:hover { background: var(--gsb-nhan-nhat); color: var(--gsb-nhan); }
+.gsb-nut-tron[aria-pressed='true'] { background: var(--gsb-nhan-nhat); color: var(--gsb-nhan); border-color: var(--gsb-nhan-vien); }
+.gsb-nut-tron:disabled { opacity: 0.4; cursor: default; }
+
+/* ── Vùng hội thoại ── */
+.gsb-cuon { flex: 1; overflow-y: auto; overflow-x: hidden; padding: 14px 14px 8px; scroll-behavior: auto; }
+.gsb-luot { display: flex; gap: 8px; margin-bottom: 14px; }
+.gsb-luot[data-vai='user'] { justify-content: flex-end; }
+.gsb-bong-hoi {
+  max-width: 86%;
+  padding: 8px 12px; border-radius: 16px 16px 4px 16px;
+  background: var(--gsb-nhan); color: #fff;
+  font-size: 14px; line-height: 1.55; white-space: pre-wrap; overflow-wrap: anywhere;
+}
+.gsb-bong-hoi .gsb-chip { background: rgba(255, 255, 255, 0.18); color: #fff; border-color: rgba(255, 255, 255, 0.28); margin-bottom: 6px; }
+.gsb-tra-loi { min-width: 0; flex: 1; }
+.gsb-the {
+  padding: 10px 14px; border-radius: 4px 16px 16px 16px;
+  background: var(--gsb-nen-2); border: 1px solid var(--gsb-vien);
+  overflow-wrap: anywhere;
+}
+.gsb-cho { display: inline-flex; align-items: center; gap: 8px; font-size: 13px; color: var(--gsb-chu-3); }
+.gsb-con-tro { display: inline-block; width: 7px; height: 15px; margin-left: 2px; vertical-align: -2px; border-radius: 2px; background: var(--gsb-nhan); animation: gsb-nhap 1s steps(2) infinite; }
+@keyframes gsb-nhap { 50% { opacity: 0; } }
+
+/* Hàng hành động dưới câu trả lời */
+.gsb-hanh-dong { display: flex; flex-wrap: wrap; align-items: center; gap: 2px 10px; margin-top: 5px; padding-left: 2px; font-size: 11.5px; color: var(--gsb-chu-3); }
+.gsb-hanh-dong button { display: inline-flex; align-items: center; gap: 4px; padding: 2px 0; background: none; border: 0; color: inherit; cursor: pointer; }
+.gsb-hanh-dong button:hover { color: var(--gsb-nhan); }
+.gsb-hanh-dong button:disabled { opacity: 0.4; cursor: default; }
+.gsb-co-san { padding: 1px 7px; border-radius: 999px; background: var(--gsb-nhan-nhat); color: var(--gsb-nhan); font-weight: 600; }
+
+/* ── Chữ trả lời: cỡ dễ đọc, dòng thoáng, đầu mục rõ — đè màu cứng (#f1f5f9…) của ChatMarkdown theo chủ đề ── */
+.gsb-md { font-size: 14.5px; line-height: 1.7; color: var(--gsb-chu); }
+.gsb-md .chat-markdown p { margin: 0 0 0.6em; line-height: 1.7; }
+.gsb-md .chat-markdown h1, .gsb-md .chat-markdown h2, .gsb-md .chat-markdown h3 {
+  color: var(--gsb-chu); margin: 0.9em 0 0.35em; line-height: 1.35;
+}
+.gsb-md .chat-markdown h1 { font-size: 1.12em; }
+.gsb-md .chat-markdown h2 { font-size: 1.05em; padding-bottom: 3px; border-bottom: 1px solid var(--gsb-vien); }
+.gsb-md .chat-markdown h3 { font-size: 1em; color: var(--gsb-nhan); }
+.gsb-md .chat-markdown h1:first-child, .gsb-md .chat-markdown h2:first-child, .gsb-md .chat-markdown h3:first-child { margin-top: 0; }
+.gsb-md .chat-markdown strong { color: var(--gsb-chu); font-weight: 650; }
+.gsb-md .chat-markdown ul, .gsb-md .chat-markdown ol { margin: 0.2em 0 0.7em; }
+.gsb-md .chat-markdown li { margin: 0.2em 0; line-height: 1.65; }
+.gsb-md .chat-markdown li::marker { color: var(--gsb-nhan); }
+.gsb-md .chat-markdown blockquote { color: var(--gsb-chu-2); border-left-color: var(--gsb-nhan-vien); background: var(--gsb-nhan-nhat); padding: 6px 10px; border-radius: 0 8px 8px 0; }
+.gsb-md .chat-markdown hr { border-color: var(--gsb-vien); }
+.gsb-md .chat-markdown p code, .gsb-md .chat-markdown li code, .gsb-md .chat-markdown td code, .gsb-md .chat-markdown h3 code {
+  background: var(--gsb-nhan-nhat); color: var(--gsb-nhan); border-color: var(--gsb-nhan-vien); font-size: 0.86em;
+}
+.gsb-md .chat-markdown table { font-size: 13px; }
+.gsb-md .chat-markdown th { color: var(--gsb-chu); }
+.gsb-md .chat-markdown th, .gsb-md .chat-markdown td { border-color: var(--gsb-vien); }
+.gsb-md .chat-markdown div:has(> table) { border-color: var(--gsb-vien); max-width: 100%; }
+.gsb-md .chat-markdown a { color: var(--gsb-nhan); }
+/* Mốc thời gian ⇒ nút "▶ 3:20" tua video (themLienKet chèn `#tua-<giây>`). */
+.gsb-md .chat-markdown a[href^='#tua-'] {
+  display: inline-flex; align-items: center; gap: 3px;
+  padding: 0 7px; border-radius: 999px; text-decoration: none;
+  background: var(--gsb-nhan-nhat); border: 1px solid var(--gsb-nhan-vien);
+  font-size: 0.86em; font-weight: 600; font-variant-numeric: tabular-nums; white-space: nowrap;
+  color: var(--gsb-nhan); cursor: pointer;
+}
+.gsb-md .chat-markdown a[href^='#tua-']::before { content: '▶'; font-size: 0.7em; }
+.gsb-md .chat-markdown a[href^='#tua-']:hover { background: var(--gsb-nhan); color: #fff; }
+
+/* ── Chip ngữ cảnh (đoạn video / slide) ── */
+.gsb-chip {
+  display: inline-flex; align-items: center; gap: 6px; max-width: 100%;
+  padding: 3px 6px 3px 9px; border-radius: 999px;
+  border: 1px solid var(--gsb-nhan-vien); background: var(--gsb-nhan-nhat); color: var(--gsb-nhan);
+  font-size: 12px; font-weight: 600;
+}
+.gsb-chip-chu { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.gsb-chip-moc { font-variant-numeric: tabular-nums; opacity: 0.85; white-space: nowrap; }
+.gsb-chip button { display: inline-flex; padding: 2px; border: 0; border-radius: 999px; background: transparent; color: inherit; cursor: pointer; }
+.gsb-chip button:hover { background: var(--gsb-nhan-vien); }
+
+/* ── Gợi ý nhanh ── */
+.gsb-goi-y { display: flex; flex-wrap: wrap; gap: 6px; }
+.gsb-goi-y button {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 5px 10px; border-radius: 999px;
+  border: 1px solid var(--gsb-vien); background: var(--gsb-nen); color: var(--gsb-chu-2);
+  font-size: 12.5px; line-height: 1.3; text-align: left; cursor: pointer;
+  transition: border-color 0.15s, color 0.15s, background 0.15s;
+}
+.gsb-goi-y button:hover { border-color: var(--gsb-nhan-vien); color: var(--gsb-nhan); background: var(--gsb-nhan-nhat); }
+.gsb-goi-y button:disabled { opacity: 0.45; cursor: default; }
+.gsb-the-goi-y { display: grid; gap: 6px; }
+.gsb-the-goi-y button {
+  display: flex; align-items: center; gap: 10px;
+  padding: 9px 12px; border-radius: 12px;
+  border: 1px solid var(--gsb-vien); background: var(--gsb-nen); color: var(--gsb-chu);
+  font-size: 13.5px; line-height: 1.4; text-align: left; cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+}
+.gsb-the-goi-y button:hover { border-color: var(--gsb-nhan-vien); background: var(--gsb-nhan-nhat); }
+.gsb-the-goi-y button:disabled { opacity: 0.45; cursor: default; }
+.gsb-the-goi-y .gsb-bieu-tuong { font-size: 16px; line-height: 1; }
+
+/* ── Lời chào khi chưa hỏi gì ── */
+.gsb-chao { display: flex; gap: 10px; align-items: flex-start; margin-bottom: 12px; }
+.gsb-chao-the { flex: 1; padding: 10px 12px; border-radius: 4px 14px 14px 14px; background: var(--gsb-nen-2); border: 1px solid var(--gsb-vien); font-size: 14px; line-height: 1.6; color: var(--gsb-chu); }
+.gsb-chao-the b { color: var(--gsb-nhan); }
+.gsb-nhom-ten { margin: 12px 0 6px; font-size: 11px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: var(--gsb-chu-3); }
+
+/* ── Ô soạn ── */
+.gsb-soan { flex-shrink: 0; padding: 8px 10px 10px; border-top: 1px solid var(--gsb-vien); background: var(--gsb-nen); }
+.gsb-o {
+  display: flex; align-items: flex-end; gap: 6px;
+  padding: 6px 6px 6px 8px; border-radius: 14px;
+  border: 1px solid var(--gsb-vien); background: var(--gsb-nen-2);
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+.gsb-o:focus-within { border-color: var(--gsb-nhan-vien); box-shadow: 0 0 0 3px var(--gsb-nhan-nhat); }
+.gsb-o textarea {
+  flex: 1; min-width: 0; resize: none; border: 0; outline: none; background: transparent;
+  color: var(--gsb-chu); font-family: inherit; font-size: 14px; line-height: 1.5; padding: 6px 2px; min-height: 34px; max-height: 140px; box-sizing: border-box;
+}
+.gsb-o textarea::placeholder { color: var(--gsb-chu-3); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.gsb-nut-gui {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 34px; height: 34px; flex-shrink: 0; border-radius: 10px; border: 0;
+  background: var(--gsb-nhan); color: #fff; cursor: pointer; transition: opacity 0.15s, transform 0.1s;
+}
+.gsb-nut-gui:active { transform: scale(0.94); }
+.gsb-nut-gui:disabled { opacity: 0.35; cursor: default; }
+.gsb-nut-anh { display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 34px; flex-shrink: 0; border: 0; border-radius: 9px; background: transparent; color: var(--gsb-chu-3); cursor: pointer; }
+.gsb-nut-anh:hover { color: var(--gsb-nhan); background: var(--gsb-nhan-nhat); }
+.gsb-nut-anh:disabled { opacity: 0.35; cursor: default; }
+.gsb-goi-y-soan { margin-bottom: 7px; }
+.gsb-meo { margin-top: 5px; font-size: 11px; color: var(--gsb-chu-3); text-align: center; }
+.gsb-anh-nho { position: relative; }
+.gsb-anh-nho img { width: 56px; height: 56px; object-fit: cover; border-radius: 10px; border: 1px solid var(--gsb-vien); }
+.gsb-anh-nho button { position: absolute; top: -6px; right: -6px; display: flex; align-items: center; justify-content: center; width: 20px; height: 20px; border-radius: 999px; border: 1px solid var(--gsb-vien); background: var(--gsb-nen); color: var(--gsb-chu-2); cursor: pointer; }
+
+/* ── Hỏi đáp (FAQ) ── */
+.gsb-faq { max-height: 260px; overflow-y: auto; border-bottom: 1px solid var(--gsb-vien); background: var(--gsb-nen-2); }
+.gsb-faq-muc { border-bottom: 1px solid var(--gsb-vien); }
+.gsb-faq-muc:last-child { border-bottom: 0; }
+
+/* ── Nút "💬 Hỏi slide này" gắn vào chú thích ảnh slide trong nội dung bài (nutHoiSlide.ts) ── */
+.rich-content .anh-slide .chu-thich:has(.gsb-nut-slide) { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; }
+.gsb-nut-slide {
+  margin-left: auto;
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 3px 10px; border-radius: 999px; white-space: nowrap;
+  border: 1px solid color-mix(in srgb, var(--neon-violet, #8b5cf6) 35%, transparent);
+  background: color-mix(in srgb, var(--neon-violet, #8b5cf6) 12%, transparent);
+  color: var(--neon-violet, #8b5cf6);
+  font-size: 12px; font-weight: 600; line-height: 1.4; cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+.gsb-nut-slide:hover { background: var(--neon-violet, #8b5cf6); color: #fff; }
+
+@media (prefers-reduced-motion: reduce) { .gsb-con-tro { animation: none; } }

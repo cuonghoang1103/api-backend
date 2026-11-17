@@ -27,7 +27,7 @@ import type { useGiaSuBai } from '@/components/academy/useGiaSuBai';
 
 /** Một bản `useGiaSuBai` dùng CHUNG cho cả phòng — xem ghi chú ở `PhongVideoClient`. */
 export type GiaSu = ReturnType<typeof useGiaSuBai>;
-import { giayTuURL, moc, themLienKet } from './mocThoiGian';
+import { giayTuURL, moc, themLienKet } from '@/lib/mocThoiGian';
 
 /**
  * Chip mở màn. `key` CỐ ĐỊNH ⇒ dùng chung cache: ai bấm cùng chip trên cùng

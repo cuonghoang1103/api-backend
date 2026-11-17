@@ -8,6 +8,13 @@
 Mẫu một mục:
 
 ```
+### 18/11/2026 — Máy nhà (hạ tầng video) — bộ tự soát báo "âm tục" nhầm, tập kẹt ở soát tay
+- **Triệu chứng:** csx-7-1 (và trước đó cea-asm-a) bị `soat-tha.sh` xếp SOAT-TAY lượt nào cũng vậy, không vào hàng render dù mọi câu điểm nghe ≥ 0,7.
+- **Nguyên nhân:** `~/Documents/video-bai-giang/scratchpad/dieu-phoi/soat-tha.sh` dùng `grep "địt|đìt|dịt"` trên CẢ `thoigian.json`, gồm trường `nghe`/`words` là chữ Whisper chép lại ("biên dịch" ⇒ "biên dịt") — không phải chữ giọng đọc.
+- **Cách sửa:** chỉ soát hai trường đọc thật `hien`/`doc` (python), chép lại sang `~/agent-nha/soat-tha.sh` (timer vbg-soat-tha 15 phút). Tập kẹt thả tay.
+- **Ảnh hưởng:** vài tập trễ render một–hai giờ; không tập nào lên web với âm tục.
+- **Bài học:** luật soát chữ phải nhắm đúng trường nguồn; trường do máy nghe sinh ra chỉ để chấm điểm, không phải nội dung (memory `feedback_phien_am_tranh_tu_tuc`: "bỏ trường nghe").
+
 ### dd/mm/yyyy — <khu vực> — <tên lỗi ngắn>
 - **Triệu chứng:** người dùng thấy gì
 - **Nguyên nhân:** gốc rễ thật (tệp:dòng nếu có)

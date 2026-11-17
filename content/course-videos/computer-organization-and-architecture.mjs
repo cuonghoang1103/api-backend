@@ -29,9 +29,9 @@ export default {
     "cea201-12-2-pipelining": { yt: "nv0yAm5gc-E", credit: "Gate Smashers — L-4.2: Pipelining Introduction and structure | Computer Organisation", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/computer-organization-and-architecture/12-cau-truc-cpu/12-04-pipeline-duong-ong-lenh-c0190d86.mp4' }, defaultVideoTrack: 'VI'},
     "cea201-13-1-risc-cisc": { yt: "ZW1gb3h-f9k", credit: "Gate Smashers — L-2.13: RISC vs CISC | Computer Organization & Architecture", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/computer-organization-and-architecture/13-risc/13-03-risc-vs-cisc-2501d419.mp4' }, defaultVideoTrack: 'VI'},
     "cea201-14-1-ilp-superscalar": { yt: "Ut8wY6qtie4", credit: "Tech CS&IT — Instruction Level Parallelism | ILP Techniques | Superscalar Technique | Computer Architecture", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/computer-organization-and-architecture/14-ilp-superscalar/14-03-ilp-superscalar-ce5f5d8d.mp4' }, defaultVideoTrack: 'VI'},
-    "cea201-15-1-multicore": { yt: "r_ZE1XVT8Ao", credit: "Neso Academy — Cache Coherence Problem & Cache Coherency Protocols" },
+    "cea201-15-1-multicore": { yt: "r_ZE1XVT8Ao", credit: "Neso Academy — Cache Coherence Problem & Cache Coherency Protocols", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/computer-organization-and-architecture/15-song-song-da-nhan/15-04-multicore-87d08bcc.mp4' }, defaultVideoTrack: 'VI'},
     "cea201-n1-1-marie": { yt: "mkXdChZ1D2Y", credit: "THE IT CHANNEL — Programming with MARIE Simulator: Take inputs, compute sum, and display result" },
-    "cea201-n2-1-branch-prediction": { yt: "nczJ58WvtYo", credit: "Computerphile — How Branch Prediction Works in CPUs - Computerphile" },
+    "cea201-n2-1-branch-prediction": { yt: "nczJ58WvtYo", credit: "Computerphile — How Branch Prediction Works in CPUs - Computerphile", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/computer-organization-and-architecture/17-nang-cao-cpu-hien-dai/17-01-du-doan-nhanh-suy-doan-639cb836.mp4' }, defaultVideoTrack: 'VI'},
     "cea201-n3-1-spectre-meltdown": { yt: "I5mRwzVvFGE", credit: "Computerphile — Spectre & Meltdown - Computerphile" },
 
     /* ---- Bổ sung: các bài "Slide by slide" + phần mở đầu/ôn thi ---- */

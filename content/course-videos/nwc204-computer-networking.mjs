@@ -83,7 +83,7 @@ export default {
     /* ── Chương 10 — Địa chỉ IPv4 (buổi 30–34) ──────────────────────────── */
     "nwc204-10-1-cau-truc-dia-chi-ipv4": { yt: "3ROdsfEUuhs", credit: "Jeremy's IT Lab — Free CCNA | IPv4 Addressing (Part 1) | Day 7 | CCNA 200-301 Complete Course" },
     "nwc204-10-2-chia-subnet-va-vlsm": { yt: "z-JqCedc9EI", credit: "Jeremy's IT Lab — Free CCNA | Subnetting (Part 3 - VLSM) | Day 15 | CCNA 200-301 Complete Course", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nwc204-computer-networking/11-dia-chi-ipv4/11-02-chia-subnet-va-vlsm-718e142e.mp4' }, defaultVideoTrack: 'VI'},
-    "nwc204-10-3-lab-2-2-va-thi-giua-ky": { yt: "GITl4IScWQA", credit: "Tech Acad — 11.10.1 Packet Tracer - Design and Implement a VLSM Addressing Scheme" },
+    "nwc204-10-3-lab-2-2-va-thi-giua-ky": { yt: "GITl4IScWQA", credit: "Tech Acad — 11.10.1 Packet Tracer - Design and Implement a VLSM Addressing Scheme", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nwc204-computer-networking/11-dia-chi-ipv4/11-03-lab-2-2-va-thi-giua-ky-f9c9d010.mp4' }, defaultVideoTrack: 'VI'},
 
     /* ── Chương 11 — Địa chỉ IPv6 (buổi 35–36) ──────────────────────────── */
     "nwc204-11-1-cau-truc-dia-chi-ipv6": { yt: "ZNuXyOXae5U", credit: "Jeremy's IT Lab — Free CCNA | IPv6 Part 1 | Day 31 | CCNA 200-301 Complete Course" },

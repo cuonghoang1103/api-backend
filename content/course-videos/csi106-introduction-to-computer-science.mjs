@@ -24,8 +24,8 @@ export default {
     // Chương 3 — Lưu trữ & thao tác dữ liệu
     "csi106-3-0a-slides-luu-tru-du-lieu": { yt: "1GSjbWt0c9M", credit: "CrashCourse — Representing Numbers and Letters with Binary: Crash Course Computer Science #4", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/csi106-introduction-to-computer-science/03-luu-tru-thao-tac-du-lieu/03-01-slide-luu-tru-du-lieu-a7b7bf0e.mp4' }, defaultVideoTrack: 'VI'},
     "csi106-3-0b-slides-phep-logic-dich-bit": { yt: "4JgtUf5ThqY", credit: "Christopher Lum — Bit Shifting, Bit Masking, and Bit Manipulation", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/csi106-introduction-to-computer-science/03-luu-tru-thao-tac-du-lieu/03-02-slide-phep-logic-dich-bit-37078d21.mp4' }, defaultVideoTrack: 'VI'},
-    "csi106-3-1-storing-numbers": { yt: "PZRI1IfStY0", credit: "Computerphile — Floating Point Numbers - Computerphile" },
-    "csi106-3-2-text-media-operations": { yt: "Kv1Hiv3ox8I", credit: "Branch Education — How are Images Compressed?  [46MB ↘↘ 4.07MB] JPEG In Depth" },
+    "csi106-3-1-storing-numbers": { yt: "PZRI1IfStY0", credit: "Computerphile — Floating Point Numbers - Computerphile", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/csi106-introduction-to-computer-science/03-luu-tru-thao-tac-du-lieu/03-03-luu-so-nguyen-so-thuc-e7990c66.mp4' }, defaultVideoTrack: 'VI'},
+    "csi106-3-2-text-media-operations": { yt: "Kv1Hiv3ox8I", credit: "Branch Education — How are Images Compressed?  [46MB ↘↘ 4.07MB] JPEG In Depth", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/csi106-introduction-to-computer-science/03-luu-tru-thao-tac-du-lieu/03-04-luu-chu-media-phep-tren-du-lieu-6016e2bb.mp4' }, defaultVideoTrack: 'VI'},
 
     // Chương 4 — Mạng & Internet
     "csi106-4-0-slides-mang-tcp-ip": { yt: "3kfO61Mensg", credit: "NetworkChuck — REAL LIFE example!! (TCP/IP and OSI layers) // FREE CCNA // EP 4" },

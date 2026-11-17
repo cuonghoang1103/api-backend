@@ -150,6 +150,14 @@ test('phụ đề video riêng: seed idempotent + phòng video + gia sư chọn 
   assert.doesNotMatch(ngCanhVi, /Branches are pointers/);
   assert.match(vi.system, /Use EXACTLY the parts listed/);
 
+  // "Hỏi phần này" (17/11/2026): đoạn được hỏi có ĐỦ câu của nó + nhắc ngay đầu câu hỏi, thắng cửa sổ quanh giây.
+  const doan = await buildTutorCall(a.id, { ...hoi, videoTrack: 'VI', phuDeGiay: 5, doan: { tu: 199.9, den: 330, ten: 'Nhánh là con trỏ' } });
+  const ngCanhDoan = String(doan.messages[0].content);
+  assert.match(ngCanhDoan, /ĐOẠN NGƯỜI HỌC ĐANG HỎI \("Nhánh là con trỏ", \[3:19 - 5:30\] — đủ từng câu\):\n\[3:20\] Nhánh chỉ là một con trỏ nhẹ tới commit\./);
+  assert.doesNotMatch(ngCanhDoan, /ĐOẠN NGƯỜI HỌC ĐANG XEM/);
+  assert.match(String(doan.messages.at(-1)!.content), /^\[Câu hỏi về ĐOẠN VIDEO \[3:19 - 5:30\] "Nhánh là con trỏ"/);
+  assert.match(doan.system, /ĐOẠN NGƯỜI HỌC ĐANG HỎI/);
+
   const ytCall = await buildTutorCall(a.id, { ...hoi, videoTrack: 'YT' });
   assert.match(String(ytCall.messages[0].content), /\[3:20\] Branches are pointers\./);
   assert.doesNotMatch(String(ytCall.messages[0].content), /CÁC PHẦN CỦA VIDEO/);

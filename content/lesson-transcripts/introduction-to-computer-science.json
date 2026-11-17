@@ -1,0 +1,47 @@
+{
+  "courseSlug": "introduction-to-computer-science",
+  "sinhBoi": "scripts/phu-de-tu-video-rieng.mjs",
+  "lessons": {
+    "csi104-0-5-bat-dau-tu-so-0": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/introduction-to-computer-science/00-gioi-thieu-huong-dan-hoc/00-05-hanh-trinh-3d-vao-may-tinh-acb9795a.mp4","durationSec":215.52,"nguonCau":"srt",
+      "parts": [],
+      "cues": [
+        {"t":5.2,"vi":"Bạn bấm chạy một dòng code và máy làm theo."},
+        {"t":9.09,"vi":"Nhưng bên trong cái hộp này, thứ gì thật sự chạy nó?"},
+        {"t":13,"vi":"Mình sẽ thu nhỏ lại và chui vào trong, tới tận những công tắc nhỏ hơn vi khuẩn hàng chục lần."},
+        {"t":20.27,"vi":"Mở tấm kính hông ra nào."},
+        {"t":23.85,"vi":"Đây là bo mạch chủ, motherboard, nơi mọi linh kiện cắm vào."},
+        {"t":28.48,"vi":"Ở giữa là CPU, bộ xử lý trung tâm, cắm trong socket."},
+        {"t":33.02,"vi":"Bên phải là RAM, bộ nhớ chính, giữ chương trình đang chạy."},
+        {"t":37.45,"vi":"Thanh nằm ngang là ổ SSD, lưu dữ liệu lâu dài."},
+        {"t":41.88,"vi":"Phía dưới là card đồ hoạ GPU, và chipset lo cổng USB."},
+        {"t":47.01,"vi":"Những đường đồng li ti nối CPU với RAM là bus: dữ liệu chạy trên đó thành các xung điện."},
+        {"t":55.86,"vi":"Lại gần CPU. Nắp kim loại này là IHS, dẫn hơi nóng ra quạt."},
+        {"t":61.53,"vi":"Nhấc nắp lên: bên dưới là die, mảnh silicon to cỡ con tem, chứa hàng tỉ transistor."},
+        {"t":68.09,"vi":"Có tám lõi, hay core, mỗi lõi là một bộ xử lý hoàn chỉnh."},
+        {"t":72.63,"vi":"Dải ở giữa là cache L3, bộ nhớ đệm dùng chung, nhanh hơn RAM nhiều."},
+        {"t":77.89,"vi":"Mép trái là bộ điều khiển bộ nhớ nói chuyện với RAM, mép phải là khối I/O."},
+        {"t":85.32,"vi":"Chui vào một lõi. Nó lặp mãi ba bước, hàng tỉ lần mỗi giây."},
+        {"t":90.12,"vi":"Một, nạp lệnh, fetch, từ cache L1."},
+        {"t":93.12,"vi":"Hai, giải mã, decode, xem lệnh bảo làm gì."},
+        {"t":96.82,"vi":"Ba, thực thi, execute: ALU tính rồi ghi kết quả vào thanh ghi."},
+        {"t":101.92,"vi":"Lệnh Add Y: thanh ghi AC đang là năm, Y là bảy, ALU cộng ra mười hai."},
+        {"t":107.82,"vi":"Chính là CPU MARIE trong phòng lab Máy tính từ số 0, chỉ là chạy nhanh hơn rất nhiều."},
+        {"t":116.35,"vi":"Phóng vào ALU: ở đây chỉ có các cổng logic nối với nhau."},
+        {"t":120.78,"vi":"Mạch cộng bốn bit này gồm bốn bộ cộng đầy đủ, full adder, mỗi bộ có hai cổng XOR, hai cổng AND và một cổng OR."},
+        {"t":129.86,"vi":"Đưa vào năm là 0101 và bảy là 0111."},
+        {"t":134.71,"vi":"Dây sáng là bit một, và bit nhớ lan dần từ phải sang trái."},
+        {"t":139.92,"vi":"Kết quả là 1100, tức mười hai, đúng như ALU vừa tính."},
+        {"t":147.04,"vi":"Phóng vào một cổng AND: bên trong là sáu transistor, ba cái loại P và ba cái loại N."},
+        {"t":153.57,"vi":"Chui vào một transistor, đáy của mọi thứ: một công tắc có ba cực, nguồn, máng và cực cổng."},
+        {"t":161.02,"vi":"Cực cổng không có điện áp thì electron không có đường đi: công tắc tắt, đó là số không."},
+        {"t":168.45,"vi":"Đặt điện áp lên cực cổng, điện trường hút electron thành một kênh dẫn, dòng chạy qua: đó là số một."},
+        {"t":177.16,"vi":"Chip thật dùng transistor ba chiều, FinFET, nhưng nguyên lý vẫn y như vậy."},
+        {"t":182.92,"vi":"Hàng tỉ công tắc bật tắt hàng tỉ lần mỗi giây, đó là toàn bộ bí mật."},
+        {"t":189.9,"vi":"Giờ mình lùi ra thật nhanh nhé."},
+        {"t":192.03,"vi":"Điện áp thành bit, transistor thành cổng logic, cổng thành mạch cộng."},
+        {"t":197.62,"vi":"Mạch cộng nằm trong lõi, lõi nằm trên con chip, chip cắm trên bo mạch chủ, và tất cả cùng chạy chương trình của bạn."},
+        {"t":206.9,"vi":"Tự bay qua từng lớp ở trang Hành trình 3D trên cuongthai.com nhé."}
+      ]
+    }
+  }
+}

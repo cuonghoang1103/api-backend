@@ -71,7 +71,13 @@ async function main() {
   const idTheoThuMuc = new Map();
   const baiDir = path.join(NGUON_DIR, 'public/bai');
   if (existsSync(baiDir)) {
+    // 17/11: một số kịch bản nạp vào là nổ bộ nhớ cả tiến trình (vd obj-0-8 — không bắt được bằng try) ⇒ bỏ qua theo
+    // PHUDE_BO_QUA=id1,id2 (khớp id hoặc tiền tố kết thúc bằng '-'); PHUDE_DEM=1 in tiến độ để tìm thủ phạm.
+    const BO_QUA = (process.env.PHUDE_BO_QUA ?? '').split(',').map((x) => x.trim()).filter(Boolean);
+    let dem = 0;
     for (const id of readdirSync(baiDir)) {
+      if (BO_QUA.some((b) => id === b || (b.endsWith('-') && id.startsWith(b)))) continue;
+      if (process.env.PHUDE_DEM && ++dem) console.error(`  · ${dem} ${id}`);
       const kb = path.join(NGUON_DIR, 'src/bai', id, 'kichban.ts');
       if (!existsSync(kb) || !existsSync(path.join(baiDir, id, 'thoigian.json'))) continue;
       try {

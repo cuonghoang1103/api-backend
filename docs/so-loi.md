@@ -25,6 +25,27 @@ Mẫu một mục:
 
 ---
 
+### 18/11/2026 — App CT Lồng Tiếng (đóng gói macOS) — bản cài dựng xanh nhưng mở lên chết ngay (SIGTRAP)
+- **Triệu chứng:** `CT Lồng Tiếng.app` (dmg/zip arm64 + x64) mở là tắt, không cửa sổ, không log; báo cáo crash: `EXC_BREAKPOINT` trong `ElectronMain` → V8. Bản dev (`electron .`) cùng mã chạy bình thường.
+- **Nguyên nhân:** `productName: CT Lồng Tiếng` trong `apps/ct-long-tieng/electron-builder.yml` ⇒ tên BUNDLE + tệp chạy + các app Helper mang dấu tiếng Việt; Electron 33 chết lúc khởi động với tên đó (đo: cùng bản dựng, chỉ đổi `-c.productName="CT Long Tieng"` là chạy). Không phải do ký: ký ad-hoc `--deep` một Electron.app trần vẫn chạy.
+- **Cách sửa:** `productName: CT Long Tieng` (ASCII) cho bundle/tệp; tên có dấu đưa vào `mac.extendInfo.CFBundleDisplayName`, `app.setName()` lúc chạy, `nsis.shortcutName`, `linux.desktop.Name`. Móc `scripts/after-pack.cjs` ký ad-hoc cả bundle (không thì "app bị hỏng" trên Apple Silicon khi tải về).
+- **Ảnh hưởng:** chỉ bản cài thử trên máy, chưa phát hành.
+- **Bài học:** "build xanh" ≠ "app chạy" (y như bài học Prisma musl/glibc trong CLAUDE.md) — mở bản ĐÓNG GÓI một lần trước khi coi là xong; tên tệp/bundle giữ ASCII, chữ có dấu chỉ để hiển thị.
+
+### 18/11/2026 — App CT Lồng Tiếng (IPC) — mọi lời gọi `window.ctlt` bị main từ chối "IPC bị từ chối"
+- **Triệu chứng:** cửa sổ trắng; log main: `Error occurred in handler for 'ctlt:lay-trang-thai': IPC bị từ chối`.
+- **Nguyên nhân:** kiểm người gửi bằng `new URL(senderFrame.url).origin === 'ctlt://app'` (`src/main/index.ts`). Với scheme tự đăng ký (`ctlt:`), WHATWG URL của Node trả `origin === "null"` ⇒ không bao giờ khớp (và nếu so với "null" thì lại khớp mọi trang opaque).
+- **Cách sửa:** `laGocApp()` so `protocol === 'ctlt:' && host === 'app'` (dev: so origin của Vite như cũ); dùng chung cho chặn `will-navigate`.
+- **Ảnh hưởng:** chỉ lúc phát triển, bắt được ở lần chạy chế độ thử đầu tiên.
+- **Bài học:** `URL.origin` chỉ có nghĩa với scheme "đặc biệt" (http/https/file/ws…); scheme riêng của Electron phải so protocol + host.
+
+### 18/11/2026 — App CT Lồng Tiếng (khởi động macOS) — mở app ra HAI cửa sổ, một cái không có IPC
+- **Triệu chứng:** `Error: No handler registered for 'ctlt:lay-trang-thai'` ngay lúc mở; ảnh chụp tự động lấy nhầm khung cũ.
+- **Nguyên nhân:** macOS bắn `app.on('activate')` NGAY khi mở app, trong lúc `whenReady` còn `await` (dựng máy chủ giả, tìm ffmpeg) ⇒ `moApp()` tạo cửa sổ trước khi `dangKyIpc()` chạy; sau đó khởi động tạo thêm cửa sổ thứ hai.
+- **Cách sửa:** cờ `sanSang` — `activate`/`second-instance` chỉ mở cửa sổ sau khi khởi động xong (`src/main/index.ts`).
+- **Ảnh hưởng:** chỉ lúc phát triển (chế độ thử khởi động chậm hơn nên lộ ra).
+- **Bài học:** handler sự kiện app đăng ký ở cấp module chạy được TRƯỚC `whenReady` xong — mọi thứ chúng chạm tới phải chịu được trạng thái "chưa khởi tạo".
+
 ### 17/11/2026 — Web (nút trợ lý nổi trên trang học) — icon AI "hiện rồi biến", nhấp nháy
 - **Triệu chứng:** con robot góc phải trang học lúc có lúc không: rê chuột / AI bắt đầu trả lời thì nó biến mất một nhịp rồi hiện lại thành một hình khác; trên iPad nó ẩn suốt lúc khoá đang tải rồi mới "bật" ra từ 0; đổi trang là nó lại phóng to từ chấm.
 - **Nguyên nhân:** ba chỗ trong `frontend/src/components/chat/FloatingAIAssistant.tsx` (bản trước 17/11): (1) `{robotData ? <LottieClient/> : <img src="/robot-avatar.png"/>}` — khi Lottie JSON về, ảnh PNG bị gỡ, `LottieClient.tsx` vẽ ô `visibility:hidden` ở lần đầu rồi `next/dynamic(() => import('lottie-react'))` KHÔNG có `loading` ⇒ trả `null` tới khi chunk ~300 KB về ⇒ khoảng trống; (2) `motion.div initial={{ scale: 0, opacity: 0 }}` + `delay: 0.5` chạy lại MỖI lần nút gắn lại (ẩn/hiện theo trang); (3) trên máy cảm ứng `hiddenOnMobile` chỉ mở khi kho `bai` có giá trị — mà `CourseTutor` ghi `bai` SAU khi khoá + bài tải xong. Thêm: `useChatStore()` trần + `animate={{ y: [0,-4,0] }}` tạo object mới mỗi lần vẽ ⇒ mỗi mẩu chữ chat chảy về là vòng nhún bị khởi động lại (giật).

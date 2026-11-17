@@ -1,0 +1,92 @@
+# Đóng gói CT Lồng Tiếng — app RIÊNG, nhỏ (không chung mã/bản cài với app CuongThai ở desktop/).
+#
+#   npm run dist:mac     # CT-Long-Tieng-<ver>-arm64.dmg / -x64.dmg + .zip
+#   npm run dist:win     # CT-Long-Tieng-Setup-<ver>.exe (NSIS)
+#   npm run dist:linux   # CT-Long-Tieng-<ver>.AppImage
+#
+# CHƯA ký / CHƯA notarize và KHÔNG phát hành công khai (hợp đồng mục 4: chờ chủ kênh duyệt) — `publish: null`,
+# workflow `ct-long-tieng-build.yml` chỉ lưu bản cài làm artifact.
+#
+# Tên tệp không có khoảng trắng/dấu (`CT-Long-Tieng-…`): GitHub đổi khoảng trắng trong tên tệp đính kèm thành dấu
+# chấm — bài học từ app CT Work (xem desktop/electron-builder.ctwork.yml).
+
+appId: com.cuongthai.longtieng
+# Tên BUNDLE/tệp chạy phải là ASCII: "CT Lồng Tiếng.app" dựng xanh nhưng Electron 33 chết SIGTRAP ngay lúc mở
+# (đo 18/11/2026 — cùng mã, đổi tên ASCII là chạy). Tên CÓ DẤU vẫn hiện ở Dock/Finder (CFBundleDisplayName), menu,
+# cửa sổ, thông báo (app.setName lúc chạy), lối tắt Windows và mục menu Linux.
+productName: CT Long Tieng
+copyright: © 2026 CuongHoangDev
+
+directories:
+  output: release
+  buildResources: build
+
+files:
+  - dist/**/*
+  - resources/**/*
+  - package.json
+  - '!**/*.map'
+  - '!node_modules/ffmpeg-static/{README.md,example.js,install.js,ffmpeg.README}'
+
+# ffmpeg là tệp chạy — phải nằm NGOÀI asar thì mới spawn được (main tự đổi `app.asar` → `app.asar.unpacked`).
+asarUnpack:
+  - node_modules/ffmpeg-static/**
+
+# ffmpeg-static chỉ tải nhị phân của MÁY ĐANG DỰNG. Dựng bản macOS x64 trên máy arm64 (hoặc ngược lại) thì móc này
+# thay bằng nhị phân đúng kiến trúc — không có nó, bản x64 mang ffmpeg arm64 và "Tải trên máy này" chết câm trên
+# máy Intel (yt-dlp vẫn chạy được nhưng không ghép được hình + tiếng 1080p).
+afterPack: scripts/after-pack.cjs
+
+publish: null
+
+# ── macOS ──────────────────────────────────────────────────
+mac:
+  category: public.app-category.education
+  icon: build/icon.png
+  artifactName: 'CT-Long-Tieng-${version}-${arch}-mac.${ext}'
+  target:
+    - target: dmg
+      arch: [arm64, x64]
+    - target: zip
+      arch: [arm64, x64]
+  minimumSystemVersion: '11.0'
+  # Chưa có chứng chỉ Developer ID ⇒ móc after-pack ký ad-hoc (đủ để chạy trên Apple Silicon; lần đầu mở phải
+  # chuột phải → Mở, vì Gatekeeper chưa biết app).
+  hardenedRuntime: false
+  gatekeeperAssess: false
+  notarize: false
+  extendInfo:
+    CFBundleDisplayName: CT Lồng Tiếng
+
+dmg:
+  title: '${productName} ${version}'
+  artifactName: 'CT-Long-Tieng-${version}-${arch}.${ext}'
+
+# ── Windows ────────────────────────────────────────────────
+win:
+  icon: build/icon.png
+  target:
+    - target: nsis
+      arch: [x64]
+
+nsis:
+  oneClick: false
+  allowToChangeInstallationDirectory: true
+  perMachine: false
+  createDesktopShortcut: true
+  createStartMenuShortcut: true
+  shortcutName: CT Lồng Tiếng
+  artifactName: 'CT-Long-Tieng-Setup-${version}.${ext}'
+
+# ── Linux ──────────────────────────────────────────────────
+linux:
+  icon: build/icon.png
+  category: AudioVideo
+  synopsis: Lồng tiếng Việt cho video kỹ thuật để tự học
+  executableName: ct-long-tieng
+  artifactName: 'CT-Long-Tieng-${version}.${ext}'
+  target:
+    - target: AppImage
+      arch: [x64]
+  desktop:
+    Name: CT Lồng Tiếng

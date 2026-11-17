@@ -1506,6 +1506,9 @@ function LessonYouTubePlayer({
   return <div ref={wrapperRef} title={title} className="w-full h-full" />;
 }
 
+const TOC_DO = [0.5, 0.75, 0.85, 1, 1.25, 1.5, 1.75, 2];
+const TOC_DO_KEY = 'ct-video-toc-do';
+
 // ─── Custom video player for direct course videos ──────────────────────────
 // Replaces the native <video controls> with the same dark translucent control
 // bar used across the app: layered input-range scrubber, auto-hide overlay,
@@ -1573,6 +1576,27 @@ function CourseVideoPlayer({
   const [showControls, setShowControls] = useState(true);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const hideControlsTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  // 17/11: chỉnh tốc độ (user: video nhanh, phải tua đi tua lại). Nhớ lựa chọn cho mọi bài, giữ qua lần mở sau.
+  const [tocDo, setTocDo] = useState<number>(1);
+  const [moTocDo, setMoTocDo] = useState(false);
+  useEffect(() => {
+    try {
+      const v = Number(localStorage.getItem(TOC_DO_KEY));
+      if (TOC_DO.includes(v) && v !== 1) { setTocDo(v); if (videoRef.current) videoRef.current.playbackRate = v; }
+    } catch { /* bỏ qua */ }
+  }, []);
+  const datTocDo = (r: number) => {
+    setTocDo(r);
+    if (videoRef.current) videoRef.current.playbackRate = r;
+    try { localStorage.setItem(TOC_DO_KEY, String(r)); } catch { /* bỏ qua */ }
+  };
+  const lui = (giay: number) => {
+    const v = videoRef.current;
+    if (!v) return;
+    v.currentTime = Math.max(0, v.currentTime - giay);
+    setCurrentTime(v.currentTime);
+    resetHideTimer();
+  };
 
   useEffect(() => {
     const handler = () => setIsFullscreen(!!document.fullscreenElement);
@@ -1637,6 +1661,13 @@ function CourseVideoPlayer({
       v.currentTime = Math.min(duration, v.currentTime + 5);
       setCurrentTime(v.currentTime);
       resetHideTimer();
+    } else if (e.key === '<' || e.key === '>') {
+      // Shift+, / Shift+. như YouTube: chậm / nhanh một nấc
+      e.preventDefault();
+      const i = TOC_DO.indexOf(tocDo);
+      const j = e.key === '<' ? Math.max(0, i - 1) : Math.min(TOC_DO.length - 1, i + 1);
+      datTocDo(TOC_DO[j]);
+      resetHideTimer();
     }
   };
 
@@ -1673,6 +1704,7 @@ function CourseVideoPlayer({
         onLoadedMetadata={() => {
           const d = videoRef.current?.duration ?? 0;
           setDuration(d);
+          if (videoRef.current) videoRef.current.playbackRate = tocDo;
           if (d > 0) onDuration?.(d);
           // Resume from the last saved position (only once, and never
           // so close to the end that it feels like nothing happened).
@@ -1764,7 +1796,38 @@ function CourseVideoPlayer({
                 {fmt(currentTime)} / {fmt(duration)}
               </span>
 
+              {/* Lùi 10 giây — nghe lại câu vừa rồi */}
+              <button onClick={() => lui(10)} className="shrink-0 text-[12px] font-semibold transition-opacity hover:opacity-75" aria-label="Lùi 10 giây" title="Lùi 10 giây (←: 5 giây)">
+                ↺ 10s
+              </button>
+
               <div className="flex-1" />
+
+              {/* Tốc độ phát */}
+              <div className="relative">
+                <button
+                  onClick={() => { setMoTocDo((x) => !x); resetHideTimer(); }}
+                  className="rounded px-1.5 py-0.5 text-[13px] font-semibold tabular-nums ring-1 ring-white/30 transition-opacity hover:opacity-75"
+                  aria-label="Tốc độ phát"
+                  aria-expanded={moTocDo}
+                  title="Tốc độ phát (Shift + , / Shift + .)"
+                >
+                  {tocDo === 1 ? '1x' : `${tocDo}x`}
+                </button>
+                {moTocDo && (
+                  <div className="absolute bottom-full right-0 mb-2 flex flex-col overflow-hidden rounded-md bg-black/90 py-1 text-[13px] ring-1 ring-white/20">
+                    {TOC_DO.map((r) => (
+                      <button
+                        key={r}
+                        onClick={() => { datTocDo(r); setMoTocDo(false); }}
+                        className={`px-4 py-1 text-left tabular-nums hover:bg-white/10 ${r === tocDo ? 'text-violet-300' : ''}`}
+                      >
+                        {r === 1 ? 'Bình thường' : `${r}x`}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
 
               {/* Volume */}
               <div className="flex items-center gap-1.5">

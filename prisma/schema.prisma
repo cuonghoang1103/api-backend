@@ -537,6 +537,9 @@ model User {
   ctlThachDau              CtlThachDau[]             @relation("CtlThachDauNguoiTao")
   // CT Language — vòng quay may mắn (16/11/2026): lượt đã quay + quà
   ctlVongQuay              CtlVongQuay[]             @relation("CtlVongQuayNguoi")
+  // CT Lồng Tiếng (18/11/2026): việc lồng tiếng + mã kết nối app — docs/long-tieng-hop-dong.md
+  longTiengViec            LongTiengViec[]           @relation("LongTiengViecNguoi")
+  longTiengMaKetNoi        LongTiengMaKetNoi[]       @relation("LongTiengMaKetNoiNguoi")
 
   @@index([email], name: "idx_users_email")
   @@map("users")
@@ -18378,4 +18381,69 @@ model GiongElDung {
   @@index([userId, createdAt])
   @@index([viec, createdAt])
   @@map("giong_el_dung")
+}
+
+/// CT Lồng Tiếng (18/11/2026) — một việc lồng tiếng Việt bằng giọng chủ kênh. Chỉ ADMIN. Trạm máy nhà giành việc qua
+/// /api/v1/internal/long-tieng. Tệp ở R2 khoá riêng tư `long-tieng/<userId>/<id>/…`. Hợp đồng: docs/long-tieng-hop-dong.md
+model LongTiengViec {
+  /// UUID ngẫu nhiên (nằm trong khoá R2 ⇒ không đoán được)
+  id        String    @id @db.VarChar(36)
+  userId    Int       @map("user_id")
+  /// Link trạm tự tải (null = tệp tải lên)
+  url       String?   @db.VarChar(2000)
+  /// Tệp người dùng tải lên: { ten, kichThuoc, kieu } (null = link)
+  tep       Json?     @db.JsonB
+  /// Khoá R2 của tệp vào (chỉ việc tải tệp lên; xoá khi xong)
+  khoaVao   String?   @map("khoa_vao") @db.VarChar(400)
+  tenVideo  String?   @map("ten_video") @db.VarChar(300)
+  /// auto | zh | en
+  lang      String    @default("auto") @db.VarChar(8)
+  /// Âm lượng giọng gốc trong bản "VI + giọng gốc" (0..0,4)
+  goc       Float     @default(0.15)
+  /// cho-giong (giữ nhịp đọc, kéo dài hình khi câu Việt dài hơn khe) | tang-toc (đọc nhanh tới 1,3× như bản mẫu)
+  nhip      String    @default("cho-giong") @db.VarChar(16)
+  /// Nhạc nền: { loai: goc|thu-vien|tep|khong, id?, amLuong, tep?: { ten, kichThuoc, kieu } }
+  nhacNen   Json?     @map("nhac_nen") @db.JsonB
+  /// Khoá R2 của tệp nhạc người dùng tải lên (nhacNen.loai = tep; xoá khi xong)
+  khoaNhac  String?   @map("khoa_nhac") @db.VarChar(400)
+  /// cho_tai_len | cho | tai | lam | xong | loi | huy
+  trangThai String    @default("cho") @map("trang_thai") @db.VarChar(16)
+  buoc      String?   @db.VarChar(200)
+  phanTram  Int       @default(0) @map("phan_tram")
+  loi       String?   @db.Text
+  /// [{ loai, ten, kichThuoc, kieu, khoa }]
+  ketQua    Json?     @map("ket_qua") @db.JsonB
+  thoiLuong Float?    @map("thoi_luong")
+  /// Số lần trạm đã giành việc này (chặn vòng lặp giành → mất nhịp tim → giành lại)
+  soLanNhan Int       @default(0) @map("so_lan_nhan")
+  nhipTim   DateTime? @map("nhip_tim")
+  daTaiVe   DateTime? @map("da_tai_ve")
+  tao       DateTime  @default(now()) @map("created_at")
+  capNhat   DateTime  @updatedAt @map("updated_at")
+  xong      DateTime? @map("xong_luc")
+
+  user User @relation("LongTiengViecNguoi", fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([trangThai, tao], map: "idx_long_tieng_viec_trang_thai")
+  @@index([userId, tao(sort: Desc)], map: "idx_long_tieng_viec_user")
+  @@map("long_tieng_viec")
+}
+
+/// Mã kết nối app CT Lồng Tiếng (`ctlt_…`). Chỉ lưu sha256; chuỗi gốc hiện MỘT lần lúc tạo. Thu hồi = đặt thuHoi.
+model LongTiengMaKetNoi {
+  id          Int       @id @default(autoincrement())
+  userId      Int       @map("user_id")
+  ten         String?   @db.VarChar(100)
+  /// sha256 hex của chuỗi mã
+  bam         String    @unique(map: "uk_long_tieng_ma_bam") @db.VarChar(64)
+  /// Vài ký tự đầu để nhận ra mã trong danh sách (vd "ctlt_ab12")
+  dau         String    @db.VarChar(16)
+  dungLanCuoi DateTime? @map("dung_lan_cuoi")
+  thuHoi      DateTime? @map("thu_hoi")
+  tao         DateTime  @default(now()) @map("created_at")
+
+  user User @relation("LongTiengMaKetNoiNguoi", fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId], map: "idx_long_tieng_ma_user")
+  @@map("long_tieng_ma_ket_noi")
 }

@@ -1,0 +1,15 @@
+{
+  "name": "long-tieng-tram",
+  "private": true,
+  "type": "module",
+  "description": "Trạm CT Lồng Tiếng chạy ở máy nhà — xem README.md",
+  "engines": { "node": ">=20.11" },
+  "scripts": {
+    "tram": "tsx tram.mts",
+    "mot": "tsx tram.mts --mot",
+    "test": "tsx --test thuatToan.test.ts"
+  },
+  "devDependencies": {
+    "tsx": "4.22.4"
+  }
+}

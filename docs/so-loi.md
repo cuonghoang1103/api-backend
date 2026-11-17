@@ -45,6 +45,12 @@ Mẫu một mục:
 - **Cách sửa:** cờ `sanSang` — `activate`/`second-instance` chỉ mở cửa sổ sau khi khởi động xong (`src/main/index.ts`).
 - **Ảnh hưởng:** chỉ lúc phát triển (chế độ thử khởi động chậm hơn nên lộ ra).
 - **Bài học:** handler sự kiện app đăng ký ở cấp module chạy được TRƯỚC `whenReady` xong — mọi thứ chúng chạm tới phải chịu được trạng thái "chưa khởi tạo".
+### 18/11/2026 — Trạm CT Lồng Tiếng (bản mẫu `lt.mts`) — giọng Việt "vỡ" (không ra tiếng người) ở ~0:20 video chạy thử
+- **Triệu chứng:** video 13 phút tiếng Trung chạy thử: tới khoảng 0:20 giọng cuong8 méo, rè, không còn là tiếng người; các câu khác nghe ổn. Ngoài ra 77/103 câu bị đọc nhanh (tới 1,3×), 4 câu vẫn trễ — chủ kênh không thích đọc nhanh.
+- **Nguyên nhân:** Whisper trả MỘT đoạn 23,5 s; bản mẫu (`/Users/admin/Documents/long-tieng/lt.mts`, bước gộp câu) chỉ gộp đoạn ngắn chứ không tách đoạn dài ⇒ câu dịch 314 ký tự (trung vị các câu khác 109) ⇒ F5 đọc câu quá dài thì vỡ. Không có khâu nghe lại nào nên lỗi đi thẳng ra video. Độ dài dịch nhắm 15 ký tự/giây khe ⇒ câu Việt dài hơn khe trung vị 1,07×, p90 1,30×, max 1,72×.
+- **Cách sửa:** trạm mới `tools/long-tieng-tram/` (`thuatToan.ts`): đoạn Whisper > 8 s tách theo dấu câu / mốc từng từ (`tachDoanDai`, Whisper bật `word_timestamps`); câu Việt > 130 ký tự tách ở `. ? ! ; :` rồi `,` (`tachCauViet`), đọc từng mẩu, ghép lặng 0,4 / 0,18 s như nhịp C; MỌI mẩu được Whisper nghe lại, điểm < 0,85 hoặc độ dài vô lý (< 0,25 s/từ, > 3× kỳ vọng) ⇒ đọc lại bằng seed 7/1234/99, giữ bản tốt nhất, ghi điểm vào `thong-tin.json`. Nhịp `cho-giong` (mặc định): nhanh tối đa 1,08×, còn thiếu thì kéo dài hình. Dịch nhắm 13 ký tự/giây. Test: `npx tsx --test tools/long-tieng-tram/thuatToan.test.ts`.
+- **Ảnh hưởng:** chỉ video chạy thử của chủ kênh (chưa có người dùng nào khác).
+- **Bài học:** TTS phải có trần độ dài đầu vào VÀ một khâu nghe lại tự động — chạy không người trông thì máy phải tự bắt được âm hỏng; đường sản xuất video bài giảng đã có sẵn (NGUONG 0,9, seed xoay vòng) mà bản mẫu bỏ qua.
 
 ### 17/11/2026 — Web (nút trợ lý nổi trên trang học) — icon AI "hiện rồi biến", nhấp nháy
 - **Triệu chứng:** con robot góc phải trang học lúc có lúc không: rê chuột / AI bắt đầu trả lời thì nó biến mất một nhịp rồi hiện lại thành một hình khác; trên iPad nó ẩn suốt lúc khoá đang tải rồi mới "bật" ra từ 0; đổi trang là nó lại phóng to từ chấm.

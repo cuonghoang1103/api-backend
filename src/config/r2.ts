@@ -338,6 +338,31 @@ export async function getSignedDownloadUrl(
 }
 
 /**
+ * URL GET ký sẵn, tải về dưới TÊN TIẾNG VIỆT GIỮ NGUYÊN (CT Lồng Tiếng, 18/11/2026).
+ *
+ * `getSignedDownloadUrl` thay mọi ký tự ngoài [\w.-] bằng `_` ⇒ "Bài 1 [VI].mp4" thành "B_i_1__VI_.mp4". Ở đây
+ * gửi cả `filename` (ASCII bỏ dấu, cho trình duyệt cũ) lẫn `filename*=UTF-8''…` (RFC 5987/6266, trình duyệt nay
+ * đều ưu tiên cái này).
+ */
+export async function getSignedAttachmentUrl(
+  key: string,
+  filename: string,
+  expiresInSeconds: number = 3600,
+): Promise<string> {
+  const ascii = filename
+    .normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/đ/g, 'd').replace(/Đ/g, 'D')
+    .replace(/[^\w .()[\]+-]/g, '_').trim() || 'tep';
+  const utf8 = encodeURIComponent(filename).replace(/['()*]/g, (c) => `%${c.charCodeAt(0).toString(16).toUpperCase()}`);
+  const client = getR2Client();
+  const cmd = new GetObjectCommand({
+    Bucket: config.r2.bucketName,
+    Key: key,
+    ResponseContentDisposition: `attachment; filename="${ascii}"; filename*=UTF-8''${utf8}`,
+  });
+  return sandboxReachable(key, await getSignedUrl(client, cmd, { expiresIn: expiresInSeconds }));
+}
+
+/**
  * URL GET CÓ CHỮ KÝ cho nội dung RIÊNG TƯ của người dùng (Vở: nét, ảnh xem
  * trước, nền — 23/10/2026), thay cho `buildPublicUrl` (CDN công khai).
  *

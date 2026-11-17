@@ -2,7 +2,7 @@
  * Chương 14 · 14.6b — Vì sao mạng nhà chậm: Mb hay MB, cổng 100M/1G, chuẩn Wi-Fi, dây, và tìm cổ chai (soạn 17/11/2026).
  * Sinh ra từ câu hỏi thật của chủ kênh: chép 165 GB từ MacBook sang máy bàn qua LAN chỉ được ~2 MB/s. Mọi số liệu là đo THẬT
  * trong phòng chủ kênh hôm đó (ethtool/lspci trên máy bàn Fedora, system_profiler trên MacBook, đếm byte của card mạng, arp).
- * KHÔNG có output iperf3 (chưa đo) ⇒ chỉ đưa lệnh, không bịa số. Chưa có deck slide/giảng riêng (bài bổ sung ngoài kế hoạch chương).
+ * KHÔNG có output iperf3 (chưa đo) ⇒ chỉ đưa lệnh, không bịa số. Mục 9: đo LẠI sau khi thay Archer AX12 (17/11 chiều). Chưa có deck slide/giảng riêng (bài bổ sung ngoài kế hoạch chương).
  */
 import { code, out, card, kv } from '../_ui.mjs';
 
@@ -41,6 +41,12 @@ const DEM = `$ cat /sys/class/net/enp3s0/statistics/rx_bytes   # đọc hai lầ
 const DEM_EN = `$ cat /sys/class/net/enp3s0/statistics/rx_bytes   # read twice, 5 seconds apart
 135783046587
 135797640475          # difference 14,593,888 bytes / 5 s ≈ 2.9 MB/s`;
+// Đo LẠI sau khi thay router 17/11/2026 (TP-Link Archer AX12, AX1500, cổng gigabit) — số thật, cùng phòng, cùng máy.
+const SAU = `$ cat /sys/class/net/enp3s0/speed        # máy bàn, cổng dây
+1000
+$ system_profiler SPAirPortDataType      # MacBook
+              PHY Mode: 802.11ax
+              Channel: 149 (5GHz, 80MHz)`;
 const DO_CUA_BAN = `# Linux: tốc độ cổng dây đã bắt tay
 ethtool enp3s0 | grep -E 'Speed|Duplex'
 # macOS: chuẩn Wi-Fi, băng tần, độ rộng kênh, tín hiệu
@@ -138,6 +144,18 @@ ${kv([
 <li>A new router speeds up the <em>LAN</em>. Your <em>Internet</em> is still capped by the building's plan behind the wall socket.</li>
 </ul>
 
+<h3>9 — After the upgrade: measured again</h3>
+<p>The same afternoon the old router was replaced by a TP-Link Archer AX12 (Wi-Fi 6 AX1500, gigabit ports, about 900k VND), with a Cat6 cable to the desktop. Same room, same machines, measured the same way:</p>
+${out(SAU)}
+${kv([
+    ['Desktop cable port', '100 Mb/s ⇒ <strong>1000 Mb/s</strong>'],
+    ['MacBook radio', 'Wi-Fi 4, 2.4 GHz, 20 MHz ⇒ <strong>Wi-Fi 6, 5 GHz, 80 MHz</strong>'],
+    ['Copy MacBook → desktop (rsync, many small files)', '≈ 2 MB/s ⇒ <strong>51–56 MB/s</strong> (≈ 25×) — 200 episodes in ~4 minutes'],
+    ['Internet on the MacBook (download from the CDN)', '≈ 0.4 MB/s while the copy shared the old radio ⇒ <strong>≈ 9 MB/s</strong>'],
+  ])}
+<p>Every hop moved — except one. The router's app immediately warned: <em>"the cable on the WAN port does not support gigabit"</em>. The cable from the wall negotiates only 100 Mb/s, so the Internet now stops at ≈ 11 MB/s — exactly what the desktop had been reaching all along. The router end of that cable has all 8 wires, so the limit is on the building's side (a 10/100 switch, a badly crimped far end, or a broken pair in the wall). That is the rule from section 6 again: fix the narrowest pipe and the next one becomes the bottleneck. For a rented room it is the right place to stop — 11 MB/s is plenty for 4K video and work, and the router moves with you.</p>
+<p>Two more messages from the app are lessons from this chapter: <strong>"double NAT"</strong> (your router sits behind the building's router — the same effect as CGNAT in lesson 14.6, harmless unless you open ports) and <strong>"random MAC address detected"</strong> on the MacBook (the private Wi-Fi address from lesson 14.1 — set it to <em>Fixed</em> for your home network so per-device settings stick).</p>
+
 <h3>🕵️ The attacker's corner</h3>
 <ul>
 <li><strong>The neighbour on your Wi-Fi.</strong> A weak password (or WPS left on — lesson 14.6) lets someone join your LAN: they eat airtime on that shared channel, and they can now reach your machines directly (shared folders, a dev server on 0.0.0.0, a NAS). <em>Defence:</em> WPA2/WPA3 with a long passphrase, WPS off, and look at the router's "connected devices" list — a phone you do not own is a red flag.</li>
@@ -179,6 +197,7 @@ ${kv([
 <li>Measure every hop: <code>ethtool</code> for cables, the Wi-Fi status for the radio, byte counters or <code>iperf3</code> for throughput.</li>
 <li>The slowest hop sets the speed. Here: Wi-Fi 4 at 2.4 GHz first, then the 10/100 router port.</li>
 <li>Buy: gigabit ports, Wi-Fi 6 dual band, still updated — and re-measure after installing it.</li>
+<li>Measured after the swap: copy 2 → 51–56 MB/s, MacBook Internet ≈ 0.4 → 9 MB/s; the new bottleneck is the 100 Mb/s wall cable.</li>
 </ul>
 <p>Related: <a href="${bai('netdev-14-6-lan-nha-ky-tuc-xa')}">14.6 Home and dorm network</a> · <a href="${bai('netdev-14-1-wifi-truong-mac')}">14.1 Wi-Fi and MAC</a> · <a href="${NWC}">NWC204 · 1.1 LAN, MAN, WAN</a></p>
 ${L('https://iperf.fr/', '🛠', 'iPerf3 — measure network throughput', 'The standard tool for raw TCP/UDP speed between two machines.', 'Open')}
@@ -256,6 +275,18 @@ ${kv([
 <li>Router mới làm nhanh <em>LAN</em>. <em>Internet</em> vẫn bị giới hạn bởi gói cước của toà nhà phía sau ổ mạng trên tường.</li>
 </ul>
 
+<h3>9 — Sau khi nâng cấp: đo lại</h3>
+<p>Ngay chiều hôm đó router cũ được thay bằng TP-Link Archer AX12 (Wi-Fi 6 AX1500, cổng gigabit, khoảng 900 nghìn), dây sang máy bàn là Cat6. Cùng phòng, cùng máy, đo cùng cách:</p>
+${out(SAU)}
+${kv([
+    ['Cổng dây máy bàn', '100 Mb/s ⇒ <strong>1000 Mb/s</strong>'],
+    ['Sóng của MacBook', 'Wi-Fi 4, 2,4 GHz, 20 MHz ⇒ <strong>Wi-Fi 6, 5 GHz, 80 MHz</strong>'],
+    ['Chép MacBook → máy bàn (rsync, nhiều tệp nhỏ)', '≈ 2 MB/s ⇒ <strong>51–56 MB/s</strong> (≈ 25 lần) — 200 tập trong khoảng 4 phút'],
+    ['Internet trên MacBook (tải từ CDN)', '≈ 0,4 MB/s khi lượt chép chia chung sóng cũ ⇒ <strong>≈ 9 MB/s</strong>'],
+  ])}
+<p>Mọi đoạn đều nhanh lên — trừ một. Ứng dụng của router báo ngay: <em>"cáp Ethernet nối với cổng WAN không hỗ trợ tốc độ gigabit"</em>. Dây từ tường chỉ bắt tay 100 Mb/s, nên Internet giờ dừng ở ≈ 11 MB/s — đúng mức máy bàn vẫn chạm tới từ trước. Đầu dây phía router có đủ 8 lõi, nên giới hạn nằm ở phía toà nhà (switch 10/100, đầu bên kia bấm thiếu lõi, hoặc một cặp lõi trong tường đứt). Lại đúng quy tắc mục 6: sửa đoạn ống hẹp nhất thì đoạn kế tiếp thành cổ chai. Với phòng trọ, dừng ở đây là hợp lý — 11 MB/s dư cho video 4K và công việc, còn router thì mang theo được khi chuyển nhà.</p>
+<p>Hai thông báo khác của ứng dụng cũng là bài học trong chương này: <strong>"NAT kép"</strong> (router của bạn đứng sau router toà nhà — cùng hiệu ứng với CGNAT ở bài 14.6, vô hại trừ khi bạn mở cổng) và <strong>"phát hiện địa chỉ MAC ngẫu nhiên"</strong> trên MacBook (địa chỉ Wi-Fi riêng tư ở bài 14.1 — đặt <em>Cố định</em> cho mạng nhà mình để cài đặt theo từng máy không bị mất).</p>
+
 <h3>🕵️ Góc kẻ xấu</h3>
 <ul>
 <li><strong>Hàng xóm dùng ké Wi-Fi.</strong> Mật khẩu yếu (hoặc để WPS bật — bài 14.6) là có người vào được LAN của bạn: họ chiếm thời gian phát trên kênh dùng chung, và giờ họ chạm thẳng được tới máy của bạn (thư mục chia sẻ, máy chủ dev nghe ở 0.0.0.0, NAS). <em>Cách phòng:</em> WPA2/WPA3 với mật khẩu dài, tắt WPS, và xem danh sách "thiết bị đang kết nối" trong trang quản trị router — một điện thoại lạ là dấu hiệu đỏ.</li>
@@ -297,6 +328,7 @@ ${kv([
 <li>Đo từng đoạn: <code>ethtool</code> cho dây, trạng thái Wi-Fi cho sóng, bộ đếm byte hoặc <code>iperf3</code> cho thông lượng.</li>
 <li>Đoạn chậm nhất quyết định tốc độ. Ở đây: Wi-Fi 4 ở 2,4 GHz trước, rồi tới cổng router 10/100.</li>
 <li>Mua: cổng gigabit, Wi-Fi 6 hai băng tần, còn được cập nhật — lắp xong thì đo lại.</li>
+<li>Đo sau khi đổi: chép 2 → 51–56 MB/s, Internet trên MacBook ≈ 0,4 → 9 MB/s; cổ chai mới là dây tường 100 Mb/s.</li>
 </ul>
 <p>Bài liên quan: <a href="${bai('netdev-14-6-lan-nha-ky-tuc-xa')}">14.6 Mạng nhà và ký túc xá</a> · <a href="${bai('netdev-14-1-wifi-truong-mac')}">14.1 Wi-Fi và MAC</a> · <a href="${NWC}">NWC204 · 1.1 LAN, MAN, WAN</a></p>
 ${L('https://iperf.fr/', '🛠', 'iPerf3 — đo thông lượng mạng', 'Công cụ chuẩn đo tốc độ TCP/UDP thuần giữa hai máy.', 'Mở')}

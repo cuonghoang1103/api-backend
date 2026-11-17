@@ -25,6 +25,7 @@ import { pickLang, sanitizeHtml, stripInlineColors } from '@/lib/utils';
 import ExamRichContent from '../ExamRichContent';
 import ExamQuestionComments from '../ExamQuestionComments';
 import CuongMiniPanel from './CuongMiniPanel';
+import AnhDePhongTo from '@/components/exam/AnhDePhongTo';
 import './../exam.css';
 
 type FullExam = ExamHeader & { questions: ExamTakingQuestion[] };
@@ -492,7 +493,7 @@ function QuestionImageToggle({ url, isVi, resetKey, className = 'mb-5' }: {
           từng gãy "Failed to execute 'insertBefore'…" khi có gì đó (tiện ích
           trình duyệt, dịch trang) đụng vào DOM cạnh khối prompt render bằng
           dangerouslySetInnerHTML ngay trước lúc React gắn node ảnh mới vào. */}
-      <img src={url} alt="" hidden={!show} className="max-w-full rounded-lg border border-[var(--border-color)] mt-2.5" />
+      <AnhDePhongTo url={url} hidden={!show} isVi={isVi} className="mt-2.5" />
     </div>
   );
 }
@@ -745,7 +746,7 @@ function Recorder({ index, text, imageUrl, isVi, blob, onRecorded }: {
   return (
     <div className="exam-card p-4">
       {imageUrl && (
-        <img src={imageUrl} alt="" className="mb-3 w-full max-w-xs rounded-lg border border-[var(--border-color)]" />
+        <AnhDePhongTo url={imageUrl} isVi={isVi} className="mb-3 w-full max-w-xs" imgClassName="w-full" />
       )}
       <div className="text-sm font-medium mb-3">{index + 1}. {text}</div>
       <div className="flex items-center gap-3">

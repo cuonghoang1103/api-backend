@@ -15,6 +15,7 @@ import { examApi } from '@/lib/api';
 import { pickLang } from '@/lib/utils';
 import ExamRichContent from '../../ExamRichContent';
 import ExamQuestionComments from '../../ExamQuestionComments';
+import AnhDePhongTo from '@/components/exam/AnhDePhongTo';
 import './../../exam.css';
 
 interface ReviewQuestion {
@@ -268,7 +269,7 @@ function QuestionImageToggle({ url, isVi }: { url: string; isVi: boolean }) {
         {show ? <EyeOffIcon className="w-3.5 h-3.5" /> : <EyeIcon className="w-3.5 h-3.5" />}
         {show ? (isVi ? 'Ẩn ảnh đề gốc' : 'Hide original image') : (isVi ? 'Xem ảnh đề gốc' : 'Show original image')}
       </button>
-      {show && <img src={url} alt="" className="max-w-full rounded-lg border border-[var(--border-color)] mt-2.5" />}
+      {show && <AnhDePhongTo url={url} isVi={isVi} className="mt-2.5" />}
     </div>
   );
 }

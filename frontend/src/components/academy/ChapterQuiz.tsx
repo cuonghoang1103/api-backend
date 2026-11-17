@@ -45,6 +45,7 @@ import { usePro } from '@/hooks/usePro';
 import { useHoiCauLuyenStore, type CauTomTat, type TrangThaiCau } from '@/store/hoiCauLuyenStore';
 import RobotAI from './RobotAI';
 import HoiAICauLuyen from './HoiAICauLuyen';
+import AnhDePhongTo from '@/components/exam/AnhDePhongTo';
 import { CHE_DO_HOI, useHoiCauLuyen } from './useHoiCauLuyen';
 
 interface ExamQ {
@@ -143,10 +144,7 @@ function CauHoi({ q, so, tong, L, chon, daCham, moAI, onChon, onKiemTra, onBatAI
       </div>
 
       <ExamRichContent html={q.prompt} L={L} className="text-[15px] leading-relaxed" />
-      {q.imageUrl && (
-        // eslint-disable-next-line @next/next/no-img-element
-        <img src={q.imageUrl} alt="" className="mt-2 max-w-full rounded-lg border" style={{ borderColor: 'var(--border-color)' }} />
-      )}
+      {q.imageUrl && <AnhDePhongTo url={q.imageUrl} isVi={L === 'vi'} className="mt-2" />}
 
       <div className="mt-4 space-y-2" role="group" aria-label={`Các đáp án của câu ${so}`}>
         {opts.map((o, i) => {
@@ -417,10 +415,7 @@ function PracticeBlock({ sectionId, L, tuMo = false, coVien = true }: {
             {p.language && <span>· {p.language}</span>}
           </div>
           <ExamRichContent html={p.prompt} L={L} />
-          {p.imageUrl && (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img src={p.imageUrl} alt="" className="mt-2 max-w-full rounded-lg border" style={{ borderColor: 'var(--border-color)' }} />
-          )}
+          {p.imageUrl && <AnhDePhongTo url={p.imageUrl} isVi={L === 'vi'} className="mt-2" />}
           {p.starterCode && (
             <details className="mt-2">
               <summary className="cursor-pointer text-xs font-semibold" style={{ color: 'var(--text-secondary)' }}>Mã cho sẵn</summary>

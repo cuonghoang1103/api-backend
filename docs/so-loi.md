@@ -18,6 +18,13 @@ Mẫu một mục:
 
 ---
 
+### 17/11/2026 — Phòng thi + Luyện cuối chương (app iOS + web) — ảnh đề không bấm phóng to được, chữ nhỏ không đọc nổi
+- **Triệu chứng:** ảnh chụp trang đề gốc (hai cột chữ in nhỏ, ví dụ ASI101 SP26-FE) co theo bề rộng điện thoại, bấm vào không có gì xảy ra ⇒ không đọc được câu hỏi (người dùng gửi ảnh chụp app; web cũng vậy).
+- **Nguyên nhân:** ios-app `Shared/PhongThi/AnhCauHoi.swift` chỉ là `KFImage` cố định (chú thích có ghi "bấm vào thì mở xem to" nhưng chưa từng làm); web `QuestionImageToggle` (`app/exam/[examId]/ExamRoomClient.tsx`, `app/exam/attempt/[attemptId]/ExamReviewClient.tsx`) + `components/academy/ChapterQuiz.tsx` là `<img>` trần.
+- **Cách sửa:** app ios-app `4e29ea7` — chạm ảnh ⇒ trình xem toàn màn (UIScrollView: chụm/chạm đúp phóng tới 8×, xoay 90°, vuốt xuống đóng, chia sẻ/lưu). Web: `components/exam/AnhDePhongTo.tsx` (huy hiệu "Phóng to") mở `AnhLightbox` của Messenger, thêm nút/phím R xoay 90° (đổi chỗ trần rộng/cao khi xoay).
+- **Ảnh hưởng:** mọi câu có ảnh trong phòng thi, xem lại bài, câu nói có ảnh và luyện cuối chương — cả app CuongThai lẫn CT Courses (dùng chung `AnhCauHoi`).
+- **Bài học:** nội dung là ẢNH CHỤP chữ thì luôn phải phóng được — kiểm trên khổ điện thoại thật, không phải màn rộng; chú thích "bấm để xem to" không thay được việc làm nó.
+
 ### 17/11/2026 — app iOS CT Courses — chuyển trang giật/lag + giao diện "màu mè khó nhìn"
 - **Triệu chứng:** người dùng (iPhone 16 Pro Max) thấy chuyển giữa các màn đơ, không mượt; giao diện dải lam→tím, chữ tròn siêu đậm, bóng/quầng màu khắp nơi, chạm nào cũng có âm "pop".
 - **Nguyên nhân:** `NenManCTC` (ios-app `CTCoursesApp/GiaoDien/ThanhPhanCTC.swift`) vẽ hai `Circle().blur(radius: 90)` 380pt sau MỌI màn (63 màn) ⇒ lúc trượt trang cả hai màn vẽ lại vùng mờ mỗi khung hình; thêm bóng mềm ở mọi thẻ `theCTC()`, ~40 quầng màu `.shadow(color: mau…)`, khung xương `XuongCTC` chạy `repeatForever` (tới chục khối/màn), âm + rung ở mỗi lần nhấn (`KieuBamCTC`).

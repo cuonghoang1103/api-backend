@@ -12,12 +12,13 @@
  *   · ← / → (phím hoặc nút) đi qua MỌI ảnh của hội thoại đang mở
  *   · phóng to: lăn chuột · nhấp đúp · chụm hai ngón; đang phóng thì kéo để dời
  *   · lưu ảnh: `luuAnhVeMay` — app desktop mở hộp thoại lưu, KHÔNG ra trình duyệt
+ *   · xoay 90° (17/11/2026 — ảnh trang đề thi gốc nằm ngang, trên điện thoại đứng xoay lên là chữ to gấp đôi)
  *
  * Một component cho cả web lẫn app desktop (app dùng lại nguyên cây messenger).
  */
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
-import { ChevronLeft, ChevronRight, Download, X, ZoomIn, ZoomOut } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Download, RotateCw, X, ZoomIn, ZoomOut } from 'lucide-react';
 import toast from 'react-hot-toast';
 import type { AnhTrongHoiThoai } from '@/lib/tinNhan/nhom';
 import { luuAnhVeMay } from '@/lib/tinNhan/luuAnh';
@@ -41,6 +42,9 @@ export default function AnhLightbox({
   const [zoom, datZoom] = useState(1);
   const [dich, datDich] = useState({ x: 0, y: 0 });
   const [dangLuu, datDangLuu] = useState(false);
+  const [xoay, datXoay] = useState(0);
+  const khung = useRef<HTMLDivElement>(null);
+  const [coKhung, datCoKhung] = useState<{ w: number; h: number } | null>(null);
   const conTro = useRef(new Map<number, { x: number; y: number }>());
   const chum = useRef<{ kc: number; zoom: number } | null>(null);
   const keo = useRef<{ x: number; y: number; dx: number; dy: number } | null>(null);
@@ -50,7 +54,17 @@ export default function AnhLightbox({
   const coSau = chiSo < ds.length - 1;
 
   // Đổi ảnh ⇒ về cỡ gốc.
-  useEffect(() => { datZoom(1); datDich({ x: 0, y: 0 }); }, [chiSo]);
+  useEffect(() => { datZoom(1); datDich({ x: 0, y: 0 }); datXoay(0); }, [chiSo]);
+
+  // Cỡ vùng ảnh — xoay 90°/270° thì giới hạn rộng/cao phải ĐỔI CHỖ, không thì ảnh ngang xoay xong vẫn bé bằng bề rộng màn.
+  useEffect(() => {
+    const el = khung.current;
+    if (!el) return;
+    const ro = new ResizeObserver(() => datCoKhung({ w: el.clientWidth, h: el.clientHeight }));
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, []);
+  const xoayDoc = xoay % 2 === 1;
 
   const datZoomKep = useCallback((z: number) => {
     const k = Math.min(ZOOM_MAX, Math.max(ZOOM_MIN, z));
@@ -65,6 +79,7 @@ export default function AnhLightbox({
       else if (e.key === 'ArrowRight' && coSau) { e.stopPropagation(); onDoi(chiSo + 1); }
       else if (e.key === '+' || e.key === '=') datZoomKep(zoom * 1.5);
       else if (e.key === '-') datZoomKep(zoom / 1.5);
+      else if (e.key === 'r' || e.key === 'R') { datXoay((x) => (x + 1) % 4); datZoom(1); datDich({ x: 0, y: 0 }); }
     };
     // capture: chặn trước mọi phím tắt của trang bên dưới (Esc đóng hội thoại…)
     window.addEventListener('keydown', phim, true);
@@ -126,12 +141,14 @@ export default function AnhLightbox({
         <div className="ml-auto flex items-center gap-1">
           <NutTron nhan="Thu nhỏ" onClick={() => datZoomKep(zoom / 1.5)} tat={zoom <= ZOOM_MIN}><ZoomOut className="h-5 w-5" /></NutTron>
           <NutTron nhan="Phóng to" onClick={() => datZoomKep(zoom * 1.5)} tat={zoom >= ZOOM_MAX}><ZoomIn className="h-5 w-5" /></NutTron>
+          <NutTron nhan="Xoay ảnh (R)" onClick={() => { datXoay((x) => (x + 1) % 4); datZoom(1); datDich({ x: 0, y: 0 }); }}><RotateCw className="h-5 w-5" /></NutTron>
           <NutTron nhan="Lưu ảnh" onClick={() => void luu()} tat={dangLuu}><Download className="h-5 w-5" /></NutTron>
           <NutTron nhan="Đóng" onClick={onDong}><X className="h-6 w-6" /></NutTron>
         </div>
       </div>
 
       <div
+        ref={khung}
         className="relative flex min-h-0 flex-1 touch-none select-none items-center justify-center overflow-hidden"
         onClick={(e) => { if (e.target === e.currentTarget) onDong(); }}
         onWheel={(e) => { datZoomKep(zoom * (e.deltaY < 0 ? 1.15 : 1 / 1.15)); }}
@@ -142,8 +159,12 @@ export default function AnhLightbox({
           src={anh.url}
           alt={anh.ten}
           draggable={false}
-          className={cn('max-h-full max-w-full object-contain transition-transform duration-75', zoom > 1 ? 'cursor-grab active:cursor-grabbing' : 'cursor-zoom-in')}
-          style={{ transform: `translate(${dich.x}px, ${dich.y}px) scale(${zoom})` }}
+          className={cn('object-contain transition-transform duration-75', zoom > 1 ? 'cursor-grab active:cursor-grabbing' : 'cursor-zoom-in')}
+          style={{
+            maxWidth: coKhung ? (xoayDoc ? coKhung.h : coKhung.w) : '100%',
+            maxHeight: coKhung ? (xoayDoc ? coKhung.w : coKhung.h) : '100%',
+            transform: `translate(${dich.x}px, ${dich.y}px) scale(${zoom}) rotate(${xoay * 90}deg)`,
+          }}
           onDoubleClick={() => datZoomKep(zoom > 1 ? 1 : 2.5)}
           onClick={(e) => e.stopPropagation()}
           onPointerDown={onPointerDown}

@@ -496,7 +496,8 @@ export async function doiGio(userId: number, viecId: number, gio: Date) {
 export async function nhacGioHoc(now = new Date()) {
   const { guiThongBao } = await import('../push/apns.js');
   const sapToi = await prisma.nhiemVuHoc.findMany({
-    where: { trangThai: { in: ['CHUA_LAM', 'CHUA_DAT'] }, batDauLuc: null, daNhacLuc: null, gioBatDau: { gte: new Date(now.getTime() - 60_000), lte: new Date(now.getTime() + 6 * 60_000) } },
+    // 17/11: chỉ kỳ ĐANG HỌC — kỳ đã kết thúc (dangHoc=false) thì im, như chayBuoiSang.
+    where: { mon: { hocKy: { dangHoc: true } }, trangThai: { in: ['CHUA_LAM', 'CHUA_DAT'] }, batDauLuc: null, daNhacLuc: null, gioBatDau: { gte: new Date(now.getTime() - 60_000), lte: new Date(now.getTime() + 6 * 60_000) } },
     include: { mon: { select: { maMon: true } } },
   });
   for (const v of sapToi) {
@@ -506,7 +507,7 @@ export async function nhacGioHoc(now = new Date()) {
   }
 
   const tre = await prisma.nhiemVuHoc.findMany({
-    where: { trangThai: { in: ['CHUA_LAM', 'CHUA_DAT'] }, batDauLuc: null, gioBatDau: { lt: new Date(now.getTime() - 15 * 60_000) } },
+    where: { mon: { hocKy: { dangHoc: true } }, trangThai: { in: ['CHUA_LAM', 'CHUA_DAT'] }, batDauLuc: null, gioBatDau: { lt: new Date(now.getTime() - 15 * 60_000) } },
     include: { mon: { select: { maMon: true } } },
   });
   const nguoi = new Set<number>();

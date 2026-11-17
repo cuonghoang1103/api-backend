@@ -79,6 +79,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${SITE_URL}/projects`, lastModified: now, changeFrequency: 'weekly', priority: 0.6 },
     { url: `${SITE_URL}/games`, lastModified: now, changeFrequency: 'monthly', priority: 0.4 },
     { url: `${SITE_URL}/language`, lastModified: now, changeFrequency: 'weekly', priority: 0.7 },
+    // Trang chủ app CT Language (17/11/2026) — trong mục My Language.
+    ...['', '/tinh-nang', '/huong-dan', '/pro', '/cong-dong', '/cap-nhat', '/tro-giup', '/gioi-thieu'].map((d) => ({
+      url: `${SITE_URL}/language/app${d}`,
+      lastModified: now,
+      changeFrequency: 'monthly' as const,
+      priority: d ? 0.5 : 0.7,
+    })),
 
     // ── Các trang công khai trước đây KHÔNG có trong sitemap ───────────────
     // Không trang nào ở đây đòi đăng nhập (đã đối chiếu từng cái với
@@ -109,6 +116,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.4,
     })),
     { url: `${SITE_URL}/download`, lastModified: now, changeFrequency: 'monthly', priority: 0.5 },
+    // Trang chủ app CT Work (17/11/2026) — trang chủ + 6 trang con (không có /pro: CT Work không có gói riêng).
+    ...['', '/tinh-nang', '/huong-dan', '/cong-dong', '/cap-nhat', '/tro-giup', '/gioi-thieu'].map((d) => ({
+      url: `${SITE_URL}/ct-work${d}`,
+      lastModified: now,
+      changeFrequency: 'monthly' as const,
+      priority: d ? 0.5 : 0.7,
+    })),
     // CuongMini Code (extension VS Code/Cursor/…) + CLI — trang giới thiệu có deep link cài một cú bấm.
     { url: `${SITE_URL}/ai-code`, lastModified: now, changeFrequency: 'monthly', priority: 0.6 },
     // CuongMini CLI (17/10/2026) — AI Code trong terminal: cài một dòng + hướng dẫn dùng cho máy mới tinh.

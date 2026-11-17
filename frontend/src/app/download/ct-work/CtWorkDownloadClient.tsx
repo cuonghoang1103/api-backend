@@ -173,6 +173,9 @@ export default function CtWorkDownloadClient({ banPhatHanh }: { banPhatHanh: Rel
               ? 'App native cho iPhone và iPad, miễn phí, iOS 17 trở lên: My Work, board, bảng tin nhóm, chat, cuộc họp và CuongMini — cùng tài khoản.'
               : 'A native app for iPhone and iPad, free, iOS 17 or later: My Work, boards, team feed, chat, meetings and CuongMini — same account.'}
           </p>
+          <Link href="/ct-work" className="mt-2 inline-block text-sm text-[#6b7cff] hover:underline">
+            {vi ? 'Xem trang giới thiệu app →' : 'See the app’s home page →'}
+          </Link>
         </div>
         <AppStoreBadge href={CTWORK_APP_STORE} lang={vi ? 'vi' : 'en'} appName="CT Work" height={48} />
       </section>

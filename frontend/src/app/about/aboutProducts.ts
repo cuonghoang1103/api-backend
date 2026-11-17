@@ -11,6 +11,7 @@
  * that status and gets NO App Store badge. Only CT Work is on the App Store.
  */
 import {
+  CTLANGUAGE_APP_STORE,
   CTWORK_APP_STORE,
   CTWORK_DESKTOP_RELEASES,
   CUONGMINI_VSCODE_MARKETPLACE,
@@ -37,7 +38,7 @@ export interface BuiltProduct {
   status: Bi;
   /** 'live' = public and running · 'testing' = not public yet. */
   state: 'live' | 'testing';
-  /** CT Work only: link to its App Store page (renders Apple's badge). */
+  /** Apps on the App Store only (CT Work, CT Language): link to the store page (renders Apple's badge). */
   appStore?: string;
   links: BuiltLink[];
 }
@@ -57,10 +58,29 @@ export const BUILT: BuiltProduct[] = [
     state: 'live',
     appStore: CTWORK_APP_STORE,
     links: [
+      { href: '/ct-work', label: L('App homepage', 'Trang chủ app') },
       { href: '/work', label: L('Open on the web', 'Mở trên web') },
       { href: '/download/ct-work', label: L('Desktop app', 'App máy tính') },
       { href: CTWORK_DESKTOP_RELEASES, label: L('Releases on GitHub', 'Bản phát hành trên GitHub'), external: true },
       { href: '/about/studio/case/ct-work', label: L('Case study', 'Case study') },
+    ],
+  },
+  {
+    id: 'ctlanguage',
+    name: 'CT Language',
+    icon: '/images/ct-language/app/icon-180.png',
+    kind: L('Language learning app', 'App học ngoại ngữ'),
+    what: L(
+      'Japanese, Chinese and English for Vietnamese speakers, from the alphabet to JLPT, HSK and IELTS practice: lessons, a dictionary with Vietnamese meanings, translation, podcasts, learning from videos, mock tests and five word games, with CuongMini as an AI tutor that reads photos and takes voice calls.',
+      'Tiếng Nhật, Trung, Anh cho người Việt, từ bảng chữ cái tới luyện JLPT, HSK, IELTS: bài học, từ điển nghĩa tiếng Việt, dịch, podcast, học qua video, thi thử và 5 trò chơi, cùng CuongMini — trợ lý AI đọc được ảnh và gọi thoại luyện nói.',
+    ),
+    platforms: L('iPhone & iPad (iOS 17+) · Web', 'iPhone & iPad (iOS 17+) · Web'),
+    status: L('Live, free — on the App Store since Nov 2026', 'Đang chạy, miễn phí — lên App Store từ 11/2026'),
+    state: 'live',
+    appStore: CTLANGUAGE_APP_STORE,
+    links: [
+      { href: '/language/app', label: L('App homepage', 'Trang chủ app') },
+      { href: '/language', label: L('Learn on the web', 'Học trên web') },
     ],
   },
   {

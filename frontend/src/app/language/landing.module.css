@@ -165,3 +165,4 @@
 .sapCoNhan { display: inline-flex; align-items: center; gap: .3rem; font-size: .72rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: var(--text-muted); }
 .sapCoDs { display: flex; flex-wrap: wrap; gap: .4rem; margin-top: .6rem; }
 .sapCoChip { padding: .25rem .6rem; border-radius: 999px; font-size: .8rem; color: var(--text-secondary); background: var(--bg-surface); }
+.daiApp { margin: 0 0 2rem; }

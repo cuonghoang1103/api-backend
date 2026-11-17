@@ -24,7 +24,7 @@ import {
   KanbanSquare, NotebookPen, Wallet, Music, Gamepad2, Wifi, Crown, ShoppingBag,
   Newspaper, BookOpen, Megaphone, Users, MessagesSquare, MessageSquareHeart, FolderOpen, Github,
   FileCode2, Bookmark, User, Store, Send, Workflow, ShieldCheck, MonitorDown,
-  LayoutDashboard, Settings, Receipt, Ticket, Shield,
+  LayoutDashboard, Settings, Receipt, Ticket, Shield, Smartphone,
 } from 'lucide-react';
 import type { MenuId } from './navLabels';
 import { CART_ENABLED, SHOP_ENABLED, INTERVIEW_ENABLED, CV_BUILDER_ENABLED } from '@/lib/featureFlags';
@@ -299,6 +299,15 @@ export const NAV_TREE: NavMenu[] = [
             title: { en: 'Desktop app', vi: 'App máy tính' },
             desc: { en: 'CuongThai for macOS, Windows and Linux.', vi: 'CuongThai cho macOS, Windows và Linux.' },
             keywords: 'get app tai app' },
+          // 17/11/2026: trang chủ của từng app (giới thiệu, hướng dẫn, nút App Store).
+          { href: '/language/app', icon: Smartphone,
+            title: { en: 'CT Language app', vi: 'App CT Language' },
+            desc: { en: 'Japanese, Chinese and English on iPhone & iPad.', vi: 'Học Nhật, Trung, Anh trên iPhone & iPad.' },
+            keywords: 'app store ios iphone ipad tai app ngoai ngu' },
+          { href: '/ct-work', icon: KanbanSquare,
+            title: { en: 'CT Work app', vi: 'App CT Work' },
+            desc: { en: 'Projects and student teams on iPhone, iPad and desktop.', vi: 'Dự án, đồ án nhóm trên iPhone, iPad và máy tính.' },
+            keywords: 'app store ios iphone ipad tai app jira' },
         ],
       },
     ],

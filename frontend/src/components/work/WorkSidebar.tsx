@@ -745,11 +745,11 @@ export default function WorkSidebar({ onNavigate }: { onNavigate?: () => void })
         <NavItem href="/work/developer" icon={KeyRound} label={wt('dev.apiTokens')} active={pathname.startsWith('/work/developer')} />
         {/* CTW đợt 8a: kết nối Microsoft 365 / Google của tôi */}
         <NavItem href="/work/connections" icon={PlugZap} label={wt('c8a.navConnections')} active={pathname.startsWith('/work/connections')} />
-        {/* 13/10/2026 — trên web: lối tải app CT Work riêng. Trong app desktop thì
+        {/* 17/11/2026: trỏ về trang chủ app /ct-work (App Store + app máy tính + hướng dẫn). 13/10/2026 — trên web: lối tải app CT Work riêng. Trong app desktop thì
             không cần (đã ở trong app). Trong app CT Work riêng thì giấu luôn "Về
             CuongThai": app này chỉ có CT Work, link về trang chính chỉ bật trình duyệt. */}
         {!trongAppDesktop() && (
-          <NavItem href="/download/ct-work" icon={Download} label={wt('shell.downloadApp')} active={false} />
+          <NavItem href="/ct-work" icon={Download} label={wt('shell.downloadApp')} active={false} />
         )}
         {!laAppCtWork() && (
           <Link href="/" title={wt('shell.backToSite')} className={cn(ROW, ROW_IDLE)}>

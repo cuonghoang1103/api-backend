@@ -65,6 +65,16 @@ export const BO_TU: BoTu[] = [
     },
   },
   {
+    // IELTS Tập 3 (18/11/2026): mọi ngày tải chậm qua tap-3/ngay — chưa soạn ngày nào thì bộ rỗng (0 từ).
+    id: 'tap3', ten: 'Từ của khoá — Tập 3', mo: 'Từ vựng mọi Ngày đã soạn của IELTS Tập 3 (5.0 → 6.0)',
+    tai: async () => {
+      const [{ loadNgay }, { MANIFEST }] = await Promise.all([import('../tap-3/ngay'), import('../tap-3/ngay/manifest')]);
+      const ngay = Object.keys(MANIFEST).map(Number).sort((a, b) => a - b);
+      const ls = await Promise.all(ngay.map((n) => loadNgay(n) ?? Promise.resolve([] as Lesson[])));
+      return ls.flatMap((l) => tuTuBai(l, 'tap3'));
+    },
+  },
+  {
     id: 'nen1', ten: 'Nền tảng — chặng 1 (band 0 → 3)', mo: '300 từ đời sống cơ bản theo chủ đề',
     tai: async () => {
       const [a, b] = await Promise.all([import('@/app/tech-trends/ielts/data/stage1/vocab-a'), import('@/app/tech-trends/ielts/data/stage1/vocab-b')]);

@@ -140,3 +140,20 @@ tick ô mình phủ). Mọi quy tắc văn phong / khối / bài tập ở các 
   (`tapCuaBai` / `linkBai`), `thiMayCham.test.ts` kiểm id có trong manifest Tập 2.
 - Trang con MỚI dưới `tap-2/` (nếu có) ⇒ thêm tuyến desktop `desktop/src/renderer/features/web/dinhTuyenWeb.ts`
   (hai đường `/language/:code/ielts/tap-2/…` và `/ielts/tap-2/…`) + số đếm trong `dinhTuyenWeb.test.ts`.
+
+## Soạn Tập 3 (5.0 → 6.0, 30 ngày) — hạ tầng dựng 18/11/2026
+
+Giống hệt Tập 2 ở mục trên, chỉ khác:
+- **Nguồn sự thật:** `docs/ielts-lo-trinh-0-8.md` mục **3.3** (mục lục 30 ngày) + mục **3.6 "Tập 3"** (kỹ thuật phải dạy TRỌN và
+  nối lại Tập 2 — ghi rõ "ôn từ Tập 2 Ngày N") + mục 1 (band 6 phải làm được gì) + mục 2 (mã G/V/R/L/W/S/X/E).
+- **Tệp:** `tap-3/data.ts` (`IELTS_T3`, Mở đầu `t3-bat-dau`, `MUC_LUC`, `CHANG_T3`) · `tap-3/ngay/ngayN.ts` · `tap-3/ngay/index.ts` ·
+  `tap-3/ngay/manifest.ts` (SINH TỰ ĐỘNG) · `tap-3/tracuu.ts` + `tap-3/tracuu-chang1..5.ts` (mỗi chặng 6 ngày một tệp) ·
+  `tap-3/videos.ts` (`VIDEO_BAI_T3`).
+- **Tiến độ:** `stage: 'sach3'`, `storageKey: 'ielts-t3'`. **id:** mọi id bắt đầu **`t3dN-`**.
+- **Khuôn ngày:** lẻ = `grammar` · `reading` · bài 3; chẵn = `vocab` · `writing` · bài 3; bài 3 = `listening` khi N mod 4 ∈ {0,1},
+  `speaking` khi N mod 4 ∈ {2,3}; + 1 `homework` (≥ 30 câu, có đáp án); mỗi ngày đúng 1 khối `phatam` (âm ở bảng 3.3).
+  Ngày **6 / 12 / 18 / 24 / 30** thêm `review` id `t3dN-kiem-tra`. Đề 4 (N15) + Đề 5 (N30) ở `thi-may/de/`, không trong ngày.
+- **Mức band 6:** mọi bài Viết có bài mẫu **band 5 và band 6 đặt cạnh nhau** + chỉ rõ chỗ khác nhau theo 4 tiêu chí; bài Nói có câu
+  trả lời mẫu band 5 vs band 6; Reading/Listening độ dài và độ paraphrase đúng mức Tập 3 (passage ~700–900 từ, nghe ~150 wpm).
+- **Giọng:** thêm `ca-nu` / `ca-nam` (Canada) và `nz-nu` / `nz-nam` (New Zealand) — Azure `en-CA-*` / `en-NZ-*`.
+- Dạng câu thi → bài ôn: thêm id `t3dN-…` vào `BAI_ON` (`thi-may/cham.ts`) — `linkBai` tự trỏ `/ielts/tap-3`.

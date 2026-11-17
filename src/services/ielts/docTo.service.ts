@@ -37,6 +37,12 @@ export const GIONG = {
   // Giọng Úc (13/11/2026) — IELTS Listening có giọng AU (docs/ielts-lo-trinh-0-8.md L17; Tập 2 N15, N19).
   'au-nu': 'en-AU-Wavenet-C',
   'au-nam': 'en-AU-Wavenet-B',
+  // Giọng Canada + New Zealand (18/11/2026) — IELTS Tập 3 (docs/ielts-lo-trinh-0-8.md L17: N4/N12 CA, N12/N20/N24 NZ).
+  // Google Cloud không có en-CA / en-NZ ⇒ dự phòng Google gần nhất (CA ~ US, NZ ~ AU); đường chính là Azure ở dưới.
+  'ca-nu': 'en-US-Wavenet-H',
+  'ca-nam': 'en-US-Wavenet-J',
+  'nz-nu': 'en-AU-Wavenet-A',
+  'nz-nam': 'en-AU-Wavenet-D',
   // Khoá tiếng Nhật (Dekiru, JPD113/123) dùng chung đường này.
   'ja-nu': 'ja-JP-Wavenet-A',
   'ja-nam': 'ja-JP-Wavenet-C',
@@ -60,6 +66,10 @@ const GIONG_AZURE: Record<Giong, string> = {
   'us-nam': 'en-US-AndrewNeural',
   'au-nu': 'en-AU-NatashaNeural',
   'au-nam': 'en-AU-WilliamNeural',
+  'ca-nu': 'en-CA-ClaraNeural',
+  'ca-nam': 'en-CA-LiamNeural',
+  'nz-nu': 'en-NZ-MollyNeural',
+  'nz-nam': 'en-NZ-MitchellNeural',
   'ja-nu': 'ja-JP-NanamiNeural',
   'ja-nam': 'ja-JP-KeitaNeural',
   'ja2-nu': 'ja-JP-AoiNeural',
@@ -140,7 +150,7 @@ async function synthesizeAzure(text: string, giong: Giong, toc: number, danhVan:
 async function docGoogleDich(text: string, giong: Giong, bam: string, danhVan: boolean) {
   const keyGt = `ielts/audio/gt-${giong.slice(0, 2)}/${bam}.mp3`;
   if (await objectExists(keyGt)) return { url: buildPublicUrl(keyGt), giongDon: true };
-  const tl = giong.startsWith('ja') ? 'ja' : giong.startsWith('zh') ? 'zh-CN' : giong.startsWith('us') ? 'en-US' : giong.startsWith('au') ? 'en-AU' : 'en-GB';
+  const tl = giong.startsWith('ja') ? 'ja' : giong.startsWith('zh') ? 'zh-CN' : giong.startsWith('us') ? 'en-US' : giong.startsWith('au') || giong.startsWith('nz') ? 'en-AU' : giong.startsWith('ca') ? 'en-US' : 'en-GB';
   const doc = danhVan ? text.split(/\s*,\s*/).join('. ') : text;
   const mp3 = await synthesizeGoogle(doc, tl);
   const { url } = await putObject(keyGt, mp3, 'audio/mpeg');

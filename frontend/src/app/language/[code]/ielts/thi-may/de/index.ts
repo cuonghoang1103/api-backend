@@ -61,6 +61,28 @@ export const MUC_LUC: MucDe[] = [
     moTa: 'Task 1: main source of news for adults in 2005 and 2025 (two pie charts) · Task 2: large numbers of tourists — advantages and disadvantages for local people' },
   { id: 'noi-de3', kyNang: 'noi', ten: 'Speaking — Đề 3 (thi cuối Tập 2)', boDe: 'Đề 3', capDo: 'Band 5.0', phut: 13, soCau: 3,
     moTa: 'Part 1: food · travel · Part 2: an event you attended and enjoyed · Part 3: public events, celebrations past and present' },
+  // Đề 4 — giữa Tập 3 (sau Ngày 15), band 5.5 (soạn 18/11/2026).
+  { id: 'nghe-de4', kyNang: 'nghe', ten: 'Listening — Đề 4 (giữa Tập 3)', boDe: 'Đề 4', capDo: 'Band 5.5', phut: 30, soCau: 40,
+    moTa: 'Renting a car (US) · Nature reserve talk & map · Three speakers discuss a journal article · Lecture on how children learn language (Canadian speaker)',
+    dang: ['table', 'form', 'mcq', 'map', 'match-feature', 'note', 'sentence'] },
+  { id: 'doc-de4', kyNang: 'doc', ten: 'Academic Reading — Đề 4 (giữa Tập 3)', boDe: 'Đề 4', capDo: 'Band 5.5', phut: 60, soCau: 40,
+    moTa: 'The mark of the criminal (fingerprints) · Cleaning up the sky (space debris) · The slow revolution (the printing press)',
+    dang: ['tfng', 'table', 'short', 'heading', 'summary-box', 'mcq2', 'ynng', 'match-ending', 'mcq'] },
+  { id: 'viet-de4', kyNang: 'viet', ten: 'Academic Writing — Đề 4 (giữa Tập 3)', boDe: 'Đề 4', capDo: 'Band 5.5', phut: 60, soCau: 2,
+    moTa: 'Task 1: how people travelled to work in one city in 2004, 2014 and 2024 (table) · Task 2: young people leaving the countryside — problems and solutions' },
+  { id: 'noi-de4', kyNang: 'noi', ten: 'Speaking — Đề 4 (giữa Tập 3)', boDe: 'Đề 4', capDo: 'Band 5.5', phut: 13, soCau: 3,
+    moTa: 'Part 1: shopping · technology · Part 2: a skill that took you a long time to learn · Part 3: learning skills, practical skills and the future' },
+  // Đề 5 — thi cuối Tập 3 (sau Ngày 30), band 6.0 (soạn 18/11/2026).
+  { id: 'nghe-de5', kyNang: 'nghe', ten: 'Listening — Đề 5 (thi cuối Tập 3)', boDe: 'Đề 5', capDo: 'Band 6.0', phut: 30, soCau: 40,
+    moTa: 'Contents insurance enquiry (AU + UK) · Community centre talk & plan · Three students plan a research project · Lecture on urban agriculture (New Zealand speaker)',
+    dang: ['form', 'short', 'mcq', 'map', 'match-feature', 'mcq2', 'note', 'flow'] },
+  { id: 'doc-de5', kyNang: 'doc', ten: 'Academic Reading — Đề 5 (thi cuối Tập 3)', boDe: 'Đề 5', capDo: 'Band 6.0', phut: 60, soCau: 40,
+    moTa: 'The paper promise (the history of banknotes) · Seeing with sound (how bats find their way) · Words and worlds (does language shape thought?)',
+    dang: ['tfng', 'sentence', 'diagram', 'match-info', 'match-feature', 'summary', 'ynng', 'mcq', 'match-ending'] },
+  { id: 'viet-de5', kyNang: 'viet', ten: 'Academic Writing — Đề 5 (thi cuối Tập 3)', boDe: 'Đề 5', capDo: 'Band 6.0', phut: 60, soCau: 2,
+    moTa: 'Task 1: how olive oil is produced (process diagram) · Task 2: throwing things away instead of repairing them — why, and is it a positive or negative development? (two-part question)' },
+  { id: 'noi-de5', kyNang: 'noi', ten: 'Speaking — Đề 5 (thi cuối Tập 3)', boDe: 'Đề 5', capDo: 'Band 6.0', phut: 13, soCau: 3,
+    moTa: 'Part 1: music · sleep · Part 2: a positive change you made in your life · Part 3: change in people\'s lives, change in society' },
   // Đề 6 (đầu Tập 4).
   { id: 'doc-01', kyNang: 'doc', ten: 'Academic Reading — Test 1', boDe: 'Đề 6', capDo: 'Band 6 → 7.5', phut: 60, soCau: 40, moTa: 'Mangroves · The shipping container · The hidden value of boredom',
     dang: ['note', 'diagram', 'tfng', 'heading', 'match-feature', 'summary-box', 'ynng', 'mcq', 'mcq2', 'sentence'] },
@@ -93,6 +115,14 @@ const TEP_DE: Record<string, () => Promise<De>> = {
   'doc-de3': () => import('./doc-de3').then((m) => m.DOC_DE3),
   'viet-de3': () => import('./viet-de3').then((m) => m.VIET_DE3),
   'noi-de3': () => import('./noi-de3').then((m) => m.NOI_DE3),
+  'nghe-de4': () => import('./nghe-de4').then((m) => m.NGHE_DE4),
+  'doc-de4': () => import('./doc-de4').then((m) => m.DOC_DE4),
+  'viet-de4': () => import('./viet-de4').then((m) => m.VIET_DE4),
+  'noi-de4': () => import('./noi-de4').then((m) => m.NOI_DE4),
+  'nghe-de5': () => import('./nghe-de5').then((m) => m.NGHE_DE5),
+  'doc-de5': () => import('./doc-de5').then((m) => m.DOC_DE5),
+  'viet-de5': () => import('./viet-de5').then((m) => m.VIET_DE5),
+  'noi-de5': () => import('./noi-de5').then((m) => m.NOI_DE5),
   'noi-06': () => import('./noi-06').then((m) => m.NOI_06),
 };
 
@@ -113,6 +143,7 @@ export const THU_TU_THI: KyNang[] = ['sangloc', 'nghe', 'doc', 'viet', 'noi'];
  * Bộ đề đủ 4 kỹ năng ("Đề N", docs/ielts-lo-trinh-0-8.md mục 4.2). Đề 0 = test đầu vào (mục 4.3).
  * Đề 1 (thi cuối Tập 1) = `nghe-de1` · `doc-de1` · `viet-de1` · `noi-de1` (mã `-de1` vì `-01` đã thuộc Đề 6).
  * Đề 2 (Tập 2 · Ngày 12) = bộ `-de2`; Đề 3 (thi cuối Tập 2) = bộ `-de3` (cùng quy ước mã như Đề 1).
+ * Đề 4 (giữa Tập 3, sau Ngày 15) = bộ `-de4`; Đề 5 (thi cuối Tập 3, sau Ngày 30) = bộ `-de5`.
  * Đề 6 (đầu Tập 4) = `nghe-01` · `doc-01` · `viet-01` · `noi-06`.
  */
 export const BO_DE: BoDeDu[] = [
@@ -131,6 +162,14 @@ export const BO_DE: BoDeDu[] = [
   {
     id: 'bo-03', so: 3, ten: 'Đề 3', capDo: 'Band 5.0', viTri: 'Thi cuối Tập 2 (sau Ngày 24)',
     nghe: 'nghe-de3', doc: 'doc-de3', viet: 'viet-de3', noi: 'noi-de3',
+  },
+  {
+    id: 'bo-04', so: 4, ten: 'Đề 4', capDo: 'Band 5.5', viTri: 'Giữa Tập 3 (sau Ngày 15)',
+    nghe: 'nghe-de4', doc: 'doc-de4', viet: 'viet-de4', noi: 'noi-de4',
+  },
+  {
+    id: 'bo-05', so: 5, ten: 'Đề 5', capDo: 'Band 6.0', viTri: 'Thi cuối Tập 3 (sau Ngày 30)',
+    nghe: 'nghe-de5', doc: 'doc-de5', viet: 'viet-de5', noi: 'noi-de5',
   },
   {
     id: 'bo-06', so: 6, ten: 'Đề 6', capDo: 'Band 6.0 → 7.5', viTri: 'Đầu Tập 4 (Ngày 1)',

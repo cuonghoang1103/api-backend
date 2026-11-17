@@ -29,6 +29,8 @@ const THU_MUC = [
   'frontend/src/app/language/[code]/ielts', // IELTS Ngày 1 nằm trong data.ts (13/11/2026) — chỉ quét *.ts ngay cấp này
   'frontend/src/app/language/[code]/ielts/tap-2/ngay', // IELTS Tập 2 (12/11/2026): ngày t2dN
   'frontend/src/app/language/[code]/ielts/tap-2', // IELTS Tập 2: data.ts (Mở đầu) + tracuu.ts
+  'frontend/src/app/language/[code]/ielts/tap-3/ngay', // IELTS Tập 3 (18/11/2026): ngày t3dN
+  'frontend/src/app/language/[code]/ielts/tap-3', // IELTS Tập 3: data.ts (Mở đầu) + tracuu.ts
 ];
 export const KHOA = (slug: string) => `hoc/hinh/${slug}.webp`;
 

@@ -138,6 +138,7 @@ export const IELTS_T2 = defineCourse({
   extras: [TRA_CONG_THUC_T2, TRA_TU_VUNG_T2],
   links: [
     { href: '/language/en/ielts', label: '← Tập 1 (mất gốc → 4.0) — ôn lại ngày còn yếu' },
+    { href: '/language/en/ielts/tap-3', label: '📘 Học tiếp Tập 3 (band 5.0 → 6.0) →' },
     { href: '/language/en/ielts/thi-may', label: '🖥️ Online Test — thi trên máy tính (Reading · Listening · Writing · Speaking)' },
     { href: '/language/en/ielts/the-tu', label: '🃏 Flashcards (bộ "Từ của khoá — Tập 2")' },
     { href: '/language/en/ielts/so-loi', label: '📒 Sổ lỗi tự động' },

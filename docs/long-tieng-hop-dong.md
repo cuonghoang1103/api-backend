@@ -47,7 +47,7 @@ Thiếu cấu hình / sai khoá ⇒ 404 (không lộ tuyến).
 | `POST /nhan` | giành 1 việc `cho` (cũ nhất) ⇒ `{ job: { id, url, tep, tenVideo, lang, goc, nhip, nhacNen (+ ten bài thư viện), soLanNhan, tao }, vao?: { url GET ký sẵn }, nhac?: { url GET ký sẵn — bài thư viện hoặc tệp nhạc } }` hoặc 204. Việc `tai/lam` không nhịp tim > 20 phút ⇒ về `cho`; giành ≥ 5 lần vẫn mất nhịp ⇒ `loi`. |
 | `POST /:id/tien-do` `{ trangThai: 'tai'\|'lam', buoc, phanTram, tenVideo? }` | nhịp tim + tiến độ. **Việc đã huỷ/xoá/xếp lại ⇒ 410 `LT_VIEC_KHONG_CON` ⇒ trạm DỪNG việc đó** (mọi tuyến `/:id/*` và `/dich` đều vậy) |
 | `POST /:id/len-ket-qua` `{ tep: [{ loai, ten, kichThuoc, kieu? }] }` | ⇒ `{ tep: [{ loai, url, kieu, het }] }` URL PUT ký sẵn từng tệp (PUT với `Content-Type = kieu`; thiếu `kieu` ⇒ mặc định theo loại). Khoá theo LOẠI: `…/ra/<loai><đuôi>` |
-| `POST /:id/xong` `{ thoiLuong, ketQua: [...], tenVideo? }` · `POST /:id/loi` `{ loi }` | kết thúc. `xong` HEAD từng tệp (thiếu ⇒ 400), lấy kích thước thật, xoá tệp vào |
+| `POST /:id/xong` `{ thoiLuong, ketQua: [...], tenVideo?, buoc? }` · `POST /:id/loi` `{ loi }` | kết thúc. `xong` HEAD từng tệp (thiếu ⇒ 400), lấy kích thước thật, xoá tệp vào. `buoc` = dòng tóm tắt cuối (vd "103 câu · 3 câu đọc lại · 0 câu dưới ngưỡng"), thiếu ⇒ "Xong" |
 | `POST /dich` `{ jobId, ngonNgu, cau: [{ i, giay, toiDa, src }] (≤ 60 câu), truoc }` | backend dịch một lô bằng `gateway.ts` (việc mới `long_tieng_dich` = `gpt-6-sol`, trần chi phí sẵn có) ⇒ `{ ds: [{ i, vi }] }`. Model bỏ sót câu ⇒ tự hỏi lại phần thiếu một lần; vẫn thiếu ⇒ 502 `LT_DICH_THIEU` (trạm thử lại lô). |
 
 ## 3. Trạm ở máy nhà (`linux-nha`, user Cuong03dx)

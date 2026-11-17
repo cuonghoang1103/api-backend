@@ -1,0 +1,24 @@
+# Trạm CT Lồng Tiếng — systemd --user (máy nhà linux-nha, user Cuong03dx). Cài: xem README.md cùng thư mục.
+#   cp vbg-long-tieng.service ~/.config/systemd/user/ && systemctl --user daemon-reload && systemctl --user enable --now vbg-long-tieng
+#   journalctl --user -u vbg-long-tieng -f
+[Unit]
+Description=Trạm CT Lồng Tiếng (nhận việc từ cuongthai.com, lồng tiếng giọng cuong8)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=%h/long-tieng
+# LT_TOKEN (= INTERNAL_API_TOKEN của web), LT_API, LT_GPU… — tệp quyền 600, KHÔNG đưa vào git
+EnvironmentFile=%h/long-tieng/.env
+Environment=PATH=%h/long-tieng/bin:%h/.local/bin:/usr/local/bin:/usr/bin:/bin
+ExecStart=%h/long-tieng/node_modules/.bin/tsx %h/long-tieng/tram.mts
+Restart=always
+RestartSec=30
+# Dừng: để trạm tự giết tiến trình con; việc dở được web xếp lại sau 20 phút và trạm làm tiếp từ bước dở
+KillMode=mixed
+TimeoutStopSec=20
+Nice=5
+
+[Install]
+WantedBy=default.target

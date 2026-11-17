@@ -456,7 +456,7 @@ export async function xongViec(id: string, body: Record<string, unknown>): Promi
   const moi = await prisma.longTiengViec.update({
     where: { id: v.id },
     data: {
-      trangThai: 'xong', buoc: 'Xong', phanTram: 100, loi: null, xong: new Date(), nhipTim: new Date(),
+      trangThai: 'xong', buoc: chuoi(body.buoc, 200) || 'Xong', phanTram: 100, loi: null, xong: new Date(), nhipTim: new Date(),
       thoiLuong: soDuong(body.thoiLuong), ketQua: ketQua as unknown as Prisma.InputJsonValue, khoaVao: null, khoaNhac: null,
       ...(tenVideo ? { tenVideo } : {}),
     },

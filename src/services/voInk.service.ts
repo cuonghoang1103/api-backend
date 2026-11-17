@@ -22,6 +22,7 @@ import {
 import { config } from '../config/env.js';
 import { AppError } from '../middleware/errorHandler.js';
 import { logger } from '../utils/logger.js';
+import { docBiaMo, themBiaMo, goBiaMo, chuanId, lucMediaTheoTrang, khoaMediaCanDon } from './voDongBoThem.service.js';
 
 // ─── Giới hạn ────────────────────────────────────────────────────────────
 
@@ -256,7 +257,7 @@ function khoaCuaNguoiNay(key: string, userId: number, noteId: number): boolean {
 export async function dongBoCay(
   userId: number,
   mons: MonVao[],
-): Promise<{ mons: Array<{ clientId: string; id: number; cuons: Array<{ clientId: string; id: number; trangs: TrangRa[] }> }> }> {
+): Promise<{ mons: Array<{ clientId: string; id: number; daXoa?: boolean; cuons: Array<{ clientId: string; id: number; daXoa?: boolean; trangs: TrangRa[] }> }> }> {
   if (!Array.isArray(mons)) throw new AppError('Thiếu danh sách môn', 400, 'INVALID_INPUT');
   if (mons.length > TRAN_MON) throw new AppError(`Quá ${TRAN_MON} môn trong một lượt`, 400, 'TOO_MANY');
 
@@ -266,10 +267,18 @@ export async function dongBoCay(
   if (tongCuon > TRAN_CUON) throw new AppError(`Quá ${TRAN_CUON} cuốn vở trong một lượt`, 400, 'TOO_MANY');
   if (tongTrang > TRAN_TRANG) throw new AppError(`Quá ${TRAN_TRANG} trang trong một lượt`, 400, 'TOO_MANY');
 
-  const ketQua: Array<{ clientId: string; id: number; cuons: Array<{ clientId: string; id: number; trangs: TrangRa[] }> }> = [];
+  const ketQua: Array<{ clientId: string; id: number; daXoa?: boolean; cuons: Array<{ clientId: string; id: number; daXoa?: boolean; trangs: TrangRa[] }> }> = [];
+
+  // Bia mộ (16/11/2026): môn/cuốn đã bị xoá ở máy khác ⇒ KHÔNG tạo lại (upsert theo clientId sẽ làm nó sống lại
+  // trên mọi máy), trả `daXoa: true` để máy này hỏi người dùng / dọn bản của nó. Xem `voDongBoThem.service.ts`.
+  const biaMo = await docBiaMo(userId);
 
   for (const mon of mons) {
     const monClient = uuidSach(mon.clientId, 'clientId của môn');
+    if (biaMo.mon[chuanId(monClient)]) {
+      ketQua.push({ clientId: monClient, id: 0, daXoa: true, cuons: [] });
+      continue;
+    }
     const monRow = await prisma.noteSubject.upsert({
       where: { uk_note_subject_client: { userId, clientId: monClient } },
       create: {
@@ -289,10 +298,14 @@ export async function dongBoCay(
       },
     });
 
-    const cuonsRa: Array<{ clientId: string; id: number; trangs: TrangRa[] }> = [];
+    const cuonsRa: Array<{ clientId: string; id: number; daXoa?: boolean; trangs: TrangRa[] }> = [];
 
     for (const cuon of mon.cuons ?? []) {
       const cuonClient = uuidSach(cuon.clientId, 'clientId của cuốn vở');
+      if (biaMo.cuon[chuanId(cuonClient)]) {
+        cuonsRa.push({ clientId: cuonClient, id: 0, daXoa: true, trangs: [] });
+        continue;
+      }
       const giayCuon = typeof cuon.giayMacDinh === 'string' && GIAY_HOP_LE.has(cuon.giayMacDinh)
         ? cuon.giayMacDinh : null;
       const cotKhoCuon = coKhoa(cuon, 'khoGiay') ? { inkPageSize: khoSach(cuon.khoGiay) } : {};
@@ -618,8 +631,12 @@ export async function xacNhanNet(
   const soNet = Number.isInteger(data.soNet) && data.soNet >= 0 ? data.soNet : 0;
   const phienBanMoi = trang.inkVersion + 1;
 
-  const capNhat = await prisma.note.update({
-    where: { id: noteId },
+  // ⚠️ GHI CÓ ĐIỀU KIỆN (16/11/2026). Trước đây: đọc `inkVersion` → so → `update` vô điều kiện. Hai lượt xác nhận
+  // cùng dựa trên phiên bản N chạy chồng nhau (hai máy, hoặc một máy thử lại khi lượt trước chưa về) thì CẢ HAI qua
+  // được phép so, lượt sau ghi đè lượt trước và cả hai cùng nhận "v N+1" — nét của một máy mất mà không ai báo
+  // xung đột. Nay phép so nằm TRONG câu UPDATE: chỉ một lượt thắng, lượt kia nhận 409 như mọi xung đột khác.
+  const ghi = await prisma.note.updateMany({
+    where: { id: noteId, userId, deletedAt: null, inkVersion: trang.inkVersion },
     data: {
       inkKey,
       inkPreviewKey: previewKey ?? trang.inkPreviewKey,
@@ -627,8 +644,21 @@ export async function xacNhanNet(
       inkStrokeCount: soNet,
       inkUpdatedAt: new Date(),
     },
-    select: { inkVersion: true, inkKey: true, inkPreviewKey: true },
   });
+  if (ghi.count === 0) {
+    const nay = await prisma.note.findFirst({
+      where: { id: noteId, userId, deletedAt: null },
+      select: { inkVersion: true, inkKey: true, inkStrokeCount: true },
+    });
+    if (!nay) throw new AppError('Không tìm thấy trang', 404, 'NOTE_NOT_FOUND');
+    throw new AppError(
+      'Máy khác đã ghi trang này trong lúc bạn viết — tải về và hợp nhất trước',
+      409,
+      'INK_CONFLICT',
+      { inkVersion: nay.inkVersion, inkStrokeCount: nay.inkStrokeCount, inkUrl: await urlDocVo(nay.inkKey) },
+    );
+  }
+  const capNhat = { inkVersion: phienBanMoi, inkKey, inkPreviewKey: previewKey ?? trang.inkPreviewKey };
 
   // Dọn bản CŨ HƠN MỘT BẬC. Giữ lại đúng bản liền trước làm lưới an toàn:
   // nếu lượt đẩy này hoá ra hỏng, bản trước vẫn còn để cứu.
@@ -708,6 +738,9 @@ export async function khoaCanDonChoTrang(
     for (const d of ds) for (const o of d) khoa.add(o.key);
   }
 
+  // Media (ảnh dán + ghi âm, 16/11/2026) — thư mục riêng của từng trang + danh sách.
+  for (const k of await khoaMediaCanDon(trangs.map((t) => ({ id: t.id, userId: t.userId })))) khoa.add(k);
+
   if (nenUngVien.size > 0) {
     // Trang nào KHÁC mẻ này còn trỏ vào cùng khoá nền thì giữ lại object.
     const conDung = await prisma.note.findMany({
@@ -725,6 +758,7 @@ export async function khoaCanDonChoTrang(
 // ─── 4. Kéo cây về (máy thứ hai, hoặc cài lại app) ───────────────────────
 
 export async function layCayVo(userId: number) {
+  const [biaMo, lucMedia] = await Promise.all([docBiaMo(userId), lucMediaTheoTrang(userId)]);
   const mons = await prisma.noteSubject.findMany({
     where: { userId, clientId: { not: null } },
     orderBy: [{ isPinned: 'desc' }, { sortOrder: 'asc' }],
@@ -772,7 +806,9 @@ export async function layCayVo(userId: number) {
   }));
 
   return {
-    mons: mons.map((m) => ({
+    // clientId (chữ thường) của môn/cuốn đã xoá — máy chỉ KÉO về cũng biết mà dọn bản của nó (`DongBoVo.apBiaMo`).
+    biaMo: { mons: Object.keys(biaMo.mon), cuons: Object.keys(biaMo.cuon) },
+    mons: mons.filter((m) => !biaMo.mon[chuanId(m.clientId!)]).map((m) => ({
       clientId: m.clientId!,
       id: m.id,
       ten: m.name,
@@ -781,7 +817,7 @@ export async function layCayVo(userId: number) {
       thuTu: m.sortOrder,
       ghim: m.isPinned,
       suaLuc: m.updatedAt.toISOString(),
-      cuons: m.chapters.map((c) => ({
+      cuons: m.chapters.filter((c) => !biaMo.cuon[chuanId(c.clientId!)]).map((c) => ({
         clientId: c.clientId!,
         id: c.id,
         ten: c.title,
@@ -808,6 +844,8 @@ export async function layCayVo(userId: number) {
           nenUrl: urlTheoTrang.get(t.id)?.nenUrl ?? null,
           nenLoai: t.bgKind,
           nenTrang: t.bgPage,
+          // Lúc danh sách media (ảnh dán + ghi âm) của trang đổi gần nhất; `null` = không có.
+          mediaLuc: lucMedia.get(t.id) ?? null,
         })),
       })),
     })),
@@ -818,7 +856,10 @@ export async function layCayVo(userId: number) {
 
 export async function xoaTrangVo(userId: number, clientIds: string[]): Promise<{ daXoa: number }> {
   if (!Array.isArray(clientIds) || clientIds.length === 0) return { daXoa: 0 };
-  const ids = clientIds.slice(0, 500).map((v) => uuidSach(v, 'clientId'));
+  // Trước 16/11/2026: `slice(0, 500)` cắt LẶNG LẼ — app gửi 600 trang, máy chủ xoá 500 rồi trả 200, app tưởng xong
+  // cả 600 và 100 trang kia sống lại ở lượt kéo về. Nay quá trần thì NÉM; app gửi theo lô ≤ 500.
+  if (clientIds.length > 500) throw new AppError('Quá 500 trang trong một lượt', 400, 'TOO_MANY');
+  const ids = clientIds.map((v) => uuidSach(v, 'clientId'));
   // Xoá MỀM: `Note` đã có thùng rác 30 ngày sẵn, dùng lại nó thay vì xoá
   // thật — một cú chạm nhầm trên iPad không được phép làm mất buổi học.
   const r = await prisma.note.updateMany({
@@ -843,13 +884,18 @@ export async function xoaTrangVo(userId: number, clientIds: string[]): Promise<{
  * clientId, trang được tạo lại / gắn lại vào cuốn. App gọi sync ngay sau
  * lệnh này, nên không cần dựng cha ở đây (dựng ở đây cũng không biết tên).
  */
-export async function khoiPhucTrangVo(userId: number, clientIds: unknown): Promise<{
+export async function khoiPhucTrangVo(userId: number, clientIds: unknown, cha?: { cuonIds?: unknown; monIds?: unknown }): Promise<{
   daKhoiPhuc: number;
   trangs: Array<{ clientId: string; id: number | null; trangThai: 'khoiPhuc' | 'conSong' | 'khongCo'; thieuCuon: boolean }>;
 }> {
   if (!Array.isArray(clientIds) || clientIds.length === 0) return { daKhoiPhuc: 0, trangs: [] };
   if (clientIds.length > 500) throw new AppError('Quá 500 trang trong một lượt', 400, 'TOO_MANY');
   const ids = [...new Set(clientIds.map((v) => uuidSach(v, 'clientId')))];
+
+  // Trang nằm trong cuốn/môn đã xoá (bia mộ) ⇒ gỡ bia mộ của cha, không thì `/vo/sync` ngay sau đó vẫn từ chối
+  // dựng lại cuốn/môn và trang vừa khôi phục không có chỗ nào để về.
+  const dsCha = (v: unknown) => (Array.isArray(v) ? v.slice(0, 500).map((x) => uuidSach(x, 'clientId')) : []);
+  await goBiaMo(userId, { cuon: dsCha(cha?.cuonIds), mon: dsCha(cha?.monIds) });
 
   const truoc = await prisma.note.findMany({
     where: { userId, clientId: { in: ids } },
@@ -889,6 +935,45 @@ export async function xoaCuonVo(userId: number, clientId: string): Promise<{ daX
     // Chương còn ghi chú CŨ (không thuộc Vở) thì để nguyên — xoá cuốn vở
     // không được phép kéo theo ghi chú người dùng gõ trên web.
   });
+  await themBiaMo(userId, { cuon: [id] });
+  return { daXoa: r.count };
+}
+
+/**
+ * Xoá cả một MÔN vở (16/11/2026). Trước đó app chỉ gửi lệnh xoá từng CUỐN ⇒ `NoteSubject` vẫn mang clientId, và
+ * lượt kéo về kế tiếp dựng môn sống lại (rỗng) trên mọi máy.
+ *
+ *   - Trang Vở của môn ⇒ xoá MỀM (thùng rác web 30 ngày, như xoá cuốn).
+ *   - Cuốn Vở (có clientId) ⇒ xoá hàng; trang giữ `subjectId`, `chapterId` về NULL.
+ *   - Môn: KHÔNG còn hàng nào trỏ vào (kể cả trang trong thùng rác, ghi chú web) ⇒ xoá hẳn. Còn ⇒ chỉ GỠ clientId:
+ *     môn rời khỏi Vở nhưng ghi chú web + trang trong thùng rác vẫn nguyên (xoá hàng môn là cascade xoá HẲN chúng).
+ *   - Bia mộ cho môn + các cuốn ⇒ máy khác còn bản cũ đẩy lên không làm chúng sống lại.
+ */
+export async function xoaMonVo(userId: number, clientId: unknown): Promise<{ daXoa: number }> {
+  const id = uuidSach(clientId, 'clientId');
+  const mon = await prisma.noteSubject.findFirst({ where: { userId, clientId: id }, select: { id: true } });
+  if (!mon) {
+    await themBiaMo(userId, { mon: [id] });
+    return { daXoa: 0 };
+  }
+  const r = await prisma.note.updateMany({
+    where: { userId, subjectId: mon.id, clientId: { not: null }, deletedAt: null },
+    data: { deletedAt: new Date() },
+  });
+  const cuons = await prisma.noteChapter.findMany({
+    where: { userId, subjectId: mon.id, clientId: { not: null } }, select: { id: true, clientId: true },
+  });
+  if (cuons.length) await prisma.noteChapter.deleteMany({ where: { id: { in: cuons.map((c) => c.id) } } });
+  const [conTrang, conCuon] = await Promise.all([
+    prisma.note.count({ where: { subjectId: mon.id } }),
+    prisma.noteChapter.count({ where: { subjectId: mon.id } }),
+  ]);
+  if (conTrang === 0 && conCuon === 0) {
+    await prisma.noteSubject.delete({ where: { id: mon.id } }).catch(() => {});
+  } else {
+    await prisma.noteSubject.update({ where: { id: mon.id }, data: { clientId: null } });
+  }
+  await themBiaMo(userId, { mon: [id], cuon: cuons.map((c) => c.clientId!).filter(Boolean) });
   return { daXoa: r.count };
 }
 

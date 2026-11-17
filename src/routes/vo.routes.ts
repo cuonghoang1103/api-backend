@@ -17,9 +17,10 @@ import { authenticate } from '../middleware/auth.js';
 import { AppError } from '../middleware/errorHandler.js';
 import type { ApiResponse } from '../types/index.js';
 import {
-  dongBoCay, xinDuongDayNet, xacNhanNet, layCayVo, xoaTrangVo, xoaCuonVo,
+  dongBoCay, xinDuongDayNet, xacNhanNet, layCayVo, xoaTrangVo, xoaCuonVo, xoaMonVo,
   xinDuongNen, khoiPhucTrangVo,
 } from '../services/voInk.service.js';
+import { xinDuongMedia, luuDsMedia, layDsMedia } from '../services/voDongBoThem.service.js';
 import { veBangNet, batDauVe, xemViecVe } from '../services/voVe.service.js';
 import { vietLaiTrang, batDauVietLai, xemViecVietLai } from '../services/voVietLai.service.js';
 import { traChuHan } from '../services/voHan.service.js';
@@ -106,13 +107,52 @@ router.post('/trang/xoa', async (req, res: Response<ApiResponse>, next) => {
  */
 router.post('/trang/khoi-phuc', async (req, res: Response<ApiResponse>, next) => {
   try {
-    res.json({ success: true, data: await khoiPhucTrangVo(req.userId!, req.body?.clientIds) });
+    // `cuonIds`/`monIds` (16/11/2026, tuỳ chọn): gỡ bia mộ của cuốn/môn chứa các trang này.
+    res.json({ success: true, data: await khoiPhucTrangVo(req.userId!, req.body?.clientIds, {
+      cuonIds: req.body?.cuonIds, monIds: req.body?.monIds,
+    }) });
   } catch (e) { next(e); }
 });
 
 router.post('/cuon/xoa', async (req, res: Response<ApiResponse>, next) => {
   try {
     res.json({ success: true, data: await xoaCuonVo(req.userId!, req.body?.clientId) });
+  } catch (e) { next(e); }
+});
+
+/** Xoá cả MÔN vở (16/11/2026): trang ⇒ thùng rác, cuốn ⇒ xoá, môn ⇒ xoá/gỡ khỏi Vở, + bia mộ. */
+router.post('/mon/xoa', async (req, res: Response<ApiResponse>, next) => {
+  try {
+    res.json({ success: true, data: await xoaMonVo(req.userId!, req.body?.clientId) });
+  } catch (e) { next(e); }
+});
+
+/**
+ * MEDIA của trang — ảnh dán + ghi âm buổi học (16/11/2026; trước đó chỉ sống trên máy).
+ *   POST /vo/trang/:id/media/duong-day `{ sha256, duoi: png|jpg|m4a, soByte }` ⇒ `{ khoa, url|null, daCo }`
+ *   POST /vo/trang/:id/media `{ anh: [{id,khoa,x,y,rong,cao,nguon,luc}], ghiAm: {khoa,dai,mocNet}|null, phien }`
+ *        ⇒ `{ luc, phien }` (409 `MEDIA_MISSING` + `thieu` khi tệp chưa lên kho)
+ *   GET  /vo/trang/:id/media ⇒ `{ ds|null, urls: { khoa: URL ký sẵn } }`
+ */
+router.post('/trang/:id/media/duong-day', async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const id = soNguyen(req.params.id, 'Mã trang');
+    const { sha256, duoi, soByte } = req.body ?? {};
+    res.json({ success: true, data: await xinDuongMedia(req.userId!, id, String(sha256 ?? ''), String(duoi ?? ''), Number(soByte ?? 0)) });
+  } catch (e) { next(e); }
+});
+
+router.post('/trang/:id/media', async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const id = soNguyen(req.params.id, 'Mã trang');
+    res.json({ success: true, data: await luuDsMedia(req.userId!, id, req.body) });
+  } catch (e) { next(e); }
+});
+
+router.get('/trang/:id/media', async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const id = soNguyen(req.params.id, 'Mã trang');
+    res.json({ success: true, data: await layDsMedia(req.userId!, id) });
   } catch (e) { next(e); }
 });
 

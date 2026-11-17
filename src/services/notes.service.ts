@@ -446,10 +446,22 @@ export async function updateNote(
     sortOrder?: number;
     subjectId?: number;
     chapterId?: number | null;
+    /**
+     * KHOÁ LẠC QUAN (16/11/2026, app iOS): `updatedAt` của bản mà người gọi đang sửa. Máy chủ đã đổi kể từ đó
+     * (web vừa lưu) ⇒ 409 `NOTE_CONFLICT`, KHÔNG ghi — trước đây app gửi bản cũ là đè mất bản web vừa sửa, rồi
+     * lượt gộp lịch sử 5 phút ghi đè luôn cả bản chụp của nó. Không gửi ⇒ như cũ (web tự lưu liên tục).
+     */
+    baseUpdatedAt?: string;
   },
 ) {
   assertId(id);
   const d: Prisma.NoteUncheckedUpdateManyInput = {};
+  let base: Date | null = null;
+  if (data.baseUpdatedAt !== undefined && data.baseUpdatedAt !== null) {
+    const t = Date.parse(String(data.baseUpdatedAt));
+    if (!Number.isFinite(t)) throw new AppError('baseUpdatedAt không hợp lệ', 400, 'INVALID_BASE');
+    base = new Date(t);
+  }
 
   if (data.title !== undefined) d.title = cleanStr(data.title, 300, 'Tiêu đề') || 'Untitled';
   if (data.contentJson !== undefined) d.contentJson = data.contentJson === null ? Prisma.JsonNull : data.contentJson;
@@ -511,11 +523,26 @@ export async function updateNote(
       const current = await tx.note.findFirst({ where: { id, userId, deletedAt: null } });
       if (!current) throw new AppError('Ghi chú không tồn tại, đã ở trong thùng rác hoặc không thuộc về bạn', 404, 'NOT_FOUND');
 
+      const xungDot = () => new AppError(
+        'Ghi chú đã được sửa ở nơi khác (web / máy khác) sau khi bạn mở — chưa ghi đè.',
+        409, 'NOTE_CONFLICT',
+        { updatedAt: current.updatedAt.toISOString(), title: current.title },
+      );
+      if (base && current.updatedAt.getTime() !== base.getTime()) throw xungDot();
+
       if (data.contentJson !== undefined) {
         await tx.noteCollaborationDocument.deleteMany({ where: { noteId: id } });
       }
 
-      const updated = await tx.note.update({ where: { id }, data: d });
+      let updated;
+      if (base) {
+        // Phép so nằm TRONG câu UPDATE: web lưu chen giữa lúc đọc và lúc ghi vẫn bị bắt.
+        const r = await tx.note.updateMany({ where: { id, userId, deletedAt: null, updatedAt: current.updatedAt }, data: d });
+        if (r.count === 0) throw xungDot();
+        updated = await tx.note.findUniqueOrThrow({ where: { id } });
+      } else {
+        updated = await tx.note.update({ where: { id }, data: d });
+      }
       if (!createsSnapshot) return updated;
 
       // Immutable coalescing: the first content edit after a manual or
@@ -526,7 +553,9 @@ export async function updateNote(
         orderBy: { version: 'desc' },
         select: { id: true, origin: true, createdAt: true },
       });
-      const withinWindow = latest?.origin === 'AUTO_SAVE'
+      // Lượt lưu có khoá lạc quan (app iOS — người dùng bấm "Lưu") KHÔNG gộp vào bản chụp tự lưu đang mở: gộp là
+      // ghi đè bản chụp đó, mà nó có thể đang giữ bản web vừa lưu (đợt 5a, 16/11/2026).
+      const withinWindow = !base && latest?.origin === 'AUTO_SAVE'
         && Date.now() - latest.createdAt.getTime() < 5 * 60 * 1000;
       if (withinWindow) {
         // Coalesce in place. Overwriting the open autosave row (instead of
@@ -564,7 +593,7 @@ export async function updateNote(
             : numbered.contentJson as Prisma.InputJsonValue,
           contentHtml: numbered.contentHtml,
           tags: numbered.tags,
-          origin: 'AUTO_SAVE',
+          origin: base ? 'MANUAL' : 'AUTO_SAVE',
         },
       });
       return numbered;

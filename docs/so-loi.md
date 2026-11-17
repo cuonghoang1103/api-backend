@@ -18,6 +18,34 @@ Mẫu một mục:
 
 ---
 
+### 16/11/2026 — Vở iOS + backend (đợt 5a) — ảnh dán + ghi âm buổi học không bao giờ lên mây
+- **Triệu chứng:** đổi máy / cài lại app CT Courses hay CuongThai: nét vở về đủ nhưng mọi ảnh "Chụp đoạn bài vào Vở" và bản ghi âm buổi học (kèm mốc từng nét) biến mất.
+- **Nguyên nhân:** `ios-app/…/Shared/Vo/AnhDanVo.swift` (đầu tệp: "Đồng bộ: CHƯA lên máy chủ") và `GhiAmBuoiHoc.swift` chỉ ghi tệp vào `Documents/Vo/`; `DongBoVo` không đẩy chúng, backend không có chỗ chứa.
+- **Cách sửa:** backend `src/services/voDongBoThem.service.ts` + 3 tuyến `/vo/trang/:id/media(/duong-day)` (tệp khoá sha256 trong `notes/u<uid>/vo-media/<noteId>/`, danh sách JSON `vo-media-ds/<noteId>.json`, `/vo` trả `mediaLuc`); iOS `Shared/Vo/MediaVo.swift` đẩy/kéo, gộp khi hai máy cùng sửa. Không migration (CHƯA commit/deploy).
+- **Ảnh hưởng:** mọi người dùng Vở có ảnh dán (từ 24/10) / ghi âm (từ 09/2026) — dữ liệu chỉ nằm trên một máy.
+- **Bài học:** tính năng mới của Vở mà "chưa đồng bộ" phải có dòng việc treo + kiểm thử đổi máy; tệp cạnh trang không tự đi theo nét.
+
+### 16/11/2026 — Vở iOS + backend (đợt 5a) — xoá cuốn/môn không hỏi, xoá tệp trước máy chủ, môn sống lại
+- **Triệu chứng:** chạm "Xoá cuốn vở"/"Xoá môn" là mất ngay, không hoàn tác; trang chưa kịp đẩy mất vĩnh viễn; xoá môn xong kéo về thì môn (rỗng) hiện lại; máy thứ hai còn bản cũ đẩy lên làm cuốn đã xoá sống lại ở mọi máy.
+- **Nguyên nhân:** `Shared/Vo/VoView.swift` (`xoaMon`/`xoaCuon`) `KhoVo.xoa` ngay sau `kho.delete`; xoá môn chỉ xếp lệnh xoá từng CUỐN nên `NoteSubject` còn clientId (`layCayVo`); `note_subjects/note_chapters` không có xoá mềm ⇒ `/vo/sync` upsert theo clientId tạo lại; lệnh xoá hỏng vì MẠNG cũng bị tính "hỏng" và vứt sau 5 lần.
+- **Cách sửa:** iOS `Shared/Vo/XoaVo.swift` (hỏi + "Hoàn tác" 10 s, chụp đủ cây, tệp chỉ xoá khi máy chủ xác nhận), loại lệnh `mon`, lỗi mạng không đếm; backend `xoaMonVo` + `POST /vo/mon/xoa`, BIA MỘ R2 `notes/u<uid>/vo/bia-mo.json` (sync trả `daXoa`, `/vo` lọc + trả `biaMo`, khôi phục trang kèm `cuonIds/monIds` gỡ bia mộ). CHƯA commit/deploy.
+- **Ảnh hưởng:** mọi người dùng Vở từ 09/2026; nặng nhất với người có iPad + iPhone.
+- **Bài học:** bảng không có xoá mềm + đồng bộ upsert theo id máy sinh ⇒ BẮT BUỘC có bia mộ; đề xuất cột `deletedAt` cho `note_subjects/note_chapters` thay bia mộ R2 (cần migration).
+
+### 16/11/2026 — backend Vở (đợt 5a) — `xacNhanNet` hai lượt cùng phiên bản đều thắng; `/vo/trang/xoa` cắt lặng lẽ 500
+- **Triệu chứng:** hai máy (hoặc một máy thử lại) đẩy cùng trang dựa trên v N: cả hai nhận "v N+1", nét của một máy mất không báo xung đột; xoá > 500 trang một lượt thì phần dư sống lại.
+- **Nguyên nhân:** `src/services/voInk.service.ts` `xacNhanNet` đọc `inkVersion` → so → `update` vô điều kiện (TOCTOU); `xoaTrangVo` `clientIds.slice(0, 500)`. App phía iOS còn race thứ ba: gỡ `canDay` khi lượt đẩy về dù người dùng viết thêm lúc đang tải (`DongBoVo.dayMotTrang`), và `keoNetVe` ghi đè trang vừa viết trong lúc tải.
+- **Cách sửa:** `updateMany where inkVersion = cũ` + 0 hàng ⇒ 409; > 500 ⇒ 400 `TOO_MANY`, app gửi lô ≤ 500 và chia cây theo lô (`DongBoVo.chiaLoCay`, trần 200 môn/500 cuốn/2.000 trang); app so `suaLuc` trước/sau. Test `src/services/voDongBoThem.db.test.ts`. CHƯA commit/deploy.
+- **Ảnh hưởng:** hiếm nhưng mất nét câm; người nhiều hơn 2.000 trang thì KHÔNG trang nào đồng bộ được.
+- **Bài học:** "đọc rồi so rồi ghi" phải gói phép so vào câu UPDATE; trần phía máy chủ phải NÉM, không cắt.
+
+### 16/11/2026 — Ghi chú iOS + backend (đợt 5a) — lưu từ iOS mất bảng/ảnh, dẹt danh sách lồng, đè bản web
+- **Triệu chứng:** mở ghi chú có bảng/ảnh trên iPhone, sửa một chữ, lưu ⇒ trên web bảng thành một dòng trích dẫn "⟦table…⟧", danh sách lồng dẹt; web vừa sửa xong thì bản iOS cũ đè mất, kể cả bản chụp lịch sử (gộp 5 phút); mất mạng lúc bấm Lưu là mất bài.
+- **Nguyên nhân:** `ios-app/…/Shared/Notes/TiptapSangMarkdown.swift` đổi node lạ thành "> ⟦…⟧" (đọc lại là blockquote), `khoiCon` chỉ lấy một đoạn; `SoanGhiChuView.luu` PATCH không điều kiện; `notes.service.ts updateNote` không có khoá lạc quan và gộp đè bản chụp `AUTO_SAVE`.
+- **Cách sửa:** `BanGocTiptap` — khối/mục Markdown y nguyên ⇒ dùng lại NODE GỐC; danh sách lồng theo thụt lề; `TiptapSangHtml` vẽ cả bảng/ảnh; `NhapGhiChu` (nháp trên máy + `baseUpdatedAt`, 409 `NOTE_CONFLICT` ⇒ giữ cả hai bản); backend `updateNote` nhận `baseUpdatedAt` (so trong UPDATE, bản chụp `MANUAL`). CHƯA commit/deploy.
+- **Ảnh hưởng:** mọi ghi chú web có bảng/ảnh/danh sách lồng từng được lưu từ app iOS.
+- **Bài học:** chuyển đổi một chiều có mất mát thì phải giữ bản gốc để quay về; lưu từ thiết bị thứ hai luôn cần khoá lạc quan.
+
 ### 16/11/2026 — app iOS (màn đồng ý quy tắc dùng chung) — chữ nút "Tôi đồng ý" màu tối trên nền thương hiệu
 - **Triệu chứng:** chụp app CT Courses lần đầu: nút "Tôi đồng ý" chữ gần đen trên nền lam, khó đọc (~2:1); app CuongThai dính y hệt ở chủ đề sáng.
 - **Nguyên nhân:** `ios-app/CuongThaiApp/Shared/Views/LegalViews.swift` (TermsConsentView) tô chữ nút bằng `AppColors.textPrimary` — ở chế độ sáng đó là màu gần đen.

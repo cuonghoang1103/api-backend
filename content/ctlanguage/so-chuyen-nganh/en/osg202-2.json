@@ -1,0 +1,671 @@
+{
+ "ma": "osg202-2",
+ "nn": "en",
+ "ten": "OSG202 · 2. Deadlock và quản lý bộ nhớ",
+ "moTa": "Môn Hệ điều hành (OSG202), phần 2: bế tắc (deadlock) – điều kiện, phát hiện, tránh, ngăn ngừa; quản lý bộ nhớ – phân vùng, phân trang, bộ nhớ ảo, thuật toán thay trang, phân đoạn. Từ lấy từ đề FE thật; câu ví dụ là câu hỏi thật trong đề.",
+ "bieuTuong": "memorychip.fill",
+ "thuTu": -976,
+ "tu": [
+  {
+   "chu": "deadlock",
+   "doc": "/ˈdedlɑːk/",
+   "nghia": "bế tắc – một nhóm tiến trình chờ lẫn nhau mãi mãi, không tiến trình nào chạy tiếp được",
+   "nhom": "Deadlock",
+   "viDu": "In modern printing systems, a disk accepts output from several users. Deadlock occurs when _____.",
+   "viDuNghia": "Trong các hệ thống in hiện đại, một đĩa nhận dữ liệu in từ nhiều người dùng. Deadlock (bế tắc) xảy ra khi _____."
+  },
+  {
+   "chu": "preemptable resource",
+   "doc": "/priˈemptəbl ˈriːsɔːrs/",
+   "nghia": "tài nguyên trưng dụng được – lấy lại giữa chừng mà không gây hại (vd bộ nhớ)",
+   "nhom": "Deadlock",
+   "viDu": "What is true about preemptable resources?",
+   "viDuNghia": "Điều gì đúng về tài nguyên có thể chiếm lại được (preemptable resources)?"
+  },
+  {
+   "chu": "nonpreemptable resource",
+   "doc": "/ˌnɑːnpriˈemptəbl ˈriːsɔːrs/",
+   "nghia": "tài nguyên không trưng dụng được – lấy lại giữa chừng thì hỏng việc (vd máy in đang in)",
+   "nhom": "Deadlock",
+   "viDu": "What is true about non-preemptable resources?",
+   "viDuNghia": "Điều gì đúng với tài nguyên không thể lấy lại (non-preemptable)?"
+  },
+  {
+   "chu": "hold and wait",
+   "nghia": "giữ và chờ – tiến trình đang giữ tài nguyên lại xin thêm tài nguyên khác; một trong bốn điều kiện deadlock",
+   "nhom": "Deadlock",
+   "viDu": "To ensure that the hold and wait condition never occurs in the system, it must be ensured that __________",
+   "viDuNghia": "Để đảm bảo điều kiện hold-and-wait không bao giờ xảy ra trong hệ thống, cần đảm bảo rằng __________"
+  },
+  {
+   "chu": "no preemption",
+   "doc": "/noʊ priˈempʃn/",
+   "nghia": "không trưng dụng – tài nguyên đã cấp không thể bị giật lại; một trong bốn điều kiện deadlock",
+   "nhom": "Deadlock",
+   "viDu": "Which of the following techniques attacks the \"No Preemption\" condition for preventing deadlocks?",
+   "viDuNghia": "Kỹ thuật nào sau đây tấn công vào điều kiện \"No Preemption\" (không thu hồi) để ngăn ngừa deadlock?"
+  },
+  {
+   "chu": "circular wait",
+   "doc": "/ˈsɜːrkjələr weɪt/",
+   "nghia": "chờ vòng tròn – các tiến trình chờ nhau thành một vòng khép kín; một trong bốn điều kiện deadlock",
+   "nhom": "Deadlock",
+   "viDu": "The scheme of ____ removes the possibility of a circular wait and therefore guarantees the removal of deadlocks.",
+   "viDuNghia": "Cơ chế ____ loại bỏ khả năng chờ vòng tròn (circular wait) và do đó đảm bảo loại bỏ deadlock."
+  },
+  {
+   "chu": "preemption",
+   "doc": "/priˈempʃn/",
+   "nghia": "sự trưng dụng – giật tài nguyên/CPU khỏi tiến trình đang giữ",
+   "nhom": "Deadlock",
+   "viDu": "What is the correct approach with the \"No preemption condition\" to prevent Deadlock?",
+   "viDuNghia": "Cách tiếp cận đúng để tấn công điều kiện \"No preemption\" nhằm ngăn ngừa Deadlock là gì?"
+  },
+  {
+   "chu": "resource allocation graph",
+   "nghia": "đồ thị cấp phát tài nguyên – vẽ tiến trình, tài nguyên và các cung xin/giữ; có chu trình là có thể deadlock",
+   "nhom": "Deadlock",
+   "viDu": "The resource allocation graph does not apply to a resource allocation system ____________",
+   "viDuNghia": "Đồ thị cấp phát tài nguyên (resource allocation graph) không áp dụng được cho hệ thống cấp phát tài nguyên ____________"
+  },
+  {
+   "chu": "deadlock detection",
+   "doc": "/ˈdedlɑːk dɪˈtekʃn/",
+   "nghia": "phát hiện deadlock – để deadlock xảy ra rồi tìm ra và xử lý",
+   "nhom": "Deadlock",
+   "viDu": "What does a resource allocation graph represent in the context of deadlock detection?",
+   "viDuNghia": "Đồ thị cấp phát tài nguyên (resource allocation graph) biểu diễn điều gì trong ngữ cảnh phát hiện deadlock?"
+  },
+  {
+   "chu": "deadlock avoidance",
+   "doc": "/ˈdedlɑːk əˈvɔɪdəns/",
+   "nghia": "tránh deadlock – xét kỹ mỗi lần xin tài nguyên, chỉ cấp khi hệ thống vẫn an toàn",
+   "nhom": "Deadlock",
+   "viDu": "A deadlock avoidance algorithm dynamically examines the ___ to ensure that a circular wait condition can never exist.",
+   "viDuNghia": "Thuật toán tránh deadlock (deadlock avoidance) kiểm tra động ___ để đảm bảo điều kiện chờ vòng tròn (circular wait) không bao giờ xảy ra."
+  },
+  {
+   "chu": "deadlock prevention",
+   "doc": "/ˈdedlɑːk prɪˈvenʃn/",
+   "nghia": "ngăn ngừa deadlock – phá bỏ một trong bốn điều kiện cần để deadlock không thể xảy ra",
+   "nhom": "Deadlock",
+   "viDu": "Why is deadlock prevention often favored in embedded or real-time systems over avoidance?",
+   "viDuNghia": "Tại sao ngăn ngừa deadlock (deadlock prevention) thường được ưa chuộng hơn tránh deadlock (avoidance) trong hệ thống nhúng hoặc thời gian thực?"
+  },
+  {
+   "chu": "ostrich algorithm",
+   "doc": "/ˈɑːstrɪtʃ ˈælɡərɪðəm/",
+   "nghia": "thuật toán đà điểu – lờ deadlock đi, coi như không có (vì hiếm gặp)",
+   "nhom": "Deadlock",
+   "viDu": "Which of the following statements does not apply to manual deadlock management (the \"ostrich algorithm\")?",
+   "viDuNghia": "Phát biểu nào sau đây KHÔNG áp dụng cho cách quản lý deadlock thủ công (\"thuật toán đà điểu\" - ostrich algorithm)?"
+  },
+  {
+   "chu": "banker's algorithm",
+   "doc": "/ˈbæŋkərz ˈælɡərɪðəm/",
+   "nghia": "thuật toán chủ nhà băng – chỉ cấp tài nguyên nếu sau khi cấp hệ thống vẫn ở trạng thái an toàn",
+   "nhom": "Deadlock",
+   "viDu": "In the Banker's algorithm, what is the purpose of the \"maximum demand\" matrix?",
+   "viDuNghia": "Trong thuật toán Banker, ma trận \"nhu cầu tối đa\" (maximum demand) có mục đích gì?"
+  },
+  {
+   "chu": "safe state",
+   "doc": "/seɪf steɪt/",
+   "nghia": "trạng thái an toàn – tồn tại một thứ tự chạy để mọi tiến trình đều xong",
+   "nhom": "Deadlock",
+   "viDu": "What does the Banker's Algorithm check before granting a resource request? — If granting the request will lead to a safe state.",
+   "viDuNghia": "Thuật toán Banker's kiểm tra điều gì trước khi cấp phát một yêu cầu tài nguyên? — Việc cấp phát có dẫn đến trạng thái an toàn hay không."
+  },
+  {
+   "chu": "unsafe state",
+   "doc": "/ʌnˈseɪf steɪt/",
+   "nghia": "trạng thái không an toàn – không bảo đảm tránh được deadlock (chưa chắc đã deadlock)",
+   "nhom": "Deadlock",
+   "viDu": "An unsafe state does not always lead to deadlock, but the system cannot guarantee to avoid it.",
+   "viDuNghia": "Trạng thái không an toàn không phải lúc nào cũng dẫn tới deadlock, nhưng hệ thống không bảo đảm tránh được."
+  },
+  {
+   "chu": "livelock",
+   "doc": "/ˈlaɪvlɑːk/",
+   "nghia": "livelock – các tiến trình vẫn chạy, liên tục nhường nhau nhưng không ai tiến được",
+   "nhom": "Deadlock",
+   "viDu": "In Operating Systems, how does livelock differ from deadlock?",
+   "viDuNghia": "Trong Hệ điều hành, livelock khác deadlock như thế nào?"
+  },
+  {
+   "chu": "two-phase locking",
+   "doc": "/ˌtuː ˈfeɪz ˈlɑːkɪŋ/",
+   "nghia": "khoá hai pha – pha một khoá hết bản ghi cần dùng, pha hai cập nhật rồi nhả khoá",
+   "nhom": "Deadlock",
+   "viDu": "With two-phase locking, a process first locks all the records it needs.",
+   "viDuNghia": "Với khoá hai pha, tiến trình trước hết khoá mọi bản ghi nó cần."
+  },
+  {
+   "chu": "allocation matrix",
+   "doc": "/ˌæləˈkeɪʃn ˈmeɪtrɪks/",
+   "nghia": "ma trận cấp phát – mỗi tiến trình đang giữ bao nhiêu tài nguyên mỗi loại",
+   "nhom": "Deadlock",
+   "viDu": "The allocation matrix shows how many resources each process currently holds.",
+   "viDuNghia": "Ma trận cấp phát cho biết mỗi tiến trình đang giữ bao nhiêu tài nguyên."
+  },
+  {
+   "chu": "request matrix",
+   "doc": "/rɪˈkwest ˈmeɪtrɪks/",
+   "nghia": "ma trận yêu cầu – mỗi tiến trình còn xin thêm bao nhiêu tài nguyên mỗi loại",
+   "nhom": "Deadlock",
+   "viDu": "The request matrix shows how many more resources each process still needs.",
+   "viDuNghia": "Ma trận yêu cầu cho biết mỗi tiến trình còn cần thêm bao nhiêu tài nguyên."
+  },
+  {
+   "chu": "indefinitely",
+   "doc": "/ɪnˈdefɪnətli/",
+   "nghia": "vô thời hạn – (chờ) mãi không biết bao giờ xong",
+   "nhom": "Deadlock",
+   "viDu": "In a deadlock, the processes wait indefinitely.",
+   "viDuNghia": "Khi deadlock, các tiến trình chờ vô thời hạn."
+  },
+  {
+   "chu": "grant",
+   "doc": "/ɡrænt/",
+   "nghia": "cấp cho – chấp thuận yêu cầu xin tài nguyên",
+   "nhom": "Deadlock",
+   "viDu": "Processes currently holding resources that were granted earlier can request new resources.",
+   "viDuNghia": "Các tiến trình hiện đang giữ tài nguyên đã được cấp trước đó có thể yêu cầu thêm tài nguyên mới."
+  },
+  {
+   "chu": "acquire",
+   "doc": "/əˈkwaɪər/",
+   "nghia": "giành được, lấy được (khoá, tài nguyên)",
+   "nhom": "Deadlock",
+   "viDu": "In DMA transfer cycle, what is the form of operation called when the DMA controller tells the device to acquire the bus, perform a series of transfers, and then release the bus?",
+   "viDuNghia": "Trong chu kỳ truyền DMA, hình thức hoạt động được gọi là gì khi bộ điều khiển DMA yêu cầu thiết bị chiếm bus, thực hiện một loạt truyền dữ liệu, rồi giải phóng bus?"
+  },
+  {
+   "chu": "kill",
+   "doc": "/kɪl/",
+   "nghia": "huỷ (tiến trình) – buộc tiến trình kết thúc, vd để phá deadlock",
+   "nhom": "Deadlock",
+   "viDu": "Which of the following conditions causes a process to be terminated when the process executes a system call telling the OS to finish some other process? — Killed by another process (involuntary)",
+   "viDuNghia": "Điều kiện nào sau đây khiến một tiến trình bị kết thúc khi một tiến trình khác thực hiện lời gọi hệ thống yêu cầu OS chấm dứt nó? — Bị tiến trình khác giết (không tự nguyện)"
+  },
+  {
+   "chu": "deadlock recovery",
+   "doc": "/ˈdedlɑːk rɪˈkʌvəri/",
+   "nghia": "khôi phục sau deadlock – phá bế tắc bằng trưng dụng tài nguyên, quay lui (rollback) hoặc huỷ tiến trình",
+   "nhom": "Deadlock",
+   "viDu": "What is the way to recover from deadlock?",
+   "viDuNghia": "Cách nào để khôi phục khỏi tình trạng deadlock?"
+  },
+  {
+   "chu": "memory management",
+   "doc": "/ˈmeməri ˈmænɪdʒmənt/",
+   "nghia": "quản lý bộ nhớ – theo dõi phần nhớ nào đang dùng, cấp và thu hồi cho tiến trình",
+   "nhom": "Phân vùng & cấp phát",
+   "viDu": "In the context of memory management, which statement accurately describes a logical address in memory?",
+   "viDuNghia": "Trong ngữ cảnh quản lý bộ nhớ, phát biểu nào mô tả chính xác về địa chỉ logic trong bộ nhớ?"
+  },
+  {
+   "chu": "memory manager",
+   "doc": "/ˈmeməri ˈmænɪdʒər/",
+   "nghia": "bộ quản lý bộ nhớ – phần HĐH lo cấp phát và thu hồi bộ nhớ",
+   "nhom": "Phân vùng & cấp phát",
+   "viDu": "The memory manager swaps processes in and out of the memory.",
+   "viDuNghia": "Bộ quản lý bộ nhớ hoán đổi (swap) các tiến trình vào và ra khỏi bộ nhớ."
+  },
+  {
+   "chu": "limit register",
+   "doc": "/ˈlɪmɪt ˈredʒɪstər/",
+   "nghia": "thanh ghi giới hạn – giữ độ dài vùng nhớ, chặn chương trình truy cập ra ngoài",
+   "nhom": "Phân vùng & cấp phát",
+   "viDu": "The limit register prevents a program from accessing memory outside its partition.",
+   "viDuNghia": "Thanh ghi giới hạn ngăn chương trình truy cập bộ nhớ ngoài vùng của nó."
+  },
+  {
+   "chu": "relocation",
+   "doc": "/ˌriːloʊˈkeɪʃn/",
+   "nghia": "tái định vị – chỉnh địa chỉ trong chương trình cho khớp nơi nó được nạp",
+   "nhom": "Phân vùng & cấp phát",
+   "viDu": "Relocation adjusts the addresses in a program to the place where it is loaded.",
+   "viDuNghia": "Tái định vị chỉnh các địa chỉ trong chương trình cho khớp nơi nó được nạp."
+  },
+  {
+   "chu": "internal fragmentation",
+   "doc": "/ɪnˈtɜːrnl ˌfræɡmenˈteɪʃn/",
+   "nghia": "phân mảnh trong – phần thừa bỏ phí bên trong vùng/trang đã cấp",
+   "nhom": "Phân vùng & cấp phát",
+   "viDu": "In paged memory systems, if the page size is increased, then the internal fragmentation generally ____.",
+   "viDuNghia": "Trong hệ thống bộ nhớ phân trang, nếu kích thước trang (page size) tăng thì phân mảnh trong (internal fragmentation) nói chung sẽ ____."
+  },
+  {
+   "chu": "external fragmentation",
+   "doc": "/ɪkˈstɜːrnl ˌfræɡmenˈteɪʃn/",
+   "nghia": "phân mảnh ngoài – các lỗ trống nhỏ rải rác giữa các vùng, cộng lại đủ mà không dùng được",
+   "nhom": "Phân vùng & cấp phát",
+   "viDu": "What is the DISADVANTAGE of segmentation in the memory management? — It can have external fragmentation.",
+   "viDuNghia": "Nhược điểm của phân đoạn (segmentation) trong quản lý bộ nhớ là gì? — Có thể xảy ra phân mảnh ngoài (external fragmentation)."
+  },
+  {
+   "chu": "bitmap",
+   "doc": "/ˈbɪtmæp/",
+   "nghia": "bản đồ bit – mỗi bit ứng với một đơn vị cấp phát: 0 là trống, 1 là đã dùng",
+   "nhom": "Phân vùng & cấp phát",
+   "viDu": "With a bitmap, each allocation unit is represented by one bit: 0 if free, 1 if occupied.",
+   "viDuNghia": "Với bản đồ bit, mỗi đơn vị cấp phát ứng với một bit: 0 là trống, 1 là đã dùng."
+  },
+  {
+   "chu": "hole",
+   "doc": "/hoʊl/",
+   "nghia": "lỗ trống – đoạn bộ nhớ đang rảnh nằm giữa các vùng đã cấp",
+   "nhom": "Phân vùng & cấp phát",
+   "viDu": "________searches the entire list, from beginning to end, and takes the smallest hole that is adequate.",
+   "viDuNghia": "________ tìm kiếm toàn bộ danh sách, từ đầu đến cuối, và chọn khoảng trống nhỏ nhất nhưng đủ dùng."
+  },
+  {
+   "chu": "first fit",
+   "doc": "/fɜːrst fɪt/",
+   "nghia": "vừa đầu tiên – lấy lỗ trống đầu tiên đủ lớn; nhanh",
+   "nhom": "Phân vùng & cấp phát",
+   "viDu": "In terms of speed, if there is a suitable part of memory nearer to the beginning of memory than the last allocation, the best method of Dynamic-Storage-Allocation is first fit",
+   "viDuNghia": "Xét về tốc độ, nếu có một vùng bộ nhớ phù hợp nằm gần đầu bộ nhớ hơn so với vị trí cấp phát cuối cùng, phương pháp cấp phát bộ nhớ động (Dynamic-Storage-Allocation) tốt nhất là first fit"
+  },
+  {
+   "chu": "next fit",
+   "doc": "/nekst fɪt/",
+   "nghia": "vừa kế tiếp – như first fit nhưng tìm tiếp từ chỗ lần trước dừng",
+   "nhom": "Phân vùng & cấp phát",
+   "viDu": "Which of these statements about the algorithm \"Next fit\" is true?",
+   "viDuNghia": "Phát biểu nào sau đây về thuật toán \"Next fit\" là đúng?"
+  },
+  {
+   "chu": "best fit",
+   "doc": "/best fɪt/",
+   "nghia": "vừa khít nhất – lấy lỗ trống nhỏ nhất mà vẫn đủ; hay để lại mảnh vụn rất nhỏ",
+   "nhom": "Phân vùng & cấp phát",
+   "viDu": "What is the primary goal of the Best Fit algorithm in memory allocation?",
+   "viDuNghia": "Mục tiêu chính của thuật toán Best Fit trong cấp phát bộ nhớ là gì?"
+  },
+  {
+   "chu": "worst fit",
+   "doc": "/wɜːrst fɪt/",
+   "nghia": "vừa tệ nhất – lấy lỗ trống lớn nhất để phần thừa còn dùng được",
+   "nhom": "Phân vùng & cấp phát",
+   "viDu": "Worst fit always allocates the largest available hole.",
+   "viDuNghia": "Worst fit luôn cấp phát lỗ trống lớn nhất đang có."
+  },
+  {
+   "chu": "swap area",
+   "doc": "/swɑːp ˈeriə/",
+   "nghia": "vùng hoán đổi (swap space) – chỗ trên đĩa chứa các trang/tiến trình bị đưa ra khỏi RAM",
+   "nhom": "Phân vùng & cấp phát",
+   "viDu": "Which is not true about the method of backing store: \"Paging to a static swap area\"?",
+   "viDuNghia": "Điều nào KHÔNG đúng về phương pháp lưu trữ dự phòng (backing store): \"Phân trang vào vùng swap tĩnh\"?"
+  },
+  {
+   "chu": "contiguous",
+   "doc": "/kənˈtɪɡjuəs/",
+   "nghia": "liên tục, liền kề – các ô/khối nằm sát nhau thành một dải",
+   "nhom": "Phân vùng & cấp phát",
+   "viDu": "In file allocation, which strategy uses both index blocks and contiguous portions?",
+   "viDuNghia": "Trong cấp phát file, chiến lược nào sử dụng cả khối chỉ mục (index block) lẫn các đoạn liên tục (contiguous)?"
+  },
+  {
+   "chu": "memory allocation",
+   "doc": "/ˈmeməri ˌæləˈkeɪʃn/",
+   "nghia": "cấp phát bộ nhớ – giao một vùng nhớ cho tiến trình",
+   "nhom": "Phân vùng & cấp phát",
+   "viDu": "In terms of storage utilization, the best method of dynamic storage allocation is ____.",
+   "viDuNghia": "Xét về mức tận dụng bộ nhớ, phương pháp cấp phát bộ nhớ động tốt nhất là ____."
+  },
+  {
+   "chu": "free list",
+   "doc": "/friː lɪst/",
+   "nghia": "danh sách trống – danh sách các khối nhớ/khối đĩa còn rảnh",
+   "nhom": "Phân vùng & cấp phát",
+   "viDu": "Consider a 4-TB disk that uses 4-KB blocks and the free-list method. How many block addresses can be stored in one block?",
+   "viDuNghia": "Xét ổ đĩa 4TB dùng block 4KB và phương pháp free-list. Một block có thể chứa bao nhiêu địa chỉ block?"
+  },
+  {
+   "chu": "swap out",
+   "doc": "/swɑːp aʊt/",
+   "nghia": "đưa ra đĩa – chuyển tiến trình/trang từ RAM ra vùng hoán đổi (ngược lại là swap in)",
+   "nhom": "Phân vùng & cấp phát",
+   "viDu": "When memory is full, the system may swap out a blocked process to disk.",
+   "viDuNghia": "Khi bộ nhớ đầy, hệ thống có thể đưa một tiến trình đang bị chặn ra đĩa."
+  },
+  {
+   "chu": "partitioning",
+   "doc": "/pɑːrˈtɪʃənɪŋ/",
+   "nghia": "phân vùng – chia bộ nhớ (hoặc đĩa) thành các vùng, mỗi vùng chứa một chương trình; phân vùng cố định / động",
+   "nhom": "Phân vùng & cấp phát",
+   "viDu": "With fixed partitioning, memory is divided into partitions of fixed size when the system starts.",
+   "viDuNghia": "Với phân vùng cố định, bộ nhớ được chia thành các vùng kích thước cố định ngay khi hệ thống khởi động."
+  },
+  {
+   "chu": "allocation",
+   "doc": "/ˌæləˈkeɪʃn/",
+   "nghia": "cấp phát – giao bộ nhớ/tài nguyên cho tiến trình (cấp phát liên tục, theo bitmap, danh sách liên kết…). (C: malloc cấp phát động)",
+   "nhom": "Phân vùng & cấp phát",
+   "viDu": "What memory management technique uses a binary representation where each bit corresponds to an allocation unit ?",
+   "viDuNghia": "Kỹ thuật quản lý bộ nhớ nào dùng biểu diễn nhị phân, trong đó mỗi bit tương ứng với một đơn vị cấp phát?"
+  },
+  {
+   "chu": "swapping",
+   "doc": "/ˈswɑːpɪŋ/",
+   "nghia": "hoán đổi – chuyển cả tiến trình giữa bộ nhớ chính và đĩa",
+   "nhom": "Phân vùng & cấp phát",
+   "viDu": "A swapping system has holes of 10K, 4K, 20K, 15K and 9K. Which holes does worst fit take for requests of 8K, 12K and 10K?",
+   "viDuNghia": "Một hệ hoán đổi (swapping) có các lỗ trống 10K, 4K, 20K, 15K, 9K. Worst fit chọn lỗ nào cho các yêu cầu 8K, 12K, 10K?"
+  },
+  {
+   "chu": "allocate",
+   "doc": "/ˈæləkeɪt/",
+   "nghia": "cấp phát – giao tài nguyên (bộ nhớ, CPU) cho một chương trình",
+   "nhom": "Phân vùng & cấp phát",
+   "viDu": "In which page replacement algorithm can the page fault rate increase even when the number of allocated frames increases?",
+   "viDuNghia": "Với thuật toán thay trang nào, tỉ lệ lỗi trang có thể TĂNG ngay cả khi số khung được cấp tăng lên?"
+  },
+  {
+   "chu": "page",
+   "doc": "/peɪdʒ/",
+   "nghia": "trang – khối kích thước cố định của không gian địa chỉ ảo",
+   "nhom": "Phân trang & bộ nhớ ảo",
+   "viDu": "With a 4-KB page size, each page of the virtual address space holds 4096 bytes.",
+   "viDuNghia": "Với kích thước trang 4 KB, mỗi trang của không gian địa chỉ ảo chứa 4096 byte."
+  },
+  {
+   "chu": "page frame",
+   "doc": "/peɪdʒ freɪm/",
+   "nghia": "khung trang – khối bộ nhớ vật lý cùng cỡ với trang, nơi trang được nạp vào",
+   "nhom": "Phân trang & bộ nhớ ảo",
+   "viDu": "If LRU page replacement is used with three page frames, how many page faults will occur with the reference string 7, 0, 1, 2, 0, 3 (if the three frames are initially empty)?",
+   "viDuNghia": "Nếu dùng thay thế trang LRU với ba khung trang, có bao nhiêu page fault xảy ra với chuỗi tham chiếu 7, 0, 1, 2, 0, 3 (ba khung ban đầu trống)?"
+  },
+  {
+   "chu": "page fault",
+   "doc": "/peɪdʒ fɔːlt/",
+   "nghia": "lỗi trang – tiến trình đụng tới trang chưa có trong RAM, HĐH phải nạp từ đĩa lên",
+   "nhom": "Phân trang & bộ nhớ ảo",
+   "viDu": "In the context of memory management, which statement accurately describes a page fault in memory paging?",
+   "viDuNghia": "Trong ngữ cảnh quản lý bộ nhớ, phát biểu nào mô tả chính xác một lỗi trang (page fault) trong phân trang bộ nhớ?"
+  },
+  {
+   "chu": "page size",
+   "doc": "/peɪdʒ saɪz/",
+   "nghia": "kích thước trang – số byte của một trang (vd 4 KB)",
+   "nhom": "Phân trang & bộ nhớ ảo",
+   "viDu": "If there are 128 pages and the page size is 32 K words, what is the length of logical address?",
+   "viDuNghia": "Nếu có 128 trang (page) và kích thước mỗi trang là 32K từ (word), độ dài địa chỉ logic là bao nhiêu?"
+  },
+  {
+   "chu": "offset",
+   "doc": "/ˈɔːfset/",
+   "nghia": "độ dời – vị trí tính từ đầu trang/đoạn; phần thấp của địa chỉ ảo",
+   "nhom": "Phân trang & bộ nhớ ảo",
+   "viDu": "To specify an address in this segmented memory, the <segment-number, offset> form is used",
+   "viDuNghia": "Để chỉ định một địa chỉ trong bộ nhớ phân đoạn (segmented memory) này, dạng <số đoạn (segment-number), offset> được sử dụng"
+  },
+  {
+   "chu": "virtual address",
+   "doc": "/ˈvɜːrtʃuəl ˈædres/",
+   "nghia": "địa chỉ ảo – địa chỉ chương trình dùng, được MMU đổi sang địa chỉ vật lý",
+   "nhom": "Phân trang & bộ nhớ ảo",
+   "viDu": "A virtual address space has 2^24 words and the page size is 2^12 words. If the virtual address is 123456 (hex), what is the page number?",
+   "viDuNghia": "Không gian địa chỉ ảo có 2^24 từ, kích thước trang 2^12 từ. Nếu địa chỉ ảo là 123456 (hệ 16), số trang là bao nhiêu?"
+  },
+  {
+   "chu": "memory management unit",
+   "nghia": "khối quản lý bộ nhớ (MMU) – phần cứng đổi địa chỉ ảo sang địa chỉ vật lý",
+   "nhom": "Phân trang & bộ nhớ ảo",
+   "viDu": "What is the role of the Memory Management Unit (MMU) in a computer system?",
+   "viDuNghia": "Vai trò của Bộ quản lý bộ nhớ (Memory Management Unit - MMU) trong một hệ thống máy tính là gì?"
+  },
+  {
+   "chu": "present/absent bit",
+   "doc": "/ˈpreznt ˈæbsənt bɪt/",
+   "nghia": "bit có/vắng – cho biết trang hiện có nằm trong bộ nhớ vật lý hay không",
+   "nhom": "Phân trang & bộ nhớ ảo",
+   "viDu": "If the present/absent bit is 0, accessing the page causes a page fault.",
+   "viDuNghia": "Nếu bit có/vắng bằng 0, truy cập vào trang đó sẽ gây ra lỗi trang."
+  },
+  {
+   "chu": "modified bit",
+   "doc": "/ˈmɑːdɪfaɪd bɪt/",
+   "nghia": "bit đã sửa (dirty bit) – trang đã bị ghi, phải chép lại ra đĩa trước khi thay",
+   "nhom": "Phân trang & bộ nhớ ảo",
+   "viDu": "What is another name for the Modified Bit that reflects the page's state?",
+   "viDuNghia": "Tên gọi khác của Modified Bit (bit đã sửa đổi) phản ánh trạng thái của trang là gì?"
+  },
+  {
+   "chu": "referenced bit",
+   "doc": "/ˈrefrənst bɪt/",
+   "nghia": "bit đã tham chiếu – trang vừa được đọc hoặc ghi gần đây",
+   "nhom": "Phân trang & bộ nhớ ảo",
+   "viDu": "The referenced bit is set whenever the page is read or written.",
+   "viDuNghia": "Bit đã tham chiếu được bật mỗi khi trang được đọc hoặc ghi."
+  },
+  {
+   "chu": "protection bit",
+   "doc": "/prəˈtekʃn bɪt/",
+   "nghia": "bit bảo vệ – quy định trang được đọc, ghi hay thực thi",
+   "nhom": "Phân trang & bộ nhớ ảo",
+   "viDu": "The protection bits tell what kinds of access to the page are permitted.",
+   "viDuNghia": "Các bit bảo vệ cho biết những kiểu truy cập nào vào trang được phép."
+  },
+  {
+   "chu": "two-level page table",
+   "nghia": "bảng trang hai cấp – bảng cấp một trỏ tới các bảng cấp hai, đỡ phải giữ cả bảng lớn trong RAM",
+   "nhom": "Phân trang & bộ nhớ ảo",
+   "viDu": "A multilevel page table is preferred in comparison to a single level page table for translating virtual address to physical address because ____________",
+   "viDuNghia": "Bảng trang nhiều cấp (multilevel page table) được ưu tiên sử dụng hơn bảng trang một cấp để dịch địa chỉ ảo sang địa chỉ vật lý vì ____________"
+  },
+  {
+   "chu": "inverted page table",
+   "nghia": "bảng trang đảo – mỗi khung trang vật lý một mục, thay vì mỗi trang ảo một mục",
+   "nhom": "Phân trang & bộ nhớ ảo",
+   "viDu": "Which of these statements about the Inverted Page Table are true?",
+   "viDuNghia": "Phát biểu nào sau đây về Bảng trang nghịch đảo (Inverted Page Table) là đúng?"
+  },
+  {
+   "chu": "page table entry",
+   "nghia": "mục bảng trang – một dòng của bảng trang: số khung trang kèm các bit trạng thái",
+   "nhom": "Phân trang & bộ nhớ ảo",
+   "viDu": "Which of the following information bits in the page table entry is used to indicate the types of access that are permitted?",
+   "viDuNghia": "Bit thông tin nào trong mục của bảng trang (page table entry) dùng để chỉ ra các kiểu truy cập được phép?"
+  },
+  {
+   "chu": "demand paging",
+   "doc": "/dɪˈmænd ˈpeɪdʒɪŋ/",
+   "nghia": "phân trang theo yêu cầu – chỉ nạp trang khi tiến trình thật sự đụng tới nó",
+   "nhom": "Phân trang & bộ nhớ ảo",
+   "viDu": "One of the most important innovations of demand paging was that it made ____ feasible.",
+   "viDuNghia": "Một trong những cải tiến quan trọng nhất của demand paging (phân trang theo yêu cầu) là nó làm cho ____ trở nên khả thi."
+  },
+  {
+   "chu": "thrashing",
+   "doc": "/ˈθræʃɪŋ/",
+   "nghia": "trì trệ (thrashing) – lỗi trang dồn dập, máy tốn thời gian đổi trang hơn là chạy chương trình",
+   "nhom": "Phân trang & bộ nhớ ảo",
+   "viDu": "In the context of virtual memory, what does \"thrashing\" refer to?",
+   "viDuNghia": "Trong bối cảnh bộ nhớ ảo, \"thrashing\" (đảo trang) là gì?"
+  },
+  {
+   "chu": "working set",
+   "doc": "/ˈwɜːrkɪŋ set/",
+   "nghia": "tập làm việc – tập các trang tiến trình đang dùng trong khoảng thời gian gần đây",
+   "nhom": "Phân trang & bộ nhớ ảo",
+   "viDu": "What is the primary goal of the \"working set model\" in page replacement algorithms?",
+   "viDuNghia": "Mục tiêu chính của \"mô hình tập làm việc\" (working set model) trong các thuật toán thay thế trang là gì?"
+  },
+  {
+   "chu": "physical memory",
+   "doc": "/ˈfɪzɪkl ˈmeməri/",
+   "nghia": "bộ nhớ vật lý – RAM thật gắn trong máy, trái với bộ nhớ ảo",
+   "nhom": "Phân trang & bộ nhớ ảo",
+   "viDu": "The virtual address space consists of fixed-size units called pages. The corresponding units in the physical memory are called ________ .",
+   "viDuNghia": "Không gian địa chỉ ảo gồm các đơn vị kích thước cố định gọi là trang (page). Các đơn vị tương ứng trong bộ nhớ vật lý được gọi là ________."
+  },
+  {
+   "chu": "page number",
+   "doc": "/peɪdʒ ˈnʌmbər/",
+   "nghia": "số trang – phần cao của địa chỉ ảo, dùng làm chỉ số tra bảng trang",
+   "nhom": "Phân trang & bộ nhớ ảo",
+   "viDu": "The percentage of times a page number is found in the TLB is known as ____________",
+   "viDuNghia": "Tỷ lệ phần trăm số lần số trang được tìm thấy trong TLB được gọi là ____________"
+  },
+  {
+   "chu": "top-level page table",
+   "nghia": "bảng trang cấp cao nhất – bảng đầu tiên được tra trong bảng trang nhiều cấp",
+   "nhom": "Phân trang & bộ nhớ ảo",
+   "viDu": "The first 10 bits of the virtual address are used as an index into the top-level page table.",
+   "viDuNghia": "10 bit đầu của địa chỉ ảo được dùng làm chỉ số tra bảng trang cấp cao nhất."
+  },
+  {
+   "chu": "page table",
+   "doc": "/peɪdʒ ˈteɪbl/",
+   "nghia": "bảng trang – bảng ánh xạ số trang ảo sang số khung trang vật lý; mỗi mục có các bit present, protection…",
+   "nhom": "Phân trang & bộ nhớ ảo",
+   "viDu": "Assume we have a 16-bit virtual address and a 4-KB page size. How many indexes are in a one-level page table?",
+   "viDuNghia": "Giả sử có địa chỉ ảo 16-bit và kích thước trang 4-KB. Có bao nhiêu chỉ số (index) trong bảng trang một cấp?"
+  },
+  {
+   "chu": "paging",
+   "doc": "/ˈpeɪdʒɪŋ/",
+   "nghia": "phân trang – chia bộ nhớ ảo thành trang và RAM thành khung cùng cỡ để nạp từng phần chương trình",
+   "nhom": "Phân trang & bộ nhớ ảo",
+   "viDu": "In a paging system, what is the term for the data stored in secondary storage that is not currently in main memory?",
+   "viDuNghia": "Trong hệ thống phân trang, thuật ngữ nào chỉ dữ liệu được lưu trong bộ nhớ phụ (secondary storage) mà hiện không nằm trong bộ nhớ chính?"
+  },
+  {
+   "chu": "virtual memory",
+   "doc": "/ˈvɜːrtʃuəl ˈmeməri/",
+   "nghia": "bộ nhớ ảo – cho chương trình dùng không gian địa chỉ lớn hơn RAM thật, phần chưa dùng nằm trên đĩa",
+   "nhom": "Phân trang & bộ nhớ ảo",
+   "viDu": "Which statement best describes the function of virtual memory in the Windows operating system?",
+   "viDuNghia": "Phát biểu nào mô tả đúng nhất chức năng của bộ nhớ ảo trong hệ điều hành Windows?"
+  },
+  {
+   "chu": "logical address",
+   "doc": "/ˈlɑːdʒɪkl ˈædres/",
+   "nghia": "địa chỉ logic – địa chỉ chương trình dùng (tính từ đầu chương trình/đoạn), được đổi sang địa chỉ vật lý khi truy cập",
+   "nhom": "Phân trang & bộ nhớ ảo",
+   "viDu": "If there are 256 pages and the page size is 4K words, what is the length of the logical address?",
+   "viDuNghia": "Nếu có 256 trang và mỗi trang 4K từ, địa chỉ logic dài bao nhiêu bit?"
+  },
+  {
+   "chu": "physical address",
+   "doc": "/ˈfɪzɪkl ˈædres/",
+   "nghia": "địa chỉ vật lý – vị trí thật trong bộ nhớ chính",
+   "nhom": "Phân trang & bộ nhớ ảo",
+   "viDu": "The MMU maps each virtual address to a physical address in main memory.",
+   "viDuNghia": "MMU ánh xạ mỗi địa chỉ ảo thành một địa chỉ vật lý trong bộ nhớ chính."
+  },
+  {
+   "chu": "address space",
+   "doc": "/ˈædres speɪs/",
+   "nghia": "không gian địa chỉ – tập tất cả địa chỉ mà chương trình/CPU dùng được",
+   "nhom": "Phân trang & bộ nhớ ảo",
+   "viDu": "How does memory abstraction through address spaces benefit a computer system?",
+   "viDuNghia": "Việc trừu tượng hoá bộ nhớ bằng không gian địa chỉ (address space) mang lại lợi ích gì cho hệ thống?"
+  },
+  {
+   "chu": "page replacement algorithm",
+   "nghia": "thuật toán thay trang – chọn trang nào bị đẩy ra khi cần chỗ cho trang mới",
+   "nhom": "Thay trang & phân đoạn",
+   "viDu": "Where should be put the page replacement algorithm in Mach model of Page fault handling with external pager?",
+   "viDuNghia": "Trong mô hình Mach xử lý lỗi trang (page fault) với external pager, giải thuật thay thế trang (page replacement algorithm) nên được đặt ở đâu?"
+  },
+  {
+   "chu": "optimal page replacement",
+   "nghia": "thay trang tối ưu – bỏ trang sẽ lâu nhất mới dùng lại; không cài được, chỉ dùng để so sánh",
+   "nhom": "Thay trang & phân đoạn",
+   "viDu": "If optimal page replacement is used with four page frames, how many page faults will occur with the reference string 7, 0, 1, 2, 0, 3, 0 if the four frames are initially empty?",
+   "viDuNghia": "Nếu dùng thay trang tối ưu (optimal) với bốn khung trang, sẽ có bao nhiêu lỗi trang (page fault) xảy ra với chuỗi tham chiếu 7, 0, 1, 2, 0, 3, 0 nếu bốn khung ban đầu trống?"
+  },
+  {
+   "chu": "not recently used",
+   "nghia": "NRU – bỏ ngẫu nhiên một trang thuộc lớp thấp nhất tính theo bit R và M",
+   "nhom": "Thay trang & phân đoạn",
+   "viDu": "The not recently used (NRU) algorithm removes a page from the lowest non-empty class.",
+   "viDuNghia": "Thuật toán NRU loại một trang thuộc lớp thấp nhất còn trang."
+  },
+  {
+   "chu": "first-in first-out",
+   "doc": "/ˌfɜːrst ˈɪn ˌfɜːrst ˈaʊt/",
+   "nghia": "vào trước ra trước (FIFO) – bỏ trang nằm trong bộ nhớ lâu nhất",
+   "nhom": "Thay trang & phân đoạn",
+   "viDu": "In the FIFO page replacement algorithm, what data structure is commonly used to implement the page replacement queue?",
+   "viDuNghia": "Trong thuật toán thay trang FIFO, cấu trúc dữ liệu nào thường được dùng để cài đặt hàng đợi thay trang?"
+  },
+  {
+   "chu": "second chance",
+   "doc": "/ˈsekənd tʃæns/",
+   "nghia": "cơ hội thứ hai – như FIFO nhưng trang có bit R = 1 được xoá R và cho ở lại thêm một vòng",
+   "nhom": "Thay trang & phân đoạn",
+   "viDu": "The second chance algorithm gives a page with R = 1 another chance instead of removing it.",
+   "viDuNghia": "Thuật toán cơ hội thứ hai cho trang có bit R = 1 thêm một cơ hội thay vì loại nó ra."
+  },
+  {
+   "chu": "clock algorithm",
+   "doc": "/klɑːk ˈælɡərɪðəm/",
+   "nghia": "thuật toán đồng hồ – cơ hội thứ hai xếp theo vòng tròn với một kim trỏ",
+   "nhom": "Thay trang & phân đoạn",
+   "viDu": "What is the main advantage of using the Clock Algorithm over the Second Chance Algorithm in terms of page replacement efficiency?",
+   "viDuNghia": "Ưu điểm chính của giải thuật Clock so với giải thuật Second Chance về hiệu quả thay trang là gì?"
+  },
+  {
+   "chu": "reference string",
+   "doc": "/ˈrefrəns strɪŋ/",
+   "nghia": "chuỗi tham chiếu – dãy số trang mà tiến trình lần lượt truy cập",
+   "nhom": "Thay trang & phân đoạn",
+   "viDu": "If FIFO page replacement algorithm is used with four page frames, how many page faults will occur with the reference string 0172327103 if the four frames are initially empty?",
+   "viDuNghia": "Nếu dùng thuật toán thay trang FIFO với bốn khung trang, sẽ xảy ra bao nhiêu lỗi trang (page fault) với chuỗi tham chiếu 0172327103, biết bốn khung trang ban đầu đều trống?"
+  },
+  {
+   "chu": "Belady's anomaly",
+   "doc": "/ˈbelədiz əˈnɑːməli/",
+   "nghia": "nghịch lý Belady – với FIFO, thêm khung trang đôi khi lại làm tăng số lỗi trang",
+   "nhom": "Thay trang & phân đoạn",
+   "viDu": "Which scenario would the FIFO (First-In-First-Out) page replacement algorithm suffer from the \"Belady's Anomaly\"?",
+   "viDuNghia": "Trong tình huống nào thì thuật toán thay trang FIFO (vào trước ra trước) gặp phải \"Nghịch lý Belady\" (Belady's Anomaly)?"
+  },
+  {
+   "chu": "segmentation",
+   "doc": "/ˌseɡmenˈteɪʃn/",
+   "nghia": "phân đoạn – chia chương trình thành các đoạn logic dài ngắn khác nhau (mã, dữ liệu, ngăn xếp)",
+   "nhom": "Thay trang & phân đoạn",
+   "viDu": "Which of the following is not a benefit of segmentation in memory management?",
+   "viDuNghia": "Mục nào sau đây KHÔNG phải là lợi ích của phân đoạn (segmentation) trong quản lý bộ nhớ?"
+  },
+  {
+   "chu": "segment",
+   "doc": "/ˈseɡmənt/",
+   "nghia": "đoạn – một vùng địa chỉ độc lập, có độ dài riêng",
+   "nhom": "Thay trang & phân đoạn",
+   "viDu": "Processes in UNIX have their memory divided up into three segments: the Data segment, the Stack segment and the _____.",
+   "viDuNghia": "Trong UNIX, bộ nhớ của một tiến trình được chia thành ba phân đoạn: phân đoạn Dữ liệu (Data), phân đoạn Ngăn xếp (Stack) và _____."
+  },
+  {
+   "chu": "overlay",
+   "doc": "/ˈoʊvərleɪ/",
+   "nghia": "overlay – kỹ thuật cũ: chia chương trình thành các mảnh, nạp thay phiên khi bộ nhớ không đủ",
+   "nhom": "Thay trang & phân đoạn",
+   "viDu": "In virtual memory, a solution adopted in the 1960s was to split programs into little pieces called overlays.",
+   "viDuNghia": "Trong bộ nhớ ảo, một giải pháp được áp dụng vào những năm 1960 là chia chương trình thành các mảnh nhỏ gọi là overlays (mảnh chồng lấp)."
+  },
+  {
+   "chu": "occupy",
+   "doc": "/ˈɑːkjupaɪ/",
+   "nghia": "chiếm (chỗ) – dùng một phần bộ nhớ/đĩa",
+   "nhom": "Thay trang & phân đoạn",
+   "viDu": "A system with 32-bit virtual address. If the page size is 16 KB and each table entry occupies 4 bytes, what is the size of the page table?",
+   "viDuNghia": "Một hệ thống có địa chỉ ảo 32-bit. Nếu kích thước trang là 16 KB và mỗi mục nhập bảng trang chiếm 4 byte, kích thước của bảng trang là bao nhiêu?"
+  },
+  {
+   "chu": "segmentation with paging",
+   "nghia": "phân đoạn kết hợp phân trang – mỗi đoạn lại được chia thành các trang (MULTICS, Intel x86)",
+   "nhom": "Thay trang & phân đoạn",
+   "viDu": "What is segmentation with paging, and how does it enhance memory management?",
+   "viDuNghia": "Phân đoạn kết hợp phân trang là gì, và nó cải thiện việc quản lý bộ nhớ thế nào?"
+  }
+ ]
+}

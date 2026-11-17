@@ -1,0 +1,580 @@
+{
+ "ma": "nwc204-1",
+ "nn": "en",
+ "ten": "NWC204 · Mạng máy tính (phần riêng)",
+ "moTa": "Môn Mạng máy tính bản mới (NWC204): chia mạng con IPv4/IPv6, switch và ARP, cáp, cấu hình thiết bị Cisco, kiểm tra lỗi mạng, bảo mật cơ bản. Chỉ gồm từ chưa có ở ba bộ NWC203c/NWC204. Từ lấy từ đề thật; câu ví dụ là câu hỏi thật trong đề.",
+ "bieuTuong": "wifi.router.fill",
+ "thuTu": -971,
+ "tu": [
+  {
+   "chu": "prefix length",
+   "doc": "/ˈpriːfɪks leŋθ/",
+   "nghia": "độ dài tiền tố – số bit phần mạng của địa chỉ, viết sau dấu gạch chéo (vd /24)",
+   "nhom": "Địa chỉ & chia mạng con",
+   "viDu": "A lab needs 120 host addresses in one subnet, wasting as few as possible. What is the longest prefix that still fits?",
+   "viDuNghia": "Một phòng lab cần 120 địa chỉ máy trong một subnet, càng ít lãng phí càng tốt. Tiền tố dài nhất vẫn đủ là gì?"
+  },
+  {
+   "chu": "usable host address",
+   "nghia": "địa chỉ máy dùng được – địa chỉ gán được cho thiết bị, tức trừ địa chỉ mạng và địa chỉ quảng bá (2^n − 2)",
+   "nhom": "Địa chỉ & chia mạng con",
+   "viDu": "You borrow 6 bits from the host part of a /16 network. How many subnets do you get, and how many usable hosts in each?",
+   "viDuNghia": "Bạn mượn 6 bit từ phần máy của mạng /16. Bạn có bao nhiêu subnet và mỗi subnet có bao nhiêu máy dùng được?"
+  },
+  {
+   "chu": "broadcast address",
+   "doc": "/ˈbrɔːdkæst ˈædres/",
+   "nghia": "địa chỉ quảng bá – địa chỉ cuối của mạng con (phần host toàn bit 1), gửi tới mọi máy trong mạng",
+   "nhom": "Địa chỉ & chia mạng con",
+   "viDu": "Host 172.20.46.130/25 sends one packet to every device in its own subnet. Which destination IPv4 address does it use?",
+   "viDuNghia": "Máy 172.20.46.130/25 gửi một gói tới mọi thiết bị trong subnet của nó. Máy dùng địa chỉ IPv4 đích nào?"
+  },
+  {
+   "chu": "dotted-decimal",
+   "doc": "/ˌdɑːtɪd ˈdesɪml/",
+   "nghia": "thập phân có chấm – cách viết IPv4 thành bốn số cách nhau bằng dấu chấm (255.255.255.0)",
+   "nhom": "Địa chỉ & chia mạng con",
+   "viDu": "Which dotted-decimal mask equals /21?",
+   "viDuNghia": "Mặt nạ dạng thập phân nào tương đương /21?"
+  },
+  {
+   "chu": "octet",
+   "doc": "/ɑːkˈtet/",
+   "nghia": "octet – nhóm 8 bit; địa chỉ IPv4 gồm 4 octet",
+   "nhom": "Địa chỉ & chia mạng con",
+   "viDu": "A host's last octet is 90 and the mask's last octet is 224. What is the result of a bitwise AND on those two octets?",
+   "viDuNghia": "Octet cuối của máy là 90, octet cuối của mặt nạ là 224. Kết quả AND từng bit của hai octet đó là bao nhiêu?"
+  },
+  {
+   "chu": "variable-length subnet mask",
+   "nghia": "mặt nạ mạng con độ dài thay đổi (VLSM) – chia mạng thành các mạng con to nhỏ khác nhau theo nhu cầu",
+   "nhom": "Địa chỉ & chia mạng con",
+   "viDu": "A variable-length subnet mask lets each subnet have a size that matches its number of hosts.",
+   "viDuNghia": "VLSM cho phép mỗi mạng con có kích thước vừa với số máy của nó."
+  },
+  {
+   "chu": "public address",
+   "doc": "/ˈpʌblɪk ˈædres/",
+   "nghia": "địa chỉ công cộng – địa chỉ IP định tuyến được trên Internet",
+   "nhom": "Địa chỉ & chia mạng con",
+   "viDu": "Which of these IPv4 addresses is public, meaning it is routable on the Internet?",
+   "viDuNghia": "Địa chỉ IPv4 nào dưới đây là địa chỉ công cộng, tức định tuyến được trên Internet?"
+  },
+  {
+   "chu": "private address",
+   "doc": "/ˈpraɪvət ˈædres/",
+   "nghia": "địa chỉ riêng – dải dùng trong mạng nội bộ (10.x, 172.16–31.x, 192.168.x), không đi ra Internet được",
+   "nhom": "Địa chỉ & chia mạng con",
+   "viDu": "192.168.1.10 is a private address and cannot be routed on the Internet.",
+   "viDuNghia": "192.168.1.10 là địa chỉ riêng, không định tuyến được trên Internet."
+  },
+  {
+   "chu": "static address",
+   "doc": "/ˈstætɪk ˈædres/",
+   "nghia": "địa chỉ tĩnh – địa chỉ IP đặt tay, không đổi (cho máy chủ, router, máy in)",
+   "nhom": "Địa chỉ & chia mạng con",
+   "viDu": "In a small office network, which two devices should normally get static IP addresses?",
+   "viDuNghia": "Trong mạng văn phòng nhỏ, hai thiết bị nào thường nên dùng địa chỉ IP tĩnh?"
+  },
+  {
+   "chu": "lease",
+   "doc": "/liːs/",
+   "nghia": "thời hạn thuê – khoảng thời gian máy được dùng địa chỉ IP do DHCP cấp",
+   "nhom": "Địa chỉ & chia mạng con",
+   "viDu": "When the DHCP lease expires, the host must renew its address.",
+   "viDuNghia": "Khi hết thời hạn thuê DHCP, máy phải xin gia hạn địa chỉ."
+  },
+  {
+   "chu": "link-local address",
+   "doc": "/ˌlɪŋk ˈloʊkl ˈædres/",
+   "nghia": "địa chỉ liên kết cục bộ – địa chỉ IPv6 fe80::/10, chỉ dùng trong một liên kết, không qua router",
+   "nhom": "Địa chỉ & chia mạng con",
+   "viDu": "Which prefix identifies IPv6 link-local addresses?",
+   "viDuNghia": "Tiền tố nào nhận diện địa chỉ IPv6 link-local?"
+  },
+  {
+   "chu": "stateless address autoconfiguration",
+   "nghia": "SLAAC – máy tự tạo địa chỉ IPv6 từ tiền tố router quảng bá, không cần máy chủ DHCPv6",
+   "nhom": "Địa chỉ & chia mạng con",
+   "viDu": "IPv6 addresses are configured on a router, but hosts on the LAN get no SLAAC prefix and the router does not forward IPv6 packets. Which global command is missing?",
+   "viDuNghia": "Đã đặt địa chỉ IPv6 trên router, nhưng máy trong LAN không nhận được tiền tố SLAAC và router không chuyển gói IPv6. Thiếu lệnh toàn cục nào?"
+  },
+  {
+   "chu": "Router Advertisement",
+   "doc": "/ˈraʊtər ˌædvərˈtaɪzmənt/",
+   "nghia": "thông điệp quảng bá của router (RA) – ICMPv6 báo cho máy biết tiền tố mạng và cổng mặc định",
+   "nhom": "Địa chỉ & chia mạng con",
+   "viDu": "A host forms a global IPv6 address with no DHCPv6 server. Which ICMPv6 message gives it the network prefix?",
+   "viDuNghia": "Một máy tự tạo địa chỉ IPv6 toàn cục khi không có máy chủ DHCPv6. Thông điệp ICMPv6 nào cho nó biết tiền tố mạng?"
+  },
+  {
+   "chu": "Neighbor Solicitation",
+   "doc": "/ˈneɪbər səˌlɪsɪˈteɪʃn/",
+   "nghia": "thông điệp hỏi hàng xóm (NS) – ICMPv6 dùng để tìm địa chỉ MAC của máy cùng liên kết, thay cho ARP",
+   "nhom": "Địa chỉ & chia mạng con",
+   "viDu": "IPv6 has no ARP. How does a host find the MAC address of a neighbour on its link?",
+   "viDuNghia": "IPv6 không có ARP. Máy tìm MAC của hàng xóm trên cùng chặng bằng cách nào?"
+  },
+  {
+   "chu": "interface ID",
+   "doc": "/ˈɪntərfeɪs ˌaɪ ˈdiː/",
+   "nghia": "định danh giao diện – 64 bit cuối của địa chỉ IPv6, xác định máy trong mạng (có thể tạo từ MAC bằng EUI-64)",
+   "nhom": "Địa chỉ & chia mạng con",
+   "viDu": "Using EUI-64, what is the interface ID built from MAC address 00-1A-2B-3C-4D-5E?",
+   "viDuNghia": "Dùng EUI-64, interface ID được tạo từ địa chỉ MAC 00-1A-2B-3C-4D-5E là gì?"
+  },
+  {
+   "chu": "hextet",
+   "doc": "/ˈhekstet/",
+   "nghia": "hextet – nhóm 16 bit (4 chữ số hex) của địa chỉ IPv6",
+   "nhom": "Địa chỉ & chia mạng con",
+   "viDu": "How long is an IPv6 address, and how long is each hextet?",
+   "viDuNghia": "Địa chỉ IPv6 dài bao nhiêu bit, và mỗi hextet dài bao nhiêu?"
+  },
+  {
+   "chu": "hop limit",
+   "doc": "/hɑːp ˈlɪmɪt/",
+   "nghia": "giới hạn chặng – trường của IPv6 làm việc như TTL của IPv4",
+   "nhom": "Địa chỉ & chia mạng con",
+   "viDu": "Which IPv6 header field does the same job as the IPv4 TTL field?",
+   "viDuNghia": "Trường nào trong phần đầu IPv6 làm cùng việc với trường TTL của IPv4?"
+  },
+  {
+   "chu": "dual stack",
+   "doc": "/ˌduːəl ˈstæk/",
+   "nghia": "ngăn xếp kép – thiết bị chạy cả IPv4 lẫn IPv6 cùng lúc",
+   "nhom": "Địa chỉ & chia mạng con",
+   "viDu": "During migration, a server keeps both an IPv4 and an IPv6 address and answers on either. What is this technique called?",
+   "viDuNghia": "Trong giai đoạn chuyển đổi, một máy chủ giữ cả địa chỉ IPv4 và IPv6, trả lời trên cả hai. Kỹ thuật này gọi là gì?"
+  },
+  {
+   "chu": "IPv4",
+   "doc": "/ˌaɪ piː viː ˈfɔːr/",
+   "nghia": "IP phiên bản 4 – địa chỉ 32 bit viết dạng thập phân có chấm; chuyển gói kiểu best-effort (không bảo đảm tới nơi)",
+   "nhom": "Địa chỉ & chia mạng con",
+   "viDu": "IPv4 is called best-effort. What does that mean?",
+   "viDuNghia": "IPv4 được gọi là best-effort. Điều đó nghĩa là gì?"
+  },
+  {
+   "chu": "MAC address",
+   "doc": "/mæk ˈædres/",
+   "nghia": "địa chỉ MAC – địa chỉ vật lý 48 bit của card mạng, viết bằng hex",
+   "nhom": "Switch & ARP",
+   "viDu": "One byte of a MAC address is written as A7. What is its decimal value?",
+   "viDuNghia": "Một byte của địa chỉ MAC được viết là A7. Giá trị thập phân của nó là bao nhiêu?"
+  },
+  {
+   "chu": "MAC address table",
+   "nghia": "bảng địa chỉ MAC – switch ghi địa chỉ MAC nào nằm ở cổng nào để chuyển khung cho đúng",
+   "nhom": "Switch & ARP",
+   "viDu": "How does a switch fill its MAC address table?",
+   "viDuNghia": "Switch điền bảng địa chỉ MAC bằng cách nào?"
+  },
+  {
+   "chu": "ARP cache",
+   "doc": "/ɑːrp kæʃ/",
+   "nghia": "bộ đệm ARP – bảng trong máy lưu tạm các cặp địa chỉ IP – MAC đã hỏi được",
+   "nhom": "Switch & ARP",
+   "viDu": "PC-1 (10.0.1.5/24, gateway 10.0.1.1) has an empty ARP cache and sends a packet to 8.8.4.4. Which IP address does PC-1 ask about in its ARP request?",
+   "viDuNghia": "PC-1 (10.0.1.5/24, gateway 10.0.1.1) có ARP cache trống và gửi gói tới 8.8.4.4. PC-1 hỏi về địa chỉ IP nào trong ARP request?"
+  },
+  {
+   "chu": "ARP request",
+   "doc": "/ɑːrp rɪˈkwest/",
+   "nghia": "yêu cầu ARP – khung quảng bá hỏi \"ai có địa chỉ IP này, cho xin địa chỉ MAC\"",
+   "nhom": "Switch & ARP",
+   "viDu": "An ARP request travels inside an Ethernet frame. Which value fills that frame's destination MAC field?",
+   "viDuNghia": "ARP request được mang trong một khung Ethernet. Giá trị nào điền vào trường MAC đích của khung đó?"
+  },
+  {
+   "chu": "virtual LAN",
+   "doc": "/ˈvɜːrtʃuəl læn/",
+   "nghia": "mạng LAN ảo (VLAN) – chia một switch thành nhiều mạng LAN tách biệt về logic",
+   "nhom": "Switch & ARP",
+   "viDu": "Clients in VLAN 10 get no address, while the DHCP server sits in another subnet behind router R1. What should be configured on R1's interface facing those clients?",
+   "viDuNghia": "Máy trong VLAN 10 không nhận được địa chỉ, còn máy chủ DHCP nằm ở subnet khác phía sau router R1. Cần cấu hình gì trên cổng R1 hướng về các máy đó?"
+  },
+  {
+   "chu": "collision domain",
+   "doc": "/kəˈlɪʒn doʊˈmeɪn/",
+   "nghia": "miền va chạm – vùng mạng mà các khung phát cùng lúc sẽ va chạm nhau; mỗi cổng switch là một miền riêng",
+   "nhom": "Switch & ARP",
+   "viDu": "Each switch port is its own collision domain.",
+   "viDuNghia": "Mỗi cổng của switch là một miền va chạm riêng."
+  },
+  {
+   "chu": "broadcast domain",
+   "doc": "/ˈbrɔːdkæst doʊˈmeɪn/",
+   "nghia": "miền quảng bá – vùng mạng mà một khung quảng bá lan tới; router ngăn cách các miền",
+   "nhom": "Switch & ARP",
+   "viDu": "A router separates one broadcast domain from another.",
+   "viDuNghia": "Router ngăn cách miền quảng bá này với miền quảng bá khác."
+  },
+  {
+   "chu": "age out",
+   "doc": "/eɪdʒ aʊt/",
+   "nghia": "hết hạn – mục trong bảng MAC/ARP bị xoá khi lâu không được dùng",
+   "nhom": "Switch & ARP",
+   "viDu": "A printer is unplugged and stays silent for a long time. What happens to its entry in the switch's MAC table?",
+   "viDuNghia": "Một máy in bị rút dây và im lặng rất lâu. Mục của nó trong bảng MAC của switch sẽ ra sao?"
+  },
+  {
+   "chu": "frame check sequence",
+   "nghia": "dãy kiểm tra khung (FCS) – mã CRC ở phần đuôi khung Ethernet để phát hiện lỗi",
+   "nhom": "Switch & ARP",
+   "viDu": "Which switching method reads the whole frame and checks its FCS before forwarding?",
+   "viDuNghia": "Phương pháp chuyển mạch nào đọc hết khung và kiểm FCS trước khi chuyển đi?"
+  },
+  {
+   "chu": "organizationally unique identifier",
+   "nghia": "OUI – ba byte đầu của địa chỉ MAC, cho biết hãng sản xuất",
+   "nhom": "Switch & ARP",
+   "viDu": "What do the first three bytes of a MAC address identify?",
+   "viDuNghia": "Ba byte đầu của địa chỉ MAC cho biết điều gì?"
+  },
+  {
+   "chu": "duplex mismatch",
+   "doc": "/ˈduːpleks ˈmɪsmætʃ/",
+   "nghia": "lệch chế độ song công – hai đầu liên kết đặt khác nhau (một bên half, một bên full) làm mạng chậm, nhiều va chạm muộn",
+   "nhom": "Switch & ARP",
+   "viDu": "A switch port and a server NIC are linked, but file copies are slow and the interface shows many late collisions on one side. What is the likely cause?",
+   "viDuNghia": "Cổng switch và card mạng máy chủ đã nối nhưng chép tệp chậm, và một bên báo rất nhiều late collision. Nguyên nhân khả dĩ là gì?"
+  },
+  {
+   "chu": "intermediary device",
+   "doc": "/ˌɪntərˈmiːdieri dɪˈvaɪs/",
+   "nghia": "thiết bị trung gian – switch, router, điểm truy cập… nối các thiết bị đầu cuối với nhau",
+   "nhom": "Switch & ARP",
+   "viDu": "Which of these is an intermediary device rather than an end device?",
+   "viDuNghia": "Thiết bị nào dưới đây là thiết bị trung gian chứ không phải thiết bị đầu cuối?"
+  },
+  {
+   "chu": "unshielded twisted pair",
+   "nghia": "cáp xoắn đôi không bọc chống nhiễu (UTP) – loại cáp mạng LAN thông dụng, dài tối đa 100 m",
+   "nhom": "Cáp & kết nối",
+   "viDu": "Why are the wires inside UTP cable twisted into pairs?",
+   "viDuNghia": "Vì sao các sợi dây trong cáp UTP được xoắn thành từng đôi?"
+  },
+  {
+   "chu": "crosstalk",
+   "doc": "/ˈkrɔːstɔːk/",
+   "nghia": "nhiễu xuyên âm – tín hiệu của cặp dây này lọt sang cặp dây bên cạnh",
+   "nhom": "Cáp & kết nối",
+   "viDu": "The wires in a UTP cable are twisted to cancel crosstalk.",
+   "viDuNghia": "Các dây trong cáp UTP được xoắn lại để triệt nhiễu xuyên âm."
+  },
+  {
+   "chu": "attenuation",
+   "doc": "/əˌtenjuˈeɪʃn/",
+   "nghia": "suy hao – tín hiệu yếu dần khi đi xa",
+   "nhom": "Cáp & kết nối",
+   "viDu": "A 140 m Cat 6 run between a switch and a PC gives many errors, while a 20 m run on the same switch is clean. What is the likely physical cause? — Attenuation over a run beyond the 100 m limit",
+   "viDuNghia": "Đường Cat 6 dài 140 m từ switch tới máy tính báo nhiều lỗi, còn đường 20 m trên cùng switch thì sạch. Nguyên nhân vật lý khả dĩ là gì? — Suy hao do đoạn cáp vượt giới hạn 100 m"
+  },
+  {
+   "chu": "straight-through cable",
+   "doc": "/ˌstreɪt ˈθruː ˈkeɪbl/",
+   "nghia": "cáp thẳng – hai đầu bấm cùng chuẩn; nối thiết bị khác loại (PC với switch)",
+   "nhom": "Cáp & kết nối",
+   "viDu": "Use a straight-through cable to connect a PC to a switch.",
+   "viDuNghia": "Dùng cáp thẳng để nối máy tính với switch."
+  },
+  {
+   "chu": "crossover cable",
+   "doc": "/ˈkrɔːsoʊvər ˈkeɪbl/",
+   "nghia": "cáp chéo – một đầu T568A, một đầu T568B; nối hai thiết bị cùng loại",
+   "nhom": "Cáp & kết nối",
+   "viDu": "One end of a patch cable is wired T568A and the other end T568B. What kind of cable is this?",
+   "viDuNghia": "Một đầu dây nhảy bấm theo T568A, đầu kia theo T568B. Đây là loại cáp gì?"
+  },
+  {
+   "chu": "rollover cable",
+   "doc": "/ˈroʊloʊvər ˈkeɪbl/",
+   "nghia": "cáp console (rollover) – nối máy tính với cổng console của thiết bị Cisco",
+   "nhom": "Cáp & kết nối",
+   "viDu": "Which cable type connects a PC's serial or USB adapter to a Cisco console port? — Rollover cable",
+   "viDuNghia": "Loại cáp nào nối bộ chuyển serial hoặc USB của máy tính vào cổng console Cisco? — Cáp rollover"
+  },
+  {
+   "chu": "single-mode fiber",
+   "doc": "/ˌsɪŋɡl ˈmoʊd ˈfaɪbər/",
+   "nghia": "cáp quang đơn mốt – lõi rất nhỏ, dùng laser, đi được rất xa",
+   "nhom": "Cáp & kết nối",
+   "viDu": "Two factory buildings stand 1.5 km apart and the cable route passes heavy electric motors. Which medium suits this link best? — Single-mode fiber",
+   "viDuNghia": "Hai nhà xưởng cách nhau 1,5 km và đường cáp đi qua các động cơ điện lớn. Môi trường truyền nào phù hợp nhất? — Cáp quang đơn mode"
+  },
+  {
+   "chu": "multimode fiber",
+   "doc": "/ˌmʌltiˈmoʊd ˈfaɪbər/",
+   "nghia": "cáp quang đa mốt – lõi lớn hơn, dùng LED, đi khoảng cách ngắn",
+   "nhom": "Cáp & kết nối",
+   "viDu": "Multimode fiber is used for short links inside a building.",
+   "viDuNghia": "Cáp quang đa mốt dùng cho các đường nối ngắn trong toà nhà."
+  },
+  {
+   "chu": "connector",
+   "doc": "/kəˈnektər/",
+   "nghia": "đầu nối – đầu cắm của cáp (RJ-45 cho cáp UTP)",
+   "nhom": "Cáp & kết nối",
+   "viDu": "Which connector normally terminates a UTP Ethernet cable?",
+   "viDuNghia": "Đầu nối nào thường dùng để bấm đầu cáp Ethernet UTP?"
+  },
+  {
+   "chu": "broadband",
+   "doc": "/ˈbrɔːdbænd/",
+   "nghia": "băng rộng – kết nối Internet tốc độ cao, luôn bật",
+   "nhom": "Cáp & kết nối",
+   "viDu": "Cable and DSL are common broadband access technologies.",
+   "viDuNghia": "Cáp truyền hình và DSL là các công nghệ truy cập băng rộng phổ biến."
+  },
+  {
+   "chu": "digital subscriber line",
+   "nghia": "DSL – Internet băng rộng chạy trên chính đôi dây đồng của điện thoại bàn",
+   "nhom": "Cáp & kết nối",
+   "viDu": "An apartment receives always-on broadband over the same copper pair as its landline telephone. Which access technology is this?",
+   "viDuNghia": "Một căn hộ nhận Internet băng rộng luôn bật qua chính đôi dây đồng của điện thoại bàn. Đây là công nghệ truy cập nào?"
+  },
+  {
+   "chu": "converged network",
+   "doc": "/kənˈvɜːrdʒd ˈnetwɜːrk/",
+   "nghia": "mạng hội tụ – thoại, video và dữ liệu cùng chạy trên một hạ tầng mạng IP",
+   "nhom": "Cáp & kết nối",
+   "viDu": "A college retires its separate telephone wiring and video system. Voice calls, lecture streams and web traffic now all run over the same IP network. What is this kind of network called?",
+   "viDuNghia": "Một trường cao đẳng bỏ hệ thống dây điện thoại và hệ thống video riêng. Cuộc gọi thoại, luồng bài giảng và lưu lượng web nay đều chạy trên cùng một mạng IP. Loại mạng này gọi là gì?"
+  },
+  {
+   "chu": "physical topology",
+   "doc": "/ˈfɪzɪkl təˈpɑːlədʒi/",
+   "nghia": "sơ đồ vật lý – cho thấy vị trí thật của thiết bị, tủ rack và đường cáp (khác sơ đồ logic: địa chỉ, cổng)",
+   "nhom": "Cáp & kết nối",
+   "viDu": "A technician's drawing shows which rack each switch sits in, which room each wall jack serves and how long every cable run is. What kind of documentation is this?",
+   "viDuNghia": "Bản vẽ của kỹ thuật viên cho biết mỗi switch nằm ở tủ rack nào, mỗi ổ mạng trên tường phục vụ phòng nào và mỗi đường cáp dài bao nhiêu. Đây là loại tài liệu gì?"
+  },
+  {
+   "chu": "command-line interface",
+   "doc": "/kəˌmænd ˈlaɪn ˈɪntərfeɪs/",
+   "nghia": "giao diện dòng lệnh (CLI) – cấu hình thiết bị bằng cách gõ lệnh",
+   "nhom": "Cấu hình Cisco",
+   "viDu": "A brand-new switch has no IP address yet. How do you reach its CLI for the first time?",
+   "viDuNghia": "Switch mới tinh chưa có địa chỉ IP. Bạn vào CLI của nó lần đầu bằng cách nào?"
+  },
+  {
+   "chu": "console port",
+   "doc": "/ˈkɑːnsoʊl pɔːrt/",
+   "nghia": "cổng console – cổng quản trị trực tiếp, dùng để cấu hình thiết bị lần đầu khi chưa có địa chỉ IP",
+   "nhom": "Cấu hình Cisco",
+   "viDu": "The configuration of a router shows the console and VTY passwords in clear text. Which single global command scrambles every plain-text password already in the configuration?",
+   "viDuNghia": "Cấu hình của router hiện mật khẩu console và VTY dạng rõ. Lệnh toàn cục nào, chỉ một lệnh, làm xáo trộn mọi mật khẩu dạng rõ đang có trong cấu hình?"
+  },
+  {
+   "chu": "Secure Shell",
+   "doc": "/sɪˈkjʊr ʃel/",
+   "nghia": "SSH – giao thức đăng nhập từ xa có mã hoá, thay cho Telnet",
+   "nhom": "Cấu hình Cisco",
+   "viDu": "A server runs a web service and an SSH service on one IP address. What lets incoming data reach the right program?",
+   "viDuNghia": "Máy chủ chạy dịch vụ web và SSH trên cùng một địa chỉ IP. Thứ gì giúp dữ liệu đi vào đến đúng chương trình?"
+  },
+  {
+   "chu": "virtual terminal line",
+   "nghia": "đường VTY – \"cổng ảo\" nhận kết nối quản trị từ xa qua Telnet/SSH",
+   "nhom": "Cấu hình Cisco",
+   "viDu": "An engineer wants the VTY lines of a switch to accept SSH and refuse Telnet. Which line configuration command does this?",
+   "viDuNghia": "Kỹ sư muốn đường VTY của switch nhận SSH và từ chối Telnet. Lệnh cấu hình line nào làm được việc này?"
+  },
+  {
+   "chu": "running configuration",
+   "doc": "/ˈrʌnɪŋ kənˌfɪɡjəˈreɪʃn/",
+   "nghia": "cấu hình đang chạy (running-config) – nằm trong RAM, mất khi tắt máy nếu chưa lưu",
+   "nhom": "Cấu hình Cisco",
+   "viDu": "Where does a Cisco device keep the running configuration while it is powered on?",
+   "viDuNghia": "Thiết bị Cisco giữ running-config ở đâu khi đang bật nguồn?"
+  },
+  {
+   "chu": "startup configuration",
+   "doc": "/ˈstɑːrtʌp kənˌfɪɡjəˈreɪʃn/",
+   "nghia": "cấu hình khởi động (startup-config) – lưu trong NVRAM, được nạp khi thiết bị bật lên",
+   "nhom": "Cấu hình Cisco",
+   "viDu": "An admin changes a switch's hostname and management IP, tests them, and goes home. A power cut overnight restarts the switch and both changes are gone. Which command did the admin forget?",
+   "viDuNghia": "Quản trị viên đổi tên và IP quản lý của switch, thử xong thì về. Mất điện đêm đó làm switch khởi động lại và cả hai thay đổi biến mất. Quản trị viên đã quên lệnh nào?"
+  },
+  {
+   "chu": "interface configuration mode",
+   "nghia": "chế độ cấu hình giao diện – dấu nhắc (config-if)#, nơi đặt địa chỉ IP, bật/tắt một cổng",
+   "nhom": "Cấu hình Cisco",
+   "viDu": "You see the prompt below on a Cisco switch. Which mode are you in? Sw-Lab1(config-if)#",
+   "viDuNghia": "Bạn thấy dấu nhắc dưới đây trên switch Cisco. Bạn đang ở chế độ nào? Sw-Lab1(config-if)#"
+  },
+  {
+   "chu": "switch virtual interface",
+   "nghia": "giao diện ảo của switch (SVI) – giao diện VLAN mang địa chỉ IP để quản trị switch từ xa",
+   "nhom": "Cấu hình Cisco",
+   "viDu": "Layer 2 switch Sw-A must be reachable over SSH from an admin PC in a different IP subnet. Which two settings are required on Sw-A?",
+   "viDuNghia": "Switch tầng 2 Sw-A phải SSH được từ máy quản trị ở một subnet IP khác. Hai cấu hình nào là bắt buộc trên Sw-A?"
+  },
+  {
+   "chu": "enable secret",
+   "doc": "/ɪˈneɪbl ˈsiːkrət/",
+   "nghia": "mật khẩu enable dạng băm – mật khẩu vào chế độ đặc quyền, được ưu tiên hơn enable password",
+   "nhom": "Cấu hình Cisco",
+   "viDu": "A router has both enable password and enable secret configured with different values. Which one does it accept at the enable prompt?",
+   "viDuNghia": "Router có cả enable password và enable secret với hai giá trị khác nhau. Nó nhận giá trị nào ở dấu nhắc enable?"
+  },
+  {
+   "chu": "administratively down",
+   "doc": "/ədˈmɪnɪstreɪtɪvli daʊn/",
+   "nghia": "bị tắt bằng lệnh – trạng thái cổng đang shutdown; phải gõ no shutdown để bật",
+   "nhom": "Cấu hình Cisco",
+   "viDu": "The interface is administratively down until you enter the no shutdown command.",
+   "viDuNghia": "Cổng ở trạng thái bị tắt bằng lệnh cho tới khi bạn gõ lệnh no shutdown."
+  },
+  {
+   "chu": "directly connected",
+   "doc": "/dəˈrektli kəˈnektɪd/",
+   "nghia": "kết nối trực tiếp – mạng gắn ngay vào một cổng của router (dòng C trong bảng định tuyến)",
+   "nhom": "Cấu hình Cisco",
+   "viDu": "You arrive at an unfamiliar closet and want to see which Cisco devices are directly attached to a switch, without knowing their IP addresses. Which command helps?",
+   "viDuNghia": "Bạn đến một tủ mạng lạ và muốn biết thiết bị Cisco nào nối trực tiếp với switch mà chưa biết IP của chúng. Lệnh nào giúp được?"
+  },
+  {
+   "chu": "default route",
+   "doc": "/dɪˈfɔːlt ruːt/",
+   "nghia": "tuyến mặc định (0.0.0.0/0) – đường dùng khi không có tuyến nào khớp hơn",
+   "nhom": "Cấu hình Cisco",
+   "viDu": "A router has no route for a packet and no default route. What does it send back to the source?",
+   "viDuNghia": "Router không có tuyến cho một gói tin và cũng không có tuyến mặc định. Nó gửi gì về nguồn?"
+  },
+  {
+   "chu": "Internetwork Operating System",
+   "nghia": "IOS – hệ điều hành chạy trên router và switch Cisco, cấu hình qua giao diện dòng lệnh",
+   "nhom": "Cấu hình Cisco",
+   "viDu": "Which name is a valid Cisco IOS hostname under the usual naming rules?",
+   "viDuNghia": "Theo quy tắc đặt tên thường dùng, tên nào hợp lệ làm hostname trên Cisco IOS?"
+  },
+  {
+   "chu": "ping",
+   "doc": "/pɪŋ/",
+   "nghia": "ping – lệnh gửi gói ICMP Echo để thử xem một máy có tới được không",
+   "nhom": "Kiểm tra & dịch vụ",
+   "viDu": "A PC can ping 8.8.8.8 but opening www.example.com says the host cannot be found. Which setting should you check first?",
+   "viDuNghia": "Một máy ping được 8.8.8.8 nhưng mở www.example.com thì báo không tìm thấy máy chủ. Nên kiểm cấu hình nào trước?"
+  },
+  {
+   "chu": "traceroute",
+   "doc": "/ˈtreɪsruːt/",
+   "nghia": "traceroute (tracert) – lệnh liệt kê các router trên đường tới đích bằng cách tăng dần TTL",
+   "nhom": "Kiểm tra & dịch vụ",
+   "viDu": "How does traceroute learn the routers along a path?",
+   "viDuNghia": "Traceroute biết các router trên đường đi bằng cách nào?"
+  },
+  {
+   "chu": "Destination Unreachable",
+   "doc": "/ˌdestɪˈneɪʃn ʌnˈriːtʃəbl/",
+   "nghia": "không tới được đích – thông điệp ICMP router gửi về khi không có đường tới mạng đích",
+   "nhom": "Kiểm tra & dịch vụ",
+   "viDu": "Ping from a lab PC gives the result below. What does it tell you? C:\\> ping 172.31.9.9 Reply from 10.0.0.1: Destination net unreachable. Reply from 10.0.0.1: Destination net unreachable.",
+   "viDuNghia": "Ping từ máy trong lab cho kết quả dưới đây. Kết quả đó cho biết điều gì? C:\\> ping 172.31.9.9 Reply from 10.0.0.1: Destination net unreachable. Reply from 10.0.0.1: Destination net unreachable."
+  },
+  {
+   "chu": "well-known port",
+   "doc": "/ˌwel ˈnoʊn pɔːrt/",
+   "nghia": "cổng thông dụng – dải số cổng 0–1023 dành cho các dịch vụ chuẩn (HTTP 80, HTTPS 443, DNS 53)",
+   "nhom": "Kiểm tra & dịch vụ",
+   "viDu": "Which range holds the well-known port numbers?",
+   "viDuNghia": "Dải nào chứa các số cổng phổ biến (well-known)?"
+  },
+  {
+   "chu": "acknowledgment number",
+   "doc": "/əkˈnɑːlɪdʒmənt ˈnʌmbər/",
+   "nghia": "số báo nhận – số thứ tự byte kế tiếp mà bên nhận TCP đang chờ",
+   "nhom": "Kiểm tra & dịch vụ",
+   "viDu": "A receiver gets TCP data bytes 1-1000, 1001-2000 and then 3001-4000. Bytes 2001-3000 are missing. Which acknowledgment number does it send?",
+   "viDuNghia": "Bên nhận có các byte TCP 1-1000, 1001-2000 rồi 3001-4000. Các byte 2001-3000 bị thiếu. Bên nhận gửi số xác nhận nào?"
+  },
+  {
+   "chu": "authoritative server",
+   "doc": "/əˈθɔːrəteɪtɪv ˈsɜːrvər/",
+   "nghia": "máy chủ có thẩm quyền – máy chủ DNS giữ bản ghi gốc của một tên miền",
+   "nhom": "Kiểm tra & dịch vụ",
+   "viDu": "A PC with an empty cache looks up a name. Assuming nothing is cached along the way, which order is right?",
+   "viDuNghia": "Một máy với cache trống tra một tên miền. Giả sử dọc đường không có gì trong cache, thứ tự nào đúng?"
+  },
+  {
+   "chu": "resolver",
+   "doc": "/rɪˈzɑːlvər/",
+   "nghia": "bộ phân giải – phần mềm phía máy khách gửi câu hỏi DNS",
+   "nhom": "Kiểm tra & dịch vụ",
+   "viDu": "The resolver on the client sends the DNS query to a name server.",
+   "viDuNghia": "Bộ phân giải ở máy khách gửi câu hỏi DNS tới máy chủ tên."
+  },
+  {
+   "chu": "Server Message Block",
+   "nghia": "SMB – giao thức chia sẻ tệp và máy in của Windows trong mạng LAN",
+   "nhom": "Kiểm tra & dịch vụ",
+   "viDu": "Which protocol do Windows computers normally use to share files and printers on a LAN?",
+   "viDuNghia": "Máy Windows thường dùng giao thức nào để chia sẻ tệp và máy in trong LAN?"
+  },
+  {
+   "chu": "fault tolerance",
+   "doc": "/fɔːlt ˈtɑːlərəns/",
+   "nghia": "khả năng chịu lỗi – mạng vẫn chạy khi một đường/thiết bị hỏng nhờ có đường dự phòng",
+   "nhom": "Kiểm tra & dịch vụ",
+   "viDu": "A shop adds a second Internet line, and traffic moves to it automatically when the first line fails. Which network quality does this improve?",
+   "viDuNghia": "Một cửa hàng thêm đường Internet thứ hai, lưu lượng tự chuyển sang đó khi đường đầu hỏng. Điều này cải thiện đặc tính nào của mạng?"
+  },
+  {
+   "chu": "social engineering",
+   "doc": "/ˈsoʊʃl ˌendʒɪˈnɪrɪŋ/",
+   "nghia": "tấn công phi kỹ thuật – lừa con người để lấy mật khẩu, thông tin",
+   "nhom": "Bảo mật cơ bản",
+   "viDu": "Someone phones a staff member, claims to be from the IT helpdesk and asks for a password to \"fix an account\". What kind of attack is this?",
+   "viDuNghia": "Một người gọi điện cho nhân viên, tự nhận là bộ phận hỗ trợ IT và xin mật khẩu để \"sửa tài khoản\". Đây là kiểu tấn công gì?"
+  },
+  {
+   "chu": "stateful firewall",
+   "doc": "/ˈsteɪtfl ˈfaɪərwɔːl/",
+   "nghia": "tường lửa có trạng thái – nhớ các kết nối mở từ bên trong và cho gói trả lời của chúng đi vào",
+   "nhom": "Bảo mật cơ bản",
+   "viDu": "What does a stateful firewall do that a plain packet filter does not?",
+   "viDuNghia": "Tường lửa trạng thái (stateful) làm được gì mà bộ lọc gói đơn giản không làm được?"
+  },
+  {
+   "chu": "packet filter",
+   "doc": "/ˈpækɪt ˈfɪltər/",
+   "nghia": "bộ lọc gói – tường lửa đơn giản, xét từng gói theo địa chỉ và cổng",
+   "nhom": "Bảo mật cơ bản",
+   "viDu": "A packet filter checks each packet's addresses and port numbers against a list of rules.",
+   "viDuNghia": "Bộ lọc gói so địa chỉ và số cổng của từng gói với một danh sách luật."
+  },
+  {
+   "chu": "attack surface",
+   "doc": "/əˈtæk ˈsɜːrfɪs/",
+   "nghia": "bề mặt tấn công – tổng các chỗ kẻ xấu có thể lợi dụng (cổng mở, dịch vụ thừa)",
+   "nhom": "Bảo mật cơ bản",
+   "viDu": "Which action directly reduces the attack surface of a switch in a shared classroom?",
+   "viDuNghia": "Hành động nào trực tiếp giảm bề mặt tấn công của switch trong phòng học dùng chung?"
+  },
+  {
+   "chu": "forged",
+   "doc": "/fɔːrdʒd/",
+   "nghia": "giả mạo – (gói ARP, địa chỉ) bị làm giả để đánh lừa máy khác",
+   "nhom": "Bảo mật cơ bản",
+   "viDu": "An attacker on a LAN sends forged ARP replies claiming to be the default gateway. What is the attacker trying to do?",
+   "viDuNghia": "Kẻ tấn công trong LAN gửi ARP reply giả, tự nhận là default gateway. Kẻ đó định làm gì?"
+  },
+  {
+   "chu": "accounting",
+   "doc": "/əˈkaʊntɪŋ/",
+   "nghia": "ghi nhận (trong AAA) – ghi lại ai đã làm gì, lúc nào trên thiết bị",
+   "nhom": "Bảo mật cơ bản",
+   "viDu": "In AAA, which part records what commands an administrator ran and when?",
+   "viDuNghia": "Trong AAA, phần nào ghi lại quản trị viên đã chạy lệnh gì và lúc nào?"
+  },
+  {
+   "chu": "Bring Your Own Device",
+   "nghia": "BYOD – xu hướng cho người dùng mang thiết bị cá nhân vào dùng mạng của tổ chức",
+   "nhom": "Bảo mật cơ bản",
+   "viDu": "A school lets students join the campus Wi-Fi with their own phones and laptops for class work. Which trend describes this?",
+   "viDuNghia": "Trường cho sinh viên dùng điện thoại và laptop cá nhân vào Wi-Fi của trường để học. Xu hướng nào mô tả điều này?"
+  }
+ ]
+}

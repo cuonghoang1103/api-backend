@@ -1,0 +1,816 @@
+{
+ "ma": "prm392-1",
+ "nn": "en",
+ "ten": "PRM392 · Lập trình Android",
+ "moTa": "Môn Mobile Programming (PRM392): Activity và vòng đời, Intent, Service, Broadcast Receiver, Content Provider, layout và RecyclerView, SQLite, Shared Preferences, quyền, luồng nền, thông báo, kiến trúc Android. Từ lấy từ đề FE/PE thật; câu ví dụ phần lớn là câu hỏi thật trong đề.",
+ "bieuTuong": "iphone",
+ "thuTu": -940,
+ "tu": [
+  {
+   "chu": "activity",
+   "doc": "/ækˈtɪvəti/",
+   "nghia": "Activity: một màn hình của ứng dụng Android mà người dùng tương tác · (PMG201c) hoạt động – một đầu việc trong lịch dự án, có thời lượng và hoạt động trước",
+   "nhom": "Thành phần ứng dụng",
+   "viDu": "Which one of the following does describe how to get data from another activity through intent?",
+   "viDuNghia": "Cái nào sau đây mô tả cách lấy dữ liệu từ một activity khác thông qua intent?"
+  },
+  {
+   "chu": "intent",
+   "doc": "/ɪnˈtent/",
+   "nghia": "Intent: thông điệp yêu cầu một thành phần làm việc gì đó (mở Activity, chạy Service, phát broadcast)",
+   "nhom": "Thành phần ứng dụng",
+   "viDu": "Which of the following correctly describe benefits that an intent provides to apps in Android?",
+   "viDuNghia": "Phát biểu nào mô tả đúng lợi ích mà intent mang lại cho ứng dụng trong Android?"
+  },
+  {
+   "chu": "explicit intent",
+   "doc": "/ɪkˈsplɪsɪt ɪnˈtent/",
+   "nghia": "intent tường minh: chỉ rõ TÊN LỚP thành phần sẽ nhận (thường dùng trong cùng ứng dụng)",
+   "nhom": "Thành phần ứng dụng",
+   "viDu": "Which of the following best describes the difference between explicit and implicit intents in Android?",
+   "viDuNghia": "Câu nào sau đây mô tả đúng nhất sự khác biệt giữa explicit intent và implicit intent trong Android?"
+  },
+  {
+   "chu": "implicit intent",
+   "doc": "/ɪmˈplɪsɪt ɪnˈtent/",
+   "nghia": "intent ngầm định: chỉ nêu HÀNH ĐỘNG cần làm (xem trang web, gọi điện), hệ thống tự tìm ứng dụng phù hợp",
+   "nhom": "Thành phần ứng dụng",
+   "viDu": "Which constructor method do you use to create an implicit Intent to launch a camera app?",
+   "viDuNghia": "Bạn dùng constructor nào để tạo một Intent implicit nhằm khởi chạy ứng dụng camera?"
+  },
+  {
+   "chu": "intent filter",
+   "doc": "/ɪnˈtent ˈfɪltər/",
+   "nghia": "bộ lọc intent: khai trong manifest để báo thành phần này nhận được những intent ngầm định nào",
+   "nhom": "Thành phần ứng dụng",
+   "viDu": "If I send a broadcast with an implicit intent and there is no matching intent filter, what happens?",
+   "viDuNghia": "Nếu tôi gửi broadcast bằng implicit intent mà không có intent filter (bộ lọc intent) nào khớp thì điều gì xảy ra?"
+  },
+  {
+   "chu": "intent extra",
+   "doc": "/ɪnˈtent ˈekstrə/",
+   "nghia": "dữ liệu kèm intent: các cặp khoá – giá trị gửi theo intent (putExtra / getStringExtra)",
+   "nhom": "Thành phần ứng dụng",
+   "viDu": "Use an intent extra to pass the user name to the second activity.",
+   "viDuNghia": "Dùng dữ liệu kèm intent để truyền tên người dùng sang Activity thứ hai."
+  },
+  {
+   "chu": "pending intent",
+   "doc": "/ˈpendɪŋ ɪnˈtent/",
+   "nghia": "intent chờ: gói một intent để thành phần khác (vd thông báo) thực hiện giúp vào lúc sau",
+   "nhom": "Thành phần ứng dụng",
+   "viDu": "What is the purpose of the PendingIntent in Android notifications?",
+   "viDuNghia": "Mục đích của PendingIntent trong notification của Android là gì?"
+  },
+  {
+   "chu": "Android service",
+   "doc": "/ˈændrɔɪd ˈsɜːrvɪs/",
+   "nghia": "Service: thành phần chạy ngầm làm việc lâu dài, không có giao diện",
+   "nhom": "Thành phần ứng dụng",
+   "viDu": "Which method is called when a Service is first created through startService() or bindService()?",
+   "viDuNghia": "Phương thức nào được gọi khi một Service được tạo lần đầu thông qua startService() hoặc bindService()?"
+  },
+  {
+   "chu": "started service",
+   "doc": "/ˈstɑːrtɪd ˈsɜːrvɪs/",
+   "nghia": "service được khởi động (startService): chạy độc lập cho tới khi tự dừng hoặc bị dừng",
+   "nhom": "Thành phần ứng dụng",
+   "viDu": "What is the primary difference between a Bound Service and a Started Service (unbound) in Android?",
+   "viDuNghia": "Sự khác biệt chính giữa Bound Service và Started Service (unbound) trong Android là gì?"
+  },
+  {
+   "chu": "bound service",
+   "doc": "/baʊnd ˈsɜːrvɪs/",
+   "nghia": "service ràng buộc (bindService): thành phần khác nối vào để gọi qua lại; hết bên nối thì service bị huỷ",
+   "nhom": "Thành phần ứng dụng",
+   "viDu": "What is the primary difference between a Bound Service and a Started Service (unbound) in Android?",
+   "viDuNghia": "Sự khác biệt chính giữa Bound Service và Started Service (không bind) trong Android là gì?"
+  },
+  {
+   "chu": "foreground service",
+   "doc": "/ˈfɔːrɡraʊnd ˈsɜːrvɪs/",
+   "nghia": "service tiền cảnh: làm việc người dùng nhận biết được (nghe nhạc…), bắt buộc hiện thông báo",
+   "nhom": "Thành phần ứng dụng",
+   "viDu": "A music player uses a foreground service and shows a notification.",
+   "viDuNghia": "Trình nghe nhạc dùng service tiền cảnh và hiện một thông báo."
+  },
+  {
+   "chu": "sticky service",
+   "doc": "/ˈstɪki ˈsɜːrvɪs/",
+   "nghia": "service \"dính\" (onStartCommand trả về START_STICKY): bị hệ thống giết thì được tự tạo lại",
+   "nhom": "Thành phần ứng dụng",
+   "viDu": "In the lifecycle of a Started Service, what is the purpose of the onStartCommand() method and what does the return value START_STICKY mean?",
+   "viDuNghia": "Trong vòng đời của một Started Service, mục đích của phương thức onStartCommand() là gì và giá trị trả về START_STICKY có ý nghĩa gì?"
+  },
+  {
+   "chu": "broadcast receiver",
+   "doc": "/ˈbrɔːdkæst rɪˈsiːvər/",
+   "nghia": "bộ nhận phát sóng: thành phần lắng nghe thông báo của hệ thống hoặc ứng dụng khác (pin yếu, có mạng…)",
+   "nhom": "Thành phần ứng dụng",
+   "viDu": "Which pair of methods do you use to register and unregister your broadcast receiver dynamically?",
+   "viDuNghia": "Cặp phương thức nào dùng để đăng ký và hủy đăng ký broadcast receiver một cách động (dynamically)?"
+  },
+  {
+   "chu": "content provider",
+   "doc": "/ˈkɑːntent prəˈvaɪdər/",
+   "nghia": "bộ cung cấp nội dung: thành phần chia sẻ dữ liệu có cấu trúc cho ứng dụng khác (danh bạ, ảnh…)",
+   "nhom": "Thành phần ứng dụng",
+   "viDu": "What is the typical URI format for accessing data from a Content Provider?",
+   "viDuNghia": "Định dạng URI thông thường để truy cập dữ liệu từ một Content Provider là gì?"
+  },
+  {
+   "chu": "content resolver",
+   "doc": "/ˈkɑːntent rɪˈzɑːlvər/",
+   "nghia": "bộ phân giải nội dung: đối tượng ứng dụng dùng để truy vấn dữ liệu từ content provider",
+   "nhom": "Thành phần ứng dụng",
+   "viDu": "What is the purpose of the ContentResolver class in Android?",
+   "viDuNghia": "Mục đích của lớp ContentResolver trong Android là gì?"
+  },
+  {
+   "chu": "content URI",
+   "doc": "/ˈkɑːntent ˌjuː ɑːr ˈaɪ/",
+   "nghia": "địa chỉ nội dung: URI dạng content:// xác định dữ liệu trong một content provider",
+   "nhom": "Thành phần ứng dụng",
+   "viDu": "How do you define a Content URI in a Contract class?",
+   "viDuNghia": "Bạn định nghĩa Content URI trong một lớp Contract như thế nào?"
+  },
+  {
+   "chu": "manifest file",
+   "doc": "/ˈmænɪfest faɪl/",
+   "nghia": "tệp AndroidManifest.xml: khai báo các thành phần, quyền và thông tin của ứng dụng",
+   "nhom": "Thành phần ứng dụng",
+   "viDu": "Which permission do you need to declare for an HTTP connection in AndroidManifest.xml file?",
+   "viDuNghia": "Bạn cần khai báo quyền nào cho một kết nối HTTP trong file AndroidManifest.xml?"
+  },
+  {
+   "chu": "launcher activity",
+   "doc": "/ˈlɔːntʃər ækˈtɪvəti/",
+   "nghia": "Activity khởi chạy: màn hình mở đầu tiên khi bấm biểu tượng ứng dụng",
+   "nhom": "Thành phần ứng dụng",
+   "viDu": "The launcher activity is declared with the MAIN action and the LAUNCHER category.",
+   "viDuNghia": "Activity khởi chạy được khai báo với action MAIN và category LAUNCHER."
+  },
+  {
+   "chu": "back stack",
+   "doc": "/bæk stæk/",
+   "nghia": "ngăn xếp quay lui: chồng các Activity đã mở; bấm Back thì gỡ Activity trên cùng",
+   "nhom": "Thành phần ứng dụng",
+   "viDu": "What is a back stack used for?",
+   "viDuNghia": "Back stack được dùng cho việc gì?"
+  },
+  {
+   "chu": "fragment",
+   "doc": "/ˈfræɡmənt/",
+   "nghia": "Fragment (Android) – phần giao diện có vòng đời riêng, gắn vào Activity. (Đời thường: đoạn, mẩu code)",
+   "nhom": "Thành phần ứng dụng",
+   "viDu": "Which method is most efficient for adding a fragment dynamically to an activity?",
+   "viDuNghia": "Phương thức nào hiệu quả nhất để thêm một fragment vào activity một cách động?"
+  },
+  {
+   "chu": "activity lifecycle",
+   "doc": "/ækˈtɪvəti ˈlaɪfsaɪkl/",
+   "nghia": "vòng đời Activity: onCreate, onStart, onResume, onPause, onStop, onDestroy",
+   "nhom": "Vòng đời",
+   "viDu": "What Activity lifecycle methods are called when a device-configuration change (such as rotation) occurs?",
+   "viDuNghia": "Những phương thức lifecycle nào của Activity được gọi khi xảy ra thay đổi cấu hình thiết bị (như xoay màn hình)?"
+  },
+  {
+   "chu": "callback method",
+   "doc": "/ˈkɔːlbæk ˈmeθəd/",
+   "nghia": "phương thức gọi lại: phương thức hệ thống tự gọi khi có sự kiện (onCreate, onClick…)",
+   "nhom": "Vòng đời",
+   "viDu": "When you create a backup agent by extending BackupAgent, which callback methods should you implement?",
+   "viDuNghia": "Khi tạo một backup agent bằng cách kế thừa BackupAgent, bạn cần triển khai những phương thức callback nào?"
+  },
+  {
+   "chu": "pause",
+   "doc": "/pɔːz/",
+   "nghia": "tạm dừng: Activity bị che một phần hoặc sắp rời đi (onPause)",
+   "nhom": "Vòng đời",
+   "viDu": "What is the difference between the onPause() method and the onSaveInstanceState() method?",
+   "viDuNghia": "Sự khác nhau giữa phương thức onPause() và phương thức onSaveInstanceState() là gì?"
+  },
+  {
+   "chu": "configuration change",
+   "doc": "/kənˌfɪɡjəˈreɪʃn tʃeɪndʒ/",
+   "nghia": "thay đổi cấu hình (xoay màn hình, đổi ngôn ngữ): Activity bị huỷ rồi tạo lại",
+   "nhom": "Vòng đời",
+   "viDu": "Which of the following methods are called when the screen changes orientation from portrait to landscape in Android?",
+   "viDuNghia": "Những phương thức nào sau đây được gọi khi màn hình đổi hướng từ portrait sang landscape trong Android?"
+  },
+  {
+   "chu": "saved instance state",
+   "nghia": "trạng thái đã lưu: Bundle giữ dữ liệu giao diện để khôi phục sau khi Activity bị tạo lại (onSaveInstanceState)",
+   "nhom": "Vòng đời",
+   "viDu": "When in the Activity lifecycle is onSaveInstanceState() called?",
+   "viDuNghia": "onSaveInstanceState() được gọi vào thời điểm nào trong lifecycle của Activity?"
+  },
+  {
+   "chu": "long-running operation",
+   "doc": "/ˌlɔːŋ ˈrʌnɪŋ ˌɑːpəˈreɪʃn/",
+   "nghia": "thao tác chạy lâu (tải mạng, xử lý nặng): phải làm ở luồng nền, không làm trên luồng chính",
+   "nhom": "Vòng đời",
+   "viDu": "Which component would you use to perform a long-running task in the background without blocking the main thread?",
+   "viDuNghia": "Thành phần nào bạn sẽ dùng để thực hiện một tác vụ chạy lâu ở nền mà không chặn main thread?"
+  },
+  {
+   "chu": "layout file",
+   "doc": "/ˈleɪaʊt faɪl/",
+   "nghia": "tệp bố cục: tệp XML trong res/layout mô tả giao diện một màn hình",
+   "nhom": "Giao diện",
+   "viDu": "How can you apply a custom style to a TextView in an Android layout XML file?",
+   "viDuNghia": "Làm thế nào để áp dụng một style tùy chỉnh cho một TextView trong file layout XML của Android?"
+  },
+  {
+   "chu": "view group",
+   "doc": "/vjuː ɡruːp/",
+   "nghia": "nhóm view (ViewGroup): view chứa và sắp xếp các view con (các loại layout)",
+   "nhom": "Giao diện",
+   "viDu": "Which ViewGroup would be most suitable to create a layout with two buttons side-by-side?",
+   "viDuNghia": "ViewGroup nào phù hợp nhất để tạo layout với hai nút bấm nằm cạnh nhau?"
+  },
+  {
+   "chu": "widget",
+   "doc": "/ˈwɪdʒɪt/",
+   "nghia": "thành phần giao diện có sẵn (nút, ô nhập, nhãn…); cũng chỉ tiện ích ngoài màn hình chính",
+   "nhom": "Giao diện",
+   "viDu": "Is a View also known as a Widget in Android?",
+   "viDuNghia": "Trong Android, View còn được gọi là Widget, đúng hay sai?"
+  },
+  {
+   "chu": "linear layout",
+   "doc": "/ˈlɪniər ˈleɪaʊt/",
+   "nghia": "LinearLayout: xếp các view con thành một hàng ngang hoặc một cột dọc",
+   "nhom": "Giao diện",
+   "viDu": "Which XML attribute do you use in a LinearLayout to show views side by side?",
+   "viDuNghia": "Thuộc tính XML nào dùng trong LinearLayout để hiển thị các view cạnh nhau?"
+  },
+  {
+   "chu": "relative layout",
+   "doc": "/ˈrelətɪv ˈleɪaʊt/",
+   "nghia": "RelativeLayout: đặt view con theo vị trí tương đối với nhau hoặc với cha",
+   "nhom": "Giao diện",
+   "viDu": "In a relative layout, a view can be placed below or to the right of another view.",
+   "viDuNghia": "Trong RelativeLayout, một view có thể đặt bên dưới hoặc bên phải view khác."
+  },
+  {
+   "chu": "constraint layout",
+   "doc": "/kənˈstreɪnt ˈleɪaʊt/",
+   "nghia": "ConstraintLayout: đặt view bằng các ràng buộc nối với view khác; bố cục phẳng, linh hoạt",
+   "nhom": "Giao diện",
+   "viDu": "In Android, what is the benefit of using a ConstraintLayout for complex UI designs?",
+   "viDuNghia": "Trong Android, lợi ích của việc dùng ConstraintLayout cho các thiết kế UI phức tạp là gì?"
+  },
+  {
+   "chu": "frame layout",
+   "doc": "/freɪm ˈleɪaʊt/",
+   "nghia": "FrameLayout: các view con xếp chồng lên nhau, thường dùng làm khung chứa fragment",
+   "nhom": "Giao diện",
+   "viDu": "A frame layout is often used as a container for a fragment.",
+   "viDuNghia": "FrameLayout thường được dùng làm khung chứa một fragment."
+  },
+  {
+   "chu": "recycler view",
+   "doc": "/ˌriːˈsaɪklər vjuː/",
+   "nghia": "RecyclerView: hiển thị danh sách dài hiệu quả nhờ tái dùng các view đã cuộn khuất",
+   "nhom": "Giao diện",
+   "viDu": "How does a RecyclerView improve performance compared to a traditional ListView?",
+   "viDuNghia": "RecyclerView cải thiện hiệu năng so với ListView truyền thống như thế nào? (Đáp án: tái sử dụng layout của các ô.)"
+  },
+  {
+   "chu": "adapter",
+   "doc": "/əˈdæptər/",
+   "nghia": "bộ chuyển đổi (Adapter): cầu nối đưa dữ liệu vào từng dòng của danh sách",
+   "nhom": "Giao diện",
+   "viDu": "Which subclass of Fragment displays a vertical list of items that are managed by an adapter?",
+   "viDuNghia": "Lớp con nào của Fragment hiển thị một danh sách item theo chiều dọc được quản lý bởi một adapter?"
+  },
+  {
+   "chu": "view holder",
+   "doc": "/vjuː ˈhoʊldər/",
+   "nghia": "ViewHolder: đối tượng giữ sẵn các view của một dòng để khỏi tìm lại nhiều lần",
+   "nhom": "Giao diện",
+   "viDu": "What is the purpose of the \"ViewHolder\" pattern in RecyclerView?",
+   "viDuNghia": "Mục đích của pattern \"ViewHolder\" trong RecyclerView là gì?"
+  },
+  {
+   "chu": "layout manager",
+   "doc": "/ˈleɪaʊt ˈmænɪdʒər/",
+   "nghia": "bộ quản lý bố cục của RecyclerView: xếp các dòng theo danh sách dọc, lưới…",
+   "nhom": "Giao diện",
+   "viDu": "Which layout manager allows a RecyclerView to display items in a grid format? Choose 2 correct answers.",
+   "viDuNghia": "Layout manager nào cho phép RecyclerView hiển thị các mục theo dạng lưới? Chọn 2 đáp án đúng."
+  },
+  {
+   "chu": "fragment transaction",
+   "doc": "/ˈfræɡmənt trænˈzækʃn/",
+   "nghia": "giao dịch fragment: thao tác thêm, thay, gỡ fragment (một phần giao diện tái dùng được) trong Activity",
+   "nhom": "Giao diện",
+   "viDu": "Which method is most efficient for adding a fragment dynamically to an activity?",
+   "viDuNghia": "Phương thức nào hiệu quả nhất để thêm một fragment vào activity một cách động?"
+  },
+  {
+   "chu": "toast",
+   "doc": "/toʊst/",
+   "nghia": "Toast: dòng thông báo nhỏ hiện vài giây rồi tự biến mất",
+   "nhom": "Giao diện",
+   "viDu": "Which of the following is CORRECT definition of Toast?",
+   "viDuNghia": "Định nghĩa nào sau đây ĐÚNG về Toast?"
+  },
+  {
+   "chu": "action bar",
+   "doc": "/ˈækʃn bɑːr/",
+   "nghia": "thanh hành động (app bar): thanh trên cùng chứa tiêu đề và các nút lệnh",
+   "nhom": "Giao diện",
+   "viDu": "How do you add action items to the Action Bar?",
+   "viDuNghia": "Bạn thêm action item vào Action Bar bằng cách nào?"
+  },
+  {
+   "chu": "options menu",
+   "doc": "/ˈɑːpʃnz ˈmenjuː/",
+   "nghia": "trình đơn tuỳ chọn: menu chính của Activity, mở từ thanh hành động",
+   "nhom": "Giao diện",
+   "viDu": "What is the name of the file in which you create options menu items?",
+   "viDuNghia": "Tên file dùng để tạo các mục (item) cho options menu là gì?"
+  },
+  {
+   "chu": "contextual menu",
+   "doc": "/kənˈtekstʃuəl ˈmenjuː/",
+   "nghia": "trình đơn ngữ cảnh: menu hiện khi nhấn giữ một phần tử",
+   "nhom": "Giao diện",
+   "viDu": "What are the key differences between a Floating Context Menu and Contextual Action Mode?",
+   "viDuNghia": "Sự khác biệt chính giữa Floating Context Menu và Contextual Action Mode là gì?"
+  },
+  {
+   "chu": "click listener",
+   "doc": "/klɪk ˈlɪsənər/",
+   "nghia": "bộ lắng nghe bấm: đối tượng xử lý khi người dùng bấm vào view (setOnClickListener)",
+   "nhom": "Giao diện",
+   "viDu": "Which rule applies to a click handler called from the attribute in the layout?",
+   "viDuNghia": "Quy tắc nào áp dụng cho một click handler được gọi từ thuộc tính trong layout?"
+  },
+  {
+   "chu": "density-independent pixel",
+   "doc": "/ˈdensəti ˌɪndɪˈpendənt ˈpɪksl/",
+   "nghia": "điểm ảnh độc lập mật độ (dp): đơn vị kích thước cho view, trông như nhau trên mọi màn hình",
+   "nhom": "Giao diện",
+   "viDu": "In Android, how is the size of a view specified in dp units typically used for layouts?",
+   "viDuNghia": "Trong Android, kích thước của một view được chỉ định bằng đơn vị dp thường được dùng cho layout như thế nào?"
+  },
+  {
+   "chu": "scale-independent pixel",
+   "doc": "/ˈskeɪl ˌɪndɪˈpendənt ˈpɪksl/",
+   "nghia": "điểm ảnh độc lập tỉ lệ (sp): đơn vị cho cỡ chữ, thay đổi theo cỡ chữ người dùng chọn",
+   "nhom": "Giao diện",
+   "viDu": "Text size should be specified in sp, the scale-independent pixel.",
+   "viDuNghia": "Cỡ chữ nên ghi bằng sp, tức điểm ảnh độc lập tỉ lệ."
+  },
+  {
+   "chu": "drawable",
+   "doc": "/ˈdrɔːəbl/",
+   "nghia": "tài nguyên vẽ được: ảnh, hình, biểu tượng trong thư mục res/drawable",
+   "nhom": "Giao diện",
+   "viDu": "Copy the image files into your project's drawable folder.",
+   "viDuNghia": "Sao chép các tệp ảnh vào thư mục drawable của project."
+  },
+  {
+   "chu": "string resource",
+   "doc": "/strɪŋ ˈriːsɔːrs/",
+   "nghia": "tài nguyên chuỗi: chữ hiển thị để trong strings.xml cho dễ dịch nhiều ngôn ngữ",
+   "nhom": "Giao diện",
+   "viDu": "What is the name of the string resource that specifies the application's name?",
+   "viDuNghia": "Tên của tài nguyên chuỗi chỉ định tên ứng dụng là gì?"
+  },
+  {
+   "chu": "layout",
+   "doc": "/ˈleɪaʊt/",
+   "nghia": "layout (Android) – tệp XML sắp xếp View trên màn hình (LinearLayout, RelativeLayout, ConstraintLayout)",
+   "nhom": "Giao diện",
+   "viDu": "Which type of layout is most appropriate for aligning child View controls in relation to the parent or to each other?",
+   "viDuNghia": "Loại layout nào phù hợp nhất để căn chỉnh các View con theo vị trí tương đối với layout cha hoặc với nhau?"
+  },
+  {
+   "chu": "Extensible Markup Language",
+   "nghia": "XML: ngôn ngữ đánh dấu bằng thẻ tự đặt; Android dùng cho layout, manifest, strings; Java web dùng cho web.xml",
+   "nhom": "Giao diện",
+   "viDu": "The root element of AndroidManifest.xml is manifest.",
+   "viDuNghia": "Phần tử gốc của tệp AndroidManifest.xml (tệp XML) là manifest."
+  },
+  {
+   "chu": "text view",
+   "doc": "/tekst vjuː/",
+   "nghia": "TextView: view hiển thị chữ; đổi chữ bằng setText()",
+   "nhom": "Giao diện",
+   "viDu": "How can you change the text of a TextView with ID textViewId to \"Hello World\" programmatically?",
+   "viDuNghia": "Làm sao đổi chữ của một TextView có ID textViewId thành \"Hello World\" bằng code?"
+  },
+  {
+   "chu": "edit text",
+   "doc": "/ˈedɪt tekst/",
+   "nghia": "EditText: ô cho người dùng nhập chữ; android:hint là chữ gợi ý, đọc giá trị bằng getText()",
+   "nhom": "Giao diện",
+   "viDu": "What XML attribute sets a hint inside an EditText field?",
+   "viDuNghia": "Thuộc tính XML nào đặt chữ gợi ý (hint) bên trong ô EditText? (Đáp án: android:hint.)"
+  },
+  {
+   "chu": "style",
+   "doc": "/staɪl/",
+   "nghia": "(Android) style: bộ thuộc tính giao diện áp cho MỘT view; theme áp cho cả app · (web) kiểu CSS, thuộc tính style của thẻ",
+   "nhom": "Giao diện",
+   "viDu": "What is the difference between themes and styles?",
+   "viDuNghia": "Theme và style khác nhau thế nào? (Theme áp cho cả ứng dụng, style áp cho từng view.)"
+  },
+  {
+   "chu": "SQLite database",
+   "doc": "/ˌes kjuː ˈlaɪt ˈdeɪtəbeɪs/",
+   "nghia": "CSDL SQLite: CSDL quan hệ nhỏ gọn có sẵn trong Android, lưu ngay trong máy",
+   "nhom": "Lưu trữ dữ liệu",
+   "viDu": "To insert a record into a SQLite database, which class do you use to compile the SQL query?",
+   "viDuNghia": "Để chèn một bản ghi vào cơ sở dữ liệu SQLite, bạn dùng lớp nào để biên dịch câu truy vấn SQL?"
+  },
+  {
+   "chu": "shared preferences",
+   "doc": "/ʃerd ˈprefrənsɪz/",
+   "nghia": "SharedPreferences: lưu các cặp khoá – giá trị đơn giản (cài đặt, trạng thái đăng nhập)",
+   "nhom": "Lưu trữ dữ liệu",
+   "viDu": "By using SharedPreferences, the data is saved in which format?",
+   "viDuNghia": "Khi dùng SharedPreferences, dữ liệu được lưu ở định dạng nào?"
+  },
+  {
+   "chu": "internal storage",
+   "doc": "/ɪnˈtɜːrnl ˈstɔːrɪdʒ/",
+   "nghia": "bộ nhớ trong: vùng riêng của ứng dụng, ứng dụng khác không đọc được, gỡ ứng dụng là mất",
+   "nhom": "Lưu trữ dữ liệu",
+   "viDu": "Which of the following application should be installed on Internal Storage?",
+   "viDuNghia": "Loại ứng dụng nào sau đây nên được cài đặt ở Internal Storage?"
+  },
+  {
+   "chu": "external storage",
+   "doc": "/ɪkˈstɜːrnl ˈstɔːrɪdʒ/",
+   "nghia": "bộ nhớ ngoài (thẻ nhớ, vùng dùng chung): ứng dụng khác và người dùng truy cập được",
+   "nhom": "Lưu trữ dữ liệu",
+   "viDu": "Which permission allows an Android application to write to external storage?",
+   "viDuNghia": "Quyền nào cho phép một ứng dụng Android ghi vào bộ nhớ ngoài (external storage)?"
+  },
+  {
+   "chu": "Room persistence library",
+   "nghia": "thư viện Room: lớp bọc trên SQLite, dùng chú giải @Entity, @Dao, @Database",
+   "nhom": "Lưu trữ dữ liệu",
+   "viDu": "Which annotation is used for a method in a DAO component to edit an object in a Room database?",
+   "viDuNghia": "Annotation nào được dùng cho một phương thức trong DAO để chỉnh sửa (edit) một đối tượng trong cơ sở dữ liệu Room?"
+  },
+  {
+   "chu": "runtime permission",
+   "doc": "/ˈrʌntaɪm pərˈmɪʃn/",
+   "nghia": "quyền xin lúc chạy: quyền nguy hiểm (vị trí, máy ảnh, danh bạ) phải hỏi người dùng khi ứng dụng đang chạy",
+   "nhom": "Quyền, luồng nền, thông báo",
+   "viDu": "Which Android version introduced the concept of runtime permissions?",
+   "viDuNghia": "Phiên bản Android nào giới thiệu khái niệm quyền lúc chạy (runtime permissions)?"
+  },
+  {
+   "chu": "uses-permission",
+   "doc": "/ˌjuːzɪz pərˈmɪʃn/",
+   "nghia": "thẻ khai báo quyền trong manifest, vd android.permission.INTERNET",
+   "nhom": "Quyền, luồng nền, thông báo",
+   "viDu": "What is the purpose of including the android.permission.INTERNET permission in the AndroidManifest.xml file?",
+   "viDuNghia": "Mục đích của việc khai báo quyền android.permission.INTERNET trong file AndroidManifest.xml là gì?"
+  },
+  {
+   "chu": "main thread",
+   "doc": "/meɪn θred/",
+   "nghia": "luồng chính (luồng UI): luồng vẽ giao diện và nhận thao tác; không được làm việc nặng ở đây",
+   "nhom": "Quyền, luồng nền, thông báo",
+   "viDu": "Long-running work must not block the main thread, or the app shows an ANR dialog.",
+   "viDuNghia": "Việc chạy lâu không được chặn luồng chính, nếu không ứng dụng sẽ hiện hộp thoại ANR (không phản hồi)."
+  },
+  {
+   "chu": "worker thread",
+   "doc": "/ˈwɜːrkər θred/",
+   "nghia": "luồng làm việc (luồng nền): luồng phụ để chạy việc nặng",
+   "nhom": "Quyền, luồng nền, thông báo",
+   "viDu": "Network calls must run on a worker thread, not on the main thread.",
+   "viDuNghia": "Lời gọi mạng phải chạy trên luồng làm việc, không chạy trên luồng chính."
+  },
+  {
+   "chu": "background task",
+   "doc": "/ˈbækɡraʊnd tæsk/",
+   "nghia": "tác vụ nền: việc chạy ngầm không chặn giao diện",
+   "nhom": "Quyền, luồng nền, thông báo",
+   "viDu": "Evaluate the effectiveness of using Services for background tasks compared to Activities:",
+   "viDuNghia": "Đánh giá tính hiệu quả của việc dùng Service cho tác vụ nền so với Activity:"
+  },
+  {
+   "chu": "asynchronous task",
+   "doc": "/eɪˈsɪŋkrənəs tæsk/",
+   "nghia": "tác vụ bất đồng bộ (AsyncTask): lớp cũ chạy việc ở luồng nền rồi cập nhật giao diện",
+   "nhom": "Quyền, luồng nền, thông báo",
+   "viDu": "When using AsyncTask, we can update the UI in which of the below methods:",
+   "viDuNghia": "Khi dùng AsyncTask, ta có thể cập nhật UI ở những phương thức nào dưới đây:"
+  },
+  {
+   "chu": "handler",
+   "doc": "/ˈhændlər/",
+   "nghia": "Handler: đối tượng gửi thông điệp / việc cần chạy sang luồng khác (thường là luồng chính)",
+   "nhom": "Quyền, luồng nền, thông báo",
+   "viDu": "A Handler can post a task from a background thread to the main thread.",
+   "viDuNghia": "Handler có thể chuyển một việc từ luồng nền sang luồng chính."
+  },
+  {
+   "chu": "Application Not Responding",
+   "nghia": "lỗi ANR: ứng dụng \"không phản hồi\" vì luồng chính bị chặn quá lâu",
+   "nhom": "Quyền, luồng nền, thông báo",
+   "viDu": "What is meant by ANR?",
+   "viDuNghia": "ANR nghĩa là gì?"
+  },
+  {
+   "chu": "notification channel",
+   "doc": "/ˌnoʊtɪfɪˈkeɪʃn ˈtʃænl/",
+   "nghia": "kênh thông báo: nhóm thông báo cùng loại (từ Android 8.0), người dùng bật / tắt từng kênh",
+   "nhom": "Quyền, luồng nền, thông báo",
+   "viDu": "How would you create a notification channel in Android 8.0 (API level 26) or higher?",
+   "viDuNghia": "Làm thế nào để tạo một notification channel trong Android 8.0 (API level 26) trở lên?"
+  },
+  {
+   "chu": "network request",
+   "doc": "/ˈnetwɜːrk rɪˈkwest/",
+   "nghia": "yêu cầu mạng: gọi API qua Internet (thư viện Retrofit, Volley)",
+   "nhom": "Quyền, luồng nền, thông báo",
+   "viDu": "Every network request must run on a background thread, not on the main thread.",
+   "viDuNghia": "Mọi yêu cầu mạng phải chạy trên luồng nền, không chạy trên luồng chính."
+  },
+  {
+   "chu": "permission",
+   "doc": "/pərˈmɪʃn/",
+   "nghia": "quyền (Android) – khai báo <uses-permission> trong AndroidManifest.xml để được dùng Internet, SMS, danh bạ…",
+   "nhom": "Quyền, luồng nền, thông báo",
+   "viDu": "What is the purpose of including the android.permission.INTERNET permission in the AndroidManifest.xml file?",
+   "viDuNghia": "Mục đích của việc khai báo quyền android.permission.INTERNET trong file AndroidManifest.xml là gì?"
+  },
+  {
+   "chu": "Retrofit",
+   "doc": "/ˈretroʊfɪt/",
+   "nghia": "thư viện gọi REST API cho Android: khai báo interface có @GET, @POST, @Query rồi Retrofit tự sinh mã gọi mạng",
+   "nhom": "Quyền, luồng nền, thông báo",
+   "viDu": "Which of the following is a correct way to create an instance of a Retrofit API interface?",
+   "viDuNghia": "Cách nào sau đây đúng để tạo một instance của interface API Retrofit?"
+  },
+  {
+   "chu": "Software Development Kit",
+   "nghia": "bộ công cụ phát triển phần mềm (SDK): thư viện và công cụ để viết ứng dụng cho một nền tảng",
+   "nhom": "Nền tảng và kiến trúc",
+   "viDu": "What is the primary purpose of the Android Software Development Kit (SDK)?",
+   "viDuNghia": "Mục đích chính của Android Software Development Kit (SDK) là gì?"
+  },
+  {
+   "chu": "API level",
+   "doc": "/ˌeɪ piː ˈaɪ ˈlevl/",
+   "nghia": "mức API: số nguyên ứng với một phiên bản Android (vd API 26 là Android 8.0)",
+   "nhom": "Nền tảng và kiến trúc",
+   "viDu": "Which parameter specifies the Android API level that Gradle should use to compile your app?",
+   "viDuNghia": "Tham số nào chỉ định API level của Android mà Gradle sẽ dùng để biên dịch ứng dụng?"
+  },
+  {
+   "chu": "Android application package",
+   "nghia": "tệp APK: gói cài đặt của ứng dụng Android",
+   "nhom": "Nền tảng và kiến trúc",
+   "viDu": "An APK file contains the compiled code and resources of an Android app.",
+   "viDuNghia": "Tệp APK chứa mã đã biên dịch và tài nguyên của ứng dụng Android."
+  },
+  {
+   "chu": "emulator",
+   "doc": "/ˈemjuleɪtər/",
+   "nghia": "trình giả lập: thiết bị ảo chạy trên máy tính để thử ứng dụng (AVD)",
+   "nhom": "Nền tảng và kiến trúc",
+   "viDu": "What is the tool that is used to create an emulator to simulate the configuration of a particular type of Android device?",
+   "viDuNghia": "Công cụ nào được dùng để tạo một emulator mô phỏng cấu hình của một loại thiết bị Android cụ thể?"
+  },
+  {
+   "chu": "Linux kernel",
+   "doc": "/ˈlɪnəks ˈkɜːrnl/",
+   "nghia": "nhân Linux: tầng thấp nhất của Android, quản lý bộ nhớ, tiến trình, trình điều khiển phần cứng",
+   "nhom": "Nền tảng và kiến trúc",
+   "viDu": "Android is based on which kernel?",
+   "viDuNghia": "Android được xây dựng dựa trên nhân (kernel) nào?"
+  },
+  {
+   "chu": "Android Runtime",
+   "doc": "/ˈændrɔɪd ˈrʌntaɪm/",
+   "nghia": "môi trường chạy Android (ART): chạy mã ứng dụng, thay cho máy ảo Dalvik cũ",
+   "nhom": "Nền tảng và kiến trúc",
+   "viDu": "The Android Runtime (ART) replaced the older Dalvik virtual machine.",
+   "viDuNghia": "Android Runtime (ART) đã thay cho máy ảo Dalvik cũ."
+  },
+  {
+   "chu": "application framework",
+   "doc": "/ˌæplɪˈkeɪʃn ˈfreɪmwɜːrk/",
+   "nghia": "tầng khung ứng dụng: các API cấp cao (Activity Manager, Content Providers…) cho lập trình viên dùng",
+   "nhom": "Nền tảng và kiến trúc",
+   "viDu": "What is the purpose of the Android Application Framework layer in the Android architecture?",
+   "viDuNghia": "Mục đích của tầng Application Framework trong kiến trúc Android là gì?"
+  },
+  {
+   "chu": "Model-View-ViewModel",
+   "doc": "/ˌmɑːdl ˌvjuː ˈvjuːmɑːdl/",
+   "nghia": "kiến trúc MVVM: View quan sát ViewModel, ViewModel lấy dữ liệu từ Model",
+   "nhom": "Nền tảng và kiến trúc",
+   "viDu": "Which of the followings are components in MVVM architecture?",
+   "viDuNghia": "Đâu là các thành phần trong kiến trúc MVVM?"
+  },
+  {
+   "chu": "Model-View-Presenter",
+   "doc": "/ˌmɑːdl ˌvjuː prɪˈzentər/",
+   "nghia": "kiến trúc MVP: Presenter đứng giữa, lấy dữ liệu từ Model rồi ra lệnh cho View hiển thị",
+   "nhom": "Nền tảng và kiến trúc",
+   "viDu": "Which of the following is a key difference between the MVC and MVP architectural patterns?",
+   "viDuNghia": "Đâu là khác biệt chính giữa hai kiến trúc MVC và MVP?"
+  },
+  {
+   "chu": "hybrid app",
+   "doc": "/ˈhaɪbrɪd æp/",
+   "nghia": "ứng dụng lai: viết bằng công nghệ web rồi bọc trong vỏ native (PhoneGap, Cordova)",
+   "nhom": "Nền tảng và kiến trúc",
+   "viDu": "Which of the following statements about PhoneGap is FALSE?",
+   "viDuNghia": "Phát biểu nào sau đây về PhoneGap là SAI?"
+  },
+  {
+   "chu": "debug log",
+   "doc": "/ˌdiːˈbʌɡ lɔːɡ/",
+   "nghia": "nhật ký gỡ lỗi: dòng in ra Logcat bằng Log.d, Log.i, Log.e",
+   "nhom": "Nền tảng và kiến trúc",
+   "viDu": "Log.d() writes a debug log message that you can read in Logcat.",
+   "viDuNghia": "Log.d() ghi một dòng nhật ký gỡ lỗi mà bạn đọc được trong Logcat."
+  },
+  {
+   "chu": "Android",
+   "doc": "/ˈændrɔɪd/",
+   "nghia": "hệ điều hành di động mã nguồn mở của Google, xây trên nhân Linux; ứng dụng viết bằng Java/Kotlin",
+   "nhom": "Nền tảng và kiến trúc",
+   "viDu": "Android is an open-source mobile operating system based on the Linux kernel.",
+   "viDuNghia": "Android là hệ điều hành di động mã nguồn mở dựa trên nhân Linux."
+  },
+  {
+   "chu": "Hardware Abstraction Layer",
+   "nghia": "tầng trừu tượng phần cứng (HAL): giao diện chuẩn để Android dùng máy ảnh, Bluetooth, cảm biến của từng hãng",
+   "nhom": "Nền tảng và kiến trúc",
+   "viDu": "Which of the following is a key role of the Hardware Abstraction Layer (HAL) in Android?",
+   "viDuNghia": "Vai trò chính nào sau đây thuộc về tầng trừu tượng phần cứng (HAL) trong Android?"
+  },
+  {
+   "chu": "Android Studio",
+   "doc": "/ˈændrɔɪd ˈstuːdioʊ/",
+   "nghia": "môi trường phát triển (IDE) chính thức để viết, chạy giả lập và gỡ lỗi ứng dụng Android",
+   "nhom": "Nền tảng và kiến trúc",
+   "viDu": "How do you add images to an Android Studio project?",
+   "viDuNghia": "Làm thế nào để thêm hình ảnh vào một project Android Studio? (Đáp án: chép tệp ảnh vào thư mục drawable.)"
+  },
+  {
+   "chu": "Gradle",
+   "doc": "/ˈɡreɪdl/",
+   "nghia": "công cụ build của Android: đọc build.gradle để tải thư viện phụ thuộc, biên dịch và đóng gói APK",
+   "nhom": "Nền tảng và kiến trúc",
+   "viDu": "What is the purpose of the build.gradle file at the project level?",
+   "viDuNghia": "Mục đích của tệp build.gradle ở cấp project là gì?"
+  },
+  {
+   "chu": "Logcat",
+   "doc": "/ˈlɔːɡkæt/",
+   "nghia": "cửa sổ trong Android Studio hiện nhật ký hệ thống và các dòng Log.d / Log.e để gỡ lỗi",
+   "nhom": "Nền tảng và kiến trúc",
+   "viDu": "What is the Logcat window in Android Studio?",
+   "viDuNghia": "Cửa sổ Logcat trong Android Studio là gì? (Đáp án: nơi xem log message để gỡ lỗi chương trình.)"
+  },
+  {
+   "chu": "Jetpack",
+   "doc": "/ˈdʒetpæk/",
+   "nghia": "bộ thư viện Android chính thức của Google (Room, ViewModel, LiveData, Navigation…)",
+   "nhom": "Nền tảng và kiến trúc",
+   "viDu": "Which of the following are Jetpack libraries that could be used in the data layer?",
+   "viDuNghia": "Đâu là thư viện Jetpack có thể dùng ở tầng dữ liệu? (Đáp án: Room.)"
+  },
+  {
+   "chu": "debug",
+   "doc": "/diːˈbʌɡ/",
+   "nghia": "gỡ lỗi – tìm và sửa nguyên nhân lỗi trong mã (đặt breakpoint, đọc Logcat); Debug cũng là một mức log (Log.d)",
+   "nhom": "Nền tảng và kiến trúc",
+   "viDu": "What is the Logcat window in Android Studio? → Log messages are used to debug a program.",
+   "viDuNghia": "Cửa sổ Logcat trong Android Studio là gì? → Thông điệp log dùng để gỡ lỗi chương trình."
+  },
+  {
+   "chu": "status bar notification",
+   "nghia": "thông báo trên thanh trạng thái: tin hiện ở đầu màn hình, bên ngoài giao diện ứng dụng",
+   "nhom": "Bổ sung",
+   "viDu": "Which of the following statement about function of class NotificationCompat.Builder is FALSE?",
+   "viDuNghia": "Phát biểu nào sau đây về chức năng của lớp NotificationCompat.Builder là SAI?"
+  },
+  {
+   "chu": "dialog",
+   "doc": "/ˈdaɪəlɔːɡ/",
+   "nghia": "hộp thoại: cửa sổ nhỏ hỏi hoặc báo cho người dùng (AlertDialog)",
+   "nhom": "Bổ sung",
+   "viDu": "Which of the following statements sets the title for an alert dialog?",
+   "viDuNghia": "Câu lệnh nào đặt tiêu đề (title) cho một alert dialog?"
+  },
+  {
+   "chu": "location service",
+   "doc": "/loʊˈkeɪʃn ˈsɜːrvɪs/",
+   "nghia": "dịch vụ vị trí: lấy toạ độ thiết bị bằng GPS hoặc mạng",
+   "nhom": "Bổ sung",
+   "viDu": "Which permission should Android app use when the app wants to track phone's precise location?",
+   "viDuNghia": "Ứng dụng Android nên dùng quyền nào khi muốn theo dõi vị trí chính xác (precise location) của điện thoại?"
+  },
+  {
+   "chu": "camera permission",
+   "doc": "/ˈkæmərə pərˈmɪʃn/",
+   "nghia": "quyền dùng máy ảnh: quyền nguy hiểm, phải khai trong manifest và xin lúc chạy",
+   "nhom": "Bổ sung",
+   "viDu": "The app must request the camera permission before taking a photo.",
+   "viDuNghia": "Ứng dụng phải xin quyền dùng máy ảnh trước khi chụp ảnh."
+  },
+  {
+   "chu": "map marker",
+   "doc": "/mæp ˈmɑːrkər/",
+   "nghia": "điểm đánh dấu trên bản đồ (Google Maps)",
+   "nhom": "Bổ sung",
+   "viDu": "Which Google Map method is used to remove all markers, polylines, polygons, and overlays from the map?",
+   "viDuNghia": "Phương thức nào của Google Map dùng để xóa tất cả marker, polyline, polygon và overlay khỏi bản đồ?"
+  },
+  {
+   "chu": "socket connection",
+   "doc": "/ˈsɑːkɪt kəˈnekʃn/",
+   "nghia": "kết nối socket: kênh hai chiều giữa client và server để trao đổi dữ liệu tức thời",
+   "nhom": "Bổ sung",
+   "viDu": "Which method is used by a client socket to initiate a connection to a server at a specific IP address and port?",
+   "viDuNghia": "Phương thức nào được client socket sử dụng để khởi tạo kết nối tới server tại một địa chỉ IP và cổng cụ thể?"
+  },
+  {
+   "chu": "build configuration",
+   "doc": "/bɪld kənˌfɪɡjəˈreɪʃn/",
+   "nghia": "cấu hình build: tệp build.gradle khai phiên bản SDK, thư viện phụ thuộc của dự án",
+   "nhom": "Bổ sung",
+   "viDu": "The build configuration in build.gradle lists the SDK versions and the dependencies of the app.",
+   "viDuNghia": "Cấu hình build trong build.gradle liệt kê các phiên bản SDK và thư viện phụ thuộc của ứng dụng."
+  },
+  {
+   "chu": "image loading library",
+   "nghia": "thư viện tải ảnh (Glide, Picasso): tải, lưu đệm và hiển thị ảnh từ mạng",
+   "nhom": "Bổ sung",
+   "viDu": "Glide is an image loading library that downloads and caches images.",
+   "viDuNghia": "Glide là thư viện tải ảnh, lo tải về và lưu đệm ảnh."
+  },
+  {
+   "chu": "list view",
+   "doc": "/lɪst vjuː/",
+   "nghia": "ListView: danh sách cuộn dọc kiểu cũ, nay thường thay bằng RecyclerView",
+   "nhom": "Bổ sung",
+   "viDu": "What will happen when setting the choice mode on a ListView object to CHOICE_MODE_SINGLE?",
+   "viDuNghia": "Điều gì sẽ xảy ra khi đặt choice mode của một đối tượng ListView thành CHOICE_MODE_SINGLE?"
+  },
+  {
+   "chu": "menu item",
+   "doc": "/ˈmenjuː ˈaɪtəm/",
+   "nghia": "mục trình đơn",
+   "nhom": "Bổ sung",
+   "viDu": "What is the name of the file in which you create options menu items?",
+   "viDuNghia": "Tên file dùng để tạo các mục (item) cho options menu là gì?"
+  },
+  {
+   "chu": "second activity",
+   "doc": "/ˈsekənd ækˈtɪvəti/",
+   "nghia": "Activity thứ hai: màn hình được mở từ màn hình chính",
+   "nhom": "Bổ sung",
+   "viDu": "Start the second activity with an explicit intent and pass the user name as an extra.",
+   "viDuNghia": "Mở Activity thứ hai bằng một explicit intent và truyền tên người dùng dưới dạng extra."
+  },
+  {
+   "chu": "target component",
+   "doc": "/ˈtɑːrɡɪt kəmˈpoʊnənt/",
+   "nghia": "thành phần đích: thành phần sẽ nhận và xử lý intent",
+   "nhom": "Bổ sung",
+   "viDu": "Which intent type is explicitly specified by the target component's name?",
+   "viDuNghia": "Loại intent nào được chỉ định rõ ràng bằng tên của thành phần đích?"
+  },
+  {
+   "chu": "register a receiver",
+   "nghia": "đăng ký bộ nhận: báo hệ thống rằng receiver muốn nghe loại broadcast nào (registerReceiver hoặc khai trong manifest)",
+   "nhom": "Bổ sung",
+   "viDu": "Which method would you use to send a broadcast to all registered receivers?",
+   "viDuNghia": "Phương thức nào dùng để gửi một broadcast tới tất cả các receiver đã đăng ký?"
+  },
+  {
+   "chu": "backup agent",
+   "doc": "/ˈbækʌp ˈeɪdʒənt/",
+   "nghia": "tác nhân sao lưu: lớp lo sao lưu và khôi phục dữ liệu của ứng dụng",
+   "nhom": "Bổ sung",
+   "viDu": "When you create a backup agent by extending BackupAgent, which callback methods should you implement?",
+   "viDuNghia": "Khi tạo một backup agent bằng cách kế thừa BackupAgent, bạn cần triển khai những phương thức callback nào?"
+  },
+  {
+   "chu": "Google Maps",
+   "doc": "/ˈɡuːɡl mæps/",
+   "nghia": "dịch vụ bản đồ của Google; trong Android dùng Maps SDK để hiện bản đồ, thêm marker (addMarker)",
+   "nhom": "Bổ sung",
+   "viDu": "Which method is used to add a marker to Google Maps?",
+   "viDuNghia": "Phương thức nào dùng để thêm một điểm đánh dấu (marker) vào Google Maps? (Đáp án: addMarker.)"
+  }
+ ]
+}

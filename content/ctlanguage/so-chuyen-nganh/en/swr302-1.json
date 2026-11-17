@@ -1,0 +1,763 @@
+{
+ "ma": "swr302-1",
+ "nn": "en",
+ "ten": "SWR302 · 1. Nền tảng yêu cầu & vai trò",
+ "moTa": "Môn Software Requirements (FPT): các loại và cấp yêu cầu, tầm nhìn – phạm vi, quy tắc nghiệp vụ, vai trò BA và các bên liên quan. Từ trích từ đề FE/PE thật; phần lớn câu ví dụ là câu hỏi thật trong đề.",
+ "bieuTuong": "list.bullet.clipboard.fill",
+ "thuTu": -956,
+ "tu": [
+  {
+   "chu": "software requirement",
+   "doc": "/ˈsɔːftwer rɪˈkwaɪərmənt/",
+   "nghia": "yêu cầu phần mềm: điều phần mềm phải làm và phải đạt; \"Software Requirements\" cũng là tên môn và tên giáo trình Wiegers",
+   "nhom": "Loại yêu cầu",
+   "viDu": "Software requirements serve as input to the project planning process.",
+   "viDuNghia": "Yêu cầu phần mềm là đầu vào cho quy trình lập kế hoạch dự án."
+  },
+  {
+   "chu": "business requirement",
+   "doc": "/ˈbɪznəs rɪˈkwaɪərmənt/",
+   "nghia": "yêu cầu nghiệp vụ: mục tiêu cấp cao của tổ chức, trả lời câu \"vì sao làm hệ thống này\"",
+   "nhom": "Loại yêu cầu",
+   "viDu": "Business requirements issues must be resolved:",
+   "viDuNghia": "Các vấn đề về yêu cầu nghiệp vụ phải được giải quyết:"
+  },
+  {
+   "chu": "user requirement",
+   "doc": "/ˈjuːzər rɪˈkwaɪərmənt/",
+   "nghia": "yêu cầu người dùng: mục tiêu hay công việc mà một lớp người dùng phải làm được với hệ thống",
+   "nhom": "Loại yêu cầu",
+   "viDu": "A user requirement is a goal or task that specific classes of users must be able to perform with a system, or a desired product attribute.",
+   "viDuNghia": "Yêu cầu người dùng là một mục tiêu hay công việc mà những lớp người dùng cụ thể phải làm được với hệ thống, hoặc một thuộc tính mong muốn của sản phẩm."
+  },
+  {
+   "chu": "functional requirement",
+   "doc": "/ˈfʌŋkʃənl rɪˈkwaɪərmənt/",
+   "nghia": "yêu cầu chức năng: mô tả hành vi hệ thống thể hiện trong điều kiện cụ thể (hệ thống LÀM gì)",
+   "nhom": "Loại yêu cầu",
+   "viDu": "Which of the following is the CORRECT definition of the term Functional Requirement?",
+   "viDuNghia": "Đâu là định nghĩa ĐÚNG của thuật ngữ Yêu cầu chức năng (Functional Requirement)?"
+  },
+  {
+   "chu": "non-functional requirement",
+   "doc": "/ˌnɑːnˈfʌŋkʃənl rɪˈkwaɪərmənt/",
+   "nghia": "yêu cầu phi chức năng (NFR): thuộc tính hệ thống phải có hoặc ràng buộc phải tuân theo (nhanh, an toàn, dễ dùng…)",
+   "nhom": "Loại yêu cầu",
+   "viDu": "What is the key difference between functional and non-functional requirements?",
+   "viDuNghia": "Khác biệt cốt lõi giữa yêu cầu chức năng và yêu cầu phi chức năng là gì?"
+  },
+  {
+   "chu": "system requirement",
+   "doc": "/ˈsɪstəm rɪˈkwaɪərmənt/",
+   "nghia": "yêu cầu hệ thống: yêu cầu cấp cao nhất cho sản phẩm gồm nhiều hệ thống con (phần mềm, hoặc phần mềm + phần cứng)",
+   "nhom": "Loại yêu cầu",
+   "viDu": "Which of the following is the CORRECT definition of the term System Requirement?",
+   "viDuNghia": "Đâu là định nghĩa ĐÚNG của thuật ngữ Yêu cầu hệ thống (System Requirement)?"
+  },
+  {
+   "chu": "external interface requirement",
+   "nghia": "yêu cầu giao diện ngoài: mô tả kết nối giữa phần mềm với người dùng, hệ thống khác hoặc thiết bị phần cứng",
+   "nhom": "Loại yêu cầu",
+   "viDu": "What are the external interface requirements?",
+   "viDuNghia": "Yêu cầu giao diện ngoài (external interface requirements) là gì?"
+  },
+  {
+   "chu": "data requirement",
+   "doc": "/ˈdeɪtə rɪˈkwaɪərmənt/",
+   "nghia": "yêu cầu dữ liệu: mô tả dữ liệu hệ thống phải lưu, xử lý, hiển thị (định dạng, kiểu, giá trị hợp lệ)",
+   "nhom": "Loại yêu cầu",
+   "viDu": "When documenting data requirements for a system, which of the following practices should be followed? Select three.",
+   "viDuNghia": "Khi lập tài liệu yêu cầu dữ liệu cho hệ thống, nên tuân thủ những thực hành nào? Chọn ba."
+  },
+  {
+   "chu": "technical requirement",
+   "doc": "/ˈteknɪkl rɪˈkwaɪərmənt/",
+   "nghia": "yêu cầu kỹ thuật: yêu cầu về công nghệ, nền tảng, hạ tầng mà giải pháp phải theo",
+   "nhom": "Loại yêu cầu",
+   "viDu": "\"The database must run on PostgreSQL 15\" is a technical requirement, not a user requirement.",
+   "viDuNghia": "\"Cơ sở dữ liệu phải chạy trên PostgreSQL 15\" là yêu cầu kỹ thuật, không phải yêu cầu người dùng."
+  },
+  {
+   "chu": "assumed requirement",
+   "doc": "/əˈsuːmd rɪˈkwaɪərmənt/",
+   "nghia": "yêu cầu ngầm định: điều người dùng mặc nhiên mong có nên không nói ra",
+   "nhom": "Loại yêu cầu",
+   "viDu": "Which of the following is the best description of Assumed requirements?",
+   "viDuNghia": "Mô tả nào đúng nhất về yêu cầu ngầm định (Assumed requirements)?"
+  },
+  {
+   "chu": "stakeholder requirement",
+   "doc": "/ˈsteɪkhoʊldər rɪˈkwaɪərmənt/",
+   "nghia": "yêu cầu của bên liên quan: nhu cầu của một bên liên quan cụ thể, cầu nối giữa yêu cầu nghiệp vụ và yêu cầu giải pháp",
+   "nhom": "Loại yêu cầu",
+   "viDu": "Each stakeholder requirement should trace back to a business requirement.",
+   "viDuNghia": "Mỗi yêu cầu của bên liên quan phải truy ngược được về một yêu cầu nghiệp vụ."
+  },
+  {
+   "chu": "capability",
+   "doc": "/ˌkeɪpəˈbɪləti/",
+   "nghia": "khả năng (của hệ thống): việc mà hệ thống làm được cho người dùng",
+   "nhom": "Loại yêu cầu",
+   "viDu": "A requirement is a condition or capability needed by a stakeholder to solve a problem or achieve an objective.",
+   "viDuNghia": "Yêu cầu là một điều kiện hay khả năng mà bên liên quan cần để giải quyết vấn đề hoặc đạt mục tiêu."
+  },
+  {
+   "chu": "behavior",
+   "doc": "/bɪˈheɪvjər/",
+   "nghia": "hành vi: cách hệ thống phản ứng, xử lý trong một tình huống",
+   "nhom": "Loại yêu cầu",
+   "viDu": "Which type of requirement best describes the behavior and information that the solution will manage, including specific system actions or responses?",
+   "viDuNghia": "Loại yêu cầu nào mô tả tốt nhất hành vi và thông tin mà giải pháp sẽ quản lý, bao gồm các hành động hoặc phản hồi cụ thể của hệ thống?"
+  },
+  {
+   "chu": "functionality",
+   "doc": "/ˌfʌŋkʃəˈnæləti/",
+   "nghia": "chức năng, phần việc mà hệ thống cung cấp",
+   "nhom": "Loại yêu cầu",
+   "viDu": "What is a potential consequence of adding more functionality through a series of iterations?",
+   "viDuNghia": "Hậu quả tiềm tàng của việc thêm nhiều chức năng qua một loạt lần lặp là gì?"
+  },
+  {
+   "chu": "customer needs",
+   "doc": "/ˈkʌstəmər niːdz/",
+   "nghia": "nhu cầu của khách hàng: điều khách thật sự cần, là gốc để viết yêu cầu",
+   "nhom": "Loại yêu cầu",
+   "viDu": "How to reduce the gap between what the customer needs and what the developer builds?",
+   "viDuNghia": "Làm sao thu hẹp khoảng cách giữa thứ khách hàng cần và thứ lập trình viên xây dựng?"
+  },
+  {
+   "chu": "expectation",
+   "doc": "/ˌekspekˈteɪʃn/",
+   "nghia": "kỳ vọng: điều khách hàng, người dùng mong sản phẩm sẽ có",
+   "nhom": "Loại yêu cầu",
+   "viDu": "What is meant by the \"Expectation Gap\" in software development?",
+   "viDuNghia": "\"Khoảng cách kỳ vọng\" (Expectation Gap) trong phát triển phần mềm nghĩa là gì?"
+  },
+  {
+   "chu": "expectation gap",
+   "doc": "/ˌekspekˈteɪʃn ɡæp/",
+   "nghia": "khoảng cách kỳ vọng: chênh lệch giữa cái khách hàng cần và cái nhóm phát triển làm ra",
+   "nhom": "Loại yêu cầu",
+   "viDu": "Without customer contact the expectation gap increases during software development time.",
+   "viDuNghia": "Nếu không tiếp xúc với khách hàng, khoảng cách kỳ vọng (expectation gap) tăng lên trong suốt quá trình phát triển phần mềm"
+  },
+  {
+   "chu": "derived requirement",
+   "doc": "/dɪˈraɪvd rɪˈkwaɪərmənt/",
+   "nghia": "yêu cầu dẫn xuất: yêu cầu chi tiết suy ra khi phân rã một yêu cầu cấp cao hơn",
+   "nhom": "Loại yêu cầu",
+   "viDu": "In the embedded and other real-time systems project, the analyst should decompose individual system requirements into numerous derived requirements. Which type of requirement will allocate to people?",
+   "viDuNghia": "Trong dự án hệ thống nhúng và thời gian thực, nhà phân tích phải phân rã từng yêu cầu hệ thống thành nhiều yêu cầu dẫn xuất. Loại yêu cầu nào sẽ được phân bổ cho CON NGƯỜI?"
+  },
+  {
+   "chu": "requirement",
+   "doc": "/rɪˈkwaɪərmənt/",
+   "nghia": "yêu cầu (phần mềm) – điều hệ thống phải làm hoặc phải đạt; có yêu cầu chức năng và phi chức năng",
+   "nhom": "Loại yêu cầu",
+   "viDu": "Which of the following is the most precise definition of a requirement?",
+   "viDuNghia": "Đâu là định nghĩa chính xác nhất về một yêu cầu (requirement)?"
+  },
+  {
+   "chu": "vision and scope document",
+   "nghia": "tài liệu tầm nhìn và phạm vi: ghi yêu cầu nghiệp vụ, tầm nhìn sản phẩm và phạm vi dự án",
+   "nhom": "Tầm nhìn & phạm vi",
+   "viDu": "What is Vision and Scope Document derived from?",
+   "viDuNghia": "Tài liệu Tầm nhìn và Phạm vi (Vision and Scope) được rút ra từ đâu?"
+  },
+  {
+   "chu": "product vision",
+   "doc": "/ˈprɑːdʌkt ˈvɪʒn/",
+   "nghia": "tầm nhìn sản phẩm: sản phẩm cuối cùng sẽ là gì và đạt được gì về lâu dài",
+   "nhom": "Tầm nhìn & phạm vi",
+   "viDu": "The following statement is true or false? \"Project scope is more dynamic than product vision\".",
+   "viDuNghia": "Phát biểu sau đúng hay sai? \"Phạm vi dự án biến động nhiều hơn tầm nhìn sản phẩm\"."
+  },
+  {
+   "chu": "project scope",
+   "doc": "/ˈprɑːdʒekt skoʊp/",
+   "nghia": "phạm vi dự án: phần của tầm nhìn sản phẩm mà dự án (bản phát hành) hiện tại sẽ làm",
+   "nhom": "Tầm nhìn & phạm vi",
+   "viDu": "Which of the following statements accurately describe the use of context diagrams in representing project scope? Select two.",
+   "viDuNghia": "Phát biểu nào mô tả chính xác việc dùng sơ đồ ngữ cảnh (context diagram) để biểu diễn phạm vi dự án? Chọn hai."
+  },
+  {
+   "chu": "scope creep",
+   "doc": "/skoʊp kriːp/",
+   "nghia": "phình phạm vi: yêu cầu mới cứ được thêm dần mà không kiểm soát, làm trễ hạn và đội chi phí",
+   "nhom": "Tầm nhìn & phạm vi",
+   "viDu": "What is the first step to controlling scope creep in a project?",
+   "viDuNghia": "Bước đầu tiên để kiểm soát phình phạm vi (scope creep) trong một dự án là gì?"
+  },
+  {
+   "chu": "business objective",
+   "doc": "/ˈbɪznəs əbˈdʒektɪv/",
+   "nghia": "mục tiêu nghiệp vụ: kết quả kinh doanh đo được mà tổ chức muốn đạt nhờ sản phẩm",
+   "nhom": "Tầm nhìn & phạm vi",
+   "viDu": "How does the MoSCoW method contribute to prioritizing requirements based on business objectives?",
+   "viDuNghia": "Phương pháp MoSCoW đóng góp thế nào vào việc ưu tiên hoá yêu cầu dựa trên mục tiêu nghiệp vụ?"
+  },
+  {
+   "chu": "business opportunity",
+   "doc": "/ˈbɪznəs ˌɑːpərˈtuːnəti/",
+   "nghia": "cơ hội kinh doanh: thị trường hay vấn đề mà sản phẩm nhắm tới để sinh lợi",
+   "nhom": "Tầm nhìn & phạm vi",
+   "viDu": "The business opportunity section describes the business opportunity that exists and the market in which the product will be competing.",
+   "viDuNghia": "Mục Business opportunity mô tả cơ hội kinh doanh đang có và thị trường mà sản phẩm sẽ cạnh tranh."
+  },
+  {
+   "chu": "business benefit",
+   "doc": "/ˈbɪznəs ˈbenɪfɪt/",
+   "nghia": "lợi ích kinh doanh: cái lợi tổ chức thu được khi có sản phẩm",
+   "nhom": "Tầm nhìn & phạm vi",
+   "viDu": "The business objectives summarize the important business benefits the product will provide in a quantitative and measurable way.",
+   "viDuNghia": "Mục business objectives tóm tắt các lợi ích kinh doanh quan trọng mà sản phẩm sẽ mang lại theo cách định lượng và đo được."
+  },
+  {
+   "chu": "business value",
+   "doc": "/ˈbɪznəs ˈvæljuː/",
+   "nghia": "giá trị kinh doanh: mức độ một yêu cầu, tính năng đóng góp cho mục tiêu của tổ chức",
+   "nhom": "Tầm nhìn & phạm vi",
+   "viDu": "By maintaining a dynamic product backlog where new tasks are prioritized based on business value, and lower-priority tasks can be deferred or removed.",
+   "viDuNghia": "Duy trì một product backlog động, nơi các công việc mới được ưu tiên theo giá trị nghiệp vụ, và công việc ưu tiên thấp có thể được hoãn hoặc loại bỏ."
+  },
+  {
+   "chu": "business context",
+   "doc": "/ˈbɪznəs ˈkɑːntekst/",
+   "nghia": "bối cảnh nghiệp vụ: hoàn cảnh kinh doanh, các bên liên quan và môi trường mà dự án diễn ra",
+   "nhom": "Tầm nhìn & phạm vi",
+   "viDu": "The structure of the vision and scope document includes Business Requirements, Scope and Limitations, and Business Context.",
+   "viDuNghia": "Cấu trúc tài liệu tầm nhìn và phạm vi gồm Yêu cầu nghiệp vụ, Phạm vi và giới hạn, và Bối cảnh nghiệp vụ."
+  },
+  {
+   "chu": "success metric",
+   "doc": "/səkˈses ˈmetrɪk/",
+   "nghia": "thước đo thành công: chỉ số dùng để biết dự án có đạt mục tiêu nghiệp vụ hay không",
+   "nhom": "Tầm nhìn & phạm vi",
+   "viDu": "A success metric such as \"cut order-processing time by 30%\" tells us whether the project met its business objective.",
+   "viDuNghia": "Một thước đo thành công như \"giảm 30% thời gian xử lý đơn\" cho biết dự án có đạt mục tiêu nghiệp vụ hay không."
+  },
+  {
+   "chu": "vision statement",
+   "doc": "/ˈvɪʒn ˈsteɪtmənt/",
+   "nghia": "tuyên bố tầm nhìn: đoạn ngắn tóm tắt mục đích lâu dài của sản phẩm",
+   "nhom": "Tầm nhìn & phạm vi",
+   "viDu": "Which of the following elements should be included when crafting a vision statement? Select three",
+   "viDuNghia": "Những thành phần nào sau đây nên có khi soạn một tuyên bố tầm nhìn (vision statement)? Chọn ba."
+  },
+  {
+   "chu": "limitation",
+   "doc": "/ˌlɪmɪˈteɪʃn/",
+   "nghia": "giới hạn: thứ sản phẩm sẽ KHÔNG làm, ghi rõ trong mục \"scope and limitations\"",
+   "nhom": "Tầm nhìn & phạm vi",
+   "viDu": "What is the main purpose of defining \"Scope and limitations\" in a software project?",
+   "viDuNghia": "Mục đích chính của việc định nghĩa \"Phạm vi và giới hạn\" trong một dự án phần mềm là gì?"
+  },
+  {
+   "chu": "high-level",
+   "doc": "/ˌhaɪ ˈlevl/",
+   "nghia": "cấp cao, tổng quát: mô tả ở mức khái quát, chưa đi vào chi tiết",
+   "nhom": "Tầm nhìn & phạm vi",
+   "viDu": "What is the definition of a high-level requirement for a product that contains multiple subsystems, which could be all software or software and hardware?",
+   "viDuNghia": "Định nghĩa nào chỉ một yêu cầu ở mức cao cho một sản phẩm gồm nhiều hệ thống con, có thể toàn phần mềm hoặc vừa phần mềm vừa phần cứng?"
+  },
+  {
+   "chu": "alignment",
+   "doc": "/əˈlaɪnmənt/",
+   "nghia": "sự ăn khớp, thống nhất (với mục tiêu nghiệp vụ)",
+   "nhom": "Tầm nhìn & phạm vi",
+   "viDu": "In the context of change management on agile projects, how are changes typically managed to maintain alignment with business objectives and priorities?",
+   "viDuNghia": "Trong bối cảnh quản lý thay đổi ở dự án agile, thay đổi thường được quản lý thế nào để duy trì sự nhất quán với mục tiêu và ưu tiên nghiệp vụ?"
+  },
+  {
+   "chu": "business need",
+   "doc": "/ˈbɪznəs niːd/",
+   "nghia": "nhu cầu nghiệp vụ: vấn đề hay cơ hội mà tổ chức muốn giải quyết",
+   "nhom": "Tầm nhìn & phạm vi",
+   "viDu": "With whom should an Agile analyst collaborate closely to ensure the requirements accurately reflect business needs?",
+   "viDuNghia": "Nhà phân tích Agile nên phối hợp chặt chẽ với ai để đảm bảo yêu cầu phản ánh đúng nhu cầu nghiệp vụ?"
+  },
+  {
+   "chu": "system of interest",
+   "nghia": "hệ thống đang xét: hệ thống mà dự án đang xây dựng, phân biệt với các hệ thống xung quanh",
+   "nhom": "Tầm nhìn & phạm vi",
+   "viDu": "An ecosystem map shows all of the systems related to the system of interest that interact with one another and the nature of those interactions.",
+   "viDuNghia": "Bản đồ hệ sinh thái (ecosystem map) thể hiện tất cả các hệ thống liên quan tới hệ thống đang xét, cách chúng tương tác với nhau và bản chất của các tương tác đó."
+  },
+  {
+   "chu": "fact",
+   "doc": "/fækt/",
+   "nghia": "sự kiện (một loại quy tắc nghiệp vụ): phát biểu luôn đúng về nghiệp vụ tại một thời điểm",
+   "nhom": "Quy tắc nghiệp vụ",
+   "viDu": "\"Every order has a shipping charge\" is a fact.",
+   "viDuNghia": "\"Mỗi đơn hàng đều có phí vận chuyển\" là một sự kiện (fact)."
+  },
+  {
+   "chu": "action enabler",
+   "doc": "/ˈækʃn ɪˈneɪblər/",
+   "nghia": "quy tắc kích hoạt hành động: khi điều kiện đúng thì một hành động được thực hiện (nếu… thì làm…)",
+   "nhom": "Quy tắc nghiệp vụ",
+   "viDu": "Which is NOT an example of an action enabler, a type of business rule?",
+   "viDuNghia": "Đâu KHÔNG phải ví dụ về quy tắc kích hoạt hành động (action enabler), một loại quy tắc nghiệp vụ?"
+  },
+  {
+   "chu": "inference",
+   "doc": "/ˈɪnfərəns/",
+   "nghia": "suy diễn (loại quy tắc nghiệp vụ): rút ra một sự kiện mới khi các điều kiện đã đúng",
+   "nhom": "Quy tắc nghiệp vụ",
+   "viDu": "\"If a lead doesn't respond within 30 days of the first contact, it must be a cold lead.\" This business rule is an inference.",
+   "viDuNghia": "\"Nếu khách tiềm năng không phản hồi trong 30 ngày kể từ lần liên hệ đầu thì đó là khách nguội.\" Quy tắc nghiệp vụ này là một suy diễn."
+  },
+  {
+   "chu": "computation",
+   "doc": "/ˌkɑːmpjuˈteɪʃn/",
+   "nghia": "phép tính (loại quy tắc nghiệp vụ): quy tắc tính bằng công thức hoặc thuật toán, ví dụ tính thuế, giảm giá",
+   "nhom": "Quy tắc nghiệp vụ",
+   "viDu": "\"The total price is the sum of all item prices plus 8% sales tax\" is a computation.",
+   "viDuNghia": "\"Tổng tiền bằng tổng giá các món cộng 8% thuế bán hàng\" là một phép tính."
+  },
+  {
+   "chu": "policy",
+   "doc": "/ˈpɑːləsi/",
+   "nghia": "chính sách: quy định chung của tổ chức, thường là nguồn của quy tắc nghiệp vụ",
+   "nhom": "Quy tắc nghiệp vụ",
+   "viDu": "Which statement is the change policy?",
+   "viDuNghia": "Câu nào là chính sách thay đổi (change policy)?"
+  },
+  {
+   "chu": "guideline",
+   "doc": "/ˈɡaɪdlaɪn/",
+   "nghia": "hướng dẫn, nguyên tắc chỉ dẫn cách làm",
+   "nhom": "Quy tắc nghiệp vụ",
+   "viDu": "What is one guideline for naming processes in a DFD?",
+   "viDuNghia": "Một hướng dẫn để đặt tên cho các tiến trình (process) trong DFD là gì?"
+  },
+  {
+   "chu": "compliance",
+   "doc": "/kəmˈplaɪəns/",
+   "nghia": "sự tuân thủ (luật, quy định, tiêu chuẩn)",
+   "nhom": "Quy tắc nghiệp vụ",
+   "viDu": "The system must be in compliance with data protection law.",
+   "viDuNghia": "Hệ thống phải tuân thủ luật bảo vệ dữ liệu."
+  },
+  {
+   "chu": "regulatory",
+   "doc": "/ˈreɡjələtɔːri/",
+   "nghia": "thuộc quy định pháp lý, do cơ quan quản lý đặt ra",
+   "nhom": "Quy tắc nghiệp vụ",
+   "viDu": "A benefit of requirements tracing is identifying all regulatory compliance requirements and confirming their correct implementation.",
+   "viDuNghia": "Một lợi ích của truy vết yêu cầu là nhận diện mọi yêu cầu tuân thủ quy định pháp lý và xác nhận chúng được cài đặt đúng."
+  },
+  {
+   "chu": "constrain",
+   "doc": "/kənˈstreɪn/",
+   "nghia": "ràng buộc, hạn chế (động từ)",
+   "nhom": "Quy tắc nghiệp vụ",
+   "viDu": "A business rule is a statement that defines or constrains some aspect of the business to control or influence its behavior.",
+   "viDuNghia": "Quy tắc nghiệp vụ là một phát biểu định nghĩa hoặc ràng buộc một khía cạnh của nghiệp vụ nhằm kiểm soát hoặc ảnh hưởng đến hành vi của nó."
+  },
+  {
+   "chu": "business rule",
+   "doc": "/ˈbɪznəs ruːl/",
+   "nghia": "quy tắc nghiệp vụ – chính sách, luật, điều kiện của tổ chức mà phần mềm phải tuân theo (fact, constraint, computation…)",
+   "nhom": "Quy tắc nghiệp vụ",
+   "viDu": "Which is the correct definition of the term business rule based on the information system perspective?",
+   "viDuNghia": "Định nghĩa nào đúng cho thuật ngữ business rule (quy tắc nghiệp vụ) theo góc nhìn HỆ THỐNG THÔNG TIN?"
+  },
+  {
+   "chu": "business process",
+   "doc": "/ˈbɪznəs ˈprɑːses/",
+   "nghia": "quy trình nghiệp vụ – chuỗi công việc thật của tổ chức (BPM, BPA, BPI)",
+   "nhom": "Quy tắc nghiệp vụ",
+   "viDu": "Which of the following statements correctly describes the term business process improvement (BPI)?",
+   "viDuNghia": "Phát biểu nào mô tả đúng thuật ngữ cải tiến quy trình nghiệp vụ (BPI)?"
+  },
+  {
+   "chu": "business analyst",
+   "doc": "/ˈbɪznəs ˈænəlɪst/",
+   "nghia": "chuyên viên phân tích nghiệp vụ (BA): người khơi gợi, phân tích, ghi lại và kiểm chứng yêu cầu",
+   "nhom": "Vai trò & các bên",
+   "viDu": "What are the tasks of a business analyst? Choose 3 correct answers.",
+   "viDuNghia": "Nhiệm vụ của chuyên viên phân tích nghiệp vụ (BA) là gì? Chọn 3 đáp án đúng."
+  },
+  {
+   "chu": "product owner",
+   "doc": "/ˈprɑːdʌkt ˈoʊnər/",
+   "nghia": "chủ sản phẩm (PO): trong Agile, người đại diện khách hàng, quyết định và xếp ưu tiên các hạng mục trong backlog",
+   "nhom": "Vai trò & các bên",
+   "viDu": "On projects using agile development methods, the traditional project role Business Analyst will likely be a Product owner.",
+   "viDuNghia": "Trong các dự án dùng phương pháp phát triển linh hoạt (agile), vai trò truyền thống Business Analyst nhiều khả năng sẽ trở thành Product owner"
+  },
+  {
+   "chu": "product champion",
+   "doc": "/ˈprɑːdʌkt ˈtʃæmpiən/",
+   "nghia": "đại diện người dùng chủ chốt: thành viên tiêu biểu của một lớp người dùng, cung cấp yêu cầu thay cho cả nhóm mình",
+   "nhom": "Vai trò & các bên",
+   "viDu": "Who is the product champion?",
+   "viDuNghia": "Product champion là ai?"
+  },
+  {
+   "chu": "user class",
+   "doc": "/ˈjuːzər klæs/",
+   "nghia": "lớp người dùng: nhóm người dùng có đặc điểm và nhu cầu giống nhau đối với hệ thống",
+   "nhom": "Vai trò & các bên",
+   "viDu": "A designated representative of a specific user class who supplies the user requirements for the group that he or she represents",
+   "viDuNghia": "Người đại diện được chỉ định của một lớp người dùng cụ thể, cung cấp các yêu cầu người dùng cho nhóm mà người đó đại diện"
+  },
+  {
+   "chu": "favored user class",
+   "nghia": "lớp người dùng được ưu tiên: lớp mà sự hài lòng của họ gắn chặt nhất với mục tiêu kinh doanh, được ưu tiên khi có xung đột",
+   "nhom": "Vai trò & các bên",
+   "viDu": "To resolve a requirement disagreement between user classes, the favored user class gets preference.",
+   "viDuNghia": "Để giải quyết bất đồng về yêu cầu giữa các lớp người dùng, lớp người dùng được ưu tiên sẽ được chọn theo."
+  },
+  {
+   "chu": "user representative",
+   "doc": "/ˈjuːzər ˌreprɪˈzentətɪv/",
+   "nghia": "đại diện người dùng: người nói thay nhu cầu của một nhóm người dùng",
+   "nhom": "Vai trò & các bên",
+   "viDu": "Why is it important to engage with a variety of user representatives rather than relying on a single representative?",
+   "viDuNghia": "Vì sao cần làm việc với nhiều đại diện người dùng khác nhau thay vì chỉ dựa vào một đại diện duy nhất?"
+  },
+  {
+   "chu": "acquirer",
+   "doc": "/əˈkwaɪərər/",
+   "nghia": "bên mua, bên đặt hàng (trong dự án thuê ngoài)",
+   "nhom": "Vai trò & các bên",
+   "viDu": "Why is clear communication crucial in acquirer-supplier interactions in outsourced projects? (Choose 2 answers)",
+   "viDuNghia": "Tại sao giao tiếp rõ ràng lại quan trọng trong tương tác bên mua - bên cung cấp ở các dự án thuê ngoài? (Chọn 2 đáp án)"
+  },
+  {
+   "chu": "development team",
+   "doc": "/dɪˈveləpmənt tiːm/",
+   "nghia": "nhóm phát triển: những người thiết kế, viết mã, kiểm thử sản phẩm",
+   "nhom": "Vai trò & các bên",
+   "viDu": "What is the main benefit of fostering a collaborative relationship between the development team and other stakeholders in the requirements process?",
+   "viDuNghia": "Lợi ích chính của việc xây dựng quan hệ hợp tác giữa nhóm phát triển và các bên liên quan trong quy trình yêu cầu là gì?"
+  },
+  {
+   "chu": "user community",
+   "doc": "/ˈjuːzər kəˈmjuːnəti/",
+   "nghia": "cộng đồng người dùng: toàn bộ những người sẽ dùng sản phẩm",
+   "nhom": "Vai trò & các bên",
+   "viDu": "Product champions are a few key members of the user community who provide the requirements.",
+   "viDuNghia": "Product champion là vài thành viên chủ chốt của cộng đồng người dùng, những người cung cấp yêu cầu."
+  },
+  {
+   "chu": "decision maker",
+   "doc": "/dɪˈsɪʒn ˈmeɪkər/",
+   "nghia": "người ra quyết định: người có quyền chốt khi các bên không thống nhất về yêu cầu",
+   "nhom": "Vai trò & các bên",
+   "viDu": "What is the benefit of having a small group representing key areas as decision makers in a project?",
+   "viDuNghia": "Lợi ích của việc có một nhóm nhỏ đại diện các lĩnh vực then chốt làm người ra quyết định trong dự án là gì?"
+  },
+  {
+   "chu": "stakeholder analysis",
+   "doc": "/ˈsteɪkhoʊldər əˈnæləsɪs/",
+   "nghia": "phân tích bên liên quan: xác định ai liên quan, họ quan tâm gì và ảnh hưởng tới đâu",
+   "nhom": "Vai trò & các bên",
+   "viDu": "Stakeholder analysis identifies who is affected by the project and how much influence each group has.",
+   "viDuNghia": "Phân tích bên liên quan xác định ai bị dự án ảnh hưởng và mỗi nhóm có ảnh hưởng tới đâu."
+  },
+  {
+   "chu": "involvement",
+   "doc": "/ɪnˈvɑːlvmənt/",
+   "nghia": "sự tham gia (của khách hàng, bên liên quan vào dự án)",
+   "nhom": "Vai trò & các bên",
+   "viDu": "Which of the following is NOT TRUE for customer involvement during the project lifecycle?",
+   "viDuNghia": "Điều nào KHÔNG ĐÚNG về sự tham gia của khách hàng trong vòng đời dự án?"
+  },
+  {
+   "chu": "collaboration",
+   "doc": "/kəˌlæbəˈreɪʃn/",
+   "nghia": "sự cộng tác, phối hợp làm việc",
+   "nhom": "Vai trò & các bên",
+   "viDu": "The close collaboration of customers with developers on agile projects generally means that requirements can be documented in less detail than on traditional projects.",
+   "viDuNghia": "Sự phối hợp chặt chẽ giữa khách hàng và lập trình viên trong các dự án agile nói chung có nghĩa là yêu cầu có thể được ghi tài liệu ở mức chi tiết ít hơn so với các dự án truyền thống."
+  },
+  {
+   "chu": "role",
+   "doc": "/roʊl/",
+   "nghia": "vai trò: phần việc và trách nhiệm một người đảm nhận trong dự án",
+   "nhom": "Vai trò & các bên",
+   "viDu": "The BA's role is to bridge communication between customers and developers.",
+   "viDuNghia": "Vai trò của BA là làm cầu nối giao tiếp giữa khách hàng và lập trình viên."
+  },
+  {
+   "chu": "business analysis",
+   "doc": "/ˈbɪznəs əˈnæləsɪs/",
+   "nghia": "phân tích nghiệp vụ: công việc tìm hiểu nhu cầu kinh doanh và đề xuất giải pháp",
+   "nhom": "Vai trò & các bên",
+   "viDu": "During the Monitor and Control Business Analysis Performance process, which of the following is performed?",
+   "viDuNghia": "Trong quy trình Giám sát và Kiểm soát Hiệu quả Phân tích Nghiệp vụ, việc nào sau đây được thực hiện?"
+  },
+  {
+   "chu": "bill of rights",
+   "nghia": "bản quyền lợi (Requirements Bill of Rights): danh sách quyền của khách hàng phần mềm khi làm việc về yêu cầu",
+   "nhom": "Vai trò & các bên",
+   "viDu": "The Requirements Bill of Rights for software customers includes all of the following, EXCEPT:",
+   "viDuNghia": "Bản quyền lợi về yêu cầu của khách hàng phần mềm gồm tất cả các điều sau, NGOẠI TRỪ:"
+  },
+  {
+   "chu": "bill of responsibilities",
+   "nghia": "bản trách nhiệm (Requirements Bill of Responsibilities): danh sách trách nhiệm của khách hàng phần mềm về yêu cầu",
+   "nhom": "Vai trò & các bên",
+   "viDu": "The Requirements Bill of Responsibilities for software customers includes all of the following, EXCEPT:",
+   "viDuNghia": "Bản trách nhiệm về yêu cầu của khách hàng phần mềm gồm tất cả các điều sau, NGOẠI TRỪ:"
+  },
+  {
+   "chu": "requirements engineer",
+   "doc": "/rɪˈkwaɪərmənts ˌendʒɪˈnɪr/",
+   "nghia": "kỹ sư yêu cầu: người chuyên lo việc yêu cầu trong dự án (vai trò gần với BA)",
+   "nhom": "Vai trò & các bên",
+   "viDu": "The requirements engineer documents what stakeholders need before design starts.",
+   "viDuNghia": "Kỹ sư yêu cầu ghi lại điều các bên liên quan cần trước khi bắt đầu thiết kế."
+  },
+  {
+   "chu": "stakeholder engagement",
+   "doc": "/ˈsteɪkhoʊldər ɪnˈɡeɪdʒmənt/",
+   "nghia": "sự gắn kết của bên liên quan: lôi cuốn họ cùng tham gia và theo sát dự án",
+   "nhom": "Vai trò & các bên",
+   "viDu": "Regular demos keep stakeholder engagement high throughout the project.",
+   "viDuNghia": "Các buổi demo đều đặn giữ cho các bên liên quan luôn gắn bó suốt dự án."
+  },
+  {
+   "chu": "stakeholder feedback",
+   "doc": "/ˈsteɪkhoʊldər ˈfiːdbæk/",
+   "nghia": "phản hồi của bên liên quan: ý kiến nhận xét của họ về yêu cầu, nguyên mẫu, sản phẩm",
+   "nhom": "Vai trò & các bên",
+   "viDu": "Why is stakeholder feedback critical during requirements validation?",
+   "viDuNghia": "Vì sao phản hồi của các bên liên quan là then chốt trong quá trình thẩm định yêu cầu?"
+  },
+  {
+   "chu": "customer involvement",
+   "doc": "/ˈkʌstəmər ɪnˈvɑːlvmənt/",
+   "nghia": "sự tham gia của khách hàng vào dự án (góp yêu cầu, xem lại, thử sản phẩm)",
+   "nhom": "Vai trò & các bên",
+   "viDu": "Which of the following is NOT TRUE for customer involvement during the project lifecycle?",
+   "viDuNghia": "Điều nào KHÔNG ĐÚNG về sự tham gia của khách hàng trong vòng đời dự án?"
+  },
+  {
+   "chu": "actor",
+   "doc": "/ˈæktər/",
+   "nghia": "tác nhân – người hoặc hệ thống bên ngoài tương tác với hệ thống trong use case",
+   "nhom": "Vai trò & các bên",
+   "viDu": "Which section of a use case description outlines the steps the actor takes to accomplish the use case?",
+   "viDuNghia": "Phần nào của mô tả ca sử dụng liệt kê các bước tác nhân thực hiện để hoàn thành ca sử dụng?"
+  },
+  {
+   "chu": "stakeholder",
+   "doc": "/ˈsteɪkhoʊldər/",
+   "nghia": "bên liên quan – người/nhóm có quyền lợi hoặc ảnh hưởng tới dự án, sản phẩm (khách hàng, người dùng, nhà tài trợ…)",
+   "nhom": "Vai trò & các bên",
+   "viDu": "What is a significant risk or problem associated with \"overlooked stakeholders\" in a software project?",
+   "viDuNghia": "Rủi ro/vấn đề đáng kể khi \"bỏ sót stakeholder\" trong dự án phần mềm là gì?"
+  },
+  {
+   "chu": "customer",
+   "doc": "/ˈkʌstəmər/",
+   "nghia": "khách hàng – người/tổ chức trả tiền hoặc chọn mua sản phẩm; một nhóm stakeholder quan trọng khi lấy yêu cầu",
+   "nhom": "Vai trò & các bên",
+   "viDu": "Which analysis model component is most appropriate when the customer's voice is conditional?",
+   "viDuNghia": "Thành phần mô hình phân tích nào phù hợp nhất khi \"tiếng nói khách hàng\" mang tính điều kiện (nếu… thì…)?"
+  },
+  {
+   "chu": "requirements engineering",
+   "doc": "/rɪˈkwaɪərmənts ˌendʒɪˈnɪrɪŋ/",
+   "nghia": "kỹ nghệ yêu cầu: toàn bộ công việc phát triển yêu cầu và quản lý yêu cầu",
+   "nhom": "Quy trình yêu cầu",
+   "viDu": "Which of the following are issues with free documentation in requirements engineering? Select two.",
+   "viDuNghia": "Những điều nào sau đây là vấn đề của tài liệu dạng tự do (free documentation) trong kỹ nghệ yêu cầu? Chọn hai."
+  },
+  {
+   "chu": "requirements development",
+   "doc": "/rɪˈkwaɪərmənts dɪˈveləpmənt/",
+   "nghia": "phát triển yêu cầu: gồm khơi gợi, phân tích, đặc tả và kiểm chứng yêu cầu",
+   "nhom": "Quy trình yêu cầu",
+   "viDu": "The software requirements specification template belongs to requirements development process assets.",
+   "viDuNghia": "Mẫu đặc tả yêu cầu phần mềm thuộc nhóm tài sản quy trình phát triển yêu cầu."
+  },
+  {
+   "chu": "requirements analysis",
+   "doc": "/rɪˈkwaɪərmənts əˈnæləsɪs/",
+   "nghia": "phân tích yêu cầu: làm rõ, phân loại, mô hình hoá và xếp ưu tiên các yêu cầu đã thu được",
+   "nhom": "Quy trình yêu cầu",
+   "viDu": "What is the purpose of requirements analysis?",
+   "viDuNghia": "Mục đích của phân tích yêu cầu là gì?"
+  },
+  {
+   "chu": "development process",
+   "doc": "/dɪˈveləpmənt ˈprɑːses/",
+   "nghia": "quy trình phát triển: chuỗi bước làm ra phần mềm",
+   "nhom": "Quy trình yêu cầu",
+   "viDu": "Reuse-based software engineering is a software engineering strategy where the development process is geared to reusing existing software.",
+   "viDuNghia": "Kỹ nghệ phần mềm dựa trên tái sử dụng là chiến lược kỹ nghệ phần mềm trong đó quy trình phát triển hướng tới việc tái sử dụng phần mềm đã có."
+  },
+  {
+   "chu": "project plan",
+   "doc": "/ˈprɑːdʒekt plæn/",
+   "nghia": "kế hoạch dự án: việc gì, ai làm, bao giờ xong",
+   "nhom": "Quy trình yêu cầu",
+   "viDu": "Which of the following statements is about the effects of requirements on the project plans?",
+   "viDuNghia": "Câu nào sau đây nói về ảnh hưởng của yêu cầu tới KẾ HOẠCH dự án?"
+  },
+  {
+   "chu": "design",
+   "doc": "/dɪˈzaɪn/",
+   "nghia": "thiết kế: quyết định hệ thống sẽ được xây NHƯ THẾ NÀO (yêu cầu thì nói hệ thống cần CÁI GÌ)",
+   "nhom": "Quy trình yêu cầu",
+   "viDu": "Requirements development does not include design.",
+   "viDuNghia": "Phát triển yêu cầu không bao gồm thiết kế."
+  },
+  {
+   "chu": "construction",
+   "doc": "/kənˈstrʌkʃn/",
+   "nghia": "giai đoạn xây dựng, viết mã sản phẩm",
+   "nhom": "Quy trình yêu cầu",
+   "viDu": "Fixing a requirement error during construction costs far more than fixing it during requirements development.",
+   "viDuNghia": "Sửa một lỗi yêu cầu ở giai đoạn xây dựng tốn hơn nhiều so với sửa ngay lúc phát triển yêu cầu."
+  },
+  {
+   "chu": "implementation",
+   "doc": "/ˌɪmplɪmenˈteɪʃn/",
+   "nghia": "sự hiện thực, cài đặt: biến yêu cầu và thiết kế thành phần mềm chạy được",
+   "nhom": "Quy trình yêu cầu",
+   "viDu": "Implementation starts only after the requirements for that iteration are understood.",
+   "viDuNghia": "Việc cài đặt chỉ bắt đầu sau khi đã hiểu yêu cầu của vòng lặp đó."
+  },
+  {
+   "chu": "good practice",
+   "doc": "/ɡʊd ˈpræktɪs/",
+   "nghia": "thông lệ tốt: cách làm đã được kinh nghiệm chứng minh là hiệu quả",
+   "nhom": "Quy trình yêu cầu",
+   "viDu": "Which of the following are considered good practices in requirements analysis? Select three.",
+   "viDuNghia": "Những điều nào sau đây được coi là thực hành tốt trong phân tích yêu cầu? Chọn ba."
+  },
+  {
+   "chu": "usage-centric",
+   "doc": "/ˈjuːsɪdʒ ˈsentrɪk/",
+   "nghia": "lấy việc sử dụng làm trung tâm: tìm hiểu người dùng cần LÀM gì với hệ thống rồi mới suy ra chức năng",
+   "nhom": "Quy trình yêu cầu",
+   "viDu": "What are the benefits of usage-centric requirements?",
+   "viDuNghia": "Lợi ích của yêu cầu hướng-sử-dụng (usage-centric) là gì?"
+  },
+  {
+   "chu": "product-centric",
+   "doc": "/ˈprɑːdʌkt ˈsentrɪk/",
+   "nghia": "lấy sản phẩm làm trung tâm: tập trung liệt kê tính năng mà ít hỏi người dùng dùng để làm gì",
+   "nhom": "Quy trình yêu cầu",
+   "viDu": "What is the difference between usage-centric and product-centric requirements?",
+   "viDuNghia": "Sự khác nhau giữa yêu cầu hướng-sử-dụng (usage-centric) và hướng-sản-phẩm (product-centric) là gì?"
+  },
+  {
+   "chu": "exhibit",
+   "doc": "/ɪɡˈzɪbɪt/",
+   "nghia": "thể hiện, bộc lộ (một hành vi, thuộc tính)",
+   "nhom": "Từ học thuật trong đề",
+   "viDu": "Which type of requirement specifies a behavior or action that the system must exhibit?",
+   "viDuNghia": "Loại yêu cầu nào đặc tả một hành vi hoặc hành động mà hệ thống phải thể hiện?"
+  },
+  {
+   "chu": "impose",
+   "doc": "/ɪmˈpoʊz/",
+   "nghia": "áp đặt (một giới hạn, quy định) lên ai hay cái gì",
+   "nhom": "Từ học thuật trong đề",
+   "viDu": "A constraint is a restriction that is imposed on the choices available to the developer for the design and construction of a product.",
+   "viDuNghia": "Ràng buộc là một hạn chế áp lên các lựa chọn mà lập trình viên có khi thiết kế và xây dựng sản phẩm."
+  },
+  {
+   "chu": "restriction",
+   "doc": "/rɪˈstrɪkʃn/",
+   "nghia": "sự hạn chế, giới hạn",
+   "nhom": "Từ học thuật trong đề",
+   "viDu": "A constraint is a restriction that is imposed on the choices available to the developer for the design and construction of a product.",
+   "viDuNghia": "Ràng buộc là một hạn chế áp lên các lựa chọn mà lập trình viên có khi thiết kế và xây dựng sản phẩm."
+  },
+  {
+   "chu": "procure",
+   "doc": "/prəˈkjʊr/",
+   "nghia": "mua sắm, đặt mua (sản phẩm, dịch vụ cho tổ chức)",
+   "nhom": "Từ học thuật trong đề",
+   "viDu": "A business requirement is a high-level business objective of the organization that builds a product or of a customer who procures it.",
+   "viDuNghia": "Yêu cầu nghiệp vụ là mục tiêu kinh doanh cấp cao của tổ chức làm ra sản phẩm hoặc của khách hàng đặt mua nó."
+  },
+  {
+   "chu": "dictate",
+   "doc": "/ˈdɪkteɪt/",
+   "nghia": "quyết định, chi phối (hướng đi)",
+   "nhom": "Từ học thuật trong đề",
+   "viDu": "To resolve a requirement disagreement between corporate customers, business objectives dictate direction.",
+   "viDuNghia": "Để giải quyết bất đồng về yêu cầu giữa các khách hàng doanh nghiệp, mục tiêu nghiệp vụ quyết định hướng đi."
+  },
+  {
+   "chu": "rationale",
+   "doc": "/ˌræʃəˈnæl/",
+   "nghia": "lý do, cơ sở lập luận: vì sao có yêu cầu hay quyết định đó",
+   "nhom": "Từ học thuật trong đề",
+   "viDu": "The rationale behind every approval or rejection of a change request must be recorded.",
+   "viDuNghia": "Lý do đằng sau mọi quyết định chấp thuận hay từ chối một yêu cầu thay đổi đều phải được ghi lại."
+  },
+  {
+   "chu": "perspective",
+   "doc": "/pərˈspektɪv/",
+   "nghia": "góc nhìn, quan điểm",
+   "nhom": "Từ học thuật trong đề",
+   "viDu": "Write user requirements from the user's perspective, not the developer's.",
+   "viDuNghia": "Hãy viết yêu cầu người dùng từ góc nhìn của người dùng, không phải của lập trình viên."
+  },
+  {
+   "chu": "distinguish",
+   "doc": "/dɪˈstɪŋɡwɪʃ/",
+   "nghia": "phân biệt",
+   "nhom": "Từ học thuật trong đề",
+   "viDu": "Why is it critical to clearly distinguish between Business Requirements, User Requirements, and Functional Requirements in software projects?",
+   "viDuNghia": "Tại sao việc phân biệt rõ ràng giữa Yêu cầu Nghiệp vụ, Yêu cầu Người dùng và Yêu cầu Chức năng lại quan trọng trong các dự án phần mềm?"
+  },
+  {
+   "chu": "define",
+   "doc": "/dɪˈfaɪn/",
+   "nghia": "định nghĩa; xác định rõ",
+   "nhom": "Từ học thuật trong đề",
+   "viDu": "Define vision and scope and Select product champions activities should be done in Elicitation stage.",
+   "viDuNghia": "Các hoạt động Xác định tầm nhìn và phạm vi (vision and scope) và Chọn product champion nên được thực hiện ở giai đoạn Khơi gợi yêu cầu (Elicitation)"
+  },
+  {
+   "chu": "resolve",
+   "doc": "/rɪˈzɑːlv/",
+   "nghia": "giải quyết (xung đột, bất đồng, vấn đề)",
+   "nhom": "Từ học thuật trong đề",
+   "viDu": "Which is the most appropriate way to resolve a requirement disagreement between market segments?",
+   "viDuNghia": "Cách nào phù hợp nhất để giải quyết bất đồng về yêu cầu giữa các phân khúc thị trường?"
+  },
+  {
+   "chu": "disagreement",
+   "doc": "/ˌdɪsəˈɡriːmənt/",
+   "nghia": "sự bất đồng, không thống nhất ý kiến",
+   "nhom": "Từ học thuật trong đề",
+   "viDu": "When there is a disagreement between development and customers, how to solve it?",
+   "viDuNghia": "Khi có bất đồng giữa đội phát triển và khách hàng, giải quyết thế nào?"
+  },
+  {
+   "chu": "accurately",
+   "doc": "/ˈækjərətli/",
+   "nghia": "một cách chính xác",
+   "nhom": "Từ học thuật trong đề",
+   "viDu": "Which of the following statements accurately describe user stories and epics in agile development? (Choose 2 correct answers)",
+   "viDuNghia": "Phát biểu nào mô tả chính xác user story và epic trong phát triển agile? (Chọn 2 đáp án đúng)"
+  },
+  {
+   "chu": "logically related",
+   "doc": "/ˈlɑːdʒɪkli rɪˈleɪtɪd/",
+   "nghia": "có liên quan với nhau về mặt logic",
+   "nhom": "Từ học thuật trong đề",
+   "viDu": "A feature is one or more logically related system capabilities that provide value to a user and are described by a set of functional requirements.",
+   "viDuNghia": "Tính năng là một hay nhiều khả năng của hệ thống có liên quan logic với nhau, đem lại giá trị cho người dùng và được mô tả bằng một tập yêu cầu chức năng."
+  },
+  {
+   "chu": "Chemical Tracking System",
+   "nghia": "Hệ thống theo dõi hoá chất (CTS): ví dụ xuyên suốt giáo trình Wiegers, đề thi hay lấy làm tình huống",
+   "nhom": "Từ học thuật trong đề",
+   "viDu": "Consider the use case diagram for the Chemical Tracking System. How does the \"extend\" relationship between \"Request a Chemical\" and \"Search Vendor Catalogs\" affect the system's functionality?",
+   "viDuNghia": "Xét sơ đồ ca sử dụng của Hệ thống Theo dõi Hóa chất. Quan hệ \"extend\" giữa \"Request a Chemical\" và \"Search Vendor Catalogs\" ảnh hưởng đến chức năng hệ thống như thế nào?"
+  }
+ ]
+}

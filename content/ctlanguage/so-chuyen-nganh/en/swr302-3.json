@@ -1,0 +1,811 @@
+{
+ "ma": "swr302-3",
+ "nn": "en",
+ "ten": "SWR302 · 3. Mô hình, use case & đặc tả",
+ "moTa": "Môn Software Requirements (FPT): use case, sơ đồ ngữ cảnh, DFD, ERD, sơ đồ trạng thái, SRS, user story, thuộc tính chất lượng. Từ trích từ đề FE/PE thật; phần lớn câu ví dụ là câu hỏi thật trong đề.",
+ "bieuTuong": "rectangle.connected.to.line.below",
+ "thuTu": -954,
+ "tu": [
+  {
+   "chu": "use case diagram",
+   "doc": "/ˈjuːs keɪs ˈdaɪəɡræm/",
+   "nghia": "sơ đồ use case: hình vẽ các tác nhân (hình người), các use case (hình oval) và quan hệ giữa chúng quanh ranh giới hệ thống",
+   "nhom": "Use case",
+   "viDu": "Draw one use case diagram based on the content of this exam paper.",
+   "viDuNghia": "Vẽ một sơ đồ use case dựa trên nội dung đề thi này."
+  },
+  {
+   "chu": "primary actor",
+   "doc": "/ˈpraɪmeri ˈæktər/",
+   "nghia": "tác nhân chính: người khởi động use case và nhận giá trị chính từ nó",
+   "nhom": "Use case",
+   "viDu": "In a use case diagram, an arrow from an actor to a use case indicates that he is the primary actor for the use case.",
+   "viDuNghia": "Trong sơ đồ ca sử dụng, mũi tên từ một tác nhân đến một ca sử dụng cho biết tác nhân đó là tác nhân chính (primary) của ca sử dụng."
+  },
+  {
+   "chu": "secondary actor",
+   "doc": "/ˈsekənderi ˈæktər/",
+   "nghia": "tác nhân phụ: tác nhân tham gia hỗ trợ để use case hoàn thành, không phải người khởi động",
+   "nhom": "Use case",
+   "viDu": "Draw a use case diagram and name the secondary actor of the use case Add Book.",
+   "viDuNghia": "Vẽ sơ đồ use case và nêu tên tác nhân phụ của use case Add Book."
+  },
+  {
+   "chu": "include relationship",
+   "doc": "/ɪnˈkluːd rɪˈleɪʃnʃɪp/",
+   "nghia": "quan hệ include (bao gồm): use case gốc LUÔN gọi use case được bao gồm; mũi tên nét đứt chỉ từ gốc sang use case được bao gồm",
+   "nhom": "Use case",
+   "viDu": "If two use cases both use the \"Perform credit check\" use case, their relationship with \"Perform credit check\" is an include relationship.",
+   "viDuNghia": "Nếu hai use case đều dùng use case \"Perform credit check\" thì quan hệ giữa chúng với \"Perform credit check\" là quan hệ include."
+  },
+  {
+   "chu": "extend relationship",
+   "doc": "/ɪkˈstend rɪˈleɪʃnʃɪp/",
+   "nghia": "quan hệ extend (mở rộng): use case mở rộng CHỈ chạy trong điều kiện nhất định; mũi tên nét đứt chỉ từ use case mở rộng về use case gốc",
+   "nhom": "Use case",
+   "viDu": "List two use cases that have an extend relationship, then name the base use case and the extend use case.",
+   "viDuNghia": "Nêu hai use case có quan hệ extend, rồi cho biết use case gốc và use case mở rộng."
+  },
+  {
+   "chu": "base use case",
+   "doc": "/beɪs ˈjuːs keɪs/",
+   "nghia": "use case gốc: use case chính, cái gọi use case khác (include) hoặc được use case khác mở rộng (extend)",
+   "nhom": "Use case",
+   "viDu": "Name the base use case of the include relationship.",
+   "viDuNghia": "Nêu tên use case gốc của quan hệ include."
+  },
+  {
+   "chu": "included use case",
+   "doc": "/ɪnˈkluːdɪd ˈjuːs keɪs/",
+   "nghia": "use case được bao gồm: phần việc dùng chung được tách riêng, use case gốc luôn gọi tới",
+   "nhom": "Use case",
+   "viDu": "Include relationship: the dashed arrow points to which use case, the base use case or the included use case?",
+   "viDuNghia": "Quan hệ include: mũi tên nét đứt chỉ vào use case nào, use case gốc hay use case được bao gồm?"
+  },
+  {
+   "chu": "extend use case",
+   "doc": "/ɪkˈstend ˈjuːs keɪs/",
+   "nghia": "use case mở rộng: phần việc tuỳ chọn, thêm vào use case gốc khi có điều kiện",
+   "nhom": "Use case",
+   "viDu": "Extend relationship: name the base use case and the extend use case.",
+   "viDuNghia": "Quan hệ extend: nêu tên use case gốc và use case mở rộng."
+  },
+  {
+   "chu": "generalization",
+   "doc": "/ˌdʒenrələˈzeɪʃn/",
+   "nghia": "quan hệ tổng quát hoá: tác nhân hoặc use case con kế thừa từ cái cha tổng quát hơn",
+   "nhom": "Use case",
+   "viDu": "\"Pay by card\" and \"Pay by cash\" are linked to \"Pay a bill\" by generalization.",
+   "viDuNghia": "\"Trả bằng thẻ\" và \"Trả bằng tiền mặt\" nối với \"Trả hoá đơn\" bằng quan hệ tổng quát hoá."
+  },
+  {
+   "chu": "use case description",
+   "doc": "/ˈjuːs keɪs dɪˈskrɪpʃn/",
+   "nghia": "bản mô tả use case: phần chữ ghi tác nhân, tiền điều kiện, các luồng, hậu điều kiện…",
+   "nhom": "Use case",
+   "viDu": "Which section of a use case description outlines the steps the actor takes to accomplish the use case?",
+   "viDuNghia": "Phần nào của mô tả ca sử dụng liệt kê các bước tác nhân thực hiện để hoàn thành ca sử dụng?"
+  },
+  {
+   "chu": "system boundary",
+   "doc": "/ˈsɪstəm ˈbaʊndri/",
+   "nghia": "ranh giới hệ thống: khung chữ nhật phân tách cái nằm trong hệ thống với cái bên ngoài",
+   "nhom": "Use case",
+   "viDu": "Provide the following information: the name of the rectangle (system boundary).",
+   "viDuNghia": "Cung cấp các thông tin sau: tên của hình chữ nhật (ranh giới hệ thống)."
+  },
+  {
+   "chu": "oval",
+   "doc": "/ˈoʊvl/",
+   "nghia": "hình bầu dục: ký hiệu của một use case trong sơ đồ",
+   "nhom": "Use case",
+   "viDu": "One oval is one use case; the name must begin with a verb followed by an object.",
+   "viDuNghia": "Một hình bầu dục là một use case; tên phải bắt đầu bằng động từ, theo sau là tân ngữ."
+  },
+  {
+   "chu": "rectangle",
+   "doc": "/ˈrektæŋɡl/",
+   "nghia": "hình chữ nhật: trong sơ đồ use case là khung ranh giới hệ thống",
+   "nhom": "Use case",
+   "viDu": "Are the actors inside or outside the rectangle?",
+   "viDuNghia": "Các tác nhân nằm trong hay ngoài hình chữ nhật?"
+  },
+  {
+   "chu": "dashed arrow",
+   "doc": "/dæʃt ˈæroʊ/",
+   "nghia": "mũi tên nét đứt: ký hiệu vẽ quan hệ include và extend",
+   "nhom": "Use case",
+   "viDu": "Extend relationship: the dashed arrow points to which use case?",
+   "viDuNghia": "Quan hệ extend: mũi tên nét đứt chỉ vào use case nào?"
+  },
+  {
+   "chu": "use case",
+   "doc": "/juːs keɪs/",
+   "nghia": "ca sử dụng – chuỗi tương tác giữa tác nhân và hệ thống để đạt một mục tiêu cụ thể",
+   "nhom": "Use case",
+   "viDu": "According to Wiegers, which of the following is a characteristic of a well-written use case?",
+   "viDuNghia": "Theo Wiegers, đặc điểm nào sau đây thuộc về một use case được viết tốt?"
+  },
+  {
+   "chu": "normal flow",
+   "doc": "/ˈnɔːrml floʊ/",
+   "nghia": "luồng chính (main flow): chuỗi bước khi mọi việc diễn ra như mong đợi; (SWT301) test case cho luồng này gọi là normal case",
+   "nhom": "Use case",
+   "viDu": "Fill in the Normal Flow, Alternative Flows and Exceptions fields of the use case template.",
+   "viDuNghia": "Điền các trường Normal Flow (luồng chính), Alternative Flows (luồng thay thế) và Exceptions (ngoại lệ) của mẫu use case."
+  },
+  {
+   "chu": "alternative flow",
+   "doc": "/ɔːlˈtɜːrnətɪv floʊ/",
+   "nghia": "luồng thay thế: nhánh rẽ khỏi luồng chính nhưng use case vẫn đạt mục tiêu (cách làm khác, lựa chọn khác)",
+   "nhom": "Use case",
+   "viDu": "An alternative flow branches off the normal flow but still lets the actor reach the goal.",
+   "viDuNghia": "Luồng thay thế rẽ khỏi luồng chính nhưng vẫn giúp tác nhân đạt được mục tiêu."
+  },
+  {
+   "chu": "precondition",
+   "doc": "/ˌpriːkənˈdɪʃn/",
+   "nghia": "tiền điều kiện: điều phải đúng TRƯỚC khi use case bắt đầu (vd đã đăng nhập); test case cũng ghi precondition trước các bước test",
+   "nhom": "Use case",
+   "viDu": "Preconditions define the prerequisites that must be met before the system can begin executing a use case.",
+   "viDuNghia": "Tiền điều kiện xác định những điều phải thoả trước khi hệ thống có thể bắt đầu thực hiện một use case."
+  },
+  {
+   "chu": "postcondition",
+   "doc": "/ˌpoʊstkənˈdɪʃn/",
+   "nghia": "hậu điều kiện: trạng thái của hệ thống SAU khi use case kết thúc thành công (vd đơn hàng đã được lưu)",
+   "nhom": "Use case",
+   "viDu": "Postconditions describe the state of the system after the use case has executed successfully.",
+   "viDuNghia": "Hậu điều kiện mô tả trạng thái của hệ thống sau khi use case đã thực hiện thành công."
+  },
+  {
+   "chu": "exception flow",
+   "doc": "/ɪkˈsepʃn floʊ/",
+   "nghia": "luồng ngoại lệ (mục Exceptions của mẫu use case): điều kiện khiến use case KHÔNG thành công và hệ thống xử lý ra sao",
+   "nhom": "Use case",
+   "viDu": "An exception flow describes what happens when a condition prevents the use case from succeeding.",
+   "viDuNghia": "Luồng ngoại lệ mô tả điều xảy ra khi một điều kiện khiến use case không thể thành công."
+  },
+  {
+   "chu": "user story",
+   "doc": "/ˈjuːzər ˈstɔːri/",
+   "nghia": "câu chuyện người dùng – yêu cầu ngắn theo mẫu \"As a [vai trò], I want [mục tiêu] so that [lợi ích]\"; dùng trong Agile, gọn hơn use case",
+   "nhom": "Use case",
+   "viDu": "What is the key difference between a \"use case\" and a \"user story\"?",
+   "viDuNghia": "Điểm khác biệt chính giữa \"use case\" và \"user story\" là gì?"
+  },
+  {
+   "chu": "analysis model",
+   "doc": "/əˈnæləsɪs ˈmɑːdl/",
+   "nghia": "mô hình phân tích: sơ đồ biểu diễn yêu cầu bằng hình để dễ thấy chỗ thiếu, chỗ mâu thuẫn",
+   "nhom": "Sơ đồ & mô hình",
+   "viDu": "When choosing the appropriate representation techniques for analysis models, which of the following guidelines should be followed? Select two.",
+   "viDuNghia": "Khi chọn kỹ thuật biểu diễn phù hợp cho các mô hình phân tích, nên tuân theo hướng dẫn nào? Chọn hai."
+  },
+  {
+   "chu": "context diagram",
+   "doc": "/ˈkɑːntekst ˈdaɪəɡræm/",
+   "nghia": "sơ đồ ngữ cảnh: một vòng tròn là hệ thống, xung quanh là các thực thể ngoài và luồng dữ liệu vào ra, dùng để chỉ phạm vi",
+   "nhom": "Sơ đồ & mô hình",
+   "viDu": "Which statement correctly describes a context diagram?",
+   "viDuNghia": "Phát biểu nào mô tả ĐÚNG về sơ đồ ngữ cảnh (context diagram)?"
+  },
+  {
+   "chu": "ecosystem map",
+   "doc": "/ˈiːkoʊsɪstəm mæp/",
+   "nghia": "bản đồ hệ sinh thái: vẽ mọi hệ thống có liên quan tới hệ thống đang xét và cách chúng tương tác với nhau",
+   "nhom": "Sơ đồ & mô hình",
+   "viDu": "An ecosystem map shows all of the systems related to the system of interest that interact with one another and the nature of those interactions.",
+   "viDuNghia": "Ecosystem map cho thấy tất cả các hệ thống liên quan đến hệ thống đang xét, chúng tương tác với nhau ra sao và bản chất của các tương tác đó."
+  },
+  {
+   "chu": "feature tree",
+   "doc": "/ˈfiːtʃər triː/",
+   "nghia": "cây tính năng: sơ đồ nhánh cây xếp các tính năng thành nhóm theo nhiều cấp",
+   "nhom": "Sơ đồ & mô hình",
+   "viDu": "A feature tree is a visual depiction of the product's features organized in logical groups, hierarchically subdividing each feature into further levels of detail.",
+   "viDuNghia": "Cây tính năng (feature tree) là biểu diễn trực quan các tính năng của sản phẩm được tổ chức thành nhóm logic, phân rã theo thứ bậc mỗi tính năng thành các mức chi tiết hơn"
+  },
+  {
+   "chu": "event list",
+   "doc": "/ɪˈvent lɪst/",
+   "nghia": "danh sách sự kiện: liệt kê các sự kiện bên ngoài khiến hệ thống phải phản ứng",
+   "nhom": "Sơ đồ & mô hình",
+   "viDu": "An event list identifies external events that could trigger behavior in the system.",
+   "viDuNghia": "Danh sách sự kiện nêu ra các sự kiện bên ngoài có thể kích hoạt hành vi của hệ thống."
+  },
+  {
+   "chu": "business event",
+   "doc": "/ˈbɪznəs ɪˈvent/",
+   "nghia": "sự kiện nghiệp vụ: việc do người dùng làm, khiến hệ thống phải đáp lại (ví dụ khách đặt hàng)",
+   "nhom": "Sơ đồ & mô hình",
+   "viDu": "An event list depicts the scope boundary for the system by naming possible business events triggered by users.",
+   "viDuNghia": "Danh sách sự kiện thể hiện ranh giới phạm vi của hệ thống bằng cách nêu tên các sự kiện nghiệp vụ do người dùng kích hoạt."
+  },
+  {
+   "chu": "signal event",
+   "doc": "/ˈsɪɡnəl ɪˈvent/",
+   "nghia": "sự kiện tín hiệu: sự kiện do phần cứng hay hệ thống khác gửi tín hiệu tới",
+   "nhom": "Sơ đồ & mô hình",
+   "viDu": "A signal event occurs when a sensor sends data to the system.",
+   "viDuNghia": "Sự kiện tín hiệu xảy ra khi một cảm biến gửi dữ liệu tới hệ thống."
+  },
+  {
+   "chu": "data flow diagram",
+   "doc": "/ˈdeɪtə floʊ ˈdaɪəɡræm/",
+   "nghia": "sơ đồ luồng dữ liệu (DFD): vẽ dữ liệu đi qua các tiến trình, kho dữ liệu và thực thể ngoài như thế nào",
+   "nhom": "Sơ đồ & mô hình",
+   "viDu": "Which statement(s) is/are correct for DFD (data flow diagram)?",
+   "viDuNghia": "Phát biểu nào đúng về DFD (biểu đồ luồng dữ liệu)?"
+  },
+  {
+   "chu": "data store",
+   "doc": "/ˈdeɪtə stɔːr/",
+   "nghia": "kho dữ liệu: nơi dữ liệu được lưu lại trong DFD",
+   "nhom": "Sơ đồ & mô hình",
+   "viDu": "How should data flows be represented between processes, data stores, and external entities in a DFD?",
+   "viDuNghia": "Các luồng dữ liệu giữa các tiến trình, kho dữ liệu và thực thể ngoài nên được biểu diễn thế nào trong DFD?"
+  },
+  {
+   "chu": "external entity",
+   "doc": "/ɪkˈstɜːrnl ˈentəti/",
+   "nghia": "thực thể ngoài: người, tổ chức, hệ thống nằm ngoài hệ thống, gửi hoặc nhận dữ liệu",
+   "nhom": "Sơ đồ & mô hình",
+   "viDu": "Which diagram provides a high-level view of system processes and external entities?",
+   "viDuNghia": "Sơ đồ nào cung cấp cái nhìn tổng quan ở mức cao về các tiến trình hệ thống và các thực thể bên ngoài?"
+  },
+  {
+   "chu": "swimlane diagram",
+   "doc": "/ˈswɪmleɪn ˈdaɪəɡræm/",
+   "nghia": "sơ đồ làn bơi: vẽ các bước của quy trình nghiệp vụ, chia làn theo người hay bộ phận thực hiện",
+   "nhom": "Sơ đồ & mô hình",
+   "viDu": "In a swimlane diagram, process steps are shown as rectangles.",
+   "viDuNghia": "Trong sơ đồ làn bơi, các bước của quy trình được vẽ bằng hình chữ nhật."
+  },
+  {
+   "chu": "state-transition diagram",
+   "doc": "/steɪt trænˈzɪʃn ˈdaɪəɡræm/",
+   "nghia": "sơ đồ chuyển trạng thái (STD): các trạng thái của hệ thống hay đối tượng và các bước chuyển được phép giữa chúng",
+   "nhom": "Sơ đồ & mô hình",
+   "viDu": "What is the primary purpose of a state-transition diagram (STD)?",
+   "viDuNghia": "Mục đích chính của sơ đồ chuyển trạng thái (STD) là gì?"
+  },
+  {
+   "chu": "state table",
+   "doc": "/steɪt ˈteɪbl/",
+   "nghia": "bảng trạng thái: ma trận cho biết từ trạng thái nào được chuyển sang trạng thái nào",
+   "nhom": "Sơ đồ & mô hình",
+   "viDu": "A state table shows every allowed transition between order states in a matrix.",
+   "viDuNghia": "Bảng trạng thái trình bày mọi bước chuyển được phép giữa các trạng thái đơn hàng dưới dạng ma trận."
+  },
+  {
+   "chu": "dialog map",
+   "doc": "/ˈdaɪəlɔːɡ mæp/",
+   "nghia": "bản đồ hội thoại: sơ đồ các màn hình và đường điều hướng giữa chúng",
+   "nhom": "Sơ đồ & mô hình",
+   "viDu": "Which of the following is highlighted as a tool for documenting user interface elements and their behaviors in detail, beyond wireframes and dialog maps?",
+   "viDuNghia": "Công cụ nào sau đây được nêu bật để ghi tài liệu chi tiết các phần tử giao diện người dùng và hành vi của chúng, vượt ra ngoài wireframe và dialog map?"
+  },
+  {
+   "chu": "decision tree",
+   "doc": "/dɪˈsɪʒn triː/",
+   "nghia": "cây quyết định: vẽ điều kiện và hành động theo dạng nhánh cây",
+   "nhom": "Sơ đồ & mô hình",
+   "viDu": "When customers present requirements using conditions, model the decisions with a decision tree, decision table, or activity diagram.",
+   "viDuNghia": "Khi khách hàng nêu yêu cầu bằng câu điều kiện, hãy mô hình hoá các quyết định bằng cây quyết định, bảng quyết định hoặc sơ đồ hoạt động."
+  },
+  {
+   "chu": "organization chart",
+   "doc": "/ˌɔːrɡənəˈzeɪʃn tʃɑːrt/",
+   "nghia": "sơ đồ tổ chức: cây các phòng ban, chức vụ, giúp tìm ra người dùng và bên liên quan",
+   "nhom": "Sơ đồ & mô hình",
+   "viDu": "An organization chart is an effective way to visualize the organization structure of the users.",
+   "viDuNghia": "Sơ đồ tổ chức là cách hiệu quả để hình dung cơ cấu tổ chức của người dùng."
+  },
+  {
+   "chu": "process flow",
+   "doc": "/ˈprɑːses floʊ/",
+   "nghia": "luồng quy trình: thứ tự các bước của một quy trình",
+   "nhom": "Sơ đồ & mô hình",
+   "viDu": "An analysis model that depicts a process flow proceeding from one activity to another",
+   "viDuNghia": "Mô hình phân tích thể hiện một luồng quy trình đi từ hoạt động này sang hoạt động khác"
+  },
+  {
+   "chu": "flowchart",
+   "doc": "/ˈfloʊtʃɑːrt/",
+   "nghia": "lưu đồ: sơ đồ các bước xử lý và điểm rẽ nhánh",
+   "nhom": "Sơ đồ & mô hình",
+   "viDu": "Create flowcharts, swimlane diagrams, activity diagrams, or use cases to show how users currently perform tasks and how they will perform them after automation.",
+   "viDuNghia": "Vẽ lưu đồ, sơ đồ swimlane, sơ đồ hoạt động hoặc use case để thể hiện người dùng đang làm việc thế nào và sẽ làm thế nào sau khi tự động hoá."
+  },
+  {
+   "chu": "notation",
+   "doc": "/noʊˈteɪʃn/",
+   "nghia": "hệ ký hiệu: bộ hình vẽ quy ước dùng trong một loại sơ đồ",
+   "nhom": "Sơ đồ & mô hình",
+   "viDu": "True/False: Diagrammatic Notation allows you to show items under consideration and their inter-relationships",
+   "viDuNghia": "Đúng/Sai: Ký pháp dạng sơ đồ (Diagrammatic Notation) cho phép bạn thể hiện các đối tượng đang xét và mối quan hệ giữa chúng"
+  },
+  {
+   "chu": "visual representation",
+   "doc": "/ˈvɪʒuəl ˌreprɪzenˈteɪʃn/",
+   "nghia": "cách biểu diễn bằng hình ảnh (thay cho chữ)",
+   "nhom": "Sơ đồ & mô hình",
+   "viDu": "Data model is a visual representation of the data objects and collections the system will process and the relationships between them.",
+   "viDuNghia": "Mô hình dữ liệu (Data model) là cách biểu diễn trực quan các đối tượng dữ liệu và tập hợp dữ liệu mà hệ thống sẽ xử lý, cùng các mối quan hệ giữa chúng."
+  },
+  {
+   "chu": "depict",
+   "doc": "/dɪˈpɪkt/",
+   "nghia": "mô tả, thể hiện bằng hình vẽ",
+   "nhom": "Sơ đồ & mô hình",
+   "viDu": "An analysis model that visually depicts the various states in which a system or an object in the system can exist, the permitted transitions that can take place between states.",
+   "viDuNghia": "Mô hình phân tích thể hiện trực quan các trạng thái mà hệ thống hoặc một đối tượng trong hệ thống có thể tồn tại, cùng các chuyển tiếp được phép giữa các trạng thái."
+  },
+  {
+   "chu": "decompose",
+   "doc": "/ˌdiːkəmˈpoʊz/",
+   "nghia": "phân rã: tách một thứ lớn thành các phần nhỏ hơn",
+   "nhom": "Sơ đồ & mô hình",
+   "viDu": "In the embedded and other real-time systems project, the analyst should decompose individual system requirements into numerous derived requirements. Which type of requirement will allocate to people?",
+   "viDuNghia": "Trong dự án hệ thống nhúng và thời gian thực, nhà phân tích phải phân rã từng yêu cầu hệ thống thành nhiều yêu cầu dẫn xuất. Loại yêu cầu nào sẽ được phân bổ cho CON NGƯỜI?"
+  },
+  {
+   "chu": "dashboard",
+   "doc": "/ˈdæʃbɔːrd/",
+   "nghia": "bảng điều khiển: màn hình gom nhiều biểu đồ, chỉ số để nhìn nhanh tình hình",
+   "nhom": "Sơ đồ & mô hình",
+   "viDu": "Which of the following are true about a dashboard? Choose 3 correct answers.",
+   "viDuNghia": "Điều nào sau đây đúng về dashboard? Chọn 3 đáp án đúng."
+  },
+  {
+   "chu": "state machine diagram",
+   "nghia": "sơ đồ máy trạng thái (UML): tên UML của sơ đồ chuyển trạng thái",
+   "nhom": "Sơ đồ & mô hình",
+   "viDu": "Draw a state machine diagram for the Order object: New, Paid, Shipped, Cancelled.",
+   "viDuNghia": "Vẽ sơ đồ máy trạng thái cho đối tượng Đơn hàng: Mới, Đã thanh toán, Đã giao, Đã huỷ."
+  },
+  {
+   "chu": "hierarchical",
+   "doc": "/ˌhaɪəˈrɑːrkɪkl/",
+   "nghia": "theo thứ bậc, phân cấp từ trên xuống",
+   "nhom": "Sơ đồ & mô hình",
+   "viDu": "A feature tree gives a hierarchical view of the product's features.",
+   "viDuNghia": "Cây tính năng cho cái nhìn phân cấp về các tính năng của sản phẩm."
+  },
+  {
+   "chu": "diamond",
+   "doc": "/ˈdaɪəmənd/",
+   "nghia": "hình thoi: ký hiệu điểm quyết định (rẽ nhánh) trong lưu đồ, sơ đồ làn bơi",
+   "nhom": "Sơ đồ & mô hình",
+   "viDu": "In a flowchart, a diamond marks a decision point.",
+   "viDuNghia": "Trong lưu đồ, hình thoi đánh dấu một điểm quyết định."
+  },
+  {
+   "chu": "conceptual ERD",
+   "doc": "/kənˈseptʃuəl ˌiː ɑːr ˈdiː/",
+   "nghia": "ERD mức khái niệm: chỉ nêu thực thể và quan hệ theo nghiệp vụ, chưa đi vào chi tiết cài đặt cơ sở dữ liệu",
+   "nhom": "Dữ liệu",
+   "viDu": "Draw a conceptual ERD for the system, and briefly describe each entity in the provided template.",
+   "viDuNghia": "Vẽ ERD mức khái niệm cho hệ thống và mô tả ngắn gọn từng thực thể trong mẫu được cung cấp."
+  },
+  {
+   "chu": "data dictionary",
+   "doc": "/ˈdeɪtə ˈdɪkʃəneri/",
+   "nghia": "từ điển dữ liệu: bảng định nghĩa từng phần tử dữ liệu (ý nghĩa, kiểu, độ dài, giá trị cho phép)",
+   "nhom": "Dữ liệu",
+   "viDu": "Entries in the data dictionary represent the following types of data elements: (choose 3 correct answers)",
+   "viDuNghia": "Các mục trong từ điển dữ liệu biểu diễn những loại phần tử dữ liệu nào? (chọn 3 đáp án đúng)"
+  },
+  {
+   "chu": "data element",
+   "doc": "/ˈdeɪtə ˈelɪmənt/",
+   "nghia": "phần tử dữ liệu: một mục dữ liệu nhỏ nhất, không chia nhỏ hơn",
+   "nhom": "Dữ liệu",
+   "viDu": "In the context of a data dictionary, which of the following is true about organizing data elements?",
+   "viDuNghia": "Trong ngữ cảnh của từ điển dữ liệu (data dictionary), điều nào sau đây đúng về việc tổ chức các phần tử dữ liệu?"
+  },
+  {
+   "chu": "data object",
+   "doc": "/ˈdeɪtə ˈɑːbdʒekt/",
+   "nghia": "đối tượng dữ liệu: nhóm dữ liệu mô tả một sự vật trong nghiệp vụ",
+   "nhom": "Dữ liệu",
+   "viDu": "Data model is a visual representation of the data objects and collections the system will process, and the relationships between them.",
+   "viDuNghia": "Mô hình dữ liệu là biểu diễn trực quan các đối tượng và tập hợp dữ liệu mà hệ thống xử lý, cùng quan hệ giữa chúng."
+  },
+  {
+   "chu": "CRUD matrix",
+   "doc": "/krʌd ˈmeɪtrɪks/",
+   "nghia": "ma trận CRUD: bảng đối chiếu use case với thực thể, ghi chỗ nào Tạo, Đọc, Sửa, Xoá dữ liệu để tìm yêu cầu sót",
+   "nhom": "Dữ liệu",
+   "viDu": "A CRUD matrix is a rigorous data analysis technique for detecting missing requirements.",
+   "viDuNghia": "Ma trận CRUD là kỹ thuật phân tích dữ liệu chặt chẽ để phát hiện yêu cầu bị thiếu"
+  },
+  {
+   "chu": "data analysis",
+   "doc": "/ˈdeɪtə əˈnæləsɪs/",
+   "nghia": "phân tích dữ liệu",
+   "nhom": "Dữ liệu",
+   "viDu": "What is the main purpose of a Create, Read, Update, and Delete (CRUD) matrix data analysis technique?",
+   "viDuNghia": "Mục đích chính của kỹ thuật phân tích dữ liệu bằng ma trận CRUD (Create, Read, Update, Delete) là gì?"
+  },
+  {
+   "chu": "software requirements specification",
+   "nghia": "bản đặc tả yêu cầu phần mềm (SRS): tài liệu ghi đầy đủ yêu cầu chức năng và phi chức năng của sản phẩm",
+   "nhom": "Đặc tả & SRS",
+   "viDu": "The software requirements specification is the most appropriate document to store a product's functional and non-functional requirements.",
+   "viDuNghia": "Bản đặc tả yêu cầu phần mềm là tài liệu phù hợp nhất để lưu yêu cầu chức năng và phi chức năng của sản phẩm."
+  },
+  {
+   "chu": "requirements document",
+   "doc": "/rɪˈkwaɪərmənts ˈdɑːkjumənt/",
+   "nghia": "tài liệu yêu cầu",
+   "nhom": "Đặc tả & SRS",
+   "viDu": "True or false: \"Develop a defect checklist and use it for all types of requirements documents.\"",
+   "viDuNghia": "Phát biểu sau đúng hay sai? \"Xây dựng một checklist lỗi rồi dùng chung cho mọi loại tài liệu yêu cầu\""
+  },
+  {
+   "chu": "to be determined",
+   "nghia": "sẽ xác định sau (TBD): ghi chú đánh dấu chỗ còn thiếu thông tin trong SRS",
+   "nhom": "Đặc tả & SRS",
+   "viDu": "When to use notation TBD (to be determined) in software requirements specification?",
+   "viDuNghia": "Khi nào dùng ký hiệu TBD (to be determined) trong đặc tả yêu cầu phần mềm?"
+  },
+  {
+   "chu": "shall",
+   "doc": "/ʃæl/",
+   "nghia": "phải (từ khoá viết yêu cầu: \"The system shall…\" = hệ thống phải…)",
+   "nhom": "Đặc tả & SRS",
+   "viDu": "Consider the following Statement: \"The output of a program shall be given within 10 secs of event X 10% of the time.\" What characteristic of SRS is being depicted here?",
+   "viDuNghia": "Xét phát biểu sau: \"Đầu ra của chương trình phải được đưa ra trong vòng 10 giây kể từ sự kiện X, 10% số lần.\" Đặc điểm nào của SRS đang được thể hiện ở đây?"
+  },
+  {
+   "chu": "Planguage",
+   "doc": "/ˈplæŋɡwɪdʒ/",
+   "nghia": "Planguage: ngôn ngữ dùng từ khoá (TAG, SCALE, METER, GOAL…) để viết yêu cầu chất lượng đo được",
+   "nhom": "Đặc tả & SRS",
+   "viDu": "What does the \"STRETCH\" keyword in Planguage represent?",
+   "viDuNghia": "Từ khóa \"STRETCH\" trong Planguage biểu thị điều gì?"
+  },
+  {
+   "chu": "jargon",
+   "doc": "/ˈdʒɑːrɡən/",
+   "nghia": "biệt ngữ: từ nhà nghề mà người ngoài ngành khó hiểu",
+   "nhom": "Đặc tả & SRS",
+   "viDu": "Write in simple language, avoid jargon, and keep sentences short and direct.",
+   "viDuNghia": "Viết bằng ngôn ngữ đơn giản, tránh thuật ngữ rối rắm, câu ngắn và trực tiếp."
+  },
+  {
+   "chu": "natural language",
+   "doc": "/ˈnætʃrəl ˈlæŋɡwɪdʒ/",
+   "nghia": "ngôn ngữ tự nhiên: viết yêu cầu bằng câu chữ thông thường",
+   "nhom": "Đặc tả & SRS",
+   "viDu": "Requirements written in natural language are easy to read but often ambiguous.",
+   "viDuNghia": "Yêu cầu viết bằng ngôn ngữ tự nhiên thì dễ đọc nhưng thường mơ hồ."
+  },
+  {
+   "chu": "operating environment",
+   "doc": "/ˈɑːpəreɪtɪŋ ɪnˈvaɪrənmənt/",
+   "nghia": "môi trường vận hành: phần cứng, hệ điều hành, nền tảng nơi phần mềm sẽ chạy",
+   "nhom": "Đặc tả & SRS",
+   "viDu": "Project requirements include staff training and infrastructure changes needed in the operating environment.",
+   "viDuNghia": "Yêu cầu dự án bao gồm đào tạo nhân sự và các thay đổi hạ tầng cần thiết trong môi trường vận hành."
+  },
+  {
+   "chu": "intended audience",
+   "doc": "/ɪnˈtendɪd ˈɔːdiəns/",
+   "nghia": "đối tượng người đọc mà tài liệu nhắm tới",
+   "nhom": "Đặc tả & SRS",
+   "viDu": "Who are the intended audiences for requirements specifications?",
+   "viDuNghia": "Ai là đối tượng đọc của tài liệu đặc tả yêu cầu?"
+  },
+  {
+   "chu": "level of detail",
+   "nghia": "mức độ chi tiết (của yêu cầu, tài liệu)",
+   "nhom": "Đặc tả & SRS",
+   "viDu": "When specifying the level of detail in software requirements, which of the following practices should be considered? Select two.",
+   "viDuNghia": "Khi xác định mức độ chi tiết của yêu cầu phần mềm, nên cân nhắc thực hành nào? Chọn hai."
+  },
+  {
+   "chu": "epic",
+   "doc": "/ˈepɪk/",
+   "nghia": "epic: user story quá lớn, không làm xong trong một vòng lặp nên phải tách thành nhiều story nhỏ",
+   "nhom": "Đặc tả & SRS",
+   "viDu": "Which of the following statements accurately describe user stories and epics in agile development? Select all that apply.",
+   "viDuNghia": "Những phát biểu nào sau đây mô tả chính xác về user story và epic trong phát triển agile? Chọn tất cả đáp án đúng."
+  },
+  {
+   "chu": "acceptance test",
+   "doc": "/əkˈseptəns test/",
+   "nghia": "kiểm thử chấp nhận: bài kiểm tra cho biết phần mềm có đáp ứng nhu cầu người dùng hay không",
+   "nhom": "Đặc tả & SRS",
+   "viDu": "Write acceptance tests early: they show whether the requirements can really be verified.",
+   "viDuNghia": "Hãy viết kiểm thử chấp nhận từ sớm: chúng cho thấy yêu cầu có thật sự kiểm chứng được không."
+  },
+  {
+   "chu": "product backlog",
+   "doc": "/ˈprɑːdʌkt ˈbæklɔːɡ/",
+   "nghia": "danh sách tồn sản phẩm: danh sách có xếp ưu tiên mọi việc còn phải làm cho sản phẩm (Agile)",
+   "nhom": "Đặc tả & SRS",
+   "viDu": "Product backlog items are typically user stories and defects.",
+   "viDuNghia": "Các hạng mục trong product backlog thường là user story và lỗi (defect)."
+  },
+  {
+   "chu": "system response",
+   "doc": "/ˈsɪstəm rɪˈspɑːns/",
+   "nghia": "phản hồi của hệ thống: việc hệ thống làm để đáp lại một sự kiện hay thao tác",
+   "nhom": "Đặc tả & SRS",
+   "viDu": "[optional precondition] [optional trigger event] the system shall [expected system response].",
+   "viDuNghia": "[điều kiện tiên quyết tuỳ chọn] [sự kiện kích hoạt tuỳ chọn] hệ thống phải [phản hồi mong đợi của hệ thống]"
+  },
+  {
+   "chu": "specification",
+   "doc": "/ˌspesɪfɪˈkeɪʃn/",
+   "nghia": "bản đặc tả – tài liệu mô tả chi tiết yêu cầu (Software Requirements Specification – SRS)",
+   "nhom": "Đặc tả & SRS",
+   "viDu": "Which of the following is NOT an intended audience for a Software Requirements Specification (SRS)?",
+   "viDuNghia": "Đối tượng nào sau đây KHÔNG phải là độc giả dự kiến của một SRS?"
+  },
+  {
+   "chu": "acceptance criteria",
+   "doc": "/əkˈseptəns kraɪˈtɪriə/",
+   "nghia": "tiêu chí chấp nhận (nghiệm thu) – điều kiện kiểm chứng được mà yêu cầu/user story phải đạt để khách chấp nhận; cũng là cơ sở viết test",
+   "nhom": "Đặc tả & SRS",
+   "viDu": "Why is it essential to specify acceptance criteria during requirements validation?",
+   "viDuNghia": "Vì sao việc xác định tiêu chí chấp nhận (acceptance criteria) trong khâu thẩm định yêu cầu lại rất cần thiết?"
+  },
+  {
+   "chu": "backlog",
+   "doc": "/ˈbæklɔːɡ/",
+   "nghia": "backlog – danh sách việc/yêu cầu còn tồn, xếp theo độ ưu tiên (product backlog cho cả sản phẩm, sprint backlog cho một sprint) trong Agile",
+   "nhom": "Đặc tả & SRS",
+   "viDu": "In Agile, the product backlog is:",
+   "viDuNghia": "Trong Agile, product backlog là:"
+  },
+  {
+   "chu": "quality attribute",
+   "doc": "/ˈkwɑːləti ˈætrɪbjuːt/",
+   "nghia": "thuộc tính chất lượng: loại yêu cầu phi chức năng mô tả đặc tính dịch vụ hay hiệu năng của sản phẩm",
+   "nhom": "Thuộc tính chất lượng",
+   "viDu": "The following statement is true or false? Different projects will demand the same sets of quality attributes for success.",
+   "viDuNghia": "Phát biểu sau đúng hay sai? Các dự án khác nhau sẽ đòi hỏi cùng một bộ thuộc tính chất lượng để thành công."
+  },
+  {
+   "chu": "external quality attribute",
+   "nghia": "thuộc tính chất lượng ngoài: thấy được khi phần mềm đang chạy, người dùng cảm nhận được (dễ dùng, sẵn sàng, hiệu năng…)",
+   "nhom": "Thuộc tính chất lượng",
+   "viDu": "Which of the following is an example of an external quality attribute?",
+   "viDuNghia": "Điều nào sau đây là ví dụ về thuộc tính chất lượng bên ngoài?"
+  },
+  {
+   "chu": "internal quality attribute",
+   "nghia": "thuộc tính chất lượng trong: không thấy khi chạy, quan trọng với lập trình viên và người bảo trì (dễ sửa, dễ chuyển nền tảng…)",
+   "nhom": "Thuộc tính chất lượng",
+   "viDu": "Portability is an internal quality attribute which could be described:",
+   "viDuNghia": "Portability là một thuộc tính chất lượng bên trong, có thể được mô tả là:"
+  },
+  {
+   "chu": "availability",
+   "doc": "/əˌveɪləˈbɪləti/",
+   "nghia": "tính sẵn sàng: tỉ lệ thời gian hệ thống chạy và dùng được",
+   "nhom": "Thuộc tính chất lượng",
+   "viDu": "Availability is NOT a type of internal quality; it is an external quality attribute.",
+   "viDuNghia": "Tính sẵn sàng KHÔNG phải chất lượng bên trong; nó là thuộc tính chất lượng bên ngoài."
+  },
+  {
+   "chu": "security",
+   "doc": "/sɪˈkjʊrəti/",
+   "nghia": "bảo mật: ngăn truy cập trái phép vào chức năng và dữ liệu",
+   "nhom": "Thuộc tính chất lượng",
+   "viDu": "Which is an example of Security requirements reuse opportunity?",
+   "viDuNghia": "Đâu là ví dụ về cơ hội tái sử dụng yêu cầu thuộc nhóm Bảo mật (Security)?"
+  },
+  {
+   "chu": "robustness",
+   "doc": "/roʊˈbʌstnəs/",
+   "nghia": "tính bền vững: vẫn chạy được khi gặp dữ liệu sai, lỗi hay điều kiện bất thường",
+   "nhom": "Thuộc tính chất lượng",
+   "viDu": "\"If the editor fails before the user saves the file, it shall recover the contents of the file.\" This is a robustness requirement.",
+   "viDuNghia": "\"Nếu trình soạn thảo hỏng trước khi người dùng lưu tệp, nó phải khôi phục nội dung tệp.\" Đây là một yêu cầu về tính bền vững."
+  },
+  {
+   "chu": "interoperability",
+   "doc": "/ˌɪntərˌɑːpərəˈbɪləti/",
+   "nghia": "khả năng liên thông: trao đổi dữ liệu, dịch vụ dễ dàng với hệ thống khác",
+   "nhom": "Thuộc tính chất lượng",
+   "viDu": "\"The system shall be able to import any valid chemical structure from the ChemDraw tool.\" This refers to interoperability.",
+   "viDuNghia": "\"Hệ thống phải nhập được mọi cấu trúc hoá học hợp lệ từ công cụ ChemDraw.\" Câu này nói về khả năng liên thông."
+  },
+  {
+   "chu": "installability",
+   "doc": "/ɪnˌstɔːləˈbɪləti/",
+   "nghia": "tính dễ cài đặt: cài, gỡ, cài lại phần mềm dễ tới đâu",
+   "nhom": "Thuộc tính chất lượng",
+   "viDu": "When defining installability requirements, which of the following factors is most important to measure how easy it is to install a system?",
+   "viDuNghia": "Khi định nghĩa yêu cầu về tính cài đặt được, yếu tố nào quan trọng nhất để đo mức độ dễ cài đặt hệ thống?"
+  },
+  {
+   "chu": "modifiability",
+   "doc": "/ˌmɑːdɪfaɪəˈbɪləti/",
+   "nghia": "tính dễ sửa đổi: hiểu, sửa và mở rộng thiết kế, mã nguồn dễ tới đâu",
+   "nhom": "Thuộc tính chất lượng",
+   "viDu": "Modifiability is an internal quality attribute.",
+   "viDuNghia": "Tính dễ sửa đổi là một thuộc tính chất lượng bên trong."
+  },
+  {
+   "chu": "portability",
+   "doc": "/ˌpɔːrtəˈbɪləti/",
+   "nghia": "tính khả chuyển: chuyển phần mềm sang nền tảng, môi trường khác dễ tới đâu",
+   "nhom": "Thuộc tính chất lượng",
+   "viDu": "Which of the following statements explains portability in non-functional requirements?",
+   "viDuNghia": "Phát biểu nào giải thích tính khả chuyển (portability) trong yêu cầu phi chức năng?"
+  },
+  {
+   "chu": "reusability",
+   "doc": "/ˌriːjuːzəˈbɪləti/",
+   "nghia": "tính tái sử dụng: dùng lại một thành phần cho hệ thống khác dễ tới đâu",
+   "nhom": "Thuộc tính chất lượng",
+   "viDu": "Reusability is not an external quality attribute.",
+   "viDuNghia": "Tính tái sử dụng không phải là thuộc tính chất lượng bên ngoài."
+  },
+  {
+   "chu": "verifiability",
+   "doc": "/ˌverɪfaɪəˈbɪləti/",
+   "nghia": "tính kiểm chứng được: kiểm tra xem phần mềm làm đúng yêu cầu hay không dễ tới đâu",
+   "nhom": "Thuộc tính chất lượng",
+   "viDu": "Verifiability is an internal quality attribute, also called testability.",
+   "viDuNghia": "Tính kiểm chứng được là thuộc tính chất lượng bên trong, còn gọi là tính kiểm thử được."
+  },
+  {
+   "chu": "Specific, Measurable, Attainable, Relevant, Time-sensitive",
+   "nghia": "SMART: yêu cầu chất lượng viết tốt phải cụ thể, đo được, đạt được, phù hợp, có thời hạn (PMG201c đọc: Achievable, Time-bound)",
+   "nhom": "Thuộc tính chất lượng",
+   "viDu": "When specifying well-structured quality requirements, what does the \"SMART\" mnemonic stand for?",
+   "viDuNghia": "Khi đặc tả yêu cầu chất lượng có cấu trúc tốt, cụm viết tắt \"SMART\" là viết tắt của gì?"
+  },
+  {
+   "chu": "quality requirement",
+   "doc": "/ˈkwɑːləti rɪˈkwaɪərmənt/",
+   "nghia": "yêu cầu chất lượng: yêu cầu phi chức năng nói hệ thống phải TỐT tới mức nào (nhanh, an toàn, sẵn sàng…), nên có con số đo được",
+   "nhom": "Thuộc tính chất lượng",
+   "viDu": "Example of a quality requirement: \"Authorization of an ATM withdrawal request shall take no more than 2.0 seconds.\"",
+   "viDuNghia": "Ví dụ về yêu cầu chất lượng: \"Việc cấp phép một yêu cầu rút tiền ATM phải mất không quá 2,0 giây.\""
+  },
+  {
+   "chu": "complete",
+   "doc": "/kəmˈpliːt/",
+   "nghia": "đầy đủ: yêu cầu chứa mọi thông tin cần để thiết kế và cài đặt",
+   "nhom": "Yêu cầu viết tốt",
+   "viDu": "Each requirement should be complete, meaning it contains all the information necessary for the reader to understand it.",
+   "viDuNghia": "Mỗi yêu cầu phải đầy đủ, nghĩa là chứa mọi thông tin cần thiết để người đọc hiểu được nó."
+  },
+  {
+   "chu": "feasible",
+   "doc": "/ˈfiːzəbl/",
+   "nghia": "khả thi: làm được trong giới hạn kỹ thuật, thời gian, chi phí",
+   "nhom": "Yêu cầu viết tốt",
+   "viDu": "A business analyst needs analytical skills to break down complex problems and identify feasible solutions.",
+   "viDuNghia": "BA cần kỹ năng phân tích để chia nhỏ vấn đề phức tạp và xác định các giải pháp khả thi."
+  },
+  {
+   "chu": "prioritized",
+   "doc": "/praɪˈɔːrətaɪzd/",
+   "nghia": "đã xếp ưu tiên: yêu cầu có mức quan trọng được gán rõ",
+   "nhom": "Yêu cầu viết tốt",
+   "viDu": "Each requirement should be prioritized so that the most important ones are implemented first.",
+   "viDuNghia": "Mỗi yêu cầu nên được xếp ưu tiên để những yêu cầu quan trọng nhất được làm trước."
+  },
+  {
+   "chu": "unambiguous",
+   "doc": "/ˌʌnæmˈbɪɡjuəs/",
+   "nghia": "không mơ hồ: mọi người đọc đều hiểu theo đúng một nghĩa",
+   "nhom": "Yêu cầu viết tốt",
+   "viDu": "Which requirement attribute refers to the degree to which a requirement is clear and unambiguous?",
+   "viDuNghia": "Thuộc tính yêu cầu nào chỉ mức độ một yêu cầu rõ ràng và không nhập nhằng?"
+  },
+  {
+   "chu": "verifiable",
+   "doc": "/ˈverɪfaɪəbl/",
+   "nghia": "kiểm chứng được: có cách kiểm tra (test, rà soát) xem yêu cầu đã được làm đúng chưa",
+   "nhom": "Yêu cầu viết tốt",
+   "viDu": "What does the term \"verifiable\" mean in the context of excellent requirements?",
+   "viDuNghia": "Trong bối cảnh yêu cầu chất lượng cao, thuật ngữ \"verifiable\" (kiểm chứng được) nghĩa là gì?"
+  },
+  {
+   "chu": "modifiable",
+   "doc": "/ˈmɑːdɪfaɪəbl/",
+   "nghia": "sửa đổi được: tài liệu được tổ chức sao cho dễ sửa và giữ được lịch sử thay đổi",
+   "nhom": "Yêu cầu viết tốt",
+   "viDu": "A modifiable SRS has a table of contents, an index, and no duplicated requirements.",
+   "viDuNghia": "Một bản SRS sửa đổi được thì có mục lục, chỉ mục và không có yêu cầu bị lặp."
+  },
+  {
+   "chu": "ambiguous",
+   "doc": "/æmˈbɪɡjuəs/",
+   "nghia": "mơ hồ, nhập nhằng: có thể hiểu theo nhiều nghĩa",
+   "nhom": "Yêu cầu viết tốt",
+   "viDu": "Consider the following statement: \"All the screens in the system must load quickly\". This requirement statement is Ambiguous and Non-Testable.",
+   "viDuNghia": "Xét phát biểu sau: \"Tất cả màn hình trong hệ thống phải tải nhanh\". Phát biểu yêu cầu này là Nhập nhằng và Không kiểm thử được"
+  },
+  {
+   "chu": "ambiguity",
+   "doc": "/ˌæmbɪˈɡjuːəti/",
+   "nghia": "sự mơ hồ, nhập nhằng trong câu chữ",
+   "nhom": "Yêu cầu viết tốt",
+   "viDu": "True or False: A problem with Disciplined Documentation in requirements engineering is that ambiguity and confusion arise as a result of limited terminology?",
+   "viDuNghia": "Đúng hay Sai: Một vấn đề của việc lập tài liệu có kỷ luật (Disciplined Documentation) trong kỹ nghệ yêu cầu là sự mơ hồ và nhầm lẫn nảy sinh do thuật ngữ bị hạn chế?"
+  },
+  {
+   "chu": "testable",
+   "doc": "/ˈtestəbl/",
+   "nghia": "kiểm thử được: viết được test để biết đạt hay không đạt",
+   "nhom": "Yêu cầu viết tốt",
+   "viDu": "Consider the following statement: \"All the screens in the system must load quickly\". This requirement statement is Ambiguous and Non-Testable.",
+   "viDuNghia": "Xét phát biểu sau: \"Tất cả các màn hình trong hệ thống phải tải nhanh\". Phát biểu yêu cầu này là Mơ hồ và Không kiểm thử được"
+  },
+  {
+   "chu": "measurable",
+   "doc": "/ˈmeʒərəbl/",
+   "nghia": "đo được: có con số cụ thể để đo",
+   "nhom": "Yêu cầu viết tốt",
+   "viDu": "\"Fast\" is not measurable; \"responds within 2 seconds\" is.",
+   "viDuNghia": "\"Nhanh\" thì không đo được; \"phản hồi trong 2 giây\" thì đo được."
+  },
+  {
+   "chu": "concise",
+   "doc": "/kənˈsaɪs/",
+   "nghia": "ngắn gọn, súc tích",
+   "nhom": "Yêu cầu viết tốt",
+   "viDu": "Which of the following is a correct guideline for writing clear and concise requirements?",
+   "viDuNghia": "Đâu là hướng dẫn đúng để viết yêu cầu rõ ràng và súc tích?"
+  },
+  {
+   "chu": "vague",
+   "doc": "/veɪɡ/",
+   "nghia": "mơ hồ, chung chung, không cụ thể",
+   "nhom": "Yêu cầu viết tốt",
+   "viDu": "A common pitfall in writing non-functional requirements is making them too vague or unmeasurable.",
+   "viDuNghia": "Một lỗi hay gặp khi viết yêu cầu phi chức năng là viết quá chung chung hoặc không đo được."
+  },
+  {
+   "chu": "precise",
+   "doc": "/prɪˈsaɪs/",
+   "nghia": "chính xác, rõ ràng từng chi tiết",
+   "nhom": "Yêu cầu viết tốt",
+   "viDu": "Which of the following is the most precise definition of \"requirement(s)\"?",
+   "viDuNghia": "Đâu là định nghĩa chính xác nhất về \"yêu cầu (requirement)\"?"
+  },
+  {
+   "chu": "redundant",
+   "doc": "/rɪˈdʌndənt/",
+   "nghia": "dư thừa, lặp lại (cùng một yêu cầu ghi nhiều chỗ)",
+   "nhom": "Yêu cầu viết tốt",
+   "viDu": "According to IEEE 830, a good SRS is NOT redundant: the same requirement is not stated multiple times in different sections.",
+   "viDuNghia": "Theo IEEE 830, một SRS tốt KHÔNG dư thừa: cùng một yêu cầu không bị ghi lặp ở nhiều mục khác nhau."
+  },
+  {
+   "chu": "subjective",
+   "doc": "/səbˈdʒektɪv/",
+   "nghia": "chủ quan: tuỳ cảm nhận từng người nên không đo được (ví dụ \"dễ dùng\", \"nhanh\")",
+   "nhom": "Yêu cầu viết tốt",
+   "viDu": "Non-functional requirements are hard to validate because they are often subjective and difficult to measure accurately.",
+   "viDuNghia": "Yêu cầu phi chức năng khó kiểm chứng vì chúng thường chủ quan và khó đo chính xác."
+  },
+  {
+   "chu": "requirement statement",
+   "doc": "/rɪˈkwaɪərmənt ˈsteɪtmənt/",
+   "nghia": "câu phát biểu yêu cầu: một câu viết ra một yêu cầu cụ thể",
+   "nhom": "Yêu cầu viết tốt",
+   "viDu": "Consider the following statement: \"All the screens in the system must load quickly\". This requirement statement is Ambiguous and Non-Testable.",
+   "viDuNghia": "Xét phát biểu sau: \"Tất cả các màn hình trong hệ thống phải tải nhanh\". Phát biểu yêu cầu này là Mơ hồ và Không kiểm thử được"
+  },
+  {
+   "chu": "well-written",
+   "doc": "/ˌwel ˈrɪtn/",
+   "nghia": "được viết tốt: rõ ràng, đủ ý, đúng chuẩn",
+   "nhom": "Yêu cầu viết tốt",
+   "viDu": "Which of the following characteristics should a well-written requirement statement exhibit? Select two.",
+   "viDuNghia": "Một phát biểu yêu cầu được viết tốt cần có những đặc tính nào? Chọn hai."
+  }
+ ]
+}

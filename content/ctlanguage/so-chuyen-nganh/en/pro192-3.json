@@ -1,0 +1,567 @@
+{
+ "ma": "pro192-3",
+ "nn": "en",
+ "ten": "PRO192 · 3. Đọc đề PE và bài LAB211",
+ "moTa": "PRO192 + LAB211 – từ vựng để đọc hiểu đề thực hành (PE) và đề bài lab Java: cấu trúc đề, menu, kiểm tra dữ liệu nhập, dữ liệu bài toán, hình học, thuật toán, từ nối. Từ lấy từ đề PE và đề LAB211 thật; câu ví dụ là câu thật trong đề.",
+ "bieuTuong": "doc.text.magnifyingglass",
+ "thuTu": -981,
+ "tu": [
+  {
+   "chu": "program specification",
+   "doc": "/ˈproʊɡræm ˌspesɪfɪˈkeɪʃn/",
+   "nghia": "đặc tả chương trình – phần mô tả chương trình phải làm gì; mục đầu tiên cần đọc của đề lab",
+   "nhom": "Cấu trúc đề PE & LAB211",
+   "viDu": "Program Specifications: Design a program that allows users to input the number of array elements.",
+   "viDuNghia": "Đặc tả chương trình: Thiết kế chương trình cho phép người dùng nhập số phần tử của mảng."
+  },
+  {
+   "chu": "background",
+   "doc": "/ˈbækɡraʊnd/",
+   "nghia": "bối cảnh – phần giới thiệu tình huống của bài toán",
+   "nhom": "Cấu trúc đề PE & LAB211",
+   "viDu": "Background: BMLT Company is a software company.",
+   "viDuNghia": "Bối cảnh: Công ty BMLT là một công ty phần mềm."
+  },
+  {
+   "chu": "function details",
+   "doc": "/ˈfʌŋkʃn ˈdiːteɪlz/",
+   "nghia": "chi tiết chức năng – mô tả từng chức năng chương trình phải có",
+   "nhom": "Cấu trúc đề PE & LAB211",
+   "viDu": "Function details: Display a screen to prompt users to input a positive decimal number.",
+   "viDuNghia": "Chi tiết chức năng: Hiển thị màn hình nhắc người dùng nhập một số thập phân dương."
+  },
+  {
+   "chu": "short assignment",
+   "doc": "/ʃɔːrt əˈsaɪnmənt/",
+   "nghia": "bài lab ngắn (mã J1.S…) – ít dòng lệnh, làm trong 1–2 slot",
+   "nhom": "Cấu trúc đề PE & LAB211",
+   "viDu": "Short Assignment, 42 LOC, 1 slot: create a program to calculate the perimeter and the area of a circle.",
+   "viDuNghia": "Bài ngắn, 42 dòng lệnh, 1 slot: viết chương trình tính chu vi và diện tích hình tròn."
+  },
+  {
+   "chu": "long assignment",
+   "doc": "/lɔːŋ əˈsaɪnmənt/",
+   "nghia": "bài lab dài (mã J1.L…) – nhiều chức năng, thường 200 LOC trở lên",
+   "nhom": "Cấu trúc đề PE & LAB211",
+   "viDu": "Long Assignment, 200 LOC: asset management will include 2 programs.",
+   "viDuNghia": "Bài dài, 200 dòng lệnh: phần quản lý tài sản sẽ gồm 2 chương trình."
+  },
+  {
+   "chu": "lines of code",
+   "nghia": "số dòng lệnh (LOC) – đơn vị tính khối lượng bài LAB211; đủ LOC mới qua môn",
+   "nhom": "Cấu trúc đề PE & LAB211",
+   "viDu": "Function 1: Load data from file - 50 LOC.",
+   "viDuNghia": "Chức năng 1: Nạp dữ liệu từ tệp - 50 dòng lệnh."
+  },
+  {
+   "chu": "slot",
+   "doc": "/slɑːt/",
+   "nghia": "tiết học (một buổi 90 phút ở FPT)",
+   "nhom": "Cấu trúc đề PE & LAB211",
+   "viDu": "The lecturer will explain the requirement only once on the first slot of the assignment.",
+   "viDuNghia": "Giảng viên chỉ giải thích yêu cầu một lần duy nhất ở tiết đầu của bài."
+  },
+  {
+   "chu": "mark",
+   "doc": "/mɑːrk/",
+   "nghia": "điểm – \"(2 marks)\" = câu này 2 điểm",
+   "nhom": "Cấu trúc đề PE & LAB211",
+   "viDu": "(2 marks) Do not pay attention to the real meaning of objects, variables and their values.",
+   "viDuNghia": "(2 điểm) Không cần để ý ý nghĩa thực tế của các đối tượng, biến và giá trị của chúng."
+  },
+  {
+   "chu": "skeleton",
+   "doc": "/ˈskelɪtn/",
+   "nghia": "bộ khung mã cho sẵn – đề cho sẵn khung, chỉ viết thêm vào chỗ được yêu cầu",
+   "nhom": "Cấu trúc đề PE & LAB211",
+   "viDu": "Class Q1 reads commands from input.txt and writes results to output.txt, exactly per the fixed skeleton below.",
+   "viDuNghia": "Lớp Q1 đọc lệnh từ input.txt và ghi kết quả ra output.txt, đúng theo bộ khung cố định bên dưới."
+  },
+  {
+   "chu": "lecturer",
+   "doc": "/ˈlektʃərər/",
+   "nghia": "giảng viên",
+   "nhom": "Cấu trúc đề PE & LAB211",
+   "viDu": "The lecturer will check your program with his own test cases.",
+   "viDuNghia": "Giảng viên sẽ kiểm tra chương trình của bạn bằng các ca kiểm thử riêng."
+  },
+  {
+   "chu": "driver class",
+   "doc": "/ˈdraɪvər klæs/",
+   "nghia": "lớp chạy chính – lớp chứa main, đọc lệnh rồi gọi các lớp khác",
+   "nhom": "Cấu trúc đề PE & LAB211",
+   "viDu": "Class Q1 is the driver: it reads commands from input.txt and writes results to output.txt.",
+   "viDuNghia": "Lớp Q1 là lớp chạy chính: nó đọc lệnh từ input.txt và ghi kết quả ra output.txt."
+  },
+  {
+   "chu": "startup code",
+   "doc": "/ˈstɑːrtʌp koʊd/",
+   "nghia": "mã khởi đầu – phần mã đề cho sẵn để làm tiếp",
+   "nhom": "Cấu trúc đề PE & LAB211",
+   "viDu": "Student must implement methods in startup code.",
+   "viDuNghia": "Sinh viên phải cài đặt các phương thức trong phần mã cho sẵn."
+  },
+  {
+   "chu": "suggestion",
+   "doc": "/səˈdʒestʃən/",
+   "nghia": "gợi ý (cách thiết kế lớp, hàm)",
+   "nhom": "Cấu trúc đề PE & LAB211",
+   "viDu": "Suggestion: Class DoctorHash contains adding, editing, deleting and searching functions.",
+   "viDuNghia": "Gợi ý: Lớp DoctorHash chứa các hàm thêm, sửa, xoá và tìm kiếm."
+  },
+  {
+   "chu": "option",
+   "doc": "/ˈɑːpʃn/",
+   "nghia": "lựa chọn, mục trong menu",
+   "nhom": "Menu & nhập liệu",
+   "viDu": "Option 2: Login System. Require to input the task information including username and password.",
+   "viDuNghia": "Lựa chọn 2: Đăng nhập hệ thống. Yêu cầu nhập thông tin gồm tên đăng nhập và mật khẩu."
+  },
+  {
+   "chu": "notification",
+   "doc": "/ˌnoʊtɪfɪˈkeɪʃn/",
+   "nghia": "thông báo hiện ra cho người dùng",
+   "nhom": "Menu & nhập liệu",
+   "viDu": "If the code does not exist, show the notification \"Doctor code does not exist\".",
+   "viDuNghia": "Nếu mã không tồn tại, hiện thông báo \"Doctor code does not exist\"."
+  },
+  {
+   "chu": "message",
+   "doc": "/ˈmesɪdʒ/",
+   "nghia": "thông điệp, câu thông báo in ra màn hình",
+   "nhom": "Menu & nhập liệu",
+   "viDu": "After each candidate is created, the system shows the message: Do you want to continue (Y/N)?",
+   "viDuNghia": "Sau khi tạo xong mỗi ứng viên, hệ thống hiện thông báo: Bạn có muốn tiếp tục (Y/N)?"
+  },
+  {
+   "chu": "main screen",
+   "doc": "/meɪn skriːn/",
+   "nghia": "màn hình chính – nơi hiện menu",
+   "nhom": "Menu & nhập liệu",
+   "viDu": "Find and remove the related pair of words from dictionary, then return to the main screen.",
+   "viDuNghia": "Tìm và xoá cặp từ tương ứng khỏi từ điển, rồi quay về màn hình chính."
+  },
+  {
+   "chu": "quit",
+   "doc": "/kwɪt/",
+   "nghia": "thoát chương trình",
+   "nhom": "Menu & nhập liệu",
+   "viDu": "Others: Quit.",
+   "viDuNghia": "Các phím khác: Thoát."
+  },
+  {
+   "chu": "login",
+   "doc": "/ˈlɔːɡɪn/",
+   "nghia": "đăng nhập",
+   "nhom": "Menu & nhập liệu",
+   "viDu": "Option 2: Login System.",
+   "viDuNghia": "Lựa chọn 2: Đăng nhập hệ thống."
+  },
+  {
+   "chu": "username",
+   "doc": "/ˈjuːzərneɪm/",
+   "nghia": "tên đăng nhập",
+   "nhom": "Menu & nhập liệu",
+   "viDu": "Add account information: Username, Password, Name, Phone, Email Address, Date Of Birth.",
+   "viDuNghia": "Thêm thông tin tài khoản: tên đăng nhập, mật khẩu, họ tên, điện thoại, email, ngày sinh."
+  },
+  {
+   "chu": "password",
+   "doc": "/ˈpæswɜːrd/",
+   "nghia": "mật khẩu",
+   "nhom": "Menu & nhập liệu",
+   "viDu": "Require to input the task information including username and password.",
+   "viDuNghia": "Yêu cầu nhập thông tin gồm tên đăng nhập và mật khẩu."
+  },
+  {
+   "chu": "captcha",
+   "doc": "/ˈkæptʃə/",
+   "nghia": "mã xác nhận chống máy – chuỗi ngẫu nhiên người dùng phải gõ lại",
+   "nhom": "Menu & nhập liệu",
+   "viDu": "Implement the function generateCaptcha(). Return value: a random captcha string.",
+   "viDuNghia": "Cài đặt hàm generateCaptcha(). Giá trị trả về: một chuỗi captcha ngẫu nhiên."
+  },
+  {
+   "chu": "account number",
+   "doc": "/əˈkaʊnt ˈnʌmbər/",
+   "nghia": "số tài khoản",
+   "nhom": "Menu & nhập liệu",
+   "viDu": "The program checks that the account number is a number that meets the defined requirements.",
+   "viDuNghia": "Chương trình kiểm tra số tài khoản phải là một số đáp ứng đúng các yêu cầu đã định."
+  },
+  {
+   "chu": "update",
+   "doc": "/ˌʌpˈdeɪt/",
+   "nghia": "cập nhật (sửa thông tin một bản ghi)",
+   "nhom": "Menu & nhập liệu",
+   "viDu": "For Update and Remove, locate the record by Id and tell the user when no match is found.",
+   "viDuNghia": "Với Cập nhật và Xoá, tìm bản ghi theo Id và báo cho người dùng khi không thấy bản ghi khớp."
+  },
+  {
+   "chu": "date of birth",
+   "nghia": "ngày sinh",
+   "nhom": "Menu & nhập liệu",
+   "viDu": "The program has to check valid data for: Date of Birth, Phone, Email, Year of Experience, Rank of Graduation.",
+   "viDuNghia": "Chương trình phải kiểm tra dữ liệu hợp lệ cho: ngày sinh, điện thoại, email, số năm kinh nghiệm, xếp loại tốt nghiệp."
+  },
+  {
+   "chu": "submenu",
+   "doc": "/ˈsʌbmenjuː/",
+   "nghia": "menu con – menu hiện ra sau khi chọn một mục của menu chính",
+   "nhom": "Menu & nhập liệu",
+   "viDu": "Create a submenu that allows the user to select way to show: show all or by type.",
+   "viDuNghia": "Tạo một menu con cho phép người dùng chọn cách hiển thị: tất cả hoặc theo loại."
+  },
+  {
+   "chu": "export",
+   "doc": "/ɪkˈspɔːrt/",
+   "nghia": "xuất (dữ liệu ra tệp)",
+   "nhom": "Menu & nhập liệu",
+   "viDu": "Export a file with the format which the user chose.",
+   "viDuNghia": "Xuất một tệp theo định dạng mà người dùng đã chọn."
+  },
+  {
+   "chu": "unzip",
+   "doc": "/ˌʌnˈzɪp/",
+   "nghia": "giải nén tệp",
+   "nhom": "Menu & nhập liệu",
+   "viDu": "Create a program to zip and unzip file with the following menu.",
+   "viDuNghia": "Viết chương trình nén và giải nén tệp với menu sau."
+  },
+  {
+   "chu": "destination",
+   "doc": "/ˌdestɪˈneɪʃn/",
+   "nghia": "đích – tệp hoặc thư mục nhận dữ liệu (ngược với source = nguồn)",
+   "nhom": "Menu & nhập liệu",
+   "viDu": "Must set the function: copyWordOneTimes(String source, String destination).",
+   "viDuNghia": "Phải viết hàm: copyWordOneTimes(String source, String destination)."
+  },
+  {
+   "chu": "candidate",
+   "doc": "/ˈkændɪdət/",
+   "nghia": "ứng viên (xin việc)",
+   "nhom": "Dữ liệu bài toán",
+   "viDu": "Create Experience Candidate; should create Candidate as a superclass.",
+   "viDuNghia": "Tạo lớp ứng viên có kinh nghiệm; nên tạo Candidate làm lớp cha."
+  },
+  {
+   "chu": "experience",
+   "doc": "/ɪkˈspɪriəns/",
+   "nghia": "kinh nghiệm (làm việc)",
+   "nhom": "Dữ liệu bài toán",
+   "viDu": "Year of Experience must be a number from 0 to 100.",
+   "viDuNghia": "Số năm kinh nghiệm phải là một số từ 0 đến 100."
+  },
+  {
+   "chu": "graduation",
+   "doc": "/ˌɡrædʒuˈeɪʃn/",
+   "nghia": "sự tốt nghiệp (\"rank of graduation\" = xếp loại tốt nghiệp)",
+   "nhom": "Dữ liệu bài toán",
+   "viDu": "Rank of Graduation is one of: Excellence, Good, Fair, Poor.",
+   "viDuNghia": "Xếp loại tốt nghiệp là một trong: Xuất sắc, Giỏi, Khá, Kém."
+  },
+  {
+   "chu": "specialization",
+   "doc": "/ˌspeʃələˈzeɪʃn/",
+   "nghia": "chuyên khoa, chuyên môn (của bác sĩ)",
+   "nhom": "Dữ liệu bài toán",
+   "viDu": "Option 1: Add Doctor. Require to enter task information including code, name, specialization, availability.",
+   "viDuNghia": "Lựa chọn 1: Thêm bác sĩ. Yêu cầu nhập thông tin gồm mã, tên, chuyên khoa, tình trạng làm việc."
+  },
+  {
+   "chu": "borrow",
+   "doc": "/ˈbɑːroʊ/",
+   "nghia": "mượn (sách, tài sản)",
+   "nhom": "Dữ liệu bài toán",
+   "viDu": "In addition, the manager also approves the requests to borrow assets of employees.",
+   "viDuNghia": "Ngoài ra, người quản lý còn duyệt các yêu cầu mượn tài sản của nhân viên."
+  },
+  {
+   "chu": "loan",
+   "doc": "/loʊn/",
+   "nghia": "lượt mượn, khoản cho mượn",
+   "nhom": "Dữ liệu bài toán",
+   "viDu": "The given Main starts the list, then adds the loan you type, then runs the test case.",
+   "viDuNghia": "Lớp Main cho sẵn khởi tạo danh sách, rồi thêm lượt mượn bạn nhập, rồi chạy ca kiểm thử."
+  },
+  {
+   "chu": "fee",
+   "doc": "/fiː/",
+   "nghia": "phí (phí trễ hạn, phí dịch vụ)",
+   "nhom": "Dữ liệu bài toán",
+   "viDu": "Each member type has its own fee policy for late returns.",
+   "viDuNghia": "Mỗi loại thành viên có chính sách phí riêng khi trả trễ."
+  },
+  {
+   "chu": "catalog",
+   "doc": "/ˈkætəlɔːɡ/",
+   "nghia": "danh mục (sách, sản phẩm)",
+   "nhom": "Dữ liệu bài toán",
+   "viDu": "A Catalog is NOT a Map and does NOT extend one; it HAS-A map inside it (composition).",
+   "viDuNghia": "Catalog KHÔNG phải là Map và KHÔNG kế thừa Map; nó CHỨA một map bên trong (quan hệ hợp thành)."
+  },
+  {
+   "chu": "asset",
+   "doc": "/ˈæset/",
+   "nghia": "tài sản (của công ty)",
+   "nhom": "Dữ liệu bài toán",
+   "viDu": "Asset management will include 2 programs: one for employees and other one for manager.",
+   "viDuNghia": "Phần quản lý tài sản gồm 2 chương trình: một cho nhân viên và một cho người quản lý."
+  },
+  {
+   "chu": "quantity",
+   "doc": "/ˈkwɑːntəti/",
+   "nghia": "số lượng",
+   "nhom": "Dữ liệu bài toán",
+   "viDu": "The order table has four columns: Product, Quantity, Price, Amount.",
+   "viDuNghia": "Bảng đơn hàng có bốn cột: sản phẩm, số lượng, đơn giá, thành tiền."
+  },
+  {
+   "chu": "balance",
+   "doc": "/ˈbæləns/",
+   "nghia": "số dư (tài khoản)",
+   "nhom": "Dữ liệu bài toán",
+   "viDu": "The balance is formatted with two decimal places.",
+   "viDuNghia": "Số dư được định dạng với hai chữ số thập phân."
+  },
+  {
+   "chu": "department",
+   "doc": "/dɪˈpɑːrtmənt/",
+   "nghia": "phòng ban",
+   "nhom": "Dữ liệu bài toán",
+   "viDu": "The actual salary is formatted with two decimal places and the name and department in uppercase.",
+   "viDuNghia": "Lương thực nhận được định dạng hai chữ số thập phân, còn tên và phòng ban viết hoa."
+  },
+  {
+   "chu": "registration",
+   "doc": "/ˌredʒɪˈstreɪʃn/",
+   "nghia": "sự đăng ký (\"registration date\" = ngày đăng ký)",
+   "nhom": "Dữ liệu bài toán",
+   "viDu": "A pet has an owner, a registration date, and a vaccination-due date.",
+   "viDuNghia": "Một thú cưng có chủ, ngày đăng ký và ngày đến hạn tiêm phòng."
+  },
+  {
+   "chu": "suit",
+   "doc": "/suːt/",
+   "nghia": "chất của lá bài (cơ, rô, chuồn, bích)",
+   "nhom": "Dữ liệu bài toán",
+   "viDu": "Build the deck with two nested loops: the outer over suits, the inner over ranks.",
+   "viDuNghia": "Dựng bộ bài bằng hai vòng lặp lồng nhau: vòng ngoài theo chất, vòng trong theo hạng."
+  },
+  {
+   "chu": "deck",
+   "doc": "/dek/",
+   "nghia": "bộ bài (52 lá)",
+   "nhom": "Dữ liệu bài toán",
+   "viDu": "The test program creates one deck and prints its 52 cards.",
+   "viDuNghia": "Chương trình thử tạo một bộ bài và in ra 52 lá của nó."
+  },
+  {
+   "chu": "dictionary",
+   "doc": "/ˈdɪkʃəneri/",
+   "nghia": "từ điển",
+   "nhom": "Dữ liệu bài toán",
+   "viDu": "Add a new English-Vietnamese pair of words to the dictionary.",
+   "viDuNghia": "Thêm một cặp từ Anh–Việt mới vào từ điển."
+  },
+  {
+   "chu": "threshold",
+   "doc": "/ˈθreʃhoʊld/",
+   "nghia": "ngưỡng – mức giá trị mà vượt qua thì trạng thái thay đổi",
+   "nhom": "Dữ liệu bài toán",
+   "viDu": "Every bee has a health value, but each kind of bee dies at a different health threshold.",
+   "viDuNghia": "Con ong nào cũng có chỉ số sức khoẻ, nhưng mỗi loại ong chết ở một ngưỡng sức khoẻ khác nhau."
+  },
+  {
+   "chu": "normalize",
+   "doc": "/ˈnɔːrməlaɪz/",
+   "nghia": "chuẩn hoá (văn bản: bỏ dấu cách thừa, viết hoa đầu câu…)",
+   "nhom": "Dữ liệu bài toán",
+   "viDu": "After that, write the normalized document to the output file (output.txt).",
+   "viDuNghia": "Sau đó, ghi văn bản đã chuẩn hoá ra tệp kết quả (output.txt)."
+  },
+  {
+   "chu": "distinguishing",
+   "doc": "/dɪˈstɪŋɡwɪʃɪŋ/",
+   "nghia": "để phân biệt, đặc trưng",
+   "nhom": "Dữ liệu bài toán",
+   "viDu": "Playing cards have two distinguishing properties: rank and suit.",
+   "viDuNghia": "Lá bài có hai thuộc tính để phân biệt: hạng và chất."
+  },
+  {
+   "chu": "wallet",
+   "doc": "/ˈwɑːlɪt/",
+   "nghia": "ví tiền",
+   "nhom": "Dữ liệu bài toán",
+   "viDu": "Class Wallet contains the information about the amount in the user wallet.",
+   "viDuNghia": "Lớp Wallet chứa thông tin về số tiền trong ví của người dùng."
+  },
+  {
+   "chu": "vaccination",
+   "doc": "/ˌvæksɪˈneɪʃn/",
+   "nghia": "sự tiêm phòng",
+   "nhom": "Dữ liệu bài toán",
+   "viDu": "A pet has an owner, a registration date, and a vaccination-due date.",
+   "viDuNghia": "Một thú cưng có chủ, ngày đăng ký và ngày đến hạn tiêm phòng."
+  },
+  {
+   "chu": "contact",
+   "doc": "/ˈkɑːntækt/",
+   "nghia": "liên hệ – một mục trong danh bạ (tên, nhóm, địa chỉ, điện thoại)",
+   "nhom": "Dữ liệu bài toán",
+   "viDu": "Option 1: Add contact. Require to input task information including name, group, address, phone.",
+   "viDuNghia": "Lựa chọn 1: Thêm liên hệ. Yêu cầu nhập thông tin gồm tên, nhóm, địa chỉ, điện thoại."
+  },
+  {
+   "chu": "vehicle",
+   "doc": "/ˈviːəkl/",
+   "nghia": "phương tiện, xe cộ",
+   "nhom": "Dữ liệu bài toán",
+   "viDu": "Function 6: Show vehicle list.",
+   "viDuNghia": "Chức năng 6: Hiển thị danh sách xe."
+  },
+  {
+   "chu": "damage",
+   "doc": "/ˈdæmɪdʒ/",
+   "nghia": "sát thương, thiệt hại",
+   "nhom": "Dữ liệu bài toán",
+   "viDu": "Each bee has a Damage() method that takes a single integer parameter between 0 and 100.",
+   "viDuNghia": "Mỗi con ong có phương thức Damage() nhận một tham số nguyên từ 0 đến 100."
+  },
+  {
+   "chu": "semester",
+   "doc": "/sɪˈmestər/",
+   "nghia": "học kỳ",
+   "nhom": "Dữ liệu bài toán",
+   "viDu": "It should display: Student name, semester and Course Name.",
+   "viDuNghia": "Cần hiển thị: tên sinh viên, học kỳ và tên môn học."
+  },
+  {
+   "chu": "terrain",
+   "doc": "/təˈreɪn/",
+   "nghia": "địa hình",
+   "nhom": "Dữ liệu bài toán",
+   "viDu": "Input the information of 11 countries in East Asia including code, name, total area, terrain.",
+   "viDuNghia": "Nhập thông tin 11 nước Đông Á gồm mã, tên, tổng diện tích, địa hình."
+  },
+  {
+   "chu": "circle",
+   "doc": "/ˈsɜːrkl/",
+   "nghia": "hình tròn",
+   "nhom": "Tính toán & thuật toán",
+   "viDu": "Create classes Triangle, Rectangle, Circle that extend from class Shape.",
+   "viDuNghia": "Tạo các lớp Triangle, Rectangle, Circle kế thừa từ lớp Shape."
+  },
+  {
+   "chu": "surface area",
+   "doc": "/ˈsɜːrfɪs ˈeriə/",
+   "nghia": "diện tích bề mặt (của hình khối)",
+   "nhom": "Tính toán & thuật toán",
+   "viDu": "The methods getArea() and getVolume() calculate the surface area and the volume respectively.",
+   "viDuNghia": "Phương thức getArea() và getVolume() lần lượt tính diện tích bề mặt và thể tích."
+  },
+  {
+   "chu": "quadratic equation",
+   "doc": "/kwɑːˈdrætɪk ɪˈkweɪʒn/",
+   "nghia": "phương trình bậc hai",
+   "nhom": "Tính toán & thuật toán",
+   "viDu": "Calculate Quadratic Equation: input the coefficients A, B, C and find the solutions.",
+   "viDuNghia": "Giải phương trình bậc hai: nhập các hệ số A, B, C và tìm nghiệm."
+  },
+  {
+   "chu": "body mass index",
+   "nghia": "chỉ số khối cơ thể (BMI) – cân nặng (kg) chia cho bình phương chiều cao (m)",
+   "nhom": "Tính toán & thuật toán",
+   "viDu": "Option 2: BMI calculator. Require to input your weight and height.",
+   "viDuNghia": "Lựa chọn 2: Tính chỉ số khối cơ thể (BMI). Yêu cầu nhập cân nặng và chiều cao."
+  },
+  {
+   "chu": "calculator",
+   "doc": "/ˈkælkjuleɪtər/",
+   "nghia": "máy tính (chương trình tính toán)",
+   "nhom": "Tính toán & thuật toán",
+   "viDu": "Option 1: Normal calculator. Require to input task information including number and operator.",
+   "viDuNghia": "Lựa chọn 1: Máy tính thường. Yêu cầu nhập thông tin gồm số và toán tử."
+  },
+  {
+   "chu": "routine",
+   "doc": "/ruːˈtiːn/",
+   "nghia": "thủ tục, đoạn chương trình làm một việc (sorting routine = thủ tục sắp xếp)",
+   "nhom": "Tính toán & thuật toán",
+   "viDu": "Merge sort is a fast, stable sorting routine.",
+   "viDuNghia": "Merge sort là một thủ tục sắp xếp nhanh và ổn định."
+  },
+  {
+   "chu": "three-dimensional shape",
+   "doc": "/θriː daɪˈmenʃənl ʃeɪp/",
+   "nghia": "hình ba chiều, hình khối (hình cầu, hình hộp…)",
+   "nhom": "Tính toán & thuật toán",
+   "viDu": "Each three-dimensional shape should contain getArea() and getVolume() methods.",
+   "viDuNghia": "Mỗi hình ba chiều cần có phương thức getArea() và getVolume()."
+  },
+  {
+   "chu": "subtraction",
+   "doc": "/səbˈtrækʃn/",
+   "nghia": "phép trừ",
+   "nhom": "Tính toán & thuật toán",
+   "viDu": "Option 2: Subtraction of matrices. Display the result.",
+   "viDuNghia": "Lựa chọn 2: Phép trừ hai ma trận. Hiển thị kết quả."
+  },
+  {
+   "chu": "in addition",
+   "doc": "/ɪn əˈdɪʃn/",
+   "nghia": "ngoài ra, thêm vào đó",
+   "nhom": "Từ nối & ràng buộc",
+   "viDu": "In addition, the manager also approves the requests to borrow assets of employees.",
+   "viDuNghia": "Ngoài ra, người quản lý còn duyệt các yêu cầu mượn tài sản của nhân viên."
+  },
+  {
+   "chu": "tie",
+   "doc": "/taɪ/",
+   "nghia": "trường hợp bằng nhau, hoà – \"break the tie\" = phân định khi hai phần tử bằng nhau",
+   "nhom": "Từ nối & ràng buộc",
+   "viDu": "If two names are equal ignoring case, break the tie by code ascending.",
+   "viDuNghia": "Nếu hai tên bằng nhau khi không xét hoa thường thì phân định bằng mã tăng dần."
+  },
+  {
+   "chu": "unchanged",
+   "doc": "/ʌnˈtʃeɪndʒd/",
+   "nghia": "không thay đổi, giữ nguyên",
+   "nhom": "Từ nối & ràng buộc",
+   "viDu": "Once the bee is dead, calling Damage() must leave the health unchanged but must not throw an error.",
+   "viDuNghia": "Khi ong đã chết, gọi Damage() phải giữ nguyên sức khoẻ và không được ném lỗi."
+  },
+  {
+   "chu": "afterwards",
+   "doc": "/ˈæftərwərdz/",
+   "nghia": "sau đó",
+   "nhom": "Từ nối & ràng buộc",
+   "viDu": "The harness prints the caller list again afterwards to check this.",
+   "viDuNghia": "Chương trình chấm in lại danh sách của nơi gọi sau đó để kiểm tra điều này."
+  },
+  {
+   "chu": "ignore case",
+   "doc": "/ɪɡˈnɔːr keɪs/",
+   "nghia": "không phân biệt chữ hoa chữ thường (khi so sánh chuỗi)",
+   "nhom": "Từ nối & ràng buộc",
+   "viDu": "If two names are equal ignoring case, break the tie by code ascending.",
+   "viDuNghia": "Nếu hai tên bằng nhau khi không xét hoa thường thì phân định bằng mã tăng dần."
+  },
+  {
+   "chu": "relative order",
+   "doc": "/ˈrelətɪv ˈɔːrdər/",
+   "nghia": "thứ tự tương đối – thứ tự trước sau giữa các phần tử với nhau",
+   "nhom": "Từ nối & ràng buộc",
+   "viDu": "Inside each group the products must keep the same relative order they had in the original list.",
+   "viDuNghia": "Trong mỗi nhóm, các sản phẩm phải giữ đúng thứ tự tương đối như trong danh sách gốc."
+  },
+  {
+   "chu": "colon",
+   "doc": "/ˈkoʊlən/",
+   "nghia": "dấu hai chấm",
+   "nhom": "Từ nối & ràng buộc",
+   "viDu": "Only one space after comma, dot and colon.",
+   "viDuNghia": "Chỉ để một dấu cách sau dấu phẩy, dấu chấm và dấu hai chấm."
+  }
+ ]
+}

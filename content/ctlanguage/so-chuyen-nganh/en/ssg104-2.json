@@ -1,0 +1,786 @@
+{
+ "ma": "ssg104-2",
+ "nn": "en",
+ "ten": "SSG104 · 2. Tư duy, hiểu bản thân & sự nghiệp",
+ "moTa": "Communication and In-Group Working Skills, phần 2: tư duy sáng tạo – phản biện, thang Bloom, so sánh xã hội và lòng tự trọng, căng thẳng, phát triển sự nghiệp, thư xin việc và email. Từ lấy từ đề FE thật; ví dụ phần lớn là câu hỏi thật trong đề. Dùng được khi viết CV, đi phỏng vấn.",
+ "bieuTuong": "brain.head.profile",
+ "thuTu": -969,
+ "tu": [
+  {
+   "chu": "creative thinking",
+   "doc": "/kriˌeɪtɪv ˈθɪŋkɪŋ/",
+   "nghia": "tư duy sáng tạo: tạo ra ý tưởng mới, nhìn vấn đề theo cách khác thường",
+   "nhom": "Tư duy & thang Bloom",
+   "viDu": "Which is NOT a fiction about Creative Thinking?",
+   "viDuNghia": "Điều nào KHÔNG PHẢI là một ngộ nhận (fiction) về Tư duy Sáng tạo?"
+  },
+  {
+   "chu": "Bloom's taxonomy",
+   "doc": "/ˌbluːmz tækˈsɑːnəmi/",
+   "nghia": "thang phân loại Bloom: 6 bậc nhận thức — nhớ, hiểu, vận dụng, phân tích, đánh giá, sáng tạo",
+   "nhom": "Tư duy & thang Bloom",
+   "viDu": "Which is the lowest learning-skill level of Bloom's Taxonomy?",
+   "viDuNghia": "Cấp độ kỹ năng học tập thấp nhất trong thang Bloom's Taxonomy là gì?"
+  },
+  {
+   "chu": "cognitive domain",
+   "doc": "/ˈkɑːɡnətɪv doʊˈmeɪn/",
+   "nghia": "lĩnh vực nhận thức: phần kiến thức và tư duy trong thang Bloom",
+   "nhom": "Tư duy & thang Bloom",
+   "viDu": "Which of the following domains of learning skills means \"What you should care about\"? — Cognitive domain / Affective domain / Psychomotor domain / Reflective domain",
+   "viDuNghia": "Lĩnh vực học tập nào sau đây (theo phân loại Bloom) mang nghĩa \"Những gì bạn nên quan tâm\"? — Lĩnh vực nhận thức (Cognitive) / Lĩnh vực cảm xúc/thái độ (Affective) / Lĩnh vực tâm vận động (Psychomotor) / Lĩnh vực phản tư (Reflective)"
+  },
+  {
+   "chu": "affective domain",
+   "doc": "/əˈfektɪv doʊˈmeɪn/",
+   "nghia": "lĩnh vực cảm xúc: thái độ, giá trị, cảm nhận của người học",
+   "nhom": "Tư duy & thang Bloom",
+   "viDu": "Which of the following domains of learning skills means \"What you should care about\"? — Cognitive domain / Affective domain / Psychomotor domain / Reflective domain",
+   "viDuNghia": "Lĩnh vực học tập nào sau đây (theo phân loại Bloom) mang nghĩa \"Những gì bạn nên quan tâm\"? — Lĩnh vực nhận thức (Cognitive) / Lĩnh vực cảm xúc/thái độ (Affective) / Lĩnh vực tâm vận động (Psychomotor) / Lĩnh vực phản tư (Reflective)"
+  },
+  {
+   "chu": "psychomotor domain",
+   "doc": "/ˌsaɪkoʊˈmoʊtər doʊˈmeɪn/",
+   "nghia": "lĩnh vực tâm vận động: kỹ năng thao tác tay chân, vận động",
+   "nhom": "Tư duy & thang Bloom",
+   "viDu": "The 'Psychomotor Domain' of learning skills means",
+   "viDuNghia": "'Lĩnh vực Tâm vận động' (Psychomotor Domain) trong các kỹ năng học tập nghĩa là:"
+  },
+  {
+   "chu": "cognitive",
+   "doc": "/ˈkɑːɡnətɪv/",
+   "nghia": "thuộc nhận thức, liên quan tới quá trình tư duy",
+   "nhom": "Tư duy & thang Bloom",
+   "viDu": "Which of the following is NOT a cognitive skill level?",
+   "viDuNghia": "Điều nào sau đây KHÔNG phải là một cấp độ kỹ năng nhận thức (cognitive skill level)?"
+  },
+  {
+   "chu": "remembering",
+   "doc": "/rɪˈmembərɪŋ/",
+   "nghia": "bậc 1 của Bloom — nhớ: nhắc lại được kiến thức đã học",
+   "nhom": "Tư duy & thang Bloom",
+   "viDu": "Which of the following is NOT a cognitive skill level? — Evaluating / Guiding / Remembering / Applying",
+   "viDuNghia": "Điều nào sau đây KHÔNG phải là một cấp độ kỹ năng nhận thức (cognitive skill level)? — Đánh giá (Evaluating) / Hướng dẫn (Guiding) / Ghi nhớ (Remembering) / Vận dụng (Applying)"
+  },
+  {
+   "chu": "applying",
+   "doc": "/əˈplaɪɪŋ/",
+   "nghia": "bậc 3 của Bloom — vận dụng: dùng kiến thức vào tình huống cụ thể",
+   "nhom": "Tư duy & thang Bloom",
+   "viDu": "At the Applying level of Bloom's Taxonomy, students use what they have learned in a new, concrete situation.",
+   "viDuNghia": "Ở bậc Vận dụng của thang Bloom, sinh viên dùng điều đã học vào một tình huống mới, cụ thể."
+  },
+  {
+   "chu": "evaluating",
+   "doc": "/ɪˈvæljueɪtɪŋ/",
+   "nghia": "bậc 5 của Bloom — đánh giá: phán đoán giá trị của tài liệu, ý tưởng theo tiêu chí",
+   "nhom": "Tư duy & thang Bloom",
+   "viDu": "Which learning-skill stage of Bloom's Taxonomy do they refer to? — Applying / Understanding / Analyzing / Evaluating",
+   "viDuNghia": "Chúng ứng với bậc kỹ năng học tập nào trong thang Bloom? — Vận dụng (Applying) / Hiểu (Understanding) / Phân tích (Analyzing) / Đánh giá (Evaluating)"
+  },
+  {
+   "chu": "creating",
+   "doc": "/kriˈeɪtɪŋ/",
+   "nghia": "bậc 6 (cao nhất) của Bloom — sáng tạo: ghép các phần thành cái mới",
+   "nhom": "Tư duy & thang Bloom",
+   "viDu": "What is NOT a characteristic of the Creating stage in Bloom's Taxonomy?",
+   "viDuNghia": "Điều nào sau đây KHÔNG phải là đặc điểm của giai đoạn Sáng tạo (Creating) trong Thang Bloom?"
+  },
+  {
+   "chu": "conceptualization",
+   "doc": "/kənˌseptʃuələˈzeɪʃn/",
+   "nghia": "sự khái niệm hoá: hình thành ý niệm, mô hình trong đầu về một vấn đề",
+   "nhom": "Tư duy & thang Bloom",
+   "viDu": "What is the first stage in the model of the Conflict Process? — Frustration / Conceptualization / Behavior / Outcome",
+   "viDuNghia": "Giai đoạn đầu tiên trong mô hình Quá trình Xung đột (Conflict Process) là gì? — Sự bực bội (Frustration) / Khái niệm hoá (Conceptualization) / Hành vi (Behavior) / Kết quả (Outcome)"
+  },
+  {
+   "chu": "sound reasoning",
+   "doc": "/saʊnd ˈriːzənɪŋ/",
+   "nghia": "lập luận vững chắc, hợp lô-gic. Sound ở đây = đúng đắn, không phải âm thanh",
+   "nhom": "Tư duy & thang Bloom",
+   "viDu": "One needs to use sound reasoning to solve the problem.",
+   "viDuNghia": "Ta cần dùng lập luận vững chắc để giải quyết vấn đề."
+  },
+  {
+   "chu": "scrutiny",
+   "doc": "/ˈskruːtəni/",
+   "nghia": "sự xem xét kỹ lưỡng (under scrutiny = đang bị soi xét)",
+   "nhom": "Tư duy & thang Bloom",
+   "viDu": "Different assumptions are under scrutiny.",
+   "viDuNghia": "Các giả định khác nhau được đem ra xem xét kỹ."
+  },
+  {
+   "chu": "entertain",
+   "doc": "/ˌentərˈteɪn/",
+   "nghia": "cân nhắc, xem xét (một ý nghĩ) mà chưa cần chấp nhận nó; nghĩa thường: giải trí",
+   "nhom": "Tư duy & thang Bloom",
+   "viDu": "It is the mark of an educated mind to be able to entertain a thought without accepting it.",
+   "viDuNghia": "Dấu hiệu của một trí óc có học là có thể cân nhắc một ý nghĩ mà không cần chấp nhận nó."
+  },
+  {
+   "chu": "transcend",
+   "doc": "/trænˈsend/",
+   "nghia": "vượt lên trên, vượt khỏi (giới hạn)",
+   "nhom": "Tư duy & thang Bloom",
+   "viDu": "It involves using strategies to clear the mind so that our thoughts and ideas can transcend limitations of a problem.",
+   "viDuNghia": "Nó đòi hỏi sử dụng các chiến lược để giải phóng tâm trí, giúp suy nghĩ và ý tưởng vượt qua giới hạn của vấn đề."
+  },
+  {
+   "chu": "unorthodox",
+   "doc": "/ʌnˈɔːrθədɑːks/",
+   "nghia": "khác thường, không theo lối cũ (unorthodox solutions)",
+   "nhom": "Tư duy & thang Bloom",
+   "viDu": "Creative thinking is a way to develop novel or unorthodox solutions that do not depend wholly on past or current solutions.",
+   "viDuNghia": "Tư duy sáng tạo là cách tạo ra những giải pháp mới lạ, khác thường, không phụ thuộc hoàn toàn vào giải pháp cũ hay hiện có."
+  },
+  {
+   "chu": "novel",
+   "doc": "/ˈnɑːvl/",
+   "nghia": "(tính từ) mới lạ, chưa từng có; (danh từ) tiểu thuyết",
+   "nhom": "Tư duy & thang Bloom",
+   "viDu": "The team won the contest with a novel idea that nobody had tried before.",
+   "viDuNghia": "Nhóm thắng cuộc thi nhờ một ý tưởng mới lạ chưa ai từng thử."
+  },
+  {
+   "chu": "imaginative",
+   "doc": "/ɪˈmædʒɪnətɪv/",
+   "nghia": "giàu trí tưởng tượng",
+   "nhom": "Tư duy & thang Bloom",
+   "viDu": "As a creative thinker, you are curious, optimistic, and imaginative.",
+   "viDuNghia": "Là người tư duy sáng tạo, bạn tò mò, lạc quan và giàu trí tưởng tượng."
+  },
+  {
+   "chu": "curious",
+   "doc": "/ˈkjʊriəs/",
+   "nghia": "tò mò, ham tìm hiểu",
+   "nhom": "Tư duy & thang Bloom",
+   "viDu": "Curious students ask \"why\" before they accept an answer.",
+   "viDuNghia": "Sinh viên ham tìm hiểu hỏi \"vì sao\" trước khi chấp nhận một câu trả lời."
+  },
+  {
+   "chu": "innately",
+   "doc": "/ɪˈneɪtli/",
+   "nghia": "một cách bẩm sinh (innately creative = sáng tạo bẩm sinh)",
+   "nhom": "Tư duy & thang Bloom",
+   "viDu": "All humans are innately creative, especially if creativity is understood as a problem-solving skill.",
+   "viDuNghia": "Mọi người đều sáng tạo bẩm sinh, nhất là khi hiểu sáng tạo như một kỹ năng giải quyết vấn đề."
+  },
+  {
+   "chu": "skepticism",
+   "doc": "/ˈskeptɪsɪzəm/",
+   "nghia": "thái độ hoài nghi, không vội tin",
+   "nhom": "Tư duy & thang Bloom",
+   "viDu": "Which is NOT a characteristic of Critical thinking? — Skepticism / Group thinking / Examining assumptions / Uncovering biases",
+   "viDuNghia": "Đặc điểm nào KHÔNG phải của tư duy phản biện? — Sự hoài nghi / Tư duy nhóm (Groupthink) / Xem xét các giả định / Phát hiện thành kiến"
+  },
+  {
+   "chu": "bandwagon",
+   "doc": "/ˈbændwæɡən/",
+   "nghia": "hiệu ứng đám đông; bandwagon fallacy = nguỵ biện \"nhiều người tin nên nó đúng\"",
+   "nhom": "Tư duy & thang Bloom",
+   "viDu": "Also called the Bandwagon Fallacy, as people \"jump on the bandwagon\" of a perceived popular view.",
+   "viDuNghia": "Còn gọi là nguỵ biện đám đông, vì người ta \"nhảy lên đoàn xe\" của một quan điểm được cho là phổ biến."
+  },
+  {
+   "chu": "refute",
+   "doc": "/rɪˈfjuːt/",
+   "nghia": "bác bỏ, chứng minh là sai",
+   "nhom": "Tư duy & thang Bloom",
+   "viDu": "A weak argument set up to be easily refuted, distracting attention from stronger arguments.",
+   "viDuNghia": "Một lập luận yếu được dựng lên để dễ dàng bác bỏ, nhằm đánh lạc hướng khỏi các lập luận mạnh hơn."
+  },
+  {
+   "chu": "tentative",
+   "doc": "/ˈtentətɪv/",
+   "nghia": "tạm thời, chưa chắc chắn (a tentative conclusion)",
+   "nhom": "Tư duy & thang Bloom",
+   "viDu": "Which age group is considered to have tentative choices and support a desire for autonomy?",
+   "viDuNghia": "Nhóm tuổi nào được xem là có những lựa chọn còn mang tính thử nghiệm (tạm thời) và ủng hộ mong muốn tự chủ?"
+  },
+  {
+   "chu": "mindset",
+   "doc": "/ˈmaɪndset/",
+   "nghia": "lối tư duy, cách nghĩ đã thành nếp",
+   "nhom": "Tư duy & thang Bloom",
+   "viDu": "People who consider upward comparison a threat have — negative mindset / growth mindset / fixed mindset / jealous feelings",
+   "viDuNghia": "Những người coi so sánh hướng lên (upward comparison) là một mối đe doạ thì có — tư duy tiêu cực / tư duy phát triển (growth mindset) / tư duy cố định (fixed mindset) / cảm giác ghen tị"
+  },
+  {
+   "chu": "taxonomy",
+   "doc": "/tækˈsɑːnəmi/",
+   "nghia": "thang phân loại – Bloom's Taxonomy: sáu bậc tư duy từ nhớ, hiểu, áp dụng tới phân tích, đánh giá, sáng tạo",
+   "nhom": "Tư duy & thang Bloom",
+   "viDu": "According to Bloom's Taxonomy, ........... is \"the ability to put parts together to form a coherent or unique whole\".",
+   "viDuNghia": "Theo Thang Bloom, ........... là \"khả năng ghép các phần lại với nhau để tạo thành một tổng thể mạch lạc hoặc độc đáo\"."
+  },
+  {
+   "chu": "social comparison",
+   "doc": "/ˈsoʊʃl kəmˈpærɪsn/",
+   "nghia": "so sánh xã hội: đánh giá bản thân bằng cách so mình với người khác",
+   "nhom": "Hiểu bản thân",
+   "viDu": "What are the basics when making social comparison?",
+   "viDuNghia": "Các yếu tố cơ bản khi thực hiện so sánh xã hội (social comparison) là gì?"
+  },
+  {
+   "chu": "upward comparison",
+   "doc": "/ˈʌpwərd kəmˈpærɪsn/",
+   "nghia": "so sánh hướng lên: so mình với người giỏi hơn (có thể tạo động lực hoặc tự ti)",
+   "nhom": "Hiểu bản thân",
+   "viDu": "What is NOT TRUE about the effect of upward comparison?",
+   "viDuNghia": "Điều nào KHÔNG ĐÚNG về tác động của so sánh hướng lên (upward comparison)?"
+  },
+  {
+   "chu": "downward comparison",
+   "doc": "/ˈdaʊnwərd kəmˈpærɪsn/",
+   "nghia": "so sánh hướng xuống: so mình với người kém hơn để thấy dễ chịu hơn",
+   "nhom": "Hiểu bản thân",
+   "viDu": "What is the negative effect of downward comparison?",
+   "viDuNghia": "Tác động tiêu cực của việc so sánh xuống (downward comparison) là gì?"
+  },
+  {
+   "chu": "localized",
+   "doc": "/ˈloʊkəlaɪzd/",
+   "nghia": "mang tính cục bộ, gần gũi; ta bị tác động mạnh hơn khi so với người ngay quanh mình",
+   "nhom": "Hiểu bản thân",
+   "viDu": "People are more influenced by social comparison when the comparison is more localized.",
+   "viDuNghia": "Người ta chịu tác động của so sánh xã hội mạnh hơn khi sự so sánh mang tính gần gũi, cục bộ hơn."
+  },
+  {
+   "chu": "self-esteem",
+   "doc": "/ˌself ɪˈstiːm/",
+   "nghia": "lòng tự trọng, sự tự đánh giá giá trị bản thân",
+   "nhom": "Hiểu bản thân",
+   "viDu": "Social comparison can have impacts on self-esteem, feelings of envy and feelings of regret.",
+   "viDuNghia": "So sánh xã hội có thể ảnh hưởng đến lòng tự trọng, gây cảm giác ganh tị và cảm giác hối tiếc."
+  },
+  {
+   "chu": "self-concept",
+   "doc": "/ˌself ˈkɑːnsept/",
+   "nghia": "quan niệm về bản thân: mình nghĩ mình là người thế nào",
+   "nhom": "Hiểu bản thân",
+   "viDu": "Which effect best describes this statement: \"People in general had a better academic self-concept if they were a big frog in a small pond rather than a small frog in a large one\"?",
+   "viDuNghia": "Hiệu ứng nào mô tả đúng nhất phát biểu \"Nhìn chung, người ta có khái niệm bản thân về học tập tốt hơn nếu họ là 'con ếch to trong ao nhỏ' thay vì 'con ếch nhỏ trong ao lớn'\"?"
+  },
+  {
+   "chu": "self-assessment",
+   "doc": "/ˌself əˈsesmənt/",
+   "nghia": "tự đánh giá (điểm mạnh, điểm yếu, sở thích) — bước đầu khi tìm việc",
+   "nhom": "Hiểu bản thân",
+   "viDu": "When evaluating your career plan, what should you do first? — Looking for a career / Perform a self-assessment / Always review and revise your plan / Focus on developing goals",
+   "viDuNghia": "Khi đánh giá kế hoạch nghề nghiệp của mình, bạn nên làm gì trước tiên? — Tìm kiếm một nghề nghiệp / Thực hiện tự đánh giá bản thân / Luôn xem xét lại và điều chỉnh kế hoạch / Tập trung vào việc xây dựng mục tiêu"
+  },
+  {
+   "chu": "Dunning-Kruger effect",
+   "doc": "/ˌdʌnɪŋ ˈkruːɡər ɪˌfekt/",
+   "nghia": "hiệu ứng Dunning–Kruger: người kém năng lực thường đánh giá mình cao hơn thực tế",
+   "nhom": "Hiểu bản thân",
+   "viDu": "What can be inferred from the Dunning-Kruger Effect?",
+   "viDuNghia": "Điều gì có thể được suy ra từ Hiệu ứng Dunning-Kruger?"
+  },
+  {
+   "chu": "overestimate",
+   "doc": "/ˌoʊvərˈestɪmeɪt/",
+   "nghia": "đánh giá quá cao",
+   "nhom": "Hiểu bản thân",
+   "viDu": "What is one disadvantage of having a large group? — Overestimate their abilities / Rank themselves above average / More involvement / Reduce communication",
+   "viDuNghia": "Một nhược điểm của việc có nhóm lớn là gì? — Đánh giá quá cao khả năng của mình / Tự xếp hạng bản thân trên mức trung bình / Tham gia nhiều hơn / Giảm giao tiếp"
+  },
+  {
+   "chu": "underestimate",
+   "doc": "/ˌʌndərˈestɪmeɪt/",
+   "nghia": "đánh giá thấp",
+   "nhom": "Hiểu bản thân",
+   "viDu": "Top performers are more likely to underestimate their own abilities.",
+   "viDuNghia": "Người có thành tích cao nhất có xu hướng đánh giá thấp khả năng của bản thân."
+  },
+  {
+   "chu": "competent",
+   "doc": "/ˈkɑːmpɪtənt/",
+   "nghia": "có năng lực, làm được việc",
+   "nhom": "Hiểu bản thân",
+   "viDu": "When one language is dominant in the group, what could happen to the person who can't speak it? — Less competent in a group / Feel left out / Be seen as contributing less / All are correct.",
+   "viDuNghia": "Khi một ngôn ngữ chiếm ưu thế trong nhóm, điều gì có thể xảy ra với người không nói được ngôn ngữ đó? — Bị xem là kém năng lực hơn trong nhóm / Cảm thấy bị bỏ rơi/ngoài lề / Bị xem là đóng góp ít hơn / Tất cả đều đúng."
+  },
+  {
+   "chu": "unskilled",
+   "doc": "/ˌʌnˈskɪld/",
+   "nghia": "không có tay nghề, thiếu kỹ năng",
+   "nhom": "Hiểu bản thân",
+   "viDu": "One of the key findings in the Dunning-Kruger effect experiments is that unskilled people are ______.",
+   "viDuNghia": "Một trong những phát hiện chính trong các thí nghiệm về hiệu ứng Dunning-Kruger là những người thiếu kỹ năng thường ______."
+  },
+  {
+   "chu": "motivation",
+   "doc": "/ˌmoʊtɪˈveɪʃn/",
+   "nghia": "động lực",
+   "nhom": "Hiểu bản thân",
+   "viDu": "Meetings give members the opportunity to participate, which boosts their motivation to implement group ideas.",
+   "viDuNghia": "Cuộc họp cho thành viên cơ hội tham gia, nhờ đó tăng động lực thực hiện ý tưởng của nhóm."
+  },
+  {
+   "chu": "confidence",
+   "doc": "/ˈkɑːnfɪdəns/",
+   "nghia": "sự tự tin",
+   "nhom": "Hiểu bản thân",
+   "viDu": "In order to make a good impression, positive words that convey optimism and confidence are ______.",
+   "viDuNghia": "Để tạo ấn tượng tốt, những từ tích cực thể hiện sự lạc quan và tự tin là ______."
+  },
+  {
+   "chu": "optimism",
+   "doc": "/ˈɑːptɪmɪzəm/",
+   "nghia": "sự lạc quan",
+   "nhom": "Hiểu bản thân",
+   "viDu": "In order to make a good impression, positive words that convey optimism and confidence are ______.",
+   "viDuNghia": "Để tạo ấn tượng tốt, những từ tích cực thể hiện sự lạc quan và tự tin là ______."
+  },
+  {
+   "chu": "enthusiasm",
+   "doc": "/ɪnˈθuːziæzəm/",
+   "nghia": "sự nhiệt tình, hăng hái",
+   "nhom": "Hiểu bản thân",
+   "viDu": "Show enthusiasm for the job when you answer interview questions.",
+   "viDuNghia": "Hãy thể hiện sự nhiệt tình với công việc khi trả lời phỏng vấn."
+  },
+  {
+   "chu": "trustworthy",
+   "doc": "/ˈtrʌstwɜːrði/",
+   "nghia": "đáng tin cậy (về con người)",
+   "nhom": "Hiểu bản thân",
+   "viDu": "What are the two main factors in social comparison? — Similarity and friendliness / Openness and independence / Relevance and similarity / Self-esteem and trustworthy",
+   "viDuNghia": "Hai yếu tố chính trong so sánh xã hội (social comparison) là gì? — Sự tương đồng và tính thân thiện / Sự cởi mở và tính độc lập / Tính liên quan và sự tương đồng / Lòng tự trọng và độ tin cậy"
+  },
+  {
+   "chu": "openness",
+   "doc": "/ˈoʊpənnəs/",
+   "nghia": "sự cởi mở, sẵn lòng tiếp nhận cái mới",
+   "nhom": "Hiểu bản thân",
+   "viDu": "What are the basics when making social comparison? — Similarity and compliance / Openness and friendliness / Relevance and similarity / Self-esteem and independence",
+   "viDuNghia": "Các yếu tố cơ bản khi thực hiện so sánh xã hội (social comparison) là gì? — Sự tương đồng và tuân thủ / Sự cởi mở và thân thiện / Sự liên quan và tương đồng / Lòng tự trọng và tính độc lập"
+  },
+  {
+   "chu": "physiological",
+   "doc": "/ˌfɪziəˈlɑːdʒɪkl/",
+   "nghia": "thuộc sinh lý; physiological needs = nhu cầu sinh lý (ăn, ngủ) — bậc thấp nhất trong tháp Maslow",
+   "nhom": "Hiểu bản thân",
+   "viDu": "Which of Maslow's Hierarchy of Needs is primarily met when a neighborhood watch group forms to deter crime in the community? — Physiological / Esteem / Love and belonging / Safety",
+   "viDuNghia": "Tầng nào trong Tháp nhu cầu Maslow được đáp ứng chủ yếu khi một nhóm tuần tra khu phố được thành lập để ngăn chặn tội phạm trong cộng đồng? — Sinh lý / Được tôn trọng / Tình yêu và sự thuộc về / An toàn"
+  },
+  {
+   "chu": "belonging",
+   "doc": "/bɪˈlɔːŋɪŋ/",
+   "nghia": "cảm giác thuộc về (một nhóm, cộng đồng) — bậc 3 trong tháp nhu cầu Maslow",
+   "nhom": "Hiểu bản thân",
+   "viDu": "Which of Maslow's Hierarchy of Needs is primarily met when a neighborhood watch group forms to deter crime in the community? — Physiological / Esteem / Love and belonging / Safety",
+   "viDuNghia": "Tầng nào trong Tháp nhu cầu Maslow được đáp ứng chủ yếu khi một nhóm tuần tra khu phố được thành lập để ngăn chặn tội phạm trong cộng đồng? — Sinh lý / Được tôn trọng / Tình yêu và sự thuộc về / An toàn"
+  },
+  {
+   "chu": "esteem",
+   "doc": "/ɪˈstiːm/",
+   "nghia": "sự quý trọng; esteem needs = nhu cầu được tôn trọng (bậc 4 trong tháp Maslow)",
+   "nhom": "Hiểu bản thân",
+   "viDu": "Which of Maslow's Hierarchy of Needs is primarily met when a neighborhood watch group forms to deter crime in the community? — Physiological / Esteem / Love and belonging / Safety",
+   "viDuNghia": "Tầng nào trong Tháp nhu cầu Maslow được đáp ứng chủ yếu khi một nhóm tuần tra khu phố được thành lập để ngăn chặn tội phạm trong cộng đồng? — Sinh lý / Được tôn trọng / Tình yêu và sự thuộc về / An toàn"
+  },
+  {
+   "chu": "drive",
+   "doc": "/draɪv/",
+   "nghia": "nghị lực, sự quyết tâm vươn lên (một phẩm chất của người lãnh đạo); nghĩa thường: lái xe",
+   "nhom": "Hiểu bản thân",
+   "viDu": "In the Leader Trait Research which trait includes strong analytical abilities? — Self-confidence / Leadership motivation / Drive / Cognitive ability",
+   "viDuNghia": "Trong Nghiên cứu về Phẩm chất Lãnh đạo, phẩm chất nào bao gồm năng lực phân tích tốt? — Tự tin / Động lực lãnh đạo / Nghị lực / Năng lực nhận thức"
+  },
+  {
+   "chu": "stress",
+   "doc": "/stres/",
+   "nghia": "căng thẳng, áp lực",
+   "nhom": "Căng thẳng & cảm xúc",
+   "viDu": "Which of the following is NOT a way to combat stress?",
+   "viDuNghia": "Cách nào sau đây KHÔNG phải là cách để đối phó với căng thẳng (stress)?"
+  },
+  {
+   "chu": "chronic stress",
+   "doc": "/ˈkrɑːnɪk stres/",
+   "nghia": "căng thẳng mãn tính, kéo dài",
+   "nhom": "Căng thẳng & cảm xúc",
+   "viDu": "What is true about chronic stress?",
+   "viDuNghia": "Điều nào đúng về căng thẳng mãn tính (chronic stress)?"
+  },
+  {
+   "chu": "decisional stress",
+   "doc": "/dɪˈsɪʒənl stres/",
+   "nghia": "áp lực khi phải ra quyết định (một nguyên nhân gây tư duy bầy đàn)",
+   "nhom": "Căng thẳng & cảm xúc",
+   "viDu": "Four group level factors that combine to cause groupthink are cohesion, isolation, biased leadership, and decisional stress.",
+   "viDuNghia": "Bốn yếu tố cấp độ nhóm kết hợp gây ra tư duy bầy đàn (groupthink) là sự gắn kết, sự cô lập, lãnh đạo thiên vị và áp lực khi ra quyết định."
+  },
+  {
+   "chu": "frustration",
+   "doc": "/frʌˈstreɪʃn/",
+   "nghia": "sự bực bội, nản vì bị cản trở",
+   "nhom": "Căng thẳng & cảm xúc",
+   "viDu": "What is the first stage in the model of the Conflict Process? — Frustration / Conceptualization / Behavior / Outcome",
+   "viDuNghia": "Giai đoạn đầu tiên trong mô hình Quá trình Xung đột (Conflict Process) là gì? — Sự bực bội (Frustration) / Khái niệm hoá (Conceptualization) / Hành vi (Behavior) / Kết quả (Outcome)"
+  },
+  {
+   "chu": "envy",
+   "doc": "/ˈenvi/",
+   "nghia": "sự ghen tị, đố kỵ (muốn có thứ người khác có)",
+   "nhom": "Căng thẳng & cảm xúc",
+   "viDu": "What is the negative effect of downward comparison? — Envy / Dissatisfaction / Scorn / Pessimistic",
+   "viDuNghia": "Tác động tiêu cực của việc so sánh xuống (downward comparison) là gì? — Ganh tị / Bất mãn / Khinh thường / Bi quan"
+  },
+  {
+   "chu": "jealous",
+   "doc": "/ˈdʒeləs/",
+   "nghia": "ghen tuông, ghen tị",
+   "nhom": "Căng thẳng & cảm xúc",
+   "viDu": "People who consider upward comparison a threat have — negative mindset / growth mindset / fixed mindset / jealous feelings",
+   "viDuNghia": "Những người coi so sánh hướng lên (upward comparison) là một mối đe doạ thì có — tư duy tiêu cực / tư duy phát triển (growth mindset) / tư duy cố định (fixed mindset) / cảm giác ghen tị"
+  },
+  {
+   "chu": "regret",
+   "doc": "/rɪˈɡret/",
+   "nghia": "sự hối tiếc; (động từ) lấy làm tiếc",
+   "nhom": "Căng thẳng & cảm xúc",
+   "viDu": "In order to make a good impression, positive words that convey optimism and confidence are — regret, sorry, terror / trouble, unable, happy / wrong, obnoxious, yes / willing, thank, appreciate",
+   "viDuNghia": "Để tạo ấn tượng tốt, những từ tích cực thể hiện sự lạc quan và tự tin là — hối tiếc, xin lỗi, kinh hãi / rắc rối, không thể, vui vẻ / sai, khó chịu, đồng ý / sẵn lòng, cảm ơn, trân trọng"
+  },
+  {
+   "chu": "nerve-racking",
+   "doc": "/ˈnɜːrv ˌrækɪŋ/",
+   "nghia": "gây căng thẳng tột độ, hồi hộp thót tim",
+   "nhom": "Căng thẳng & cảm xúc",
+   "viDu": "Why can putting yourself in nerve-racking situations sometimes stimulate your creative thinking?",
+   "viDuNghia": "Vì sao việc đặt bản thân vào những tình huống căng thẳng đôi khi có thể kích thích tư duy sáng tạo?"
+  },
+  {
+   "chu": "awkward",
+   "doc": "/ˈɔːkwərd/",
+   "nghia": "ngượng nghịu, khó xử",
+   "nhom": "Căng thẳng & cảm xúc",
+   "viDu": "Awkward pauses in conversation can be a sign that someone is being deceptive.",
+   "viDuNghia": "Những khoảng lặng ngượng nghịu trong cuộc trò chuyện có thể là dấu hiệu ai đó đang nói dối."
+  },
+  {
+   "chu": "obnoxious",
+   "doc": "/əbˈnɑːkʃəs/",
+   "nghia": "rất khó chịu, đáng ghét (trong cách cư xử)",
+   "nhom": "Căng thẳng & cảm xúc",
+   "viDu": "In order to make a good impression, positive words that convey optimism and confidence are — regret, sorry, terror / trouble, unable, happy / wrong, obnoxious, yes / willing, thank, appreciate",
+   "viDuNghia": "Để tạo ấn tượng tốt, những từ tích cực thể hiện sự lạc quan và tự tin là — hối tiếc, xin lỗi, kinh hãi / rắc rối, không thể, vui vẻ / sai, khó chịu, đồng ý / sẵn lòng, cảm ơn, trân trọng"
+  },
+  {
+   "chu": "dissatisfaction",
+   "doc": "/ˌdɪsˌsætɪsˈfækʃn/",
+   "nghia": "sự bất mãn, không hài lòng",
+   "nhom": "Căng thẳng & cảm xúc",
+   "viDu": "What is NOT TRUE about the effect of upward comparison? — Dissatisfaction / Inspiration / Gratitude / Envy",
+   "viDuNghia": "Điều nào KHÔNG ĐÚNG về tác động của so sánh hướng lên (upward comparison)? — Sự bất mãn / Sự truyền cảm hứng / Lòng biết ơn / Sự ghen tị"
+  },
+  {
+   "chu": "career development",
+   "doc": "/kəˈrɪr dɪˈveləpmənt/",
+   "nghia": "phát triển sự nghiệp (5 giai đoạn: growing, exploring, establishing, maintaining, reinventing)",
+   "nhom": "Sự nghiệp & hồ sơ",
+   "viDu": "What are five main stages of career development?",
+   "viDuNghia": "Năm giai đoạn chính của phát triển sự nghiệp là gì?"
+  },
+  {
+   "chu": "exploring",
+   "doc": "/ɪkˈsplɔːrɪŋ/",
+   "nghia": "giai đoạn khám phá: tìm hiểu các ngành nghề, thử việc, thực tập",
+   "nhom": "Sự nghiệp & hồ sơ",
+   "viDu": "What are five main stages of career development? Growing - Exploring - Establishing - Maintaining - Reinventing.",
+   "viDuNghia": "Năm giai đoạn chính của phát triển sự nghiệp là gì? Trưởng thành - Khám phá - Lập nghiệp - Duy trì - Làm mới."
+  },
+  {
+   "chu": "establishing",
+   "doc": "/ɪˈstæblɪʃɪŋ/",
+   "nghia": "giai đoạn lập nghiệp: có việc chính thức, xây chỗ đứng trong nghề",
+   "nhom": "Sự nghiệp & hồ sơ",
+   "viDu": "He has identified a career field that aligns with his degree. Which career development stage will Hung enter next? — Growing / Exploring / Establishing / Maintaining / Reinventing",
+   "viDuNghia": "Anh ấy đã xác định được lĩnh vực nghề nghiệp phù hợp với bằng cấp. Hùng sẽ bước vào giai đoạn phát triển sự nghiệp nào tiếp theo? — Trưởng thành / Khám phá / Lập nghiệp / Duy trì / Làm mới"
+  },
+  {
+   "chu": "maintaining",
+   "doc": "/meɪnˈteɪnɪŋ/",
+   "nghia": "giai đoạn duy trì: giữ vững vị trí, cập nhật kỹ năng",
+   "nhom": "Sự nghiệp & hồ sơ",
+   "viDu": "In the maintaining stage, you keep your position and update your skills.",
+   "viDuNghia": "Ở giai đoạn duy trì, bạn giữ vững vị trí và cập nhật kỹ năng."
+  },
+  {
+   "chu": "reinventing",
+   "doc": "/ˌriːɪnˈventɪŋ/",
+   "nghia": "giai đoạn làm mới: đổi hướng, học nghề mới, tái định vị sự nghiệp",
+   "nhom": "Sự nghiệp & hồ sơ",
+   "viDu": "After twenty years as an accountant, she is reinventing her career as a teacher.",
+   "viDuNghia": "Sau hai mươi năm làm kế toán, cô ấy đang làm mới sự nghiệp với nghề giáo viên."
+  },
+  {
+   "chu": "career roadmap",
+   "doc": "/kəˈrɪr ˈroʊdmæp/",
+   "nghia": "lộ trình sự nghiệp",
+   "nhom": "Sự nghiệp & hồ sơ",
+   "viDu": "What does a career roadmap primarily aim to provide?",
+   "viDuNghia": "Lộ trình sự nghiệp (career roadmap) chủ yếu nhằm cung cấp điều gì?"
+  },
+  {
+   "chu": "job search",
+   "doc": "/ˈdʒɑːb sɜːrtʃ/",
+   "nghia": "việc tìm việc làm",
+   "nhom": "Sự nghiệp & hồ sơ",
+   "viDu": "Know yourself, Explore and choose options, Gain knowledge and experience, Put it all together: the job search process",
+   "viDuNghia": "Hiểu bản thân, Khám phá và lựa chọn phương án, Tích lũy kiến thức và kinh nghiệm, Tổng hợp tất cả: quy trình tìm việc"
+  },
+  {
+   "chu": "job description",
+   "doc": "/ˈdʒɑːb dɪˌskrɪpʃn/",
+   "nghia": "bản mô tả công việc (JD)",
+   "nhom": "Sự nghiệp & hồ sơ",
+   "viDu": "Which of the following advice is NOT suitable for a job interview? — Review job description / Be confident / Come prepared / Dress casually",
+   "viDuNghia": "Lời khuyên nào sau đây KHÔNG phù hợp cho một buổi phỏng vấn xin việc? — Xem lại bản mô tả công việc / Tự tin / Chuẩn bị kỹ trước khi đến / Ăn mặc xuề xòa/thường ngày"
+  },
+  {
+   "chu": "cover letter",
+   "doc": "/ˈkʌvər ˌletər/",
+   "nghia": "thư xin việc gửi kèm CV: nêu vì sao mình hợp với vị trí",
+   "nhom": "Sự nghiệp & hồ sơ",
+   "viDu": "What is the typical length of a cover letter?",
+   "viDuNghia": "Độ dài điển hình của một thư xin việc (cover letter) là bao nhiêu?"
+  },
+  {
+   "chu": "application letter",
+   "doc": "/ˌæplɪˈkeɪʃn ˌletər/",
+   "nghia": "thư ứng tuyển (= cover letter)",
+   "nhom": "Sự nghiệp & hồ sơ",
+   "viDu": "When developing an application letter, which of the following should not be added in the opening paragraph?",
+   "viDuNghia": "Khi viết một lá thư xin việc (application letter), điều nào sau đây KHÔNG nên đưa vào đoạn mở đầu?"
+  },
+  {
+   "chu": "applicant",
+   "doc": "/ˈæplɪkənt/",
+   "nghia": "người nộp đơn, ứng viên",
+   "nhom": "Sự nghiệp & hồ sơ",
+   "viDu": "Which questions below should a job applicant prepare to ask during an interview?",
+   "viDuNghia": "Ứng viên nên chuẩn bị hỏi những câu nào dưới đây trong buổi phỏng vấn?"
+  },
+  {
+   "chu": "employer",
+   "doc": "/ɪmˈplɔɪər/",
+   "nghia": "nhà tuyển dụng, chủ lao động (employee = nhân viên)",
+   "nhom": "Sự nghiệp & hồ sơ",
+   "viDu": "What is the best way to dress to impress employers in an interview?",
+   "viDuNghia": "Cách ăn mặc tốt nhất để gây ấn tượng với nhà tuyển dụng trong buổi phỏng vấn là gì?"
+  },
+  {
+   "chu": "qualification",
+   "doc": "/ˌkwɑːlɪfɪˈkeɪʃn/",
+   "nghia": "bằng cấp, trình độ chuyên môn đáp ứng công việc",
+   "nhom": "Sự nghiệp & hồ sơ",
+   "viDu": "When analyzing your qualifications and job preferences, you will look into your most positive attributes including ______.",
+   "viDuNghia": "Khi phân tích trình độ và sở thích nghề nghiệp của bản thân, bạn sẽ xem xét những thuộc tính tích cực nhất của mình, bao gồm ______."
+  },
+  {
+   "chu": "accomplishment",
+   "doc": "/əˈkɑːmplɪʃmənt/",
+   "nghia": "thành tích, việc đã làm được",
+   "nhom": "Sự nghiệp & hồ sơ",
+   "viDu": "An inventory of your education, work experience, job-related skills, accomplishments, volunteer history, internships, residencies, and/or more.",
+   "viDuNghia": "Một bản liệt kê về học vấn, kinh nghiệm làm việc, kỹ năng liên quan đến công việc, thành tích, lịch sử hoạt động tình nguyện, thực tập, và/hoặc nhiều hơn nữa."
+  },
+  {
+   "chu": "achievement",
+   "doc": "/əˈtʃiːvmənt/",
+   "nghia": "thành tựu, thành tích",
+   "nhom": "Sự nghiệp & hồ sơ",
+   "viDu": "State your achievements in a specific and positive manner.",
+   "viDuNghia": "Hãy nêu thành tích của bạn một cách cụ thể và tích cực."
+  },
+  {
+   "chu": "internship",
+   "doc": "/ˈɪntɜːrnʃɪp/",
+   "nghia": "kỳ thực tập",
+   "nhom": "Sự nghiệp & hồ sơ",
+   "viDu": "An inventory of your education, work experience, job-related skills, accomplishments, volunteer history, internships, residencies, and/or more.",
+   "viDuNghia": "Một bản liệt kê về học vấn, kinh nghiệm làm việc, kỹ năng liên quan đến công việc, thành tích, lịch sử hoạt động tình nguyện, thực tập, và/hoặc nhiều hơn nữa."
+  },
+  {
+   "chu": "volunteer",
+   "doc": "/ˌvɑːlənˈtɪr/",
+   "nghia": "tình nguyện viên; (động từ) tình nguyện làm",
+   "nhom": "Sự nghiệp & hồ sơ",
+   "viDu": "You are a volunteer to organize a charity book sale.",
+   "viDuNghia": "Bạn là tình nguyện viên tổ chức một buổi bán sách từ thiện."
+  },
+  {
+   "chu": "referee",
+   "doc": "/ˌrefəˈriː/",
+   "nghia": "người giới thiệu, người xác nhận cho ứng viên (ghi ở cuối CV); nghĩa khác: trọng tài",
+   "nhom": "Sự nghiệp & hồ sơ",
+   "viDu": "Ask your lecturer before you list her as a referee on your CV.",
+   "viDuNghia": "Hãy xin phép giảng viên trước khi ghi cô là người giới thiệu trong CV."
+  },
+  {
+   "chu": "professionalism",
+   "doc": "/prəˈfeʃənəlɪzəm/",
+   "nghia": "tính chuyên nghiệp",
+   "nhom": "Sự nghiệp & hồ sơ",
+   "viDu": "Demonstrate professionalism in your verbal and nonverbal interactions.",
+   "viDuNghia": "Hãy thể hiện sự chuyên nghiệp trong giao tiếp bằng lời và phi ngôn ngữ."
+  },
+  {
+   "chu": "soft skill",
+   "doc": "/ˌsɔːft ˈskɪl/",
+   "nghia": "kỹ năng mềm (giao tiếp, làm việc nhóm, quản lý thời gian)",
+   "nhom": "Sự nghiệp & hồ sơ",
+   "viDu": "What can a student put in his or her cover letter? — GPA / Soft skills / Volunteer works / All are correct",
+   "viDuNghia": "Sinh viên có thể đưa những gì vào thư xin việc (cover letter) của mình? — Điểm trung bình (GPA) / Kỹ năng mềm / Công việc tình nguyện / Tất cả đều đúng"
+  },
+  {
+   "chu": "passion",
+   "doc": "/ˈpæʃn/",
+   "nghia": "niềm đam mê",
+   "nhom": "Sự nghiệp & hồ sơ",
+   "viDu": "What does Ethos refer to? — Credibility and ethics / Passion and enthusiasm / Logic or reason / Emotion and generosity",
+   "viDuNghia": "Ethos đề cập đến điều gì? — Uy tín và đạo đức / Đam mê và nhiệt huyết / Logic hoặc lý lẽ / Cảm xúc và sự hào phóng"
+  },
+  {
+   "chu": "action plan",
+   "doc": "/ˈækʃn plæn/",
+   "nghia": "kế hoạch hành động: các bước cụ thể, ai làm, khi nào xong",
+   "nhom": "Sự nghiệp & hồ sơ",
+   "viDu": "What is an action Plan?",
+   "viDuNghia": "Kế hoạch hành động (Action Plan) là gì?"
+  },
+  {
+   "chu": "short-term",
+   "doc": "/ˌʃɔːrt ˈtɜːrm/",
+   "nghia": "ngắn hạn (short-term goal); trái nghĩa: long-term",
+   "nhom": "Sự nghiệp & hồ sơ",
+   "viDu": "Which is TRUE about short-term orientation culture?",
+   "viDuNghia": "Điều nào sau đây ĐÚNG về văn hóa định hướng ngắn hạn (short-term orientation)?"
+  },
+  {
+   "chu": "job interview",
+   "doc": "/dʒɑːb ˈɪntərvjuː/",
+   "nghia": "phỏng vấn xin việc",
+   "nhom": "Sự nghiệp & hồ sơ",
+   "viDu": "What is good advice for communicating effectively in a job interview?",
+   "viDuNghia": "Đâu là lời khuyên tốt để giao tiếp hiệu quả trong buổi phỏng vấn xin việc?"
+  },
+  {
+   "chu": "resume",
+   "doc": "/ˈrezəmeɪ/",
+   "nghia": "sơ yếu lý lịch (CV) – tóm tắt học vấn, kinh nghiệm, kỹ năng khi xin việc",
+   "nhom": "Sự nghiệp & hồ sơ",
+   "viDu": "For new college graduates with limited experience, the preferred number of pages for a resume is ______.",
+   "viDuNghia": "Đối với sinh viên mới tốt nghiệp có ít kinh nghiệm, số trang lý tưởng cho một bản CV là ______."
+  },
+  {
+   "chu": "salutation",
+   "doc": "/ˌsæljuˈteɪʃn/",
+   "nghia": "lời chào đầu thư (Dear Mr. Smith,)",
+   "nhom": "Thư & email",
+   "viDu": "The opening of an application letter for a software developer position is not effective because it uses an impersonal salutation.",
+   "viDuNghia": "Phần mở đầu của thư ứng tuyển vị trí lập trình viên chưa hiệu quả vì dùng lời chào chung chung, không nêu tên người nhận."
+  },
+  {
+   "chu": "impersonal",
+   "doc": "/ɪmˈpɜːrsənl/",
+   "nghia": "chung chung, không hướng tới người cụ thể (impersonal salutation: \"To whom it may concern\")",
+   "nhom": "Thư & email",
+   "viDu": "To produce a good opening in a persuasive message, you should keep it — Neutral / Negative and impersonal / Impersonal / Positive and personal",
+   "viDuNghia": "Để tạo một phần mở đầu tốt trong thông điệp thuyết phục, bạn nên giữ cho nó — Trung lập / Tiêu cực và khách sáo / Khách sáo / Tích cực và mang tính cá nhân"
+  },
+  {
+   "chu": "enclosure",
+   "doc": "/ɪnˈkloʊʒər/",
+   "nghia": "tài liệu gửi kèm thư; enclosure note = dòng ghi chú \"Enclosure: …\" cuối thư",
+   "nhom": "Thư & email",
+   "viDu": "Include the enclosure note because attachments are not always obvious when reading emails on some devices.",
+   "viDuNghia": "Hãy ghi chú tài liệu đính kèm vì trên một số thiết bị, tệp đính kèm không phải lúc nào cũng dễ thấy khi đọc email."
+  },
+  {
+   "chu": "subject line",
+   "doc": "/ˈsʌbdʒekt laɪn/",
+   "nghia": "dòng tiêu đề email",
+   "nhom": "Thư & email",
+   "viDu": "Which is NOT a part of an email? — Subject lines / Sign-off / Signature / Topic",
+   "viDuNghia": "Thành phần nào sau đây KHÔNG phải là một phần của email? — Dòng tiêu đề (subject line) / Lời kết/chào tạm biệt (sign-off) / Chữ ký (signature) / Chủ đề (topic)"
+  },
+  {
+   "chu": "readability",
+   "doc": "/ˌriːdəˈbɪləti/",
+   "nghia": "tính dễ đọc của văn bản",
+   "nhom": "Thư & email",
+   "viDu": "Which of the following best describes the term \"readability\"?",
+   "viDuNghia": "Điều nào sau đây mô tả đúng nhất thuật ngữ \"khả năng đọc hiểu\" (readability)?"
+  },
+  {
+   "chu": "punctuation",
+   "doc": "/ˌpʌŋktʃuˈeɪʃn/",
+   "nghia": "dấu câu, cách chấm câu",
+   "nhom": "Thư & email",
+   "viDu": "Specific revision requires attention to the following: format, facts, names, spelling, punctuation, and ______.",
+   "viDuNghia": "Việc hiệu đính cụ thể cần chú ý đến các yếu tố sau: định dạng, dữ kiện, tên riêng, chính tả, dấu câu và ______."
+  },
+  {
+   "chu": "inform",
+   "doc": "/ɪnˈfɔːrm/",
+   "nghia": "thông báo, cho biết",
+   "nhom": "Thư & email",
+   "viDu": "To use THIS power: Punish in private, Inform subordinates of rules and penalties, or THIS power ... without jeopardizing personal integrity.",
+   "viDuNghia": "Để sử dụng loại quyền lực NÀY: Trừng phạt riêng tư, Thông báo cho cấp dưới về quy tắc và hình phạt, hoặc dùng quyền lực NÀY ... mà không làm ảnh hưởng đến sự chính trực cá nhân."
+  },
+  {
+   "chu": "threaded conversation",
+   "doc": "/ˈθredɪd ˌkɑːnvərˈseɪʃn/",
+   "nghia": "chuỗi trao đổi theo luồng: các trả lời xếp dưới tin gốc (diễn đàn, email, chat)",
+   "nhom": "Thư & email",
+   "viDu": "Which technology can help students establish a sense of community with their class and engage in threaded conversations on assigned readings and topics highlighting diverse points of view?",
+   "viDuNghia": "Công nghệ nào có thể giúp sinh viên xây dựng cảm giác cộng đồng với lớp học của mình và tham gia vào các cuộc thảo luận theo chuỗi (threaded conversations) về bài đọc được giao và các chủ đề, làm nổi bật những quan điểm đa dạng?"
+  },
+  {
+   "chu": "discussion board",
+   "doc": "/dɪˈskʌʃn bɔːrd/",
+   "nghia": "diễn đàn thảo luận trực tuyến của lớp",
+   "nhom": "Thư & email",
+   "viDu": "Post your question on the class discussion board so everyone can see the answer.",
+   "viDuNghia": "Hãy đăng câu hỏi lên diễn đàn thảo luận của lớp để mọi người cùng thấy câu trả lời."
+  },
+  {
+   "chu": "rehearsal",
+   "doc": "/rɪˈhɜːrsl/",
+   "nghia": "buổi tập dượt (trước khi thuyết trình, phỏng vấn)",
+   "nhom": "Thư & email",
+   "viDu": "Prepare the presentation with relevant data and do a rehearsal of the speech.",
+   "viDuNghia": "Hãy chuẩn bị bài thuyết trình với dữ liệu liên quan và tập dượt trước bài nói."
+  },
+  {
+   "chu": "understanding",
+   "doc": "/ˌʌndərˈstændɪŋ/",
+   "nghia": "bậc 2 của Bloom — hiểu: giải thích, diễn đạt lại được ý đã học; nghĩa thường: sự hiểu biết",
+   "nhom": "Tư duy & thang Bloom",
+   "viDu": "Which learning-skill stage of Bloom's Taxonomy do they refer to? — Applying / Understanding / Analyzing / Evaluating",
+   "viDuNghia": "Chúng ứng với bậc kỹ năng học tập nào trong thang Bloom? — Vận dụng (Applying) / Hiểu (Understanding) / Phân tích (Analyzing) / Đánh giá (Evaluating)"
+  },
+  {
+   "chu": "analyzing",
+   "doc": "/ˈænəlaɪzɪŋ/",
+   "nghia": "bậc 4 của Bloom — phân tích: tách vấn đề thành phần nhỏ, tìm mối liên hệ; nghĩa thường: việc phân tích (analyzing job preferences)",
+   "nhom": "Tư duy & thang Bloom",
+   "viDu": "When analyzing job preferences, which of the following questions is not necessary to consider?",
+   "viDuNghia": "Khi phân tích sở thích nghề nghiệp, câu hỏi nào sau đây không cần xem xét?"
+  },
+  {
+   "chu": "work experience",
+   "doc": "/ˈwɜːrk ɪkˌspɪriəns/",
+   "nghia": "kinh nghiệm làm việc — một mục chính trong CV (ghi việc làm thêm, thực tập, dự án nếu chưa đi làm)",
+   "nhom": "Sự nghiệp & hồ sơ",
+   "viDu": "You don't have a job yet, but you're applying for your first job. What should you write in the work experience section?",
+   "viDuNghia": "Bạn chưa từng đi làm nhưng đang ứng tuyển công việc đầu tiên. Bạn nên viết gì ở mục kinh nghiệm làm việc?"
+  }
+ ]
+}

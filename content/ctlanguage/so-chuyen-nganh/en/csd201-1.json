@@ -1,0 +1,678 @@
+{
+ "ma": "csd201-1",
+ "nn": "en",
+ "ten": "CSD201 · 1. Danh sách, ngăn xếp, hàng đợi, đệ quy",
+ "moTa": "CSD201 – Cấu trúc dữ liệu và giải thuật (Java), phần 1: danh sách liên kết, ngăn xếp, hàng đợi, đệ quy, độ phức tạp, sắp xếp và từ hay gặp trong đề PE. Từ lấy từ đề FE/PE thật; câu ví dụ là câu hỏi thật trong đề.",
+ "bieuTuong": "list.bullet.indent",
+ "thuTu": -968,
+ "tu": [
+  {
+   "chu": "singly linked list",
+   "nghia": "danh sách liên kết đơn – mỗi nút chỉ giữ liên kết tới nút kế sau, chỉ đi được một chiều",
+   "nhom": "Danh sách liên kết",
+   "viDu": "Suppose we are considering a singly linked list and p is some node in the list which has a successor.",
+   "viDuNghia": "Giả sử ta xét một danh sách liên kết đơn và p là một nút nào đó trong danh sách có nút kế sau."
+  },
+  {
+   "chu": "doubly linked list",
+   "nghia": "danh sách liên kết đôi – mỗi nút giữ liên kết tới cả nút trước lẫn nút sau",
+   "nhom": "Danh sách liên kết",
+   "viDu": "Select the most correct statement. The complexity of counting the number of items in a doubly linked list is",
+   "viDuNghia": "Chọn phát biểu đúng nhất. Độ phức tạp của việc đếm số phần tử trong một danh sách liên kết đôi là"
+  },
+  {
+   "chu": "circular linked list",
+   "nghia": "danh sách liên kết vòng – nút cuối nối ngược về nút đầu",
+   "nhom": "Danh sách liên kết",
+   "viDu": "Specify the statement that is most correct about a circular linked list.",
+   "viDuNghia": "Chọn phát biểu đúng nhất về danh sách liên kết vòng (circular linked list)."
+  },
+  {
+   "chu": "list node",
+   "doc": "/lɪst noʊd/",
+   "nghia": "nút của danh sách – gồm phần dữ liệu (info) và liên kết tới nút kế (next)",
+   "nhom": "Danh sách liên kết",
+   "viDu": "Suppose we are considering a doubly linked list which has at least 2 nodes.",
+   "viDuNghia": "Giả sử ta đang xét một danh sách liên kết đôi có ít nhất 2 nút."
+  },
+  {
+   "chu": "head",
+   "doc": "/hed/",
+   "nghia": "nút đầu của danh sách liên kết",
+   "nhom": "Danh sách liên kết",
+   "viDu": "Insert x and y to the list so that y will be at position 0 (head) and x will be at position 1.",
+   "viDuNghia": "Chèn x và y vào danh sách sao cho y ở vị trí 0 (đầu danh sách) còn x ở vị trí 1."
+  },
+  {
+   "chu": "tail",
+   "doc": "/teɪl/",
+   "nghia": "nút cuối của danh sách liên kết",
+   "nhom": "Danh sách liên kết",
+   "viDu": "In a singly linked list, the tail is the last node, and its next reference is null.",
+   "viDuNghia": "Trong danh sách liên kết đơn, tail là nút cuối cùng và tham chiếu next của nó bằng null."
+  },
+  {
+   "chu": "previous node",
+   "doc": "/ˈpriːviəs noʊd/",
+   "nghia": "nút đứng ngay trước (prev) – danh sách liên kết đôi giữ thêm liên kết này",
+   "nhom": "Danh sách liên kết",
+   "viDu": "In a doubly linked list, each node keeps a link to its previous node and to its next node.",
+   "viDuNghia": "Trong danh sách liên kết đôi, mỗi nút giữ một liên kết tới nút đứng trước và một liên kết tới nút kế sau."
+  },
+  {
+   "chu": "traverse",
+   "doc": "/trəˈvɜːrs/",
+   "nghia": "duyệt – đi lần lượt qua từng nút/phần tử của cấu trúc dữ liệu",
+   "nhom": "Danh sách liên kết",
+   "viDu": "Specify the correct implementation of in-order traverse algorithm for binary trees.",
+   "viDuNghia": "Chọn cài đặt đúng của thuật toán duyệt in-order cho cây nhị phân."
+  },
+  {
+   "chu": "insert",
+   "doc": "/ɪnˈsɜːrt/",
+   "nghia": "chèn một phần tử mới vào cấu trúc dữ liệu",
+   "nhom": "Danh sách liên kết",
+   "viDu": "What does the hash table look like after we insert the following keys sequentially?",
+   "viDuNghia": "Bảng băm trông thế nào sau khi ta chèn lần lượt các khoá sau?"
+  },
+  {
+   "chu": "delete",
+   "doc": "/dɪˈliːt/",
+   "nghia": "xoá một phần tử khỏi cấu trúc dữ liệu",
+   "nhom": "Danh sách liên kết",
+   "viDu": "Select the most correct java code snippet that deletes the node p.",
+   "viDuNghia": "Chọn đoạn mã Java đúng nhất để xoá nút p."
+  },
+  {
+   "chu": "data member",
+   "doc": "/ˈdeɪtə ˈmembər/",
+   "nghia": "thành phần dữ liệu của lớp (thuộc tính) – đề PE luôn mô tả lớp bằng các data members",
+   "nhom": "Danh sách liên kết",
+   "viDu": "The class Laptop with 3 data members: producer, weight and price is given (do not edit it).",
+   "viDuNghia": "Lớp Laptop với 3 thành phần dữ liệu: producer, weight và price được cho sẵn (không được sửa)."
+  },
+  {
+   "chu": "reference variable",
+   "doc": "/ˈrefrəns ˈveriəbl/",
+   "nghia": "biến tham chiếu – biến trỏ tới một đối tượng (một nút); cách Java thay cho con trỏ",
+   "nhom": "Danh sách liên kết",
+   "viDu": "Suppose a doubly linked list of integers is given below and p is a reference to the node with value 12 in the list.",
+   "viDuNghia": "Giả sử cho danh sách liên kết đôi các số nguyên bên dưới và p là tham chiếu tới nút có giá trị 12 trong danh sách."
+  },
+  {
+   "chu": "empty list",
+   "doc": "/ˈempti lɪst/",
+   "nghia": "danh sách rỗng – không có nút nào (head bằng null)",
+   "nhom": "Danh sách liên kết",
+   "viDu": "It should return 0 if the list is empty.",
+   "viDuNghia": "Hàm phải trả về 0 nếu danh sách rỗng."
+  },
+  {
+   "chu": "array-based implementation",
+   "doc": "/əˈreɪ beɪst ˌɪmplɪmenˈteɪʃn/",
+   "nghia": "cài đặt bằng mảng – dùng mảng (thay vì nút liên kết) để chứa phần tử của ngăn xếp/hàng đợi",
+   "nhom": "Danh sách liên kết",
+   "viDu": "The heap is array-based, so the tree is implicit: the node stored at index has its left child at 2*index+1.",
+   "viDuNghia": "Heap được cài bằng mảng nên cây là ngầm định: nút ở ô index có con trái ở ô 2*index+1."
+  },
+  {
+   "chu": "linear data structure",
+   "nghia": "cấu trúc dữ liệu tuyến tính – các phần tử xếp thành một dãy (mảng, danh sách, ngăn xếp, hàng đợi)",
+   "nhom": "Danh sách liên kết",
+   "viDu": "Which of the following data structures is a linear data structure?",
+   "viDuNghia": "Cấu trúc dữ liệu nào sau đây là cấu trúc dữ liệu tuyến tính?"
+  },
+  {
+   "chu": "sequentially",
+   "doc": "/sɪˈkwenʃəli/",
+   "nghia": "một cách tuần tự, lần lượt từng cái theo thứ tự",
+   "nhom": "Danh sách liên kết",
+   "viDu": "What is the result of the breadth first traverse of the binary search tree T, after inserting the keys into the tree sequentially?",
+   "viDuNghia": "Kết quả duyệt theo chiều rộng của cây nhị phân tìm kiếm T là gì, sau khi chèn lần lượt các khoá vào cây?"
+  },
+  {
+   "chu": "add to the tail",
+   "nghia": "thêm vào cuối danh sách (addLast); ngược lại là add to the head = thêm vào đầu",
+   "nhom": "Danh sách liên kết",
+   "viDu": "addLast(x): create a new node with value x and add it to the tail of the list.",
+   "viDuNghia": "addLast(x): tạo một nút mới có giá trị x rồi thêm nó vào cuối danh sách."
+  },
+  {
+   "chu": "linked list of integers",
+   "nghia": "danh sách liên kết chứa các số nguyên",
+   "nhom": "Danh sách liên kết",
+   "viDu": "Suppose a singly linked list of integers is given below.",
+   "viDuNghia": "Giả sử cho danh sách liên kết đơn các số nguyên như bên dưới."
+  },
+  {
+   "chu": "node with value",
+   "nghia": "nút có giá trị (bằng một số nào đó)",
+   "nhom": "Danh sách liên kết",
+   "viDu": "What is the breadth first traversal of the tree after inserting a node with value 22?",
+   "viDuNghia": "Kết quả duyệt theo chiều rộng của cây là gì sau khi chèn một nút có giá trị 22?"
+  },
+  {
+   "chu": "next pointer",
+   "doc": "/nekst ˈpɔɪntər/",
+   "nghia": "con trỏ next – liên kết từ một nút tới nút kế sau",
+   "nhom": "Danh sách liên kết",
+   "viDu": "A Node is an info object (Room) plus a next pointer.",
+   "viDuNghia": "Một Node gồm một đối tượng info (Room) kèm một con trỏ next."
+  },
+  {
+   "chu": "linked list",
+   "doc": "/lɪŋkt lɪst/",
+   "nghia": "danh sách liên kết – dãy nút, mỗi nút giữ dữ liệu + liên kết tới nút kế tiếp (đơn, đôi, vòng)",
+   "nhom": "Danh sách liên kết",
+   "viDu": "State True or False: In a linked list, the tail node is introduced for performance purpose only.",
+   "viDuNghia": "Đúng hay Sai: Trong một danh sách liên kết, node tail được đưa vào chỉ nhằm mục đích hiệu năng."
+  },
+  {
+   "chu": "node",
+   "doc": "/noʊd/",
+   "nghia": "nút – phần tử của danh sách liên kết/cây/đồ thị, giữ dữ liệu và liên kết tới nút khác. (SWT301: nút trong đồ thị luồng điều khiển)",
+   "nhom": "Danh sách liên kết",
+   "viDu": "State True or False: In circular linked-list, it is always required to define both head and tail nodes.",
+   "viDuNghia": "Đúng hay Sai: Trong danh sách liên kết vòng (circular linked-list), luôn luôn bắt buộc phải định nghĩa cả node head lẫn node tail."
+  },
+  {
+   "chu": "skip list",
+   "doc": "/skɪp lɪst/",
+   "nghia": "danh sách nhảy cóc – danh sách liên kết có thêm các tầng liên kết \"nhảy cóc\" để tìm kiếm nhanh như cây, trung bình O(log n)",
+   "nhom": "Danh sách liên kết",
+   "viDu": "A skip list adds extra levels of links so that a search can jump over many nodes at once.",
+   "viDuNghia": "Danh sách nhảy cóc thêm các tầng liên kết phụ để khi tìm có thể nhảy qua nhiều nút một lúc."
+  },
+  {
+   "chu": "top of the stack",
+   "nghia": "đỉnh ngăn xếp – nơi thêm vào (push) và lấy ra (pop)",
+   "nhom": "Ngăn xếp & hàng đợi",
+   "viDu": "The operation for removing and returning the top element of the stack is traditionally called:",
+   "viDuNghia": "Thao tác xoá và trả về phần tử ở đỉnh của ngăn xếp (stack) theo truyền thống được gọi là:"
+  },
+  {
+   "chu": "empty stack",
+   "doc": "/ˈempti stæk/",
+   "nghia": "ngăn xếp rỗng – không còn phần tử nào để pop",
+   "nhom": "Ngăn xếp & hàng đợi",
+   "viDu": "When the series of operations below is performed on an empty stack, which of the following is the data remaining on the stack?",
+   "viDuNghia": "Khi dãy thao tác dưới đây được thực hiện trên một ngăn xếp rỗng, dữ liệu nào còn lại trên ngăn xếp?"
+  },
+  {
+   "chu": "underflow",
+   "doc": "/ˈʌndərfloʊ/",
+   "nghia": "tràn dưới – lỗi khi lấy phần tử ra khỏi ngăn xếp/hàng đợi đang rỗng",
+   "nhom": "Ngăn xếp & hàng đợi",
+   "viDu": "Which of the following queue operations could result in queue underflow (become empty)?",
+   "viDuNghia": "Thao tác nào sau đây trên hàng đợi (queue) có thể dẫn tới hụt hàng đợi (underflow - trở nên rỗng)?"
+  },
+  {
+   "chu": "circular queue",
+   "doc": "/ˈsɜːrkjələr kjuː/",
+   "nghia": "hàng đợi vòng – cài bằng mảng, chỉ số đi hết mảng thì quay lại ô đầu",
+   "nhom": "Ngăn xếp & hàng đợi",
+   "viDu": "In a circular queue, when the rear reaches the end of the array, it wraps around to index 0.",
+   "viDuNghia": "Trong hàng đợi vòng, khi rear chạm cuối mảng thì nó quay vòng về chỉ số 0."
+  },
+  {
+   "chu": "pending",
+   "doc": "/ˈpendɪŋ/",
+   "nghia": "đang chờ xử lý (pending request = yêu cầu còn nằm trong hàng đợi)",
+   "nhom": "Ngăn xếp & hàng đợi",
+   "viDu": "Hotel is the main class, holding a dataList (rooms) and a requestQueue (pending orders).",
+   "viDuNghia": "Hotel là lớp chính, chứa một dataList (các phòng) và một requestQueue (các đơn đang chờ)."
+  },
+  {
+   "chu": "traditionally",
+   "doc": "/trəˈdɪʃənəli/",
+   "nghia": "theo cách gọi quen thuộc, theo truyền thống",
+   "nhom": "Ngăn xếp & hàng đợi",
+   "viDu": "The operation for removing and returning the front element of the queue is traditionally called:",
+   "viDuNghia": "Thao tác xoá và trả về phần tử ở đầu (front) của hàng đợi (queue) theo truyền thống được gọi là:"
+  },
+  {
+   "chu": "request queue",
+   "doc": "/rɪˈkwest kjuː/",
+   "nghia": "hàng đợi yêu cầu – các yêu cầu xếp hàng chờ xử lý theo thứ tự đến trước làm trước",
+   "nhom": "Ngăn xếp & hàng đợi",
+   "viDu": "Serve all requests in the requestQueue.",
+   "viDuNghia": "Xử lý mọi yêu cầu trong hàng đợi yêu cầu."
+  },
+  {
+   "chu": "front element",
+   "doc": "/frʌnt ˈelɪmənt/",
+   "nghia": "phần tử đầu hàng đợi – phần tử vào sớm nhất, sẽ được lấy ra trước",
+   "nhom": "Ngăn xếp & hàng đợi",
+   "viDu": "Dequeue removes and returns the front element of the queue.",
+   "viDuNghia": "Dequeue lấy ra và trả về phần tử ở đầu hàng đợi."
+  },
+  {
+   "chu": "top element",
+   "doc": "/tɑːp ˈelɪmənt/",
+   "nghia": "phần tử trên đỉnh ngăn xếp – phần tử vào sau cùng, sẽ được lấy ra trước",
+   "nhom": "Ngăn xếp & hàng đợi",
+   "viDu": "Pop removes and returns the top element of the stack.",
+   "viDuNghia": "Pop lấy ra và trả về phần tử trên đỉnh ngăn xếp."
+  },
+  {
+   "chu": "series of operations",
+   "nghia": "dãy thao tác – chuỗi các lệnh push/pop, enqueue/dequeue làm lần lượt",
+   "nhom": "Ngăn xếp & hàng đợi",
+   "viDu": "When the series of stack operations below is performed on an empty stack, which data is read out by the last READ operation?",
+   "viDuNghia": "Khi dãy thao tác ngăn xếp dưới đây được thực hiện trên một ngăn xếp rỗng, dữ liệu nào được đọc ra bởi thao tác READ cuối cùng?"
+  },
+  {
+   "chu": "pop",
+   "doc": "/pɑːp/",
+   "nghia": "lấy ra (pop) – thao tác bỏ phần tử ở ĐỈNH ngăn xếp ra và trả về nó; đi cặp với push",
+   "nhom": "Ngăn xếp & hàng đợi",
+   "viDu": "A pop operation removes the top item from the stack.",
+   "viDuNghia": "Thao tác pop lấy phần tử trên đỉnh ra khỏi ngăn xếp."
+  },
+  {
+   "chu": "push",
+   "doc": "/pʊʃ/",
+   "nghia": "đẩy vào (push) – thao tác đặt phần tử mới lên ĐỈNH ngăn xếp; đi cặp với pop",
+   "nhom": "Ngăn xếp & hàng đợi",
+   "viDu": "A push operation places a new item on top of the stack.",
+   "viDuNghia": "Thao tác push đặt một phần tử mới lên đỉnh ngăn xếp."
+  },
+  {
+   "chu": "stack",
+   "doc": "/stæk/",
+   "nghia": "ngăn xếp – cấu trúc vào sau ra trước (LIFO), chỉ thêm/lấy ở đỉnh (top). (CEA201: vùng nhớ stack của CPU, dùng khi gọi hàm)",
+   "nhom": "Ngăn xếp & hàng đợi",
+   "viDu": "Select the statement that is most correct. Which of the following applications may not use a stack?",
+   "viDuNghia": "Chọn phát biểu đúng nhất. Ứng dụng nào sau đây có thể KHÔNG dùng một ngăn xếp (stack)?"
+  },
+  {
+   "chu": "dequeue",
+   "doc": "/ˌdiːˈkjuː/",
+   "nghia": "lấy ra khỏi hàng đợi (dequeue) – bỏ phần tử ở ĐẦU (front) hàng đợi và trả về nó",
+   "nhom": "Ngăn xếp & hàng đợi",
+   "viDu": "The dequeue operation removes the item at the front of the queue.",
+   "viDuNghia": "Thao tác dequeue lấy ra phần tử ở đầu hàng đợi."
+  },
+  {
+   "chu": "enqueue",
+   "doc": "/ɪnˈkjuː/",
+   "nghia": "thêm vào hàng đợi (enqueue) – đặt phần tử mới vào CUỐI (rear) hàng đợi",
+   "nhom": "Ngăn xếp & hàng đợi",
+   "viDu": "What does the enqueue operation do in a queue ADT?",
+   "viDuNghia": "Thao tác enqueue làm gì trong ADT hàng đợi?"
+  },
+  {
+   "chu": "queue",
+   "doc": "/kjuː/",
+   "nghia": "hàng đợi – cấu trúc vào trước ra trước (FIFO): thêm ở cuối (enqueue), lấy ở đầu (dequeue)",
+   "nhom": "Ngăn xếp & hàng đợi",
+   "viDu": "Which of the following queue operations could result in queue underflow (become empty)?",
+   "viDuNghia": "Thao tác nào sau đây trên hàng đợi (queue) có thể dẫn tới hụt hàng đợi (underflow - trở nên rỗng)?"
+  },
+  {
+   "chu": "circular array",
+   "doc": "/ˈsɜːrkjələr əˈreɪ/",
+   "nghia": "mảng vòng – mảng coi như nối đầu với cuối (chỉ số tính theo % kích thước), dùng để cài hàng đợi",
+   "nhom": "Ngăn xếp & hàng đợi",
+   "viDu": "Consider a queue of characters which is implemented by a circular array of size 6.",
+   "viDuNghia": "Xét một hàng đợi ký tự được cài đặt bằng một mảng vòng kích thước 6."
+  },
+  {
+   "chu": "recursive call",
+   "doc": "/rɪˈkɜːrsɪv kɔːl/",
+   "nghia": "lời gọi đệ quy – chỗ hàm gọi lại chính nó",
+   "nhom": "Đệ quy & độ phức tạp",
+   "viDu": "In a real computer, what will happen if you make a recursive call without making the problem smaller?",
+   "viDuNghia": "Trên một máy tính thật, điều gì sẽ xảy ra nếu bạn thực hiện một lời gọi đệ quy mà không làm cho bài toán nhỏ đi?"
+  },
+  {
+   "chu": "recursive method",
+   "doc": "/rɪˈkɜːrsɪv ˈmeθəd/",
+   "nghia": "phương thức đệ quy – phương thức tự gọi lại chính nó với bài toán nhỏ hơn",
+   "nhom": "Đệ quy & độ phức tạp",
+   "viDu": "A recursive method calls itself with a smaller problem until it reaches the base case.",
+   "viDuNghia": "Phương thức đệ quy gọi lại chính nó với bài toán nhỏ hơn cho tới khi gặp trường hợp cơ sở."
+  },
+  {
+   "chu": "tail recursion",
+   "doc": "/teɪl rɪˈkɜːrʒn/",
+   "nghia": "đệ quy đuôi – lời gọi đệ quy là việc cuối cùng hàm làm",
+   "nhom": "Đệ quy & độ phức tạp",
+   "viDu": "Tail recursion is a special case of recursion in which the last operation of the function, the tail call, is a recursive call.",
+   "viDuNghia": "Đệ quy đuôi là trường hợp đặc biệt của đệ quy, trong đó thao tác cuối cùng của hàm là một lời gọi đệ quy."
+  },
+  {
+   "chu": "base case",
+   "doc": "/beɪs keɪs/",
+   "nghia": "trường hợp cơ sở – trường hợp nhỏ nhất, hàm trả kết quả ngay mà không gọi đệ quy; thiếu nó là đệ quy vô hạn",
+   "nhom": "Đệ quy & độ phức tạp",
+   "viDu": "Every recursive function must have at least one base case.",
+   "viDuNghia": "Mọi hàm đệ quy phải có ít nhất một trường hợp cơ sở."
+  },
+  {
+   "chu": "non-recursive",
+   "doc": "/ˌnɑːn rɪˈkɜːrsɪv/",
+   "nghia": "không đệ quy – viết bằng vòng lặp",
+   "nhom": "Đệ quy & độ phức tạp",
+   "viDu": "A non-recursive method uses a loop instead of calling itself.",
+   "viDuNghia": "Phương thức không đệ quy dùng vòng lặp thay vì tự gọi lại chính nó."
+  },
+  {
+   "chu": "worst case",
+   "doc": "/wɜːrst keɪs/",
+   "nghia": "trường hợp xấu nhất – dữ liệu khiến thuật toán chạy lâu nhất",
+   "nhom": "Đệ quy & độ phức tạp",
+   "viDu": "Select the statement that is most correct. Basically, the complexity (worst-case) of search algorithm in singly linked lists is",
+   "viDuNghia": "Chọn phát biểu đúng nhất. Về cơ bản, độ phức tạp (trường hợp xấu nhất) của giải thuật tìm kiếm trong danh sách liên kết đơn là"
+  },
+  {
+   "chu": "best case",
+   "doc": "/best keɪs/",
+   "nghia": "trường hợp tốt nhất – dữ liệu khiến thuật toán chạy nhanh nhất",
+   "nhom": "Đệ quy & độ phức tạp",
+   "viDu": "In the best case, linear search finds the value at the first position.",
+   "viDuNghia": "Trong trường hợp tốt nhất, tìm kiếm tuyến tính thấy giá trị ngay ở vị trí đầu tiên."
+  },
+  {
+   "chu": "average case",
+   "doc": "/ˈævərɪdʒ keɪs/",
+   "nghia": "trường hợp trung bình",
+   "nhom": "Đệ quy & độ phức tạp",
+   "viDu": "In the average case, sequential search examines about half of the elements in the list.",
+   "viDuNghia": "Trong trường hợp trung bình, tìm kiếm tuần tự phải xét khoảng một nửa số phần tử của danh sách."
+  },
+  {
+   "chu": "logarithmic",
+   "doc": "/ˌlɔːɡəˈrɪðmɪk/",
+   "nghia": "theo hàm logarit – độ phức tạp O(log n), rất nhanh (tìm kiếm nhị phân)",
+   "nhom": "Đệ quy & độ phức tạp",
+   "viDu": "Binary search has logarithmic complexity because it halves the search range at each step.",
+   "viDuNghia": "Tìm kiếm nhị phân có độ phức tạp logarit vì mỗi bước nó chia đôi vùng tìm."
+  },
+  {
+   "chu": "quadratic",
+   "doc": "/kwɑːˈdrætɪk/",
+   "nghia": "bậc hai – độ phức tạp O(n^2), chậm khi dữ liệu lớn (sắp xếp nổi bọt, chọn, chèn)",
+   "nhom": "Đệ quy & độ phức tạp",
+   "viDu": "Selection sort and bubble sort have quadratic time complexity, O(n^2).",
+   "viDuNghia": "Sắp xếp chọn và sắp xếp nổi bọt có độ phức tạp thời gian bậc hai, O(n^2)."
+  },
+  {
+   "chu": "linear time",
+   "doc": "/ˈlɪniər taɪm/",
+   "nghia": "thời gian tuyến tính – độ phức tạp O(n), thời gian tăng tỉ lệ với số phần tử",
+   "nhom": "Đệ quy & độ phức tạp",
+   "viDu": "Sequential search in an unsorted list runs in linear time, O(n).",
+   "viDuNghia": "Tìm kiếm tuần tự trên danh sách chưa sắp xếp chạy trong thời gian tuyến tính, O(n)."
+  },
+  {
+   "chu": "time complexity of an operation",
+   "nghia": "độ phức tạp thời gian của một thao tác (chèn, xoá, tìm) – đề hay hỏi so sánh giữa mảng và danh sách liên kết",
+   "nhom": "Đệ quy & độ phức tạp",
+   "viDu": "With respect to complexity of each operation on array and singly linked list, which operation is regarded as the same?",
+   "viDuNghia": "Xét độ phức tạp của từng thao tác trên mảng và danh sách liên kết đơn, thao tác nào được coi là như nhau?"
+  },
+  {
+   "chu": "pseudocode",
+   "doc": "/ˈsuːdoʊkoʊd/",
+   "nghia": "mã giả – mô tả thuật toán bằng câu gần giống ngôn ngữ lập trình, không theo cú pháp ngôn ngữ cụ thể nào",
+   "nhom": "Đệ quy & độ phức tạp",
+   "viDu": "Given the Insertion sort algorithm (procedure Insertionsort, standard pseudocode with outer loop i=2 to n).",
+   "viDuNghia": "Cho thuật toán Insertion sort (giả mã chuẩn, vòng ngoài i=2 đến n)."
+  },
+  {
+   "chu": "recursion",
+   "doc": "/rɪˈkɜːrʒn/",
+   "nghia": "đệ quy – hàm tự gọi lại chính nó với bài toán nhỏ hơn, dừng ở trường hợp cơ sở (base case)",
+   "nhom": "Đệ quy & độ phức tạp",
+   "viDu": "Which of the following algorithms cannot be designed without recursion?",
+   "viDuNghia": "Thuật toán nào sau đây KHÔNG THỂ thiết kế được nếu không dùng đệ quy?"
+  },
+  {
+   "chu": "complexity",
+   "doc": "/kəmˈpleksəti/",
+   "nghia": "độ phức tạp – thời gian/bộ nhớ thuật toán cần theo cỡ dữ liệu n, ký hiệu O(n), O(log n). (Kiểm thử: cyclomatic complexity)",
+   "nhom": "Đệ quy & độ phức tạp",
+   "viDu": "Select the statement that is most correct. Basically, the complexity (worst-case) of search algorithm in singly linked lists is",
+   "viDuNghia": "Chọn phát biểu đúng nhất. Về cơ bản, độ phức tạp (trường hợp xấu nhất) của giải thuật tìm kiếm trong danh sách liên kết đơn là"
+  },
+  {
+   "chu": "time complexity",
+   "doc": "/taɪm kəmˈpleksəti/",
+   "nghia": "độ phức tạp thời gian – số bước thuật toán chạy theo kích thước đầu vào n, ghi bằng Big-O: O(1), O(log n), O(n), O(n log n)…; MAD101 cũng hỏi",
+   "nhom": "Đệ quy & độ phức tạp",
+   "viDu": "In a singly-linked list we can insert a node after a given node with time complexity O(1).",
+   "viDuNghia": "Trong danh sách liên kết đơn, ta có thể chèn một nút vào sau một nút cho trước với độ phức tạp thời gian O(1)."
+  },
+  {
+   "chu": "quick sort",
+   "doc": "/kwɪk sɔːrt/",
+   "nghia": "sắp xếp nhanh – chọn phần tử chốt, chia dãy thành hai phần rồi sắp từng phần",
+   "nhom": "Sắp xếp & tìm kiếm",
+   "viDu": "The average-case complexity of quick sort is O(n log n), but the worst case is O(n^2).",
+   "viDuNghia": "Độ phức tạp trường hợp trung bình của quick sort là O(n log n), nhưng trường hợp xấu nhất là O(n^2)."
+  },
+  {
+   "chu": "heap sort",
+   "doc": "/hiːp sɔːrt/",
+   "nghia": "sắp xếp vun đống – dựng heap rồi lần lượt lấy phần tử lớn nhất ra",
+   "nhom": "Sắp xếp & tìm kiếm",
+   "viDu": "Select the most correct statement about the complexity of heapsort:",
+   "viDuNghia": "Chọn phát biểu đúng nhất về độ phức tạp của heapsort:"
+  },
+  {
+   "chu": "ascendingly",
+   "doc": "/əˈsendɪŋli/",
+   "nghia": "theo thứ tự tăng dần",
+   "nhom": "Sắp xếp & tìm kiếm",
+   "viDu": "Sort the 4 elements from position 2 to position 5 (head position is 0) ascendingly by depth.",
+   "viDuNghia": "Sắp xếp 4 phần tử từ vị trí 2 đến vị trí 5 (vị trí của head là 0) tăng dần theo depth."
+  },
+  {
+   "chu": "minimal",
+   "doc": "/ˈmɪnɪml/",
+   "nghia": "nhỏ nhất, tối thiểu",
+   "nhom": "Sắp xếp & tìm kiếm",
+   "viDu": "Each step a vertex with minimal current distance is selected into S.",
+   "viDuNghia": "Mỗi bước, đỉnh có khoảng cách hiện tại nhỏ nhất được chọn vào S."
+  },
+  {
+   "chu": "considering",
+   "doc": "/kənˈsɪdərɪŋ/",
+   "nghia": "xét theo, tính theo (\"sort considering price\" = sắp xếp theo giá)",
+   "nhom": "Sắp xếp & tìm kiếm",
+   "viDu": "Suppose we are considering a binary search tree. Select the correct Java code that searches for a node with value x.",
+   "viDuNghia": "Giả sử ta đang xét một cây tìm kiếm nhị phân. Chọn đoạn mã Java đúng để tìm một nút có giá trị x."
+  },
+  {
+   "chu": "sorting",
+   "doc": "/ˈsɔːrtɪŋ/",
+   "nghia": "sắp xếp – xếp phần tử theo thứ tự tăng/giảm (bubble, selection, insertion, quick, merge, heap sort)",
+   "nhom": "Sắp xếp & tìm kiếm",
+   "viDu": "Which sorting algorithm compares adjacent items and swaps them?",
+   "viDuNghia": "Thuật toán sắp xếp nào so sánh các phần tử liền kề và hoán đổi chúng?"
+  },
+  {
+   "chu": "binary search",
+   "doc": "/ˈbaɪneri sɜːrtʃ/",
+   "nghia": "tìm kiếm nhị phân – trên dãy ĐÃ sắp xếp, so với phần tử giữa rồi bỏ đi một nửa; độ phức tạp O(log n)",
+   "nhom": "Sắp xếp & tìm kiếm",
+   "viDu": "Use the binary search algorithm to find the location of 10 in the sequence {1,4,5,7,8,10,12}. How many iterations are needed?",
+   "viDuNghia": "Dùng thuật toán tìm kiếm nhị phân để tìm vị trí của 10 trong dãy {1,4,5,7,8,10,12}. Cần bao nhiêu lần lặp?"
+  },
+  {
+   "chu": "pre-given",
+   "doc": "/ˌpriː ˈɡɪvn/",
+   "nghia": "cho sẵn từ trước – phần mã đề đã viết sẵn, không được sửa",
+   "nhom": "Đọc đề PE",
+   "viDu": "Method to complete: the body of void f2(), just after the marked comment (keep every pre-given statement).",
+   "viDuNghia": "Phương thức cần hoàn thiện: thân của void f2(), ngay sau chú thích đánh dấu (giữ nguyên mọi câu lệnh cho sẵn)."
+  },
+  {
+   "chu": "untouched",
+   "doc": "/ʌnˈtʌtʃt/",
+   "nghia": "giữ nguyên, không đụng tới",
+   "nhom": "Đọc đề PE",
+   "viDu": "Sort the 5 elements just before p ascending by type, leaving p and other nodes untouched.",
+   "viDuNghia": "Sắp xếp 5 phần tử ngay trước p tăng dần theo type, giữ nguyên p và các nút khác."
+  },
+  {
+   "chu": "edit",
+   "doc": "/ˈedɪt/",
+   "nghia": "sửa (mã) – \"do not edit\" = không được sửa",
+   "nhom": "Đọc đề PE",
+   "viDu": "The class Bike with 3 data members (brand, color, weight) is provided; do not edit it.",
+   "viDuNghia": "Lớp Bike với 3 thành phần dữ liệu (brand, color, weight) được cho sẵn; không được sửa nó."
+  },
+  {
+   "chu": "helper function",
+   "doc": "/ˈhelpər ˈfʌŋkʃn/",
+   "nghia": "hàm phụ trợ – hàm nhỏ viết thêm để hàm chính gọi",
+   "nhom": "Đọc đề PE",
+   "viDu": "A private recursive helper method is a good approach for this task.",
+   "viDuNghia": "Một phương thức phụ trợ đệ quy để private là cách làm tốt cho nhiệm vụ này."
+  },
+  {
+   "chu": "thus",
+   "doc": "/ðʌs/",
+   "nghia": "do đó, như vậy thì",
+   "nhom": "Đọc đề PE",
+   "viDu": "The variable rate is the key of the tree, thus it must be unique.",
+   "viDuNghia": "Biến rate là khoá của cây, do đó nó phải là duy nhất."
+  },
+  {
+   "chu": "i.e.",
+   "doc": "/ˌaɪ ˈiː/",
+   "nghia": "tức là, nghĩa là (viết tắt của tiếng Latin id est)",
+   "nhom": "Đọc đề PE",
+   "viDu": "p is a reference to the node with value 12 in the list (i.e. p.info=12).",
+   "viDuNghia": "p là tham chiếu tới nút có giá trị 12 trong danh sách (tức là p.info=12)."
+  },
+  {
+   "chu": "labeled",
+   "doc": "/ˈleɪbld/",
+   "nghia": "được gán nhãn, được đặt tên (vertices labeled A to P = các đỉnh tên từ A đến P)",
+   "nhom": "Đọc đề PE",
+   "viDu": "The class Graph is the implementation of a graph (adjacency matrix, vertices labeled A to P).",
+   "viDuNghia": "Lớp Graph là phần cài đặt của một đồ thị (ma trận kề, các đỉnh mang nhãn từ A đến P)."
+  },
+  {
+   "chu": "numbered",
+   "doc": "/ˈnʌmbərd/",
+   "nghia": "được đánh số",
+   "nhom": "Đọc đề PE",
+   "viDu": "Colors numbered 1, 2, 3, ... are assigned to vertices with the sequential coloring algorithm.",
+   "viDuNghia": "Các màu đánh số 1, 2, 3, ... được gán cho các đỉnh bằng thuật toán tô màu tuần tự."
+  },
+  {
+   "chu": "assigned",
+   "doc": "/əˈsaɪnd/",
+   "nghia": "được gán (giá trị, màu, nhãn)",
+   "nhom": "Đọc đề PE",
+   "viDu": "Each vertex is assigned the smallest color that is not used by its adjacent vertices.",
+   "viDuNghia": "Mỗi đỉnh được gán màu nhỏ nhất chưa bị các đỉnh kề với nó dùng."
+  },
+  {
+   "chu": "holding",
+   "doc": "/ˈhoʊldɪŋ/",
+   "nghia": "chứa, giữ (\"a class holding ID and priority\" = lớp chứa ID và độ ưu tiên)",
+   "nhom": "Đọc đề PE",
+   "viDu": "Implement a Task class holding ID, description and priority attributes.",
+   "viDuNghia": "Cài đặt lớp Task chứa các thuộc tính ID, mô tả và độ ưu tiên."
+  },
+  {
+   "chu": "having",
+   "doc": "/ˈhævɪŋ/",
+   "nghia": "có – \"the node having color 6\" = nút có color bằng 6",
+   "nhom": "Đọc đề PE",
+   "viDu": "Remove the SECOND node having color < 6 (thus if only one node has color < 6, do nothing).",
+   "viDuNghia": "Xoá nút THỨ HAI có color < 6 (như vậy nếu chỉ một nút có color < 6 thì không làm gì)."
+  },
+  {
+   "chu": "owner",
+   "doc": "/ˈoʊnər/",
+   "nghia": "chủ sở hữu – thuộc tính hay gặp của đối tượng trong đề PE",
+   "nhom": "Đọc đề PE",
+   "viDu": "Complete a Java singly-linked-list program of Cala objects (owner, horn, color).",
+   "viDuNghia": "Hoàn thiện chương trình Java danh sách liên kết đơn chứa các đối tượng Cala (owner, horn, color)."
+  },
+  {
+   "chu": "raw",
+   "doc": "/rɔː/",
+   "nghia": "thô, chưa xử lý (raw message = thông điệp gốc chưa mã hoá)",
+   "nhom": "Đọc đề PE",
+   "viDu": "Given a raw message (without single quote). Run the run-length encoding algorithm for that message, what is the output?",
+   "viDuNghia": "Cho một thông điệp gốc (không tính dấu nháy đơn). Chạy thuật toán mã hoá run-length cho thông điệp đó, kết quả là gì?"
+  },
+  {
+   "chu": "look like",
+   "doc": "/lʊk laɪk/",
+   "nghia": "trông như thế nào – \"What does the list look like after…?\" = sau khi… thì danh sách ra sao?",
+   "nhom": "Đọc đề PE",
+   "viDu": "What does the list look like after the following java code snippet is run?",
+   "viDuNghia": "Danh sách trông thế nào sau khi chạy đoạn mã Java sau?"
+  },
+  {
+   "chu": "complete the body",
+   "nghia": "viết nốt phần thân (của phương thức đề cho sẵn tên)",
+   "nhom": "Đọc đề PE",
+   "viDu": "Method to complete: the body of f3(), right after the given traversal call.",
+   "viDuNghia": "Phương thức cần hoàn thiện: thân của f3(), ngay sau lời gọi duyệt cho sẵn."
+  },
+  {
+   "chu": "written to the screen",
+   "nghia": "được in ra màn hình",
+   "nhom": "Đọc đề PE",
+   "viDu": "What is written to the screen for the input \"Good**Mor*ni**ng*Sir\"?",
+   "viDuNghia": "Màn hình in ra gì với dữ liệu nhập \"Good**Mor*ni**ng*Sir\"?"
+  },
+  {
+   "chu": "selection ability",
+   "doc": "/sɪˈlekʃn əˈbɪləti/",
+   "nghia": "khả năng được chọn – \"nodes having the same selection ability\" = các nút ngang hàng nhau khi chọn",
+   "nhom": "Đọc đề PE",
+   "viDu": "Visit nodes in ABC order if there are some nodes having the same selection ability.",
+   "viDuNghia": "Thăm các nút theo thứ tự ABC nếu có một số nút cùng khả năng được chọn."
+  },
+  {
+   "chu": "reference solution",
+   "doc": "/ˈrefrəns səˈluːʃn/",
+   "nghia": "lời giải mẫu – chương trình chuẩn dùng để sinh kết quả mong đợi",
+   "nhom": "Đọc đề PE",
+   "viDu": "The expected output shown here is the real output of a reference solution that was actually compiled and run.",
+   "viDuNghia": "Kết quả mong đợi ở đây là kết quả thật của một lời giải mẫu đã được biên dịch và chạy."
+  },
+  {
+   "chu": "expected output",
+   "doc": "/ɪkˈspektɪd ˈaʊtpʊt/",
+   "nghia": "kết quả mong đợi – nội dung chương trình của bạn phải in ra đúng như vậy",
+   "nhom": "Đọc đề PE",
+   "viDu": "The expected output in the file f4.txt should be the following.",
+   "viDuNghia": "Kết quả mong đợi trong tệp f4.txt phải như sau."
+  },
+  {
+   "chu": "marked comment",
+   "doc": "/mɑːrkt ˈkɑːment/",
+   "nghia": "dòng chú thích đánh dấu – chỗ đề đánh dấu để bạn viết mã ngay sau đó",
+   "nhom": "Đọc đề PE",
+   "viDu": "Complete the body of void f3(), just after the marked comment.",
+   "viDuNghia": "Hoàn thiện thân của void f3(), ngay sau dòng chú thích đánh dấu."
+  },
+  {
+   "chu": "scholarship",
+   "doc": "/ˈskɑːlərʃɪp/",
+   "nghia": "học bổng",
+   "nhom": "Đọc đề PE",
+   "viDu": "Add a student to the end of the scholarship list.",
+   "viDuNghia": "Thêm một sinh viên vào cuối danh sách học bổng."
+  },
+  {
+   "chu": "immediately after",
+   "doc": "/ɪˈmiːdiətli ˈæftər/",
+   "nghia": "ngay sau (không cách phần tử nào)",
+   "nhom": "Đọc đề PE",
+   "viDu": "Sort the 6 nodes immediately after p ascendingly by color.",
+   "viDuNghia": "Sắp xếp 6 nút ngay sau p tăng dần theo color."
+  }
+ ]
+}

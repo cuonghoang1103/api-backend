@@ -1,0 +1,676 @@
+{
+ "ma": "wed201c-2",
+ "nn": "en",
+ "ten": "WED201c · 2. JavaScript, DOM, responsive",
+ "moTa": "Môn Web Design (WED201c), bộ 2: JavaScript cơ bản, DOM và sự kiện, thiết kế đáp ứng (responsive), media query, lưới Bootstrap, flexbox. Từ lấy từ đề FE/PE thật; câu ví dụ phần lớn là câu hỏi thật trong đề.",
+ "bieuTuong": "rectangle.on.rectangle.angled",
+ "thuTu": -963,
+ "tu": [
+  {
+   "chu": "script",
+   "doc": "/skrɪpt/",
+   "nghia": "kịch bản: đoạn mã JavaScript chạy trong trang (đặt trong thẻ script)",
+   "nhom": "JavaScript cơ bản",
+   "viDu": "Built-in JavaScript functions (alert, prompt, etc) cannot be mixed in with other HTML code unless you use the <script> tag.",
+   "viDuNghia": "Các hàm JavaScript có sẵn (alert, prompt, v.v.) không thể trộn lẫn với mã HTML khác trừ khi bạn dùng thẻ <script>."
+  },
+  {
+   "chu": "external script",
+   "doc": "/ɪkˈstɜːrnl skrɪpt/",
+   "nghia": "tệp JavaScript riêng (.js), nối vào trang bằng thuộc tính src của thẻ script",
+   "nhom": "JavaScript cơ bản",
+   "viDu": "Which of the following is the proper way to link to an external JavaScript file?",
+   "viDuNghia": "Đâu là cách đúng để liên kết tới một tệp JavaScript bên ngoài?"
+  },
+  {
+   "chu": "assignment",
+   "doc": "/əˈsaɪnmənt/",
+   "nghia": "phép gán: đặt giá trị cho biến bằng dấu =",
+   "nhom": "JavaScript cơ bản",
+   "viDu": "This code is illegal and it doesn't make sense to have a non-variable (also called a constant) in the left-hand side (LHS) of an assignment statement.",
+   "viDuNghia": "Đoạn mã này bất hợp lệ, việc đặt một giá trị không phải biến (còn gọi là hằng số) ở vế trái (LHS) của câu lệnh gán là vô nghĩa."
+  },
+  {
+   "chu": "zero-based",
+   "doc": "/ˌzɪroʊ ˈbeɪst/",
+   "nghia": "đánh số từ 0: phần tử đầu tiên của mảng có chỉ số 0",
+   "nhom": "JavaScript cơ bản",
+   "viDu": "Array indexes in JavaScript are zero-based.",
+   "viDuNghia": "Chỉ số mảng trong JavaScript bắt đầu từ 0."
+  },
+  {
+   "chu": "call a function",
+   "nghia": "gọi hàm: chạy hàm bằng cách viết tên hàm kèm cặp ngoặc đơn",
+   "nhom": "JavaScript cơ bản",
+   "viDu": "You can call a function without it being defined.",
+   "viDuNghia": "Bạn có thể gọi một hàm ngay cả khi hàm đó chưa được định nghĩa (ở phía trước)."
+  },
+  {
+   "chu": "comparison operator",
+   "doc": "/kəmˈpærɪsn ˈɑːpəreɪtər/",
+   "nghia": "toán tử so sánh (==, ===, !=, <, >)",
+   "nhom": "JavaScript cơ bản",
+   "viDu": "A comparison operator returns true or false.",
+   "viDuNghia": "Toán tử so sánh trả về true hoặc false."
+  },
+  {
+   "chu": "strict equality",
+   "doc": "/strɪkt iˈkwɑːləti/",
+   "nghia": "so sánh bằng nghiêm ngặt (===): bằng cả giá trị LẪN kiểu, khác với ==",
+   "nhom": "JavaScript cơ bản",
+   "viDu": "Strict equality (===) compares both value and type.",
+   "viDuNghia": "So sánh bằng nghiêm ngặt (===) so cả giá trị lẫn kiểu."
+  },
+  {
+   "chu": "syntax error",
+   "doc": "/ˈsɪntæks ˈerər/",
+   "nghia": "lỗi cú pháp: viết sai quy tắc ngôn ngữ nên mã không chạy được",
+   "nhom": "JavaScript cơ bản",
+   "viDu": "A missing closing bracket causes a syntax error.",
+   "viDuNghia": "Thiếu dấu ngoặc đóng gây ra lỗi cú pháp."
+  },
+  {
+   "chu": "alert box",
+   "doc": "/əˈlɜːrt bɑːks/",
+   "nghia": "hộp thông báo: cửa sổ nhỏ hiện một câu thông báo, có nút OK",
+   "nhom": "JavaScript cơ bản",
+   "viDu": "How does prompt differ from alert?",
+   "viDuNghia": "prompt khác với alert như thế nào?"
+  },
+  {
+   "chu": "prompt",
+   "doc": "/prɑːmpt/",
+   "nghia": "hộp nhập: cửa sổ hỏi và cho người dùng gõ một giá trị",
+   "nhom": "JavaScript cơ bản",
+   "viDu": "The prompt will return a value, alert does not.",
+   "viDuNghia": "prompt sẽ trả về một giá trị, alert thì không."
+  },
+  {
+   "chu": "popup",
+   "doc": "/ˈpɑːpʌp/",
+   "nghia": "cửa sổ bật lên",
+   "nhom": "JavaScript cơ bản",
+   "viDu": "The alert function shows a popup with a message.",
+   "viDuNghia": "Hàm alert hiện một cửa sổ bật lên kèm thông báo."
+  },
+  {
+   "chu": "console",
+   "doc": "/ˈkɑːnsoʊl/",
+   "nghia": "bảng điều khiển của trình duyệt: nơi in thông báo và lỗi để gỡ lỗi (console.log)",
+   "nhom": "JavaScript cơ bản",
+   "viDu": "What will happen when the following code runs? let num = 3 ; num += 2 ; ++num; console . log (num);",
+   "viDuNghia": "Điều gì xảy ra khi đoạn mã sau chạy? let num = 3 ; num += 2 ; ++num; console . log (num);"
+  },
+  {
+   "chu": "semicolon",
+   "doc": "/ˈsemikoʊlən/",
+   "nghia": "dấu chấm phẩy (;): kết thúc một câu lệnh JavaScript hoặc một khai báo CSS",
+   "nhom": "JavaScript cơ bản",
+   "viDu": "Each CSS declaration ends with a semicolon.",
+   "viDuNghia": "Mỗi khai báo CSS kết thúc bằng dấu chấm phẩy."
+  },
+  {
+   "chu": "parentheses",
+   "doc": "/pəˈrenθəsiːz/",
+   "nghia": "cặp ngoặc đơn ( )",
+   "nhom": "JavaScript cơ bản",
+   "viDu": "Which of these options does NOT require the use of parentheses?",
+   "viDuNghia": "Tuỳ chọn nào dưới đây KHÔNG cần dùng dấu ngoặc đơn?"
+  },
+  {
+   "chu": "curly braces",
+   "doc": "/ˈkɜːrli ˈbreɪsɪz/",
+   "nghia": "cặp ngoặc nhọn { }: bao một khối lệnh hoặc một đối tượng",
+   "nhom": "JavaScript cơ bản",
+   "viDu": "The body of a function is written inside curly braces.",
+   "viDuNghia": "Thân hàm được viết trong cặp ngoặc nhọn."
+  },
+  {
+   "chu": "JavaScript",
+   "doc": "/ˈdʒɑːvəskrɪpt/",
+   "nghia": "ngôn ngữ lập trình chạy trong trình duyệt, làm trang web tương tác (đổi nội dung, xử lý sự kiện, kiểm tra form)",
+   "nhom": "JavaScript cơ bản",
+   "viDu": "Where can you put JavaScript?",
+   "viDuNghia": "Bạn có thể đặt JavaScript ở đâu? (Đáp án: trong phần head và phần body.)"
+  },
+  {
+   "chu": "typeof operator",
+   "doc": "/ˈtaɪpəv ˈɑːpəreɪtər/",
+   "nghia": "toán tử typeof: trả về chuỗi tên kiểu của giá trị (\"number\", \"string\", \"object\"…); mảng cho ra \"object\"",
+   "nhom": "JavaScript cơ bản",
+   "viDu": "Which of the following is true about the typeof operator in JavaScript?",
+   "viDuNghia": "Phát biểu nào sau đây đúng về toán tử typeof trong JavaScript?"
+  },
+  {
+   "chu": "Document Object Model",
+   "nghia": "mô hình đối tượng tài liệu (DOM): trình duyệt biểu diễn trang HTML thành cây đối tượng để JavaScript đọc và sửa",
+   "nhom": "DOM và sự kiện",
+   "viDu": "JavaScript uses what kind of interface to access the DOM structure?",
+   "viDuNghia": "JavaScript dùng loại giao diện (interface) nào để truy cập cấu trúc DOM?"
+  },
+  {
+   "chu": "child element",
+   "doc": "/tʃaɪld ˈelɪmənt/",
+   "nghia": "phần tử con: phần tử nằm ngay bên trong phần tử khác",
+   "nhom": "DOM và sự kiện",
+   "viDu": "Element head is missing a required instance of child element title.",
+   "viDuNghia": "Phần tử head thiếu một phần tử con (child element) bắt buộc là title."
+  },
+  {
+   "chu": "parent element",
+   "doc": "/ˈperənt ˈelɪmənt/",
+   "nghia": "phần tử cha: phần tử chứa trực tiếp phần tử khác",
+   "nhom": "DOM và sự kiện",
+   "viDu": "What unit is used to specify the size of an element relative to the parent element?",
+   "viDuNghia": "Đơn vị nào dùng để xác định kích thước của một phần tử tương đối so với phần tử cha?"
+  },
+  {
+   "chu": "event",
+   "doc": "/ɪˈvent/",
+   "nghia": "sự kiện: điều xảy ra trên trang như bấm chuột, gõ phím, tải xong trang",
+   "nhom": "DOM và sự kiện",
+   "viDu": "Which event is fired when the mouse pointer is moved out of an element?",
+   "viDuNghia": "Sự kiện nào được kích hoạt khi con trỏ chuột di chuyển ra khỏi một phần tử?"
+  },
+  {
+   "chu": "event handler",
+   "doc": "/ɪˈvent ˈhændlər/",
+   "nghia": "hàm xử lý sự kiện: đoạn mã chạy khi sự kiện xảy ra (onclick, onload…)",
+   "nhom": "DOM và sự kiện",
+   "viDu": "onclick is an event handler that runs when the user clicks an element.",
+   "viDuNghia": "onclick là hàm xử lý sự kiện chạy khi người dùng bấm vào phần tử."
+  },
+  {
+   "chu": "event listener",
+   "doc": "/ɪˈvent ˈlɪsənər/",
+   "nghia": "bộ lắng nghe sự kiện: hàm đăng ký bằng addEventListener, chờ sự kiện để chạy",
+   "nhom": "DOM và sự kiện",
+   "viDu": "An event listener waits for an event and then runs a function.",
+   "viDuNghia": "Bộ lắng nghe sự kiện chờ một sự kiện rồi chạy một hàm."
+  },
+  {
+   "chu": "mouse pointer",
+   "doc": "/maʊs ˈpɔɪntər/",
+   "nghia": "con trỏ chuột",
+   "nhom": "DOM và sự kiện",
+   "viDu": "Which of the following CSS pseudo-classes is used to select an element that is being hovered over by the mouse pointer?",
+   "viDuNghia": "Pseudo-class CSS nào dùng để chọn một phần tử đang được con trỏ chuột di (hover) lên trên?"
+  },
+  {
+   "chu": "keystroke",
+   "doc": "/ˈkiːstroʊk/",
+   "nghia": "một lần gõ phím",
+   "nhom": "DOM và sự kiện",
+   "viDu": "The onkeydown event fires on every keystroke.",
+   "viDuNghia": "Sự kiện onkeydown kích hoạt ở mỗi lần gõ phím."
+  },
+  {
+   "chu": "focus",
+   "doc": "/ˈfoʊkəs/",
+   "nghia": "tiêu điểm: phần tử đang được chọn để nhập (ô đang có con nháy)",
+   "nhom": "DOM và sự kiện",
+   "viDu": "The onfocus event occurs when an input field gets focus.",
+   "viDuNghia": "Sự kiện onfocus xảy ra khi một ô nhập nhận tiêu điểm."
+  },
+  {
+   "chu": "dynamically",
+   "doc": "/daɪˈnæmɪkli/",
+   "nghia": "một cách động: thay đổi ngay khi trang đang chạy, không cần tải lại",
+   "nhom": "DOM và sự kiện",
+   "viDu": "JavaScript can change the content of a page dynamically.",
+   "viDuNghia": "JavaScript có thể thay đổi nội dung trang một cách động."
+  },
+  {
+   "chu": "form validation",
+   "doc": "/fɔːrm ˌvælɪˈdeɪʃn/",
+   "nghia": "kiểm tra dữ liệu form: xem người dùng nhập có hợp lệ không trước khi gửi",
+   "nhom": "DOM và sự kiện",
+   "viDu": "How does JavaScript's document.getElementById() method relate to the Document Object Model (DOM) and what is its primary use in form validation?",
+   "viDuNghia": "Phương thức document.getElementById() của JavaScript liên quan thế nào đến Document Object Model (DOM), và công dụng chính của nó trong việc kiểm tra hợp lệ (validation) form là gì?"
+  },
+  {
+   "chu": "case sensitivity",
+   "doc": "/keɪs ˌsensəˈtɪvəti/",
+   "nghia": "sự phân biệt hoa – thường: trong JavaScript, myVar và myvar là hai biến khác nhau",
+   "nhom": "DOM và sự kiện",
+   "viDu": "What does it mean that variables are case-sensitive?",
+   "viDuNghia": "Việc biến phân biệt chữ hoa/chữ thường (case-sensitive) có nghĩa là gì?"
+  },
+  {
+   "chu": "window object",
+   "doc": "/ˈwɪndoʊ ˈɑːbdʒekt/",
+   "nghia": "đối tượng window: đại diện cửa sổ trình duyệt, là đối tượng gốc chứa document, alert(), setTimeout()…",
+   "nhom": "DOM và sự kiện",
+   "viDu": "Which of the following is true about the window object in JavaScript?",
+   "viDuNghia": "Điều nào sau đây đúng về đối tượng window trong JavaScript?"
+  },
+  {
+   "chu": "getElementById",
+   "doc": "/ɡet ˈelɪmənt baɪ ˌaɪ ˈdiː/",
+   "nghia": "phương thức document.getElementById(\"x\"): lấy về MỘT phần tử có id=\"x\" để đọc hoặc sửa",
+   "nhom": "DOM và sự kiện",
+   "viDu": "What does the script do? document.getElementById(\"demo\").innerHTML = Date();",
+   "viDuNghia": "Đoạn script làm gì? document.getElementById(\"demo\").innerHTML = Date(); (Đáp án: gán ngày giờ hiện tại vào nội dung phần tử id=\"demo\".)"
+  },
+  {
+   "chu": "getElementsByTagName",
+   "doc": "/ɡet ˈelɪmənts baɪ tæɡ neɪm/",
+   "nghia": "phương thức trả về DANH SÁCH mọi phần tử có tên thẻ cho trước, vd getElementsByTagName(\"img\")",
+   "nhom": "DOM và sự kiện",
+   "viDu": "Choose the right output: var list = document.getElementById(\"demo\").getElementsByTagName(\"img\");",
+   "viDuNghia": "Chọn kết quả đúng: var list = document.getElementById(\"demo\").getElementsByTagName(\"img\"); (Đáp án: trả về mọi thẻ img nằm trong thẻ id=\"demo\".)"
+  },
+  {
+   "chu": "innerHTML",
+   "doc": "/ˌɪnər ˌeɪtʃ tiː em ˈel/",
+   "nghia": "thuộc tính chứa nội dung HTML bên trong một phần tử; gán vào để thay nội dung đó",
+   "nhom": "DOM và sự kiện",
+   "viDu": "var op = document.createElement(\"option\"); op.innerHTML = \"Apple\"; Choose the right statement.",
+   "viDuNghia": "var op = document.createElement(\"option\"); op.innerHTML = \"Apple\"; Chọn phát biểu đúng. (Đáp án: tạo một option có nội dung HTML là \"Apple\".)"
+  },
+  {
+   "chu": "createElement",
+   "doc": "/kriˈeɪt ˈelɪmənt/",
+   "nghia": "phương thức document.createElement(\"img\"): tạo phần tử mới (chưa hiện), sau đó gắn vào trang bằng appendChild",
+   "nhom": "DOM và sự kiện",
+   "viDu": "What is the right order? 1. obj.src = url 2. var obj = document.createElement(\"img\") 3. document.body.appendChild(obj)",
+   "viDuNghia": "Thứ tự nào đúng? 1. obj.src = url 2. var obj = document.createElement(\"img\") 3. document.body.appendChild(obj) (Đáp án: 2, 3, 1.)"
+  },
+  {
+   "chu": "onclick",
+   "doc": "/ɑːn ˈklɪk/",
+   "nghia": "thuộc tính/sự kiện onclick: chạy mã khi người dùng bấm vào phần tử (React viết onClick)",
+   "nhom": "DOM và sự kiện",
+   "viDu": "<input type=\"button\" value=\"getValue\" onclick=\"createArray()\"> calls createArray() when the button is clicked.",
+   "viDuNghia": "<input type=\"button\" value=\"getValue\" onclick=\"createArray()\"> gọi hàm createArray() khi nút được bấm."
+  },
+  {
+   "chu": "scroll",
+   "doc": "/skroʊl/",
+   "nghia": "cuộn (trang, khung); overflow: scroll luôn hiện thanh cuộn, overflow: hidden cắt phần thừa",
+   "nhom": "DOM và sự kiện",
+   "viDu": "Choose the right statement: div { overflow-x: hidden; overflow-y: scroll; }",
+   "viDuNghia": "Chọn phát biểu đúng: div { overflow-x: hidden; overflow-y: scroll; } (Đáp án: ẩn thanh cuộn ngang, thêm thanh cuộn dọc.)"
+  },
+  {
+   "chu": "responsive web design",
+   "nghia": "thiết kế web đáp ứng: trang tự đổi bố cục cho vừa mọi cỡ màn hình (điện thoại, máy tính bảng, máy bàn)",
+   "nhom": "Thiết kế đáp ứng",
+   "viDu": "Which layout mode makes it easy to design a flexible responsive layout?",
+   "viDuNghia": "Chế độ bố cục nào giúp dễ thiết kế bố cục responsive linh hoạt? (Đáp án: Flexible Box Layout — flexbox.)"
+  },
+  {
+   "chu": "fluid layout",
+   "doc": "/ˈfluːɪd ˈleɪaʊt/",
+   "nghia": "bố cục co giãn: độ rộng tính theo phần trăm nên co giãn theo cửa sổ",
+   "nhom": "Thiết kế đáp ứng",
+   "viDu": "In responsive design, which measurement unit allows a fluid element to adjust based on the screen size?",
+   "viDuNghia": "Trong thiết kế responsive, đơn vị đo nào cho phép một phần tử co giãn linh hoạt theo kích thước màn hình?"
+  },
+  {
+   "chu": "fixed layout",
+   "doc": "/fɪkst ˈleɪaʊt/",
+   "nghia": "bố cục cố định: độ rộng tính bằng pixel, không đổi theo màn hình",
+   "nhom": "Thiết kế đáp ứng",
+   "viDu": "Which class provides a responsive fixed width container?",
+   "viDuNghia": "Class nào cung cấp một container có chiều rộng cố định, đáp ứng (responsive)?"
+  },
+  {
+   "chu": "media query",
+   "doc": "/ˈmiːdiə ˈkwɪri/",
+   "nghia": "truy vấn phương tiện (@media): áp CSS khác nhau tuỳ độ rộng / loại màn hình",
+   "nhom": "Thiết kế đáp ứng",
+   "viDu": "What does the CSS `min-width` media query condition ensure in responsive design?",
+   "viDuNghia": "Điều kiện `min-width` trong media query CSS đảm bảo điều gì trong thiết kế responsive?"
+  },
+  {
+   "chu": "breakpoint",
+   "doc": "/ˈbreɪkpɔɪnt/",
+   "nghia": "điểm ngắt: độ rộng màn hình mà tại đó bố cục thay đổi",
+   "nhom": "Thiết kế đáp ứng",
+   "viDu": "At the 768px breakpoint, the layout changes from one column to two.",
+   "viDuNghia": "Tại điểm ngắt 768px, bố cục đổi từ một cột sang hai cột."
+  },
+  {
+   "chu": "viewport",
+   "doc": "/ˈvjuːpɔːrt/",
+   "nghia": "khung nhìn: vùng trang web nhìn thấy được trên màn hình thiết bị",
+   "nhom": "Thiết kế đáp ứng",
+   "viDu": "What unit is used to specify a font size that is relative to 1% of the viewport's larger dimension?",
+   "viDuNghia": "Đơn vị nào dùng để chỉ định font-size tương đối với 1% của kích thước lớn hơn trong viewport?"
+  },
+  {
+   "chu": "mobile-first",
+   "doc": "/ˌmoʊbl ˈfɜːrst/",
+   "nghia": "ưu tiên di động: thiết kế cho màn hình nhỏ trước rồi mở rộng dần cho màn hình lớn",
+   "nhom": "Thiết kế đáp ứng",
+   "viDu": "Bootstrap 3 is mobile-first.",
+   "viDuNghia": "Bootstrap 3 theo triết lý mobile-first (ưu tiên di động trước)."
+  },
+  {
+   "chu": "orientation",
+   "doc": "/ˌɔːriənˈteɪʃn/",
+   "nghia": "hướng màn hình: dọc (portrait) hoặc ngang (landscape)",
+   "nhom": "Thiết kế đáp ứng",
+   "viDu": "A media query can check the orientation of the viewport.",
+   "viDuNghia": "Media query có thể kiểm tra hướng của khung nhìn."
+  },
+  {
+   "chu": "landscape",
+   "doc": "/ˈlændskeɪp/",
+   "nghia": "hướng ngang: màn hình rộng hơn cao",
+   "nhom": "Thiết kế đáp ứng",
+   "viDu": "In landscape orientation, the screen is wider than it is tall.",
+   "viDuNghia": "Ở hướng ngang, màn hình rộng hơn cao."
+  },
+  {
+   "chu": "portrait",
+   "doc": "/ˈpɔːrtrət/",
+   "nghia": "hướng dọc: màn hình cao hơn rộng",
+   "nhom": "Thiết kế đáp ứng",
+   "viDu": "A phone is usually held in portrait orientation.",
+   "viDuNghia": "Điện thoại thường được cầm theo hướng dọc."
+  },
+  {
+   "chu": "screen size",
+   "doc": "/skriːn saɪz/",
+   "nghia": "kích thước màn hình",
+   "nhom": "Thiết kế đáp ứng",
+   "viDu": "When testing a responsive website, which tool is most effective for quickly simulating various screen sizes and devices?",
+   "viDuNghia": "Khi kiểm thử một website responsive, công cụ nào hiệu quả nhất để nhanh chóng mô phỏng các kích thước màn hình và thiết bị khác nhau?"
+  },
+  {
+   "chu": "device",
+   "doc": "/dɪˈvaɪs/",
+   "nghia": "thiết bị (điện thoại, máy tính bảng, máy tính)",
+   "nhom": "Thiết kế đáp ứng",
+   "viDu": "The Bootstrap grid system works across multiple devices.",
+   "viDuNghia": "Hệ thống lưới (grid) của Bootstrap hoạt động trên nhiều loại thiết bị khác nhau."
+  },
+  {
+   "chu": "resize",
+   "doc": "/ˌriːˈsaɪz/",
+   "nghia": "đổi kích thước (cửa sổ, ảnh)",
+   "nhom": "Thiết kế đáp ứng",
+   "viDu": "Choose a way to resize content to the viewport.",
+   "viDuNghia": "Chọn một cách để điều chỉnh kích thước nội dung theo viewport."
+  },
+  {
+   "chu": "shrink",
+   "doc": "/ʃrɪŋk/",
+   "nghia": "co lại, thu nhỏ",
+   "nhom": "Thiết kế đáp ứng",
+   "viDu": "Which of the following bootstrap classes are used to create justified tabs navigation? (Reminder, \"justified\" means that they grow/shrink to take up the full width of the screen.)",
+   "viDuNghia": "Class bootstrap nào tạo thanh điều hướng dạng tab \"justified\" (giãn/co để chiếm hết chiều rộng màn hình)?"
+  },
+  {
+   "chu": "wrap",
+   "doc": "/ræp/",
+   "nghia": "xuống dòng / rớt xuống hàng dưới khi không đủ chỗ",
+   "nhom": "Thiết kế đáp ứng",
+   "viDu": "What is the correct syntax for the word-wrap property of CSS3, applied to a paragraph with class \"test\"?",
+   "viDuNghia": "Cú pháp đúng cho thuộc tính word-wrap của CSS3, áp dụng cho một đoạn văn (paragraph) có class \"test\" là gì?"
+  },
+  {
+   "chu": "crop",
+   "doc": "/krɑːp/",
+   "nghia": "cắt xén (ảnh) cho vừa khung",
+   "nhom": "Thiết kế đáp ứng",
+   "viDu": "The image is cropped when it is larger than its container.",
+   "viDuNghia": "Ảnh bị cắt xén khi nó lớn hơn khối chứa."
+  },
+  {
+   "chu": "grid system",
+   "doc": "/ɡrɪd ˈsɪstəm/",
+   "nghia": "hệ thống lưới: chia chiều ngang trang thành các cột (Bootstrap chia 12 cột)",
+   "nhom": "Bootstrap và flexbox",
+   "viDu": "Which grid classes, spanning the different viewport widths, are part of the Bootstrap 3 Grid System?",
+   "viDuNghia": "Những lớp (class) lưới nào, ứng với các độ rộng màn hình khác nhau, thuộc Hệ thống lưới (Grid System) của Bootstrap 3?"
+  },
+  {
+   "chu": "gutter",
+   "doc": "/ˈɡʌtər/",
+   "nghia": "rãnh: khoảng trống giữa các cột của lưới",
+   "nhom": "Bootstrap và flexbox",
+   "viDu": "The gutter is the space between two columns of the grid.",
+   "viDuNghia": "Rãnh là khoảng trống giữa hai cột của lưới."
+  },
+  {
+   "chu": "navigation bar",
+   "doc": "/ˌnævɪˈɡeɪʃn bɑːr/",
+   "nghia": "thanh điều hướng (navbar): dãy liên kết chính của trang",
+   "nhom": "Bootstrap và flexbox",
+   "viDu": "Which of the following bootstrap style is to be used if you want to create a .navbar that scrolls with the page?",
+   "viDuNghia": "Style Bootstrap nào được dùng nếu bạn muốn tạo một .navbar cuộn theo trang (scroll cùng trang)?"
+  },
+  {
+   "chu": "collapse",
+   "doc": "/kəˈlæps/",
+   "nghia": "thu gọn lại: vd thanh menu gập thành nút ba gạch trên màn hình nhỏ",
+   "nhom": "Bootstrap và flexbox",
+   "viDu": "On small screens, the navbar collapses into a button.",
+   "viDuNghia": "Trên màn hình nhỏ, thanh điều hướng thu gọn thành một nút."
+  },
+  {
+   "chu": "flex container",
+   "doc": "/fleks kənˈteɪnər/",
+   "nghia": "khối chứa flex: phần tử có display: flex, sắp các phần tử con theo hàng hoặc cột",
+   "nhom": "Bootstrap và flexbox",
+   "viDu": "What does the CSS property display: flex; do?",
+   "viDuNghia": "Thuộc tính CSS display: flex; làm gì?"
+  },
+  {
+   "chu": "flex item",
+   "doc": "/fleks ˈaɪtəm/",
+   "nghia": "phần tử con trực tiếp của khối chứa flex",
+   "nhom": "Bootstrap và flexbox",
+   "viDu": "Which property is used to wrap flex items onto a new line?",
+   "viDuNghia": "Thuộc tính nào dùng để cho phép các flex item xuống dòng mới khi không đủ chỗ?"
+  },
+  {
+   "chu": "utility class",
+   "doc": "/juːˈtɪləti klæs/",
+   "nghia": "lớp tiện ích: lớp CSS có sẵn làm đúng một việc, vd text-center",
+   "nhom": "Bootstrap và flexbox",
+   "viDu": "Bootstrap utility classes such as text-center or mt-3 each do exactly one job.",
+   "viDuNghia": "Các lớp tiện ích của Bootstrap như text-center hay mt-3 mỗi lớp làm đúng một việc."
+  },
+  {
+   "chu": "bootstrap",
+   "doc": "/ˈbuːtstræp/",
+   "nghia": "Bootstrap – thư viện CSS/JS dựng giao diện đáp ứng bằng lớp có sẵn (.navbar, .container, lưới 12 cột). (OS: chương trình mồi khởi động máy)",
+   "nhom": "Bootstrap và flexbox",
+   "viDu": "Which of the following Bootstrap styles is to be used if you want to create a .navbar that scrolls with the page?",
+   "viDuNghia": "Style Bootstrap nào dùng để tạo một .navbar cuộn (scroll) theo trang?"
+  },
+  {
+   "chu": "missing code",
+   "doc": "/ˈmɪsɪŋ koʊd/",
+   "nghia": "đoạn mã còn thiếu: đề yêu cầu chọn mã điền vào chỗ trống",
+   "nhom": "Từ hay gặp trong câu hỏi",
+   "viDu": "Consider the code: What option do you choose to send form data to a form-handler? < form > < input type = \"[missing code]\" value = \"Send\" /> </ form >",
+   "viDuNghia": "Xét đoạn mã sau: Bạn chọn giá trị nào để gửi dữ liệu form đến bộ xử lý form (form-handler)? < form > < input type = \"[missing code]\" value = \"Send\" /> </ form >"
+  },
+  {
+   "chu": "properly",
+   "doc": "/ˈprɑːpərli/",
+   "nghia": "đúng cách, đúng chuẩn",
+   "nhom": "Từ hay gặp trong câu hỏi",
+   "viDu": "What is the best/proper way to declare a section that has an h2 heading and uses a detail tag?",
+   "viDuNghia": "Cách nào là đúng/chuẩn nhất để khai báo một section có tiêu đề h2 và dùng thẻ details?"
+  },
+  {
+   "chu": "appear",
+   "doc": "/əˈpɪr/",
+   "nghia": "xuất hiện, hiện ra",
+   "nhom": "Từ hay gặp trong câu hỏi",
+   "viDu": "What unit is used to fix the size of an element (it will appear exactly this size)?",
+   "viDuNghia": "Đơn vị nào được dùng để cố định kích thước của một phần tử (nó sẽ hiển thị đúng bằng kích thước đó, không co giãn)?"
+  },
+  {
+   "chu": "eliminate",
+   "doc": "/ɪˈlɪmɪneɪt/",
+   "nghia": "loại bỏ",
+   "nhom": "Từ hay gặp trong câu hỏi",
+   "viDu": "Which of the following is the best example to eliminate the blue border around linked images on web page?",
+   "viDuNghia": "Đoạn nào sau đây là ví dụ tốt nhất để loại bỏ viền xanh quanh ảnh có liên kết trên trang web?"
+  },
+  {
+   "chu": "hide",
+   "doc": "/haɪd/",
+   "nghia": "ẩn đi",
+   "nhom": "Từ hay gặp trong câu hỏi",
+   "viDu": "Which of the following lines of code can be used to hide the image?",
+   "viDuNghia": "Dòng code nào sau đây có thể dùng để ẩn ảnh (img)?"
+  },
+  {
+   "chu": "desktop",
+   "doc": "/ˈdesktɑːp/",
+   "nghia": "máy tính để bàn; màn hình lớn",
+   "nhom": "Thiết bị và công cụ",
+   "viDu": "Designing multiple pages, one for each type of major device (phone, tablet, laptop, and desktop), is called adaptive design.",
+   "viDuNghia": "Thiết kế nhiều trang riêng, mỗi trang cho một loại thiết bị chính (điện thoại, máy tính bảng, laptop và máy bàn), được gọi là thiết kế thích ứng."
+  },
+  {
+   "chu": "smartphone",
+   "doc": "/ˈsmɑːrtfoʊn/",
+   "nghia": "điện thoại thông minh",
+   "nhom": "Thiết bị và công cụ",
+   "viDu": "A responsive page must look good on smartphones, tablets and desktops.",
+   "viDuNghia": "Một trang responsive phải hiển thị tốt trên điện thoại thông minh, máy tính bảng và máy bàn."
+  },
+  {
+   "chu": "touchscreen",
+   "doc": "/ˈtʌtʃskriːn/",
+   "nghia": "màn hình cảm ứng",
+   "nhom": "Thiết bị và công cụ",
+   "viDu": "On a touchscreen there is no hover state.",
+   "viDuNghia": "Trên màn hình cảm ứng không có trạng thái rê chuột."
+  },
+  {
+   "chu": "minimum width",
+   "doc": "/ˈmɪnɪməm wɪdθ/",
+   "nghia": "độ rộng tối thiểu (min-width): áp dụng khi màn hình rộng TỪ mức đó trở lên",
+   "nhom": "Thiết bị và công cụ",
+   "viDu": "What does the CSS `min-width` media query condition ensure in responsive design?",
+   "viDuNghia": "Điều kiện `min-width` trong media query CSS đảm bảo điều gì trong thiết kế responsive?"
+  },
+  {
+   "chu": "maximum width",
+   "doc": "/ˈmæksɪməm wɪdθ/",
+   "nghia": "độ rộng tối đa (max-width): áp dụng khi màn hình rộng ĐẾN mức đó trở xuống",
+   "nhom": "Thiết bị và công cụ",
+   "viDu": "How would you apply styles only to screens with a maximum width of 600px?",
+   "viDuNghia": "Làm sao để áp dụng style chỉ cho màn hình có chiều rộng tối đa (maximum) là 600px?"
+  },
+  {
+   "chu": "root element",
+   "doc": "/ruːt ˈelɪmənt/",
+   "nghia": "phần tử gốc (thẻ html); đơn vị rem tính theo cỡ chữ của phần tử này",
+   "nhom": "Thiết bị và công cụ",
+   "viDu": "What unit is used to specify the font size that relative to the font size of the root element?",
+   "viDuNghia": "Đơn vị nào dùng để chỉ định kích thước font tương đối so với kích thước font của phần tử gốc (root)?"
+  },
+  {
+   "chu": "adaptive design",
+   "doc": "/əˈdæptɪv dɪˈzaɪn/",
+   "nghia": "thiết kế thích ứng: làm sẵn vài bố cục cố định cho vài cỡ màn hình (khác responsive co giãn liên tục)",
+   "nhom": "Thiết bị và công cụ",
+   "viDu": "Designing multiple pages, one for each type of major device (phone, tablet, laptop, and desktop), is called adaptive design.",
+   "viDuNghia": "Thiết kế nhiều trang riêng, mỗi trang cho một loại thiết bị chính (điện thoại, máy tính bảng, laptop và máy bàn), được gọi là thiết kế thích ứng (adaptive design)."
+  },
+  {
+   "chu": "search engine optimization",
+   "nghia": "tối ưu cho công cụ tìm kiếm (SEO): làm trang dễ được Google tìm và xếp hạng cao",
+   "nhom": "Thiết bị và công cụ",
+   "viDu": "Using the header and footer tags can improve the search engine optimization for your page.",
+   "viDuNghia": "Dùng thẻ header và footer có thể cải thiện tối ưu hoá công cụ tìm kiếm (SEO) cho trang của bạn."
+  },
+  {
+   "chu": "content delivery network",
+   "nghia": "mạng phân phối nội dung (CDN): máy chủ đặt khắp nơi giúp tải tệp (vd Bootstrap) nhanh hơn",
+   "nhom": "Thiết bị và công cụ",
+   "viDu": "Which of the following is a benefit of using the Bootstrap CDN?",
+   "viDuNghia": "Đâu là lợi ích của việc dùng Bootstrap qua CDN?"
+  },
+  {
+   "chu": "dropdown menu",
+   "doc": "/ˈdrɑːpdaʊn ˈmenjuː/",
+   "nghia": "trình đơn thả xuống: bấm vào mới xổ ra danh sách lựa chọn",
+   "nhom": "Thiết bị và công cụ",
+   "viDu": "What is the correct HTML for making a drop-down list?",
+   "viDuNghia": "HTML nào đúng để tạo một danh sách thả xuống (drop-down list)?"
+  },
+  {
+   "chu": "thumbnail",
+   "doc": "/ˈθʌmneɪl/",
+   "nghia": "ảnh thu nhỏ",
+   "nhom": "Thiết bị và công cụ",
+   "viDu": "Click the thumbnail to see the full-size image.",
+   "viDuNghia": "Bấm vào ảnh thu nhỏ để xem ảnh cỡ đầy đủ."
+  },
+  {
+   "chu": "carousel",
+   "doc": "/ˌkærəˈsel/",
+   "nghia": "băng chuyền ảnh: khung trình chiếu các ảnh / nội dung lần lượt",
+   "nhom": "Thiết bị và công cụ",
+   "viDu": "The Carousel plugin is used to cycle through elements, like a slideshow.",
+   "viDuNghia": "Plugin Carousel dùng để chuyển vòng qua các phần tử, giống một slideshow."
+  },
+  {
+   "chu": "modal",
+   "doc": "/ˈmoʊdl/",
+   "nghia": "hộp thoại nổi: cửa sổ hiện đè lên trang, phải đóng mới thao tác tiếp được",
+   "nhom": "Thiết bị và công cụ",
+   "viDu": "A modal is a dialog box that is displayed on top of the current page.",
+   "viDuNghia": "Modal là hộp thoại hiện đè lên trên trang hiện tại."
+  },
+  {
+   "chu": "glyphicon",
+   "doc": "/ˈɡlɪfɪkɑːn/",
+   "nghia": "bộ biểu tượng (icon) có sẵn của Bootstrap 3",
+   "nhom": "Thiết bị và công cụ",
+   "viDu": "Bootstrap 3 includes glyphicons, a set of icons for buttons and menus.",
+   "viDuNghia": "Bootstrap 3 có sẵn glyphicon, một bộ biểu tượng cho nút và trình đơn."
+  },
+  {
+   "chu": "striped",
+   "doc": "/straɪpt/",
+   "nghia": "có sọc: bảng tô màu xen kẽ các hàng (table-striped)",
+   "nhom": "Thiết bị và công cụ",
+   "viDu": "Which Bootstrap class will apply a striped look to a Bootstrap table?",
+   "viDuNghia": "Class Bootstrap nào tạo hiệu ứng sọc xen kẽ (striped) cho bảng Bootstrap?"
+  },
+  {
+   "chu": "side by side",
+   "nghia": "cạnh nhau (theo hàng ngang)",
+   "nhom": "Thiết bị và công cụ",
+   "viDu": "On wide screens the two columns are displayed side by side.",
+   "viDuNghia": "Trên màn hình rộng, hai cột hiện cạnh nhau."
+  },
+  {
+   "chu": "developer tools",
+   "doc": "/dɪˈveləpər tuːlz/",
+   "nghia": "công cụ nhà phát triển của trình duyệt (F12): xem mã, sửa thử CSS, giả lập màn hình",
+   "nhom": "Thiết bị và công cụ",
+   "viDu": "Press F12 to open the developer tools and inspect the CSS of an element.",
+   "viDuNghia": "Nhấn F12 để mở công cụ nhà phát triển và xem CSS của một phần tử."
+  },
+  {
+   "chu": "validator",
+   "doc": "/ˈvælɪdeɪtər/",
+   "nghia": "trình kiểm tra hợp lệ: công cụ soát mã HTML / CSS theo chuẩn W3C",
+   "nhom": "Thiết bị và công cụ",
+   "viDu": "The W3C validator checks an HTML page for errors.",
+   "viDuNghia": "Trình kiểm tra của W3C soát lỗi cho một trang HTML."
+  },
+  {
+   "chu": "compatibility",
+   "doc": "/kəmˌpætəˈbɪləti/",
+   "nghia": "tính tương thích: trang chạy đúng trên nhiều trình duyệt / thiết bị",
+   "nhom": "Thiết bị và công cụ",
+   "viDu": "Browser prefixes are used for compatibility with older browsers.",
+   "viDuNghia": "Tiền tố trình duyệt dùng để tương thích với các trình duyệt cũ."
+  }
+ ]
+}

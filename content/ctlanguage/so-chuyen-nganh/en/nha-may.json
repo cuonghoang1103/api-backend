@@ -45,7 +45,7 @@
     { "chu": "toolbox", "doc": "/ˈtuːlbɑːks/", "nghia": "hộp dụng cụ", "nhom": "Máy móc & bảo trì", "viDu": "Put the tools back in the toolbox.", "viDuNghia": "Cất dụng cụ lại vào hộp." },
     { "chu": "wrench", "doc": "/rentʃ/", "nghia": "cờ lê", "nhom": "Máy móc & bảo trì", "viDu": "Pass me the 12 mm wrench, please.", "viDuNghia": "Đưa tôi cái cờ lê 12 ly." },
     { "chu": "control panel", "nghia": "bảng điều khiển", "nhom": "Máy móc & bảo trì", "viDu": "The error code is on the control panel.", "viDuNghia": "Mã lỗi hiện trên bảng điều khiển." },
-    { "chu": "sensor", "doc": "/ˈsensər/", "nghia": "cảm biến", "nhom": "Máy móc & bảo trì", "viDu": "The sensor is dirty, so the machine keeps stopping.", "viDuNghia": "Cảm biến bị bẩn nên máy cứ dừng." },
+    { "chu": "pressure gauge", "doc": "/ˈpreʃər ɡeɪdʒ/", "nghia": "đồng hồ đo áp suất", "nhom": "Máy móc & bảo trì", "viDu": "Check the pressure gauge before you start the machine.", "viDuNghia": "Kiểm tra đồng hồ áp suất trước khi khởi động máy." },
 
     { "chu": "quality control", "nghia": "kiểm soát chất lượng (QC)", "nhom": "Chất lượng", "viDu": "Every product goes through quality control.", "viDuNghia": "Mọi sản phẩm đều qua kiểm soát chất lượng." },
     { "chu": "inspection", "doc": "/ɪnˈspekʃn/", "nghia": "sự kiểm tra", "nhom": "Chất lượng", "viDu": "The customer inspection is tomorrow morning.", "viDuNghia": "Sáng mai khách hàng đến kiểm hàng." },

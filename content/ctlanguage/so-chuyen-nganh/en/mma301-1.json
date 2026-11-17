@@ -1,0 +1,657 @@
+{
+ "ma": "mma301-1",
+ "nn": "en",
+ "ten": "MMA301 · React Native đa nền tảng",
+ "moTa": "Môn Multiplatform Mobile App Development (MMA301): React Native và kiến trúc cầu nối, component lõi, FlatList, Flexbox, React Navigation, AsyncStorage, gọi API và từ vựng yêu cầu trong đề PE. Từ lấy từ đề FE/PE thật; câu ví dụ phần lớn là câu thật trong đề.",
+ "bieuTuong": "apps.iphone",
+ "thuTu": -939,
+ "tu": [
+  {
+   "chu": "cross-platform",
+   "doc": "/ˌkrɔːs ˈplætfɔːrm/",
+   "nghia": "đa nền tảng: viết một bộ mã chạy được trên cả Android và iOS",
+   "nhom": "Nền tảng React Native",
+   "viDu": "React Native uses the following tech stack to build cross-platform native apps. Select the correct answer.",
+   "viDuNghia": "React Native dùng bộ công nghệ nào để xây dựng ứng dụng native đa nền tảng? Chọn câu trả lời đúng."
+  },
+  {
+   "chu": "native component",
+   "doc": "/ˈneɪtɪv kəmˈpoʊnənt/",
+   "nghia": "thành phần gốc: thành phần giao diện thật của Android / iOS mà React Native dựng ra",
+   "nhom": "Nền tảng React Native",
+   "viDu": "Of the following core React Native components, which were used in the MenuItems component?",
+   "viDuNghia": "Trong các core component sau của React Native, những component nào đã được dùng trong component MenuItems?"
+  },
+  {
+   "chu": "native module",
+   "doc": "/ˈneɪtɪv ˈmɑːdʒuːl/",
+   "nghia": "mô-đun gốc: mã viết bằng Java / Kotlin / Swift cho JavaScript gọi để dùng tính năng của máy",
+   "nhom": "Nền tảng React Native",
+   "viDu": "Which of the following steps is NOT necessary when creating a custom native module for Android?",
+   "viDuNghia": "Bước nào sau đây KHÔNG cần thiết khi tạo một custom native module cho Android?"
+  },
+  {
+   "chu": "JavaScript thread",
+   "doc": "/ˈdʒɑːvəskrɪpt θred/",
+   "nghia": "luồng JavaScript: luồng chạy logic của ứng dụng và React",
+   "nhom": "Nền tảng React Native",
+   "viDu": "In Bridge architecture, which thread is the place where the entire JavaScript code is placed and compiled?",
+   "viDuNghia": "Trong kiến trúc Bridge, thread nào là nơi toàn bộ mã JavaScript được đặt và biên dịch?"
+  },
+  {
+   "chu": "shadow thread",
+   "doc": "/ˈʃædoʊ θred/",
+   "nghia": "luồng bóng: luồng tính toán bố cục (vị trí, kích thước) trước khi vẽ lên màn hình",
+   "nhom": "Nền tảng React Native",
+   "viDu": "The Shadow Thread calculates the layout with the help of Facebook's own layout engine called Yoga.",
+   "viDuNghia": "Shadow Thread tính toán bố cục nhờ engine bố cục riêng của Facebook tên là Yoga."
+  },
+  {
+   "chu": "platform-specific",
+   "doc": "/ˌplætfɔːrm spəˈsɪfɪk/",
+   "nghia": "riêng cho từng nền tảng: mã chỉ chạy trên Android hoặc chỉ trên iOS (Platform.OS, đuôi .ios.js / .android.js)",
+   "nhom": "Nền tảng React Native",
+   "viDu": "Use Platform.OS or the .ios.js and .android.js file extensions to write platform-specific code.",
+   "viDuNghia": "Dùng Platform.OS hoặc đuôi tệp .ios.js và .android.js để viết mã riêng cho từng nền tảng."
+  },
+  {
+   "chu": "hot reloading",
+   "doc": "/hɑːt ˌriːˈloʊdɪŋ/",
+   "nghia": "tải nóng: sửa mã là ứng dụng cập nhật ngay, không phải build lại và không mất state",
+   "nhom": "Nền tảng React Native",
+   "viDu": "With hot reloading, you see code changes on the device almost instantly.",
+   "viDuNghia": "Với tải nóng, bạn thấy thay đổi mã trên thiết bị gần như tức thì."
+  },
+  {
+   "chu": "simulator",
+   "doc": "/ˈsɪmjuleɪtər/",
+   "nghia": "trình mô phỏng: thiết bị iOS ảo trên máy tính (Android gọi là emulator)",
+   "nhom": "Nền tảng React Native",
+   "viDu": "You can test the app on an iOS simulator or on a real device.",
+   "viDuNghia": "Bạn có thể thử ứng dụng trên trình mô phỏng iOS hoặc trên máy thật."
+  },
+  {
+   "chu": "core component",
+   "doc": "/kɔːr kəmˈpoʊnənt/",
+   "nghia": "component lõi: các component có sẵn của React Native (View, Text, Image, ScrollView…)",
+   "nhom": "Nền tảng React Native",
+   "viDu": "Which core component in React Native should you have imported to build scrollable lists?",
+   "viDuNghia": "Bạn nên import core component nào của React Native để dựng danh sách cuộn được?"
+  },
+  {
+   "chu": "native app",
+   "doc": "/ˈneɪtɪv æp/",
+   "nghia": "ứng dụng gốc – app chạy thẳng trên nền tảng (Android/iOS); React Native dựng app gốc đa nền tảng từ JavaScript",
+   "nhom": "Nền tảng React Native",
+   "viDu": "React Native uses the following tech stack to build cross-platform native apps. Select the correct answer.",
+   "viDuNghia": "React Native dùng bộ công nghệ nào để xây dựng ứng dụng native đa nền tảng? Chọn câu trả lời đúng."
+  },
+  {
+   "chu": "React Native",
+   "doc": "/riˈækt ˈneɪtɪv/",
+   "nghia": "framework mã nguồn mở (của Meta) viết ứng dụng di động Android và iOS bằng JavaScript/React, dựng ra giao diện gốc",
+   "nhom": "Nền tảng React Native",
+   "viDu": "What is React Native?",
+   "viDuNghia": "React Native là gì? (Đáp án: framework mã nguồn mở để xây ứng dụng di động iOS và Android.)"
+  },
+  {
+   "chu": "Expo",
+   "doc": "/ˈekspoʊ/",
+   "nghia": "bộ công cụ cho React Native: tạo và chạy dự án nhanh, thử trên điện thoại bằng ứng dụng Expo Go, không cần Android Studio/Xcode",
+   "nhom": "Nền tảng React Native",
+   "viDu": "React Navigation can be used for both Expo and plain React Native apps. True or false?",
+   "viDuNghia": "React Navigation dùng được cho cả ứng dụng Expo lẫn ứng dụng React Native thuần. Đúng hay sai? (Đúng.)"
+  },
+  {
+   "chu": "iOS",
+   "doc": "/ˌaɪ oʊ ˈes/",
+   "nghia": "hệ điều hành của iPhone (Apple); React Native chạy cùng một mã trên iOS và Android",
+   "nhom": "Nền tảng React Native",
+   "viDu": "Which of the following are iOS components?",
+   "viDuNghia": "Component nào sau đây là component dành riêng cho iOS?"
+  },
+  {
+   "chu": "text input",
+   "doc": "/tekst ˈɪnpʊt/",
+   "nghia": "ô nhập chữ (TextInput); onChangeText chạy mỗi khi chữ thay đổi",
+   "nhom": "Component giao diện",
+   "viDu": "The TextInput component supports multiple lines for text entry within the text input box.",
+   "viDuNghia": "Component TextInput hỗ trợ nhập văn bản nhiều dòng bên trong ô nhập."
+  },
+  {
+   "chu": "scroll view",
+   "doc": "/skroʊl vjuː/",
+   "nghia": "khung cuộn (ScrollView): cuộn được nhưng dựng TOÀN BỘ phần tử con cùng lúc, chỉ hợp danh sách ngắn",
+   "nhom": "Component giao diện",
+   "viDu": "Which of the following props in ScrollView controls the direction of scrolling?",
+   "viDuNghia": "Prop nào sau đây trong ScrollView điều khiển hướng cuộn?"
+  },
+  {
+   "chu": "flat list",
+   "doc": "/flæt lɪst/",
+   "nghia": "FlatList: danh sách cuộn hiệu năng cao, chỉ dựng những dòng đang nhìn thấy",
+   "nhom": "Component giao diện",
+   "viDu": "Which prop of the FlatList component is used to specify the layout direction of the list items?",
+   "viDuNghia": "Prop nào của component FlatList dùng để chỉ định hướng bố cục của các mục trong danh sách?"
+  },
+  {
+   "chu": "section list",
+   "doc": "/ˈsekʃn lɪst/",
+   "nghia": "SectionList: danh sách chia thành các nhóm, mỗi nhóm có tiêu đề riêng",
+   "nhom": "Component giao diện",
+   "viDu": "Which of the following approaches would work to provide the key to the SectionList component?",
+   "viDuNghia": "Cách nào dưới đây dùng được để cung cấp key cho component SectionList?"
+  },
+  {
+   "chu": "render item",
+   "doc": "/ˈrendər ˈaɪtəm/",
+   "nghia": "hàm renderItem: hàm trả về giao diện của MỘT dòng trong danh sách",
+   "nhom": "Component giao diện",
+   "viDu": "Which prop of the FlatList component allows you to customize the rendering of each list item?",
+   "viDuNghia": "Prop nào của component FlatList cho phép tuỳ chỉnh cách render từng mục trong danh sách?"
+  },
+  {
+   "chu": "key extractor",
+   "doc": "/kiː ɪkˈstræktər/",
+   "nghia": "hàm keyExtractor: trả về khoá duy nhất cho mỗi dòng của danh sách",
+   "nhom": "Component giao diện",
+   "viDu": "The keyExtractor is a required prop to both the FlatList and SectionList components. True or False?",
+   "viDuNghia": "keyExtractor là prop BẮT BUỘC của cả FlatList lẫn SectionList. Đúng hay Sai?"
+  },
+  {
+   "chu": "section header",
+   "doc": "/ˈsekʃn ˈhedər/",
+   "nghia": "tiêu đề nhóm trong SectionList (renderSectionHeader)",
+   "nhom": "Component giao diện",
+   "viDu": "Which method is used to render section headers using the SectionList component?",
+   "viDuNghia": "Phương thức nào được dùng để hiển thị tiêu đề của từng section trong component SectionList?"
+  },
+  {
+   "chu": "pressable",
+   "doc": "/ˈpresəbl/",
+   "nghia": "Pressable: vùng bấm được, nhận biết bấm, giữ, thả",
+   "nhom": "Component giao diện",
+   "viDu": "The Pressable component is always styled to appear as a button. True or false?",
+   "viDuNghia": "Component Pressable luôn được tạo kiểu để trông giống một cái nút. Đúng hay sai?"
+  },
+  {
+   "chu": "tap",
+   "doc": "/tæp/",
+   "nghia": "chạm nhẹ một lần lên màn hình",
+   "nhom": "Component giao diện",
+   "viDu": "When the user taps an item, navigate to the Detail screen.",
+   "viDuNghia": "Khi người dùng chạm vào một mục, chuyển sang màn hình Detail."
+  },
+  {
+   "chu": "long press",
+   "doc": "/lɔːŋ pres/",
+   "nghia": "nhấn giữ",
+   "nhom": "Component giao diện",
+   "viDu": "What is the default time after the onLongPress is called after the onPressIn?",
+   "viDuNghia": "Mặc định sau bao lâu kể từ onPressIn thì onLongPress được gọi?"
+  },
+  {
+   "chu": "safe area",
+   "doc": "/seɪf ˈeriə/",
+   "nghia": "vùng an toàn: phần màn hình không bị tai thỏ, góc bo, thanh hệ thống che (SafeAreaView)",
+   "nhom": "Component giao diện",
+   "viDu": "What is the purpose of SafeAreaView component?",
+   "viDuNghia": "Mục đích của component SafeAreaView là gì?"
+  },
+  {
+   "chu": "status bar",
+   "doc": "/ˈsteɪtəs bɑːr/",
+   "nghia": "thanh trạng thái: dải trên cùng màn hình hiện giờ, pin, sóng",
+   "nhom": "Component giao diện",
+   "viDu": "The status bar shows the time and the battery level.",
+   "viDuNghia": "Thanh trạng thái hiện giờ và mức pin."
+  },
+  {
+   "chu": "activity indicator",
+   "doc": "/ækˈtɪvəti ˈɪndɪkeɪtər/",
+   "nghia": "vòng xoay báo đang tải (ActivityIndicator)",
+   "nhom": "Component giao diện",
+   "viDu": "Show an activity indicator while the data is loading.",
+   "viDuNghia": "Hiện vòng xoay trong lúc dữ liệu đang tải."
+  },
+  {
+   "chu": "image source",
+   "doc": "/ˈɪmɪdʒ sɔːrs/",
+   "nghia": "nguồn ảnh: prop source của Image, là tệp trong máy (require) hoặc địa chỉ mạng (uri)",
+   "nhom": "Component giao diện",
+   "viDu": "The Image component can fetch images from a network and display them. True or false?",
+   "viDuNghia": "Component Image có thể tải ảnh từ mạng và hiển thị chúng. Đúng hay sai?"
+  },
+  {
+   "chu": "flex direction",
+   "doc": "/fleks dəˈrekʃn/",
+   "nghia": "hướng xếp (flexDirection): row là hàng ngang, column là cột dọc (mặc định trong React Native)",
+   "nhom": "Bố cục Flexbox",
+   "viDu": "Which property is used to define the main axis direction of a flex container in React Native?",
+   "viDuNghia": "Thuộc tính nào được dùng để định nghĩa hướng trục chính (main axis) của một flex container trong React Native?"
+  },
+  {
+   "chu": "main axis",
+   "doc": "/meɪn ˈæksɪs/",
+   "nghia": "trục chính: trục theo hướng xếp; justifyContent canh theo trục này",
+   "nhom": "Bố cục Flexbox",
+   "viDu": "Which flexbox property allows you to control the alignment of items along the main axis?",
+   "viDuNghia": "Thuộc tính flexbox nào cho phép điều khiển canh chỉnh các item dọc theo trục chính (main axis)?"
+  },
+  {
+   "chu": "cross axis",
+   "doc": "/krɔːs ˈæksɪs/",
+   "nghia": "trục phụ: trục vuông góc với trục chính; alignItems canh theo trục này",
+   "nhom": "Bố cục Flexbox",
+   "viDu": "alignItems aligns the children of a flex container along the cross axis.",
+   "viDuNghia": "alignItems canh các phần tử con của flex container theo trục phụ (cross axis)."
+  },
+  {
+   "chu": "arrange",
+   "doc": "/əˈreɪndʒ/",
+   "nghia": "sắp xếp, bố trí (các phần tử trên màn hình)",
+   "nhom": "Bố cục Flexbox",
+   "viDu": "Which value is used to arrange flex items in a row from left to right?",
+   "viDuNghia": "Giá trị nào dùng để sắp xếp các flex item thành một hàng từ trái sang phải?"
+  },
+  {
+   "chu": "style object",
+   "doc": "/staɪl ˈɑːbdʒekt/",
+   "nghia": "đối tượng kiểu: kiểu dáng trong React Native viết bằng đối tượng JavaScript (StyleSheet.create), tên thuộc tính dạng camelCase",
+   "nhom": "Bố cục Flexbox",
+   "viDu": "StyleSheet.create returns a style object that is passed to the style prop.",
+   "viDuNghia": "StyleSheet.create trả về một đối tượng kiểu để truyền vào prop style."
+  },
+  {
+   "chu": "screen dimensions",
+   "doc": "/skriːn dɪˈmenʃnz/",
+   "nghia": "kích thước màn hình (API Dimensions, hook useWindowDimensions)",
+   "nhom": "Bố cục Flexbox",
+   "viDu": "The useWindowDimensions hook is part of the core React Native package. True or false?",
+   "viDuNghia": "Hook useWindowDimensions thuộc gói lõi React Native. Đúng hay sai?"
+  },
+  {
+   "chu": "flexbox",
+   "doc": "/ˈfleksbɑːks/",
+   "nghia": "mô hình bố cục co giãn: xếp con theo trục chính (justifyContent) và trục phụ (alignItems); dùng cả trong CSS lẫn React Native",
+   "nhom": "Bố cục Flexbox",
+   "viDu": "Which flexbox property allows you to control the alignment of items along the main axis?",
+   "viDuNghia": "Thuộc tính flexbox nào cho phép canh các item dọc theo trục chính? (Đáp án: justifyContent.)"
+  },
+  {
+   "chu": "justifyContent",
+   "doc": "/ˈdʒʌstɪfaɪ ˈkɑːntent/",
+   "nghia": "thuộc tính canh các con theo TRỤC CHÍNH: flex-start (mặc định), center, flex-end, space-between, space-around",
+   "nhom": "Bố cục Flexbox",
+   "viDu": "Which of the following is the default option of the justifyContent property?",
+   "viDuNghia": "Giá trị nào sau đây là mặc định của thuộc tính justifyContent? (Đáp án: flex-start.)"
+  },
+  {
+   "chu": "alignItems",
+   "doc": "/əˈlaɪn ˈaɪtəmz/",
+   "nghia": "thuộc tính canh các con theo TRỤC PHỤ: stretch (mặc định), flex-start, center, flex-end, baseline",
+   "nhom": "Bố cục Flexbox",
+   "viDu": "Which of the following is not an option of the alignItems property?",
+   "viDuNghia": "Giá trị nào sau đây KHÔNG phải là tuỳ chọn của thuộc tính alignItems? (Đáp án: flex-center.)"
+  },
+  {
+   "chu": "navigator",
+   "doc": "/ˈnævɪɡeɪtər/",
+   "nghia": "bộ điều hướng: thành phần quản lý việc chuyển qua lại giữa các màn hình",
+   "nhom": "Điều hướng",
+   "viDu": "Which of the following is not a main navigator that React Navigation comes bundled with?",
+   "viDuNghia": "Mục nào sau đây KHÔNG PHẢI là một navigator chính đi kèm sẵn với React Navigation?"
+  },
+  {
+   "chu": "stack navigator",
+   "doc": "/stæk ˈnævɪɡeɪtər/",
+   "nghia": "điều hướng ngăn xếp: màn hình mới chồng lên màn hình cũ, bấm Back để quay lại",
+   "nhom": "Điều hướng",
+   "viDu": "A stack navigator puts each new screen on top of the previous one.",
+   "viDuNghia": "Điều hướng ngăn xếp đặt mỗi màn hình mới chồng lên màn hình trước."
+  },
+  {
+   "chu": "bottom tabs",
+   "doc": "/ˈbɑːtəm tæbz/",
+   "nghia": "các tab dưới đáy màn hình để chuyển nhanh giữa các màn hình chính",
+   "nhom": "Điều hướng",
+   "viDu": "Which of the following code snippets will you use to set up bottom tab navigation to navigate between two screens, Home and Settings?",
+   "viDuNghia": "Đoạn mã nào sau đây dùng để thiết lập bottom tab navigation điều hướng giữa hai màn hình Home và Settings?"
+  },
+  {
+   "chu": "drawer navigator",
+   "doc": "/ˈdrɔːr ˈnævɪɡeɪtər/",
+   "nghia": "điều hướng ngăn kéo: trình đơn trượt ra từ cạnh màn hình",
+   "nhom": "Điều hướng",
+   "viDu": "Which of the following packages are needed for the Drawer Navigation to work?",
+   "viDuNghia": "Những gói nào sau đây cần có để Drawer Navigation hoạt động?"
+  },
+  {
+   "chu": "navigation container",
+   "doc": "/ˌnævɪˈɡeɪʃn kənˈteɪnər/",
+   "nghia": "NavigationContainer: component bọc ngoài cùng, giữ trạng thái điều hướng của cả ứng dụng",
+   "nhom": "Điều hướng",
+   "viDu": "The entire app must be wrapped in the NavigationContainer while setting up React Navigation. Which of the following import statements will import NavigationContainer correctly?",
+   "viDuNghia": "Toàn bộ ứng dụng phải được bọc trong NavigationContainer khi thiết lập React Navigation. Câu lệnh import nào sau đây import NavigationContainer đúng?"
+  },
+  {
+   "chu": "home screen",
+   "doc": "/hoʊm skriːn/",
+   "nghia": "màn hình chính",
+   "nhom": "Điều hướng",
+   "viDu": "This code is correct and sets up the stack navigator. It contains two screens in the stack, Home and Details, with an initial route to the Home screen.",
+   "viDuNghia": "Đoạn mã đúng và thiết lập stack navigator. Nó chứa hai màn hình trong stack là Home và Details, với route khởi đầu là màn hình Home."
+  },
+  {
+   "chu": "detail screen",
+   "doc": "/ˈdiːteɪl skriːn/",
+   "nghia": "màn hình chi tiết: hiện đầy đủ thông tin của một mục",
+   "nhom": "Điều hướng",
+   "viDu": "The Detail screen shows the image, name and price of the selected item.",
+   "viDuNghia": "Màn hình Detail hiện ảnh, tên và giá của mục được chọn."
+  },
+  {
+   "chu": "route params",
+   "doc": "/ruːt pəˈræmz/",
+   "nghia": "tham số tuyến: dữ liệu truyền sang màn hình khác khi điều hướng (route.params)",
+   "nhom": "Điều hướng",
+   "viDu": "In React Navigation, which hook should you use to get access to route parameters inside a functional component?",
+   "viDuNghia": "Trong React Navigation, hook nào nên dùng để truy cập các tham số route (route parameters) bên trong một functional component?"
+  },
+  {
+   "chu": "focused screen",
+   "doc": "/ˈfoʊkəst skriːn/",
+   "nghia": "màn hình đang được hiển thị; hook useIsFocused cho biết điều đó",
+   "nhom": "Điều hướng",
+   "viDu": "The useIsFocused hook returns true when the screen is the focused screen.",
+   "viDuNghia": "Hook useIsFocused trả về true khi màn hình đó đang là màn hình được hiển thị (focused)."
+  },
+  {
+   "chu": "go back",
+   "doc": "/ɡoʊ bæk/",
+   "nghia": "quay lại màn hình trước (navigation.goBack)",
+   "nhom": "Điều hướng",
+   "viDu": "Press the back button to go back to the Home screen.",
+   "viDuNghia": "Bấm nút quay lại để về màn hình Home."
+  },
+  {
+   "chu": "header title",
+   "doc": "/ˈhedər ˈtaɪtl/",
+   "nghia": "tiêu đề ở thanh đầu màn hình",
+   "nhom": "Điều hướng",
+   "viDu": "Set the header title of the screen to the name of the product.",
+   "viDuNghia": "Đặt tiêu đề đầu màn hình là tên sản phẩm."
+  },
+  {
+   "chu": "navigate",
+   "doc": "/ˈnævɪɡeɪt/",
+   "nghia": "điều hướng – chuyển sang màn hình khác (navigation.navigate(\"Home\")); web: useNavigate() của React Router",
+   "nhom": "Điều hướng",
+   "viDu": "Which method would you use to navigate back to the very first screen on the stack with a single action?",
+   "viDuNghia": "Bạn dùng phương thức nào để quay về màn hình đầu tiên của stack chỉ bằng một thao tác?"
+  },
+  {
+   "chu": "navigation",
+   "doc": "/ˌnævɪˈɡeɪʃn/",
+   "nghia": "điều hướng – cách chuyển giữa các màn hình (stack, tab, drawer) bằng thư viện React Navigation",
+   "nhom": "Điều hướng",
+   "viDu": "Which hook would you use to get access to the navigation object within a functional component in React Navigation?",
+   "viDuNghia": "Hook nào bạn sẽ dùng để lấy quyền truy cập vào đối tượng navigation bên trong một functional component trong React Navigation?"
+  },
+  {
+   "chu": "React Navigation",
+   "doc": "/riˈækt ˌnævɪˈɡeɪʃn/",
+   "nghia": "thư viện điều hướng phổ biến nhất của React Native: stack, bottom tabs, drawer; bọc app bằng NavigationContainer",
+   "nhom": "Điều hướng",
+   "viDu": "Select all the features supported by React Navigation.",
+   "viDuNghia": "Chọn tất cả các tính năng mà React Navigation hỗ trợ."
+  },
+  {
+   "chu": "screen",
+   "doc": "/skriːn/",
+   "nghia": "(React Native) màn hình: một trang của ứng dụng, khai bằng Stack.Screen / Tab.Screen · (CSS) màn hình hiển thị, vd @media screen",
+   "nhom": "Điều hướng",
+   "viDu": "Which component is used to navigate between different screens?",
+   "viDuNghia": "Component nào được dùng để điều hướng giữa các màn hình khác nhau? (Đáp án: StackNavigator.)"
+  },
+  {
+   "chu": "asynchronous storage",
+   "doc": "/eɪˈsɪŋkrənəs ˈstɔːrɪdʒ/",
+   "nghia": "AsyncStorage: kho khoá – giá trị bất đồng bộ lưu ngay trên máy, dữ liệu còn sau khi tắt ứng dụng",
+   "nhom": "Lưu trữ và dữ liệu",
+   "viDu": "Which of the following statements about the persistence mechanism of AsyncStorage in React Native is true?",
+   "viDuNghia": "Phát biểu nào sau đây về cơ chế lưu trữ bền vững (persistence) của AsyncStorage trong React Native là đúng?"
+  },
+  {
+   "chu": "persist data",
+   "doc": "/pərˈsɪst ˈdeɪtə/",
+   "nghia": "lưu bền dữ liệu: giữ dữ liệu qua các lần mở ứng dụng",
+   "nhom": "Lưu trữ và dữ liệu",
+   "viDu": "Use AsyncStorage to persist data after the app is closed.",
+   "viDuNghia": "Dùng AsyncStorage để lưu bền dữ liệu sau khi đóng ứng dụng."
+  },
+  {
+   "chu": "mock API",
+   "doc": "/mɑːk ˌeɪ piː ˈaɪ/",
+   "nghia": "API giả lập: dịch vụ trả dữ liệu mẫu để làm bài (vd mockapi.io)",
+   "nhom": "Lưu trữ và dữ liệu",
+   "viDu": "Fetch the list of products from the mock API.",
+   "viDuNghia": "Lấy danh sách sản phẩm từ API giả lập."
+  },
+  {
+   "chu": "favorite list",
+   "doc": "/ˈfeɪvərɪt lɪst/",
+   "nghia": "danh sách yêu thích: các mục người dùng đã đánh dấu thích",
+   "nhom": "Lưu trữ và dữ liệu",
+   "viDu": "The user can add an item to the favorite list or remove it.",
+   "viDuNghia": "Người dùng có thể thêm một mục vào danh sách yêu thích hoặc gỡ ra."
+  },
+  {
+   "chu": "geolocation",
+   "doc": "/ˌdʒiːoʊloʊˈkeɪʃn/",
+   "nghia": "định vị địa lý: lấy toạ độ hiện tại của thiết bị",
+   "nhom": "Lưu trữ và dữ liệu",
+   "viDu": "Which of the following methods is NOT used by the Geolocation API to determine a user's location?",
+   "viDuNghia": "Phương pháp nào sau đây KHÔNG được Geolocation API sử dụng để xác định vị trí người dùng?"
+  },
+  {
+   "chu": "push notification",
+   "doc": "/pʊʃ ˌnoʊtɪfɪˈkeɪʃn/",
+   "nghia": "thông báo đẩy: thông báo máy chủ gửi tới thiết bị kể cả khi ứng dụng đang đóng",
+   "nhom": "Lưu trữ và dữ liệu",
+   "viDu": "A push notification can reach the user even when the app is closed.",
+   "viDuNghia": "Thông báo đẩy có thể tới người dùng kể cả khi ứng dụng đang đóng."
+  },
+  {
+   "chu": "efficiently",
+   "doc": "/ɪˈfɪʃntli/",
+   "nghia": "một cách hiệu quả (ít tốn bộ nhớ, thời gian)",
+   "nhom": "Lưu trữ và dữ liệu",
+   "viDu": "How would you apply the FlatList component to render a list of items efficiently?",
+   "viDuNghia": "Làm thế nào để áp dụng component FlatList để render một danh sách mục một cách hiệu quả?"
+  },
+  {
+   "chu": "display a list",
+   "nghia": "hiển thị một danh sách",
+   "nhom": "Từ trong đề PE",
+   "viDu": "You need to display a large list of items in your app while maintaining solid performance. Which components could you use to accomplish this?",
+   "viDuNghia": "Bạn cần hiển thị một danh sách rất dài trong ứng dụng mà vẫn giữ hiệu năng tốt. Bạn có thể dùng những component nào?"
+  },
+  {
+   "chu": "navigate to",
+   "doc": "/ˈnævɪɡeɪt tuː/",
+   "nghia": "chuyển sang (màn hình khác)",
+   "nhom": "Từ trong đề PE",
+   "viDu": "Press the item to navigate to the Detail screen.",
+   "viDuNghia": "Bấm vào mục để chuyển sang màn hình Detail."
+  },
+  {
+   "chu": "remove from",
+   "doc": "/rɪˈmuːv frʌm/",
+   "nghia": "gỡ khỏi (danh sách)",
+   "nhom": "Từ trong đề PE",
+   "viDu": "The user can remove an item from the favorite list.",
+   "viDuNghia": "Người dùng có thể gỡ một mục khỏi danh sách yêu thích."
+  },
+  {
+   "chu": "immediately",
+   "doc": "/ɪˈmiːdiətli/",
+   "nghia": "ngay lập tức: giao diện phải cập nhật ngay sau thao tác",
+   "nhom": "Từ trong đề PE",
+   "viDu": "The favorite state must be updated immediately on all screens.",
+   "viDuNghia": "Trạng thái yêu thích phải được cập nhật ngay trên mọi màn hình."
+  },
+  {
+   "chu": "confirmation",
+   "doc": "/ˌkɑːnfərˈmeɪʃn/",
+   "nghia": "sự xác nhận: hỏi lại người dùng trước khi xoá",
+   "nhom": "Từ trong đề PE",
+   "viDu": "Ask for confirmation before removing all items from the list.",
+   "viDuNghia": "Hỏi xác nhận trước khi gỡ mọi mục khỏi danh sách."
+  },
+  {
+   "chu": "percentage off",
+   "doc": "/pərˈsentɪdʒ ɔːf/",
+   "nghia": "phần trăm giảm giá",
+   "nhom": "Từ trong đề PE",
+   "viDu": "The percentage off is displayed as a percentage, for example 20%.",
+   "viDuNghia": "Phần trăm giảm giá được hiển thị dạng phần trăm, ví dụ 20%."
+  },
+  {
+   "chu": "light gray",
+   "doc": "/laɪt ɡreɪ/",
+   "nghia": "màu xám nhạt",
+   "nhom": "Từ trong đề PE",
+   "viDu": "Show the text \"React Native!\" in blue color on a light gray background.",
+   "viDuNghia": "Hiển thị dòng chữ \"React Native!\" màu xanh dương trên nền xám nhạt."
+  },
+  {
+   "chu": "rounded",
+   "doc": "/ˈraʊndɪd/",
+   "nghia": "bo tròn (góc ảnh, góc thẻ)",
+   "nhom": "Từ trong đề PE",
+   "viDu": "Display the image with rounded corners.",
+   "viDuNghia": "Hiển thị ảnh với các góc bo tròn."
+  },
+  {
+   "chu": "component-based architecture",
+   "doc": "/kəmˈpoʊnənt beɪst ˈɑːrkɪtektʃər/",
+   "nghia": "kiến trúc dựa trên component: giao diện ghép từ các component độc lập, tái sử dụng được",
+   "nhom": "Bổ sung từ đề FE",
+   "viDu": "React Native uses component-based architecture, and code is reused between components. True or false?",
+   "viDuNghia": "React Native dùng kiến trúc dựa trên component, và mã được tái sử dụng giữa các component. Đúng hay sai?"
+  },
+  {
+   "chu": "fixed dimensions",
+   "doc": "/fɪkst dɪˈmenʃnz/",
+   "nghia": "kích thước cố định: width / height ghi bằng số, không co giãn theo màn hình",
+   "nhom": "Bổ sung từ đề FE",
+   "viDu": "Which property in React Native is used to specify the width of a component with fixed dimensions?",
+   "viDuNghia": "Thuộc tính nào trong React Native được dùng để chỉ định chiều rộng của một component có kích thước cố định?"
+  },
+  {
+   "chu": "flex dimensions",
+   "doc": "/fleks dɪˈmenʃnz/",
+   "nghia": "kích thước co giãn: dùng thuộc tính flex để phần tử tự chia chỗ trống theo tỉ lệ",
+   "nhom": "Bổ sung từ đề FE",
+   "viDu": "Why do you use flex dimensions in a component's style?",
+   "viDuNghia": "Tại sao lại dùng flex dimensions trong style của một component?"
+  },
+  {
+   "chu": "virtual keyboard",
+   "doc": "/ˈvɜːrtʃuəl ˈkiːbɔːrd/",
+   "nghia": "bàn phím ảo trên màn hình",
+   "nhom": "Bổ sung từ đề FE",
+   "viDu": "Which one of these React Native components would you use to input text into the app through a keyboard?",
+   "viDuNghia": "Bạn dùng component React Native nào để nhập văn bản vào ứng dụng qua bàn phím?"
+  },
+  {
+   "chu": "obscure",
+   "doc": "/əbˈskjʊr/",
+   "nghia": "che đi: secureTextEntry che chữ đang gõ (ô mật khẩu)",
+   "nhom": "Bổ sung từ đề FE",
+   "viDu": "Which of the following is a prop to the TextInput that can obscure the text entered within the text input?",
+   "viDuNghia": "Prop nào của TextInput có thể che (làm mờ) văn bản người dùng nhập vào?"
+  },
+  {
+   "chu": "tint color",
+   "doc": "/tɪnt ˈkʌlər/",
+   "nghia": "màu phủ: màu tô lên biểu tượng / thanh điều hướng",
+   "nhom": "Bổ sung từ đề FE",
+   "viDu": "Select all options you can set to configure the tint color of a tab bar icon.",
+   "viDuNghia": "Chọn tất cả các tuỳ chọn dùng để cấu hình màu (tint color) cho icon của thanh tab."
+  },
+  {
+   "chu": "render window",
+   "doc": "/ˈrendər ˈwɪndoʊ/",
+   "nghia": "cửa sổ dựng: phần danh sách đang được dựng quanh vùng nhìn thấy; dòng cuộn ra ngoài sẽ bị gỡ",
+   "nhom": "Bổ sung từ đề FE",
+   "viDu": "The internal state is not preserved when content scrolls out of the render window while using SectionList.",
+   "viDuNghia": "Trạng thái nội bộ KHÔNG được giữ lại khi nội dung cuộn ra khỏi khung hiển thị (render window) khi dùng SectionList."
+  },
+  {
+   "chu": "lose focus",
+   "doc": "/luːz ˈfoʊkəs/",
+   "nghia": "mất tiêu điểm: ô nhập không còn được chọn (bàn phím đóng lại)",
+   "nhom": "Bổ sung từ đề FE",
+   "viDu": "Which method would you use to make a native text input lose focus?",
+   "viDuNghia": "Bạn dùng phương thức nào để làm cho một ô nhập native MẤT focus?"
+  },
+  {
+   "chu": "image picker",
+   "doc": "/ˈɪmɪdʒ ˈpɪkər/",
+   "nghia": "bộ chọn ảnh: mở máy ảnh hoặc thư viện ảnh để người dùng chọn",
+   "nhom": "Bổ sung từ đề FE",
+   "viDu": "Which of the following options does the React Native Image Picker provide to manage the ImagePicker component?",
+   "viDuNghia": "Tuỳ chọn (option) nào sau đây được React Native Image Picker cung cấp để cấu hình component ImagePicker?"
+  },
+  {
+   "chu": "map view",
+   "doc": "/mæp vjuː/",
+   "nghia": "khung bản đồ (MapView): component hiển thị bản đồ",
+   "nhom": "Bổ sung từ đề FE",
+   "viDu": "When using the Geolocation API, which of the following is not a prop of MapView?",
+   "viDuNghia": "Khi sử dụng Geolocation API, thuộc tính (prop) nào sau đây KHÔNG PHẢI là prop của MapView?"
+  },
+  {
+   "chu": "base component",
+   "doc": "/beɪs kəmˈpoʊnənt/",
+   "nghia": "component gốc: lớp cha mà component lớp kế thừa (extends React.Component)",
+   "nhom": "Bổ sung từ đề FE",
+   "viDu": "Which keyword is used to extend a component from a base component?",
+   "viDuNghia": "Từ khoá nào được dùng để kế thừa (extend) một component từ một component cơ sở?"
+  },
+  {
+   "chu": "tech stack",
+   "doc": "/tek stæk/",
+   "nghia": "bộ công nghệ dùng để xây một ứng dụng (ngôn ngữ, framework, thư viện)",
+   "nhom": "Bổ sung từ đề FE",
+   "viDu": "React Native uses the following tech stack to build cross-platform native apps:",
+   "viDuNghia": "React Native sử dụng ngăn xếp công nghệ (tech stack) nào sau đây để xây dựng ứng dụng native đa nền tảng?"
+  },
+  {
+   "chu": "inherit props",
+   "doc": "/ɪnˈherɪt prɑːps/",
+   "nghia": "thừa hưởng props: component nhận được mọi props của component nền (vd Image có mọi props của View)",
+   "nhom": "Bổ sung từ đề FE",
+   "viDu": "The Image component inherits all the props of __________ component. Select the correct option.",
+   "viDuNghia": "Component Image kế thừa toàn bộ props của component __________. Chọn phương án đúng."
+  },
+  {
+   "chu": "scrollable list",
+   "doc": "/ˈskroʊləbl lɪst/",
+   "nghia": "danh sách cuộn được",
+   "nhom": "Bổ sung từ đề FE",
+   "viDu": "Which core component in React Native should you have imported to build scrollable lists?",
+   "viDuNghia": "Bạn nên import core component nào của React Native để dựng danh sách cuộn được?"
+  },
+  {
+   "chu": "solid performance",
+   "doc": "/ˈsɑːlɪd pərˈfɔːrməns/",
+   "nghia": "hiệu năng tốt, ổn định",
+   "nhom": "Bổ sung từ đề FE",
+   "viDu": "Let's say you must display a large list of items in your app while maintaining solid performance. Which component would be more suitable for this use case?",
+   "viDuNghia": "Giả sử bạn phải hiển thị một danh sách rất dài mà vẫn giữ hiệu năng tốt. Component nào phù hợp hơn cho tình huống này?"
+  }
+ ]
+}

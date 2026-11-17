@@ -1,0 +1,902 @@
+{
+ "ma": "enw492c-1",
+ "nn": "en",
+ "ten": "ENW492c · 1. Cấu trúc bài luận & trích dẫn",
+ "moTa": "Writing Research Papers, phần 1: các loại bài luận, bố cục – câu chủ đề – luận đề, cách phát triển lập luận, trích dẫn MLA/APA và từ hay gặp trong câu hỏi đề. Từ lấy từ đề FE/PE thật; ví dụ phần lớn là câu hỏi thật trong đề. Dùng trực tiếp cho IELTS Writing Task 2.",
+ "bieuTuong": "text.book.closed.fill",
+ "thuTu": -938,
+ "tu": [
+  {
+   "chu": "academic writing",
+   "doc": "/ˌækəˈdemɪk ˈraɪtɪŋ/",
+   "nghia": "viết học thuật: lối viết trang trọng, có luận điểm, bằng chứng và trích dẫn nguồn",
+   "nhom": "Loại bài luận",
+   "viDu": "Read the model argumentative essay \"Compulsory First-Year Academic Writing Courses\", then answer: Which of the following statements are correct?",
+   "viDuNghia": "Đọc bài luận mẫu \"Compulsory First-Year Academic Writing Courses\", rồi trả lời: Phát biểu nào sau đây đúng?"
+  },
+  {
+   "chu": "argumentative essay",
+   "doc": "/ˌɑːrɡjuˈmentətɪv ˈeseɪ/",
+   "nghia": "bài luận tranh biện: nêu quan điểm về một vấn đề gây tranh cãi và bảo vệ nó bằng lý lẽ, bằng chứng",
+   "nhom": "Loại bài luận",
+   "viDu": "What is the main argument of this argumentative essay?",
+   "viDuNghia": "Luận điểm chính của bài luận tranh biện này là gì?"
+  },
+  {
+   "chu": "cause-and-effect essay",
+   "doc": "/ˌkɔːz ənd ɪˈfekt ˈeseɪ/",
+   "nghia": "bài luận nguyên nhân – kết quả: giải thích vì sao việc gì xảy ra và nó dẫn tới đâu",
+   "nhom": "Loại bài luận",
+   "viDu": "Read the cause-and-effect essay below and respond to the questions that follow: Paragraph 1: What is the purpose of the introduction in this essay?",
+   "viDuNghia": "Đọc bài luận nhân-quả dưới đây rồi trả lời các câu hỏi: Đoạn 1: Mục đích của phần mở bài trong bài luận này là gì?"
+  },
+  {
+   "chu": "compare-and-contrast essay",
+   "doc": "/kəmˌper ənd kənˈtræst ˈeseɪ/",
+   "nghia": "bài luận so sánh – đối chiếu: nêu điểm giống và khác giữa hai đối tượng",
+   "nhom": "Loại bài luận",
+   "viDu": "A compare-and-contrast essay on wind and solar power shows how the two are similar and how they differ.",
+   "viDuNghia": "Một bài luận so sánh – đối chiếu về điện gió và điện mặt trời cho thấy hai nguồn này giống và khác nhau thế nào."
+  },
+  {
+   "chu": "problem-solution essay",
+   "doc": "/ˌprɑːbləm səˈluːʃn ˈeseɪ/",
+   "nghia": "bài luận vấn đề – giải pháp: mô tả vấn đề rồi đề xuất và đánh giá cách giải quyết",
+   "nhom": "Loại bài luận",
+   "viDu": "Task 1 — Time: 60 minutes. Write a problem-solution essay of 450 words on the topic of cyberbullying.",
+   "viDuNghia": "Bài 1 — Thời gian: 60 phút. Viết một bài luận vấn đề-giải pháp 450 từ về chủ đề bắt nạt trên mạng (cyberbullying)."
+  },
+  {
+   "chu": "comparative essay",
+   "doc": "/kəmˈpærətɪv ˈeseɪ/",
+   "nghia": "bài luận so sánh (= compare-and-contrast essay)",
+   "nhom": "Loại bài luận",
+   "viDu": "Read the comparative essay \"Nuclear, Wind, and Solar\" by Brandon Chow, then answer the questions.",
+   "viDuNghia": "Đọc bài luận so sánh \"Nuclear, Wind, and Solar\" của Brandon Chow rồi trả lời các câu hỏi."
+  },
+  {
+   "chu": "genre",
+   "doc": "/ˈʒɑːnrə/",
+   "nghia": "thể loại văn bản (bài luận, báo cáo, email…), mỗi thể loại có quy ước riêng",
+   "nhom": "Loại bài luận",
+   "viDu": "Developing genre awareness is perhaps the most difficult challenge first-year students face.",
+   "viDuNghia": "Hình thành nhận thức về thể loại có lẽ là thử thách khó nhất mà sinh viên năm nhất gặp phải."
+  },
+  {
+   "chu": "genre awareness",
+   "doc": "/ˈʒɑːnrə əˈwernəs/",
+   "nghia": "nhận thức về thể loại: biết mỗi loại văn bản đòi hỏi cấu trúc, giọng văn nào",
+   "nhom": "Loại bài luận",
+   "viDu": "The same cannot be said of writing during secondary school, which is less varied and thus less demanding in terms of genre awareness.",
+   "viDuNghia": "Không thể nói như vậy về việc viết ở bậc trung học, vốn ít đa dạng hơn nên ít đòi hỏi hơn về nhận thức thể loại."
+  },
+  {
+   "chu": "text type",
+   "doc": "/ˈtekst taɪp/",
+   "nghia": "loại văn bản",
+   "nhom": "Loại bài luận",
+   "viDu": "The term genre will refer to different text types that change according to the form and the situation.",
+   "viDuNghia": "Thuật ngữ \"thể loại\" sẽ chỉ các loại văn bản khác nhau, thay đổi theo hình thức và tình huống."
+  },
+  {
+   "chu": "essay",
+   "doc": "/ˈeseɪ/",
+   "nghia": "bài luận – bài viết nhiều đoạn trình bày và bảo vệ một luận điểm (mở bài – thân bài – kết bài)",
+   "nhom": "Loại bài luận",
+   "viDu": "How does the essay create a logical link between the reasons for and the benefits of studying abroad?",
+   "viDuNghia": "Bài luận tạo liên kết logic giữa các lý do và các lợi ích của việc du học bằng cách nào?"
+  },
+  {
+   "chu": "essay organization",
+   "doc": "/ˈeseɪ ˌɔːrɡənəˈzeɪʃn/",
+   "nghia": "bố cục bài luận: cách sắp xếp mở bài, các đoạn thân bài và kết bài (Anh: organisation)",
+   "nhom": "Bố cục & đoạn văn",
+   "viDu": "Essay organization. Which statement accurately describes the introduction?",
+   "viDuNghia": "Bố cục bài luận. Phát biểu nào mô tả đúng phần mở bài?"
+  },
+  {
+   "chu": "thesis statement",
+   "doc": "/ˈθiːsɪs ˌsteɪtmənt/",
+   "nghia": "câu luận đề: câu (thường cuối mở bài) nêu quan điểm chính mà cả bài sẽ chứng minh",
+   "nhom": "Bố cục & đoạn văn",
+   "viDu": "Which sentence is the thesis statement in the introduction?",
+   "viDuNghia": "Câu nào là câu luận đề (thesis statement) trong phần mở bài?"
+  },
+  {
+   "chu": "topic sentence",
+   "doc": "/ˈtɑːpɪk ˌsentəns/",
+   "nghia": "câu chủ đề: câu nêu ý chính của một đoạn, thường đứng đầu đoạn",
+   "nhom": "Bố cục & đoạn văn",
+   "viDu": "Which sentence is the topic sentence of paragraph 3?",
+   "viDuNghia": "Câu nào là câu chủ đề (topic sentence) của đoạn 3?"
+  },
+  {
+   "chu": "supporting detail",
+   "doc": "/səˈpɔːrtɪŋ ˈdiːteɪl/",
+   "nghia": "chi tiết hỗ trợ: ví dụ, số liệu, giải thích làm rõ câu chủ đề",
+   "nhom": "Bố cục & đoạn văn",
+   "viDu": "Support your essay with supporting details and examples.",
+   "viDuNghia": "Hãy hỗ trợ bài luận bằng các chi tiết hỗ trợ và ví dụ."
+  },
+  {
+   "chu": "supporting idea",
+   "doc": "/səˈpɔːrtɪŋ aɪˈdiːə/",
+   "nghia": "ý phụ, ý chống đỡ cho luận điểm chính",
+   "nhom": "Bố cục & đoạn văn",
+   "viDu": "Back up your viewpoint with relevant supporting ideas, details, and examples drawn from various contexts, such as personal experiences, academic settings, or current events.",
+   "viDuNghia": "Hỗ trợ quan điểm bằng ý tưởng, chi tiết và ví dụ liên quan từ nhiều bối cảnh khác nhau, như trải nghiệm cá nhân, môi trường học thuật, hoặc sự kiện thời sự."
+  },
+  {
+   "chu": "concluding sentence",
+   "doc": "/kənˈkluːdɪŋ ˌsentəns/",
+   "nghia": "câu kết đoạn: tóm lại ý của đoạn hoặc nối sang đoạn sau",
+   "nhom": "Bố cục & đoạn văn",
+   "viDu": "The concluding sentence of a paragraph provides a closing statement or links to the next paragraph.",
+   "viDuNghia": "Câu kết của một đoạn đưa ra lời chốt hoặc nối sang đoạn kế tiếp."
+  },
+  {
+   "chu": "transition sentence",
+   "doc": "/trænˈzɪʃn ˌsentəns/",
+   "nghia": "câu chuyển ý: nối ý đoạn trước với đoạn sau",
+   "nhom": "Bố cục & đoạn văn",
+   "viDu": "Sentence 14 is a transition sentence to the theme of the next paragraph.",
+   "viDuNghia": "Câu 14 là câu chuyển ý dẫn sang chủ đề của đoạn kế tiếp."
+  },
+  {
+   "chu": "transition phrase",
+   "doc": "/trænˈzɪʃn freɪz/",
+   "nghia": "cụm từ chuyển ý (in addition, however, as a result…)",
+   "nhom": "Bố cục & đoạn văn",
+   "viDu": "What transition phrase is used in the essay to introduce an additional cause of deforestation?",
+   "viDuNghia": "Cụm từ chuyển ý nào trong bài được dùng để giới thiệu thêm một nguyên nhân khác của nạn phá rừng?"
+  },
+  {
+   "chu": "signal word",
+   "doc": "/ˈsɪɡnəl wɜːrd/",
+   "nghia": "từ báo hiệu: cho biết quan hệ giữa các ý (first, therefore, in conclusion…)",
+   "nhom": "Bố cục & đoạn văn",
+   "viDu": "In the conclusion, which sentence contains a signal word to conclude the essay?",
+   "viDuNghia": "Trong phần kết luận, câu nào chứa từ tín hiệu để kết thúc bài luận?"
+  },
+  {
+   "chu": "body paragraph",
+   "doc": "/ˈbɑːdi ˌpærəɡræf/",
+   "nghia": "đoạn thân bài: mỗi đoạn phát triển một ý chống đỡ luận đề",
+   "nhom": "Bố cục & đoạn văn",
+   "viDu": "Which of the following is NOT used to develop the body paragraphs of this argumentative essay?",
+   "viDuNghia": "Điều nào sau đây KHÔNG được dùng để triển khai các đoạn thân bài của bài luận này?"
+  },
+  {
+   "chu": "main idea",
+   "doc": "/ˌmeɪn aɪˈdiːə/",
+   "nghia": "ý chính (của đoạn, của bài)",
+   "nhom": "Bố cục & đoạn văn",
+   "viDu": "Which option best conveys the main idea of Brewer and Cunningham (2009) as presented in the essay?",
+   "viDuNghia": "Phương án nào diễn đạt đúng nhất ý chính của Brewer và Cunningham (2009) như được trình bày trong bài luận?"
+  },
+  {
+   "chu": "key term",
+   "doc": "/ˈkiː tɜːrm/",
+   "nghia": "thuật ngữ then chốt cần định nghĩa hoặc nhắc lại trong bài",
+   "nhom": "Bố cục & đoạn văn",
+   "viDu": "The second sentence of the introduction gives a definition of the key term.",
+   "viDuNghia": "Câu thứ hai của mở bài đưa ra định nghĩa cho thuật ngữ then chốt."
+  },
+  {
+   "chu": "general statement",
+   "doc": "/ˈdʒenrəl ˌsteɪtmənt/",
+   "nghia": "câu dẫn chung ở đầu mở bài, giới thiệu chủ đề trước khi thu hẹp về luận đề",
+   "nhom": "Bố cục & đoạn văn",
+   "viDu": "The introduction opens with a general statement about writing and then narrows to the thesis statement.",
+   "viDuNghia": "Mở bài bắt đầu bằng một câu dẫn chung về việc viết rồi thu hẹp dần về câu luận đề."
+  },
+  {
+   "chu": "closing statement",
+   "doc": "/ˈkloʊzɪŋ ˌsteɪtmənt/",
+   "nghia": "câu kết bài: lời chốt cuối cùng để lại ấn tượng cho người đọc",
+   "nhom": "Bố cục & đoạn văn",
+   "viDu": "End the essay with a closing statement that leaves the reader with a final thought.",
+   "viDuNghia": "Hãy kết bài bằng một câu chốt để lại cho người đọc một suy nghĩ cuối cùng."
+  },
+  {
+   "chu": "restate",
+   "doc": "/ˌriːˈsteɪt/",
+   "nghia": "nhắc lại bằng lời khác (kết bài thường restate luận đề)",
+   "nhom": "Bố cục & đoạn văn",
+   "viDu": "The conclusion restates the thesis statement, summarises the key points, and concludes with a final, relevant comment.",
+   "viDuNghia": "Kết bài nhắc lại câu luận đề, tóm tắt các ý chính và khép lại bằng một nhận xét cuối cùng có liên quan."
+  },
+  {
+   "chu": "coherence",
+   "doc": "/koʊˈhɪrəns/",
+   "nghia": "tính mạch lạc: các ý xếp hợp lý, dễ theo dõi",
+   "nhom": "Bố cục & đoạn văn",
+   "viDu": "Transition phrases such as \"in addition\" and \"as a result\" improve the coherence of an essay.",
+   "viDuNghia": "Các cụm chuyển ý như \"in addition\" và \"as a result\" làm bài luận mạch lạc hơn."
+  },
+  {
+   "chu": "logical link",
+   "doc": "/ˈlɑːdʒɪkl lɪŋk/",
+   "nghia": "mối nối lô-gic giữa các ý, các đoạn",
+   "nhom": "Bố cục & đoạn văn",
+   "viDu": "How does the essay create a logical link between the reasons for and the benefits of studying abroad?",
+   "viDuNghia": "Bài luận tạo liên kết logic giữa các lý do và các lợi ích của việc du học bằng cách nào?"
+  },
+  {
+   "chu": "writer",
+   "doc": "/ˈraɪtər/",
+   "nghia": "người viết, tác giả bài luận",
+   "nhom": "Bố cục & đoạn văn",
+   "viDu": "Which external sources does the writer use in the essay? Tick all options that apply.",
+   "viDuNghia": "Người viết dùng những nguồn bên ngoài nào trong bài luận? Chọn TẤT CẢ đáp án đúng."
+  },
+  {
+   "chu": "compose",
+   "doc": "/kəmˈpoʊz/",
+   "nghia": "soạn, viết (compose a 450-word essay = viết một bài luận 450 từ)",
+   "nhom": "Bố cục & đoạn văn",
+   "viDu": "Task 1 — Time: 60 minutes. Compose a 450-word essay discussing the causes and effects of climate change.",
+   "viDuNghia": "Bài 1 — Thời gian: 60 phút. Viết một bài luận 450 từ bàn về nguyên nhân và hậu quả của biến đổi khí hậu."
+  },
+  {
+   "chu": "consequently",
+   "doc": "/ˈkɑːnsəkwentli/",
+   "nghia": "do đó, vì vậy (từ nối chỉ kết quả, trang trọng hơn so)",
+   "nhom": "Bố cục & đoạn văn",
+   "viDu": "Consequently, educators need to rethink how academic writing is taught, and to whom, in higher education.",
+   "viDuNghia": "Do đó, các nhà giáo cần nghĩ lại cách dạy viết học thuật, và dạy cho ai, ở bậc đại học."
+  },
+  {
+   "chu": "moreover",
+   "doc": "/mɔːrˈoʊvər/",
+   "nghia": "hơn nữa, ngoài ra (từ nối bổ sung ý)",
+   "nhom": "Bố cục & đoạn văn",
+   "viDu": "Moreover, much of the cleared land is repurposed for agriculture, a major source of methane and other harmful emissions.",
+   "viDuNghia": "Hơn nữa, phần lớn đất bị phát quang được chuyển sang làm nông nghiệp, một nguồn phát thải mê-tan và các khí độc hại khác."
+  },
+  {
+   "chu": "thesis",
+   "doc": "/ˈθiːsɪs/",
+   "nghia": "luận điểm chính (thesis statement) – câu nêu ý chính cả bài luận, thường cuối mở bài. (Đại học: luận văn)",
+   "nhom": "Bố cục & đoạn văn",
+   "viDu": "The sentences below are from paragraph 1. Which sentence presents the essay's thesis statement?",
+   "viDuNghia": "Các câu dưới đây trích từ đoạn 1. Câu nào nêu luận điểm chính của bài luận?"
+  },
+  {
+   "chu": "introduction",
+   "doc": "/ˌɪntrəˈdʌkʃn/",
+   "nghia": "mở bài, phần giới thiệu – đoạn đầu dẫn dắt vấn đề và nêu luận điểm chính (thesis)",
+   "nhom": "Bố cục & đoạn văn",
+   "viDu": "In paragraph [1], which of the following best describes the structure of the introduction?",
+   "viDuNghia": "Trong đoạn [1], cấu trúc mở bài được mô tả đúng nhất bởi lựa chọn nào?"
+  },
+  {
+   "chu": "paragraph",
+   "doc": "/ˈpærəɡræf/",
+   "nghia": "đoạn văn – (bài đọc) \"In paragraph [2]\" = ở đoạn 2. (HTML: thẻ <p>)",
+   "nhom": "Bố cục & đoạn văn",
+   "viDu": "In paragraph 4, the statistic \"the average American woman weighs one hundred and forty pounds...\" is used primarily to:",
+   "viDuNghia": "Trong đoạn 4, số liệu \"the average American woman weighs one hundred and forty pounds...\" chủ yếu được dùng để làm gì?"
+  },
+  {
+   "chu": "concession sentence",
+   "doc": "/kənˈseʃn ˌsentəns/",
+   "nghia": "câu nhượng bộ: thừa nhận phía đối lập có phần đúng (Although…, It is true that…) trước khi phản bác",
+   "nhom": "Phát triển lập luận",
+   "viDu": "\"Although nuclear energy is reliable, it carries risk\" is a concession sentence.",
+   "viDuNghia": "\"Dù năng lượng hạt nhân đáng tin cậy, nó vẫn có rủi ro\" là một câu nhượng bộ."
+  },
+  {
+   "chu": "opponent",
+   "doc": "/əˈpoʊnənt/",
+   "nghia": "người phản đối, phe đối lập với một quan điểm",
+   "nhom": "Phát triển lập luận",
+   "viDu": "Opponents of curriculum reform may argue that adding integrity instruction increases workload and diverts time from disciplinary content.",
+   "viDuNghia": "Những người phản đối cải cách chương trình có thể cho rằng thêm phần dạy về liêm chính làm tăng khối lượng học và lấy mất thời gian của nội dung chuyên ngành."
+  },
+  {
+   "chu": "supporter",
+   "doc": "/səˈpɔːrtər/",
+   "nghia": "người ủng hộ một quan điểm",
+   "nhom": "Phát triển lập luận",
+   "viDu": "Sentence 22 presents the arguments supporters would present.",
+   "viDuNghia": "Câu 22 trình bày những lập luận mà phe ủng hộ sẽ đưa ra."
+  },
+  {
+   "chu": "critic",
+   "doc": "/ˈkrɪtɪk/",
+   "nghia": "nhà phê bình; người chỉ trích (\"Critics might argue that…\")",
+   "nhom": "Phát triển lập luận",
+   "viDu": "In paragraph [2], the writer cites the children's literature critic and technology analyst Eliza Dresang ________.",
+   "viDuNghia": "Ở đoạn [2], tác giả trích dẫn nhà phê bình văn học thiếu nhi và chuyên gia công nghệ Eliza Dresang ________."
+  },
+  {
+   "chu": "external source",
+   "doc": "/ɪkˈstɜːrnl sɔːrs/",
+   "nghia": "nguồn bên ngoài: tài liệu của người khác mà người viết đưa vào bài",
+   "nhom": "Phát triển lập luận",
+   "viDu": "Which external sources does the writer use in the essay?",
+   "viDuNghia": "Người viết dùng những nguồn bên ngoài nào trong bài luận?"
+  },
+  {
+   "chu": "numerical data",
+   "doc": "/nuːˈmerɪkl ˈdeɪtə/",
+   "nghia": "số liệu, dữ liệu bằng con số",
+   "nhom": "Phát triển lập luận",
+   "viDu": "Which section of the essay provides specific numerical data to support claims?",
+   "viDuNghia": "Phần nào của bài luận đưa ra số liệu cụ thể để hỗ trợ lập luận?"
+  },
+  {
+   "chu": "anecdote",
+   "doc": "/ˈænɪkdoʊt/",
+   "nghia": "giai thoại, mẩu chuyện ngắn có thật dùng để mở bài hoặc minh hoạ",
+   "nhom": "Phát triển lập luận",
+   "viDu": "The essay opens with an anecdote about a three-year-old girl who says she needs to go on a diet.",
+   "viDuNghia": "Bài luận mở đầu bằng một mẩu chuyện về bé gái ba tuổi nói rằng mình cần ăn kiêng."
+  },
+  {
+   "chu": "strengthen",
+   "doc": "/ˈstreŋkθn/",
+   "nghia": "làm mạnh thêm, củng cố (lập luận)",
+   "nhom": "Phát triển lập luận",
+   "viDu": "How does using a cause/effect structure strengthen the writer’s argument in this essay?",
+   "viDuNghia": "Cấu trúc nhân-quả giúp làm mạnh lập luận của tác giả như thế nào?"
+  },
+  {
+   "chu": "back up",
+   "doc": "/ˌbæk ˈʌp/",
+   "nghia": "chống đỡ, làm chỗ dựa (back up the thesis with evidence)",
+   "nhom": "Phát triển lập luận",
+   "viDu": "Compose an argumentative essay of 400-450 words to back up your opinion.",
+   "viDuNghia": "Viết một bài luận tranh biện 400–450 từ để củng cố (back up) ý kiến của bạn."
+  },
+  {
+   "chu": "put forward",
+   "doc": "/ˌpʊt ˈfɔːrwərd/",
+   "nghia": "đưa ra, nêu lên (ý kiến, đề xuất)",
+   "nhom": "Phát triển lập luận",
+   "viDu": "Which option paraphrases the idea put forward by Kauffmann, Martin, and Weaver (1992)?",
+   "viDuNghia": "Phương án nào diễn giải lại ý mà Kauffmann, Martin và Weaver (1992) đưa ra?"
+  },
+  {
+   "chu": "mention",
+   "doc": "/ˈmenʃn/",
+   "nghia": "nhắc tới, đề cập",
+   "nhom": "Phát triển lập luận",
+   "viDu": "I also believe, however, that the prison system itself needs to be completely reformed, for some of the reasons mentioned above.",
+   "viDuNghia": "Tuy nhiên, tôi cũng tin rằng chính hệ thống nhà tù cần được cải tổ hoàn toàn, vì một số lý do đã nêu ở trên."
+  },
+  {
+   "chu": "highlight",
+   "doc": "/ˈhaɪlaɪt/",
+   "nghia": "làm nổi bật, nhấn mạnh",
+   "nhom": "Phát triển lập luận",
+   "viDu": "The sentence effectively signals the beginning of the conclusion and highlights the main themes.",
+   "viDuNghia": "Câu này báo hiệu rõ phần kết bắt đầu và làm nổi bật các chủ đề chính."
+  },
+  {
+   "chu": "attitude",
+   "doc": "/ˈætɪtuːd/",
+   "nghia": "thái độ (của người viết đối với vấn đề: ủng hộ, phản đối, thận trọng…)",
+   "nhom": "Phát triển lập luận",
+   "viDu": "The author of the essay maintains a ______ attitude toward the use of biotechnology in sports.",
+   "viDuNghia": "Tác giả bài luận duy trì thái độ ______ đối với việc dùng công nghệ sinh học trong thể thao."
+  },
+  {
+   "chu": "flaw",
+   "doc": "/flɔː/",
+   "nghia": "lỗi, chỗ sai sót (a flaw in the Works Cited page)",
+   "nhom": "Phát triển lập luận",
+   "viDu": "Which of the following statements accurately describes a flaw in the provided Works Cited page?",
+   "viDuNghia": "Nhận định nào sau đây mô tả đúng một lỗi trong mục Works Cited được cung cấp?"
+  },
+  {
+   "chu": "employ",
+   "doc": "/ɪmˈplɔɪ/",
+   "nghia": "sử dụng (một phương pháp, một nguồn); nghĩa thường: thuê người làm",
+   "nhom": "Phát triển lập luận",
+   "viDu": "The author employs all of the following ways to cite sources, EXCEPT:",
+   "viDuNghia": "Tác giả sử dụng TẤT CẢ các cách trích dẫn nguồn sau, NGOẠI TRỪ:"
+  },
+  {
+   "chu": "mechanism",
+   "doc": "/ˈmekənɪzəm/",
+   "nghia": "cơ chế, cách thức (the mechanism used to develop the paragraph)",
+   "nhom": "Phát triển lập luận",
+   "viDu": "Paragraph 4: Which best describes the main mechanism used to develop paragraph 4 (sentences 32-40)?",
+   "viDuNghia": "Đoạn 4: Điều nào mô tả đúng nhất cơ chế chính dùng để triển khai đoạn 4 (câu 32-40)?"
+  },
+  {
+   "chu": "alternative",
+   "doc": "/ɔːlˈtɜːrnətɪv/",
+   "nghia": "phương án thay thế; (tính từ) thay thế, khác",
+   "nhom": "Phát triển lập luận",
+   "viDu": "Which of the following is the best alternative to the citation provided in paragraph 2?",
+   "viDuNghia": "Lựa chọn nào là cách trích dẫn thay thế tốt nhất cho trích dẫn ở đoạn 2?"
+  },
+  {
+   "chu": "concession",
+   "doc": "/kənˈseʃn/",
+   "nghia": "sự nhượng bộ – thừa nhận ý của phía phản đối đúng một phần trước khi bác bỏ (rebuttal)",
+   "nhom": "Phát triển lập luận",
+   "viDu": "According to Clark, coordination means — interpretation and negotiation. / argumentation and concessions. / working in groups. / assistance and protection.",
+   "viDuNghia": "Theo Clark, sự phối hợp (coordination) nghĩa là — diễn giải và thương lượng. / lập luận và nhượng bộ. / làm việc nhóm. / hỗ trợ và bảo vệ."
+  },
+  {
+   "chu": "rebuttal",
+   "doc": "/rɪˈbʌtl/",
+   "nghia": "lời bác bỏ – phần đáp trả phản biện (counterargument) để bảo vệ quan điểm của người viết",
+   "nhom": "Phát triển lập luận",
+   "viDu": "The essay's counterargument and rebuttal are presented in ________.",
+   "viDuNghia": "Luận điểm phản bác và sự bác bỏ của bài luận được trình bày ở ________."
+  },
+  {
+   "chu": "stance",
+   "doc": "/stæns/",
+   "nghia": "lập trường, quan điểm của người viết về vấn đề",
+   "nhom": "Phát triển lập luận",
+   "viDu": "Paragraph 1. Which of the following statements correctly describes how a stance is presented in the paragraph?",
+   "viDuNghia": "Đoạn 1. Phát biểu nào sau đây mô tả đúng cách lập trường được trình bày trong đoạn văn?"
+  },
+  {
+   "chu": "MLA style",
+   "doc": "/ˌem el ˈeɪ staɪl/",
+   "nghia": "kiểu trích dẫn MLA: trong bài ghi (Tác giả số-trang), cuối bài là trang Works Cited",
+   "nhom": "Trích dẫn MLA & APA",
+   "viDu": "Of the three in-text citations, which of the following were appropriately cited according to MLA style?",
+   "viDuNghia": "Trong ba trích dẫn trong bài, trích dẫn nào được ghi đúng theo chuẩn MLA?"
+  },
+  {
+   "chu": "APA style",
+   "doc": "/ˌeɪ piː ˈeɪ staɪl/",
+   "nghia": "kiểu trích dẫn APA: trong bài ghi (Tác giả, năm), cuối bài là mục References",
+   "nhom": "Trích dẫn MLA & APA",
+   "viDu": "Both the in-text citations and references follow proper APA style.",
+   "viDuNghia": "Cả trích dẫn trong bài lẫn mục tham khảo đều theo đúng kiểu APA."
+  },
+  {
+   "chu": "Works Cited",
+   "doc": "/ˌwɜːrks ˈsaɪtɪd/",
+   "nghia": "trang \"Tài liệu đã trích\" cuối bài theo MLA, xếp theo vần họ tác giả",
+   "nhom": "Trích dẫn MLA & APA",
+   "viDu": "Are the sources in Works Cited correctly styled?",
+   "viDuNghia": "Các nguồn trong mục Works Cited có được trình bày đúng chuẩn không?"
+  },
+  {
+   "chu": "et al.",
+   "doc": "/et ˈæl/",
+   "nghia": "\"và những người khác\" (tiếng Latinh et alii): dùng khi nguồn có nhiều tác giả, vd (Masson et al.)",
+   "nhom": "Trích dẫn MLA & APA",
+   "viDu": "Studies prove that it may be beneficial to provide multi-focused interventions (Elison et al., 2016).",
+   "viDuNghia": "Các nghiên cứu chứng minh rằng những biện pháp can thiệp đa trọng tâm có thể có lợi (Elison và cộng sự, 2016)."
+  },
+  {
+   "chu": "long quote",
+   "doc": "/ˌlɔːŋ ˈkwoʊt/",
+   "nghia": "trích dẫn dài (APA: từ 40 từ): trình bày thành khối thụt lề, không dùng ngoặc kép",
+   "nhom": "Trích dẫn MLA & APA",
+   "viDu": "Is this long quote properly formatted according to APA guidelines?",
+   "viDuNghia": "Trích dẫn dài này có được định dạng đúng theo hướng dẫn của APA không?"
+  },
+  {
+   "chu": "quotation mark",
+   "doc": "/kwoʊˈteɪʃn mɑːrk/",
+   "nghia": "dấu ngoặc kép, bắt buộc khi chép nguyên văn nguồn; (lập trình) dấu nháy bao quanh chuỗi",
+   "nhom": "Trích dẫn MLA & APA",
+   "viDu": "According to APA guidelines, a quotation of more than 40 words is indented and the quotation marks are removed.",
+   "viDuNghia": "Theo hướng dẫn APA, đoạn trích dài hơn 40 từ được thụt lề và bỏ dấu ngoặc kép."
+  },
+  {
+   "chu": "quoting",
+   "doc": "/ˈkwoʊtɪŋ/",
+   "nghia": "trích nguyên văn — một trong ba cách dùng nguồn (quoting, paraphrasing, summarising)",
+   "nhom": "Trích dẫn MLA & APA",
+   "viDu": "In paragraph [4], a source is used. The author employs this source by quoting.",
+   "viDuNghia": "Ở đoạn [4] có dùng một nguồn. Tác giả dùng nguồn này bằng cách trích nguyên văn."
+  },
+  {
+   "chu": "paraphrasing",
+   "doc": "/ˈpærəfreɪzɪŋ/",
+   "nghia": "việc diễn đạt lại ý của nguồn bằng lời mình, độ dài tương đương bản gốc",
+   "nhom": "Trích dẫn MLA & APA",
+   "viDu": "What is the correct paraphrasing of sentence 11?",
+   "viDuNghia": "Cách diễn giải (paraphrase) nào đúng cho câu 11?"
+  },
+  {
+   "chu": "summarise",
+   "doc": "/ˈsʌməraɪz/",
+   "nghia": "tóm tắt (chính tả Anh–Úc của summarize)",
+   "nhom": "Trích dẫn MLA & APA",
+   "viDu": "The conclusion summarises the main points, reiterates the argument, and adds a final thought.",
+   "viDuNghia": "Kết bài tóm tắt các ý chính, nhắc lại lập luận và thêm một suy nghĩ cuối cùng."
+  },
+  {
+   "chu": "credit",
+   "doc": "/ˈkredɪt/",
+   "nghia": "sự ghi nhận công; give credit to the author = ghi nhận tác giả; nghĩa khác: tín chỉ",
+   "nhom": "Trích dẫn MLA & APA",
+   "viDu": "In paragraph [3], the author uses a name to credit a source, but the reference is inappropriate.",
+   "viDuNghia": "Ở đoạn [3], tác giả dùng một cái tên để ghi nguồn, nhưng cách trích dẫn đó chưa phù hợp."
+  },
+  {
+   "chu": "acknowledge",
+   "doc": "/əkˈnɑːlɪdʒ/",
+   "nghia": "ghi nhận, thừa nhận (nguồn, công sức của người khác)",
+   "nhom": "Trích dẫn MLA & APA",
+   "viDu": "Students must learn how to evaluate online sources critically and acknowledge the technological help they use.",
+   "viDuNghia": "Sinh viên phải học cách đánh giá nguồn trực tuyến một cách phản biện và ghi nhận sự hỗ trợ công nghệ mà mình dùng."
+  },
+  {
+   "chu": "formatting",
+   "doc": "/ˈfɔːrmætɪŋ/",
+   "nghia": "cách trình bày, định dạng (lề, cỡ chữ, cách ghi nguồn)",
+   "nhom": "Trích dẫn MLA & APA",
+   "viDu": "Is the APA formatting accurate and consistent, and are the sources reliable?",
+   "viDuNghia": "Định dạng APA có chính xác và nhất quán không, và các nguồn có đáng tin cậy không?"
+  },
+  {
+   "chu": "accurate",
+   "doc": "/ˈækjərət/",
+   "nghia": "chính xác",
+   "nhom": "Trích dẫn MLA & APA",
+   "viDu": "Which statement below gives an accurate description of the introduction?",
+   "viDuNghia": "Phát biểu nào sau đây mô tả đúng phần mở bài?"
+  },
+  {
+   "chu": "appropriately",
+   "doc": "/əˈproʊpriətli/",
+   "nghia": "một cách phù hợp, đúng cách (appropriately cited = trích đúng quy cách)",
+   "nhom": "Trích dẫn MLA & APA",
+   "viDu": "Is the source cited appropriately according to MLA style?",
+   "viDuNghia": "Nguồn này có được trích dẫn đúng theo kiểu MLA không?"
+  },
+  {
+   "chu": "citation",
+   "doc": "/saɪˈteɪʃn/",
+   "nghia": "trích dẫn – chỗ ghi nguồn trong bài; gồm in-text citation và mục tương ứng trong Works Cited/References",
+   "nhom": "Trích dẫn MLA & APA",
+   "viDu": "Why does the author include the citation \"[FAO, 2021]\" in the discussion of agriculture as a cause of deforestation?",
+   "viDuNghia": "Vì sao tác giả đưa trích dẫn \"[FAO, 2021]\" vào phần bàn về nông nghiệp là nguyên nhân phá rừng?"
+  },
+  {
+   "chu": "cite",
+   "doc": "/saɪt/",
+   "nghia": "trích dẫn, dẫn nguồn – nêu tác giả/tài liệu mình đã dùng theo chuẩn MLA hoặc APA",
+   "nhom": "Trích dẫn MLA & APA",
+   "viDu": "Are any of the in-text citations below cited incorrectly according to the MLA style? If so, which one(s)?",
+   "viDuNghia": "Có trích dẫn nào trong bài dưới đây bị trích sai theo kiểu MLA không? Nếu có, là (những) trích dẫn nào?"
+  },
+  {
+   "chu": "in-text citation",
+   "doc": "/ˌɪn tekst saɪˈteɪʃn/",
+   "nghia": "trích dẫn trong bài, vd (Smith 25) theo MLA hoặc (Smith, 2020) theo APA, khớp với một mục ở danh sách nguồn cuối bài",
+   "nhom": "Trích dẫn MLA & APA",
+   "viDu": "In paragraph [6], is the in-text citation correctly formatted to match the corresponding Works Cited entry?",
+   "viDuNghia": "Ở đoạn [6], trích dẫn trong bài có đúng định dạng khớp với mục tương ứng trong Works Cited không?"
+  },
+  {
+   "chu": "compulsory",
+   "doc": "/kəmˈpʌlsəri/",
+   "nghia": "bắt buộc (= mandatory, required)",
+   "nhom": "Từ trong bài đọc về giáo dục",
+   "viDu": "Read the model argumentative essay \"Compulsory First-Year Academic Writing Courses\", then answer: Which of the following statements are correct?",
+   "viDuNghia": "Đọc bài luận mẫu \"Compulsory First-Year Academic Writing Courses\", rồi trả lời: Phát biểu nào sau đây đúng?"
+  },
+  {
+   "chu": "remedial",
+   "doc": "/rɪˈmiːdiəl/",
+   "nghia": "(lớp, khoá) phụ đạo, bổ túc cho người còn yếu",
+   "nhom": "Từ trong bài đọc về giáo dục",
+   "viDu": "From this perspective, mandatory instruction in integrity could appear unnecessary or remedial.",
+   "viDuNghia": "Nhìn từ góc độ này, việc bắt buộc dạy về liêm chính có vẻ không cần thiết hoặc chỉ mang tính phụ đạo."
+  },
+  {
+   "chu": "foundational",
+   "doc": "/faʊnˈdeɪʃənl/",
+   "nghia": "mang tính nền tảng",
+   "nhom": "Từ trong bài đọc về giáo dục",
+   "viDu": "Providing structured instruction in writing with integrity is therefore not remedial but foundational.",
+   "viDuNghia": "Vì vậy, dạy viết có liêm chính một cách bài bản không phải là phụ đạo mà là nền tảng."
+  },
+  {
+   "chu": "higher education",
+   "doc": "/ˌhaɪər ˌedʒuˈkeɪʃn/",
+   "nghia": "giáo dục đại học (sau phổ thông)",
+   "nhom": "Từ trong bài đọc về giáo dục",
+   "viDu": "Read the comparative essay \"Writing in Higher Education versus Writing in Secondary School\", then answer the questions.",
+   "viDuNghia": "Đọc bài luận so sánh \"Writing in Higher Education versus Writing in Secondary School\" (Viết ở bậc đại học và viết ở bậc trung học), rồi trả lời các câu hỏi."
+  },
+  {
+   "chu": "secondary education",
+   "doc": "/ˈsekənderi ˌedʒuˈkeɪʃn/",
+   "nghia": "giáo dục trung học",
+   "nhom": "Từ trong bài đọc về giáo dục",
+   "viDu": "Through to the final year of secondary education, many students' experiences of writing are limited to far fewer forms of essay writing.",
+   "viDuNghia": "Cho tới năm cuối bậc trung học, trải nghiệm viết của nhiều học sinh chỉ gói trong số ít dạng bài luận hơn hẳn."
+  },
+  {
+   "chu": "institution",
+   "doc": "/ˌɪnstɪˈtuːʃn/",
+   "nghia": "cơ sở, tổ chức (educational institution = cơ sở giáo dục)",
+   "nhom": "Từ trong bài đọc về giáo dục",
+   "viDu": "What are the main causes of stress among young adults, and how can educational institutions help reduce it?",
+   "viDuNghia": "Đâu là nguyên nhân chính gây stress ở người trẻ, và các cơ sở giáo dục có thể giúp giảm stress bằng cách nào?"
+  },
+  {
+   "chu": "educator",
+   "doc": "/ˈedʒukeɪtər/",
+   "nghia": "nhà giáo dục, người làm nghề dạy học",
+   "nhom": "Từ trong bài đọc về giáo dục",
+   "viDu": "To summarize, although AI brings advantages to learning, it cannot replace the role of educators in the classroom.",
+   "viDuNghia": "Tóm lại, dù AI đem lại lợi ích cho việc học, nó không thể thay vai trò của nhà giáo trong lớp học."
+  },
+  {
+   "chu": "instructor",
+   "doc": "/ɪnˈstrʌktər/",
+   "nghia": "giảng viên, người hướng dẫn",
+   "nhom": "Từ trong bài đọc về giáo dục",
+   "viDu": "Instructors continue to play a crucial role in guiding and supporting students.",
+   "viDuNghia": "Giảng viên vẫn giữ vai trò then chốt trong việc hướng dẫn và hỗ trợ sinh viên."
+  },
+  {
+   "chu": "tuition fee",
+   "doc": "/tuˈɪʃn fiː/",
+   "nghia": "học phí",
+   "nhom": "Từ trong bài đọc về giáo dục",
+   "viDu": "And is it fair to add more cost to already expensive tuition fees?",
+   "viDuNghia": "Và liệu có công bằng không khi cộng thêm chi phí vào mức học phí vốn đã đắt đỏ?"
+  },
+  {
+   "chu": "studying abroad",
+   "doc": "/ˌstʌdiɪŋ əˈbrɔːd/",
+   "nghia": "việc du học",
+   "nhom": "Từ trong bài đọc về giáo dục",
+   "viDu": "Read the review of a research paper on studying abroad, then answer the question that follows.",
+   "viDuNghia": "Đọc bài nhận xét về một nghiên cứu bàn chuyện du học, rồi trả lời câu hỏi bên dưới."
+  },
+  {
+   "chu": "international student",
+   "doc": "/ˌɪntərˈnæʃnəl ˈstuːdnt/",
+   "nghia": "sinh viên quốc tế, du học sinh",
+   "nhom": "Từ trong bài đọc về giáo dục",
+   "viDu": "In addition, Germany has free education for its college students as well as for international students.",
+   "viDuNghia": "Ngoài ra, Đức miễn học phí cho sinh viên đại học của mình cũng như cho sinh viên quốc tế."
+  },
+  {
+   "chu": "visa status",
+   "doc": "/ˈviːzə ˌsteɪtəs/",
+   "nghia": "tình trạng thị thực (loại visa, còn hạn hay không)",
+   "nhom": "Từ trong bài đọc về giáo dục",
+   "viDu": "Is it fair to treat students differently based on their language backgrounds or visa status?",
+   "viDuNghia": "Liệu có công bằng không khi đối xử khác nhau với sinh viên dựa trên nền tảng ngôn ngữ hay tình trạng thị thực của họ?"
+  },
+  {
+   "chu": "blended learning",
+   "doc": "/ˌblendɪd ˈlɜːrnɪŋ/",
+   "nghia": "học kết hợp: vừa học trực tiếp trên lớp vừa học trực tuyến",
+   "nhom": "Từ trong bài đọc về giáo dục",
+   "viDu": "Blended learning allows for a flexible and dynamic learning experience, using the strengths of both AI and educators.",
+   "viDuNghia": "Học kết hợp cho phép một trải nghiệm học linh hoạt và sinh động, tận dụng thế mạnh của cả AI lẫn nhà giáo."
+  },
+  {
+   "chu": "emerging scholar",
+   "doc": "/ɪˈmɜːrdʒɪŋ ˈskɑːlər/",
+   "nghia": "học giả trẻ, người mới bước vào giới nghiên cứu (cách gọi sinh viên năm nhất trong bài đọc)",
+   "nhom": "Từ trong bài đọc về giáo dục",
+   "viDu": "Read the model argumentative essay \"Writing with Integrity: Fundamentals for Emerging Scholars\", then answer: Which of the following statements are correct?",
+   "viDuNghia": "Đọc bài luận mẫu \"Writing with Integrity: Fundamentals for Emerging Scholars\", rồi trả lời: Phát biểu nào sau đây đúng?"
+  },
+  {
+   "chu": "illiterate",
+   "doc": "/ɪˈlɪtərət/",
+   "nghia": "mù chữ; rộng hơn: thiếu hiểu biết về một lĩnh vực",
+   "nhom": "Từ trong bài đọc về giáo dục",
+   "viDu": "The answer is simple: I am not illiterate, nor was I illiterate when I entered the University.",
+   "viDuNghia": "Câu trả lời rất đơn giản: tôi không mù chữ, và khi vào đại học tôi cũng không hề mù chữ."
+  },
+  {
+   "chu": "affordable",
+   "doc": "/əˈfɔːrdəbl/",
+   "nghia": "giá phải chăng, vừa túi tiền",
+   "nhom": "Từ trong bài đọc về giáo dục",
+   "viDu": "Just as everyone has the right to affordable healthcare, every citizen has the right to be educated.",
+   "viDuNghia": "Cũng như ai cũng có quyền được chăm sóc sức khoẻ với giá phải chăng, mọi công dân đều có quyền được học hành."
+  },
+  {
+   "chu": "realm",
+   "doc": "/relm/",
+   "nghia": "lĩnh vực, địa hạt (the realm of higher education)",
+   "nhom": "Từ trong bài đọc về giáo dục",
+   "viDu": "\"To discuss writing as a skill, then, is to place it in the realm of the technical\" (Mike Rose).",
+   "viDuNghia": "\"Vậy thì bàn về viết như một kỹ năng tức là đặt nó vào địa hạt kỹ thuật\" (Mike Rose)."
+  },
+  {
+   "chu": "children's literature",
+   "doc": "/ˈtʃɪldrənz ˈlɪtrətʃər/",
+   "nghia": "văn học thiếu nhi",
+   "nhom": "Từ trong bài đọc về giáo dục",
+   "viDu": "In paragraph [2], the writer cites the children's literature critic and technology analyst Eliza Dresang ________.",
+   "viDuNghia": "Ở đoạn [2], tác giả trích dẫn nhà phê bình văn học thiếu nhi và chuyên gia công nghệ Eliza Dresang ________."
+  },
+  {
+   "chu": "graphic novel",
+   "doc": "/ˌɡræfɪk ˈnɑːvl/",
+   "nghia": "tiểu thuyết bằng tranh",
+   "nhom": "Từ trong bài đọc về giáo dục",
+   "viDu": "In paragraph [4], the author discusses graphic novels ________.",
+   "viDuNghia": "Ở đoạn [4], tác giả bàn về truyện tranh (graphic novels) ________."
+  },
+  {
+   "chu": "digital age",
+   "doc": "/ˈdɪdʒɪtl eɪdʒ/",
+   "nghia": "thời đại số",
+   "nhom": "Từ trong bài đọc về giáo dục",
+   "viDu": "My cousin is only one of millions of children affected by the growth of the digital age in children's literature.",
+   "viDuNghia": "Em họ tôi chỉ là một trong hàng triệu đứa trẻ chịu ảnh hưởng từ sự lớn mạnh của thời đại số trong văn học thiếu nhi."
+  },
+  {
+   "chu": "virtual reality",
+   "doc": "/ˌvɜːrtʃuəl riˈæləti/",
+   "nghia": "thực tế ảo (VR)",
+   "nhom": "Từ trong bài đọc về giáo dục",
+   "viDu": "An insulting comment on a classmate's picture can create a virtual reality where victims feel judged.",
+   "viDuNghia": "Một bình luận lăng mạ dưới ảnh của bạn cùng lớp có thể tạo ra một thực tế ảo nơi nạn nhân thấy mình bị phán xét."
+  },
+  {
+   "chu": "innovative",
+   "doc": "/ˈɪnəveɪtɪv/",
+   "nghia": "có tính đổi mới, sáng tạo",
+   "nhom": "Từ trong bài đọc về giáo dục",
+   "viDu": "Wasatch Gardens provides an innovative solution to the problem of food insecurity by helping communities start community gardens.",
+   "viDuNghia": "Wasatch Gardens đưa ra một giải pháp đổi mới cho vấn đề mất an ninh lương thực bằng cách giúp các cộng đồng lập vườn cộng đồng."
+  },
+  {
+   "chu": "interact",
+   "doc": "/ˌɪntərˈækt/",
+   "nghia": "tương tác",
+   "nhom": "Từ trong bài đọc về giáo dục",
+   "viDu": "Computers in the classroom also allow students to tackle otherwise inaccessible real-world problems and interact with professionals from around the world.",
+   "viDuNghia": "Máy tính trong lớp còn cho học sinh xử lý những vấn đề thực tế vốn ngoài tầm với và tương tác với giới chuyên môn khắp thế giới."
+  },
+  {
+   "chu": "sentence",
+   "doc": "/ˈsentəns/",
+   "nghia": "câu (văn) — đơn vị trong đoạn: topic sentence, concluding sentence… · (luật, bài đọc về nhà tù) bản án: a prison sentence = án tù",
+   "nhom": "Bố cục & đoạn văn",
+   "viDu": "In sentence 5, the word \"it\" refers to ____.",
+   "viDuNghia": "Trong câu 5, từ \"it\" chỉ điều gì?"
+  },
+  {
+   "chu": "theme",
+   "doc": "/θiːm/",
+   "nghia": "(bài đọc, bài luận) chủ đề – ý chính xuyên suốt đoạn/bài · (Android, PRM392) theme: bộ kiểu dáng áp cho cả ứng dụng hoặc cả Activity",
+   "nhom": "Bố cục & đoạn văn",
+   "viDu": "Transition sentence to the theme of the next paragraph",
+   "viDuNghia": "Câu chuyển tiếp sang chủ đề của đoạn kế tiếp"
+  },
+  {
+   "chu": "first-year",
+   "doc": "/ˌfɜːrst ˈjɪr/",
+   "nghia": "năm nhất (first-year students = sinh viên năm nhất)",
+   "nhom": "Từ trong bài đọc về giáo dục",
+   "viDu": "Developing genre awareness is perhaps the most difficult challenge first-year students face.",
+   "viDuNghia": "Hình thành nhận thức về thể loại có lẽ là thử thách khó nhất mà sinh viên năm nhất gặp phải."
+  },
+  {
+   "chu": "English as an additional language",
+   "nghia": "tiếng Anh là ngôn ngữ bổ sung (EAL): người học tiếng Anh ngoài tiếng mẹ đẻ, vd du học sinh",
+   "nhom": "Từ trong bài đọc về giáo dục",
+   "viDu": "It could be argued that requiring only international or EAL students to take certain courses discriminates against them.",
+   "viDuNghia": "Có thể lập luận rằng việc chỉ bắt sinh viên quốc tế hoặc sinh viên EAL (học tiếng Anh như ngôn ngữ bổ sung) học một số môn là phân biệt đối xử với họ."
+  },
+  {
+   "chu": "discriminate",
+   "doc": "/dɪˈskrɪmɪneɪt/",
+   "nghia": "phân biệt đối xử (discriminate against sb = đối xử bất công với ai); nghĩa khác: phân biệt, nhận ra khác biệt",
+   "nhom": "Từ trong bài đọc về giáo dục",
+   "viDu": "It could be argued that requiring only international or EAL students to take certain courses discriminates against them.",
+   "viDuNghia": "Có thể lập luận rằng việc chỉ bắt sinh viên quốc tế hoặc sinh viên EAL học một số môn là phân biệt đối xử với họ."
+  },
+  {
+   "chu": "legitimacy",
+   "doc": "/lɪˈdʒɪtɪməsi/",
+   "nghia": "tính chính đáng, sự được công nhận là hợp lệ, ngang hàng",
+   "nhom": "Từ trong bài đọc về giáo dục",
+   "viDu": "This suggests that some students are not equal and lack legitimacy compared to others (Flowerdew, 2000).",
+   "viDuNghia": "Điều này ngụ ý rằng một số sinh viên không bình đẳng và kém chính đáng so với những người khác (Flowerdew, 2000)."
+  },
+  {
+   "chu": "furthermore",
+   "doc": "/ˈfɜːrðərmɔːr/",
+   "nghia": "hơn nữa, thêm vào đó (từ nối bổ sung ý, trang trọng; ≈ moreover)",
+   "nhom": "Từ nối & chuyển ý",
+   "viDu": "Furthermore, deforestation causes soil erosion and degradation.",
+   "viDuNghia": "Hơn nữa, nạn phá rừng gây xói mòn và thoái hoá đất."
+  },
+  {
+   "chu": "in contrast",
+   "doc": "/ɪn ˈkɑːntræst/",
+   "nghia": "ngược lại, trái lại (từ nối chỉ sự đối lập giữa hai đối tượng — hay dùng trong bài so sánh)",
+   "nhom": "Từ nối & chuyển ý",
+   "viDu": "In contrast, in secondary education, students tend to study in smaller classes, where they have a more personal relationship with their teachers.",
+   "viDuNghia": "Ngược lại, ở bậc trung học, học sinh thường học trong lớp nhỏ hơn, nơi các em có quan hệ gần gũi hơn với thầy cô."
+  },
+  {
+   "chu": "on the other hand",
+   "nghia": "mặt khác (nêu khía cạnh đối lập của cùng vấn đề)",
+   "nhom": "Từ nối & chuyển ý",
+   "viDu": "On the other hand, solar and wind power also impact the environment in negative ways as well.",
+   "viDuNghia": "Mặt khác, điện mặt trời và điện gió cũng tác động tiêu cực tới môi trường."
+  },
+  {
+   "chu": "as a result",
+   "doc": "/æz ə rɪˈzʌlt/",
+   "nghia": "kết quả là, vì vậy (từ nối chỉ hệ quả — dùng nhiều trong bài nhân-quả)",
+   "nhom": "Từ nối & chuyển ý",
+   "viDu": "As a result, they have to resort to using older vehicles: the older the vehicle, the more likely it is to be harmful to the environment.",
+   "viDuNghia": "Kết quả là họ phải dùng những chiếc xe cũ hơn: xe càng cũ thì càng dễ gây hại cho môi trường."
+  },
+  {
+   "chu": "for instance",
+   "doc": "/fər ˈɪnstəns/",
+   "nghia": "ví dụ, chẳng hạn (= for example; dẫn vào ví dụ minh hoạ)",
+   "nhom": "Từ nối & chuyển ý",
+   "viDu": "For instance, wind turbines need a large amount of space for the wind to affect the propellers that power them.",
+   "viDuNghia": "Chẳng hạn, tua-bin gió cần một khoảng không gian rộng để gió tác động vào các cánh quạt làm chúng quay."
+  },
+  {
+   "chu": "similarly",
+   "doc": "/ˈsɪmələrli/",
+   "nghia": "tương tự (từ nối chỉ sự giống nhau)",
+   "nhom": "Từ nối & chuyển ý",
+   "viDu": "Similarly, soybean farming, primarily used for livestock feed, has led to significant deforestation.",
+   "viDuNghia": "Tương tự, việc trồng đậu nành, chủ yếu làm thức ăn chăn nuôi, đã dẫn đến nạn phá rừng nghiêm trọng."
+  },
+  {
+   "chu": "likewise",
+   "doc": "/ˈlaɪkwaɪz/",
+   "nghia": "cũng vậy, tương tự như thế (≈ similarly)",
+   "nhom": "Từ nối & chuyển ý",
+   "viDu": "Likewise, athletes who use gene therapy to alter their bodies and enhance their performance will create an uneven playing field.",
+   "viDuNghia": "Tương tự, những vận động viên dùng liệu pháp gen để thay đổi cơ thể và tăng thành tích sẽ tạo ra một sân chơi không công bằng."
+  },
+  {
+   "chu": "admittedly",
+   "doc": "/ədˈmɪtɪdli/",
+   "nghia": "phải thừa nhận rằng — mở đầu câu nhượng bộ (concession) trước khi phản bác",
+   "nhom": "Từ nối & chuyển ý",
+   "viDu": "Admittedly, cost is an unavoidable factor in any decision; however, issues such as fairness, equality, and learning are far more important.",
+   "viDuNghia": "Phải thừa nhận rằng chi phí là yếu tố không tránh khỏi trong mọi quyết định; tuy nhiên, những vấn đề như công bằng, bình đẳng và việc học quan trọng hơn nhiều."
+  },
+  {
+   "chu": "granted",
+   "doc": "/ˈɡræntɪd/",
+   "nghia": "(đầu câu) đành rằng, phải công nhận — dấu hiệu câu nhượng bộ; nghĩa khác: được cấp, được trao",
+   "nhom": "Từ nối & chuyển ý",
+   "viDu": "Granted, academic language is a new language for all first-year students, and many do need to take an extra class that teaches them academic writing.",
+   "viDuNghia": "Đành rằng ngôn ngữ học thuật là ngôn ngữ mới với mọi sinh viên năm nhất, và nhiều bạn thực sự cần học thêm một lớp dạy viết học thuật."
+  },
+  {
+   "chu": "in this regard",
+   "nghia": "về mặt này, về điểm này (nối câu sau với ý vừa nêu)",
+   "nhom": "Từ nối & chuyển ý",
+   "viDu": "The bad actions of a few students should not cause colleges to abandon their efforts in this regard.",
+   "viDuNghia": "Hành động xấu của một vài sinh viên không nên khiến các trường từ bỏ nỗ lực của mình về mặt này."
+  },
+  {
+   "chu": "in other words",
+   "nghia": "nói cách khác (diễn đạt lại ý vừa nói cho rõ hơn)",
+   "nhom": "Từ nối & chuyển ý",
+   "viDu": "In other words, who should pay for providing courses to all first-year students?",
+   "viDuNghia": "Nói cách khác, ai nên trả tiền để mở các khoá học cho mọi sinh viên năm nhất?"
+  },
+  {
+   "chu": "despite",
+   "doc": "/dɪˈspaɪt/",
+   "nghia": "mặc dù, bất chấp (+ danh từ/V-ing; khác although + mệnh đề)",
+   "nhom": "Từ nối & chuyển ý",
+   "viDu": "Despite the dangers, more people are starting to think that taking on this challenge and going to Mars are worthwhile.",
+   "viDuNghia": "Bất chấp những nguy hiểm, ngày càng nhiều người bắt đầu nghĩ rằng nhận thử thách này và lên Sao Hoả là đáng giá."
+  }
+ ]
+}

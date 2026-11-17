@@ -1,0 +1,744 @@
+{
+ "ma": "ssl101c-2",
+ "nn": "en",
+ "ten": "SSL101c · 2. Giải quyết vấn đề & tư duy phản biện",
+ "moTa": "Academic Skills for University Success, phần 2: quy trình giải quyết vấn đề (Polya), chiến lược sáng tạo, lập luận – bằng chứng, các kiểu suy luận và nguỵ biện, thái độ của người tư duy phản biện. Từ lấy từ đề FE thật; ví dụ phần lớn là câu hỏi thật trong đề.",
+ "bieuTuong": "lightbulb.fill",
+ "thuTu": -985,
+ "tu": [
+  {
+   "chu": "problem solving",
+   "doc": "/ˈprɑːbləm ˌsɑːlvɪŋ/",
+   "nghia": "giải quyết vấn đề. Quy trình 4 bước của Polya: hiểu vấn đề, lập kế hoạch, thực hiện, nhìn lại",
+   "nhom": "Giải quyết vấn đề",
+   "viDu": "What is the precise sequence of problem-solving process?",
+   "viDuNghia": "Trình tự chính xác của quy trình giải quyết vấn đề là gì?"
+  },
+  {
+   "chu": "well-defined problem",
+   "doc": "/ˌwel dɪˈfaɪnd ˈprɑːbləm/",
+   "nghia": "vấn đề xác định rõ: đủ dữ kiện, mục tiêu rõ, có một đáp án đúng (vd bài toán có công thức)",
+   "nhom": "Giải quyết vấn đề",
+   "viDu": "Problem which has a clear goal and often uses basic concepts and formulas, and does not require analysis or evaluation, is a well-defined problem.",
+   "viDuNghia": "Vấn đề có mục tiêu rõ ràng, thường dùng khái niệm và công thức cơ bản, không đòi hỏi phân tích hay đánh giá là vấn đề xác định rõ."
+  },
+  {
+   "chu": "ill-defined problem",
+   "doc": "/ˌɪl dɪˈfaɪnd ˈprɑːbləm/",
+   "nghia": "vấn đề không xác định rõ: mục tiêu mơ hồ, thiếu dữ kiện, nhiều lời giải chấp nhận được (vd thiết kế một chương trình học)",
+   "nhom": "Giải quyết vấn đề",
+   "viDu": "Ill-defined problem refers to a problem that:",
+   "viDuNghia": "Vấn đề \"ill-defined\" (chưa được xác định rõ) là vấn đề mà:"
+  },
+  {
+   "chu": "knowledge-rich problem",
+   "doc": "/ˈnɑːlɪdʒ rɪtʃ ˈprɑːbləm/",
+   "nghia": "vấn đề đòi hỏi nhiều kiến thức nền chuyên biệt của một lĩnh vực mới giải được",
+   "nhom": "Giải quyết vấn đề",
+   "viDu": "Diagnosing a patient is a knowledge-rich problem: it needs years of medical training.",
+   "viDuNghia": "Chẩn đoán bệnh là một vấn đề giàu tri thức: cần nhiều năm đào tạo y khoa."
+  },
+  {
+   "chu": "devise",
+   "doc": "/dɪˈvaɪz/",
+   "nghia": "nghĩ ra, vạch ra (kế hoạch, cách làm). Devise a plan = bước 2 trong quy trình của Polya",
+   "nhom": "Giải quyết vấn đề",
+   "viDu": "What is the correct order of the four-step problem-solving process? Understand the problem - devise a plan - carry out the plan - look back at what you've done.",
+   "viDuNghia": "Thứ tự đúng của quy trình giải quyết vấn đề bốn bước là gì? Hiểu vấn đề - lập kế hoạch - thực hiện kế hoạch - nhìn lại điều đã làm."
+  },
+  {
+   "chu": "carry out",
+   "doc": "/ˌkæri ˈaʊt/",
+   "nghia": "tiến hành, thực hiện (kế hoạch, thí nghiệm, nghiên cứu) — bước 3 của Polya",
+   "nhom": "Giải quyết vấn đề",
+   "viDu": "After devising a plan, you carry out the plan step by step.",
+   "viDuNghia": "Sau khi lập kế hoạch, bạn thực hiện kế hoạch từng bước một."
+  },
+  {
+   "chu": "look back",
+   "doc": "/ˌlʊk ˈbæk/",
+   "nghia": "nhìn lại, rà soát kết quả và cách làm sau khi giải xong — bước 4 của Polya",
+   "nhom": "Giải quyết vấn đề",
+   "viDu": "After you solve the problem, look back and check whether your answer makes sense.",
+   "viDuNghia": "Sau khi giải xong, hãy nhìn lại và kiểm tra xem đáp án có hợp lý không."
+  },
+  {
+   "chu": "laundry list",
+   "doc": "/ˈlɔːndri lɪst/",
+   "nghia": "danh sách liệt kê dài, rời rạc: kể nguyên nhân mà không chỉ ra chúng liên quan nhau thế nào (cách phân tích yếu)",
+   "nhom": "Giải quyết vấn đề",
+   "viDu": "What problems are there with the following 'laundry list' approach to the following issue: Too many private cars => Inadequate public transport => congestion.",
+   "viDuNghia": "Cách tiếp cận 'danh sách liệt kê' sau có vấn đề gì: Quá nhiều xe cá nhân => Giao thông công cộng chưa đủ => tắc nghẽn."
+  },
+  {
+   "chu": "systemic",
+   "doc": "/sɪˈstemɪk/",
+   "nghia": "mang tính hệ thống, thuộc về cả hệ thống chứ không riêng một sự việc (systemic causes)",
+   "nhom": "Giải quyết vấn đề",
+   "viDu": "Which of the following solutions demonstrate an understanding of underlying systemic causes rather than just focusing on events?",
+   "viDuNghia": "Giải pháp nào sau đây thể hiện việc hiểu nguyên nhân hệ thống bên dưới thay vì chỉ tập trung vào sự kiện bề mặt?"
+  },
+  {
+   "chu": "underlying",
+   "doc": "/ˌʌndərˈlaɪɪŋ/",
+   "nghia": "nằm bên dưới, là gốc rễ (underlying cause = nguyên nhân sâu xa)",
+   "nhom": "Giải quyết vấn đề",
+   "viDu": "\"In what ways will marketing fundamentally change our needs and wants?\" At university, are you able to disagree with the underlying assumption in this question?",
+   "viDuNghia": "\"Marketing sẽ thay đổi một cách căn bản nhu cầu và mong muốn của chúng ta theo những cách nào?\" Ở đại học, bạn có thể bất đồng với giả định nền tảng của câu hỏi này không?"
+  },
+  {
+   "chu": "cause-effect relationship",
+   "doc": "/ˌkɔːz ɪˈfekt rɪˈleɪʃnʃɪp/",
+   "nghia": "quan hệ nhân quả: cái này dẫn tới cái kia",
+   "nhom": "Giải quyết vấn đề",
+   "viDu": "It assumes that there is a cause-effect relationship between the two trends.",
+   "viDuNghia": "Nó giả định rằng có quan hệ nhân quả giữa hai xu hướng."
+  },
+  {
+   "chu": "case study",
+   "doc": "/ˈkeɪs stʌdi/",
+   "nghia": "nghiên cứu tình huống: phân tích kỹ một trường hợp cụ thể để rút bài học",
+   "nhom": "Giải quyết vấn đề",
+   "viDu": "Which of the following case studies could you choose to use?",
+   "viDuNghia": "Bạn có thể chọn dùng case study nào sau đây?"
+  },
+  {
+   "chu": "visualize",
+   "doc": "/ˈvɪʒuəlaɪz/",
+   "nghia": "hình dung, vẽ ra thành hình/sơ đồ để hiểu vấn đề",
+   "nhom": "Giải quyết vấn đề",
+   "viDu": "Some ways to understand a problem include: — Visualizing the problem. / Checking the marking rubric. / Looking at keywords. / All of the answers are correct.",
+   "viDuNghia": "Một vài cách để hiểu vấn đề gồm: — Hình dung vấn đề. / Xem lại tiêu chí chấm điểm (marking rubric). / Xem các từ khoá. / Tất cả các đáp án đều đúng."
+  },
+  {
+   "chu": "function word",
+   "doc": "/ˈfʌŋkʃn wɜːrd/",
+   "nghia": "từ chỉ thị trong đề bài (list, analyze, compare…): cho biết đề yêu cầu LÀM gì. Mẹo: tìm từ này trước khi viết",
+   "nhom": "Giải quyết vấn đề",
+   "viDu": "Which of the following is a function word in the question \"Analyze the role of a country's culture in shaping its business practices\"?",
+   "viDuNghia": "Đâu là function word trong câu hỏi \"Phân tích vai trò của văn hoá một quốc gia trong việc định hình thực tiễn kinh doanh của nước đó\"?"
+  },
+  {
+   "chu": "clear-cut",
+   "doc": "/ˌklɪr ˈkʌt/",
+   "nghia": "rõ ràng, dứt khoát (a clear-cut answer = đáp án rõ ràng, không phải bàn cãi)",
+   "nhom": "Giải quyết vấn đề",
+   "viDu": "An ill-defined problem has no clear-cut answer.",
+   "viDuNghia": "Một vấn đề không xác định rõ thì không có đáp án dứt khoát."
+  },
+  {
+   "chu": "negative brainstorming",
+   "doc": "/ˈneɡətɪv ˈbreɪnstɔːrmɪŋ/",
+   "nghia": "động não ngược: nghĩ cách làm vấn đề TỆ hơn, rồi đảo lại để ra giải pháp",
+   "nhom": "Chiến lược sáng tạo",
+   "viDu": "A number of ways that we can be creative when solving a problem include all except for: — A random juxtaposition / Negative brainstorming / Doing the opposite / Working forwards",
+   "viDuNghia": "Một số cách sáng tạo khi giải quyết vấn đề bao gồm tất cả NGOẠI TRỪ: — Ghép ngẫu nhiên / Động não ngược / Làm ngược lại / Làm theo hướng thuận (Working forwards)"
+  },
+  {
+   "chu": "random juxtaposition",
+   "doc": "/ˈrændəm ˌdʒʌkstəpəˈzɪʃn/",
+   "nghia": "ghép ngẫu nhiên: lấy một từ bất kỳ trong từ điển rồi tìm cách áp nó vào vấn đề để nảy ý mới",
+   "nhom": "Chiến lược sáng tạo",
+   "viDu": "Which of the following is the most appropriate explanation for the creative strategy \"Random juxtaposition\"?",
+   "viDuNghia": "Cách giải thích nào phù hợp nhất cho chiến lược sáng tạo \"Random juxtaposition\" (kết hợp ngẫu nhiên)?"
+  },
+  {
+   "chu": "juxtaposition",
+   "doc": "/ˌdʒʌkstəpəˈzɪʃn/",
+   "nghia": "sự đặt hai thứ cạnh nhau để so sánh, tạo liên tưởng",
+   "nhom": "Chiến lược sáng tạo",
+   "viDu": "\"Creative Strategies\" includes: — Random Juxtaposition / The Intermediate Impossible / Doing the Opposite / A&B / A, B & C",
+   "viDuNghia": "\"Chiến lược sáng tạo\" bao gồm: — Kết hợp ngẫu nhiên / Điều bất khả trung gian / Làm ngược lại / A&B / A, B & C"
+  },
+  {
+   "chu": "intermediate impossible",
+   "doc": "/ˌɪntərˈmiːdiət ɪmˈpɑːsəbl/",
+   "nghia": "ý tưởng bất khả thi làm bước đệm: nêu một ý không thể thực hiện rồi từ đó đi tới ý khả thi",
+   "nhom": "Chiến lược sáng tạo",
+   "viDu": "\"Creative Strategies\" includes: — Random Juxtaposition / The Intermediate Impossible / Doing the Opposite / A&B / A, B & C",
+   "viDuNghia": "\"Chiến lược sáng tạo\" bao gồm: — Kết hợp ngẫu nhiên / Điều bất khả trung gian / Làm ngược lại / A&B / A, B & C"
+  },
+  {
+   "chu": "analogy",
+   "doc": "/əˈnælədʒi/",
+   "nghia": "phép loại suy, so sánh tương tự: dùng một việc quen để giải thích việc khác",
+   "nhom": "Chiến lược sáng tạo",
+   "viDu": "One analogy people often use in solving a special case is:",
+   "viDuNghia": "Một loại analogy (phép loại suy) người ta thường dùng khi giải quyết trường hợp đặc biệt là:"
+  },
+  {
+   "chu": "working backwards",
+   "doc": "/ˈwɜːrkɪŋ ˈbækwərdz/",
+   "nghia": "làm ngược: bắt đầu từ kết quả mong muốn rồi lần về điểm xuất phát",
+   "nhom": "Chiến lược sáng tạo",
+   "viDu": "Working backwards, we start from the exam date and plan each week of revision.",
+   "viDuNghia": "Làm ngược lại, ta bắt đầu từ ngày thi rồi lên kế hoạch ôn cho từng tuần."
+  },
+  {
+   "chu": "empowerment",
+   "doc": "/ɪmˈpaʊərmənt/",
+   "nghia": "sự trao quyền: cho nhân viên/sinh viên quyền và nguồn lực để tự quyết định",
+   "nhom": "Từ trong tình huống",
+   "viDu": "She notes that empowerment is nothing more than giving employees autonomy.",
+   "viDuNghia": "Cô ấy cho rằng empowerment (trao quyền) chỉ đơn giản là cho nhân viên quyền tự chủ."
+  },
+  {
+   "chu": "morale",
+   "doc": "/məˈræl/",
+   "nghia": "tinh thần, nhuệ khí của tập thể. Đừng nhầm với moral (đạo đức)",
+   "nhom": "Từ trong tình huống",
+   "viDu": "A case study of a small, local business with high morale, high productivity and strong employee and customer loyalty",
+   "viDuNghia": "Case study về một doanh nghiệp nhỏ, địa phương với tinh thần cao, năng suất cao và lòng trung thành mạnh của nhân viên/khách hàng"
+  },
+  {
+   "chu": "absenteeism",
+   "doc": "/ˌæbsənˈtiːɪzəm/",
+   "nghia": "tình trạng hay vắng mặt, nghỉ làm/nghỉ học không lý do",
+   "nhom": "Từ trong tình huống",
+   "viDu": "The company has low morale, low productivity and high absenteeism.",
+   "viDuNghia": "Công ty có tinh thần làm việc thấp, năng suất thấp và tỉ lệ vắng mặt cao."
+  },
+  {
+   "chu": "productivity",
+   "doc": "/ˌproʊdʌkˈtɪvəti/",
+   "nghia": "năng suất (lao động, làm việc)",
+   "nhom": "Từ trong tình huống",
+   "viDu": "Workers are angry about the accidents and are threatening strikes, and management are worried about their employees' safety and loss of productivity.",
+   "viDuNghia": "Công nhân tức giận về các vụ tai nạn và đe doạ đình công, còn ban quản lý lo lắng về sự an toàn của nhân viên và việc giảm năng suất."
+  },
+  {
+   "chu": "loyalty",
+   "doc": "/ˈlɔɪəlti/",
+   "nghia": "lòng trung thành (customer loyalty = sự gắn bó của khách hàng)",
+   "nhom": "Từ trong tình huống",
+   "viDu": "A case study of a major multi-national company with high morale, high productivity and strong employee and customer loyalty",
+   "viDuNghia": "Case study về một tập đoàn đa quốc gia lớn với tinh thần cao, năng suất cao và lòng trung thành mạnh của nhân viên/khách hàng"
+  },
+  {
+   "chu": "workforce",
+   "doc": "/ˈwɜːrkfɔːrs/",
+   "nghia": "lực lượng lao động",
+   "nhom": "Từ trong tình huống",
+   "viDu": "Robots are becoming an intelligent automated workforce that can do routine tasks.",
+   "viDuNghia": "Robot đang trở thành một lực lượng lao động tự động thông minh, làm được các việc lặp đi lặp lại."
+  },
+  {
+   "chu": "funding",
+   "doc": "/ˈfʌndɪŋ/",
+   "nghia": "kinh phí, tiền tài trợ (cho chương trình, nghiên cứu)",
+   "nhom": "Từ trong tình huống",
+   "viDu": "There is not increased funding, so there will not be a decrease in youth homelessness.",
+   "viDuNghia": "Không tăng kinh phí thì tình trạng vô gia cư ở giới trẻ sẽ không giảm."
+  },
+  {
+   "chu": "homelessness",
+   "doc": "/ˈhoʊmləsnəs/",
+   "nghia": "tình trạng vô gia cư",
+   "nhom": "Từ trong tình huống",
+   "viDu": "This would lead to a decrease in youth homelessness.",
+   "viDuNghia": "Điều này sẽ dẫn tới giảm tình trạng vô gia cư ở giới trẻ."
+  },
+  {
+   "chu": "exit planning",
+   "doc": "/ˈeɡzɪt ˌplænɪŋ/",
+   "nghia": "kế hoạch hỗ trợ khi rời cơ sở chăm sóc/trại giáo dưỡng/bệnh viện, để người trẻ có chỗ ở sau đó",
+   "nhom": "Từ trong tình huống",
+   "viDu": "Therefore, funding for better exit planning would lead to a decrease in youth homelessness.",
+   "viDuNghia": "Vì vậy, kinh phí cho kế hoạch rời cơ sở (exit planning) tốt hơn sẽ làm giảm tình trạng vô gia cư ở giới trẻ."
+  },
+  {
+   "chu": "statutory",
+   "doc": "/ˈstætʃətɔːri/",
+   "nghia": "theo luật định; statutory care = chế độ chăm sóc do nhà nước bảo trợ theo luật",
+   "nhom": "Từ trong tình huống",
+   "viDu": "One contributing factor for youth homelessness is a lack of exit planning after leaving statutory care, juvenile justice or medical facilities.",
+   "viDuNghia": "Một yếu tố góp phần gây vô gia cư ở giới trẻ là thiếu kế hoạch rời cơ sở sau khi rời chế độ chăm sóc theo luật định của nhà nước, hệ thống tư pháp vị thành niên hoặc cơ sở y tế."
+  },
+  {
+   "chu": "juvenile justice",
+   "doc": "/ˈdʒuːvənl ˈdʒʌstɪs/",
+   "nghia": "hệ thống tư pháp dành cho người chưa thành niên",
+   "nhom": "Từ trong tình huống",
+   "viDu": "If there was increased funding for exit planning for youth leaving statutory care, juvenile justice or medical facilities then there would be a decrease in youth homelessness.",
+   "viDuNghia": "Nếu tăng kinh phí cho kế hoạch rời cơ sở dành cho thanh niên rời chế độ chăm sóc của nhà nước, hệ thống tư pháp vị thành niên hoặc cơ sở y tế thì tình trạng vô gia cư ở giới trẻ sẽ giảm."
+  },
+  {
+   "chu": "decline",
+   "doc": "/dɪˈklaɪn/",
+   "nghia": "sự sụt giảm; (động từ) giảm xuống; nghĩa khác: từ chối lịch sự",
+   "nhom": "Từ trong tình huống",
+   "viDu": "Since 2013, however, there has been a sharp decline in Physics scores and this year only 3 students signed up for the course...",
+   "viDuNghia": "Tuy nhiên, từ năm 2013, điểm môn Vật lý giảm mạnh và năm nay chỉ có 3 học sinh đăng ký môn này..."
+  },
+  {
+   "chu": "significant",
+   "doc": "/sɪɡˈnɪfɪkənt/",
+   "nghia": "đáng kể, có ý nghĩa (a significant increase = tăng đáng kể)",
+   "nhom": "Từ trong tình huống",
+   "viDu": "A significant percentage of people experiencing homelessness are aged between 0-24 years of age.",
+   "viDuNghia": "Một tỷ lệ đáng kể những người vô gia cư ở độ tuổi từ 0 đến 24."
+  },
+  {
+   "chu": "trend",
+   "doc": "/trend/",
+   "nghia": "xu hướng (tăng, giảm theo thời gian)",
+   "nhom": "Từ trong tình huống",
+   "viDu": "It assumes that there is a cause-effect relationship between the two trends.",
+   "viDuNghia": "Nó giả định rằng có quan hệ nhân quả giữa hai xu hướng."
+  },
+  {
+   "chu": "inadequate",
+   "doc": "/ɪnˈædɪkwət/",
+   "nghia": "không đủ, không đạt yêu cầu (về chất lượng hay số lượng)",
+   "nhom": "Từ trong tình huống",
+   "viDu": "What problems are there with the following 'laundry list' approach to the following issue: Too many private cars, Inadequate public transport, Insufficient road networks => congestion.",
+   "viDuNghia": "Cách tiếp cận \"danh sách liệt kê\" sau đây có vấn đề gì: Quá nhiều xe cá nhân, Giao thông công cộng chưa đủ, Mạng lưới đường chưa đủ => tắc nghẽn."
+  },
+  {
+   "chu": "critical thinking",
+   "doc": "/ˌkrɪtɪkl ˈθɪŋkɪŋ/",
+   "nghia": "tư duy phản biện: xem xét bằng chứng và lập luận trước khi tin hay kết luận. Critical ở đây KHÔNG phải chê bai",
+   "nhom": "Lập luận",
+   "viDu": "How is critical thinking developed at university?",
+   "viDuNghia": "Tư duy phản biện được phát triển ở đại học như thế nào?"
+  },
+  {
+   "chu": "argumentation",
+   "doc": "/ˌɑːrɡjumenˈteɪʃn/",
+   "nghia": "sự lập luận, cách xây dựng và trình bày lý lẽ",
+   "nhom": "Lập luận",
+   "viDu": "What is an example of a difference in argumentation in the arts and social sciences courses on the one hand, and science courses on the other?",
+   "viDuNghia": "Đâu là ví dụ về sự khác biệt trong lập luận giữa các môn khoa học xã hội/nhân văn so với các môn khoa học tự nhiên?"
+  },
+  {
+   "chu": "argument field",
+   "doc": "/ˈɑːrɡjumənt fiːld/",
+   "nghia": "trường lập luận: cộng đồng có chung đối tượng nghiên cứu và chung cách tư duy (một ngành, một trường phái)",
+   "nhom": "Lập luận",
+   "viDu": "What is NOT a characteristic of argument fields?",
+   "viDuNghia": "Điều nào KHÔNG phải đặc điểm của các trường lập luận (argument fields)?"
+  },
+  {
+   "chu": "assertion",
+   "doc": "/əˈsɜːrʃn/",
+   "nghia": "lời khẳng định nói ra như sự thật, chưa kèm lý do (vd \"Your next task is to collect data\")",
+   "nhom": "Lập luận",
+   "viDu": "Which of the following is an assertion? Check 2 options.",
+   "viDuNghia": "Câu nào sau đây là một assertion (khẳng định)? Chọn 2 đáp án."
+  },
+  {
+   "chu": "evidence",
+   "doc": "/ˈevɪdəns/",
+   "nghia": "bằng chứng, chứng cứ (danh từ không đếm được: a piece of evidence)",
+   "nhom": "Lập luận",
+   "viDu": "What questions can you ask to determine if the evidence is relevant to the conclusion? Choose 2 answers.",
+   "viDuNghia": "Bạn có thể tự hỏi câu gì để xác định bằng chứng có liên quan tới kết luận không? Chọn 2 đáp án."
+  },
+  {
+   "chu": "reasoning",
+   "doc": "/ˈriːzənɪŋ/",
+   "nghia": "sự suy luận, lập luận: đi từ lý do tới kết luận",
+   "nhom": "Lập luận",
+   "viDu": "Which are features of deductive reasoning? Choose 2 answers",
+   "viDuNghia": "Đâu là đặc điểm của deductive reasoning (suy luận diễn dịch)? Chọn 2 đáp án"
+  },
+  {
+   "chu": "implicit premise",
+   "doc": "/ɪmˈplɪsɪt ˈpremɪs/",
+   "nghia": "tiền đề ngầm: giả định không nói ra nhưng lập luận phải dựa vào (quảng cáo dùng rất nhiều)",
+   "nhom": "Lập luận",
+   "viDu": "What are the implicit premises?",
+   "viDuNghia": "Tiền đề ngầm là gì?"
+  },
+  {
+   "chu": "counter-argument",
+   "doc": "/ˈkaʊntər ˌɑːrɡjumənt/",
+   "nghia": "phản biện, lập luận chống lại một quan điểm",
+   "nhom": "Lập luận",
+   "viDu": "Counter-argument: Procrastinating instead of doing your work means nothing will ever get done.",
+   "viDuNghia": "Phản biện: Trì hoãn thay vì làm việc nghĩa là sẽ không bao giờ hoàn thành."
+  },
+  {
+   "chu": "opinion",
+   "doc": "/əˈpɪnjən/",
+   "nghia": "ý kiến, quan điểm cá nhân — ở đại học phải có bằng chứng đi kèm mới thành lập luận",
+   "nhom": "Lập luận",
+   "viDu": "Which of the following ordering could NOT be used to present your opinions in an essay?",
+   "viDuNghia": "Cách sắp xếp nào sau đây KHÔNG thể dùng để trình bày ý kiến trong essay?"
+  },
+  {
+   "chu": "justify",
+   "doc": "/ˈdʒʌstɪfaɪ/",
+   "nghia": "biện minh, đưa lý do chứng minh điều gì là hợp lý",
+   "nhom": "Lập luận",
+   "viDu": "Consider the following question from university course: \"Between a leader and a follower, which one enterprises prefer when recruiting? Justify your answer.\" This is an example of:",
+   "viDuNghia": "Xét câu hỏi sau từ môn học đại học: \"Giữa lãnh đạo và người theo sau, doanh nghiệp ưu tiên tuyển ai hơn? Hãy biện minh câu trả lời của bạn.\" Đây là ví dụ của:"
+  },
+  {
+   "chu": "analyze",
+   "doc": "/ˈænəlaɪz/",
+   "nghia": "phân tích: tách vấn đề thành phần nhỏ để xem chúng liên hệ ra sao (Anh: analyse)",
+   "nhom": "Lập luận",
+   "viDu": "Which of the following items will a speaker examine when analyzing the demographic traits of an audience or group of listeners?",
+   "viDuNghia": "Đâu là điều một diễn giả xem xét khi phân tích đặc điểm nhân khẩu học (demographic traits) của khán giả?"
+  },
+  {
+   "chu": "synthesize",
+   "doc": "/ˈsɪnθəsaɪz/",
+   "nghia": "tổng hợp: kết nối ý từ nhiều nguồn thành một cái nhìn mới",
+   "nhom": "Lập luận",
+   "viDu": "In a literature review, you synthesize information from many sources.",
+   "viDuNghia": "Trong phần tổng quan tài liệu, bạn tổng hợp thông tin từ nhiều nguồn."
+  },
+  {
+   "chu": "misrepresent",
+   "doc": "/ˌmɪsˌreprɪˈzent/",
+   "nghia": "trình bày sai, bóp méo (ý của người khác)",
+   "nhom": "Lập luận",
+   "viDu": "It misrepresents the original argument.",
+   "viDuNghia": "Nó bóp méo lập luận ban đầu."
+  },
+  {
+   "chu": "debate",
+   "doc": "/dɪˈbeɪt/",
+   "nghia": "cuộc tranh luận có lý lẽ giữa các quan điểm; (động từ) tranh luận",
+   "nhom": "Lập luận",
+   "viDu": "Which of the following is not a benefit of debate?",
+   "viDuNghia": "Điều nào sau đây KHÔNG phải là lợi ích của tranh biện (debate)?"
+  },
+  {
+   "chu": "persuasive",
+   "doc": "/pərˈsweɪsɪv/",
+   "nghia": "có sức thuyết phục",
+   "nhom": "Lập luận",
+   "viDu": "What are the motivational factors that should be considered when planning a persuasive message?",
+   "viDuNghia": "Những yếu tố động lực nào cần xem xét khi lên kế hoạch cho thông điệp thuyết phục?"
+  },
+  {
+   "chu": "worldview",
+   "doc": "/ˈwɜːrldvjuː/",
+   "nghia": "thế giới quan, cách nhìn nhận thế giới",
+   "nhom": "Lập luận",
+   "viDu": "A structural worldview is needed, where individual issues are socio-political phenomena.",
+   "viDuNghia": "Cần một thế giới quan cấu trúc, trong đó vấn đề cá nhân là hiện tượng chính trị-xã hội."
+  },
+  {
+   "chu": "ideology",
+   "doc": "/ˌaɪdiˈɑːlədʒi/",
+   "nghia": "hệ tư tưởng",
+   "nhom": "Lập luận",
+   "viDu": "This ideology then reinforces how the broader housing system... creates a homeless underclass.",
+   "viDuNghia": "Ý thức hệ này củng cố cách hệ thống nhà ở rộng lớn hơn... tạo ra tầng lớp dưới vô gia cư."
+  },
+  {
+   "chu": "power structure",
+   "doc": "/ˈpaʊər ˌstrʌktʃər/",
+   "nghia": "cấu trúc quyền lực: ai nắm quyền, ai chịu thiệt trong xã hội hay tổ chức",
+   "nhom": "Lập luận",
+   "viDu": "Theory is never neutral, but either maintains or challenges unequal power structures.",
+   "viDuNghia": "Lý thuyết không bao giờ trung lập, mà hoặc duy trì hoặc thách thức các cấu trúc quyền lực bất bình đẳng."
+  },
+  {
+   "chu": "structural",
+   "doc": "/ˈstrʌktʃərəl/",
+   "nghia": "thuộc cấu trúc; structural worldview = coi vấn đề cá nhân là hệ quả của cấu trúc xã hội",
+   "nhom": "Lập luận",
+   "viDu": "Homelessness has structural causes such as high rents and low wages.",
+   "viDuNghia": "Vô gia cư có những nguyên nhân mang tính cấu trúc như tiền thuê nhà cao và lương thấp."
+  },
+  {
+   "chu": "socio-political",
+   "doc": "/ˌsoʊsioʊ pəˈlɪtɪkl/",
+   "nghia": "thuộc chính trị – xã hội",
+   "nhom": "Lập luận",
+   "viDu": "Poverty is a socio-political issue, not only a personal one.",
+   "viDuNghia": "Nghèo đói là một vấn đề chính trị – xã hội, không chỉ là chuyện cá nhân."
+  },
+  {
+   "chu": "neutral",
+   "doc": "/ˈnuːtrəl/",
+   "nghia": "trung lập, không nghiêng về bên nào",
+   "nhom": "Lập luận",
+   "viDu": "A good chairperson stays neutral and lets both sides speak.",
+   "viDuNghia": "Người chủ toạ giỏi giữ trung lập và để cả hai bên được nói."
+  },
+  {
+   "chu": "unjust",
+   "doc": "/ˌʌnˈdʒʌst/",
+   "nghia": "bất công",
+   "nhom": "Lập luận",
+   "viDu": "Unjust ideologies maintain unequal power structures.",
+   "viDuNghia": "Các hệ tư tưởng bất công duy trì những cấu trúc quyền lực bất bình đẳng."
+  },
+  {
+   "chu": "responsibilisation",
+   "doc": "/rɪˌspɑːnsəbələˈzeɪʃn/",
+   "nghia": "sự \"cá nhân hoá trách nhiệm\": đẩy trách nhiệm về vấn đề xã hội (vd vô gia cư) cho từng cá nhân",
+   "nhom": "Lập luận",
+   "viDu": "Another example of the responsibilisation of homelessness can be seen in an article in the Southern Messenger (Diaz, 2011).",
+   "viDuNghia": "Một ví dụ khác về việc cá nhân hoá trách nhiệm (responsibilisation) đối với vô gia cư có thể thấy trong bài báo trên Southern Messenger (Diaz, 2011)."
+  },
+  {
+   "chu": "object of study",
+   "nghia": "đối tượng nghiên cứu: thứ mà một ngành lấy làm trọng tâm tìm hiểu",
+   "nhom": "Lập luận",
+   "viDu": "Which of the following are characteristics of argument fields? Common object of study. Shared processes of thought.",
+   "viDuNghia": "Đâu là đặc điểm của các trường lập luận? Chung đối tượng nghiên cứu. Chung cách tư duy."
+  },
+  {
+   "chu": "argument",
+   "doc": "/ˈɑːrɡjumənt/",
+   "nghia": "lập luận – một hoặc nhiều tiền đề (premise) dẫn tới kết luận (conclusion); (logic) suy luận hợp lệ/không hợp lệ; (lập trình) đối số",
+   "nhom": "Lập luận",
+   "viDu": "Which of the following are characteristics of argument fields?",
+   "viDuNghia": "Đâu là đặc điểm của các trường lập luận (argument fields)?"
+  },
+  {
+   "chu": "conclusion",
+   "doc": "/kənˈkluːʒn/",
+   "nghia": "kết luận – điều được rút ra từ các tiền đề của lập luận; cũng là phần kết bài",
+   "nhom": "Lập luận",
+   "viDu": "What questions can you ask to determine if the evidence is relevant to the conclusion? Choose 2 answers.",
+   "viDuNghia": "Bạn có thể tự hỏi câu gì để xác định bằng chứng có liên quan tới kết luận không? Chọn 2 đáp án."
+  },
+  {
+   "chu": "premise",
+   "doc": "/ˈpremɪs/",
+   "nghia": "tiền đề – lý do/giả thiết đưa ra để ủng hộ kết luận của một lập luận; (toán rời rạc) given the premises = cho các tiền đề, rút ra kết luận",
+   "nhom": "Lập luận",
+   "viDu": "______can be defined as facts or conditions objectively observable, beliefs or premises generally accepted as true by the audience, or conclusions previously established.",
+   "viDuNghia": "______ có thể được định nghĩa là sự kiện hoặc điều kiện quan sát khách quan được, niềm tin hoặc tiền đề được khán giả chấp nhận rộng rãi là đúng, hoặc kết luận đã được xác lập trước đó."
+  },
+  {
+   "chu": "deductive",
+   "doc": "/dɪˈdʌktɪv/",
+   "nghia": "(suy luận) diễn dịch: từ quy tắc chung suy ra trường hợp riêng; tiền đề đúng thì kết luận chắc chắn đúng",
+   "nhom": "Suy luận & nguỵ biện",
+   "viDu": "Which are features of deductive reasoning?",
+   "viDuNghia": "Đâu là đặc điểm của deductive reasoning (suy luận diễn dịch)?"
+  },
+  {
+   "chu": "inductive",
+   "doc": "/ɪnˈdʌktɪv/",
+   "nghia": "(suy luận) quy nạp: từ nhiều trường hợp riêng rút ra kết luận chung; kết luận chỉ có khả năng đúng",
+   "nhom": "Suy luận & nguỵ biện",
+   "viDu": "\"Every time Mike drinks coffee he cannot sleep. Therefore, coffee makes Mike sleepless.\" This is inductive reasoning.",
+   "viDuNghia": "\"Lần nào uống cà phê Mike cũng không ngủ được. Vậy cà phê làm Mike mất ngủ.\" Đây là suy luận quy nạp."
+  },
+  {
+   "chu": "abductive",
+   "doc": "/æbˈdʌktɪv/",
+   "nghia": "(suy luận) giả định, quy nạp ngược: từ hiện tượng quan sát được đoán ra lời giải thích hợp lý nhất",
+   "nhom": "Suy luận & nguỵ biện",
+   "viDu": "The grass is wet, so it probably rained last night: this is abductive reasoning.",
+   "viDuNghia": "Cỏ ướt, vậy có lẽ đêm qua trời mưa: đây là suy luận giả định (abductive)."
+  },
+  {
+   "chu": "fallacy",
+   "doc": "/ˈfæləsi/",
+   "nghia": "nguỵ biện: lỗi suy luận khiến lập luận nghe có vẻ đúng mà thực ra sai",
+   "nhom": "Suy luận & nguỵ biện",
+   "viDu": "Which is NOT an example of common fallacies?",
+   "viDuNghia": "Đâu KHÔNG phải một ví dụ về nguỵ biện phổ biến?"
+  },
+  {
+   "chu": "hasty generalization",
+   "doc": "/ˈheɪsti ˌdʒenrələˈzeɪʃn/",
+   "nghia": "khái quát hoá vội vàng: kết luận chung từ quá ít ví dụ",
+   "nhom": "Suy luận & nguỵ biện",
+   "viDu": "Which of the following is an example of a hasty generalization? Check one option.",
+   "viDuNghia": "Đâu là ví dụ về khái quát hoá vội vàng (hasty generalization)? Chọn một đáp án."
+  },
+  {
+   "chu": "ad hominem",
+   "doc": "/ˌæd ˈhɑːmɪnem/",
+   "nghia": "công kích cá nhân: chê người nói thay vì phản bác lập luận của họ",
+   "nhom": "Suy luận & nguỵ biện",
+   "viDu": "\"Don't listen to his plan, he failed maths at school\" is an ad hominem attack.",
+   "viDuNghia": "\"Đừng nghe kế hoạch của anh ta, hồi đi học anh ta trượt toán\" là một lời công kích cá nhân."
+  },
+  {
+   "chu": "straw man",
+   "doc": "/ˌstrɔː ˈmæn/",
+   "nghia": "nguỵ biện người rơm: bóp méo ý đối phương thành bản yếu hơn rồi tấn công bản đó",
+   "nhom": "Suy luận & nguỵ biện",
+   "viDu": "Which is NOT an example of common fallacies? — Hasty generalization / Jumping from correlation to cause / Straw man fallacy / Misinterpretation of reasoning / Faulty analogy",
+   "viDuNghia": "Đâu KHÔNG phải một ví dụ về nguỵ biện phổ biến? — Khái quát hoá vội vàng / Nhảy từ tương quan sang nhân quả / Nguỵ biện người rơm (Straw man) / Diễn giải sai lập luận / Loại suy sai (Faulty analogy)"
+  },
+  {
+   "chu": "faulty analogy",
+   "doc": "/ˈfɔːlti əˈnælədʒi/",
+   "nghia": "so sánh khập khiễng: hai thứ đem so không giống nhau ở điểm cốt yếu",
+   "nhom": "Suy luận & nguỵ biện",
+   "viDu": "Which is NOT an example of common fallacies? — Hasty generalization / Jumping from correlation to cause / Straw man fallacy / Misinterpretation of reasoning / Faulty analogy",
+   "viDuNghia": "Đâu KHÔNG phải một ví dụ về nguỵ biện phổ biến? — Khái quát hoá vội vàng / Nhảy từ tương quan sang nhân quả / Nguỵ biện người rơm (Straw man) / Diễn giải sai lập luận / Loại suy sai (Faulty analogy)"
+  },
+  {
+   "chu": "causal argument",
+   "doc": "/ˈkɔːzl ˈɑːrɡjumənt/",
+   "nghia": "lập luận nhân quả: cho rằng A gây ra B",
+   "nhom": "Suy luận & nguỵ biện",
+   "viDu": "What type of argument is this? — Argument from analogy / Generalization / Causal argument / Quasilogical argument",
+   "viDuNghia": "Đây là loại lập luận gì? — Lập luận loại suy / Khái quát hoá / Lập luận nhân quả / Lập luận tựa lô-gic"
+  },
+  {
+   "chu": "emotive language",
+   "doc": "/ɪˈmoʊtɪv ˈlæŋɡwɪdʒ/",
+   "nghia": "ngôn ngữ gợi cảm xúc: dùng từ mạnh để lái cảm xúc người đọc — một dấu hiệu thiên kiến",
+   "nhom": "Suy luận & nguỵ biện",
+   "viDu": "How is bias displayed in this statement? Use of emotive language.",
+   "viDuNghia": "Thiên kiến thể hiện thế nào trong phát biểu này? Qua việc dùng ngôn ngữ gợi cảm xúc."
+  },
+  {
+   "chu": "passive voice",
+   "doc": "/ˌpæsɪv ˈvɔɪs/",
+   "nghia": "thể bị động; có thể dùng để giấu ai chịu trách nhiệm (\"mistakes were made\")",
+   "nhom": "Suy luận & nguỵ biện",
+   "viDu": "How is bias displayed in this statement? Use of passive voice to hide responsibility.",
+   "viDuNghia": "Thiên kiến thể hiện thế nào trong phát biểu này? Dùng thể bị động để giấu trách nhiệm."
+  },
+  {
+   "chu": "appeal",
+   "doc": "/əˈpiːl/",
+   "nghia": "kêu gọi, viện tới (appeal to emotion); appealing = hấp dẫn",
+   "nhom": "Suy luận & nguỵ biện",
+   "viDu": "The advertisement appeals to our wish to be young, beautiful and happy.",
+   "viDuNghia": "Quảng cáo đánh vào mong muốn được trẻ, đẹp và hạnh phúc của chúng ta."
+  },
+  {
+   "chu": "membership",
+   "doc": "/ˈmembərʃɪp/",
+   "nghia": "tư cách thành viên; appealing to membership of a common group = thuyết phục bằng \"chúng ta cùng một nhóm\"",
+   "nhom": "Suy luận & nguỵ biện",
+   "viDu": "How is bias displayed in this statement? Appealing to membership of a common group.",
+   "viDuNghia": "Thiên kiến thể hiện thế nào trong phát biểu này? Viện tới tư cách thành viên của một nhóm chung."
+  },
+  {
+   "chu": "experiment",
+   "doc": "/ɪkˈsperɪmənt/",
+   "nghia": "thí nghiệm, thực nghiệm",
+   "nhom": "Suy luận & nguỵ biện",
+   "viDu": "For a course Timmy is taking, he has to conduct a research experiment and write a full research report.",
+   "viDuNghia": "Trong một môn Timmy đang học, anh phải làm thí nghiệm nghiên cứu và viết báo cáo nghiên cứu đầy đủ."
+  },
+  {
+   "chu": "quasilogical argument",
+   "doc": "/ˌkwɑːziˈlɑːdʒɪkl ˈɑːrɡjumənt/",
+   "nghia": "lập luận tựa lô-gic: trình bày giống suy luận toán/lô-gic chặt chẽ (nếu A thì B) để thuyết phục",
+   "nhom": "Suy luận & nguỵ biện",
+   "viDu": "\"If all students must attend, and Lan is a student, then Lan must attend\" is a quasilogical argument.",
+   "viDuNghia": "\"Nếu mọi sinh viên phải dự, mà Lan là sinh viên, thì Lan phải dự\" là một lập luận tựa lô-gic."
+  },
+  {
+   "chu": "co-existential argument",
+   "doc": "/ˌkoʊ ˌeɡzɪˈstenʃl ˈɑːrɡjumənt/",
+   "nghia": "lập luận đồng tồn tại: suy từ cái thấy được (hành động) ra cái không thấy (bản chất con người đó)",
+   "nhom": "Suy luận & nguỵ biện",
+   "viDu": "\"She donated all her prize money, so she must be a generous person\" is a co-existential argument.",
+   "viDuNghia": "\"Cô ấy tặng hết tiền thưởng, vậy hẳn cô là người hào phóng\" là một lập luận đồng tồn tại."
+  },
+  {
+   "chu": "misinterpretation",
+   "doc": "/ˌmɪsɪnˌtɜːrprəˈteɪʃn/",
+   "nghia": "sự hiểu sai, diễn giải sai",
+   "nhom": "Suy luận & nguỵ biện",
+   "viDu": "Which is NOT an example of common fallacies? — Hasty generalization / Jumping from correlation to cause / Straw man fallacy / Misinterpretation of reasoning / Faulty analogy",
+   "viDuNghia": "Đâu KHÔNG phải một ví dụ về nguỵ biện phổ biến? — Khái quát hoá vội vàng / Nhảy từ tương quan sang nhân quả / Nguỵ biện người rơm (Straw man) / Diễn giải sai lập luận / Loại suy sai (Faulty analogy)"
+  },
+  {
+   "chu": "false classification scheme",
+   "nghia": "cách phân loại sai: chia sự vật vào các nhóm không hợp lý để dẫn dắt người đọc — một kiểu thiên kiến",
+   "nhom": "Suy luận & nguỵ biện",
+   "viDu": "How is bias displayed in this statement? False classification schemes.",
+   "viDuNghia": "Thiên kiến thể hiện thế nào trong phát biểu này? Qua cách phân loại sai."
+  },
+  {
+   "chu": "replicate",
+   "doc": "/ˈreplɪkeɪt/",
+   "nghia": "lặp lại (thí nghiệm, nghiên cứu) để kiểm tra kết quả có đúng không",
+   "nhom": "Suy luận & nguỵ biện",
+   "viDu": "While trying to replicate one of his professor's experiments, Mohammed notices that another student has made a mistake while calculating the data for the experiment...",
+   "viDuNghia": "Khi cố tái lập một thí nghiệm của giáo sư, Mohammed nhận thấy một sinh viên khác đã tính sai dữ liệu thí nghiệm..."
+  },
+  {
+   "chu": "disposition",
+   "doc": "/ˌdɪspəˈzɪʃn/",
+   "nghia": "thiên hướng, thái độ thường trực (critical thinking dispositions = phẩm chất của người tư duy phản biện)",
+   "nhom": "Thái độ tư duy",
+   "viDu": "Which of the following does NOT belong to the list of critical thinking dispositions according to Facione et al.?",
+   "viDuNghia": "Điều nào sau đây KHÔNG thuộc danh sách các thiên hướng tư duy phản biện theo Facione và cộng sự?"
+  },
+  {
+   "chu": "inquisitiveness",
+   "doc": "/ɪnˈkwɪzətɪvnəs/",
+   "nghia": "tính ham hiểu biết, hay tìm tòi đặt câu hỏi",
+   "nhom": "Thái độ tư duy",
+   "viDu": "Which of the following does NOT belong to the list of critical thinking dispositions according to Facione et al.? — Inquisitiveness / Truth-seeking / Self-confidence / Responsibility / Maturity",
+   "viDuNghia": "Điều nào sau đây KHÔNG thuộc danh sách các thiên hướng tư duy phản biện theo Facione và cộng sự? — Tò mò tìm hiểu (Inquisitiveness) / Tìm kiếm sự thật (Truth-seeking) / Tự tin (Self-confidence) / Trách nhiệm (Responsibility) / Trưởng thành (Maturity)"
+  },
+  {
+   "chu": "self-confidence",
+   "doc": "/ˌself ˈkɑːnfɪdəns/",
+   "nghia": "sự tự tin (ở đây: tin vào khả năng suy luận của chính mình)",
+   "nhom": "Thái độ tư duy",
+   "viDu": "Which of the following does NOT belong to the list of critical thinking dispositions according to Facione et al.? — Inquisitiveness / Truth-seeking / Self-confidence / Responsibility / Maturity",
+   "viDuNghia": "Điều nào sau đây KHÔNG thuộc danh sách các thiên hướng tư duy phản biện theo Facione và cộng sự? — Tò mò tìm hiểu (Inquisitiveness) / Tìm kiếm sự thật (Truth-seeking) / Tự tin (Self-confidence) / Trách nhiệm (Responsibility) / Trưởng thành (Maturity)"
+  },
+  {
+   "chu": "metacognition",
+   "doc": "/ˌmetəkɑːɡˈnɪʃn/",
+   "nghia": "siêu nhận thức: tự theo dõi và điều chỉnh cách mình suy nghĩ (\"nghĩ về việc nghĩ\")",
+   "nhom": "Thái độ tư duy",
+   "viDu": "Which of the following dispositions or habits of mind for critical thinking is the student displaying? Metacognition.",
+   "viDuNghia": "Sinh viên đang thể hiện thiên hướng hay thói quen tư duy phản biện nào? Siêu nhận thức."
+  },
+  {
+   "chu": "truth-seeking",
+   "doc": "/ˈtruːθ ˌsiːkɪŋ/",
+   "nghia": "tinh thần truy tìm sự thật, kể cả khi nó trái ý mình",
+   "nhom": "Thái độ tư duy",
+   "viDu": "Which of the following does NOT belong to the list of critical thinking dispositions according to Facione et al.? — Inquisitiveness / Truth-seeking / Self-confidence / Responsibility / Maturity",
+   "viDuNghia": "Điều nào sau đây KHÔNG thuộc danh sách các thiên hướng tư duy phản biện theo Facione và cộng sự? — Tò mò tìm hiểu (Inquisitiveness) / Tìm kiếm sự thật (Truth-seeking) / Tự tin (Self-confidence) / Trách nhiệm (Responsibility) / Trưởng thành (Maturity)"
+  },
+  {
+   "chu": "maturity",
+   "doc": "/məˈtʃʊrəti/",
+   "nghia": "sự chín chắn (trong phán đoán: hiểu rằng vấn đề có thể nhiều đáp án)",
+   "nhom": "Thái độ tư duy",
+   "viDu": "Which of the following does NOT belong to the list of critical thinking dispositions according to Facione et al.? — Inquisitiveness / Truth-seeking / Self-confidence / Responsibility / Maturity",
+   "viDuNghia": "Điều nào sau đây KHÔNG thuộc danh sách các thiên hướng tư duy phản biện theo Facione và cộng sự? — Tò mò tìm hiểu (Inquisitiveness) / Tìm kiếm sự thật (Truth-seeking) / Tự tin (Self-confidence) / Trách nhiệm (Responsibility) / Trưởng thành (Maturity)"
+  },
+  {
+   "chu": "intellectual",
+   "doc": "/ˌɪntəˈlektʃuəl/",
+   "nghia": "thuộc trí tuệ (intellectual inquiry = tìm tòi tri thức); danh từ: người trí thức",
+   "nhom": "Thái độ tư duy",
+   "viDu": "What is NOT an academic culture value? — Lifelong Learning / Intellectual autonomy / Problem solving / Empathic Listening",
+   "viDuNghia": "Điều nào KHÔNG phải là giá trị văn hoá học thuật? — Học tập suốt đời / Tự chủ trí tuệ / Giải quyết vấn đề / Lắng nghe đồng cảm"
+  },
+  {
+   "chu": "solidify",
+   "doc": "/səˈlɪdɪfaɪ/",
+   "nghia": "củng cố, làm vững chắc (solidify your own opinion)",
+   "nhom": "Thái độ tư duy",
+   "viDu": "Debate helps you to solidify your own opinion.",
+   "viDuNghia": "Tranh biện giúp bạn củng cố ý kiến của chính mình."
+  },
+  {
+   "chu": "narrow",
+   "doc": "/ˈnæroʊ/",
+   "nghia": "(động từ) thu hẹp (narrow the topic; narrow your mind = làm hẹp tư duy); (tính từ) hẹp",
+   "nhom": "Thái độ tư duy",
+   "viDu": "Which of the following is not a benefit of debate? Debate can help narrow your mind.",
+   "viDuNghia": "Điều nào sau đây KHÔNG phải lợi ích của tranh biện? Tranh biện có thể làm hẹp tư duy của bạn."
+  },
+  {
+   "chu": "common sense",
+   "doc": "/ˌkɑːmən ˈsens/",
+   "nghia": "lẽ thường, hiểu biết thông thường — ở đại học chưa đủ để làm bằng chứng",
+   "nhom": "Thái độ tư duy",
+   "viDu": "Common sense is useful in everyday life, but an academic argument needs evidence.",
+   "viDuNghia": "Lẽ thường hữu ích trong đời sống, nhưng một lập luận học thuật cần bằng chứng."
+  }
+ ]
+}

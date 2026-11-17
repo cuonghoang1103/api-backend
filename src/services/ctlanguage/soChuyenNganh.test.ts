@@ -4,7 +4,7 @@
  */
 import { strict as assert } from 'node:assert';
 import { test } from 'node:test';
-import { kiemBo, kiemTu } from './soChuyenNganhThuan.js';
+import { kiemBo, kiemTu, laBoDeThi } from './soChuyenNganhThuan.js';
 import { danhSach, napSoChuyenNganh } from './soChuyenNganh.js';
 
 test('kiểm từ: kana / pinyin có dấu / IPA', () => {
@@ -27,10 +27,21 @@ test('kiểm bộ: trùng chữ (kể cả katakana/hiragana) + quá ít từ', 
 
 test('nội dung trong repo: ≥ 8 bộ mỗi ngôn ngữ, cùng bộ mã, tất cả hợp lệ', () => {
   const ds = napSoChuyenNganh();
-  const theoNn = (nn: string) => ds.filter((b) => b.nn === nn).map((b) => b.ma).sort();
+  // Bộ NGHỀ: cùng bộ mã giữa 3 ngôn ngữ. Bộ ĐỀ THI (laBoDeThi): chỉ tiếng Anh.
+  const theoNn = (nn: string) => ds.filter((b) => b.nn === nn && !laBoDeThi(b.ma)).map((b) => b.ma).sort();
   for (const nn of ['en', 'ja', 'zh']) assert.ok(theoNn(nn).length >= 8, `${nn}: ${theoNn(nn).length} bộ`);
   assert.deepEqual(theoNn('ja'), theoNn('zh'));
   assert.deepEqual(theoNn('en'), theoNn('zh'));
+  const deThi = ds.filter((b) => laBoDeThi(b.ma));
+  assert.ok(deThi.every((b) => b.nn === 'en'), 'bộ đề thi chỉ ở en/');
+  // Mỗi từ chỉ ở MỘT bộ đề thi (so không phân biệt hoa thường, nháy cong = nháy thẳng).
+  const khoa = (c: string) => c.normalize('NFKC').replace(/[’‘]/g, "'").toLowerCase().replace(/\s+/g, ' ').trim();
+  const daCo = new Map<string, string>();
+  for (const b of deThi) for (const t of b.tu) {
+    const k = khoa(t.chu);
+    assert.ok(!daCo.has(k), `"${t.chu}" trùng giữa ${daCo.get(k)} và ${b.ma}`);
+    daCo.set(k, b.ma);
+  }
   for (const b of ds) assert.deepEqual(kiemBo(b), [], `${b.nn}/${b.ma}`);
   const tq = danhSach();
   assert.equal(tq.tong, ds.length);

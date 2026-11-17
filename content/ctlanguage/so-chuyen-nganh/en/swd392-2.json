@@ -1,0 +1,735 @@
+{
+ "ma": "swd392-2",
+ "nn": "en",
+ "ten": "SWD392 · 2. Kiến trúc và mẫu thiết kế",
+ "moTa": "Kiến trúc và thiết kế phần mềm (SWD392) – phần 2: kiến trúc phần mềm, mẫu kiến trúc, giao tiếp thông điệp, thành phần – cổng, hệ đồng thời, SOA, dòng sản phẩm, ánh xạ CSDL, mẫu thiết kế GoF. Từ lấy từ đề FE thật; ví dụ là câu hỏi thật trong đề.",
+ "bieuTuong": "building.columns.fill",
+ "thuTu": -947,
+ "tu": [
+  {
+   "chu": "software architecture",
+   "doc": "/ˈsɔːftwer ˈɑːrkɪtektʃər/",
+   "nghia": "kiến trúc phần mềm: cấu trúc của hệ thống gồm các thành phần, thuộc tính lộ ra ngoài và quan hệ giữa chúng",
+   "nhom": "Kiến trúc phần mềm",
+   "viDu": "Which of the following statements concerning software architecture design guidelines is FALSE?",
+   "viDuNghia": "Phát biểu nào dưới đây về các nguyên tắc thiết kế kiến trúc phần mềm là SAI?"
+  },
+  {
+   "chu": "architectural pattern",
+   "doc": "/ˌɑːrkɪˈtektʃərəl ˈpætərn/",
+   "nghia": "mẫu kiến trúc: cách tổ chức tổng thể hệ thống đã được dùng lại nhiều lần",
+   "nhom": "Kiến trúc phần mềm",
+   "viDu": "What role do software architectural patterns play in the development of an application?",
+   "viDuNghia": "Các mẫu kiến trúc phần mềm (software architectural pattern) đóng vai trò gì trong việc phát triển một ứng dụng?"
+  },
+  {
+   "chu": "architectural style",
+   "doc": "/ˌɑːrkɪˈtektʃərəl staɪl/",
+   "nghia": "kiểu kiến trúc: tên gọi khác của mẫu cấu trúc kiến trúc (phân lớp, client/server…)",
+   "nhom": "Kiến trúc phần mềm",
+   "viDu": "Which architectural style emphasizes loosely coupled services communicating through interfaces?",
+   "viDuNghia": "Kiểu kiến trúc nào nhấn mạnh các dịch vụ kết hợp lỏng lẻo giao tiếp thông qua các giao diện (interfaces)?"
+  },
+  {
+   "chu": "architectural design",
+   "doc": "/ˌɑːrkɪˈtektʃərəl dɪˈzaɪn/",
+   "nghia": "thiết kế kiến trúc: chia hệ thống thành hệ con và định giao diện giữa chúng",
+   "nhom": "Kiến trúc phần mềm",
+   "viDu": "Which of the following best describes the role of software quality attributes in architectural design?",
+   "viDuNghia": "Điều nào sau đây mô tả đúng nhất vai trò của các thuộc tính chất lượng phần mềm (quality attributes) trong thiết kế kiến trúc?"
+  },
+  {
+   "chu": "design pattern",
+   "doc": "/dɪˈzaɪn ˈpætərn/",
+   "nghia": "mẫu thiết kế: lời giải mẫu cho một bài toán thiết kế hay gặp, ở mức vài lớp cộng tác với nhau",
+   "nhom": "Kiến trúc phần mềm",
+   "viDu": "Which design pattern is most suitable for allowing a system to vary its behavior dynamically at runtime?",
+   "viDuNghia": "Design pattern nào phù hợp nhất để cho phép một hệ thống thay đổi hành vi một cách linh động tại runtime?"
+  },
+  {
+   "chu": "layered architecture",
+   "doc": "/ˈleɪərd ˈɑːrkɪtektʃər/",
+   "nghia": "kiến trúc phân lớp: mỗi lớp dùng dịch vụ của lớp dưới và phục vụ lớp trên",
+   "nhom": "Kiến trúc phần mềm",
+   "viDu": "How does an n-Tier architecture differ from a layered architecture?",
+   "viDuNghia": "Kiến trúc n-Tier khác với kiến trúc layered (phân lớp) như thế nào?"
+  },
+  {
+   "chu": "tier",
+   "doc": "/tɪr/",
+   "nghia": "tầng (vật lý): nhóm thành phần chạy trên cùng một loại máy (client, ứng dụng, CSDL)",
+   "nhom": "Kiến trúc phần mềm",
+   "viDu": "In a Multi-tier Client/Service architectural pattern, which of the following is true about an intermediate tier?",
+   "viDuNghia": "Trong mẫu kiến trúc Client/Service đa tầng (Multi-tier), điều nào sau đây đúng về một tầng trung gian (intermediate tier)?"
+  },
+  {
+   "chu": "intermediate tier",
+   "doc": "/ˌɪntərˈmiːdiət tɪr/",
+   "nghia": "tầng giữa: vừa là server của tầng trên, vừa là client của tầng dưới",
+   "nhom": "Kiến trúc phần mềm",
+   "viDu": "In a Multi-tier Client/Service architectural pattern, which of the following is true about an intermediate tier?",
+   "viDuNghia": "Trong mẫu kiến trúc Client/Service nhiều tầng (Multi-tier), phát biểu nào ĐÚNG về một tầng trung gian?"
+  },
+  {
+   "chu": "n-tier architecture",
+   "doc": "/ˈen tɪr ˈɑːrkɪtektʃər/",
+   "nghia": "kiến trúc nhiều tầng: client – tầng ứng dụng – tầng dữ liệu",
+   "nhom": "Kiến trúc phần mềm",
+   "viDu": "Which of these is a drawback of n-Tier architecture?",
+   "viDuNghia": "Điều nào sau đây là một nhược điểm của kiến trúc n-Tier?"
+  },
+  {
+   "chu": "client/server architecture",
+   "doc": "/ˌklaɪənt ˈsɜːrvər ˈɑːrkɪtektʃər/",
+   "nghia": "kiến trúc client/server: client gửi yêu cầu, server cung cấp dịch vụ",
+   "nhom": "Kiến trúc phần mềm",
+   "viDu": "While creating a client/server architecture, which elements or factors should be taken into account?",
+   "viDuNghia": "Khi tạo một kiến trúc client/server, những yếu tố nào cần được cân nhắc?"
+  },
+  {
+   "chu": "multiple client/single service",
+   "nghia": "mẫu nhiều client/một dịch vụ: nhiều client cùng gửi yêu cầu tới một dịch vụ",
+   "nhom": "Kiến trúc phần mềm",
+   "viDu": "The Multiple client/single service architectural pattern that:",
+   "viDuNghia": "Mẫu kiến trúc Nhiều client/Một service là mẫu mà:"
+  },
+  {
+   "chu": "monolithic",
+   "doc": "/ˌmɑːnəˈlɪθɪk/",
+   "nghia": "nguyên khối: cả ứng dụng đóng thành một khối triển khai duy nhất",
+   "nhom": "Kiến trúc phần mềm",
+   "viDu": "In software architecture, what is the key difference between the monolithic and microservices architectural patterns?",
+   "viDuNghia": "Trong kiến trúc phần mềm, sự khác biệt chính giữa kiến trúc nguyên khối (monolithic) và kiến trúc microservices là gì?"
+  },
+  {
+   "chu": "microservice",
+   "doc": "/ˈmaɪkroʊˌsɜːrvɪs/",
+   "nghia": "vi dịch vụ: dịch vụ nhỏ, độc lập, triển khai riêng, giao tiếp qua API",
+   "nhom": "Kiến trúc phần mềm",
+   "viDu": "What is the key concept of microservices architecture?",
+   "viDuNghia": "Khái niệm then chốt của kiến trúc microservices là gì?"
+  },
+  {
+   "chu": "event-driven architecture",
+   "doc": "/ɪˈvent drɪvn ˈɑːrkɪtektʃər/",
+   "nghia": "kiến trúc hướng sự kiện: các thành phần phản ứng với sự kiện được phát ra",
+   "nhom": "Kiến trúc phần mềm",
+   "viDu": "In an event-driven architecture, components react to events instead of calling each other directly.",
+   "viDuNghia": "Trong kiến trúc hướng sự kiện, các thành phần phản ứng với sự kiện thay vì gọi trực tiếp lẫn nhau."
+  },
+  {
+   "chu": "pipe and filter",
+   "nghia": "kiến trúc ống và bộ lọc: dữ liệu chảy qua một chuỗi bước xử lý nối nhau",
+   "nhom": "Kiến trúc phần mềm",
+   "viDu": "Which of the following quality attributes can the pipe and filter architecture satisfy?",
+   "viDuNghia": "Kiến trúc pipe and filter có thể thỏa mãn thuộc tính chất lượng nào sau đây?"
+  },
+  {
+   "chu": "centralized control",
+   "doc": "/ˈsentrəlaɪzd kənˈtroʊl/",
+   "nghia": "điều khiển tập trung: một thành phần điều khiển duy nhất nắm toàn bộ quyền điều phối",
+   "nhom": "Kiến trúc phần mềm",
+   "viDu": "Which of the following is true for a Centralized Control architectural pattern?",
+   "viDuNghia": "Điều nào sau đây đúng đối với mẫu kiến trúc Centralized Control (điều khiển tập trung)?"
+  },
+  {
+   "chu": "distributed control",
+   "doc": "/dɪˈstrɪbjuːtɪd kənˈtroʊl/",
+   "nghia": "điều khiển phân tán: nhiều thành phần điều khiển ngang hàng, không ai nắm toàn cục",
+   "nhom": "Kiến trúc phần mềm",
+   "viDu": "Which of the following is true for a Distributed Control architectural pattern?",
+   "viDuNghia": "Điều nào sau đây đúng với mẫu kiến trúc Distributed Control?"
+  },
+  {
+   "chu": "hierarchical control",
+   "doc": "/ˌhaɪəˈrɑːrkɪkl kənˈtroʊl/",
+   "nghia": "điều khiển phân cấp: thành phần cấp trên điều phối các thành phần điều khiển cấp dưới",
+   "nhom": "Kiến trúc phần mềm",
+   "viDu": "Which of the following is true for a Hierarchical Control architectural pattern?",
+   "viDuNghia": "Điều nào sau đây đúng đối với Hierarchical Control architectural pattern?"
+  },
+  {
+   "chu": "master/slave",
+   "doc": "/ˈmæstər sleɪv/",
+   "nghia": "mẫu chủ/tớ: thành phần chủ chia việc cho các tớ rồi gom kết quả",
+   "nhom": "Kiến trúc phần mềm",
+   "viDu": "Which architecture supports fault tolerance and system reliability? → Master/slave",
+   "viDuNghia": "Kiến trúc nào hỗ trợ khả năng chịu lỗi (fault tolerance) và độ tin cậy hệ thống (reliability)? → Master/slave"
+  },
+  {
+   "chu": "geographically distributed",
+   "doc": "/ˌdʒiːəˈɡræfɪkli dɪˈstrɪbjuːtɪd/",
+   "nghia": "phân tán về địa lý: các phần đặt ở những nơi xa nhau, nối qua mạng",
+   "nhom": "Kiến trúc phần mềm",
+   "viDu": "Objects that are geographically distributed should be placed in separate subsystems.",
+   "viDuNghia": "Các đối tượng phân tán ở những vị trí địa lý khác nhau nên được đặt vào các hệ con riêng."
+  },
+  {
+   "chu": "physical configuration",
+   "doc": "/ˈfɪzɪkl kənˌfɪɡjəˈreɪʃn/",
+   "nghia": "cấu hình vật lý: các nút phần cứng và kết nối giữa chúng (vẽ ở sơ đồ triển khai)",
+   "nhom": "Kiến trúc phần mềm",
+   "viDu": "What does a deployment diagram depict? → The physical configuration of the system in terms of physical nodes and physical connections",
+   "viDuNghia": "Sơ đồ triển khai mô tả điều gì? → Cấu hình vật lý của hệ thống theo các nút vật lý và kết nối vật lý"
+  },
+  {
+   "chu": "deployment diagram",
+   "doc": "/dɪˈplɔɪmənt ˈdaɪəɡræm/",
+   "nghia": "sơ đồ triển khai: vẽ các nút vật lý và thành phần phần mềm chạy trên đó",
+   "nhom": "Kiến trúc phần mềm",
+   "viDu": "What is the primary purpose of Deployment Diagrams in software architecture?",
+   "viDuNghia": "Mục đích chính của Deployment Diagram (Sơ đồ triển khai) trong kiến trúc phần mềm là gì?"
+  },
+  {
+   "chu": "component diagram",
+   "doc": "/kəmˈpoʊnənt ˈdaɪəɡræm/",
+   "nghia": "sơ đồ thành phần: vẽ các thành phần phần mềm và giao diện, phụ thuộc giữa chúng",
+   "nhom": "Kiến trúc phần mềm",
+   "viDu": "What does the component of a 'component diagram' refer to?",
+   "viDuNghia": "Component trong 'component diagram' ám chỉ điều gì?"
+  },
+  {
+   "chu": "implicit invocation",
+   "doc": "/ɪmˈplɪsɪt ˌɪnvəˈkeɪʃn/",
+   "nghia": "gọi ngầm: thành phần phát sự kiện, hệ thống tự gọi các thành phần đã đăng ký (kiến trúc hướng sự kiện)",
+   "nhom": "Kiến trúc phần mềm",
+   "viDu": "Select the partition of nonbuffered event-based implicit invocation architecture.",
+   "viDuNghia": "Chọn thành phần (partition) của kiến trúc implicit invocation hướng sự kiện không dùng buffer (nonbuffered event-based)"
+  },
+  {
+   "chu": "architecture characteristic",
+   "doc": "/ˈɑːrkɪtektʃər ˌkærəktəˈrɪstɪk/",
+   "nghia": "đặc tính kiến trúc: tiêu chí phi chức năng mà kiến trúc phải đạt (hiệu năng, khả năng mở rộng…)",
+   "nhom": "Kiến trúc phần mềm",
+   "viDu": "What is the role of architecture characteristics in software architecture?",
+   "viDuNghia": "Vai trò của các đặc tính kiến trúc (architecture characteristics) trong kiến trúc phần mềm là gì?"
+  },
+  {
+   "chu": "architecture",
+   "doc": "/ˈɑːrkɪtektʃər/",
+   "nghia": "kiến trúc phần mềm – cấu trúc tổng thể gồm các thành phần và cách chúng kết nối (monolithic, microservices, SOA)",
+   "nhom": "Kiến trúc phần mềm",
+   "viDu": "In software architecture, what is the key difference between the monolithic and microservices architectural patterns?",
+   "viDuNghia": "Trong kiến trúc phần mềm, sự khác biệt chính giữa kiến trúc nguyên khối (monolithic) và kiến trúc microservices là gì?"
+  },
+  {
+   "chu": "subsystem",
+   "doc": "/ˈsʌbsɪstəm/",
+   "nghia": "hệ thống con – một phần độc lập tương đối của hệ thống lớn, có giao diện riêng",
+   "nhom": "Kiến trúc phần mềm",
+   "viDu": "What is the main goal when applying the principle of separation of concerns in subsystem design?",
+   "viDuNghia": "Mục tiêu chính khi áp dụng nguyên tắc separation of concerns (tách biệt mối quan tâm) trong thiết kế subsystem là gì?"
+  },
+  {
+   "chu": "scalability",
+   "doc": "/ˌskeɪləˈbɪləti/",
+   "nghia": "khả năng mở rộng – hệ thống chịu được tải tăng (thêm người dùng, dữ liệu) mà vẫn chạy tốt",
+   "nhom": "Kiến trúc phần mềm",
+   "viDu": "In software quality attributes, scalability is the extent to which the system is capable of growing after its initial deployment.",
+   "viDuNghia": "Trong các thuộc tính chất lượng phần mềm, Scalability (khả năng mở rộng) là mức độ mà hệ thống có thể phát triển/mở rộng sau khi được triển khai lần đầu."
+  },
+  {
+   "chu": "4+1 view model",
+   "nghia": "mô hình 4+1 góc nhìn (Kruchten): logical, process, development, physical view + 1 là scenario (use case) nối cả bốn",
+   "nhom": "Kiến trúc phần mềm",
+   "viDu": "The \"+1\" in Kruchten's 4+1 View Model refers to a scenario. What is a scenario?",
+   "viDuNghia": "Chữ \"+1\" trong mô hình 4+1 View của Kruchten là một scenario (kịch bản). Scenario là gì?"
+  },
+  {
+   "chu": "component-based software architecture",
+   "nghia": "kiến trúc phần mềm dựa trên thành phần: hệ thống ghép từ các thành phần có giao diện rõ ràng",
+   "nhom": "Thành phần & giao diện",
+   "viDu": "What is the key characteristic of a component in a component-based software architecture?",
+   "viDuNghia": "Đặc điểm chính của một component trong kiến trúc phần mềm hướng thành phần (component-based) là gì?"
+  },
+  {
+   "chu": "provided port",
+   "doc": "/prəˈvaɪdɪd pɔːrt/",
+   "nghia": "cổng cung cấp: cổng qua đó thành phần cung cấp dịch vụ cho thành phần khác",
+   "nhom": "Thành phần & giao diện",
+   "viDu": "A provided port supports a provided interface, through which the component offers its services.",
+   "viDuNghia": "Cổng cung cấp hỗ trợ một provided interface, qua đó thành phần cung cấp dịch vụ của mình."
+  },
+  {
+   "chu": "required port",
+   "doc": "/rɪˈkwaɪərd pɔːrt/",
+   "nghia": "cổng yêu cầu: cổng qua đó thành phần dùng dịch vụ của thành phần khác",
+   "nhom": "Thành phần & giao diện",
+   "viDu": "A required port uses a required interface, through which the component requests services from other components.",
+   "viDuNghia": "Cổng yêu cầu dùng một required interface, qua đó thành phần yêu cầu dịch vụ từ thành phần khác."
+  },
+  {
+   "chu": "delegation connector",
+   "doc": "/ˌdelɪˈɡeɪʃn kəˈnektər/",
+   "nghia": "đầu nối uỷ thác: nối cổng ngoài của thành phần hợp thành với cổng của thành phần bên trong",
+   "nhom": "Thành phần & giao diện",
+   "viDu": "What does a delegation connector join?",
+   "viDuNghia": "Delegation connector kết nối cái gì?"
+  },
+  {
+   "chu": "interface design",
+   "doc": "/ˈɪntərfeɪs dɪˈzaɪn/",
+   "nghia": "thiết kế giao diện (của lớp, thành phần): định các thao tác lộ ra bên ngoài",
+   "nhom": "Thành phần & giao diện",
+   "viDu": "Class interface design decides which operations are externally visible.",
+   "viDuNghia": "Thiết kế giao diện lớp quyết định thao tác nào nhìn thấy được từ bên ngoài."
+  },
+  {
+   "chu": "subsystem structuring",
+   "doc": "/ˈsʌbsɪstəm ˈstrʌktʃərɪŋ/",
+   "nghia": "phân chia hệ con: quyết định chia hệ thống thành những hệ con nào (client, service, control, coordinator…)",
+   "nhom": "Thành phần & giao diện",
+   "viDu": "Which of the following subsystems is NOT likely to be a client subsystem?",
+   "viDuNghia": "Subsystem nào sau đây KHÔNG có khả năng là một client subsystem?"
+  },
+  {
+   "chu": "loose coupling",
+   "doc": "/luːs ˈkʌplɪŋ/",
+   "nghia": "ghép nối lỏng: các phần ít phụ thuộc nhau nên đổi phần này ít ảnh hưởng phần kia",
+   "nhom": "Thành phần & giao diện",
+   "viDu": "Which architectural style emphasizes loosely coupled services communicating through interfaces?",
+   "viDuNghia": "Kiểu kiến trúc nào nhấn mạnh các dịch vụ ghép nối lỏng, giao tiếp với nhau qua giao diện?"
+  },
+  {
+   "chu": "wrapper",
+   "doc": "/ˈræpər/",
+   "nghia": "lớp bọc: bọc quanh một thứ có sẵn (CSDL, hệ thống cũ) để che chi tiết truy cập",
+   "nhom": "Thành phần & giao diện",
+   "viDu": "What is the role of a database wrapper in a client/server architecture?",
+   "viDuNghia": "Vai trò của một database wrapper trong kiến trúc client/server là gì?"
+  },
+  {
+   "chu": "application programming interface",
+   "nghia": "giao diện lập trình ứng dụng (API): tập thao tác mà phần mềm khác gọi được",
+   "nhom": "Thành phần & giao diện",
+   "viDu": "The client calls the server through a REST API.",
+   "viDuNghia": "Client gọi server thông qua một REST API."
+  },
+  {
+   "chu": "refinement",
+   "doc": "/rɪˈfaɪnmənt/",
+   "nghia": "tinh chỉnh: làm bản thiết kế chi tiết và tốt dần qua từng bước",
+   "nhom": "Thành phần & giao diện",
+   "viDu": "In the refinement of the design process, which activity focuses on enhancing the reusability of components?",
+   "viDuNghia": "Trong việc tinh chỉnh (refinement) quy trình thiết kế, hoạt động nào tập trung vào việc tăng cường khả năng tái sử dụng (reusability) của các component?"
+  },
+  {
+   "chu": "message communication",
+   "doc": "/ˈmesɪdʒ kəˌmjuːnɪˈkeɪʃn/",
+   "nghia": "giao tiếp bằng thông điệp giữa các thành phần (đồng bộ hoặc không đồng bộ)",
+   "nhom": "Giao tiếp thông điệp",
+   "viDu": "Which of the following best describes synchronous message communication in software system design?",
+   "viDuNghia": "Điều nào sau đây mô tả đúng nhất giao tiếp thông điệp đồng bộ (synchronous message communication) trong thiết kế hệ thống phần mềm?"
+  },
+  {
+   "chu": "synchronous message",
+   "doc": "/ˈsɪŋkrənəs ˈmesɪdʒ/",
+   "nghia": "thông điệp đồng bộ: bên gửi chờ bên nhận xử lý xong mới làm tiếp",
+   "nhom": "Giao tiếp thông điệp",
+   "viDu": "A producer sends a message to a consumer. Which one of the following is synchronous message communication with reply?",
+   "viDuNghia": "Một producer gửi message đến một consumer. Trường hợp nào sau đây là synchronous message communication with reply (giao tiếp đồng bộ có phản hồi)?"
+  },
+  {
+   "chu": "asynchronous message",
+   "doc": "/eɪˈsɪŋkrənəs ˈmesɪdʒ/",
+   "nghia": "thông điệp không đồng bộ: bên gửi gửi xong làm tiếp ngay, không chờ trả lời",
+   "nhom": "Giao tiếp thông điệp",
+   "viDu": "What is the significance of asynchronous messaging in architectural communication patterns?",
+   "viDuNghia": "Ý nghĩa của giao tiếp bất đồng bộ (asynchronous messaging) trong các mẫu giao tiếp kiến trúc là gì?"
+  },
+  {
+   "chu": "call/return",
+   "doc": "/kɔːl rɪˈtɜːrn/",
+   "nghia": "mẫu gọi/trả về: đối tượng gọi thao tác của đối tượng khác rồi chờ kết quả",
+   "nhom": "Giao tiếp thông điệp",
+   "viDu": "Which are Objects in the Call/Return pattern?",
+   "viDuNghia": "Các đối tượng trong mẫu Call/Return là loại nào?"
+  },
+  {
+   "chu": "reply",
+   "doc": "/rɪˈplaɪ/",
+   "nghia": "hồi đáp: thông điệp trả lời gửi lại cho bên yêu cầu",
+   "nhom": "Giao tiếp thông điệp",
+   "viDu": "A producer sends a message to a consumer. Which one of the following is synchronous message communication with reply?",
+   "viDuNghia": "Một producer gửi message đến một consumer. Trường hợp nào sau đây là synchronous message communication with reply (giao tiếp đồng bộ có phản hồi)?"
+  },
+  {
+   "chu": "broker",
+   "doc": "/ˈbroʊkər/",
+   "nghia": "môi giới: thành phần trung gian giúp client tìm và gọi dịch vụ mà không cần biết dịch vụ nằm ở đâu",
+   "nhom": "Giao tiếp thông điệp",
+   "viDu": "In the Broker Forwarding Pattern, how do a client and service communicate with each other?",
+   "viDuNghia": "Trong mẫu Broker Forwarding (broker chuyển tiếp), client và service giao tiếp với nhau như thế nào?"
+  },
+  {
+   "chu": "service registration",
+   "doc": "/ˈsɜːrvɪs ˌredʒɪˈstreɪʃn/",
+   "nghia": "đăng ký dịch vụ: dịch vụ khai báo tên và địa chỉ của mình với broker",
+   "nhom": "Giao tiếp thông điệp",
+   "viDu": "Why does a service register with a broker?",
+   "viDuNghia": "Vì sao một service đăng ký (register) với một broker?"
+  },
+  {
+   "chu": "service discovery",
+   "doc": "/ˈsɜːrvɪs dɪˈskʌvəri/",
+   "nghia": "khám phá dịch vụ: client hỏi broker để tìm dịch vụ phù hợp (kiểu trang vàng)",
+   "nhom": "Giao tiếp thông điệp",
+   "viDu": "In the service Discovery pattern, how do a client and service communicate with each other?",
+   "viDuNghia": "Trong mẫu Khám phá dịch vụ (Service Discovery), client và service giao tiếp với nhau như thế nào?"
+  },
+  {
+   "chu": "subscription/notification",
+   "doc": "/səbˈskrɪpʃn ˌnoʊtɪfɪˈkeɪʃn/",
+   "nghia": "mẫu đăng ký/thông báo: client đăng ký nhận tin, khi có sự kiện thì được báo",
+   "nhom": "Giao tiếp thông điệp",
+   "viDu": "What are the communication characteristics of subscription/notification?",
+   "viDuNghia": "Đặc điểm giao tiếp của mô hình subscription/notification (đăng ký/thông báo) là gì?"
+  },
+  {
+   "chu": "invocation",
+   "doc": "/ˌɪnvəˈkeɪʃn/",
+   "nghia": "sự gọi (một thao tác, một dịch vụ)",
+   "nhom": "Giao tiếp thông điệp",
+   "viDu": "Which is NOT the benefit of nonbuffered event-based implicit invocation architecture?",
+   "viDuNghia": "Điều nào sau đây KHÔNG PHẢI là lợi ích của kiến trúc implicit invocation hướng sự kiện không dùng buffer (nonbuffered event-based)?"
+  },
+  {
+   "chu": "active object",
+   "doc": "/ˈæktɪv ˈɑːbdʒekt/",
+   "nghia": "đối tượng chủ động: có luồng điều khiển riêng, tự chạy song song (còn gọi là task)",
+   "nhom": "Đồng thời & giao dịch",
+   "viDu": "In UML notation, an active object is used to represent which of the following?",
+   "viDuNghia": "Trong ký hiệu UML, active object được dùng để biểu diễn điều gì sau đây?"
+  },
+  {
+   "chu": "passive object",
+   "doc": "/ˈpæsɪv ˈɑːbdʒekt/",
+   "nghia": "đối tượng thụ động: không có luồng riêng, chỉ chạy khi đối tượng khác gọi thao tác của nó",
+   "nhom": "Đồng thời & giao dịch",
+   "viDu": "What is the difference between an active object and a passive object in Concurrent and Real-Time Software Architecture?",
+   "viDuNghia": "Sự khác biệt giữa đối tượng chủ động (active object) và đối tượng thụ động (passive object) trong Kiến trúc phần mềm Concurrent và Real-Time là gì?"
+  },
+  {
+   "chu": "thread of control",
+   "nghia": "luồng điều khiển: một dòng thực thi độc lập",
+   "nhom": "Đồng thời & giao dịch",
+   "viDu": "What is a characteristic of a sequential program? → It contains passive objects and supports a single thread of control",
+   "viDuNghia": "Đặc điểm của một chương trình tuần tự (sequential program) là gì? → Nó chỉ gồm đối tượng thụ động và có một luồng điều khiển duy nhất"
+  },
+  {
+   "chu": "real-time software",
+   "doc": "/ˈriːəl taɪm ˈsɔːftwer/",
+   "nghia": "phần mềm thời gian thực: phải đáp ứng trong thời hạn chặt chẽ",
+   "nhom": "Đồng thời & giao dịch",
+   "viDu": "What is the difference between an active object and a passive object in Concurrent and Real-Time Software Architecture?",
+   "viDuNghia": "Đối tượng chủ động (active object) và đối tượng thụ động (passive object) khác nhau thế nào trong kiến trúc phần mềm Concurrent và Real-Time?"
+  },
+  {
+   "chu": "compound transaction",
+   "doc": "/ˈkɑːmpaʊnd trænˈzækʃn/",
+   "nghia": "giao dịch phức hợp: gồm nhiều giao dịch con, có thể huỷ riêng từng phần",
+   "nhom": "Đồng thời & giao dịch",
+   "viDu": "What is a compound transaction?",
+   "viDuNghia": "Compound transaction là gì?"
+  },
+  {
+   "chu": "long-living transaction",
+   "doc": "/ˌlɔːŋ ˈlɪvɪŋ trænˈzækʃn/",
+   "nghia": "giao dịch kéo dài: có chỗ chờ con người quyết định nên diễn ra lâu",
+   "nhom": "Đồng thời & giao dịch",
+   "viDu": "What is a long-living transaction?",
+   "viDuNghia": "Giao dịch dài hơi (long-living transaction) là gì?"
+  },
+  {
+   "chu": "negotiation",
+   "doc": "/nɪˌɡoʊʃiˈeɪʃn/",
+   "nghia": "thương lượng: mẫu trong đó client và dịch vụ trao đổi đề nghị qua lại để đạt thoả thuận",
+   "nhom": "Đồng thời & giao dịch",
+   "viDu": "With a Negotiation pattern, which of the following is NOT true?",
+   "viDuNghia": "Với mẫu Thương lượng (Negotiation pattern), điều nào sau đây KHÔNG đúng?"
+  },
+  {
+   "chu": "periodic task",
+   "doc": "/ˌpɪriˈɑːdɪk tæsk/",
+   "nghia": "tác vụ định kỳ: tác vụ được sự kiện đồng hồ kích hoạt đều đặn",
+   "nhom": "Đồng thời & giao dịch",
+   "viDu": "What is a periodic task? → A task that is activated by a timer event",
+   "viDuNghia": "Tác vụ định kỳ là gì? → Một tác vụ được kích hoạt bởi sự kiện của bộ định thời"
+  },
+  {
+   "chu": "sequential program",
+   "doc": "/sɪˈkwenʃl ˈproʊɡræm/",
+   "nghia": "chương trình tuần tự: chỉ có một luồng điều khiển, gồm các đối tượng thụ động",
+   "nhom": "Đồng thời & giao dịch",
+   "viDu": "What is a characteristic of a sequential program?",
+   "viDuNghia": "Đặc điểm của một chương trình tuần tự (sequential program) là gì?"
+  },
+  {
+   "chu": "demand-driven task",
+   "doc": "/dɪˈmænd ˈdrɪvn tæsk/",
+   "nghia": "tác vụ theo yêu cầu: tác vụ được kích hoạt khi nhận thông điệp hay sự kiện nội bộ từ một tác vụ khác",
+   "nhom": "Đồng thời & giao dịch",
+   "viDu": "What is a demand-driven task?",
+   "viDuNghia": "Tác vụ theo yêu cầu (demand-driven task) là gì?"
+  },
+  {
+   "chu": "event-driven input task",
+   "nghia": "tác vụ nhập theo sự kiện: nhận dữ liệu từ thiết bị bên ngoài mỗi khi thiết bị phát ngắt (interrupt)",
+   "nhom": "Đồng thời & giao dịch",
+   "viDu": "What is an event-driven input task?",
+   "viDuNghia": "Tác vụ nhập liệu theo sự kiện (event-driven input task) là gì?"
+  },
+  {
+   "chu": "service-oriented architecture",
+   "doc": "/ˈsɜːrvɪs ˈɔːrientɪd ˈɑːrkɪtektʃər/",
+   "nghia": "kiến trúc hướng dịch vụ (SOA): hệ thống ghép từ các dịch vụ tự trị, tái sử dụng được, ghép nối lỏng",
+   "nhom": "SOA & dòng sản phẩm",
+   "viDu": "Which of the following statements best describes a key characteristic of Service-Oriented Architecture (SOA)?",
+   "viDuNghia": "Phát biểu nào sau đây mô tả đúng nhất một đặc điểm chính của kiến trúc hướng dịch vụ (SOA)?"
+  },
+  {
+   "chu": "web service",
+   "doc": "/web ˈsɜːrvɪs/",
+   "nghia": "dịch vụ web: dịch vụ gọi qua các giao thức web chuẩn",
+   "nhom": "SOA & dòng sản phẩm",
+   "viDu": "Which of these is not a desirable characteristic of a web service?",
+   "viDuNghia": "Đặc điểm nào dưới đây KHÔNG phải là đặc điểm mong muốn của một web service?"
+  },
+  {
+   "chu": "service provider",
+   "doc": "/ˈsɜːrvɪs prəˈvaɪdər/",
+   "nghia": "bên cung cấp dịch vụ",
+   "nhom": "SOA & dòng sản phẩm",
+   "viDu": "A service provider registers its service with the broker.",
+   "viDuNghia": "Bên cung cấp dịch vụ đăng ký dịch vụ của mình với broker."
+  },
+  {
+   "chu": "service requester",
+   "doc": "/ˈsɜːrvɪs rɪˈkwestər/",
+   "nghia": "bên yêu cầu (sử dụng) dịch vụ",
+   "nhom": "SOA & dòng sản phẩm",
+   "viDu": "Yellow pages brokering is useful when a service requester:",
+   "viDuNghia": "Yellow pages brokering hữu ích khi một service requester (bên yêu cầu dịch vụ):"
+  },
+  {
+   "chu": "software product line",
+   "nghia": "dòng sản phẩm phần mềm (SPL): họ các hệ thống có chung phần lõi và khác nhau ở một số tính năng",
+   "nhom": "SOA & dòng sản phẩm",
+   "viDu": "The software process model for SPL engineering has two main processes, which are:",
+   "viDuNghia": "Mô hình quy trình phần mềm cho kỹ thuật SPL có hai quy trình chính, đó là:"
+  },
+  {
+   "chu": "kernel system",
+   "doc": "/ˈkɜːrnl ˈsɪstəm/",
+   "nghia": "hệ lõi của SPL: phần chung mà mọi thành viên của dòng sản phẩm đều có",
+   "nhom": "SOA & dòng sản phẩm",
+   "viDu": "What is a kernel system in a SPL?",
+   "viDuNghia": "Kernel system trong một SPL (Software Product Line) là gì?"
+  },
+  {
+   "chu": "variation point",
+   "doc": "/ˌveriˈeɪʃn pɔɪnt/",
+   "nghia": "điểm biến thể: chỗ trong mô hình nơi các thành viên của SPL được phép khác nhau",
+   "nhom": "SOA & dòng sản phẩm",
+   "viDu": "What is a use case variation point?",
+   "viDuNghia": "Use case variation point là gì?"
+  },
+  {
+   "chu": "commonality",
+   "doc": "/ˌkɑːməˈnæləti/",
+   "nghia": "điểm chung: phần giống nhau giữa các thành viên của dòng sản phẩm",
+   "nhom": "SOA & dòng sản phẩm",
+   "viDu": "The kernel of a product line captures the commonality among its members.",
+   "viDuNghia": "Phần lõi của dòng sản phẩm chứa điểm chung giữa các thành viên."
+  },
+  {
+   "chu": "feature modeling",
+   "doc": "/ˈfiːtʃər ˈmɑːdəlɪŋ/",
+   "nghia": "mô hình hoá tính năng: phân loại tính năng chung, tuỳ chọn, thay thế của SPL",
+   "nhom": "SOA & dòng sản phẩm",
+   "viDu": "In the context of software product lines, what is 'Feature Modeling'?",
+   "viDuNghia": "Trong ngữ cảnh software product line, 'Feature Modeling' là gì?"
+  },
+  {
+   "chu": "service",
+   "doc": "/ˈsɜːrvɪs/",
+   "nghia": "dịch vụ: thành phần tự trị cung cấp chức năng qua giao diện rõ ràng cho client gọi (SOA, broker, web service)",
+   "nhom": "SOA & dòng sản phẩm",
+   "viDu": "Why does a service register with a broker?",
+   "viDuNghia": "Vì sao một dịch vụ (service) đăng ký với broker?"
+  },
+  {
+   "chu": "relational table",
+   "doc": "/rɪˈleɪʃənl ˈteɪbl/",
+   "nghia": "bảng quan hệ: bảng trong CSDL quan hệ mà lớp thực thể được ánh xạ sang",
+   "nhom": "Ánh xạ CSDL",
+   "viDu": "When mapping an aggregation hierarchy to a relational table, which of the following is NOT true?",
+   "viDuNghia": "Khi ánh xạ một cây tổng thể/bộ phận (aggregation hierarchy) sang bảng quan hệ, phát biểu nào sau đây là KHÔNG đúng?"
+  },
+  {
+   "chu": "association table",
+   "doc": "/əˌsoʊsiˈeɪʃn ˈteɪbl/",
+   "nghia": "bảng liên kết: bảng riêng để ánh xạ quan hệ nhiều – nhiều hoặc lớp liên kết",
+   "nhom": "Ánh xạ CSDL",
+   "viDu": "Which type of relationship necessitates using a concatenated key as the primary key in an association table?",
+   "viDuNghia": "Loại quan hệ nào bắt buộc phải dùng khóa hỗn hợp (concatenated key) làm khóa chính trong một bảng association?"
+  },
+  {
+   "chu": "superclass table",
+   "doc": "/ˈsuːpərklæs ˈteɪbl/",
+   "nghia": "bảng lớp cha: bảng ánh xạ lớp cha khi chuyển phân cấp kế thừa sang CSDL quan hệ",
+   "nhom": "Ánh xạ CSDL",
+   "viDu": "How is the discriminator represented in the relational database mapping from the generalization/specialization hierarchy? → As an explicit attribute of the superclass table.",
+   "viDuNghia": "Discriminator được biểu diễn như thế nào khi ánh xạ cây phân cấp generalization/specialization sang cơ sở dữ liệu quan hệ? → Là một thuộc tính tường minh (explicit) trong bảng của superclass."
+  },
+  {
+   "chu": "database wrapper class",
+   "nghia": "lớp bọc CSDL: giấu cách truy cập CSDL quan hệ sau một giao diện hướng đối tượng",
+   "nhom": "Ánh xạ CSDL",
+   "viDu": "What is a database wrapper class?",
+   "viDuNghia": "Database wrapper class là gì?"
+  },
+  {
+   "chu": "mapping",
+   "doc": "/ˈmæpɪŋ/",
+   "nghia": "ánh xạ: chuyển phần tử của mô hình này sang mô hình khác (lớp sang bảng)",
+   "nhom": "Ánh xạ CSDL",
+   "viDu": "In a relational database mapping a one-to-one relationship between two classes, where should the foreign key be placed?",
+   "viDuNghia": "Khi ánh xạ một quan hệ một-một (one-to-one) giữa hai lớp sang cơ sở dữ liệu quan hệ, khóa ngoại (foreign key) nên được đặt ở đâu?"
+  },
+  {
+   "chu": "discriminator",
+   "doc": "/dɪˈskrɪmɪneɪtər/",
+   "nghia": "thuộc tính phân biệt: cột cho biết dòng thuộc lớp con nào khi ánh xạ phân cấp kế thừa sang bảng",
+   "nhom": "Ánh xạ CSDL",
+   "viDu": "How is the discriminator represented in the relational database mapping from the generalization/specialization hierarchy?",
+   "viDuNghia": "Discriminator được biểu diễn như thế nào khi ánh xạ cây phân cấp generalization/specialization sang cơ sở dữ liệu quan hệ?"
+  },
+  {
+   "chu": "concatenated key",
+   "doc": "/kənˈkætəneɪtɪd kiː/",
+   "nghia": "khoá ghép: khoá chính gồm nhiều cột nối lại (dùng cho bảng liên kết)",
+   "nhom": "Ánh xạ CSDL",
+   "viDu": "Which type of relationship necessitates using a concatenated key as the primary key in an association table?",
+   "viDuNghia": "Loại quan hệ nào bắt buộc phải dùng khóa hỗn hợp (concatenated key) làm khóa chính trong một bảng association?"
+  },
+  {
+   "chu": "creational pattern",
+   "doc": "/kriˈeɪʃənl ˈpætərn/",
+   "nghia": "mẫu khởi tạo: nhóm mẫu lo việc tạo đối tượng (Singleton, Factory, Builder…)",
+   "nhom": "Mẫu thiết kế GoF",
+   "viDu": "Singleton and Factory Method are creational patterns.",
+   "viDuNghia": "Singleton và Factory Method là các mẫu khởi tạo."
+  },
+  {
+   "chu": "structural pattern",
+   "doc": "/ˈstrʌktʃərəl ˈpætərn/",
+   "nghia": "mẫu cấu trúc: nhóm mẫu lo cách ghép lớp, đối tượng (Adapter, Decorator, Facade…)",
+   "nhom": "Mẫu thiết kế GoF",
+   "viDu": "Adapter, Decorator and Facade are structural patterns.",
+   "viDuNghia": "Adapter, Decorator và Facade là các mẫu cấu trúc."
+  },
+  {
+   "chu": "behavioral pattern",
+   "doc": "/bɪˈheɪvjərəl ˈpætərn/",
+   "nghia": "mẫu hành vi: nhóm mẫu lo cách đối tượng phối hợp, chia trách nhiệm (Observer, Strategy…)",
+   "nhom": "Mẫu thiết kế GoF",
+   "viDu": "Observer and Strategy are behavioral patterns.",
+   "viDuNghia": "Observer và Strategy là các mẫu hành vi."
+  },
+  {
+   "chu": "Singleton pattern",
+   "doc": "/ˈsɪŋɡltən ˈpætərn/",
+   "nghia": "mẫu Singleton: bảo đảm một lớp chỉ có đúng một thể hiện và có điểm truy cập toàn cục",
+   "nhom": "Mẫu thiết kế GoF",
+   "viDu": "Which design pattern ensures that a class has only one instance and provides a global point of access to it? → Singleton",
+   "viDuNghia": "Mẫu thiết kế (design pattern) nào đảm bảo một lớp chỉ có duy nhất một thực thể và cung cấp một điểm truy cập toàn cục đến thực thể đó? → Singleton"
+  },
+  {
+   "chu": "Factory Method pattern",
+   "nghia": "mẫu Factory Method: để lớp con quyết định tạo đối tượng thuộc lớp nào",
+   "nhom": "Mẫu thiết kế GoF",
+   "viDu": "The Factory Method pattern lets subclasses decide which class to instantiate.",
+   "viDuNghia": "Mẫu Factory Method để lớp con quyết định tạo đối tượng của lớp nào."
+  },
+  {
+   "chu": "Abstract Factory pattern",
+   "nghia": "mẫu Abstract Factory: tạo cả họ đối tượng liên quan mà không nêu lớp cụ thể",
+   "nhom": "Mẫu thiết kế GoF",
+   "viDu": "The Abstract Factory pattern creates families of related objects.",
+   "viDuNghia": "Mẫu Abstract Factory tạo ra các họ đối tượng có liên quan với nhau."
+  },
+  {
+   "chu": "Builder pattern",
+   "doc": "/ˈbɪldər ˈpætərn/",
+   "nghia": "mẫu Builder: dựng đối tượng phức tạp từng bước một",
+   "nhom": "Mẫu thiết kế GoF",
+   "viDu": "The Builder pattern constructs a complex object step by step.",
+   "viDuNghia": "Mẫu Builder dựng một đối tượng phức tạp theo từng bước."
+  },
+  {
+   "chu": "Adapter pattern",
+   "doc": "/əˈdæptər ˈpætərn/",
+   "nghia": "mẫu Adapter: đổi giao diện của lớp có sẵn thành giao diện mà client cần",
+   "nhom": "Mẫu thiết kế GoF",
+   "viDu": "The Adapter pattern makes two incompatible interfaces work together.",
+   "viDuNghia": "Mẫu Adapter giúp hai giao diện không tương thích làm việc được với nhau."
+  },
+  {
+   "chu": "Composite pattern",
+   "doc": "/kəmˈpɑːzɪt ˈpætərn/",
+   "nghia": "mẫu Composite: xử lý đối tượng đơn và nhóm đối tượng (cây) theo cùng một cách",
+   "nhom": "Mẫu thiết kế GoF",
+   "viDu": "The Composite pattern treats a single object and a group of objects in the same way.",
+   "viDuNghia": "Mẫu Composite xử lý một đối tượng đơn và một nhóm đối tượng theo cùng một cách."
+  },
+  {
+   "chu": "Decorator pattern",
+   "doc": "/ˈdekəreɪtər ˈpætərn/",
+   "nghia": "mẫu Decorator: bọc thêm trách nhiệm cho đối tượng lúc chạy mà không sửa lớp gốc",
+   "nhom": "Mẫu thiết kế GoF",
+   "viDu": "The Decorator pattern wraps an object to add behavior at run time, like adding toppings to a dish.",
+   "viDuNghia": "Mẫu Decorator bọc một đối tượng để thêm hành vi lúc chạy, như thêm topping vào món ăn."
+  },
+  {
+   "chu": "Facade pattern",
+   "doc": "/fəˈsɑːd ˈpætərn/",
+   "nghia": "mẫu Facade: đưa ra một giao diện đơn giản che cả hệ con phức tạp",
+   "nhom": "Mẫu thiết kế GoF",
+   "viDu": "Which design pattern provides a simplified interface to a complex subsystem? → Facade",
+   "viDuNghia": "Mẫu thiết kế (design pattern) nào cung cấp một giao diện đơn giản hoá cho một hệ thống con phức tạp? → Facade"
+  },
+  {
+   "chu": "Proxy pattern",
+   "doc": "/ˈprɑːksi ˈpætərn/",
+   "nghia": "mẫu Proxy: đối tượng đứng thay, kiểm soát việc truy cập đối tượng thật",
+   "nhom": "Mẫu thiết kế GoF",
+   "viDu": "The Proxy pattern controls access to the real object.",
+   "viDuNghia": "Mẫu Proxy kiểm soát việc truy cập đối tượng thật."
+  },
+  {
+   "chu": "Observer pattern",
+   "doc": "/əbˈzɜːrvər ˈpætərn/",
+   "nghia": "mẫu Observer: khi một đối tượng đổi trạng thái thì mọi đối tượng đăng ký đều được báo",
+   "nhom": "Mẫu thiết kế GoF",
+   "viDu": "When applying the Observer pattern in a system, what is the primary responsibility of the subject object?",
+   "viDuNghia": "Khi áp dụng Observer pattern trong một hệ thống, trách nhiệm chính của đối tượng subject là gì?"
+  },
+  {
+   "chu": "Strategy pattern",
+   "doc": "/ˈstrætədʒi ˈpætərn/",
+   "nghia": "mẫu Strategy: đóng gói từng thuật toán thành lớp riêng để đổi qua lại lúc chạy",
+   "nhom": "Mẫu thiết kế GoF",
+   "viDu": "Which pattern focuses on dynamically binding classes at runtime? → Strategy Pattern",
+   "viDuNghia": "Mẫu thiết kế nào tập trung vào việc gắn kết (binding) lớp một cách động tại thời điểm chạy (runtime)? → Strategy Pattern"
+  },
+  {
+   "chu": "refactoring",
+   "doc": "/ˌriːˈfæktərɪŋ/",
+   "nghia": "tái cấu trúc mã: sửa cấu trúc bên trong cho gọn mà không đổi hành vi bên ngoài",
+   "nhom": "Mẫu thiết kế GoF",
+   "viDu": "You find numerous cycles and tangles in the dependencies. The recommended approach to be followed is: → Perform architecture refactoring",
+   "viDuNghia": "Bạn thấy nhiều vòng lặp và rối rắm trong các phụ thuộc. Cách làm được khuyến nghị là: → Tái cấu trúc kiến trúc"
+  }
+ ]
+}

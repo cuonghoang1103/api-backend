@@ -1,0 +1,734 @@
+{
+ "ma": "iot102-2",
+ "nn": "en",
+ "ten": "IOT102 · 2. Arduino, điện tử, cảm biến, lập trình",
+ "moTa": "Môn Internet vạn vật (IOT102), phần 2: bo mạch Arduino Uno, chân và tín hiệu số – tương tự, linh kiện điện tử, cảm biến và cơ cấu chấp hành, hàm lập trình Arduino, giao tiếp nối tiếp. Từ lấy từ đề FE thật; câu ví dụ là câu hỏi thật trong đề.",
+ "bieuTuong": "cpu",
+ "thuTu": -961,
+ "tu": [
+  {
+   "chu": "Arduino Uno",
+   "doc": "/ɑːrˈdwiːnoʊ ˈuːnoʊ/",
+   "nghia": "Arduino Uno – bo mạch vi điều khiển phổ biến nhất cho người mới học, dùng chip ATmega328P",
+   "nhom": "Bo mạch Arduino",
+   "viDu": "Which pins support serial communication between the Arduino Uno and the computer?",
+   "viDuNghia": "Chân nào hỗ trợ giao tiếp nối tiếp giữa Arduino Uno và máy tính?"
+  },
+  {
+   "chu": "microcontroller",
+   "doc": "/ˌmaɪkroʊkənˈtroʊlər/",
+   "nghia": "vi điều khiển – máy tính tí hon trên một chip: có CPU, bộ nhớ và các chân vào/ra",
+   "nhom": "Bo mạch Arduino",
+   "viDu": "Which board is the Arduino's first development board to use one microcontroller with built-in USB?",
+   "viDuNghia": "Board nào là board Arduino đầu tiên dùng vi điều khiển có USB tích hợp sẵn?"
+  },
+  {
+   "chu": "board",
+   "doc": "/bɔːrd/",
+   "nghia": "bo mạch – tấm mạch in gắn sẵn chip và linh kiện",
+   "nhom": "Bo mạch Arduino",
+   "viDu": "In circuit design, which component is used to limit the current from the arduino board to the LED?",
+   "viDuNghia": "Linh kiện nào hạn dòng từ Arduino tới LED?"
+  },
+  {
+   "chu": "shield",
+   "doc": "/ʃiːld/",
+   "nghia": "shield – bo mở rộng cắm chồng lên Arduino để thêm chức năng (Wi-Fi, điều khiển động cơ…)",
+   "nhom": "Bo mạch Arduino",
+   "viDu": "What is the primary purpose of connecting shields to the I/O board in an embedded system?",
+   "viDuNghia": "Mục đích chính khi gắn shield vào board I/O trong hệ nhúng là gì?"
+  },
+  {
+   "chu": "breadboard",
+   "doc": "/ˈbredbɔːrd/",
+   "nghia": "bo cắm thử – tấm nhựa nhiều lỗ để cắm linh kiện, lắp mạch thử không cần hàn",
+   "nhom": "Bo mạch Arduino",
+   "viDu": "On a breadboard, where do you put a DIP package?",
+   "viDuNghia": "Trên breadboard, đặt vi mạch DIP ở đâu?"
+  },
+  {
+   "chu": "jumper wire",
+   "doc": "/ˈdʒʌmpər ˈwaɪər/",
+   "nghia": "dây cắm – dây ngắn có đầu cắm, dùng nối các điểm trên bo cắm thử",
+   "nhom": "Bo mạch Arduino",
+   "viDu": "Use jumper wires to connect the LED on the breadboard to the Arduino pins.",
+   "viDuNghia": "Dùng dây cắm để nối LED trên bo cắm thử với các chân của Arduino."
+  },
+  {
+   "chu": "power supply",
+   "doc": "/ˈpaʊər səˈplaɪ/",
+   "nghia": "nguồn điện – bộ phận cấp điện cho mạch",
+   "nhom": "Bo mạch Arduino",
+   "viDu": "In the reticulation (water irrigation) system, what type of device are the power supplies?",
+   "viDuNghia": "Trong hệ thống tưới tiêu, các bộ nguồn cấp điện thuộc loại thiết bị gì?"
+  },
+  {
+   "chu": "bootloader",
+   "doc": "/ˈbuːtloʊdər/",
+   "nghia": "bootloader – chương trình nhỏ nạp sẵn trong chip, cho phép tải mã mới qua cổng USB",
+   "nhom": "Bo mạch Arduino",
+   "viDu": "How much space of flash memory does the default bootloader of Arduino Uno take?",
+   "viDuNghia": "Bootloader mặc định của Arduino Uno chiếm bao nhiêu dung lượng flash?"
+  },
+  {
+   "chu": "clock speed",
+   "doc": "/klɑːk spiːd/",
+   "nghia": "tốc độ xung nhịp – Arduino Uno chạy thạch anh 16 MHz",
+   "nhom": "Bo mạch Arduino",
+   "viDu": "What is the clock speed of the ATmega328 microcontroller used in the Arduino Uno?",
+   "viDuNghia": "Tốc độ xung nhịp của vi điều khiển ATmega328 trên Arduino Uno là bao nhiêu?"
+  },
+  {
+   "chu": "schematic",
+   "doc": "/skiːˈmætɪk/",
+   "nghia": "sơ đồ nguyên lý – bản vẽ mạch bằng ký hiệu linh kiện",
+   "nhom": "Bo mạch Arduino",
+   "viDu": "What is the primary purpose of a schematic diagram in electrical engineering?",
+   "viDuNghia": "Mục đích chính của sơ đồ nguyên lý (schematic) trong kỹ thuật điện là gì?"
+  },
+  {
+   "chu": "ATmega328P",
+   "doc": "/eɪ ˈtiː ˌmeɡə ˌθriː ˌtuː ˈeɪt ˈpiː/",
+   "nghia": "ATmega328P – chip vi điều khiển 8 bit của Arduino Uno: 32 KB flash, 2 KB SRAM, 1 KB EEPROM, chạy 16 MHz; chữ P = picoPower (tiết kiệm điện)",
+   "nhom": "Bo mạch Arduino",
+   "viDu": "What does p refer to in ATmega328p?",
+   "viDuNghia": "Chữ p trong ATmega328p nghĩa là gì?"
+  },
+  {
+   "chu": "Raspberry Pi",
+   "doc": "/ˈræzberi paɪ/",
+   "nghia": "Raspberry Pi – máy tính nhỏ một bo mạch chạy Linux, mạnh hơn Arduino",
+   "nhom": "Bo mạch Arduino",
+   "viDu": "Unlike an Arduino, a Raspberry Pi runs a full Linux operating system.",
+   "viDuNghia": "Khác Arduino, Raspberry Pi chạy cả một hệ điều hành Linux."
+  },
+  {
+   "chu": "ESP8266",
+   "doc": "/ˌiː es ˈpiː eɪt tuː sɪks sɪks/",
+   "nghia": "ESP8266 – chip/module Wi-Fi giá rẻ chạy 3,3 V, giúp Arduino kết nối mạng",
+   "nhom": "Bo mạch Arduino",
+   "viDu": "What is the use of the ESP8266 WiFi module?",
+   "viDuNghia": "Module WiFi ESP8266 dùng để làm gì?"
+  },
+  {
+   "chu": "megahertz",
+   "doc": "/ˈmeɡəhɜːrts/",
+   "nghia": "mêga-héc (MHz) – một triệu chu kỳ mỗi giây; Arduino Uno chạy 16 MHz",
+   "nhom": "Bo mạch Arduino",
+   "viDu": "The Arduino Uno runs at 16 megahertz (MHz).",
+   "viDuNghia": "Arduino Uno chạy ở tần số 16 MHz."
+  },
+  {
+   "chu": "pin",
+   "doc": "/pɪn/",
+   "nghia": "chân – điểm nối trên bo mạch để cắm dây ra linh kiện",
+   "nhom": "Chân & tín hiệu",
+   "viDu": "Which pin has a built-in LED?",
+   "viDuNghia": "Chân nào có sẵn đèn LED tích hợp trên bo?"
+  },
+  {
+   "chu": "digital pin",
+   "doc": "/ˈdɪdʒɪtl pɪn/",
+   "nghia": "chân số – chỉ đọc/xuất hai mức HIGH (5 V) và LOW (0 V); Uno có 14 chân (0–13)",
+   "nhom": "Chân & tín hiệu",
+   "viDu": "Which of the following digital pins can be used in Arduino Nano/Uno to give interrupt?",
+   "viDuNghia": "Những chân digital nào có thể dùng để tạo ngắt (interrupt) trên Arduino Nano/Uno?"
+  },
+  {
+   "chu": "analog input",
+   "doc": "/ˈænəlɔːɡ ˈɪnpʊt/",
+   "nghia": "đầu vào tương tự – chân A0–A5 của Uno, đọc điện áp 0–5 V thành số 0–1023",
+   "nhom": "Chân & tín hiệu",
+   "viDu": "What is a critical consideration when programming analog input/output for IoT applications?",
+   "viDuNghia": "Điều gì quan trọng khi lập trình I/O analog cho ứng dụng IoT?"
+  },
+  {
+   "chu": "general-purpose input/output",
+   "doc": "/ˌdʒenrəl ˈpɜːrpəs ˈɪnpʊt ˈaʊtpʊt/",
+   "nghia": "chân vào/ra đa dụng (GPIO) – chân có thể đặt làm đầu vào hoặc đầu ra bằng chương trình",
+   "nhom": "Chân & tín hiệu",
+   "viDu": "What does GPIO stand for?",
+   "viDuNghia": "GPIO là viết tắt của gì?"
+  },
+  {
+   "chu": "analog-to-digital converter",
+   "doc": "/ˌænəlɔːɡ tə ˈdɪdʒɪtl kənˈvɜːrtər/",
+   "nghia": "bộ chuyển tương tự sang số (ADC) – đổi điện áp thành con số; ADC của Uno 10 bit cho giá trị 0–1023",
+   "nhom": "Chân & tín hiệu",
+   "viDu": "If the following are the parameters of ADC, Vref = 5V, and a 10-bit A/D output code is 0x1AB, what is the ADC input voltage?",
+   "viDuNghia": "Cho thông số ADC, Vref = 5V, mã ngõ ra A/D 10-bit là 0x1AB, điện áp ngõ vào ADC là bao nhiêu?"
+  },
+  {
+   "chu": "digital-to-analog converter",
+   "doc": "/ˌdɪdʒɪtl tu ˈænəlɔːɡ kənˈvɜːrtər/",
+   "nghia": "bộ chuyển số sang tương tự (DAC) – đổi con số thành mức điện áp",
+   "nhom": "Chân & tín hiệu",
+   "viDu": "What is the function of a Digital to Analog Converter?",
+   "viDuNghia": "Chức năng của bộ chuyển đổi Digital to Analog (DAC) là gì?"
+  },
+  {
+   "chu": "pulse width modulation",
+   "nghia": "điều chế độ rộng xung (PWM) – bật/tắt thật nhanh để giả lập mức điện áp trung gian; dùng chỉnh độ sáng LED, tốc độ động cơ",
+   "nhom": "Chân & tín hiệu",
+   "viDu": "Which of the following digital pins on Arduino Uno support PWM output by default?",
+   "viDuNghia": "Chân digital nào sau đây trên Arduino Uno hỗ trợ ngõ ra PWM theo mặc định?"
+  },
+  {
+   "chu": "duty cycle",
+   "doc": "/ˈduːti ˈsaɪkl/",
+   "nghia": "chu kỳ nhiệm vụ – phần trăm thời gian tín hiệu ở mức HIGH trong một chu kỳ PWM",
+   "nhom": "Chân & tín hiệu",
+   "viDu": "75% duty cycle corresponding to analogWrite(pin number,Value), the Value is ________.",
+   "viDuNghia": "Duty cycle 75% tương ứng với analogWrite(pin number,Value), Value là ________."
+  },
+  {
+   "chu": "amplitude",
+   "doc": "/ˈæmplɪtuːd/",
+   "nghia": "biên độ – độ lớn (chiều cao) của tín hiệu",
+   "nhom": "Chân & tín hiệu",
+   "viDu": "The amplitude of the signal is 5 volts.",
+   "viDuNghia": "Biên độ của tín hiệu là 5 vôn."
+  },
+  {
+   "chu": "brightness",
+   "doc": "/ˈbraɪtnəs/",
+   "nghia": "độ sáng – chỉnh độ sáng LED bằng PWM (analogWrite)",
+   "nhom": "Chân & tín hiệu",
+   "viDu": "analogWrite() changes the brightness of an LED by changing the PWM duty cycle.",
+   "viDuNghia": "analogWrite() thay đổi độ sáng LED bằng cách đổi chu kỳ nhiệm vụ PWM."
+  },
+  {
+   "chu": "square wave",
+   "doc": "/skwer weɪv/",
+   "nghia": "sóng vuông – tín hiệu chỉ nhảy giữa hai mức HIGH và LOW",
+   "nhom": "Chân & tín hiệu",
+   "viDu": "A part of an Arduino sketch is as follows: digitalWrite(11, HIGH); delay(300); digitalWrite(11, LOW); delay(200); What is the frequency of the waveform at digital pin D11?",
+   "viDuNghia": "Một phần sketch Arduino như sau: digitalWrite(11, HIGH); delay(300); digitalWrite(11, LOW); delay(200); Tần số của dạng sóng tại chân digital D11 là bao nhiêu?"
+  },
+  {
+   "chu": "analog",
+   "doc": "/ˈænəlɔːɡ/",
+   "nghia": "tương tự (analog) – tín hiệu thay đổi liên tục; Arduino đọc bằng analogRead() ra số 0–1023 ở chân A0–A5",
+   "nhom": "Chân & tín hiệu",
+   "viDu": "To declare a variable that stores the value read from analog pin A0, what data type is this variable?",
+   "viDuNghia": "Để khai báo một biến lưu giá trị đọc được từ chân analog A0, kiểu dữ liệu của biến đó là gì?"
+  },
+  {
+   "chu": "digital",
+   "doc": "/ˈdɪdʒɪtl/",
+   "nghia": "số (digital) – tín hiệu chỉ có hai mức HIGH/LOW (1/0); Arduino dùng digitalRead()/digitalWrite()",
+   "nhom": "Chân & tín hiệu",
+   "viDu": "How is the input voltage range of 0 to 5 volts converted to a digital value between 0 and 1023 in an Arduino microcontroller?",
+   "viDuNghia": "Điện áp ngõ vào từ 0 đến 5V được chuyển thành giá trị digital từ 0 đến 1023 trên vi điều khiển Arduino như thế nào?"
+  },
+  {
+   "chu": "logic level",
+   "doc": "/ˈlɑːdʒɪk ˈlevl/",
+   "nghia": "mức logic – HIGH (khoảng 5 V hoặc 3,3 V) hay LOW (0 V) ở một chân số",
+   "nhom": "Chân & tín hiệu",
+   "viDu": "digitalRead() returns the logic level of a pin: HIGH or LOW.",
+   "viDuNghia": "digitalRead() trả về mức logic của một chân: HIGH hoặc LOW."
+  },
+  {
+   "chu": "voltage",
+   "doc": "/ˈvoʊltɪdʒ/",
+   "nghia": "điện áp (hiệu điện thế) – đo bằng vôn (V)",
+   "nhom": "Linh kiện điện tử",
+   "viDu": "The resistance of a heater coil is 10 Ohms and the input voltage is 120V. What is the current?",
+   "viDuNghia": "Điện trở cuộn dây sưởi là 10 Ohm, điện áp vào 120V. Dòng điện là bao nhiêu?"
+  },
+  {
+   "chu": "current",
+   "doc": "/ˈkɜːrənt/",
+   "nghia": "dòng điện – đo bằng ampe (A)",
+   "nhom": "Linh kiện điện tử",
+   "viDu": "When designing an IoT device, which component is used to limit current flowing through an LED?",
+   "viDuNghia": "Khi thiết kế thiết bị IoT, linh kiện nào dùng để giới hạn dòng điện chạy qua LED?"
+  },
+  {
+   "chu": "resistance",
+   "doc": "/rɪˈzɪstəns/",
+   "nghia": "điện trở (đại lượng) – mức cản dòng điện, đo bằng ôm",
+   "nhom": "Linh kiện điện tử",
+   "viDu": "A photoresistor is an electronic component whose electrical resistance ________ when it is exposed to light.",
+   "viDuNghia": "Quang trở là linh kiện điện tử có điện trở ________ khi tiếp xúc với ánh sáng."
+  },
+  {
+   "chu": "resistor",
+   "doc": "/rɪˈzɪstər/",
+   "nghia": "điện trở (linh kiện) – dùng hạn dòng, vd mắc nối tiếp với LED để LED không cháy",
+   "nhom": "Linh kiện điện tử",
+   "viDu": "The first three color bands of a 4-band resistor are brown, green, and yellow. What is its value?",
+   "viDuNghia": "Ba vạch màu đầu tiên của một điện trở 4 vạch là nâu, xanh lá, và vàng. Giá trị của nó là bao nhiêu?"
+  },
+  {
+   "chu": "Ohm's law",
+   "doc": "/ˈoʊmz lɔː/",
+   "nghia": "định luật Ôm – V = I × R",
+   "nhom": "Linh kiện điện tử",
+   "viDu": "Which statements are true? (Ohm's Law: V=IR)",
+   "viDuNghia": "Phát biểu nào đúng? (Định luật Ohm: V=IR)"
+  },
+  {
+   "chu": "ohm",
+   "doc": "/oʊm/",
+   "nghia": "ôm – đơn vị đo điện trở",
+   "nhom": "Linh kiện điện tử",
+   "viDu": "A 220 ohm resistor is often placed in series with an LED.",
+   "viDuNghia": "Người ta thường mắc nối tiếp một điện trở 220 ôm với LED."
+  },
+  {
+   "chu": "light-emitting diode",
+   "doc": "/ˌlaɪt ɪˈmɪtɪŋ ˈdaɪoʊd/",
+   "nghia": "đi-ốt phát quang (LED) – đèn bán dẫn, chỉ sáng khi cắm đúng chiều",
+   "nhom": "Linh kiện điện tử",
+   "viDu": "What does the RX LED blinking on an Arduino board signify?",
+   "viDuNghia": "Đèn LED RX nhấp nháy trên bo Arduino báo hiệu điều gì?"
+  },
+  {
+   "chu": "anode",
+   "doc": "/ˈænoʊd/",
+   "nghia": "cực dương của LED/đi-ốt – chân dài, nối về phía dương",
+   "nhom": "Linh kiện điện tử",
+   "viDu": "To vary the brightness of an LED, anode of the LED is to be connected at ________.",
+   "viDuNghia": "Để thay đổi độ sáng LED, anode của LED cần nối vào ________."
+  },
+  {
+   "chu": "cathode",
+   "doc": "/ˈkæθoʊd/",
+   "nghia": "cực âm của LED/đi-ốt – chân ngắn, nối về phía đất",
+   "nhom": "Linh kiện điện tử",
+   "viDu": "On a LED, the shorter/negative side is called the cathode pin.",
+   "viDuNghia": "Trên LED, chân ngắn hơn/âm gọi là chân cathode."
+  },
+  {
+   "chu": "push button",
+   "doc": "/pʊʃ ˈbʌtn/",
+   "nghia": "nút nhấn – công tắc chỉ đóng mạch khi đang bị nhấn",
+   "nhom": "Linh kiện điện tử",
+   "viDu": "In the code that tracks button presses, what structure is used to detect a button press?",
+   "viDuNghia": "Trong đoạn code theo dõi nhấn nút, cấu trúc nào được dùng để phát hiện một lần nhấn nút?"
+  },
+  {
+   "chu": "potentiometer",
+   "doc": "/pəˌtenʃiˈɑːmɪtər/",
+   "nghia": "biến trở – điện trở vặn được để thay đổi giá trị",
+   "nhom": "Linh kiện điện tử",
+   "viDu": "What does the analogRead() function return when the potentiometer is turned all the way to connect with the +5 volts?",
+   "viDuNghia": "analogRead() trả về gì khi biến trở vặn hết cỡ để nối vào +5V?"
+  },
+  {
+   "chu": "pull-up resistor",
+   "doc": "/ˈpʊl ʌp rɪˈzɪstər/",
+   "nghia": "điện trở kéo lên – giữ chân đầu vào ở mức HIGH khi nút chưa nhấn, tránh chân bị thả nổi",
+   "nhom": "Linh kiện điện tử",
+   "viDu": "What is the difference between the INPUT and INPUT_PULLUP arguments in the pinMode() function?",
+   "viDuNghia": "Sự khác nhau giữa tham số INPUT và INPUT_PULLUP trong hàm pinMode() là gì?"
+  },
+  {
+   "chu": "color band",
+   "doc": "/ˈkʌlər bænd/",
+   "nghia": "vạch màu – các vòng màu trên thân điện trở cho biết giá trị của nó",
+   "nhom": "Linh kiện điện tử",
+   "viDu": "If a resistor has bands of yellow, violet, and orange, what would be its resistance value?",
+   "viDuNghia": "Điện trở với vạch màu vàng, tím, cam có giá trị bao nhiêu?"
+  },
+  {
+   "chu": "seven-segment display",
+   "doc": "/ˌsevn ˈseɡmənt dɪˈspleɪ/",
+   "nghia": "LED 7 đoạn – hiển thị chữ số bằng bảy thanh LED; có loại anode chung và cathode chung",
+   "nhom": "Linh kiện điện tử",
+   "viDu": "How many pins are there in a 7-segment LED display?",
+   "viDuNghia": "Màn hình LED 7 đoạn có bao nhiêu chân?"
+  },
+  {
+   "chu": "liquid crystal display",
+   "nghia": "màn hình tinh thể lỏng (LCD)",
+   "nhom": "Linh kiện điện tử",
+   "viDu": "When using the LCD 1602 display with an Arduino, what is the purpose of wiring a 10k ohm potentiometer to the VO pin of the LCD?",
+   "viDuNghia": "Khi dùng màn hình LCD 1602 với Arduino, mục đích của việc nối biến trở 10k ohm vào chân VO của LCD là gì?"
+  },
+  {
+   "chu": "electrical",
+   "doc": "/ɪˈlektrɪkl/",
+   "nghia": "(thuộc) điện – electrical signal = tín hiệu điện",
+   "nhom": "Linh kiện điện tử",
+   "viDu": "A narrow pipe in a water system is analogous to what concept in an electrical circuit?",
+   "viDuNghia": "Ống nước hẹp trong hệ thống nước tương tự khái niệm nào trong mạch điện?"
+  },
+  {
+   "chu": "volt",
+   "doc": "/voʊlt/",
+   "nghia": "vôn – đơn vị đo điện áp",
+   "nhom": "Linh kiện điện tử",
+   "viDu": "A vacuum cleaner has a maximum power consumption of 1000 W and is powered by 240 Volts, what is the current used?",
+   "viDuNghia": "Máy hút bụi có công suất tiêu thụ tối đa 1000 W, cấp nguồn 240V, dòng điện sử dụng là bao nhiêu?"
+  },
+  {
+   "chu": "inductor",
+   "doc": "/ɪnˈdʌktər/",
+   "nghia": "cuộn cảm – linh kiện tích năng lượng dưới dạng từ trường",
+   "nhom": "Linh kiện điện tử",
+   "viDu": "An inductor stores energy in a magnetic field.",
+   "viDuNghia": "Cuộn cảm tích năng lượng trong từ trường."
+  },
+  {
+   "chu": "capacitor",
+   "doc": "/kəˈpæsɪtər/",
+   "nghia": "tụ điện – linh kiện tích điện tích; dùng lọc nguồn, chống nhiễu · (bộ nhớ, CEA201) ô DRAM lưu mỗi bit bằng điện tích trên một tụ",
+   "nhom": "Linh kiện điện tử",
+   "viDu": "____ is made with cells that store data as charge on capacitors.",
+   "viDuNghia": "____ được làm từ các ô nhớ lưu dữ liệu dưới dạng điện tích trên tụ điện."
+  },
+  {
+   "chu": "voltage divider",
+   "doc": "/ˈvoʊltɪdʒ dɪˈvaɪdər/",
+   "nghia": "mạch chia áp – hai điện trở nối tiếp; điện áp trên một điện trở = Vin × R đó / (R1 + R2)",
+   "nhom": "Linh kiện điện tử",
+   "viDu": "In a voltage divider with R1 = 10k ohm and R2 = 15k ohm, Vin = 12V. What is the voltage across R1?",
+   "viDuNghia": "Mạch chia áp có R1 = 10k ôm, R2 = 15k ôm, Vin = 12V. Điện áp trên R1 là bao nhiêu?"
+  },
+  {
+   "chu": "temperature sensor",
+   "doc": "/ˈtemprətʃər ˈsensər/",
+   "nghia": "cảm biến nhiệt độ – vd LM35 cho ra 10 mV mỗi độ C",
+   "nhom": "Cảm biến & chấp hành",
+   "viDu": "In terms of output format, how does the LM35 temperature sensor differ from the DS1820?",
+   "viDuNghia": "Về định dạng ngõ ra, LM35 khác DS1820 như thế nào?"
+  },
+  {
+   "chu": "ultrasonic sensor",
+   "doc": "/ˌʌltrəˈsɑːnɪk ˈsensər/",
+   "nghia": "cảm biến siêu âm – đo khoảng cách bằng thời gian sóng âm dội lại (HC-SR04)",
+   "nhom": "Cảm biến & chấp hành",
+   "viDu": "What is the primary function of the Ultrasonic Sensor in IoT applications?",
+   "viDuNghia": "Chức năng chính của cảm biến siêu âm trong IoT là gì?"
+  },
+  {
+   "chu": "humidity",
+   "doc": "/hjuːˈmɪdəti/",
+   "nghia": "độ ẩm",
+   "nhom": "Cảm biến & chấp hành",
+   "viDu": "The DHT11 is a temperature and humidity sensor.",
+   "viDuNghia": "DHT11 là cảm biến nhiệt độ và độ ẩm."
+  },
+  {
+   "chu": "photoresistor",
+   "doc": "/ˌfoʊtoʊrɪˈzɪstər/",
+   "nghia": "quang trở (LDR) – điện trở thay đổi theo ánh sáng: sáng nhiều thì điện trở giảm",
+   "nhom": "Cảm biến & chấp hành",
+   "viDu": "What is the function of a photoresistor?",
+   "viDuNghia": "Chức năng của photoresistor là gì?"
+  },
+  {
+   "chu": "motion sensor",
+   "doc": "/ˈmoʊʃn ˈsensər/",
+   "nghia": "cảm biến chuyển động – phát hiện người/vật di chuyển (PIR)",
+   "nhom": "Cảm biến & chấp hành",
+   "viDu": "Why is the motion sensor in the responder important on a dairy farm?",
+   "viDuNghia": "Vì sao cảm biến chuyển động trong thiết bị phản hồi lại quan trọng ở trang trại bò sữa?"
+  },
+  {
+   "chu": "pressure",
+   "doc": "/ˈpreʃər/",
+   "nghia": "áp suất, áp lực",
+   "nhom": "Cảm biến & chấp hành",
+   "viDu": "Which category of actuators includes mechanisms that utilize air pressure to control or move objects?",
+   "viDuNghia": "Loại actuator nào dùng áp suất khí?"
+  },
+  {
+   "chu": "strain gauge",
+   "doc": "/streɪn ɡeɪdʒ/",
+   "nghia": "cảm biến biến dạng – điện trở thay đổi khi bị kéo/nén, dùng đo lực, cân nặng",
+   "nhom": "Cảm biến & chấp hành",
+   "viDu": "A strain gauge changes its resistance when it is stretched or compressed.",
+   "viDuNghia": "Cảm biến biến dạng thay đổi điện trở khi bị kéo giãn hoặc nén."
+  },
+  {
+   "chu": "actuator",
+   "doc": "/ˈæktʃueɪtər/",
+   "nghia": "cơ cấu chấp hành – biến tín hiệu điện thành hành động vật lý (động cơ, van, loa)",
+   "nhom": "Cảm biến & chấp hành",
+   "viDu": "What type of actuator is typically used to control the movement of a conveyor belt?",
+   "viDuNghia": "Loại cơ cấu chấp hành nào thường dùng để điều khiển chuyển động của băng tải?"
+  },
+  {
+   "chu": "servo motor",
+   "doc": "/ˈsɜːrvoʊ ˈmoʊtər/",
+   "nghia": "động cơ servo – quay tới đúng góc được ra lệnh (thường 0–180 độ)",
+   "nhom": "Cảm biến & chấp hành",
+   "viDu": "Which Arduino function is specifically used to link a servo object to a designated control pin on the board?",
+   "viDuNghia": "Hàm Arduino nào chuyên dùng để gắn (link) một đối tượng servo với một chân điều khiển cụ thể trên board?"
+  },
+  {
+   "chu": "DC motor",
+   "doc": "/ˌdiː ˈsiː ˈmoʊtər/",
+   "nghia": "động cơ một chiều – quay liên tục, tốc độ chỉnh bằng PWM",
+   "nhom": "Cảm biến & chấp hành",
+   "viDu": "The speed of a DC motor can be controlled with a PWM signal.",
+   "viDuNghia": "Tốc độ động cơ một chiều điều khiển được bằng tín hiệu PWM."
+  },
+  {
+   "chu": "relay",
+   "doc": "/ˈriːleɪ/",
+   "nghia": "rơ-le – công tắc điều khiển bằng điện, cho mạch nhỏ đóng/cắt tải lớn",
+   "nhom": "Cảm biến & chấp hành",
+   "viDu": "In the reticulation (water irrigation) system, what type of device are the relays?",
+   "viDuNghia": "Trong hệ thống tưới tiêu, các rơ-le thuộc loại thiết bị gì?"
+  },
+  {
+   "chu": "buzzer",
+   "doc": "/ˈbʌzər/",
+   "nghia": "còi chip – phát tiếng kêu khi có điện",
+   "nhom": "Cảm biến & chấp hành",
+   "viDu": "The buzzer sounds when the temperature is too high.",
+   "viDuNghia": "Còi kêu khi nhiệt độ quá cao."
+  },
+  {
+   "chu": "transducer",
+   "doc": "/trænzˈduːsər/",
+   "nghia": "bộ chuyển đổi – biến dạng năng lượng này thành dạng khác (cảm biến và cơ cấu chấp hành đều là transducer)",
+   "nhom": "Cảm biến & chấp hành",
+   "viDu": "A sensor is a transducer that converts a physical quantity into an electrical signal.",
+   "viDuNghia": "Cảm biến là bộ chuyển đổi biến một đại lượng vật lý thành tín hiệu điện."
+  },
+  {
+   "chu": "mechanical",
+   "doc": "/məˈkænɪkl/",
+   "nghia": "(thuộc) cơ khí – chuyển động, lực",
+   "nhom": "Cảm biến & chấp hành",
+   "viDu": "An actuator converts an electrical signal into mechanical motion.",
+   "viDuNghia": "Cơ cấu chấp hành biến tín hiệu điện thành chuyển động cơ học."
+  },
+  {
+   "chu": "hydraulic",
+   "doc": "/haɪˈdrɔːlɪk/",
+   "nghia": "thuỷ lực – truyền lực bằng chất lỏng nén",
+   "nhom": "Cảm biến & chấp hành",
+   "viDu": "A hydraulic actuator uses liquid under pressure to create motion.",
+   "viDuNghia": "Cơ cấu chấp hành thuỷ lực dùng chất lỏng nén để tạo chuyển động."
+  },
+  {
+   "chu": "pneumatic",
+   "doc": "/nuːˈmætɪk/",
+   "nghia": "khí nén – truyền lực bằng khí nén",
+   "nhom": "Cảm biến & chấp hành",
+   "viDu": "A pneumatic actuator uses compressed air to create motion.",
+   "viDuNghia": "Cơ cấu chấp hành khí nén dùng khí nén để tạo chuyển động."
+  },
+  {
+   "chu": "thermistor",
+   "doc": "/θɜːrˈmɪstər/",
+   "nghia": "nhiệt điện trở – điện trở thay đổi theo nhiệt độ",
+   "nhom": "Cảm biến & chấp hành",
+   "viDu": "The resistance of a thermistor changes with temperature.",
+   "viDuNghia": "Điện trở của nhiệt điện trở thay đổi theo nhiệt độ."
+  },
+  {
+   "chu": "amplifier",
+   "doc": "/ˈæmplɪfaɪər/",
+   "nghia": "bộ khuếch đại – làm tín hiệu yếu mạnh lên (instrumentation amplifier dùng cho cảm biến)",
+   "nhom": "Cảm biến & chấp hành",
+   "viDu": "An amplifier increases the strength of a weak sensor signal.",
+   "viDuNghia": "Bộ khuếch đại làm tín hiệu yếu của cảm biến mạnh lên."
+  },
+  {
+   "chu": "sensor",
+   "doc": "/ˈsensər/",
+   "nghia": "cảm biến – linh kiện đo đại lượng vật lý (nhiệt độ, ánh sáng, khoảng cách) và đổi thành tín hiệu điện",
+   "nhom": "Cảm biến & chấp hành",
+   "viDu": "In an IoT device, after a sensor communicates with a controller, what component makes the physical change?",
+   "viDuNghia": "Trong thiết bị IoT, sau khi cảm biến giao tiếp với controller, thành phần nào tạo ra thay đổi vật lý?"
+  },
+  {
+   "chu": "sketch",
+   "doc": "/sketʃ/",
+   "nghia": "sketch – tên gọi một chương trình Arduino",
+   "nhom": "Lập trình Arduino",
+   "viDu": "While taking the input from the user in Arduino, which of the function is used in Sketch?",
+   "viDuNghia": "Khi nhận input từ người dùng trong Arduino, hàm nào được dùng trong Sketch?"
+  },
+  {
+   "chu": "upload",
+   "doc": "/ˈʌploʊd/",
+   "nghia": "nạp (tải lên) – chép chương trình đã biên dịch từ máy tính vào bo mạch",
+   "nhom": "Lập trình Arduino",
+   "viDu": "When you upload a photo from your camera to a social media site, what kind of path is the information likely to travel?",
+   "viDuNghia": "Khi tải ảnh từ camera lên mạng xã hội, thông tin có khả năng đi theo đường nào?"
+  },
+  {
+   "chu": "setup function",
+   "doc": "/ˈsetʌp ˈfʌŋkʃn/",
+   "nghia": "hàm setup() – chạy đúng một lần khi bo vừa cấp điện hoặc reset; dùng để khởi tạo",
+   "nhom": "Lập trình Arduino",
+   "viDu": "What setup() function call is required to initialize SPI communication for the RC522 RFID module with Arduino Uno?",
+   "viDuNghia": "Cần gọi hàm nào trong setup() để khởi tạo giao tiếp SPI cho module RFID RC522 với Arduino Uno?"
+  },
+  {
+   "chu": "loop function",
+   "doc": "/luːp ˈfʌŋkʃn/",
+   "nghia": "hàm loop() – chạy lặp đi lặp lại mãi sau khi setup() xong",
+   "nhom": "Lập trình Arduino",
+   "viDu": "Can the loop() function be used to call another function that is custom defined by the programmer?",
+   "viDuNghia": "Hàm loop() có thể gọi một hàm khác do lập trình viên tự định nghĩa không?"
+  },
+  {
+   "chu": "pinMode",
+   "doc": "/ˈpɪn moʊd/",
+   "nghia": "pinMode(chân, chế độ) – đặt một chân là INPUT hay OUTPUT",
+   "nhom": "Lập trình Arduino",
+   "viDu": "In code: pinMode(2, INPUT_PULLUP); When the button is not pressed, and the internal pull-up resistor is enabled on digital pin 2, what is the voltage level on this pin?",
+   "viDuNghia": "Trong code: pinMode(2, INPUT_PULLUP); Khi nút chưa nhấn và điện trở kéo lên nội bộ được bật trên chân digital 2, mức điện áp trên chân này là bao nhiêu?"
+  },
+  {
+   "chu": "digitalWrite",
+   "doc": "/ˈdɪdʒɪtl raɪt/",
+   "nghia": "digitalWrite(chân, mức) – xuất mức HIGH hoặc LOW ra chân số",
+   "nhom": "Lập trình Arduino",
+   "viDu": "digitalWrite(13, HIGH) turns on the LED connected to pin 13.",
+   "viDuNghia": "digitalWrite(13, HIGH) bật LED nối ở chân 13."
+  },
+  {
+   "chu": "digitalRead",
+   "doc": "/ˈdɪdʒɪtl riːd/",
+   "nghia": "digitalRead(chân) – đọc chân số, trả về HIGH hoặc LOW",
+   "nhom": "Lập trình Arduino",
+   "viDu": "Choose the output of the function digitalRead():",
+   "viDuNghia": "Chọn ngõ ra của hàm digitalRead():"
+  },
+  {
+   "chu": "analogRead",
+   "doc": "/ˈænəlɔːɡ riːd/",
+   "nghia": "analogRead(chân) – đọc điện áp ở chân tương tự, trả về số 0–1023",
+   "nhom": "Lập trình Arduino",
+   "viDu": "The Output of the below program will print: void loop () { int val= analogRead (A6); Serial . print (val);}",
+   "viDuNghia": "Kết quả của chương trình dưới đây sẽ in ra: void loop () { int val= analogRead (A6); Serial . print (val);}"
+  },
+  {
+   "chu": "analogWrite",
+   "doc": "/ˈænəlɔːɡ raɪt/",
+   "nghia": "analogWrite(chân, giá trị) – xuất xung PWM với giá trị 0–255",
+   "nhom": "Lập trình Arduino",
+   "viDu": "In the given Arduino code, what is the purpose of the \"analogWrite\" function, and how is it used to control the LED's behavior?",
+   "viDuNghia": "Trong code Arduino, mục đích của hàm \"analogWrite\" là gì, và nó dùng để điều khiển hành vi LED như thế nào?"
+  },
+  {
+   "chu": "simulation",
+   "doc": "/ˌsɪmjuˈleɪʃn/",
+   "nghia": "mô phỏng – chạy thử mạch và mã trên phần mềm (vd Tinkercad) trước khi lắp thật",
+   "nhom": "Lập trình Arduino",
+   "viDu": "Which component on tinkercad.com allows displaying the results of the simulation program?",
+   "viDuNghia": "Thành phần nào trên tinkercad.com hiển thị kết quả mô phỏng?"
+  },
+  {
+   "chu": "Serial.begin",
+   "doc": "/ˈsɪriəl bɪˈɡɪn/",
+   "nghia": "Serial.begin(tốc độ) – mở cổng nối tiếp với tốc độ baud cho trước, vd Serial.begin(9600)",
+   "nhom": "Lập trình Arduino",
+   "viDu": "Serial.begin(9600) sets the serial data rate to 9600 bits per second.",
+   "viDuNghia": "Serial.begin(9600) đặt tốc độ truyền nối tiếp là 9600 bit mỗi giây."
+  },
+  {
+   "chu": "Serial.println",
+   "doc": "/ˈsɪriəl ˈprɪnt laɪn/",
+   "nghia": "Serial.println(giá trị) – gửi giá trị ra cổng nối tiếp rồi xuống dòng",
+   "nhom": "Lập trình Arduino",
+   "viDu": "Serial.println(value) prints the value to the serial monitor, followed by a new line.",
+   "viDuNghia": "Serial.println(value) in giá trị ra Serial Monitor rồi xuống dòng."
+  },
+  {
+   "chu": "blink",
+   "doc": "/blɪŋk/",
+   "nghia": "nhấp nháy – bật tắt LED liên tục; chương trình Arduino đầu tiên ai cũng làm",
+   "nhom": "Lập trình Arduino",
+   "viDu": "Why is the delay(1000); function used in the Arduino sketch for blinking an LED?",
+   "viDuNghia": "Vì sao dùng hàm delay(1000); trong sketch nhấp nháy LED?"
+  },
+  {
+   "chu": "Arduino IDE",
+   "doc": "/ɑːrˈdwiːnoʊ ˌaɪ diː ˈiː/",
+   "nghia": "Arduino IDE – phần mềm soạn, biên dịch và nạp sketch vào bo; có cửa sổ Serial Monitor",
+   "nhom": "Lập trình Arduino",
+   "viDu": "Arduino IDE consists of 2 functions. What are they?",
+   "viDuNghia": "Arduino IDE gồm 2 hàm chính. Đó là những hàm nào?"
+  },
+  {
+   "chu": "serial communication",
+   "doc": "/ˈsɪriəl kəˌmjuːnɪˈkeɪʃn/",
+   "nghia": "giao tiếp nối tiếp – truyền dữ liệu từng bit một trên một dây",
+   "nhom": "Giao tiếp nối tiếp",
+   "viDu": "Which function in the Arduino is used to initialize the serial communication?",
+   "viDuNghia": "Hàm nào trong Arduino dùng để khởi tạo giao tiếp serial?"
+  },
+  {
+   "chu": "serial monitor",
+   "doc": "/ˈsɪriəl ˈmɑːnɪtər/",
+   "nghia": "cửa sổ Serial Monitor – trong Arduino IDE, hiện dữ liệu bo mạch gửi về máy tính",
+   "nhom": "Giao tiếp nối tiếp",
+   "viDu": "To activate serial monitor, what setup code is to be written?",
+   "viDuNghia": "Để kích hoạt serial monitor, code thiết lập nào cần viết?"
+  },
+  {
+   "chu": "baud rate",
+   "doc": "/bɔːd reɪt/",
+   "nghia": "tốc độ baud – số bit truyền mỗi giây trên cổng nối tiếp (vd 9600)",
+   "nhom": "Giao tiếp nối tiếp",
+   "viDu": "What is the default baud rate for communication in the HC-05 Bluetooth module?",
+   "viDuNghia": "Baud rate mặc định để giao tiếp trên module Bluetooth HC-05 là bao nhiêu?"
+  },
+  {
+   "chu": "universal asynchronous receiver-transmitter",
+   "nghia": "UART – mạch truyền nối tiếp không đồng bộ qua hai chân TX (phát) và RX (thu)",
+   "nhom": "Giao tiếp nối tiếp",
+   "viDu": "Is it possible to have multiple software serial ports (UART) with speeds up to 115200 bps?",
+   "viDuNghia": "Có thể có nhiều cổng nối tiếp phần mềm (UART) với tốc độ tới 115200 bps không?"
+  },
+  {
+   "chu": "Inter-Integrated Circuit",
+   "doc": "/ˌɪntər ˈɪntɪɡreɪtɪd ˈsɜːrkɪt/",
+   "nghia": "I2C – bus nối tiếp hai dây (SDA dữ liệu, SCL xung nhịp), nhiều thiết bị dùng chung theo địa chỉ",
+   "nhom": "Giao tiếp nối tiếp",
+   "viDu": "The I2C protocol is supported on all Arduino boards. What does I2C stand for?",
+   "viDuNghia": "Giao thức I2C được hỗ trợ trên mọi board Arduino. I2C là viết tắt của gì?"
+  },
+  {
+   "chu": "Serial Peripheral Interface",
+   "nghia": "SPI – bus nối tiếp đồng bộ tốc độ cao, bốn dây (MOSI, MISO, SCK, SS)",
+   "nhom": "Giao tiếp nối tiếp",
+   "viDu": "SPI uses four lines: MOSI, MISO, SCK and SS.",
+   "viDuNghia": "SPI dùng bốn đường: MOSI, MISO, SCK và SS."
+  },
+  {
+   "chu": "serial port",
+   "doc": "/ˈsɪriəl pɔːrt/",
+   "nghia": "cổng nối tiếp – cổng truyền dữ liệu từng bit (trên Uno là chân 0 RX và 1 TX)",
+   "nhom": "Giao tiếp nối tiếp",
+   "viDu": "The Uno hardware serial port uses pin 0 (RX) and pin 1 (TX).",
+   "viDuNghia": "Cổng nối tiếp phần cứng của Uno dùng chân 0 (RX) và chân 1 (TX)."
+  },
+  {
+   "chu": "serial",
+   "doc": "/ˈsɪriəl/",
+   "nghia": "nối tiếp – truyền từng bit một trên một đường; Serial.begin(9600) mở cổng giao tiếp nối tiếp (UART) với máy tính",
+   "nhom": "Giao tiếp nối tiếp",
+   "viDu": "To send sensor data to the Serial Monitor, you use ____.",
+   "viDuNghia": "Để gửi dữ liệu cảm biến ra Serial Monitor, bạn dùng ____."
+  },
+  {
+   "chu": "Serial.available",
+   "doc": "/ˈsɪriəl əˈveɪləbl/",
+   "nghia": "Serial.available() – trả về số byte đã tới cổng nối tiếp và đang chờ được đọc",
+   "nhom": "Giao tiếp nối tiếp",
+   "viDu": "Use Serial.available() to check whether data has arrived before calling Serial.read().",
+   "viDuNghia": "Dùng Serial.available() để kiểm tra đã có dữ liệu tới chưa rồi mới gọi Serial.read()."
+  },
+  {
+   "chu": "Serial.read",
+   "doc": "/ˈsɪriəl riːd/",
+   "nghia": "Serial.read() – đọc một byte từ cổng nối tiếp; trả về −1 nếu chưa có dữ liệu",
+   "nhom": "Giao tiếp nối tiếp",
+   "viDu": "Serial.read() returns the first byte of incoming serial data.",
+   "viDuNghia": "Serial.read() trả về byte đầu tiên của dữ liệu nối tiếp vừa tới."
+  }
+ ]
+}

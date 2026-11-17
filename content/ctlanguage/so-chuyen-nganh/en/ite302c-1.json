@@ -1,0 +1,953 @@
+{
+ "ma": "ite302c-1",
+ "nn": "en",
+ "ten": "ITE302c · Đạo đức trong CNTT",
+ "moTa": "Ethics in IT (ITE302c): khung đạo đức, quyền con người, thiên kiến và công bằng, minh bạch và giải thích được của AI, quyền riêng tư dữ liệu, rủi ro đạo đức, quản trị và văn hoá tổ chức. Từ lấy từ đề FE thật; ví dụ là câu hỏi thật trong đề.",
+ "bieuTuong": "scalemass.fill",
+ "thuTu": -946,
+ "tu": [
+  {
+   "chu": "ethics",
+   "doc": "/ˈeθɪks/",
+   "nghia": "đạo đức học: các nguyên tắc phân biệt đúng – sai để định hướng hành động",
+   "nhom": "Khung đạo đức",
+   "viDu": "Ethics is about deciding what is right and wrong, not only what is legal.",
+   "viDuNghia": "Đạo đức là việc xác định điều gì đúng, điều gì sai, chứ không chỉ điều gì hợp pháp."
+  },
+  {
+   "chu": "ethical framework",
+   "doc": "/ˈeθɪkl ˈfreɪmwɜːrk/",
+   "nghia": "khung đạo đức: bộ nguyên tắc dùng để phân tích và ra quyết định về mặt đạo đức",
+   "nhom": "Khung đạo đức",
+   "viDu": "Which of the following are ways that regulations differ from ethical frameworks? (Select two.)",
+   "viDuNghia": "Quy định (regulations) khác khung đạo đức (ethical frameworks) như thế nào? (Chọn hai.)"
+  },
+  {
+   "chu": "moral reasoning",
+   "doc": "/ˈmɔːrəl ˈriːzənɪŋ/",
+   "nghia": "lập luận đạo đức: cách suy xét để quyết định điều gì là đúng",
+   "nhom": "Khung đạo đức",
+   "viDu": "Why is deciding how to act using moral reasoning not always a feasible goal for human beings?",
+   "viDuNghia": "Tại sao việc quyết định hành động dựa trên lý luận đạo đức (moral reasoning) không phải lúc nào cũng là mục tiêu khả thi với con người?"
+  },
+  {
+   "chu": "moral agent",
+   "doc": "/ˈmɔːrəl ˈeɪdʒənt/",
+   "nghia": "chủ thể đạo đức: người/thực thể có khả năng phân biệt đúng sai và phải chịu trách nhiệm về hành động của mình",
+   "nhom": "Khung đạo đức",
+   "viDu": "Which of the following are consequences of saying that someone or something has moral agency? (Select two.)",
+   "viDuNghia": "Điều nào sau đây là hệ quả của việc nói rằng ai đó hoặc điều gì đó có tính chủ thể đạo đức (moral agency)? (Chọn hai.)"
+  },
+  {
+   "chu": "moral code",
+   "doc": "/ˈmɔːrəl koʊd/",
+   "nghia": "chuẩn mực đạo đức: bộ quy tắc đúng – sai mà một người hay nhóm người tuân theo",
+   "nhom": "Khung đạo đức",
+   "viDu": "Which school of philosophical thought primarily advocates for a global moral code?",
+   "viDuNghia": "Trường phái triết học nào chủ trương một bộ quy tắc đạo đức toàn cầu?"
+  },
+  {
+   "chu": "virtue ethics",
+   "doc": "/ˈvɜːrtʃuː ˈeθɪks/",
+   "nghia": "đạo đức học đức hạnh: xét phẩm chất của người hành động (trung thực, can đảm…) thay vì xét từng hành vi",
+   "nhom": "Khung đạo đức",
+   "viDu": "Virtue ethics asks what a good person would do in the situation.",
+   "viDuNghia": "Đạo đức học đức hạnh hỏi rằng một người tốt sẽ làm gì trong tình huống đó."
+  },
+  {
+   "chu": "deontology",
+   "doc": "/ˌdiːɑːnˈtɑːlədʒi/",
+   "nghia": "nghĩa vụ luận: hành động đúng khi tuân theo bổn phận, quy tắc – bất kể kết quả",
+   "nhom": "Khung đạo đức",
+   "viDu": "Which school of philosophical thought primarily advocates for a global moral code? → Deontology",
+   "viDuNghia": "Trường phái triết học nào chủ trương một bộ quy tắc đạo đức toàn cầu? → Nghĩa vụ luận (Deontology)"
+  },
+  {
+   "chu": "utilitarianism",
+   "doc": "/ˌjuːtɪlɪˈteriənɪzəm/",
+   "nghia": "thuyết vị lợi: hành động đúng là hành động đem lại lợi ích lớn nhất cho nhiều người nhất",
+   "nhom": "Khung đạo đức",
+   "viDu": "What is a defining feature of utilitarianism in ethics?",
+   "viDuNghia": "Đặc điểm định nghĩa của chủ nghĩa vị lợi (utilitarianism) là gì?"
+  },
+  {
+   "chu": "beneficence",
+   "doc": "/bəˈnefɪsns/",
+   "nghia": "làm điều thiện: nguyên tắc chỉ làm điều tốt (do only good)",
+   "nhom": "Khung đạo đức",
+   "viDu": "What is the difference between beneficence and non-maleficence?",
+   "viDuNghia": "Sự khác biệt giữa beneficence (thiện ý) và non-maleficence (không gây hại) là gì?"
+  },
+  {
+   "chu": "non-maleficence",
+   "doc": "/ˌnɑːn məˈlefɪsns/",
+   "nghia": "không gây hại: nguyên tắc không làm điều có hại (do no harm)",
+   "nhom": "Khung đạo đức",
+   "viDu": "What is the difference between beneficence and non-maleficence?",
+   "viDuNghia": "Sự khác biệt giữa beneficence (thiện ý) và non-maleficence (không gây hại) là gì?"
+  },
+  {
+   "chu": "autonomy",
+   "doc": "/ɔːˈtɑːnəmi/",
+   "nghia": "quyền tự chủ: con người được tự quyết định về bản thân mình",
+   "nhom": "Khung đạo đức",
+   "viDu": "Which of the following are examples of how AI can limit human autonomy? (Select two.)",
+   "viDuNghia": "Điều nào sau đây là ví dụ về cách AI có thể hạn chế quyền tự chủ của con người? (Chọn hai.)"
+  },
+  {
+   "chu": "justice",
+   "doc": "/ˈdʒʌstɪs/",
+   "nghia": "công lý: đối xử công bằng, chia lợi ích và gánh nặng một cách hợp lý",
+   "nhom": "Khung đạo đức",
+   "viDu": "Justice requires that the benefits and burdens of a technology are shared fairly.",
+   "viDuNghia": "Công lý đòi hỏi lợi ích và gánh nặng của một công nghệ phải được chia sẻ công bằng."
+  },
+  {
+   "chu": "inalienable right",
+   "doc": "/ɪnˈeɪliənəbl raɪt/",
+   "nghia": "quyền bất khả xâm phạm: quyền vốn có của mọi con người, không ai tước đi được",
+   "nhom": "Khung đạo đức",
+   "viDu": "What does it mean to say that human rights are inalienable? (Select two.)",
+   "viDuNghia": "Nói rằng quyền con người là bất khả xâm phạm (inalienable) nghĩa là gì? (Chọn hai.)"
+  },
+  {
+   "chu": "human rights",
+   "doc": "/ˈhjuːmən raɪts/",
+   "nghia": "quyền con người",
+   "nhom": "Khung đạo đức",
+   "viDu": "What does it mean to say that human rights are inalienable? (Select two.)",
+   "viDuNghia": "Nói rằng quyền con người là bất khả xâm phạm (inalienable) nghĩa là gì? (Chọn hai.)"
+  },
+  {
+   "chu": "personhood",
+   "doc": "/ˈpɜːrsnhʊd/",
+   "nghia": "tư cách con người (nhân vị): được coi là một cá nhân có quyền – quyết định một thực thể được đối xử thế nào",
+   "nhom": "Khung đạo đức",
+   "viDu": "Which of the following describes personhood?",
+   "viDuNghia": "Điều nào sau đây mô tả tính nhân vị (personhood)?"
+  },
+  {
+   "chu": "sentient",
+   "doc": "/ˈsenʃnt/",
+   "nghia": "có tri giác: có khả năng cảm nhận, có ý thức",
+   "nhom": "Khung đạo đức",
+   "viDu": "Robot rights would require robots to become sentient entities, which is not feasible now.",
+   "viDuNghia": "Quyền của robot đòi hỏi robot phải trở thành thực thể có tri giác, điều hiện nay chưa khả thi."
+  },
+  {
+   "chu": "ethical dilemma",
+   "doc": "/ˈeθɪkl dɪˈlemə/",
+   "nghia": "tình huống khó xử về đạo đức: phải chọn giữa các phương án đều có mặt đúng và mặt sai",
+   "nhom": "Khung đạo đức",
+   "viDu": "What is a side effect of learning algorithms that creates an ethical dilemma for users?",
+   "viDuNghia": "Điều gì là tác dụng phụ của các thuật toán học máy tạo ra một tình huống khó xử về đạo đức đối với người dùng?"
+  },
+  {
+   "chu": "harm",
+   "doc": "/hɑːrm/",
+   "nghia": "tác hại, tổn hại (gây ra cho con người, xã hội)",
+   "nhom": "Khung đạo đức",
+   "viDu": "A model that equalizes the number of mistakes it makes for each subgroup to reduce harm is deciding on",
+   "viDuNghia": "Một mô hình cân bằng số lỗi nó mắc ở mỗi nhóm con để giảm tác hại là đang chọn tiêu chí"
+  },
+  {
+   "chu": "ethical",
+   "doc": "/ˈeθɪkl/",
+   "nghia": "có đạo đức, hợp chuẩn mực đạo đức (ethical AI = AI có đạo đức)",
+   "nhom": "Khung đạo đức",
+   "viDu": "Which of the following describe important aspects in the role of an ethical AI engineer? Select two options.",
+   "viDuNghia": "Điều nào sau đây mô tả khía cạnh quan trọng trong vai trò của một kỹ sư AI có đạo đức? Chọn hai đáp án."
+  },
+  {
+   "chu": "moral",
+   "doc": "/ˈmɔːrəl/",
+   "nghia": "(thuộc) đạo đức, luân lý — đúng/sai theo chuẩn mực con người (moral reasoning, moral code, moral agent)",
+   "nhom": "Khung đạo đức",
+   "viDu": "A moral question asks what is right, not only what is legal.",
+   "viDuNghia": "Một câu hỏi đạo đức hỏi điều gì là đúng, chứ không chỉ điều gì là hợp pháp."
+  },
+  {
+   "chu": "machine learning",
+   "doc": "/məˈʃiːn ˈlɜːrnɪŋ/",
+   "nghia": "học máy: máy tự rút ra quy luật từ dữ liệu thay vì được lập trình từng bước",
+   "nhom": "AI & dữ liệu",
+   "viDu": "Which of the following metrics is used to evaluate a linear regression machine learning model?",
+   "viDuNghia": "Chỉ số nào sau đây được dùng để đánh giá một mô hình học máy hồi quy tuyến tính?"
+  },
+  {
+   "chu": "learning algorithm",
+   "doc": "/ˈlɜːrnɪŋ ˈælɡərɪðəm/",
+   "nghia": "thuật toán học: nhận dữ liệu vào cùng kết quả mong muốn để tự tạo ra mô hình",
+   "nhom": "AI & dữ liệu",
+   "viDu": "What side effect of learning algorithms creates an ethical dilemma for its users?",
+   "viDuNghia": "Tác dụng phụ nào của thuật toán học máy tạo ra tình huống khó xử về đạo đức cho người dùng?"
+  },
+  {
+   "chu": "predictive model",
+   "doc": "/prɪˈdɪktɪv ˈmɑːdl/",
+   "nghia": "mô hình dự đoán: mô hình đã huấn luyện, nhận đầu vào mới và đưa ra kết quả dự đoán",
+   "nhom": "AI & dữ liệu",
+   "viDu": "Which of the following goals should be considered when building an ethical predictive model?",
+   "viDuNghia": "Mục tiêu nào sau đây nên được cân nhắc khi xây dựng một mô hình dự đoán có đạo đức?"
+  },
+  {
+   "chu": "narrow AI",
+   "doc": "/ˈnæroʊ ˌeɪ ˈaɪ/",
+   "nghia": "AI hẹp: chỉ làm được đúng loại việc nó được thiết kế (toàn bộ AI hiện nay)",
+   "nhom": "AI & dữ liệu",
+   "viDu": "Why are deep learning and machine learning called narrow? → Narrow AI can only perform the specific tasks it was designed to do.",
+   "viDuNghia": "Vì sao học sâu và học máy bị gọi là hẹp? → AI hẹp chỉ làm được đúng những việc cụ thể mà nó được thiết kế để làm."
+  },
+  {
+   "chu": "general AI",
+   "doc": "/ˈdʒenrəl ˌeɪ ˈaɪ/",
+   "nghia": "AI tổng quát: AI giả định có trí tuệ linh hoạt như con người",
+   "nhom": "AI & dữ liệu",
+   "viDu": "General AI would be able to learn and solve any problem like a human, but it does not exist yet.",
+   "viDuNghia": "AI tổng quát sẽ có thể học và giải mọi bài toán như con người, nhưng hiện chưa tồn tại."
+  },
+  {
+   "chu": "training data",
+   "doc": "/ˈtreɪnɪŋ ˈdeɪtə/",
+   "nghia": "dữ liệu huấn luyện: dữ liệu dùng để dạy mô hình",
+   "nhom": "AI & dữ liệu",
+   "viDu": "Why is a model that has been overfitted to its training data a source of fairness risk?",
+   "viDuNghia": "Tại sao một mô hình bị quá khớp (overfit) với dữ liệu huấn luyện lại là nguồn rủi ro về công bằng?"
+  },
+  {
+   "chu": "dataset",
+   "doc": "/ˈdeɪtəset/",
+   "nghia": "bộ dữ liệu",
+   "nhom": "AI & dữ liệu",
+   "viDu": "What is one possible reason a model may predict a higher crime rate based on datasets used?",
+   "viDuNghia": "Một lý do khả dĩ khiến mô hình dự đoán tỷ lệ tội phạm cao hơn dựa trên tập dữ liệu sử dụng là gì?"
+  },
+  {
+   "chu": "predicted result",
+   "doc": "/prɪˈdɪktɪd rɪˈzʌlt/",
+   "nghia": "kết quả dự đoán (do mô hình đưa ra) – đem so với kết quả thực tế",
+   "nhom": "AI & dữ liệu",
+   "viDu": "A predictive model's false negative result can be defined as the predicted result was negative, and the actual result was positive.",
+   "viDuNghia": "Kết quả âm tính giả (false negative) của một mô hình dự đoán có thể định nghĩa là kết quả dự đoán là âm tính, và kết quả thực tế là dương tính."
+  },
+  {
+   "chu": "error rate",
+   "doc": "/ˈerər reɪt/",
+   "nghia": "tỉ lệ lỗi: phần trăm dự đoán sai",
+   "nhom": "AI & dữ liệu",
+   "viDu": "The no free lunch theorem states that all models have the same error rate when averaged over all possible data generating distributions.",
+   "viDuNghia": "Định lý no free lunch (không có bữa trưa miễn phí) phát biểu rằng mọi mô hình đều có cùng tỷ lệ lỗi khi được lấy trung bình trên tất cả các phân phối sinh dữ liệu có thể có."
+  },
+  {
+   "chu": "false positive",
+   "doc": "/ˌfɔːls ˈpɑːzətɪv/",
+   "nghia": "dương tính giả: mô hình báo CÓ trong khi thực tế là KHÔNG (false negative: ngược lại)",
+   "nhom": "AI & dữ liệu",
+   "viDu": "A false positive result means the predicted result was positive, but the actual result was negative.",
+   "viDuNghia": "Kết quả dương tính giả nghĩa là kết quả dự đoán là dương tính nhưng kết quả thực tế là âm tính."
+  },
+  {
+   "chu": "overfitting",
+   "doc": "/ˌoʊvərˈfɪtɪŋ/",
+   "nghia": "quá khớp: mô hình học thuộc dữ liệu huấn luyện nên dự đoán kém với dữ liệu mới",
+   "nhom": "AI & dữ liệu",
+   "viDu": "Why is a model that has been overfitted to its training data a source of fairness risk?",
+   "viDuNghia": "Tại sao một mô hình bị quá khớp (overfit) với dữ liệu huấn luyện lại là nguồn rủi ro về công bằng?"
+  },
+  {
+   "chu": "data-driven technology",
+   "doc": "/ˈdeɪtə drɪvn tekˈnɑːlədʒi/",
+   "nghia": "công nghệ hướng dữ liệu: công nghệ hoạt động dựa trên việc thu thập và phân tích dữ liệu (AI, IoT…)",
+   "nhom": "AI & dữ liệu",
+   "viDu": "Why is fair competition an important ethical consideration for data-driven technology businesses?",
+   "viDuNghia": "Tại sao cạnh tranh công bằng là yếu tố đạo đức quan trọng đối với doanh nghiệp công nghệ dựa trên dữ liệu?"
+  },
+  {
+   "chu": "emerging technology",
+   "doc": "/ɪˈmɜːrdʒɪŋ tekˈnɑːlədʒi/",
+   "nghia": "công nghệ mới nổi: công nghệ đang phát triển, tác động chưa lường hết",
+   "nhom": "AI & dữ liệu",
+   "viDu": "At what point should ethical consideration ideally be applied to emerging technologies?",
+   "viDuNghia": "Về mặt lý tưởng, sự cân nhắc đạo đức nên được áp dụng vào công nghệ mới nổi ở thời điểm nào?"
+  },
+  {
+   "chu": "smart contract",
+   "doc": "/smɑːrt ˈkɑːntrækt/",
+   "nghia": "hợp đồng thông minh: chương trình trên blockchain tự thực thi khi đủ điều kiện",
+   "nhom": "AI & dữ liệu",
+   "viDu": "How does a smart contract differ from a traditional contract?",
+   "viDuNghia": "Hợp đồng thông minh (smart contract) khác hợp đồng truyền thống như thế nào?"
+  },
+  {
+   "chu": "visual contract",
+   "doc": "/ˈvɪʒuəl ˈkɑːntrækt/",
+   "nghia": "hợp đồng trực quan: hợp đồng trình bày bằng hình ảnh cho dễ hiểu",
+   "nhom": "AI & dữ liệu",
+   "viDu": "What are the benefits of using visual contracts in contract understanding and implementation?",
+   "viDuNghia": "Lợi ích của hợp đồng trực quan (visual contract) trong việc hiểu và thực hiện hợp đồng là gì?"
+  },
+  {
+   "chu": "social media",
+   "doc": "/ˈsoʊʃl ˈmiːdiə/",
+   "nghia": "mạng xã hội",
+   "nhom": "AI & dữ liệu",
+   "viDu": "Which of the following are effective strategies when making statements on social media? (Select two.)",
+   "viDuNghia": "Chiến lược nào sau đây hiệu quả khi đưa ra phát biểu trên mạng xã hội? (Chọn hai.)"
+  },
+  {
+   "chu": "shadow ban",
+   "doc": "/ˈʃædoʊ bæn/",
+   "nghia": "cấm ngầm: nền tảng âm thầm ẩn bài của người dùng mà không báo cho họ biết",
+   "nhom": "AI & dữ liệu",
+   "viDu": "A disruptive user on a social media site is subjected to a shadow ban. Which of the following is an indication of that shadow ban?",
+   "viDuNghia": "Một người dùng gây rối trên mạng xã hội bị áp dụng lệnh cấm ngầm (shadow ban). Điều nào sau đây là dấu hiệu của lệnh cấm ngầm đó?"
+  },
+  {
+   "chu": "automated decision-making",
+   "doc": "/ˈɔːtəmeɪtɪd dɪˈsɪʒn meɪkɪŋ/",
+   "nghia": "ra quyết định tự động: hệ thống tự quyết mà không có con người tham gia",
+   "nhom": "AI & dữ liệu",
+   "viDu": "Which type of bias causes people to trust an automated decision-making system (ADS) over a human's decision?",
+   "viDuNghia": "Loại thiên kiến nào khiến con người tin tưởng hệ thống ra quyết định tự động (ADS) hơn là quyết định của con người?"
+  },
+  {
+   "chu": "deep learning",
+   "doc": "/diːp ˈlɜːrnɪŋ/",
+   "nghia": "học sâu: nhánh của học máy dùng mạng nơ-ron nhiều lớp",
+   "nhom": "AI & dữ liệu",
+   "viDu": "Why are deep learning and machine learning called narrow? Select two options.",
+   "viDuNghia": "Vì sao học sâu (deep learning) và học máy (machine learning) được gọi là hẹp (narrow)? Chọn hai đáp án."
+  },
+  {
+   "chu": "classification model",
+   "doc": "/ˌklæsɪfɪˈkeɪʃn ˈmɑːdl/",
+   "nghia": "mô hình phân loại: dự đoán một đối tượng thuộc nhóm nào (đạt/không đạt, có/không)",
+   "nhom": "AI & dữ liệu",
+   "viDu": "In a classification model that determines whether or not a customer qualifies for a coupon, a significantly lower percentage of males qualified than females.",
+   "viDuNghia": "Trong một mô hình phân loại xác định khách hàng có đủ điều kiện nhận phiếu giảm giá hay không, tỉ lệ nam đủ điều kiện thấp hơn nữ đáng kể."
+  },
+  {
+   "chu": "recommendation engine",
+   "doc": "/ˌrekəmenˈdeɪʃn ˈendʒɪn/",
+   "nghia": "hệ thống gợi ý: đề xuất nội dung, sản phẩm dựa trên dữ liệu người dùng",
+   "nhom": "AI & dữ liệu",
+   "viDu": "When used in recommendation engines, explainable algorithms can help answer the question of why?",
+   "viDuNghia": "Khi được dùng trong các hệ thống gợi ý, thuật toán có thể giải thích giúp trả lời câu hỏi tại sao?"
+  },
+  {
+   "chu": "subgroup",
+   "doc": "/ˈsʌbɡruːp/",
+   "nghia": "nhóm con (trong tập người dùng, tập dữ liệu) – dùng khi so mức công bằng giữa các nhóm",
+   "nhom": "AI & dữ liệu",
+   "viDu": "Why is it impractical to protect all possible subgroups in predictive models?",
+   "viDuNghia": "Tại sao việc bảo vệ tất cả các nhóm con có thể trong mô hình dự đoán là không thực tế?"
+  },
+  {
+   "chu": "artificial intelligence",
+   "doc": "/ˌɑːrtɪˈfɪʃl ɪnˈtelɪdʒəns/",
+   "nghia": "trí tuệ nhân tạo (AI) – máy làm được việc cần trí thông minh: nhận dạng, dự đoán, ra quyết định",
+   "nhom": "AI & dữ liệu",
+   "viDu": "Which type of entity are the OECD Principles on Artificial Intelligence mostly geared towards?",
+   "viDuNghia": "Các Nguyên tắc AI của OECD (OECD Principles on Artificial Intelligence) chủ yếu hướng đến loại thực thể nào?"
+  },
+  {
+   "chu": "intelligence",
+   "doc": "/ɪnˈtelɪdʒəns/",
+   "nghia": "trí thông minh, trí tuệ – khả năng học, suy luận, ra quyết định (của người hoặc máy)",
+   "nhom": "AI & dữ liệu",
+   "viDu": "A type of artificial intelligence that outperforms humans in some defined task is known as",
+   "viDuNghia": "Loại trí tuệ nhân tạo vượt trội hơn con người trong một tác vụ được định nghĩa cụ thể được gọi là"
+  },
+  {
+   "chu": "prediction",
+   "doc": "/prɪˈdɪkʃn/",
+   "nghia": "sự dự đoán: kết quả mô hình đưa ra cho dữ liệu mới (đem so với kết quả thực tế)",
+   "nhom": "AI & dữ liệu",
+   "viDu": "Which technique does the Python tool Alibi use to produce a subset of features that will usually result in the same model prediction?",
+   "viDuNghia": "Công cụ Python Alibi dùng kỹ thuật nào để tạo ra một tập con đặc trưng thường cho ra cùng một dự đoán của mô hình?"
+  },
+  {
+   "chu": "false negative",
+   "doc": "/ˌfɔːls ˈneɡətɪv/",
+   "nghia": "âm tính giả: mô hình dự đoán KHÔNG (âm) trong khi thực tế là CÓ (dương)",
+   "nhom": "AI & dữ liệu",
+   "viDu": "A false negative result means the predicted result was negative, and the actual result was positive.",
+   "viDuNghia": "Kết quả âm tính giả nghĩa là kết quả dự đoán là âm tính, còn kết quả thực tế là dương tính."
+  },
+  {
+   "chu": "true positive",
+   "doc": "/ˌtruː ˈpɑːzətɪv/",
+   "nghia": "dương tính thật: mô hình dự đoán CÓ (dương) và thực tế cũng là CÓ",
+   "nhom": "AI & dữ liệu",
+   "viDu": "A true positive result means the predicted result was positive, and the actual result was positive.",
+   "viDuNghia": "Kết quả dương tính thật nghĩa là kết quả dự đoán là dương tính và kết quả thực tế cũng dương tính."
+  },
+  {
+   "chu": "implicit bias",
+   "doc": "/ɪmˈplɪsɪt ˈbaɪəs/",
+   "nghia": "thiên kiến ngầm: định kiến vô thức mà chính mình không nhận ra",
+   "nhom": "Thiên kiến & công bằng",
+   "viDu": "Which of the following are actions that can help combat implicit bias? (Select three.)",
+   "viDuNghia": "Hành động nào sau đây có thể giúp chống lại thiên kiến ngầm? (Chọn ba.)"
+  },
+  {
+   "chu": "confirmation bias",
+   "doc": "/ˌkɑːnfərˈmeɪʃn ˈbaɪəs/",
+   "nghia": "thiên kiến xác nhận: chỉ tìm và tin thông tin hợp với điều mình đã nghĩ sẵn",
+   "nhom": "Thiên kiến & công bằng",
+   "viDu": "How can confirmation bias impact us socially? (Select two.)",
+   "viDuNghia": "Thiên kiến xác nhận (confirmation bias) có thể tác động đến chúng ta về mặt xã hội như thế nào? (Chọn hai.)"
+  },
+  {
+   "chu": "observer bias",
+   "doc": "/əbˈzɜːrvər ˈbaɪəs/",
+   "nghia": "thiên kiến người quan sát: kỳ vọng của người thu thập làm lệch dữ liệu",
+   "nhom": "Thiên kiến & công bằng",
+   "viDu": "Observer bias occurs when researchers see what they expect to see in the data.",
+   "viDuNghia": "Thiên kiến người quan sát xảy ra khi nhà nghiên cứu nhìn thấy trong dữ liệu điều mà họ mong đợi."
+  },
+  {
+   "chu": "exclusion bias",
+   "doc": "/ɪkˈskluːʒn ˈbaɪəs/",
+   "nghia": "thiên kiến loại trừ: bỏ sót dữ liệu quan trọng khỏi bộ dữ liệu",
+   "nhom": "Thiên kiến & công bằng",
+   "viDu": "Removing a feature that turns out to be important is an example of exclusion bias.",
+   "viDuNghia": "Bỏ đi một đặc trưng mà hoá ra lại quan trọng là một ví dụ về thiên kiến loại trừ."
+  },
+  {
+   "chu": "prejudice bias",
+   "doc": "/ˈpredʒədɪs ˈbaɪəs/",
+   "nghia": "thiên kiến định kiến: dữ liệu mang sẵn định kiến xã hội (giới, chủng tộc…)",
+   "nhom": "Thiên kiến & công bằng",
+   "viDu": "Prejudice bias appears when the training data reflects social stereotypes.",
+   "viDuNghia": "Thiên kiến định kiến xuất hiện khi dữ liệu huấn luyện phản ánh các khuôn mẫu xã hội."
+  },
+  {
+   "chu": "illusory correlation",
+   "doc": "/ɪˈluːsəri ˌkɔːrəˈleɪʃn/",
+   "nghia": "tương quan ảo: thấy mối liên hệ giữa các biến trong khi thực ra không có",
+   "nhom": "Thiên kiến & công bằng",
+   "viDu": "Which of the following describes an illusory-correlation bias?",
+   "viDuNghia": "Điều nào sau đây mô tả thiên kiến tương quan ảo (illusory-correlation bias)?"
+  },
+  {
+   "chu": "disparate impact",
+   "doc": "/ˈdɪspərət ˈɪmpækt/",
+   "nghia": "tác động khác biệt: quy tắc bề ngoài trung lập nhưng kết quả gây bất lợi cho một nhóm",
+   "nhom": "Thiên kiến & công bằng",
+   "viDu": "A significantly lower percentage of males qualified for a coupon than females. Which type of discrimination does this outcome indicate? → Disparate impact",
+   "viDuNghia": "Tỉ lệ nam đủ điều kiện nhận phiếu giảm giá thấp hơn nữ đáng kể. Kết quả này cho thấy loại phân biệt đối xử nào? → Tác động khác biệt"
+  },
+  {
+   "chu": "disparate treatment",
+   "doc": "/ˈdɪspərət ˈtriːtmənt/",
+   "nghia": "đối xử khác biệt: cố ý đối xử với người ta khác nhau vì thuộc tính được bảo vệ",
+   "nhom": "Thiên kiến & công bằng",
+   "viDu": "Rejecting applicants because of their religion is disparate treatment.",
+   "viDuNghia": "Từ chối ứng viên vì tôn giáo của họ là đối xử khác biệt."
+  },
+  {
+   "chu": "discrimination",
+   "doc": "/dɪˌskrɪmɪˈneɪʃn/",
+   "nghia": "phân biệt đối xử",
+   "nhom": "Thiên kiến & công bằng",
+   "viDu": "Fairness is best defined as just treatment without favoritism or discrimination",
+   "viDuNghia": "Công bằng được định nghĩa tốt nhất là đối xử đúng đắn mà không có thiên vị hoặc phân biệt đối xử"
+  },
+  {
+   "chu": "protected class",
+   "doc": "/prəˈtektɪd klæs/",
+   "nghia": "nhóm được bảo vệ: nhóm người xác định theo chủng tộc, tôn giáo, giới, tuổi… mà luật cấm phân biệt đối xử",
+   "nhom": "Thiên kiến & công bằng",
+   "viDu": "Why are groups like race and religion considered protected classes?",
+   "viDuNghia": "Tại sao các nhóm như chủng tộc và tôn giáo được coi là nhóm được bảo vệ (protected classes)?"
+  },
+  {
+   "chu": "equity",
+   "doc": "/ˈekwəti/",
+   "nghia": "công bằng thực chất: cho mỗi người đúng thứ họ cần để có cơ hội như nhau",
+   "nhom": "Thiên kiến & công bằng",
+   "viDu": "Which of the following is a best practice for incorporating diversity, equity, and inclusiveness in communication?",
+   "viDuNghia": "Thực hành nào sau đây là tốt nhất để kết hợp đa dạng, công bằng và hòa nhập trong truyền thông?"
+  },
+  {
+   "chu": "inclusion",
+   "doc": "/ɪnˈkluːʒn/",
+   "nghia": "sự hoà nhập: bảo đảm mọi nhóm người đều được tham gia và được tính đến",
+   "nhom": "Thiên kiến & công bằng",
+   "viDu": "Which framework emphasizes inclusive and responsible development of AI?",
+   "viDuNghia": "Khung nào nhấn mạnh việc phát triển AI có trách nhiệm và hoà nhập?"
+  },
+  {
+   "chu": "vulnerable",
+   "doc": "/ˈvʌlnərəbl/",
+   "nghia": "dễ bị tổn thương (nhóm người dễ chịu thiệt hại)",
+   "nhom": "Thiên kiến & công bằng",
+   "viDu": "Children are a vulnerable group, so their data needs extra protection.",
+   "viDuNghia": "Trẻ em là nhóm dễ bị tổn thương nên dữ liệu của các em cần được bảo vệ kỹ hơn."
+  },
+  {
+   "chu": "automation bias",
+   "doc": "/ˌɔːtəˈmeɪʃn ˈbaɪəs/",
+   "nghia": "thiên kiến tự động hoá: tin kết quả của máy hơn phán đoán của con người",
+   "nhom": "Thiên kiến & công bằng",
+   "viDu": "Which type of bias causes people to trust an automated decision-making system (ADS) over a human's decision?",
+   "viDuNghia": "Loại thiên kiến nào khiến con người tin tưởng hệ thống ra quyết định tự động (ADS) hơn là quyết định của con người?"
+  },
+  {
+   "chu": "bias",
+   "doc": "/ˈbaɪəs/",
+   "nghia": "thiên kiến, độ thiên lệch – (AI, đạo đức) dữ liệu/hệ thống nghiêng bất công về một nhóm · (CSI104) số bù cộng vào số mũ trong hệ Excess",
+   "nhom": "Thiên kiến & công bằng",
+   "viDu": "Which type of bias causes people to trust an automated decision-making system (ADS) over a human's decision?",
+   "viDuNghia": "Loại thiên kiến nào khiến con người tin tưởng hệ thống ra quyết định tự động (ADS) hơn là quyết định của con người?"
+  },
+  {
+   "chu": "fairness",
+   "doc": "/ˈfernəs/",
+   "nghia": "tính công bằng – (AI) hệ thống không đối xử bất lợi với một nhóm người. (OS: mỗi tiến trình được chia CPU hợp lý)",
+   "nhom": "Thiên kiến & công bằng",
+   "viDu": "What tools do researchers have to evaluate the fairness of existing black box models?",
+   "viDuNghia": "Nhà nghiên cứu có công cụ nào để đánh giá sự công bằng của các mô hình hộp đen hiện có?"
+  },
+  {
+   "chu": "game theory",
+   "doc": "/ˈɡeɪm ˌθiːəri/",
+   "nghia": "lý thuyết trò chơi: nghiên cứu cách các bên ra quyết định khi kết quả phụ thuộc lẫn nhau; dùng để điều chỉnh kết quả cho các nhóm",
+   "nhom": "Thiên kiến & công bằng",
+   "viDu": "Group outcomes being improved through explainable recommendation systems is an example of using game theory to modify outcomes.",
+   "viDuNghia": "Cải thiện kết quả cho nhóm nhờ hệ thống gợi ý giải thích được là ví dụ về việc dùng lý thuyết trò chơi để điều chỉnh kết quả."
+  },
+  {
+   "chu": "transparency",
+   "doc": "/trænsˈpærənsi/",
+   "nghia": "tính minh bạch: công khai hệ thống làm gì, dùng dữ liệu nào, quyết định ra sao",
+   "nhom": "Minh bạch & giải thích được",
+   "viDu": "To uphold transparency and explainability, communication about data-driven technologies should be...",
+   "viDuNghia": "Để giữ vững minh bạch và khả năng giải thích, truyền thông về công nghệ dựa trên dữ liệu nên..."
+  },
+  {
+   "chu": "explainability",
+   "doc": "/ɪkˌspleɪnəˈbɪləti/",
+   "nghia": "khả năng giải thích: nói được vì sao mô hình đưa ra kết quả đó",
+   "nhom": "Minh bạch & giải thích được",
+   "viDu": "How does increasing AI performance often conflict with the desire for explainability?",
+   "viDuNghia": "Việc tăng hiệu năng AI thường xung đột với mong muốn về khả năng giải thích như thế nào?"
+  },
+  {
+   "chu": "explainable AI",
+   "doc": "/ɪkˈspleɪnəbl ˌeɪ ˈaɪ/",
+   "nghia": "AI giải thích được (XAI): AI mà con người hiểu được cách nó ra quyết định",
+   "nhom": "Minh bạch & giải thích được",
+   "viDu": "Explainable AI lets people understand why a model made a particular decision.",
+   "viDuNghia": "AI giải thích được giúp con người hiểu vì sao mô hình đưa ra một quyết định cụ thể."
+  },
+  {
+   "chu": "black box",
+   "doc": "/ˌblæk ˈbɑːks/",
+   "nghia": "hộp đen: mô hình mà con người không nhìn thấy, không hiểu được cách suy luận bên trong",
+   "nhom": "Minh bạch & giải thích được",
+   "viDu": "In fixing the Word2Vec model, we have an advantage over a traditional black box model in that",
+   "viDuNghia": "Khi sửa lỗi mô hình Word2Vec, ta có lợi thế hơn một mô hình hộp đen truyền thống ở chỗ"
+  },
+  {
+   "chu": "accountability",
+   "doc": "/əˌkaʊntəˈbɪləti/",
+   "nghia": "trách nhiệm giải trình: có người chịu trách nhiệm và phải trả lời về kết quả của hệ thống",
+   "nhom": "Minh bạch & giải thích được",
+   "viDu": "Why is accountability an important principle to include in governance structures for data-driven technologies?",
+   "viDuNghia": "Tại sao trách nhiệm giải trình là nguyên tắc quan trọng cần đưa vào cơ cấu quản trị cho công nghệ dựa trên dữ liệu?"
+  },
+  {
+   "chu": "oversight",
+   "doc": "/ˈoʊvərsaɪt/",
+   "nghia": "sự giám sát (của con người đối với hệ thống)",
+   "nhom": "Minh bạch & giải thích được",
+   "viDu": "What is a key safety consideration for AI systems? → Fail-safe mechanisms and human oversight",
+   "viDuNghia": "Đâu là yếu tố an toàn then chốt cho hệ thống AI? → Cơ chế an toàn khi lỗi (fail-safe) và sự giám sát của con người"
+  },
+  {
+   "chu": "human-in-the-loop",
+   "doc": "/ˌhjuːmən ɪn ðə ˈluːp/",
+   "nghia": "có con người trong vòng lặp: con người tham gia kiểm tra, duyệt quyết định của máy",
+   "nhom": "Minh bạch & giải thích được",
+   "viDu": "With a human-in-the-loop design, a person reviews the model's decision before it takes effect.",
+   "viDuNghia": "Với thiết kế có con người trong vòng lặp, một người sẽ xem lại quyết định của mô hình trước khi nó có hiệu lực."
+  },
+  {
+   "chu": "open data",
+   "doc": "/ˈoʊpən ˈdeɪtə/",
+   "nghia": "dữ liệu mở: dữ liệu ai cũng được dùng và chia sẻ lại",
+   "nhom": "Minh bạch & giải thích được",
+   "viDu": "Which of the following principle sets are important for the creation of open data that is widely usable?",
+   "viDuNghia": "Bộ nguyên tắc nào sau đây quan trọng cho việc tạo ra dữ liệu mở có thể sử dụng rộng rãi?"
+  },
+  {
+   "chu": "closed source software",
+   "nghia": "phần mềm nguồn đóng: không công khai mã nguồn",
+   "nhom": "Minh bạch & giải thích được",
+   "viDu": "Which of the following is a transparency risk of closed source software?",
+   "viDuNghia": "Điều nào sau đây là một rủi ro về tính minh bạch của phần mềm mã nguồn đóng (closed source)?"
+  },
+  {
+   "chu": "personal data",
+   "doc": "/ˈpɜːrsənl ˈdeɪtə/",
+   "nghia": "dữ liệu cá nhân: thông tin gắn với một người cụ thể",
+   "nhom": "Quyền riêng tư",
+   "viDu": "GDPR states that \"Personal data shall be adequate, relevant and not excessive in relation to the purpose for which they are processed.\"",
+   "viDuNghia": "GDPR quy định \"Dữ liệu cá nhân phải đầy đủ, liên quan và không quá mức cần thiết so với mục đích mà chúng được xử lý.\""
+  },
+  {
+   "chu": "personally identifiable information",
+   "nghia": "thông tin định danh cá nhân (PII): tên, số CCCD, địa chỉ… dùng để nhận ra một người",
+   "nhom": "Quyền riêng tư",
+   "viDu": "Which of the following, by itself, qualifies as personally identifiable information (PII)?",
+   "viDuNghia": "Điều nào sau đây, tự bản thân nó, đủ điều kiện là thông tin định danh cá nhân (PII)?"
+  },
+  {
+   "chu": "data minimization",
+   "doc": "/ˈdeɪtə ˌmɪnɪməˈzeɪʃn/",
+   "nghia": "tối thiểu hoá dữ liệu: chỉ thu đúng dữ liệu cần cho mục đích đã nêu và không giữ lâu hơn cần thiết",
+   "nhom": "Quyền riêng tư",
+   "viDu": "Which of the following are important elements of the data minimization principle? (Select two.)",
+   "viDuNghia": "Yếu tố nào sau đây là quan trọng của nguyên tắc tối thiểu hóa dữ liệu (data minimization)? (Chọn hai.)"
+  },
+  {
+   "chu": "consent",
+   "doc": "/kənˈsent/",
+   "nghia": "sự đồng ý (của người dùng cho việc thu thập, dùng dữ liệu)",
+   "nhom": "Quyền riêng tư",
+   "viDu": "Users must give consent before their data is collected.",
+   "viDuNghia": "Người dùng phải đồng ý trước khi dữ liệu của họ được thu thập."
+  },
+  {
+   "chu": "anonymized dataset",
+   "doc": "/əˈnɑːnɪmaɪzd ˈdeɪtəset/",
+   "nghia": "bộ dữ liệu đã ẩn danh: đã gỡ thông tin định danh",
+   "nhom": "Quyền riêng tư",
+   "viDu": "How do anonymized datasets fall short of their goal of being anonymous?",
+   "viDuNghia": "Các tập dữ liệu đã ẩn danh không đạt được mục tiêu ẩn danh của chúng như thế nào?"
+  },
+  {
+   "chu": "re-identification",
+   "doc": "/ˌriː aɪˌdentɪfɪˈkeɪʃn/",
+   "nghia": "tái định danh: ghép nhiều nguồn để lần ra danh tính từ dữ liệu đã ẩn danh",
+   "nhom": "Quyền riêng tư",
+   "viDu": "A major downside to k-anonymity is that re-identification is possible with multiple datasets.",
+   "viDuNghia": "Một nhược điểm lớn của k-ẩn danh (k-anonymity) là việc tái định danh có thể xảy ra với nhiều tập dữ liệu."
+  },
+  {
+   "chu": "k-anonymity",
+   "doc": "/ˌkeɪ ˌænəˈnɪməti/",
+   "nghia": "k-ẩn danh: mỗi bản ghi giống ít nhất k−1 bản ghi khác nên không tách riêng được một người",
+   "nhom": "Quyền riêng tư",
+   "viDu": "K-anonymity is achieved when each individual cannot be distinguished from at least k-1 other individuals in the dataset.",
+   "viDuNghia": "K-ẩn danh đạt được khi mỗi cá nhân không thể phân biệt với ít nhất k-1 cá nhân khác trong tập dữ liệu."
+  },
+  {
+   "chu": "differential privacy",
+   "doc": "/ˌdɪfəˈrenʃl ˈpraɪvəsi/",
+   "nghia": "quyền riêng tư vi phân: thêm nhiễu vào kết quả để không suy ra được dữ liệu của từng cá nhân",
+   "nhom": "Quyền riêng tư",
+   "viDu": "At which level of differential privacy is the outcome secured from even the people collecting answers?",
+   "viDuNghia": "Ở mức differential privacy nào kết quả được bảo vệ ngay cả với người thu thập câu trả lời?"
+  },
+  {
+   "chu": "General Data Protection Regulation",
+   "nghia": "Quy định chung về bảo vệ dữ liệu của EU (GDPR)",
+   "nhom": "Quyền riêng tư",
+   "viDu": "The General Data Protection Regulation (GDPR) is the EU law that protects the personal data of people in the EU.",
+   "viDuNghia": "Quy định chung về bảo vệ dữ liệu (GDPR) là luật của EU bảo vệ dữ liệu cá nhân của người dân trong EU."
+  },
+  {
+   "chu": "radioactive data tracing",
+   "nghia": "đánh dấu dữ liệu phóng xạ: cài dấu ẩn vào dữ liệu để biết nó có bị đem huấn luyện mô hình hay không",
+   "nhom": "Quyền riêng tư",
+   "viDu": "What is the primary advantage of radioactive data tracing over past techniques that modify input in order to determine whether or not that input was used in training?",
+   "viDuNghia": "Ưu điểm chính của kỹ thuật đánh dấu dữ liệu phóng xạ so với các kỹ thuật trước đây sửa đổi dữ liệu đầu vào để xác định liệu dữ liệu đó có được dùng để huấn luyện hay không là gì?"
+  },
+  {
+   "chu": "privacy",
+   "doc": "/ˈpraɪvəsi/",
+   "nghia": "quyền riêng tư – dữ liệu cá nhân không bị thu thập, dùng hay lộ ra trái ý người dùng",
+   "nhom": "Quyền riêng tư",
+   "viDu": "In AI, the principle of privacy is most commonly referred to in the context of which of the following concepts?",
+   "viDuNghia": "Trong AI, nguyên tắc quyền riêng tư thường được đề cập nhất trong bối cảnh khái niệm nào sau đây?"
+  },
+  {
+   "chu": "ethical risk",
+   "doc": "/ˈeθɪkl rɪsk/",
+   "nghia": "rủi ro đạo đức: khả năng công nghệ gây hại về mặt đạo đức cho con người, xã hội, tổ chức",
+   "nhom": "Rủi ro & khủng hoảng",
+   "viDu": "Why is it important to engage stakeholders at the beginning of the ethical risk management process?",
+   "viDuNghia": "Tại sao việc thu hút các bên liên quan ngay từ đầu quy trình quản lý rủi ro đạo đức lại quan trọng?"
+  },
+  {
+   "chu": "business impact assessment",
+   "nghia": "đánh giá tác động kinh doanh (BIA): xem một sự cố ảnh hưởng tới hoạt động của tổ chức thế nào",
+   "nhom": "Rủi ro & khủng hoảng",
+   "viDu": "Which of the following describes the purpose of a business impact assessment (BIA)?",
+   "viDuNghia": "Điều nào sau đây mô tả mục đích của đánh giá tác động kinh doanh (BIA)?"
+  },
+  {
+   "chu": "strategic analysis",
+   "doc": "/strəˈtiːdʒɪk əˈnæləsɪs/",
+   "nghia": "phân tích chiến lược: xem xét môi trường trong và ngoài tổ chức để định hướng",
+   "nhom": "Rủi ro & khủng hoảng",
+   "viDu": "Strategic analysis looks at the internal and external factors that affect the organization.",
+   "viDuNghia": "Phân tích chiến lược xem xét các yếu tố bên trong và bên ngoài ảnh hưởng tới tổ chức."
+  },
+  {
+   "chu": "what-if scenario planning",
+   "nghia": "lập kế hoạch theo kịch bản giả định: đặt câu hỏi nếu… thì sao để chuẩn bị trước cho khủng hoảng",
+   "nhom": "Rủi ro & khủng hoảng",
+   "viDu": "What is the purpose of what-if scenario planning sessions?",
+   "viDuNghia": "Mục đích của các buổi lập kế hoạch kịch bản what-if là gì?"
+  },
+  {
+   "chu": "crisis",
+   "doc": "/ˈkraɪsɪs/",
+   "nghia": "khủng hoảng",
+   "nhom": "Rủi ro & khủng hoảng",
+   "viDu": "Which of the following are important to provide to a crisis communication team? (Select two.)",
+   "viDuNghia": "Điều nào sau đây quan trọng cần cung cấp cho đội truyền thông khủng hoảng? (Chọn hai.)"
+  },
+  {
+   "chu": "simulated attack",
+   "doc": "/ˈsɪmjuleɪtɪd əˈtæk/",
+   "nghia": "tấn công giả lập: tấn công thử có chủ đích để tìm điểm yếu (red team)",
+   "nhom": "Rủi ro & khủng hoảng",
+   "viDu": "A red team performs a simulated attack to find weaknesses before real attackers do.",
+   "viDuNghia": "Đội đỏ thực hiện một cuộc tấn công giả lập để tìm điểm yếu trước khi kẻ tấn công thật tìm ra."
+  },
+  {
+   "chu": "erosion of rights",
+   "nghia": "sự xói mòn quyền: quyền của con người bị mất dần đi",
+   "nhom": "Rủi ro & khủng hoảng",
+   "viDu": "Failing to communicate ethical risks can lead to an erosion of rights.",
+   "viDuNghia": "Không truyền đạt các rủi ro đạo đức có thể dẫn tới sự xói mòn quyền."
+  },
+  {
+   "chu": "reputation",
+   "doc": "/ˌrepjuˈteɪʃn/",
+   "nghia": "uy tín, danh tiếng (của tổ chức)",
+   "nhom": "Rủi ro & khủng hoảng",
+   "viDu": "An ethics scandal can damage the company's reputation for years.",
+   "viDuNghia": "Một vụ bê bối đạo đức có thể làm tổn hại uy tín của công ty trong nhiều năm."
+  },
+  {
+   "chu": "brand loyalty",
+   "doc": "/brænd ˈlɔɪəlti/",
+   "nghia": "lòng trung thành với thương hiệu",
+   "nhom": "Rủi ro & khủng hoảng",
+   "viDu": "Customers who trust how their data is used show stronger brand loyalty.",
+   "viDuNghia": "Khách hàng tin tưởng cách dữ liệu của mình được dùng sẽ trung thành với thương hiệu hơn."
+  },
+  {
+   "chu": "liability",
+   "doc": "/ˌlaɪəˈbɪləti/",
+   "nghia": "trách nhiệm pháp lý",
+   "nhom": "Rủi ro & khủng hoảng",
+   "viDu": "Why is it important to take a proactive approach to addressing liability issues?",
+   "viDuNghia": "Tại sao việc chủ động xử lý vấn đề trách nhiệm pháp lý (liability) lại quan trọng?"
+  },
+  {
+   "chu": "manipulation",
+   "doc": "/məˌnɪpjuˈleɪʃn/",
+   "nghia": "sự thao túng (hành vi, ý kiến của người dùng)",
+   "nhom": "Rủi ro & khủng hoảng",
+   "viDu": "Showing users only extreme content to keep them online is a form of manipulation.",
+   "viDuNghia": "Chỉ cho người dùng xem nội dung cực đoan để giữ họ trực tuyến là một dạng thao túng."
+  },
+  {
+   "chu": "penetration testing",
+   "doc": "/ˌpenəˈtreɪʃn ˈtestɪŋ/",
+   "nghia": "kiểm thử xâm nhập: tấn công thử có phép để tìm lỗ hổng trước kẻ xấu",
+   "nhom": "Rủi ro & khủng hoảng",
+   "viDu": "Which team typically oversees penetration test operations and adherence to the rules of engagement (RoE)?",
+   "viDuNghia": "Đội nào thường giám sát các hoạt động kiểm tra xâm nhập và việc tuân thủ bộ quy tắc giao ước (RoE)?"
+  },
+  {
+   "chu": "crisis communication",
+   "doc": "/ˈkraɪsɪs kəˌmjuːnɪˈkeɪʃn/",
+   "nghia": "truyền thông khủng hoảng: cách tổ chức thông tin ra ngoài khi có sự cố",
+   "nhom": "Rủi ro & khủng hoảng",
+   "viDu": "Which of the following is the most important idea that a crisis communication program should manage?",
+   "viDuNghia": "Ý tưởng quan trọng nhất nào mà một chương trình truyền thông khủng hoảng cần quản lý?"
+  },
+  {
+   "chu": "press conference",
+   "doc": "/pres ˈkɑːnfərəns/",
+   "nghia": "họp báo",
+   "nhom": "Rủi ro & khủng hoảng",
+   "viDu": "What is the benefit of hosting a virtual reality press conference over a traditional in-person press conference?",
+   "viDuNghia": "Lợi ích của việc tổ chức họp báo bằng thực tế ảo (VR) so với họp báo truyền thống trực tiếp là gì?"
+  },
+  {
+   "chu": "proactive",
+   "doc": "/ˌproʊˈæktɪv/",
+   "nghia": "chủ động: hành động trước khi vấn đề xảy ra (trái với reactive – bị động đối phó)",
+   "nhom": "Rủi ro & khủng hoảng",
+   "viDu": "Why is it important to take a proactive approach to addressing liability issues?",
+   "viDuNghia": "Tại sao việc chủ động xử lý vấn đề trách nhiệm pháp lý (liability) lại quan trọng?"
+  },
+  {
+   "chu": "cybersecurity",
+   "doc": "/ˌsaɪbərsɪˈkjʊrəti/",
+   "nghia": "an ninh mạng: bảo vệ hệ thống và dữ liệu khỏi tấn công — giữ bí mật, toàn vẹn và sẵn sàng (CIA)",
+   "nhom": "Rủi ro & khủng hoảng",
+   "viDu": "Which of the following describes the goal of integrity when it comes to cybersecurity?",
+   "viDuNghia": "Điều nào sau đây mô tả mục tiêu của tính toàn vẹn (integrity) trong an ninh mạng?"
+  },
+  {
+   "chu": "code of ethics",
+   "nghia": "bộ quy tắc đạo đức: văn bản nêu chuẩn mực ứng xử của một nghề hay tổ chức",
+   "nhom": "Quản trị & văn hoá",
+   "viDu": "Which of the following constitute internal stakeholders in the context of a code of ethics?",
+   "viDuNghia": "Điều nào sau đây cấu thành các bên liên quan nội bộ trong bối cảnh của một bộ quy tắc đạo đức?"
+  },
+  {
+   "chu": "ethics board",
+   "doc": "/ˈeθɪks bɔːrd/",
+   "nghia": "hội đồng đạo đức: nhóm xem xét và tư vấn các vấn đề đạo đức của tổ chức",
+   "nhom": "Quản trị & văn hoá",
+   "viDu": "Which of the following describes the purpose of having an Ethics Board for a data-driven organization?",
+   "viDuNghia": "Điều nào sau đây mô tả mục đích của việc có một Hội đồng Đạo đức cho một tổ chức dựa trên dữ liệu?"
+  },
+  {
+   "chu": "ethics policy",
+   "doc": "/ˈeθɪks ˈpɑːləsi/",
+   "nghia": "chính sách đạo đức (nội bộ cho nhân viên, bên ngoài cho khách hàng và đối tác)",
+   "nhom": "Quản trị & văn hoá",
+   "viDu": "Which of the following helps to ensure that internal and external ethics policies are adhered to in practice?",
+   "viDuNghia": "Điều nào sau đây giúp đảm bảo chính sách đạo đức nội bộ và bên ngoài được tuân thủ trong thực tế?"
+  },
+  {
+   "chu": "ethics training",
+   "doc": "/ˈeθɪks ˈtreɪnɪŋ/",
+   "nghia": "đào tạo về đạo đức cho nhân viên",
+   "nhom": "Quản trị & văn hoá",
+   "viDu": "How is a culture-building workshop different from ethics training?",
+   "viDuNghia": "Hội thảo xây dựng văn hoá khác với đào tạo đạo đức như thế nào?"
+  },
+  {
+   "chu": "organizational culture",
+   "doc": "/ˌɔːrɡənəˈzeɪʃənl ˈkʌltʃər/",
+   "nghia": "văn hoá tổ chức: giá trị và cách ứng xử chung của mọi người trong tổ chức",
+   "nhom": "Quản trị & văn hoá",
+   "viDu": "What is the purpose of change management in terms of creating an ethical organizational culture?",
+   "viDuNghia": "Mục đích của quản lý thay đổi trong việc xây văn hoá tổ chức có đạo đức là gì?"
+  },
+  {
+   "chu": "company values",
+   "doc": "/ˈkʌmpəni ˈvæljuːz/",
+   "nghia": "giá trị cốt lõi của công ty",
+   "nhom": "Quản trị & văn hoá",
+   "viDu": "How do you create an ethical organizational culture? → Transparency about company values.",
+   "viDuNghia": "Bạn tạo ra văn hoá tổ chức có đạo đức bằng cách nào? → Minh bạch về giá trị công ty."
+  },
+  {
+   "chu": "governance structure",
+   "doc": "/ˈɡʌvərnəns ˈstrʌktʃər/",
+   "nghia": "cơ cấu quản trị: ai có quyền quyết định, ai giám sát, ai chịu trách nhiệm",
+   "nhom": "Quản trị & văn hoá",
+   "viDu": "Why is accountability an important principle to include in governance structures for data-driven technologies?",
+   "viDuNghia": "Tại sao trách nhiệm giải trình là nguyên tắc quan trọng cần đưa vào cơ cấu quản trị cho công nghệ dựa trên dữ liệu?"
+  },
+  {
+   "chu": "internal stakeholder",
+   "doc": "/ɪnˈtɜːrnl ˈsteɪkhoʊldər/",
+   "nghia": "bên liên quan nội bộ: nhân viên, quản lý, chủ sở hữu",
+   "nhom": "Quản trị & văn hoá",
+   "viDu": "Which of the following is a key element of communications with internal and external stakeholders regarding an organization's ethics policies?",
+   "viDuNghia": "Yếu tố then chốt nào sau đây trong truyền thông với các bên liên quan nội bộ và bên ngoài về chính sách đạo đức của tổ chức?"
+  },
+  {
+   "chu": "external stakeholder",
+   "doc": "/ɪkˈstɜːrnl ˈsteɪkhoʊldər/",
+   "nghia": "bên liên quan bên ngoài: khách hàng, đối tác, cơ quan quản lý, cộng đồng",
+   "nhom": "Quản trị & văn hoá",
+   "viDu": "Which of the following constitute external stakeholders in the context of a code of ethics?",
+   "viDuNghia": "Điều nào sau đây cấu thành các bên liên quan bên ngoài trong bối cảnh của một bộ quy tắc đạo đức?"
+  },
+  {
+   "chu": "open door policy",
+   "nghia": "chính sách mở cửa: nhân viên được tự do gặp cấp trên để nêu ý kiến, lo ngại",
+   "nhom": "Quản trị & văn hoá",
+   "viDu": "Is an open door policy equivalent to ensuring employee voice?",
+   "viDuNghia": "Chính sách mở cửa (open door policy) có tương đương với việc đảm bảo tiếng nói của nhân viên không?"
+  },
+  {
+   "chu": "incentive structure",
+   "doc": "/ɪnˈsentɪv ˈstrʌktʃər/",
+   "nghia": "cơ chế khuyến khích: cách tổ chức thưởng – phạt để hướng hành vi của nhân viên",
+   "nhom": "Quản trị & văn hoá",
+   "viDu": "An incentive structure that encourages ethical behavior gives a reward for behaving ethically.",
+   "viDuNghia": "Một cơ chế khuyến khích hành vi có đạo đức sẽ thưởng cho việc cư xử có đạo đức."
+  },
+  {
+   "chu": "fair competition",
+   "doc": "/fer ˌkɑːmpəˈtɪʃn/",
+   "nghia": "cạnh tranh lành mạnh: cạnh tranh trung thực, không gian lận",
+   "nhom": "Quản trị & văn hoá",
+   "viDu": "Which of the following is an ethical benefit of incorporating fair competition considerations in a data-driven technology ecosystem?",
+   "viDuNghia": "Điều nào sau đây là lợi ích đạo đức của việc đưa các cân nhắc về cạnh tranh công bằng vào hệ sinh thái công nghệ dựa trên dữ liệu?"
+  },
+  {
+   "chu": "institutional knowledge",
+   "doc": "/ˌɪnstɪˈtuːʃənl ˈnɑːlɪdʒ/",
+   "nghia": "hiểu biết nội bộ: kinh nghiệm, thông tin mà người trong tổ chức tích luỹ được",
+   "nhom": "Quản trị & văn hoá",
+   "viDu": "Why is it important to interview the ground level in a business impact assessment? → They may have more institutional knowledge about a subject than managers.",
+   "viDuNghia": "Vì sao cần phỏng vấn cấp cơ sở khi đánh giá tác động kinh doanh? → Họ có thể có nhiều hiểu biết nội bộ về một vấn đề hơn cấp quản lý."
+  },
+  {
+   "chu": "regulatory requirement",
+   "doc": "/ˈreɡjələtɔːri rɪˈkwaɪərmənt/",
+   "nghia": "yêu cầu pháp lý: điều luật hay quy định bắt buộc phải tuân thủ",
+   "nhom": "Quản trị & văn hoá",
+   "viDu": "The system must meet every regulatory requirement, such as GDPR, before it is launched.",
+   "viDuNghia": "Hệ thống phải đáp ứng mọi yêu cầu pháp lý, như GDPR, trước khi ra mắt."
+  },
+  {
+   "chu": "decision-making",
+   "doc": "/dɪˈsɪʒn meɪkɪŋ/",
+   "nghia": "việc ra quyết định",
+   "nhom": "Quản trị & văn hoá",
+   "viDu": "What is the impact of biased algorithms on decision-making?",
+   "viDuNghia": "Thuật toán thiên lệch tác động thế nào tới việc ra quyết định?"
+  },
+  {
+   "chu": "employee voice",
+   "doc": "/ɪmˈplɔɪiː vɔɪs/",
+   "nghia": "tiếng nói của nhân viên: nhân viên được nêu ý kiến và thực sự được lắng nghe",
+   "nhom": "Quản trị & văn hoá",
+   "viDu": "Is an open door policy equivalent to ensuring employee voice?",
+   "viDuNghia": "Chính sách mở cửa (open door policy) có tương đương với việc đảm bảo tiếng nói của nhân viên không?"
+  },
+  {
+   "chu": "corporate governance",
+   "doc": "/ˈkɔːrpərət ˈɡʌvərnəns/",
+   "nghia": "quản trị doanh nghiệp: hệ thống quy tắc và quy trình điều hành, kiểm soát công ty",
+   "nhom": "Quản trị & văn hoá",
+   "viDu": "Why is corporate governance important when thinking about ethical considerations for the development of data-driven technologies?",
+   "viDuNghia": "Tại sao quản trị doanh nghiệp quan trọng khi cân nhắc các yếu tố đạo đức trong việc phát triển công nghệ dựa trên dữ liệu?"
+  },
+  {
+   "chu": "obligation",
+   "doc": "/ˌɑːblɪˈɡeɪʃn/",
+   "nghia": "nghĩa vụ, bổn phận",
+   "nhom": "Quản trị & văn hoá",
+   "viDu": "\"Companies have an obligation to their shareholders\" is part of a view that sees artificial intelligence as ______.",
+   "viDuNghia": "\"Doanh nghiệp có nghĩa vụ với cổ đông của mình\" là một phần của quan điểm xem trí tuệ nhân tạo là ______."
+  },
+  {
+   "chu": "data governance",
+   "doc": "/ˈdeɪtə ˈɡʌvərnəns/",
+   "nghia": "quản trị dữ liệu: quy tắc, vai trò, quy trình về việc ai được thu thập, truy cập và dùng dữ liệu ra sao",
+   "nhom": "Quản trị & văn hoá",
+   "viDu": "A recommended security practice for machine learning datasets is to enact a sound data governance structure.",
+   "viDuNghia": "Một thực hành bảo mật được khuyến nghị cho tập dữ liệu học máy là xây dựng cơ cấu quản trị dữ liệu vững chắc."
+  }
+ ]
+}

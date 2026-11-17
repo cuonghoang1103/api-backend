@@ -1,0 +1,597 @@
+{
+ "ma": "pro192-2",
+ "nn": "en",
+ "ten": "PRO192 · 2. Ngoại lệ, Collections, tệp",
+ "moTa": "PRO192 – Lập trình hướng đối tượng (Java), phần 2: xử lý ngoại lệ, Collections (List, Set, Map), sắp xếp – so sánh, đọc ghi tệp, xử lý chuỗi. Từ lấy từ đề FE/PE thật; câu ví dụ là câu hỏi thật trong đề.",
+ "bieuTuong": "exclamationmark.triangle.fill",
+ "thuTu": -982,
+ "tu": [
+  {
+   "chu": "exception handling",
+   "doc": "/ɪkˈsepʃn ˈhændlɪŋ/",
+   "nghia": "xử lý ngoại lệ – bắt và giải quyết lỗi bằng try–catch để chương trình không sập",
+   "nhom": "Ngoại lệ",
+   "viDu": "Exception handling with try-catch lets the program recover from errors instead of crashing.",
+   "viDuNghia": "Xử lý ngoại lệ bằng try-catch giúp chương trình phục hồi sau lỗi thay vì bị sập."
+  },
+  {
+   "chu": "throws clause",
+   "doc": "/θroʊz klɔːz/",
+   "nghia": "mệnh đề throws – ghi ở đầu phương thức, báo phương thức có thể ném ngoại lệ nào",
+   "nhom": "Ngoại lệ",
+   "viDu": "A throws clause such as throws IOException tells callers that the method may throw that exception.",
+   "viDuNghia": "Mệnh đề throws như throws IOException báo cho nơi gọi biết phương thức có thể ném ngoại lệ đó."
+  },
+  {
+   "chu": "try block",
+   "doc": "/traɪ blɑːk/",
+   "nghia": "khối try – chứa đoạn mã có thể sinh ngoại lệ",
+   "nhom": "Ngoại lệ",
+   "viDu": "Whenever a method does not want to handle exceptions using the try block, which keyword is used?",
+   "viDuNghia": "Khi một phương thức không muốn xử lý ngoại lệ bằng khối try thì dùng từ khoá nào?"
+  },
+  {
+   "chu": "catch block",
+   "doc": "/kætʃ blɑːk/",
+   "nghia": "khối catch – bắt và xử lý ngoại lệ ném ra từ khối try",
+   "nhom": "Ngoại lệ",
+   "viDu": "A catch block handles an exception thrown inside the matching try block.",
+   "viDuNghia": "Khối catch xử lý ngoại lệ được ném ra bên trong khối try tương ứng."
+  },
+  {
+   "chu": "finally block",
+   "doc": "/ˈfaɪnəli blɑːk/",
+   "nghia": "khối finally – luôn chạy dù có ngoại lệ hay không, thường để đóng tệp",
+   "nhom": "Ngoại lệ",
+   "viDu": "The finally block always runs, whether or not an exception is thrown, so it is used to close files.",
+   "viDuNghia": "Khối finally luôn chạy dù có ngoại lệ hay không, nên được dùng để đóng tệp."
+  },
+  {
+   "chu": "checked exception",
+   "doc": "/tʃekt ɪkˈsepʃn/",
+   "nghia": "ngoại lệ được kiểm tra – trình biên dịch bắt phải try–catch hoặc khai báo throws (vd IOException)",
+   "nhom": "Ngoại lệ",
+   "viDu": "What is a checked exception in Java?",
+   "viDuNghia": "Checked exception trong Java là gì?"
+  },
+  {
+   "chu": "unchecked exception",
+   "doc": "/ʌnˈtʃekt ɪkˈsepʃn/",
+   "nghia": "ngoại lệ không kiểm tra – lớp con của RuntimeException, không bắt buộc phải bắt",
+   "nhom": "Ngoại lệ",
+   "viDu": "Select an operation which may cause an unchecked exception.",
+   "viDuNghia": "Chọn thao tác có thể gây ra ngoại lệ không kiểm tra (unchecked exception)."
+  },
+  {
+   "chu": "custom exception",
+   "doc": "/ˈkʌstəm ɪkˈsepʃn/",
+   "nghia": "ngoại lệ tự định nghĩa – lớp ngoại lệ do mình viết, kế thừa Exception",
+   "nhom": "Ngoại lệ",
+   "viDu": "Write three classes: a custom checked exception, an abstract base class, and one concrete subclass.",
+   "viDuNghia": "Viết ba lớp: một ngoại lệ checked tự định nghĩa, một lớp cơ sở trừu tượng và một lớp con cụ thể."
+  },
+  {
+   "chu": "raise",
+   "doc": "/reɪz/",
+   "nghia": "phát sinh, ném ra (ngoại lệ) – \"an exception is raised\" = có ngoại lệ xảy ra",
+   "nhom": "Ngoại lệ",
+   "viDu": "If the user enters text instead of a number, the program will raise an exception.",
+   "viDuNghia": "Nếu người dùng nhập chữ thay vì số, chương trình sẽ phát sinh một ngoại lệ."
+  },
+  {
+   "chu": "attempt",
+   "doc": "/əˈtempt/",
+   "nghia": "thử, cố gắng làm (\"attempts to compile\" = thử biên dịch)",
+   "nhom": "Ngoại lệ",
+   "viDu": "Which of the following exceptions is thrown when an attempt is made to open a file that CANNOT be found by the FileInputStream class?",
+   "viDuNghia": "Ngoại lệ nào được ném ra khi cố mở bằng lớp FileInputStream một tệp KHÔNG tìm thấy?"
+  },
+  {
+   "chu": "cause",
+   "doc": "/kɔːz/",
+   "nghia": "gây ra; nguyên nhân (của ngoại lệ)",
+   "nhom": "Ngoại lệ",
+   "viDu": "When is it appropriate to pass a cause to an exception's constructor?",
+   "viDuNghia": "Khi nào thì nên truyền 'cause' (nguyên nhân) vào hàm dựng của một exception?"
+  },
+  {
+   "chu": "null pointer exception",
+   "nghia": "ngoại lệ con trỏ null (NullPointerException) – gọi phương thức trên tham chiếu đang là null",
+   "nhom": "Ngoại lệ",
+   "viDu": "Calling a method on a null reference throws a NullPointerException.",
+   "viDuNghia": "Gọi phương thức trên một tham chiếu null sẽ ném NullPointerException."
+  },
+  {
+   "chu": "arithmetic exception",
+   "doc": "/ˌærɪθˈmetɪk ɪkˈsepʃn/",
+   "nghia": "ngoại lệ số học (ArithmeticException) – ví dụ chia số nguyên cho 0",
+   "nhom": "Ngoại lệ",
+   "viDu": "Which of the following operations might throw an ArithmeticException?",
+   "viDuNghia": "Phép toán nào sau đây có thể ném ra ArithmeticException?"
+  },
+  {
+   "chu": "number format exception",
+   "nghia": "ngoại lệ định dạng số (NumberFormatException) – đổi chuỗi không phải số sang số",
+   "nhom": "Ngoại lệ",
+   "viDu": "Use the try catch to catch NumberFormatException and NullPointerException.",
+   "viDuNghia": "Dùng try catch để bắt NumberFormatException và NullPointerException."
+  },
+  {
+   "chu": "class cast exception",
+   "nghia": "ngoại lệ ép kiểu (ClassCastException) – ép một đối tượng sang lớp mà nó không thuộc về",
+   "nhom": "Ngoại lệ",
+   "viDu": "Sorting would yield a ClassCastException as the classes are incompatible.",
+   "viDuNghia": "Việc sắp xếp sẽ sinh ClassCastException vì các lớp không tương thích."
+  },
+  {
+   "chu": "file not found exception",
+   "nghia": "ngoại lệ không tìm thấy tệp (FileNotFoundException) – mở tệp không tồn tại",
+   "nhom": "Ngoại lệ",
+   "viDu": "The code inside X may throw a FileNotFoundException or other exceptions descended from IOException.",
+   "viDuNghia": "Đoạn mã trong X có thể ném FileNotFoundException hoặc các ngoại lệ khác kế thừa từ IOException."
+  },
+  {
+   "chu": "input/output exception",
+   "doc": "/ˈɪnpʊt ˈaʊtpʊt ɪkˈsepʃn/",
+   "nghia": "ngoại lệ vào/ra (IOException) – lỗi khi đọc ghi tệp hay luồng; là checked exception",
+   "nhom": "Ngoại lệ",
+   "viDu": "PrintWriter methods never throw IOException. After writing all lines of books.csv, how does FileBookRepository find out that the disk was full?",
+   "viDuNghia": "Các phương thức của PrintWriter không bao giờ ném IOException. Ghi xong mọi dòng của books.csv, FileBookRepository biết đĩa đầy bằng cách nào?"
+  },
+  {
+   "chu": "throw statement",
+   "doc": "/θroʊ ˈsteɪtmənt/",
+   "nghia": "lệnh throw – chủ động ném một đối tượng ngoại lệ",
+   "nhom": "Ngoại lệ",
+   "viDu": "Use a throw statement such as throw new IllegalArgumentException(\"Invalid age\") to reject bad input.",
+   "viDuNghia": "Dùng lệnh throw như throw new IllegalArgumentException(\"Invalid age\") để từ chối dữ liệu sai."
+  },
+  {
+   "chu": "descend from",
+   "doc": "/dɪˈsend frəm/",
+   "nghia": "kế thừa từ, là con cháu của (một lớp)",
+   "nhom": "Ngoại lệ",
+   "viDu": "The code may throw a FileNotFoundException or other exceptions descended from IOException.",
+   "viDuNghia": "Đoạn mã có thể ném FileNotFoundException hoặc các ngoại lệ khác kế thừa từ IOException."
+  },
+  {
+   "chu": "incompatible types",
+   "doc": "/ˌɪnkəmˈpætəbl taɪps/",
+   "nghia": "kiểu không tương thích – hai kiểu không gán hoặc ép cho nhau được",
+   "nhom": "Ngoại lệ",
+   "viDu": "Sorting would fail because the classes are incompatible.",
+   "viDuNghia": "Việc sắp xếp sẽ thất bại vì các lớp không tương thích."
+  },
+  {
+   "chu": "try-with-resources",
+   "doc": "/ˈtraɪ wɪð rɪˈsɔːrsɪz/",
+   "nghia": "cú pháp try tự đóng tài nguyên – tệp/luồng khai báo trong ngoặc của try được đóng tự động",
+   "nhom": "Ngoại lệ",
+   "viDu": "Close both files (try-with-resources).",
+   "viDuNghia": "Đóng cả hai tệp (dùng try-with-resources)."
+  },
+  {
+   "chu": "exception class",
+   "doc": "/ɪkˈsepʃn klæs/",
+   "nghia": "lớp ngoại lệ – mọi ngoại lệ đều là đối tượng của một lớp kế thừa Throwable",
+   "nhom": "Ngoại lệ",
+   "viDu": "Every exception class in Java is a subclass of Throwable.",
+   "viDuNghia": "Mọi lớp ngoại lệ trong Java đều là lớp con của Throwable."
+  },
+  {
+   "chu": "exception",
+   "doc": "/ɪkˈsepʃn/",
+   "nghia": "ngoại lệ – lỗi phát sinh khi chạy, được ném (throw) và bắt (try-catch); checked/unchecked exception · (use case, SWR302) điều kiện làm use case không thành công",
+   "nhom": "Ngoại lệ",
+   "viDu": "Which exception is CHECKED (the compiler forces you to catch it or declare it with throws)?",
+   "viDuNghia": "Ngoại lệ nào là CHECKED (trình biên dịch buộc phải bắt hoặc khai throws)?"
+  },
+  {
+   "chu": "throw",
+   "doc": "/θroʊ/",
+   "nghia": "ném (ngoại lệ) – throw new X() phát ra ngoại lệ; throws khai báo phương thức có thể ném ngoại lệ",
+   "nhom": "Ngoại lệ",
+   "viDu": "Which of the following operations might throw an ArithmeticException?",
+   "viDuNghia": "Phép toán nào sau đây có thể ném ra ArithmeticException?"
+  },
+  {
+   "chu": "Collections Framework",
+   "doc": "/kəˈlekʃnz ˈfreɪmwɜːrk/",
+   "nghia": "bộ khung Collections – hệ thống interface và lớp có sẵn của Java để lưu nhóm đối tượng",
+   "nhom": "Tập hợp (Collections)",
+   "viDu": "Which two of the following interfaces are at the top of the hierarchies in the Java Collections Framework? (Select two)",
+   "viDuNghia": "Hai interface nào sau đây nằm ở đỉnh các cây phân cấp trong Java Collections Framework? (Chọn hai)"
+  },
+  {
+   "chu": "ArrayList",
+   "doc": "/əˈreɪ lɪst/",
+   "nghia": "danh sách mảng – List dùng mảng tự co giãn, truy cập theo chỉ số nhanh",
+   "nhom": "Tập hợp (Collections)",
+   "viDu": "Which of the following statements related to inserting a new element into an ArrayList is true?",
+   "viDuNghia": "Phát biểu nào ĐÚNG về việc chèn phần tử mới vào ArrayList?"
+  },
+  {
+   "chu": "HashSet",
+   "doc": "/ˈhæʃ set/",
+   "nghia": "tập băm – Set không trùng, không giữ thứ tự, thêm/tìm rất nhanh",
+   "nhom": "Tập hợp (Collections)",
+   "viDu": "What is the main difference between HashSet and TreeSet?",
+   "viDuNghia": "Khác biệt chính giữa HashSet và TreeSet là gì?"
+  },
+  {
+   "chu": "TreeSet",
+   "doc": "/ˈtriː set/",
+   "nghia": "tập cây – Set không trùng, tự sắp xếp phần tử tăng dần",
+   "nhom": "Tập hợp (Collections)",
+   "viDu": "A TreeSet keeps its elements sorted and does not allow duplicates.",
+   "viDuNghia": "TreeSet giữ các phần tử luôn được sắp xếp và không cho phép trùng."
+  },
+  {
+   "chu": "HashMap",
+   "doc": "/ˈhæʃ mæp/",
+   "nghia": "bảng băm ánh xạ – Map tra theo khoá rất nhanh, không giữ thứ tự",
+   "nhom": "Tập hợp (Collections)",
+   "viDu": "A HashMap stores each word together with the number of times it appears.",
+   "viDuNghia": "HashMap lưu mỗi từ kèm số lần nó xuất hiện."
+  },
+  {
+   "chu": "TreeMap",
+   "doc": "/ˈtriː mæp/",
+   "nghia": "ánh xạ cây – Map tự sắp xếp theo khoá",
+   "nhom": "Tập hợp (Collections)",
+   "viDu": "A TreeMap keeps its entries sorted by key.",
+   "viDuNghia": "TreeMap giữ các mục luôn được sắp xếp theo khoá."
+  },
+  {
+   "chu": "key-value pair",
+   "doc": "/kiː ˈvæljuː per/",
+   "nghia": "cặp khoá–giá trị – một mục của Map: tra theo khoá để lấy giá trị",
+   "nhom": "Tập hợp (Collections)",
+   "viDu": "A Map stores data as key-value pairs, and each key appears only once.",
+   "viDuNghia": "Map lưu dữ liệu thành các cặp khoá–giá trị, và mỗi khoá chỉ xuất hiện một lần."
+  },
+  {
+   "chu": "iterator",
+   "doc": "/ˈɪtəreɪtər/",
+   "nghia": "bộ duyệt – đối tượng đi lần lượt qua từng phần tử của tập hợp (hasNext, next)",
+   "nhom": "Tập hợp (Collections)",
+   "viDu": "Use an Iterator to visit every element of the collection one by one.",
+   "viDuNghia": "Dùng Iterator để đi qua lần lượt từng phần tử của tập hợp."
+  },
+  {
+   "chu": "iterate",
+   "doc": "/ˈɪtəreɪt/",
+   "nghia": "duyệt qua lần lượt từng phần tử",
+   "nhom": "Tập hợp (Collections)",
+   "viDu": "What loop is specifically designed for iterating through array elements? (Choose 1 answer)",
+   "viDuNghia": "Vòng lặp nào được thiết kế riêng để duyệt qua các phần tử của mảng? (Chọn 1 đáp án)"
+  },
+  {
+   "chu": "insertion order",
+   "doc": "/ɪnˈsɜːrʃn ˈɔːrdər/",
+   "nghia": "thứ tự chèn – thứ tự các phần tử được thêm vào",
+   "nhom": "Tập hợp (Collections)",
+   "viDu": "Which of the following Set implementations maintains insertion order in Java?",
+   "viDuNghia": "Cài đặt Set nào sau đây giữ nguyên thứ tự chèn (insertion order) trong Java?"
+  },
+  {
+   "chu": "shuffle",
+   "doc": "/ˈʃʌfl/",
+   "nghia": "xáo trộn ngẫu nhiên thứ tự các phần tử (xáo bài)",
+   "nhom": "Tập hợp (Collections)",
+   "viDu": "Which of the following classes is used for shuffling an ArrayList in Java?",
+   "viDuNghia": "Lớp nào sau đây được dùng để xáo trộn (shuffle) một ArrayList trong Java?"
+  },
+  {
+   "chu": "type parameter",
+   "doc": "/taɪp pəˈræmɪtər/",
+   "nghia": "tham số kiểu – chữ đại diện cho kiểu trong lớp generic, vd chữ T hoặc E",
+   "nhom": "Tập hợp (Collections)",
+   "viDu": "In the declaration of ArrayList, the letter E is a type parameter.",
+   "viDuNghia": "Trong khai báo của ArrayList, chữ E là một tham số kiểu."
+  },
+  {
+   "chu": "root interface",
+   "doc": "/ruːt ˈɪntərfeɪs/",
+   "nghia": "interface gốc – interface đứng trên cùng của một hệ phân cấp",
+   "nhom": "Tập hợp (Collections)",
+   "viDu": "Which of the following interfaces is the root interface of the Java Collections Framework?",
+   "viDuNghia": "Interface nào sau đây là interface gốc (root) của Java Collections Framework?"
+  },
+  {
+   "chu": "lookup",
+   "doc": "/ˈlʊkʌp/",
+   "nghia": "sự tra cứu – tìm giá trị theo khoá",
+   "nhom": "Tập hợp (Collections)",
+   "viDu": "You need to store unique customer IDs efficiently, ensuring rapid lookup and insertion.",
+   "viDuNghia": "Bạn cần lưu các mã khách hàng không trùng một cách hiệu quả, đảm bảo tra cứu và chèn nhanh."
+  },
+  {
+   "chu": "duplicate element",
+   "doc": "/ˈduːplɪkət ˈelɪmənt/",
+   "nghia": "phần tử trùng – phần tử đã có sẵn trong tập hợp; Set tự bỏ qua",
+   "nhom": "Tập hợp (Collections)",
+   "viDu": "What happens if you add a duplicate element to a TreeSet?",
+   "viDuNghia": "Điều gì xảy ra nếu bạn thêm một phần tử trùng lặp vào một TreeSet?"
+  },
+  {
+   "chu": "key-value mapping",
+   "doc": "/kiː ˈvæljuː ˈmæpɪŋ/",
+   "nghia": "ánh xạ khoá–giá trị – cách Map gắn mỗi khoá với một giá trị",
+   "nhom": "Tập hợp (Collections)",
+   "viDu": "Use a Java collection to model this relationship, considering the principles of association and key-value mapping.",
+   "viDuNghia": "Dùng một collection của Java để mô hình hoá quan hệ này, xét theo nguyên tắc liên kết và ánh xạ khoá–giá trị."
+  },
+  {
+   "chu": "word frequency",
+   "doc": "/wɜːrd ˈfriːkwənsi/",
+   "nghia": "tần suất từ – số lần mỗi từ xuất hiện trong văn bản",
+   "nhom": "Tập hợp (Collections)",
+   "viDu": "Utilize a HashMap for efficient word frequency tracking.",
+   "viDuNghia": "Dùng HashMap để theo dõi tần suất từ một cách hiệu quả."
+  },
+  {
+   "chu": "List collection",
+   "doc": "/lɪst kəˈlekʃn/",
+   "nghia": "tập hợp kiểu List – có thứ tự, cho phép trùng, truy cập theo chỉ số",
+   "nhom": "Tập hợp (Collections)",
+   "viDu": "Which of the following represents a valid declaration of a List collection of integers in Java?",
+   "viDuNghia": "Phương án nào sau đây là khai báo hợp lệ của một List chứa các số nguyên (integer) trong Java?"
+  },
+  {
+   "chu": "Set implementation",
+   "doc": "/set ˌɪmplɪmenˈteɪʃn/",
+   "nghia": "lớp cài đặt Set – HashSet (nhanh), LinkedHashSet (giữ thứ tự chèn), TreeSet (tự sắp xếp)",
+   "nhom": "Tập hợp (Collections)",
+   "viDu": "If you need a Set implementation that provides value-ordered iteration, which class should you use?",
+   "viDuNghia": "Nếu cần một cài đặt Set duyệt theo thứ tự giá trị, bạn dùng lớp nào?"
+  },
+  {
+   "chu": "comparable",
+   "doc": "/ˈkɑːmpərəbl/",
+   "nghia": "interface Comparable – lớp tự định nghĩa thứ tự tự nhiên bằng compareTo",
+   "nhom": "Sắp xếp & so sánh",
+   "viDu": "Employee must implement Comparable so that a list of employees can be sorted.",
+   "viDuNghia": "Employee phải cài đặt Comparable để sắp xếp được danh sách nhân viên."
+  },
+  {
+   "chu": "comparator",
+   "doc": "/kəmˈpærətər/",
+   "nghia": "bộ so sánh (Comparator) – đối tượng bên ngoài quy định cách so hai phần tử bằng compare",
+   "nhom": "Sắp xếp & so sánh",
+   "viDu": "For Sort, order the list by salary with a Comparator.",
+   "viDuNghia": "Với chức năng Sort, sắp xếp danh sách theo lương bằng một Comparator."
+  },
+  {
+   "chu": "natural ordering",
+   "doc": "/ˈnætʃrəl ˈɔːrdərɪŋ/",
+   "nghia": "thứ tự tự nhiên – thứ tự mặc định của kiểu (số tăng dần, chuỗi theo bảng chữ cái)",
+   "nhom": "Sắp xếp & so sánh",
+   "viDu": "The method compareTo defines the natural order by name (case-insensitive).",
+   "viDuNghia": "Phương thức compareTo định nghĩa thứ tự tự nhiên theo tên (không phân biệt hoa thường)."
+  },
+  {
+   "chu": "stable sort",
+   "doc": "/ˈsteɪbl sɔːrt/",
+   "nghia": "sắp xếp ổn định – các phần tử bằng nhau giữ nguyên thứ tự trước sau",
+   "nhom": "Sắp xếp & so sánh",
+   "viDu": "Merge sort is a fast, stable sorting routine with guaranteed O(n log n) efficiency.",
+   "viDuNghia": "Merge sort là thuật toán sắp xếp nhanh, ổn định, đảm bảo hiệu năng O(n log n)."
+  },
+  {
+   "chu": "pivot",
+   "doc": "/ˈpɪvət/",
+   "nghia": "phần tử chốt – phần tử dùng làm mốc để chia dãy trong quicksort",
+   "nhom": "Sắp xếp & so sánh",
+   "viDu": "Index j is moved backward until an element with a value less than or equal to the pivot is found.",
+   "viDuNghia": "Chỉ số j lùi dần cho tới khi gặp một phần tử có giá trị nhỏ hơn hoặc bằng chốt."
+  },
+  {
+   "chu": "alphabetical order",
+   "doc": "/ˌælfəˈbetɪkl ˈɔːrdər/",
+   "nghia": "thứ tự bảng chữ cái (A đến Z)",
+   "nhom": "Sắp xếp & so sánh",
+   "viDu": "If multiple letters have the same frequency, return the one that comes first alphabetically.",
+   "viDuNghia": "Nếu nhiều chữ cái có cùng tần suất, trả về chữ đứng trước theo bảng chữ cái."
+  },
+  {
+   "chu": "ordering",
+   "doc": "/ˈɔːrdərɪŋ/",
+   "nghia": "thứ tự sắp xếp; cách xếp thứ tự",
+   "nhom": "Sắp xếp & so sánh",
+   "viDu": "What must be implemented when storing custom objects in a TreeSet to ensure proper ordering?",
+   "viDuNghia": "Cần phải hiện thực (implement) cái gì khi lưu các đối tượng tự định nghĩa trong một TreeSet để đảm bảo thứ tự đúng?"
+  },
+  {
+   "chu": "sorted order",
+   "doc": "/ˈsɔːrtɪd ˈɔːrdər/",
+   "nghia": "thứ tự đã sắp xếp",
+   "nhom": "Sắp xếp & so sánh",
+   "viDu": "Furthermore, it would be nice if the list was in sorted order.",
+   "viDuNghia": "Hơn nữa, sẽ tốt hơn nếu danh sách ở dạng đã sắp xếp."
+  },
+  {
+   "chu": "folder",
+   "doc": "/ˈfoʊldər/",
+   "nghia": "thư mục (cách gọi thường ngày của directory)",
+   "nhom": "Tệp & luồng dữ liệu",
+   "viDu": "Display the number of files and print the names of files with size > n in the folder.",
+   "viDuNghia": "Hiển thị số lượng tệp và in tên các tệp có kích thước > n trong thư mục."
+  },
+  {
+   "chu": "path",
+   "doc": "/pæθ/",
+   "nghia": "đường dẫn tới tệp hoặc thư mục",
+   "nhom": "Tệp & luồng dữ liệu",
+   "viDu": "When the user chooses 2, require the user to enter a folder path.",
+   "viDuNghia": "Khi người dùng chọn 2, yêu cầu người dùng nhập đường dẫn của một thư mục."
+  },
+  {
+   "chu": "byte stream",
+   "doc": "/baɪt striːm/",
+   "nghia": "luồng byte – đọc ghi dữ liệu thô theo từng byte (InputStream, OutputStream)",
+   "nhom": "Tệp & luồng dữ liệu",
+   "viDu": "A byte stream reads and writes raw data one byte at a time.",
+   "viDuNghia": "Luồng byte đọc và ghi dữ liệu thô từng byte một."
+  },
+  {
+   "chu": "character stream",
+   "doc": "/ˈkærəktər striːm/",
+   "nghia": "luồng ký tự – đọc ghi văn bản theo ký tự (Reader, Writer)",
+   "nhom": "Tệp & luồng dữ liệu",
+   "viDu": "Which package contains the classes that work on character streams?",
+   "viDuNghia": "Gói nào chứa các lớp làm việc với luồng ký tự?"
+  },
+  {
+   "chu": "serialization",
+   "doc": "/ˌsɪriələˈzeɪʃn/",
+   "nghia": "tuần tự hoá – chuyển đối tượng thành dãy byte để lưu tệp hoặc gửi đi",
+   "nhom": "Tệp & luồng dữ liệu",
+   "viDu": "A class must implement Serializable so that its objects can be written to a file by serialization.",
+   "viDuNghia": "Lớp phải cài đặt Serializable thì đối tượng của nó mới ghi được ra tệp bằng tuần tự hoá."
+  },
+  {
+   "chu": "random access file",
+   "nghia": "tệp truy cập ngẫu nhiên – nhảy tới vị trí bất kỳ trong tệp để đọc/ghi (RandomAccessFile)",
+   "nhom": "Tệp & luồng dữ liệu",
+   "viDu": "A random access file lets the program jump to any position in the file to read or write.",
+   "viDuNghia": "Tệp truy cập ngẫu nhiên cho chương trình nhảy tới vị trí bất kỳ trong tệp để đọc hoặc ghi."
+  },
+  {
+   "chu": "encoding",
+   "doc": "/ɪnˈkoʊdɪŋ/",
+   "nghia": "bảng mã ký tự (UTF-8…) – cách đổi ký tự thành byte",
+   "nhom": "Tệp & luồng dữ liệu",
+   "viDu": "What is the way to instantiate a Scanner object to read data from a file \"data.txt\" with UTF-8 character encoding?",
+   "viDuNghia": "Cách nào là cách khởi tạo một đối tượng Scanner để đọc dữ liệu từ file \"data.txt\" với bảng mã ký tự UTF-8?"
+  },
+  {
+   "chu": "comma-separated values",
+   "doc": "/ˈkɑːmə ˈsepəreɪtɪd ˈvæljuːz/",
+   "nghia": "tệp CSV – mỗi dòng một bản ghi, các trường cách nhau bởi dấu phẩy",
+   "nhom": "Tệp & luồng dữ liệu",
+   "viDu": "A comma-separated values (CSV) file stores one record per line, with fields separated by commas.",
+   "viDuNghia": "Tệp giá trị phân tách bằng dấu phẩy (CSV) lưu mỗi dòng một bản ghi, các trường cách nhau bởi dấu phẩy."
+  },
+  {
+   "chu": "split",
+   "doc": "/splɪt/",
+   "nghia": "tách chuỗi thành nhiều phần theo dấu phân cách",
+   "nhom": "Tệp & luồng dữ liệu",
+   "viDu": "Split each line of the CSV file by the comma character.",
+   "viDuNghia": "Tách mỗi dòng của tệp CSV theo ký tự dấu phẩy."
+  },
+  {
+   "chu": "parse",
+   "doc": "/pɑːrs/",
+   "nghia": "phân tích chuỗi để lấy giá trị (parseInt đổi chuỗi thành số nguyên)",
+   "nhom": "Tệp & luồng dữ liệu",
+   "viDu": "Read each number as text from the keyboard; do not parse it into int, because it may be far too big.",
+   "viDuNghia": "Đọc mỗi số dưới dạng chuỗi từ bàn phím; đừng đổi nó sang int vì nó có thể quá lớn."
+  },
+  {
+   "chu": "close",
+   "doc": "/kloʊz/",
+   "nghia": "đóng (tệp, luồng) sau khi dùng xong để giải phóng tài nguyên",
+   "nhom": "Tệp & luồng dữ liệu",
+   "viDu": "Always close the file after reading so that its resources are released.",
+   "viDuNghia": "Luôn đóng tệp sau khi đọc để giải phóng tài nguyên."
+  },
+  {
+   "chu": "object stream",
+   "doc": "/ˈɑːbdʒɪkt striːm/",
+   "nghia": "luồng đối tượng – ghi/đọc cả đối tượng ra tệp (ObjectOutputStream, ObjectInputStream)",
+   "nhom": "Tệp & luồng dữ liệu",
+   "viDu": "In the object stream, which of the following members of an object won't be serialized?",
+   "viDuNghia": "Trong luồng đối tượng (object stream), thành phần nào sau đây của một đối tượng sẽ KHÔNG được tuần tự hoá (serialize)?"
+  },
+  {
+   "chu": "low-level stream",
+   "doc": "/ˌloʊ ˈlevl striːm/",
+   "nghia": "luồng mức thấp – nối trực tiếp với nguồn dữ liệu, đọc ghi byte thô (FileInputStream)",
+   "nhom": "Tệp & luồng dữ liệu",
+   "viDu": "For the low-level binary stream class FileInputStream, which of the following methods is used to retrieve a byte from a source stream?",
+   "viDuNghia": "Đối với lớp luồng nhị phân mức thấp (low-level) FileInputStream, phương thức nào sau đây được dùng để lấy một byte từ luồng nguồn?"
+  },
+  {
+   "chu": "high-level stream",
+   "doc": "/ˌhaɪ ˈlevl striːm/",
+   "nghia": "luồng mức cao – bọc ngoài luồng mức thấp để đọc ghi theo kiểu dữ liệu (DataInputStream)",
+   "nhom": "Tệp & luồng dữ liệu",
+   "viDu": "Which of the following statements about the low-level stream and the high-level stream is true?",
+   "viDuNghia": "Phát biểu nào sau đây về luồng mức thấp (low-level) và luồng mức cao (high-level) là đúng?"
+  },
+  {
+   "chu": "file path",
+   "doc": "/faɪl pæθ/",
+   "nghia": "đường dẫn tệp",
+   "nhom": "Tệp & luồng dữ liệu",
+   "viDu": "Implement function importCSV(String path). Input: path is the file path.",
+   "viDuNghia": "Cài đặt hàm importCSV(String path). Đầu vào: path là đường dẫn tệp."
+  },
+  {
+   "chu": "concatenation",
+   "doc": "/kənˌkætəˈneɪʃn/",
+   "nghia": "phép nối chuỗi (toán tử cộng hoặc concat)",
+   "nhom": "Chuỗi & tiện ích",
+   "viDu": "Assume a and b are two ArrayLists of Integer class. Which of the following statements is used to concatenate the two ArrayLists?",
+   "viDuNghia": "Giả sử a và b là hai ArrayList kiểu Integer. Câu lệnh nào dùng để nối hai ArrayList lại?"
+  },
+  {
+   "chu": "mutable string",
+   "doc": "/ˈmjuːtəbl strɪŋ/",
+   "nghia": "chuỗi sửa được – StringBuilder/StringBuffer cho phép thay đổi nội dung, khác String bất biến",
+   "nhom": "Chuỗi & tiện ích",
+   "viDu": "Use a StringBuilder when the text is changed many times, because a String is immutable.",
+   "viDuNghia": "Dùng StringBuilder khi chuỗi bị sửa nhiều lần, vì String là bất biến."
+  },
+  {
+   "chu": "enum",
+   "doc": "/ˈiːnʌm/",
+   "nghia": "kiểu liệt kê – tập cố định các hằng có tên (vd các chất của bộ bài)",
+   "nhom": "Chuỗi & tiện ích",
+   "viDu": "Create method getColor(String color); if color is not a Color Enum then return null.",
+   "viDuNghia": "Tạo phương thức getColor(String color); nếu color không thuộc enum Color thì trả về null."
+  },
+  {
+   "chu": "hash code",
+   "doc": "/hæʃ koʊd/",
+   "nghia": "mã băm – số nguyên đại diện cho đối tượng, HashSet/HashMap dùng để xếp chỗ",
+   "nhom": "Chuỗi & tiện ích",
+   "viDu": "If two objects are equal according to equals(), they must return the same hash code.",
+   "viDuNghia": "Nếu hai đối tượng bằng nhau theo equals() thì chúng phải trả về cùng một mã băm."
+  },
+  {
+   "chu": "maintain",
+   "doc": "/meɪnˈteɪn/",
+   "nghia": "duy trì, giữ (thứ tự, trạng thái); bảo trì mã",
+   "nhom": "Chuỗi & tiện ích",
+   "viDu": "A TreeSet maintains its elements in sorted order.",
+   "viDuNghia": "TreeSet giữ các phần tử của nó theo thứ tự đã sắp xếp."
+  },
+  {
+   "chu": "regardless",
+   "doc": "/rɪˈɡɑːrdləs/",
+   "nghia": "bất kể, không phụ thuộc vào",
+   "nhom": "Chuỗi & tiện ích",
+   "viDu": "A public method is accessible from any class, regardless of the package.",
+   "viDuNghia": "Phương thức public truy cập được từ mọi lớp, bất kể thuộc gói nào."
+  },
+  {
+   "chu": "regular expression",
+   "doc": "/ˈreɡjələr ɪkˈspreʃn/",
+   "nghia": "biểu thức chính quy (regex) – mẫu dùng để tìm và tách chuỗi",
+   "nhom": "Chuỗi & tiện ích",
+   "viDu": "Which string method is used to split a string using a regular expression?",
+   "viDuNghia": "Phương thức nào của String được dùng để tách (split) một chuỗi bằng biểu thức chính quy (regular expression)?"
+  },
+  {
+   "chu": "string",
+   "doc": "/strɪŋ/",
+   "nghia": "chuỗi (String) – dãy ký tự; trong Java String là bất biến (immutable)",
+   "nhom": "Chuỗi & tiện ích",
+   "viDu": "Given a string constructed by calling s = new String(\"xyzzy\"), which of the calls modifies the string?",
+   "viDuNghia": "Cho một chuỗi được tạo bằng s = new String(\"xyzzy\"), lời gọi nào sau đây làm thay đổi chuỗi đó?"
+  }
+ ]
+}

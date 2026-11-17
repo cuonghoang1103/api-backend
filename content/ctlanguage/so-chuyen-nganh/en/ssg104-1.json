@@ -1,0 +1,850 @@
+{
+ "ma": "ssg104-1",
+ "nn": "en",
+ "ten": "SSG104 · 1. Giao tiếp, làm việc nhóm & văn hoá",
+ "moTa": "Communication and In-Group Working Skills, phần 1: giao tiếp bằng lời và phi ngôn ngữ, lắng nghe, nhóm và họp, các loại quyền lực, lãnh đạo, xử lý xung đột, trí tuệ văn hoá. Từ lấy từ đề FE thật; ví dụ phần lớn là câu hỏi thật trong đề. Dùng được ngay khi đi làm.",
+ "bieuTuong": "person.3.fill",
+ "thuTu": -970,
+ "tu": [
+  {
+   "chu": "nonverbal communication",
+   "doc": "/ˌnɑːnˈvɜːrbl kəˌmjuːnɪˈkeɪʃn/",
+   "nghia": "giao tiếp phi ngôn ngữ: truyền thông điệp không bằng lời (ánh mắt, cử chỉ, khoảng cách, giọng điệu)",
+   "nhom": "Giao tiếp & phi ngôn ngữ",
+   "viDu": "The study of body movements is key to understanding nonverbal communication, called ______.",
+   "viDuNghia": "Việc nghiên cứu các cử động cơ thể là chìa khoá để hiểu giao tiếp phi ngôn ngữ, được gọi là ______."
+  },
+  {
+   "chu": "nonverbal",
+   "doc": "/ˌnɑːnˈvɜːrbl/",
+   "nghia": "phi ngôn ngữ, không dùng lời",
+   "nhom": "Giao tiếp & phi ngôn ngữ",
+   "viDu": "What type of nonverbal communication involves the verbal and nonverbal aspects of speech?",
+   "viDuNghia": "Loại giao tiếp phi ngôn ngữ nào liên quan đến cả khía cạnh lời nói và phi lời nói của giọng nói?"
+  },
+  {
+   "chu": "verbal",
+   "doc": "/ˈvɜːrbl/",
+   "nghia": "bằng lời, bằng từ ngữ (cả nói lẫn viết). Bẫy: verbal không chỉ là \"nói miệng\" (đó là oral)",
+   "nhom": "Giao tiếp & phi ngôn ngữ",
+   "viDu": "What type of nonverbal communication involves the verbal and nonverbal aspects of speech? — Touch / Space / Artifacts / Paralanguage",
+   "viDuNghia": "Loại giao tiếp phi ngôn ngữ nào liên quan đến cả khía cạnh lời nói và phi lời nói của giọng nói? — Chạm (Touch) / Không gian (Space) / Đồ vật/trang phục (Artifacts) / Cận ngôn ngữ (Paralanguage)"
+  },
+  {
+   "chu": "paralanguage",
+   "doc": "/ˈpærəˌlæŋɡwɪdʒ/",
+   "nghia": "cận ngôn ngữ: phần \"cách nói\" đi kèm lời — cao độ, âm lượng, tốc độ, ngữ điệu",
+   "nhom": "Giao tiếp & phi ngôn ngữ",
+   "viDu": "\"Kinesics\" is the term for the study of: — Paralanguage / Body movements / Physical characteristics / Artifacts",
+   "viDuNghia": "\"Kinesics\" là thuật ngữ chỉ việc nghiên cứu về: — Cận ngôn ngữ / Cử động cơ thể / Đặc điểm thể chất / Vật phẩm/đồ vật"
+  },
+  {
+   "chu": "kinesics",
+   "doc": "/kɪˈniːsɪks/",
+   "nghia": "ngôn ngữ cơ thể: nghiên cứu cử chỉ, tư thế, nét mặt trong giao tiếp",
+   "nhom": "Giao tiếp & phi ngôn ngữ",
+   "viDu": "\"Kinesics\" is the term for the study of:",
+   "viDuNghia": "\"Kinesics\" là thuật ngữ chỉ việc nghiên cứu về:"
+  },
+  {
+   "chu": "artifact",
+   "doc": "/ˈɑːrtɪfækt/",
+   "nghia": "vật dụng mang thông điệp về người dùng: quần áo, trang sức, đồ trang trí… (một kênh phi ngôn ngữ)",
+   "nhom": "Giao tiếp & phi ngôn ngữ",
+   "viDu": "\"Kinesics\" is the term for the study of: — Paralanguage / Body movements / Physical characteristics / Artifacts",
+   "viDuNghia": "\"Kinesics\" là thuật ngữ chỉ việc nghiên cứu về: — Cận ngôn ngữ / Cử động cơ thể / Đặc điểm thể chất / Vật phẩm/đồ vật"
+  },
+  {
+   "chu": "gesture",
+   "doc": "/ˈdʒestʃər/",
+   "nghia": "cử chỉ, điệu bộ (nhất là của tay). Cùng một cử chỉ có thể là lời khen ở nước này, lời xúc phạm ở nước khác",
+   "nhom": "Giao tiếp & phi ngôn ngữ",
+   "viDu": "This gesture (the \"OK\" hand sign) is considered an insult in:",
+   "viDuNghia": "Cử chỉ này (dấu hiệu \"OK\" bằng tay) được coi là một sự xúc phạm ở:"
+  },
+  {
+   "chu": "eye contact",
+   "doc": "/ˈaɪ ˌkɑːntækt/",
+   "nghia": "giao tiếp bằng mắt, nhìn vào mắt người đối diện",
+   "nhom": "Giao tiếp & phi ngôn ngữ",
+   "viDu": "Eye contact with your team members can be maintained by",
+   "viDuNghia": "Có thể duy trì giao tiếp bằng mắt với các thành viên trong nhóm bằng cách"
+  },
+  {
+   "chu": "facial expression",
+   "doc": "/ˈfeɪʃl ɪkˈspreʃn/",
+   "nghia": "nét mặt, biểu cảm khuôn mặt",
+   "nhom": "Giao tiếp & phi ngôn ngữ",
+   "viDu": "A smile is a facial expression that is understood in almost every culture.",
+   "viDuNghia": "Nụ cười là một nét mặt mà gần như nền văn hoá nào cũng hiểu."
+  },
+  {
+   "chu": "intimate",
+   "doc": "/ˈɪntɪmət/",
+   "nghia": "thân mật, gần gũi; intimate space = vùng không gian thân mật (dưới ~45 cm)",
+   "nhom": "Giao tiếp & phi ngôn ngữ",
+   "viDu": "According to Edward Hall, the four main categories of distance used in communication are Intimate, Personal, Social, and Public space.",
+   "viDuNghia": "Theo Edward Hall, bốn loại khoảng cách chính dùng trong giao tiếp là không gian Thân mật, Cá nhân, Xã hội và Công cộng."
+  },
+  {
+   "chu": "public space",
+   "doc": "/ˌpʌblɪk ˈspeɪs/",
+   "nghia": "vùng không gian công cộng (khoảng cách xa nhất khi giao tiếp, vd diễn giả với khán giả)",
+   "nhom": "Giao tiếp & phi ngôn ngữ",
+   "viDu": "A speaker on a stage talks to the audience from public space, more than 3.5 metres away.",
+   "viDuNghia": "Diễn giả trên sân khấu nói với khán giả từ vùng không gian công cộng, cách hơn 3,5 mét."
+  },
+  {
+   "chu": "convey",
+   "doc": "/kənˈveɪ/",
+   "nghia": "truyền đạt (ý, thông điệp, cảm xúc)",
+   "nhom": "Giao tiếp & phi ngôn ngữ",
+   "viDu": "The best way to convey friendliness is to......",
+   "viDuNghia": "Cách tốt nhất để thể hiện sự thân thiện là......"
+  },
+  {
+   "chu": "tone",
+   "doc": "/toʊn/",
+   "nghia": "giọng điệu của lời nói, bài viết (negative tone = giọng tiêu cực)",
+   "nhom": "Giao tiếp & phi ngôn ngữ",
+   "viDu": "The opening of the letter is not effective because it conveys negative tones.",
+   "viDuNghia": "Phần mở đầu của bức thư không hiệu quả vì nó mang giọng điệu tiêu cực."
+  },
+  {
+   "chu": "articulate",
+   "doc": "/ɑːrˈtɪkjuleɪt/",
+   "nghia": "diễn đạt rõ ràng, rành mạch; (tính từ /ɑːrˈtɪkjələt/) ăn nói lưu loát",
+   "nhom": "Giao tiếp & phi ngôn ngữ",
+   "viDu": "A good team leader can articulate the goal of the project in one sentence.",
+   "viDuNghia": "Trưởng nhóm giỏi diễn đạt được mục tiêu dự án chỉ trong một câu."
+  },
+  {
+   "chu": "insult",
+   "doc": "/ˈɪnsʌlt/",
+   "nghia": "lời/cử chỉ xúc phạm; động từ /ɪnˈsʌlt/: xúc phạm",
+   "nhom": "Giao tiếp & phi ngôn ngữ",
+   "viDu": "This gesture is considered an insult in: [image shows the \"OK\" hand sign]",
+   "viDuNghia": "Cử chỉ này (dấu hiệu \"OK\" bằng tay) bị coi là sự xúc phạm ở:"
+  },
+  {
+   "chu": "deceptive",
+   "doc": "/dɪˈseptɪv/",
+   "nghia": "lừa dối, gây hiểu lầm. Giao tiếp có đạo đức là không deceptive",
+   "nhom": "Giao tiếp & phi ngôn ngữ",
+   "viDu": "Which behavior do people often NOT display when they are being deceptive?",
+   "viDuNghia": "Con người thường KHÔNG thể hiện hành vi nào khi họ đang lừa dối?"
+  },
+  {
+   "chu": "business proposal",
+   "doc": "/ˈbɪznəs prəˈpoʊzl/",
+   "nghia": "bản đề xuất kinh doanh gửi khách hàng tiềm năng: nêu vấn đề, giải pháp, chi phí",
+   "nhom": "Giao tiếp & phi ngôn ngữ",
+   "viDu": "Which of the following is NOT a component of a business proposal?",
+   "viDuNghia": "Thành phần nào sau đây KHÔNG phải là một phần của một bản đề xuất kinh doanh (business proposal)?"
+  },
+  {
+   "chu": "ethos",
+   "doc": "/ˈiːθɑːs/",
+   "nghia": "ethos: thuyết phục bằng uy tín và đạo đức của người nói (bộ ba ethos – pathos – logos của Aristotle)",
+   "nhom": "Giao tiếp & phi ngôn ngữ",
+   "viDu": "What does Ethos refer to? — Credibility and ethics / Passion and enthusiasm / Logic or reason / Emotion and generosity",
+   "viDuNghia": "Ethos đề cập đến điều gì? — Uy tín và đạo đức / Đam mê và nhiệt huyết / Lô-gic hoặc lý lẽ / Cảm xúc và sự hào phóng"
+  },
+  {
+   "chu": "pathos",
+   "doc": "/ˈpeɪθɑːs/",
+   "nghia": "pathos: thuyết phục bằng cảm xúc của người nghe",
+   "nhom": "Giao tiếp & phi ngôn ngữ",
+   "viDu": "A charity advertisement with a photo of a hungry child uses pathos.",
+   "viDuNghia": "Quảng cáo từ thiện với ảnh một em bé đói dùng pathos (đánh vào cảm xúc)."
+  },
+  {
+   "chu": "logos",
+   "doc": "/ˈloʊɡɑːs/",
+   "nghia": "logos: thuyết phục bằng lý lẽ, lô-gic và số liệu",
+   "nhom": "Giao tiếp & phi ngôn ngữ",
+   "viDu": "What does Logos refer to? Logic or reason.",
+   "viDuNghia": "Logos đề cập đến điều gì? Lô-gic hoặc lý lẽ."
+  },
+  {
+   "chu": "empathy",
+   "doc": "/ˈempəθi/",
+   "nghia": "sự thấu cảm: đặt mình vào vị trí người khác để hiểu cảm xúc của họ",
+   "nhom": "Lắng nghe & phản hồi",
+   "viDu": "Which type of feedback communicates sympathy and empathy for the source of the message?",
+   "viDuNghia": "Loại phản hồi nào thể hiện sự cảm thông và đồng cảm với người gửi thông điệp?"
+  },
+  {
+   "chu": "empathetic",
+   "doc": "/ˌempəˈθetɪk/",
+   "nghia": "thấu cảm, biết đồng cảm",
+   "nhom": "Lắng nghe & phản hồi",
+   "viDu": "Those who have empathetic ability can ....",
+   "viDuNghia": "Những người có khả năng đồng cảm (empathy) có thể ...."
+  },
+  {
+   "chu": "probing",
+   "doc": "/ˈproʊbɪŋ/",
+   "nghia": "(câu hỏi, phản hồi) thăm dò: hỏi thêm để lấy thông tin chi tiết hơn",
+   "nhom": "Lắng nghe & phản hồi",
+   "viDu": "Which type of feedback is used for encouragement in response to a message? — Evaluative / Interpretive / Supportive / Probing",
+   "viDuNghia": "Loại phản hồi nào được dùng để khích lệ khi đáp lại một thông điệp? — Đánh giá (evaluative) / Diễn giải (interpretive) / Hỗ trợ/khích lệ (supportive) / Thăm dò (probing)"
+  },
+  {
+   "chu": "evaluative",
+   "doc": "/ɪˈvæljueɪtɪv/",
+   "nghia": "(phản hồi) mang tính đánh giá: phán xét đúng sai, tốt xấu về điều người kia nói",
+   "nhom": "Lắng nghe & phản hồi",
+   "viDu": "Which type of feedback communicates sympathy and empathy for the source of the message? — Evaluative / Interpretive / Supportive / Understanding",
+   "viDuNghia": "Loại phản hồi nào thể hiện sự cảm thông và đồng cảm với người gửi thông điệp? — Đánh giá (Evaluative) / Diễn giải (Interpretive) / Hỗ trợ/nâng đỡ (Supportive) / Thấu hiểu (Understanding)"
+  },
+  {
+   "chu": "interpretive",
+   "doc": "/ɪnˈtɜːrprətɪv/",
+   "nghia": "(phản hồi) mang tính diễn giải: nói lại cách mình hiểu thông điệp, thường ở dạng câu hỏi",
+   "nhom": "Lắng nghe & phản hồi",
+   "viDu": "Which type of feedback requests confirmation or clarification of a message, and is often expressed in the form of a question? — Evaluative / Interpretive / Supportive / Probing",
+   "viDuNghia": "Loại phản hồi nào yêu cầu xác nhận hoặc làm rõ một thông điệp, và thường được thể hiện dưới dạng câu hỏi? — Đánh giá (Evaluative) / Diễn giải (Interpretive) / Hỗ trợ (Supportive) / Thăm dò (Probing)"
+  },
+  {
+   "chu": "viewpoint",
+   "doc": "/ˈvjuːpɔɪnt/",
+   "nghia": "quan điểm, góc nhìn",
+   "nhom": "Lắng nghe & phản hồi",
+   "viDu": "Cultural viewpoint is a continuum or range.",
+   "viDuNghia": "Quan điểm văn hoá là một dải liên tục (continuum)."
+  },
+  {
+   "chu": "group development",
+   "doc": "/ɡruːp dɪˈveləpmənt/",
+   "nghia": "quá trình phát triển nhóm; mô hình Tuckman 5 giai đoạn: forming (hình thành), storming (sóng gió), norming (ổn định), performing (hiệu quả), adjourning (kết thúc)",
+   "nhom": "Nhóm & họp",
+   "viDu": "Which is the highest stage of Tuckman's Stages of Group Development?",
+   "viDuNghia": "Giai đoạn nào là giai đoạn cao nhất trong Mô hình các giai đoạn phát triển nhóm của Tuckman?"
+  },
+  {
+   "chu": "forming",
+   "doc": "/ˈfɔːrmɪŋ/",
+   "nghia": "giai đoạn hình thành: thành viên làm quen, còn dè dặt, phụ thuộc trưởng nhóm",
+   "nhom": "Nhóm & họp",
+   "viDu": "Which is the highest stage of Tuckman's Stages of Group Development? — Forming / Storming / Adjourning / Norming / Performing",
+   "viDuNghia": "Giai đoạn nào là giai đoạn cao nhất trong mô hình các giai đoạn phát triển nhóm của Tuckman? — Hình thành (Forming) / Sóng gió (Storming) / Kết thúc (Adjourning) / Ổn định (Norming) / Hiệu quả (Performing)"
+  },
+  {
+   "chu": "storming",
+   "doc": "/ˈstɔːrmɪŋ/",
+   "nghia": "giai đoạn sóng gió: bất đồng, tranh giành vai trò nổi lên",
+   "nhom": "Nhóm & họp",
+   "viDu": "Which is the highest stage of Tuckman's Stages of Group Development? — Forming / Storming / Adjourning / Norming / Performing",
+   "viDuNghia": "Giai đoạn nào là giai đoạn cao nhất trong mô hình các giai đoạn phát triển nhóm của Tuckman? — Hình thành (Forming) / Sóng gió (Storming) / Kết thúc (Adjourning) / Ổn định (Norming) / Hiệu quả (Performing)"
+  },
+  {
+   "chu": "norming",
+   "doc": "/ˈnɔːrmɪŋ/",
+   "nghia": "giai đoạn ổn định: nhóm thống nhất quy tắc, bắt đầu gắn kết",
+   "nhom": "Nhóm & họp",
+   "viDu": "Which stage is suitable for the following statement: \"Members implement plans and achieve goals\"? — Performing / Storming / Adjourning / Norming / Forming",
+   "viDuNghia": "Giai đoạn nào phù hợp với câu sau: \"Các thành viên triển khai kế hoạch và đạt được mục tiêu\"? — Hiệu quả (Performing) / Sóng gió (Storming) / Kết thúc (Adjourning) / Ổn định (Norming) / Hình thành (Forming)"
+  },
+  {
+   "chu": "performing",
+   "doc": "/pərˈfɔːrmɪŋ/",
+   "nghia": "giai đoạn hoạt động hiệu quả: nhóm tập trung làm việc, đạt mục tiêu",
+   "nhom": "Nhóm & họp",
+   "viDu": "Which is the highest stage of Tuckman's Stages of Group Development? — Forming / Storming / Adjourning / Norming / Performing",
+   "viDuNghia": "Giai đoạn nào là giai đoạn cao nhất trong mô hình các giai đoạn phát triển nhóm của Tuckman? — Hình thành (Forming) / Sóng gió (Storming) / Kết thúc (Adjourning) / Ổn định (Norming) / Hiệu quả (Performing)"
+  },
+  {
+   "chu": "adjourning",
+   "doc": "/əˈdʒɜːrnɪŋ/",
+   "nghia": "giai đoạn kết thúc: xong việc, nhóm giải tán",
+   "nhom": "Nhóm & họp",
+   "viDu": "Which stage is suitable for the following statement: \"Members implement plans and achieve goals\"? — Performing / Storming / Adjourning / Norming / Forming",
+   "viDuNghia": "Giai đoạn nào phù hợp với câu sau: \"Các thành viên triển khai kế hoạch và đạt được mục tiêu\"? — Hiệu quả (Performing) / Sóng gió (Storming) / Kết thúc (Adjourning) / Ổn định (Norming) / Hình thành (Forming)"
+  },
+  {
+   "chu": "norm",
+   "doc": "/nɔːrm/",
+   "nghia": "chuẩn mực, quy tắc ngầm của nhóm về cách cư xử",
+   "nhom": "Nhóm & họp",
+   "viDu": "Adapting an individual's behavior to the norms of other cultures shows an aspect of cultural intelligence.",
+   "viDuNghia": "Việc điều chỉnh hành vi cá nhân theo chuẩn mực của văn hóa khác thể hiện một khía cạnh của trí tuệ văn hóa."
+  },
+  {
+   "chu": "groupthink",
+   "doc": "/ˈɡruːpθɪŋk/",
+   "nghia": "tư duy bầy đàn: nhóm quá gắn kết nên ai cũng xuôi theo, không ai dám phản biện ⇒ quyết định tồi",
+   "nhom": "Nhóm & họp",
+   "viDu": "Four group level factors that combine to cause groupthink are cohesion, isolation, biased leadership, and decisional stress.",
+   "viDuNghia": "Bốn yếu tố cấp độ nhóm kết hợp gây ra tư duy bầy đàn (groupthink) là sự gắn kết, sự cô lập, lãnh đạo thiên vị và áp lực khi ra quyết định."
+  },
+  {
+   "chu": "interdependence",
+   "doc": "/ˌɪntərdɪˈpendəns/",
+   "nghia": "sự phụ thuộc lẫn nhau giữa các thành viên",
+   "nhom": "Nhóm & họp",
+   "viDu": "Which of the following is not a characteristic of a team? — Interdependence / Sustainability / The ability to act together / Independence",
+   "viDuNghia": "Điều nào sau đây không phải là đặc điểm của một nhóm (team)? — Sự phụ thuộc lẫn nhau / Tính bền vững / Khả năng hành động cùng nhau / Sự độc lập"
+  },
+  {
+   "chu": "matrix team",
+   "doc": "/ˈmeɪtrɪks tiːm/",
+   "nghia": "nhóm ma trận: nhân viên báo cáo cho nhiều quản lý cùng lúc (quản lý chuyên môn và quản lý dự án)",
+   "nhom": "Nhóm & họp",
+   "viDu": "What is the difference between Hierarchical structure and Matrix team?",
+   "viDuNghia": "Sự khác biệt giữa cơ cấu Thứ bậc (Hierarchical) và nhóm Ma trận (Matrix) là gì?"
+  },
+  {
+   "chu": "hierarchical structure",
+   "doc": "/ˌhaɪəˈrɑːrkɪkl ˈstrʌktʃər/",
+   "nghia": "cơ cấu phân cấp: mỗi nhân viên báo cáo cho một cấp trên duy nhất",
+   "nhom": "Nhóm & họp",
+   "viDu": "What is the difference between Hierarchical structure and Matrix team?",
+   "viDuNghia": "Sự khác biệt giữa cơ cấu Thứ bậc (Hierarchical) và nhóm Ma trận (Matrix) là gì?"
+  },
+  {
+   "chu": "subordinate",
+   "doc": "/səˈbɔːrdɪnət/",
+   "nghia": "cấp dưới",
+   "nhom": "Nhóm & họp",
+   "viDu": "To use THIS power: Punish in private, Inform subordinates of rules and penalties, or THIS power ... without jeopardizing personal integrity.",
+   "viDuNghia": "Để sử dụng loại quyền lực NÀY: Trừng phạt riêng tư, Thông báo cho cấp dưới về quy tắc và hình phạt, hoặc dùng quyền lực NÀY ... mà không làm ảnh hưởng đến sự chính trực cá nhân."
+  },
+  {
+   "chu": "superior",
+   "doc": "/suːˈpɪriər/",
+   "nghia": "cấp trên; (tính từ) vượt trội hơn",
+   "nhom": "Nhóm & họp",
+   "viDu": "In a hierarchical structure, you report to one superior only.",
+   "viDuNghia": "Trong cơ cấu phân cấp, bạn chỉ báo cáo cho một cấp trên."
+  },
+  {
+   "chu": "chairperson",
+   "doc": "/ˈtʃerpɜːrsn/",
+   "nghia": "người chủ trì cuộc họp",
+   "nhom": "Nhóm & họp",
+   "viDu": "The person in charge of conducting a meeting is the………. — group leader / dominator / chairperson / recorder",
+   "viDuNghia": "Người chịu trách nhiệm điều hành một cuộc họp được gọi là………. — trưởng nhóm / người áp đảo/lấn át / chủ tọa (chairperson) / thư ký ghi chép"
+  },
+  {
+   "chu": "latecomer",
+   "doc": "/ˈleɪtkʌmər/",
+   "nghia": "người đến muộn (một kiểu thành viên làm gián đoạn cuộc họp)",
+   "nhom": "Nhóm & họp",
+   "viDu": "Who is the meeting contributor? — Sleeper / Whisperer / Latecomer / Reporter",
+   "viDuNghia": "Ai là người đóng góp trong cuộc họp (meeting contributor)? — Người ngủ gật / Người thì thầm / Người đến trễ / Người tường thuật/báo cáo"
+  },
+  {
+   "chu": "dominator",
+   "doc": "/ˈdɑːmɪneɪtər/",
+   "nghia": "người lấn át: nói quá nhiều, không cho người khác góp ý",
+   "nhom": "Nhóm & họp",
+   "viDu": "The person in charge of conducting a meeting is the......... — chairperson / group leader / recorder / dominator",
+   "viDuNghia": "Người phụ trách điều hành một cuộc họp là......... — chủ tọa (chairperson) / trưởng nhóm / thư ký ghi biên bản / người áp đảo/lấn át"
+  },
+  {
+   "chu": "loudmouth",
+   "doc": "/ˈlaʊdmaʊθ/",
+   "nghia": "người to mồm, nói át mọi người trong cuộc họp",
+   "nhom": "Nhóm & họp",
+   "viDu": "Which of the following labels does NOT represent how member behavior can disrupt a meeting? — loudmouth / whisperer / latecomer / summarizer",
+   "viDuNghia": "Nhãn nào sau đây KHÔNG thể hiện cách hành vi của thành viên có thể làm gián đoạn cuộc họp? — người nói lấn át (loudmouth) / người thì thầm (whisperer) / người đến trễ (latecomer) / người tóm tắt (summarizer)"
+  },
+  {
+   "chu": "virtual meeting",
+   "doc": "/ˈvɜːrtʃuəl ˈmiːtɪŋ/",
+   "nghia": "họp trực tuyến, họp từ xa",
+   "nhom": "Nhóm & họp",
+   "viDu": "In order to avoid such problems in a virtual meeting, you should:",
+   "viDuNghia": "Để tránh những vấn đề như vậy trong một cuộc họp trực tuyến (virtual meeting), bạn nên:"
+  },
+  {
+   "chu": "minority",
+   "doc": "/maɪˈnɔːrəti/",
+   "nghia": "thiểu số; minority viewpoint = ý kiến của số ít trong nhóm",
+   "nhom": "Nhóm & họp",
+   "viDu": "Invite individuals who disagree or represent minority viewpoints to the meeting.",
+   "viDuNghia": "Hãy mời cả những người không đồng tình hoặc đại diện cho quan điểm thiểu số tới cuộc họp."
+  },
+  {
+   "chu": "whisperer",
+   "doc": "/ˈwɪspərər/",
+   "nghia": "người hay thì thầm nói chuyện riêng trong cuộc họp, làm người khác mất tập trung",
+   "nhom": "Nhóm & họp",
+   "viDu": "Which of the following labels does NOT represent how member behavior can disrupt a meeting? — loudmouth / whisperer / latecomer / summarizer",
+   "viDuNghia": "Nhãn nào sau đây KHÔNG chỉ kiểu hành vi của thành viên làm gián đoạn cuộc họp? — người to mồm / người thì thầm / người đến muộn / người tóm tắt"
+  },
+  {
+   "chu": "disrupt",
+   "doc": "/dɪsˈrʌpt/",
+   "nghia": "làm gián đoạn, phá rối (cuộc họp, tiến độ)",
+   "nhom": "Nhóm & họp",
+   "viDu": "Which of the following labels does NOT represent how member behavior can disrupt a meeting?",
+   "viDuNghia": "Nhãn nào sau đây KHÔNG thể hiện cách hành vi của thành viên có thể làm gián đoạn cuộc họp?"
+  },
+  {
+   "chu": "biased",
+   "doc": "/ˈbaɪəst/",
+   "nghia": "thiên vị, có thành kiến (biased leadership = lãnh đạo thiên vị, một nguyên nhân của tư duy bầy đàn)",
+   "nhom": "Nhóm & họp",
+   "viDu": "Four group level factors that combine to cause groupthink are cohesion, isolation, biased leadership, and decisional stress.",
+   "viDuNghia": "Bốn yếu tố cấp độ nhóm kết hợp gây ra tư duy bầy đàn (groupthink) là sự gắn kết, sự cô lập, lãnh đạo thiên vị và áp lực khi ra quyết định."
+  },
+  {
+   "chu": "sub-optimal",
+   "doc": "/ˌsʌb ˈɑːptɪməl/",
+   "nghia": "chưa tối ưu, dưới mức tốt nhất",
+   "nhom": "Nhóm & họp",
+   "viDu": "Managers may prefer sub-optimal candidates who aren't likely to challenge their standing in the organization.",
+   "viDuNghia": "Người quản lý có thể ưu tiên những ứng viên chưa phải tốt nhất (sub-optimal), những người khó có khả năng thách thức vị thế của họ trong tổ chức."
+  },
+  {
+   "chu": "agenda",
+   "doc": "/əˈdʒendə/",
+   "nghia": "chương trình họp – danh sách nội dung sẽ bàn, gửi trước buổi họp",
+   "nhom": "Nhóm & họp",
+   "viDu": "At what point in a business meeting should group members approve the agenda and minutes?",
+   "viDuNghia": "Vào thời điểm nào trong một cuộc họp kinh doanh thì các thành viên nhóm nên phê duyệt chương trình nghị sự và biên bản họp?"
+  },
+  {
+   "chu": "minutes",
+   "doc": "/ˈmɪnɪts/",
+   "nghia": "biên bản họp – bản ghi tóm tắt nội dung, quyết định và việc cần làm của cuộc họp; được duyệt ở đầu cuộc họp sau (luôn dùng số nhiều)",
+   "nhom": "Nhóm & họp",
+   "viDu": "At what point in a business meeting should group members approve the agenda and minutes?",
+   "viDuNghia": "Vào thời điểm nào trong cuộc họp, các thành viên nên phê duyệt chương trình họp và biên bản họp?"
+  },
+  {
+   "chu": "coercive power",
+   "doc": "/koʊˈɜːrsɪv ˈpaʊər/",
+   "nghia": "quyền lực cưỡng chế: buộc người khác làm theo bằng đe doạ, trừng phạt",
+   "nhom": "Quyền lực & lãnh đạo",
+   "viDu": "What is a consequence of Coercive power? (choose 2 options)",
+   "viDuNghia": "Hệ quả của quyền lực cưỡng ép (Coercive power) là gì? (chọn 2 đáp án)"
+  },
+  {
+   "chu": "legitimate power",
+   "doc": "/lɪˈdʒɪtɪmət ˈpaʊər/",
+   "nghia": "quyền lực chính danh: có được nhờ chức vụ, vị trí chính thức",
+   "nhom": "Quyền lực & lãnh đạo",
+   "viDu": "What is the possible response in the consequence of legitimate power?",
+   "viDuNghia": "Phản ứng có thể xảy ra do hệ quả của quyền lực hợp pháp (legitimate power) là gì?"
+  },
+  {
+   "chu": "reward power",
+   "doc": "/rɪˈwɔːrd ˈpaʊər/",
+   "nghia": "quyền lực khen thưởng: khiến người khác làm theo vì mình nắm phần thưởng (lương, thăng chức)",
+   "nhom": "Quyền lực & lãnh đạo",
+   "viDu": "Authority is another name of: — Expert Power / Legitimate Power / Reward Power / Coercive Power",
+   "viDuNghia": "Uy quyền (Authority) còn được gọi là: — Quyền lực chuyên môn / Quyền lực hợp pháp / Quyền lực khen thưởng / Quyền lực cưỡng ép"
+  },
+  {
+   "chu": "expert power",
+   "doc": "/ˈekspɜːrt ˈpaʊər/",
+   "nghia": "quyền lực chuyên gia: người khác nghe theo vì mình giỏi chuyên môn",
+   "nhom": "Quyền lực & lãnh đạo",
+   "viDu": "What is an example of Expert Power?",
+   "viDuNghia": "Điều nào sau đây là một ví dụ về Quyền lực chuyên môn (Expert Power)?"
+  },
+  {
+   "chu": "referent power",
+   "doc": "/ˈrefərənt ˈpaʊər/",
+   "nghia": "quyền lực tham chiếu: người khác làm theo vì quý mến, ngưỡng mộ mình",
+   "nhom": "Quyền lực & lãnh đạo",
+   "viDu": "Person A obtains the referent power when ....",
+   "viDuNghia": "Người A có được quyền lực tham chiếu (referent power) khi..."
+  },
+  {
+   "chu": "power-over",
+   "doc": "/ˈpaʊər ˌoʊvər/",
+   "nghia": "quyền lực áp đặt: một bên ra quyết định ảnh hưởng tới người khác và buộc họ tuân theo",
+   "nhom": "Quyền lực & lãnh đạo",
+   "viDu": "Power-over can be seen in which of the following situations?",
+   "viDuNghia": "'Quyền lực áp đặt' (Power-over) được thể hiện trong tình huống nào sau đây?"
+  },
+  {
+   "chu": "power-with",
+   "doc": "/ˈpaʊər wɪð/",
+   "nghia": "quyền lực cùng nhau: sức mạnh có được khi hợp tác bình đẳng với người khác",
+   "nhom": "Quyền lực & lãnh đạo",
+   "viDu": "What is NOT TRUE about power-with?",
+   "viDuNghia": "Điều nào KHÔNG ĐÚNG về quyền lực-cùng-nhau (\"power-with\")?"
+  },
+  {
+   "chu": "power-from-within",
+   "doc": "/ˌpaʊər frəm wɪˈðɪn/",
+   "nghia": "quyền lực từ bên trong: sức mạnh nội tại, sự tự tin vào giá trị và năng lực của chính mình",
+   "nhom": "Quyền lực & lãnh đạo",
+   "viDu": "Which type of power can be generated by controlling such resources as money, love and information? — Power-over / Power-with / Power-from-within / Legitimate power",
+   "viDuNghia": "Loại quyền lực nào có thể được tạo ra bằng cách kiểm soát các nguồn lực như tiền bạc, tình cảm và thông tin? — Quyền lực-áp đặt (Power-over) / Quyền lực-cùng nhau (Power-with) / Quyền lực-từ nội tại (Power-from-within) / Quyền lực hợp pháp"
+  },
+  {
+   "chu": "exert",
+   "doc": "/ɪɡˈzɜːrt/",
+   "nghia": "sử dụng, phát huy (quyền lực, ảnh hưởng); exert power over = áp quyền lực lên ai",
+   "nhom": "Quyền lực & lãnh đạo",
+   "viDu": "Which power of the following exists when person B submits to person A because B feels that A can exert power in a certain domain?",
+   "viDuNghia": "Quyền lực nào sau đây tồn tại khi người B phục tùng người A vì B cảm thấy A có thể sử dụng quyền lực trong một lĩnh vực nhất định?"
+  },
+  {
+   "chu": "influence",
+   "doc": "/ˈɪnfluəns/",
+   "nghia": "ảnh hưởng; (động từ) tác động tới",
+   "nhom": "Quyền lực & lãnh đạo",
+   "viDu": "Which component is a situational influence on cooperation?",
+   "viDuNghia": "Thành phần nào là một ảnh hưởng mang tính tình huống (situational) đến sự hợp tác?"
+  },
+  {
+   "chu": "leadership",
+   "doc": "/ˈliːdərʃɪp/",
+   "nghia": "sự lãnh đạo, năng lực lãnh đạo",
+   "nhom": "Quyền lực & lãnh đạo",
+   "viDu": "Which of the following is NOT the characteristic of leadership?",
+   "viDuNghia": "Đặc điểm nào sau đây KHÔNG phải là đặc điểm của khả năng lãnh đạo?"
+  },
+  {
+   "chu": "punish",
+   "doc": "/ˈpʌnɪʃ/",
+   "nghia": "trừng phạt. Mẹo quản lý: praise in public, punish in private (khen công khai, phạt riêng)",
+   "nhom": "Quyền lực & lãnh đạo",
+   "viDu": "To use THIS power: Punish in private, Inform subordinates of rules and penalties or THIS power can be used without jeopardizing personal integrity.",
+   "viDuNghia": "Để sử dụng loại quyền lực NÀY: Trừng phạt riêng tư, Thông báo cho cấp dưới về các quy định và hình phạt thì loại quyền lực NÀY có thể được sử dụng mà không gây tổn hại đến uy tín cá nhân."
+  },
+  {
+   "chu": "jeopardize",
+   "doc": "/ˈdʒepərdaɪz/",
+   "nghia": "gây nguy hại, làm tổn hại (uy tín, sự chính trực)",
+   "nhom": "Quyền lực & lãnh đạo",
+   "viDu": "To use THIS power: Punish in private, Inform subordinates of rules and penalties, or THIS power can be used without jeopardizing personal integrity.",
+   "viDuNghia": "Để sử dụng quyền lực NÀY: Phạt riêng tư (không công khai), Thông báo cho cấp dưới về quy tắc và hình phạt, hoặc quyền lực NÀY có thể được sử dụng mà không làm tổn hại đến uy tín cá nhân."
+  },
+  {
+   "chu": "commitment",
+   "doc": "/kəˈmɪtmənt/",
+   "nghia": "sự cam kết, tận tâm với mục tiêu chung",
+   "nhom": "Quyền lực & lãnh đạo",
+   "viDu": "Low-quality exchange relationships tend to be associated with lower levels of performance, commitment, and satisfaction.",
+   "viDuNghia": "Các mối quan hệ trao đổi chất lượng thấp thường đi kèm với hiệu suất, sự cam kết và sự hài lòng thấp hơn."
+  },
+  {
+   "chu": "managerial",
+   "doc": "/ˌmænəˈdʒɪriəl/",
+   "nghia": "thuộc về quản lý (managerial skills = kỹ năng quản lý)",
+   "nhom": "Quyền lực & lãnh đạo",
+   "viDu": "Planning, organizing and controlling are basic managerial skills.",
+   "viDuNghia": "Lập kế hoạch, tổ chức và kiểm soát là những kỹ năng quản lý cơ bản."
+  },
+  {
+   "chu": "trait",
+   "doc": "/treɪt/",
+   "nghia": "nét tính cách, đặc điểm (leader traits = phẩm chất của người lãnh đạo)",
+   "nhom": "Quyền lực & lãnh đạo",
+   "viDu": "In the Leader Trait Research which trait includes strong analytical abilities?",
+   "viDuNghia": "Trong Nghiên cứu về Phẩm chất Lãnh đạo, phẩm chất nào bao gồm năng lực phân tích tốt?"
+  },
+  {
+   "chu": "dyadic",
+   "doc": "/daɪˈædɪk/",
+   "nghia": "thuộc cặp đôi, giữa hai người (dyadic relationship = quan hệ tay đôi giữa sếp và từng nhân viên)",
+   "nhom": "Quyền lực & lãnh đạo",
+   "viDu": "It views leadership as consisting of a number of dyadic relationships.",
+   "viDuNghia": "Nó xem lãnh đạo là tập hợp nhiều mối quan hệ tay đôi (dyadic)."
+  },
+  {
+   "chu": "conflict-handling mode",
+   "doc": "/ˈkɑːnflɪkt ˌhændlɪŋ moʊd/",
+   "nghia": "kiểu xử lý xung đột; 5 kiểu Thomas–Kilmann: competing, collaborating, compromising (thoả hiệp), avoiding, accommodating",
+   "nhom": "Xung đột",
+   "viDu": "Which conflict-handling mode can be used when an issue is trivial, or when more important issues are pressing?",
+   "viDuNghia": "Kiểu xử lý xung đột nào có thể dùng khi vấn đề vặt vãnh, hoặc khi có những vấn đề quan trọng hơn đang cấp bách?"
+  },
+  {
+   "chu": "competing",
+   "doc": "/kəmˈpiːtɪŋ/",
+   "nghia": "kiểu cạnh tranh: giành phần thắng cho mình, không quan tâm bên kia (thắng – thua)",
+   "nhom": "Xung đột",
+   "viDu": "The five conflict-handling modes are (1) competing, (2) collaborating, (3) compromising, (4) avoiding, and (5) accommodating.",
+   "viDuNghia": "Năm kiểu xử lý xung đột là (1) cạnh tranh, (2) hợp tác, (3) thoả hiệp, (4) né tránh và (5) nhường nhịn."
+  },
+  {
+   "chu": "accommodating",
+   "doc": "/əˈkɑːmədeɪtɪŋ/",
+   "nghia": "kiểu nhường nhịn: bỏ nhu cầu của mình để chiều theo bên kia",
+   "nhom": "Xung đột",
+   "viDu": "Withdrawing from or suppression of conflict is termed ______. — collaborating / forcing / accommodating / avoiding",
+   "viDuNghia": "Việc rút lui khỏi hoặc kìm nén xung đột được gọi là ______. — hợp tác (collaborating) / áp đặt (forcing) / nhường nhịn (accommodating) / né tránh (avoiding)"
+  },
+  {
+   "chu": "avoiding",
+   "doc": "/əˈvɔɪdɪŋ/",
+   "nghia": "kiểu né tránh: lảng đi, không giải quyết xung đột",
+   "nhom": "Xung đột",
+   "viDu": "Withdrawing from or suppression of conflict is termed ______. — collaborating / forcing / accommodating / avoiding",
+   "viDuNghia": "Việc rút lui khỏi hoặc kìm nén xung đột được gọi là ______. — hợp tác (collaborating) / áp đặt (forcing) / nhường nhịn (accommodating) / né tránh (avoiding)"
+  },
+  {
+   "chu": "collaborating",
+   "doc": "/kəˈlæbəreɪtɪŋ/",
+   "nghia": "kiểu hợp tác: cùng tìm giải pháp thoả mãn trọn vẹn cả hai bên (thắng – thắng)",
+   "nhom": "Xung đột",
+   "viDu": "Which mode of resolving conflict should be considered when potential disruption outweighs the benefits of resolution? — Collaborating / Compromising / Avoiding / Accommodating",
+   "viDuNghia": "Phương thức giải quyết xung đột nào nên được cân nhắc khi sự xáo trộn tiềm ẩn lớn hơn lợi ích của việc giải quyết? — Hợp tác (Collaborating) / Thỏa hiệp (Compromising) / Né tránh (Avoiding) / Nhượng bộ (Accommodating)"
+  },
+  {
+   "chu": "cooperation",
+   "doc": "/koʊˌɑːpəˈreɪʃn/",
+   "nghia": "sự hợp tác",
+   "nhom": "Xung đột",
+   "viDu": "Which one is the key component in cooperation?",
+   "viDuNghia": "Đâu là yếu tố then chốt trong hợp tác?"
+  },
+  {
+   "chu": "cooperative",
+   "doc": "/koʊˈɑːpərətɪv/",
+   "nghia": "có tinh thần hợp tác",
+   "nhom": "Xung đột",
+   "viDu": "One of the three categories of social value orientation (SVO) is? — Incompetent / Cooperative / Obsessive / Generous",
+   "viDuNghia": "Một trong ba nhóm định hướng giá trị xã hội (Social Value Orientation - SVO) là? — Thiếu năng lực (Incompetent) / Hợp tác (Cooperative) / Ám ảnh (Obsessive) / Hào phóng (Generous)"
+  },
+  {
+   "chu": "competitive",
+   "doc": "/kəmˈpetətɪv/",
+   "nghia": "mang tính cạnh tranh, ganh đua",
+   "nhom": "Xung đột",
+   "viDu": "So what kind of social value orientation is shown in this situation? — Competitive Orientation / Cooperative Orientation / Individualistic Orientation / All of above",
+   "viDuNghia": "Vậy đây là kiểu định hướng giá trị xã hội nào? — Định hướng cạnh tranh / Định hướng hợp tác / Định hướng cá nhân / Tất cả các ý trên"
+  },
+  {
+   "chu": "misperceive",
+   "doc": "/ˌmɪspərˈsiːv/",
+   "nghia": "nhận thức sai, hiểu sai; conflicts of misperceived differences = xung đột do hiểu lầm chứ không khác biệt thật",
+   "nhom": "Xung đột",
+   "viDu": "When do the Conflicts of misperceived differences arise?",
+   "viDuNghia": "Xung đột về sự khác biệt bị hiểu sai (misperceived differences) phát sinh khi nào?"
+  },
+  {
+   "chu": "situational influence",
+   "doc": "/ˌsɪtʃuˈeɪʃənl ˈɪnfluəns/",
+   "nghia": "ảnh hưởng của tình huống (lên việc hợp tác), vd mức gắn bó với nhóm",
+   "nhom": "Xung đột",
+   "viDu": "Which component is in situational influence of cooperation?",
+   "viDuNghia": "Yếu tố nào sau đây thuộc về ảnh hưởng mang tính tình huống (situational influence) đối với sự hợp tác?"
+  },
+  {
+   "chu": "identification",
+   "doc": "/aɪˌdentɪfɪˈkeɪʃn/",
+   "nghia": "sự đồng nhất mình với nhóm (group identification = cảm giác thuộc về nhóm); nghĩa khác: nhận dạng",
+   "nhom": "Xung đột",
+   "viDu": "Which component is a situational influence on cooperation? — Hard working / Group identification / Open mind / Generosity",
+   "viDuNghia": "Thành phần nào là một ảnh hưởng mang tính tình huống (situational) đến sự hợp tác? — Chăm chỉ. / Sự nhận diện/đồng nhất với nhóm (Group identification). / Cởi mở. / Rộng lượng."
+  },
+  {
+   "chu": "intervention",
+   "doc": "/ˌɪntərˈvenʃn/",
+   "nghia": "sự can thiệp (để giải quyết xung đột, sửa một vấn đề)",
+   "nhom": "Xung đột",
+   "viDu": "Which of the following intervention techniques should be used sparingly?",
+   "viDuNghia": "Kỹ thuật can thiệp nào sau đây nên được sử dụng một cách hạn chế (sparingly)?"
+  },
+  {
+   "chu": "trivial",
+   "doc": "/ˈtrɪviəl/",
+   "nghia": "vặt vãnh, không đáng kể",
+   "nhom": "Xung đột",
+   "viDu": "Which conflict-handling mode can be used when an issue is trivial, or when more important issues are pressing?",
+   "viDuNghia": "Kiểu xử lý xung đột nào có thể được sử dụng khi vấn đề không quan trọng, hoặc khi có những vấn đề quan trọng hơn đang cấp bách?"
+  },
+  {
+   "chu": "withdraw",
+   "doc": "/wɪðˈdrɔː/",
+   "nghia": "rút lui, rút khỏi (cuộc xung đột, cuộc thảo luận)",
+   "nhom": "Xung đột",
+   "viDu": "Withdrawing from or suppression of conflict is termed ______.",
+   "viDuNghia": "Việc rút lui khỏi hoặc kìm nén xung đột được gọi là ______."
+  },
+  {
+   "chu": "suppression",
+   "doc": "/səˈpreʃn/",
+   "nghia": "sự kìm nén, dập xuống (cảm xúc, xung đột)",
+   "nhom": "Xung đột",
+   "viDu": "Withdrawing from or suppression of conflict is termed ______.",
+   "viDuNghia": "Việc rút lui khỏi hoặc kìm nén xung đột được gọi là ______."
+  },
+  {
+   "chu": "social value orientation",
+   "doc": "/ˈsoʊʃl ˈvæljuː ˌɔːriənˈteɪʃn/",
+   "nghia": "định hướng giá trị xã hội (SVO): ba kiểu — hợp tác, cá nhân, cạnh tranh — khi chia lợi ích với người khác",
+   "nhom": "Xung đột",
+   "viDu": "One of the three categories of social value orientation (SVO) is?",
+   "viDuNghia": "Một trong ba nhóm định hướng giá trị xã hội (Social Value Orientation - SVO) là?"
+  },
+  {
+   "chu": "conflict",
+   "doc": "/ˈkɑːnflɪkt/",
+   "nghia": "xung đột – mâu thuẫn giữa người/nhóm khi mục tiêu, lợi ích khác nhau; 5 cách xử lý: né tránh, nhượng bộ, cạnh tranh, thoả hiệp, hợp tác · (SWR302) xung đột giữa các yêu cầu",
+   "nhom": "Xung đột",
+   "viDu": "What is the first stage in the model of the Conflict Process?",
+   "viDuNghia": "Giai đoạn đầu tiên trong mô hình Quá trình Xung đột là gì?"
+  },
+  {
+   "chu": "compromising",
+   "doc": "/ˈkɑːmprəmaɪzɪŋ/",
+   "nghia": "thoả hiệp – cách xử lý xung đột mỗi bên nhường một phần để có giải pháp tạm chấp nhận được; hợp khi hai bên ngang quyền, mục tiêu loại trừ nhau",
+   "nhom": "Xung đột",
+   "viDu": "Which conflict-handling mode can be used when opponents with equal power are committed to mutually exclusive goals? → Compromising",
+   "viDuNghia": "Cách xử lý xung đột nào dùng được khi hai bên ngang quyền lực theo đuổi các mục tiêu loại trừ nhau? → Thoả hiệp"
+  },
+  {
+   "chu": "cultural intelligence",
+   "doc": "/ˈkʌltʃərəl ɪnˈtelɪdʒəns/",
+   "nghia": "trí tuệ văn hoá (CQ): khả năng làm việc và ứng xử hiệu quả trong môi trường đa văn hoá",
+   "nhom": "Văn hoá",
+   "viDu": "Which of the following is incorrect about cultural intelligence?",
+   "viDuNghia": "Điều nào sau đây KHÔNG đúng về trí tuệ văn hóa (cultural intelligence)?"
+  },
+  {
+   "chu": "cross-cultural",
+   "doc": "/ˌkrɔːs ˈkʌltʃərəl/",
+   "nghia": "liên văn hoá, giữa các nền văn hoá",
+   "nhom": "Văn hoá",
+   "viDu": "Which of the following provides a great advantage to the leader in their relationships with team members [from diverse/cross-cultural backgrounds]?",
+   "viDuNghia": "Điều nào sau đây mang lại lợi thế lớn cho người lãnh đạo trong mối quan hệ với các thành viên nhóm [đến từ những nền văn hóa khác nhau]?"
+  },
+  {
+   "chu": "individualistic",
+   "doc": "/ˌɪndɪˌvɪdʒuəˈlɪstɪk/",
+   "nghia": "theo chủ nghĩa cá nhân: đề cao mục tiêu, thành tích của từng người (vd Mỹ)",
+   "nhom": "Văn hoá",
+   "viDu": "A person with individualistic orientation tends to ....",
+   "viDuNghia": "Một người có định hướng cá nhân chủ nghĩa (individualistic) có xu hướng ...."
+  },
+  {
+   "chu": "collectivist",
+   "doc": "/kəˈlektɪvɪst/",
+   "nghia": "theo chủ nghĩa tập thể: đề cao gia đình, nhóm hơn cá nhân (vd Việt Nam, Nhật)",
+   "nhom": "Văn hoá",
+   "viDu": "___ cultures focus on the needs of the nation, community, family, or group of workers — Collectivist / Individualistic / Low-Power Distance / High-Power Distance",
+   "viDuNghia": "Các nền văn hóa ___ tập trung vào nhu cầu của quốc gia, cộng đồng, gia đình, hoặc nhóm người lao động — Tập thể (Collectivist) / Cá nhân (Individualistic) / Khoảng cách quyền lực thấp / Khoảng cách quyền lực cao"
+  },
+  {
+   "chu": "power distance",
+   "doc": "/ˈpaʊər ˌdɪstəns/",
+   "nghia": "khoảng cách quyền lực: mức xã hội chấp nhận sự bất bình đẳng giữa cấp trên và cấp dưới",
+   "nhom": "Văn hoá",
+   "viDu": "In a culture with high power distance, employees rarely disagree with their boss in public.",
+   "viDuNghia": "Ở nền văn hoá có khoảng cách quyền lực cao, nhân viên hiếm khi phản đối sếp trước mặt mọi người."
+  },
+  {
+   "chu": "high-power distance",
+   "doc": "/ˌhaɪ ˈpaʊər ˌdɪstəns/",
+   "nghia": "(văn hoá) khoảng cách quyền lực cao: tôn ti rõ, cấp dưới ít khi phản bác cấp trên",
+   "nhom": "Văn hoá",
+   "viDu": "____cultures focus on the needs of the nation, community, family, or group of workers — Collectivist / Individualistic / Low-Power Distance / High-Power Distance",
+   "viDuNghia": "Văn hóa ____ tập trung vào nhu cầu của quốc gia, cộng đồng, gia đình, hoặc nhóm lao động — Tập thể (Collectivist) / Cá nhân (Individualistic) / Khoảng cách quyền lực thấp (Low-Power Distance) / Khoảng cách quyền lực cao (High-Power Distance)"
+  },
+  {
+   "chu": "low-power distance",
+   "doc": "/ˌloʊ ˈpaʊər ˌdɪstəns/",
+   "nghia": "(văn hoá) khoảng cách quyền lực thấp: sếp và nhân viên gần như ngang hàng, dễ góp ý",
+   "nhom": "Văn hoá",
+   "viDu": "_____cultures focus on the needs of the nation, community, family, or group of workers — Collectivist / Individualistic / Low-Power Distance / High-Power Distance",
+   "viDuNghia": "Nền văn hóa _____ tập trung vào nhu cầu của quốc gia, cộng đồng, gia đình, hoặc nhóm người lao động — Tập thể (Collectivist) / Cá nhân (Individualistic) / Khoảng cách quyền lực thấp (Low-Power Distance) / Khoảng cách quyền lực cao (High-Power Distance)"
+  },
+  {
+   "chu": "short-term orientation",
+   "doc": "/ˌʃɔːrt tɜːrm ˌɔːriənˈteɪʃn/",
+   "nghia": "định hướng ngắn hạn: coi trọng kết quả nhanh, truyền thống, đáp lễ quà cáp và lời chào",
+   "nhom": "Văn hoá",
+   "viDu": "Which is TRUE about short-term orientation culture?",
+   "viDuNghia": "Điều nào sau đây ĐÚNG về văn hóa định hướng ngắn hạn (short-term orientation)?"
+  },
+  {
+   "chu": "long-term orientation",
+   "doc": "/ˌlɔːŋ tɜːrm ˌɔːriənˈteɪʃn/",
+   "nghia": "định hướng dài hạn: coi trọng kiên trì, tiết kiệm, tôn ti theo tuổi và địa vị",
+   "nhom": "Văn hoá",
+   "viDu": "Which is TRUE about long-term orientation culture?",
+   "viDuNghia": "Điều nào sau đây ĐÚNG về nền văn hóa định hướng dài hạn (long-term orientation)?"
+  },
+  {
+   "chu": "reciprocation",
+   "doc": "/rɪˌsɪprəˈkeɪʃn/",
+   "nghia": "sự đáp lại, có qua có lại (chào, quà, ân huệ)",
+   "nhom": "Văn hoá",
+   "viDu": "If you work within a culture that has a short-term orientation, you may need to place greater emphasis on reciprocation of greetings, gifts, and rewards.",
+   "viDuNghia": "Nếu bạn làm việc trong một nền văn hóa có định hướng ngắn hạn, bạn có thể cần chú trọng hơn đến việc đáp lễ trong lời chào hỏi, quà tặng, và phần thưởng"
+  },
+  {
+   "chu": "persistence",
+   "doc": "/pərˈsɪstəns/",
+   "nghia": "sự kiên trì, bền bỉ",
+   "nhom": "Văn hoá",
+   "viDu": "Long-term orientation is often marked by persistence, thrift and frugality",
+   "viDuNghia": "Định hướng dài hạn thường được thể hiện qua tính kiên trì, tiết kiệm và cần kiệm"
+  },
+  {
+   "chu": "frugality",
+   "doc": "/fruːˈɡæləti/",
+   "nghia": "tính tiết kiệm, thanh đạm (= thrift)",
+   "nhom": "Văn hoá",
+   "viDu": "Long-term orientation is often marked by persistence, thrift and frugality",
+   "viDuNghia": "Định hướng dài hạn thường được thể hiện qua tính kiên trì, tiết kiệm và cần kiệm"
+  },
+  {
+   "chu": "generosity",
+   "doc": "/ˌdʒenəˈrɑːsəti/",
+   "nghia": "sự hào phóng, rộng rãi",
+   "nhom": "Văn hoá",
+   "viDu": "Which one is the key component in cooperation? — Honesty / Hard working / Generosity / Trust",
+   "viDuNghia": "Đâu là yếu tố then chốt trong hợp tác? — Trung thực / Chăm chỉ / Rộng lượng / Niềm tin (Trust)"
+  },
+  {
+   "chu": "competency",
+   "doc": "/ˈkɑːmpɪtənsi/",
+   "nghia": "năng lực (kiến thức, kỹ năng, thái độ) để làm tốt một việc",
+   "nhom": "Văn hoá",
+   "viDu": "A competency and skill known as cultural intelligence enables people to work and behave effectively in cross-cultural settings.",
+   "viDuNghia": "Trí tuệ văn hóa là một năng lực và kỹ năng giúp con người làm việc và ứng xử hiệu quả trong môi trường đa văn hóa."
+  },
+  {
+   "chu": "thrift",
+   "doc": "/θrɪft/",
+   "nghia": "sự tằn tiện, tiết kiệm",
+   "nhom": "Văn hoá",
+   "viDu": "Long-term orientation is often marked by persistence, thrift and frugality",
+   "viDuNghia": "Định hướng dài hạn thường được thể hiện qua tính kiên trì, tiết kiệm và cần kiệm"
+  },
+  {
+   "chu": "power",
+   "doc": "/ˈpaʊər/",
+   "nghia": "quyền lực: khả năng tác động, buộc người khác làm theo (coercive, legitimate, reward, expert, referent power) · (toán) luỹ thừa: power of 3 = luỹ thừa của 3",
+   "nhom": "Quyền lực & lãnh đạo",
+   "viDu": "Which type of power can be generated by controlling such resources as money, love and information?",
+   "viDuNghia": "Loại quyền lực nào có thể được tạo ra bằng cách kiểm soát các nguồn lực như tiền bạc, tình cảm và thông tin?"
+  },
+  {
+   "chu": "proxemics",
+   "doc": "/prɑːkˈsiːmɪks/",
+   "nghia": "khoảng cách học: nghiên cứu cách con người dùng khoảng cách, không gian khi giao tiếp (thân mật, cá nhân, xã hội, công cộng)",
+   "nhom": "Giao tiếp & phi ngôn ngữ",
+   "viDu": "The study of body movements is key to understanding nonverbal communication, called ______. — Kinesics / Chronemics / Proxemics / Haptics",
+   "viDuNghia": "Việc nghiên cứu cử động cơ thể là chìa khoá để hiểu giao tiếp phi ngôn ngữ, được gọi là ______. — Cử động học (Kinesics) / Thời gian học (Chronemics) / Khoảng cách học (Proxemics) / Xúc giác học (Haptics)"
+  },
+  {
+   "chu": "haptics",
+   "doc": "/ˈhæptɪks/",
+   "nghia": "xúc giác học: giao tiếp bằng đụng chạm (bắt tay, vỗ vai, ôm)",
+   "nhom": "Giao tiếp & phi ngôn ngữ",
+   "viDu": "The study of body movements is key to understanding nonverbal communication, called ______. — Kinesics / Chronemics / Proxemics / Haptics",
+   "viDuNghia": "Việc nghiên cứu cử động cơ thể là chìa khoá để hiểu giao tiếp phi ngôn ngữ, được gọi là ______. — Cử động học (Kinesics) / Thời gian học (Chronemics) / Khoảng cách học (Proxemics) / Xúc giác học (Haptics)"
+  },
+  {
+   "chu": "chronemics",
+   "doc": "/krəˈniːmɪks/",
+   "nghia": "thời gian học: cách dùng và cảm nhận thời gian truyền thông điệp (đúng giờ, để người khác chờ…)",
+   "nhom": "Giao tiếp & phi ngôn ngữ",
+   "viDu": "The study of body movements is key to understanding nonverbal communication, called ______. — Kinesics / Chronemics / Proxemics / Haptics",
+   "viDuNghia": "Việc nghiên cứu cử động cơ thể là chìa khoá để hiểu giao tiếp phi ngôn ngữ, được gọi là ______. — Cử động học (Kinesics) / Thời gian học (Chronemics) / Khoảng cách học (Proxemics) / Xúc giác học (Haptics)"
+  }
+ ]
+}

@@ -1,0 +1,566 @@
+{
+ "ma": "mae101-3",
+ "nn": "en",
+ "ten": "MAE101 · 3. Tích phân, hình học & bài toán thực tế",
+ "moTa": "Toán cho kỹ sư (MAE101), bộ 3: tích phân và tính gần đúng tích phân, từ hình học trong đề, từ của bài toán chuyển động - tốc độ - tối ưu (particle, rocket, balloon, hourly...). Từ lấy từ đề FE thật; ví dụ là câu hỏi thật trong đề.",
+ "bieuTuong": "sum",
+ "thuTu": -991,
+ "tu": [
+  {
+   "chu": "integral",
+   "doc": "/ˈɪntɪɡrəl/",
+   "nghia": "tích phân (ký hiệu ∫); evaluate the integral = tính tích phân",
+   "nhom": "Tích phân",
+   "viDu": "Use the Trapezoidal Rule with n=5 to approximate the integral ∫₁^6 f(x)dx x 1 2 3 4 5 6 f(x) 3.2 1.6 2.4 3.8 4.4 1.3",
+   "viDuNghia": "Dùng Quy tắc hình thang với n=5 để xấp xỉ tích phân ∫₁^6 f(x)dx x 1 2 3 4 5 6 f(x) 3.2 1.6 2.4 3.8 4.4 1.3"
+  },
+  {
+   "chu": "definite integral",
+   "doc": "/ˈdefɪnət ˈɪntɪɡrəl/",
+   "nghia": "tích phân xác định (có cận a, b, kết quả là một số)",
+   "nhom": "Tích phân",
+   "viDu": "Express the limit as a definite integral on the interval [0,π].",
+   "viDuNghia": "Biểu diễn giới hạn dưới dạng tích phân xác định trên đoạn [0,π]."
+  },
+  {
+   "chu": "indefinite integral",
+   "doc": "/ɪnˈdefɪnət ˈɪntɪɡrəl/",
+   "nghia": "tích phân bất định (nguyên hàm tổng quát, kết quả có + C)",
+   "nhom": "Tích phân",
+   "viDu": "Evaluate the indefinite integral ∫(x-4)²x²dx",
+   "viDuNghia": "Tính tích phân bất định ∫(x-4)²x²dx"
+  },
+  {
+   "chu": "antiderivative",
+   "doc": "/ˌæntidɪˈrɪvətɪv/",
+   "nghia": "nguyên hàm (F là nguyên hàm của f nếu F' = f)",
+   "nhom": "Tích phân",
+   "viDu": "Evaluate ∫(15e^7xdx)/(e^7x+1). Which of the following is the correct antiderivative? (i) 15ln (e^7x+1)+C (ii) (7/15)ln (e^7x+1)+C (iii) (5/7)ln (e^7x+1)+C (iv) (15/7)ln (e^7x+1)+C",
+   "viDuNghia": "Tính ∫(15e^7xdx)/(e^7x+1). Biểu thức nào sau đây là nguyên hàm đúng? (i) 15ln (e^7x+1)+C (ii) (7/15)ln (e^7x+1)+C (iii) (5/7)ln (e^7x+1)+C (iv) (15/7)ln (e^7x+1)+C"
+  },
+  {
+   "chu": "integrand",
+   "doc": "/ˈɪntɪɡrænd/",
+   "nghia": "hàm dưới dấu tích phân",
+   "nhom": "Tích phân",
+   "viDu": "In ∫ x² dx, the integrand is x².",
+   "viDuNghia": "Trong ∫ x² dx, hàm dưới dấu tích phân là x²."
+  },
+  {
+   "chu": "substitution",
+   "doc": "/ˌsʌbstɪˈtuːʃn/",
+   "nghia": "phép đổi biến (đặt u = g(x)); phép thế",
+   "nhom": "Tích phân",
+   "viDu": "Use the substitution u = x² + 1 to evaluate the integral.",
+   "viDuNghia": "Dùng phép đổi biến u = x² + 1 để tính tích phân."
+  },
+  {
+   "chu": "integration by parts",
+   "nghia": "tích phân từng phần: ∫u dv = uv - ∫v du",
+   "nhom": "Tích phân",
+   "viDu": "Use integration by parts to evaluate ∫ x·e^x dx.",
+   "viDuNghia": "Dùng tích phân từng phần để tính ∫ x·e^x dx."
+  },
+  {
+   "chu": "improper integral",
+   "doc": "/ɪmˈprɑːpər ˈɪntɪɡrəl/",
+   "nghia": "tích phân suy rộng (cận vô cực hoặc hàm không bị chặn)",
+   "nhom": "Tích phân",
+   "viDu": "Which of the following are improper integrals?",
+   "viDuNghia": "Tích phân nào sau đây là tích phân suy rộng?"
+  },
+  {
+   "chu": "converge",
+   "doc": "/kənˈvɜːrdʒ/",
+   "nghia": "hội tụ (tích phân suy rộng ra một số hữu hạn)",
+   "nhom": "Tích phân",
+   "viDu": "Calculate the following integral (if it converges): ∫₀² 2x/(x²-4)dx.",
+   "viDuNghia": "Tính tích phân sau (nếu hội tụ): ∫₀² 2x/(x²-4)dx."
+  },
+  {
+   "chu": "diverge",
+   "doc": "/daɪˈvɜːrdʒ/",
+   "nghia": "phân kỳ (không ra số hữu hạn)",
+   "nhom": "Tích phân",
+   "viDu": "The improper integral ∫₁^∞ 1/x dx diverges.",
+   "viDuNghia": "Tích phân suy rộng ∫₁^∞ 1/x dx phân kỳ."
+  },
+  {
+   "chu": "convergent",
+   "doc": "/kənˈvɜːrdʒənt/",
+   "nghia": "hội tụ (tính từ); convergence = sự hội tụ",
+   "nhom": "Tích phân",
+   "viDu": "Investigate the convergence of ∫₁^∞1/(x^n)dx.",
+   "viDuNghia": "Khảo sát sự hội tụ của ∫₁^∞1/(x^n)dx."
+  },
+  {
+   "chu": "divergent",
+   "doc": "/daɪˈvɜːrdʒənt/",
+   "nghia": "phân kỳ (tính từ)",
+   "nhom": "Tích phân",
+   "viDu": "Which of the following integrals is divergent? (i) ∫₁^(∞)2010/(5x²)dx (ii) ∫₁^(∞)1/(√(x³))dx (iii) ∫₁^(∞)(1+xe^-2x)/xdx",
+   "viDuNghia": "Tích phân nào sau đây phân kỳ? (i) ∫₁^(∞)2010/(5x²)dx (ii) ∫₁^(∞)1/(√(x³))dx (iii) ∫₁^(∞)(1+xe^-2x)/xdx"
+  },
+  {
+   "chu": "area under the graph",
+   "nghia": "diện tích dưới đồ thị (phần nằm giữa đồ thị và trục hoành)",
+   "nhom": "Tích phân",
+   "viDu": "Approximate the area under the graph of f(x)=0.015x³+4 over the interval [-6,0] using 3 subintervals and left endpoints.",
+   "viDuNghia": "Xấp xỉ diện tích dưới đồ thị f(x)=0.015x³+4 trên đoạn [-6,0] dùng 3 khoảng con và các đầu mút trái."
+  },
+  {
+   "chu": "region",
+   "doc": "/ˈriːdʒən/",
+   "nghia": "miền, vùng (phần mặt phẳng giới hạn bởi các đường)",
+   "nhom": "Tích phân",
+   "viDu": "Find the area of the region bounded by the curves y = x² and y = x.",
+   "viDuNghia": "Tìm diện tích miền giới hạn bởi các đường cong y = x² và y = x."
+  },
+  {
+   "chu": "bounded by",
+   "doc": "/ˈbaʊndɪd baɪ/",
+   "nghia": "giới hạn bởi (region bounded by the curves = miền giới hạn bởi các đường cong)",
+   "nhom": "Tích phân",
+   "viDu": "The region is bounded by the graph of v(t) and the t-axis.",
+   "viDuNghia": "Miền này được giới hạn bởi đồ thị của v(t) và trục t."
+  },
+  {
+   "chu": "average value",
+   "doc": "/ˈævərɪdʒ ˈvæljuː/",
+   "nghia": "giá trị trung bình của hàm trên [a, b]: (1/(b - a))·∫f(x)dx",
+   "nhom": "Tích phân",
+   "viDu": "Let f(x) = 2x²-2x+1. Find a number c such that f(c) is equal to the average value of f(x) over [-1,1].",
+   "viDuNghia": "Cho f(x) = 2x²-2x+1. Tìm số c sao cho f(c) bằng giá trị trung bình của f(x) trên [-1,1]."
+  },
+  {
+   "chu": "Riemann sum",
+   "doc": "/ˈriːmɑːn sʌm/",
+   "nghia": "tổng Riemann (cộng diện tích các hình chữ nhật để xấp xỉ tích phân)",
+   "nhom": "Tính gần đúng tích phân",
+   "viDu": "Find the Riemann sum for f(x)=3x²-5, 0≤x≤2, with 4 subintervals, taking the sample points to be left endpoints.",
+   "viDuNghia": "Tìm tổng Riemann của f(x)=3x²-5, 0≤x≤2, với 4 khoảng con, lấy điểm mẫu là đầu mút trái."
+  },
+  {
+   "chu": "subinterval",
+   "doc": "/ˈsʌbˌɪntərvl/",
+   "nghia": "khoảng con (chia [a, b] thành n khoảng con bằng nhau)",
+   "nhom": "Tính gần đúng tích phân",
+   "viDu": "Find the Riemann sum for f(x) = x + x², 0 ≤x ≤3 with 3 equal subintervals and taking left endpoints.",
+   "viDuNghia": "Tìm tổng Riemann cho f(x) = x + x², 0 ≤x ≤3 với 3 khoảng con bằng nhau, lấy các đầu mút trái."
+  },
+  {
+   "chu": "left endpoint",
+   "doc": "/left ˈendpɔɪnt/",
+   "nghia": "đầu mút trái (của mỗi khoảng con, dùng làm điểm lấy mẫu)",
+   "nhom": "Tính gần đúng tích phân",
+   "viDu": "Approximate the area under the graph of f(x) = 0.015x³ + 4 over the interval [-6, 0] using 3 subintervals and left endpoints.",
+   "viDuNghia": "Xấp xỉ diện tích dưới đồ thị của f(x) = 0.015x³ + 4 trên đoạn [-6, 0] dùng 3 khoảng con và các đầu mút trái."
+  },
+  {
+   "chu": "right endpoint",
+   "doc": "/raɪt ˈendpɔɪnt/",
+   "nghia": "đầu mút phải (của mỗi khoảng con)",
+   "nhom": "Tính gần đúng tích phân",
+   "viDu": "Estimate the area under the graph of f(x)=25-x² on [0,5] using 5 rectangles and right endpoints.",
+   "viDuNghia": "Ước lượng diện tích dưới đồ thị f(x)=25-x² trên [0,5] bằng 5 hình chữ nhật và các đầu mút phải."
+  },
+  {
+   "chu": "midpoint rule",
+   "doc": "/ˈmɪdpɔɪnt ruːl/",
+   "nghia": "quy tắc điểm giữa (lấy giá trị hàm tại trung điểm mỗi khoảng con)",
+   "nhom": "Tính gần đúng tích phân",
+   "viDu": "Use Midpoint Rule with n=4 to approximate ∫₀^8 f(x)dx given the table: x: 0,1,2,3,4,5,6,7,8; f(x): 3,1,2,5,3,8,7,6,2.",
+   "viDuNghia": "Dùng quy tắc trung điểm với n=4 để xấp xỉ ∫₀^8 f(x)dx với bảng: x: 0,1,2,3,4,5,6,7,8; f(x): 3,1,2,5,3,8,7,6,2."
+  },
+  {
+   "chu": "trapezoidal rule",
+   "doc": "/ˌtræpəˈzɔɪdl ruːl/",
+   "nghia": "quy tắc hình thang (xấp xỉ tích phân bằng các hình thang)",
+   "nhom": "Tính gần đúng tích phân",
+   "viDu": "Use the Trapezoidal Rule with n=4 to estimate the value of the integral ∫₀^4 f(x)dx x 0.0 1.0 2.0 3.0 4.0 f(x) 1.00 1.19 1.50 1.78 2.03",
+   "viDuNghia": "Dùng quy tắc hình thang với n=4 để ước lượng giá trị tích phân ∫₀^4 f(x)dx x 0.0 1.0 2.0 3.0 4.0 f(x) 1.00 1.19 1.50 1.78 2.03"
+  },
+  {
+   "chu": "Simpson's rule",
+   "doc": "/ˈsɪmpsnz ruːl/",
+   "nghia": "quy tắc Simpson (xấp xỉ bằng các cung parabol, n phải chẵn)",
+   "nhom": "Tính gần đúng tích phân",
+   "viDu": "Using Simpson's Rule with n=8 to approximate ∫₀^8 f(x)dx from the table below. x 0 1 2 3 4 5 6 7 8 f(x) 3 1 2 5 3 8 7 6 2",
+   "viDuNghia": "Dùng quy tắc Simpson với n=8 để xấp xỉ ∫₀^8 f(x)dx theo bảng dưới đây. x 0 1 2 3 4 5 6 7 8 f(x) 3 1 2 5 3 8 7 6 2"
+  },
+  {
+   "chu": "approximating rectangle",
+   "doc": "/əˈprɑːksɪmeɪtɪŋ ˈrektæŋɡl/",
+   "nghia": "hình chữ nhật xấp xỉ (dùng trong tổng Riemann)",
+   "nhom": "Tính gần đúng tích phân",
+   "viDu": "Estimate the area under the graph of f(x)=20-x² from x=0 to 4 using four approximating rectangles and right endpoints.",
+   "viDuNghia": "Ước lượng diện tích dưới đồ thị f(x)=20-x² từ x=0 đến 4 dùng bốn hình chữ nhật xấp xỉ và điểm mút phải."
+  },
+  {
+   "chu": "approximation",
+   "doc": "/əˌprɑːksɪˈmeɪʃn/",
+   "nghia": "giá trị gần đúng, phép xấp xỉ (third approximation = xấp xỉ thứ ba x₃)",
+   "nhom": "Tính gần đúng tích phân",
+   "viDu": "Use Newton's method with the specified initial approximation x₁=2 to find x₃ of the following equation ln (x²+4)-2x=0.",
+   "viDuNghia": "Dùng phương pháp Newton với xấp xỉ ban đầu x₁=2 để tìm x₃ của phương trình ln (x²+4)-2x=0."
+  },
+  {
+   "chu": "table of values",
+   "nghia": "bảng giá trị (đề cho f(x) tại vài điểm thay cho công thức)",
+   "nhom": "Tính gần đúng tích phân",
+   "viDu": "A table of values for f,g,f',g' is given: x f(x) g(x) f'(x) g'(x) 0 1 1 2 -2 1 0 2 3 -1 2 4 -1 5 6 Find h'(1) if h(x)=g(f(x)).",
+   "viDuNghia": "Cho bảng giá trị của f,g,f',g': x f(x) g(x) f'(x) g'(x) 0 1 1 2 -2 1 0 2 3 -1 2 4 -1 5 6 Tìm h'(1) nếu h(x)=g(f(x))."
+  },
+  {
+   "chu": "area",
+   "doc": "/ˈeriə/",
+   "nghia": "diện tích",
+   "nhom": "Hình học trong đề",
+   "viDu": "Approximate the area under the graph of f(x)=1/(x²) on [1,5] using 4 subintervals and left endpoints.",
+   "viDuNghia": "Xấp xỉ diện tích dưới đồ thị f(x)=1/(x²) trên [1,5] dùng 4 khoảng con và các đầu mút trái."
+  },
+  {
+   "chu": "volume",
+   "doc": "/ˈvɑːljəm/",
+   "nghia": "thể tích",
+   "nhom": "Hình học trong đề",
+   "viDu": "Find the volume of the tetrahedron with vertices (0,0,0), (1,2,3), (2,1,3), and (3,1,2).",
+   "viDuNghia": "Tìm thể tích khối tứ diện có các đỉnh (0,0,0), (1,2,3), (2,1,3), và (3,1,2)."
+  },
+  {
+   "chu": "height",
+   "doc": "/haɪt/",
+   "nghia": "chiều cao, độ cao",
+   "nhom": "Hình học trong đề",
+   "viDu": "A ball is launched vertically upward such that its height (in meters) after t seconds is given by h(t)=20t-5t². Determine the time at which the ball reaches its maximum height.",
+   "viDuNghia": "Một quả bóng được phóng thẳng đứng lên trên sao cho độ cao (mét) sau t giây cho bởi h(t)=20t-5t². Xác định thời điểm bóng đạt độ cao lớn nhất."
+  },
+  {
+   "chu": "radius",
+   "doc": "/ˈreɪdiəs/",
+   "nghia": "bán kính",
+   "nhom": "Hình học trong đề",
+   "viDu": "A spherical balloon is being inflated. Find the rate of increase of the surface area S=4πr² with respect to the radius r when r=1.",
+   "viDuNghia": "Một quả bóng hình cầu đang được bơm căng. Tìm tốc độ tăng diện tích mặt cầu S=4πr² theo bán kính r khi r=1."
+  },
+  {
+   "chu": "diameter",
+   "doc": "/daɪˈæmɪtər/",
+   "nghia": "đường kính",
+   "nhom": "Hình học trong đề",
+   "viDu": "The volume of a spherical balloon is decreasing at a rate of 9 cm³/s. How fast is its diameter decreasing when the volume is 6 cm³?",
+   "viDuNghia": "Thể tích một quả bóng hình cầu đang giảm với tốc độ 9 cm³/s. Đường kính của nó giảm nhanh cỡ nào khi thể tích bằng 6 cm³?"
+  },
+  {
+   "chu": "perimeter",
+   "doc": "/pəˈrɪmɪtər/",
+   "nghia": "chu vi",
+   "nhom": "Hình học trong đề",
+   "viDu": "A rectangle has a perimeter of 40 m. What is the largest possible area?",
+   "viDuNghia": "Một hình chữ nhật có chu vi 40 m. Diện tích lớn nhất có thể là bao nhiêu?"
+  },
+  {
+   "chu": "triangle",
+   "doc": "/ˈtraɪæŋɡl/",
+   "nghia": "tam giác",
+   "nhom": "Hình học trong đề",
+   "viDu": "Find the area of the triangle with the vertices A(3,0,1), B(5,1,0), C(7,2,-1).",
+   "viDuNghia": "Tìm diện tích tam giác với các đỉnh A(3,0,1), B(5,1,0), C(7,2,-1)."
+  },
+  {
+   "chu": "square",
+   "doc": "/skwer/",
+   "nghia": "hình vuông; bình phương (the sum of their squares = tổng bình phương của chúng)",
+   "nhom": "Hình học trong đề",
+   "viDu": "Each side of a square is increasing at a rate of 3 cm/s. At what rate (in cm²/s) is the area of the square increasing when the area of the square is 25 cm²?",
+   "viDuNghia": "Mỗi cạnh của một hình vuông tăng với tốc độ 3 cm/s. Diện tích hình vuông tăng với tốc độ bao nhiêu (cm²/s) khi diện tích hình vuông là 25 cm²?"
+  },
+  {
+   "chu": "cube",
+   "doc": "/kjuːb/",
+   "nghia": "hình lập phương; lập phương",
+   "nhom": "Hình học trong đề",
+   "viDu": "The surface area of a cube is increasing at a rate of 10 cm²/min. How fast is the volume increasing (cm³/min) when the length of an edge is 30 cm?",
+   "viDuNghia": "Diện tích bề mặt của một hình lập phương đang tăng với tốc độ 10 cm²/phút. Thể tích tăng nhanh cỡ nào (cm³/phút) khi cạnh dài 30 cm?"
+  },
+  {
+   "chu": "sphere",
+   "doc": "/sfɪr/",
+   "nghia": "hình cầu (spherical = có dạng hình cầu)",
+   "nhom": "Hình học trong đề",
+   "viDu": "A spherical balloon is being inflated. Find the rate of increase of the surface area S = 4πr² with respect to the radius r when r = 1.",
+   "viDuNghia": "Một quả bóng hình cầu đang được bơm phồng. Tìm tốc độ tăng của diện tích mặt cầu S = 4πr² theo bán kính r khi r = 1."
+  },
+  {
+   "chu": "surface",
+   "doc": "/ˈsɜːrfɪs/",
+   "nghia": "bề mặt (surface area = diện tích bề mặt)",
+   "nhom": "Hình học trong đề",
+   "viDu": "How fast (in m²/s) is the cube's surface area increasing at the time when t=1 (s)?",
+   "viDuNghia": "Diện tích bề mặt của khối lập phương tăng nhanh bao nhiêu (đơn vị m²/s) tại thời điểm t=1 (giây)?"
+  },
+  {
+   "chu": "angle",
+   "doc": "/ˈæŋɡl/",
+   "nghia": "góc",
+   "nhom": "Hình học trong đề",
+   "viDu": "Let T be the rotation in R² of angle θ radians, with matrix 1/(√2)[-1 -1; 1 -1]. Find θ.",
+   "viDuNghia": "Cho T là phép quay trong R² góc θ radian, với ma trận 1/(√2)[-1 -1; 1 -1]. Tìm θ."
+  },
+  {
+   "chu": "parallel to",
+   "doc": "/ˈpærəlel tə/",
+   "nghia": "song song với",
+   "nhom": "Hình học trong đề",
+   "viDu": "Let B(1,0,1). Find all points M on the line passing through A(2,0,0) and parallel to the vector d=[1 -1 1]^T such that MB=√5.",
+   "viDuNghia": "Cho B(1,0,1). Tìm tất cả các điểm M trên đường thẳng đi qua A(2,0,0) và song song với vectơ d=[1 -1 1]^T sao cho MB=√5."
+  },
+  {
+   "chu": "perpendicular",
+   "doc": "/ˌpɜːrpənˈdɪkjələr/",
+   "nghia": "vuông góc (perpendicular to = vuông góc với)",
+   "nhom": "Hình học trong đề",
+   "viDu": "Find a parametric equation of the line which goes through P(2,3,5) and perpendicular to the plane 2x+4y+6z-7=0.",
+   "viDuNghia": "Tìm phương trình tham số của đường thẳng đi qua P(2,3,5) và vuông góc với mặt phẳng 2x+4y+6z-7=0."
+  },
+  {
+   "chu": "distance",
+   "doc": "/ˈdɪstəns/",
+   "nghia": "khoảng cách; quãng đường",
+   "nhom": "Hình học trong đề",
+   "viDu": "Find the distance from the origin to the line passing through the point (3, 1, 5) and having the direction v = (2, -1, 1).",
+   "viDuNghia": "Tìm khoảng cách từ gốc tọa độ đến đường thẳng đi qua điểm (3, 1, 5) và có vectơ chỉ phương v = (2, -1, 1)."
+  },
+  {
+   "chu": "midpoint",
+   "doc": "/ˈmɪdpɔɪnt/",
+   "nghia": "trung điểm",
+   "nhom": "Hình học trong đề",
+   "viDu": "Let ABCD be a parallelogram with A(1,2,3), C(3,0,1). Assume M(0,1,2) is the midpoint of AB. Find the coordinates of vector BD.",
+   "viDuNghia": "Cho hình bình hành ABCD với A(1,2,3), C(3,0,1). Biết M(0,1,2) là trung điểm của AB. Tìm tọa độ vectơ BD."
+  },
+  {
+   "chu": "straight line",
+   "doc": "/streɪt laɪn/",
+   "nghia": "đường thẳng",
+   "nhom": "Hình học trong đề",
+   "viDu": "The following graph shows the position y = s(t) of an object moving along a straight line.",
+   "viDuNghia": "Đồ thị sau cho biết vị trí y = s(t) của một vật chuyển động trên đường thẳng."
+  },
+  {
+   "chu": "side",
+   "doc": "/saɪd/",
+   "nghia": "cạnh (của tam giác, hình vuông); phía, vế",
+   "nhom": "Hình học trong đề",
+   "viDu": "Let A(3,-1,-1), B(1,-2,0), C(1,-1,2) be three vertices of the parallelogram with two adjacent sides AB and AC. Find the fourth vertex.",
+   "viDuNghia": "Cho A(3,-1,-1), B(1,-2,0), C(1,-1,2) là ba đỉnh của hình bình hành với hai cạnh kề AB và AC. Tìm đỉnh thứ tư."
+  },
+  {
+   "chu": "base",
+   "doc": "/beɪs/",
+   "nghia": "đáy (của hình: square base = đáy vuông); cơ số (của luỹ thừa, logarit, hệ đếm). Lưu ý: bases còn là số nhiều của basis (cơ sở)",
+   "nhom": "Hình học trong đề",
+   "viDu": "A box with a square base and open top must have 8 volume units. Find the length of one side of the base that minimizes the surface area.",
+   "viDuNghia": "Một hộp đáy vuông, không nắp phải có thể tích 8 đơn vị. Tìm độ dài một cạnh đáy để diện tích bề mặt nhỏ nhất."
+  },
+  {
+   "chu": "line of intersection",
+   "nghia": "giao tuyến (của hai mặt phẳng); point of intersection = giao điểm",
+   "nhom": "Hình học trong đề",
+   "viDu": "Find an equation describing the plane passing through (6,0,2) and perpendicular to the line of intersection of the planes x+y-2z=4 and 3x-2y+z=1.",
+   "viDuNghia": "Tìm phương trình mặt phẳng đi qua (6,0,2) và vuông góc với giao tuyến của hai mặt phẳng x+y-2z=4 và 3x-2y+z=1."
+  },
+  {
+   "chu": "lie on",
+   "doc": "/laɪ ɑːn/",
+   "nghia": "nằm trên (the point lies on the line = điểm nằm trên đường thẳng)",
+   "nhom": "Hình học trong đề",
+   "viDu": "Let (d) be the line containing (1,4,7) and (2,1,3). Which of the following points lie on (d): M(0,0,3); N(3,-2,-1)?",
+   "viDuNghia": "Cho (d) là đường thẳng đi qua (1,4,7) và (2,1,3). Điểm nào sau đây thuộc (d): M(0,0,3); N(3,-2,-1)?"
+  },
+  {
+   "chu": "particle",
+   "doc": "/ˈpɑːrtɪkl/",
+   "nghia": "chất điểm, hạt (vật chuyển động coi như một điểm)",
+   "nhom": "Chuyển động và tốc độ",
+   "viDu": "A particle moves along a line with velocity v(t)=3t²-2t (m/s). Find its displacement between t=0 and t=2 seconds.",
+   "viDuNghia": "Một chất điểm chuyển động trên đường thẳng với vận tốc v(t)=3t²-2t (m/s). Tìm độ dời của nó từ t=0 đến t=2 giây."
+  },
+  {
+   "chu": "displacement",
+   "doc": "/dɪsˈpleɪsmənt/",
+   "nghia": "độ dời (vị trí cuối trừ vị trí đầu, có thể âm) — khác total distance (tổng quãng đường)",
+   "nhom": "Chuyển động và tốc độ",
+   "viDu": "A particle moves along a straight line with displacement given by s(t)=t²-8t+18. What is the instantaneous velocity when t=4?",
+   "viDuNghia": "Một chất điểm chuyển động trên đường thẳng với độ dịch chuyển s(t)=t²-8t+18. Vận tốc tức thời tại t=4 là bao nhiêu?"
+  },
+  {
+   "chu": "travel",
+   "doc": "/ˈtrævl/",
+   "nghia": "di chuyển, đi được (distance traveled = quãng đường đã đi)",
+   "nhom": "Chuyển động và tốc độ",
+   "viDu": "The distance in feet that the potato travels from the ground after t seconds is given by s(t) = -16t²+100t+85.",
+   "viDuNghia": "Quãng đường (feet) mà quả khoai tây đi được tính từ mặt đất sau t giây là s(t) = -16t²+100t+85."
+  },
+  {
+   "chu": "motion",
+   "doc": "/ˈmoʊʃn/",
+   "nghia": "chuyển động",
+   "nhom": "Chuyển động và tốc độ",
+   "viDu": "The equation of motion given for a particle is s=sin 2πt, where s is in meters and t is in seconds. Find the acceleration after 4.5 seconds.",
+   "viDuNghia": "Phương trình chuyển động của một hạt là s=sin 2πt, với s tính bằng mét và t tính bằng giây. Tìm gia tốc sau 4.5 giây."
+  },
+  {
+   "chu": "move along",
+   "doc": "/muːv əˈlɔːŋ/",
+   "nghia": "chuyển động dọc theo (một trục, một đường)",
+   "nhom": "Chuyển động và tốc độ",
+   "viDu": "A particle moves along a line with the velocity v(t)=t²-2t (m/s). Find the distance traveled by the particle during the time interval 0≤t≤3.",
+   "viDuNghia": "Một chất điểm chuyển động trên một đường thẳng với vận tốc v(t)=t²-2t (m/s). Tìm quãng đường đi được trong khoảng thời gian 0≤t≤3."
+  },
+  {
+   "chu": "rate",
+   "doc": "/reɪt/",
+   "nghia": "tốc độ (thay đổi), tỉ lệ (at a rate of 2 cm/s = với tốc độ 2 cm/s)",
+   "nhom": "Chuyển động và tốc độ",
+   "viDu": "Two sides of a triangle are 3 m and 4 m in length and the angle between them is increasing at a rate of 0.02 rad/s.",
+   "viDuNghia": "Hai cạnh của một tam giác dài 3 m và 4 m, góc giữa chúng đang tăng với tốc độ 0.02 rad/s."
+  },
+  {
+   "chu": "per",
+   "doc": "/pər/",
+   "nghia": "mỗi, trên mỗi (meters per second = mét trên giây, m/s)",
+   "nhom": "Chuyển động và tốc độ",
+   "viDu": "A car was purchased for USD 20000. The value of the car depreciates by USD 1500 per year; find a linear function that models the value V of the car after t years.",
+   "viDuNghia": "Một chiếc xe được mua với giá 20000 USD. Giá trị xe giảm 1500 USD mỗi năm; tìm hàm bậc nhất mô tả giá trị V của xe sau t năm."
+  },
+  {
+   "chu": "feet",
+   "doc": "/fiːt/",
+   "nghia": "foot (đơn vị dài của Mỹ, 1 foot ≈ 0,3048 m; viết tắt ft; số ít: foot)",
+   "nhom": "Chuyển động và tốc độ",
+   "viDu": "The distance s in feet that the rocket travels from the ground after t seconds is given by s(t) = -16t² + 560t.",
+   "viDuNghia": "Quãng đường s (tính bằng feet) mà tên lửa di chuyển từ mặt đất sau t giây được cho bởi s(t) = -16t² + 560t."
+  },
+  {
+   "chu": "rocket",
+   "doc": "/ˈrɑːkɪt/",
+   "nghia": "tên lửa",
+   "nhom": "Chuyển động và tốc độ",
+   "viDu": "A rocket is fired vertically upward from the ground.",
+   "viDuNghia": "Một tên lửa được phóng thẳng đứng lên từ mặt đất."
+  },
+  {
+   "chu": "fire",
+   "doc": "/ˈfaɪər/",
+   "nghia": "bắn, phóng (is fired upward = được bắn thẳng lên)",
+   "nhom": "Chuyển động và tốc độ",
+   "viDu": "A rocket is fired vertically upward from the ground.",
+   "viDuNghia": "Một tên lửa được phóng thẳng đứng lên từ mặt đất."
+  },
+  {
+   "chu": "ground",
+   "doc": "/ɡraʊnd/",
+   "nghia": "mặt đất (above the ground = cách mặt đất; hit the ground = chạm đất)",
+   "nhom": "Chuyển động và tốc độ",
+   "viDu": "The distance in feet that the potato travels from the ground after t seconds is given by s(t)=-16t²+100t+85.",
+   "viDuNghia": "Quãng đường (feet) mà quả khoai tây đi được tính từ mặt đất sau t giây là s(t)=-16t²+100t+85."
+  },
+  {
+   "chu": "reach",
+   "doc": "/riːtʃ/",
+   "nghia": "đạt tới, chạm tới (reach its peak = đạt điểm cao nhất)",
+   "nhom": "Chuyển động và tốc độ",
+   "viDu": "A ball is launched vertically upward such that its height (in meters) after t seconds is given by h(t) = 20t - 5t². Determine the time at which the ball reaches its maximum height.",
+   "viDuNghia": "Một quả bóng được ném thẳng đứng lên trên sao cho độ cao (mét) sau t giây được cho bởi h(t) = 20t - 5t². Xác định thời điểm quả bóng đạt độ cao tối đa."
+  },
+  {
+   "chu": "balloon",
+   "doc": "/bəˈluːn/",
+   "nghia": "quả bóng bay, khí cầu",
+   "nhom": "Bài toán thực tế",
+   "viDu": "Volume of a spherical balloon is decreasing at rate 9 cm³/s. How fast is its diameter decreasing when the volume is 6 cm³?",
+   "viDuNghia": "Thể tích một quả bóng hình cầu đang giảm với tốc độ 9 cm³/s. Đường kính của nó giảm nhanh như thế nào khi thể tích bằng 6 cm³?"
+  },
+  {
+   "chu": "inflate",
+   "doc": "/ɪnˈfleɪt/",
+   "nghia": "bơm phồng (is being inflated = đang được bơm)",
+   "nhom": "Bài toán thực tế",
+   "viDu": "A spherical balloon is being inflated. Find the rate of increase of the surface area S=4πr² with respect to the radius r when r=1.",
+   "viDuNghia": "Một quả bóng hình cầu đang được bơm căng. Tìm tốc độ tăng diện tích mặt cầu S=4πr² theo bán kính r khi r=1."
+  },
+  {
+   "chu": "tank",
+   "doc": "/tæŋk/",
+   "nghia": "bể chứa, bồn (nước)",
+   "nhom": "Bài toán thực tế",
+   "viDu": "Find the rate at which water is draining from the tank after 6 minutes.",
+   "viDuNghia": "Tìm tốc độ nước thoát khỏi bể sau 6 phút."
+  },
+  {
+   "chu": "drain",
+   "doc": "/dreɪn/",
+   "nghia": "thoát ra, chảy hết (nước thoát khỏi bể)",
+   "nhom": "Bài toán thực tế",
+   "viDu": "If a tank holds 5000 gallons of water, and that water can drain from the tank in 40 minutes, find the rate at which water is draining from the tank after 6 minutes.",
+   "viDuNghia": "Nếu một bể chứa 5000 ga-lông nước và nước thoát hết khỏi bể trong 40 phút, hãy tìm tốc độ nước thoát khỏi bể sau 6 phút."
+  },
+  {
+   "chu": "box",
+   "doc": "/bɑːks/",
+   "nghia": "cái hộp, hình hộp (open box = hộp không nắp)",
+   "nhom": "Bài toán thực tế",
+   "viDu": "A box with a square base and open top must have a volume of 13500 cm³. Find the dimensions of the box that minimize the amount of material used.",
+   "viDuNghia": "Một hộp có đáy vuông và không có nắp phải có thể tích 13500 cm³. Tìm kích thước của hộp sao cho lượng vật liệu sử dụng là nhỏ nhất."
+  },
+  {
+   "chu": "material",
+   "doc": "/məˈtɪriəl/",
+   "nghia": "vật liệu (least material = tốn ít vật liệu nhất)",
+   "nhom": "Bài toán thực tế",
+   "viDu": "If 1200 area units of material is available to make a box with a square base and an open top, find the largest possible volume of the box.",
+   "viDuNghia": "Nếu có 1200 đơn vị diện tích vật liệu để làm một hộp có đáy vuông và không có nắp, tìm thể tích lớn nhất có thể của hộp."
+  },
+  {
+   "chu": "cut off",
+   "doc": "/kʌt ɔːf/",
+   "nghia": "cắt ra, cắt bỏ (the line cuts off a triangle = đường thẳng cắt ra một tam giác)",
+   "nhom": "Bài toán thực tế",
+   "viDu": "Find an equation of the line through the point (4,5) that cuts off the least area from the first quadrant.",
+   "viDuNghia": "Tìm phương trình đường thẳng đi qua điểm (4,5) cắt ra phần diện tích nhỏ nhất từ góc phần tư thứ nhất."
+  },
+  {
+   "chu": "earn",
+   "doc": "/ɜːrn/",
+   "nghia": "kiếm được (tiền)",
+   "nhom": "Bài toán thực tế",
+   "viDu": "John and Joe earn a total of 39.5 when John works 2 hours and Joe works 3 hours. If John works 3 hours and Joe works 2 hours, they get 38. Find Joe's hourly rate (in dollars).",
+   "viDuNghia": "John và Joe kiếm được tổng cộng 39,5 đô la khi John làm 2 giờ và Joe làm 3 giờ. Nếu John làm 3 giờ và Joe làm 2 giờ, họ được 38 đô la. Tìm mức lương theo giờ của Joe (đơn vị đô la)."
+  },
+  {
+   "chu": "hourly",
+   "doc": "/ˈaʊərli/",
+   "nghia": "theo giờ (hourly wage = lương theo giờ)",
+   "nhom": "Bài toán thực tế",
+   "viDu": "John and Joe earn a total of 34 when John works 2 hours and Joe works 3 hours. If John works 3 hours and Joe works 2 hours, they get 33.5. Find John's hourly rate (in dollars).",
+   "viDuNghia": "John và Joe kiếm tổng cộng 34 đô la khi John làm 2 giờ và Joe làm 3 giờ. Nếu John làm 3 giờ và Joe làm 2 giờ, họ nhận được 33.5 đô la. Tìm mức lương theo giờ của John (đơn vị đô la)."
+  },
+  {
+   "chu": "decrease",
+   "doc": "/dɪˈkriːs/",
+   "nghia": "giảm (decreases by = giảm đi một lượng; decreasing = đang giảm)",
+   "nhom": "Bài toán thực tế",
+   "viDu": "Determine where the given function is increasing and where it is decreasing: f(x)=2x³+15x²+24x.",
+   "viDuNghia": "Xác định khoảng đồng biến và nghịch biến của hàm số f(x)=2x³+15x²+24x."
+  },
+  {
+   "chu": "gallon",
+   "doc": "/ˈɡælən/",
+   "nghia": "ga-lông (đơn vị thể tích của Mỹ, khoảng 3,785 lít)",
+   "nhom": "Bài toán thực tế",
+   "viDu": "A tank holds 5000 gallons of water.",
+   "viDuNghia": "Một bể chứa 5000 ga-lông nước."
+  }
+ ]
+}

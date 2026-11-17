@@ -1,0 +1,858 @@
+{
+ "ma": "prj301-1",
+ "nn": "en",
+ "ten": "PRJ301 · Java Web: Servlet, JSP, MVC",
+ "moTa": "Môn Java Web Application Development (PRJ301): Servlet và vòng đời, web.xml, request/response, session và cookie, JSP, EL, JSTL, custom tag, filter, listener, MVC, JDBC, bảo mật. Từ lấy từ đề FE/PE thật; câu ví dụ phần lớn là câu hỏi thật trong đề.",
+ "bieuTuong": "server.rack",
+ "thuTu": -960,
+ "tu": [
+  {
+   "chu": "web application",
+   "doc": "/web ˌæplɪˈkeɪʃn/",
+   "nghia": "ứng dụng web: chương trình chạy trên máy chủ, người dùng dùng qua trình duyệt",
+   "nhom": "Ứng dụng web và triển khai",
+   "viDu": "Which is NOT considered a standard component of a typical MVC architecture in web applications?",
+   "viDuNghia": "Cái nào KHÔNG được xem là thành phần chuẩn của kiến trúc MVC điển hình trong ứng dụng web?"
+  },
+  {
+   "chu": "servlet",
+   "doc": "/ˈsɜːrvlət/",
+   "nghia": "servlet: lớp Java chạy trên máy chủ, nhận HTTP request và sinh response",
+   "nhom": "Ứng dụng web và triển khai",
+   "viDu": "What file is commonly used for packaging a Java web application, including servlets and JSP files?",
+   "viDuNghia": "File nào thường dùng để đóng gói ứng dụng web Java, gồm servlet và file JSP?"
+  },
+  {
+   "chu": "servlet container",
+   "doc": "/ˈsɜːrvlət kənˈteɪnər/",
+   "nghia": "bộ chứa servlet (vd Tomcat): phần mềm tạo, gọi và huỷ servlet, quản lý vòng đời của chúng",
+   "nhom": "Ứng dụng web và triển khai",
+   "viDu": "What is the role of a servlet container in the context of a Java web application?",
+   "viDuNghia": "Vai trò của servlet container trong ứng dụng web Java là gì?"
+  },
+  {
+   "chu": "application server",
+   "doc": "/ˌæplɪˈkeɪʃn ˈsɜːrvər/",
+   "nghia": "máy chủ ứng dụng: phần mềm chạy ứng dụng web Java (Tomcat, GlassFish)",
+   "nhom": "Ứng dụng web và triển khai",
+   "viDu": "How can you deploy a Web application to a Java EE application server like Apache Tomcat?",
+   "viDuNghia": "Làm sao triển khai một ứng dụng web lên máy chủ ứng dụng Java EE như Apache Tomcat?"
+  },
+  {
+   "chu": "deployment descriptor",
+   "doc": "/dɪˈplɔɪmənt dɪˈskrɪptər/",
+   "nghia": "bộ mô tả triển khai: tệp web.xml trong WEB-INF, khai báo servlet, mapping, filter, tham số…",
+   "nhom": "Ứng dụng web và triển khai",
+   "viDu": "In a standard Java web application, where is the deployment descriptor (web.xml) typically located?",
+   "viDuNghia": "Trong ứng dụng web Java chuẩn, deployment descriptor (web.xml) thường nằm ở đâu?"
+  },
+  {
+   "chu": "deployment",
+   "doc": "/dɪˈplɔɪmənt/",
+   "nghia": "triển khai: đưa ứng dụng lên máy chủ để chạy",
+   "nhom": "Ứng dụng web và triển khai",
+   "viDu": "What is the syntax for defining an initialization parameter of a servlet in a deployment descriptor?",
+   "viDuNghia": "Cú pháp định nghĩa tham số khởi tạo của servlet trong deployment descriptor là gì?"
+  },
+  {
+   "chu": "web application archive",
+   "nghia": "tệp WAR: gói nén toàn bộ ứng dụng web Java để triển khai",
+   "nhom": "Ứng dụng web và triển khai",
+   "viDu": "A web application archive (WAR file) packages servlets, JSP pages and web.xml for deployment.",
+   "viDuNghia": "Tệp WAR đóng gói servlet, trang JSP và web.xml để triển khai."
+  },
+  {
+   "chu": "servlet mapping",
+   "doc": "/ˈsɜːrvlət ˈmæpɪŋ/",
+   "nghia": "ánh xạ servlet: nối một URL pattern với servlet sẽ xử lý nó",
+   "nhom": "Ứng dụng web và triển khai",
+   "viDu": "Assess the role of \"servlet-mapping\" in the \"web.xml\" file. What does this element define?",
+   "viDuNghia": "Vai trò của \"servlet-mapping\" trong web.xml là gì?"
+  },
+  {
+   "chu": "URL pattern",
+   "doc": "/ˌjuː ɑːr ˈel ˈpætərn/",
+   "nghia": "mẫu URL: đường dẫn (vd /login) mà servlet hoặc filter nhận xử lý",
+   "nhom": "Ứng dụng web và triển khai",
+   "viDu": "In filter mapping, what does the URL pattern \"/*\" indicate?",
+   "viDuNghia": "URL pattern \"/*\" trong ánh xạ filter có nghĩa gì?"
+  },
+  {
+   "chu": "annotation",
+   "doc": "/ˌænəˈteɪʃn/",
+   "nghia": "chú giải (bắt đầu bằng @): khai báo cấu hình ngay trong mã, vd @WebServlet thay cho web.xml",
+   "nhom": "Ứng dụng web và triển khai",
+   "viDu": "What annotation can be used to declare a Servlet Filter in Servlet 3.0 and later?",
+   "viDuNghia": "Annotation (chú giải) nào dùng để khai báo Servlet Filter từ Servlet 3.0 trở lên? (Đáp án: @WebFilter.)"
+  },
+  {
+   "chu": "welcome file",
+   "doc": "/ˈwelkəm faɪl/",
+   "nghia": "trang mặc định: trang được trả về khi URL chỉ ghi tên ứng dụng (index.jsp, index.html)",
+   "nhom": "Ứng dụng web và triển khai",
+   "viDu": "The welcome file is shown when the user requests the root of the application.",
+   "viDuNghia": "Trang mặc định hiện ra khi người dùng yêu cầu gốc của ứng dụng."
+  },
+  {
+   "chu": "configuration",
+   "doc": "/kənˌfɪɡjəˈreɪʃn/",
+   "nghia": "cấu hình: các thiết lập của ứng dụng",
+   "nhom": "Ứng dụng web và triển khai",
+   "viDu": "Which file is commonly used to specify deployment descriptors and configurations for a Java web application?",
+   "viDuNghia": "File nào thường dùng để chỉ định deployment descriptor và cấu hình cho ứng dụng web Java?"
+  },
+  {
+   "chu": "initialization parameter",
+   "doc": "/ɪˌnɪʃələˈzeɪʃn pəˈræmɪtər/",
+   "nghia": "tham số khởi tạo: giá trị cấu hình khai trong web.xml (init-param cho một servlet, context-param cho cả ứng dụng)",
+   "nhom": "Ứng dụng web và triển khai",
+   "viDu": "Which servlet method retrieves a servlet's initialization parameter defined in the web.xml?",
+   "viDuNghia": "Phương thức servlet nào lấy tham số khởi tạo của servlet được định nghĩa trong web.xml?"
+  },
+  {
+   "chu": "servlet context",
+   "doc": "/ˈsɜːrvlət ˈkɑːntekst/",
+   "nghia": "ngữ cảnh servlet (ServletContext): đối tượng dùng chung cho toàn ứng dụng, mọi servlet và mọi người dùng đều thấy",
+   "nhom": "Ứng dụng web và triển khai",
+   "viDu": "In a web application, if you store a variable in the ServletContext, it can be accessed by:",
+   "viDuNghia": "Trong ứng dụng web, nếu lưu một biến vào ServletContext, biến đó có thể được truy cập bởi:"
+  },
+  {
+   "chu": "web server",
+   "doc": "/web ˈsɜːrvər/",
+   "nghia": "máy chủ web – phần mềm/máy nhận HTTP request và trả về trang, tài nguyên (Tomcat, Apache)",
+   "nhom": "Ứng dụng web và triển khai",
+   "viDu": "What is the primary function of a web server in the client-server architecture?",
+   "viDuNghia": "Chức năng chính của web server trong kiến trúc client-server là gì?"
+  },
+  {
+   "chu": "Apache Tomcat",
+   "doc": "/əˈpætʃi ˈtɑːmkæt/",
+   "nghia": "máy chủ web / servlet container mã nguồn mở hay dùng nhất để chạy servlet và JSP",
+   "nhom": "Ứng dụng web và triển khai",
+   "viDu": "Apache Tomcat is a servlet container that runs servlets and JSP pages.",
+   "viDuNghia": "Apache Tomcat là một servlet container chạy servlet và trang JSP."
+  },
+  {
+   "chu": "Java EE",
+   "doc": "/ˈdʒɑːvə ˌiː ˈiː/",
+   "nghia": "Java Enterprise Edition (nay là Jakarta EE): bộ chuẩn Java cho ứng dụng doanh nghiệp, gồm Servlet, JSP, JDBC…",
+   "nhom": "Ứng dụng web và triển khai",
+   "viDu": "What is a Web Application Listener in the context of Java EE applications?",
+   "viDuNghia": "Web Application Listener trong ứng dụng Java EE là gì?"
+  },
+  {
+   "chu": "life cycle",
+   "doc": "/laɪf ˈsaɪkl/",
+   "nghia": "vòng đời: các giai đoạn từ lúc tạo đến lúc huỷ · servlet: init → service → destroy · Android Activity: onCreate → onStart → onResume → onPause → onStop → onDestroy",
+   "nhom": "Vòng đời và xử lý request",
+   "viDu": "During the filter lifecycle in a web application, when is the init() method typically called?",
+   "viDuNghia": "Trong vòng đời filter, init() thường được gọi khi nào?"
+  },
+  {
+   "chu": "destroy",
+   "doc": "/dɪˈstrɔɪ/",
+   "nghia": "huỷ: destroy() được gọi một lần trước khi servlet bị gỡ, dùng để giải phóng tài nguyên",
+   "nhom": "Vòng đời và xử lý request",
+   "viDu": "When is the destroy() method of a servlet filter called?",
+   "viDuNghia": "Phương thức destroy() của servlet filter được gọi khi nào?"
+  },
+  {
+   "chu": "service method",
+   "doc": "/ˈsɜːrvɪs ˈmeθəd/",
+   "nghia": "phương thức service(): được gọi cho MỖI request, rồi chuyển tiếp sang doGet / doPost",
+   "nhom": "Vòng đời và xử lý request",
+   "viDu": "Which JSP element is NOT executed at the service() method of the servlet?",
+   "viDuNghia": "Phần tử JSP nào KHÔNG được thực thi tại phương thức service() của servlet?"
+  },
+  {
+   "chu": "HTTP method",
+   "doc": "/ˌeɪtʃ tiː tiː ˈpiː ˈmeθəd/",
+   "nghia": "phương thức HTTP: kiểu yêu cầu (GET, POST, PUT, DELETE)",
+   "nhom": "Vòng đời và xử lý request",
+   "viDu": "Which HTTP method is more secure when transferring sensitive data like passwords or user information?",
+   "viDuNghia": "Phương thức HTTP nào an toàn hơn khi truyền dữ liệu nhạy cảm như mật khẩu?"
+  },
+  {
+   "chu": "GET request",
+   "doc": "/ɡet rɪˈkwest/",
+   "nghia": "yêu cầu GET: dữ liệu nằm trên URL (query string), dùng để lấy dữ liệu; servlet xử lý bằng doGet",
+   "nhom": "Vòng đời và xử lý request",
+   "viDu": "In a Java web application, which HTTP status code indicates a successful response for a GET request?",
+   "viDuNghia": "Trong ứng dụng web Java, mã trạng thái HTTP nào cho biết response của một GET request thành công?"
+  },
+  {
+   "chu": "POST request",
+   "doc": "/poʊst rɪˈkwest/",
+   "nghia": "yêu cầu POST: dữ liệu nằm trong thân request, dùng để gửi form; servlet xử lý bằng doPost",
+   "nhom": "Vòng đời và xử lý request",
+   "viDu": "In an HttpServlet, what method is responsible for processing both GET and POST requests?",
+   "viDuNghia": "Trong HttpServlet, phương thức nào xử lý cả GET và POST request?"
+  },
+  {
+   "chu": "query string",
+   "doc": "/ˈkwɪri strɪŋ/",
+   "nghia": "chuỗi truy vấn: phần sau dấu hỏi trên URL, vd ?id=5&page=2",
+   "nhom": "Vòng đời và xử lý request",
+   "viDu": "The parameters will be appended to the URL as a query string.",
+   "viDuNghia": "Các tham số sẽ được gắn vào URL dưới dạng chuỗi truy vấn (query string)."
+  },
+  {
+   "chu": "request parameter",
+   "doc": "/rɪˈkwest pəˈræmɪtər/",
+   "nghia": "tham số request: dữ liệu client gửi lên (từ form hoặc URL), đọc bằng getParameter, luôn là chuỗi",
+   "nhom": "Vòng đời và xử lý request",
+   "viDu": "How do you access a request parameter named \"user\" via EL?",
+   "viDuNghia": "Dùng EL thế nào để truy cập tham số request tên \"user\"?"
+  },
+  {
+   "chu": "request attribute",
+   "doc": "/rɪˈkwest ˈætrɪbjuːt/",
+   "nghia": "thuộc tính request: đối tượng do máy chủ gắn vào request bằng setAttribute để chuyển cho servlet / JSP khác",
+   "nhom": "Vòng đời và xử lý request",
+   "viDu": "What is the correct syntax for accessing the length of a String stored in a request attribute named \"message\" using EL?",
+   "viDuNghia": "Cú pháp đúng để lấy độ dài của String lưu trong request attribute \"message\" bằng EL là gì?"
+  },
+  {
+   "chu": "response header",
+   "doc": "/rɪˈspɑːns ˈhedər/",
+   "nghia": "tiêu đề phản hồi: thông tin kèm theo response (kiểu nội dung, cookie, bộ nhớ đệm…)",
+   "nhom": "Vòng đời và xử lý request",
+   "viDu": "Which HTTP header is used to send cookies from the server to the client in a web application?",
+   "viDuNghia": "HTTP header nào dùng để gửi cookie từ server đến client?"
+  },
+  {
+   "chu": "status code",
+   "doc": "/ˈsteɪtəs koʊd/",
+   "nghia": "mã trạng thái HTTP: 200 thành công, 404 không tìm thấy, 500 lỗi máy chủ",
+   "nhom": "Vòng đời và xử lý request",
+   "viDu": "Which status code is returned when a request cannot be fulfilled due to bad syntax?",
+   "viDuNghia": "Mã trạng thái nào trả về khi request không thể xử lý do sai cú pháp?"
+  },
+  {
+   "chu": "content type",
+   "doc": "/ˈkɑːntent taɪp/",
+   "nghia": "kiểu nội dung của response, vd text/html; đặt bằng setContentType",
+   "nhom": "Vòng đời và xử lý request",
+   "viDu": "For generating an HTML page in JSP, which content type must be set using the page directive?",
+   "viDuNghia": "Để tạo trang HTML trong JSP, content type nào cần được đặt bằng page directive?"
+  },
+  {
+   "chu": "request dispatcher",
+   "doc": "/rɪˈkwest dɪˈspætʃər/",
+   "nghia": "bộ điều phối request (RequestDispatcher): chuyển tiếp request sang tài nguyên khác bằng forward hoặc include",
+   "nhom": "Vòng đời và xử lý request",
+   "viDu": "What is the purpose of the RequestDispatcher interface in servlets?",
+   "viDuNghia": "Mục đích của interface RequestDispatcher trong servlet là gì?"
+  },
+  {
+   "chu": "redirect",
+   "doc": "/ˌriːdəˈrekt/",
+   "nghia": "chuyển hướng: bảo trình duyệt gửi request MỚI tới URL khác (sendRedirect); URL đổi, mất request attribute",
+   "nhom": "Vòng đời và xử lý request",
+   "viDu": "What is the purpose of the response.sendRedirect method in Java Servlets when performing URL rewriting?",
+   "viDuNghia": "Mục đích của response.sendRedirect khi thực hiện URL rewriting là gì?"
+  },
+  {
+   "chu": "dynamic content",
+   "doc": "/daɪˈnæmɪk ˈkɑːntent/",
+   "nghia": "nội dung động: trang được sinh ra lúc chạy tuỳ theo dữ liệu, khác trang tĩnh",
+   "nhom": "Vòng đời và xử lý request",
+   "viDu": "A servlet processes client requests and returns dynamic content.",
+   "viDuNghia": "Servlet xử lý request của client và trả về nội dung động."
+  },
+  {
+   "chu": "client-side",
+   "doc": "/ˈklaɪənt saɪd/",
+   "nghia": "phía client: chạy trên trình duyệt của người dùng (HTML, JavaScript)",
+   "nhom": "Vòng đời và xử lý request",
+   "viDu": "Which of the following is responsible for storing session data on the client side?",
+   "viDuNghia": "Cái nào chịu trách nhiệm lưu dữ liệu session phía client?"
+  },
+  {
+   "chu": "server-side",
+   "doc": "/ˈsɜːrvər saɪd/",
+   "nghia": "phía máy chủ: chạy trên server (servlet, JSP)",
+   "nhom": "Vòng đời và xử lý request",
+   "viDu": "How are sessions typically identified on the server side in web development?",
+   "viDuNghia": "Session thường được xác định bằng cách nào ở phía server?"
+  },
+  {
+   "chu": "client",
+   "doc": "/ˈklaɪənt/",
+   "nghia": "(web) máy khách: chương trình phía người dùng (thường là trình duyệt) gửi request tới server và nhận response; kiến trúc client-server",
+   "nhom": "Vòng đời và xử lý request",
+   "viDu": "What objects are received when a servlet accepts a call from the client?",
+   "viDuNghia": "Servlet nhận những đối tượng nào khi tiếp nhận một lời gọi từ client (máy khách)? (Đáp án: ServletRequest và ServletResponse.)"
+  },
+  {
+   "chu": "thread-safe",
+   "doc": "/ˈθred seɪf/",
+   "nghia": "an toàn luồng: chạy đúng khi nhiều luồng (nhiều request) dùng cùng lúc",
+   "nhom": "Vòng đời và xử lý request",
+   "viDu": "A servlet is not thread-safe if it stores request data in instance variables.",
+   "viDuNghia": "Servlet không an toàn luồng nếu nó lưu dữ liệu request trong biến thể hiện."
+  },
+  {
+   "chu": "request",
+   "doc": "/rɪˈkwest/",
+   "nghia": "yêu cầu (HTTP request) – thông điệp client gửi lên server; đối tượng request trong servlet/JSP",
+   "nhom": "Vòng đời và xử lý request",
+   "viDu": "Which implicit object in JavaServer Pages (JSP) represents the request made by the client to the server?",
+   "viDuNghia": "Implicit object nào trong JSP đại diện cho request từ client đến server?"
+  },
+  {
+   "chu": "response",
+   "doc": "/rɪˈspɑːns/",
+   "nghia": "phản hồi (HTTP response) – thông điệp server trả về client; response.sendRedirect(), mã trạng thái",
+   "nhom": "Vòng đời và xử lý request",
+   "viDu": "In a Java web application, which HTTP status code indicates a successful response for a GET request?",
+   "viDuNghia": "Mã trạng thái HTTP nào cho biết response GET thành công?"
+  },
+  {
+   "chu": "HttpServlet",
+   "doc": "/ˌeɪtʃ tiː tiː ˈpiː ˈsɜːrvlət/",
+   "nghia": "lớp cha của mọi servlet web: ta kế thừa (extends HttpServlet) rồi ghi đè doGet / doPost để xử lý request HTTP",
+   "nhom": "Vòng đời và xử lý request",
+   "viDu": "What is the main purpose of HttpServlet in Java web applications?",
+   "viDuNghia": "Mục đích chính của HttpServlet trong ứng dụng web Java là gì? (Đáp án: xử lý HTTP request và response.)"
+  },
+  {
+   "chu": "HttpServletRequest",
+   "doc": "/ˌeɪtʃ tiː tiː ˈpiː ˈsɜːrvlət rɪˈkwest/",
+   "nghia": "đối tượng request trong servlet: đọc tham số (getParameter), header, cookie, lấy session (getSession)",
+   "nhom": "Vòng đời và xử lý request",
+   "viDu": "HttpServletRequest.getSession() method returns a ___________ object.",
+   "viDuNghia": "Phương thức HttpServletRequest.getSession() trả về đối tượng ___________. (Đáp án: HttpSession.)"
+  },
+  {
+   "chu": "session",
+   "doc": "/ˈseʃn/",
+   "nghia": "phiên làm việc: dữ liệu máy chủ giữ riêng cho từng người dùng qua nhiều request (HttpSession)",
+   "nhom": "Session và cookie",
+   "viDu": "What are the implications of maintaining user roles and permissions within the session object?",
+   "viDuNghia": "Việc lưu vai trò/quyền người dùng trong session object có hệ quả gì?"
+  },
+  {
+   "chu": "session tracking",
+   "doc": "/ˈseʃn ˈtrækɪŋ/",
+   "nghia": "theo dõi phiên: cách nhận ra các request của cùng một người dùng (cookie, URL rewriting, hidden field)",
+   "nhom": "Session và cookie",
+   "viDu": "If a user logs into a web application from a public computer, which method of session tracking might be less secure?",
+   "viDuNghia": "Nếu người dùng đăng nhập ứng dụng web từ máy tính công cộng, phương pháp theo dõi phiên (session tracking) nào có thể kém an toàn hơn?"
+  },
+  {
+   "chu": "URL rewriting",
+   "doc": "/ˌjuː ɑːr ˈel ˈriːraɪtɪŋ/",
+   "nghia": "viết lại URL: gắn mã phiên (session ID) vào URL khi trình duyệt tắt cookie",
+   "nhom": "Session và cookie",
+   "viDu": "Which method would you use to put the session id into the URL to support sessions using URL rewriting?",
+   "viDuNghia": "Dùng phương thức nào để đưa session id vào URL hỗ trợ session bằng URL rewriting?"
+  },
+  {
+   "chu": "hidden form field",
+   "nghia": "trường ẩn trong form: ô input kiểu hidden mang dữ liệu qua lại mà người dùng không thấy",
+   "nhom": "Session và cookie",
+   "viDu": "A hidden form field can carry the session ID between requests.",
+   "viDuNghia": "Trường ẩn trong form có thể mang mã phiên giữa các request."
+  },
+  {
+   "chu": "invalidate",
+   "doc": "/ɪnˈvælɪdeɪt/",
+   "nghia": "vô hiệu hoá (session): huỷ phiên và mọi dữ liệu của nó, dùng khi đăng xuất",
+   "nhom": "Session và cookie",
+   "viDu": "Session death can come about through an explicit call (in Servlet code) to HttpSession.invalidate().",
+   "viDuNghia": "Session có thể kết thúc thông qua lời gọi tường minh (trong code Servlet) tới HttpSession.invalidate()."
+  },
+  {
+   "chu": "session timeout",
+   "doc": "/ˈseʃn ˈtaɪmaʊt/",
+   "nghia": "thời hạn phiên: thời gian không hoạt động tối đa trước khi phiên tự hết hạn",
+   "nhom": "Session và cookie",
+   "viDu": "The session time-out value is controlled in which way(s)?",
+   "viDuNghia": "Giá trị session time-out được kiểm soát bằng (những) cách nào?"
+  },
+  {
+   "chu": "application scope",
+   "doc": "/ˌæplɪˈkeɪʃn skoʊp/",
+   "nghia": "phạm vi ứng dụng: dữ liệu dùng chung cho mọi người dùng, sống suốt thời gian ứng dụng chạy",
+   "nhom": "Session và cookie",
+   "viDu": "An attribute in application scope is shared by all users.",
+   "viDuNghia": "Thuộc tính ở phạm vi ứng dụng được dùng chung cho mọi người dùng."
+  },
+  {
+   "chu": "log out",
+   "doc": "/lɔːɡ aʊt/",
+   "nghia": "đăng xuất",
+   "nhom": "Session và cookie",
+   "viDu": "What is the most secure way to handle session invalidation during logout?",
+   "viDuNghia": "Cách an toàn nhất để huỷ session khi logout là gì?"
+  },
+  {
+   "chu": "cookie",
+   "doc": "/ˈkʊki/",
+   "nghia": "cookie – mẩu dữ liệu máy chủ gửi cho trình duyệt lưu, gửi kèm mỗi request sau để nhận ra người dùng",
+   "nhom": "Session và cookie",
+   "viDu": "To read the cookies that come back from the client, you call getCookies on the HttpServletRequest.",
+   "viDuNghia": "Để đọc cookie gửi về từ client, gọi getCookies trên HttpServletRequest."
+  },
+  {
+   "chu": "HttpSession",
+   "doc": "/ˌeɪtʃ tiː tiː ˈpiː ˈseʃn/",
+   "nghia": "đối tượng phiên của một người dùng: lưu dữ liệu bằng setAttribute, huỷ bằng invalidate()",
+   "nhom": "Session và cookie",
+   "viDu": "How is ServletContext different from HttpSession?",
+   "viDuNghia": "ServletContext khác HttpSession thế nào? (Đáp án: ServletContext dùng chung cả ứng dụng, HttpSession riêng từng người dùng.)"
+  },
+  {
+   "chu": "JavaServer Pages",
+   "doc": "/ˈdʒɑːvəsɜːrvər ˈpeɪdʒɪz/",
+   "nghia": "JSP: trang HTML có nhúng mã Java, được máy chủ dịch thành servlet rồi chạy",
+   "nhom": "JSP, EL và JSTL",
+   "viDu": "In JavaServer Pages (JSP), which implicit object provides access to the servlet context?",
+   "viDuNghia": "Implicit object nào trong JSP cung cấp quyền truy cập servlet context?"
+  },
+  {
+   "chu": "scriptlet",
+   "doc": "/ˈskrɪptlət/",
+   "nghia": "scriptlet: đoạn mã Java nhúng trong JSP giữa cặp <% và %>",
+   "nhom": "JSP, EL và JSTL",
+   "viDu": "In a JSP scriptlet, what is the correct syntax for declaring an integer variable named \"count\" and initializing it to 10?",
+   "viDuNghia": "Trong scriptlet JSP, cú pháp đúng để khai báo biến int \"count\" và gán 10 là gì?"
+  },
+  {
+   "chu": "include directive",
+   "doc": "/ɪnˈkluːd dəˈrektɪv/",
+   "nghia": "chỉ thị include: chèn nội dung tệp khác vào LÚC DỊCH trang (tĩnh), khác jsp:include chèn lúc chạy",
+   "nhom": "JSP, EL và JSTL",
+   "viDu": "Which of these is true about include directive? Select the one correct answer.",
+   "viDuNghia": "Phát biểu nào đúng về include directive?"
+  },
+  {
+   "chu": "implicit object",
+   "doc": "/ɪmˈplɪsɪt ˈɑːbdʒekt/",
+   "nghia": "đối tượng ngầm định: biến JSP có sẵn không cần khai báo (request, response, session, out, application…)",
+   "nhom": "JSP, EL và JSTL",
+   "viDu": "Which implicit object in JavaServer Pages (JSP) represents the request made by the client to the server?",
+   "viDuNghia": "Implicit object nào trong JSP đại diện cho request từ client đến server?"
+  },
+  {
+   "chu": "standard action",
+   "doc": "/ˈstændərd ˈækʃn/",
+   "nghia": "hành động chuẩn của JSP: các thẻ jsp: như jsp:include, jsp:forward, jsp:useBean",
+   "nhom": "JSP, EL và JSTL",
+   "viDu": "What is the major difference between <jsp:forward> and response.sendRedirect() in a JSP page?",
+   "viDuNghia": "Khác biệt chính giữa <jsp:forward> và response.sendRedirect() là gì?"
+  },
+  {
+   "chu": "JavaBean",
+   "doc": "/ˈdʒɑːvə biːn/",
+   "nghia": "JavaBean: lớp Java có constructor không tham số, thuộc tính private và các getter / setter",
+   "nhom": "JSP, EL và JSTL",
+   "viDu": "Which of the following EL expressions correctly accesses the \"name\" property of a JavaBean named \"user\" stored in the session scope?",
+   "viDuNghia": "Biểu thức EL nào truy cập đúng thuộc tính \"name\" của JavaBean \"user\" lưu trong session scope?"
+  },
+  {
+   "chu": "Expression Language",
+   "doc": "/ɪkˈspreʃn ˈlæŋɡwɪdʒ/",
+   "nghia": "ngôn ngữ biểu thức (EL): cú pháp ${...} để lấy dữ liệu trong JSP mà không cần viết mã Java",
+   "nhom": "JSP, EL và JSTL",
+   "viDu": "What is the correct syntax for accessing the first element of a collection named \"items\" in EL?",
+   "viDuNghia": "Cú pháp đúng để truy cập phần tử đầu tiên của collection tên \"items\" trong EL là gì?"
+  },
+  {
+   "chu": "JSP Standard Tag Library",
+   "nghia": "thư viện thẻ chuẩn JSTL: các thẻ c:if, c:forEach, c:set, fmt:formatDate… thay cho scriptlet",
+   "nhom": "JSP, EL và JSTL",
+   "viDu": "Which JSTL core tag is used to conditionally render content based on a boolean expression?",
+   "viDuNghia": "Thẻ core JSTL nào dùng để render nội dung có điều kiện dựa trên biểu thức boolean?"
+  },
+  {
+   "chu": "tag library",
+   "doc": "/tæɡ ˈlaɪbreri/",
+   "nghia": "thư viện thẻ: bộ thẻ dùng trong JSP, khai báo bằng chỉ thị taglib",
+   "nhom": "JSP, EL và JSTL",
+   "viDu": "In a JSP, how do you use a custom tag defined in a tag library descriptor (TLD) file?",
+   "viDuNghia": "Trong JSP, làm sao dùng thẻ tuỳ chỉnh đã định nghĩa trong file TLD?"
+  },
+  {
+   "chu": "custom tag",
+   "doc": "/ˈkʌstəm tæɡ/",
+   "nghia": "thẻ tuỳ biến: thẻ JSP do lập trình viên tự định nghĩa",
+   "nhom": "JSP, EL và JSTL",
+   "viDu": "Which class in JSP API supports creating Custom Tag by the simplest inheritance?",
+   "viDuNghia": "Class nào trong JSP API hỗ trợ tạo thẻ tuỳ chỉnh bằng cách kế thừa đơn giản nhất?"
+  },
+  {
+   "chu": "tag handler",
+   "doc": "/tæɡ ˈhændlər/",
+   "nghia": "lớp xử lý thẻ: lớp Java chứa mã chạy khi gặp thẻ tuỳ biến",
+   "nhom": "JSP, EL và JSTL",
+   "viDu": "Which method in the Simple Tag Handler class is responsible for processing the tag?",
+   "viDuNghia": "Phương thức nào trong Simple Tag Handler chịu trách nhiệm xử lý thẻ?"
+  },
+  {
+   "chu": "tag library descriptor",
+   "nghia": "tệp mô tả thư viện thẻ (TLD): tệp XML khai tên thẻ, thuộc tính và lớp xử lý",
+   "nhom": "JSP, EL và JSTL",
+   "viDu": "What is the purpose of the Tag Description in the TLD file in Java Servlet?",
+   "viDuNghia": "Mục đích của Tag Description trong file TLD là gì?"
+  },
+  {
+   "chu": "body content",
+   "doc": "/ˈbɑːdi ˈkɑːntent/",
+   "nghia": "nội dung thân thẻ: phần nằm giữa thẻ mở và thẻ đóng",
+   "nhom": "JSP, EL và JSTL",
+   "viDu": "How can a Simple Tag Handler access the body content of the custom tag?",
+   "viDuNghia": "Simple Tag Handler truy cập nội dung body của thẻ tuỳ chỉnh bằng cách nào?"
+  },
+  {
+   "chu": "presentation logic",
+   "doc": "/ˌpriːzenˈteɪʃn ˈlɑːdʒɪk/",
+   "nghia": "logic trình bày: phần mã lo hiển thị, nên đặt ở JSP (tách khỏi logic nghiệp vụ)",
+   "nhom": "JSP, EL và JSTL",
+   "viDu": "MVC separates the presentation logic from the business logic.",
+   "viDuNghia": "MVC tách logic trình bày khỏi logic nghiệp vụ."
+  },
+  {
+   "chu": "business logic",
+   "doc": "/ˈbɪznəs ˈlɑːdʒɪk/",
+   "nghia": "logic nghiệp vụ: phần mã xử lý quy tắc của bài toán, nên đặt ở servlet / lớp Java",
+   "nhom": "JSP, EL và JSTL",
+   "viDu": "Which component is responsible for managing the application's data and business logic in the MVC architecture?",
+   "viDuNghia": "Thành phần nào chịu trách nhiệm quản lý dữ liệu và logic nghiệp vụ trong MVC?"
+  },
+  {
+   "chu": "directive",
+   "doc": "/dəˈrektɪv/",
+   "nghia": "chỉ thị (JSP) – <%@ page / include / taglib %>, báo cho container cách dịch trang JSP. (Hợp ngữ: chỉ thị cho trình hợp dịch)",
+   "nhom": "JSP, EL và JSTL",
+   "viDu": "For generating an HTML page in JSP, which content type must be set using the page directive?",
+   "viDuNghia": "Để tạo trang HTML trong JSP, content type nào cần được đặt bằng page directive?"
+  },
+  {
+   "chu": "filter chain",
+   "doc": "/ˈfɪltər tʃeɪn/",
+   "nghia": "chuỗi filter: các filter chạy nối tiếp nhau; chain.doFilter chuyển sang filter kế hoặc tài nguyên đích",
+   "nhom": "Filter, listener và MVC",
+   "viDu": "When multiple filters are applied to a servlet, what determines the order of execution?",
+   "viDuNghia": "Khi nhiều filter áp dụng cho một servlet, điều gì quyết định thứ tự thực thi?"
+  },
+  {
+   "chu": "listener",
+   "doc": "/ˈlɪsənər/",
+   "nghia": "bộ lắng nghe: lớp được gọi khi có sự kiện (tạo / huỷ session, khởi động ứng dụng…)",
+   "nhom": "Filter, listener và MVC",
+   "viDu": "Which Listener should be used to load JDBC Driver automatically for a web application?",
+   "viDuNghia": "Listener nào dùng để tự động nạp JDBC Driver?"
+  },
+  {
+   "chu": "Model-View-Controller",
+   "doc": "/ˌmɑːdl ˌvjuː kənˈtroʊlər/",
+   "nghia": "kiến trúc MVC: tách ứng dụng thành Model (dữ liệu), View (giao diện), Controller (điều khiển)",
+   "nhom": "Filter, listener và MVC",
+   "viDu": "What is the purpose of using Java Beans in a Model-View-Controller (MVC) architecture for web development?",
+   "viDuNghia": "Mục đích dùng JavaBean trong kiến trúc MVC cho lập trình web là gì?"
+  },
+  {
+   "chu": "model",
+   "doc": "/ˈmɑːdl/",
+   "nghia": "mô hình: phần chứa dữ liệu và logic nghiệp vụ (JavaBean, DAO)",
+   "nhom": "Filter, listener và MVC",
+   "viDu": "In MVC, the Model holds the data and the business logic of the application.",
+   "viDuNghia": "Trong MVC, Model chứa dữ liệu và logic nghiệp vụ của ứng dụng."
+  },
+  {
+   "chu": "separation of concerns",
+   "nghia": "tách biệt mối quan tâm: mỗi phần chỉ lo một việc (lợi ích chính của MVC)",
+   "nhom": "Filter, listener và MVC",
+   "viDu": "MVC promotes separation of concerns between data, view and control logic.",
+   "viDuNghia": "MVC thúc đẩy việc tách biệt mối quan tâm giữa dữ liệu, giao diện và logic điều khiển."
+  },
+  {
+   "chu": "encapsulate",
+   "doc": "/ɪnˈkæpsjuleɪt/",
+   "nghia": "đóng gói: gom dữ liệu và xử lý vào một chỗ, giấu chi tiết bên trong",
+   "nhom": "Filter, listener và MVC",
+   "viDu": "A JavaBean is used to encapsulate data in private fields.",
+   "viDuNghia": "JavaBean dùng để đóng gói dữ liệu trong các trường private."
+  },
+  {
+   "chu": "controller",
+   "doc": "/kənˈtroʊlər/",
+   "nghia": "bộ điều khiển (Controller trong MVC) – nhận request, gọi Model, chọn View trả về. (CSI104/OSG202: bộ điều khiển thiết bị)",
+   "nhom": "Filter, listener và MVC",
+   "viDu": "In MVC architecture, what does the Controller component handle?",
+   "viDuNghia": "Trong kiến trúc MVC, thành phần Controller xử lý gì?"
+  },
+  {
+   "chu": "filter",
+   "doc": "/ˈfɪltər/",
+   "nghia": "bộ lọc (Filter) – thành phần chặn request trước servlet và response sau servlet (kiểm đăng nhập, mã hoá…). (SQL: lọc dòng)",
+   "nhom": "Filter, listener và MVC",
+   "viDu": "When a web request enters a Java web application with filters, how can the operation of the filters be best described?",
+   "viDuNghia": "Khi request vào ứng dụng web Java có filter, hoạt động của các filter được mô tả tốt nhất thế nào?"
+  },
+  {
+   "chu": "ServletContextListener",
+   "doc": "/ˈsɜːrvlət ˈkɑːntekst ˈlɪsənər/",
+   "nghia": "listener được gọi khi ứng dụng web khởi động (contextInitialized) và khi tắt (contextDestroyed)",
+   "nhom": "Filter, listener và MVC",
+   "viDu": "When is the contextInitialized() method of a ServletContextListener invoked?",
+   "viDuNghia": "contextInitialized() của ServletContextListener được gọi khi nào? (Đáp án: khi ứng dụng web được triển khai hoặc khởi động.)"
+  },
+  {
+   "chu": "Java Database Connectivity",
+   "nghia": "JDBC: thư viện chuẩn để chương trình Java kết nối và truy vấn CSDL",
+   "nhom": "JDBC và dữ liệu",
+   "viDu": "Which type of JDBC driver provides the highest level of performance and is platform-independent?",
+   "viDuNghia": "Loại JDBC driver nào cho hiệu năng cao nhất và không phụ thuộc nền tảng?"
+  },
+  {
+   "chu": "JDBC driver",
+   "doc": "/ˌdʒeɪ diː biː ˈsiː ˈdraɪvər/",
+   "nghia": "trình điều khiển JDBC: thư viện của từng hãng CSDL giúp Java nói chuyện được với CSDL đó",
+   "nhom": "JDBC và dữ liệu",
+   "viDu": "What does the \"thin\" in \"Thin Driver\" refer to in JDBC terminology?",
+   "viDuNghia": "Chữ \"thin\" trong \"Thin Driver\" của JDBC nghĩa là gì?"
+  },
+  {
+   "chu": "database connection",
+   "doc": "/ˈdeɪtəbeɪs kəˈnekʃn/",
+   "nghia": "kết nối CSDL: đường liên lạc mở giữa ứng dụng và CSDL, dùng xong phải đóng",
+   "nhom": "JDBC và dữ liệu",
+   "viDu": "What is a connection pool in the context of database connections in web applications?",
+   "viDuNghia": "Connection pool trong ngữ cảnh kết nối cơ sở dữ liệu là gì?"
+  },
+  {
+   "chu": "connection pool",
+   "doc": "/kəˈnekʃn puːl/",
+   "nghia": "bể kết nối: giữ sẵn một số kết nối để dùng lại, đỡ tốn thời gian mở mới",
+   "nhom": "JDBC và dữ liệu",
+   "viDu": "What is a connection pool in the context of database connections in web applications?",
+   "viDuNghia": "Connection pool trong ngữ cảnh kết nối cơ sở dữ liệu là gì?"
+  },
+  {
+   "chu": "prepared statement",
+   "doc": "/prɪˈperd ˈsteɪtmənt/",
+   "nghia": "câu lệnh chuẩn bị sẵn (PreparedStatement): SQL có tham số ?, chạy nhanh hơn và chống SQL injection",
+   "nhom": "JDBC và dữ liệu",
+   "viDu": "Which symbol represents placeholders in a SQL query within a PreparedStatement?",
+   "viDuNghia": "Ký hiệu nào đại diện cho placeholder trong câu SQL của PreparedStatement?"
+  },
+  {
+   "chu": "data source",
+   "doc": "/ˈdeɪtə sɔːrs/",
+   "nghia": "nguồn dữ liệu (DataSource): đối tượng cấp kết nối CSDL, thường đi cùng bể kết nối",
+   "nhom": "JDBC và dữ liệu",
+   "viDu": "What is the purpose of a DataSource object in JDBC?",
+   "viDuNghia": "Mục đích của đối tượng DataSource trong JDBC là gì?"
+  },
+  {
+   "chu": "Data Access Object",
+   "nghia": "đối tượng truy cập dữ liệu (DAO): lớp gom mã truy vấn CSDL của một bảng / thực thể · (Android Room) interface @Dao chứa các phương thức truy vấn",
+   "nhom": "JDBC và dữ liệu",
+   "viDu": "The servlet calls a Data Access Object to read the products from the database.",
+   "viDuNghia": "Servlet gọi một đối tượng truy cập dữ liệu để đọc các sản phẩm từ CSDL."
+  },
+  {
+   "chu": "Data Transfer Object",
+   "nghia": "đối tượng chuyển dữ liệu (DTO): lớp chỉ chứa dữ liệu để chuyển giữa các tầng",
+   "nhom": "JDBC và dữ liệu",
+   "viDu": "A Data Transfer Object carries data between the DAO and the JSP page.",
+   "viDuNghia": "Đối tượng chuyển dữ liệu mang dữ liệu giữa DAO và trang JSP."
+  },
+  {
+   "chu": "release resources",
+   "doc": "/rɪˈliːs ˈriːsɔːrsɪz/",
+   "nghia": "giải phóng tài nguyên: đóng kết nối, statement, tệp khi dùng xong",
+   "nhom": "JDBC và dữ liệu",
+   "viDu": "Always release resources by closing the connection in a finally block.",
+   "viDuNghia": "Luôn giải phóng tài nguyên bằng cách đóng kết nối trong khối finally."
+  },
+  {
+   "chu": "ResultSet",
+   "doc": "/rɪˈzʌlt set/",
+   "nghia": "đối tượng JDBC chứa các dòng kết quả của câu SELECT; duyệt bằng next(), đọc cột bằng getString / getInt",
+   "nhom": "JDBC và dữ liệu",
+   "viDu": "Which JDBC method returns a ResultSet?",
+   "viDuNghia": "Phương thức JDBC nào trả về một ResultSet? (Đáp án: executeQuery().)"
+  },
+  {
+   "chu": "sensitive data",
+   "doc": "/ˈsensətɪv ˈdeɪtə/",
+   "nghia": "dữ liệu nhạy cảm (mật khẩu, số thẻ…): phải gửi bằng POST và HTTPS, không để trên URL",
+   "nhom": "Bảo mật và xử lý lỗi",
+   "viDu": "How does the GET method handle sensitive data compared to the POST method?",
+   "viDuNghia": "Phương thức GET xử lý dữ liệu nhạy cảm khác POST như thế nào?"
+  },
+  {
+   "chu": "secure",
+   "doc": "/sɪˈkjʊr/",
+   "nghia": "an toàn, bảo mật",
+   "nhom": "Bảo mật và xử lý lỗi",
+   "viDu": "Which HTTP method is more secure when transferring sensitive data like passwords?",
+   "viDuNghia": "Phương thức HTTP nào an toàn hơn khi truyền dữ liệu nhạy cảm như mật khẩu? (Đáp án: POST.)"
+  },
+  {
+   "chu": "error page",
+   "doc": "/ˈerər peɪdʒ/",
+   "nghia": "trang lỗi: trang hiện ra khi có lỗi hoặc ngoại lệ (khai bằng errorPage hoặc error-page trong web.xml)",
+   "nhom": "Bảo mật và xử lý lỗi",
+   "viDu": "In a JSP error page, how can you access the exception object thrown by the server?",
+   "viDuNghia": "Trong trang lỗi JSP, làm sao truy cập đối tượng exception do server ném ra?"
+  },
+  {
+   "chu": "session attribute",
+   "doc": "/ˈseʃn ˈætrɪbjuːt/",
+   "nghia": "thuộc tính phiên: đối tượng lưu trong session bằng session.setAttribute, sống qua nhiều request",
+   "nhom": "Thuật ngữ bổ sung",
+   "viDu": "How do you retrieve the value of a session attribute named 'userRole' in Java Servlets?",
+   "viDuNghia": "Làm sao lấy giá trị session attribute 'userRole' trong Java Servlet?"
+  },
+  {
+   "chu": "session ID",
+   "doc": "/ˈseʃn ˌaɪ ˈdiː/",
+   "nghia": "mã phiên: chuỗi định danh duy nhất của một phiên, thường nằm trong cookie JSESSIONID",
+   "nhom": "Thuật ngữ bổ sung",
+   "viDu": "1) URL rewriting may be used when a browser has cookies disabled. 2) In URL encoding the session ID is included as part of the URL. Which is correct?",
+   "viDuNghia": "1) URL rewriting dùng được khi trình duyệt tắt cookie. 2) Khi mã hoá URL, mã phiên (session ID) được đưa vào URL. Phương án nào đúng?"
+  },
+  {
+   "chu": "persistent cookie",
+   "doc": "/pərˈsɪstənt ˈkʊki/",
+   "nghia": "cookie lâu dài: có hạn sống (setMaxAge) nên vẫn còn sau khi đóng trình duyệt",
+   "nhom": "Thuật ngữ bổ sung",
+   "viDu": "A persistent cookie stays on the client after the browser is closed.",
+   "viDuNghia": "Cookie lâu dài vẫn nằm trên máy client sau khi đóng trình duyệt."
+  },
+  {
+   "chu": "request scope",
+   "doc": "/rɪˈkwest skoʊp/",
+   "nghia": "phạm vi request: dữ liệu chỉ sống trong một request (kể cả khi forward)",
+   "nhom": "Thuật ngữ bổ sung",
+   "viDu": "An attribute in request scope is lost after the response is sent.",
+   "viDuNghia": "Thuộc tính ở phạm vi request sẽ mất sau khi response được gửi đi."
+  },
+  {
+   "chu": "session scope",
+   "doc": "/ˈseʃn skoʊp/",
+   "nghia": "phạm vi phiên: dữ liệu sống suốt phiên làm việc của MỘT người dùng",
+   "nhom": "Thuật ngữ bổ sung",
+   "viDu": "When accessing ${sessionScope.cart.items[0]}, what happens?",
+   "viDuNghia": "Khi truy cập ${sessionScope.cart.items[0]}, điều gì xảy ra?"
+  },
+  {
+   "chu": "getter method",
+   "doc": "/ˈɡetər ˈmeθəd/",
+   "nghia": "phương thức lấy giá trị thuộc tính (getName, getPrice…)",
+   "nhom": "Thuật ngữ bổ sung",
+   "viDu": "EL reads a bean property by calling its getter method.",
+   "viDuNghia": "EL đọc một thuộc tính của bean bằng cách gọi phương thức getter."
+  },
+  {
+   "chu": "setter method",
+   "doc": "/ˈsetər ˈmeθəd/",
+   "nghia": "phương thức gán giá trị thuộc tính (setName, setPrice…)",
+   "nhom": "Thuật ngữ bổ sung",
+   "viDu": "jsp:setProperty calls the setter method of the bean.",
+   "viDuNghia": "jsp:setProperty gọi phương thức setter của bean."
+  },
+  {
+   "chu": "JSP declaration",
+   "doc": "/ˌdʒeɪ es ˈpiː ˌdekləˈreɪʃn/",
+   "nghia": "khai báo JSP: khai biến / phương thức ở mức lớp giữa cặp <%! và %>",
+   "nhom": "Thuật ngữ bổ sung",
+   "viDu": "A JSP declaration defines a variable or method at class level.",
+   "viDuNghia": "Khai báo JSP định nghĩa một biến hoặc phương thức ở mức lớp."
+  },
+  {
+   "chu": "JSP expression",
+   "doc": "/ˌdʒeɪ es ˈpiː ɪkˈspreʃn/",
+   "nghia": "biểu thức JSP: in thẳng giá trị ra trang, viết giữa cặp <%= và %>",
+   "nhom": "Thuật ngữ bổ sung",
+   "viDu": "A JSP expression prints the value of a Java expression to the page.",
+   "viDuNghia": "Biểu thức JSP in giá trị của một biểu thức Java ra trang."
+  },
+  {
+   "chu": "translation phase",
+   "doc": "/trænzˈleɪʃn feɪz/",
+   "nghia": "pha dịch: lúc máy chủ chuyển trang JSP thành mã servlet (trước khi biên dịch và chạy)",
+   "nhom": "Thuật ngữ bổ sung",
+   "viDu": "What is the purpose of the Translation phase in the JSP life cycle?",
+   "viDuNghia": "Mục đích của giai đoạn Translation trong vòng đời JSP là gì?"
+  },
+  {
+   "chu": "multi-tier",
+   "doc": "/ˌmʌlti ˈtɪr/",
+   "nghia": "nhiều tầng: kiến trúc chia thành các tầng trình bày, nghiệp vụ, dữ liệu",
+   "nhom": "Thuật ngữ bổ sung",
+   "viDu": "Which layer in a multi-tier architecture is responsible for implementing business rules and logic?",
+   "viDuNghia": "Tầng nào trong kiến trúc đa tầng chịu trách nhiệm triển khai quy tắc và logic nghiệp vụ?"
+  },
+  {
+   "chu": "callable statement",
+   "doc": "/ˈkɔːləbl ˈsteɪtmənt/",
+   "nghia": "CallableStatement: đối tượng JDBC dùng để gọi stored procedure",
+   "nhom": "Thuật ngữ bổ sung",
+   "viDu": "A callable statement is used to call a stored procedure from Java.",
+   "viDuNghia": "CallableStatement dùng để gọi stored procedure từ Java."
+  },
+  {
+   "chu": "auto-commit",
+   "doc": "/ˌɔːtoʊ kəˈmɪt/",
+   "nghia": "tự động commit: mặc định JDBC commit sau mỗi câu lệnh; muốn gom giao tác phải tắt đi",
+   "nhom": "Thuật ngữ bổ sung",
+   "viDu": "In JDBC, what is the effect of calling setAutoCommit(false) on a Connection object?",
+   "viDuNghia": "Trong JDBC, gọi setAutoCommit(false) trên Connection có tác dụng gì?"
+  },
+  {
+   "chu": "security constraint",
+   "doc": "/sɪˈkjʊrəti kənˈstreɪnt/",
+   "nghia": "ràng buộc bảo mật: khai trong web.xml để chỉ vai trò nào được vào URL nào",
+   "nhom": "Thuật ngữ bổ sung",
+   "viDu": "A security constraint in web.xml restricts access to some URL patterns.",
+   "viDuNghia": "Ràng buộc bảo mật trong web.xml giới hạn quyền truy cập một số mẫu URL."
+  },
+  {
+   "chu": "user role",
+   "doc": "/ˈjuːzər roʊl/",
+   "nghia": "vai trò người dùng (admin, user…): quyết định được phép làm gì",
+   "nhom": "Thuật ngữ bổ sung",
+   "viDu": "What are the implications of maintaining user roles and permissions within the session object?",
+   "viDuNghia": "Việc lưu vai trò/quyền người dùng trong session object có hệ quả gì?"
+  },
+  {
+   "chu": "cross-site scripting",
+   "doc": "/ˌkrɔːs saɪt ˈskrɪptɪŋ/",
+   "nghia": "tấn công XSS: chèn mã JavaScript độc vào trang để chạy trên trình duyệt người khác",
+   "nhom": "Thuật ngữ bổ sung",
+   "viDu": "Escaping user input helps prevent cross-site scripting.",
+   "viDuNghia": "Mã hoá ký tự đặc biệt trong dữ liệu nhập giúp ngăn tấn công XSS."
+  },
+  {
+   "chu": "session hijacking",
+   "doc": "/ˈseʃn ˈhaɪdʒækɪŋ/",
+   "nghia": "chiếm phiên: kẻ xấu lấy được session ID rồi giả làm người dùng",
+   "nhom": "Thuật ngữ bổ sung",
+   "viDu": "Propose enhancements to ensure secure session management and prevent session hijacking.",
+   "viDuNghia": "Đề xuất cải tiến để đảm bảo quản lý session an toàn và ngăn chiếm đoạt session."
+  },
+  {
+   "chu": "form data",
+   "doc": "/fɔːrm ˈdeɪtə/",
+   "nghia": "dữ liệu form: các giá trị người dùng nhập và gửi lên",
+   "nhom": "Thuật ngữ bổ sung",
+   "viDu": "GET requests and POST requests can both be used to send form data to a web server.",
+   "viDuNghia": "Request GET và POST đều dùng gửi dữ liệu form đến web server."
+  },
+  {
+   "chu": "retain",
+   "doc": "/rɪˈteɪn/",
+   "nghia": "giữ lại (dữ liệu, trạng thái) qua các request",
+   "nhom": "Thuật ngữ bổ sung",
+   "viDu": "A session retains user data across multiple requests.",
+   "viDuNghia": "Session giữ lại dữ liệu người dùng qua nhiều request."
+  }
+ ]
+}

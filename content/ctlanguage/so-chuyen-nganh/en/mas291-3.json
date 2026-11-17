@@ -1,0 +1,584 @@
+{
+ "ma": "mas291-3",
+ "nn": "en",
+ "ten": "MAS291 · 3. Kiểm định giả thuyết & hồi quy",
+ "moTa": "Xác suất thống kê (MAS291), bộ 3: giả thuyết không - đối thuyết, thống kê kiểm định, P-value, miền bác bỏ, sai lầm loại I - II, kiểm định một mẫu và hai mẫu, hồi quy tuyến tính đơn, tương quan, bảng ANOVA và cách đọc bảng kết quả Excel. Từ lấy từ đề FE thật; ví dụ là câu hỏi thật trong đề.",
+ "bieuTuong": "chart.xyaxis.line",
+ "thuTu": -957,
+ "tu": [
+  {
+   "chu": "hypothesis testing",
+   "doc": "/haɪˈpɑːθəsɪs ˈtestɪŋ/",
+   "nghia": "kiểm định giả thuyết (dùng dữ liệu mẫu để quyết định bác bỏ hay không bác bỏ H0)",
+   "nhom": "Giả thuyết và kiểm định",
+   "viDu": "In hypothesis testing, the null hypothesis should contain the equality sign.",
+   "viDuNghia": "Trong kiểm định giả thuyết, giả thuyết không (null hypothesis) phải chứa dấu bằng."
+  },
+  {
+   "chu": "null hypothesis",
+   "doc": "/nʌl haɪˈpɑːθəsɪs/",
+   "nghia": "giả thuyết không H0 (giả thuyết ban đầu, thường có dấu =)",
+   "nhom": "Giả thuyết và kiểm định",
+   "viDu": "In testing of hypothesis, which of the following would be strong evidence against the null hypothesis?",
+   "viDuNghia": "Trong kiểm định giả thuyết, điều nào sau đây là bằng chứng MẠNH chống lại giả thuyết không?"
+  },
+  {
+   "chu": "alternative hypothesis",
+   "doc": "/ɔːlˈtɜːrnətɪv haɪˈpɑːθəsɪs/",
+   "nghia": "đối thuyết, giả thuyết thay thế H1 (điều muốn chứng minh: khác, lớn hơn hoặc nhỏ hơn)",
+   "nhom": "Giả thuyết và kiểm định",
+   "viDu": "State the null and alternative hypotheses used to demonstrate that the mean pull-off force is below 25 newtons.",
+   "viDuNghia": "Hãy nêu giả thuyết không và giả thuyết đối dùng để chứng minh rằng lực kéo rời trung bình NHỎ HƠN 25 newton."
+  },
+  {
+   "chu": "test statistic",
+   "doc": "/test stəˈtɪstɪk/",
+   "nghia": "thống kê kiểm định (giá trị z0, t0 tính từ mẫu để so với giá trị tới hạn)",
+   "nhom": "Giả thuyết và kiểm định",
+   "viDu": "A test is conducted for H₀: μ= 50 vs. H₁: μ> 50. The test statistic is 2.46. The p-value is __________.",
+   "viDuNghia": "Tiến hành kiểm định H₀: μ= 50 đối với H₁: μ> 50. Giá trị thống kê kiểm định là 2,46. Giá trị p là __________."
+  },
+  {
+   "chu": "significance level",
+   "doc": "/sɪɡˈnɪfɪkəns ˈlevl/",
+   "nghia": "mức ý nghĩa α (xác suất bác bỏ H0 khi H0 đúng, thường 0,05 hoặc 0,01)",
+   "nhom": "Giả thuyết và kiểm định",
+   "viDu": "Given H₀: μ= 25, H₁: μ≠25, and P-value = 0.041. Do you reject or fail to reject H₀ at the 0.01 level of significance?",
+   "viDuNghia": "Cho H₀: μ= 25, H₁: μ≠25 và P-value = 0.041. Bạn bác bỏ hay không bác bỏ H₀ ở mức ý nghĩa 0.01?"
+  },
+  {
+   "chu": "alpha",
+   "doc": "/ˈælfə/",
+   "nghia": "chữ Hy Lạp α — ký hiệu mức ý nghĩa, xác suất sai lầm loại I",
+   "nhom": "Giả thuyết và kiểm định",
+   "viDu": "What conclusions can the product developer draw about the effectiveness of the new ingredient, using α= 0.05?",
+   "viDuNghia": "Nhà phát triển sản phẩm có thể kết luận gì về hiệu quả của phụ gia mới, với α= 0.05?"
+  },
+  {
+   "chu": "P-value",
+   "doc": "/ˈpiː ˌvæljuː/",
+   "nghia": "giá trị P (mức ý nghĩa nhỏ nhất dẫn tới bác bỏ H0; P-value nhỏ hơn α thì bác bỏ H0)",
+   "nhom": "Giả thuyết và kiểm định",
+   "viDu": "A test is conducted for H₀: μ= 50 vs. H₁: μ> 50. The test statistic is 2.46. The p-value is __________",
+   "viDuNghia": "Kiểm định H₀: μ= 50 với H₁: μ> 50. Thống kê kiểm định bằng 2,46. Giá trị p (p-value) là __________"
+  },
+  {
+   "chu": "critical value",
+   "doc": "/ˈkrɪtɪkl ˈvæljuː/",
+   "nghia": "giá trị tới hạn (ngưỡng so sánh với thống kê kiểm định, ví dụ 1,96)",
+   "nhom": "Giả thuyết và kiểm định",
+   "viDu": "Which of the following statements is true about the critical value of the z-test?",
+   "viDuNghia": "Phát biểu nào sau đây đúng về giá trị tới hạn của kiểm định z?"
+  },
+  {
+   "chu": "rejection region",
+   "doc": "/rɪˈdʒekʃn ˈriːdʒən/",
+   "nghia": "miền bác bỏ (thống kê kiểm định rơi vào đây thì bác bỏ H0)",
+   "nhom": "Giả thuyết và kiểm định",
+   "viDu": "Specify the form of the rejection region assuming that the sample size will be sufficient to guarantee the approximate normality of the sampling distribution of x̄.",
+   "viDuNghia": "Hãy nêu dạng của miền bác bỏ, giả sử cỡ mẫu đủ lớn để đảm bảo phân phối mẫu của x̄ xấp xỉ chuẩn."
+  },
+  {
+   "chu": "reject the null hypothesis",
+   "nghia": "bác bỏ giả thuyết không H0",
+   "nhom": "Giả thuyết và kiểm định",
+   "viDu": "At a significance level of 0.05, can we reject the null hypothesis that the mean penguin weight does not differ from last year?",
+   "viDuNghia": "Ở mức ý nghĩa 0,05, ta có bác bỏ được giả thuyết không rằng khối lượng trung bình không khác năm ngoái hay không?"
+  },
+  {
+   "chu": "acceptance region",
+   "doc": "/əkˈseptəns ˈriːdʒən/",
+   "nghia": "miền chấp nhận (thống kê kiểm định rơi vào đây thì không bác bỏ H0)",
+   "nhom": "Giả thuyết và kiểm định",
+   "viDu": "If the acceptance region is defined as 98.5 ≤x̄ ≤101.5, find the type I error probability α.",
+   "viDuNghia": "Nếu miền chấp nhận được định nghĩa là 98,5 ≤x̄ ≤101,5, hãy tìm xác suất sai lầm loại I α."
+  },
+  {
+   "chu": "fail to reject",
+   "doc": "/feɪl tə rɪˈdʒekt/",
+   "nghia": "không bác bỏ H0, chưa đủ bằng chứng để bác bỏ (không có nghĩa là chứng minh H0 đúng)",
+   "nhom": "Giả thuyết và kiểm định",
+   "viDu": "Given H₀: μ= 25, H₁: μ≠25, and P-value = 0.041. Do you reject or fail to reject H₀ at the 0.01 level of significance?",
+   "viDuNghia": "Cho H₀: μ= 25, H₁: μ≠25 và P-value = 0.041. Bạn bác bỏ hay không bác bỏ H₀ ở mức ý nghĩa 0.01?"
+  },
+  {
+   "chu": "type I error",
+   "doc": "/taɪp wʌn ˈerər/",
+   "nghia": "sai lầm loại I (bác bỏ H0 trong khi H0 đúng; xác suất là α)",
+   "nhom": "Giả thuyết và kiểm định",
+   "viDu": "The Type I error is believing that the percent of EVC students who attended is ____________",
+   "viDuNghia": "Sai lầm loại I ở đây là tin rằng tỉ lệ phần trăm sinh viên EVC đã tham dự là ____________"
+  },
+  {
+   "chu": "type II error",
+   "doc": "/taɪp tuː ˈerər/",
+   "nghia": "sai lầm loại II (không bác bỏ H0 trong khi H0 sai; xác suất là β)",
+   "nhom": "Giả thuyết và kiểm định",
+   "viDu": "Which of the following statements is true regarding the effect of changing the true value of the population mean on the probability of Type II error?",
+   "viDuNghia": "Khẳng định nào sau đây đúng về ảnh hưởng của việc thay đổi giá trị thực của trung bình tổng thể lên xác suất mắc sai lầm loại II?"
+  },
+  {
+   "chu": "power of a test",
+   "nghia": "lực lượng của kiểm định, bằng 1 - β (xác suất bác bỏ đúng một H0 sai)",
+   "nhom": "Giả thuyết và kiểm định",
+   "viDu": "The researcher wants to ensure the test has a power of at least 0.80 (80%) with a significance level of α= 0.05.",
+   "viDuNghia": "Nhà nghiên cứu muốn bảo đảm kiểm định có lực (power) ít nhất 0,80 (80%) với mức ý nghĩa α= 0,05."
+  },
+  {
+   "chu": "null and alternative hypotheses",
+   "nghia": "cặp giả thuyết không H0 và đối thuyết H1 (state the null and alternative hypotheses = phát biểu H0 và H1)",
+   "nhom": "Giả thuyết và kiểm định",
+   "viDu": "State the null and alternative hypotheses and find the value of the test statistic z₀.",
+   "viDuNghia": "Hãy nêu giả thuyết không và giả thuyết đối, và tìm giá trị thống kê kiểm định z₀."
+  },
+  {
+   "chu": "normality",
+   "doc": "/nɔːrˈmæləti/",
+   "nghia": "tính chuẩn (giả thiết dữ liệu tuân theo phân phối chuẩn)",
+   "nhom": "Giả thuyết và kiểm định",
+   "viDu": "Specify the form of the rejection region assuming that the sample size will be sufficient to guarantee the approximate normality of the sampling distribution of x̄.",
+   "viDuNghia": "Hãy nêu dạng của miền bác bỏ, giả sử cỡ mẫu đủ lớn để đảm bảo phân phối mẫu của x̄ xấp xỉ chuẩn."
+  },
+  {
+   "chu": "true value",
+   "doc": "/truː ˈvæljuː/",
+   "nghia": "giá trị thật (của tham số tổng thể, thường chưa biết)",
+   "nhom": "Giả thuyết và kiểm định",
+   "viDu": "Suppose we wish to test H₀: μ= 47 versus H₁: μ> 47. What will result if we conclude that the mean is greater than 47 when its true value is really 52?",
+   "viDuNghia": "Giả sử ta kiểm định H₀: μ= 47 đối với H₁: μ> 47. Điều gì xảy ra nếu ta kết luận trung bình lớn hơn 47 trong khi giá trị thật của nó đúng là 52?"
+  },
+  {
+   "chu": "claim",
+   "doc": "/kleɪm/",
+   "nghia": "tuyên bố, khẳng định (cần kiểm định); test the claim = kiểm định khẳng định đó",
+   "nhom": "Giả thuyết và kiểm định",
+   "viDu": "A researcher would like to test the claim that supplier 1 provides gears with higher mean impact strength.",
+   "viDuNghia": "Một nhà nghiên cứu muốn kiểm định khẳng định rằng nhà cung cấp 1 cho bánh răng có độ bền va đập trung bình cao hơn."
+  },
+  {
+   "chu": "sufficient evidence",
+   "doc": "/səˈfɪʃnt ˈevɪdəns/",
+   "nghia": "đủ bằng chứng (để kết luận, để bác bỏ H0)",
+   "nhom": "Giả thuyết và kiểm định",
+   "viDu": "We want to ask whether there is sufficient evidence of a difference in the test results.",
+   "viDuNghia": "Ta muốn hỏi liệu có đủ bằng chứng về sự khác biệt trong kết quả thi hay không."
+  },
+  {
+   "chu": "significantly",
+   "doc": "/sɪɡˈnɪfɪkəntli/",
+   "nghia": "một cách có ý nghĩa thống kê (differ significantly = khác nhau có ý nghĩa)",
+   "nhom": "Giả thuyết và kiểm định",
+   "viDu": "The mean lifetimes of the two brands differ significantly at the 0.05 level.",
+   "viDuNghia": "Tuổi thọ trung bình của hai nhãn hiệu khác nhau có ý nghĩa thống kê ở mức 0,05."
+  },
+  {
+   "chu": "in favor of",
+   "doc": "/ɪn ˈfeɪvər əv/",
+   "nghia": "nghiêng về, ủng hộ (reject H0 in favor of H1 = bác bỏ H0 để chấp nhận H1)",
+   "nhom": "Giả thuyết và kiểm định",
+   "viDu": "A researcher found that 70 of the 90 people randomly selected were in favor of reducing the sales tax.",
+   "viDuNghia": "Một nhà nghiên cứu thấy rằng 70 trong số 90 người được chọn ngẫu nhiên ủng hộ việc giảm thuế bán hàng."
+  },
+  {
+   "chu": "versus",
+   "doc": "/ˈvɜːrsəs/",
+   "nghia": "đối với, so với (H0: μ = 5 versus H1: μ ≠ 5); viết tắt vs",
+   "nhom": "Giả thuyết và kiểm định",
+   "viDu": "Give a conclusion about the two hypotheses H₀: β₁ = 1.5 versus H₁: β₁ ≠1.5 with a 5% level of significance.",
+   "viDuNghia": "Hãy kết luận về hai giả thuyết H₀: β₁ = 1.5 đối với H₁: β₁ ≠1.5 ở mức ý nghĩa 5%."
+  },
+  {
+   "chu": "hypothesis",
+   "doc": "/haɪˈpɑːθəsɪs/",
+   "nghia": "giả thuyết (thống kê) – null hypothesis H0 và giả thuyết đối H1 trong kiểm định. (MAD101: giả thiết p của p → q)",
+   "nhom": "Giả thuyết và kiểm định",
+   "viDu": "In testing of hypothesis, which of the following would be strong evidence against the null hypothesis?",
+   "viDuNghia": "Trong kiểm định giả thuyết, điều nào sau đây là bằng chứng MẠNH chống lại giả thuyết không?"
+  },
+  {
+   "chu": "significance",
+   "doc": "/sɪɡˈnɪfɪkəns/",
+   "nghia": "ý nghĩa (thống kê): statistically significant = có ý nghĩa thống kê; level of significance = mức ý nghĩa α (thường 0.05)",
+   "nhom": "Giả thuyết và kiểm định",
+   "viDu": "If a study finds a statistically significant result with a P-value of 0.03, what is the likelihood of committing a Type I error if the significance level is set at 0.05?",
+   "viDuNghia": "Nếu một nghiên cứu cho kết quả có ý nghĩa thống kê với giá trị P bằng 0,03, khả năng mắc sai lầm loại I là bao nhiêu nếu mức ý nghĩa được đặt ở 0,05?"
+  },
+  {
+   "chu": "two-tailed test",
+   "doc": "/ˌtuː ˈteɪld test/",
+   "nghia": "kiểm định hai phía (H1 có dấu ≠; miền bác bỏ ở cả hai đuôi)",
+   "nhom": "Loại kiểm định",
+   "viDu": "Find the critical value for a two-tailed test H₁: μ≠10, α= 0.01, n = 30.",
+   "viDuNghia": "Tìm giá trị tới hạn cho kiểm định hai phía H₁: μ≠10, α= 0,01, n = 30."
+  },
+  {
+   "chu": "one-tailed test",
+   "doc": "/ˌwʌn ˈteɪld test/",
+   "nghia": "kiểm định một phía (H1 có dấu > hoặc <; miền bác bỏ ở một đuôi)",
+   "nhom": "Loại kiểm định",
+   "viDu": "A researcher conducts a one-tailed z-test to determine if the average weight of a new species of bird is greater than 200 grams.",
+   "viDuNghia": "Một nhà nghiên cứu thực hiện kiểm định z MỘT PHÍA để xác định xem cân nặng trung bình của một loài chim mới có lớn hơn 200 gam hay không."
+  },
+  {
+   "chu": "upper tail",
+   "doc": "/ˈʌpər teɪl/",
+   "nghia": "đuôi trên, đuôi phải của phân phối (upper-tail test = kiểm định phía phải)",
+   "nhom": "Loại kiểm định",
+   "viDu": "From the picture of the Standard Normal Distribution below, the shaded upper tail satisfies prob(Z ≥1.64485) = 0.05000.",
+   "viDuNghia": "Từ hình vẽ phân phối chuẩn tắc dưới đây, đuôi phải được tô đậm thoả prob(Z ≥1.64485) = 0.05000."
+  },
+  {
+   "chu": "z-test",
+   "doc": "/ˈziː test/",
+   "nghia": "kiểm định z (dùng phân phối chuẩn tắc; khi biết σ hoặc mẫu lớn)",
+   "nhom": "Loại kiểm định",
+   "viDu": "What is the value of the Z test statistic? (round to 4 decimal places)",
+   "viDuNghia": "Giá trị của thống kê kiểm định Z là bao nhiêu? (làm tròn 4 chữ số thập phân)"
+  },
+  {
+   "chu": "t-test",
+   "doc": "/ˈtiː test/",
+   "nghia": "kiểm định t (dùng phân phối t; khi không biết σ)",
+   "nhom": "Loại kiểm định",
+   "viDu": "After conducting a one-sample t-test, the researcher calculates a 95% confidence interval for the average weight of the dogs to be (10 kg, 12 kg).",
+   "viDuNghia": "Sau khi thực hiện kiểm định t một mẫu, nhà nghiên cứu tính được khoảng tin cậy 95% cho cân nặng trung bình của đàn chó là (10 kg, 12 kg)."
+  },
+  {
+   "chu": "two-sample",
+   "doc": "/ˌtuː ˈsæmpl/",
+   "nghia": "hai mẫu (two-sample t-test = kiểm định t so sánh trung bình hai tổng thể)",
+   "nhom": "Loại kiểm định",
+   "viDu": "Two samples are randomly selected and come from populations that are normal with the same variance.",
+   "viDuNghia": "Hai mẫu được chọn ngẫu nhiên từ các tổng thể chuẩn có cùng phương sai."
+  },
+  {
+   "chu": "mean difference",
+   "doc": "/miːn ˈdɪfrəns/",
+   "nghia": "trung bình của các hiệu (đại lượng kiểm định trong kiểm định t theo cặp)",
+   "nhom": "Loại kiểm định",
+   "viDu": "True or False: In the paired t-test for the mean difference, the sample sizes must be equal in the two groups.",
+   "viDuNghia": "Đúng hay Sai: Trong kiểm định t theo cặp cho trung bình của các hiệu, cỡ mẫu của hai nhóm phải bằng nhau."
+  },
+  {
+   "chu": "paired t-test",
+   "doc": "/perd ˈtiː test/",
+   "nghia": "kiểm định t theo cặp (hai phép đo trên cùng một đối tượng)",
+   "nhom": "Loại kiểm định",
+   "viDu": "True or False: In the paired t-test for the mean difference, the sample sizes must be equal in the two groups.",
+   "viDuNghia": "Đúng hay Sai: Trong kiểm định t theo cặp (paired t-test) cho hiệu trung bình, cỡ mẫu của hai nhóm phải bằng nhau."
+  },
+  {
+   "chu": "pooled variance",
+   "doc": "/puːld ˈveriəns/",
+   "nghia": "phương sai gộp (ước lượng chung khi giả sử hai tổng thể có phương sai bằng nhau)",
+   "nhom": "Loại kiểm định",
+   "viDu": "Suppose that x̄₁ = 92.255, s₁ = 2.39, n₁ = 8, and x̄₂ = 92.733, s₂ = 2.98, n₂ = 8. Compute the pooled variance. (to 3 decimal places)",
+   "viDuNghia": "Giả sử x̄₁ = 92.255, s₁ = 2.39, n₁ = 8, và x̄₂ = 92.733, s₂ = 2.98, n₂ = 8. Hãy tính phương sai gộp. (đến 3 chữ số thập phân)"
+  },
+  {
+   "chu": "equal variances",
+   "doc": "/ˈiːkwəl ˈveriənsɪz/",
+   "nghia": "phương sai bằng nhau (giả thiết của kiểm định t gộp)",
+   "nhom": "Loại kiểm định",
+   "viDu": "Two samples each of size 25 are taken from independent populations assumed to be normally distributed with equal variances.",
+   "viDuNghia": "Hai mẫu, mỗi mẫu cỡ 25, được lấy từ hai tổng thể độc lập được giả định phân phối chuẩn với phương sai bằng nhau."
+  },
+  {
+   "chu": "difference in means",
+   "nghia": "hiệu hai trung bình (μ1 - μ2), đại lượng cần kiểm định khi so sánh hai tổng thể",
+   "nhom": "Loại kiểm định",
+   "viDu": "Construct a 95% two-sided confidence interval for the difference in mean fill volumes of two machines.",
+   "viDuNghia": "Hãy xây dựng khoảng tin cậy 95% hai phía cho hiệu thể tích rót trung bình của hai máy."
+  },
+  {
+   "chu": "simple linear regression",
+   "nghia": "hồi quy tuyến tính đơn: mô hình y = β0 + β1·x + ε với một biến giải thích",
+   "nhom": "Hồi quy tuyến tính",
+   "viDu": "In a simple linear regression model the slope coefficient measures ____________.",
+   "viDuNghia": "Trong mô hình hồi quy tuyến tính đơn, hệ số góc đo lường ____________."
+  },
+  {
+   "chu": "regression line",
+   "doc": "/rɪˈɡreʃn laɪn/",
+   "nghia": "đường hồi quy (đường thẳng khớp nhất với các điểm dữ liệu)",
+   "nhom": "Hồi quy tuyến tính",
+   "viDu": "For the data in the table below, find the equation of the regression line ŷ = a + bx of y on x. x 0 1 2 1 y 0 0 2 2",
+   "viDuNghia": "Với dữ liệu trong bảng dưới đây, hãy tìm phương trình đường hồi quy ŷ = a + bx của y theo x. x 0 1 2 1 y 0 0 2 2"
+  },
+  {
+   "chu": "regression model",
+   "doc": "/rɪˈɡreʃn ˈmɑːdl/",
+   "nghia": "mô hình hồi quy",
+   "nhom": "Hồi quy tuyến tính",
+   "viDu": "Which distribution will we use when testing hypotheses about the slope and intercept of the regression model?",
+   "viDuNghia": "Ta dùng phân phối nào khi kiểm định giả thuyết về hệ số góc và hệ số chặn của mô hình hồi quy?"
+  },
+  {
+   "chu": "regression analysis",
+   "doc": "/rɪˈɡreʃn əˈnæləsɪs/",
+   "nghia": "phân tích hồi quy (tìm quan hệ giữa biến phụ thuộc y và biến độc lập x)",
+   "nhom": "Hồi quy tuyến tính",
+   "viDu": "In regression analysis, if the independent variable is measured in kilometer, the dependent variable ________.",
+   "viDuNghia": "Trong phân tích hồi quy, nếu biến độc lập được đo bằng kilômét thì biến phụ thuộc ________."
+  },
+  {
+   "chu": "regression equation",
+   "doc": "/rɪˈɡreʃn ɪˈkweɪʒn/",
+   "nghia": "phương trình hồi quy (ŷ = b0 + b1·x)",
+   "nhom": "Hồi quy tuyến tính",
+   "viDu": "The regression equation is Y = 26.8 + 1.48x.",
+   "viDuNghia": "Phương trình hồi quy là Y = 26.8 + 1.48x."
+  },
+  {
+   "chu": "slope coefficient",
+   "doc": "/sloʊp ˌkoʊɪˈfɪʃnt/",
+   "nghia": "hệ số góc β1 (y thay đổi bao nhiêu khi x tăng 1 đơn vị)",
+   "nhom": "Hồi quy tuyến tính",
+   "viDu": "In a simple linear regression model the slope coefficient measures____________",
+   "viDuNghia": "Trong mô hình hồi quy tuyến tính đơn, hệ số góc đo lường____________"
+  },
+  {
+   "chu": "least squares",
+   "doc": "/liːst skwerz/",
+   "nghia": "bình phương tối thiểu (phương pháp tìm đường thẳng có tổng bình phương sai số nhỏ nhất)",
+   "nhom": "Hồi quy tuyến tính",
+   "viDu": "Which of the following sum of squares is minimized by the least squares method?",
+   "viDuNghia": "Tổng bình phương nào sau đây được cực tiểu hoá bởi phương pháp bình phương tối thiểu?"
+  },
+  {
+   "chu": "y-intercept",
+   "doc": "/ˈwaɪ ˌɪntərsept/",
+   "nghia": "hệ số chặn, tung độ gốc (β0: giá trị y khi x = 0)",
+   "nhom": "Hồi quy tuyến tính",
+   "viDu": "Which of the following statement is FALSE about the y-intercept of regression line?",
+   "viDuNghia": "Phát biểu nào sau đây là SAI về hệ số chặn (y-intercept) của đường hồi quy?"
+  },
+  {
+   "chu": "beta",
+   "doc": "/ˈbeɪtə/",
+   "nghia": "chữ Hy Lạp β — β0, β1 là hệ số hồi quy; β còn là xác suất sai lầm loại II",
+   "nhom": "Hồi quy tuyến tính",
+   "viDu": "The formula for the equation describing a straight line is ŷ=β̂₁ x+β̂₀. The value for β̂₀ in this equation represents the ____________",
+   "viDuNghia": "Công thức của phương trình mô tả một đường thẳng là ŷ=β̂₁ x+β̂₀. Giá trị β̂₀ trong phương trình này biểu diễn ____________"
+  },
+  {
+   "chu": "dependent variable",
+   "doc": "/dɪˈpendənt ˈveriəbl/",
+   "nghia": "biến phụ thuộc, biến đáp ứng y (đại lượng cần dự đoán)",
+   "nhom": "Hồi quy tuyến tính",
+   "viDu": "In regression analysis, if the independent variable is measured in kilometer, the dependent variable ________",
+   "viDuNghia": "Trong phân tích hồi quy, nếu biến độc lập được đo bằng kilômét thì biến phụ thuộc ________"
+  },
+  {
+   "chu": "independent variable",
+   "doc": "/ˌɪndɪˈpendənt ˈveriəbl/",
+   "nghia": "biến độc lập, biến giải thích x (dùng để dự đoán y)",
+   "nhom": "Hồi quy tuyến tính",
+   "viDu": "In regression analysis, if the independent variable is measured in kilometer, the dependent variable ________.",
+   "viDuNghia": "Trong phân tích hồi quy, nếu biến độc lập được đo bằng kilômét thì biến phụ thuộc ________."
+  },
+  {
+   "chu": "predictor",
+   "doc": "/prɪˈdɪktər/",
+   "nghia": "biến dự báo (biến x trong mô hình hồi quy)",
+   "nhom": "Hồi quy tuyến tính",
+   "viDu": "In the output table, the Predictor column lists the constant and the variable x.",
+   "viDuNghia": "Trong bảng kết quả, cột Predictor liệt kê hằng số và biến x."
+  },
+  {
+   "chu": "predict",
+   "doc": "/prɪˈdɪkt/",
+   "nghia": "dự đoán, dự báo (giá trị y từ x bằng phương trình hồi quy)",
+   "nhom": "Hồi quy tuyến tính",
+   "viDu": "The correlation when we use y to predict x is _______ the correlation when we use x to predict y.",
+   "viDuNghia": "Hệ số tương quan khi ta dùng y để dự đoán x thì _______ hệ số tương quan khi ta dùng x để dự đoán y."
+  },
+  {
+   "chu": "predicted value",
+   "doc": "/prɪˈdɪktɪd ˈvæljuː/",
+   "nghia": "giá trị dự đoán ŷ (tính từ phương trình hồi quy)",
+   "nhom": "Hồi quy tuyến tính",
+   "viDu": "Use the above information to find the predicted value of GPA when ACT = 20.",
+   "viDuNghia": "Dùng thông tin trên để tìm giá trị GPA dự đoán khi ACT = 20."
+  },
+  {
+   "chu": "residual",
+   "doc": "/rɪˈzɪdʒuəl/",
+   "nghia": "phần dư (giá trị thực tế trừ giá trị dự đoán: e = y - ŷ)",
+   "nhom": "Hồi quy tuyến tính",
+   "viDu": "A residual is the difference between an observed value and the predicted value.",
+   "viDuNghia": "Phần dư là hiệu giữa một giá trị quan sát được và giá trị dự đoán."
+  },
+  {
+   "chu": "linear relationship",
+   "doc": "/ˈlɪniər rɪˈleɪʃnʃɪp/",
+   "nghia": "quan hệ tuyến tính (positive = đồng biến, negative = nghịch biến)",
+   "nhom": "Hồi quy tuyến tính",
+   "viDu": "Assuming a linear relationship between X and Y, if the coefficient of correlation equals to -0.30, then_________________",
+   "viDuNghia": "Giả sử có quan hệ tuyến tính giữa X và Y, nếu hệ số tương quan bằng -0,30 thì_________________"
+  },
+  {
+   "chu": "correlation",
+   "doc": "/ˌkɔːrəˈleɪʃn/",
+   "nghia": "tương quan (mức độ hai biến cùng thay đổi)",
+   "nhom": "Hồi quy tuyến tính",
+   "viDu": "The correlation when we use y to predict x is ______ the correlation when we use x to predict y.",
+   "viDuNghia": "Hệ số tương quan khi dùng y để dự đoán x thì ______ hệ số tương quan khi dùng x để dự đoán y."
+  },
+  {
+   "chu": "sample correlation coefficient",
+   "nghia": "hệ số tương quan mẫu r (tính từ dữ liệu mẫu)",
+   "nhom": "Hồi quy tuyến tính",
+   "viDu": "Calculate the sample correlation coefficient. x: 12, 6, 3 y: -1, 5, 2",
+   "viDuNghia": "Tính hệ số tương quan mẫu. x: 12, 6, 3 y: -1, 5, 2"
+  },
+  {
+   "chu": "correlation coefficient",
+   "doc": "/ˌkɔːrəˈleɪʃn ˌkoʊɪˈfɪʃnt/",
+   "nghia": "hệ số tương quan r, từ -1 đến 1 (gần 1 hoặc -1 là quan hệ tuyến tính mạnh)",
+   "nhom": "Hồi quy tuyến tính",
+   "viDu": "If Data A has a correlation coefficient of r=-0.991, and Data B has a correlation coefficient of r=0.991, which statement is correct?",
+   "viDuNghia": "Nếu bộ dữ liệu A có hệ số tương quan r=-0.991 và bộ dữ liệu B có r=0.991, phát biểu nào đúng?"
+  },
+  {
+   "chu": "coefficient of determination",
+   "nghia": "hệ số xác định R² (tỉ lệ biến thiên của y được mô hình giải thích)",
+   "nhom": "Hồi quy tuyến tính",
+   "viDu": "In the Excel output, R Square is the coefficient of determination.",
+   "viDuNghia": "Trong bảng kết quả Excel, R Square chính là hệ số xác định."
+  },
+  {
+   "chu": "coefficient",
+   "doc": "/ˌkoʊɪˈfɪʃnt/",
+   "nghia": "hệ số – (thống kê) correlation coefficient = hệ số tương quan, slope coefficient = hệ số góc hồi quy. (Đại số: số đứng trước biến)",
+   "nhom": "Hồi quy tuyến tính",
+   "viDu": "In a simple linear regression model the slope coefficient measures ____________.",
+   "viDuNghia": "Trong mô hình hồi quy tuyến tính đơn, hệ số góc đo lường ____________."
+  },
+  {
+   "chu": "intercept",
+   "doc": "/ˌɪntərˈsept/",
+   "nghia": "hệ số chặn – giá trị y khi x = 0 của đường hồi quy (y-intercept). (Java web: Filter chặn request giữa đường)",
+   "nhom": "Hồi quy tuyến tính",
+   "viDu": "Which of the following statement is FALSE about the y-intercept of regression line?",
+   "viDuNghia": "Phát biểu nào sau đây là SAI về hệ số chặn (y-intercept) của đường hồi quy?"
+  },
+  {
+   "chu": "analysis of variance",
+   "nghia": "phân tích phương sai (ANOVA) — bảng tách tổng biến thiên thành phần hồi quy và phần dư",
+   "nhom": "Đọc bảng kết quả ANOVA và Excel",
+   "viDu": "In a one-way ANOVA, the null hypothesis is always ________.",
+   "viDuNghia": "Trong phân tích phương sai một yếu tố (one-way ANOVA), giả thuyết không luôn là ________."
+  },
+  {
+   "chu": "sum of squares",
+   "doc": "/sʌm əv skwerz/",
+   "nghia": "tổng bình phương (cột SS trong bảng ANOVA)",
+   "nhom": "Đọc bảng kết quả ANOVA và Excel",
+   "viDu": "Here is computer output on the sample data: Sₓₓ=1,475; se(β₁̂)=4.75 Find the error sum of squares.",
+   "viDuNghia": "Kết quả máy tính cho mẫu là: Sₓₓ=1,475; se(β₁̂)=4.75 Tìm tổng bình phương sai số (error sum of squares)."
+  },
+  {
+   "chu": "error sum of squares",
+   "nghia": "tổng bình phương sai số SSE (phần biến thiên mà mô hình không giải thích được)",
+   "nhom": "Đọc bảng kết quả ANOVA và Excel",
+   "viDu": "The error sum of squares (SSE) of the above regression is:",
+   "viDuNghia": "Tổng bình phương sai số (SSE) của hồi quy trên là:"
+  },
+  {
+   "chu": "mean square",
+   "doc": "/miːn skwer/",
+   "nghia": "trung bình bình phương (cột MS = SS chia df)",
+   "nhom": "Đọc bảng kết quả ANOVA và Excel",
+   "viDu": "In the ANOVA table, each mean square equals the sum of squares divided by its degrees of freedom.",
+   "viDuNghia": "Trong bảng ANOVA, mỗi trung bình bình phương bằng tổng bình phương chia cho bậc tự do tương ứng."
+  },
+  {
+   "chu": "t stat",
+   "doc": "/ˈtiː stæt/",
+   "nghia": "thống kê t (cột t Stat trong bảng Excel = hệ số chia cho sai số chuẩn của nó)",
+   "nhom": "Đọc bảng kết quả ANOVA và Excel",
+   "viDu": "Coefficients — Intercept: 0.5681, Standard Error 0.9284, t Stat 0.6119, P-value 0.5630, Lower 95% -1.7036, Upper 95% 2.8398.",
+   "viDuNghia": "Hệ số — Intercept: 0.5681, Standard Error 0.9284, t Stat 0.6119, P-value 0.5630, Lower 95% -1.7036, Upper 95% 2.8398."
+  },
+  {
+   "chu": "multiple R",
+   "doc": "/ˈmʌltɪpl ɑːr/",
+   "nghia": "hệ số tương quan bội (dòng Multiple R trong bảng Excel; với hồi quy đơn bằng |r|)",
+   "nhom": "Đọc bảng kết quả ANOVA và Excel",
+   "viDu": "Regression Statistics — Multiple R = 0.754525991; Adjusted R Square = 0.507782253; Standard Error = (missing).",
+   "viDuNghia": "Thống kê hồi quy — Multiple R = 0,754525991; Adjusted R Square = 0,507782253; Standard Error = (thiếu)."
+  },
+  {
+   "chu": "adjusted R square",
+   "nghia": "R bình phương hiệu chỉnh (R² đã điều chỉnh theo số biến và cỡ mẫu)",
+   "nhom": "Đọc bảng kết quả ANOVA và Excel",
+   "viDu": "Regression Statistics: Multiple R = 0.8857; R Square = 0.7845; Adjusted R Square = 0.7801; Standard Error = 1.3704; Observations = 51.",
+   "viDuNghia": "Thống kê hồi quy: Multiple R = 0,8857; R Square = 0,7845; Adjusted R Square = 0,7801; Standard Error = 1,3704; Observations = 51."
+  },
+  {
+   "chu": "computer output",
+   "doc": "/kəmˈpjuːtər ˈaʊtpʊt/",
+   "nghia": "bảng kết quả do phần mềm in ra (Excel, Minitab) — đề cho bảng và hỏi cách đọc",
+   "nhom": "Đọc bảng kết quả ANOVA và Excel",
+   "viDu": "Given below is the Excel output from regressing starting salary on hours spent studying per day for a sample of 51 students.",
+   "viDuNghia": "Dưới đây là kết quả Excel khi hồi quy lương khởi điểm theo số giờ học mỗi ngày với mẫu 51 sinh viên."
+  },
+  {
+   "chu": "missing value",
+   "doc": "/ˈmɪsɪŋ ˈvæljuː/",
+   "nghia": "giá trị bị thiếu (ô bị che trong bảng kết quả, đề yêu cầu tính lại)",
+   "nhom": "Đọc bảng kết quả ANOVA và Excel",
+   "viDu": "Determine the probability distribution's missing value in the table of probability that a tutor will see 0, 1, 2, 3, or 4 students. X 0 1 2 3 4 P(X) 0.01 0.04 0.37 0.34?",
+   "viDuNghia": "Hãy xác định giá trị còn thiếu trong bảng phân phối xác suất số sinh viên mà một gia sư gặp là 0, 1, 2, 3 hoặc 4. X 0 1 2 3 4 P(X) 0.01 0.04 0.37 0.34?"
+  },
+  {
+   "chu": "researcher",
+   "doc": "/rɪˈsɜːrtʃər/",
+   "nghia": "nhà nghiên cứu",
+   "nhom": "Từ trong bài toán kiểm định",
+   "viDu": "A researcher wants to test whether the average weight of a specific breed of goat is greater than 12 kg.",
+   "viDuNghia": "Một nhà nghiên cứu muốn kiểm định xem khối lượng trung bình của một giống dê có lớn hơn 12 kg hay không."
+  },
+  {
+   "chu": "consumer",
+   "doc": "/kənˈsuːmər/",
+   "nghia": "người tiêu dùng",
+   "nhom": "Từ trong bài toán kiểm định",
+   "viDu": "A consumer group conducts a study to compare the average miles per gallon (mpg) achieved in road tests of two popular car brands.",
+   "viDuNghia": "Một nhóm người tiêu dùng tiến hành nghiên cứu so sánh số dặm trung bình trên mỗi gallon (mpg) đạt được trong các bài chạy thử của hai hãng xe phổ biến."
+  },
+  {
+   "chu": "believe",
+   "doc": "/bɪˈliːv/",
+   "nghia": "tin rằng, cho rằng (điều người ta tin thường là giả thuyết cần kiểm định)",
+   "nhom": "Từ trong bài toán kiểm định",
+   "viDu": "It is believed that the debt load follows a normal distribution with the standard deviation of 4,200 USD.",
+   "viDuNghia": "Người ta tin rằng khoản nợ tuân theo phân phối chuẩn với độ lệch chuẩn 4.200 USD."
+  },
+  {
+   "chu": "on-time",
+   "doc": "/ˌɑːn ˈtaɪm/",
+   "nghia": "đúng giờ (on-time arrival = đến đúng giờ)",
+   "nhom": "Từ trong bài toán kiểm định",
+   "viDu": "Expedia would like to test the hypothesis that the proportion of United Airline flights that arrive on-time is less than 0.80.",
+   "viDuNghia": "Expedia muốn kiểm định giả thuyết rằng tỷ lệ chuyến bay của United Airline đến đúng giờ nhỏ hơn 0.80."
+  },
+  {
+   "chu": "brand",
+   "doc": "/brænd/",
+   "nghia": "nhãn hiệu, thương hiệu (so sánh hai nhãn hàng là bài toán hai mẫu)",
+   "nhom": "Từ trong bài toán kiểm định",
+   "viDu": "A manufacturer of a certain brand of rice cereal claims that the average saturated fat content does not exceed 1.6 grams.",
+   "viDuNghia": "Nhà sản xuất một nhãn hiệu ngũ cốc gạo nọ tuyên bố hàm lượng chất béo bão hoà trung bình không vượt quá 1,6 gam."
+  },
+  {
+   "chu": "average age",
+   "doc": "/ˈævərɪdʒ eɪdʒ/",
+   "nghia": "tuổi trung bình",
+   "nhom": "Từ trong bài toán kiểm định",
+   "viDu": "Sony would like to test the hypothesis that the average age of a PlayStation user is different from the average age of an Xbox user at the significance level of 0.05.",
+   "viDuNghia": "Sony muốn kiểm định giả thuyết rằng tuổi trung bình của người dùng PlayStation khác tuổi trung bình của người dùng Xbox ở mức ý nghĩa 0,05."
+  }
+ ]
+}

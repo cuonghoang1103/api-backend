@@ -1,0 +1,651 @@
+{
+ "ma": "pmg201c-2",
+ "nn": "en",
+ "ten": "PMG201c · 2. Ước lượng, chi phí, EVM, rủi ro",
+ "moTa": "Quản lý dự án (PMG201c, theo PMBOK) – phần 2: kỹ thuật ước lượng, ngân sách và dự phòng, giá trị thu được (EVM), rủi ro và cách ứng phó, chất lượng, truyền thông. Từ lấy từ đề FE/PE thật; ví dụ là câu hỏi thật trong đề.",
+ "bieuTuong": "chart.line.uptrend.xyaxis",
+ "thuTu": -941,
+ "tu": [
+  {
+   "chu": "budget",
+   "doc": "/ˈbʌdʒɪt/",
+   "nghia": "ngân sách: tổng số tiền được duyệt cho dự án",
+   "nhom": "Chi phí & ngân sách",
+   "viDu": "Project Cost Management processes aim to help the project be completed within the approved budget.",
+   "viDuNghia": "Các quy trình Quản lý chi phí dự án nhằm giúp dự án có thể hoàn thành trong phạm vi ngân sách đã được phê duyệt."
+  },
+  {
+   "chu": "cost baseline",
+   "doc": "/kɔːst ˈbeɪslaɪn/",
+   "nghia": "đường cơ sở chi phí: ngân sách theo thời gian đã duyệt, gồm cả dự phòng rủi ro nhưng KHÔNG gồm dự phòng quản lý",
+   "nhom": "Chi phí & ngân sách",
+   "viDu": "The Cost Baseline is equal to the total of Activity Cost Estimates plus Contingency Reserves.",
+   "viDuNghia": "Đường cơ sở chi phí (Cost Baseline) bằng tổng ước lượng chi phí hoạt động cộng với dự trữ dự phòng (Contingency Reserves)."
+  },
+  {
+   "chu": "cost budget",
+   "doc": "/kɔːst ˈbʌdʒɪt/",
+   "nghia": "ngân sách chi phí = đường cơ sở chi phí + dự phòng quản lý",
+   "nhom": "Chi phí & ngân sách",
+   "viDu": "The cost budget equals the cost baseline plus the management reserve.",
+   "viDuNghia": "Ngân sách chi phí bằng đường cơ sở chi phí cộng với dự phòng quản lý."
+  },
+  {
+   "chu": "cost estimate",
+   "doc": "/kɔːst ˈestɪmət/",
+   "nghia": "bản ước lượng chi phí",
+   "nhom": "Chi phí & ngân sách",
+   "viDu": "The Cost Baseline is equal to the total of Activity Cost Estimates plus Contingency Reserves.",
+   "viDuNghia": "Đường cơ sở chi phí (Cost Baseline) bằng tổng ước lượng chi phí hoạt động cộng với dự trữ dự phòng (Contingency Reserves)."
+  },
+  {
+   "chu": "contingency reserve",
+   "doc": "/kənˈtɪndʒənsi rɪˈzɜːrv/",
+   "nghia": "dự phòng rủi ro: tiền/thời gian để dành cho rủi ro ĐÃ nhận diện; giám đốc dự án được dùng",
+   "nhom": "Chi phí & ngân sách",
+   "viDu": "Which of the following is the most correct statement regarding management and contingency reserves?",
+   "viDuNghia": "Phát biểu nào sau đây là đúng nhất về dự trữ quản lý (management reserve) và dự trữ dự phòng (contingency reserve)?"
+  },
+  {
+   "chu": "management reserve",
+   "doc": "/ˈmænɪdʒmənt rɪˈzɜːrv/",
+   "nghia": "dự phòng quản lý: tiền để dành cho rủi ro CHƯA nhận diện; muốn dùng phải xin cấp trên",
+   "nhom": "Chi phí & ngân sách",
+   "viDu": "The Project Budget is equal to the Cost Baseline budget plus Management Reserve.",
+   "viDuNghia": "Ngân sách dự án (Project Budget) bằng Cost Baseline cộng với Management Reserve."
+  },
+  {
+   "chu": "labor cost",
+   "doc": "/ˈleɪbər kɔːst/",
+   "nghia": "chi phí nhân công",
+   "nhom": "Chi phí & ngân sách",
+   "viDu": "Labor cost is usually the largest part of a software project budget.",
+   "viDuNghia": "Chi phí nhân công thường là phần lớn nhất trong ngân sách của một dự án phần mềm."
+  },
+  {
+   "chu": "direct cost",
+   "doc": "/dəˈrekt kɔːst/",
+   "nghia": "chi phí trực tiếp: tính thẳng được cho dự án (lương nhóm, vật tư)",
+   "nhom": "Chi phí & ngân sách",
+   "viDu": "The salary of a full-time team member is a direct cost of the project.",
+   "viDuNghia": "Lương của một thành viên làm toàn thời gian là chi phí trực tiếp của dự án."
+  },
+  {
+   "chu": "indirect cost",
+   "doc": "/ˌɪndəˈrekt kɔːst/",
+   "nghia": "chi phí gián tiếp: chia chung cho nhiều dự án (điện, thuê văn phòng)",
+   "nhom": "Chi phí & ngân sách",
+   "viDu": "A cost can be either direct or indirect. Which of the following statements are correct (choose 2 answers)?",
+   "viDuNghia": "Một chi phí có thể là trực tiếp hoặc gián tiếp. Phát biểu nào sau đây đúng (chọn 2 đáp án)?"
+  },
+  {
+   "chu": "over budget",
+   "doc": "/ˈoʊvər ˈbʌdʒɪt/",
+   "nghia": "vượt ngân sách: tiêu nhiều hơn giá trị công việc làm được (CV âm, CPI nhỏ hơn 1)",
+   "nhom": "Chi phí & ngân sách",
+   "viDu": "A Cost Performance Index (CPI) less than 1 means you are over budget.",
+   "viDuNghia": "Chỉ số hiệu suất chi phí (CPI) nhỏ hơn 1 nghĩa là bạn đang vượt ngân sách."
+  },
+  {
+   "chu": "under budget",
+   "doc": "/ˈʌndər ˈbʌdʒɪt/",
+   "nghia": "dưới ngân sách: tiêu ít hơn giá trị công việc làm được (CV dương, CPI lớn hơn 1)",
+   "nhom": "Chi phí & ngân sách",
+   "viDu": "A CPI greater than 1 means the project is under budget.",
+   "viDuNghia": "CPI lớn hơn 1 nghĩa là dự án đang dưới ngân sách."
+  },
+  {
+   "chu": "cost",
+   "doc": "/kɔːst/",
+   "nghia": "chi phí – (dự án) tiền cần để hoàn thành công việc; cost baseline, cost estimate, cost performance index (CPI)",
+   "nhom": "Chi phí & ngân sách",
+   "viDu": "True or False: Project Cost Management processes aim to help the project be completed within the approved budget.",
+   "viDuNghia": "Đúng hay Sai: Các quy trình Quản lý chi phí dự án nhằm giúp dự án có thể hoàn thành trong phạm vi ngân sách đã được phê duyệt."
+  },
+  {
+   "chu": "procurement",
+   "doc": "/prəˈkjʊrmənt/",
+   "nghia": "mua sắm: mua hàng hoá, dịch vụ từ bên ngoài cho dự án",
+   "nhom": "Chi phí & ngân sách",
+   "viDu": "Procurement covers buying goods and services from outside the project team.",
+   "viDuNghia": "Mua sắm bao gồm việc mua hàng hoá và dịch vụ từ bên ngoài nhóm dự án."
+  },
+  {
+   "chu": "earned value management",
+   "nghia": "quản lý giá trị thu được (EVM): kỹ thuật đo hiệu suất, gộp phạm vi, tiến độ và chi phí vào một phép so",
+   "nhom": "Giá trị thu được (EVM)",
+   "viDu": "Earned value management integrates scope, cost, and schedule measures to:",
+   "viDuNghia": "Quản lý giá trị thu được (Earned Value Management) tích hợp các thước đo phạm vi, chi phí và tiến độ nhằm:"
+  },
+  {
+   "chu": "planned value",
+   "doc": "/plænd ˈvæljuː/",
+   "nghia": "giá trị kế hoạch (PV): giá trị phần việc DỰ ĐỊNH xong tính tới hôm nay",
+   "nhom": "Giá trị thu được (EVM)",
+   "viDu": "Planned value (PV) is the budgeted cost of the work scheduled to be done by now.",
+   "viDuNghia": "Giá trị kế hoạch (PV) là chi phí theo ngân sách của phần việc dự định làm xong tới thời điểm này."
+  },
+  {
+   "chu": "earned value",
+   "doc": "/ɜːrnd ˈvæljuː/",
+   "nghia": "giá trị thu được (EV): giá trị theo ngân sách của phần việc ĐÃ xong thật = % hoàn thành x BAC",
+   "nhom": "Giá trị thu được (EVM)",
+   "viDu": "Earned value integrates scope, schedule and budget and uses monetary values to assess project status.",
+   "viDuNghia": "Giá trị thu được tích hợp phạm vi, tiến độ và ngân sách, dùng giá trị tiền tệ để đánh giá tình trạng dự án."
+  },
+  {
+   "chu": "actual cost",
+   "doc": "/ˈæktʃuəl kɔːst/",
+   "nghia": "chi phí thực tế (AC): số tiền đã chi thật cho phần việc đã làm",
+   "nhom": "Giá trị thu được (EVM)",
+   "viDu": "Actual cost (AC) is the money actually spent on the work done so far; CPI = EV / AC.",
+   "viDuNghia": "Chi phí thực tế (AC) là số tiền đã thật sự chi cho phần việc đã làm; CPI = EV / AC."
+  },
+  {
+   "chu": "budget at completion",
+   "nghia": "ngân sách khi hoàn thành (BAC): tổng ngân sách kế hoạch của cả dự án",
+   "nhom": "Giá trị thu được (EVM)",
+   "viDu": "In Earned Value Management, which of the following formulas computes the Estimate At Completion (EAC)? (BAC: Budget At Completion)",
+   "viDuNghia": "Trong Quản lý giá trị thu được, công thức nào sau đây tính Ước tính khi hoàn thành (EAC)? (BAC: ngân sách khi hoàn thành)"
+  },
+  {
+   "chu": "cost variance",
+   "doc": "/kɔːst ˈveriəns/",
+   "nghia": "chênh lệch chi phí: CV = EV − AC; âm là vượt ngân sách",
+   "nhom": "Giá trị thu được (EVM)",
+   "viDu": "In Earned Value Management, which of the following formulas computes the Cost Variance (CV)? CV = EV - AC",
+   "viDuNghia": "Trong Quản lý giá trị thu được, công thức nào sau đây tính Độ lệch chi phí (CV)? CV = EV - AC"
+  },
+  {
+   "chu": "schedule variance",
+   "doc": "/ˈskedʒuːl ˈveriəns/",
+   "nghia": "chênh lệch tiến độ: SV = EV − PV; âm là chậm tiến độ",
+   "nhom": "Giá trị thu được (EVM)",
+   "viDu": "In Earned Value Management, which of the following formulas computes the Schedule Variance (SV)? SV = EV - PV",
+   "viDuNghia": "Trong Quản lý giá trị thu được, công thức nào sau đây tính Độ lệch tiến độ (SV)? SV = EV - PV"
+  },
+  {
+   "chu": "cost performance index",
+   "nghia": "chỉ số hiệu suất chi phí: CPI = EV / AC; nhỏ hơn 1 là vượt ngân sách",
+   "nhom": "Giá trị thu được (EVM)",
+   "viDu": "Your Cost Performance Index (CPI) is lesser than 1 means you are:",
+   "viDuNghia": "Chỉ số hiệu suất chi phí (Cost Performance Index - CPI) của bạn nhỏ hơn 1 nghĩa là bạn đang:"
+  },
+  {
+   "chu": "schedule performance index",
+   "nghia": "chỉ số hiệu suất tiến độ: SPI = EV / PV; nhỏ hơn 1 là chậm tiến độ",
+   "nhom": "Giá trị thu được (EVM)",
+   "viDu": "Your Schedule Performance Index (SPI) is greater than 1 means you are:",
+   "viDuNghia": "Chỉ số hiệu suất lịch trình (SPI) của bạn lớn hơn 1 nghĩa là bạn đang:"
+  },
+  {
+   "chu": "estimate at completion",
+   "nghia": "ước tính tổng chi phí khi hoàn thành: EAC = BAC / CPI (nếu hiệu suất giữ như hiện tại)",
+   "nhom": "Giá trị thu được (EVM)",
+   "viDu": "If performance stays as it is, the estimate at completion is EAC = BAC / CPI.",
+   "viDuNghia": "Nếu hiệu suất giữ như hiện tại, ước tính tổng chi phí khi hoàn thành là EAC = BAC / CPI."
+  },
+  {
+   "chu": "estimate to complete",
+   "nghia": "ước tính chi phí còn lại: ETC = EAC − AC",
+   "nhom": "Giá trị thu được (EVM)",
+   "viDu": "The estimate to complete is the expected cost of the remaining work: ETC = EAC - AC.",
+   "viDuNghia": "Ước tính chi phí còn lại là chi phí dự kiến cho phần việc còn lại: ETC = EAC - AC."
+  },
+  {
+   "chu": "ahead of schedule",
+   "nghia": "vượt tiến độ: làm được nhiều hơn kế hoạch (SV dương, SPI lớn hơn 1)",
+   "nhom": "Giá trị thu được (EVM)",
+   "viDu": "An SPI greater than 1 means the project is ahead of schedule.",
+   "viDuNghia": "SPI lớn hơn 1 nghĩa là dự án đang vượt tiến độ."
+  },
+  {
+   "chu": "project status",
+   "doc": "/ˈprɑːdʒekt ˈsteɪtəs/",
+   "nghia": "tình trạng dự án: đang nhanh hay chậm, vượt hay dưới ngân sách tại thời điểm báo cáo",
+   "nhom": "Giá trị thu được (EVM)",
+   "viDu": "When you report project status you compare actual performance to:",
+   "viDuNghia": "Khi báo cáo tình trạng dự án, bạn so sánh hiệu suất thực tế với:"
+  },
+  {
+   "chu": "status report",
+   "doc": "/ˈsteɪtəs rɪˈpɔːrt/",
+   "nghia": "báo cáo tình trạng: cho biết dự án đang ở đâu so với kế hoạch",
+   "nhom": "Giá trị thu được (EVM)",
+   "viDu": "The weekly status report compares actual progress with the plan.",
+   "viDuNghia": "Báo cáo tình trạng hằng tuần so tiến triển thực tế với kế hoạch."
+  },
+  {
+   "chu": "project performance",
+   "doc": "/ˈprɑːdʒekt pərˈfɔːrməns/",
+   "nghia": "hiệu suất dự án: mức độ dự án bám kế hoạch về phạm vi, tiến độ, chi phí",
+   "nhom": "Giá trị thu được (EVM)",
+   "viDu": "During status review meetings to evaluate project performance and progress, which report is NOT preferred to use?",
+   "viDuNghia": "Trong các cuộc họp đánh giá tình trạng để xem xét hiệu suất và tiến độ dự án, báo cáo nào KHÔNG nên dùng?"
+  },
+  {
+   "chu": "progress report",
+   "doc": "/ˈprɑːɡres rɪˈpɔːrt/",
+   "nghia": "báo cáo tiến triển: đã làm được gì trong kỳ vừa qua",
+   "nhom": "Giá trị thu được (EVM)",
+   "viDu": "A progress report describes what the team has accomplished during the period.",
+   "viDuNghia": "Báo cáo tiến triển mô tả những gì nhóm đã làm được trong kỳ."
+  },
+  {
+   "chu": "status review meeting",
+   "nghia": "họp rà soát tình trạng dự án",
+   "nhom": "Giá trị thu được (EVM)",
+   "viDu": "During status review meetings to evaluate project performance and progress, which tool or technique is NOT preferred to use?",
+   "viDuNghia": "Trong các cuộc họp đánh giá tình trạng để xem xét hiệu suất và tiến độ dự án, công cụ/kỹ thuật nào KHÔNG nên dùng?"
+  },
+  {
+   "chu": "subsidiary plan",
+   "doc": "/səbˈsɪdieri plæn/",
+   "nghia": "kế hoạch thành phần: kế hoạch con nằm trong kế hoạch quản lý dự án (phạm vi, rủi ro, chất lượng…)",
+   "nhom": "Giá trị thu được (EVM)",
+   "viDu": "The Risk Management Plan is a subsidiary to the Project Management Plan document.",
+   "viDuNghia": "Kế hoạch quản lý rủi ro (Risk Management Plan) là một tài liệu phụ (subsidiary) thuộc tài liệu Kế hoạch quản lý dự án (Project Management Plan)."
+  },
+  {
+   "chu": "baseline",
+   "doc": "/ˈbeɪslaɪn/",
+   "nghia": "đường cơ sở – bản kế hoạch đã duyệt (phạm vi, tiến độ, chi phí) để so với thực tế; cost baseline. (SWR302: bản yêu cầu đã chốt)",
+   "nhom": "Giá trị thu được (EVM)",
+   "viDu": "True or False: The Cost Baseline is equal to the total of Activity Cost Estimates plus Contingency Reserves.",
+   "viDuNghia": "Đúng hay Sai: Đường cơ sở chi phí (Cost Baseline) bằng tổng ước lượng chi phí hoạt động cộng với dự trữ dự phòng (Contingency Reserves)."
+  },
+  {
+   "chu": "risk management plan",
+   "nghia": "kế hoạch quản lý rủi ro: nói rủi ro sẽ được nhận diện, phân tích, ứng phó và theo dõi thế nào",
+   "nhom": "Rủi ro",
+   "viDu": "The Risk Management Plan is a subsidiary to the Project Management Plan document.",
+   "viDuNghia": "Kế hoạch quản lý rủi ro (Risk Management Plan) là một tài liệu phụ (subsidiary) thuộc tài liệu Kế hoạch quản lý dự án (Project Management Plan)."
+  },
+  {
+   "chu": "risk identification",
+   "doc": "/rɪsk aɪˌdentɪfɪˈkeɪʃn/",
+   "nghia": "nhận diện rủi ro: tìm ra các rủi ro có thể ảnh hưởng dự án và ghi lại",
+   "nhom": "Rủi ro",
+   "viDu": "A useful tool in identifying risks is the SWOT analysis. What does SWOT stand for?",
+   "viDuNghia": "Một công cụ hữu ích để xác định rủi ro là phân tích SWOT. SWOT là viết tắt của gì?"
+  },
+  {
+   "chu": "risk response",
+   "doc": "/rɪsk rɪˈspɑːns/",
+   "nghia": "ứng phó rủi ro: hành động đã định sẵn để xử lý một rủi ro",
+   "nhom": "Rủi ro",
+   "viDu": "Identify three project risks by listing the risk name, description, possible impacts, and relevant risk response plans (mitigation, contingency).",
+   "viDuNghia": "Hãy nêu ba rủi ro của dự án, gồm tên rủi ro, mô tả, tác động có thể có và kế hoạch ứng phó tương ứng (giảm thiểu, dự phòng)."
+  },
+  {
+   "chu": "risk breakdown structure",
+   "nghia": "cấu trúc phân rã rủi ro (RBS): cây phân loại rủi ro theo nguồn gốc",
+   "nhom": "Rủi ro",
+   "viDu": "The risk breakdown structure groups risks by category, such as technical or external.",
+   "viDuNghia": "Cấu trúc phân rã rủi ro gom rủi ro theo loại, ví dụ kỹ thuật hay bên ngoài."
+  },
+  {
+   "chu": "probability and impact matrix",
+   "nghia": "ma trận xác suất – tác động: xếp hạng rủi ro theo khả năng xảy ra và mức ảnh hưởng",
+   "nhom": "Rủi ro",
+   "viDu": "Use a probability and impact matrix to rank the risks as high, medium or low.",
+   "viDuNghia": "Dùng ma trận xác suất – tác động để xếp rủi ro thành cao, trung bình hay thấp."
+  },
+  {
+   "chu": "opportunity",
+   "doc": "/ˌɑːpərˈtuːnəti/",
+   "nghia": "cơ hội: rủi ro TÍCH CỰC, nếu xảy ra thì có lợi cho dự án",
+   "nhom": "Rủi ro",
+   "viDu": "A positive risk is an opportunity; a negative risk is a threat.",
+   "viDuNghia": "Rủi ro tích cực là cơ hội; rủi ro tiêu cực là mối đe dọa."
+  },
+  {
+   "chu": "uncertain event",
+   "doc": "/ʌnˈsɜːrtn ɪˈvent/",
+   "nghia": "sự kiện không chắc chắn: có thể xảy ra hoặc không – bản chất của rủi ro",
+   "nhom": "Rủi ro",
+   "viDu": "A risk is an uncertain event that, if it occurs, affects at least one project objective.",
+   "viDuNghia": "Rủi ro là một sự kiện không chắc chắn, nếu xảy ra sẽ ảnh hưởng tới ít nhất một mục tiêu dự án."
+  },
+  {
+   "chu": "avoidance",
+   "doc": "/əˈvɔɪdəns/",
+   "nghia": "né tránh: đổi kế hoạch để loại hẳn rủi ro (ví dụ bỏ phần việc gây rủi ro)",
+   "nhom": "Rủi ro",
+   "viDu": "If the response you choose is to avoid a risk this means that:",
+   "viDuNghia": "Nếu phản ứng bạn chọn là né tránh (avoid) một rủi ro thì điều này có nghĩa là:"
+  },
+  {
+   "chu": "mitigation",
+   "doc": "/ˌmɪtɪˈɡeɪʃn/",
+   "nghia": "giảm thiểu: hành động trước để giảm xác suất hoặc tác động của rủi ro",
+   "nhom": "Rủi ro",
+   "viDu": "Mitigation reduces the probability or the impact of a risk before it happens.",
+   "viDuNghia": "Giảm thiểu là làm giảm xác suất hoặc tác động của rủi ro trước khi nó xảy ra."
+  },
+  {
+   "chu": "transfer",
+   "doc": "/ˈtrænsfɜːr/",
+   "nghia": "chuyển giao: đẩy tác động rủi ro sang bên thứ ba (mua bảo hiểm, thuê ngoài)",
+   "nhom": "Rủi ro",
+   "viDu": "If the response you choose is to transfer a risk this means that:",
+   "viDuNghia": "Nếu chiến lược ứng phó bạn chọn là chuyển giao rủi ro (transfer), điều đó có nghĩa là:"
+  },
+  {
+   "chu": "acceptance",
+   "doc": "/əkˈseptəns/",
+   "nghia": "chấp nhận (rủi ro): không xử lý trước, xảy ra thì ứng phó (có thể để sẵn dự phòng) · (SWT301/SWR302) nghiệm thu: acceptance testing, user acceptance",
+   "nhom": "Rủi ro",
+   "viDu": "If the response you choose is to accept a risk this means that:",
+   "viDuNghia": "Nếu bạn chọn chiến lược ứng phó là chấp nhận rủi ro (accept), điều đó có nghĩa là:"
+  },
+  {
+   "chu": "exploit",
+   "doc": "/ɪkˈsplɔɪt/",
+   "nghia": "khai thác: làm cho cơ hội chắc chắn xảy ra (ứng phó với rủi ro tích cực)",
+   "nhom": "Rủi ro",
+   "viDu": "If the response you choose is to exploit a risk this means that:",
+   "viDuNghia": "Nếu phản ứng bạn chọn là khai thác (exploit) một rủi ro, điều đó có nghĩa là:"
+  },
+  {
+   "chu": "share",
+   "doc": "/ʃer/",
+   "nghia": "chia sẻ: giao một phần cơ hội cho bên thứ ba có khả năng nắm bắt tốt hơn",
+   "nhom": "Rủi ro",
+   "viDu": "To share a positive risk, give part of the opportunity to a partner who can capture it.",
+   "viDuNghia": "Để chia sẻ một rủi ro tích cực, hãy giao một phần cơ hội cho đối tác có khả năng nắm bắt nó."
+  },
+  {
+   "chu": "contingency plan",
+   "doc": "/kənˈtɪndʒənsi plæn/",
+   "nghia": "kế hoạch dự phòng: việc sẽ làm NẾU rủi ro đã nhận diện thật sự xảy ra",
+   "nhom": "Rủi ro",
+   "viDu": "If the response you choose is to accept a risk this means that: → You actively do not consider the risk but establish contingency plan.",
+   "viDuNghia": "Nếu bạn chọn chấp nhận một rủi ro thì nghĩa là: → Bạn chủ động không xử lý rủi ro nhưng lập sẵn kế hoạch dự phòng."
+  },
+  {
+   "chu": "secondary risk",
+   "doc": "/ˈsekənderi rɪsk/",
+   "nghia": "rủi ro thứ cấp: rủi ro mới sinh ra do chính biện pháp ứng phó",
+   "nhom": "Rủi ro",
+   "viDu": "When you choose to transfer your project risk to a third party, it may give rise to secondary risk that did not exist prior to the transfer.",
+   "viDuNghia": "Khi bạn chọn chuyển giao (transfer) rủi ro dự án cho bên thứ ba, điều đó có thể phát sinh rủi ro thứ cấp (secondary risk) chưa từng tồn tại trước khi chuyển giao."
+  },
+  {
+   "chu": "high-risk activity",
+   "doc": "/ˌhaɪ ˈrɪsk ækˈtɪvəti/",
+   "nghia": "hoạt động rủi ro cao",
+   "nhom": "Rủi ro",
+   "viDu": "Add contingency reserve to the high-risk activities.",
+   "viDuNghia": "Hãy thêm dự phòng rủi ro cho các hoạt động rủi ro cao."
+  },
+  {
+   "chu": "SWOT analysis",
+   "doc": "/ˈswɑːt əˈnæləsɪs/",
+   "nghia": "phân tích SWOT: điểm mạnh, điểm yếu, cơ hội, thách thức – công cụ để nhận diện rủi ro",
+   "nhom": "Rủi ro",
+   "viDu": "A useful tool in identifying risks is the SWOT analysis. What does SWOT stand for?",
+   "viDuNghia": "Một công cụ hữu ích để xác định rủi ro là phân tích SWOT. SWOT là viết tắt của gì?"
+  },
+  {
+   "chu": "weakness",
+   "doc": "/ˈwiːknəs/",
+   "nghia": "điểm yếu (chữ W trong SWOT)",
+   "nhom": "Rủi ro",
+   "viDu": "A useful tool in identifying risks is the SWOT analysis. What does SWOT stand for? → Strengths, opportunities, weaknesses, and threats",
+   "viDuNghia": "Một công cụ hữu ích để xác định rủi ro là phân tích SWOT. SWOT là viết tắt của gì? → Điểm mạnh, cơ hội, điểm yếu, nguy cơ"
+  },
+  {
+   "chu": "positive risk",
+   "doc": "/ˈpɑːzətɪv rɪsk/",
+   "nghia": "rủi ro tích cực: sự kiện không chắc chắn có lợi – tức là cơ hội",
+   "nhom": "Rủi ro",
+   "viDu": "When you and your team know that a positive risk has a high likelihood of occurring and it will be very beneficial if it does:",
+   "viDuNghia": "Khi bạn và nhóm biết rằng một rủi ro tích cực có khả năng xảy ra cao và sẽ rất có lợi nếu nó xảy ra:"
+  },
+  {
+   "chu": "negative risk",
+   "doc": "/ˈneɡətɪv rɪsk/",
+   "nghia": "rủi ro tiêu cực: sự kiện không chắc chắn gây hại – tức là mối đe doạ",
+   "nhom": "Rủi ro",
+   "viDu": "When you and your team know that a negative risk has a high likelihood of occurring and it will be very impactful if it does:",
+   "viDuNghia": "Khi bạn và nhóm biết rằng một rủi ro tiêu cực có khả năng xảy ra cao và sẽ gây tác động rất lớn nếu xảy ra:"
+  },
+  {
+   "chu": "third party",
+   "doc": "/θɜːrd ˈpɑːrti/",
+   "nghia": "bên thứ ba: tổ chức ngoài dự án (bảo hiểm, nhà thầu) nhận rủi ro được chuyển giao",
+   "nhom": "Rủi ro",
+   "viDu": "When you choose to transfer your project risk to a third party, it may give rise to secondary risk that did not exist prior to the transfer.",
+   "viDuNghia": "Khi bạn chọn chuyển giao (transfer) rủi ro dự án cho bên thứ ba, điều đó có thể phát sinh rủi ro thứ cấp (secondary risk) chưa từng tồn tại trước khi chuyển giao."
+  },
+  {
+   "chu": "risk management",
+   "doc": "/rɪsk ˈmænɪdʒmənt/",
+   "nghia": "quản lý rủi ro – nhận diện, phân tích, lập kế hoạch ứng phó và theo dõi rủi ro suốt dự án",
+   "nhom": "Rủi ro",
+   "viDu": "True or False: Once you plan for managing risks, you are not finished. Risk management is an ongoing process.",
+   "viDuNghia": "Đúng hay Sai: Một khi bạn đã lập kế hoạch quản lý rủi ro, bạn vẫn chưa hoàn tất. Quản lý rủi ro là một quá trình liên tục."
+  },
+  {
+   "chu": "risk register",
+   "doc": "/rɪsk ˈredʒɪstər/",
+   "nghia": "sổ đăng ký rủi ro – bảng ghi các rủi ro, xác suất, tác động, người phụ trách và cách ứng phó",
+   "nhom": "Rủi ro",
+   "viDu": "True or False: The primary output from the identification of risks is the risk register.",
+   "viDuNghia": "Đúng hay Sai: Đầu ra chính của quá trình xác định rủi ro (identify risks) là sổ đăng ký rủi ro (risk register)."
+  },
+  {
+   "chu": "quality management",
+   "doc": "/ˈkwɑːləti ˈmænɪdʒmənt/",
+   "nghia": "quản lý chất lượng: bảo đảm dự án đáp ứng đúng nhu cầu đã đề ra",
+   "nhom": "Chất lượng",
+   "viDu": "The discipline of quality management complements the discipline of project management. Both recognize the importance of:",
+   "viDuNghia": "Ngành quản lý chất lượng bổ trợ cho ngành quản lý dự án. Cả hai đều công nhận tầm quan trọng của:"
+  },
+  {
+   "chu": "quality management plan",
+   "nghia": "kế hoạch quản lý chất lượng: nêu tiêu chuẩn chất lượng và cách đạt được",
+   "nhom": "Chất lượng",
+   "viDu": "The quality management plan describes the quality standards and how to meet them.",
+   "viDuNghia": "Kế hoạch quản lý chất lượng mô tả các tiêu chuẩn chất lượng và cách đạt được chúng."
+  },
+  {
+   "chu": "customer satisfaction",
+   "doc": "/ˈkʌstəmər ˌsætɪsˈfækʃn/",
+   "nghia": "sự hài lòng của khách hàng: hiểu, đáp ứng đúng kỳ vọng của khách",
+   "nhom": "Chất lượng",
+   "viDu": "Quality management and project management both recognize the importance of: → Customer satisfaction, prevention over inspection, continuous improvement",
+   "viDuNghia": "Quản lý chất lượng và quản lý dự án đều thừa nhận tầm quan trọng của: → Sự hài lòng của khách hàng, phòng ngừa hơn kiểm tra, cải tiến liên tục"
+  },
+  {
+   "chu": "continuous improvement",
+   "doc": "/kənˈtɪnjuəs ɪmˈpruːvmənt/",
+   "nghia": "cải tiến liên tục: làm tốt dần từng bước nhỏ (chu trình Plan-Do-Check-Act)",
+   "nhom": "Chất lượng",
+   "viDu": "Continuous improvement means making small changes to the process all the time.",
+   "viDuNghia": "Cải tiến liên tục nghĩa là luôn thực hiện những thay đổi nhỏ cho quy trình."
+  },
+  {
+   "chu": "prevention over inspection",
+   "nghia": "phòng ngừa hơn kiểm tra: chất lượng phải được lập kế hoạch và xây vào, không phải soát ra sau",
+   "nhom": "Chất lượng",
+   "viDu": "Prevention over inspection: it costs less to prevent a defect than to find and fix it later.",
+   "viDuNghia": "Phòng ngừa hơn kiểm tra: ngăn một lỗi tốn ít hơn là tìm và sửa nó về sau."
+  },
+  {
+   "chu": "Pareto chart",
+   "doc": "/pəˈreɪtoʊ tʃɑːrt/",
+   "nghia": "biểu đồ Pareto: xếp nguyên nhân theo tần suất – 20% nguyên nhân gây 80% vấn đề",
+   "nhom": "Chất lượng",
+   "viDu": "A Pareto chart shows which causes produce most of the defects.",
+   "viDuNghia": "Biểu đồ Pareto cho thấy nguyên nhân nào gây ra phần lớn lỗi."
+  },
+  {
+   "chu": "appraisal cost",
+   "doc": "/əˈpreɪzl kɔːst/",
+   "nghia": "chi phí thẩm định: tiền bỏ ra để kiểm tra, đo, thử sản phẩm (một phần của chi phí chất lượng)",
+   "nhom": "Chất lượng",
+   "viDu": "Provide at least 5 quality cost items (prevention, appraisal, or external failure costs), with a description and an estimation for each cost item.",
+   "viDuNghia": "Hãy nêu ít nhất 5 khoản chi phí chất lượng (phòng ngừa, thẩm định, hoặc lỗi bên ngoài), kèm mô tả và ước lượng cho từng khoản."
+  },
+  {
+   "chu": "external failure cost",
+   "nghia": "chi phí lỗi bên ngoài: tốn kém khi lỗi lọt tới tay khách hàng (bảo hành, sửa, mất uy tín)",
+   "nhom": "Chất lượng",
+   "viDu": "Fixing a bug that the customer found after release is an external failure cost.",
+   "viDuNghia": "Sửa một lỗi do khách hàng phát hiện sau khi phát hành là chi phí lỗi bên ngoài."
+  },
+  {
+   "chu": "prevention cost",
+   "doc": "/prɪˈvenʃn kɔːst/",
+   "nghia": "chi phí phòng ngừa: tiền bỏ ra để lỗi không xảy ra (đào tạo, quy trình, review)",
+   "nhom": "Chất lượng",
+   "viDu": "Training the team is a prevention cost.",
+   "viDuNghia": "Đào tạo nhóm là một khoản chi phí phòng ngừa."
+  },
+  {
+   "chu": "estimating",
+   "doc": "/ˈestɪmeɪtɪŋ/",
+   "nghia": "ước lượng (thời gian, chi phí)",
+   "nhom": "Ước lượng",
+   "viDu": "Using bottom-up estimating techniques when the detail is available and the accuracy is needed.",
+   "viDuNghia": "Sử dụng kỹ thuật ước lượng từ dưới lên (bottom-up) khi chi tiết có sẵn và cần độ chính xác cao."
+  },
+  {
+   "chu": "analogous estimating",
+   "doc": "/əˈnæləɡəs ˈestɪmeɪtɪŋ/",
+   "nghia": "ước lượng tương tự (từ trên xuống): dựa vào số liệu của dự án giống trước đây – nhanh nhưng kém chính xác",
+   "nhom": "Ước lượng",
+   "viDu": "When applying analogous estimating, the best practice is to use the expertise of someone who did previous projects that are similar in fact, not just in appearance.",
+   "viDuNghia": "Thực hành tốt nhất khi áp dụng ước lượng tương tự (analogous estimating) là sử dụng kinh nghiệm của người đã thực hiện các dự án trước đó thực sự tương tự chứ không chỉ giống bề ngoài."
+  },
+  {
+   "chu": "top-down estimating",
+   "doc": "/ˌtɑːp ˈdaʊn ˈestɪmeɪtɪŋ/",
+   "nghia": "ước lượng từ trên xuống: ước cả dự án rồi chia xuống các phần",
+   "nhom": "Ước lượng",
+   "viDu": "Using top-down estimating techniques when activity durations or resource quantities are uncertain.",
+   "viDuNghia": "Sử dụng kỹ thuật ước tính từ trên xuống khi thời lượng hoạt động hoặc số lượng nguồn lực chưa chắc chắn."
+  },
+  {
+   "chu": "bottom-up estimating",
+   "doc": "/ˌbɑːtəm ˈʌp ˈestɪmeɪtɪŋ/",
+   "nghia": "ước lượng từ dưới lên: ước từng gói công việc rồi cộng lên – chính xác nhất, tốn công nhất",
+   "nhom": "Ước lượng",
+   "viDu": "Which of the following is NOT the disadvantage of bottom-up estimating?",
+   "viDuNghia": "Điều nào sau đây KHÔNG phải là nhược điểm của ước lượng từ dưới lên (bottom-up estimating)?"
+  },
+  {
+   "chu": "parametric estimating",
+   "doc": "/ˌpærəˈmetrɪk ˈestɪmeɪtɪŋ/",
+   "nghia": "ước lượng tham số: lấy đơn giá nhân số lượng (ví dụ 2 giờ cho mỗi mét vuông)",
+   "nhom": "Ước lượng",
+   "viDu": "The danger of estimating with the same parametric model is that the historical data may no longer be applicable.",
+   "viDuNghia": "Nguy cơ khi ước lượng bằng cùng một mô hình tham số là dữ liệu lịch sử có thể không còn phù hợp nữa."
+  },
+  {
+   "chu": "three-point estimating",
+   "doc": "/ˌθriː ˈpɔɪnt ˈestɪmeɪtɪŋ/",
+   "nghia": "ước lượng ba điểm: dùng ba giá trị lạc quan, khả dĩ nhất, bi quan",
+   "nhom": "Ước lượng",
+   "viDu": "Three-point estimating uses optimistic, most likely and pessimistic values.",
+   "viDuNghia": "Ước lượng ba điểm dùng ba giá trị lạc quan, khả dĩ nhất và bi quan."
+  },
+  {
+   "chu": "program evaluation and review technique",
+   "nghia": "kỹ thuật PERT: thời lượng kỳ vọng = (O + 4M + P) / 6",
+   "nhom": "Ước lượng",
+   "viDu": "Given 14.000 USD is the most likely estimated cost of the activity, 8.000 USD is the optimistic value and 26.000 USD is the pessimistic one. Use PERT analysis to calculate the expected cost.",
+   "viDuNghia": "Cho chi phí ước lượng khả dĩ nhất của hoạt động là 14.000 USD, giá trị lạc quan là 8.000 USD và bi quan là 26.000 USD. Dùng phân tích PERT để tính chi phí kỳ vọng."
+  },
+  {
+   "chu": "optimistic",
+   "doc": "/ˌɑːptɪˈmɪstɪk/",
+   "nghia": "lạc quan (O): thời lượng ngắn nhất khi mọi việc thuận lợi",
+   "nhom": "Ước lượng",
+   "viDu": "The optimistic estimate assumes that everything goes well.",
+   "viDuNghia": "Ước lượng lạc quan giả định mọi việc đều thuận lợi."
+  },
+  {
+   "chu": "pessimistic",
+   "doc": "/ˌpesɪˈmɪstɪk/",
+   "nghia": "bi quan (P): thời lượng dài nhất khi mọi việc trục trặc",
+   "nhom": "Ước lượng",
+   "viDu": "The pessimistic estimate assumes that almost everything goes wrong.",
+   "viDuNghia": "Ước lượng bi quan giả định hầu như mọi việc đều trục trặc."
+  },
+  {
+   "chu": "historical information",
+   "doc": "/hɪˈstɔːrɪkl ˌɪnfərˈmeɪʃn/",
+   "nghia": "dữ liệu lịch sử: số liệu từ các dự án trước, dùng để ước lượng",
+   "nhom": "Ước lượng",
+   "viDu": "When you have good historical information which can be used in a reliable formula or model, you will probably use:",
+   "viDuNghia": "Khi bạn có thông tin lịch sử tốt có thể dùng trong một công thức hoặc mô hình đáng tin cậy, bạn sẽ nhiều khả năng sử dụng:"
+  },
+  {
+   "chu": "workload",
+   "doc": "/ˈwɜːrkloʊd/",
+   "nghia": "khối lượng công việc (của một người, một nhóm)",
+   "nhom": "Ước lượng",
+   "viDu": "Check each member's workload before assigning new tasks.",
+   "viDuNghia": "Hãy kiểm tra khối lượng công việc của từng thành viên trước khi giao việc mới."
+  },
+  {
+   "chu": "man-hour",
+   "doc": "/ˈmæn aʊər/",
+   "nghia": "giờ công: lượng việc một người làm trong một giờ (man-day: ngày công) – đơn vị đo công sức",
+   "nhom": "Ước lượng",
+   "viDu": "Provide at least 5 main cost items needed to complete the project. The estimation must be expressed in effort (man-days, man-hours).",
+   "viDuNghia": "Hãy nêu ít nhất 5 khoản chi phí chính cần để hoàn thành dự án. Ước lượng phải tính bằng công sức (ngày công, giờ công)."
+  },
+  {
+   "chu": "estimate",
+   "doc": "/ˈestɪmeɪt/",
+   "nghia": "ước lượng – dự tính thời gian, công sức, chi phí của công việc (activity cost estimates) · (thống kê, MAS291) giá trị suy từ mẫu cho tham số tổng thể",
+   "nhom": "Ước lượng",
+   "viDu": "True or False: When you are concerned that your estimates might not be correct, especially if you think they are too low, you should pad the estimate and add extra.",
+   "viDuNghia": "Đúng hay Sai: Khi bạn lo ngại ước tính của mình có thể không chính xác, đặc biệt nếu bạn nghĩ chúng quá thấp, bạn nên \"đệm\" (pad) ước tính và cộng thêm phần dư."
+  },
+  {
+   "chu": "communication method",
+   "doc": "/kəˌmjuːnɪˈkeɪʃn ˈmeθəd/",
+   "nghia": "phương thức truyền thông: tương tác, đẩy (push), kéo (pull)",
+   "nhom": "Truyền thông",
+   "viDu": "Choose the communication method (interactive, push or pull) that fits the message and the audience.",
+   "viDuNghia": "Hãy chọn phương thức truyền thông (tương tác, đẩy hay kéo) phù hợp với nội dung và đối tượng nhận."
+  },
+  {
+   "chu": "interactive communication",
+   "doc": "/ˌɪntərˈæktɪv kəˌmjuːnɪˈkeɪʃn/",
+   "nghia": "truyền thông tương tác: trao đổi hai chiều tức thời (họp, gọi điện)",
+   "nhom": "Truyền thông",
+   "viDu": "A meeting is interactive communication; an email is push communication.",
+   "viDuNghia": "Họp là truyền thông tương tác; email là truyền thông đẩy."
+  },
+  {
+   "chu": "push communication",
+   "doc": "/pʊʃ kəˌmjuːnɪˈkeɪʃn/",
+   "nghia": "truyền thông đẩy: gửi thẳng tới người nhận (email, báo cáo) – không chắc họ đã đọc, hiểu",
+   "nhom": "Truyền thông",
+   "viDu": "Sending a status report by email is push communication.",
+   "viDuNghia": "Gửi báo cáo tình trạng qua email là truyền thông đẩy."
+  },
+  {
+   "chu": "pull communication",
+   "doc": "/pʊl kəˌmjuːnɪˈkeɪʃn/",
+   "nghia": "truyền thông kéo: để thông tin ở một chỗ, ai cần tự vào lấy (cổng thông tin, wiki)",
+   "nhom": "Truyền thông",
+   "viDu": "A project wiki is pull communication: people go there when they need information.",
+   "viDuNghia": "Wiki dự án là truyền thông kéo: ai cần thông tin thì tự vào đó."
+  },
+  {
+   "chu": "audience",
+   "doc": "/ˈɔːdiəns/",
+   "nghia": "đối tượng nhận thông tin",
+   "nhom": "Truyền thông",
+   "viDu": "The communication plan lists the audience, purpose, frequency and method of each message.",
+   "viDuNghia": "Kế hoạch truyền thông liệt kê đối tượng nhận, mục đích, tần suất và phương thức của từng thông tin."
+  }
+ ]
+}

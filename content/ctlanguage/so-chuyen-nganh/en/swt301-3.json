@@ -1,0 +1,667 @@
+{
+ "ma": "swt301-3",
+ "nn": "en",
+ "ten": "SWT301 · 3. Kỹ thuật thiết kế test",
+ "moTa": "Thuật ngữ trích từ đề FE/PE thật môn SWT301: hộp đen (EP, BVA, bảng quyết định, chuyển trạng thái, use case), hộp trắng và độ phủ, kỹ thuật dựa trên kinh nghiệm, từ vựng đề PE viết test case. Ví dụ phần lớn là câu hỏi thật trong đề.",
+ "bieuTuong": "square.grid.3x3.fill",
+ "thuTu": -950,
+ "tu": [
+  {
+   "chu": "test design technique",
+   "nghia": "kỹ thuật thiết kế test — cách có hệ thống để rút ra test case: hộp đen, hộp trắng, dựa trên kinh nghiệm",
+   "nhom": "Nhóm kỹ thuật",
+   "viDu": "Purpose of test design technique is",
+   "viDuNghia": "Mục đích của kỹ thuật thiết kế kiểm thử (test design technique) là"
+  },
+  {
+   "chu": "black-box testing",
+   "doc": "/ˈblæk bɑːks ˈtestɪŋ/",
+   "nghia": "kiểm thử hộp đen — thiết kế test từ đặc tả, không nhìn vào code bên trong",
+   "nhom": "Nhóm kỹ thuật",
+   "viDu": "Which of the following is MOST characteristic of specification based (black-box) techniques?",
+   "viDuNghia": "Đâu là đặc điểm ĐẶC TRƯNG NHẤT của các kỹ thuật dựa trên đặc tả (hộp đen)?"
+  },
+  {
+   "chu": "white-box testing",
+   "doc": "/ˈwaɪt bɑːks ˈtestɪŋ/",
+   "nghia": "kiểm thử hộp trắng — thiết kế test dựa trên cấu trúc code bên trong (câu lệnh, nhánh, đường đi)",
+   "nhom": "Nhóm kỹ thuật",
+   "viDu": "One of the following is not a part of white box testing as per BS7925-II standards.",
+   "viDuNghia": "Một trong những kỹ thuật sau không thuộc kiểm thử hộp trắng theo chuẩn BS7925-II."
+  },
+  {
+   "chu": "specification-based",
+   "doc": "/ˌspesɪfɪˈkeɪʃn beɪst/",
+   "nghia": "dựa trên đặc tả — tên khác của kỹ thuật hộp đen",
+   "nhom": "Nhóm kỹ thuật",
+   "viDu": "What is the main purpose of specification-based testing techniques?",
+   "viDuNghia": "Mục đích chính của kỹ thuật kiểm thử dựa trên đặc tả (specification-based) là gì?"
+  },
+  {
+   "chu": "structure-based",
+   "doc": "/ˈstrʌktʃər beɪst/",
+   "nghia": "dựa trên cấu trúc — tên khác của kỹ thuật hộp trắng",
+   "nhom": "Nhóm kỹ thuật",
+   "viDu": "Structure-based techniques are also called white-box techniques.",
+   "viDuNghia": "Kỹ thuật dựa trên cấu trúc còn được gọi là kỹ thuật hộp trắng."
+  },
+  {
+   "chu": "experience-based",
+   "doc": "/ɪkˈspɪriəns beɪst/",
+   "nghia": "dựa trên kinh nghiệm — test dựa vào hiểu biết, trực giác của tester: error guessing, exploratory testing",
+   "nhom": "Nhóm kỹ thuật",
+   "viDu": "Error guessing is an experience-based technique.",
+   "viDuNghia": "Đoán lỗi là một kỹ thuật dựa trên kinh nghiệm."
+  },
+  {
+   "chu": "input",
+   "doc": "/ˈɪnpʊt/",
+   "nghia": "đầu vào — dữ liệu đưa vào hệ thống",
+   "nhom": "Nhóm kỹ thuật",
+   "viDu": "Which technique uses different combinations of inputs to result in different actions being taken?",
+   "viDuNghia": "Kỹ thuật nào dùng các tổ hợp đầu vào khác nhau để dẫn đến các hành động khác nhau được thực hiện?"
+  },
+  {
+   "chu": "syntax testing",
+   "doc": "/ˈsɪntæks ˈtestɪŋ/",
+   "nghia": "kiểm thử cú pháp — kỹ thuật hộp đen thử định dạng dữ liệu nhập đúng và sai so với quy tắc",
+   "nhom": "Nhóm kỹ thuật",
+   "viDu": "Syntax testing checks how the system handles inputs with a wrong format.",
+   "viDuNghia": "Kiểm thử cú pháp xem hệ thống xử lý ra sao với dữ liệu nhập sai định dạng."
+  },
+  {
+   "chu": "stochastic testing",
+   "doc": "/stəˈkæstɪk ˈtestɪŋ/",
+   "nghia": "kiểm thử ngẫu nhiên theo thống kê — chọn test dựa trên số liệu thống kê hoặc hồ sơ vận hành",
+   "nhom": "Nhóm kỹ thuật",
+   "viDu": "Stochastic testing using statistical information or operational profiles uses the following method",
+   "viDuNghia": "Kiểm thử ngẫu nhiên (stochastic testing) dùng thông tin thống kê hoặc hồ sơ vận hành (operational profiles) sử dụng phương pháp nào sau đây"
+  },
+  {
+   "chu": "operational profile",
+   "doc": "/ˌɑːpəˈreɪʃənl ˈproʊfaɪl/",
+   "nghia": "hồ sơ vận hành — mô tả người dùng thật dùng hệ thống ra sao, chức năng nào dùng nhiều",
+   "nhom": "Nhóm kỹ thuật",
+   "viDu": "Stochastic testing using statistical information or operational profiles uses the following method",
+   "viDuNghia": "Kiểm thử ngẫu nhiên (stochastic testing) dùng thông tin thống kê hoặc hồ sơ vận hành (operational profiles) sử dụng phương pháp nào sau đây"
+  },
+  {
+   "chu": "test technique",
+   "doc": "/ˈtest tekˈniːk/",
+   "nghia": "kỹ thuật kiểm thử: cách có hệ thống để chọn và thiết kế test (hộp đen, hộp trắng, dựa trên kinh nghiệm)",
+   "nhom": "Nhóm kỹ thuật",
+   "viDu": "A common test technique during component test is",
+   "viDuNghia": "Một kỹ thuật kiểm thử phổ biến trong kiểm thử thành phần (component test) là"
+  },
+  {
+   "chu": "equivalence partitioning",
+   "doc": "/ɪˈkwɪvələns pɑːrˈtɪʃənɪŋ/",
+   "nghia": "phân vùng tương đương (EP) — chia đầu vào thành các nhóm được xử lý giống nhau, mỗi nhóm chỉ cần thử một giá trị đại diện",
+   "nhom": "Phân vùng & giá trị biên",
+   "viDu": "Design a test case using Equivalence Partitioning for a function that calculates discounts based on Customer age: (Select all that apply)",
+   "viDuNghia": "Thiết kế ca kiểm thử bằng Phân vùng tương đương cho hàm tính chiết khấu dựa trên tuổi khách hàng: (Chọn tất cả đáp án đúng)"
+  },
+  {
+   "chu": "equivalence class",
+   "doc": "/ɪˈkwɪvələns klæs/",
+   "nghia": "lớp tương đương — một nhóm giá trị mà hệ thống xử lý như nhau; còn gọi equivalence partition",
+   "nhom": "Phân vùng & giá trị biên",
+   "viDu": "What is an equivalence partition (also known as an equivalence class)?",
+   "viDuNghia": "Phân hoạch tương đương (equivalence partition, còn gọi là lớp tương đương) là gì?"
+  },
+  {
+   "chu": "partition",
+   "doc": "/pɑːrˈtɪʃn/",
+   "nghia": "phân vùng — một nhóm giá trị trong EP",
+   "nhom": "Phân vùng & giá trị biên",
+   "viDu": "Equivalence partitioning is:",
+   "viDuNghia": "Phân vùng tương đương (Equivalence partitioning) là:"
+  },
+  {
+   "chu": "boundary value analysis",
+   "nghia": "phân tích giá trị biên (BVA) — thử ngay tại mép mỗi phân vùng (min, max và giá trị sát bên) vì lỗi hay nằm ở biên",
+   "nhom": "Phân vùng & giá trị biên",
+   "viDu": "Boundary Value Analysis is an extension of which technique?",
+   "viDuNghia": "Phân tích giá trị biên (BVA) là phần mở rộng của kỹ thuật nào?"
+  },
+  {
+   "chu": "boundary value",
+   "doc": "/ˈbaʊndri ˈvæljuː/",
+   "nghia": "giá trị biên — giá trị nằm ngay mép một phân vùng (nhỏ nhất, lớn nhất)",
+   "nhom": "Phân vùng & giá trị biên",
+   "viDu": "For the password field (8-12 alphanumeric characters), which of the following is a valid boundary value?",
+   "viDuNghia": "Với trường mật khẩu (8-12 ký tự chữ và số), giá trị biên hợp lệ nào sau đây là đúng?"
+  },
+  {
+   "chu": "boundary",
+   "doc": "/ˈbaʊndri/",
+   "nghia": "biên, ranh giới giữa hai phân vùng",
+   "nhom": "Phân vùng & giá trị biên",
+   "viDu": "An input field takes the year of birth between 1900 and 2004. The boundary values for testing this field are",
+   "viDuNghia": "Một trường nhập liệu nhận năm sinh trong khoảng từ 1900 đến 2004. Các giá trị biên để kiểm thử trường này là"
+  },
+  {
+   "chu": "range",
+   "doc": "/reɪndʒ/",
+   "nghia": "khoảng giá trị — ví dụ từ 18 tới 25",
+   "nhom": "Phân vùng & giá trị biên",
+   "viDu": "One of the fields on a form contains a text box which accepts numeric values in the range of 18 to 25. Identify the invalid Equivalence class",
+   "viDuNghia": "Một trường trên biểu mẫu chứa ô văn bản chấp nhận giá trị số trong khoảng 18 đến 25. Xác định lớp tương đương KHÔNG hợp lệ"
+  },
+  {
+   "chu": "input domain",
+   "doc": "/ˈɪnpʊt doʊˈmeɪn/",
+   "nghia": "miền đầu vào — tập mọi giá trị có thể nhập",
+   "nhom": "Phân vùng & giá trị biên",
+   "viDu": "Equivalence testing divides the input domain into classes of data from which test cases can be derived to reduce the total number of test cases that must be developed.",
+   "viDuNghia": "Kiểm thử tương đương chia miền đầu vào thành các lớp dữ liệu để từ đó suy ra test case, nhằm giảm tổng số test case phải phát triển."
+  },
+  {
+   "chu": "numeric",
+   "doc": "/nuːˈmerɪk/",
+   "nghia": "thuộc về số — numeric value: giá trị là số",
+   "nhom": "Phân vùng & giá trị biên",
+   "viDu": "One of the fields on a form contains a text box which accepts numeric values in the range of 18 to 25. Identify the invalid Equivalence class",
+   "viDuNghia": "Một trường trên biểu mẫu chứa ô văn bản chấp nhận giá trị số trong khoảng 18 đến 25. Xác định lớp tương đương KHÔNG hợp lệ"
+  },
+  {
+   "chu": "alphanumeric",
+   "doc": "/ˌælfənuːˈmerɪk/",
+   "nghia": "gồm chữ và số",
+   "nhom": "Phân vùng & giá trị biên",
+   "viDu": "For the password field (8-12 alphanumeric characters), which of the following is a valid boundary value?",
+   "viDuNghia": "Với trường mật khẩu (8-12 ký tự chữ và số), giá trị biên hợp lệ nào sau đây là đúng?"
+  },
+  {
+   "chu": "alphabet",
+   "doc": "/ˈælfəbet/",
+   "nghia": "chữ cái",
+   "nhom": "Phân vùng & giá trị biên",
+   "viDu": "One of the fields on a form contains a text box, which accepts alphabets in lower or upper case. Identify the invalid Equivalence class value.",
+   "viDuNghia": "Một trường trên form chứa ô nhập chỉ nhận chữ cái thường hoặc hoa. Hãy xác định giá trị lớp tương đương KHÔNG hợp lệ."
+  },
+  {
+   "chu": "upper case",
+   "doc": "/ˈʌpər keɪs/",
+   "nghia": "chữ hoa; lower case là chữ thường",
+   "nhom": "Phân vùng & giá trị biên",
+   "viDu": "One of the fields on a form contains a text box, which accepts alphabets in lower or upper case. Identify the invalid Equivalence class value.",
+   "viDuNghia": "Một trường trên form chứa ô nhập chỉ nhận chữ cái thường hoặc hoa. Hãy xác định giá trị lớp tương đương KHÔNG hợp lệ."
+  },
+  {
+   "chu": "invalid input",
+   "doc": "/ɪnˈvælɪd ˈɪnpʊt/",
+   "nghia": "đầu vào không hợp lệ — dữ liệu hệ thống phải từ chối hoặc báo lỗi",
+   "nhom": "Phân vùng & giá trị biên",
+   "viDu": "Data input is invalid, and invalid input notification is displayed below the corresponding field.",
+   "viDuNghia": "Dữ liệu nhập không hợp lệ, và thông báo đầu vào không hợp lệ hiện bên dưới ô tương ứng."
+  },
+  {
+   "chu": "decision table testing",
+   "nghia": "kiểm thử bảng quyết định — thử các tổ hợp điều kiện đầu vào; mỗi cột (rule) trong bảng thành một test case",
+   "nhom": "Bảng quyết định & trạng thái",
+   "viDu": "Decision table testing is useful when the output depends on combinations of conditions.",
+   "viDuNghia": "Kiểm thử bảng quyết định hữu ích khi kết quả phụ thuộc vào tổ hợp các điều kiện."
+  },
+  {
+   "chu": "condition",
+   "doc": "/kənˈdɪʃn/",
+   "nghia": "điều kiện — biểu thức đúng/sai; trong bảng quyết định là các dòng đầu vào",
+   "nhom": "Bảng quyết định & trạng thái",
+   "viDu": "Each condition in the decision table can be true or false.",
+   "viDuNghia": "Mỗi điều kiện trong bảng quyết định có thể đúng hoặc sai."
+  },
+  {
+   "chu": "action",
+   "doc": "/ˈækʃn/",
+   "nghia": "hành động — kết quả hệ thống thực hiện ứng với một tổ hợp điều kiện",
+   "nhom": "Bảng quyết định & trạng thái",
+   "viDu": "For each rule, the decision table shows the action the system should take.",
+   "viDuNghia": "Với mỗi quy tắc, bảng quyết định cho biết hành động hệ thống phải thực hiện."
+  },
+  {
+   "chu": "rule",
+   "doc": "/ruːl/",
+   "nghia": "quy tắc — một cột của bảng quyết định: tổ hợp điều kiện kèm hành động tương ứng",
+   "nhom": "Bảng quyết định & trạng thái",
+   "viDu": "Each column of a decision table is a rule, and each rule becomes one test case.",
+   "viDuNghia": "Mỗi cột của bảng quyết định là một quy tắc, và mỗi quy tắc thành một test case."
+  },
+  {
+   "chu": "combination",
+   "doc": "/ˌkɑːmbɪˈneɪʃn/",
+   "nghia": "tổ hợp — một cách kết hợp các giá trị đầu vào",
+   "nhom": "Bảng quyết định & trạng thái",
+   "viDu": "Which technique uses different combinations of inputs to result in different actions being taken?",
+   "viDuNghia": "Kỹ thuật nào dùng các tổ hợp đầu vào khác nhau để dẫn đến các hành động khác nhau được thực hiện?"
+  },
+  {
+   "chu": "state transition testing",
+   "nghia": "kiểm thử chuyển trạng thái — thử hệ thống đổi từ trạng thái này sang trạng thái khác khi có sự kiện, cả chuyển hợp lệ lẫn không hợp lệ",
+   "nhom": "Bảng quyết định & trạng thái",
+   "viDu": "What is the key focus of state transition testing?",
+   "viDuNghia": "Trọng tâm chính của kiểm thử chuyển trạng thái là gì?"
+  },
+  {
+   "chu": "state transition diagram",
+   "nghia": "sơ đồ chuyển trạng thái — hình vẽ các trạng thái và mũi tên chuyển giữa chúng",
+   "nhom": "Bảng quyết định & trạng thái",
+   "viDu": "Consider the following state transition diagram of a switch.",
+   "viDuNghia": "Xét sơ đồ chuyển trạng thái của một công tắc sau đây."
+  },
+  {
+   "chu": "transition",
+   "doc": "/trænˈzɪʃn/",
+   "nghia": "sự chuyển — bước đổi từ trạng thái này sang trạng thái khác",
+   "nhom": "Bảng quyết định & trạng thái",
+   "viDu": "What is the key focus of state transition testing?",
+   "viDuNghia": "Trọng tâm chính của kiểm thử chuyển trạng thái là gì?"
+  },
+  {
+   "chu": "sequence",
+   "doc": "/ˈsiːkwəns/",
+   "nghia": "trình tự, chuỗi các bước · (toán, MAD101) dãy số a1, a2, a3… theo một quy luật, vd dãy Fibonacci",
+   "nhom": "Bảng quyết định & trạng thái",
+   "viDu": "Which of the following sequences BEST shows the main activities of the work product review process?",
+   "viDuNghia": "Chuỗi nào sau đây thể hiện TỐT NHẤT các hoạt động chính của quy trình rà soát sản phẩm công việc?"
+  },
+  {
+   "chu": "cause-effect graphing",
+   "doc": "/ˌkɔːz ɪˈfekt ˈɡræfɪŋ/",
+   "nghia": "đồ thị nhân quả — kỹ thuật hộp đen vẽ quan hệ giữa điều kiện (nguyên nhân) và kết quả, rồi chuyển thành bảng quyết định",
+   "nhom": "Bảng quyết định & trạng thái",
+   "viDu": "Cause-effect graphing helps the tester build a decision table from the specification.",
+   "viDuNghia": "Đồ thị nhân quả giúp tester dựng bảng quyết định từ đặc tả."
+  },
+  {
+   "chu": "decision table",
+   "doc": "/dɪˈsɪʒn ˈteɪbl/",
+   "nghia": "bảng quyết định – kỹ thuật thiết kế test: liệt kê mọi tổ hợp điều kiện và hành động, mỗi cột (rule) thành ít nhất một test case",
+   "nhom": "Bảng quyết định & trạng thái",
+   "viDu": "What is the function of decision tables in requirements modeling?",
+   "viDuNghia": "Chức năng của bảng quyết định (decision table) trong mô hình hóa yêu cầu là gì?"
+  },
+  {
+   "chu": "invalid transition",
+   "doc": "/ɪnˈvælɪd trænˈzɪʃn/",
+   "nghia": "bước chuyển không hợp lệ: chuyển trạng thái mà sơ đồ không cho phép; state transition testing phải thử cả loại này",
+   "nhom": "Bảng quyết định & trạng thái",
+   "viDu": "Which of the following series of state transitions contains an INVALID transition which may indicate a fault in the system design?",
+   "viDuNghia": "Chuỗi chuyển trạng thái nào sau đây chứa một bước chuyển KHÔNG HỢP LỆ, có thể chỉ ra lỗi trong thiết kế hệ thống?"
+  },
+  {
+   "chu": "premium",
+   "doc": "/ˈpriːmiəm/",
+   "nghia": "(bảo hiểm) phí bảo hiểm phải đóng — hay gặp trong câu bảng quyết định về bảo hiểm (Age, Insurance class, Premium, Excess)",
+   "nhom": "Bảng quyết định & trạng thái",
+   "viDu": "23 year old in insurance class A. Premium is 90 and excess is 2,500.",
+   "viDuNghia": "Người 23 tuổi, hạng bảo hiểm A: phí bảo hiểm là 90 và mức khấu trừ là 2.500."
+  },
+  {
+   "chu": "excess",
+   "doc": "/ˈekses/",
+   "nghia": "(bảo hiểm) mức khấu trừ — phần thiệt hại người mua tự chịu trước khi bảo hiểm chi; nghĩa chung: phần vượt quá",
+   "nhom": "Bảng quyết định & trạng thái",
+   "viDu": "23 year old in insurance class A. Premium is 90 and excess is 2,500.",
+   "viDuNghia": "Người 23 tuổi, hạng bảo hiểm A: phí bảo hiểm là 90 và mức khấu trừ là 2.500."
+  },
+  {
+   "chu": "use case testing",
+   "doc": "/ˈjuːs keɪs ˈtestɪŋ/",
+   "nghia": "kiểm thử theo use case — rút test từ các kịch bản người dùng tương tác với hệ thống (luồng chính và luồng phụ)",
+   "nhom": "Use case",
+   "viDu": "What is the main purpose of use case testing?",
+   "viDuNghia": "Mục đích chính của kiểm thử ca sử dụng (use case testing) là gì?"
+  },
+  {
+   "chu": "coverage",
+   "doc": "/ˈkʌvərɪdʒ/",
+   "nghia": "độ phủ — phần trăm thứ cần test (câu lệnh, nhánh, yêu cầu) đã được bộ test chạy qua",
+   "nhom": "Hộp trắng & độ phủ",
+   "viDu": "Given the following fragment of code, how many tests are required for 100% decision coverage?",
+   "viDuNghia": "Cho đoạn mã sau, cần bao nhiêu trường hợp kiểm thử để đạt 100% bao phủ quyết định?"
+  },
+  {
+   "chu": "code coverage",
+   "doc": "/ˈkoʊd ˈkʌvərɪdʒ/",
+   "nghia": "độ phủ mã — bao nhiêu phần code đã được test chạy tới",
+   "nhom": "Hộp trắng & độ phủ",
+   "viDu": "Code Coverage is used as a measure of what?",
+   "viDuNghia": "Độ bao phủ mã (Code Coverage) được dùng như thước đo của điều gì?"
+  },
+  {
+   "chu": "statement coverage",
+   "doc": "/ˈsteɪtmənt ˈkʌvərɪdʒ/",
+   "nghia": "độ phủ câu lệnh — phần trăm câu lệnh đã được chạy ít nhất một lần",
+   "nhom": "Hộp trắng & độ phủ",
+   "viDu": "Statement Coverage will not check for the following.",
+   "viDuNghia": "Bao phủ câu lệnh (Statement Coverage) sẽ KHÔNG kiểm tra điều nào sau đây."
+  },
+  {
+   "chu": "branch coverage",
+   "doc": "/ˈbræntʃ ˈkʌvərɪdʒ/",
+   "nghia": "độ phủ nhánh — phần trăm nhánh rẽ (cả true lẫn false) đã được chạy",
+   "nhom": "Hộp trắng & độ phủ",
+   "viDu": "Complete statement and branch coverage means:",
+   "viDuNghia": "Bao phủ câu lệnh và nhánh đầy đủ (complete statement and branch coverage) nghĩa là:"
+  },
+  {
+   "chu": "decision coverage",
+   "doc": "/dɪˈsɪʒn ˈkʌvərɪdʒ/",
+   "nghia": "độ phủ quyết định — phần trăm kết quả đúng/sai của các điểm quyết định đã được chạy; 100% decision thì cũng 100% statement",
+   "nhom": "Hộp trắng & độ phủ",
+   "viDu": "Which of the following statements is CORRECT about decision coverage?",
+   "viDuNghia": "Phát biểu nào sau đây ĐÚNG về độ bao phủ quyết định (decision coverage)?"
+  },
+  {
+   "chu": "decision",
+   "doc": "/dɪˈsɪʒn/",
+   "nghia": "điểm quyết định — chỗ code rẽ nhánh (IF, WHILE...)",
+   "nhom": "Hộp trắng & độ phủ",
+   "viDu": "Why is decision coverage important in white-box testing?",
+   "viDuNghia": "Vì sao độ bao phủ quyết định (decision coverage) quan trọng trong kiểm thử hộp trắng?"
+  },
+  {
+   "chu": "condition coverage",
+   "doc": "/kənˈdɪʃn ˈkʌvərɪdʒ/",
+   "nghia": "độ phủ điều kiện — mỗi điều kiện con trong một quyết định đều đã nhận cả giá trị đúng và sai",
+   "nhom": "Hộp trắng & độ phủ",
+   "viDu": "Condition coverage requires each condition in a decision to be both true and false.",
+   "viDuNghia": "Độ phủ điều kiện đòi mỗi điều kiện trong một quyết định phải nhận cả giá trị đúng lẫn sai."
+  },
+  {
+   "chu": "path coverage",
+   "doc": "/ˈpæθ ˈkʌvərɪdʒ/",
+   "nghia": "độ phủ đường đi — phần trăm đường đi từ đầu tới cuối chương trình đã được chạy",
+   "nhom": "Hộp trắng & độ phủ",
+   "viDu": "Full path coverage is usually impossible when the code contains loops.",
+   "viDuNghia": "Phủ hết mọi đường đi thường là bất khả thi khi code có vòng lặp."
+  },
+  {
+   "chu": "logic coverage",
+   "doc": "/ˈlɑːdʒɪk ˈkʌvərɪdʒ/",
+   "nghia": "độ phủ logic — tên chung cho các độ phủ hộp trắng: statement, decision, condition, path",
+   "nhom": "Hộp trắng & độ phủ",
+   "viDu": "Incorrect form of Logic coverage is:",
+   "viDuNghia": "Dạng bao phủ logic (Logic coverage) KHÔNG đúng là:"
+  },
+  {
+   "chu": "cyclomatic complexity",
+   "doc": "/ˌsaɪkləˈmætɪk kəmˈpleksəti/",
+   "nghia": "độ phức tạp cyclomatic — số đường đi độc lập qua code; V(G) = cạnh − nút + 2, hoặc số điểm quyết định + 1",
+   "nhom": "Hộp trắng & độ phủ",
+   "viDu": "A program with high cyclomatic complexity is almost likely to be:",
+   "viDuNghia": "Một chương trình có độ phức tạp cyclomatic cao gần như chắc chắn sẽ:"
+  },
+  {
+   "chu": "independent path",
+   "doc": "/ˌɪndɪˈpendənt pæθ/",
+   "nghia": "đường đi độc lập — đường qua code có ít nhất một cạnh chưa có ở các đường khác",
+   "nhom": "Hộp trắng & độ phủ",
+   "viDu": "The number of independent paths through a program equals its cyclomatic complexity.",
+   "viDuNghia": "Số đường đi độc lập qua một chương trình bằng độ phức tạp cyclomatic của nó."
+  },
+  {
+   "chu": "loop testing",
+   "doc": "/ˈluːp ˈtestɪŋ/",
+   "nghia": "kiểm thử vòng lặp — thử vòng lặp chạy 0 lần, 1 lần, nhiều lần, tối đa",
+   "nhom": "Hộp trắng & độ phủ",
+   "viDu": "Which of these can be successfully tested using Loop Testing methodology (choose one answer)?",
+   "viDuNghia": "Loại nào sau đây có thể được kiểm thử thành công bằng phương pháp Kiểm thử vòng lặp (Loop Testing) (chọn một đáp án)?"
+  },
+  {
+   "chu": "arc testing",
+   "doc": "/ˈɑːrk ˈtestɪŋ/",
+   "nghia": "kiểm thử cung — tên khác của branch testing",
+   "nhom": "Hộp trắng & độ phủ",
+   "viDu": "Arc testing is known as",
+   "viDuNghia": "Kiểm thử cung (arc testing) còn được gọi là gì?"
+  },
+  {
+   "chu": "percentage",
+   "doc": "/pərˈsentɪdʒ/",
+   "nghia": "tỉ lệ phần trăm",
+   "nhom": "Hộp trắng & độ phủ",
+   "viDu": "A white box testing technique that measures the number of or percentage of decision directions executed by the test case designed is called",
+   "viDuNghia": "Kỹ thuật kiểm thử hộp trắng đo số lượng hoặc phần trăm các hướng quyết định (decision directions) được thực thi bởi trường hợp kiểm thử được thiết kế gọi là"
+  },
+  {
+   "chu": "branch testing",
+   "doc": "/ˈbræntʃ ˈtestɪŋ/",
+   "nghia": "kiểm thử nhánh — thiết kế test để chạy qua các nhánh rẽ (true/false) của code; còn gọi arc testing",
+   "nhom": "Hộp trắng & độ phủ",
+   "viDu": "Branch testing needs at least one test for the true outcome and one for the false outcome of each decision.",
+   "viDuNghia": "Kiểm thử nhánh cần ít nhất một test cho kết quả đúng và một test cho kết quả sai của mỗi điểm quyết định."
+  },
+  {
+   "chu": "coverage measurement",
+   "doc": "/ˈkʌvərɪdʒ ˈmeʒərmənt/",
+   "nghia": "đo độ phủ — tính xem bộ test đã chạy qua bao nhiêu phần trăm cấu trúc code",
+   "nhom": "Hộp trắng & độ phủ",
+   "viDu": "A coverage measurement tool shows what percentage of the code structure the tests have exercised.",
+   "viDuNghia": "Công cụ đo độ phủ cho biết bộ test đã chạy qua bao nhiêu phần trăm cấu trúc code."
+  },
+  {
+   "chu": "linear code sequence and jump",
+   "nghia": "LCSAJ — một kiểu độ phủ hộp trắng: chuỗi câu lệnh chạy tuần tự rồi kết thúc bằng một bước nhảy",
+   "nhom": "Hộp trắng & độ phủ",
+   "viDu": "LCSAJ coverage is a white-box measure that is stronger than branch coverage.",
+   "viDuNghia": "Độ phủ LCSAJ là một số đo hộp trắng mạnh hơn độ phủ nhánh."
+  },
+  {
+   "chu": "test coverage",
+   "doc": "/test ˈkʌvərɪdʒ/",
+   "nghia": "độ bao phủ kiểm thử – tỉ lệ (%) phần được bộ test chạm tới (câu lệnh, nhánh, yêu cầu…) trên tổng; đo mức đầy đủ của việc kiểm thử",
+   "nhom": "Hộp trắng & độ phủ",
+   "viDu": "Which is a key benefit of risk-based testing? → It optimizes test coverage by focusing on high-risk areas.",
+   "viDuNghia": "Lợi ích chính của kiểm thử dựa trên rủi ro là gì? → Nó tối ưu độ bao phủ kiểm thử bằng cách tập trung vào vùng rủi ro cao."
+  },
+  {
+   "chu": "error guessing",
+   "doc": "/ˈerər ˈɡesɪŋ/",
+   "nghia": "đoán lỗi — tester dựa vào kinh nghiệm để đoán chỗ dễ có lỗi rồi viết test nhắm vào đó",
+   "nhom": "Dựa trên kinh nghiệm",
+   "viDu": "Error guessing is best used",
+   "viDuNghia": "Đoán lỗi (error guessing) được dùng tốt nhất"
+  },
+  {
+   "chu": "exploratory testing",
+   "doc": "/ɪkˈsplɔːrətɔːri ˈtestɪŋ/",
+   "nghia": "kiểm thử thăm dò — vừa tìm hiểu, vừa thiết kế, vừa chạy test cùng lúc; hợp khi thiếu tài liệu, ít thời gian",
+   "nhom": "Dựa trên kinh nghiệm",
+   "viDu": "What essential skill does exploratory testing require from a tester?",
+   "viDuNghia": "Kiểm thử khám phá đòi hỏi kỹ năng thiết yếu nào ở tester?"
+  },
+  {
+   "chu": "intuition",
+   "doc": "/ˌɪntuˈɪʃn/",
+   "nghia": "trực giác",
+   "nhom": "Dựa trên kinh nghiệm",
+   "viDu": "Which type of test design technique is based on the tester's skills, intuition, and experience in testing?",
+   "viDuNghia": "Loại kỹ thuật thiết kế kiểm thử nào dựa trên kỹ năng, trực giác và kinh nghiệm của người kiểm thử?"
+  },
+  {
+   "chu": "unit test case",
+   "doc": "/ˈjuːnɪt ˈtest keɪs/",
+   "nghia": "ca kiểm thử đơn vị — test case cho một hàm/phương thức",
+   "nhom": "Đề PE: viết test case",
+   "viDu": "Create unit test cases that achieve:",
+   "viDuNghia": "Tạo các ca kiểm thử đơn vị đạt được:"
+  },
+  {
+   "chu": "test case ID",
+   "nghia": "mã test case — số hiệu để phân biệt từng test case",
+   "nhom": "Đề PE: viết test case",
+   "viDu": "Test Case ID, Description, Initial State, Action Performed, Expected State.",
+   "viDuNghia": "Mã test case, mô tả, trạng thái ban đầu, hành động thực hiện, trạng thái mong đợi."
+  },
+  {
+   "chu": "normal case",
+   "doc": "/ˈnɔːrml keɪs/",
+   "nghia": "trường hợp bình thường — dữ liệu hợp lệ, luồng chính",
+   "nhom": "Đề PE: viết test case",
+   "viDu": "Normal case - the user fills in the fields and clicks \"Create\";",
+   "viDuNghia": "Trường hợp bình thường — người dùng điền các ô rồi bấm \"Create\";"
+  },
+  {
+   "chu": "abnormal case",
+   "doc": "/æbˈnɔːrml keɪs/",
+   "nghia": "trường hợp bất thường — dữ liệu sai, tình huống lỗi",
+   "nhom": "Đề PE: viết test case",
+   "viDu": "Abnormal case - when the input data is invalid, the system reports an error and asks the user to re-enter.",
+   "viDuNghia": "Trường hợp bất thường — khi dữ liệu nhập không hợp lệ, hệ thống báo lỗi và yêu cầu người dùng nhập lại."
+  },
+  {
+   "chu": "assumption",
+   "doc": "/əˈsʌmpʃn/",
+   "nghia": "giả định — điều tự đặt ra khi đề không nói rõ; phải ghi vào bài làm",
+   "nhom": "Đề PE: viết test case",
+   "viDu": "Feel free to state any assumptions needed for your answers to be clearer and more accurate.",
+   "viDuNghia": "Bạn được tự nêu các giả định cần thiết để câu trả lời rõ và chính xác hơn."
+  },
+  {
+   "chu": "template",
+   "doc": "/ˈtemplət/",
+   "nghia": "biểu mẫu, tệp mẫu — đề PE: tệp mẫu phát sẵn để làm bài (không dùng là 0 điểm); SWR302: mẫu tài liệu SRS, mẫu đặc tả use case",
+   "nhom": "Đề PE: viết test case",
+   "viDu": "If you do not use the provided template file, your exam will be marked ZERO.",
+   "viDuNghia": "Nếu không dùng tệp biểu mẫu được phát, bài thi của bạn sẽ bị điểm 0."
+  },
+  {
+   "chu": "practical exam",
+   "doc": "/ˈpræktɪkl ɪɡˈzæm/",
+   "nghia": "bài thi thực hành (PE)",
+   "nhom": "Đề PE: viết test case",
+   "viDu": "This is a Practical Exam (PE) for SWT301 - Software Testing.",
+   "viDuNghia": "Đây là bài thi thực hành (PE) môn SWT301 - Kiểm thử phần mềm."
+  },
+  {
+   "chu": "function description",
+   "doc": "/ˈfʌŋkʃn dɪˈskrɪpʃn/",
+   "nghia": "mô tả chức năng — phần đề nói hàm/màn hình phải làm gì",
+   "nhom": "Đề PE: viết test case",
+   "viDu": "(Use the provided test case template - sheet Q3.) Function Description:",
+   "viDuNghia": "(Dùng biểu mẫu test case được phát — sheet Q3.) Mô tả chức năng:"
+  },
+  {
+   "chu": "positive",
+   "doc": "/ˈpɑːzətɪv/",
+   "nghia": "dương (số lớn hơn 0); positive test: test với dữ liệu hợp lệ",
+   "nhom": "Đề PE: viết test case",
+   "viDu": "\"Please enter valid positive numbers for all required fields!\".",
+   "viDuNghia": "\"Vui lòng nhập số dương hợp lệ cho mọi ô bắt buộc!\""
+  },
+  {
+   "chu": "parameter",
+   "doc": "/pəˈræmɪtər/",
+   "nghia": "tham số — giá trị truyền vào hàm",
+   "nhom": "Đề PE: code & màn hình",
+   "viDu": "Assume all parameters are provided and have the correct data types.",
+   "viDuNghia": "Giả sử mọi tham số đều được truyền vào và đúng kiểu dữ liệu."
+  },
+  {
+   "chu": "validate",
+   "doc": "/ˈvælɪdeɪt/",
+   "nghia": "kiểm tra tính hợp lệ của dữ liệu nhập",
+   "nhom": "Đề PE: code & màn hình",
+   "viDu": "Your task is to design test cases using JUnit to validate this method.",
+   "viDuNghia": "Nhiệm vụ của bạn là thiết kế test case bằng JUnit để kiểm tra phương thức này."
+  },
+  {
+   "chu": "exceed",
+   "doc": "/ɪkˈsiːd/",
+   "nghia": "vượt quá — ví dụ not exceeding 50 characters: không quá 50 ký tự",
+   "nhom": "Đề PE: code & màn hình",
+   "viDu": "Which testing is used to verify that the system can perform properly when internal program or system limitations have been exceeded",
+   "viDuNghia": "Loại kiểm thử nào dùng để xác minh rằng hệ thống vẫn hoạt động đúng khi các giới hạn nội bộ của chương trình hoặc hệ thống bị vượt quá"
+  },
+  {
+   "chu": "length",
+   "doc": "/leŋθ/",
+   "nghia": "độ dài — số ký tự của chuỗi",
+   "nhom": "Đề PE: code & màn hình",
+   "viDu": "\"Document code\" is a required string with length ranging from 3 to 10 characters.",
+   "viDuNghia": "\"Document code\" là chuỗi bắt buộc, độ dài từ 3 đến 10 ký tự."
+  },
+  {
+   "chu": "special character",
+   "doc": "/ˈspeʃl ˈkærəktər/",
+   "nghia": "ký tự đặc biệt — như @, #, $, %",
+   "nhom": "Đề PE: code & màn hình",
+   "viDu": "required, no more than 250 characters, no special character",
+   "viDuNghia": "bắt buộc, không quá 250 ký tự, không có ký tự đặc biệt"
+  },
+  {
+   "chu": "blank",
+   "doc": "/blæŋk/",
+   "nghia": "chỗ trống; khoảng trắng — \"Fill in the blank\" = điền vào chỗ trống; \"no blanks are allowed\" = không được có dấu cách / ô để trống",
+   "nhom": "Đề PE: code & màn hình",
+   "viDu": "No special characters or blanks are allowed.",
+   "viDuNghia": "Không được có ký tự đặc biệt hay khoảng trắng."
+  },
+  {
+   "chu": "empty",
+   "doc": "/ˈempti/",
+   "nghia": "rỗng — không nhập gì",
+   "nhom": "Đề PE: code & màn hình",
+   "viDu": "If the shopping cart is empty when proceeding to checkout, the system prompts the customer to add items to the cart.",
+   "viDuNghia": "Nếu giỏ hàng rỗng khi sang bước thanh toán, hệ thống nhắc khách thêm hàng vào giỏ."
+  },
+  {
+   "chu": "error message",
+   "doc": "/ˈerər ˈmesɪdʒ/",
+   "nghia": "thông báo lỗi",
+   "nhom": "Đề PE: code & màn hình",
+   "viDu": "If it is invalid, the system displays the error message \"The input data for <XXXX> field is invalid!\".",
+   "viDuNghia": "Nếu không hợp lệ, hệ thống hiện thông báo lỗi \"The input data for <XXXX> field is invalid!\"."
+  },
+  {
+   "chu": "text field",
+   "doc": "/ˈtekst fiːld/",
+   "nghia": "ô nhập chữ",
+   "nhom": "Đề PE: code & màn hình",
+   "viDu": "Feeding Rate (% of Fish Weight) - text field with placeholder \"Value\";",
+   "viDuNghia": "Feeding Rate (% trọng lượng cá) — ô nhập chữ có chữ gợi ý \"Value\";"
+  },
+  {
+   "chu": "dropdown",
+   "doc": "/ˈdrɑːpdaʊn/",
+   "nghia": "danh sách thả xuống để chọn",
+   "nhom": "Đề PE: code & màn hình",
+   "viDu": "A dropdown to select gold purity (24K, 21K, 18K, 14K).",
+   "viDuNghia": "Một danh sách thả xuống để chọn tuổi vàng (24K, 21K, 18K, 14K)."
+  },
+  {
+   "chu": "screen layout",
+   "doc": "/ˈskriːn ˈleɪaʊt/",
+   "nghia": "bố cục màn hình",
+   "nhom": "Đề PE: code & màn hình",
+   "viDu": "The screen layout shows two text fields and a \"Calculate\" button.",
+   "viDuNghia": "Bố cục màn hình có hai ô nhập chữ và một nút \"Calculate\"."
+  },
+  {
+   "chu": "required field",
+   "doc": "/rɪˈkwaɪərd fiːld/",
+   "nghia": "ô bắt buộc nhập",
+   "nhom": "Đề PE: code & màn hình",
+   "viDu": "If a required field is empty or any field has an invalid value, the system displays the error message:",
+   "viDuNghia": "Nếu một ô bắt buộc bị bỏ trống hoặc ô nào có giá trị không hợp lệ, hệ thống hiện thông báo lỗi:"
+  },
+  {
+   "chu": "default",
+   "doc": "/dɪˈfɔːlt/",
+   "nghia": "mặc định — giá trị có sẵn khi người dùng chưa chọn",
+   "nhom": "Đề PE: code & màn hình",
+   "viDu": "if not selected, default is Gram.",
+   "viDuNghia": "nếu không chọn thì mặc định là Gram."
+  },
+  {
+   "chu": "display",
+   "doc": "/dɪˈspleɪ/",
+   "nghia": "hiển thị",
+   "nhom": "Đề PE: code & màn hình",
+   "viDu": "the system displays the results of the (\"X\" + \"Y\") expression value in \"Result\".",
+   "viDuNghia": "hệ thống hiển thị kết quả của biểu thức (\"X\" + \"Y\") ở ô \"Result\"."
+  }
+ ]
+}

@@ -1,0 +1,892 @@
+{
+ "ma": "dbi202-1",
+ "nn": "en",
+ "ten": "DBI202 · 1. Mô hình dữ liệu, ER, chuẩn hoá",
+ "moTa": "Môn Database Systems (DBI202), bộ 1: khái niệm CSDL, mô hình ER, mô hình quan hệ và khoá, đại số quan hệ, phụ thuộc hàm, chuẩn hoá. Từ lấy từ đề FE/PE thật của môn; câu ví dụ phần lớn là câu hỏi thật trong đề.",
+ "bieuTuong": "cylinder.split.1x2.fill",
+ "thuTu": -966,
+ "tu": [
+  {
+   "chu": "database management system",
+   "nghia": "hệ quản trị cơ sở dữ liệu (DBMS): phần mềm tạo, lưu và quản lý CSDL, vd SQL Server, MySQL",
+   "nhom": "Khái niệm cơ sở",
+   "viDu": "According to the technology deployed by the database management system, which of the following is correct?",
+   "viDuNghia": "Theo công nghệ mà hệ quản trị cơ sở dữ liệu (DBMS) sử dụng, phát biểu nào sau đây đúng?"
+  },
+  {
+   "chu": "relational model",
+   "doc": "/rɪˈleɪʃənl ˈmɑːdl/",
+   "nghia": "mô hình quan hệ: dữ liệu tổ chức thành các bảng (quan hệ) hai chiều",
+   "nhom": "Khái niệm cơ sở",
+   "viDu": "Which of the following statements is correct when converting from the ERD model to the relational model?",
+   "viDuNghia": "Phát biểu nào sau đây đúng khi chuyển đổi từ mô hình ERD sang mô hình quan hệ?"
+  },
+  {
+   "chu": "relational database",
+   "doc": "/rɪˈleɪʃənl ˈdeɪtəbeɪs/",
+   "nghia": "cơ sở dữ liệu quan hệ: CSDL gồm các bảng liên kết với nhau qua khoá",
+   "nhom": "Khái niệm cơ sở",
+   "viDu": "In a relational database, which SQL command is used to modify the structure of an existing table?",
+   "viDuNghia": "Trong CSDL quan hệ, lệnh SQL nào dùng để sửa cấu trúc của một bảng đã có?"
+  },
+  {
+   "chu": "hierarchical model",
+   "doc": "/ˌhaɪəˈrɑːrkɪkl ˈmɑːdl/",
+   "nghia": "mô hình phân cấp: dữ liệu tổ chức dạng cây cha – con (mô hình cũ, trước mô hình quan hệ)",
+   "nhom": "Khái niệm cơ sở",
+   "viDu": "What data structure will be represented for the hierarchical data model?",
+   "viDuNghia": "Mô hình dữ liệu phân cấp (hierarchical data model) được biểu diễn bằng cấu trúc dữ liệu nào?"
+  },
+  {
+   "chu": "network model",
+   "doc": "/ˈnetwɜːrk ˈmɑːdl/",
+   "nghia": "mô hình mạng: dữ liệu tổ chức dạng đồ thị, một bản ghi con có thể có nhiều cha",
+   "nhom": "Khái niệm cơ sở",
+   "viDu": "In a network data model, a node can be linked to multiple other nodes. What is this relationship called?",
+   "viDuNghia": "Trong mô hình dữ liệu mạng, một nút có thể được liên kết với nhiều nút khác. Mối quan hệ này được gọi là gì?"
+  },
+  {
+   "chu": "object-oriented model",
+   "doc": "/ˌɑːbdʒekt ˈɔːrientɪd ˈmɑːdl/",
+   "nghia": "mô hình hướng đối tượng: dữ liệu lưu dưới dạng đối tượng có thuộc tính và phương thức",
+   "nhom": "Khái niệm cơ sở",
+   "viDu": "An object-oriented model stores data as objects with attributes and methods.",
+   "viDuNghia": "Mô hình hướng đối tượng lưu dữ liệu dưới dạng các đối tượng có thuộc tính và phương thức."
+  },
+  {
+   "chu": "semistructured data",
+   "doc": "/ˌsemiˈstrʌktʃərd ˈdeɪtə/",
+   "nghia": "dữ liệu bán cấu trúc: dữ liệu tự mô tả, không theo lược đồ cứng (XML, JSON)",
+   "nhom": "Khái niệm cơ sở",
+   "viDu": "XML is a common format for semistructured data.",
+   "viDuNghia": "XML là định dạng phổ biến cho dữ liệu bán cấu trúc."
+  },
+  {
+   "chu": "schema",
+   "doc": "/ˈskiːmə/",
+   "nghia": "lược đồ: phần mô tả cấu trúc (tên bảng, tên cột, kiểu dữ liệu), không phải dữ liệu",
+   "nhom": "Khái niệm cơ sở",
+   "viDu": "Consider the table named \"Boat\": Which option is the correct relation schema for the table?",
+   "viDuNghia": "Xét bảng tên \"Boat\": Phương án nào là lược đồ quan hệ (relation schema) đúng cho bảng này?"
+  },
+  {
+   "chu": "relation schema",
+   "doc": "/rɪˈleɪʃn ˈskiːmə/",
+   "nghia": "lược đồ quan hệ: tên quan hệ kèm danh sách thuộc tính, vd R(A, B, C)",
+   "nhom": "Khái niệm cơ sở",
+   "viDu": "In SQL , the command/statement that let you add an attribute to a relation schema is …….",
+   "viDuNghia": "Trong SQL, câu lệnh cho phép thêm một thuộc tính vào lược đồ quan hệ (relation schema) là ……."
+  },
+  {
+   "chu": "database administrator",
+   "doc": "/ˈdeɪtəbeɪs ədˈmɪnɪstreɪtər/",
+   "nghia": "người quản trị cơ sở dữ liệu (DBA): lo cấp quyền, sao lưu, hiệu năng",
+   "nhom": "Khái niệm cơ sở",
+   "viDu": "A database administrator: a person or persons responsible for the structure or schema of the database.",
+   "viDuNghia": "Quản trị viên cơ sở dữ liệu (DBA): một người hoặc nhiều người chịu trách nhiệm về cấu trúc hoặc lược đồ (schema) của cơ sở dữ liệu."
+  },
+  {
+   "chu": "data independence",
+   "doc": "/ˈdeɪtə ˌɪndɪˈpendəns/",
+   "nghia": "tính độc lập dữ liệu: đổi cách lưu trữ mà không phải sửa chương trình ứng dụng",
+   "nhom": "Khái niệm cơ sở",
+   "viDu": "Data independence lets us change storage without rewriting applications.",
+   "viDuNghia": "Tính độc lập dữ liệu cho phép đổi cách lưu trữ mà không phải viết lại ứng dụng."
+  },
+  {
+   "chu": "metadata",
+   "doc": "/ˈmetədeɪtə/",
+   "nghia": "siêu dữ liệu: dữ liệu mô tả về dữ liệu (tên bảng, kiểu cột, ràng buộc)",
+   "nhom": "Khái niệm cơ sở",
+   "viDu": "The schema of a table is stored as metadata.",
+   "viDuNghia": "Lược đồ của một bảng được lưu dưới dạng siêu dữ liệu."
+  },
+  {
+   "chu": "record",
+   "doc": "/ˈrekərd/",
+   "nghia": "bản ghi: một dòng dữ liệu trong bảng (đồng nghĩa row, tuple)",
+   "nhom": "Khái niệm cơ sở",
+   "viDu": "When joining 2 relations, if we want to display all the records in that 2 relations, we must use:",
+   "viDuNghia": "Khi join 2 quan hệ, nếu muốn hiển thị tất cả các bản ghi trong cả 2 quan hệ đó, ta phải dùng:"
+  },
+  {
+   "chu": "field",
+   "doc": "/fiːld/",
+   "nghia": "trường: một cột / một ô thông tin của bản ghi (đồng nghĩa column, attribute) · (OOP, PRO192) trường = biến thành viên, thuộc tính của lớp",
+   "nhom": "Khái niệm cơ sở",
+   "viDu": "Which of the following to delete \"model\" field is \"ford\" from Cars table?",
+   "viDuNghia": "Câu lệnh nào sau đây xóa các dòng có trường \"model\" là \"ford\" trong bảng Cars?"
+  },
+  {
+   "chu": "data model",
+   "doc": "/ˈdeɪtə ˈmɑːdl/",
+   "nghia": "mô hình dữ liệu – cách mô tả dữ liệu, quan hệ và ràng buộc (mô hình quan hệ, mạng, phân cấp, ER)",
+   "nhom": "Khái niệm cơ sở",
+   "viDu": "A data model is a notation for describing data or information. The description generally consists of________?",
+   "viDuNghia": "Mô hình dữ liệu (data model) là một ký hiệu để mô tả dữ liệu hay thông tin. Mô tả này thường gồm________?"
+  },
+  {
+   "chu": "database",
+   "doc": "/ˈdeɪtəbeɪs/",
+   "nghia": "cơ sở dữ liệu – tập dữ liệu có tổ chức, được quản lý bởi hệ quản trị CSDL (DBMS)",
+   "nhom": "Khái niệm cơ sở",
+   "viDu": "Which is a bottom-up approach to database design that design by examining the relationship between attributes.",
+   "viDuNghia": "Đâu là phương pháp tiếp cận từ dưới lên (bottom-up) trong thiết kế cơ sở dữ liệu, thiết kế bằng cách xem xét mối quan hệ giữa các thuộc tính."
+  },
+  {
+   "chu": "table",
+   "doc": "/ˈteɪbl/",
+   "nghia": "(CSDL) bảng: dữ liệu xếp thành dòng (bản ghi) và cột (thuộc tính); trong lý thuyết gọi là quan hệ · (HTML) thẻ <table> tạo bảng trên trang web",
+   "nhom": "Khái niệm cơ sở",
+   "viDu": "What is the difference between a view and a table in SQL?",
+   "viDuNghia": "Sự khác nhau giữa view (khung nhìn) và table (bảng) trong SQL là gì?"
+  },
+  {
+   "chu": "entity set",
+   "doc": "/ˈentəti set/",
+   "nghia": "tập thực thể: tập các thực thể cùng loại; vẽ bằng hình chữ nhật trong sơ đồ ER",
+   "nhom": "Mô hình ER",
+   "viDu": "What is the relationship between a weak entity set and its owner entity in an E/R diagram?",
+   "viDuNghia": "Mối quan hệ giữa một tập thực thể yếu (weak entity set) và thực thể chủ (owner) của nó trong sơ đồ E/R là gì?"
+  },
+  {
+   "chu": "weak entity set",
+   "nghia": "tập thực thể yếu: không tự có đủ khoá, phải mượn khoá của tập thực thể khác; vẽ khung đôi",
+   "nhom": "Mô hình ER",
+   "viDu": "How are weak entity sets represented in an Entity Relationship Diagram (ERD)?",
+   "viDuNghia": "Tập thực thể yếu (weak entity set) được biểu diễn như thế nào trong sơ đồ ERD?"
+  },
+  {
+   "chu": "supporting relationship",
+   "doc": "/səˈpɔːrtɪŋ rɪˈleɪʃnʃɪp/",
+   "nghia": "mối quan hệ hỗ trợ: quan hệ nhiều–một nối tập thực thể yếu với tập cho nó mượn khoá; vẽ hình thoi đôi",
+   "nhom": "Mô hình ER",
+   "viDu": "A weak entity: (a) must have total participation in a supporting relationship (b) does not have a key (c) has no key attribute",
+   "viDuNghia": "Một thực thể yếu: (a) phải tham gia toàn phần vào một mối quan hệ hỗ trợ (supporting relationship) (b) không có khoá (c) không có thuộc tính khoá nào"
+  },
+  {
+   "chu": "multiplicity",
+   "doc": "/ˌmʌltɪˈplɪsəti/",
+   "nghia": "bản số: một thực thể bên này liên kết với bao nhiêu thực thể bên kia (1–1, 1–n, n–n)",
+   "nhom": "Mô hình ER",
+   "viDu": "The multiplicity of a relationship can be one-one, many-one or many-many.",
+   "viDuNghia": "Bản số của một mối quan hệ có thể là một–một, nhiều–một hoặc nhiều–nhiều."
+  },
+  {
+   "chu": "one-to-many",
+   "doc": "/ˌwʌn tə ˈmeni/",
+   "nghia": "một – nhiều: một thực thể bên này ứng với nhiều thực thể bên kia",
+   "nhom": "Mô hình ER",
+   "viDu": "In an ERD, which of the following best describes a one-to-many (1:M) relationship?",
+   "viDuNghia": "Trong ERD, phát biểu nào sau đây mô tả đúng nhất mối quan hệ một-nhiều (1:M)?"
+  },
+  {
+   "chu": "many-to-many",
+   "doc": "/ˌmeni tə ˈmeni/",
+   "nghia": "nhiều – nhiều: mỗi bên ứng với nhiều thực thể bên kia; khi chuyển sang bảng phải tách bảng trung gian",
+   "nhom": "Mô hình ER",
+   "viDu": "How are many-to-many relationships typically represented in the relational model?",
+   "viDuNghia": "Mối quan hệ nhiều-nhiều (many-to-many) thường được biểu diễn như thế nào trong mô hình quan hệ?"
+  },
+  {
+   "chu": "one-to-one",
+   "doc": "/ˌwʌn tə ˈwʌn/",
+   "nghia": "một – một: mỗi thực thể bên này ứng với nhiều nhất một thực thể bên kia",
+   "nhom": "Mô hình ER",
+   "viDu": "Each country has one capital city: this is a one-to-one relationship.",
+   "viDuNghia": "Mỗi nước có một thủ đô: đây là mối quan hệ một – một."
+  },
+  {
+   "chu": "binary relationship",
+   "doc": "/ˈbaɪnəri rɪˈleɪʃnʃɪp/",
+   "nghia": "mối quan hệ hai ngôi: nối đúng hai tập thực thể",
+   "nhom": "Mô hình ER",
+   "viDu": "A binary relationship connects exactly two entity sets.",
+   "viDuNghia": "Mối quan hệ hai ngôi nối đúng hai tập thực thể."
+  },
+  {
+   "chu": "multiway relationship",
+   "doc": "/ˈmʌltiweɪ rɪˈleɪʃnʃɪp/",
+   "nghia": "mối quan hệ nhiều ngôi: nối từ ba tập thực thể trở lên",
+   "nhom": "Mô hình ER",
+   "viDu": "A multiway relationship connects three or more entity sets.",
+   "viDuNghia": "Mối quan hệ nhiều ngôi nối ba tập thực thể trở lên."
+  },
+  {
+   "chu": "referential integrity",
+   "doc": "/ˌrefəˈrenʃl ɪnˈteɡrəti/",
+   "nghia": "toàn vẹn tham chiếu: giá trị tham chiếu phải tồn tại ở bảng được tham chiếu",
+   "nhom": "Mô hình ER",
+   "viDu": "Domain constraints, functional dependency and referential integrity are special forms of _________.",
+   "viDuNghia": "Ràng buộc miền giá trị (domain constraint), phụ thuộc hàm (functional dependency) và toàn vẹn tham chiếu (referential integrity) là các dạng đặc biệt của _________."
+  },
+  {
+   "chu": "dangling tuple",
+   "doc": "/ˈdæŋɡlɪŋ ˈtʌpl/",
+   "nghia": "bộ treo: bộ không ghép được với bộ nào ở bảng kia (mất khi join thường, giữ lại và điền NULL khi outer join)",
+   "nhom": "Mô hình ER",
+   "viDu": "Which of the following tuples of R or S is dangling (and therefore needs to be padded in the outer-join)?",
+   "viDuNghia": "Bộ nào sau đây của R hoặc S bị treo (và do đó cần được điền NULL trong phép kết ngoài)?"
+  },
+  {
+   "chu": "faithfulness",
+   "doc": "/ˈfeɪθflnəs/",
+   "nghia": "tính trung thực (nguyên tắc thiết kế): thiết kế phải phản ánh đúng thực tế của bài toán",
+   "nhom": "Mô hình ER",
+   "viDu": "Faithfulness means the design must reflect the real world correctly.",
+   "viDuNghia": "Tính trung thực nghĩa là thiết kế phải phản ánh đúng thế giới thực."
+  },
+  {
+   "chu": "avoid redundancy",
+   "doc": "/əˈvɔɪd rɪˈdʌndənsi/",
+   "nghia": "tránh dư thừa (nguyên tắc thiết kế): không lưu một thông tin ở nhiều nơi",
+   "nhom": "Mô hình ER",
+   "viDu": "A good design should avoid redundancy: say everything only once.",
+   "viDuNghia": "Thiết kế tốt phải tránh dư thừa: mỗi thông tin chỉ nói một lần."
+  },
+  {
+   "chu": "simplicity",
+   "doc": "/sɪmˈplɪsəti/",
+   "nghia": "tính đơn giản (nguyên tắc thiết kế): không thêm thành phần không cần thiết vào thiết kế",
+   "nhom": "Mô hình ER",
+   "viDu": "Simplicity counts: do not add more elements to the design than necessary.",
+   "viDuNghia": "Đơn giản là quan trọng: đừng thêm vào thiết kế nhiều thành phần hơn mức cần."
+  },
+  {
+   "chu": "conceptual design",
+   "doc": "/kənˈseptʃuəl dɪˈzaɪn/",
+   "nghia": "thiết kế mức khái niệm: bước vẽ mô hình ER, chưa phụ thuộc vào DBMS cụ thể",
+   "nhom": "Mô hình ER",
+   "viDu": "Conceptual design draws the E/R model before choosing any specific DBMS.",
+   "viDuNghia": "Thiết kế mức khái niệm vẽ mô hình E/R trước khi chọn bất kỳ DBMS cụ thể nào."
+  },
+  {
+   "chu": "attribute",
+   "doc": "/ˈætrɪbjuːt/",
+   "nghia": "(CSDL) thuộc tính: một cột của quan hệ / đặc điểm của thực thể (tên, ngày sinh) · (HTML) thuộc tính của thẻ, vd href, src · (JSP/Servlet) dữ liệu gắn vào request/session",
+   "nhom": "Mô hình ER",
+   "viDu": "Suppose R is a relation with attributes A1, A2, A3, A4. The only key of R is A1. So, how many super-keys R has?",
+   "viDuNghia": "Giả sử R là một quan hệ có các thuộc tính A1, A2, A3, A4. Khóa duy nhất của R là A1. Vậy R có bao nhiêu super-key (siêu khóa)?"
+  },
+  {
+   "chu": "entity",
+   "doc": "/ˈentəti/",
+   "nghia": "thực thể – đối tượng cần lưu dữ liệu (Sinh viên, Đơn hàng); tập thực thể là hình chữ nhật trong sơ đồ ER",
+   "nhom": "Mô hình ER",
+   "viDu": "What is an entity?",
+   "viDuNghia": "Thực thể (entity) là gì? (Đáp án: một sự vật có thật, tồn tại trong thực tế.)"
+  },
+  {
+   "chu": "entity-relationship model",
+   "doc": "/ˈentəti rɪˈleɪʃnʃɪp ˈmɑːdl/",
+   "nghia": "mô hình thực thể – liên kết (ER model / E/R model): mô tả dữ liệu bằng thực thể, thuộc tính và mối quan hệ giữa chúng",
+   "nhom": "Mô hình ER",
+   "viDu": "In the entity-relationship model, what is the entity?",
+   "viDuNghia": "Trong mô hình thực thể – liên kết (ER), thực thể (entity) là gì?"
+  },
+  {
+   "chu": "derived attribute",
+   "doc": "/dɪˈraɪvd ˈætrɪbjuːt/",
+   "nghia": "thuộc tính suy dẫn: tính được từ thuộc tính khác (tuổi tính từ ngày sinh); vẽ bầu dục nét đứt, thường không lưu thành cột",
+   "nhom": "Mô hình ER",
+   "viDu": "What happens to derived attributes when converting an ERD to a relational model?",
+   "viDuNghia": "Điều gì xảy ra với thuộc tính suy dẫn (derived attribute) khi chuyển ERD sang mô hình quan hệ?"
+  },
+  {
+   "chu": "composite attribute",
+   "doc": "/kəmˈpɑːzət ˈætrɪbjuːt/",
+   "nghia": "thuộc tính phức hợp: tách được thành nhiều phần nhỏ (FullName = FirstName + LastName); khi sang bảng thì mỗi phần thành một cột",
+   "nhom": "Mô hình ER",
+   "viDu": "Which of the following is an example of a composite attribute?",
+   "viDuNghia": "Cái nào sau đây là ví dụ về thuộc tính phức hợp (composite attribute)?"
+  },
+  {
+   "chu": "relationship",
+   "doc": "/rɪˈleɪʃnʃɪp/",
+   "nghia": "(CSDL) mối quan hệ – liên kết giữa các tập thực thể trong mô hình ER (1:1, 1:N, N:M), vẽ hình thoi · (UML, use case) quan hệ giữa các phần tử mô hình",
+   "nhom": "Mô hình ER",
+   "viDu": "How are many-to-many relationships typically represented in the relational model?",
+   "viDuNghia": "Mối quan hệ nhiều-nhiều thường được biểu diễn như thế nào trong mô hình quan hệ?"
+  },
+  {
+   "chu": "cardinality",
+   "doc": "/ˌkɑːrdɪˈnæləti/",
+   "nghia": "(CSDL) bản số – số thể hiện tối đa ở mỗi đầu mối quan hệ: 1:1, 1:N, N:M · (toán rời rạc) lực lượng của tập hợp: số phần tử |A|",
+   "nhom": "Mô hình ER",
+   "viDu": "In an entity-relationship diagram (ERD), what does the \"cardinality\" of a relationship represent?",
+   "viDuNghia": "Trong sơ đồ thực thể – quan hệ (ERD), \"cardinality\" (bản số) của một mối quan hệ biểu diễn điều gì?"
+  },
+  {
+   "chu": "entity-relationship diagram",
+   "doc": "/ˈentəti rɪˈleɪʃnʃɪp ˈdaɪəɡræm/",
+   "nghia": "sơ đồ thực thể – quan hệ (ERD): vẽ tập thực thể (chữ nhật), thuộc tính (elip), mối quan hệ (hình thoi); bước thiết kế trước khi chuyển sang mô hình quan hệ",
+   "nhom": "Mô hình ER",
+   "viDu": "Which of the following statements is correct when converting from the ERD model to the relational model?",
+   "viDuNghia": "Phát biểu nào sau đây đúng khi chuyển đổi từ mô hình ERD sang mô hình quan hệ?"
+  },
+  {
+   "chu": "relation",
+   "doc": "/rɪˈleɪʃn/",
+   "nghia": "quan hệ: tên gọi toán học của một bảng trong mô hình quan hệ (gồm các bộ và thuộc tính)",
+   "nhom": "Mô hình quan hệ và khoá",
+   "viDu": "In SQL, to update a relation's schema, which one of the following statements can be used?",
+   "viDuNghia": "Trong SQL, để cập nhật lược đồ (schema) của một quan hệ, câu lệnh nào sau đây có thể được dùng?"
+  },
+  {
+   "chu": "tuple",
+   "doc": "/ˈtʌpl/",
+   "nghia": "bộ: một dòng của quan hệ (đồng nghĩa row, record)",
+   "nhom": "Mô hình quan hệ và khoá",
+   "viDu": "Which constraint ensures that the values of certain attributes in a relation uniquely identify tuples in that relation?",
+   "viDuNghia": "Ràng buộc nào đảm bảo giá trị của một số thuộc tính trong một quan hệ xác định duy nhất các bộ (tuple) trong quan hệ đó?"
+  },
+  {
+   "chu": "row",
+   "doc": "/roʊ/",
+   "nghia": "dòng (hàng) của bảng",
+   "nhom": "Mô hình quan hệ và khoá",
+   "viDu": "What SQL keyword can be used to return data from two non-related tables as combined set of rows?",
+   "viDuNghia": "Từ khóa SQL nào có thể dùng để trả về dữ liệu từ hai bảng không liên quan nhau thành một tập hợp các dòng kết hợp?"
+  },
+  {
+   "chu": "atomic",
+   "doc": "/əˈtɑːmɪk/",
+   "nghia": "nguyên tố: giá trị không chia nhỏ được nữa (điều kiện của 1NF); với giao tác là \"tất cả hoặc không gì cả\"",
+   "nhom": "Mô hình quan hệ và khoá",
+   "viDu": "A database transaction, by definition, must be ACID (atomic, consistent, isolated and durable). What does \"Durable\" mean?",
+   "viDuNghia": "Theo định nghĩa, một giao tác (transaction) cơ sở dữ liệu phải là ACID (atomic, consistent, isolated và durable). \"Durable\" nghĩa là gì?"
+  },
+  {
+   "chu": "null value",
+   "doc": "/nʌl ˈvæljuː/",
+   "nghia": "giá trị NULL: ô không có giá trị hoặc chưa biết; khác số 0 và khác chuỗi rỗng",
+   "nhom": "Mô hình quan hệ và khoá",
+   "viDu": "What is the value of the query: SELECT 1 + NULL + 2 when evaluated on Microsoft SQL Server?",
+   "viDuNghia": "Giá trị của câu truy vấn: SELECT 1 + NULL + 2 khi được thực thi trên Microsoft SQL Server là gì?"
+  },
+  {
+   "chu": "primary key",
+   "doc": "/ˈpraɪmeri kiː/",
+   "nghia": "khoá chính: (tập) thuộc tính định danh duy nhất mỗi dòng, không được NULL",
+   "nhom": "Mô hình quan hệ và khoá",
+   "viDu": "Regarding difference between a primary key vs. unique key, which of the following is false?",
+   "viDuNghia": "Về sự khác biệt giữa khóa chính (primary key) và khóa duy nhất (unique key), phát biểu nào sau đây SAI?"
+  },
+  {
+   "chu": "foreign key",
+   "doc": "/ˈfɔːrən kiː/",
+   "nghia": "khoá ngoại: thuộc tính tham chiếu tới khoá chính (hoặc unique) của bảng khác",
+   "nhom": "Mô hình quan hệ và khoá",
+   "viDu": "A foreign key is a field (or fields) that points to the primary key of another table. What is the purpose of foreign key?",
+   "viDuNghia": "Khóa ngoại (foreign key) là một trường (hoặc các trường) trỏ tới khóa chính của một bảng khác. Mục đích của khóa ngoại là gì?"
+  },
+  {
+   "chu": "candidate key",
+   "doc": "/ˈkændɪdət kiː/",
+   "nghia": "khoá ứng viên: khoá tối thiểu; một quan hệ có thể có nhiều, chọn một làm khoá chính",
+   "nhom": "Mô hình quan hệ và khoá",
+   "viDu": "The subset of a super key is a candidate key under what condition?",
+   "viDuNghia": "Một tập con của siêu khoá (super key) là khoá ứng viên (candidate key) khi nào?"
+  },
+  {
+   "chu": "superkey",
+   "doc": "/ˈsuːpərkiː/",
+   "nghia": "siêu khoá: tập thuộc tính chứa một khoá (xác định duy nhất bộ nhưng có thể thừa thuộc tính)",
+   "nhom": "Mô hình quan hệ và khoá",
+   "viDu": "Suppose R is a relation with attributes A1, A2, A3, A4. The only key of R is A1. So, how many super-keys R has?",
+   "viDuNghia": "Giả sử R là một quan hệ có các thuộc tính A1, A2, A3, A4. Khóa duy nhất của R là A1. Vậy R có bao nhiêu super-key (siêu khóa)?"
+  },
+  {
+   "chu": "composite key",
+   "doc": "/kəmˈpɑːzət kiː/",
+   "nghia": "khoá phức hợp: khoá gồm từ hai thuộc tính trở lên",
+   "nhom": "Mô hình quan hệ và khoá",
+   "viDu": "What is a composite key in an ERD?",
+   "viDuNghia": "Khoá phức hợp (composite key) trong ERD là gì?"
+  },
+  {
+   "chu": "unique key",
+   "doc": "/juˈniːk kiː/",
+   "nghia": "khoá duy nhất: cột không cho trùng giá trị nhưng (khác khoá chính) có thể nhận NULL",
+   "nhom": "Mô hình quan hệ và khoá",
+   "viDu": "In the relational DBMS, what is the difference between PRIMARY KEY and UNIQUE KEY?",
+   "viDuNghia": "Trong DBMS quan hệ, sự khác nhau giữa PRIMARY KEY và UNIQUE KEY là gì?"
+  },
+  {
+   "chu": "integrity constraint",
+   "doc": "/ɪnˈteɡrəti kənˈstreɪnt/",
+   "nghia": "ràng buộc toàn vẹn: quy tắc dữ liệu phải thoả (khoá, khoá ngoại, CHECK, NOT NULL…)",
+   "nhom": "Mô hình quan hệ và khoá",
+   "viDu": "To include an integrity constraint in an existing relation, use",
+   "viDuNghia": "Để thêm một ràng buộc toàn vẹn (integrity constraint) vào một quan hệ đã tồn tại, dùng"
+  },
+  {
+   "chu": "key constraint",
+   "doc": "/kiː kənˈstreɪnt/",
+   "nghia": "ràng buộc khoá: không có hai bộ trùng giá trị trên khoá",
+   "nhom": "Mô hình quan hệ và khoá",
+   "viDu": "A key constraint says that no two tuples may have the same values on all attributes of the key.",
+   "viDuNghia": "Ràng buộc khoá nói rằng không có hai bộ nào được trùng giá trị trên mọi thuộc tính của khoá."
+  },
+  {
+   "chu": "uniquely identify",
+   "doc": "/juˈniːkli aɪˈdentɪfaɪ/",
+   "nghia": "định danh duy nhất: phân biệt được một dòng với mọi dòng khác",
+   "nhom": "Mô hình quan hệ và khoá",
+   "viDu": "Consider the following statement: \"When drawing ERD, you should avoid drawing entities that can not be uniquely identified by attributes\" That above statement describes which principle?",
+   "viDuNghia": "Xét phát biểu sau: \"Khi vẽ ERD, bạn nên tránh vẽ các entity không thể được nhận diện duy nhất chỉ bằng các thuộc tính của chính nó\" Phát biểu trên mô tả nguyên tắc nào?"
+  },
+  {
+   "chu": "referencing table",
+   "doc": "/ˈrefrənsɪŋ ˈteɪbl/",
+   "nghia": "bảng tham chiếu: bảng chứa khoá ngoại (bảng con), trỏ tới bảng được tham chiếu (referenced table)",
+   "nhom": "Mô hình quan hệ và khoá",
+   "viDu": "Foreign key is the one in which the ________ of one relation is referenced in another relation.",
+   "viDuNghia": "Khóa ngoại (foreign key) là khóa mà ________ của một quan hệ được tham chiếu trong một quan hệ khác."
+  },
+  {
+   "chu": "integrity",
+   "doc": "/ɪnˈteɡrəti/",
+   "nghia": "tính toàn vẹn – dữ liệu luôn đúng và nhất quán, được giữ bằng ràng buộc (khoá chính, khoá ngoại, CHECK)",
+   "nhom": "Mô hình quan hệ và khoá",
+   "viDu": "In the context of a DBMS, what is meant by \"data integrity\"?",
+   "viDuNghia": "Trong ngữ cảnh của một DBMS, \"tính toàn vẹn dữ liệu\" (data integrity) nghĩa là gì?"
+  },
+  {
+   "chu": "key",
+   "doc": "/kiː/",
+   "nghia": "khoá – tập thuộc tính xác định duy nhất một bộ (super key, candidate key, primary key). (Đọc đề: key = then chốt, chính)",
+   "nhom": "Mô hình quan hệ và khoá",
+   "viDu": "Consider the relation R(A,B,C,D) and functional dependencies: A→B, C→D. Find key of the above relation.",
+   "viDuNghia": "Xét quan hệ R(A,B,C,D) với các phụ thuộc hàm: A→B, C→D. Tìm khóa của quan hệ trên."
+  },
+  {
+   "chu": "constraint",
+   "doc": "/kənˈstreɪnt/",
+   "nghia": "ràng buộc – điều kiện dữ liệu phải thoả để giữ toàn vẹn: khoá chính, khoá ngoại, UNIQUE, CHECK, NOT NULL; nghĩa chung: giới hạn phải tuân theo",
+   "nhom": "Mô hình quan hệ và khoá",
+   "viDu": "Which constraint ensures that the values of certain attributes in a relation uniquely identify tuples in that relation?",
+   "viDuNghia": "Ràng buộc nào đảm bảo giá trị của một số thuộc tính trong quan hệ xác định duy nhất các bộ (tuple) của quan hệ đó?"
+  },
+  {
+   "chu": "relational algebra",
+   "doc": "/rɪˈleɪʃənl ˈældʒɪbrə/",
+   "nghia": "đại số quan hệ: bộ phép toán trên quan hệ (chọn, chiếu, kết, hợp…) cho kết quả là quan hệ",
+   "nhom": "Đại số quan hệ",
+   "viDu": "Why the intersection operator is not called a primitive relational algebra operator?",
+   "viDuNghia": "Vì sao toán tử intersection (giao) không được gọi là một toán tử đại số quan hệ nguyên thủy (primitive)?"
+  },
+  {
+   "chu": "selection",
+   "doc": "/sɪˈlekʃn/",
+   "nghia": "phép chọn (σ): lấy các DÒNG thoả điều kiện",
+   "nhom": "Đại số quan hệ",
+   "viDu": "To apply a selection to a bag, we apply the selection condition to each tuple independently.",
+   "viDuNghia": "Để áp dụng phép chọn (selection) lên một bag (đa tập), ta áp điều kiện chọn lên từng bộ một cách độc lập."
+  },
+  {
+   "chu": "projection",
+   "doc": "/prəˈdʒekʃn/",
+   "nghia": "phép chiếu (π): lấy một số CỘT, bỏ các cột còn lại",
+   "nhom": "Đại số quan hệ",
+   "viDu": "What does the relational algebra operation \"Projection\" do?",
+   "viDuNghia": "Phép toán đại số quan hệ \"Projection\" (chiếu) làm gì?"
+  },
+  {
+   "chu": "Cartesian product",
+   "doc": "/kɑːrˈtiːʒn ˈprɑːdʌkt/",
+   "nghia": "tích Đề-các (×): ghép mọi bộ của R với mọi bộ của S; số dòng = tích số dòng hai bảng",
+   "nhom": "Đại số quan hệ",
+   "viDu": "Given table A with n rows and table B with m rows. How many rows of table result by Cartesian product on AxB?",
+   "viDuNghia": "Cho bảng A có n dòng và bảng B có m dòng. Bảng kết quả của tích Đề-các (Cartesian product) A×B có bao nhiêu dòng?"
+  },
+  {
+   "chu": "join",
+   "doc": "/dʒɔɪn/",
+   "nghia": "phép kết: ghép dòng của hai bảng theo điều kiện",
+   "nhom": "Đại số quan hệ",
+   "viDu": "How many JOIN conditions are necessary to combine five tables based on common attributes?",
+   "viDuNghia": "Cần bao nhiêu điều kiện JOIN để kết hợp năm bảng dựa trên các thuộc tính chung?"
+  },
+  {
+   "chu": "natural join",
+   "doc": "/ˈnætʃrəl dʒɔɪn/",
+   "nghia": "kết tự nhiên: ghép các bộ bằng nhau trên mọi thuộc tính cùng tên, cột trùng chỉ giữ một lần",
+   "nhom": "Đại số quan hệ",
+   "viDu": "In relational algebra, the natural join operation can be viewed as:",
+   "viDuNghia": "Trong đại số quan hệ, phép kết tự nhiên (natural join) có thể được xem như:"
+  },
+  {
+   "chu": "theta join",
+   "doc": "/ˈθeɪtə dʒɔɪn/",
+   "nghia": "kết theta: tích Đề-các rồi chọn theo một điều kiện bất kỳ (=, <, >…)",
+   "nhom": "Đại số quan hệ",
+   "viDu": "A theta join pairs tuples of R and S that satisfy a condition.",
+   "viDuNghia": "Phép kết theta ghép các bộ của R và S thoả một điều kiện."
+  },
+  {
+   "chu": "outer join",
+   "doc": "/ˈaʊtər dʒɔɪn/",
+   "nghia": "kết ngoài: giữ cả các bộ không ghép được, phần thiếu điền NULL (left / right / full)",
+   "nhom": "Đại số quan hệ",
+   "viDu": "Outer joins behave like join operations except on tuples that do not occur in the join result.",
+   "viDuNghia": "Outer join hoạt động giống phép join, ngoại trừ với các bộ không xuất hiện trong kết quả join (những bộ này vẫn được giữ, điền NULL)."
+  },
+  {
+   "chu": "inner join",
+   "doc": "/ˈɪnər dʒɔɪn/",
+   "nghia": "kết trong: chỉ giữ các cặp dòng thoả điều kiện kết",
+   "nhom": "Đại số quan hệ",
+   "viDu": "An inner join returns only the rows that match in both tables.",
+   "viDuNghia": "Kết trong chỉ trả về các dòng khớp ở cả hai bảng."
+  },
+  {
+   "chu": "union",
+   "doc": "/ˈjuːniən/",
+   "nghia": "phép hợp: gộp các bộ của hai quan hệ cùng lược đồ (UNION bỏ trùng, UNION ALL giữ trùng)",
+   "nhom": "Đại số quan hệ",
+   "viDu": "When we apply set operators (UNION, INTERSECT, EXCEPT) to two relations R and S, which conditions on R and S must be satisfied?",
+   "viDuNghia": "Khi áp dụng các phép toán tập hợp (UNION, INTERSECT, EXCEPT) lên hai quan hệ R và S, những điều kiện nào trên R và S phải được thỏa mãn?"
+  },
+  {
+   "chu": "intersection",
+   "doc": "/ˌɪntərˈsekʃn/",
+   "nghia": "phép giao: lấy các bộ có mặt ở cả hai quan hệ",
+   "nhom": "Đại số quan hệ",
+   "viDu": "Why is the intersection operator not called a primitive relational algebra operator?",
+   "viDuNghia": "Tại sao toán tử giao (intersection) không được gọi là một toán tử đại số quan hệ nguyên thủy (primitive)?"
+  },
+  {
+   "chu": "set difference",
+   "doc": "/set ˈdɪfrəns/",
+   "nghia": "phép hiệu (R − S): các bộ có trong R mà không có trong S (EXCEPT trong SQL)",
+   "nhom": "Đại số quan hệ",
+   "viDu": "The set difference R - S contains the tuples that are in R but not in S.",
+   "viDuNghia": "Phép hiệu R - S gồm các bộ có trong R nhưng không có trong S."
+  },
+  {
+   "chu": "renaming",
+   "doc": "/ˌriːˈneɪmɪŋ/",
+   "nghia": "phép đổi tên (ρ): đổi tên quan hệ hoặc tên thuộc tính",
+   "nhom": "Đại số quan hệ",
+   "viDu": "Which syntax is commonly used for the rename operation in Relational Algebra?",
+   "viDuNghia": "Cú pháp nào thường được dùng cho phép đổi tên (rename) trong Đại số quan hệ?"
+  },
+  {
+   "chu": "duplicate",
+   "doc": "/ˈduːplɪkət/",
+   "nghia": "(dòng) trùng lặp; duplicate elimination = loại bỏ dòng trùng (DISTINCT)",
+   "nhom": "Đại số quan hệ",
+   "viDu": "The relation R(A,B) may have duplicate tuples. Choose the query that create non-duplicated results, regardless of what tuples R contains?",
+   "viDuNghia": "Quan hệ R(A,B) có thể có các bộ trùng lặp. Chọn truy vấn tạo ra kết quả KHÔNG trùng lặp, bất kể R chứa những bộ gì?"
+  },
+  {
+   "chu": "bag",
+   "doc": "/bæɡ/",
+   "nghia": "túi (đa tập): tập cho phép phần tử trùng lặp; bảng SQL mặc định là bag chứ không phải set",
+   "nhom": "Đại số quan hệ",
+   "viDu": "Consider the law, that holds for set relations: (S intersect T) - R = S intersect (T - R). The above law still hold for bag relations?",
+   "viDuNghia": "Xét quy luật sau, vốn đúng với quan hệ tập hợp (set): (S intersect T) - R = S intersect (T - R). Quy luật trên còn đúng với quan hệ bag (đa tập hợp) không?"
+  },
+  {
+   "chu": "grouping",
+   "doc": "/ˈɡruːpɪŋ/",
+   "nghia": "gom nhóm (γ, trong SQL là GROUP BY): chia các bộ thành nhóm theo giá trị thuộc tính rồi tính hàm gộp trên từng nhóm; lọc nhóm bằng HAVING",
+   "nhom": "Đại số quan hệ",
+   "viDu": "Given a SELECT statement that has a GROUP BY clause. The HAVING clause uses the same syntax as which other clause?",
+   "viDuNghia": "Cho một câu lệnh SELECT có mệnh đề GROUP BY. Mệnh đề HAVING dùng cú pháp giống với mệnh đề nào khác?"
+  },
+  {
+   "chu": "aggregation",
+   "doc": "/ˌæɡrɪˈɡeɪʃn/",
+   "nghia": "phép gộp: tính một giá trị tổng hợp (SUM, AVG, COUNT, MIN, MAX) từ nhiều dòng",
+   "nhom": "Đại số quan hệ",
+   "viDu": "How we can understand about this statement: \"All aggregate functions are deterministic\"?",
+   "viDuNghia": "Có thể hiểu phát biểu sau như thế nào: \"All aggregate functions are deterministic\" (mọi hàm tổng hợp đều xác định - deterministic)?"
+  },
+  {
+   "chu": "commutative",
+   "doc": "/kəˈmjuːtətɪv/",
+   "nghia": "giao hoán: đổi chỗ hai vế kết quả không đổi, vd R ∪ S = S ∪ R",
+   "nhom": "Đại số quan hệ",
+   "viDu": "Union is commutative: R union S equals S union R.",
+   "viDuNghia": "Phép hợp có tính giao hoán: R hợp S bằng S hợp R."
+  },
+  {
+   "chu": "distributive law",
+   "doc": "/dɪˈstrɪbjətɪv lɔː/",
+   "nghia": "luật phân phối, vd A giao (B hợp C) = (A giao B) hợp (A giao C); đề hay hỏi luật này còn đúng với bag không",
+   "nhom": "Đại số quan hệ",
+   "viDu": "Consider the distributive law, that holds for set relations: (R U S) - T = (R-T) U (S-T) The above distributive law still hold for bag relations?",
+   "viDuNghia": "Xét luật phân phối sau, vốn đúng với các quan hệ tập hợp (set): (R U S) - T = (R-T) U (S-T) Luật phân phối trên còn đúng với quan hệ bag (đa tập hợp) không?"
+  },
+  {
+   "chu": "functional dependency",
+   "doc": "/ˈfʌŋkʃənl dɪˈpendənsi/",
+   "nghia": "phụ thuộc hàm (FD) X → Y: hai bộ bằng nhau trên X thì phải bằng nhau trên Y",
+   "nhom": "Phụ thuộc hàm",
+   "viDu": "Consider the relation R(A,B,C,D) and functional dependencies: A→B, C→D. Find key of the above relation.",
+   "viDuNghia": "Xét quan hệ R(A,B,C,D) với các phụ thuộc hàm: A→B, C→D. Tìm khóa của quan hệ trên."
+  },
+  {
+   "chu": "functionally determine",
+   "doc": "/ˈfʌŋkʃənəli dɪˈtɜːrmɪn/",
+   "nghia": "xác định hàm: X xác định hàm Y nghĩa là biết X thì suy ra đúng một giá trị Y",
+   "nhom": "Phụ thuộc hàm",
+   "viDu": "If attribute A determines both attributes B and C, then it is also true that:",
+   "viDuNghia": "Nếu thuộc tính A quyết định (determines) cả hai thuộc tính B và C, thì điều nào sau đây cũng đúng:"
+  },
+  {
+   "chu": "closure",
+   "doc": "/ˈkloʊʒər/",
+   "nghia": "bao đóng X+: tập mọi thuộc tính suy ra được từ X theo tập phụ thuộc hàm; dùng để tìm khoá",
+   "nhom": "Phụ thuộc hàm",
+   "viDu": "Consider the relation R(A,B,C,D,E,F,G,K) and functional dependencies: AB→C, C→AD, D→E, CF→B, G→K. What is the closure of {A,B}?",
+   "viDuNghia": "Xét quan hệ R(A,B,C,D,E,F,G,K) với các phụ thuộc hàm: AB→C, C→AD, D→E, CF→B, G→K. Bao đóng (closure) của {A,B} là gì?"
+  },
+  {
+   "chu": "trivial dependency",
+   "doc": "/ˈtrɪviəl dɪˈpendənsi/",
+   "nghia": "phụ thuộc hàm tầm thường: X → Y mà Y nằm trong X (luôn đúng)",
+   "nhom": "Phụ thuộc hàm",
+   "viDu": "AB -> A is a trivial dependency because A is a subset of AB.",
+   "viDuNghia": "AB -> A là phụ thuộc hàm tầm thường vì A là tập con của AB."
+  },
+  {
+   "chu": "nontrivial",
+   "doc": "/ˌnɑːnˈtrɪviəl/",
+   "nghia": "không tầm thường: X → Y mà Y không nằm trọn trong X",
+   "nhom": "Phụ thuộc hàm",
+   "viDu": "BCNF requires that the left side of every nontrivial FD is a superkey.",
+   "viDuNghia": "BCNF đòi vế trái của mọi phụ thuộc hàm không tầm thường phải là siêu khoá."
+  },
+  {
+   "chu": "transitive dependency",
+   "doc": "/ˈtrænzətɪv dɪˈpendənsi/",
+   "nghia": "phụ thuộc bắc cầu: X → Y và Y → Z nên X → Z; 3NF cấm thuộc tính không khoá phụ thuộc bắc cầu vào khoá",
+   "nhom": "Phụ thuộc hàm",
+   "viDu": "Which normalization form eliminates transitive dependency?",
+   "viDuNghia": "Dạng chuẩn nào loại bỏ phụ thuộc bắc cầu (transitive dependency)?"
+  },
+  {
+   "chu": "partial dependency",
+   "doc": "/ˈpɑːrʃl dɪˈpendənsi/",
+   "nghia": "phụ thuộc bộ phận: thuộc tính không khoá chỉ phụ thuộc MỘT PHẦN của khoá phức hợp; 2NF cấm điều này",
+   "nhom": "Phụ thuộc hàm",
+   "viDu": "A table in 2NF has no partial dependency on the primary key.",
+   "viDuNghia": "Bảng đạt 2NF không có phụ thuộc bộ phận vào khoá chính."
+  },
+  {
+   "chu": "multivalued dependency",
+   "doc": "/ˌmʌltiˈvæljuːd dɪˈpendənsi/",
+   "nghia": "phụ thuộc đa trị (MVD) X ->> Y; liên quan dạng chuẩn 4 (4NF)",
+   "nhom": "Phụ thuộc hàm",
+   "viDu": "Fourth normal form removes nontrivial multivalued dependencies.",
+   "viDuNghia": "Dạng chuẩn 4 loại bỏ các phụ thuộc đa trị không tầm thường."
+  },
+  {
+   "chu": "Armstrong's axioms",
+   "doc": "/ˈɑːrmstrɔːŋz ˈæksiəmz/",
+   "nghia": "hệ tiên đề Armstrong: ba luật suy diễn phụ thuộc hàm (phản xạ, tăng trưởng, bắc cầu)",
+   "nhom": "Phụ thuộc hàm",
+   "viDu": "Which statement is the best represents Armstrong's Axiom of Decomposition?",
+   "viDuNghia": "Phát biểu nào biểu diễn tốt nhất Tiên đề Phân rã (Decomposition) của Armstrong?"
+  },
+  {
+   "chu": "augmentation",
+   "doc": "/ˌɔːɡmenˈteɪʃn/",
+   "nghia": "luật tăng trưởng: nếu X → Y thì XZ → YZ",
+   "nhom": "Phụ thuộc hàm",
+   "viDu": "By augmentation, if A determines B then AC determines BC.",
+   "viDuNghia": "Theo luật tăng trưởng, nếu A xác định B thì AC xác định BC."
+  },
+  {
+   "chu": "reflexivity",
+   "doc": "/ˌriːflekˈsɪvəti/",
+   "nghia": "luật phản xạ: nếu Y nằm trong X thì X → Y",
+   "nhom": "Phụ thuộc hàm",
+   "viDu": "By reflexivity, AB determines A.",
+   "viDuNghia": "Theo luật phản xạ, AB xác định A."
+  },
+  {
+   "chu": "left side",
+   "doc": "/left saɪd/",
+   "nghia": "vế trái của phụ thuộc hàm (tập thuộc tính xác định); right side = vế phải",
+   "nhom": "Phụ thuộc hàm",
+   "viDu": "____________has a right side that is a subset of its left side",
+   "viDuNghia": "____________có vế phải là tập con của vế trái"
+  },
+  {
+   "chu": "minimal basis",
+   "doc": "/ˈmɪnɪml ˈbeɪsɪs/",
+   "nghia": "cơ sở tối thiểu (phủ tối thiểu): tập phụ thuộc hàm tương đương, gọn nhất, không thừa",
+   "nhom": "Phụ thuộc hàm",
+   "viDu": "A minimal basis has no redundant dependency and no extra attribute on any left side.",
+   "viDuNghia": "Cơ sở tối thiểu không có phụ thuộc hàm thừa và không có thuộc tính thừa ở vế trái."
+  },
+  {
+   "chu": "hold",
+   "doc": "/hoʊld/",
+   "nghia": "đúng, thoả: \"the law/FD holds\" = luật/phụ thuộc hàm đó đúng; (giá trị) can hold = có thể chứa, nhận",
+   "nhom": "Phụ thuộc hàm",
+   "viDu": "Consider the law that holds for set relations: (S intersect T) - R = S intersect (T - R). Does it still hold for bag relations?",
+   "viDuNghia": "Xét luật vốn đúng với quan hệ tập hợp: (S giao T) - R = S giao (T - R). Luật này còn đúng với quan hệ bag (đa tập) không?"
+  },
+  {
+   "chu": "violate",
+   "doc": "/ˈvaɪəleɪt/",
+   "nghia": "vi phạm (một ràng buộc, một dạng chuẩn)",
+   "nhom": "Phụ thuộc hàm",
+   "viDu": "In a student registration system, which normal form is violated if one field contains multiple course IDs for the same student?",
+   "viDuNghia": "Trong hệ thống đăng ký học của sinh viên, nếu một trường (cột) chứa nhiều mã môn học cho cùng một sinh viên thì vi phạm dạng chuẩn nào?"
+  },
+  {
+   "chu": "transitivity",
+   "doc": "/ˌtrænzəˈtɪvəti/",
+   "nghia": "luật bắc cầu (tiên đề Armstrong): nếu A → B và B → C thì A → C",
+   "nhom": "Phụ thuộc hàm",
+   "viDu": "Which of the following represents Armstrong's Axiom of Transitivity?",
+   "viDuNghia": "Điều nào sau đây thể hiện tiên đề bắc cầu (Transitivity) của Armstrong?"
+  },
+  {
+   "chu": "normalization",
+   "doc": "/ˌnɔːrmələˈzeɪʃn/",
+   "nghia": "chuẩn hoá: tách bảng theo các dạng chuẩn để bớt dư thừa và tránh dị thường",
+   "nhom": "Chuẩn hoá",
+   "viDu": "Which normalization level ensures that each attribute is dependent only on the primary key?",
+   "viDuNghia": "Mức chuẩn hoá nào đảm bảo mỗi thuộc tính chỉ phụ thuộc vào khoá chính?"
+  },
+  {
+   "chu": "normal form",
+   "doc": "/ˈnɔːrml fɔːrm/",
+   "nghia": "dạng chuẩn: mức \"tốt\" của lược đồ (1NF, 2NF, 3NF, BCNF, 4NF)",
+   "nhom": "Chuẩn hoá",
+   "viDu": "What is the condition that a relation schema R is in BCNF (Boyce-Codd Normal Form)?",
+   "viDuNghia": "Điều kiện để một lược đồ quan hệ R ở dạng BCNF (Boyce-Codd Normal Form) là gì?"
+  },
+  {
+   "chu": "first normal form",
+   "nghia": "dạng chuẩn 1 (1NF): mọi ô chứa giá trị nguyên tố, không có nhóm lặp",
+   "nhom": "Chuẩn hoá",
+   "viDu": "Which of the following is the main requirement of 1NF (First Normal Form)?",
+   "viDuNghia": "Yêu cầu chính của 1NF (Dạng chuẩn 1) là gì?"
+  },
+  {
+   "chu": "second normal form",
+   "nghia": "dạng chuẩn 2 (2NF): đạt 1NF và không có phụ thuộc bộ phận vào khoá",
+   "nhom": "Chuẩn hoá",
+   "viDu": "A table is in 2NF if the table is in 1NF and what other condition is met?",
+   "viDuNghia": "Một bảng ở dạng 2NF nếu bảng đó ở dạng 1NF và thỏa thêm điều kiện nào sau đây?"
+  },
+  {
+   "chu": "third normal form",
+   "nghia": "dạng chuẩn 3 (3NF): đạt 2NF và không có thuộc tính không khoá phụ thuộc bắc cầu vào khoá",
+   "nhom": "Chuẩn hoá",
+   "viDu": "Given R as a relation, which of the following statements is correct about normalizing data in 3NF form:",
+   "viDuNghia": "Cho R là một quan hệ, phát biểu nào sau đây đúng về việc chuẩn hóa dữ liệu ở dạng 3NF:"
+  },
+  {
+   "chu": "Boyce-Codd normal form",
+   "nghia": "dạng chuẩn Boyce-Codd (BCNF): vế trái của mọi phụ thuộc hàm không tầm thường đều là siêu khoá",
+   "nhom": "Chuẩn hoá",
+   "viDu": "Which of the following relations is in Boyce-Codd Normal Form (BCNF)?",
+   "viDuNghia": "Quan hệ nào sau đây ở dạng chuẩn Boyce-Codd (BCNF)?"
+  },
+  {
+   "chu": "decomposition",
+   "doc": "/ˌdiːkɑːmpəˈzɪʃn/",
+   "nghia": "phép tách: chia một quan hệ thành các quan hệ nhỏ hơn",
+   "nhom": "Chuẩn hoá",
+   "viDu": "What is the goal of decomposition when designing a database?",
+   "viDuNghia": "Mục tiêu của việc phân rã (decomposition) khi thiết kế cơ sở dữ liệu là gì?"
+  },
+  {
+   "chu": "lossless join",
+   "doc": "/ˈlɔːsləs dʒɔɪn/",
+   "nghia": "kết không mất mát: tách xong kết tự nhiên lại được đúng quan hệ ban đầu",
+   "nhom": "Chuẩn hoá",
+   "viDu": "A good decomposition must have the lossless join property.",
+   "viDuNghia": "Một phép tách tốt phải có tính chất kết không mất mát."
+  },
+  {
+   "chu": "dependency-preserving",
+   "doc": "/dɪˈpendənsi prɪˈzɜːrvɪŋ/",
+   "nghia": "bảo toàn phụ thuộc: sau khi tách vẫn kiểm tra được mọi phụ thuộc hàm ban đầu mà không cần kết",
+   "nhom": "Chuẩn hoá",
+   "viDu": "For any relation schema, there is a dependency-preserving decomposition into 3NF.",
+   "viDuNghia": "Với mọi lược đồ quan hệ, luôn tồn tại một phép tách bảo toàn phụ thuộc về 3NF."
+  },
+  {
+   "chu": "update anomaly",
+   "doc": "/ˌʌpˈdeɪt əˈnɑːməli/",
+   "nghia": "dị thường cập nhật: sửa một thông tin phải sửa nhiều dòng, sót thì dữ liệu mâu thuẫn",
+   "nhom": "Chuẩn hoá",
+   "viDu": "How to eliminate anomalies when we design a database?",
+   "viDuNghia": "Làm thế nào để loại bỏ các dị thường (anomaly) khi thiết kế cơ sở dữ liệu?"
+  },
+  {
+   "chu": "insertion anomaly",
+   "doc": "/ɪnˈsɜːrʃn əˈnɑːməli/",
+   "nghia": "dị thường thêm: không thêm được dữ liệu này nếu thiếu dữ liệu khác",
+   "nhom": "Chuẩn hoá",
+   "viDu": "An insertion anomaly occurs when we cannot add a fact without another fact.",
+   "viDuNghia": "Dị thường thêm xảy ra khi không thể thêm một thông tin nếu thiếu một thông tin khác."
+  },
+  {
+   "chu": "deletion anomaly",
+   "doc": "/dɪˈliːʃn əˈnɑːməli/",
+   "nghia": "dị thường xoá: xoá một dòng làm mất luôn thông tin khác không muốn mất",
+   "nhom": "Chuẩn hoá",
+   "viDu": "A deletion anomaly occurs when deleting a row also removes other useful facts.",
+   "viDuNghia": "Dị thường xoá xảy ra khi xoá một dòng làm mất luôn những thông tin hữu ích khác."
+  },
+  {
+   "chu": "repeating group",
+   "doc": "/rɪˈpiːtɪŋ ɡruːp/",
+   "nghia": "nhóm lặp: một ô chứa nhiều giá trị hoặc các cột lặp lại (vi phạm 1NF)",
+   "nhom": "Chuẩn hoá",
+   "viDu": "Which normalization level ensures that there are no repeating groups in tables?",
+   "viDuNghia": "Mức chuẩn hóa nào đảm bảo không có nhóm lặp (repeating groups) trong bảng?"
+  },
+  {
+   "chu": "non-key attribute",
+   "doc": "/ˌnɑːn ˈkiː ˈætrɪbjuːt/",
+   "nghia": "thuộc tính không khoá: thuộc tính không thuộc khoá ứng viên nào",
+   "nhom": "Chuẩn hoá",
+   "viDu": "In 3NF, no non-key attribute depends transitively on the key.",
+   "viDuNghia": "Ở 3NF, không thuộc tính không khoá nào phụ thuộc bắc cầu vào khoá."
+  },
+  {
+   "chu": "prime attribute",
+   "doc": "/praɪm ˈætrɪbjuːt/",
+   "nghia": "thuộc tính khoá: thuộc tính nằm trong ít nhất một khoá ứng viên",
+   "nhom": "Chuẩn hoá",
+   "viDu": "Given the relation schema R(A,B,C) and functional dependencies F = {AB-> C, B->A, C->B}. Which attribute(s) is/are prime?",
+   "viDuNghia": "Cho lược đồ quan hệ R(A,B,C) và các phụ thuộc hàm F = {AB-> C, B->A, C->B}. Thuộc tính nào là thuộc tính prime (khóa)?"
+  },
+  {
+   "chu": "inconsistent",
+   "doc": "/ˌɪnkənˈsɪstənt/",
+   "nghia": "mâu thuẫn, không nhất quán: cùng một thông tin mà hai nơi lưu khác nhau",
+   "nhom": "Chuẩn hoá",
+   "viDu": "Redundant data can become inconsistent after an update.",
+   "viDuNghia": "Dữ liệu dư thừa có thể trở nên mâu thuẫn sau một lần cập nhật."
+  },
+  {
+   "chu": "redundancy",
+   "doc": "/rɪˈdʌndənsi/",
+   "nghia": "dư thừa dữ liệu – cùng một thông tin bị lưu lặp nhiều chỗ, gây dị thường khi cập nhật; chuẩn hoá để bỏ. (CEA201/RAID: dự phòng)",
+   "nhom": "Chuẩn hoá",
+   "viDu": "Problems such as redundancy that occur when we try to cram too much into a single relation are called_______",
+   "viDuNghia": "Các vấn đề như dư thừa dữ liệu xảy ra khi ta cố nhồi quá nhiều thông tin vào một quan hệ duy nhất được gọi là_______"
+  },
+  {
+   "chu": "denormalization",
+   "doc": "/diːˌnɔːrmələˈzeɪʃn/",
+   "nghia": "phi chuẩn hoá: cố ý gộp bảng / chấp nhận dư thừa để truy vấn đọc nhanh hơn (đổi lại dễ dị thường khi cập nhật)",
+   "nhom": "Chuẩn hoá",
+   "viDu": "In which scenario would denormalization be considered a good design choice?",
+   "viDuNghia": "Trong tình huống nào phi chuẩn hoá (denormalization) được xem là lựa chọn thiết kế tốt?"
+  }
+ ]
+}

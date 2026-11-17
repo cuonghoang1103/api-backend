@@ -1,0 +1,697 @@
+{
+ "ma": "mae101-1",
+ "nn": "en",
+ "ten": "MAE101 · 1. Đọc đề toán: cụm từ & ký hiệu",
+ "moTa": "Toán cho kỹ sư (MAE101), bộ 1: động từ lệnh, cụm nối hay gặp trong đề (such that, given that, with respect to...), từ về số - biểu thức và cách ĐỌC ký hiệu toán bằng tiếng Anh. Từ lấy từ đề FE thật; ví dụ phần lớn là câu hỏi thật trong đề.",
+ "bieuTuong": "x.squareroot",
+ "thuTu": -993,
+ "tu": [
+  {
+   "chu": "simplify",
+   "doc": "/ˈsɪmplɪfaɪ/",
+   "nghia": "rút gọn (biểu thức)",
+   "nhom": "Động từ lệnh trong đề",
+   "viDu": "Simplify (au+bv)×(cu+dv), where a, b, c, d are real numbers and u, v are vectors in R³.",
+   "viDuNghia": "Rút gọn (au+bv)×(cu+dv), với a, b, c, d là các số thực và u, v là các vector trong R³."
+  },
+  {
+   "chu": "solve",
+   "doc": "/sɑːlv/",
+   "nghia": "giải (phương trình, hệ phương trình, bài toán)",
+   "nhom": "Động từ lệnh trong đề",
+   "viDu": "Solve the following system of linear equations: x+y-z=1, 2x-y+7z=8, -x+y-5z=-5",
+   "viDuNghia": "Giải hệ phương trình tuyến tính sau: x+y-z=1, 2x-y+7z=8, -x+y-5z=-5"
+  },
+  {
+   "chu": "find all values of",
+   "nghia": "tìm tất cả các giá trị của (tham số, ẩn) thoả điều kiện đề cho",
+   "nhom": "Động từ lệnh trong đề",
+   "viDu": "Find all values of m such that the following matrix is invertible A=[1 2 1; 2 3 m; 3 2 -1][1 1 1; 2 3 2; 5 7 5].",
+   "viDuNghia": "Tìm tất cả giá trị m để ma trận sau khả nghịch A=[1 2 1; 2 3 m; 3 2 -1][1 1 1; 2 3 2; 5 7 5]."
+  },
+  {
+   "chu": "approximate",
+   "doc": "/əˈprɑːksɪmeɪt/",
+   "nghia": "tính gần đúng, xấp xỉ (động từ); gần đúng (tính từ đọc /əˈprɑːksɪmət/)",
+   "nhom": "Động từ lệnh trong đề",
+   "viDu": "When using Simpson's rule to approximate a definite integral, it is necessary for the number of subintervals to be ______",
+   "viDuNghia": "Khi dùng quy tắc Simpson để xấp xỉ tích phân xác định, số khoảng chia bắt buộc phải là ______"
+  },
+  {
+   "chu": "round",
+   "doc": "/raʊnd/",
+   "nghia": "làm tròn (round to two decimal places = làm tròn đến 2 chữ số thập phân)",
+   "nhom": "Động từ lệnh trong đề",
+   "viDu": "Find the area of the triangle with the following vertices. A(3,-1,2), B(1,1,0), and C(1,2,-1). Round your answer to two decimal places.",
+   "viDuNghia": "Tìm diện tích tam giác với các đỉnh sau. A(3,-1,2), B(1,1,0), và C(1,2,-1). Làm tròn đến hai chữ số thập phân."
+  },
+  {
+   "chu": "decimal place",
+   "doc": "/ˈdesɪml pleɪs/",
+   "nghia": "chữ số thập phân (sau dấu phẩy) — correct to 4 decimal places = chính xác đến 4 chữ số thập phân",
+   "nhom": "Động từ lệnh trong đề",
+   "viDu": "Compute the left Riemann sum for f(x)=1/(x(x-1)) on [2,6] using 4 subintervals. (Give your answer to 2 decimal places)",
+   "viDuNghia": "Tính tổng Riemann trái (left Riemann sum) của f(x)=1/(x(x-1)) trên [2,6] dùng 4 khoảng con. (Cho đáp án đến 2 chữ số thập phân)"
+  },
+  {
+   "chu": "nearest",
+   "doc": "/ˈnɪrɪst/",
+   "nghia": "gần nhất (round to the nearest hundredth = làm tròn đến hàng phần trăm gần nhất)",
+   "nhom": "Động từ lệnh trong đề",
+   "viDu": "Round the result to the nearest hundredth.",
+   "viDuNghia": "Làm tròn kết quả đến hàng phần trăm gần nhất."
+  },
+  {
+   "chu": "satisfy",
+   "doc": "/ˈsætɪsfaɪ/",
+   "nghia": "thoả mãn (điều kiện, phương trình)",
+   "nhom": "Động từ lệnh trong đề",
+   "viDu": "Let A be a square matrix that satisfies A³=2I, where I is an identity matrix of the same size. Choose the correct statement.",
+   "viDuNghia": "Cho A là ma trận vuông thỏa A³=2I, với I là ma trận đơn vị cùng cỡ. Chọn phát biểu đúng."
+  },
+  {
+   "chu": "obtain",
+   "doc": "/əbˈteɪn/",
+   "nghia": "thu được, nhận được (is obtained from = được suy ra/tạo ra từ)",
+   "nhom": "Động từ lệnh trong đề",
+   "viDu": "The matrix B is obtained from a 3×3 matrix A by interchanging two rows. If det (A)=5, what is det (B)?",
+   "viDuNghia": "Ma trận B nhận được từ ma trận 3×3 A bằng cách đổi chỗ hai hàng. Nếu det (A)=5 thì det (B) bằng bao nhiêu?"
+  },
+  {
+   "chu": "denote",
+   "doc": "/dɪˈnoʊt/",
+   "nghia": "ký hiệu là, biểu thị (Let A denote... = gọi A là...)",
+   "nhom": "Động từ lệnh trong đề",
+   "viDu": "Let A=[2 * * *; 0 -3 * *; 0 0 5 *; 0 0 0 6], where (*) denotes any number. Find det (4A).",
+   "viDuNghia": "Cho A=[2 * * *; 0 -3 * *; 0 0 5 *; 0 0 0 6], trong đó (*) là một số bất kỳ. Tìm det (4A)."
+  },
+  {
+   "chu": "belong to",
+   "doc": "/bɪˈlɔːŋ tə/",
+   "nghia": "thuộc, thuộc về (một tập hợp, một không gian)",
+   "nhom": "Động từ lệnh trong đề",
+   "viDu": "Let u=(0,1,1), v=(1,1,-1) be vectors. Which of the following vectors belong to span{u,v}: x=(1,3,-1), y=(0,2,3)?",
+   "viDuNghia": "Cho u=(0,1,1), v=(1,1,-1) là các vectơ. Vectơ nào sau đây thuộc span{u,v}: x=(1,3,-1), y=(0,2,3)?"
+  },
+  {
+   "chu": "given that",
+   "doc": "/ˈɡɪvn ðæt/",
+   "nghia": "biết rằng, cho biết (dữ kiện đề cho)",
+   "nhom": "Cụm từ nối trong đề",
+   "viDu": "Given that -5 is an eigenvalue for the matrix [3 -6; 8 -11]. Find all eigenvectors corresponding to this eigenvalue.",
+   "viDuNghia": "Biết -5 là một trị riêng của ma trận [3 -6; 8 -11]. Tìm tất cả vectơ riêng ứng với trị riêng này."
+  },
+  {
+   "chu": "neither ... nor",
+   "nghia": "không ... cũng không ... (cả hai đều sai/đều không)",
+   "nhom": "Cụm từ nối trong đề",
+   "viDu": "How many positive integers not exceeding 2016 are divisible by neither 7 nor 9?",
+   "viDuNghia": "Có bao nhiêu số nguyên dương không vượt quá 2016 không chia hết cho 7 và cũng không chia hết cho 9?"
+  },
+  {
+   "chu": "provided",
+   "doc": "/prəˈvaɪdɪd/",
+   "nghia": "với điều kiện là, miễn là (provided that...)",
+   "nhom": "Cụm từ nối trong đề",
+   "viDu": "Find the volume of the parallelepiped determined by 2u, -3v,5w, provided that u=[1,2,-1]^T,v=[0,2,4]^T,w=[1,4,1]^T.",
+   "viDuNghia": "Tìm thể tích hình hộp xác định bởi 2u, -3v,5w, biết u=[1,2,-1]^T,v=[0,2,4]^T,w=[1,4,1]^T."
+  },
+  {
+   "chu": "for every",
+   "doc": "/fər ˈevri/",
+   "nghia": "với mọi, với mỗi (ký hiệu ∀); giống for all, for each, for any",
+   "nhom": "Cụm từ nối trong đề",
+   "viDu": "Which of the following statements are true for every square matrix A: (1) If A²=0 then A is invertible. (2) If A³=-I then A is invertible.",
+   "viDuNghia": "Phát biểu nào sau đây đúng với mọi ma trận vuông A: (1) Nếu A²=0 thì A khả nghịch. (2) Nếu A³=-I thì A khả nghịch."
+  },
+  {
+   "chu": "exist",
+   "doc": "/ɪɡˈzɪst/",
+   "nghia": "tồn tại (there exists = tồn tại, ký hiệu ∃; does not exist = không tồn tại, viết tắt DNE)",
+   "nhom": "Cụm từ nối trong đề",
+   "viDu": "Find the relative extrema, if they exist, of the function f(x) = x³ - 3x² + 4x - 4.",
+   "viDuNghia": "Tìm cực trị (nếu có) của hàm f(x) = x³ - 3x² + 4x - 4."
+  },
+  {
+   "chu": "infinitely many",
+   "doc": "/ˈɪnfɪnətli ˈmeni/",
+   "nghia": "vô số (infinitely many solutions = vô số nghiệm)",
+   "nhom": "Cụm từ nối trong đề",
+   "viDu": "Find conditions on a,b,c such that the system has infinitely many solutions: x+ay=0, y+bz=0, z+cx=0.",
+   "viDuNghia": "Tìm điều kiện của a,b,c để hệ sau có vô số nghiệm: x+ay=0, y+bz=0, z+cx=0."
+  },
+  {
+   "chu": "arbitrary",
+   "doc": "/ˈɑːrbɪtreri/",
+   "nghia": "tuỳ ý, bất kỳ (arbitrary constant = hằng số tuỳ ý)",
+   "nhom": "Cụm từ nối trong đề",
+   "viDu": "Let A be an arbitrary 3×3 matrix. Choose correct statements. (i) det (-A)=det (A). (ii) det (-A)=-det (A). (iii) If det (A)=0, then A has two equal rows.",
+   "viDuNghia": "Cho A là ma trận 3×3 bất kỳ. Chọn các phát biểu đúng. (i) det (-A)=det (A). (ii) det (-A)=-det (A). (iii) Nếu det (A)=0 thì A có hai hàng bằng nhau."
+  },
+  {
+   "chu": "specified",
+   "doc": "/ˈspesɪfaɪd/",
+   "nghia": "được chỉ định, đã cho trong đề",
+   "nhom": "Cụm từ nối trong đề",
+   "viDu": "Use Newton's method with the specified initial approximation x₁=1 to find x₃ of the equation tan x = x²",
+   "viDuNghia": "Dùng phương pháp Newton với xấp xỉ ban đầu đã cho x₁=1 để tìm x₃ của phương trình tan x = x²"
+  },
+  {
+   "chu": "passing through",
+   "doc": "/ˈpæsɪŋ θruː/",
+   "nghia": "đi qua (điểm nào đó)",
+   "nhom": "Cụm từ nối trong đề",
+   "viDu": "Which of the following vectors is perpendicular to the plane passing through the points (-7,10,0), (4,1,6) and (2,-1,3)?",
+   "viDuNghia": "Vector nào sau đây vuông góc với mặt phẳng đi qua các điểm (-7,10,0), (4,1,6) và (2,-1,3)?"
+  },
+  {
+   "chu": "as small as possible",
+   "nghia": "nhỏ nhất có thể (as large as possible = lớn nhất có thể)",
+   "nhom": "Cụm từ nối trong đề",
+   "viDu": "Find a positive number such that the sum of the number and four times its reciprocal is as small as possible.",
+   "viDuNghia": "Tìm một số dương sao cho tổng của số đó và bốn lần nghịch đảo của nó là nhỏ nhất có thể."
+  },
+  {
+   "chu": "correct to",
+   "doc": "/kəˈrekt tə/",
+   "nghia": "chính xác đến (bao nhiêu chữ số thập phân)",
+   "nhom": "Cụm từ nối trong đề",
+   "viDu": "Give your answer correct to 4 decimal places.",
+   "viDuNghia": "Cho đáp án chính xác đến 4 chữ số thập phân."
+  },
+  {
+   "chu": "hundredth",
+   "doc": "/ˈhʌndrədθ/",
+   "nghia": "phần trăm, hàng phần trăm (chữ số thứ hai sau dấu phẩy); thứ một trăm",
+   "nhom": "Cụm từ nối trong đề",
+   "viDu": "Round the result to the nearest hundredth.",
+   "viDuNghia": "Làm tròn kết quả đến hàng phần trăm gần nhất."
+  },
+  {
+   "chu": "defined",
+   "doc": "/dɪˈfaɪnd/",
+   "nghia": "được xác định, được cho (defined by f(x) = ... = cho bởi công thức; if they are defined = nếu chúng có nghĩa)",
+   "nhom": "Cụm từ nối trong đề",
+   "viDu": "Let T be the linear transformation defined by T(X)=[1 0; 6 1]X. Describe geometrically the effect of T.",
+   "viDuNghia": "Cho T là phép biến đổi tuyến tính xác định bởi T(X)=[1 0; 6 1]X. Mô tả hình học tác động của T."
+  },
+  {
+   "chu": "take the form",
+   "doc": "/teɪk ðə fɔːrm/",
+   "nghia": "có dạng (h(t) takes the form ... = h(t) có dạng ...)",
+   "nhom": "Cụm từ nối trong đề",
+   "viDu": "A ball is thrown upward such that its height (in meters) takes the form h(t)=1+25t+at². Assume that the velocity of the ball at time t=2 is 5 m/s. Find a.",
+   "viDuNghia": "Một quả bóng được ném lên sao cho độ cao (mét) có dạng h(t)=1+25t+at². Giả sử vận tốc của bóng tại thời điểm t=2 là 5 m/s. Tìm a."
+  },
+  {
+   "chu": "how fast",
+   "doc": "/haʊ fæst/",
+   "nghia": "nhanh thế nào, với tốc độ bao nhiêu (câu hỏi về tốc độ thay đổi - phải lấy đạo hàm theo thời gian)",
+   "nhom": "Cụm từ nối trong đề",
+   "viDu": "Volume of a spherical balloon is decreasing at rate 9 cm³/s. How fast is its diameter decreasing when the volume is 6 cm³?",
+   "viDuNghia": "Thể tích một quả bóng hình cầu đang giảm với tốc độ 9 cm³/s. Đường kính của nó giảm nhanh như thế nào khi thể tích bằng 6 cm³?"
+  },
+  {
+   "chu": "by how much",
+   "nghia": "(tăng, giảm, thay đổi) một lượng bao nhiêu",
+   "nhom": "Cụm từ nối trong đề",
+   "viDu": "A population of cattle is increasing at a rate of f'(t) = 100+20t in year t. By how much does the population increase between the 2nd and the 5th years?",
+   "viDuNghia": "Một quần thể gia súc tăng trưởng với tốc độ f'(t) = 100+20t trong năm t. Quần thể tăng thêm bao nhiêu cá thể giữa năm thứ 2 và năm thứ 5?"
+  },
+  {
+   "chu": "largest possible",
+   "doc": "/ˈlɑːrdʒɪst ˈpɑːsəbl/",
+   "nghia": "lớn nhất có thể (largest possible area = diện tích lớn nhất có thể)",
+   "nhom": "Cụm từ nối trong đề",
+   "viDu": "If 1200 area units of material is available to make a box with a square base and an open top, find the largest possible volume of the box.",
+   "viDuNghia": "Nếu có 1200 đơn vị diện tích vật liệu để làm một hộp có đáy vuông và không có nắp, tìm thể tích lớn nhất có thể của hộp."
+  },
+  {
+   "chu": "most general",
+   "doc": "/moʊst ˈdʒenrəl/",
+   "nghia": "tổng quát nhất (most general antiderivative = nguyên hàm tổng quát, có + C)",
+   "nhom": "Cụm từ nối trong đề",
+   "viDu": "Find the most general antiderivative of f(x) = (x²+1)e^x",
+   "viDuNghia": "Tìm nguyên hàm tổng quát nhất của f(x) = (x²+1)e^x"
+  },
+  {
+   "chu": "geometrically",
+   "doc": "/ˌdʒiːəˈmetrɪkli/",
+   "nghia": "về mặt hình học (describe geometrically = mô tả ý nghĩa hình học)",
+   "nhom": "Cụm từ nối trong đề",
+   "viDu": "Let T be the linear transformation defined by T(X)=[1 0; 6 1]X. Describe geometrically the effect of T.",
+   "viDuNghia": "Cho T là phép biến đổi tuyến tính xác định bởi T(X)=[1 0; 6 1]X. Mô tả hình học tác động của T."
+  },
+  {
+   "chu": "guarantee",
+   "doc": "/ˌɡærənˈtiː/",
+   "nghia": "bảo đảm (the number c that the theorem guarantees = số c mà định lý bảo đảm tồn tại)",
+   "nhom": "Cụm từ nối trong đề",
+   "viDu": "The function f(x)=x² satisfies the hypotheses of the Mean Value Theorem on [1,3]. Find the number c that the theorem guarantees.",
+   "viDuNghia": "Hàm f(x)=x² thoả các giả thiết của Định lý giá trị trung bình trên [1,3]. Tìm số c mà định lý bảo đảm tồn tại."
+  },
+  {
+   "chu": "theorem",
+   "doc": "/ˈθiːərəm/",
+   "nghia": "định lý",
+   "nhom": "Cụm từ nối trong đề",
+   "viDu": "The function f(x)=x² satisfies the hypotheses of the Mean Value Theorem on [1,3]. Find the number c that the theorem guarantees.",
+   "viDuNghia": "Hàm f(x)=x² thoả các giả thiết của Định lý giá trị trung bình trên [1,3]. Tìm số c mà định lý bảo đảm tồn tại."
+  },
+  {
+   "chu": "real number",
+   "doc": "/ˈriːəl ˈnʌmbər/",
+   "nghia": "số thực (tập R)",
+   "nhom": "Số và biểu thức",
+   "viDu": "Find two real numbers such that the first minus two times the second is 10 and the sum of their square is minimum",
+   "viDuNghia": "Tìm hai số thực sao cho số thứ nhất trừ hai lần số thứ hai bằng 10 và tổng bình phương của chúng nhỏ nhất"
+  },
+  {
+   "chu": "negative",
+   "doc": "/ˈneɡətɪv/",
+   "nghia": "âm (nhỏ hơn 0)",
+   "nhom": "Số và biểu thức",
+   "viDu": "Let x,y be non-negative real numbers such that x+2y=8.",
+   "viDuNghia": "Cho x,y là các số thực không âm với x+2y=8."
+  },
+  {
+   "chu": "nonzero",
+   "doc": "/ˌnɑːnˈzɪroʊ/",
+   "nghia": "khác 0",
+   "nhom": "Số và biểu thức",
+   "viDu": "If u and v are two nonzero vectors, then u and v are parallel if and only if ______ (i) ‖u×v‖=-1 (ii) ‖u×v‖=0 (iii) ‖u×v‖=1",
+   "viDuNghia": "Nếu u và v là hai vectơ khác không thì u và v song song khi và chỉ khi ______ (i) ‖u×v‖=-1 (ii) ‖u×v‖=0 (iii) ‖u×v‖=1"
+  },
+  {
+   "chu": "constant",
+   "doc": "/ˈkɑːnstənt/",
+   "nghia": "hằng số; không đổi",
+   "nhom": "Số và biểu thức",
+   "viDu": "The answer to an indefinite integral must include an arbitrary constant C.",
+   "viDuNghia": "Đáp án của tích phân bất định phải có hằng số tuỳ ý C."
+  },
+  {
+   "chu": "expression",
+   "doc": "/ɪkˈspreʃn/",
+   "nghia": "biểu thức",
+   "nhom": "Số và biểu thức",
+   "viDu": "Simplify the expression (f(x+h)-f(x))/h for f(x) = x² + 5x.",
+   "viDuNghia": "Rút gọn biểu thức (f(x+h)-f(x))/h với f(x) = x² + 5x."
+  },
+  {
+   "chu": "equation",
+   "doc": "/ɪˈkweɪʒn/",
+   "nghia": "phương trình (có dấu =)",
+   "nhom": "Số và biểu thức",
+   "viDu": "Find an equation of the line through the point (4,5) that cuts off the least area from the first quadrant.",
+   "viDuNghia": "Tìm phương trình đường thẳng đi qua điểm (4,5) cắt bỏ diện tích nhỏ nhất khỏi góc phần tư thứ nhất."
+  },
+  {
+   "chu": "equal",
+   "doc": "/ˈiːkwəl/",
+   "nghia": "bằng (is equal to = bằng với; equals = bằng)",
+   "nhom": "Số và biểu thức",
+   "viDu": "Consider the function f(x)=3x²+2x. Find the number b such that the average value of f on [0,b] is equal to 72.",
+   "viDuNghia": "Xét hàm f(x)=3x²+2x. Tìm số b sao cho giá trị trung bình của f trên [0,b] bằng 72."
+  },
+  {
+   "chu": "value",
+   "doc": "/ˈvæljuː/",
+   "nghia": "giá trị (values of x = các giá trị của x)",
+   "nhom": "Số và biểu thức",
+   "viDu": "Find the minimum value of the product of two numbers in which one number is 2 more than three times the other.",
+   "viDuNghia": "Tìm giá trị nhỏ nhất của tích hai số, trong đó một số bằng 2 cộng ba lần số kia."
+  },
+  {
+   "chu": "unknown",
+   "doc": "/ˌʌnˈnoʊn/",
+   "nghia": "ẩn, ẩn số (đại lượng chưa biết cần tìm)",
+   "nhom": "Số và biểu thức",
+   "viDu": "Consider a homogeneous system of 5 linear equations in 6 unknowns. Which of the following is true?",
+   "viDuNghia": "Xét một hệ 5 phương trình tuyến tính thuần nhất với 6 ẩn. Khẳng định nào sau đây đúng?"
+  },
+  {
+   "chu": "polynomial",
+   "doc": "/ˌpɑːliˈnoʊmiəl/",
+   "nghia": "đa thức",
+   "nhom": "Số và biểu thức",
+   "viDu": "Find the characteristic polynomial of the matrix [1 0 2; -2 3 1; 0 2 2].",
+   "viDuNghia": "Tìm đa thức đặc trưng của ma trận [1 0 2; -2 3 1; 0 2 2]."
+  },
+  {
+   "chu": "quotient",
+   "doc": "/ˈkwoʊʃnt/",
+   "nghia": "thương (kết quả phép chia)",
+   "nhom": "Số và biểu thức",
+   "viDu": "Simplify the quotient (f(x+h)-f(x))/h for f(x) = -x²+3x",
+   "viDuNghia": "Rút gọn thương (f(x+h)-f(x))/h với f(x) = -x²+3x"
+  },
+  {
+   "chu": "product",
+   "doc": "/ˈprɑːdʌkt/",
+   "nghia": "tích (kết quả phép nhân)",
+   "nhom": "Số và biểu thức",
+   "viDu": "Find the minimum of the product of two numbers with the property that the first minus 4 times the second is 8.",
+   "viDuNghia": "Tìm giá trị nhỏ nhất của tích hai số với tính chất: số thứ nhất trừ 4 lần số thứ hai bằng 8."
+  },
+  {
+   "chu": "sum",
+   "doc": "/sʌm/",
+   "nghia": "tổng (kết quả phép cộng)",
+   "nhom": "Số và biểu thức",
+   "viDu": "Find two real numbers such that the first minus two times the second is 10 and the sum of their squares is minimum.",
+   "viDuNghia": "Tìm hai số thực sao cho số thứ nhất trừ hai lần số thứ hai bằng 10 và tổng bình phương của chúng nhỏ nhất."
+  },
+  {
+   "chu": "difference",
+   "doc": "/ˈdɪfrəns/",
+   "nghia": "hiệu (kết quả phép trừ); sự khác nhau",
+   "nhom": "Số và biểu thức",
+   "viDu": "The symmetric difference of two sets A and B, denoted by A ⊕B, is the set of all elements that ONLY belong to A or ONLY belong to B.",
+   "viDuNghia": "Hiệu đối xứng của hai tập A và B, ký hiệu A ⊕B, là tập tất cả các phần tử CHỈ thuộc A hoặc CHỈ thuộc B."
+  },
+  {
+   "chu": "solution",
+   "doc": "/səˈluːʃn/",
+   "nghia": "nghiệm; lời giải",
+   "nhom": "Số và biểu thức",
+   "viDu": "How many solutions would a HOMOGENEOUS system of linear equations of 4 equations and in 4 variables have?",
+   "viDuNghia": "Một hệ phương trình tuyến tính THUẦN NHẤT gồm 4 phương trình và 4 ẩn có bao nhiêu nghiệm?"
+  },
+  {
+   "chu": "unit",
+   "doc": "/ˈjuːnɪt/",
+   "nghia": "đơn vị (shift 2 units = dịch 2 đơn vị)",
+   "nhom": "Số và biểu thức",
+   "viDu": "Write the equation for the graph obtained by stretching the graph of y=f(x) vertically by a factor of 5 and then shifting 1 unit upward.",
+   "viDuNghia": "Viết phương trình đồ thị nhận được khi kéo dãn đồ thị y=f(x) theo chiều dọc với hệ số 5, sau đó tịnh tiến lên trên 1 đơn vị."
+  },
+  {
+   "chu": "radian",
+   "doc": "/ˈreɪdiən/",
+   "nghia": "radian (đơn vị góc; π radian = 180 độ)",
+   "nhom": "Số và biểu thức",
+   "viDu": "An angle of π/2 radians equals 90 degrees.",
+   "viDuNghia": "Góc π/2 radian bằng 90 độ."
+  },
+  {
+   "chu": "finite",
+   "doc": "/ˈfaɪnaɪt/",
+   "nghia": "hữu hạn",
+   "nhom": "Số và biểu thức",
+   "viDu": "Determine whether the area between the graph of f(x)=1/x and the x-axis over the interval [1,+∞) is finite or infinite.",
+   "viDuNghia": "Xác định xem diện tích giữa đồ thị f(x)=1/x và trục hoành trên khoảng [1,+∞) là hữu hạn hay vô hạn."
+  },
+  {
+   "chu": "infinite",
+   "doc": "/ˈɪnfɪnət/",
+   "nghia": "vô hạn",
+   "nhom": "Số và biểu thức",
+   "viDu": "Determine whether the area between the graph of f(x)=1/x and the x-axis over the interval [1,+∞) is finite or infinite.",
+   "viDuNghia": "Xác định xem diện tích giữa đồ thị f(x)=1/x và trục hoành trên khoảng [1,+∞) là hữu hạn hay vô hạn."
+  },
+  {
+   "chu": "infinity",
+   "doc": "/ɪnˈfɪnəti/",
+   "nghia": "vô cực (ký hiệu ∞)",
+   "nhom": "Số và biểu thức",
+   "viDu": "x → ∞ is read: x approaches infinity.",
+   "viDuNghia": "x → ∞ đọc là: x tiến tới vô cực."
+  },
+  {
+   "chu": "undefined",
+   "doc": "/ˌʌndɪˈfaɪnd/",
+   "nghia": "không xác định (ví dụ chia cho 0)",
+   "nhom": "Số và biểu thức",
+   "viDu": "The slope of a vertical line is undefined.",
+   "viDuNghia": "Hệ số góc của đường thẳng đứng là không xác định."
+  },
+  {
+   "chu": "reciprocal",
+   "doc": "/rɪˈsɪprəkl/",
+   "nghia": "nghịch đảo (của x là 1/x)",
+   "nhom": "Số và biểu thức",
+   "viDu": "Find a positive number such that the sum of the number and four times its reciprocal is as small as possible.",
+   "viDuNghia": "Tìm một số dương sao cho tổng của số đó và bốn lần nghịch đảo của nó là nhỏ nhất có thể."
+  },
+  {
+   "chu": "twice",
+   "doc": "/twaɪs/",
+   "nghia": "hai lần, gấp đôi (twice as large = lớn gấp đôi)",
+   "nhom": "Số và biểu thức",
+   "viDu": "Find the minimum of the product of two numbers with the property that the first is 2 less than twice the second.",
+   "viDuNghia": "Tìm giá trị nhỏ nhất của tích hai số biết số thứ nhất nhỏ hơn hai lần số thứ hai 2 đơn vị."
+  },
+  {
+   "chu": "pair",
+   "doc": "/per/",
+   "nghia": "cặp (pairs of real numbers (s, t) = các cặp số thực (s, t))",
+   "nhom": "Số và biểu thức",
+   "viDu": "Let A=[1 2s-t t³; s+t 2 1; st 1 4]. Find all pairs of real numbers (s,t) such that the matrix A is symmetric.",
+   "viDuNghia": "Cho A=[1 2s-t t³; s+t 2 1; st 1 4]. Tìm tất cả cặp số thực (s,t) để ma trận A đối xứng."
+  },
+  {
+   "chu": "amount",
+   "doc": "/əˈmaʊnt/",
+   "nghia": "lượng (the amount of material = lượng vật liệu)",
+   "nhom": "Số và biểu thức",
+   "viDu": "A box with a square base and open top must have a volume of 13500 cm³. Find the dimensions of the box that minimize the amount of material used.",
+   "viDuNghia": "Một hộp có đáy vuông và không có nắp phải có thể tích 13500 cm³. Tìm kích thước hộp sao cho lượng vật liệu sử dụng là nhỏ nhất."
+  },
+  {
+   "chu": "measurement",
+   "doc": "/ˈmeʒərmənt/",
+   "nghia": "phép đo, số đo (error in measurement = sai số của phép đo)",
+   "nhom": "Số và biểu thức",
+   "viDu": "The edge of a cube was found to be 20 cm with a possible error in measurement of at most 0.1 cm. What is the maximum possible error in computing the surface area of the cube?",
+   "viDuNghia": "Cạnh của một hình lập phương đo được 20 cm với sai số tối đa 0.1 cm. Sai số tối đa có thể khi tính diện tích toàn phần của hình lập phương là bao nhiêu?"
+  },
+  {
+   "chu": "half",
+   "doc": "/hæf/",
+   "nghia": "một nửa (one half = 1/2; half of = một nửa của)",
+   "nhom": "Số và biểu thức",
+   "viDu": "The standard error of the mean for a sample of 100 is 30. In order to cut the standard error of the mean to 15 (i.e. in half), we would ______",
+   "viDuNghia": "Sai số chuẩn của trung bình mẫu với cỡ mẫu 100 là 30. Để giảm sai số chuẩn của trung bình mẫu xuống còn 15 (tức một nửa), ta cần ______"
+  },
+  {
+   "chu": "plus",
+   "doc": "/plʌs/",
+   "nghia": "cộng (dấu +)",
+   "nhom": "Đọc ký hiệu bằng tiếng Anh",
+   "viDu": "x + 5 is read: x plus five.",
+   "viDuNghia": "x + 5 đọc là: x cộng năm."
+  },
+  {
+   "chu": "minus",
+   "doc": "/ˈmaɪnəs/",
+   "nghia": "trừ (dấu −); âm (minus two = âm hai)",
+   "nhom": "Đọc ký hiệu bằng tiếng Anh",
+   "viDu": "Find the minimum of the product of two numbers with the property that the first minus 7 times the second is 28.",
+   "viDuNghia": "Tìm giá trị nhỏ nhất của tích hai số biết số thứ nhất trừ 7 lần số thứ hai bằng 28."
+  },
+  {
+   "chu": "times",
+   "doc": "/taɪmz/",
+   "nghia": "nhân (3 × 4 = three times four); lần (2 times the first = hai lần số thứ nhất)",
+   "nhom": "Đọc ký hiệu bằng tiếng Anh",
+   "viDu": "Find two positive numbers whose product is 24 and the sum of 2 times the first and 3 times the second is a minimum.",
+   "viDuNghia": "Tìm hai số dương có tích bằng 24 sao cho tổng của 2 lần số thứ nhất và 3 lần số thứ hai là nhỏ nhất."
+  },
+  {
+   "chu": "divided by",
+   "doc": "/dɪˈvaɪdɪd baɪ/",
+   "nghia": "chia cho (dấu ÷ hoặc /)",
+   "nhom": "Đọc ký hiệu bằng tiếng Anh",
+   "viDu": "12 ÷ 4 is read: twelve divided by four.",
+   "viDuNghia": "12 ÷ 4 đọc là: mười hai chia cho bốn."
+  },
+  {
+   "chu": "over",
+   "doc": "/ˈoʊvər/",
+   "nghia": "trên: đọc phân số a/b là a over b; over the interval [a, b] = trên đoạn [a, b]",
+   "nhom": "Đọc ký hiệu bằng tiếng Anh",
+   "viDu": "Approximate the area under the graph of f(x)=x²+2 over the interval [0,5] using 5 subintervals and left endpoints.",
+   "viDuNghia": "Xấp xỉ diện tích dưới đồ thị f(x)=x²+2 trên đoạn [0,5] dùng 5 khoảng con và các đầu mút trái."
+  },
+  {
+   "chu": "fraction",
+   "doc": "/ˈfrækʃn/",
+   "nghia": "phân số",
+   "nhom": "Đọc ký hiệu bằng tiếng Anh",
+   "viDu": "Write the answer as a fraction, not as a decimal.",
+   "viDuNghia": "Viết đáp án dưới dạng phân số, không viết dạng số thập phân."
+  },
+  {
+   "chu": "numerator",
+   "doc": "/ˈnuːməreɪtər/",
+   "nghia": "tử số (phần trên của phân số)",
+   "nhom": "Đọc ký hiệu bằng tiếng Anh",
+   "viDu": "In 3/5, the numerator is 3.",
+   "viDuNghia": "Trong 3/5, tử số là 3."
+  },
+  {
+   "chu": "denominator",
+   "doc": "/dɪˈnɑːmɪneɪtər/",
+   "nghia": "mẫu số (phần dưới của phân số)",
+   "nhom": "Đọc ký hiệu bằng tiếng Anh",
+   "viDu": "The function is undefined where the denominator is zero.",
+   "viDuNghia": "Hàm số không xác định tại chỗ mẫu số bằng 0."
+  },
+  {
+   "chu": "squared",
+   "doc": "/skwerd/",
+   "nghia": "bình phương (x² = x squared)",
+   "nhom": "Đọc ký hiệu bằng tiếng Anh",
+   "viDu": "x² + 5 is read: x squared plus five.",
+   "viDuNghia": "x² + 5 đọc là: x bình phương cộng năm."
+  },
+  {
+   "chu": "cubed",
+   "doc": "/kjuːbd/",
+   "nghia": "lập phương (x³ = x cubed)",
+   "nhom": "Đọc ký hiệu bằng tiếng Anh",
+   "viDu": "x³ − 1 is read: x cubed minus one.",
+   "viDuNghia": "x³ − 1 đọc là: x lập phương trừ một."
+  },
+  {
+   "chu": "to the power of",
+   "nghia": "mũ, luỹ thừa bậc (x^n = x to the power of n, hoặc x to the n)",
+   "nhom": "Đọc ký hiệu bằng tiếng Anh",
+   "viDu": "2^10 is read: two to the power of ten.",
+   "viDuNghia": "2^10 đọc là: hai mũ mười."
+  },
+  {
+   "chu": "square root",
+   "doc": "/skwer ruːt/",
+   "nghia": "căn bậc hai (√x = the square root of x)",
+   "nhom": "Đọc ký hiệu bằng tiếng Anh",
+   "viDu": "√(x + 1) is read: the square root of x plus one.",
+   "viDuNghia": "√(x + 1) đọc là: căn bậc hai của x cộng một."
+  },
+  {
+   "chu": "cube root",
+   "doc": "/kjuːb ruːt/",
+   "nghia": "căn bậc ba",
+   "nhom": "Đọc ký hiệu bằng tiếng Anh",
+   "viDu": "The cube root of 8 is 2.",
+   "viDuNghia": "Căn bậc ba của 8 là 2."
+  },
+  {
+   "chu": "absolute value",
+   "doc": "/ˈæbsəluːt ˈvæljuː/",
+   "nghia": "giá trị tuyệt đối (|x| = the absolute value of x)",
+   "nhom": "Đọc ký hiệu bằng tiếng Anh",
+   "viDu": "|x − 2| is read: the absolute value of x minus two.",
+   "viDuNghia": "|x − 2| đọc là: giá trị tuyệt đối của x trừ hai."
+  },
+  {
+   "chu": "less than or equal to",
+   "nghia": "nhỏ hơn hoặc bằng (≤); less than = nhỏ hơn (<)",
+   "nhom": "Đọc ký hiệu bằng tiếng Anh",
+   "viDu": "x ≤ 3 is read: x is less than or equal to three.",
+   "viDuNghia": "x ≤ 3 đọc là: x nhỏ hơn hoặc bằng ba."
+  },
+  {
+   "chu": "greater than or equal to",
+   "nghia": "lớn hơn hoặc bằng (≥); greater than = lớn hơn (>)",
+   "nhom": "Đọc ký hiệu bằng tiếng Anh",
+   "viDu": "x ≥ 0 is read: x is greater than or equal to zero.",
+   "viDuNghia": "x ≥ 0 đọc là: x lớn hơn hoặc bằng không."
+  },
+  {
+   "chu": "not equal to",
+   "nghia": "khác, không bằng (≠)",
+   "nhom": "Đọc ký hiệu bằng tiếng Anh",
+   "viDu": "x ≠ 2 is read: x is not equal to two.",
+   "viDuNghia": "x ≠ 2 đọc là: x khác hai."
+  },
+  {
+   "chu": "f of x",
+   "nghia": "f của x, tức f(x) — giá trị của hàm f tại x",
+   "nhom": "Đọc ký hiệu bằng tiếng Anh",
+   "viDu": "f(x) = 2x is read: f of x equals two x.",
+   "viDuNghia": "f(x) = 2x đọc là: f của x bằng hai x."
+  },
+  {
+   "chu": "subscript",
+   "doc": "/ˈsʌbskrɪpt/",
+   "nghia": "chỉ số dưới (x₁ = x sub one)",
+   "nhom": "Đọc ký hiệu bằng tiếng Anh",
+   "viDu": "x₁ and x₂ are read: x sub one and x sub two.",
+   "viDuNghia": "x₁ và x₂ đọc là: x một và x hai (x chỉ số một, x chỉ số hai)."
+  },
+  {
+   "chu": "natural logarithm",
+   "doc": "/ˈnætʃrəl ˈlɔːɡərɪðəm/",
+   "nghia": "logarit tự nhiên, logarit cơ số e (ln x đọc là: natural log of x hoặc l-n of x)",
+   "nhom": "Đọc ký hiệu bằng tiếng Anh",
+   "viDu": "ln e = 1 because the natural logarithm has base e.",
+   "viDuNghia": "ln e = 1 vì logarit tự nhiên có cơ số e."
+  },
+  {
+   "chu": "exponential function",
+   "doc": "/ˌekspəˈnenʃl ˈfʌŋkʃn/",
+   "nghia": "hàm mũ (ví dụ e^x, đọc: e to the x)",
+   "nhom": "Đọc ký hiệu bằng tiếng Anh",
+   "viDu": "The exponential function e^x is its own derivative.",
+   "viDuNghia": "Hàm mũ e^x có đạo hàm bằng chính nó."
+  },
+  {
+   "chu": "sine",
+   "doc": "/saɪn/",
+   "nghia": "sin (sin x đọc là: sine of x, hoặc sine x)",
+   "nhom": "Đọc ký hiệu bằng tiếng Anh",
+   "viDu": "sin²x + cos²x = 1 is read: sine squared x plus cosine squared x equals one.",
+   "viDuNghia": "sin²x + cos²x = 1 đọc là: sin bình phương x cộng cos bình phương x bằng một."
+  },
+  {
+   "chu": "cosine",
+   "doc": "/ˈkoʊsaɪn/",
+   "nghia": "cos (cos x đọc là: cosine of x)",
+   "nhom": "Đọc ký hiệu bằng tiếng Anh",
+   "viDu": "The derivative of sine x is cosine x.",
+   "viDuNghia": "Đạo hàm của sin x là cos x."
+  },
+  {
+   "chu": "lambda",
+   "doc": "/ˈlæmdə/",
+   "nghia": "chữ Hy Lạp λ — trong đại số tuyến tính thường ký hiệu trị riêng",
+   "nhom": "Đọc ký hiệu bằng tiếng Anh",
+   "viDu": "Given that -3 is an eigenvalue for the matrix [3 -6; 8 -11]. Find all eigenvectors corresponding to this eigenvalue λ=-3.",
+   "viDuNghia": "Cho biết -3 là một trị riêng của ma trận [3 -6; 8 -11]. Tìm tất cả các véc-tơ riêng ứng với trị riêng λ=-3."
+  },
+  {
+   "chu": "bracket",
+   "doc": "/ˈbrækɪt/",
+   "nghia": "dấu ngoặc vuông [ ] — trong khoảng, ngoặc vuông nghĩa là lấy cả đầu mút",
+   "nhom": "Đọc ký hiệu bằng tiếng Anh",
+   "viDu": "In [0, 5] the square brackets mean that 0 and 5 are included.",
+   "viDuNghia": "Trong [0, 5], ngoặc vuông nghĩa là lấy cả 0 và 5."
+  },
+  {
+   "chu": "parenthesis",
+   "doc": "/pəˈrenθəsɪs/",
+   "nghia": "dấu ngoặc đơn ( ); số nhiều: parentheses — trong khoảng, ngoặc đơn nghĩa là không lấy đầu mút",
+   "nhom": "Đọc ký hiệu bằng tiếng Anh",
+   "viDu": "In (0, 5) the parentheses mean that 0 and 5 are not included.",
+   "viDuNghia": "Trong (0, 5), ngoặc đơn nghĩa là không lấy 0 và 5."
+  },
+  {
+   "chu": "theta",
+   "doc": "/ˈθeɪtə/",
+   "nghia": "chữ Hy Lạp θ, thường ký hiệu góc",
+   "nhom": "Đọc ký hiệu bằng tiếng Anh",
+   "viDu": "Rotation through an angle θ is read: rotation through an angle theta.",
+   "viDuNghia": "Phép quay một góc θ đọc là: rotation through an angle theta."
+  },
+  {
+   "chu": "delta",
+   "doc": "/ˈdeltə/",
+   "nghia": "chữ Hy Lạp Δ, δ — Δx (delta x) là độ biến thiên của x, độ rộng mỗi khoảng con",
+   "nhom": "Đọc ký hiệu bằng tiếng Anh",
+   "viDu": "Δx = (b − a)/n is read: delta x equals b minus a over n.",
+   "viDuNghia": "Δx = (b − a)/n đọc là: delta x bằng b trừ a trên n."
+  }
+ ]
+}

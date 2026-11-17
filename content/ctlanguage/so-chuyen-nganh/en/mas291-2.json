@@ -1,0 +1,756 @@
+{
+ "ma": "mas291-2",
+ "nn": "en",
+ "ten": "MAS291 · 2. Thống kê mô tả & ước lượng",
+ "moTa": "Xác suất thống kê (MAS291), bộ 2: dữ liệu và cách thu thập, trung bình - trung vị - tứ phân vị, biểu đồ thân lá - hộp - tần số, ước lượng điểm và khoảng tin cậy, đơn vị đo kiểu Mỹ và từ trong bài toán sản xuất. Từ lấy từ đề FE thật; ví dụ là câu hỏi thật trong đề.",
+ "bieuTuong": "chart.bar.fill",
+ "thuTu": -958,
+ "tu": [
+  {
+   "chu": "random sample",
+   "doc": "/ˈrændəm ˈsæmpl/",
+   "nghia": "mẫu ngẫu nhiên (các phần tử được chọn ngẫu nhiên, độc lập từ tổng thể)",
+   "nhom": "Dữ liệu và mẫu",
+   "viDu": "A random sample of 36 bearings is selected and the average inside diameter of these bearings is 1.4895 inches.",
+   "viDuNghia": "Một mẫu ngẫu nhiên gồm 36 vòng bi được chọn và đường kính trong trung bình của chúng là 1.4895 inch."
+  },
+  {
+   "chu": "sample size",
+   "doc": "/ˈsæmpl saɪz/",
+   "nghia": "cỡ mẫu, kích thước mẫu (n)",
+   "nhom": "Dữ liệu và mẫu",
+   "viDu": "True or False: In the paired t-test for the mean difference, the sample sizes must be equal in the two groups.",
+   "viDuNghia": "Đúng hay Sai: Trong kiểm định t theo cặp (paired t-test) cho hiệu trung bình, cỡ mẫu của hai nhóm phải bằng nhau."
+  },
+  {
+   "chu": "data set",
+   "doc": "/ˈdeɪtə set/",
+   "nghia": "tập dữ liệu, bộ số liệu",
+   "nhom": "Dữ liệu và mẫu",
+   "viDu": "Given the data set: 1, 1, 2, 2, 3, 4, 4, 5, 6, 7, 7, 8, 9. Determine the IQR for this data.",
+   "viDuNghia": "Cho tập dữ liệu: 1, 1, 2, 2, 3, 4, 4, 5, 6, 7, 7, 8, 9. Tính khoảng tứ phân vị (IQR) của dữ liệu này."
+  },
+  {
+   "chu": "sample data",
+   "doc": "/ˈsæmpl ˈdeɪtə/",
+   "nghia": "dữ liệu mẫu (số liệu thu được từ mẫu)",
+   "nhom": "Dữ liệu và mẫu",
+   "viDu": "Consider the following sample data: 25, 11, 6, 4, 2, 17, 9, 6. For these data the median is ________________",
+   "viDuNghia": "Xét dữ liệu mẫu sau: 25, 11, 6, 4, 2, 17, 9, 6. Trung vị của dữ liệu này là ________________"
+  },
+  {
+   "chu": "descriptive statistics",
+   "doc": "/dɪˈskrɪptɪv stəˈtɪstɪks/",
+   "nghia": "thống kê mô tả (tóm tắt dữ liệu bằng số đặc trưng, bảng, biểu đồ)",
+   "nhom": "Dữ liệu và mẫu",
+   "viDu": "Descriptive statistics summarize data using numbers such as the mean and graphs such as histograms.",
+   "viDuNghia": "Thống kê mô tả tóm tắt dữ liệu bằng các con số như trung bình và các biểu đồ như biểu đồ tần số."
+  },
+  {
+   "chu": "inferential statistics",
+   "doc": "/ˌɪnfəˈrenʃl stəˈtɪstɪks/",
+   "nghia": "thống kê suy diễn (từ mẫu suy ra kết luận cho tổng thể)",
+   "nhom": "Dữ liệu và mẫu",
+   "viDu": "Inferential statistics use a sample to draw conclusions about a population.",
+   "viDuNghia": "Thống kê suy diễn dùng mẫu để rút ra kết luận về tổng thể."
+  },
+  {
+   "chu": "gathering data",
+   "doc": "/ˈɡæðərɪŋ ˈdeɪtə/",
+   "nghia": "thu thập dữ liệu (method of gathering data = phương pháp thu thập dữ liệu)",
+   "nhom": "Dữ liệu và mẫu",
+   "viDu": "A method of gathering data when subjects are exposed to certain treatments and the data of interest is recorded is known as ______.",
+   "viDuNghia": "Phương pháp thu thập dữ liệu trong đó các đối tượng được cho tiếp xúc với những tác động (treatment) nhất định và dữ liệu quan tâm được ghi lại gọi là ______."
+  },
+  {
+   "chu": "retrospective study",
+   "doc": "/ˌretrəˈspektɪv ˈstʌdi/",
+   "nghia": "nghiên cứu hồi cứu (dùng dữ liệu có sẵn trong quá khứ)",
+   "nhom": "Dữ liệu và mẫu",
+   "viDu": "A retrospective study __________",
+   "viDuNghia": "Nghiên cứu hồi cứu (retrospective study) __________"
+  },
+  {
+   "chu": "observational study",
+   "doc": "/ˌɑːbzərˈveɪʃənl ˈstʌdi/",
+   "nghia": "nghiên cứu quan sát (chỉ quan sát, ghi nhận; không can thiệp vào quá trình)",
+   "nhom": "Dữ liệu và mẫu",
+   "viDu": "In an observational study, the engineer observes the process without disturbing it.",
+   "viDuNghia": "Trong nghiên cứu quan sát, kỹ sư quan sát quá trình mà không tác động vào nó."
+  },
+  {
+   "chu": "designed experiment",
+   "doc": "/dɪˈzaɪnd ɪkˈsperɪmənt/",
+   "nghia": "thí nghiệm có thiết kế (chủ động thay đổi các yếu tố rồi đo kết quả)",
+   "nhom": "Dữ liệu và mẫu",
+   "viDu": "In a designed experiment, the engineer makes deliberate changes to the factors.",
+   "viDuNghia": "Trong thí nghiệm có thiết kế, kỹ sư chủ động thay đổi các yếu tố."
+  },
+  {
+   "chu": "representative",
+   "doc": "/ˌreprɪˈzentətɪv/",
+   "nghia": "(có tính) đại diện (representative sample = mẫu đại diện cho tổng thể)",
+   "nhom": "Dữ liệu và mẫu",
+   "viDu": "A __________ is a portion of a population that is representative of the population from which it is selected.",
+   "viDuNghia": "Một __________ là một phần của tổng thể, đại diện cho tổng thể mà nó được chọn ra."
+  },
+  {
+   "chu": "subject",
+   "doc": "/ˈsʌbdʒekt/",
+   "nghia": "đối tượng nghiên cứu (người, vật được quan sát hoặc thử nghiệm)",
+   "nhom": "Dữ liệu và mẫu",
+   "viDu": "A method of gathering data when subjects are exposed to certain treatments and the data of interest is recorded is known as ________",
+   "viDuNghia": "Phương pháp thu thập dữ liệu trong đó các đối tượng được cho chịu tác động của những nghiệm thức (treatment) nhất định rồi ghi lại dữ liệu quan tâm được gọi là ________"
+  },
+  {
+   "chu": "quantitative",
+   "doc": "/ˈkwɑːntəteɪtɪv/",
+   "nghia": "định lượng (dữ liệu là con số đo, đếm được)",
+   "nhom": "Dữ liệu và mẫu",
+   "viDu": "Which of the following is a continuous quantitative (numerical) variable?",
+   "viDuNghia": "Biến nào sau đây là biến định lượng LIÊN TỤC?"
+  },
+  {
+   "chu": "yield",
+   "doc": "/jiːld/",
+   "nghia": "cho ra, mang lại (kết quả); sản lượng, hiệu suất",
+   "nhom": "Dữ liệu và mẫu",
+   "viDu": "A random sample of 15 Internet sales yielded a mean sale amount of 86.40 with a standard deviation of 18.75.",
+   "viDuNghia": "Mẫu ngẫu nhiên 15 giao dịch Internet cho giá trị trung bình 86,40 USD với độ lệch chuẩn 18,75 USD."
+  },
+  {
+   "chu": "population",
+   "doc": "/ˌpɑːpjuˈleɪʃn/",
+   "nghia": "tổng thể – toàn bộ đối tượng cần nghiên cứu; mẫu (sample) là một phần lấy ra từ tổng thể. (Đời thường: dân số)",
+   "nhom": "Dữ liệu và mẫu",
+   "viDu": "An employee at the local ice cream parlor asks three customers if they like chocolate ice cream. What is the population?",
+   "viDuNghia": "Một nhân viên tại quán kem địa phương hỏi ba khách hàng xem họ có thích kem sô-cô-la không. Tổng thể (population) ở đây là gì?"
+  },
+  {
+   "chu": "sample",
+   "doc": "/ˈsæmpl/",
+   "nghia": "mẫu – phần dữ liệu lấy ra từ tổng thể để nghiên cứu; sample size = cỡ mẫu",
+   "nhom": "Dữ liệu và mẫu",
+   "viDu": "Compute the sample standard deviation of the heights (in inches) of three men with heights of 64.9, 65, 65.5.",
+   "viDuNghia": "Tính độ lệch chuẩn mẫu của chiều cao (theo inch) của ba người đàn ông có chiều cao 64.9, 65, 65.5."
+  },
+  {
+   "chu": "observation",
+   "doc": "/ˌɑːbzərˈveɪʃn/",
+   "nghia": "(thống kê) quan sát – một giá trị đo được trong mẫu; mẫu cỡ n gồm n quan sát · (BA, SWR302) quan sát người dùng làm việc thật để khơi gợi yêu cầu",
+   "nhom": "Dữ liệu và mẫu",
+   "viDu": "Find the mode for the sample composed of the observations 4, 5, 6, 6, 6, 7, 7, 8, 8, 5.",
+   "viDuNghia": "Tìm mốt (mode) của mẫu gồm các quan sát 4, 5, 6, 6, 6, 7, 7, 8, 8, 5."
+  },
+  {
+   "chu": "median",
+   "doc": "/ˈmiːdiən/",
+   "nghia": "trung vị (giá trị đứng giữa khi dữ liệu đã sắp thứ tự)",
+   "nhom": "Số đặc trưng của dữ liệu",
+   "viDu": "Five fish with lengths of 7.5 inch, 7.75 inch, 8.5 inch, 8.5 inch, 8.25 inch. The sample median is __________",
+   "viDuNghia": "Năm con cá có chiều dài 7.5 inch, 7.75 inch, 8.5 inch, 8.5 inch, 8.25 inch. Trung vị mẫu là __________"
+  },
+  {
+   "chu": "mode",
+   "doc": "/moʊd/",
+   "nghia": "mốt, yếu vị (giá trị xuất hiện nhiều nhất)",
+   "nhom": "Số đặc trưng của dữ liệu",
+   "viDu": "What are the median and mode of the following series: 2; 2; 2; 4; 4; 5; 5; 6; 8; 11; 12; 16; 18?",
+   "viDuNghia": "Trung vị và mốt (mode) của dãy số sau là bao nhiêu: 2; 2; 2; 4; 4; 5; 5; 6; 8; 11; 12; 16; 18?"
+  },
+  {
+   "chu": "sample range",
+   "doc": "/ˈsæmpl reɪndʒ/",
+   "nghia": "khoảng biến thiên của mẫu (giá trị lớn nhất trừ giá trị nhỏ nhất)",
+   "nhom": "Số đặc trưng của dữ liệu",
+   "viDu": "Nine furnace temperatures recorded on successive batches are 920, 918, 922, 930, 915, 921, 925, 931, 927. Find the sample range and mean.",
+   "viDuNghia": "Chín số đo nhiệt độ lò ghi trên các mẻ liên tiếp là 920, 918, 922, 930, 915, 921, 925, 931, 927. Tìm khoảng biến thiên mẫu và trung bình mẫu."
+  },
+  {
+   "chu": "quartile",
+   "doc": "/ˈkwɔːrtaɪl/",
+   "nghia": "tứ phân vị (Q1, Q2, Q3 chia dữ liệu đã sắp xếp thành 4 phần bằng nhau)",
+   "nhom": "Số đặc trưng của dữ liệu",
+   "viDu": "Consider the following sample data: 1, 2, 3, 4, 5, 5, 7, 8, 9, and 10. Find quartiles for the data.",
+   "viDuNghia": "Cho dữ liệu mẫu sau: 1, 2, 3, 4, 5, 5, 7, 8, 9 và 10. Tìm các tứ phân vị của bộ dữ liệu."
+  },
+  {
+   "chu": "first quartile",
+   "doc": "/fɜːrst ˈkwɔːrtaɪl/",
+   "nghia": "tứ phân vị thứ nhất Q1 (25% dữ liệu nằm dưới giá trị này)",
+   "nhom": "Số đặc trưng của dữ liệu",
+   "viDu": "A box plot is constructed from a given data set with minimum 10, first quartile 15, median 18, third quartile 20 and maximum 22.",
+   "viDuNghia": "Một biểu đồ hộp được dựng từ một tập dữ liệu với giá trị nhỏ nhất 10, tứ phân vị thứ nhất 15, trung vị 18, tứ phân vị thứ ba 20 và giá trị lớn nhất 22."
+  },
+  {
+   "chu": "third quartile",
+   "doc": "/θɜːrd ˈkwɔːrtaɪl/",
+   "nghia": "tứ phân vị thứ ba Q3 (75% dữ liệu nằm dưới giá trị này)",
+   "nhom": "Số đặc trưng của dữ liệu",
+   "viDu": "The number of books read in a year by 11 students are 5, 5, 6, 11, 14, 16, 12, 13, 20, 22, 21. What is the third quartile Q3 for this data?",
+   "viDuNghia": "Số sách đọc trong một năm của 11 sinh viên là 5, 5, 6, 11, 14, 16, 12, 13, 20, 22, 21. Tứ phân vị thứ ba Q3 của dữ liệu này là bao nhiêu?"
+  },
+  {
+   "chu": "interquartile range",
+   "doc": "/ˌɪntərˈkwɔːrtaɪl reɪndʒ/",
+   "nghia": "khoảng tứ phân vị IQR = Q3 - Q1",
+   "nhom": "Số đặc trưng của dữ liệu",
+   "viDu": "Given the data 5, 7, 2, 9, 4, 9, 7, 10, 4, 7, 5, 6, 4, 0, 7, 6, 3, 4, 14, 6, what is the interquartile range?",
+   "viDuNghia": "Với dữ liệu 5, 7, 2, 9, 4, 9, 7, 10, 4, 7, 5, 6, 4, 0, 7, 6, 3, 4, 14, 6, khoảng tứ phân vị (IQR) bằng bao nhiêu?"
+  },
+  {
+   "chu": "percentile",
+   "doc": "/pərˈsentaɪl/",
+   "nghia": "bách phân vị (percentile thứ k: k% dữ liệu nằm dưới giá trị đó)",
+   "nhom": "Số đặc trưng của dữ liệu",
+   "viDu": "Franklin Gilman recently took the test and it was reported back to him that his score placed him at the 80th percentile.",
+   "viDuNghia": "Franklin Gilman vừa làm bài và được báo rằng điểm của anh nằm ở phân vị thứ 80."
+  },
+  {
+   "chu": "five-number summary",
+   "doc": "/ˌfaɪv ˈnʌmbər ˈsʌməri/",
+   "nghia": "tóm tắt năm số: nhỏ nhất, Q1, trung vị, Q3, lớn nhất",
+   "nhom": "Số đặc trưng của dữ liệu",
+   "viDu": "The four candidate boxplots are given by their five-number summaries (minimum, Q₁, median, Q₃, maximum).",
+   "viDuNghia": "Bốn biểu đồ hộp được cho bằng bộ năm số (nhỏ nhất, Q₁, trung vị, Q₃, lớn nhất)."
+  },
+  {
+   "chu": "outlier",
+   "doc": "/ˈaʊtlaɪər/",
+   "nghia": "giá trị ngoại lai (cách rất xa phần còn lại của dữ liệu)",
+   "nhom": "Số đặc trưng của dữ liệu",
+   "viDu": "In a boxplot, a point plotted separately beyond the whiskers is an outlier.",
+   "viDuNghia": "Trong biểu đồ hộp, một điểm được vẽ tách riêng ngoài phần râu là một giá trị ngoại lai."
+  },
+  {
+   "chu": "sample variance",
+   "doc": "/ˈsæmpl ˈveriəns/",
+   "nghia": "phương sai mẫu s² (chia cho n - 1)",
+   "nhom": "Số đặc trưng của dữ liệu",
+   "viDu": "Given the following data on the motor fuel octane rating of several blends of gasoline: 88.2; 93.8; 86.5. Find the sample variance of these data.",
+   "viDuNghia": "Cho dữ liệu về chỉ số octane của một số loại xăng pha: 88,2; 93,8; 86,5. Tìm phương sai mẫu của bộ dữ liệu này."
+  },
+  {
+   "chu": "sample standard deviation",
+   "nghia": "độ lệch chuẩn mẫu s (căn bậc hai của phương sai mẫu)",
+   "nhom": "Số đặc trưng của dữ liệu",
+   "viDu": "Compute the sample standard deviation of the heights (in inches) of three men with heights of 64.9, 65, 65.5",
+   "viDuNghia": "Tính độ lệch chuẩn MẪU của chiều cao (đơn vị inch) của ba người đàn ông cao 64,9; 65; 65,5"
+  },
+  {
+   "chu": "variability",
+   "doc": "/ˌveriəˈbɪləti/",
+   "nghia": "độ biến động, mức phân tán của dữ liệu",
+   "nhom": "Số đặc trưng của dữ liệu",
+   "viDu": "A lot of 25 washers contains 5 in which the variability in thickness around the circumference of the washer is unacceptable.",
+   "viDuNghia": "Một lô 25 vòng đệm có 5 chiếc mà độ biến thiên bề dày quanh chu vi là không chấp nhận được."
+  },
+  {
+   "chu": "statistic",
+   "doc": "/stəˈtɪstɪk/",
+   "nghia": "thống kê (đại lượng) – con số tính từ mẫu (sample mean, test statistic) để ước lượng tham số tổng thể",
+   "nhom": "Số đặc trưng của dữ liệu",
+   "viDu": "The process of using sample statistics to draw conclusions about true population parameters is called ________.",
+   "viDuNghia": "Quá trình dùng các thống kê mẫu để rút ra kết luận về tham số thật của tổng thể được gọi là ________."
+  },
+  {
+   "chu": "stem-and-leaf display",
+   "doc": "/ˌstem ən ˈliːf dɪˈspleɪ/",
+   "nghia": "biểu đồ thân - lá (thân là chữ số hàng chục trở lên, lá là chữ số hàng đơn vị)",
+   "nhom": "Bảng và biểu đồ",
+   "viDu": "Find the original data from the stem-and-leaf plot. Stem 8 has leaves 5 and 8; stem 9 has leaves 1 and 8; stem 10 has leaves 5 and 5.",
+   "viDuNghia": "Tìm dữ liệu gốc từ biểu đồ thân-lá. Thân 8 có các lá 5 và 8; thân 9 có các lá 1 và 8; thân 10 có các lá 5 và 5."
+  },
+  {
+   "chu": "stem",
+   "doc": "/stem/",
+   "nghia": "thân (phần chữ số đứng trước trong biểu đồ thân - lá)",
+   "nhom": "Bảng và biểu đồ",
+   "viDu": "Consider the following stem and leaf display. 3 | 1 1 1 4 5 4 | 4 6 7 5 | 0 0 4 5 6 6 8 9 6 | 1 3 3 6 Which data value occurs most often?",
+   "viDuNghia": "Xét biểu đồ thân–lá sau. 3 | 1 1 1 4 5 4 | 4 6 7 5 | 0 0 4 5 6 6 8 9 6 | 1 3 3 6 Giá trị dữ liệu nào xuất hiện nhiều nhất?"
+  },
+  {
+   "chu": "histogram",
+   "doc": "/ˈhɪstəɡræm/",
+   "nghia": "biểu đồ tần số (các cột liền nhau, mỗi cột là một khoảng giá trị)",
+   "nhom": "Bảng và biểu đồ",
+   "viDu": "When polygons or histograms are constructed, which axis must show the true zero or \"origin\"?",
+   "viDuNghia": "Khi vẽ đa giác tần số (polygon) hoặc biểu đồ tần số (histogram), trục nào BẮT BUỘC phải thể hiện điểm không thật sự (\"gốc\")?"
+  },
+  {
+   "chu": "boxplot",
+   "doc": "/ˈbɑːksplɑːt/",
+   "nghia": "biểu đồ hộp (hộp từ Q1 đến Q3, vạch giữa là trung vị); còn viết box plot",
+   "nhom": "Bảng và biểu đồ",
+   "viDu": "Given below is the boxplot of the number of hours it took to drain each of the 130 batteries.",
+   "viDuNghia": "Dưới đây là biểu đồ hộp (boxplot) của số giờ để làm cạn mỗi viên trong 130 viên pin."
+  },
+  {
+   "chu": "whisker",
+   "doc": "/ˈwɪskər/",
+   "nghia": "râu (đoạn kéo dài từ hộp ra giá trị nhỏ nhất và lớn nhất trong biểu đồ hộp)",
+   "nhom": "Bảng và biểu đồ",
+   "viDu": "Given this information, for a box and whisker plot, which of the following statements is appropriate?",
+   "viDuNghia": "Với thông tin này, đối với biểu đồ hộp và râu, phát biểu nào sau đây là phù hợp?"
+  },
+  {
+   "chu": "frequency distribution",
+   "doc": "/ˈfriːkwənsi ˌdɪstrɪˈbjuːʃn/",
+   "nghia": "bảng phân phối tần số (mỗi lớp giá trị xuất hiện bao nhiêu lần)",
+   "nhom": "Bảng và biểu đồ",
+   "viDu": "Frequency distributions can be formed from which of the following types of data?",
+   "viDuNghia": "Bảng phân phối tần số có thể lập từ loại dữ liệu nào sau đây?"
+  },
+  {
+   "chu": "relative frequency",
+   "doc": "/ˈrelətɪv ˈfriːkwənsi/",
+   "nghia": "tần suất, tần số tương đối (tần số chia cho tổng số quan sát)",
+   "nhom": "Bảng và biểu đồ",
+   "viDu": "Based on this information what was the relative frequency distribution for the first class?",
+   "viDuNghia": "Dựa trên thông tin này, tần suất tương đối của lớp đầu tiên là bao nhiêu?"
+  },
+  {
+   "chu": "cumulative frequency",
+   "doc": "/ˈkjuːmjələtɪv ˈfriːkwənsi/",
+   "nghia": "tần số tích luỹ (cộng dồn tần số từ lớp đầu đến lớp đang xét)",
+   "nhom": "Bảng và biểu đồ",
+   "viDu": "Construct a cumulative frequency distribution for this data.",
+   "viDuNghia": "Hãy lập bảng phân phối tần số TÍCH LUỸ cho dữ liệu này."
+  },
+  {
+   "chu": "shape",
+   "doc": "/ʃeɪp/",
+   "nghia": "hình dạng (của phân phối: đối xứng, lệch trái, lệch phải)",
+   "nhom": "Bảng và biểu đồ",
+   "viDu": "The histogram shows the shape of the distribution of the data.",
+   "viDuNghia": "Biểu đồ tần số cho thấy hình dạng phân phối của dữ liệu."
+  },
+  {
+   "chu": "symmetrical",
+   "doc": "/sɪˈmetrɪkl/",
+   "nghia": "đối xứng (hai nửa trái phải giống nhau quanh trung tâm)",
+   "nhom": "Bảng và biểu đồ",
+   "viDu": "The normal distribution is symmetrical about its mean.",
+   "viDuNghia": "Phân phối chuẩn đối xứng qua giá trị trung bình của nó."
+  },
+  {
+   "chu": "vertical axis",
+   "doc": "/ˈvɜːrtɪkl ˈæksɪs/",
+   "nghia": "trục tung, trục đứng (horizontal axis = trục hoành)",
+   "nhom": "Bảng và biểu đồ",
+   "viDu": "The horizontal axis runs from 0.0 to about 1.6, with labelled ticks at 0.0, 0.5, 1.0 and 1.5; the vertical axis is Frequency, running from 0 to about 60.",
+   "viDuNghia": "Trục hoành chạy từ 0.0 tới khoảng 1.6, có các vạch ghi nhãn tại 0.0, 0.5, 1.0 và 1.5; trục tung là Tần suất (Frequency), chạy từ 0 tới khoảng 60."
+  },
+  {
+   "chu": "frequency",
+   "doc": "/ˈfriːkwənsi/",
+   "nghia": "tần số – số lần một giá trị xuất hiện trong dữ liệu (bảng phân phối tần số). (Phần cứng: số chu kỳ mỗi giây, Hz)",
+   "nhom": "Bảng và biểu đồ",
+   "viDu": "Frequency distributions can be formed from which of the following types of data?",
+   "viDuNghia": "Bảng phân phối tần số có thể lập từ loại dữ liệu nào sau đây?"
+  },
+  {
+   "chu": "point estimate",
+   "doc": "/pɔɪnt ˈestɪmət/",
+   "nghia": "ước lượng điểm (một con số ước lượng cho tham số, ví dụ x̄ ước lượng μ)",
+   "nhom": "Ước lượng và khoảng tin cậy",
+   "viDu": "Find the best point estimate of the y-intercept of the regression line between x and y.",
+   "viDuNghia": "Tìm ước lượng điểm tốt nhất cho hệ số chặn của đường hồi quy giữa x và y."
+  },
+  {
+   "chu": "estimator",
+   "doc": "/ˈestɪmeɪtər/",
+   "nghia": "ước lượng, hàm ước lượng (công thức tính từ mẫu để ước lượng tham số)",
+   "nhom": "Ước lượng và khoảng tin cậy",
+   "viDu": "Capital investment, x 10 12 18 25 Profits, y 15 14 23 38 Assume that an unbiased estimator for the variance of the error is 8.34.",
+   "viDuNghia": "Vốn đầu tư, x 10 12 18 25 Lợi nhuận, y 15 14 23 38 Giả sử ước lượng không chệch của phương sai sai số là 8.34."
+  },
+  {
+   "chu": "unbiased",
+   "doc": "/ʌnˈbaɪəst/",
+   "nghia": "không chệch (kỳ vọng của ước lượng đúng bằng tham số cần ước lượng)",
+   "nhom": "Ước lượng và khoảng tin cậy",
+   "viDu": "Capital investment, x 10 12 18 25 Profits, y 15 14 23 38 Assume that an unbiased estimator for the variance of the error is 8.34.",
+   "viDuNghia": "Vốn đầu tư, x 10 12 18 25 Lợi nhuận, y 15 14 23 38 Giả sử ước lượng không chệch của phương sai sai số là 8.34."
+  },
+  {
+   "chu": "standard error",
+   "doc": "/ˈstændərd ˈerər/",
+   "nghia": "sai số chuẩn (độ lệch chuẩn của một ước lượng, ví dụ σ/√n)",
+   "nhom": "Ước lượng và khoảng tin cậy",
+   "viDu": "The standard error of the mean for a sample of 100 is 30. In order to cut the standard error of the mean to 15, we would ______",
+   "viDuNghia": "Sai số chuẩn của trung bình mẫu với cỡ mẫu 100 là 30. Để giảm sai số chuẩn của trung bình mẫu xuống còn 15, ta phải ______"
+  },
+  {
+   "chu": "confidence interval",
+   "doc": "/ˈkɑːnfɪdəns ˈɪntərvl/",
+   "nghia": "khoảng tin cậy (khoảng chứa tham số với độ tin cậy cho trước, ví dụ 95%)",
+   "nhom": "Ước lượng và khoảng tin cậy",
+   "viDu": "A 95% confidence interval for a population mean of (10.8, 16.4) can be interpreted as ______",
+   "viDuNghia": "Một khoảng tin cậy 95% cho trung bình tổng thể là (10.8; 16.4) có thể được diễn giải là ______"
+  },
+  {
+   "chu": "confidence level",
+   "doc": "/ˈkɑːnfɪdəns ˈlevl/",
+   "nghia": "độ tin cậy, mức tin cậy (ví dụ 95%, 99%)",
+   "nhom": "Ước lượng và khoảng tin cậy",
+   "viDu": "For a normal population with known variance σ², find the confidence level corresponding to the confidence interval x̄ - 1.96σ/√n ≤μ≤x̄ + 1.96σ/√n. Let z₀.₀₂₅=1.96.",
+   "viDuNghia": "Với một tổng thể chuẩn có phương sai σ² đã biết, hãy tìm độ tin cậy tương ứng với khoảng tin cậy x̄ - 1.96σ/√n ≤μ≤x̄ + 1.96σ/√n. Cho z₀.₀₂₅=1,96."
+  },
+  {
+   "chu": "confident",
+   "doc": "/ˈkɑːnfɪdənt/",
+   "nghia": "tin cậy (to be 95% confident = để đạt độ tin cậy 95%)",
+   "nhom": "Ước lượng và khoảng tin cậy",
+   "viDu": "Suppose a 95% confidence interval for μ turns out to be (1000, 2100). Give a definition of what it means to be 95% confident in an inference.",
+   "viDuNghia": "Giả sử khoảng tin cậy 95% cho μ là (1000; 2100). Hãy cho biết \"tin cậy 95%\" trong một suy luận nghĩa là gì."
+  },
+  {
+   "chu": "interval estimate",
+   "doc": "/ˈɪntərvl ˈestɪmət/",
+   "nghia": "ước lượng khoảng",
+   "nhom": "Ước lượng và khoảng tin cậy",
+   "viDu": "Compute the 95% confidence interval estimate for the population proportion of people who favor reducing the sales tax.",
+   "viDuNghia": "Hãy tính ước lượng khoảng tin cậy 95% cho tỉ lệ tổng thể những người ủng hộ giảm thuế bán hàng."
+  },
+  {
+   "chu": "two-sided",
+   "doc": "/ˌtuː ˈsaɪdɪd/",
+   "nghia": "hai phía (two-sided confidence interval = khoảng tin cậy hai phía)",
+   "nhom": "Ước lượng và khoảng tin cậy",
+   "viDu": "Construct a 95% two-sided confidence interval for the difference in mean fill volumes of the two machines.",
+   "viDuNghia": "Hãy lập khoảng tin cậy hai phía 95% cho hiệu thể tích chiết trung bình của hai máy."
+  },
+  {
+   "chu": "upper bound",
+   "doc": "/ˈʌpər baʊnd/",
+   "nghia": "cận trên (upper confidence bound = cận tin cậy trên); lower bound = cận dưới",
+   "nhom": "Ước lượng và khoảng tin cậy",
+   "viDu": "Construct a 95% upper confidence bound for the difference in the two population means μ₁ - μ₂.",
+   "viDuNghia": "Hãy xây dựng cận trên tin cậy 95% cho hiệu hai trung bình tổng thể μ₁ - μ₂."
+  },
+  {
+   "chu": "margin of error",
+   "nghia": "biên sai số, sai số tối đa của ước lượng (nửa độ rộng của khoảng tin cậy)",
+   "nhom": "Ước lượng và khoảng tin cậy",
+   "viDu": "How many individuals must he survey to develop a 95% confidence interval that has a 0.03 margin of error?",
+   "viDuNghia": "Ông ta phải khảo sát bao nhiêu người để lập khoảng tin cậy 95% với sai số biên 0.03?"
+  },
+  {
+   "chu": "degrees of freedom",
+   "nghia": "bậc tự do (df; với kiểm định t một mẫu là n - 1)",
+   "nhom": "Ước lượng và khoảng tin cậy",
+   "viDu": "What is the value of the pooled-variance and how many degrees of freedom for the T test?",
+   "viDuNghia": "Giá trị phương sai gộp và số bậc tự do của kiểm định T là bao nhiêu?"
+  },
+  {
+   "chu": "t distribution",
+   "doc": "/ˈtiː ˌdɪstrɪˈbjuːʃn/",
+   "nghia": "phân phối t (Student), dùng thay Z khi không biết σ và mẫu nhỏ",
+   "nhom": "Ước lượng và khoảng tin cậy",
+   "viDu": "When σ is unknown and n is small, use the t distribution with n - 1 degrees of freedom.",
+   "viDuNghia": "Khi không biết σ và n nhỏ, dùng phân phối t với n - 1 bậc tự do."
+  },
+  {
+   "chu": "how large a sample",
+   "nghia": "cần cỡ mẫu lớn bao nhiêu (câu hỏi tìm n để sai số ước lượng không vượt quá mức cho trước)",
+   "nhom": "Ước lượng và khoảng tin cậy",
+   "viDu": "How large a sample is needed if we wish to be 96% confident that our sample mean will be within 10 hours of the true mean?",
+   "viDuNghia": "Cần cỡ mẫu bao nhiêu nếu muốn có độ tin cậy 96% rằng trung bình mẫu sai lệch không quá 10 giờ so với trung bình thực?"
+  },
+  {
+   "chu": "true mean",
+   "doc": "/truː miːn/",
+   "nghia": "trung bình thật (của tổng thể, giá trị μ chưa biết mà ta đang ước lượng)",
+   "nhom": "Ước lượng và khoảng tin cậy",
+   "viDu": "Find a 98% confidence interval for the true mean checking account balance for local customers.",
+   "viDuNghia": "Tìm khoảng tin cậy 98% cho số dư tài khoản thanh toán trung bình thật của các khách hàng địa phương."
+  },
+  {
+   "chu": "interval width",
+   "doc": "/ˈɪntərvl wɪdθ/",
+   "nghia": "độ rộng của khoảng tin cậy (cận trên trừ cận dưới)",
+   "nhom": "Ước lượng và khoảng tin cậy",
+   "viDu": "To make more useful inferences from the data, it is desired to reduce the width of the confidence interval.",
+   "viDuNghia": "Để rút ra suy luận hữu ích hơn từ dữ liệu, người ta muốn giảm độ rộng của khoảng tin cậy."
+  },
+  {
+   "chu": "population mean",
+   "doc": "/ˌpɑːpjuˈleɪʃn miːn/",
+   "nghia": "trung bình tổng thể μ",
+   "nhom": "Ước lượng và khoảng tin cậy",
+   "viDu": "Assume that the variances are equal, construct a 95% confidence interval on the difference in population mean lengths.",
+   "viDuNghia": "Giả sử hai phương sai bằng nhau, hãy lập khoảng tin cậy 95% cho hiệu hai trung bình tổng thể."
+  },
+  {
+   "chu": "population proportion",
+   "doc": "/ˌpɑːpjuˈleɪʃn prəˈpɔːrʃn/",
+   "nghia": "tỉ lệ tổng thể p",
+   "nhom": "Ước lượng và khoảng tin cậy",
+   "viDu": "The standard error of the population proportion will become larger ______.",
+   "viDuNghia": "Sai số chuẩn của tỉ lệ tổng thể sẽ trở nên LỚN HƠN ______."
+  },
+  {
+   "chu": "sample proportion",
+   "doc": "/ˈsæmpl prəˈpɔːrʃn/",
+   "nghia": "tỉ lệ mẫu (p mũ: số phần tử có tính chất chia cho cỡ mẫu)",
+   "nhom": "Ước lượng và khoảng tin cậy",
+   "viDu": "A researcher did a pilot sample of 81 individuals and found the sample proportion to be 0.20.",
+   "viDuNghia": "Một nhà nghiên cứu làm mẫu thử với 81 người và thấy tỉ lệ mẫu là 0.20."
+  },
+  {
+   "chu": "population variance",
+   "doc": "/ˌpɑːpjuˈleɪʃn ˈveriəns/",
+   "nghia": "phương sai tổng thể σ²",
+   "nhom": "Ước lượng và khoảng tin cậy",
+   "viDu": "Assume the population variances are equal and the two populations from which the samples are drawn are normally distributed.",
+   "viDuNghia": "Giả sử phương sai hai tổng thể bằng nhau và cả hai tổng thể đều có phân phối chuẩn."
+  },
+  {
+   "chu": "population standard deviation",
+   "nghia": "độ lệch chuẩn tổng thể σ",
+   "nhom": "Ước lượng và khoảng tin cậy",
+   "viDu": "Suppose that the POPULATION standard deviation of Python and PowerShell grades are 7.4 and 5.6 respectively.",
+   "viDuNghia": "Giả sử độ lệch chuẩn TỔNG THỂ của điểm Python và PowerShell lần lượt là 7.4 và 5.6."
+  },
+  {
+   "chu": "ounce",
+   "doc": "/aʊns/",
+   "nghia": "ao-xơ (đơn vị khối lượng, khoảng 28,35 g; viết tắt oz); fluid ounce = ao-xơ chất lỏng, khoảng 29,6 ml",
+   "nhom": "Đơn vị đo và từ trong bài toán",
+   "viDu": "How large a sample must she select if she desires to be 90% confident that the true mean is within 4 ounces of the sample mean?",
+   "viDuNghia": "Cô ấy phải chọn cỡ mẫu bao nhiêu để tin cậy 90% rằng trung bình thật nằm trong phạm vi 4 ao-xơ quanh trung bình mẫu?"
+  },
+  {
+   "chu": "pound",
+   "doc": "/paʊnd/",
+   "nghia": "pao, cân Anh (khoảng 0,454 kg; viết tắt lb)",
+   "nhom": "Đơn vị đo và từ trong bài toán",
+   "viDu": "The impact strength of these gears, measured in foot-pounds, is an important characteristic.",
+   "viDuNghia": "Độ bền va đập của các bánh răng này, đo bằng foot-pound, là một đặc tính quan trọng."
+  },
+  {
+   "chu": "inch",
+   "doc": "/ɪntʃ/",
+   "nghia": "in-sơ (2,54 cm)",
+   "nhom": "Đơn vị đo và từ trong bài toán",
+   "viDu": "Five fish with lengths of 7.5 inch, 7.75 inch, 8.5 inch, 8.5 inch, 8.25 inch. The sample median is ______",
+   "viDuNghia": "Năm con cá có chiều dài 7.5 inch, 7.75 inch, 8.5 inch, 8.5 inch, 8.25 inch. Trung vị của mẫu là ______"
+  },
+  {
+   "chu": "mile",
+   "doc": "/maɪl/",
+   "nghia": "dặm (khoảng 1,609 km); mph = dặm trên giờ",
+   "nhom": "Đơn vị đo và từ trong bài toán",
+   "viDu": "One variable for which data were collected from the 500 fans surveyed was the miles from home to the stadium.",
+   "viDuNghia": "Một biến được thu thập từ 500 cổ động viên tham gia khảo sát là số dặm từ nhà đến sân vận động."
+  },
+  {
+   "chu": "psi",
+   "doc": "/ˌpiː es ˈaɪ/",
+   "nghia": "pao trên in-sơ vuông (pounds per square inch, đơn vị áp suất, độ bền)",
+   "nhom": "Đơn vị đo và từ trong bài toán",
+   "viDu": "The compressive strength of concrete is normally distributed with mean = 1200 psi and standard deviation = 30.",
+   "viDuNghia": "Cường độ chịu nén của bê tông tuân theo phân phối chuẩn với kỳ vọng = 1200 psi và độ lệch chuẩn = 30."
+  },
+  {
+   "chu": "manufacturer",
+   "doc": "/ˌmænjuˈfæktʃərər/",
+   "nghia": "nhà sản xuất",
+   "nhom": "Đơn vị đo và từ trong bài toán",
+   "viDu": "A soft drink manufacturer claims that the average volume of soft drink in its bottle is at least 2000 ml.",
+   "viDuNghia": "Một nhà sản xuất nước giải khát tuyên bố thể tích trung bình trong mỗi chai của họ là ÍT NHẤT 2000 ml."
+  },
+  {
+   "chu": "specimen",
+   "doc": "/ˈspesɪmən/",
+   "nghia": "mẫu vật, mẫu thử (một vật được đem đo, thử)",
+   "nhom": "Đơn vị đo và từ trong bài toán",
+   "viDu": "The breaking strength of yarn is investigated. Two random samples of n1 = 20 and n2 = 20 specimens are tested.",
+   "viDuNghia": "Người ta khảo sát độ bền đứt của sợi. Thử nghiệm hai mẫu ngẫu nhiên gồm n1 = 20 và n2 = 20 mẫu thử."
+  },
+  {
+   "chu": "strength",
+   "doc": "/streŋθ/",
+   "nghia": "độ bền, cường độ (breaking strength = độ bền đứt; compressive strength = cường độ chịu nén)",
+   "nhom": "Đơn vị đo và từ trong bài toán",
+   "viDu": "A random sample of 20 observations was made on the diameter of spot welds and the corresponding weld shear strength.",
+   "viDuNghia": "Một mẫu ngẫu nhiên 20 quan sát được thực hiện về đường kính mối hàn điểm và độ bền cắt tương ứng của mối hàn."
+  },
+  {
+   "chu": "diameter of a part",
+   "nghia": "đường kính của chi tiết (đại lượng hay được đo trong bài toán sản xuất)",
+   "nhom": "Đơn vị đo và từ trong bài toán",
+   "viDu": "A random sample of 50 observations was made on the diameter of spot welds and the corresponding weld shear strength.",
+   "viDuNghia": "Một mẫu ngẫu nhiên 50 quan sát được thực hiện trên đường kính mối hàn điểm và độ bền cắt tương ứng của mối hàn."
+  },
+  {
+   "chu": "burning rate",
+   "doc": "/ˈbɜːrnɪŋ reɪt/",
+   "nghia": "tốc độ cháy (của nhiên liệu tên lửa)",
+   "nhom": "Đơn vị đo và từ trong bài toán",
+   "viDu": "The burning rates of two different solid-fuel propellants used in aircrew escape systems are being studied.",
+   "viDuNghia": "Người ta nghiên cứu tốc độ cháy của hai loại nhiên liệu rắn dùng trong hệ thống thoát hiểm của tổ bay."
+  },
+  {
+   "chu": "a certain",
+   "doc": "/ə ˈsɜːrtn/",
+   "nghia": "một ... nào đó (a certain company = một công ty nào đó; không phải \"chắc chắn\")",
+   "nhom": "Từ đời thường trong bài toán",
+   "viDu": "Suppose that a system contains a certain type of component whose time in years to failure is given by T.",
+   "viDuNghia": "Giả sử một hệ thống chứa một loại linh kiện nào đó có thời gian tới khi hỏng (tính bằng năm) là T."
+  },
+  {
+   "chu": "particular",
+   "doc": "/pərˈtɪkjələr/",
+   "nghia": "cụ thể, riêng (a particular brand = một nhãn hiệu cụ thể nào đó)",
+   "nhom": "Từ đời thường trong bài toán",
+   "viDu": "The collection and summarization of the socioeconomic and physical characteristics of the employees of a particular firm is an example of ______",
+   "viDuNghia": "Việc thu thập và tóm tắt các đặc điểm kinh tế - xã hội và thể chất của các nhân viên trong một công ty cụ thể là ví dụ của ______"
+  },
+  {
+   "chu": "employee",
+   "doc": "/ɪmˈplɔɪiː/",
+   "nghia": "nhân viên, người lao động",
+   "nhom": "Từ đời thường trong bài toán",
+   "viDu": "An employee at the local ice cream parlor asks three customers if they like chocolate ice cream. What is the population?",
+   "viDuNghia": "Một nhân viên tại quán kem địa phương hỏi ba khách hàng xem họ có thích kem sô-cô-la không. Tổng thể (population) ở đây là gì?"
+  },
+  {
+   "chu": "resident",
+   "doc": "/ˈrezɪdənt/",
+   "nghia": "cư dân, người dân sống ở một nơi",
+   "nhom": "Từ đời thường trong bài toán",
+   "viDu": "According to a survey of American households, the probability that the residents own 2 cars if annual household income is over 25,000 is 80%.",
+   "viDuNghia": "Theo một khảo sát các hộ gia đình Mỹ, xác suất các thành viên trong hộ sở hữu 2 xe hơi nếu thu nhập hằng năm của hộ trên 25,000 là 80%."
+  },
+  {
+   "chu": "household",
+   "doc": "/ˈhaʊshoʊld/",
+   "nghia": "hộ gia đình",
+   "nhom": "Từ đời thường trong bài toán",
+   "viDu": "A plumber claims he can fix a standard household plumbing issue at most an hour.",
+   "viDuNghia": "Một thợ sửa ống nước tuyên bố anh ta có thể xử lý một sự cố ống nước gia đình thông thường trong nhiều nhất một giờ."
+  },
+  {
+   "chu": "income",
+   "doc": "/ˈɪnkʌm/",
+   "nghia": "thu nhập",
+   "nhom": "Từ đời thường trong bài toán",
+   "viDu": "If an economist wishes to determine whether there is evidence that average family income in a community exceeds 25,000 USD, ______",
+   "viDuNghia": "Nếu một nhà kinh tế muốn xác định xem có bằng chứng cho thấy thu nhập trung bình của hộ gia đình trong một cộng đồng vượt quá 25,000 USD hay không, ______"
+  },
+  {
+   "chu": "firm",
+   "doc": "/fɜːrm/",
+   "nghia": "công ty, hãng",
+   "nhom": "Từ đời thường trong bài toán",
+   "viDu": "The collection and summarization of the socioeconomic and physical characteristics of the employees of a particular firm is an example of ___________",
+   "viDuNghia": "Việc thu thập và tóm tắt các đặc điểm kinh tế – xã hội và thể chất của nhân viên trong một công ty cụ thể là ví dụ của ___________"
+  },
+  {
+   "chu": "retail",
+   "doc": "/ˈriːteɪl/",
+   "nghia": "bán lẻ (retail store = cửa hàng bán lẻ)",
+   "nhom": "Từ đời thường trong bài toán",
+   "viDu": "A retail store executive wants to know whether the store's average Internet sales exceed its average mail-order sales.",
+   "viDuNghia": "Một quản lý cửa hàng bán lẻ muốn biết doanh số bán qua Internet trung bình có vượt doanh số đặt hàng qua thư trung bình hay không."
+  },
+  {
+   "chu": "undergraduate",
+   "doc": "/ˌʌndərˈɡrædʒuət/",
+   "nghia": "sinh viên đại học (chưa tốt nghiệp)",
+   "nhom": "Từ đời thường trong bài toán",
+   "viDu": "A campus program evenly enrolls undergraduate and graduate students.",
+   "viDuNghia": "Một chương trình trong trường tuyển sinh viên đại học và học viên cao học với tỉ lệ ngang nhau."
+  },
+  {
+   "chu": "score",
+   "doc": "/skɔːr/",
+   "nghia": "điểm số (test score = điểm bài kiểm tra); ghi điểm",
+   "nhom": "Từ đời thường trong bài toán",
+   "viDu": "The scores of the top ten finishers in a recent golf tournament are listed below. 71, 67, 67, 72, 76, 72, 73, 68, 72, 72 Find the mode score.",
+   "viDuNghia": "Điểm của mười người về đầu trong một giải golf gần đây được liệt kê dưới đây. 71, 67, 67, 72, 76, 72, 73, 68, 72, 72 Hãy tìm mốt (mode) của điểm."
+  },
+  {
+   "chu": "grade",
+   "doc": "/ɡreɪd/",
+   "nghia": "điểm, điểm xếp loại (của môn học); khối lớp",
+   "nhom": "Từ đời thường trong bài toán",
+   "viDu": "The final grades show that 3 of the juniors, 10 of the seniors, and 5 of the graduate students received an A for the course.",
+   "viDuNghia": "Điểm cuối kỳ cho thấy 3 sinh viên năm ba, 10 sinh viên năm cuối và 5 học viên cao học đạt điểm A."
+  },
+  {
+   "chu": "desired",
+   "doc": "/dɪˈzaɪərd/",
+   "nghia": "mong muốn, cần đạt (desired confidence level = độ tin cậy mong muốn)",
+   "nhom": "Từ đời thường trong bài toán",
+   "viDu": "To make more useful inferences from the data, it is desired to reduce the width of the confidence interval.",
+   "viDuNghia": "Để rút ra suy luận hữu ích hơn từ dữ liệu, người ta mong muốn giảm độ rộng của khoảng tin cậy."
+  },
+  {
+   "chu": "depend on",
+   "doc": "/dɪˈpend ɑːn/",
+   "nghia": "phụ thuộc vào",
+   "nhom": "Từ đời thường trong bài toán",
+   "viDu": "The fur colour of the offspring depends on the pairs of fur-colour genes that they receive.",
+   "viDuNghia": "Màu lông của con phụ thuộc vào cặp gen màu lông mà chúng nhận được."
+  },
+  {
+   "chu": "collect",
+   "doc": "/kəˈlekt/",
+   "nghia": "thu thập (data were collected = dữ liệu đã được thu thập)",
+   "nhom": "Từ đời thường trong bài toán",
+   "viDu": "When data are collected over a period of time, which of the following assumptions is particularly important?",
+   "viDuNghia": "Khi dữ liệu được thu thập theo chuỗi thời gian, giả định nào sau đây đặc biệt quan trọng?"
+  },
+  {
+   "chu": "summarize",
+   "doc": "/ˈsʌməraɪz/",
+   "nghia": "tóm tắt (the data are summarized = dữ liệu được tóm tắt)",
+   "nhom": "Từ đời thường trong bài toán",
+   "viDu": "The probabilities corresponding to the 9 possible values of X are summarized in the table below.",
+   "viDuNghia": "Xác suất ứng với 9 giá trị có thể của X được tóm tắt trong bảng dưới đây."
+  },
+  {
+   "chu": "plot",
+   "doc": "/plɑːt/",
+   "nghia": "biểu đồ, đồ thị (của dữ liệu); vẽ các điểm lên đồ thị",
+   "nhom": "Từ đời thường trong bài toán",
+   "viDu": "Their answers were as follows: 12, 23, 19, 6, 10, 7, 15, 25, 21, 12 Prepare a stem and leaf plot for these data.",
+   "viDuNghia": "Câu trả lời của các em như sau: 12, 23, 19, 6, 10, 7, 15, 25, 21, 12 Hãy lập biểu đồ thân–lá (stem and leaf plot) cho bộ số liệu này."
+  },
+  {
+   "chu": "bulb",
+   "doc": "/bʌlb/",
+   "nghia": "bóng đèn (light bulb)",
+   "nhom": "Từ đời thường trong bài toán",
+   "viDu": "A random sample of 16 fluorescent light bulbs has a mean life of 645 hours with a standard deviation of 31 hours.",
+   "viDuNghia": "Một mẫu ngẫu nhiên 16 bóng đèn huỳnh quang có tuổi thọ trung bình 645 giờ với độ lệch chuẩn (mẫu) 31 giờ."
+  },
+  {
+   "chu": "tire",
+   "doc": "/ˈtaɪər/",
+   "nghia": "lốp xe",
+   "nhom": "Từ đời thường trong bài toán",
+   "viDu": "To determine the difference, if any, between two brands of radial tires, 12 tires of each brand are tested.",
+   "viDuNghia": "Để xác định sự khác biệt (nếu có) giữa hai nhãn lốp radial, người ta thử nghiệm 12 lốp của mỗi nhãn."
+  },
+  {
+   "chu": "bearing",
+   "doc": "/ˈberɪŋ/",
+   "nghia": "vòng bi, ổ bi (chi tiết máy)",
+   "nhom": "Từ đời thường trong bài toán",
+   "viDu": "A bearing used in an automotive application is supposed to have a nominal inside diameter of 1.5 inches.",
+   "viDuNghia": "Một loại vòng bi dùng trong ô tô được cho là có đường kính trong danh nghĩa 1.5 inch."
+  },
+  {
+   "chu": "gear",
+   "doc": "/ɡɪr/",
+   "nghia": "bánh răng",
+   "nhom": "Từ đời thường trong bài toán",
+   "viDu": "Two suppliers manufacture a plastic gear used in a laser printer.",
+   "viDuNghia": "Hai nhà cung cấp sản xuất một loại bánh răng nhựa dùng trong máy in laser."
+  }
+ ]
+}

@@ -1,0 +1,510 @@
+{
+ "ma": "csi104-2",
+ "nn": "en",
+ "ten": "CSI104/CSI106 · 2. Mạng, HĐH, thuật toán, phần mềm",
+ "moTa": "Nhập môn điện toán (CSI104/CSI106) – phần 2: mạng và Internet, hệ điều hành, thuật toán, ngôn ngữ lập trình, kỹ nghệ và chất lượng phần mềm. Từ lấy từ đề FE thật; ví dụ là câu hỏi thật trong đề.",
+ "bieuTuong": "network",
+ "thuTu": -997,
+ "tu": [
+  {
+   "chu": "TCP/IP protocol suite",
+   "nghia": "bộ giao thức TCP/IP: 5 tầng (ứng dụng, giao vận, mạng, liên kết dữ liệu, vật lý) dùng trên Internet",
+   "nhom": "Mạng & Internet",
+   "viDu": "Which layer of the TCP/IP suite delivers data from one running program to another, using port numbers?",
+   "viDuNghia": "Tầng nào của bộ TCP/IP giao dữ liệu từ chương trình đang chạy này tới chương trình khác, dùng số cổng?"
+  },
+  {
+   "chu": "dotted-decimal notation",
+   "doc": "/ˌdɑːtɪd ˈdesɪml noʊˈteɪʃn/",
+   "nghia": "ký pháp thập phân có chấm: cách viết địa chỉ IPv4 thành 4 số cách nhau bằng dấu chấm (10.0.0.1)",
+   "nhom": "Mạng & Internet",
+   "viDu": "The format of an IPv4 address is referred to as dotted-decimal notation.",
+   "viDuNghia": "Định dạng viết địa chỉ IPv4 được gọi là ký pháp thập phân có chấm."
+  },
+  {
+   "chu": "client-server paradigm",
+   "doc": "/ˌklaɪənt ˈsɜːrvər ˈpærədaɪm/",
+   "nghia": "mô hình khách – chủ: máy khách gửi yêu cầu, máy chủ luôn chạy và trả lời",
+   "nhom": "Mạng & Internet",
+   "viDu": "HTTP defines how client-server programs can be written to retrieve pages from the Web.",
+   "viDuNghia": "HTTP quy định cách viết các chương trình khách–chủ để lấy trang từ Web."
+  },
+  {
+   "chu": "remote login",
+   "doc": "/rɪˈmoʊt ˈlɔːɡɪn/",
+   "nghia": "đăng nhập từ xa (TELNET): điều khiển một máy khác qua mạng",
+   "nhom": "Mạng & Internet",
+   "viDu": "TELNET lets a user log in to a remote computer and work on it.",
+   "viDuNghia": "TELNET cho phép người dùng đăng nhập vào một máy ở xa và làm việc trên máy đó."
+  },
+  {
+   "chu": "World Wide Web",
+   "nghia": "mạng toàn cầu (WWW): kho trang web liên kết nhau trên Internet",
+   "nhom": "Mạng & Internet",
+   "viDu": "HTTP is a protocol for accessing and transferring documents on the WWW.",
+   "viDuNghia": "HTTP là giao thức để truy cập và truyền tài liệu trên WWW."
+  },
+  {
+   "chu": "electromagnetic signal",
+   "doc": "/ɪˌlektroʊmæɡˈnetɪk ˈsɪɡnəl/",
+   "nghia": "tín hiệu điện từ: dạng mà tầng vật lý dùng để truyền bit",
+   "nhom": "Mạng & Internet",
+   "viDu": "The physical layer converts the bits received from the data-link layer into electromagnetic signals for transmission.",
+   "viDuNghia": "Tầng vật lý chuyển các bit nhận từ tầng liên kết dữ liệu thành tín hiệu điện từ để truyền đi."
+  },
+  {
+   "chu": "Internet Protocol version 4",
+   "nghia": "IPv4: giao thức Internet phiên bản 4; địa chỉ IPv4 dài 32 bit, viết dạng thập phân có chấm (vd 172.16.254.1)",
+   "nhom": "Mạng & Internet",
+   "viDu": "An IPv4 address is a 32-bit address that uniquely and universally defines the connection of a host or a router to the Internet.",
+   "viDuNghia": "Địa chỉ IPv4 là địa chỉ 32 bit, định danh duy nhất và toàn cục kết nối của một máy hay một router với Internet."
+  },
+  {
+   "chu": "monoprogramming",
+   "doc": "/ˌmɑːnoʊˈproʊɡræmɪŋ/",
+   "nghia": "đơn chương: cả bộ nhớ chỉ dành cho một chương trình tại một thời điểm",
+   "nhom": "Hệ điều hành",
+   "viDu": "What is a significant limitation of monoprogramming in terms of CPU utilization?",
+   "viDuNghia": "Hạn chế đáng kể của đơn chương trình (monoprogramming) về mặt tận dụng CPU là gì?"
+  },
+  {
+   "chu": "parallel system",
+   "doc": "/ˈpærəlel ˈsɪstəm/",
+   "nghia": "hệ song song: một máy có nhiều CPU cùng chạy",
+   "nhom": "Hệ điều hành",
+   "viDu": "The need for more speed and efficiency led to parallel systems, with multiple CPUs on the same machine.",
+   "viDuNghia": "Nhu cầu tốc độ và hiệu quả cao hơn dẫn tới hệ song song, có nhiều CPU trên cùng một máy."
+  },
+  {
+   "chu": "personal system",
+   "doc": "/ˈpɜːrsənl ˈsɪstəm/",
+   "nghia": "hệ điều hành cho máy cá nhân, một người dùng",
+   "nhom": "Hệ điều hành",
+   "viDu": "Personal systems were introduced when personal computers became common.",
+   "viDuNghia": "Hệ điều hành cá nhân xuất hiện khi máy tính cá nhân trở nên phổ biến."
+  },
+  {
+   "chu": "process manager",
+   "doc": "/ˈprɑːses ˈmænɪdʒər/",
+   "nghia": "bộ quản lý tiến trình: phần của HĐH điều phối chương trình, công việc, tiến trình",
+   "nhom": "Hệ điều hành",
+   "viDu": "The process manager moves a process from the ready state to the running state.",
+   "viDuNghia": "Bộ quản lý tiến trình chuyển tiến trình từ trạng thái sẵn sàng sang trạng thái chạy."
+  },
+  {
+   "chu": "device manager",
+   "doc": "/dɪˈvaɪs ˈmænɪdʒər/",
+   "nghia": "bộ quản lý thiết bị: phần của HĐH điều khiển truy cập thiết bị vào/ra",
+   "nhom": "Hệ điều hành",
+   "viDu": "The device manager tracks every device constantly to ensure that the device is functioning properly.",
+   "viDuNghia": "Bộ quản lý thiết bị theo dõi liên tục mọi thiết bị để bảo đảm thiết bị hoạt động bình thường."
+  },
+  {
+   "chu": "file manager",
+   "doc": "/faɪl ˈmænɪdʒər/",
+   "nghia": "bộ quản lý tệp: phần của HĐH kiểm soát việc tạo, xoá, truy cập tệp",
+   "nhom": "Hệ điều hành",
+   "viDu": "What does the file manager NOT control?",
+   "viDuNghia": "Trình quản lý tệp KHÔNG kiểm soát điều gì?"
+  },
+  {
+   "chu": "job",
+   "doc": "/dʒɑːb/",
+   "nghia": "công việc: chương trình đã được chọn để chạy nhưng chưa xong; nằm trên đĩa ở trạng thái hold",
+   "nhom": "Hệ điều hành",
+   "viDu": "A program becomes a job when it is selected by the operating system and brought to the hold state.",
+   "viDuNghia": "Một chương trình trở thành công việc (job) khi được hệ điều hành chọn và đưa vào trạng thái giữ."
+  },
+  {
+   "chu": "program",
+   "doc": "/ˈproʊɡræm/",
+   "nghia": "chương trình: tập lệnh nằm trên đĩa, chưa được chọn để chạy",
+   "nhom": "Hệ điều hành",
+   "viDu": "A program is a nonactive set of instructions stored on disk; it may or may not become a job.",
+   "viDuNghia": "Chương trình là một tập lệnh không hoạt động nằm trên đĩa; nó có thể trở thành công việc (job) hoặc không."
+  },
+  {
+   "chu": "demand segmentation",
+   "doc": "/dɪˈmænd ˌseɡmenˈteɪʃn/",
+   "nghia": "phân đoạn theo yêu cầu: chia chương trình thành đoạn theo nghĩa (module), cần đoạn nào mới nạp đoạn đó",
+   "nhom": "Hệ điều hành",
+   "viDu": "In demand segmentation, the program is divided into sections of different sizes, such as modules.",
+   "viDuNghia": "Trong phân đoạn theo yêu cầu, chương trình được chia thành các đoạn có kích thước khác nhau, chẳng hạn theo module."
+  },
+  {
+   "chu": "waiting state",
+   "doc": "/ˈweɪtɪŋ steɪt/",
+   "nghia": "trạng thái chờ: tiến trình đang đợi vào/ra hay sự kiện xong",
+   "nhom": "Hệ điều hành",
+   "viDu": "A process in the running state can go to the ready, terminated or waiting state.",
+   "viDuNghia": "Một tiến trình ở trạng thái chạy có thể chuyển sang trạng thái sẵn sàng, kết thúc hoặc chờ."
+  },
+  {
+   "chu": "hold state",
+   "doc": "/hoʊld steɪt/",
+   "nghia": "trạng thái giữ: công việc nằm trên đĩa, chờ được nạp vào bộ nhớ",
+   "nhom": "Hệ điều hành",
+   "viDu": "A program becomes a Job when it is selected by the operating system and brought to the hold state.",
+   "viDuNghia": "Một chương trình trở thành Công việc (job) khi được hệ điều hành chọn và đưa vào trạng thái giữ (hold)."
+  },
+  {
+   "chu": "circular waiting",
+   "doc": "/ˈsɜːrkjələr ˈweɪtɪŋ/",
+   "nghia": "chờ vòng tròn: các tiến trình chờ nhau thành vòng kín (một điều kiện gây deadlock)",
+   "nhom": "Hệ điều hành",
+   "viDu": "Deadlock needs four conditions; one of them is circular waiting.",
+   "viDuNghia": "Deadlock cần bốn điều kiện; một trong số đó là chờ vòng tròn."
+  },
+  {
+   "chu": "repetition",
+   "doc": "/ˌrepəˈtɪʃn/",
+   "nghia": "cấu trúc lặp: một trong ba cấu trúc cơ bản (tuần tự, rẽ nhánh, lặp)",
+   "nhom": "Thuật toán",
+   "viDu": "Which of the following examples demonstrates the \"repetition\" construct in an algorithm?",
+   "viDuNghia": "Ví dụ nào sau đây minh hoạ cấu trúc \"lặp\" (repetition) trong thuật toán?"
+  },
+  {
+   "chu": "construct",
+   "doc": "/ˈkɑːnstrʌkt/",
+   "nghia": "cấu trúc điều khiển (ba cấu trúc: sequence, decision, repetition)",
+   "nhom": "Thuật toán",
+   "viDu": "Which three constructs are enough to write any algorithm?",
+   "viDuNghia": "Ba cấu trúc nào là đủ để viết mọi thuật toán?"
+  },
+  {
+   "chu": "searching",
+   "doc": "/ˈsɜːrtʃɪŋ/",
+   "nghia": "tìm kiếm: tìm vị trí của một giá trị đích trong danh sách",
+   "nhom": "Thuật toán",
+   "viDu": "Searching is a basic algorithm in which we want to find the location of a target in a list of items.",
+   "viDuNghia": "Tìm kiếm (searching) là thuật toán cơ bản mà ta muốn tìm vị trí của một mục tiêu trong danh sách các phần tử."
+  },
+  {
+   "chu": "sequential search",
+   "doc": "/sɪˈkwenʃl sɜːrtʃ/",
+   "nghia": "tìm tuần tự: dò từng phần tử từ đầu; dùng được cho danh sách chưa sắp xếp",
+   "nhom": "Thuật toán",
+   "viDu": "What is the primary difference between sequential search and binary search algorithms?",
+   "viDuNghia": "Điểm khác biệt chính giữa tìm kiếm tuần tự và tìm kiếm nhị phân là gì?"
+  },
+  {
+   "chu": "subalgorithm",
+   "doc": "/ˈsʌbˌælɡərɪðəm/",
+   "nghia": "thuật toán con: chia thuật toán lớn thành các phần nhỏ (chương trình con, module)",
+   "nhom": "Thuật toán",
+   "viDu": "A large algorithm can be broken into subalgorithms, and each subalgorithm can be called by the main algorithm.",
+   "viDuNghia": "Một thuật toán lớn có thể chia thành các thuật toán con, và mỗi thuật toán con được thuật toán chính gọi."
+  },
+  {
+   "chu": "structure chart",
+   "doc": "/ˈstrʌktʃər tʃɑːrt/",
+   "nghia": "sơ đồ cấu trúc: hình vẽ quan hệ giữa các module của chương trình",
+   "nhom": "Thuật toán",
+   "viDu": "In the system development process, structure charts are tools used in the design phase.",
+   "viDuNghia": "Trong quy trình phát triển hệ thống, sơ đồ cấu trúc là công cụ dùng ở giai đoạn thiết kế."
+  },
+  {
+   "chu": "computer language",
+   "doc": "/kəmˈpjuːtər ˈlæŋɡwɪdʒ/",
+   "nghia": "ngôn ngữ máy tính: tập từ và quy tắc định sẵn để viết chương trình",
+   "nhom": "Ngôn ngữ lập trình",
+   "viDu": "Which type of computer language was exclusively used at the very beginning of the computer age?",
+   "viDuNghia": "Loại ngôn ngữ máy tính nào được dùng độc quyền vào thời kỳ đầu của kỷ nguyên máy tính?"
+  },
+  {
+   "chu": "source program",
+   "doc": "/sɔːrs ˈproʊɡræm/",
+   "nghia": "chương trình nguồn: chương trình viết bằng ngôn ngữ bậc cao, chưa dịch",
+   "nhom": "Ngôn ngữ lập trình",
+   "viDu": "The software used to convert source program instructions into object instructions is known as a compiler.",
+   "viDuNghia": "Phần mềm dùng để chuyển các lệnh của chương trình nguồn thành lệnh đích được gọi là trình biên dịch."
+  },
+  {
+   "chu": "object program",
+   "doc": "/ˈɑːbdʒekt ˈproʊɡræm/",
+   "nghia": "chương trình đích: mã máy thu được sau khi dịch chương trình nguồn",
+   "nhom": "Ngôn ngữ lập trình",
+   "viDu": "The translated program in machine language is called the object program.",
+   "viDuNghia": "Chương trình đã dịch sang ngôn ngữ máy được gọi là chương trình đích (object program)."
+  },
+  {
+   "chu": "translation",
+   "doc": "/trænzˈleɪʃn/",
+   "nghia": "quá trình dịch chương trình nguồn sang mã máy (compilation, interpretation)",
+   "nhom": "Ngôn ngữ lập trình",
+   "viDu": "Translation of a source program into machine language is done by a compiler or an interpreter.",
+   "viDuNghia": "Việc dịch chương trình nguồn sang ngôn ngữ máy do trình biên dịch hoặc trình thông dịch đảm nhận."
+  },
+  {
+   "chu": "lexical analyzer",
+   "doc": "/ˈleksɪkl ˈænəlaɪzər/",
+   "nghia": "bộ phân tích từ vựng: đọc mã nguồn từng ký tự và tách thành các token",
+   "nhom": "Ngôn ngữ lập trình",
+   "viDu": "A lexical analyzer reads the source code symbol by symbol and creates a list of tokens.",
+   "viDuNghia": "Bộ phân tích từ vựng đọc mã nguồn theo từng ký hiệu và tạo ra danh sách các token."
+  },
+  {
+   "chu": "syntax analyzer",
+   "doc": "/ˈsɪntæks ˈænəlaɪzər/",
+   "nghia": "bộ phân tích cú pháp: kiểm tra các token ghép thành câu lệnh đúng ngữ pháp",
+   "nhom": "Ngôn ngữ lập trình",
+   "viDu": "A compiler reports that a closing bracket is missing. Which stage noticed the broken grammar? → Syntax analysis",
+   "viDuNghia": "Trình biên dịch báo thiếu dấu ngoặc đóng. Giai đoạn nào phát hiện lỗi ngữ pháp này? → Phân tích cú pháp"
+  },
+  {
+   "chu": "semantic analyzer",
+   "doc": "/sɪˈmæntɪk ˈænəlaɪzər/",
+   "nghia": "bộ phân tích ngữ nghĩa: kiểm tra câu lệnh có nghĩa rõ ràng, không mơ hồ",
+   "nhom": "Ngôn ngữ lập trình",
+   "viDu": "The semantic analyzer checks that the statements have no ambiguity.",
+   "viDuNghia": "Bộ phân tích ngữ nghĩa kiểm tra để các câu lệnh không mơ hồ."
+  },
+  {
+   "chu": "code generator",
+   "doc": "/koʊd ˈdʒenəreɪtər/",
+   "nghia": "bộ sinh mã: đổi câu lệnh đã kiểm tra thành mã máy",
+   "nhom": "Ngôn ngữ lập trình",
+   "viDu": "The code generator converts each instruction into a set of machine language instructions.",
+   "viDuNghia": "Bộ sinh mã chuyển mỗi lệnh thành một tập lệnh ngôn ngữ máy."
+  },
+  {
+   "chu": "paradigm",
+   "doc": "/ˈpærədaɪm/",
+   "nghia": "mô thức lập trình: cách nhìn và cách tổ chức một chương trình",
+   "nhom": "Ngôn ngữ lập trình",
+   "viDu": "Programmers give Prolog a set of facts and rules, then ask questions. Which paradigm is this?",
+   "viDuNghia": "Lập trình viên đưa cho Prolog một tập sự kiện và luật rồi đặt câu hỏi. Đây là mô thức nào?"
+  },
+  {
+   "chu": "procedural paradigm",
+   "doc": "/prəˈsiːdʒərəl ˈpærədaɪm/",
+   "nghia": "mô thức thủ tục (mệnh lệnh): chương trình là tác nhân chủ động thao tác trên dữ liệu thụ động (C, Pascal, FORTRAN, COBOL)",
+   "nhom": "Ngôn ngữ lập trình",
+   "viDu": "Which language of the procedural paradigm is high-level but also has some low-level instructions? → C",
+   "viDuNghia": "Ngôn ngữ nào thuộc mô thức thủ tục là ngôn ngữ bậc cao nhưng vẫn có một số lệnh cấp thấp? → C"
+  },
+  {
+   "chu": "object-oriented paradigm",
+   "doc": "/ˌɑːbdʒekt ˈɔːrientɪd ˈpærədaɪm/",
+   "nghia": "mô thức hướng đối tượng: đối tượng chủ động, tự mang phương thức của mình (Java, C++)",
+   "nhom": "Ngôn ngữ lập trình",
+   "viDu": "The object-oriented paradigm deals with active objects instead of passive objects.",
+   "viDuNghia": "Mô thức hướng đối tượng làm việc với các đối tượng chủ động thay vì đối tượng thụ động."
+  },
+  {
+   "chu": "functional paradigm",
+   "doc": "/ˈfʌŋkʃənl ˈpærədaɪm/",
+   "nghia": "mô thức hàm: chương trình là hàm toán học, hộp đen ánh xạ đầu vào sang đầu ra (LISP, Scheme)",
+   "nhom": "Ngôn ngữ lập trình",
+   "viDu": "In the functional paradigm, a program is a mathematical function that maps a list of inputs to a list of outputs.",
+   "viDuNghia": "Trong mô thức hàm, chương trình là một hàm toán học ánh xạ danh sách đầu vào sang danh sách đầu ra."
+  },
+  {
+   "chu": "declarative paradigm",
+   "doc": "/dɪˈklerətɪv ˈpærədaɪm/",
+   "nghia": "mô thức khai báo (logic): chương trình suy luận từ các sự kiện và luật (Prolog); SQL cũng là ngôn ngữ khai báo",
+   "nhom": "Ngôn ngữ lập trình",
+   "viDu": "In the declarative paradigm, the program uses logical reasoning on facts and rules, as in Prolog.",
+   "viDuNghia": "Trong mô thức khai báo, chương trình suy luận logic dựa trên các sự kiện và luật, như trong Prolog."
+  },
+  {
+   "chu": "literal",
+   "doc": "/ˈlɪtərəl/",
+   "nghia": "hằng trực tiếp: giá trị viết thẳng trong mã (ví dụ 3.14)",
+   "nhom": "Ngôn ngữ lập trình",
+   "viDu": "In the statement x = 5, the value 5 is a literal.",
+   "viDuNghia": "Trong câu lệnh x = 5, giá trị 5 là một hằng trực tiếp."
+  },
+  {
+   "chu": "subprogram",
+   "doc": "/ˈsʌbproʊɡræm/",
+   "nghia": "chương trình con (hàm, thủ tục)",
+   "nhom": "Ngôn ngữ lập trình",
+   "viDu": "In pass by value, what happens to the main program's variable? → Its value is copied to the subprogram",
+   "viDuNghia": "Trong truyền tham trị (pass by value), điều gì xảy ra với biến của chương trình chính? → Giá trị của nó được sao chép vào chương trình con"
+  },
+  {
+   "chu": "incremental model",
+   "doc": "/ˌɪŋkrəˈmentl ˈmɑːdl/",
+   "nghia": "mô hình gia tăng: làm bản đơn giản trước rồi thêm dần chức năng qua từng phiên bản",
+   "nhom": "Kỹ nghệ phần mềm",
+   "viDu": "A team builds a basic version first and adds features in several rounds, testing each. Which model is this? → Incremental model",
+   "viDuNghia": "Một nhóm làm bản cơ bản trước rồi thêm tính năng qua nhiều vòng, kiểm thử từng vòng. Đây là mô hình nào? → Mô hình gia tăng"
+  },
+  {
+   "chu": "analysis phase",
+   "doc": "/əˈnæləsɪs feɪz/",
+   "nghia": "giai đoạn phân tích: xác định phần mềm phải LÀM GÌ, ra tài liệu đặc tả",
+   "nhom": "Kỹ nghệ phần mềm",
+   "viDu": "What is the primary outcome of the \"analysis phase\" in software development?",
+   "viDuNghia": "Kết quả chính của \"giai đoạn phân tích\" trong phát triển phần mềm là gì?"
+  },
+  {
+   "chu": "design phase",
+   "doc": "/dɪˈzaɪn feɪz/",
+   "nghia": "giai đoạn thiết kế: xác định hệ thống làm NHƯ THẾ NÀO",
+   "nhom": "Kỹ nghệ phần mềm",
+   "viDu": "In the design phase, the project team needs to choose a language or a set of languages from among the procedural languages.",
+   "viDuNghia": "Ở giai đoạn thiết kế, nhóm dự án cần chọn một ngôn ngữ hoặc một bộ ngôn ngữ trong số các ngôn ngữ thủ tục."
+  },
+  {
+   "chu": "implementation phase",
+   "doc": "/ˌɪmplɪmenˈteɪʃn feɪz/",
+   "nghia": "giai đoạn cài đặt: viết mã chương trình",
+   "nhom": "Kỹ nghệ phần mềm",
+   "viDu": "In the system development process, writing the program is part of the implementation phase.",
+   "viDuNghia": "Trong quy trình phát triển hệ thống, việc viết chương trình thuộc giai đoạn cài đặt."
+  },
+  {
+   "chu": "testing phase",
+   "doc": "/ˈtestɪŋ feɪz/",
+   "nghia": "giai đoạn kiểm thử: tìm lỗi của phần mềm",
+   "nhom": "Kỹ nghệ phần mềm",
+   "viDu": "The goal of the testing phase is to find errors.",
+   "viDuNghia": "Mục tiêu của giai đoạn kiểm thử là tìm ra lỗi."
+  },
+  {
+   "chu": "system development",
+   "doc": "/ˈsɪstəm dɪˈveləpmənt/",
+   "nghia": "(quy trình) phát triển hệ thống: phân tích, thiết kế, cài đặt, kiểm thử",
+   "nhom": "Kỹ nghệ phần mềm",
+   "viDu": "The system development process has four phases: analysis, design, implementation and testing.",
+   "viDuNghia": "Quy trình phát triển hệ thống gồm bốn giai đoạn: phân tích, thiết kế, cài đặt và kiểm thử."
+  },
+  {
+   "chu": "modularity",
+   "doc": "/ˌmɑːdʒəˈlærəti/",
+   "nghia": "tính module: chia chương trình lớn thành các phần nhỏ dễ hiểu, dễ sửa",
+   "nhom": "Kỹ nghệ phần mềm",
+   "viDu": "When developing software, how would you describe the concept of modularity in software design?",
+   "viDuNghia": "Khi phát triển phần mềm, bạn mô tả khái niệm mô-đun hoá (modularity) trong thiết kế phần mềm như thế nào?"
+  },
+  {
+   "chu": "coupling",
+   "doc": "/ˈkʌplɪŋ/",
+   "nghia": "độ ghép nối: mức hai module phụ thuộc nhau – càng lỏng càng tốt",
+   "nhom": "Kỹ nghệ phần mềm",
+   "viDu": "Coupling is a measure of how tightly two modules are bound to each other.",
+   "viDuNghia": "Độ ghép nối (coupling) là thước đo mức hai module gắn chặt với nhau tới đâu."
+  },
+  {
+   "chu": "cohesion",
+   "doc": "/koʊˈhiːʒn/",
+   "nghia": "độ kết dính: mức các việc bên trong một module liên quan tới nhau – càng cao càng tốt",
+   "nhom": "Kỹ nghệ phần mềm",
+   "viDu": "Cohesion inside each module should be maximized, while coupling between modules should be minimized.",
+   "viDuNghia": "Độ kết dính bên trong mỗi module nên cao nhất có thể, còn độ ghép nối giữa các module nên thấp nhất có thể."
+  },
+  {
+   "chu": "glass-box testing",
+   "doc": "/ˈɡlæs bɑːks ˈtestɪŋ/",
+   "nghia": "kiểm thử hộp kính (hộp trắng): người kiểm thử biết cấu trúc bên trong chương trình",
+   "nhom": "Kỹ nghệ phần mềm",
+   "viDu": "What is a key difference between glass-box testing and black-box testing?",
+   "viDuNghia": "Điểm khác biệt chính giữa kiểm thử hộp kính (glass-box) và kiểm thử hộp đen (black-box) là gì?"
+  },
+  {
+   "chu": "basis path testing",
+   "nghia": "kiểm thử đường cơ sở: mọi câu lệnh được chạy ít nhất một lần",
+   "nhom": "Kỹ nghệ phần mềm",
+   "viDu": "Basis path testing is a method in which each statement in the software is executed at least once.",
+   "viDuNghia": "Kiểm thử đường cơ sở (basis path testing) là phương pháp trong đó mỗi câu lệnh trong phần mềm được thực thi ít nhất một lần."
+  },
+  {
+   "chu": "boundary-value testing",
+   "doc": "/ˈbaʊndri ˈvæljuː ˈtestɪŋ/",
+   "nghia": "kiểm thử giá trị biên: thử các giá trị ở mép miền dữ liệu",
+   "nhom": "Kỹ nghệ phần mềm",
+   "viDu": "Which black-box testing method designs tests that include the boundary values of a range? → Boundary-value testing",
+   "viDuNghia": "Phương pháp kiểm thử hộp đen nào thiết kế ca kiểm thử chứa các giá trị biên của một khoảng? → Kiểm thử giá trị biên"
+  },
+  {
+   "chu": "random testing",
+   "doc": "/ˈrændəm ˈtestɪŋ/",
+   "nghia": "kiểm thử ngẫu nhiên: chọn ngẫu nhiên một tập giá trị đầu vào để thử",
+   "nhom": "Kỹ nghệ phần mềm",
+   "viDu": "In random testing, a subset of values in the input domain is selected at random.",
+   "viDuNghia": "Trong kiểm thử ngẫu nhiên, một tập con giá trị của miền đầu vào được chọn ngẫu nhiên."
+  },
+  {
+   "chu": "state diagram",
+   "doc": "/steɪt ˈdaɪəɡræm/",
+   "nghia": "sơ đồ trạng thái: vẽ các trạng thái của đối tượng và sự chuyển giữa chúng",
+   "nhom": "Kỹ nghệ phần mềm",
+   "viDu": "A state diagram shows how an object changes from one state to another.",
+   "viDuNghia": "Sơ đồ trạng thái cho thấy đối tượng chuyển từ trạng thái này sang trạng thái khác thế nào."
+  },
+  {
+   "chu": "software engineering",
+   "doc": "/ˈsɔːftwer ˌendʒɪˈnɪrɪŋ/",
+   "nghia": "kỹ nghệ phần mềm: làm phần mềm theo quy trình bài bản (phân tích, thiết kế, cài đặt, kiểm thử, bảo trì, tài liệu)",
+   "nhom": "Kỹ nghệ phần mềm",
+   "viDu": "Why is documentation considered important in software engineering?",
+   "viDuNghia": "Vì sao tài liệu được coi là quan trọng trong kỹ nghệ phần mềm?"
+  },
+  {
+   "chu": "software quality",
+   "doc": "/ˈsɔːftwer ˈkwɑːləti/",
+   "nghia": "chất lượng phần mềm: gồm 3 nhóm – khả năng vận hành, khả năng bảo trì, khả năng chuyển đổi",
+   "nhom": "Chất lượng phần mềm",
+   "viDu": "Software quality can be divided into three broad measures: operability, maintainability and transferability.",
+   "viDuNghia": "Chất lượng phần mềm chia thành ba nhóm tiêu chí lớn: khả năng vận hành, khả năng bảo trì và khả năng chuyển đổi."
+  },
+  {
+   "chu": "operability",
+   "doc": "/ˌɑːpərəˈbɪləti/",
+   "nghia": "khả năng vận hành: nhóm tiêu chí gồm chính xác, hiệu quả, tin cậy, an toàn, kịp thời, dễ dùng",
+   "nhom": "Chất lượng phần mềm",
+   "viDu": "In software quality, which factor is a measure of operability? → Timeliness",
+   "viDuNghia": "Trong chất lượng phần mềm, yếu tố nào là thước đo khả năng vận hành? → Tính kịp thời"
+  },
+  {
+   "chu": "transferability",
+   "doc": "/ˌtrænsfɜːrəˈbɪləti/",
+   "nghia": "khả năng chuyển đổi: mang được sang nền tảng khác và tái sử dụng được",
+   "nhom": "Chất lượng phần mềm",
+   "viDu": "Transferability refers to the ability to move software from one hardware platform to another.",
+   "viDuNghia": "Khả năng chuyển đổi là khả năng mang phần mềm từ nền tảng phần cứng này sang nền tảng khác."
+  },
+  {
+   "chu": "accuracy",
+   "doc": "/ˈækjərəsi/",
+   "nghia": "độ chính xác: phần mềm cho kết quả đúng",
+   "nhom": "Chất lượng phần mềm",
+   "viDu": "Accuracy, efficiency, reliability, security, timeliness and usability are measures of operability.",
+   "viDuNghia": "Độ chính xác, hiệu quả, độ tin cậy, an toàn, tính kịp thời và tính dễ dùng là các tiêu chí của khả năng vận hành."
+  },
+  {
+   "chu": "timeliness",
+   "doc": "/ˈtaɪmlinəs/",
+   "nghia": "tính kịp thời: phần mềm cho kết quả đúng lúc",
+   "nhom": "Chất lượng phần mềm",
+   "viDu": "In the software quality, what factor measures can be mentioned for operability? → Timeliness",
+   "viDuNghia": "Trong chất lượng phần mềm, yếu tố nào có thể được nêu ra cho tính vận hành (operability)? → Tính đúng lúc (Timeliness)"
+  },
+  {
+   "chu": "changeability",
+   "doc": "/ˌtʃeɪndʒəˈbɪləti/",
+   "nghia": "khả năng thay đổi: dễ sửa khi yêu cầu thay đổi",
+   "nhom": "Chất lượng phần mềm",
+   "viDu": "In software quality, which factor is a measure of maintainability? → Changeability",
+   "viDuNghia": "Trong chất lượng phần mềm, yếu tố nào là thước đo khả năng bảo trì? → Khả năng thay đổi"
+  },
+  {
+   "chu": "correctability",
+   "doc": "/kəˌrektəˈbɪləti/",
+   "nghia": "khả năng sửa lỗi: dễ tìm và sửa lỗi khi phát hiện",
+   "nhom": "Chất lượng phần mềm",
+   "viDu": "Correctability can be measured by metrics such as mean time between failures and number of bugs per thousand lines of code.",
+   "viDuNghia": "Khả năng sửa lỗi có thể đo bằng các chỉ số như thời gian trung bình giữa hai lần hỏng và số lỗi trên một nghìn dòng mã."
+  },
+  {
+   "chu": "flexibility",
+   "doc": "/ˌfleksəˈbɪləti/",
+   "nghia": "tính linh hoạt: dễ điều chỉnh, mở rộng",
+   "nhom": "Chất lượng phần mềm",
+   "viDu": "Flexibility is one of the measures of software maintainability.",
+   "viDuNghia": "Tính linh hoạt là một trong các tiêu chí của khả năng bảo trì phần mềm."
+  }
+ ]
+}

@@ -1,0 +1,577 @@
+{
+ "ma": "csi104-1",
+ "nn": "en",
+ "ten": "CSI104/CSI106 · 1. Dữ liệu và máy tính",
+ "moTa": "Nhập môn điện toán (CSI104, bản mới CSI106) – phần 1: mô hình máy tính, hệ đếm, biểu diễn dữ liệu, phép toán trên bit, tổ chức máy tính. Từ lấy từ đề FE thật; ví dụ là câu hỏi thật trong đề.",
+ "bieuTuong": "cpu.fill",
+ "thuTu": -998,
+ "tu": [
+  {
+   "chu": "Turing model",
+   "doc": "/ˈtʊrɪŋ ˈmɑːdl/",
+   "nghia": "mô hình Turing: máy tính đa năng, nhận dữ liệu vào + chương trình, cho dữ liệu ra; đổi chương trình là đổi việc",
+   "nhom": "Mô hình máy tính",
+   "viDu": "In a computer based on the Turing model, what is the specific role of a \"program\"?",
+   "viDuNghia": "Trong máy tính dựa trên mô hình Turing, vai trò cụ thể của một \"chương trình\" là gì?"
+  },
+  {
+   "chu": "Von Neumann model",
+   "nghia": "mô hình Von Neumann: chương trình và dữ liệu cùng nằm trong bộ nhớ; 4 khối: bộ nhớ, ALU, khối điều khiển, vào/ra",
+   "nhom": "Mô hình máy tính",
+   "viDu": "According to the Von Neumann model, which one is NOT a computer hardware subsystem?",
+   "viDuNghia": "Theo mô hình Von Neumann, đâu KHÔNG phải là hệ thống con phần cứng máy tính?"
+  },
+  {
+   "chu": "data processor",
+   "doc": "/ˈdeɪtə ˈprɑːsesər/",
+   "nghia": "bộ xử lý dữ liệu: coi máy tính như hộp đen nhận dữ liệu vào và cho dữ liệu ra",
+   "nhom": "Mô hình máy tính",
+   "viDu": "A digital device that processes data is known as a data processor.",
+   "viDuNghia": "Một thiết bị số xử lý dữ liệu được gọi là bộ xử lý dữ liệu (data processor)."
+  },
+  {
+   "chu": "arithmetic logic unit",
+   "nghia": "khối số học – logic (ALU): nơi làm phép tính và phép logic trong CPU",
+   "nhom": "Mô hình máy tính",
+   "viDu": "Which part of the CPU actually works out 7 AND 3? → The arithmetic logic unit",
+   "viDuNghia": "Bộ phận nào của CPU thật sự tính 7 AND 3? → Khối số học-logic (ALU)"
+  },
+  {
+   "chu": "stored program concept",
+   "nghia": "khái niệm chương trình lưu trữ: chương trình cũng được cất trong bộ nhớ như dữ liệu",
+   "nhom": "Mô hình máy tính",
+   "viDu": "What does the stored-program concept say? → Programs and data are both kept in memory.",
+   "viDuNghia": "Khái niệm chương trình lưu sẵn nói gì? → Chương trình và dữ liệu đều được cất trong bộ nhớ."
+  },
+  {
+   "chu": "computer generation",
+   "doc": "/kəmˈpjuːtər ˌdʒenəˈreɪʃn/",
+   "nghia": "thế hệ máy tính (1: đèn chân không, 2: transistor, 3: mạch tích hợp, 4: vi xử lý…)",
+   "nhom": "Mô hình máy tính",
+   "viDu": "Which generation of computers is covered by the period 1964-77?",
+   "viDuNghia": "Thế hệ máy tính nào ứng với giai đoạn 1964–1977?"
+  },
+  {
+   "chu": "microcomputer",
+   "doc": "/ˈmaɪkroʊkəmpjuːtər/",
+   "nghia": "máy vi tính: máy tính cá nhân nhỏ dùng bộ vi xử lý",
+   "nhom": "Mô hình máy tính",
+   "viDu": "The fourth generation of computers brought the microcomputer to homes and offices.",
+   "viDuNghia": "Thế hệ máy tính thứ tư đưa máy vi tính đến nhà và văn phòng."
+  },
+  {
+   "chu": "software",
+   "doc": "/ˈsɔːftwer/",
+   "nghia": "phần mềm: chương trình và dữ liệu điều khiển phần cứng",
+   "nhom": "Mô hình máy tính",
+   "viDu": "Which quality factor refers to the ability to move software from one hardware platform to another?",
+   "viDuNghia": "Yếu tố chất lượng nào chỉ khả năng chuyển phần mềm từ nền tảng phần cứng này sang nền tảng phần cứng khác?"
+  },
+  {
+   "chu": "number system",
+   "doc": "/ˈnʌmbər ˈsɪstəm/",
+   "nghia": "hệ đếm: cách dùng ký hiệu để viết một con số",
+   "nhom": "Hệ đếm",
+   "viDu": "Which of the following is NOT true for a nonpositional number system?",
+   "viDuNghia": "Điều nào sau đây KHÔNG đúng với hệ đếm phi vị trí (nonpositional)?"
+  },
+  {
+   "chu": "positional number system",
+   "nghia": "hệ đếm theo vị trí: giá trị chữ số phụ thuộc vị trí của nó (nhị phân, bát phân, thập phân, thập lục phân)",
+   "nhom": "Hệ đếm",
+   "viDu": "In a positional number system with base b, we can always find the number of digits of an integer. So how many digits can we find in the decimal number 234 in decimal?",
+   "viDuNghia": "Trong hệ đếm theo vị trí với cơ số b, ta luôn tìm được số chữ số của một số nguyên. Vậy số thập phân 234 có bao nhiêu chữ số ở hệ thập phân?"
+  },
+  {
+   "chu": "nonpositional number system",
+   "nghia": "hệ đếm không theo vị trí: mỗi ký hiệu có giá trị cố định (ví dụ số La Mã)",
+   "nhom": "Hệ đếm",
+   "viDu": "Why are Roman numerals called a non-positional system?",
+   "viDuNghia": "Vì sao chữ số La Mã được gọi là hệ không theo vị trí?"
+  },
+  {
+   "chu": "Roman numeral",
+   "doc": "/ˈroʊmən ˈnuːmərəl/",
+   "nghia": "chữ số La Mã (I, V, X, L, C, D, M) – ví dụ của hệ không theo vị trí",
+   "nhom": "Hệ đếm",
+   "viDu": "Why are Roman numerals called a non-positional system?",
+   "viDuNghia": "Vì sao chữ số La Mã được gọi là hệ không theo vị trí?"
+  },
+  {
+   "chu": "binary system",
+   "doc": "/ˈbaɪnəri ˈsɪstəm/",
+   "nghia": "hệ nhị phân: cơ số 2, chỉ dùng 0 và 1",
+   "nhom": "Hệ đếm",
+   "viDu": "A group contains 3 bits in the binary system are represented as one digit in the octal system.",
+   "viDuNghia": "Một nhóm gồm 3 bit trong hệ nhị phân được biểu diễn thành một chữ số trong hệ bát phân."
+  },
+  {
+   "chu": "decimal system",
+   "doc": "/ˈdesɪml ˈsɪstəm/",
+   "nghia": "hệ thập phân: cơ số 10, dùng chữ số 0–9",
+   "nhom": "Hệ đếm",
+   "viDu": "To convert a number in any system to decimal, we multiply each digit by its place value and add the results.",
+   "viDuNghia": "Để đổi một số ở hệ bất kỳ sang hệ thập phân, ta nhân mỗi chữ số với giá trị vị trí của nó rồi cộng các kết quả lại."
+  },
+  {
+   "chu": "hexadecimal system",
+   "doc": "/ˌheksəˈdesɪml ˈsɪstəm/",
+   "nghia": "hệ thập lục phân: cơ số 16, dùng 0–9 và A–F; 1 chữ số = 4 bit",
+   "nhom": "Hệ đếm",
+   "viDu": "A group includes 4 bits in the binary system are represented as one digit in the hexadecimal system.",
+   "viDuNghia": "Một nhóm gồm 4 bit trong hệ nhị phân được biểu diễn thành một chữ số trong hệ thập lục phân."
+  },
+  {
+   "chu": "bit pattern",
+   "doc": "/bɪt ˈpætərn/",
+   "nghia": "mẫu bit: một dãy bit (0 và 1) biểu diễn một dữ liệu nào đó",
+   "nhom": "Hệ đếm",
+   "viDu": "How many symbols can be represented by a bit pattern with ten bits?",
+   "viDuNghia": "Một mẫu bit gồm mười bit biểu diễn được bao nhiêu ký hiệu?"
+  },
+  {
+   "chu": "integral part",
+   "doc": "/ˈɪntɪɡrəl pɑːrt/",
+   "nghia": "phần nguyên của một số thực (bên trái dấu chấm)",
+   "nhom": "Hệ đếm",
+   "viDu": "To convert the integral part of a decimal number to another base, what repetitive procedure is used?",
+   "viDuNghia": "Để chuyển phần nguyên của số thập phân sang cơ số khác, thủ tục lặp nào được dùng?"
+  },
+  {
+   "chu": "fractional part",
+   "doc": "/ˈfrækʃənl pɑːrt/",
+   "nghia": "phần thập phân (phần lẻ) của một số thực (bên phải dấu chấm)",
+   "nhom": "Hệ đếm",
+   "viDu": "To convert the fractional part of a decimal number to binary, we repeatedly multiply it by 2.",
+   "viDuNghia": "Để đổi phần lẻ (phần thập phân) của một số thập phân sang nhị phân, ta nhân nó với 2 lặp đi lặp lại."
+  },
+  {
+   "chu": "place value",
+   "doc": "/pleɪs ˈvæljuː/",
+   "nghia": "giá trị vị trí: trọng số của một chữ số theo vị trí (cơ số mũ vị trí)",
+   "nhom": "Hệ đếm",
+   "viDu": "In the decimal number 2537, what is the place value of the digit 5?",
+   "viDuNghia": "Trong số thập phân 2537, chữ số 5 có giá trị theo vị trí là bao nhiêu?"
+  },
+  {
+   "chu": "leading zero",
+   "doc": "/ˈliːdɪŋ ˈzɪroʊ/",
+   "nghia": "số 0 đứng đầu: thêm vào bên trái cho đủ số bit, không đổi giá trị",
+   "nhom": "Hệ đếm",
+   "viDu": "When storing the unsigned integer 12 in an 8-bit memory location, why are leading zeros added?",
+   "viDuNghia": "Khi lưu số nguyên không dấu 12 vào ô nhớ 8-bit, vì sao phải thêm các số 0 ở đầu?"
+  },
+  {
+   "chu": "hexadecimal",
+   "doc": "/ˌheksəˈdesɪml/",
+   "nghia": "thập lục phân – hệ đếm cơ số 16 (0–9, A–F); mỗi chữ số hex ứng với đúng 4 bit",
+   "nhom": "Hệ đếm",
+   "viDu": "How many hexadecimal digits are needed to write a 32-bit value in full?",
+   "viDuNghia": "Cần bao nhiêu chữ số thập lục phân để viết đầy đủ một giá trị 32 bit?"
+  },
+  {
+   "chu": "octal",
+   "doc": "/ˈɑːktl/",
+   "nghia": "bát phân – hệ đếm cơ số 8 (0–7); mỗi chữ số bát phân ứng với 3 bit",
+   "nhom": "Hệ đếm",
+   "viDu": "Using the grouping shortcut, what is binary 110101101 in octal?",
+   "viDuNghia": "Dùng mẹo nhóm bit, số nhị phân 110101101 viết ở hệ bát phân là gì?"
+  },
+  {
+   "chu": "decimal",
+   "doc": "/ˈdesɪml/",
+   "nghia": "thập phân – hệ đếm cơ số 10; decimal number = số thập phân",
+   "nhom": "Hệ đếm",
+   "viDu": "Convert the binary number 1011011011 to decimal.",
+   "viDuNghia": "Đổi số nhị phân 1011011011 sang hệ thập phân."
+  },
+  {
+   "chu": "data representation",
+   "doc": "/ˈdeɪtə ˌreprɪzenˈteɪʃn/",
+   "nghia": "biểu diễn dữ liệu: cách mã hoá số, chữ, ảnh, âm thanh, video thành bit",
+   "nhom": "Biểu diễn dữ liệu",
+   "viDu": "Data representation describes how numbers, text, images, audio and video are stored as bit patterns.",
+   "viDuNghia": "Biểu diễn dữ liệu mô tả cách số, chữ, hình ảnh, âm thanh và video được lưu thành các mẫu bit."
+  },
+  {
+   "chu": "unsigned integer",
+   "doc": "/ʌnˈsaɪnd ˈɪntɪdʒər/",
+   "nghia": "số nguyên không dấu: chỉ biểu diễn số từ 0 trở lên",
+   "nhom": "Biểu diễn dữ liệu",
+   "viDu": "When storing the unsigned integer 12 in an 8-bit memory location, why are leading zeros added?",
+   "viDuNghia": "Khi lưu số nguyên không dấu 12 vào ô nhớ 8-bit, vì sao phải thêm các số 0 ở đầu?"
+  },
+  {
+   "chu": "sign-and-magnitude",
+   "doc": "/ˌsaɪn ən ˈmæɡnɪtuːd/",
+   "nghia": "dấu – độ lớn: bit trái nhất là dấu, các bit còn lại là giá trị tuyệt đối; có hai số 0 (+0 và −0)",
+   "nhom": "Biểu diễn dữ liệu",
+   "viDu": "In sign-and-magnitude representation, how is the number -5 stored in 4 bits?",
+   "viDuNghia": "Trong biểu diễn dấu-độ lớn (sign-and-magnitude), số -5 được lưu như thế nào trong 4 bit?"
+  },
+  {
+   "chu": "one's complement",
+   "doc": "/wʌnz ˈkɑːmplɪmənt/",
+   "nghia": "bù một: đảo tất cả các bit (0 thành 1, 1 thành 0)",
+   "nhom": "Biểu diễn dữ liệu",
+   "viDu": "Which of the following is taking the one's complement of of the integer 00110110?",
+   "viDuNghia": "Cách nào sau đây là lấy bù một (one's complement) của số nguyên 00110110?"
+  },
+  {
+   "chu": "fixed-point",
+   "doc": "/ˌfɪkst ˈpɔɪnt/",
+   "nghia": "dấu chấm tĩnh: vị trí dấu chấm thập phân cố định – khác với dấu chấm động",
+   "nhom": "Biểu diễn dữ liệu",
+   "viDu": "Fixed-point representation is not used for real numbers because precision may be lost.",
+   "viDuNghia": "Biểu diễn dấu chấm tĩnh không được dùng cho số thực vì có thể mất độ chính xác."
+  },
+  {
+   "chu": "excess system",
+   "doc": "/ˈekses ˈsɪstəm/",
+   "nghia": "hệ dư (Excess): cộng thêm một độ lệch (bias) để lưu số mũ có dấu thành số không âm",
+   "nhom": "Biểu diễn dữ liệu",
+   "viDu": "If the exponent in Excess_127 is binary 10000101, the exponent in decimal is 6.",
+   "viDuNghia": "Nếu số mũ ở dạng Excess_127 là nhị phân 10000101, số mũ ở hệ thập phân là 6."
+  },
+  {
+   "chu": "mantissa",
+   "doc": "/mænˈtɪsə/",
+   "nghia": "phần định trị của số dấu chấm động (các chữ số có nghĩa)",
+   "nhom": "Biểu diễn dữ liệu",
+   "viDu": "In IEEE floating-point format, the sign and mantissa are stored together in sign-and-magnitude representation.",
+   "viDuNghia": "Trong định dạng dấu chấm động IEEE, dấu và phần định trị được lưu chung theo biểu diễn dấu–độ lớn."
+  },
+  {
+   "chu": "Unicode",
+   "doc": "/ˈjuːnɪkoʊd/",
+   "nghia": "bảng mã Unicode: mã 32 bit, biểu diễn ký tự của mọi ngôn ngữ",
+   "nhom": "Biểu diễn dữ liệu",
+   "viDu": "A 32-bit code called Unicode represents symbols in all languages.",
+   "viDuNghia": "Một bộ mã 32-bit gọi là Unicode biểu diễn ký hiệu trong tất cả các ngôn ngữ."
+  },
+  {
+   "chu": "sampling",
+   "doc": "/ˈsæmplɪŋ/",
+   "nghia": "lấy mẫu: đo tín hiệu tương tự tại những thời điểm cách đều nhau",
+   "nhom": "Biểu diễn dữ liệu",
+   "viDu": "What does \"sampling\" refer to in the context of audio storage?",
+   "viDuNghia": "\"Lấy mẫu\" (sampling) trong lưu trữ âm thanh nghĩa là gì?"
+  },
+  {
+   "chu": "sampling rate",
+   "doc": "/ˈsæmplɪŋ reɪt/",
+   "nghia": "tần số lấy mẫu: số mẫu lấy trong một giây",
+   "nhom": "Biểu diễn dữ liệu",
+   "viDu": "A sampling rate of 40,000 samples per second is good enough to reproduce an audio signal.",
+   "viDuNghia": "Tần số lấy mẫu 40.000 mẫu mỗi giây là đủ để tái tạo một tín hiệu âm thanh."
+  },
+  {
+   "chu": "quantization",
+   "doc": "/ˌkwɑːntəˈzeɪʃn/",
+   "nghia": "lượng tử hoá: làm tròn giá trị mẫu về mức nguyên gần nhất",
+   "nhom": "Biểu diễn dữ liệu",
+   "viDu": "In storing audio, the quantized sample values need to be encoded as bit patterns.",
+   "viDuNghia": "Khi lưu âm thanh, các giá trị mẫu đã lượng tử hoá cần được mã hoá thành các mẫu bit."
+  },
+  {
+   "chu": "bit depth",
+   "doc": "/bɪt depθ/",
+   "nghia": "độ sâu bit: số bit dùng cho mỗi mẫu âm thanh",
+   "nhom": "Biểu diễn dữ liệu",
+   "viDu": "If we call the bit depth or number of bits per sample B, the number of samples per second S, so how to calculate BIT RATE (R)?",
+   "viDuNghia": "Nếu gọi độ sâu bit (số bit trên mỗi mẫu) là B, số mẫu trên giây là S, thì TỐC ĐỘ BIT (R) tính thế nào?"
+  },
+  {
+   "chu": "bit rate",
+   "doc": "/bɪt reɪt/",
+   "nghia": "tốc độ bit: số bit mỗi giây = tần số lấy mẫu x số bit mỗi mẫu",
+   "nhom": "Biểu diễn dữ liệu",
+   "viDu": "If we call the bit depth or number of bits per sample B, the number of samples per second S, so how to calculate BIT RATE (R)?",
+   "viDuNghia": "Nếu gọi độ sâu bit (số bit trên mỗi mẫu) là B, số mẫu trên giây là S, thì TỐC ĐỘ BIT (R) tính thế nào?"
+  },
+  {
+   "chu": "raster graphic",
+   "doc": "/ˈræstər ˈɡræfɪk/",
+   "nghia": "ảnh raster (bitmap): ảnh lưu thành lưới điểm ảnh; phóng to bị vỡ",
+   "nhom": "Biểu diễn dữ liệu",
+   "viDu": "A raster graphic stores an image as a grid of pixels, so it looks blocky when it is enlarged.",
+   "viDuNghia": "Ảnh raster lưu hình thành một lưới điểm ảnh, nên khi phóng to trông bị vỡ hạt."
+  },
+  {
+   "chu": "vector graphic",
+   "doc": "/ˈvektər ˈɡræfɪk/",
+   "nghia": "ảnh vector: ảnh lưu bằng công thức hình học (đường, cung…); phóng to không vỡ",
+   "nhom": "Biểu diễn dữ liệu",
+   "viDu": "An image can be represented in a computer using either the bitmap graphic or the vector graphic method.",
+   "viDuNghia": "Một hình ảnh có thể được biểu diễn trong máy tính bằng phương pháp đồ hoạ bitmap hoặc đồ hoạ vector."
+  },
+  {
+   "chu": "resolution",
+   "doc": "/ˌrezəˈluːʃn/",
+   "nghia": "độ phân giải: số điểm ảnh của ảnh hay màn hình",
+   "nhom": "Biểu diễn dữ liệu",
+   "viDu": "The higher the resolution, the more pixels the image has and the more memory it needs.",
+   "viDuNghia": "Độ phân giải càng cao thì ảnh càng nhiều điểm ảnh và càng tốn bộ nhớ."
+  },
+  {
+   "chu": "color depth",
+   "doc": "/ˈkʌlər depθ/",
+   "nghia": "độ sâu màu: số bit dùng để biểu diễn màu của một điểm ảnh",
+   "nhom": "Biểu diễn dữ liệu",
+   "viDu": "The number of bits used to represent a pixel, its color depth, depends on the color encoding technique.",
+   "viDuNghia": "Số bit dùng để biểu diễn một điểm ảnh, tức độ sâu màu, phụ thuộc vào kỹ thuật mã hoá màu."
+  },
+  {
+   "chu": "true color",
+   "doc": "/truː ˈkʌlər/",
+   "nghia": "màu thực (True-Color): dùng 24 bit cho mỗi điểm ảnh (8 bit cho mỗi màu R, G, B)",
+   "nhom": "Biểu diễn dữ liệu",
+   "viDu": "In the True-Color (RGB) model, red is (255, 0, 0). What is the RGB code for white?",
+   "viDuNghia": "Trong mô hình True-Color (RGB), màu đỏ là (255, 0, 0). Mã RGB của màu trắng là gì?"
+  },
+  {
+   "chu": "compression",
+   "doc": "/kəmˈpreʃn/",
+   "nghia": "nén dữ liệu: giảm số bit cần lưu hay truyền",
+   "nhom": "Biểu diễn dữ liệu",
+   "viDu": "A two-channel recording uses 48,000 samples per second and 2 bytes per sample. How many bytes does one uncompressed second need?",
+   "viDuNghia": "Một bản ghi hai kênh dùng 48.000 mẫu mỗi giây, mỗi mẫu 2 byte. Một giây không nén cần bao nhiêu byte?"
+  },
+  {
+   "chu": "lossy compression",
+   "doc": "/ˈlɔːsi kəmˈpreʃn/",
+   "nghia": "nén mất mát: bỏ bớt thông tin (JPEG, MP3), không khôi phục được y nguyên",
+   "nhom": "Biểu diễn dữ liệu",
+   "viDu": "A photo is saved as a JPEG, and a source file is packed into a ZIP. Which statement is right? → JPEG is lossy, and ZIP is lossless",
+   "viDuNghia": "Một ảnh được lưu thành JPEG, còn tệp mã nguồn được nén thành ZIP. Phát biểu nào đúng? → JPEG nén mất dữ liệu, còn ZIP nén không mất dữ liệu"
+  },
+  {
+   "chu": "lossless compression",
+   "doc": "/ˈlɔːsləs kəmˈpreʃn/",
+   "nghia": "nén không mất mát: giải nén ra đúng dữ liệu gốc (ZIP)",
+   "nhom": "Biểu diễn dữ liệu",
+   "viDu": "A photo is saved as a JPEG, and a source file is packed into a ZIP. Which statement is right? → JPEG is lossy, and ZIP is lossless",
+   "viDuNghia": "Một ảnh được lưu thành JPEG, còn tệp mã nguồn được nén thành ZIP. Phát biểu nào đúng? → JPEG nén mất dữ liệu, còn ZIP nén không mất dữ liệu"
+  },
+  {
+   "chu": "magnitude",
+   "doc": "/ˈmæɡnɪtuːd/",
+   "nghia": "độ lớn: giá trị tuyệt đối của một số, không kể dấu",
+   "nhom": "Biểu diễn dữ liệu",
+   "viDu": "In sign-and-magnitude representation, the leftmost bit is the sign and the other bits hold the magnitude.",
+   "viDuNghia": "Trong biểu diễn dấu–độ lớn, bit trái nhất là dấu, các bit còn lại chứa độ lớn (giá trị tuyệt đối)."
+  },
+  {
+   "chu": "analog signal",
+   "doc": "/ˈænəlɔːɡ ˈsɪɡnəl/",
+   "nghia": "tín hiệu tương tự: thay đổi liên tục, có vô số mức giá trị",
+   "nhom": "Biểu diễn dữ liệu",
+   "viDu": "A technique used by codecs to convert an analog signal into a digital bit stream is known as pulse code modulation.",
+   "viDuNghia": "Kỹ thuật mà bộ codec dùng để chuyển tín hiệu tương tự thành dòng bit số được gọi là điều chế xung mã (PCM)."
+  },
+  {
+   "chu": "digital signal",
+   "doc": "/ˈdɪdʒɪtl ˈsɪɡnəl/",
+   "nghia": "tín hiệu số: chỉ có một số hữu hạn mức giá trị rời rạc",
+   "nhom": "Biểu diễn dữ liệu",
+   "viDu": "A hybrid computer uses a modulator to convert digital signals from a computer into analog signals.",
+   "viDuNghia": "Máy tính lai dùng một bộ điều chế để chuyển tín hiệu số từ máy tính thành tín hiệu tương tự."
+  },
+  {
+   "chu": "audio",
+   "doc": "/ˈɔːdioʊ/",
+   "nghia": "âm thanh (dữ liệu âm thanh)",
+   "nhom": "Biểu diễn dữ liệu",
+   "viDu": "Which of the following processes is NOT involved in storing audio in a computer?",
+   "viDuNghia": "Quá trình nào sau đây KHÔNG liên quan tới việc lưu trữ âm thanh trong máy tính?"
+  },
+  {
+   "chu": "bit",
+   "doc": "/bɪt/",
+   "nghia": "bit – đơn vị dữ liệu nhỏ nhất, mang giá trị 0 hoặc 1; 8 bit = 1 byte",
+   "nhom": "Biểu diễn dữ liệu",
+   "viDu": "If you want to store the decimal number 15 in an 8-bit unsigned integer, what is the binary representation?",
+   "viDuNghia": "Nếu muốn lưu số thập phân 15 vào một số nguyên không dấu 8-bit, biểu diễn nhị phân là gì?"
+  },
+  {
+   "chu": "Extended Binary Coded Decimal Interchange Code",
+   "nghia": "EBCDIC: bảng mã ký tự 8 bit của IBM, dùng trên máy tính lớn (mainframe) — khác ASCII",
+   "nhom": "Biểu diễn dữ liệu",
+   "viDu": "Which type of computers use the 8-bit code called EBCDIC? → Mainframe computers",
+   "viDuNghia": "Loại máy tính nào dùng mã 8 bit gọi là EBCDIC? → Máy tính lớn (mainframe)"
+  },
+  {
+   "chu": "logic operation",
+   "doc": "/ˈlɑːdʒɪk ˌɑːpəˈreɪʃn/",
+   "nghia": "phép toán logic trên bit: NOT, AND, OR, XOR",
+   "nhom": "Phép toán trên bit",
+   "viDu": "Which component of the CPU is responsible for performing arithmetic and logical operations?",
+   "viDuNghia": "Thành phần nào của CPU chịu trách nhiệm thực hiện các phép toán số học và logic?"
+  },
+  {
+   "chu": "unary operator",
+   "doc": "/ˈjuːnəri ˈɑːpəreɪtər/",
+   "nghia": "toán tử một ngôi: chỉ nhận MỘT đầu vào (vd NOT trên bit; trong CSDL quan hệ: select, project, insert… trên một quan hệ)",
+   "nhom": "Phép toán trên bit",
+   "viDu": "A unary operator is applied to one relation and creates an output of one relation.",
+   "viDuNghia": "Toán tử một ngôi áp dụng lên một quan hệ và tạo ra kết quả là một quan hệ."
+  },
+  {
+   "chu": "binary operator",
+   "doc": "/ˈbaɪnəri ˈɑːpəreɪtər/",
+   "nghia": "toán tử hai ngôi: nhận hai đầu vào (AND, OR, XOR)",
+   "nhom": "Phép toán trên bit",
+   "viDu": "Which of the following is a binary operator?",
+   "viDuNghia": "Toán tử nào sau đây là toán tử hai ngôi (binary)?"
+  },
+  {
+   "chu": "unset",
+   "doc": "/ˌʌnˈset/",
+   "nghia": "xoá bit (đưa về 0) – dùng AND với mặt nạ có bit 0 ở vị trí cần xoá",
+   "nhom": "Phép toán trên bit",
+   "viDu": "Which mask, used with AND, unsets (clears) the four leftmost bits of the pattern 1010 0111?",
+   "viDuNghia": "Mặt nạ nào, dùng với phép AND, xoá (đưa về 0) bốn bit bên trái của mẫu 1010 0111?"
+  },
+  {
+   "chu": "flip",
+   "doc": "/flɪp/",
+   "nghia": "đảo bit (0 thành 1, 1 thành 0) – dùng XOR với mặt nạ có bit 1 ở vị trí cần đảo",
+   "nhom": "Phép toán trên bit",
+   "viDu": "Which operation flips the right four bits of a byte and leaves the left four alone?",
+   "viDuNghia": "Phép toán nào lật bốn bit phải của một byte và giữ nguyên bốn bit trái?"
+  },
+  {
+   "chu": "shift operation",
+   "doc": "/ʃɪft ˌɑːpəˈreɪʃn/",
+   "nghia": "phép dịch bit: dời cả mẫu bit sang trái hoặc sang phải",
+   "nhom": "Phép toán trên bit",
+   "viDu": "Use an arithmetic left shift operation on the bit pattern 10011001. The pattern is an integer in two's complement format.",
+   "viDuNghia": "Áp dụng phép dịch trái số học lên chuỗi bit 10011001. Chuỗi này là số nguyên ở dạng bù hai."
+  },
+  {
+   "chu": "arithmetic shift",
+   "doc": "/ˌærɪθˈmetɪk ʃɪft/",
+   "nghia": "dịch số học: dịch phải chia đôi, dịch trái nhân đôi một số bù hai, giữ nguyên bit dấu",
+   "nhom": "Phép toán trên bit",
+   "viDu": "A signed value 10011000 is shifted right by one using an arithmetic shift. What is the result?",
+   "viDuNghia": "Giá trị có dấu 10011000 được dịch phải một bit bằng dịch số học. Kết quả là gì?"
+  },
+  {
+   "chu": "circular shift",
+   "doc": "/ˈsɜːrkjələr ʃɪft/",
+   "nghia": "dịch vòng (xoay): bit rơi ra ở đầu này được đưa vào lại ở đầu kia, không mất bit",
+   "nhom": "Phép toán trên bit",
+   "viDu": "Use a circular right shift operation on the bit pattern 1001 1000.",
+   "viDuNghia": "Thực hiện phép dịch phải vòng (circular right shift) trên mẫu bit 1001 1000."
+  },
+  {
+   "chu": "programmable read-only memory",
+   "nghia": "PROM: ROM cho người dùng ghi một lần bằng thiết bị riêng",
+   "nhom": "Tổ chức máy tính",
+   "viDu": "PROM can be programmed once by the user with a special device, but it cannot be erased.",
+   "viDuNghia": "PROM có thể được người dùng ghi (lập trình) một lần bằng thiết bị riêng, nhưng không xoá được."
+  },
+  {
+   "chu": "erasable programmable read-only memory",
+   "nghia": "EPROM: ROM xoá được bằng tia cực tím rồi ghi lại",
+   "nhom": "Tổ chức máy tính",
+   "viDu": "EPROM can be programmed by the user, but can also be erased with a special device that applies ultraviolet light.",
+   "viDuNghia": "EPROM có thể được lập trình bởi người dùng, nhưng cũng có thể bị xóa bằng một thiết bị đặc biệt chiếu tia cực tím."
+  },
+  {
+   "chu": "ultraviolet light",
+   "doc": "/ˌʌltrəˈvaɪələt laɪt/",
+   "nghia": "tia cực tím (dùng để xoá EPROM)",
+   "nhom": "Tổ chức máy tính",
+   "viDu": "EPROM can be programmed by the user, but can also be erased with a special device that applies ultraviolet light.",
+   "viDuNghia": "EPROM có thể được lập trình bởi người dùng, nhưng cũng có thể bị xóa bằng một thiết bị đặc biệt chiếu tia cực tím."
+  },
+  {
+   "chu": "machine cycle",
+   "doc": "/məˈʃiːn ˈsaɪkl/",
+   "nghia": "chu kỳ máy: nạp lệnh – giải mã – thực thi, lặp lại cho từng lệnh",
+   "nhom": "Tổ chức máy tính",
+   "viDu": "What are the three phases of the CPU's machine cycle?",
+   "viDuNghia": "Ba pha của chu kỳ máy trong CPU là gì?"
+  },
+  {
+   "chu": "optical storage",
+   "doc": "/ˈɑːptɪkl ˈstɔːrɪdʒ/",
+   "nghia": "lưu trữ quang: dùng tia laser để đọc/ghi (CD, DVD)",
+   "nhom": "Tổ chức máy tính",
+   "viDu": "CD-ROM, CD-R, CD-RW and DVD are examples of optical storage devices that are read by a laser.",
+   "viDuNghia": "CD-ROM, CD-R, CD-RW và DVD là ví dụ về thiết bị lưu trữ quang, được đọc bằng tia laser."
+  },
+  {
+   "chu": "pit",
+   "doc": "/pɪt/",
+   "nghia": "hố (pit) trên mặt đĩa CD – cùng với mặt phẳng (land) biểu diễn bit 0 và 1",
+   "nhom": "Tổ chức máy tính",
+   "viDu": "The CD-ROM is read using a low-power laser beam. It is reflected twice when it encounters a pit.",
+   "viDuNghia": "Đĩa CD-ROM được đọc bằng chùm laser công suất thấp. Chùm tia bị phản xạ hai lần khi gặp một hố (pit)."
+  },
+  {
+   "chu": "peripheral device",
+   "doc": "/pəˈrɪfərəl dɪˈvaɪs/",
+   "nghia": "thiết bị ngoại vi: thiết bị nối thêm ngoài CPU và bộ nhớ (bàn phím, máy in, đĩa…)",
+   "nhom": "Tổ chức máy tính",
+   "viDu": "In peripheral device management, what is the principle of hierarchical work on OS of third-generation computers?",
+   "viDuNghia": "Trong quản lý thiết bị ngoại vi, nguyên tắc làm việc phân cấp trên hệ điều hành của máy tính thế hệ thứ ba là gì?"
+  },
+  {
+   "chu": "storage device",
+   "doc": "/ˈstɔːrɪdʒ dɪˈvaɪs/",
+   "nghia": "thiết bị lưu trữ: giữ dữ liệu lâu dài (đĩa từ, băng từ, đĩa quang)",
+   "nhom": "Tổ chức máy tính",
+   "viDu": "Which of the following is considered an input/output storage device?",
+   "viDuNghia": "Đâu được coi là thiết bị lưu trữ vào/ra (input/output)?"
+  },
+  {
+   "chu": "input device",
+   "doc": "/ˈɪnpʊt dɪˈvaɪs/",
+   "nghia": "thiết bị vào (bàn phím, chuột, máy quét)",
+   "nhom": "Tổ chức máy tính",
+   "viDu": "Hardware is the term used for all input and output devices in a computer system.",
+   "viDuNghia": "Phần cứng là thuật ngữ chỉ toàn bộ thiết bị vào và thiết bị ra trong hệ thống máy tính."
+  },
+  {
+   "chu": "output device",
+   "doc": "/ˈaʊtpʊt dɪˈvaɪs/",
+   "nghia": "thiết bị ra (màn hình, máy in, loa)",
+   "nhom": "Tổ chức máy tính",
+   "viDu": "In the context of device management, what does \"policies for accessing input/output devices\" refer to?",
+   "viDuNghia": "Trong quản lý thiết bị, \"chính sách truy cập thiết bị vào/ra\" đề cập tới điều gì?"
+  },
+  {
+   "chu": "parallel processing",
+   "doc": "/ˈpærəlel ˈprɑːsesɪŋ/",
+   "nghia": "xử lý song song: nhiều bộ xử lý cùng làm một lúc (SISD, SIMD, MISD, MIMD)",
+   "nhom": "Tổ chức máy tính",
+   "viDu": "Which parallel processing organization just shows the concept and it has never been implemented?",
+   "viDuNghia": "Loại tổ chức xử lý song song nào chỉ mang tính khái niệm và chưa từng được hiện thực?"
+  },
+  {
+   "chu": "firmware",
+   "doc": "/ˈfɜːrmwer/",
+   "nghia": "phần sụn: chương trình ghi sẵn trong ROM của thiết bị",
+   "nhom": "Tổ chức máy tính",
+   "viDu": "A router's firmware chip can be erased and rewritten electrically without removing it from the board. Which kind of memory is it?",
+   "viDuNghia": "Chip chứa firmware của router có thể xoá và ghi lại bằng điện mà không cần tháo khỏi bảng mạch. Đó là loại bộ nhớ nào?"
+  },
+  {
+   "chu": "microprogramming",
+   "doc": "/ˌmaɪkroʊˈproʊɡræmɪŋ/",
+   "nghia": "vi lập trình: thực hiện lệnh phức tạp bằng một dãy vi lệnh đơn giản (dùng ở CISC)",
+   "nhom": "Tổ chức máy tính",
+   "viDu": "In CISC, the CPU does not execute a machine instruction directly; it runs simple micro-operations. This is called microprogramming.",
+   "viDuNghia": "Ở CISC, CPU không thực thi trực tiếp lệnh máy mà chạy các vi thao tác đơn giản. Kỹ thuật này gọi là vi lập trình."
+  },
+  {
+   "chu": "electrically erasable programmable read-only memory",
+   "nghia": "EEPROM: ROM xoá được bằng xung điện, không cần tháo khỏi máy",
+   "nhom": "Tổ chức máy tính",
+   "viDu": "EEPROM can be programmed and erased using electronic impulses but can remain in a computer during erasure.",
+   "viDuNghia": "EEPROM có thể được lập trình và xóa bằng xung điện nhưng vẫn nằm trong máy tính khi xóa."
+  }
+ ]
+}

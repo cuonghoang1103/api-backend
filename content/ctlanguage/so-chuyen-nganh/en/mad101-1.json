@@ -1,0 +1,540 @@
+{
+ "ma": "mad101-1",
+ "nn": "en",
+ "ten": "MAD101 · 1. Logic, suy luận, tập hợp & hàm",
+ "moTa": "Toán rời rạc (MAD101), bộ 1: mệnh đề và phép toán logic, vị từ - lượng từ, luật suy diễn và chứng minh, tập hợp, hàm (one-to-one, onto). Từ lấy từ đề FE thật; ví dụ là câu hỏi thật trong đề.",
+ "bieuTuong": "point.3.connected.trianglepath.dotted",
+ "thuTu": -980,
+ "tu": [
+  {
+   "chu": "proposition",
+   "doc": "/ˌprɑːpəˈzɪʃn/",
+   "nghia": "mệnh đề (câu khẳng định hoặc đúng hoặc sai, không thể vừa đúng vừa sai)",
+   "nhom": "Mệnh đề và phép toán logic",
+   "viDu": "Let P(x) be a propositional function on {1,2,3}. Find a proposition that is logically equivalent to ∀x ¬P(x).",
+   "viDuNghia": "Cho P(x) là hàm mệnh đề trên {1,2,3}. Tìm một mệnh đề tương đương logic với ∀x ¬P(x)."
+  },
+  {
+   "chu": "compound proposition",
+   "doc": "/ˈkɑːmpaʊnd ˌprɑːpəˈzɪʃn/",
+   "nghia": "mệnh đề phức hợp (ghép từ các mệnh đề đơn bằng phép toán logic)",
+   "nhom": "Mệnh đề và phép toán logic",
+   "viDu": "How many quadruples (p, q, r, s) are there that make the compound proposition false? (p →q) →(r →s)",
+   "viDuNghia": "Có bao nhiêu bộ bốn (p, q, r, s) làm mệnh đề hợp thành sau đây sai? (p →q) →(r →s)"
+  },
+  {
+   "chu": "logical expression",
+   "doc": "/ˈlɑːdʒɪkl ɪkˈspreʃn/",
+   "nghia": "biểu thức logic (viết bằng ký hiệu ¬, ∧, ∨, →, ∀, ∃)",
+   "nhom": "Mệnh đề và phép toán logic",
+   "viDu": "Let T(x,y) mean that \"student x likes cuisine y\". Translate the logical expression ∀x∀z∃y((x≠z)→¬(T(x,y)∧T(z,y))) into a sentence.",
+   "viDuNghia": "Cho T(x,y) nghĩa là \"sinh viên x thích ẩm thực y\". Diễn dịch biểu thức logic ∀x∀z∃y((x≠z)→¬(T(x,y)∧T(z,y))) thành câu."
+  },
+  {
+   "chu": "translate",
+   "doc": "/trænzˈleɪt/",
+   "nghia": "dịch, chuyển (câu tiếng Anh thành biểu thức logic và ngược lại)",
+   "nhom": "Mệnh đề và phép toán logic",
+   "viDu": "Translate the statement into a logical expression: \"For any x, there are y and y' such that x+y>5 and x+y'≤5\".",
+   "viDuNghia": "Diễn đạt câu sau thành biểu thức logic: \"Với mọi x, tồn tại y và y' sao cho x+y>5 và x+y'≤5\"."
+  },
+  {
+   "chu": "truth value",
+   "doc": "/truːθ ˈvæljuː/",
+   "nghia": "giá trị chân lý (True - đúng hoặc False - sai)",
+   "nhom": "Mệnh đề và phép toán logic",
+   "viDu": "Suppose the truth value of the proposition p →¬(p ∧¬q) is false. Find the truth value of p, q.",
+   "viDuNghia": "Giả sử giá trị chân lý của mệnh đề p →¬(p ∧¬q) là sai. Tìm giá trị chân lý của p, q."
+  },
+  {
+   "chu": "negation",
+   "doc": "/nɪˈɡeɪʃn/",
+   "nghia": "phủ định (¬p, đọc: not p)",
+   "nhom": "Mệnh đề và phép toán logic",
+   "viDu": "Find the negation of the statement \"I will remember to send you the address only if you send me an e-mail message.\"",
+   "viDuNghia": "Tìm phủ định của mệnh đề \"Tôi sẽ nhớ gửi bạn địa chỉ chỉ khi bạn gửi tôi một email.\""
+  },
+  {
+   "chu": "conjunction",
+   "doc": "/kənˈdʒʌŋkʃn/",
+   "nghia": "phép hội, phép AND (p ∧ q, đọc: p and q) — chỉ đúng khi cả hai cùng đúng",
+   "nhom": "Mệnh đề và phép toán logic",
+   "viDu": "The conjunction p ∧ q is true only when both p and q are true.",
+   "viDuNghia": "Phép hội p ∧ q chỉ đúng khi cả p và q đều đúng."
+  },
+  {
+   "chu": "disjunction",
+   "doc": "/dɪsˈdʒʌŋkʃn/",
+   "nghia": "phép tuyển, phép OR (p ∨ q, đọc: p or q) — chỉ sai khi cả hai cùng sai",
+   "nhom": "Mệnh đề và phép toán logic",
+   "viDu": "The disjunction p ∨ q is false only when both p and q are false.",
+   "viDuNghia": "Phép tuyển p ∨ q chỉ sai khi cả p và q đều sai."
+  },
+  {
+   "chu": "implication",
+   "doc": "/ˌɪmplɪˈkeɪʃn/",
+   "nghia": "phép kéo theo (p → q, đọc: if p then q, p implies q) — chỉ sai khi p đúng mà q sai",
+   "nhom": "Mệnh đề và phép toán logic",
+   "viDu": "The implication p → q is false only when p is true and q is false.",
+   "viDuNghia": "Phép kéo theo p → q chỉ sai khi p đúng và q sai."
+  },
+  {
+   "chu": "conditional statement",
+   "doc": "/kənˈdɪʃənl ˈsteɪtmənt/",
+   "nghia": "mệnh đề điều kiện, mệnh đề kéo theo (if p, then q)",
+   "nhom": "Mệnh đề và phép toán logic",
+   "viDu": "Determine whether these conditional statements are tautology: (i) (p ∧q) →p (ii) p →(p ∨q)",
+   "viDuNghia": "Xác định các mệnh đề điều kiện sau có phải là hằng đúng (tautology) không: (i) (p ∧q) →p (ii) p →(p ∨q)"
+  },
+  {
+   "chu": "biconditional",
+   "doc": "/ˌbaɪkənˈdɪʃənl/",
+   "nghia": "phép tương đương, hai chiều (p ↔ q, đọc: p if and only if q)",
+   "nhom": "Mệnh đề và phép toán logic",
+   "viDu": "Determine whether these biconditionals are true or false: (i) 1+1=2 if and only if 2+2=5. (ii) 1+1=3 if and only if 2+2=5.",
+   "viDuNghia": "Xác định các mệnh đề tương đương sau đúng hay sai: (i) 1+1=2 khi và chỉ khi 2+2=5. (ii) 1+1=3 khi và chỉ khi 2+2=5."
+  },
+  {
+   "chu": "only if",
+   "doc": "/ˈoʊnli ɪf/",
+   "nghia": "chỉ khi (p only if q nghĩa là p → q; dễ nhầm với if)",
+   "nhom": "Mệnh đề và phép toán logic",
+   "viDu": "Find the negation of the statement \"You can access the website only if you pay a subscription fee.\"",
+   "viDuNghia": "Tìm phủ định của mệnh đề \"Bạn có thể truy cập trang web chỉ khi bạn trả phí đăng ký.\""
+  },
+  {
+   "chu": "whenever",
+   "doc": "/wenˈevər/",
+   "nghia": "bất cứ khi nào, hễ (q whenever p nghĩa là p → q)",
+   "nhom": "Mệnh đề và phép toán logic",
+   "viDu": "MASTER THEOREM: Let f be an increasing function satisfying f(n) = af(n/b) + cn^d whenever n=b^k (k positive integer, a ≥1, b integer >1, c,d real with c>0, d≥0).",
+   "viDuNghia": "ĐỊNH LÝ THỢ (MASTER THEOREM): Cho f là hàm tăng thoả f(n) = af(n/b) + cn^d bất cứ khi nào n=b^k (k nguyên dương, a ≥1, b nguyên >1, c,d thực với c>0, d≥0)."
+  },
+  {
+   "chu": "converse",
+   "doc": "/ˈkɑːnvɜːrs/",
+   "nghia": "mệnh đề đảo (của p → q là q → p)",
+   "nhom": "Mệnh đề và phép toán logic",
+   "viDu": "The converse of p → q is q → p.",
+   "viDuNghia": "Mệnh đề đảo của p → q là q → p."
+  },
+  {
+   "chu": "contrapositive",
+   "doc": "/ˌkɑːntrəˈpɑːzətɪv/",
+   "nghia": "mệnh đề phản đảo (của p → q là ¬q → ¬p, luôn tương đương với mệnh đề gốc)",
+   "nhom": "Mệnh đề và phép toán logic",
+   "viDu": "The contrapositive of p → q is ¬q → ¬p.",
+   "viDuNghia": "Mệnh đề phản đảo của p → q là ¬q → ¬p."
+  },
+  {
+   "chu": "tautology",
+   "doc": "/tɔːˈtɑːlədʒi/",
+   "nghia": "hằng đúng (mệnh đề luôn đúng với mọi giá trị của các biến)",
+   "nhom": "Mệnh đề và phép toán logic",
+   "viDu": "Which propositions are tautologies? (i) (p ∧q) →(q →p) (ii) (p ∨q) →(p ∧q)",
+   "viDuNghia": "Mệnh đề nào là hằng đúng (tautology)? (i) (p ∧q) →(q →p) (ii) (p ∨q) →(p ∧q)"
+  },
+  {
+   "chu": "contradiction",
+   "doc": "/ˌkɑːntrəˈdɪkʃn/",
+   "nghia": "mâu thuẫn, hằng sai (mệnh đề luôn sai); proof by contradiction = chứng minh phản chứng",
+   "nhom": "Mệnh đề và phép toán logic",
+   "viDu": "Which of the following is a contradiction? (i) (p∨¬q)∧(¬p∧q) (ii) (p∨q)∧(p∨¬q)",
+   "viDuNghia": "Mệnh đề nào sau đây là mâu thuẫn (hằng sai)? (i) (p∨¬q)∧(¬p∧q) (ii) (p∨q)∧(p∨¬q)"
+  },
+  {
+   "chu": "logically equivalent",
+   "doc": "/ˈlɑːdʒɪkli ɪˈkwɪvələnt/",
+   "nghia": "tương đương logic (hai mệnh đề có cùng bảng chân trị, ký hiệu ≡)",
+   "nhom": "Mệnh đề và phép toán logic",
+   "viDu": "Find a proposition that is logically equivalent to (p →q) ∨(¬p →q)",
+   "viDuNghia": "Tìm mệnh đề tương đương logic với (p →q) ∨(¬p →q)"
+  },
+  {
+   "chu": "connective",
+   "doc": "/kəˈnektɪv/",
+   "nghia": "phép nối logic (and, or, not, if...then)",
+   "nhom": "Mệnh đề và phép toán logic",
+   "viDu": "Express the sentence \"All students in your class have a cat, a dog, or a ferret\" in terms of C(x),D(x),F(x), quantifiers, and logical connectives.",
+   "viDuNghia": "Diễn đạt câu \"Mọi sinh viên trong lớp bạn đều có mèo, chó, hoặc chồn sương\" theo C(x),D(x),F(x), lượng từ, và liên từ logic."
+  },
+  {
+   "chu": "De Morgan's laws",
+   "nghia": "luật De Morgan: ¬(p ∧ q) ≡ ¬p ∨ ¬q và ¬(p ∨ q) ≡ ¬p ∧ ¬q (phủ định thì đổi and thành or và ngược lại)",
+   "nhom": "Mệnh đề và phép toán logic",
+   "viDu": "By De Morgan's laws, the negation of p ∧ q is ¬p ∨ ¬q.",
+   "viDuNghia": "Theo luật De Morgan, phủ định của p ∧ q là ¬p ∨ ¬q."
+  },
+  {
+   "chu": "bit operation",
+   "doc": "/bɪt ˌɑːpəˈreɪʃn/",
+   "nghia": "phép toán trên bit (AND, OR, XOR từng bit của hai xâu bit)",
+   "nhom": "Mệnh đề và phép toán logic",
+   "viDu": "What is the largest n for which one can solve within one second a problem using an algorithm that requires f(n)=n² bit operations, where each bit operation is carried out in 10^-9 seconds?",
+   "viDuNghia": "Giá trị n lớn nhất là bao nhiêu để trong một giây giải được bài toán bằng thuật toán cần f(n)=n² phép toán bit, biết mỗi phép toán bit thực hiện trong 10^-9 giây?"
+  },
+  {
+   "chu": "truth table",
+   "doc": "/truːθ ˈteɪbl/",
+   "nghia": "bảng chân trị – liệt kê giá trị đúng/sai (T/F) của mệnh đề với mọi tổ hợp biến; n biến ⇒ 2^n dòng · (mạch số, CEA201) bảng đầu ra của cổng logic",
+   "nhom": "Mệnh đề và phép toán logic",
+   "viDu": "Find a proposition with the given truth table.",
+   "viDuNghia": "Tìm một mệnh đề có bảng chân trị cho trước."
+  },
+  {
+   "chu": "propositional function",
+   "doc": "/ˌprɑːpəˈzɪʃənl ˈfʌŋkʃn/",
+   "nghia": "hàm mệnh đề (vị từ P(x): trở thành mệnh đề khi x nhận giá trị cụ thể)",
+   "nhom": "Vị từ và lượng từ",
+   "viDu": "Let x, y be integer numbers. Choose the propositional function P(x,y) such that ∀x ∃y P(x,y) = T and ∃y ∀x P(x,y) = T.",
+   "viDuNghia": "Cho x, y là các số nguyên. Chọn hàm mệnh đề P(x,y) sao cho ∀x ∃y P(x,y) = T và ∃y ∀x P(x,y) = T."
+  },
+  {
+   "chu": "predicate",
+   "doc": "/ˈpredɪkət/",
+   "nghia": "vị từ (tính chất của biến, ví dụ \"x is a student\")",
+   "nhom": "Vị từ và lượng từ",
+   "viDu": "Let F(A) be the predicate \"A is a finite set\" and S(A,B) be the predicate \"A is contained in B\".",
+   "viDuNghia": "Cho F(A) là vị từ \"A là tập hữu hạn\" và S(A,B) là vị từ \"A chứa trong B\"."
+  },
+  {
+   "chu": "quantifier",
+   "doc": "/ˈkwɑːntɪfaɪər/",
+   "nghia": "lượng từ (∀ - với mọi, ∃ - tồn tại)",
+   "nhom": "Vị từ và lượng từ",
+   "viDu": "Which of the following words indicates the universal quantifier (∀)?",
+   "viDuNghia": "Từ nào sau đây chỉ lượng từ phổ dụng (∀)?"
+  },
+  {
+   "chu": "universal quantifier",
+   "doc": "/ˌjuːnɪˈvɜːrsl ˈkwɑːntɪfaɪər/",
+   "nghia": "lượng từ phổ dụng ∀ (for all, for every)",
+   "nhom": "Vị từ và lượng từ",
+   "viDu": "Which of the following words indicates the universal quantifier (∀)?",
+   "viDuNghia": "Từ nào sau đây chỉ lượng từ phổ dụng (∀)?"
+  },
+  {
+   "chu": "existential quantifier",
+   "doc": "/ˌeɡzɪˈstenʃl ˈkwɑːntɪfaɪər/",
+   "nghia": "lượng từ tồn tại ∃ (there exists, for some)",
+   "nhom": "Vị từ và lượng từ",
+   "viDu": "The existential quantifier ∃x P(x) means that P(x) is true for at least one x.",
+   "viDuNghia": "Lượng từ tồn tại ∃x P(x) nghĩa là P(x) đúng với ít nhất một x."
+  },
+  {
+   "chu": "universe of discourse",
+   "nghia": "tập vũ trụ, miền xác định của biến trong vị từ (còn gọi domain)",
+   "nhom": "Vị từ và lượng từ",
+   "viDu": "Suppose the universe of discourse consists of all sets.",
+   "viDuNghia": "Giả sử miền xác định gồm tất cả các tập hợp."
+  },
+  {
+   "chu": "for some",
+   "doc": "/fər sʌm/",
+   "nghia": "với một (vài) ... nào đó, tồn tại (tương ứng ∃)",
+   "nhom": "Vị từ và lượng từ",
+   "viDu": "In the Principle of Mathematical Induction, assuming that P(k) is true for some k, in order to prove P(k+1) is true we should ______.",
+   "viDuNghia": "Trong Nguyên lý Quy nạp Toán học, giả sử P(k) đúng với một k nào đó, để chứng minh P(k+1) đúng ta nên ______."
+  },
+  {
+   "chu": "everyone",
+   "doc": "/ˈevriwʌn/",
+   "nghia": "mọi người (dịch bằng ∀); someone = có người nào đó (∃); no one = không ai",
+   "nhom": "Vị từ và lượng từ",
+   "viDu": "\"Everyone in this discrete mathematics class has taken a course in computer science\" and \"Marla is a student in this class\". Which conclusion can be drawn?",
+   "viDuNghia": "\"Mọi người trong lớp toán rời rạc này đều đã học một môn khoa học máy tính\" và \"Marla là sinh viên lớp này\". Kết luận nào có thể rút ra?"
+  },
+  {
+   "chu": "domain",
+   "doc": "/doʊˈmeɪn/",
+   "nghia": "(toán) miền: tập xác định của hàm số; tập giá trị mà biến của lượng từ chạy trên đó (domain of discourse) · (phần mềm) lĩnh vực nghiệp vụ hệ thống phục vụ",
+   "nhom": "Vị từ và lượng từ",
+   "viDu": "Assume that the domain of x consists of all integer numbers. Which proposition is true?",
+   "viDuNghia": "Giả sử miền của x là tập tất cả các số nguyên. Mệnh đề nào đúng?"
+  },
+  {
+   "chu": "valid argument",
+   "doc": "/ˈvælɪd ˈɑːrɡjumənt/",
+   "nghia": "lập luận hợp lệ (hễ mọi tiền đề đúng thì kết luận phải đúng)",
+   "nhom": "Suy luận và chứng minh",
+   "viDu": "An argument is valid if and only if ___________.",
+   "viDuNghia": "Một lập luận (argument) là hợp lệ (valid) khi và chỉ khi ___________."
+  },
+  {
+   "chu": "draw a conclusion",
+   "nghia": "rút ra kết luận (which conclusion can be drawn = rút ra được kết luận nào)",
+   "nhom": "Suy luận và chứng minh",
+   "viDu": "Given the premises (1) If it is not raining then the soccer game will be held (2) If the soccer game is held then Nam will buy a ticket (3) Nam did not buy a ticket. Which conclusion can be drawn?",
+   "viDuNghia": "Cho các tiền đề (1) Nếu trời không mưa thì trận bóng đá sẽ diễn ra (2) Nếu trận bóng diễn ra thì Nam sẽ mua vé (3) Nam đã không mua vé. Rút ra được kết luận nào?"
+  },
+  {
+   "chu": "rule of inference",
+   "nghia": "luật suy diễn (mẫu lập luận hợp lệ)",
+   "nhom": "Suy luận và chứng minh",
+   "viDu": "What rule of inference is used in this argument? \"David is an awesome friend. David is also a good teacher. Therefore, David is an awesome friend and a good teacher.\"",
+   "viDuNghia": "Quy tắc suy luận nào được dùng trong lập luận này? \"David là một người bạn tuyệt vời. David cũng là một giáo viên tốt. Vậy David là một người bạn tuyệt vời và là một giáo viên tốt.\""
+  },
+  {
+   "chu": "modus ponens",
+   "doc": "/ˈmoʊdəs ˈpoʊnenz/",
+   "nghia": "luật tách, khẳng định: từ p và p → q suy ra q",
+   "nhom": "Suy luận và chứng minh",
+   "viDu": "Recall rules of inference: Modus ponens p∧(p→q)→q; Modus tollens ¬q∧(p→q)→¬p; Hypothetical syllogism (p→q)∧(q→r)→(p→r); Disjunctive syllogism [(p∨q)∧¬p]→q.",
+   "viDuNghia": "Nhắc lại các quy tắc suy luận: Modus ponens p∧(p→q)→q; Modus tollens ¬q∧(p→q)→¬p; Tam đoạn luận giả định (p→q)∧(q→r)→(p→r); Tam đoạn luận tuyển [(p∨q)∧¬p]→q."
+  },
+  {
+   "chu": "modus tollens",
+   "doc": "/ˈmoʊdəs ˈtɑːlenz/",
+   "nghia": "luật phủ định: từ ¬q và p → q suy ra ¬p",
+   "nhom": "Suy luận và chứng minh",
+   "viDu": "Recall rules of inference: Modus ponens p∧(p→q)→q; Modus tollens ¬q∧(p→q)→¬p; Hypothetical syllogism (p→q)∧(q→r)→(p→r); Disjunctive syllogism [(p∨q)∧¬p]→q.",
+   "viDuNghia": "Nhắc lại các quy tắc suy luận: Modus ponens p∧(p→q)→q; Modus tollens ¬q∧(p→q)→¬p; Tam đoạn luận giả định (p→q)∧(q→r)→(p→r); Tam đoạn luận tuyển [(p∨q)∧¬p]→q."
+  },
+  {
+   "chu": "hypothetical syllogism",
+   "doc": "/ˌhaɪpəˈθetɪkl ˈsɪlədʒɪzəm/",
+   "nghia": "tam đoạn luận giả định (bắc cầu): từ p → q và q → r suy ra p → r",
+   "nhom": "Suy luận và chứng minh",
+   "viDu": "Recall rules of inference: Modus ponens p∧(p→q)→q; Modus tollens ¬q∧(p→q)→¬p; Hypothetical syllogism (p→q)∧(q→r)→(p→r); Disjunctive syllogism [(p∨q)∧¬p]→q.",
+   "viDuNghia": "Nhắc lại các quy tắc suy luận: Modus ponens p∧(p→q)→q; Modus tollens ¬q∧(p→q)→¬p; Tam đoạn luận giả định (p→q)∧(q→r)→(p→r); Tam đoạn luận tuyển [(p∨q)∧¬p]→q."
+  },
+  {
+   "chu": "disjunctive syllogism",
+   "doc": "/dɪsˈdʒʌŋktɪv ˈsɪlədʒɪzəm/",
+   "nghia": "tam đoạn luận tuyển: từ p ∨ q và ¬p suy ra q",
+   "nhom": "Suy luận và chứng minh",
+   "viDu": "Recall rules of inference: Modus ponens p∧(p→q)→q; Modus tollens ¬q∧(p→q)→¬p; Hypothetical syllogism (p→q)∧(q→r)→(p→r); Disjunctive syllogism [(p∨q)∧¬p]→q.",
+   "viDuNghia": "Nhắc lại các quy tắc suy luận: Modus ponens p∧(p→q)→q; Modus tollens ¬q∧(p→q)→¬p; Tam đoạn luận giả định (p→q)∧(q→r)→(p→r); Tam đoạn luận tuyển [(p∨q)∧¬p]→q."
+  },
+  {
+   "chu": "simplification",
+   "doc": "/ˌsɪmplɪfɪˈkeɪʃn/",
+   "nghia": "luật rút gọn: từ p ∧ q suy ra p",
+   "nhom": "Suy luận và chứng minh",
+   "viDu": "By simplification, from p ∧ q we can conclude p.",
+   "viDuNghia": "Theo luật rút gọn, từ p ∧ q ta kết luận được p."
+  },
+  {
+   "chu": "addition",
+   "doc": "/əˈdɪʃn/",
+   "nghia": "phép cộng; luật cộng trong suy diễn: từ p suy ra p ∨ q",
+   "nhom": "Suy luận và chứng minh",
+   "viDu": "The addition of a=(2112)₃ and b=(12021)₃ is...",
+   "viDuNghia": "Phép cộng a=(2112)₃ và b=(12021)₃ là..."
+  },
+  {
+   "chu": "proof",
+   "doc": "/pruːf/",
+   "nghia": "phép chứng minh, lời chứng minh",
+   "nhom": "Suy luận và chứng minh",
+   "viDu": "Find the correct order of a proof by induction of \"Prove that for all positive integers n>2 we have 2^n>n+3\".",
+   "viDuNghia": "Tìm thứ tự đúng của phép chứng minh quy nạp cho \"Chứng minh rằng với mọi số nguyên dương n>2 ta có 2^n>n+3\"."
+  },
+  {
+   "chu": "prove",
+   "doc": "/pruːv/",
+   "nghia": "chứng minh",
+   "nhom": "Suy luận và chứng minh",
+   "viDu": "Find the correct order of a proof by induction of \"Prove that for all positive integers n>2 we have 2^n>n+3\": 1.",
+   "viDuNghia": "Tìm thứ tự đúng của chứng minh quy nạp cho \"Chứng minh với mọi số nguyên dương n>2 ta có 2^n>n+3\": 1."
+  },
+  {
+   "chu": "counterexample",
+   "doc": "/ˈkaʊntərɪɡzæmpl/",
+   "nghia": "phản ví dụ (một trường hợp cho thấy mệnh đề \"với mọi\" là sai)",
+   "nhom": "Suy luận và chứng minh",
+   "viDu": "To show that ∀x P(x) is false, we only need one counterexample.",
+   "viDuNghia": "Để chỉ ra ∀x P(x) sai, ta chỉ cần một phản ví dụ."
+  },
+  {
+   "chu": "empty set",
+   "doc": "/ˈempti set/",
+   "nghia": "tập rỗng (∅, không có phần tử nào)",
+   "nhom": "Tập hợp",
+   "viDu": "The empty set is a subset of every set.",
+   "viDuNghia": "Tập rỗng là tập con của mọi tập hợp."
+  },
+  {
+   "chu": "nonempty",
+   "doc": "/ˌnɑːnˈempti/",
+   "nghia": "khác rỗng, không rỗng",
+   "nhom": "Tập hợp",
+   "viDu": "Let A,B,C be nonempty sets such that A×B⊆B×C. Choose the correct statement. (i) A⊆B⊆C (ii) B⊆C⊆A (iii) C⊆B⊆A",
+   "viDuNghia": "Cho A,B,C là các tập khác rỗng sao cho A×B⊆B×C. Chọn phát biểu đúng. (i) A⊆B⊆C (ii) B⊆C⊆A (iii) C⊆B⊆A"
+  },
+  {
+   "chu": "cardinality of a set",
+   "nghia": "lực lượng của tập hợp, số phần tử của tập hợp, ký hiệu |A|",
+   "nhom": "Tập hợp",
+   "viDu": "Which set has the maximal cardinality? (a) P(P(P({a}))) (b) P({a}) ×P({b}) (c) P({a}×{b}) (d) {a, b, c} ×{a, b}",
+   "viDuNghia": "Tập nào có lực lượng (số phần tử) lớn nhất? (a) P(P(P({a}))) (b) P({a}) ×P({b}) (c) P({a}×{b}) (d) {a, b, c} ×{a, b}"
+  },
+  {
+   "chu": "power set",
+   "doc": "/ˈpaʊər set/",
+   "nghia": "tập luỹ thừa P(A): tập tất cả các tập con của A (có 2^n phần tử nếu |A| = n)",
+   "nhom": "Tập hợp",
+   "viDu": "Let A = {0, 2, 4, 6, 8, 10}. Find the cardinality of the power set P(A).",
+   "viDuNghia": "Cho A = {0, 2, 4, 6, 8, 10}. Tìm lực lượng (số phần tử) của tập luỹ thừa P(A)."
+  },
+  {
+   "chu": "proper subset",
+   "doc": "/ˈprɑːpər ˈsʌbset/",
+   "nghia": "tập con thực sự (A ⊂ B và A khác B); subset = tập con (⊆)",
+   "nhom": "Tập hợp",
+   "viDu": "{1, 2} is a proper subset of {1, 2, 3}.",
+   "viDuNghia": "{1, 2} là tập con thực sự của {1, 2, 3}."
+  },
+  {
+   "chu": "union of sets",
+   "nghia": "hợp của các tập hợp (A ∪ B: phần tử thuộc A hoặc thuộc B)",
+   "nhom": "Tập hợp",
+   "viDu": "Let U={a,b,c,d,e,f,g,h,i,j}. Given the subsets A={a,c,d,e,i}, B={a,f,g,h,j}. The bit string representing the union of A and B is ___",
+   "viDuNghia": "Cho U={a,b,c,d,e,f,g,h,i,j}. Cho các tập con A={a,c,d,e,i}, B={a,f,g,h,j}. Chuỗi bit biểu diễn hợp của A và B là ___"
+  },
+  {
+   "chu": "complement",
+   "doc": "/ˈkɑːmplɪmənt/",
+   "nghia": "phần bù (của tập A trong tập vũ trụ U: các phần tử không thuộc A)",
+   "nhom": "Tập hợp",
+   "viDu": "What is the bit string representation for the complement of the set {1,2,4,5,7} in the universal set {1,2,3,4,5,6,7,8,9,10}?",
+   "viDuNghia": "Chuỗi bit biểu diễn phần bù của tập {1,2,4,5,7} trong tập vũ trụ {1,2,3,4,5,6,7,8,9,10} là gì?"
+  },
+  {
+   "chu": "symmetric difference",
+   "doc": "/sɪˈmetrɪk ˈdɪfrəns/",
+   "nghia": "hiệu đối xứng (A ⊕ B: phần tử thuộc đúng một trong hai tập)",
+   "nhom": "Tập hợp",
+   "viDu": "The symmetric difference of two sets A and B, denoted by A⊕B, is the set of all elements that either belong to A or to B, but not both.",
+   "viDuNghia": "Hiệu đối xứng của hai tập A và B, ký hiệu A⊕B, là tập tất cả các phần tử thuộc A hoặc thuộc B nhưng không thuộc cả hai."
+  },
+  {
+   "chu": "disjoint",
+   "doc": "/dɪsˈdʒɔɪnt/",
+   "nghia": "rời nhau (hai tập không có phần tử chung)",
+   "nhom": "Tập hợp",
+   "viDu": "Let the universal set U = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10}, and P = {1, 3, 5, 8}. Find a set Q so that Q is not the complement of P but Q and P are disjoint.",
+   "viDuNghia": "Cho tập vũ trụ U = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10}, và P = {1, 3, 5, 8}. Tìm tập Q sao cho Q không phải là phần bù của P nhưng Q và P rời nhau."
+  },
+  {
+   "chu": "ordered pair",
+   "doc": "/ˈɔːrdərd per/",
+   "nghia": "cặp có thứ tự (a, b) — (a, b) khác (b, a)",
+   "nhom": "Tập hợp",
+   "viDu": "Let S be the subset of ordered pairs of integers defined recursively: Basis step (0,0)∈S. Recursive step: if (a,b)∈S then (a+2,b+3)∈S and (a+3,b+2)∈S. Which element is in S?",
+   "viDuNghia": "Cho S là tập con các cặp số nguyên được định nghĩa đệ quy: Bước cơ sở (0,0)∈S. Bước đệ quy: nếu (a,b)∈S thì (a+2,b+3)∈S và (a+3,b+2)∈S. Phần tử nào thuộc S?"
+  },
+  {
+   "chu": "universal set",
+   "doc": "/ˌjuːnɪˈvɜːrsl set/",
+   "nghia": "tập vũ trụ U (chứa mọi phần tử đang xét)",
+   "nhom": "Tập hợp",
+   "viDu": "Given the universal set U = {1,2,3,4,5,6,7,8,9,10}. Represent the subset {1,2,5,7,8,10} by a bit string whose i-th bit is 1 if i belongs to that subset, and is 0 otherwise. What is that bit string?",
+   "viDuNghia": "Cho tập vũ trụ U = {1,2,3,4,5,6,7,8,9,10}. Biểu diễn tập con {1,2,5,7,8,10} bằng chuỗi bit mà bit thứ i là 1 nếu i thuộc tập con đó, và là 0 nếu không. Chuỗi bit đó là gì?"
+  },
+  {
+   "chu": "Venn diagram",
+   "doc": "/ven ˈdaɪəɡræm/",
+   "nghia": "sơ đồ Venn (biểu diễn tập hợp bằng các hình tròn)",
+   "nhom": "Tập hợp",
+   "viDu": "The Venn diagram below describes which set operation? (i) A∪(A∩B) (ii) (A∩B)∪(A∩B̄) (iii) U∖B (iv) U∖(B∖A)",
+   "viDuNghia": "Sơ đồ Venn dưới đây mô tả phép toán tập hợp nào? (i) A∪(A∩B) (ii) (A∩B)∪(A∩B̄) (iii) U∖B (iv) U∖(B∖A)"
+  },
+  {
+   "chu": "bit string",
+   "doc": "/bɪt strɪŋ/",
+   "nghia": "xâu bit, chuỗi bit (dãy các số 0 và 1); bit string of length n = xâu bit độ dài n",
+   "nhom": "Tập hợp",
+   "viDu": "Given the message 'weekend'. Find the length of the bit string when encoding this message by a Huffman coding.",
+   "viDuNghia": "Cho thông điệp 'weekend'. Tìm độ dài chuỗi bit khi mã hóa thông điệp này bằng mã Huffman."
+  },
+  {
+   "chu": "subset",
+   "doc": "/ˈsʌbset/",
+   "nghia": "tập con – A là tập con của B (A ⊆ B) khi mọi phần tử của A đều thuộc B",
+   "nhom": "Tập hợp",
+   "viDu": "Let U = {1, 2, ..., 10}. Find the bit string representation of the subset {2, 5, 7, 9}.",
+   "viDuNghia": "Cho U = {1, 2, ..., 10}. Tìm chuỗi bit biểu diễn tập con {2, 5, 7, 9}."
+  },
+  {
+   "chu": "set",
+   "doc": "/set/",
+   "nghia": "tập hợp – nhóm các phần tử phân biệt, vd A = {1, 2, 3}. (SQL: SET trong UPDATE; đặt giá trị, set x = 0)",
+   "nhom": "Tập hợp",
+   "viDu": "How many one-to-one functions are there from a set with 5 elements to another set with 10 elements?",
+   "viDuNghia": "Có bao nhiêu hàm đơn ánh từ một tập 5 phần tử đến một tập 10 phần tử?"
+  },
+  {
+   "chu": "one-to-one function",
+   "doc": "/ˌwʌn tə ˈwʌn ˈfʌŋkʃn/",
+   "nghia": "hàm đơn ánh (hai đầu vào khác nhau cho hai đầu ra khác nhau); còn gọi injective, injection",
+   "nhom": "Hàm",
+   "viDu": "Consider the function f:{1,2,3,4}→{1,2,3,4,5,6,7,8}. How many one-to-one functions that are increasing are there?",
+   "viDuNghia": "Xét hàm f:{1,2,3,4}→{1,2,3,4,5,6,7,8}. Có bao nhiêu hàm đơn ánh (one-to-one) mà tăng dần (increasing)?"
+  },
+  {
+   "chu": "surjective",
+   "doc": "/sɜːrˈdʒektɪv/",
+   "nghia": "toàn ánh (mọi phần tử của tập đích đều có tạo ảnh); giống onto",
+   "nhom": "Hàm",
+   "viDu": "Define f,g,h: Z×Z →Z by: f(m,n)=m²-n², g(m,n)=|m|-|n|, h(m,n)=max {m,n}. Which of the above functions are surjective?",
+   "viDuNghia": "Định nghĩa f,g,h: Z×Z →Z bởi: f(m,n)=m²-n², g(m,n)=|m|-|n|, h(m,n)=max {m,n}. Hàm nào trong các hàm trên là toàn ánh?"
+  },
+  {
+   "chu": "bijection",
+   "doc": "/baɪˈdʒekʃn/",
+   "nghia": "song ánh (vừa đơn ánh vừa toàn ánh); còn gọi one-to-one correspondence",
+   "nhom": "Hàm",
+   "viDu": "Given the function f: N →N defined by f(x) = x² + 4. Determine if this function is one-to-one, onto or a bijection.",
+   "viDuNghia": "Cho hàm f: N →N xác định bởi f(x) = x² + 4. Xác định hàm này là đơn ánh, toàn ánh hay song ánh."
+  },
+  {
+   "chu": "bijective",
+   "doc": "/baɪˈdʒektɪv/",
+   "nghia": "(có tính) song ánh",
+   "nhom": "Hàm",
+   "viDu": "How many bijective functions are there from a set of 6 elements to a set of 7 elements?",
+   "viDuNghia": "Có bao nhiêu hàm song ánh từ một tập 6 phần tử đến một tập 7 phần tử?"
+  },
+  {
+   "chu": "composition",
+   "doc": "/ˌkɑːmpəˈzɪʃn/",
+   "nghia": "phép hợp thành (f∘g)(x) = f(g(x))",
+   "nhom": "Hàm",
+   "viDu": "Let f,g:N→N be two functions defined respectively by f(n)=2n and g(n)=3n-1. The value of the composition g∘f at n=2 is ___",
+   "viDuNghia": "Cho f,g:N→N là hai hàm được định nghĩa lần lượt bởi f(n)=2n và g(n)=3n-1. Giá trị của hàm hợp g∘f tại n=2 là ___"
+  },
+  {
+   "chu": "floor function",
+   "doc": "/flɔːr ˈfʌŋkʃn/",
+   "nghia": "hàm phần nguyên dưới ⌊x⌋ (số nguyên lớn nhất không vượt quá x)",
+   "nhom": "Hàm",
+   "viDu": "Let f, g be floor and ceiling functions respectively. Compute (f∘g)(4.85) + (g∘f)(-2.45).",
+   "viDuNghia": "Cho f, g lần lượt là hàm sàn và hàm trần. Tính (f∘g)(4.85) + (g∘f)(-2.45)."
+  },
+  {
+   "chu": "ceiling function",
+   "doc": "/ˈsiːlɪŋ ˈfʌŋkʃn/",
+   "nghia": "hàm phần nguyên trên ⌈x⌉ (số nguyên nhỏ nhất không nhỏ hơn x)",
+   "nhom": "Hàm",
+   "viDu": "Let f, g be floor and ceiling functions respectively. Compute (f∘g)(4.85) + (g∘f)(-2.45).",
+   "viDuNghia": "Cho f, g lần lượt là hàm sàn và hàm trần. Tính (f∘g)(4.85) + (g∘f)(-2.45)."
+  },
+  {
+   "chu": "codomain",
+   "doc": "/ˈkoʊdoʊmeɪn/",
+   "nghia": "tập đích (tập B trong f: A → B); range là tập các giá trị thực sự nhận được",
+   "nhom": "Hàm",
+   "viDu": "In f: A → B, the set A is the domain and B is the codomain.",
+   "viDuNghia": "Trong f: A → B, tập A là tập xác định còn B là tập đích."
+  },
+  {
+   "chu": "onto",
+   "doc": "/ˈɑːntuː/",
+   "nghia": "(hàm) toàn ánh — onto function: mọi phần tử của tập đích đều có tạo ảnh (= surjective) · (đại số tuyến tính) lên: projection onto a vector = chiếu lên vectơ",
+   "nhom": "Hàm",
+   "viDu": "Consider the functions from Z×Z → Z given by f(m,n) = m+2n, g(m,n) = 2m+2n+1, h(m,n) = m-n. Which functions are onto?",
+   "viDuNghia": "Xét các hàm từ Z×Z → Z cho bởi f(m,n) = m+2n, g(m,n) = 2m+2n+1, h(m,n) = m-n. Hàm nào là toàn ánh (onto)?"
+  }
+ ]
+}

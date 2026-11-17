@@ -1,0 +1,688 @@
+{
+ "ma": "nwc203c-1",
+ "nn": "en",
+ "ten": "NWC203c/NWC204 · 1. Mô hình mạng, ứng dụng, truyền dẫn",
+ "moTa": "Môn Mạng máy tính (NWC203c, dùng chung cho NWC204), phần 1: loại mạng và thiết bị, mô hình phân lớp OSI – TCP/IP, giao thức tầng ứng dụng, chuyển mạch, độ trễ và môi trường truyền. Từ lấy từ đề FE thật; câu ví dụ là câu hỏi thật trong đề.",
+ "bieuTuong": "network",
+ "thuTu": -974,
+ "tu": [
+  {
+   "chu": "computer network",
+   "doc": "/kəmˈpjuːtər ˈnetwɜːrk/",
+   "nghia": "mạng máy tính – các máy nối với nhau để trao đổi dữ liệu và dùng chung tài nguyên",
+   "nhom": "Loại mạng & thiết bị",
+   "viDu": "An endpoint of an inter-process communication flow across a computer network is called",
+   "viDuNghia": "Điểm đầu cuối của một luồng truyền thông liên tiến trình qua mạng máy tính được gọi là"
+  },
+  {
+   "chu": "local area network",
+   "nghia": "mạng cục bộ (LAN) – mạng trong phạm vi nhỏ: phòng, toà nhà, trường học",
+   "nhom": "Loại mạng & thiết bị",
+   "viDu": "A local area network covers a small area such as a room, a building or a campus.",
+   "viDuNghia": "Mạng cục bộ phủ một vùng nhỏ như một phòng, một toà nhà hay một khuôn viên trường."
+  },
+  {
+   "chu": "wide area network",
+   "nghia": "mạng diện rộng (WAN) – nối các nơi cách xa nhau, thường thuê đường truyền của nhà mạng",
+   "nhom": "Loại mạng & thiết bị",
+   "viDu": "Which of these is a Layer 2 protocol often used on WAN serial links?",
+   "viDuNghia": "Giao thức tầng 2 nào thường dùng trên đường WAN nối tiếp?"
+  },
+  {
+   "chu": "metropolitan area network",
+   "nghia": "mạng đô thị (MAN) – mạng phủ một thành phố",
+   "nhom": "Loại mạng & thiết bị",
+   "viDu": "_____ refers to a family of IEEE standards dealing with local area network and metropolitan area network.",
+   "viDuNghia": "_____ là họ các chuẩn IEEE liên quan đến mạng cục bộ (LAN) và mạng đô thị (MAN)."
+  },
+  {
+   "chu": "storage area network",
+   "nghia": "mạng lưu trữ (SAN) – mạng riêng nối máy chủ với các thiết bị lưu trữ",
+   "nhom": "Loại mạng & thiết bị",
+   "viDu": "A storage area network connects servers to shared storage devices.",
+   "viDuNghia": "Mạng lưu trữ (SAN) nối các máy chủ với thiết bị lưu trữ dùng chung."
+  },
+  {
+   "chu": "Internet service provider",
+   "nghia": "nhà cung cấp dịch vụ Internet (ISP)",
+   "nhom": "Loại mạng & thiết bị",
+   "viDu": "What is ISP the abbreviation for?",
+   "viDuNghia": "ISP là viết tắt của cụm từ nào?"
+  },
+  {
+   "chu": "intranet",
+   "doc": "/ˈɪntrənet/",
+   "nghia": "mạng nội bộ – mạng riêng của một tổ chức, dùng công nghệ Internet",
+   "nhom": "Loại mạng & thiết bị",
+   "viDu": "Intranet connecting selected customers, suppliers and offices in addition to the internal personnel is called",
+   "viDuNghia": "Mạng nội bộ (intranet) mở rộng cho một số khách hàng, nhà cung cấp và văn phòng ngoài nhân sự nội bộ được gọi là"
+  },
+  {
+   "chu": "extranet",
+   "doc": "/ˈekstrənet/",
+   "nghia": "mạng mở rộng – phần mạng nội bộ mở cho đối tác, khách hàng bên ngoài truy cập",
+   "nhom": "Loại mạng & thiết bị",
+   "viDu": "An extranet lets business partners access part of the company network.",
+   "viDuNghia": "Extranet cho phép đối tác truy cập một phần mạng của công ty."
+  },
+  {
+   "chu": "network edge",
+   "doc": "/ˈnetwɜːrk edʒ/",
+   "nghia": "biên mạng – nơi có các thiết bị đầu cuối (máy tính, điện thoại, máy chủ)",
+   "nhom": "Loại mạng & thiết bị",
+   "viDu": "Which of this is NOT a network edge device?",
+   "viDuNghia": "Thiết bị nào sau đây KHÔNG phải thiết bị biên mạng (network edge)?"
+  },
+  {
+   "chu": "end system",
+   "doc": "/end ˈsɪstəm/",
+   "nghia": "hệ thống đầu cuối – máy nằm ở rìa mạng, chạy ứng dụng (còn gọi là host)",
+   "nhom": "Loại mạng & thiết bị",
+   "viDu": "End systems, also called hosts, run applications at the edge of the network.",
+   "viDuNghia": "Hệ thống đầu cuối, còn gọi là host, chạy các ứng dụng ở rìa mạng."
+  },
+  {
+   "chu": "link",
+   "doc": "/lɪŋk/",
+   "nghia": "liên kết – đường truyền nối trực tiếp hai nút mạng",
+   "nhom": "Loại mạng & thiết bị",
+   "viDu": "Three or more devices share a link in a ________ connection.",
+   "viDuNghia": "Ba thiết bị trở lên dùng chung một đường truyền trong kết nối ________."
+  },
+  {
+   "chu": "topology",
+   "doc": "/təˈpɑːlədʒi/",
+   "nghia": "cấu trúc liên kết – cách các thiết bị trong mạng được nối với nhau",
+   "nhom": "Loại mạng & thiết bị",
+   "viDu": "In a __________ topology, if there are n devices in a network, each device has n-1 ports for cable.",
+   "viDuNghia": "Trong tô-pô __________, nếu mạng có n thiết bị thì mỗi thiết bị cần n-1 cổng để cắm cáp."
+  },
+  {
+   "chu": "bus topology",
+   "doc": "/bʌs təˈpɑːlədʒi/",
+   "nghia": "cấu trúc bus – mọi máy nối chung vào một đường trục",
+   "nhom": "Loại mạng & thiết bị",
+   "viDu": "____ unit(s) in a single bus structure communicate at a time.",
+   "viDuNghia": "Trong cấu trúc bus đơn, có ____ đơn vị truyền thông tại một thời điểm."
+  },
+  {
+   "chu": "star topology",
+   "doc": "/stɑːr təˈpɑːlədʒi/",
+   "nghia": "cấu trúc hình sao – mọi máy nối về một thiết bị trung tâm",
+   "nhom": "Loại mạng & thiết bị",
+   "viDu": "In a star network all computers and other communication devices are connected to a central hub.",
+   "viDuNghia": "Trong mạng hình sao (star), tất cả máy tính và thiết bị truyền thông đều nối vào một hub trung tâm."
+  },
+  {
+   "chu": "ring topology",
+   "doc": "/rɪŋ təˈpɑːlədʒi/",
+   "nghia": "cấu trúc vòng – các máy nối thành một vòng khép kín",
+   "nhom": "Loại mạng & thiết bị",
+   "viDu": "In a ring topology, the computer in possession of the ____ can transmit data.",
+   "viDuNghia": "Trong topo hình vòng (ring), máy tính đang giữ ____ mới được truyền dữ liệu."
+  },
+  {
+   "chu": "mesh topology",
+   "doc": "/meʃ təˈpɑːlədʒi/",
+   "nghia": "cấu trúc lưới – mỗi nút nối với nhiều nút khác; dự phòng cao nhưng tốn kém",
+   "nhom": "Loại mạng & thiết bị",
+   "viDu": "Which WAN topology gives the most redundancy, at the highest cost? — Full mesh",
+   "viDuNghia": "Tô-pô WAN nào có độ dự phòng cao nhất với chi phí cao nhất? — Mesh đầy đủ (full mesh)"
+  },
+  {
+   "chu": "router",
+   "doc": "/ˈraʊtər/",
+   "nghia": "bộ định tuyến – thiết bị tầng mạng, chuyển gói tin giữa các mạng khác nhau",
+   "nhom": "Loại mạng & thiết bị",
+   "viDu": "Before crypto key generate rsa can run on a Cisco router, which two items must already be set?",
+   "viDuNghia": "Trước khi chạy được lệnh crypto key generate rsa trên router Cisco, hai mục nào phải được đặt sẵn?"
+  },
+  {
+   "chu": "switch",
+   "doc": "/swɪtʃ/",
+   "nghia": "bộ chuyển mạch – thiết bị tầng liên kết, chuyển khung trong một mạng LAN theo địa chỉ MAC",
+   "nhom": "Loại mạng & thiết bị",
+   "viDu": "A switch receives a unicast frame whose destination MAC is not in its table. What does the switch do?",
+   "viDuNghia": "Switch nhận một khung unicast có MAC đích chưa có trong bảng. Switch làm gì?"
+  },
+  {
+   "chu": "hub",
+   "doc": "/hʌb/",
+   "nghia": "bộ tập trung – thiết bị tầng vật lý, nhận tín hiệu ở một cổng rồi phát ra mọi cổng",
+   "nhom": "Loại mạng & thiết bị",
+   "viDu": "At which OSI layers do a hub, a Layer 2 switch and a router mainly work, in that order?",
+   "viDuNghia": "Hub, switch tầng 2 và router chủ yếu làm việc ở các tầng OSI nào, theo đúng thứ tự đó?"
+  },
+  {
+   "chu": "bridge",
+   "doc": "/brɪdʒ/",
+   "nghia": "cầu nối – thiết bị tầng liên kết nối hai đoạn mạng LAN",
+   "nhom": "Loại mạng & thiết bị",
+   "viDu": "One can use repeaters, bridges and routers to interconnect two LANs. Which of the following approaches will make local traffic appear in both LANs?",
+   "viDuNghia": "Có thể dùng repeater, bridge và router để nối hai mạng LAN. Cách nào sau đây làm cho lưu lượng cục bộ xuất hiện ở CẢ HAI mạng LAN?"
+  },
+  {
+   "chu": "repeater",
+   "doc": "/rɪˈpiːtər/",
+   "nghia": "bộ lặp – khuếch đại, phát lại tín hiệu để truyền được xa hơn",
+   "nhom": "Loại mạng & thiết bị",
+   "viDu": "A repeater regenerates a weak signal so that it can travel farther.",
+   "viDuNghia": "Bộ lặp tái tạo tín hiệu đã yếu để nó đi được xa hơn."
+  },
+  {
+   "chu": "modem",
+   "doc": "/ˈmoʊdem/",
+   "nghia": "modem – đổi tín hiệu số sang tương tự và ngược lại để truyền qua đường điện thoại/cáp",
+   "nhom": "Loại mạng & thiết bị",
+   "viDu": "A modem converts digital data into analog signals for the telephone line.",
+   "viDuNghia": "Modem đổi dữ liệu số thành tín hiệu tương tự cho đường điện thoại."
+  },
+  {
+   "chu": "network interface card",
+   "nghia": "card mạng (NIC) – phần cứng nối máy tính vào mạng, mang địa chỉ MAC",
+   "nhom": "Loại mạng & thiết bị",
+   "viDu": "What is the full form of NIC?",
+   "viDuNghia": "NIC là viết tắt của cụm từ nào?"
+  },
+  {
+   "chu": "access point",
+   "doc": "/ˈækses pɔɪnt/",
+   "nghia": "điểm truy cập – thiết bị phát Wi-Fi, nối các máy không dây vào mạng có dây",
+   "nhom": "Loại mạng & thiết bị",
+   "viDu": "Wireless stations connect to the wired LAN through an access point.",
+   "viDuNghia": "Các trạm không dây nối vào mạng LAN có dây qua một điểm truy cập."
+  },
+  {
+   "chu": "peer-to-peer",
+   "doc": "/ˌpɪr tə ˈpɪr/",
+   "nghia": "ngang hàng (P2P) – các máy vừa là máy khách vừa là máy chủ, trao đổi trực tiếp với nhau",
+   "nhom": "Loại mạng & thiết bị",
+   "viDu": "What does P2P stand for?",
+   "viDuNghia": "P2P là viết tắt của gì?"
+  },
+  {
+   "chu": "telegraph network",
+   "doc": "/ˈtelɪɡræf ˈnetwɜːrk/",
+   "nghia": "mạng điện báo – mạng truyền tin kiểu chuyển mạch thông điệp thời đầu",
+   "nhom": "Loại mạng & thiết bị",
+   "viDu": "The telegraph network was an early example of message switching.",
+   "viDuNghia": "Mạng điện báo là một ví dụ sơ khai của chuyển mạch thông điệp."
+  },
+  {
+   "chu": "host",
+   "doc": "/hoʊst/",
+   "nghia": "máy trạm, host – máy đầu cuối gắn vào mạng, có địa chỉ IP",
+   "nhom": "Loại mạng & thiết bị",
+   "viDu": "Which layer establishes a temporary communication session between the source and destination host applications?",
+   "viDuNghia": "Tầng nào thiết lập phiên truyền thông tạm thời giữa các ứng dụng trên máy nguồn và máy đích?"
+  },
+  {
+   "chu": "layer",
+   "doc": "/ˈleɪər/",
+   "nghia": "tầng (lớp) – một mức chức năng trong mô hình mạng, phục vụ tầng trên và dùng tầng dưới",
+   "nhom": "Mô hình phân lớp",
+   "viDu": "Which of following statements is true about how the data link layer and transport layer differ?",
+   "viDuNghia": "Phát biểu nào sau đây đúng về sự khác nhau giữa tầng liên kết dữ liệu và tầng giao vận?"
+  },
+  {
+   "chu": "Open Systems Interconnection",
+   "nghia": "mô hình OSI – mô hình tham chiếu 7 tầng của ISO",
+   "nhom": "Mô hình phân lớp",
+   "viDu": "Which OSI layer is responsible for providing end-to-end communication with reliable service?",
+   "viDuNghia": "Tầng OSI nào chịu trách nhiệm cung cấp truyền thông đầu-cuối với dịch vụ tin cậy?"
+  },
+  {
+   "chu": "application layer",
+   "doc": "/ˌæplɪˈkeɪʃn ˈleɪər/",
+   "nghia": "tầng ứng dụng – tầng trên cùng, nơi các ứng dụng mạng (web, thư) hoạt động",
+   "nhom": "Mô hình phân lớp",
+   "viDu": "Which of the following is associated with the application layer (layer 7) of the OSI model?",
+   "viDuNghia": "Thành phần nào sau đây thuộc tầng ứng dụng (tầng 7) của mô hình OSI?"
+  },
+  {
+   "chu": "presentation layer",
+   "doc": "/ˌpreznˈteɪʃn ˈleɪər/",
+   "nghia": "tầng trình diễn – lo khuôn dạng dữ liệu, nén và mã hoá",
+   "nhom": "Mô hình phân lớp",
+   "viDu": "The functionalities of presentation layer includes",
+   "viDuNghia": "Các chức năng của tầng trình diễn (presentation layer) bao gồm:"
+  },
+  {
+   "chu": "session layer",
+   "doc": "/ˈseʃn ˈleɪər/",
+   "nghia": "tầng phiên – thiết lập, quản lý và kết thúc phiên làm việc giữa hai ứng dụng",
+   "nhom": "Mô hình phân lớp",
+   "viDu": "The session layer sets up, manages and closes sessions between applications.",
+   "viDuNghia": "Tầng phiên thiết lập, quản lý và đóng phiên làm việc giữa các ứng dụng."
+  },
+  {
+   "chu": "transport layer",
+   "doc": "/ˈtrænspɔːrt ˈleɪər/",
+   "nghia": "tầng giao vận – truyền dữ liệu giữa hai tiến trình đầu cuối (TCP, UDP)",
+   "nhom": "Mô hình phân lớp",
+   "viDu": "What layer in the TCP/IP stack is equivalent to the Transport layer of the OSI model?",
+   "viDuNghia": "Tầng nào trong chồng giao thức TCP/IP tương đương với tầng Giao vận (Transport) của mô hình OSI?"
+  },
+  {
+   "chu": "network layer",
+   "doc": "/ˈnetwɜːrk ˈleɪər/",
+   "nghia": "tầng mạng – định địa chỉ và định tuyến gói tin qua nhiều mạng (IP)",
+   "nhom": "Mô hình phân lớp",
+   "viDu": "Which one of the following is not a function of network layer?",
+   "viDuNghia": "Chức năng nào sau đây KHÔNG phải là chức năng của tầng mạng?"
+  },
+  {
+   "chu": "data link layer",
+   "nghia": "tầng liên kết dữ liệu – truyền khung giữa hai nút kề nhau, phát hiện lỗi, điều khiển truy cập đường truyền",
+   "nhom": "Mô hình phân lớp",
+   "viDu": "As a frame climbs the stack at the receiver, what does the data link layer do before passing data upward?",
+   "viDuNghia": "Khi khung đi lên chồng giao thức ở bên nhận, tầng liên kết dữ liệu làm gì trước khi đẩy dữ liệu lên trên?"
+  },
+  {
+   "chu": "physical layer",
+   "doc": "/ˈfɪzɪkl ˈleɪər/",
+   "nghia": "tầng vật lý – truyền từng bit qua môi trường truyền (cáp, sóng)",
+   "nhom": "Mô hình phân lớp",
+   "viDu": "The physical layer transmits raw bits over the communication channel.",
+   "viDuNghia": "Tầng vật lý truyền các bit thô qua kênh truyền."
+  },
+  {
+   "chu": "peer",
+   "doc": "/pɪr/",
+   "nghia": "thực thể ngang hàng – hai tiến trình cùng tầng ở hai máy nói chuyện với nhau qua giao thức",
+   "nhom": "Mô hình phân lớp",
+   "viDu": "A peer with which a mobile node is communicating is called ______",
+   "viDuNghia": "Nút đối tác mà một mobile node đang liên lạc cùng được gọi là ______"
+  },
+  {
+   "chu": "protocol data unit",
+   "nghia": "đơn vị dữ liệu giao thức (PDU) – khối dữ liệu trao đổi ở một tầng (segment, packet, frame)",
+   "nhom": "Mô hình phân lớp",
+   "viDu": "At which OSI layer is the protocol data unit called a frame?",
+   "viDuNghia": "Ở tầng OSI nào đơn vị dữ liệu giao thức (PDU) được gọi là frame (khung)?"
+  },
+  {
+   "chu": "trailer",
+   "doc": "/ˈtreɪlər/",
+   "nghia": "phần đuôi – thông tin gắn sau dữ liệu, thường là mã kiểm lỗi",
+   "nhom": "Mô hình phân lớp",
+   "viDu": "A receiving NIC recalculates the frame check sequence and it does not match the value in the trailer. What does Ethernet do?",
+   "viDuNghia": "Card mạng bên nhận tính lại frame check sequence và thấy không khớp với giá trị ở phần đuôi. Ethernet xử lý thế nào?"
+  },
+  {
+   "chu": "payload",
+   "doc": "/ˈpeɪloʊd/",
+   "nghia": "phần tải – dữ liệu thật được chở bên trong gói/khung",
+   "nhom": "Mô hình phân lớp",
+   "viDu": "A captured Ethernet frame has the type field value 0x0800. What does the receiving device learn from it? — The payload is an IPv4 packet",
+   "viDuNghia": "Một khung Ethernet bắt được có trường type bằng 0x0800. Thiết bị nhận biết được điều gì từ đó? — Phần dữ liệu là một gói IPv4"
+  },
+  {
+   "chu": "packet",
+   "doc": "/ˈpækɪt/",
+   "nghia": "gói tin – đơn vị dữ liệu của tầng mạng",
+   "nhom": "Mô hình phân lớp",
+   "viDu": "Each IP packet must contain ____.",
+   "viDuNghia": "Mỗi gói IP bắt buộc phải chứa ____."
+  },
+  {
+   "chu": "frame",
+   "doc": "/freɪm/",
+   "nghia": "khung – đơn vị dữ liệu của tầng liên kết",
+   "nhom": "Mô hình phân lớp",
+   "viDu": "The destination address field in an Ethernet frame is ______ long.",
+   "viDuNghia": "Trường địa chỉ đích trong khung Ethernet dài ______."
+  },
+  {
+   "chu": "datagram",
+   "doc": "/ˈdeɪtəɡræm/",
+   "nghia": "datagram – gói tin được chuyển độc lập, không cần thiết lập kết nối trước",
+   "nhom": "Mô hình phân lớp",
+   "viDu": "A datagram is fragmented into three smaller datagrams. Which of the following is true?",
+   "viDuNghia": "Một datagram bị phân mảnh thành ba datagram nhỏ hơn. Phát biểu nào sau đây đúng?"
+  },
+  {
+   "chu": "protocol",
+   "doc": "/ˈproʊtəkɔːl/",
+   "nghia": "giao thức – bộ quy tắc trao đổi dữ liệu giữa các máy (HTTP, TCP, IP, FTP, PPP)",
+   "nhom": "Mô hình phân lớp",
+   "viDu": "Which application layer protocol is used to provide file-sharing and print services to Microsoft applications?",
+   "viDuNghia": "Giao thức tầng ứng dụng nào cung cấp dịch vụ chia sẻ tệp và in ấn cho các ứng dụng Microsoft?"
+  },
+  {
+   "chu": "TCP/IP model",
+   "nghia": "mô hình TCP/IP – mô hình phân tầng của Internet: ứng dụng, giao vận, mạng (Internet), truy cập mạng",
+   "nhom": "Mô hình phân lớp",
+   "viDu": "Which of the following is true about the ways in which the OSI reference model and TCP/IP reference model differ?",
+   "viDuNghia": "Phát biểu nào sau đây đúng về những điểm khác nhau giữa mô hình tham chiếu OSI và mô hình TCP/IP?"
+  },
+  {
+   "chu": "protocol stack",
+   "doc": "/ˈproʊtəkɔːl stæk/",
+   "nghia": "chồng giao thức – các giao thức của các tầng xếp chồng lên nhau, tầng trên dùng dịch vụ tầng dưới",
+   "nhom": "Mô hình phân lớp",
+   "viDu": "What is the number of layers in the Internet protocol stack?",
+   "viDuNghia": "Chồng giao thức Internet có bao nhiêu tầng?"
+  },
+  {
+   "chu": "Domain Name System",
+   "nghia": "DNS – hệ thống đổi tên miền (www.example.com) thành địa chỉ IP",
+   "nhom": "Tầng ứng dụng",
+   "viDu": "The DNS protocol runs over _____ and uses port _____.",
+   "viDuNghia": "Giao thức DNS chạy trên _____ và dùng cổng _____."
+  },
+  {
+   "chu": "File Transfer Protocol",
+   "nghia": "FTP – giao thức truyền tệp, dùng một kết nối điều khiển và một kết nối dữ liệu",
+   "nhom": "Tầng ứng dụng",
+   "viDu": "What happens if part of an FTP message is not delivered to the destination?",
+   "viDuNghia": "Điều gì xảy ra nếu một phần của bản tin FTP không tới được đích?"
+  },
+  {
+   "chu": "Simple Mail Transfer Protocol",
+   "nghia": "SMTP – giao thức gửi thư điện tử giữa các máy chủ thư",
+   "nhom": "Tầng ứng dụng",
+   "viDu": "SMTP, FTP and DNS are applications of the ______ layer.",
+   "viDuNghia": "SMTP, FTP và DNS là các ứng dụng của tầng ______."
+  },
+  {
+   "chu": "Post Office Protocol",
+   "nghia": "POP3 – giao thức tải thư từ máy chủ về máy người dùng",
+   "nhom": "Tầng ứng dụng",
+   "viDu": "The Post Office Protocol (POP3) downloads mail from the server to the client.",
+   "viDuNghia": "Giao thức POP3 tải thư từ máy chủ về máy khách."
+  },
+  {
+   "chu": "Internet Message Access Protocol",
+   "nghia": "IMAP – giao thức đọc thư ngay trên máy chủ, đồng bộ thư mục giữa nhiều thiết bị",
+   "nhom": "Tầng ứng dụng",
+   "viDu": "Which is a feature of IMAP?",
+   "viDuNghia": "Đặc điểm nào là của IMAP?"
+  },
+  {
+   "chu": "Dynamic Host Configuration Protocol",
+   "nghia": "DHCP – tự động cấp địa chỉ IP và cấu hình mạng cho máy",
+   "nhom": "Tầng ứng dụng",
+   "viDu": "A new laptop joins the network and needs an address from DHCP. What is the correct order of messages?",
+   "viDuNghia": "Laptop mới vào mạng và cần địa chỉ từ DHCP. Thứ tự thông điệp đúng là gì?"
+  },
+  {
+   "chu": "Telnet",
+   "doc": "/ˈtelnet/",
+   "nghia": "Telnet – giao thức đăng nhập từ xa, không mã hoá",
+   "nhom": "Tầng ứng dụng",
+   "viDu": "Telnet sends everything, including passwords, as plain text.",
+   "viDuNghia": "Telnet gửi mọi thứ, kể cả mật khẩu, dưới dạng văn bản rõ."
+  },
+  {
+   "chu": "hypertext",
+   "doc": "/ˈhaɪpərtekst/",
+   "nghia": "siêu văn bản – văn bản có liên kết dẫn sang tài liệu khác",
+   "nhom": "Tầng ứng dụng",
+   "viDu": "A web page is a hypertext document that links to other documents.",
+   "viDuNghia": "Trang web là tài liệu siêu văn bản có liên kết tới các tài liệu khác."
+  },
+  {
+   "chu": "stateless",
+   "doc": "/ˈsteɪtləs/",
+   "nghia": "không trạng thái – máy chủ không nhớ gì về các yêu cầu trước của máy khách (HTTP)",
+   "nhom": "Tầng ứng dụng",
+   "viDu": "Although HTTP is stateless, if the web server wants to identify users, ______ is used.",
+   "viDuNghia": "Dù HTTP là không trạng thái, nếu máy chủ web muốn nhận diện người dùng thì ______ được dùng."
+  },
+  {
+   "chu": "proxy server",
+   "doc": "/ˈprɑːksi ˈsɜːrvər/",
+   "nghia": "máy chủ uỷ nhiệm – đứng giữa, thay máy khách gửi yêu cầu và lưu sẵn bản sao trang web",
+   "nhom": "Tầng ứng dụng",
+   "viDu": "What is incorrect about Web cache (proxy server)?",
+   "viDuNghia": "Phát biểu nào KHÔNG đúng về bộ đệm web (máy chủ proxy)?"
+  },
+  {
+   "chu": "socket",
+   "doc": "/ˈsɑːkɪt/",
+   "nghia": "socket – điểm cuối của một kết nối, nơi ứng dụng gửi/nhận dữ liệu qua mạng",
+   "nhom": "Tầng ứng dụng",
+   "viDu": "In BSD socket API, which call is usually used for transmitting data in the connectionless mode?",
+   "viDuNghia": "Trong BSD socket API, lời gọi nào thường được dùng để truyền dữ liệu ở chế độ không kết nối (connectionless)?"
+  },
+  {
+   "chu": "circuit switching",
+   "doc": "/ˈsɜːrkɪt ˈswɪtʃɪŋ/",
+   "nghia": "chuyển mạch kênh – dành riêng một đường truyền suốt cuộc gọi (mạng điện thoại)",
+   "nhom": "Chuyển mạch & độ trễ",
+   "viDu": "Which of the following methods provides a dedicated communication channel between two stations? — Circuit switching",
+   "viDuNghia": "Phương pháp nào cung cấp kênh truyền thông dành riêng giữa hai trạm? — Chuyển mạch kênh"
+  },
+  {
+   "chu": "packet switching",
+   "doc": "/ˈpækɪt ˈswɪtʃɪŋ/",
+   "nghia": "chuyển mạch gói – chia dữ liệu thành gói nhỏ, mỗi gói tự tìm đường và dùng chung đường truyền",
+   "nhom": "Chuyển mạch & độ trễ",
+   "viDu": "On the Internet, switching is done by the datagram approach to packet switching at the ____ layer.",
+   "viDuNghia": "Trên Internet, việc chuyển mạch được làm theo cách datagram của chuyển mạch gói ở tầng ____."
+  },
+  {
+   "chu": "message switching",
+   "doc": "/ˈmesɪdʒ ˈswɪtʃɪŋ/",
+   "nghia": "chuyển mạch thông điệp – chuyển nguyên cả thông điệp qua từng trạm, không chia gói",
+   "nhom": "Chuyển mạch & độ trễ",
+   "viDu": "Which of the following applies to packet switching but not to message switching?",
+   "viDuNghia": "Đặc điểm nào sau đây thuộc chuyển mạch gói nhưng KHÔNG thuộc chuyển mạch thông điệp?"
+  },
+  {
+   "chu": "store-and-forward",
+   "doc": "/ˌstɔːr ən ˈfɔːrwərd/",
+   "nghia": "lưu và chuyển tiếp – nút nhận trọn gói/khung, kiểm tra rồi mới gửi tiếp",
+   "nhom": "Chuyển mạch & độ trễ",
+   "viDu": "Which of the following networks use store-and-forward switching operation?",
+   "viDuNghia": "Mạng nào sau đây sử dụng hoạt động chuyển mạch lưu-và-chuyển tiếp (store-and-forward)?"
+  },
+  {
+   "chu": "connection-oriented",
+   "doc": "/kəˌnekʃn ˈɔːrientɪd/",
+   "nghia": "hướng kết nối – phải thiết lập kết nối trước khi truyền dữ liệu (TCP)",
+   "nhom": "Chuyển mạch & độ trễ",
+   "viDu": "Which transport layer feature is used to establish a connection-oriented session?",
+   "viDuNghia": "Đặc trưng nào của tầng giao vận được dùng để thiết lập phiên hướng kết nối?"
+  },
+  {
+   "chu": "connectionless",
+   "doc": "/kəˈnekʃnləs/",
+   "nghia": "không kết nối – gửi luôn, không cần thiết lập trước (UDP, IP)",
+   "nhom": "Chuyển mạch & độ trễ",
+   "viDu": "Which of the following sentences are true for the connectionless stream mode of service?",
+   "viDuNghia": "Phát biểu nào sau đây đúng với dịch vụ kiểu không kết nối, chế độ dòng (connectionless stream mode)?"
+  },
+  {
+   "chu": "multiplexing",
+   "doc": "/ˈmʌltɪpleksɪŋ/",
+   "nghia": "ghép kênh – nhiều luồng dữ liệu dùng chung một đường truyền",
+   "nhom": "Chuyển mạch & độ trễ",
+   "viDu": "Multiplexing lets many signals share one transmission line.",
+   "viDuNghia": "Ghép kênh cho phép nhiều tín hiệu dùng chung một đường truyền."
+  },
+  {
+   "chu": "bandwidth",
+   "doc": "/ˈbændwɪdθ/",
+   "nghia": "băng thông – lượng dữ liệu tối đa đường truyền chở được mỗi giây (bps)",
+   "nhom": "Chuyển mạch & độ trễ",
+   "viDu": "A link with higher bandwidth can carry more bits per second.",
+   "viDuNghia": "Đường truyền có băng thông cao hơn chở được nhiều bit mỗi giây hơn."
+  },
+  {
+   "chu": "transmission rate",
+   "doc": "/trænzˈmɪʃn reɪt/",
+   "nghia": "tốc độ truyền – số bit gửi được mỗi giây",
+   "nhom": "Chuyển mạch & độ trễ",
+   "viDu": "In a router, the control of the transmission rate at the sender's side such that the router's buffer will not be over-filled is called _________ if sender is transmitting too fast",
+   "viDuNghia": "Ở router, việc kiểm soát tốc độ phát ở phía gửi sao cho bộ đệm của router không bị tràn được gọi là _________ nếu bên gửi truyền quá nhanh"
+  },
+  {
+   "chu": "transmission delay",
+   "doc": "/trænzˈmɪʃn dɪˈleɪ/",
+   "nghia": "trễ truyền – thời gian đẩy hết các bit của gói lên đường truyền = độ dài gói / tốc độ truyền",
+   "nhom": "Chuyển mạch & độ trễ",
+   "viDu": "For a 10Mbps Ethernet link, if the length of the packet is 32bits, the transmission delay is (in microseconds)",
+   "viDuNghia": "Với đường truyền Ethernet 10 Mbps, nếu gói tin dài 32 bit thì độ trễ truyền (transmission delay) là bao nhiêu (đơn vị micro-giây)?"
+  },
+  {
+   "chu": "propagation delay",
+   "doc": "/ˌprɑːpəˈɡeɪʃn dɪˈleɪ/",
+   "nghia": "trễ lan truyền – thời gian tín hiệu đi hết chiều dài đường truyền = khoảng cách / vận tốc",
+   "nhom": "Chuyển mạch & độ trễ",
+   "viDu": "Time-out period is equal to maximum possible propagation delay of ____.",
+   "viDuNghia": "Khoảng thời gian time-out bằng độ trễ lan truyền tối đa có thể của ____."
+  },
+  {
+   "chu": "queueing delay",
+   "doc": "/ˈkjuːɪŋ dɪˈleɪ/",
+   "nghia": "trễ hàng đợi – thời gian gói nằm chờ trong bộ đệm của nút",
+   "nhom": "Chuyển mạch & độ trễ",
+   "viDu": "Queueing delay depends on how congested the router is.",
+   "viDuNghia": "Trễ hàng đợi phụ thuộc vào mức độ tắc nghẽn của router."
+  },
+  {
+   "chu": "round-trip time",
+   "doc": "/ˌraʊnd ˈtrɪp taɪm/",
+   "nghia": "thời gian khứ hồi (RTT) – thời gian gói đi tới đích và phản hồi quay về",
+   "nhom": "Chuyển mạch & độ trễ",
+   "viDu": "In Carrier Sense Multiple Access with collision detection (CSMA-CD), how long will it take a collision to be detected and resolved? — Round-trip propagation delay",
+   "viDuNghia": "Trong CSMA/CD, mất bao lâu để một va chạm được phát hiện và xử lý xong? — Độ trễ lan truyền khứ hồi (round-trip)"
+  },
+  {
+   "chu": "delay-bandwidth product",
+   "doc": "/dɪˌleɪ ˈbændwɪdθ ˈprɑːdʌkt/",
+   "nghia": "tích độ trễ – băng thông: số bit đang \"nằm trên đường truyền\" cùng lúc",
+   "nhom": "Chuyển mạch & độ trễ",
+   "viDu": "Which of the following statements is true about the stop-and-wait ARQ protocol? — Stop-and-wait is only efficient if the link delay-bandwidth product is small",
+   "viDuNghia": "Phát biểu nào sau đây đúng về giao thức stop-and-wait ARQ? — Stop-and-wait chỉ hiệu quả khi tích trễ-băng thông của liên kết nhỏ"
+  },
+  {
+   "chu": "hop",
+   "doc": "/hɑːp/",
+   "nghia": "chặng – một bước đi từ nút này sang nút kế tiếp trên đường tới đích",
+   "nhom": "Chuyển mạch & độ trễ",
+   "viDu": "Each router along the path counts as one hop.",
+   "viDuNghia": "Mỗi router trên đường đi được tính là một chặng."
+  },
+  {
+   "chu": "delay",
+   "doc": "/dɪˈleɪ/",
+   "nghia": "độ trễ – (mạng) thời gian gói đi từ nguồn tới đích = trễ xử lý + hàng đợi + truyền + lan truyền · (Arduino) hàm delay(ms) dừng chương trình số mili giây",
+   "nhom": "Chuyển mạch & độ trễ",
+   "viDu": "The total nodal delay is the sum of processing, queueing, transmission and propagation delays.",
+   "viDuNghia": "Tổng độ trễ tại một nút bằng trễ xử lý cộng trễ hàng đợi, trễ truyền và trễ lan truyền."
+  },
+  {
+   "chu": "frequency-division multiplexing",
+   "nghia": "ghép kênh theo tần số (FDM) – mỗi kênh dùng một dải tần riêng; truyền được tín hiệu tương tự",
+   "nhom": "Chuyển mạch & độ trễ",
+   "viDu": "Which multiplexing technique can transmit analog signals?",
+   "viDuNghia": "Kỹ thuật ghép kênh nào có thể truyền tín hiệu tương tự (analog)?"
+  },
+  {
+   "chu": "time-division multiplexing",
+   "nghia": "ghép kênh theo thời gian (TDM) – các kênh thay phiên dùng cả đường truyền theo từng khe thời gian",
+   "nhom": "Chuyển mạch & độ trễ",
+   "viDu": "In time-division multiplexing, each channel gets the whole link for a short time slot in turn.",
+   "viDuNghia": "Trong ghép kênh theo thời gian, mỗi kênh lần lượt được dùng cả đường truyền trong một khe thời gian ngắn."
+  },
+  {
+   "chu": "transmission medium",
+   "doc": "/trænzˈmɪʃn ˈmiːdiəm/",
+   "nghia": "môi trường truyền – thứ mang tín hiệu: cáp đồng, cáp quang, sóng vô tuyến",
+   "nhom": "Tầng vật lý",
+   "viDu": "Optical fiber is the transmission medium with the highest bandwidth.",
+   "viDuNghia": "Cáp quang là môi trường truyền có băng thông cao nhất."
+  },
+  {
+   "chu": "twisted pair",
+   "doc": "/ˈtwɪstɪd per/",
+   "nghia": "cáp xoắn đôi – hai dây đồng xoắn vào nhau để giảm nhiễu (UTP)",
+   "nhom": "Tầng vật lý",
+   "viDu": "UTP cable uses twisted pairs of copper wire to reduce interference.",
+   "viDuNghia": "Cáp UTP dùng các đôi dây đồng xoắn để giảm nhiễu."
+  },
+  {
+   "chu": "coaxial cable",
+   "doc": "/koʊˈæksiəl ˈkeɪbl/",
+   "nghia": "cáp đồng trục – lõi đồng bọc lớp cách điện và lưới chống nhiễu",
+   "nhom": "Tầng vật lý",
+   "viDu": "Cable TV networks use coaxial cable.",
+   "viDuNghia": "Mạng truyền hình cáp dùng cáp đồng trục."
+  },
+  {
+   "chu": "optical fiber",
+   "doc": "/ˈɑːptɪkl ˈfaɪbər/",
+   "nghia": "cáp quang – truyền dữ liệu bằng ánh sáng; đi xa, nhanh, không bị nhiễu điện từ",
+   "nhom": "Tầng vật lý",
+   "viDu": "A ________ network is a high-speed network using fiber optic cable.",
+   "viDuNghia": "Mạng ________ là mạng tốc độ cao dùng cáp quang."
+  },
+  {
+   "chu": "wireless",
+   "doc": "/ˈwaɪərləs/",
+   "nghia": "không dây – truyền bằng sóng vô tuyến",
+   "nhom": "Tầng vật lý",
+   "viDu": "Wireless data communication is compelling because of ____.",
+   "viDuNghia": "Truyền dữ liệu không dây hấp dẫn là nhờ ____."
+  },
+  {
+   "chu": "satellite",
+   "doc": "/ˈsætəlaɪt/",
+   "nghia": "vệ tinh – trạm chuyển tiếp trên quỹ đạo; đường truyền có trễ lan truyền lớn",
+   "nhom": "Tầng vật lý",
+   "viDu": "Satellite, Microwave and Infrared are types of _____________________.",
+   "viDuNghia": "Vệ tinh, vi ba và hồng ngoại là các loại _____________________."
+  },
+  {
+   "chu": "simplex",
+   "doc": "/ˈsɪmpleks/",
+   "nghia": "đơn công – chỉ truyền được một chiều",
+   "nhom": "Tầng vật lý",
+   "viDu": "In simplex mode data is transmitted in only one direction.",
+   "viDuNghia": "Trong chế độ đơn công (simplex), dữ liệu chỉ được truyền theo một chiều."
+  },
+  {
+   "chu": "half-duplex",
+   "doc": "/ˌhæf ˈduːpleks/",
+   "nghia": "bán song công – truyền được hai chiều nhưng mỗi lúc chỉ một chiều",
+   "nhom": "Tầng vật lý",
+   "viDu": "A half-duplex communication channel permits information to travel ____.",
+   "viDuNghia": "Kênh truyền bán song công (half-duplex) cho phép thông tin đi ____."
+  },
+  {
+   "chu": "full-duplex",
+   "doc": "/ˌfʊl ˈduːpleks/",
+   "nghia": "song công – truyền hai chiều cùng lúc",
+   "nhom": "Tầng vật lý",
+   "viDu": "In full-duplex mode, a device can send and receive data at the same time.",
+   "viDuNghia": "Ở chế độ song công, thiết bị có thể gửi và nhận dữ liệu cùng lúc."
+  },
+  {
+   "chu": "signal",
+   "doc": "/ˈsɪɡnəl/",
+   "nghia": "tín hiệu – dạng điện, ánh sáng hay sóng mang dữ liệu trên đường truyền",
+   "nhom": "Tầng vật lý",
+   "viDu": "Computers send and receive data in the form of__________signals.",
+   "viDuNghia": "Máy tính gửi và nhận dữ liệu dưới dạng tín hiệu __________."
+  },
+  {
+   "chu": "interference",
+   "doc": "/ˌɪntərˈfɪrəns/",
+   "nghia": "nhiễu – tín hiệu ngoài chen vào làm sai tín hiệu đang truyền",
+   "nhom": "Tầng vật lý",
+   "viDu": "What is a big advantage to using fiber-optic cable? — Fiber is not affected by Electromagnetic interference.",
+   "viDuNghia": "Ưu điểm lớn của việc dùng cáp quang là gì? — Cáp quang không bị ảnh hưởng bởi nhiễu điện từ."
+  },
+  {
+   "chu": "channel",
+   "doc": "/ˈtʃænl/",
+   "nghia": "kênh truyền – đường (hoặc dải tần) mang tín hiệu giữa bên gửi và bên nhận",
+   "nhom": "Tầng vật lý",
+   "viDu": "The speed at which data travel over a communication channel is called the ________.",
+   "viDuNghia": "Tốc độ dữ liệu đi trên một kênh truyền thông được gọi là ________."
+  }
+ ]
+}

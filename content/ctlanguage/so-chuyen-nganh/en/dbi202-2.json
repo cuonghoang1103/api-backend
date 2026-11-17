@@ -1,0 +1,870 @@
+{
+ "ma": "dbi202-2",
+ "nn": "en",
+ "ten": "DBI202 · 2. SQL, giao tác, lập trình T-SQL",
+ "moTa": "Môn Database Systems (DBI202), bộ 2: ngôn ngữ SQL (DDL, DML, truy vấn, kết bảng, gom nhóm), view, index, stored procedure, trigger, giao tác ACID và phân quyền. Từ lấy từ đề FE/PE thật; câu ví dụ phần lớn là câu hỏi thật trong đề.",
+ "bieuTuong": "tablecells.fill",
+ "thuTu": -965,
+ "tu": [
+  {
+   "chu": "Structured Query Language",
+   "nghia": "ngôn ngữ truy vấn có cấu trúc (SQL): ngôn ngữ chuẩn để định nghĩa, truy vấn và cập nhật CSDL quan hệ",
+   "nhom": "Ngôn ngữ SQL",
+   "viDu": "SQL stands for Structured Query Language.",
+   "viDuNghia": "SQL là viết tắt của Structured Query Language (ngôn ngữ truy vấn có cấu trúc)."
+  },
+  {
+   "chu": "Data Definition Language",
+   "nghia": "ngôn ngữ định nghĩa dữ liệu (DDL): các lệnh tạo / sửa / xoá cấu trúc như CREATE, ALTER, DROP",
+   "nhom": "Ngôn ngữ SQL",
+   "viDu": "Which of the following statement removes dbsale and dbsupplier database by using data definition language (DDL)?",
+   "viDuNghia": "Câu lệnh nào sau đây xóa cơ sở dữ liệu dbsale và dbsupplier bằng ngôn ngữ định nghĩa dữ liệu (DDL)?"
+  },
+  {
+   "chu": "Data Manipulation Language",
+   "nghia": "ngôn ngữ thao tác dữ liệu (DML): các lệnh SELECT, INSERT, UPDATE, DELETE",
+   "nhom": "Ngôn ngữ SQL",
+   "viDu": "Which one of the following is NOT a DML command?",
+   "viDuNghia": "Lệnh nào sau đây KHÔNG phải là lệnh DML?"
+  },
+  {
+   "chu": "Data Control Language",
+   "nghia": "ngôn ngữ điều khiển dữ liệu (DCL): các lệnh cấp và thu quyền GRANT, REVOKE",
+   "nhom": "Ngôn ngữ SQL",
+   "viDu": "GRANT and REVOKE belong to the Data Control Language.",
+   "viDuNghia": "GRANT và REVOKE thuộc ngôn ngữ điều khiển dữ liệu."
+  },
+  {
+   "chu": "Transaction Control Language",
+   "nghia": "ngôn ngữ điều khiển giao tác (TCL): COMMIT, ROLLBACK, SAVEPOINT",
+   "nhom": "Ngôn ngữ SQL",
+   "viDu": "COMMIT and ROLLBACK belong to the Transaction Control Language.",
+   "viDuNghia": "COMMIT và ROLLBACK thuộc ngôn ngữ điều khiển giao tác."
+  },
+  {
+   "chu": "Transact-SQL",
+   "doc": "/trænˈzækt ˌes kjuː ˈel/",
+   "nghia": "T-SQL: phần mở rộng SQL của Microsoft SQL Server (thêm biến, IF, WHILE, thủ tục, trigger)",
+   "nhom": "Ngôn ngữ SQL",
+   "viDu": "A stored procedure is a group of Transact-SQL statements compiled into a single execution plan.",
+   "viDuNghia": "Stored procedure là một nhóm các câu lệnh Transact-SQL được biên dịch thành một execution plan (kế hoạch thực thi) duy nhất."
+  },
+  {
+   "chu": "clause",
+   "doc": "/klɔːz/",
+   "nghia": "mệnh đề: một phần của câu lệnh SQL (WHERE, GROUP BY, HAVING, ORDER BY…)",
+   "nhom": "Ngôn ngữ SQL",
+   "viDu": "When no specific join type between multiple tables in a query's from clause is specified, what type of JOIN is assumed?",
+   "viDuNghia": "Khi không chỉ định rõ loại JOIN giữa nhiều bảng trong mệnh đề FROM của một truy vấn, loại JOIN nào được mặc định sử dụng?"
+  },
+  {
+   "chu": "command",
+   "doc": "/kəˈmænd/",
+   "nghia": "lệnh, câu lệnh (SQL)",
+   "nhom": "Ngôn ngữ SQL",
+   "viDu": "Which one of the following is NOT a DDL command? Choose correct answers.",
+   "viDuNghia": "Lệnh nào sau đây KHÔNG phải là lệnh DDL? Chọn (các) đáp án đúng."
+  },
+  {
+   "chu": "wildcard",
+   "doc": "/ˈwaɪldkɑːrd/",
+   "nghia": "ký tự đại diện trong LIKE: % thay cho chuỗi bất kỳ, _ thay cho đúng một ký tự",
+   "nhom": "Ngôn ngữ SQL",
+   "viDu": "The % wildcard when used with the LIKE keyword is used to represent a string of characters:",
+   "viDuNghia": "Ký tự đại diện % khi dùng với từ khoá LIKE được dùng để biểu diễn một chuỗi ký tự:"
+  },
+  {
+   "chu": "pattern matching",
+   "doc": "/ˈpætərn ˈmætʃɪŋ/",
+   "nghia": "so khớp mẫu: tìm chuỗi theo mẫu bằng LIKE",
+   "nhom": "Ngôn ngữ SQL",
+   "viDu": "Which one is a wildcard used for pattern matching?",
+   "viDuNghia": "Ký tự đại diện (wildcard) nào được dùng để so khớp mẫu (pattern matching)?"
+  },
+  {
+   "chu": "alias",
+   "doc": "/ˈeɪliəs/",
+   "nghia": "bí danh: tên tạm đặt cho cột hoặc bảng bằng AS",
+   "nhom": "Ngôn ngữ SQL",
+   "viDu": "We use the AS keyword to give a column an alias.",
+   "viDuNghia": "Ta dùng từ khoá AS để đặt bí danh cho một cột."
+  },
+  {
+   "chu": "case-sensitive",
+   "doc": "/ˌkeɪs ˈsensətɪv/",
+   "nghia": "phân biệt chữ hoa – chữ thường",
+   "nhom": "Ngôn ngữ SQL",
+   "viDu": "SQL keywords are not case-sensitive.",
+   "viDuNghia": "Từ khoá SQL không phân biệt chữ hoa – chữ thường."
+  },
+  {
+   "chu": "data definition",
+   "doc": "/ˈdeɪtə ˌdefɪˈnɪʃn/",
+   "nghia": "định nghĩa dữ liệu – Data Definition Language (DDL): CREATE, ALTER, DROP để tạo/sửa cấu trúc CSDL",
+   "nhom": "Ngôn ngữ SQL",
+   "viDu": "The Data Definition Language (DDL) in SQL is used to:",
+   "viDuNghia": "Ngôn ngữ định nghĩa dữ liệu (DDL) trong SQL được dùng để:"
+  },
+  {
+   "chu": "CREATE TABLE",
+   "doc": "/kriˈeɪt ˈteɪbl/",
+   "nghia": "lệnh tạo bảng mới",
+   "nhom": "Định nghĩa bảng",
+   "viDu": "Tables are created with the CREATE TABLE statement, while views use CREATE VIEW",
+   "viDuNghia": "Table được tạo bằng câu lệnh CREATE TABLE, còn view dùng CREATE VIEW"
+  },
+  {
+   "chu": "ALTER TABLE",
+   "doc": "/ˈɔːltər ˈteɪbl/",
+   "nghia": "lệnh sửa cấu trúc bảng đã có (thêm / xoá / đổi cột, thêm ràng buộc)",
+   "nhom": "Định nghĩa bảng",
+   "viDu": "To drop a DEFAULT constraint, use the following SQL: ALTER TABLE Persons ALTER COLUMN City DROP DEFAULT",
+   "viDuNghia": "Để xóa một ràng buộc DEFAULT, dùng câu lệnh SQL nào sau đây: ALTER TABLE Persons ALTER COLUMN City DROP DEFAULT"
+  },
+  {
+   "chu": "DROP TABLE",
+   "doc": "/drɑːp ˈteɪbl/",
+   "nghia": "lệnh xoá hẳn bảng: mất cả dữ liệu lẫn cấu trúc",
+   "nhom": "Định nghĩa bảng",
+   "viDu": "The DROP TABLE statement deletes the table structure along with the table data.",
+   "viDuNghia": "Câu lệnh DROP TABLE xoá cấu trúc bảng cùng với toàn bộ dữ liệu trong bảng."
+  },
+  {
+   "chu": "default value",
+   "doc": "/dɪˈfɔːlt ˈvæljuː/",
+   "nghia": "giá trị mặc định: tự điền khi INSERT không cho giá trị cột đó",
+   "nhom": "Định nghĩa bảng",
+   "viDu": "To create a DEFAULT constraint on the \"City\" column of the table PERSON which already exists (has been created), use the following SQL:",
+   "viDuNghia": "Để tạo ràng buộc DEFAULT trên cột \"City\" của bảng PERSON vốn đã tồn tại (đã được tạo trước đó), dùng câu lệnh SQL nào sau đây:"
+  },
+  {
+   "chu": "NOT NULL constraint",
+   "nghia": "ràng buộc NOT NULL: cột bắt buộc phải có giá trị",
+   "nhom": "Định nghĩa bảng",
+   "viDu": "A NOT NULL constraint means the column must always have a value.",
+   "viDuNghia": "Ràng buộc NOT NULL nghĩa là cột luôn phải có giá trị."
+  },
+  {
+   "chu": "CHECK constraint",
+   "doc": "/tʃek kənˈstreɪnt/",
+   "nghia": "ràng buộc CHECK: giá trị cột phải thoả một điều kiện, vd CHECK (age >= 18)",
+   "nhom": "Định nghĩa bảng",
+   "viDu": "To drop a CHECK constraint named chk_Person, we can use the following SQL:",
+   "viDuNghia": "Để xóa một ràng buộc CHECK tên là chk_Person, ta có thể dùng câu lệnh SQL sau:"
+  },
+  {
+   "chu": "UNIQUE constraint",
+   "doc": "/juˈniːk kənˈstreɪnt/",
+   "nghia": "ràng buộc UNIQUE: các giá trị trong cột không được trùng nhau",
+   "nhom": "Định nghĩa bảng",
+   "viDu": "Choose the correct statement about the impact of declaring a key for a relation R using PRIMARY KEY or UNIQUE:",
+   "viDuNghia": "Chọn phát biểu đúng về ảnh hưởng của việc khai báo khoá cho quan hệ R bằng PRIMARY KEY hoặc UNIQUE:"
+  },
+  {
+   "chu": "identity column",
+   "doc": "/aɪˈdentəti ˈkɑːləm/",
+   "nghia": "cột tự tăng (IDENTITY trong SQL Server): hệ thống tự sinh số tăng dần",
+   "nhom": "Định nghĩa bảng",
+   "viDu": "An identity column generates a new number for each inserted row.",
+   "viDuNghia": "Cột tự tăng sinh một số mới cho mỗi dòng được thêm."
+  },
+  {
+   "chu": "cascade",
+   "doc": "/kæˈskeɪd/",
+   "nghia": "lan truyền: ON DELETE CASCADE = xoá dòng cha thì tự xoá các dòng con tham chiếu tới nó",
+   "nhom": "Định nghĩa bảng",
+   "viDu": "Suppose R and S are 2 relations. R is the parent of S. And the relationship between R and S is set to \"ON DELETE CASCADE\". This means that:",
+   "viDuNghia": "Giả sử R và S là 2 quan hệ. R là cha (parent) của S. Và quan hệ giữa R và S được thiết lập là \"ON DELETE CASCADE\". Điều này có nghĩa là:"
+  },
+  {
+   "chu": "variable-length",
+   "doc": "/ˌveriəbl ˈleŋθ/",
+   "nghia": "độ dài thay đổi (kiểu varchar(n)): chỉ chiếm đúng số ký tự thực có",
+   "nhom": "Định nghĩa bảng",
+   "viDu": "VARCHAR(50) stores a variable-length string of up to 50 characters.",
+   "viDuNghia": "VARCHAR(50) lưu chuỗi độ dài thay đổi, tối đa 50 ký tự."
+  },
+  {
+   "chu": "column",
+   "doc": "/ˈkɑːləm/",
+   "nghia": "cột – một thuộc tính của bảng; mỗi cột có tên và kiểu dữ liệu",
+   "nhom": "Định nghĩa bảng",
+   "viDu": "Column A of a relation has the following list of values: NULL, NULL, 10, 10, 20, 20 Which of the following is the value of AVG(A)?",
+   "viDuNghia": "Cột A của một quan hệ có danh sách giá trị sau: NULL, NULL, 10, 10, 20, 20 Giá trị của AVG(A) là bao nhiêu?"
+  },
+  {
+   "chu": "SELECT statement",
+   "doc": "/sɪˈlekt ˈsteɪtmənt/",
+   "nghia": "câu lệnh SELECT: lấy dữ liệu từ một hay nhiều bảng",
+   "nhom": "Truy vấn",
+   "viDu": "Given a SELECT statement that has a GROUP BY clause. The HAVING clause uses the same syntax as which other clause?",
+   "viDuNghia": "Cho một câu lệnh SELECT có mệnh đề GROUP BY. Mệnh đề HAVING dùng cú pháp giống với mệnh đề nào khác?"
+  },
+  {
+   "chu": "WHERE clause",
+   "doc": "/wer klɔːz/",
+   "nghia": "mệnh đề WHERE: lọc DÒNG theo điều kiện, chạy trước khi gom nhóm",
+   "nhom": "Truy vấn",
+   "viDu": "In an UPDATE statement, what does the WHERE clause determine?",
+   "viDuNghia": "Trong câu lệnh UPDATE, mệnh đề WHERE xác định điều gì?"
+  },
+  {
+   "chu": "GROUP BY clause",
+   "nghia": "mệnh đề GROUP BY: gom các dòng cùng giá trị thành nhóm để tính hàm gộp",
+   "nhom": "Truy vấn",
+   "viDu": "What does the following SQL statement do: SELECT Customer, COUNT(Order) FROM Sales GROUP BY Customer HAVING COUNT(Order) > 5",
+   "viDuNghia": "Câu lệnh SQL sau làm gì: SELECT Customer, COUNT(Order) FROM Sales GROUP BY Customer HAVING COUNT(Order) > 5 (lấy các khách có hơn 5 đơn)"
+  },
+  {
+   "chu": "HAVING clause",
+   "doc": "/ˈhævɪŋ klɔːz/",
+   "nghia": "mệnh đề HAVING: lọc NHÓM sau khi GROUP BY (dùng được hàm gộp, khác WHERE)",
+   "nhom": "Truy vấn",
+   "viDu": "Regarding the difference between WHERE and HAVING in SQL, which of the following is true?",
+   "viDuNghia": "Về sự khác nhau giữa WHERE và HAVING trong SQL, phát biểu nào sau đây đúng?"
+  },
+  {
+   "chu": "ORDER BY clause",
+   "nghia": "mệnh đề ORDER BY: sắp xếp kết quả, mặc định tăng dần (ASC), DESC là giảm dần",
+   "nhom": "Truy vấn",
+   "viDu": "The ORDER BY clause can only be used in SELECT queries.",
+   "viDuNghia": "Mệnh đề ORDER BY chỉ dùng được trong truy vấn SELECT."
+  },
+  {
+   "chu": "DISTINCT",
+   "doc": "/dɪˈstɪŋkt/",
+   "nghia": "từ khoá loại bỏ dòng trùng trong kết quả SELECT",
+   "nhom": "Truy vấn",
+   "viDu": "In the SELECT clause, what does the keyword DISTINCT mean?",
+   "viDuNghia": "Trong mệnh đề SELECT, từ khoá DISTINCT có nghĩa là gì?"
+  },
+  {
+   "chu": "aggregate function",
+   "doc": "/ˈæɡrɪɡət ˈfʌŋkʃn/",
+   "nghia": "hàm gộp: tính một giá trị từ nhiều dòng (COUNT, SUM, AVG, MIN, MAX); bỏ qua NULL trừ COUNT(*)",
+   "nhom": "Truy vấn",
+   "viDu": "Which of the following aggregate functions does not ignore nulls in its results?",
+   "viDuNghia": "Hàm tổng hợp (aggregate function) nào sau đây KHÔNG bỏ qua giá trị null trong kết quả của nó?"
+  },
+  {
+   "chu": "subquery",
+   "doc": "/ˈsʌbkwɪri/",
+   "nghia": "truy vấn con: câu SELECT lồng bên trong một câu lệnh khác",
+   "nhom": "Truy vấn",
+   "viDu": "A subquery is a SELECT statement nested inside another statement.",
+   "viDuNghia": "Truy vấn con là một câu SELECT lồng trong một câu lệnh khác."
+  },
+  {
+   "chu": "correlated subquery",
+   "doc": "/ˈkɔːrəleɪtɪd ˈsʌbkwɪri/",
+   "nghia": "truy vấn con tương quan: dùng giá trị của truy vấn ngoài nên phải chạy lại cho từng dòng ngoài",
+   "nhom": "Truy vấn",
+   "viDu": "Which of the following statements is false regarding SQL Correlated sub-queries?",
+   "viDuNghia": "Phát biểu nào sau đây SAI về truy vấn con tương quan (correlated sub-query) trong SQL?"
+  },
+  {
+   "chu": "nested query",
+   "doc": "/ˈnestɪd ˈkwɪri/",
+   "nghia": "truy vấn lồng: truy vấn chứa truy vấn khác bên trong",
+   "nhom": "Truy vấn",
+   "viDu": "The inner part of a nested query runs first.",
+   "viDuNghia": "Phần bên trong của truy vấn lồng chạy trước."
+  },
+  {
+   "chu": "result set",
+   "doc": "/rɪˈzʌlt set/",
+   "nghia": "tập kết quả: các dòng mà câu truy vấn trả về",
+   "nhom": "Truy vấn",
+   "viDu": "In SQL, a view is a virtual table based on the result-set of an SQL statement. Which statement is not correct about view?",
+   "viDuNghia": "Trong SQL, view là một bảng ảo dựa trên tập kết quả của một câu lệnh SQL. Phát biểu nào sau đây KHÔNG đúng về view?"
+  },
+  {
+   "chu": "retrieve",
+   "doc": "/rɪˈtriːv/",
+   "nghia": "truy xuất, lấy (dữ liệu) ra",
+   "nhom": "Truy vấn",
+   "viDu": "Assume that all tables, columns are ready, and each customer can place one or more orders. How can you retrieve all customers who have not made any purchases?",
+   "viDuNghia": "Giả sử mọi bảng, cột đã sẵn sàng, và mỗi khách hàng có thể đặt một hoặc nhiều đơn hàng. Làm sao lấy ra tất cả khách hàng chưa mua hàng lần nào?"
+  },
+  {
+   "chu": "sort",
+   "doc": "/sɔːrt/",
+   "nghia": "sắp xếp",
+   "nhom": "Truy vấn",
+   "viDu": "Which SQL keyword is used to sort the result-set?",
+   "viDuNghia": "Từ khóa SQL nào được dùng để sắp xếp result-set (tập kết quả)?"
+  },
+  {
+   "chu": "descending",
+   "doc": "/dɪˈsendɪŋ/",
+   "nghia": "giảm dần (DESC), ngược với ascending (tăng dần)",
+   "nhom": "Truy vấn",
+   "viDu": "ORDER BY salary DESC sorts the rows in descending order.",
+   "viDuNghia": "ORDER BY salary DESC sắp các dòng theo thứ tự giảm dần."
+  },
+  {
+   "chu": "left outer join",
+   "nghia": "kết ngoài trái: giữ mọi dòng bảng TRÁI, dòng không khớp điền NULL ở cột bảng phải",
+   "nhom": "Truy vấn",
+   "viDu": "A left outer join keeps all rows of the left table.",
+   "viDuNghia": "Kết ngoài trái giữ lại mọi dòng của bảng bên trái."
+  },
+  {
+   "chu": "right outer join",
+   "nghia": "kết ngoài phải: giữ mọi dòng bảng PHẢI, dòng không khớp điền NULL ở cột bảng trái",
+   "nhom": "Truy vấn",
+   "viDu": "Compute R right outer join S, where the condition is R.B = S.B. Which tuples of R do not appear in the result?",
+   "viDuNghia": "Tính R right outer join S (kết ngoài phải) với điều kiện R.B = S.B. Những bộ nào của R không xuất hiện trong kết quả?"
+  },
+  {
+   "chu": "full outer join",
+   "nghia": "kết ngoài đầy đủ: giữ mọi dòng của cả hai bảng, chỗ không khớp điền NULL",
+   "nhom": "Truy vấn",
+   "viDu": "Compute the full outer join of R and S, where the condition is R.B = S.B.",
+   "viDuNghia": "Tính phép kết ngoài đầy đủ của R và S, với điều kiện R.B = S.B."
+  },
+  {
+   "chu": "cross join",
+   "doc": "/krɔːs dʒɔɪn/",
+   "nghia": "kết chéo: tích Đề-các của hai bảng, không có điều kiện kết",
+   "nhom": "Truy vấn",
+   "viDu": "What is the result of a CROSS JOIN in SQL?",
+   "viDuNghia": "Kết quả của CROSS JOIN trong SQL là gì?"
+  },
+  {
+   "chu": "self join",
+   "doc": "/self dʒɔɪn/",
+   "nghia": "tự kết: kết một bảng với chính nó (phải đặt bí danh)",
+   "nhom": "Truy vấn",
+   "viDu": "A self join is used to find employees and their managers in one table.",
+   "viDuNghia": "Tự kết dùng để tìm nhân viên và quản lý của họ trong cùng một bảng."
+  },
+  {
+   "chu": "three-valued logic",
+   "doc": "/ˌθriː ˈvæljuːd ˈlɑːdʒɪk/",
+   "nghia": "logic ba trị: điều kiện trong SQL cho TRUE, FALSE hoặc UNKNOWN (khi so sánh với NULL)",
+   "nhom": "Truy vấn",
+   "viDu": "In three-valued logic, the result of (UNKNOWN OR TRUE) is TRUE.",
+   "viDuNghia": "Trong logic ba trị, kết quả của (UNKNOWN OR TRUE) là TRUE."
+  },
+  {
+   "chu": "concatenate",
+   "doc": "/kənˈkætəneɪt/",
+   "nghia": "nối chuỗi: ghép hai chuỗi thành một",
+   "nhom": "Truy vấn",
+   "viDu": "In SQL Server, the + operator is used to concatenate two strings.",
+   "viDuNghia": "Trong SQL Server, toán tử + dùng để nối hai chuỗi."
+  },
+  {
+   "chu": "comparison",
+   "doc": "/kəmˈpærɪsn/",
+   "nghia": "phép so sánh (=, <>, <, >, <=, >=)",
+   "nhom": "Truy vấn",
+   "viDu": "Which of the following wildcard characters matches any sequence of zero or more characters in a string comparison?",
+   "viDuNghia": "Ký tự đại diện (wildcard) nào sau đây khớp với bất kỳ chuỗi nào gồm 0 hoặc nhiều ký tự trong so sánh chuỗi?"
+  },
+  {
+   "chu": "evaluate to",
+   "doc": "/ɪˈvæljueɪt tuː/",
+   "nghia": "cho ra giá trị: \"the condition evaluates to TRUE\" = điều kiện có giá trị TRUE",
+   "nhom": "Truy vấn",
+   "viDu": "What is the value of the query: SELECT 'Nancy' + NULL + 'Smith' when evaluated on Microsoft SQL Server?",
+   "viDuNghia": "Giá trị của truy vấn: SELECT 'Nancy' + NULL + 'Smith' khi thực thi trên Microsoft SQL Server là gì?"
+  },
+  {
+   "chu": "intersect",
+   "doc": "/ˌɪntərˈsekt/",
+   "nghia": "INTERSECT – phép giao: lấy các dòng có ở CẢ hai kết quả truy vấn. (Toán: cắt nhau, giao nhau)",
+   "nhom": "Truy vấn",
+   "viDu": "When we apply set operators (UNION, INTERSECT, EXCEPT) to two relations R and S, which conditions on R and S must be satisfied?",
+   "viDuNghia": "Khi áp dụng các phép toán tập hợp (UNION, INTERSECT, EXCEPT) lên hai quan hệ R và S, những điều kiện nào trên R và S phải được thỏa mãn?"
+  },
+  {
+   "chu": "where",
+   "doc": "/wer/",
+   "nghia": "WHERE – mệnh đề lọc dòng theo điều kiện trong câu SQL. (Đề toán: \"where a, b are…\" = trong đó a, b là…)",
+   "nhom": "Truy vấn",
+   "viDu": "Regarding the difference between WHERE and HAVING in SQL, which of the following is true?",
+   "viDuNghia": "Về sự khác nhau giữa WHERE và HAVING trong SQL, phát biểu nào sau đây đúng?"
+  },
+  {
+   "chu": "query",
+   "doc": "/ˈkwɪri/",
+   "nghia": "truy vấn – câu lệnh SQL lấy dữ liệu (SELECT … FROM … WHERE …)",
+   "nhom": "Truy vấn",
+   "viDu": "Identify the correct query for viewing only those records wherein the customers have a phone number?",
+   "viDuNghia": "Xác định truy vấn đúng để chỉ xem những bản ghi mà khách hàng có số điện thoại?"
+  },
+  {
+   "chu": "LIKE operator",
+   "doc": "/laɪk ˈɑːpəreɪtər/",
+   "nghia": "toán tử LIKE: so khớp chuỗi theo mẫu; % = chuỗi bất kỳ (kể cả rỗng), _ = đúng một ký tự",
+   "nhom": "Truy vấn",
+   "viDu": "Consider the query: SELECT * FROM R WHERE A LIKE '%a%'. What does the % sign represent?",
+   "viDuNghia": "Xét truy vấn: SELECT * FROM R WHERE A LIKE '%a%'. Dấu % biểu diễn điều gì? (Đáp án: không, một hoặc nhiều ký tự bất kỳ.)"
+  },
+  {
+   "chu": "BETWEEN operator",
+   "doc": "/bɪˈtwiːn ˈɑːpəreɪtər/",
+   "nghia": "toán tử BETWEEN … AND …: kiểm tra giá trị nằm trong một khoảng, TÍNH CẢ hai đầu mút",
+   "nhom": "Truy vấn",
+   "viDu": "The SQL BETWEEN operator specifies a range to test.",
+   "viDuNghia": "Toán tử BETWEEN trong SQL chỉ định một khoảng giá trị để kiểm tra."
+  },
+  {
+   "chu": "INSERT statement",
+   "doc": "/ɪnˈsɜːrt ˈsteɪtmənt/",
+   "nghia": "câu lệnh INSERT: thêm dòng mới vào bảng",
+   "nhom": "Cập nhật dữ liệu",
+   "viDu": "An INSERT statement adds new rows to a table.",
+   "viDuNghia": "Câu lệnh INSERT thêm các dòng mới vào một bảng."
+  },
+  {
+   "chu": "UPDATE statement",
+   "doc": "/ˌʌpˈdeɪt ˈsteɪtmənt/",
+   "nghia": "câu lệnh UPDATE: sửa giá trị của các dòng đã có",
+   "nhom": "Cập nhật dữ liệu",
+   "viDu": "In MS-SQL Server, there are three primary SQL commands (INSERT, UPDATE, and DELETE) to modify data in a table. Which of the following is false about function of these commands?",
+   "viDuNghia": "Trong MS-SQL Server, có ba lệnh SQL chính (INSERT, UPDATE, DELETE) để sửa đổi dữ liệu trong bảng. Phát biểu nào sau đây SAI về chức năng của các lệnh này?"
+  },
+  {
+   "chu": "DELETE statement",
+   "doc": "/dɪˈliːt ˈsteɪtmənt/",
+   "nghia": "câu lệnh DELETE: xoá các dòng thoả điều kiện; không có WHERE thì xoá hết dòng",
+   "nhom": "Cập nhật dữ liệu",
+   "viDu": "Choose the incorrect statement about DELETE and TRUNCATE in SQL Server.",
+   "viDuNghia": "Chọn phát biểu SAI về DELETE và TRUNCATE trong SQL Server."
+  },
+  {
+   "chu": "modify",
+   "doc": "/ˈmɑːdɪfaɪ/",
+   "nghia": "sửa đổi (dữ liệu, cấu trúc bảng)",
+   "nhom": "Cập nhật dữ liệu",
+   "viDu": "In order to modify or delete an existing constraint, it is necessary that:",
+   "viDuNghia": "Để sửa đổi hoặc xóa một ràng buộc (constraint) đã có, cần phải:"
+  },
+  {
+   "chu": "remove",
+   "doc": "/rɪˈmuːv/",
+   "nghia": "loại bỏ, xoá đi",
+   "nhom": "Cập nhật dữ liệu",
+   "viDu": "Which of the following SQL statements removes all of the content from a table named \"employees\" but keeps the schema?",
+   "viDuNghia": "Câu lệnh SQL nào sau đây xóa toàn bộ nội dung khỏi bảng tên \"employees\" nhưng vẫn giữ lại lược đồ (schema)?"
+  },
+  {
+   "chu": "permanently",
+   "doc": "/ˈpɜːrmənəntli/",
+   "nghia": "vĩnh viễn: \"saved permanently\" = lưu hẳn, không mất khi tắt máy",
+   "nhom": "Cập nhật dữ liệu",
+   "viDu": "COMMIT saves the changes of a transaction permanently.",
+   "viDuNghia": "COMMIT lưu vĩnh viễn các thay đổi của giao tác."
+  },
+  {
+   "chu": "drop",
+   "doc": "/drɑːp/",
+   "nghia": "DROP – lệnh xoá hẳn một đối tượng CSDL (DROP TABLE, DROP CONSTRAINT). (Đời thường: thả rơi, giảm xuống)",
+   "nhom": "Cập nhật dữ liệu",
+   "viDu": "To drop a CHECK constraint named chk_Person, we can use the following SQL:",
+   "viDuNghia": "Để xóa một ràng buộc CHECK tên là chk_Person, ta có thể dùng câu lệnh SQL sau:"
+  },
+  {
+   "chu": "TRUNCATE TABLE",
+   "doc": "/trʌŋˈkeɪt ˈteɪbl/",
+   "nghia": "lệnh xoá TẤT CẢ dòng của bảng nhưng giữ cấu trúc; không có WHERE, nhanh hơn DELETE",
+   "nhom": "Cập nhật dữ liệu",
+   "viDu": "What is the difference between DELETE and TRUNCATE in SQL?",
+   "viDuNghia": "Sự khác biệt giữa DELETE và TRUNCATE trong SQL là gì?"
+  },
+  {
+   "chu": "view",
+   "doc": "/vjuː/",
+   "nghia": "(CSDL) khung nhìn: bảng ảo định nghĩa bằng một câu SELECT, không tự lưu dữ liệu · (Android / React Native) View: khối giao diện cơ bản trên màn hình",
+   "nhom": "View và index",
+   "viDu": "Through VIEW, is it possible to update data in the original table (that VIEW sees)?",
+   "viDuNghia": "Thông qua VIEW, có thể cập nhật dữ liệu ở bảng gốc (mà VIEW đang thấy) hay không?"
+  },
+  {
+   "chu": "virtual table",
+   "doc": "/ˈvɜːrtʃuəl ˈteɪbl/",
+   "nghia": "bảng ảo: không lưu dữ liệu riêng, mỗi lần dùng lấy từ bảng gốc (chính là view)",
+   "nhom": "View và index",
+   "viDu": "What is an SQL virtual table that is constructed from other tables?",
+   "viDuNghia": "Một bảng ảo SQL được xây dựng từ các bảng khác được gọi là gì?"
+  },
+  {
+   "chu": "base table",
+   "doc": "/beɪs ˈteɪbl/",
+   "nghia": "bảng gốc: bảng thật chứa dữ liệu mà view dựa vào",
+   "nhom": "View và index",
+   "viDu": "A view does not store data; it reads from its base tables.",
+   "viDuNghia": "View không lưu dữ liệu; nó đọc từ các bảng gốc."
+  },
+  {
+   "chu": "updatable view",
+   "doc": "/ˌʌpˈdeɪtəbl vjuː/",
+   "nghia": "view cập nhật được: cho phép INSERT / UPDATE / DELETE qua view (thường là view đơn giản trên một bảng)",
+   "nhom": "View và index",
+   "viDu": "Which is the SQL statement that creates an updatable view? In this question, all the tables in the SQL statements are updatable.",
+   "viDuNghia": "Câu lệnh SQL nào tạo ra một view có thể cập nhật (updatable view)? Trong câu này, mọi bảng trong các câu SQL đều là bảng có thể cập nhật."
+  },
+  {
+   "chu": "materialized view",
+   "doc": "/məˈtɪriəlaɪzd vjuː/",
+   "nghia": "view vật chất hoá: kết quả được tính sẵn và lưu thật trên đĩa",
+   "nhom": "View và index",
+   "viDu": "A materialized view stores the query result physically.",
+   "viDuNghia": "View vật chất hoá lưu kết quả truy vấn thật sự trên đĩa."
+  },
+  {
+   "chu": "index",
+   "doc": "/ˈɪndeks/",
+   "nghia": "chỉ mục: cấu trúc phụ giúp tìm dòng nhanh hơn; đổi lại tốn chỗ và làm chậm thêm / sửa / xoá",
+   "nhom": "View và index",
+   "viDu": "In query optimization, why is it beneficial for the database engine to use indexes?",
+   "viDuNghia": "Trong tối ưu truy vấn, vì sao việc database engine dùng chỉ mục (index) lại có lợi?"
+  },
+  {
+   "chu": "clustered index",
+   "doc": "/ˈklʌstərd ˈɪndeks/",
+   "nghia": "chỉ mục cụm: quyết định thứ tự lưu vật lý của các dòng; mỗi bảng chỉ có một",
+   "nhom": "View và index",
+   "viDu": "A clustered index determines the physical order of rows in a table.",
+   "viDuNghia": "Chỉ mục cụm quyết định thứ tự vật lý của các dòng trong bảng."
+  },
+  {
+   "chu": "nonclustered index",
+   "doc": "/ˌnɑːnˈklʌstərd ˈɪndeks/",
+   "nghia": "chỉ mục phi cụm: cấu trúc riêng trỏ tới dòng dữ liệu; một bảng có thể có nhiều",
+   "nhom": "View và index",
+   "viDu": "A table can have many nonclustered indexes but only one clustered index.",
+   "viDuNghia": "Một bảng có thể có nhiều chỉ mục phi cụm nhưng chỉ một chỉ mục cụm."
+  },
+  {
+   "chu": "speed up",
+   "doc": "/spiːd ʌp/",
+   "nghia": "tăng tốc, làm nhanh hơn",
+   "nhom": "View và index",
+   "viDu": "Indexes speed up queries but slow down INSERT and UPDATE.",
+   "viDuNghia": "Chỉ mục làm truy vấn nhanh hơn nhưng làm chậm INSERT và UPDATE."
+  },
+  {
+   "chu": "stored procedure",
+   "doc": "/stɔːrd prəˈsiːdʒər/",
+   "nghia": "thủ tục lưu trữ: khối lệnh SQL có tên, lưu sẵn trong CSDL, gọi bằng EXEC",
+   "nhom": "Lập trình T-SQL",
+   "viDu": "If you wish to return a value from a stored procedure into a parameter, which of the following calls would you use?",
+   "viDuNghia": "Nếu muốn trả về một giá trị từ stored procedure vào một tham số, bạn sẽ dùng lệnh gọi nào sau đây?"
+  },
+  {
+   "chu": "user-defined function",
+   "doc": "/ˌjuːzər dɪˈfaɪnd ˈfʌŋkʃn/",
+   "nghia": "hàm do người dùng tự định nghĩa (UDF): nhận tham số, bắt buộc trả về giá trị",
+   "nhom": "Lập trình T-SQL",
+   "viDu": "Which type of user-defined function in SQL returns a single value?",
+   "viDuNghia": "Loại hàm do người dùng định nghĩa (user-defined function) nào trong SQL trả về một giá trị đơn?"
+  },
+  {
+   "chu": "cursor",
+   "doc": "/ˈkɜːrsər/",
+   "nghia": "con trỏ: duyệt tập kết quả từng dòng một",
+   "nhom": "Lập trình T-SQL",
+   "viDu": "In SQL, what is the purpose of the CLOSE statement in relation to cursors?",
+   "viDuNghia": "Trong SQL, mục đích của câu lệnh CLOSE đối với cursor là gì?"
+  },
+  {
+   "chu": "scalar function",
+   "doc": "/ˈskeɪlər ˈfʌŋkʃn/",
+   "nghia": "hàm vô hướng: trả về MỘT giá trị đơn",
+   "nhom": "Lập trình T-SQL",
+   "viDu": "A scalar function returns a single value.",
+   "viDuNghia": "Hàm vô hướng trả về một giá trị đơn."
+  },
+  {
+   "chu": "table-valued function",
+   "doc": "/ˌteɪbl ˈvæljuːd ˈfʌŋkʃn/",
+   "nghia": "hàm trả về bảng: kết quả là một bảng, dùng được trong mệnh đề FROM",
+   "nhom": "Lập trình T-SQL",
+   "viDu": "A table-valued function can be used in the FROM clause.",
+   "viDuNghia": "Hàm trả về bảng có thể dùng trong mệnh đề FROM."
+  },
+  {
+   "chu": "input parameter",
+   "doc": "/ˈɪnpʊt pəˈræmɪtər/",
+   "nghia": "tham số đầu vào: giá trị truyền vào thủ tục / hàm",
+   "nhom": "Lập trình T-SQL",
+   "viDu": "The procedure has one input parameter named @id.",
+   "viDuNghia": "Thủ tục có một tham số đầu vào tên @id."
+  },
+  {
+   "chu": "output parameter",
+   "doc": "/ˈaʊtpʊt pəˈræmɪtər/",
+   "nghia": "tham số đầu ra (OUTPUT): thủ tục trả giá trị về qua tham số này",
+   "nhom": "Lập trình T-SQL",
+   "viDu": "An output parameter returns a value from the procedure to the caller.",
+   "viDuNghia": "Tham số đầu ra trả một giá trị từ thủ tục về cho nơi gọi."
+  },
+  {
+   "chu": "declare",
+   "doc": "/dɪˈkler/",
+   "nghia": "khai báo (biến, con trỏ) bằng DECLARE",
+   "nhom": "Lập trình T-SQL",
+   "viDu": "Which SQL statement is used to declare a cursor?",
+   "viDuNghia": "Câu lệnh SQL nào dùng để khai báo một cursor?"
+  },
+  {
+   "chu": "AFTER trigger",
+   "doc": "/ˈæftər ˈtrɪɡər/",
+   "nghia": "trigger chạy SAU khi lệnh INSERT / UPDATE / DELETE đã thực hiện xong",
+   "nhom": "Lập trình T-SQL",
+   "viDu": "What are AFTER triggers?",
+   "viDuNghia": "AFTER trigger là gì?"
+  },
+  {
+   "chu": "INSTEAD OF trigger",
+   "nghia": "trigger chạy THAY CHO lệnh gốc: lệnh INSERT / UPDATE / DELETE ban đầu không được thực hiện",
+   "nhom": "Lập trình T-SQL",
+   "viDu": "An INSTEAD OF trigger runs in place of the original statement.",
+   "viDuNghia": "Trigger INSTEAD OF chạy thay cho câu lệnh ban đầu."
+  },
+  {
+   "chu": "inserted table",
+   "doc": "/ɪnˈsɜːrtɪd ˈteɪbl/",
+   "nghia": "bảng tạm inserted trong trigger: chứa các dòng MỚI (sau INSERT / UPDATE); bảng deleted chứa các dòng cũ",
+   "nhom": "Lập trình T-SQL",
+   "viDu": "Inside a trigger, the inserted table holds the new rows.",
+   "viDuNghia": "Bên trong trigger, bảng inserted chứa các dòng mới."
+  },
+  {
+   "chu": "deterministic",
+   "doc": "/dɪˌtɜːrmɪˈnɪstɪk/",
+   "nghia": "tất định: cùng đầu vào luôn cho cùng kết quả (GETDATE() thì không tất định)",
+   "nhom": "Lập trình T-SQL",
+   "viDu": "How we can understand about this statement: \"All aggregate functions are deterministic\"?",
+   "viDuNghia": "Có thể hiểu phát biểu sau như thế nào: \"All aggregate functions are deterministic\" (mọi hàm tổng hợp đều xác định - deterministic)?"
+  },
+  {
+   "chu": "execution plan",
+   "doc": "/ˌeksɪˈkjuːʃn plæn/",
+   "nghia": "kế hoạch thực thi: cách DBMS chọn để chạy một câu truy vấn",
+   "nhom": "Lập trình T-SQL",
+   "viDu": "Group of Transact-SQL statements compiled into a single execution plan",
+   "viDuNghia": "Một nhóm các câu lệnh Transact-SQL được biên dịch thành một kế hoạch thực thi duy nhất"
+  },
+  {
+   "chu": "invoke",
+   "doc": "/ɪnˈvoʊk/",
+   "nghia": "gọi (thủ tục, hàm)",
+   "nhom": "Lập trình T-SQL",
+   "viDu": "How can you invoke a user-defined function in a SQL query?",
+   "viDuNghia": "Làm sao để gọi một user-defined function trong một câu truy vấn SQL?"
+  },
+  {
+   "chu": "trigger",
+   "doc": "/ˈtrɪɡər/",
+   "nghia": "trigger – khối lệnh T-SQL tự chạy khi INSERT/UPDATE/DELETE trên bảng (AFTER, INSTEAD OF). (Use case: sự kiện kích hoạt)",
+   "nhom": "Lập trình T-SQL",
+   "viDu": "When does the Inserted temporary trigger table become populated?",
+   "viDuNghia": "Bảng trigger tạm \"Inserted\" được nạp dữ liệu khi nào?"
+  },
+  {
+   "chu": "transaction",
+   "doc": "/trænˈzækʃn/",
+   "nghia": "giao tác: nhóm thao tác được coi là MỘT đơn vị công việc — thành công hết hoặc huỷ hết",
+   "nhom": "Giao tác",
+   "viDu": "In order to undo the work of a transaction after the last commit, which one should be used?",
+   "viDuNghia": "Để hoàn tác (undo) công việc của một giao tác (transaction) sau lần commit gần nhất, nên dùng câu lệnh nào?"
+  },
+  {
+   "chu": "ACID properties",
+   "doc": "/ˈæsɪd ˈprɑːpərtiz/",
+   "nghia": "bốn tính chất ACID của giao tác: Atomicity, Consistency, Isolation, Durability",
+   "nhom": "Giao tác",
+   "viDu": "In SQL, what does the acronym ACID stand for concerning transactions?",
+   "viDuNghia": "Trong SQL, chữ viết tắt ACID liên quan đến giao tác (transaction) là viết tắt của gì?"
+  },
+  {
+   "chu": "atomicity",
+   "doc": "/ˌætəˈmɪsəti/",
+   "nghia": "tính nguyên tố: giao tác thực hiện tất cả hoặc không gì cả (all-or-nothing)",
+   "nhom": "Giao tác",
+   "viDu": "In the context of a banking application, which of the following best represents a transaction that violates atomicity? Choose two answers.",
+   "viDuNghia": "Trong ứng dụng ngân hàng, trường hợp nào sau đây thể hiện một giao tác vi phạm tính nguyên tố (atomicity)? Chọn hai đáp án."
+  },
+  {
+   "chu": "durability",
+   "doc": "/ˌdʊrəˈbɪləti/",
+   "nghia": "tính bền vững: giao tác đã commit thì kết quả còn mãi, kể cả khi hệ thống sập",
+   "nhom": "Giao tác",
+   "viDu": "A database transaction must be ACID (atomic, consistent, isolated and durable). What does \"Durable\" mean?",
+   "viDuNghia": "Một giao tác CSDL phải có tính ACID (nguyên tố, nhất quán, cô lập và bền vững). \"Durable\" nghĩa là gì?"
+  },
+  {
+   "chu": "isolated",
+   "doc": "/ˈaɪsəleɪtɪd/",
+   "nghia": "cô lập: các giao tác chạy đồng thời không thấy kết quả dở dang của nhau",
+   "nhom": "Giao tác",
+   "viDu": "A database transaction must be ACID (atomic, consistent, isolated and durable). What does \"Isolated\" mean?",
+   "viDuNghia": "Một giao tác CSDL phải có tính ACID (nguyên tố, nhất quán, cô lập và bền vững). \"Isolated\" nghĩa là gì?"
+  },
+  {
+   "chu": "all-or-nothing",
+   "doc": "/ˌɔːl ɔːr ˈnʌθɪŋ/",
+   "nghia": "tất cả hoặc không gì cả: cách diễn đạt tính nguyên tố của giao tác",
+   "nhom": "Giao tác",
+   "viDu": "Atomicity is the all-or-nothing property of a transaction.",
+   "viDuNghia": "Tính nguyên tố là tính chất tất cả hoặc không gì cả của giao tác."
+  },
+  {
+   "chu": "isolation level",
+   "doc": "/ˌaɪsəˈleɪʃn ˈlevl/",
+   "nghia": "mức cô lập: mức các giao tác được phép thấy dữ liệu của nhau (READ COMMITTED, SERIALIZABLE…)",
+   "nhom": "Giao tác",
+   "viDu": "In database transactions, which isolation level is most restrictive?",
+   "viDuNghia": "Trong giao tác CSDL, mức cô lập (isolation level) nào chặt chẽ nhất?"
+  },
+  {
+   "chu": "savepoint",
+   "doc": "/ˈseɪvpɔɪnt/",
+   "nghia": "điểm lưu: mốc trong giao tác để rollback về đó thay vì huỷ toàn bộ",
+   "nhom": "Giao tác",
+   "viDu": "We can roll back to a savepoint without cancelling the whole transaction.",
+   "viDuNghia": "Ta có thể rollback về một điểm lưu mà không huỷ cả giao tác."
+  },
+  {
+   "chu": "concurrency control",
+   "doc": "/kənˈkɜːrənsi kənˈtroʊl/",
+   "nghia": "điều khiển đồng thời: cơ chế cho nhiều giao tác chạy cùng lúc mà dữ liệu vẫn đúng",
+   "nhom": "Giao tác",
+   "viDu": "Locking is a common technique for concurrency control.",
+   "viDuNghia": "Khoá là kỹ thuật phổ biến để điều khiển đồng thời."
+  },
+  {
+   "chu": "concurrent",
+   "doc": "/kənˈkɜːrənt/",
+   "nghia": "đồng thời: nhiều giao tác / người dùng chạy cùng một lúc",
+   "nhom": "Giao tác",
+   "viDu": "Which property of a transaction ensures that the execution of a transaction should not be interfered with by any other transactions executing concurrently?",
+   "viDuNghia": "Tính chất nào của giao tác đảm bảo việc thực thi một giao tác không bị các giao tác khác đang chạy đồng thời (concurrently) can thiệp?"
+  },
+  {
+   "chu": "lock",
+   "doc": "/lɑːk/",
+   "nghia": "khoá (dữ liệu): giữ dòng / bảng để giao tác khác không sửa cùng lúc · (HĐH, OSG202) khoá, biến khoá để loại trừ lẫn nhau khi vào đoạn găng",
+   "nhom": "Giao tác",
+   "viDu": "Locks are used to maintain transactional integrity and consistency.",
+   "viDuNghia": "Lock (khóa) được dùng để duy trì tính toàn vẹn và nhất quán của giao tác."
+  },
+  {
+   "chu": "shared lock",
+   "doc": "/ʃerd lɑːk/",
+   "nghia": "khoá chia sẻ (khoá đọc): nhiều giao tác cùng đọc được, không ai được ghi",
+   "nhom": "Giao tác",
+   "viDu": "A shared lock allows other transactions to read but not to write the data.",
+   "viDuNghia": "Khoá chia sẻ cho giao tác khác đọc nhưng không được ghi dữ liệu."
+  },
+  {
+   "chu": "exclusive lock",
+   "doc": "/ɪkˈskluːsɪv lɑːk/",
+   "nghia": "khoá độc quyền (khoá ghi): chỉ một giao tác được đọc / ghi, giao tác khác phải chờ",
+   "nhom": "Giao tác",
+   "viDu": "A transaction needs an exclusive lock before it updates a row.",
+   "viDuNghia": "Giao tác cần khoá độc quyền trước khi sửa một dòng."
+  },
+  {
+   "chu": "serializable",
+   "doc": "/ˈsɪriəlaɪzəbl/",
+   "nghia": "khả tuần tự: kết quả chạy đồng thời giống như chạy lần lượt từng giao tác",
+   "nhom": "Giao tác",
+   "viDu": "A serializable schedule gives the same result as running transactions one by one.",
+   "viDuNghia": "Lịch khả tuần tự cho kết quả giống như chạy lần lượt từng giao tác."
+  },
+  {
+   "chu": "dirty read",
+   "doc": "/ˈdɜːrti riːd/",
+   "nghia": "đọc bẩn: đọc phải dữ liệu mà giao tác khác chưa commit (có thể bị rollback)",
+   "nhom": "Giao tác",
+   "viDu": "A dirty read happens when a transaction reads uncommitted data.",
+   "viDuNghia": "Đọc bẩn xảy ra khi một giao tác đọc dữ liệu chưa được commit."
+  },
+  {
+   "chu": "committed",
+   "doc": "/kəˈmɪtɪd/",
+   "nghia": "đã xác nhận (commit): thay đổi của giao tác đã được lưu vĩnh viễn",
+   "nhom": "Giao tác",
+   "viDu": "Once a transaction is committed, its changes cannot be rolled back.",
+   "viDuNghia": "Khi giao tác đã commit thì không rollback các thay đổi của nó được nữa."
+  },
+  {
+   "chu": "transaction log",
+   "doc": "/trænˈzækʃn lɔːɡ/",
+   "nghia": "nhật ký giao tác: ghi mọi thay đổi để khôi phục hoặc rollback",
+   "nhom": "Giao tác",
+   "viDu": "The DBMS uses the transaction log to recover after a crash.",
+   "viDuNghia": "DBMS dùng nhật ký giao tác để khôi phục sau khi sập."
+  },
+  {
+   "chu": "recovery",
+   "doc": "/rɪˈkʌvəri/",
+   "nghia": "khôi phục: đưa CSDL về trạng thái đúng sau sự cố",
+   "nhom": "Giao tác",
+   "viDu": "Durability depends on the recovery mechanism of the DBMS.",
+   "viDuNghia": "Tính bền vững dựa vào cơ chế khôi phục của DBMS."
+  },
+  {
+   "chu": "commit",
+   "doc": "/kəˈmɪt/",
+   "nghia": "(giao tác) COMMIT: xác nhận, lưu vĩnh viễn mọi thay đổi của giao tác; sau đó không ROLLBACK được nữa",
+   "nhom": "Giao tác",
+   "viDu": "In order to undo the work of a transaction after the last commit, which one should be used?",
+   "viDuNghia": "Để hoàn tác công việc của một giao tác kể từ lần commit gần nhất, nên dùng lệnh nào? (Đáp án: ROLLBACK.)"
+  },
+  {
+   "chu": "rollback",
+   "doc": "/ˈroʊlbæk/",
+   "nghia": "(giao tác) ROLLBACK: huỷ mọi thay đổi chưa commit, đưa dữ liệu về trạng thái trước giao tác (hoặc về một savepoint)",
+   "nhom": "Giao tác",
+   "viDu": "To undo the work of a transaction after the last commit, you use ROLLBACK.",
+   "viDuNghia": "Để hoàn tác công việc của một giao tác kể từ lần commit gần nhất, ta dùng ROLLBACK."
+  },
+  {
+   "chu": "isolation",
+   "doc": "/ˌaɪsəˈleɪʃn/",
+   "nghia": "(giao tác) tính cô lập – chữ I trong ACID: các giao tác chạy đồng thời không thấy kết quả dở của nhau (isolation level) · (kiểm thử) test cô lập một đơn vị",
+   "nhom": "Giao tác",
+   "viDu": "The Isolation property in transactions ensures that:",
+   "viDuNghia": "Tính cô lập (Isolation) của giao tác bảo đảm rằng:"
+  },
+  {
+   "chu": "consistency",
+   "doc": "/kənˈsɪstənsi/",
+   "nghia": "(giao tác) tính nhất quán – chữ C trong ACID: giao tác đưa CSDL từ trạng thái hợp lệ sang trạng thái hợp lệ · (yêu cầu, kiểm thử) các phần không mâu thuẫn nhau",
+   "nhom": "Giao tác",
+   "viDu": "What are the ACID properties of DBMS transactions? → Atomicity, Consistency, Isolation, Durability",
+   "viDuNghia": "Các tính chất ACID của giao tác trong DBMS là gì? → Tính nguyên tử, nhất quán, cô lập, bền vững"
+  },
+  {
+   "chu": "privilege",
+   "doc": "/ˈprɪvəlɪdʒ/",
+   "nghia": "quyền (đặc quyền): được phép SELECT, INSERT, UPDATE… trên một đối tượng",
+   "nhom": "Phân quyền và bảo mật",
+   "viDu": "The GRANT statement gives a privilege to a user.",
+   "viDuNghia": "Câu lệnh GRANT cấp một quyền cho người dùng."
+  },
+  {
+   "chu": "revoke",
+   "doc": "/rɪˈvoʊk/",
+   "nghia": "thu hồi quyền (lệnh REVOKE)",
+   "nhom": "Phân quyền và bảo mật",
+   "viDu": "Use REVOKE to take a privilege back from a user.",
+   "viDuNghia": "Dùng REVOKE để thu lại quyền của một người dùng."
+  },
+  {
+   "chu": "SQL injection",
+   "doc": "/ˌes kjuː ˈel ɪnˈdʒekʃn/",
+   "nghia": "tấn công chèn mã SQL: nhét câu lệnh SQL vào dữ liệu nhập để phá hoặc lấy trộm dữ liệu",
+   "nhom": "Phân quyền và bảo mật",
+   "viDu": "Parameterized queries help prevent SQL injection.",
+   "viDuNghia": "Truy vấn có tham số giúp ngăn tấn công chèn mã SQL."
+  }
+ ]
+}

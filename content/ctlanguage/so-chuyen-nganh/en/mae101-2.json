@@ -1,0 +1,605 @@
+{
+ "ma": "mae101-2",
+ "nn": "en",
+ "ten": "MAE101 · 2. Hàm số, giới hạn, đạo hàm",
+ "moTa": "Toán cho kỹ sư (MAE101), bộ 2 - giải tích: hàm số và đồ thị, giới hạn và liên tục, đạo hàm, cực trị và khảo sát hàm số. Từ lấy từ đề FE thật; ví dụ là câu hỏi thật trong đề.",
+ "bieuTuong": "function",
+ "thuTu": -992,
+ "tu": [
+  {
+   "chu": "domain of a function",
+   "nghia": "tập xác định (các giá trị x mà hàm số có nghĩa); find the domain = tìm tập xác định",
+   "nhom": "Hàm số và đồ thị",
+   "viDu": "State the domain of the derivative of the function f(x) = ln (x²).",
+   "viDuNghia": "Nêu tập xác định của đạo hàm của hàm số f(x) = ln (x²)."
+  },
+  {
+   "chu": "range of a function",
+   "nghia": "tập giá trị, miền giá trị (các giá trị y mà hàm số nhận được)",
+   "nhom": "Hàm số và đồ thị",
+   "viDu": "Find the range of the function f(x) = sin (x²+3).",
+   "viDuNghia": "Tìm tập giá trị của hàm số f(x) = sin (x²+3)."
+  },
+  {
+   "chu": "curve",
+   "doc": "/kɜːrv/",
+   "nghia": "đường cong",
+   "nhom": "Hàm số và đồ thị",
+   "viDu": "Differentiate implicitly to find the slope of the curve at the given point: y³+yx²+x²-3y²=0, (-1,1).",
+   "viDuNghia": "Đạo hàm ẩn để tìm hệ số góc của đường cong tại điểm cho trước: y³+yx²+x²-3y²=0, (-1,1)."
+  },
+  {
+   "chu": "x-axis",
+   "doc": "/ˈeks ˌæksɪs/",
+   "nghia": "trục hoành (trục x); y-axis = trục tung",
+   "nhom": "Hàm số và đồ thị",
+   "viDu": "Let T be the rotation about the origin of angle (π)/2 followed by reflection in the x-axis. Find T[1; 0].",
+   "viDuNghia": "Cho T là phép quay quanh gốc tọa độ góc (π)/2 theo sau bởi phép đối xứng qua trục x. Tìm T[1; 0]."
+  },
+  {
+   "chu": "coordinate",
+   "doc": "/koʊˈɔːrdɪnət/",
+   "nghia": "toạ độ (x-coordinate = hoành độ, y-coordinate = tung độ)",
+   "nhom": "Hàm số và đồ thị",
+   "viDu": "Let A be the point in the plane 2x-y-z=6 that is closest to the point (1,-2,3). Determine the y-coordinate of A.",
+   "viDuNghia": "Cho A là điểm trên mặt phẳng 2x-y-z=6 gần điểm (1,-2,3) nhất. Xác định tọa độ y của A."
+  },
+  {
+   "chu": "origin",
+   "doc": "/ˈɔːrɪdʒɪn/",
+   "nghia": "gốc toạ độ O(0, 0)",
+   "nhom": "Hàm số và đồ thị",
+   "viDu": "Let A(-2,1,3) and B(1,2,4). Let P(a,b,c) be the point on the line AB that is closest to the origin. Find a.",
+   "viDuNghia": "Cho A(-2,1,3) và B(1,2,4). Gọi P(a,b,c) là điểm trên đường thẳng AB gần gốc toạ độ nhất. Tìm a."
+  },
+  {
+   "chu": "quadrant",
+   "doc": "/ˈkwɑːdrənt/",
+   "nghia": "góc phần tư (first quadrant = góc phần tư thứ nhất, x > 0 và y > 0)",
+   "nhom": "Hàm số và đồ thị",
+   "viDu": "Find an equation of the line through the point (4,5) that cuts off the least area from the first quadrant.",
+   "viDuNghia": "Tìm phương trình đường thẳng đi qua điểm (4,5) cắt bỏ diện tích nhỏ nhất khỏi góc phần tư thứ nhất."
+  },
+  {
+   "chu": "slope",
+   "doc": "/sloʊp/",
+   "nghia": "hệ số góc, độ dốc (của đường thẳng, của tiếp tuyến)",
+   "nhom": "Hàm số và đồ thị",
+   "viDu": "Let (L) be the line passing through (1,-1) with slope 2. Which of the following points lies in (L)?",
+   "viDuNghia": "Cho (L) là đường thẳng đi qua (1,-1) với hệ số góc 2. Điểm nào sau đây nằm trên (L)?"
+  },
+  {
+   "chu": "even function",
+   "doc": "/ˈiːvn ˈfʌŋkʃn/",
+   "nghia": "hàm chẵn, f(-x) = f(x), đồ thị đối xứng qua trục tung; odd function = hàm lẻ",
+   "nhom": "Hàm số và đồ thị",
+   "viDu": "Which of the following are even functions? (i) f(x)=x³-1010 (ii) f(x)=sin (2x^4) (iii) f(x)=sin (x-10x^5) (iv) f(x)=x+5/x+2 (v) f(x)=sin xcos x",
+   "viDuNghia": "Hàm nào sau đây là hàm chẵn? (i) f(x)=x³-1010 (ii) f(x)=sin (2x^4) (iii) f(x)=sin (x-10x^5) (iv) f(x)=x+5/x+2 (v) f(x)=sin xcos x"
+  },
+  {
+   "chu": "composite function",
+   "doc": "/kəmˈpɑːzɪt ˈfʌŋkʃn/",
+   "nghia": "hàm hợp (f∘g)(x) = f(g(x))",
+   "nhom": "Hàm số và đồ thị",
+   "viDu": "Find the domain of the composite function g ∘f if f(x) = √x and g(x) = 1/(x-2).",
+   "viDuNghia": "Tìm tập xác định của hàm hợp g ∘f nếu f(x) = √x và g(x) = 1/(x-2)."
+  },
+  {
+   "chu": "inverse",
+   "doc": "/ˈɪnvɜːrs/",
+   "nghia": "nghịch đảo: hàm ngược (inverse function), ma trận nghịch đảo (inverse matrix)",
+   "nhom": "Hàm số và đồ thị",
+   "viDu": "Find the third entry of the first row of the inverse of the matrix [1 0 3; 0 1 0; 0 0 1].",
+   "viDuNghia": "Tìm phần tử thứ ba của hàng đầu tiên trong ma trận nghịch đảo của [1 0 3; 0 1 0; 0 0 1]."
+  },
+  {
+   "chu": "piecewise",
+   "doc": "/ˈpiːswaɪz/",
+   "nghia": "từng khúc (piecewise-defined function = hàm cho bởi các công thức khác nhau trên từng khoảng)",
+   "nhom": "Hàm số và đồ thị",
+   "viDu": "A piecewise function uses different formulas on different intervals.",
+   "viDuNghia": "Hàm từng khúc dùng các công thức khác nhau trên các khoảng khác nhau."
+  },
+  {
+   "chu": "stretch",
+   "doc": "/stretʃ/",
+   "nghia": "kéo dãn (đồ thị) theo một hệ số (by a factor of 5 = gấp 5 lần)",
+   "nhom": "Hàm số và đồ thị",
+   "viDu": "Write the equation for the graph obtained by stretching the graph of y=f(x) vertically by a factor of 5 and then shifting 1 unit upward.",
+   "viDuNghia": "Viết phương trình đồ thị nhận được khi kéo dãn đồ thị y=f(x) theo chiều dọc với hệ số 5, sau đó tịnh tiến lên trên 1 đơn vị."
+  },
+  {
+   "chu": "compress",
+   "doc": "/kəmˈpres/",
+   "nghia": "co lại, nén (đồ thị)",
+   "nhom": "Hàm số và đồ thị",
+   "viDu": "To compress the graph of y = f(x) horizontally by a factor of 2, replace x by 2x.",
+   "viDuNghia": "Để co đồ thị y = f(x) theo chiều ngang 2 lần, thay x bằng 2x."
+  },
+  {
+   "chu": "horizontal",
+   "doc": "/ˌhɔːrɪˈzɑːntl/",
+   "nghia": "nằm ngang (horizontally = theo chiều ngang)",
+   "nhom": "Hàm số và đồ thị",
+   "viDu": "Find all the values of x where the tangent line to the graph of the function is horizontal. f(x) = x³ - 3x² + 1",
+   "viDuNghia": "Tìm tất cả các giá trị của x mà tiếp tuyến của đồ thị hàm số nằm ngang. f(x) = x³ - 3x² + 1"
+  },
+  {
+   "chu": "vertical",
+   "doc": "/ˈvɜːrtɪkl/",
+   "nghia": "thẳng đứng (vertically = theo chiều dọc)",
+   "nhom": "Hàm số và đồ thị",
+   "viDu": "Find the vertical and horizontal asymptotes of the graph of the following function f(x) = x + 1/(x-1)",
+   "viDuNghia": "Tìm tiệm cận đứng và tiệm cận ngang của đồ thị hàm số sau f(x) = x + 1/(x-1)"
+  },
+  {
+   "chu": "upward",
+   "doc": "/ˈʌpwərd/",
+   "nghia": "lên trên (shift 3 units upward = tịnh tiến lên 3 đơn vị)",
+   "nhom": "Hàm số và đồ thị",
+   "viDu": "Describe how the graph of y = f(x-2)+3 is obtained from the graph of y = f(x): shift 2 units to the right, then shift 3 units upward.",
+   "viDuNghia": "Mô tả cách thu được đồ thị y = f(x-2)+3 từ đồ thị y = f(x): dịch sang phải 2 đơn vị rồi dịch lên trên 3 đơn vị."
+  },
+  {
+   "chu": "downward",
+   "doc": "/ˈdaʊnwərd/",
+   "nghia": "xuống dưới (shift downward = tịnh tiến xuống; concave downward = lõm xuống)",
+   "nhom": "Hàm số và đồ thị",
+   "viDu": "The parabola y = -x² opens downward.",
+   "viDuNghia": "Parabol y = -x² quay bề lõm xuống dưới."
+  },
+  {
+   "chu": "symmetric",
+   "doc": "/sɪˈmetrɪk/",
+   "nghia": "đối xứng (symmetric about the y-axis = đối xứng qua trục tung; symmetric matrix = ma trận đối xứng)",
+   "nhom": "Hàm số và đồ thị",
+   "viDu": "Determine ALL the values of s,t such that the following matrix is symmetric: [s 2s st; t -1 s; t s² s].",
+   "viDuNghia": "Xác định TẤT CẢ giá trị s,t để ma trận sau đối xứng: [s 2s st; t -1 s; t s² s]."
+  },
+  {
+   "chu": "increasing",
+   "doc": "/ɪnˈkriːsɪŋ/",
+   "nghia": "tăng, đồng biến (increasing on an interval = đồng biến trên một khoảng)",
+   "nhom": "Hàm số và đồ thị",
+   "viDu": "Determine where the given function is increasing and where it is decreasing: f(x) = -4x² - 2x - 12",
+   "viDuNghia": "Xác định khoảng đồng biến và nghịch biến của hàm số f(x) = -4x² - 2x - 12"
+  },
+  {
+   "chu": "decreasing",
+   "doc": "/dɪˈkriːsɪŋ/",
+   "nghia": "giảm, nghịch biến (trên một khoảng)",
+   "nhom": "Hàm số và đồ thị",
+   "viDu": "Determine where the given function is increasing and where it is decreasing f(x) = 2x³+15x²+24x",
+   "viDuNghia": "Xác định khoảng hàm số sau đồng biến và khoảng nghịch biến f(x) = 2x³+15x²+24x"
+  },
+  {
+   "chu": "parabola",
+   "doc": "/pəˈræbələ/",
+   "nghia": "parabol (đồ thị của hàm bậc hai)",
+   "nhom": "Hàm số và đồ thị",
+   "viDu": "Find the point on the parabola x=y²-6y+9 that is closest to the point (-1,3).",
+   "viDuNghia": "Tìm điểm trên parabol x=y²-6y+9 gần điểm (-1,3) nhất."
+  },
+  {
+   "chu": "interval",
+   "doc": "/ˈɪntərvl/",
+   "nghia": "khoảng, đoạn; (a, b) là khoảng mở - open interval, [a, b] là đoạn - closed interval",
+   "nhom": "Hàm số và đồ thị",
+   "viDu": "Approximate the area under the graph of f(x) = x²+2 over the interval [0, 5] using 5 subintervals and left endpoints.",
+   "viDuNghia": "Xấp xỉ diện tích dưới đồ thị của f(x) = x²+2 trên đoạn [0, 5] dùng 5 khoảng con và các đầu mút trái."
+  },
+  {
+   "chu": "rise",
+   "doc": "/raɪz/",
+   "nghia": "đi lên, tăng lên (đồ thị, nhiệt độ, vật thể); rises = đang đi lên",
+   "nhom": "Hàm số và đồ thị",
+   "viDu": "The graph rises from (0,4) to a local maximum near (1,5), then falls to a local minimum near (6,2), then rises to about (7,3).",
+   "viDuNghia": "Đồ thị tăng từ (0,4) lên cực đại gần (1,5), sau đó giảm xuống cực tiểu gần (6,2), rồi tăng lên khoảng (7,3)."
+  },
+  {
+   "chu": "steep",
+   "doc": "/stiːp/",
+   "nghia": "dốc (steeply = một cách dốc, tăng/giảm nhanh)",
+   "nhom": "Hàm số và đồ thị",
+   "viDu": "The graph is steep where the absolute value of the derivative is large.",
+   "viDuNghia": "Đồ thị dốc ở nơi trị tuyệt đối của đạo hàm lớn."
+  },
+  {
+   "chu": "dip",
+   "doc": "/dɪp/",
+   "nghia": "hạ xuống, trũng xuống (đồ thị đi xuống rồi lại đi lên)",
+   "nhom": "Hàm số và đồ thị",
+   "viDu": "The curve dips to a local minimum and then rises again.",
+   "viDuNghia": "Đường cong hạ xuống một cực tiểu địa phương rồi lại đi lên."
+  },
+  {
+   "chu": "peak",
+   "doc": "/piːk/",
+   "nghia": "đỉnh, điểm cao nhất (của đồ thị, của quỹ đạo)",
+   "nhom": "Hàm số và đồ thị",
+   "viDu": "The ball reaches its peak when its velocity is zero.",
+   "viDuNghia": "Quả bóng đạt điểm cao nhất khi vận tốc bằng 0."
+  },
+  {
+   "chu": "limit",
+   "doc": "/ˈlɪmɪt/",
+   "nghia": "giới hạn (lim); evaluate the limit = tính giới hạn",
+   "nhom": "Giới hạn và liên tục",
+   "viDu": "Express the area under the graph of f(x)=x³+1, from 0 to 4, as a limit.",
+   "viDuNghia": "Biểu diễn diện tích dưới đồ thị f(x)=x³+1, từ 0 đến 4, dưới dạng một giới hạn."
+  },
+  {
+   "chu": "continuous",
+   "doc": "/kənˈtɪnjuəs/",
+   "nghia": "liên tục (continuous at x = a = liên tục tại a)",
+   "nhom": "Giới hạn và liên tục",
+   "viDu": "Find the number a such that the function f(x) = (√(x+7)-3)/(x-2) for x≠2, f(x)=a for x=2, is continuous at 2.",
+   "viDuNghia": "Tìm số a để hàm f(x) = (√(x+7)-3)/(x-2) khi x≠2, f(x)=a khi x=2, liên tục tại 2."
+  },
+  {
+   "chu": "discontinuous",
+   "doc": "/ˌdɪskənˈtɪnjuəs/",
+   "nghia": "gián đoạn, không liên tục",
+   "nhom": "Giới hạn và liên tục",
+   "viDu": "The function f(x) = 1/x is discontinuous at x = 0.",
+   "viDuNghia": "Hàm số f(x) = 1/x gián đoạn tại x = 0."
+  },
+  {
+   "chu": "discontinuity",
+   "doc": "/ˌdɪsˌkɑːntɪˈnuːəti/",
+   "nghia": "điểm gián đoạn, sự gián đoạn",
+   "nhom": "Giới hạn và liên tục",
+   "viDu": "Find all points of discontinuity of the function.",
+   "viDuNghia": "Tìm tất cả các điểm gián đoạn của hàm số."
+  },
+  {
+   "chu": "jump",
+   "doc": "/dʒʌmp/",
+   "nghia": "bước nhảy (jump discontinuity = gián đoạn kiểu bước nhảy: giới hạn trái khác giới hạn phải)",
+   "nhom": "Giới hạn và liên tục",
+   "viDu": "The graph has a jump at x = 2, so f is not continuous there.",
+   "viDuNghia": "Đồ thị có bước nhảy tại x = 2 nên f không liên tục tại đó."
+  },
+  {
+   "chu": "asymptote",
+   "doc": "/ˈæsɪmptoʊt/",
+   "nghia": "đường tiệm cận",
+   "nhom": "Giới hạn và liên tục",
+   "viDu": "Find the vertical and horizontal asymptotes of the graph of the following function f(x)=x+1/(x-1)",
+   "viDuNghia": "Tìm tiệm cận đứng và tiệm cận ngang của đồ thị hàm số f(x)=x+1/(x-1)"
+  },
+  {
+   "chu": "vertical asymptote",
+   "doc": "/ˈvɜːrtɪkl ˈæsɪmptoʊt/",
+   "nghia": "tiệm cận đứng (x = a, khi hàm tiến ra vô cực gần a)",
+   "nhom": "Giới hạn và liên tục",
+   "viDu": "Find the vertical asymptotes to the graph of f(x)=(x-4)/(6-√x-x).",
+   "viDuNghia": "Tìm tiệm cận đứng của đồ thị f(x)=(x-4)/(6-√x-x)."
+  },
+  {
+   "chu": "horizontal asymptote",
+   "doc": "/ˌhɔːrɪˈzɑːntl ˈæsɪmptoʊt/",
+   "nghia": "tiệm cận ngang (y = L, khi x tiến ra vô cực)",
+   "nhom": "Giới hạn và liên tục",
+   "viDu": "How many horizontal asymptotes does the following function have? y = (3x-20)/(√(5x²+1))",
+   "viDuNghia": "Hàm số sau có bao nhiêu tiệm cận ngang? y = (3x-20)/(√(5x²+1))"
+  },
+  {
+   "chu": "corner",
+   "doc": "/ˈkɔːrnər/",
+   "nghia": "điểm góc, góc nhọn (sharp corner) — tại đó hàm số không khả vi",
+   "nhom": "Giới hạn và liên tục",
+   "viDu": "The graph of f(x) is given (the curve has a vertical asymptote at x=0 and a sharp corner at x=3). State the numbers at which f(x) is not differentiable.",
+   "viDuNghia": "Cho đồ thị f(x) (đường cong có tiệm cận đứng tại x=0 và một góc nhọn tại x=3). Nêu các số mà tại đó f(x) không khả vi."
+  },
+  {
+   "chu": "smooth",
+   "doc": "/smuːð/",
+   "nghia": "trơn (đồ thị không gãy khúc, không có góc nhọn)",
+   "nhom": "Giới hạn và liên tục",
+   "viDu": "A smooth curve has no sharp corners, so the function is differentiable.",
+   "viDuNghia": "Đường cong trơn không có góc nhọn nên hàm số khả vi."
+  },
+  {
+   "chu": "right-hand limit",
+   "doc": "/ˈraɪt hænd ˈlɪmɪt/",
+   "nghia": "giới hạn phải (x tiến tới a từ bên phải); left-hand limit = giới hạn trái",
+   "nhom": "Giới hạn và liên tục",
+   "viDu": "A jump discontinuity occurs when the left-hand limit and the right-hand limit are different.",
+   "viDuNghia": "Gián đoạn bước nhảy xảy ra khi giới hạn trái và giới hạn phải khác nhau."
+  },
+  {
+   "chu": "derivative",
+   "doc": "/dɪˈrɪvətɪv/",
+   "nghia": "đạo hàm (f'(x), dy/dx)",
+   "nhom": "Đạo hàm",
+   "viDu": "State the domain of the derivative of the function f(x)=ln (x²).",
+   "viDuNghia": "Xác định miền xác định của đạo hàm hàm số f(x)=ln (x²)."
+  },
+  {
+   "chu": "differentiate",
+   "doc": "/ˌdɪfəˈrenʃieɪt/",
+   "nghia": "lấy đạo hàm",
+   "nhom": "Đạo hàm",
+   "viDu": "Differentiate implicitly to find the slope of the curve at the given point: xy³ - x^5y² = -4, (-1,2).",
+   "viDuNghia": "Đạo hàm ẩn để tìm hệ số góc của đường cong tại điểm cho trước: xy³ - x^5y² = -4, (-1,2)."
+  },
+  {
+   "chu": "differentiable",
+   "doc": "/ˌdɪfəˈrenʃəbl/",
+   "nghia": "khả vi (có đạo hàm)",
+   "nhom": "Đạo hàm",
+   "viDu": "The graph of f(x) is given. State the numbers at which f(x) is not differentiable.",
+   "viDuNghia": "Cho đồ thị của f(x). Xác định các giá trị mà tại đó f(x) không khả vi."
+  },
+  {
+   "chu": "differentiation",
+   "doc": "/ˌdɪfəˌrenʃiˈeɪʃn/",
+   "nghia": "phép lấy đạo hàm",
+   "nhom": "Đạo hàm",
+   "viDu": "Find dy/dx by implicit differentiation: 9xy + 2y - 2 = 0.",
+   "viDuNghia": "Tìm dy/dx bằng phương pháp đạo hàm ẩn: 9xy + 2y - 2 = 0."
+  },
+  {
+   "chu": "implicit differentiation",
+   "doc": "/ɪmˈplɪsɪt ˌdɪfəˌrenʃiˈeɪʃn/",
+   "nghia": "đạo hàm hàm ẩn (lấy đạo hàm hai vế của phương trình chứa cả x và y rồi giải ra dy/dx)",
+   "nhom": "Đạo hàm",
+   "viDu": "Find dy/dx by implicit differentiation: 7y² - 5x² = 5",
+   "viDuNghia": "Tìm dy/dx bằng đạo hàm ẩn: 7y² - 5x² = 5"
+  },
+  {
+   "chu": "implicitly",
+   "doc": "/ɪmˈplɪsɪtli/",
+   "nghia": "theo kiểu hàm ẩn (differentiate implicitly = lấy đạo hàm hàm ẩn)",
+   "nhom": "Đạo hàm",
+   "viDu": "Differentiate implicitly to find the slope of the curve at the given point: xy³ - x^5y² = -4, (-1,2)",
+   "viDuNghia": "Đạo hàm ẩn để tìm hệ số góc của đường cong tại điểm cho trước: xy³ - x^5y² = -4, (-1,2)"
+  },
+  {
+   "chu": "chain rule",
+   "doc": "/tʃeɪn ruːl/",
+   "nghia": "quy tắc dây chuyền, đạo hàm hàm hợp: (f(g(x)))' = f'(g(x))·g'(x)",
+   "nhom": "Đạo hàm",
+   "viDu": "Use the chain rule to differentiate y = sin(x²).",
+   "viDuNghia": "Dùng quy tắc đạo hàm hàm hợp để tính đạo hàm của y = sin(x²)."
+  },
+  {
+   "chu": "tangent line",
+   "doc": "/ˈtændʒənt laɪn/",
+   "nghia": "tiếp tuyến",
+   "nhom": "Đạo hàm",
+   "viDu": "Find all the values of x where the tangent line to the graph of the function is horizontal: f(x)=1/3 x³-2x+7",
+   "viDuNghia": "Tìm mọi giá trị x mà tiếp tuyến của đồ thị hàm số nằm ngang: f(x)=1/3 x³-2x+7"
+  },
+  {
+   "chu": "rate of change",
+   "nghia": "tốc độ biến thiên (đạo hàm chính là tốc độ biến thiên tức thời)",
+   "nhom": "Đạo hàm",
+   "viDu": "Find the instantaneous rate of change of the temperature (in °C/h) at midnight.",
+   "viDuNghia": "Tìm tốc độ thay đổi tức thời của nhiệt độ (theo °C/h) vào lúc nửa đêm."
+  },
+  {
+   "chu": "instantaneous",
+   "doc": "/ˌɪnstənˈteɪniəs/",
+   "nghia": "tức thời (instantaneous velocity = vận tốc tức thời, tức đạo hàm của vị trí)",
+   "nhom": "Đạo hàm",
+   "viDu": "A particle moves along a straight line with displacement given by s(t)=t²-8t+18. What is the instantaneous velocity when t=4?",
+   "viDuNghia": "Một chất điểm chuyển động trên đường thẳng với độ dịch chuyển s(t)=t²-8t+18. Vận tốc tức thời tại t=4 là bao nhiêu?"
+  },
+  {
+   "chu": "acceleration",
+   "doc": "/əkˌseləˈreɪʃn/",
+   "nghia": "gia tốc (đạo hàm của vận tốc)",
+   "nhom": "Đạo hàm",
+   "viDu": "At 2:00 PM a car's speedometer reads 30 mi/h. At 2:10 PM it reads 50 mi/h. Find the average acceleration from 2:00 PM to 2:10 PM.",
+   "viDuNghia": "Lúc 2:00 chiều, đồng hồ tốc độ ô tô chỉ 30 dặm/giờ. Lúc 2:10 chiều, nó chỉ 50 dặm/giờ. Tìm gia tốc trung bình từ 2:00 đến 2:10 chiều."
+  },
+  {
+   "chu": "position",
+   "doc": "/pəˈzɪʃn/",
+   "nghia": "vị trí (position function s(t) = hàm vị trí theo thời gian)",
+   "nhom": "Đạo hàm",
+   "viDu": "The function s(t)=t² cos t+4t² represents the position of a particle moving along a horizontal line. Find the velocity of the particle at time t=π.",
+   "viDuNghia": "Hàm số s(t)=t² cos t+4t² biểu diễn vị trí của một chất điểm chuyển động trên đường thẳng nằm ngang. Tìm vận tốc của chất điểm tại thời điểm t=π."
+  },
+  {
+   "chu": "initial velocity",
+   "doc": "/ɪˈnɪʃl vəˈlɑːsəti/",
+   "nghia": "vận tốc ban đầu (tại t = 0)",
+   "nhom": "Đạo hàm",
+   "viDu": "A potato is launched vertically upward with an initial velocity of 100 ft/s from a potato gun at the top of an 85-feet-tall building.",
+   "viDuNghia": "Một quả khoai tây được bắn thẳng đứng lên trên với vận tốc ban đầu 100 ft/s từ một khẩu súng bắn khoai tây đặt trên đỉnh tòa nhà cao 85 feet."
+  },
+  {
+   "chu": "speed",
+   "doc": "/spiːd/",
+   "nghia": "tốc độ (độ lớn của vận tốc)",
+   "nhom": "Đạo hàm",
+   "viDu": "Determine the time intervals when the object is speeding up.",
+   "viDuNghia": "Xác định các khoảng thời gian vật chuyển động NHANH DẦN."
+  },
+  {
+   "chu": "linear approximation",
+   "doc": "/ˈlɪniər əˌprɑːksɪˈmeɪʃn/",
+   "nghia": "xấp xỉ tuyến tính: L(x) = f(a) + f'(a)(x - a)",
+   "nhom": "Đạo hàm",
+   "viDu": "Find the linear approximation of the function f(x) = (1+x)² √(1+2x) at x=0.",
+   "viDuNghia": "Tìm xấp xỉ tuyến tính của hàm số f(x) = (1+x)² √(1+2x) tại x=0."
+  },
+  {
+   "chu": "linearization",
+   "doc": "/ˌlɪniərəˈzeɪʃn/",
+   "nghia": "tuyến tính hoá (hàm L(x) xấp xỉ f(x) gần điểm a)",
+   "nhom": "Đạo hàm",
+   "viDu": "Find the linearization of the function f(x)=3x³+2x²+x at x=1.",
+   "viDuNghia": "Tìm xấp xỉ tuyến tính (linearization) của hàm số f(x)=3x³+2x²+x tại x=1."
+  },
+  {
+   "chu": "differential",
+   "doc": "/ˌdɪfəˈrenʃl/",
+   "nghia": "vi phân (dy = f'(x)dx)",
+   "nhom": "Đạo hàm",
+   "viDu": "Find the differential of the function y = √(4+5x)",
+   "viDuNghia": "Tìm vi phân của hàm số y = √(4+5x)"
+  },
+  {
+   "chu": "marginal cost",
+   "doc": "/ˈmɑːrdʒɪnl kɔːst/",
+   "nghia": "chi phí biên (đạo hàm của hàm chi phí: chi phí làm thêm một đơn vị)",
+   "nhom": "Đạo hàm",
+   "viDu": "If C(x) = the cost of producing x units of a product, the rate of change of C(x) is called the marginal cost. Let C(x)=0.000003x³-0.04x²+200x+70000. Find the marginal cost of 3000 units.",
+   "viDuNghia": "Nếu C(x) là chi phí sản xuất x đơn vị sản phẩm thì tốc độ thay đổi của C(x) gọi là chi phí biên. Cho C(x)=0.000003x³-0.04x²+200x+70000. Tìm chi phí biên tại 3000 đơn vị."
+  },
+  {
+   "chu": "Newton's method",
+   "doc": "/ˈnuːtnz ˈmeθəd/",
+   "nghia": "phương pháp Newton (lặp x(n+1) = x(n) - f(x(n))/f'(x(n)) để tìm nghiệm gần đúng)",
+   "nhom": "Đạo hàm",
+   "viDu": "Use Newton's method with the initial approximation x₁=1 to find x₃ of the following equation sin x = x³-1",
+   "viDuNghia": "Dùng phương pháp Newton với xấp xỉ ban đầu x₁=1 để tìm x₃ của phương trình sin x = x³-1"
+  },
+  {
+   "chu": "initial approximation",
+   "doc": "/ɪˈnɪʃl əˌprɑːksɪˈmeɪʃn/",
+   "nghia": "xấp xỉ ban đầu (giá trị x₁ bắt đầu phép lặp)",
+   "nhom": "Đạo hàm",
+   "viDu": "Use Newton's method with the initial approximation x₁=1 to find x₃ of the following equation sin x=x³-1",
+   "viDuNghia": "Dùng phương pháp Newton với xấp xỉ ban đầu x₁=1 để tìm x₃ của phương trình sin x=x³-1"
+  },
+  {
+   "chu": "mean value theorem",
+   "nghia": "định lý giá trị trung bình (Lagrange): tồn tại c để f'(c) = (f(b) - f(a))/(b - a)",
+   "nhom": "Đạo hàm",
+   "viDu": "The function f(x)=x² satisfies the hypotheses of the Mean Value Theorem on [1,3]. Find the number c that the theorem guarantees.",
+   "viDuNghia": "Hàm f(x)=x² thoả các giả thiết của Định lý giá trị trung bình trên [1,3]. Tìm số c mà định lý bảo đảm tồn tại."
+  },
+  {
+   "chu": "at what rate",
+   "nghia": "với tốc độ bao nhiêu (câu hỏi bài toán tốc độ liên quan - related rates)",
+   "nhom": "Đạo hàm",
+   "viDu": "The area of a square is decreasing at a rate of 30 cm²/s. At what rate (in cm/s) is the side of the square changing when the area of the square is 625 cm²?",
+   "viDuNghia": "Diện tích một hình vuông đang giảm với tốc độ 30 cm²/s. Cạnh hình vuông thay đổi với tốc độ nào (cm/s) khi diện tích bằng 625 cm²?"
+  },
+  {
+   "chu": "absolute maximum",
+   "doc": "/ˈæbsəluːt ˈmæksɪməm/",
+   "nghia": "giá trị lớn nhất (toàn cục) trên miền đang xét",
+   "nhom": "Cực trị và khảo sát",
+   "viDu": "Find the absolute minimum and absolute maximum values of f(x) = x³ - 3x² + 1 on [-1,3].",
+   "viDuNghia": "Tìm giá trị nhỏ nhất tuyệt đối và lớn nhất tuyệt đối của f(x) = x³ - 3x² + 1 trên [-1,3]."
+  },
+  {
+   "chu": "absolute minimum",
+   "doc": "/ˈæbsəluːt ˈmɪnɪməm/",
+   "nghia": "giá trị nhỏ nhất (toàn cục) trên miền đang xét",
+   "nhom": "Cực trị và khảo sát",
+   "viDu": "Find the absolute maximum and absolute minimum values of f(x) = x³-3x²+3x+1 on [0, 2].",
+   "viDuNghia": "Tìm giá trị lớn nhất và nhỏ nhất tuyệt đối của f(x) = x³-3x²+3x+1 trên [0, 2]."
+  },
+  {
+   "chu": "relative maximum",
+   "doc": "/ˈrelətɪv ˈmæksɪməm/",
+   "nghia": "cực đại địa phương (giống local maximum)",
+   "nhom": "Cực trị và khảo sát",
+   "viDu": "If f'(x) changes from positive to negative at x = c, then f has a relative maximum at c.",
+   "viDuNghia": "Nếu f'(x) đổi dấu từ dương sang âm tại x = c thì f đạt cực đại địa phương tại c."
+  },
+  {
+   "chu": "relative minimum",
+   "doc": "/ˈrelətɪv ˈmɪnɪməm/",
+   "nghia": "cực tiểu địa phương (giống local minimum)",
+   "nhom": "Cực trị và khảo sát",
+   "viDu": "If f'(c) = 0 and f''(c) > 0, then f has a relative minimum at c.",
+   "viDuNghia": "Nếu f'(c) = 0 và f''(c) > 0 thì f đạt cực tiểu địa phương tại c."
+  },
+  {
+   "chu": "local",
+   "doc": "/ˈloʊkl/",
+   "nghia": "địa phương (local maximum = cực đại địa phương, chỉ lớn nhất so với các điểm lân cận)",
+   "nhom": "Cực trị và khảo sát",
+   "viDu": "Find the local (relative) extrema of the function f(x) = x³ - 3x^4.",
+   "viDuNghia": "Tìm cực trị (địa phương) của hàm số f(x) = x³ - 3x^4."
+  },
+  {
+   "chu": "extremum",
+   "doc": "/ɪkˈstriːməm/",
+   "nghia": "cực trị; số nhiều: extrema (relative extrema = các cực trị địa phương)",
+   "nhom": "Cực trị và khảo sát",
+   "viDu": "Find the relative extrema, if they exist, of the function f(x) = -6x² - 2x - 7.",
+   "viDuNghia": "Tìm các cực trị (nếu có) của hàm số f(x) = -6x² - 2x - 7."
+  },
+  {
+   "chu": "critical number",
+   "doc": "/ˈkrɪtɪkl ˈnʌmbər/",
+   "nghia": "điểm tới hạn (x mà f'(x) = 0 hoặc f'(x) không tồn tại)",
+   "nhom": "Cực trị và khảo sát",
+   "viDu": "Find the critical numbers of f(t) = 2sin t + sin ² t on [0, π].",
+   "viDuNghia": "Tìm các số tới hạn của f(t) = 2sin t + sin ² t trên [0, π]."
+  },
+  {
+   "chu": "concave up",
+   "doc": "/ˈkɑːnkeɪv ʌp/",
+   "nghia": "lõm lên (đồ thị cong hình cái chén, f'' > 0); còn gọi concave upward",
+   "nhom": "Cực trị và khảo sát",
+   "viDu": "Determine where the function f(x)=x²-20x+104 is concave up and where it is concave down.",
+   "viDuNghia": "Xác định khoảng đồ thị hàm số f(x)=x²-20x+104 lõm lên (concave up) và khoảng lõm xuống (concave down)."
+  },
+  {
+   "chu": "concave down",
+   "doc": "/ˈkɑːnkeɪv daʊn/",
+   "nghia": "lõm xuống (đồ thị cong hình cái vòm, f'' < 0)",
+   "nhom": "Cực trị và khảo sát",
+   "viDu": "Determine where the function f(x) = x³ + 3x² - x - 24 is concave up and where it is concave down.",
+   "viDuNghia": "Xác định khoảng đồ thị của f(x) = x³ + 3x² - x - 24 lõm lên (concave up) và khoảng lõm xuống (concave down)."
+  },
+  {
+   "chu": "inflection point",
+   "doc": "/ɪnˈflekʃn pɔɪnt/",
+   "nghia": "điểm uốn (nơi đồ thị đổi chiều lõm)",
+   "nhom": "Cực trị và khảo sát",
+   "viDu": "Find the inflection point of the curve y=x³-6x²+9x.",
+   "viDuNghia": "Tìm điểm uốn của đường cong y=x³-6x²+9x."
+  },
+  {
+   "chu": "minimize",
+   "doc": "/ˈmɪnɪmaɪz/",
+   "nghia": "làm cho nhỏ nhất, cực tiểu hoá (maximize = làm cho lớn nhất)",
+   "nhom": "Cực trị và khảo sát",
+   "viDu": "A box with a square base and open top must have a volume of 13500 (in cubic centimeter). Find the dimensions of the box that minimize the amount of material used.",
+   "viDuNghia": "Một chiếc hộp có đáy vuông và không có nắp phải có thể tích 13500 (cm khối). Tìm các kích thước của hộp sao cho lượng vật liệu sử dụng là nhỏ nhất."
+  },
+  {
+   "chu": "closest",
+   "doc": "/ˈkloʊsɪst/",
+   "nghia": "gần nhất (closest to the point = gần điểm ... nhất)",
+   "nhom": "Cực trị và khảo sát",
+   "viDu": "Let Q(a, b, c) be the point on the plane with equation x+y+z = 1 that is closest to the point P(1, 0, 3). Find b.",
+   "viDuNghia": "Cho Q(a, b, c) là điểm trên mặt phẳng x+y+z = 1 gần điểm P(1, 0, 3) nhất. Tìm b."
+  },
+  {
+   "chu": "growing",
+   "doc": "/ˈɡroʊɪŋ/",
+   "nghia": "đang tăng, đang lớn lên (rate of growth = tốc độ tăng trưởng)",
+   "nhom": "Cực trị và khảo sát",
+   "viDu": "Assume that w'(t) is the rate of growth of a child's weight in kilograms in year t. What does the integral ∫₂^7w'(t)dt represent?",
+   "viDuNghia": "Giả sử w'(t) là tốc độ tăng cân nặng (kg) của một đứa trẻ trong năm t. Tích phân ∫₂^7w'(t)dt biểu thị điều gì?"
+  },
+  {
+   "chu": "shift",
+   "doc": "/ʃɪft/",
+   "nghia": "tịnh tiến, dịch chuyển đồ thị (shift 2 units to the right = dịch sang phải 2 đơn vị: thay x bằng x - 2)",
+   "nhom": "Hàm số và đồ thị",
+   "viDu": "Write the equation for the graph obtained by stretching the graph of y=f(x) vertically by a factor of 5 and then shifting 1 unit upward.",
+   "viDuNghia": "Viết phương trình đồ thị nhận được khi kéo dãn đồ thị y=f(x) theo chiều dọc với hệ số 5, sau đó tịnh tiến lên trên 1 đơn vị."
+  },
+  {
+   "chu": "velocity",
+   "doc": "/vəˈlɑːsəti/",
+   "nghia": "vận tốc: đạo hàm của vị trí theo thời gian, v(t) = s'(t); có dấu (âm = đi ngược chiều), khác speed (tốc độ, luôn ≥ 0)",
+   "nhom": "Đạo hàm",
+   "viDu": "A particle moves along a line with velocity v(t)=3t²-2t (m/s). Find its displacement between t=0 and t=2 seconds.",
+   "viDuNghia": "Một chất điểm chuyển động trên đường thẳng với vận tốc v(t)=3t²-2t (m/s). Tìm độ dời của nó từ t=0 đến t=2 giây."
+  }
+ ]
+}

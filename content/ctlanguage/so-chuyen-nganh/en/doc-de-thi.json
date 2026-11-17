@@ -1,0 +1,849 @@
+{
+ "ma": "doc-de-thi",
+ "nn": "en",
+ "ten": "Đọc hiểu đề thi tiếng Anh",
+ "moTa": "Mẫu câu hỏi, từ phủ định – ngoại trừ, từ chỉ mức độ và tổ hợp đáp án trích từ đề FE/PE thật của FPT (lập trình, mạng, OS, CSDL, toán, kiểm thử…). Học để đọc đúng đề hỏi gì trước khi chọn đáp án.",
+ "bieuTuong": "text.magnifyingglass",
+ "thuTu": -1000,
+ "tu": [
+  {
+   "chu": "Which of the following",
+   "nghia": "cái nào / điều nào sau đây — mẫu mở đầu phổ biến nhất. Đọc tiếp phần SAU cụm này (is true, is NOT, best describes) mới biết đề hỏi gì.",
+   "nhom": "Mẫu câu hỏi",
+   "viDu": "Which of the following is a benefit of performing reviews in the software development process?",
+   "viDuNghia": "Điều nào sau đây là lợi ích của việc thực hiện rà soát trong quy trình phát triển phần mềm?"
+  },
+  {
+   "chu": "Which of the following statements",
+   "nghia": "phát biểu nào sau đây — mỗi phương án là một câu khẳng định; xét đúng/sai từng câu rồi mới chọn.",
+   "nhom": "Mẫu câu hỏi",
+   "viDu": "Which of the following statements about the low-level stream and the high-level stream is true?",
+   "viDuNghia": "Phát biểu nào sau đây về luồng cấp thấp và luồng cấp cao là đúng?"
+  },
+  {
+   "chu": "Which statement",
+   "nghia": "phát biểu nào — giống \"Which of the following statements\"; chú ý tính từ đi sau (true, false, correct, incorrect).",
+   "nhom": "Mẫu câu hỏi",
+   "viDu": "Which statement best describes the function of virtual memory in the Windows operating system?",
+   "viDuNghia": "Phát biểu nào mô tả đúng nhất chức năng của bộ nhớ ảo trong hệ điều hành Windows?",
+   "doc": "/wɪtʃ ˈsteɪtmənt/"
+  },
+  {
+   "chu": "Which one of the following",
+   "nghia": "cái nào (chỉ MỘT) trong các cái sau — chỉ chọn một đáp án.",
+   "nhom": "Mẫu câu hỏi",
+   "viDu": "Which one of the following does describe how to get data from another activity through intent?",
+   "viDuNghia": "Cái nào sau đây mô tả cách lấy dữ liệu từ một activity khác thông qua intent?"
+  },
+  {
+   "chu": "What is the purpose of",
+   "nghia": "mục đích của ... là gì — hỏi \"dùng để làm gì\", không hỏi định nghĩa hay cách hoạt động.",
+   "nhom": "Mẫu câu hỏi",
+   "viDu": "What is the purpose of change management in terms of creating an ethical organizational culture?",
+   "viDuNghia": "Mục đích của quản lý thay đổi trong việc xây văn hoá tổ chức có đạo đức là gì?"
+  },
+  {
+   "chu": "best describes",
+   "nghia": "mô tả đúng nhất — có thể nhiều phương án đúng một phần; chọn câu đầy đủ, sát nhất.",
+   "nhom": "Mẫu câu hỏi",
+   "viDu": "Which of the following best describes the structure of the Requirements Traceability Matrix (RTM)?",
+   "viDuNghia": "Điều nào sau đây mô tả đúng nhất cấu trúc của Ma trận Truy vết Yêu cầu (RTM)?",
+   "doc": "/best dɪˈskraɪbz/"
+  },
+  {
+   "chu": "is used to",
+   "nghia": "được dùng để — hỏi công dụng. Đừng nhầm với \"used to + V\" (đã từng).",
+   "nhom": "Mẫu câu hỏi",
+   "viDu": "Which of the following is used to pass a function from a parent component to a child component?",
+   "viDuNghia": "Cái nào dùng để truyền một hàm từ component cha xuống component con?"
+  },
+  {
+   "chu": "is true",
+   "nghia": "là đúng — tìm phát biểu ĐÚNG. Hay đi với about/regarding/for (đúng về cái gì).",
+   "nhom": "Mẫu câu hỏi",
+   "viDu": "Which of the following statements is true about how the data link layer and transport layer differ?",
+   "viDuNghia": "Phát biểu nào sau đây đúng về sự khác nhau giữa tầng liên kết dữ liệu và tầng giao vận?",
+   "doc": "/ɪz truː/"
+  },
+  {
+   "chu": "true about",
+   "nghia": "đúng về ... — \"Which is true about X\" = câu nào nói đúng về X.",
+   "nhom": "Mẫu câu hỏi",
+   "viDu": "Which of the following is true about query parameters and post variables in HttpServletRequest?",
+   "viDuNghia": "Phát biểu nào đúng về query parameters và post variables trong HttpServletRequest?",
+   "doc": "/truː əˈbaʊt/"
+  },
+  {
+   "chu": "is correct",
+   "nghia": "là đúng, chính xác — tìm phương án ĐÚNG; phân biệt với \"is incorrect\".",
+   "nhom": "Mẫu câu hỏi",
+   "viDu": "Which of the following statements about Electrically Erasable PROM (EEPROM) is correct?",
+   "viDuNghia": "Phát biểu nào sau đây về EEPROM (Electrically Erasable PROM) là đúng?",
+   "doc": "/ɪz kəˈrekt/"
+  },
+  {
+   "chu": "stand for",
+   "nghia": "là viết tắt của — \"What does X stand for\" hỏi tên đầy đủ của chữ viết tắt.",
+   "nhom": "Mẫu câu hỏi",
+   "viDu": "A useful tool in identifying risks is the SWOT analysis. What does SWOT stand for?",
+   "viDuNghia": "Một công cụ hữu ích để xác định rủi ro là phân tích SWOT. SWOT là viết tắt của gì?",
+   "doc": "/ˈstænd fɔːr/"
+  },
+  {
+   "chu": "refer to",
+   "doc": "/rɪˈfɜːr tuː/",
+   "nghia": "chỉ, nói đến — \"X refers to\" = X là để chỉ cái gì (hỏi định nghĩa). \"Refer to the exhibit\" = hãy xem hình.",
+   "nhom": "Mẫu câu hỏi",
+   "viDu": "____ refers to the ability to move data and/or a system from one platform to another and to reuse code.",
+   "viDuNghia": "____ chỉ khả năng di chuyển dữ liệu và/hoặc hệ thống từ nền tảng này sang nền tảng khác và tái sử dụng mã."
+  },
+  {
+   "chu": "is known as",
+   "nghia": "được gọi là — đề mô tả một khái niệm rồi hỏi TÊN của nó.",
+   "nhom": "Mẫu câu hỏi",
+   "viDu": "When data are moved over longer distances, to or from a remote device, the process is known as ______.",
+   "viDuNghia": "Khi dữ liệu được di chuyển trên khoảng cách xa hơn, tới hoặc từ một thiết bị ở xa, quá trình đó được gọi là ______."
+  },
+  {
+   "chu": "is called",
+   "nghia": "được gọi là — đề tả khái niệm, bạn chọn thuật ngữ đúng.",
+   "nhom": "Mẫu câu hỏi",
+   "viDu": "A system with absolute guarantees that a certain action will occur by a certain time is called:",
+   "viDuNghia": "Một hệ thống đảm bảo tuyệt đối rằng một hành động nhất định sẽ xảy ra trước một thời điểm nhất định được gọi là:",
+   "doc": "/ɪz kɔːld/"
+  },
+  {
+   "chu": "defined as",
+   "nghia": "được định nghĩa là — câu hỏi định nghĩa, chọn phương án khớp định nghĩa trong giáo trình.",
+   "nhom": "Mẫu câu hỏi",
+   "viDu": "The number of bits transmitted or received per second is defined as ________.",
+   "viDuNghia": "Số bit truyền hoặc nhận mỗi giây được định nghĩa là ________.",
+   "doc": "/dɪˈfaɪnd æz/"
+  },
+  {
+   "chu": "an example of",
+   "nghia": "một ví dụ của — đề đưa trường hợp cụ thể, hỏi nó thuộc loại / khái niệm nào.",
+   "nhom": "Mẫu câu hỏi",
+   "viDu": "Which of the following is an example of NoSQL database systems, which are not based on the relational model?",
+   "viDuNghia": "Điều nào sau đây là ví dụ về hệ CSDL NoSQL, không dựa trên mô hình quan hệ?"
+  },
+  {
+   "chu": "What happens",
+   "nghia": "điều gì xảy ra — hỏi KẾT QUẢ / hậu quả khi một việc diễn ra (thường kèm when / if).",
+   "nhom": "Mẫu câu hỏi",
+   "viDu": "What happens when the return statement has a double expression and the function return type is int?",
+   "viDuNghia": "Điều gì xảy ra khi câu lệnh return có biểu thức kiểu double nhưng kiểu trả về của hàm là int?",
+   "doc": "/wʌt ˈhæpənz/"
+  },
+  {
+   "chu": "How many",
+   "nghia": "bao nhiêu (đếm được) — đáp án là một CON SỐ; chú ý đơn vị (bits, bytes, frames, edges).",
+   "nhom": "Mẫu câu hỏi",
+   "viDu": "How many positive integers between 100 and 999, inclusive, are NOT divisible by both 7 and 11?",
+   "viDuNghia": "Có bao nhiêu số nguyên dương từ 100 đến 999 (bao gồm cả hai đầu) KHÔNG chia hết cho cả 7 và 11?",
+   "doc": "/haʊ ˈmeni/"
+  },
+  {
+   "chu": "What is the output",
+   "nghia": "kết quả in ra là gì — phải chạy tay đoạn code; để ý lỗi biên dịch / ngoại lệ cũng có thể là đáp án.",
+   "nhom": "Mẫu câu hỏi",
+   "viDu": "What is the output of the following Node.js code? Assume 'config.json' does NOT exist.",
+   "viDuNghia": "Kết quả của đoạn mã Node.js sau là gì? Giả sử 'config.json' KHÔNG tồn tại."
+  },
+  {
+   "chu": "What will be",
+   "nghia": "... sẽ là gì — hỏi kết quả sau khi thực hiện (giá trị, output, trạng thái).",
+   "nhom": "Mẫu câu hỏi",
+   "viDu": "What will be the output of the following program?",
+   "viDuNghia": "Chương trình sau đây sẽ cho kết quả gì?"
+  },
+  {
+   "chu": "What is the result of",
+   "nghia": "kết quả của ... là gì — tính / chạy tay rồi so với phương án.",
+   "nhom": "Mẫu câu hỏi",
+   "viDu": "A host's last octet is 90 and the mask's last octet is 224. What is the result of a bitwise AND on those two octets?",
+   "viDuNghia": "Octet cuối của máy là 90, octet cuối của mặt nạ là 224. Kết quả AND từng bit của hai octet đó là bao nhiêu?"
+  },
+  {
+   "chu": "What is the value of",
+   "nghia": "giá trị của ... là bao nhiêu — đáp án là một giá trị cụ thể sau khi tính.",
+   "nhom": "Mẫu câu hỏi",
+   "viDu": "What is the value of the query: SELECT 1 + NULL + 2 when evaluated on Microsoft SQL Server?",
+   "viDuNghia": "Giá trị của câu truy vấn: SELECT 1 + NULL + 2 khi được thực thi trên Microsoft SQL Server là gì?"
+  },
+  {
+   "chu": "difference between",
+   "nghia": "sự khác nhau giữa A và B — tìm điểm PHÂN BIỆT, không phải điểm chung.",
+   "nhom": "Mẫu câu hỏi",
+   "viDu": "What is the main difference between object-oriented static modeling and entity-relationship modeling?",
+   "viDuNghia": "Khác biệt chính giữa mô hình hoá tĩnh hướng đối tượng và mô hình hoá thực thể – quan hệ là gì?",
+   "doc": "/ˈdɪfrəns bɪˈtwiːn/"
+  },
+  {
+   "chu": "is responsible for",
+   "nghia": "chịu trách nhiệm về, đảm nhận việc — hỏi AI / thành phần NÀO làm việc đó.",
+   "nhom": "Mẫu câu hỏi",
+   "viDu": "The ______ in the TCP/IP protocol suite is responsible for the host-to-host delivery of messages.",
+   "viDuNghia": "Tầng ______ trong bộ giao thức TCP/IP chịu trách nhiệm phân phối thông điệp giữa các máy (host-to-host)."
+  },
+  {
+   "chu": "consist of",
+   "doc": "/kənˈsɪst əv/",
+   "nghia": "gồm có — hỏi các thành phần cấu tạo nên một thứ.",
+   "nhom": "Mẫu câu hỏi",
+   "viDu": "What team consists of a group of people who come together as a distinct organizational unit to implement projects?",
+   "viDuNghia": "Loại nhóm nào bao gồm những người tập hợp lại thành một đơn vị tổ chức riêng biệt để thực hiện các dự án?"
+  },
+  {
+   "chu": "Which type of",
+   "nghia": "loại ... nào — đáp án là TÊN một loại / kiểu (type of test, type of memory).",
+   "nhom": "Mẫu câu hỏi",
+   "viDu": "Which type of prototype is specifically used to demonstrate the feasibility of the requirements?",
+   "viDuNghia": "Loại prototype nào dùng riêng để chứng minh tính khả thi của yêu cầu?"
+  },
+  {
+   "chu": "In which",
+   "nghia": "trong ... nào / ở ... nào — hỏi giai đoạn, tầng, trường hợp NƠI việc đó xảy ra.",
+   "nhom": "Mẫu câu hỏi",
+   "viDu": "In which of the following skill levels would you judge, check and critique the value of material?",
+   "viDuNghia": "Ở cấp độ kỹ năng học tập nào bạn sẽ đánh giá, kiểm tra và phê bình giá trị của tài liệu?",
+   "doc": "/ɪn wɪtʃ/"
+  },
+  {
+   "chu": "in the context of",
+   "nghia": "trong ngữ cảnh / phạm vi của — giới hạn lĩnh vực; nghĩa của thuật ngữ phải hiểu theo lĩnh vực đó.",
+   "nhom": "Mẫu câu hỏi",
+   "viDu": "Which of the following constitute internal stakeholders in the context of a code of ethics?",
+   "viDuNghia": "Điều nào sau đây cấu thành các bên liên quan nội bộ trong bối cảnh của một bộ quy tắc đạo đức?"
+  },
+  {
+   "chu": "What is meant by",
+   "nghia": "... có nghĩa là gì — hỏi định nghĩa của thuật ngữ.",
+   "nhom": "Mẫu câu hỏi",
+   "viDu": "Which of the following correctly describe what is meant by an intent being a \"passive\" data structure?",
+   "viDuNghia": "Phát biểu nào sau đây mô tả đúng ý nghĩa Intent là một cấu trúc dữ liệu \"thụ động\" (passive)?"
+  },
+  {
+   "chu": "correct",
+   "doc": "/kəˈrekt/",
+   "nghia": "đúng – \"Which is correct?\" = câu nào đúng; INCORRECT/NOT correct = sai. (SWR302: yêu cầu correct là mô tả đúng nhu cầu)",
+   "nhom": "Mẫu câu hỏi",
+   "viDu": "Polling is a scheduling approach for dynamic medium access control. Which of the following statements are correct?",
+   "viDuNghia": "Polling là một phương pháp lập lịch cho điều khiển truy nhập môi trường động. Phát biểu nào sau đây đúng?"
+  },
+  {
+   "chu": "following",
+   "doc": "/ˈfɑːloʊɪŋ/",
+   "nghia": "(the following) … sau đây — chỉ đoạn code, bảng, phát biểu nằm ngay bên dưới; đọc hết phần đó rồi mới đọc câu hỏi",
+   "nhom": "Mẫu câu hỏi",
+   "viDu": "What does the following code do?",
+   "viDuNghia": "Đoạn mã sau đây làm gì?"
+  },
+  {
+   "chu": "NOT",
+   "doc": "/nɑːt/",
+   "nghia": "KHÔNG — chữ đảo ngược cả câu hỏi: chọn phương án SAI / không thuộc nhóm. Gạch chân ngay khi thấy; đề thường viết hoa nhưng không phải lúc nào cũng vậy.",
+   "nhom": "Phủ định & ngoại trừ",
+   "viDu": "When mapping an aggregation hierarchy to a relational table, which of the following is NOT true?",
+   "viDuNghia": "Khi ánh xạ một cây phân cấp aggregation sang bảng quan hệ, điều nào sau đây KHÔNG đúng?"
+  },
+  {
+   "chu": "is not",
+   "nghia": "không phải là — bẫy khi viết thường \"is not a ...\": vẫn là câu hỏi tìm cái KHÔNG đúng / không thuộc.",
+   "nhom": "Phủ định & ngoại trừ",
+   "viDu": "Analyze the benefits of using synthetic events in React. Which of the following is NOT a benefit?",
+   "viDuNghia": "Phân tích lợi ích của việc dùng synthetic event trong React. Đâu KHÔNG phải một lợi ích?",
+   "doc": "/ɪz nɑːt/"
+  },
+  {
+   "chu": "EXCEPT",
+   "doc": "/ɪkˈsept/",
+   "nghia": "ngoại trừ — mọi phương án đều đúng TRỪ một; chọn cái sai / không thuộc nhóm. Đánh dấu chữ này trước khi đọc đáp án.",
+   "nhom": "Phủ định & ngoại trừ",
+   "viDu": "A typical commercial test execution tool would be able to perform all of the following, EXCEPT:",
+   "viDuNghia": "Một công cụ thực thi kiểm thử thương mại điển hình có thể làm tất cả những điều sau, NGOẠI TRỪ:"
+  },
+  {
+   "chu": "INCORRECT",
+   "doc": "/ˌɪnkəˈrekt/",
+   "nghia": "sai, không đúng — đề yêu cầu tìm phát biểu SAI; ba câu còn lại đều đúng.",
+   "nhom": "Phủ định & ngoại trừ",
+   "viDu": "Concerning rules and conventions for naming variables in Java, choose an incorrect statement.",
+   "viDuNghia": "Về quy tắc và quy ước đặt tên biến trong Java, hãy chọn phát biểu SAI."
+  },
+  {
+   "chu": "is false",
+   "nghia": "là sai — tìm câu SAI. Dễ quen tay chọn câu đúng đầu tiên nhìn thấy.",
+   "nhom": "Phủ định & ngoại trừ",
+   "viDu": "What is false about the von Neumann architecture?",
+   "viDuNghia": "Điều nào SAI về kiến trúc von Neumann?",
+   "doc": "/ɪz fɔːls/"
+  },
+  {
+   "chu": "not true",
+   "nghia": "không đúng — tương đương \"false\": chọn phát biểu SAI.",
+   "nhom": "Phủ định & ngoại trừ",
+   "viDu": "Which of the following is NOT true regarding milestones?",
+   "viDuNghia": "Điều nào sau đây KHÔNG đúng về các mốc (milestones)?",
+   "doc": "/nɑːt truː/"
+  },
+  {
+   "chu": "not correct",
+   "nghia": "không đúng — tương đương \"incorrect\": chọn phương án SAI.",
+   "nhom": "Phủ định & ngoại trừ",
+   "viDu": "Which of the following statements about the purpose and content of a test plan is not correct?",
+   "viDuNghia": "Câu nào sau đây về mục đích và nội dung của một kế hoạch kiểm thử là KHÔNG đúng?",
+   "doc": "/nɑːt kəˈrekt/"
+  },
+  {
+   "chu": "wrong",
+   "doc": "/rɔːŋ/",
+   "nghia": "sai — \"Which is wrong\" = chọn câu sai; \"What is wrong with\" = lỗi nằm ở đâu.",
+   "nhom": "Phủ định & ngoại trừ",
+   "viDu": "Which HTTP code means that the data does not pass validation, or is in the wrong format?",
+   "viDuNghia": "Mã HTTP nào có nghĩa là dữ liệu không vượt qua kiểm tra hợp lệ, hoặc sai định dạng?"
+  },
+  {
+   "chu": "invalid",
+   "doc": "/ɪnˈvælɪd/",
+   "nghia": "không hợp lệ — trái nghĩa valid; hỏi cái vi phạm quy tắc (cú pháp, khai báo, dữ liệu).",
+   "nhom": "Phủ định & ngoại trừ",
+   "viDu": "Which of the following is the most appropriate way to handle invalid arguments in a public method?",
+   "viDuNghia": "Cách nào sau đây là phù hợp nhất để xử lý đối số không hợp lệ trong một phương thức public?"
+  },
+  {
+   "chu": "cannot",
+   "doc": "/ˈkænɑːt/",
+   "nghia": "không thể — \"which CANNOT be\" = chọn cái bất khả thi. Chữ viết liền nên dễ đọc lướt thành \"can\".",
+   "nhom": "Phủ định & ngoại trừ",
+   "viDu": "Which IPv4 header field does each router decrease by one so that a packet cannot loop forever?",
+   "viDuNghia": "Trường nào trong phần đầu IPv4 được mỗi router giảm đi một để gói tin không lặp mãi?"
+  },
+  {
+   "chu": "does not",
+   "nghia": "không (làm gì) — phủ định ẩn giữa câu: \"which does not belong / require / support\".",
+   "nhom": "Phủ định & ngoại trừ",
+   "viDu": "Which digital pin of Arduino Uno Rev3 does NOT provide PWM output?",
+   "viDuNghia": "Chân digital nào của Arduino Uno Rev3 KHÔNG hỗ trợ PWM?",
+   "doc": "/dʌz nɑːt/"
+  },
+  {
+   "chu": "not belong",
+   "nghia": "không thuộc về — chọn phần tử LẠC nhóm. Đề hay viết sai ngữ pháp \"is not belong to\" — hiểu là \"does not belong to\".",
+   "nhom": "Phủ định & ngoại trừ",
+   "viDu": "Which of the following does not belong to the aspects you can use to classify users?",
+   "viDuNghia": "Điều nào sau đây KHÔNG thuộc các khía cạnh có thể dùng để phân loại người dùng?",
+   "doc": "/nɑːt bɪˈlɔːŋ/"
+  },
+  {
+   "chu": "least likely",
+   "nghia": "ít khả năng nhất — đảo của \"most likely\": chọn phương án KHÓ xảy ra nhất.",
+   "nhom": "Phủ định & ngoại trừ",
+   "viDu": "Which deadlock recovery technique is least likely to impact system performance but may lead to potential inconsistencies?",
+   "viDuNghia": "Kỹ thuật phục hồi deadlock nào ít có khả năng ảnh hưởng hiệu năng hệ thống nhất nhưng có thể gây ra sự thiếu nhất quán tiềm ẩn?",
+   "doc": "/liːst ˈlaɪkli/"
+  },
+  {
+   "chu": "neither nor",
+   "nghia": "không ... cũng không — \"neither A nor B\" phủ định CẢ HAI. Trong phương án: cả A và B đều sai.",
+   "nhom": "Phủ định & ngoại trừ",
+   "viDu": "The method neither reads input nor prints output; it only returns a value.",
+   "viDuNghia": "Phương thức này không đọc dữ liệu vào cũng không in ra gì; nó chỉ trả về một giá trị.",
+   "doc": "/ˈniːðər nɔːr/"
+  },
+  {
+   "chu": "without",
+   "doc": "/wɪˈðaʊt/",
+   "nghia": "mà không (có) — điều kiện loại trừ: việc xảy ra khi THIẾU một thứ.",
+   "nhom": "Phủ định & ngoại trừ",
+   "viDu": "In a real computer, what will happen if you make a recursive call without making the problem smaller?",
+   "viDuNghia": "Trên một máy tính thật, điều gì sẽ xảy ra nếu bạn thực hiện một lời gọi đệ quy mà không làm cho bài toán nhỏ đi?"
+  },
+  {
+   "chu": "unless",
+   "doc": "/ənˈles/",
+   "nghia": "trừ khi (= if not) — \"A unless B\" nghĩa là A xảy ra nếu B KHÔNG xảy ra.",
+   "nhom": "Phủ định & ngoại trừ",
+   "viDu": "Data about the user is automatically collected unless that user explicitly states that you should not do so.",
+   "viDuNghia": "Dữ liệu về người dùng được tự động thu thập trừ khi người dùng đó nói rõ rằng bạn không nên làm vậy."
+  },
+  {
+   "chu": "other than",
+   "nghia": "ngoài, khác với — \"other than X\" = loại X ra, xét phần còn lại.",
+   "nhom": "Phủ định & ngoại trừ",
+   "viDu": "The rows of a relation, other than the header row containing the attribute names, are called ________.",
+   "viDuNghia": "Các hàng của một quan hệ, ngoại trừ hàng tiêu đề chứa tên các thuộc tính, được gọi là ________.",
+   "doc": "/ˈʌðər ðæn/"
+  },
+  {
+   "chu": "rather than",
+   "nghia": "thay vì, chứ không phải — vế trước được chọn, vế SAU \"rather than\" bị loại.",
+   "nhom": "Phủ định & ngoại trừ",
+   "viDu": "Why do Wi-Fi stations use collision avoidance (CSMA/CA) rather than collision detection?",
+   "viDuNghia": "Vì sao các trạm Wi-Fi dùng tránh va chạm (CSMA/CA) thay vì phát hiện va chạm?",
+   "doc": "/ˈræðər ðæn/"
+  },
+  {
+   "chu": "instead of",
+   "nghia": "thay cho, thay vì — dùng A, KHÔNG dùng B.",
+   "nhom": "Phủ định & ngoại trừ",
+   "viDu": "Internet protocols use check bits to detect errors, instead of using CRC polynomial. The primary reason is ____.",
+   "viDuNghia": "Các giao thức Internet dùng bit kiểm tra (checksum) để phát hiện lỗi thay vì dùng đa thức CRC. Lý do chính là ____.",
+   "doc": "/ɪnˈsted əv/"
+  },
+  {
+   "chu": "no longer",
+   "nghia": "không còn nữa — trước có, giờ hết: trạng thái đã thay đổi.",
+   "nhom": "Phủ định & ngoại trừ",
+   "viDu": "Which callback methods are called when an activity is no longer visible?",
+   "viDuNghia": "Các callback nào được gọi khi một activity không còn hiển thị nữa?",
+   "doc": "/noʊ ˈlɔːŋɡər/"
+  },
+  {
+   "chu": "never",
+   "doc": "/ˈnevər/",
+   "nghia": "không bao giờ — từ tuyệt đối; phát biểu có never/always thường SAI nếu tồn tại một ngoại lệ.",
+   "nhom": "Phủ định & ngoại trừ",
+   "viDu": "True or False: In a projectized organization, team members are never assigned to the project full time.",
+   "viDuNghia": "Đúng hay Sai: Trong một tổ chức theo dự án (projectized organization), thành viên đội không bao giờ được phân công làm việc toàn thời gian cho dự án."
+  },
+  {
+   "chu": "fail",
+   "doc": "/feɪl/",
+   "nghia": "thất bại, không đạt, hỏng — \"fails to\" = không làm được; trong kiểm thử: test fail = kết quả khác mong đợi.",
+   "nhom": "Phủ định & ngoại trừ",
+   "viDu": "What happens if a prop fails the validation defined by a simple property validator?",
+   "viDuNghia": "Điều gì xảy ra nếu một prop không qua được kiểm tra định nghĩa bởi một property validator đơn giản?"
+  },
+  {
+   "chu": "most appropriate",
+   "nghia": "thích hợp nhất — nhiều phương án dùng được; chọn cái hợp NHẤT với tình huống đề nêu.",
+   "nhom": "Mức độ & so sánh",
+   "viDu": "Which UML stereotype is most appropriate to represent a subsystem in a service-oriented architecture?",
+   "viDuNghia": "Stereotype UML nào phù hợp nhất để biểu diễn một subsystem trong kiến trúc hướng dịch vụ (SOA)?",
+   "doc": "/moʊst əˈproʊpriət/"
+  },
+  {
+   "chu": "most likely",
+   "nghia": "nhiều khả năng nhất — không chắc chắn 100 phần trăm; chọn phương án hợp lý nhất.",
+   "nhom": "Mức độ & so sánh",
+   "viDu": "On a home network, which device is most likely to provide dynamic IPv4 addressing to clients on the home network?",
+   "viDuNghia": "Trong mạng gia đình, thiết bị nào nhiều khả năng cấp địa chỉ IPv4 động cho các máy trong mạng?",
+   "doc": "/moʊst ˈlaɪkli/"
+  },
+  {
+   "chu": "most suitable",
+   "nghia": "phù hợp nhất — giống most appropriate.",
+   "nhom": "Mức độ & so sánh",
+   "viDu": "Specify the correct statement about a binary search tree (select the most suitable one).",
+   "viDuNghia": "Chọn phát biểu đúng về cây tìm kiếm nhị phân (binary search tree) (chọn phát biểu phù hợp nhất).",
+   "doc": "/moʊst ˈsuːtəbl/"
+  },
+  {
+   "chu": "most important",
+   "nghia": "quan trọng nhất — các phương án đều có thể quan trọng; chọn yếu tố hàng đầu theo giáo trình.",
+   "nhom": "Mức độ & so sánh",
+   "viDu": "What are the most important general categories of data that machine instructions operate on?",
+   "viDuNghia": "Các loại dữ liệu tổng quát quan trọng nhất mà lệnh máy thao tác trên đó là gì?",
+   "doc": "/moʊst ɪmˈpɔːrtnt/"
+  },
+  {
+   "chu": "most correct",
+   "nghia": "đúng nhất — \"Choose the most correct answer\": có phương án đúng một phần, chọn câu đúng và đủ nhất.",
+   "nhom": "Mức độ & so sánh",
+   "viDu": "What is the most correct format to declare a variable in C?",
+   "viDuNghia": "Cú pháp nào đúng nhất để khai báo một biến trong C?",
+   "doc": "/moʊst kəˈrekt/"
+  },
+  {
+   "chu": "the best",
+   "nghia": "tốt nhất, đúng nhất — so sánh nhất: phải đọc HẾT các phương án rồi mới chọn.",
+   "nhom": "Mức độ & so sánh",
+   "viDu": "Which of the following is the best option for a meeting that requires close contact and collaboration?",
+   "viDuNghia": "Lựa chọn nào sau đây là tốt nhất cho một cuộc họp cần sự gần gũi và hợp tác chặt chẽ?",
+   "doc": "/ðə best/"
+  },
+  {
+   "chu": "primary",
+   "doc": "/ˈpraɪmeri/",
+   "nghia": "chính, hàng đầu — \"primary purpose / goal\" = mục đích CHÍNH; bỏ qua các lợi ích phụ.",
+   "nhom": "Mức độ & so sánh",
+   "viDu": "What is the primary function of a web server in the client-server architecture?",
+   "viDuNghia": "Chức năng chính của web server trong kiến trúc client-server là gì?"
+  },
+  {
+   "chu": "primarily",
+   "doc": "/praɪˈmerəli/",
+   "nghia": "chủ yếu — hỏi công dụng / đối tượng CHÍNH, không phải mọi công dụng.",
+   "nhom": "Mức độ & so sánh",
+   "viDu": "What technology is primarily used for short-range, contactless data exchange in payment systems?",
+   "viDuNghia": "Công nghệ nào chủ yếu dùng để trao đổi dữ liệu không tiếp xúc, tầm ngắn trong hệ thống thanh toán?"
+  },
+  {
+   "chu": "main",
+   "doc": "/meɪn/",
+   "nghia": "chính — \"main purpose / advantage / difference\": chọn ý lớn nhất, không chọn chi tiết phụ.",
+   "nhom": "Mức độ & so sánh",
+   "viDu": "What is the main purpose of HttpServlet in Java web applications?",
+   "viDuNghia": "Mục đích chính của HttpServlet trong ứng dụng web Java là gì?"
+  },
+  {
+   "chu": "mainly",
+   "doc": "/ˈmeɪnli/",
+   "nghia": "chủ yếu là — như primarily.",
+   "nhom": "Mức độ & so sánh",
+   "viDu": "What does a digital signature mainly give the receiver?",
+   "viDuNghia": "Chữ ký số chủ yếu mang lại điều gì cho bên nhận?"
+  },
+  {
+   "chu": "major",
+   "doc": "/ˈmeɪdʒər/",
+   "nghia": "lớn, chủ yếu, quan trọng — major advantage / problem; trái nghĩa minor (nhỏ, phụ).",
+   "nhom": "Mức độ & so sánh",
+   "viDu": "Which of the following is NOT a common consideration when looking at the major ethical frameworks?",
+   "viDuNghia": "Điều nào sau đây KHÔNG phải là cân nhắc phổ biến khi xem xét các khung đạo đức chính?"
+  },
+  {
+   "chu": "at least",
+   "nghia": "ít nhất, tối thiểu — lớn hơn HOẶC BẰNG (at least 3 = 3 trở lên).",
+   "nhom": "Mức độ & so sánh",
+   "viDu": "What kind of loop executes its body at least once?",
+   "viDuNghia": "Loại vòng lặp nào thực thi thân vòng lặp ít nhất một lần?",
+   "doc": "/æt ˈliːst/"
+  },
+  {
+   "chu": "at most",
+   "nghia": "nhiều nhất, tối đa — nhỏ hơn HOẶC BẰNG (at most 3 = không quá 3).",
+   "nhom": "Mức độ & so sánh",
+   "viDu": "A complete bipartite graph with 10 vertices can have at most ________ edges.",
+   "viDuNghia": "Một đồ thị lưỡng phân đầy đủ với 10 đỉnh có nhiều nhất ________ cạnh.",
+   "doc": "/æt ˈmoʊst/"
+  },
+  {
+   "chu": "only",
+   "doc": "/ˈoʊnli/",
+   "nghia": "chỉ — từ giới hạn tuyệt đối; phương án có \"only\" phải đúng trong MỌI trường hợp mới chọn.",
+   "nhom": "Mức độ & so sánh",
+   "viDu": "Which of the following instructions should be allowed only in kernel mode?",
+   "viDuNghia": "Lệnh nào sau đây chỉ nên được phép thực hiện ở chế độ kernel (kernel mode)?"
+  },
+  {
+   "chu": "always",
+   "doc": "/ˈɔːlweɪz/",
+   "nghia": "luôn luôn — từ tuyệt đối; chỉ cần một ngoại lệ là phát biểu sai.",
+   "nhom": "Mức độ & so sánh",
+   "viDu": "Suppose X is a number, and can be NULL. The result of expression: (X - X) always returns 0?",
+   "viDuNghia": "Giả sử X là một số, và có thể là NULL. Kết quả của biểu thức (X - X) luôn trả về 0?"
+  },
+  {
+   "chu": "typically",
+   "doc": "/ˈtɪpɪkli/",
+   "nghia": "thường, điển hình là — hỏi trường hợp THÔNG THƯỜNG, không xét ngoại lệ hiếm.",
+   "nhom": "Mức độ & so sánh",
+   "viDu": "Which HTTP method is typically used to create a new resource in a RESTful API?",
+   "viDuNghia": "Phương thức HTTP nào thường được dùng để tạo một tài nguyên mới trong RESTful API?"
+  },
+  {
+   "chu": "usually",
+   "doc": "/ˈjuːʒuəli/",
+   "nghia": "thường — hỏi điều phổ biến, không phải điều luôn đúng.",
+   "nhom": "Mức độ & so sánh",
+   "viDu": "In BSD socket API, which call is usually used for transmitting data in the connectionless mode?",
+   "viDuNghia": "Trong BSD socket API, lời gọi nào thường được dùng để truyền dữ liệu ở chế độ không kết nối (connectionless)?"
+  },
+  {
+   "chu": "generally",
+   "doc": "/ˈdʒenrəli/",
+   "nghia": "nhìn chung, thường — nói về quy tắc chung.",
+   "nhom": "Mức độ & so sánh",
+   "viDu": "Why is it generally recommended to use transactions when performing multiple database operations?",
+   "viDuNghia": "Tại sao thường được khuyến nghị dùng transaction khi thực hiện nhiều thao tác cơ sở dữ liệu?"
+  },
+  {
+   "chu": "exactly",
+   "doc": "/ɪɡˈzæktli/",
+   "nghia": "chính xác, đúng bằng — \"exactly two\" = đúng 2, không hơn không kém (khác at least 2).",
+   "nhom": "Mức độ & so sánh",
+   "viDu": "How many strings consisting of 4 decimal digits, among them exactly three digits are 3?",
+   "viDuNghia": "Có bao nhiêu xâu gồm 4 chữ số thập phân, trong đó đúng ba chữ số là 3?"
+  },
+  {
+   "chu": "minimum",
+   "doc": "/ˈmɪnɪməm/",
+   "nghia": "tối thiểu, nhỏ nhất — hỏi giá trị NHỎ NHẤT thoả điều kiện.",
+   "nhom": "Mức độ & so sánh",
+   "viDu": "What is the minimum value of the height of a full 3-ary tree with 40 internal vertices?",
+   "viDuNghia": "Giá trị nhỏ nhất của chiều cao một cây đầy đủ 3 nhánh (full 3-ary tree) có 40 đỉnh trong (internal vertices) là bao nhiêu?"
+  },
+  {
+   "chu": "maximum",
+   "doc": "/ˈmæksɪməm/",
+   "nghia": "tối đa, lớn nhất — hỏi giá trị LỚN NHẤT có thể.",
+   "nhom": "Mức độ & so sánh",
+   "viDu": "What is the maximum index of the last character in a character array with a size of 10?",
+   "viDuNghia": "Chỉ số (index) lớn nhất của ký tự cuối cùng trong một mảng ký tự có kích thước 10 là bao nhiêu?"
+  },
+  {
+   "chu": "average",
+   "doc": "/ˈævərɪdʒ/",
+   "nghia": "trung bình — phải cộng hết rồi chia (average waiting time, average case).",
+   "nhom": "Mức độ & so sánh",
+   "viDu": "The function which will compute the average of two real numbers should be prototyped as:",
+   "viDuNghia": "Hàm tính trung bình cộng của hai số thực nên được khai báo nguyên mẫu (prototype) như thế nào?"
+  },
+  {
+   "chu": "total",
+   "doc": "/ˈtoʊtl/",
+   "nghia": "tổng, tổng cộng — cộng TẤT CẢ lại, đừng trả lời một phần.",
+   "nhom": "Mức độ & so sánh",
+   "viDu": "True or False: The Cost Baseline is equal to the total of Activity Cost Estimates plus Contingency Reserves.",
+   "viDuNghia": "Đúng hay Sai: Đường cơ sở chi phí (Cost Baseline) bằng tổng ước lượng chi phí hoạt động cộng với dự trữ dự phòng (Contingency Reserves)."
+  },
+  {
+   "chu": "greater than",
+   "nghia": "lớn hơn (>) — KHÔNG gồm bằng; \"greater than or equal to\" mới gồm bằng.",
+   "nhom": "Mức độ & so sánh",
+   "viDu": "Your Schedule Performance Index (SPI) is greater than 1 means you are:",
+   "viDuNghia": "Chỉ số hiệu suất lịch trình (SPI) của bạn lớn hơn 1 nghĩa là bạn đang:",
+   "doc": "/ˈɡreɪtər ðæn/"
+  },
+  {
+   "chu": "less than",
+   "nghia": "nhỏ hơn (<) — KHÔNG gồm bằng.",
+   "nhom": "Mức độ & so sánh",
+   "viDu": "What happens if the size of memory is less than the size of the program in a monoprogramming OS?",
+   "viDuNghia": "Điều gì xảy ra nếu kích thước bộ nhớ nhỏ hơn kích thước chương trình trong HĐH đơn chương trình (monoprogramming)?",
+   "doc": "/ˈles ðæn/"
+  },
+  {
+   "chu": "equal to",
+   "nghia": "bằng với — \"is equal to\" = có giá trị bằng.",
+   "nhom": "Mức độ & so sánh",
+   "viDu": "Consider an expression: NOT (A OR B). Choose the correct expression that is equal to the given expression.",
+   "viDuNghia": "Xét biểu thức: NOT (A OR B). Chọn biểu thức đúng bằng với biểu thức đã cho.",
+   "doc": "/ˈiːkwəl tuː/"
+  },
+  {
+   "chu": "up to",
+   "nghia": "lên tới, tối đa đến — \"up to 8\" = từ 8 trở xuống.",
+   "nhom": "Mức độ & so sánh",
+   "viDu": "Is it possible to have multiple software serial ports (UART) with speeds up to 115200 bps?",
+   "viDuNghia": "Có thể có nhiều cổng serial phần mềm (UART) với tốc độ tới 115200 bps không?",
+   "doc": "/ˈʌp tuː/"
+  },
+  {
+   "chu": "more than one",
+   "nghia": "nhiều hơn một — từ 2 trở lên.",
+   "nhom": "Mức độ & so sánh",
+   "viDu": "In ____ more than one program is in memory at the same time and they are executed concurrently, CPU switching rapidly between the programs.",
+   "viDuNghia": "Trong ____ có nhiều hơn một chương trình cùng nằm trong bộ nhớ và được thực thi đồng thời, CPU chuyển đổi nhanh giữa các chương trình."
+  },
+  {
+   "chu": "one or more",
+   "nghia": "một hoặc nhiều — từ 1 trở lên (khác more than one).",
+   "nhom": "Mức độ & so sánh",
+   "viDu": "A formal assessment of a work product conducted by one or more qualified independent reviewers to detect defects.",
+   "viDuNghia": "Một đánh giá chính thức về sản phẩm công việc do một hoặc nhiều người đánh giá độc lập đủ năng lực thực hiện nhằm phát hiện lỗi."
+  },
+  {
+   "chu": "common",
+   "doc": "/ˈkɑːmən/",
+   "nghia": "phổ biến, chung — \"a common use\" = cách dùng hay gặp; \"in common\" = điểm chung.",
+   "nhom": "Mức độ & so sánh",
+   "viDu": "Which of the following are common places and ways to look for business rules? Choose 3 correct answers.",
+   "viDuNghia": "Đâu là những nơi và cách phổ biến để tìm quy tắc nghiệp vụ? Chọn 3 đáp án đúng."
+  },
+  {
+   "chu": "essential",
+   "doc": "/ɪˈsenʃl/",
+   "nghia": "thiết yếu, bắt buộc phải có — thiếu thì không được.",
+   "nhom": "Mức độ & so sánh",
+   "viDu": "Which function is essential in configuring Passport to serialize user information into the session?",
+   "viDuNghia": "Hàm nào là cần thiết để cấu hình Passport lưu (serialize) thông tin người dùng vào session?"
+  },
+  {
+   "chu": "shortest",
+   "doc": "/ˈʃɔːrtɪst/",
+   "nghia": "ngắn nhất — so sánh nhất: shortest path, shortest job. Tương tự: longest, largest, smallest, highest, lowest.",
+   "nhom": "Mức độ & so sánh",
+   "viDu": "A preemptive version of shortest job first (SJF) is ____.",
+   "viDuNghia": "Phiên bản có tính tranh chấp (preemptive) của thuật toán shortest job first (SJF) là ____."
+  },
+  {
+   "chu": "least",
+   "doc": "/liːst/",
+   "nghia": "ít nhất, kém nhất — \"the LEAST important / true\" = chọn cái ÍT… NHẤT (ngược most); \"at least\" lại là \"tối thiểu\"",
+   "nhom": "Mức độ & so sánh",
+   "viDu": "Which of the following is least important in test management?",
+   "viDuNghia": "Điều nào sau đây ít quan trọng nhất trong quản lý kiểm thử?"
+  },
+  {
+   "chu": "approximately",
+   "doc": "/əˈprɑːksɪmətli/",
+   "nghia": "xấp xỉ, khoảng — kết quả là giá trị gần đúng; chọn phương án gần nhất",
+   "nhom": "Mức độ & so sánh",
+   "viDu": "For sample sizes greater than 40, the sampling distribution of the mean will be approximately normally distributed.",
+   "viDuNghia": "Với cỡ mẫu lớn hơn 40, phân phối mẫu của trung bình sẽ xấp xỉ phân phối chuẩn."
+  },
+  {
+   "chu": "optimal",
+   "doc": "/ˈɑːptɪməl/",
+   "nghia": "tối ưu — tốt nhất theo một tiêu chí (optimal algorithm, optimal solution)",
+   "nhom": "Mức độ & so sánh",
+   "viDu": "The optimal page replacement algorithm gives the lowest page-fault rate but cannot be implemented in practice.",
+   "viDuNghia": "Giải thuật thay trang tối ưu cho tỉ lệ lỗi trang thấp nhất nhưng không thể cài đặt trong thực tế."
+  },
+  {
+   "chu": "similar",
+   "doc": "/ˈsɪmələr/",
+   "nghia": "giống, tương tự — \"most similar to\" = giống nhất với; câu hỏi điểm GIỐNG (khác \"difference\" hỏi điểm khác)",
+   "nhom": "Mức độ & so sánh",
+   "viDu": "In the context of a use case, a control object is most similar to:",
+   "viDuNghia": "Trong ngữ cảnh một use case, đối tượng điều khiển (control object) giống nhất với:"
+  },
+  {
+   "chu": "All of the above",
+   "nghia": "tất cả các ý trên — chỉ chọn khi MỌI phương án phía trên đều đúng; một ý sai là loại.",
+   "nhom": "Tổ hợp đáp án & thứ tự",
+   "viDu": "Choose \"All of the above\" only if every option above it is correct.",
+   "viDuNghia": "Chỉ chọn \"All of the above\" khi mọi phương án phía trên đều đúng."
+  },
+  {
+   "chu": "None of the above",
+   "nghia": "không ý nào ở trên — chọn khi mọi phương án trên đều sai.",
+   "nhom": "Tổ hợp đáp án & thứ tự",
+   "viDu": "If every option above is wrong, the answer is \"None of the above\".",
+   "viDuNghia": "Nếu mọi phương án phía trên đều sai thì đáp án là \"None of the above\"."
+  },
+  {
+   "chu": "None of the others",
+   "nghia": "không phương án nào khác đúng — cách FPT hay viết thay \"None of the above\"; thử hết các ý còn lại trước khi chọn.",
+   "nhom": "Tổ hợp đáp án & thứ tự",
+   "viDu": "Which of the following algorithm cannot be designed without recursion? - None of the others",
+   "viDuNghia": "Thuật toán nào sau đây KHÔNG THỂ thiết kế được nếu không dùng đệ quy? - Không có thuật toán nào trong số trên"
+  },
+  {
+   "chu": "All of the others",
+   "nghia": "tất cả các phương án còn lại — bằng \"All of the above\"; chọn khi các ý khác đều đúng.",
+   "nhom": "Tổ hợp đáp án & thứ tự",
+   "viDu": "In FPT exams, \"All of the others\" means every other option is correct.",
+   "viDuNghia": "Trong đề FPT, \"All of the others\" nghĩa là mọi phương án còn lại đều đúng."
+  },
+  {
+   "chu": "None of the mentioned",
+   "nghia": "không cái nào đã nêu — như None of the above.",
+   "nhom": "Tổ hợp đáp án & thứ tự",
+   "viDu": "Choose \"None of the mentioned\" only if no option listed is correct.",
+   "viDuNghia": "Chỉ chọn \"None of the mentioned\" khi không phương án nào được liệt kê là đúng."
+  },
+  {
+   "chu": "Both",
+   "doc": "/boʊθ/",
+   "nghia": "cả hai — \"Both A and B\" đúng khi A đúng VÀ B đúng. Một ý sai là loại.",
+   "nhom": "Tổ hợp đáp án & thứ tự",
+   "viDu": "The principal attributes of tools and automation are (choose one answer) - Both of (1) and (2)",
+   "viDuNghia": "Các thuộc tính chính của công cụ và tự động hóa là (chọn một đáp án) - Cả (1) và (2)"
+  },
+  {
+   "chu": "Only (I)",
+   "nghia": "chỉ (I) — đề đánh số phát biểu I, II, III; \"Only (I)\" = chỉ phát biểu I đúng. Xét từng phát biểu, ghi Đ/S rồi mới dò phương án.",
+   "nhom": "Tổ hợp đáp án & thứ tự",
+   "viDu": "Which statement is true for all sets A and B? (i) A \\ (A ∩ B) = A \\ B (ii) A \\ (A ∪ B) = A \\ B - Only (i)",
+   "viDuNghia": "Mệnh đề nào đúng với mọi tập A và B? (i) A \\ (A ∩ B) = A \\ B (ii) A \\ (A ∪ B) = A \\ B - Chỉ (i)",
+   "doc": "/ˈoʊnli wʌn/"
+  },
+  {
+   "chu": "either",
+   "doc": "/ˈiːðər/",
+   "nghia": "một trong hai — \"either A or B\" = A hoặc B đều được; khác both (cả hai).",
+   "nhom": "Tổ hợp đáp án & thứ tự",
+   "viDu": "A walkie-talkie lets either side talk, but only one at a time. Which communication mode is this?",
+   "viDuNghia": "Bộ đàm cho phép mỗi bên nói, nhưng chỉ một bên mỗi lúc. Đây là chế độ truyền nào?"
+  },
+  {
+   "chu": "respectively",
+   "doc": "/rɪˈspektɪvli/",
+   "nghia": "theo thứ tự tương ứng — \"A and B are 3 and 5 respectively\": A = 3, B = 5. Đáp án đúng số nhưng SAI thứ tự vẫn sai.",
+   "nhom": "Tổ hợp đáp án & thứ tự",
+   "viDu": "P, V, and I denote the power, voltage, and current, respectively. Which formula is correct?",
+   "viDuNghia": "P, V, I lần lượt là công suất, điện áp, dòng điện. Công thức nào đúng?"
+  },
+  {
+   "chu": "in that order",
+   "nghia": "theo đúng thứ tự đó — thứ tự liệt kê có ý nghĩa, không được đảo.",
+   "nhom": "Tổ hợp đáp án & thứ tự",
+   "viDu": "How many comparisons are needed in order to locate/insert the word \"SHARK\" in the binary search tree built from inserting the list {SHE, SELLS, SEA, SHELLS, BY, THE, SEASHORE} (in that order)?",
+   "viDuNghia": "Cần bao nhiêu phép so sánh để định vị/chèn từ \"SHARK\" vào cây tìm kiếm nhị phân được xây dựng bằng cách chèn danh sách {SHE, SELLS, SEA, SHELLS, BY, THE, SEASHORE} (theo thứ tự đó)?"
+  },
+  {
+   "chu": "correct order",
+   "nghia": "thứ tự đúng — đề yêu cầu SẮP XẾP các bước / giai đoạn; so từng vị trí.",
+   "nhom": "Tổ hợp đáp án & thứ tự",
+   "viDu": "A new laptop joins the network and needs an address from DHCP. What is the correct order of messages?",
+   "viDuNghia": "Laptop mới vào mạng và cần địa chỉ từ DHCP. Thứ tự thông điệp đúng là gì?",
+   "doc": "/kəˈrekt ˈɔːrdər/"
+  },
+  {
+   "chu": "in ascending order",
+   "nghia": "theo thứ tự tăng dần (nhỏ đến lớn) — trái nghĩa: in descending order (giảm dần).",
+   "nhom": "Tổ hợp đáp án & thứ tự",
+   "viDu": "An ________ of a binary search tree (BST) creates a list that is sorted in ascending order.",
+   "viDuNghia": "Phép ________ của cây tìm kiếm nhị phân (BST) tạo ra một danh sách được sắp tăng dần."
+  },
+  {
+   "chu": "followed by",
+   "nghia": "rồi đến, theo sau là — \"A followed by B\": A TRƯỚC, B sau.",
+   "nhom": "Tổ hợp đáp án & thứ tự",
+   "viDu": "The latter clause consists of the keyword _____ followed by a condition about the group.",
+   "viDuNghia": "Mệnh đề sau đó bao gồm từ khóa _____ theo sau bởi một điều kiện về nhóm (group).",
+   "doc": "/ˈfɑːloʊd baɪ/"
+  },
+  {
+   "chu": "True or False",
+   "nghia": "Đúng hay Sai — đề đưa một phát biểu; chỉ cần một chi tiết sai là chọn False.",
+   "nhom": "Tổ hợp đáp án & thứ tự",
+   "viDu": "The following statement is true or false? \"Project scope is more dynamic than product vision\".",
+   "viDuNghia": "Phát biểu sau đúng hay sai? \"Phạm vi dự án biến động nhiều hơn tầm nhìn sản phẩm\"."
+  },
+  {
+   "chu": "the latter",
+   "nghia": "cái sau (trong hai cái vừa nêu) — \"the former\" = cái trước. Phải nhìn lại thứ tự hai thứ đã nhắc.",
+   "nhom": "Tổ hợp đáp án & thứ tự",
+   "viDu": "The latter clause consists of the keyword _____ followed by a condition about the group.",
+   "viDuNghia": "Mệnh đề sau đó bao gồm từ khóa _____ theo sau bởi một điều kiện về nhóm (group).",
+   "doc": "/ðə ˈlætər/"
+  },
+  {
+   "chu": "each",
+   "doc": "/iːtʃ/",
+   "nghia": "mỗi, từng cái — xét RIÊNG từng phần tử (each process, each node); khác all (gộp chung).",
+   "nhom": "Tổ hợp đáp án & thứ tự",
+   "viDu": "Each node in a graph can have ____ parents.",
+   "viDuNghia": "Mỗi nút trong một đồ thị có thể có ____ nút cha."
+  },
+  {
+   "chu": "as follows",
+   "nghia": "như sau — dữ kiện được liệt kê ngay phía dưới; đọc kỹ từng dòng dữ kiện.",
+   "nhom": "Tổ hợp đáp án & thứ tự",
+   "viDu": "Given an array as follows: [4, 1, 2, 9, 8]. How is the array like after the first round of Bubble sort?",
+   "viDuNghia": "Cho mảng [4, 1, 2, 9, 8]. Mảng như thế nào sau vòng đầu tiên của Bubble sort?",
+   "doc": "/æz ˈfɑːloʊz/"
+  },
+  {
+   "chu": "given below",
+   "nghia": "cho bên dưới — bảng / đoạn code / danh sách nằm ngay sau câu hỏi. Tương tự: shown below, listed below.",
+   "nhom": "Tổ hợp đáp án & thứ tự",
+   "viDu": "Write appropriate function call for the function given below (suppose that a and b are variables of float type):",
+   "viDuNghia": "Viết lời gọi hàm phù hợp cho hàm dưới đây (giả sử a và b là các biến kiểu float):",
+   "doc": "/ˈɡɪvn bɪˈloʊ/"
+  },
+  {
+   "chu": "the above",
+   "nghia": "(cái) ở trên — chỉ lại đoạn code / phát biểu vừa nêu phía trên.",
+   "nhom": "Tổ hợp đáp án & thứ tự",
+   "viDu": "Which one of the following is the output of the above code?",
+   "viDuNghia": "Kết quả (output) của đoạn code trên là gì?",
+   "doc": "/ði əˈbʌv/"
+  }
+ ]
+}

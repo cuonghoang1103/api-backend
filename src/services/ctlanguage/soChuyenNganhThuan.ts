@@ -52,6 +52,15 @@ export interface BoChuyenNganh {
 }
 
 const MA = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+
+/**
+ * Bộ "TIẾNG ANH THEO ĐỀ THI" (18/11/2026): từ chuyên ngành rút từ đề FE/PE thật của từng môn FPT (`swt301-1`, `nwc203c-2`…)
+ * + hai bộ đọc hiểu đề (`doc-de-thi`, `doc-de-thi-2`). CHỈ có tiếng Anh (đề thi là tiếng Anh) ⇒ không thuộc luật
+ * "cùng bộ mã giữa 3 ngôn ngữ" của bộ NGHỀ. Mỗi từ chỉ ở MỘT bộ đề thi (môn dùng nó nhiều nhất).
+ */
+export function laBoDeThi(ma: string): boolean {
+  return /^doc-de-thi(?:-\d+)?$/.test(ma) || /^[a-z]{3}\d{3}[a-z]?-\d+$/.test(ma);
+}
 const KANA = /[ぁ-ゖァ-ヺ]/;
 const CO_HAN = /\p{Script=Han}/u;
 const CHI_KANA = /^[ぁ-ゖァ-ヺー・\s（）()〜～]+$/;

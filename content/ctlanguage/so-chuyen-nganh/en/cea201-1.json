@@ -1,0 +1,790 @@
+{
+ "ma": "cea201-1",
+ "nn": "en",
+ "ten": "CEA201 · 1. Tổng quan, CPU, bus và ngắt",
+ "moTa": "Môn Tổ chức & kiến trúc máy tính (CEA201), phần 1: kiến trúc – tổ chức, các thế hệ máy tính, hiệu năng, bus hệ thống, thanh ghi, chu trình lệnh và ngắt. Từ lấy từ đề FE thật; câu ví dụ là câu hỏi thật trong đề.",
+ "bieuTuong": "cpu.fill",
+ "thuTu": -989,
+ "tu": [
+  {
+   "chu": "computer architecture",
+   "doc": "/kəmˈpjuːtər ˈɑːrkɪtektʃər/",
+   "nghia": "kiến trúc máy tính – những thuộc tính lập trình viên nhìn thấy được: tập lệnh, số bit dữ liệu, cách định địa chỉ",
+   "nhom": "Kiến trúc & tổ chức",
+   "viDu": "When considering the number of pipeline stages, what trade-offs must be made in computer architecture?",
+   "viDuNghia": "Khi xét số lượng tầng của pipeline, cần cân nhắc những đánh đổi nào trong kiến trúc máy tính?"
+  },
+  {
+   "chu": "computer organization",
+   "doc": "/kəmˈpjuːtər ˌɔːrɡənəˈzeɪʃn/",
+   "nghia": "tổ chức máy tính – cách các khối phần cứng được nối và vận hành để hiện thực kiến trúc",
+   "nhom": "Kiến trúc & tổ chức",
+   "viDu": "What is the distinction between Computer Architecture and Computer Organization?",
+   "viDuNghia": "Sự khác biệt giữa Kiến trúc máy tính (Computer Architecture) và Tổ chức máy tính (Computer Organization) là gì?"
+  },
+  {
+   "chu": "architectural attribute",
+   "doc": "/ˌɑːrkɪˈtektʃərəl ˈætrɪbjuːt/",
+   "nghia": "thuộc tính kiến trúc – thứ ảnh hưởng trực tiếp tới việc chạy chương trình (tập lệnh, số bit, cơ chế I/O)",
+   "nhom": "Kiến trúc & tổ chức",
+   "viDu": "The number of bits used to represent various data types is an example of an architectural attribute.",
+   "viDuNghia": "Số bit dùng để biểu diễn các kiểu dữ liệu khác nhau là một ví dụ về thuộc tính kiến trúc."
+  },
+  {
+   "chu": "organizational attribute",
+   "doc": "/ˌɔːrɡənəˈzeɪʃənl ˈætrɪbjuːt/",
+   "nghia": "thuộc tính tổ chức – chi tiết phần cứng lập trình viên không thấy (tín hiệu điều khiển, công nghệ bộ nhớ)",
+   "nhom": "Kiến trúc & tổ chức",
+   "viDu": "Interfaces between the computer and peripherals is an example of an organizational attribute.",
+   "viDuNghia": "Giao diện giữa máy tính và thiết bị ngoại vi là một ví dụ về thuộc tính tổ chức."
+  },
+  {
+   "chu": "von Neumann architecture",
+   "nghia": "kiến trúc von Neumann – dữ liệu và lệnh nằm chung một bộ nhớ, lệnh chạy tuần tự",
+   "nhom": "Kiến trúc & tổ chức",
+   "viDu": "Which characteristic distinguishes the von Neumann architecture from the Harvard architecture?",
+   "viDuNghia": "Đặc điểm nào phân biệt kiến trúc von Neumann với kiến trúc Harvard?"
+  },
+  {
+   "chu": "stored program",
+   "doc": "/stɔːrd ˈproʊɡræm/",
+   "nghia": "chương trình lưu trữ – chương trình nằm sẵn trong bộ nhớ cùng dữ liệu, máy tự lấy ra chạy",
+   "nhom": "Kiến trúc & tổ chức",
+   "viDu": "The stored-program concept means a computer could get its instructions by reading them from memory, and a program could be set or altered by setting the values of a portion of memory.",
+   "viDuNghia": "Khái niệm chương trình lưu trữ (stored-program) nghĩa là máy tính có thể lấy lệnh bằng cách đọc từ bộ nhớ, và một chương trình có thể được thiết lập hoặc thay đổi bằng cách đặt giá trị cho một phần bộ nhớ."
+  },
+  {
+   "chu": "central processing unit",
+   "nghia": "bộ xử lý trung tâm (CPU) – điều khiển máy và thực hiện xử lý dữ liệu",
+   "nhom": "Kiến trúc & tổ chức",
+   "viDu": "What is the central processing unit (CPU) responsible for?",
+   "viDuNghia": "Bộ xử lý trung tâm (CPU) chịu trách nhiệm việc gì?"
+  },
+  {
+   "chu": "processor",
+   "doc": "/ˈprɑːsesər/",
+   "nghia": "bộ xử lý – khối đọc và thực thi lệnh",
+   "nhom": "Kiến trúc & tổ chức",
+   "viDu": "What is the role of the control unit in a processor?",
+   "viDuNghia": "Vai trò của khối điều khiển (control unit) trong bộ xử lý là gì?"
+  },
+  {
+   "chu": "microprocessor",
+   "doc": "/ˌmaɪkroʊˈprɑːsesər/",
+   "nghia": "bộ vi xử lý – cả CPU nằm trên một con chip",
+   "nhom": "Kiến trúc & tổ chức",
+   "viDu": "What is the maximum addressable memory of a 32-bit microprocessor with 24-bit address?",
+   "viDuNghia": "Dung lượng bộ nhớ tối đa có thể định địa chỉ của một bộ vi xử lý 32-bit với bus địa chỉ 24-bit là bao nhiêu?"
+  },
+  {
+   "chu": "main memory",
+   "doc": "/meɪn ˈmeməri/",
+   "nghia": "bộ nhớ chính – nơi chứa chương trình và dữ liệu đang chạy (RAM)",
+   "nhom": "Kiến trúc & tổ chức",
+   "viDu": "Which mechanism enables communication between the CPU, main memory, and I/O in a computer system?",
+   "viDuNghia": "Cơ chế nào cho phép giao tiếp giữa CPU, bộ nhớ chính và I/O trong hệ thống máy tính?"
+  },
+  {
+   "chu": "hardware",
+   "doc": "/ˈhɑːrdwer/",
+   "nghia": "phần cứng – các linh kiện vật lý của máy",
+   "nhom": "Kiến trúc & tổ chức",
+   "viDu": "Computers are classified into generations based on the fundamental hardware technology employed.",
+   "viDuNghia": "Máy tính được phân loại theo các thế hệ dựa trên công nghệ phần cứng cơ bản được sử dụng."
+  },
+  {
+   "chu": "addressable",
+   "doc": "/əˈdresəbl/",
+   "nghia": "định địa chỉ được – mỗi ô nhớ có một địa chỉ riêng để truy cập",
+   "nhom": "Kiến trúc & tổ chức",
+   "viDu": "A byte addressable microprocessor has 24 bit address. What is maximum memory capacity?",
+   "viDuNghia": "Một bộ vi xử lý định địa chỉ theo byte có bus địa chỉ 24 bit. Dung lượng bộ nhớ tối đa là bao nhiêu?"
+  },
+  {
+   "chu": "peripheral",
+   "doc": "/pəˈrɪfərəl/",
+   "nghia": "thiết bị ngoại vi – thiết bị nối ngoài như bàn phím, máy in, ổ đĩa",
+   "nhom": "Kiến trúc & tổ chức",
+   "viDu": "An I/O module must recognize one unique address for each peripheral it controls.",
+   "viDuNghia": "Một mô-đun I/O phải nhận biết một địa chỉ duy nhất cho mỗi thiết bị ngoại vi mà nó điều khiển."
+  },
+  {
+   "chu": "data processing",
+   "doc": "/ˈdeɪtə ˈprɑːsesɪŋ/",
+   "nghia": "xử lý dữ liệu – một trong bốn chức năng cơ bản của máy tính",
+   "nhom": "Kiến trúc & tổ chức",
+   "viDu": "The __________ performs the computer's data processing functions.",
+   "viDuNghia": "__________ thực hiện các chức năng xử lý dữ liệu của máy tính."
+  },
+  {
+   "chu": "data movement",
+   "doc": "/ˈdeɪtə ˈmuːvmənt/",
+   "nghia": "di chuyển dữ liệu – đưa dữ liệu giữa máy và thế giới bên ngoài (I/O, truyền thông)",
+   "nhom": "Kiến trúc & tổ chức",
+   "viDu": "Which of the following are the 4 basic functions of a computer? — Data processing; Data storage; Data movement; Control.",
+   "viDuNghia": "Đâu là 4 chức năng cơ bản của máy tính? — Xử lý dữ liệu; Lưu trữ dữ liệu; Di chuyển dữ liệu; Điều khiển."
+  },
+  {
+   "chu": "embedded system",
+   "doc": "/ɪmˈbedɪd ˈsɪstəm/",
+   "nghia": "hệ thống nhúng – máy tính gắn sẵn trong thiết bị để làm một việc chuyên biệt",
+   "nhom": "Kiến trúc & tổ chức",
+   "viDu": "A washing machine is controlled by an embedded system.",
+   "viDuNghia": "Máy giặt được điều khiển bởi một hệ thống nhúng."
+  },
+  {
+   "chu": "general-purpose",
+   "doc": "/ˌdʒenrəl ˈpɜːrpəs/",
+   "nghia": "đa dụng – dùng được cho nhiều việc, không chuyên cho một việc",
+   "nhom": "Kiến trúc & tổ chức",
+   "viDu": "A general-purpose computer can run many different kinds of programs.",
+   "viDuNghia": "Máy tính đa dụng chạy được nhiều loại chương trình khác nhau."
+  },
+  {
+   "chu": "Advanced RISC Machine",
+   "nghia": "ARM – họ kiến trúc RISC tiết kiệm điện, lệnh dài cố định; dùng trong điện thoại và thiết bị nhúng",
+   "nhom": "Kiến trúc & tổ chức",
+   "viDu": "What is the main difference between x86 and ARM instruction formats?",
+   "viDuNghia": "Khác biệt chính giữa khuôn dạng lệnh x86 và ARM là gì?"
+  },
+  {
+   "chu": "vacuum tube",
+   "doc": "/ˈvækjuːm tuːb/",
+   "nghia": "đèn điện tử chân không – linh kiện của máy tính thế hệ thứ nhất",
+   "nhom": "Thế hệ & linh kiện",
+   "viDu": "The first generation of computers used vacuum tubes for digital logic elements and memory.",
+   "viDuNghia": "Thế hệ máy tính đầu tiên dùng đèn điện tử chân không (vacuum tube) cho các phần tử logic số và bộ nhớ."
+  },
+  {
+   "chu": "transistor",
+   "doc": "/trænˈzɪstər/",
+   "nghia": "bóng bán dẫn – linh kiện của thế hệ thứ hai, nhỏ và ít tốn điện hơn đèn điện tử",
+   "nhom": "Thế hệ & linh kiện",
+   "viDu": "Second generation computers used transistors.",
+   "viDuNghia": "Máy tính thế hệ thứ hai sử dụng bóng bán dẫn (transistor)."
+  },
+  {
+   "chu": "integrated circuit",
+   "doc": "/ˈɪntɪɡreɪtɪd ˈsɜːrkɪt/",
+   "nghia": "mạch tích hợp (IC) – nhiều transistor trên một miếng silicon; thế hệ thứ ba",
+   "nhom": "Thế hệ & linh kiện",
+   "viDu": "The integrated circuit defines the third generation of computers.",
+   "viDuNghia": "Mạch tích hợp (integrated circuit) định nghĩa thế hệ máy tính thứ ba."
+  },
+  {
+   "chu": "semiconductor",
+   "doc": "/ˌsemikənˈdʌktər/",
+   "nghia": "chất bán dẫn – vật liệu (silicon) làm chip và bộ nhớ",
+   "nhom": "Thế hệ & linh kiện",
+   "viDu": "The SSDs now on the market use a type of semiconductor memory referred to as flash memory.",
+   "viDuNghia": "Các ổ SSD hiện có trên thị trường sử dụng một loại bộ nhớ bán dẫn gọi là bộ nhớ flash."
+  },
+  {
+   "chu": "generation",
+   "doc": "/ˌdʒenəˈreɪʃn/",
+   "nghia": "thế hệ (máy tính) – chia theo công nghệ: đèn điện tử, transistor, mạch tích hợp…",
+   "nhom": "Thế hệ & linh kiện",
+   "viDu": "Which option correctly pairs a computer generation with the technology used for its logic elements?",
+   "viDuNghia": "Phương án nào ghép ĐÚNG một thế hệ máy tính với công nghệ dùng cho phần tử logic của nó?"
+  },
+  {
+   "chu": "chip",
+   "doc": "/tʃɪp/",
+   "nghia": "vi mạch – miếng silicon chứa mạch điện tử",
+   "nhom": "Thế hệ & linh kiện",
+   "viDu": "The use of multiple processors on the same chip is referred to as __________ and can raise performance without raising the clock rate.",
+   "viDuNghia": "Việc đặt nhiều bộ xử lý trên cùng một chip được gọi là __________ và có thể tăng hiệu năng mà không cần tăng tốc độ xung nhịp."
+  },
+  {
+   "chu": "core",
+   "doc": "/kɔːr/",
+   "nghia": "nhân (lõi) xử lý – một bộ xử lý độc lập nằm trong chip",
+   "nhom": "Thế hệ & linh kiện",
+   "viDu": "A quad-core processor has four independent cores on one chip.",
+   "viDuNghia": "Bộ xử lý bốn nhân có bốn nhân xử lý độc lập trên một chip."
+  },
+  {
+   "chu": "multicore",
+   "doc": "/ˌmʌltiˈkɔːr/",
+   "nghia": "đa nhân – một chip chứa nhiều nhân xử lý",
+   "nhom": "Thế hệ & linh kiện",
+   "viDu": "What is a multicore processor?",
+   "viDuNghia": "Bộ xử lý đa nhân là gì?"
+  },
+  {
+   "chu": "quartz crystal",
+   "doc": "/kwɔːrts ˈkrɪstl/",
+   "nghia": "tinh thể thạch anh – tạo xung nhịp đều cho đồng hồ hệ thống",
+   "nhom": "Thế hệ & linh kiện",
+   "viDu": "The system clock is driven by a quartz crystal.",
+   "viDuNghia": "Đồng hồ hệ thống được tạo nhịp bởi một tinh thể thạch anh."
+  },
+  {
+   "chu": "Electronic Numerical Integrator and Computer",
+   "nghia": "ENIAC – máy tính điện tử đa dụng đầu tiên (1946), dùng đèn điện tử chân không, thuộc thế hệ thứ nhất",
+   "nhom": "Thế hệ & linh kiện",
+   "viDu": "The ENIAC is an example of a __________ generation computer.",
+   "viDuNghia": "ENIAC là ví dụ về máy tính thế hệ __________."
+  },
+  {
+   "chu": "Moore's law",
+   "doc": "/mɔːrz lɔː/",
+   "nghia": "định luật Moore – số transistor đặt được trên một chip tăng gấp đôi khoảng mỗi 18–24 tháng",
+   "nhom": "Thế hệ & linh kiện",
+   "viDu": "Which statement correctly describes Moore's law?",
+   "viDuNghia": "Phát biểu nào mô tả đúng định luật Moore?"
+  },
+  {
+   "chu": "performance",
+   "doc": "/pərˈfɔːrməns/",
+   "nghia": "hiệu năng – máy chạy nhanh, hiệu quả tới mức nào",
+   "nhom": "Hiệu năng",
+   "viDu": "Which of the following types of processors typically offer better performance for parallel processing?",
+   "viDuNghia": "Loại bộ xử lý nào thường cho hiệu năng tốt hơn cho xử lý song song?"
+  },
+  {
+   "chu": "system clock",
+   "doc": "/ˈsɪstəm klɑːk/",
+   "nghia": "đồng hồ hệ thống – phát xung nhịp đều để đồng bộ mọi thao tác của CPU",
+   "nhom": "Hiệu năng",
+   "viDu": "What electronic component is used to govern operations such as fetching, decoding, and performing arithmetic operations executed by a processor? — Using a system clock",
+   "viDuNghia": "Thành phần điện tử nào được dùng để điều phối các thao tác như nạp lệnh, giải mã và thực hiện phép toán số học do bộ xử lý thực thi? — Dùng đồng hồ hệ thống (system clock)"
+  },
+  {
+   "chu": "clock cycle",
+   "doc": "/klɑːk ˈsaɪkl/",
+   "nghia": "chu kỳ đồng hồ – một nhịp xung; mỗi thao tác tốn một hay nhiều chu kỳ",
+   "nhom": "Hiệu năng",
+   "viDu": "A DDR memory transfers 64 bits per clock cycle at 200 MHz. What is the peak bandwidth?",
+   "viDuNghia": "Một bộ nhớ DDR truyền 64 bit mỗi chu kỳ xung tại 200 MHz. Băng thông đỉnh là bao nhiêu?"
+  },
+  {
+   "chu": "clock rate",
+   "doc": "/klɑːk reɪt/",
+   "nghia": "tốc độ đồng hồ (clock speed) – số xung mỗi giây, đo bằng Hz/GHz",
+   "nhom": "Hiệu năng",
+   "viDu": "Because all devices on a synchronous bus are tied to a fixed clock rate, the system cannot take advantage of advances in device performance.",
+   "viDuNghia": "Vì mọi thiết bị trên một bus đồng bộ đều bị buộc vào một tốc độ xung nhịp cố định, hệ thống không thể tận dụng các tiến bộ về hiệu năng thiết bị."
+  },
+  {
+   "chu": "throughput",
+   "doc": "/ˈθruːpʊt/",
+   "nghia": "thông lượng – lượng việc làm xong trong một đơn vị thời gian",
+   "nhom": "Hiệu năng",
+   "viDu": "A parallel system completes 500 tasks in 50 seconds. What is the throughput?",
+   "viDuNghia": "Một hệ song song hoàn thành 500 tác vụ trong 50 giây. Thông lượng (throughput) là bao nhiêu?"
+  },
+  {
+   "chu": "benchmark",
+   "doc": "/ˈbentʃmɑːrk/",
+   "nghia": "chương trình đo chuẩn – bộ chương trình mẫu dùng để so hiệu năng các máy",
+   "nhom": "Hiệu năng",
+   "viDu": "A benchmark is run 4 times on a computer with execution times: 8s, 10s, 12s, 14s. What is the arithmetic mean?",
+   "viDuNghia": "Một benchmark chạy 4 lần với thời gian: 8s, 10s, 12s, 14s. Trung bình cộng là bao nhiêu?"
+  },
+  {
+   "chu": "Amdahl's law",
+   "doc": "/ˈæmdɑːlz lɔː/",
+   "nghia": "định luật Amdahl – mức tăng tốc khi thêm bộ xử lý bị giới hạn bởi phần chương trình không song song hoá được",
+   "nhom": "Hiệu năng",
+   "viDu": "Amdahl's law shows that the serial part of a program limits the speedup from adding processors.",
+   "viDuNghia": "Định luật Amdahl cho thấy phần tuần tự của chương trình giới hạn mức tăng tốc khi thêm bộ xử lý."
+  },
+  {
+   "chu": "speedup",
+   "doc": "/ˈspiːdʌp/",
+   "nghia": "độ tăng tốc – tỉ số thời gian chạy trước và sau khi cải tiến",
+   "nhom": "Hiệu năng",
+   "viDu": "Running the program on four cores gives a speedup of about 3.",
+   "viDuNghia": "Chạy chương trình trên bốn nhân cho độ tăng tốc khoảng 3 lần."
+  },
+  {
+   "chu": "power consumption",
+   "doc": "/ˈpaʊər kənˈsʌmpʃn/",
+   "nghia": "mức tiêu thụ điện",
+   "nhom": "Hiệu năng",
+   "viDu": "What is the main benefit of using ARM processors over other processors? — Low cost and low power consumption",
+   "viDuNghia": "Lợi ích chính của việc dùng bộ xử lý ARM so với bộ xử lý khác là gì? — Chi phí thấp và tiêu thụ điện thấp"
+  },
+  {
+   "chu": "trade-off",
+   "doc": "/ˈtreɪd ɔːf/",
+   "nghia": "sự đánh đổi – được cái này thì mất cái kia (vd tốc độ đổi lấy giá thành)",
+   "nhom": "Hiệu năng",
+   "viDu": "Which memory management technique provides the best trade-off between efficient memory utilization and performance in a system with high process variability?",
+   "viDuNghia": "Kỹ thuật quản lý bộ nhớ nào cho sự đánh đổi tốt nhất giữa tận dụng bộ nhớ và hiệu năng trong hệ có độ biến thiên tiến trình cao?"
+  },
+  {
+   "chu": "efficiency",
+   "doc": "/ɪˈfɪʃnsi/",
+   "nghia": "hiệu suất – làm được nhiều việc mà tốn ít tài nguyên",
+   "nhom": "Hiệu năng",
+   "viDu": "Pipelining improves the efficiency of the processor.",
+   "viDuNghia": "Kỹ thuật đường ống nâng cao hiệu suất của bộ xử lý."
+  },
+  {
+   "chu": "latency",
+   "doc": "/ˈleɪtənsi/",
+   "nghia": "độ trễ – thời gian chờ từ lúc yêu cầu tới lúc có dữ liệu (cache L1 trễ thấp nhất; đĩa có trễ quay – rotational latency)",
+   "nhom": "Hiệu năng",
+   "viDu": "A hard disk spins at 7200 rpm. What is its average rotational latency?",
+   "viDuNghia": "Một ổ cứng quay 7200 vòng/phút. Độ trễ quay trung bình của nó là bao nhiêu?"
+  },
+  {
+   "chu": "execution time",
+   "doc": "/ˌeksɪˈkjuːʃn taɪm/",
+   "nghia": "thời gian thực thi – thời gian CPU cần để chạy xong chương trình = số lệnh × CPI / tần số xung nhịp",
+   "nhom": "Hiệu năng",
+   "viDu": "Execution time equals the instruction count times the CPI divided by the clock rate.",
+   "viDuNghia": "Thời gian thực thi bằng số lệnh nhân CPI rồi chia cho tần số xung nhịp."
+  },
+  {
+   "chu": "cycles per instruction",
+   "nghia": "CPI – số chu kỳ xung nhịp trung bình cần cho một lệnh; CPI càng nhỏ máy càng nhanh",
+   "nhom": "Hiệu năng",
+   "viDu": "A program contains 5 x 10^9 instructions and runs on a 2 GHz processor whose average CPI is 2.5. How long does the program take to execute?",
+   "viDuNghia": "Một chương trình gồm 5 x 10^9 lệnh, chạy trên bộ xử lý 2 GHz có CPI trung bình 2,5. Chương trình chạy mất bao lâu?"
+  },
+  {
+   "chu": "millions of instructions per second",
+   "nghia": "MIPS – số triệu lệnh thực thi mỗi giây = tần số xung nhịp / (CPI × 10^6)",
+   "nhom": "Hiệu năng",
+   "viDu": "A benchmark program is run on a 40 MHz processor. What is its MIPS (Million Instructions per Second) rate?",
+   "viDuNghia": "Một chương trình benchmark chạy trên bộ xử lý 40 MHz. Tốc độ MIPS (triệu lệnh mỗi giây) của nó là bao nhiêu?"
+  },
+  {
+   "chu": "bus",
+   "doc": "/bʌs/",
+   "nghia": "bus – đường truyền dùng chung nối các khối của máy tính",
+   "nhom": "Bus & kết nối",
+   "viDu": "A bus that connects major computer components (processor, memory, I/O) is called a __________.",
+   "viDuNghia": "Bus kết nối các thành phần chính của máy tính (bộ xử lý, bộ nhớ, I/O) được gọi là __________."
+  },
+  {
+   "chu": "system bus",
+   "doc": "/ˈsɪstəm bʌs/",
+   "nghia": "bus hệ thống – bus nối CPU, bộ nhớ và I/O; gồm bus dữ liệu, địa chỉ và điều khiển",
+   "nhom": "Bus & kết nối",
+   "viDu": "In a computer system bus, the control lines are responsible for ____.",
+   "viDuNghia": "Trong bus hệ thống của máy tính, các đường điều khiển (control lines) chịu trách nhiệm ____."
+  },
+  {
+   "chu": "data bus",
+   "doc": "/ˈdeɪtə bʌs/",
+   "nghia": "bus dữ liệu – các đường chở dữ liệu; độ rộng quyết định số bit truyền một lần",
+   "nhom": "Bus & kết nối",
+   "viDu": "The width of the data bus determines how many bits can be transferred at one time.",
+   "viDuNghia": "Độ rộng bus dữ liệu quyết định số bit truyền được trong một lần."
+  },
+  {
+   "chu": "address bus",
+   "doc": "/ˈædres bʌs/",
+   "nghia": "bus địa chỉ – chỉ ra nguồn/đích của dữ liệu; độ rộng quyết định dung lượng nhớ tối đa",
+   "nhom": "Bus & kết nối",
+   "viDu": "The System bus is made up of control bus, Data bus and Address bus.",
+   "viDuNghia": "Bus hệ thống được tạo thành từ bus điều khiển, bus dữ liệu và bus địa chỉ."
+  },
+  {
+   "chu": "control bus",
+   "doc": "/kənˈtroʊl bʌs/",
+   "nghia": "bus điều khiển – chở tín hiệu lệnh và định thời (đọc, ghi, ngắt, clock)",
+   "nhom": "Bus & kết nối",
+   "viDu": "The control bus carries command and timing signals between the modules.",
+   "viDuNghia": "Bus điều khiển chở tín hiệu lệnh và định thời giữa các mô-đun."
+  },
+  {
+   "chu": "interconnection",
+   "doc": "/ˌɪntərkəˈnekʃn/",
+   "nghia": "sự kết nối giữa các khối (system interconnection = cấu trúc nối CPU – bộ nhớ – I/O)",
+   "nhom": "Bus & kết nối",
+   "viDu": "____ refers to the operational units and their interconnections that realize the architectural specifications.",
+   "viDuNghia": "____ đề cập tới các đơn vị vận hành và sự kết nối giữa chúng nhằm hiện thực hóa các đặc tả kiến trúc."
+  },
+  {
+   "chu": "address line",
+   "doc": "/ˈædres laɪn/",
+   "nghia": "đường địa chỉ – một dây của bus địa chỉ; n đường thì đánh địa chỉ được 2^n ô nhớ",
+   "nhom": "Bus & kết nối",
+   "viDu": "The _____ is connected to the address lines of the system bus.",
+   "viDuNghia": "_____ được nối với các đường địa chỉ của bus hệ thống."
+  },
+  {
+   "chu": "control signal",
+   "doc": "/kənˈtroʊl ˈsɪɡnəl/",
+   "nghia": "tín hiệu điều khiển – tín hiệu khối điều khiển phát ra để ra lệnh cho các khối khác",
+   "nhom": "Bus & kết nối",
+   "viDu": "Which control signal is responsible for temporarily opening the gate to allow data to pass in the data path?",
+   "viDuNghia": "Tín hiệu điều khiển nào chịu trách nhiệm tạm thời mở cổng (gate) để cho dữ liệu đi qua trong đường dữ liệu?"
+  },
+  {
+   "chu": "timing",
+   "doc": "/ˈtaɪmɪŋ/",
+   "nghia": "định thời – quy định thời điểm các sự kiện xảy ra trên bus",
+   "nhom": "Bus & kết nối",
+   "viDu": "Timing refers to the way in which events are coordinated on the bus.",
+   "viDuNghia": "Định thời (timing) đề cập tới cách các sự kiện được phối hợp trên bus."
+  },
+  {
+   "chu": "parallel",
+   "doc": "/ˈpærəlel/",
+   "nghia": "song song – truyền nhiều bit cùng lúc trên nhiều đường; hoặc nhiều việc chạy đồng thời",
+   "nhom": "Bus & kết nối",
+   "viDu": "How many common classifications of parallel systems are there as proposed by Flynn?",
+   "viDuNghia": "Theo Flynn, có bao nhiêu cách phân loại hệ song song phổ biến?"
+  },
+  {
+   "chu": "bus width",
+   "doc": "/bʌs wɪdθ/",
+   "nghia": "độ rộng bus – số đường song song của bus; bus dữ liệu càng rộng thì mỗi lần truyền càng nhiều bit",
+   "nhom": "Bus & kết nối",
+   "viDu": "Which of the following determines the bus width?",
+   "viDuNghia": "Yếu tố nào sau đây quyết định độ rộng bus?"
+  },
+  {
+   "chu": "Peripheral Component Interconnect Express",
+   "nghia": "PCIe – chuẩn kết nối nối tiếp điểm–điểm tốc độ cao, thay cho bus song song dùng chung",
+   "nhom": "Bus & kết nối",
+   "viDu": "Modern systems such as PCI Express replaced the wide shared parallel bus mainly because ____.",
+   "viDuNghia": "Các hệ thống hiện đại như PCI Express thay thế bus song song dùng chung chủ yếu vì ____."
+  },
+  {
+   "chu": "register",
+   "doc": "/ˈredʒɪstər/",
+   "nghia": "thanh ghi – ô nhớ rất nhanh nằm trong CPU, giữ dữ liệu tạm khi xử lý",
+   "nhom": "CPU & thanh ghi",
+   "viDu": "What is the role of the registers in a processor?",
+   "viDuNghia": "Vai trò của các thanh ghi trong bộ xử lý là gì?"
+  },
+  {
+   "chu": "control unit",
+   "doc": "/kənˈtroʊl ˈjuːnɪt/",
+   "nghia": "khối điều khiển (CU) – điều khiển hoạt động của CPU và cả máy",
+   "nhom": "CPU & thanh ghi",
+   "viDu": "During microinstruction execution, which of the following is generated by the control unit?",
+   "viDuNghia": "Trong quá trình thực thi vi lệnh (microinstruction), thành phần nào sau đây do đơn vị điều khiển tạo ra?"
+  },
+  {
+   "chu": "arithmetic and logic unit",
+   "nghia": "khối số học và logic (ALU) – nơi thực hiện phép tính và phép so sánh",
+   "nhom": "CPU & thanh ghi",
+   "viDu": "What is the primary function of the Arithmetic and Logic Unit (ALU) in a processor?",
+   "viDuNghia": "Chức năng chính của Đơn vị Số học và Logic (ALU) trong bộ xử lý là gì?"
+  },
+  {
+   "chu": "program counter",
+   "doc": "/ˈproʊɡræm ˈkaʊntər/",
+   "nghia": "bộ đếm chương trình (PC) – giữ địa chỉ của lệnh sẽ nạp kế tiếp",
+   "nhom": "CPU & thanh ghi",
+   "viDu": "What is the significance of the program counter (PC) in the fetch phase of the instruction cycle?",
+   "viDuNghia": "Ý nghĩa của bộ đếm chương trình (PC) trong giai đoạn nạp lệnh của chu kỳ lệnh là gì?"
+  },
+  {
+   "chu": "instruction register",
+   "doc": "/ɪnˈstrʌkʃn ˈredʒɪstər/",
+   "nghia": "thanh ghi lệnh (IR) – giữ lệnh vừa nạp, đang được giải mã",
+   "nhom": "CPU & thanh ghi",
+   "viDu": "What are two roles of the instruction register (IR) during the instruction cycle?",
+   "viDuNghia": "Hai vai trò của thanh ghi lệnh (IR) trong chu kỳ lệnh là gì?"
+  },
+  {
+   "chu": "memory address register",
+   "nghia": "thanh ghi địa chỉ bộ nhớ (MAR) – giữ địa chỉ ô nhớ sắp đọc/ghi",
+   "nhom": "CPU & thanh ghi",
+   "viDu": "What is the role of the Memory Address Register (MAR) in a computer system?",
+   "viDuNghia": "Thanh ghi địa chỉ bộ nhớ (MAR) có vai trò gì trong hệ thống máy tính?"
+  },
+  {
+   "chu": "memory buffer register",
+   "nghia": "thanh ghi đệm bộ nhớ (MBR) – giữ dữ liệu sắp ghi vào hoặc vừa đọc ra từ bộ nhớ",
+   "nhom": "CPU & thanh ghi",
+   "viDu": "What is the function of the Memory Buffer Register (MBR)?",
+   "viDuNghia": "Chức năng của thanh ghi đệm bộ nhớ (MBR) là gì?"
+  },
+  {
+   "chu": "accumulator",
+   "doc": "/əˈkjuːmjəleɪtər/",
+   "nghia": "thanh ghi tích luỹ (AC) – chứa tạm toán hạng và kết quả phép tính",
+   "nhom": "CPU & thanh ghi",
+   "viDu": "Which of the following PDP series computers is known for its use of 12-bit instructions and a single general-purpose register, the accumulator?",
+   "viDuNghia": "Máy tính dòng PDP nào sau đây nổi tiếng với việc dùng lệnh 12-bit và một thanh ghi đa dụng duy nhất là thanh ghi tích lũy (accumulator)?"
+  },
+  {
+   "chu": "program status word",
+   "nghia": "từ trạng thái chương trình (PSW) – thanh ghi chứa các cờ trạng thái và điều khiển",
+   "nhom": "CPU & thanh ghi",
+   "viDu": "What information does the program status word (PSW) contain?",
+   "viDuNghia": "Từ trạng thái chương trình (PSW) chứa thông tin gì?"
+  },
+  {
+   "chu": "flag",
+   "doc": "/flæɡ/",
+   "nghia": "cờ – (CPU) bit báo kết quả phép tính vừa xong: bằng 0, âm, tràn, có nhớ · (mạng) bit cờ trong phần đầu gói/đoạn, vd SYN, ACK, FIN của TCP",
+   "nhom": "CPU & thanh ghi",
+   "viDu": "The Program Status Word (PSW) typically contains condition codes, the sign of the last result, and other status information like interrupt enable/disable flags.",
+   "viDuNghia": "Từ trạng thái chương trình (PSW) thường chứa các mã điều kiện, dấu của kết quả gần nhất, và các thông tin trạng thái khác như cờ bật/tắt ngắt."
+  },
+  {
+   "chu": "stack pointer",
+   "doc": "/stæk ˈpɔɪntər/",
+   "nghia": "con trỏ ngăn xếp – thanh ghi giữ địa chỉ đỉnh ngăn xếp",
+   "nhom": "CPU & thanh ghi",
+   "viDu": "What is stored in the Stack Pointer?",
+   "viDuNghia": "Con trỏ ngăn xếp (Stack Pointer) lưu cái gì?"
+  },
+  {
+   "chu": "user-visible register",
+   "doc": "/ˌjuːzər ˈvɪzəbl ˈredʒɪstər/",
+   "nghia": "thanh ghi người dùng thấy được – lập trình viên dùng được qua lệnh máy (để giảm truy cập bộ nhớ)",
+   "nhom": "CPU & thanh ghi",
+   "viDu": "User-visible registers help the programmer reduce references to main memory.",
+   "viDuNghia": "Thanh ghi người dùng thấy được giúp lập trình viên giảm số lần truy cập bộ nhớ chính."
+  },
+  {
+   "chu": "general-purpose register",
+   "doc": "/ˌdʒenrəl ˈpɜːrpəs ˈredʒɪstər/",
+   "nghia": "thanh ghi đa dụng – thanh ghi lập trình viên dùng cho nhiều việc: chứa dữ liệu, địa chỉ hoặc chỉ số",
+   "nhom": "CPU & thanh ghi",
+   "viDu": "How many general-purpose registers are there in the register organization of the Intel 80386–Pentium 4?",
+   "viDuNghia": "Có bao nhiêu thanh ghi đa dụng trong tổ chức thanh ghi của vi xử lý Intel 80386–Pentium 4?"
+  },
+  {
+   "chu": "data register",
+   "doc": "/ˈdeɪtə ˈredʒɪstər/",
+   "nghia": "thanh ghi dữ liệu – chỉ dùng để chứa dữ liệu, không dùng để tính địa chỉ toán hạng",
+   "nhom": "CPU & thanh ghi",
+   "viDu": "How do data registers and address registers differ in some computer systems?",
+   "viDuNghia": "Thanh ghi dữ liệu và thanh ghi địa chỉ khác nhau thế nào trong một số hệ máy tính?"
+  },
+  {
+   "chu": "control and status register",
+   "nghia": "thanh ghi điều khiển và trạng thái – PC, IR, MAR, MBR, PSW…; điều khiển hoạt động CPU, phần lớn chỉ HĐH (chương trình đặc quyền) dùng",
+   "nhom": "CPU & thanh ghi",
+   "viDu": "Control and status registers are used by which entities to control the operation of the processor?",
+   "viDuNghia": "Thanh ghi điều khiển và trạng thái được những đối tượng nào dùng để điều khiển hoạt động của bộ xử lý?"
+  },
+  {
+   "chu": "condition code",
+   "doc": "/kənˈdɪʃn koʊd/",
+   "nghia": "mã điều kiện – các bit CPU đặt sau phép tính (dương, âm, bằng 0, tràn); lệnh rẽ nhánh có điều kiện dựa vào đó",
+   "nhom": "CPU & thanh ghi",
+   "viDu": "Condition codes facilitate multiway branches.",
+   "viDuNghia": "Mã điều kiện giúp việc rẽ nhánh nhiều hướng dễ hơn."
+  },
+  {
+   "chu": "register file",
+   "doc": "/ˈredʒɪstər faɪl/",
+   "nghia": "tệp thanh ghi – tập các thanh ghi của CPU, nằm cùng chip với ALU; nhanh hơn cache",
+   "nhom": "CPU & thanh ghi",
+   "viDu": "The register file is on the same chip as the ALU and control unit.",
+   "viDuNghia": "Tệp thanh ghi (register file) nằm trên cùng một chip với ALU và khối điều khiển."
+  },
+  {
+   "chu": "word length",
+   "doc": "/wɜːrd leŋθ/",
+   "nghia": "độ dài từ – số bit CPU xử lý trong một lần, thường bằng độ rộng thanh ghi",
+   "nhom": "CPU & thanh ghi",
+   "viDu": "What does the word length of a computer refer to?",
+   "viDuNghia": "Độ dài từ (word length) của máy tính là gì?"
+  },
+  {
+   "chu": "instruction",
+   "doc": "/ɪnˈstrʌkʃn/",
+   "nghia": "lệnh (lệnh máy) – một thao tác CPU thực hiện",
+   "nhom": "Chu trình lệnh",
+   "viDu": "Program execution consists of repeating the process of instruction fetch and instruction execution.",
+   "viDuNghia": "Việc thực thi chương trình bao gồm lặp lại quá trình nạp lệnh và thực thi lệnh."
+  },
+  {
+   "chu": "instruction cycle",
+   "doc": "/ɪnˈstrʌkʃn ˈsaɪkl/",
+   "nghia": "chu trình lệnh – các bước xử lý một lệnh: nạp, giải mã, thực thi",
+   "nhom": "Chu trình lệnh",
+   "viDu": "The __________ cycle occurs at the beginning of each instruction cycle and causes an instruction to be fetched from memory.",
+   "viDuNghia": "Chu kỳ __________ xảy ra ở đầu mỗi chu kỳ lệnh và làm cho một lệnh được nạp từ bộ nhớ."
+  },
+  {
+   "chu": "fetch",
+   "doc": "/fetʃ/",
+   "nghia": "nạp (lấy) lệnh – đọc lệnh từ bộ nhớ vào CPU",
+   "nhom": "Chu trình lệnh",
+   "viDu": "The __________ is a small cache memory associated with the instruction fetch stage of the pipeline.",
+   "viDuNghia": "__________ là một bộ nhớ cache nhỏ gắn với giai đoạn nạp lệnh (instruction fetch) của pipeline."
+  },
+  {
+   "chu": "decode",
+   "doc": "/ˌdiːˈkoʊd/",
+   "nghia": "giải mã – xác định lệnh yêu cầu làm gì",
+   "nhom": "Chu trình lệnh",
+   "viDu": "Which RISC feature simplifies instruction decoding?",
+   "viDuNghia": "Đặc điểm nào của RISC giúp đơn giản hóa việc giải mã lệnh?"
+  },
+  {
+   "chu": "fetch cycle",
+   "doc": "/fetʃ ˈsaɪkl/",
+   "nghia": "chu kỳ nạp lệnh – giai đoạn CPU đọc lệnh từ bộ nhớ",
+   "nhom": "Chu trình lệnh",
+   "viDu": "During the fetch cycle, the instruction at the address held in the PC is loaded into the IR.",
+   "viDuNghia": "Trong chu kỳ nạp lệnh, lệnh ở địa chỉ mà PC đang giữ được nạp vào thanh ghi lệnh IR."
+  },
+  {
+   "chu": "execute cycle",
+   "doc": "/ˈeksɪkjuːt ˈsaɪkl/",
+   "nghia": "chu kỳ thực thi – giai đoạn CPU làm việc lệnh yêu cầu",
+   "nhom": "Chu trình lệnh",
+   "viDu": "During the execute cycle, the processor carries out the operation specified by the instruction.",
+   "viDuNghia": "Trong chu kỳ thực thi, bộ xử lý thực hiện thao tác mà lệnh chỉ ra."
+  },
+  {
+   "chu": "operand",
+   "doc": "/ˈɑːpərænd/",
+   "nghia": "toán hạng – dữ liệu mà lệnh thao tác lên",
+   "nhom": "Chu trình lệnh",
+   "viDu": "The ____ of two logical operands is 1 if and only if exactly one of the operands has the value 1.",
+   "viDuNghia": "____ của hai toán hạng logic bằng 1 khi và chỉ khi đúng một toán hạng có giá trị 1."
+  },
+  {
+   "chu": "opcode",
+   "doc": "/ˈɑːpkoʊd/",
+   "nghia": "mã thao tác – phần của lệnh cho biết làm phép gì (cộng, nạp, nhảy…)",
+   "nhom": "Chu trình lệnh",
+   "viDu": "During the __________ the opcode of the next instruction is loaded into the IR and the address is loaded into the MAR.",
+   "viDuNghia": "Trong __________, mã thao tác (opcode) của lệnh kế tiếp được nạp vào IR và địa chỉ được nạp vào MAR."
+  },
+  {
+   "chu": "machine instruction",
+   "doc": "/məˈʃiːn ɪnˈstrʌkʃn/",
+   "nghia": "lệnh máy – lệnh ở dạng nhị phân mà CPU hiểu trực tiếp",
+   "nhom": "Chu trình lệnh",
+   "viDu": "What are the most important general categories of data that machine instructions operate on?",
+   "viDuNghia": "Các loại dữ liệu tổng quát quan trọng nhất mà lệnh máy thao tác trên đó là gì?"
+  },
+  {
+   "chu": "increment",
+   "doc": "/ˈɪŋkrəmənt/",
+   "nghia": "tăng lên một đơn vị (PC được tăng sau mỗi lần nạp lệnh)",
+   "nhom": "Chu trình lệnh",
+   "viDu": "After each fetch, the processor increments the program counter.",
+   "viDuNghia": "Sau mỗi lần nạp lệnh, bộ xử lý tăng bộ đếm chương trình lên."
+  },
+  {
+   "chu": "sequential",
+   "doc": "/sɪˈkwenʃl/",
+   "nghia": "tuần tự – lần lượt theo thứ tự",
+   "nhom": "Chu trình lệnh",
+   "viDu": "Which of the following is a characteristic of sequential circuits compared to combinational circuits?",
+   "viDuNghia": "Đâu là đặc điểm của mạch tuần tự (sequential) so với mạch tổ hợp (combinational)?"
+  },
+  {
+   "chu": "interpret",
+   "doc": "/ɪnˈtɜːrprət/",
+   "nghia": "diễn giải, hiểu (lệnh) – khối điều khiển diễn giải lệnh rồi phát tín hiệu",
+   "nhom": "Chu trình lệnh",
+   "viDu": "______________ interprets the instructions in memory and causes them to be executed.",
+   "viDuNghia": "______________ diễn giải các lệnh trong bộ nhớ và khiến chúng được thực thi."
+  },
+  {
+   "chu": "temporarily",
+   "doc": "/ˌtempəˈrerəli/",
+   "nghia": "tạm thời",
+   "nhom": "Chu trình lệnh",
+   "viDu": "The processor needs to store instructions and data temporarily while an instruction is being executed.",
+   "viDuNghia": "Bộ xử lý cần lưu tạm lệnh và dữ liệu trong khi một lệnh đang được thực thi."
+  },
+  {
+   "chu": "indirect cycle",
+   "doc": "/ˌɪndəˈrekt ˈsaɪkl/",
+   "nghia": "chu kỳ gián tiếp – bước thêm trong chu trình lệnh để đọc địa chỉ thật của toán hạng khi lệnh dùng định địa chỉ gián tiếp",
+   "nhom": "Chu trình lệnh",
+   "viDu": "In the instruction cycle, which of the following describes the indirect cycle?",
+   "viDuNghia": "Trong chu trình lệnh, phát biểu nào mô tả chu kỳ gián tiếp (indirect cycle)?"
+  },
+  {
+   "chu": "interrupt",
+   "doc": "/ˈɪntərʌpt/",
+   "nghia": "ngắt – tín hiệu buộc CPU tạm dừng việc đang làm để xử lý một sự kiện",
+   "nhom": "Ngắt",
+   "viDu": "When an interrupt occurs, the processor suspends the current program and runs the interrupt handler.",
+   "viDuNghia": "Khi có ngắt, bộ xử lý tạm ngưng chương trình hiện tại và chạy trình xử lý ngắt."
+  },
+  {
+   "chu": "interrupt handler",
+   "doc": "/ˈɪntərʌpt ˈhændlər/",
+   "nghia": "trình xử lý ngắt – đoạn chương trình chạy khi có ngắt",
+   "nhom": "Ngắt",
+   "viDu": "Control is transferred to the interrupt handler when an interrupt occurs.",
+   "viDuNghia": "Quyền điều khiển được chuyển cho trình xử lý ngắt khi có ngắt xảy ra."
+  },
+  {
+   "chu": "interrupt request",
+   "doc": "/ˈɪntərʌpt rɪˈkwest/",
+   "nghia": "yêu cầu ngắt – tín hiệu thiết bị gửi tới CPU để xin phục vụ",
+   "nhom": "Ngắt",
+   "viDu": "The routine executed in response to an interrupt request is called ________ routine.",
+   "viDuNghia": "Thủ tục được thực thi để đáp lại một yêu cầu ngắt được gọi là thủ tục ________."
+  },
+  {
+   "chu": "suspend",
+   "doc": "/səˈspend/",
+   "nghia": "tạm ngưng – dừng lại, sau đó có thể chạy tiếp",
+   "nhom": "Ngắt",
+   "viDu": "Interrupt processing allows an application program to be suspended in order that a variety of conditions can be serviced and later resumed.",
+   "viDuNghia": "Xử lý ngắt cho phép tạm dừng một chương trình ứng dụng để có thể phục vụ nhiều điều kiện khác nhau rồi sau đó tiếp tục lại."
+  },
+  {
+   "chu": "timer",
+   "doc": "/ˈtaɪmər/",
+   "nghia": "bộ định thời – phát ngắt đều đặn sau mỗi khoảng thời gian",
+   "nhom": "Ngắt",
+   "viDu": "A timer interrupt lets the operating system regain control at regular intervals.",
+   "viDuNghia": "Ngắt định thời cho phép hệ điều hành giành lại quyền điều khiển theo chu kỳ đều đặn."
+  },
+  {
+   "chu": "hardware failure",
+   "doc": "/ˈhɑːrdwer ˈfeɪljər/",
+   "nghia": "hỏng hóc phần cứng – một nguồn gây ngắt (mất điện, lỗi bộ nhớ)",
+   "nhom": "Ngắt",
+   "viDu": "A hardware failure interrupt is generated by a failure such as power failure or memory parity error.",
+   "viDuNghia": "Ngắt lỗi phần cứng (hardware failure interrupt) được sinh ra bởi một sự cố như mất điện hoặc lỗi chẵn lẻ bộ nhớ."
+  },
+  {
+   "chu": "facilitate",
+   "doc": "/fəˈsɪlɪteɪt/",
+   "nghia": "tạo điều kiện, giúp cho việc gì dễ hơn",
+   "nhom": "Từ học thuật trong đề",
+   "viDu": "Which component defines the system call interface to the operating system and facilitates binary portability?",
+   "viDuNghia": "Thành phần nào định nghĩa giao diện lời gọi hệ thống (system call) tới hệ điều hành và tạo điều kiện cho tính khả chuyển ở mức nhị phân?"
+  },
+  {
+   "chu": "enhance",
+   "doc": "/ɪnˈhæns/",
+   "nghia": "nâng cao, cải thiện",
+   "nhom": "Từ học thuật trong đề",
+   "viDu": "An error-correcting code enhances the reliability of the memory at the cost of added complexity.",
+   "viDuNghia": "Mã sửa lỗi nâng cao độ tin cậy của bộ nhớ với cái giá là tăng thêm độ phức tạp."
+  },
+  {
+   "chu": "simultaneously",
+   "doc": "/ˌsaɪmlˈteɪniəsli/",
+   "nghia": "đồng thời, cùng một lúc",
+   "nhom": "Từ học thuật trong đề",
+   "viDu": "Which computing model is characterized by a large number of processors working on different parts of a problem simultaneously?",
+   "viDuNghia": "Mô hình tính toán nào đặc trưng bởi số lượng lớn bộ xử lý cùng làm các phần khác nhau của một bài toán đồng thời?"
+  },
+  {
+   "chu": "designate",
+   "doc": "/ˈdezɪɡneɪt/",
+   "nghia": "chỉ định, ấn định (dành riêng cho một việc)",
+   "nhom": "Từ học thuật trong đề",
+   "viDu": "The ________ are used to designate the source or destination of the data on the data bus.",
+   "viDuNghia": "________ được dùng để chỉ định nguồn hoặc đích của dữ liệu trên bus dữ liệu."
+  },
+  {
+   "chu": "conserve",
+   "doc": "/kənˈsɜːrv/",
+   "nghia": "tiết kiệm, giữ gìn (conserve power = tiết kiệm điện)",
+   "nhom": "Từ học thuật trong đề",
+   "viDu": "Mobile processors lower the clock rate to conserve power.",
+   "viDuNghia": "Bộ xử lý di động hạ tốc độ đồng hồ để tiết kiệm điện."
+  }
+ ]
+}

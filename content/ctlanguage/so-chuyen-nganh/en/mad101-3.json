@@ -1,0 +1,719 @@
+{
+ "ma": "mad101-3",
+ "nn": "en",
+ "ten": "MAD101 · 3. Đồ thị & cây",
+ "moTa": "Toán rời rạc (MAD101), bộ 3: các loại đồ thị, bậc của đỉnh, ma trận kề, đẳng cấu, liên thông, chu trình Euler - Hamilton, đường đi ngắn nhất, cây, duyệt cây, mã Huffman, cây khung nhỏ nhất. Từ lấy từ đề FE thật; ví dụ là câu hỏi thật trong đề.",
+ "bieuTuong": "point.3.filled.connected.trianglepath.dotted",
+ "thuTu": -978,
+ "tu": [
+  {
+   "chu": "simple graph",
+   "doc": "/ˈsɪmpl ɡræf/",
+   "nghia": "đơn đồ thị (vô hướng, không có khuyên, không có cạnh bội)",
+   "nhom": "Các loại đồ thị",
+   "viDu": "Let G be a simple graph whose vertices are all of degree 3. If G has 15 edges, how many vertices does G have?",
+   "viDuNghia": "Cho G là đơn đồ thị mà mọi đỉnh đều bậc 3. Nếu G có 15 cạnh, G có bao nhiêu đỉnh?"
+  },
+  {
+   "chu": "undirected",
+   "doc": "/ˌʌndəˈrektɪd/",
+   "nghia": "vô hướng (undirected graph = đồ thị vô hướng, cạnh không có chiều)",
+   "nhom": "Các loại đồ thị",
+   "viDu": "Let G be a simple undirected graph with 20 vertices. Find the maximum number of edges of G.",
+   "viDuNghia": "Cho G là đồ thị vô hướng đơn với 20 đỉnh. Tìm số cạnh tối đa của G."
+  },
+  {
+   "chu": "directed edge",
+   "doc": "/dəˈrektɪd edʒ/",
+   "nghia": "cạnh có hướng, cung (directed graph = đồ thị có hướng, mỗi cạnh có chiều đi)",
+   "nhom": "Các loại đồ thị",
+   "viDu": "Let G be a multigraph with directed edges containing n vertices, and A be the adjacency matrix of G. Find the correct statement:",
+   "viDuNghia": "Cho G là đa đồ thị có hướng với n đỉnh, và A là ma trận kề của G. Tìm phát biểu đúng:"
+  },
+  {
+   "chu": "multigraph",
+   "doc": "/ˈmʌltiɡræf/",
+   "nghia": "đa đồ thị (cho phép nhiều cạnh nối cùng một cặp đỉnh)",
+   "nhom": "Các loại đồ thị",
+   "viDu": "Given 3 undirected multigraphs whose adjacency matrices are (X)[0 2 1; 2 0 1; 1 1 0] (Y)[0 2 1; 2 0 0; 1 0 0] (Z)[0 2 0; 2 0 1; 0 1 0] Choose the correct answer.",
+   "viDuNghia": "Cho 3 đa đồ thị vô hướng với ma trận kề là (X)[0 2 1; 2 0 1; 1 1 0] (Y)[0 2 1; 2 0 0; 1 0 0] (Z)[0 2 0; 2 0 1; 0 1 0] Chọn đáp án đúng."
+  },
+  {
+   "chu": "pseudograph",
+   "doc": "/ˈsuːdoʊɡræf/",
+   "nghia": "giả đồ thị (cho phép cả cạnh bội lẫn khuyên)",
+   "nhom": "Các loại đồ thị",
+   "viDu": "Given a pseudograph G with incidence matrix [0 1 0 1 0; 1 0 0 0 1; 0 1 1 0 1] (rows = 3 vertices, columns = 5 edges). How many loops does G have?",
+   "viDuNghia": "Cho đồ thị giả (pseudograph) G với ma trận liên thuộc [0 1 0 1 0; 1 0 0 0 1; 0 1 1 0 1] (hàng = 3 đỉnh, cột = 5 cạnh). G có bao nhiêu khuyên (loop)?"
+  },
+  {
+   "chu": "weighted graph",
+   "doc": "/ˈweɪtɪd ɡræf/",
+   "nghia": "đồ thị có trọng số (mỗi cạnh gắn một số: độ dài, chi phí)",
+   "nhom": "Các loại đồ thị",
+   "viDu": "Use Kruskal's algorithm to find a minimum spanning tree for the weighted graph with the first edge being {A, C}.",
+   "viDuNghia": "Dùng thuật toán Kruskal để tìm cây khung nhỏ nhất cho đồ thị có trọng số, với cạnh đầu tiên là {A, C}."
+  },
+  {
+   "chu": "complete graph",
+   "doc": "/kəmˈpliːt ɡræf/",
+   "nghia": "đồ thị đầy đủ K_n (mọi cặp đỉnh đều kề nhau)",
+   "nhom": "Các loại đồ thị",
+   "viDu": "How many distinct Hamilton circuits does the complete graph K₄ have? (Circuits related by rotation or reversal count as the same.)",
+   "viDuNghia": "Đồ thị đầy đủ K₄ có bao nhiêu chu trình Hamilton phân biệt? (Chu trình lệch nhau do xoay vòng hoặc đảo chiều tính là giống nhau.)"
+  },
+  {
+   "chu": "bipartite graph",
+   "doc": "/baɪˈpɑːrtaɪt ɡræf/",
+   "nghia": "đồ thị hai phía, đồ thị lưỡng phân (đỉnh chia thành hai nhóm, cạnh chỉ nối đỉnh khác nhóm)",
+   "nhom": "Các loại đồ thị",
+   "viDu": "Let u, v be two vertices on different sides of the bipartite graph K₂,₂. How many paths of length 3 from u to v?",
+   "viDuNghia": "Cho u, v là hai đỉnh ở hai phía khác nhau của đồ thị lưỡng phân K₂,₂. Có bao nhiêu đường đi độ dài 3 từ u đến v?"
+  },
+  {
+   "chu": "complete bipartite graph",
+   "nghia": "đồ thị hai phía đầy đủ K_(m,n) (mỗi đỉnh nhóm này nối với mọi đỉnh nhóm kia)",
+   "nhom": "Các loại đồ thị",
+   "viDu": "Find all values of m and n such that the complete bipartite graph Kₘ,ₙ has Hamilton circuits.",
+   "viDuNghia": "Tìm tất cả giá trị m và n sao cho đồ thị lưỡng phân đầy đủ Kₘ,ₙ có chu trình Hamilton."
+  },
+  {
+   "chu": "cycle",
+   "doc": "/ˈsaɪkl/",
+   "nghia": "chu trình; đồ thị vòng C_n (n đỉnh nối thành một vòng kín)",
+   "nhom": "Các loại đồ thị",
+   "viDu": "The degree sequence of W₇ (wheel graph: a 7-vertex cycle plus a hub connected to all 7 cycle vertices) is ____",
+   "viDuNghia": "Dãy bậc của W₇ (đồ thị bánh xe: chu trình 7 đỉnh cộng một trục nối với cả 7 đỉnh) là ____"
+  },
+  {
+   "chu": "wheel",
+   "doc": "/wiːl/",
+   "nghia": "đồ thị bánh xe W_n (đồ thị vòng C_n thêm một đỉnh ở tâm nối với mọi đỉnh trên vòng)",
+   "nhom": "Các loại đồ thị",
+   "viDu": "For which values of n does the wheel graph Wₙ have Euler paths but no Euler circuits?",
+   "viDuNghia": "Với những giá trị n nào thì đồ thị bánh xe Wₙ có đường đi Euler nhưng không có chu trình Euler?"
+  },
+  {
+   "chu": "hypercube",
+   "doc": "/ˈhaɪpərkjuːb/",
+   "nghia": "siêu lập phương Q_n (đỉnh là các xâu bit độ dài n, kề nhau khi khác đúng một bit)",
+   "nhom": "Các loại đồ thị",
+   "viDu": "Consider the graph Q₄ (the 4-dimensional hypercube graph). Choose the correct answer.",
+   "viDuNghia": "Xét đồ thị Q₄ (đồ thị siêu lập phương 4 chiều). Chọn đáp án đúng."
+  },
+  {
+   "chu": "subgraph",
+   "doc": "/ˈsʌbɡræf/",
+   "nghia": "đồ thị con",
+   "nhom": "Các loại đồ thị",
+   "viDu": "How many subgraphs with exactly 2 vertices are there in the complete graph Kₙ with n = 3?",
+   "viDuNghia": "Có bao nhiêu đồ thị con gồm đúng 2 đỉnh trong đồ thị đầy đủ Kₙ với n = 3?"
+  },
+  {
+   "chu": "complementary graph",
+   "doc": "/ˌkɑːmplɪˈmentri ɡræf/",
+   "nghia": "đồ thị bù của G (cùng tập đỉnh; hai đỉnh kề nhau trong đồ thị bù khi và chỉ khi không kề nhau trong G)",
+   "nhom": "Các loại đồ thị",
+   "viDu": "The complementary graph G' has the same vertex set as G, and an edge connecting u and v in G' iff there is no edge connecting u and v in G.",
+   "viDuNghia": "Đồ thị bù G' có cùng tập đỉnh với G, và có cạnh nối u, v trong G' khi và chỉ khi không có cạnh nối u, v trong G."
+  },
+  {
+   "chu": "graph",
+   "doc": "/ɡræf/",
+   "nghia": "đồ thị (đỉnh – cạnh) G = (V, E): tập đỉnh và các cạnh nối chúng. (MAE101: đồ thị của hàm số)",
+   "nhom": "Các loại đồ thị",
+   "viDu": "How many vertices are needed to construct a graph with 10 edges in which every vertex is of degree 4?",
+   "viDuNghia": "Cần bao nhiêu đỉnh để xây dựng một đồ thị có 10 cạnh mà mọi đỉnh đều có bậc 4?"
+  },
+  {
+   "chu": "directed graph",
+   "doc": "/dəˈrektɪd ɡræf/",
+   "nghia": "đồ thị có hướng (digraph) – mỗi cạnh (cung) có chiều từ đỉnh đầu tới đỉnh cuối; bậc tách thành bậc vào và bậc ra",
+   "nhom": "Các loại đồ thị",
+   "viDu": "Given the directed graph, how many vertices are in the strongly connected component containing A?",
+   "viDuNghia": "Cho đồ thị có hướng, có bao nhiêu đỉnh nằm trong thành phần liên thông mạnh chứa A?"
+  },
+  {
+   "chu": "undirected graph",
+   "doc": "/ˌʌndəˈrektɪd ɡræf/",
+   "nghia": "đồ thị vô hướng – cạnh không có chiều, nối hai đỉnh như nhau; tổng bậc các đỉnh = 2 × số cạnh",
+   "nhom": "Các loại đồ thị",
+   "viDu": "Let G be a simple undirected graph with 20 vertices. Find the maximum number of edges of G.",
+   "viDuNghia": "Cho G là đồ thị vô hướng đơn với 20 đỉnh. Tìm số cạnh tối đa của G."
+  },
+  {
+   "chu": "edge of a graph",
+   "nghia": "cạnh của đồ thị (đoạn nối hai đỉnh)",
+   "nhom": "Đỉnh, cạnh và bậc",
+   "viDu": "How many edges must be removed from a connected graph with n vertices and m edges to produce a spanning tree?",
+   "viDuNghia": "Cần loại bỏ bao nhiêu cạnh khỏi một đồ thị liên thông có n đỉnh và m cạnh để được một cây khung?"
+  },
+  {
+   "chu": "adjacent vertices",
+   "doc": "/əˈdʒeɪsnt ˈvɜːrtɪsiːz/",
+   "nghia": "hai đỉnh kề nhau (có cạnh nối trực tiếp)",
+   "nhom": "Đỉnh, cạnh và bậc",
+   "viDu": "Two vertices are adjacent in G' if and only if they are not adjacent in G.",
+   "viDuNghia": "Hai đỉnh kề nhau trong G' khi và chỉ khi chúng không kề nhau trong G."
+  },
+  {
+   "chu": "pendant vertex",
+   "doc": "/ˈpendənt ˈvɜːrteks/",
+   "nghia": "đỉnh treo (đỉnh bậc 1)",
+   "nhom": "Đỉnh, cạnh và bậc",
+   "viDu": "A pendant vertex is a vertex of degree 1.",
+   "viDuNghia": "Đỉnh treo là đỉnh có bậc 1."
+  },
+  {
+   "chu": "isolated vertex",
+   "doc": "/ˈaɪsəleɪtɪd ˈvɜːrteks/",
+   "nghia": "đỉnh cô lập (đỉnh bậc 0)",
+   "nhom": "Đỉnh, cạnh và bậc",
+   "viDu": "An isolated vertex has degree 0, so it is not adjacent to any vertex.",
+   "viDuNghia": "Đỉnh cô lập có bậc 0 nên không kề với đỉnh nào."
+  },
+  {
+   "chu": "in-degree",
+   "doc": "/ˈɪn dɪɡriː/",
+   "nghia": "bậc vào (số cạnh đi vào đỉnh trong đồ thị có hướng)",
+   "nhom": "Đỉnh, cạnh và bậc",
+   "viDu": "Let S be the set of all directed graphs with the sequence of (out-degree, in-degree): [(2,2),(2,2),(2,1),(2,3)].",
+   "viDuNghia": "Cho S là tập mọi đồ thị có hướng với dãy (bậc ra, bậc vào): [(2,2),(2,2),(2,1),(2,3)]."
+  },
+  {
+   "chu": "out-degree",
+   "doc": "/ˈaʊt dɪɡriː/",
+   "nghia": "bậc ra (số cạnh đi ra khỏi đỉnh trong đồ thị có hướng)",
+   "nhom": "Đỉnh, cạnh và bậc",
+   "viDu": "Let S be the set of all directed graphs with the given (in-degree, out-degree) sequence: [(3,2),(2,2),(2,2),(1,2)].",
+   "viDuNghia": "Cho S là tập mọi đồ thị có hướng với dãy (bậc vào, bậc ra) cho trước: [(3,2),(2,2),(2,2),(1,2)]."
+  },
+  {
+   "chu": "degree sequence",
+   "doc": "/dɪˈɡriː ˈsiːkwəns/",
+   "nghia": "dãy bậc (bậc của các đỉnh xếp theo thứ tự giảm dần)",
+   "nhom": "Đỉnh, cạnh và bậc",
+   "viDu": "Let G be a simple graph with degree sequence [2, 2, 3, 1, 0]. Which of the following is TRUE?",
+   "viDuNghia": "Cho G là đơn đồ thị với dãy bậc [2, 2, 3, 1, 0]. Phát biểu nào sau đây ĐÚNG?"
+  },
+  {
+   "chu": "multiple edges",
+   "doc": "/ˈmʌltɪpl ˈedʒɪz/",
+   "nghia": "cạnh bội (nhiều cạnh cùng nối một cặp đỉnh)",
+   "nhom": "Đỉnh, cạnh và bậc",
+   "viDu": "A simple graph has no loops and no multiple edges.",
+   "viDuNghia": "Đơn đồ thị không có khuyên và không có cạnh bội."
+  },
+  {
+   "chu": "handshaking theorem",
+   "doc": "/ˈhændʃeɪkɪŋ ˈθiːərəm/",
+   "nghia": "định lý bắt tay: tổng bậc các đỉnh bằng 2 lần số cạnh",
+   "nhom": "Đỉnh, cạnh và bậc",
+   "viDu": "By the handshaking theorem, the sum of the degrees equals twice the number of edges.",
+   "viDuNghia": "Theo định lý bắt tay, tổng bậc các đỉnh bằng hai lần số cạnh."
+  },
+  {
+   "chu": "joined",
+   "doc": "/dʒɔɪnd/",
+   "nghia": "được nối (với nhau bằng một cạnh)",
+   "nhom": "Đỉnh, cạnh và bậc",
+   "viDu": "Find a spanning tree for K₁,₆, the complete bipartite graph drawn below (one vertex v joined to each of u₁,...,u₆).",
+   "viDuNghia": "Tìm cây khung của K₁,₆, đồ thị lưỡng phân đầy đủ vẽ dưới đây (một đỉnh v nối tới từng đỉnh u₁,...,u₆)."
+  },
+  {
+   "chu": "labelled",
+   "doc": "/ˈleɪbld/",
+   "nghia": "được gán nhãn (đỉnh có tên); unlabelled = không gán nhãn",
+   "nhom": "Đỉnh, cạnh và bậc",
+   "viDu": "Choose the correct statement about the graph (see diagram below; vertices labelled v₁-v₆).",
+   "viDuNghia": "Chọn phát biểu đúng về đồ thị (xem hình dưới; các đỉnh được gán nhãn v₁-v₆)."
+  },
+  {
+   "chu": "vertex",
+   "doc": "/ˈvɜːrteks/",
+   "nghia": "đỉnh (của đồ thị), số nhiều vertices; bậc của đỉnh = số cạnh kề. (Toán: đỉnh của parabol, tam giác)",
+   "nhom": "Đỉnh, cạnh và bậc",
+   "viDu": "Given a simple graph with 5 vertices. The degrees of 4 vertices are 1, 3, 3, 4. Which of the following could be the degree of the fifth vertex?",
+   "viDuNghia": "Cho một đồ thị đơn có 5 đỉnh. Bậc của 4 đỉnh là 1, 3, 3, 4. Bậc của đỉnh thứ năm có thể là bao nhiêu?"
+  },
+  {
+   "chu": "degree",
+   "doc": "/dɪˈɡriː/",
+   "nghia": "bậc (của đỉnh) – số cạnh kề với đỉnh; tổng bậc = 2 × số cạnh. (Toán: bậc của đa thức; độ – đơn vị góc)",
+   "nhom": "Đỉnh, cạnh và bậc",
+   "viDu": "Let G be a simple graph whose vertices all have degree 3. If G has 30 edges, how many vertices does G have?",
+   "viDuNghia": "Cho G là đơn đồ thị mà mọi đỉnh đều có bậc 3. Nếu G có 30 cạnh, G có bao nhiêu đỉnh?"
+  },
+  {
+   "chu": "edge",
+   "doc": "/edʒ/",
+   "nghia": "cạnh – đường nối hai đỉnh của đồ thị. (Kiểm thử: cạnh của đồ thị luồng điều khiển)",
+   "nhom": "Đỉnh, cạnh và bậc",
+   "viDu": "Let G be a simple undirected graph with 20 vertices. Find the maximum number of edges of G.",
+   "viDuNghia": "Cho G là đồ thị vô hướng đơn với 20 đỉnh. Tìm số cạnh tối đa của G."
+  },
+  {
+   "chu": "adjacency matrix",
+   "doc": "/əˈdʒeɪsnsi ˈmeɪtrɪks/",
+   "nghia": "ma trận kề (phần tử hàng i cột j là số cạnh nối đỉnh i với đỉnh j)",
+   "nhom": "Biểu diễn và đẳng cấu",
+   "viDu": "Let G be a simple graph with n vertices and A be the adjacency matrix of G. Choose the INCORRECT statement:",
+   "viDuNghia": "Cho G là đơn đồ thị với n đỉnh và A là ma trận kề của G. Chọn phát biểu SAI:"
+  },
+  {
+   "chu": "adjacency list",
+   "doc": "/əˈdʒeɪsnsi lɪst/",
+   "nghia": "danh sách kề (liệt kê các đỉnh kề của từng đỉnh)",
+   "nhom": "Biểu diễn và đẳng cấu",
+   "viDu": "Given the graph with vertices a,b,c,d,e,f and edges a-b, a-f, b-c, c-f, c-e, c-d, e-d. The adjacency list to represent the given graph is ___",
+   "viDuNghia": "Cho đồ thị có các đỉnh a,b,c,d,e,f và các cạnh a-b, a-f, b-c, c-f, c-e, c-d, e-d. Danh sách kề biểu diễn đồ thị này là ___"
+  },
+  {
+   "chu": "incidence matrix",
+   "doc": "/ˈɪnsɪdəns ˈmeɪtrɪks/",
+   "nghia": "ma trận liên thuộc (hàng là đỉnh, cột là cạnh; bằng 1 khi cạnh chạm đỉnh)",
+   "nhom": "Biểu diễn và đẳng cấu",
+   "viDu": "How many 1s are there in the incidence matrix of the graph K₃?",
+   "viDuNghia": "Có bao nhiêu số 1 trong ma trận liên thuộc của đồ thị K₃?"
+  },
+  {
+   "chu": "isomorphic",
+   "doc": "/ˌaɪsəˈmɔːrfɪk/",
+   "nghia": "đẳng cấu (hai đồ thị có cùng cấu trúc, chỉ khác tên đỉnh)",
+   "nhom": "Biểu diễn và đẳng cấu",
+   "viDu": "Which graphs are isomorphic to K₂,₃? Graph X has 5 vertices v1, v2, v3, v4, v5 with edges v1v2, v1v4, v2v3, v3v4, v2v5, v4v5.",
+   "viDuNghia": "Đồ thị nào đẳng cấu với K₂,₃? Đồ thị X có 5 đỉnh v1, v2, v3, v4, v5 với các cạnh v1v2, v1v4, v2v3, v3v4, v2v5, v4v5."
+  },
+  {
+   "chu": "non-isomorphic",
+   "doc": "/ˌnɑːn ˌaɪsəˈmɔːrfɪk/",
+   "nghia": "không đẳng cấu (khác nhau thực sự về cấu trúc)",
+   "nhom": "Biểu diễn và đẳng cấu",
+   "viDu": "How many non-isomorphic simple graphs with 5 vertices and 3 edges?",
+   "viDuNghia": "Có bao nhiêu đơn đồ thị không đẳng cấu với 5 đỉnh và 3 cạnh?"
+  },
+  {
+   "chu": "crossing",
+   "doc": "/ˈkrɔːsɪŋ/",
+   "nghia": "chỗ cắt nhau (của hai cạnh trong hình vẽ; không phải là đỉnh)",
+   "nhom": "Biểu diễn và đẳng cấu",
+   "viDu": "Which graph is bipartite? Graph 1: C₆ (a 6-cycle). Graph 2: a square with one diagonal drawn (forming a triangle). Graph 3: a 5-vertex tree-like figure with crossing diagonal lines.",
+   "viDuNghia": "Đồ thị nào là đồ thị hai phía? Đồ thị 1: C₆ (vòng 6 đỉnh). Đồ thị 2: hình vuông có vẽ một đường chéo (tạo thành tam giác). Đồ thị 3: hình 5 đỉnh dạng cây với các đường chéo cắt nhau."
+  },
+  {
+   "chu": "path in a graph",
+   "nghia": "đường đi trong đồ thị (dãy cạnh nối tiếp từ đỉnh này đến đỉnh kia)",
+   "nhom": "Đường đi và liên thông",
+   "viDu": "Let u, v be two vertices of the graph K₂,₂, one on each side. How many paths of length 4 between u and v?",
+   "viDuNghia": "Gọi u, v là hai đỉnh của đồ thị K₂,₂, mỗi đỉnh thuộc một phía. Có bao nhiêu đường đi độ dài 4 giữa u và v?"
+  },
+  {
+   "chu": "circuit",
+   "doc": "/ˈsɜːrkɪt/",
+   "nghia": "chu trình (đường đi khép kín, quay về đỉnh xuất phát)",
+   "nhom": "Đường đi và liên thông",
+   "viDu": "Choose a pair of values (m,n) for which the graph Kₘ,ₙ has Hamilton paths but no Hamilton circuits.",
+   "viDuNghia": "Chọn một cặp giá trị (m,n) để đồ thị Kₘ,ₙ có đường đi Hamilton nhưng không có chu trình Hamilton."
+  },
+  {
+   "chu": "connected graph",
+   "doc": "/kəˈnektɪd ɡræf/",
+   "nghia": "đồ thị liên thông (giữa hai đỉnh bất kỳ luôn có đường đi)",
+   "nhom": "Đường đi và liên thông",
+   "viDu": "How many edges must be removed from a connected graph with 5 vertices and 8 edges to produce a spanning tree?",
+   "viDuNghia": "Cần bỏ bao nhiêu cạnh khỏi đồ thị liên thông 5 đỉnh, 8 cạnh để thu được cây khung?"
+  },
+  {
+   "chu": "connected component",
+   "doc": "/kəˈnektɪd kəmˈpoʊnənt/",
+   "nghia": "thành phần liên thông (mỗi \"mảnh\" liên thông lớn nhất của đồ thị)",
+   "nhom": "Đường đi và liên thông",
+   "viDu": "How many vertices in the strongly connected component of maximal number of vertices in the given graph?",
+   "viDuNghia": "Thành phần liên thông mạnh (strongly connected component) có số đỉnh lớn nhất trong đồ thị cho trước có bao nhiêu đỉnh?"
+  },
+  {
+   "chu": "strongly connected",
+   "doc": "/ˈstrɔːŋli kəˈnektɪd/",
+   "nghia": "liên thông mạnh (đồ thị có hướng: có đường đi theo cả hai chiều giữa mọi cặp đỉnh)",
+   "nhom": "Đường đi và liên thông",
+   "viDu": "How many vertices are in the strongly connected component containing A in the pictured directed graph?",
+   "viDuNghia": "Có bao nhiêu đỉnh trong thành phần liên thông mạnh chứa A trong đồ thị có hướng ở hình?"
+  },
+  {
+   "chu": "weakly connected",
+   "doc": "/ˈwiːkli kəˈnektɪd/",
+   "nghia": "liên thông yếu (liên thông khi bỏ qua chiều của các cạnh)",
+   "nhom": "Đường đi và liên thông",
+   "viDu": "Two directed graphs G₁ and G₂ are shown (see diagram below). Which statements are correct? (i) G₁ is weakly connected (ii) G₂ is weakly connected",
+   "viDuNghia": "Cho hai đồ thị có hướng G₁ và G₂ (xem hình dưới). Phát biểu nào đúng? (i) G₁ liên thông yếu (ii) G₂ liên thông yếu"
+  },
+  {
+   "chu": "cut edge",
+   "doc": "/kʌt edʒ/",
+   "nghia": "cạnh cắt, cầu (xoá đi thì đồ thị mất liên thông); còn gọi bridge",
+   "nhom": "Đường đi và liên thông",
+   "viDu": "How many cut-vertices and cut-edges are in this graph (see picture: a small graph with a pendant vertex attached via a path, leading into a 4-cycle)?",
+   "viDuNghia": "Có bao nhiêu đỉnh cắt và cạnh cắt trong đồ thị này (xem hình: một đồ thị nhỏ có đỉnh treo nối qua một đường dẫn vào một chu trình 4 đỉnh)?"
+  },
+  {
+   "chu": "cut vertex",
+   "doc": "/kʌt ˈvɜːrteks/",
+   "nghia": "đỉnh cắt, đỉnh khớp (xoá đi thì đồ thị mất liên thông)",
+   "nhom": "Đường đi và liên thông",
+   "viDu": "Find all the cut vertices of the given graph. (Graph: vertices a, b, c, d, e, h, f, g, i, k. Edges: a-b, b-c, c-d, c-f, e-d, h-f, f-g, h-g, f-i, i-k.)",
+   "viDuNghia": "Tìm tất cả các đỉnh cắt của đồ thị đã cho. (Đồ thị: các đỉnh a, b, c, d, e, h, f, g, i, k. Các cạnh: a-b, b-c, c-d, c-f, e-d, h-f, f-g, h-g, f-i, i-k.)"
+  },
+  {
+   "chu": "Euler circuit",
+   "doc": "/ˈɔɪlər ˈsɜːrkɪt/",
+   "nghia": "chu trình Euler (đi qua mỗi CẠNH đúng một lần rồi về chỗ cũ; có khi mọi đỉnh bậc chẵn)",
+   "nhom": "Đường đi và liên thông",
+   "viDu": "Given 4 graphs (each with 6 vertices, roughly a square/box with a triangle attached). How many of these graphs have Euler circuits?",
+   "viDuNghia": "Cho 4 đồ thị (mỗi đồ thị có 6 đỉnh, dạng hình vuông/hộp gắn thêm tam giác). Có bao nhiêu đồ thị trong số này có chu trình Euler?"
+  },
+  {
+   "chu": "Euler path",
+   "doc": "/ˈɔɪlər pæθ/",
+   "nghia": "đường đi Euler (đi qua mỗi cạnh đúng một lần; có khi đúng hai đỉnh bậc lẻ)",
+   "nhom": "Đường đi và liên thông",
+   "viDu": "For which values of n does the graph Wₙ have Euler paths but no Euler circuits?",
+   "viDuNghia": "Với những giá trị n nào thì đồ thị Wₙ có đường đi Euler nhưng không có chu trình Euler?"
+  },
+  {
+   "chu": "Hamilton circuit",
+   "doc": "/ˈhæmɪltən ˈsɜːrkɪt/",
+   "nghia": "chu trình Hamilton (đi qua mỗi ĐỈNH đúng một lần rồi về chỗ cũ)",
+   "nhom": "Đường đi và liên thông",
+   "viDu": "Find all values of m and n such that the complete bipartite graph Kₘ,ₙ has Hamilton circuits.",
+   "viDuNghia": "Tìm tất cả giá trị m và n sao cho đồ thị lưỡng phân đầy đủ Kₘ,ₙ có chu trình Hamilton."
+  },
+  {
+   "chu": "Hamilton path",
+   "doc": "/ˈhæmɪltən pæθ/",
+   "nghia": "đường đi Hamilton (đi qua mỗi đỉnh đúng một lần)",
+   "nhom": "Đường đi và liên thông",
+   "viDu": "Choose a pair of values (m,n) for which the graph K(m,n) has Hamilton paths but no Hamilton circuits.",
+   "viDuNghia": "Chọn một cặp giá trị (m,n) sao cho đồ thị K(m,n) có đường đi Hamilton nhưng không có chu trình Hamilton."
+  },
+  {
+   "chu": "total weight",
+   "doc": "/ˈtoʊtl weɪt/",
+   "nghia": "tổng trọng số (của một đường đi, một cây khung)",
+   "nhom": "Đường đi và liên thông",
+   "viDu": "What is the total weight of the minimum spanning tree produced by the graph below?",
+   "viDuNghia": "Tổng trọng số của cây khung nhỏ nhất (MST) sinh ra từ đồ thị dưới đây là bao nhiêu?"
+  },
+  {
+   "chu": "visit",
+   "doc": "/ˈvɪzɪt/",
+   "nghia": "thăm, duyệt qua (một đỉnh)",
+   "nhom": "Đường đi và liên thông",
+   "viDu": "If using preorder traversal to visit the vertices of the given rooted tree, what is the position of vertex d?",
+   "viDuNghia": "Nếu dùng duyệt tiền thứ tự (preorder) để thăm các đỉnh của cây có gốc đã cho, vị trí của đỉnh d là gì?"
+  },
+  {
+   "chu": "Dijkstra's algorithm",
+   "doc": "/ˈdaɪkstrəz ˈælɡərɪðəm/",
+   "nghia": "thuật toán Dijkstra – tìm đường đi ngắn nhất từ một đỉnh tới các đỉnh khác trên đồ thị trọng số không âm; học cả ở CSD201, và giao thức định tuyến OSPF (mạng) dùng nó",
+   "nhom": "Đường đi và liên thông",
+   "viDu": "Use Dijkstra's algorithm to find the shortest path from A to Z. What are the first 4 vertices chosen?",
+   "viDuNghia": "Dùng thuật toán Dijkstra để tìm đường đi ngắn nhất từ A đến Z. 4 đỉnh đầu tiên được chọn là gì?"
+  },
+  {
+   "chu": "root of a tree",
+   "nghia": "gốc của cây (đỉnh trên cùng, không có cha)",
+   "nhom": "Cây",
+   "viDu": "Given the tree: root a with children b,d,c; b's children e,h,g; e's children i,n,k; c's children f,l,m; d is a leaf.",
+   "viDuNghia": "Cho cây: gốc a với con b,d,c; con của b là e,h,g; con của e là i,n,k; con của c là f,l,m; d là lá."
+  },
+  {
+   "chu": "height of a tree",
+   "nghia": "chiều cao của cây (mức lớn nhất của các đỉnh, tức số cạnh trên đường dài nhất từ gốc xuống lá)",
+   "nhom": "Cây",
+   "viDu": "What is the height of the spanning tree obtained from Wₙ by depth-first search, starting at the central vertex of Wₙ?",
+   "viDuNghia": "Chiều cao của cây khung thu được từ Wₙ bằng tìm kiếm theo chiều sâu (DFS), bắt đầu tại đỉnh trung tâm của Wₙ, là bao nhiêu?"
+  },
+  {
+   "chu": "level of a vertex",
+   "nghia": "mức của đỉnh (số cạnh trên đường từ gốc đến đỉnh đó; gốc ở mức 0)",
+   "nhom": "Cây",
+   "viDu": "Let T be a full 3-ary tree such that every leaf is at level 4. How many vertices does T have?",
+   "viDuNghia": "Cho T là cây 3-phân đầy đủ mà mọi lá đều ở mức 4. Cây T có bao nhiêu đỉnh?"
+  },
+  {
+   "chu": "rooted tree",
+   "doc": "/ˈruːtɪd triː/",
+   "nghia": "cây có gốc (chọn một đỉnh làm gốc)",
+   "nhom": "Cây",
+   "viDu": "Consider the rooted tree below, whose root is the vertex labelled root (see diagram below).",
+   "viDuNghia": "Xét cây có gốc là đỉnh có nhãn root (xem sơ đồ bên dưới)."
+  },
+  {
+   "chu": "parent",
+   "doc": "/ˈperənt/",
+   "nghia": "đỉnh cha (đỉnh ngay phía trên, gần gốc hơn)",
+   "nhom": "Cây",
+   "viDu": "In a rooted tree, every vertex except the root has exactly one parent.",
+   "viDuNghia": "Trong cây có gốc, mọi đỉnh trừ gốc đều có đúng một đỉnh cha."
+  },
+  {
+   "chu": "child",
+   "doc": "/tʃaɪld/",
+   "nghia": "đỉnh con (số nhiều: children)",
+   "nhom": "Cây",
+   "viDu": "Determine the order in which a preorder traversal visits the vertices of the given rooted tree. (Tree: root a, children b and c. b has children d and e. e has children f and g.)",
+   "viDuNghia": "Xác định thứ tự mà phép duyệt trước (preorder) thăm các đỉnh của cây có gốc đã cho. (Cây: gốc a, các con là b và c. b có các con d và e. e có các con f và g.)"
+  },
+  {
+   "chu": "ancestor",
+   "doc": "/ˈænsestər/",
+   "nghia": "tổ tiên (mọi đỉnh trên đường từ gốc xuống đỉnh đó)",
+   "nhom": "Cây",
+   "viDu": "(See picture: a rooted tree with root a; a's children are b, d, c; b's children are e, h, g; e's children are i, n, k; c's children are f, l, m.) How many ancestors does the vertex e have?",
+   "viDuNghia": "(Xem hình: cây có gốc a; các con của a là b, d, c; các con của b là e, h, g; các con của e là i, n, k; các con của c là f, l, m.) Đỉnh e có bao nhiêu tổ tiên?"
+  },
+  {
+   "chu": "descendant",
+   "doc": "/dɪˈsendənt/",
+   "nghia": "con cháu, hậu duệ (mọi đỉnh nằm dưới một đỉnh)",
+   "nhom": "Cây",
+   "viDu": "The descendants of a vertex v are all vertices that have v as an ancestor.",
+   "viDuNghia": "Hậu duệ của đỉnh v là mọi đỉnh nhận v làm tổ tiên."
+  },
+  {
+   "chu": "sibling",
+   "doc": "/ˈsɪblɪŋ/",
+   "nghia": "đỉnh anh em (các đỉnh có cùng cha)",
+   "nhom": "Cây",
+   "viDu": "Vertices with the same parent are called siblings.",
+   "viDuNghia": "Các đỉnh có cùng cha gọi là anh em."
+  },
+  {
+   "chu": "leaf of a tree",
+   "nghia": "lá của cây (đỉnh không có con); số nhiều: leaves",
+   "nhom": "Cây",
+   "viDu": "For what values of m does there exist a full m-ary tree with 32 leaves and height 4?",
+   "viDuNghia": "Với những giá trị m nào thì tồn tại một cây m-phân đầy đủ với 32 lá và chiều cao 4?"
+  },
+  {
+   "chu": "internal vertex",
+   "doc": "/ɪnˈtɜːrnl ˈvɜːrteks/",
+   "nghia": "đỉnh trong (đỉnh có ít nhất một con); còn gọi internal node",
+   "nhom": "Cây",
+   "viDu": "What is the minimum value of the height of a full 3-ary tree with 40 internal vertices?",
+   "viDuNghia": "Giá trị nhỏ nhất của chiều cao một cây 3-phân đầy đủ với 40 đỉnh trong là bao nhiêu?"
+  },
+  {
+   "chu": "m-ary tree",
+   "doc": "/ˈem eri triː/",
+   "nghia": "cây m-phân (mỗi đỉnh có nhiều nhất m con)",
+   "nhom": "Cây",
+   "viDu": "Find the maximum number of internal vertices of a full 3-ary tree of height 3.",
+   "viDuNghia": "Tìm số đỉnh trong tối đa của một cây 3-phân đầy đủ chiều cao 3."
+  },
+  {
+   "chu": "full m-ary tree",
+   "nghia": "cây m-phân đầy đủ (mỗi đỉnh trong có đúng m con)",
+   "nhom": "Cây",
+   "viDu": "Let T be a full 3-ary tree such that every leaf is at level 4. How many vertices does T have?",
+   "viDuNghia": "Cho T là cây 3-phân đầy đủ mà mọi lá đều ở mức 4. Cây T có bao nhiêu đỉnh?"
+  },
+  {
+   "chu": "full binary tree",
+   "nghia": "cây nhị phân đầy đủ (mỗi đỉnh trong có đúng 2 con; binary tree = cây nhị phân, mỗi đỉnh có nhiều nhất 2 con)",
+   "nhom": "Cây",
+   "viDu": "What is the maximum height of a full binary tree with 101 vertices?",
+   "viDuNghia": "Chiều cao lớn nhất của một cây nhị phân đầy đủ với 101 đỉnh là bao nhiêu?"
+  },
+  {
+   "chu": "balanced",
+   "doc": "/ˈbælənst/",
+   "nghia": "cân bằng (cây có mọi lá ở mức h hoặc h - 1)",
+   "nhom": "Cây",
+   "viDu": "Find the least number of leaves in a balanced full 4-ary tree of height 3.",
+   "viDuNghia": "Tìm số lá ít nhất trong một cây 4-phân đầy đủ cân bằng chiều cao 3."
+  },
+  {
+   "chu": "ordered rooted tree",
+   "nghia": "cây có gốc có thứ tự (các con của mỗi đỉnh được xếp thứ tự trái sang phải)",
+   "nhom": "Cây",
+   "viDu": "In an ordered rooted tree, the children of each vertex are ordered from left to right.",
+   "viDuNghia": "Trong cây có gốc có thứ tự, các con của mỗi đỉnh được xếp thứ tự từ trái sang phải."
+  },
+  {
+   "chu": "dictionary order",
+   "doc": "/ˈdɪkʃəneri ˈɔːrdər/",
+   "nghia": "thứ tự từ điển (so sánh như xếp từ trong từ điển)",
+   "nhom": "Cây",
+   "viDu": "We suppose that at each stage, if we have many choices, we will choose in reverse dictionary order.",
+   "viDuNghia": "Giả sử tại mỗi bước, nếu có nhiều lựa chọn, ta sẽ chọn theo thứ tự từ điển ngược."
+  },
+  {
+   "chu": "tree traversal",
+   "doc": "/triː trəˈvɜːrsl/",
+   "nghia": "phép duyệt cây (thăm mọi đỉnh theo một thứ tự quy định)",
+   "nhom": "Duyệt cây và mã hoá",
+   "viDu": "Find the inorder traversal of the tree (see diagram below).",
+   "viDuNghia": "Tìm thứ tự duyệt giữa (inorder) của cây (xem hình dưới)."
+  },
+  {
+   "chu": "preorder",
+   "doc": "/ˈpriːɔːrdər/",
+   "nghia": "duyệt trước, tiền thứ tự (gốc, rồi cây con trái, rồi cây con phải)",
+   "nhom": "Duyệt cây và mã hoá",
+   "viDu": "Determine the order in which a preorder traversal visits the vertices of the given rooted tree. (Tree: root a, children b and c. b has children d and e. e has children f and g.)",
+   "viDuNghia": "Xác định thứ tự mà phép duyệt trước (preorder) thăm các đỉnh của cây có gốc đã cho. (Cây: gốc a, các con là b và c. b có các con d và e. e có các con f và g.)"
+  },
+  {
+   "chu": "inorder",
+   "doc": "/ˈɪnɔːrdər/",
+   "nghia": "duyệt giữa, trung thứ tự (cây con trái, gốc, cây con phải)",
+   "nhom": "Duyệt cây và mã hoá",
+   "viDu": "If inorder traversal is used, what is the position of the vertex \"d\" in the list?",
+   "viDuNghia": "Nếu dùng duyệt trung tự (inorder traversal), vị trí của đỉnh \"d\" trong danh sách là bao nhiêu?"
+  },
+  {
+   "chu": "postorder",
+   "doc": "/ˈpoʊstɔːrdər/",
+   "nghia": "duyệt sau, hậu thứ tự (cây con trái, cây con phải, gốc)",
+   "nhom": "Duyệt cây và mã hoá",
+   "viDu": "Determine the order in which a post-order traversal visits the given rooted tree. (see diagram below)",
+   "viDuNghia": "Xác định thứ tự mà phép duyệt sau (post-order) thăm các đỉnh của cây có gốc đã cho. (xem hình dưới)"
+  },
+  {
+   "chu": "prefix notation",
+   "doc": "/ˈpriːfɪks noʊˈteɪʃn/",
+   "nghia": "ký pháp tiền tố (toán tử đứng trước hai toán hạng: + a b)",
+   "nhom": "Duyệt cây và mã hoá",
+   "viDu": "Find the algebraic expression whose prefix notation is given as + * 3 + x y ↑- x y 2",
+   "viDuNghia": "Tìm biểu thức đại số có ký hiệu tiền tố (prefix) là + * 3 + x y ↑- x y 2"
+  },
+  {
+   "chu": "postfix notation",
+   "doc": "/ˈpoʊstfɪks noʊˈteɪʃn/",
+   "nghia": "ký pháp hậu tố (toán tử đứng sau hai toán hạng: a b +)",
+   "nhom": "Duyệt cây và mã hoá",
+   "viDu": "What is the value of the following postfix expression? 3 2 * 2 ↑ 5 3 - 8 4 / * -",
+   "viDuNghia": "Giá trị của biểu thức hậu tố sau là gì? 3 2 * 2 ↑ 5 3 - 8 4 / * -"
+  },
+  {
+   "chu": "infix notation",
+   "doc": "/ˈɪnfɪks noʊˈteɪʃn/",
+   "nghia": "ký pháp trung tố (toán tử đứng giữa: a + b, cách viết thông thường)",
+   "nhom": "Duyệt cây và mã hoá",
+   "viDu": "Given the prefix notation - * 2 - x a + 4 y. Find the corresponding infix notation.",
+   "viDuNghia": "Cho ký hiệu tiền tố (prefix) - * 2 - x a + 4 y. Tìm ký hiệu trung tố (infix) tương ứng."
+  },
+  {
+   "chu": "prefix code",
+   "doc": "/ˈpriːfɪks koʊd/",
+   "nghia": "mã tiền tố (không từ mã nào là phần đầu của từ mã khác nên giải mã không nhầm)",
+   "nhom": "Duyệt cây và mã hoá",
+   "viDu": "Give the coding scheme A:001, B:1011, C:11, D:0000, E:0100, F:011, G:a01b01. Find a and b such that we have a prefix code.",
+   "viDuNghia": "Cho lược đồ mã hóa A:001, B:1011, C:11, D:0000, E:0100, F:011, G:a01b01. Tìm a và b sao cho ta có một mã tiền tố."
+  },
+  {
+   "chu": "Huffman coding",
+   "doc": "/ˈhʌfmən ˈkoʊdɪŋ/",
+   "nghia": "mã hoá Huffman (ký tự xuất hiện nhiều thì mã ngắn)",
+   "nhom": "Duyệt cây và mã hoá",
+   "viDu": "Find the length of the bit string when encoding the following message by a Huffman coding: \"abbbbcccddcba\"",
+   "viDuNghia": "Tìm độ dài chuỗi bit khi mã hoá thông điệp sau bằng mã Huffman: \"abbbbcccddcba\""
+  },
+  {
+   "chu": "encode",
+   "doc": "/ɪnˈkoʊd/",
+   "nghia": "mã hoá (chuyển ký tự thành xâu bit)",
+   "nhom": "Duyệt cây và mã hoá",
+   "viDu": "What is the average number of bits used for one character when using Huffman coding to encode the message \"mathematic\"?",
+   "viDuNghia": "Số bit trung bình dùng cho một ký tự khi dùng mã hóa Huffman để mã hóa thông điệp \"mathematic\" là bao nhiêu?"
+  },
+  {
+   "chu": "symbol",
+   "doc": "/ˈsɪmbl/",
+   "nghia": "ký hiệu, ký tự (cần mã hoá)",
+   "nhom": "Duyệt cây và mã hoá",
+   "viDu": "Use Huffman coding to encode these symbols with given frequencies A: 0.3 B: 0.15 C: 0.25 D: 0.2 E: 0.1 What is the average number of bits required to encode a character?",
+   "viDuNghia": "Dùng mã Huffman để mã hóa các ký hiệu với tần suất cho trước A: 0.3 B: 0.15 C: 0.25 D: 0.2 E: 0.1 Số bit trung bình cần để mã hóa một ký tự là bao nhiêu?"
+  },
+  {
+   "chu": "coding scheme",
+   "doc": "/ˈkoʊdɪŋ skiːm/",
+   "nghia": "bảng mã, sơ đồ mã hoá (quy định mỗi ký tự ứng với xâu bit nào)",
+   "nhom": "Duyệt cây và mã hoá",
+   "viDu": "Give the coding scheme a:001, b:0001, e:11, r:0000, s:0100, t:011, x:0101. Find the word represented by 011110101011",
+   "viDuNghia": "Cho lược đồ mã hóa a:001, b:0001, e:11, r:0000, s:0100, t:011, x:0101. Tìm từ được biểu diễn bởi 011110101011"
+  },
+  {
+   "chu": "algebraic expression",
+   "doc": "/ˌældʒɪˈbreɪɪk ɪkˈspreʃn/",
+   "nghia": "biểu thức đại số",
+   "nhom": "Duyệt cây và mã hoá",
+   "viDu": "Find the algebraic expression whose prefix notation is given as + * 3 + x y ↑- x y 2 (i) (3x+y)+(x-y)² (ii) 3((x+y)+(x-y)²) (iii) 3(x+y)+(x-y)²",
+   "viDuNghia": "Tìm biểu thức đại số có ký hiệu tiền tố (prefix notation) là + * 3 + x y ↑- x y 2 (i) (3x+y)+(x-y)² (ii) 3((x+y)+(x-y)²) (iii) 3(x+y)+(x-y)²"
+  },
+  {
+   "chu": "minimum spanning tree",
+   "nghia": "cây khung nhỏ nhất (spanning tree = cây khung: đồ thị con là cây và chứa mọi đỉnh; minimum = tổng trọng số nhỏ nhất)",
+   "nhom": "Cây khung",
+   "viDu": "Using Kruskal's algorithm to find a minimum spanning tree, what are the seventh and eighth edges (in correct order) added?",
+   "viDuNghia": "Dùng thuật toán Kruskal để tìm cây khung nhỏ nhất, cạnh thứ bảy và thứ tám (theo đúng thứ tự) được thêm vào là gì?"
+  },
+  {
+   "chu": "depth-first search",
+   "doc": "/ˌdepθ ˈfɜːrst sɜːrtʃ/",
+   "nghia": "tìm kiếm theo chiều sâu, DFS (đi sâu hết một nhánh rồi mới quay lui)",
+   "nhom": "Cây khung",
+   "viDu": "What is the height of spanning tree obtained from W₁₀₀ by the Depth-first search, starting at the vertex of degree 100?",
+   "viDuNghia": "Chiều cao của cây khung thu được từ W₁₀₀ bằng tìm kiếm theo chiều sâu, bắt đầu tại đỉnh bậc 100, là bao nhiêu?"
+  },
+  {
+   "chu": "breadth-first search",
+   "doc": "/ˌbredθ ˈfɜːrst sɜːrtʃ/",
+   "nghia": "tìm kiếm theo chiều rộng, BFS (thăm hết các đỉnh kề rồi mới đi xa hơn)",
+   "nhom": "Cây khung",
+   "viDu": "What is the height of spanning tree obtained from W₁₀₀ by the Breadth-first search, starting at the vertex of degree 100?",
+   "viDuNghia": "Chiều cao của cây khung thu được từ W₁₀₀ bằng tìm kiếm theo chiều rộng (BFS), bắt đầu từ đỉnh bậc 100, là bao nhiêu?"
+  },
+  {
+   "chu": "Prim's algorithm",
+   "doc": "/prɪmz ˈælɡərɪðəm/",
+   "nghia": "thuật toán Prim (lớn dần cây khung từ một đỉnh, mỗi bước thêm cạnh nhẹ nhất nối ra ngoài)",
+   "nhom": "Cây khung",
+   "viDu": "Using Prim's algorithm to find a minimal spanning tree in the weighted graph (see diagram below), starting from vertex A.",
+   "viDuNghia": "Dùng thuật toán Prim để tìm cây khung nhỏ nhất trong đồ thị có trọng số (xem sơ đồ bên dưới), bắt đầu từ đỉnh A."
+  },
+  {
+   "chu": "Kruskal's algorithm",
+   "doc": "/ˈkrʌskəlz ˈælɡərɪðəm/",
+   "nghia": "thuật toán Kruskal (chọn dần cạnh nhẹ nhất mà không tạo chu trình)",
+   "nhom": "Cây khung",
+   "viDu": "If we use Kruskal's algorithm to find a minimum spanning tree, what are the seventh and eighth edges (in correct order) added?",
+   "viDuNghia": "Nếu dùng thuật toán Kruskal để tìm cây khung nhỏ nhất, cạnh thứ bảy và thứ tám (đúng thứ tự) được thêm vào là gì?"
+  },
+  {
+   "chu": "central vertex",
+   "doc": "/ˈsentrəl ˈvɜːrteks/",
+   "nghia": "đỉnh ở tâm (của đồ thị bánh xe; còn gọi hub)",
+   "nhom": "Cây khung",
+   "viDu": "What is the height of the spanning tree obtained from Wₙ by the breadth-first search, starting at the central vertex of Wₙ?",
+   "viDuNghia": "Chiều cao của cây khung thu được từ Wₙ bằng tìm kiếm theo chiều rộng, bắt đầu tại đỉnh trung tâm của Wₙ, là bao nhiêu?"
+  },
+  {
+   "chu": "chord",
+   "doc": "/kɔːrd/",
+   "nghia": "dây cung (cạnh nối hai đỉnh không liền nhau của một chu trình)",
+   "nhom": "Cây khung",
+   "viDu": "Graph 2 is a 4-cycle p-q-r-s-p plus the chord pr (which splits it into two triangles).",
+   "viDuNghia": "Đồ thị 2 là chu trình 4 đỉnh p-q-r-s-p cộng thêm dây cung pr (chia nó thành hai tam giác)."
+  },
+  {
+   "chu": "spanning tree",
+   "doc": "/ˈspænɪŋ triː/",
+   "nghia": "cây khung – cây con chứa đủ mọi đỉnh của đồ thị liên thông; cây khung nhỏ nhất (Prim, Kruskal). (Mạng: giao thức STP chống vòng lặp)",
+   "nhom": "Cây khung",
+   "viDu": "How many edges must be removed from a connected graph with 5 vertices and 8 edges to produce a spanning tree?",
+   "viDuNghia": "Cần bỏ bao nhiêu cạnh khỏi đồ thị liên thông 5 đỉnh, 8 cạnh để thu được cây khung?"
+  }
+ ]
+}

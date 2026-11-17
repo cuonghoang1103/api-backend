@@ -1,0 +1,797 @@
+{
+ "ma": "osg202-1",
+ "nn": "en",
+ "ten": "OSG202 · 1. Tổng quan HĐH, tiến trình, lập lịch, đồng bộ",
+ "moTa": "Môn Hệ điều hành (OSG202), phần 1: khái niệm và cấu trúc hệ điều hành, tiến trình và luồng, các thuật toán lập lịch CPU, giao tiếp và đồng bộ giữa các tiến trình. Từ lấy từ đề FE thật; câu ví dụ là câu hỏi thật trong đề.",
+ "bieuTuong": "gearshape.2.fill",
+ "thuTu": -977,
+ "tu": [
+  {
+   "chu": "extended machine",
+   "doc": "/ɪkˈstendɪd məˈʃiːn/",
+   "nghia": "máy mở rộng – vai trò của HĐH: che phần cứng rắc rối, đưa ra giao diện dễ dùng hơn",
+   "nhom": "Tổng quan & cấu trúc",
+   "viDu": "As an extended machine, the operating system hides the details of the hardware.",
+   "viDuNghia": "Với vai trò máy mở rộng, hệ điều hành che đi các chi tiết phần cứng."
+  },
+  {
+   "chu": "resource manager",
+   "doc": "/ˈriːsɔːrs ˈmænɪdʒər/",
+   "nghia": "bộ quản lý tài nguyên – vai trò của HĐH: chia CPU, bộ nhớ, thiết bị cho các chương trình",
+   "nhom": "Tổng quan & cấu trúc",
+   "viDu": "As a resource manager, the operating system shares the CPU, memory and devices among programs.",
+   "viDuNghia": "Với vai trò bộ quản lý tài nguyên, hệ điều hành chia CPU, bộ nhớ và thiết bị cho các chương trình."
+  },
+  {
+   "chu": "abstraction",
+   "doc": "/æbˈstrækʃn/",
+   "nghia": "sự trừu tượng hoá – che chi tiết phức tạp, chỉ đưa ra khái niệm đơn giản (tệp, tiến trình)",
+   "nhom": "Tổng quan & cấu trúc",
+   "viDu": "Operating system abstraction supports the ability to have ________ operation even when there is only one CPU available.",
+   "viDuNghia": "Sự trừu tượng hóa của hệ điều hành hỗ trợ khả năng có hoạt động ________ ngay cả khi chỉ có một CPU khả dụng."
+  },
+  {
+   "chu": "user mode",
+   "doc": "/ˈjuːzər moʊd/",
+   "nghia": "chế độ người dùng – chỉ chạy được một phần tập lệnh, không đụng trực tiếp phần cứng",
+   "nhom": "Tổng quan & cấu trúc",
+   "viDu": "What is the purpose of the TRAP instruction in the execution of a system call? — To switch from user mode to kernel mode.",
+   "viDuNghia": "Mục đích của lệnh TRAP trong việc thực thi một lời gọi hệ thống (system call) là gì? — Để chuyển từ chế độ người dùng (user mode) sang chế độ nhân (kernel mode)."
+  },
+  {
+   "chu": "kernel mode",
+   "doc": "/ˈkɜːrnl moʊd/",
+   "nghia": "chế độ nhân – HĐH chạy ở đây, được dùng mọi lệnh và mọi phần cứng",
+   "nhom": "Tổng quan & cấu trúc",
+   "viDu": "Which of the following instructions should be allowed only in kernel mode?",
+   "viDuNghia": "Lệnh nào sau đây chỉ nên được phép thực hiện ở chế độ kernel (kernel mode)?"
+  },
+  {
+   "chu": "user space",
+   "doc": "/ˈjuːzər speɪs/",
+   "nghia": "không gian người dùng – vùng nhớ nơi chương trình người dùng chạy",
+   "nhom": "Tổng quan & cấu trúc",
+   "viDu": "When threads are managed in user space, what does each process need to track the threads within that process?",
+   "viDuNghia": "Khi thread được quản lý ở user space, mỗi tiến trình cần gì để theo dõi các thread bên trong nó?"
+  },
+  {
+   "chu": "shell",
+   "doc": "/ʃel/",
+   "nghia": "trình thông dịch lệnh – chương trình nhận lệnh người dùng gõ rồi nhờ HĐH thực hiện",
+   "nhom": "Tổng quan & cấu trúc",
+   "viDu": "The shell reads a command from the user and asks the operating system to run it.",
+   "viDuNghia": "Shell đọc lệnh người dùng gõ và nhờ hệ điều hành chạy lệnh đó."
+  },
+  {
+   "chu": "trap",
+   "doc": "/træp/",
+   "nghia": "bẫy (trap) – lệnh chuyển từ chế độ người dùng sang chế độ nhân để gọi HĐH",
+   "nhom": "Tổng quan & cấu trúc",
+   "viDu": "Which of the following statements about interrupts and trap instructions is incorrect?",
+   "viDuNghia": "Phát biểu nào sau đây về ngắt (interrupt) và lệnh bẫy (trap) là KHÔNG đúng?"
+  },
+  {
+   "chu": "monolithic system",
+   "doc": "/ˌmɑːnəˈlɪθɪk ˈsɪstəm/",
+   "nghia": "hệ nguyên khối – cả HĐH là một chương trình lớn chạy trong chế độ nhân",
+   "nhom": "Tổng quan & cấu trúc",
+   "viDu": "A simple structuring model for a monolithic system includes ____.",
+   "viDuNghia": "Mô hình cấu trúc đơn giản cho hệ nguyên khối (monolithic system) gồm ____."
+  },
+  {
+   "chu": "layered system",
+   "doc": "/ˈleɪərd ˈsɪstəm/",
+   "nghia": "hệ phân lớp – HĐH chia thành các lớp, lớp trên dùng dịch vụ lớp dưới",
+   "nhom": "Tổng quan & cấu trúc",
+   "viDu": "Which layer in the Layered Operating System Model is responsible for managing memory and drum storage?",
+   "viDuNghia": "Trong mô hình hệ điều hành phân lớp (Layered OS Model), lớp nào chịu trách nhiệm quản lý bộ nhớ và trống từ (drum storage)?"
+  },
+  {
+   "chu": "microkernel",
+   "doc": "/ˈmaɪkroʊkɜːrnl/",
+   "nghia": "vi nhân – nhân chỉ giữ phần tối thiểu, các dịch vụ khác chạy như tiến trình người dùng",
+   "nhom": "Tổng quan & cấu trúc",
+   "viDu": "In what scenario would a microkernel-based operating system structure be advantageous compared to a monolithic structure?",
+   "viDuNghia": "Trong tình huống nào thì cấu trúc hệ điều hành dạng microkernel có lợi thế hơn so với cấu trúc monolithic?"
+  },
+  {
+   "chu": "client-server model",
+   "doc": "/ˌklaɪənt ˈsɜːrvər ˈmɑːdl/",
+   "nghia": "mô hình khách – chủ: tiến trình khách gửi yêu cầu, tiến trình phục vụ trả lời",
+   "nhom": "Tổng quan & cấu trúc",
+   "viDu": "Compare and contrast monolithic and client-server operating system structures.",
+   "viDuNghia": "So sánh và đối chiếu cấu trúc hệ điều hành nguyên khối (monolithic) và cấu trúc máy khách - máy chủ (client-server)."
+  },
+  {
+   "chu": "virtual machine",
+   "doc": "/ˈvɜːrtʃuəl məˈʃiːn/",
+   "nghia": "máy ảo – bản sao giả lập của phần cứng, cho phép chạy nhiều HĐH trên một máy thật",
+   "nhom": "Tổng quan & cấu trúc",
+   "viDu": "Each virtual machine can run a different operating system on the same physical hardware.",
+   "viDuNghia": "Mỗi máy ảo có thể chạy một hệ điều hành khác nhau trên cùng một phần cứng thật."
+  },
+  {
+   "chu": "virtual machine monitor",
+   "nghia": "trình giám sát máy ảo (VMM, hypervisor) – lớp phần mềm tạo và quản lý các máy ảo",
+   "nhom": "Tổng quan & cấu trúc",
+   "viDu": "A VMM (Virtual Machine Monitor) creates the illusion of multiple (virtual) machines on the same physical hardware. What is VMM also known as?",
+   "viDuNghia": "VMM (Virtual Machine Monitor) tạo ra ảo giác về nhiều máy (ảo) trên cùng một phần cứng vật lý. VMM còn được gọi là gì?"
+  },
+  {
+   "chu": "exokernel",
+   "doc": "/ˈeksoʊkɜːrnl/",
+   "nghia": "exokernel – lớp mỏng chỉ lo chia tài nguyên cho các máy ảo, không giả lập phần cứng",
+   "nhom": "Tổng quan & cấu trúc",
+   "viDu": "An exokernel only allocates resources to virtual machines and keeps them apart.",
+   "viDuNghia": "Exokernel chỉ cấp tài nguyên cho các máy ảo và giữ cho chúng tách biệt nhau."
+  },
+  {
+   "chu": "mainframe",
+   "doc": "/ˈmeɪnfreɪm/",
+   "nghia": "máy tính lớn – máy cỡ phòng, xử lý lượng I/O khổng lồ cho doanh nghiệp",
+   "nhom": "Tổng quan & cấu trúc",
+   "viDu": "Linux and ____ are often used as operating systems on supercomputers, mainframes, and servers.",
+   "viDuNghia": "Linux và ____ thường được dùng làm hệ điều hành trên siêu máy tính, máy chủ lớn (mainframe) và máy chủ (server)."
+  },
+  {
+   "chu": "distributed system",
+   "doc": "/dɪˈstrɪbjuːtɪd ˈsɪstəm/",
+   "nghia": "hệ phân tán – nhiều máy nối mạng hoạt động như một hệ thống",
+   "nhom": "Tổng quan & cấu trúc",
+   "viDu": "A distributed system looks like a single computer to its users.",
+   "viDuNghia": "Hệ phân tán trông như một máy tính duy nhất đối với người dùng."
+  },
+  {
+   "chu": "multitasking",
+   "doc": "/ˌmʌltiˈtæskɪŋ/",
+   "nghia": "đa nhiệm – nhiều tác vụ được chạy xen kẽ nhau như thể cùng lúc",
+   "nhom": "Tổng quan & cấu trúc",
+   "viDu": "Which of the following Operating System does not implement multitasking truly?",
+   "viDuNghia": "Hệ điều hành nào sau đây không thực sự cài đặt đa nhiệm (multitasking)?"
+  },
+  {
+   "chu": "device driver",
+   "doc": "/dɪˈvaɪs ˈdraɪvər/",
+   "nghia": "trình điều khiển thiết bị – phần mềm nói chuyện với bộ điều khiển của một thiết bị cụ thể",
+   "nhom": "Tổng quan & cấu trúc",
+   "viDu": "Which of the following statements about device drivers is incorrect?",
+   "viDuNghia": "Phát biểu nào sau đây về trình điều khiển thiết bị (device driver) là KHÔNG đúng?"
+  },
+  {
+   "chu": "boot",
+   "doc": "/buːt/",
+   "nghia": "khởi động máy – nạp hệ điều hành vào bộ nhớ khi bật máy",
+   "nhom": "Tổng quan & cấu trúc",
+   "viDu": "Which of the following is not a step in the boot process?",
+   "viDuNghia": "Bước nào sau đây KHÔNG phải là một bước trong quá trình khởi động (boot) máy?"
+  },
+  {
+   "chu": "basic input output system",
+   "nghia": "BIOS – chương trình trong ROM chạy đầu tiên khi bật máy, kiểm tra phần cứng và nạp HĐH",
+   "nhom": "Tổng quan & cấu trúc",
+   "viDu": "When the computer is switched on, the BIOS runs first and then loads the operating system.",
+   "viDuNghia": "Khi bật máy, BIOS chạy trước rồi nạp hệ điều hành."
+  },
+  {
+   "chu": "daemon",
+   "doc": "/ˈdiːmən/",
+   "nghia": "tiến trình nền (daemon) – chạy ngầm để phục vụ một việc như in ấn, thư điện tử",
+   "nhom": "Tổng quan & cấu trúc",
+   "viDu": "A printer daemon is the only process allowed to use the printer directly.",
+   "viDuNghia": "Daemon máy in là tiến trình duy nhất được dùng trực tiếp máy in."
+  },
+  {
+   "chu": "kernel",
+   "doc": "/ˈkɜːrnl/",
+   "nghia": "nhân hệ điều hành – phần lõi chạy ở chế độ kernel (kernel mode), quản lý CPU, bộ nhớ, thiết bị",
+   "nhom": "Tổng quan & cấu trúc",
+   "viDu": "What is the primary purpose of the Kernel in an operating system structure?",
+   "viDuNghia": "Mục đích chính của Kernel trong cấu trúc hệ điều hành là gì?"
+  },
+  {
+   "chu": "operating system",
+   "doc": "/ˈɑːpəreɪtɪŋ ˈsɪstəm/",
+   "nghia": "hệ điều hành (OS) – phần mềm quản lý phần cứng, cấp tài nguyên và cung cấp dịch vụ cho chương trình người dùng",
+   "nhom": "Tổng quan & cấu trúc",
+   "viDu": "In the operating system zoo, what is the main priority of time-sharing system over a multiprogramming system?",
+   "viDuNghia": "Trong \"vườn thú\" hệ điều hành, ưu tiên chính của hệ thống chia sẻ thời gian (time-sharing) so với hệ thống đa chương trình (multiprogramming) là gì?"
+  },
+  {
+   "chu": "system call",
+   "doc": "/ˈsɪstəm kɔːl/",
+   "nghia": "lời gọi hệ thống – cách chương trình người dùng nhờ hệ điều hành làm dịch vụ (đọc tệp, tạo tiến trình…)",
+   "nhom": "Tổng quan & cấu trúc",
+   "viDu": "In UNIX, which system call creates a new process?",
+   "viDuNghia": "Trong UNIX, lời gọi hệ thống nào tạo ra tiến trình mới?"
+  },
+  {
+   "chu": "multiprogramming",
+   "doc": "/ˌmʌltiˈproʊɡræmɪŋ/",
+   "nghia": "đa chương – nạp nhiều chương trình vào bộ nhớ, CPU chuyển qua lại để không ngồi chờ I/O",
+   "nhom": "Tổng quan & cấu trúc",
+   "viDu": "Multiprogramming increases processor efficiency by ____.",
+   "viDuNghia": "Đa chương trình (multiprogramming) làm tăng hiệu suất bộ xử lý bằng cách ____."
+  },
+  {
+   "chu": "batch system",
+   "doc": "/bætʃ ˈsɪstəm/",
+   "nghia": "hệ xử lý theo lô – gom các công việc lại rồi chạy lần lượt, không tương tác",
+   "nhom": "Tổng quan & cấu trúc",
+   "viDu": "In batch systems, which goal is focused on maximizing the number of jobs completed per hour?",
+   "viDuNghia": "Trong hệ xử lý theo lô (batch), mục tiêu nào tập trung tối đa hoá số công việc xong mỗi giờ?"
+  },
+  {
+   "chu": "type 1 hypervisor",
+   "nghia": "hypervisor loại 1 – chạy thẳng trên phần cứng (bare metal) như một HĐH, quản lý các máy ảo; hiệu năng cao",
+   "nhom": "Tổng quan & cấu trúc",
+   "viDu": "Differentiate between Type 1 and Type 2 hypervisors in terms of their implementation and performance.",
+   "viDuNghia": "Hãy phân biệt hypervisor loại 1 và loại 2 về cách cài đặt và hiệu năng."
+  },
+  {
+   "chu": "type 2 hypervisor",
+   "nghia": "hypervisor loại 2 – chạy như một chương trình trên HĐH chủ (host OS), vd VirtualBox, VMware Workstation",
+   "nhom": "Tổng quan & cấu trúc",
+   "viDu": "Regarding the hypervisor, the operating system running on the hardware is called the host operating system. Which type is it?",
+   "viDuNghia": "Về hypervisor, hệ điều hành chạy trên phần cứng được gọi là hệ điều hành chủ (host OS). Đó là loại nào?"
+  },
+  {
+   "chu": "real-time system",
+   "doc": "/ˈriːəl taɪm ˈsɪstəm/",
+   "nghia": "hệ thống (hệ điều hành) thời gian thực – kết quả phải đúng VÀ kịp hạn chót (deadline); dùng trong hệ nhúng, điều khiển công nghiệp",
+   "nhom": "Tổng quan & cấu trúc",
+   "viDu": "Which is not a goal of a scheduling algorithm for real-time systems?",
+   "viDuNghia": "Điều nào sau đây KHÔNG phải là mục tiêu của giải thuật lập lịch cho hệ thống thời gian thực?"
+  },
+  {
+   "chu": "hard real-time system",
+   "nghia": "hệ thống thời gian thực cứng – bảo đảm tuyệt đối hành động xong trước hạn; trễ dù một lần cũng coi là hỏng (túi khí, máy trợ tim)",
+   "nhom": "Tổng quan & cấu trúc",
+   "viDu": "A system with absolute guarantees that a certain action will occur by a certain time is called a hard real-time system.",
+   "viDuNghia": "Hệ thống bảo đảm tuyệt đối một hành động sẽ xảy ra trước một thời điểm nhất định được gọi là hệ thống thời gian thực cứng."
+  },
+  {
+   "chu": "soft real-time system",
+   "nghia": "hệ thống thời gian thực mềm – thỉnh thoảng trễ hạn vẫn chấp nhận được, chỉ giảm chất lượng (phát video, ATM); trái với hard real-time",
+   "nhom": "Tổng quan & cấu trúc",
+   "viDu": "The ATM belongs to soft real-time systems.",
+   "viDuNghia": "Máy ATM thuộc loại hệ thống thời gian thực mềm."
+  },
+  {
+   "chu": "time-sharing",
+   "doc": "/ˈtaɪm ʃerɪŋ/",
+   "nghia": "chia sẻ thời gian – HĐH chia CPU thành lát thời gian ngắn luân phiên cho nhiều người dùng/tiến trình, ưu tiên phản hồi nhanh (đa chương trình thì ưu tiên tận dụng CPU)",
+   "nhom": "Tổng quan & cấu trúc",
+   "viDu": "In the operating system zoo, what is the main priority of time-sharing system over a multiprogramming system?",
+   "viDuNghia": "Trong \"vườn thú\" hệ điều hành, ưu tiên chính của hệ thống chia sẻ thời gian so với hệ thống đa chương trình là gì?"
+  },
+  {
+   "chu": "process state",
+   "doc": "/ˈprɑːses steɪt/",
+   "nghia": "trạng thái tiến trình – đang chạy, sẵn sàng hay bị chặn",
+   "nhom": "Tiến trình & luồng",
+   "viDu": "Which of the following process state transitions is correct, when the external event for which waiting happens?",
+   "viDuNghia": "Chuyển trạng thái tiến trình nào sau đây là đúng, khi sự kiện bên ngoài mà tiến trình đang đợi xảy ra?"
+  },
+  {
+   "chu": "running state",
+   "doc": "/ˈrʌnɪŋ steɪt/",
+   "nghia": "trạng thái đang chạy – tiến trình đang thật sự dùng CPU",
+   "nhom": "Tiến trình & luồng",
+   "viDu": "Only one process per CPU can be in the running state at any moment.",
+   "viDuNghia": "Tại mỗi thời điểm, mỗi CPU chỉ có một tiến trình ở trạng thái đang chạy."
+  },
+  {
+   "chu": "ready state",
+   "doc": "/ˈredi steɪt/",
+   "nghia": "trạng thái sẵn sàng – chạy được nhưng đang chờ tới lượt dùng CPU",
+   "nhom": "Tiến trình & luồng",
+   "viDu": "Which of the following process state transitions is correct, when the scheduler picks a process from the ready queue to run?",
+   "viDuNghia": "Sự chuyển trạng thái tiến trình nào sau đây là đúng, khi bộ lập lịch chọn một tiến trình từ hàng đợi ready để chạy?"
+  },
+  {
+   "chu": "blocked state",
+   "doc": "/blɑːkt steɪt/",
+   "nghia": "trạng thái bị chặn – không chạy được cho tới khi có sự kiện bên ngoài (vd I/O xong)",
+   "nhom": "Tiến trình & luồng",
+   "viDu": "In the Windows OS, which statement is true about the blocked state of a process?",
+   "viDuNghia": "Trong hệ điều hành Windows, phát biểu nào đúng về trạng thái blocked (bị chặn) của một tiến trình?"
+  },
+  {
+   "chu": "process table",
+   "doc": "/ˈprɑːses ˈteɪbl/",
+   "nghia": "bảng tiến trình – mỗi tiến trình một mục (PCB) lưu mọi thông tin để chạy lại sau",
+   "nhom": "Tiến trình & luồng",
+   "viDu": "An entry of the process table is called ____.",
+   "viDuNghia": "Một mục (entry) trong bảng tiến trình (process table) được gọi là ____."
+  },
+  {
+   "chu": "process control block",
+   "nghia": "khối điều khiển tiến trình (PCB) – mục lưu trạng thái, PC, thanh ghi, tệp đang mở của một tiến trình",
+   "nhom": "Tiến trình & luồng",
+   "viDu": "The Process Control Block (PCB) does NOT store which of the following?",
+   "viDuNghia": "Khối điều khiển tiến trình (PCB) KHÔNG lưu trữ thông tin nào sau đây?"
+  },
+  {
+   "chu": "process creation",
+   "doc": "/ˈprɑːses kriˈeɪʃn/",
+   "nghia": "tạo tiến trình – khi khởi động hệ thống, khi tiến trình gọi tạo, khi người dùng yêu cầu",
+   "nhom": "Tiến trình & luồng",
+   "viDu": "Which of the following is appropriate to determine program size and create page table? — Process creation",
+   "viDuNghia": "Hoạt động nào sau đây phù hợp để xác định kích thước chương trình và tạo bảng trang (page table)? — Tạo tiến trình (Process creation)"
+  },
+  {
+   "chu": "process termination",
+   "doc": "/ˈprɑːses ˌtɜːrmɪˈneɪʃn/",
+   "nghia": "kết thúc tiến trình – thoát bình thường, thoát do lỗi, lỗi nghiêm trọng, bị tiến trình khác huỷ",
+   "nhom": "Tiến trình & luồng",
+   "viDu": "In which operating system is the system call for voluntary process termination referred to as ExitProcess?",
+   "viDuNghia": "Trong hệ điều hành nào thì lời gọi hệ thống để tự nguyện kết thúc tiến trình được gọi là ExitProcess?"
+  },
+  {
+   "chu": "context switch",
+   "doc": "/ˈkɑːntekst swɪtʃ/",
+   "nghia": "chuyển ngữ cảnh – lưu trạng thái tiến trình đang chạy và nạp trạng thái tiến trình kế tiếp",
+   "nhom": "Tiến trình & luồng",
+   "viDu": "A context switch saves the state of the running process and loads the state of the next one.",
+   "viDuNghia": "Chuyển ngữ cảnh lưu trạng thái tiến trình đang chạy và nạp trạng thái tiến trình kế tiếp."
+  },
+  {
+   "chu": "parent process",
+   "doc": "/ˈperənt ˈprɑːses/",
+   "nghia": "tiến trình cha – tiến trình tạo ra tiến trình khác",
+   "nhom": "Tiến trình & luồng",
+   "viDu": "The parent process waits until its child terminates.",
+   "viDuNghia": "Tiến trình cha chờ cho tới khi tiến trình con kết thúc."
+  },
+  {
+   "chu": "child process",
+   "doc": "/tʃaɪld ˈprɑːses/",
+   "nghia": "tiến trình con – tiến trình do tiến trình khác tạo ra",
+   "nhom": "Tiến trình & luồng",
+   "viDu": "In UNIX, fork creates a child process that is a copy of the parent.",
+   "viDuNghia": "Trong UNIX, fork tạo một tiến trình con là bản sao của tiến trình cha."
+  },
+  {
+   "chu": "terminate",
+   "doc": "/ˈtɜːrmɪneɪt/",
+   "nghia": "kết thúc, chấm dứt (tiến trình)",
+   "nhom": "Tiến trình & luồng",
+   "viDu": "Windows uses system call ____, while UNIX uses system call ____ to terminate a process.",
+   "viDuNghia": "Windows dùng lời gọi hệ thống ____, còn UNIX dùng lời gọi hệ thống ____ để kết thúc tiến trình."
+  },
+  {
+   "chu": "user-level thread",
+   "doc": "/ˌjuːzər ˈlevl θred/",
+   "nghia": "luồng mức người dùng – do thư viện trong không gian người dùng quản lý, nhân không biết tới",
+   "nhom": "Tiến trình & luồng",
+   "viDu": "Compare and contrast the implementations of threads in user space and in the kernel, highlighting their advantages and disadvantages.",
+   "viDuNghia": "So sánh việc cài đặt thread ở user space và ở kernel, nêu rõ ưu nhược điểm của từng loại."
+  },
+  {
+   "chu": "kernel-level thread",
+   "doc": "/ˌkɜːrnl ˈlevl θred/",
+   "nghia": "luồng mức nhân – do nhân HĐH tạo và lập lịch",
+   "nhom": "Tiến trình & luồng",
+   "viDu": "Which statement is true about implementing Threads in Kernel?",
+   "viDuNghia": "Phát biểu nào đúng về việc cài đặt Thread ở mức Kernel (kernel-level threads)?"
+  },
+  {
+   "chu": "CPU-bound",
+   "doc": "/ˌsiː piː ˈjuː baʊnd/",
+   "nghia": "thiên về CPU – tiến trình tính toán nhiều, ít chờ I/O",
+   "nhom": "Tiến trình & luồng",
+   "viDu": "Which statement is true about the classification of a process based on its behavior? — A compute-bound process spent most of its time computing",
+   "viDuNghia": "Phát biểu nào đúng về việc phân loại tiến trình dựa trên hành vi của nó? — Tiến trình thiên về tính toán (compute-bound) dành phần lớn thời gian để tính toán"
+  },
+  {
+   "chu": "I/O-bound",
+   "doc": "/ˌaɪ ˈoʊ baʊnd/",
+   "nghia": "thiên về I/O – tiến trình phần lớn thời gian chờ vào/ra",
+   "nhom": "Tiến trình & luồng",
+   "viDu": "An I/O-bound process spends most of its time waiting for I/O.",
+   "viDuNghia": "Tiến trình thiên về I/O dành phần lớn thời gian chờ vào/ra."
+  },
+  {
+   "chu": "CPU burst",
+   "doc": "/ˌsiː piː ˈjuː bɜːrst/",
+   "nghia": "đợt dùng CPU – khoảng thời gian tiến trình chạy liên tục trước khi chờ I/O",
+   "nhom": "Tiến trình & luồng",
+   "viDu": "When selecting the proper time quantum it should be long enough to allow ____ percent of the CPU bursts to run to completion",
+   "viDuNghia": "Khi chọn lượng tử thời gian (time quantum), nó nên đủ dài để ____ phần trăm số đợt dùng CPU (CPU burst) chạy xong"
+  },
+  {
+   "chu": "fork",
+   "doc": "/fɔːrk/",
+   "nghia": "fork – lời gọi hệ thống của UNIX tạo ra một tiến trình con giống hệt tiến trình cha",
+   "nhom": "Tiến trình & luồng",
+   "viDu": "In UNIX systems, what is the primary purpose of system calls like fork() and exec()?",
+   "viDuNghia": "Trong hệ thống UNIX, mục đích chính của các system call như fork() và exec() là gì?"
+  },
+  {
+   "chu": "voluntary",
+   "doc": "/ˈvɑːlənteri/",
+   "nghia": "tự nguyện – tiến trình tự thoát (normal exit, error exit), trái với bị huỷ (involuntary)",
+   "nhom": "Tiến trình & luồng",
+   "viDu": "Which of the following is a voluntary reason for process termination?",
+   "viDuNghia": "Lý do nào sau đây là lý do tự nguyện (voluntary) để kết thúc tiến trình?"
+  },
+  {
+   "chu": "fatal error",
+   "doc": "/ˈfeɪtl ˈerər/",
+   "nghia": "lỗi nghiêm trọng – lỗi làm tiến trình bị buộc kết thúc (vd chia cho 0, truy cập vùng nhớ cấm)",
+   "nhom": "Tiến trình & luồng",
+   "viDu": "Which of the following conditions that causes the processes to be terminated, when the processes have a program bug? — Fatal error (involuntary)",
+   "viDuNghia": "Điều kiện nào sau đây khiến tiến trình bị chấm dứt khi tiến trình có lỗi chương trình (bug)? — Lỗi nghiêm trọng - fatal error (không tự nguyện)"
+  },
+  {
+   "chu": "thread",
+   "doc": "/θred/",
+   "nghia": "luồng – dòng thực thi trong một tiến trình; các luồng cùng tiến trình dùng chung bộ nhớ, tệp đang mở",
+   "nhom": "Tiến trình & luồng",
+   "viDu": "Which of the following best describes the relationship between threads within a single process?",
+   "viDuNghia": "Phát biểu nào mô tả đúng nhất mối quan hệ giữa các thread trong cùng một tiến trình?"
+  },
+  {
+   "chu": "process",
+   "doc": "/ˈprɑːses/",
+   "nghia": "tiến trình – chương trình đang chạy, có trạng thái (ready, running, blocked) và PCB riêng",
+   "nhom": "Tiến trình & luồng",
+   "viDu": "A process is a program in execution, with its own address space and PCB.",
+   "viDuNghia": "Tiến trình là một chương trình đang chạy, có không gian địa chỉ và PCB riêng."
+  },
+  {
+   "chu": "scheduler",
+   "doc": "/ˈskedʒuːlər/",
+   "nghia": "bộ lập lịch – phần HĐH chọn tiến trình nào chạy tiếp",
+   "nhom": "Lập lịch CPU",
+   "viDu": "When several equally important jobs are sitting in the input queue waiting to be started, the scheduler picks the __________.",
+   "viDuNghia": "Khi có nhiều công việc quan trọng như nhau đang nằm trong hàng đợi chờ được bắt đầu, bộ lập lịch sẽ chọn theo __________."
+  },
+  {
+   "chu": "scheduling algorithm",
+   "doc": "/ˈskedʒuːlɪŋ ˈælɡərɪðəm/",
+   "nghia": "thuật toán lập lịch – quy tắc chọn tiến trình kế tiếp",
+   "nhom": "Lập lịch CPU",
+   "viDu": "Which scheduling algorithm allocates the CPU first to the process that requests the CPU first?",
+   "viDuNghia": "Thuật toán lập lịch nào cấp CPU trước cho tiến trình yêu cầu CPU trước?"
+  },
+  {
+   "chu": "preemptive",
+   "doc": "/priˈemptɪv/",
+   "nghia": "có trưng dụng – HĐH được quyền giật CPU lại giữa chừng để giao cho tiến trình khác",
+   "nhom": "Lập lịch CPU",
+   "viDu": "Which of the following algorithms operates in preemptive scheme only in batch system?",
+   "viDuNghia": "Thuật toán nào sau đây chỉ hoạt động theo chế độ preemptive trong hệ thống batch?"
+  },
+  {
+   "chu": "nonpreemptive",
+   "doc": "/ˌnɑːnpriˈemptɪv/",
+   "nghia": "không trưng dụng – tiến trình chạy tới khi tự nhả CPU hoặc bị chặn",
+   "nhom": "Lập lịch CPU",
+   "viDu": "_______ is a non-preemptive scheduling algorithm. With this algorithm, processes are assigned the CPU in the order they request it.",
+   "viDuNghia": "_______ là một thuật toán lập lịch không trưng dụng (non-preemptive). Với thuật toán này, các tiến trình được cấp CPU theo đúng thứ tự chúng yêu cầu."
+  },
+  {
+   "chu": "first-come first-served",
+   "doc": "/ˌfɜːrst ˈkʌm ˌfɜːrst ˈsɜːrvd/",
+   "nghia": "đến trước phục vụ trước (FCFS) – chạy theo thứ tự đến; đơn giản, không trưng dụng",
+   "nhom": "Lập lịch CPU",
+   "viDu": "The first-come, first-served (FCFS) algorithm is fine for most ____ systems",
+   "viDuNghia": "Thuật toán first-come, first-served (FCFS) phù hợp với hầu hết các hệ thống ____"
+  },
+  {
+   "chu": "shortest job first",
+   "nghia": "việc ngắn nhất chạy trước (SJF) – cho thời gian quay vòng trung bình nhỏ nhất",
+   "nhom": "Lập lịch CPU",
+   "viDu": "Which of the following is correct about Shortest Job First scheduling algorithm?",
+   "viDuNghia": "Điều nào sau đây đúng về thuật toán lập lịch Shortest Job First (Công việc ngắn nhất trước)?"
+  },
+  {
+   "chu": "shortest remaining time next",
+   "nghia": "thời gian còn lại ngắn nhất chạy trước – bản có trưng dụng của SJF",
+   "nhom": "Lập lịch CPU",
+   "viDu": "A preemptive version of shortest job first (SJF) is shortest remaining time next.",
+   "viDuNghia": "Phiên bản có trưng dụng (preemptive) của thuật toán shortest job first (SJF) là shortest remaining time next."
+  },
+  {
+   "chu": "round robin",
+   "doc": "/ˌraʊnd ˈrɑːbɪn/",
+   "nghia": "xoay vòng – mỗi tiến trình được chạy một lượng tử thời gian rồi về cuối hàng",
+   "nhom": "Lập lịch CPU",
+   "viDu": "In the Round-robin scheduling, what happens to a process when it runs out of the time allocated by the system?",
+   "viDuNghia": "Trong lập lịch Round-robin, điều gì xảy ra với một tiến trình khi hết thời gian (time quantum) mà hệ thống cấp cho nó?"
+  },
+  {
+   "chu": "quantum",
+   "doc": "/ˈkwɑːntəm/",
+   "nghia": "lượng tử thời gian (time slice) – khoảng thời gian tối đa một tiến trình được chạy mỗi lượt",
+   "nhom": "Lập lịch CPU",
+   "viDu": "Which is a wrong statement about the quantum used in Round Robin algorithm?",
+   "viDuNghia": "Phát biểu nào sau đây là SAI về quantum dùng trong giải thuật Round Robin?"
+  },
+  {
+   "chu": "priority scheduling",
+   "doc": "/praɪˈɔːrəti ˈskedʒuːlɪŋ/",
+   "nghia": "lập lịch theo độ ưu tiên – tiến trình ưu tiên cao nhất được chạy trước",
+   "nhom": "Lập lịch CPU",
+   "viDu": "In the preemptive priority scheduling algorithm, when a process arrives at the ready queue, its priority is compared with the priority of ____________",
+   "viDuNghia": "Trong thuật toán lập lịch ưu tiên có trưng dụng (preemptive priority), khi một tiến trình vào hàng đợi sẵn sàng, độ ưu tiên của nó được so với độ ưu tiên của ____"
+  },
+  {
+   "chu": "turnaround time",
+   "doc": "/ˈtɜːrnəraʊnd taɪm/",
+   "nghia": "thời gian quay vòng – từ lúc nộp việc tới lúc việc xong hẳn",
+   "nhom": "Lập lịch CPU",
+   "viDu": "Assume jobs A-D arrive at almost the same time in the READY queue. Determine the average turnaround time for SJF scheduling. Ignore process switching overhead. Job: A B C D CPU cycle: 5 2 6 4",
+   "viDuNghia": "Giả sử các job A-D đến hàng đợi READY gần như cùng lúc. Xác định thời gian quay vòng (turnaround time) trung bình khi dùng giải thuật SJF. Bỏ qua chi phí chuyển ngữ cảnh. Job: A B C D Chu kỳ CPU: 5 2 6 4"
+  },
+  {
+   "chu": "waiting time",
+   "doc": "/ˈweɪtɪŋ taɪm/",
+   "nghia": "thời gian chờ – tổng thời gian tiến trình nằm trong hàng sẵn sàng",
+   "nhom": "Lập lịch CPU",
+   "viDu": "Shortest job first gives the minimum average waiting time.",
+   "viDuNghia": "SJF cho thời gian chờ trung bình nhỏ nhất."
+  },
+  {
+   "chu": "arrival time",
+   "doc": "/əˈraɪvl taɪm/",
+   "nghia": "thời điểm đến – lúc tiến trình vào hàng sẵn sàng",
+   "nhom": "Lập lịch CPU",
+   "viDu": "The jobs are listed with their arrival time and CPU burst time.",
+   "viDuNghia": "Các công việc được liệt kê kèm thời điểm đến và thời gian dùng CPU."
+  },
+  {
+   "chu": "CPU utilization",
+   "doc": "/ˌsiː piː ˈjuː ˌjuːtələˈzeɪʃn/",
+   "nghia": "mức sử dụng CPU – phần trăm thời gian CPU bận",
+   "nhom": "Lập lịch CPU",
+   "viDu": "In a multiprogramming environment, if the degree of multiprogramming is increased, what will happen to CPU utilization in general?",
+   "viDuNghia": "Trong môi trường đa chương trình (multiprogramming), nếu mức độ đa chương trình (degree of multiprogramming) tăng lên, nhìn chung mức sử dụng CPU (CPU utilization) sẽ ra sao?"
+  },
+  {
+   "chu": "ready queue",
+   "doc": "/ˈredi kjuː/",
+   "nghia": "hàng đợi sẵn sàng – danh sách tiến trình đang chờ tới lượt dùng CPU",
+   "nhom": "Lập lịch CPU",
+   "viDu": "Each process is given a fixed amount of time; when it has elapsed, the process is preempted and added to the end of the ready queue.",
+   "viDuNghia": "Mỗi tiến trình được cấp một khoảng thời gian cố định; hết thời gian đó, tiến trình bị thu hồi CPU và đưa về cuối hàng đợi sẵn sàng."
+  },
+  {
+   "chu": "starvation",
+   "doc": "/stɑːrˈveɪʃn/",
+   "nghia": "đói tài nguyên – tiến trình chờ mãi không bao giờ tới lượt",
+   "nhom": "Lập lịch CPU",
+   "viDu": "An algorithm that detects starvation by tracking how long each job has been waiting for resources is the same concept as ____.",
+   "viDuNghia": "Một thuật toán phát hiện đói tài nguyên (starvation) bằng cách theo dõi mỗi công việc đã chờ tài nguyên bao lâu có cùng khái niệm với ____."
+  },
+  {
+   "chu": "aging",
+   "doc": "/ˈeɪdʒɪŋ/",
+   "nghia": "lão hoá – tăng dần độ ưu tiên của tiến trình chờ lâu để chống đói",
+   "nhom": "Lập lịch CPU",
+   "viDu": "Aging gradually raises the priority of a job that has been waiting a long time.",
+   "viDuNghia": "Lão hoá tăng dần độ ưu tiên của công việc đã chờ lâu."
+  },
+  {
+   "chu": "dispatcher",
+   "doc": "/dɪˈspætʃər/",
+   "nghia": "bộ điều phối – trao CPU cho tiến trình vừa được bộ lập lịch chọn",
+   "nhom": "Lập lịch CPU",
+   "viDu": "The dispatcher gives control of the CPU to the process chosen by the scheduler.",
+   "viDuNghia": "Bộ điều phối trao quyền dùng CPU cho tiến trình mà bộ lập lịch đã chọn."
+  },
+  {
+   "chu": "interactive system",
+   "doc": "/ˌɪntərˈæktɪv ˈsɪstəm/",
+   "nghia": "hệ tương tác – người dùng ngồi chờ phản hồi nên cần đáp ứng nhanh",
+   "nhom": "Lập lịch CPU",
+   "viDu": "In interactive systems, what does \"proportionality\" refer to?",
+   "viDuNghia": "Trong các hệ thống tương tác, \"proportionality\" (tính cân xứng) đề cập đến điều gì?"
+  },
+  {
+   "chu": "idle",
+   "doc": "/ˈaɪdl/",
+   "nghia": "rảnh rỗi – CPU không có việc gì để chạy",
+   "nhom": "Lập lịch CPU",
+   "viDu": "How many percent is CPU utilization, when a computer system has enough room to hold two programs and these programs are idle waiting for I/O 10% of the time?",
+   "viDuNghia": "Hiệu suất sử dụng CPU là bao nhiêu phần trăm, khi hệ thống máy tính có đủ chỗ chứa hai chương trình và các chương trình này rảnh rỗi chờ I/O 10% thời gian?"
+  },
+  {
+   "chu": "overhead",
+   "doc": "/ˈoʊvərhed/",
+   "nghia": "chi phí phụ – thời gian/tài nguyên tốn cho việc quản lý chứ không phải việc chính",
+   "nhom": "Lập lịch CPU",
+   "viDu": "When designing a paging system, which of the following factors is the most critical in minimizing translation overhead?",
+   "viDuNghia": "Khi thiết kế hệ thống phân trang, yếu tố nào sau đây quan trọng nhất để giảm thiểu chi phí dịch địa chỉ (translation overhead)?"
+  },
+  {
+   "chu": "scheduling",
+   "doc": "/ˈskedʒuːlɪŋ/",
+   "nghia": "lập lịch – quyết định tiến trình nào được dùng CPU (hoặc yêu cầu đĩa nào được phục vụ) tiếp theo",
+   "nhom": "Lập lịch CPU",
+   "viDu": "What is the purpose of CPU scheduling algorithms?",
+   "viDuNghia": "Mục đích của các thuật toán lập lịch CPU là gì?"
+  },
+  {
+   "chu": "utilization",
+   "doc": "/ˌjuːtələˈzeɪʃn/",
+   "nghia": "mức sử dụng – tỉ lệ thời gian tài nguyên (CPU, bộ nhớ) thật sự bận làm việc; càng cao càng tốt",
+   "nhom": "Lập lịch CPU",
+   "viDu": "Which resource allocation strategy is most likely to prevent deadlock while still allowing high resource utilization?",
+   "viDuNghia": "Chiến lược cấp phát tài nguyên nào dễ ngăn deadlock nhất mà vẫn giữ mức sử dụng tài nguyên cao?"
+  },
+  {
+   "chu": "interprocess communication",
+   "doc": "/ˌɪntərˈprɑːses kəˌmjuːnɪˈkeɪʃn/",
+   "nghia": "giao tiếp giữa các tiến trình (IPC) – cách các tiến trình trao đổi dữ liệu và phối hợp",
+   "nhom": "Đồng bộ tiến trình",
+   "viDu": "In interprocess communication, which synchronization method requires hardware support?",
+   "viDuNghia": "Trong giao tiếp liên tiến trình, phương pháp đồng bộ nào cần sự hỗ trợ của phần cứng?"
+  },
+  {
+   "chu": "race condition",
+   "doc": "/reɪs kənˈdɪʃn/",
+   "nghia": "tranh đua – kết quả sai lệch vì nhiều tiến trình cùng đọc/ghi dữ liệu chung, tuỳ ai chạy trước",
+   "nhom": "Đồng bộ tiến trình",
+   "viDu": "Which statement about disabling interrupts to resolve race conditions is wrong?",
+   "viDuNghia": "Phát biểu nào về việc vô hiệu hóa ngắt để giải quyết race condition là SAI?"
+  },
+  {
+   "chu": "critical region",
+   "doc": "/ˈkrɪtɪkl ˈriːdʒən/",
+   "nghia": "miền găng (critical section) – đoạn mã truy cập dữ liệu dùng chung, mỗi lúc chỉ một tiến trình được vào",
+   "nhom": "Đồng bộ tiến trình",
+   "viDu": "Which of the following statements is true about hardware solution to the critical region problem?",
+   "viDuNghia": "Phát biểu nào sau đây đúng về giải pháp phần cứng cho bài toán miền tới hạn (critical region)?"
+  },
+  {
+   "chu": "mutual exclusion",
+   "doc": "/ˈmjuːtʃuəl ɪkˈskluːʒn/",
+   "nghia": "loại trừ lẫn nhau – bảo đảm khi một tiến trình đang dùng tài nguyên chung thì tiến trình khác phải chờ",
+   "nhom": "Đồng bộ tiến trình",
+   "viDu": "Which of the following conditions must be held to provide good solution for mutual exclusion?",
+   "viDuNghia": "Những điều kiện nào sau đây phải được đảm bảo để có giải pháp tốt cho mutual exclusion?"
+  },
+  {
+   "chu": "busy waiting",
+   "doc": "/ˈbɪzi ˈweɪtɪŋ/",
+   "nghia": "chờ bận – liên tục kiểm tra điều kiện trong vòng lặp, tốn CPU vô ích",
+   "nhom": "Đồng bộ tiến trình",
+   "viDu": "Which of the following synchronization mechanisms does not rely on busy-waiting?",
+   "viDuNghia": "Cơ chế đồng bộ hóa nào sau đây KHÔNG dựa vào chờ bận (busy-waiting)?"
+  },
+  {
+   "chu": "semaphore",
+   "doc": "/ˈseməfɔːr/",
+   "nghia": "semaphore – biến nguyên đếm, dùng hai thao tác down/up (P/V) để đồng bộ tiến trình",
+   "nhom": "Đồng bộ tiến trình",
+   "viDu": "Which of the following conditions of semaphore variable \"s\" implies a busy critical region?",
+   "viDuNghia": "Điều kiện nào của biến semaphore \"s\" ngụ ý vùng tới hạn (critical region) đang bận?"
+  },
+  {
+   "chu": "mutex",
+   "doc": "/ˈmjuːteks/",
+   "nghia": "mutex – khoá loại trừ, chỉ có hai trạng thái khoá/mở",
+   "nhom": "Đồng bộ tiến trình",
+   "viDu": "Analyze the relationship between the dining philosophers problem and the use of semaphores or mutexes in concurrent programming, outlining the potential for deadlock situations and solutions.",
+   "viDuNghia": "Phân tích mối quan hệ giữa bài toán triết gia ăn tối và việc dùng semaphore/mutex trong lập trình đồng thời, nêu rõ nguy cơ deadlock và giải pháp."
+  },
+  {
+   "chu": "monitor",
+   "doc": "/ˈmɑːnɪtər/",
+   "nghia": "monitor – gói thủ tục và dữ liệu, mỗi lúc chỉ một tiến trình được hoạt động bên trong",
+   "nhom": "Đồng bộ tiến trình",
+   "viDu": "Only one process can be active inside a monitor at any instant.",
+   "viDuNghia": "Tại mỗi thời điểm chỉ một tiến trình được hoạt động bên trong monitor."
+  },
+  {
+   "chu": "message passing",
+   "doc": "/ˈmesɪdʒ ˈpæsɪŋ/",
+   "nghia": "truyền thông điệp – tiến trình trao đổi bằng hai thao tác send và receive",
+   "nhom": "Đồng bộ tiến trình",
+   "viDu": "What is an operating system structure in which the communication between requesting process and responding process is message passing?",
+   "viDuNghia": "Cấu trúc hệ điều hành nào mà việc giao tiếp giữa tiến trình yêu cầu và tiến trình đáp ứng được thực hiện bằng truyền thông điệp (message passing)?"
+  },
+  {
+   "chu": "producer-consumer problem",
+   "doc": "/prəˌduːsər kənˈsuːmər ˈprɑːbləm/",
+   "nghia": "bài toán sản xuất – tiêu thụ (bộ đệm giới hạn): một bên bỏ vào, một bên lấy ra khỏi bộ đệm chung",
+   "nhom": "Đồng bộ tiến trình",
+   "viDu": "What problem does using semaphores help to solve in the Producer-Consumer scenario?",
+   "viDuNghia": "Việc sử dụng semaphore giúp giải quyết vấn đề gì trong kịch bản Producer-Consumer?"
+  },
+  {
+   "chu": "dining philosophers problem",
+   "nghia": "bài toán triết gia ăn tối – mô hình các tiến trình tranh nhau một số tài nguyên giới hạn",
+   "nhom": "Đồng bộ tiến trình",
+   "viDu": "In the Dining Philosophers problem, what do the philosophers represent?",
+   "viDuNghia": "Trong bài toán Triết gia ăn tối (Dining Philosophers), các triết gia đại diện cho điều gì?"
+  },
+  {
+   "chu": "readers and writers problem",
+   "nghia": "bài toán người đọc – người ghi: mô hình truy cập cơ sở dữ liệu, nhiều người đọc cùng lúc nhưng chỉ một người ghi",
+   "nhom": "Đồng bộ tiến trình",
+   "viDu": "In the Classical IPC Problems, specifically the Readers-Writers problem, what condition may lead to writer starvation?",
+   "viDuNghia": "Trong các bài toán IPC kinh điển, cụ thể là bài toán Readers-Writers, điều kiện nào có thể dẫn đến hiện tượng đói tài nguyên (starvation) cho writer?"
+  },
+  {
+   "chu": "atomic action",
+   "doc": "/əˈtɑːmɪk ˈækʃn/",
+   "nghia": "thao tác nguyên tử – làm trọn một lèo, không thể bị ngắt giữa chừng",
+   "nhom": "Đồng bộ tiến trình",
+   "viDu": "Which of the following is true about Atomic action on semaphores?",
+   "viDuNghia": "Phát biểu nào sau đây đúng về hành động nguyên tử (Atomic action) trên semaphore?"
+  },
+  {
+   "chu": "lock variable",
+   "doc": "/lɑːk ˈveriəbl/",
+   "nghia": "biến khoá – biến chung 0/1 báo miền găng đang trống hay có người",
+   "nhom": "Đồng bộ tiến trình",
+   "viDu": "Which conditions of mutual exclusion does the Lock Variables (Software proposal) violate?",
+   "viDuNghia": "Giải pháp Lock Variables (đề xuất phần mềm) vi phạm điều kiện nào của loại trừ lẫn nhau?"
+  },
+  {
+   "chu": "test and set lock",
+   "nghia": "lệnh TSL – đọc và đặt khoá trong một thao tác nguyên tử, dùng để cài loại trừ lẫn nhau",
+   "nhom": "Đồng bộ tiến trình",
+   "viDu": "The TSL (test and set lock) instruction reads the lock and sets it in one atomic step.",
+   "viDuNghia": "Lệnh TSL đọc khoá và đặt khoá trong một bước nguyên tử."
+  },
+  {
+   "chu": "Peterson's solution",
+   "doc": "/ˈpiːtərsənz səˈluːʃn/",
+   "nghia": "giải pháp Peterson – thuật toán phần mềm cho loại trừ lẫn nhau giữa hai tiến trình",
+   "nhom": "Đồng bộ tiến trình",
+   "viDu": "Peterson's solution achieves mutual exclusion for two processes without special hardware.",
+   "viDuNghia": "Giải pháp Peterson đạt được loại trừ lẫn nhau cho hai tiến trình mà không cần phần cứng đặc biệt."
+  },
+  {
+   "chu": "sleep and wakeup",
+   "nghia": "ngủ và đánh thức – tiến trình không vào được miền găng thì ngủ, thay vì chờ bận",
+   "nhom": "Đồng bộ tiến trình",
+   "viDu": "Sleep and wakeup avoid busy waiting: a blocked process sleeps until another wakes it.",
+   "viDuNghia": "Ngủ và đánh thức tránh được chờ bận: tiến trình bị chặn ngủ cho tới khi tiến trình khác đánh thức."
+  },
+  {
+   "chu": "synchronization",
+   "doc": "/ˌsɪŋkrənəˈzeɪʃn/",
+   "nghia": "sự đồng bộ – phối hợp thứ tự chạy của các tiến trình để kết quả đúng",
+   "nhom": "Đồng bộ tiến trình",
+   "viDu": "What is Higher-level proposal in the solution of Mutual exclusion and Synchronization?",
+   "viDuNghia": "Đâu là giải pháp ở mức cao (higher-level) trong lời giải cho Mutual exclusion và Synchronization?"
+  },
+  {
+   "chu": "strict alternation",
+   "doc": "/strɪkt ˌɔːltərˈneɪʃn/",
+   "nghia": "luân phiên nghiêm ngặt – hai tiến trình buộc phải thay nhau vào miền găng theo một biến turn",
+   "nhom": "Đồng bộ tiến trình",
+   "viDu": "Which conditions of mutual exclusion does the Strict Alternation (Software proposal) violate?",
+   "viDuNghia": "Giải pháp phần mềm Strict Alternation (Luân phiên nghiêm ngặt) vi phạm điều kiện nào của loại trừ tương hỗ?"
+  },
+  {
+   "chu": "shared memory",
+   "doc": "/ʃerd ˈmeməri/",
+   "nghia": "bộ nhớ dùng chung – vùng nhớ nhiều tiến trình (hoặc nhiều bộ xử lý) cùng đọc ghi; giao tiếp nhanh nhưng phải đồng bộ",
+   "nhom": "Đồng bộ tiến trình",
+   "viDu": "Two processes can communicate by reading and writing a shared memory region.",
+   "viDuNghia": "Hai tiến trình có thể giao tiếp bằng cách đọc ghi một vùng bộ nhớ dùng chung."
+  },
+  {
+   "chu": "critical section",
+   "doc": "/ˈkrɪtɪkl ˈsekʃn/",
+   "nghia": "đoạn găng – đoạn mã truy cập dữ liệu dùng chung, mỗi lúc chỉ một tiến trình được vào (cùng nghĩa critical region)",
+   "nhom": "Đồng bộ tiến trình",
+   "viDu": "What happens when a thread calls Down(S) to enter its critical section, where S is a binary semaphore set to 1?",
+   "viDuNghia": "Điều gì xảy ra khi một luồng gọi Down(S) để vào đoạn găng, với S là semaphore nhị phân đang bằng 1?"
+  },
+  {
+   "chu": "binary semaphore",
+   "doc": "/ˈbaɪnəri ˈseməfɔːr/",
+   "nghia": "semaphore nhị phân – chỉ nhận 0 hoặc 1, dùng như mutex để bảo đảm loại trừ lẫn nhau",
+   "nhom": "Đồng bộ tiến trình",
+   "viDu": "A binary semaphore initialized to 1 can be used to enforce mutual exclusion.",
+   "viDuNghia": "Một semaphore nhị phân khởi tạo bằng 1 có thể dùng để bảo đảm loại trừ lẫn nhau."
+  }
+ ]
+}

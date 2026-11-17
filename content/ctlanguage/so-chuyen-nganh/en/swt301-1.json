@@ -1,0 +1,1029 @@
+{
+ "ma": "swt301-1",
+ "nn": "en",
+ "ten": "SWT301 · 1. Nền tảng & vòng đời kiểm thử",
+ "moTa": "Thuật ngữ trích từ đề FE/PE thật môn SWT301 (ISTQB Foundation): error – defect – failure, 7 nguyên tắc, quy trình kiểm thử, mức và loại kiểm thử, hồi quy – bảo trì. Ví dụ phần lớn là câu hỏi thật trong đề.",
+ "bieuTuong": "checkmark.seal.fill",
+ "thuTu": -952,
+ "tu": [
+  {
+   "chu": "error",
+   "doc": "/ˈerər/",
+   "nghia": "lỗi do con người (nhầm lẫn) — người làm sai, từ đó sinh ra defect trong code hoặc tài liệu",
+   "nhom": "Lỗi & chất lượng",
+   "viDu": "In error guessing, what is the tester primarily relying on to identify potential defects?",
+   "viDuNghia": "Trong đoán lỗi (error guessing), tester chủ yếu dựa vào đâu để nhận diện lỗi tiềm ẩn?"
+  },
+  {
+   "chu": "mistake",
+   "doc": "/mɪˈsteɪk/",
+   "nghia": "sai sót của con người — trong ISTQB đồng nghĩa với error",
+   "nhom": "Lỗi & chất lượng",
+   "viDu": "A developer's mistake in the code can introduce a defect.",
+   "viDuNghia": "Một sai sót của lập trình viên khi viết code có thể tạo ra lỗi (defect)."
+  },
+  {
+   "chu": "fault",
+   "doc": "/fɔːlt/",
+   "nghia": "lỗi nằm trong sản phẩm — đồng nghĩa với defect, bug: chỗ sai trong code/tài liệu; khi chạy trúng có thể gây ra failure",
+   "nhom": "Lỗi & chất lượng",
+   "viDu": "The later in the development life cycle a fault is discovered, the more expensive it is to fix. Why?",
+   "viDuNghia": "Càng phát hiện lỗi muộn trong vòng đời phát triển thì sửa càng tốn kém. Vì sao?"
+  },
+  {
+   "chu": "failure",
+   "doc": "/ˈfeɪljər/",
+   "nghia": "sự cố, hỏng hóc khi chạy — phần mềm làm khác mong đợi và người dùng nhìn thấy được",
+   "nhom": "Lỗi & chất lượng",
+   "viDu": "A field failure occurs when multiple users access a system. Which of the following is true?",
+   "viDuNghia": "Một sự cố hiện trường xảy ra khi nhiều người dùng truy cập hệ thống. Điều nào sau đây đúng?"
+  },
+  {
+   "chu": "anomaly",
+   "doc": "/əˈnɑːməli/",
+   "nghia": "điểm bất thường — bất cứ thứ gì lệch so với mong đợi (đặc tả, chuẩn, kinh nghiệm); chưa chắc là lỗi",
+   "nhom": "Lỗi & chất lượng",
+   "viDu": "Any anomaly found during testing should be logged and investigated.",
+   "viDuNghia": "Mọi điểm bất thường thấy khi test đều nên được ghi lại và xem xét."
+  },
+  {
+   "chu": "nonconformance",
+   "doc": "/ˌnɑːnkənˈfɔːrməns/",
+   "nghia": "sự không phù hợp — không đạt yêu cầu hoặc tiêu chuẩn đã đặt ra",
+   "nhom": "Lỗi & chất lượng",
+   "viDu": "A nonconformance is recorded when the product does not meet the standard.",
+   "viDuNghia": "Một điểm không phù hợp được ghi nhận khi sản phẩm không đạt tiêu chuẩn."
+  },
+  {
+   "chu": "debugging",
+   "doc": "/ˌdiːˈbʌɡɪŋ/",
+   "nghia": "gỡ lỗi — lập trình viên tìm, phân tích và sửa nguyên nhân gây failure (khác với testing là tìm ra failure)",
+   "nhom": "Lỗi & chất lượng",
+   "viDu": "Who would USUALLY perform debugging activities?",
+   "viDuNghia": "Ai THƯỜNG thực hiện hoạt động gỡ lỗi (debugging)?"
+  },
+  {
+   "chu": "quality",
+   "doc": "/ˈkwɑːləti/",
+   "nghia": "chất lượng — mức độ sản phẩm đáp ứng yêu cầu và mong đợi của người dùng",
+   "nhom": "Lỗi & chất lượng",
+   "viDu": "Pick the best definition of quality",
+   "viDuNghia": "Chọn định nghĩa đúng nhất về chất lượng."
+  },
+  {
+   "chu": "quality assurance",
+   "doc": "/ˈkwɑːləti əˈʃʊrəns/",
+   "nghia": "đảm bảo chất lượng (QA) — các hoạt động theo quy trình để tin rằng sản phẩm sẽ đạt chất lượng",
+   "nhom": "Lỗi & chất lượng",
+   "viDu": "How do reviews support software quality assurance?",
+   "viDuNghia": "Rà soát (review) hỗ trợ đảm bảo chất lượng phần mềm như thế nào?"
+  },
+  {
+   "chu": "verification",
+   "doc": "/ˌverɪfɪˈkeɪʃn/",
+   "nghia": "xác minh — kiểm tra có làm ĐÚNG theo đặc tả không (\"Are we building the product right?\")",
+   "nhom": "Lỗi & chất lượng",
+   "viDu": "Verification can be termed as 'Are we building the product right?'",
+   "viDuNghia": "Xác minh (verification) có thể diễn đạt là 'Chúng ta có đang xây dựng sản phẩm ĐÚNG CÁCH không?'"
+  },
+  {
+   "chu": "validation",
+   "doc": "/ˌvælɪˈdeɪʃn/",
+   "nghia": "thẩm định — kiểm tra có làm ĐÚNG SẢN PHẨM người dùng cần không (\"Are we building the right product?\")",
+   "nhom": "Lỗi & chất lượng",
+   "viDu": "Independent Verification & Validation is",
+   "viDuNghia": "Xác minh & thẩm định độc lập (Independent Verification & Validation) là"
+  },
+  {
+   "chu": "reliability",
+   "doc": "/rɪˌlaɪəˈbɪləti/",
+   "nghia": "độ tin cậy — phần mềm chạy đúng, ổn định trong thời gian và điều kiện đã định",
+   "nhom": "Lỗi & chất lượng",
+   "viDu": "There are several risks of managing your project's schedule with a statistical reliability model. These include:",
+   "viDuNghia": "Có một số rủi ro khi quản lý lịch trình dự án bằng mô hình độ tin cậy thống kê. Chúng bao gồm:"
+  },
+  {
+   "chu": "reliable",
+   "doc": "/rɪˈlaɪəbl/",
+   "nghia": "đáng tin cậy — chạy ổn định, ít hỏng",
+   "nhom": "Lỗi & chất lượng",
+   "viDu": "For software to be reliable it must:",
+   "viDuNghia": "Để phần mềm đáng tin cậy, nó phải:"
+  },
+  {
+   "chu": "testability",
+   "doc": "/ˌtestəˈbɪləti/",
+   "nghia": "khả năng kiểm thử được — phần mềm dễ hay khó để kiểm thử",
+   "nhom": "Lỗi & chất lượng",
+   "viDu": "Which of the following is not a characteristic for Testability?",
+   "viDuNghia": "Điều nào sau đây không phải là một đặc tính của Tính kiểm thử được (Testability)?"
+  },
+  {
+   "chu": "correctness",
+   "doc": "/kəˈrektnəs/",
+   "nghia": "tính đúng đắn — phần mềm cho kết quả đúng theo yêu cầu",
+   "nhom": "Lỗi & chất lượng",
+   "viDu": "Functional testing checks the correctness of the system's outputs.",
+   "viDuNghia": "Kiểm thử chức năng kiểm tra tính đúng đắn của kết quả hệ thống trả ra."
+  },
+  {
+   "chu": "safety-critical",
+   "doc": "/ˈseɪfti ˈkrɪtɪkl/",
+   "nghia": "quan trọng về an toàn — hệ thống mà lỗi có thể gây chết người hoặc thiệt hại lớn (y tế, hàng không)",
+   "nhom": "Lỗi & chất lượng",
+   "viDu": "Which factor should be taken into account to select an appropriate test strategy for a safety-critical system?",
+   "viDuNghia": "Yếu tố nào nên được cân nhắc để chọn một chiến lược kiểm thử phù hợp cho một hệ thống an toàn trọng yếu (safety-critical)?"
+  },
+  {
+   "chu": "maintainability",
+   "doc": "/meɪnˌteɪnəˈbɪləti/",
+   "nghia": "khả năng bảo trì — phần mềm dễ hay khó sửa, nâng cấp về sau",
+   "nhom": "Lỗi & chất lượng",
+   "viDu": "Clean, well-structured code improves maintainability.",
+   "viDuNghia": "Code sạch, cấu trúc tốt giúp phần mềm dễ bảo trì hơn."
+  },
+  {
+   "chu": "requirement specification",
+   "doc": "/rɪˈkwaɪərmənt ˌspesɪfɪˈkeɪʃn/",
+   "nghia": "bản đặc tả yêu cầu — tài liệu ghi rõ phần mềm phải làm gì; là test basis cho system test và acceptance test",
+   "nhom": "Lỗi & chất lượng",
+   "viDu": "We use the output of the requirement analysis, the requirement specification as the input for writing:",
+   "viDuNghia": "Chúng ta sử dụng đầu ra của phân tích yêu cầu, tức đặc tả yêu cầu, làm đầu vào để viết:"
+  },
+  {
+   "chu": "bug",
+   "doc": "/bʌɡ/",
+   "nghia": "lỗi phần mềm (bug) – cách gọi thường ngày của defect/fault",
+   "nhom": "Lỗi & chất lượng",
+   "viDu": "The goal of a software tester is to find bugs, find them as early as possible and make sure they get fixed.",
+   "viDuNghia": "Mục tiêu của người kiểm thử phần mềm là tìm lỗi, tìm sớm nhất có thể và bảo đảm chúng được sửa."
+  },
+  {
+   "chu": "defect",
+   "doc": "/ˈdiːfekt/",
+   "nghia": "khiếm khuyết, lỗi (defect/bug/fault) – chỗ sai trong sản phẩm phần mềm; chạy tới nó có thể gây failure",
+   "nhom": "Lỗi & chất lượng",
+   "viDu": "When a defect is detected and fixed then the software should be retested to confirm that the original defect has been successfully removed. This is called",
+   "viDuNghia": "Khi một lỗi được phát hiện và sửa, phần mềm nên được kiểm thử lại để xác nhận lỗi ban đầu đã được loại bỏ thành công. Điều này gọi là"
+  },
+  {
+   "chu": "software testing",
+   "doc": "/ˈsɔːftwer ˈtestɪŋ/",
+   "nghia": "kiểm thử phần mềm — chạy và xem xét phần mềm để tìm lỗi, đánh giá chất lượng",
+   "nhom": "Nguyên tắc kiểm thử",
+   "viDu": "What is the normal order of activities in which software testing is organized?",
+   "viDuNghia": "Thứ tự thông thường của các hoạt động mà kiểm thử phần mềm được tổ chức là gì?"
+  },
+  {
+   "chu": "objective",
+   "doc": "/əbˈdʒektɪv/",
+   "nghia": "mục tiêu — điều việc kiểm thử cần đạt (tìm lỗi, tạo niềm tin, ngăn lỗi...)",
+   "nhom": "Nguyên tắc kiểm thử",
+   "viDu": "What is the MAIN objective when reviewing a software deliverable?",
+   "viDuNghia": "Mục tiêu CHÍNH khi rà soát một sản phẩm bàn giao phần mềm là gì?"
+  },
+  {
+   "chu": "principle",
+   "doc": "/ˈprɪnsəpl/",
+   "nghia": "nguyên tắc — ISTQB có 7 nguyên tắc kiểm thử",
+   "nhom": "Nguyên tắc kiểm thử",
+   "viDu": "What is the significance of context in testing according to the principles?",
+   "viDuNghia": "Theo các nguyên tắc kiểm thử, tầm quan trọng của ngữ cảnh trong kiểm thử là gì?"
+  },
+  {
+   "chu": "exhaustive testing",
+   "doc": "/ɪɡˈzɔːstɪv ˈtestɪŋ/",
+   "nghia": "kiểm thử vét cạn — thử mọi tổ hợp đầu vào và điều kiện; thực tế là bất khả thi",
+   "nhom": "Nguyên tắc kiểm thử",
+   "viDu": "Find the explanation of \"Exhaustive testing is impossible\":",
+   "viDuNghia": "Tìm lời giải thích cho \"Kiểm thử vét cạn là bất khả thi\":"
+  },
+  {
+   "chu": "complete testing",
+   "doc": "/kəmˈpliːt ˈtestɪŋ/",
+   "nghia": "kiểm thử hoàn toàn — thử hết mọi thứ; không thể làm được, nên phải chọn test theo rủi ro và ưu tiên",
+   "nhom": "Nguyên tắc kiểm thử",
+   "viDu": "Important consequences of the impossibility of complete testing are: (Choose one answer)",
+   "viDuNghia": "Những hệ quả quan trọng của việc không thể kiểm thử hoàn toàn là: (Chọn một đáp án)"
+  },
+  {
+   "chu": "early testing",
+   "doc": "/ˈɜːrli ˈtestɪŋ/",
+   "nghia": "kiểm thử sớm — bắt đầu test càng sớm càng tốt trong vòng đời để tìm lỗi khi còn rẻ",
+   "nhom": "Nguyên tắc kiểm thử",
+   "viDu": "How does early testing benefit the software development process?",
+   "viDuNghia": "Kiểm thử sớm mang lại lợi ích gì cho quy trình phát triển phần mềm?"
+  },
+  {
+   "chu": "presence of defects",
+   "doc": "/ˈprezns əv ˈdiːfekts/",
+   "nghia": "sự có mặt của lỗi — kiểm thử chỉ chứng minh được là CÓ lỗi, không chứng minh được là hết lỗi",
+   "nhom": "Nguyên tắc kiểm thử",
+   "viDu": "Find the explanation of \"Testing shows presence of defects\":",
+   "viDuNghia": "Tìm lời giải thích cho nguyên tắc \"Kiểm thử cho thấy sự hiện diện của khiếm khuyết\":"
+  },
+  {
+   "chu": "defect clustering",
+   "doc": "/ˈdiːfekt ˈklʌstərɪŋ/",
+   "nghia": "lỗi tụ thành cụm — phần lớn lỗi nằm trong một số ít module",
+   "nhom": "Nguyên tắc kiểm thử",
+   "viDu": "Defect clustering means a small number of modules contain most of the defects.",
+   "viDuNghia": "Lỗi tụ thành cụm nghĩa là một số ít module chứa phần lớn lỗi."
+  },
+  {
+   "chu": "pesticide paradox",
+   "doc": "/ˈpestɪsaɪd ˈpærədɑːks/",
+   "nghia": "nghịch lý thuốc trừ sâu — lặp mãi một bộ test thì không còn tìm ra lỗi mới; phải xem lại và bổ sung test",
+   "nhom": "Nguyên tắc kiểm thử",
+   "viDu": "What is the 'Pesticide Paradox' in testing?",
+   "viDuNghia": "'Nghịch lý thuốc trừ sâu' (Pesticide Paradox) trong kiểm thử là gì?"
+  },
+  {
+   "chu": "context",
+   "doc": "/ˈkɑːntekst/",
+   "nghia": "bối cảnh — kiểm thử phụ thuộc bối cảnh: phần mềm khác nhau thì cách test khác nhau",
+   "nhom": "Nguyên tắc kiểm thử",
+   "viDu": "What is the function of a monitoring tool in the context of testing?",
+   "viDuNghia": "Chức năng của công cụ giám sát (monitoring tool) trong bối cảnh kiểm thử là gì?"
+  },
+  {
+   "chu": "independence",
+   "doc": "/ˌɪndɪˈpendəns/",
+   "nghia": "tính độc lập — người test không phải là người viết ra sản phẩm; độc lập càng cao càng dễ thấy lỗi",
+   "nhom": "Nguyên tắc kiểm thử",
+   "viDu": "Which of the following has highest level of independence in which test cases are:",
+   "viDuNghia": "Điều nào sau đây có mức độ độc lập cao nhất, khi các ca kiểm thử được:"
+  },
+  {
+   "chu": "independent testing",
+   "doc": "/ˌɪndɪˈpendənt ˈtestɪŋ/",
+   "nghia": "kiểm thử độc lập — do người hoặc nhóm khác với tác giả thực hiện",
+   "nhom": "Nguyên tắc kiểm thử",
+   "viDu": "Independent testing - who is a tester? Choose the incorrect sentence:",
+   "viDuNghia": "Kiểm thử độc lập - ai là người kiểm thử? Chọn câu SAI:"
+  },
+  {
+   "chu": "fault masking",
+   "doc": "/fɔːlt ˈmæskɪŋ/",
+   "nghia": "che lấp lỗi — một lỗi làm cho lỗi khác không lộ ra",
+   "nhom": "Nguyên tắc kiểm thử",
+   "viDu": "Fault Masking is",
+   "viDuNghia": "Che lấp lỗi (fault masking) là gì?"
+  },
+  {
+   "chu": "psychological",
+   "doc": "/ˌsaɪkəˈlɑːdʒɪkl/",
+   "nghia": "thuộc về tâm lý — tâm lý của tester và developer ảnh hưởng tới cách báo lỗi và hợp tác",
+   "nhom": "Nguyên tắc kiểm thử",
+   "viDu": "What is the primary benefit of understanding the psychological factors in testing?",
+   "viDuNghia": "Lợi ích chính của việc hiểu các yếu tố tâm lý trong kiểm thử là gì?"
+  },
+  {
+   "chu": "tester",
+   "doc": "/ˈtestər/",
+   "nghia": "người kiểm thử",
+   "nhom": "Nguyên tắc kiểm thử",
+   "viDu": "Which one of the following test tools is mostly suitable for developers rather than testers?",
+   "viDuNghia": "Công cụ kiểm thử nào sau đây phù hợp cho lập trình viên hơn là người kiểm thử?"
+  },
+  {
+   "chu": "developer",
+   "doc": "/dɪˈveləpər/",
+   "nghia": "lập trình viên, người phát triển",
+   "nhom": "Nguyên tắc kiểm thử",
+   "viDu": "Which approach helps in maintaining good relationships between testers and developers?",
+   "viDuNghia": "Cách tiếp cận nào giúp duy trì mối quan hệ tốt giữa tester và developer?"
+  },
+  {
+   "chu": "end user",
+   "doc": "/ˌend ˈjuːzər/",
+   "nghia": "người dùng cuối — người thật sự sử dụng phần mềm",
+   "nhom": "Nguyên tắc kiểm thử",
+   "viDu": "When what is visible to end-users is a deviation from the specific or expected behavior, this is called:",
+   "viDuNghia": "Khi điều mà người dùng cuối thấy được là một sai lệch so với hành vi đặc tả hoặc mong đợi, đó được gọi là:"
+  },
+  {
+   "chu": "test objective",
+   "doc": "/ˈtest əbˈdʒektɪv/",
+   "nghia": "mục tiêu kiểm thử — lý do thiết kế và chạy một test: tìm lỗi, tạo niềm tin, ngăn lỗi",
+   "nhom": "Nguyên tắc kiểm thử",
+   "viDu": "Ensuring that test design starts during the requirements definition phase is important to enable which of the following test objectives?",
+   "viDuNghia": "Bảo đảm thiết kế kiểm thử bắt đầu ngay trong giai đoạn định nghĩa yêu cầu là quan trọng để đạt mục tiêu kiểm thử nào sau đây?"
+  },
+  {
+   "chu": "testing",
+   "doc": "/ˈtestɪŋ/",
+   "nghia": "việc kiểm thử (hoạt động): lập kế hoạch, thiết kế, chạy test, so kết quả, báo lỗi — tìm ra failure; khác debugging là sửa lỗi",
+   "nhom": "Nguyên tắc kiểm thử",
+   "viDu": "What is the main reason for testing software before releasing it?",
+   "viDuNghia": "Lý do chính để kiểm thử phần mềm trước khi phát hành là gì?"
+  },
+  {
+   "chu": "test process",
+   "doc": "/ˈtest ˈprɑːses/",
+   "nghia": "quy trình kiểm thử — lập kế hoạch và điều khiển, phân tích và thiết kế, cài đặt và thực thi, đánh giá tiêu chí kết thúc và báo cáo, đóng kiểm thử",
+   "nhom": "Quy trình kiểm thử",
+   "viDu": "Which activity in the fundamental test process creates test suites for efficient test execution?",
+   "viDuNghia": "Hoạt động nào trong quy trình kiểm thử cơ bản tạo ra bộ kiểm thử để thực thi hiệu quả?"
+  },
+  {
+   "chu": "test planning",
+   "doc": "/ˈtest ˈplænɪŋ/",
+   "nghia": "lập kế hoạch kiểm thử — xác định mục tiêu, phạm vi, cách tiếp cận, nguồn lực và lịch",
+   "nhom": "Quy trình kiểm thử",
+   "viDu": "Which of the following is a MAJOR task of test planning?",
+   "viDuNghia": "Điều nào sau đây là một nhiệm vụ CHÍNH của lập kế hoạch kiểm thử?"
+  },
+  {
+   "chu": "test analysis",
+   "doc": "/ˈtest əˈnæləsɪs/",
+   "nghia": "phân tích kiểm thử — xem xét test basis để tìm ra cần test những gì (test condition)",
+   "nhom": "Quy trình kiểm thử",
+   "viDu": "During test analysis, we review the test basis and identify test conditions.",
+   "viDuNghia": "Trong phân tích kiểm thử, ta xem lại cơ sở kiểm thử và xác định các điều kiện kiểm thử."
+  },
+  {
+   "chu": "test design",
+   "doc": "/ˈtest dɪˈzaɪn/",
+   "nghia": "thiết kế kiểm thử — biến test condition thành test case và dữ liệu test",
+   "nhom": "Quy trình kiểm thử",
+   "viDu": "Which type of test design technique is based on the tester's skills, intuition, and experience in testing?",
+   "viDuNghia": "Loại kỹ thuật thiết kế kiểm thử nào dựa trên kỹ năng, trực giác và kinh nghiệm của người kiểm thử?"
+  },
+  {
+   "chu": "test implementation",
+   "doc": "/ˈtest ˌɪmplɪmenˈteɪʃn/",
+   "nghia": "cài đặt kiểm thử — viết test procedure/script, gom thành test suite, dựng môi trường test",
+   "nhom": "Quy trình kiểm thử",
+   "viDu": "Which of the following is not a part of the Test Implementation and Execution Phase",
+   "viDuNghia": "Điều nào sau đây KHÔNG thuộc pha Cài đặt và Thực thi kiểm thử (Test Implementation and Execution)?"
+  },
+  {
+   "chu": "test execution",
+   "doc": "/ˈtest ˌeksɪˈkjuːʃn/",
+   "nghia": "thực thi kiểm thử — chạy test, so kết quả thực tế với mong đợi, ghi lại sự cố",
+   "nhom": "Quy trình kiểm thử",
+   "viDu": "Which one of the following is MOST likely to be a benefit of using test execution tools?",
+   "viDuNghia": "Điều nào sau đây CÓ KHẢ NĂNG NHẤT là lợi ích của việc dùng công cụ thực thi kiểm thử?"
+  },
+  {
+   "chu": "exit criteria",
+   "doc": "/ˈeksɪt kraɪˈtɪriə/",
+   "nghia": "tiêu chí kết thúc — điều kiện thoả thuận trước để được coi là test xong (độ phủ, số lỗi còn mở...)",
+   "nhom": "Quy trình kiểm thử",
+   "viDu": "What should be a key outcome of the evaluating exit criteria and reporting phase?",
+   "viDuNghia": "Kết quả then chốt của giai đoạn đánh giá tiêu chí kết thúc và báo cáo là gì?"
+  },
+  {
+   "chu": "test closure activities",
+   "nghia": "các hoạt động đóng kiểm thử — gom testware, bàn giao, lưu trữ, rút kinh nghiệm khi kết thúc",
+   "nhom": "Quy trình kiểm thử",
+   "viDu": "In a software project, what is the purpose of test closure activities?",
+   "viDuNghia": "Trong một dự án phần mềm, mục đích của các hoạt động kết thúc kiểm thử (test closure) là gì?"
+  },
+  {
+   "chu": "infrastructure",
+   "doc": "/ˈɪnfrəstrʌktʃər/",
+   "nghia": "hạ tầng — máy móc, mạng, phần mềm nền cần có để chạy test",
+   "nhom": "Quy trình kiểm thử",
+   "viDu": "Designing the test environment set-up and identifying any required infrastructure and tools are a part of which phase",
+   "viDuNghia": "Thiết kế thiết lập môi trường kiểm thử và xác định hạ tầng, công cụ cần thiết là một phần của giai đoạn nào?"
+  },
+  {
+   "chu": "test report",
+   "doc": "/ˈtest rɪˈpɔːrt/",
+   "nghia": "báo cáo kiểm thử: tóm tắt đã test những gì, bao nhiêu test pass/fail, lỗi còn mở, đánh giá chất lượng",
+   "nhom": "Quy trình kiểm thử",
+   "viDu": "They adopted a testing tool that automates test execution and generates test reports.",
+   "viDuNghia": "Họ áp dụng một công cụ kiểm thử tự động chạy test và tạo ra báo cáo kiểm thử."
+  },
+  {
+   "chu": "test basis",
+   "doc": "/ˈtest ˈbeɪsɪs/",
+   "nghia": "cơ sở kiểm thử — các tài liệu dùng làm căn cứ viết test (yêu cầu, thiết kế, đặc tả)",
+   "nhom": "Thành phần của test",
+   "viDu": "Reviewing the test Basis is a part of which phase",
+   "viDuNghia": "Việc đánh giá cơ sở kiểm thử (test Basis) thuộc giai đoạn nào"
+  },
+  {
+   "chu": "test condition",
+   "doc": "/ˈtest kənˈdɪʃn/",
+   "nghia": "điều kiện kiểm thử — một thứ cần được kiểm (chức năng, giao dịch, thuộc tính), rút ra từ test basis",
+   "nhom": "Thành phần của test",
+   "viDu": "Test Conditions are derived from:",
+   "viDuNghia": "Điều kiện kiểm thử (test conditions) được suy ra từ:"
+  },
+  {
+   "chu": "test data",
+   "doc": "/ˈtest ˈdeɪtə/",
+   "nghia": "dữ liệu kiểm thử — dữ liệu chuẩn bị sẵn để chạy test",
+   "nhom": "Thành phần của test",
+   "viDu": "What does a programmer need to write in order to test a function, which calls the function under test and passes test data to it?",
+   "viDuNghia": "Lập trình viên cần viết gì để kiểm thử một hàm — thứ gọi hàm cần test và truyền dữ liệu test cho nó?"
+  },
+  {
+   "chu": "test script",
+   "doc": "/ˈtest skrɪpt/",
+   "nghia": "kịch bản kiểm thử — các bước chạy test, thường là mã cho công cụ chạy tự động",
+   "nhom": "Thành phần của test",
+   "viDu": "A Test Plan Outline contains which of the following: i. Test Items ii. Test Scripts iii. Test Deliverables iv. Responsibilities",
+   "viDuNghia": "Một dàn ý kế hoạch kiểm thử (Test Plan Outline) chứa những mục nào sau đây: i. Test Items ii. Test Scripts iii. Test Deliverables iv. Responsibilities"
+  },
+  {
+   "chu": "test suite",
+   "doc": "/ˈtest swiːt/",
+   "nghia": "bộ kiểm thử — nhiều test case gom lại thành nhóm để chạy cùng nhau",
+   "nhom": "Thành phần của test",
+   "viDu": "Which activity in the fundamental test process creates test suites for efficient test execution?",
+   "viDuNghia": "Hoạt động nào trong quy trình kiểm thử cơ bản tạo ra bộ kiểm thử để thực thi hiệu quả?"
+  },
+  {
+   "chu": "test procedure",
+   "doc": "/ˈtest prəˈsiːdʒər/",
+   "nghia": "thủ tục kiểm thử — trình tự các bước để chạy một hay nhiều test case",
+   "nhom": "Thành phần của test",
+   "viDu": "Test case ID, Test case description, Preconditions, Test steps (Test Procedure) with test data, Expected results",
+   "viDuNghia": "Mã test case, mô tả test case, điều kiện tiên quyết, các bước test (thủ tục kiểm thử) kèm dữ liệu test, kết quả mong đợi"
+  },
+  {
+   "chu": "testware",
+   "doc": "/ˈtestwer/",
+   "nghia": "sản phẩm kiểm thử — mọi thứ làm ra khi test: kế hoạch, test case, dữ liệu, script, báo cáo",
+   "nhom": "Thành phần của test",
+   "viDu": "Who is responsible for support in setting up adequate configuration management of testware for traceability?",
+   "viDuNghia": "Ai chịu trách nhiệm hỗ trợ thiết lập việc quản lý cấu hình testware đầy đủ để phục vụ truy vết (traceability)?"
+  },
+  {
+   "chu": "expected result",
+   "doc": "/ɪkˈspektɪd rɪˈzʌlt/",
+   "nghia": "kết quả mong đợi — kết quả đúng theo đặc tả, phải xác định TRƯỚC khi chạy test",
+   "nhom": "Thành phần của test",
+   "viDu": "Which of the following defines the expected results of a test?",
+   "viDuNghia": "Điều nào sau đây định nghĩa kết quả mong đợi của một kiểm thử?"
+  },
+  {
+   "chu": "actual result",
+   "doc": "/ˈæktʃuəl rɪˈzʌlt/",
+   "nghia": "kết quả thực tế — thứ phần mềm thật sự cho ra khi chạy test",
+   "nhom": "Thành phần của test",
+   "viDu": "The actual result did not match the expected result, so I raised an incident.",
+   "viDuNghia": "Kết quả thực tế không khớp kết quả mong đợi nên tôi đã ghi nhận một sự cố."
+  },
+  {
+   "chu": "test environment",
+   "doc": "/ˈtest ɪnˈvaɪrənmənt/",
+   "nghia": "môi trường kiểm thử — phần cứng, phần mềm, dữ liệu, công cụ dùng để chạy test",
+   "nhom": "Thành phần của test",
+   "viDu": "Why is the test environment set-up included in test implementation?",
+   "viDuNghia": "Tại sao việc thiết lập môi trường kiểm thử được xếp vào giai đoạn hiện thực kiểm thử (test implementation)?"
+  },
+  {
+   "chu": "test object",
+   "doc": "/ˈtest ˈɑːbdʒekt/",
+   "nghia": "đối tượng kiểm thử — thành phần hoặc hệ thống đang được test",
+   "nhom": "Thành phần của test",
+   "viDu": "The test object for this cycle is the new payment module.",
+   "viDuNghia": "Đối tượng kiểm thử của đợt này là module thanh toán mới."
+  },
+  {
+   "chu": "test case specification",
+   "nghia": "đặc tả test case — tài liệu (IEEE 829) ghi từng test case: dữ liệu vào, điều kiện chạy, kết quả mong đợi",
+   "nhom": "Thành phần của test",
+   "viDu": "The test case specification describes the inputs, execution conditions and expected results of each test case.",
+   "viDuNghia": "Đặc tả test case mô tả dữ liệu vào, điều kiện chạy và kết quả mong đợi của từng test case."
+  },
+  {
+   "chu": "test case",
+   "doc": "/test keɪs/",
+   "nghia": "ca kiểm thử – bộ điều kiện đầu vào, các bước và kết quả mong đợi để kiểm một chức năng",
+   "nhom": "Thành phần của test",
+   "viDu": "Why is equivalence partitioning particularly effective in test case design?",
+   "viDuNghia": "Vì sao phân hoạch tương đương (equivalence partitioning) đặc biệt hiệu quả trong thiết kế ca kiểm thử?"
+  },
+  {
+   "chu": "test",
+   "doc": "/test/",
+   "nghia": "(danh từ) một lần kiểm thử, bài test · (động từ) kiểm thử — chạy hoặc xem xét sản phẩm để tìm lỗi, đánh giá chất lượng",
+   "nhom": "Thành phần của test",
+   "viDu": "Which of the following defines the expected results of a test?",
+   "viDuNghia": "Điều nào sau đây định nghĩa kết quả mong đợi của một bài kiểm thử?"
+  },
+  {
+   "chu": "test case design",
+   "nghia": "thiết kế test case: dùng kỹ thuật (phân vùng tương đương, giá trị biên, bảng quyết định…) để tạo ra các test case",
+   "nhom": "Thành phần của test",
+   "viDu": "Why is equivalence partitioning particularly effective in test case design?",
+   "viDuNghia": "Vì sao phân vùng tương đương đặc biệt hiệu quả trong thiết kế test case?"
+  },
+  {
+   "chu": "test result",
+   "doc": "/ˈtest rɪˈzʌlt/",
+   "nghia": "kết quả kiểm thử: pass (đạt) hay fail (không đạt) sau khi so kết quả thực tế với kết quả mong đợi",
+   "nhom": "Thành phần của test",
+   "viDu": "Record the test result as pass or fail after comparing the actual result with the expected result.",
+   "viDuNghia": "Ghi kết quả kiểm thử là pass hay fail sau khi so kết quả thực tế với kết quả mong đợi."
+  },
+  {
+   "chu": "test step",
+   "doc": "/ˈtest step/",
+   "nghia": "bước kiểm thử: một thao tác trong test case (nhập gì, bấm gì) — các test step viết theo thứ tự",
+   "nhom": "Thành phần của test",
+   "viDu": "Each test step should say exactly what the tester must enter or click.",
+   "viDuNghia": "Mỗi bước kiểm thử phải nói rõ tester cần nhập gì hoặc bấm vào đâu."
+  },
+  {
+   "chu": "test scenario",
+   "doc": "/ˈtest səˈnerioʊ/",
+   "nghia": "kịch bản kiểm thử: một tình huống / luồng nghiệp vụ cần test; từ một kịch bản viết ra nhiều test case",
+   "nhom": "Thành phần của test",
+   "viDu": "Test Case ID, Test Scenario, Preconditions (if applicable), Test Steps, Expected Result.",
+   "viDuNghia": "Mã test case, kịch bản kiểm thử, điều kiện tiên quyết (nếu có), các bước test, kết quả mong đợi."
+  },
+  {
+   "chu": "software development life cycle",
+   "nghia": "vòng đời phát triển phần mềm (SDLC) — các giai đoạn từ yêu cầu, thiết kế, lập trình, kiểm thử tới bảo trì",
+   "nhom": "Vòng đời phát triển",
+   "viDu": "Testing activities should start as early as possible in the software development life cycle.",
+   "viDuNghia": "Hoạt động kiểm thử nên bắt đầu càng sớm càng tốt trong vòng đời phát triển phần mềm."
+  },
+  {
+   "chu": "V-model",
+   "doc": "/ˈviː ˌmɑːdl/",
+   "nghia": "mô hình chữ V — mỗi giai đoạn phát triển có một mức kiểm thử tương ứng; thiết kế test bắt đầu sớm",
+   "nhom": "Vòng đời phát triển",
+   "viDu": "What is the main advantage of using the V-model in software development?",
+   "viDuNghia": "Ưu điểm chính của việc dùng mô hình chữ V trong phát triển phần mềm là gì?"
+  },
+  {
+   "chu": "waterfall model",
+   "doc": "/ˈwɔːtərfɔːl ˌmɑːdl/",
+   "nghia": "mô hình thác nước — làm tuần tự từng giai đoạn, kiểm thử nằm gần cuối",
+   "nhom": "Vòng đời phát triển",
+   "viDu": "What is the typical sequence of testing activities in the Waterfall model?",
+   "viDuNghia": "Trình tự điển hình của các hoạt động kiểm thử trong mô hình Thác nước (Waterfall) là gì?"
+  },
+  {
+   "chu": "big-bang",
+   "doc": "/ˌbɪɡ ˈbæŋ/",
+   "nghia": "kiểu big-bang — (tích hợp) ghép mọi thành phần cùng lúc rồi mới test, khó khoanh vùng lỗi · (mô hình phát triển) lao vào code ngay, gần như không lập kế hoạch",
+   "nhom": "Vòng đời phát triển",
+   "viDu": "What does the term \"Big-bang model\" imply about the approach to software development?",
+   "viDuNghia": "Thuật ngữ \"mô hình Big-bang\" hàm ý gì về cách tiếp cận phát triển phần mềm?"
+  },
+  {
+   "chu": "Agile methodology",
+   "doc": "/ˈædʒl ˌmeθəˈdɑːlədʒi/",
+   "nghia": "phương pháp Agile — phát triển theo vòng lặp ngắn; cả nhóm cùng chịu trách nhiệm về chất lượng",
+   "nhom": "Vòng đời phát triển",
+   "viDu": "Who is responsible for testing in Agile methodology?",
+   "viDuNghia": "Ai chịu trách nhiệm cho việc kiểm thử trong phương pháp Agile?"
+  },
+  {
+   "chu": "iteration",
+   "doc": "/ˌɪtəˈreɪʃn/",
+   "nghia": "vòng lặp — một chu kỳ phát triển ngắn (sprint) trong Agile",
+   "nhom": "Vòng đời phát triển",
+   "viDu": "In an Agile project, you are establishing the procedure for conducting product risk analysis during each iteration. Where should you appropriately document this process within a test plan?",
+   "viDuNghia": "Trong một dự án Agile, bạn đang thiết lập quy trình tiến hành phân tích rủi ro sản phẩm trong mỗi lần lặp (iteration). Bạn nên ghi lại quy trình này ở đâu cho phù hợp trong một kế hoạch kiểm thử?"
+  },
+  {
+   "chu": "incremental",
+   "doc": "/ˌɪŋkrəˈmentl/",
+   "nghia": "tăng dần — thêm từng phần nhỏ rồi test, không ghép hết một lần",
+   "nhom": "Vòng đời phát triển",
+   "viDu": "Which of the following is not a type of incremental testing approach?",
+   "viDuNghia": "Điều nào sau đây KHÔNG phải là một kiểu tiếp cận kiểm thử tăng dần (incremental testing)?"
+  },
+  {
+   "chu": "phase",
+   "doc": "/feɪz/",
+   "nghia": "giai đoạn, pha — một chặng trong dự án hoặc trong quy trình",
+   "nhom": "Vòng đời phát triển",
+   "viDu": "Which of the following activities is included in the kick-off phase of a formal review?",
+   "viDuNghia": "Hoạt động nào sau đây thuộc giai đoạn khởi động (kick-off) của một buổi rà soát chính thức (formal review)?"
+  },
+  {
+   "chu": "build",
+   "doc": "/bɪld/",
+   "nghia": "bản dựng — một phiên bản phần mềm được đóng gói để đem ra test",
+   "nhom": "Vòng đời phát triển",
+   "viDu": "________ is a very early build intended for limited distribution to a few key customers and to marketing for demonstration purposes.",
+   "viDuNghia": "________ là một bản dựng rất sớm, chỉ phát cho một số ít khách hàng quan trọng và cho bộ phận marketing để trình diễn."
+  },
+  {
+   "chu": "product release",
+   "doc": "/ˈprɑːdʌkt rɪˈliːs/",
+   "nghia": "phát hành sản phẩm — đưa phiên bản phần mềm tới khách hàng/người dùng",
+   "nhom": "Vòng đời phát triển",
+   "viDu": "All critical defects must be fixed before the product release.",
+   "viDuNghia": "Mọi lỗi nghiêm trọng phải được sửa trước khi phát hành sản phẩm."
+  },
+  {
+   "chu": "test level",
+   "doc": "/ˈtest ˈlevl/",
+   "nghia": "mức kiểm thử — component, integration, system, acceptance",
+   "nhom": "Mức kiểm thử",
+   "viDu": "Which test level verifies the application meets business requirements?",
+   "viDuNghia": "Mức kiểm thử nào xác minh ứng dụng đáp ứng các yêu cầu nghiệp vụ?"
+  },
+  {
+   "chu": "component testing",
+   "doc": "/kəmˈpoʊnənt ˈtestɪŋ/",
+   "nghia": "kiểm thử thành phần — test từng thành phần riêng lẻ; còn gọi unit / module / program testing",
+   "nhom": "Mức kiểm thử",
+   "viDu": "Which of the following statements about component testing is not true?",
+   "viDuNghia": "Phát biểu nào sau đây về kiểm thử thành phần (component testing) là KHÔNG đúng?"
+  },
+  {
+   "chu": "unit testing",
+   "doc": "/ˈjuːnɪt ˈtestɪŋ/",
+   "nghia": "kiểm thử đơn vị — test từng hàm, lớp, module riêng lẻ; thường do lập trình viên làm",
+   "nhom": "Mức kiểm thử",
+   "viDu": "What is the purpose of unit testing in software development?",
+   "viDuNghia": "Mục đích của kiểm thử đơn vị (unit testing) trong phát triển phần mềm là gì?"
+  },
+  {
+   "chu": "module",
+   "doc": "/ˈmɑːdʒuːl/",
+   "nghia": "mô-đun — một khối chức năng của chương trình",
+   "nhom": "Mức kiểm thử",
+   "viDu": "The process starting with the terminal modules is called:",
+   "viDuNghia": "Quá trình tích hợp bắt đầu từ các mô-đun đầu cuối (terminal) được gọi là:"
+  },
+  {
+   "chu": "integration testing",
+   "doc": "/ˌɪntɪˈɡreɪʃn ˈtestɪŋ/",
+   "nghia": "kiểm thử tích hợp — tìm lỗi ở giao diện và sự tương tác giữa các thành phần/hệ thống đã ghép",
+   "nhom": "Mức kiểm thử",
+   "viDu": "Which of the following is the main purpose of the integration strategy for integration testing in the small?",
+   "viDuNghia": "Đâu là mục đích chính của chiến lược tích hợp cho kiểm thử tích hợp ở phạm vi nhỏ?"
+  },
+  {
+   "chu": "integration strategy",
+   "doc": "/ˌɪntɪˈɡreɪʃn ˈstrætədʒi/",
+   "nghia": "chiến lược tích hợp — thứ tự ghép các thành phần: top-down, bottom-up, big-bang...",
+   "nhom": "Mức kiểm thử",
+   "viDu": "Which of the following is not the integration strategy?",
+   "viDuNghia": "Điều nào sau đây KHÔNG phải là chiến lược tích hợp?"
+  },
+  {
+   "chu": "top-down",
+   "doc": "/ˌtɑːp ˈdaʊn/",
+   "nghia": "từ trên xuống — ghép từ module chính xuống module con, dùng stub thay cho module chưa có",
+   "nhom": "Mức kiểm thử",
+   "viDu": "In top-down integration, stubs replace the lower-level modules that are not ready yet.",
+   "viDuNghia": "Trong tích hợp từ trên xuống, stub thay cho các module cấp dưới chưa làm xong."
+  },
+  {
+   "chu": "bottom-up",
+   "doc": "/ˌbɑːtəm ˈʌp/",
+   "nghia": "từ dưới lên — ghép từ module thấp nhất lên, dùng driver để gọi chúng",
+   "nhom": "Mức kiểm thử",
+   "viDu": "Bottom-up integration starts with the lowest-level modules and uses drivers to call them.",
+   "viDuNghia": "Tích hợp từ dưới lên bắt đầu từ các module thấp nhất và dùng driver để gọi chúng."
+  },
+  {
+   "chu": "driver",
+   "doc": "/ˈdraɪvər/",
+   "nghia": "trình điều khiển giả — đoạn code tạm GỌI thành phần đang được test và truyền dữ liệu test vào",
+   "nhom": "Mức kiểm thử",
+   "viDu": "Drivers are also known as: i. Spade; ii. Test harness; iii. Scaffolding",
+   "viDuNghia": "Driver (bộ điều khiển) còn được gọi là: i. Spade; ii. Test harness; iii. Scaffolding"
+  },
+  {
+   "chu": "stub",
+   "doc": "/stʌb/",
+   "nghia": "thành phần giả — đoạn code tạm thay cho thành phần BỊ GỌI mà chưa có",
+   "nhom": "Mức kiểm thử",
+   "viDu": "We wrote a stub to replace the payment service that is not built yet.",
+   "viDuNghia": "Bọn mình viết một stub để thay cho dịch vụ thanh toán chưa được làm xong."
+  },
+  {
+   "chu": "test harness",
+   "doc": "/ˈtest ˈhɑːrnɪs/",
+   "nghia": "bộ khung chạy test — gồm driver và stub cần có để chạy test một thành phần",
+   "nhom": "Mức kiểm thử",
+   "viDu": "Drivers are also known as: i. Spade ii. Test harness iii. Scaffolding",
+   "viDuNghia": "Driver (bộ điều khiển) còn được gọi là: i. Spade ii. Test harness (khung kiểm thử) iii. Scaffolding (giàn giáo)"
+  },
+  {
+   "chu": "interaction",
+   "doc": "/ˌɪntərˈækʃn/",
+   "nghia": "sự tương tác — các thành phần gọi nhau, trao đổi dữ liệu với nhau",
+   "nhom": "Mức kiểm thử",
+   "viDu": "Testing activity which is performed to expose defects in the interfaces and in the interaction between integrated components is",
+   "viDuNghia": "Hoạt động kiểm thử được thực hiện để lộ ra lỗi ở giao diện và trong tương tác giữa các thành phần đã tích hợp là"
+  },
+  {
+   "chu": "link testing",
+   "doc": "/ˈlɪŋk ˈtestɪŋ/",
+   "nghia": "kiểm thử liên kết — tên khác của kiểm thử tích hợp thành phần",
+   "nhom": "Mức kiểm thử",
+   "viDu": "Link Testing is also called as",
+   "viDuNghia": "Kiểm thử liên kết (Link Testing) còn được gọi là"
+  },
+  {
+   "chu": "system testing",
+   "doc": "/ˈsɪstəm ˈtestɪŋ/",
+   "nghia": "kiểm thử hệ thống — test cả hệ thống đã ghép xong so với yêu cầu, cả chức năng lẫn phi chức năng",
+   "nhom": "Mức kiểm thử",
+   "viDu": "What is the role of performance testing in system testing?",
+   "viDuNghia": "Vai trò của kiểm thử hiệu năng trong kiểm thử hệ thống là gì?"
+  },
+  {
+   "chu": "end-to-end",
+   "doc": "/ˌend tu ˈend/",
+   "nghia": "đầu-cuối — đi trọn một luồng nghiệp vụ từ đầu tới cuối",
+   "nhom": "Mức kiểm thử",
+   "viDu": "A __________ consists of a set of test cases covering the end-to-end functionality of a software application",
+   "viDuNghia": "Một __________ gồm một tập test case bao phủ chức năng từ đầu đến cuối của một ứng dụng phần mềm."
+  },
+  {
+   "chu": "acceptance testing",
+   "doc": "/əkˈseptəns ˈtestɪŋ/",
+   "nghia": "kiểm thử chấp nhận — khách hàng/người dùng kiểm xem hệ thống có đáp ứng nhu cầu nghiệp vụ để nghiệm thu không",
+   "nhom": "Mức kiểm thử",
+   "viDu": "Which of the following is NOT a characteristic of User Acceptance Testing?",
+   "viDuNghia": "Điều nào sau đây KHÔNG phải là đặc trưng của Kiểm thử chấp nhận người dùng (User Acceptance Testing)?"
+  },
+  {
+   "chu": "user acceptance testing",
+   "nghia": "kiểm thử chấp nhận người dùng (UAT) — người dùng nghiệp vụ tự kiểm hệ thống có dùng được cho công việc thật không",
+   "nhom": "Mức kiểm thử",
+   "viDu": "Which of the following is NOT a characteristic of User Acceptance Testing?",
+   "viDuNghia": "Điều nào sau đây KHÔNG phải là đặc trưng của Kiểm thử chấp nhận người dùng (User Acceptance Testing)?"
+  },
+  {
+   "chu": "alpha testing",
+   "doc": "/ˈælfə ˈtestɪŋ/",
+   "nghia": "kiểm thử alpha — người dùng/nhóm độc lập test tại nơi của bên PHÁT TRIỂN",
+   "nhom": "Mức kiểm thử",
+   "viDu": "Alpha testing is performed at the developing organization's site.",
+   "viDuNghia": "Kiểm thử alpha được thực hiện tại nơi của tổ chức phát triển phần mềm."
+  },
+  {
+   "chu": "beta testing",
+   "doc": "/ˈbeɪtə ˈtestɪŋ/",
+   "nghia": "kiểm thử beta — khách hàng tự test tại nơi của HỌ, trong môi trường thật",
+   "nhom": "Mức kiểm thử",
+   "viDu": "Beta testing is performed by customers at their own locations.",
+   "viDuNghia": "Kiểm thử beta do khách hàng thực hiện tại chính nơi của họ."
+  },
+  {
+   "chu": "regulation",
+   "doc": "/ˌreɡjuˈleɪʃn/",
+   "nghia": "quy định pháp lý — regulation acceptance testing kiểm hệ thống có tuân theo luật, quy định không",
+   "nhom": "Mức kiểm thử",
+   "viDu": "Contract and regulation testing is a part of",
+   "viDuNghia": "Kiểm thử hợp đồng và quy định (contract and regulation testing) là một phần của"
+  },
+  {
+   "chu": "program testing",
+   "doc": "/ˈproʊɡræm ˈtestɪŋ/",
+   "nghia": "kiểm thử chương trình — tên khác của component testing",
+   "nhom": "Mức kiểm thử",
+   "viDu": "Component Testing is also called as: i) Unit Testing; ii) Program Testing; iii) Module Testing; iv) System Component Testing.",
+   "viDuNghia": "Kiểm thử thành phần (Component Testing) còn được gọi là: i) Unit Testing; ii) Program Testing; iii) Module Testing; iv) System Component Testing."
+  },
+  {
+   "chu": "unit test",
+   "doc": "/ˈjuːnɪt test/",
+   "nghia": "kiểm thử đơn vị – test từng hàm/lớp nhỏ nhất một cách riêng lẻ (unit/component testing)",
+   "nhom": "Mức kiểm thử",
+   "viDu": "What is the purpose of unit testing in software development?",
+   "viDuNghia": "Mục đích của kiểm thử đơn vị (unit testing) trong phát triển phần mềm là gì?"
+  },
+  {
+   "chu": "field testing",
+   "doc": "/ˈfiːld ˈtestɪŋ/",
+   "nghia": "kiểm thử hiện trường: người dùng test ngay tại nơi làm việc của khách hàng, môi trường thật (gần với beta testing)",
+   "nhom": "Mức kiểm thử",
+   "viDu": "Field testing is performed by the people at the client's own locations.",
+   "viDuNghia": "Kiểm thử hiện trường do chính người dùng thực hiện tại địa điểm của khách hàng."
+  },
+  {
+   "chu": "test type",
+   "doc": "/ˈtest taɪp/",
+   "nghia": "loại kiểm thử — functional, non-functional, structural, change-related",
+   "nhom": "Loại kiểm thử",
+   "viDu": "Which of the following is a test type?",
+   "viDuNghia": "Điều nào sau đây là một LOẠI kiểm thử (test type)?"
+  },
+  {
+   "chu": "functional testing",
+   "doc": "/ˈfʌŋkʃənl ˈtestɪŋ/",
+   "nghia": "kiểm thử chức năng — kiểm hệ thống LÀM GÌ, so với đặc tả chức năng",
+   "nhom": "Loại kiểm thử",
+   "viDu": "A software model that can't be used in functional testing",
+   "viDuNghia": "Một mô hình phần mềm không thể dùng trong kiểm thử chức năng"
+  },
+  {
+   "chu": "non-functional testing",
+   "doc": "/ˌnɑːn ˈfʌŋkʃənl ˈtestɪŋ/",
+   "nghia": "kiểm thử phi chức năng — kiểm hệ thống chạy TỐT ĐẾN ĐÂU: hiệu năng, dễ dùng, tin cậy, bảo mật...",
+   "nhom": "Loại kiểm thử",
+   "viDu": "Which of the following is a type of non-functional testing?",
+   "viDuNghia": "Điều nào là một loại kiểm thử phi chức năng?"
+  },
+  {
+   "chu": "performance testing",
+   "doc": "/pərˈfɔːrməns ˈtestɪŋ/",
+   "nghia": "kiểm thử hiệu năng — đo tốc độ, thời gian phản hồi, lượng giao dịch xử lý được",
+   "nhom": "Loại kiểm thử",
+   "viDu": "How does usability testing differ from performance testing?",
+   "viDuNghia": "Kiểm thử tính khả dụng khác kiểm thử hiệu năng như thế nào?"
+  },
+  {
+   "chu": "load testing",
+   "doc": "/ˈloʊd ˈtestɪŋ/",
+   "nghia": "kiểm thử tải — xem hệ thống chạy thế nào khi số người dùng/giao dịch tăng tới mức dự kiến",
+   "nhom": "Loại kiểm thử",
+   "viDu": "How does stress testing differ from load testing?",
+   "viDuNghia": "Kiểm thử áp lực (stress testing) khác kiểm thử tải (load testing) như thế nào?"
+  },
+  {
+   "chu": "stress testing",
+   "doc": "/ˈstres ˈtestɪŋ/",
+   "nghia": "kiểm thử quá tải — ép hệ thống vượt giới hạn thiết kế để xem nó hỏng và phục hồi ra sao",
+   "nhom": "Loại kiểm thử",
+   "viDu": "How does stress testing differ from load testing?",
+   "viDuNghia": "Kiểm thử áp lực (stress testing) khác kiểm thử tải (load testing) như thế nào?"
+  },
+  {
+   "chu": "volume testing",
+   "doc": "/ˈvɑːljəm ˈtestɪŋ/",
+   "nghia": "kiểm thử khối lượng — cho hệ thống xử lý lượng dữ liệu rất lớn",
+   "nhom": "Loại kiểm thử",
+   "viDu": "Volume testing checks how the system behaves with a very large amount of data.",
+   "viDuNghia": "Kiểm thử khối lượng xem hệ thống chạy ra sao với lượng dữ liệu rất lớn."
+  },
+  {
+   "chu": "security testing",
+   "doc": "/sɪˈkjʊrəti ˈtestɪŋ/",
+   "nghia": "kiểm thử bảo mật — hệ thống có chống được truy cập trái phép, virus, tấn công từ bên ngoài không",
+   "nhom": "Loại kiểm thử",
+   "viDu": "Security testing checks that only authorized users can access the data.",
+   "viDuNghia": "Kiểm thử bảo mật kiểm tra rằng chỉ người được cấp quyền mới truy cập được dữ liệu."
+  },
+  {
+   "chu": "recovery testing",
+   "doc": "/rɪˈkʌvəri ˈtestɪŋ/",
+   "nghia": "kiểm thử phục hồi — hệ thống có khôi phục được sau sự cố (sập, mất điện, mất mạng) không",
+   "nhom": "Loại kiểm thử",
+   "viDu": "Recovery testing checks whether the system can recover after a crash or hardware failure.",
+   "viDuNghia": "Kiểm thử phục hồi xem hệ thống có khôi phục được sau khi sập hoặc hỏng phần cứng không."
+  },
+  {
+   "chu": "compatibility testing",
+   "doc": "/kəmˌpætəˈbɪləti ˈtestɪŋ/",
+   "nghia": "kiểm thử tương thích — phần mềm có chạy được trên các máy, hệ điều hành, trình duyệt khác nhau không",
+   "nhom": "Loại kiểm thử",
+   "viDu": "Configuration and compatibility testing are typically good choices for outsourcing",
+   "viDuNghia": "Kiểm thử cấu hình và tương thích thường là lựa chọn tốt để thuê ngoài (outsourcing)"
+  },
+  {
+   "chu": "structural testing",
+   "doc": "/ˈstrʌktʃərəl ˈtestɪŋ/",
+   "nghia": "kiểm thử cấu trúc — test dựa trên cấu trúc bên trong (code, luồng điều khiển); chính là white-box",
+   "nhom": "Loại kiểm thử",
+   "viDu": "Structural testing is based on the internal structure of the code, so it is also called white-box testing.",
+   "viDuNghia": "Kiểm thử cấu trúc dựa trên cấu trúc bên trong của code nên còn gọi là kiểm thử hộp trắng."
+  },
+  {
+   "chu": "response time",
+   "doc": "/rɪˈspɑːns taɪm/",
+   "nghia": "thời gian phản hồi — từ lúc gửi yêu cầu tới lúc hệ thống trả lời",
+   "nhom": "Loại kiểm thử",
+   "viDu": "A performance testing tool measures response time under load.",
+   "viDuNghia": "Công cụ kiểm thử hiệu năng đo thời gian phản hồi khi hệ thống chịu tải."
+  },
+  {
+   "chu": "transaction rate",
+   "doc": "/trænˈzækʃn reɪt/",
+   "nghia": "tốc độ giao dịch — số giao dịch xử lý được trong một đơn vị thời gian",
+   "nhom": "Loại kiểm thử",
+   "viDu": "The tool measures transaction rates while simulating many users.",
+   "viDuNghia": "Công cụ đo tốc độ giao dịch trong lúc giả lập nhiều người dùng."
+  },
+  {
+   "chu": "threat",
+   "doc": "/θret/",
+   "nghia": "mối đe doạ — thứ có thể gây hại cho hệ thống (virus, kẻ tấn công)",
+   "nhom": "Loại kiểm thử",
+   "viDu": "A Type of functional Testing, which investigates the functions relating to detection of threats, such as virus from malicious outsiders.",
+   "viDuNghia": "Một loại kiểm thử chức năng, khảo sát các chức năng liên quan đến phát hiện các mối đe dọa, như virus từ những kẻ tấn công bên ngoài."
+  },
+  {
+   "chu": "malicious",
+   "doc": "/məˈlɪʃəs/",
+   "nghia": "có ác ý, độc hại — ví dụ malicious outsider: kẻ xấu từ bên ngoài",
+   "nhom": "Loại kiểm thử",
+   "viDu": "A Type of functional Testing, which investigates the functions relating to detection of threats, such as virus from malicious outsiders.",
+   "viDuNghia": "Một loại kiểm thử chức năng, khảo sát các chức năng liên quan đến phát hiện các mối đe dọa, như virus từ những kẻ tấn công bên ngoài."
+  },
+  {
+   "chu": "user-friendliness",
+   "doc": "/ˌjuːzər ˈfrendlinəs/",
+   "nghia": "tính thân thiện với người dùng — dễ hiểu, dễ dùng",
+   "nhom": "Loại kiểm thử",
+   "viDu": "Usability testing evaluates the user-friendliness of the application.",
+   "viDuNghia": "Kiểm thử tính dễ dùng đánh giá độ thân thiện với người dùng của ứng dụng."
+  },
+  {
+   "chu": "sanity testing",
+   "doc": "/ˈsænəti ˈtestɪŋ/",
+   "nghia": "kiểm thử sơ bộ — test nhanh, hẹp sau một thay đổi nhỏ để xem có đáng test tiếp không",
+   "nhom": "Loại kiểm thử",
+   "viDu": "After the small fix, we did quick sanity testing before starting the full regression.",
+   "viDuNghia": "Sau bản sửa nhỏ, bọn mình test sơ bộ nhanh trước khi chạy hồi quy đầy đủ."
+  },
+  {
+   "chu": "monkey testing",
+   "doc": "/ˈmʌŋki ˈtestɪŋ/",
+   "nghia": "kiểm thử kiểu khỉ — bấm, gõ ngẫu nhiên, không cần biết gì về phần mềm",
+   "nhom": "Loại kiểm thử",
+   "viDu": "In monkey testing, the tester clicks and types randomly without knowing the software.",
+   "viDuNghia": "Trong kiểm thử kiểu khỉ, tester bấm và gõ ngẫu nhiên mà không cần biết gì về phần mềm."
+  },
+  {
+   "chu": "gorilla testing",
+   "doc": "/ɡəˈrɪlə ˈtestɪŋ/",
+   "nghia": "kiểm thử gorilla — dồn sức test thật nặng, lặp đi lặp lại một module",
+   "nhom": "Loại kiểm thử",
+   "viDu": "In gorilla testing, one module is tested heavily and repeatedly.",
+   "viDuNghia": "Trong kiểm thử gorilla, một module được test thật nặng và lặp đi lặp lại."
+  },
+  {
+   "chu": "ad hoc testing",
+   "doc": "/ˌæd ˈhɑːk ˈtestɪŋ/",
+   "nghia": "kiểm thử tuỳ hứng — test không có kế hoạch, không có test case viết sẵn",
+   "nhom": "Loại kiểm thử",
+   "viDu": "Ad hoc testing is done without a real plan or documented test cases.",
+   "viDuNghia": "Kiểm thử tuỳ hứng được làm mà không có kế hoạch thật sự hay test case viết sẵn."
+  },
+  {
+   "chu": "smoke testing",
+   "doc": "/ˈsmoʊk ˈtestɪŋ/",
+   "nghia": "kiểm thử khói: chạy nhanh các chức năng chính của bản build mới để xem đủ ổn định để test sâu hơn chưa",
+   "nhom": "Loại kiểm thử",
+   "viDu": "Smoke testing quickly checks that the main functions of a new build work.",
+   "viDuNghia": "Kiểm thử khói kiểm tra nhanh xem các chức năng chính của bản build mới có chạy không."
+  },
+  {
+   "chu": "regression testing",
+   "doc": "/rɪˈɡreʃn ˈtestɪŋ/",
+   "nghia": "kiểm thử hồi quy — chạy lại test cũ sau khi phần mềm/môi trường thay đổi để chắc thay đổi không làm hỏng chỗ đang chạy đúng",
+   "nhom": "Kiểm thử khi thay đổi",
+   "viDu": "What type of tools to be used for Regression Testing ? (1) Performance (2) Record/Playback",
+   "viDuNghia": "Loại công cụ nào được dùng cho Kiểm thử hồi quy? (1) Hiệu năng (Performance) (2) Ghi/Phát lại (Record/Playback)"
+  },
+  {
+   "chu": "confirmation testing",
+   "doc": "/ˌkɑːnfərˈmeɪʃn ˈtestɪŋ/",
+   "nghia": "kiểm thử xác nhận — chạy lại đúng test đã fail sau khi sửa, để chắc lỗi đó đã hết; còn gọi re-testing",
+   "nhom": "Kiểm thử khi thay đổi",
+   "viDu": "Fill in the blank: Confirmation testing____",
+   "viDuNghia": "Điền vào chỗ trống: Kiểm thử xác nhận (confirmation testing)____"
+  },
+  {
+   "chu": "re-testing",
+   "doc": "/ˌriː ˈtestɪŋ/",
+   "nghia": "kiểm thử lại — tên khác của confirmation testing: kiểm lại lỗi vừa được sửa",
+   "nhom": "Kiểm thử khi thay đổi",
+   "viDu": "The difference between re-testing and regression testing is",
+   "viDuNghia": "Khác biệt giữa kiểm thử lại (re-testing) và kiểm thử hồi quy (regression testing) là"
+  },
+  {
+   "chu": "change-related testing",
+   "doc": "/ˈtʃeɪndʒ rɪˌleɪtɪd ˈtestɪŋ/",
+   "nghia": "kiểm thử liên quan tới thay đổi — gồm confirmation testing và regression testing",
+   "nhom": "Kiểm thử khi thay đổi",
+   "viDu": "What does change-related testing include?",
+   "viDuNghia": "Kiểm thử liên quan đến thay đổi (change-related testing) bao gồm những gì?"
+  },
+  {
+   "chu": "maintenance testing",
+   "doc": "/ˈmeɪntənəns ˈtestɪŋ/",
+   "nghia": "kiểm thử bảo trì — test hệ thống đang vận hành khi nó bị sửa, chuyển đổi (migration) hoặc ngừng dùng",
+   "nhom": "Kiểm thử khi thay đổi",
+   "viDu": "What is the role of regression testing in maintenance testing?",
+   "viDuNghia": "Vai trò của kiểm thử hồi quy trong kiểm thử bảo trì là gì?"
+  },
+  {
+   "chu": "impact analysis",
+   "doc": "/ˈɪmpækt əˈnæləsɪs/",
+   "nghia": "phân tích ảnh hưởng — xem một thay đổi động tới những phần nào, từ đó quyết định test hồi quy bao nhiêu",
+   "nhom": "Kiểm thử khi thay đổi",
+   "viDu": "Why is impact analysis important in maintenance testing?",
+   "viDuNghia": "Tại sao phân tích tác động lại quan trọng trong kiểm thử bảo trì?"
+  },
+  {
+   "chu": "modification",
+   "doc": "/ˌmɑːdɪfɪˈkeɪʃn/",
+   "nghia": "sự sửa đổi — thay đổi trên phần mềm đang chạy",
+   "nhom": "Kiểm thử khi thay đổi",
+   "viDu": "Which software change management activities are most vital to assessing the impact of proposed modifications?",
+   "viDuNghia": "Hoạt động quản lý thay đổi phần mềm nào là quan trọng nhất để đánh giá tác động của các thay đổi được đề xuất?"
+  }
+ ]
+}

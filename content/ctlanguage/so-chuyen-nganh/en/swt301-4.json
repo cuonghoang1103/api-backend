@@ -1,0 +1,900 @@
+{
+ "ma": "swt301-4",
+ "nn": "en",
+ "ten": "SWT301 · 4. Quản lý kiểm thử & công cụ",
+ "moTa": "Thuật ngữ trích từ đề FE/PE thật môn SWT301: kế hoạch và chiến lược test, ước lượng, theo dõi, rủi ro, báo cáo sự cố, quản lý cấu hình, các loại công cụ kiểm thử. Ví dụ phần lớn là câu hỏi thật trong đề.",
+ "bieuTuong": "chart.bar.doc.horizontal.fill",
+ "thuTu": -949,
+ "tu": [
+  {
+   "chu": "test management",
+   "doc": "/ˈtest ˈmænɪdʒmənt/",
+   "nghia": "quản lý kiểm thử — lập kế hoạch, ước lượng, theo dõi và điều khiển hoạt động test",
+   "nhom": "Tổ chức & vai trò",
+   "viDu": "Which of the following is least important in test management?",
+   "viDuNghia": "Điều nào ít quan trọng nhất trong quản lý kiểm thử?"
+  },
+  {
+   "chu": "test manager",
+   "doc": "/ˈtest ˈmænɪdʒər/",
+   "nghia": "trưởng bộ phận kiểm thử — lập kế hoạch, điều phối, theo dõi và báo cáo; còn gọi test leader",
+   "nhom": "Tổ chức & vai trò",
+   "viDu": "Which of the following tasks is MOST LIKELY to be performed by the test manager?",
+   "viDuNghia": "Nhiệm vụ nào sau đây có khả năng NHẤT được thực hiện bởi quản lý kiểm thử?"
+  },
+  {
+   "chu": "test leader",
+   "doc": "/ˈtest ˈliːdər/",
+   "nghia": "trưởng nhóm kiểm thử — người dẫn dắt công việc test của nhóm",
+   "nhom": "Tổ chức & vai trò",
+   "viDu": "Which statement best reflects the role of a test leader compared to a tester?",
+   "viDuNghia": "Phát biểu nào phản ánh đúng nhất vai trò của trưởng nhóm kiểm thử (test leader) so với tester?"
+  },
+  {
+   "chu": "test team",
+   "doc": "/ˈtest tiːm/",
+   "nghia": "nhóm kiểm thử",
+   "nhom": "Tổ chức & vai trò",
+   "viDu": "How would you structure a test team for a project requiring specialized knowledge in both business processes and technical execution?",
+   "viDuNghia": "Bạn sẽ cấu trúc đội kiểm thử thế nào cho dự án đòi hỏi kiến thức chuyên biệt cả về quy trình nghiệp vụ lẫn thực thi kỹ thuật?"
+  },
+  {
+   "chu": "independent tester",
+   "doc": "/ˌɪndɪˈpendənt ˈtestər/",
+   "nghia": "tester độc lập — không thuộc nhóm viết ra sản phẩm, nên nhìn khách quan hơn",
+   "nhom": "Tổ chức & vai trò",
+   "viDu": "In a mobile application development project, independent testers are assigned to verify the functionality of a new feature.",
+   "viDuNghia": "Trong một dự án phát triển ứng dụng di động, các tester độc lập được giao kiểm tra chức năng của một tính năng mới."
+  },
+  {
+   "chu": "outsourcing",
+   "doc": "/ˈaʊtsɔːrsɪŋ/",
+   "nghia": "thuê ngoài — giao việc cho công ty khác làm",
+   "nhom": "Tổ chức & vai trò",
+   "viDu": "Configuration and compatibility testing are typically good choices for outsourcing",
+   "viDuNghia": "Kiểm thử cấu hình và tương thích thường là lựa chọn tốt để thuê ngoài (outsourcing)"
+  },
+  {
+   "chu": "vendor",
+   "doc": "/ˈvendər/",
+   "nghia": "nhà cung cấp — bên bán công cụ hoặc dịch vụ",
+   "nhom": "Tổ chức & vai trò",
+   "viDu": "For which of the following types of testing would a vendor contractor typically need to write the initial scripts?",
+   "viDuNghia": "Với loại kiểm thử nào sau đây thì một nhà thầu/nhà cung cấp thường cần viết các script ban đầu?"
+  },
+  {
+   "chu": "responsibility",
+   "doc": "/rɪˌspɑːnsəˈbɪləti/",
+   "nghia": "trách nhiệm — ai làm việc gì",
+   "nhom": "Tổ chức & vai trò",
+   "viDu": "What role is responsible for leading the test effort?",
+   "viDuNghia": "Vai trò nào chịu trách nhiệm dẫn dắt nỗ lực kiểm thử?"
+  },
+  {
+   "chu": "test plan",
+   "doc": "/ˈtest plæn/",
+   "nghia": "kế hoạch kiểm thử — tài liệu ghi phạm vi, cách tiếp cận, nguồn lực, lịch, tiêu chí vào/ra của việc test",
+   "nhom": "Kế hoạch & chiến lược",
+   "viDu": "Which of the following statements about the purpose and content of a test plan is not correct?",
+   "viDuNghia": "Câu nào sau đây về mục đích và nội dung của một kế hoạch kiểm thử là KHÔNG đúng?"
+  },
+  {
+   "chu": "test strategy",
+   "doc": "/ˈtest ˈstrætədʒi/",
+   "nghia": "chiến lược kiểm thử — mô tả chung cách tổ chức sẽ test: các mức test, loại test, kỹ thuật dùng",
+   "nhom": "Kế hoạch & chiến lược",
+   "viDu": "Which of the following is an example of the analytical test strategy?",
+   "viDuNghia": "Điều nào sau đây là ví dụ về chiến lược kiểm thử phân tích (analytical)?"
+  },
+  {
+   "chu": "test approach",
+   "doc": "/ˈtest əˈproʊtʃ/",
+   "nghia": "cách tiếp cận kiểm thử — chiến lược test được áp dụng cụ thể cho một dự án",
+   "nhom": "Kế hoạch & chiến lược",
+   "viDu": "Which of the following is MOST important in the selection of a test approach?",
+   "viDuNghia": "Điều nào sau đây QUAN TRỌNG NHẤT trong việc lựa chọn cách tiếp cận kiểm thử?"
+  },
+  {
+   "chu": "test item",
+   "doc": "/ˈtest ˈaɪtəm/",
+   "nghia": "hạng mục kiểm thử — từng phần mềm/thành phần cụ thể được đem ra test",
+   "nhom": "Kế hoạch & chiến lược",
+   "viDu": "What test items should be put under configuration management?",
+   "viDuNghia": "Những hạng mục kiểm thử (test item) nào nên được đưa vào quản lý cấu hình?"
+  },
+  {
+   "chu": "resource",
+   "doc": "/ˈriːsɔːrs/",
+   "nghia": "nguồn lực — người, máy, công cụ, thời gian",
+   "nhom": "Kế hoạch & chiến lược",
+   "viDu": "Match the following: 1. Test estimation 2. Test control 3. Test monitoring a. Measures of tracking process b. Effort required to perform activities c. Reallocation of resources",
+   "viDuNghia": "Ghép cặp: 1. Ước lượng kiểm thử (Test estimation) 2. Kiểm soát kiểm thử (Test control) 3. Giám sát kiểm thử (Test monitoring) a. Các thước đo theo dõi quy trình b. Công sức cần để thực hiện hoạt động c. Tái phân bổ nguồn lực"
+  },
+  {
+   "chu": "entry criteria",
+   "doc": "/ˈentri kraɪˈtɪriə/",
+   "nghia": "tiêu chí bắt đầu — điều kiện phải có trước khi bắt đầu test (môi trường sẵn sàng, build đã có...)",
+   "nhom": "Kế hoạch & chiến lược",
+   "viDu": "Which of the following are common entry criteria for testing? (Choose 2 correct answers)",
+   "viDuNghia": "Điều nào sau đây là tiêu chí đầu vào (entry criteria) thường gặp cho kiểm thử? (Chọn 2 đáp án đúng)"
+  },
+  {
+   "chu": "completion criteria",
+   "doc": "/kəmˈpliːʃn kraɪˈtɪriə/",
+   "nghia": "tiêu chí hoàn thành — điều kiện để coi là test xong; đồng nghĩa với exit criteria",
+   "nhom": "Kế hoạch & chiến lược",
+   "viDu": "What is the purpose of test completion criteria in a test plan:",
+   "viDuNghia": "Mục đích của tiêu chí hoàn thành kiểm thử (test completion criteria) trong kế hoạch kiểm thử là gì?"
+  },
+  {
+   "chu": "analytical",
+   "doc": "/ˌænəˈlɪtɪkl/",
+   "nghia": "phân tích — chiến lược test dựa trên phân tích một yếu tố như rủi ro hoặc yêu cầu (ví dụ risk-based testing)",
+   "nhom": "Kế hoạch & chiến lược",
+   "viDu": "Which of the following is an example of the analytical test strategy?",
+   "viDuNghia": "Điều nào sau đây là ví dụ về chiến lược kiểm thử phân tích (analytical)?"
+  },
+  {
+   "chu": "methodical",
+   "doc": "/məˈθɑːdɪkl/",
+   "nghia": "theo phương pháp có sẵn — chiến lược test bám một bộ checklist, danh sách đặc tính chất lượng định trước",
+   "nhom": "Kế hoạch & chiến lược",
+   "viDu": "A methodical test strategy follows a predefined checklist of quality characteristics.",
+   "viDuNghia": "Chiến lược test theo phương pháp bám một danh sách đặc tính chất lượng định sẵn."
+  },
+  {
+   "chu": "model-based",
+   "doc": "/ˈmɑːdl beɪst/",
+   "nghia": "dựa trên mô hình — chiến lược thiết kế test từ một mô hình của hệ thống",
+   "nhom": "Kế hoạch & chiến lược",
+   "viDu": "In a model-based strategy, tests are designed from a model of the system, such as a state model.",
+   "viDuNghia": "Trong chiến lược dựa trên mô hình, test được thiết kế từ một mô hình của hệ thống, ví dụ mô hình trạng thái."
+  },
+  {
+   "chu": "reactive",
+   "doc": "/riˈæktɪv/",
+   "nghia": "phản ứng — test được thiết kế SAU khi có phần mềm, tuỳ theo thứ quan sát được (ví dụ exploratory)",
+   "nhom": "Kế hoạch & chiến lược",
+   "viDu": "What is the KEY difference between preventative and reactive approaches to testing?",
+   "viDuNghia": "Sự khác biệt CHÍNH giữa cách tiếp cận kiểm thử phòng ngừa (preventative) và phản ứng (reactive) là gì?"
+  },
+  {
+   "chu": "preventative",
+   "doc": "/prɪˈventətɪv/",
+   "nghia": "phòng ngừa — test được thiết kế SỚM, trước khi có phần mềm, để ngăn lỗi",
+   "nhom": "Kế hoạch & chiến lược",
+   "viDu": "What is the KEY difference between preventative and reactive approaches to testing?",
+   "viDuNghia": "Sự khác biệt CHÍNH giữa cách tiếp cận kiểm thử phòng ngừa (preventative) và phản ứng (reactive) là gì?"
+  },
+  {
+   "chu": "risk-based testing",
+   "doc": "/ˈrɪsk beɪst ˈtestɪŋ/",
+   "nghia": "kiểm thử dựa trên rủi ro — phần nào rủi ro cao thì test trước và test kỹ hơn",
+   "nhom": "Kế hoạch & chiến lược",
+   "viDu": "Which of the following is correct about risk-based testing.",
+   "viDuNghia": "Điều nào sau đây là đúng về kiểm thử dựa trên rủi ro (risk-based testing)?"
+  },
+  {
+   "chu": "test design specification",
+   "nghia": "đặc tả thiết kế test (IEEE 829): ghi các điều kiện test, cách tiếp cận và test case cho một tính năng",
+   "nhom": "Kế hoạch & chiến lược",
+   "viDu": "The test design specification lists the test conditions and the test cases for a feature.",
+   "viDuNghia": "Đặc tả thiết kế test liệt kê các điều kiện kiểm thử và các test case cho một tính năng."
+  },
+  {
+   "chu": "test estimation",
+   "doc": "/ˈtest ˌestɪˈmeɪʃn/",
+   "nghia": "ước lượng kiểm thử — tính trước công sức, thời gian, chi phí cần cho việc test",
+   "nhom": "Ước lượng, theo dõi, điều khiển",
+   "viDu": "Match the following: 1. Test estimation 2. Test control 3. Test monitoring | a. Measures of tracking process b. Effort required to perform activities c. Reallocation of resources",
+   "viDuNghia": "Ghép cặp: 1. Ước lượng kiểm thử 2. Kiểm soát kiểm thử 3. Giám sát kiểm thử | a. Các thước đo theo dõi tiến trình b. Nỗ lực cần để thực hiện hoạt động c. Tái phân bổ nguồn lực"
+  },
+  {
+   "chu": "effort",
+   "doc": "/ˈefərt/",
+   "nghia": "công sức — lượng công việc, thường tính bằng giờ công/ngày công",
+   "nhom": "Ước lượng, theo dõi, điều khiển",
+   "viDu": "What role is responsible for leading the test effort?",
+   "viDuNghia": "Vai trò nào chịu trách nhiệm dẫn dắt nỗ lực kiểm thử?"
+  },
+  {
+   "chu": "metrics-based",
+   "doc": "/ˈmetrɪks beɪst/",
+   "nghia": "dựa trên số liệu — ước lượng từ số liệu của các dự án trước",
+   "nhom": "Ước lượng, theo dõi, điều khiển",
+   "viDu": "Which of the following are the examples of the metrics-based approach and which are the examples of the expert-based approach?",
+   "viDuNghia": "Đâu là ví dụ của cách tiếp cận dựa trên số liệu và đâu là ví dụ của cách tiếp cận dựa trên chuyên gia?"
+  },
+  {
+   "chu": "expert-based",
+   "doc": "/ˈekspɜːrt beɪst/",
+   "nghia": "dựa trên chuyên gia — ước lượng bằng ý kiến người có kinh nghiệm",
+   "nhom": "Ước lượng, theo dõi, điều khiển",
+   "viDu": "Asking experienced testers for their estimates is an expert-based approach.",
+   "viDuNghia": "Hỏi ước lượng của các tester giàu kinh nghiệm là cách tiếp cận dựa trên chuyên gia."
+  },
+  {
+   "chu": "test monitoring",
+   "doc": "/ˈtest ˈmɑːnɪtərɪŋ/",
+   "nghia": "theo dõi kiểm thử — thu số liệu, so tiến độ thực tế với kế hoạch",
+   "nhom": "Ước lượng, theo dõi, điều khiển",
+   "viDu": "Which set of metrics can be used for monitoring of the test execution?",
+   "viDuNghia": "Bộ số đo (metrics) nào có thể dùng để giám sát việc thực thi kiểm thử?"
+  },
+  {
+   "chu": "test control",
+   "doc": "/ˈtest kənˈtroʊl/",
+   "nghia": "điều khiển kiểm thử — hành động chỉnh lại khi tiến độ lệch kế hoạch (ví dụ phân bổ lại nguồn lực)",
+   "nhom": "Ước lượng, theo dõi, điều khiển",
+   "viDu": "Match the following: 1. Test estimation 2. Test control 3. Test monitoring a. Measures of tracking process b. Effort required to perform activities c. Reallocation of resources",
+   "viDuNghia": "Ghép cặp: 1. Ước lượng kiểm thử (Test estimation) 2. Kiểm soát kiểm thử (Test control) 3. Giám sát kiểm thử (Test monitoring) a. Các thước đo theo dõi quy trình b. Công sức cần để thực hiện hoạt động c. Tái phân bổ nguồn lực"
+  },
+  {
+   "chu": "metric",
+   "doc": "/ˈmetrɪk/",
+   "nghia": "số đo — con số dùng để theo dõi: số test đã chạy, số lỗi tìm được, độ phủ...",
+   "nhom": "Ước lượng, theo dõi, điều khiển",
+   "viDu": "Which of the following is not a good reason to collect test metrics?",
+   "viDuNghia": "Điều nào sau đây KHÔNG phải là lý do tốt để thu thập số liệu kiểm thử (test metrics)?"
+  },
+  {
+   "chu": "reallocation",
+   "doc": "/ˌriːæləˈkeɪʃn/",
+   "nghia": "phân bổ lại — chuyển người, nguồn lực sang chỗ đang cần hơn",
+   "nhom": "Ước lượng, theo dõi, điều khiển",
+   "viDu": "Match the following: 1. Test estimation 2. Test control 3. Test monitoring | a. Measures of tracking process b. Effort required to perform activities c. Reallocation of resources",
+   "viDuNghia": "Ghép cặp: 1. Ước lượng kiểm thử 2. Kiểm soát kiểm thử 3. Giám sát kiểm thử | a. Các thước đo theo dõi tiến trình b. Nỗ lực cần để thực hiện hoạt động c. Tái phân bổ nguồn lực"
+  },
+  {
+   "chu": "tracking",
+   "doc": "/ˈtrækɪŋ/",
+   "nghia": "theo dõi — bám sát tiến độ, trạng thái",
+   "nhom": "Ước lượng, theo dõi, điều khiển",
+   "viDu": "Match the following: 1. Test estimation 2. Test control 3. Test monitoring a. Measures of tracking process b. Effort required to perform activities c. Reallocation of resources",
+   "viDuNghia": "Ghép cặp: 1. Ước lượng kiểm thử (Test estimation) 2. Kiểm soát kiểm thử (Test control) 3. Giám sát kiểm thử (Test monitoring) a. Các thước đo theo dõi quy trình b. Công sức cần để thực hiện hoạt động c. Tái phân bổ nguồn lực"
+  },
+  {
+   "chu": "defect density",
+   "doc": "/ˈdiːfekt ˈdensəti/",
+   "nghia": "mật độ lỗi — số lỗi trên một đơn vị kích thước phần mềm (ví dụ trên 1000 dòng code)",
+   "nhom": "Ước lượng, theo dõi, điều khiển",
+   "viDu": "Defect density is the number of defects found per thousand lines of code.",
+   "viDuNghia": "Mật độ lỗi là số lỗi tìm được trên mỗi nghìn dòng code."
+  },
+  {
+   "chu": "function point analysis",
+   "nghia": "phân tích điểm chức năng (FPA) — cách đo kích thước phần mềm theo chức năng, dùng để ước lượng",
+   "nhom": "Ước lượng, theo dõi, điều khiển",
+   "viDu": "Function point analysis (FPA) is used to estimate the size of the software.",
+   "viDuNghia": "Phân tích điểm chức năng (FPA) dùng để ước lượng kích thước phần mềm."
+  },
+  {
+   "chu": "test summary report",
+   "nghia": "báo cáo tổng kết kiểm thử — tóm tắt kết quả test và đánh giá so với exit criteria",
+   "nhom": "Ước lượng, theo dõi, điều khiển",
+   "viDu": "Write Test Summary Reports based on the information gathered during testing",
+   "viDuNghia": "Viết báo cáo tổng kết kiểm thử dựa trên thông tin thu được trong quá trình test"
+  },
+  {
+   "chu": "status",
+   "doc": "/ˈsteɪtəs/",
+   "nghia": "trạng thái, tình hình hiện tại",
+   "nhom": "Ước lượng, theo dõi, điều khiển",
+   "viDu": "Defects are recorded into three major purposes. They are: 1.To correct the defect 2.To report status of the application 3.To improve the software development process",
+   "viDuNghia": "Khiếm khuyết được ghi nhận nhằm ba mục đích chính. Đó là: 1. Để sửa khiếm khuyết 2. Để báo cáo trạng thái ứng dụng 3. Để cải tiến quy trình phát triển phần mềm"
+  },
+  {
+   "chu": "test progress",
+   "doc": "/ˈtest ˈprɑːɡres/",
+   "nghia": "tiến độ kiểm thử — đã chạy được bao nhiêu test, bao nhiêu pass/fail so với kế hoạch",
+   "nhom": "Ước lượng, theo dõi, điều khiển",
+   "viDu": "Which of the following helps in monitoring the Test Progress:",
+   "viDuNghia": "Điều nào sau đây giúp theo dõi tiến độ kiểm thử:"
+  },
+  {
+   "chu": "risk",
+   "doc": "/rɪsk/",
+   "nghia": "rủi ro — điều xấu có thể xảy ra; mức rủi ro = khả năng xảy ra × mức thiệt hại",
+   "nhom": "Rủi ro",
+   "viDu": "According to the ISTQB Glossary, a risk relates to which of the following?",
+   "viDuNghia": "Theo Từ điển thuật ngữ ISTQB, rủi ro (risk) liên quan đến điều nào sau đây?"
+  },
+  {
+   "chu": "project risk",
+   "doc": "/ˈprɑːdʒekt rɪsk/",
+   "nghia": "rủi ro dự án — đe doạ việc dự án hoàn thành: thiếu người, trễ hạn, nhà cung cấp chậm...",
+   "nhom": "Rủi ro",
+   "viDu": "Which of the following is an example of project risk?",
+   "viDuNghia": "Điều nào sau đây là ví dụ về rủi ro dự án (project risk)?"
+  },
+  {
+   "chu": "product risk",
+   "doc": "/ˈprɑːdʌkt rɪsk/",
+   "nghia": "rủi ro sản phẩm — sản phẩm kém chất lượng: hay lỗi, chậm, gây hại cho người dùng",
+   "nhom": "Rủi ro",
+   "viDu": "The following list contains risks that have been identified for a software product to be developed. Which of these risks is an example of a product risk?",
+   "viDuNghia": "Danh sách sau chứa các rủi ro đã được xác định cho một sản phẩm phần mềm sắp phát triển. Rủi ro nào là ví dụ của một rủi ro sản phẩm (product risk)?"
+  },
+  {
+   "chu": "likelihood",
+   "doc": "/ˈlaɪklihʊd/",
+   "nghia": "khả năng xảy ra — xác suất rủi ro thành sự thật",
+   "nhom": "Rủi ro",
+   "viDu": "The test team conducts a risk assessment and prioritizes the identified risks based on their impact and likelihood.",
+   "viDuNghia": "Nhóm test đánh giá rủi ro và xếp ưu tiên các rủi ro đã xác định theo mức tác động và khả năng xảy ra."
+  },
+  {
+   "chu": "impact",
+   "doc": "/ˈɪmpækt/",
+   "nghia": "tác động — mức thiệt hại nếu rủi ro xảy ra",
+   "nhom": "Rủi ro",
+   "viDu": "Risks are prioritized by their likelihood and impact.",
+   "viDuNghia": "Rủi ro được xếp ưu tiên theo khả năng xảy ra và mức tác động."
+  },
+  {
+   "chu": "risk assessment",
+   "doc": "/ˈrɪsk əˌsesmənt/",
+   "nghia": "đánh giá rủi ro — xác định rủi ro rồi chấm khả năng xảy ra và mức tác động",
+   "nhom": "Rủi ro",
+   "viDu": "What is the goal of a risk assessment in software testing?",
+   "viDuNghia": "Mục tiêu của việc đánh giá rủi ro (risk assessment) trong kiểm thử phần mềm là gì?"
+  },
+  {
+   "chu": "risk analysis",
+   "doc": "/ˈrɪsk əˌnæləsɪs/",
+   "nghia": "phân tích rủi ro — tìm ra các rủi ro và đánh giá mức độ của chúng",
+   "nhom": "Rủi ro",
+   "viDu": "In an Agile project, you are establishing the procedure for conducting product risk analysis during each iteration. Where should you appropriately document this process within a test plan?",
+   "viDuNghia": "Trong một dự án Agile, bạn đang thiết lập quy trình tiến hành phân tích rủi ro sản phẩm trong mỗi lần lặp (iteration). Bạn nên ghi lại quy trình này ở đâu cho phù hợp trong một kế hoạch kiểm thử?"
+  },
+  {
+   "chu": "incident",
+   "doc": "/ˈɪnsɪdənt/",
+   "nghia": "(ISTQB) sự cố: bất kỳ hiện tượng nào khi test cần điều tra (kết quả khác mong đợi); ghi vào incident report, có thể là lỗi thật hoặc không",
+   "nhom": "Sự cố & báo cáo lỗi",
+   "viDu": "Why is it important to prioritize incidents?",
+   "viDuNghia": "Vì sao cần xếp mức ưu tiên cho các sự cố (incident)?"
+  },
+  {
+   "chu": "incident report",
+   "doc": "/ˈɪnsɪdənt rɪˌpɔːrt/",
+   "nghia": "báo cáo sự cố — ghi lại: đã làm gì, mong đợi gì, thực tế ra sao, mức nghiêm trọng, độ ưu tiên",
+   "nhom": "Sự cố & báo cáo lỗi",
+   "viDu": "Which of the following would you NOT usually find on a software incident report?",
+   "viDuNghia": "Điều nào sau đây bạn thường KHÔNG tìm thấy trên một báo cáo sự cố phần mềm?"
+  },
+  {
+   "chu": "incident management",
+   "doc": "/ˈɪnsɪdənt ˈmænɪdʒmənt/",
+   "nghia": "quản lý sự cố — ghi nhận, phân loại, theo dõi sự cố từ lúc phát hiện tới lúc đóng",
+   "nhom": "Sự cố & báo cáo lỗi",
+   "viDu": "Which of the following is a benefit of effective incident management?",
+   "viDuNghia": "Điều nào sau đây là lợi ích của quản lý sự cố hiệu quả?"
+  },
+  {
+   "chu": "defect report",
+   "doc": "/ˈdiːfekt rɪˌpɔːrt/",
+   "nghia": "báo cáo lỗi (bug report)",
+   "nhom": "Sự cố & báo cáo lỗi",
+   "viDu": "Which of the following statement is true about the bug/defect report?",
+   "viDuNghia": "Phát biểu nào sau đây đúng về báo cáo lỗi/khiếm khuyết (bug/defect report)?"
+  },
+  {
+   "chu": "defect management",
+   "doc": "/ˈdiːfekt ˈmænɪdʒmənt/",
+   "nghia": "quản lý lỗi — quy trình ghi nhận, phân loại, sửa và đóng lỗi",
+   "nhom": "Sự cố & báo cáo lỗi",
+   "viDu": "The defect Management process does not include:",
+   "viDuNghia": "Quy trình quản lý lỗi (defect management) KHÔNG bao gồm:"
+  },
+  {
+   "chu": "bug life cycle",
+   "doc": "/ˈbʌɡ laɪf ˌsaɪkl/",
+   "nghia": "vòng đời của lỗi — new, assigned, open, fixed, retest, closed (hoặc rejected, deferred, reopened)",
+   "nhom": "Sự cố & báo cáo lỗi",
+   "viDu": "In the bug life cycle, a fixed bug must be retested before it is closed.",
+   "viDuNghia": "Trong vòng đời của lỗi, lỗi đã sửa phải được test lại rồi mới đóng."
+  },
+  {
+   "chu": "urgency",
+   "doc": "/ˈɜːrdʒənsi/",
+   "nghia": "tính khẩn cấp — mức độ gấp phải xử lý",
+   "nhom": "Sự cố & báo cáo lỗi",
+   "viDu": "They recognize the urgency of the defect and are now waiting for you to provide further details.",
+   "viDuNghia": "Họ đã nhận thấy lỗi này khẩn cấp và đang chờ bạn cung cấp thêm chi tiết."
+  },
+  {
+   "chu": "discrepancy",
+   "doc": "/dɪˈskrepənsi/",
+   "nghia": "sự chênh lệch — kết quả thực tế khác kết quả mong đợi",
+   "nhom": "Sự cố & báo cáo lỗi",
+   "viDu": "Reporting Discrepancies as incidents is a part of which phase",
+   "viDuNghia": "Báo cáo các sai khác dưới dạng sự cố (incident) thuộc giai đoạn nào"
+  },
+  {
+   "chu": "logging",
+   "doc": "/ˈlɔːɡɪŋ/",
+   "nghia": "ghi nhận lại — lưu sự cố/kết quả vào hệ thống",
+   "nhom": "Sự cố & báo cáo lỗi",
+   "viDu": "An incident logging system",
+   "viDuNghia": "Một hệ thống ghi nhận sự cố (incident logging system)"
+  },
+  {
+   "chu": "rejected",
+   "doc": "/rɪˈdʒektɪd/",
+   "nghia": "bị từ chối — trạng thái lỗi mà lập trình viên cho là không phải lỗi",
+   "nhom": "Sự cố & báo cáo lỗi",
+   "viDu": "The developer rejected the bug report because the behavior matches the specification.",
+   "viDuNghia": "Lập trình viên từ chối báo cáo lỗi vì hành vi đó đúng với đặc tả."
+  },
+  {
+   "chu": "severity and priority",
+   "nghia": "mức nghiêm trọng và độ ưu tiên — severity: lỗi ảnh hưởng nặng tới hệ thống đến đâu; priority: cần sửa gấp đến đâu",
+   "nhom": "Sự cố & báo cáo lỗi",
+   "viDu": "Which of the following statements best describes the difference between severity and priority in software testing?",
+   "viDuNghia": "Phát biểu nào sau đây mô tả tốt nhất sự khác biệt giữa mức độ nghiêm trọng (severity) và mức độ ưu tiên (priority) trong kiểm thử phần mềm?"
+  },
+  {
+   "chu": "test log",
+   "doc": "/ˈtest lɔːɡ/",
+   "nghia": "nhật ký kiểm thử — ghi lại theo thời gian test nào đã chạy và kết quả ra sao",
+   "nhom": "Sự cố & báo cáo lỗi",
+   "viDu": "The test log shows which tests were run today and their results.",
+   "viDuNghia": "Nhật ký kiểm thử cho biết hôm nay đã chạy test nào và kết quả ra sao."
+  },
+  {
+   "chu": "severity",
+   "doc": "/sɪˈverəti/",
+   "nghia": "mức độ nghiêm trọng – lỗi ảnh hưởng tới hệ thống nặng đến đâu; khác priority (mức ưu tiên sửa)",
+   "nhom": "Sự cố & báo cáo lỗi",
+   "viDu": "Which of the following statements best describes the difference between severity and priority in software testing?",
+   "viDuNghia": "Phát biểu nào sau đây mô tả tốt nhất sự khác biệt giữa mức độ nghiêm trọng (severity) và mức độ ưu tiên (priority) trong kiểm thử phần mềm?"
+  },
+  {
+   "chu": "priority",
+   "doc": "/praɪˈɔːrəti/",
+   "nghia": "độ ưu tiên – mức gấp phải sửa/làm trước, quyết theo nghiệp vụ; khác severity = mức nghiêm trọng về kỹ thuật · (SWR302) độ ưu tiên của yêu cầu",
+   "nhom": "Sự cố & báo cáo lỗi",
+   "viDu": "Which of the following statements best describes the difference between severity and priority in software testing?",
+   "viDuNghia": "Phát biểu nào mô tả tốt nhất sự khác biệt giữa mức độ nghiêm trọng (severity) và độ ưu tiên (priority) trong kiểm thử phần mềm?"
+  },
+  {
+   "chu": "configuration management",
+   "doc": "/kənˌfɪɡjəˈreɪʃn ˈmænɪdʒmənt/",
+   "nghia": "quản lý cấu hình — kiểm soát phiên bản và thay đổi của code, tài liệu, testware để biết chính xác đang test bản nào",
+   "nhom": "Cấu hình & tiêu chuẩn",
+   "viDu": "Which of the following configuration management activities is most important from a testing point of view?",
+   "viDuNghia": "Hoạt động quản lý cấu hình nào sau đây quan trọng nhất từ góc độ kiểm thử?"
+  },
+  {
+   "chu": "configuration item",
+   "doc": "/kənˌfɪɡjəˈreɪʃn ˈaɪtəm/",
+   "nghia": "hạng mục cấu hình — một thứ (tệp code, tài liệu, test case) được đặt dưới quản lý cấu hình",
+   "nhom": "Cấu hình & tiêu chuẩn",
+   "viDu": "The provision and management of a controlled library containing all the configuration items is called:",
+   "viDuNghia": "Việc cung cấp và quản lý một thư viện được kiểm soát chứa tất cả các hạng mục cấu hình được gọi là"
+  },
+  {
+   "chu": "controlled library",
+   "doc": "/kənˈtroʊld ˈlaɪbreri/",
+   "nghia": "thư viện được kiểm soát — nơi lưu mọi hạng mục cấu hình, có quản lý phiên bản",
+   "nhom": "Cấu hình & tiêu chuẩn",
+   "viDu": "The provision and management of a controlled library containing all the configuration items is called:",
+   "viDuNghia": "Việc cung cấp và quản lý một thư viện được kiểm soát chứa tất cả các hạng mục cấu hình được gọi là"
+  },
+  {
+   "chu": "version",
+   "doc": "/ˈvɜːrʒn/",
+   "nghia": "phiên bản",
+   "nhom": "Cấu hình & tiêu chuẩn",
+   "viDu": "You are testing a new version of software for a coffee machine.",
+   "viDuNghia": "Bạn đang test một phiên bản phần mềm mới cho máy pha cà phê."
+  },
+  {
+   "chu": "traceable",
+   "doc": "/ˈtreɪsəbl/",
+   "nghia": "truy vết được — biết được test này kiểm yêu cầu nào",
+   "nhom": "Cấu hình & tiêu chuẩn",
+   "viDu": "A requirements management tool enables individual tests to be traceable to requirements, functions and features.",
+   "viDuNghia": "Công cụ quản lý yêu cầu giúp từng test truy vết được tới yêu cầu, chức năng và tính năng."
+  },
+  {
+   "chu": "IEEE 829",
+   "nghia": "tiêu chuẩn tài liệu kiểm thử — quy định mẫu test plan, test case specification, incident report, test summary report...",
+   "nhom": "Cấu hình & tiêu chuẩn",
+   "viDu": "The IEEE 829 test plan documentation standard contains all of the following, EXCEPT:",
+   "viDuNghia": "Tiêu chuẩn tài liệu kế hoạch kiểm thử IEEE 829 chứa tất cả những mục sau, NGOẠI TRỪ:",
+   "doc": "/ˌaɪ ˌtrɪpl ˈiː ˌeɪt tuː ˈnaɪn/"
+  },
+  {
+   "chu": "BS 7925-2",
+   "nghia": "tiêu chuẩn Anh về kiểm thử thành phần phần mềm (component testing)",
+   "nhom": "Cấu hình & tiêu chuẩn",
+   "viDu": "One of the following is not a part of white box testing as per BS7925-II standards.",
+   "viDuNghia": "Một trong những kỹ thuật sau không thuộc kiểm thử hộp trắng theo chuẩn BS7925-II.",
+   "doc": "/ˌbiː ˈes ˈsevn ˈnaɪn ˈtuː ˈfaɪv ˈtuː/"
+  },
+  {
+   "chu": "ISO 9126",
+   "nghia": "tiêu chuẩn về chất lượng sản phẩm phần mềm: chức năng, tin cậy, dễ dùng, hiệu quả, dễ bảo trì, khả chuyển (nay là ISO/IEC 25010)",
+   "nhom": "Cấu hình & tiêu chuẩn",
+   "viDu": "ISO 9126 defines quality characteristics such as functionality, reliability, usability, efficiency, maintainability and portability.",
+   "viDuNghia": "ISO 9126 định nghĩa các đặc tính chất lượng như chức năng, độ tin cậy, tính dễ dùng, hiệu quả, khả năng bảo trì và tính khả chuyển.",
+   "doc": "/ˈaɪsoʊ ˌnaɪn wʌn tuː ˈsɪks/"
+  },
+  {
+   "chu": "glossary",
+   "doc": "/ˈɡlɑːsəri/",
+   "nghia": "bảng thuật ngữ — ISTQB Glossary định nghĩa các từ chuyên ngành kiểm thử",
+   "nhom": "Cấu hình & tiêu chuẩn",
+   "viDu": "According to the ISTQB Glossary, a risk relates to which of the following?",
+   "viDuNghia": "Theo Từ điển thuật ngữ ISTQB, rủi ro (risk) liên quan đến điều nào sau đây?"
+  },
+  {
+   "chu": "terminology",
+   "doc": "/ˌtɜːrmɪˈnɑːlədʒi/",
+   "nghia": "hệ thống thuật ngữ",
+   "nhom": "Cấu hình & tiêu chuẩn",
+   "viDu": "A standard for software testing terminology is:",
+   "viDuNghia": "Chuẩn về thuật ngữ kiểm thử phần mềm là:"
+  },
+  {
+   "chu": "change control",
+   "doc": "/ˈtʃeɪndʒ kənˌtroʊl/",
+   "nghia": "kiểm soát thay đổi — mọi thay đổi phải được đề xuất, duyệt rồi mới làm",
+   "nhom": "Cấu hình & tiêu chuẩn",
+   "viDu": "Under change control, every change request must be approved before it is implemented.",
+   "viDuNghia": "Theo kiểm soát thay đổi, mọi yêu cầu thay đổi phải được duyệt rồi mới được làm."
+  },
+  {
+   "chu": "test tool",
+   "doc": "/ˈtest tuːl/",
+   "nghia": "công cụ kiểm thử — phần mềm hỗ trợ một hay nhiều hoạt động test",
+   "nhom": "Loại công cụ kiểm thử",
+   "viDu": "What are the success factors for implementing a new test tool? (Select all that apply)",
+   "viDuNghia": "Đâu là các yếu tố thành công khi triển khai một công cụ kiểm thử mới? (Chọn tất cả đáp án đúng)"
+  },
+  {
+   "chu": "computer-aided software testing",
+   "nghia": "kiểm thử có máy tính hỗ trợ (CAST) — tên chung cho việc dùng công cụ trong kiểm thử",
+   "nhom": "Loại công cụ kiểm thử",
+   "viDu": "CAST stands for computer-aided software testing.",
+   "viDuNghia": "CAST là viết tắt của computer-aided software testing (kiểm thử phần mềm có máy tính hỗ trợ)."
+  },
+  {
+   "chu": "test management tool",
+   "nghia": "công cụ quản lý kiểm thử — quản lý test case, lịch chạy, kết quả, truy vết tới yêu cầu và sự cố",
+   "nhom": "Loại công cụ kiểm thử",
+   "viDu": "What is NOT typically a feature of a test management tool?",
+   "viDuNghia": "Đâu KHÔNG phải là một tính năng điển hình của công cụ quản lý kiểm thử (test management tool)?"
+  },
+  {
+   "chu": "requirements management tool",
+   "nghia": "công cụ quản lý yêu cầu — lưu yêu cầu, kiểm tính nhất quán, xếp ưu tiên, cho truy vết từ test tới yêu cầu",
+   "nhom": "Loại công cụ kiểm thử",
+   "viDu": "A requirements management tool stores requirement statements, checks them for consistency and allows them to be prioritized.",
+   "viDuNghia": "Công cụ quản lý yêu cầu lưu các phát biểu yêu cầu, kiểm tra tính nhất quán và cho phép xếp ưu tiên chúng."
+  },
+  {
+   "chu": "configuration management tool",
+   "nghia": "công cụ quản lý cấu hình — lưu và quản lý phiên bản của code, testware",
+   "nhom": "Loại công cụ kiểm thử",
+   "viDu": "A configuration management tool keeps track of the versions of the testware.",
+   "viDuNghia": "Công cụ quản lý cấu hình theo dõi các phiên bản của testware."
+  },
+  {
+   "chu": "static analysis tool",
+   "nghia": "công cụ phân tích tĩnh — soi code không cần chạy; chủ yếu lập trình viên dùng",
+   "nhom": "Loại công cụ kiểm thử",
+   "viDu": "For which of the following would a static analysis tool be MOST useful?",
+   "viDuNghia": "Công cụ phân tích tĩnh sẽ HỮU ÍCH NHẤT cho việc nào sau đây?"
+  },
+  {
+   "chu": "test execution tool",
+   "nghia": "công cụ thực thi test — tự chạy test theo script rồi so kết quả; hay dùng cho test hồi quy",
+   "nhom": "Loại công cụ kiểm thử",
+   "viDu": "Which one of the following is MOST likely to be a benefit of test execution tools?",
+   "viDuNghia": "Điều nào sau đây có khả năng NHẤT là lợi ích của công cụ thực thi kiểm thử (test execution tools)?"
+  },
+  {
+   "chu": "capture and replay",
+   "nghia": "ghi và phát lại — công cụ ghi thao tác tay của tester rồi chạy lại tự động; còn gọi record/playback",
+   "nhom": "Loại công cụ kiểm thử",
+   "viDu": "Which of the following is not a drawback of capture/replay testing tools?",
+   "viDuNghia": "Điều nào sau đây KHÔNG phải là nhược điểm của công cụ kiểm thử ghi/phát lại (capture/replay)?"
+  },
+  {
+   "chu": "record and playback",
+   "nghia": "ghi và phát lại — tên khác của capture/replay; hợp cho test hồi quy",
+   "nhom": "Loại công cụ kiểm thử",
+   "viDu": "What type of tools to be used for Regression Testing? (1) Performance (2) Record/Playback",
+   "viDuNghia": "Loại công cụ nào được dùng cho Kiểm thử hồi quy? (1) Hiệu năng (Performance) (2) Ghi/Phát lại (Record/Playback)"
+  },
+  {
+   "chu": "test comparator",
+   "doc": "/ˈtest kəmˈpærətər/",
+   "nghia": "công cụ so sánh — tự so kết quả thực tế với kết quả mong đợi",
+   "nhom": "Loại công cụ kiểm thử",
+   "viDu": "With which of the following categories is a test comparator tool USUALLY associated?",
+   "viDuNghia": "Công cụ so sánh kiểm thử (test comparator) THƯỜNG gắn với nhóm nào sau đây?"
+  },
+  {
+   "chu": "dynamic analysis tool",
+   "nghia": "công cụ phân tích động — theo dõi chương trình lúc chạy để tìm rò rỉ bộ nhớ, con trỏ chưa gán",
+   "nhom": "Loại công cụ kiểm thử",
+   "viDu": "Which of the following tools would you use for dynamic analysis? (Choose 2 correct answers)",
+   "viDuNghia": "Bạn sẽ dùng công cụ nào cho phân tích động (dynamic analysis)? (Chọn 2 đáp án đúng)"
+  },
+  {
+   "chu": "performance testing tool",
+   "nghia": "công cụ kiểm thử hiệu năng — giả lập nhiều người dùng, sinh nhiều giao dịch, đo thời gian phản hồi",
+   "nhom": "Loại công cụ kiểm thử",
+   "viDu": "A performance testing tool simulates many users and measures response time.",
+   "viDuNghia": "Công cụ kiểm thử hiệu năng giả lập nhiều người dùng và đo thời gian phản hồi."
+  },
+  {
+   "chu": "monitoring tool",
+   "doc": "/ˈmɑːnɪtərɪŋ tuːl/",
+   "nghia": "công cụ giám sát — liên tục theo dõi tình trạng hệ thống và cảnh báo khi có vấn đề",
+   "nhom": "Loại công cụ kiểm thử",
+   "viDu": "What is the function of a monitoring tool in the context of testing?",
+   "viDuNghia": "Chức năng của công cụ giám sát (monitoring tool) trong bối cảnh kiểm thử là gì?"
+  },
+  {
+   "chu": "memory leak",
+   "doc": "/ˈmeməri liːk/",
+   "nghia": "rò rỉ bộ nhớ — chương trình xin bộ nhớ mà không trả lại, chạy lâu sẽ hết bộ nhớ",
+   "nhom": "Loại công cụ kiểm thử",
+   "viDu": "Which tool will be used to flag memory leaks and unassigned pointers?",
+   "viDuNghia": "Công cụ nào sẽ được dùng để phát hiện rò rỉ bộ nhớ và con trỏ chưa được gán?"
+  },
+  {
+   "chu": "unassigned pointer",
+   "doc": "/ˌʌnəˈsaɪnd ˈpɔɪntər/",
+   "nghia": "con trỏ chưa được gán — con trỏ chưa trỏ vào đâu, dùng tới là lỗi",
+   "nhom": "Loại công cụ kiểm thử",
+   "viDu": "Which tool will be used to flag memory leaks and unassigned pointers?",
+   "viDuNghia": "Công cụ nào được dùng để phát hiện rò rỉ bộ nhớ và con trỏ chưa được gán?"
+  },
+  {
+   "chu": "simulate",
+   "doc": "/ˈsɪmjuleɪt/",
+   "nghia": "giả lập, mô phỏng — ví dụ giả lập nhiều người dùng cùng lúc",
+   "nhom": "Loại công cụ kiểm thử",
+   "viDu": "The tool can simulate hundreds of users logging in at the same time.",
+   "viDuNghia": "Công cụ có thể giả lập hàng trăm người dùng đăng nhập cùng lúc."
+  },
+  {
+   "chu": "generate",
+   "doc": "/ˈdʒenəreɪt/",
+   "nghia": "sinh ra, tạo ra — ví dụ sinh nhiều giao dịch",
+   "nhom": "Loại công cụ kiểm thử",
+   "viDu": "The system confirms the order and generates an order confirmation.",
+   "viDuNghia": "Hệ thống xác nhận đơn hàng và tạo ra một xác nhận đơn hàng."
+  },
+  {
+   "chu": "data-driven",
+   "doc": "/ˈdeɪtə ˌdrɪvn/",
+   "nghia": "hướng dữ liệu — tách dữ liệu test ra bảng riêng, một script chạy được với nhiều bộ dữ liệu",
+   "nhom": "Loại công cụ kiểm thử",
+   "viDu": "What is an advantage of using data-driven scripts in test automation?",
+   "viDuNghia": "Ưu điểm của việc dùng script hướng dữ liệu (data-driven) trong tự động hóa kiểm thử là gì?"
+  },
+  {
+   "chu": "review tool",
+   "doc": "/rɪˈvjuː tuːl/",
+   "nghia": "công cụ hỗ trợ review — lưu nhận xét, theo dõi tiến trình và số liệu của cuộc review",
+   "nhom": "Loại công cụ kiểm thử",
+   "viDu": "A review tool stores the reviewers' comments and tracks the review status.",
+   "viDuNghia": "Công cụ hỗ trợ review lưu nhận xét của người rà soát và theo dõi trạng thái cuộc review."
+  },
+  {
+   "chu": "test data preparation tool",
+   "nghia": "công cụ chuẩn bị dữ liệu test — tạo, chọn lọc, che dữ liệu để dùng cho test",
+   "nhom": "Loại công cụ kiểm thử",
+   "viDu": "A test data preparation tool can create a large set of customer records for testing.",
+   "viDuNghia": "Công cụ chuẩn bị dữ liệu test có thể tạo ra một bộ lớn hồ sơ khách hàng để test."
+  },
+  {
+   "chu": "unit test framework",
+   "nghia": "khung kiểm thử đơn vị — thư viện để viết và chạy unit test (như JUnit); chủ yếu lập trình viên dùng",
+   "nhom": "Loại công cụ kiểm thử",
+   "viDu": "JUnit is a unit test framework for Java.",
+   "viDuNghia": "JUnit là một khung kiểm thử đơn vị cho Java."
+  },
+  {
+   "chu": "keyword-driven",
+   "doc": "/ˈkiːwɜːrd ˌdrɪvn/",
+   "nghia": "hướng từ khoá — script test viết bằng các từ khoá chỉ hành động (login, click...), người không biết code cũng viết được",
+   "nhom": "Loại công cụ kiểm thử",
+   "viDu": "In keyword-driven testing, each keyword such as \"login\" stands for an action.",
+   "viDuNghia": "Trong kiểm thử hướng từ khoá, mỗi từ khoá như \"login\" đại diện cho một hành động."
+  },
+  {
+   "chu": "incident management tool",
+   "nghia": "công cụ quản lý sự cố / lỗi: ghi nhận, phân loại, gán người xử lý và theo dõi trạng thái cho tới khi đóng",
+   "nhom": "Loại công cụ kiểm thử",
+   "viDu": "An incident management tool records defects and tracks their status until they are closed.",
+   "viDuNghia": "Công cụ quản lý sự cố ghi nhận lỗi và theo dõi trạng thái của chúng cho tới khi được đóng."
+  },
+  {
+   "chu": "test automation",
+   "doc": "/ˈtest ˌɔːtəˈmeɪʃn/",
+   "nghia": "tự động hoá kiểm thử — dùng công cụ chạy test thay cho làm tay",
+   "nhom": "Đưa công cụ vào dùng",
+   "viDu": "Which of the following tools would be involved in the automation of regression test?",
+   "viDuNghia": "Công cụ nào sau đây sẽ tham gia vào việc tự động hóa kiểm thử hồi quy?"
+  },
+  {
+   "chu": "automated",
+   "doc": "/ˈɔːtəmeɪtɪd/",
+   "nghia": "được tự động hoá — máy tự chạy",
+   "nhom": "Đưa công cụ vào dùng",
+   "viDu": "Automated tests that are run until the component passes",
+   "viDuNghia": "Các test tự động được chạy cho tới khi thành phần vượt qua"
+  },
+  {
+   "chu": "manual",
+   "doc": "/ˈmænjuəl/",
+   "nghia": "thủ công — người làm bằng tay",
+   "nhom": "Đưa công cụ vào dùng",
+   "viDu": "Manual testing of the same functions after each update takes a lot of time.",
+   "viDuNghia": "Test tay lại cùng các chức năng sau mỗi lần cập nhật tốn rất nhiều thời gian."
+  },
+  {
+   "chu": "repetitive",
+   "doc": "/rɪˈpetətɪv/",
+   "nghia": "lặp đi lặp lại — việc lặp lại nhiều lần thì nên tự động hoá",
+   "nhom": "Đưa công cụ vào dùng",
+   "viDu": "Automation is most useful for repetitive tasks such as regression tests.",
+   "viDuNghia": "Tự động hoá hữu ích nhất với việc lặp đi lặp lại như test hồi quy."
+  },
+  {
+   "chu": "pilot project",
+   "doc": "/ˈpaɪlət ˈprɑːdʒekt/",
+   "nghia": "dự án thí điểm — thử công cụ mới trên một dự án nhỏ trước khi áp dụng rộng",
+   "nhom": "Đưa công cụ vào dùng",
+   "viDu": "You have just completed a pilot project for a test management tool.",
+   "viDuNghia": "Bạn vừa hoàn thành một dự án thí điểm cho một công cụ quản lý kiểm thử."
+  },
+  {
+   "chu": "tool selection",
+   "doc": "/ˈtuːl sɪˌlekʃn/",
+   "nghia": "lựa chọn công cụ — đánh giá và quyết định dùng công cụ nào",
+   "nhom": "Đưa công cụ vào dùng",
+   "viDu": "Which of the following is NOT a main principle for tool selection?",
+   "viDuNghia": "Đâu KHÔNG phải là một nguyên tắc chính khi lựa chọn công cụ?"
+  },
+  {
+   "chu": "proof of concept",
+   "nghia": "thử nghiệm chứng minh tính khả thi — dùng thử để xem công cụ có chạy được trong môi trường của mình không",
+   "nhom": "Đưa công cụ vào dùng",
+   "viDu": "Before buying the tool, conduct a proof of concept in your own environment.",
+   "viDuNghia": "Trước khi mua công cụ, hãy thử nghiệm tính khả thi trong chính môi trường của mình."
+  },
+  {
+   "chu": "coaching",
+   "doc": "/ˈkoʊtʃɪŋ/",
+   "nghia": "kèm cặp — hướng dẫn trực tiếp người mới dùng công cụ",
+   "nhom": "Đưa công cụ vào dùng",
+   "viDu": "Identify coaching and mentoring requirements for the use of the selected tool.",
+   "viDuNghia": "Xác định nhu cầu kèm cặp và cố vấn cho việc sử dụng công cụ đã chọn."
+  },
+  {
+   "chu": "mentoring",
+   "doc": "/ˈmentərɪŋ/",
+   "nghia": "cố vấn, dìu dắt",
+   "nhom": "Đưa công cụ vào dùng",
+   "viDu": "New testers get mentoring from a senior tester while they learn the tool.",
+   "viDuNghia": "Tester mới được một tester lâu năm dìu dắt trong lúc học dùng công cụ."
+  },
+  {
+   "chu": "non-invasive",
+   "doc": "/ˌnɑːn ɪnˈveɪsɪv/",
+   "nghia": "không xâm nhập — công cụ không sửa code hay môi trường của chương trình được test",
+   "nhom": "Đưa công cụ vào dùng",
+   "viDu": "An intrusive tool changes the code or its environment; a non-invasive tool does not.",
+   "viDuNghia": "Công cụ xâm nhập làm thay đổi code hoặc môi trường của nó; công cụ không xâm nhập thì không."
+  },
+  {
+   "chu": "commercial",
+   "doc": "/kəˈmɜːrʃl/",
+   "nghia": "thương mại — công cụ phải trả tiền mua",
+   "nhom": "Đưa công cụ vào dùng",
+   "viDu": "A typical commercial test execution tool would be able to perform all of the following EXCEPT:",
+   "viDuNghia": "Một công cụ thực thi kiểm thử thương mại điển hình có thể làm tất cả những điều sau NGOẠI TRỪ:"
+  },
+  {
+   "chu": "obsoleteness",
+   "doc": "/ˌɑːbsəˈliːtnəs/",
+   "nghia": "sự lỗi thời — công cụ cũ đi, không còn dùng được",
+   "nhom": "Đưa công cụ vào dùng",
+   "viDu": "Monitoring tool wastage and obsoleteness.",
+   "viDuNghia": "Theo dõi sự lãng phí và lỗi thời của công cụ."
+  },
+  {
+   "chu": "wastage",
+   "doc": "/ˈweɪstɪdʒ/",
+   "nghia": "sự lãng phí",
+   "nhom": "Đưa công cụ vào dùng",
+   "viDu": "Buying a tool that nobody uses is pure wastage.",
+   "viDuNghia": "Mua một công cụ mà không ai dùng là lãng phí hoàn toàn."
+  },
+  {
+   "chu": "end-user license agreement",
+   "nghia": "thoả thuận cấp phép người dùng cuối (EULA) — điều khoản phải đồng ý khi dùng phần mềm",
+   "nhom": "Đưa công cụ vào dùng",
+   "viDu": "EULA stands for end-user license agreement.",
+   "viDuNghia": "EULA là viết tắt của end-user license agreement (thoả thuận cấp phép người dùng cuối)."
+  },
+  {
+   "chu": "plan-do-check-act",
+   "doc": "/ˌplæn duː tʃek ˈækt/",
+   "nghia": "chu trình PDCA: lập kế hoạch – thực hiện – kiểm tra – hành động, dùng để cải tiến liên tục",
+   "nhom": "Đưa công cụ vào dùng",
+   "viDu": "PDCA stands for plan-do-check-act, a cycle for continuous improvement.",
+   "viDuNghia": "PDCA là viết tắt của plan-do-check-act, một chu trình cải tiến liên tục."
+  },
+  {
+   "chu": "independent verification and validation",
+   "nghia": "xác minh và thẩm định độc lập (IV&V) — do một tổ chức bên ngoài nhóm phát triển thực hiện",
+   "nhom": "Đưa công cụ vào dùng",
+   "viDu": "Independent verification and validation (IV&V) is done by an organization outside the development team.",
+   "viDuNghia": "Xác minh và thẩm định độc lập (IV&V) do một tổ chức bên ngoài nhóm phát triển thực hiện."
+  },
+  {
+   "chu": "measurement dysfunction",
+   "doc": "/ˈmeʒərmənt dɪsˈfʌŋkʃn/",
+   "nghia": "méo mó do đo lường — khi bị đo bằng con số, người ta chạy theo con số thay vì làm việc tốt",
+   "nhom": "Đưa công cụ vào dùng",
+   "viDu": "Measurement dysfunction is a problem because:",
+   "viDuNghia": "Méo mó do đo lường (measurement dysfunction) là một vấn đề vì:"
+  },
+  {
+   "chu": "workbench",
+   "doc": "/ˈwɜːrkbentʃ/",
+   "nghia": "bàn làm việc — cách mô tả một bước công việc: đầu vào, cách làm, kiểm tra, đầu ra",
+   "nhom": "Đưa công cụ vào dùng",
+   "viDu": "The ________ and ________ are used within individual workbenches to produce the right output products.",
+   "viDuNghia": "________ và ________ được dùng trong từng workbench (bàn làm việc) để tạo ra đúng sản phẩm đầu ra."
+  },
+  {
+   "chu": "cost of quality",
+   "doc": "/ˌkɔːst əv ˈkwɑːləti/",
+   "nghia": "chi phí chất lượng — tiền bỏ ra để phòng lỗi, tìm lỗi và trả giá cho lỗi (lỗi nội bộ, lỗi lọt ra ngoài)",
+   "nhom": "Đưa công cụ vào dùng",
+   "viDu": "Maintenance releases and technical assistance centers are examples of which of the following costs of quality?",
+   "viDuNghia": "Các bản phát hành bảo trì và trung tâm hỗ trợ kỹ thuật là ví dụ của loại chi phí chất lượng nào sau đây?"
+  },
+  {
+   "chu": "maintenance release",
+   "doc": "/ˈmeɪntənəns rɪˌliːs/",
+   "nghia": "bản phát hành bảo trì — bản vá lỗi sau khi sản phẩm đã ra thị trường; thuộc chi phí lỗi bên ngoài",
+   "nhom": "Đưa công cụ vào dùng",
+   "viDu": "Maintenance releases and technical assistance centers are examples of which of the following costs of quality?",
+   "viDuNghia": "Các bản phát hành bảo trì và trung tâm hỗ trợ kỹ thuật là ví dụ của loại chi phí chất lượng nào sau đây?"
+  },
+  {
+   "chu": "technical assistance",
+   "doc": "/ˈteknɪkl əˈsɪstəns/",
+   "nghia": "hỗ trợ kỹ thuật — trung tâm trợ giúp khách hàng khi sản phẩm có vấn đề",
+   "nhom": "Đưa công cụ vào dùng",
+   "viDu": "Maintenance releases and technical assistance centers are examples of which of the following costs of quality?",
+   "viDuNghia": "Các bản phát hành bảo trì và trung tâm hỗ trợ kỹ thuật là ví dụ của loại chi phí chất lượng nào sau đây?"
+  },
+  {
+   "chu": "statistical reliability model",
+   "nghia": "mô hình độ tin cậy thống kê — dùng số liệu lỗi theo thời gian để dự đoán khi nào đủ tin cậy để phát hành",
+   "nhom": "Đưa công cụ vào dùng",
+   "viDu": "There are several risks of managing your project's schedule with a statistical reliability model. These include: (choose one answer)",
+   "viDuNghia": "Có một số rủi ro khi quản lý lịch trình dự án bằng mô hình độ tin cậy thống kê. Bao gồm: (chọn một đáp án)"
+  },
+  {
+   "chu": "defect arrival rate",
+   "nghia": "tốc độ phát hiện lỗi — số lỗi mới tìm ra theo thời gian (theo ngày, theo tuần)",
+   "nhom": "Đưa công cụ vào dùng",
+   "viDu": "A defect arrival rate curve:",
+   "viDuNghia": "Đường cong tốc độ phát sinh lỗi (defect arrival rate curve):"
+  }
+ ]
+}

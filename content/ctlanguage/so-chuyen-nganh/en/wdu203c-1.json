@@ -1,0 +1,992 @@
+{
+ "ma": "wdu203c-1",
+ "nn": "en",
+ "ten": "WDU203c · Thiết kế UI/UX",
+ "moTa": "UI/UX Design (WDU203c): nghiên cứu người dùng, phỏng vấn, khảo sát, phân tích dữ liệu định tính, lên ý tưởng, prototype, kiểm thử người dùng, heuristic và tâm lý nhận thức. Từ lấy từ đề FE thật; ví dụ là câu hỏi thật trong đề.",
+ "bieuTuong": "paintbrush.pointed.fill",
+ "thuTu": -945,
+ "tu": [
+  {
+   "chu": "user experience design",
+   "nghia": "thiết kế trải nghiệm người dùng (UX design): thiết kế để sản phẩm hữu ích, dễ dùng và dễ chịu",
+   "nhom": "Nghiên cứu người dùng",
+   "viDu": "User experience design aims to make a product useful, usable and enjoyable.",
+   "viDuNghia": "Thiết kế trải nghiệm người dùng nhằm làm cho sản phẩm hữu ích, dễ dùng và dễ chịu."
+  },
+  {
+   "chu": "UX research",
+   "doc": "/ˌjuː ˈeks ˈriːsɜːrtʃ/",
+   "nghia": "nghiên cứu UX: tìm hiểu người dùng, nhu cầu và hành vi của họ để định hướng thiết kế",
+   "nhom": "Nghiên cứu người dùng",
+   "viDu": "Which of the following is a characteristic of a good interview question in UX research?",
+   "viDuNghia": "Đặc điểm nào sau đây thuộc về một câu hỏi phỏng vấn tốt trong nghiên cứu UX?"
+  },
+  {
+   "chu": "user needs assessment",
+   "nghia": "đánh giá nhu cầu người dùng: tìm hiểu người dùng là ai, đang làm việc gì, bằng cách nào và gặp khó ở đâu",
+   "nhom": "Nghiên cứu người dùng",
+   "viDu": "At what point in a product or service's life-cycle should one conduct a user needs assessment?",
+   "viDuNghia": "Vào thời điểm nào trong vòng đời sản phẩm hoặc dịch vụ nên tiến hành đánh giá nhu cầu người dùng (user needs assessment)?"
+  },
+  {
+   "chu": "formative research",
+   "doc": "/ˈfɔːrmətɪv ˈriːsɜːrtʃ/",
+   "nghia": "nghiên cứu định hình: làm sớm để tìm vấn đề và định hướng thiết kế (khác summative: đánh giá sau cùng)",
+   "nhom": "Nghiên cứu người dùng",
+   "viDu": "Which of the following are research methods that can be applied in formative research?",
+   "viDuNghia": "Phương pháp nào sau đây có thể được áp dụng trong nghiên cứu formative (nghiên cứu hình thành)?"
+  },
+  {
+   "chu": "summative",
+   "doc": "/ˈsʌmətɪv/",
+   "nghia": "(đánh giá) tổng kết: đo hiệu quả chung của thiết kế đã xong, thường bằng số liệu",
+   "nhom": "Nghiên cứu người dùng",
+   "viDu": "Which method is primarily used for summative usability testing to evaluate the overall performance of a design?",
+   "viDuNghia": "Phương pháp nào chủ yếu được dùng cho kiểm thử khả dụng tổng kết (summative) để đánh giá hiệu suất tổng thể của một thiết kế?"
+  },
+  {
+   "chu": "needs-finding",
+   "doc": "/ˈniːdz faɪndɪŋ/",
+   "nghia": "tìm nhu cầu: nghiên cứu để phát hiện nhu cầu chưa được đáp ứng của người dùng",
+   "nhom": "Nghiên cứu người dùng",
+   "viDu": "What makes these good research questions for a needs-finding study?",
+   "viDuNghia": "Điều gì khiến những câu hỏi này trở thành câu hỏi nghiên cứu tốt cho một nghiên cứu tìm hiểu nhu cầu (needs-finding)?"
+  },
+  {
+   "chu": "problem framing",
+   "doc": "/ˈprɑːbləm ˈfreɪmɪŋ/",
+   "nghia": "định khung vấn đề: phát biểu rõ vấn đề thiết kế cần giải quyết",
+   "nhom": "Nghiên cứu người dùng",
+   "viDu": "Good problem framing keeps the team from solving the wrong problem.",
+   "viDuNghia": "Định khung vấn đề tốt giúp nhóm không giải nhầm bài toán."
+  },
+  {
+   "chu": "research question",
+   "doc": "/ˈriːsɜːrtʃ ˈkwestʃən/",
+   "nghia": "câu hỏi nghiên cứu: điều nhóm muốn biết qua nghiên cứu (khác câu hỏi đem hỏi người tham gia)",
+   "nhom": "Nghiên cứu người dùng",
+   "viDu": "Which of the following are the hallmarks of good research questions?",
+   "viDuNghia": "Đâu là những đặc điểm nổi bật của một câu hỏi nghiên cứu tốt?"
+  },
+  {
+   "chu": "target user",
+   "doc": "/ˈtɑːrɡɪt ˈjuːzər/",
+   "nghia": "người dùng mục tiêu: nhóm người mà sản phẩm hướng tới",
+   "nhom": "Nghiên cứu người dùng",
+   "viDu": "What is the purpose of creating personas in UX design? → To understand the needs, behaviors, and goals of target users",
+   "viDuNghia": "Mục đích của việc tạo persona trong thiết kế UX là gì? → Để hiểu nhu cầu, hành vi và mục tiêu của người dùng mục tiêu"
+  },
+  {
+   "chu": "user population",
+   "doc": "/ˈjuːzər ˌpɑːpjuˈleɪʃn/",
+   "nghia": "quần thể người dùng: toàn bộ những người thuộc nhóm người dùng mục tiêu",
+   "nhom": "Nghiên cứu người dùng",
+   "viDu": "These questions can be answered by interviewing the target user population.",
+   "viDuNghia": "Những câu hỏi này trả lời được bằng cách phỏng vấn quần thể người dùng mục tiêu."
+  },
+  {
+   "chu": "qualitative research",
+   "doc": "/ˈkwɑːlɪteɪtɪv ˈriːsɜːrtʃ/",
+   "nghia": "nghiên cứu định tính: thu dữ liệu bằng lời, quan sát để hiểu vì sao, như thế nào",
+   "nhom": "Nghiên cứu người dùng",
+   "viDu": "Which of the following questions is best answered by a qualitative research methodology?",
+   "viDuNghia": "Câu hỏi nào sau đây được trả lời tốt nhất bằng phương pháp nghiên cứu định tính?"
+  },
+  {
+   "chu": "quantitative research",
+   "doc": "/ˈkwɑːntɪteɪtɪv ˈriːsɜːrtʃ/",
+   "nghia": "nghiên cứu định lượng: thu dữ liệu bằng con số để đo đếm, thống kê",
+   "nhom": "Nghiên cứu người dùng",
+   "viDu": "How does qualitative research differ from quantitative research?",
+   "viDuNghia": "Nghiên cứu định tính khác với nghiên cứu định lượng như thế nào?"
+  },
+  {
+   "chu": "existing solution",
+   "doc": "/ɪɡˈzɪstɪŋ səˈluːʃn/",
+   "nghia": "giải pháp hiện có: cách người dùng đang làm việc đó lúc này",
+   "nhom": "Nghiên cứu người dùng",
+   "viDu": "Good research questions seek to learn what problems there are with existing solutions.",
+   "viDuNghia": "Câu hỏi nghiên cứu tốt tìm hiểu xem các giải pháp hiện có đang gặp vấn đề gì."
+  },
+  {
+   "chu": "diary study",
+   "doc": "/ˈdaɪəri ˈstʌdi/",
+   "nghia": "nghiên cứu nhật ký: người tham gia tự ghi lại trải nghiệm trong nhiều ngày",
+   "nhom": "Nghiên cứu người dùng",
+   "viDu": "Besides usability testing, what is another research method that can be conducted remotely? → Diary studies",
+   "viDuNghia": "Ngoài kiểm thử khả dụng, phương pháp nghiên cứu nào khác có thể thực hiện từ xa? → Nghiên cứu nhật ký (Diary studies)"
+  },
+  {
+   "chu": "analytics",
+   "doc": "/ˌænəˈlɪtɪks/",
+   "nghia": "số liệu phân tích hành vi: dữ liệu ghi tự động việc người dùng làm trên sản phẩm",
+   "nhom": "Nghiên cứu người dùng",
+   "viDu": "What is \"page depth\" in website analytics?",
+   "viDuNghia": "\"Page depth\" (độ sâu trang) trong phân tích website là gì?"
+  },
+  {
+   "chu": "user behavior",
+   "doc": "/ˈjuːzər bɪˈheɪvjər/",
+   "nghia": "hành vi người dùng: điều người dùng thực sự làm (khác với điều họ nói)",
+   "nhom": "Nghiên cứu người dùng",
+   "viDu": "What does Norman's model of action help designers do? → Understand user behavior step-by-step and improve user interfaces accordingly",
+   "viDuNghia": "Mô hình hành động của Norman giúp nhà thiết kế làm gì? → Hiểu hành vi người dùng theo từng bước và cải thiện giao diện cho phù hợp"
+  },
+  {
+   "chu": "recruiting",
+   "doc": "/rɪˈkruːtɪŋ/",
+   "nghia": "tuyển người tham gia nghiên cứu",
+   "nhom": "Tuyển người & phỏng vấn",
+   "viDu": "Which of the following best describes why you might choose to use a panel for recruiting respondents?",
+   "viDuNghia": "Đâu mô tả đúng nhất lý do bạn có thể chọn sử dụng panel (nhóm người tham gia có sẵn) để tuyển người trả lời?"
+  },
+  {
+   "chu": "recruiting criteria",
+   "doc": "/rɪˈkruːtɪŋ kraɪˈtɪriə/",
+   "nghia": "tiêu chí tuyển chọn: điều kiện để một người được mời tham gia (hành vi, nhân khẩu, thái độ…)",
+   "nhom": "Tuyển người & phỏng vấn",
+   "viDu": "Which type of recruiting criteria would the following question screen for? \"In the past week, how many hours did you spend completing coursework on edX? 0, 1-2, 3-5, or more than 5\"",
+   "viDuNghia": "Câu hỏi sau đây sàng lọc theo loại tiêu chí tuyển mộ nào? \"Trong tuần qua, bạn đã dành bao nhiêu giờ để hoàn thành bài tập trên edX? 0, 1-2, 3-5, hoặc hơn 5\""
+  },
+  {
+   "chu": "diversity criteria",
+   "doc": "/daɪˈvɜːrsəti kraɪˈtɪriə/",
+   "nghia": "tiêu chí đa dạng: những yếu tố mà người dùng khác nhau, cần phủ đủ khi tuyển",
+   "nhom": "Tuyển người & phỏng vấn",
+   "viDu": "Factors that capture the ways in which you expect your users to differ can be expressed as diversity criteria.",
+   "viDuNghia": "Những yếu tố thể hiện các điểm mà bạn dự đoán người dùng sẽ khác nhau được gọi là tiêu chí đa dạng."
+  },
+  {
+   "chu": "demographic",
+   "doc": "/ˌdeməˈɡræfɪk/",
+   "nghia": "(thuộc) nhân khẩu học: tuổi, giới, nghề, thu nhập…",
+   "nhom": "Tuyển người & phỏng vấn",
+   "viDu": "Personas include different types of information, from demographics to motivations and sociocultural context. How should designers decide what information to include?",
+   "viDuNghia": "Persona bao gồm nhiều loại thông tin khác nhau, từ nhân khẩu học đến động cơ và bối cảnh văn hóa xã hội. Nhà thiết kế nên quyết định thông tin nào cần đưa vào như thế nào?"
+  },
+  {
+   "chu": "incentive",
+   "doc": "/ɪnˈsentɪv/",
+   "nghia": "phần thưởng khuyến khích: quà hoặc tiền để người ta chịu tham gia",
+   "nhom": "Tuyển người & phỏng vấn",
+   "viDu": "Which of the following is LEAST true about extrinsic, or material, incentives?",
+   "viDuNghia": "Đâu là điều ÍT ĐÚNG NHẤT về các phần thưởng ngoại lai (extrinsic/material incentives)?"
+  },
+  {
+   "chu": "informed consent",
+   "doc": "/ɪnˈfɔːrmd kənˈsent/",
+   "nghia": "sự đồng ý có hiểu biết: người tham gia được giải thích rõ rồi mới đồng ý",
+   "nhom": "Tuyển người & phỏng vấn",
+   "viDu": "Obtain informed consent before you start recording the session.",
+   "viDuNghia": "Hãy lấy sự đồng ý có hiểu biết trước khi bắt đầu ghi hình buổi làm việc."
+  },
+  {
+   "chu": "rapport",
+   "doc": "/ræˈpɔːr/",
+   "nghia": "sự thân thiện, tin cậy giữa người phỏng vấn và người được phỏng vấn",
+   "nhom": "Tuyển người & phỏng vấn",
+   "viDu": "Which of the following should you NOT do when trying to establish rapport with an interview participant?",
+   "viDuNghia": "Điều nào sau đây bạn KHÔNG nên làm khi cố gắng tạo mối thiện cảm (rapport) với người tham gia phỏng vấn?"
+  },
+  {
+   "chu": "interview protocol",
+   "doc": "/ˈɪntərvjuː ˈproʊtəkɑːl/",
+   "nghia": "kịch bản phỏng vấn: danh sách câu hỏi và trình tự chuẩn bị trước",
+   "nhom": "Tuyển người & phỏng vấn",
+   "viDu": "Once you have a list of core questions to ask, what should you do next in constructing the interview protocol?",
+   "viDuNghia": "Khi đã có danh sách các câu hỏi cốt lõi cần hỏi, bước tiếp theo bạn nên làm gì khi xây dựng đề cương phỏng vấn?"
+  },
+  {
+   "chu": "semi-structured interview",
+   "doc": "/ˌsemi ˈstrʌktʃərd ˈɪntərvjuː/",
+   "nghia": "phỏng vấn bán cấu trúc: có sẵn bộ câu hỏi nhưng được hỏi thêm, đổi thứ tự theo câu trả lời",
+   "nhom": "Tuyển người & phỏng vấn",
+   "viDu": "Conducting an actual semi-structured interview is most consistently like which of the following?",
+   "viDuNghia": "Việc thực hiện một cuộc phỏng vấn bán cấu trúc thực tế giống nhất với điều nào sau đây?"
+  },
+  {
+   "chu": "interviewer",
+   "doc": "/ˈɪntərvjuːər/",
+   "nghia": "người phỏng vấn",
+   "nhom": "Tuyển người & phỏng vấn",
+   "viDu": "The interviewer uses an interview protocol as a guideline, not as a fixed script.",
+   "viDuNghia": "Người phỏng vấn dùng kịch bản phỏng vấn làm hướng dẫn chứ không phải lời thoại cố định."
+  },
+  {
+   "chu": "follow-up question",
+   "doc": "/ˈfɑːloʊ ʌp ˈkwestʃən/",
+   "nghia": "câu hỏi tiếp nối: hỏi thêm để đào sâu câu trả lời vừa nghe",
+   "nhom": "Tuyển người & phỏng vấn",
+   "viDu": "What is the primary role of follow-up questions in an interview?",
+   "viDuNghia": "Vai trò chính của các câu hỏi tiếp nối (follow-up) trong một buổi phỏng vấn là gì?"
+  },
+  {
+   "chu": "probe",
+   "doc": "/proʊb/",
+   "nghia": "câu gợi hỏi thêm (trung tính) để người trả lời nói rõ hơn",
+   "nhom": "Tuyển người & phỏng vấn",
+   "viDu": "Which of the following is a best practice for writing an open-ended survey question? → Use non-biasing probes",
+   "viDuNghia": "Điều nào sau đây là thực hành tốt khi viết câu hỏi khảo sát dạng mở? → Sử dụng các câu gợi mở không thiên lệch"
+  },
+  {
+   "chu": "leading question",
+   "doc": "/ˈliːdɪŋ ˈkwestʃən/",
+   "nghia": "câu hỏi dẫn dắt: gợi sẵn câu trả lời mong muốn – cần tránh",
+   "nhom": "Tuyển người & phỏng vấn",
+   "viDu": "Why does the course recommend avoiding leading questions?",
+   "viDuNghia": "Vì sao khóa học khuyến nghị tránh các câu hỏi dẫn dắt (leading questions)?"
+  },
+  {
+   "chu": "critical incident",
+   "doc": "/ˈkrɪtɪkl ˈɪnsɪdənt/",
+   "nghia": "sự cố then chốt: lúc người dùng gặp trục trặc hoặc thành công rõ rệt – dữ liệu quan trọng nhất khi quan sát",
+   "nhom": "Tuyển người & phỏng vấn",
+   "viDu": "Critical incidents and verbal reports are both examples of what kind of user testing data?",
+   "viDuNghia": "Sự kiện quan trọng (critical incidents) và báo cáo bằng lời (verbal reports) đều là ví dụ của loại dữ liệu kiểm thử người dùng nào?"
+  },
+  {
+   "chu": "attitudinal",
+   "doc": "/ˌætɪˈtuːdɪnl/",
+   "nghia": "(thuộc) thái độ: điều người dùng nghĩ, cảm thấy – khác behavioral là điều họ làm",
+   "nhom": "Tuyển người & phỏng vấn",
+   "viDu": "Attitudinal research asks what users think and feel, while behavioral research observes what they do.",
+   "viDuNghia": "Nghiên cứu thái độ hỏi người dùng nghĩ và cảm thấy gì, còn nghiên cứu hành vi quan sát điều họ làm."
+  },
+  {
+   "chu": "behavioral",
+   "doc": "/bɪˈheɪvjərəl/",
+   "nghia": "(thuộc) hành vi: điều người dùng thực sự làm",
+   "nhom": "Tuyển người & phỏng vấn",
+   "viDu": "Which type of recruiting criteria would this question screen for: \"In the past week, how many hours did you spend completing coursework?\" → Behavioral",
+   "viDuNghia": "Câu hỏi này sàng lọc theo loại tiêu chí tuyển chọn nào: \"Tuần qua bạn dành bao nhiêu giờ làm bài của khoá học?\" → Hành vi"
+  },
+  {
+   "chu": "participant",
+   "doc": "/pɑːrˈtɪsɪpənt/",
+   "nghia": "người tham gia (buổi test, phỏng vấn, khảo sát)",
+   "nhom": "Tuyển người & phỏng vấn",
+   "viDu": "What is the most appropriate way for a user test moderator to respond when a participant expresses confusion?",
+   "viDuNghia": "Cách phù hợp nhất để người điều phối kiểm thử người dùng phản hồi khi người tham gia tỏ ra bối rối là gì?"
+  },
+  {
+   "chu": "respondent",
+   "doc": "/rɪˈspɑːndənt/",
+   "nghia": "người trả lời khảo sát",
+   "nhom": "Khảo sát",
+   "viDu": "Which of the following best describes why you might choose to use a panel for recruiting respondents?",
+   "viDuNghia": "Điều nào sau đây mô tả tốt nhất lý do bạn có thể chọn sử dụng một nhóm (panel) đã đăng ký sẵn để tuyển người tham gia khảo sát?"
+  },
+  {
+   "chu": "question stem",
+   "doc": "/ˈkwestʃən stem/",
+   "nghia": "thân câu hỏi: phần lời hỏi, chưa kể các lựa chọn trả lời",
+   "nhom": "Khảo sát",
+   "viDu": "Which of the following best describes the question stem?",
+   "viDuNghia": "Điều nào sau đây mô tả tốt nhất \"question stem\" (thân câu hỏi)?"
+  },
+  {
+   "chu": "response category",
+   "doc": "/rɪˈspɑːns ˈkætəɡɔːri/",
+   "nghia": "lựa chọn trả lời: các mục cho sẵn để người trả lời chọn",
+   "nhom": "Khảo sát",
+   "viDu": "Which of the following is NOT a reason to randomize your response categories in a nominal survey question?",
+   "viDuNghia": "Điều nào sau đây KHÔNG PHẢI là lý do để ngẫu nhiên hóa thứ tự các phương án trả lời trong một câu hỏi khảo sát định danh (nominal)?"
+  },
+  {
+   "chu": "response rate",
+   "doc": "/rɪˈspɑːns reɪt/",
+   "nghia": "tỉ lệ phản hồi: số người trả lời trên số người được mời",
+   "nhom": "Khảo sát",
+   "viDu": "Which of the following is NOT a reason you would want to have a high response rate?",
+   "viDuNghia": "Điều nào sau đây KHÔNG phải là lý do bạn muốn có tỷ lệ phản hồi cao?"
+  },
+  {
+   "chu": "nonresponse",
+   "doc": "/ˌnɑːnrɪˈspɑːns/",
+   "nghia": "không phản hồi: người được mời nhưng không trả lời – gây sai lệch nếu họ khác người trả lời",
+   "nhom": "Khảo sát",
+   "viDu": "This is the error that is introduced because some portion of the population is refusing to answer your questions. → Nonresponse error",
+   "viDuNghia": "Đây là sai số phát sinh vì một phần quần thể từ chối trả lời câu hỏi của bạn. → Sai số do không phản hồi"
+  },
+  {
+   "chu": "closed-ended question",
+   "doc": "/ˌkloʊzd ˈendɪd ˈkwestʃən/",
+   "nghia": "câu hỏi đóng: chọn trong các đáp án cho sẵn",
+   "nhom": "Khảo sát",
+   "viDu": "Which of the following is NOT a best practice when designing ordinal closed-ended questions?",
+   "viDuNghia": "Đâu KHÔNG phải là thực hành tốt khi thiết kế câu hỏi đóng dạng thứ bậc (ordinal closed-ended)?"
+  },
+  {
+   "chu": "sampling frame",
+   "doc": "/ˈsæmplɪŋ freɪm/",
+   "nghia": "khung lấy mẫu: danh sách những người có thể được chọn vào mẫu",
+   "nhom": "Khảo sát",
+   "viDu": "Which of the following would NOT be an example of a sampling frame?",
+   "viDuNghia": "Đâu KHÔNG phải là ví dụ về khung mẫu (sampling frame)?"
+  },
+  {
+   "chu": "convenience sample",
+   "doc": "/kənˈviːniəns ˈsæmpl/",
+   "nghia": "mẫu thuận tiện: lấy ai dễ gặp thì hỏi, không đại diện",
+   "nhom": "Khảo sát",
+   "viDu": "Why might you choose to use a panel for recruiting respondents? → To avoid having a convenience sample",
+   "viDuNghia": "Vì sao bạn có thể chọn dùng một panel để tuyển người trả lời? → Để tránh có một mẫu thuận tiện"
+  },
+  {
+   "chu": "panel",
+   "doc": "/ˈpænl/",
+   "nghia": "nhóm người đã đăng ký sẵn để trả lời khảo sát",
+   "nhom": "Khảo sát",
+   "viDu": "Which of the following best describes why you might choose to use a panel for recruiting respondents?",
+   "viDuNghia": "Đâu mô tả đúng nhất lý do bạn có thể chọn sử dụng panel (nhóm người tham gia có sẵn) để tuyển người trả lời?"
+  },
+  {
+   "chu": "social exchange theory",
+   "nghia": "thuyết trao đổi xã hội: người ta tham gia khi tin rằng lợi ích lớn hơn chi phí; dựa trên lòng tin",
+   "nhom": "Khảo sát",
+   "viDu": "Which of the following is the MOST TRUE about social exchange theory?",
+   "viDuNghia": "Điều nào sau đây ĐÚNG NHẤT về thuyết trao đổi xã hội (social exchange theory)?"
+  },
+  {
+   "chu": "burden",
+   "doc": "/ˈbɜːrdn/",
+   "nghia": "gánh nặng: công sức, thời gian người trả lời phải bỏ ra",
+   "nhom": "Khảo sát",
+   "viDu": "Which of the following is NOT a way of reducing the burden for a respondent to participate in a survey?",
+   "viDuNghia": "Cách nào sau đây KHÔNG phải là cách để giảm gánh nặng cho người trả lời khi tham gia khảo sát?"
+  },
+  {
+   "chu": "acquiescence bias",
+   "doc": "/ˌækwiˈesns ˈbaɪəs/",
+   "nghia": "thiên lệch dễ dãi: người trả lời có xu hướng chọn Đồng ý",
+   "nhom": "Khảo sát",
+   "viDu": "What is the main problem with the \"Agree/Disagree\" response scale? → Leads to acquiescence bias",
+   "viDuNghia": "Vấn đề chính với thang đo trả lời \"Đồng ý/Không đồng ý\" (Agree/Disagree) là gì? → Dẫn đến thiên lệch xu hướng đồng ý (acquiescence bias)"
+  },
+  {
+   "chu": "social desirability",
+   "doc": "/ˈsoʊʃl dɪˌzaɪərəˈbɪləti/",
+   "nghia": "mong muốn được xã hội chấp nhận: trả lời cho đẹp lòng người hỏi chứ không đúng thật",
+   "nhom": "Khảo sát",
+   "viDu": "Which of the following best describes the social desirability outcomes in interview-led survey modes?",
+   "viDuNghia": "Đâu mô tả đúng nhất kết quả của thiên lệch mong muốn xã hội (social desirability) trong các hình thức khảo sát do người phỏng vấn dẫn dắt?"
+  },
+  {
+   "chu": "primacy",
+   "doc": "/ˈpraɪməsi/",
+   "nghia": "hiệu ứng đầu danh sách: dễ chọn đáp án đứng đầu",
+   "nhom": "Khảo sát",
+   "viDu": "Randomizing the response categories reduces primacy and recency effects.",
+   "viDuNghia": "Xáo ngẫu nhiên các lựa chọn trả lời làm giảm hiệu ứng đầu và cuối danh sách."
+  },
+  {
+   "chu": "recency",
+   "doc": "/ˈriːsnsi/",
+   "nghia": "hiệu ứng cuối danh sách / mức độ gần đây: dễ nhớ, dễ chọn thứ vừa gặp",
+   "nhom": "Khảo sát",
+   "viDu": "Recency of use affects how easily something in long-term memory is recalled.",
+   "viDuNghia": "Mức độ dùng gần đây ảnh hưởng tới việc một điều trong trí nhớ dài hạn dễ được nhớ lại tới đâu."
+  },
+  {
+   "chu": "ordinal",
+   "doc": "/ˈɔːrdənl/",
+   "nghia": "(thang đo) thứ bậc: các lựa chọn có thứ tự (rất thích, thích, bình thường…)",
+   "nhom": "Khảo sát",
+   "viDu": "Which of the following is NOT a best practice when creating ordinal closed-ended questions?",
+   "viDuNghia": "Điều nào sau đây KHÔNG phải là thực hành tốt khi tạo câu hỏi đóng dạng thứ bậc (ordinal closed-ended)?"
+  },
+  {
+   "chu": "nominal",
+   "doc": "/ˈnɑːmɪnl/",
+   "nghia": "(thang đo) định danh: các lựa chọn không có thứ tự (màu, nghề nghiệp…)",
+   "nhom": "Khảo sát",
+   "viDu": "Which of the following is NOT a best practice in writing nominal closed-ended questions?",
+   "viDuNghia": "Điều nào sau đây KHÔNG phải là thực hành tốt khi viết câu hỏi đóng dạng định danh (nominal closed-ended)?"
+  },
+  {
+   "chu": "unipolar",
+   "doc": "/ˌjuːnɪˈpoʊlər/",
+   "nghia": "(thang) một cực: đi từ không có đến rất nhiều (không hề – cực kỳ)",
+   "nhom": "Khảo sát",
+   "viDu": "\"How likely are you to take an online course?\" should be framed as a unipolar scale.",
+   "viDuNghia": "Câu \"Bạn có khả năng học một khoá trực tuyến tới mức nào?\" nên dùng thang một cực."
+  },
+  {
+   "chu": "bipolar",
+   "doc": "/ˌbaɪˈpoʊlər/",
+   "nghia": "(thang) hai cực: hai đầu trái nghĩa, có điểm giữa trung lập (rất ghét – rất thích)",
+   "nhom": "Khảo sát",
+   "viDu": "What type of question is this: \"How much do you like or dislike participating in surveys?\" → Bipolar ordinal",
+   "viDuNghia": "Câu hỏi sau thuộc loại nào: \"Bạn thích hay không thích tham gia khảo sát tới mức nào?\" → Thứ bậc hai cực"
+  },
+  {
+   "chu": "lottery",
+   "doc": "/ˈlɑːtəri/",
+   "nghia": "bốc thăm trúng thưởng (một kiểu phần thưởng khuyến khích, kém hiệu quả hơn quà trao trước)",
+   "nhom": "Khảo sát",
+   "viDu": "Lotteries with a chance to win a larger reward are not very effective as incentives.",
+   "viDuNghia": "Bốc thăm với cơ hội trúng phần thưởng lớn không hiệu quả lắm khi dùng làm phần thưởng khuyến khích."
+  },
+  {
+   "chu": "anchoring",
+   "doc": "/ˈæŋkərɪŋ/",
+   "nghia": "hiệu ứng mỏ neo: câu trả lời bị kéo theo thông tin gặp đầu tiên",
+   "nhom": "Khảo sát",
+   "viDu": "Anchoring is one reason to randomize the order of response categories.",
+   "viDuNghia": "Hiệu ứng mỏ neo là một lý do để xáo ngẫu nhiên thứ tự các lựa chọn trả lời."
+  },
+  {
+   "chu": "randomize",
+   "doc": "/ˈrændəmaɪz/",
+   "nghia": "xáo ngẫu nhiên (thứ tự các lựa chọn) để giảm thiên lệch do vị trí",
+   "nhom": "Khảo sát",
+   "viDu": "Which of the following is NOT a reason to randomize your response categories in a nominal survey question?",
+   "viDuNghia": "Điều nào sau đây KHÔNG phải là lý do để xáo ngẫu nhiên (randomize) thứ tự các phương án trả lời trong câu hỏi khảo sát định danh (nominal)?"
+  },
+  {
+   "chu": "intrinsic motivation",
+   "doc": "/ɪnˈtrɪnzɪk ˌmoʊtɪˈveɪʃn/",
+   "nghia": "động lực bên trong: làm vì tự thấy thích, thấy có ý nghĩa (extrinsic: vì phần thưởng bên ngoài)",
+   "nhom": "Khảo sát",
+   "viDu": "People with intrinsic motivation take part because the task itself is interesting or meaningful to them.",
+   "viDuNghia": "Người có động lực bên trong tham gia vì bản thân công việc thú vị hoặc có ý nghĩa với họ."
+  },
+  {
+   "chu": "open-ended question",
+   "doc": "/ˌoʊpən ˈendɪd ˈkwestʃən/",
+   "nghia": "câu hỏi mở – không trả lời có/không được, người trả lời phải kể, giải thích",
+   "nhom": "Khảo sát",
+   "viDu": "Which of the following is a good open-ended question to ask in a semi-structured interview?",
+   "viDuNghia": "Điều nào sau đây là một câu hỏi mở tốt để đặt ra trong phỏng vấn bán cấu trúc?"
+  },
+  {
+   "chu": "survey",
+   "doc": "/ˈsɜːrveɪ/",
+   "nghia": "khảo sát – thu ý kiến nhiều người bằng bảng hỏi",
+   "nhom": "Khảo sát",
+   "viDu": "Which type of survey question allows respondents to select from a set of unordered, mutually exclusive categories?",
+   "viDuNghia": "Loại câu hỏi khảo sát nào cho phép người trả lời chọn từ một tập hợp các danh mục không có thứ tự, loại trừ lẫn nhau?"
+  },
+  {
+   "chu": "cost-benefit",
+   "doc": "/ˌkɔːst ˈbenɪfɪt/",
+   "nghia": "chi phí – lợi ích: cân giữa công sức bỏ ra và giá trị nhận lại",
+   "nhom": "Khảo sát",
+   "viDu": "People use trust as a basis to make a cost-benefit guess on the value of a social exchange.",
+   "viDuNghia": "Người ta lấy lòng tin làm cơ sở để ước đoán chi phí – lợi ích của một cuộc trao đổi xã hội."
+  },
+  {
+   "chu": "qualitative data analysis",
+   "nghia": "phân tích dữ liệu định tính: gom nhóm ghi chép để tìm mẫu hình và ý nghĩa",
+   "nhom": "Phân tích & lên ý tưởng",
+   "viDu": "Which of the following are techniques that might be used in qualitative data analysis?",
+   "viDuNghia": "Kỹ thuật nào sau đây có thể được sử dụng trong phân tích dữ liệu định tính?"
+  },
+  {
+   "chu": "affinity wall",
+   "doc": "/əˈfɪnəti wɔːl/",
+   "nghia": "bức tường tương đồng: dán các ghi chú lên tường rồi gom thành cụm theo ý giống nhau",
+   "nhom": "Phân tích & lên ý tưởng",
+   "viDu": "What does it mean to balance abstraction and precision in an affinity wall cluster summary?",
+   "viDuNghia": "Việc cân bằng giữa tính trừu tượng và độ chính xác trong bản tóm tắt cụm trên bức tường tương đồng (affinity wall) nghĩa là gì?"
+  },
+  {
+   "chu": "finding",
+   "doc": "/ˈfaɪndɪŋ/",
+   "nghia": "phát hiện: điều rút ra được từ dữ liệu nghiên cứu",
+   "nhom": "Phân tích & lên ý tưởng",
+   "viDu": "Finding 1. No Option to delete or modify Time Sheet entries. Severity: 4. What heuristic does this violate?",
+   "viDuNghia": "Phát hiện 1. Không có tùy chọn để xóa hoặc chỉnh sửa các mục trong Bảng chấm công. Mức độ nghiêm trọng: 4. Vấn đề này vi phạm nguyên tắc heuristic nào?"
+  },
+  {
+   "chu": "recommendation",
+   "doc": "/ˌrekəmenˈdeɪʃn/",
+   "nghia": "khuyến nghị: đề xuất nên làm gì dựa trên phát hiện",
+   "nhom": "Phân tích & lên ý tưởng",
+   "viDu": "Nielsen provides several recommendations for help and documentation. Which of the following is NOT one of his recommendations?",
+   "viDuNghia": "Nielsen đưa ra một số khuyến nghị về phần trợ giúp (help) và tài liệu hướng dẫn. Điều nào sau đây KHÔNG phải là một trong các khuyến nghị của ông?"
+  },
+  {
+   "chu": "storyboard",
+   "doc": "/ˈstɔːribɔːrd/",
+   "nghia": "bảng truyện tranh: dãy khung hình kể lại người dùng dùng sản phẩm trong bối cảnh nào",
+   "nhom": "Phân tích & lên ý tưởng",
+   "viDu": "Why would a designer create storyboards as opposed to write scenarios?",
+   "viDuNghia": "Vì sao nhà thiết kế lại tạo storyboard thay vì chỉ viết kịch bản (scenario)?"
+  },
+  {
+   "chu": "ideation",
+   "doc": "/ˌaɪdiˈeɪʃn/",
+   "nghia": "lên ý tưởng: tạo ra thật nhiều phương án thiết kế trước khi chọn",
+   "nhom": "Phân tích & lên ý tưởng",
+   "viDu": "Which of the following is not a characteristic of sketches done for the purposes of ideation?",
+   "viDuNghia": "Đặc điểm nào sau đây KHÔNG phải là đặc điểm của các bản phác thảo (sketch) dùng cho mục đích lên ý tưởng (ideation)?"
+  },
+  {
+   "chu": "sketching",
+   "doc": "/ˈsketʃɪŋ/",
+   "nghia": "phác thảo: vẽ nhanh, thô để thử ý tưởng",
+   "nhom": "Phân tích & lên ý tưởng",
+   "viDu": "In the \"generation\" phase, your goal should be to sketch many different design ideas rather than to perfect a single idea.",
+   "viDuNghia": "Trong giai đoạn \"tạo ý tưởng\" (generation), mục tiêu của bạn nên là phác thảo nhiều ý tưởng thiết kế khác nhau thay vì hoàn thiện một ý tưởng duy nhất."
+  },
+  {
+   "chu": "reification",
+   "doc": "/ˌriːɪfɪˈkeɪʃn/",
+   "nghia": "cụ thể hoá: biến ý tưởng thành thứ có thật, nhìn thấy được",
+   "nhom": "Phân tích & lên ý tưởng",
+   "viDu": "Reification means \"to make an idea real or concrete.\"",
+   "viDuNghia": "Cụ thể hóa (Reification) có nghĩa là \"biến một ý tưởng thành hiện thực hoặc cụ thể.\""
+  },
+  {
+   "chu": "design solution",
+   "doc": "/dɪˈzaɪn səˈluːʃn/",
+   "nghia": "giải pháp thiết kế",
+   "nhom": "Phân tích & lên ý tưởng",
+   "viDu": "Personas represent target users and are, thus, primarily a distillation of the findings from formative work. Scenarios begin to move designers toward a design solution. How do scenarios do this?",
+   "viDuNghia": "Persona đại diện cho người dùng mục tiêu và do đó chủ yếu là sự chắt lọc từ các phát hiện của nghiên cứu formative. Scenario bắt đầu đưa nhà thiết kế tiến gần hơn tới giải pháp thiết kế. Scenario làm điều này bằng cách nào?"
+  },
+  {
+   "chu": "design process",
+   "doc": "/dɪˈzaɪn ˈprɑːses/",
+   "nghia": "quy trình thiết kế: đánh giá nhu cầu, lên ý tưởng, prototype, kiểm thử – lặp lại nhiều vòng",
+   "nhom": "Phân tích & lên ý tưởng",
+   "viDu": "What is the first step in the User Experience (UX) design process according to the lesson on UX principles?",
+   "viDuNghia": "Theo bài học về nguyên tắc UX, bước đầu tiên trong quy trình thiết kế Trải nghiệm người dùng (UX) là gì?"
+  },
+  {
+   "chu": "design thinking",
+   "doc": "/dɪˈzaɪn ˈθɪŋkɪŋ/",
+   "nghia": "tư duy thiết kế: cách giải quyết vấn đề lấy người dùng làm trung tâm — thấu hiểu, xác định vấn đề, lên ý tưởng, làm prototype, thử",
+   "nhom": "Phân tích & lên ý tưởng",
+   "viDu": "Bill Buxton claims that sketching is not just a byproduct of design, but is central to design thinking and learning.",
+   "viDuNghia": "Bill Buxton cho rằng phác thảo không chỉ là sản phẩm phụ của thiết kế mà là trung tâm của tư duy thiết kế và việc học."
+  },
+  {
+   "chu": "customer journey map",
+   "nghia": "bản đồ hành trình khách hàng: vẽ các bước người dùng đi qua khi dùng dịch vụ, kèm cảm xúc và điểm khó ở từng bước",
+   "nhom": "Phân tích & lên ý tưởng",
+   "viDu": "Personas, scenarios and customer journey maps are deliverables typically used to tell user stories.",
+   "viDuNghia": "Persona, kịch bản và bản đồ hành trình khách hàng là những sản phẩm thường dùng để kể câu chuyện người dùng."
+  },
+  {
+   "chu": "prototype",
+   "doc": "/ˈproʊtətaɪp/",
+   "nghia": "bản mẫu thử (nguyên mẫu): bản làm thử một phần sản phẩm để lấy phản hồi trước khi xây thật — UX: lo-fi / hi-fi; SWR302: throwaway, evolutionary",
+   "nhom": "Prototype",
+   "viDu": "The primary reason for creating a prototype is to resolve uncertainties early in the development process.",
+   "viDuNghia": "Lý do chính để tạo nguyên mẫu là giải quyết sớm những điều chưa chắc chắn trong quá trình phát triển."
+  },
+  {
+   "chu": "wireframe",
+   "doc": "/ˈwaɪərfreɪm/",
+   "nghia": "khung dây: bản vẽ bố cục màn hình, chưa có màu sắc và hình ảnh thật",
+   "nhom": "Prototype",
+   "viDu": "Which of the following is not a question that can be answered by getting feedback on wireframes?",
+   "viDuNghia": "Điều nào sau đây KHÔNG phải là câu hỏi có thể được trả lời bằng cách lấy phản hồi về wireframe?"
+  },
+  {
+   "chu": "mockup",
+   "doc": "/ˈmɑːkʌp/",
+   "nghia": "bản dựng tĩnh: hình màn hình trông giống thật nhưng chưa bấm được",
+   "nhom": "Prototype",
+   "viDu": "A mockup shows how the screen will look, but it is not interactive.",
+   "viDuNghia": "Mockup cho thấy màn hình trông ra sao nhưng chưa tương tác được."
+  },
+  {
+   "chu": "lo-fi prototype",
+   "doc": "/ˌloʊ ˈfaɪ ˈproʊtətaɪp/",
+   "nghia": "prototype độ trung thực thấp: vẽ giấy, thô, làm nhanh để thử ý tưởng sớm",
+   "nhom": "Prototype",
+   "viDu": "Which of the following is a common method for creating a lo-fi prototype in UX design?",
+   "viDuNghia": "Phương pháp nào sau đây thường được dùng để tạo prototype lo-fi trong thiết kế UX?"
+  },
+  {
+   "chu": "hi-fi prototype",
+   "doc": "/ˌhaɪ ˈfaɪ ˈproʊtətaɪp/",
+   "nghia": "prototype độ trung thực cao: giống sản phẩm thật, bấm được",
+   "nhom": "Prototype",
+   "viDu": "Which of the following is not a characteristic of hi-fi prototypes?",
+   "viDuNghia": "Điều nào sau đây KHÔNG PHẢI là đặc điểm của nguyên mẫu độ trung thực cao (hi-fi prototype)?"
+  },
+  {
+   "chu": "interactive",
+   "doc": "/ˌɪntərˈæktɪv/",
+   "nghia": "có tương tác: người dùng bấm, nhập được và hệ thống phản hồi",
+   "nhom": "Prototype",
+   "viDu": "Which is not an output modality commonly used in today's interactive applications?",
+   "viDuNghia": "Đâu KHÔNG phải là một phương thức xuất (output modality) thường được sử dụng trong các ứng dụng tương tác ngày nay?"
+  },
+  {
+   "chu": "key task",
+   "doc": "/kiː tæsk/",
+   "nghia": "tác vụ chính: việc quan trọng nhất người dùng cần làm được với hệ thống",
+   "nhom": "Prototype",
+   "viDu": "Which of the following are among the key tasks that were identified?",
+   "viDuNghia": "Đâu là các tác vụ chính (key tasks) đã được xác định?"
+  },
+  {
+   "chu": "core function",
+   "doc": "/kɔːr ˈfʌŋkʃn/",
+   "nghia": "chức năng cốt lõi của sản phẩm",
+   "nhom": "Prototype",
+   "viDu": "Is this a good scope for a user test? → Yes, it has users test the core functions of the app",
+   "viDuNghia": "Đây có phải là một phạm vi tốt cho một bài kiểm thử người dùng (user test) không? → Có, vì nó cho người dùng kiểm thử các chức năng cốt lõi của ứng dụng"
+  },
+  {
+   "chu": "user testing",
+   "doc": "/ˈjuːzər ˈtestɪŋ/",
+   "nghia": "kiểm thử với người dùng: cho người dùng thật làm tác vụ trên thiết kế và quan sát",
+   "nhom": "Kiểm thử người dùng",
+   "viDu": "What does the concept of \"demand characteristics\" warn us about when applied to user testing?",
+   "viDuNghia": "Khái niệm \"đặc điểm yêu cầu\" (demand characteristics) cảnh báo chúng ta điều gì khi áp dụng vào kiểm thử người dùng?"
+  },
+  {
+   "chu": "test participant",
+   "doc": "/test pɑːrˈtɪsɪpənt/",
+   "nghia": "người tham gia buổi kiểm thử",
+   "nhom": "Kiểm thử người dùng",
+   "viDu": "In user testing, we generally ask test participants to verbalize what they are thinking as they perform tasks. This approach is called:",
+   "viDuNghia": "Trong kiểm thử người dùng (user testing), chúng ta thường yêu cầu người tham gia nói to những gì họ đang nghĩ trong khi thực hiện tác vụ. Cách tiếp cận này được gọi là:"
+  },
+  {
+   "chu": "think-aloud protocol",
+   "doc": "/ˈθɪŋk əlaʊd ˈproʊtəkɑːl/",
+   "nghia": "phương pháp nói to suy nghĩ: người tham gia vừa làm vừa nói ra điều mình đang nghĩ",
+   "nhom": "Kiểm thử người dùng",
+   "viDu": "What should you do during the think-aloud protocol?",
+   "viDuNghia": "Bạn nên làm gì trong quá trình thực hiện phương pháp nghĩ thành lời (think-aloud protocol)?"
+  },
+  {
+   "chu": "remote moderated testing",
+   "nghia": "kiểm thử từ xa có người điều phối: người điều phối và người dùng gặp nhau qua mạng",
+   "nhom": "Kiểm thử người dùng",
+   "viDu": "What preparations should you make ahead of both remote moderated as well as unmoderated testing?",
+   "viDuNghia": "Bạn nên chuẩn bị những gì trước cả kiểm thử từ xa có điều phối viên (moderated) lẫn không có điều phối viên (unmoderated)?"
+  },
+  {
+   "chu": "unmoderated",
+   "doc": "/ʌnˈmɑːdəreɪtɪd/",
+   "nghia": "không có người điều phối: người dùng tự làm bài kiểm thử một mình",
+   "nhom": "Kiểm thử người dùng",
+   "viDu": "What preparations should you make ahead of both remote moderated as well as unmoderated testing?",
+   "viDuNghia": "Bạn nên chuẩn bị những gì trước cả kiểm thử từ xa có điều phối (moderated) lẫn không điều phối (unmoderated)?"
+  },
+  {
+   "chu": "task completion",
+   "doc": "/tæsk kəmˈpliːʃn/",
+   "nghia": "mức hoàn thành tác vụ: người dùng có làm xong việc được giao hay không",
+   "nhom": "Kiểm thử người dùng",
+   "viDu": "Baseline statistics such as task completion rate, time spent on task, and/or errors should be included in user test reports.",
+   "viDuNghia": "Các thống kê nền tảng (baseline statistics) như tỷ lệ hoàn thành tác vụ, thời gian thực hiện tác vụ, và/hoặc lỗi nên được đưa vào báo cáo kiểm thử người dùng."
+  },
+  {
+   "chu": "success criteria",
+   "doc": "/səkˈses kraɪˈtɪriə/",
+   "nghia": "tiêu chí thành công: thế nào thì coi là làm xong tác vụ",
+   "nhom": "Kiểm thử người dùng",
+   "viDu": "Do not tell participants as soon as they have met each task's success criteria.",
+   "viDuNghia": "Đừng báo cho người tham gia ngay khi họ vừa đạt tiêu chí thành công của từng tác vụ."
+  },
+  {
+   "chu": "set expectations",
+   "doc": "/set ˌekspekˈteɪʃnz/",
+   "nghia": "nói trước cho người tham gia biết buổi làm việc sẽ diễn ra thế nào",
+   "nhom": "Kiểm thử người dùng",
+   "viDu": "The script should set expectations for the duration and content of the session.",
+   "viDuNghia": "Kịch bản nên nói trước về thời lượng và nội dung của buổi làm việc."
+  },
+  {
+   "chu": "verbal report",
+   "doc": "/ˈvɜːrbl rɪˈpɔːrt/",
+   "nghia": "lời thuật lại: điều người tham gia nói ra trong lúc làm",
+   "nhom": "Kiểm thử người dùng",
+   "viDu": "Critical incidents and verbal reports are both examples of what kind of user testing data?",
+   "viDuNghia": "Sự kiện quan trọng (critical incidents) và báo cáo bằng lời (verbal reports) đều là ví dụ của loại dữ liệu kiểm thử người dùng nào?"
+  },
+  {
+   "chu": "capture",
+   "doc": "/ˈkæptʃər/",
+   "nghia": "ghi lại (dữ liệu, lời nói, thao tác) trong buổi nghiên cứu",
+   "nhom": "Kiểm thử người dùng",
+   "viDu": "Critical incidents are the most important data to capture in a formative user test.",
+   "viDuNghia": "Sự cố then chốt là dữ liệu quan trọng nhất cần ghi lại trong buổi kiểm thử định hình."
+  },
+  {
+   "chu": "perceived usefulness",
+   "doc": "/pərˈsiːvd ˈjuːsfəlnəs/",
+   "nghia": "tính hữu ích cảm nhận: người dùng tin hệ thống giúp được việc của mình tới đâu",
+   "nhom": "Kiểm thử người dùng",
+   "viDu": "A debrief interview includes general questions about perceived usefulness.",
+   "viDuNghia": "Buổi phỏng vấn tổng kết có các câu hỏi chung về tính hữu ích cảm nhận."
+  },
+  {
+   "chu": "perceived usability",
+   "doc": "/pərˈsiːvd ˌjuːzəˈbɪləti/",
+   "nghia": "tính dễ dùng cảm nhận: người dùng thấy hệ thống dễ dùng tới đâu",
+   "nhom": "Kiểm thử người dùng",
+   "viDu": "What does the System Usability Scale measure? → Perceived usability",
+   "viDuNghia": "Thang đo Khả dụng Hệ thống (System Usability Scale - SUS) đo lường điều gì? → Khả dụng được cảm nhận (perceived usability)"
+  },
+  {
+   "chu": "comparative testing",
+   "doc": "/kəmˈpærətɪv ˈtestɪŋ/",
+   "nghia": "kiểm thử so sánh (A/B): cho hai phương án thi nhau để xem cái nào tốt hơn",
+   "nhom": "Kiểm thử người dùng",
+   "viDu": "Which method is primarily used for summative usability testing to evaluate the overall performance of a design? → Comparative A/B Testing",
+   "viDuNghia": "Phương pháp nào chủ yếu được dùng cho kiểm thử khả dụng tổng kết (summative) để đánh giá hiệu suất tổng thể của một thiết kế? → Kiểm thử so sánh A/B (Comparative A/B Testing)"
+  },
+  {
+   "chu": "verbalize",
+   "doc": "/ˈvɜːrbəlaɪz/",
+   "nghia": "nói thành lời (điều đang nghĩ)",
+   "nhom": "Kiểm thử người dùng",
+   "viDu": "In user testing, we generally ask test participants to verbalize what they are thinking as they perform tasks.",
+   "viDuNghia": "Trong kiểm thử người dùng, ta thường yêu cầu người tham gia nói thành lời điều họ đang nghĩ khi thực hiện tác vụ."
+  },
+  {
+   "chu": "observer",
+   "doc": "/əbˈzɜːrvər/",
+   "nghia": "người quan sát: ngồi xem và ghi chép trong buổi kiểm thử, không can thiệp",
+   "nhom": "Kiểm thử người dùng",
+   "viDu": "Introduce the observers to the participant at the start of the session.",
+   "viDuNghia": "Hãy giới thiệu những người quan sát với người tham gia khi bắt đầu buổi làm việc."
+  },
+  {
+   "chu": "debrief",
+   "doc": "/ˌdiːˈbriːf/",
+   "nghia": "trao đổi tổng kết ngay sau buổi kiểm thử",
+   "nhom": "Kiểm thử người dùng",
+   "viDu": "Which of the following would you typically not include in a debrief interview?",
+   "viDuNghia": "Điều nào sau đây thường KHÔNG được đưa vào một buổi phỏng vấn tổng kết (debrief interview)?"
+  },
+  {
+   "chu": "usability",
+   "doc": "/ˌjuːzəˈbɪləti/",
+   "nghia": "tính khả dụng, dễ dùng – người dùng học, thao tác hiệu quả và hài lòng tới mức nào",
+   "nhom": "Kiểm thử người dùng",
+   "viDu": "Which method is primarily used for summative usability testing to evaluate the overall performance of a design?",
+   "viDuNghia": "Phương pháp nào chủ yếu được dùng cho kiểm thử khả dụng tổng kết (summative) để đánh giá hiệu suất tổng thể của một thiết kế?"
+  },
+  {
+   "chu": "usability testing",
+   "doc": "/ˌjuːzəˈbɪləti ˈtestɪŋ/",
+   "nghia": "kiểm thử khả dụng – cho người dùng thật làm nhiệm vụ trên sản phẩm để tìm chỗ khó dùng",
+   "nhom": "Kiểm thử người dùng",
+   "viDu": "Select all the benefits of conducting usability testing early in the UX design process. (More than one answer may be correct).",
+   "viDuNghia": "Chọn tất cả các lợi ích của việc thực hiện kiểm thử khả dụng (usability testing) sớm trong quy trình thiết kế UX. (Có thể có nhiều hơn một đáp án đúng)."
+  },
+  {
+   "chu": "System Usability Scale",
+   "nghia": "thang SUS: bảng hỏi 10 câu, quy ra điểm 0–100, đo tính dễ dùng mà người dùng cảm nhận",
+   "nhom": "Kiểm thử người dùng",
+   "viDu": "What does the System Usability Scale measure?",
+   "viDuNghia": "Thang đo khả dụng hệ thống (System Usability Scale – SUS) đo điều gì?"
+  },
+  {
+   "chu": "A/B testing",
+   "doc": "/ˌeɪ ˈbiː ˈtestɪŋ/",
+   "nghia": "kiểm thử A/B: cho hai nhóm người dùng hai phương án rồi so số liệu xem phương án nào tốt hơn (kiểm thử so sánh, tổng kết)",
+   "nhom": "Kiểm thử người dùng",
+   "viDu": "Comparative A/B testing is primarily used for summative usability testing to evaluate the overall performance of a design.",
+   "viDuNghia": "Kiểm thử so sánh A/B chủ yếu dùng cho kiểm thử khả dụng tổng kết để đánh giá hiệu quả tổng thể của một thiết kế."
+  },
+  {
+   "chu": "heuristic",
+   "doc": "/hjuˈrɪstɪk/",
+   "nghia": "nguyên tắc kinh nghiệm: quy tắc chung để thiết kế và đánh giá giao diện (10 heuristic của Nielsen)",
+   "nhom": "Heuristic",
+   "viDu": "Using obscure system codes or non-intuitive imagery to represent system features and/or feedback violates which heuristic?",
+   "viDuNghia": "Việc sử dụng mã hệ thống khó hiểu hoặc hình ảnh không trực quan để biểu diễn tính năng và/hoặc phản hồi của hệ thống vi phạm nguyên tắc heuristic nào?"
+  },
+  {
+   "chu": "heuristic evaluation",
+   "doc": "/hjuˈrɪstɪk ɪˌvæljuˈeɪʃn/",
+   "nghia": "đánh giá theo heuristic: chuyên gia soát giao diện theo bộ nguyên tắc để tìm lỗi",
+   "nhom": "Heuristic",
+   "viDu": "What is the first step in conducting a Heuristic Evaluation?",
+   "viDuNghia": "Bước đầu tiên khi thực hiện Heuristic Evaluation (đánh giá theo nguyên tắc chuyên gia) là gì?"
+  },
+  {
+   "chu": "visibility of system status",
+   "nghia": "hiển thị trạng thái hệ thống: luôn cho người dùng biết chuyện gì đang xảy ra",
+   "nhom": "Heuristic",
+   "viDu": "A progress bar supports the heuristic of visibility of system status.",
+   "viDuNghia": "Thanh tiến trình đáp ứng heuristic hiển thị trạng thái hệ thống."
+  },
+  {
+   "chu": "user control and freedom",
+   "nghia": "quyền kiểm soát và tự do của người dùng: có lối thoát, hoàn tác (undo) được",
+   "nhom": "Heuristic",
+   "viDu": "Finding 1: No option to delete or modify Time Sheet entries. What heuristic does this violate? → User control and freedom",
+   "viDuNghia": "Phát hiện 1: Không có lựa chọn xoá hay sửa mục trong Bảng chấm công. Vi phạm heuristic nào? → Quyền kiểm soát và tự do của người dùng"
+  },
+  {
+   "chu": "error prevention",
+   "doc": "/ˈerər prɪˈvenʃn/",
+   "nghia": "phòng ngừa lỗi: thiết kế để người dùng khó làm sai ngay từ đầu",
+   "nhom": "Heuristic",
+   "viDu": "Asking for confirmation before deleting a file is an example of error prevention.",
+   "viDuNghia": "Hỏi xác nhận trước khi xoá tệp là một ví dụ về phòng ngừa lỗi."
+  },
+  {
+   "chu": "recognition rather than recall",
+   "nghia": "nhận ra thay vì phải nhớ lại: bày sẵn lựa chọn để người dùng không phải nhớ",
+   "nhom": "Heuristic",
+   "viDu": "Showing a list of recent files supports recognition rather than recall.",
+   "viDuNghia": "Hiện danh sách tệp gần đây giúp người dùng nhận ra thay vì phải nhớ lại."
+  },
+  {
+   "chu": "aesthetic and minimalist design",
+   "nghia": "thiết kế đẹp và tối giản: không bày thông tin thừa",
+   "nhom": "Heuristic",
+   "viDu": "Aesthetic and minimalist design means the screen shows no irrelevant information.",
+   "viDuNghia": "Thiết kế đẹp và tối giản nghĩa là màn hình không hiện thông tin thừa."
+  },
+  {
+   "chu": "undo",
+   "doc": "/ˌʌnˈduː/",
+   "nghia": "hoàn tác: huỷ thao tác vừa làm",
+   "nhom": "Heuristic",
+   "viDu": "An undo feature lets users reverse a mistake.",
+   "viDuNghia": "Tính năng hoàn tác cho phép người dùng đảo ngược một thao tác sai."
+  },
+  {
+   "chu": "match between system and the real world",
+   "nghia": "khớp giữa hệ thống và thế giới thực (heuristic 2): dùng từ ngữ, hình ảnh quen thuộc với người dùng, không dùng mã khó hiểu",
+   "nhom": "Heuristic",
+   "viDu": "Using obscure system codes or non-intuitive imagery violates the heuristic of match between system and the real world.",
+   "viDuNghia": "Dùng mã hệ thống khó hiểu hoặc hình ảnh không trực quan là vi phạm heuristic \"khớp giữa hệ thống và thế giới thực\"."
+  },
+  {
+   "chu": "consistency and standards",
+   "nghia": "nhất quán và tuân chuẩn (heuristic 4): cùng một thứ thì cùng tên, cùng cách thể hiện; theo quy ước quen thuộc của nền tảng",
+   "nhom": "Heuristic",
+   "viDu": "Using the same icon for the same action on every screen follows consistency and standards.",
+   "viDuNghia": "Dùng cùng một biểu tượng cho cùng một thao tác trên mọi màn hình là tuân theo nguyên tắc nhất quán và tuân chuẩn."
+  },
+  {
+   "chu": "flexibility and efficiency of use",
+   "nghia": "linh hoạt và hiệu quả khi dùng (heuristic 7): có lối tắt cho người dùng thạo mà vẫn dễ với người mới",
+   "nhom": "Heuristic",
+   "viDu": "Keyboard shortcuts for expert users support flexibility and efficiency of use.",
+   "viDuNghia": "Phím tắt cho người dùng thành thạo hỗ trợ nguyên tắc linh hoạt và hiệu quả khi dùng."
+  },
+  {
+   "chu": "help users recognize, diagnose, and recover from errors",
+   "nghia": "giúp người dùng nhận ra, hiểu và khắc phục lỗi (heuristic 9): thông báo lỗi bằng lời dễ hiểu, nói rõ vấn đề và cách sửa",
+   "nhom": "Heuristic",
+   "viDu": "A clear error message that explains how to fix the problem helps users recognize, diagnose, and recover from errors.",
+   "viDuNghia": "Thông báo lỗi rõ ràng, nói cách khắc phục giúp người dùng nhận ra, hiểu và khắc phục lỗi."
+  },
+  {
+   "chu": "help and documentation",
+   "nghia": "trợ giúp và tài liệu (heuristic 10): có hướng dẫn dễ tìm, tập trung vào tác vụ, liệt kê các bước cụ thể",
+   "nhom": "Heuristic",
+   "viDu": "Nielsen provides several recommendations for help and documentation.",
+   "viDuNghia": "Nielsen đưa ra một số khuyến nghị về trợ giúp và tài liệu hướng dẫn."
+  },
+  {
+   "chu": "gulf of execution",
+   "nghia": "hố ngăn thực thi: khoảng cách giữa điều người dùng muốn làm và cách hệ thống cho phép làm",
+   "nhom": "Tâm lý & mô hình",
+   "viDu": "Gulf of execution refers to which of the following?",
+   "viDuNghia": "Khoảng cách thực thi (Gulf of execution) đề cập đến điều nào sau đây?"
+  },
+  {
+   "chu": "gulf of evaluation",
+   "nghia": "hố ngăn đánh giá: khó hiểu hệ thống đang ở trạng thái nào, thao tác vừa rồi có kết quả gì",
+   "nhom": "Tâm lý & mô hình",
+   "viDu": "Gulf of evaluation refers to which of the following?",
+   "viDuNghia": "Gulf of evaluation (khoảng cách đánh giá) đề cập đến điều nào sau đây?"
+  },
+  {
+   "chu": "conceptual model",
+   "doc": "/kənˈseptʃuəl ˈmɑːdl/",
+   "nghia": "mô hình khái niệm: hình dung trong đầu người dùng về cách hệ thống hoạt động",
+   "nhom": "Tâm lý & mô hình",
+   "viDu": "By helping users form effective Conceptual models, we can help users predict the results of actions they haven't yet performed using a system.",
+   "viDuNghia": "Bằng cách giúp người dùng hình thành Mô hình khái niệm (conceptual models) hiệu quả, chúng ta có thể giúp người dùng dự đoán được kết quả của những hành động mà họ chưa thực hiện trên hệ thống."
+  },
+  {
+   "chu": "system image",
+   "doc": "/ˈsɪstəm ˈɪmɪdʒ/",
+   "nghia": "hình ảnh hệ thống: những gì hệ thống phô ra cho người dùng thấy (giao diện, tài liệu)",
+   "nhom": "Tâm lý & mô hình",
+   "viDu": "Users build their conceptual model from the system image.",
+   "viDuNghia": "Người dùng xây mô hình khái niệm của mình từ hình ảnh hệ thống."
+  },
+  {
+   "chu": "affordance",
+   "doc": "/əˈfɔːrdns/",
+   "nghia": "gợi ý sử dụng: đặc điểm cho thấy vật đó dùng được thế nào (nút thì bấm được)",
+   "nhom": "Tâm lý & mô hình",
+   "viDu": "A raised button has the affordance of being pressed.",
+   "viDuNghia": "Một nút nổi gợi ý rằng nó bấm được."
+  },
+  {
+   "chu": "short-term memory",
+   "doc": "/ˌʃɔːrt tɜːrm ˈmeməri/",
+   "nghia": "trí nhớ ngắn hạn: chỉ giữ được vài mục trong vài chục giây",
+   "nhom": "Tâm lý & mô hình",
+   "viDu": "According to the original research on short-term memory, how many \"items\" can a person retain in memory at one time?",
+   "viDuNghia": "Theo nghiên cứu gốc về trí nhớ ngắn hạn, một người có thể ghi nhớ được bao nhiêu \"mục\" (items) cùng một lúc?"
+  },
+  {
+   "chu": "long-term memory",
+   "doc": "/ˌlɔːŋ tɜːrm ˈmeməri/",
+   "nghia": "trí nhớ dài hạn: nơi lưu kiến thức lâu dài",
+   "nhom": "Tâm lý & mô hình",
+   "viDu": "Which of the following does NOT impact the likelihood that something in long-term memory will be recalled?",
+   "viDuNghia": "Điều nào sau đây KHÔNG ảnh hưởng đến khả năng một điều gì đó trong trí nhớ dài hạn sẽ được nhớ lại?"
+  },
+  {
+   "chu": "social determinist",
+   "doc": "/ˈsoʊʃl dɪˈtɜːrmɪnɪst/",
+   "nghia": "người theo thuyết quyết định xã hội: nhu cầu của các nhóm xã hội quyết định việc công nghệ được dùng ra sao",
+   "nhom": "Tâm lý & mô hình",
+   "viDu": "Which position claims that technological adoption is primarily governed by the needs of different social groups? → Social determinists",
+   "viDuNghia": "Quan điểm nào cho rằng việc chấp nhận công nghệ chủ yếu do nhu cầu của các nhóm xã hội chi phối? → Những người theo thuyết quyết định xã hội"
+  },
+  {
+   "chu": "technical determinist",
+   "doc": "/ˈteknɪkl dɪˈtɜːrmɪnɪst/",
+   "nghia": "người theo thuyết quyết định công nghệ: đặc tính của công nghệ gần như định sẵn hệ quả xã hội",
+   "nhom": "Tâm lý & mô hình",
+   "viDu": "Technical determinists believe that sometimes the properties of technologies almost necessitate certain kinds of consequences.",
+   "viDuNghia": "Những người theo thuyết tất định công nghệ (technical determinism) tin rằng đôi khi các đặc tính của công nghệ gần như tất yếu dẫn đến những hệ quả nhất định."
+  },
+  {
+   "chu": "adoption",
+   "doc": "/əˈdɑːpʃn/",
+   "nghia": "sự chấp nhận, bắt đầu sử dụng (một công nghệ mới)",
+   "nhom": "Tâm lý & mô hình",
+   "viDu": "Perceived usefulness strongly affects the adoption of a new technology.",
+   "viDuNghia": "Tính hữu ích cảm nhận ảnh hưởng mạnh tới việc chấp nhận một công nghệ mới."
+  },
+  {
+   "chu": "mental model",
+   "doc": "/ˈmentl ˈmɑːdl/",
+   "nghia": "mô hình tinh thần: cách người dùng nghĩ rằng hệ thống hoạt động",
+   "nhom": "Tâm lý & mô hình",
+   "viDu": "Users do not need to know the technical details to have a useful mental model of a system.",
+   "viDuNghia": "Người dùng không cần biết chi tiết kỹ thuật vẫn có được mô hình tinh thần hữu ích về hệ thống."
+  },
+  {
+   "chu": "trust",
+   "doc": "/trʌst/",
+   "nghia": "lòng tin (cơ sở để người ta chịu tham gia, chịu dùng)",
+   "nhom": "Tâm lý & mô hình",
+   "viDu": "People answer a survey when they trust that the benefits will outweigh the costs.",
+   "viDuNghia": "Người ta trả lời khảo sát khi tin rằng lợi ích sẽ lớn hơn chi phí."
+  },
+  {
+   "chu": "signifier",
+   "doc": "/ˈsɪɡnɪfaɪər/",
+   "nghia": "dấu hiệu chỉ dẫn (Norman): chữ hay hình cho người dùng biết thao tác ở đâu và điều gì sẽ xảy ra (nhãn \"Push\", mũi tên)",
+   "nhom": "Tâm lý & mô hình",
+   "viDu": "A feature of a system that communicates through words or images what will happen if an action is taken is called a signifier.",
+   "viDuNghia": "Đặc điểm của hệ thống dùng chữ hoặc hình để cho biết điều gì sẽ xảy ra khi thực hiện một thao tác được gọi là signifier."
+  }
+ ]
+}

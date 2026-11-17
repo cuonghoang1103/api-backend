@@ -1,0 +1,838 @@
+{
+ "ma": "cea201-3",
+ "nn": "en",
+ "ten": "CEA201 · 3. Tập lệnh, số học, logic, pipeline, HĐH",
+ "moTa": "Môn Tổ chức & kiến trúc máy tính (CEA201), phần 3: tập lệnh, hợp ngữ, kiểu định địa chỉ, biểu diễn số, cổng logic và đại số Boole, đường ống lệnh và xung đột, RISC/CISC, đa xử lý, hỗ trợ hệ điều hành. Từ lấy từ đề FE thật; phần lớn câu ví dụ là câu hỏi thật trong đề.",
+ "bieuTuong": "function",
+ "thuTu": -987,
+ "tu": [
+  {
+   "chu": "instruction set",
+   "doc": "/ɪnˈstrʌkʃn set/",
+   "nghia": "tập lệnh – toàn bộ các lệnh máy mà một CPU hiểu được",
+   "nhom": "Tập lệnh",
+   "viDu": "What is a primary disadvantage of CISC (Complex Instruction Set Computer) architectures?",
+   "viDuNghia": "Đâu là nhược điểm chính của kiến trúc CISC (Complex Instruction Set Computer)?"
+  },
+  {
+   "chu": "instruction format",
+   "doc": "/ɪnˈstrʌkʃn ˈfɔːrmæt/",
+   "nghia": "khuôn dạng lệnh – cách chia lệnh thành các trường (opcode, toán hạng)",
+   "nhom": "Tập lệnh",
+   "viDu": "Which type of instruction format is more flexible but can lead to inefficient use of memory?",
+   "viDuNghia": "Loại định dạng lệnh nào linh hoạt hơn nhưng có thể dẫn tới dùng bộ nhớ kém hiệu quả?"
+  },
+  {
+   "chu": "instruction length",
+   "doc": "/ɪnˈstrʌkʃn leŋθ/",
+   "nghia": "độ dài lệnh – số bit của một lệnh",
+   "nhom": "Tập lệnh",
+   "viDu": "Assume an instruction set that uses a fixed 16-bit instruction length. Operand specifiers are 6 bits in length. What is the maximum number of one-operand instructions that can be supported?",
+   "viDuNghia": "Giả sử một tập lệnh dùng độ dài lệnh cố định 16 bit. Trường toán hạng dài 6 bit. Số lệnh một-toán-hạng tối đa có thể hỗ trợ là bao nhiêu?"
+  },
+  {
+   "chu": "arithmetic",
+   "doc": "/əˈrɪθmətɪk/",
+   "nghia": "số học – các phép cộng, trừ, nhân, chia",
+   "nhom": "Tập lệnh",
+   "viDu": "Which representation is most efficient to perform arithmetic operations on the signed integer numbers?",
+   "viDuNghia": "Cách biểu diễn nào hiệu quả nhất để thực hiện phép số học trên số nguyên có dấu?"
+  },
+  {
+   "chu": "logical",
+   "doc": "/ˈlɑːdʒɪkl/",
+   "nghia": "(thuộc) logic – phép AND, OR, NOT trên bit; hoặc \"luận lý\" trái với \"vật lý\"",
+   "nhom": "Tập lệnh",
+   "viDu": "____ is a set of physical disk drives viewed by the operating system as a single logical drive.",
+   "viDuNghia": "____ là một tập các ổ đĩa vật lý được HĐH xem như một ổ đĩa logic duy nhất."
+  },
+  {
+   "chu": "branch instruction",
+   "doc": "/bræntʃ ɪnˈstrʌkʃn/",
+   "nghia": "lệnh rẽ nhánh – đổi địa chỉ lệnh kế tiếp thay vì chạy tuần tự",
+   "nhom": "Tập lệnh",
+   "viDu": "The only form of addressing for branch instructions is ________ addressing.",
+   "viDuNghia": "Dạng định địa chỉ duy nhất cho lệnh rẽ nhánh là định địa chỉ ________."
+  },
+  {
+   "chu": "conditional branch",
+   "doc": "/kənˈdɪʃənl bræntʃ/",
+   "nghia": "rẽ nhánh có điều kiện – chỉ nhảy khi điều kiện (cờ) thoả",
+   "nhom": "Tập lệnh",
+   "viDu": "In a conditional branch instruction, what happens if the specified condition is met?",
+   "viDuNghia": "Trong lệnh rẽ nhánh có điều kiện, điều gì xảy ra nếu điều kiện được thỏa?"
+  },
+  {
+   "chu": "little-endian",
+   "doc": "/ˌlɪtl ˈendiən/",
+   "nghia": "little-endian – byte thấp nhất nằm ở địa chỉ thấp nhất",
+   "nhom": "Tập lệnh",
+   "viDu": "The 32-bit value 12345678 (hexadecimal) is stored starting at address 100 on a little-endian machine. Which byte is stored at address 100?",
+   "viDuNghia": "Giá trị 32 bit 12345678 (hệ thập lục phân) được lưu bắt đầu từ địa chỉ 100 trên một máy little-endian. Byte nào nằm ở địa chỉ 100?"
+  },
+  {
+   "chu": "machine language",
+   "doc": "/məˈʃiːn ˈlæŋɡwɪdʒ/",
+   "nghia": "ngôn ngữ máy – lệnh dạng nhị phân CPU chạy trực tiếp",
+   "nhom": "Tập lệnh",
+   "viDu": "The __________ defines the repertoire of machine language instructions that a computer can follow.",
+   "viDuNghia": "__________ định nghĩa tập hợp các lệnh ngôn ngữ máy mà một máy tính có thể thực hiện."
+  },
+  {
+   "chu": "assembly language",
+   "doc": "/əˈsembli ˈlæŋɡwɪdʒ/",
+   "nghia": "hợp ngữ – viết lệnh máy bằng ký hiệu dễ đọc (MOV, ADD…)",
+   "nhom": "Tập lệnh",
+   "viDu": "Each assembly language statement corresponds to one machine instruction.",
+   "viDuNghia": "Mỗi câu lệnh hợp ngữ ứng với một lệnh máy."
+  },
+  {
+   "chu": "assembler",
+   "doc": "/əˈsemblər/",
+   "nghia": "trình hợp dịch – dịch hợp ngữ sang mã máy",
+   "nhom": "Tập lệnh",
+   "viDu": "How does pipelining in a RISC architecture handle branch instruction? — By using NOOP instructions inserted by the compiler or assembler",
+   "viDuNghia": "Kỹ thuật đường ống trong kiến trúc RISC xử lý lệnh rẽ nhánh như thế nào? — Bằng cách chèn các lệnh NOOP do trình biên dịch hoặc trình hợp dịch thêm vào"
+  },
+  {
+   "chu": "high-level language",
+   "doc": "/ˌhaɪ ˈlevl ˈlæŋɡwɪdʒ/",
+   "nghia": "ngôn ngữ bậc cao (HLL) – C, Java…; gần ngôn ngữ người, xa phần cứng",
+   "nhom": "Tập lệnh",
+   "viDu": "What role does an Application Programming Interface (API) play in software development? — It allows program access to hardware resources using high-level language libraries",
+   "viDuNghia": "Giao diện lập trình ứng dụng (API) đóng vai trò gì trong phát triển phần mềm? — Nó cho phép chương trình truy cập tài nguyên phần cứng thông qua các thư viện ngôn ngữ bậc cao"
+  },
+  {
+   "chu": "symbolic",
+   "doc": "/sɪmˈbɑːlɪk/",
+   "nghia": "dạng ký hiệu – viết bằng tên gợi nhớ thay cho dãy bit",
+   "nhom": "Tập lệnh",
+   "viDu": "Why is it essential to use symbolic representation of machine instructions?",
+   "viDuNghia": "Vì sao việc dùng biểu diễn ký hiệu (symbolic) cho các lệnh máy là cần thiết?"
+  },
+  {
+   "chu": "mnemonic",
+   "doc": "/nɪˈmɑːnɪk/",
+   "nghia": "từ gợi nhớ – tên viết tắt của lệnh trong hợp ngữ (ADD, SUB, JMP)",
+   "nhom": "Tập lệnh",
+   "viDu": "ADD is the mnemonic for the addition instruction.",
+   "viDuNghia": "ADD là từ gợi nhớ của lệnh cộng."
+  },
+  {
+   "chu": "halt",
+   "doc": "/hɔːlt/",
+   "nghia": "dừng hẳn – lệnh/trạng thái làm CPU ngừng chạy chương trình",
+   "nhom": "Tập lệnh",
+   "viDu": "The processor halts when it executes a HALT instruction.",
+   "viDuNghia": "Bộ xử lý dừng khi thực thi lệnh HALT."
+  },
+  {
+   "chu": "big-endian",
+   "doc": "/ˌbɪɡ ˈendiən/",
+   "nghia": "big-endian – byte cao nhất (MSB) nằm ở địa chỉ thấp nhất; ngược với little-endian",
+   "nhom": "Tập lệnh",
+   "viDu": "On a big-endian machine, the value 12345678 (hex) has the byte 12 at the lowest address.",
+   "viDuNghia": "Trên máy big-endian, giá trị 12345678 (hệ 16) có byte 12 nằm ở địa chỉ thấp nhất."
+  },
+  {
+   "chu": "addressing mode",
+   "doc": "/əˈdresɪŋ moʊd/",
+   "nghia": "chế độ (kiểu) định địa chỉ – cách lệnh chỉ ra toán hạng nằm ở đâu",
+   "nhom": "Định địa chỉ",
+   "viDu": "The value of the mode field determines which addressing mode is to be used.",
+   "viDuNghia": "Giá trị của trường mode quyết định chế độ định địa chỉ nào được dùng."
+  },
+  {
+   "chu": "immediate addressing",
+   "doc": "/ɪˈmiːdiət əˈdresɪŋ/",
+   "nghia": "định địa chỉ tức thời – toán hạng nằm ngay trong lệnh; không tốn lần truy cập bộ nhớ nào",
+   "nhom": "Định địa chỉ",
+   "viDu": "The disadvantage of immediate addressing is that the size of the number is restricted to the size of the address field.",
+   "viDuNghia": "Nhược điểm của định địa chỉ tức thời (immediate addressing) là kích thước của con số bị giới hạn bởi kích thước của trường địa chỉ."
+  },
+  {
+   "chu": "direct addressing",
+   "doc": "/dəˈrekt əˈdresɪŋ/",
+   "nghia": "định địa chỉ trực tiếp – trường địa chỉ chứa địa chỉ của toán hạng (EA = A)",
+   "nhom": "Định địa chỉ",
+   "viDu": "With direct addressing, the length of the address field is usually less than the word length, thus limiting the address range.",
+   "viDuNghia": "Với định địa chỉ trực tiếp, độ dài của trường địa chỉ thường nhỏ hơn độ dài từ, do đó giới hạn phạm vi địa chỉ."
+  },
+  {
+   "chu": "indirect addressing",
+   "doc": "/ˌɪndəˈrekt əˈdresɪŋ/",
+   "nghia": "định địa chỉ gián tiếp – trường địa chỉ trỏ tới ô nhớ chứa địa chỉ toán hạng (EA = (A))",
+   "nhom": "Định địa chỉ",
+   "viDu": "What is the primary advantage of indirect addressing mode?",
+   "viDuNghia": "Ưu điểm chính của chế độ định địa chỉ gián tiếp (indirect addressing) là gì?"
+  },
+  {
+   "chu": "register addressing",
+   "doc": "/ˈredʒɪstər əˈdresɪŋ/",
+   "nghia": "định địa chỉ thanh ghi – toán hạng nằm trong thanh ghi (EA = R)",
+   "nhom": "Định địa chỉ",
+   "viDu": "Almost all RISC instructions use simple register addressing.",
+   "viDuNghia": "Hầu như tất cả các lệnh RISC đều dùng định địa chỉ thanh ghi đơn giản."
+  },
+  {
+   "chu": "register indirect addressing",
+   "nghia": "định địa chỉ gián tiếp qua thanh ghi – thanh ghi chứa địa chỉ của toán hạng (EA = (R))",
+   "nhom": "Định địa chỉ",
+   "viDu": "The effective address of Register indirect addressing mode is ______.",
+   "viDuNghia": "Địa chỉ hiệu dụng (effective address) của chế độ định địa chỉ gián tiếp qua thanh ghi là ______."
+  },
+  {
+   "chu": "displacement addressing",
+   "doc": "/dɪsˈpleɪsmənt əˈdresɪŋ/",
+   "nghia": "định địa chỉ dịch chuyển – địa chỉ = giá trị thanh ghi + một độ dời (EA = A + (R))",
+   "nhom": "Định địa chỉ",
+   "viDu": "For __________, the address field references a main memory address and the referenced register contains a positive displacement from that address.",
+   "viDuNghia": "Với __________, trường địa chỉ tham chiếu một địa chỉ bộ nhớ chính và thanh ghi được tham chiếu chứa một độ dời (displacement) dương so với địa chỉ đó."
+  },
+  {
+   "chu": "relative addressing",
+   "doc": "/ˈrelətɪv əˈdresɪŋ/",
+   "nghia": "định địa chỉ tương đối – địa chỉ tính từ PC cộng độ dời",
+   "nhom": "Định địa chỉ",
+   "viDu": "In relative addressing, the effective address is the program counter plus a displacement.",
+   "viDuNghia": "Trong định địa chỉ tương đối, địa chỉ hiệu dụng bằng bộ đếm chương trình cộng một độ dời."
+  },
+  {
+   "chu": "base-register addressing",
+   "doc": "/ˌbeɪs ˈredʒɪstər əˈdresɪŋ/",
+   "nghia": "định địa chỉ thanh ghi cơ sở – thanh ghi giữ địa chỉ gốc, trường địa chỉ giữ độ dời",
+   "nhom": "Định địa chỉ",
+   "viDu": "The method of calculating the EA is the same for both base-register addressing and indexing.",
+   "viDuNghia": "Phương pháp tính địa chỉ hiệu dụng (EA) là như nhau cho cả định địa chỉ thanh ghi cơ sở (base-register) và định địa chỉ chỉ số (indexing)."
+  },
+  {
+   "chu": "indexing",
+   "doc": "/ˈɪndeksɪŋ/",
+   "nghia": "định địa chỉ chỉ số – trường địa chỉ là gốc, thanh ghi chỉ số là độ dời; tiện duyệt mảng",
+   "nhom": "Định địa chỉ",
+   "viDu": "Indexing performed after the indirection is __________.",
+   "viDuNghia": "Định chỉ số (indexing) thực hiện sau khi gián tiếp (indirection) được gọi là __________."
+  },
+  {
+   "chu": "autoindexing",
+   "doc": "/ˌɔːtoʊˈɪndeksɪŋ/",
+   "nghia": "tự tăng chỉ số – thanh ghi chỉ số tự tăng/giảm sau mỗi lần dùng",
+   "nhom": "Định địa chỉ",
+   "viDu": "The effective address of autoindexing is EA = A + (R); (R) → (R) + 1.",
+   "viDuNghia": "Địa chỉ hiệu dụng của tự động chỉ số (autoindexing) là EA = A + (R); (R) → (R) + 1."
+  },
+  {
+   "chu": "effective address",
+   "doc": "/ɪˈfektɪv ˈædres/",
+   "nghia": "địa chỉ hiệu dụng (EA) – địa chỉ thật của toán hạng sau khi tính xong",
+   "nhom": "Định địa chỉ",
+   "viDu": "In PC-relative addressing, how is the effective address computed?",
+   "viDuNghia": "Trong định địa chỉ tương đối theo PC, địa chỉ hiệu dụng được tính thế nào?"
+  },
+  {
+   "chu": "address field",
+   "doc": "/ˈædres fiːld/",
+   "nghia": "trường địa chỉ – phần của lệnh chứa địa chỉ hoặc giá trị dùng để tính địa chỉ",
+   "nhom": "Định địa chỉ",
+   "viDu": "The advantages of _____ addressing are that only a small address field is needed in the instruction and no time-consuming memory references are required.",
+   "viDuNghia": "Ưu điểm của định địa chỉ _____ là chỉ cần một trường địa chỉ nhỏ trong lệnh và không cần các lần tham chiếu bộ nhớ tốn thời gian."
+  },
+  {
+   "chu": "stack addressing",
+   "doc": "/stæk əˈdresɪŋ/",
+   "nghia": "định địa chỉ ngăn xếp – toán hạng ngầm định nằm ở đỉnh ngăn xếp",
+   "nhom": "Định địa chỉ",
+   "viDu": "Stack addressing needs no address field because the operand is on top of the stack.",
+   "viDuNghia": "Định địa chỉ ngăn xếp không cần trường địa chỉ vì toán hạng nằm ở đỉnh ngăn xếp."
+  },
+  {
+   "chu": "memory reference",
+   "doc": "/ˈmeməri ˈrefrəns/",
+   "nghia": "tham chiếu bộ nhớ – một lần truy cập vào bộ nhớ để lấy địa chỉ hoặc dữ liệu",
+   "nhom": "Định địa chỉ",
+   "viDu": "__________ has the advantage of large address space, however it has the disadvantage of multiple memory references.",
+   "viDuNghia": "__________ có ưu điểm là không gian địa chỉ lớn, nhưng lại có nhược điểm là cần nhiều lần tham chiếu bộ nhớ."
+  },
+  {
+   "chu": "postindexing",
+   "doc": "/ˌpoʊstˈɪndeksɪŋ/",
+   "nghia": "chỉ số hoá sau – làm gián tiếp trước rồi mới cộng chỉ số: EA = (A) + (R)",
+   "nhom": "Định địa chỉ",
+   "viDu": "In addressing modes that combine indirect addressing and indexing, what is postindexing?",
+   "viDuNghia": "Trong các chế độ định địa chỉ kết hợp gián tiếp và chỉ số, postindexing (chỉ số hoá sau) là gì?"
+  },
+  {
+   "chu": "preindexing",
+   "doc": "/ˌpriːˈɪndeksɪŋ/",
+   "nghia": "chỉ số hoá trước – cộng chỉ số trước rồi mới làm gián tiếp: EA = (A + (R))",
+   "nhom": "Định địa chỉ",
+   "viDu": "Typically an instruction set will include both preindexing and postindexing.",
+   "viDuNghia": "Thông thường một tập lệnh sẽ bao gồm cả tiền lập chỉ mục (preindexing) và hậu lập chỉ mục (postindexing)."
+  },
+  {
+   "chu": "binary",
+   "doc": "/ˈbaɪneri/",
+   "nghia": "nhị phân – hệ đếm cơ số 2, chỉ dùng 0 và 1",
+   "nhom": "Số học máy tính",
+   "viDu": "The operation ______ yields true (binary value 1) if and only if both of its operands are true.",
+   "viDuNghia": "Phép ______ cho kết quả đúng (giá trị nhị phân 1) khi và chỉ khi cả hai toán hạng đều đúng."
+  },
+  {
+   "chu": "two's complement",
+   "doc": "/ˌtuːz ˈkɑːmplɪmənt/",
+   "nghia": "bù hai – cách biểu diễn số nguyên có dấu: đảo bit rồi cộng 1 để được số âm",
+   "nhom": "Số học máy tính",
+   "viDu": "Using 8 bits in two's complement representation, what is the range of integers that can be represented?",
+   "viDuNghia": "Dùng 8 bit biểu diễn số bù hai, khoảng giá trị nguyên biểu diễn được là bao nhiêu?"
+  },
+  {
+   "chu": "sign-magnitude",
+   "doc": "/ˌsaɪn ˈmæɡnɪtuːd/",
+   "nghia": "dấu – độ lớn: bit trái nhất là dấu, các bit còn lại là giá trị tuyệt đối",
+   "nhom": "Số học máy tính",
+   "viDu": "If you have an integer number +18 in sign magnitude representation, which is 00010010, what is the correct option for -18?",
+   "viDuNghia": "Nếu bạn có số nguyên +18 ở dạng biểu diễn dấu-độ lớn (sign magnitude) là 00010010, phương án đúng cho -18 là gì?"
+  },
+  {
+   "chu": "sign bit",
+   "doc": "/saɪn bɪt/",
+   "nghia": "bit dấu – bit trái nhất: 0 là dương, 1 là âm",
+   "nhom": "Số học máy tính",
+   "viDu": "In two's complement, a sign bit of 1 means the number is negative.",
+   "viDuNghia": "Trong bù hai, bit dấu bằng 1 nghĩa là số âm."
+  },
+  {
+   "chu": "floating-point",
+   "doc": "/ˌfloʊtɪŋ ˈpɔɪnt/",
+   "nghia": "dấu phẩy động – cách biểu diễn số thực gồm dấu, phần định trị và số mũ",
+   "nhom": "Số học máy tính",
+   "viDu": "Floating-point numbers can represent both very large and very small values.",
+   "viDuNghia": "Số dấu phẩy động biểu diễn được cả số rất lớn lẫn số rất nhỏ."
+  },
+  {
+   "chu": "significand",
+   "doc": "/sɪɡˈnɪfɪkənd/",
+   "nghia": "phần định trị (mantissa) – phần chữ số có nghĩa của số dấu phẩy động",
+   "nhom": "Số học máy tính",
+   "viDu": "A floating-point number consists of a sign, a significand and an exponent.",
+   "viDuNghia": "Số dấu phẩy động gồm dấu, phần định trị và số mũ."
+  },
+  {
+   "chu": "exponent",
+   "doc": "/ɪkˈspoʊnənt/",
+   "nghia": "số mũ – phần cho biết dấu phẩy dịch bao nhiêu vị trí",
+   "nhom": "Số học máy tính",
+   "viDu": "In IEEE 754 single precision, the exponent is stored in biased form. What is the value of the bias?",
+   "viDuNghia": "Trong IEEE 754 độ chính xác đơn, số mũ được lưu ở dạng có độ lệch (biased). Giá trị độ lệch đó là bao nhiêu?"
+  },
+  {
+   "chu": "overflow",
+   "doc": "/ˈoʊvərfloʊ/",
+   "nghia": "tràn số – kết quả lớn quá, không chứa vừa số bit cho phép",
+   "nhom": "Số học máy tính",
+   "viDu": "Two two's complement numbers of the SAME sign are added. Overflow has occurred if ____.",
+   "viDuNghia": "Cộng hai số bù hai CÙNG dấu. Tràn số (overflow) xảy ra khi ____."
+  },
+  {
+   "chu": "carry",
+   "doc": "/ˈkæri/",
+   "nghia": "số nhớ – bit dư chuyển sang cột bên trái khi cộng",
+   "nhom": "Số học máy tính",
+   "viDu": "Adding binary 1 and 1 gives 0 with a carry of 1 into the next column.",
+   "viDuNghia": "Cộng nhị phân 1 với 1 được 0 và nhớ 1 sang cột kế tiếp."
+  },
+  {
+   "chu": "most significant bit",
+   "nghia": "bit có trọng số lớn nhất (MSB) – bit trái nhất",
+   "nhom": "Số học máy tính",
+   "viDu": "In sign-magnitude representation, the most significant bit is the sign bit.",
+   "viDuNghia": "Trong biểu diễn dấu – độ lớn, bit có trọng số lớn nhất là bit dấu."
+  },
+  {
+   "chu": "logical shift",
+   "doc": "/ˈlɑːdʒɪkl ʃɪft/",
+   "nghia": "dịch logic – dịch các bit sang trái/phải, chèn 0 vào chỗ trống",
+   "nhom": "Số học máy tính",
+   "viDu": "What is result logical right shift of 10110000 by 2 bit?",
+   "viDuNghia": "Kết quả dịch phải logic (logical right shift) của 10110000 đi 2 bit là gì?"
+  },
+  {
+   "chu": "truncate",
+   "doc": "/ˈtrʌŋkeɪt/",
+   "nghia": "cắt bỏ – bỏ bớt các bit/chữ số thừa",
+   "nhom": "Số học máy tính",
+   "viDu": "The result is truncated to fit in 8 bits.",
+   "viDuNghia": "Kết quả bị cắt bớt cho vừa 8 bit."
+  },
+  {
+   "chu": "signed integer",
+   "doc": "/saɪnd ˈɪntɪdʒər/",
+   "nghia": "số nguyên có dấu – biểu diễn được cả số âm; với bù hai n bit: từ −2^(n−1) tới 2^(n−1) − 1",
+   "nhom": "Số học máy tính",
+   "viDu": "If an immediate field is 10 bits long, what is the valid range of a signed integer in it?",
+   "viDuNghia": "Nếu trường tức thời dài 10 bit, phạm vi số nguyên có dấu hợp lệ trong đó là bao nhiêu?"
+  },
+  {
+   "chu": "IEEE 754",
+   "doc": "/aɪ ˌtrɪpl iː ˌsevn faɪv ˈfɔːr/",
+   "nghia": "chuẩn IEEE 754 – chuẩn biểu diễn số dấu phẩy động: độ chính xác đơn 32 bit (1 dấu, 8 mũ, 23 định trị), độ chính xác kép 64 bit",
+   "nhom": "Số học máy tính",
+   "viDu": "In the IEEE 754 single-precision (32-bit) floating-point format, how are the 32 bits allocated?",
+   "viDuNghia": "Trong định dạng dấu phẩy động IEEE 754 độ chính xác đơn (32 bit), 32 bit được phân bổ thế nào?"
+  },
+  {
+   "chu": "Boolean algebra",
+   "doc": "/ˈbuːliən ˈældʒɪbrə/",
+   "nghia": "đại số Boole – phép toán trên giá trị đúng/sai (1/0) với AND, OR, NOT",
+   "nhom": "Logic số",
+   "viDu": "Simplify the Boolean expression A.(A + B).",
+   "viDuNghia": "Rút gọn biểu thức Boole A.(A + B)."
+  },
+  {
+   "chu": "logic gate",
+   "doc": "/ˈlɑːdʒɪk ɡeɪt/",
+   "nghia": "cổng logic – mạch thực hiện một phép logic cơ bản (AND, OR, NOT, NAND, NOR, XOR)",
+   "nhom": "Logic số",
+   "viDu": "Which gates are called universal gates, because any Boolean function can be built using that gate alone?",
+   "viDuNghia": "Những cổng nào được gọi là cổng vạn năng, vì chỉ dùng riêng cổng đó cũng xây dựng được mọi hàm Boole?"
+  },
+  {
+   "chu": "exclusive OR",
+   "doc": "/ɪkˈskluːsɪv ɔːr/",
+   "nghia": "hoặc loại trừ (XOR) – ra 1 khi hai đầu vào khác nhau",
+   "nhom": "Logic số",
+   "viDu": "(R1) = 01110110, (R2) = 11011111, the result of (R1) XOR (R2) is:",
+   "viDuNghia": "(R1) = 01110110, (R2) = 11011111, kết quả của (R1) XOR (R2) là:"
+  },
+  {
+   "chu": "Karnaugh map",
+   "doc": "/ˈkɑːrnɔː mæp/",
+   "nghia": "bìa Karnaugh – bảng dùng để rút gọn biểu thức Boole",
+   "nhom": "Logic số",
+   "viDu": "A Karnaugh map is used to simplify a Boolean expression.",
+   "viDuNghia": "Bìa Karnaugh được dùng để rút gọn biểu thức Boole."
+  },
+  {
+   "chu": "combinational circuit",
+   "doc": "/ˌkɑːmbɪˈneɪʃənl ˈsɜːrkɪt/",
+   "nghia": "mạch tổ hợp – đầu ra chỉ phụ thuộc đầu vào hiện tại, không có nhớ",
+   "nhom": "Logic số",
+   "viDu": "A combinational circuit compares two 4-bit numbers and outputs 1 if the first is greater. Which circuit type is it?",
+   "viDuNghia": "Một mạch tổ hợp so sánh hai số 4 bit và cho ra 1 nếu số thứ nhất lớn hơn. Đó là loại mạch gì?"
+  },
+  {
+   "chu": "sequential circuit",
+   "doc": "/sɪˈkwenʃl ˈsɜːrkɪt/",
+   "nghia": "mạch tuần tự – đầu ra phụ thuộc cả đầu vào lẫn trạng thái trước đó (có nhớ)",
+   "nhom": "Logic số",
+   "viDu": "The output of a sequential circuit depends on both the current inputs and the stored state.",
+   "viDuNghia": "Đầu ra của mạch tuần tự phụ thuộc cả đầu vào hiện tại lẫn trạng thái đang lưu."
+  },
+  {
+   "chu": "flip-flop",
+   "doc": "/ˈflɪp flɑːp/",
+   "nghia": "flip-flop – mạch nhớ được một bit; nền tảng của thanh ghi và SRAM",
+   "nhom": "Logic số",
+   "viDu": "In a ________, binary values are stored using traditional flip-flop logic-gate configurations.",
+   "viDuNghia": "Trong ________, các giá trị nhị phân được lưu bằng cấu hình cổng logic flip-flop truyền thống."
+  },
+  {
+   "chu": "multiplexer",
+   "doc": "/ˈmʌltɪpleksər/",
+   "nghia": "bộ dồn kênh – chọn một trong nhiều đầu vào đưa ra một đầu ra",
+   "nhom": "Logic số",
+   "viDu": "What is the function of a multiplexer (MUX)?",
+   "viDuNghia": "Bộ dồn kênh (multiplexer - MUX) có chức năng gì?"
+  },
+  {
+   "chu": "decoder",
+   "doc": "/ˌdiːˈkoʊdər/",
+   "nghia": "bộ giải mã – n đầu vào chọn đúng một trong 2^n đầu ra",
+   "nhom": "Logic số",
+   "viDu": "A decoder has n input lines. At most how many output lines can it have?",
+   "viDuNghia": "Một bộ giải mã có n đường vào. Nó có tối đa bao nhiêu đường ra?"
+  },
+  {
+   "chu": "adder",
+   "doc": "/ˈædər/",
+   "nghia": "bộ cộng – mạch cộng số nhị phân; half adder: 2 vào (a, b), 2 ra (tổng, nhớ); full adder: 3 vào (a, b, nhớ vào), 2 ra",
+   "nhom": "Logic số",
+   "viDu": "How many inputs and outputs does a full adder have?",
+   "viDuNghia": "Bộ cộng đầy đủ (full adder) có bao nhiêu đầu vào và bao nhiêu đầu ra?"
+  },
+  {
+   "chu": "sum of products",
+   "nghia": "tổng các tích (SOP) – dạng biểu thức Boole: các tích AND được OR với nhau",
+   "nhom": "Logic số",
+   "viDu": "F = AB + A'C is written in sum of products form.",
+   "viDuNghia": "F = AB + A'C được viết ở dạng tổng các tích."
+  },
+  {
+   "chu": "AND gate",
+   "doc": "/ænd ɡeɪt/",
+   "nghia": "cổng AND – ra 1 chỉ khi mọi đầu vào đều bằng 1",
+   "nhom": "Logic số",
+   "viDu": "Which logic gate produces a high output (1) only when all of its inputs are high?",
+   "viDuNghia": "Cổng logic nào cho đầu ra cao (1) chỉ khi TẤT CẢ đầu vào đều cao?"
+  },
+  {
+   "chu": "OR gate",
+   "doc": "/ɔːr ɡeɪt/",
+   "nghia": "cổng OR – ra 1 khi có ít nhất một đầu vào bằng 1; ra 0 chỉ khi mọi đầu vào bằng 0",
+   "nhom": "Logic số",
+   "viDu": "An OR gate outputs 0 only when all of its inputs are 0.",
+   "viDuNghia": "Cổng OR chỉ cho ra 0 khi mọi đầu vào đều bằng 0."
+  },
+  {
+   "chu": "NOT gate",
+   "doc": "/nɑːt ɡeɪt/",
+   "nghia": "cổng NOT (bộ đảo) – đảo giá trị: vào 0 ra 1, vào 1 ra 0",
+   "nhom": "Logic số",
+   "viDu": "What is the output of a NOT gate when the input is 0?",
+   "viDuNghia": "Đầu ra của cổng NOT khi đầu vào bằng 0 là gì?"
+  },
+  {
+   "chu": "NAND gate",
+   "doc": "/nænd ɡeɪt/",
+   "nghia": "cổng NAND – AND rồi đảo; ra 0 chỉ khi mọi đầu vào bằng 1; là cổng vạn năng",
+   "nhom": "Logic số",
+   "viDu": "When both inputs are 1, what is the result of a NAND gate?",
+   "viDuNghia": "Khi cả hai đầu vào bằng 1, kết quả của cổng NAND là gì?"
+  },
+  {
+   "chu": "NOR gate",
+   "doc": "/nɔːr ɡeɪt/",
+   "nghia": "cổng NOR – OR rồi đảo; ra 1 chỉ khi mọi đầu vào bằng 0; là cổng vạn năng",
+   "nhom": "Logic số",
+   "viDu": "When both inputs are 0, what is the result of a NOR gate?",
+   "viDuNghia": "Khi cả hai đầu vào bằng 0, kết quả của cổng NOR là gì?"
+  },
+  {
+   "chu": "instruction pipelining",
+   "doc": "/ɪnˈstrʌkʃn ˈpaɪplaɪnɪŋ/",
+   "nghia": "đường ống lệnh – chia việc xử lý lệnh thành nhiều công đoạn, nhiều lệnh chạy gối đầu nhau",
+   "nhom": "Pipeline",
+   "viDu": "What is a drawback of instruction pipelining?",
+   "viDuNghia": "Nhược điểm của đường ống lệnh (instruction pipelining) là gì?"
+  },
+  {
+   "chu": "pipeline stage",
+   "doc": "/ˈpaɪplaɪn steɪdʒ/",
+   "nghia": "công đoạn của đường ống – một bước xử lý lệnh (nạp, giải mã, thực thi…)",
+   "nhom": "Pipeline",
+   "viDu": "A __________ architecture is one that makes use of more, and more fine-grained pipeline stages.",
+   "viDuNghia": "Kiến trúc __________ là kiến trúc sử dụng nhiều tầng đường ống hơn và có độ chi tiết (mịn) cao hơn."
+  },
+  {
+   "chu": "pipeline hazard",
+   "doc": "/ˈpaɪplaɪn ˈhæzərd/",
+   "nghia": "xung đột đường ống – tình huống buộc đường ống phải dừng chờ (tranh tài nguyên, phụ thuộc dữ liệu, rẽ nhánh)",
+   "nhom": "Pipeline",
+   "viDu": "An instruction pipeline has 5 stages. In the ideal case, with no hazards and no stalls, what is the maximum speed-up over a non-pipelined processor?",
+   "viDuNghia": "Một pipeline lệnh có 5 tầng. Trường hợp lý tưởng, không xung đột (hazard) và không phải dừng, tốc độ tối đa tăng bao nhiêu lần so với bộ xử lý không pipeline?"
+  },
+  {
+   "chu": "branch prediction",
+   "doc": "/bræntʃ prɪˈdɪkʃn/",
+   "nghia": "dự đoán rẽ nhánh – đoán trước lệnh rẽ nhánh có nhảy hay không để nạp sẵn lệnh",
+   "nhom": "Pipeline",
+   "viDu": "What role does branch prediction play in superscalar processors?",
+   "viDuNghia": "Dự đoán rẽ nhánh (branch prediction) đóng vai trò gì trong bộ xử lý superscalar?"
+  },
+  {
+   "chu": "delayed branch",
+   "doc": "/dɪˈleɪd bræntʃ/",
+   "nghia": "rẽ nhánh trễ – lệnh đứng ngay sau lệnh rẽ nhánh vẫn được chạy trước khi nhảy",
+   "nhom": "Pipeline",
+   "viDu": "A tactic similar to the delayed branch is the __________, which can be used on LOAD instructions.",
+   "viDuNghia": "Một chiến thuật tương tự như rẽ nhánh trì hoãn (delayed branch) là __________, có thể dùng cho lệnh LOAD."
+  },
+  {
+   "chu": "misprediction",
+   "doc": "/ˌmɪsprɪˈdɪkʃn/",
+   "nghia": "dự đoán sai – đoán nhầm hướng rẽ nhánh, phải bỏ các lệnh đã nạp lỡ",
+   "nhom": "Pipeline",
+   "viDu": "A branch misprediction forces the processor to discard the instructions it fetched by mistake.",
+   "viDuNghia": "Dự đoán rẽ nhánh sai buộc bộ xử lý bỏ các lệnh đã nạp nhầm."
+  },
+  {
+   "chu": "superscalar",
+   "doc": "/ˌsuːpərˈskeɪlər/",
+   "nghia": "siêu vô hướng – CPU có nhiều đường ống, chạy nhiều lệnh cùng lúc trong một chu kỳ",
+   "nhom": "Pipeline",
+   "viDu": "What is the benefit of using a superscalar organization over a scalar organization?",
+   "viDuNghia": "Lợi ích của tổ chức siêu vô hướng (superscalar) so với tổ chức vô hướng (scalar) là gì?"
+  },
+  {
+   "chu": "instruction-level parallelism",
+   "doc": "/ɪnˌstrʌkʃn ˈlevl ˈpærəlelɪzəm/",
+   "nghia": "song song mức lệnh – các lệnh độc lập được chạy đồng thời",
+   "nhom": "Pipeline",
+   "viDu": "What does the term \"instruction-level parallelism\" refer to in computer architecture?",
+   "viDuNghia": "Thuật ngữ \"song song mức lệnh\" (instruction-level parallelism) chỉ điều gì trong kiến trúc máy tính?"
+  },
+  {
+   "chu": "out-of-order execution",
+   "doc": "/ˌaʊt əv ˈɔːrdər ˌeksɪˈkjuːʃn/",
+   "nghia": "thực thi không theo thứ tự – lệnh nào sẵn sàng thì chạy trước, không chờ lệnh đứng trước",
+   "nhom": "Pipeline",
+   "viDu": "With out-of-order execution, an instruction runs as soon as its operands are ready.",
+   "viDuNghia": "Với thực thi không theo thứ tự, lệnh nào có đủ toán hạng thì chạy ngay."
+  },
+  {
+   "chu": "register renaming",
+   "doc": "/ˈredʒɪstər riːˈneɪmɪŋ/",
+   "nghia": "đổi tên thanh ghi – cấp thanh ghi khác để tránh hai lệnh tranh nhau một thanh ghi",
+   "nhom": "Pipeline",
+   "viDu": "What is the primary method used to cope with storage conflicts in registers? — Register renaming",
+   "viDuNghia": "Phương pháp chính để xử lý xung đột lưu trữ trong thanh ghi (storage conflicts) là gì? — Đổi tên thanh ghi (Register renaming)"
+  },
+  {
+   "chu": "pipelining",
+   "doc": "/ˈpaɪplaɪnɪŋ/",
+   "nghia": "kỹ thuật đường ống (ống lệnh) – CPU chia lệnh thành các giai đoạn và làm gối đầu nhiều lệnh cùng lúc",
+   "nhom": "Pipeline",
+   "viDu": "Which of the following statements is correct in the context of instruction pipelining?",
+   "viDuNghia": "Phát biểu nào sau đây đúng trong ngữ cảnh kỹ thuật đường ống lệnh (instruction pipelining)?"
+  },
+  {
+   "chu": "data hazard",
+   "doc": "/ˈdeɪtə ˈhæzərd/",
+   "nghia": "xung đột dữ liệu – có tranh chấp khi truy cập vị trí toán hạng: lệnh sau cần kết quả lệnh trước chưa tính xong",
+   "nhom": "Pipeline",
+   "viDu": "A __________ hazard occurs when there is a conflict in the access of an operand location.",
+   "viDuNghia": "Xung đột __________ xảy ra khi có tranh chấp trong việc truy cập một vị trí toán hạng."
+  },
+  {
+   "chu": "structural hazard",
+   "doc": "/ˈstrʌktʃərəl ˈhæzərd/",
+   "nghia": "xung đột cấu trúc (tài nguyên) – hai lệnh ở hai tầng cùng cần một phần cứng trong cùng một chu kỳ",
+   "nhom": "Pipeline",
+   "viDu": "In a pipelined processor, which hazard occurs when two instructions in different stages need the same hardware resource in the same clock cycle?",
+   "viDuNghia": "Trong bộ xử lý pipeline, xung đột nào xảy ra khi hai lệnh ở hai tầng khác nhau cùng cần một tài nguyên phần cứng trong cùng chu kỳ?"
+  },
+  {
+   "chu": "control hazard",
+   "doc": "/kənˈtroʊl ˈhæzərd/",
+   "nghia": "xung đột điều khiển (branch hazard) – pipeline nạp nhầm lệnh vì chưa biết kết quả lệnh rẽ nhánh",
+   "nhom": "Pipeline",
+   "viDu": "A control hazard occurs when the pipeline makes a wrong decision on a branch prediction.",
+   "viDuNghia": "Xung đột điều khiển xảy ra khi pipeline quyết định sai trong dự đoán rẽ nhánh."
+  },
+  {
+   "chu": "instruction prefetch",
+   "doc": "/ɪnˈstrʌkʃn ˈpriːfetʃ/",
+   "nghia": "nạp lệnh trước (fetch overlap) – nạp sẵn lệnh kế tiếp trong lúc lệnh hiện tại đang thực thi",
+   "nhom": "Pipeline",
+   "viDu": "What is the purpose of instruction prefetch (fetch overlap) in a processor?",
+   "viDuNghia": "Kỹ thuật nạp lệnh trước (instruction prefetch) trong bộ xử lý dùng để làm gì?"
+  },
+  {
+   "chu": "speculative execution",
+   "doc": "/ˈspekjələtɪv ˌeksɪˈkjuːʃn/",
+   "nghia": "thực thi suy đoán – chạy trước các lệnh sau lệnh rẽ nhánh khi chưa biết kết quả; đoán sai thì bỏ kết quả",
+   "nhom": "Pipeline",
+   "viDu": "What does speculative execution mean in a modern processor?",
+   "viDuNghia": "Thực thi suy đoán (speculative execution) trong bộ xử lý hiện đại nghĩa là gì?"
+  },
+  {
+   "chu": "reduced instruction set computer",
+   "nghia": "RISC – ít lệnh, lệnh đơn giản, dài cố định, chủ yếu thao tác trên thanh ghi",
+   "nhom": "RISC & CISC",
+   "viDu": "Which of the following describes a RISC (Reduced Instruction Set Computer) architecture?",
+   "viDuNghia": "Phát biểu nào mô tả kiến trúc RISC (Máy tính tập lệnh rút gọn)?"
+  },
+  {
+   "chu": "complex instruction set computer",
+   "nghia": "CISC – nhiều lệnh phức tạp, độ dài lệnh thay đổi, nhiều kiểu định địa chỉ",
+   "nhom": "RISC & CISC",
+   "viDu": "Which statement is incorrect about RISC and CISC architecture?",
+   "viDuNghia": "Phát biểu nào sau đây là KHÔNG đúng về kiến trúc RISC và CISC?"
+  },
+  {
+   "chu": "register window",
+   "doc": "/ˈredʒɪstər ˈwɪndoʊ/",
+   "nghia": "cửa sổ thanh ghi – nhóm thanh ghi dành riêng cho mỗi thủ tục, giúp gọi thủ tục nhanh (RISC)",
+   "nhom": "RISC & CISC",
+   "viDu": "In the concept of Register Windows, how many register groups are there?",
+   "viDuNghia": "Trong khái niệm Register Windows (cửa sổ thanh ghi), có bao nhiêu nhóm thanh ghi?"
+  },
+  {
+   "chu": "fixed-length",
+   "doc": "/ˌfɪkst ˈleŋθ/",
+   "nghia": "độ dài cố định – mọi đơn vị dài như nhau (lệnh của RISC, sector của đĩa)",
+   "nhom": "RISC & CISC",
+   "viDu": "In most contemporary systems fixed-length sectors are used, with ________ bytes being the nearly universal sector size.",
+   "viDuNghia": "Trong hầu hết hệ thống hiện đại, các sector có độ dài cố định được dùng, với ________ byte là kích thước sector gần như phổ quát."
+  },
+  {
+   "chu": "load-and-store",
+   "doc": "/ˌloʊd ən ˈstɔːr/",
+   "nghia": "nạp – lưu: chỉ lệnh load và store mới truy cập bộ nhớ, các lệnh khác làm trên thanh ghi",
+   "nhom": "RISC & CISC",
+   "viDu": "Load-and-store instructions are used to position quantities in registers temporarily for computation.",
+   "viDuNghia": "Các lệnh nạp-lưu (load-and-store) được dùng để đưa các đại lượng vào thanh ghi tạm thời phục vụ tính toán."
+  },
+  {
+   "chu": "microprogrammed",
+   "doc": "/ˌmaɪkroʊˈproʊɡræmd/",
+   "nghia": "vi chương trình – khối điều khiển hoạt động theo các vi lệnh lưu trong bộ nhớ điều khiển",
+   "nhom": "RISC & CISC",
+   "viDu": "A microprogrammed control unit is easier to design and change than a hardwired one.",
+   "viDuNghia": "Khối điều khiển vi chương trình dễ thiết kế và sửa đổi hơn loại nối cứng."
+  },
+  {
+   "chu": "parallelism",
+   "doc": "/ˈpærəlelɪzəm/",
+   "nghia": "tính song song – nhiều việc được xử lý cùng một lúc",
+   "nhom": "Đa xử lý & đa nhân",
+   "viDu": "Pipelining is a means of introducing parallelism into the essentially sequential nature of a machine-instruction program.",
+   "viDuNghia": "Pipelining là một phương tiện đưa tính song song vào bản chất vốn tuần tự của một chương trình lệnh máy."
+  },
+  {
+   "chu": "multiprocessor",
+   "doc": "/ˌmʌltiˈprɑːsesər/",
+   "nghia": "hệ đa xử lý – máy có nhiều bộ xử lý dùng chung bộ nhớ",
+   "nhom": "Đa xử lý & đa nhân",
+   "viDu": "By Amdahl's law for multiprocessors, if 10% of the code is inherently serial, what speedup do 4 processors give?",
+   "viDuNghia": "Theo định luật Amdahl cho hệ đa xử lý, nếu 10% mã vốn dĩ tuần tự thì 4 bộ xử lý cho độ tăng tốc bao nhiêu?"
+  },
+  {
+   "chu": "symmetric multiprocessor",
+   "doc": "/sɪˈmetrɪk ˌmʌltiˈprɑːsesər/",
+   "nghia": "đa xử lý đối xứng (SMP) – nhiều bộ xử lý ngang hàng dùng chung bộ nhớ và I/O",
+   "nhom": "Đa xử lý & đa nhân",
+   "viDu": "In a symmetric multiprocessor, all processors share the same memory and I/O and can perform the same functions.",
+   "viDuNghia": "Trong hệ đa xử lý đối xứng, mọi bộ xử lý dùng chung bộ nhớ và I/O và làm được cùng các chức năng."
+  },
+  {
+   "chu": "cluster",
+   "doc": "/ˈklʌstər/",
+   "nghia": "cụm máy tính – nhiều máy nối với nhau làm việc như một hệ thống",
+   "nhom": "Đa xử lý & đa nhân",
+   "viDu": "What is the main advantage of a cluster compared with a symmetric multiprocessor (SMP)?",
+   "viDuNghia": "Ưu điểm chính của cụm máy tính (cluster) so với hệ đa xử lý đối xứng (SMP) là gì?"
+  },
+  {
+   "chu": "nonuniform memory access",
+   "nghia": "NUMA – thời gian truy cập bộ nhớ khác nhau tuỳ vùng nhớ nằm gần hay xa bộ xử lý",
+   "nhom": "Đa xử lý & đa nhân",
+   "viDu": "What is one advantage of Nonuniform Memory Access (NUMA) over Uniform Memory Access (UMA)?",
+   "viDuNghia": "Một ưu điểm của truy cập bộ nhớ không đồng nhất (NUMA) so với truy cập bộ nhớ đồng nhất (UMA) là gì?"
+  },
+  {
+   "chu": "uniform memory access",
+   "nghia": "UMA – mọi bộ xử lý truy cập mọi vùng nhớ với thời gian như nhau",
+   "nhom": "Đa xử lý & đa nhân",
+   "viDu": "In a UMA system, every processor takes the same time to access any memory location.",
+   "viDuNghia": "Trong hệ UMA, mọi bộ xử lý truy cập mọi vị trí nhớ với cùng một thời gian."
+  },
+  {
+   "chu": "single instruction multiple data",
+   "nghia": "SIMD – một lệnh thực hiện đồng thời trên nhiều dữ liệu (xử lý vector)",
+   "nhom": "Đa xử lý & đa nhân",
+   "viDu": "A vector processor is an example of a single instruction multiple data (SIMD) machine.",
+   "viDuNghia": "Bộ xử lý vector là một ví dụ của máy SIMD (một lệnh, nhiều dữ liệu)."
+  },
+  {
+   "chu": "multiple instruction multiple data",
+   "nghia": "MIMD – nhiều bộ xử lý chạy các lệnh khác nhau trên các dữ liệu khác nhau",
+   "nhom": "Đa xử lý & đa nhân",
+   "viDu": "SMPs and clusters belong to the multiple instruction multiple data (MIMD) category.",
+   "viDuNghia": "SMP và cụm máy tính thuộc loại MIMD (nhiều lệnh, nhiều dữ liệu)."
+  },
+  {
+   "chu": "multithreading",
+   "doc": "/ˌmʌltiˈθredɪŋ/",
+   "nghia": "đa luồng – chạy nhiều luồng đồng thời trong một bộ xử lý/tiến trình",
+   "nhom": "Đa xử lý & đa nhân",
+   "viDu": "How does multithreading improve the performance of a processor?",
+   "viDuNghia": "Đa luồng (multithreading) cải thiện hiệu năng của bộ xử lý bằng cách nào?"
+  },
+  {
+   "chu": "inherently",
+   "doc": "/ɪnˈhɪrəntli/",
+   "nghia": "vốn dĩ, tự bản chất (inherently serial = bắt buộc chạy tuần tự)",
+   "nhom": "Đa xử lý & đa nhân",
+   "viDu": "Part of the code is inherently serial and cannot be run in parallel.",
+   "viDuNghia": "Một phần mã vốn dĩ phải chạy tuần tự, không thể chạy song song."
+  },
+  {
+   "chu": "thread-level parallelism",
+   "doc": "/ˌθred ˈlevl ˈpærəlelɪzəm/",
+   "nghia": "song song mức luồng – nhiều luồng chạy đồng thời trên các nhân/bộ xử lý",
+   "nhom": "Đa xử lý & đa nhân",
+   "viDu": "Multicore processors exploit thread-level parallelism.",
+   "viDuNghia": "Bộ xử lý đa nhân khai thác tính song song mức luồng."
+  },
+  {
+   "chu": "concurrently",
+   "doc": "/kənˈkɜːrəntli/",
+   "nghia": "đồng thời – nhiều việc diễn ra trong cùng khoảng thời gian",
+   "nhom": "Đa xử lý & đa nhân",
+   "viDu": "In superscalar computer architecture, what is the primary goal of utilizing multiple processing units concurrently?",
+   "viDuNghia": "Trong kiến trúc siêu vô hướng (superscalar), mục tiêu chính của việc dùng nhiều đơn vị xử lý đồng thời là gì?"
+  },
+  {
+   "chu": "cache coherence",
+   "doc": "/kæʃ koʊˈhɪrəns/",
+   "nghia": "nhất quán cache – giữ cho các bản sao của cùng một dữ liệu ở cache của các nhân luôn giống nhau (vd giao thức MESI)",
+   "nhom": "Đa xử lý & đa nhân",
+   "viDu": "In a multiprocessor where every core has its own cache, which problem is the MESI protocol designed to solve?",
+   "viDuNghia": "Trong hệ đa xử lý mà mỗi nhân có cache riêng, giao thức MESI được thiết kế để giải quyết vấn đề gì?"
+  },
+  {
+   "chu": "long-term scheduler",
+   "doc": "/ˌlɔːŋ ˈtɜːrm ˈskedʒuːlər/",
+   "nghia": "bộ lập lịch dài hạn – quyết định chương trình nào được nhận vào hệ thống để xử lý",
+   "nhom": "Hỗ trợ hệ điều hành",
+   "viDu": "We have a long-term queue of process requests, typically stored on ____________.",
+   "viDuNghia": "Ta có một hàng đợi dài hạn các yêu cầu tiến trình, thường được lưu trên ____________."
+  },
+  {
+   "chu": "medium-term scheduler",
+   "doc": "/ˌmiːdiəm ˈtɜːrm ˈskedʒuːlər/",
+   "nghia": "bộ lập lịch trung hạn – quyết định hoán đổi tiến trình nào ra/vào bộ nhớ chính",
+   "nhom": "Hỗ trợ hệ điều hành",
+   "viDu": "The medium-term scheduler decides which processes are swapped in and out of main memory.",
+   "viDuNghia": "Bộ lập lịch trung hạn quyết định tiến trình nào được hoán đổi vào/ra bộ nhớ chính."
+  },
+  {
+   "chu": "short-term scheduler",
+   "doc": "/ˌʃɔːrt ˈtɜːrm ˈskedʒuːlər/",
+   "nghia": "bộ lập lịch ngắn hạn (dispatcher) – chọn tiến trình sẵn sàng nào được CPU chạy kế tiếp",
+   "nhom": "Hỗ trợ hệ điều hành",
+   "viDu": "The short-term scheduler is also known as the dispatcher.",
+   "viDuNghia": "Bộ lập lịch ngắn hạn (short-term) còn được gọi là bộ điều phối (dispatcher)."
+  },
+  {
+   "chu": "translation lookaside buffer",
+   "nghia": "TLB – cache nhỏ lưu các mục bảng trang vừa dùng để đổi địa chỉ nhanh",
+   "nhom": "Hỗ trợ hệ điều hành",
+   "viDu": "Which of the following statements is incorrect about Translation Look-aside Buffer (TLB)?",
+   "viDuNghia": "Câu nào SAI về bộ đệm tra cứu chuyển đổi (TLB)?"
+  },
+  {
+   "chu": "privileged instruction",
+   "doc": "/ˈprɪvəlɪdʒd ɪnˈstrʌkʃn/",
+   "nghia": "lệnh đặc quyền – lệnh chỉ hệ điều hành (chế độ nhân) mới được chạy",
+   "nhom": "Hỗ trợ hệ điều hành",
+   "viDu": "Privileged instructions are certain instructions that are designated special and can be executed only by the monitor.",
+   "viDuNghia": "Lệnh đặc quyền (privileged instructions) là những lệnh được chỉ định đặc biệt và chỉ có thể được thực thi bởi monitor (hệ điều hành)."
+  },
+  {
+   "chu": "application binary interface",
+   "nghia": "ABI – quy ước ở mức mã máy giữa chương trình và hệ điều hành/phần cứng",
+   "nhom": "Hỗ trợ hệ điều hành",
+   "viDu": "The ABI defines the system call interface to the operating system and the hardware resources and services available in a system through the user instruction set architecture.",
+   "viDuNghia": "ABI định nghĩa giao diện lời gọi hệ thống tới hệ điều hành cùng các tài nguyên và dịch vụ phần cứng có trong hệ thống thông qua kiến trúc tập lệnh người dùng."
+  },
+  {
+   "chu": "instruction set architecture",
+   "nghia": "ISA – ranh giới phần cứng–phần mềm: tập lệnh máy mà phần mềm được dùng",
+   "nhom": "Hỗ trợ hệ điều hành",
+   "viDu": "What is a common advantage of a larger instruction set architecture (ISA)?",
+   "viDuNghia": "Ưu điểm phổ biến của một kiến trúc tập lệnh (ISA) lớn hơn là gì?"
+  }
+ ]
+}

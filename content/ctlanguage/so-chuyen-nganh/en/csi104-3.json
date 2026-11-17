@@ -1,0 +1,611 @@
+{
+ "ma": "csi104-3",
+ "nn": "en",
+ "ten": "CSI104/CSI106 · 3. CTDL, tệp, CSDL, bảo mật",
+ "moTa": "Nhập môn điện toán (CSI104/CSI106) – phần 3: cấu trúc dữ liệu và ADT, cấu trúc tệp và băm, cơ sở dữ liệu, tấn công – mật mã, đạo đức và pháp lý. Từ lấy từ đề FE thật; ví dụ là câu hỏi thật trong đề.",
+ "bieuTuong": "lock.shield.fill",
+ "thuTu": -996,
+ "tu": [
+  {
+   "chu": "data structure",
+   "doc": "/ˈdeɪtə ˈstrʌktʃər/",
+   "nghia": "cấu trúc dữ liệu: cách gom các dữ liệu liên quan lại dưới một tên chung",
+   "nhom": "Cấu trúc dữ liệu",
+   "viDu": "Which data structure is commonly used for First-In, First-Out (FIFO) data processing?",
+   "viDuNghia": "Cấu trúc dữ liệu nào thường dùng cho xử lý dữ liệu Vào Trước Ra Trước (FIFO)?"
+  },
+  {
+   "chu": "insertion",
+   "doc": "/ɪnˈsɜːrʃn/",
+   "nghia": "thao tác chèn một phần tử vào cấu trúc",
+   "nhom": "Cấu trúc dữ liệu",
+   "viDu": "Insertion, deletion, retrieval and traversal are the common operations on an array.",
+   "viDuNghia": "Chèn, xoá, truy xuất và duyệt là các thao tác thường gặp trên mảng."
+  },
+  {
+   "chu": "deletion",
+   "doc": "/dɪˈliːʃn/",
+   "nghia": "thao tác xoá một phần tử khỏi cấu trúc",
+   "nhom": "Cấu trúc dữ liệu",
+   "viDu": "An array is a suitable structure when only a few insertions and deletions are needed but a lot of searching and retrieval is required.",
+   "viDuNghia": "Mảng là cấu trúc phù hợp khi chỉ cần ít thao tác chèn và xoá nhưng phải tìm kiếm và truy xuất nhiều."
+  },
+  {
+   "chu": "retrieval",
+   "doc": "/rɪˈtriːvl/",
+   "nghia": "thao tác truy xuất: lấy dữ liệu ra mà không thay đổi cấu trúc",
+   "nhom": "Cấu trúc dữ liệu",
+   "viDu": "Which file structure allows direct access to a specific record without retrieving all preceding records?",
+   "viDuNghia": "Cấu trúc tệp nào cho phép truy cập trực tiếp một bản ghi cụ thể mà không cần lấy hết các bản ghi trước đó?"
+  },
+  {
+   "chu": "abstract data type",
+   "nghia": "kiểu dữ liệu trừu tượng (ADT): dữ liệu + các thao tác, giấu cách cài đặt",
+   "nhom": "Cấu trúc dữ liệu",
+   "viDu": "What does an abstract data type specify? → The data and the operations, but not how they are implemented",
+   "viDuNghia": "Kiểu dữ liệu trừu tượng quy định điều gì? → Dữ liệu và các thao tác, nhưng không nói cách cài đặt"
+  },
+  {
+   "chu": "last in, first out",
+   "nghia": "vào sau ra trước (LIFO): nguyên tắc của ngăn xếp",
+   "nhom": "Cấu trúc dữ liệu",
+   "viDu": "What characteristic makes a stack a \"Last In, First Out (LIFO)\" data structure?",
+   "viDuNghia": "Đặc điểm nào khiến ngăn xếp trở thành cấu trúc \"Vào sau, Ra trước (LIFO)\"?"
+  },
+  {
+   "chu": "front",
+   "doc": "/frʌnt/",
+   "nghia": "đầu hàng đợi: nơi phần tử được lấy ra",
+   "nhom": "Cấu trúc dữ liệu",
+   "viDu": "A queue runs: enqueue 4, enqueue 9, dequeue, enqueue 2. Which item is at the front now?",
+   "viDuNghia": "Một hàng đợi chạy: enqueue 4, enqueue 9, dequeue, enqueue 2. Phần tử nào đang ở đầu hàng?"
+  },
+  {
+   "chu": "rear",
+   "doc": "/rɪr/",
+   "nghia": "cuối hàng đợi: nơi phần tử mới được thêm vào",
+   "nhom": "Cấu trúc dữ liệu",
+   "viDu": "What does the enqueue operation do in a queue ADT? → Inserts an item at the rear of the queue, making it the last item",
+   "viDuNghia": "Thao tác enqueue làm gì trong ADT hàng đợi? → Chèn một phần tử vào cuối hàng đợi, biến nó thành phần tử cuối cùng"
+  },
+  {
+   "chu": "subtree",
+   "doc": "/ˈsʌbtriː/",
+   "nghia": "cây con: phần cây nằm dưới một nút",
+   "nhom": "Cấu trúc dữ liệu",
+   "viDu": "In postorder traversal of a binary tree, the left subtree is processed first.",
+   "viDuNghia": "Khi duyệt sau (postorder) cây nhị phân, cây con trái được xử lý đầu tiên."
+  },
+  {
+   "chu": "sequential file",
+   "doc": "/sɪˈkwenʃl faɪl/",
+   "nghia": "tệp tuần tự: bản ghi chỉ đọc được lần lượt từ đầu tới cuối",
+   "nhom": "Tệp & băm",
+   "viDu": "After a sequential file is updated, the new master file contains the most current data.",
+   "viDuNghia": "Sau khi tệp tuần tự được cập nhật, tệp chủ mới chứa dữ liệu mới nhất."
+  },
+  {
+   "chu": "indexed file",
+   "doc": "/ˈɪndekst faɪl/",
+   "nghia": "tệp chỉ mục: gồm tệp dữ liệu và tệp chỉ mục (khoá – địa chỉ) để truy cập ngẫu nhiên",
+   "nhom": "Tệp & băm",
+   "viDu": "In an indexed file, what does the index hold?",
+   "viDuNghia": "Trong tệp chỉ mục, chỉ mục chứa gì?"
+  },
+  {
+   "chu": "hashed file",
+   "doc": "/hæʃt faɪl/",
+   "nghia": "tệp băm: dùng hàm băm tính địa chỉ bản ghi từ khoá, không cần tệp chỉ mục",
+   "nhom": "Tệp & băm",
+   "viDu": "A hashed file uses a mathematical function to map a key to the address of a record.",
+   "viDuNghia": "Tệp băm dùng một hàm toán học để ánh xạ khoá thành địa chỉ của bản ghi."
+  },
+  {
+   "chu": "master file",
+   "doc": "/ˈmæstər faɪl/",
+   "nghia": "tệp chủ: tệp dữ liệu chính, lâu dài (old master cũ, new master sau cập nhật)",
+   "nhom": "Tệp & băm",
+   "viDu": "If the transaction file key is 20 and the first master file key is 25, we add the new record to the new master file.",
+   "viDuNghia": "Nếu khoá của tệp giao dịch là 20 và khoá đầu tiên của tệp chủ là 25, ta thêm bản ghi mới vào tệp chủ mới."
+  },
+  {
+   "chu": "transaction file",
+   "doc": "/trænˈzækʃn faɪl/",
+   "nghia": "tệp giao dịch: chứa các thay đổi sẽ áp vào tệp chủ",
+   "nhom": "Tệp & băm",
+   "viDu": "The transaction file contains the changes to be applied to the master file.",
+   "viDuNghia": "Tệp giao dịch chứa những thay đổi sẽ được áp vào tệp chủ."
+  },
+  {
+   "chu": "error report",
+   "doc": "/ˈerər rɪˈpɔːrt/",
+   "nghia": "báo cáo lỗi: tệp ghi các lỗi gặp khi cập nhật tệp tuần tự",
+   "nhom": "Tệp & băm",
+   "viDu": "When a sequential file is updated, the error report file contains a list of all errors that occur during the process.",
+   "viDuNghia": "Khi cập nhật tệp tuần tự, tệp báo cáo lỗi chứa danh sách mọi lỗi xảy ra trong quá trình đó."
+  },
+  {
+   "chu": "home directory",
+   "doc": "/hoʊm dəˈrektəri/",
+   "nghia": "thư mục nhà: thư mục riêng của người dùng khi đăng nhập",
+   "nhom": "Tệp & băm",
+   "viDu": "When you log in, you start in your home directory.",
+   "viDuNghia": "Khi đăng nhập, bạn bắt đầu ở thư mục nhà của mình."
+  },
+  {
+   "chu": "hashing",
+   "doc": "/ˈhæʃɪŋ/",
+   "nghia": "băm: biến khoá thành địa chỉ bằng một phép tính",
+   "nhom": "Tệp & băm",
+   "viDu": "Student IDs run from 1 to 1000 with no gaps, so ID n is stored at address n. Which hashing method is this?",
+   "viDuNghia": "Mã sinh viên chạy từ 1 đến 1000 không có khoảng trống, nên mã n được lưu ở địa chỉ n. Đây là phương pháp băm nào?"
+  },
+  {
+   "chu": "direct hashing",
+   "doc": "/dəˈrekt ˈhæʃɪŋ/",
+   "nghia": "băm trực tiếp: khoá chính là địa chỉ, không có xung đột",
+   "nhom": "Tệp & băm",
+   "viDu": "In direct hashing, the key is the data file address without any algorithmic manipulation.",
+   "viDuNghia": "Trong băm trực tiếp, khoá chính là địa chỉ trong tệp dữ liệu, không qua phép biến đổi nào."
+  },
+  {
+   "chu": "modulo division",
+   "doc": "/ˈmɑːdʒəloʊ dɪˈvɪʒn/",
+   "nghia": "băm chia lấy dư: địa chỉ = khoá chia cho kích thước tệp, lấy phần dư",
+   "nhom": "Tệp & băm",
+   "viDu": "With modulo division hashing on a file of 11 slots, which slot does key 1234 go to?",
+   "viDuNghia": "Dùng băm chia lấy dư trên tệp 11 ô, khoá 1234 vào ô nào?"
+  },
+  {
+   "chu": "digit extraction",
+   "doc": "/ˈdɪdʒɪt ɪkˈstrækʃn/",
+   "nghia": "băm trích chữ số: lấy một số chữ số chọn trước của khoá làm địa chỉ",
+   "nhom": "Tệp & băm",
+   "viDu": "In digit extraction hashing, selected digits of the key become the address.",
+   "viDuNghia": "Trong băm trích chữ số, các chữ số được chọn của khoá trở thành địa chỉ."
+  },
+  {
+   "chu": "synonym",
+   "doc": "/ˈsɪnənɪm/",
+   "nghia": "khoá đồng nghĩa: các khoá băm ra cùng một địa chỉ",
+   "nhom": "Tệp & băm",
+   "viDu": "In the direct hashing method, there are no synonyms or collisions.",
+   "viDuNghia": "Trong phương pháp băm trực tiếp, không có khoá đồng nghĩa (synonym) hay xung đột."
+  },
+  {
+   "chu": "bucket hashing",
+   "doc": "/ˈbʌkɪt ˈhæʃɪŋ/",
+   "nghia": "băm theo thùng: mỗi địa chỉ là một thùng chứa được nhiều bản ghi",
+   "nhom": "Tệp & băm",
+   "viDu": "With bucket hashing, one address can hold several records.",
+   "viDuNghia": "Với băm theo thùng, một địa chỉ chứa được nhiều bản ghi."
+  },
+  {
+   "chu": "internal level",
+   "doc": "/ɪnˈtɜːrnl ˈlevl/",
+   "nghia": "mức trong (của DBMS): dữ liệu thực sự nằm ở đâu trên thiết bị lưu trữ",
+   "nhom": "Cơ sở dữ liệu",
+   "viDu": "The internal level decides where data is actually stored on the storage device.",
+   "viDuNghia": "Mức trong quyết định dữ liệu thực sự được lưu ở đâu trên thiết bị lưu trữ."
+  },
+  {
+   "chu": "conceptual level",
+   "doc": "/kənˈseptʃuəl ˈlevl/",
+   "nghia": "mức khái niệm: cái nhìn logic về dữ liệu, mô hình dữ liệu được định nghĩa ở đây",
+   "nhom": "Cơ sở dữ liệu",
+   "viDu": "The conceptual level defines the logical view of the data.",
+   "viDuNghia": "Mức khái niệm định nghĩa cái nhìn logic về dữ liệu."
+  },
+  {
+   "chu": "external level",
+   "doc": "/ɪkˈstɜːrnl ˈlevl/",
+   "nghia": "mức ngoài: phần dữ liệu mà người dùng nhìn thấy và thao tác",
+   "nhom": "Cơ sở dữ liệu",
+   "viDu": "In the ANSI/SPARC architecture, which level is what one student sees in the grades portal? → External level",
+   "viDuNghia": "Trong kiến trúc ANSI/SPARC, mức nào là thứ một sinh viên thấy trên cổng xem điểm? → Mức ngoài"
+  },
+  {
+   "chu": "unary operation",
+   "doc": "/ˈjuːnəri ˌɑːpəˈreɪʃn/",
+   "nghia": "phép toán một ngôi: chỉ làm trên một quan hệ (insert, delete, update, select, project)",
+   "nhom": "Cơ sở dữ liệu",
+   "viDu": "Which of the following best describes a unary operation?",
+   "viDuNghia": "Điều nào mô tả đúng nhất một phép toán một ngôi (unary)?"
+  },
+  {
+   "chu": "object-oriented database",
+   "doc": "/ˌɑːbdʒekt ˈɔːrientɪd ˈdeɪtəbeɪs/",
+   "nghia": "CSDL hướng đối tượng: lưu đối tượng cùng thao tác của nó",
+   "nhom": "Cơ sở dữ liệu",
+   "viDu": "An object-oriented database stores objects together with their operations.",
+   "viDuNghia": "CSDL hướng đối tượng lưu các đối tượng cùng với thao tác của chúng."
+  },
+  {
+   "chu": "confidentiality",
+   "doc": "/ˌkɑːnfɪˌdenʃiˈæləti/",
+   "nghia": "tính bí mật: chỉ người được phép mới xem được thông tin",
+   "nhom": "Tấn công & phòng vệ",
+   "viDu": "In the asymmetric-key method used for confidentiality, which key(s) is (are) publicly known?",
+   "viDuNghia": "Trong phương pháp khoá bất đối xứng dùng cho tính bí mật, khoá nào được công khai?"
+  },
+  {
+   "chu": "snooping",
+   "doc": "/ˈsnuːpɪŋ/",
+   "nghia": "nghe lén: truy cập trái phép hay chặn bắt dữ liệu – đe doạ tính bí mật",
+   "nhom": "Tấn công & phòng vệ",
+   "viDu": "Among attacks that threaten confidentiality, snooping refers to unauthorized access to or interception of data.",
+   "viDuNghia": "Trong các tấn công đe doạ tính bí mật, nghe lén là truy cập trái phép hoặc chặn bắt dữ liệu."
+  },
+  {
+   "chu": "traffic analysis",
+   "doc": "/ˈtræfɪk əˈnæləsɪs/",
+   "nghia": "phân tích lưu lượng: theo dõi ai gửi cho ai, bao nhiêu, dù không đọc được nội dung",
+   "nhom": "Tấn công & phòng vệ",
+   "viDu": "Which of the following attacks is threatening confidentiality? → Traffic analysis",
+   "viDuNghia": "Kiểu tấn công nào sau đây đe doạ tính bí mật (confidentiality)? → Phân tích lưu lượng (traffic analysis)"
+  },
+  {
+   "chu": "masquerading",
+   "doc": "/ˌmæskəˈreɪdɪŋ/",
+   "nghia": "giả mạo danh tính (spoofing): kẻ tấn công đóng giả người khác – đe doạ tính toàn vẹn",
+   "nhom": "Tấn công & phòng vệ",
+   "viDu": "Among attacks that threaten integrity, masquerading happens when the attacker impersonates somebody else.",
+   "viDuNghia": "Trong các tấn công đe doạ tính toàn vẹn, giả mạo xảy ra khi kẻ tấn công đóng giả người khác."
+  },
+  {
+   "chu": "replaying",
+   "doc": "/ˌriːˈpleɪɪŋ/",
+   "nghia": "tấn công phát lại: bắt bản tin của người khác rồi gửi lại sau đó",
+   "nhom": "Tấn công & phòng vệ",
+   "viDu": "In a replaying attack, the attacker copies a message and sends it again later.",
+   "viDuNghia": "Trong tấn công phát lại, kẻ tấn công chép một bản tin rồi gửi lại sau đó."
+  },
+  {
+   "chu": "repudiation",
+   "doc": "/rɪˌpjuːdiˈeɪʃn/",
+   "nghia": "chối bỏ: người gửi chối đã gửi hoặc người nhận chối đã nhận",
+   "nhom": "Tấn công & phòng vệ",
+   "viDu": "Repudiation means the sender denies having sent the message, or the receiver denies having received it.",
+   "viDuNghia": "Chối bỏ nghĩa là người gửi chối đã gửi bản tin, hoặc người nhận chối đã nhận."
+  },
+  {
+   "chu": "denial of service",
+   "nghia": "tấn công từ chối dịch vụ (DoS): làm hệ thống chậm hoặc ngừng phục vụ – đe doạ tính sẵn sàng",
+   "nhom": "Tấn công & phòng vệ",
+   "viDu": "The attack that reduces the capability of a computer is called a denial of service attack.",
+   "viDuNghia": "Tấn công làm giảm khả năng phục vụ của máy tính được gọi là tấn công từ chối dịch vụ."
+  },
+  {
+   "chu": "hacker",
+   "doc": "/ˈhækər/",
+   "nghia": "tin tặc: người xâm nhập hệ thống máy tính",
+   "nhom": "Tấn công & phòng vệ",
+   "viDu": "Which type of hacker fights back against black hat hackers, often by disabling or destroying their systems?",
+   "viDuNghia": "Loại hacker nào chống trả hacker mũ đen, thường bằng cách vô hiệu hoá hoặc phá huỷ hệ thống của chúng?"
+  },
+  {
+   "chu": "penetration attack",
+   "doc": "/ˌpenəˈtreɪʃn əˈtæk/",
+   "nghia": "tấn công xâm nhập: đột nhập vào hệ thống (ví dụ gửi virus vào máy)",
+   "nhom": "Tấn công & phòng vệ",
+   "viDu": "Sending a virus to a computer is called a penetration attack.",
+   "viDuNghia": "Gửi virus vào một máy tính được gọi là tấn công xâm nhập."
+  },
+  {
+   "chu": "virus",
+   "doc": "/ˈvaɪrəs/",
+   "nghia": "vi-rút máy tính: mã độc bám vào chương trình khác, lây khi chương trình đó chạy",
+   "nhom": "Tấn công & phòng vệ",
+   "viDu": "A virus hides inside a host program and copies itself when that program runs.",
+   "viDuNghia": "Vi-rút ẩn trong một chương trình chủ và tự sao chép khi chương trình đó chạy."
+  },
+  {
+   "chu": "worm",
+   "doc": "/wɜːrm/",
+   "nghia": "sâu máy tính: mã độc tự nhân bản và tự lan qua mạng",
+   "nhom": "Tấn công & phòng vệ",
+   "viDu": "A worm copies itself and spreads through the network without a host program.",
+   "viDuNghia": "Sâu máy tính tự sao chép và lan qua mạng mà không cần chương trình chủ."
+  },
+  {
+   "chu": "Trojan horse",
+   "doc": "/ˈtroʊdʒən hɔːrs/",
+   "nghia": "ngựa Trojan: chương trình độc hại nguỵ trang thành chương trình có ích",
+   "nhom": "Tấn công & phòng vệ",
+   "viDu": "A Trojan horse looks like a useful program but does something harmful.",
+   "viDuNghia": "Ngựa Trojan trông như chương trình có ích nhưng lại làm việc có hại."
+  },
+  {
+   "chu": "firewall",
+   "doc": "/ˈfaɪərwɔːl/",
+   "nghia": "tường lửa: lọc gói tin ra vào mạng theo luật",
+   "nhom": "Tấn công & phòng vệ",
+   "viDu": "A firewall filters the packets that enter or leave a network.",
+   "viDuNghia": "Tường lửa lọc các gói tin đi vào hoặc đi ra khỏi mạng."
+  },
+  {
+   "chu": "cryptography",
+   "doc": "/krɪpˈtɑːɡrəfi/",
+   "nghia": "mật mã học: biến đổi bản tin để giữ bí mật và chống tấn công",
+   "nhom": "Mật mã",
+   "viDu": "Cryptography can provide confidentiality, integrity, authentication and nonrepudiation.",
+   "viDuNghia": "Mật mã học có thể mang lại tính bí mật, toàn vẹn, xác thực và chống chối bỏ."
+  },
+  {
+   "chu": "steganography",
+   "doc": "/ˌsteɡəˈnɑːɡrəfi/",
+   "nghia": "giấu tin: che giấu sự tồn tại của bản tin bên trong dữ liệu khác",
+   "nhom": "Mật mã",
+   "viDu": "Steganography means concealing the message by covering it with something else.",
+   "viDuNghia": "Giấu tin (Steganography) nghĩa là che giấu thông điệp bằng cách phủ nó bởi thứ khác."
+  },
+  {
+   "chu": "plaintext",
+   "doc": "/ˈpleɪntekst/",
+   "nghia": "bản rõ: bản tin gốc trước khi mã hoá",
+   "nhom": "Mật mã",
+   "viDu": "When the ciphertext is received, the receiver transforms it back into the plaintext; this is decryption.",
+   "viDuNghia": "Khi nhận được bản mã, người nhận biến đổi nó trở lại thành bản rõ; đó là giải mã."
+  },
+  {
+   "chu": "ciphertext",
+   "doc": "/ˈsaɪfərtekst/",
+   "nghia": "bản mã: bản tin sau khi mã hoá",
+   "nhom": "Mật mã",
+   "viDu": "Ciphertext is a series of randomized letters and numbers that humans cannot make sense of.",
+   "viDuNghia": "Bản mã là một chuỗi chữ và số ngẫu nhiên mà con người không đọc hiểu được."
+  },
+  {
+   "chu": "encryption",
+   "doc": "/ɪnˈkrɪpʃn/",
+   "nghia": "mã hoá: đổi bản rõ thành bản mã",
+   "nhom": "Mật mã",
+   "viDu": "Bob wants to send Alice a secret using an asymmetric cipher. Which key does he encrypt with?",
+   "viDuNghia": "Bob muốn gửi bí mật cho Alice bằng mã bất đối xứng. Bob mã hoá bằng khoá nào?"
+  },
+  {
+   "chu": "decryption",
+   "doc": "/diːˈkrɪpʃn/",
+   "nghia": "giải mã: đổi bản mã về bản rõ",
+   "nhom": "Mật mã",
+   "viDu": "In cryptography, plaintext is readable text before being encrypted into ciphertext or after being decrypted.",
+   "viDuNghia": "Trong mật mã học, bản rõ là văn bản đọc được, trước khi được mã hoá thành bản mã hoặc sau khi được giải mã."
+  },
+  {
+   "chu": "cipher",
+   "doc": "/ˈsaɪfər/",
+   "nghia": "mật mã: thuật toán mã hoá/giải mã",
+   "nhom": "Mật mã",
+   "viDu": "A Caesar cipher shifts each letter 3 places forward. How is CAT encrypted?",
+   "viDuNghia": "Mã Caesar dịch mỗi chữ cái tiến 3 vị trí. CAT được mã hoá thành gì?"
+  },
+  {
+   "chu": "symmetric-key cryptography",
+   "doc": "/sɪˌmetrɪk ˈkiː krɪpˈtɑːɡrəfi/",
+   "nghia": "mật mã khoá đối xứng: hai bên dùng chung MỘT khoá bí mật cho cả mã hoá lẫn giải mã",
+   "nhom": "Mật mã",
+   "viDu": "In symmetric-key cryptography, the same key is used by the sender and the receiver.",
+   "viDuNghia": "Trong mật mã khoá đối xứng, người gửi và người nhận dùng cùng một khoá."
+  },
+  {
+   "chu": "asymmetric-key cryptography",
+   "doc": "/ˌeɪsɪˌmetrɪk ˈkiː krɪpˈtɑːɡrəfi/",
+   "nghia": "mật mã khoá bất đối xứng: dùng cặp khoá – khoá công khai để mã hoá, khoá riêng để giải mã",
+   "nhom": "Mật mã",
+   "viDu": "To guarantee secure communication among 10 hosts using asymmetric-key encryption, how many keys are necessary?",
+   "viDuNghia": "Để đảm bảo giao tiếp an toàn giữa 10 máy chủ dùng mã hoá khoá bất đối xứng, cần bao nhiêu khoá?"
+  },
+  {
+   "chu": "public key",
+   "doc": "/ˈpʌblɪk kiː/",
+   "nghia": "khoá công khai: ai cũng biết, dùng để mã hoá hoặc kiểm chữ ký",
+   "nhom": "Mật mã",
+   "viDu": "In asymmetric-key cryptography, everyone has access to everyone else's public key.",
+   "viDuNghia": "Trong mật mã khoá bất đối xứng, ai cũng lấy được khoá công khai của mọi người khác."
+  },
+  {
+   "chu": "private key",
+   "doc": "/ˈpraɪvət kiː/",
+   "nghia": "khoá riêng: chỉ chủ khoá giữ, dùng để giải mã hoặc ký",
+   "nhom": "Mật mã",
+   "viDu": "The receiver decrypts the message with his own private key.",
+   "viDuNghia": "Người nhận giải mã bản tin bằng khoá riêng của mình."
+  },
+  {
+   "chu": "substitution cipher",
+   "doc": "/ˌsʌbstɪˈtuːʃn ˈsaɪfər/",
+   "nghia": "mật mã thay thế: thay mỗi ký hiệu bằng ký hiệu khác",
+   "nhom": "Mật mã",
+   "viDu": "Which cipher replaces each letter with another based on a fixed rule? → Substitution cipher",
+   "viDuNghia": "Loại mật mã nào thay thế mỗi chữ cái bằng một chữ khác theo một quy tắc cố định? → Mật mã thay thế (substitution)"
+  },
+  {
+   "chu": "transposition cipher",
+   "doc": "/ˌtrænspəˈzɪʃn ˈsaɪfər/",
+   "nghia": "mật mã hoán vị: giữ nguyên ký hiệu, chỉ đổi vị trí của chúng",
+   "nhom": "Mật mã",
+   "viDu": "A transposition cipher does not substitute symbols; it only changes their positions.",
+   "viDuNghia": "Mật mã hoán vị không thay thế ký hiệu mà chỉ đổi vị trí của chúng."
+  },
+  {
+   "chu": "stream cipher",
+   "doc": "/striːm ˈsaɪfər/",
+   "nghia": "mật mã dòng: mã hoá từng ký hiệu (bit) một",
+   "nhom": "Mật mã",
+   "viDu": "In a stream cipher, encryption is done one symbol at a time, using a plaintext stream, a ciphertext stream and a key stream.",
+   "viDuNghia": "Trong mật mã dòng, mã hoá làm từng ký hiệu một, dùng luồng bản rõ, luồng bản mã và luồng khoá."
+  },
+  {
+   "chu": "block cipher",
+   "doc": "/blɑːk ˈsaɪfər/",
+   "nghia": "mật mã khối: mã hoá cả khối nhiều bit một lúc",
+   "nhom": "Mật mã",
+   "viDu": "In a block cipher, a key block is used to encrypt the whole block even if the key is made of multiple values.",
+   "viDuNghia": "Trong mật mã khối, một khối khoá được dùng để mã hoá cả khối, kể cả khi khoá gồm nhiều giá trị."
+  },
+  {
+   "chu": "digital signature",
+   "doc": "/ˈdɪdʒɪtl ˈsɪɡnətʃər/",
+   "nghia": "chữ ký số: ký bằng khoá riêng, kiểm bằng khoá công khai; cho toàn vẹn, xác thực, chống chối bỏ",
+   "nhom": "Mật mã",
+   "viDu": "What does a digital signature mainly give the receiver?",
+   "viDuNghia": "Chữ ký số chủ yếu mang lại gì cho bên nhận?"
+  },
+  {
+   "chu": "message integrity",
+   "doc": "/ˈmesɪdʒ ɪnˈteɡrəti/",
+   "nghia": "toàn vẹn bản tin: bản tin không bị sửa trên đường đi",
+   "nhom": "Mật mã",
+   "viDu": "Message integrity means that the data must arrive at the receiver exactly as they were sent.",
+   "viDuNghia": "Toàn vẹn thông điệp (message integrity) nghĩa là dữ liệu phải đến nơi nhận đúng y hệt như lúc được gửi đi."
+  },
+  {
+   "chu": "nonrepudiation",
+   "doc": "/ˌnɑːnrɪˌpjuːdiˈeɪʃn/",
+   "nghia": "chống chối bỏ: người gửi không thể chối là mình đã gửi",
+   "nhom": "Mật mã",
+   "viDu": "A digital signature provides nonrepudiation: the sender cannot deny sending the message.",
+   "viDuNghia": "Chữ ký số cho tính chống chối bỏ: người gửi không thể chối là đã gửi bản tin."
+  },
+  {
+   "chu": "entity authentication",
+   "doc": "/ˈentəti ɔːˌθentɪˈkeɪʃn/",
+   "nghia": "xác thực thực thể: chứng minh danh tính một bên trước khi cho truy cập",
+   "nhom": "Mật mã",
+   "viDu": "In entity authentication, the identity of a party is verified once for the entire duration of system access.",
+   "viDuNghia": "Trong xác thực thực thể (entity authentication), danh tính của một bên được xác minh một lần cho toàn bộ thời gian truy cập hệ thống."
+  },
+  {
+   "chu": "monoalphabetic cipher",
+   "doc": "/ˌmɑːnoʊˌælfəˈbetɪk ˈsaɪfər/",
+   "nghia": "mật mã đơn bảng: một ký tự bản rõ luôn đổi thành CÙNG một ký tự bản mã (quan hệ một–một), vd mã Caesar",
+   "nhom": "Mật mã",
+   "viDu": "In a monoalphabetic cipher, a character in the plaintext is always changed to the same character in the ciphertext.",
+   "viDuNghia": "Trong mật mã đơn bảng, một ký tự của bản rõ luôn được đổi thành cùng một ký tự trong bản mã."
+  },
+  {
+   "chu": "polyalphabetic cipher",
+   "doc": "/ˌpɑːliˌælfəˈbetɪk ˈsaɪfər/",
+   "nghia": "mật mã đa bảng: một ký tự bản rõ có thể đổi thành NHIỀU ký tự bản mã khác nhau (quan hệ một–nhiều)",
+   "nhom": "Mật mã",
+   "viDu": "In a polyalphabetic cipher, the relationship between a character in the plaintext and a character in the ciphertext is one-to-many.",
+   "viDuNghia": "Trong mật mã đa bảng, quan hệ giữa một ký tự bản rõ và một ký tự bản mã là một–nhiều."
+  },
+  {
+   "chu": "ethical principle",
+   "doc": "/ˈeθɪkl ˈprɪnsəpl/",
+   "nghia": "nguyên tắc đạo đức (ba nguyên tắc: quy tắc luân lý, vị lợi, khế ước xã hội)",
+   "nhom": "Đạo đức & pháp lý",
+   "viDu": "Which ethical principle states that an act is ethical if it brings about a good result for society?",
+   "viDuNghia": "Học thuyết đạo đức nào nói rằng một hành động có đạo đức nếu nó mang lại kết quả tốt cho xã hội?"
+  },
+  {
+   "chu": "moral rules",
+   "doc": "/ˈmɔːrəl ruːlz/",
+   "nghia": "quy tắc luân lý: hành động có đạo đức nếu hợp với quy tắc đạo đức được thừa nhận rộng rãi",
+   "nhom": "Đạo đức & pháp lý",
+   "viDu": "The three main ethical principles are moral rules, utilitarianism and social contract.",
+   "viDuNghia": "Ba nguyên tắc đạo đức chính là quy tắc luân lý, thuyết vị lợi và khế ước xã hội."
+  },
+  {
+   "chu": "social contract",
+   "doc": "/ˈsoʊʃl ˈkɑːntrækt/",
+   "nghia": "khế ước xã hội: hành động có đạo đức khi đa số người trong xã hội đồng ý với nó",
+   "nhom": "Đạo đức & pháp lý",
+   "viDu": "According to the social contract theory, what makes an act ethical?",
+   "viDuNghia": "Theo thuyết khế ước xã hội, điều gì khiến một hành động có đạo đức?"
+  },
+  {
+   "chu": "intellectual property",
+   "doc": "/ˌɪntəˈlektʃuəl ˈprɑːpərti/",
+   "nghia": "sở hữu trí tuệ: tài sản do trí óc tạo ra (bản quyền, sáng chế, nhãn hiệu, bí mật kinh doanh)",
+   "nhom": "Đạo đức & pháp lý",
+   "viDu": "Copyright, patent, trademark and trade secret are types of intellectual property.",
+   "viDuNghia": "Bản quyền, bằng sáng chế, nhãn hiệu và bí mật kinh doanh là các loại sở hữu trí tuệ."
+  },
+  {
+   "chu": "copyright",
+   "doc": "/ˈkɑːpiraɪt/",
+   "nghia": "bản quyền (quyền tác giả): bảo hộ tác phẩm viết, nhạc, phần mềm…",
+   "nhom": "Đạo đức & pháp lý",
+   "viDu": "What is a key feature of a copyright?",
+   "viDuNghia": "Đặc điểm chính của bản quyền (copyright) là gì?"
+  },
+  {
+   "chu": "patent",
+   "doc": "/ˈpætnt/",
+   "nghia": "bằng sáng chế: độc quyền một phát minh trong thời hạn nhất định",
+   "nhom": "Đạo đức & pháp lý",
+   "viDu": "A right to a monopoly on the use of a piece of intellectual property is referred to as a patent.",
+   "viDuNghia": "Quyền độc quyền sử dụng một tài sản trí tuệ được gọi là bằng sáng chế."
+  },
+  {
+   "chu": "trademark",
+   "doc": "/ˈtreɪdmɑːrk/",
+   "nghia": "nhãn hiệu: tên, biểu tượng nhận diện sản phẩm của một công ty",
+   "nhom": "Đạo đức & pháp lý",
+   "viDu": "A company's product or service is identified by a trademark.",
+   "viDuNghia": "Sản phẩm hoặc dịch vụ của một công ty được nhận diện bằng nhãn hiệu."
+  },
+  {
+   "chu": "trade secret",
+   "doc": "/treɪd ˈsiːkrət/",
+   "nghia": "bí mật kinh doanh: thông tin công ty giữ kín để có lợi thế (công thức, quy trình)",
+   "nhom": "Đạo đức & pháp lý",
+   "viDu": "Information about a product that is kept secret by the owner is referred to as a trade secret.",
+   "viDuNghia": "Thông tin về sản phẩm được chủ sở hữu giữ kín được gọi là bí mật kinh doanh."
+  },
+  {
+   "chu": "unauthorized access",
+   "doc": "/ʌnˈɔːθəraɪzd ˈækses/",
+   "nghia": "truy cập trái phép",
+   "nhom": "Tấn công & phòng vệ",
+   "viDu": "To be secure, information needs to be hidden from unauthorized access.",
+   "viDuNghia": "Để an toàn, thông tin cần được che giấu khỏi truy cập trái phép."
+  },
+  {
+   "chu": "attack",
+   "doc": "/əˈtæk/",
+   "nghia": "cuộc tấn công (vào hệ thống, dữ liệu)",
+   "nhom": "Tấn công & phòng vệ",
+   "viDu": "A flood of fake requests stops real customers from using a website. Which security goal is under attack?",
+   "viDuNghia": "Một lượng lớn yêu cầu giả khiến khách thật không dùng được web. Mục tiêu an toàn nào bị tấn công?"
+  },
+  {
+   "chu": "security goal",
+   "doc": "/sɪˈkjʊrəti ɡoʊl/",
+   "nghia": "mục tiêu an toàn thông tin: ba mục tiêu là bí mật (confidentiality), toàn vẹn (integrity), sẵn sàng (availability)",
+   "nhom": "Tấn công & phòng vệ",
+   "viDu": "Three security goals are confidentiality, integrity and availability.",
+   "viDuNghia": "Ba mục tiêu an toàn là tính bí mật, tính toàn vẹn và tính sẵn sàng."
+  },
+  {
+   "chu": "black hat hacker",
+   "nghia": "hacker mũ đen: kẻ xâm nhập hệ thống với mục đích xấu (trục lợi, phá hoại, danh tiếng)",
+   "nhom": "Tấn công & phòng vệ",
+   "viDu": "Black hat hackers are the \"bad guys\" who break into computer networks for money or reputation.",
+   "viDuNghia": "Hacker mũ đen là \"kẻ xấu\", đột nhập mạng máy tính để kiếm tiền hoặc danh tiếng."
+  },
+  {
+   "chu": "white hat hacker",
+   "nghia": "hacker mũ trắng (hacker đạo đức): được phép thử xâm nhập để tìm và vá lỗ hổng",
+   "nhom": "Tấn công & phòng vệ",
+   "viDu": "A white hat hacker is hired by a company to find security holes before attackers do.",
+   "viDuNghia": "Hacker mũ trắng được công ty thuê để tìm lỗ hổng bảo mật trước khi kẻ tấn công tìm ra."
+  },
+  {
+   "chu": "grey hat hacker",
+   "nghia": "hacker mũ xám: xâm nhập khi chưa được phép nhưng không nhằm phá hoại, thường báo lỗ hổng cho chủ hệ thống",
+   "nhom": "Tấn công & phòng vệ",
+   "viDu": "A grey hat hacker breaks into a system without permission but then reports the weakness to its owner.",
+   "viDuNghia": "Hacker mũ xám đột nhập hệ thống khi chưa được phép nhưng sau đó báo điểm yếu cho chủ hệ thống."
+  },
+  {
+   "chu": "red hat hacker",
+   "nghia": "hacker mũ đỏ: truy lùng và chống trả hacker mũ đen, thường bằng cách tấn công lại hệ thống của chúng",
+   "nhom": "Tấn công & phòng vệ",
+   "viDu": "Red hat hackers track down black hat hackers and work to stop their activities.",
+   "viDuNghia": "Hacker mũ đỏ truy lùng hacker mũ đen và tìm cách chặn hoạt động của chúng."
+  }
+ ]
+}

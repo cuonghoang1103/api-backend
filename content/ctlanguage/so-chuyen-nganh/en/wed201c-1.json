@@ -1,0 +1,859 @@
+{
+ "ma": "wed201c-1",
+ "nn": "en",
+ "ten": "WED201c · 1. Web, HTML và CSS",
+ "moTa": "Môn Web Design (WED201c), bộ 1: cách web hoạt động, thẻ và phần tử HTML, form, bảng, khả năng tiếp cận, bộ chọn và thuộc tính CSS, mô hình hộp, định vị. Từ lấy từ đề FE/PE thật; câu ví dụ phần lớn là câu hỏi thật trong đề.",
+ "bieuTuong": "globe",
+ "thuTu": -964,
+ "tu": [
+  {
+   "chu": "World Wide Web Consortium",
+   "nghia": "Tổ chức W3C: nơi ban hành các chuẩn web như HTML, CSS",
+   "nhom": "Web hoạt động thế nào",
+   "viDu": "W3C stands for World Wide Web Consortium.",
+   "viDuNghia": "W3C là viết tắt của World Wide Web Consortium (Tổ chức Mạng toàn cầu, nơi ban hành chuẩn web)."
+  },
+  {
+   "chu": "Hypertext Markup Language",
+   "nghia": "ngôn ngữ đánh dấu siêu văn bản (HTML): dùng thẻ để mô tả cấu trúc, nội dung trang web",
+   "nhom": "Web hoạt động thế nào",
+   "viDu": "What does HTML stand for?",
+   "viDuNghia": "HTML là viết tắt của gì?"
+  },
+  {
+   "chu": "Cascading Style Sheets",
+   "nghia": "bảng định kiểu xếp tầng (CSS): ngôn ngữ quy định màu, cỡ chữ, bố cục của trang",
+   "nhom": "Web hoạt động thế nào",
+   "viDu": "CSS stands for Cascading Style Sheets.",
+   "viDuNghia": "CSS là viết tắt của Cascading Style Sheets."
+  },
+  {
+   "chu": "Uniform Resource Locator",
+   "nghia": "địa chỉ định vị tài nguyên (URL): địa chỉ đầy đủ của một trang / tệp trên web",
+   "nhom": "Web hoạt động thế nào",
+   "viDu": "Which attribute specifies the URL where the form data will be submitted and processed?",
+   "viDuNghia": "Thuộc tính nào chỉ định URL nơi dữ liệu form sẽ được gửi đến và xử lý?"
+  },
+  {
+   "chu": "Hypertext Transfer Protocol",
+   "nghia": "giao thức truyền siêu văn bản (HTTP): quy tắc trình duyệt và máy chủ web trao đổi với nhau",
+   "nhom": "Web hoạt động thế nào",
+   "viDu": "What does HTTP stand for?",
+   "viDuNghia": "HTTP là viết tắt của gì?"
+  },
+  {
+   "chu": "browser",
+   "doc": "/ˈbraʊzər/",
+   "nghia": "trình duyệt: phần mềm tải và hiển thị trang web (Chrome, Firefox, Safari…)",
+   "nhom": "Web hoạt động thế nào",
+   "viDu": "Which prefix do you need to get CSS3 properties to work on older Mozilla Firefox browsers?",
+   "viDuNghia": "Cần tiền tố nào để các thuộc tính CSS3 hoạt động trên các trình duyệt Mozilla Firefox đời cũ?"
+  },
+  {
+   "chu": "web page",
+   "doc": "/web peɪdʒ/",
+   "nghia": "trang web: một tài liệu HTML hiển thị trong trình duyệt",
+   "nhom": "Web hoạt động thế nào",
+   "viDu": "A basic functionality of browsers is to translate HTML documents into viewable webpages.",
+   "viDuNghia": "Một chức năng cơ bản của trình duyệt là dịch tài liệu HTML thành các trang web có thể xem được."
+  },
+  {
+   "chu": "domain name",
+   "doc": "/doʊˈmeɪn neɪm/",
+   "nghia": "tên miền: tên dễ nhớ thay cho địa chỉ IP, vd umich.edu",
+   "nhom": "Web hoạt động thế nào",
+   "viDu": "Which organization is responsible for assigning top-level domain names?",
+   "viDuNghia": "Tổ chức nào chịu trách nhiệm cấp phát tên miền cấp cao nhất (top-level domain)?"
+  },
+  {
+   "chu": "top-level domain",
+   "doc": "/ˌtɑːp ˈlevl doʊˈmeɪn/",
+   "nghia": "tên miền cấp cao nhất: phần đuôi của tên miền (.com, .edu, .vn)",
+   "nhom": "Web hoạt động thế nào",
+   "viDu": "Which of the following is an example of a top-level domain?",
+   "viDuNghia": "Ví dụ nào sau đây là một tên miền cấp cao nhất (top-level domain)?"
+  },
+  {
+   "chu": "hostname",
+   "doc": "/ˈhoʊstneɪm/",
+   "nghia": "tên máy chủ: phần của URL cho biết máy nào giữ tài nguyên",
+   "nhom": "Web hoạt động thế nào",
+   "viDu": "Host name indicates the domain name of the web _________",
+   "viDuNghia": "Host name (tên máy chủ) biểu thị tên miền của _________ web"
+  },
+  {
+   "chu": "hyperlink",
+   "doc": "/ˈhaɪpərlɪŋk/",
+   "nghia": "siêu liên kết: chỗ bấm vào để sang trang hoặc vị trí khác (thẻ a)",
+   "nhom": "Web hoạt động thế nào",
+   "viDu": "You want to create a hyperlink that links to the google page. What is the best option to create this link?",
+   "viDuNghia": "Bạn muốn tạo một siêu liên kết (hyperlink) trỏ đến trang Google. Đâu là cách tốt nhất để tạo liên kết này?"
+  },
+  {
+   "chu": "absolute path",
+   "doc": "/ˈæbsəluːt pæθ/",
+   "nghia": "đường dẫn tuyệt đối: địa chỉ đầy đủ từ gốc, có cả giao thức và tên miền",
+   "nhom": "Web hoạt động thế nào",
+   "viDu": "An absolute path includes the protocol and the domain name.",
+   "viDuNghia": "Đường dẫn tuyệt đối gồm cả giao thức và tên miền."
+  },
+  {
+   "chu": "relative path",
+   "doc": "/ˈrelətɪv pæθ/",
+   "nghia": "đường dẫn tương đối: địa chỉ tính từ vị trí tệp hiện tại, vd images/logo.png",
+   "nhom": "Web hoạt động thế nào",
+   "viDu": "A relative path points to a file starting from the current folder.",
+   "viDuNghia": "Đường dẫn tương đối trỏ tới tệp tính từ thư mục hiện tại."
+  },
+  {
+   "chu": "markup",
+   "doc": "/ˈmɑːrkʌp/",
+   "nghia": "đánh dấu: dùng thẻ để chú thích nội dung là tiêu đề, đoạn văn, ảnh…",
+   "nhom": "Thẻ và cấu trúc HTML",
+   "viDu": "HTML is a markup language for web pages.",
+   "viDuNghia": "HTML là ngôn ngữ đánh dấu (markup language) dùng cho trang web."
+  },
+  {
+   "chu": "opening tag",
+   "doc": "/ˈoʊpənɪŋ tæɡ/",
+   "nghia": "thẻ mở: thẻ bắt đầu một phần tử",
+   "nhom": "Thẻ và cấu trúc HTML",
+   "viDu": "Most elements have an opening tag and a closing tag.",
+   "viDuNghia": "Phần lớn phần tử có một thẻ mở và một thẻ đóng."
+  },
+  {
+   "chu": "closing tag",
+   "doc": "/ˈkloʊzɪŋ tæɡ/",
+   "nghia": "thẻ đóng: thẻ kết thúc phần tử, có dấu gạch chéo",
+   "nhom": "Thẻ và cấu trúc HTML",
+   "viDu": "A closing tag has a forward slash before the tag name.",
+   "viDuNghia": "Thẻ đóng có dấu gạch chéo trước tên thẻ."
+  },
+  {
+   "chu": "self-closing tag",
+   "doc": "/ˌself ˈkloʊzɪŋ tæɡ/",
+   "nghia": "thẻ tự đóng: thẻ không có nội dung và không cần thẻ đóng (img, br, hr)",
+   "nhom": "Thẻ và cấu trúc HTML",
+   "viDu": "The img element is a self-closing tag.",
+   "viDuNghia": "Phần tử img là thẻ tự đóng."
+  },
+  {
+   "chu": "nested",
+   "doc": "/ˈnestɪd/",
+   "nghia": "lồng nhau: phần tử nằm bên trong phần tử khác",
+   "nhom": "Thẻ và cấu trúc HTML",
+   "viDu": "Which code properly creates the nested list structure shown here? 1. Vegetables 2. Fruit - Blueberries - Bananas Notice that the blueberries and bananas are part of the fruit component.",
+   "viDuNghia": "Đoạn mã nào tạo đúng cấu trúc danh sách lồng nhau sau đây? 1. Vegetables 2. Fruit - Blueberries - Bananas Lưu ý rằng blueberries và bananas là thành phần con của mục fruit."
+  },
+  {
+   "chu": "doctype declaration",
+   "doc": "/ˈdɑːktaɪp ˌdekləˈreɪʃn/",
+   "nghia": "khai báo DOCTYPE: dòng đầu tệp báo cho trình duyệt biết phiên bản HTML",
+   "nhom": "Thẻ và cấu trúc HTML",
+   "viDu": "The doctype declaration must be the first line of an HTML document.",
+   "viDuNghia": "Khai báo DOCTYPE phải là dòng đầu tiên của tài liệu HTML."
+  },
+  {
+   "chu": "heading",
+   "doc": "/ˈhedɪŋ/",
+   "nghia": "tiêu đề mục (thẻ h1 đến h6), h1 là lớn / quan trọng nhất",
+   "nhom": "Thẻ và cấu trúc HTML",
+   "viDu": "Which is the best/proper way to declare a section that has an h2 heading and an unordered list?",
+   "viDuNghia": "Cách nào đúng/hợp lý nhất để khai báo một section có tiêu đề h2 và một danh sách không thứ tự?"
+  },
+  {
+   "chu": "unordered list",
+   "doc": "/ˌʌnˈɔːrdərd lɪst/",
+   "nghia": "danh sách không thứ tự (thẻ ul): các mục có dấu chấm đầu dòng",
+   "nhom": "Thẻ và cấu trúc HTML",
+   "viDu": "What tag do you use to create an unordered list?",
+   "viDuNghia": "Thẻ nào dùng để tạo danh sách không thứ tự (unordered list)?"
+  },
+  {
+   "chu": "ordered list",
+   "doc": "/ˈɔːrdərd lɪst/",
+   "nghia": "danh sách có thứ tự (thẻ ol): các mục được đánh số",
+   "nhom": "Thẻ và cấu trúc HTML",
+   "viDu": "What tag do you use to create an ordered list?",
+   "viDuNghia": "Thẻ nào dùng để tạo danh sách có thứ tự (ordered list)?"
+  },
+  {
+   "chu": "list item",
+   "doc": "/lɪst ˈaɪtəm/",
+   "nghia": "mục trong danh sách (thẻ li)",
+   "nhom": "Thẻ và cấu trúc HTML",
+   "viDu": "Which HTML element is used to define list items?",
+   "viDuNghia": "Phần tử HTML nào dùng để định nghĩa mục trong danh sách?"
+  },
+  {
+   "chu": "anchor",
+   "doc": "/ˈæŋkər/",
+   "nghia": "thẻ neo (thẻ a): tạo liên kết; thuộc tính href chứa địa chỉ đích",
+   "nhom": "Thẻ và cấu trúc HTML",
+   "viDu": "The anchor tag uses the href attribute to specify the link address.",
+   "viDuNghia": "Thẻ neo dùng thuộc tính href để chỉ địa chỉ liên kết."
+  },
+  {
+   "chu": "line break",
+   "doc": "/laɪn breɪk/",
+   "nghia": "xuống dòng (thẻ br)",
+   "nhom": "Thẻ và cấu trúc HTML",
+   "viDu": "Which tag represents a line break (new line)?",
+   "viDuNghia": "Thẻ nào đại diện cho một dấu ngắt dòng (line break, xuống dòng)?"
+  },
+  {
+   "chu": "comment",
+   "doc": "/ˈkɑːment/",
+   "nghia": "chú thích trong mã: trình duyệt bỏ qua, chỉ để người đọc mã hiểu",
+   "nhom": "Thẻ và cấu trúc HTML",
+   "viDu": "Which of the following is the correct way to comment on HTML5?",
+   "viDuNghia": "Cách nào sau đây đúng để viết chú thích (comment) trong HTML5?"
+  },
+  {
+   "chu": "semantic element",
+   "doc": "/sɪˈmæntɪk ˈelɪmənt/",
+   "nghia": "phần tử ngữ nghĩa: tên thẻ nói rõ vai trò nội dung (header, nav, article, footer)",
+   "nhom": "Thẻ và cấu trúc HTML",
+   "viDu": "Which tag is used for emphasizing text in semantic HTML5?",
+   "viDuNghia": "Thẻ nào dùng để nhấn mạnh (emphasize) văn bản trong HTML5 ngữ nghĩa (semantic)?"
+  },
+  {
+   "chu": "header",
+   "doc": "/ˈhedər/",
+   "nghia": "phần đầu trang hoặc đầu một khối (thẻ header) · (mạng, NWC203c) phần đầu gói/khung/đoạn chứa thông tin điều khiển: địa chỉ, cổng, độ dài…",
+   "nhom": "Thẻ và cấu trúc HTML",
+   "viDu": "Using the header and footer tags can improve the search engine optimization for your page.",
+   "viDuNghia": "Sử dụng thẻ header và footer có thể cải thiện tối ưu hóa công cụ tìm kiếm (SEO) cho trang của bạn."
+  },
+  {
+   "chu": "footer",
+   "doc": "/ˈfʊtər/",
+   "nghia": "phần chân trang (thẻ footer): thường chứa bản quyền, liên hệ",
+   "nhom": "Thẻ và cấu trúc HTML",
+   "viDu": "Which HTML element is used to specify a footer for a document or section?",
+   "viDuNghia": "Phần tử HTML nào được dùng để chỉ định phần chân trang (footer) cho một tài liệu hoặc section?"
+  },
+  {
+   "chu": "block-level element",
+   "doc": "/ˌblɑːk ˈlevl ˈelɪmənt/",
+   "nghia": "phần tử khối: bắt đầu trên dòng mới và chiếm hết chiều ngang (div, p, h1)",
+   "nhom": "Thẻ và cấu trúc HTML",
+   "viDu": "What is a block-level element?",
+   "viDuNghia": "Phần tử block-level là gì?"
+  },
+  {
+   "chu": "inline element",
+   "doc": "/ˈɪnlaɪn ˈelɪmənt/",
+   "nghia": "phần tử nội dòng: nằm cùng dòng, chỉ rộng bằng nội dung (span, a, img)",
+   "nhom": "Thẻ và cấu trúc HTML",
+   "viDu": "Which value is like inline elements but they can have a width and a height?",
+   "viDuNghia": "Giá trị nào giống phần tử inline nhưng có thể có chiều rộng và chiều cao?"
+  },
+  {
+   "chu": "alternative text",
+   "doc": "/ɔːlˈtɜːrnətɪv tekst/",
+   "nghia": "văn bản thay thế (thuộc tính alt): mô tả ảnh cho trình đọc màn hình và khi ảnh không tải được",
+   "nhom": "Thẻ và cấu trúc HTML",
+   "viDu": "When should an image have null (empty) alt text (alt=\"\")?",
+   "viDuNghia": "Khi nào một ảnh nên có văn bản thay thế rỗng (alt=\"\")? (Đáp án: khi ảnh chỉ để trang trí.)"
+  },
+  {
+   "chu": "table row",
+   "doc": "/ˈteɪbl roʊ/",
+   "nghia": "hàng của bảng (thẻ tr)",
+   "nhom": "Thẻ và cấu trúc HTML",
+   "viDu": "Each table row is defined with the tr tag.",
+   "viDuNghia": "Mỗi hàng của bảng được khai báo bằng thẻ tr."
+  },
+  {
+   "chu": "table header",
+   "doc": "/ˈteɪbl ˈhedər/",
+   "nghia": "ô tiêu đề của bảng (thẻ th): chữ đậm, canh giữa theo mặc định",
+   "nhom": "Thẻ và cấu trúc HTML",
+   "viDu": "A table header cell is defined with the th tag.",
+   "viDuNghia": "Ô tiêu đề của bảng được khai báo bằng thẻ th."
+  },
+  {
+   "chu": "caption",
+   "doc": "/ˈkæpʃn/",
+   "nghia": "chú thích / tiêu đề của bảng hoặc hình",
+   "nhom": "Thẻ và cấu trúc HTML",
+   "viDu": "The caption tag defines a title for a table.",
+   "viDuNghia": "Thẻ caption đặt tiêu đề cho một bảng."
+  },
+  {
+   "chu": "deprecated",
+   "doc": "/ˈdeprəkeɪtɪd/",
+   "nghia": "lỗi thời, không còn khuyến khích dùng (thẻ / thuộc tính cũ như font, center)",
+   "nhom": "Thẻ và cấu trúc HTML",
+   "viDu": "The font tag is deprecated in HTML5; use CSS instead.",
+   "viDuNghia": "Thẻ font đã lỗi thời trong HTML5; hãy dùng CSS thay thế."
+  },
+  {
+   "chu": "character encoding",
+   "doc": "/ˈkærəktər ɪnˈkoʊdɪŋ/",
+   "nghia": "bảng mã ký tự (vd UTF-8): cách biểu diễn chữ thành byte; khai báo bằng meta charset",
+   "nhom": "Thẻ và cấu trúc HTML",
+   "viDu": "UTF-8 is the most common character encoding on the web.",
+   "viDuNghia": "UTF-8 là bảng mã ký tự phổ biến nhất trên web."
+  },
+  {
+   "chu": "tag",
+   "doc": "/tæɡ/",
+   "nghia": "thẻ (HTML) – phần đánh dấu trong dấu < >, vd <p>, <h2>; thẻ mở + nội dung + thẻ đóng tạo thành phần tử. (CEA201: tag của dòng cache)",
+   "nhom": "Thẻ và cấu trúc HTML",
+   "viDu": "What statement do you use to change the className property of a tag with id=\"demo\"?",
+   "viDuNghia": "Câu lệnh nào dùng để thay đổi thuộc tính className của thẻ có id=\"demo\"?"
+  },
+  {
+   "chu": "element",
+   "doc": "/ˈelɪmənt/",
+   "nghia": "phần tử (HTML) – thẻ mở + nội dung + thẻ đóng, vd <p>Hi</p>; là nút trong cây DOM. (Toán: phần tử của tập hợp)",
+   "nhom": "Thẻ và cấu trúc HTML",
+   "viDu": "In responsive design, which measurement unit allows a fluid element to adjust based on the screen size?",
+   "viDuNghia": "Trong thiết kế responsive, đơn vị đo nào cho phép một phần tử co giãn linh hoạt theo kích thước màn hình?"
+  },
+  {
+   "chu": "div",
+   "doc": "/dɪv/",
+   "nghia": "thẻ <div> (division): khối chứa chung, là phần tử block-level, dùng để nhóm nội dung và dàn bố cục",
+   "nhom": "Thẻ và cấu trúc HTML",
+   "viDu": "A <div> block is an inline-level element.",
+   "viDuNghia": "Khối <div> là một phần tử inline-level. (Đáp án: Sai — div là phần tử block-level.)"
+  },
+  {
+   "chu": "body element",
+   "doc": "/ˈbɑːdi ˈelɪmənt/",
+   "nghia": "phần tử <body>: chứa mọi nội dung hiển thị của trang (đứng sau <head>)",
+   "nhom": "Thẻ và cấu trúc HTML",
+   "viDu": "JavaScript code can be placed in the head and the body section of the document.",
+   "viDuNghia": "Mã JavaScript có thể đặt ở phần head và phần body của tài liệu."
+  },
+  {
+   "chu": "meta tag",
+   "doc": "/ˈmetə tæɡ/",
+   "nghia": "thẻ <meta> trong <head>: khai báo thông tin về trang (charset, mô tả, viewport), không hiện ra màn hình",
+   "nhom": "Thẻ và cấu trúc HTML",
+   "viDu": "Choose the correct statement about the meta tag.",
+   "viDuNghia": "Chọn phát biểu đúng về thẻ meta. (Đáp án: phần tử meta thường dùng để mô tả trang.)"
+  },
+  {
+   "chu": "nav element",
+   "doc": "/næv ˈelɪmənt/",
+   "nghia": "phần tử <nav>: thẻ ngữ nghĩa chứa nhóm liên kết điều hướng chính của trang",
+   "nhom": "Thẻ và cấu trúc HTML",
+   "viDu": "What does the tag <nav> typically contain?",
+   "viDuNghia": "Thẻ <nav> thường chứa gì? (Đáp án: một nhóm liên kết điều hướng.)"
+  },
+  {
+   "chu": "src attribute",
+   "doc": "/ˈsɔːrs əˈtrɪbjuːt/",
+   "nghia": "thuộc tính src (source): đường dẫn tới tệp nguồn của ảnh, script, video",
+   "nhom": "Thẻ và cấu trúc HTML",
+   "viDu": "In order for the <img> element to work, a src attribute and value must be included to specify the image.",
+   "viDuNghia": "Để phần tử <img> hoạt động, bắt buộc phải có thuộc tính src cùng giá trị để chỉ định hình ảnh."
+  },
+  {
+   "chu": "href attribute",
+   "doc": "/ˌeɪtʃ ˈref əˈtrɪbjuːt/",
+   "nghia": "thuộc tính href (hypertext reference) của thẻ <a> hoặc <link>: địa chỉ đích của liên kết",
+   "nhom": "Thẻ và cấu trúc HTML",
+   "viDu": "How can you open a link in a new tab or browser window? Use <a href=\"url\" target=\"_blank\">.",
+   "viDuNghia": "Làm sao mở liên kết trong tab hoặc cửa sổ trình duyệt mới? Dùng <a href=\"url\" target=\"_blank\">."
+  },
+  {
+   "chu": "table cell",
+   "doc": "/ˈteɪbl sel/",
+   "nghia": "ô của bảng (thẻ td); colspan cho ô trải nhiều cột, rowspan cho ô trải nhiều hàng",
+   "nhom": "Thẻ và cấu trúc HTML",
+   "viDu": "Which attributes are used to create cells that span more than one column?",
+   "viDuNghia": "Thuộc tính nào dùng để tạo ô (cell) trải qua nhiều cột? (Đáp án: colspan.)"
+  },
+  {
+   "chu": "input field",
+   "doc": "/ˈɪnpʊt fiːld/",
+   "nghia": "ô nhập liệu (thẻ input)",
+   "nhom": "Form",
+   "viDu": "In the form, what input type do you use to mask inputted characters?",
+   "viDuNghia": "Trong form, dùng input type nào để che (mask) các ký tự đã nhập?"
+  },
+  {
+   "chu": "radio button",
+   "doc": "/ˈreɪdioʊ ˈbʌtn/",
+   "nghia": "nút chọn một: trong một nhóm chỉ chọn được một mục",
+   "nhom": "Form",
+   "viDu": "Radio buttons let a user select only one option in a group.",
+   "viDuNghia": "Nút chọn một chỉ cho người dùng chọn một phương án trong nhóm."
+  },
+  {
+   "chu": "checkbox",
+   "doc": "/ˈtʃekbɑːks/",
+   "nghia": "ô đánh dấu: chọn được nhiều mục cùng lúc",
+   "nhom": "Form",
+   "viDu": "Checkboxes let a user select zero or more options.",
+   "viDuNghia": "Ô đánh dấu cho người dùng chọn không hoặc nhiều phương án."
+  },
+  {
+   "chu": "submit button",
+   "doc": "/səbˈmɪt ˈbʌtn/",
+   "nghia": "nút gửi: bấm để gửi dữ liệu form lên máy chủ",
+   "nhom": "Form",
+   "viDu": "When the user clicks the submit button, the form data is sent to the server.",
+   "viDuNghia": "Khi người dùng bấm nút gửi, dữ liệu form được gửi lên máy chủ."
+  },
+  {
+   "chu": "placeholder",
+   "doc": "/ˈpleɪshoʊldər/",
+   "nghia": "chữ gợi ý mờ trong ô nhập, tự mất khi người dùng gõ",
+   "nhom": "Form",
+   "viDu": "The placeholder attribute shows a short hint inside an input field.",
+   "viDuNghia": "Thuộc tính placeholder hiện một gợi ý ngắn bên trong ô nhập."
+  },
+  {
+   "chu": "form",
+   "doc": "/fɔːrm/",
+   "nghia": "biểu mẫu (HTML form) – thẻ <form> chứa ô nhập để gửi dữ liệu lên máy chủ (action, method)",
+   "nhom": "Form",
+   "viDu": "Which attribute specifies the URL where the form data will be submitted and processed?",
+   "viDuNghia": "Thuộc tính nào chỉ định URL nơi dữ liệu form sẽ được gửi đến và xử lý?"
+  },
+  {
+   "chu": "accessibility",
+   "doc": "/əkˌsesəˈbɪləti/",
+   "nghia": "khả năng tiếp cận: trang web dùng được cho mọi người, kể cả người khiếm thị, khiếm thính, khó vận động",
+   "nhom": "Khả năng tiếp cận",
+   "viDu": "Accessibility means that people with disabilities can use the website.",
+   "viDuNghia": "Khả năng tiếp cận nghĩa là người khuyết tật cũng dùng được trang web."
+  },
+  {
+   "chu": "screen reader",
+   "doc": "/skriːn ˈriːdər/",
+   "nghia": "trình đọc màn hình: phần mềm đọc to nội dung trang cho người khiếm thị",
+   "nhom": "Khả năng tiếp cận",
+   "viDu": "A screen reader reads the alt text of an image aloud.",
+   "viDuNghia": "Trình đọc màn hình đọc to văn bản thay thế của ảnh."
+  },
+  {
+   "chu": "assistive technology",
+   "doc": "/əˈsɪstɪv tekˈnɑːlədʒi/",
+   "nghia": "công nghệ hỗ trợ: thiết bị / phần mềm giúp người khuyết tật dùng máy tính",
+   "nhom": "Khả năng tiếp cận",
+   "viDu": "A screen reader is one kind of assistive technology.",
+   "viDuNghia": "Trình đọc màn hình là một loại công nghệ hỗ trợ."
+  },
+  {
+   "chu": "color contrast",
+   "doc": "/ˈkʌlər ˈkɑːntræst/",
+   "nghia": "độ tương phản màu giữa chữ và nền: phải đủ cao để dễ đọc",
+   "nhom": "Khả năng tiếp cận",
+   "viDu": "Good color contrast between text and background makes a page easier to read.",
+   "viDuNghia": "Độ tương phản màu tốt giữa chữ và nền giúp trang dễ đọc hơn."
+  },
+  {
+   "chu": "impairment",
+   "doc": "/ɪmˈpermənt/",
+   "nghia": "sự suy giảm (thị lực, thính lực, vận động)",
+   "nhom": "Khả năng tiếp cận",
+   "viDu": "Alternative text helps users with a visual impairment.",
+   "viDuNghia": "Văn bản thay thế giúp người dùng bị suy giảm thị lực."
+  },
+  {
+   "chu": "style sheet",
+   "doc": "/staɪl ʃiːt/",
+   "nghia": "bảng định kiểu: tệp / khối chứa các quy tắc CSS",
+   "nhom": "Bộ chọn và quy tắc CSS",
+   "viDu": "What is the correct HTML for referring to an external style sheet stored in a subfolder called css?",
+   "viDuNghia": "Cách viết HTML nào đúng để tham chiếu tới một style sheet bên ngoài được lưu trong thư mục con tên css?"
+  },
+  {
+   "chu": "external style sheet",
+   "nghia": "bảng định kiểu ngoài: tệp .css riêng, nối vào trang bằng thẻ link",
+   "nhom": "Bộ chọn và quy tắc CSS",
+   "viDu": "What is the correct HTML for referring to an external style sheet named ex_style.css ?",
+   "viDuNghia": "HTML nào đúng để tham chiếu đến một tệp style sheet ngoài tên là ex_style.css ?"
+  },
+  {
+   "chu": "internal style sheet",
+   "nghia": "bảng định kiểu trong: CSS viết trong thẻ style ở phần head của trang",
+   "nhom": "Bộ chọn và quy tắc CSS",
+   "viDu": "Which HTML tag is used to define an internal style sheet?",
+   "viDuNghia": "Thẻ HTML nào dùng để định nghĩa một internal style sheet (bảng CSS nội bộ trong trang)?"
+  },
+  {
+   "chu": "inline style",
+   "doc": "/ˈɪnlaɪn staɪl/",
+   "nghia": "kiểu nội dòng: CSS viết thẳng trong thuộc tính style của thẻ; ưu tiên cao nhất",
+   "nhom": "Bộ chọn và quy tắc CSS",
+   "viDu": "Which HTML attribute is used to define inline CSS styles?",
+   "viDuNghia": "Thuộc tính HTML nào dùng để định nghĩa CSS kiểu inline?"
+  },
+  {
+   "chu": "selector",
+   "doc": "/sɪˈlektər/",
+   "nghia": "bộ chọn: phần đầu quy tắc CSS, chỉ ra phần tử nào được áp kiểu",
+   "nhom": "Bộ chọn và quy tắc CSS",
+   "viDu": "Which modern DOM method allows you to find the first element that matches a CSS selector?",
+   "viDuNghia": "Phương thức DOM hiện đại nào cho phép tìm phần tử ĐẦU TIÊN khớp với một bộ chọn CSS?"
+  },
+  {
+   "chu": "class selector",
+   "doc": "/klæs sɪˈlektər/",
+   "nghia": "bộ chọn lớp: bắt đầu bằng dấu chấm, chọn mọi phần tử có class đó",
+   "nhom": "Bộ chọn và quy tắc CSS",
+   "viDu": "Which of the following would be used to create class called button which has a width of 750px, height of 30px and the color of the text is black?",
+   "viDuNghia": "Phương án nào dưới đây tạo một class tên là button có chiều rộng 750px, chiều cao 30px và màu chữ đen?"
+  },
+  {
+   "chu": "id selector",
+   "doc": "/ˌaɪ ˈdiː sɪˈlektər/",
+   "nghia": "bộ chọn id: bắt đầu bằng dấu thăng, chọn phần tử duy nhất có id đó",
+   "nhom": "Bộ chọn và quy tắc CSS",
+   "viDu": "An id selector starts with a hash sign and selects one unique element.",
+   "viDuNghia": "Bộ chọn id bắt đầu bằng dấu thăng và chọn một phần tử duy nhất."
+  },
+  {
+   "chu": "descendant selector",
+   "doc": "/dɪˈsendənt sɪˈlektər/",
+   "nghia": "bộ chọn con cháu (cách nhau khoảng trắng): chọn phần tử nằm bên trong phần tử khác ở mọi cấp",
+   "nhom": "Bộ chọn và quy tắc CSS",
+   "viDu": "Descendant selectors nav a{ ..} are more general than child selectors nav>a{ ..}",
+   "viDuNghia": "Bộ chọn hậu duệ (descendant selector) nav a{...} tổng quát hơn bộ chọn con trực tiếp (child selector) nav>a{...}."
+  },
+  {
+   "chu": "child selector",
+   "doc": "/tʃaɪld sɪˈlektər/",
+   "nghia": "bộ chọn con trực tiếp (dấu lớn hơn): chỉ chọn phần tử con ngay bên dưới",
+   "nhom": "Bộ chọn và quy tắc CSS",
+   "viDu": "Descendant selectors nav a{ ..} are more general than child selectors nav>a{ ..}",
+   "viDuNghia": "Bộ chọn hậu duệ (descendant selector) nav a{...} tổng quát hơn bộ chọn con trực tiếp (child selector) nav>a{...}."
+  },
+  {
+   "chu": "pseudo-class",
+   "doc": "/ˈsuːdoʊ klæs/",
+   "nghia": "lớp giả: chọn phần tử theo TRẠNG THÁI, vd :hover, :visited, :focus",
+   "nhom": "Bộ chọn và quy tắc CSS",
+   "viDu": "An element that currently has the user's mouse pointer hovering over it is matched by which pseudo-class?",
+   "viDuNghia": "Phần tử đang có con trỏ chuột của người dùng rê qua được chọn bởi pseudo-class (lớp giả) nào?"
+  },
+  {
+   "chu": "pseudo-element",
+   "doc": "/ˈsuːdoʊ ˈelɪmənt/",
+   "nghia": "phần tử giả: chọn MỘT PHẦN của phần tử, vd ::first-line, ::before",
+   "nhom": "Bộ chọn và quy tắc CSS",
+   "viDu": "Which pseudo-element can be used to insert some content before the content of an element?",
+   "viDuNghia": "Pseudo-element nào dùng để chèn nội dung vào TRƯỚC nội dung của một phần tử?"
+  },
+  {
+   "chu": "hover",
+   "doc": "/ˈhʌvər/",
+   "nghia": "rê chuột lên trên phần tử (chưa bấm)",
+   "nhom": "Bộ chọn và quy tắc CSS",
+   "viDu": "Which rule will change the text color of p elements with the class \"highlight\" when hovered over?",
+   "viDuNghia": "Quy tắc nào sẽ đổi màu chữ của các phần tử p có class \"highlight\" khi được rê chuột (hover) qua?"
+  },
+  {
+   "chu": "specificity",
+   "doc": "/ˌspesɪˈfɪsəti/",
+   "nghia": "độ đặc hiệu: quy tắc quyết định bộ chọn nào thắng khi nhiều quy tắc cùng áp một phần tử (id > class > thẻ)",
+   "nhom": "Bộ chọn và quy tắc CSS",
+   "viDu": "An id selector has higher specificity than a class selector.",
+   "viDuNghia": "Bộ chọn id có độ đặc hiệu cao hơn bộ chọn lớp."
+  },
+  {
+   "chu": "inherit",
+   "doc": "/ɪnˈherɪt/",
+   "nghia": "kế thừa: phần tử con nhận giá trị thuộc tính CSS từ phần tử cha",
+   "nhom": "Bộ chọn và quy tắc CSS",
+   "viDu": "Child elements inherit the font color of their parent.",
+   "viDuNghia": "Phần tử con kế thừa màu chữ của phần tử cha."
+  },
+  {
+   "chu": "precedence",
+   "doc": "/ˈpresɪdəns/",
+   "nghia": "thứ tự ưu tiên: quy tắc nào được áp dụng trước khi có xung đột",
+   "nhom": "Bộ chọn và quy tắc CSS",
+   "viDu": "When two rules conflict, the more specific rule takes precedence.",
+   "viDuNghia": "Khi hai quy tắc xung đột, quy tắc đặc hiệu hơn được ưu tiên."
+  },
+  {
+   "chu": "browser prefix",
+   "doc": "/ˈbraʊzər ˈpriːfɪks/",
+   "nghia": "tiền tố trình duyệt (-webkit-, -moz-, -ms-, -o-): thêm trước thuộc tính CSS còn thử nghiệm",
+   "nhom": "Bộ chọn và quy tắc CSS",
+   "viDu": "Which of the following is not a browser prefix?",
+   "viDuNghia": "Đâu KHÔNG phải là một tiền tố trình duyệt (browser prefix)?"
+  },
+  {
+   "chu": "shorthand property",
+   "doc": "/ˈʃɔːrthænd ˈprɑːpərti/",
+   "nghia": "thuộc tính viết gộp: một dòng đặt nhiều thuộc tính, vd border: 1px solid black",
+   "nhom": "Bộ chọn và quy tắc CSS",
+   "viDu": "margin is a shorthand property for the four margin sides.",
+   "viDuNghia": "margin là thuộc tính viết gộp cho bốn phía lề ngoài."
+  },
+  {
+   "chu": "property",
+   "doc": "/ˈprɑːpərti/",
+   "nghia": "thuộc tính CSS – tên đặc tính cần đặt giá trị, vd color, margin, padding (property: value). (JS: thuộc tính của đối tượng)",
+   "nhom": "Bộ chọn và quy tắc CSS",
+   "viDu": "Which CSS property is used to generate space around an element's content, inside of any defined borders?",
+   "viDuNghia": "Thuộc tính CSS nào dùng để tạo khoảng trống xung quanh nội dung của phần tử, bên trong đường viền (border) đã định nghĩa?"
+  },
+  {
+   "chu": "box model",
+   "doc": "/bɑːks ˈmɑːdl/",
+   "nghia": "mô hình hộp: mỗi phần tử là một hộp gồm nội dung, padding, border, margin",
+   "nhom": "Mô hình hộp và bố cục",
+   "viDu": "The \"Box Model\" in CSS is made up of ___________?",
+   "viDuNghia": "\"Box Model\" trong CSS được cấu thành từ ___________?"
+  },
+  {
+   "chu": "margin",
+   "doc": "/ˈmɑːrdʒɪn/",
+   "nghia": "lề ngoài: khoảng trống bên NGOÀI đường viền, cách phần tử khác",
+   "nhom": "Mô hình hộp và bố cục",
+   "viDu": "How much width will this div occupy? div { width : 100px ; padding : 10px ; margin : 5px ; border : 2px ; }",
+   "viDuNghia": "Div này sẽ chiếm tổng cộng bao nhiêu chiều rộng? div { width : 100px ; padding : 10px ; margin : 5px ; border : 2px ; }"
+  },
+  {
+   "chu": "padding",
+   "doc": "/ˈpædɪŋ/",
+   "nghia": "vùng đệm: khoảng trống bên TRONG, giữa nội dung và đường viền",
+   "nhom": "Mô hình hộp và bố cục",
+   "viDu": "What is the total width of the div element? div { width : 220px ; padding : 2px ; border : 2px solid gray; margin : 0 ; }",
+   "viDuNghia": "Chiều rộng tổng cộng (rendered width) của phần tử div là bao nhiêu? div { width : 220px ; padding : 2px ; border : 2px solid gray; margin : 0 ; }"
+  },
+  {
+   "chu": "border",
+   "doc": "/ˈbɔːrdər/",
+   "nghia": "đường viền quanh phần tử",
+   "nhom": "Mô hình hộp và bố cục",
+   "viDu": "Which CSS property is used to create space between the element's border and inner content?",
+   "viDuNghia": "Thuộc tính CSS nào dùng để tạo khoảng cách giữa border của phần tử và nội dung bên trong nó?"
+  },
+  {
+   "chu": "width",
+   "doc": "/wɪdθ/",
+   "nghia": "chiều rộng",
+   "nhom": "Mô hình hộp và bố cục",
+   "viDu": "Which of the object be used to display screen width, height, color depth, pixel depth, etc.?",
+   "viDuNghia": "Đối tượng nào dùng để hiển thị chiều rộng màn hình, chiều cao, độ sâu màu, độ sâu điểm ảnh, v.v.?"
+  },
+  {
+   "chu": "pixel",
+   "doc": "/ˈpɪksl/",
+   "nghia": "điểm ảnh (px): đơn vị tuyệt đối, kích thước cố định",
+   "nhom": "Mô hình hộp và bố cục",
+   "viDu": "Which of the following statements best describes what pixels, ems, and rems have in common?",
+   "viDuNghia": "Phát biểu nào mô tả đúng nhất điểm chung giữa pixel, em và rem?"
+  },
+  {
+   "chu": "relative unit",
+   "doc": "/ˈrelətɪv ˈjuːnɪt/",
+   "nghia": "đơn vị tương đối (%, em, rem, vw): kích thước tính theo phần tử khác hoặc màn hình",
+   "nhom": "Mô hình hộp và bố cục",
+   "viDu": "Which of the following is the relative unit that is relative to the font-size of the root element?",
+   "viDuNghia": "Đơn vị nào sau đây là đơn vị tương đối, tính theo font-size của phần tử gốc (root)?"
+  },
+  {
+   "chu": "absolute positioning",
+   "doc": "/ˈæbsəluːt pəˈzɪʃənɪŋ/",
+   "nghia": "định vị tuyệt đối: đặt phần tử theo toạ độ so với phần tử cha đã định vị, tách khỏi dòng chảy",
+   "nhom": "Mô hình hộp và bố cục",
+   "viDu": "With absolute positioning, an element is removed from the normal flow.",
+   "viDuNghia": "Với định vị tuyệt đối, phần tử bị tách khỏi dòng chảy bình thường."
+  },
+  {
+   "chu": "fixed positioning",
+   "doc": "/fɪkst pəˈzɪʃənɪŋ/",
+   "nghia": "định vị cố định: phần tử đứng yên trên màn hình kể cả khi cuộn trang",
+   "nhom": "Mô hình hộp và bố cục",
+   "viDu": "With fixed positioning, an element stays in place when the page is scrolled.",
+   "viDuNghia": "Với định vị cố định, phần tử đứng yên khi cuộn trang."
+  },
+  {
+   "chu": "scrollbar",
+   "doc": "/ˈskroʊlbɑːr/",
+   "nghia": "thanh cuộn",
+   "nhom": "Mô hình hộp và bố cục",
+   "viDu": "Which event is fired when an element's scrollbar is being scrolled?",
+   "viDuNghia": "Sự kiện nào được kích hoạt khi thanh cuộn của một phần tử đang được cuộn?"
+  },
+  {
+   "chu": "visibility",
+   "doc": "/ˌvɪzəˈbɪləti/",
+   "nghia": "tính hiển thị: visibility: hidden ẩn phần tử nhưng VẪN giữ chỗ (khác display: none)",
+   "nhom": "Mô hình hộp và bố cục",
+   "viDu": "visibility: hidden hides an element but it still takes up space.",
+   "viDuNghia": "visibility: hidden ẩn phần tử nhưng nó vẫn chiếm chỗ."
+  },
+  {
+   "chu": "invisible",
+   "doc": "/ɪnˈvɪzəbl/",
+   "nghia": "không nhìn thấy, bị ẩn",
+   "nhom": "Mô hình hộp và bố cục",
+   "viDu": "Which property makes the element invisible but still lets it take up space?",
+   "viDuNghia": "Thuộc tính nào làm phần tử vô hình nhưng vẫn để nó chiếm chỗ? (Đáp án: visibility.)"
+  },
+  {
+   "chu": "opacity",
+   "doc": "/oʊˈpæsəti/",
+   "nghia": "độ mờ đục: 1 là rõ hoàn toàn, 0 là trong suốt",
+   "nhom": "Mô hình hộp và bố cục",
+   "viDu": "What happens when you set opacity: 0.5;?",
+   "viDuNghia": "Điều gì xảy ra khi bạn đặt opacity: 0.5;?"
+  },
+  {
+   "chu": "transparent",
+   "doc": "/trænsˈpærənt/",
+   "nghia": "trong suốt",
+   "nhom": "Mô hình hộp và bố cục",
+   "viDu": "An opacity of 0 makes the element completely transparent.",
+   "viDuNghia": "Độ mờ đục bằng 0 làm phần tử trong suốt hoàn toàn."
+  },
+  {
+   "chu": "center-aligned",
+   "doc": "/ˌsentər əˈlaɪnd/",
+   "nghia": "canh giữa",
+   "nhom": "Mô hình hộp và bố cục",
+   "viDu": "You want all p elements to be center-aligned with red text. What syntax is right?",
+   "viDuNghia": "Bạn muốn mọi phần tử p được căn giữa và có chữ màu đỏ. Cú pháp nào đúng?"
+  },
+  {
+   "chu": "horizontally",
+   "doc": "/ˌhɔːrɪˈzɑːntəli/",
+   "nghia": "theo chiều ngang",
+   "nhom": "Mô hình hộp và bố cục",
+   "viDu": "Which snippet of CSS is commonly used to center an element horizontally?",
+   "viDuNghia": "Đoạn CSS nào thường được dùng để căn giữa một phần tử theo chiều ngang? (Đáp án: margin: 0 auto;)"
+  },
+  {
+   "chu": "vertically",
+   "doc": "/ˈvɜːrtɪkli/",
+   "nghia": "theo chiều dọc",
+   "nhom": "Mô hình hộp và bố cục",
+   "viDu": "How much vertical space (\"height\") will this div use? div { height : 50px ; padding : 5px 10px ; margin : 5px ; border : 2px ; }",
+   "viDuNghia": "Đoạn div này chiếm bao nhiêu không gian theo chiều dọc (\"height\")? div { height : 50px ; padding : 5px 10px ; margin : 5px ; border : 2px ; }"
+  },
+  {
+   "chu": "absolute unit",
+   "doc": "/ˈæbsəluːt ˈjuːnɪt/",
+   "nghia": "đơn vị tuyệt đối (px, pt, cm): kích thước cố định, không co giãn theo màn hình; ngược với đơn vị tương đối",
+   "nhom": "Mô hình hộp và bố cục",
+   "viDu": "Responsive sites can have a mixture of fluid and absolute measurements.",
+   "viDuNghia": "Trang responsive có thể kết hợp cả số đo linh hoạt (fluid) lẫn số đo tuyệt đối (absolute)."
+  },
+  {
+   "chu": "font family",
+   "doc": "/fɑːnt ˈfæməli/",
+   "nghia": "họ phông chữ (Arial, Verdana, Times…)",
+   "nhom": "Chữ, màu và hiệu ứng",
+   "viDu": "How many type faces inside property \"font-family\"?",
+   "viDuNghia": "Thuộc tính \"font-family\" có thể chứa bao nhiêu kiểu chữ (typeface)?"
+  },
+  {
+   "chu": "font size",
+   "doc": "/fɑːnt saɪz/",
+   "nghia": "cỡ chữ",
+   "nhom": "Chữ, màu và hiệu ứng",
+   "viDu": "What unit is used to specify the font size that relative to the font size of the root element?",
+   "viDuNghia": "Đơn vị nào dùng để chỉ định kích thước font tương đối so với kích thước font của phần tử gốc (root)?"
+  },
+  {
+   "chu": "bold",
+   "doc": "/boʊld/",
+   "nghia": "chữ đậm",
+   "nhom": "Chữ, màu và hiệu ứng",
+   "viDu": "How do you make text bold using CSS?",
+   "viDuNghia": "Làm sao để chữ in đậm bằng CSS?"
+  },
+  {
+   "chu": "italic",
+   "doc": "/ɪˈtælɪk/",
+   "nghia": "chữ nghiêng",
+   "nhom": "Chữ, màu và hiệu ứng",
+   "viDu": "The em tag usually displays text in italic.",
+   "viDuNghia": "Thẻ em thường hiển thị chữ nghiêng."
+  },
+  {
+   "chu": "underline",
+   "doc": "/ˌʌndərˈlaɪn/",
+   "nghia": "gạch chân",
+   "nhom": "Chữ, màu và hiệu ứng",
+   "viDu": "How do you display hyperlinks without an underline?",
+   "viDuNghia": "Làm thế nào để hiển thị hyperlink không có gạch chân?"
+  },
+  {
+   "chu": "uppercase",
+   "doc": "/ˈʌpərkeɪs/",
+   "nghia": "chữ in hoa; lowercase = chữ thường",
+   "nhom": "Chữ, màu và hiệu ứng",
+   "viDu": "text-transform: uppercase changes all letters to capital letters.",
+   "viDuNghia": "text-transform: uppercase đổi mọi chữ cái thành chữ in hoa."
+  },
+  {
+   "chu": "background color",
+   "doc": "/ˈbækɡraʊnd ˈkʌlər/",
+   "nghia": "màu nền",
+   "nhom": "Chữ, màu và hiệu ứng",
+   "viDu": "What is the best way to set up a background color=\"red\" for the p tag?",
+   "viDuNghia": "Cách tốt nhất để thiết lập màu nền \"red\" cho thẻ p là gì?"
+  },
+  {
+   "chu": "solid",
+   "doc": "/ˈsɑːlɪd/",
+   "nghia": "(đường viền) nét liền; dotted = chấm, dashed = gạch đứt",
+   "nhom": "Chữ, màu và hiệu ứng",
+   "viDu": "border: 1px solid black draws a thin solid black line around the element.",
+   "viDuNghia": "border: 1px solid black vẽ một đường liền mảnh màu đen quanh phần tử."
+  },
+  {
+   "chu": "shadow",
+   "doc": "/ˈʃædoʊ/",
+   "nghia": "bóng đổ (box-shadow, text-shadow)",
+   "nhom": "Chữ, màu và hiệu ứng",
+   "viDu": "Which of the following properties is used to set the text shadow around a text?",
+   "viDuNghia": "Thuộc tính nào sau đây dùng để tạo bóng đổ (shadow) xung quanh chữ?"
+  },
+  {
+   "chu": "rounded corner",
+   "doc": "/ˈraʊndɪd ˈkɔːrnər/",
+   "nghia": "góc bo tròn (thuộc tính border-radius)",
+   "nhom": "Chữ, màu và hiệu ứng",
+   "viDu": "How can you create rounded corners using CSS3?",
+   "viDuNghia": "Làm thế nào để tạo góc bo tròn (rounded corners) bằng CSS3?"
+  },
+  {
+   "chu": "animation",
+   "doc": "/ˌænɪˈmeɪʃn/",
+   "nghia": "hoạt ảnh CSS: chuyển động nhiều bước định nghĩa bằng @keyframes",
+   "nhom": "Chữ, màu và hiệu ứng",
+   "viDu": "What CSS3 property creates animation effects without using JavaScript?",
+   "viDuNghia": "Thuộc tính CSS3 nào tạo hiệu ứng chuyển động (animation) mà không cần dùng JavaScript?"
+  },
+  {
+   "chu": "text-align",
+   "doc": "/ˈtekst əˌlaɪn/",
+   "nghia": "thuộc tính CSS canh lề chữ theo chiều ngang: left, right, center, justify",
+   "nhom": "Chữ, màu và hiệu ứng",
+   "viDu": "Consider the code: #para1 { text-align: center; color: red; }. Which element does the rule apply to?",
+   "viDuNghia": "Xét đoạn mã: #para1 { text-align: center; color: red; }. Quy tắc áp cho phần tử nào? (Đáp án: phần tử có id=\"para1\".)"
+  },
+  {
+   "chu": "typeface",
+   "doc": "/ˈtaɪpfeɪs/",
+   "nghia": "kiểu chữ, mặt chữ (Arial, Times…); trong CSS đặt bằng font-family",
+   "nhom": "Chữ, màu và hiệu ứng",
+   "viDu": "Which property is used to specify typefaces?",
+   "viDuNghia": "Thuộc tính nào dùng để chỉ định kiểu chữ (typeface)? (Đáp án: font-family.)"
+  },
+  {
+   "chu": "transform",
+   "doc": "/trænsˈfɔːrm/",
+   "nghia": "thuộc tính CSS biến đổi hình: translate (dời), scale (phóng to), rotate (xoay), skew (nghiêng)",
+   "nhom": "Chữ, màu và hiệu ứng",
+   "viDu": "What does the transform: scale(2); property do to an element?",
+   "viDuNghia": "Thuộc tính transform: scale(2); làm gì với một phần tử? (Đáp án: gấp đôi cả chiều rộng lẫn chiều cao.)"
+  }
+ ]
+}

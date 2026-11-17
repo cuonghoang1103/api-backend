@@ -1,0 +1,544 @@
+{
+ "ma": "mas291-1",
+ "nn": "en",
+ "ten": "MAS291 · 1. Xác suất & biến ngẫu nhiên",
+ "moTa": "Xác suất thống kê (MAS291), bộ 1: phép thử và biến cố, xác suất có điều kiện, biến ngẫu nhiên rời rạc - liên tục, hàm mật độ, hàm phân phối, kỳ vọng, phương sai, các phân phối (nhị thức, Poisson, đều, mũ, chuẩn). Từ lấy từ đề FE thật; ví dụ là câu hỏi thật trong đề.",
+ "bieuTuong": "dice.fill",
+ "thuTu": -959,
+ "tu": [
+  {
+   "chu": "random experiment",
+   "doc": "/ˈrændəm ɪkˈsperɪmənt/",
+   "nghia": "phép thử ngẫu nhiên (thí nghiệm mà kết quả không đoán trước được)",
+   "nhom": "Phép thử và biến cố",
+   "viDu": "Choose a correct answer. A random variable is a function that assigns ________ to each outcome in the sample space of a random experiment.",
+   "viDuNghia": "Chọn đáp án đúng. Biến ngẫu nhiên là một hàm gán ________ cho mỗi kết quả trong không gian mẫu của một phép thử ngẫu nhiên."
+  },
+  {
+   "chu": "sample space",
+   "doc": "/ˈsæmpl speɪs/",
+   "nghia": "không gian mẫu (tập mọi kết quả có thể xảy ra của phép thử)",
+   "nhom": "Phép thử và biến cố",
+   "viDu": "Flip a coin twice, create the sample space of possible outcomes. (Below, H stands for Head, T stands for Tail)",
+   "viDuNghia": "Tung một đồng xu hai lần, hãy lập không gian mẫu các kết quả có thể. (Dưới đây, H là mặt ngửa - Head, T là mặt sấp - Tail)"
+  },
+  {
+   "chu": "outcome",
+   "doc": "/ˈaʊtkʌm/",
+   "nghia": "kết quả (một kết cục có thể xảy ra của phép thử)",
+   "nhom": "Phép thử và biến cố",
+   "viDu": "Flip a coin three times; create the sample space of possible outcomes. (Below, H stands for Head, T stands for Tail.)",
+   "viDuNghia": "Tung một đồng xu ba lần; hãy lập không gian mẫu các kết cục có thể. (Dưới đây H là mặt ngửa — Head, T là mặt sấp — Tail.)"
+  },
+  {
+   "chu": "mutually exclusive",
+   "doc": "/ˈmjuːtʃuəli ɪkˈskluːsɪv/",
+   "nghia": "xung khắc (hai biến cố không thể cùng xảy ra; P(A ∩ B) = 0)",
+   "nhom": "Phép thử và biến cố",
+   "viDu": "If A, B and C are mutually exclusive events with P(A)=0.2, P(B)=0.3 and P(C)=0.4. Then P(A' ∩B' ∩C') equals ______",
+   "viDuNghia": "Nếu A, B và C là các biến cố xung khắc từng đôi với P(A)=0.2, P(B)=0.3 và P(C)=0.4. Khi đó P(A' ∩B' ∩C') bằng ______"
+  },
+  {
+   "chu": "independent events",
+   "doc": "/ˌɪndɪˈpendənt ɪˈvents/",
+   "nghia": "các biến cố độc lập (việc này xảy ra không ảnh hưởng xác suất việc kia; P(A ∩ B) = P(A)·P(B))",
+   "nhom": "Phép thử và biến cố",
+   "viDu": "Suppose P(A) = 0.4 and P(A ∪B) = 0.7. If A and B are independent events, then the value of P(B) is ______.",
+   "viDuNghia": "Giả sử P(A) = 0.4 và P(A ∪B) = 0.7. Nếu A và B là hai biến cố độc lập thì P(B) bằng ______."
+  },
+  {
+   "chu": "complementary event",
+   "doc": "/ˌkɑːmplɪˈmentri ɪˈvent/",
+   "nghia": "biến cố đối, biến cố bù (A' là \"A không xảy ra\"; P(A') = 1 - P(A))",
+   "nhom": "Phép thử và biến cố",
+   "viDu": "Suppose that B and C are mutually exclusive and complementary events, such that P(B)=0.6 and P(C)=0.4. Consider another event A such that P(A|B)=0.2 and P(A|C)=0.5. Find P(A).",
+   "viDuNghia": "Giả sử B và C là hai biến cố xung khắc và bù nhau, với P(B)=0,6 và P(C)=0,4. Xét biến cố A với P(A|B)=0,2 và P(A|C)=0,5. Tìm P(A)."
+  },
+  {
+   "chu": "conditional probability",
+   "doc": "/kənˈdɪʃənl ˌprɑːbəˈbɪləti/",
+   "nghia": "xác suất có điều kiện P(A|B): xác suất của A khi biết B đã xảy ra",
+   "nhom": "Phép thử và biến cố",
+   "viDu": "The conditional probability of A given B is P(A|B) = P(A ∩ B)/P(B).",
+   "viDuNghia": "Xác suất có điều kiện của A khi biết B là P(A|B) = P(A ∩ B)/P(B)."
+  },
+  {
+   "chu": "Bayes' theorem",
+   "doc": "/beɪz ˈθiːərəm/",
+   "nghia": "định lý Bayes: tính ngược P(B|A) từ P(A|B), P(B) và P(A)",
+   "nhom": "Phép thử và biến cố",
+   "viDu": "Use Bayes' theorem to find the probability that a defective part came from machine A.",
+   "viDuNghia": "Dùng định lý Bayes để tìm xác suất một linh kiện lỗi là do máy A làm ra."
+  },
+  {
+   "chu": "at random",
+   "doc": "/æt ˈrændəm/",
+   "nghia": "một cách ngẫu nhiên (selected at random = được chọn ngẫu nhiên)",
+   "nhom": "Phép thử và biến cố",
+   "viDu": "A box contains 7 red, 5 white, and 4 black balls. What is the probability of your drawing at random one black ball?",
+   "viDuNghia": "Một hộp chứa 7 bi đỏ, 5 bi trắng và 4 bi đen. Xác suất rút ngẫu nhiên được một bi đen là bao nhiêu?"
+  },
+  {
+   "chu": "randomly selected",
+   "doc": "/ˈrændəmli sɪˈlektɪd/",
+   "nghia": "được chọn ngẫu nhiên (mọi phần tử có cơ hội được chọn như nhau)",
+   "nhom": "Phép thử và biến cố",
+   "viDu": "A sample of 15 randomly selected students has a grade point average of 2.86 with a standard deviation of 0.78.",
+   "viDuNghia": "Một mẫu 15 sinh viên chọn ngẫu nhiên có điểm trung bình 2,86 với độ lệch chuẩn 0,78."
+  },
+  {
+   "chu": "without replacement",
+   "doc": "/wɪˈðaʊt rɪˈpleɪsmənt/",
+   "nghia": "không hoàn lại (rút ra rồi không bỏ lại); with replacement = có hoàn lại",
+   "nhom": "Phép thử và biến cố",
+   "viDu": "A lot contains 40 cards, and a sample of 3 are selected at random without replacement for functional testing.",
+   "viDuNghia": "Một lô có 40 bo mạch, và 3 bo được chọn ngẫu nhiên không hoàn lại để kiểm tra chức năng."
+  },
+  {
+   "chu": "equally likely",
+   "doc": "/ˈiːkwəli ˈlaɪkli/",
+   "nghia": "đồng khả năng (các kết quả có xác suất bằng nhau)",
+   "nhom": "Phép thử và biến cố",
+   "viDu": "The range of the random variable X is {0.5, 1.4, 2.2, 3.5, 4.1} where each value is equally likely. Determine the standard deviation of X.",
+   "viDuNghia": "Miền giá trị của biến ngẫu nhiên X là {0,5; 1,4; 2,2; 3,5; 4,1}, mỗi giá trị đồng khả năng. Hãy tính độ lệch chuẩn của X."
+  },
+  {
+   "chu": "likely",
+   "doc": "/ˈlaɪkli/",
+   "nghia": "có khả năng xảy ra (more likely = dễ xảy ra hơn)",
+   "nhom": "Phép thử và biến cố",
+   "viDu": "The range of the random variable X is {0, 1, 2, 3, x} where x is unknown. If each value is equally likely and the mean of X is 6, determine x.",
+   "viDuNghia": "Miền giá trị của biến ngẫu nhiên X là {0, 1, 2, 3, x} trong đó x chưa biết. Nếu mọi giá trị đồng khả năng và kỳ vọng của X bằng 6, hãy xác định x."
+  },
+  {
+   "chu": "chance",
+   "doc": "/tʃæns/",
+   "nghia": "cơ hội, khả năng, xác suất (a 30% chance = xác suất 30%)",
+   "nhom": "Phép thử và biến cố",
+   "viDu": "A telemarketer found that there was a 1% chance of a sale from his phone solicitations. Find the probability of getting 5 or more sales for 1000 telephone calls.",
+   "viDuNghia": "Một nhân viên tiếp thị qua điện thoại thấy rằng xác suất bán được hàng từ mỗi cuộc gọi là 1%. Tìm xác suất bán được từ 5 đơn trở lên trong 1000 cuộc gọi."
+  },
+  {
+   "chu": "fair",
+   "doc": "/fer/",
+   "nghia": "cân đối, công bằng (fair coin, fair die: các mặt có xác suất bằng nhau)",
+   "nhom": "Phép thử và biến cố",
+   "viDu": "Find the probability that in 5 tosses of a fair six-sided die, a five will be obtained at least 2 times.",
+   "viDuNghia": "Tính xác suất để trong 5 lần gieo một con xúc xắc cân đối 6 mặt, mặt 5 chấm xuất hiện ít nhất 2 lần."
+  },
+  {
+   "chu": "toss",
+   "doc": "/tɔːs/",
+   "nghia": "tung (đồng xu), gieo (xúc xắc); 5 tosses of a die = 5 lần gieo xúc xắc",
+   "nhom": "Phép thử và biến cố",
+   "viDu": "Find the probability that in 4 tosses of a fair six-sided die, a five will be obtained at most once.",
+   "viDuNghia": "Tính xác suất để trong 4 lần gieo một con xúc xắc cân đối sáu mặt, mặt 5 chấm xuất hiện nhiều nhất một lần."
+  },
+  {
+   "chu": "roll",
+   "doc": "/roʊl/",
+   "nghia": "gieo, đổ (xúc xắc)",
+   "nhom": "Phép thử và biến cố",
+   "viDu": "A die is rolled 10 times and let X be the number of times that two shows on the up face. Find the mean of X.",
+   "viDuNghia": "Gieo một con xúc xắc 10 lần và gọi X là số lần mặt hai xuất hiện. Tìm trung bình (kỳ vọng) của X."
+  },
+  {
+   "chu": "die",
+   "doc": "/daɪ/",
+   "nghia": "con xúc xắc (số nhiều: dice); six-sided die = xúc xắc 6 mặt",
+   "nhom": "Phép thử và biến cố",
+   "viDu": "A die is rolled. Find the probability that an even number is obtained knowing the number is greater than 3.",
+   "viDuNghia": "Gieo một con xúc xắc. Tính xác suất ra số chẵn, biết rằng số nhận được lớn hơn 3."
+  },
+  {
+   "chu": "heads and tails",
+   "nghia": "mặt ngửa (heads, ký hiệu H) và mặt sấp (tails, ký hiệu T) của đồng xu — luôn dùng dạng số nhiều",
+   "nhom": "Phép thử và biến cố",
+   "viDu": "Flip a coin three times. Find the sample space of possible outcomes. (Below, H stands for Heads and T stands for Tails.)",
+   "viDuNghia": "Tung một đồng xu ba lần. Tìm không gian mẫu các kết quả có thể. (Dưới đây H là mặt ngửa (Heads), T là mặt sấp (Tails).)"
+  },
+  {
+   "chu": "marble",
+   "doc": "/ˈmɑːrbl/",
+   "nghia": "viên bi (trong bài toán rút bi từ hộp)",
+   "nhom": "Phép thử và biến cố",
+   "viDu": "An experiment consists of drawing two marbles from a box that contains two red marbles, five white marbles, and one blue marble.",
+   "viDuNghia": "Một thí nghiệm gồm việc rút hai viên bi từ một hộp chứa hai bi đỏ, năm bi trắng và một bi xanh."
+  },
+  {
+   "chu": "defective item",
+   "doc": "/dɪˈfektɪv ˈaɪtəm/",
+   "nghia": "sản phẩm lỗi, phế phẩm",
+   "nhom": "Phép thử và biến cố",
+   "viDu": "The semiconductor manufacturer takes a random sample of 100 devices and finds that four of them are defective.",
+   "viDuNghia": "Nhà sản xuất chất bán dẫn lấy mẫu ngẫu nhiên 100 thiết bị và thấy 4 trong số đó bị lỗi."
+  },
+  {
+   "chu": "nonconforming",
+   "doc": "/ˌnɑːnkənˈfɔːrmɪŋ/",
+   "nghia": "không đạt yêu cầu, không đạt chuẩn (sản phẩm lỗi)",
+   "nhom": "Phép thử và biến cố",
+   "viDu": "Parts are selected successively, without replacement, until two nonconforming parts are obtained.",
+   "viDuNghia": "Người ta lấy lần lượt từng chi tiết, không hoàn lại, cho tới khi lấy được hai chi tiết không đạt."
+  },
+  {
+   "chu": "conform to",
+   "doc": "/kənˈfɔːrm tə/",
+   "nghia": "đạt, phù hợp với (yêu cầu, tiêu chuẩn)",
+   "nhom": "Phép thử và biến cố",
+   "viDu": "A batch of 500 machined parts contains 15 that do not conform to customer requirements.",
+   "viDuNghia": "Một lô 500 chi tiết gia công có 15 chi tiết không đạt yêu cầu khách hàng."
+  },
+  {
+   "chu": "probability",
+   "doc": "/ˌprɑːbəˈbɪləti/",
+   "nghia": "xác suất – số từ 0 đến 1 đo khả năng một biến cố xảy ra, P(A)",
+   "nhom": "Phép thử và biến cố",
+   "viDu": "A box contains 7 red, 5 white, and 4 black balls. What is the probability of your drawing at random one black ball?",
+   "viDuNghia": "Một hộp chứa 7 bi đỏ, 5 bi trắng và 4 bi đen. Xác suất rút ngẫu nhiên được một bi đen là bao nhiêu?"
+  },
+  {
+   "chu": "random variable",
+   "doc": "/ˈrændəm ˈveriəbl/",
+   "nghia": "biến ngẫu nhiên, đại lượng ngẫu nhiên (thường ký hiệu X)",
+   "nhom": "Biến ngẫu nhiên",
+   "viDu": "Let the random variable X have a discrete uniform distribution on integers from 30 to 89. Determine P(X > 47).",
+   "viDuNghia": "Cho biến ngẫu nhiên X có phân phối đều rời rạc trên các số nguyên từ 30 đến 89. Tính P(X > 47)."
+  },
+  {
+   "chu": "discrete random variable",
+   "nghia": "biến ngẫu nhiên rời rạc (nhận các giá trị đếm được: 0, 1, 2...)",
+   "nhom": "Biến ngẫu nhiên",
+   "viDu": "Which of the following is FALSE about the cumulative distribution function of a discrete random variable?",
+   "viDuNghia": "Phát biểu nào sau đây là SAI về hàm phân phối tích luỹ của một biến ngẫu nhiên rời rạc?"
+  },
+  {
+   "chu": "continuous random variable",
+   "nghia": "biến ngẫu nhiên liên tục (nhận mọi giá trị trong một khoảng)",
+   "nhom": "Biến ngẫu nhiên",
+   "viDu": "Suppose X is a uniform continuous random variable over the interval [40, 70]. Find the standard deviation of X.",
+   "viDuNghia": "Giả sử X là biến ngẫu nhiên liên tục phân phối đều trên khoảng [40, 70]. Tìm độ lệch chuẩn của X."
+  },
+  {
+   "chu": "probability mass function",
+   "nghia": "hàm khối xác suất, pmf: f(x) = P(X = x) của biến rời rạc",
+   "nhom": "Biến ngẫu nhiên",
+   "viDu": "Which of the following is FALSE about the probability mass function f(x) of a random variable X?",
+   "viDuNghia": "Phát biểu nào sau đây là SAI về hàm khối xác suất f(x) của biến ngẫu nhiên X?"
+  },
+  {
+   "chu": "probability density function",
+   "nghia": "hàm mật độ xác suất, pdf: f(x) của biến liên tục; xác suất bằng diện tích dưới đường cong",
+   "nhom": "Biến ngẫu nhiên",
+   "viDu": "Consider the function f(x) = 2x on the interval [0, b]. For what value of b is f(x) a probability density function?",
+   "viDuNghia": "Xét hàm f(x) = 2x trên đoạn [0, b]. Với giá trị nào của b thì f(x) là một hàm mật độ xác suất?"
+  },
+  {
+   "chu": "cumulative distribution function",
+   "nghia": "hàm phân phối tích luỹ, cdf: F(x) = P(X ≤ x)",
+   "nhom": "Biến ngẫu nhiên",
+   "viDu": "The discrete random variable X has the cumulative distribution function F(x) with x = 0, 1, 2, 3, 4. Find F(4).",
+   "viDuNghia": "Biến ngẫu nhiên rời rạc X có hàm phân phối tích luỹ F(x) với x = 0, 1, 2, 3, 4. Tìm F(4)."
+  },
+  {
+   "chu": "expected value",
+   "doc": "/ɪkˈspektɪd ˈvæljuː/",
+   "nghia": "kỳ vọng, giá trị trung bình lý thuyết E(X), ký hiệu μ",
+   "nhom": "Biến ngẫu nhiên",
+   "viDu": "Given that the probability of hitting the target of a sniper is 0.7. What is the expected number of shots to obtain the first hit?",
+   "viDuNghia": "Cho biết xác suất một xạ thủ bắn trúng bia là 0,7. Kỳ vọng số phát bắn để lần đầu trúng bia là bao nhiêu?"
+  },
+  {
+   "chu": "variance",
+   "doc": "/ˈveriəns/",
+   "nghia": "phương sai V(X), σ² (đo độ phân tán quanh trung bình)",
+   "nhom": "Biến ngẫu nhiên",
+   "viDu": "Let X be a discrete random variable having a uniform distribution on {2, 5, 8, 12, 23}. Determine the variance of X.",
+   "viDuNghia": "Cho X là biến ngẫu nhiên rời rạc có phân phối đều trên {2; 5; 8; 12; 23}. Xác định phương sai của X."
+  },
+  {
+   "chu": "standard deviation",
+   "doc": "/ˈstændərd ˌdiːviˈeɪʃn/",
+   "nghia": "độ lệch chuẩn σ (căn bậc hai của phương sai)",
+   "nhom": "Biến ngẫu nhiên",
+   "viDu": "Compute the sample standard deviation of the heights (in inches) of three men with heights of 64.9, 65, 65.5.",
+   "viDuNghia": "Tính độ lệch chuẩn mẫu của chiều cao (theo inch) của ba người đàn ông có chiều cao 64.9, 65, 65.5."
+  },
+  {
+   "chu": "mean",
+   "doc": "/miːn/",
+   "nghia": "trung bình, kỳ vọng (μ là trung bình tổng thể, x̄ là trung bình mẫu)",
+   "nhom": "Biến ngẫu nhiên",
+   "viDu": "A family has eight children. The ages were 9, 11, 8, 15, 14, 12, 17, 14. Find the mean and the range of the data.",
+   "viDuNghia": "Một gia đình có tám người con. Tuổi của họ là 9, 11, 8, 15, 14, 12, 17, 14. Tìm trung bình và khoảng biến thiên của dữ liệu."
+  },
+  {
+   "chu": "mu",
+   "doc": "/mjuː/",
+   "nghia": "chữ Hy Lạp μ — ký hiệu trung bình tổng thể (kỳ vọng)",
+   "nhom": "Biến ngẫu nhiên",
+   "viDu": "X is normal with μ = 50 is read: X is normal with mean mu equal to fifty.",
+   "viDuNghia": "X chuẩn với μ = 50 đọc là: X có phân phối chuẩn với trung bình muy bằng năm mươi."
+  },
+  {
+   "chu": "sigma",
+   "doc": "/ˈsɪɡmə/",
+   "nghia": "chữ Hy Lạp σ — ký hiệu độ lệch chuẩn tổng thể; Σ viết hoa là ký hiệu tổng",
+   "nhom": "Biến ngẫu nhiên",
+   "viDu": "σ² is read: sigma squared, the population variance.",
+   "viDuNghia": "σ² đọc là: sigma bình phương, tức phương sai tổng thể."
+  },
+  {
+   "chu": "discrete",
+   "doc": "/dɪˈskriːt/",
+   "nghia": "rời rạc – chỉ nhận các giá trị tách biệt, đếm được (số khách, số lỗi); trái với liên tục (continuous)",
+   "nhom": "Biến ngẫu nhiên",
+   "viDu": "Let X be the number of customers who enter a bank in an hour. Identify whether X is discrete or continuous.",
+   "viDuNghia": "Gọi X là số khách hàng vào một ngân hàng trong một giờ. Hãy xác định X là rời rạc hay liên tục."
+  },
+  {
+   "chu": "deviation",
+   "doc": "/ˌdiːviˈeɪʃn/",
+   "nghia": "(thống kê) độ lệch – khoảng cách của giá trị so với trung bình; standard deviation = độ lệch chuẩn · (kiểm thử) sai lệch so với đặc tả, hành vi mong đợi",
+   "nhom": "Biến ngẫu nhiên",
+   "viDu": "Find the standard deviation for the given probability distribution.",
+   "viDuNghia": "Tìm độ lệch chuẩn của phân phối xác suất cho sau đây."
+  },
+  {
+   "chu": "probability distribution",
+   "doc": "/ˌprɑːbəˈbɪləti ˌdɪstrɪˈbjuːʃn/",
+   "nghia": "phân phối xác suất (bảng hoặc công thức cho xác suất của từng giá trị)",
+   "nhom": "Các phân phối xác suất",
+   "viDu": "Find the standard deviation for the given probability distribution: X 0 1 2 3 4 P(x) 0.10 0.27 0.26 0.26 0.11",
+   "viDuNghia": "Tìm độ lệch chuẩn của phân phối xác suất sau: X 0 1 2 3 4 P(x) 0,10 0,27 0,26 0,26 0,11"
+  },
+  {
+   "chu": "binomial distribution",
+   "doc": "/baɪˈnoʊmiəl ˌdɪstrɪˈbjuːʃn/",
+   "nghia": "phân phối nhị thức B(n, p): số lần thành công trong n phép thử độc lập",
+   "nhom": "Các phân phối xác suất",
+   "viDu": "Find the standard deviation of the binomial distribution with n=2661 and p=0.63. Round your answer to the nearest hundredth.",
+   "viDuNghia": "Tìm độ lệch chuẩn của phân phối nhị thức với n=2661 và p=0,63. Làm tròn đến hai chữ số thập phân."
+  },
+  {
+   "chu": "Poisson distribution",
+   "doc": "/ˈpwɑːsɑːn ˌdɪstrɪˈbjuːʃn/",
+   "nghia": "phân phối Poisson: số sự kiện xảy ra trong một khoảng thời gian hoặc không gian, tham số λ",
+   "nhom": "Các phân phối xác suất",
+   "viDu": "Suppose that X has a Poisson distribution with a mean of 4. Determine the probability P(X≤3). Round to 4 decimal places.",
+   "viDuNghia": "Giả sử X có phân phối Poisson với trung bình 4. Hãy xác định xác suất P(X≤3). Làm tròn 4 chữ số thập phân."
+  },
+  {
+   "chu": "geometric distribution",
+   "doc": "/ˌdʒiːəˈmetrɪk ˌdɪstrɪˈbjuːʃn/",
+   "nghia": "phân phối hình học: số phép thử cho đến lần thành công đầu tiên",
+   "nhom": "Các phân phối xác suất",
+   "viDu": "Suppose that X has a geometric distribution with probability of success is 0.3. Determine P(X=3). Rounded to 4 decimal places.",
+   "viDuNghia": "Giả sử X có phân phối hình học với xác suất thành công là 0.3. Hãy xác định P(X=3). Làm tròn 4 chữ số thập phân."
+  },
+  {
+   "chu": "uniform distribution",
+   "doc": "/ˈjuːnɪfɔːrm ˌdɪstrɪˈbjuːʃn/",
+   "nghia": "phân phối đều (mọi giá trị trong khoảng có khả năng như nhau)",
+   "nhom": "Các phân phối xác suất",
+   "viDu": "Suppose that a random variable X has the discrete uniform distribution on the integers 6,...,11. Find E(2X+1).",
+   "viDuNghia": "Giả sử biến ngẫu nhiên X có phân phối đều rời rạc trên các số nguyên 6,...,11. Tính E(2X+1)."
+  },
+  {
+   "chu": "discrete uniform distribution",
+   "nghia": "phân phối đều rời rạc (trên các số nguyên từ a đến b)",
+   "nhom": "Các phân phối xác suất",
+   "viDu": "Suppose that a random variable X has the discrete uniform distribution on the integers 1,...,13. Find P(X≥6).",
+   "viDuNghia": "Giả sử biến ngẫu nhiên X có phân phối đều rời rạc trên các số nguyên 1,...,13. Tìm P(X≥6)."
+  },
+  {
+   "chu": "exponential distribution",
+   "doc": "/ˌekspəˈnenʃl ˌdɪstrɪˈbjuːʃn/",
+   "nghia": "phân phối mũ: thời gian chờ giữa hai sự kiện Poisson, tham số λ",
+   "nhom": "Các phân phối xác suất",
+   "viDu": "Given a continuous random variable X having an exponential distribution with mean equal to 10. Determine P(X>10).",
+   "viDuNghia": "Cho biến ngẫu nhiên liên tục X có phân phối mũ với trung bình bằng 10. Xác định P(X>10)."
+  },
+  {
+   "chu": "normal distribution",
+   "doc": "/ˈnɔːrml ˌdɪstrɪˈbjuːʃn/",
+   "nghia": "phân phối chuẩn N(μ, σ²), đường cong hình chuông",
+   "nhom": "Các phân phối xác suất",
+   "viDu": "Suppose that X has a Poisson distribution with a mean of 64. Use the normal distribution to approximate the probability P(X > 72).",
+   "viDuNghia": "Giả sử X có phân phối Poisson với trung bình bằng 64. Dùng phân phối chuẩn để xấp xỉ xác suất P(X > 72)."
+  },
+  {
+   "chu": "standard normal",
+   "doc": "/ˈstændərd ˈnɔːrml/",
+   "nghia": "(phân phối) chuẩn tắc Z: trung bình 0, độ lệch chuẩn 1",
+   "nhom": "Các phân phối xác suất",
+   "viDu": "From the picture of the Standard Normal Distribution below, the shaded upper tail satisfies prob(Z ≥1.64485) = 0.05000.",
+   "viDuNghia": "Từ hình vẽ phân phối chuẩn tắc dưới đây, đuôi phải được tô đậm thoả prob(Z ≥1.64485) = 0.05000."
+  },
+  {
+   "chu": "normally distributed",
+   "doc": "/ˈnɔːrməli dɪˈstrɪbjuːtɪd/",
+   "nghia": "có phân phối chuẩn, tuân theo phân phối chuẩn",
+   "nhom": "Các phân phối xác suất",
+   "viDu": "For sample sizes greater than 40, the sampling distribution of the mean will be approximately normally distributed ______",
+   "viDuNghia": "Với cỡ mẫu lớn hơn 40, phân phối mẫu của trung bình mẫu sẽ xấp xỉ phân phối chuẩn ______"
+  },
+  {
+   "chu": "approximately normal",
+   "doc": "/əˈprɑːksɪmətli ˈnɔːrml/",
+   "nghia": "xấp xỉ phân phối chuẩn (gần đúng chuẩn)",
+   "nhom": "Các phân phối xác suất",
+   "viDu": "For sample sizes greater than 40, the sampling distribution of the mean will be approximately normally distributed __________",
+   "viDuNghia": "Với cỡ mẫu lớn hơn 40, phân phối mẫu của trung bình sẽ xấp xỉ phân phối chuẩn __________"
+  },
+  {
+   "chu": "normal approximation",
+   "doc": "/ˈnɔːrml əˌprɑːksɪˈmeɪʃn/",
+   "nghia": "xấp xỉ bằng phân phối chuẩn (cho nhị thức, Poisson khi n lớn)",
+   "nhom": "Các phân phối xác suất",
+   "viDu": "Use normal distribution to approximate the probability that more than 50 chips are defective.",
+   "viDuNghia": "Dùng phân phối chuẩn để xấp xỉ xác suất có nhiều hơn 50 chip lỗi."
+  },
+  {
+   "chu": "trial",
+   "doc": "/ˈtraɪəl/",
+   "nghia": "phép thử, lần thử (mỗi lần lặp lại thí nghiệm)",
+   "nhom": "Các phân phối xác suất",
+   "viDu": "Assume the trials are independent. What is the probability that the first successful alignment requires exactly four trials?",
+   "viDuNghia": "Giả sử các phép thử độc lập. Xác suất để lần căn chỉnh thành công đầu tiên xảy ra đúng ở phép thử thứ tư là bao nhiêu?"
+  },
+  {
+   "chu": "success",
+   "doc": "/səkˈses/",
+   "nghia": "thành công (kết quả đang quan tâm trong mỗi phép thử, xác suất p)",
+   "nhom": "Các phân phối xác suất",
+   "viDu": "Use the binomial probability formula to find the probability of x successes in n trials given the probability p of success on a single trial. n=12, x=5, p=0.25",
+   "viDuNghia": "Dùng công thức xác suất nhị thức để tìm xác suất có x lần thành công trong n phép thử, biết xác suất thành công của một phép thử là p. n=12, x=5, p=0.25"
+  },
+  {
+   "chu": "modeled as",
+   "doc": "/ˈmɑːdld æz/",
+   "nghia": "được mô hình hoá bằng, được coi là tuân theo (một phân phối)",
+   "nhom": "Các phân phối xác suất",
+   "viDu": "The random variable T is modeled nicely by the exponential distribution with mean time to failure is 5 years.",
+   "viDuNghia": "Biến ngẫu nhiên T được mô hình hoá tốt bởi phân phối mũ với thời gian tới hỏng trung bình là 5 năm."
+  },
+  {
+   "chu": "lifetime",
+   "doc": "/ˈlaɪftaɪm/",
+   "nghia": "tuổi thọ, thời gian sống (của thiết bị, bóng đèn)",
+   "nhom": "Các phân phối xác suất",
+   "viDu": "Assume that the lifetimes of both brands of tires come from the same normal distribution N(m, 3300²).",
+   "viDuNghia": "Giả sử tuổi thọ của cả hai nhãn lốp đều đến từ CÙNG một phân phối chuẩn N(m, 3300²)."
+  },
+  {
+   "chu": "central limit theorem",
+   "nghia": "định lý giới hạn trung tâm: trung bình mẫu xấp xỉ chuẩn khi cỡ mẫu n lớn",
+   "nhom": "Các phân phối xác suất",
+   "viDu": "By the central limit theorem, the sample mean is approximately normal when n is large.",
+   "viDuNghia": "Theo định lý giới hạn trung tâm, trung bình mẫu xấp xỉ chuẩn khi n lớn."
+  },
+  {
+   "chu": "sampling distribution",
+   "doc": "/ˈsæmplɪŋ ˌdɪstrɪˈbjuːʃn/",
+   "nghia": "phân phối mẫu (phân phối xác suất của một thống kê như trung bình mẫu)",
+   "nhom": "Các phân phối xác suất",
+   "viDu": "Which of the following is true regarding the sampling distribution of the mean for a large sample size?",
+   "viDuNghia": "Phát biểu nào sau đây đúng về phân phối mẫu của trung bình khi cỡ mẫu lớn?"
+  },
+  {
+   "chu": "sample mean",
+   "doc": "/ˈsæmpl miːn/",
+   "nghia": "trung bình mẫu x̄ (trung bình cộng của các quan sát trong mẫu)",
+   "nhom": "Các phân phối xác suất",
+   "viDu": "Consider the following sample data: 25, 11, 6, 4, 2, 17, 9, 6. For these data the sample mean is ___________.",
+   "viDuNghia": "Xét mẫu dữ liệu sau: 25, 11, 6, 4, 2, 17, 9, 6. Với dữ liệu này, trung bình mẫu là ___________."
+  },
+  {
+   "chu": "no more than",
+   "nghia": "không quá, nhiều nhất (≤)",
+   "nhom": "Cụm chỉ điều kiện xác suất",
+   "viDu": "The mean water temperature downstream from a power plant cooling tower discharge pipe should be no more than 100 F.",
+   "viDuNghia": "Nhiệt độ nước trung bình phía hạ lưu ống xả tháp làm mát của nhà máy điện không được vượt quá 100 F."
+  },
+  {
+   "chu": "fewer than",
+   "doc": "/ˈfjuːər ðæn/",
+   "nghia": "ít hơn (<), dùng cho thứ đếm được",
+   "nhom": "Cụm chỉ điều kiện xác suất",
+   "viDu": "Suppose a Poisson distribution will be used to find the probability that on a given day there will be fewer than 4 homicides.",
+   "viDuNghia": "Giả sử dùng phân phối Poisson để tính xác suất trong một ngày cho trước có ít hơn 4 vụ án mạng."
+  },
+  {
+   "chu": "within",
+   "doc": "/wɪˈðɪn/",
+   "nghia": "trong vòng, trong phạm vi (within 2 standard deviations of the mean = cách trung bình không quá 2 độ lệch chuẩn)",
+   "nhom": "Cụm chỉ điều kiện xác suất",
+   "viDu": "What sample size is needed to be 99% confident that the point estimate of p will be within 0.2 around the population p?",
+   "viDuNghia": "Cần cỡ mẫu bao nhiêu để tin cậy 99% rằng ước lượng điểm của p sai lệch không quá 0,2 so với p của tổng thể?"
+  },
+  {
+   "chu": "inclusively",
+   "doc": "/ɪnˈkluːsɪvli/",
+   "nghia": "kể cả hai đầu mút (between 3 and 7 inclusively = từ 3 đến 7, tính cả 3 và 7)",
+   "nhom": "Cụm chỉ điều kiện xác suất",
+   "viDu": "Assume that you are finding the cumulative frequency distribution using groupings: 50-59 inclusively, 60-69 inclusively, 70-79 inclusively, 80-89 inclusively and 90-99 inclusively.",
+   "viDuNghia": "Giả sử bạn lập bảng tần số tích luỹ với các nhóm: 50-59, 60-69, 70-79, 80-89 và 90-99 (bao gồm hai đầu mút)."
+  },
+  {
+   "chu": "on average",
+   "doc": "/ɑːn ˈævərɪdʒ/",
+   "nghia": "tính trung bình",
+   "nhom": "Cụm chỉ điều kiện xác suất",
+   "viDu": "On average, Binh receives 10 phone calls from his mother weekly.",
+   "viDuNghia": "Trung bình, Bình nhận được 10 cuộc gọi từ mẹ mỗi tuần."
+  },
+  {
+   "chu": "per hour",
+   "doc": "/pər ˈaʊər/",
+   "nghia": "mỗi giờ, trên một giờ (tốc độ λ của phân phối Poisson)",
+   "nhom": "Cụm chỉ điều kiện xác suất",
+   "viDu": "Patients arriving at an outpatient clinic follow an exponential distribution at a rate of 15 patients per hour.",
+   "viDuNghia": "Bệnh nhân đến một phòng khám ngoại trú theo phân phối mũ với tốc độ 15 bệnh nhân mỗi giờ."
+  },
+  {
+   "chu": "proportion",
+   "doc": "/prəˈpɔːrʃn/",
+   "nghia": "tỉ lệ (phần trên tổng thể, số từ 0 đến 1; ký hiệu p)",
+   "nhom": "Cụm chỉ điều kiện xác suất",
+   "viDu": "Find the point estimate p̂ if the confidence interval on population proportion p is (0.320; 0.420).",
+   "viDuNghia": "Tìm ước lượng điểm p̂ nếu khoảng tin cậy cho tỉ lệ tổng thể p là (0.320; 0.420)."
+  },
+  {
+   "chu": "percent",
+   "doc": "/pərˈsent/",
+   "nghia": "phần trăm (%)",
+   "nhom": "Cụm chỉ điều kiện xác suất",
+   "viDu": "The past 5 days of plant operation have resulted in the following percent yields: 91.6, 88.75, 90.8, 89.95, and 91.3.",
+   "viDuNghia": "Năm ngày vận hành gần nhất của nhà máy cho hiệu suất (tính theo phần trăm) như sau: 91.6, 88.75, 90.8, 89.95 và 91.3."
+  },
+  {
+   "chu": "lot",
+   "doc": "/lɑːt/",
+   "nghia": "lô hàng (một mẻ sản phẩm đem kiểm tra, lấy mẫu): a lot of 25 washers = một lô 25 vòng đệm. Bẫy: khác \"a lot of\" = nhiều",
+   "nhom": "Phép thử và biến cố",
+   "viDu": "A lot of 25 washers contains 5 in which the variability in thickness is unacceptable. A sample of 3 washers is selected at random, without replacement.",
+   "viDuNghia": "Một lô 25 vòng đệm có 5 chiếc có độ biến thiên bề dày không chấp nhận được. Chọn ngẫu nhiên 3 vòng đệm, không hoàn lại."
+  },
+  {
+   "chu": "negative binomial distribution",
+   "nghia": "phân phối nhị thức âm: số phép thử cần để đạt đủ r lần thành công (r = 1 thì là phân phối hình học)",
+   "nhom": "Các phân phối xác suất",
+   "viDu": "Let X be a discrete random variable having a negative binomial distribution with parameters p and r.",
+   "viDuNghia": "Cho X là biến ngẫu nhiên rời rạc có phân phối nhị thức âm với các tham số p và r."
+  },
+  {
+   "chu": "hypergeometric distribution",
+   "doc": "/ˌhaɪpərˌdʒiːəˈmetrɪk ˌdɪstrɪˈbjuːʃn/",
+   "nghia": "phân phối siêu bội: số phần tử \"đạt\" (K) khi rút n phần tử không hoàn lại từ một lô N phần tử",
+   "nhom": "Các phân phối xác suất",
+   "viDu": "Suppose that X has a hypergeometric distribution with N = 20, n = 4, and K = 6. Determine P(X=3).",
+   "viDuNghia": "Giả sử X có phân phối siêu bội với N = 20, n = 4 và K = 6. Hãy tính P(X=3)."
+  }
+ ]
+}

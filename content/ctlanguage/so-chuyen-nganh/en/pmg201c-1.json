@@ -1,0 +1,699 @@
+{
+ "ma": "pmg201c-1",
+ "nn": "en",
+ "ten": "PMG201c · 1. Khởi tạo, phạm vi, tiến độ",
+ "moTa": "Quản lý dự án (PMG201c, theo PMBOK) – phần 1: khái niệm dự án, điều lệ, bên liên quan, tổ chức, phạm vi và WBS, sơ đồ mạng, đường găng, đường găng và tiến độ. Từ lấy từ đề FE/PE thật; ví dụ là câu hỏi thật trong đề.",
+ "bieuTuong": "calendar.badge.clock",
+ "thuTu": -942,
+ "tu": [
+  {
+   "chu": "project",
+   "doc": "/ˈprɑːdʒekt/",
+   "nghia": "dự án: nỗ lực TẠM THỜI (có bắt đầu, có kết thúc) để tạo ra một sản phẩm, dịch vụ hay kết quả DUY NHẤT",
+   "nhom": "Dự án & quy trình",
+   "viDu": "A project is defined as being unique and temporary, with a defined start and finish.",
+   "viDuNghia": "Một Dự án được định nghĩa là duy nhất và tạm thời, có điểm bắt đầu và kết thúc xác định."
+  },
+  {
+   "chu": "project management",
+   "doc": "/ˈprɑːdʒekt ˈmænɪdʒmənt/",
+   "nghia": "quản lý dự án: áp dụng kiến thức, kỹ năng, công cụ để dự án đạt mục tiêu",
+   "nhom": "Dự án & quy trình",
+   "viDu": "Which project management process group generally takes the most project time and resources?",
+   "viDuNghia": "Nhóm quy trình quản lý dự án nào thường tiêu tốn nhiều thời gian và nguồn lực dự án nhất?"
+  },
+  {
+   "chu": "temporary",
+   "doc": "/ˈtempəreri/",
+   "nghia": "tạm thời: có điểm bắt đầu và điểm kết thúc xác định – đặc điểm của dự án",
+   "nhom": "Dự án & quy trình",
+   "viDu": "A project is defined as being unique and temporary, with a defined start and finish.",
+   "viDuNghia": "Một Dự án được định nghĩa là duy nhất và tạm thời, có ngày bắt đầu và kết thúc xác định"
+  },
+  {
+   "chu": "process group",
+   "doc": "/ˈprɑːses ɡruːp/",
+   "nghia": "nhóm quy trình: 5 nhóm của PMBOK – khởi tạo, lập kế hoạch, thực thi, giám sát và kiểm soát, đóng",
+   "nhom": "Dự án & quy trình",
+   "viDu": "Which process group focuses on completing the requirements of the project?",
+   "viDuNghia": "Nhóm quy trình nào tập trung vào việc hoàn thành các yêu cầu của dự án?"
+  },
+  {
+   "chu": "knowledge area",
+   "doc": "/ˈnɑːlɪdʒ ˈeriə/",
+   "nghia": "lĩnh vực kiến thức: 10 lĩnh vực của PMBOK (phạm vi, tiến độ, chi phí, chất lượng, rủi ro…)",
+   "nhom": "Dự án & quy trình",
+   "viDu": "As discussed in the Project Management course, The PMBOK® Guide knowledge area that has processes in all 5 process groups is:",
+   "viDuNghia": "Như đã thảo luận trong khóa học Quản lý Dự án, lĩnh vực kiến thức của PMBOK® Guide có các quy trình trải đều trong cả 5 nhóm quy trình là:"
+  },
+  {
+   "chu": "initiating",
+   "doc": "/ɪˈnɪʃieɪtɪŋ/",
+   "nghia": "khởi tạo: nhóm quy trình mở đầu – lập điều lệ, xác định bên liên quan",
+   "nhom": "Dự án & quy trình",
+   "viDu": "Which process groups must be included in every project? → Initiating, planning, executing, monitoring and controlling, closing",
+   "viDuNghia": "Những nhóm quy trình nào bắt buộc phải có trong mọi dự án? → Khởi tạo, lập kế hoạch, thực hiện, giám sát và kiểm soát, kết thúc"
+  },
+  {
+   "chu": "planning",
+   "doc": "/ˈplænɪŋ/",
+   "nghia": "lập kế hoạch: nhóm quy trình xác định phạm vi, tiến độ, chi phí và cách làm",
+   "nhom": "Dự án & quy trình",
+   "viDu": "The person who should be in control of the project during project planning is the:",
+   "viDuNghia": "Người nên nắm quyền kiểm soát dự án trong giai đoạn lập kế hoạch dự án là:"
+  },
+  {
+   "chu": "executing",
+   "doc": "/ˈeksɪkjuːtɪŋ/",
+   "nghia": "thực thi: nhóm quy trình làm công việc theo kế hoạch",
+   "nhom": "Dự án & quy trình",
+   "viDu": "You have finished planning and have begun executing the project when the client asks if you would add some important features to the product of the project. How are the triple constraints affected?",
+   "viDuNghia": "Bạn đã hoàn tất lập kế hoạch và bắt đầu thực thi dự án thì khách hàng hỏi liệu bạn có thể thêm vài tính năng quan trọng vào sản phẩm của dự án không. Bộ ba ràng buộc (triple constraints) bị ảnh hưởng như thế nào?"
+  },
+  {
+   "chu": "monitoring and controlling",
+   "nghia": "giám sát và kiểm soát: theo dõi tiến triển, so với kế hoạch và điều chỉnh",
+   "nhom": "Dự án & quy trình",
+   "viDu": "Which process groups must be included in every project? → Initiating, planning, executing, monitoring and controlling, closing",
+   "viDuNghia": "Những nhóm quy trình nào bắt buộc phải có trong mọi dự án? → Khởi tạo, lập kế hoạch, thực hiện, giám sát và kiểm soát, kết thúc"
+  },
+  {
+   "chu": "closing",
+   "doc": "/ˈkloʊzɪŋ/",
+   "nghia": "đóng dự án: bàn giao, lưu hồ sơ, ghi bài học kinh nghiệm",
+   "nhom": "Dự án & quy trình",
+   "viDu": "Which process groups must be included in every project? → Initiating, planning, executing, monitoring and controlling, closing",
+   "viDuNghia": "Những nhóm quy trình nào bắt buộc phải có trong mọi dự án? → Khởi tạo, lập kế hoạch, thực hiện, giám sát và kiểm soát, kết thúc"
+  },
+  {
+   "chu": "project life cycle",
+   "nghia": "vòng đời dự án: chuỗi giai đoạn dự án đi qua từ lúc bắt đầu tới lúc kết thúc",
+   "nhom": "Dự án & quy trình",
+   "viDu": "The project life cycle is divided into phases, from initiation to closure.",
+   "viDuNghia": "Vòng đời dự án được chia thành các giai đoạn, từ khởi tạo tới đóng dự án."
+  },
+  {
+   "chu": "project charter",
+   "doc": "/ˈprɑːdʒekt ˈtʃɑːrtər/",
+   "nghia": "điều lệ dự án: văn bản chính thức cho phép dự án tồn tại và trao quyền cho giám đốc dự án",
+   "nhom": "Dự án & quy trình",
+   "viDu": "Which of the following is true about the development of a project charter?",
+   "viDuNghia": "Điều nào sau đây đúng về việc xây dựng điều lệ dự án (project charter)?"
+  },
+  {
+   "chu": "business case",
+   "doc": "/ˈbɪznəs keɪs/",
+   "nghia": "luận chứng kinh doanh: lý do vì sao đáng đầu tư vào dự án",
+   "nhom": "Dự án & quy trình",
+   "viDu": "Which of the following is included in a project charter? → The business case for the project",
+   "viDuNghia": "Mục nào sau đây được đưa vào điều lệ dự án (project charter)? → Luận cứ kinh doanh (business case) của dự án"
+  },
+  {
+   "chu": "justification",
+   "doc": "/ˌdʒʌstɪfɪˈkeɪʃn/",
+   "nghia": "lý do biện minh: căn cứ cho thấy dự án đáng làm",
+   "nhom": "Dự án & quy trình",
+   "viDu": "Write a narrative charter statement that covers: project name; justifications (purpose and reasons to implement this project); project constraints.",
+   "viDuNghia": "Hãy viết bản điều lệ dạng tường thuật gồm: tên dự án; lý do biện minh (mục đích và lý do thực hiện dự án); các ràng buộc của dự án."
+  },
+  {
+   "chu": "project management plan",
+   "nghia": "kế hoạch quản lý dự án: tài liệu tổng hợp nói dự án sẽ được thực thi, giám sát và đóng thế nào",
+   "nhom": "Dự án & quy trình",
+   "viDu": "Which of the following best describes a project management plan?",
+   "viDuNghia": "Điều nào sau đây mô tả đúng nhất về kế hoạch quản lý dự án (project management plan)?"
+  },
+  {
+   "chu": "project objective",
+   "doc": "/ˈprɑːdʒekt əbˈdʒektɪv/",
+   "nghia": "mục tiêu dự án: kết quả đo được mà dự án phải đạt",
+   "nhom": "Dự án & quy trình",
+   "viDu": "Define at least 2 project objectives based on SMART criteria.",
+   "viDuNghia": "Hãy xác định ít nhất 2 mục tiêu dự án theo tiêu chí SMART."
+  },
+  {
+   "chu": "triple constraint",
+   "doc": "/ˈtrɪpl kənˈstreɪnt/",
+   "nghia": "bộ ba ràng buộc: phạm vi – thời gian – chi phí; đổi một thứ là ảnh hưởng hai thứ kia",
+   "nhom": "Dự án & quy trình",
+   "viDu": "Which one is not mentioned explicitly in the three components of the triple constraints:",
+   "viDuNghia": "Yếu tố nào không được nêu rõ trong ba thành phần của ràng buộc bộ ba (triple constraints):"
+  },
+  {
+   "chu": "project constraint",
+   "doc": "/ˈprɑːdʒekt kənˈstreɪnt/",
+   "nghia": "ràng buộc dự án: giới hạn mà dự án phải tuân theo (thời hạn, ngân sách, nguồn lực…)",
+   "nhom": "Dự án & quy trình",
+   "viDu": "Write a narrative charter statement that covers: project name; justifications; project constraints.",
+   "viDuNghia": "Hãy viết bản điều lệ dạng tường thuật gồm: tên dự án; lý do biện minh; các ràng buộc của dự án."
+  },
+  {
+   "chu": "lessons learned",
+   "doc": "/ˈlesnz lɜːrnd/",
+   "nghia": "bài học kinh nghiệm: điều rút ra sau dự án để lần sau làm tốt hơn",
+   "nhom": "Dự án & quy trình",
+   "viDu": "Company procedures require the creation of a lessons learned register. Which of the following is the best use of lessons learned?",
+   "viDuNghia": "Quy trình công ty yêu cầu tạo sổ đăng ký bài học kinh nghiệm (lessons learned register). Điều nào sau đây là cách sử dụng tốt nhất của bài học kinh nghiệm?"
+  },
+  {
+   "chu": "kickoff meeting",
+   "doc": "/ˈkɪkɔːf ˈmiːtɪŋ/",
+   "nghia": "họp khởi động dự án",
+   "nhom": "Dự án & quy trình",
+   "viDu": "The kickoff meeting introduces the team and the project objectives.",
+   "viDuNghia": "Buổi họp khởi động giới thiệu nhóm và các mục tiêu của dự án."
+  },
+  {
+   "chu": "milestone",
+   "doc": "/ˈmaɪlstoʊn/",
+   "nghia": "cột mốc: thời điểm quan trọng trong dự án, thời lượng bằng 0",
+   "nhom": "Dự án & quy trình",
+   "viDu": "Project Manager should consider using milestones for high level reporting.",
+   "viDuNghia": "Quản lý dự án nên cân nhắc sử dụng các mốc quan trọng (milestones) cho báo cáo cấp cao."
+  },
+  {
+   "chu": "Project Management Body of Knowledge",
+   "nghia": "Bộ kiến thức quản lý dự án (PMBOK® Guide) của PMI: 5 nhóm quy trình và 10 lĩnh vực kiến thức mà môn học theo",
+   "nhom": "Dự án & quy trình",
+   "viDu": "PMBOK stands for Project Management Body of Knowledge, which describes 10 knowledge areas.",
+   "viDuNghia": "PMBOK là viết tắt của Project Management Body of Knowledge, mô tả 10 lĩnh vực kiến thức."
+  },
+  {
+   "chu": "project team",
+   "doc": "/ˈprɑːdʒekt tiːm/",
+   "nghia": "nhóm dự án: những người thực hiện công việc của dự án",
+   "nhom": "Con người & tổ chức",
+   "viDu": "Project Human Resource Management includes the processes that organize, manage, and lead the project team.",
+   "viDuNghia": "Quản lý nguồn nhân lực dự án (Project Human Resource Management) bao gồm các quy trình tổ chức, quản lý và dẫn dắt đội dự án."
+  },
+  {
+   "chu": "team member",
+   "doc": "/tiːm ˈmembər/",
+   "nghia": "thành viên nhóm dự án",
+   "nhom": "Con người & tổ chức",
+   "viDu": "Your team member informs you that the test system must be refreshed with your test data before testing can begin. This dependency is:",
+   "viDuNghia": "Thành viên nhóm của bạn thông báo rằng hệ thống kiểm thử phải được làm mới với dữ liệu kiểm thử trước khi việc kiểm thử có thể bắt đầu. Sự phụ thuộc này là:"
+  },
+  {
+   "chu": "stakeholder register",
+   "doc": "/ˈsteɪkhoʊldər ˈredʒɪstər/",
+   "nghia": "sổ đăng ký bên liên quan: danh sách bên liên quan kèm vai trò, mối quan tâm, ảnh hưởng",
+   "nhom": "Con người & tổ chức",
+   "viDu": "Your stakeholder register is your primary output and should at least contain:",
+   "viDuNghia": "Stakeholder register của bạn là đầu ra chính và cần chứa ít nhất:"
+  },
+  {
+   "chu": "power/interest grid",
+   "doc": "/ˈpaʊər ˈɪntrəst ɡrɪd/",
+   "nghia": "lưới quyền lực/mối quan tâm: xếp bên liên quan theo quyền lực và mức quan tâm để chọn cách ứng xử",
+   "nhom": "Con người & tổ chức",
+   "viDu": "On a power/interest grid, stakeholders with high power and high interest should be managed closely.",
+   "viDuNghia": "Trên lưới quyền lực/mối quan tâm, bên liên quan có quyền lực cao và quan tâm cao cần được quản lý sát sao."
+  },
+  {
+   "chu": "unaware",
+   "doc": "/ˌʌnəˈwer/",
+   "nghia": "chưa biết: mức gắn kết thấp nhất – bên liên quan chưa biết về dự án và tác động của nó",
+   "nhom": "Con người & tổ chức",
+   "viDu": "Identify the five engagement levels of stakeholders: → Unaware, resistant, neutral, supportive, leading",
+   "viDuNghia": "Hãy nêu năm mức độ gắn kết của bên liên quan: → Chưa biết, chống đối, trung lập, ủng hộ, dẫn dắt"
+  },
+  {
+   "chu": "resistant",
+   "doc": "/rɪˈzɪstənt/",
+   "nghia": "chống đối: biết về dự án và phản đối thay đổi",
+   "nhom": "Con người & tổ chức",
+   "viDu": "A resistant stakeholder is aware of the project but does not support the change.",
+   "viDuNghia": "Bên liên quan chống đối biết về dự án nhưng không ủng hộ thay đổi."
+  },
+  {
+   "chu": "supportive",
+   "doc": "/səˈpɔːrtɪv/",
+   "nghia": "ủng hộ: biết về dự án và ủng hộ thay đổi",
+   "nhom": "Con người & tổ chức",
+   "viDu": "Our goal is to move this stakeholder from neutral to supportive.",
+   "viDuNghia": "Mục tiêu của chúng ta là đưa bên liên quan này từ trung lập sang ủng hộ."
+  },
+  {
+   "chu": "leading",
+   "doc": "/ˈliːdɪŋ/",
+   "nghia": "dẫn dắt: bên liên quan tích cực tham gia để dự án thành công – mức gắn kết cao nhất",
+   "nhom": "Con người & tổ chức",
+   "viDu": "A leading stakeholder is actively engaged in making the project a success.",
+   "viDuNghia": "Bên liên quan dẫn dắt tích cực tham gia để dự án thành công."
+  },
+  {
+   "chu": "responsibility assignment matrix",
+   "nghia": "ma trận phân công trách nhiệm (RAM): bảng nối từng gói công việc với người thực hiện",
+   "nhom": "Con người & tổ chức",
+   "viDu": "Which one of below situations is not correct when discussing about Responsibility Assignment Matrix?",
+   "viDuNghia": "Tình huống nào dưới đây KHÔNG ĐÚNG khi bàn về Ma trận Phân công Trách nhiệm (RAM)?"
+  },
+  {
+   "chu": "RACI chart",
+   "doc": "/ˈreɪsi tʃɑːrt/",
+   "nghia": "bảng RACI: một dạng RAM, ghi ai Responsible, Accountable, Consulted, Informed",
+   "nhom": "Con người & tổ chức",
+   "viDu": "When you use the RACI or Responsible, Accountable, Consult, Inform version of the RAM, those informed persons are:",
+   "viDuNghia": "Khi sử dụng RACI (Responsible, Accountable, Consult, Inform) - một phiên bản của RAM (Ma trận phân công trách nhiệm) - những người được 'Inform' (thông báo) là:"
+  },
+  {
+   "chu": "responsible",
+   "doc": "/rɪˈspɑːnsəbl/",
+   "nghia": "chịu trách nhiệm (làm việc gì) · (RACI – R) người trực tiếp thực hiện công việc",
+   "nhom": "Con người & tổ chức",
+   "viDu": "The Project Manager is responsible for stakeholder expectations management.",
+   "viDuNghia": "Project Manager chịu trách nhiệm về việc quản lý kỳ vọng của các stakeholder."
+  },
+  {
+   "chu": "accountable",
+   "doc": "/əˈkaʊntəbl/",
+   "nghia": "(A) người chịu trách nhiệm cuối cùng: duyệt kết quả; mỗi việc chỉ có MỘT người",
+   "nhom": "Con người & tổ chức",
+   "viDu": "When you use the RACI or Responsible, Accountable, Consult, Inform version of the RAM, those consulted persons are:",
+   "viDuNghia": "Khi sử dụng phiên bản RACI (Responsible, Accountable, Consult, Inform) của RAM, những người được \"Tham vấn\" (Consult) là:"
+  },
+  {
+   "chu": "consulted",
+   "doc": "/kənˈsʌltɪd/",
+   "nghia": "(C) người được tham vấn: được hỏi ý kiến trước khi làm",
+   "nhom": "Con người & tổ chức",
+   "viDu": "When you use the RACI or Responsible, Accountable, Consult, Inform version of the RAM, those consulted persons are:",
+   "viDuNghia": "Khi sử dụng phiên bản RACI (Responsible, Accountable, Consult, Inform) của RAM, những người được \"Tham vấn\" (Consult) là:"
+  },
+  {
+   "chu": "informed",
+   "doc": "/ɪnˈfɔːrmd/",
+   "nghia": "(I) người được thông báo: được báo kết quả sau khi làm",
+   "nhom": "Con người & tổ chức",
+   "viDu": "When you use the RACI or Responsible, Accountable, Consult, Inform version of the RAM, those informed persons are:",
+   "viDuNghia": "Khi dùng bảng RACI (Responsible, Accountable, Consult, Inform) của RAM, những người được thông báo là:"
+  },
+  {
+   "chu": "functional manager",
+   "doc": "/ˈfʌŋkʃənl ˈmænɪdʒər/",
+   "nghia": "quản lý chức năng: trưởng phòng ban chuyên môn (kỹ thuật, tài chính…)",
+   "nhom": "Con người & tổ chức",
+   "viDu": "In a functional organization: → The functional manager has stronger power than the project manager's power.",
+   "viDuNghia": "Trong tổ chức theo chức năng: → Quản lý chức năng có quyền lực mạnh hơn giám đốc dự án."
+  },
+  {
+   "chu": "functional organization",
+   "doc": "/ˈfʌŋkʃənl ˌɔːrɡənəˈzeɪʃn/",
+   "nghia": "tổ chức theo chức năng: nhân viên thuộc phòng ban, giám đốc dự án có rất ít quyền",
+   "nhom": "Con người & tổ chức",
+   "viDu": "In a functional organization:",
+   "viDuNghia": "Trong một tổ chức theo chức năng (functional organization):"
+  },
+  {
+   "chu": "matrix organization",
+   "doc": "/ˈmeɪtrɪks ˌɔːrɡənəˈzeɪʃn/",
+   "nghia": "tổ chức ma trận: nhân viên báo cáo cho cả quản lý chức năng lẫn giám đốc dự án (yếu, cân bằng, mạnh)",
+   "nhom": "Con người & tổ chức",
+   "viDu": "We discussed three types of matrix organizations, the not mentioned one is:",
+   "viDuNghia": "Chúng ta đã thảo luận về ba loại tổ chức ma trận, loại không được đề cập là:"
+  },
+  {
+   "chu": "projectized organization",
+   "doc": "/ˈprɑːdʒektaɪzd ˌɔːrɡənəˈzeɪʃn/",
+   "nghia": "tổ chức theo dự án: giám đốc dự án có toàn quyền, cả nhóm chỉ làm cho dự án",
+   "nhom": "Con người & tổ chức",
+   "viDu": "Which organization structure can provide the most power for the project manager? → Projectized",
+   "viDuNghia": "Cấu trúc tổ chức nào mang lại quyền lực lớn nhất cho trưởng dự án? → Dự án hóa (Projectized)"
+  },
+  {
+   "chu": "authority",
+   "doc": "/əˈθɔːrəti/",
+   "nghia": "thẩm quyền: quyền ra quyết định và dùng nguồn lực",
+   "nhom": "Con người & tổ chức",
+   "viDu": "Authority means you have the right to apply resources, make decisions and give approvals.",
+   "viDuNghia": "Quyền hạn (authority) nghĩa là bạn có quyền sử dụng nguồn lực, ra quyết định và phê duyệt."
+  },
+  {
+   "chu": "conflict resolution",
+   "doc": "/ˈkɑːnflɪkt ˌrezəˈluːʃn/",
+   "nghia": "giải quyết xung đột (các cách: đối mặt, thoả hiệp, xoa dịu, ép buộc, rút lui)",
+   "nhom": "Con người & tổ chức",
+   "viDu": "Confronting, also called problem solving, is the best conflict resolution approach because both sides can win.",
+   "viDuNghia": "Đối mặt (còn gọi giải quyết vấn đề) là cách giải quyết xung đột tốt nhất vì cả hai bên đều có thể thắng."
+  },
+  {
+   "chu": "confronting",
+   "doc": "/kənˈfrʌntɪŋ/",
+   "nghia": "đối mặt (giải quyết vấn đề): cùng nhìn thẳng vào vấn đề để tìm lời giải – cách tốt nhất, hai bên cùng thắng",
+   "nhom": "Con người & tổ chức",
+   "viDu": "What are the 5 approaches to conflict discussed in the Project Human Resources Management Lesson? → Confronting, Compromising, Smoothing, Forcing, Avoiding.",
+   "viDuNghia": "5 cách tiếp cận xung đột được thảo luận trong bài học Quản lý Nguồn nhân lực Dự án là gì? → Đối đầu, Thỏa hiệp, Xoa dịu, Ép buộc, Né tránh."
+  },
+  {
+   "chu": "smoothing",
+   "doc": "/ˈsmuːðɪŋ/",
+   "nghia": "xoa dịu: nhấn vào điểm đồng thuận, lờ đi điểm bất đồng",
+   "nhom": "Con người & tổ chức",
+   "viDu": "What are the 5 approaches to conflict discussed in the Project Human Resources Management Lesson? → Confronting, Compromising, Smoothing, Forcing, Avoiding.",
+   "viDuNghia": "5 cách tiếp cận xung đột được thảo luận trong bài học Quản lý Nguồn nhân lực Dự án là gì? → Đối đầu, Thỏa hiệp, Xoa dịu, Ép buộc, Né tránh."
+  },
+  {
+   "chu": "forcing",
+   "doc": "/ˈfɔːrsɪŋ/",
+   "nghia": "ép buộc: một bên dùng quyền áp đặt ý mình – thắng/thua",
+   "nhom": "Con người & tổ chức",
+   "viDu": "What are the 5 approaches to conflict discussed in the Project Human Resources Management Lesson? → Confronting, Compromising, Smoothing, Forcing, Avoiding.",
+   "viDuNghia": "5 cách tiếp cận xung đột được thảo luận trong bài học Quản lý Nguồn nhân lực Dự án là gì? → Đối đầu, Thỏa hiệp, Xoa dịu, Ép buộc, Né tránh."
+  },
+  {
+   "chu": "withdrawing",
+   "doc": "/wɪðˈdrɔːɪŋ/",
+   "nghia": "rút lui (né tránh): lùi khỏi xung đột, hoãn lại",
+   "nhom": "Con người & tổ chức",
+   "viDu": "Withdrawing from a conflict only postpones the problem.",
+   "viDuNghia": "Rút lui khỏi xung đột chỉ làm vấn đề bị hoãn lại."
+  },
+  {
+   "chu": "communication plan",
+   "doc": "/kəˌmjuːnɪˈkeɪʃn plæn/",
+   "nghia": "kế hoạch truyền thông: ai cần thông tin gì, khi nào, qua kênh nào, ai gửi",
+   "nhom": "Con người & tổ chức",
+   "viDu": "Which of the following is NOT likely to be documented in a communications management plan?",
+   "viDuNghia": "Điều nào sau đây KHÔNG có khả năng được ghi trong kế hoạch quản lý truyền thông?"
+  },
+  {
+   "chu": "escalation",
+   "doc": "/ˌeskəˈleɪʃn/",
+   "nghia": "chuyển lên cấp trên: đưa vấn đề vượt thẩm quyền lên người có quyền quyết định",
+   "nhom": "Con người & tổ chức",
+   "viDu": "If the issue is beyond your authority, follow the escalation path to the sponsor.",
+   "viDuNghia": "Nếu vấn đề vượt thẩm quyền của bạn, hãy chuyển lên nhà tài trợ theo đúng đường báo cáo."
+  },
+  {
+   "chu": "sponsor",
+   "doc": "/ˈspɑːnsər/",
+   "nghia": "nhà tài trợ dự án – người cấp tiền, phê duyệt và chịu trách nhiệm cuối cùng về mục tiêu kinh doanh của dự án",
+   "nhom": "Con người & tổ chức",
+   "viDu": "True or False: The Project Sponsor is responsible for stakeholder expectations management.",
+   "viDuNghia": "Đúng hay Sai: Sponsor của dự án chịu trách nhiệm quản lý kỳ vọng của các bên liên quan."
+  },
+  {
+   "chu": "project manager",
+   "doc": "/ˈprɑːdʒekt ˈmænɪdʒər/",
+   "nghia": "quản lý dự án (PM) – người chịu trách nhiệm lập kế hoạch, điều phối và đưa dự án đạt mục tiêu",
+   "nhom": "Con người & tổ chức",
+   "viDu": "Which one of these is not the major source of conflict that a project manager may influence?",
+   "viDuNghia": "Điều nào sau đây KHÔNG phải là nguồn gây xung đột chính mà project manager có thể ảnh hưởng?"
+  },
+  {
+   "chu": "communication channel",
+   "doc": "/kəˌmjuːnɪˈkeɪʃn ˈtʃænl/",
+   "nghia": "kênh giao tiếp: số kênh = n(n−1)/2 với n là số người trong nhóm, tính cả chính bạn (8 người ⇒ 28 kênh)",
+   "nhom": "Con người & tổ chức",
+   "viDu": "Your team consists of yourself, a tester, five developers and a communicator. How many communication channels are there on your team?",
+   "viDuNghia": "Nhóm của bạn gồm chính bạn, một tester, năm developer và một communicator. Nhóm có bao nhiêu kênh giao tiếp?"
+  },
+  {
+   "chu": "weak matrix",
+   "doc": "/wiːk ˈmeɪtrɪks/",
+   "nghia": "tổ chức ma trận yếu: quản lý chức năng nắm phần lớn quyền, giám đốc dự án gần như chỉ là người điều phối",
+   "nhom": "Con người & tổ chức",
+   "viDu": "In a weak matrix, the project manager has little authority over resources.",
+   "viDuNghia": "Trong tổ chức ma trận yếu, giám đốc dự án có rất ít quyền với nguồn lực."
+  },
+  {
+   "chu": "balanced matrix",
+   "doc": "/ˈbælənst ˈmeɪtrɪks/",
+   "nghia": "tổ chức ma trận cân bằng: giám đốc dự án và quản lý chức năng chia quyền gần ngang nhau",
+   "nhom": "Con người & tổ chức",
+   "viDu": "In a balanced matrix, the project manager shares authority with the functional manager.",
+   "viDuNghia": "Trong tổ chức ma trận cân bằng, giám đốc dự án chia quyền với quản lý chức năng."
+  },
+  {
+   "chu": "strong matrix",
+   "doc": "/strɔːŋ ˈmeɪtrɪks/",
+   "nghia": "tổ chức ma trận mạnh: giám đốc dự án nắm phần lớn quyền và ngân sách, gần với tổ chức theo dự án",
+   "nhom": "Con người & tổ chức",
+   "viDu": "In a strong matrix, the project manager has most of the authority and controls the budget.",
+   "viDuNghia": "Trong tổ chức ma trận mạnh, giám đốc dự án nắm phần lớn quyền hạn và kiểm soát ngân sách."
+  },
+  {
+   "chu": "scope",
+   "doc": "/skoʊp/",
+   "nghia": "phạm vi: toàn bộ công việc phải làm – và chỉ những việc đó – để dự án hoàn thành · (Java web, PRJ301) phạm vi sống của biến/attribute: page, request, session, application",
+   "nhom": "Phạm vi & WBS",
+   "viDu": "During which part of the project management process is the Project Scope Statement created?",
+   "viDuNghia": "Bản công bố phạm vi dự án (Project Scope Statement) được tạo ra trong phần nào của quy trình quản lý dự án?"
+  },
+  {
+   "chu": "scope statement",
+   "doc": "/skoʊp ˈsteɪtmənt/",
+   "nghia": "bản tuyên bố phạm vi: mô tả phạm vi, sản phẩm bàn giao, tiêu chí nghiệm thu, giả định, ràng buộc, phần loại trừ",
+   "nhom": "Phạm vi & WBS",
+   "viDu": "An important part of the project scope statement is exclusions or out of scope items.",
+   "viDuNghia": "Một phần quan trọng của bản công bố phạm vi dự án (project scope statement) là các mục loại trừ hoặc nằm ngoài phạm vi."
+  },
+  {
+   "chu": "product scope",
+   "doc": "/ˈprɑːdʒʌkt skoʊp/",
+   "nghia": "phạm vi sản phẩm: các tính năng, chức năng của sản phẩm (khác phạm vi dự án là công việc phải làm)",
+   "nhom": "Phạm vi & WBS",
+   "viDu": "Project scope differs from product scope in that:",
+   "viDuNghia": "Phạm vi dự án (project scope) khác với phạm vi sản phẩm (product scope) ở chỗ:"
+  },
+  {
+   "chu": "scope baseline",
+   "doc": "/skoʊp ˈbeɪslaɪn/",
+   "nghia": "đường cơ sở phạm vi: bản tuyên bố phạm vi + WBS + từ điển WBS đã được duyệt",
+   "nhom": "Phạm vi & WBS",
+   "viDu": "Which one is not included in the Scope Baseline?",
+   "viDuNghia": "Thành phần nào KHÔNG thuộc Scope Baseline?"
+  },
+  {
+   "chu": "scope management",
+   "doc": "/skoʊp ˈmænɪdʒmənt/",
+   "nghia": "quản lý phạm vi: bảo đảm dự án làm đủ và chỉ làm những việc cần thiết",
+   "nhom": "Phạm vi & WBS",
+   "viDu": "The Scope Management section of your project plan document would include information on:",
+   "viDuNghia": "Phần Quản lý Phạm vi trong tài liệu kế hoạch dự án của bạn sẽ bao gồm thông tin về:"
+  },
+  {
+   "chu": "exclusion",
+   "doc": "/ɪkˈskluːʒn/",
+   "nghia": "phần loại trừ: những thứ nói rõ là KHÔNG nằm trong phạm vi dự án",
+   "nhom": "Phạm vi & WBS",
+   "viDu": "Project scope statement is better to define inclusions (in-scope items) than identify only exclusions (out of scope items).",
+   "viDuNghia": "Bản công bố phạm vi dự án (project scope statement) nên nêu rõ các mục nằm trong phạm vi (inclusions) tốt hơn là chỉ liệt kê các mục ngoài phạm vi (exclusions)."
+  },
+  {
+   "chu": "work breakdown structure",
+   "nghia": "cấu trúc phân rã công việc (WBS): chia toàn bộ phạm vi thành các phần nhỏ dần theo cây",
+   "nhom": "Phạm vi & WBS",
+   "viDu": "The work breakdown structure can best be thought of as an effective aid for Team communications.",
+   "viDuNghia": "Cấu trúc phân rã công việc (WBS) có thể được xem tốt nhất là một công cụ hỗ trợ hiệu quả cho việc giao tiếp trong nhóm."
+  },
+  {
+   "chu": "work package",
+   "doc": "/wɜːrk ˈpækɪdʒ/",
+   "nghia": "gói công việc: mức thấp nhất của WBS, ước lượng và giao việc được",
+   "nhom": "Phạm vi & WBS",
+   "viDu": "A project manager may use the WBS dictionary to make sure the team members clearly know what is included in each of their work packages.",
+   "viDuNghia": "PM có thể sử dụng Từ điển WBS (WBS dictionary) để đảm bảo các thành viên nhóm hiểu rõ những gì được bao gồm trong từng gói công việc của họ."
+  },
+  {
+   "chu": "WBS dictionary",
+   "doc": "/ˌdʌbljuː biː ˈes ˈdɪkʃəneri/",
+   "nghia": "từ điển WBS: tài liệu mô tả chi tiết từng phần tử của WBS",
+   "nhom": "Phạm vi & WBS",
+   "viDu": "A project manager may use the WBS dictionary to make sure the team members clearly know what is included in each of their work packages.",
+   "viDuNghia": "Project manager có thể dùng WBS dictionary để đảm bảo các thành viên trong nhóm biết rõ những gì được bao gồm trong mỗi gói công việc (work package) của họ."
+  },
+  {
+   "chu": "deliverable",
+   "doc": "/dɪˈlɪvərəbl/",
+   "nghia": "sản phẩm bàn giao – kết quả cụ thể phải giao khi xong một phần việc; WBS chia theo deliverable",
+   "nhom": "Phạm vi & WBS",
+   "viDu": "True or False: A Work Breakdown Structure (WBS) is a deliverable-oriented hierarchical decomposition of the work to be executed by the project team.",
+   "viDuNghia": "Đúng hay Sai: Cấu trúc phân rã công việc (WBS) là sự phân rã theo cấp bậc, định hướng theo sản phẩm bàn giao, của công việc mà đội dự án sẽ thực hiện."
+  },
+  {
+   "chu": "activity list",
+   "doc": "/ækˈtɪvəti lɪst/",
+   "nghia": "danh sách hoạt động: mọi hoạt động cần làm để hoàn thành các gói công việc",
+   "nhom": "Hoạt động & sơ đồ mạng",
+   "viDu": "The following table is an activity list that includes the duration and predecessor for a series of project activities. What is the duration of the critical path?",
+   "viDuNghia": "Bảng sau là danh sách hoạt động gồm thời lượng và hoạt động đứng trước của một loạt hoạt động dự án. Đường găng dài bao nhiêu?"
+  },
+  {
+   "chu": "activity duration",
+   "doc": "/ækˈtɪvəti duˈreɪʃn/",
+   "nghia": "thời lượng hoạt động: số ngày/tuần làm việc cần để xong một hoạt động",
+   "nhom": "Hoạt động & sơ đồ mạng",
+   "viDu": "The Forward Pass is used through the activities to determine the total duration of the project.",
+   "viDuNghia": "Lượt tính xuôi (Forward Pass) được dùng qua các hoạt động để xác định tổng thời lượng của dự án."
+  },
+  {
+   "chu": "immediate predecessor",
+   "doc": "/ɪˈmiːdiət ˈpredəsesər/",
+   "nghia": "hoạt động đứng ngay trước: phải xong (hoặc bắt đầu) thì hoạt động này mới làm được",
+   "nhom": "Hoạt động & sơ đồ mạng",
+   "viDu": "To calculate the early start (ES) of an activity which has more than one immediate predecessor, you will:",
+   "viDuNghia": "Để tính Ngày bắt đầu sớm (ES) của một hoạt động có nhiều hơn một hoạt động trước trực tiếp, bạn sẽ:"
+  },
+  {
+   "chu": "network diagram",
+   "doc": "/ˈnetwɜːrk ˈdaɪəɡræm/",
+   "nghia": "sơ đồ mạng: hình vẽ các hoạt động và quan hệ phụ thuộc giữa chúng",
+   "nhom": "Hoạt động & sơ đồ mạng",
+   "viDu": "The critical path is made up by all zero float activities (activities have floats equal to zero) in the project network diagram.",
+   "viDuNghia": "Đường găng (critical path) được tạo thành từ tất cả các hoạt động có độ trễ bằng không (float bằng 0) trong sơ đồ mạng dự án."
+  },
+  {
+   "chu": "finish-to-start",
+   "doc": "/ˌfɪnɪʃ tə ˈstɑːrt/",
+   "nghia": "quan hệ FS: việc trước KẾT THÚC thì việc sau mới BẮT ĐẦU – loại phổ biến nhất",
+   "nhom": "Hoạt động & sơ đồ mạng",
+   "viDu": "If \"develop online modules\" must be 100% completed before \"review online modules\" can begin, that is called a finish to start relationship.",
+   "viDuNghia": "Nếu \"phát triển học liệu online\" phải hoàn thành 100% trước khi \"đánh giá học liệu online\" có thể bắt đầu, đó được gọi là mối quan hệ kết thúc-bắt đầu (finish to start)."
+  },
+  {
+   "chu": "start-to-start",
+   "doc": "/ˌstɑːrt tə ˈstɑːrt/",
+   "nghia": "quan hệ SS: việc trước bắt đầu thì việc sau mới bắt đầu",
+   "nhom": "Hoạt động & sơ đồ mạng",
+   "viDu": "If \"develop online modules\" needs to begin before \"review online modules\" can begin, that is called a start to start relationship.",
+   "viDuNghia": "Nếu \"phát triển các mô-đun trực tuyến\" cần bắt đầu trước khi \"rà soát các mô-đun trực tuyến\" có thể bắt đầu, thì đó được gọi là quan hệ bắt đầu-bắt đầu (start to start)."
+  },
+  {
+   "chu": "finish-to-finish",
+   "doc": "/ˌfɪnɪʃ tə ˈfɪnɪʃ/",
+   "nghia": "quan hệ FF: việc trước kết thúc thì việc sau mới kết thúc",
+   "nhom": "Hoạt động & sơ đồ mạng",
+   "viDu": "If \"develop online modules\" needs to finish before \"review online modules\" can finish, that is called a finish to finish relationship.",
+   "viDuNghia": "Nếu \"phát triển các module trực tuyến\" cần hoàn thành trước khi \"đánh giá các module trực tuyến\" có thể hoàn thành, đó được gọi là quan hệ finish-to-finish (kết thúc-kết thúc)."
+  },
+  {
+   "chu": "start-to-finish",
+   "doc": "/ˌstɑːrt tə ˈfɪnɪʃ/",
+   "nghia": "quan hệ SF: việc trước bắt đầu thì việc sau mới kết thúc – hiếm gặp",
+   "nhom": "Hoạt động & sơ đồ mạng",
+   "viDu": "If \"review online modules\" needs to begin before \"develop online modules\" can finish, that is called a start to finish relationship.",
+   "viDuNghia": "Nếu \"xem xét mô-đun trực tuyến\" cần bắt đầu trước khi \"phát triển mô-đun trực tuyến\" có thể kết thúc, đó được gọi là mối quan hệ bắt đầu-đến-kết thúc (start to finish)."
+  },
+  {
+   "chu": "preceding activity",
+   "doc": "/ˈpriːsiːdɪŋ ækˈtɪvəti/",
+   "nghia": "hoạt động đứng trước (= predecessor): cột trong bảng hoạt động của đề, ghi việc phải xong trước thì việc này mới bắt đầu",
+   "nhom": "Hoạt động & sơ đồ mạng",
+   "viDu": "Assume that you have defined the project schedule with the following activities: Activity, Preceding Activity, Duration (weeks).",
+   "viDuNghia": "Giả sử bạn đã lập tiến độ dự án với các hoạt động sau: Hoạt động, Hoạt động đứng trước, Thời lượng (tuần)."
+  },
+  {
+   "chu": "schedule",
+   "doc": "/ˈskedʒuːl/",
+   "nghia": "tiến độ: lịch ghi ngày bắt đầu, ngày kết thúc của các hoạt động",
+   "nhom": "Đường găng & tiến độ",
+   "viDu": "Earned value integrates scope, schedule and budget and uses monetary values to assess project status.",
+   "viDuNghia": "Giá trị thu được (Earned Value) tích hợp phạm vi, lịch trình và ngân sách, và sử dụng giá trị tiền tệ để đánh giá tình trạng dự án."
+  },
+  {
+   "chu": "critical path",
+   "doc": "/ˈkrɪtɪkl pæθ/",
+   "nghia": "đường găng: chuỗi hoạt động DÀI NHẤT trong sơ đồ mạng, quyết định thời gian ngắn nhất để xong dự án",
+   "nhom": "Đường găng & tiến độ",
+   "viDu": "The Backward Pass is used through the activities to determine the critical path & available float of the project.",
+   "viDuNghia": "Phép tính lùi (Backward Pass) được sử dụng qua các hoạt động để xác định đường găng và độ trễ khả dụng (float) của dự án."
+  },
+  {
+   "chu": "critical path method",
+   "nghia": "phương pháp đường găng (CPM): tính ES, EF, LS, LF và độ thả nổi để tìm đường găng",
+   "nhom": "Đường găng & tiến độ",
+   "viDu": "The critical path method calculates ES, EF, LS, LF and float for every activity to find the critical path.",
+   "viDuNghia": "Phương pháp đường găng tính ES, EF, LS, LF và độ thả nổi cho mọi hoạt động để tìm ra đường găng."
+  },
+  {
+   "chu": "forward pass",
+   "doc": "/ˈfɔːrwərd pæs/",
+   "nghia": "lượt đi xuôi: tính từ đầu tới cuối để ra thời điểm bắt đầu sớm và kết thúc sớm",
+   "nhom": "Đường găng & tiến độ",
+   "viDu": "The Forward Pass is used through the activities to determine the total duration of the project.",
+   "viDuNghia": "Lượt tính xuôi (Forward Pass) được dùng qua các hoạt động để xác định tổng thời lượng của dự án."
+  },
+  {
+   "chu": "backward pass",
+   "doc": "/ˈbækwərd pæs/",
+   "nghia": "lượt đi ngược: tính từ cuối về đầu để ra thời điểm bắt đầu muộn và kết thúc muộn",
+   "nhom": "Đường găng & tiến độ",
+   "viDu": "The Backward Pass is used through the activities to determine the critical path & available float of the project.",
+   "viDuNghia": "Phép tính lùi (Backward Pass) được sử dụng qua các hoạt động để xác định đường găng và độ trễ khả dụng (float) của dự án."
+  },
+  {
+   "chu": "early start",
+   "doc": "/ˈɜːrli stɑːrt/",
+   "nghia": "bắt đầu sớm (ES): thời điểm sớm nhất hoạt động có thể bắt đầu",
+   "nhom": "Đường găng & tiến độ",
+   "viDu": "To calculate the early start (ES) of an activity which has more than one immediate predecessor, you will:",
+   "viDuNghia": "Để tính thời điểm bắt đầu sớm (ES) của một công việc có nhiều hơn một công việc trước liền kề, bạn sẽ:"
+  },
+  {
+   "chu": "early finish",
+   "doc": "/ˈɜːrli ˈfɪnɪʃ/",
+   "nghia": "kết thúc sớm (EF) = ES + thời lượng",
+   "nhom": "Đường găng & tiến độ",
+   "viDu": "To calculate early finish (EF) of an activity, you will",
+   "viDuNghia": "Để tính thời điểm kết thúc sớm (Early Finish - EF) của một hoạt động, bạn sẽ"
+  },
+  {
+   "chu": "late start",
+   "doc": "/leɪt stɑːrt/",
+   "nghia": "bắt đầu muộn (LS): thời điểm muộn nhất được bắt đầu mà không làm trễ dự án",
+   "nhom": "Đường găng & tiến độ",
+   "viDu": "To calculate late finish (LF) and late start (LS) perform a:",
+   "viDuNghia": "Để tính late finish (LF) và late start (LS), ta thực hiện:"
+  },
+  {
+   "chu": "late finish",
+   "doc": "/leɪt ˈfɪnɪʃ/",
+   "nghia": "kết thúc muộn (LF): thời điểm muộn nhất phải xong mà không làm trễ dự án",
+   "nhom": "Đường găng & tiến độ",
+   "viDu": "To calculate late finish (LF) of an activity which has more than one successor, you will",
+   "viDuNghia": "Để tính kết thúc trễ (LF) của một hoạt động có nhiều hơn một hoạt động kế tiếp, bạn sẽ"
+  },
+  {
+   "chu": "slack",
+   "doc": "/slæk/",
+   "nghia": "độ thả nổi (float) = LS − ES: thời gian hoạt động được phép trễ mà không trễ dự án; trên đường găng bằng 0",
+   "nhom": "Đường găng & tiến độ",
+   "viDu": "Slack, also called float, is the time an activity can be delayed without delaying the project.",
+   "viDuNghia": "Slack (còn gọi float) là khoảng thời gian một hoạt động được phép trễ mà không làm trễ dự án."
+  },
+  {
+   "chu": "schedule baseline",
+   "doc": "/ˈskedʒuːl ˈbeɪslaɪn/",
+   "nghia": "đường cơ sở tiến độ: bản tiến độ đã duyệt, dùng để so với thực tế",
+   "nhom": "Đường găng & tiến độ",
+   "viDu": "As part of planning you have created a scope baseline, a budget baseline, and a schedule baseline. Should those baselines ever be allowed to change?",
+   "viDuNghia": "Trong quá trình lập kế hoạch, bạn đã tạo ra baseline phạm vi, baseline ngân sách và baseline lịch trình. Những baseline đó có bao giờ được phép thay đổi không?"
+  },
+  {
+   "chu": "crashing",
+   "doc": "/ˈkræʃɪŋ/",
+   "nghia": "nén tiến độ bằng cách thêm nguồn lực vào hoạt động trên đường găng – tốn thêm chi phí",
+   "nhom": "Đường găng & tiến độ",
+   "viDu": "Crashing is the approach to add more resources (labor, overtime, etc.) into the activities to reduce their durations.",
+   "viDuNghia": "Crashing là cách tiếp cận thêm nguồn lực (nhân công, làm thêm giờ, v.v.) vào các hoạt động để rút ngắn thời lượng của chúng."
+  },
+  {
+   "chu": "fast tracking",
+   "doc": "/fæst ˈtrækɪŋ/",
+   "nghia": "làm gối đầu: làm song song các hoạt động vốn nối tiếp để rút tiến độ – tăng rủi ro",
+   "nhom": "Đường găng & tiến độ",
+   "viDu": "Fast tracking is the approach to re-plan the work and try to perform overlapping sequential activities in parallel.",
+   "viDuNghia": "Fast Tracking là cách tiếp cận lập lại kế hoạch công việc và cố gắng thực hiện nhiều hoạt động tuần tự chồng lấp nhau để chạy song song."
+  },
+  {
+   "chu": "project duration",
+   "doc": "/ˈprɑːdʒekt duˈreɪʃn/",
+   "nghia": "thời gian thực hiện dự án = độ dài đường găng",
+   "nhom": "Đường găng & tiến độ",
+   "viDu": "The project duration equals the length of the critical path.",
+   "viDuNghia": "Thời gian thực hiện dự án bằng độ dài của đường găng."
+  }
+ ]
+}

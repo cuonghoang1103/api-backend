@@ -1,0 +1,678 @@
+{
+ "ma": "ssl101c-3",
+ "nn": "en",
+ "ten": "SSL101c · 3. Giao tiếp học thuật",
+ "moTa": "Academic Skills for University Success, phần 3: phân tích hội thoại, nghe – thảo luận trong lớp, thuyết trình, viết bài luận và báo cáo, khán giả và mục đích giao tiếp. Từ lấy từ đề FE thật; ví dụ phần lớn là câu hỏi thật trong đề. Dùng được ngay khi thuyết trình và viết báo cáo.",
+ "bieuTuong": "bubble.left.and.bubble.right.fill",
+ "thuTu": -984,
+ "tu": [
+  {
+   "chu": "conversation analysis",
+   "doc": "/ˌkɑːnvərˈseɪʃn əˈnæləsɪs/",
+   "nghia": "phân tích hội thoại (CA): phương pháp nghiên cứu cách người ta làm việc bằng lời nói trong trò chuyện thật",
+   "nhom": "Phân tích hội thoại",
+   "viDu": "When thinking about Conversation Analysis as an argument field, what is a specialized process of thought?",
+   "viDuNghia": "Khi coi Phân tích hội thoại là một trường lập luận (argument field), đâu là quy trình tư duy chuyên biệt?"
+  },
+  {
+   "chu": "talk-in-interaction",
+   "doc": "/ˌtɔːk ɪn ˌɪntərˈækʃn/",
+   "nghia": "lời nói trong tương tác: trò chuyện tự nhiên giữa người với người — đối tượng nghiên cứu của CA",
+   "nhom": "Phân tích hội thoại",
+   "viDu": "It seeks to study naturally occurring talk-in-interaction, either in everyday conversations or in institutional settings.",
+   "viDuNghia": "Nó tìm cách nghiên cứu lời nói trong tương tác diễn ra tự nhiên, trong trò chuyện thường ngày hoặc trong bối cảnh công sở."
+  },
+  {
+   "chu": "turn",
+   "doc": "/tɜːrn/",
+   "nghia": "lượt lời: phần một người nói trước khi người khác nói tiếp",
+   "nhom": "Phân tích hội thoại",
+   "viDu": "They use a special mode of analysis called the next turn proof procedure.",
+   "viDuNghia": "Họ dùng một cách phân tích đặc biệt gọi là thủ tục kiểm chứng bằng lượt kế tiếp (next turn proof procedure)."
+  },
+  {
+   "chu": "sequence organization",
+   "doc": "/ˈsiːkwəns ˌɔːrɡənəˈzeɪʃn/",
+   "nghia": "tổ chức chuỗi lượt lời: các lượt nối nhau thành cặp, thành chuỗi (hỏi – đáp, mời – nhận)",
+   "nhom": "Phân tích hội thoại",
+   "viDu": "When discussing the organization of talk, conversation analysts use terms such as turns, sequence organization and repair (how speakers fix errors in their talk).",
+   "viDuNghia": "Khi bàn về tổ chức lời nói, nhà phân tích hội thoại dùng thuật ngữ như turns (lượt lời), sequence organization (tổ chức chuỗi), và repair (cách người nói sửa lỗi trong lời nói)."
+  },
+  {
+   "chu": "repair",
+   "doc": "/rɪˈper/",
+   "nghia": "sửa chữa hội thoại: cách người nói sửa chỗ nghe nhầm, nói nhầm, hiểu nhầm",
+   "nhom": "Phân tích hội thoại",
+   "viDu": "When discussing the organization of talk, conversation analysts use terms such as turns, sequence organization and repair (how speakers fix errors in their talk).",
+   "viDuNghia": "Khi bàn về tổ chức lời nói, nhà phân tích hội thoại dùng thuật ngữ như turns (lượt lời), sequence organization (tổ chức chuỗi), và repair (cách người nói sửa lỗi trong lời nói)."
+  },
+  {
+   "chu": "next turn proof procedure",
+   "nghia": "thủ tục kiểm chứng bằng lượt kế tiếp: hiểu hành động của người nói qua cách người nghe đáp lại ở lượt sau",
+   "nhom": "Phân tích hội thoại",
+   "viDu": "They use a special mode of analysis to understand how actions are performed in talk called the next turn proof procedure.",
+   "viDuNghia": "Họ dùng một cách phân tích đặc biệt để hiểu hành động được thực hiện thế nào trong lời nói, gọi là next turn proof procedure (thủ tục chứng minh ở lượt lời tiếp theo)."
+  },
+  {
+   "chu": "naturally occurring",
+   "doc": "/ˈnætʃrəli əˈkɜːrɪŋ/",
+   "nghia": "xảy ra tự nhiên, không dàn dựng (naturally occurring talk = lời nói thật ngoài đời)",
+   "nhom": "Phân tích hội thoại",
+   "viDu": "It seeks to study naturally occurring talk, either in everyday conversations or institutional settings such as schools and organizations.",
+   "viDuNghia": "Nó tìm hiểu lời nói xảy ra tự nhiên, trong hội thoại đời thường hoặc bối cảnh thể chế như trường học, tổ chức."
+  },
+  {
+   "chu": "joint activity",
+   "doc": "/dʒɔɪnt ækˈtɪvəti/",
+   "nghia": "hoạt động chung: việc hai hay nhiều người cùng phối hợp làm (trò chuyện là một hoạt động chung)",
+   "nhom": "Phân tích hội thoại",
+   "viDu": "Which of the following is NOT joint activity?",
+   "viDuNghia": "Điều nào sau đây KHÔNG phải là hoạt động chung (joint activity)?"
+  },
+  {
+   "chu": "school of thought",
+   "nghia": "trường phái tư tưởng: nhóm người chung một cách nhìn, cách nghiên cứu",
+   "nhom": "Phân tích hội thoại",
+   "viDu": "Conversation analysis is a well-defined method and school of thought that analyses language from a social perspective.",
+   "viDuNghia": "Phân tích hội thoại (Conversation analysis) là phương pháp và trường phái tư duy được định nghĩa rõ, phân tích ngôn ngữ từ góc nhìn xã hội."
+  },
+  {
+   "chu": "linguistics",
+   "doc": "/lɪŋˈɡwɪstɪks/",
+   "nghia": "ngôn ngữ học",
+   "nhom": "Phân tích hội thoại",
+   "viDu": "Linguistics1002: Phonetics. Weekly problem sets.",
+   "viDuNghia": "Linguistics1002 (Ngôn ngữ học): Ngữ âm học. Bộ bài tập hằng tuần."
+  },
+  {
+   "chu": "code-switching",
+   "doc": "/ˈkoʊd ˌswɪtʃɪŋ/",
+   "nghia": "chuyển mã: đổi qua lại giữa hai ngôn ngữ hay hai lối nói trong cùng cuộc trò chuyện",
+   "nhom": "Phân tích hội thoại",
+   "viDu": "You're in a lecture for your course on 'Cross-cultural communication' on the topic of code-switching and translanguaging.",
+   "viDuNghia": "Bạn đang trong buổi giảng môn 'Giao tiếp liên văn hoá' về code-switching và translanguaging."
+  },
+  {
+   "chu": "translanguaging",
+   "doc": "/trænzˈlæŋɡwɪdʒɪŋ/",
+   "nghia": "dùng linh hoạt toàn bộ vốn ngôn ngữ của mình (nhiều thứ tiếng) để giao tiếp và học",
+   "nhom": "Phân tích hội thoại",
+   "viDu": "You're in a lecture for your course on 'Cross-cultural communication' on the topic of code-switching and translanguaging.",
+   "viDuNghia": "Bạn đang dự bài giảng môn \"Giao tiếp liên văn hoá\" về chủ đề chuyển mã và translanguaging."
+  },
+  {
+   "chu": "contextualization cue",
+   "doc": "/kənˌtekstʃuələˈzeɪʃn kjuː/",
+   "nghia": "tín hiệu ngữ cảnh (Gumperz): ngữ điệu, cách nói… cho biết nên hiểu lời nói theo hướng nào",
+   "nhom": "Phân tích hội thoại",
+   "viDu": "Ask a question at the end about what Gumperz meant about contextualization cues, which was mentioned in the readings.",
+   "viDuNghia": "Hãy đặt câu hỏi ở cuối buổi về ý của Gumperz khi nói về contextualization cues (tín hiệu ngữ cảnh), điều được nhắc tới trong bài đọc."
+  },
+  {
+   "chu": "greeting",
+   "doc": "/ˈɡriːtɪŋ/",
+   "nghia": "lời chào",
+   "nhom": "Phân tích hội thoại",
+   "viDu": "The greeting is too informal for addressing a lecturer.",
+   "viDuNghia": "Lời chào này quá suồng sã khi xưng hô với giảng viên."
+  },
+  {
+   "chu": "speaker",
+   "doc": "/ˈspiːkər/",
+   "nghia": "người nói, diễn giả",
+   "nhom": "Phân tích hội thoại",
+   "viDu": "Which of the following items will a speaker examine when analyzing the demographic traits of an audience or group of listeners?",
+   "viDuNghia": "Đâu là điều một diễn giả xem xét khi phân tích đặc điểm nhân khẩu học (demographic traits) của khán giả?"
+  },
+  {
+   "chu": "mode of analysis",
+   "nghia": "phương thức phân tích: cách riêng mà một ngành dùng để xem xét dữ liệu",
+   "nhom": "Phân tích hội thoại",
+   "viDu": "They use a special mode of analysis called the next turn proof procedure.",
+   "viDuNghia": "Họ dùng một phương thức phân tích đặc biệt gọi là thủ tục kiểm chứng bằng lượt kế tiếp (next turn proof procedure)."
+  },
+  {
+   "chu": "miscommunication",
+   "doc": "/ˌmɪskəˌmjuːnɪˈkeɪʃn/",
+   "nghia": "sự hiểu lầm trong giao tiếp, truyền đạt không tới",
+   "nhom": "Nghe & thảo luận",
+   "viDu": "Inappropriate gestures in certain countries result in miscommunication.",
+   "viDuNghia": "Cử chỉ không phù hợp ở một số nước dẫn tới hiểu lầm trong giao tiếp."
+  },
+  {
+   "chu": "empathic listening",
+   "doc": "/emˈpæθɪk ˈlɪsənɪŋ/",
+   "nghia": "lắng nghe thấu cảm: nghe để hiểu cảm xúc và góc nhìn của người nói",
+   "nhom": "Nghe & thảo luận",
+   "viDu": "What is NOT an academic culture value? — Lifelong Learning / Intellectual autonomy / Problem solving / Empathic Listening",
+   "viDuNghia": "Điều nào KHÔNG phải là giá trị văn hoá học thuật? — Học tập suốt đời / Tự chủ trí tuệ / Giải quyết vấn đề / Lắng nghe đồng cảm"
+  },
+  {
+   "chu": "facilitation",
+   "doc": "/fəˌsɪlɪˈteɪʃn/",
+   "nghia": "sự điều phối, tạo điều kiện (thảo luận); trong liêm chính học thuật: tiếp tay cho người khác vi phạm",
+   "nhom": "Nghe & thảo luận",
+   "viDu": "What kind of misconduct is happening? Facilitation of academic misconduct of another student.",
+   "viDuNghia": "Loại vi phạm nào đang xảy ra? Tiếp tay cho vi phạm học thuật của sinh viên khác."
+  },
+  {
+   "chu": "recitation",
+   "doc": "/ˌresɪˈteɪʃn/",
+   "nghia": "(Mỹ) buổi phụ đạo nhóm nhỏ ôn lại bài giảng, tương đương tutorial",
+   "nhom": "Nghe & thảo luận",
+   "viDu": "What is the purpose of a tutorial or recitation? Check one option.",
+   "viDuNghia": "Mục đích của tutorial hoặc recitation là gì? Chọn một đáp án."
+  },
+  {
+   "chu": "role-play",
+   "doc": "/ˈroʊl pleɪ/",
+   "nghia": "đóng vai (tình huống giả định trong lớp)",
+   "nhom": "Nghe & thảo luận",
+   "viDu": "Yes, because she is role-playing the head of a government department",
+   "viDuNghia": "Có, vì cô đang đóng vai trưởng một bộ của chính phủ"
+  },
+  {
+   "chu": "participate",
+   "doc": "/pɑːrˈtɪsɪpeɪt/",
+   "nghia": "tham gia, góp phần (participate in a tutorial)",
+   "nhom": "Nghe & thảo luận",
+   "viDu": "Which is NOT a proposal when participating in Group Work?",
+   "viDuNghia": "Câu nào KHÔNG phải một proposal (đề xuất) khi tham gia làm việc nhóm?"
+  },
+  {
+   "chu": "disagree",
+   "doc": "/ˌdɪsəˈɡriː/",
+   "nghia": "không đồng ý. Mẹo lịch sự: \"I see your point, but…\"",
+   "nhom": "Nghe & thảo luận",
+   "viDu": "\"In what ways will marketing fundamentally change our needs and wants?\" At university, are you able to disagree with the underlying assumption in this question?",
+   "viDuNghia": "\"Marketing sẽ thay đổi nhu cầu và mong muốn của chúng ta theo cách nào?\" Ở đại học, bạn có thể bất đồng với giả định nền tảng của câu hỏi này không?"
+  },
+  {
+   "chu": "criticize",
+   "doc": "/ˈkrɪtɪsaɪz/",
+   "nghia": "chỉ trích, phê bình",
+   "nhom": "Nghe & thảo luận",
+   "viDu": "How is bias displayed in the following statement: \"The government was criticized as responding slowly in the pandemic\"?",
+   "viDuNghia": "Thiên kiến được thể hiện thế nào trong câu sau: \"Chính phủ đã bị chỉ trích vì phản ứng chậm trong đại dịch\"?"
+  },
+  {
+   "chu": "informal",
+   "doc": "/ɪnˈfɔːrml/",
+   "nghia": "thân mật, suồng sã, không trang trọng (trái với formal) — không hợp khi viết email cho giảng viên",
+   "nhom": "Nghe & thảo luận",
+   "viDu": "\"Hey teacher!\" is too informal for an email to your professor.",
+   "viDuNghia": "\"Hey teacher!\" quá suồng sã cho một email gửi giáo sư."
+  },
+  {
+   "chu": "polite",
+   "doc": "/pəˈlaɪt/",
+   "nghia": "lịch sự",
+   "nhom": "Nghe & thảo luận",
+   "viDu": "In an email to a lecturer, use a polite greeting such as \"Dear Professor Jones\".",
+   "viDuNghia": "Trong email gửi giảng viên, hãy dùng lời chào lịch sự như \"Dear Professor Jones\"."
+  },
+  {
+   "chu": "respond",
+   "doc": "/rɪˈspɑːnd/",
+   "nghia": "đáp lại, phản hồi (respond to a question)",
+   "nhom": "Nghe & thảo luận",
+   "viDu": "Students are also expected to respond to others' blog posts.",
+   "viDuNghia": "Sinh viên cũng cần phản hồi bài blog của người khác."
+  },
+  {
+   "chu": "audience-centered",
+   "doc": "/ˈɔːdiəns ˌsentərd/",
+   "nghia": "lấy người nghe làm trung tâm: chọn nội dung, cách nói theo nhu cầu của khán giả",
+   "nhom": "Thuyết trình",
+   "viDu": "An audience-centered message will consider the audience's ______.",
+   "viDuNghia": "Một thông điệp lấy khán giả làm trung tâm sẽ xem xét ______ của khán giả."
+  },
+  {
+   "chu": "slide",
+   "doc": "/slaɪd/",
+   "nghia": "trang trình chiếu",
+   "nhom": "Thuyết trình",
+   "viDu": "Which of the following is NOT true about organizing the slides?",
+   "viDuNghia": "Điều nào sau đây KHÔNG đúng về tổ chức slide?"
+  },
+  {
+   "chu": "visual aid",
+   "doc": "/ˈvɪʒuəl eɪd/",
+   "nghia": "phương tiện trực quan hỗ trợ bài nói: slide, biểu đồ, hình ảnh, video",
+   "nhom": "Thuyết trình",
+   "viDu": "Some common purposes for visual aids in a presentation at university include: Choose 3 options.",
+   "viDuNghia": "Một số mục đích phổ biến của công cụ trực quan trong thuyết trình đại học gồm: Chọn 3 đáp án."
+  },
+  {
+   "chu": "pie chart",
+   "doc": "/ˈpaɪ tʃɑːrt/",
+   "nghia": "biểu đồ tròn: cho thấy tỉ lệ phần trăm của từng phần trong tổng",
+   "nhom": "Thuyết trình",
+   "viDu": "A pie chart shows the percentage of each part in a whole.",
+   "viDuNghia": "Biểu đồ tròn cho thấy tỉ lệ phần trăm của từng phần trong tổng thể."
+  },
+  {
+   "chu": "line graph",
+   "doc": "/ˈlaɪn ɡræf/",
+   "nghia": "biểu đồ đường: cho thấy xu hướng thay đổi theo thời gian",
+   "nhom": "Thuyết trình",
+   "viDu": "The best graphic aid to illustrate changes over time is the: — Pie chart / Line graph / Multiple bar graph / Pictograph",
+   "viDuNghia": "Công cụ đồ hoạ tốt nhất để minh hoạ sự thay đổi theo thời gian là: — Biểu đồ tròn (Pie chart) / Biểu đồ đường (Line graph) / Biểu đồ cột nhiều nhóm (Multiple bar graph) / Biểu đồ tượng hình (Pictograph)"
+  },
+  {
+   "chu": "aesthetics",
+   "doc": "/esˈθetɪks/",
+   "nghia": "tính thẩm mỹ, vẻ đẹp hình thức (của slide, thiết kế)",
+   "nhom": "Thuyết trình",
+   "viDu": "Pay attention to the aesthetics of slides.",
+   "viDuNghia": "Hãy chú ý tới tính thẩm mỹ của slide."
+  },
+  {
+   "chu": "oral",
+   "doc": "/ˈɔːrəl/",
+   "nghia": "bằng lời nói (oral presentation = thuyết trình miệng)",
+   "nhom": "Thuyết trình",
+   "viDu": "One advantage of an oral message is that it ______.",
+   "viDuNghia": "Một ưu điểm của thông điệp bằng lời nói (oral) là nó ______."
+  },
+  {
+   "chu": "deliver",
+   "doc": "/dɪˈlɪvər/",
+   "nghia": "trình bày (bài nói, bài thuyết trình); nghĩa khác: giao hàng",
+   "nhom": "Thuyết trình",
+   "viDu": "She delivered a ten-minute oral presentation to the whole class.",
+   "viDuNghia": "Cô ấy trình bày bài thuyết trình miệng mười phút trước cả lớp."
+  },
+  {
+   "chu": "visual literacy",
+   "doc": "/ˈvɪʒuəl ˈlɪtərəsi/",
+   "nghia": "năng lực đọc và tạo thông tin bằng hình ảnh (biểu đồ, sơ đồ, hình)",
+   "nhom": "Thuyết trình",
+   "viDu": "Reading charts and diagrams correctly requires visual literacy.",
+   "viDuNghia": "Đọc đúng biểu đồ và sơ đồ đòi hỏi năng lực đọc hiểu hình ảnh (visual literacy)."
+  },
+  {
+   "chu": "rhetorical situation",
+   "doc": "/rɪˈtɔːrɪkl ˌsɪtʃuˈeɪʃn/",
+   "nghia": "tình huống giao tiếp: ai nói, nói với ai, nhằm mục đích gì, trong bối cảnh nào",
+   "nhom": "Thuyết trình",
+   "viDu": "Which is NOT a feature of a rhetorical situation?",
+   "viDuNghia": "Điều nào KHÔNG phải một đặc điểm của rhetorical situation (tình huống tu từ)?"
+  },
+  {
+   "chu": "rhetorical",
+   "doc": "/rɪˈtɔːrɪkl/",
+   "nghia": "thuộc tu từ, nghệ thuật thuyết phục; rhetorical question = câu hỏi tu từ",
+   "nhom": "Thuyết trình",
+   "viDu": "Which common rhetorical situations can make up university courses? Choose 4 options.",
+   "viDuNghia": "Những tình huống tu từ phổ biến nào có thể tạo nên các môn học đại học? Chọn 4 đáp án."
+  },
+  {
+   "chu": "pronunciation",
+   "doc": "/prəˌnʌnsiˈeɪʃn/",
+   "nghia": "cách phát âm. Mẹo: danh từ viết -nun-, động từ pronounce viết -noun-",
+   "nhom": "Thuyết trình",
+   "viDu": "Don't worry about small pronunciation mistakes when you ask a question in a tutorial.",
+   "viDuNghia": "Đừng lo về lỗi phát âm nhỏ khi bạn đặt câu hỏi trong buổi tutorial."
+  },
+  {
+   "chu": "emphasize",
+   "doc": "/ˈemfəsaɪz/",
+   "nghia": "nhấn mạnh (Anh: emphasise)",
+   "nhom": "Thuyết trình",
+   "viDu": "This practice is increasingly emphasized in the context of life-long learning, in which each individual needs to actively foster their own development of knowledge and skills.",
+   "viDuNghia": "Thực hành này ngày càng được nhấn mạnh trong bối cảnh học tập suốt đời; trong đó mỗi cá nhân cần chủ động thúc đẩy phát triển kiến thức và kỹ năng của chính mình."
+  },
+  {
+   "chu": "presentation",
+   "doc": "/ˌpriːzenˈteɪʃn/",
+   "nghia": "bài thuyết trình",
+   "nhom": "Thuyết trình",
+   "viDu": "It's the end of the presentation, and someone has asked you a difficult question. What do you do? Choose 2 options.",
+   "viDuNghia": "Cuối buổi thuyết trình, ai đó hỏi bạn một câu khó. Bạn làm gì? Chọn 2 đáp án."
+  },
+  {
+   "chu": "outline",
+   "doc": "/ˈaʊtlaɪn/",
+   "nghia": "dàn ý, đề cương; (động từ) nêu sơ lược",
+   "nhom": "Viết học thuật",
+   "viDu": "What might not be included in a Course Outline or Syllabus document?",
+   "viDuNghia": "Điều gì có thể KHÔNG có trong tài liệu Đề cương môn học (Syllabus)?"
+  },
+  {
+   "chu": "reverse outline",
+   "doc": "/rɪˈvɜːrs ˈaʊtlaɪn/",
+   "nghia": "dàn ý ngược: sau khi viết xong, ghi lại ý chính từng đoạn để kiểm tra mạch bài",
+   "nhom": "Viết học thuật",
+   "viDu": "Make a reverse outline to check that each paragraph has one main idea.",
+   "viDuNghia": "Hãy lập dàn ý ngược để kiểm tra mỗi đoạn có đúng một ý chính."
+  },
+  {
+   "chu": "section heading",
+   "doc": "/ˈsekʃn ˌhedɪŋ/",
+   "nghia": "đề mục của từng phần trong báo cáo",
+   "nhom": "Viết học thuật",
+   "viDu": "Writing section headings helps the reader find information in a report.",
+   "viDuNghia": "Viết đề mục cho từng phần giúp người đọc tìm thông tin trong báo cáo."
+  },
+  {
+   "chu": "draft",
+   "doc": "/dræft/",
+   "nghia": "bản nháp; (động từ) viết nháp",
+   "nhom": "Viết học thuật",
+   "viDu": "What would be the best name for this draft file, according to lesson 3.3a?",
+   "viDuNghia": "Tên tốt nhất cho tệp nháp này, theo bài 3.3a, là gì?"
+  },
+  {
+   "chu": "proofread",
+   "doc": "/ˈpruːfriːd/",
+   "nghia": "đọc soát lỗi (chính tả, ngữ pháp, dấu câu) trước khi nộp",
+   "nhom": "Viết học thuật",
+   "viDu": "Which of the following is included in proofreading?",
+   "viDuNghia": "Điều nào sau đây thuộc về việc rà soát lỗi (proofreading)?"
+  },
+  {
+   "chu": "executive summary",
+   "doc": "/ɪɡˈzekjətɪv ˈsʌməri/",
+   "nghia": "bản tóm tắt cho lãnh đạo ở đầu báo cáo: nêu vấn đề, kết quả, khuyến nghị trong một trang",
+   "nhom": "Viết học thuật",
+   "viDu": "Your report should begin with an executive summary.",
+   "viDuNghia": "Báo cáo của bạn nên mở đầu bằng một bản tóm tắt cho lãnh đạo (executive summary)."
+  },
+  {
+   "chu": "reflective",
+   "doc": "/rɪˈflektɪv/",
+   "nghia": "mang tính chiêm nghiệm, nhìn lại trải nghiệm của mình (reflective blog, reflective essay)",
+   "nhom": "Viết học thuật",
+   "viDu": "For a piece of reflective writing, where should you begin? Check one option.",
+   "viDuNghia": "Với một bài viết phản tư (reflective writing), nên bắt đầu từ đâu? Chọn một đáp án."
+  },
+  {
+   "chu": "logical connector",
+   "doc": "/ˈlɑːdʒɪkl kəˈnektər/",
+   "nghia": "từ nối lô-gic: therefore, however, because… — nối các ý và cho thấy quan hệ giữa chúng",
+   "nhom": "Viết học thuật",
+   "viDu": "How is bias displayed in this statement? Use of logical connectors and appealing to membership of a common group.",
+   "viDuNghia": "Thiên kiến thể hiện thế nào trong phát biểu này? Dùng từ nối lô-gic và viện tới tư cách thành viên của một nhóm chung."
+  },
+  {
+   "chu": "cohesive",
+   "doc": "/koʊˈhiːsɪv/",
+   "nghia": "liền mạch, các câu các đoạn gắn kết với nhau",
+   "nhom": "Viết học thuật",
+   "viDu": "It has two functions: (1) It ties all the evidence and examples that make up the body of the paragraph into one cohesive argument.",
+   "viDuNghia": "Nó có hai chức năng: (1) Gắn kết mọi bằng chứng và ví dụ tạo nên thân đoạn thành một lập luận gắn kết."
+  },
+  {
+   "chu": "convention",
+   "doc": "/kənˈvenʃn/",
+   "nghia": "quy ước, thông lệ (academic conventions = quy ước viết học thuật)",
+   "nhom": "Viết học thuật",
+   "viDu": "File naming conventions and folder hierarchy help to.......:",
+   "viDuNghia": "Quy ước đặt tên tệp và phân cấp thư mục giúp.......:"
+  },
+  {
+   "chu": "methodology",
+   "doc": "/ˌmeθəˈdɑːlədʒi/",
+   "nghia": "phương pháp luận; phần mô tả cách tiến hành nghiên cứu trong báo cáo",
+   "nhom": "Viết học thuật",
+   "viDu": "When you scan for information in a research report, which part should you not read in detail? — Introduction / Results / Conclusion / Methodology",
+   "viDuNghia": "Khi bạn đọc lướt tìm thông tin trong một báo cáo nghiên cứu, phần nào không cần đọc chi tiết? — Giới thiệu / Kết quả / Kết luận / Phương pháp luận"
+  },
+  {
+   "chu": "vocabulary",
+   "doc": "/vəˈkæbjəleri/",
+   "nghia": "vốn từ, từ vựng",
+   "nhom": "Viết học thuật",
+   "viDu": "They are difficult to read because of the expert vocabulary used.",
+   "viDuNghia": "Chúng khó đọc vì dùng nhiều từ vựng chuyên môn."
+  },
+  {
+   "chu": "phenomenon",
+   "doc": "/fəˈnɑːmɪnən/",
+   "nghia": "hiện tượng (số nhiều bất quy tắc: phenomena)",
+   "nhom": "Viết học thuật",
+   "viDu": "A structural worldview is needed, where individual issues are socio-political phenomena.",
+   "viDuNghia": "Cần một thế giới quan cấu trúc, trong đó vấn đề của cá nhân là những hiện tượng chính trị – xã hội."
+  },
+  {
+   "chu": "theorist",
+   "doc": "/ˈθiːərɪst/",
+   "nghia": "nhà lý luận, nhà lý thuyết",
+   "nhom": "Viết học thuật",
+   "viDu": "Which feature of critique can be found in the theorist's writing?",
+   "viDuNghia": "Đặc điểm nào của lối phê bình (critique) có thể thấy trong bài viết của nhà lý thuyết?"
+  },
+  {
+   "chu": "epidemiology",
+   "doc": "/ˌepɪˌdiːmiˈɑːlədʒi/",
+   "nghia": "dịch tễ học",
+   "nhom": "Viết học thuật",
+   "viDu": "Mohammed is a third-year undergraduate student studying epidemiology...",
+   "viDuNghia": "Mohammed là sinh viên năm ba ngành dịch tễ học..."
+  },
+  {
+   "chu": "pedagogy",
+   "doc": "/ˈpedəɡɑːdʒi/",
+   "nghia": "sư phạm học: khoa học và phương pháp giảng dạy",
+   "nhom": "Viết học thuật",
+   "viDu": "You are studying a unit titled 'Pedagogy and Professional Practice'... 10% of your final mark is a reflective blog...",
+   "viDuNghia": "Bạn học học phần 'Pedagogy and Professional Practice'... 10% điểm cuối là blog phản tư..."
+  },
+  {
+   "chu": "indented",
+   "doc": "/ɪnˈdentɪd/",
+   "nghia": "thụt đầu dòng; đoạn trích dài được trình bày thụt vào thay cho ngoặc kép",
+   "nhom": "Viết học thuật",
+   "viDu": "A long quotation is indented instead of being put in quotation marks.",
+   "viDuNghia": "Đoạn trích dài được thụt vào thay vì đặt trong ngoặc kép."
+  },
+  {
+   "chu": "reword",
+   "doc": "/ˌriːˈwɜːrd/",
+   "nghia": "viết lại bằng từ khác — một bước khi paraphrase",
+   "nhom": "Viết học thuật",
+   "viDu": "A student borrows another student's essay, rewords and restructures parts of it, and submits it as their own.",
+   "viDuNghia": "Một sinh viên mượn bài luận của sinh viên khác, diễn đạt lại và sắp xếp lại một số phần, rồi nộp như bài của mình."
+  },
+  {
+   "chu": "restructure",
+   "doc": "/ˌriːˈstrʌktʃər/",
+   "nghia": "sắp xếp lại cấu trúc (câu, đoạn) — một bước khi paraphrase",
+   "nhom": "Viết học thuật",
+   "viDu": "A student borrows another student's essay, rewords and restructures parts of it, and submits it as their own.",
+   "viDuNghia": "Một sinh viên mượn bài luận của sinh viên khác, diễn đạt lại và sắp xếp lại một số phần, rồi nộp như bài của mình."
+  },
+  {
+   "chu": "revise",
+   "doc": "/rɪˈvaɪz/",
+   "nghia": "sửa lại bài viết (về ý và bố cục); Anh–Úc còn nghĩa: ôn bài",
+   "nhom": "Viết học thuật",
+   "viDu": "Revise your draft for ideas and structure first, then proofread it for spelling.",
+   "viDuNghia": "Hãy sửa bản nháp về ý và bố cục trước, rồi mới soát lỗi chính tả."
+  },
+  {
+   "chu": "refine",
+   "doc": "/rɪˈfaɪn/",
+   "nghia": "trau chuốt, tinh chỉnh cho tốt hơn",
+   "nhom": "Viết học thuật",
+   "viDu": "Which of the following techniques for polishing and refining academic writing are usually specific to writing reports and proposals?",
+   "viDuNghia": "Kỹ thuật nào sau đây để trau chuốt văn bản học thuật thường CHỈ áp dụng riêng cho báo cáo và đề xuất?"
+  },
+  {
+   "chu": "polish",
+   "doc": "/ˈpɑːlɪʃ/",
+   "nghia": "gọt giũa lần cuối (câu chữ, trình bày)",
+   "nhom": "Viết học thuật",
+   "viDu": "Which of the following techniques for polishing and refining academic writing are usually specific to writing reports and proposals? Choose two answers.",
+   "viDuNghia": "Kỹ thuật nào sau đây để trau chuốt văn bản học thuật thường CHỈ áp dụng riêng cho báo cáo và đề xuất (proposal)? Chọn hai đáp án."
+  },
+  {
+   "chu": "technical",
+   "doc": "/ˈteknɪkl/",
+   "nghia": "thuộc kỹ thuật, chuyên môn (technical article = bài chuyên ngành, nhiều thuật ngữ)",
+   "nhom": "Từ học thuật trong đề",
+   "viDu": "Which traits describe the technical sphere of argumentation?",
+   "viDuNghia": "Đặc điểm nào mô tả phạm vi kỹ thuật (technical sphere) của lập luận?"
+  },
+  {
+   "chu": "elementary",
+   "doc": "/ˌelɪˈmentri/",
+   "nghia": "sơ đẳng, cơ bản (too elementary = quá dễ so với nhu cầu); elementary school = trường tiểu học",
+   "nhom": "Từ học thuật trong đề",
+   "viDu": "What referencing system is used in the following part of an article? \"...Elementary and secondary schools are growing more segregated (Orfield, Bachmeier, James, & Eitle, 1997)...\"",
+   "viDuNghia": "Hệ thống trích dẫn nào được dùng trong đoạn trích sau: \"...các trường tiểu học và trung học ngày càng phân tách hơn (Orfield, Bachmeier, James, & Eitle, 1997)...\"?"
+  },
+  {
+   "chu": "in-depth",
+   "doc": "/ˌɪn ˈdepθ/",
+   "nghia": "chuyên sâu, kỹ lưỡng",
+   "nhom": "Từ học thuật trong đề",
+   "viDu": "Task which requires in-depth exploration and evaluation of a topic often in relevance to theory is",
+   "viDuNghia": "Nhiệm vụ yêu cầu khám phá sâu và đánh giá một chủ đề, thường liên quan đến lý thuyết, là"
+  },
+  {
+   "chu": "unproblematic",
+   "doc": "/ˌʌnprɑːbləˈmætɪk/",
+   "nghia": "không có gì phải bàn cãi; an unproblematic view = cách trình bày như thể mọi thứ đã ngã ngũ",
+   "nhom": "Từ học thuật trong đề",
+   "viDu": "Because they present an unproblematic view of a field and don't always present current debates in the field",
+   "viDuNghia": "Vì chúng trình bày một lĩnh vực như thể không có gì phải bàn cãi và không phải lúc nào cũng nêu các tranh luận hiện tại trong lĩnh vực đó"
+  },
+  {
+   "chu": "institutional",
+   "doc": "/ˌɪnstɪˈtuːʃənl/",
+   "nghia": "thuộc thể chế, tổ chức (trường học, toà án, bệnh viện); institutional talk = lời nói nơi công sở",
+   "nhom": "Từ học thuật trong đề",
+   "viDu": "It seeks to study naturally occurring talk, either in everyday conversations or institutional settings such as schools and organizations.",
+   "viDuNghia": "Nó tìm hiểu lời nói xảy ra tự nhiên, trong hội thoại đời thường hoặc bối cảnh thể chế như trường học, tổ chức."
+  },
+  {
+   "chu": "belief",
+   "doc": "/bɪˈliːf/",
+   "nghia": "niềm tin, điều mình tin là đúng",
+   "nhom": "Từ học thuật trong đề",
+   "viDu": "An often abstract idea, theory or belief that needs to be defined or explored",
+   "viDuNghia": "Một ý tưởng, lý thuyết hoặc niềm tin thường trừu tượng cần được định nghĩa hoặc khám phá"
+  },
+  {
+   "chu": "encounter",
+   "doc": "/ɪnˈkaʊntər/",
+   "nghia": "gặp phải, đụng phải (khó khăn, vấn đề mới)",
+   "nhom": "Từ học thuật trong đề",
+   "viDu": "Asking yourself initially if you know a related problem and if you have seen this kind of problem before, particularly if you encounter a simpler problem",
+   "viDuNghia": "Tự hỏi ban đầu xem mình có biết vấn đề liên quan nào không, đã từng gặp loại vấn đề này chưa, đặc biệt nếu gặp một vấn đề đơn giản hơn"
+  },
+  {
+   "chu": "segregated",
+   "doc": "/ˈseɡrɪɡeɪtɪd/",
+   "nghia": "bị tách biệt, phân biệt (theo chủng tộc, nhóm xã hội)",
+   "nhom": "Từ học thuật trong đề",
+   "viDu": "What referencing system is used in the following part of an article? \"...Elementary and secondary schools are growing more segregated (Orfield, Bachmeier, James, & Eitle, 1997)...\"",
+   "viDuNghia": "Hệ thống trích dẫn nào được dùng trong đoạn trích sau: \"...các trường tiểu học và trung học ngày càng bị phân tách (segregated) hơn (Orfield, Bachmeier, James, & Eitle, 1997)...\"?"
+  },
+  {
+   "chu": "self-efficacy",
+   "doc": "/ˌself ˈefɪkəsi/",
+   "nghia": "niềm tin vào năng lực của bản thân rằng mình làm được việc",
+   "nhom": "Từ học thuật trong đề",
+   "viDu": "Students with high self-efficacy believe they can solve a difficult problem if they keep trying.",
+   "viDuNghia": "Sinh viên có niềm tin cao vào năng lực bản thân tin rằng mình giải được bài khó nếu kiên trì."
+  },
+  {
+   "chu": "work-life balance",
+   "doc": "/ˌwɜːrk laɪf ˈbæləns/",
+   "nghia": "cân bằng giữa công việc và cuộc sống",
+   "nhom": "Từ học thuật trong đề",
+   "viDu": "A case study of how the CEO of a large company changed workplace culture from a similar state and increased her employee's work-life balance and work satisfaction",
+   "viDuNghia": "Case study về cách một CEO của công ty lớn thay đổi văn hoá nơi làm việc từ tình trạng tương tự và tăng cân bằng công việc-cuộc sống, sự hài lòng của nhân viên"
+  },
+  {
+   "chu": "microbusiness",
+   "doc": "/ˈmaɪkroʊˌbɪznəs/",
+   "nghia": "doanh nghiệp siêu nhỏ (thường dưới 10 người)",
+   "nhom": "Từ học thuật trong đề",
+   "viDu": "Homeless man Mike Davis pulled himself back on his feet with some hard work in his new microbusiness...",
+   "viDuNghia": "Người vô gia cư Mike Davis đã tự vực dậy nhờ làm việc chăm chỉ với doanh nghiệp siêu nhỏ (microbusiness) mới của mình..."
+  },
+  {
+   "chu": "bar graph",
+   "doc": "/ˈbɑːr ɡræf/",
+   "nghia": "biểu đồ cột: so sánh độ lớn giữa các nhóm (vd vốn đầu tư của 5 nước); khác line graph (xu hướng theo thời gian)",
+   "nhom": "Thuyết trình",
+   "viDu": "Which visual aid best presents the investment capital of 5 countries in the first 4 months of 2020? — Bar graph / Venn diagram / Line graph / Pie chart",
+   "viDuNghia": "Phương tiện trực quan nào thể hiện tốt nhất vốn đầu tư của 5 quốc gia trong 4 tháng đầu năm 2020? — Biểu đồ cột / Biểu đồ Venn / Biểu đồ đường / Biểu đồ tròn"
+  },
+  {
+   "chu": "plateau",
+   "doc": "/plæˈtoʊ/",
+   "nghia": "(động từ) chững lại, đi ngang sau khi tăng; (danh từ) giai đoạn đi ngang — từ hay dùng khi mô tả biểu đồ",
+   "nhom": "Thuyết trình",
+   "viDu": "Usage plateaued in the second and third quarters at 450 and 475 visitors respectively.",
+   "viDuNghia": "Lượng truy cập chững lại ở quý hai và quý ba, lần lượt ở mức 450 và 475 lượt khách."
+  },
+  {
+   "chu": "audience analysis",
+   "doc": "/ˈɔːdiəns əˈnæləsɪs/",
+   "nghia": "phân tích khán giả: tìm hiểu kiến thức, quan tâm, thái độ, nhu cầu của người nghe trước khi soạn bài nói",
+   "nhom": "Thuyết trình",
+   "viDu": "A receiver's concerns and needs are considered in which element of audience analysis?",
+   "viDuNghia": "Mối quan tâm và nhu cầu của người nhận được xem xét trong yếu tố nào của phân tích khán giả?"
+  },
+  {
+   "chu": "persuasive message",
+   "doc": "/pərˈsweɪsɪv ˈmesɪdʒ/",
+   "nghia": "thông điệp thuyết phục: nhằm khiến người nghe đồng ý hoặc hành động (cần tính tới mục tiêu, giá trị, nhu cầu của họ)",
+   "nhom": "Nghe & thảo luận",
+   "viDu": "What are the motivational factors that should be considered when planning a persuasive message?",
+   "viDuNghia": "Những yếu tố tạo động lực nào cần xem xét khi lên kế hoạch cho một thông điệp thuyết phục?"
+  },
+  {
+   "chu": "cultural dimension",
+   "doc": "/ˈkʌltʃərəl daɪˈmenʃn/",
+   "nghia": "chiều văn hoá: một khía cạnh tạo nên khác biệt giữa các nhóm người (sắc tộc, giới, tuổi…)",
+   "nhom": "Nghe & thảo luận",
+   "viDu": "Five generally recognized core cultural dimensions are ______.",
+   "viDuNghia": "Năm chiều văn hoá cốt lõi được công nhận rộng rãi là ______."
+  },
+  {
+   "chu": "naming convention",
+   "doc": "/ˈneɪmɪŋ kənˌvenʃn/",
+   "nghia": "quy ước đặt tên (tệp, thư mục): thống nhất một kiểu tên, vd ngày dạng YYYYMMDD",
+   "nhom": "Viết học thuật",
+   "viDu": "Which of the following is NOT included in the general guide to naming conventions and folder hierarchies?",
+   "viDuNghia": "Điều nào sau đây KHÔNG có trong hướng dẫn chung về quy ước đặt tên và phân cấp thư mục?"
+  },
+  {
+   "chu": "folder hierarchy",
+   "doc": "/ˈfoʊldər ˈhaɪərɑːrki/",
+   "nghia": "cây phân cấp thư mục: thư mục lớn chứa thư mục con theo môn, tuần, loại tài liệu",
+   "nhom": "Viết học thuật",
+   "viDu": "File naming conventions and folder hierarchy help to ______.",
+   "viDuNghia": "Quy ước đặt tên tệp và cây phân cấp thư mục giúp ______."
+  },
+  {
+   "chu": "questioning stance",
+   "doc": "/ˈkwestʃənɪŋ stæns/",
+   "nghia": "thái độ chất vấn: đọc và học với tinh thần đặt câu hỏi, không chấp nhận ngay điều được nói",
+   "nhom": "Từ học thuật trong đề",
+   "viDu": "Why do we need to take a questioning stance in our learning at university?",
+   "viDuNghia": "Vì sao chúng ta cần giữ thái độ chất vấn (questioning stance) trong việc học ở đại học?"
+  },
+  {
+   "chu": "creative problem solving",
+   "nghia": "giải quyết vấn đề sáng tạo: dùng cho vấn đề chưa có lời giải sẵn, cần ý tưởng mới (khác analytical problem solving)",
+   "nhom": "Từ học thuật trong đề",
+   "viDu": "Creative problem solving occurs less frequently but often separates career successes from career failures.",
+   "viDuNghia": "Giải quyết vấn đề sáng tạo ít xảy ra hơn nhưng thường tạo nên khác biệt giữa thành công và thất bại trong sự nghiệp."
+  },
+  {
+   "chu": "analytical problem",
+   "doc": "/ˌænəˈlɪtɪkl ˈprɑːbləm/",
+   "nghia": "vấn đề phân tích: mục tiêu rõ, giải được bằng lập luận lô-gic từng bước (vd lên lịch một hội thảo)",
+   "nhom": "Từ học thuật trong đề",
+   "viDu": "Example(s) of analytical problems: — Apply the nonverbal cues in communication / Negotiate a business deal / Schedule a seminar / Review a previous meeting",
+   "viDuNghia": "Ví dụ về vấn đề phân tích: — Vận dụng tín hiệu phi ngôn ngữ trong giao tiếp / Đàm phán một thương vụ / Lên lịch một hội thảo / Rà soát một cuộc họp trước"
+  }
+ ]
+}

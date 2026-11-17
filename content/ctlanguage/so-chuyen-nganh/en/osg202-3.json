@@ -1,0 +1,646 @@
+{
+ "ma": "osg202-3",
+ "nn": "en",
+ "ten": "OSG202 · 3. Hệ thống tệp, vào/ra và đĩa",
+ "moTa": "Môn Hệ điều hành (OSG202), phần 3: tệp và thư mục, cách cài đặt hệ thống tệp (FAT, i-node, cấp phát khối), phần mềm vào/ra, lập lịch đĩa, đồng hồ, bảo vệ và bảo mật. Từ lấy từ đề FE thật; câu ví dụ là câu hỏi thật trong đề.",
+ "bieuTuong": "folder.fill",
+ "thuTu": -975,
+ "tu": [
+  {
+   "chu": "file system",
+   "doc": "/ˈfaɪl ˌsɪstəm/",
+   "nghia": "hệ thống tệp – phần HĐH tổ chức, lưu và tìm tệp trên đĩa",
+   "nhom": "Tệp & thư mục",
+   "viDu": "For I/O operations, what block size range is commonly used in a file system or storage medium?",
+   "viDuNghia": "Với thao tác I/O, khoảng kích thước khối nào thường được dùng trong hệ thống tệp hoặc thiết bị lưu trữ?"
+  },
+  {
+   "chu": "directory",
+   "doc": "/dəˈrektəri/",
+   "nghia": "thư mục – tệp đặc biệt chứa danh sách các tệp và thư mục con",
+   "nhom": "Tệp & thư mục",
+   "viDu": "A directory in UNIX/Linux consists of ____.",
+   "viDuNghia": "Một thư mục trong UNIX/Linux gồm ____."
+  },
+  {
+   "chu": "root directory",
+   "doc": "/ruːt dəˈrektəri/",
+   "nghia": "thư mục gốc – thư mục trên cùng của cây thư mục",
+   "nhom": "Tệp & thư mục",
+   "viDu": "The simplest form of directory system is having one directory containing all the files. it is called the root directory",
+   "viDuNghia": "Dạng đơn giản nhất của hệ thống thư mục là có một thư mục duy nhất chứa tất cả các tệp. Nó được gọi là thư mục gốc (Root directory)"
+  },
+  {
+   "chu": "working directory",
+   "doc": "/ˈwɜːrkɪŋ dəˈrektəri/",
+   "nghia": "thư mục làm việc (thư mục hiện hành) – nơi đường dẫn tương đối được tính từ đó",
+   "nhom": "Tệp & thư mục",
+   "viDu": "How does a relative path differ from an absolute path? — Relative paths depend on the current working directory",
+   "viDuNghia": "Đường dẫn tương đối khác đường dẫn tuyệt đối như thế nào? — Đường dẫn tương đối phụ thuộc vào thư mục làm việc hiện tại"
+  },
+  {
+   "chu": "path name",
+   "doc": "/ˈpæθ neɪm/",
+   "nghia": "tên đường dẫn – dãy thư mục dẫn tới tệp",
+   "nhom": "Tệp & thư mục",
+   "viDu": "The absolute path name of a file in Linux is given with respect to the ____.",
+   "viDuNghia": "Đường dẫn tuyệt đối của một tệp trong Linux được tính từ ____."
+  },
+  {
+   "chu": "absolute path name",
+   "nghia": "đường dẫn tuyệt đối – tính từ thư mục gốc, vd /usr/ast/mailbox",
+   "nhom": "Tệp & thư mục",
+   "viDu": "What is an absolute path in operating systems?",
+   "viDuNghia": "Đường dẫn tuyệt đối (absolute path) trong hệ điều hành là gì?"
+  },
+  {
+   "chu": "relative path name",
+   "nghia": "đường dẫn tương đối – tính từ thư mục làm việc hiện hành",
+   "nhom": "Tệp & thư mục",
+   "viDu": "How does a relative path differ from an absolute path?",
+   "viDuNghia": "Đường dẫn tương đối khác đường dẫn tuyệt đối như thế nào?"
+  },
+  {
+   "chu": "file attribute",
+   "doc": "/faɪl ˈætrɪbjuːt/",
+   "nghia": "thuộc tính tệp – thông tin kèm theo tệp: chủ sở hữu, kích thước, ngày tạo, quyền",
+   "nhom": "Tệp & thư mục",
+   "viDu": "Which system call lets the system announce that a file is coming and set some of its attributes?",
+   "viDuNghia": "Lời gọi hệ thống nào cho hệ thống biết một tệp sắp được tạo và đặt sẵn một số thuộc tính của tệp?"
+  },
+  {
+   "chu": "file extension",
+   "doc": "/faɪl ɪkˈstenʃn/",
+   "nghia": "phần mở rộng tên tệp – đuôi sau dấu chấm cho biết loại tệp (.c, .txt)",
+   "nhom": "Tệp & thư mục",
+   "viDu": "In the name prog.c, the file extension .c shows that it is a C source file.",
+   "viDuNghia": "Trong tên prog.c, phần mở rộng .c cho biết đây là tệp mã nguồn C."
+  },
+  {
+   "chu": "file descriptor",
+   "doc": "/faɪl dɪˈskrɪptər/",
+   "nghia": "mô tả tệp – số nguyên nhỏ HĐH trả về khi mở tệp, dùng cho các lần đọc/ghi sau",
+   "nhom": "Tệp & thư mục",
+   "viDu": "What is the role of a file descriptor in Unix-based systems?",
+   "viDuNghia": "Vai trò của file descriptor (bộ mô tả tệp) trong hệ thống Unix là gì?"
+  },
+  {
+   "chu": "regular file",
+   "doc": "/ˈreɡjələr faɪl/",
+   "nghia": "tệp thường – tệp chứa dữ liệu người dùng (văn bản hoặc nhị phân)",
+   "nhom": "Tệp & thư mục",
+   "viDu": "Which of the following best describes a regular file in UNIX or Windows systems?",
+   "viDuNghia": "Mục nào sau đây mô tả đúng nhất một file thông thường (regular file) trong UNIX hoặc Windows?"
+  },
+  {
+   "chu": "character special file",
+   "nghia": "tệp đặc biệt kiểu ký tự – đại diện cho thiết bị vào/ra theo dòng ký tự (bàn phím, máy in)",
+   "nhom": "Tệp & thư mục",
+   "viDu": "A keyboard is represented by a character special file.",
+   "viDuNghia": "Bàn phím được biểu diễn bằng một tệp đặc biệt kiểu ký tự."
+  },
+  {
+   "chu": "block special file",
+   "nghia": "tệp đặc biệt kiểu khối – đại diện cho thiết bị khối như ổ đĩa",
+   "nhom": "Tệp & thư mục",
+   "viDu": "In UNIX, which type of file is used to model disks? — Block special files.",
+   "viDuNghia": "Trong UNIX, loại file nào được dùng để mô hình hóa đĩa? — File đặc biệt kiểu khối (Block special files)."
+  },
+  {
+   "chu": "byte sequence",
+   "doc": "/baɪt ˈsiːkwəns/",
+   "nghia": "dãy byte – cấu trúc tệp đơn giản nhất: HĐH không quan tâm nội dung (UNIX, Windows)",
+   "nhom": "Tệp & thư mục",
+   "viDu": "UNIX and Windows treat a file as an unstructured byte sequence.",
+   "viDuNghia": "UNIX và Windows coi tệp là một dãy byte không có cấu trúc."
+  },
+  {
+   "chu": "record sequence",
+   "doc": "/ˈrekərd ˈsiːkwəns/",
+   "nghia": "dãy bản ghi – tệp gồm các bản ghi dài cố định",
+   "nhom": "Tệp & thư mục",
+   "viDu": "Which of the following file structure is used if the file includes set of fixed-length record? — Record sequence",
+   "viDuNghia": "Cấu trúc tệp nào sau đây được dùng nếu tệp gồm tập hợp các bản ghi có độ dài cố định? — Chuỗi bản ghi (Record sequence)"
+  },
+  {
+   "chu": "append",
+   "doc": "/əˈpend/",
+   "nghia": "ghi nối – thêm dữ liệu vào cuối tệp",
+   "nhom": "Tệp & thư mục",
+   "viDu": "___ is a specialized WRITE command for existing data files that allows for appending records or for rewriting selected records in their original place in the file.",
+   "viDuNghia": "___ là một lệnh WRITE chuyên biệt cho file dữ liệu đã tồn tại, cho phép thêm (append) bản ghi hoặc ghi lại (rewrite) các bản ghi đã chọn tại đúng vị trí gốc trong file."
+  },
+  {
+   "chu": "hard link",
+   "doc": "/hɑːrd lɪŋk/",
+   "nghia": "liên kết cứng – thêm một tên nữa trỏ thẳng tới cùng i-node của tệp",
+   "nhom": "Tệp & thư mục",
+   "viDu": "Which of the following is not correct about hard links and symbolic links?",
+   "viDuNghia": "Phát biểu nào sau đây KHÔNG đúng về hard link và symbolic link?"
+  },
+  {
+   "chu": "symbolic link",
+   "doc": "/sɪmˈbɑːlɪk lɪŋk/",
+   "nghia": "liên kết tượng trưng – tệp nhỏ chứa đường dẫn tới tệp khác (shortcut)",
+   "nhom": "Tệp & thư mục",
+   "viDu": "Which of the following is correct about symbolic links?",
+   "viDuNghia": "Điều nào sau đây đúng về liên kết mềm (symbolic link)?"
+  },
+  {
+   "chu": "executable file",
+   "doc": "/ɪɡˈzekjətəbl faɪl/",
+   "nghia": "tệp thực thi – tệp nhị phân chứa chương trình chạy được",
+   "nhom": "Tệp & thư mục",
+   "viDu": "An executable file contains a header, the program text, the data and a symbol table.",
+   "viDuNghia": "Tệp thực thi gồm phần đầu (header), mã chương trình, dữ liệu và bảng ký hiệu."
+  },
+  {
+   "chu": "rename",
+   "doc": "/ˌriːˈneɪm/",
+   "nghia": "đổi tên (tệp)",
+   "nhom": "Tệp & thư mục",
+   "viDu": "The rename system call changes the name of an existing file.",
+   "viDuNghia": "Lời gọi hệ thống rename đổi tên một tệp đang có."
+  },
+  {
+   "chu": "seek",
+   "doc": "/siːk/",
+   "nghia": "seek – thao tác đặt vị trí đọc/ghi tới một chỗ bất kỳ trong tệp; hoặc dời đầu đọc đĩa tới cylinder",
+   "nhom": "Tệp & thư mục",
+   "viDu": "The lseek system call moves the file pointer to a given position in the file.",
+   "viDuNghia": "Lời gọi hệ thống lseek dời con trỏ tệp tới một vị trí cho trước trong tệp."
+  },
+  {
+   "chu": "file structure",
+   "doc": "/faɪl ˈstrʌktʃər/",
+   "nghia": "cấu trúc tệp – cách dữ liệu trong tệp được tổ chức: dãy byte, dãy bản ghi hoặc cây",
+   "nhom": "Tệp & thư mục",
+   "viDu": "Which of the following file structures is widely used on large mainframe computers?",
+   "viDuNghia": "Cấu trúc file nào sau đây được sử dụng rộng rãi trên các máy tính mainframe lớn?"
+  },
+  {
+   "chu": "file size",
+   "doc": "/faɪl saɪz/",
+   "nghia": "kích thước tệp",
+   "nhom": "Tệp & thư mục",
+   "viDu": "In a file's metadata, what information does the file size typically represent?",
+   "viDuNghia": "Trong siêu dữ liệu (metadata) của tệp, thông tin kích thước tệp (file size) thường biểu thị điều gì?"
+  },
+  {
+   "chu": "file",
+   "doc": "/faɪl/",
+   "nghia": "tệp – đơn vị lưu trữ có tên do HĐH quản lý; có thuộc tính, cấu trúc (dãy byte, bản ghi, cây) và thao tác create, open, read, write…",
+   "nhom": "Tệp & thư mục",
+   "viDu": "File is generally defined to be ____.",
+   "viDuNghia": "Tệp (file) thường được định nghĩa là ____."
+  },
+  {
+   "chu": "parent directory",
+   "doc": "/ˈperənt dəˈrektəri/",
+   "nghia": "thư mục cha – thư mục chứa ngay thư mục hiện tại; trong đường dẫn ký hiệu là .. (thư mục gốc không có thư mục cha)",
+   "nhom": "Tệp & thư mục",
+   "viDu": "The root directory is the highest level in the file system hierarchy, so it does not have a parent directory.",
+   "viDuNghia": "Thư mục gốc là mức cao nhất trong cây thư mục, nên nó không có thư mục cha."
+  },
+  {
+   "chu": "file allocation table",
+   "nghia": "bảng cấp phát tệp (FAT) – bảng trong bộ nhớ ghi khối kế tiếp của mỗi tệp",
+   "nhom": "Cài đặt hệ thống tệp",
+   "viDu": "In Windows 95, which is the maximum partition size, if the FAT type is FAT-16 and the block size is 4 KB?",
+   "viDuNghia": "Trong Windows 95, kích thước phân vùng tối đa là bao nhiêu nếu dùng FAT-16 với kích thước khối (block) là 4 KB?"
+  },
+  {
+   "chu": "i-node",
+   "doc": "/ˈaɪ noʊd/",
+   "nghia": "i-node (index node) – cấu trúc ghi thuộc tính và địa chỉ các khối đĩa của một tệp",
+   "nhom": "Cài đặt hệ thống tệp",
+   "viDu": "If i-node only contains 10 direct addresses and all disk blocks are 1024 KB, what is largest possible file size?",
+   "viDuNghia": "Nếu i-node chỉ chứa 10 địa chỉ trực tiếp (direct address) và mỗi block đĩa có kích thước 1024 KB, kích thước tệp lớn nhất có thể là bao nhiêu?"
+  },
+  {
+   "chu": "contiguous allocation",
+   "doc": "/kənˈtɪɡjuəs ˌæləˈkeɪʃn/",
+   "nghia": "cấp phát liên tục – tệp nằm trên một dãy khối liền nhau; đọc nhanh nhưng gây phân mảnh",
+   "nhom": "Cài đặt hệ thống tệp",
+   "viDu": "What is incorrect about contiguous allocation of files?",
+   "viDuNghia": "Điều nào sau đây KHÔNG đúng về cấp phát liên tục (contiguous allocation) cho file?"
+  },
+  {
+   "chu": "linked allocation",
+   "doc": "/lɪŋkt ˌæləˈkeɪʃn/",
+   "nghia": "cấp phát liên kết – mỗi khối chứa con trỏ tới khối kế tiếp của tệp",
+   "nhom": "Cài đặt hệ thống tệp",
+   "viDu": "Which allocation method does MS-DOS use? — Linked allocation using FAT",
+   "viDuNghia": "MS-DOS dùng phương pháp cấp phát nào? — Cấp phát liên kết dùng FAT"
+  },
+  {
+   "chu": "indexed allocation",
+   "doc": "/ˈɪndekst ˌæləˈkeɪʃn/",
+   "nghia": "cấp phát theo chỉ mục – một khối chỉ mục (i-node) liệt kê địa chỉ mọi khối của tệp",
+   "nhom": "Cài đặt hệ thống tệp",
+   "viDu": "Indexed allocation in file systems uses ____.",
+   "viDuNghia": "Cấp phát theo chỉ mục (indexed allocation) trong hệ thống tệp dùng ____."
+  },
+  {
+   "chu": "master boot record",
+   "nghia": "bản ghi khởi động chính (MBR) – sector 0 của đĩa, chứa mã khởi động và bảng phân vùng",
+   "nhom": "Cài đặt hệ thống tệp",
+   "viDu": "Which is the maximum number of partitions that a disk using Master Boot Record to boot the computer is divided up?",
+   "viDuNghia": "Số phân vùng (partition) tối đa mà một đĩa dùng Master Boot Record để khởi động máy tính có thể được chia thành là bao nhiêu?"
+  },
+  {
+   "chu": "boot block",
+   "doc": "/buːt blɑːk/",
+   "nghia": "khối khởi động – khối đầu của phân vùng, chứa chương trình nạp HĐH",
+   "nhom": "Cài đặt hệ thống tệp",
+   "viDu": "The boot block contains the code that loads the operating system.",
+   "viDuNghia": "Khối khởi động chứa đoạn mã nạp hệ điều hành."
+  },
+  {
+   "chu": "superblock",
+   "doc": "/ˈsuːpərblɑːk/",
+   "nghia": "siêu khối – chứa các thông số chính của hệ thống tệp (loại, số khối…)",
+   "nhom": "Cài đặt hệ thống tệp",
+   "viDu": "The superblock stores key parameters of the file system.",
+   "viDuNghia": "Siêu khối lưu các thông số chính của hệ thống tệp."
+  },
+  {
+   "chu": "partition table",
+   "doc": "/pɑːrˈtɪʃn ˈteɪbl/",
+   "nghia": "bảng phân vùng – ghi điểm đầu và cuối của từng phân vùng trên đĩa",
+   "nhom": "Cài đặt hệ thống tệp",
+   "viDu": "Which of the following information contain in the entry of the partition tables?",
+   "viDuNghia": "Thông tin nào chứa trong một mục (entry) của bảng phân vùng (partition table)?"
+  },
+  {
+   "chu": "free block",
+   "doc": "/friː blɑːk/",
+   "nghia": "khối trống – khối đĩa chưa được cấp cho tệp nào",
+   "nhom": "Cài đặt hệ thống tệp",
+   "viDu": "Which ways are used to keep track of free block in disk space management?",
+   "viDuNghia": "Những cách nào được dùng để theo dõi các khối trống (free block) trong quản lý không gian đĩa?"
+  },
+  {
+   "chu": "block size",
+   "doc": "/blɑːk saɪz/",
+   "nghia": "kích thước khối – số byte của một khối đĩa; khối lớn thì nhanh nhưng phí chỗ",
+   "nhom": "Cài đặt hệ thống tệp",
+   "viDu": "In Windows 95, which is the maximum partition size, if the FAT type is FAT-32 and the block size is 16 KB?",
+   "viDuNghia": "Trong Windows 95, nếu loại FAT là FAT-32 và kích thước khối là 16KB, kích thước phân vùng tối đa là bao nhiêu?"
+  },
+  {
+   "chu": "journaling file system",
+   "nghia": "hệ thống tệp ghi nhật ký – ghi trước việc sắp làm vào nhật ký để phục hồi sau sự cố",
+   "nhom": "Cài đặt hệ thống tệp",
+   "viDu": "A journaling file system can recover quickly after a crash.",
+   "viDuNghia": "Hệ thống tệp ghi nhật ký phục hồi nhanh sau khi máy bị sập."
+  },
+  {
+   "chu": "log-structured file system",
+   "nghia": "hệ thống tệp cấu trúc nhật ký – coi cả đĩa như một nhật ký, mọi lần ghi đều nối vào cuối",
+   "nhom": "Cài đặt hệ thống tệp",
+   "viDu": "Analyze the significance of log-structured file systems in enhancing file-system performance, discussing their mechanisms and impact on write operations and disk usage.",
+   "viDuNghia": "Phân tích ý nghĩa của hệ thống tệp dạng nhật ký (log-structured file system) trong việc nâng cao hiệu năng hệ thống tệp, bàn về cơ chế hoạt động và tác động của nó đến các thao tác ghi và việc sử dụng đĩa."
+  },
+  {
+   "chu": "disk quota",
+   "doc": "/dɪsk ˈkwoʊtə/",
+   "nghia": "hạn ngạch đĩa – giới hạn dung lượng/số tệp mỗi người dùng được dùng",
+   "nhom": "Cài đặt hệ thống tệp",
+   "viDu": "To prevent people from hogging too much disk space, multiuser operating systems often provide a mechanism for enforcing a limit on individual user space. What do we call this mechanism? — Disk Quota",
+   "viDuNghia": "Để ngăn người dùng chiếm dụng quá nhiều dung lượng đĩa, các hệ điều hành đa người dùng thường cung cấp cơ chế giới hạn không gian đĩa của từng người dùng. Cơ chế này được gọi là gì? — Hạn ngạch đĩa (Disk Quota)"
+  },
+  {
+   "chu": "block cache",
+   "doc": "/blɑːk kæʃ/",
+   "nghia": "cache khối (buffer cache) – giữ trong RAM các khối đĩa hay dùng để đỡ phải đọc đĩa",
+   "nhom": "Cài đặt hệ thống tệp",
+   "viDu": "The block cache keeps frequently used disk blocks in memory.",
+   "viDuNghia": "Cache khối giữ các khối đĩa hay dùng trong bộ nhớ."
+  },
+  {
+   "chu": "read ahead",
+   "doc": "/ˌriːd əˈhed/",
+   "nghia": "đọc trước – đọc sẵn các khối kế tiếp vào cache trước khi được yêu cầu",
+   "nhom": "Cài đặt hệ thống tệp",
+   "viDu": "Critically evaluate the effectiveness of caching and read-ahead techniques in file-system performance enhancement, highlighting their respective contributions and potential limitations.",
+   "viDuNghia": "Đánh giá hiệu quả của kỹ thuật caching và read-ahead trong việc cải thiện hiệu năng hệ thống tệp, nêu rõ đóng góp và hạn chế của từng kỹ thuật."
+  },
+  {
+   "chu": "defragmentation",
+   "doc": "/ˌdiːfræɡmenˈteɪʃn/",
+   "nghia": "chống phân mảnh – dồn các khối của tệp lại liền nhau",
+   "nhom": "Cài đặt hệ thống tệp",
+   "viDu": "Why is defragmenting a Solid-State Drive (SSD) generally not recommended?",
+   "viDuNghia": "Vì sao việc chống phân mảnh (defragment) ổ SSD nói chung không được khuyến khích?"
+  },
+  {
+   "chu": "extent",
+   "doc": "/ɪkˈstent/",
+   "nghia": "extent – một dải khối đĩa liền nhau thuộc về một tệp",
+   "nhom": "Cài đặt hệ thống tệp",
+   "viDu": "Which ISO 9660 level allows a file to consist of several extents (i.e., noncontiguous segments) by partially relaxing the contiguous file requirement?",
+   "viDuNghia": "Mức (level) nào của ISO 9660 cho phép một file gồm nhiều extent (tức các đoạn không liên tục) bằng cách nới lỏng một phần yêu cầu file phải liên tục?"
+  },
+  {
+   "chu": "mount",
+   "doc": "/maʊnt/",
+   "nghia": "gắn kết – nối một hệ thống tệp vào cây thư mục để dùng",
+   "nhom": "Cài đặt hệ thống tệp",
+   "viDu": "What happens when a USB stick is mounted on the directory /usr/ast/backup in UNIX?",
+   "viDuNghia": "Điều gì xảy ra khi một USB được mount vào thư mục /usr/ast/backup trong UNIX?"
+  },
+  {
+   "chu": "disk block",
+   "doc": "/dɪsk blɑːk/",
+   "nghia": "khối đĩa – đơn vị cấp phát chỗ trên đĩa cho tệp",
+   "nhom": "Cài đặt hệ thống tệp",
+   "viDu": "The disk blocks in a partition that contains the top of the file system tree is called:",
+   "viDuNghia": "Khối đĩa trong một phân vùng chứa đỉnh của cây hệ thống file được gọi là:"
+  },
+  {
+   "chu": "ISO 9660",
+   "doc": "/ˌaɪ es ˈoʊ ˌnaɪn sɪks sɪks ˈoʊ/",
+   "nghia": "ISO 9660 – chuẩn hệ thống tệp của đĩa CD-ROM",
+   "nhom": "Cài đặt hệ thống tệp",
+   "viDu": "ISO 9660 is the standard file system for CD-ROMs.",
+   "viDuNghia": "ISO 9660 là hệ thống tệp chuẩn của đĩa CD-ROM."
+  },
+  {
+   "chu": "disk space",
+   "doc": "/dɪsk speɪs/",
+   "nghia": "dung lượng đĩa – chỗ chứa trên đĩa",
+   "nhom": "Cài đặt hệ thống tệp",
+   "viDu": "Which of the following is true about the block size in disk space management",
+   "viDuNghia": "Phát biểu nào sau đây đúng về kích thước khối (block size) trong quản lý không gian đĩa"
+  },
+  {
+   "chu": "block",
+   "doc": "/blɑːk/",
+   "nghia": "khối – (đĩa, hệ thống tệp) đơn vị lưu trữ cố định trên đĩa · (lập trình) khối lệnh trong cặp ngoặc nhọn { }",
+   "nhom": "Cài đặt hệ thống tệp",
+   "viDu": "Which of the following is not a well-known technique for organizing the physical storage blocks for a file?",
+   "viDuNghia": "Kỹ thuật nào sau đây KHÔNG phải là kỹ thuật phổ biến để tổ chức các khối lưu trữ vật lý cho một tệp?"
+  },
+  {
+   "chu": "New Technology File System",
+   "nghia": "NTFS – hệ thống tệp chính của Windows: hỗ trợ tệp lớn, phân quyền, ghi nhật ký",
+   "nhom": "Cài đặt hệ thống tệp",
+   "viDu": "NTFS replaced FAT-32 as the main file system of Windows.",
+   "viDuNghia": "NTFS thay FAT-32 làm hệ thống tệp chính của Windows."
+  },
+  {
+   "chu": "block device",
+   "doc": "/blɑːk dɪˈvaɪs/",
+   "nghia": "thiết bị khối – lưu theo khối cỡ cố định, mỗi khối có địa chỉ (đĩa)",
+   "nhom": "Phần mềm vào/ra",
+   "viDu": "An example of an I/O block device is ____.",
+   "viDuNghia": "Một ví dụ về thiết bị I/O dạng khối (block device) là ____."
+  },
+  {
+   "chu": "character device",
+   "doc": "/ˈkærəktər dɪˈvaɪs/",
+   "nghia": "thiết bị ký tự – nhận/phát một dòng ký tự, không có địa chỉ, không seek được (bàn phím, chuột)",
+   "nhom": "Phần mềm vào/ra",
+   "viDu": "An example of an I/O character device is ____.",
+   "viDuNghia": "Một ví dụ về thiết bị I/O dạng ký tự (character device) là ____."
+  },
+  {
+   "chu": "device independence",
+   "doc": "/dɪˈvaɪs ˌɪndɪˈpendəns/",
+   "nghia": "độc lập thiết bị – viết chương trình dùng được với mọi thiết bị mà không cần biết trước loại nào",
+   "nhom": "Phần mềm vào/ra",
+   "viDu": "Which of the following is NOT a responsibility of Device-Independent I/O Software layer?",
+   "viDuNghia": "Điều nào sau đây KHÔNG phải là trách nhiệm của tầng phần mềm I/O độc lập thiết bị (Device-Independent I/O Software)?"
+  },
+  {
+   "chu": "uniform naming",
+   "doc": "/ˈjuːnɪfɔːrm ˈneɪmɪŋ/",
+   "nghia": "đặt tên thống nhất – tên tệp/thiết bị không phụ thuộc vào thiết bị cụ thể",
+   "nhom": "Phần mềm vào/ra",
+   "viDu": "What is the goal of uniform naming in the context of file and device management?",
+   "viDuNghia": "Mục tiêu của việc đặt tên đồng nhất (uniform naming) trong quản lý tệp và thiết bị là gì?"
+  },
+  {
+   "chu": "error handling",
+   "doc": "/ˈerər ˈhændlɪŋ/",
+   "nghia": "xử lý lỗi – nên xử lý càng gần phần cứng càng tốt",
+   "nhom": "Phần mềm vào/ra",
+   "viDu": "Error handling should be done as close to the hardware as possible.",
+   "viDuNghia": "Việc xử lý lỗi nên được làm càng gần phần cứng càng tốt."
+  },
+  {
+   "chu": "spooling",
+   "doc": "/ˈspuːlɪŋ/",
+   "nghia": "spooling – xếp việc vào hàng đợi trên đĩa cho thiết bị dùng riêng như máy in",
+   "nhom": "Phần mềm vào/ra",
+   "viDu": "Which deadlock condition does \"Spool everything\" attack?",
+   "viDuNghia": "\"Spool everything\" tấn công điều kiện deadlock nào?"
+  },
+  {
+   "chu": "I/O port",
+   "doc": "/ˌaɪ ˈoʊ pɔːrt/",
+   "nghia": "cổng I/O – số địa chỉ gán cho thanh ghi điều khiển của thiết bị",
+   "nhom": "Phần mềm vào/ra",
+   "viDu": "In separating I/O and memory space system, the set of I/O ports form the I/O port space. This allows:",
+   "viDuNghia": "Trong hệ thống tách biệt không gian I/O và không gian bộ nhớ, tập hợp các cổng I/O tạo thành không gian cổng I/O. Điều này cho phép:"
+  },
+  {
+   "chu": "interrupt vector",
+   "doc": "/ˈɪntərʌpt ˈvektər/",
+   "nghia": "vector ngắt – bảng chứa địa chỉ trình xử lý ứng với từng loại ngắt",
+   "nhom": "Phần mềm vào/ra",
+   "viDu": "What is interrupt vector?",
+   "viDuNghia": "Interrupt vector là gì?"
+  },
+  {
+   "chu": "precise interrupt",
+   "doc": "/prɪˈsaɪs ˈɪntərʌpt/",
+   "nghia": "ngắt chính xác – ngắt để máy ở trạng thái xác định rõ: mọi lệnh trước PC đã xong, sau PC chưa chạy",
+   "nhom": "Phần mềm vào/ra",
+   "viDu": "An interrupt that leaves the machine in well-defined state is called a precise interrupt",
+   "viDuNghia": "Một ngắt để lại máy tính ở trạng thái xác định rõ ràng được gọi là precise interrupt"
+  },
+  {
+   "chu": "thin client",
+   "doc": "/θɪn ˈklaɪənt/",
+   "nghia": "máy khách mỏng – máy chỉ lo hiển thị, mọi xử lý nằm ở máy chủ",
+   "nhom": "Phần mềm vào/ra",
+   "viDu": "In a thin client setup, where is most of the software and data processing performed?",
+   "viDuNghia": "Trong mô hình thin client, phần lớn việc xử lý phần mềm và dữ liệu được thực hiện ở đâu?"
+  },
+  {
+   "chu": "dedicated device",
+   "doc": "/ˈdedɪkeɪtɪd dɪˈvaɪs/",
+   "nghia": "thiết bị dùng riêng – mỗi lúc chỉ một tiến trình dùng được (máy in, băng từ)",
+   "nhom": "Phần mềm vào/ra",
+   "viDu": "__________ is the act of allowing only one process to have access to a dedicated resource.",
+   "viDuNghia": "__________ là hành động chỉ cho phép một tiến trình duy nhất được truy cập vào một tài nguyên dành riêng."
+  },
+  {
+   "chu": "device register",
+   "doc": "/dɪˈvaɪs ˈredʒɪstər/",
+   "nghia": "thanh ghi thiết bị – thanh ghi của bộ điều khiển mà HĐH đọc/ghi để ra lệnh và xem trạng thái thiết bị",
+   "nhom": "Phần mềm vào/ra",
+   "viDu": "Which approach is used in order to CPU communicate with the control registers of the I/O device?",
+   "viDuNghia": "Cách tiếp cận nào được dùng để CPU giao tiếp với các thanh ghi điều khiển của thiết bị I/O?"
+  },
+  {
+   "chu": "uniform interfacing",
+   "doc": "/ˈjuːnɪfɔːrm ˈɪntərfeɪsɪŋ/",
+   "nghia": "giao tiếp thống nhất – mọi trình điều khiển thiết bị đều dùng cùng một kiểu giao diện với HĐH",
+   "nhom": "Phần mềm vào/ra",
+   "viDu": "Which I/O software layer is primarily responsible for handling device-specific details while maintaining a uniform interface for the upper layers?",
+   "viDuNghia": "Lớp phần mềm I/O nào chịu trách nhiệm chính xử lý các chi tiết đặc thù của thiết bị trong khi vẫn giữ giao diện thống nhất cho các lớp trên?"
+  },
+  {
+   "chu": "virtualization",
+   "doc": "/ˌvɜːrtʃuələˈzeɪʃn/",
+   "nghia": "ảo hoá – chạy nhiều máy ảo, mỗi máy một HĐH, trên cùng một máy thật",
+   "nhom": "Phần mềm vào/ra",
+   "viDu": "Evaluate the role of memory virtualization in optimizing resource allocation in a virtualized environment. How does this technique impact overall system performance?",
+   "viDuNghia": "Đánh giá vai trò của ảo hóa bộ nhớ (memory virtualization) trong việc tối ưu cấp phát tài nguyên ở môi trường ảo hóa. Kỹ thuật này ảnh hưởng thế nào tới hiệu năng tổng thể của hệ thống?"
+  },
+  {
+   "chu": "graphical user interface",
+   "nghia": "giao diện đồ hoạ (GUI) – làm việc bằng cửa sổ, biểu tượng, menu và con trỏ chuột",
+   "nhom": "Phần mềm vào/ra",
+   "viDu": "A graphical user interface lets users work with windows, icons, menus and a mouse pointer.",
+   "viDuNghia": "Giao diện đồ hoạ cho người dùng làm việc với cửa sổ, biểu tượng, menu và con trỏ chuột."
+  },
+  {
+   "chu": "disk arm",
+   "doc": "/dɪsk ɑːrm/",
+   "nghia": "tay đọc đĩa – cần mang đầu đọc di chuyển vào/ra giữa các cylinder",
+   "nhom": "Đĩa & đồng hồ",
+   "viDu": "The disk arm moves the heads to the requested cylinder.",
+   "viDuNghia": "Tay đọc đĩa đưa các đầu đọc tới cylinder được yêu cầu."
+  },
+  {
+   "chu": "disk arm scheduling",
+   "nghia": "lập lịch tay đọc đĩa – sắp thứ tự phục vụ các yêu cầu đọc/ghi để tay đọc di chuyển ít nhất",
+   "nhom": "Đĩa & đồng hồ",
+   "viDu": "In disk scheduling, which algorithm is considered the fairest but may lead to high seek times?",
+   "viDuNghia": "Trong lập lịch đĩa, giải thuật nào được coi là công bằng nhất nhưng có thể dẫn đến thời gian seek cao?"
+  },
+  {
+   "chu": "shortest seek first",
+   "nghia": "tìm ngắn nhất trước (SSF/SSTF) – phục vụ yêu cầu gần vị trí đầu đọc nhất",
+   "nhom": "Đĩa & đồng hồ",
+   "viDu": "Shortest seek first always serves the request closest to the current head position.",
+   "viDuNghia": "SSF luôn phục vụ yêu cầu gần vị trí đầu đọc hiện tại nhất."
+  },
+  {
+   "chu": "elevator algorithm",
+   "doc": "/ˈelɪveɪtər ˈælɡərɪðəm/",
+   "nghia": "thuật toán thang máy (SCAN) – tay đọc đi hết một chiều rồi mới quay ngược lại",
+   "nhom": "Đĩa & đồng hồ",
+   "viDu": "The elevator algorithm keeps moving the arm in one direction until there are no more requests.",
+   "viDuNghia": "Thuật toán thang máy cho tay đọc đi tiếp một chiều tới khi hết yêu cầu ở chiều đó."
+  },
+  {
+   "chu": "cylinder skew",
+   "doc": "/ˈsɪlɪndər skjuː/",
+   "nghia": "độ lệch cylinder – đặt sector 0 của rãnh sau lệch đi để đọc liên tục khi chuyển rãnh",
+   "nhom": "Đĩa & đồng hồ",
+   "viDu": "How much cylinder skew is needed for a 3600-RPM (rotate per minute) disk with the track-to-track seek time of 1 msec? The disk has 200 sectors of 512 bytes on each track.",
+   "viDuNghia": "Cần bao nhiêu độ lệch trụ (cylinder skew) cho một đĩa quay 3600 vòng/phút, với thời gian tìm kiếm giữa hai track liền kề (track-to-track seek time) là 1 msec? Đĩa có 200 sector, mỗi sector 512 byte trên mỗi track."
+  },
+  {
+   "chu": "interleaving",
+   "doc": "/ˌɪntərˈliːvɪŋ/",
+   "nghia": "xen kẽ sector – đánh số sector cách quãng để bộ điều khiển kịp chép dữ liệu",
+   "nhom": "Đĩa & đồng hồ",
+   "viDu": "Interleaving gives the controller time to copy its buffer between sectors.",
+   "viDuNghia": "Xen kẽ sector cho bộ điều khiển thời gian chép bộ đệm giữa các sector."
+  },
+  {
+   "chu": "low-level format",
+   "doc": "/ˌloʊ ˈlevl ˈfɔːrmæt/",
+   "nghia": "định dạng cấp thấp – ghi sẵn các rãnh và sector lên đĩa trắng",
+   "nhom": "Đĩa & đồng hồ",
+   "viDu": "Before the disk can be used, each platter must receive a low-level format. What is the sector after forming?",
+   "viDuNghia": "Trước khi đĩa có thể sử dụng, mỗi mặt đĩa (platter) phải được định dạng mức thấp (low-level format). Cấu trúc sector sau khi định dạng là gì?"
+  },
+  {
+   "chu": "stable storage",
+   "doc": "/ˈsteɪbl ˈstɔːrɪdʒ/",
+   "nghia": "lưu trữ ổn định – dùng hai đĩa để dữ liệu hoặc được ghi đúng, hoặc giữ nguyên bản cũ",
+   "nhom": "Đĩa & đồng hồ",
+   "viDu": "Which operation in stable storage involves writing and verifying a block on both drives until it is successfully written and verified?",
+   "viDuNghia": "Thao tác nào trong lưu trữ ổn định (stable storage) liên quan đến việc ghi và kiểm tra một khối trên cả hai ổ đĩa cho đến khi ghi và kiểm tra thành công?"
+  },
+  {
+   "chu": "clock tick",
+   "doc": "/klɑːk tɪk/",
+   "nghia": "nhịp đồng hồ – mỗi lần đồng hồ phát ngắt định kỳ",
+   "nhom": "Đĩa & đồng hồ",
+   "viDu": "At every clock tick, the clock driver updates the time of day.",
+   "viDuNghia": "Ở mỗi nhịp đồng hồ, trình điều khiển đồng hồ cập nhật giờ trong ngày."
+  },
+  {
+   "chu": "watchdog timer",
+   "doc": "/ˈwɔːtʃdɔːɡ ˈtaɪmər/",
+   "nghia": "bộ định thời canh gác – hết giờ thì báo động/khởi động lại việc bị treo",
+   "nhom": "Đĩa & đồng hồ",
+   "viDu": "What is the main function of a watchdog timer in an operating system?",
+   "viDuNghia": "Chức năng chính của watchdog timer trong hệ điều hành là gì?"
+  },
+  {
+   "chu": "RAID level",
+   "doc": "/reɪd ˈlevl/",
+   "nghia": "mức RAID – các kiểu ghép đĩa RAID 0 đến RAID 6, khác nhau ở tốc độ và độ an toàn",
+   "nhom": "Đĩa & đồng hồ",
+   "viDu": "RAID level ____ works worst with operating systems that habitually ask for data one sector at a time",
+   "viDuNghia": "Mức RAID ____ hoạt động kém nhất với các hệ điều hành thường xuyên yêu cầu dữ liệu từng sector một"
+  },
+  {
+   "chu": "programmable clock",
+   "doc": "/ˈproʊɡræməbl klɑːk/",
+   "nghia": "đồng hồ lập trình được – gồm thạch anh, bộ đếm và thanh ghi giữ; phát ngắt sau khoảng thời gian đặt trước",
+   "nhom": "Đĩa & đồng hồ",
+   "viDu": "A computer uses a programmable clock in square-wave mode. If 500 MHz crystal is used, what value of the holding register to achieve a clock resolution of 10 msec (Clock tick)?",
+   "viDuNghia": "Một máy tính dùng đồng hồ lập trình được ở chế độ sóng vuông. Nếu dùng thạch anh 500 MHz, giá trị của thanh ghi giữ (holding register) cần thiết để đạt độ phân giải đồng hồ 10 msec (một tick) là bao nhiêu?"
+  },
+  {
+   "chu": "error-correcting code",
+   "doc": "/ˌerər kəˈrektɪŋ koʊd/",
+   "nghia": "mã sửa lỗi (ECC) – các bit thêm vào mỗi sector để phát hiện và sửa lỗi đọc",
+   "nhom": "Đĩa & đồng hồ",
+   "viDu": "Each disk sector stores an error-correcting code (ECC) after the data.",
+   "viDuNghia": "Mỗi sector đĩa lưu một mã sửa lỗi (ECC) sau phần dữ liệu."
+  },
+  {
+   "chu": "cylinder",
+   "doc": "/ˈsɪlɪndər/",
+   "nghia": "trụ (cylinder) – tập các rãnh (track) cùng vị trí trên mọi mặt đĩa; seek time là thời gian dời đầu đọc tới đúng cylinder",
+   "nhom": "Đĩa & đồng hồ",
+   "viDu": "What is the time it takes to move the arm to the proper cylinder called?",
+   "viDuNghia": "Thời gian để dời tay đọc (arm) tới đúng cylinder được gọi là gì?"
+  },
+  {
+   "chu": "disk",
+   "doc": "/dɪsk/",
+   "nghia": "đĩa – thiết bị lưu trữ khối (đĩa từ, SSD); HĐH lo phân vùng, cấp phát khối và lập lịch tay đọc",
+   "nhom": "Đĩa & đồng hồ",
+   "viDu": "Structure of a disk drive consists of ____.",
+   "viDuNghia": "Cấu trúc của một ổ đĩa gồm ____."
+  },
+  {
+   "chu": "transfer time",
+   "doc": "/ˈtrænsfɜːr taɪm/",
+   "nghia": "thời gian truyền – thời gian đọc/ghi dữ liệu khi đầu đọc đã tới đúng sector; truy cập đĩa = seek + trễ quay + truyền",
+   "nhom": "Đĩa & đồng hồ",
+   "viDu": "Disk access time is the sum of seek time, rotational delay and transfer time.",
+   "viDuNghia": "Thời gian truy cập đĩa bằng tổng thời gian tìm, độ trễ quay và thời gian truyền."
+  },
+  {
+   "chu": "protection",
+   "doc": "/prəˈtekʃn/",
+   "nghia": "bảo vệ – cơ chế kiểm soát ai được truy cập tài nguyên nào",
+   "nhom": "Bảo vệ & bảo mật",
+   "viDu": "Which file attribute specifies who can access the file and in what way? — Protection",
+   "viDuNghia": "Thuộc tính tệp nào chỉ định ai có thể truy cập tệp và theo cách nào? — Bảo vệ (Protection)"
+  }
+ ]
+}

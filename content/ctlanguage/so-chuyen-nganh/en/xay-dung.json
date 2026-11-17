@@ -22,7 +22,7 @@
     { "chu": "project owner", "nghia": "chủ đầu tư", "nhom": "Công trường & nhân sự", "viDu": "The project owner wants to visit the site on Friday.", "viDuNghia": "Chủ đầu tư muốn thăm công trường vào thứ Sáu." },
     { "chu": "site inspection", "nghia": "kiểm tra hiện trường", "nhom": "Công trường & nhân sự", "viDu": "The site inspection found three problems.", "viDuNghia": "Đợt kiểm tra hiện trường phát hiện ba vấn đề." },
     { "chu": "progress", "doc": "/ˈprɑːɡres/", "nghia": "tiến độ (thi công)", "nhom": "Công trường & nhân sự", "viDu": "Please send a progress report every week.", "viDuNghia": "Gửi báo cáo tiến độ hằng tuần." },
-    { "chu": "schedule", "doc": "/ˈskedʒuːl/", "nghia": "tiến độ, lịch thi công", "nhom": "Công trường & nhân sự", "viDu": "The rain put us behind schedule.", "viDuNghia": "Mưa làm chúng ta chậm tiến độ." },
+    { "chu": "completion date", "doc": "/kəmˈpliːʃn deɪt/", "nghia": "ngày hoàn thành (công trình)", "nhom": "Công trường & nhân sự", "viDu": "The rain may push back the completion date.", "viDuNghia": "Mưa có thể làm lùi ngày hoàn thành công trình." },
 
     { "chu": "concrete", "doc": "/ˈkɑːŋkriːt/", "nghia": "bê tông", "nhom": "Vật liệu", "viDu": "The concrete truck arrives at 7 a.m.", "viDuNghia": "Xe bê tông đến lúc 7 giờ sáng." },
     { "chu": "cement", "doc": "/sɪˈment/", "nghia": "xi măng", "nhom": "Vật liệu", "viDu": "Keep the cement bags dry.", "viDuNghia": "Giữ bao xi măng khô ráo." },

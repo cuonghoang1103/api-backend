@@ -1,0 +1,546 @@
+{
+ "ma": "iot102-1",
+ "nn": "en",
+ "ten": "IOT102 · 1. Khái niệm IoT, kết nối, dữ liệu, bảo mật",
+ "moTa": "Môn Internet vạn vật (IOT102), phần 1: khái niệm và đặc điểm IoT, kiến trúc nhiều tầng, công nghệ kết nối không dây và giao thức, dữ liệu lớn – đám mây, bảo mật và ứng dụng. Từ lấy từ đề FE thật; câu ví dụ là câu hỏi thật trong đề.",
+ "bieuTuong": "sensor.fill",
+ "thuTu": -962,
+ "tu": [
+  {
+   "chu": "Internet of Things",
+   "nghia": "Internet vạn vật (IoT) – mạng các đồ vật gắn cảm biến, phần mềm, tự kết nối và trao đổi dữ liệu qua Internet",
+   "nhom": "Khái niệm & đặc điểm",
+   "viDu": "What are the three dominant technological forces which are accelerating the Internet of Things?",
+   "viDuNghia": "Ba lực lượng công nghệ chính thúc đẩy IoT là gì?"
+  },
+  {
+   "chu": "machine-to-machine",
+   "doc": "/məˌʃiːn tə məˈʃiːn/",
+   "nghia": "máy với máy (M2M) – các thiết bị tự trao đổi dữ liệu với nhau, không cần con người",
+   "nhom": "Khái niệm & đặc điểm",
+   "viDu": "MQTT is a machine-to-machine (M2M) and Internet of Things protocol.",
+   "viDuNghia": "MQTT là giao thức máy với máy (M2M) và Internet vạn vật."
+  },
+  {
+   "chu": "connectivity",
+   "doc": "/ˌkɑːnekˈtɪvəti/",
+   "nghia": "khả năng kết nối – thiết bị nối được vào mạng và với nhau",
+   "nhom": "Khái niệm & đặc điểm",
+   "viDu": "Connectivity empowers IoT by bringing together everyday objects.",
+   "viDuNghia": "Khả năng kết nối tạo sức mạnh cho IoT bằng cách nối các đồ vật hằng ngày lại với nhau."
+  },
+  {
+   "chu": "heterogeneity",
+   "doc": "/ˌhetərədʒəˈniːəti/",
+   "nghia": "tính không đồng nhất – thiết bị IoT chạy trên nhiều nền tảng phần cứng và mạng khác nhau",
+   "nhom": "Khái niệm & đặc điểm",
+   "viDu": "Heterogeneity is one of the key characteristics of IoT: devices have different hardware platforms.",
+   "viDuNghia": "Tính không đồng nhất là một đặc điểm chính của IoT: các thiết bị có nền tảng phần cứng khác nhau."
+  },
+  {
+   "chu": "dynamic nature",
+   "doc": "/daɪˈnæmɪk ˈneɪtʃər/",
+   "nghia": "tính thay đổi liên tục – trạng thái thiết bị (ngủ/thức, nối/ngắt, vị trí) luôn biến động",
+   "nhom": "Khái niệm & đặc điểm",
+   "viDu": "Because of the dynamic nature of IoT, the state and number of devices change all the time.",
+   "viDuNghia": "Do tính thay đổi liên tục của IoT, trạng thái và số lượng thiết bị luôn biến động."
+  },
+  {
+   "chu": "enormous scale",
+   "doc": "/ɪˈnɔːrməs skeɪl/",
+   "nghia": "quy mô khổng lồ – số thiết bị cần quản lý lớn hơn nhiều lần Internet hiện nay",
+   "nhom": "Khái niệm & đặc điểm",
+   "viDu": "The enormous scale of IoT means billions of devices must be managed.",
+   "viDuNghia": "Quy mô khổng lồ của IoT nghĩa là phải quản lý hàng tỉ thiết bị."
+  },
+  {
+   "chu": "unique identity",
+   "doc": "/juˈniːk aɪˈdentəti/",
+   "nghia": "định danh duy nhất – mỗi thiết bị IoT có một mã/địa chỉ riêng",
+   "nhom": "Khái niệm & đặc điểm",
+   "viDu": "What is used to uniquely identify devices connected to the Internet?",
+   "viDuNghia": "Cái gì dùng để định danh duy nhất các thiết bị kết nối Internet?"
+  },
+  {
+   "chu": "ubiquitous",
+   "doc": "/juːˈbɪkwɪtəs/",
+   "nghia": "có ở khắp nơi – (ubiquitous computing: máy tính hiện diện mọi lúc mọi nơi)",
+   "nhom": "Khái niệm & đặc điểm",
+   "viDu": "IoT is a paradigm that involves ubiquitous presence in the environment.",
+   "viDuNghia": "IoT là mô hình liên quan tới sự hiện diện khắp nơi trong môi trường."
+  },
+  {
+   "chu": "physical object",
+   "doc": "/ˈfɪzɪkl ˈɑːbdʒekt/",
+   "nghia": "vật thể vật lý – đồ vật thật ngoài đời được gắn cảm biến để nối mạng",
+   "nhom": "Khái niệm & đặc điểm",
+   "viDu": "In IoT, everyday physical objects are given sensors and a network connection.",
+   "viDuNghia": "Trong IoT, các vật thể vật lý hằng ngày được gắn cảm biến và kết nối mạng."
+  },
+  {
+   "chu": "context awareness",
+   "doc": "/ˈkɑːntekst əˈwernəs/",
+   "nghia": "nhận biết ngữ cảnh – thiết bị biết tình huống xung quanh (vị trí, thời gian, người dùng) để phản ứng phù hợp",
+   "nhom": "Khái niệm & đặc điểm",
+   "viDu": "Context awareness lets a device react to its location, the time and the user's activity.",
+   "viDuNghia": "Nhận biết ngữ cảnh cho phép thiết bị phản ứng theo vị trí, thời gian và hoạt động của người dùng."
+  },
+  {
+   "chu": "perception layer",
+   "doc": "/pərˈsepʃn ˈleɪər/",
+   "nghia": "tầng cảm nhận – tầng dưới cùng của kiến trúc IoT: cảm biến và cơ cấu chấp hành thu thập dữ liệu",
+   "nhom": "Kiến trúc & nền tảng",
+   "viDu": "The perception layer contains the sensors and actuators that interact with the physical world.",
+   "viDuNghia": "Tầng cảm nhận chứa các cảm biến và cơ cấu chấp hành tương tác với thế giới vật lý."
+  },
+  {
+   "chu": "gateway",
+   "doc": "/ˈɡeɪtweɪ/",
+   "nghia": "cổng nối (gateway) – thiết bị trung gian gom dữ liệu từ cảm biến rồi chuyển lên mạng/đám mây",
+   "nhom": "Kiến trúc & nền tảng",
+   "viDu": "What is the role of a gateway in an IoT network, and how does it relate to routing?",
+   "viDuNghia": "Vai trò của gateway trong mạng IoT và liên quan tới routing thế nào?"
+  },
+  {
+   "chu": "edge computing",
+   "doc": "/edʒ kəmˈpjuːtɪŋ/",
+   "nghia": "điện toán biên – xử lý dữ liệu ngay tại hoặc gần thiết bị, không gửi hết lên đám mây",
+   "nhom": "Kiến trúc & nền tảng",
+   "viDu": "Edge computing processes sensor data close to the device instead of in the cloud.",
+   "viDuNghia": "Điện toán biên xử lý dữ liệu cảm biến ngay gần thiết bị thay vì trên đám mây."
+  },
+  {
+   "chu": "fog computing",
+   "doc": "/fɔːɡ kəmˈpjuːtɪŋ/",
+   "nghia": "điện toán sương mù – lớp xử lý trung gian nằm giữa thiết bị và đám mây",
+   "nhom": "Kiến trúc & nền tảng",
+   "viDu": "Which of the following is an example of a fog computing concept in IoT?",
+   "viDuNghia": "Cái nào là ví dụ khái niệm fog computing trong IoT?"
+  },
+  {
+   "chu": "cloud computing",
+   "doc": "/klaʊd kəmˈpjuːtɪŋ/",
+   "nghia": "điện toán đám mây – thuê tài nguyên tính toán và lưu trữ qua Internet",
+   "nhom": "Kiến trúc & nền tảng",
+   "viDu": "When integrating IoT devices with cloud platforms, what is the main programming challenge related to data flow?",
+   "viDuNghia": "Khi tích hợp thiết bị IoT với nền tảng cloud, thách thức lập trình chính liên quan tới luồng dữ liệu là gì?"
+  },
+  {
+   "chu": "platform",
+   "doc": "/ˈplætfɔːrm/",
+   "nghia": "nền tảng – hệ thống phần mềm/phần cứng làm nền để xây ứng dụng IoT",
+   "nhom": "Kiến trúc & nền tảng",
+   "viDu": "Cloud computing is a computing platform where people can access applications and computer resources as a service from anywhere.",
+   "viDuNghia": "Điện toán đám mây là nền tảng nơi người dùng truy cập ứng dụng và tài nguyên máy tính dưới dạng dịch vụ, từ bất cứ đâu."
+  },
+  {
+   "chu": "integration",
+   "doc": "/ˌɪntɪˈɡreɪʃn/",
+   "nghia": "tích hợp – ghép các hệ thống, thiết bị lại để chạy chung",
+   "nhom": "Kiến trúc & nền tảng",
+   "viDu": "Integration of devices from different vendors is a major challenge in IoT.",
+   "viDuNghia": "Tích hợp thiết bị của nhiều hãng khác nhau là một thách thức lớn của IoT."
+  },
+  {
+   "chu": "device management",
+   "doc": "/dɪˈvaɪs ˈmænɪdʒmənt/",
+   "nghia": "quản lý thiết bị – theo dõi, cấu hình, cập nhật các thiết bị IoT từ xa",
+   "nhom": "Kiến trúc & nền tảng",
+   "viDu": "Device management includes updating the software of IoT devices remotely.",
+   "viDuNghia": "Quản lý thiết bị gồm cả việc cập nhật phần mềm cho thiết bị IoT từ xa."
+  },
+  {
+   "chu": "Bluetooth",
+   "doc": "/ˈbluːtuːθ/",
+   "nghia": "Bluetooth – kết nối không dây tầm ngắn, tốn ít điện, băng tần 2,4 GHz",
+   "nhom": "Kết nối & giao thức",
+   "viDu": "To send and receive data between Arduino and the Bluetooth HC-06 module, how should the pins be connected?",
+   "viDuNghia": "Để gửi/nhận dữ liệu giữa Arduino và module Bluetooth HC-06, nối các chân thế nào?"
+  },
+  {
+   "chu": "Wi-Fi",
+   "doc": "/ˈwaɪ faɪ/",
+   "nghia": "Wi-Fi – mạng LAN không dây chuẩn IEEE 802.11",
+   "nhom": "Kết nối & giao thức",
+   "viDu": "What type of network does the Wi-Fi shield allow the Arduino to connect to?",
+   "viDuNghia": "Wi-Fi shield cho phép Arduino kết nối tới loại mạng nào?"
+  },
+  {
+   "chu": "Zigbee",
+   "doc": "/ˈzɪɡbiː/",
+   "nghia": "Zigbee – giao thức không dây tốc độ thấp, tốn rất ít điện, nối theo mạng lưới (IEEE 802.15.4)",
+   "nhom": "Kết nối & giao thức",
+   "viDu": "Zigbee is a low-power wireless protocol often used in smart homes.",
+   "viDuNghia": "Zigbee là giao thức không dây tốn ít điện, thường dùng trong nhà thông minh."
+  },
+  {
+   "chu": "LoRa",
+   "doc": "/ˈlɔːrə/",
+   "nghia": "LoRa – công nghệ không dây tầm xa, công suất thấp cho thiết bị IoT",
+   "nhom": "Kết nối & giao thức",
+   "viDu": "LoRa can send small amounts of data over several kilometers using very little power.",
+   "viDuNghia": "LoRa gửi được lượng nhỏ dữ liệu xa vài kilômét mà tốn rất ít điện."
+  },
+  {
+   "chu": "near field communication",
+   "nghia": "giao tiếp trường gần (NFC) – trao đổi dữ liệu khi hai thiết bị cách nhau vài centimet",
+   "nhom": "Kết nối & giao thức",
+   "viDu": "Near field communication (NFC) is used for contactless payment with a phone.",
+   "viDuNghia": "Giao tiếp trường gần (NFC) được dùng để thanh toán không chạm bằng điện thoại."
+  },
+  {
+   "chu": "radio frequency identification",
+   "nghia": "nhận dạng qua sóng vô tuyến (RFID) – đọc thẻ gắn trên đồ vật từ xa không cần tiếp xúc",
+   "nhom": "Kết nối & giao thức",
+   "viDu": "In a typical three-layer IoT architecture, which layer includes sensors, actuators, and RFID tags?",
+   "viDuNghia": "Trong kiến trúc IoT 3 lớp điển hình, lớp nào bao gồm cảm biến, cơ cấu chấp hành, và thẻ RFID?"
+  },
+  {
+   "chu": "cellular",
+   "doc": "/ˈseljələr/",
+   "nghia": "mạng di động – kết nối qua trạm phát sóng điện thoại (3G/4G/5G)",
+   "nhom": "Kết nối & giao thức",
+   "viDu": "__________ on a cellular network is expensive, especially with many IoT devices.",
+   "viDuNghia": "__________ trên mạng di động tốn kém, đặc biệt với nhiều thiết bị IoT."
+  },
+  {
+   "chu": "infrared",
+   "doc": "/ˌɪnfrəˈred/",
+   "nghia": "hồng ngoại – ánh sáng không nhìn thấy, dùng cho điều khiển từ xa và cảm biến",
+   "nhom": "Kết nối & giao thức",
+   "viDu": "Infrared remote controls use what to carry signals between the remote control and the device it controls?",
+   "viDuNghia": "Điều khiển từ xa hồng ngoại dùng gì để truyền tín hiệu giữa remote và thiết bị được điều khiển?"
+  },
+  {
+   "chu": "Message Queuing Telemetry Transport",
+   "nghia": "MQTT – giao thức nhắn tin nhẹ kiểu xuất bản/đăng ký, hợp với thiết bị yếu và mạng chập chờn",
+   "nhom": "Kết nối & giao thức",
+   "viDu": "What is MQTT primarily used for?",
+   "viDuNghia": "MQTT chủ yếu được dùng để làm gì?"
+  },
+  {
+   "chu": "Constrained Application Protocol",
+   "nghia": "CoAP – giao thức kiểu web gọn nhẹ chạy trên UDP cho thiết bị hạn chế tài nguyên",
+   "nhom": "Kết nối & giao thức",
+   "viDu": "The Constrained Application Protocol (CoAP) runs over UDP on small devices.",
+   "viDuNghia": "Giao thức CoAP chạy trên UDP ở các thiết bị nhỏ."
+  },
+  {
+   "chu": "lightweight",
+   "doc": "/ˈlaɪtweɪt/",
+   "nghia": "gọn nhẹ – tốn ít bộ nhớ, băng thông và điện",
+   "nhom": "Kết nối & giao thức",
+   "viDu": "Among the following protocols commonly used in IoT, which one is considered lightweight?",
+   "viDuNghia": "Giao thức nào được coi là nhẹ trong IoT?"
+  },
+  {
+   "chu": "telemetry",
+   "doc": "/təˈlemətri/",
+   "nghia": "đo từ xa – tự động thu số đo ở xa rồi truyền về nơi theo dõi",
+   "nhom": "Kết nối & giao thức",
+   "viDu": "MQTT stands for MQ Telemetry Transport.",
+   "viDuNghia": "MQTT là viết tắt của MQ Telemetry Transport."
+  },
+  {
+   "chu": "short-range",
+   "doc": "/ˌʃɔːrt ˈreɪndʒ/",
+   "nghia": "tầm ngắn – phạm vi phủ sóng nhỏ (vài mét tới vài chục mét)",
+   "nhom": "Kết nối & giao thức",
+   "viDu": "What technology is primarily used for short-range, contactless data exchange in payment systems?",
+   "viDuNghia": "Công nghệ nào chủ yếu dùng để trao đổi dữ liệu không tiếp xúc, tầm ngắn trong hệ thống thanh toán?"
+  },
+  {
+   "chu": "frequency band",
+   "doc": "/ˈfriːkwənsi bænd/",
+   "nghia": "băng tần – dải tần số dành cho một loại truyền vô tuyến (vd 2,4 GHz)",
+   "nhom": "Kết nối & giao thức",
+   "viDu": "Wi-Fi and Bluetooth both operate in the 2.4 GHz frequency band.",
+   "viDuNghia": "Wi-Fi và Bluetooth đều hoạt động ở băng tần 2,4 GHz."
+  },
+  {
+   "chu": "mesh network",
+   "doc": "/meʃ ˈnetwɜːrk/",
+   "nghia": "mạng lưới – các nút chuyển tiếp dữ liệu cho nhau, hỏng một nút vẫn còn đường khác",
+   "nhom": "Kết nối & giao thức",
+   "viDu": "What is a mesh network in the context of IoT?",
+   "viDuNghia": "Mạng mesh trong bối cảnh IoT là gì?"
+  },
+  {
+   "chu": "radio wave",
+   "doc": "/ˈreɪdioʊ weɪv/",
+   "nghia": "sóng vô tuyến – sóng điện từ dùng để truyền tin không dây",
+   "nhom": "Kết nối & giao thức",
+   "viDu": "Bluetooth uses low power radio waves in the frequency range of ____________?",
+   "viDuNghia": "Bluetooth dùng sóng radio công suất thấp trong dải tần số ____________?"
+  },
+  {
+   "chu": "low power",
+   "doc": "/ˌloʊ ˈpaʊər/",
+   "nghia": "công suất thấp – tốn ít điện, để thiết bị chạy pin được lâu",
+   "nhom": "Kết nối & giao thức",
+   "viDu": "Which protocol is suitable for IoT devices requiring low power and low data rate communication over a few kilometers?",
+   "viDuNghia": "Giao thức nào phù hợp cho thiết bị IoT cần công suất thấp, tốc độ dữ liệu thấp, phạm vi vài km?"
+  },
+  {
+   "chu": "wireless sensor network",
+   "nghia": "mạng cảm biến không dây (WSN) – nhiều nút cảm biến nhỏ nối không dây, cùng thu thập và chuyển dữ liệu về",
+   "nhom": "Kết nối & giao thức",
+   "viDu": "A wireless sensor network consists of many small nodes that collect and forward data.",
+   "viDuNghia": "Mạng cảm biến không dây gồm nhiều nút nhỏ thu thập và chuyển tiếp dữ liệu."
+  },
+  {
+   "chu": "data rate",
+   "doc": "/ˈdeɪtə reɪt/",
+   "nghia": "tốc độ dữ liệu – số bit truyền được mỗi giây",
+   "nhom": "Kết nối & giao thức",
+   "viDu": "What protocol is good for communication of IoT devices with restricted power and low data rates over a range of a few kilometres?",
+   "viDuNghia": "Giao thức nào phù hợp cho thiết bị IoT công suất hạn chế, tốc độ dữ liệu thấp, phạm vi vài km?"
+  },
+  {
+   "chu": "low-power wide-area network",
+   "nghia": "mạng diện rộng công suất thấp (LPWAN) – truyền rất xa, tốn rất ít điện, tốc độ thấp (LoRaWAN, Sigfox, NB-IoT)",
+   "nhom": "Kết nối & giao thức",
+   "viDu": "In the context of IoT and networking, what does the abbreviation LPWAN stand for?",
+   "viDuNghia": "Trong bối cảnh IoT và mạng, LPWAN là viết tắt của gì?"
+  },
+  {
+   "chu": "data transmission",
+   "doc": "/ˈdeɪtə trænzˈmɪʃn/",
+   "nghia": "truyền dữ liệu – gửi dữ liệu từ thiết bị này sang thiết bị khác",
+   "nhom": "Kết nối & giao thức",
+   "viDu": "Which protocol is most commonly used for small data transmission in IoT devices?",
+   "viDuNghia": "Giao thức nào thường dùng nhất để truyền dữ liệu nhỏ trong thiết bị IoT?"
+  },
+  {
+   "chu": "IPv6 over Low-Power Wireless Personal Area Networks",
+   "nghia": "6LoWPAN – cho thiết bị IoT công suất thấp (IEEE 802.15.4) gửi gói IPv6 đã nén phần đầu",
+   "nhom": "Kết nối & giao thức",
+   "viDu": "6LoWPAN lets tiny low-power sensors send IPv6 packets.",
+   "viDuNghia": "6LoWPAN cho các cảm biến nhỏ, tốn ít điện gửi được gói IPv6."
+  },
+  {
+   "chu": "big data",
+   "doc": "/ˌbɪɡ ˈdeɪtə/",
+   "nghia": "dữ liệu lớn – dữ liệu quá nhiều, đến quá nhanh, quá đa dạng so với công cụ thường",
+   "nhom": "Dữ liệu & đám mây",
+   "viDu": "What programming strategies could be employed to handle the \"velocity\" aspect of big data in an IoT system?",
+   "viDuNghia": "Chiến lược lập trình nào xử lý khía cạnh \"velocity\" của big data?"
+  },
+  {
+   "chu": "variety",
+   "doc": "/vəˈraɪəti/",
+   "nghia": "sự đa dạng – một chữ V của dữ liệu lớn: nhiều kiểu dữ liệu (số, chữ, ảnh, video)",
+   "nhom": "Dữ liệu & đám mây",
+   "viDu": "Variety means big data comes in many forms: numbers, text, images and video.",
+   "viDuNghia": "Sự đa dạng nghĩa là dữ liệu lớn có nhiều dạng: số, văn bản, hình ảnh và video."
+  },
+  {
+   "chu": "veracity",
+   "doc": "/vəˈræsəti/",
+   "nghia": "độ xác thực – một chữ V của dữ liệu lớn: dữ liệu có đáng tin, có chính xác không",
+   "nhom": "Dữ liệu & đám mây",
+   "viDu": "How does the veracity of big data impact IoT applications?",
+   "viDuNghia": "Tính xác thực (veracity) của big data ảnh hưởng tới ứng dụng IoT thế nào?"
+  },
+  {
+   "chu": "data analytics",
+   "doc": "/ˈdeɪtə ˌænəˈlɪtɪks/",
+   "nghia": "phân tích dữ liệu – rút ra thông tin có ích từ dữ liệu thu được",
+   "nhom": "Dữ liệu & đám mây",
+   "viDu": "Which of the following is a challenge that arises when manipulating big data for analysis?",
+   "viDuNghia": "Thách thức nào phát sinh khi xử lý big data để phân tích?"
+  },
+  {
+   "chu": "data collection",
+   "doc": "/ˈdeɪtə kəˈlekʃn/",
+   "nghia": "thu thập dữ liệu – gom số đo từ cảm biến",
+   "nhom": "Dữ liệu & đám mây",
+   "viDu": "Which layer of IoT architecture involves applications and services that utilize collected data?",
+   "viDuNghia": "Lớp nào trong kiến trúc IoT gồm ứng dụng và dịch vụ dùng dữ liệu đã thu thập?"
+  },
+  {
+   "chu": "voice recognition",
+   "doc": "/vɔɪs ˌrekəɡˈnɪʃn/",
+   "nghia": "nhận dạng giọng nói – máy hiểu lời người nói",
+   "nhom": "Dữ liệu & đám mây",
+   "viDu": "Voice recognition software and virtual assistant programs offer for ________.",
+   "viDuNghia": "Phần mềm nhận dạng giọng nói và trợ lý ảo cung cấp cho ________."
+  },
+  {
+   "chu": "visualization",
+   "doc": "/ˌvɪʒuələˈzeɪʃn/",
+   "nghia": "trực quan hoá – trình bày dữ liệu thành biểu đồ, bảng điều khiển để dễ nhìn",
+   "nhom": "Dữ liệu & đám mây",
+   "viDu": "Data visualization shows sensor readings as charts on a dashboard.",
+   "viDuNghia": "Trực quan hoá dữ liệu hiển thị số đo cảm biến thành biểu đồ trên bảng điều khiển."
+  },
+  {
+   "chu": "stability",
+   "doc": "/stəˈbɪləti/",
+   "nghia": "tính ổn định – hệ thống giữ được trạng thái mong muốn, không dao động",
+   "nhom": "Bảo mật & thách thức",
+   "viDu": "Closed-loop Systems use feedback where a portion of the output signal is fed back to the input to reduce errors and improve stability.",
+   "viDuNghia": "Hệ vòng kín dùng phản hồi, một phần tín hiệu ngõ ra được đưa trở lại ngõ vào để giảm lỗi và cải thiện ổn định."
+  },
+  {
+   "chu": "battery",
+   "doc": "/ˈbætəri/",
+   "nghia": "pin – nguồn điện của thiết bị di động/thiết bị IoT",
+   "nhom": "Bảo mật & thách thức",
+   "viDu": "Given the nominal voltage of an AAA battery is 1.5 V, what is the nominal voltage of 5 AAA batteries connected in parallel?",
+   "viDuNghia": "Cho biết điện áp danh định của pin AAA là 1.5V, điện áp danh định của 5 pin AAA đấu SONG SONG là bao nhiêu?"
+  },
+  {
+   "chu": "energy consumption",
+   "doc": "/ˈenərdʒi kənˈsʌmpʃn/",
+   "nghia": "mức tiêu thụ năng lượng",
+   "nhom": "Bảo mật & thách thức",
+   "viDu": "Low energy consumption is essential for battery-powered IoT devices.",
+   "viDuNghia": "Tiêu thụ năng lượng thấp là điều thiết yếu với thiết bị IoT chạy pin."
+  },
+  {
+   "chu": "smart home",
+   "doc": "/smɑːrt hoʊm/",
+   "nghia": "nhà thông minh – đèn, khoá, điều hoà… điều khiển tự động hoặc từ xa",
+   "nhom": "Ứng dụng",
+   "viDu": "In a smart home, lights and locks can be controlled from a phone.",
+   "viDuNghia": "Trong nhà thông minh, đèn và khoá cửa điều khiển được từ điện thoại."
+  },
+  {
+   "chu": "smart city",
+   "doc": "/smɑːrt ˈsɪti/",
+   "nghia": "thành phố thông minh – dùng IoT quản lý giao thông, chiếu sáng, rác thải",
+   "nhom": "Ứng dụng",
+   "viDu": "Which category could be used by citizens to contribute to a smart city?",
+   "viDuNghia": "Danh mục nào công dân có thể dùng để đóng góp cho thành phố thông minh?"
+  },
+  {
+   "chu": "wearable",
+   "doc": "/ˈwerəbl/",
+   "nghia": "thiết bị đeo – đồng hồ, vòng tay thông minh đo sức khoẻ",
+   "nhom": "Ứng dụng",
+   "viDu": "Which of the following is an example of an IoT application? — Wearable device to monitor blood glucose level",
+   "viDuNghia": "Cái nào là ví dụ ứng dụng IoT? — Thiết bị đeo theo dõi đường huyết"
+  },
+  {
+   "chu": "industrial IoT",
+   "doc": "/ɪnˈdʌstriəl ˌaɪ oʊ ˈtiː/",
+   "nghia": "IoT công nghiệp – IoT trong nhà máy: giám sát máy móc, tự động hoá sản xuất",
+   "nhom": "Ứng dụng",
+   "viDu": "Industrial IoT connects machines in a factory to monitor production.",
+   "viDuNghia": "IoT công nghiệp kết nối máy móc trong nhà máy để giám sát sản xuất."
+  },
+  {
+   "chu": "irrigation",
+   "doc": "/ˌɪrɪˈɡeɪʃn/",
+   "nghia": "tưới tiêu – hệ thống tưới nước cho cây trồng",
+   "nhom": "Ứng dụng",
+   "viDu": "In the reticulation (water irrigation) system, what type of device is the moisture detector?",
+   "viDuNghia": "Trong hệ thống tưới tiêu (reticulation), thiết bị dò độ ẩm thuộc loại nào?"
+  },
+  {
+   "chu": "reticulation",
+   "doc": "/rɪˌtɪkjuˈleɪʃn/",
+   "nghia": "mạng ống tưới – hệ thống ống dẫn và van tưới nước tự động",
+   "nhom": "Ứng dụng",
+   "viDu": "In the reticulation (water irrigation) system, what type of device is the outdoor camera?",
+   "viDuNghia": "Trong hệ thống tưới tiêu, camera ngoài trời đóng vai trò loại thiết bị gì?"
+  },
+  {
+   "chu": "remote control",
+   "doc": "/rɪˈmoʊt kənˈtroʊl/",
+   "nghia": "điều khiển từ xa",
+   "nhom": "Ứng dụng",
+   "viDu": "In the IR remote control, IR stands for what?",
+   "viDuNghia": "Trong điều khiển từ xa IR, IR là viết tắt của gì?"
+  },
+  {
+   "chu": "automation",
+   "doc": "/ˌɔːtəˈmeɪʃn/",
+   "nghia": "tự động hoá – máy tự làm việc không cần người điều khiển",
+   "nhom": "Ứng dụng",
+   "viDu": "Which possibility automatically communicates with other vehicles?",
+   "viDuNghia": "Khả năng nào tự động giao tiếp với các phương tiện khác?"
+  },
+  {
+   "chu": "closed-loop system",
+   "doc": "/ˌkloʊzd ˈluːp ˈsɪstəm/",
+   "nghia": "hệ vòng kín – đo đầu ra đưa ngược về để tự điều chỉnh (có phản hồi)",
+   "nhom": "Ứng dụng",
+   "viDu": "Fill in the blank: System __________ can be a major problem, especially in badly designed closed-loop systems using feedback.",
+   "viDuNghia": "Điền vào chỗ trống: __________ của hệ thống có thể là vấn đề lớn, đặc biệt trong các hệ thống vòng kín (closed-loop) dùng phản hồi thiết kế kém."
+  },
+  {
+   "chu": "open-loop system",
+   "doc": "/ˌoʊpən ˈluːp ˈsɪstəm/",
+   "nghia": "hệ vòng hở – điều khiển theo lệnh đặt sẵn, không đo lại kết quả",
+   "nhom": "Ứng dụng",
+   "viDu": "Which of the following is not an example of an open loop system?",
+   "viDuNghia": "Cái nào KHÔNG phải ví dụ hệ hở (open loop)?"
+  },
+  {
+   "chu": "instrumentation",
+   "doc": "/ˌɪnstrəmenˈteɪʃn/",
+   "nghia": "thiết bị đo lường – các dụng cụ đo và theo dõi đại lượng vật lý",
+   "nhom": "Ứng dụng",
+   "viDu": "An instrumentation amplifier is used to read very small sensor signals.",
+   "viDuNghia": "Bộ khuếch đại đo lường được dùng để đọc tín hiệu cảm biến rất nhỏ."
+  },
+  {
+   "chu": "autonomous",
+   "doc": "/ɔːˈtɑːnəməs/",
+   "nghia": "tự hành, tự chủ – tự hoạt động không cần người lái/điều khiển",
+   "nhom": "Ứng dụng",
+   "viDu": "Autonomous vehicles rely on many sensors to drive without a human.",
+   "viDuNghia": "Xe tự hành dựa vào nhiều cảm biến để chạy mà không cần người lái."
+  },
+  {
+   "chu": "healthcare",
+   "doc": "/ˈhelθker/",
+   "nghia": "chăm sóc sức khoẻ – lĩnh vực ứng dụng IoT: theo dõi bệnh nhân từ xa",
+   "nhom": "Ứng dụng",
+   "viDu": "Which category finds an increase in IoT applications targeting health and fitness?",
+   "viDuNghia": "Danh mục nào ghi nhận sự gia tăng ứng dụng IoT nhắm vào sức khoẻ và thể chất?"
+  },
+  {
+   "chu": "transportation",
+   "doc": "/ˌtrænspərˈteɪʃn/",
+   "nghia": "giao thông vận tải – lĩnh vực ứng dụng IoT: theo dõi xe, điều phối giao thông",
+   "nhom": "Ứng dụng",
+   "viDu": "What is one of the main impacts of IoT on urban areas? — Creating smart cities with smart buildings and transportation.",
+   "viDuNghia": "Một trong những tác động chính của IoT tới khu vực đô thị là gì? — Tạo thành phố thông minh với toà nhà và giao thông thông minh."
+  },
+  {
+   "chu": "manufacturing",
+   "doc": "/ˌmænjuˈfæktʃərɪŋ/",
+   "nghia": "sản xuất, chế tạo – lĩnh vực ứng dụng IoT trong nhà máy",
+   "nhom": "Ứng dụng",
+   "viDu": "Which possibility is highest contributor to cost overhead for manufacturing facilities?",
+   "viDuNghia": "Khả năng nào đóng góp nhiều nhất vào chi phí phát sinh cho nhà máy sản xuất?"
+  },
+  {
+   "chu": "employment",
+   "doc": "/ɪmˈplɔɪmənt/",
+   "nghia": "việc làm – IoT và tự động hoá có thể làm một số công việc cần ít người hơn",
+   "nhom": "Ứng dụng",
+   "viDu": "Why might having 20 billion connected devices cause a major disruption in employment?",
+   "viDuNghia": "Vì sao 20 tỷ thiết bị kết nối có thể gây gián đoạn lớn tới việc làm?"
+  },
+  {
+   "chu": "telephony",
+   "doc": "/təˈlefəni/",
+   "nghia": "điện thoại (ngành/dịch vụ thoại) – truyền tiếng nói qua mạng",
+   "nhom": "Ứng dụng",
+   "viDu": "Voice telephony is an efficient means of ____________ with machines that can listen.",
+   "viDuNghia": "Thoại qua điện thoại (voice telephony) là phương tiện hiệu quả để ____ với các máy có thể nghe."
+  },
+  {
+   "chu": "smart grid",
+   "doc": "/smɑːrt ɡrɪd/",
+   "nghia": "lưới điện thông minh – lưới điện dùng IoT đo và điều phối cung – cầu điện theo thời gian thực",
+   "nhom": "Ứng dụng",
+   "viDu": "In the smart grid architecture of IoT, what is the primary function of the cloud?",
+   "viDuNghia": "Trong kiến trúc lưới điện thông minh của IoT, chức năng chính của đám mây là gì?"
+  }
+ ]
+}

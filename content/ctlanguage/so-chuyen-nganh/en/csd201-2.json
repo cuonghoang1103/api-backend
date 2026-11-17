@@ -1,0 +1,618 @@
+{
+ "ma": "csd201-2",
+ "nn": "en",
+ "ten": "CSD201 · 2. Cây, đồ thị, bảng băm, nén dữ liệu",
+ "moTa": "CSD201 – Cấu trúc dữ liệu và giải thuật (Java), phần 2: cây nhị phân tìm kiếm, AVL, heap, đồ thị (Dijkstra, tô màu, Euler), bảng băm và giải quyết va chạm, nén dữ liệu (run-length, LZW). Từ lấy từ đề FE/PE thật; câu ví dụ là câu hỏi thật trong đề.",
+ "bieuTuong": "point.3.connected.trianglepath.dotted",
+ "thuTu": -967,
+ "tu": [
+  {
+   "chu": "tree node",
+   "doc": "/triː noʊd/",
+   "nghia": "nút của cây – chứa dữ liệu và liên kết tới con trái, con phải",
+   "nhom": "Cây nhị phân & BST",
+   "viDu": "Each tree node stores an info object and two references: left and right.",
+   "viDuNghia": "Mỗi nút của cây lưu một đối tượng info và hai tham chiếu: left và right."
+  },
+  {
+   "chu": "root node",
+   "doc": "/ruːt noʊd/",
+   "nghia": "nút gốc – nút trên cùng của cây, không có nút cha",
+   "nhom": "Cây nhị phân & BST",
+   "viDu": "Perform breadth-first traversal starting at the root node.",
+   "viDuNghia": "Thực hiện duyệt theo chiều rộng bắt đầu từ nút gốc."
+  },
+  {
+   "chu": "leaf node",
+   "doc": "/liːf noʊd/",
+   "nghia": "nút lá – nút không có con nào",
+   "nhom": "Cây nhị phân & BST",
+   "viDu": "Perform breadth-first traversal from the root but display LEAF NODES only.",
+   "viDuNghia": "Duyệt theo chiều rộng từ gốc nhưng chỉ hiển thị các NÚT LÁ."
+  },
+  {
+   "chu": "internal node",
+   "doc": "/ɪnˈtɜːrnl noʊd/",
+   "nghia": "nút trong – nút có ít nhất một con (không phải lá)",
+   "nhom": "Cây nhị phân & BST",
+   "viDu": "Print out the internal nodes of the tree.",
+   "viDuNghia": "In ra các nút trong của cây."
+  },
+  {
+   "chu": "left child",
+   "doc": "/left tʃaɪld/",
+   "nghia": "con trái – trong BST có khoá nhỏ hơn nút cha",
+   "nhom": "Cây nhị phân & BST",
+   "viDu": "Find the 4th node (in in-order traversal order from the root) that has a left child; rotate this node to the right.",
+   "viDuNghia": "Tìm nút thứ 4 (theo thứ tự duyệt in-order từ gốc) có con trái; quay nút này sang phải."
+  },
+  {
+   "chu": "right child",
+   "doc": "/raɪt tʃaɪld/",
+   "nghia": "con phải – trong BST có khoá lớn hơn nút cha",
+   "nhom": "Cây nhị phân & BST",
+   "viDu": "The node stored at index has its left child at 2*index+1 and its right child at 2*index+2.",
+   "viDuNghia": "Nút lưu ở ô index có con trái ở ô 2*index+1 và con phải ở ô 2*index+2."
+  },
+  {
+   "chu": "left subtree",
+   "doc": "/left ˈsʌbtriː/",
+   "nghia": "cây con trái – toàn bộ nhánh mọc từ con trái của một nút",
+   "nhom": "Cây nhị phân & BST",
+   "viDu": "Pre-order visits the node first, then the left subtree, then the right subtree.",
+   "viDuNghia": "Duyệt pre-order thăm nút trước, rồi cây con trái, rồi cây con phải."
+  },
+  {
+   "chu": "right subtree",
+   "doc": "/raɪt ˈsʌbtriː/",
+   "nghia": "cây con phải – toàn bộ nhánh mọc từ con phải của một nút",
+   "nhom": "Cây nhị phân & BST",
+   "viDu": "In a binary search tree, every key in the right subtree is greater than the key of the node.",
+   "viDuNghia": "Trong cây nhị phân tìm kiếm, mọi khoá ở cây con phải đều lớn hơn khoá của nút."
+  },
+  {
+   "chu": "two children",
+   "doc": "/tuː ˈtʃɪldrən/",
+   "nghia": "hai con – nút có đủ con trái và con phải; xoá nút loại này là ca khó nhất",
+   "nhom": "Cây nhị phân & BST",
+   "viDu": "In an expression tree, each node that is not a leaf has two children.",
+   "viDuNghia": "Trong cây biểu thức, mỗi nút không phải lá có hai con."
+  },
+  {
+   "chu": "depth",
+   "doc": "/depθ/",
+   "nghia": "độ sâu – số bước đi từ gốc xuống tới nút đó",
+   "nhom": "Cây nhị phân & BST",
+   "viDu": "Sort the 4 elements from position 2 to position 5 ascendingly by depth.",
+   "viDuNghia": "Sắp xếp 4 phần tử từ vị trí 2 đến vị trí 5 tăng dần theo depth."
+  },
+  {
+   "chu": "tree height",
+   "doc": "/triː haɪt/",
+   "nghia": "chiều cao của cây – số mức từ gốc xuống lá xa nhất",
+   "nhom": "Cây nhị phân & BST",
+   "viDu": "The tree height is the number of levels from the root down to the deepest leaf.",
+   "viDuNghia": "Chiều cao của cây là số mức tính từ gốc xuống tới lá sâu nhất."
+  },
+  {
+   "chu": "complete binary tree",
+   "nghia": "cây nhị phân hoàn chỉnh – mọi mức đều đầy, riêng mức cuối dồn hết về bên trái",
+   "nhom": "Cây nhị phân & BST",
+   "viDu": "With the root at height 1, the height of a complete binary tree with n nodes is log2(n+1), rounded up.",
+   "viDuNghia": "Coi gốc có chiều cao 1, chiều cao của cây nhị phân hoàn chỉnh có n nút là log2(n+1), làm tròn lên."
+  },
+  {
+   "chu": "pre-order traversal",
+   "doc": "/ˈpriː ˌɔːrdər trəˈvɜːrsl/",
+   "nghia": "duyệt trước (NLR) – thăm nút, rồi cây con trái, rồi cây con phải",
+   "nhom": "Cây nhị phân & BST",
+   "viDu": "Given a binary tree below. What is a result of pre-order traverse?",
+   "viDuNghia": "Cho cây nhị phân dưới đây. Kết quả duyệt theo thứ tự trước (pre-order) là gì?"
+  },
+  {
+   "chu": "in-order traversal",
+   "doc": "/ˈɪn ˌɔːrdər trəˈvɜːrsl/",
+   "nghia": "duyệt giữa (LNR) – trái, nút, phải; trên BST cho ra dãy khoá tăng dần",
+   "nhom": "Cây nhị phân & BST",
+   "viDu": "Specify the correct implementation of in-order traverse algorithm for binary trees.",
+   "viDuNghia": "Chọn cài đặt đúng của thuật toán duyệt in-order cho cây nhị phân."
+  },
+  {
+   "chu": "post-order traversal",
+   "doc": "/ˈpoʊst ˌɔːrdər trəˈvɜːrsl/",
+   "nghia": "duyệt sau (LRN) – trái, phải rồi mới thăm nút",
+   "nhom": "Cây nhị phân & BST",
+   "viDu": "The expected output below is the post-order traversal of the tree after each insertion.",
+   "viDuNghia": "Kết quả mong đợi bên dưới là kết quả duyệt post-order của cây sau mỗi lần chèn."
+  },
+  {
+   "chu": "breadth-first traversal",
+   "doc": "/ˈbredθ fɜːrst trəˈvɜːrsl/",
+   "nghia": "duyệt theo chiều rộng – thăm lần lượt từng mức từ trên xuống, trái sang phải (dùng hàng đợi)",
+   "nhom": "Cây nhị phân & BST",
+   "viDu": "What is the breadth-first traversal of the tree below after deleting the node 40 by copying?",
+   "viDuNghia": "Kết quả duyệt theo chiều rộng của cây dưới đây sau khi xoá nút 40 bằng cách sao chép là gì?"
+  },
+  {
+   "chu": "level order",
+   "doc": "/ˈlevl ˈɔːrdər/",
+   "nghia": "thứ tự theo mức – thăm hết mức này mới xuống mức dưới (chính là duyệt theo chiều rộng)",
+   "nhom": "Cây nhị phân & BST",
+   "viDu": "Level order traversal visits the root first, then all nodes of level 2, and so on.",
+   "viDuNghia": "Duyệt theo mức thăm gốc trước, rồi mọi nút ở mức 2, và cứ thế tiếp."
+  },
+  {
+   "chu": "predecessor",
+   "doc": "/ˈpredəsesər/",
+   "nghia": "nút/phần tử đứng liền trước – trong danh sách: nút kề trước; trong BST: nút lớn nhất của cây con trái · (PMG201c) hoạt động phải xong trước trong sơ đồ mạng",
+   "nhom": "Cây nhị phân & BST",
+   "viDu": "Suppose p is some node in the list which has both predecessor and successor nodes.",
+   "viDuNghia": "Giả sử p là một nút trong danh sách có cả nút đứng trước lẫn nút đứng sau."
+  },
+  {
+   "chu": "successor",
+   "doc": "/səkˈsesər/",
+   "nghia": "phần tử đứng liền sau – trong BST là nút nhỏ nhất của cây con phải",
+   "nhom": "Cây nhị phân & BST",
+   "viDu": "Replace the data with its in-order successor data, then remove the successor.",
+   "viDuNghia": "Thay dữ liệu bằng dữ liệu của nút kế tiếp theo in-order, rồi xoá nút kế tiếp đó."
+  },
+  {
+   "chu": "deletion by copying",
+   "nghia": "xoá bằng sao chép – chép nút tiền nhiệm (lớn nhất cây con trái) đè lên nút cần xoá rồi xoá nút tiền nhiệm",
+   "nhom": "Cây nhị phân & BST",
+   "viDu": "What is the breadth-first traversal of a tree below after deleting the node 5 by copying?",
+   "viDuNghia": "Kết quả duyệt theo chiều rộng của cây dưới đây sau khi xoá nút 5 bằng phương pháp sao chép (delete by copying) là gì?"
+  },
+  {
+   "chu": "deletion by merging",
+   "nghia": "xoá bằng trộn – gắn cây con phải vào nút phải nhất của cây con trái rồi bỏ nút cần xoá",
+   "nhom": "Cây nhị phân & BST",
+   "viDu": "What is the breadth-first traversal of a tree below after deleting the node 5 by merging?",
+   "viDuNghia": "Kết quả duyệt theo chiều rộng của cây dưới đây sau khi xoá nút 5 bằng phương pháp hoà trộn (delete by merging) là gì?"
+  },
+  {
+   "chu": "key of the tree",
+   "nghia": "khoá của cây – thuộc tính dùng để so sánh, xếp chỗ các nút trong BST; không được trùng",
+   "nhom": "Cây nhị phân & BST",
+   "viDu": "The variable rate is the key of the tree, thus it must be unique.",
+   "viDuNghia": "Biến rate là khoá của cây, do đó nó phải là duy nhất."
+  },
+  {
+   "chu": "expression tree",
+   "doc": "/ɪkˈspreʃn triː/",
+   "nghia": "cây biểu thức – lá là toán hạng, nút trong là phép toán",
+   "nhom": "Cây nhị phân & BST",
+   "viDu": "In an expression tree, the variables appear as leaves and the operations as internal nodes.",
+   "viDuNghia": "Trong cây biểu thức, các biến nằm ở lá còn các phép toán nằm ở nút trong."
+  },
+  {
+   "chu": "binary search tree",
+   "nghia": "cây tìm kiếm nhị phân (BST) – mọi khoá ở cây con trái nhỏ hơn nút, cây con phải lớn hơn nút",
+   "nhom": "Cây nhị phân & BST",
+   "viDu": "In a binary search tree, all keys in the left subtree of a node are smaller than the key of that node.",
+   "viDuNghia": "Trong cây tìm kiếm nhị phân, mọi khoá ở cây con trái của một nút đều nhỏ hơn khoá của nút đó."
+  },
+  {
+   "chu": "binary tree",
+   "doc": "/ˈbaɪnəri triː/",
+   "nghia": "cây nhị phân – mỗi nút có nhiều nhất hai con (trái, phải)",
+   "nhom": "Cây nhị phân & BST",
+   "viDu": "The maximum number of nodes in a binary tree with height k, where the root is at height 1, is 2^k - 1.",
+   "viDuNghia": "Số nút tối đa của một cây nhị phân có chiều cao k (gốc có chiều cao 1) là 2^k - 1."
+  },
+  {
+   "chu": "traversal",
+   "doc": "/trəˈvɜːrsl/",
+   "nghia": "phép duyệt – đi qua lần lượt mọi nút của cây/đồ thị (pre-order, in-order, post-order, breadth-first)",
+   "nhom": "Cây nhị phân & BST",
+   "viDu": "What is the breadth-first traversal of a tree below after deleting the node 5 by copying?",
+   "viDuNghia": "Kết quả duyệt theo chiều rộng của cây dưới đây sau khi xoá nút 5 bằng phương pháp sao chép (delete by copying) là gì?"
+  },
+  {
+   "chu": "tree",
+   "doc": "/triː/",
+   "nghia": "cây – tập nút nối theo quan hệ cha – con, bắt đầu từ nút gốc (root), không có chu trình",
+   "nhom": "Cây nhị phân & BST",
+   "viDu": "Select the most correct definition of a tree.",
+   "viDuNghia": "Chọn định nghĩa đúng nhất về cây."
+  },
+  {
+   "chu": "root",
+   "doc": "/ruːt/",
+   "nghia": "gốc (của cây) – nút trên cùng, không có cha. (Toán: nghiệm của phương trình; căn – square root)",
+   "nhom": "Cây nhị phân & BST",
+   "viDu": "Given a binary search tree T below. What is a result of breadth-first traverse of T after you delete by merging the root (node 5)?",
+   "viDuNghia": "Cho cây tìm kiếm nhị phân T dưới đây. Kết quả duyệt theo chiều rộng của T sau khi xoá gốc (nút 5) bằng phương pháp hoà trộn (delete by merging) là gì?"
+  },
+  {
+   "chu": "proper binary tree",
+   "nghia": "cây nhị phân chuẩn (= full binary tree = 2-tree) – mọi nút có 0 hoặc 2 con; khác complete binary tree",
+   "nhom": "Cây nhị phân & BST",
+   "viDu": "In a proper binary tree, also called a full binary tree or a 2-tree, every node has either 0 or 2 children.",
+   "viDuNghia": "Trong cây nhị phân chuẩn (còn gọi full binary tree hay 2-tree), mỗi nút có 0 hoặc 2 con."
+  },
+  {
+   "chu": "AVL tree",
+   "doc": "/ˌeɪ viː ˈel triː/",
+   "nghia": "cây AVL – cây nhị phân tìm kiếm tự cân bằng: chiều cao hai cây con của mọi nút lệch nhau không quá 1",
+   "nhom": "Cây AVL & heap",
+   "viDu": "Consider the AVL tree below. What is the breadth first traversal of the tree after inserting a node with value 22?",
+   "viDuNghia": "Xét cây AVL dưới đây. Kết quả duyệt theo chiều rộng của cây sau khi chèn một nút có giá trị 22 là gì?"
+  },
+  {
+   "chu": "balance factor",
+   "doc": "/ˈbæləns ˈfæktər/",
+   "nghia": "hệ số cân bằng – chiều cao cây con phải trừ chiều cao cây con trái; AVL chỉ cho -1, 0, 1",
+   "nhom": "Cây AVL & heap",
+   "viDu": "To implement an AVL tree, a concept balance factor is introduced (bal = height(right) - height(left)).",
+   "viDuNghia": "Để cài đặt cây AVL, người ta đưa ra khái niệm hệ số cân bằng (bal = height(right) - height(left))."
+  },
+  {
+   "chu": "rotate",
+   "doc": "/ˈroʊteɪt/",
+   "nghia": "quay (cây) – phép xoay một nút sang trái/phải để cân bằng lại cây",
+   "nhom": "Cây AVL & heap",
+   "viDu": "Find the 4th node that has a left child; rotate this node to the right.",
+   "viDuNghia": "Tìm nút thứ 4 có con trái; quay nút này sang phải."
+  },
+  {
+   "chu": "rebalance",
+   "doc": "/ˌriːˈbæləns/",
+   "nghia": "cân bằng lại (cây AVL) sau khi chèn hoặc xoá",
+   "nhom": "Cây AVL & heap",
+   "viDu": "Must keep the AVL property after deletion (rebalance every ancestor on the way back up).",
+   "viDuNghia": "Phải giữ tính chất AVL sau khi xoá (cân bằng lại mọi nút tổ tiên trên đường đi ngược lên)."
+  },
+  {
+   "chu": "AVL property",
+   "doc": "/ˌeɪ viː ˈel ˈprɑːpərti/",
+   "nghia": "tính chất AVL – chiều cao cây con trái và phải của mọi nút lệch nhau tối đa 1",
+   "nhom": "Cây AVL & heap",
+   "viDu": "Keep the AVL property (every node left/right subtree heights differ by at most 1) after insertion.",
+   "viDuNghia": "Giữ tính chất AVL (chiều cao cây con trái/phải của mọi nút lệch nhau tối đa 1) sau khi chèn."
+  },
+  {
+   "chu": "max heap",
+   "doc": "/mæks hiːp/",
+   "nghia": "đống cực đại – cây hoàn chỉnh mà nút cha luôn lớn hơn hoặc bằng các con; gốc là phần tử lớn nhất",
+   "nhom": "Cây AVL & heap",
+   "viDu": "In a max heap tree, the value in each node is greater than or equal to the values in its children.",
+   "viDuNghia": "Trong cây max heap, giá trị ở mỗi nút lớn hơn hoặc bằng giá trị ở các nút con của nó."
+  },
+  {
+   "chu": "heap property",
+   "doc": "/hiːp ˈprɑːpərti/",
+   "nghia": "tính chất heap – quan hệ lớn/nhỏ hơn giữa nút cha và con phải luôn được giữ",
+   "nhom": "Cây AVL & heap",
+   "viDu": "The max heap property must be maintained after each deletion.",
+   "viDuNghia": "Tính chất max heap phải được duy trì sau mỗi lần xoá."
+  },
+  {
+   "chu": "implicit",
+   "doc": "/ɪmˈplɪsɪt/",
+   "nghia": "ngầm định – không lưu liên kết, suy ra từ chỉ số mảng",
+   "nhom": "Cây AVL & heap",
+   "viDu": "The heap is array-based, so the tree is implicit.",
+   "viDuNghia": "Heap được cài bằng mảng nên cây là ngầm định."
+  },
+  {
+   "chu": "heap",
+   "doc": "/hiːp/",
+   "nghia": "(CTDL) đống – cây nhị phân hoàn chỉnh, cha ≥ con (max heap) hoặc ≤ con (min heap), lưu được bằng mảng · (bộ nhớ) vùng heap chứa bộ nhớ cấp phát động (malloc, new)",
+   "nhom": "Cây AVL & heap",
+   "viDu": "A heap is a complete binary tree, so it can be stored in an array without any links.",
+   "viDuNghia": "Heap là cây nhị phân hoàn chỉnh nên có thể lưu trong một mảng mà không cần liên kết nào."
+  },
+  {
+   "chu": "edge weight",
+   "doc": "/edʒ weɪt/",
+   "nghia": "trọng số cạnh – con số gắn trên cạnh (độ dài, chi phí)",
+   "nhom": "Đồ thị",
+   "viDu": "Given a weighted graph below. What is the total edge-weight of the minimum spanning tree of G?",
+   "viDuNghia": "Cho đồ thị có trọng số bên dưới. Tổng trọng số các cạnh của cây khung nhỏ nhất (minimum spanning tree) của G là bao nhiêu?"
+  },
+  {
+   "chu": "source vertex",
+   "doc": "/sɔːrs ˈvɜːrteks/",
+   "nghia": "đỉnh nguồn – đỉnh xuất phát của thuật toán tìm đường đi ngắn nhất",
+   "nhom": "Đồ thị",
+   "viDu": "Run the algorithm from the source vertex A and record the current distance of every other vertex.",
+   "viDuNghia": "Chạy thuật toán từ đỉnh nguồn A và ghi lại khoảng cách hiện tại của mọi đỉnh còn lại."
+  },
+  {
+   "chu": "current distance",
+   "doc": "/ˈkɜːrənt ˈdɪstəns/",
+   "nghia": "khoảng cách hiện tại – độ dài đường ngắn nhất tìm được tới đỉnh đó tính tới lúc này",
+   "nhom": "Đồ thị",
+   "viDu": "Each step a vertex with minimal current distance is selected into S.",
+   "viDuNghia": "Mỗi bước, đỉnh có khoảng cách hiện tại nhỏ nhất được chọn vào S."
+  },
+  {
+   "chu": "depth-first traversal",
+   "doc": "/ˈdepθ fɜːrst trəˈvɜːrsl/",
+   "nghia": "duyệt theo chiều sâu – đi sâu hết một nhánh rồi mới quay lại nhánh khác (dùng ngăn xếp hoặc đệ quy)",
+   "nhom": "Đồ thị",
+   "viDu": "What is the depth-first traversal from the vertex C of the graph below? (visit nodes in ABC order if there is a tie)",
+   "viDuNghia": "Kết quả duyệt theo chiều sâu từ đỉnh C của đồ thị dưới đây là gì? (gặp nhiều đỉnh ngang nhau thì thăm theo thứ tự ABC)"
+  },
+  {
+   "chu": "visited",
+   "doc": "/ˈvɪzɪtɪd/",
+   "nghia": "đã thăm – đỉnh/nút đã được duyệt qua",
+   "nhom": "Đồ thị",
+   "viDu": "When the algorithm is applied to the tree above, in what order will the nodes be visited?",
+   "viDuNghia": "Khi áp dụng thuật toán cho cây ở trên, các nút sẽ được thăm theo thứ tự nào?"
+  },
+  {
+   "chu": "Euler cycle",
+   "doc": "/ˈɔɪlər ˈsaɪkl/",
+   "nghia": "chu trình Euler – đi qua MỌI CẠNH đúng một lần rồi về lại đỉnh xuất phát",
+   "nhom": "Đồ thị",
+   "viDu": "Suppose the given graph has an Euler cycle. Apply the stack-based pseudocode to find it.",
+   "viDuNghia": "Giả sử đồ thị đã cho có chu trình Euler. Áp dụng mã giả dùng ngăn xếp để tìm chu trình đó."
+  },
+  {
+   "chu": "Hamilton cycle",
+   "doc": "/ˈhæmɪltən ˈsaɪkl/",
+   "nghia": "chu trình Hamilton – đi qua MỌI ĐỈNH đúng một lần rồi về lại đỉnh xuất phát",
+   "nhom": "Đồ thị",
+   "viDu": "Suppose there exists at least one Hamilton cycle for the graph.",
+   "viDuNghia": "Giả sử đồ thị có ít nhất một chu trình Hamilton."
+  },
+  {
+   "chu": "graph coloring",
+   "doc": "/ɡræf ˈkʌlərɪŋ/",
+   "nghia": "tô màu đồ thị – gán màu cho các đỉnh sao cho hai đỉnh kề nhau khác màu",
+   "nhom": "Đồ thị",
+   "viDu": "In graph coloring, two adjacent vertices must not have the same color.",
+   "viDuNghia": "Trong tô màu đồ thị, hai đỉnh kề nhau không được cùng màu."
+  },
+  {
+   "chu": "sequential coloring",
+   "doc": "/sɪˈkwenʃl ˈkʌlərɪŋ/",
+   "nghia": "tô màu tuần tự – lần lượt lấy từng đỉnh theo một thứ tự, gán màu nhỏ nhất chưa bị đỉnh kề dùng",
+   "nhom": "Đồ thị",
+   "viDu": "Colors numbered 1, 2, 3, ... are assigned to vertices with the sequential coloring algorithm.",
+   "viDuNghia": "Các màu đánh số 1, 2, 3, ... được gán cho các đỉnh bằng thuật toán tô màu tuần tự."
+  },
+  {
+   "chu": "largest first",
+   "doc": "/ˈlɑːrdʒɪst fɜːrst/",
+   "nghia": "lớn nhất trước – xếp các đỉnh theo bậc giảm dần trước khi tô màu",
+   "nhom": "Đồ thị",
+   "viDu": "The algorithm orders vertices in decreasing order of their degrees (i.e. vertices are put in the largest first sequence).",
+   "viDuNghia": "Thuật toán xếp các đỉnh theo bậc giảm dần (tức là các đỉnh được đặt theo dãy lớn nhất trước)."
+  },
+  {
+   "chu": "selected into",
+   "doc": "/sɪˈlektɪd ˈɪntuː/",
+   "nghia": "được chọn đưa vào (tập đỉnh đã xét xong)",
+   "nhom": "Đồ thị",
+   "viDu": "What is the correct order of vertices selected into the set S until the vertex T is selected?",
+   "viDuNghia": "Thứ tự đúng của các đỉnh được chọn vào tập S cho tới khi đỉnh T được chọn là gì?"
+  },
+  {
+   "chu": "stack-based algorithm",
+   "doc": "/ˈstæk beɪst ˈælɡərɪðəm/",
+   "nghia": "thuật toán dùng ngăn xếp",
+   "nhom": "Đồ thị",
+   "viDu": "Apply the pseudocode given in Graph.java (a stack-based algorithm) to find the Euler cycle.",
+   "viDuNghia": "Áp dụng mã giả cho trong Graph.java (một thuật toán dùng ngăn xếp) để tìm chu trình Euler."
+  },
+  {
+   "chu": "weight",
+   "doc": "/weɪt/",
+   "nghia": "trọng số – số gắn trên cạnh của đồ thị có trọng số (chi phí, độ dài); dùng trong Dijkstra, cây khung nhỏ nhất",
+   "nhom": "Đồ thị",
+   "viDu": "Given a weighted graph below. What is the total edge-weight of the minimum spanning tree of G?",
+   "viDuNghia": "Cho đồ thị có trọng số bên dưới. Tổng trọng số các cạnh của cây khung nhỏ nhất (minimum spanning tree) của G là bao nhiêu?"
+  },
+  {
+   "chu": "shortest path",
+   "doc": "/ˈʃɔːrtɪst pæθ/",
+   "nghia": "đường đi ngắn nhất – đường giữa hai đỉnh có tổng trọng số nhỏ nhất (thuật toán Dijkstra); giao thức định tuyến OSPF cũng dùng",
+   "nhom": "Đồ thị",
+   "viDu": "Dijkstra's algorithm finds the shortest path from a source vertex to every other vertex of a weighted graph.",
+   "viDuNghia": "Thuật toán Dijkstra tìm đường đi ngắn nhất từ một đỉnh nguồn tới mọi đỉnh khác của đồ thị có trọng số."
+  },
+  {
+   "chu": "hash table",
+   "doc": "/hæʃ ˈteɪbl/",
+   "nghia": "bảng băm – mảng mà vị trí lưu của mỗi khoá được tính bằng hàm băm, tra cứu rất nhanh",
+   "nhom": "Bảng băm",
+   "viDu": "What is the correct definition of a hash table? (Select the best answer)",
+   "viDuNghia": "Định nghĩa đúng nhất về bảng băm (hash table) là gì? (Chọn câu trả lời tốt nhất)"
+  },
+  {
+   "chu": "division hash function",
+   "nghia": "hàm băm chia – lấy khoá chia cho kích thước bảng, số dư là vị trí: h(x) = x % M",
+   "nhom": "Bảng băm",
+   "viDu": "Given the division hash function h(x) = x % M, where M = 10, and collision resolution is linear probing.",
+   "viDuNghia": "Cho hàm băm chia h(x) = x % M với M = 10, và cách giải quyết va chạm là dò tuyến tính."
+  },
+  {
+   "chu": "collision resolution",
+   "doc": "/kəˈlɪʒn ˌrezəˈluːʃn/",
+   "nghia": "giải quyết va chạm – cách xử lý khi hai khoá băm vào cùng một ô",
+   "nhom": "Bảng băm",
+   "viDu": "Collision resolution decides where to store a key when its position is already occupied.",
+   "viDuNghia": "Cách giải quyết va chạm quyết định lưu khoá vào đâu khi vị trí của nó đã có khoá khác."
+  },
+  {
+   "chu": "linear probing",
+   "doc": "/ˈlɪniər ˈproʊbɪŋ/",
+   "nghia": "dò tuyến tính – ô bị chiếm thì thử lần lượt ô kế tiếp (cộng 1, cộng 2…)",
+   "nhom": "Bảng băm",
+   "viDu": "Collision resolution is linear probing. What does the hash table look like after inserting the following keys sequentially?",
+   "viDuNghia": "Cách giải quyết va chạm là dò tuyến tính. Bảng băm trông thế nào sau khi chèn lần lượt các khoá sau?"
+  },
+  {
+   "chu": "quadratic probing",
+   "doc": "/kwɑːˈdrætɪk ˈproʊbɪŋ/",
+   "nghia": "dò bậc hai – ô bị chiếm thì thử ô cách 1, 4, 9… (bình phương số lần thử)",
+   "nhom": "Bảng băm",
+   "viDu": "With quadratic probing, the collision is resolved by finding an available position at (h(x) + i^2) % M.",
+   "viDuNghia": "Với dò bậc hai, va chạm được giải quyết bằng cách tìm một vị trí trống tại (h(x) + i^2) % M."
+  },
+  {
+   "chu": "chaining",
+   "doc": "/ˈtʃeɪnɪŋ/",
+   "nghia": "phương pháp móc xích – mỗi ô của bảng băm giữ một danh sách liên kết các khoá băm trùng vào ô đó",
+   "nhom": "Bảng băm",
+   "viDu": "Specify the correct statement about the chaining method for handling collision.",
+   "viDuNghia": "Chọn phát biểu đúng về phương pháp móc xích (chaining) để xử lý va chạm."
+  },
+  {
+   "chu": "coalesced chaining",
+   "doc": "/ˌkoʊəˈlest ˈtʃeɪnɪŋ/",
+   "nghia": "móc xích hợp nhất – các khoá va chạm vẫn nằm trong bảng và nối với nhau bằng chỉ số ô kế tiếp",
+   "nhom": "Bảng băm",
+   "viDu": "Specify the correct statement about coalesced chaining method for handling collision (select the best answer).",
+   "viDuNghia": "Chọn phát biểu đúng về phương pháp coalesced chaining (chuỗi kết hợp) để xử lý đụng độ (chọn đáp án đúng nhất)."
+  },
+  {
+   "chu": "bucket addressing",
+   "doc": "/ˈbʌkɪt əˈdresɪŋ/",
+   "nghia": "địa chỉ hoá theo thùng – mỗi vị trí của bảng là một thùng chứa được nhiều khoá",
+   "nhom": "Bảng băm",
+   "viDu": "Specify the correct statement about bucket addressing method for handling collision (select the best answer).",
+   "viDuNghia": "Chọn phát biểu đúng về phương pháp địa chỉ hoá theo thùng (bucket addressing) để xử lý va chạm (chọn đáp án đúng nhất)."
+  },
+  {
+   "chu": "folding",
+   "doc": "/ˈfoʊldɪŋ/",
+   "nghia": "phương pháp gấp – cắt khoá thành nhiều đoạn rồi cộng lại để ra vị trí băm (shift folding, boundary folding)",
+   "nhom": "Bảng băm",
+   "viDu": "What is the value of the Shift Folding Hash Function if K = 43-65-69 and TSize = 100?",
+   "viDuNghia": "Giá trị của hàm băm gấp dịch (Shift Folding Hash Function) là bao nhiêu nếu K = 43-65-69 và TSize = 100?"
+  },
+  {
+   "chu": "available position",
+   "doc": "/əˈveɪləbl pəˈzɪʃn/",
+   "nghia": "vị trí còn trống trong bảng băm",
+   "nhom": "Bảng băm",
+   "viDu": "The collision is resolved by finding an available position in the table.",
+   "viDuNghia": "Va chạm được giải quyết bằng cách tìm một vị trí còn trống trong bảng."
+  },
+  {
+   "chu": "colliding key",
+   "doc": "/kəˈlaɪdɪŋ kiː/",
+   "nghia": "khoá va chạm – khoá băm vào ô đã có khoá khác",
+   "nhom": "Bảng băm",
+   "viDu": "The collision is resolved by finding an available table entry other than the position to which the colliding key is originally hashed.",
+   "viDuNghia": "Va chạm được giải quyết bằng cách tìm một ô trống khác với vị trí mà khoá va chạm được băm tới ban đầu."
+  },
+  {
+   "chu": "table entry",
+   "doc": "/ˈteɪbl ˈentri/",
+   "nghia": "ô của bảng (băm) – một vị trí lưu được một khoá",
+   "nhom": "Bảng băm",
+   "viDu": "Each table entry of the hash table can hold one key.",
+   "viDuNghia": "Mỗi ô của bảng băm chứa được một khoá."
+  },
+  {
+   "chu": "handle collision",
+   "doc": "/ˈhændl kəˈlɪʒn/",
+   "nghia": "xử lý va chạm",
+   "nhom": "Bảng băm",
+   "viDu": "Open addressing and chaining are two methods to handle collision.",
+   "viDuNghia": "Địa chỉ mở và móc xích là hai phương pháp xử lý va chạm."
+  },
+  {
+   "chu": "occupied",
+   "doc": "/ˈɑːkjupaɪd/",
+   "nghia": "đã bị chiếm, đang có người/khoá ở đó",
+   "nhom": "Bảng băm",
+   "viDu": "Room stores code, status (0=empty, 1=occupied), size and price.",
+   "viDuNghia": "Room lưu mã phòng, trạng thái (0=trống, 1=đang có khách), kích thước và giá."
+  },
+  {
+   "chu": "collision",
+   "doc": "/kəˈlɪʒn/",
+   "nghia": "đụng độ (băm) – hai khoá khác nhau cho cùng một địa chỉ băm; xử lý bằng dò tuyến tính, chaining…",
+   "nhom": "Bảng băm",
+   "viDu": "A collision occurs when two different keys are hashed to the same position in the table.",
+   "viDuNghia": "Va chạm (đụng độ) xảy ra khi hai khoá khác nhau được băm vào cùng một vị trí trong bảng."
+  },
+  {
+   "chu": "hash function",
+   "doc": "/hæʃ ˈfʌŋkʃn/",
+   "nghia": "hàm băm – biến khoá thành chỉ số ô trong bảng băm (vd K mod TSize, folding). (Mật mã: hàm tóm lược bản tin)",
+   "nhom": "Bảng băm",
+   "viDu": "What is the correct definition of a hash function? (Select the best answer)",
+   "viDuNghia": "Định nghĩa đúng của hàm băm (hash function) là gì? (Chọn câu trả lời đúng nhất)"
+  },
+  {
+   "chu": "open addressing",
+   "doc": "/ˈoʊpən əˈdresɪŋ/",
+   "nghia": "địa chỉ mở – khi va chạm thì tìm một ô trống KHÁC ngay trong bảng (dò tuyến tính, dò bậc hai, băm kép)",
+   "nhom": "Bảng băm",
+   "viDu": "Specify the correct statement about the open addressing method for handling collision.",
+   "viDuNghia": "Chọn phát biểu đúng về phương pháp địa chỉ mở để xử lý va chạm."
+  },
+  {
+   "chu": "boundary folding",
+   "doc": "/ˈbaʊndri ˈfoʊldɪŋ/",
+   "nghia": "gấp biên – kiểu băm gấp: cắt khoá thành đoạn, ĐẢO NGƯỢC các đoạn xen kẽ rồi cộng lại (shift folding thì cộng thẳng)",
+   "nhom": "Bảng băm",
+   "viDu": "What is the value of the Boundary Folding Hash Function if K = 45-65-79-8 and TSize = 100? → 88",
+   "viDuNghia": "Hàm băm gấp biên cho giá trị bao nhiêu nếu K = 45-65-79-8 và TSize = 100? → 88"
+  },
+  {
+   "chu": "run-length encoding",
+   "doc": "/ˈrʌn leŋθ ɪnˈkoʊdɪŋ/",
+   "nghia": "mã hoá loạt dài – thay một dãy ký tự lặp bằng số lần lặp kèm ký tự (AAAA thành 4A)",
+   "nhom": "Nén dữ liệu",
+   "viDu": "Given a raw message 'FFFFOOOOFFFOOFFFFFOO' (without single quote). Run the run-length encoding algorithm for that message, what is the output?",
+   "viDuNghia": "Cho một thông điệp gốc 'FFFFOOOOFFFOOFFFFFOO' (không có dấu nháy đơn). Chạy thuật toán run-length encoding cho thông điệp đó, kết quả là gì?"
+  },
+  {
+   "chu": "Lempel-Ziv-Welch",
+   "doc": "/ˈlempəl zɪv ˈwelʃ/",
+   "nghia": "thuật toán nén LZW – vừa đọc vừa dựng từ điển các chuỗi đã gặp, thay chuỗi bằng mã số trong từ điển",
+   "nhom": "Nén dữ liệu",
+   "viDu": "Suppose you are using the LZW algorithm to encode the message AABCAAAABD.",
+   "viDuNghia": "Giả sử bạn dùng thuật toán LZW để mã hoá thông điệp AABCAAAABD."
+  },
+  {
+   "chu": "code word",
+   "doc": "/koʊd wɜːrd/",
+   "nghia": "từ mã – mã số (hoặc dãy bit) đại diện cho một chuỗi ký tự",
+   "nhom": "Nén dữ liệu",
+   "viDu": "What string is denoted by code word (5)?",
+   "viDuNghia": "Từ mã (5) biểu thị chuỗi nào?"
+  },
+  {
+   "chu": "raw message",
+   "doc": "/rɔː ˈmesɪdʒ/",
+   "nghia": "thông điệp gốc – chuỗi ban đầu chưa nén, chưa mã hoá",
+   "nhom": "Nén dữ liệu",
+   "viDu": "Given a raw message. Run the run-length encoding algorithm for that message, what is the output?",
+   "viDuNghia": "Cho một thông điệp gốc. Chạy thuật toán mã hoá run-length cho thông điệp đó, kết quả là gì?"
+  },
+  {
+   "chu": "contents of the dictionary",
+   "nghia": "nội dung từ điển (của LZW) – bảng các chuỗi đã có mã ở thời điểm đó",
+   "nhom": "Nén dữ liệu",
+   "viDu": "Contents of the dictionary at the beginning of encoding are: (1) A (2) B (3) C (4) D.",
+   "viDuNghia": "Nội dung từ điển lúc bắt đầu mã hoá là: (1) A (2) B (3) C (4) D."
+  },
+  {
+   "chu": "Huffman tree",
+   "doc": "/ˈhʌfmən triː/",
+   "nghia": "cây Huffman – cây nhị phân dựng từ tần suất ký tự; ký tự hay gặp nằm gần gốc nên mã ngắn",
+   "nhom": "Nén dữ liệu",
+   "viDu": "In a Huffman tree, the most frequent character is closest to the root.",
+   "viDuNghia": "Trong cây Huffman, ký tự xuất hiện nhiều nhất nằm gần gốc nhất."
+  },
+  {
+   "chu": "decoding",
+   "doc": "/diːˈkoʊdɪŋ/",
+   "nghia": "giải mã – đổi dãy mã (bit) về lại ký tự gốc; với cây Huffman: đi từ gốc theo bit 0/1 tới lá thì được một ký tự",
+   "nhom": "Nén dữ liệu",
+   "viDu": "Using the Huffman code tree below, what is the result of decoding the string 0111000000101?",
+   "viDuNghia": "Dùng cây mã Huffman dưới đây, kết quả giải mã chuỗi 0111000000101 là gì?"
+  }
+ ]
+}

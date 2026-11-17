@@ -1,0 +1,742 @@
+{
+ "ma": "pro192-1",
+ "nn": "en",
+ "ten": "PRO192 · 1. Hướng đối tượng với Java",
+ "moTa": "PRO192 – Lập trình hướng đối tượng (Java), phần 1: máy ảo Java, lớp và đối tượng, đóng gói, kế thừa, đa hình, lớp trừu tượng, interface, kiểu dữ liệu. Từ lấy từ đề FE/PE thật; câu ví dụ là câu hỏi thật trong đề.",
+ "bieuTuong": "square.stack.3d.up.fill",
+ "thuTu": -983,
+ "tu": [
+  {
+   "chu": "object-oriented programming",
+   "doc": "/ˌɑːbdʒekt ˈɔːrientɪd ˈproʊɡræmɪŋ/",
+   "nghia": "lập trình hướng đối tượng (OOP) – tổ chức chương trình thành các đối tượng gồm dữ liệu và hành vi",
+   "nhom": "Java & máy ảo",
+   "viDu": "Which of the following is NOT one of the four fundamental object-oriented programming concepts?",
+   "viDuNghia": "Điều nào sau đây KHÔNG phải là một trong bốn khái niệm nền tảng của lập trình hướng đối tượng?"
+  },
+  {
+   "chu": "Java Virtual Machine",
+   "nghia": "máy ảo Java (JVM) – chạy bytecode, nhờ đó một chương trình Java chạy được trên nhiều hệ điều hành",
+   "nhom": "Java & máy ảo",
+   "viDu": "What is the primary function of the JVM (Java Virtual Machine)?",
+   "viDuNghia": "Chức năng chính của JVM (máy ảo Java) là gì?"
+  },
+  {
+   "chu": "Java Development Kit",
+   "nghia": "bộ phát triển Java (JDK) – gồm trình biên dịch javac và công cụ để viết chương trình",
+   "nhom": "Java & máy ảo",
+   "viDu": "What is the role of the Java Development Kit (JDK) in Java programming? (Choose multiple correct answers)",
+   "viDuNghia": "Vai trò của bộ phát triển Java (JDK) trong lập trình Java là gì? (Chọn nhiều đáp án đúng)"
+  },
+  {
+   "chu": "Java Runtime Environment",
+   "nghia": "môi trường chạy Java (JRE) – gồm JVM và thư viện, chỉ đủ để CHẠY chương trình",
+   "nhom": "Java & máy ảo",
+   "viDu": "To run a compiled Java program, a computer only needs the Java Runtime Environment.",
+   "viDuNghia": "Để chạy một chương trình Java đã biên dịch, máy chỉ cần có môi trường chạy Java (JRE)."
+  },
+  {
+   "chu": "bytecode",
+   "doc": "/ˈbaɪtkoʊd/",
+   "nghia": "mã bytecode – mã trung gian trong tệp .class do javac sinh ra, JVM đọc và chạy",
+   "nhom": "Java & máy ảo",
+   "viDu": "What is the file extension for compiled Java bytecode files?",
+   "viDuNghia": "Phần mở rộng của tệp bytecode Java đã được biên dịch là gì?"
+  },
+  {
+   "chu": "platform-independent",
+   "doc": "/ˈplætfɔːrm ˌɪndɪˈpendənt/",
+   "nghia": "độc lập nền tảng – viết một lần, chạy được trên mọi hệ điều hành có JVM",
+   "nhom": "Java & máy ảo",
+   "viDu": "Java bytecode is platform-independent: the same class file runs on any system that has a JVM.",
+   "viDuNghia": "Bytecode của Java độc lập nền tảng: cùng một tệp class chạy được trên mọi hệ thống có JVM."
+  },
+  {
+   "chu": "garbage collection",
+   "doc": "/ˈɡɑːrbɪdʒ kəˈlekʃn/",
+   "nghia": "thu gom rác – JVM tự giải phóng vùng nhớ của đối tượng không còn ai tham chiếu",
+   "nhom": "Java & máy ảo",
+   "viDu": "What is the role of the Garbage Collection?",
+   "viDuNghia": "Vai trò của việc thu gom rác (Garbage Collection) là gì?"
+  },
+  {
+   "chu": "package",
+   "doc": "/ˈpækɪdʒ/",
+   "nghia": "gói – thư mục gom các lớp liên quan, tránh trùng tên",
+   "nhom": "Java & máy ảo",
+   "viDu": "A field is declared protected in class LibraryItem of package model. Which code can access it?",
+   "viDuNghia": "Một trường khai protected trong lớp LibraryItem thuộc package model. Code nào truy cập được nó?"
+  },
+  {
+   "chu": "import",
+   "doc": "/ɪmˈpɔːrt/",
+   "nghia": "nạp lớp từ gói khác vào để dùng tên ngắn",
+   "nhom": "Java & máy ảo",
+   "viDu": "By default, the java.lang package is imported into every Java program.",
+   "viDuNghia": "Mặc định, gói java.lang được import sẵn vào mọi chương trình Java."
+  },
+  {
+   "chu": "main method",
+   "doc": "/meɪn ˈmeθəd/",
+   "nghia": "phương thức main – điểm bắt đầu chạy của chương trình Java",
+   "nhom": "Java & máy ảo",
+   "viDu": "Which of the following signatures is valid for the main() method entry point of an application?",
+   "viDuNghia": "Chữ ký nào sau đây hợp lệ cho phương thức main() làm điểm vào của ứng dụng?"
+  },
+  {
+   "chu": "command line",
+   "doc": "/kəˈmænd laɪn/",
+   "nghia": "dòng lệnh – nơi gõ lệnh javac, java và truyền đối số cho chương trình",
+   "nhom": "Java & máy ảo",
+   "viDu": "In order to compile a program named Hello.java, what do you type at the command line?",
+   "viDuNghia": "Để biên dịch (compile) chương trình có tên Hello.java, bạn gõ lệnh gì ở command line?"
+  },
+  {
+   "chu": "compile-time",
+   "doc": "/kəmˈpaɪl taɪm/",
+   "nghia": "lúc biên dịch – lỗi kiểu này javac báo ngay, chương trình chưa chạy",
+   "nhom": "Java & máy ảo",
+   "viDu": "Calling a method that the class does not declare causes a compile-time error.",
+   "viDuNghia": "Gọi một phương thức mà lớp không khai báo sẽ gây lỗi lúc biên dịch."
+  },
+  {
+   "chu": "run-time",
+   "doc": "/ˈrʌn taɪm/",
+   "nghia": "lúc chạy – lỗi/ngoại lệ chỉ lộ ra khi chương trình đang chạy",
+   "nhom": "Java & máy ảo",
+   "viDu": "In Java polymorphism, which of the following types of methods is dynamically linked or implemented at runtime?",
+   "viDuNghia": "Trong đa hình của Java, loại phương thức nào được liên kết động (thực hiện lúc chạy)?"
+  },
+  {
+   "chu": "compile",
+   "doc": "/kəmˈpaɪl/",
+   "nghia": "biên dịch – javac dịch tệp .java thành bytecode .class để JVM chạy",
+   "nhom": "Java & máy ảo",
+   "viDu": "In order to compile a program named Hello.java, what do you type at the command line?",
+   "viDuNghia": "Để biên dịch (compile) chương trình có tên Hello.java, bạn gõ lệnh gì ở command line?"
+  },
+  {
+   "chu": "compile error",
+   "doc": "/kəmˈpaɪl ˈerər/",
+   "nghia": "lỗi biên dịch – code sai cú pháp/kiểu nên javac không dịch được, chương trình chưa chạy",
+   "nhom": "Java & máy ảo",
+   "viDu": "A missing semicolon causes a compile error in Java.",
+   "viDuNghia": "Thiếu một dấu chấm phẩy gây lỗi biên dịch trong Java."
+  },
+  {
+   "chu": "class",
+   "doc": "/klæs/",
+   "nghia": "lớp – bản thiết kế định nghĩa thuộc tính và phương thức chung của các đối tượng",
+   "nhom": "Lớp & đối tượng",
+   "viDu": "A class is a blueprint, and every object created from it has the same attributes and methods.",
+   "viDuNghia": "Lớp là bản thiết kế, và mọi đối tượng tạo từ nó đều có cùng thuộc tính và phương thức."
+  },
+  {
+   "chu": "instantiate",
+   "doc": "/ɪnˈstænʃieɪt/",
+   "nghia": "tạo đối tượng từ lớp bằng new – lớp trừu tượng và interface KHÔNG instantiate được",
+   "nhom": "Lớp & đối tượng",
+   "viDu": "What is the way to instantiate a Scanner object to read data from a file \"data.txt\" with UTF-8 character encoding?",
+   "viDuNghia": "Cách nào là cách khởi tạo một đối tượng Scanner để đọc dữ liệu từ file \"data.txt\" với bảng mã ký tự UTF-8?"
+  },
+  {
+   "chu": "constructor",
+   "doc": "/kənˈstrʌktər/",
+   "nghia": "hàm tạo – phương thức đặc biệt trùng tên lớp, chạy khi new để khởi tạo đối tượng",
+   "nhom": "Lớp & đối tượng",
+   "viDu": "Which of the following statements related to the constructors is false? (Choose 1 answer)",
+   "viDuNghia": "Phát biểu nào sau đây về hàm khởi tạo (constructor) là SAI? (Chọn 1 đáp án)"
+  },
+  {
+   "chu": "default constructor",
+   "doc": "/dɪˈfɔːlt kənˈstrʌktər/",
+   "nghia": "hàm tạo mặc định – không tham số; Java tự thêm khi lớp không khai báo hàm tạo nào",
+   "nhom": "Lớp & đối tượng",
+   "viDu": "In Java, if a class does not explicitly define a constructor, which constructor is provided automatically? → The default constructor",
+   "viDuNghia": "Trong Java, nếu lớp không khai báo hàm tạo nào thì hàm tạo nào được tự động cung cấp? → Hàm tạo mặc định"
+  },
+  {
+   "chu": "parameterized constructor",
+   "doc": "/pəˈræmɪtəraɪzd kənˈstrʌktər/",
+   "nghia": "hàm tạo có tham số – nhận giá trị để gán cho các thuộc tính",
+   "nhom": "Lớp & đối tượng",
+   "viDu": "Device(name: String, price: int) is a parameterized constructor which sets values to name and price.",
+   "viDuNghia": "Device(name: String, price: int) là hàm tạo có tham số, gán giá trị cho name và price."
+  },
+  {
+   "chu": "instance variable",
+   "doc": "/ˈɪnstəns ˈveriəbl/",
+   "nghia": "biến thể hiện – thuộc tính riêng của từng đối tượng (không có static)",
+   "nhom": "Lớp & đối tượng",
+   "viDu": "In Java, can an abstract class have instance variables?",
+   "viDuNghia": "Trong Java, lớp trừu tượng có thể có biến thể hiện (instance variable) không?"
+  },
+  {
+   "chu": "static variable",
+   "doc": "/ˈstætɪk ˈveriəbl/",
+   "nghia": "biến tĩnh – thuộc về lớp, mọi đối tượng dùng chung một bản",
+   "nhom": "Lớp & đối tượng",
+   "viDu": "Abstract classes can have both instance and static variables.",
+   "viDuNghia": "Lớp trừu tượng có thể có cả biến thể hiện lẫn biến tĩnh."
+  },
+  {
+   "chu": "static method",
+   "doc": "/ˈstætɪk ˈmeθəd/",
+   "nghia": "phương thức tĩnh – gọi qua tên lớp, không cần tạo đối tượng; không dùng được this",
+   "nhom": "Lớp & đối tượng",
+   "viDu": "A static method belongs to the class, so it can be called without creating an object.",
+   "viDuNghia": "Phương thức tĩnh thuộc về lớp nên gọi được mà không cần tạo đối tượng."
+  },
+  {
+   "chu": "object reference",
+   "doc": "/ˈɑːbdʒɪkt ˈrefrəns/",
+   "nghia": "tham chiếu đối tượng – biến giữ địa chỉ của đối tượng chứ không giữ chính đối tượng",
+   "nhom": "Lớp & đối tượng",
+   "viDu": "Assigning one object reference to another makes both variables refer to the same object.",
+   "viDuNghia": "Gán một tham chiếu đối tượng cho biến khác làm cả hai biến cùng trỏ tới một đối tượng."
+  },
+  {
+   "chu": "method signature",
+   "doc": "/ˈmeθəd ˈsɪɡnətʃər/",
+   "nghia": "chữ ký phương thức – tên phương thức cùng danh sách kiểu tham số",
+   "nhom": "Lớp & đối tượng",
+   "viDu": "When multiple methods exist within the same class with different method signatures, this is known as what?",
+   "viDuNghia": "Khi trong cùng một lớp có nhiều phương thức với chữ ký khác nhau, điều này được gọi là gì?"
+  },
+  {
+   "chu": "anonymous class",
+   "doc": "/əˈnɑːnɪməs klæs/",
+   "nghia": "lớp vô danh – lớp không tên, khai báo và tạo đối tượng ngay tại chỗ",
+   "nhom": "Lớp & đối tượng",
+   "viDu": "What is the main purpose of using anonymous classes in Java?",
+   "viDuNghia": "Mục đích chính của việc dùng anonymous class (lớp vô danh) trong Java là gì?"
+  },
+  {
+   "chu": "nested class",
+   "doc": "/ˈnestɪd klæs/",
+   "nghia": "lớp lồng – lớp khai báo bên trong một lớp khác",
+   "nhom": "Lớp & đối tượng",
+   "viDu": "A nested class is declared inside the body of another class.",
+   "viDuNghia": "Lớp lồng được khai báo bên trong thân của một lớp khác."
+  },
+  {
+   "chu": "has-a relationship",
+   "doc": "/ˈhæz ə rɪˈleɪʃnʃɪp/",
+   "nghia": "quan hệ \"có một\" – quan hệ chứa (composition): Car có một Engine",
+   "nhom": "Lớp & đối tượng",
+   "viDu": "A Catalog is NOT a Map; it HAS-A map inside it (composition).",
+   "viDuNghia": "Catalog KHÔNG phải là Map; nó CÓ một map bên trong (quan hệ hợp thành)."
+  },
+  {
+   "chu": "no-argument constructor",
+   "doc": "/noʊ ˈɑːrɡjumənt kənˈstrʌktər/",
+   "nghia": "hàm tạo không tham số (no-arg constructor)",
+   "nhom": "Lớp & đối tượng",
+   "viDu": "A Device created with the no-arg constructor is a real Device and must get an ID like any other.",
+   "viDuNghia": "Một Device tạo bằng hàm tạo không tham số vẫn là Device thật và phải được cấp ID như mọi cái khác."
+  },
+  {
+   "chu": "top-level class",
+   "doc": "/ˌtɑːp ˈlevl klæs/",
+   "nghia": "lớp cấp cao nhất – lớp khai báo trực tiếp trong tệp, không nằm trong lớp khác",
+   "nhom": "Lớp & đối tượng",
+   "viDu": "A source file can contain only one public top-level class.",
+   "viDuNghia": "Một tệp nguồn chỉ chứa được một lớp public cấp cao nhất."
+  },
+  {
+   "chu": "class member",
+   "doc": "/klæs ˈmembər/",
+   "nghia": "thành viên của lớp – thuộc tính hoặc phương thức khai báo trong lớp",
+   "nhom": "Lớp & đối tượng",
+   "viDu": "Fields and methods declared inside a class are its class members.",
+   "viDuNghia": "Các trường và phương thức khai báo bên trong một lớp là các thành viên của lớp đó."
+  },
+  {
+   "chu": "instance method",
+   "doc": "/ˈɪnstəns ˈmeθəd/",
+   "nghia": "phương thức thể hiện – phải gọi qua một đối tượng (không có static)",
+   "nhom": "Lớp & đối tượng",
+   "viDu": "What is the correct way to call an instance method fly() on an object bird?",
+   "viDuNghia": "Cách gọi đúng một phương thức instance fly() trên đối tượng bird là gì?"
+  },
+  {
+   "chu": "object array",
+   "doc": "/ˈɑːbdʒɪkt əˈreɪ/",
+   "nghia": "mảng đối tượng – mảng mà mỗi phần tử là một tham chiếu tới đối tượng",
+   "nhom": "Lớp & đối tượng",
+   "viDu": "In a banking application, you need to represent customer accounts using object arrays.",
+   "viDuNghia": "Trong một ứng dụng ngân hàng, bạn cần biểu diễn các tài khoản khách hàng bằng mảng đối tượng."
+  },
+  {
+   "chu": "method",
+   "doc": "/ˈmeθəd/",
+   "nghia": "phương thức – hàm thuộc một lớp, mô tả hành vi của đối tượng",
+   "nhom": "Lớp & đối tượng",
+   "viDu": "A method is a function that belongs to a class and describes the behavior of its objects.",
+   "viDuNghia": "Phương thức là một hàm thuộc về lớp, mô tả hành vi của các đối tượng của lớp đó."
+  },
+  {
+   "chu": "object",
+   "doc": "/ˈɑːbdʒekt/",
+   "nghia": "đối tượng – thể hiện cụ thể của một lớp, có thuộc tính và phương thức. (JS: tập cặp tên–giá trị; UML: đối tượng)",
+   "nhom": "Lớp & đối tượng",
+   "viDu": "All objects belonging to the same class have the same type of characteristics (attributes) and behaviors (methods).",
+   "viDuNghia": "Mọi đối tượng thuộc cùng một lớp đều có cùng loại đặc điểm (thuộc tính) và hành vi (phương thức)."
+  },
+  {
+   "chu": "instance",
+   "doc": "/ˈɪnstəns/",
+   "nghia": "(OOP) thể hiện – một đối tượng cụ thể tạo từ lớp bằng new; instance variable thuộc riêng từng đối tượng · (CSDL) thể hiện: dữ liệu thực tế của quan hệ tại một thời điểm",
+   "nhom": "Lớp & đối tượng",
+   "viDu": "In Java, can an abstract class have instance variables?",
+   "viDuNghia": "Trong Java, lớp trừu tượng có thể có biến thể hiện (instance variable) không?"
+  },
+  {
+   "chu": "access modifier",
+   "doc": "/ˈækses ˈmɑːdɪfaɪər/",
+   "nghia": "từ khoá phạm vi truy cập – public, protected, mặc định (package), private",
+   "nhom": "Đóng gói & phạm vi truy cập",
+   "viDu": "Which access modifier is commonly used for setter methods in Java?",
+   "viDuNghia": "Phương thức setter trong Java thường dùng access modifier nào?"
+  },
+  {
+   "chu": "private member",
+   "doc": "/ˈpraɪvət ˈmembər/",
+   "nghia": "thành viên private – chỉ dùng được bên trong chính lớp khai báo nó",
+   "nhom": "Đóng gói & phạm vi truy cập",
+   "viDu": "A private member can be accessed only inside the class that declares it, not from a subclass.",
+   "viDuNghia": "Thành viên private chỉ truy cập được bên trong lớp khai báo nó, kể cả lớp con cũng không truy cập được."
+  },
+  {
+   "chu": "protected member",
+   "doc": "/prəˈtektɪd ˈmembər/",
+   "nghia": "thành viên protected – dùng được trong cùng gói và trong lớp con (kể cả khác gói)",
+   "nhom": "Đóng gói & phạm vi truy cập",
+   "viDu": "A protected member can be used in the same package and in subclasses, even in another package.",
+   "viDuNghia": "Thành viên protected dùng được trong cùng gói và trong lớp con, kể cả lớp con ở gói khác."
+  },
+  {
+   "chu": "public member",
+   "doc": "/ˈpʌblɪk ˈmembər/",
+   "nghia": "thành viên public – dùng được từ mọi nơi",
+   "nhom": "Đóng gói & phạm vi truy cập",
+   "viDu": "A public member of a class can be accessed from code in any other class.",
+   "viDuNghia": "Thành viên public của một lớp truy cập được từ mã ở bất kỳ lớp nào khác."
+  },
+  {
+   "chu": "getter",
+   "doc": "/ˈɡetər/",
+   "nghia": "phương thức get – trả về giá trị của một thuộc tính private",
+   "nhom": "Đóng gói & phạm vi truy cập",
+   "viDu": "A getter returns the value of a private field, for example getName().",
+   "viDuNghia": "Getter trả về giá trị của một trường private, ví dụ getName()."
+  },
+  {
+   "chu": "setter",
+   "doc": "/ˈsetər/",
+   "nghia": "phương thức set – gán giá trị mới cho một thuộc tính private",
+   "nhom": "Đóng gói & phạm vi truy cập",
+   "viDu": "A setter such as setName() assigns a new value to a private field.",
+   "viDuNghia": "Setter như setName() gán giá trị mới cho một trường private."
+  },
+  {
+   "chu": "data hiding",
+   "doc": "/ˈdeɪtə ˈhaɪdɪŋ/",
+   "nghia": "che giấu dữ liệu – không cho bên ngoài đụng trực tiếp vào thuộc tính",
+   "nhom": "Đóng gói & phạm vi truy cập",
+   "viDu": "Data hiding means that fields are private and can be reached only through methods.",
+   "viDuNghia": "Che giấu dữ liệu nghĩa là các trường để private và chỉ truy cập được qua phương thức."
+  },
+  {
+   "chu": "visible",
+   "doc": "/ˈvɪzəbl/",
+   "nghia": "nhìn thấy được, truy cập được từ vị trí đó",
+   "nhom": "Đóng gói & phạm vi truy cập",
+   "viDu": "Suppose a class has public visibility. In this class we define a protected method. Which of the following statements is correct?",
+   "viDuNghia": "Giả sử một lớp có phạm vi public. Trong lớp này ta định nghĩa một phương thức protected. Phát biểu nào sau đây là đúng?"
+  },
+  {
+   "chu": "restrictive",
+   "doc": "/rɪˈstrɪktɪv/",
+   "nghia": "hạn chế, chặt – \"more restrictive\" = phạm vi truy cập hẹp hơn (private hẹp nhất)",
+   "nhom": "Đóng gói & phạm vi truy cập",
+   "viDu": "Select the order of access modifiers from the least restrictive to the most restrictive in Java.",
+   "viDuNghia": "Chọn thứ tự các access modifier từ ít hạn chế nhất đến hạn chế nhất trong Java."
+  },
+  {
+   "chu": "access level",
+   "doc": "/ˈækses ˈlevl/",
+   "nghia": "mức truy cập – public, protected, mặc định, private (rộng đến hẹp)",
+   "nhom": "Đóng gói & phạm vi truy cập",
+   "viDu": "Which of the following is the MOST RESTRICTIVE access level for a class member in Java?",
+   "viDuNghia": "Đâu là mức truy cập HẠN CHẾ NHẤT cho một thành viên (member) của class trong Java?"
+  },
+  {
+   "chu": "access control",
+   "doc": "/ˈækses kənˈtroʊl/",
+   "nghia": "kiểm soát truy cập – quy định ai được dùng thành viên nào của lớp",
+   "nhom": "Đóng gói & phạm vi truy cập",
+   "viDu": "Consider a superclass with a private method and a subclass that attempts to override it. What happens in terms of method overriding and access control?",
+   "viDuNghia": "Xét một lớp cha có phương thức private và một lớp con cố ghi đè nó. Điều gì xảy ra về mặt ghi đè phương thức và kiểm soát truy cập?"
+  },
+  {
+   "chu": "encapsulation",
+   "doc": "/ɪnˌkæpsjuˈleɪʃn/",
+   "nghia": "tính đóng gói – giấu dữ liệu (private) và chỉ cho truy cập qua getter/setter. (Mạng: mỗi tầng bọc dữ liệu bằng header của mình)",
+   "nhom": "Đóng gói & phạm vi truy cập",
+   "viDu": "Which of the following is an example of encapsulation in Java?",
+   "viDuNghia": "Điều nào sau đây là ví dụ của đóng gói (encapsulation) trong Java?"
+  },
+  {
+   "chu": "inheritance",
+   "doc": "/ɪnˈherɪtəns/",
+   "nghia": "tính kế thừa – lớp con nhận lại thuộc tính và phương thức của lớp cha (từ khoá extends)",
+   "nhom": "Kế thừa",
+   "viDu": "Which of the following statements about the final keyword and inheritance is true?",
+   "viDuNghia": "Phát biểu nào sau đây về từ khoá final và tính kế thừa là đúng?"
+  },
+  {
+   "chu": "superclass",
+   "doc": "/ˈsuːpərklæs/",
+   "nghia": "lớp cha – lớp được kế thừa",
+   "nhom": "Kế thừa",
+   "viDu": "Which of the following statements is true about superclass and subclass relationships in Java?",
+   "viDuNghia": "Phát biểu nào sau đây là đúng về quan hệ lớp cha - lớp con trong Java?"
+  },
+  {
+   "chu": "base class",
+   "doc": "/beɪs klæs/",
+   "nghia": "lớp cơ sở – tên khác của lớp cha",
+   "nhom": "Kế thừa",
+   "viDu": "Define an abstract base class Shape with an abstract method getArea() and an overridden toString().",
+   "viDuNghia": "Định nghĩa lớp cơ sở trừu tượng Shape với phương thức trừu tượng getArea() và toString() được ghi đè."
+  },
+  {
+   "chu": "derived class",
+   "doc": "/dɪˈraɪvd klæs/",
+   "nghia": "lớp dẫn xuất – tên khác của lớp con",
+   "nhom": "Kế thừa",
+   "viDu": "Write a class named Manager which is derived from Employee.",
+   "viDuNghia": "Viết lớp tên Manager dẫn xuất (kế thừa) từ Employee."
+  },
+  {
+   "chu": "parent class",
+   "doc": "/ˈperənt klæs/",
+   "nghia": "lớp cha",
+   "nhom": "Kế thừa",
+   "viDu": "In Java, a class can have only one parent class, but it can implement many interfaces.",
+   "viDuNghia": "Trong Java, một lớp chỉ có một lớp cha, nhưng có thể hiện thực nhiều interface."
+  },
+  {
+   "chu": "child class",
+   "doc": "/tʃaɪld klæs/",
+   "nghia": "lớp con",
+   "nhom": "Kế thừa",
+   "viDu": "A child class can call the constructor of its parent class by using super.",
+   "viDuNghia": "Lớp con có thể gọi hàm tạo của lớp cha bằng super."
+  },
+  {
+   "chu": "extend",
+   "doc": "/ɪkˈstend/",
+   "nghia": "mở rộng, kế thừa một lớp (class B extends A)",
+   "nhom": "Kế thừa",
+   "viDu": "class Book extends LibraryItem overrides toString() and wants to reuse the parent's text, then add the ISBN. Which line is correct inside Book.toString()?",
+   "viDuNghia": "class Book extends LibraryItem ghi đè toString() và muốn dùng lại chuỗi của lớp cha rồi thêm ISBN. Dòng nào đúng trong Book.toString()?"
+  },
+  {
+   "chu": "hierarchy",
+   "doc": "/ˈhaɪərɑːrki/",
+   "nghia": "hệ phân cấp – cây quan hệ cha–con giữa các lớp",
+   "nhom": "Kế thừa",
+   "viDu": "Which two of the following interfaces are at the top of the hierarchies in the Java Collections Framework? (Select two)",
+   "viDuNghia": "Hai interface nào sau đây nằm ở đỉnh các cây phân cấp trong Java Collections Framework? (Chọn hai)"
+  },
+  {
+   "chu": "multiple inheritance",
+   "doc": "/ˈmʌltɪpl ɪnˈherɪtəns/",
+   "nghia": "đa kế thừa – kế thừa từ nhiều lớp; Java KHÔNG cho với lớp, chỉ cho với interface",
+   "nhom": "Kế thừa",
+   "viDu": "How does Java handle the concept of multiple inheritance?",
+   "viDuNghia": "Java xử lý khái niệm đa kế thừa (multiple inheritance) như thế nào?"
+  },
+  {
+   "chu": "overload",
+   "doc": "/ˌoʊvərˈloʊd/",
+   "nghia": "nạp chồng – nhiều phương thức cùng tên trong một lớp nhưng khác danh sách tham số",
+   "nhom": "Kế thừa",
+   "viDu": "Which of the following is a correct implementation of method overloading?",
+   "viDuNghia": "Cách nào sau đây là cài đặt đúng của nạp chồng phương thức (method overloading)?"
+  },
+  {
+   "chu": "super keyword",
+   "doc": "/ˈsuːpər ˈkiːwɜːrd/",
+   "nghia": "từ khoá super – gọi hàm tạo hoặc phương thức của lớp cha",
+   "nhom": "Kế thừa",
+   "viDu": "The super keyword is used to call a constructor or a method of the parent class.",
+   "viDuNghia": "Từ khoá super dùng để gọi hàm tạo hoặc phương thức của lớp cha."
+  },
+  {
+   "chu": "reuse",
+   "doc": "/ˌriːˈjuːz/",
+   "nghia": "tái sử dụng (mã) – lợi ích chính của kế thừa",
+   "nhom": "Kế thừa",
+   "viDu": "You must reuse the parent toString() instead of re-writing the four Book fields by hand.",
+   "viDuNghia": "Bạn phải dùng lại toString() của lớp cha thay vì tự viết lại bốn trường của Book."
+  },
+  {
+   "chu": "method overriding",
+   "doc": "/ˈmeθəd ˌoʊvərˈraɪdɪŋ/",
+   "nghia": "ghi đè phương thức – lớp con viết lại phương thức của lớp cha, giữ nguyên tên và tham số",
+   "nhom": "Kế thừa",
+   "viDu": "Method overriding happens when a subclass provides its own version of a method declared in its superclass.",
+   "viDuNghia": "Ghi đè phương thức xảy ra khi lớp con tự viết phiên bản riêng của một phương thức đã khai báo ở lớp cha."
+  },
+  {
+   "chu": "is-a relationship",
+   "doc": "/ˈɪz ə rɪˈleɪʃnʃɪp/",
+   "nghia": "quan hệ \"là một\" – quan hệ kế thừa: Dog là một Animal",
+   "nhom": "Kế thừa",
+   "viDu": "Inheritance models an is-a relationship: a Manager is an Employee.",
+   "viDuNghia": "Kế thừa mô hình hoá quan hệ \"là một\": Manager là một Employee."
+  },
+  {
+   "chu": "concrete subclass",
+   "doc": "/ˈkɑːnkriːt ˈsʌbklæs/",
+   "nghia": "lớp con cụ thể – lớp con đã cài đặt hết phương thức trừu tượng của lớp cha",
+   "nhom": "Kế thừa",
+   "viDu": "In Java, if a concrete subclass extends an abstract class, and the subclass provides implementations for all the abstract methods of the superclass, what is the status of the subclass?",
+   "viDuNghia": "Trong Java, nếu một lớp con cụ thể kế thừa một lớp trừu tượng và cài đặt đầy đủ tất cả các phương thức trừu tượng của lớp cha, thì trạng thái của lớp con là gì?"
+  },
+  {
+   "chu": "overridden method",
+   "doc": "/ˌoʊvərˈrɪdn ˈmeθəd/",
+   "nghia": "phương thức bị ghi đè – bản của lớp cha đã được lớp con viết lại; gọi lại nó bằng super",
+   "nhom": "Kế thừa",
+   "viDu": "You can invoke the overridden method of the superclass through the keyword super.",
+   "viDuNghia": "Bạn có thể gọi phương thức bị ghi đè của lớp cha qua từ khoá super."
+  },
+  {
+   "chu": "subclass",
+   "doc": "/ˈsʌbklæs/",
+   "nghia": "lớp con – lớp kế thừa (extends) từ lớp cha, nhận lại thuộc tính và phương thức của cha. (ER: tập thực thể con)",
+   "nhom": "Kế thừa",
+   "viDu": "Class A is a subclass of class B. What would happen if you try to sort an array of mixed elements of A and B?",
+   "viDuNghia": "Lớp A là lớp con của lớp B. Điều gì xảy ra nếu bạn sắp xếp một mảng chứa lẫn lộn các phần tử A và B?"
+  },
+  {
+   "chu": "override",
+   "doc": "/ˌoʊvərˈraɪd/",
+   "nghia": "ghi đè (@Override) – lớp con viết lại phương thức của lớp cha cùng chữ ký. (CSS: quy tắc sau đè quy tắc trước)",
+   "nhom": "Kế thừa",
+   "viDu": "Which of the following may override a method whose signature is void xyz(float f)?",
+   "viDuNghia": "Phương thức nào sau đây có thể ghi đè (override) phương thức có chữ ký void xyz(float f)?"
+  },
+  {
+   "chu": "Object class",
+   "doc": "/ˈɑːbdʒekt klæs/",
+   "nghia": "lớp Object – lớp gốc của mọi lớp trong Java; có sẵn equals(), hashCode(), toString()…",
+   "nhom": "Kế thừa",
+   "viDu": "Which of the following methods belongs to the Object class? → equals",
+   "viDuNghia": "Phương thức nào sau đây thuộc lớp Object? → equals"
+  },
+  {
+   "chu": "toString method",
+   "doc": "/tuː ˈstrɪŋ ˈmeθəd/",
+   "nghia": "phương thức toString() – trả về chuỗi mô tả đối tượng; được gọi tự động khi in đối tượng, thường được ghi đè",
+   "nhom": "Kế thừa",
+   "viDu": "What is the result of overriding the toString() method in a subclass? → Its objects provide a custom string representation",
+   "viDuNghia": "Ghi đè phương thức toString() ở lớp con cho kết quả gì? → Đối tượng của nó có chuỗi mô tả riêng"
+  },
+  {
+   "chu": "polymorphism",
+   "doc": "/ˌpɑːliˈmɔːrfɪzəm/",
+   "nghia": "tính đa hình – cùng một lời gọi phương thức nhưng mỗi loại đối tượng chạy phiên bản riêng",
+   "nhom": "Đa hình & trừu tượng",
+   "viDu": "Which of the following is the best description of polymorphism?",
+   "viDuNghia": "Phát biểu nào sau đây mô tả đúng nhất về tính đa hình (polymorphism)?"
+  },
+  {
+   "chu": "abstract class",
+   "doc": "/ˈæbstrækt klæs/",
+   "nghia": "lớp trừu tượng – không tạo được đối tượng, dùng làm lớp cha; có thể chứa phương thức trừu tượng",
+   "nhom": "Đa hình & trừu tượng",
+   "viDu": "Which of the following statements about abstract classes in Java is correct?",
+   "viDuNghia": "Phát biểu nào sau đây về lớp trừu tượng (abstract class) trong Java là ĐÚNG?"
+  },
+  {
+   "chu": "abstract method",
+   "doc": "/ˈæbstrækt ˈmeθəd/",
+   "nghia": "phương thức trừu tượng – chỉ có khai báo, không có thân; lớp con phải ghi đè",
+   "nhom": "Đa hình & trừu tượng",
+   "viDu": "What happens if a subclass does not implement all the abstract methods of its superclass?",
+   "viDuNghia": "Điều gì xảy ra nếu một lớp con không hiện thực (implement) hết tất cả các phương thức trừu tượng của lớp cha?"
+  },
+  {
+   "chu": "concrete class",
+   "doc": "/ˈkɑːnkriːt klæs/",
+   "nghia": "lớp cụ thể – đã cài đặt đủ mọi phương thức nên tạo được đối tượng",
+   "nhom": "Đa hình & trừu tượng",
+   "viDu": "A concrete class implements all abstract methods, so objects of it can be created.",
+   "viDuNghia": "Lớp cụ thể cài đặt mọi phương thức trừu tượng nên tạo được đối tượng của nó."
+  },
+  {
+   "chu": "method body",
+   "doc": "/ˈmeθəd ˈbɑːdi/",
+   "nghia": "thân phương thức – phần mã nằm trong cặp ngoặc nhọn",
+   "nhom": "Đa hình & trừu tượng",
+   "viDu": "An abstract method has no method body; it ends with a semicolon.",
+   "viDuNghia": "Phương thức trừu tượng không có thân; nó kết thúc bằng dấu chấm phẩy."
+  },
+  {
+   "chu": "cast",
+   "doc": "/kæst/",
+   "nghia": "ép kiểu – đổi kiểu của tham chiếu hoặc giá trị; ép sai lúc chạy sinh ClassCastException",
+   "nhom": "Đa hình & trừu tượng",
+   "viDu": "Which of the following may legally appear as the new type (between the parentheses) in a cast operation?",
+   "viDuNghia": "Thứ nào sau đây có thể xuất hiện hợp lệ với vai trò kiểu mới (nằm trong cặp ngoặc đơn) của một phép ép kiểu (cast)?"
+  },
+  {
+   "chu": "Java interface",
+   "doc": "/ˈdʒɑːvə ˈɪntərfeɪs/",
+   "nghia": "interface của Java – tập phương thức mà lớp cam kết cài đặt (từ khoá implements); một lớp cài được nhiều interface",
+   "nhom": "Đa hình & trừu tượng",
+   "viDu": "Which of the following is the correct way of implementing an interface ISalary by Employee class?",
+   "viDuNghia": "Cách nào sau đây là đúng để lớp Employee hiện thực interface ISalary?"
+  },
+  {
+   "chu": "abstract",
+   "doc": "/ˈæbstrækt/",
+   "nghia": "trừu tượng – abstract class/method: lớp không tạo đối tượng trực tiếp, phương thức chỉ có khai báo, lớp con phải cài đặt. (Bài báo: phần tóm tắt)",
+   "nhom": "Đa hình & trừu tượng",
+   "viDu": "You cannot create an object of an abstract class with new; you must use a concrete subclass.",
+   "viDuNghia": "Không thể dùng new để tạo đối tượng của lớp trừu tượng; phải dùng một lớp con cụ thể."
+  },
+  {
+   "chu": "interface",
+   "doc": "/ˈɪntərfeɪs/",
+   "nghia": "interface (Java) – kiểu chỉ khai báo phương thức, lớp implements phải cài đặt hết. (Kiểm thử, kiến trúc: giao diện ghép nối)",
+   "nhom": "Đa hình & trừu tượng",
+   "viDu": "When creating your own class and you want to make it directly support sorting, which interface should you implement?",
+   "viDuNghia": "Khi tạo lớp của riêng bạn và muốn lớp đó TRỰC TIẾP hỗ trợ sắp xếp, bạn nên hiện thực interface nào?"
+  },
+  {
+   "chu": "instanceof operator",
+   "doc": "/ˈɪnstəns ʌv ˈɑːpəreɪtər/",
+   "nghia": "toán tử instanceof – kiểm tra một đối tượng có thuộc một lớp/interface hay không, trả về true/false",
+   "nhom": "Đa hình & trừu tượng",
+   "viDu": "What is the \"instanceof\" operator used for? → To check whether an object is an instance of a particular class",
+   "viDuNghia": "Toán tử \"instanceof\" dùng để làm gì? → Kiểm tra một đối tượng có phải thể hiện của một lớp cụ thể hay không"
+  },
+  {
+   "chu": "primitive type",
+   "doc": "/ˈprɪmətɪv taɪp/",
+   "nghia": "kiểu nguyên thuỷ – 8 kiểu có sẵn lưu thẳng giá trị (int, double, char, boolean…)",
+   "nhom": "Kiểu dữ liệu & từ khoá",
+   "viDu": "In which stream, data unit is primitive data type or string?",
+   "viDuNghia": "Trong loại luồng (stream) nào, đơn vị dữ liệu là kiểu nguyên thuỷ hoặc chuỗi?"
+  },
+  {
+   "chu": "wrapper class",
+   "doc": "/ˈræpər klæs/",
+   "nghia": "lớp bao – lớp đối tượng bọc kiểu nguyên thuỷ (Integer, Double, Character…)",
+   "nhom": "Kiểu dữ liệu & từ khoá",
+   "viDu": "Integer and Double are wrapper classes for the primitive types int and double.",
+   "viDuNghia": "Integer và Double là lớp bao của các kiểu nguyên thuỷ int và double."
+  },
+  {
+   "chu": "immutable",
+   "doc": "/ɪˈmjuːtəbl/",
+   "nghia": "bất biến – tạo xong không sửa được (String trong Java là bất biến)",
+   "nhom": "Kiểu dữ liệu & từ khoá",
+   "viDu": "A card is immutable once created, so no setters are required.",
+   "viDuNghia": "Lá bài là bất biến sau khi tạo nên không cần setter."
+  },
+  {
+   "chu": "final variable",
+   "doc": "/ˈfaɪnl ˈveriəbl/",
+   "nghia": "biến final – chỉ gán được một lần (hằng); final method không ghi đè được, final class không kế thừa được",
+   "nhom": "Kiểu dữ liệu & từ khoá",
+   "viDu": "A final variable can be assigned only once, so its value cannot be changed later.",
+   "viDuNghia": "Biến final chỉ gán được một lần, nên sau đó không đổi được giá trị."
+  },
+  {
+   "chu": "null reference",
+   "doc": "/nʌl ˈrefrəns/",
+   "nghia": "tham chiếu null – biến tham chiếu không trỏ tới đối tượng nào",
+   "nhom": "Kiểu dữ liệu & từ khoá",
+   "viDu": "What happens if you try to use a method on a null object reference?",
+   "viDuNghia": "Điều gì xảy ra nếu bạn cố gọi một phương thức trên một tham chiếu đối tượng đang là null?"
+  },
+  {
+   "chu": "equality",
+   "doc": "/iˈkwɑːləti/",
+   "nghia": "sự bằng nhau – toán tử hai dấu bằng so địa chỉ, phương thức equals so nội dung",
+   "nhom": "Kiểu dữ liệu & từ khoá",
+   "viDu": "Which method is used to compare two arrays for equality in Java?",
+   "viDuNghia": "Phương thức nào được dùng để so sánh sự bằng nhau của hai mảng trong Java?"
+  },
+  {
+   "chu": "legal",
+   "doc": "/ˈliːɡl/",
+   "nghia": "hợp lệ – câu lệnh/khai báo được phép theo luật Java",
+   "nhom": "Kiểu dữ liệu & từ khoá",
+   "viDu": "Which of the following is a legal import statement?",
+   "viDuNghia": "Câu lệnh import nào sau đây hợp lệ?"
+  },
+  {
+   "chu": "explicitly",
+   "doc": "/ɪkˈsplɪsɪtli/",
+   "nghia": "một cách tường minh – viết rõ ra trong mã chứ không để Java tự làm",
+   "nhom": "Kiểu dữ liệu & từ khoá",
+   "viDu": "Which of the following forms of constructor must exist explicitly in the definition of the Base class?",
+   "viDuNghia": "Dạng hàm tạo nào sau đây bắt buộc phải được viết tường minh trong định nghĩa của lớp Base?"
+  },
+  {
+   "chu": "concept",
+   "doc": "/ˈkɑːnsept/",
+   "nghia": "khái niệm (OOP concept = khái niệm hướng đối tượng)",
+   "nhom": "Kiểu dữ liệu & từ khoá",
+   "viDu": "Which OOP concept allows a class to inherit attributes and behaviors from another class?",
+   "viDuNghia": "Khái niệm OOP nào cho phép một lớp kế thừa các thuộc tính và hành vi từ một lớp khác?"
+  },
+  {
+   "chu": "related",
+   "doc": "/rɪˈleɪtɪd/",
+   "nghia": "có liên quan (\"related classes\" = các lớp liên quan nhau)",
+   "nhom": "Kiểu dữ liệu & từ khoá",
+   "viDu": "Which of the following statements related to inserting a new element into an ArrayList is true?",
+   "viDuNghia": "Phát biểu nào ĐÚNG về việc chèn phần tử mới vào ArrayList?"
+  },
+  {
+   "chu": "keyword",
+   "doc": "/ˈkiːwɜːrd/",
+   "nghia": "từ khoá – từ dành riêng của Java (class, final, static, extends…), không dùng làm tên biến",
+   "nhom": "Kiểu dữ liệu & từ khoá",
+   "viDu": "You can prevent a class from being sub-classed by using the __________ keyword in the class definition.",
+   "viDuNghia": "Bạn có thể ngăn một lớp bị kế thừa bằng cách dùng từ khoá __________ trong định nghĩa lớp."
+  },
+  {
+   "chu": "equals method",
+   "doc": "/ˈiːkwəlz ˈmeθəd/",
+   "nghia": "phương thức equals() – so sánh NỘI DUNG hai đối tượng (toán tử == so sánh tham chiếu/địa chỉ)",
+   "nhom": "Kiểu dữ liệu & từ khoá",
+   "viDu": "Use the equals method, not ==, to check whether two String objects have the same content.",
+   "viDuNghia": "Dùng phương thức equals, không dùng ==, để kiểm tra hai đối tượng String có cùng nội dung hay không."
+  },
+  {
+   "chu": "enhanced for loop",
+   "nghia": "vòng lặp for cải tiến (for-each) – for (Type x : collection) duyệt lần lượt từng phần tử mảng/collection, không cần chỉ số",
+   "nhom": "Kiểu dữ liệu & từ khoá",
+   "viDu": "The enhanced for loop for (int x : arr) visits every element of the array without using an index.",
+   "viDuNghia": "Vòng for cải tiến for (int x : arr) duyệt qua mọi phần tử của mảng mà không cần dùng chỉ số."
+  },
+  {
+   "chu": "boolean",
+   "doc": "/ˈbuːliən/",
+   "nghia": "kiểu boolean (luận lý) – chỉ có true hoặc false; trong Java mặc định là false và KHÔNG đổi qua lại với số như C; JavaScript cũng có kiểu này",
+   "nhom": "Kiểu dữ liệu & từ khoá",
+   "viDu": "What is the default value of boolean elements in an array if NOT initialized?",
+   "viDuNghia": "Giá trị mặc định của các phần tử kiểu boolean trong mảng khi CHƯA khởi tạo là gì?"
+  }
+ ]
+}

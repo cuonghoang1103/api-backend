@@ -1,0 +1,699 @@
+{
+ "ma": "swr302-4",
+ "nn": "en",
+ "ten": "SWR302 · 4. Kiểm chứng & quản lý yêu cầu",
+ "moTa": "Môn Software Requirements (FPT): kiểm chứng, rà soát, xếp ưu tiên, kiểm soát thay đổi, truy vết, tái sử dụng, rủi ro, Agile và các loại dự án. Từ trích từ đề FE/PE thật; phần lớn câu ví dụ là câu hỏi thật trong đề.",
+ "bieuTuong": "arrow.triangle.branch",
+ "thuTu": -953,
+ "tu": [
+  {
+   "chu": "requirements validation",
+   "doc": "/rɪˈkwaɪərmənts ˌvælɪˈdeɪʃn/",
+   "nghia": "kiểm chứng yêu cầu: xác nhận ta đã viết ĐÚNG yêu cầu, tức sản phẩm làm theo đó sẽ thoả nhu cầu khách hàng",
+   "nhom": "Kiểm chứng & rà soát",
+   "viDu": "Requirements validation activity occurs primarily after the specification activity.",
+   "viDuNghia": "Hoạt động kiểm chứng yêu cầu chủ yếu diễn ra sau hoạt động đặc tả."
+  },
+  {
+   "chu": "requirements verification",
+   "doc": "/rɪˈkwaɪərmənts ˌverɪfɪˈkeɪʃn/",
+   "nghia": "xác minh yêu cầu: kiểm tra yêu cầu được VIẾT ĐÚNG cách, đủ các đặc tính của yêu cầu tốt",
+   "nhom": "Kiểm chứng & rà soát",
+   "viDu": "Requirements verification checks that each requirement is written correctly and has the properties of a good requirement.",
+   "viDuNghia": "Xác minh yêu cầu là kiểm tra mỗi yêu cầu được viết đúng và có đủ đặc tính của yêu cầu tốt."
+  },
+  {
+   "chu": "pass-around",
+   "doc": "/ˈpæs əraʊnd/",
+   "nghia": "chuyền tay rà soát: gửi tài liệu cho vài đồng nghiệp cùng lúc, mỗi người tự đọc và góp ý",
+   "nhom": "Kiểm chứng & rà soát",
+   "viDu": "In a pass-around, you invite several colleagues to examine a deliverable concurrently.",
+   "viDuNghia": "Với cách chuyền tay rà soát, bạn mời vài đồng nghiệp cùng lúc xem xét một sản phẩm bàn giao."
+  },
+  {
+   "chu": "peer deskcheck",
+   "doc": "/pɪr ˈdeskˌtʃek/",
+   "nghia": "nhờ kiểm tại bàn: nhờ một đồng nghiệp xem qua sản phẩm của mình",
+   "nhom": "Kiểm chứng & rà soát",
+   "viDu": "In a peer deskcheck, you ask one colleague to look over your work product.",
+   "viDuNghia": "Với cách kiểm tại bàn, bạn nhờ một đồng nghiệp xem qua sản phẩm công việc của mình."
+  },
+  {
+   "chu": "requirements review",
+   "doc": "/rɪˈkwaɪərmənts rɪˈvjuː/",
+   "nghia": "rà soát yêu cầu: đọc lại tài liệu yêu cầu để tìm lỗi, chỗ thiếu, chỗ mơ hồ",
+   "nhom": "Kiểm chứng & rà soát",
+   "viDu": "What is the primary purpose of a defect checklist in requirements reviews?",
+   "viDuNghia": "Mục đích chính của bảng kiểm lỗi (defect checklist) trong việc đánh giá yêu cầu là gì?"
+  },
+  {
+   "chu": "defect checklist",
+   "doc": "/ˈdiːfekt ˈtʃeklɪst/",
+   "nghia": "danh sách kiểm lỗi: bảng liệt kê các lỗi hay gặp để người rà soát dò theo",
+   "nhom": "Kiểm chứng & rà soát",
+   "viDu": "In the process of validating the requirements, what is a defect checklist?",
+   "viDuNghia": "Trong quá trình kiểm chứng yêu cầu, danh sách kiểm lỗi là gì?"
+  },
+  {
+   "chu": "sign-off",
+   "doc": "/ˈsaɪn ɔːf/",
+   "nghia": "ký duyệt: xác nhận chính thức là đồng ý với bản yêu cầu",
+   "nhom": "Kiểm chứng & rà soát",
+   "viDu": "Customer sign-off on the SRS means the requirements baseline is agreed.",
+   "viDuNghia": "Khách hàng ký duyệt bản SRS nghĩa là đường cơ sở yêu cầu đã được thống nhất."
+  },
+  {
+   "chu": "approve",
+   "doc": "/əˈpruːv/",
+   "nghia": "phê duyệt, chấp thuận",
+   "nhom": "Kiểm chứng & rà soát",
+   "viDu": "Which stakeholder must approve the business analysis approach to ensure that the business analysis approach is compatible with the other project activities?",
+   "viDuNghia": "Bên liên quan nào phải phê duyệt cách tiếp cận phân tích nghiệp vụ để bảo đảm nó tương thích với các hoạt động khác của dự án?"
+  },
+  {
+   "chu": "requirements prioritization",
+   "doc": "/rɪˈkwaɪərmənts praɪˌɔːrətəˈzeɪʃn/",
+   "nghia": "xếp ưu tiên yêu cầu: quyết định yêu cầu nào làm trước, cái nào để sau",
+   "nhom": "Xếp ưu tiên",
+   "viDu": "What does the MoSCoW method classify in requirements prioritization?",
+   "viDuNghia": "Phương pháp MoSCoW phân loại yêu cầu theo những nhóm nào?"
+  },
+  {
+   "chu": "prioritization technique",
+   "doc": "/praɪˌɔːrətəˈzeɪʃn tekˈniːk/",
+   "nghia": "kỹ thuật xếp ưu tiên (MoSCoW, thang ba mức, so sánh cặp…)",
+   "nhom": "Xếp ưu tiên",
+   "viDu": "The four capitalized letters in the MoSCoW prioritization technique stand for:",
+   "viDuNghia": "Bốn chữ cái viết hoa trong kỹ thuật xếp ưu tiên MoSCoW là viết tắt của:"
+  },
+  {
+   "chu": "MoSCoW",
+   "doc": "/ˈmɑːskaʊ/",
+   "nghia": "MoSCoW: xếp ưu tiên theo bốn mức Must have, Should have, Could have, Won't have",
+   "nhom": "Xếp ưu tiên",
+   "viDu": "Why is the MoSCoW method effective in managing scope changes?",
+   "viDuNghia": "Tại sao phương pháp MoSCoW hiệu quả trong việc quản lý thay đổi phạm vi?"
+  },
+  {
+   "chu": "must have",
+   "doc": "/mʌst hæv/",
+   "nghia": "bắt buộc phải có (mức cao nhất trong MoSCoW): thiếu thì sản phẩm không dùng được",
+   "nhom": "Xếp ưu tiên",
+   "viDu": "What is the purpose of categorizing requirements into \"Must-have\" and \"Should-have\"?",
+   "viDuNghia": "Mục đích của việc phân loại yêu cầu thành \"Must-have\" và \"Should-have\" là gì?"
+  },
+  {
+   "chu": "should have",
+   "doc": "/ʃʊd hæv/",
+   "nghia": "nên có (MoSCoW): quan trọng nhưng chưa phải sống còn",
+   "nhom": "Xếp ưu tiên",
+   "viDu": "What is the purpose of categorizing requirements into \"Must-have\" and \"Should-have\"?",
+   "viDuNghia": "Mục đích của việc phân loại yêu cầu thành \"Must-have\" và \"Should-have\" là gì?"
+  },
+  {
+   "chu": "could have",
+   "doc": "/kʊd hæv/",
+   "nghia": "có thì tốt (MoSCoW): làm nếu còn thời gian và tiền",
+   "nhom": "Xếp ưu tiên",
+   "viDu": "The MoSCoW technique stands for Must have, Should have, Could have, Won't have.",
+   "viDuNghia": "Kỹ thuật MoSCoW là viết tắt của Must have, Should have, Could have, Won't have."
+  },
+  {
+   "chu": "three-level scale",
+   "doc": "/ˌθriː ˈlevl skeɪl/",
+   "nghia": "thang ba mức: xếp ưu tiên cao, trung bình, thấp (dựa trên quan trọng và khẩn cấp)",
+   "nhom": "Xếp ưu tiên",
+   "viDu": "According to the \"Three-level scale\" prioritization, how is a \"High-priority requirement\" defined?",
+   "viDuNghia": "Theo cách ưu tiên \"thang ba mức\", một \"yêu cầu ưu tiên cao\" được định nghĩa như thế nào?"
+  },
+  {
+   "chu": "in or out",
+   "nghia": "kỹ thuật \"trong hay ngoài\": với mỗi yêu cầu chỉ quyết định có đưa vào bản phát hành tới hay không",
+   "nhom": "Xếp ưu tiên",
+   "viDu": "With the in or out technique, stakeholders simply decide whether each requirement goes into the next release.",
+   "viDuNghia": "Với kỹ thuật \"trong hay ngoài\", các bên chỉ quyết định mỗi yêu cầu có vào bản phát hành tới hay không."
+  },
+  {
+   "chu": "pairwise comparison",
+   "doc": "/ˈperwaɪz kəmˈpærɪsn/",
+   "nghia": "so sánh từng cặp: so hai yêu cầu một để xem cái nào ưu tiên hơn",
+   "nhom": "Xếp ưu tiên",
+   "viDu": "Pairwise comparison becomes slow when there are more than a few dozen requirements.",
+   "viDuNghia": "So sánh từng cặp trở nên chậm khi có hơn vài chục yêu cầu."
+  },
+  {
+   "chu": "urgent",
+   "doc": "/ˈɜːrdʒənt/",
+   "nghia": "khẩn cấp: cần có sớm",
+   "nhom": "Xếp ưu tiên",
+   "viDu": "A high-priority requirement is both important and urgent.",
+   "viDuNghia": "Yêu cầu ưu tiên cao là yêu cầu vừa quan trọng vừa khẩn cấp."
+  },
+  {
+   "chu": "high priority",
+   "doc": "/haɪ praɪˈɔːrəti/",
+   "nghia": "ưu tiên cao: vừa quan trọng vừa khẩn cấp",
+   "nhom": "Xếp ưu tiên",
+   "viDu": "Which is NOT a good reason to set a use case at high priority to implement?",
+   "viDuNghia": "Lý do nào KHÔNG phải là lý do hợp lý để đặt một use case ở mức ưu tiên cao?"
+  },
+  {
+   "chu": "won't have",
+   "doc": "/woʊnt hæv/",
+   "nghia": "sẽ không có (lần này): mức thấp nhất của MoSCoW, để ngoài phạm vi bản phát hành này",
+   "nhom": "Xếp ưu tiên",
+   "viDu": "The MoSCoW technique sorts requirements into Must have, Should have, Could have, and Won't have.",
+   "viDuNghia": "Kỹ thuật MoSCoW chia yêu cầu thành Must have (phải có), Should have (nên có), Could have (có thì tốt) và Won't have (sẽ không có)."
+  },
+  {
+   "chu": "low priority",
+   "doc": "/loʊ praɪˈɔːrəti/",
+   "nghia": "ưu tiên thấp: không quan trọng và không khẩn cấp, có thể để sau",
+   "nhom": "Xếp ưu tiên",
+   "viDu": "A signal that elicitation is complete: proposed new requirements are all low priority.",
+   "viDuNghia": "Một dấu hiệu cho thấy khơi gợi đã xong: các yêu cầu mới được đề xuất đều có ưu tiên thấp."
+  },
+  {
+   "chu": "penalty",
+   "doc": "/ˈpenəlti/",
+   "nghia": "thiệt hại: mức thiệt khách hàng phải chịu nếu tính năng KHÔNG có (dùng khi xếp ưu tiên theo giá trị, chi phí, rủi ro)",
+   "nhom": "Xếp ưu tiên",
+   "viDu": "Estimate the relative penalty that the customer or the business would suffer if each feature were not included.",
+   "viDuNghia": "Ước lượng mức thiệt hại tương đối mà khách hàng hay doanh nghiệp phải chịu nếu từng tính năng không được đưa vào."
+  },
+  {
+   "chu": "requirements baseline",
+   "doc": "/rɪˈkwaɪərmənts ˈbeɪslaɪn/",
+   "nghia": "đường cơ sở yêu cầu: tập yêu cầu đã được rà soát, thống nhất, làm nền cho việc phát triển tiếp",
+   "nhom": "Kiểm soát thay đổi",
+   "viDu": "A requirements baseline is a set of requirements that has been reviewed and agreed upon and serves as the basis for further development.",
+   "viDuNghia": "Requirements baseline (đường cơ sở yêu cầu) là tập yêu cầu đã được rà soát và thống nhất, làm cơ sở cho việc phát triển tiếp theo"
+  },
+  {
+   "chu": "requirements management",
+   "doc": "/rɪˈkwaɪərmənts ˈmænɪdʒmənt/",
+   "nghia": "quản lý yêu cầu: kiểm soát phiên bản, kiểm soát thay đổi, theo dõi trạng thái và truy vết yêu cầu",
+   "nhom": "Kiểm soát thay đổi",
+   "viDu": "What are the major activities involved in requirements management?",
+   "viDuNghia": "Những hoạt động chính trong quản lý yêu cầu là gì?"
+  },
+  {
+   "chu": "change control board",
+   "doc": "/tʃeɪndʒ kənˈtroʊl bɔːrd/",
+   "nghia": "hội đồng kiểm soát thay đổi (CCB): nhóm người quyết định duyệt hay bác từng yêu cầu thay đổi",
+   "nhom": "Kiểm soát thay đổi",
+   "viDu": "What role does a Requirements Change Control Board (RCCB) play in the requirements management process?",
+   "viDuNghia": "Ban Kiểm soát Thay đổi Yêu cầu (RCCB) đóng vai trò gì trong quy trình quản lý yêu cầu?"
+  },
+  {
+   "chu": "change management",
+   "doc": "/tʃeɪndʒ ˈmænɪdʒmənt/",
+   "nghia": "quản lý thay đổi",
+   "nhom": "Kiểm soát thay đổi",
+   "viDu": "Change management in enhancement and replacement projects is important for:",
+   "viDuNghia": "Quản lý thay đổi trong các dự án nâng cấp và thay thế quan trọng vì:"
+  },
+  {
+   "chu": "version control",
+   "doc": "/ˈvɜːrʒn kənˈtroʊl/",
+   "nghia": "kiểm soát phiên bản: đánh số và giữ lịch sử từng phiên bản của yêu cầu, tài liệu",
+   "nhom": "Kiểm soát thay đổi",
+   "viDu": "Why is version control important in managing requirements? (Select all that apply)",
+   "viDuNghia": "Vì sao kiểm soát phiên bản lại quan trọng trong quản lý yêu cầu? (Chọn tất cả đáp án đúng)"
+  },
+  {
+   "chu": "requirement attribute",
+   "doc": "/rɪˈkwaɪərmənt ˈætrɪbjuːt/",
+   "nghia": "thuộc tính của yêu cầu: thông tin đi kèm mỗi yêu cầu (trạng thái, độ ưu tiên, nguồn gốc, tác giả, phiên bản…)",
+   "nhom": "Kiểm soát thay đổi",
+   "viDu": "Status, priority, and origin are common requirement attributes.",
+   "viDuNghia": "Trạng thái, độ ưu tiên và nguồn gốc là các thuộc tính thường gặp của yêu cầu."
+  },
+  {
+   "chu": "requirements status",
+   "doc": "/rɪˈkwaɪərmənts ˈsteɪtəs/",
+   "nghia": "trạng thái yêu cầu: đề xuất, đã duyệt, đã cài đặt, đã kiểm, hoãn, xoá, bác bỏ",
+   "nhom": "Kiểm soát thay đổi",
+   "viDu": "Requirements status can be Proposed, Approved, Implemented, Verified, Deferred, Deleted, or Rejected.",
+   "viDuNghia": "Trạng thái yêu cầu có thể là Đề xuất, Đã duyệt, Đã cài đặt, Đã kiểm, Hoãn, Đã xoá hoặc Bị bác."
+  },
+  {
+   "chu": "status tracking",
+   "doc": "/ˈsteɪtəs ˈtrækɪŋ/",
+   "nghia": "theo dõi trạng thái (của từng yêu cầu trong suốt dự án)",
+   "nhom": "Kiểm soát thay đổi",
+   "viDu": "The major activities of requirements management are version control, change control, requirements status tracking, and requirements tracing.",
+   "viDuNghia": "Các hoạt động chính của quản lý yêu cầu là kiểm soát phiên bản, kiểm soát thay đổi, theo dõi trạng thái yêu cầu và truy vết yêu cầu."
+  },
+  {
+   "chu": "proposed",
+   "doc": "/prəˈpoʊzd/",
+   "nghia": "được đề xuất: trạng thái yêu cầu mới nêu, chưa được duyệt",
+   "nhom": "Kiểm soát thay đổi",
+   "viDu": "Proposed requirements changes are thoughtfully evaluated before being committed to.",
+   "viDuNghia": "Các thay đổi yêu cầu được đề xuất phải được đánh giá kỹ lưỡng trước khi cam kết thực hiện."
+  },
+  {
+   "chu": "approved",
+   "doc": "/əˈpruːvd/",
+   "nghia": "đã duyệt: yêu cầu đã được phân tích và đưa vào đường cơ sở",
+   "nhom": "Kiểm soát thay đổi",
+   "viDu": "Change management controls how changes to the project are approved and implemented.",
+   "viDuNghia": "Quản lý thay đổi kiểm soát cách các thay đổi của dự án được duyệt và thực hiện."
+  },
+  {
+   "chu": "implemented",
+   "doc": "/ˈɪmplɪmentɪd/",
+   "nghia": "đã cài đặt: mã thực hiện yêu cầu đã viết xong",
+   "nhom": "Kiểm soát thay đổi",
+   "viDu": "The requirement's status changes to Implemented when the code is written and unit-tested.",
+   "viDuNghia": "Trạng thái của yêu cầu chuyển sang \"Implemented\" khi mã đã viết xong và đã kiểm thử đơn vị."
+  },
+  {
+   "chu": "deferred",
+   "doc": "/dɪˈfɜːrd/",
+   "nghia": "hoãn lại: yêu cầu đã duyệt nhưng dời sang bản phát hành sau",
+   "nhom": "Kiểm soát thay đổi",
+   "viDu": "Which statement best describes the Deferred requirement status?",
+   "viDuNghia": "Phát biểu nào mô tả đúng nhất trạng thái yêu cầu \"Deferred\" (hoãn lại)?"
+  },
+  {
+   "chu": "modification history",
+   "doc": "/ˌmɑːdɪfɪˈkeɪʃn ˈhɪstri/",
+   "nghia": "lịch sử sửa đổi: ghi lại ai đã đổi gì, khi nào",
+   "nhom": "Kiểm soát thay đổi",
+   "viDu": "Labeling requirements allows us to refer to specific requirements in a change request, modification history, or traceability matrix.",
+   "viDuNghia": "Gắn nhãn cho yêu cầu giúp ta chỉ đúng từng yêu cầu trong yêu cầu thay đổi, lịch sử sửa đổi hay ma trận truy vết."
+  },
+  {
+   "chu": "gold plating",
+   "doc": "/ɡoʊld ˈpleɪtɪŋ/",
+   "nghia": "\"mạ vàng\": lập trình viên tự thêm chức năng không có trong yêu cầu vì nghĩ người dùng sẽ thích",
+   "nhom": "Kiểm soát thay đổi",
+   "viDu": "What is the primary distinction between Scope Creep and Gold Plating?",
+   "viDuNghia": "Điểm khác biệt chính giữa Scope Creep (phình phạm vi) và Gold Plating (mạ vàng) là gì?"
+  },
+  {
+   "chu": "evolving",
+   "doc": "/ɪˈvɑːlvɪŋ/",
+   "nghia": "đang thay đổi, phát triển dần theo thời gian",
+   "nhom": "Kiểm soát thay đổi",
+   "viDu": "Why is it essential to regularly reassess and update prioritization based on evolving business objectives?",
+   "viDuNghia": "Vì sao cần thường xuyên đánh giá lại và cập nhật thứ tự ưu tiên theo các mục tiêu nghiệp vụ đang thay đổi?"
+  },
+  {
+   "chu": "open issue",
+   "doc": "/ˈoʊpən ˈɪʃuː/",
+   "nghia": "vấn đề còn mở: câu hỏi, điểm chưa quyết về yêu cầu, cần theo dõi cho tới khi đóng",
+   "nhom": "Kiểm soát thay đổi",
+   "viDu": "Track every open issue until someone resolves it.",
+   "viDuNghia": "Hãy theo dõi mọi vấn đề còn mở cho tới khi có người giải quyết xong."
+  },
+  {
+   "chu": "escalate",
+   "doc": "/ˈeskəleɪt/",
+   "nghia": "chuyển lên cấp cao hơn để giải quyết",
+   "nhom": "Kiểm soát thay đổi",
+   "viDu": "If the team cannot agree on a change request, escalate it to the change control board.",
+   "viDuNghia": "Nếu nhóm không thống nhất được về một yêu cầu thay đổi, hãy chuyển nó lên hội đồng kiểm soát thay đổi."
+  },
+  {
+   "chu": "change request",
+   "doc": "/tʃeɪndʒ rɪˈkwest/",
+   "nghia": "yêu cầu thay đổi – đề nghị chính thức sửa yêu cầu đã chốt; đi qua kiểm soát thay đổi: đánh giá → CCB quyết định → thực hiện → cập nhật, thông báo",
+   "nhom": "Kiểm soát thay đổi",
+   "viDu": "The four tasks that are performed to handle a single change request are: evaluate change request, make change decision, implement the change, and ______.",
+   "viDuNghia": "Bốn công việc để xử lý một yêu cầu thay đổi là: đánh giá yêu cầu thay đổi, ra quyết định thay đổi, triển khai thay đổi, và ______."
+  },
+  {
+   "chu": "requirements traceability",
+   "doc": "/rɪˈkwaɪərmənts ˌtreɪsəˈbɪləti/",
+   "nghia": "truy vết yêu cầu: khả năng lần theo một yêu cầu ngược về nguồn gốc và xuôi tới thiết kế, mã, test",
+   "nhom": "Truy vết & tái sử dụng",
+   "viDu": "Which of the following best describes the structure of the Requirements Traceability Matrix (RTM)?",
+   "viDuNghia": "Điều nào sau đây mô tả đúng nhất cấu trúc của Ma trận Truy vết Yêu cầu (RTM)?"
+  },
+  {
+   "chu": "requirements traceability matrix",
+   "nghia": "ma trận truy vết yêu cầu (RTM): bảng nối mỗi yêu cầu với nguồn gốc, thiết kế, mã và test case của nó",
+   "nhom": "Truy vết & tái sử dụng",
+   "viDu": "What is the purpose of a Requirements Traceability Matrix (RTM) in the requirements management process?",
+   "viDuNghia": "Ma trận truy vết yêu cầu (RTM) có mục đích gì trong quy trình quản lý yêu cầu?"
+  },
+  {
+   "chu": "traceability matrix",
+   "doc": "/ˌtreɪsəˈbɪləti ˈmeɪtrɪks/",
+   "nghia": "ma trận truy vết: bảng thể hiện liên kết giữa yêu cầu và các thành phần khác",
+   "nhom": "Truy vết & tái sử dụng",
+   "viDu": "What is the value of creating a traceability matrix in a project?",
+   "viDuNghia": "Giá trị của việc lập ma trận truy vết (traceability matrix) trong dự án là gì?"
+  },
+  {
+   "chu": "requirements tracing",
+   "doc": "/rɪˈkwaɪərmənts ˈtreɪsɪŋ/",
+   "nghia": "việc lần vết yêu cầu: ghi và theo dõi các liên kết giữa yêu cầu với nhau và với sản phẩm khác",
+   "nhom": "Truy vết & tái sử dụng",
+   "viDu": "What is the primary motivation for requirements tracing?",
+   "viDuNghia": "Động lực chính của việc lần vết yêu cầu là gì?"
+  },
+  {
+   "chu": "trace",
+   "doc": "/treɪs/",
+   "nghia": "lần vết, truy theo dấu (từ yêu cầu tới mã, tới test)",
+   "nhom": "Truy vết & tái sử dụng",
+   "viDu": "What is true about the sources of trace link information?",
+   "viDuNghia": "Điều nào đúng về các nguồn thông tin của liên kết truy vết (trace link)?"
+  },
+  {
+   "chu": "requirements reuse",
+   "doc": "/rɪˈkwaɪərmənts ˌriːˈjuːs/",
+   "nghia": "tái sử dụng yêu cầu: dùng lại yêu cầu đã viết ở dự án trước cho dự án mới",
+   "nhom": "Truy vết & tái sử dụng",
+   "viDu": "What is the primary objective of requirements reuse in projects?",
+   "viDuNghia": "Mục tiêu chính của việc tái sử dụng yêu cầu trong dự án là gì?"
+  },
+  {
+   "chu": "extent of reuse",
+   "nghia": "phạm vi tái sử dụng: dùng lại bao nhiêu (một yêu cầu, một nhóm yêu cầu, hay cả bộ)",
+   "nhom": "Truy vết & tái sử dụng",
+   "viDu": "Which option belongs to the extent of reuse dimension?",
+   "viDuNghia": "Lựa chọn nào thuộc chiều \"phạm vi tái sử dụng\"?"
+  },
+  {
+   "chu": "extent of modification",
+   "nghia": "mức độ sửa đổi: phải sửa yêu cầu cũ nhiều hay ít để dùng lại được",
+   "nhom": "Truy vết & tái sử dụng",
+   "viDu": "The dimensions of requirements reuse are extent of reuse, extent of modification, and reuse mechanism.",
+   "viDuNghia": "Các chiều của tái sử dụng yêu cầu là phạm vi tái sử dụng, mức độ sửa đổi và cơ chế tái sử dụng."
+  },
+  {
+   "chu": "reuse mechanism",
+   "doc": "/ˌriːˈjuːs ˈmekənɪzəm/",
+   "nghia": "cơ chế tái sử dụng: cách dùng lại (sao chép rồi dán, hay tham chiếu tới bản gốc)",
+   "nhom": "Truy vết & tái sử dụng",
+   "viDu": "Which option belongs to the reuse mechanism dimension?",
+   "viDuNghia": "Phương án nào thuộc chiều 'cơ chế tái sử dụng' (reuse mechanism)?"
+  },
+  {
+   "chu": "copy-and-paste",
+   "doc": "/ˌkɑːpi ən ˈpeɪst/",
+   "nghia": "sao chép rồi dán: cách tái sử dụng đơn giản nhất, chép nguyên yêu cầu sang tài liệu mới",
+   "nhom": "Truy vết & tái sử dụng",
+   "viDu": "Copy-and-paste is the simplest reuse mechanism, but the copies can drift apart.",
+   "viDuNghia": "Sao chép rồi dán là cơ chế tái sử dụng đơn giản nhất, nhưng các bản sao có thể lệch nhau dần."
+  },
+  {
+   "chu": "reusable",
+   "doc": "/ˌriːˈjuːzəbl/",
+   "nghia": "dùng lại được",
+   "nhom": "Truy vết & tái sử dụng",
+   "viDu": "How can reusable requirements be stored for easy reference?",
+   "viDuNghia": "Yêu cầu tái sử dụng có thể được lưu trữ như thế nào để dễ tham chiếu?"
+  },
+  {
+   "chu": "traceability",
+   "doc": "/ˌtreɪsəˈbɪləti/",
+   "nghia": "khả năng truy vết – lần từ yêu cầu tới thiết kế, code, test case và ngược lại (Requirements Traceability Matrix)",
+   "nhom": "Truy vết & tái sử dụng",
+   "viDu": "What is the purpose of a Requirements Traceability Matrix (RTM) in the requirements management process?",
+   "viDuNghia": "Ma trận truy vết yêu cầu (RTM) có mục đích gì trong quy trình quản lý yêu cầu?"
+  },
+  {
+   "chu": "risk avoidance",
+   "doc": "/rɪsk əˈvɔɪdəns/",
+   "nghia": "né tránh rủi ro: không làm việc có rủi ro đó",
+   "nhom": "Rủi ro",
+   "viDu": "Which of the following is an example of a risk avoidance strategy?",
+   "viDuNghia": "Điều nào sau đây là ví dụ của chiến lược tránh né rủi ro (risk avoidance)?"
+  },
+  {
+   "chu": "risk control",
+   "doc": "/rɪsk kənˈtroʊl/",
+   "nghia": "kiểm soát rủi ro: quản lý các rủi ro đã được xếp là ưu tiên cao",
+   "nhom": "Rủi ro",
+   "viDu": "The elements of risk management are risk assessment, risk avoidance, and risk control.",
+   "viDuNghia": "Các thành phần của quản lý rủi ro là đánh giá rủi ro, né tránh rủi ro và kiểm soát rủi ro."
+  },
+  {
+   "chu": "risk mitigation",
+   "doc": "/rɪsk ˌmɪtɪˈɡeɪʃn/",
+   "nghia": "giảm thiểu rủi ro: hành động làm giảm khả năng xảy ra hoặc mức thiệt hại",
+   "nhom": "Rủi ro",
+   "viDu": "What is the purpose of a risk mitigation plan in requirements management?",
+   "viDuNghia": "Mục đích của kế hoạch giảm thiểu rủi ro trong quản lý yêu cầu là gì?"
+  },
+  {
+   "chu": "risk monitoring",
+   "doc": "/rɪsk ˈmɑːnɪtərɪŋ/",
+   "nghia": "theo dõi rủi ro: bám sát tiến độ xử lý từng rủi ro",
+   "nhom": "Rủi ro",
+   "viDu": "Risk monitoring tracks the progress of each risk mitigation action.",
+   "viDuNghia": "Theo dõi rủi ro là bám sát tiến độ của từng hành động giảm thiểu rủi ro."
+  },
+  {
+   "chu": "cost overrun",
+   "doc": "/kɔːst ˈoʊvərʌn/",
+   "nghia": "đội chi phí: tiêu vượt ngân sách dự kiến",
+   "nhom": "Rủi ro",
+   "viDu": "Which of the following is a potential risk in requirements elicitation that can lead to project delays and cost overruns?",
+   "viDuNghia": "Điều nào sau đây là rủi ro tiềm ẩn trong khơi gợi yêu cầu có thể dẫn tới chậm tiến độ và vượt chi phí?"
+  },
+  {
+   "chu": "agile project",
+   "doc": "/ˈædʒl ˈprɑːdʒekt/",
+   "nghia": "dự án Agile: làm theo vòng lặp ngắn, giao từng phần nhỏ, sẵn sàng đón thay đổi yêu cầu",
+   "nhom": "Agile & cách tiếp cận",
+   "viDu": "In an agile project, a single representative of stakeholders is called the product owner.",
+   "viDuNghia": "Trong dự án Agile, người đại diện duy nhất cho các bên liên quan được gọi là chủ sản phẩm."
+  },
+  {
+   "chu": "agile development",
+   "doc": "/ˈædʒl dɪˈveləpmənt/",
+   "nghia": "phát triển linh hoạt (Agile)",
+   "nhom": "Agile & cách tiếp cận",
+   "viDu": "On projects using agile development methods, the traditional project role Business Analyst will likely be a Product owner.",
+   "viDuNghia": "Trong các dự án dùng phương pháp phát triển agile, vai trò truyền thống Business Analyst nhiều khả năng sẽ trở thành Product owner"
+  },
+  {
+   "chu": "iterative",
+   "doc": "/ˈɪtəreɪtɪv/",
+   "nghia": "lặp: làm đi làm lại qua nhiều vòng, mỗi vòng hoàn thiện thêm",
+   "nhom": "Agile & cách tiếp cận",
+   "viDu": "Agile methods are based on iterative and incremental approaches to software development.",
+   "viDuNghia": "Các phương pháp Agile dựa trên cách tiếp cận lặp và tăng dần trong phát triển phần mềm."
+  },
+  {
+   "chu": "change-driven approach",
+   "doc": "/ˈtʃeɪndʒ ˌdrɪvn əˈproʊtʃ/",
+   "nghia": "cách tiếp cận hướng thay đổi (kiểu Agile): ít lập kế hoạch trước, điều chỉnh liên tục theo phản hồi",
+   "nhom": "Agile & cách tiếp cận",
+   "viDu": "When an organization is using a change-driven approach to business analysis, how are communications managed?",
+   "viDuNghia": "Khi tổ chức dùng cách tiếp cận hướng-thay-đổi (change-driven) trong phân tích nghiệp vụ, việc trao đổi thông tin được quản lý như thế nào?"
+  },
+  {
+   "chu": "plan-driven approach",
+   "doc": "/ˈplæn ˌdrɪvn əˈproʊtʃ/",
+   "nghia": "cách tiếp cận hướng kế hoạch (kiểu truyền thống): xác định yêu cầu và lập kế hoạch đầy đủ trước khi làm",
+   "nhom": "Agile & cách tiếp cận",
+   "viDu": "Fred's organization is using a plan-driven approach for the business analysis deliverables. In this approach how will the requirements be captured?",
+   "viDuNghia": "Tổ chức của Fred dùng cách tiếp cận hướng-kế-hoạch (plan-driven) cho các sản phẩm bàn giao phân tích nghiệp vụ. Trong cách tiếp cận này, các yêu cầu sẽ được ghi nhận như thế nào?"
+  },
+  {
+   "chu": "Scrum",
+   "doc": "/skrʌm/",
+   "nghia": "Scrum: khung làm việc Agile chia công việc thành các sprint ngắn",
+   "nhom": "Agile & cách tiếp cận",
+   "viDu": "In Scrum, the product owner orders the product backlog before each sprint.",
+   "viDuNghia": "Trong Scrum, chủ sản phẩm sắp thứ tự backlog trước mỗi sprint."
+  },
+  {
+   "chu": "user acceptance",
+   "doc": "/ˈjuːzər əkˈseptəns/",
+   "nghia": "sự chấp nhận của người dùng: người dùng đồng ý rằng sản phẩm đáp ứng nhu cầu",
+   "nhom": "Agile & cách tiếp cận",
+   "viDu": "User acceptance of the new system was low because nobody asked the clerks what they needed.",
+   "viDuNghia": "Mức chấp nhận của người dùng với hệ thống mới thấp vì không ai hỏi nhân viên họ cần gì."
+  },
+  {
+   "chu": "face-to-face",
+   "doc": "/ˌfeɪs tə ˈfeɪs/",
+   "nghia": "trực tiếp, mặt đối mặt",
+   "nhom": "Agile & cách tiếp cận",
+   "viDu": "Face-to-face conversations replace much of the written detail on agile projects.",
+   "viDuNghia": "Trao đổi trực tiếp thay cho phần lớn chi tiết viết ra giấy trong dự án Agile."
+  },
+  {
+   "chu": "adapt",
+   "doc": "/əˈdæpt/",
+   "nghia": "thích nghi, điều chỉnh cho hợp",
+   "nhom": "Agile & cách tiếp cận",
+   "viDu": "Which of the following is NOT considered a dimension of requirements reuse when adapting requirements from one project to another?",
+   "viDuNghia": "Điều nào sau đây KHÔNG được xem là một chiều (dimension) của việc tái sử dụng yêu cầu khi điều chỉnh yêu cầu từ dự án này sang dự án khác?"
+  },
+  {
+   "chu": "sprint",
+   "doc": "/sprɪnt/",
+   "nghia": "sprint – vòng lặp ngắn, độ dài cố định (thường 1–4 tuần) trong Scrum; cuối mỗi sprint giao một phần sản phẩm chạy được",
+   "nhom": "Agile & cách tiếp cận",
+   "viDu": "Which of the following best describes a sprint in Agile methodology?",
+   "viDuNghia": "Điều nào sau đây mô tả đúng nhất một sprint trong phương pháp Agile?"
+  },
+  {
+   "chu": "enhancement project",
+   "doc": "/ɪnˈhænsmənt ˈprɑːdʒekt/",
+   "nghia": "dự án nâng cấp: thêm khả năng mới vào một hệ thống đang có",
+   "nhom": "Các loại dự án",
+   "viDu": "Which is the best definition of enhancement project?",
+   "viDuNghia": "Đâu là định nghĩa đúng nhất của dự án nâng cấp (enhancement project)?"
+  },
+  {
+   "chu": "replacement project",
+   "doc": "/rɪˈpleɪsmənt ˈprɑːdʒekt/",
+   "nghia": "dự án thay thế: làm hệ thống mới thay cho hệ thống cũ",
+   "nhom": "Các loại dự án",
+   "viDu": "What is a common challenge that both enhancement and replacement projects often face?",
+   "viDuNghia": "Thách thức chung mà cả dự án nâng cấp lẫn dự án thay thế thường gặp là gì?"
+  },
+  {
+   "chu": "packaged solution",
+   "doc": "/ˈpækɪdʒd səˈluːʃn/",
+   "nghia": "giải pháp đóng gói: phần mềm làm sẵn mua về dùng thay vì tự viết",
+   "nhom": "Các loại dự án",
+   "viDu": "What is a common challenge with packaged solutions?",
+   "viDuNghia": "Một thách thức thường gặp với giải pháp đóng gói là gì?"
+  },
+  {
+   "chu": "commercial off-the-shelf",
+   "doc": "/kəˈmɜːrʃl ˌɔːf ðə ˈʃelf/",
+   "nghia": "phần mềm thương mại làm sẵn (COTS): mua về là dùng, có thể cấu hình hoặc mở rộng thêm",
+   "nhom": "Các loại dự án",
+   "viDu": "A replacement project replaces an existing application with a custom-built system, a commercial off-the-shelf (COTS) system, or a hybrid of those.",
+   "viDuNghia": "Dự án thay thế là thay một ứng dụng đang có bằng hệ thống tự xây, hệ thống thương mại làm sẵn (COTS) hoặc kết hợp cả hai."
+  },
+  {
+   "chu": "out of the box",
+   "nghia": "dùng ngay nguyên bản: cài gói phần mềm rồi dùng luôn, không sửa gì",
+   "nhom": "Các loại dự án",
+   "viDu": "Which arrangement describes the increasing amount of requirements and development work when implementing packaged solutions? 1. configured 2. integrated 3. extended 4. out of the box",
+   "viDuNghia": "Sắp xếp nào thể hiện mức độ tăng dần của khối lượng yêu cầu và công việc phát triển khi triển khai giải pháp đóng gói? 1. cấu hình (configured) 2. tích hợp (integrated) 3. mở rộng (extended) 4. dùng ngay (out of the box)"
+  },
+  {
+   "chu": "configure",
+   "doc": "/kənˈfɪɡjər/",
+   "nghia": "cấu hình: chỉnh các thiết lập có sẵn của gói phần mềm cho hợp nhu cầu, không viết mã",
+   "nhom": "Các loại dự án",
+   "viDu": "Which arrangement describes the increasing amount of requirements and development work when implementing packaged solutions? 1. configured 2. integrated 3. extended 4. out of the box",
+   "viDuNghia": "Sắp xếp nào thể hiện mức độ tăng dần của khối lượng yêu cầu và công việc phát triển khi triển khai giải pháp đóng gói? 1. cấu hình (configured) 2. tích hợp (integrated) 3. mở rộng (extended) 4. dùng ngay (out of the box)"
+  },
+  {
+   "chu": "integrate",
+   "doc": "/ˈɪntɪɡreɪt/",
+   "nghia": "tích hợp: nối gói phần mềm với các hệ thống khác đang có",
+   "nhom": "Các loại dự án",
+   "viDu": "We must integrate the packaged solution with our existing accounting system.",
+   "viDuNghia": "Chúng ta phải tích hợp giải pháp đóng gói với hệ thống kế toán đang có."
+  },
+  {
+   "chu": "customize",
+   "doc": "/ˈkʌstəmaɪz/",
+   "nghia": "tuỳ biến: sửa phần mềm làm sẵn theo yêu cầu riêng",
+   "nhom": "Các loại dự án",
+   "viDu": "The more you customize a COTS package, the harder it is to upgrade.",
+   "viDuNghia": "Càng tuỳ biến nhiều một gói COTS thì càng khó nâng cấp."
+  },
+  {
+   "chu": "gap analysis",
+   "doc": "/ɡæp əˈnæləsɪs/",
+   "nghia": "phân tích khoảng trống: so cái gói phần mềm có với cái tổ chức cần để thấy phần thiếu",
+   "nhom": "Các loại dự án",
+   "viDu": "Gap analysis is a comparison of functionality between an existing system and a desired new system.",
+   "viDuNghia": "Phân tích khoảng trống là việc so sánh chức năng giữa hệ thống hiện có và hệ thống mới mong muốn."
+  },
+  {
+   "chu": "outsourced project",
+   "doc": "/ˈaʊtsɔːrst ˈprɑːdʒekt/",
+   "nghia": "dự án thuê ngoài: giao cho công ty khác phát triển",
+   "nhom": "Các loại dự án",
+   "viDu": "In outsourced projects, risk management should:",
+   "viDuNghia": "Trong các dự án thuê ngoài (outsourcing), quản lý rủi ro nên:"
+  },
+  {
+   "chu": "request for proposal",
+   "nghia": "hồ sơ mời thầu (RFP): tài liệu mời các nhà cung cấp gửi đề xuất làm dự án",
+   "nhom": "Các loại dự án",
+   "viDu": "In outsourced projects, the acquirer sends a request for proposal to candidate suppliers.",
+   "viDuNghia": "Trong dự án thuê ngoài, bên đặt hàng gửi hồ sơ mời thầu cho các nhà cung cấp ứng viên."
+  },
+  {
+   "chu": "business process automation",
+   "nghia": "tự động hoá quy trình nghiệp vụ: dùng phần mềm làm thay các bước con người đang làm tay",
+   "nhom": "Các loại dự án",
+   "viDu": "True or false? All corporate IT projects choose to replace all manual business processes by implementing business process automation.",
+   "viDuNghia": "Đúng hay sai? Mọi dự án CNTT doanh nghiệp đều chọn thay toàn bộ quy trình thủ công bằng tự động hoá quy trình nghiệp vụ."
+  },
+  {
+   "chu": "business analytics",
+   "doc": "/ˈbɪznəs ˌænəˈlɪtɪks/",
+   "nghia": "phân tích dữ liệu kinh doanh: biến tập dữ liệu lớn thành thông tin có ích để ra quyết định",
+   "nhom": "Các loại dự án",
+   "viDu": "Which phase in a business analytics project involves identifying the key performance indicators (KPIs) to be analyzed?",
+   "viDuNghia": "Giai đoạn nào trong dự án phân tích nghiệp vụ (business analytics) là lúc xác định các chỉ số hiệu suất chính (KPI) cần phân tích?"
+  },
+  {
+   "chu": "predictive",
+   "doc": "/prɪˈdɪktɪv/",
+   "nghia": "mang tính dự báo: dùng dữ liệu cũ để đoán điều sẽ xảy ra",
+   "nhom": "Các loại dự án",
+   "viDu": "Which of the following types of analytics is the most predictive?",
+   "viDuNghia": "Loại phân tích nào sau đây mang tính dự báo nhiều nhất?"
+  },
+  {
+   "chu": "descriptive",
+   "doc": "/dɪˈskrɪptɪv/",
+   "nghia": "mang tính mô tả: cho biết điều đã xảy ra",
+   "nhom": "Các loại dự án",
+   "viDu": "In business analytics projects, which type of analytics is the most descriptive?",
+   "viDuNghia": "Trong dự án phân tích dữ liệu kinh doanh, loại phân tích nào mang tính mô tả nhiều nhất?"
+  },
+  {
+   "chu": "process asset",
+   "doc": "/ˈprɑːses ˈæset/",
+   "nghia": "tài sản quy trình: mẫu biểu, hướng dẫn, checklist… tổ chức tích luỹ để dùng lại",
+   "nhom": "Các loại dự án",
+   "viDu": "The software requirements specification template belongs to requirements development process assets.",
+   "viDuNghia": "Mẫu đặc tả yêu cầu phần mềm thuộc nhóm tài sản quy trình phát triển yêu cầu."
+  },
+  {
+   "chu": "project requirement",
+   "doc": "/ˈprɑːdʒekt rɪˈkwaɪərmənt/",
+   "nghia": "yêu cầu của dự án: thứ dự án cần nhưng không thuộc sản phẩm (đào tạo, hạ tầng, chuyển đổi dữ liệu…)",
+   "nhom": "Các loại dự án",
+   "viDu": "Which of the following statements correctly distinguishes between product requirements and project requirements? Select two.",
+   "viDuNghia": "Phát biểu nào phân biệt đúng giữa yêu cầu sản phẩm và yêu cầu dự án? Chọn hai."
+  },
+  {
+   "chu": "product requirement",
+   "doc": "/ˈprɑːdʌkt rɪˈkwaɪərmənt/",
+   "nghia": "yêu cầu của sản phẩm: mô tả chính phần mềm sẽ làm gì và đạt gì",
+   "nhom": "Các loại dự án",
+   "viDu": "Which of the following statements correctly distinguishes between product requirements and project requirements? Select two.",
+   "viDuNghia": "Phát biểu nào phân biệt đúng giữa yêu cầu sản phẩm và yêu cầu dự án? Chọn hai."
+  },
+  {
+   "chu": "data migration",
+   "doc": "/ˈdeɪtə maɪˈɡreɪʃn/",
+   "nghia": "chuyển đổi dữ liệu: đưa dữ liệu từ hệ thống cũ sang hệ thống mới",
+   "nhom": "Các loại dự án",
+   "viDu": "During a replacement project, legacy system data migration is important for:",
+   "viDuNghia": "Trong một dự án thay thế hệ thống, việc di trú dữ liệu từ hệ thống cũ quan trọng vì:"
+  },
+  {
+   "chu": "custom development",
+   "doc": "/ˈkʌstəm dɪˈveləpmənt/",
+   "nghia": "phát triển theo đơn đặt riêng: tự viết phần mềm cho đúng nhu cầu thay vì mua gói làm sẵn",
+   "nhom": "Các loại dự án",
+   "viDu": "In the context of selecting packaged (COTS) software solutions, which of the following is a key characteristic that distinguishes COTS solutions from custom development in terms of flexibility?",
+   "viDuNghia": "Trong bối cảnh lựa chọn giải pháp phần mềm đóng gói (COTS), đặc điểm nào sau đây phân biệt giải pháp COTS với phát triển tùy chỉnh về mặt linh hoạt?"
+  }
+ ]
+}

@@ -1,0 +1,647 @@
+{
+ "ma": "swt301-2",
+ "nn": "en",
+ "ten": "SWT301 · 2. Kiểm thử tĩnh & review",
+ "moTa": "Thuật ngữ trích từ đề FE/PE thật môn SWT301: kiểm thử tĩnh, phân tích tĩnh, các loại review, vai trò và các bước review, kèm động từ – tính từ học thuật hay gặp trong câu hỏi. Ví dụ phần lớn là câu hỏi thật trong đề.",
+ "bieuTuong": "doc.text.magnifyingglass",
+ "thuTu": -951,
+ "tu": [
+  {
+   "chu": "static testing",
+   "doc": "/ˈstætɪk ˈtestɪŋ/",
+   "nghia": "kiểm thử tĩnh — xem xét tài liệu, code mà KHÔNG chạy phần mềm (review, phân tích tĩnh)",
+   "nhom": "Tĩnh & động",
+   "viDu": "Which of the following is NOT a benefit of static testing in software development?",
+   "viDuNghia": "Điều nào sau đây KHÔNG phải là lợi ích của kiểm thử tĩnh trong phát triển phần mềm?"
+  },
+  {
+   "chu": "dynamic testing",
+   "doc": "/daɪˈnæmɪk ˈtestɪŋ/",
+   "nghia": "kiểm thử động — CHẠY phần mềm với dữ liệu test rồi quan sát kết quả",
+   "nhom": "Tĩnh & động",
+   "viDu": "What types of defects are typically found more effectively during static testing than dynamic testing?",
+   "viDuNghia": "Loại khiếm khuyết nào thường được tìm thấy hiệu quả hơn khi kiểm thử tĩnh so với kiểm thử động?"
+  },
+  {
+   "chu": "static analysis",
+   "doc": "/ˈstætɪk əˈnæləsɪs/",
+   "nghia": "phân tích tĩnh — dùng công cụ soi code/mô hình mà không chạy, tìm vi phạm chuẩn code, biến không dùng, code chết...",
+   "nhom": "Tĩnh & động",
+   "viDu": "Which TWO of the following statements about static analysis are correct?",
+   "viDuNghia": "HAI phát biểu nào sau đây về phân tích tĩnh là đúng?"
+  },
+  {
+   "chu": "dynamic analysis",
+   "doc": "/daɪˈnæmɪk əˈnæləsɪs/",
+   "nghia": "phân tích động — theo dõi chương trình lúc đang chạy để tìm rò rỉ bộ nhớ, lỗi con trỏ...",
+   "nhom": "Tĩnh & động",
+   "viDu": "Which of the following tools would you use for dynamic analysis? (Choose 2 correct answers)",
+   "viDuNghia": "Bạn sẽ dùng công cụ nào cho phân tích động (dynamic analysis)? (Chọn 2 đáp án đúng)"
+  },
+  {
+   "chu": "work product",
+   "doc": "/ˈwɜːrk ˈprɑːdʌkt/",
+   "nghia": "sản phẩm công việc — bất cứ thứ gì làm ra trong dự án: yêu cầu, thiết kế, code, test case...",
+   "nhom": "Tĩnh & động",
+   "viDu": "Which of the following sequences BEST shows the main activities of the work product review process?",
+   "viDuNghia": "Chuỗi nào sau đây thể hiện TỐT NHẤT các hoạt động chính của quy trình rà soát sản phẩm công việc?"
+  },
+  {
+   "chu": "cost-effective",
+   "doc": "/ˌkɔːst ɪˈfektɪv/",
+   "nghia": "hiệu quả về chi phí — bỏ ít tiền mà được nhiều; tìm lỗi sớm bằng review là rẻ nhất",
+   "nhom": "Tĩnh & động",
+   "viDu": "During which test activity could faults be found most cost effectively?",
+   "viDuNghia": "Trong hoạt động kiểm thử nào có thể tìm ra lỗi với chi phí hiệu quả nhất?"
+  },
+  {
+   "chu": "review process",
+   "doc": "/rɪˈvjuː ˈprɑːses/",
+   "nghia": "quy trình review — planning, kick-off, individual preparation, review meeting, rework, follow-up",
+   "nhom": "Tĩnh & động",
+   "viDu": "Which tool supports the review process during static testing?",
+   "viDuNghia": "Công cụ nào hỗ trợ quy trình rà soát trong kiểm thử tĩnh?"
+  },
+  {
+   "chu": "static code review",
+   "nghia": "rà soát mã tĩnh — đọc code để tìm lỗi mà không chạy; đề PE thường yêu cầu tìm lỗi trong một đoạn Java",
+   "nhom": "Tĩnh & động",
+   "viDu": "static code review - identify at least 6 issues (bad practice, compile errors, logic bugs).",
+   "viDuNghia": "rà soát mã tĩnh — tìm ít nhất 6 vấn đề (cách viết tệ, lỗi biên dịch, lỗi logic)."
+  },
+  {
+   "chu": "test documentation",
+   "doc": "/ˈtest ˌdɑːkjumenˈteɪʃn/",
+   "nghia": "tài liệu kiểm thử — test plan, test case, báo cáo... theo chuẩn IEEE 829",
+   "nhom": "Tĩnh & động",
+   "viDu": "Which of the following is NOT included in the Test Plan document of the Test Documentation?",
+   "viDuNghia": "Điều nào sau đây KHÔNG nằm trong tài liệu Kế hoạch kiểm thử (Test Plan) của bộ tài liệu kiểm thử?"
+  },
+  {
+   "chu": "formal review",
+   "doc": "/ˈfɔːrml rɪˈvjuː/",
+   "nghia": "review chính thức — có quy trình, vai trò, tài liệu ghi lại và tiêu chí vào/ra rõ ràng",
+   "nhom": "Loại review",
+   "viDu": "A typical formal review process consists of five main steps. Which is the correct order?",
+   "viDuNghia": "Một quy trình rà soát chính thức điển hình gồm năm bước chính. Thứ tự đúng là gì?"
+  },
+  {
+   "chu": "informal review",
+   "doc": "/ɪnˈfɔːrml rɪˈvjuː/",
+   "nghia": "review không chính thức — không quy trình, không bắt buộc ghi chép; rẻ, nhanh (nhờ đồng nghiệp xem giúp)",
+   "nhom": "Loại review",
+   "viDu": "How do technical reviews differ from informal reviews?",
+   "viDuNghia": "Rà soát kỹ thuật (technical review) khác rà soát không chính thức (informal review) như thế nào?"
+  },
+  {
+   "chu": "walkthrough",
+   "doc": "/ˈwɔːkθruː/",
+   "nghia": "walkthrough — buổi review do chính TÁC GIẢ dẫn dắt, giải thích từng bước để mọi người hiểu và góp ý",
+   "nhom": "Loại review",
+   "viDu": "Which of the following BEST describes the difference between an inspection and a walkthrough?",
+   "viDuNghia": "Điều nào sau đây MÔ TẢ ĐÚNG NHẤT khác biệt giữa thanh tra (inspection) và walkthrough?"
+  },
+  {
+   "chu": "technical review",
+   "doc": "/ˈteknɪkl rɪˈvjuː/",
+   "nghia": "review kỹ thuật — các chuyên gia kỹ thuật cùng xem để thống nhất giải pháp và tìm lỗi; có ghi chép",
+   "nhom": "Loại review",
+   "viDu": "People who don't participate in technical reviews:",
+   "viDuNghia": "Những người KHÔNG tham gia vào các cuộc review kỹ thuật:"
+  },
+  {
+   "chu": "peer review",
+   "doc": "/ˈpɪr rɪˌvjuː/",
+   "nghia": "review ngang hàng — đồng nghiệp cùng cấp xem sản phẩm của nhau",
+   "nhom": "Loại review",
+   "viDu": "Peer reviews are also called:",
+   "viDuNghia": "Rà soát ngang hàng (Peer Reviews) còn được gọi là:"
+  },
+  {
+   "chu": "formal",
+   "doc": "/ˈfɔːrml/",
+   "nghia": "chính thức — làm theo quy trình, có ghi lại bằng văn bản",
+   "nhom": "Loại review",
+   "viDu": "A person who documents all the issues, problems and open points that were identified during a formal review",
+   "viDuNghia": "Người ghi lại tất cả các vấn đề, sự cố và điểm còn để ngỏ được phát hiện trong một buổi rà soát chính thức"
+  },
+  {
+   "chu": "code review",
+   "doc": "/koʊd rɪˈvjuː/",
+   "nghia": "rà soát mã – đồng nghiệp đọc code để tìm lỗi trước khi gộp; là một dạng kiểm thử tĩnh",
+   "nhom": "Loại review",
+   "viDu": "Can you do a code review on my PR today?",
+   "viDuNghia": "Hôm nay bạn review mã PR của mình được không?"
+  },
+  {
+   "chu": "inspection",
+   "doc": "/ɪnˈspekʃn/",
+   "nghia": "thanh tra (inspection) – loại review CHÍNH THỨC nhất: có moderator dẫn, checklist, ghi chép và số đo",
+   "nhom": "Loại review",
+   "viDu": "Which of the following BEST describes the difference between an inspection and a walkthrough?",
+   "viDuNghia": "Điều nào sau đây MÔ TẢ ĐÚNG NHẤT khác biệt giữa thanh tra (inspection) và walkthrough?"
+  },
+  {
+   "chu": "review",
+   "doc": "/rɪˈvjuː/",
+   "nghia": "rà soát (review) – kiểm thử tĩnh: người đọc sản phẩm (tài liệu, code) để tìm lỗi, không chạy chương trình",
+   "nhom": "Loại review",
+   "viDu": "Which of the following is a benefit of performing reviews in the software development process?",
+   "viDuNghia": "Điều nào sau đây là lợi ích của việc thực hiện rà soát trong quy trình phát triển phần mềm?"
+  },
+  {
+   "chu": "moderator",
+   "doc": "/ˈmɑːdəreɪtər/",
+   "nghia": "người điều phối — dẫn dắt cuộc review: lên kế hoạch, chủ trì buổi họp, theo dõi sau họp",
+   "nhom": "Vai trò trong review",
+   "viDu": "Who are the persons involved in a Formal Review i) Manager ii) Moderator iii) Scribe / Recorder iv) Assistant Manager",
+   "viDuNghia": "Những người tham gia một buổi Rà soát chính thức là ai i) Manager (Quản lý) ii) Moderator (Người điều phối) iii) Scribe/Recorder (Người ghi chép) iv) Assistant Manager (Trợ lý quản lý)"
+  },
+  {
+   "chu": "author",
+   "doc": "/ˈɔːθər/",
+   "nghia": "tác giả — người viết ra tài liệu/code đang được review",
+   "nhom": "Vai trò trong review",
+   "viDu": "In a walkthrough, the author leads the meeting and explains the document.",
+   "viDuNghia": "Trong walkthrough, tác giả dẫn dắt buổi họp và giải thích tài liệu."
+  },
+  {
+   "chu": "scribe",
+   "doc": "/skraɪb/",
+   "nghia": "thư ký — ghi lại mọi lỗi, vấn đề, điểm còn mở trong buổi review; còn gọi recorder",
+   "nhom": "Vai trò trong review",
+   "viDu": "Who are the persons involved in a Formal Review: i) Manager ii) Moderator iii) Scribe / Recorder iv) Assistant Manager",
+   "viDuNghia": "Ai là những người tham gia vào một cuộc Rà soát chính thức: i) Người quản lý ii) Điều phối viên (Moderator) iii) Người ghi chép (Scribe/Recorder) iv) Trợ lý quản lý"
+  },
+  {
+   "chu": "recorder",
+   "doc": "/rɪˈkɔːrdər/",
+   "nghia": "người ghi biên bản — tên khác của scribe",
+   "nhom": "Vai trò trong review",
+   "viDu": "Who are the persons involved in a Formal Review: i) Manager; ii) Moderator; iii) Scribe / Recorder; iv) Assistant Manager",
+   "viDuNghia": "Những ai tham gia một buổi rà soát chính thức: i) Manager; ii) Moderator; iii) Scribe / Recorder; iv) Assistant Manager"
+  },
+  {
+   "chu": "reviewer",
+   "doc": "/rɪˈvjuːər/",
+   "nghia": "người rà soát — người đọc và tìm lỗi trong sản phẩm được review",
+   "nhom": "Vai trò trong review",
+   "viDu": "A formal assessment of a work product conducted by one or more qualified independent reviewers to detect defects.",
+   "viDuNghia": "Một đánh giá chính thức về sản phẩm công việc do một hoặc nhiều người đánh giá độc lập đủ năng lực thực hiện nhằm phát hiện lỗi."
+  },
+  {
+   "chu": "facilitator",
+   "doc": "/fəˈsɪlɪteɪtər/",
+   "nghia": "người điều phối cuộc họp — giữ cho buổi họp đi đúng hướng, ai cũng được nói",
+   "nhom": "Vai trò trong review",
+   "viDu": "One person has been dominating the current software process improvement meeting. Which of the following techniques should the facilitator use to bring other team members into the discussion?",
+   "viDuNghia": "Một người đang chi phối cuộc họp cải tiến quy trình phần mềm hiện tại. Người điều phối (facilitator) nên dùng kỹ thuật nào sau đây để lôi kéo các thành viên khác vào thảo luận?"
+  },
+  {
+   "chu": "trained",
+   "doc": "/treɪnd/",
+   "nghia": "đã qua đào tạo — ví dụ trained moderator: người điều phối được huấn luyện bài bản",
+   "nhom": "Vai trò trong review",
+   "viDu": "Led by a trained moderator (not the author).",
+   "viDuNghia": "Do một người điều phối đã qua đào tạo dẫn dắt (không phải tác giả)."
+  },
+  {
+   "chu": "qualified",
+   "doc": "/ˈkwɑːlɪfaɪd/",
+   "nghia": "đủ năng lực, đủ trình độ",
+   "nhom": "Vai trò trong review",
+   "viDu": "Which type of review is a formal assessment of a work product conducted by one or more qualified independent reviewers to detect defects?",
+   "viDuNghia": "Loại rà soát nào là đánh giá chính thức một sản phẩm công việc do một hoặc nhiều người rà soát độc lập, đủ năng lực thực hiện nhằm phát hiện lỗi?"
+  },
+  {
+   "chu": "kick-off",
+   "doc": "/ˈkɪk ɔːf/",
+   "nghia": "khởi động — bước phát tài liệu, giải thích mục tiêu và quy trình cho người tham gia review",
+   "nhom": "Các bước review",
+   "viDu": "The Kick Off phase of a formal review includes the following:",
+   "viDuNghia": "Giai đoạn Khởi động (Kick Off) của một buổi rà soát chính thức bao gồm:"
+  },
+  {
+   "chu": "individual preparation",
+   "doc": "/ˌɪndɪˈvɪdʒuəl ˌprepəˈreɪʃn/",
+   "nghia": "chuẩn bị cá nhân — mỗi người tự đọc tài liệu trước buổi họp, ghi lại lỗi và câu hỏi",
+   "nhom": "Các bước review",
+   "viDu": "The Phases of formal review process is mentioned below arrange them in the correct order. i) Planning ii) Review Meeting iii) Rework iv) Individual Preparations v) Kick Off vi) Follow Up",
+   "viDuNghia": "Các pha của quy trình rà soát chính thức được liệt kê dưới đây, hãy sắp xếp theo trình tự đúng. i) Planning ii) Review Meeting iii) Rework iv) Individual Preparations v) Kick Off vi) Follow Up"
+  },
+  {
+   "chu": "review meeting",
+   "doc": "/rɪˈvjuː ˈmiːtɪŋ/",
+   "nghia": "buổi họp review — cùng thảo luận, ghi nhận lỗi và ra quyết định",
+   "nhom": "Các bước review",
+   "viDu": "Who is responsible for documenting all the issues, problems and open points that were identified during the review meeting?",
+   "viDuNghia": "Ai chịu trách nhiệm ghi lại tất cả vấn đề, sự cố và điểm còn mở được xác định trong cuộc họp đánh giá"
+  },
+  {
+   "chu": "initiate review",
+   "doc": "/ɪˈnɪʃieɪt rɪˈvjuː/",
+   "nghia": "khởi động review — bước phát tài liệu và giải thích cho người tham gia (giáo trình mới)",
+   "nhom": "Các bước review",
+   "viDu": "The review process is: planning, initiate review, individual review, issue communication and analysis, fixing and reporting.",
+   "viDuNghia": "Quy trình review gồm: lập kế hoạch, khởi động review, review cá nhân, trao đổi và phân tích vấn đề, sửa và báo cáo."
+  },
+  {
+   "chu": "individual review",
+   "doc": "/ˌɪndɪˈvɪdʒuəl rɪˈvjuː/",
+   "nghia": "review cá nhân — mỗi người tự soát tài liệu trước buổi họp (giáo trình mới)",
+   "nhom": "Các bước review",
+   "viDu": "During individual review, each reviewer reads the document and notes potential defects.",
+   "viDuNghia": "Trong bước review cá nhân, mỗi người tự đọc tài liệu và ghi lại các lỗi có thể có."
+  },
+  {
+   "chu": "issue communication and analysis",
+   "nghia": "trao đổi và phân tích vấn đề — bước họp bàn các lỗi đã tìm được (giáo trình mới)",
+   "nhom": "Các bước review",
+   "viDu": "In issue communication and analysis, the reviewers discuss the anomalies they found.",
+   "viDuNghia": "Ở bước trao đổi và phân tích vấn đề, những người rà soát thảo luận các điểm bất thường họ tìm được."
+  },
+  {
+   "chu": "fixing and reporting",
+   "nghia": "sửa và báo cáo — bước cuối của review: tác giả sửa lỗi, cập nhật trạng thái, báo cáo",
+   "nhom": "Các bước review",
+   "viDu": "In the fixing and reporting step, the author fixes the defects and updates their status.",
+   "viDuNghia": "Ở bước sửa và báo cáo, tác giả sửa các lỗi và cập nhật trạng thái của chúng."
+  },
+  {
+   "chu": "issue",
+   "doc": "/ˈɪʃuː/",
+   "nghia": "vấn đề — điểm cần xem xét, có thể là lỗi",
+   "nhom": "Các bước review",
+   "viDu": "Inspections can find all of the following defects or issues, EXCEPT:",
+   "viDuNghia": "Inspection có thể tìm ra tất cả các lỗi/vấn đề sau, NGOẠI TRỪ:"
+  },
+  {
+   "chu": "open point",
+   "doc": "/ˈoʊpən pɔɪnt/",
+   "nghia": "điểm còn mở — vấn đề chưa có kết luận trong buổi review",
+   "nhom": "Các bước review",
+   "viDu": "A person who documents all the issues, problems and open points that were identified during a formal review",
+   "viDuNghia": "Người ghi lại tất cả các vấn đề, sự cố và điểm còn để ngỏ được phát hiện trong một buổi rà soát chính thức"
+  },
+  {
+   "chu": "process improvement",
+   "doc": "/ˈprɑːses ɪmˈpruːvmənt/",
+   "nghia": "cải tiến quy trình — rút kinh nghiệm để lần sau làm tốt hơn",
+   "nhom": "Các bước review",
+   "viDu": "One person has been dominating the current software process improvement meeting. Which of the following techniques should the facilitator use to bring other team members into the discussion?",
+   "viDuNghia": "Một người đang chi phối cuộc họp cải tiến quy trình phần mềm hiện tại. Người điều phối (facilitator) nên dùng kỹ thuật nào sau đây để lôi kéo các thành viên khác vào thảo luận?"
+  },
+  {
+   "chu": "coding standard",
+   "doc": "/ˈkoʊdɪŋ ˈstændərd/",
+   "nghia": "chuẩn viết code — quy ước đặt tên, trình bày, cấu trúc code mà cả nhóm phải theo",
+   "nhom": "Lỗi tìm được khi kiểm tĩnh",
+   "viDu": "What type of test tool would you use to ensure coding standards are met?",
+   "viDuNghia": "Bạn sẽ dùng loại công cụ kiểm thử nào để đảm bảo các chuẩn viết mã được tuân thủ?"
+  },
+  {
+   "chu": "violation",
+   "doc": "/ˌvaɪəˈleɪʃn/",
+   "nghia": "sự vi phạm — không tuân theo quy tắc, chuẩn",
+   "nhom": "Lỗi tìm được khi kiểm tĩnh",
+   "viDu": "Defects discovered by static analysis tools include: i. Variables that are never used. ii. Security vulnerabilities. iii. Programming Standard Violations iv. Uncalled functions and procedures",
+   "viDuNghia": "Các lỗi được công cụ phân tích tĩnh phát hiện bao gồm: i. Biến không bao giờ được dùng. ii. Lỗ hổng bảo mật. iii. Vi phạm chuẩn lập trình iv. Hàm và thủ tục không được gọi"
+  },
+  {
+   "chu": "unreachable code",
+   "doc": "/ʌnˈriːtʃəbl koʊd/",
+   "nghia": "code không bao giờ chạy tới — còn gọi dead code; công cụ phân tích tĩnh tìm ra được",
+   "nhom": "Lỗi tìm được khi kiểm tĩnh",
+   "viDu": "Unreachable code would best be found using:",
+   "viDuNghia": "Mã không thể đạt tới (unreachable code) được tìm thấy tốt nhất bằng:"
+  },
+  {
+   "chu": "uncalled",
+   "doc": "/ʌnˈkɔːld/",
+   "nghia": "không được gọi — hàm, thủ tục viết ra mà không chỗ nào gọi tới",
+   "nhom": "Lỗi tìm được khi kiểm tĩnh",
+   "viDu": "Defects discovered by static analysis tools include: i. Variables that are never used. ii. Security vulnerabilities. iii. Programming Standard Violations iv. Uncalled functions and procedures",
+   "viDuNghia": "Các lỗi được công cụ phân tích tĩnh phát hiện bao gồm: i. Biến không bao giờ được dùng. ii. Lỗ hổng bảo mật. iii. Vi phạm chuẩn lập trình iv. Hàm và thủ tục không được gọi"
+  },
+  {
+   "chu": "vulnerability",
+   "doc": "/ˌvʌlnərəˈbɪləti/",
+   "nghia": "lỗ hổng bảo mật — điểm yếu mà kẻ xấu lợi dụng được",
+   "nhom": "Lỗi tìm được khi kiểm tĩnh",
+   "viDu": "Defects discovered by static analysis tools include: i. Variables that are never used; ii. Security vulnerabilities; iii. Programming Standard Violations; iv. Uncalled functions and procedures",
+   "viDuNghia": "Các lỗi được công cụ phân tích tĩnh phát hiện bao gồm: i. Biến không bao giờ được dùng; ii. Lỗ hổng bảo mật; iii. Vi phạm chuẩn lập trình; iv. Hàm và thủ tục không được gọi"
+  },
+  {
+   "chu": "syntax",
+   "doc": "/ˈsɪntæks/",
+   "nghia": "cú pháp — quy tắc viết đúng của ngôn ngữ lập trình",
+   "nhom": "Lỗi tìm được khi kiểm tĩnh",
+   "viDu": "The compiler reports syntax errors before the program can run.",
+   "viDuNghia": "Trình biên dịch báo lỗi cú pháp trước khi chương trình chạy được."
+  },
+  {
+   "chu": "omission",
+   "doc": "/oʊˈmɪʃn/",
+   "nghia": "sự bỏ sót — thiếu một yêu cầu hoặc một phần lẽ ra phải có",
+   "nhom": "Lỗi tìm được khi kiểm tĩnh",
+   "viDu": "Reviews are good at finding omissions in the requirements.",
+   "viDuNghia": "Review rất giỏi tìm ra những chỗ bỏ sót trong yêu cầu."
+  },
+  {
+   "chu": "undocumented",
+   "doc": "/ʌnˈdɑːkjumentɪd/",
+   "nghia": "không được ghi thành tài liệu",
+   "nhom": "Lỗi tìm được khi kiểm tĩnh",
+   "viDu": "An informal review is usually undocumented.",
+   "viDuNghia": "Review không chính thức thường không được ghi thành tài liệu."
+  },
+  {
+   "chu": "data flow",
+   "doc": "/ˈdeɪtə floʊ/",
+   "nghia": "luồng dữ liệu — (kiểm thử tĩnh) biến được khai báo, gán, dùng ở đâu; tìm biến dùng khi chưa gán · (SWR302) mũi tên dữ liệu giữa tiến trình, kho, thực thể ngoài trong DFD",
+   "nhom": "Lỗi tìm được khi kiểm tĩnh",
+   "viDu": "Data flow analysis finds variables that are used before they are assigned a value.",
+   "viDuNghia": "Phân tích luồng dữ liệu tìm ra các biến bị dùng trước khi được gán giá trị."
+  },
+  {
+   "chu": "control flow",
+   "doc": "/kənˈtroʊl floʊ/",
+   "nghia": "luồng điều khiển — thứ tự các câu lệnh được chạy, qua các nhánh rẽ và vòng lặp",
+   "nhom": "Lỗi tìm được khi kiểm tĩnh",
+   "viDu": "A form of control flow testing based on decision outcomes.",
+   "viDuNghia": "Một dạng kiểm thử luồng điều khiển dựa trên kết quả của các điểm quyết định."
+  },
+  {
+   "chu": "bad practice",
+   "doc": "/ˌbæd ˈpræktɪs/",
+   "nghia": "cách làm tệ — viết code chạy được nhưng khó đọc, dễ sinh lỗi",
+   "nhom": "Lỗi tìm được khi kiểm tĩnh",
+   "viDu": "Hard-coding a password in the source code is a bad practice.",
+   "viDuNghia": "Viết cứng mật khẩu trong mã nguồn là một cách làm tệ."
+  },
+  {
+   "chu": "dead code",
+   "doc": "/ˈded koʊd/",
+   "nghia": "code chết: đoạn code không bao giờ được chạy tới hoặc kết quả không được dùng; công cụ phân tích tĩnh tìm ra được",
+   "nhom": "Lỗi tìm được khi kiểm tĩnh",
+   "viDu": "Static analysis tools can find dead code that is never executed.",
+   "viDuNghia": "Công cụ phân tích tĩnh có thể tìm ra code chết không bao giờ được chạy."
+  },
+  {
+   "chu": "detect",
+   "doc": "/dɪˈtekt/",
+   "nghia": "phát hiện (lỗi)",
+   "nhom": "Động từ hay gặp trong đề",
+   "viDu": "Which of the following tools would you use to detect a memory leak?",
+   "viDuNghia": "Bạn sẽ dùng công cụ nào để phát hiện rò rỉ bộ nhớ (memory leak)?"
+  },
+  {
+   "chu": "uncover",
+   "doc": "/ʌnˈkʌvər/",
+   "nghia": "làm lộ ra, tìm ra (lỗi đang ẩn)",
+   "nhom": "Động từ hay gặp trong đề",
+   "viDu": "Which of the following types of defects is use case testing MOST LIKELY to uncover?",
+   "viDuNghia": "Loại lỗi nào sau đây mà kiểm thử theo use case có nhiều khả năng tìm ra nhất?"
+  },
+  {
+   "chu": "expose",
+   "doc": "/ɪkˈspoʊz/",
+   "nghia": "phơi ra, làm lộ (lỗi)",
+   "nhom": "Động từ hay gặp trong đề",
+   "viDu": "Testing activity which is performed to expose defects in the interfaces and in the interaction between integrated components is",
+   "viDuNghia": "Hoạt động kiểm thử được thực hiện để lộ ra lỗi ở giao diện và trong tương tác giữa các thành phần đã tích hợp là"
+  },
+  {
+   "chu": "derive",
+   "doc": "/dɪˈraɪv/",
+   "nghia": "rút ra, suy ra — ví dụ test case được rút ra từ đặc tả",
+   "nhom": "Động từ hay gặp trong đề",
+   "viDu": "Test conditions are derived from the test basis.",
+   "viDuNghia": "Điều kiện kiểm thử được suy ra từ cơ sở kiểm thử (test basis)."
+  },
+  {
+   "chu": "conduct",
+   "doc": "/kənˈdʌkt/",
+   "nghia": "tiến hành, thực hiện",
+   "nhom": "Động từ hay gặp trong đề",
+   "viDu": "A formal assessment of a work product conducted by one or more qualified independent reviewers to detect defects.",
+   "viDuNghia": "Một đánh giá chính thức về sản phẩm công việc do một hoặc nhiều người đánh giá độc lập đủ năng lực thực hiện nhằm phát hiện lỗi."
+  },
+  {
+   "chu": "assess",
+   "doc": "/əˈses/",
+   "nghia": "đánh giá",
+   "nhom": "Động từ hay gặp trong đề",
+   "viDu": "Which software change management activities are most vital to assessing the impact of proposed modifications?",
+   "viDuNghia": "Hoạt động quản lý thay đổi phần mềm nào là quan trọng nhất để đánh giá tác động của các thay đổi được đề xuất?"
+  },
+  {
+   "chu": "investigate",
+   "doc": "/ɪnˈvestɪɡeɪt/",
+   "nghia": "điều tra, xem xét kỹ",
+   "nhom": "Động từ hay gặp trong đề",
+   "viDu": "System testing should investigate",
+   "viDuNghia": "Kiểm thử hệ thống nên khảo sát:"
+  },
+  {
+   "chu": "prioritize",
+   "doc": "/praɪˈɔːrətaɪz/",
+   "nghia": "xếp thứ tự ưu tiên",
+   "nhom": "Động từ hay gặp trong đề",
+   "viDu": "Why is it important to prioritize incidents?",
+   "viDuNghia": "Tại sao việc ưu tiên các sự cố (incidents) lại quan trọng?"
+  },
+  {
+   "chu": "achieve",
+   "doc": "/əˈtʃiːv/",
+   "nghia": "đạt được — ví dụ achieve 100% statement coverage",
+   "nhom": "Động từ hay gặp trong đề",
+   "viDu": "We can achieve complete statement coverage but still miss bugs because (choose one answer):",
+   "viDuNghia": "Ta có thể đạt bao phủ câu lệnh hoàn toàn nhưng vẫn bỏ sót lỗi vì (chọn một đáp án):"
+  },
+  {
+   "chu": "exercise",
+   "doc": "/ˈeksərsaɪz/",
+   "nghia": "chạy qua, kích hoạt — test \"exercise\" một câu lệnh nghĩa là làm cho câu lệnh đó được chạy",
+   "nhom": "Động từ hay gặp trong đề",
+   "viDu": "The specification which describes steps required to operate the system and exercise test cases in order to implement the associated test design",
+   "viDuNghia": "Đặc tả mô tả các bước cần thiết để vận hành hệ thống và thực thi các test case nhằm triển khai thiết kế kiểm thử liên quan"
+  },
+  {
+   "chu": "mimic",
+   "doc": "/ˈmɪmɪk/",
+   "nghia": "bắt chước, mô phỏng lại",
+   "nhom": "Động từ hay gặp trong đề",
+   "viDu": "Which test may not mimic real world situations (choose one answer)",
+   "viDuNghia": "Loại kiểm thử nào có thể không mô phỏng được các tình huống trong thế giới thực (chọn một đáp án)"
+  },
+  {
+   "chu": "demonstrate",
+   "doc": "/ˈdemənstreɪt/",
+   "nghia": "chứng minh, cho thấy",
+   "nhom": "Động từ hay gặp trong đề",
+   "viDu": "Testing cannot demonstrate that the software has no defects.",
+   "viDuNghia": "Kiểm thử không thể chứng minh rằng phần mềm không có lỗi."
+  },
+  {
+   "chu": "differ",
+   "doc": "/ˈdɪfər/",
+   "nghia": "khác nhau",
+   "nhom": "Động từ hay gặp trong đề",
+   "viDu": "How do technical reviews differ from informal reviews?",
+   "viDuNghia": "Rà soát kỹ thuật (technical review) khác rà soát không chính thức (informal review) như thế nào?"
+  },
+  {
+   "chu": "verify",
+   "doc": "/ˈverɪfaɪ/",
+   "nghia": "kiểm chứng, xác minh là đúng",
+   "nhom": "Động từ hay gặp trong đề",
+   "viDu": "Which testing is used to verify that the system can perform properly when internal program or system limitations have been exceeded",
+   "viDuNghia": "Loại kiểm thử nào dùng để xác minh rằng hệ thống vẫn hoạt động đúng khi các giới hạn nội bộ của chương trình hoặc hệ thống bị vượt quá"
+  },
+  {
+   "chu": "enable",
+   "doc": "/ɪˈneɪbl/",
+   "nghia": "cho phép, giúp làm được",
+   "nhom": "Động từ hay gặp trong đề",
+   "viDu": "Which type of tool stores requirement statements, checks for consistency, allows requirements to be prioritized, and enables individual tests to be traceable to requirements, functions, and features?",
+   "viDuNghia": "Loại công cụ nào lưu trữ các phát biểu yêu cầu, kiểm tra tính nhất quán, cho phép ưu tiên hóa yêu cầu, và cho phép truy vết từng test đến yêu cầu, chức năng và tính năng?"
+  },
+  {
+   "chu": "imply",
+   "doc": "/ɪmˈplaɪ/",
+   "nghia": "hàm ý, ngụ ý",
+   "nhom": "Động từ hay gặp trong đề",
+   "viDu": "What does the term \"Big-bang model\" imply about the approach to software development?",
+   "viDuNghia": "Thuật ngữ \"mô hình Big-bang\" hàm ý gì về cách tiếp cận phát triển phần mềm?"
+  },
+  {
+   "chu": "rely on",
+   "doc": "/rɪˈlaɪ ɑːn/",
+   "nghia": "dựa vào, trông cậy vào",
+   "nhom": "Động từ hay gặp trong đề",
+   "viDu": "In error guessing, what is the tester primarily relying on to identify potential defects?",
+   "viDuNghia": "Trong đoán lỗi (error guessing), tester chủ yếu dựa vào đâu để nhận diện lỗi tiềm ẩn?"
+  },
+  {
+   "chu": "utilize",
+   "doc": "/ˈjuːtəlaɪz/",
+   "nghia": "sử dụng, tận dụng",
+   "nhom": "Động từ hay gặp trong đề",
+   "viDu": "When utilizing error guessing as your testing strategy, what specific type of testing are you performing?",
+   "viDuNghia": "Khi dùng đoán lỗi (error guessing) làm chiến lược kiểm thử, bạn đang thực hiện loại kiểm thử cụ thể nào?"
+  },
+  {
+   "chu": "thorough",
+   "doc": "/ˈθɜːroʊ/",
+   "nghia": "kỹ lưỡng, triệt để",
+   "nhom": "Từ mô tả hay gặp trong đề",
+   "viDu": "Even thorough testing cannot prove that the software is free of defects.",
+   "viDuNghia": "Ngay cả test thật kỹ cũng không chứng minh được phần mềm hết lỗi."
+  },
+  {
+   "chu": "potential",
+   "doc": "/pəˈtenʃl/",
+   "nghia": "tiềm ẩn, có thể xảy ra",
+   "nhom": "Từ mô tả hay gặp trong đề",
+   "viDu": "Which is not a potential drawback of independent testing?",
+   "viDuNghia": "Điều nào KHÔNG phải là một nhược điểm tiềm tàng của kiểm thử độc lập?"
+  },
+  {
+   "chu": "drawback",
+   "doc": "/ˈdrɔːbæk/",
+   "nghia": "nhược điểm, mặt hạn chế",
+   "nhom": "Từ mô tả hay gặp trong đề",
+   "viDu": "Which of the following is not a drawback of capture/replay testing tools?",
+   "viDuNghia": "Điều nào sau đây KHÔNG phải là nhược điểm của công cụ kiểm thử ghi/phát lại (capture/replay)?"
+  },
+  {
+   "chu": "consequence",
+   "doc": "/ˈkɑːnsɪkwens/",
+   "nghia": "hệ quả, hậu quả",
+   "nhom": "Từ mô tả hay gặp trong đề",
+   "viDu": "Important consequences of the impossibility of complete testing are:",
+   "viDuNghia": "Những hệ quả quan trọng của việc không thể kiểm thử đầy đủ là:"
+  },
+  {
+   "chu": "mismatch",
+   "doc": "/ˈmɪsmætʃ/",
+   "nghia": "cặp ghép sai — \"Find the mismatch\": tìm cặp không khớp",
+   "nhom": "Từ mô tả hay gặp trong đề",
+   "viDu": "Find the mismatch",
+   "viDuNghia": "Tìm cặp ghép sai."
+  },
+  {
+   "chu": "odd one out",
+   "doc": "/ˌɑːd wʌn ˈaʊt/",
+   "nghia": "thứ lạc loài — phương án khác loại với các phương án còn lại",
+   "nhom": "Từ mô tả hay gặp trong đề",
+   "viDu": "Which of the following is the odd one out?",
+   "viDuNghia": "Điều nào sau đây là khác biệt (lạc nhóm)?"
+  },
+  {
+   "chu": "assessment",
+   "doc": "/əˈsesmənt/",
+   "nghia": "sự đánh giá",
+   "nhom": "Từ mô tả hay gặp trong đề",
+   "viDu": "Which of the statements below is the best assessment of how the test principles apply across the test life cycle?",
+   "viDuNghia": "Phát biểu nào dưới đây là đánh giá đúng nhất về cách các nguyên tắc kiểm thử áp dụng trong suốt vòng đời kiểm thử?"
+  },
+  {
+   "chu": "criterion",
+   "doc": "/kraɪˈtɪriən/",
+   "nghia": "tiêu chí (số ít); số nhiều là criteria",
+   "nhom": "Từ mô tả hay gặp trong đề",
+   "viDu": "What is the important criterion in deciding what testing technique to use?",
+   "viDuNghia": "Tiêu chí quan trọng khi quyết định dùng kỹ thuật kiểm thử nào là gì?"
+  },
+  {
+   "chu": "impossibility",
+   "doc": "/ɪmˌpɑːsəˈbɪləti/",
+   "nghia": "sự bất khả thi — không thể làm được",
+   "nhom": "Từ mô tả hay gặp trong đề",
+   "viDu": "Important consequences of the impossibility of complete testing are: (Choose one answer)",
+   "viDuNghia": "Những hệ quả quan trọng của việc không thể kiểm thử hoàn toàn là: (Chọn một đáp án)"
+  },
+  {
+   "chu": "effective",
+   "doc": "/ɪˈfektɪv/",
+   "nghia": "có hiệu quả — làm ra đúng kết quả mong muốn (ví dụ tìm được nhiều lỗi)",
+   "nhom": "Từ mô tả hay gặp trong đề",
+   "viDu": "Why is equivalence partitioning particularly effective in test case design?",
+   "viDuNghia": "Vì sao phân hoạch tương đương (equivalence partitioning) đặc biệt hiệu quả trong thiết kế ca kiểm thử?"
+  },
+  {
+   "chu": "efficient",
+   "doc": "/ɪˈfɪʃnt/",
+   "nghia": "hiệu suất cao — đạt kết quả mà tốn ít thời gian, công sức",
+   "nhom": "Từ mô tả hay gặp trong đề",
+   "viDu": "Which activity in the fundamental test process creates test suites for efficient test execution?",
+   "viDuNghia": "Hoạt động nào trong quy trình kiểm thử cơ bản tạo ra bộ kiểm thử để thực thi hiệu quả?"
+  },
+  {
+   "chu": "beneficial",
+   "doc": "/ˌbenɪˈfɪʃl/",
+   "nghia": "có lợi, hữu ích",
+   "nhom": "Từ mô tả hay gặp trong đề",
+   "viDu": "When would exploratory testing be most beneficial during a testing cycle?",
+   "viDuNghia": "Kiểm thử khám phá (exploratory testing) sẽ hữu ích nhất khi nào trong một chu kỳ kiểm thử?"
+  },
+  {
+   "chu": "critical",
+   "doc": "/ˈkrɪtɪkl/",
+   "nghia": "cực kỳ quan trọng; nghiêm trọng",
+   "nhom": "Từ mô tả hay gặp trong đề",
+   "viDu": "Which element is critical in a test estimate?",
+   "viDuNghia": "Yếu tố nào là then chốt trong một ước lượng kiểm thử (test estimate)?"
+  },
+  {
+   "chu": "adequate",
+   "doc": "/ˈædɪkwət/",
+   "nghia": "đủ, thoả đáng",
+   "nhom": "Từ mô tả hay gặp trong đề",
+   "viDu": "Who is responsible for support in setting up adequate configuration management of testware for traceability?",
+   "viDuNghia": "Ai chịu trách nhiệm hỗ trợ thiết lập việc quản lý cấu hình testware đầy đủ để phục vụ truy vết (traceability)?"
+  }
+ ]
+}

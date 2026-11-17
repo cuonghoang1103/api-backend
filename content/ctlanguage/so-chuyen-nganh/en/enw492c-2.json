@@ -1,0 +1,889 @@
+{
+ "ma": "enw492c-2",
+ "nn": "en",
+ "ten": "ENW492c · 2. Từ vựng chủ đề trong bài đọc",
+ "moTa": "Writing Research Papers, phần 2: từ theo chủ đề của các bài luận mẫu và đề viết trong đề thi — khí hậu & năng lượng, môi trường, tội phạm & cải tạo, bắt nạt mạng, hình thể & thể thao, lương thực & cộng đồng, hạnh phúc & kinh tế. Từ lấy từ đề FE/PE thật, cũng là các chủ đề quen của IELTS.",
+ "bieuTuong": "globe",
+ "thuTu": -937,
+ "tu": [
+  {
+   "chu": "climate change",
+   "doc": "/ˈklaɪmət tʃeɪndʒ/",
+   "nghia": "biến đổi khí hậu",
+   "nhom": "Khí hậu & năng lượng",
+   "viDu": "Task 1 — Time: 60 minutes. Compose a 450-word essay discussing the causes and effects of climate change.",
+   "viDuNghia": "Bài 1 — Thời gian: 60 phút. Viết một bài luận 450 từ bàn về nguyên nhân và hậu quả của biến đổi khí hậu."
+  },
+  {
+   "chu": "global warming",
+   "doc": "/ˌɡloʊbl ˈwɔːrmɪŋ/",
+   "nghia": "sự nóng lên toàn cầu",
+   "nhom": "Khí hậu & năng lượng",
+   "viDu": "In which of the following sentences of paragraph 2 does he effectively present his personal stance (that carbon emissions cause global warming)?",
+   "viDuNghia": "Ở câu nào trong đoạn 2 tác giả nêu rõ lập trường cá nhân của mình (rằng khí thải carbon gây ra hiện tượng nóng lên toàn cầu)?"
+  },
+  {
+   "chu": "greenhouse gas",
+   "doc": "/ˈɡriːnhaʊs ɡæs/",
+   "nghia": "khí nhà kính (CO2, mê-tan…): giữ nhiệt trong khí quyển",
+   "nhom": "Khí hậu & năng lượng",
+   "viDu": "When forests are cleared, stored carbon is released back into the air, significantly contributing to greenhouse gas emissions [IPCC, 2021].",
+   "viDuNghia": "Khi rừng bị chặt, lượng các-bon tích trữ thoát trở lại không khí, góp phần đáng kể vào lượng phát thải khí nhà kính [IPCC, 2021]."
+  },
+  {
+   "chu": "carbon dioxide",
+   "doc": "/ˌkɑːrbən daɪˈɑːksaɪd/",
+   "nghia": "khí các-bô-níc (CO2)",
+   "nhom": "Khí hậu & năng lượng",
+   "viDu": "Trees act as carbon sinks, absorbing carbon dioxide from the atmosphere.",
+   "viDuNghia": "Cây cối đóng vai trò bể chứa các-bon, hấp thụ khí CO2 từ bầu khí quyển."
+  },
+  {
+   "chu": "carbon emission",
+   "doc": "/ˌkɑːrbən ɪˈmɪʃn/",
+   "nghia": "lượng khí thải các-bon",
+   "nhom": "Khí hậu & năng lượng",
+   "viDu": "In which of the following sentences of paragraph 2 does he effectively present his personal stance (that carbon emissions cause global warming)?",
+   "viDuNghia": "Ở câu nào trong đoạn 2 tác giả nêu rõ lập trường cá nhân của mình (rằng khí thải carbon gây ra hiện tượng nóng lên toàn cầu)?"
+  },
+  {
+   "chu": "emission",
+   "doc": "/ɪˈmɪʃn/",
+   "nghia": "sự phát thải, khí thải",
+   "nhom": "Khí hậu & năng lượng",
+   "viDu": "In which of the following sentences of paragraph 2 does he effectively present his personal stance (that carbon emissions cause global warming)?",
+   "viDuNghia": "Ở câu nào trong đoạn 2 tác giả nêu rõ lập trường cá nhân của mình (rằng khí thải carbon gây ra hiện tượng nóng lên toàn cầu)?"
+  },
+  {
+   "chu": "atmosphere",
+   "doc": "/ˈætməsfɪr/",
+   "nghia": "bầu khí quyển",
+   "nhom": "Khí hậu & năng lượng",
+   "viDu": "A large number of cars and trucks that we drive produce harmful chemicals that get released into our atmosphere.",
+   "viDuNghia": "Rất nhiều ô tô và xe tải chúng ta lái thải ra các hoá chất độc hại vào bầu khí quyển."
+  },
+  {
+   "chu": "fossil fuel",
+   "doc": "/ˈfɑːsl ˌfjuːəl/",
+   "nghia": "nhiên liệu hoá thạch (than, dầu, khí đốt)",
+   "nhom": "Khí hậu & năng lượng",
+   "viDu": "Time: 60 minutes. Write a 450-word essay comparing the use of alternative sources of energy, such as wind and solar power, with fossil fuels.",
+   "viDuNghia": "Thời gian: 60 phút. Viết một bài luận 450 từ so sánh việc sử dụng các nguồn năng lượng thay thế, như năng lượng gió và mặt trời, với nhiên liệu hoá thạch."
+  },
+  {
+   "chu": "alternative energy",
+   "doc": "/ɔːlˈtɜːrnətɪv ˈenərdʒi/",
+   "nghia": "năng lượng thay thế (cho nhiên liệu hoá thạch): gió, mặt trời…",
+   "nhom": "Khí hậu & năng lượng",
+   "viDu": "Task 1. Time: 60 minutes. Compose a 450-word essay comparing the use of alternative energy sources, including wind and solar power, with fossil fuels.",
+   "viDuNghia": "Bài 1. Thời gian: 60 phút. Viết một bài luận 450 từ so sánh việc sử dụng các nguồn năng lượng thay thế, bao gồm điện gió và điện mặt trời, với nhiên liệu hoá thạch."
+  },
+  {
+   "chu": "solar power",
+   "doc": "/ˌsoʊlər ˈpaʊər/",
+   "nghia": "điện mặt trời, năng lượng mặt trời",
+   "nhom": "Khí hậu & năng lượng",
+   "viDu": "Write a 450-word essay comparing the use of alternative sources of energy, such as wind and solar power, with fossil fuels.",
+   "viDuNghia": "Viết một bài luận 450 từ so sánh việc sử dụng các nguồn năng lượng thay thế, như năng lượng gió và mặt trời, với nhiên liệu hoá thạch."
+  },
+  {
+   "chu": "solar panel",
+   "doc": "/ˌsoʊlər ˈpænl/",
+   "nghia": "tấm pin mặt trời",
+   "nhom": "Khí hậu & năng lượng",
+   "viDu": "Solar panels also need to be built on high elevated areas to obtain the maximum amount of sun; accordingly, trees cannot block the sun from reaching the solar panels.",
+   "viDuNghia": "Pin mặt trời còn phải đặt ở nơi cao để nhận nhiều nắng nhất; do đó không được để cây che nắng chiếu tới tấm pin."
+  },
+  {
+   "chu": "wind power",
+   "doc": "/ˈwɪnd ˌpaʊər/",
+   "nghia": "điện gió, năng lượng gió",
+   "nhom": "Khí hậu & năng lượng",
+   "viDu": "On the other hand, solar and wind power also impact the environment in negative ways as well.",
+   "viDuNghia": "Mặt khác, điện mặt trời và điện gió cũng tác động tiêu cực tới môi trường."
+  },
+  {
+   "chu": "wind turbine",
+   "doc": "/ˈwɪnd ˌtɜːrbaɪn/",
+   "nghia": "tua-bin gió",
+   "nhom": "Khí hậu & năng lượng",
+   "viDu": "For instance, wind turbines need a large amount of space for the wind to affect the propellers that power them.",
+   "viDuNghia": "Chẳng hạn, tua-bin gió cần một khoảng không gian rộng để gió tác động vào các cánh quạt làm chúng quay."
+  },
+  {
+   "chu": "nuclear energy",
+   "doc": "/ˌnuːkliər ˈenərdʒi/",
+   "nghia": "năng lượng hạt nhân",
+   "nhom": "Khí hậu & năng lượng",
+   "viDu": "Nuclear energy is a reliable source; however, it carries risk, and accidents do occur.",
+   "viDuNghia": "Năng lượng hạt nhân là nguồn đáng tin cậy; tuy nhiên nó có rủi ro, và tai nạn vẫn xảy ra."
+  },
+  {
+   "chu": "radioactive",
+   "doc": "/ˌreɪdioʊˈæktɪv/",
+   "nghia": "có tính phóng xạ",
+   "nhom": "Khí hậu & năng lượng",
+   "viDu": "Once a large amount of radioactive cesium enters an ecosystem, it quickly becomes ubiquitous, contaminating water, soil, plants and animals.",
+   "viDuNghia": "Một khi lượng lớn xê-si phóng xạ đi vào hệ sinh thái, nó nhanh chóng có mặt khắp nơi, làm nhiễm độc nước, đất, cây cối và động vật."
+  },
+  {
+   "chu": "melting",
+   "doc": "/ˈmeltɪŋ/",
+   "nghia": "sự tan chảy (melting ice = băng tan)",
+   "nhom": "Khí hậu & năng lượng",
+   "viDu": "These bodies of ice melting will also greatly affect the animals that were living on them.",
+   "viDuNghia": "Những khối băng tan này cũng sẽ ảnh hưởng lớn tới các loài vật từng sống trên đó."
+  },
+  {
+   "chu": "planet",
+   "doc": "/ˈplænɪt/",
+   "nghia": "hành tinh",
+   "nhom": "Khí hậu & năng lượng",
+   "viDu": "Without trees to absorb emissions, the planet experiences an accelerated rate of climate change.",
+   "viDuNghia": "Không còn cây để hấp thụ khí thải, hành tinh sẽ biến đổi khí hậu với tốc độ nhanh hơn."
+  },
+  {
+   "chu": "inhabit",
+   "doc": "/ɪnˈhæbɪt/",
+   "nghia": "sinh sống, cư trú ở (một nơi)",
+   "nhom": "Khí hậu & năng lượng",
+   "viDu": "Even though humans inhabit the earth and rely on it as currently the only place for us to live, we contribute the most to damaging it.",
+   "viDuNghia": "Dù con người sinh sống trên Trái Đất và hiện chỉ có nơi này để sống, chính chúng ta lại góp phần nhiều nhất làm hại nó."
+  },
+  {
+   "chu": "deforestation",
+   "doc": "/ˌdiːˌfɔːrɪˈsteɪʃn/",
+   "nghia": "nạn phá rừng",
+   "nhom": "Môi trường & tài nguyên",
+   "viDu": "What transition phrase is used in the essay to introduce an additional cause of deforestation?",
+   "viDuNghia": "Cụm từ chuyển ý nào trong bài được dùng để giới thiệu thêm một nguyên nhân khác của nạn phá rừng?"
+  },
+  {
+   "chu": "biodiversity",
+   "doc": "/ˌbaɪoʊdaɪˈvɜːrsəti/",
+   "nghia": "đa dạng sinh học",
+   "nhom": "Môi trường & tài nguyên",
+   "viDu": "Another devastating effect of deforestation is the loss of biodiversity.",
+   "viDuNghia": "Một hậu quả tàn khốc khác của nạn phá rừng là mất đa dạng sinh học."
+  },
+  {
+   "chu": "habitat",
+   "doc": "/ˈhæbɪtæt/",
+   "nghia": "môi trường sống tự nhiên của loài vật, cây cối",
+   "nhom": "Môi trường & tài nguyên",
+   "viDu": "Forests provide habitats for millions of plant and animal species.",
+   "viDuNghia": "Rừng là nơi sinh sống của hàng triệu loài động thực vật."
+  },
+  {
+   "chu": "agriculture",
+   "doc": "/ˈæɡrɪkʌltʃər/",
+   "nghia": "nông nghiệp",
+   "nhom": "Môi trường & tài nguyên",
+   "viDu": "Why does the author include the citation \"[FAO, 2021]\" in the discussion of agriculture as a cause of deforestation?",
+   "viDuNghia": "Vì sao tác giả đưa trích dẫn \"[FAO, 2021]\" vào phần bàn về nông nghiệp là nguyên nhân phá rừng?"
+  },
+  {
+   "chu": "soil",
+   "doc": "/sɔɪl/",
+   "nghia": "đất trồng",
+   "nhom": "Môi trường & tài nguyên",
+   "viDu": "Its effects on climate change, biodiversity, and soil health are catastrophic, threatening the planet's ecological stability.",
+   "viDuNghia": "Tác động của nó lên biến đổi khí hậu, đa dạng sinh học và sức khoẻ của đất là thảm khốc, đe doạ sự ổn định sinh thái của hành tinh."
+  },
+  {
+   "chu": "drought",
+   "doc": "/draʊt/",
+   "nghia": "hạn hán",
+   "nhom": "Môi trường & tài nguyên",
+   "viDu": "The first reason water is wasted is that farmers can grow any crops they want with no restrictions, even when there is a drought.",
+   "viDuNghia": "Lý do đầu tiên khiến nước bị lãng phí là nông dân được trồng bất cứ cây gì họ muốn mà không bị hạn chế, kể cả khi đang hạn hán."
+  },
+  {
+   "chu": "groundwater",
+   "doc": "/ˈɡraʊndwɔːtər/",
+   "nghia": "nước ngầm",
+   "nhom": "Môi trường & tài nguyên",
+   "viDu": "The best way to do so is through the Sustainable Groundwater Management Act.",
+   "viDuNghia": "Cách tốt nhất để làm vậy là thông qua Đạo luật Quản lý Nước ngầm Bền vững."
+  },
+  {
+   "chu": "conservation",
+   "doc": "/ˌkɑːnsərˈveɪʃn/",
+   "nghia": "sự bảo tồn, giữ gìn tiết kiệm (water conservation = tiết kiệm nước)",
+   "nhom": "Môi trường & tài nguyên",
+   "viDu": "Read the article titled “Better Water Conservation” and then answer: How does the writer show his/her personal stance in this essay?",
+   "viDuNghia": "Đọc bài báo “Better Water Conservation” rồi trả lời: Tác giả thể hiện lập trường cá nhân của mình như thế nào trong bài này?"
+  },
+  {
+   "chu": "pollution",
+   "doc": "/pəˈluːʃn/",
+   "nghia": "sự ô nhiễm",
+   "nhom": "Môi trường & tài nguyên",
+   "viDu": "Suggest how the detrimental effects of air pollution may be reduced.",
+   "viDuNghia": "Đề xuất cách giảm thiểu tác hại của ô nhiễm không khí."
+  },
+  {
+   "chu": "environmentally friendly",
+   "doc": "/ɪnˌvaɪrənˈmentəli ˈfrendli/",
+   "nghia": "thân thiện với môi trường",
+   "nhom": "Môi trường & tài nguyên",
+   "viDu": "Recycling is one of the easiest environmentally friendly habits to start.",
+   "viDuNghia": "Tái chế là một trong những thói quen thân thiện với môi trường dễ bắt đầu nhất."
+  },
+  {
+   "chu": "sustainable",
+   "doc": "/səˈsteɪnəbl/",
+   "nghia": "bền vững: dùng được lâu dài mà không làm cạn kiệt tài nguyên",
+   "nhom": "Môi trường & tài nguyên",
+   "viDu": "Colleges can and should set an example for their communities by implementing this innovative and sustainable solution to food insecurity.",
+   "viDuNghia": "Các trường đại học có thể và nên nêu gương cho cộng đồng bằng cách thực hiện giải pháp đổi mới và bền vững này cho vấn đề mất an ninh lương thực."
+  },
+  {
+   "chu": "recycle",
+   "doc": "/ˌriːˈsaɪkl/",
+   "nghia": "tái chế",
+   "nhom": "Môi trường & tài nguyên",
+   "viDu": "The best way to reduce trash in our environment is to recycle it.",
+   "viDuNghia": "Cách tốt nhất để giảm rác trong môi trường là tái chế nó."
+  },
+  {
+   "chu": "recycling",
+   "doc": "/ˌriːˈsaɪklɪŋ/",
+   "nghia": "việc tái chế",
+   "nhom": "Môi trường & tài nguyên",
+   "viDu": "The problem of putting the garbage in trash cans and recycle receptacles becomes more complex and hence important when recycling is involved.",
+   "viDuNghia": "Việc bỏ rác vào thùng rác và thùng tái chế trở nên phức tạp hơn, và vì thế quan trọng hơn, khi có khâu tái chế."
+  },
+  {
+   "chu": "garbage",
+   "doc": "/ˈɡɑːrbɪdʒ/",
+   "nghia": "rác thải (Mỹ; = trash; Anh: rubbish)",
+   "nhom": "Môi trường & tài nguyên",
+   "viDu": "It now becomes imperative that the right type of garbage is placed in its proper receptacle.",
+   "viDuNghia": "Giờ đây việc bỏ đúng loại rác vào đúng thùng trở thành điều bắt buộc."
+  },
+  {
+   "chu": "deplete",
+   "doc": "/dɪˈpliːt/",
+   "nghia": "làm cạn kiệt (tài nguyên)",
+   "nhom": "Môi trường & tài nguyên",
+   "viDu": "If we keep using fossil fuels at this rate, we will deplete them within a few generations.",
+   "viDuNghia": "Nếu cứ dùng nhiên liệu hoá thạch với tốc độ này, chúng ta sẽ làm cạn kiệt chúng trong vài thế hệ."
+  },
+  {
+   "chu": "scarce",
+   "doc": "/skers/",
+   "nghia": "khan hiếm",
+   "nhom": "Môi trường & tài nguyên",
+   "viDu": "Arable land, potable water, energy and minerals are finite, scarce and rapidly depleting on Earth.",
+   "viDuNghia": "Đất canh tác, nước uống được, năng lượng và khoáng sản trên Trái Đất là hữu hạn, khan hiếm và đang cạn nhanh."
+  },
+  {
+   "chu": "harmful",
+   "doc": "/ˈhɑːrmfl/",
+   "nghia": "có hại",
+   "nhom": "Môi trường & tài nguyên",
+   "viDu": "As the world's population continues to grow, some people argue that industrial food production is essential even though it has harmful effects on health and the environment.",
+   "viDuNghia": "Khi dân số thế giới tiếp tục tăng, một số người cho rằng sản xuất thực phẩm công nghiệp là cần thiết dù nó gây hại cho sức khoẻ và môi trường."
+  },
+  {
+   "chu": "prison",
+   "doc": "/ˈprɪzn/",
+   "nghia": "nhà tù",
+   "nhom": "Tội phạm & cải tạo",
+   "viDu": "Compose an argumentative essay of 350–400 words answering the following question: \"Prisons: Rehabilitation or Punishment?\"",
+   "viDuNghia": "Viết một bài luận tranh biện 350–400 từ trả lời câu hỏi sau: \"Nhà tù: cải tạo hay trừng phạt?\""
+  },
+  {
+   "chu": "prisoner",
+   "doc": "/ˈprɪznər/",
+   "nghia": "tù nhân",
+   "nhom": "Tội phạm & cải tạo",
+   "viDu": "Many prisons also contain prisoners with biased sentences.",
+   "viDuNghia": "Nhiều nhà tù còn giam những tù nhân bị tuyên án thiếu công bằng."
+  },
+  {
+   "chu": "crime",
+   "doc": "/kraɪm/",
+   "nghia": "tội phạm (hành vi), tội ác",
+   "nhom": "Tội phạm & cải tạo",
+   "viDu": "Prisons were originally made to hold those individuals who were involved in some sort of crime.",
+   "viDuNghia": "Nhà tù ban đầu được lập ra để giam những người dính líu tới một tội nào đó."
+  },
+  {
+   "chu": "criminal",
+   "doc": "/ˈkrɪmɪnl/",
+   "nghia": "kẻ phạm tội; (tính từ) thuộc hình sự",
+   "nhom": "Tội phạm & cải tạo",
+   "viDu": "The essay asks whether prisons should punish criminals or help them change.",
+   "viDuNghia": "Bài luận đặt câu hỏi nhà tù nên trừng phạt kẻ phạm tội hay giúp họ thay đổi."
+  },
+  {
+   "chu": "punishment",
+   "doc": "/ˈpʌnɪʃmənt/",
+   "nghia": "sự trừng phạt, hình phạt",
+   "nhom": "Tội phạm & cải tạo",
+   "viDu": "The punishment system gives people an incentive to obey the law.",
+   "viDuNghia": "Hệ thống hình phạt tạo cho người ta động cơ để tuân thủ pháp luật."
+  },
+  {
+   "chu": "rehabilitation",
+   "doc": "/ˌriːəˌbɪlɪˈteɪʃn/",
+   "nghia": "sự cải tạo, phục hồi: giúp phạm nhân trở lại làm người lương thiện (trái với chỉ trừng phạt)",
+   "nhom": "Tội phạm & cải tạo",
+   "viDu": "Some argue that prisons should be primarily for rehabilitation.",
+   "viDuNghia": "Một số người cho rằng nhà tù chủ yếu nên để cải tạo."
+  },
+  {
+   "chu": "witness",
+   "doc": "/ˈwɪtnəs/",
+   "nghia": "chứng kiến; (danh từ) người chứng kiến, nhân chứng",
+   "nhom": "Tội phạm & cải tạo",
+   "viDu": "Compared to bullying in the classroom or in the school's bathroom traditionally, the internet has the ability to create an audience witnessing victims being bullied.",
+   "viDuNghia": "So với kiểu bắt nạt truyền thống trong lớp hay trong nhà vệ sinh của trường, internet có khả năng tạo ra cả một đám đông chứng kiến nạn nhân bị bắt nạt."
+  },
+  {
+   "chu": "cyberbullying",
+   "doc": "/ˈsaɪbərbʊliɪŋ/",
+   "nghia": "bắt nạt trên mạng",
+   "nhom": "Bắt nạt & hình thể",
+   "viDu": "Task 1 — Time: 60 minutes. Write a problem-solution essay of 450 words on the topic of cyberbullying.",
+   "viDuNghia": "Bài 1 — Thời gian: 60 phút. Viết một bài luận vấn đề-giải pháp 450 từ về chủ đề bắt nạt trên mạng (cyberbullying)."
+  },
+  {
+   "chu": "bullying",
+   "doc": "/ˈbʊliɪŋ/",
+   "nghia": "nạn bắt nạt",
+   "nhom": "Bắt nạt & hình thể",
+   "viDu": "Bullying can no doubt scar and ruin one's life.",
+   "viDuNghia": "Bắt nạt chắc chắn có thể để lại vết sẹo và huỷ hoại cuộc đời một con người."
+  },
+  {
+   "chu": "bully",
+   "doc": "/ˈbʊli/",
+   "nghia": "kẻ bắt nạt; (động từ) bắt nạt",
+   "nhom": "Bắt nạt & hình thể",
+   "viDu": "Bullies often continue because nobody tells a teacher or a parent.",
+   "viDuNghia": "Kẻ bắt nạt thường cứ tiếp diễn vì không ai nói với thầy cô hay cha mẹ."
+  },
+  {
+   "chu": "victim",
+   "doc": "/ˈvɪktɪm/",
+   "nghia": "nạn nhân",
+   "nhom": "Bắt nạt & hình thể",
+   "viDu": "Consequently, since the perpetrator is anonymous in cyberbullying, parents and teachers will find it harder to notice the victim's problems.",
+   "viDuNghia": "Do đó, vì thủ phạm ẩn danh khi bắt nạt trên mạng, cha mẹ và thầy cô sẽ khó nhận ra vấn đề của nạn nhân hơn."
+  },
+  {
+   "chu": "victimize",
+   "doc": "/ˈvɪktɪmaɪz/",
+   "nghia": "biến ai thành nạn nhân, trù dập",
+   "nhom": "Bắt nạt & hình thể",
+   "viDu": "Students who are victimized online often feel that they cannot escape, even at home.",
+   "viDuNghia": "Học sinh bị bắt nạt trên mạng thường thấy mình không thể thoát, kể cả khi ở nhà."
+  },
+  {
+   "chu": "vicious circle",
+   "doc": "/ˌvɪʃəs ˈsɜːrkl/",
+   "nghia": "vòng luẩn quẩn: việc xấu này gây ra việc xấu kia rồi quay lại làm tệ thêm",
+   "nhom": "Bắt nạt & hình thể",
+   "viDu": "Victims feel judged, so they stay silent, and the bullying goes on: it is a vicious circle.",
+   "viDuNghia": "Nạn nhân thấy mình bị phán xét nên im lặng, và việc bắt nạt tiếp diễn: đó là một vòng luẩn quẩn."
+  },
+  {
+   "chu": "offensive",
+   "doc": "/əˈfensɪv/",
+   "nghia": "xúc phạm, gây khó chịu (an offensive comment)",
+   "nhom": "Bắt nạt & hình thể",
+   "viDu": "One offensive comment under a classmate's picture can be shared hundreds of times.",
+   "viDuNghia": "Một bình luận xúc phạm dưới ảnh của bạn cùng lớp có thể bị chia sẻ hàng trăm lần."
+  },
+  {
+   "chu": "insulting",
+   "doc": "/ɪnˈsʌltɪŋ/",
+   "nghia": "có tính lăng mạ, sỉ nhục",
+   "nhom": "Bắt nạt & hình thể",
+   "viDu": "Posting insulting messages about a classmate is a form of cyberbullying.",
+   "viDuNghia": "Đăng những tin nhắn lăng mạ về bạn cùng lớp là một dạng bắt nạt trên mạng."
+  },
+  {
+   "chu": "teenager",
+   "doc": "/ˈtiːneɪdʒər/",
+   "nghia": "thiếu niên (13–19 tuổi)",
+   "nhom": "Bắt nạt & hình thể",
+   "viDu": "Compose an essay of 350–400 words responding to the question below: With the rise of social media, parents are increasingly concerned about their teenagers' online activities.",
+   "viDuNghia": "Viết một bài luận 350–400 từ trả lời câu hỏi dưới đây: Với sự phát triển của mạng xã hội, phụ huynh ngày càng lo ngại về các hoạt động trực tuyến của con cái tuổi teen."
+  },
+  {
+   "chu": "body image",
+   "doc": "/ˈbɑːdi ˌɪmɪdʒ/",
+   "nghia": "hình ảnh cơ thể: cách một người nhìn nhận và cảm thấy về ngoại hình của mình",
+   "nhom": "Bắt nạt & hình thể",
+   "viDu": "Persuade the audience that the media must take responsibility for promoting unhealthy body image.",
+   "viDuNghia": "Hãy thuyết phục người nghe rằng truyền thông phải chịu trách nhiệm về việc cổ vũ hình ảnh cơ thể thiếu lành mạnh."
+  },
+  {
+   "chu": "body dissatisfaction",
+   "doc": "/ˈbɑːdi ˌdɪsˌsætɪsˈfækʃn/",
+   "nghia": "sự không hài lòng về cơ thể mình",
+   "nhom": "Bắt nạt & hình thể",
+   "viDu": "In our culture, body dissatisfaction has become very prevalent due in part to media images.",
+   "viDuNghia": "Trong nền văn hoá của chúng ta, sự không hài lòng về cơ thể đã trở nên rất phổ biến, một phần do hình ảnh trên truyền thông."
+  },
+  {
+   "chu": "eating disorder",
+   "doc": "/ˈiːtɪŋ dɪsˌɔːrdər/",
+   "nghia": "rối loạn ăn uống (chán ăn, ăn vô độ…)",
+   "nhom": "Bắt nạt & hình thể",
+   "viDu": "Unrealistic media images can lead to body dissatisfaction and eating disorders.",
+   "viDuNghia": "Hình ảnh phi thực tế trên truyền thông có thể dẫn tới sự không hài lòng về cơ thể và rối loạn ăn uống."
+  },
+  {
+   "chu": "muscular",
+   "doc": "/ˈmʌskjələr/",
+   "nghia": "vạm vỡ, nhiều cơ bắp",
+   "nhom": "Bắt nạt & hình thể",
+   "viDu": "Models have changed to reflect this new development, and men are sensitive to the influence of the media's message to be strong and muscular.",
+   "viDuNghia": "Người mẫu đã thay đổi theo xu hướng mới này, và nam giới nhạy cảm với thông điệp của truyền thông rằng phải mạnh mẽ, vạm vỡ."
+  },
+  {
+   "chu": "athlete",
+   "doc": "/ˈæθliːt/",
+   "nghia": "vận động viên",
+   "nhom": "Bắt nạt & hình thể",
+   "viDu": "In the body of the essay, write three paragraphs, with each one covering the causes, effects, and solutions of using drugs to boost performance among athletes.",
+   "viDuNghia": "Trong thân bài, viết ba đoạn, mỗi đoạn lần lượt trình bày nguyên nhân, hệ quả, và giải pháp của việc dùng thuốc để tăng thành tích ở vận động viên."
+  },
+  {
+   "chu": "biotechnology",
+   "doc": "/ˌbaɪoʊtekˈnɑːlədʒi/",
+   "nghia": "công nghệ sinh học",
+   "nhom": "Bắt nạt & hình thể",
+   "viDu": "The author of the essay maintains a ______ attitude toward the use of biotechnology in sports.",
+   "viDuNghia": "Tác giả bài luận duy trì thái độ ______ đối với việc dùng công nghệ sinh học trong thể thao."
+  },
+  {
+   "chu": "fair play",
+   "doc": "/ˌfer ˈpleɪ/",
+   "nghia": "tinh thần chơi đẹp, thi đấu công bằng",
+   "nhom": "Bắt nạt & hình thể",
+   "viDu": "Fair play means that every athlete competes under the same rules.",
+   "viDuNghia": "Chơi đẹp nghĩa là mọi vận động viên thi đấu theo cùng một luật."
+  },
+  {
+   "chu": "food insecurity",
+   "doc": "/ˈfuːd ˌɪnsɪˈkjʊrəti/",
+   "nghia": "tình trạng mất an ninh lương thực: không chắc có đủ thức ăn lành mạnh",
+   "nhom": "Lương thực & cộng đồng",
+   "viDu": "Right here in Arizona, community gardens are providing another way to combat food insecurity.",
+   "viDuNghia": "Ngay tại Arizona, các vườn cộng đồng đang đem lại thêm một cách chống mất an ninh lương thực."
+  },
+  {
+   "chu": "food bank",
+   "doc": "/ˈfuːd bæŋk/",
+   "nghia": "ngân hàng thực phẩm: nơi phát thực phẩm miễn phí cho người khó khăn",
+   "nhom": "Lương thực & cộng đồng",
+   "viDu": "Even though there are campus food banks popping up around the country, the problem still exists.",
+   "viDuNghia": "Dù các ngân hàng thực phẩm trong trường đang mọc lên khắp cả nước, vấn đề vẫn còn đó."
+  },
+  {
+   "chu": "community garden",
+   "doc": "/kəˈmjuːnəti ˈɡɑːrdn/",
+   "nghia": "vườn cộng đồng: mảnh đất chung để người dân, sinh viên cùng trồng rau",
+   "nhom": "Lương thực & cộng đồng",
+   "viDu": "Community gardens would bring many benefits to FPT University.",
+   "viDuNghia": "Vườn cộng đồng sẽ mang lại nhiều lợi ích cho Đại học FPT."
+  },
+  {
+   "chu": "homeless shelter",
+   "doc": "/ˈhoʊmləs ˈʃeltər/",
+   "nghia": "nhà tạm lánh cho người vô gia cư",
+   "nhom": "Lương thực & cộng đồng",
+   "viDu": "In one instance, they started a community garden down the street from a homeless shelter.",
+   "viDuNghia": "Có lần, họ lập một vườn cộng đồng ở cuối con phố gần một nhà tạm lánh cho người vô gia cư."
+  },
+  {
+   "chu": "shelter",
+   "doc": "/ˈʃeltər/",
+   "nghia": "chỗ trú ẩn, nơi nương náu",
+   "nhom": "Lương thực & cộng đồng",
+   "viDu": "There's another time when I put a garden in this homeless shelter in downtown Los Angeles.",
+   "viDuNghia": "Có một lần khác tôi lập một khu vườn trong nhà tạm lánh cho người vô gia cư ở trung tâm Los Angeles."
+  },
+  {
+   "chu": "participation",
+   "doc": "/pɑːrˌtɪsɪˈpeɪʃn/",
+   "nghia": "sự tham gia",
+   "nhom": "Lương thực & cộng đồng",
+   "viDu": "Community gardens depend on the participation of students and local families.",
+   "viDuNghia": "Vườn cộng đồng phụ thuộc vào sự tham gia của sinh viên và các gia đình địa phương."
+  },
+  {
+   "chu": "majority",
+   "doc": "/məˈdʒɔːrəti/",
+   "nghia": "đa số, phần lớn",
+   "nhom": "Lương thực & cộng đồng",
+   "viDu": "The accident impacted the majority of the wildlife and the island of Japan itself.",
+   "viDuNghia": "Vụ tai nạn đã ảnh hưởng tới phần lớn động vật hoang dã và chính hòn đảo Nhật Bản."
+  },
+  {
+   "chu": "concern",
+   "doc": "/kənˈsɜːrn/",
+   "nghia": "mối lo ngại; (động từ) liên quan tới",
+   "nhom": "Lương thực & cộng đồng",
+   "viDu": "The first issue concerns fairness in academic expectations.",
+   "viDuNghia": "Vấn đề đầu tiên liên quan tới sự công bằng trong các kỳ vọng học thuật."
+  },
+  {
+   "chu": "serious",
+   "doc": "/ˈsɪriəs/",
+   "nghia": "nghiêm trọng; nghiêm túc",
+   "nhom": "Lương thực & cộng đồng",
+   "viDu": "Individuals with less serious crimes often do not learn their lesson from spending a short amount of time in prison.",
+   "viDuNghia": "Những người phạm tội ít nghiêm trọng thường không rút được bài học từ quãng thời gian ngắn ở tù."
+  },
+  {
+   "chu": "technological",
+   "doc": "/ˌteknəˈlɑːdʒɪkl/",
+   "nghia": "thuộc công nghệ",
+   "nhom": "Lương thực & cộng đồng",
+   "viDu": "Certainly a technological leap at the time, these portable books paved the way for other \"book\" formats to emerge.",
+   "viDuNghia": "Rõ ràng là một bước nhảy vọt công nghệ vào thời đó, những cuốn sách bỏ túi này đã mở đường cho các dạng \"sách\" khác ra đời."
+  },
+  {
+   "chu": "happiness",
+   "doc": "/ˈhæpinəs/",
+   "nghia": "hạnh phúc",
+   "nhom": "Hạnh phúc & kinh tế",
+   "viDu": "How does the writer show his/her personal stance on the relationship between money and happiness?",
+   "viDuNghia": "Người viết thể hiện lập trường cá nhân về mối quan hệ giữa tiền bạc và hạnh phúc như thế nào?"
+  },
+  {
+   "chu": "subjective wellbeing",
+   "doc": "/səbˈdʒektɪv ˌwelˈbiːɪŋ/",
+   "nghia": "hạnh phúc chủ quan: mức độ một người tự thấy hài lòng với cuộc sống",
+   "nhom": "Hạnh phúc & kinh tế",
+   "viDu": "Surveys of subjective wellbeing ask people how satisfied they are with their lives.",
+   "viDuNghia": "Các khảo sát về hạnh phúc chủ quan hỏi người ta hài lòng với cuộc sống của mình tới mức nào."
+  },
+  {
+   "chu": "wellbeing",
+   "doc": "/ˌwelˈbiːɪŋ/",
+   "nghia": "trạng thái khoẻ mạnh, hạnh phúc, an lành",
+   "nhom": "Hạnh phúc & kinh tế",
+   "viDu": "The first reason a trip to Mars might be a good idea is that the Earth is experiencing many threats to its wellbeing, and humans may need a new home.",
+   "viDuNghia": "Lý do đầu tiên khiến chuyến đi tới Sao Hoả có thể là ý hay là Trái Đất đang gặp nhiều mối đe doạ tới sự an lành của nó, và loài người có thể cần một ngôi nhà mới."
+  },
+  {
+   "chu": "per capita",
+   "doc": "/pər ˈkæpɪtə/",
+   "nghia": "tính trên đầu người (GDP per capita = GDP bình quân đầu người)",
+   "nhom": "Hạnh phúc & kinh tế",
+   "viDu": "The writer compares GDP per capita with the level of happiness in each country.",
+   "viDuNghia": "Người viết so sánh GDP bình quân đầu người với mức hạnh phúc ở từng nước."
+  },
+  {
+   "chu": "economic freedom",
+   "doc": "/ˌekəˈnɑːmɪk ˈfriːdəm/",
+   "nghia": "tự do kinh tế: quyền tự do làm ăn, buôn bán, sở hữu tài sản",
+   "nhom": "Hạnh phúc & kinh tế",
+   "viDu": "Studies have shown that economic freedom correlates with happiness.",
+   "viDuNghia": "Các nghiên cứu cho thấy tự do kinh tế có tương quan với hạnh phúc."
+  },
+  {
+   "chu": "ecosystem",
+   "doc": "/ˈiːkoʊsɪstəm/",
+   "nghia": "hệ sinh thái",
+   "nhom": "Môi trường & tài nguyên",
+   "viDu": "Clear cutting forests also alters the ecosystem negatively in areas in which animals thrive.",
+   "viDuNghia": "Chặt trắng rừng còn làm biến đổi tiêu cực hệ sinh thái ở những vùng động vật đang sinh sôi."
+  },
+  {
+   "chu": "species",
+   "doc": "/ˈspiːʃiːz/",
+   "nghia": "loài (sinh vật); số ít và số nhiều viết giống nhau",
+   "nhom": "Môi trường & tài nguyên",
+   "viDu": "Furthermore, humans have always wondered if they were the only intelligent species.",
+   "viDuNghia": "Hơn nữa, con người luôn tự hỏi liệu mình có phải loài thông minh duy nhất hay không."
+  },
+  {
+   "chu": "wildlife",
+   "doc": "/ˈwaɪldlaɪf/",
+   "nghia": "động vật hoang dã",
+   "nhom": "Môi trường & tài nguyên",
+   "viDu": "Although it has existed for millennia, the rate of deforestation has surged in recent years, leading to severe consequences for the planet, wildlife, and humanity.",
+   "viDuNghia": "Dù đã tồn tại hàng thiên niên kỷ, tốc độ phá rừng tăng vọt trong những năm gần đây, gây hậu quả nặng nề cho hành tinh, động vật hoang dã và nhân loại."
+  },
+  {
+   "chu": "erosion",
+   "doc": "/ɪˈroʊʒn/",
+   "nghia": "sự xói mòn (soil erosion = xói mòn đất)",
+   "nhom": "Môi trường & tài nguyên",
+   "viDu": "Trees play a crucial role in holding soil together and protecting it from erosion.",
+   "viDuNghia": "Cây đóng vai trò then chốt trong việc giữ đất và bảo vệ đất khỏi xói mòn."
+  },
+  {
+   "chu": "contaminate",
+   "doc": "/kənˈtæmɪneɪt/",
+   "nghia": "làm nhiễm bẩn, nhiễm độc",
+   "nhom": "Môi trường & tài nguyên",
+   "viDu": "Additionally, eroded soil contaminates water sources, endangering aquatic life and human water supplies [Lal, 2020].",
+   "viDuNghia": "Ngoài ra, đất bị xói mòn làm ô nhiễm nguồn nước, đe doạ thuỷ sinh và nguồn nước của con người [Lal, 2020]."
+  },
+  {
+   "chu": "renewable",
+   "doc": "/rɪˈnuːəbl/",
+   "nghia": "tái tạo được (renewable resource = tài nguyên tái tạo)",
+   "nhom": "Khí hậu & năng lượng",
+   "viDu": "Solar and wind power are extremely environmentally friendly, using only renewable resources as their source of power.",
+   "viDuNghia": "Điện mặt trời và điện gió cực kỳ thân thiện với môi trường, chỉ dùng tài nguyên tái tạo làm nguồn năng lượng."
+  },
+  {
+   "chu": "absorb",
+   "doc": "/əbˈzɔːrb/",
+   "nghia": "hấp thụ (cây hấp thụ CO2)",
+   "nhom": "Khí hậu & năng lượng",
+   "viDu": "These methods help to control the amount of water released and to do it slowly so that it can be absorbed into the ground.",
+   "viDuNghia": "Những phương pháp này giúp kiểm soát lượng nước xả ra và xả chậm để nước kịp thấm vào đất."
+  },
+  {
+   "chu": "sea level",
+   "doc": "/ˈsiː ˌlevl/",
+   "nghia": "mực nước biển",
+   "nhom": "Khí hậu & năng lượng",
+   "viDu": "The result of such actions can greatly affect the earth by melting bodies of ice, thus increasing the sea level.",
+   "viDuNghia": "Hậu quả của những hành động đó có thể tác động lớn tới Trái Đất khi làm tan các khối băng, từ đó làm mực nước biển dâng."
+  },
+  {
+   "chu": "glacier",
+   "doc": "/ˈɡleɪʃər/",
+   "nghia": "sông băng",
+   "nhom": "Khí hậu & năng lượng",
+   "viDu": "As the planet warms, glaciers melt and the sea level rises.",
+   "viDuNghia": "Khi hành tinh ấm lên, sông băng tan và mực nước biển dâng."
+  },
+  {
+   "chu": "flood",
+   "doc": "/flʌd/",
+   "nghia": "lũ lụt; (động từ) làm ngập",
+   "nhom": "Khí hậu & năng lượng",
+   "viDu": "Many California farmers use older methods such as canals to flood fields.",
+   "viDuNghia": "Nhiều nông dân California dùng những cách cũ như dẫn kênh để cho nước ngập ruộng."
+  },
+  {
+   "chu": "detrimental",
+   "doc": "/ˌdetrɪˈmentl/",
+   "nghia": "có hại, gây tổn hại (trang trọng hơn harmful)",
+   "nhom": "Môi trường & tài nguyên",
+   "viDu": "Suggest how the detrimental effects of air pollution may be reduced.",
+   "viDuNghia": "Đề xuất cách giảm thiểu tác hại của ô nhiễm không khí."
+  },
+  {
+   "chu": "farmer",
+   "doc": "/ˈfɑːrmər/",
+   "nghia": "nông dân",
+   "nhom": "Môi trường & tài nguyên",
+   "viDu": "Historically, farmers have always looked for crops that are worth more money.",
+   "viDuNghia": "Từ xưa, nông dân luôn tìm những loại cây trồng bán được nhiều tiền hơn."
+  },
+  {
+   "chu": "palm oil",
+   "doc": "/ˈpɑːm ɔɪl/",
+   "nghia": "dầu cọ — rừng nhiệt đới bị phá nhiều để trồng cọ dầu",
+   "nhom": "Môi trường & tài nguyên",
+   "viDu": "Large areas of rainforest are cleared every year to produce palm oil.",
+   "viDuNghia": "Mỗi năm những vùng rừng nhiệt đới rộng lớn bị phá để sản xuất dầu cọ."
+  },
+  {
+   "chu": "offender",
+   "doc": "/əˈfendər/",
+   "nghia": "người phạm tội",
+   "nhom": "Tội phạm & cải tạo",
+   "viDu": "Rehabilitation programs teach offenders job skills so that they do not return to crime.",
+   "viDuNghia": "Các chương trình cải tạo dạy nghề cho người phạm tội để họ không tái phạm."
+  },
+  {
+   "chu": "inmate",
+   "doc": "/ˈɪnmeɪt/",
+   "nghia": "phạm nhân đang ở trong tù",
+   "nhom": "Tội phạm & cải tạo",
+   "viDu": "Prisons that mainly focus on punishment are based on the premise that inmates should suffer to allow the nature of their wrongdoing to sink in.",
+   "viDuNghia": "Những nhà tù chủ yếu nhắm vào trừng phạt dựa trên tiền đề rằng phạm nhân phải chịu khổ thì mới thấm thía bản chất việc sai trái của mình."
+  },
+  {
+   "chu": "deterrent",
+   "doc": "/dɪˈtɜːrənt/",
+   "nghia": "thứ có tác dụng răn đe, ngăn người ta phạm tội",
+   "nhom": "Tội phạm & cải tạo",
+   "viDu": "Supporters of punishment argue that a long prison sentence is a strong deterrent.",
+   "viDuNghia": "Người ủng hộ trừng phạt cho rằng án tù dài là một biện pháp răn đe mạnh."
+  },
+  {
+   "chu": "reform",
+   "doc": "/rɪˈfɔːrm/",
+   "nghia": "cải cách, cải tổ (hệ thống); cải tạo (con người)",
+   "nhom": "Tội phạm & cải tạo",
+   "viDu": "I also believe, however, that the prison system itself needs to be completely reformed, for some of the reasons mentioned above.",
+   "viDuNghia": "Tuy nhiên, tôi cũng tin rằng chính hệ thống nhà tù cần được cải tổ hoàn toàn, vì một số lý do đã nêu ở trên."
+  },
+  {
+   "chu": "therapy",
+   "doc": "/ˈθerəpi/",
+   "nghia": "liệu pháp, trị liệu (tâm lý)",
+   "nhom": "Tội phạm & cải tạo",
+   "viDu": "Some prisons offer therapy for inmates with drug addiction.",
+   "viDuNghia": "Một số nhà tù có trị liệu cho phạm nhân nghiện ma tuý."
+  },
+  {
+   "chu": "addiction",
+   "doc": "/əˈdɪkʃn/",
+   "nghia": "chứng nghiện",
+   "nhom": "Tội phạm & cải tạo",
+   "viDu": "Social media addiction is a growing concern for parents of teenagers.",
+   "viDuNghia": "Nghiện mạng xã hội là mối lo ngày càng lớn của cha mẹ có con tuổi thiếu niên."
+  },
+  {
+   "chu": "perpetrator",
+   "doc": "/ˈpɜːrpətreɪtər/",
+   "nghia": "thủ phạm, kẻ gây ra hành vi xấu",
+   "nhom": "Bắt nạt & hình thể",
+   "viDu": "Since the perpetrator is anonymous in cyberbullying, parents and teachers will find it harder to notice the victim's problems.",
+   "viDuNghia": "Vì thủ phạm ẩn danh khi bắt nạt trên mạng, cha mẹ và thầy cô sẽ khó nhận ra vấn đề của nạn nhân hơn."
+  },
+  {
+   "chu": "anonymous",
+   "doc": "/əˈnɑːnɪməs/",
+   "nghia": "ẩn danh, giấu tên",
+   "nhom": "Bắt nạt & hình thể",
+   "viDu": "Anonymous accounts make it easy to post cruel comments without being caught.",
+   "viDuNghia": "Tài khoản ẩn danh khiến việc đăng bình luận ác ý mà không bị phát hiện trở nên dễ dàng."
+  },
+  {
+   "chu": "adolescent",
+   "doc": "/ˌædəˈlesnt/",
+   "nghia": "thanh thiếu niên, người đang tuổi dậy thì",
+   "nhom": "Bắt nạt & hình thể",
+   "viDu": "School bullying among adolescents can be physical, verbal, relational, or cyber.",
+   "viDuNghia": "Bắt nạt học đường ở thanh thiếu niên có thể bằng hành động, lời nói, quan hệ hoặc trên mạng."
+  },
+  {
+   "chu": "peer pressure",
+   "doc": "/ˈpɪr ˌpreʃər/",
+   "nghia": "áp lực từ bạn bè đồng trang lứa",
+   "nhom": "Bắt nạt & hình thể",
+   "viDu": "Because of peer pressure, some students join in the bullying instead of stopping it.",
+   "viDuNghia": "Vì áp lực bạn bè, một số học sinh hùa theo bắt nạt thay vì ngăn lại."
+  },
+  {
+   "chu": "media image",
+   "doc": "/ˈmiːdiə ˌɪmɪdʒ/",
+   "nghia": "hình ảnh trên truyền thông (người mẫu, quảng cáo) — thường tạo chuẩn đẹp phi thực tế",
+   "nhom": "Bắt nạt & hình thể",
+   "viDu": "The study focuses on determining the effects of media images on men's body image.",
+   "viDuNghia": "Nghiên cứu tập trung xác định ảnh hưởng của hình ảnh trên truyền thông tới cách nam giới nhìn nhận cơ thể mình."
+  },
+  {
+   "chu": "doping",
+   "doc": "/ˈdoʊpɪŋ/",
+   "nghia": "việc dùng chất kích thích bị cấm trong thể thao",
+   "nhom": "Bắt nạt & hình thể",
+   "viDu": "Gene doping could change an athlete's body in ways that tests cannot detect.",
+   "viDuNghia": "Doping gen có thể thay đổi cơ thể vận động viên theo cách mà xét nghiệm không phát hiện được."
+  },
+  {
+   "chu": "performance-enhancing",
+   "doc": "/pərˈfɔːrməns ɪnˌhænsɪŋ/",
+   "nghia": "(thuốc, công nghệ) tăng thành tích thi đấu",
+   "nhom": "Bắt nạt & hình thể",
+   "viDu": "Many believe that using performance-enhancing drugs should be banned in sport.",
+   "viDuNghia": "Nhiều người tin rằng việc sử dụng thuốc tăng cường thành tích nên bị cấm trong thể thao."
+  },
+  {
+   "chu": "unfair advantage",
+   "doc": "/ˌʌnˈfer ədˈvæntɪdʒ/",
+   "nghia": "lợi thế không công bằng",
+   "nhom": "Bắt nạt & hình thể",
+   "viDu": "Athletes who use any type of biotechnology give themselves an unfair advantage and disrupt the sense of fair play.",
+   "viDuNghia": "Vận động viên dùng bất kỳ loại công nghệ sinh học nào là tự tạo lợi thế không công bằng và phá vỡ tinh thần chơi đẹp."
+  },
+  {
+   "chu": "spectator",
+   "doc": "/ˈspekteɪtər/",
+   "nghia": "khán giả xem thi đấu thể thao",
+   "nhom": "Bắt nạt & hình thể",
+   "viDu": "For centuries, spectators and athletes have cherished the tradition of fairness in sports.",
+   "viDuNghia": "Suốt nhiều thế kỷ, khán giả và vận động viên luôn trân trọng truyền thống công bằng trong thể thao."
+  },
+  {
+   "chu": "nutritious",
+   "doc": "/nuˈtrɪʃəs/",
+   "nghia": "bổ dưỡng, giàu dinh dưỡng",
+   "nhom": "Lương thực & cộng đồng",
+   "viDu": "Not only would campus gardens provide nutritious food for students, but it could provide job experience for agriculture students and provide a living wage, as well.",
+   "viDuNghia": "Vườn trong trường không chỉ cung cấp thực phẩm bổ dưỡng cho sinh viên mà còn có thể đem lại kinh nghiệm làm việc cho sinh viên nông nghiệp và cả một mức lương đủ sống."
+  },
+  {
+   "chu": "hunger",
+   "doc": "/ˈhʌŋɡər/",
+   "nghia": "nạn đói, cái đói",
+   "nhom": "Lương thực & cộng đồng",
+   "viDu": "Community gardens are working to combat hunger in other areas of the country as well.",
+   "viDuNghia": "Các vườn cộng đồng cũng đang góp sức chống nạn đói ở những vùng khác của đất nước."
+  },
+  {
+   "chu": "empower",
+   "doc": "/ɪmˈpaʊər/",
+   "nghia": "trao quyền, giúp ai có khả năng tự làm chủ",
+   "nhom": "Lương thực & cộng đồng",
+   "viDu": "Not only does planting a garden empower these women to make positive choices, but it provides a living.",
+   "viDuNghia": "Việc trồng một khu vườn không chỉ trao cho những phụ nữ này khả năng đưa ra lựa chọn tích cực mà còn đem lại kế sinh nhai."
+  },
+  {
+   "chu": "citizen",
+   "doc": "/ˈsɪtɪzn/",
+   "nghia": "công dân",
+   "nhom": "Lương thực & cộng đồng",
+   "viDu": "Proof of this can be seen in some European countries that offer free education to all citizens.",
+   "viDuNghia": "Bằng chứng có thể thấy ở một số nước châu Âu, nơi giáo dục miễn phí cho mọi công dân."
+  },
+  {
+   "chu": "life satisfaction",
+   "doc": "/ˈlaɪf ˌsætɪsˈfækʃn/",
+   "nghia": "mức hài lòng với cuộc sống",
+   "nhom": "Hạnh phúc & kinh tế",
+   "viDu": "Life satisfaction does not always rise when a country becomes richer.",
+   "viDuNghia": "Mức hài lòng với cuộc sống không phải lúc nào cũng tăng khi một nước giàu lên."
+  },
+  {
+   "chu": "satisfaction",
+   "doc": "/ˌsætɪsˈfækʃn/",
+   "nghia": "sự hài lòng, thoả mãn",
+   "nhom": "Hạnh phúc & kinh tế",
+   "viDu": "Money brings satisfaction only up to a certain level of income.",
+   "viDuNghia": "Tiền chỉ đem lại sự hài lòng tới một mức thu nhập nhất định."
+  },
+  {
+   "chu": "correlate",
+   "doc": "/ˈkɔːrəleɪt/",
+   "nghia": "có tương quan với (A correlates with B)",
+   "nhom": "Hạnh phúc & kinh tế",
+   "viDu": "In many studies, income correlates with happiness only up to a point.",
+   "viDuNghia": "Trong nhiều nghiên cứu, thu nhập chỉ tương quan với hạnh phúc tới một mức nào đó."
+  },
+  {
+   "chu": "wealth",
+   "doc": "/welθ/",
+   "nghia": "sự giàu có, của cải",
+   "nhom": "Hạnh phúc & kinh tế",
+   "viDu": "Easterlin argued that more national wealth does not make people happier.",
+   "viDuNghia": "Easterlin cho rằng của cải quốc gia nhiều hơn không làm người dân hạnh phúc hơn."
+  },
+  {
+   "chu": "gross domestic product",
+   "nghia": "tổng sản phẩm quốc nội (GDP): tổng giá trị hàng hoá, dịch vụ một nước làm ra trong một năm",
+   "nhom": "Hạnh phúc & kinh tế",
+   "viDu": "Gross domestic product measures the size of an economy, not the happiness of its people.",
+   "viDuNghia": "Tổng sản phẩm quốc nội đo quy mô nền kinh tế, không đo hạnh phúc của người dân."
+  }
+ ]
+}

@@ -1,0 +1,573 @@
+{
+ "ma": "swr302-2",
+ "nn": "en",
+ "ten": "SWR302 · 2. Khơi gợi yêu cầu & nguyên mẫu",
+ "moTa": "Môn Software Requirements (FPT): kỹ thuật khơi gợi yêu cầu (phỏng vấn, hội thảo, quan sát…), lớp người dùng, persona, nguyên mẫu. Từ trích từ đề FE/PE thật; phần lớn câu ví dụ là câu hỏi thật trong đề.",
+ "bieuTuong": "person.2.fill",
+ "thuTu": -955,
+ "tu": [
+  {
+   "chu": "requirements elicitation",
+   "doc": "/rɪˈkwaɪərmənts ɪˌlɪsɪˈteɪʃn/",
+   "nghia": "khơi gợi yêu cầu: quá trình làm việc với các bên liên quan để tìm ra, thu thập và làm rõ yêu cầu",
+   "nhom": "Khơi gợi yêu cầu",
+   "viDu": "What is the primary challenge in defining system boundaries during requirements elicitation?",
+   "viDuNghia": "Thách thức chính khi xác định ranh giới hệ thống trong lúc thu thập yêu cầu là gì?"
+  },
+  {
+   "chu": "elicitation",
+   "doc": "/ɪˌlɪsɪˈteɪʃn/",
+   "nghia": "sự khơi gợi, thu thập (yêu cầu): không chỉ hỏi rồi chép, mà còn khám phá nhu cầu thật",
+   "nhom": "Khơi gợi yêu cầu",
+   "viDu": "The work products produced during requirements elicitation will vary depending on the size of the product being built.",
+   "viDuNghia": "Các sản phẩm công việc tạo ra khi khơi gợi yêu cầu sẽ khác nhau tuỳ theo quy mô sản phẩm đang xây."
+  },
+  {
+   "chu": "elicit",
+   "doc": "/ɪˈlɪsɪt/",
+   "nghia": "khơi gợi, gợi hỏi để lấy ra (thông tin, yêu cầu)",
+   "nhom": "Khơi gợi yêu cầu",
+   "viDu": "What is the primary purpose of eliciting requirements?",
+   "viDuNghia": "Mục đích chính của việc khơi gợi (elicit) yêu cầu là gì?"
+  },
+  {
+   "chu": "elicitation technique",
+   "doc": "/ɪˌlɪsɪˈteɪʃn tekˈniːk/",
+   "nghia": "kỹ thuật khơi gợi: cách thu thập yêu cầu như phỏng vấn, hội thảo, quan sát, bảng hỏi",
+   "nhom": "Khơi gợi yêu cầu",
+   "viDu": "Which of the following is an example of a requirements elicitation technique commonly used in software development?",
+   "viDuNghia": "Điều nào sau đây là ví dụ về kỹ thuật khơi gợi yêu cầu thường dùng trong phát triển phần mềm?"
+  },
+  {
+   "chu": "elicitation activity",
+   "doc": "/ɪˌlɪsɪˈteɪʃn ækˈtɪvəti/",
+   "nghia": "hoạt động khơi gợi: một việc cụ thể trong lúc thu thập yêu cầu (lên kế hoạch, chuẩn bị, thực hiện, tổng kết)",
+   "nhom": "Khơi gợi yêu cầu",
+   "viDu": "What is one of the first steps in performing an elicitation activity?",
+   "viDuNghia": "Một trong những bước đầu tiên khi thực hiện hoạt động khơi gợi yêu cầu là gì?"
+  },
+  {
+   "chu": "independent elicitation",
+   "doc": "/ˌɪndɪˈpendənt ɪˌlɪsɪˈteɪʃn/",
+   "nghia": "khơi gợi độc lập: BA tự tìm hiểu qua tài liệu, hệ thống sẵn có mà không cần họp với người khác",
+   "nhom": "Khơi gợi yêu cầu",
+   "viDu": "Develop a method to ensure that all necessary documents and systems are available for independent elicitation. What would be a primary focus of this method?",
+   "viDuNghia": "Xây dựng một phương pháp bảo đảm có đủ tài liệu và hệ thống cần thiết cho việc khơi gợi yêu cầu độc lập (independent elicitation). Trọng tâm chính của phương pháp là gì?"
+  },
+  {
+   "chu": "gather",
+   "doc": "/ˈɡæðər/",
+   "nghia": "thu thập, gom (yêu cầu, thông tin)",
+   "nhom": "Khơi gợi yêu cầu",
+   "viDu": "What is a significant challenge in gathering user stories from diverse stakeholders?",
+   "viDuNghia": "Thách thức đáng kể khi thu thập user story từ nhiều bên liên quan khác nhau là gì?"
+  },
+  {
+   "chu": "discover",
+   "doc": "/dɪˈskʌvər/",
+   "nghia": "khám phá, tìm ra (yêu cầu còn ẩn)",
+   "nhom": "Khơi gợi yêu cầu",
+   "viDu": "Elicitation is a collaborative and analytical process that includes activities to collect, discover, extract, and define requirements.",
+   "viDuNghia": "Khai thác yêu cầu là một quá trình cộng tác và mang tính phân tích, bao gồm các hoạt động thu thập, khám phá, trích xuất và định nghĩa yêu cầu"
+  },
+  {
+   "chu": "stakeholder input",
+   "doc": "/ˈsteɪkhoʊldər ˈɪnpʊt/",
+   "nghia": "ý kiến đóng góp của các bên liên quan",
+   "nhom": "Khơi gợi yêu cầu",
+   "viDu": "We revised the workflow after getting stakeholder input at the workshop.",
+   "viDuNghia": "Chúng tôi sửa lại luồng công việc sau khi nhận ý kiến của các bên liên quan tại hội thảo."
+  },
+  {
+   "chu": "incomplete requirement",
+   "doc": "/ˌɪnkəmˈpliːt rɪˈkwaɪərmənt/",
+   "nghia": "yêu cầu không đầy đủ: thiếu thông tin, thiếu trường hợp nên dễ gây trễ và làm lại",
+   "nhom": "Khơi gợi yêu cầu",
+   "viDu": "What is the risk of incomplete requirements during the elicitation phase?",
+   "viDuNghia": "Rủi ro của việc yêu cầu không đầy đủ trong giai đoạn khai thác là gì?"
+  },
+  {
+   "chu": "missing requirement",
+   "doc": "/ˈmɪsɪŋ rɪˈkwaɪərmənt/",
+   "nghia": "yêu cầu bị bỏ sót: yêu cầu cần có nhưng chưa ai nêu ra",
+   "nhom": "Khơi gợi yêu cầu",
+   "viDu": "A CRUD matrix is a rigorous data analysis technique for detecting missing requirements.",
+   "viDuNghia": "Ma trận CRUD là kỹ thuật phân tích dữ liệu chặt chẽ để phát hiện yêu cầu bị thiếu"
+  },
+  {
+   "chu": "misunderstanding",
+   "doc": "/ˌmɪsʌndərˈstændɪŋ/",
+   "nghia": "sự hiểu lầm, hiểu sai ý nhau",
+   "nhom": "Khơi gợi yêu cầu",
+   "viDu": "Which approach is recommended to enhance communication and minimize misunderstandings when working with outsourced teams across cultures and native languages?",
+   "viDuNghia": "Cách nào được khuyên dùng để tăng hiệu quả giao tiếp, giảm hiểu lầm khi làm với đội outsource khác văn hoá và ngôn ngữ?"
+  },
+  {
+   "chu": "expert",
+   "doc": "/ˈekspɜːrt/",
+   "nghia": "chuyên gia: người hiểu sâu một lĩnh vực",
+   "nhom": "Khơi gợi yêu cầu",
+   "viDu": "Why is it important to involve stakeholders, including data experts, in the process of specifying data requirements?",
+   "viDuNghia": "Vì sao việc lôi kéo các bên liên quan, gồm cả chuyên gia dữ liệu, tham gia quá trình đặc tả yêu cầu dữ liệu lại quan trọng?"
+  },
+  {
+   "chu": "legacy system",
+   "doc": "/ˈleɡəsi ˈsɪstəm/",
+   "nghia": "hệ thống cũ đang dùng, thường sắp được thay thế hoặc nâng cấp",
+   "nhom": "Khơi gợi yêu cầu",
+   "viDu": "During a replacement project, legacy system data migration is important for:",
+   "viDuNghia": "Trong một dự án thay thế hệ thống, việc di trú dữ liệu từ hệ thống cũ quan trọng vì:"
+  },
+  {
+   "chu": "existing system",
+   "doc": "/ɪɡˈzɪstɪŋ ˈsɪstəm/",
+   "nghia": "hệ thống hiện có, đang chạy",
+   "nhom": "Khơi gợi yêu cầu",
+   "viDu": "What is a key challenge when maintaining trace data in an existing system?",
+   "viDuNghia": "Thách thức chính khi duy trì dữ liệu truy vết trong một hệ thống đã tồn tại là gì?"
+  },
+  {
+   "chu": "voice of the customer",
+   "nghia": "tiếng nói của khách hàng: ý kiến, nhu cầu do chính khách hàng, người dùng nêu ra",
+   "nhom": "Khơi gợi yêu cầu",
+   "viDu": "How can a business analyst effectively translate the voice of the customer into specific model components? Select two.",
+   "viDuNghia": "Nhà phân tích nghiệp vụ có thể chuyển \"tiếng nói của khách hàng\" thành các thành phần mô hình cụ thể một cách hiệu quả như thế nào? Chọn hai."
+  },
+  {
+   "chu": "unstructured",
+   "doc": "/ʌnˈstrʌktʃərd/",
+   "nghia": "không có cấu trúc, lộn xộn, chưa được sắp xếp",
+   "nhom": "Khơi gợi yêu cầu",
+   "viDu": "Requirements input is often diverse and unstructured.",
+   "viDuNghia": "Đầu vào yêu cầu thường đa dạng và thiếu cấu trúc."
+  },
+  {
+   "chu": "diverse",
+   "doc": "/daɪˈvɜːrs/",
+   "nghia": "đa dạng, nhiều kiểu khác nhau",
+   "nhom": "Khơi gợi yêu cầu",
+   "viDu": "What is a significant challenge in gathering user stories from diverse stakeholders?",
+   "viDuNghia": "Thách thức đáng kể khi thu thập user story từ nhiều bên liên quan khác nhau là gì?"
+  },
+  {
+   "chu": "time pressure",
+   "doc": "/taɪm ˈpreʃər/",
+   "nghia": "áp lực thời gian: bị thúc làm gấp vì sát hạn",
+   "nhom": "Khơi gợi yêu cầu",
+   "viDu": "Under time pressure, teams often skip requirements reviews.",
+   "viDuNghia": "Khi bị áp lực thời gian, các nhóm thường bỏ qua bước rà soát yêu cầu."
+  },
+  {
+   "chu": "collaborative",
+   "doc": "/kəˈlæbəreɪtɪv/",
+   "nghia": "có tính cộng tác: nhiều bên cùng làm với nhau",
+   "nhom": "Khơi gợi yêu cầu",
+   "viDu": "Elicitation is a collaborative and analytical process that includes activities to collect, discover, extract, and define requirements.",
+   "viDuNghia": "Khai thác yêu cầu (elicitation) là một quá trình cộng tác và phân tích, bao gồm các hoạt động để thu thập, khám phá, rút trích và định nghĩa yêu cầu"
+  },
+  {
+   "chu": "extract",
+   "doc": "/ɪkˈstrækt/",
+   "nghia": "rút ra, trích ra (yêu cầu từ lời kể, tài liệu)",
+   "nhom": "Khơi gợi yêu cầu",
+   "viDu": "Elicitation is a collaborative and analytical process that includes activities to collect, discover, extract, and define requirements.",
+   "viDuNghia": "Khơi gợi yêu cầu (elicitation) là một quá trình cộng tác và phân tích, bao gồm các hoạt động thu thập, khám phá, trích xuất và định nghĩa yêu cầu"
+  },
+  {
+   "chu": "interview",
+   "doc": "/ˈɪntərvjuː/",
+   "nghia": "phỏng vấn: hỏi trực tiếp từng người hoặc nhóm nhỏ để lấy yêu cầu",
+   "nhom": "Kỹ thuật khơi gợi",
+   "viDu": "What is the primary purpose of conducting stakeholder interviews during elicitation?",
+   "viDuNghia": "Mục đích chính của việc phỏng vấn các bên liên quan trong khai thác yêu cầu là gì?"
+  },
+  {
+   "chu": "workshop",
+   "doc": "/ˈwɜːrkʃɑːp/",
+   "nghia": "hội thảo yêu cầu: buổi làm việc có điều phối, nhiều bên cùng ngồi lại để thống nhất yêu cầu",
+   "nhom": "Kỹ thuật khơi gợi",
+   "viDu": "Which tip does NOT belong to the workshop technique when you do requirements elicitation?",
+   "viDuNghia": "Mẹo nào KHÔNG thuộc kỹ thuật hội thảo khi bạn khơi gợi yêu cầu?"
+  },
+  {
+   "chu": "focus group",
+   "doc": "/ˈfoʊkəs ɡruːp/",
+   "nghia": "nhóm tập trung: một nhóm người dùng đại diện cùng thảo luận để nêu ý kiến, ý tưởng về sản phẩm",
+   "nhom": "Kỹ thuật khơi gợi",
+   "viDu": "Conducting focus groups and identifying user requirements should be done in the elicitation stage.",
+   "viDuNghia": "Tổ chức nhóm tập trung và xác định yêu cầu người dùng là việc làm ở giai đoạn khơi gợi."
+  },
+  {
+   "chu": "questionnaire",
+   "doc": "/ˌkwestʃəˈner/",
+   "nghia": "bảng câu hỏi: gửi câu hỏi cho nhiều người dùng để khảo sát, rẻ và phủ rộng",
+   "nhom": "Kỹ thuật khơi gợi",
+   "viDu": "What kind of questions are best to ask at the beginning of the elicitation process when writing questionnaires?",
+   "viDuNghia": "Loại câu hỏi nào nên hỏi ở đầu quá trình khơi gợi khi soạn bảng câu hỏi?"
+  },
+  {
+   "chu": "document analysis",
+   "doc": "/ˈdɑːkjumənt əˈnæləsɪs/",
+   "nghia": "phân tích tài liệu: đọc tài liệu sẵn có (quy trình, biểu mẫu, hướng dẫn) để rút ra yêu cầu",
+   "nhom": "Kỹ thuật khơi gợi",
+   "viDu": "Document analysis of the old user manual revealed several hidden business rules.",
+   "viDuNghia": "Phân tích tài liệu hướng dẫn cũ đã lộ ra vài quy tắc nghiệp vụ còn ẩn."
+  },
+  {
+   "chu": "system interface analysis",
+   "nghia": "phân tích giao diện hệ thống: xem hệ thống kết nối, trao đổi dữ liệu với các hệ thống khác thế nào để tìm yêu cầu",
+   "nhom": "Kỹ thuật khơi gợi",
+   "viDu": "System interface analysis is the least helpful elicitation technique when the project is new application development.",
+   "viDuNghia": "Phân tích giao diện hệ thống là kỹ thuật khơi gợi ít hữu ích nhất khi dự án là phát triển ứng dụng mới."
+  },
+  {
+   "chu": "user interface analysis",
+   "nghia": "phân tích giao diện người dùng: nghiên cứu màn hình của hệ thống sẵn có để tìm yêu cầu người dùng và chức năng",
+   "nhom": "Kỹ thuật khơi gợi",
+   "viDu": "User Interface Analysis does NOT include",
+   "viDuNghia": "Phân tích giao diện người dùng KHÔNG bao gồm"
+  },
+  {
+   "chu": "brainstorming",
+   "doc": "/ˈbreɪnstɔːrmɪŋ/",
+   "nghia": "động não: cả nhóm nêu thật nhiều ý tưởng, chưa phê phán",
+   "nhom": "Kỹ thuật khơi gợi",
+   "viDu": "Brainstorming is NOT a prioritization technique.",
+   "viDuNghia": "Động não KHÔNG phải là một kỹ thuật xếp ưu tiên."
+  },
+  {
+   "chu": "prototyping",
+   "doc": "/ˈproʊtətaɪpɪŋ/",
+   "nghia": "làm nguyên mẫu: dựng bản thử để người dùng xem, thử và góp ý",
+   "nhom": "Kỹ thuật khơi gợi",
+   "viDu": "What is the advantage of using prototyping in early project phases?",
+   "viDuNghia": "Ưu điểm của việc dùng nguyên mẫu (prototyping) trong các giai đoạn đầu của dự án là gì?"
+  },
+  {
+   "chu": "straw man model",
+   "nghia": "mô hình nháp (\"người rơm\"): bản phác sơ bộ BA chuẩn bị trước để mọi người phê bình, sửa dần",
+   "nhom": "Kỹ thuật khơi gợi",
+   "viDu": "When does the BA prepare questions and straw man models in a requirements elicitation session?",
+   "viDuNghia": "BA chuẩn bị câu hỏi và mô hình nháp vào lúc nào trong một buổi khơi gợi yêu cầu?"
+  },
+  {
+   "chu": "ethnography",
+   "doc": "/eθˈnɑːɡrəfi/",
+   "nghia": "quan sát thực địa: sống và làm cùng người dùng trong môi trường thật để hiểu cách họ làm việc",
+   "nhom": "Kỹ thuật khơi gợi",
+   "viDu": "A disadvantage of observations and ethnographic studies is that they occur over a long period of time.",
+   "viDuNghia": "Một nhược điểm của quan sát và nghiên cứu thực địa (ethnography) là chúng kéo dài trong thời gian lâu."
+  },
+  {
+   "chu": "observe",
+   "doc": "/əbˈzɜːrv/",
+   "nghia": "quan sát, theo dõi (người dùng làm việc)",
+   "nhom": "Kỹ thuật khơi gợi",
+   "viDu": "The analyst observes how clerks process an order.",
+   "viDuNghia": "BA quan sát cách nhân viên xử lý một đơn hàng."
+  },
+  {
+   "chu": "contextual inquiry",
+   "doc": "/kənˈtekstʃuəl ˈɪnkwəri/",
+   "nghia": "phỏng vấn tại ngữ cảnh: vừa quan sát vừa hỏi người dùng ngay tại nơi họ làm việc",
+   "nhom": "Kỹ thuật khơi gợi",
+   "viDu": "Contextual inquiry elicits requirements by observing users in their natural environment.",
+   "viDuNghia": "Phỏng vấn tại ngữ cảnh khơi gợi yêu cầu bằng cách quan sát người dùng trong môi trường tự nhiên của họ."
+  },
+  {
+   "chu": "meeting agenda",
+   "doc": "/ˈmiːtɪŋ əˈdʒendə/",
+   "nghia": "chương trình cuộc họp: danh sách nội dung sẽ bàn, gửi trước để mọi người chuẩn bị",
+   "nhom": "Buổi phỏng vấn & hội thảo",
+   "viDu": "What is the benefit of having a meeting agenda and sending it out ahead of time (in requirements engineering)?",
+   "viDuNghia": "Lợi ích của việc có chương trình họp và gửi trước cho mọi người (trong kỹ nghệ yêu cầu) là gì?"
+  },
+  {
+   "chu": "elicitation session",
+   "doc": "/ɪˌlɪsɪˈteɪʃn ˈseʃn/",
+   "nghia": "buổi khơi gợi yêu cầu: một cuộc phỏng vấn hay hội thảo cụ thể",
+   "nhom": "Buổi phỏng vấn & hội thảo",
+   "viDu": "Which is not an activity for a single requirements elicitation session?",
+   "viDuNghia": "Điều nào KHÔNG phải là hoạt động của một buổi khai thác yêu cầu đơn lẻ?"
+  },
+  {
+   "chu": "active listening",
+   "doc": "/ˈæktɪv ˈlɪsənɪŋ/",
+   "nghia": "lắng nghe chủ động: nghe kỹ, hỏi lại và diễn đạt lại để chắc mình hiểu đúng",
+   "nhom": "Buổi phỏng vấn & hội thảo",
+   "viDu": "Active listening means restating what the user said to confirm you understood it.",
+   "viDuNghia": "Lắng nghe chủ động là nhắc lại điều người dùng nói để chắc rằng mình hiểu đúng."
+  },
+  {
+   "chu": "take notes",
+   "doc": "/teɪk noʊts/",
+   "nghia": "ghi chép lại nội dung buổi làm việc",
+   "nhom": "Buổi phỏng vấn & hội thảo",
+   "viDu": "One analyst asks the questions while another takes notes.",
+   "viDuNghia": "Một BA hỏi, còn một BA khác ghi chép."
+  },
+  {
+   "chu": "prepare",
+   "doc": "/prɪˈper/",
+   "nghia": "chuẩn bị (câu hỏi, mô hình nháp trước buổi khơi gợi)",
+   "nhom": "Buổi phỏng vấn & hội thảo",
+   "viDu": "Which is the first activity when you prepare for elicitation on your project?",
+   "viDuNghia": "Hoạt động đầu tiên khi chuẩn bị khơi gợi yêu cầu cho dự án là gì?"
+  },
+  {
+   "chu": "communication",
+   "doc": "/kəˌmjuːnɪˈkeɪʃn/",
+   "nghia": "giao tiếp, truyền đạt thông tin giữa các bên",
+   "nhom": "Buổi phỏng vấn & hội thảo",
+   "viDu": "What plan will describe the stakeholder groups, communication needs, and the level of formality that is appropriate for the requirements?",
+   "viDuNghia": "Kế hoạch nào mô tả các nhóm bên liên quan, nhu cầu trao đổi thông tin và mức độ chính thức phù hợp cho các yêu cầu?"
+  },
+  {
+   "chu": "agreement",
+   "doc": "/əˈɡriːmənt/",
+   "nghia": "sự đồng thuận, thống nhất",
+   "nhom": "Buổi phỏng vấn & hội thảo",
+   "viDu": "Which of the following statements about reaching agreement on requirements is accurate? Select two.",
+   "viDuNghia": "Phát biểu nào sau đây về việc đạt được sự đồng thuận trên yêu cầu là chính xác? Chọn hai."
+  },
+  {
+   "chu": "user profile",
+   "doc": "/ˈjuːzər ˈproʊfaɪl/",
+   "nghia": "hồ sơ người dùng: mô tả đặc điểm của một nhóm người dùng (trình độ, tần suất dùng, công việc)",
+   "nhom": "Người dùng & persona",
+   "viDu": "The user profile says clerks use the system all day but have little computer training.",
+   "viDuNghia": "Hồ sơ người dùng cho biết nhân viên dùng hệ thống cả ngày nhưng ít được đào tạo về máy tính."
+  },
+  {
+   "chu": "user persona",
+   "doc": "/ˈjuːzər pərˈsoʊnə/",
+   "nghia": "chân dung người dùng: nhân vật giả định, tiêu biểu cho một lớp người dùng",
+   "nhom": "Người dùng & persona",
+   "viDu": "Which of the following is the definition of the user personas?",
+   "viDuNghia": "Đâu là định nghĩa của user persona?"
+  },
+  {
+   "chu": "persona",
+   "doc": "/pərˈsoʊnə/",
+   "nghia": "persona: mô tả một con người giả định, điển hình, đại diện cho nhóm người dùng",
+   "nhom": "Người dùng & persona",
+   "viDu": "When creating a persona for each user class, the most important thing is:",
+   "viDuNghia": "Khi tạo persona cho mỗi lớp người dùng, điều quan trọng nhất là:"
+  },
+  {
+   "chu": "hypothetical",
+   "doc": "/ˌhaɪpəˈθetɪkl/",
+   "nghia": "giả định, không có thật (dùng để hình dung)",
+   "nhom": "Người dùng & persona",
+   "viDu": "A user persona is a description of a hypothetical, generic person.",
+   "viDuNghia": "Chân dung người dùng (persona) là bản mô tả một con người giả định, điển hình."
+  },
+  {
+   "chu": "generic",
+   "doc": "/dʒəˈnerɪk/",
+   "nghia": "chung chung, điển hình, không riêng một ai",
+   "nhom": "Người dùng & persona",
+   "viDu": "Which is the generic template for a requirement written from the user perspective?",
+   "viDuNghia": "Đâu là mẫu tổng quát cho một yêu cầu được viết theo góc nhìn NGƯỜI DÙNG?"
+  },
+  {
+   "chu": "market segment",
+   "doc": "/ˈmɑːrkɪt ˈseɡmənt/",
+   "nghia": "phân khúc thị trường: nhóm khách hàng có nhu cầu giống nhau",
+   "nhom": "Người dùng & persona",
+   "viDu": "When market segments disagree about a requirement, the segment with the greatest impact on business success gets preference.",
+   "viDuNghia": "Khi các phân khúc thị trường bất đồng về một yêu cầu, phân khúc ảnh hưởng lớn nhất tới thành công kinh doanh sẽ được ưu tiên."
+  },
+  {
+   "chu": "classify",
+   "doc": "/ˈklæsɪfaɪ/",
+   "nghia": "phân loại (người dùng, yêu cầu)",
+   "nhom": "Người dùng & persona",
+   "viDu": "Which of the following factors should be considered when classifying users? Select three.",
+   "viDuNghia": "Yếu tố nào nên được xem xét khi phân loại người dùng? Chọn ba."
+  },
+  {
+   "chu": "user task",
+   "doc": "/ˈjuːzər tæsk/",
+   "nghia": "công việc của người dùng: việc người dùng cần làm xong bằng hệ thống",
+   "nhom": "Người dùng & persona",
+   "viDu": "To understand user tasks and goals and the business objectives with which those tasks align, the BA should discuss with users at which stage?",
+   "viDuNghia": "Để hiểu các tác vụ, mục tiêu của người dùng và mục tiêu nghiệp vụ mà các tác vụ đó hướng tới, BA nên trao đổi với người dùng ở giai đoạn nào?"
+  },
+  {
+   "chu": "user needs",
+   "doc": "/ˈjuːzər niːdz/",
+   "nghia": "nhu cầu của người dùng",
+   "nhom": "Người dùng & persona",
+   "viDu": "User stories are concise statements that articulate user needs and serve as a starting point for detailed discussions.",
+   "viDuNghia": "User story là những phát biểu ngắn gọn diễn đạt nhu cầu người dùng và là điểm khởi đầu cho các cuộc thảo luận chi tiết."
+  },
+  {
+   "chu": "user satisfaction",
+   "doc": "/ˈjuːzər ˌsætɪsˈfækʃn/",
+   "nghia": "sự hài lòng của người dùng",
+   "nhom": "Người dùng & persona",
+   "viDu": "Usability problems found late will hurt user satisfaction.",
+   "viDuNghia": "Lỗi về tính dễ dùng bị phát hiện muộn sẽ làm giảm sự hài lòng của người dùng."
+  },
+  {
+   "chu": "preference",
+   "doc": "/ˈprefrəns/",
+   "nghia": "sự ưu tiên, được ưu tiên hơn (\"gets preference\" = được ưu tiên)",
+   "nhom": "Người dùng & persona",
+   "viDu": "Customers get preference, but in alignment with business objectives.",
+   "viDuNghia": "Khách hàng được ưu tiên, nhưng phải phù hợp với mục tiêu nghiệp vụ"
+  },
+  {
+   "chu": "throwaway prototype",
+   "doc": "/ˈθroʊəweɪ ˈproʊtətaɪp/",
+   "nghia": "nguyên mẫu dùng rồi bỏ: làm nhanh để làm rõ yêu cầu, xong thì vứt, không phát triển thành sản phẩm",
+   "nhom": "Nguyên mẫu",
+   "viDu": "Which of the following is a recommended way to reduce the pressure to deliver a throwaway prototype as a production product?",
+   "viDuNghia": "Cách nào sau đây được khuyến nghị để giảm áp lực phải bàn giao một nguyên mẫu dùng-rồi-bỏ như sản phẩm chính thức?"
+  },
+  {
+   "chu": "evolutionary prototype",
+   "doc": "/ˌevəˈluːʃəneri ˈproʊtətaɪp/",
+   "nghia": "nguyên mẫu tiến hoá: làm chắc chắn ngay từ đầu rồi phát triển dần thành sản phẩm thật",
+   "nhom": "Nguyên mẫu",
+   "viDu": "What is a key difference between a throwaway prototype and an evolutionary prototype?",
+   "viDuNghia": "Khác biệt then chốt giữa prototype dùng-rồi-bỏ (throwaway) và prototype tiến hóa (evolutionary) là gì?"
+  },
+  {
+   "chu": "mock-up prototype",
+   "doc": "/ˈmɑːk ʌp ˈproʊtətaɪp/",
+   "nghia": "nguyên mẫu mô phỏng giao diện (mock-up): chỉ có màn hình bề ngoài, chưa có chức năng thật bên dưới",
+   "nhom": "Nguyên mẫu",
+   "viDu": "Regarding scope, what is the difference between a mock-up prototype and a proof-of-concept prototype?",
+   "viDuNghia": "Về phạm vi, khác biệt giữa nguyên mẫu mô phỏng (mock-up) và nguyên mẫu chứng minh khái niệm (proof-of-concept) là gì?"
+  },
+  {
+   "chu": "horizontal prototype",
+   "doc": "/ˌhɔːrɪˈzɑːntl ˈproʊtətaɪp/",
+   "nghia": "nguyên mẫu ngang: tên khác của mock-up, phủ rộng giao diện nhưng không đi sâu các tầng bên dưới",
+   "nhom": "Nguyên mẫu",
+   "viDu": "Which term has the same meaning as horizontal prototype?",
+   "viDuNghia": "Thuật ngữ nào có cùng nghĩa với prototype ngang (horizontal prototype)?"
+  },
+  {
+   "chu": "vertical prototype",
+   "doc": "/ˈvɜːrtɪkl ˈproʊtətaɪp/",
+   "nghia": "nguyên mẫu dọc: tên khác của proof of concept, làm một lát chức năng xuyên qua mọi tầng kỹ thuật",
+   "nhom": "Nguyên mẫu",
+   "viDu": "Which term has the same meaning as vertical prototype?",
+   "viDuNghia": "Thuật ngữ nào có cùng nghĩa với bản mẫu dọc (vertical prototype)?"
+  },
+  {
+   "chu": "proof-of-concept prototype",
+   "doc": "/ˌpruːf əv ˈkɑːnsept ˈproʊtətaɪp/",
+   "nghia": "nguyên mẫu chứng minh khả thi: nguyên mẫu dọc, dùng để kiểm tra tính khả thi kỹ thuật",
+   "nhom": "Nguyên mẫu",
+   "viDu": "Regarding scope, what is the difference between a mock-up prototype and a proof-of-concept prototype?",
+   "viDuNghia": "Về phạm vi, khác biệt giữa nguyên mẫu mô phỏng (mock-up) và nguyên mẫu chứng minh khái niệm (proof-of-concept) là gì?"
+  },
+  {
+   "chu": "paper prototype",
+   "doc": "/ˈpeɪpər ˈproʊtətaɪp/",
+   "nghia": "nguyên mẫu giấy: vẽ tay màn hình trên giấy, rẻ và nhanh",
+   "nhom": "Nguyên mẫu",
+   "viDu": "To reduce the pressure to release a throwaway prototype, use paper prototypes or tools unrelated to actual development.",
+   "viDuNghia": "Để giảm áp lực phải phát hành nguyên mẫu dùng rồi bỏ, hãy dùng nguyên mẫu giấy hoặc công cụ không liên quan tới việc phát triển thật."
+  },
+  {
+   "chu": "electronic prototype",
+   "doc": "/ɪˌlekˈtrɑːnɪk ˈproʊtətaɪp/",
+   "nghia": "nguyên mẫu điện tử: bản thử dựng bằng công cụ, chạy được trên máy",
+   "nhom": "Nguyên mẫu",
+   "viDu": "An electronic prototype lets users click through the screens on a real device.",
+   "viDuNghia": "Nguyên mẫu điện tử cho người dùng bấm thử qua các màn hình trên thiết bị thật."
+  },
+  {
+   "chu": "fidelity",
+   "doc": "/fɪˈdeləti/",
+   "nghia": "độ giống thật của nguyên mẫu (low-fidelity = phác thô, high-fidelity = gần giống sản phẩm)",
+   "nhom": "Nguyên mẫu",
+   "viDu": "A low-fidelity paper sketch is enough to check the screen flow.",
+   "viDuNghia": "Một bản phác giấy có độ giống thật thấp là đủ để kiểm tra luồng màn hình."
+  },
+  {
+   "chu": "technical feasibility",
+   "doc": "/ˈteknɪkl ˌfiːzəˈbɪləti/",
+   "nghia": "tính khả thi kỹ thuật: về mặt công nghệ có làm được hay không",
+   "nhom": "Nguyên mẫu",
+   "viDu": "We built a proof of concept to check the technical feasibility of offline sync.",
+   "viDuNghia": "Chúng tôi dựng bản chứng minh khả thi để kiểm tra tính khả thi kỹ thuật của việc đồng bộ ngoại tuyến."
+  },
+  {
+   "chu": "feasibility",
+   "doc": "/ˌfiːzəˈbɪləti/",
+   "nghia": "tính khả thi: có thể làm được trong giới hạn kỹ thuật, thời gian, chi phí",
+   "nhom": "Nguyên mẫu",
+   "viDu": "Which type of prototype is specifically used to demonstrate the feasibility of the requirements?",
+   "viDuNghia": "Loại prototype nào dùng riêng để chứng minh tính khả thi của yêu cầu?"
+  },
+  {
+   "chu": "user interface",
+   "doc": "/ˈjuːzər ˈɪntərfeɪs/",
+   "nghia": "giao diện người dùng (UI): màn hình, nút bấm… nơi người dùng thao tác với hệ thống",
+   "nhom": "Nguyên mẫu",
+   "viDu": "In a software requirements specification, which section do user interfaces belong to?",
+   "viDuNghia": "Trong đặc tả yêu cầu phần mềm, giao diện người dùng thuộc phần nào?"
+  },
+  {
+   "chu": "user interface design",
+   "doc": "/ˈjuːzər ˈɪntərfeɪs dɪˈzaɪn/",
+   "nghia": "thiết kế giao diện người dùng",
+   "nhom": "Nguyên mẫu",
+   "viDu": "A key benefit of using mock-ups in prototyping is to clarify user interface designs early.",
+   "viDuNghia": "Lợi ích chính của mock-up khi làm nguyên mẫu là làm rõ thiết kế giao diện người dùng từ sớm."
+  },
+  {
+   "chu": "user experience",
+   "doc": "/ˈjuːzər ɪkˈspɪriəns/",
+   "nghia": "trải nghiệm người dùng (UX): cảm nhận của người dùng khi dùng sản phẩm",
+   "nhom": "Nguyên mẫu",
+   "viDu": "Which prototype focuses on the user experiences?",
+   "viDuNghia": "Loại prototype nào tập trung vào trải nghiệm người dùng?"
+  },
+  {
+   "chu": "uncertainty",
+   "doc": "/ʌnˈsɜːrtnti/",
+   "nghia": "điều chưa chắc chắn, chưa rõ",
+   "nhom": "Nguyên mẫu",
+   "viDu": "The primary reason for creating a prototype is to resolve uncertainties early in the development process.",
+   "viDuNghia": "Lý do chính để tạo nguyên mẫu là giải quyết các điều chưa chắc chắn sớm trong quá trình phát triển."
+  },
+  {
+   "chu": "explore",
+   "doc": "/ɪkˈsplɔːr/",
+   "nghia": "khám phá, tìm hiểu thử",
+   "nhom": "Nguyên mẫu",
+   "viDu": "Which prototype explores the technical soundness of a proposed approach?",
+   "viDuNghia": "Loại bản mẫu nào dùng để khảo sát tính đúng đắn về mặt kỹ thuật của một giải pháp đề xuất?"
+  },
+  {
+   "chu": "working software",
+   "doc": "/ˈwɜːrkɪŋ ˈsɔːftwer/",
+   "nghia": "phần mềm chạy được: sản phẩm thật dùng được, không chỉ là tài liệu",
+   "nhom": "Nguyên mẫu",
+   "viDu": "An evolutionary prototype grows into working software that users can rely on.",
+   "viDuNghia": "Nguyên mẫu tiến hoá lớn dần thành phần mềm chạy được mà người dùng tin cậy."
+  },
+  {
+   "chu": "look and feel",
+   "nghia": "diện mạo và cảm giác sử dụng của giao diện (màu sắc, bố cục, hình ảnh, nút điều khiển)",
+   "nhom": "Nguyên mẫu",
+   "viDu": "Which prototype demonstrates the functional options, the look and feel of the user interface (colors, layout, graphics, controls), and the navigation structure?",
+   "viDuNghia": "Loại nguyên mẫu nào minh họa các tùy chọn chức năng người dùng sẽ có, giao diện nhìn-và-cảm (màu sắc, bố cục, đồ họa, điều khiển) và cấu trúc điều hướng?"
+  },
+  {
+   "chu": "partial",
+   "doc": "/ˈpɑːrʃl/",
+   "nghia": "một phần, chưa đầy đủ (nguyên mẫu là bản cài đặt một phần của sản phẩm)",
+   "nhom": "Nguyên mẫu",
+   "viDu": "A software prototype is a partial implementation of a proposed new product.",
+   "viDuNghia": "Nguyên mẫu phần mềm là bản cài đặt một phần của sản phẩm mới được đề xuất."
+  }
+ ]
+}

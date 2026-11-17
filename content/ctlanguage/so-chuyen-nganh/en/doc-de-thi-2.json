@@ -1,0 +1,965 @@
+{
+ "ma": "doc-de-thi-2",
+ "nn": "en",
+ "ten": "Đọc hiểu đề thi tiếng Anh (2)",
+ "moTa": "Phần 2: từ chỉ dẫn của đề (Choose 2 answers, Given, Suppose, Calculate…), từ nối – điều kiện và từ học thuật chung hay gặp trong đề FE/PE thật của FPT ở mọi môn chuyên ngành.",
+ "bieuTuong": "text.magnifyingglass",
+ "thuTu": -999,
+ "tu": [
+  {
+   "chu": "Choose 1 answer",
+   "nghia": "chọn 1 đáp án — câu một đáp án đúng.",
+   "nhom": "Từ chỉ dẫn của đề",
+   "viDu": "(Choose 1 answer) Which of the following statements is NOT an advantage of the Object Pool pattern?",
+   "viDuNghia": "(Chọn 1 đáp án) Phát biểu nào sau đây KHÔNG phải là ưu điểm của mẫu Object Pool?"
+  },
+  {
+   "chu": "Choose 2 answers",
+   "nghia": "chọn 2 đáp án — phải chọn ĐỦ hai đáp án đúng mới có điểm; chọn một là sai cả câu.",
+   "nhom": "Từ chỉ dẫn của đề",
+   "viDu": "How do you include Tailwind CSS in a project? (Choose 2 answers)",
+   "viDuNghia": "Làm sao để nhúng Tailwind CSS vào một dự án? (Chọn 2 đáp án)"
+  },
+  {
+   "chu": "Choose 3 answers",
+   "nghia": "chọn 3 đáp án — phải đủ cả ba; thiếu hoặc thừa đều không có điểm.",
+   "nhom": "Từ chỉ dẫn của đề",
+   "viDu": "How can you pass parameters to an event handler in React? (Choose 3 answers)",
+   "viDuNghia": "Làm sao để truyền tham số cho một event handler trong React? (Chọn 3 đáp án)"
+  },
+  {
+   "chu": "Select two",
+   "nghia": "chọn hai — như Choose 2 answers.",
+   "nhom": "Từ chỉ dẫn của đề",
+   "viDu": "Which of the following are important elements of the data minimization principle? (Select two.)",
+   "viDuNghia": "Yếu tố nào sau đây là quan trọng của nguyên tắc tối thiểu hóa dữ liệu (data minimization)? (Chọn hai.)",
+   "doc": "/sɪˈlekt tuː/"
+  },
+  {
+   "chu": "Select all that apply",
+   "nghia": "chọn tất cả ý đúng — số đáp án đúng KHÔNG cho trước; xét từng phương án như câu Đúng/Sai.",
+   "nhom": "Từ chỉ dẫn của đề",
+   "viDu": "How do you import and use a Button component from React-Bootstrap 5?(Select all that apply)",
+   "viDuNghia": "Làm sao import và dùng component Button từ React-Bootstrap 5? (Chọn tất cả đáp án đúng)"
+  },
+  {
+   "chu": "Select the most suitable one",
+   "nghia": "chọn phương án phù hợp nhất — một đáp án, nhưng các phương án khác có thể đúng một phần.",
+   "nhom": "Từ chỉ dẫn của đề",
+   "viDu": "Specify the correct statement about a binary search tree (select the most suitable one).",
+   "viDuNghia": "Chọn phát biểu đúng về cây tìm kiếm nhị phân (binary search tree) (chọn phát biểu phù hợp nhất)."
+  },
+  {
+   "chu": "Select the best answer",
+   "nghia": "chọn đáp án tốt nhất — đọc hết các phương án, chọn câu đúng và đầy đủ nhất.",
+   "nhom": "Từ chỉ dẫn của đề",
+   "viDu": "Specify the correct statement about open addressing method for handling collision (select the best answer).",
+   "viDuNghia": "Chỉ ra phát biểu đúng về phương pháp địa chỉ mở (open addressing) để xử lý đụng độ (chọn đáp án tốt nhất)."
+  },
+  {
+   "chu": "Fill in the blank",
+   "nghia": "điền vào chỗ trống — chọn từ / giá trị đặt vào chỗ gạch dưới để câu đúng.",
+   "nhom": "Từ chỉ dẫn của đề",
+   "viDu": "Fill in the blank: the activities \"Define vision and scope\" and \"Select product champions\" should be done in the _____ stage.",
+   "viDuNghia": "Điền vào chỗ trống: các hoạt động \"Xác định tầm nhìn và phạm vi\" và \"Chọn product champion\" nên làm ở giai đoạn _____."
+  },
+  {
+   "chu": "Match",
+   "doc": "/mætʃ/",
+   "nghia": "ghép, nối — ghép mỗi mục cột trái với mô tả đúng ở cột phải.",
+   "nhom": "Từ chỉ dẫn của đề",
+   "viDu": "Match the following: 1. Test estimation 2. Test control 3. Test monitoring a. Measures of tracking process b. Effort required to perform activities c. Reallocation of resources",
+   "viDuNghia": "Ghép cặp: 1. Ước lượng kiểm thử (Test estimation) 2. Kiểm soát kiểm thử (Test control) 3. Giám sát kiểm thử (Test monitoring) a. Các thước đo theo dõi quy trình b. Công sức cần để thực hiện hoạt động c. Tái phân bổ nguồn lực"
+  },
+  {
+   "chu": "Given",
+   "doc": "/ˈɡɪvn/",
+   "nghia": "cho (dữ kiện) — \"Given a table / the following code\": đây là DỮ KIỆN đề cung cấp, không phải câu hỏi.",
+   "nhom": "Từ chỉ dẫn của đề",
+   "viDu": "Given a network address 128.100.0.0, what is its network class type?",
+   "viDuNghia": "Cho địa chỉ mạng 128.100.0.0, đây thuộc lớp mạng nào?"
+  },
+  {
+   "chu": "Suppose",
+   "doc": "/səˈpoʊz/",
+   "nghia": "giả sử — mở đầu tình huống giả định; mọi thứ sau đó coi như đúng để làm bài.",
+   "nhom": "Từ chỉ dẫn của đề",
+   "viDu": "Suppose prime is an int and wrapped is an Integer. Which of the following are legal Java statements?",
+   "viDuNghia": "Giả sử prime kiểu int và wrapped kiểu Integer. Câu lệnh Java nào sau đây hợp lệ?"
+  },
+  {
+   "chu": "Assume",
+   "doc": "/əˈsuːm/",
+   "nghia": "giả định rằng — điều kiện đề TỰ ĐẶT (kích thước, giá trị ban đầu); phải dùng đúng điều kiện này.",
+   "nhom": "Từ chỉ dẫn của đề",
+   "viDu": "Assume that a truth table: X Y OUTPUT / 1 1 1 / 1 0 1 / 0 1 1 / 0 0 0. Which basic operator matches the table above?",
+   "viDuNghia": "Giả sử một bảng chân trị: X Y OUTPUT / 1 1 1 / 1 0 1 / 0 1 1 / 0 0 0. Toán tử cơ bản nào khớp với bảng trên?"
+  },
+  {
+   "chu": "Consider",
+   "doc": "/kənˈsɪdər/",
+   "nghia": "xét, xem xét — \"Consider the following\" = hãy xét trường hợp sau (dữ kiện), câu hỏi nằm phía sau.",
+   "nhom": "Từ chỉ dẫn của đề",
+   "viDu": "Consider an expression: NOT (1111 1010). What is the result of this expression?",
+   "viDuNghia": "Xét biểu thức: NOT (1111 1010). Kết quả của biểu thức này là gì?"
+  },
+  {
+   "chu": "Let",
+   "doc": "/let/",
+   "nghia": "cho, gọi (toán) — \"Let A be a set\" = cho A là một tập hợp; câu đặt tên / định nghĩa đối tượng.",
+   "nhom": "Từ chỉ dẫn của đề",
+   "viDu": "Let T be a full 3-ary tree such that every leaf is at level 4. How many vertices does T have?",
+   "viDuNghia": "Cho T là cây 3-phân đầy đủ mà mọi lá đều ở mức 4. Cây T có bao nhiêu đỉnh?"
+  },
+  {
+   "chu": "such that",
+   "nghia": "sao cho — điều kiện ràng buộc đi sau: \"find x such that\" = tìm x thoả điều kiện.",
+   "nhom": "Từ chỉ dẫn của đề",
+   "viDu": "The number of edges in a graph with 50 vertices such that two of the vertices are of degree 4 and the remaining are of degree 1, is ___",
+   "viDuNghia": "Số cạnh trong một đồ thị có 50 đỉnh, trong đó hai đỉnh có bậc 4 và các đỉnh còn lại có bậc 1, là ___",
+   "doc": "/sʌtʃ ðæt/"
+  },
+  {
+   "chu": "Find",
+   "doc": "/faɪnd/",
+   "nghia": "tìm — yêu cầu tính ra / chỉ ra một kết quả cụ thể.",
+   "nhom": "Từ chỉ dẫn của đề",
+   "viDu": "Find the bug in the following React code:",
+   "viDuNghia": "Tìm lỗi trong đoạn code React sau:"
+  },
+  {
+   "chu": "Determine",
+   "doc": "/dɪˈtɜːrmɪn/",
+   "nghia": "xác định — tìm ra đáp án bằng tính toán hoặc suy luận từ dữ kiện. Giữa câu: \"X determines Y\" = X quyết định Y.",
+   "nhom": "Từ chỉ dẫn của đề",
+   "viDu": "Determine the order in which a post-order traversal visits the given rooted tree. (see diagram below)",
+   "viDuNghia": "Xác định thứ tự duyệt hậu tố (post-order) trên cây có gốc đã cho. (xem sơ đồ bên dưới)"
+  },
+  {
+   "chu": "Calculate",
+   "doc": "/ˈkælkjuleɪt/",
+   "nghia": "tính — đáp án là con số; trình bày phép tính nếu là đề tự luận.",
+   "nhom": "Từ chỉ dẫn của đề",
+   "viDu": "To calculate early finish (EF) of an activity, you will",
+   "viDuNghia": "Để tính thời điểm kết thúc sớm (Early Finish - EF) của một hoạt động, bạn sẽ"
+  },
+  {
+   "chu": "Compute",
+   "doc": "/kəmˈpjuːt/",
+   "nghia": "tính (ra kết quả) — như calculate.",
+   "nhom": "Từ chỉ dẫn của đề",
+   "viDu": "Compute the value of the postfix notation 5 6 7 - *",
+   "viDuNghia": "Tính giá trị của biểu thức hậu tố (postfix) 5 6 7 - *"
+  },
+  {
+   "chu": "Evaluate",
+   "doc": "/ɪˈvæljueɪt/",
+   "nghia": "tính giá trị (biểu thức); đánh giá — với biểu thức thì tính ra kết quả, với phương án thì nhận xét ưu nhược.",
+   "nhom": "Từ chỉ dẫn của đề",
+   "viDu": "Evaluate the impact of adopting an MVC2 architecture on the testability of a web application.",
+   "viDuNghia": "Đánh giá tác động của việc dùng kiến trúc MVC2 lên khả năng kiểm thử của ứng dụng web."
+  },
+  {
+   "chu": "Convert",
+   "doc": "/kənˈvɜːrt/",
+   "nghia": "chuyển đổi — đổi từ dạng này sang dạng khác (hệ nhị phân sang thập phân, ER sang bảng).",
+   "nhom": "Từ chỉ dẫn của đề",
+   "viDu": "Convert the binary octet 10110110 to decimal.",
+   "viDuNghia": "Đổi octet nhị phân 10110110 sang thập phân."
+  },
+  {
+   "chu": "Identify",
+   "doc": "/aɪˈdentɪfaɪ/",
+   "nghia": "xác định, chỉ ra — nhận ra và gọi đúng tên thứ đề hỏi.",
+   "nhom": "Từ chỉ dẫn của đề",
+   "viDu": "Identify the attribute refinements of a system's performance.",
+   "viDuNghia": "Xác định các tinh chỉnh thuộc tính (attribute refinement) của performance (hiệu năng) hệ thống."
+  },
+  {
+   "chu": "Explain",
+   "doc": "/ɪkˈspleɪn/",
+   "nghia": "giải thích — nêu LÝ DO / cơ chế, không chỉ nêu kết quả.",
+   "nhom": "Từ chỉ dẫn của đề",
+   "viDu": "How can you explain the statement \"Implicit requirements can also be unknown unknowns\"?",
+   "viDuNghia": "Bạn giải thích thế nào về phát biểu “Yêu cầu ngầm định cũng có thể là những ẩn số không ai biết (unknown unknowns)”?"
+  },
+  {
+   "chu": "Describe",
+   "doc": "/dɪˈskraɪb/",
+   "nghia": "mô tả — trình bày đặc điểm / các bước của sự vật.",
+   "nhom": "Từ chỉ dẫn của đề",
+   "viDu": "Describe the Redux flow process when an action is dispatched.",
+   "viDuNghia": "Mô tả quy trình luồng Redux khi một action được dispatch."
+  },
+  {
+   "chu": "Draw",
+   "doc": "/drɔː/",
+   "nghia": "vẽ — yêu cầu vẽ sơ đồ (use case, ERD, cây) trong đề tự luận.",
+   "nhom": "Từ chỉ dẫn của đề",
+   "viDu": "Draw a binary search tree for the sentence 'The quick brown fox jumps over the lazy dog'. How many comparisons are needed to locate the word 'over'?",
+   "viDuNghia": "Vẽ cây tìm kiếm nhị phân cho câu 'The quick brown fox jumps over the lazy dog'. Cần bao nhiêu phép so sánh để tìm từ 'over'?"
+  },
+  {
+   "chu": "Write",
+   "doc": "/raɪt/",
+   "nghia": "viết — \"Write a function / a query\": viết code hoặc câu truy vấn theo yêu cầu.",
+   "nhom": "Từ chỉ dẫn của đề",
+   "viDu": "Write the binary value 11011011 in hexadecimal.",
+   "viDuNghia": "Viết giá trị nhị phân 11011011 ở hệ thập lục phân."
+  },
+  {
+   "chu": "code snippet",
+   "nghia": "đoạn code ngắn — \"the following code snippet\" = đoạn code dưới đây. Giống: code fragment, code segment.",
+   "nhom": "Từ chỉ dẫn của đề",
+   "viDu": "Consider the following code snippet using Express.js. Identify which routes handle GET and POST requests.",
+   "viDuNghia": "Xét đoạn mã sau dùng Express.js. Hãy xác định route nào xử lý GET và route nào xử lý POST.",
+   "doc": "/koʊd ˈsnɪpɪt/"
+  },
+  {
+   "chu": "choose",
+   "doc": "/tʃuːz/",
+   "nghia": "chọn — \"choose an incorrect statement\" = chọn câu SAI; \"choose 2\" = chọn đủ 2 đáp án. Đọc kỹ chọn đúng hay sai, mấy đáp án",
+   "nhom": "Từ chỉ dẫn của đề",
+   "viDu": "Concerning rules and conventions for naming variables in Java, choose an incorrect statement.",
+   "viDuNghia": "Về quy tắc và quy ước đặt tên biến trong Java, hãy chọn phát biểu SAI."
+  },
+  {
+   "chu": "select",
+   "doc": "/sɪˈlekt/",
+   "nghia": "chọn (= choose) — \"Select three\" = chọn đủ ba đáp án; \"Select all that apply\" = chọn mọi ý đúng",
+   "nhom": "Từ chỉ dẫn của đề",
+   "viDu": "Which of the following factors should be considered when classifying users? Select three.",
+   "viDuNghia": "Những yếu tố nào nên xét khi phân loại người dùng? Chọn ba."
+  },
+  {
+   "chu": "whereas",
+   "doc": "/ˌwerˈæz/",
+   "nghia": "trong khi, còn (đối lập) — nối hai vế TRÁI NGƯỢC: A thế này, whereas B thế kia.",
+   "nhom": "Liên kết & điều kiện",
+   "viDu": "I/O channels are commonly seen on microcomputers, whereas I/O controllers are used on mainframes.",
+   "viDuNghia": "Kênh I/O (I/O channel) thường thấy trên máy vi tính, còn bộ điều khiển I/O (I/O controller) dùng cho máy lớn (mainframe)."
+  },
+  {
+   "chu": "while",
+   "doc": "/waɪl/",
+   "nghia": "trong khi — vừa chỉ thời gian (đang lúc) vừa chỉ đối lập (còn); xem ngữ cảnh.",
+   "nhom": "Liên kết & điều kiện",
+   "viDu": "While taking input from the user in Arduino, which function is used in the sketch?",
+   "viDuNghia": "Trong khi nhận dữ liệu nhập từ người dùng trên Arduino, hàm nào được dùng trong sketch?"
+  },
+  {
+   "chu": "prior to",
+   "nghia": "trước khi (= before) — \"prior to testing\" = trước lúc kiểm thử.",
+   "nhom": "Liên kết & điều kiện",
+   "viDu": "Information that must be saved prior to the processor transferring control to the interrupt handler includes:",
+   "viDuNghia": "Thông tin nào bắt buộc phải được lưu lại trước khi bộ xử lý chuyển quyền điều khiển sang trình xử lý ngắt (interrupt handler) bao gồm:",
+   "doc": "/ˈpraɪər tuː/"
+  },
+  {
+   "chu": "in order to",
+   "nghia": "để (làm gì) — chỉ MỤC ĐÍCH của hành động.",
+   "nhom": "Liên kết & điều kiện",
+   "viDu": "In order to \"Define the problem\", which actions should we take?",
+   "viDuNghia": "Để \"Xác định vấn đề\", chúng ta nên thực hiện những hành động nào?"
+  },
+  {
+   "chu": "so that",
+   "nghia": "để mà, sao cho — chỉ mục đích / kết quả mong muốn.",
+   "nhom": "Liên kết & điều kiện",
+   "viDu": "Fill a keyword into the blank place ( . . . ) in class C so that the program runs correctly.",
+   "viDuNghia": "Điền một từ khoá vào chỗ trống ( . . . ) trong lớp C để chương trình chạy đúng.",
+   "doc": "/soʊ ðæt/"
+  },
+  {
+   "chu": "as long as",
+   "nghia": "miễn là, chừng nào còn — điều kiện phải duy trì thì vế chính mới đúng.",
+   "nhom": "Liên kết & điều kiện",
+   "viDu": "A static RAM will hold its data as long as power is supplied to it.",
+   "viDuNghia": "RAM tĩnh (SRAM) sẽ giữ dữ liệu của nó chừng nào còn được cấp nguồn."
+  },
+  {
+   "chu": "regardless of",
+   "nghia": "bất kể, không phụ thuộc vào — yếu tố nêu sau KHÔNG ảnh hưởng tới kết quả.",
+   "nhom": "Liên kết & điều kiện",
+   "viDu": "Which operation's result contains all pairs of tuples from the two relations, regardless of whether their attribute values match?",
+   "viDuNghia": "Phép toán nào cho kết quả chứa TẤT CẢ các cặp bộ (tuple) từ hai quan hệ, bất kể giá trị thuộc tính của chúng có khớp nhau hay không.",
+   "doc": "/rɪˈɡɑːrdləs əv/"
+  },
+  {
+   "chu": "in terms of",
+   "nghia": "xét về mặt — giới hạn tiêu chí so sánh: \"in terms of speed\" = chỉ xét tốc độ.",
+   "nhom": "Liên kết & điều kiện",
+   "viDu": "Which organizational resource is most commonly used in terms of fostering an ethical organizational culture?",
+   "viDuNghia": "Xét về mặt xây dựng văn hoá tổ chức có đạo đức, nguồn lực tổ chức nào thường được dùng nhất?"
+  },
+  {
+   "chu": "such as",
+   "nghia": "chẳng hạn như — sau đó là VÍ DỤ, không phải danh sách đầy đủ.",
+   "nhom": "Liên kết & điều kiện",
+   "viDu": "What Activity lifecycle methods are called when a device-configuration change (such as rotation) occurs?",
+   "viDuNghia": "Những phương thức lifecycle nào của Activity được gọi khi xảy ra thay đổi cấu hình thiết bị (như xoay màn hình)?",
+   "doc": "/sʌtʃ æz/"
+  },
+  {
+   "chu": "due to",
+   "nghia": "do, bởi vì — nêu NGUYÊN NHÂN.",
+   "nhom": "Liên kết & điều kiện",
+   "viDu": "Which status code is returned when a request cannot be fulfilled due to bad syntax?",
+   "viDuNghia": "Mã trạng thái nào trả về khi request không thể xử lý do sai cú pháp?",
+   "doc": "/ˈduː tuː/"
+  },
+  {
+   "chu": "because of",
+   "nghia": "vì, do — sau đó là danh từ chỉ nguyên nhân.",
+   "nhom": "Liên kết & điều kiện",
+   "viDu": "Professors presumably have power in the classroom because of their mastery of a particular subject matter.",
+   "viDuNghia": "Các giáo sư được cho là có quyền lực trong lớp học nhờ sự thông thạo một lĩnh vực chuyên môn cụ thể.",
+   "doc": "/bɪˈkɔːz əv/"
+  },
+  {
+   "chu": "according to",
+   "nghia": "theo (ai, tài liệu, chuẩn nào) — trả lời theo ĐÚNG nguồn đó, không theo suy nghĩ riêng.",
+   "nhom": "Liên kết & điều kiện",
+   "viDu": "According to Bloom's Taxonomy, _____ is \"the ability to judge, check, and even critique the value of material for a given purpose\".",
+   "viDuNghia": "Theo Thang Bloom (Bloom's Taxonomy), _____ là \"khả năng đánh giá, kiểm tra, và thậm chí phê bình giá trị của tài liệu cho một mục đích nhất định\".",
+   "doc": "/əˈkɔːrdɪŋ tuː/"
+  },
+  {
+   "chu": "based on",
+   "nghia": "dựa trên — căn cứ để trả lời: \"based on the table above\".",
+   "nhom": "Liên kết & điều kiện",
+   "viDu": "What is one possible reason a model may predict a higher crime rate based on datasets used?",
+   "viDuNghia": "Một lý do khả dĩ khiến mô hình dự đoán tỷ lệ tội phạm cao hơn dựa trên tập dữ liệu sử dụng là gì?",
+   "doc": "/beɪst ɑːn/"
+  },
+  {
+   "chu": "however",
+   "doc": "/haʊˈevər/",
+   "nghia": "tuy nhiên — ý sau NGƯỢC với ý trước; thông tin quan trọng thường nằm sau however.",
+   "nhom": "Liên kết & điều kiện",
+   "viDu": "__________ has the advantage of large address space, however it has the disadvantage of multiple memory references.",
+   "viDuNghia": "__________ có ưu điểm là không gian địa chỉ lớn, nhưng lại có nhược điểm là cần nhiều lần tham chiếu bộ nhớ."
+  },
+  {
+   "chu": "although",
+   "doc": "/ɔːlˈðoʊ/",
+   "nghia": "mặc dù — vế nhượng bộ; ý chính nằm ở vế còn lại.",
+   "nhom": "Liên kết & điều kiện",
+   "viDu": "Although HTTP is stateless, if the webserver wants to identify the users, ___ is used",
+   "viDuNghia": "Mặc dù HTTP là phi trạng thái, nếu máy chủ web muốn nhận diện người dùng thì ___ được sử dụng"
+  },
+  {
+   "chu": "therefore",
+   "doc": "/ˈðerfɔːr/",
+   "nghia": "do đó, vì vậy — kết luận rút ra từ ý trước.",
+   "nhom": "Liên kết & điều kiện",
+   "viDu": "The scheme of ____ removes the possibility of a circular wait and therefore guarantees the removal of deadlocks.",
+   "viDuNghia": "Cơ chế ____ loại bỏ khả năng chờ vòng tròn (circular wait) và do đó đảm bảo loại bỏ deadlock."
+  },
+  {
+   "chu": "otherwise",
+   "doc": "/ˈʌðərwaɪz/",
+   "nghia": "nếu không thì, ngược lại — trường hợp CÒN LẠI khi điều kiện trước không thoả.",
+   "nhom": "Liên kết & điều kiện",
+   "viDu": "The function returns 1 if n is even; otherwise it returns 0. What is the return value when n is 7?",
+   "viDuNghia": "Hàm trả về 1 nếu n chẵn; nếu không thì trả về 0. Giá trị trả về khi n bằng 7 là gì?"
+  },
+  {
+   "chu": "whether",
+   "doc": "/ˈweðər/",
+   "nghia": "liệu ... hay không — \"determine whether X is valid\" = xác định X có hợp lệ không.",
+   "nhom": "Liên kết & điều kiện",
+   "viDu": "Which of the following methods of the java.io.File can be used to check whether a file exists?",
+   "viDuNghia": "Phương thức nào sau đây của java.io.File dùng để kiểm tra một file có tồn tại hay không?"
+  },
+  {
+   "chu": "until",
+   "doc": "/ənˈtɪl/",
+   "nghia": "cho đến khi — việc kéo dài tới một mốc rồi DỪNG.",
+   "nhom": "Liên kết & điều kiện",
+   "viDu": "A process stays in the waiting state until its I/O operation is completed.",
+   "viDuNghia": "Tiến trình ở trạng thái chờ cho đến khi thao tác I/O của nó hoàn tất."
+  },
+  {
+   "chu": "once",
+   "doc": "/wʌns/",
+   "nghia": "một khi, ngay khi; một lần — \"once the process terminates\" = ngay khi tiến trình kết thúc.",
+   "nhom": "Liên kết & điều kiện",
+   "viDu": "True or False: Once you plan for managing risks, you are not finished. Risk management is an ongoing process.",
+   "viDuNghia": "Đúng hay Sai: Một khi bạn đã lập kế hoạch quản lý rủi ro, bạn vẫn chưa hoàn tất. Quản lý rủi ro là một quá trình liên tục."
+  },
+  {
+   "chu": "during",
+   "doc": "/ˈdʊrɪŋ/",
+   "nghia": "trong suốt, trong lúc — hỏi việc xảy ra TRONG giai đoạn nào.",
+   "nhom": "Liên kết & điều kiện",
+   "viDu": "During the filter lifecycle in a web application, when is the init() method typically called?",
+   "viDuNghia": "Trong vòng đời filter, init() thường được gọi khi nào?"
+  },
+  {
+   "chu": "as well as",
+   "nghia": "cũng như, và cả — nối thêm một ý (gần bằng and).",
+   "nhom": "Liên kết & điều kiện",
+   "viDu": "The ability to query data, as well as insert, delete, and alter tuples, is offered by ________",
+   "viDuNghia": "Khả năng truy vấn dữ liệu, cũng như chèn (insert), xóa (delete) và sửa đổi (alter) các bộ (tuples), được cung cấp bởi ________"
+  },
+  {
+   "chu": "if and only if",
+   "nghia": "khi và chỉ khi — điều kiện HAI CHIỀU (cần và đủ).",
+   "nhom": "Liên kết & điều kiện",
+   "viDu": "The operator __________ yields true if and only if both of its operands are true.",
+   "viDuNghia": "Phép toán __________ cho kết quả đúng khi và chỉ khi cả hai toán hạng của nó đều đúng."
+  },
+  {
+   "chu": "with respect to",
+   "nghia": "đối với, xét theo — chỉ đối tượng / tiêu chí đang xét.",
+   "nhom": "Liên kết & điều kiện",
+   "viDu": "Which of the following statements are correct with respect to the capabilities provided by Android's LocalBroadcastManager?",
+   "viDuNghia": "Phát biểu nào sau đây đúng về khả năng mà LocalBroadcastManager của Android cung cấp?"
+  },
+  {
+   "chu": "compared to",
+   "nghia": "so với — đặt hai thứ cạnh nhau; chú ý cái nào là mốc so sánh.",
+   "nhom": "Liên kết & điều kiện",
+   "viDu": "In a real-world web application, how does Express improve developer productivity compared to vanilla Node.js when handling HTTP requests?",
+   "viDuNghia": "Trong một ứng dụng web thực tế, Express cải thiện năng suất lập trình viên như thế nào so với Node.js thuần khi xử lý HTTP request?",
+   "doc": "/kəmˈperd tuː/"
+  },
+  {
+   "chu": "result in",
+   "doc": "/rɪˈzʌlt ɪn/",
+   "nghia": "dẫn đến, gây ra — sau đó là HẬU QUẢ. Ngược lại: result from (do đâu mà có).",
+   "nhom": "Liên kết & điều kiện",
+   "viDu": "Which technique uses different combinations of inputs to result in different actions being taken?",
+   "viDuNghia": "Kỹ thuật nào dùng các tổ hợp đầu vào khác nhau để dẫn đến các hành động khác nhau được thực hiện?"
+  },
+  {
+   "chu": "responsible for",
+   "doc": "/rɪˈspɑːnsəbl fɔːr/",
+   "nghia": "chịu trách nhiệm (về), đảm nhận việc gì — \"X is responsible for Y\" = X lo việc Y",
+   "nhom": "Liên kết & điều kiện",
+   "viDu": "Which component is responsible for managing the application's data and business logic in the MVC architecture?",
+   "viDuNghia": "Thành phần nào chịu trách nhiệm quản lý dữ liệu và logic nghiệp vụ trong MVC?"
+  },
+  {
+   "chu": "whose",
+   "doc": "/huːz/",
+   "nghia": "mà … của nó (a graph whose vertices… = đồ thị có các đỉnh…)",
+   "nhom": "Liên kết & điều kiện",
+   "viDu": "Let F be a linear transformation in R² whose matrix is [1 0; 0 -1]. What does this transformation represent?",
+   "viDuNghia": "Cho F là phép biến đổi tuyến tính trong R² có ma trận [1 0; 0 -1]. Phép biến đổi này biểu diễn điều gì?"
+  },
+  {
+   "chu": "regarding",
+   "doc": "/rɪˈɡɑːrdɪŋ/",
+   "nghia": "về, liên quan đến (= about) — \"Which is NOT true regarding X\" = câu nào SAI về X",
+   "nhom": "Liên kết & điều kiện",
+   "viDu": "Which of the following is NOT true regarding milestones?",
+   "viDuNghia": "Điều nào sau đây KHÔNG đúng về các mốc (milestones)?"
+  },
+  {
+   "chu": "related to",
+   "doc": "/rɪˈleɪtɪd tuː/",
+   "nghia": "liên quan tới, gắn với — \"X is related to\" = X thuộc về / gắn với khái niệm nào",
+   "nhom": "Liên kết & điều kiện",
+   "viDu": "BCNF concept is related to (choose the most correct answer):",
+   "viDuNghia": "Khái niệm BCNF liên quan đến (chọn phương án đúng nhất):"
+  },
+  {
+   "chu": "lead to",
+   "doc": "/ˈliːd tuː/",
+   "nghia": "dẫn tới (hậu quả) — giống result in; vế sau là KẾT QUẢ",
+   "nhom": "Liên kết & điều kiện",
+   "viDu": "If redundant data is stored, can it lead to a data integrity problem?",
+   "viDuNghia": "Nếu lưu dữ liệu dư thừa thì có thể dẫn đến vấn đề toàn vẹn dữ liệu không?"
+  },
+  {
+   "chu": "appropriate",
+   "doc": "/əˈproʊpriət/",
+   "nghia": "thích hợp, phù hợp — đúng với tình huống đề nêu.",
+   "nhom": "Tính từ & danh từ học thuật",
+   "viDu": "Which UML relationship is most appropriate for representing common functionality shared across multiple use cases?",
+   "viDuNghia": "Quan hệ UML nào phù hợp nhất để biểu diễn chức năng chung được chia sẻ giữa nhiều use case?"
+  },
+  {
+   "chu": "suitable",
+   "doc": "/ˈsuːtəbl/",
+   "nghia": "phù hợp — \"suitable for\" = hợp với (mục đích, loại dự án).",
+   "nhom": "Tính từ & danh từ học thuật",
+   "viDu": "Which stage is suitable for this following statement \"Members implement plans and achieve goals\"?",
+   "viDuNghia": "Giai đoạn nào phù hợp với câu sau: \"Các thành viên triển khai kế hoạch và đạt được mục tiêu\"?"
+  },
+  {
+   "chu": "purpose",
+   "doc": "/ˈpɜːrpəs/",
+   "nghia": "mục đích — hỏi \"để làm gì\".",
+   "nhom": "Tính từ & danh từ học thuật",
+   "viDu": "What is the purpose of the increment or decrement expression in a for loop?",
+   "viDuNghia": "Mục đích của biểu thức tăng hoặc giảm trong vòng lặp for là gì?"
+  },
+  {
+   "chu": "approach",
+   "doc": "/əˈproʊtʃ/",
+   "nghia": "cách tiếp cận, phương pháp.",
+   "nhom": "Tính từ & danh từ học thuật",
+   "viDu": "(Choose 1 answer) What are the main steps in the stateless dynamic interaction modeling approach?",
+   "viDuNghia": "(Chọn 1 đáp án) Các bước chính của cách tiếp cận mô hình hoá tương tác động KHÔNG phụ thuộc trạng thái (stateless) là gì?"
+  },
+  {
+   "chu": "factor",
+   "doc": "/ˈfæktər/",
+   "nghia": "yếu tố, nhân tố ảnh hưởng.",
+   "nhom": "Tính từ & danh từ học thuật",
+   "viDu": "What factor is critical in the planning phase of both enhancement and replacement projects?",
+   "viDuNghia": "Yếu tố nào là then chốt trong giai đoạn lập kế hoạch của cả dự án nâng cấp lẫn dự án thay thế?"
+  },
+  {
+   "chu": "characteristic",
+   "doc": "/ˌkærəktəˈrɪstɪk/",
+   "nghia": "đặc điểm, đặc trưng — thứ làm nên bản chất của khái niệm.",
+   "nhom": "Tính từ & danh từ học thuật",
+   "viDu": "In Tuckman's Group Development Stages, which characteristics are correct for the third stage?",
+   "viDuNghia": "Trong các Giai đoạn Phát triển Nhóm của Tuckman, đặc điểm nào đúng với giai đoạn thứ ba?"
+  },
+  {
+   "chu": "consistent",
+   "doc": "/kənˈsɪstənt/",
+   "nghia": "nhất quán, không mâu thuẫn — consistent state = trạng thái nhất quán.",
+   "nhom": "Tính từ & danh từ học thuật",
+   "viDu": "A database transaction, by definition, must be ACID (atomic, consistent, isolated and durable). What does \"Durable\" mean?",
+   "viDuNghia": "Theo định nghĩa, một giao tác (transaction) cơ sở dữ liệu phải là ACID (atomic, consistent, isolated và durable). \"Durable\" nghĩa là gì?"
+  },
+  {
+   "chu": "sufficient",
+   "doc": "/səˈfɪʃnt/",
+   "nghia": "đủ — \"necessary and sufficient\" = cần và đủ.",
+   "nhom": "Tính từ & danh từ học thuật",
+   "viDu": "If a subnet needs to accommodate up to 500 hosts, how many bits for the HostID would be sufficient?",
+   "viDuNghia": "Nếu một subnet cần chứa tối đa 500 host thì cần bao nhiêu bit cho HostID là đủ?"
+  },
+  {
+   "chu": "necessary",
+   "doc": "/ˈnesəseri/",
+   "nghia": "cần thiết — necessary condition = điều kiện cần (chưa chắc đủ).",
+   "nhom": "Tính từ & danh từ học thuật",
+   "viDu": "What additional consideration is necessary to make an IoT project successful compared to existing solutions?",
+   "viDuNghia": "Cần thêm cân nhắc nào để một dự án IoT thành công so với các giải pháp hiện có?"
+  },
+  {
+   "chu": "valid",
+   "doc": "/ˈvælɪd/",
+   "nghia": "hợp lệ — đúng quy tắc / cú pháp; \"a valid declaration\" = khai báo hợp lệ.",
+   "nhom": "Tính từ & danh từ học thuật",
+   "viDu": "Which of the following signatures is valid for the main() method entry point of an application?",
+   "viDuNghia": "Chữ ký nào sau đây hợp lệ cho phương thức main() làm điểm vào của ứng dụng?"
+  },
+  {
+   "chu": "required",
+   "doc": "/rɪˈkwaɪərd/",
+   "nghia": "bắt buộc, được yêu cầu — \"is required to\" = buộc phải.",
+   "nhom": "Tính từ & danh từ học thuật",
+   "viDu": "Which steps are required to establish a connection to a MongoDB server using the MongoClient class?",
+   "viDuNghia": "Các bước nào là cần thiết để thiết lập kết nối tới một MongoDB server bằng lớp MongoClient?"
+  },
+  {
+   "chu": "mandatory",
+   "doc": "/ˈmændətɔːri/",
+   "nghia": "bắt buộc — trái nghĩa optional (tuỳ chọn).",
+   "nhom": "Tính từ & danh từ học thuật",
+   "viDu": "Which method is mandatory in a Filter class?",
+   "viDuNghia": "Phương thức nào bắt buộc phải có trong class Filter?"
+  },
+  {
+   "chu": "optional",
+   "doc": "/ˈɑːpʃənl/",
+   "nghia": "tuỳ chọn, không bắt buộc.",
+   "nhom": "Tính từ & danh từ học thuật",
+   "viDu": "Which of the following is optional in a resume?",
+   "viDuNghia": "Mục nào sau đây là không bắt buộc (tùy chọn) trong sơ yếu lý lịch?"
+  },
+  {
+   "chu": "specific",
+   "doc": "/spəˈsɪfɪk/",
+   "nghia": "cụ thể, riêng biệt — trái nghĩa general.",
+   "nhom": "Tính từ & danh từ học thuật",
+   "viDu": "Which type of OS is expected to do a task within specific time constraints?",
+   "viDuNghia": "Loại hệ điều hành nào được kỳ vọng hoàn thành tác vụ trong các ràng buộc thời gian cụ thể?"
+  },
+  {
+   "chu": "corresponding",
+   "doc": "/ˌkɔːrəˈspɑːndɪŋ/",
+   "nghia": "tương ứng — cái đi cặp với cái vừa nêu.",
+   "nhom": "Tính từ & danh từ học thuật",
+   "viDu": "In computers, what are the basic number systems and their corresponding bases used?",
+   "viDuNghia": "Trong máy tính, các hệ đếm cơ bản và cơ số tương ứng được sử dụng là gì?"
+  },
+  {
+   "chu": "equivalent",
+   "doc": "/ɪˈkwɪvələnt/",
+   "nghia": "tương đương — khác hình thức nhưng cùng giá trị / ý nghĩa.",
+   "nhom": "Tính từ & danh từ học thuật",
+   "viDu": "What layer in the TCP/IP stack is equivalent to the Transport layer of the OSI model?",
+   "viDuNghia": "Tầng nào trong chồng giao thức TCP/IP tương đương với tầng Giao vận (Transport) của mô hình OSI?"
+  },
+  {
+   "chu": "associated with",
+   "nghia": "gắn với, liên quan tới.",
+   "nhom": "Tính từ & danh từ học thuật",
+   "viDu": "Which of the following is associated with the application layer (layer 7) of the OSI model?",
+   "viDuNghia": "Thành phần nào sau đây thuộc tầng ứng dụng (tầng 7) của mô hình OSI?",
+   "doc": "/əˈsoʊʃieɪtɪd wɪð/"
+  },
+  {
+   "chu": "advantage",
+   "doc": "/ədˈvæntɪdʒ/",
+   "nghia": "ưu điểm, lợi thế — trái nghĩa disadvantage.",
+   "nhom": "Tính từ & danh từ học thuật",
+   "viDu": "In fixing the Word2Vec model, we have an advantage over a traditional black box model in that ______.",
+   "viDuNghia": "Khi sửa lỗi mô hình Word2Vec, ta có lợi thế hơn một mô hình hộp đen truyền thống ở chỗ ______."
+  },
+  {
+   "chu": "disadvantage",
+   "doc": "/ˌdɪsədˈvæntɪdʒ/",
+   "nghia": "nhược điểm, bất lợi.",
+   "nhom": "Tính từ & danh từ học thuật",
+   "viDu": "Which of the following is NOT the disadvantage of bottom-up estimating?",
+   "viDuNghia": "Điều nào sau đây KHÔNG phải là nhược điểm của ước lượng từ dưới lên (bottom-up estimating)?"
+  },
+  {
+   "chu": "benefit",
+   "doc": "/ˈbenɪfɪt/",
+   "nghia": "lợi ích.",
+   "nhom": "Tính từ & danh từ học thuật",
+   "viDu": "How does Next.js's server-side rendering capability primarily benefit web applications?",
+   "viDuNghia": "Khả năng server-side rendering của Next.js mang lại lợi ích chính gì cho ứng dụng web?"
+  },
+  {
+   "chu": "scenario",
+   "doc": "/səˈnerioʊ/",
+   "nghia": "tình huống, kịch bản — đề tả một tình huống rồi hỏi cách xử lý.",
+   "nhom": "Tính từ & danh từ học thuật",
+   "viDu": "The pessimist view of general AI references a scenario in which advancement is _____",
+   "viDuNghia": "Quan điểm bi quan về AI tổng quát đề cập đến kịch bản mà sự tiến bộ là _____"
+  },
+  {
+   "chu": "statement",
+   "doc": "/ˈsteɪtmənt/",
+   "nghia": "phát biểu, câu khẳng định; trong lập trình: câu lệnh.",
+   "nhom": "Tính từ & danh từ học thuật",
+   "viDu": "A home router offers both 2.4 GHz and 5 GHz Wi-Fi. Which statement is generally true?",
+   "viDuNghia": "Router gia đình phát cả Wi-Fi 2.4 GHz và 5 GHz. Phát biểu nào nói chung là đúng?"
+  },
+  {
+   "chu": "term",
+   "doc": "/tɜːrm/",
+   "nghia": "thuật ngữ — \"Which term describes\" = thuật ngữ nào mô tả.",
+   "nhom": "Tính từ & danh từ học thuật",
+   "viDu": "Which of the following statements correctly describes the term business process improvement (BPI)?",
+   "viDuNghia": "Phát biểu nào mô tả đúng thuật ngữ Cải tiến quy trình nghiệp vụ (BPI)?"
+  },
+  {
+   "chu": "technique",
+   "doc": "/tekˈniːk/",
+   "nghia": "kỹ thuật, phương pháp cụ thể.",
+   "nhom": "Tính từ & danh từ học thuật",
+   "viDu": "The I/O technique where the processor busy waits for an I/O operation to complete is called:",
+   "viDuNghia": "Kỹ thuật I/O mà bộ xử lý bận chờ (busy wait) cho đến khi thao tác I/O hoàn tất được gọi là:"
+  },
+  {
+   "chu": "criteria",
+   "doc": "/kraɪˈtɪriə/",
+   "nghia": "các tiêu chí (số ít: criterion).",
+   "nhom": "Tính từ & danh từ học thuật",
+   "viDu": "Which of the following are common entry criteria for testing? (Choose 2 correct answers)",
+   "viDuNghia": "Điều nào sau đây là tiêu chí đầu vào (entry criteria) thường gặp cho kiểm thử? (Chọn 2 đáp án đúng)"
+  },
+  {
+   "chu": "initial",
+   "doc": "/ɪˈnɪʃl/",
+   "nghia": "ban đầu — initial value / state = giá trị / trạng thái lúc bắt đầu.",
+   "nhom": "Tính từ & danh từ học thuật",
+   "viDu": "Which Google Maps API method is used to set the map's initial camera position in the layout XML?",
+   "viDuNghia": "Phương thức nào của Google Maps API dùng để thiết lập vị trí camera ban đầu của bản đồ trong layout XML?"
+  },
+  {
+   "chu": "multiple",
+   "doc": "/ˈmʌltɪpl/",
+   "nghia": "nhiều — multiple processes = nhiều tiến trình; trái nghĩa single (đơn).",
+   "nhom": "Tính từ & danh từ học thuật",
+   "viDu": "Is it possible to have multiple software serial ports (UART) with speeds up to 115200 bps?",
+   "viDuNghia": "Có thể có nhiều cổng serial phần mềm (UART) với tốc độ tới 115200 bps không?"
+  },
+  {
+   "chu": "unique",
+   "doc": "/juˈniːk/",
+   "nghia": "duy nhất, không trùng.",
+   "nhom": "Tính từ & danh từ học thuật",
+   "viDu": "____ is a unique name that identifies an e-mail user.",
+   "viDuNghia": "____ là tên duy nhất dùng để định danh một người dùng e-mail."
+  },
+  {
+   "chu": "overall",
+   "doc": "/ˌoʊvərˈɔːl/",
+   "nghia": "tổng thể, nói chung (overall performance = hiệu năng tổng thể)",
+   "nhom": "Tính từ & danh từ học thuật",
+   "viDu": "A faster disk improves the overall performance of the system.",
+   "viDuNghia": "Ổ đĩa nhanh hơn cải thiện hiệu năng tổng thể của hệ thống."
+  },
+  {
+   "chu": "existing",
+   "doc": "/ɪɡˈzɪstɪŋ/",
+   "nghia": "đang có sẵn, đã tồn tại (an existing table = bảng đã có)",
+   "nhom": "Tính từ & danh từ học thuật",
+   "viDu": "Which SQL statement is used to remove an existing index from a table?",
+   "viDuNghia": "Câu lệnh SQL nào được dùng để xoá một chỉ mục (index) đã tồn tại khỏi một bảng?"
+  },
+  {
+   "chu": "society",
+   "doc": "/səˈsaɪəti/",
+   "nghia": "xã hội (impact on society = tác động lên xã hội)",
+   "nhom": "Tính từ & danh từ học thuật",
+   "viDu": "How might the evolving nature of the internet, connecting devices like refrigerators, impact society?",
+   "viDuNghia": "Internet phát triển kết nối cả thiết bị như tủ lạnh tác động xã hội thế nào?"
+  },
+  {
+   "chu": "relevant",
+   "doc": "/ˈreləvənt/",
+   "nghia": "liên quan, đúng trọng tâm — \"most relevant to\" = liên quan nhiều nhất tới; trái nghĩa irrelevant",
+   "nhom": "Tính từ & danh từ học thuật",
+   "viDu": "Scheduling and memory management are the two OS functions that are most relevant to computer organization and architecture.",
+   "viDuNghia": "Lập lịch và quản lý bộ nhớ là hai chức năng của hệ điều hành liên quan nhiều nhất tới tổ chức và kiến trúc máy tính."
+  },
+  {
+   "chu": "aspect",
+   "doc": "/ˈæspekt/",
+   "nghia": "khía cạnh, mặt (của một vấn đề)",
+   "nhom": "Tính từ & danh từ học thuật",
+   "viDu": "Which of the following describe important aspects in the role of an ethical AI engineer?",
+   "viDuNghia": "Điều nào sau đây mô tả khía cạnh quan trọng trong vai trò của một kỹ sư AI có đạo đức?"
+  },
+  {
+   "chu": "stage",
+   "doc": "/steɪdʒ/",
+   "nghia": "giai đoạn, bước, tầng (của quy trình, pipeline) — \"at which stage\" = ở giai đoạn nào",
+   "nhom": "Tính từ & danh từ học thuật",
+   "viDu": "The __________ is a small cache memory associated with the instruction fetch stage of the pipeline.",
+   "viDuNghia": "__________ là một bộ nhớ cache nhỏ gắn với giai đoạn nạp lệnh (instruction fetch) của pipeline."
+  },
+  {
+   "chu": "category",
+   "doc": "/ˈkætəɡɔːri/",
+   "nghia": "loại, nhóm, hạng mục — \"which category\" = thuộc nhóm nào",
+   "nhom": "Tính từ & danh từ học thuật",
+   "viDu": "Which category of actuators includes mechanisms that use air pressure to control or move objects?",
+   "viDuNghia": "Loại cơ cấu chấp hành (actuator) nào gồm các cơ cấu dùng áp suất khí để điều khiển hoặc di chuyển vật?"
+  },
+  {
+   "chu": "best practice",
+   "doc": "/best ˈpræktɪs/",
+   "nghia": "thực hành tốt nhất, cách làm được khuyên dùng — \"a best practice for X\" = cách làm X nên theo",
+   "nhom": "Tính từ & danh từ học thuật",
+   "viDu": "Which of the following is a best practice for incorporating diversity, equity, and inclusiveness in communication?",
+   "viDuNghia": "Thực hành nào sau đây là tốt nhất để đưa sự đa dạng, công bằng và hoà nhập vào truyền thông?"
+  },
+  {
+   "chu": "ensure",
+   "doc": "/ɪnˈʃʊr/",
+   "nghia": "đảm bảo — làm cho chắc chắn điều gì xảy ra.",
+   "nhom": "Động từ học thuật hay gặp",
+   "viDu": "When designing a RESTful API, which practice best ensures predictable and consistent communication with clients?",
+   "viDuNghia": "Khi thiết kế một API RESTful, thực hành nào giúp đảm bảo giao tiếp với client dự đoán được và nhất quán nhất?"
+  },
+  {
+   "chu": "perform",
+   "doc": "/pərˈfɔːrm/",
+   "nghia": "thực hiện, tiến hành — perform a test / an operation.",
+   "nhom": "Động từ học thuật hay gặp",
+   "viDu": "A typical commercial test execution tool would be able to perform all of the following EXCEPT:",
+   "viDuNghia": "Một công cụ thực thi kiểm thử thương mại điển hình có thể làm tất cả những điều sau NGOẠI TRỪ:"
+  },
+  {
+   "chu": "provide",
+   "doc": "/prəˈvaɪd/",
+   "nghia": "cung cấp, đem lại.",
+   "nhom": "Động từ học thuật hay gặp",
+   "viDu": "Which of the following functions provide buffered input facilities on the standard input stream?",
+   "viDuNghia": "Các hàm nào sau đây cung cấp khả năng đọc có bộ đệm (buffered input) trực tiếp trên luồng nhập chuẩn (standard input)?"
+  },
+  {
+   "chu": "allow",
+   "doc": "/əˈlaʊ/",
+   "nghia": "cho phép.",
+   "nhom": "Động từ học thuật hay gặp",
+   "viDu": "Which tab allows you to switch between Design and Text view in Android Studio Layout Editor?",
+   "viDuNghia": "Tab nào cho phép chuyển đổi giữa chế độ xem Design và Text trong Layout Editor của Android Studio?"
+  },
+  {
+   "chu": "prevent",
+   "doc": "/prɪˈvent/",
+   "nghia": "ngăn chặn, phòng ngừa — làm cho việc gì KHÔNG xảy ra.",
+   "nhom": "Động từ học thuật hay gặp",
+   "viDu": "What is the correct approach with the \"Mutual Exclusion condition\" to prevent Deadlock?",
+   "viDuNghia": "Cách tiếp cận đúng với \"điều kiện Mutual Exclusion\" để ngăn chặn Deadlock là gì?"
+  },
+  {
+   "chu": "avoid",
+   "doc": "/əˈvɔɪd/",
+   "nghia": "tránh.",
+   "nhom": "Động từ học thuật hay gặp",
+   "viDu": "If the response you choose is to avoid a risk this means that:",
+   "viDuNghia": "Nếu phản ứng bạn chọn là né tránh (avoid) một rủi ro thì điều này có nghĩa là:"
+  },
+  {
+   "chu": "reduce",
+   "doc": "/rɪˈduːs/",
+   "nghia": "giảm bớt — trái nghĩa increase (tăng).",
+   "nhom": "Động từ học thuật hay gặp",
+   "viDu": "Which action directly reduces the attack surface of a switch in a shared classroom?",
+   "viDuNghia": "Hành động nào trực tiếp giảm bề mặt tấn công của switch trong phòng học dùng chung?"
+  },
+  {
+   "chu": "increase",
+   "doc": "/ɪnˈkriːs/",
+   "nghia": "tăng lên.",
+   "nhom": "Động từ học thuật hay gặp",
+   "viDu": "If you want to increase the whitespace between widgets, you will need to use the ______ property.",
+   "viDuNghia": "Nếu bạn muốn tăng khoảng trắng giữa các widget, bạn cần dùng thuộc tính ______."
+  },
+  {
+   "chu": "improve",
+   "doc": "/ɪmˈpruːv/",
+   "nghia": "cải thiện, nâng cao.",
+   "nhom": "Động từ học thuật hay gặp",
+   "viDu": "Which is the most appropriate way to improve the ambiguous terms (improved, better, faster, superior, higher quality)?",
+   "viDuNghia": "Cách nào phù hợp nhất để khắc phục các từ mơ hồ (improved, better, faster, superior, higher quality)?"
+  },
+  {
+   "chu": "affect",
+   "doc": "/əˈfekt/",
+   "nghia": "ảnh hưởng tới (động từ) — đừng nhầm effect (danh từ: tác động).",
+   "nhom": "Động từ học thuật hay gặp",
+   "viDu": "Increasing the quality of the software, by better development methods, will affect the time needed for testing (the test phases) by:",
+   "viDuNghia": "Nâng cao chất lượng phần mềm bằng các phương pháp phát triển tốt hơn sẽ ảnh hưởng đến thời gian cần cho kiểm thử (các giai đoạn kiểm thử) theo hướng:"
+  },
+  {
+   "chu": "occur",
+   "doc": "/əˈkɜːr/",
+   "nghia": "xảy ra.",
+   "nhom": "Động từ học thuật hay gặp",
+   "viDu": "What happens to a database transaction if an error occurs during its execution in a web application?",
+   "viDuNghia": "Điều gì xảy ra với giao dịch cơ sở dữ liệu nếu có lỗi xảy ra khi thực thi?"
+  },
+  {
+   "chu": "contain",
+   "doc": "/kənˈteɪn/",
+   "nghia": "chứa, có bên trong.",
+   "nhom": "Động từ học thuật hay gặp",
+   "viDu": "Which of the following can contain event declarations?",
+   "viDuNghia": "Kiểu nào sau đây có thể chứa khai báo event?"
+  },
+  {
+   "chu": "include",
+   "doc": "/ɪnˈkluːd/",
+   "nghia": "bao gồm — danh sách có thể chưa đầy đủ.",
+   "nhom": "Động từ học thuật hay gặp",
+   "viDu": "Our goals for building an ethical predictive model include making sure the results are ______.",
+   "viDuNghia": "Mục tiêu của chúng ta khi xây dựng một mô hình dự đoán có đạo đức bao gồm việc đảm bảo kết quả là ______."
+  },
+  {
+   "chu": "involve",
+   "doc": "/ɪnˈvɑːlv/",
+   "nghia": "bao gồm, liên quan tới, đòi hỏi (việc gì).",
+   "nhom": "Động từ học thuật hay gặp",
+   "viDu": "Which layer of IoT architecture involves applications and services that utilize collected data?",
+   "viDuNghia": "Lớp nào trong kiến trúc IoT gồm ứng dụng và dịch vụ dùng dữ liệu đã thu thập?"
+  },
+  {
+   "chu": "specify",
+   "doc": "/ˈspesɪfaɪ/",
+   "nghia": "chỉ rõ, quy định cụ thể.",
+   "nhom": "Động từ học thuật hay gặp",
+   "viDu": "Specify the correct statement about a binary search tree (select the most suitable one).",
+   "viDuNghia": "Chỉ ra phát biểu đúng về cây tìm kiếm nhị phân - binary search tree (chọn câu phù hợp nhất)."
+  },
+  {
+   "chu": "execute",
+   "doc": "/ˈeksɪkjuːt/",
+   "nghia": "thực thi, chạy (lệnh, chương trình, test case).",
+   "nhom": "Động từ học thuật hay gặp",
+   "viDu": "Which state indicates that a process is currently being executed by the processor?",
+   "viDuNghia": "Trạng thái nào cho biết một tiến trình đang được bộ xử lý thực thi?"
+  },
+  {
+   "chu": "implement",
+   "doc": "/ˈɪmplɪment/",
+   "nghia": "hiện thực, cài đặt (bằng code).",
+   "nhom": "Động từ học thuật hay gặp",
+   "viDu": "Given a class Circle that extends and fully implements the Shape class, which statement is correct?",
+   "viDuNghia": "Cho lớp Circle kế thừa và cài đặt đầy đủ lớp Shape, câu nào đúng?"
+  },
+  {
+   "chu": "indicate",
+   "doc": "/ˈɪndɪkeɪt/",
+   "nghia": "chỉ ra, cho thấy.",
+   "nhom": "Động từ học thuật hay gặp",
+   "viDu": "Which HTTP status code indicates that a resource has been permanently moved to a new location?",
+   "viDuNghia": "Mã trạng thái HTTP nào cho biết một tài nguyên đã bị chuyển vĩnh viễn sang vị trí mới?"
+  },
+  {
+   "chu": "represent",
+   "doc": "/ˌreprɪˈzent/",
+   "nghia": "biểu diễn, đại diện cho.",
+   "nhom": "Động từ học thuật hay gặp",
+   "viDu": "In the example \"Employee Works in Department,\" which of the following represents the association?",
+   "viDuNghia": "Trong ví dụ \"Employee Works in Department,\" phần nào đại diện cho association?"
+  },
+  {
+   "chu": "contribute",
+   "doc": "/kənˈtrɪbjuːt/",
+   "nghia": "góp phần, đóng góp vào (contribute to X = góp phần tạo ra X)",
+   "nhom": "Động từ học thuật hay gặp",
+   "viDu": "How does Boolean algebra contribute to the design of digital circuits?",
+   "viDuNghia": "Đại số Boolean đóng góp thế nào vào việc thiết kế mạch số?"
+  },
+  {
+   "chu": "conclude",
+   "doc": "/kənˈkluːd/",
+   "nghia": "kết luận, suy ra (conclude that… = kết luận rằng…)",
+   "nhom": "Động từ học thuật hay gặp",
+   "viDu": "By strong induction, we conclude ∀n P(n). Which step is wrong in this proof?",
+   "viDuNghia": "Theo quy nạp mạnh, ta kết luận ∀n P(n). Bước nào sai trong chứng minh này?"
+  },
+  {
+   "chu": "apply",
+   "doc": "/əˈplaɪ/",
+   "nghia": "áp dụng (apply a theorem / technique); (CSS) có hiệu lực lên; \"apply for\" = nộp đơn",
+   "nhom": "Động từ học thuật hay gặp",
+   "viDu": "Consider the expression NOT(A + B) = ?. Apply DeMorgan's Theorem to replace the \"?\".",
+   "viDuNghia": "Xét biểu thức NOT(A + B) = ?. Áp dụng định lý DeMorgan để thay vào chỗ \"?\"."
+  },
+  {
+   "chu": "handle",
+   "doc": "/ˈhændl/",
+   "nghia": "xử lý (lỗi, yêu cầu, sự kiện) — handle errors / requests / events",
+   "nhom": "Động từ học thuật hay gặp",
+   "viDu": "How would you handle errors in a fetch request to ensure that the error is caught and logged to the console?",
+   "viDuNghia": "Bạn xử lý lỗi trong một fetch request thế nào để lỗi được bắt và ghi ra console?"
+  },
+  {
+   "chu": "arise",
+   "doc": "/əˈraɪz/",
+   "nghia": "nảy sinh, phát sinh (vấn đề, thách thức, lỗi)",
+   "nhom": "Động từ học thuật hay gặp",
+   "viDu": "Which of the following is a challenge that arises when manipulating big data for analysis?",
+   "viDuNghia": "Thách thức nào sau đây phát sinh khi xử lý big data để phân tích?"
+  },
+  {
+   "chu": "illustrate",
+   "doc": "/ˈɪləstreɪt/",
+   "nghia": "minh hoạ, thể hiện (bằng ví dụ, hình vẽ, sơ đồ)",
+   "nhom": "Động từ học thuật hay gặp",
+   "viDu": "To illustrate the data object relationships, which kinds of representation should be used?",
+   "viDuNghia": "Để minh hoạ quan hệ giữa các đối tượng dữ liệu, nên dùng những dạng biểu diễn nào?"
+  }
+ ]
+}

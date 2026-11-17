@@ -1,0 +1,792 @@
+{
+ "ma": "sdn302-1",
+ "nn": "en",
+ "ten": "SDN302 · Node.js, Express, MongoDB",
+ "moTa": "Môn Server-side development with NodeJS, Express and MongoDB (SDN302): Node.js và vòng lặp sự kiện, Express, REST API, mã trạng thái HTTP, MongoDB, Mongoose, JWT, phân quyền, quy tắc nghiệp vụ trong đề PE. Từ lấy từ đề FE/PE thật; câu ví dụ phần lớn là câu thật trong đề.",
+ "bieuTuong": "point.3.connected.trianglepath.dotted",
+ "thuTu": -943,
+ "tu": [
+  {
+   "chu": "runtime environment",
+   "doc": "/ˈrʌntaɪm ɪnˈvaɪrənmənt/",
+   "nghia": "môi trường chạy: Node.js là môi trường chạy JavaScript bên ngoài trình duyệt (trên máy chủ)",
+   "nhom": "Node.js",
+   "viDu": "Node.js is a JavaScript runtime environment for server-side development.",
+   "viDuNghia": "Node.js là một môi trường chạy JavaScript dùng cho phát triển phía máy chủ."
+  },
+  {
+   "chu": "event loop",
+   "doc": "/ɪˈvent luːp/",
+   "nghia": "vòng lặp sự kiện: cơ chế giúp Node.js một luồng vẫn xử lý được nhiều việc bằng cách xếp hàng các callback",
+   "nhom": "Node.js",
+   "viDu": "How can you optimize code to work efficiently with the event loop in Node.js?",
+   "viDuNghia": "Làm thế nào để tối ưu mã hoạt động hiệu quả với event loop trong Node.js?"
+  },
+  {
+   "chu": "non-blocking",
+   "doc": "/ˌnɑːn ˈblɑːkɪŋ/",
+   "nghia": "không chặn: gửi yêu cầu vào / ra rồi làm việc khác ngay, không đứng chờ kết quả",
+   "nhom": "Node.js",
+   "viDu": "Node.js uses non-blocking I/O, so it can handle many requests at once.",
+   "viDuNghia": "Node.js dùng vào / ra không chặn nên xử lý được nhiều request cùng lúc."
+  },
+  {
+   "chu": "event-driven",
+   "doc": "/ɪˈvent ˌdrɪvn/",
+   "nghia": "hướng sự kiện: mã chạy khi có sự kiện xảy ra thay vì chạy tuần tự từ trên xuống",
+   "nhom": "Node.js",
+   "viDu": "Node.js has an event-driven architecture.",
+   "viDuNghia": "Node.js có kiến trúc hướng sự kiện."
+  },
+  {
+   "chu": "single-threaded",
+   "doc": "/ˌsɪŋɡl ˈθredɪd/",
+   "nghia": "đơn luồng: chỉ một luồng chạy mã JavaScript",
+   "nhom": "Node.js",
+   "viDu": "Why is Node.js described as \"single-threaded but highly scalable\"?",
+   "viDuNghia": "Tại sao Node.js được mô tả là \"đơn luồng nhưng có khả năng mở rộng cao\"?"
+  },
+  {
+   "chu": "built-in module",
+   "doc": "/ˌbɪlt ˈɪn ˈmɑːdʒuːl/",
+   "nghia": "mô-đun có sẵn của Node.js (fs, http, path…), dùng không cần cài",
+   "nhom": "Node.js",
+   "viDu": "Which Node.js built-in module is used for creating servers?",
+   "viDuNghia": "Module có sẵn nào của Node.js được dùng để tạo server?"
+  },
+  {
+   "chu": "environment variable",
+   "doc": "/ɪnˈvaɪrənmənt ˈveriəbl/",
+   "nghia": "biến môi trường: giá trị cấu hình đặt bên ngoài mã (cổng, chuỗi kết nối, khoá bí mật), đọc qua process.env",
+   "nhom": "Node.js",
+   "viDu": "Store the secret key in an environment variable, not in the source code.",
+   "viDuNghia": "Hãy lưu khoá bí mật trong biến môi trường, đừng để trong mã nguồn."
+  },
+  {
+   "chu": "server",
+   "doc": "/ˈsɜːrvər/",
+   "nghia": "máy chủ – chương trình/máy lắng nghe và trả lời request; http.createServer() trong Node.js",
+   "nhom": "Node.js",
+   "viDu": "Which of the following statements correctly describe the process of creating and starting an HTTP server in Node.js?",
+   "viDuNghia": "Phát biểu nào sau đây mô tả đúng quá trình tạo và khởi động một HTTP server trong Node.js?"
+  },
+  {
+   "chu": "Node.js",
+   "doc": "/noʊd ˌdʒeɪ ˈes/",
+   "nghia": "môi trường chạy JavaScript phía máy chủ (dựa trên engine V8), đơn luồng, hướng sự kiện, vào/ra không chặn",
+   "nhom": "Node.js",
+   "viDu": "What is Node.js?",
+   "viDuNghia": "Node.js là gì? (Đáp án: môi trường chạy JavaScript phía máy chủ.)"
+  },
+  {
+   "chu": "Node Package Manager",
+   "nghia": "npm: trình quản lý gói của Node.js — npm init tạo package.json, npm install cài thư viện",
+   "nhom": "Node.js",
+   "viDu": "Which of the following statements about npm (Node Package Manager) are correct?",
+   "viDuNghia": "Những phát biểu nào sau đây về npm (Node Package Manager) là đúng?"
+  },
+  {
+   "chu": "package.json",
+   "doc": "/ˈpækɪdʒ ˌdʒeɪ ˈsɑːn/",
+   "nghia": "tệp mô tả dự án Node.js: tên, phiên bản, scripts (npm start) và danh sách thư viện phụ thuộc",
+   "nhom": "Node.js",
+   "viDu": "Which command is used to initialize a package.json file in a Node.js project?",
+   "viDuNghia": "Lệnh nào dùng để khởi tạo tệp package.json trong dự án Node.js? (Đáp án: npm init.)"
+  },
+  {
+   "chu": "require",
+   "doc": "/rɪˈkwaɪər/",
+   "nghia": "(Node.js) hàm require() nạp một module (CommonJS), vd const express = require(\"express\") · (đọc đề) yêu cầu, đòi hỏi",
+   "nhom": "Node.js",
+   "viDu": "What does the require() function do in Node.js?",
+   "viDuNghia": "Hàm require() trong Node.js làm gì? (Đáp án: nạp — import — các module.)"
+  },
+  {
+   "chu": "localhost",
+   "doc": "/ˈloʊkəlhoʊst/",
+   "nghia": "tên chỉ chính máy đang chạy (127.0.0.1); máy chủ phát triển chạy ở vd http://localhost:3000",
+   "nhom": "Node.js",
+   "viDu": "GET http://localhost:3000/articles/65e98f60982bf2f0d7cf5f26 retrieves one article by its ID.",
+   "viDuNghia": "GET http://localhost:3000/articles/65e98f60982bf2f0d7cf5f26 lấy về một bài viết theo ID của nó."
+  },
+  {
+   "chu": "backend",
+   "doc": "/ˈbækend/",
+   "nghia": "back-end – phần chạy trên máy chủ: xử lý nghiệp vụ, API, cơ sở dữ liệu, xác thực (vd Node.js + Express + MongoDB); đối lập front-end",
+   "nhom": "Node.js",
+   "viDu": "A startup wants to quickly launch a mobile app without building a custom backend. Which solution is most appropriate?",
+   "viDuNghia": "Một startup muốn nhanh chóng ra mắt ứng dụng di động mà không tự xây backend. Giải pháp nào phù hợp nhất?"
+  },
+  {
+   "chu": "route handler",
+   "doc": "/ruːt ˈhændlər/",
+   "nghia": "hàm xử lý tuyến: hàm (req, res) chạy khi request khớp một đường dẫn và phương thức",
+   "nhom": "Express",
+   "viDu": "Express.js supports RESTful routing through methods like app.get, app.post, app.put, and app.delete.",
+   "viDuNghia": "Express.js hỗ trợ định tuyến RESTful thông qua các phương thức như app.get, app.post, app.put và app.delete."
+  },
+  {
+   "chu": "middleware function",
+   "doc": "/ˈmɪdlwer ˈfʌŋkʃn/",
+   "nghia": "hàm middleware của Express: hàm (req, res, next) chạy giữa lúc nhận request và lúc trả response",
+   "nhom": "Express",
+   "viDu": "Which is the correct order of middleware execution in Express.js?",
+   "viDuNghia": "Thứ tự thực thi middleware nào là đúng trong Express.js?"
+  },
+  {
+   "chu": "error-handling middleware",
+   "doc": "/ˈerər ˌhændlɪŋ ˈmɪdlwer/",
+   "nghia": "middleware xử lý lỗi: hàm có BỐN tham số (err, req, res, next), đặt sau cùng để bắt lỗi",
+   "nhom": "Express",
+   "viDu": "An error-handling middleware takes four arguments: err, req, res and next.",
+   "viDuNghia": "Middleware xử lý lỗi nhận bốn tham số: err, req, res và next."
+  },
+  {
+   "chu": "request body",
+   "doc": "/rɪˈkwest ˈbɑːdi/",
+   "nghia": "thân request: dữ liệu gửi kèm POST / PUT (thường là JSON), đọc qua req.body",
+   "nhom": "Express",
+   "viDu": "The request body must contain the title, author and price of the book.",
+   "viDuNghia": "Thân request phải chứa tiêu đề, tác giả và giá của cuốn sách."
+  },
+  {
+   "chu": "path parameter",
+   "doc": "/pæθ pəˈræmɪtər/",
+   "nghia": "tham số đường dẫn: phần động trong URL, vd :id trong /api/users/:id, đọc qua req.params",
+   "nhom": "Express",
+   "viDu": "The id of the order is passed as a path parameter.",
+   "viDuNghia": "Mã đơn hàng được truyền dưới dạng tham số đường dẫn."
+  },
+  {
+   "chu": "query parameter",
+   "doc": "/ˈkwɪri pəˈræmɪtər/",
+   "nghia": "tham số truy vấn: cặp khoá – giá trị sau dấu ? trên URL, đọc qua req.query",
+   "nhom": "Express",
+   "viDu": "In API design, what is the primary purpose of using query parameters in a URL?",
+   "viDuNghia": "Trong thiết kế API, mục đích chính của việc dùng query parameter trong URL là gì?"
+  },
+  {
+   "chu": "template engine",
+   "doc": "/ˈtempleɪt ˈendʒɪn/",
+   "nghia": "bộ dựng khuôn mẫu (EJS, Handlebars, Pug): trộn dữ liệu vào khuôn HTML để sinh trang",
+   "nhom": "Express",
+   "viDu": "EJS is a template engine that generates HTML with plain JavaScript.",
+   "viDuNghia": "EJS là bộ dựng khuôn mẫu sinh HTML bằng JavaScript thuần."
+  },
+  {
+   "chu": "static file",
+   "doc": "/ˈstætɪk faɪl/",
+   "nghia": "tệp tĩnh (ảnh, CSS, JS): máy chủ gửi nguyên, không xử lý; Express phục vụ bằng express.static",
+   "nhom": "Express",
+   "viDu": "Which method is used in Express to serve static files?",
+   "viDuNghia": "Phương thức nào được dùng trong Express để phục vụ file tĩnh?"
+  },
+  {
+   "chu": "scaffold",
+   "doc": "/ˈskæfoʊld/",
+   "nghia": "dựng sẵn bộ khung dự án (vd bằng express-generator)",
+   "nhom": "Express",
+   "viDu": "Which statements correctly describe the purpose of Express Generator?",
+   "viDuNghia": "Những phát biểu nào mô tả đúng mục đích của Express Generator?"
+  },
+  {
+   "chu": "middleware",
+   "doc": "/ˈmɪdlwer/",
+   "nghia": "phần mềm trung gian (Express) – hàm (req, res, next) chạy xen giữa request và route handler, gọi next() để đi tiếp. (Redux: lớp chen giữa action và reducer)",
+   "nhom": "Express",
+   "viDu": "Which is the correct order of middleware execution in Express.js?",
+   "viDuNghia": "Thứ tự thực thi middleware nào là đúng trong Express.js?"
+  },
+  {
+   "chu": "express",
+   "doc": "/ɪkˈspres/",
+   "nghia": "Express (Express.js) – framework web tối giản cho Node.js: route, middleware, xử lý request/response. (Đề toán: biểu diễn, viết dưới dạng)",
+   "nhom": "Express",
+   "viDu": "In a real-world web application, how does Express improve developer productivity compared to vanilla Node.js when handling HTTP requests?",
+   "viDuNghia": "Trong một ứng dụng web thực tế, Express cải thiện năng suất lập trình viên như thế nào so với Node.js thuần khi xử lý HTTP request?"
+  },
+  {
+   "chu": "Embedded JavaScript",
+   "doc": "/ɪmˈbedɪd ˈdʒɑːvəskrɪpt/",
+   "nghia": "EJS: template engine nhúng mã JavaScript vào HTML bằng <% %> để sinh trang; tệp có đuôi .ejs",
+   "nhom": "Express",
+   "viDu": "What does EJS stand for?",
+   "viDuNghia": "EJS là viết tắt của cụm từ nào? (Đáp án: Embedded JavaScript.)"
+  },
+  {
+   "chu": "Representational State Transfer",
+   "nghia": "REST: kiểu kiến trúc API dùng URL làm tài nguyên và phương thức HTTP làm hành động",
+   "nhom": "REST API và mã trạng thái",
+   "viDu": "Which HTTP status code should a RESTful API return when a requested resource cannot be found?",
+   "viDuNghia": "API RESTful nên trả về mã trạng thái HTTP nào khi tài nguyên được yêu cầu không tìm thấy?"
+  },
+  {
+   "chu": "HTTP verb",
+   "doc": "/ˌeɪtʃ tiː tiː ˈpiː vɜːrb/",
+   "nghia": "động từ HTTP: GET (đọc), POST (tạo), PUT / PATCH (sửa), DELETE (xoá)",
+   "nhom": "REST API và mã trạng thái",
+   "viDu": "Which HTTP method is typically used to create a new resource in a RESTful API?",
+   "viDuNghia": "Phương thức HTTP nào thường được dùng để tạo một tài nguyên mới trong RESTful API?"
+  },
+  {
+   "chu": "idempotent",
+   "doc": "/ˌaɪdemˈpoʊtənt/",
+   "nghia": "luỹ đẳng: gọi một lần hay nhiều lần kết quả vẫn như nhau (GET, PUT, DELETE)",
+   "nhom": "REST API và mã trạng thái",
+   "viDu": "Which of the following HTTP methods is idempotent?",
+   "viDuNghia": "Phương thức HTTP nào sau đây có tính idempotent (bất biến khi lặp lại)?"
+  },
+  {
+   "chu": "Bad Request",
+   "doc": "/bæd rɪˈkwest/",
+   "nghia": "mã 400: request sai (thiếu trường, sai định dạng, vi phạm quy tắc)",
+   "nhom": "REST API và mã trạng thái",
+   "viDu": "If a required field is missing, return 400 Bad Request with an error message.",
+   "viDuNghia": "Nếu thiếu một trường bắt buộc, trả về 400 Bad Request kèm thông báo lỗi."
+  },
+  {
+   "chu": "Unauthorized",
+   "doc": "/ʌnˈɔːθəraɪzd/",
+   "nghia": "mã 401: chưa xác thực (chưa đăng nhập, token thiếu hoặc sai)",
+   "nhom": "REST API và mã trạng thái",
+   "viDu": "Which HTTP status code indicates \"Unauthorized\"?",
+   "viDuNghia": "Mã trạng thái HTTP nào biểu thị \"Unauthorized\"?"
+  },
+  {
+   "chu": "Forbidden",
+   "doc": "/fərˈbɪdn/",
+   "nghia": "mã 403: đã đăng nhập nhưng không có quyền làm việc này",
+   "nhom": "REST API và mã trạng thái",
+   "viDu": "If the user is not an admin, return 403 Forbidden.",
+   "viDuNghia": "Nếu người dùng không phải admin, trả về 403 Forbidden."
+  },
+  {
+   "chu": "Not Found",
+   "doc": "/nɑːt faʊnd/",
+   "nghia": "mã 404: không tìm thấy tài nguyên",
+   "nhom": "REST API và mã trạng thái",
+   "viDu": "If the product does not exist, return 404 Not Found.",
+   "viDuNghia": "Nếu sản phẩm không tồn tại, trả về 404 Not Found."
+  },
+  {
+   "chu": "Internal Server Error",
+   "nghia": "mã 500: lỗi phía máy chủ",
+   "nhom": "REST API và mã trạng thái",
+   "viDu": "An unhandled exception results in a 500 Internal Server Error.",
+   "viDuNghia": "Một ngoại lệ không được xử lý dẫn tới lỗi 500 Internal Server Error."
+  },
+  {
+   "chu": "Created",
+   "doc": "/kriˈeɪtɪd/",
+   "nghia": "mã 201: tạo tài nguyên mới thành công",
+   "nhom": "REST API và mã trạng thái",
+   "viDu": "Which HTTP status code indicates that a resource has been created?",
+   "viDuNghia": "Mã trạng thái HTTP nào cho biết một tài nguyên đã được tạo?"
+  },
+  {
+   "chu": "consume an API",
+   "nghia": "gọi và dùng một API",
+   "nhom": "REST API và mã trạng thái",
+   "viDu": "The front-end application consumes the REST API of the server.",
+   "viDuNghia": "Ứng dụng front-end gọi và dùng REST API của máy chủ."
+  },
+  {
+   "chu": "CRUD operations",
+   "doc": "/krʌd ˌɑːpəˈreɪʃnz/",
+   "nghia": "bốn thao tác dữ liệu cơ bản: Create (tạo), Read (đọc), Update (sửa), Delete (xoá)",
+   "nhom": "REST API và mã trạng thái",
+   "viDu": "Which statements correctly describe CRUD operations in MongoDB?",
+   "viDuNghia": "Những phát biểu nào sau đây mô tả đúng các thao tác CRUD trong MongoDB?"
+  },
+  {
+   "chu": "API",
+   "doc": "/ˌeɪ piː ˈaɪ/",
+   "nghia": "giao diện lập trình ứng dụng (API) – tập endpoint cho chương trình khác gọi; RESTful API trả JSON qua HTTP",
+   "nhom": "REST API và mã trạng thái",
+   "viDu": "Which HTTP status code should a RESTful API return when a requested resource cannot be found?",
+   "viDuNghia": "API RESTful nên trả về mã trạng thái HTTP nào khi tài nguyên được yêu cầu không tìm thấy?"
+  },
+  {
+   "chu": "endpoint",
+   "doc": "/ˈendpɔɪnt/",
+   "nghia": "endpoint – một đường dẫn + phương thức HTTP cụ thể của API, vd GET /api/users",
+   "nhom": "REST API và mã trạng thái",
+   "viDu": "This endpoint returns a 500 error.",
+   "viDuNghia": "Endpoint này trả về lỗi 500."
+  },
+  {
+   "chu": "RESTful API",
+   "doc": "/ˈrestfl ˌeɪ piː ˈaɪ/",
+   "nghia": "API theo phong cách REST: URL là tài nguyên (/api/books), phương thức HTTP là hành động, trả JSON, không lưu trạng thái",
+   "nhom": "REST API và mã trạng thái",
+   "viDu": "What is the main benefit of using RESTful APIs?",
+   "viDuNghia": "Lợi ích chính của việc dùng RESTful API là gì? (Đáp án: nhất quán và dễ mở rộng.)"
+  },
+  {
+   "chu": "Postman",
+   "doc": "/ˈpoʊstmən/",
+   "nghia": "công cụ gửi thử HTTP request để kiểm thử API (chọn phương thức, URL, header, body)",
+   "nhom": "REST API và mã trạng thái",
+   "viDu": "Which tool is commonly used to test RESTful APIs?",
+   "viDuNghia": "Công cụ nào thường được dùng để kiểm thử RESTful API? (Đáp án: Postman.)"
+  },
+  {
+   "chu": "NoSQL database",
+   "doc": "/ˌnoʊ ˌes kjuː ˈel ˈdeɪtəbeɪs/",
+   "nghia": "CSDL NoSQL: không dùng bảng quan hệ; MongoDB lưu dữ liệu dạng tài liệu",
+   "nhom": "MongoDB",
+   "viDu": "Which statements correctly describe the characteristics of NoSQL databases?",
+   "viDuNghia": "Phát biểu nào mô tả đúng đặc điểm của cơ sở dữ liệu NoSQL?"
+  },
+  {
+   "chu": "document",
+   "doc": "/ˈdɑːkjumənt/",
+   "nghia": "tài liệu: một bản ghi của MongoDB, dạng giống JSON (tương đương một dòng của bảng)",
+   "nhom": "MongoDB",
+   "viDu": "Which statements correctly describe the structure of MongoDB documents and collections?",
+   "viDuNghia": "Những phát biểu nào sau đây mô tả đúng cấu trúc của document và collection trong MongoDB?"
+  },
+  {
+   "chu": "embedded document",
+   "doc": "/ɪmˈbedɪd ˈdɑːkjumənt/",
+   "nghia": "tài liệu nhúng: tài liệu nằm lồng trong tài liệu khác",
+   "nhom": "MongoDB",
+   "viDu": "To avoid multi-level embedded documents, which method should be used when storing an array of comments?",
+   "viDuNghia": "Để tránh document lồng nhau nhiều cấp, nên làm gì khi lưu một mảng các comment?"
+  },
+  {
+   "chu": "object identifier",
+   "doc": "/ˈɑːbdʒekt aɪˈdentɪfaɪər/",
+   "nghia": "ObjectId: mã định danh 12 byte MongoDB tự sinh cho trường _id",
+   "nhom": "MongoDB",
+   "viDu": "Which of the following represents a valid MongoDB ObjectId reference in Mongoose?",
+   "viDuNghia": "Đâu là một tham chiếu ObjectId hợp lệ của MongoDB trong Mongoose?"
+  },
+  {
+   "chu": "flexible schema",
+   "doc": "/ˈfleksəbl ˈskiːmə/",
+   "nghia": "lược đồ linh hoạt: các tài liệu trong cùng collection không buộc phải có cùng trường",
+   "nhom": "MongoDB",
+   "viDu": "NoSQL databases support flexible schemas for rapidly changing data.",
+   "viDuNghia": "Cơ sở dữ liệu NoSQL hỗ trợ lược đồ linh hoạt cho dữ liệu thay đổi nhanh."
+  },
+  {
+   "chu": "connection string",
+   "doc": "/kəˈnekʃn strɪŋ/",
+   "nghia": "chuỗi kết nối: địa chỉ để ứng dụng nối tới CSDL, vd mongodb://localhost:27017/shop",
+   "nhom": "MongoDB",
+   "viDu": "The connection string mongodb://localhost:27017/shop tells Mongoose where the database is.",
+   "viDuNghia": "Chuỗi kết nối mongodb://localhost:27017/shop cho Mongoose biết CSDL nằm ở đâu."
+  },
+  {
+   "chu": "aggregation pipeline",
+   "doc": "/ˌæɡrɪˈɡeɪʃn ˈpaɪplaɪn/",
+   "nghia": "đường ống tổng hợp: chuỗi các bước ($match, $group, $sort…) xử lý dữ liệu lần lượt",
+   "nhom": "MongoDB",
+   "viDu": "Which aggregation pipeline stage is used to group documents? db. orders . aggregate ([ { $group : { _id : \"$status\" , total : { $sum : \"$amount\" } } } ]);",
+   "viDuNghia": "Giai đoạn (stage) nào trong aggregation pipeline được dùng để gom nhóm document? db. orders . aggregate ([ { $group : { _id : \"$status\" , total : { $sum : \"$amount\" } } } ]);"
+  },
+  {
+   "chu": "replica set",
+   "doc": "/ˈreplɪkə set/",
+   "nghia": "bộ bản sao: nhóm máy chủ MongoDB giữ cùng dữ liệu để dự phòng",
+   "nhom": "MongoDB",
+   "viDu": "A replica set keeps copies of the data on several servers.",
+   "viDuNghia": "Bộ bản sao giữ các bản sao dữ liệu trên nhiều máy chủ."
+  },
+  {
+   "chu": "sharding",
+   "doc": "/ˈʃɑːrdɪŋ/",
+   "nghia": "phân mảnh: chia dữ liệu ra nhiều máy để mở rộng theo chiều ngang",
+   "nhom": "MongoDB",
+   "viDu": "Sharding distributes data across multiple machines.",
+   "viDuNghia": "Phân mảnh phân tán dữ liệu ra nhiều máy."
+  },
+  {
+   "chu": "collection",
+   "doc": "/kəˈlekʃn/",
+   "nghia": "collection (MongoDB) – nhóm các document, tương tự bảng trong CSDL quan hệ. (Java: Collections Framework; nghĩa chung: tập hợp)",
+   "nhom": "MongoDB",
+   "viDu": "Which statements correctly describe how to create a new database and collection in MongoDB?",
+   "viDuNghia": "Những phát biểu nào mô tả đúng cách tạo mới một database và collection trong MongoDB?"
+  },
+  {
+   "chu": "MongoDB",
+   "doc": "/ˌmɑːŋɡoʊ ˌdiː ˈbiː/",
+   "nghia": "CSDL NoSQL hướng tài liệu: lưu document dạng JSON (BSON) trong các collection, không cần lược đồ cố định",
+   "nhom": "MongoDB",
+   "viDu": "What is MongoDB?",
+   "viDuNghia": "MongoDB là gì? (Đáp án: một CSDL hướng tài liệu — document database.)"
+  },
+  {
+   "chu": "Object Data Modeling",
+   "nghia": "ODM: thư viện (Mongoose) ánh xạ đối tượng JavaScript với tài liệu MongoDB",
+   "nhom": "Mongoose",
+   "viDu": "What is a primary benefit of using Mongoose ODM over the native MongoDB Node.js driver for database operations?",
+   "viDuNghia": "Lợi ích chính của việc dùng Mongoose ODM so với driver MongoDB Node.js gốc cho các thao tác cơ sở dữ liệu là gì?"
+  },
+  {
+   "chu": "Mongoose schema",
+   "doc": "/ˈmɑːŋɡuːs ˈskiːmə/",
+   "nghia": "lược đồ Mongoose: khai báo các trường, kiểu dữ liệu và quy tắc kiểm tra của tài liệu",
+   "nhom": "Mongoose",
+   "viDu": "Which of the following Mongoose schema types are used to define a reference subdocument?",
+   "viDuNghia": "Kiểu schema nào sau đây trong Mongoose được dùng để định nghĩa một tham chiếu tới subdocument (document con)?"
+  },
+  {
+   "chu": "Mongoose model",
+   "doc": "/ˈmɑːŋɡuːs ˈmɑːdl/",
+   "nghia": "model Mongoose: lớp tạo từ schema, dùng để truy vấn và ghi một collection",
+   "nhom": "Mongoose",
+   "viDu": "Which statements correctly describe the responsibilities of a Mongoose model?",
+   "viDuNghia": "Những phát biểu nào sau đây mô tả đúng trách nhiệm của một Mongoose model?"
+  },
+  {
+   "chu": "built-in validator",
+   "doc": "/ˌbɪlt ˈɪn ˈvælɪdeɪtər/",
+   "nghia": "bộ kiểm tra có sẵn của Mongoose: required, min, max, enum, match…",
+   "nhom": "Mongoose",
+   "viDu": "required and min are built-in validators of Mongoose.",
+   "viDuNghia": "required và min là các bộ kiểm tra có sẵn của Mongoose."
+  },
+  {
+   "chu": "timestamps",
+   "doc": "/ˈtaɪmstæmps/",
+   "nghia": "dấu thời gian: tuỳ chọn timestamps tự thêm trường createdAt và updatedAt",
+   "nhom": "Mongoose",
+   "viDu": "Which of the following are valid ways to define a Mongoose schema with timestamps?",
+   "viDuNghia": "Cách nào sau đây là hợp lệ để định nghĩa một Mongoose schema có sử dụng tuỳ chọn timestamps?"
+  },
+  {
+   "chu": "pre-save hook",
+   "doc": "/ˌpriː ˈseɪv hʊk/",
+   "nghia": "hook trước khi lưu: hàm tự chạy trước khi tài liệu được lưu (vd để băm mật khẩu)",
+   "nhom": "Mongoose",
+   "viDu": "In Mongoose, what does `schema.pre('save')` do?",
+   "viDuNghia": "Trong Mongoose, `schema.pre('save')` dùng để làm gì?"
+  },
+  {
+   "chu": "lean query",
+   "doc": "/liːn ˈkwɪri/",
+   "nghia": "truy vấn gọn: lean() trả về đối tượng JavaScript thường, nhanh hơn tài liệu Mongoose đầy đủ",
+   "nhom": "Mongoose",
+   "viDu": "A lean query returns plain JavaScript objects instead of Mongoose documents.",
+   "viDuNghia": "Truy vấn gọn trả về đối tượng JavaScript thường thay vì tài liệu Mongoose."
+  },
+  {
+   "chu": "populate",
+   "doc": "/ˈpɑːpjuleɪt/",
+   "nghia": "đổ dữ liệu vào; (Mongoose) populate() thay ObjectId tham chiếu bằng cả tài liệu thật",
+   "nhom": "Mongoose",
+   "viDu": "Which of the following methods are used to populate referenced documents in Mongoose?",
+   "viDuNghia": "Phương thức nào sau đây được dùng để populate (nạp) các tài liệu tham chiếu trong Mongoose?"
+  },
+  {
+   "chu": "Mongoose",
+   "doc": "/ˈmɑːŋɡuːs/",
+   "nghia": "thư viện ODM cho Node.js: định nghĩa schema, model rồi truy vấn MongoDB bằng đối tượng JavaScript",
+   "nhom": "Mongoose",
+   "viDu": "What is Mongoose in Node.js?",
+   "viDuNghia": "Mongoose trong Node.js là gì? (Đáp án: công cụ mô hình hoá đối tượng cho MongoDB.)"
+  },
+  {
+   "chu": "JSON Web Token",
+   "nghia": "JWT: chuỗi token đã ký, mang thông tin người dùng, gửi kèm mỗi request để xác thực",
+   "nhom": "Xác thực và phân quyền",
+   "viDu": "What is the primary purpose of JWT (JSON Web Token)?",
+   "viDuNghia": "Mục đích chính của JWT (JSON Web Token) là gì?"
+  },
+  {
+   "chu": "access token",
+   "doc": "/ˈækses ˈtoʊkən/",
+   "nghia": "token truy cập: chuỗi cấp sau khi đăng nhập, dùng để gọi các API cần quyền",
+   "nhom": "Xác thực và phân quyền",
+   "viDu": "After a successful login, the server returns an access token.",
+   "viDuNghia": "Sau khi đăng nhập thành công, máy chủ trả về một token truy cập."
+  },
+  {
+   "chu": "Bearer token",
+   "doc": "/ˈberər ˈtoʊkən/",
+   "nghia": "token gửi trong tiêu đề Authorization theo dạng \"Bearer chuỗi-token\"",
+   "nhom": "Xác thực và phân quyền",
+   "viDu": "The client sends the Bearer token in the Authorization header.",
+   "viDuNghia": "Client gửi Bearer token trong tiêu đề Authorization."
+  },
+  {
+   "chu": "access key",
+   "doc": "/ˈækses kiː/",
+   "nghia": "khoá truy cập: chuỗi client phải gửi kèm (trong header) thì mới được gọi API",
+   "nhom": "Xác thực và phân quyền",
+   "viDu": "Requests without a valid access key are rejected.",
+   "viDuNghia": "Request không có khoá truy cập hợp lệ sẽ bị từ chối."
+  },
+  {
+   "chu": "authentication strategy",
+   "doc": "/ɔːˌθentɪˈkeɪʃn ˈstrætədʒi/",
+   "nghia": "chiến lược xác thực của Passport: cách đăng nhập (local, JWT, Google…)",
+   "nhom": "Xác thực và phân quyền",
+   "viDu": "Which of the following is required to configure the passport-facebook-token strategy?",
+   "viDuNghia": "Yếu tố nào sau đây cần thiết để cấu hình strategy passport-facebook-token?"
+  },
+  {
+   "chu": "role-based access control",
+   "nghia": "phân quyền theo vai trò (RBAC): quyền phụ thuộc vai trò như admin, manager, user",
+   "nhom": "Xác thực và phân quyền",
+   "viDu": "What is the purpose of role-based authorization?",
+   "viDuNghia": "Mục đích của phân quyền dựa trên vai trò (role-based authorization) là gì?"
+  },
+  {
+   "chu": "Cross-Origin Resource Sharing",
+   "nghia": "CORS: cơ chế cho phép trang ở tên miền này gọi API ở tên miền khác",
+   "nhom": "Xác thực và phân quyền",
+   "viDu": "Which are not best practices in order to mitigate these risks when using Cross-origin resource sharing (CORS)?",
+   "viDuNghia": "Đâu KHÔNG phải là thực hành tốt để giảm thiểu rủi ro khi dùng Cross-Origin Resource Sharing (CORS)?"
+  },
+  {
+   "chu": "expire",
+   "doc": "/ɪkˈspaɪər/",
+   "nghia": "hết hạn (token, phiên)",
+   "nhom": "Xác thực và phân quyền",
+   "viDu": "The token will expire after one hour.",
+   "viDuNghia": "Token sẽ hết hạn sau một giờ."
+  },
+  {
+   "chu": "successful login",
+   "doc": "/səkˈsesfl ˈlɔːɡɪn/",
+   "nghia": "đăng nhập thành công",
+   "nhom": "Xác thực và phân quyền",
+   "viDu": "On successful login, return the token and the user information.",
+   "viDuNghia": "Khi đăng nhập thành công, trả về token và thông tin người dùng."
+  },
+  {
+   "chu": "credential",
+   "doc": "/krəˈdenʃl/",
+   "nghia": "thông tin xác thực – tên đăng nhập + mật khẩu (hoặc token) dùng để chứng minh danh tính",
+   "nhom": "Xác thực và phân quyền",
+   "viDu": "When establishing a JDBC connection, the _______ object provides the URL and credentials for the database.",
+   "viDuNghia": "Khi thiết lập kết nối JDBC, đối tượng _______ cung cấp URL và thông tin xác thực cho cơ sở dữ liệu."
+  },
+  {
+   "chu": "authentication",
+   "doc": "/ɔːˌθentɪˈkeɪʃn/",
+   "nghia": "xác thực – kiểm tra người dùng đúng là ai (đăng nhập bằng mật khẩu, JWT, 2FA)",
+   "nhom": "Xác thực và phân quyền",
+   "viDu": "Which protocol is commonly used for authentication in web applications?",
+   "viDuNghia": "Giao thức nào thường được dùng cho xác thực trong ứng dụng web?"
+  },
+  {
+   "chu": "authorization",
+   "doc": "/ˌɔːθərəˈzeɪʃn/",
+   "nghia": "phân quyền – quyết định người đã xác thực được làm gì, xem gì (role-based authorization)",
+   "nhom": "Xác thực và phân quyền",
+   "viDu": "What is the purpose of role-based authorization?",
+   "viDuNghia": "Mục đích của phân quyền dựa trên vai trò (role-based authorization) là gì?"
+  },
+  {
+   "chu": "token",
+   "doc": "/ˈtoʊkən/",
+   "nghia": "mã thông báo: chuỗi máy chủ cấp sau khi đăng nhập, client gửi kèm header Authorization để chứng minh danh tính",
+   "nhom": "Xác thực và phân quyền",
+   "viDu": "Which HTTP header is used to pass the OAuth token in requests?",
+   "viDuNghia": "Header HTTP nào dùng để truyền token OAuth trong request? (Đáp án: Authorization.)"
+  },
+  {
+   "chu": "Open Authorization",
+   "doc": "/ˈoʊpən ˌɔːθərəˈzeɪʃn/",
+   "nghia": "OAuth: chuẩn uỷ quyền cho ứng dụng truy cập tài khoản của người dùng ở dịch vụ khác (Đăng nhập bằng Google/Facebook) mà không lộ mật khẩu",
+   "nhom": "Xác thực và phân quyền",
+   "viDu": "What is OAuth primarily used for?",
+   "viDuNghia": "OAuth chủ yếu được dùng để làm gì? (Đáp án: xác thực và uỷ quyền người dùng.)"
+  },
+  {
+   "chu": "bcrypt",
+   "doc": "/ˈbiːkrɪpt/",
+   "nghia": "thư viện băm mật khẩu có muối (salt): bcrypt.hash() khi đăng ký, bcrypt.compare() khi đăng nhập",
+   "nhom": "Xác thực và phân quyền",
+   "viDu": "Hash the password with bcrypt before saving the user to the database.",
+   "viDuNghia": "Hãy băm mật khẩu bằng bcrypt trước khi lưu người dùng vào CSDL."
+  },
+  {
+   "chu": "retrieve a list",
+   "nghia": "lấy về một danh sách",
+   "nhom": "Từ trong đề PE",
+   "viDu": "Create an endpoint to retrieve a list of all products.",
+   "viDuNghia": "Tạo một endpoint để lấy về danh sách mọi sản phẩm."
+  },
+  {
+   "chu": "in stock",
+   "doc": "/ɪn stɑːk/",
+   "nghia": "còn hàng; stock = số lượng tồn kho",
+   "nhom": "Từ trong đề PE",
+   "viDu": "The quantity ordered must not exceed the number of items in stock.",
+   "viDuNghia": "Số lượng đặt không được vượt số hàng còn trong kho."
+  },
+  {
+   "chu": "insufficient",
+   "doc": "/ˌɪnsəˈfɪʃnt/",
+   "nghia": "không đủ (số lượng, quyền, số dư)",
+   "nhom": "Từ trong đề PE",
+   "viDu": "Return an error if the stock is insufficient.",
+   "viDuNghia": "Trả về lỗi nếu tồn kho không đủ."
+  },
+  {
+   "chu": "already exists",
+   "doc": "/ɔːlˈredi ɪɡˈzɪsts/",
+   "nghia": "đã tồn tại: lỗi khi tạo bản ghi trùng (vd trùng email)",
+   "nhom": "Từ trong đề PE",
+   "viDu": "Return 400 if the email already exists.",
+   "viDuNghia": "Trả về 400 nếu email đã tồn tại."
+  },
+  {
+   "chu": "overlap",
+   "doc": "/ˌoʊvərˈlæp/",
+   "nghia": "trùng nhau, chồng lên nhau (về thời gian)",
+   "nhom": "Từ trong đề PE",
+   "viDu": "A new showtime must not overlap with an existing showtime in the same room.",
+   "viDuNghia": "Suất chiếu mới không được trùng giờ với suất chiếu đã có trong cùng phòng."
+  },
+  {
+   "chu": "available",
+   "doc": "/əˈveɪləbl/",
+   "nghia": "còn trống, có sẵn (ghế, sách, phòng)",
+   "nhom": "Từ trong đề PE",
+   "viDu": "A book can be borrowed only if at least one copy is available.",
+   "viDuNghia": "Chỉ mượn được sách khi còn ít nhất một bản có sẵn."
+  },
+  {
+   "chu": "unopinionated",
+   "doc": "/ˌʌnəˈpɪnjəneɪtɪd/",
+   "nghia": "không áp đặt: framework để người dùng tự chọn cách tổ chức mã (Express tự mô tả như vậy)",
+   "nhom": "Bổ sung từ đề FE",
+   "viDu": "______ is a fast, unopinionated and minimalist web framework for Node.js.",
+   "viDuNghia": "______ là một web framework nhanh, không áp đặt và tối giản dành cho Node.js. (Đáp án: Express.)"
+  },
+  {
+   "chu": "minimalist",
+   "doc": "/ˈmɪnɪməlɪst/",
+   "nghia": "tối giản: chỉ có những tính năng cốt lõi",
+   "nhom": "Bổ sung từ đề FE",
+   "viDu": "______ is a fast, unopinionated and minimalist web framework for Node.js.",
+   "viDuNghia": "______ là một web framework nhanh, không áp đặt và tối giản dành cho Node.js. (Đáp án: Express.)"
+  },
+  {
+   "chu": "scalable",
+   "doc": "/ˈskeɪləbl/",
+   "nghia": "mở rộng được: chịu được tải tăng lên",
+   "nhom": "Bổ sung từ đề FE",
+   "viDu": "You are evaluating two file upload strategies: storing files in MongoDB vs. using disk storage with Multer. Which is more scalable for large files?",
+   "viDuNghia": "Bạn đang đánh giá hai chiến lược upload file: lưu file trong MongoDB so với dùng lưu trữ trên đĩa với Multer. Chiến lược nào mở rộng tốt hơn cho file lớn?"
+  },
+  {
+   "chu": "readable stream",
+   "doc": "/ˈriːdəbl striːm/",
+   "nghia": "luồng đọc: đọc dữ liệu dần từng phần thay vì nạp cả tệp vào bộ nhớ",
+   "nhom": "Bổ sung từ đề FE",
+   "viDu": "Which of the following will correctly create a readable stream in Node.js?",
+   "viDuNghia": "Cách nào sau đây tạo đúng một readable stream trong Node.js?"
+  },
+  {
+   "chu": "salt",
+   "doc": "/sɔːlt/",
+   "nghia": "muối: chuỗi ngẫu nhiên thêm vào mật khẩu trước khi băm để hai mật khẩu giống nhau vẫn ra kết quả khác nhau",
+   "nhom": "Bổ sung từ đề FE",
+   "viDu": "What is the purpose of a salt in password hashing?",
+   "viDuNghia": "Mục đích của salt trong việc băm mật khẩu là gì?"
+  },
+  {
+   "chu": "password hashing",
+   "doc": "/ˈpæswɜːrd ˈhæʃɪŋ/",
+   "nghia": "băm mật khẩu: biến mật khẩu thành chuỗi không dịch ngược được trước khi lưu (bcrypt)",
+   "nhom": "Bổ sung từ đề FE",
+   "viDu": "What is the purpose of a salt in password hashing?",
+   "viDuNghia": "Mục đích của salt trong việc băm mật khẩu là gì?"
+  },
+  {
+   "chu": "preflight request",
+   "doc": "/ˈpriːflaɪt rɪˈkwest/",
+   "nghia": "request dò trước: trình duyệt gửi OPTIONS để hỏi máy chủ có cho phép gọi chéo tên miền không (CORS)",
+   "nhom": "Bổ sung từ đề FE",
+   "viDu": "Which of the following methods triggers a preflight request in CORS?",
+   "viDuNghia": "Phương thức nào sau đây sẽ kích hoạt một preflight request trong CORS?"
+  },
+  {
+   "chu": "decorator",
+   "doc": "/ˈdekəreɪtər/",
+   "nghia": "decorator: chú thích bắt đầu bằng @ gắn vào lớp / phương thức (NestJS dùng @Controller, @Get…)",
+   "nhom": "Bổ sung từ đề FE",
+   "viDu": "Which decorator is used to inject a dependency into a service in NestJS?",
+   "viDuNghia": "Decorator nào được dùng để inject một dependency vào service trong NestJS?"
+  },
+  {
+   "chu": "dependency injection",
+   "doc": "/dɪˈpendənsi ɪnˈdʒekʃn/",
+   "nghia": "tiêm phụ thuộc: framework tự tạo và đưa đối tượng cần dùng vào lớp thay vì lớp tự tạo",
+   "nhom": "Bổ sung từ đề FE",
+   "viDu": "What is the purpose of Dependency Injection in NestJS?",
+   "viDuNghia": "Mục đích của Dependency Injection trong NestJS là gì?"
+  },
+  {
+   "chu": "Certificate Signing Request",
+   "nghia": "yêu cầu ký chứng chỉ (CSR): tệp gửi cho nhà cấp chứng chỉ để xin chứng chỉ SSL",
+   "nhom": "Bổ sung từ đề FE",
+   "viDu": "What is the purpose of the CSR (Certificate Signing Request) in the SSL certificate creation process?",
+   "viDuNghia": "Mục đích của CSR (Certificate Signing Request) trong quá trình tạo chứng chỉ SSL là gì?"
+  },
+  {
+   "chu": "SSL certificate",
+   "doc": "/ˌes es ˈel sərˈtɪfɪkət/",
+   "nghia": "chứng chỉ SSL: tệp chứng thực danh tính máy chủ, cần để chạy HTTPS",
+   "nhom": "Bổ sung từ đề FE",
+   "viDu": "What is an SSL certificate?",
+   "viDuNghia": "Chứng chỉ SSL là gì?"
+  },
+  {
+   "chu": "subsequent request",
+   "doc": "/ˈsʌbsɪkwənt rɪˈkwest/",
+   "nghia": "request tiếp theo (sau lần đăng nhập)",
+   "nhom": "Bổ sung từ đề FE",
+   "viDu": "Each subsequent request from the client side should include the _____ in the request header.",
+   "viDuNghia": "Mỗi request tiếp theo từ phía client nên kèm _____ trong header của request. (Đáp án: token.)"
+  },
+  {
+   "chu": "continuous deployment",
+   "doc": "/kənˈtɪnjuəs dɪˈplɔɪmənt/",
+   "nghia": "triển khai liên tục: tự động triển khai mỗi khi mã được đẩy lên kho (vd Heroku nối GitHub)",
+   "nhom": "Bổ sung từ đề FE",
+   "viDu": "A team wants automatic deployment whenever code is pushed to GitHub. Which Heroku feature supports this?",
+   "viDuNghia": "Một nhóm muốn triển khai tự động mỗi khi code được push lên GitHub. Tính năng nào của Heroku hỗ trợ điều này?"
+  },
+  {
+   "chu": "referenced document",
+   "doc": "/ˈrefrənst ˈdɑːkjumənt/",
+   "nghia": "tài liệu được tham chiếu: tài liệu ở collection khác mà trường ref trỏ tới bằng _id",
+   "nhom": "Bổ sung từ đề FE",
+   "viDu": "Which of the following methods are used to populate referenced documents in Mongoose?",
+   "viDuNghia": "Phương thức nào sau đây được dùng để populate (nạp) các tài liệu tham chiếu trong Mongoose?"
+  },
+  {
+   "chu": "populate method",
+   "doc": "/ˈpɑːpjuleɪt ˈmeθəd/",
+   "nghia": "phương thức populate() của Mongoose: thay _id tham chiếu bằng tài liệu thật ở collection khác",
+   "nhom": "Bổ sung từ đề FE",
+   "viDu": "Which of the following are true about the match option in the populate() method?",
+   "viDuNghia": "Điều nào sau đây đúng về tuỳ chọn match trong phương thức populate()?"
+  },
+  {
+   "chu": "mitigate",
+   "doc": "/ˈmɪtɪɡeɪt/",
+   "nghia": "giảm nhẹ (rủi ro)",
+   "nhom": "Bổ sung từ đề FE",
+   "viDu": "Which are not best practices in order to mitigate these risks when using Cross-origin resource sharing (CORS)?",
+   "viDuNghia": "Đâu KHÔNG phải là thực hành tốt để giảm thiểu rủi ro khi dùng Cross-Origin Resource Sharing (CORS)?"
+  },
+  {
+   "chu": "Multer",
+   "doc": "/ˈmʌltər/",
+   "nghia": "middleware của Express để nhận tệp tải lên (multipart/form-data) và lưu vào đĩa hoặc bộ nhớ",
+   "nhom": "Bổ sung từ đề FE",
+   "viDu": "How would you configure Multer to save uploaded files in a folder named \"uploads\"?",
+   "viDuNghia": "Cấu hình Multer thế nào để lưu tệp tải lên vào thư mục tên \"uploads\"?"
+  }
+ ]
+}

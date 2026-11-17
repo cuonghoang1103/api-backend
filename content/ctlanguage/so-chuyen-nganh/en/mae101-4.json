@@ -1,0 +1,619 @@
+{
+ "ma": "mae101-4",
+ "nn": "en",
+ "ten": "MAE101 · 4. Đại số tuyến tính",
+ "moTa": "Toán cho kỹ sư (MAE101), bộ 4 - đại số tuyến tính: hệ phương trình, ma trận và định thức, vectơ và hình học không gian, không gian con, phép biến đổi tuyến tính, trị riêng. Từ lấy từ đề FE thật; ví dụ là câu hỏi thật trong đề.",
+ "bieuTuong": "square.grid.3x3.fill",
+ "thuTu": -990,
+ "tu": [
+  {
+   "chu": "system of linear equations",
+   "nghia": "hệ phương trình tuyến tính",
+   "nhom": "Hệ phương trình tuyến tính",
+   "viDu": "How many solutions would a HOMOGENEOUS system of linear equations of 4 equations and in 6 variables have?",
+   "viDuNghia": "Một hệ phương trình tuyến tính THUẦN NHẤT gồm 4 phương trình và 6 biến sẽ có bao nhiêu nghiệm?"
+  },
+  {
+   "chu": "linear equation",
+   "doc": "/ˈlɪniər ɪˈkweɪʒn/",
+   "nghia": "phương trình tuyến tính (bậc nhất theo các ẩn)",
+   "nhom": "Hệ phương trình tuyến tính",
+   "viDu": "Consider a homogeneous system of 3 linear equations in 5 variables. Assume that the augmented matrix has rank 2. Choose the correct statement.",
+   "viDuNghia": "Xét một hệ phương trình tuyến tính thuần nhất gồm 3 phương trình với 5 ẩn. Giả sử ma trận mở rộng có hạng bằng 2. Chọn phát biểu đúng."
+  },
+  {
+   "chu": "homogeneous system",
+   "doc": "/ˌhoʊməˈdʒiːniəs ˈsɪstəm/",
+   "nghia": "hệ thuần nhất (vế phải toàn số 0, luôn có nghiệm tầm thường)",
+   "nhom": "Hệ phương trình tuyến tính",
+   "viDu": "How many solutions are possible for a homogeneous linear system of three equations in six variables?",
+   "viDuNghia": "Một hệ phương trình tuyến tính thuần nhất gồm ba phương trình với sáu ẩn có thể có bao nhiêu nghiệm?"
+  },
+  {
+   "chu": "inconsistent system",
+   "doc": "/ˌɪnkənˈsɪstənt ˈsɪstəm/",
+   "nghia": "hệ vô nghiệm (không tương thích); consistent system = hệ có nghiệm",
+   "nhom": "Hệ phương trình tuyến tính",
+   "viDu": "Find conditions on (a,b,c) such that the following system is inconsistent: x+2y-z=a 2x+y+3z=b x-4y+9z=c",
+   "viDuNghia": "Tìm điều kiện của (a,b,c) để hệ sau vô nghiệm: x+2y-z=a 2x+y+3z=b x-4y+9z=c"
+  },
+  {
+   "chu": "unique solution",
+   "doc": "/juˈniːk səˈluːʃn/",
+   "nghia": "nghiệm duy nhất",
+   "nhom": "Hệ phương trình tuyến tính",
+   "viDu": "Find all values of a such that the following system has a unique solution: x+y-z=2, 3x-y+2z=3, 2x-2y+3z=a.",
+   "viDuNghia": "Tìm tất cả giá trị a để hệ sau có nghiệm duy nhất: x+y-z=2, 3x-y+2z=3, 2x-2y+3z=a."
+  },
+  {
+   "chu": "trivial solution",
+   "doc": "/ˈtrɪviəl səˈluːʃn/",
+   "nghia": "nghiệm tầm thường (mọi ẩn bằng 0)",
+   "nhom": "Hệ phương trình tuyến tính",
+   "viDu": "Find conditions on a, b, c such that the following system has only the trivial solution: x+ay=0, y+bz=0, z+cx=0.",
+   "viDuNghia": "Tìm điều kiện của a, b, c để hệ sau chỉ có nghiệm tầm thường: x+ay=0, y+bz=0, z+cx=0."
+  },
+  {
+   "chu": "nontrivial solution",
+   "doc": "/ˌnɑːnˈtrɪviəl səˈluːʃn/",
+   "nghia": "nghiệm không tầm thường (có ít nhất một ẩn khác 0)",
+   "nhom": "Hệ phương trình tuyến tính",
+   "viDu": "Find all values of a such that the following system has nontrivial solutions: x+2y+z=0, x+3y+6z=0, 2x+3y+az=0.",
+   "viDuNghia": "Tìm tất cả giá trị của a để hệ sau có nghiệm không tầm thường: x+2y+z=0, x+3y+6z=0, 2x+3y+az=0."
+  },
+  {
+   "chu": "augmented matrix",
+   "doc": "/ɔːɡˈmentɪd ˈmeɪtrɪks/",
+   "nghia": "ma trận bổ sung, ma trận mở rộng (ma trận hệ số ghép thêm cột vế phải)",
+   "nhom": "Hệ phương trình tuyến tính",
+   "viDu": "Find the solution of the linear system whose augmented matrix is [1 2 4 6 | 9; 0 0 1 2 | 3; 0 0 0 1 | 1]",
+   "viDuNghia": "Tìm nghiệm của hệ phương trình tuyến tính có ma trận mở rộng [1 2 4 6 | 9; 0 0 1 2 | 3; 0 0 0 1 | 1]"
+  },
+  {
+   "chu": "coefficient matrix",
+   "doc": "/ˌkoʊɪˈfɪʃnt ˈmeɪtrɪks/",
+   "nghia": "ma trận hệ số (của hệ phương trình)",
+   "nhom": "Hệ phương trình tuyến tính",
+   "viDu": "The coefficient matrix A in a homogeneous system of 15 equations in 19 unknowns has rank 8. How many free parameters are there in the solution?",
+   "viDuNghia": "Ma trận hệ số A của một hệ 15 phương trình thuần nhất với 19 ẩn có hạng bằng 8. Nghiệm có bao nhiêu tham số tự do?"
+  },
+  {
+   "chu": "row-echelon form",
+   "doc": "/roʊ ˈeʃəlɑːn fɔːrm/",
+   "nghia": "dạng bậc thang (theo hàng) của ma trận",
+   "nhom": "Hệ phương trình tuyến tính",
+   "viDu": "Find all a,b,c such that the following matrix is in reduced row-echelon form: [a 1 b b 0; 0 0 0 1 1; 0 0 0 0 c]",
+   "viDuNghia": "Tìm tất cả a,b,c để ma trận sau có dạng bậc thang rút gọn (RREF): [a 1 b b 0; 0 0 0 1 1; 0 0 0 0 c]"
+  },
+  {
+   "chu": "reduced row-echelon form",
+   "doc": "/rɪˈduːst roʊ ˈeʃəlɑːn fɔːrm/",
+   "nghia": "dạng bậc thang rút gọn (mỗi số 1 dẫn đầu là phần tử khác 0 duy nhất trong cột của nó)",
+   "nhom": "Hệ phương trình tuyến tính",
+   "viDu": "Find all values of x and y such that the matrix [y 1 x; 0 x y] is in reduced row-echelon form.",
+   "viDuNghia": "Tìm tất cả giá trị x, y sao cho ma trận [y 1 x; 0 x y] ở dạng bậc thang rút gọn (RREF)."
+  },
+  {
+   "chu": "rank",
+   "doc": "/ræŋk/",
+   "nghia": "hạng của ma trận (số hàng khác 0 sau khi đưa về dạng bậc thang)",
+   "nhom": "Hệ phương trình tuyến tính",
+   "viDu": "Find all numbers a such that the following matrix has rank 2. [-1 4 5 3; 2 3 -2 6; 3 10 a 15]",
+   "viDuNghia": "Tìm tất cả số a để ma trận sau có hạng bằng 2. [-1 4 5 3; 2 3 -2 6; 3 10 a 15]"
+  },
+  {
+   "chu": "free parameter",
+   "doc": "/friː pəˈræmɪtər/",
+   "nghia": "tham số tự do (số tham số = số ẩn trừ hạng)",
+   "nhom": "Hệ phương trình tuyến tính",
+   "viDu": "The coefficient matrix A in a homogeneous system of 15 equations in 19 unknowns has rank 8. How many free parameters are there in the solution?",
+   "viDuNghia": "Ma trận hệ số A của một hệ thuần nhất gồm 15 phương trình với 19 ẩn có hạng bằng 8. Nghiệm có bao nhiêu tham số tự do?"
+  },
+  {
+   "chu": "elementary row operation",
+   "nghia": "phép biến đổi sơ cấp trên hàng (đổi chỗ hai hàng, nhân một hàng với số khác 0, cộng bội hàng này vào hàng khác)",
+   "nhom": "Hệ phương trình tuyến tính",
+   "viDu": "Use elementary row operations to carry the matrix to row-echelon form.",
+   "viDuNghia": "Dùng các phép biến đổi sơ cấp trên hàng để đưa ma trận về dạng bậc thang."
+  },
+  {
+   "chu": "Gaussian elimination",
+   "doc": "/ˈɡaʊsiən ɪˌlɪmɪˈneɪʃn/",
+   "nghia": "phép khử Gauss (đưa ma trận bổ sung về dạng bậc thang để giải hệ)",
+   "nhom": "Hệ phương trình tuyến tính",
+   "viDu": "Solve the system by Gaussian elimination.",
+   "viDuNghia": "Giải hệ bằng phép khử Gauss."
+  },
+  {
+   "chu": "Cramer's rule",
+   "doc": "/ˈkreɪmərz ruːl/",
+   "nghia": "quy tắc Cramer (giải hệ bằng định thức: mỗi ẩn bằng det(A_i)/det(A))",
+   "nhom": "Hệ phương trình tuyến tính",
+   "viDu": "Use Cramer's rule to find x in the system 2x+y=5, x+3y=10.",
+   "viDuNghia": "Dùng quy tắc Cramer để tìm x trong hệ 2x+y=5, x+3y=10."
+  },
+  {
+   "chu": "matrix",
+   "doc": "/ˈmeɪtrɪks/",
+   "nghia": "ma trận; số nhiều: matrices /ˈmeɪtrɪsiːz/",
+   "nhom": "Ma trận và định thức",
+   "viDu": "Determine ALL the values of s,t such that the following matrix is symmetric: [s 2s st; t -1 s; t s² s]",
+   "viDuNghia": "Xác định TẤT CẢ giá trị của s,t để ma trận sau đối xứng: [s 2s st; t -1 s; t s² s]"
+  },
+  {
+   "chu": "entry",
+   "doc": "/ˈentri/",
+   "nghia": "phần tử của ma trận; (i, j)-entry = phần tử ở hàng i, cột j",
+   "nhom": "Ma trận và định thức",
+   "viDu": "Let T: R² →R² be rotation through 90° followed by reflection in the line y = 3x. Find the (2,1)-entry of the matrix of T.",
+   "viDuNghia": "Cho T: R² →R² là phép quay 90° sau đó phản chiếu (reflection) qua đường thẳng y = 3x. Tìm phần tử (2,1) của ma trận T."
+  },
+  {
+   "chu": "row of a matrix",
+   "nghia": "hàng của ma trận (first row = hàng thứ nhất)",
+   "nhom": "Ma trận và định thức",
+   "viDu": "Find the third entry of the first row of the inverse of the matrix [1 0 3; 0 1 0; 0 0 1]",
+   "viDuNghia": "Tìm phần tử thứ ba của hàng đầu tiên trong ma trận nghịch đảo của [1 0 3; 0 1 0; 0 0 1]"
+  },
+  {
+   "chu": "column of a matrix",
+   "nghia": "cột của ma trận (second column = cột thứ hai)",
+   "nhom": "Ma trận và định thức",
+   "viDu": "Find the dimension of the column space of [-1 7 0 3 1; 1 -1 0 -1 -1; 0 -3 0 -1 -1; 0 5 3 4 -3].",
+   "viDuNghia": "Tìm số chiều của không gian cột của [-1 7 0 3 1; 1 -1 0 -1 -1; 0 -3 0 -1 -1; 0 5 3 4 -3]."
+  },
+  {
+   "chu": "size",
+   "doc": "/saɪz/",
+   "nghia": "cỡ, kích thước ma trận (m×n: m hàng, n cột; of the same size = cùng cỡ)",
+   "nhom": "Ma trận và định thức",
+   "viDu": "The sizes of two matrices A and B are 2×1 and 1×1, respectively. Find the sizes of the products AB and BA if they are defined.",
+   "viDuNghia": "Kích thước hai ma trận A và B lần lượt là 2×1 và 1×1. Tìm kích thước các tích AB và BA nếu chúng xác định."
+  },
+  {
+   "chu": "square matrix",
+   "doc": "/skwer ˈmeɪtrɪks/",
+   "nghia": "ma trận vuông (số hàng bằng số cột)",
+   "nhom": "Ma trận và định thức",
+   "viDu": "Let A be a square matrix that satisfies A³=2I, where I is an identity matrix of the same size. Choose the correct statement:",
+   "viDuNghia": "Cho A là ma trận vuông thỏa A³=2I, với I là ma trận đơn vị cùng cỡ. Chọn phát biểu đúng:"
+  },
+  {
+   "chu": "identity matrix",
+   "doc": "/aɪˈdentəti ˈmeɪtrɪks/",
+   "nghia": "ma trận đơn vị I (đường chéo chính toàn 1, còn lại 0)",
+   "nhom": "Ma trận và định thức",
+   "viDu": "Let A be a square matrix such that A²+A=I, where I is the identity matrix.",
+   "viDuNghia": "Cho A là ma trận vuông thoả A²+A=I, với I là ma trận đơn vị."
+  },
+  {
+   "chu": "zero matrix",
+   "doc": "/ˈzɪroʊ ˈmeɪtrɪks/",
+   "nghia": "ma trận không (mọi phần tử bằng 0)",
+   "nhom": "Ma trận và định thức",
+   "viDu": "If A² is the zero matrix, then A is not invertible.",
+   "viDuNghia": "Nếu A² là ma trận không thì A không khả nghịch."
+  },
+  {
+   "chu": "diagonal",
+   "doc": "/daɪˈæɡənl/",
+   "nghia": "đường chéo (main diagonal = đường chéo chính; diagonal matrix = ma trận chéo)",
+   "nhom": "Ma trận và định thức",
+   "viDu": "Let A=[2 -4; -1 -1]. Find a diagonal form D of the matrix A (if it exists).",
+   "viDuNghia": "Cho A=[2 -4; -1 -1]. Tìm dạng chéo hóa D của ma trận A (nếu có)."
+  },
+  {
+   "chu": "symmetric matrix",
+   "doc": "/sɪˈmetrɪk ˈmeɪtrɪks/",
+   "nghia": "ma trận đối xứng (A^T = A)",
+   "nhom": "Ma trận và định thức",
+   "viDu": "Determine ALL the values of s,t such that the matrix [s 2s st; t -1 s; t s² s] is symmetric.",
+   "viDuNghia": "Xác định TẤT CẢ giá trị của s,t để ma trận [s 2s st; t -1 s; t s² s] đối xứng."
+  },
+  {
+   "chu": "transpose",
+   "doc": "/trænsˈpoʊz/",
+   "nghia": "chuyển vị (A^T: đổi hàng thành cột)",
+   "nhom": "Ma trận và định thức",
+   "viDu": "The transpose of a 2×3 matrix is a 3×2 matrix.",
+   "viDuNghia": "Chuyển vị của ma trận 2×3 là ma trận 3×2."
+  },
+  {
+   "chu": "invertible",
+   "doc": "/ɪnˈvɜːrtəbl/",
+   "nghia": "khả nghịch (có ma trận nghịch đảo; tương đương det khác 0)",
+   "nhom": "Ma trận và định thức",
+   "viDu": "Find all values of m such that the following matrix is invertible: A=[1 2 1; 2 3 m; 3 2 -1][1 1 1; 2 3 2; 5 7 5].",
+   "viDuNghia": "Tìm tất cả giá trị của m để ma trận sau khả nghịch: A=[1 2 1; 2 3 m; 3 2 -1][1 1 1; 2 3 2; 5 7 5]."
+  },
+  {
+   "chu": "determinant",
+   "doc": "/dɪˈtɜːrmɪnənt/",
+   "nghia": "định thức (det A, |A|)",
+   "nhom": "Ma trận và định thức",
+   "viDu": "Evaluate the determinant of the matrix [a b c; a+2 b+2 c+2; a-3 b-3 c-3]",
+   "viDuNghia": "Tính định thức của ma trận [a b c; a+2 b+2 c+2; a-3 b-3 c-3]"
+  },
+  {
+   "chu": "cofactor",
+   "doc": "/ˈkoʊfæktər/",
+   "nghia": "phần phụ đại số; (i, j)-cofactor = (-1)^(i+j) nhân định thức con",
+   "nhom": "Ma trận và định thức",
+   "viDu": "The (2,3)-cofactor of the matrix [1 3 -2; 4 5 -7; 8 15 10] is ________",
+   "viDuNghia": "Phần bù đại số (cofactor) (2,3) của ma trận [1 3 -2; 4 5 -7; 8 15 10] là ________"
+  },
+  {
+   "chu": "adjugate",
+   "doc": "/ˈædʒəɡeɪt/",
+   "nghia": "ma trận phụ hợp adj(A) (chuyển vị của ma trận các phần phụ đại số); A^(-1) = adj(A)/det(A)",
+   "nhom": "Ma trận và định thức",
+   "viDu": "Let A be a 3×3 matrix with the adjugate matrix [1 0 2; 3 -1 2; 1 2 1]. Evaluate det (A²).",
+   "viDuNghia": "Cho A là ma trận 3×3 với ma trận phụ hợp (adjugate) [1 0 2; 3 -1 2; 1 2 1]. Tính det (A²)."
+  },
+  {
+   "chu": "scalar",
+   "doc": "/ˈskeɪlər/",
+   "nghia": "vô hướng, một số (phân biệt với vectơ, ma trận); scalar multiple = bội vô hướng",
+   "nhom": "Ma trận và định thức",
+   "viDu": "If u is in a subspace W and k is a scalar, then ku is also in W.",
+   "viDuNghia": "Nếu u thuộc không gian con W và k là một vô hướng thì ku cũng thuộc W."
+  },
+  {
+   "chu": "commute",
+   "doc": "/kəˈmjuːt/",
+   "nghia": "giao hoán (A and B commute nghĩa là AB = BA)",
+   "nhom": "Ma trận và định thức",
+   "viDu": "In general, matrices do not commute: AB may differ from BA.",
+   "viDuNghia": "Nói chung ma trận không giao hoán: AB có thể khác BA."
+  },
+  {
+   "chu": "dot product",
+   "doc": "/dɑːt ˈprɑːdʌkt/",
+   "nghia": "tích vô hướng (u·v, kết quả là một số)",
+   "nhom": "Vectơ và hình học không gian",
+   "viDu": "Let X and Y be vectors in R^n such that ‖X‖ = 2, ‖Y‖ = 1, ‖2X + 3Y‖ = 5. Find the value of the dot product X ·Y.",
+   "viDuNghia": "Cho X và Y là các vector trong R^n sao cho ‖X‖ = 2, ‖Y‖ = 1, ‖2X + 3Y‖ = 5. Tìm giá trị của tích vô hướng X ·Y."
+  },
+  {
+   "chu": "cross product",
+   "doc": "/krɔːs ˈprɑːdʌkt/",
+   "nghia": "tích có hướng (u×v, kết quả là vectơ vuông góc với cả u và v)",
+   "nhom": "Vectơ và hình học không gian",
+   "viDu": "The cross product u×v is orthogonal to both u and v.",
+   "viDuNghia": "Tích có hướng u×v vuông góc với cả u và v."
+  },
+  {
+   "chu": "unit vector",
+   "doc": "/ˈjuːnɪt ˈvektər/",
+   "nghia": "vectơ đơn vị (độ dài bằng 1)",
+   "nhom": "Vectơ và hình học không gian",
+   "viDu": "Given two vectors X, Y such that the vectors 1/3X and 1/2Y are orthogonal unit vectors. Compute (X-2Y)·(2X+Y).",
+   "viDuNghia": "Cho hai vectơ X, Y sao cho các vectơ 1/3X và 1/2Y là các vectơ đơn vị trực giao. Tính (X-2Y)·(2X+Y)."
+  },
+  {
+   "chu": "orthogonal",
+   "doc": "/ɔːrˈθɑːɡənl/",
+   "nghia": "trực giao, vuông góc (tích vô hướng bằng 0)",
+   "nhom": "Vectơ và hình học không gian",
+   "viDu": "Find conditions on a, b and c such that the set of vectors {(1,0,a), (0,1,b), (c,0,1)} is orthogonal in R³.",
+   "viDuNghia": "Tìm điều kiện của a, b, c để tập vector {(1,0,a), (0,1,b), (c,0,1)} trực giao trong R³."
+  },
+  {
+   "chu": "orthonormal",
+   "doc": "/ˌɔːrθəˈnɔːrml/",
+   "nghia": "trực chuẩn (đôi một trực giao và mỗi vectơ có độ dài 1)",
+   "nhom": "Vectơ và hình học không gian",
+   "viDu": "Suppose that the set of vectors {X₁, X₂, X₃ } is orthonormal. Find the length of the vector X₁ - X₂ + 2X₃.",
+   "viDuNghia": "Giả sử tập vector {X₁, X₂, X₃ } trực chuẩn. Tìm độ dài vector X₁ - X₂ + 2X₃."
+  },
+  {
+   "chu": "projection on a line",
+   "nghia": "phép chiếu (vuông góc) lên một đường thẳng; projection of u on v = hình chiếu của u lên v",
+   "nhom": "Vectơ và hình học không gian",
+   "viDu": "Let T:R² →R² be projection on the line y=3x followed by projection on the line y=-x. Find the (2,1)-entry of the matrix of T.",
+   "viDuNghia": "Cho T:R² →R² là phép chiếu lên đường thẳng y=3x, sau đó chiếu lên đường thẳng y=-x. Tìm phần tử (2,1) của ma trận biểu diễn T."
+  },
+  {
+   "chu": "plane",
+   "doc": "/pleɪn/",
+   "nghia": "mặt phẳng",
+   "nhom": "Vectơ và hình học không gian",
+   "viDu": "Let Q(a,b,c) be the point on the plane with equation x+y+z=1 that is closest to the point P(1,0,3). Find b.",
+   "viDuNghia": "Cho Q(a,b,c) là điểm trên mặt phẳng có phương trình x+y+z=1 gần điểm P(1,0,3) nhất. Tìm b."
+  },
+  {
+   "chu": "normal vector",
+   "doc": "/ˈnɔːrml ˈvektər/",
+   "nghia": "vectơ pháp tuyến (vuông góc với mặt phẳng)",
+   "nhom": "Vectơ và hình học không gian",
+   "viDu": "Find an equation of the plane through the point (1,2,3) with normal vector n=(2,-1,4).",
+   "viDuNghia": "Viết phương trình mặt phẳng đi qua điểm (1,2,3) với vectơ pháp tuyến n=(2,-1,4)."
+  },
+  {
+   "chu": "direction vector",
+   "doc": "/dəˈrekʃn ˈvektər/",
+   "nghia": "vectơ chỉ phương (của đường thẳng)",
+   "nhom": "Vectơ và hình học không gian",
+   "viDu": "A line passes through the point (1,0,2) with direction vector (2,1,-1). Which of the following points also lies on this line?",
+   "viDuNghia": "Một đường thẳng đi qua điểm (1,0,2) với vectơ chỉ phương (2,1,-1). Điểm nào sau đây cũng nằm trên đường thẳng đó?"
+  },
+  {
+   "chu": "parametric equations",
+   "doc": "/ˌpærəˈmetrɪk ɪˈkweɪʒnz/",
+   "nghia": "phương trình tham số (x, y, z viết theo tham số t)",
+   "nhom": "Vectơ và hình học không gian",
+   "viDu": "Find a parametric equation of the line which goes through P(2,3,5) and is perpendicular to the plane 2x+4y+6z-7=0.",
+   "viDuNghia": "Tìm phương trình tham số của đường thẳng đi qua P(2,3,5) và vuông góc với mặt phẳng 2x+4y+6z-7=0."
+  },
+  {
+   "chu": "angle between",
+   "doc": "/ˈæŋɡl bɪˈtwiːn/",
+   "nghia": "góc giữa (hai vectơ, hai đường thẳng)",
+   "nhom": "Vectơ và hình học không gian",
+   "viDu": "Find the cosine of the angle between u=(1,2,2) and v=(2,0,1).",
+   "viDuNghia": "Tìm côsin của góc giữa u=(1,2,2) và v=(2,0,1)."
+  },
+  {
+   "chu": "parallelogram",
+   "doc": "/ˌpærəˈleləɡræm/",
+   "nghia": "hình bình hành",
+   "nhom": "Vectơ và hình học không gian",
+   "viDu": "Let ABCD be a parallelogram with A(1,2,3), C(3,0,1). Assume that M(0,1,2) is the midpoint of AB. Find the coordinates of vector BD.",
+   "viDuNghia": "Cho hình bình hành ABCD với A(1,2,3), C(3,0,1). Biết M(0,1,2) là trung điểm của AB. Tìm tọa độ vector BD."
+  },
+  {
+   "chu": "parallelepiped",
+   "doc": "/ˌpærəˌleləˈpaɪped/",
+   "nghia": "hình hộp (xiên) — thể tích bằng trị tuyệt đối của tích hỗn tạp",
+   "nhom": "Vectơ và hình học không gian",
+   "viDu": "Find the volume of the parallelepiped determined by w, u, and v when w=[2; 1; 1], v=[1; 0; 2], and u=[2; 1; -1].",
+   "viDuNghia": "Tìm thể tích hình hộp xác định bởi w, u, và v khi w=[2; 1; 1], v=[1; 0; 2], và u=[2; 1; -1]."
+  },
+  {
+   "chu": "tetrahedron",
+   "doc": "/ˌtetrəˈhiːdrən/",
+   "nghia": "tứ diện",
+   "nhom": "Vectơ và hình học không gian",
+   "viDu": "Find the volume of the tetrahedron with vertices (0,0,0),(1,2,3),(2,1,3), and (3,1,2).",
+   "viDuNghia": "Tìm thể tích tứ diện có các đỉnh (0,0,0),(1,2,3),(2,1,3), và (3,1,2)."
+  },
+  {
+   "chu": "xy-plane",
+   "doc": "/ˌeks ˈwaɪ pleɪn/",
+   "nghia": "mặt phẳng toạ độ Oxy (z = 0)",
+   "nhom": "Vectơ và hình học không gian",
+   "viDu": "Let T be projection on the line y=x followed by reflection in the x-axis in the xy-plane. Find the sum of all entries in the first row of the matrix of T.",
+   "viDuNghia": "Cho T là phép chiếu lên đường thẳng y=x, sau đó phản xạ qua trục hoành trong mặt phẳng xy. Tìm tổng các phần tử ở hàng đầu tiên của ma trận T."
+  },
+  {
+   "chu": "vector",
+   "doc": "/ˈvektər/",
+   "nghia": "vectơ – đại lượng có hướng, ghi dạng (x, y, z); làm tích vô hướng, chuẩn, tổ hợp tuyến tính. (CEA201: bộ xử lý vector chạy một lệnh trên nhiều dữ liệu)",
+   "nhom": "Vectơ và hình học không gian",
+   "viDu": "Find the value of t for which (4, 6, t) is a linear combination of the vectors (1, 3, 1) and (2, 8, -1).",
+   "viDuNghia": "Tìm giá trị của t để (4, 6, t) là tổ hợp tuyến tính của các vectơ (1, 3, 1) và (2, 8, -1)."
+  },
+  {
+   "chu": "subspace",
+   "doc": "/ˈsʌbspeɪs/",
+   "nghia": "không gian con (của R^n)",
+   "nhom": "Không gian con và cơ sở",
+   "viDu": "Find the dimension of the subspace spanned by the set {(1,-1,2), (0,2,-3), (1,-3,5), (1,1,-1)}.",
+   "viDuNghia": "Tìm chiều của không gian con sinh bởi tập {(1,-1,2), (0,2,-3), (1,-3,5), (1,1,-1)}."
+  },
+  {
+   "chu": "span",
+   "doc": "/spæn/",
+   "nghia": "bao tuyến tính, không gian sinh bởi (span{u, v} = tập mọi tổ hợp tuyến tính của u, v); sinh ra",
+   "nhom": "Không gian con và cơ sở",
+   "viDu": "Let S={(-1,0,1),(2,1,4)}. The value of m for which the vector (4m,3,10) belongs to the linear span of S is __________",
+   "viDuNghia": "Cho S={(-1,0,1),(2,1,4)}. Giá trị m để vectơ (4m,3,10) thuộc span tuyến tính của S là __________"
+  },
+  {
+   "chu": "spanning set",
+   "doc": "/ˈspænɪŋ set/",
+   "nghia": "tập sinh, hệ sinh (của một không gian)",
+   "nhom": "Không gian con và cơ sở",
+   "viDu": "If {u,v} is a spanning set of a subspace U then {2u,3v} is also a spanning set of U.",
+   "viDuNghia": "Nếu {u,v} là tập sinh của không gian con U thì {2u,3v} cũng là tập sinh của U."
+  },
+  {
+   "chu": "linear combination",
+   "doc": "/ˈlɪniər ˌkɑːmbɪˈneɪʃn/",
+   "nghia": "tổ hợp tuyến tính (a·u + b·v + ...)",
+   "nhom": "Không gian con và cơ sở",
+   "viDu": "Find the value of t for which (4, 6, t) is a linear combination of the vectors (1, 3, 1) and (2, 8, -1).",
+   "viDuNghia": "Tìm giá trị của t để (4, 6, t) là tổ hợp tuyến tính của các vectơ (1, 3, 1) và (2, 8, -1)."
+  },
+  {
+   "chu": "linearly independent",
+   "doc": "/ˈlɪniərli ˌɪndɪˈpendənt/",
+   "nghia": "độc lập tuyến tính (không vectơ nào là tổ hợp tuyến tính của các vectơ còn lại)",
+   "nhom": "Không gian con và cơ sở",
+   "viDu": "Find all values of m such that the set {(2,m,1),(1,0,1),(0,1,1)} is linearly independent.",
+   "viDuNghia": "Tìm tất cả các giá trị của m để tập {(2,m,1),(1,0,1),(0,1,1)} độc lập tuyến tính."
+  },
+  {
+   "chu": "linearly dependent",
+   "doc": "/ˈlɪniərli dɪˈpendənt/",
+   "nghia": "phụ thuộc tuyến tính",
+   "nhom": "Không gian con và cơ sở",
+   "viDu": "Find all numbers a such that the set of vectors {(1, -1, 0), (2, 0, 1), (0, 1, a)} is dependent.",
+   "viDuNghia": "Tìm tất cả các số a sao cho tập véc-tơ {(1, -1, 0), (2, 0, 1), (0, 1, a)} phụ thuộc tuyến tính."
+  },
+  {
+   "chu": "basis",
+   "doc": "/ˈbeɪsɪs/",
+   "nghia": "cơ sở (tập sinh độc lập tuyến tính); số nhiều: bases /ˈbeɪsiːz/",
+   "nhom": "Không gian con và cơ sở",
+   "viDu": "Let {X, Y} be a basis of a subspace U of R³ and V = span{3X+Y, -X+2Y, Y}. What is the dimension of V?",
+   "viDuNghia": "Cho {X, Y} là cơ sở của không gian con U của R³ và V = span{3X+Y, -X+2Y, Y}. Số chiều của V là bao nhiêu?"
+  },
+  {
+   "chu": "dimension",
+   "doc": "/daɪˈmenʃn/",
+   "nghia": "số chiều (số vectơ trong một cơ sở); dim U",
+   "nhom": "Không gian con và cơ sở",
+   "viDu": "Let A be a 7×10 matrix. If the rank of A is 4, what is the dimension of the null space of A?",
+   "viDuNghia": "Cho A là ma trận cỡ 7×10. Nếu hạng của A là 4, tìm số chiều của không gian không (null space) của A."
+  },
+  {
+   "chu": "null space",
+   "doc": "/nʌl speɪs/",
+   "nghia": "không gian nghiệm của A (tập x thoả Ax = 0), ký hiệu null A",
+   "nhom": "Không gian con và cơ sở",
+   "viDu": "Let A be a 5×7 matrix. Which of the following statements are true? (i) Matrix A can have independent columns (ii) Matrix A can have independent rows (iii) The null space of A can have dimension 1.",
+   "viDuNghia": "Cho A là ma trận 5×7. Phát biểu nào sau đây đúng? (i) Ma trận A có thể có các cột độc lập tuyến tính (ii) Ma trận A có thể có các hàng độc lập tuyến tính (iii) Không gian nghiệm (null space) của A có thể có số chiều bằng 1."
+  },
+  {
+   "chu": "column space",
+   "doc": "/ˈkɑːləm speɪs/",
+   "nghia": "không gian cột (sinh bởi các cột của A), ký hiệu col A",
+   "nhom": "Không gian con và cơ sở",
+   "viDu": "Find the dimension of the column space of A=[1 0 2; 0 1 3; 1 1 5].",
+   "viDuNghia": "Tìm số chiều của không gian cột của A=[1 0 2; 0 1 3; 1 1 5]."
+  },
+  {
+   "chu": "row space",
+   "doc": "/roʊ speɪs/",
+   "nghia": "không gian hàng (sinh bởi các hàng của A), ký hiệu row A",
+   "nhom": "Không gian con và cơ sở",
+   "viDu": "The rank of A equals the dimension of the row space of A.",
+   "viDuNghia": "Hạng của A bằng số chiều của không gian hàng của A."
+  },
+  {
+   "chu": "zero vector",
+   "doc": "/ˈzɪroʊ ˈvektər/",
+   "nghia": "vectơ không (mọi thành phần bằng 0); mọi không gian con đều chứa nó",
+   "nhom": "Không gian con và cơ sở",
+   "viDu": "Every subspace of R³ contains the zero vector.",
+   "viDuNghia": "Mọi không gian con của R³ đều chứa vectơ không."
+  },
+  {
+   "chu": "linear transformation",
+   "doc": "/ˈlɪniər ˌtrænsfərˈmeɪʃn/",
+   "nghia": "phép biến đổi tuyến tính (ánh xạ T thoả T(u + v) = T(u) + T(v) và T(cu) = cT(u))",
+   "nhom": "Phép biến đổi tuyến tính",
+   "viDu": "Let T:R² →R² be a linear transformation such that T[2; 1]=[-2; 3]; T[1; 2]=[4; -1]. Then T[1; -4] equals ___.",
+   "viDuNghia": "Cho T:R² →R² là ánh xạ tuyến tính với T[2; 1]=[-2; 3]; T[1; 2]=[4; -1]. Tính T[1; -4]."
+  },
+  {
+   "chu": "rotation",
+   "doc": "/roʊˈteɪʃn/",
+   "nghia": "phép quay (rotation through an angle θ = quay một góc θ)",
+   "nhom": "Phép biến đổi tuyến tính",
+   "viDu": "Let T:R² →R² be the rotation through π followed by reflection in the x-axis. Then T is:",
+   "viDuNghia": "Cho T:R² →R² là phép quay một góc π, sau đó là phép đối xứng qua trục hoành. Khi đó T là:"
+  },
+  {
+   "chu": "reflection",
+   "doc": "/rɪˈflekʃn/",
+   "nghia": "phép đối xứng, phép phản xạ (reflection in the x-axis = đối xứng qua trục hoành)",
+   "nhom": "Phép biến đổi tuyến tính",
+   "viDu": "Let A = (aᵢⱼ) be the 2×2 matrix of reflection in the x-axis followed by reflection in the line y = x. Find a₁₂.",
+   "viDuNghia": "Cho A = (aᵢⱼ) là ma trận 2×2 của phép đối xứng qua trục x rồi tiếp theo là phép đối xứng qua đường thẳng y = x. Tìm a₁₂."
+  },
+  {
+   "chu": "shear",
+   "doc": "/ʃɪr/",
+   "nghia": "phép trượt (biến đổi làm hình bị xô nghiêng)",
+   "nhom": "Phép biến đổi tuyến tính",
+   "viDu": "The matrix [1 2; 0 1] represents a horizontal shear.",
+   "viDuNghia": "Ma trận [1 2; 0 1] biểu diễn một phép trượt ngang."
+  },
+  {
+   "chu": "induced",
+   "doc": "/ɪnˈduːst/",
+   "nghia": "sinh bởi, cảm sinh (the transformation induced by A: T(x) = Ax)",
+   "nhom": "Phép biến đổi tuyến tính",
+   "viDu": "Let S be the transformation induced by the matrix [1 1 1; 0 1 1; 0 0 2]. Calculate S([1 2 1]^T).",
+   "viDuNghia": "Cho S là phép biến đổi cảm sinh bởi ma trận [1 1 1; 0 1 1; 0 0 2]. Tính S([1 2 1]^T)."
+  },
+  {
+   "chu": "matrix of T",
+   "nghia": "ma trận của phép biến đổi T (các cột là ảnh của các vectơ cơ sở chuẩn)",
+   "nhom": "Phép biến đổi tuyến tính",
+   "viDu": "Let T:R² →R² be the linear transformation such that T[1; 2]=[-1; 1], T[0; 3]=[-3; 3]. Find the matrix of T.",
+   "viDuNghia": "Cho T:R² →R² là phép biến đổi tuyến tính với T[1; 2]=[-1; 1], T[0; 3]=[-3; 3]. Tìm ma trận của T."
+  },
+  {
+   "chu": "image",
+   "doc": "/ˈɪmɪdʒ/",
+   "nghia": "ảnh (của một vectơ, một điểm qua phép biến đổi); im T = tập ảnh",
+   "nhom": "Phép biến đổi tuyến tính",
+   "viDu": "Let A be a 5×10 matrix of rank 4. Find the dimension of the image space of A.",
+   "viDuNghia": "Cho A là ma trận 5×10 có hạng bằng 4. Tìm số chiều của không gian ảnh của A."
+  },
+  {
+   "chu": "map",
+   "doc": "/mæp/",
+   "nghia": "ánh xạ; biến ... thành ... (T maps u to v)",
+   "nhom": "Phép biến đổi tuyến tính",
+   "viDu": "Let T:R³ →R² be a linear map and T[1; 1; 1]=[5; 1], T[-1; 1; 0]=[2; 0]. Then T[5; -1; 2] is... (i) [4; 2] (ii) [2; 4] (iii) [2; -3]",
+   "viDuNghia": "Cho T:R³ →R² là ánh xạ tuyến tính và T[1; 1; 1]=[5; 1], T[-1; 1; 0]=[2; 0]. Khi đó T[5; -1; 2] là... (i) [4; 2] (ii) [2; 4] (iii) [2; -3]"
+  },
+  {
+   "chu": "through an angle",
+   "nghia": "(quay) một góc bằng ...",
+   "nhom": "Phép biến đổi tuyến tính",
+   "viDu": "Let T: R² →R² be the rotation through π followed by reflection in the X axis. Then T is:",
+   "viDuNghia": "Cho T: R² →R² là phép quay một góc π, sau đó là phép đối xứng qua trục X. Khi đó T là:"
+  },
+  {
+   "chu": "eigenvalue",
+   "doc": "/ˈaɪɡənvæljuː/",
+   "nghia": "trị riêng (số λ sao cho Ax = λx với x khác 0)",
+   "nhom": "Trị riêng và vectơ riêng",
+   "viDu": "Given that -3 is an eigenvalue for the matrix [3 -6; 8 -11], find all eigenvectors corresponding to this eigenvalue λ=-3.",
+   "viDuNghia": "Cho biết -3 là một trị riêng của ma trận [3 -6; 8 -11], tìm tất cả các vector riêng ứng với trị riêng λ=-3."
+  },
+  {
+   "chu": "eigenvector",
+   "doc": "/ˈaɪɡənvektər/",
+   "nghia": "vectơ riêng (x khác 0 thoả Ax = λx)",
+   "nhom": "Trị riêng và vectơ riêng",
+   "viDu": "Given that -3 is an eigenvalue for the matrix [3 -6; 8 -11]. Find all eigenvectors corresponding to this eigenvalue λ= -3.",
+   "viDuNghia": "Cho biết -3 là trị riêng của ma trận [3 -6; 8 -11]. Tìm tất cả vector riêng ứng với trị riêng λ= -3."
+  },
+  {
+   "chu": "basic eigenvector",
+   "doc": "/ˈbeɪsɪk ˈaɪɡənvektər/",
+   "nghia": "vectơ riêng cơ sở (các nghiệm cơ sở của hệ (λI - A)x = 0)",
+   "nhom": "Trị riêng và vectơ riêng",
+   "viDu": "Find basic eigenvectors corresponding to the eigenvalue λ=1 of the matrix [1 1 1; 0 1 1; 0 0 1].",
+   "viDuNghia": "Tìm các vectơ riêng cơ bản ứng với trị riêng λ=1 của ma trận [1 1 1; 0 1 1; 0 0 1]."
+  },
+  {
+   "chu": "characteristic polynomial",
+   "doc": "/ˌkærəktəˈrɪstɪk ˌpɑːliˈnoʊmiəl/",
+   "nghia": "đa thức đặc trưng c(x) = det(xI - A); nghiệm của nó là các trị riêng",
+   "nhom": "Trị riêng và vectơ riêng",
+   "viDu": "Find the characteristic polynomial of the matrix [1 0 2; -2 3 1; 0 2 2]",
+   "viDuNghia": "Tìm đa thức đặc trưng của ma trận [1 0 2; -2 3 1; 0 2 2]"
+  },
+  {
+   "chu": "eigenspace",
+   "doc": "/ˈaɪɡənspeɪs/",
+   "nghia": "không gian riêng (tập mọi vectơ riêng ứng với λ, kèm vectơ không)",
+   "nhom": "Trị riêng và vectơ riêng",
+   "viDu": "The eigenspace corresponding to λ = 2 is the null space of 2I - A.",
+   "viDuNghia": "Không gian riêng ứng với λ = 2 là không gian nghiệm của 2I - A."
+  },
+  {
+   "chu": "diagonalizable",
+   "doc": "/daɪˌæɡənəˈlaɪzəbl/",
+   "nghia": "chéo hoá được (tồn tại P khả nghịch để P^(-1)AP là ma trận chéo)",
+   "nhom": "Trị riêng và vectơ riêng",
+   "viDu": "An n×n matrix with n distinct eigenvalues is diagonalizable.",
+   "viDuNghia": "Ma trận n×n có n trị riêng phân biệt thì chéo hoá được."
+  },
+  {
+   "chu": "no solution",
+   "doc": "/noʊ səˈluːʃn/",
+   "nghia": "vô nghiệm: hệ không có nghiệm nào (= inconsistent); khi đưa về bậc thang xuất hiện hàng 0 = c với c khác 0",
+   "nhom": "Hệ phương trình tuyến tính",
+   "viDu": "Find all values of a such that the following system has no solution: x+y-z=2, 3x-y+2z=3, 2x-2y+3z=a.",
+   "viDuNghia": "Tìm tất cả giá trị của a để hệ phương trình sau vô nghiệm: x+y-z=2, 3x-y+2z=3, 2x-2y+3z=a."
+  }
+ ]
+}

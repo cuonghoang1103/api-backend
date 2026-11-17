@@ -1,0 +1,652 @@
+{
+ "ma": "nwc203c-3",
+ "nn": "en",
+ "ten": "NWC203c/NWC204 · 3. Tầng mạng, giao vận, tắc nghẽn",
+ "moTa": "Môn Mạng máy tính (NWC203c, dùng chung cho NWC204), phần 3: địa chỉ IP và chia mạng con, định tuyến (RIP, OSPF), TCP/UDP, điều khiển tắc nghẽn, quản lý lưu lượng và chất lượng dịch vụ. Từ lấy từ đề FE thật; câu ví dụ là câu hỏi thật trong đề.",
+ "bieuTuong": "point.3.connected.trianglepath.dotted",
+ "thuTu": -972,
+ "tu": [
+  {
+   "chu": "Internet Protocol",
+   "doc": "/ˈɪntərnet ˈproʊtəkɑːl/",
+   "nghia": "giao thức Internet (IP) – giao thức tầng mạng: đánh địa chỉ và chuyển gói tin, không bảo đảm tới nơi",
+   "nhom": "Địa chỉ IP",
+   "viDu": "The Internet Protocol delivers packets from the source host to the destination host.",
+   "viDuNghia": "Giao thức Internet chuyển gói tin từ máy nguồn tới máy đích."
+  },
+  {
+   "chu": "IPv6",
+   "doc": "/ˌaɪ piː viː ˈsɪks/",
+   "nghia": "IP phiên bản 6 – địa chỉ dài 128 bit, viết bằng hệ thập lục phân",
+   "nhom": "Địa chỉ IP",
+   "viDu": "IPv6 has a much larger address space of ____.",
+   "viDuNghia": "IPv6 có không gian địa chỉ lớn hơn nhiều, gồm ____."
+  },
+  {
+   "chu": "subnet",
+   "doc": "/ˈsʌbnet/",
+   "nghia": "mạng con – một phần của mạng lớn sau khi chia nhỏ",
+   "nhom": "Địa chỉ IP",
+   "viDu": "Given the IP address 201.14.78.65 and the subnet mask 255.255.255.224, what is the subnet address?",
+   "viDuNghia": "Cho địa chỉ IP 201.14.78.65 và subnet mask 255.255.255.224, địa chỉ mạng con (subnet address) là gì?"
+  },
+  {
+   "chu": "subnet mask",
+   "doc": "/ˈsʌbnet mæsk/",
+   "nghia": "mặt nạ mạng con – cho biết phần nào của địa chỉ IP là mạng, phần nào là máy",
+   "nhom": "Địa chỉ IP",
+   "viDu": "If you wanted to have 12 subnets with a Class C network ID, which subnet mask would you use?",
+   "viDuNghia": "Nếu muốn chia một network ID lớp C thành 12 subnet, bạn dùng subnet mask nào?"
+  },
+  {
+   "chu": "network address",
+   "doc": "/ˈnetwɜːrk ˈædres/",
+   "nghia": "địa chỉ mạng – địa chỉ đại diện cho cả mạng, phần host toàn bit 0",
+   "nhom": "Địa chỉ IP",
+   "viDu": "The network address 172.16.0.0/19 provides how many subnets and hosts?",
+   "viDuNghia": "Địa chỉ mạng 172.16.0.0/19 cho bao nhiêu mạng con và bao nhiêu host?"
+  },
+  {
+   "chu": "host ID",
+   "doc": "/hoʊst ˌaɪ ˈdiː/",
+   "nghia": "phần định danh máy – các bit của địa chỉ IP chỉ ra máy cụ thể trong mạng",
+   "nhom": "Địa chỉ IP",
+   "viDu": "If a subnet needs to accommodate up to 500 hosts. How many bits for HostID would be sufficient?",
+   "viDuNghia": "Nếu một subnet cần chứa tối đa 500 host thì cần bao nhiêu bit cho HostID là đủ?"
+  },
+  {
+   "chu": "address class",
+   "doc": "/ˈædres klæs/",
+   "nghia": "lớp địa chỉ – cách chia IPv4 kiểu cũ thành lớp A, B, C theo các bit đầu",
+   "nhom": "Địa chỉ IP",
+   "viDu": "Consider a Class B network, where the subnet ID takes 9 bits. What will be the subnet mask?",
+   "viDuNghia": "Xét một mạng lớp B, trong đó phần subnet ID chiếm 9 bit. Mặt nạ mạng con sẽ là gì?"
+  },
+  {
+   "chu": "classless interdomain routing",
+   "nghia": "CIDR – định tuyến không phân lớp: viết mạng dạng a.b.c.d/n với độ dài tiền tố tuỳ ý",
+   "nhom": "Địa chỉ IP",
+   "viDu": "Perform CIDR aggregation on the following /24 IP addresses: 128.58.24.0/24, 128.58.25.0/24, 128.58.26.0/24, 128.58.27.0/24. What is the CIDR outcome?",
+   "viDuNghia": "Thực hiện gộp CIDR cho các địa chỉ /24 sau: 128.58.24.0/24, 128.58.25.0/24, 128.58.26.0/24, 128.58.27.0/24. Kết quả gộp CIDR là gì?"
+  },
+  {
+   "chu": "network address translation",
+   "nghia": "NAT – đổi địa chỉ riêng trong mạng nội bộ thành địa chỉ công cộng khi ra Internet",
+   "nhom": "Địa chỉ IP",
+   "viDu": "What information is used as the entry of the lookup table in a Network Address Translation box?",
+   "viDuNghia": "Thông tin nào được dùng làm mục (entry) của bảng tra cứu trong thiết bị NAT?"
+  },
+  {
+   "chu": "loopback",
+   "doc": "/ˈluːpbæk/",
+   "nghia": "địa chỉ vòng lại (127.0.0.1) – gói gửi tới đây quay về chính máy gửi, dùng để tự kiểm tra",
+   "nhom": "Địa chỉ IP",
+   "viDu": "A PC cannot reach any website. In what order should you test, from nearest to farthest? — Loopback, own IP, default gateway, remote host",
+   "viDuNghia": "Một máy không vào được web nào. Nên kiểm theo thứ tự nào, từ gần đến xa? — Loopback, IP của máy, default gateway, máy ở xa"
+  },
+  {
+   "chu": "fragmentation",
+   "doc": "/ˌfræɡmenˈteɪʃn/",
+   "nghia": "phân mảnh – cắt gói IP lớn thành các mảnh nhỏ cho vừa MTU của đường truyền",
+   "nhom": "Địa chỉ IP",
+   "viDu": "Which fields in IP packet provide for fragmentation of datagrams to allow differing MTUs in the internet?",
+   "viDuNghia": "Những trường nào trong gói IP phục vụ việc phân mảnh datagram để phù hợp với các MTU khác nhau trên Internet?"
+  },
+  {
+   "chu": "reassembly",
+   "doc": "/ˌriːəˈsembli/",
+   "nghia": "ráp lại – ghép các mảnh thành gói ban đầu ở máy đích",
+   "nhom": "Địa chỉ IP",
+   "viDu": "Which UDP datagram reassembly statement is true?",
+   "viDuNghia": "Phát biểu nào sau đây đúng về việc ghép lại (reassembly) datagram UDP?"
+  },
+  {
+   "chu": "maximum transmission unit",
+   "nghia": "MTU – kích thước gói lớn nhất một đường truyền chở được",
+   "nhom": "Địa chỉ IP",
+   "viDu": "A router receives a 1500-byte IPv4 packet with the Don't Fragment bit clear. The next link has an MTU of 1400. What happens?",
+   "viDuNghia": "Router nhận gói IPv4 1500 byte, bit Don't Fragment đang tắt. Chặng kế có MTU 1400. Điều gì xảy ra?"
+  },
+  {
+   "chu": "time to live",
+   "nghia": "TTL – trường trong phần đầu IP, giảm 1 qua mỗi router; về 0 thì gói bị huỷ để không lặp mãi",
+   "nhom": "Địa chỉ IP",
+   "viDu": "The time-to-live (TTL) field in the datagram is included to insure that datagrams _____",
+   "viDuNghia": "Trường time-to-live (TTL) trong datagram được đưa vào để bảo đảm rằng các datagram _____"
+  },
+  {
+   "chu": "Internet Control Message Protocol",
+   "nghia": "ICMP – giao thức báo lỗi và chẩn đoán của IP (ping, traceroute dùng nó)",
+   "nhom": "Địa chỉ IP",
+   "viDu": "Ping uses the Internet Control Message Protocol (ICMP) to test whether a host is reachable.",
+   "viDuNghia": "Ping dùng giao thức ICMP để thử xem một máy có tới được không."
+  },
+  {
+   "chu": "Address Resolution Protocol",
+   "nghia": "ARP – tìm địa chỉ MAC ứng với một địa chỉ IP trong cùng mạng LAN",
+   "nhom": "Địa chỉ IP",
+   "viDu": "ARP finds the MAC address that belongs to a given IP address on the same LAN.",
+   "viDuNghia": "ARP tìm địa chỉ MAC ứng với một địa chỉ IP cho trước trong cùng mạng LAN."
+  },
+  {
+   "chu": "default gateway",
+   "doc": "/dɪˈfɔːlt ˈɡeɪtweɪ/",
+   "nghia": "cổng mặc định – router mà máy gửi gói tới khi đích nằm ngoài mạng của mình",
+   "nhom": "Địa chỉ IP",
+   "viDu": "A host sends packets addressed to other networks to its default gateway.",
+   "viDuNghia": "Máy gửi các gói có đích ở mạng khác tới cổng mặc định (default gateway) của nó."
+  },
+  {
+   "chu": "unicast",
+   "doc": "/ˈjuːnɪkæst/",
+   "nghia": "gửi đơn hướng – gửi tới đúng một máy",
+   "nhom": "Địa chỉ IP",
+   "viDu": "A unicast packet is delivered to exactly one destination host.",
+   "viDuNghia": "Gói unicast được chuyển tới đúng một máy đích."
+  },
+  {
+   "chu": "multicast",
+   "doc": "/ˈmʌltikæst/",
+   "nghia": "gửi đa hướng – gửi tới một nhóm máy đã đăng ký",
+   "nhom": "Địa chỉ IP",
+   "viDu": "Reverse Path Multicasting (RPM) is used to increase ____.",
+   "viDuNghia": "Reverse Path Multicasting (RPM) được dùng để tăng ____."
+  },
+  {
+   "chu": "IP datagram",
+   "doc": "/ˌaɪ ˈpiː ˈdeɪtəɡræm/",
+   "nghia": "datagram IP – gói tin của tầng mạng, gồm phần đầu IP và dữ liệu",
+   "nhom": "Địa chỉ IP",
+   "viDu": "One of the header fields in an IP datagram is the Time-to-live (TTL) field. Which of the following statements best explains the need for this field?",
+   "viDuNghia": "Một trong các trường header của datagram IP là Time-to-live (TTL). Phát biểu nào giải thích đúng nhất sự cần thiết của trường này?"
+  },
+  {
+   "chu": "packet header",
+   "doc": "/ˈpækɪt ˈhedər/",
+   "nghia": "phần đầu gói – phần chứa địa chỉ nguồn, đích và thông tin điều khiển của gói tin",
+   "nhom": "Địa chỉ IP",
+   "viDu": "Which of the following packet header length cannot be used in an IPv4 packet header?",
+   "viDuNghia": "Độ dài header nào sau đây KHÔNG thể dùng cho header gói IPv4?"
+  },
+  {
+   "chu": "IP address",
+   "doc": "/ˌaɪ ˈpiː ˈædres/",
+   "nghia": "địa chỉ IP – địa chỉ tầng mạng của một máy; IPv4 dài 32 bit, gồm phần mạng + phần host",
+   "nhom": "Địa chỉ IP",
+   "viDu": "What happen if 2 hosts are assigned with 2 IP addresses belong to 2 different IP network address ranges?",
+   "viDuNghia": "Điều gì xảy ra nếu 2 máy được gán 2 địa chỉ IP thuộc 2 dải địa chỉ mạng IP khác nhau?"
+  },
+  {
+   "chu": "mask",
+   "doc": "/mæsk/",
+   "nghia": "mặt nạ mạng (subnet mask) – dãy bit 1 đánh dấu phần mạng của địa chỉ IP, AND với IP ra địa chỉ mạng. (CSI104: mặt nạ bit)",
+   "nhom": "Địa chỉ IP",
+   "viDu": "Given a subnet mask 255.255.255.240, how many hosts can the subnet support?",
+   "viDuNghia": "Cho mặt nạ mạng con 255.255.255.240, mạng con này có được bao nhiêu host?"
+  },
+  {
+   "chu": "routing",
+   "doc": "/ˈraʊtɪŋ/",
+   "nghia": "định tuyến – tìm đường đi cho gói tin từ nguồn tới đích",
+   "nhom": "Định tuyến",
+   "viDu": "In a Cisco routing table, what does a line marked L such as L 192.168.1.1/32 show?",
+   "viDuNghia": "Trong bảng định tuyến Cisco, dòng đánh dấu L như L 192.168.1.1/32 cho biết điều gì?"
+  },
+  {
+   "chu": "routing table",
+   "doc": "/ˈraʊtɪŋ ˈteɪbl/",
+   "nghia": "bảng định tuyến – bảng trong router ghi mạng đích nào thì gửi ra cổng/nút kế nào",
+   "nhom": "Định tuyến",
+   "viDu": "In a router, which of the following statement is true for creating routing tables",
+   "viDuNghia": "Trong router, phát biểu nào sau đây đúng về việc tạo bảng định tuyến?"
+  },
+  {
+   "chu": "forwarding",
+   "doc": "/ˈfɔːrwərdɪŋ/",
+   "nghia": "chuyển tiếp – router đưa gói từ cổng vào sang đúng cổng ra theo bảng",
+   "nhom": "Định tuyến",
+   "viDu": "Forwarding moves a packet from an input port of a router to the right output port.",
+   "viDuNghia": "Chuyển tiếp là đưa gói từ cổng vào của router sang đúng cổng ra."
+  },
+  {
+   "chu": "Routing Information Protocol",
+   "nghia": "RIP – giao thức định tuyến vector khoảng cách, đo đường bằng số chặng",
+   "nhom": "Định tuyến",
+   "viDu": "In RIP operation, which of the following statement is correct?",
+   "viDuNghia": "Trong hoạt động của RIP, phát biểu nào sau đây đúng?"
+  },
+  {
+   "chu": "Open Shortest Path First",
+   "nghia": "OSPF – giao thức định tuyến trạng thái liên kết, dùng thuật toán Dijkstra",
+   "nhom": "Định tuyến",
+   "viDu": "In Open Shortest Path First (OSPF), which of the following statements are correct?",
+   "viDuNghia": "Trong OSPF, những phát biểu nào sau đây đúng?"
+  },
+  {
+   "chu": "distance vector",
+   "doc": "/ˈdɪstəns ˈvektər/",
+   "nghia": "vector khoảng cách – mỗi router chỉ báo cho hàng xóm khoảng cách của mình tới các mạng",
+   "nhom": "Định tuyến",
+   "viDu": "In distance vector routing, if a link fails, ____.",
+   "viDuNghia": "Trong định tuyến vector khoảng cách, khi một liên kết bị hỏng thì ____."
+  },
+  {
+   "chu": "link state",
+   "doc": "/lɪŋk steɪt/",
+   "nghia": "trạng thái liên kết – mỗi router phát thông tin các liên kết của mình cho toàn mạng để ai cũng có bản đồ đầy đủ",
+   "nhom": "Định tuyến",
+   "viDu": "In link state routing, after the construction of link state packets, new routes are computed using ____.",
+   "viDuNghia": "Trong định tuyến trạng thái liên kết, sau khi dựng các gói trạng thái liên kết, tuyến mới được tính bằng ____."
+  },
+  {
+   "chu": "link-state database",
+   "doc": "/ˌlɪŋk ˈsteɪt ˈdeɪtəbeɪs/",
+   "nghia": "cơ sở dữ liệu trạng thái liên kết – bản đồ mạng mà mọi router OSPF cùng giữ giống nhau",
+   "nhom": "Định tuyến",
+   "viDu": "All OSPF routers in an area build an identical link-state database.",
+   "viDuNghia": "Mọi router OSPF trong một vùng xây dựng cơ sở dữ liệu trạng thái liên kết giống hệt nhau."
+  },
+  {
+   "chu": "convergence",
+   "doc": "/kənˈvɜːrdʒəns/",
+   "nghia": "sự hội tụ – lúc mọi router đã thống nhất thông tin định tuyến sau khi mạng thay đổi",
+   "nhom": "Định tuyến",
+   "viDu": "OSPF has faster convergence than RIP after a link fails.",
+   "viDuNghia": "OSPF hội tụ nhanh hơn RIP sau khi một liên kết bị hỏng."
+  },
+  {
+   "chu": "flooding",
+   "doc": "/ˈflʌdɪŋ/",
+   "nghia": "phát tràn – gửi gói ra mọi cổng trừ cổng nó đi vào",
+   "nhom": "Định tuyến",
+   "viDu": "Flooding may easily swamp the network as one packet creates multiple packets, possibly in exponential growth rate. What are possible means to reduce resource consumption in the network?",
+   "viDuNghia": "Flooding (ngập lụt) dễ làm nghẽn mạng vì một gói sinh ra nhiều gói, có thể tăng theo cấp số nhân. Đâu là các biện pháp giảm tiêu thụ tài nguyên mạng?"
+  },
+  {
+   "chu": "routing loop",
+   "doc": "/ˈraʊtɪŋ luːp/",
+   "nghia": "vòng lặp định tuyến – gói bị chuyển lòng vòng giữa các router mà không tới đích",
+   "nhom": "Định tuyến",
+   "viDu": "Which IPv4 header field does each router decrease by one so that a packet cannot loop forever?",
+   "viDuNghia": "Trường nào trong phần đầu IPv4 được mỗi router giảm đi một để gói tin không lặp mãi?"
+  },
+  {
+   "chu": "tunneling",
+   "doc": "/ˈtʌnəlɪŋ/",
+   "nghia": "đường hầm – bọc gói của giao thức này trong gói của giao thức khác để đi qua mạng trung gian",
+   "nhom": "Định tuyến",
+   "viDu": "Which of following techniques can be used for transitioning from IPv4 to IPv6? — IP tunneling",
+   "viDuNghia": "Kỹ thuật nào sau đây có thể dùng để chuyển đổi từ IPv4 sang IPv6? — Đường hầm IP (IP tunneling)"
+  },
+  {
+   "chu": "software-defined networking",
+   "doc": "/ˌsɔːftwer dɪˈfaɪnd ˈnetwɜːrkɪŋ/",
+   "nghia": "mạng định nghĩa bằng phần mềm (SDN) – tách phần điều khiển khỏi phần chuyển tiếp, điều khiển tập trung",
+   "nhom": "Định tuyến",
+   "viDu": "In a software defined network (SDN), which of the architectural layer is responsible for switching and forwarding instruction?",
+   "viDuNghia": "Trong mạng định nghĩa bằng phần mềm (SDN), tầng kiến trúc nào chịu trách nhiệm chuyển mạch và chuyển tiếp gói?"
+  },
+  {
+   "chu": "Bellman-Ford algorithm",
+   "doc": "/ˌbelmən ˈfɔːrd ˈælɡərɪðəm/",
+   "nghia": "thuật toán Bellman-Ford – tìm đường ngắn nhất, là nền của định tuyến vector khoảng cách",
+   "nhom": "Định tuyến",
+   "viDu": "RIP is based on the Bellman-Ford algorithm.",
+   "viDuNghia": "RIP dựa trên thuật toán Bellman-Ford."
+  },
+  {
+   "chu": "triggered update",
+   "doc": "/ˈtrɪɡərd ˈʌpdeɪt/",
+   "nghia": "cập nhật tức thì – router gửi ngay bảng định tuyến khi có thay đổi, không chờ tới chu kỳ",
+   "nhom": "Định tuyến",
+   "viDu": "A triggered update is sent immediately when a route changes.",
+   "viDuNghia": "Cập nhật tức thì được gửi ngay khi một tuyến thay đổi."
+  },
+  {
+   "chu": "home agent",
+   "doc": "/hoʊm ˈeɪdʒənt/",
+   "nghia": "tác tử nhà – router ở mạng gốc của máy di động, nhận hộ gói rồi chuyển tiếp cho nó (Mobile IP)",
+   "nhom": "Định tuyến",
+   "viDu": "In Mobile IP, the home agent forwards packets to the mobile host's current location.",
+   "viDuNghia": "Trong Mobile IP, tác tử nhà chuyển tiếp gói tới vị trí hiện tại của máy di động."
+  },
+  {
+   "chu": "three-way handshake",
+   "doc": "/ˌθriː ˈweɪ ˈhændʃeɪk/",
+   "nghia": "bắt tay ba bước – cách TCP mở kết nối: SYN, SYN+ACK, ACK",
+   "nhom": "TCP & UDP",
+   "viDu": "In the TCP three-way handshake, what does the server send in the second step?",
+   "viDuNghia": "Trong bắt tay ba bước của TCP, máy chủ gửi gì ở bước hai?"
+  },
+  {
+   "chu": "connection establishment",
+   "doc": "/kəˈnekʃn ɪˈstæblɪʃmənt/",
+   "nghia": "thiết lập kết nối – bước hai bên thoả thuận trước khi truyền dữ liệu",
+   "nhom": "TCP & UDP",
+   "viDu": "This protocol is used by a web browser to establish a connection to a web server.",
+   "viDuNghia": "Giao thức nào được trình duyệt web dùng để thiết lập kết nối tới máy chủ web?"
+  },
+  {
+   "chu": "TCP segment",
+   "doc": "/ˌtiː siː ˈpiː ˈseɡmənt/",
+   "nghia": "đoạn TCP – đơn vị dữ liệu của tầng giao vận",
+   "nhom": "TCP & UDP",
+   "viDu": "A student's browser opens a new HTTPS connection to a web server. Which port pair is most likely in the first segment?",
+   "viDuNghia": "Trình duyệt của sinh viên mở một kết nối HTTPS mới tới máy chủ web. Cặp cổng nào nhiều khả năng xuất hiện trong segment đầu tiên?"
+  },
+  {
+   "chu": "advertised window",
+   "doc": "/ˈædvərtaɪzd ˈwɪndoʊ/",
+   "nghia": "cửa sổ quảng bá – lượng dữ liệu bên nhận báo là còn nhận được; dùng cho điều khiển luồng",
+   "nhom": "TCP & UDP",
+   "viDu": "The advertised window tells the sender how much buffer space the receiver has left.",
+   "viDuNghia": "Cửa sổ quảng bá cho bên gửi biết bên nhận còn bao nhiêu chỗ trong bộ đệm."
+  },
+  {
+   "chu": "best-effort",
+   "doc": "/ˌbest ˈefərt/",
+   "nghia": "cố gắng tối đa – cố chuyển gói nhưng không bảo đảm tới nơi, đúng thứ tự hay đúng hạn",
+   "nhom": "TCP & UDP",
+   "viDu": "Which of the following is a stateless best-effort delivery transport layer protocol?",
+   "viDuNghia": "Giao thức tầng giao vận nào sau đây là giao thức phi trạng thái, chuyển phát best-effort?"
+  },
+  {
+   "chu": "destination port",
+   "doc": "/ˌdestɪˈneɪʃn pɔːrt/",
+   "nghia": "cổng đích – số cổng của ứng dụng nhận dữ liệu ở máy đích",
+   "nhom": "TCP & UDP",
+   "viDu": "Which of the following would be valid source and destination ports for a host connecting to a DNS server?",
+   "viDuNghia": "Cặp cổng nguồn và cổng đích nào là hợp lệ khi một máy trạm kết nối tới máy chủ DNS?"
+  },
+  {
+   "chu": "socket API",
+   "doc": "/ˈsɑːkɪt ˌeɪ piː ˈaɪ/",
+   "nghia": "giao diện lập trình socket – bộ hàm (socket, bind, listen, accept, connect) để ứng dụng dùng dịch vụ giao vận",
+   "nhom": "TCP & UDP",
+   "viDu": "In BSD socket API, which system call is used to assign a network address to the socket?",
+   "viDuNghia": "Trong BSD socket API, lời gọi hệ thống nào được dùng để gán địa chỉ mạng cho socket?"
+  },
+  {
+   "chu": "receiver window",
+   "doc": "/rɪˈsiːvər ˈwɪndoʊ/",
+   "nghia": "cửa sổ nhận – lượng dữ liệu bên nhận còn chứa được, báo cho bên gửi",
+   "nhom": "TCP & UDP",
+   "viDu": "The receiver window is found in ________",
+   "viDuNghia": "Cửa sổ nhận (receiver window) nằm trong ________"
+  },
+  {
+   "chu": "Transmission Control Protocol",
+   "nghia": "giao thức TCP – tầng giao vận, hướng kết nối, bắt tay 3 bước, bảo đảm dữ liệu đến đủ, đúng thứ tự",
+   "nhom": "TCP & UDP",
+   "viDu": "At the transport layer, TCP groups a number of bytes together into a packet called a Segment.",
+   "viDuNghia": "Ở tầng giao vận, TCP nhóm một số byte lại thành một gói được gọi là Phân đoạn (Segment)."
+  },
+  {
+   "chu": "port",
+   "doc": "/pɔːrt/",
+   "nghia": "cổng (port) – số 16 bit chỉ đúng chương trình trên máy (HTTP 80, HTTPS 443, DNS 53). (Thiết bị: cổng Ethernet)",
+   "nhom": "TCP & UDP",
+   "viDu": "Which of these ports are used by FTP?",
+   "viDuNghia": "FTP dùng những cổng nào sau đây?"
+  },
+  {
+   "chu": "User Datagram Protocol",
+   "nghia": "giao thức UDP – tầng giao vận, không kết nối, không bảo đảm tới nơi hay đúng thứ tự nhưng nhanh, header chỉ 8 byte (DNS, streaming, game dùng)",
+   "nhom": "TCP & UDP",
+   "viDu": "Which of the application layer protocols below uses UDP at the transport layer?",
+   "viDuNghia": "Giao thức tầng ứng dụng nào sau đây dùng UDP ở tầng giao vận?"
+  },
+  {
+   "chu": "port number",
+   "doc": "/pɔːrt ˈnʌmbər/",
+   "nghia": "số hiệu cổng (16 bit) – địa chỉ ở tầng giao vận chỉ ra tiến trình/ứng dụng nhận dữ liệu; IP + port = socket. Mẹo: HTTP 80, HTTPS 443, DNS 53",
+   "nhom": "TCP & UDP",
+   "viDu": "Each request has a combination of source and destination port numbers, coming from a unique IP address.",
+   "viDuNghia": "Mỗi yêu cầu có một tổ hợp số cổng nguồn và cổng đích, đến từ một địa chỉ IP duy nhất."
+  },
+  {
+   "chu": "Stream Control Transmission Protocol",
+   "nghia": "giao thức SCTP – tầng giao vận, hướng kết nối và tin cậy như TCP nhưng truyền theo thông điệp, hỗ trợ nhiều luồng (multi-stream)",
+   "nhom": "TCP & UDP",
+   "viDu": "Which one of the following is a transport layer protocol? → Stream Control Transmission Protocol",
+   "viDuNghia": "Giao thức nào sau đây thuộc tầng giao vận? → SCTP (Stream Control Transmission Protocol)"
+  },
+  {
+   "chu": "congestion",
+   "doc": "/kənˈdʒestʃən/",
+   "nghia": "tắc nghẽn – quá nhiều gói đổ vào mạng làm hàng đợi đầy, trễ tăng, gói bị rớt",
+   "nhom": "Điều khiển tắc nghẽn",
+   "viDu": "In congestion warning, the feedback can be implicit or explicit. Which of the following is an example of implicit feedback?",
+   "viDuNghia": "Trong cảnh báo tắc nghẽn, phản hồi có thể ngầm định hoặc tường minh. Đâu là ví dụ của phản hồi ngầm định?"
+  },
+  {
+   "chu": "congestion window",
+   "doc": "/kənˈdʒestʃən ˈwɪndoʊ/",
+   "nghia": "cửa sổ tắc nghẽn (cwnd) – giới hạn lượng dữ liệu TCP được gửi, tự co giãn theo tình trạng mạng",
+   "nhom": "Điều khiển tắc nghẽn",
+   "viDu": "In which state, the congestion window is increased exponentially?",
+   "viDuNghia": "Ở trạng thái nào cửa sổ tắc nghẽn được tăng theo hàm mũ?"
+  },
+  {
+   "chu": "slow start",
+   "doc": "/sloʊ stɑːrt/",
+   "nghia": "khởi động chậm – cwnd bắt đầu nhỏ rồi tăng gấp đôi sau mỗi RTT cho tới ngưỡng",
+   "nhom": "Điều khiển tắc nghẽn",
+   "viDu": "During slow start, the congestion window doubles every round-trip time.",
+   "viDuNghia": "Trong giai đoạn khởi động chậm, cửa sổ tắc nghẽn tăng gấp đôi sau mỗi thời gian khứ hồi."
+  },
+  {
+   "chu": "congestion avoidance",
+   "doc": "/kənˈdʒestʃən əˈvɔɪdəns/",
+   "nghia": "tránh tắc nghẽn – qua ngưỡng thì cwnd chỉ tăng tuyến tính, mỗi RTT thêm một đoạn",
+   "nhom": "Điều khiển tắc nghẽn",
+   "viDu": "In general, there are three phases of congestion behavior, i.e., light traffic, knee, congestion collapse. Which phase does TCP congestion avoidance map to?",
+   "viDuNghia": "Nói chung có ba pha của hành vi tắc nghẽn: lưu lượng nhẹ (light traffic), điểm gối (knee), sụp đổ do tắc nghẽn (congestion collapse). Cơ chế tránh tắc nghẽn (congestion avoidance) của TCP tương ứng với pha nào?"
+  },
+  {
+   "chu": "fast recovery",
+   "doc": "/fæst rɪˈkʌvəri/",
+   "nghia": "phục hồi nhanh – sau ba ACK trùng, giảm cwnd một nửa thay vì quay về khởi động chậm",
+   "nhom": "Điều khiển tắc nghẽn",
+   "viDu": "When three duplicate acknowledgements arrive before timeout expires, what will TCP congestion control algorithm reset congestion threshold to for fast re-transmission and fast recovery?",
+   "viDuNghia": "Khi ba ACK trùng lặp đến trước khi hết thời gian chờ, thuật toán điều khiển tắc nghẽn của TCP sẽ đặt lại ngưỡng tắc nghẽn (threshold) về giá trị nào để thực hiện fast retransmit và fast recovery?"
+  },
+  {
+   "chu": "packet loss",
+   "doc": "/ˈpækɪt lɔːs/",
+   "nghia": "mất gói – gói bị rớt dọc đường, thường do bộ đệm của router đầy",
+   "nhom": "Điều khiển tắc nghẽn",
+   "viDu": "In error detection and loss recovery, which of the following statement is correct",
+   "viDuNghia": "Về phát hiện lỗi và khôi phục mất mát, phát biểu nào sau đây là đúng?"
+  },
+  {
+   "chu": "open-loop control",
+   "doc": "/ˌoʊpən ˈluːp kənˈtroʊl/",
+   "nghia": "điều khiển vòng hở – ngăn tắc nghẽn từ trước, không dùng phản hồi của mạng (kiểm soát nhận vào, định hình lưu lượng)",
+   "nhom": "Điều khiển tắc nghẽn",
+   "viDu": "To guarantee network performance during the lifetime of admitted flows, open-loop control requires the following mechanism except:",
+   "viDuNghia": "Để đảm bảo hiệu năng mạng trong suốt vòng đời của các luồng đã được nhận, điều khiển vòng hở (open-loop) cần các cơ chế sau, NGOẠI TRỪ:"
+  },
+  {
+   "chu": "closed-loop control",
+   "doc": "/ˌkloʊzd ˈluːp kənˈtroʊl/",
+   "nghia": "điều khiển vòng kín – điều chỉnh dựa trên phản hồi về tình trạng mạng (như TCP)",
+   "nhom": "Điều khiển tắc nghẽn",
+   "viDu": "Closed-loop control adjusts the sending rate using feedback about congestion in the network.",
+   "viDuNghia": "Điều khiển vòng kín chỉnh tốc độ gửi dựa trên phản hồi về tình trạng tắc nghẽn của mạng."
+  },
+  {
+   "chu": "congestion control",
+   "doc": "/kənˈdʒestʃən kənˈtroʊl/",
+   "nghia": "điều khiển tắc nghẽn – bên gửi giảm tốc khi mạng quá tải (TCP dùng cửa sổ tắc nghẽn, ngưỡng threshold)",
+   "nhom": "Điều khiển tắc nghẽn",
+   "viDu": "In TCP congestion control, two important variables the sender has to keep track are",
+   "viDuNghia": "Trong kiểm soát tắc nghẽn TCP, hai biến quan trọng mà bên gửi phải theo dõi là"
+  },
+  {
+   "chu": "quality of service",
+   "nghia": "chất lượng dịch vụ (QoS) – mức bảo đảm về độ trễ, băng thông, tỉ lệ mất gói cho một luồng",
+   "nhom": "Quản lý lưu lượng & QoS",
+   "viDu": "Voice calls need better quality of service than email.",
+   "viDuNghia": "Cuộc gọi thoại cần chất lượng dịch vụ tốt hơn thư điện tử."
+  },
+  {
+   "chu": "traffic shaping",
+   "doc": "/ˈtræfɪk ˈʃeɪpɪŋ/",
+   "nghia": "định hình lưu lượng – làm đều tốc độ gói đi ra, giữ lại phần vượt để gửi sau",
+   "nhom": "Quản lý lưu lượng & QoS",
+   "viDu": "Traffic shaping smooths a bursty flow before it enters the network.",
+   "viDuNghia": "Định hình lưu lượng làm đều một luồng dồn cục trước khi nó vào mạng."
+  },
+  {
+   "chu": "policing",
+   "doc": "/pəˈliːsɪŋ/",
+   "nghia": "kiểm soát lưu lượng – giám sát luồng, gói vượt mức cam kết thì bị huỷ hoặc đánh dấu",
+   "nhom": "Quản lý lưu lượng & QoS",
+   "viDu": "Policing drops or marks packets that exceed the agreed rate.",
+   "viDuNghia": "Kiểm soát lưu lượng huỷ hoặc đánh dấu các gói vượt tốc độ đã cam kết."
+  },
+  {
+   "chu": "leaky bucket",
+   "doc": "/ˈliːki ˈbʌkɪt/",
+   "nghia": "thùng rò – gói vào thùng với tốc độ bất kỳ nhưng chảy ra với tốc độ đều",
+   "nhom": "Quản lý lưu lượng & QoS",
+   "viDu": "Upon which of the following condition is token bucket and leaky bucket the same?",
+   "viDuNghia": "Trong điều kiện nào thì gàu token (token bucket) và gàu rò (leaky bucket) là như nhau?"
+  },
+  {
+   "chu": "token bucket",
+   "doc": "/ˈtoʊkən ˈbʌkɪt/",
+   "nghia": "thùng thẻ bài – thẻ sinh ra đều đặn, có thẻ mới được gửi; cho phép gửi dồn một lúc có giới hạn",
+   "nhom": "Quản lý lưu lượng & QoS",
+   "viDu": "A token bucket lets a host send a burst as long as it has saved enough tokens.",
+   "viDuNghia": "Thùng thẻ bài cho phép máy gửi dồn một lúc, miễn là đã tích đủ thẻ."
+  },
+  {
+   "chu": "admission control",
+   "doc": "/ədˈmɪʃn kənˈtroʊl/",
+   "nghia": "kiểm soát nhận vào – chỉ nhận luồng mới nếu mạng còn đủ tài nguyên bảo đảm QoS",
+   "nhom": "Quản lý lưu lượng & QoS",
+   "viDu": "Admission control rejects a new flow if the network cannot guarantee its QoS.",
+   "viDuNghia": "Kiểm soát nhận vào từ chối luồng mới nếu mạng không bảo đảm được QoS cho nó."
+  },
+  {
+   "chu": "queueing",
+   "doc": "/ˈkjuːɪŋ/",
+   "nghia": "xếp hàng đợi – cách router sắp và phục vụ các gói đang chờ gửi",
+   "nhom": "Quản lý lưu lượng & QoS",
+   "viDu": "Which of the following statements is true for FIFO queueing?",
+   "viDuNghia": "Phát biểu nào sau đây đúng với hàng đợi FIFO?"
+  },
+  {
+   "chu": "priority queueing",
+   "doc": "/praɪˈɔːrəti ˈkjuːɪŋ/",
+   "nghia": "hàng đợi ưu tiên – gói lớp ưu tiên cao luôn được gửi trước; lớp thấp có thể bị bỏ đói",
+   "nhom": "Quản lý lưu lượng & QoS",
+   "viDu": "With priority queueing, packets in a higher class are always sent first.",
+   "viDuNghia": "Với hàng đợi ưu tiên, gói thuộc lớp cao hơn luôn được gửi trước."
+  },
+  {
+   "chu": "head-of-line",
+   "doc": "/ˌhed əv ˈlaɪn/",
+   "nghia": "đầu hàng (HOL) – gói đứng đầu hàng đợi; HOL priority = phục vụ đầu hàng của lớp ưu tiên cao trước",
+   "nhom": "Quản lý lưu lượng & QoS",
+   "viDu": "In Head of Line (HOL) priority queueing, which of the following statement is a feature for this approach",
+   "viDuNghia": "Trong hàng đợi ưu tiên Head of Line (HOL), phát biểu nào sau đây là đặc điểm của cách tiếp cận này?"
+  },
+  {
+   "chu": "fair queueing",
+   "doc": "/fer ˈkjuːɪŋ/",
+   "nghia": "hàng đợi công bằng – mỗi luồng một hàng, phục vụ lần lượt để chia đều băng thông",
+   "nhom": "Quản lý lưu lượng & QoS",
+   "viDu": "Which of the following statements is wrong about fair queuing?",
+   "viDuNghia": "Phát biểu nào sau đây SAI về fair queuing (hàng đợi công bằng)?"
+  },
+  {
+   "chu": "random early detection",
+   "nghia": "phát hiện sớm ngẫu nhiên (RED) – router chủ động rớt gói ngẫu nhiên khi hàng đợi bắt đầu dài, để báo nguồn giảm tốc",
+   "nhom": "Quản lý lưu lượng & QoS",
+   "viDu": "In buffer management, which of the following statement is correct for Random Early Detection (RED) technique",
+   "viDuNghia": "Trong quản lý bộ đệm, phát biểu nào đúng về kỹ thuật Random Early Detection (RED)?"
+  },
+  {
+   "chu": "starve",
+   "doc": "/stɑːrv/",
+   "nghia": "bỏ đói – khiến luồng/lớp ưu tiên thấp không bao giờ được phục vụ",
+   "nhom": "Quản lý lưu lượng & QoS",
+   "viDu": "High-priority traffic can starve the lower priority classes.",
+   "viDuNghia": "Lưu lượng ưu tiên cao có thể bỏ đói các lớp ưu tiên thấp hơn."
+  },
+  {
+   "chu": "jitter",
+   "doc": "/ˈdʒɪtər/",
+   "nghia": "độ trễ không đều – độ trễ giữa các gói thay đổi thất thường, gây giật thoại/video",
+   "nhom": "Quản lý lưu lượng & QoS",
+   "viDu": "High jitter makes a voice call sound broken.",
+   "viDuNghia": "Độ trễ không đều lớn làm cuộc gọi thoại bị ngắt quãng."
+  },
+  {
+   "chu": "differentiated services",
+   "doc": "/ˌdɪfəˈrenʃieɪtɪd ˈsɜːrvɪsɪz/",
+   "nghia": "dịch vụ phân biệt (DiffServ) – chia gói thành vài lớp và đối xử khác nhau theo lớp",
+   "nhom": "Quản lý lưu lượng & QoS",
+   "viDu": "Differentiated services treat packets differently according to their class.",
+   "viDuNghia": "Dịch vụ phân biệt đối xử với các gói khác nhau tuỳ theo lớp của chúng."
+  },
+  {
+   "chu": "voice over IP",
+   "nghia": "thoại qua IP (VoIP) – gọi điện bằng cách truyền tiếng nói qua mạng IP",
+   "nhom": "Quản lý lưu lượng & QoS",
+   "viDu": "Which transport layer protocol would be used for VoIP applications?",
+   "viDuNghia": "Giao thức tầng giao vận nào được dùng cho các ứng dụng VoIP?"
+  },
+  {
+   "chu": "bursty",
+   "doc": "/ˈbɜːrsti/",
+   "nghia": "dồn cục – lưu lượng lúc dồn dập, lúc thưa thớt, không đều",
+   "nhom": "Quản lý lưu lượng & QoS",
+   "viDu": "Data traffic is bursty: long silences followed by sudden peaks.",
+   "viDuNghia": "Lưu lượng dữ liệu dồn cục: im lặng lâu rồi đột ngột tăng vọt."
+  },
+  {
+   "chu": "regulate",
+   "doc": "/ˈreɡjuleɪt/",
+   "nghia": "điều tiết – khống chế tốc độ/lượng lưu lượng đưa vào mạng",
+   "nhom": "Quản lý lưu lượng & QoS",
+   "viDu": "In Closed-Loop flow control, which of the following mechanism is used in congestion control to regulate the flow from sources into network",
+   "viDuNghia": "Trong điều khiển luồng vòng kín (closed-loop), cơ chế nào được dùng trong điều khiển tắc nghẽn để điều tiết luồng từ nguồn vào mạng?"
+  },
+  {
+   "chu": "accommodate",
+   "doc": "/əˈkɑːmədeɪt/",
+   "nghia": "đáp ứng, chứa được (vd khung dài ngắn khác nhau, luồng mới)",
+   "nhom": "Quản lý lưu lượng & QoS",
+   "viDu": "The frame format must accommodate frames of different lengths.",
+   "viDuNghia": "Khuôn dạng khung phải chứa được các khung có độ dài khác nhau."
+  },
+  {
+   "chu": "traffic management",
+   "doc": "/ˈtræfɪk ˈmænɪdʒmənt/",
+   "nghia": "quản lý lưu lượng – các cơ chế điều khiển luồng gói để bảo đảm chất lượng dịch vụ",
+   "nhom": "Quản lý lưu lượng & QoS",
+   "viDu": "Based on traffic granularity, which of the following levels is traffic management not usually classified into?",
+   "viDuNghia": "Theo độ mịn của lưu lượng, quản lý lưu lượng thường KHÔNG được phân loại vào mức nào sau đây?"
+  },
+  {
+   "chu": "buffer management",
+   "doc": "/ˈbʌfər ˈmænɪdʒmənt/",
+   "nghia": "quản lý bộ đệm – quyết định gói nào được giữ, gói nào bị rớt khi hàng đợi đầy",
+   "nhom": "Quản lý lưu lượng & QoS",
+   "viDu": "In buffer management, which feature requires packet to drop when buffer is full",
+   "viDuNghia": "Trong quản lý bộ đệm, đặc tính nào yêu cầu loại bỏ gói khi bộ đệm đầy?"
+  },
+  {
+   "chu": "flow",
+   "doc": "/floʊ/",
+   "nghia": "luồng – dãy gói đi từ một nguồn tới một đích của cùng một ứng dụng",
+   "nhom": "Quản lý lưu lượng & QoS",
+   "viDu": "A flow is a sequence of packets from one source to one destination.",
+   "viDuNghia": "Một luồng là dãy gói đi từ một nguồn tới một đích."
+  }
+ ]
+}

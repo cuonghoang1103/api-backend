@@ -1,0 +1,767 @@
+{
+ "ma": "prf192-1",
+ "nn": "en",
+ "ten": "PRF192 · 1. Nền tảng C: biến, toán tử, vòng lặp",
+ "moTa": "PRF192/PRF193 – Cơ sở lập trình (C), phần 1: biên dịch, hệ đếm, biến và kiểu dữ liệu, toán tử, rẽ nhánh, vòng lặp, nhập xuất. Từ lấy từ đề FE/PE thật; câu ví dụ là câu hỏi thật trong đề.",
+ "bieuTuong": "chevron.left.forwardslash.chevron.right",
+ "thuTu": -995,
+ "tu": [
+  {
+   "chu": "programming language",
+   "doc": "/ˈproʊɡræmɪŋ ˈlæŋɡwɪdʒ/",
+   "nghia": "ngôn ngữ lập trình – bộ quy tắc để viết lệnh cho máy tính (C, Java…)",
+   "nhom": "Chương trình & biên dịch",
+   "viDu": "How does compilation differ from interpretation in the context of C programming language?",
+   "viDuNghia": "Biên dịch (compilation) khác thông dịch (interpretation) như thế nào trong ngữ cảnh ngôn ngữ C?"
+  },
+  {
+   "chu": "interpreter",
+   "doc": "/ɪnˈtɜːrprətər/",
+   "nghia": "trình thông dịch – dịch và chạy từng dòng lệnh một (khác compiler dịch cả chương trình)",
+   "nhom": "Chương trình & biên dịch",
+   "viDu": "Which of the following statements is INCORRECT about interpreters and compilers?",
+   "viDuNghia": "Phát biểu nào sau đây KHÔNG đúng về trình thông dịch và trình biên dịch?"
+  },
+  {
+   "chu": "compilation error",
+   "doc": "/ˌkɑːmpɪˈleɪʃn ˈerər/",
+   "nghia": "lỗi biên dịch – lỗi trình biên dịch phát hiện, chương trình không dịch được",
+   "nhom": "Chương trình & biên dịch",
+   "viDu": "Using a variable that has not been declared causes a compilation error.",
+   "viDuNghia": "Dùng một biến chưa khai báo gây ra lỗi biên dịch."
+  },
+  {
+   "chu": "runtime error",
+   "doc": "/ˈrʌntaɪm ˈerər/",
+   "nghia": "lỗi lúc chạy – dịch được nhưng chương trình hỏng khi đang chạy (vd chia cho 0)",
+   "nhom": "Chương trình & biên dịch",
+   "viDu": "Dividing an integer by zero causes a runtime error.",
+   "viDuNghia": "Chia một số nguyên cho 0 gây ra lỗi lúc chạy."
+  },
+  {
+   "chu": "logical error",
+   "doc": "/ˈlɑːdʒɪkl ˈerər/",
+   "nghia": "lỗi logic – chương trình chạy được nhưng cho kết quả sai",
+   "nhom": "Chương trình & biên dịch",
+   "viDu": "The program compiles and runs, but a logical error makes the result wrong.",
+   "viDuNghia": "Chương trình dịch và chạy được, nhưng lỗi logic làm kết quả sai."
+  },
+  {
+   "chu": "execution",
+   "doc": "/ˌeksɪˈkjuːʃn/",
+   "nghia": "sự thực thi – quá trình chương trình đang chạy",
+   "nhom": "Chương trình & biên dịch",
+   "viDu": "Which of the following correctly represents the updated array after the execution of the below code?",
+   "viDuNghia": "Mảng nào sau đây thể hiện đúng mảng sau khi đoạn mã dưới đây được thực thi?"
+  },
+  {
+   "chu": "preprocessor",
+   "doc": "/ˌpriːˈprɑːsesər/",
+   "nghia": "bộ tiền xử lý – xử lý các dòng bắt đầu bằng dấu thăng (include, define) trước khi biên dịch",
+   "nhom": "Chương trình & biên dịch",
+   "viDu": "The preprocessor handles include and define lines before the compiler runs.",
+   "viDuNghia": "Bộ tiền xử lý xử lý các dòng include và define trước khi trình biên dịch chạy."
+  },
+  {
+   "chu": "header file",
+   "doc": "/ˈhedər faɪl/",
+   "nghia": "tệp tiêu đề (đuôi .h) – chứa khai báo hàm thư viện, nạp bằng include",
+   "nhom": "Chương trình & biên dịch",
+   "viDu": "Which of the following header files contains function prototypes isdigit(int), isspace(int)?",
+   "viDuNghia": "Tệp tiêu đề nào chứa nguyên mẫu hàm isdigit(int), isspace(int)?"
+  },
+  {
+   "chu": "standard library",
+   "doc": "/ˈstændərd ˈlaɪbreri/",
+   "nghia": "thư viện chuẩn – bộ hàm có sẵn của C (stdio, stdlib, string, math…)",
+   "nhom": "Chương trình & biên dịch",
+   "viDu": "Which one of the following is not in the C standard library?",
+   "viDuNghia": "Cái nào sau đây không thuộc thư viện chuẩn của C?"
+  },
+  {
+   "chu": "linking",
+   "doc": "/ˈlɪŋkɪŋ/",
+   "nghia": "liên kết – bước ghép các tệp đã dịch với thư viện thành tệp chạy",
+   "nhom": "Chương trình & biên dịch",
+   "viDu": "A linking error occurs when the definition of a called function cannot be found.",
+   "viDuNghia": "Lỗi liên kết xảy ra khi không tìm thấy định nghĩa của hàm được gọi."
+  },
+  {
+   "chu": "code fragment",
+   "doc": "/koʊd ˈfræɡmənt/",
+   "nghia": "đoạn mã (một phần của chương trình) – nghĩa như code snippet",
+   "nhom": "Chương trình & biên dịch",
+   "viDu": "What does the following code fragment print?",
+   "viDuNghia": "Đoạn mã sau in ra gì?"
+  },
+  {
+   "chu": "identifier",
+   "doc": "/aɪˈdentɪfaɪər/",
+   "nghia": "định danh – tên do lập trình viên đặt cho biến, hàm, mảng…",
+   "nhom": "Chương trình & biên dịch",
+   "viDu": "Which of the following statements is correct regarding the first character of an identifier?",
+   "viDuNghia": "Phát biểu nào sau đây ĐÚNG về ký tự đầu tiên của một định danh (identifier)?"
+  },
+  {
+   "chu": "reserved word",
+   "doc": "/rɪˈzɜːrvd wɜːrd/",
+   "nghia": "từ dành riêng – như keyword, không được dùng để đặt tên",
+   "nhom": "Chương trình & biên dịch",
+   "viDu": "A reserved word such as int or return cannot be used as a variable name.",
+   "viDuNghia": "Từ dành riêng như int hay return không thể dùng làm tên biến."
+  },
+  {
+   "chu": "structured programming",
+   "doc": "/ˈstrʌktʃərd ˈproʊɡræmɪŋ/",
+   "nghia": "lập trình có cấu trúc – chỉ dùng tuần tự, rẽ nhánh, lặp; hạn chế goto",
+   "nhom": "Chương trình & biên dịch",
+   "viDu": "C is based on a view of structured programming.",
+   "viDuNghia": "C được xây dựng dựa trên quan điểm lập trình có cấu trúc."
+  },
+  {
+   "chu": "garbage value",
+   "doc": "/ˈɡɑːrbɪdʒ ˈvæljuː/",
+   "nghia": "giá trị rác – giá trị ngẫu nhiên trong biến chưa được khởi tạo",
+   "nhom": "Chương trình & biên dịch",
+   "viDu": "An uninitialized local variable contains a garbage value.",
+   "viDuNghia": "Biến cục bộ chưa khởi tạo chứa một giá trị rác."
+  },
+  {
+   "chu": "undefined behavior",
+   "doc": "/ˌʌndɪˈfaɪnd bɪˈheɪvjər/",
+   "nghia": "hành vi không xác định – chuẩn C không quy định kết quả, chạy ra gì cũng có thể",
+   "nhom": "Chương trình & biên dịch",
+   "viDu": "Accessing the 11th element of an array of size 10 is undefined behavior.",
+   "viDuNghia": "Truy cập phần tử thứ 11 của mảng kích thước 10 là hành vi không xác định."
+  },
+  {
+   "chu": "integrated development environment",
+   "nghia": "môi trường phát triển tích hợp (IDE) – phần mềm gộp soạn mã, biên dịch, gỡ lỗi (Dev-C++, Code::Blocks)",
+   "nhom": "Chương trình & biên dịch",
+   "viDu": "An IDE lets you edit, compile and debug a program in one place.",
+   "viDuNghia": "IDE cho phép soạn, biên dịch và gỡ lỗi chương trình ở cùng một nơi."
+  },
+  {
+   "chu": "primary memory",
+   "doc": "/ˈpraɪmeri ˈmeməri/",
+   "nghia": "bộ nhớ chính (RAM) – nhanh, mất dữ liệu khi tắt máy",
+   "nhom": "Chương trình & biên dịch",
+   "viDu": "Which of the following statements about primary memory (RAM) and secondary memory (disks) is correct?",
+   "viDuNghia": "Phát biểu nào sau đây về bộ nhớ chính (RAM) và bộ nhớ phụ (ổ đĩa) là đúng?"
+  },
+  {
+   "chu": "secondary memory",
+   "doc": "/ˈsekənderi ˈmeməri/",
+   "nghia": "bộ nhớ phụ (ổ đĩa) – chậm hơn nhưng giữ được dữ liệu khi tắt máy",
+   "nhom": "Chương trình & biên dịch",
+   "viDu": "Files are kept in secondary memory, so they are not lost when the computer is turned off.",
+   "viDuNghia": "Tệp được lưu ở bộ nhớ phụ nên không mất khi tắt máy."
+  },
+  {
+   "chu": "main function",
+   "doc": "/meɪn ˈfʌŋkʃn/",
+   "nghia": "hàm main – nơi chương trình C bắt đầu chạy",
+   "nhom": "Chương trình & biên dịch",
+   "viDu": "What is the main() function in C?",
+   "viDuNghia": "Hàm main() trong C là gì?"
+  },
+  {
+   "chu": "source file",
+   "doc": "/sɔːrs faɪl/",
+   "nghia": "tệp nguồn – tệp chứa mã do lập trình viên viết (đuôi .c)",
+   "nhom": "Chương trình & biên dịch",
+   "viDu": "What translates a C source file into machine language so that the computer can execute it?",
+   "viDuNghia": "Cái gì dịch tệp mã nguồn C sang ngôn ngữ máy để máy tính thực thi được?"
+  },
+  {
+   "chu": "compiler",
+   "doc": "/kəmˈpaɪlər/",
+   "nghia": "trình biên dịch – dịch toàn bộ mã nguồn C thành mã máy trước khi chạy; báo lỗi biên dịch nếu sai cú pháp",
+   "nhom": "Chương trình & biên dịch",
+   "viDu": "Which declaration gives a value that the compiler must be able to work out at compile time?",
+   "viDuNghia": "Khai báo nào cho một giá trị mà trình biên dịch bắt buộc phải tính được ngay lúc biên dịch?"
+  },
+  {
+   "chu": "byte",
+   "doc": "/baɪt/",
+   "nghia": "byte – 8 bit; đơn vị đo kích thước kiểu dữ liệu (char chiếm 1 byte)",
+   "nhom": "Hệ đếm & bit",
+   "viDu": "How many bytes are used to represent the float data type in C?",
+   "viDuNghia": "Kiểu dữ liệu float trong C chiếm bao nhiêu byte?"
+  },
+  {
+   "chu": "conversion",
+   "doc": "/kənˈvɜːrʒn/",
+   "nghia": "sự chuyển đổi (hệ đếm, kiểu dữ liệu)",
+   "nhom": "Hệ đếm & bit",
+   "viDu": "Which of the following statements shows an IMPLICIT type conversion in C?",
+   "viDuNghia": "Câu lệnh nào sau đây thể hiện việc ép kiểu NGẦM ĐỊNH (implicit) trong C?"
+  },
+  {
+   "chu": "unsigned",
+   "doc": "/ʌnˈsaɪnd/",
+   "nghia": "không dấu – kiểu số chỉ chứa giá trị không âm",
+   "nhom": "Hệ đếm & bit",
+   "viDu": "Which value cannot be assigned to an unsigned short variable?",
+   "viDuNghia": "Giá trị nào KHÔNG thể gán cho một biến kiểu unsigned short?"
+  },
+  {
+   "chu": "bitwise operator",
+   "doc": "/ˈbɪtwaɪz ˈɑːpəreɪtər/",
+   "nghia": "toán tử thao tác bit – làm việc trên từng bit (AND, OR, XOR, NOT, dịch bit)",
+   "nhom": "Hệ đếm & bit",
+   "viDu": "The bitwise AND operator compares two numbers bit by bit.",
+   "viDuNghia": "Toán tử AND theo bit so sánh hai số theo từng bit."
+  },
+  {
+   "chu": "floating-point number",
+   "doc": "/ˈfloʊtɪŋ pɔɪnt ˈnʌmbər/",
+   "nghia": "số dấu phẩy động – số thực lưu trong máy (kiểu float, double)",
+   "nhom": "Hệ đếm & bit",
+   "viDu": "Given x, y, z are of floating-point type, which of the following C expressions is INCORRECT?",
+   "viDuNghia": "Cho x, y, z thuộc kiểu số thực (floating-point), biểu thức C nào sau đây là SAI?"
+  },
+  {
+   "chu": "American Standard Code for Information Interchange",
+   "nghia": "bảng mã ASCII – mỗi ký tự ứng với một số (A = 65, a = 97, 0 = 48)",
+   "nhom": "Hệ đếm & bit",
+   "viDu": "The ASCII code of the character 'A' is 65.",
+   "viDuNghia": "Mã ASCII của ký tự 'A' là 65."
+  },
+  {
+   "chu": "binary number",
+   "doc": "/ˈbaɪneri ˈnʌmbər/",
+   "nghia": "số nhị phân – số viết bằng các chữ số 0 và 1",
+   "nhom": "Hệ đếm & bit",
+   "viDu": "What is the decimal value of the binary number 0111 1011?",
+   "viDuNghia": "Số nhị phân 0111 1011 có giá trị thập phân là bao nhiêu?"
+  },
+  {
+   "chu": "decimal number",
+   "doc": "/ˈdesɪml ˈnʌmbər/",
+   "nghia": "số thập phân – số viết ở hệ cơ số 10",
+   "nhom": "Hệ đếm & bit",
+   "viDu": "Convert the decimal number 45 to binary.",
+   "viDuNghia": "Đổi số thập phân 45 sang hệ nhị phân."
+  },
+  {
+   "chu": "character",
+   "doc": "/ˈkærəktər/",
+   "nghia": "ký tự (kiểu char) – một chữ cái, chữ số hay ký hiệu",
+   "nhom": "Biến & kiểu dữ liệu",
+   "viDu": "Which function writes the character value of the argument c to the output stream referenced by fp?",
+   "viDuNghia": "Hàm nào ghi giá trị ký tự của đối số c vào luồng xuất được tham chiếu bởi fp?"
+  },
+  {
+   "chu": "definition",
+   "doc": "/ˌdefɪˈnɪʃn/",
+   "nghia": "định nghĩa – phần viết đầy đủ thân hàm hoặc cấp vùng nhớ cho biến",
+   "nhom": "Biến & kiểu dữ liệu",
+   "viDu": "Which is the correct function definition that will run without errors?",
+   "viDuNghia": "Định nghĩa hàm nào sau đây là đúng cú pháp và chạy không lỗi?"
+  },
+  {
+   "chu": "initialize",
+   "doc": "/ɪˈnɪʃəlaɪz/",
+   "nghia": "khởi tạo – gán giá trị ban đầu cho biến ngay khi khai báo",
+   "nhom": "Biến & kiểu dữ liệu",
+   "viDu": "Which of the following is a valid code to use to declare and initialize a two-dimensional array?",
+   "viDuNghia": "Cách viết nào sau đây là hợp lệ để khai báo và khởi tạo một mảng HAI CHIỀU?"
+  },
+  {
+   "chu": "initialization",
+   "doc": "/ɪˌnɪʃələˈzeɪʃn/",
+   "nghia": "sự khởi tạo – việc gán giá trị ban đầu",
+   "nhom": "Biến & kiểu dữ liệu",
+   "viDu": "In a for loop, the initialization part is executed once, before the loop starts.",
+   "viDuNghia": "Trong vòng lặp for, phần khởi tạo chạy đúng một lần, trước khi vòng lặp bắt đầu."
+  },
+  {
+   "chu": "symbolic constant",
+   "doc": "/sɪmˈbɑːlɪk ˈkɑːnstənt/",
+   "nghia": "hằng tượng trưng – tên thay cho một giá trị cố định, tạo bằng define",
+   "nhom": "Biến & kiểu dữ liệu",
+   "viDu": "A symbolic constant gives a readable name to a fixed value.",
+   "viDuNghia": "Hằng tượng trưng đặt một cái tên dễ đọc cho một giá trị cố định."
+  },
+  {
+   "chu": "type casting",
+   "doc": "/taɪp ˈkæstɪŋ/",
+   "nghia": "ép kiểu – chủ động đổi giá trị sang kiểu khác, vd (float)a",
+   "nhom": "Biến & kiểu dữ liệu",
+   "viDu": "Which implicit type casting is used in the following codes in C programming?",
+   "viDuNghia": "Phép ép kiểu ngầm định (implicit casting) nào được dùng trong đoạn mã sau trong lập trình C?"
+  },
+  {
+   "chu": "implicit conversion",
+   "doc": "/ɪmˈplɪsɪt kənˈvɜːrʒn/",
+   "nghia": "chuyển kiểu ngầm định – trình biên dịch tự đổi kiểu (int thành double khi tính)",
+   "nhom": "Biến & kiểu dữ liệu",
+   "viDu": "When an int is added to a double, an implicit conversion turns the int into a double.",
+   "viDuNghia": "Khi cộng một int với một double, phép chuyển kiểu ngầm định đổi int thành double."
+  },
+  {
+   "chu": "explicit",
+   "doc": "/ɪkˈsplɪsɪt/",
+   "nghia": "tường minh – do lập trình viên viết rõ ra (explicit cast = ép kiểu tường minh)",
+   "nhom": "Biến & kiểu dữ liệu",
+   "viDu": "An explicit cast such as (float)a tells the compiler to convert a to float.",
+   "viDuNghia": "Phép ép kiểu tường minh như (float)a bảo trình biên dịch đổi a sang float."
+  },
+  {
+   "chu": "global variable",
+   "doc": "/ˈɡloʊbl ˈveriəbl/",
+   "nghia": "biến toàn cục – khai báo ngoài mọi hàm, hàm nào cũng dùng được",
+   "nhom": "Biến & kiểu dữ liệu",
+   "viDu": "What is the primary difference between global variables and local variables in C?",
+   "viDuNghia": "Sự khác biệt CHÍNH giữa biến toàn cục và biến cục bộ trong C là gì?"
+  },
+  {
+   "chu": "variable scope",
+   "doc": "/ˈveriəbl skoʊp/",
+   "nghia": "phạm vi của biến – vùng mã mà biến nhìn thấy và dùng được",
+   "nhom": "Biến & kiểu dữ liệu",
+   "viDu": "Which of the following accurately describes the scope of a local variable in C?",
+   "viDuNghia": "Phát biểu nào sau đây mô tả đúng phạm vi (scope) của biến cục bộ trong C?"
+  },
+  {
+   "chu": "accessible",
+   "doc": "/əkˈsesəbl/",
+   "nghia": "truy cập được – dùng được ở vị trí đó của chương trình",
+   "nhom": "Biến & kiểu dữ liệu",
+   "viDu": "A local variable is accessible only inside the function where it is declared.",
+   "viDuNghia": "Biến cục bộ chỉ truy cập được bên trong hàm nơi nó được khai báo."
+  },
+  {
+   "chu": "store",
+   "doc": "/stɔːr/",
+   "nghia": "lưu trữ (giá trị vào biến, dữ liệu vào bộ nhớ)",
+   "nhom": "Biến & kiểu dữ liệu",
+   "viDu": "A pointer is a variable that stores the address of another variable.",
+   "viDuNghia": "Con trỏ là một biến lưu địa chỉ của một biến khác."
+  },
+  {
+   "chu": "variable name",
+   "doc": "/ˈveriəbl neɪm/",
+   "nghia": "tên biến – chỉ gồm chữ, số, gạch dưới; không bắt đầu bằng số, không trùng từ khoá",
+   "nhom": "Biến & kiểu dữ liệu",
+   "viDu": "Which of the following is not a valid variable name declaration?",
+   "viDuNghia": "Khai báo tên biến nào KHÔNG hợp lệ?"
+  },
+  {
+   "chu": "named constant",
+   "doc": "/neɪmd ˈkɑːnstənt/",
+   "nghia": "hằng có tên – giá trị cố định được đặt tên bằng const hoặc define",
+   "nhom": "Biến & kiểu dữ liệu",
+   "viDu": "Which keyword is used to define a named constant in C? (Choose 2 correct answers)",
+   "viDuNghia": "Từ khoá nào dùng để định nghĩa một HẰNG SỐ CÓ TÊN trong C? (Chọn 2 đáp án đúng)"
+  },
+  {
+   "chu": "simple data type",
+   "nghia": "kiểu dữ liệu đơn giản – kiểu cơ bản chứa một giá trị đơn (int, char, float, double)",
+   "nhom": "Biến & kiểu dữ liệu",
+   "viDu": "Choose the correct definition for \"Simple data types\" in C programming.",
+   "viDuNghia": "Chọn định nghĩa ĐÚNG cho \"Kiểu dữ liệu đơn giản\" (Simple data types) trong lập trình C."
+  },
+  {
+   "chu": "variable declaration",
+   "doc": "/ˈveriəbl ˌdekləˈreɪʃn/",
+   "nghia": "khai báo biến – câu lệnh nêu kiểu và tên biến, vd int a;",
+   "nhom": "Biến & kiểu dữ liệu",
+   "viDu": "The variable declaration int count; tells the compiler the type and the name of the variable.",
+   "viDuNghia": "Khai báo biến int count; cho trình biên dịch biết kiểu và tên của biến."
+  },
+  {
+   "chu": "const keyword",
+   "doc": "/ˈkɑːnst ˈkiːwɜːrd/",
+   "nghia": "từ khoá const – biến khai báo kèm const không được đổi giá trị",
+   "nhom": "Biến & kiểu dữ liệu",
+   "viDu": "What is the primary use of the const keyword when used with function parameters in C?",
+   "viDuNghia": "Công dụng chính của từ khóa const khi dùng với tham số hàm trong C là gì?"
+  },
+  {
+   "chu": "data type",
+   "doc": "/ˈdeɪtə taɪp/",
+   "nghia": "kiểu dữ liệu – loại giá trị một biến lưu được (int, float, char, double…) và kích thước trong bộ nhớ",
+   "nhom": "Biến & kiểu dữ liệu",
+   "viDu": "Which function is specifically used to return the absolute value of an int data type in C?",
+   "viDuNghia": "Hàm nào chuyên dùng để trả về trị tuyệt đối của kiểu dữ liệu int trong C?"
+  },
+  {
+   "chu": "variable",
+   "doc": "/ˈveriəbl/",
+   "nghia": "(lập trình) biến – vùng nhớ có tên và kiểu, giữ giá trị thay đổi được · (thống kê) biến ngẫu nhiên",
+   "nhom": "Biến & kiểu dữ liệu",
+   "viDu": "What term is commonly used to specify both the type and name of a variable or constant in a C programming language?",
+   "viDuNghia": "Thuật ngữ nào thường dùng để chỉ việc nêu rõ CẢ kiểu lẫn tên của một biến hoặc hằng trong ngôn ngữ C?"
+  },
+  {
+   "chu": "double",
+   "doc": "/ˈdʌbl/",
+   "nghia": "(kiểu) double – số thực dấu phẩy động độ chính xác kép, thường chiếm 8 byte, in bằng %lf/%f · (nghĩa thường) gấp đôi",
+   "nhom": "Biến & kiểu dữ liệu",
+   "viDu": "What will be the maximum size of a double variable? → 8 bytes",
+   "viDuNghia": "Một biến kiểu double có kích thước tối đa là bao nhiêu? → 8 byte"
+  },
+  {
+   "chu": "magic value",
+   "doc": "/ˈmædʒɪk ˈvæljuː/",
+   "nghia": "giá trị \"ma thuật\" – con số viết thẳng trong mã mà không rõ ý nghĩa (vd 3.14, 100); nên thay bằng hằng có tên (#define, const)",
+   "nhom": "Biến & kiểu dữ liệu",
+   "viDu": "What benefit does #define offer when dealing with magic values in code?",
+   "viDuNghia": "Chỉ thị #define mang lại lợi ích gì khi xử lý các giá trị \"ma thuật\" trong mã?"
+  },
+  {
+   "chu": "local variable",
+   "doc": "/ˈloʊkl ˈveriəbl/",
+   "nghia": "(C) biến cục bộ – khai báo trong hàm/khối, chỉ dùng được trong đó và mất khi hàm kết thúc · (T-SQL) biến cục bộ, tên bắt đầu bằng một dấu @",
+   "nhom": "Biến & kiểu dữ liệu",
+   "viDu": "Which of the following accurately describes the scope of a local variable in C?",
+   "viDuNghia": "Phát biểu nào sau đây mô tả đúng phạm vi (scope) của biến cục bộ trong C?"
+  },
+  {
+   "chu": "float",
+   "doc": "/floʊt/",
+   "nghia": "(C) kiểu số thực dấu phẩy động 4 byte, in bằng %f · (CSS) thuộc tính đẩy phần tử sang trái/phải, chữ chảy quanh · (quản lý dự án) độ trễ cho phép của hoạt động, = slack",
+   "nhom": "Biến & kiểu dữ liệu",
+   "viDu": "How many bytes to represent float data type in C?",
+   "viDuNghia": "Kiểu dữ liệu float trong C chiếm bao nhiêu byte?"
+  },
+  {
+   "chu": "declaration",
+   "doc": "/ˌdekləˈreɪʃn/",
+   "nghia": "(lập trình) khai báo – câu lệnh nêu tên và kiểu của biến/hàm cho trình biên dịch biết, vd int x; · (CSS) khai báo: một cặp thuộc tính – giá trị, vd color: red",
+   "nhom": "Biến & kiểu dữ liệu",
+   "viDu": "Which of the following is true regarding the declaration of a two-dimensional array in C?",
+   "viDuNghia": "Điều nào sau đây đúng về việc khai báo một mảng hai chiều trong C?"
+  },
+  {
+   "chu": "arithmetic operator",
+   "doc": "/ˌærɪθˈmetɪk ˈɑːpəreɪtər/",
+   "nghia": "toán tử số học – cộng, trừ, nhân, chia, chia lấy dư",
+   "nhom": "Toán tử & biểu thức",
+   "viDu": "Which of the following is not an arithmetic operator?",
+   "viDuNghia": "Toán tử nào sau đây KHÔNG phải là toán tử số học?"
+  },
+  {
+   "chu": "relational operator",
+   "doc": "/rɪˈleɪʃənl ˈɑːpəreɪtər/",
+   "nghia": "toán tử quan hệ (so sánh) – lớn hơn, nhỏ hơn, bằng, khác; kết quả là 1 hoặc 0",
+   "nhom": "Toán tử & biểu thức",
+   "viDu": "Which of these is NOT a relational or logical operator?",
+   "viDuNghia": "Toán tử nào KHÔNG phải toán tử quan hệ hay toán tử logic?"
+  },
+  {
+   "chu": "decrement",
+   "doc": "/ˈdekrɪmənt/",
+   "nghia": "giảm đi 1 đơn vị (toán tử --)",
+   "nhom": "Toán tử & biểu thức",
+   "viDu": "The decrement operator reduces the value of a variable by one.",
+   "viDuNghia": "Toán tử giảm làm giá trị của biến giảm đi một."
+  },
+  {
+   "chu": "division",
+   "doc": "/dɪˈvɪʒn/",
+   "nghia": "phép chia; \"integer division\" = chia hai số nguyên, bỏ phần lẻ",
+   "nhom": "Toán tử & biểu thức",
+   "viDu": "Integer division of 7 by 2 gives 3, not 3.5.",
+   "viDuNghia": "Chia nguyên 7 cho 2 được 3, không phải 3.5."
+  },
+  {
+   "chu": "conditional operator",
+   "doc": "/kənˈdɪʃənl ˈɑːpəreɪtər/",
+   "nghia": "toán tử điều kiện (toán tử ba ngôi) – chọn một trong hai giá trị theo điều kiện",
+   "nhom": "Toán tử & biểu thức",
+   "viDu": "What is the syntax of the conditional operator in C?",
+   "viDuNghia": "Cú pháp của toán tử điều kiện (ternary) trong C là gì?"
+  },
+  {
+   "chu": "odd number",
+   "doc": "/ɑːd ˈnʌmbər/",
+   "nghia": "số lẻ – không chia hết cho 2",
+   "nhom": "Toán tử & biểu thức",
+   "viDu": "The program swaps the first largest odd number and the first smallest odd number in the array, then prints the array.",
+   "viDuNghia": "Chương trình hoán đổi vị trí số lẻ lớn nhất đầu tiên và số lẻ nhỏ nhất đầu tiên trong mảng, rồi in mảng."
+  },
+  {
+   "chu": "even number",
+   "doc": "/ˈiːvn ˈnʌmbər/",
+   "nghia": "số chẵn – chia hết cho 2",
+   "nhom": "Toán tử & biểu thức",
+   "viDu": "The program swaps the first largest even number and the first smallest even number in the array, then prints the array.",
+   "viDuNghia": "Chương trình hoán đổi vị trí số chẵn lớn nhất đầu tiên và số chẵn nhỏ nhất đầu tiên trong mảng, rồi in mảng."
+  },
+  {
+   "chu": "perfect square",
+   "doc": "/ˈpɜːrfɪkt skwer/",
+   "nghia": "số chính phương – bình phương của một số nguyên (1, 4, 9, 16…)",
+   "nhom": "Toán tử & biểu thức",
+   "viDu": "Count the perfect squares in the array, for example 4, 9 and 16.",
+   "viDuNghia": "Đếm các số chính phương trong mảng, ví dụ 4, 9 và 16."
+  },
+  {
+   "chu": "operator",
+   "doc": "/ˈɑːpəreɪtər/",
+   "nghia": "toán tử – ký hiệu thực hiện phép toán trên toán hạng (+, ==, &&, ||, ++…)",
+   "nhom": "Toán tử & biểu thức",
+   "viDu": "Which of the following statements are true with regard to the || operator?",
+   "viDuNghia": "Những phát biểu nào sau đây đúng về toán tử ||?"
+  },
+  {
+   "chu": "sizeof operator",
+   "doc": "/ˈsaɪz ʌv ˈɑːpəreɪtər/",
+   "nghia": "toán tử sizeof – cho kích thước (tính bằng byte) của một kiểu hay một biến; sizeof(arr)/sizeof(arr[0]) = số phần tử mảng",
+   "nhom": "Toán tử & biểu thức",
+   "viDu": "What is the purpose of the sizeof operator in C?",
+   "viDuNghia": "Toán tử sizeof trong C dùng để làm gì?"
+  },
+  {
+   "chu": "logical operator",
+   "doc": "/ˈlɑːdʒɪkl ˈɑːpəreɪtər/",
+   "nghia": "toán tử logic – && (và), || (hoặc), ! (phủ định); trong C cho kết quả 1 (đúng) hoặc 0 (sai); Java, JavaScript viết giống hệt",
+   "nhom": "Toán tử & biểu thức",
+   "viDu": "Which of these is NOT a relational or logical operator?",
+   "viDuNghia": "Toán tử nào sau đây KHÔNG PHẢI là toán tử quan hệ hoặc toán tử logic?"
+  },
+  {
+   "chu": "infinite loop",
+   "doc": "/ˈɪnfɪnət luːp/",
+   "nghia": "vòng lặp vô hạn – điều kiện luôn đúng nên không bao giờ dừng",
+   "nhom": "Rẽ nhánh & vòng lặp",
+   "viDu": "A while loop whose condition is always true is an infinite loop.",
+   "viDuNghia": "Vòng lặp while có điều kiện luôn đúng là một vòng lặp vô hạn."
+  },
+  {
+   "chu": "loop body",
+   "doc": "/luːp ˈbɑːdi/",
+   "nghia": "thân vòng lặp – các lệnh được lặp lại",
+   "nhom": "Rẽ nhánh & vòng lặp",
+   "viDu": "Which kind of loop executes its body at least once?",
+   "viDuNghia": "Loại vòng lặp nào thực thi thân vòng lặp ít nhất một lần?"
+  },
+  {
+   "chu": "counter",
+   "doc": "/ˈkaʊntər/",
+   "nghia": "biến đếm – đếm số lần lặp hoặc số phần tử thoả điều kiện",
+   "nhom": "Rẽ nhánh & vòng lặp",
+   "viDu": "Referring to the sample code below, what value will the variable counter have when completed?",
+   "viDuNghia": "Dựa vào đoạn mã sau, biến counter sẽ có giá trị bao nhiêu khi kết thúc?"
+  },
+  {
+   "chu": "switch statement",
+   "doc": "/swɪtʃ ˈsteɪtmənt/",
+   "nghia": "lệnh switch – rẽ nhiều nhánh theo giá trị của một biểu thức nguyên",
+   "nhom": "Rẽ nhánh & vòng lặp",
+   "viDu": "Which of the following about the switch case statement is true?",
+   "viDuNghia": "Phát biểu nào về câu lệnh switch case là ĐÚNG?"
+  },
+  {
+   "chu": "default case",
+   "doc": "/dɪˈfɔːlt keɪs/",
+   "nghia": "nhánh mặc định của switch – chạy khi không case nào khớp",
+   "nhom": "Rẽ nhánh & vòng lặp",
+   "viDu": "The default case runs when no case label matches the value of the switch expression.",
+   "viDuNghia": "Nhánh default chạy khi không nhãn case nào khớp với giá trị của biểu thức switch."
+  },
+  {
+   "chu": "break statement",
+   "doc": "/breɪk ˈsteɪtmənt/",
+   "nghia": "lệnh break – thoát ngay khỏi vòng lặp hoặc switch gần nhất",
+   "nhom": "Rẽ nhánh & vòng lặp",
+   "viDu": "What happens when you use a break statement inside a for loop?",
+   "viDuNghia": "Điều gì xảy ra khi dùng câu lệnh break bên trong vòng for?"
+  },
+  {
+   "chu": "continue statement",
+   "doc": "/kənˈtɪnjuː ˈsteɪtmənt/",
+   "nghia": "lệnh continue – bỏ phần còn lại của lần lặp này, sang lần lặp kế",
+   "nhom": "Rẽ nhánh & vòng lặp",
+   "viDu": "What is the purpose of the continue statement in a loop?",
+   "viDuNghia": "Câu lệnh continue trong vòng lặp có công dụng gì?"
+  },
+  {
+   "chu": "goto statement",
+   "doc": "/ˈɡoʊ tuː ˈsteɪtmənt/",
+   "nghia": "lệnh goto – nhảy thẳng tới một nhãn; làm mã khó đọc nên không khuyến khích",
+   "nhom": "Rẽ nhánh & vòng lặp",
+   "viDu": "The goto statement jumps to a label and makes the program hard to follow.",
+   "viDuNghia": "Lệnh goto nhảy tới một nhãn và làm chương trình khó theo dõi."
+  },
+  {
+   "chu": "repeatedly",
+   "doc": "/rɪˈpiːtɪdli/",
+   "nghia": "lặp đi lặp lại nhiều lần",
+   "nhom": "Rẽ nhánh & vòng lặp",
+   "viDu": "Which sorting algorithm repeatedly steps through the list, compares adjacent elements, and swaps them if they are in the wrong order?",
+   "viDuNghia": "Thuật toán sắp xếp nào lặp đi lặp lại việc duyệt danh sách, so sánh các phần tử KỀ NHAU và hoán đổi nếu sai thứ tự?"
+  },
+  {
+   "chu": "skip",
+   "doc": "/skɪp/",
+   "nghia": "bỏ qua (một lần lặp, một dòng, một ký tự)",
+   "nhom": "Rẽ nhánh & vòng lặp",
+   "viDu": "The program will skip the if-else block and continue with the next statement.",
+   "viDuNghia": "Chương trình sẽ bỏ qua khối if-else và chạy tiếp câu lệnh kế sau."
+  },
+  {
+   "chu": "exit",
+   "doc": "/ˈeksɪt/",
+   "nghia": "thoát khỏi (vòng lặp, hàm, chương trình)",
+   "nhom": "Rẽ nhánh & vòng lặp",
+   "viDu": "Using the break statement, we can exit from a loop or a switch.",
+   "viDuNghia": "Dùng câu lệnh break, ta có thể thoát khỏi một vòng lặp hoặc một lệnh switch."
+  },
+  {
+   "chu": "for loop",
+   "doc": "/fɔːr luːp/",
+   "nghia": "vòng lặp for – lặp với số lần biết trước: khởi tạo; điều kiện; bước tăng",
+   "nhom": "Rẽ nhánh & vòng lặp",
+   "viDu": "What is the purpose of the increment or decrement expression in a for loop?",
+   "viDuNghia": "Mục đích của biểu thức tăng hoặc giảm trong vòng lặp for là gì?"
+  },
+  {
+   "chu": "while loop",
+   "doc": "/waɪl luːp/",
+   "nghia": "vòng lặp while – kiểm tra điều kiện TRƯỚC, còn đúng thì còn lặp; có thể không chạy lần nào",
+   "nhom": "Rẽ nhánh & vòng lặp",
+   "viDu": "What will happen if the condition in a while loop is initially false?",
+   "viDuNghia": "Điều gì xảy ra nếu điều kiện của vòng lặp while sai ngay từ đầu?"
+  },
+  {
+   "chu": "do-while loop",
+   "doc": "/ˈduː waɪl luːp/",
+   "nghia": "vòng lặp do-while – chạy thân TRƯỚC rồi mới kiểm tra điều kiện, nên luôn chạy ít nhất một lần",
+   "nhom": "Rẽ nhánh & vòng lặp",
+   "viDu": "How many times will the do-while loop execute the code if the condition is false?",
+   "viDuNghia": "Vòng lặp do-while thực thi bao nhiêu lần nếu điều kiện SAI?"
+  },
+  {
+   "chu": "if-else statement",
+   "doc": "/ˈɪf els ˈsteɪtmənt/",
+   "nghia": "lệnh if-else – điều kiện đúng thì chạy nhánh if, sai thì chạy nhánh else",
+   "nhom": "Rẽ nhánh & vòng lặp",
+   "viDu": "In a C program, what happens if none of the conditions in an if-else statement are true?",
+   "viDuNghia": "Trong chương trình C, điều gì xảy ra nếu KHÔNG điều kiện nào trong câu lệnh if-else đúng?"
+  },
+  {
+   "chu": "return statement",
+   "doc": "/rɪˈtɜːrn ˈsteɪtmənt/",
+   "nghia": "lệnh return – kết thúc hàm và gửi giá trị về nơi gọi",
+   "nhom": "Rẽ nhánh & vòng lặp",
+   "viDu": "What happens when the return statement has a double expression and the function return type is int?",
+   "viDuNghia": "Điều gì xảy ra khi câu lệnh return có biểu thức kiểu double nhưng kiểu trả về của hàm là int?"
+  },
+  {
+   "chu": "loop",
+   "doc": "/luːp/",
+   "nghia": "vòng lặp – khối lệnh chạy lặp khi điều kiện còn đúng (for, while, do-while). (Đồ thị: khuyên – cạnh nối đỉnh với chính nó)",
+   "nhom": "Rẽ nhánh & vòng lặp",
+   "viDu": "What is the loop in C language used for?",
+   "viDuNghia": "Vòng lặp trong ngôn ngữ C dùng để làm gì?"
+  },
+  {
+   "chu": "format specifier",
+   "doc": "/ˈfɔːrmæt ˈspesɪfaɪər/",
+   "nghia": "ký hiệu định dạng trong printf/scanf, cho biết kiểu dữ liệu cần in hoặc đọc",
+   "nhom": "Nhập xuất & từ hay gặp",
+   "viDu": "Which format specifier is used to print the value of a double variable?",
+   "viDuNghia": "Ký tự định dạng nào dùng để in giá trị của một biến kiểu double?"
+  },
+  {
+   "chu": "newline",
+   "doc": "/ˈnuːlaɪn/",
+   "nghia": "ký tự xuống dòng",
+   "nhom": "Nhập xuất & từ hay gặp",
+   "viDu": "Write a program that takes an array of n integers and prints all numbers that appear exactly twice, in ascending order, with a newline between numbers.",
+   "viDuNghia": "Viết chương trình đọc mảng n số nguyên và in ra tất cả số xuất hiện đúng hai lần, theo thứ tự tăng dần, mỗi số một dòng."
+  },
+  {
+   "chu": "buffer",
+   "doc": "/ˈbʌfər/",
+   "nghia": "bộ đệm – vùng nhớ tạm giữ dữ liệu nhập/xuất trước khi xử lý · (mạng, HĐH) bộ đệm của router/thiết bị I/O; đầy thì gói bị bỏ (tắc nghẽn)",
+   "nhom": "Nhập xuất & từ hay gặp",
+   "viDu": "Which of the following functions provide buffered input facilities on the standard input stream?",
+   "viDuNghia": "Các hàm nào sau đây cung cấp khả năng đọc có bộ đệm (buffered input) trực tiếp trên luồng nhập chuẩn (standard input)?"
+  },
+  {
+   "chu": "standard input",
+   "doc": "/ˈstændərd ˈɪnpʊt/",
+   "nghia": "luồng nhập chuẩn (stdin) – mặc định là bàn phím",
+   "nhom": "Nhập xuất & từ hay gặp",
+   "viDu": "Which function is used to read a single character from the standard input in C?",
+   "viDuNghia": "Hàm nào dùng để đọc một ký tự đơn từ luồng nhập chuẩn (standard input) trong C?"
+  },
+  {
+   "chu": "inclusive",
+   "doc": "/ɪnˈkluːsɪv/",
+   "nghia": "tính cả hai đầu mút (\"from 1 to 10 inclusive\" = kể cả 1 và 10)",
+   "nhom": "Nhập xuất & từ hay gặp",
+   "viDu": "Which of the following statement would create a random number in the range of [1, 10] (inclusive)?",
+   "viDuNghia": "Câu lệnh nào sau đây tạo ra một số ngẫu nhiên trong khoảng [1, 10] (bao gồm cả hai đầu)?"
+  },
+  {
+   "chu": "illegal",
+   "doc": "/ɪˈliːɡl/",
+   "nghia": "không hợp lệ theo luật ngôn ngữ (illegal statement = câu lệnh sai)",
+   "nhom": "Nhập xuất & từ hay gặp",
+   "viDu": "An illegal statement breaks the rules of the language, so the program will not compile.",
+   "viDuNghia": "Câu lệnh không hợp lệ vi phạm luật của ngôn ngữ nên chương trình không biên dịch được."
+  },
+  {
+   "chu": "keyboard buffer",
+   "doc": "/ˈkiːbɔːrd ˈbʌfər/",
+   "nghia": "bộ đệm bàn phím – nơi giữ các phím đã gõ chờ chương trình đọc; ký tự xuống dòng còn sót hay gây lỗi nhập",
+   "nhom": "Nhập xuất & từ hay gặp",
+   "viDu": "The correct function to remove characters that remain in the keyboard buffer in C programming is ___.",
+   "viDuNghia": "Hàm đúng để loại bỏ các ký tự còn sót trong bộ đệm bàn phím khi lập trình C là ___."
+  },
+  {
+   "chu": "frequently",
+   "doc": "/ˈfriːkwəntli/",
+   "nghia": "thường xuyên",
+   "nhom": "Nhập xuất & từ hay gặp",
+   "viDu": "In C programming, a variable is frequently used to store the address of another variable. What is it called?",
+   "viDuNghia": "Trong lập trình C, người ta thường xuyên dùng một biến để lưu địa chỉ của biến khác. Biến đó gọi là gì?"
+  },
+  {
+   "chu": "program output",
+   "doc": "/ˈproʊɡræm ˈaʊtpʊt/",
+   "nghia": "kết quả chương trình in ra – \"What is the output?\" là câu hỏi hay gặp nhất trong đề",
+   "nhom": "Nhập xuất & từ hay gặp",
+   "viDu": "Trace the code line by line and write down the program output before choosing an answer.",
+   "viDuNghia": "Lần theo đoạn mã từng dòng và ghi ra kết quả chương trình in ra trước khi chọn đáp án."
+  },
+  {
+   "chu": "user input",
+   "doc": "/ˈjuːzər ˈɪnpʊt/",
+   "nghia": "dữ liệu người dùng nhập vào (từ bàn phím)",
+   "nhom": "Nhập xuất & từ hay gặp",
+   "viDu": "The program reads user input with scanf() and asks again if the value is not valid.",
+   "viDuNghia": "Chương trình đọc dữ liệu người dùng nhập bằng scanf() và hỏi lại nếu giá trị không hợp lệ."
+  },
+  {
+   "chu": "enter",
+   "doc": "/ˈentər/",
+   "nghia": "nhập (dữ liệu từ bàn phím) – \"the user enters n\" = người dùng nhập n",
+   "nhom": "Nhập xuất & từ hay gặp",
+   "viDu": "The program asks the user to enter two integers a and b. Print the result of 1/a + 1/b, with 2 digits after the decimal point.",
+   "viDuNghia": "Chương trình yêu cầu người dùng nhập hai số nguyên a và b. In kết quả 1/a + 1/b, lấy 2 chữ số sau dấu thập phân."
+  },
+  {
+   "chu": "formatted output",
+   "doc": "/ˈfɔːrmætɪd ˈaʊtpʊt/",
+   "nghia": "xuất có định dạng – in dữ liệu theo khuôn dạng ký hiệu định dạng (printf ra màn hình, fprintf ra tệp)",
+   "nhom": "Nhập xuất & từ hay gặp",
+   "viDu": "What function is used to send formatted output to a file? → fprintf",
+   "viDuNghia": "Hàm nào dùng để ghi dữ liệu xuất có định dạng ra tệp? → fprintf"
+  },
+  {
+   "chu": "random number",
+   "doc": "/ˈrændəm ˈnʌmbər/",
+   "nghia": "số ngẫu nhiên – trong C sinh bằng rand() (thư viện stdlib.h); gọi srand(time(NULL)) để mỗi lần chạy ra dãy khác",
+   "nhom": "Nhập xuất & từ hay gặp",
+   "viDu": "What is the correct way to ensure a different sequence of random numbers in each program run? → srand(time(NULL));",
+   "viDuNghia": "Cách đúng để mỗi lần chạy chương trình ra một dãy số ngẫu nhiên khác nhau là gì? → srand(time(NULL));"
+  }
+ ]
+}

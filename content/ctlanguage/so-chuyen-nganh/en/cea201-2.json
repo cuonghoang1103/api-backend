@@ -1,0 +1,677 @@
+{
+ "ma": "cea201-2",
+ "nn": "en",
+ "ten": "CEA201 · 2. Bộ nhớ, cache, lưu trữ và vào/ra",
+ "moTa": "Môn Tổ chức & kiến trúc máy tính (CEA201), phần 2: phân cấp bộ nhớ, cache, RAM/ROM/flash, sửa lỗi, đĩa từ, SSD, RAID và các kỹ thuật vào/ra (I/O). Từ lấy từ đề FE thật; câu ví dụ là câu hỏi thật trong đề.",
+ "bieuTuong": "memorychip.fill",
+ "thuTu": -988,
+ "tu": [
+  {
+   "chu": "memory hierarchy",
+   "doc": "/ˈmeməri ˈhaɪərɑːrki/",
+   "nghia": "phân cấp bộ nhớ – xếp tầng từ nhanh, đắt, nhỏ (thanh ghi, cache) tới chậm, rẻ, lớn (đĩa, băng từ)",
+   "nhom": "Đặc tính bộ nhớ",
+   "viDu": "In a memory hierarchy system, which factor primarily influences the decision to implement a multi-level cache rather than a single-level cache?",
+   "viDuNghia": "Trong hệ phân cấp bộ nhớ, yếu tố nào chủ yếu quyết định việc dùng cache nhiều mức thay vì cache một mức?"
+  },
+  {
+   "chu": "internal memory",
+   "doc": "/ɪnˈtɜːrnl ˈmeməri/",
+   "nghia": "bộ nhớ trong – thanh ghi, cache, bộ nhớ chính; CPU truy cập trực tiếp",
+   "nhom": "Đặc tính bộ nhớ",
+   "viDu": "Internal memory capacity is typically expressed in terms of __________.",
+   "viDuNghia": "Dung lượng bộ nhớ trong thường được biểu thị theo đơn vị __________."
+  },
+  {
+   "chu": "external memory",
+   "doc": "/ɪkˈstɜːrnl ˈmeməri/",
+   "nghia": "bộ nhớ ngoài – đĩa, băng từ; CPU truy cập qua mô-đun I/O",
+   "nhom": "Đặc tính bộ nhớ",
+   "viDu": "Magnetic disks are the foundation of external memory on virtually all computer systems.",
+   "viDuNghia": "Đĩa từ là nền tảng của bộ nhớ ngoài trên hầu như mọi hệ thống máy tính."
+  },
+  {
+   "chu": "secondary storage",
+   "doc": "/ˈsekənderi ˈstɔːrɪdʒ/",
+   "nghia": "lưu trữ thứ cấp – nơi lưu lâu dài chương trình và tệp (đĩa cứng, SSD)",
+   "nhom": "Đặc tính bộ nhớ",
+   "viDu": "Which registers can interact with the secondary storage?",
+   "viDuNghia": "Thanh ghi nào có thể tương tác với bộ nhớ thứ cấp (secondary storage)?"
+  },
+  {
+   "chu": "memory cell",
+   "doc": "/ˈmeməri sel/",
+   "nghia": "ô nhớ – phần tử nhớ cơ bản, lưu một bit (0 hoặc 1)",
+   "nhom": "Đặc tính bộ nhớ",
+   "viDu": "The basic element of a semiconductor memory is the memory cell.",
+   "viDuNghia": "Phần tử cơ bản của bộ nhớ bán dẫn là ô nhớ (memory cell)."
+  },
+  {
+   "chu": "word",
+   "doc": "/wɜːrd/",
+   "nghia": "từ nhớ – đơn vị tổ chức tự nhiên của bộ nhớ, thường bằng số bit của một lệnh hay một số nguyên",
+   "nhom": "Đặc tính bộ nhớ",
+   "viDu": "A computer has memory of 256k words, how many bits are required to specify the address of a word in memory?",
+   "viDuNghia": "Một máy tính có bộ nhớ 256k từ (words), cần bao nhiêu bit để xác định địa chỉ của một từ trong bộ nhớ?"
+  },
+  {
+   "chu": "unit of transfer",
+   "nghia": "đơn vị truyền – số bit đọc ra/ghi vào bộ nhớ trong một lần",
+   "nhom": "Đặc tính bộ nhớ",
+   "viDu": "For internal memory, the unit of transfer is equal to the number of electrical lines into and out of the memory module.",
+   "viDuNghia": "Đối với bộ nhớ trong, đơn vị truyền (unit of transfer) bằng số đường tín hiệu điện đi vào và ra khỏi mô-đun bộ nhớ."
+  },
+  {
+   "chu": "sequential access",
+   "doc": "/sɪˈkwenʃl ˈækses/",
+   "nghia": "truy cập tuần tự – phải đi qua lần lượt từ đầu (băng từ)",
+   "nhom": "Đặc tính bộ nhớ",
+   "viDu": "Which of the following is an example of sequential access media?",
+   "viDuNghia": "Thiết bị nào sau đây là ví dụ về phương tiện truy cập tuần tự?"
+  },
+  {
+   "chu": "direct access",
+   "doc": "/dəˈrekt ˈækses/",
+   "nghia": "truy cập trực tiếp – nhảy tới vùng lân cận rồi tìm tuần tự (đĩa từ)",
+   "nhom": "Đặc tính bộ nhớ",
+   "viDu": "Magnetic disks use direct access: the head moves to the right track, then waits for the sector.",
+   "viDuNghia": "Đĩa từ dùng truy cập trực tiếp: đầu đọc tới đúng rãnh rồi chờ cung quay tới."
+  },
+  {
+   "chu": "random access",
+   "doc": "/ˈrændəm ˈækses/",
+   "nghia": "truy cập ngẫu nhiên – tới thẳng ô bất kỳ, thời gian như nhau (bộ nhớ chính)",
+   "nhom": "Đặc tính bộ nhớ",
+   "viDu": "What methods can be used to access units of data in memory? — Sequential access, Direct access, Random access, Associative",
+   "viDuNghia": "Những phương pháp nào có thể được dùng để truy cập các đơn vị dữ liệu trong bộ nhớ? — Truy cập tuần tự, Truy cập trực tiếp, Truy cập ngẫu nhiên, Kết hợp"
+  },
+  {
+   "chu": "associative",
+   "doc": "/əˈsoʊʃiətɪv/",
+   "nghia": "kết hợp (liên kết) – tìm ô theo nội dung chứ không theo địa chỉ; cache liên kết đầy đủ (fully associative): một khối vào dòng nào cũng được",
+   "nhom": "Đặc tính bộ nhớ",
+   "viDu": "A fully associative cache uses 32-byte lines. Main memory is byte addressable and has a capacity of 4 GB. How many bits are needed for the tag field of an address?",
+   "viDuNghia": "Một cache liên kết đầy đủ dùng dòng 32 byte. Bộ nhớ chính định địa chỉ theo byte, dung lượng 4 GB. Trường tag của địa chỉ cần bao nhiêu bit?"
+  },
+  {
+   "chu": "access time",
+   "doc": "/ˈækses taɪm/",
+   "nghia": "thời gian truy cập – từ lúc đưa địa chỉ tới lúc có dữ liệu",
+   "nhom": "Đặc tính bộ nhớ",
+   "viDu": "Which factor has the most significant impact on the average access time of a magnetic disk drive?",
+   "viDuNghia": "Yếu tố nào ảnh hưởng lớn nhất tới thời gian truy cập trung bình của ổ đĩa từ?"
+  },
+  {
+   "chu": "transfer rate",
+   "doc": "/ˈtrænsfɜːr reɪt/",
+   "nghia": "tốc độ truyền – lượng dữ liệu đọc/ghi được mỗi giây",
+   "nhom": "Đặc tính bộ nhớ",
+   "viDu": "The memory transfer rate has not kept up with increases in processor speed.",
+   "viDuNghia": "Tốc độ truyền của bộ nhớ đã không theo kịp mức tăng của tốc độ bộ xử lý."
+  },
+  {
+   "chu": "volatile",
+   "doc": "/ˈvɑːlətl/",
+   "nghia": "khả biến – mất dữ liệu khi tắt điện (RAM)",
+   "nhom": "Đặc tính bộ nhớ",
+   "viDu": "In a volatile memory, information decays naturally or is lost when electrical power is switched off.",
+   "viDuNghia": "Trong bộ nhớ khả biến (volatile), thông tin suy giảm tự nhiên hoặc bị mất khi ngắt nguồn điện."
+  },
+  {
+   "chu": "nonvolatile",
+   "doc": "/ˌnɑːnˈvɑːlətl/",
+   "nghia": "không khả biến – giữ được dữ liệu khi mất điện (ROM, flash, đĩa)",
+   "nhom": "Đặc tính bộ nhớ",
+   "viDu": "A ______ contains a permanent pattern of data that cannot be changed, is nonvolatile, and cannot have new data written into it.",
+   "viDuNghia": "______ chứa một mẫu dữ liệu cố định không thể thay đổi, không khả biến (nonvolatile) và không thể ghi dữ liệu mới vào."
+  },
+  {
+   "chu": "storage capacity",
+   "doc": "/ˈstɔːrɪdʒ kəˈpæsəti/",
+   "nghia": "dung lượng lưu trữ – chứa được bao nhiêu dữ liệu",
+   "nhom": "Đặc tính bộ nhớ",
+   "viDu": "Consider a 5-drive, 200 GBytes-per-drive RAID array. What is the available data storage capacity for each of the RAID levels 5?",
+   "viDuNghia": "Xét một mảng RAID 5 ổ đĩa, mỗi ổ 200 GByte. Dung lượng lưu trữ dữ liệu khả dụng với RAID mức 5 là bao nhiêu?"
+  },
+  {
+   "chu": "location",
+   "doc": "/loʊˈkeɪʃn/",
+   "nghia": "vị trí (ô nhớ) – chỗ dữ liệu nằm trong bộ nhớ",
+   "nhom": "Đặc tính bộ nhớ",
+   "viDu": "The instruction location immediately following the delayed branch is referred to as the __________.",
+   "viDuNghia": "Vị trí lệnh ngay sau lệnh rẽ nhánh trì hoãn (delayed branch) được gọi là __________."
+  },
+  {
+   "chu": "access",
+   "doc": "/ˈækses/",
+   "nghia": "(máy tính) truy cập – đọc hoặc ghi một vị trí nhớ/đĩa; access time = thời gian truy cập · (trích dẫn MLA) \"Accessed\" = ngày truy cập nguồn",
+   "nhom": "Đặc tính bộ nhớ",
+   "viDu": "When large volumes of data are to be moved, a more efficient technique is direct memory access (DMA).",
+   "viDuNghia": "Khi cần di chuyển khối lượng dữ liệu lớn, một kỹ thuật hiệu quả hơn là truy cập bộ nhớ trực tiếp (DMA)."
+  },
+  {
+   "chu": "memory",
+   "doc": "/ˈmeməri/",
+   "nghia": "bộ nhớ – nơi lưu chương trình và dữ liệu (bộ nhớ chính RAM, cache, bộ nhớ phụ); tính theo word hoặc byte",
+   "nhom": "Đặc tính bộ nhớ",
+   "viDu": "In modern processors, why is cache memory typically organized into multiple levels, such as L1, L2, and L3 caches?",
+   "viDuNghia": "Trong bộ xử lý hiện đại, vì sao cache thường được tổ chức thành nhiều mức như L1, L2, L3?"
+  },
+  {
+   "chu": "memory module",
+   "doc": "/ˈmeməri ˈmɑːdʒuːl/",
+   "nghia": "mô-đun bộ nhớ – khối chip nhớ cắm vào máy; số đường dữ liệu vào/ra của nó bằng đơn vị truyền",
+   "nhom": "Đặc tính bộ nhớ",
+   "viDu": "A memory module with 20 address lines can hold 2^20 words.",
+   "viDuNghia": "Một mô-đun bộ nhớ có 20 đường địa chỉ chứa được 2^20 từ."
+  },
+  {
+   "chu": "cache",
+   "doc": "/kæʃ/",
+   "nghia": "bộ nhớ đệm cache – bộ nhớ nhỏ, rất nhanh nằm giữa CPU và bộ nhớ chính",
+   "nhom": "Cache",
+   "viDu": "For a cache of fixed total capacity, what is the drawback of making the line (block) size too large?",
+   "viDuNghia": "Với một cache có dung lượng tổng cố định, nhược điểm của việc chọn kích thước dòng (khối) quá lớn là gì?"
+  },
+  {
+   "chu": "cache memory",
+   "doc": "/kæʃ ˈmeməri/",
+   "nghia": "bộ nhớ cache – giữ bản sao những phần bộ nhớ chính vừa dùng để lần sau lấy nhanh",
+   "nhom": "Cache",
+   "viDu": "Which method of accessing units of data is used to copy a block in main memory into cache memory?",
+   "viDuNghia": "Phương pháp truy cập đơn vị dữ liệu nào được dùng để sao chép một khối từ bộ nhớ chính vào bộ nhớ cache?"
+  },
+  {
+   "chu": "cache hit",
+   "doc": "/kæʃ hɪt/",
+   "nghia": "trúng cache – dữ liệu cần tìm đang có sẵn trong cache",
+   "nhom": "Cache",
+   "viDu": "A cache hit occurs when the requested word is found in the cache.",
+   "viDuNghia": "Trúng cache xảy ra khi từ nhớ cần tìm có sẵn trong cache."
+  },
+  {
+   "chu": "cache miss",
+   "doc": "/kæʃ mɪs/",
+   "nghia": "trượt cache – dữ liệu không có trong cache, phải lấy từ bộ nhớ chính",
+   "nhom": "Cache",
+   "viDu": "In reference to access time to a two-level memory, a miss occurs if an accessed word is not found in the faster memory.",
+   "viDuNghia": "Xét thời gian truy cập tới bộ nhớ hai mức, trượt (miss) xảy ra nếu từ (word) cần truy cập không có trong bộ nhớ nhanh hơn."
+  },
+  {
+   "chu": "hit ratio",
+   "doc": "/hɪt ˈreɪʃioʊ/",
+   "nghia": "tỉ lệ trúng – phần trăm số lần truy cập tìm thấy ngay trong cache",
+   "nhom": "Cache",
+   "viDu": "The performance of cache memory is measured in terms of a quantity called the hit ratio.",
+   "viDuNghia": "Hiệu năng của bộ nhớ cache được đo bằng một đại lượng gọi là tỉ lệ trúng (hit ratio)."
+  },
+  {
+   "chu": "cache line",
+   "doc": "/kæʃ laɪn/",
+   "nghia": "dòng cache – một ô của cache, chứa một khối dữ liệu kèm tag",
+   "nhom": "Cache",
+   "viDu": "Which mapping technique allows a main memory block to be placed in only one possible cache line?",
+   "viDuNghia": "Kỹ thuật ánh xạ nào cho phép một khối bộ nhớ chính chỉ được đặt vào MỘT dòng cache duy nhất?"
+  },
+  {
+   "chu": "mapping function",
+   "doc": "/ˈmæpɪŋ ˈfʌŋkʃn/",
+   "nghia": "hàm ánh xạ – quy tắc khối bộ nhớ chính được đặt vào dòng cache nào",
+   "nhom": "Cache",
+   "viDu": "______ is the simplest mapping technique and maps each block of main memory into only one possible cache line.",
+   "viDuNghia": "______ là kỹ thuật ánh xạ đơn giản nhất và ánh xạ mỗi khối của bộ nhớ chính vào chỉ một dòng cache duy nhất có thể."
+  },
+  {
+   "chu": "direct mapping",
+   "doc": "/dəˈrekt ˈmæpɪŋ/",
+   "nghia": "ánh xạ trực tiếp – mỗi khối chỉ vào được đúng một dòng cache; đơn giản, rẻ",
+   "nhom": "Cache",
+   "viDu": "In a one-cache system using direct mapping, with a cache of 10 lines, which memory blocks can be transferred to cache line 7?",
+   "viDuNghia": "Trong hệ một cache dùng ánh xạ trực tiếp, cache có 10 dòng, những khối nhớ nào có thể được chuyển vào dòng cache số 7?"
+  },
+  {
+   "chu": "associative mapping",
+   "doc": "/əˈsoʊʃiətɪv ˈmæpɪŋ/",
+   "nghia": "ánh xạ kết hợp – một khối vào được bất kỳ dòng nào; linh hoạt nhưng mạch phức tạp",
+   "nhom": "Cache",
+   "viDu": "With associative mapping, a block can be loaded into any line of the cache.",
+   "viDuNghia": "Với ánh xạ kết hợp, một khối có thể được nạp vào bất kỳ dòng nào của cache."
+  },
+  {
+   "chu": "set-associative mapping",
+   "doc": "/ˌset əˈsoʊʃiətɪv ˈmæpɪŋ/",
+   "nghia": "ánh xạ kết hợp theo tập – khối vào được bất kỳ dòng nào trong một tập cố định; dung hoà hai cách trên",
+   "nhom": "Cache",
+   "viDu": "A two-way set-associative cache has lines of 16 bytes and a total size of 8 Kbytes. How many bits are there in the set field of the address?",
+   "viDuNghia": "Một cache liên kết tập hợp hai đường (two-way) có dòng 16 byte, tổng dung lượng 8 Kbyte. Trường tập (set) của địa chỉ có bao nhiêu bit?"
+  },
+  {
+   "chu": "replacement algorithm",
+   "doc": "/rɪˈpleɪsmənt ˈælɡərɪðəm/",
+   "nghia": "thuật toán thay thế – chọn dòng cache nào bị loại khi cần chỗ cho khối mới",
+   "nhom": "Cache",
+   "viDu": "When the cache is full, a replacement algorithm chooses which block to remove.",
+   "viDuNghia": "Khi cache đầy, thuật toán thay thế chọn khối nào bị loại ra."
+  },
+  {
+   "chu": "least recently used",
+   "nghia": "LRU – thay khối lâu nhất chưa được dùng tới",
+   "nhom": "Cache",
+   "viDu": "What is the purpose of the least recently used (LRU) algorithm in cache memory?",
+   "viDuNghia": "Mục đích của thuật toán LRU (lâu nhất chưa dùng) trong bộ nhớ cache là gì?"
+  },
+  {
+   "chu": "write through",
+   "doc": "/raɪt θruː/",
+   "nghia": "ghi xuyên – mỗi lần ghi đều ghi cả cache lẫn bộ nhớ chính; luôn nhất quán nhưng chậm",
+   "nhom": "Cache",
+   "viDu": "When using write through technique, all write operations are made to main memory as well as to the cache, so that main memory is always valid.",
+   "viDuNghia": "Khi dùng kỹ thuật ghi xuyên (write through), mọi thao tác ghi đều được ghi vào bộ nhớ chính cũng như vào cache, để bộ nhớ chính luôn hợp lệ."
+  },
+  {
+   "chu": "write back",
+   "doc": "/raɪt bæk/",
+   "nghia": "ghi sau – chỉ ghi cache, khi dòng bị thay mới cập nhật bộ nhớ chính; nhanh hơn",
+   "nhom": "Cache",
+   "viDu": "With a write-back (copy-back) policy, when is main memory updated?",
+   "viDuNghia": "Với chính sách write-back (copy-back), khi nào bộ nhớ chính được cập nhật?"
+  },
+  {
+   "chu": "locality of reference",
+   "nghia": "tính cục bộ của tham chiếu – chương trình hay dùng lại các ô nhớ gần nhau; lý do cache hiệu quả",
+   "nhom": "Cache",
+   "viDu": "A loop repeatedly reads and updates the same counter variable. Which principle of locality does this behaviour illustrate?",
+   "viDuNghia": "Một vòng lặp liên tục đọc và cập nhật cùng một biến đếm. Hành vi này minh hoạ nguyên lý cục bộ nào?"
+  },
+  {
+   "chu": "multilevel cache",
+   "doc": "/ˌmʌltiˈlevl kæʃ/",
+   "nghia": "cache nhiều mức – L1 nhỏ nhanh nhất, rồi L2, L3 lớn và chậm dần",
+   "nhom": "Cache",
+   "viDu": "Most processors use a multilevel cache: L1, L2 and L3.",
+   "viDuNghia": "Phần lớn bộ xử lý dùng cache nhiều mức: L1, L2 và L3."
+  },
+  {
+   "chu": "level 1 cache",
+   "nghia": "cache cấp 1 (L1) – nằm trong chip bộ xử lý, nhỏ nhất và nhanh nhất; sau đó tới L2, L3 lớn và chậm dần",
+   "nhom": "Cache",
+   "viDu": "What is the cache memory level that is integrated into the processor chip and has the lowest latency?",
+   "viDuNghia": "Cấp bộ nhớ cache nào được tích hợp vào chip bộ xử lý và có độ trễ thấp nhất?"
+  },
+  {
+   "chu": "tag field",
+   "doc": "/tæɡ fiːld/",
+   "nghia": "trường tag – phần cao của địa chỉ, lưu kèm mỗi dòng cache để biết dòng đang chứa khối nào",
+   "nhom": "Cache",
+   "viDu": "A set-associative cache has 64 lines in four-line sets; main memory has 4K blocks of 128 words. How many bits are in the tag field?",
+   "viDuNghia": "Một cache liên kết tập hợp có 64 dòng, chia tập 4 dòng; bộ nhớ chính có 4K khối, mỗi khối 128 từ. Trường tag có bao nhiêu bit?"
+  },
+  {
+   "chu": "average access time",
+   "nghia": "thời gian truy cập trung bình – với tỉ lệ trúng H: T = H × T1 + (1 − H) × (T1 + T2)",
+   "nhom": "Cache",
+   "viDu": "A cache has an access time of 2 ns, main memory 40 ns, and the hit ratio is 95%. What is the average access time?",
+   "viDuNghia": "Cache có thời gian truy cập 2 ns, bộ nhớ chính 40 ns, tỉ lệ trúng 95%. Thời gian truy cập trung bình là bao nhiêu?"
+  },
+  {
+   "chu": "random access memory",
+   "nghia": "bộ nhớ truy cập ngẫu nhiên (RAM) – đọc ghi được, mất dữ liệu khi tắt điện",
+   "nhom": "Bộ nhớ bán dẫn",
+   "viDu": "What is the difference between random access memory (RAM) and read-only memory (ROM)?",
+   "viDuNghia": "Bộ nhớ truy cập ngẫu nhiên (RAM) khác bộ nhớ chỉ đọc (ROM) ở điểm nào?"
+  },
+  {
+   "chu": "dynamic RAM",
+   "doc": "/daɪˈnæmɪk ræm/",
+   "nghia": "RAM động (DRAM) – lưu bit bằng tụ điện, phải làm tươi định kỳ; rẻ, dày đặc, dùng cho bộ nhớ chính",
+   "nhom": "Bộ nhớ bán dẫn",
+   "viDu": "Which of the following is true about DRAM?",
+   "viDuNghia": "Phát biểu nào sau đây đúng về DRAM?"
+  },
+  {
+   "chu": "static RAM",
+   "doc": "/ˈstætɪk ræm/",
+   "nghia": "RAM tĩnh (SRAM) – lưu bit bằng flip-flop, không cần làm tươi; nhanh, đắt, dùng cho cache",
+   "nhom": "Bộ nhớ bán dẫn",
+   "viDu": "Which of the following is true about SRAM?",
+   "viDuNghia": "Phát biểu nào sau đây đúng về SRAM?"
+  },
+  {
+   "chu": "read-only memory",
+   "doc": "/ˌriːd ˈoʊnli ˈmeməri/",
+   "nghia": "bộ nhớ chỉ đọc (ROM) – dữ liệu ghi sẵn, không mất khi tắt điện",
+   "nhom": "Bộ nhớ bán dẫn",
+   "viDu": "Read-only memory keeps its contents when the power is switched off.",
+   "viDuNghia": "Bộ nhớ chỉ đọc vẫn giữ nội dung khi tắt nguồn điện."
+  },
+  {
+   "chu": "erasable programmable ROM",
+   "nghia": "EPROM – ROM xoá được (bằng tia cực tím) rồi nạp lại",
+   "nhom": "Bộ nhớ bán dẫn",
+   "viDu": "An EPROM has 20 address lines and 8 data lines. What is the maximum memory capacity of this chip?",
+   "viDuNghia": "Một EPROM có 20 đường địa chỉ và 8 đường dữ liệu. Dung lượng nhớ tối đa của chip này là bao nhiêu?"
+  },
+  {
+   "chu": "electrically erasable programmable ROM",
+   "nghia": "EEPROM – ROM xoá và ghi lại bằng điện, sửa được từng byte",
+   "nhom": "Bộ nhớ bán dẫn",
+   "viDu": "An electrically erasable programmable ROM (EEPROM) can be rewritten without removing the chip.",
+   "viDuNghia": "EEPROM có thể ghi lại mà không cần tháo chip ra."
+  },
+  {
+   "chu": "flash memory",
+   "doc": "/flæʃ ˈmeməri/",
+   "nghia": "bộ nhớ flash – không mất dữ liệu khi tắt điện, xoá theo khối; dùng trong USB, SSD",
+   "nhom": "Bộ nhớ bán dẫn",
+   "viDu": "With ________, the microchip is organized so that a section of memory cells is erased in a single action.",
+   "viDuNghia": "Với ________, vi mạch được tổ chức sao cho cả một vùng ô nhớ được xoá trong một thao tác duy nhất."
+  },
+  {
+   "chu": "NAND flash",
+   "doc": "/nænd flæʃ/",
+   "nghia": "flash NAND – các ô nối tiếp nhau; mật độ cao, rẻ, dùng để lưu trữ lớn (SSD, thẻ nhớ)",
+   "nhom": "Bộ nhớ bán dẫn",
+   "viDu": "What are the key differences in the architecture of NOR and NAND flash memory?",
+   "viDuNghia": "Sự khác biệt chính trong kiến trúc của bộ nhớ flash NOR và NAND là gì?"
+  },
+  {
+   "chu": "NOR flash",
+   "doc": "/nɔːr flæʃ/",
+   "nghia": "flash NOR – các ô nối song song; đọc ngẫu nhiên nhanh, dùng để chứa mã chương trình",
+   "nhom": "Bộ nhớ bán dẫn",
+   "viDu": "NOR flash is often used to store program code because it allows fast random reads.",
+   "viDuNghia": "Flash NOR thường dùng để chứa mã chương trình vì đọc ngẫu nhiên nhanh."
+  },
+  {
+   "chu": "refresh",
+   "doc": "/rɪˈfreʃ/",
+   "nghia": "làm tươi – nạp lại điện tích cho ô DRAM định kỳ để khỏi mất dữ liệu",
+   "nhom": "Bộ nhớ bán dẫn",
+   "viDu": "Why must DRAM be refreshed periodically?",
+   "viDuNghia": "Vì sao DRAM phải được làm tươi (refresh) định kỳ?"
+  },
+  {
+   "chu": "error correction",
+   "doc": "/ˈerər kəˈrekʃn/",
+   "nghia": "sửa lỗi – tự tìm và sửa bit sai trong dữ liệu",
+   "nhom": "Phát hiện & sửa lỗi",
+   "viDu": "How many check bits are needed for a Hamming error correction code to detect single-error correction in a 1 KByte data word?",
+   "viDuNghia": "Cần bao nhiêu bit kiểm tra cho mã sửa lỗi Hamming để sửa một lỗi đơn (single-error correction) trên từ dữ liệu 1 KByte?"
+  },
+  {
+   "chu": "parity bit",
+   "doc": "/ˈpærəti bɪt/",
+   "nghia": "bit chẵn lẻ – bit thêm vào để phát hiện lỗi một bit",
+   "nhom": "Phát hiện & sửa lỗi",
+   "viDu": "An even parity bit makes the total number of 1s in the word even.",
+   "viDuNghia": "Bit chẵn lẻ kiểu chẵn làm cho tổng số bit 1 trong từ là số chẵn."
+  },
+  {
+   "chu": "Hamming code",
+   "doc": "/ˈhæmɪŋ koʊd/",
+   "nghia": "mã Hamming – mã sửa lỗi, thêm các bit kiểm tra để tìm đúng vị trí bit sai",
+   "nhom": "Phát hiện & sửa lỗi",
+   "viDu": "What is the main idea of using Hamming code for error correction?",
+   "viDuNghia": "Ý tưởng chính của việc dùng mã Hamming để sửa lỗi là gì?"
+  },
+  {
+   "chu": "check bit",
+   "doc": "/tʃek bɪt/",
+   "nghia": "bit kiểm tra – bit thêm vào dữ liệu để phát hiện/sửa lỗi",
+   "nhom": "Phát hiện & sửa lỗi",
+   "viDu": "How many check bits are needed if the Hamming error correction code is used to detect single bit error in a 128-bit data word?",
+   "viDuNghia": "Cần bao nhiêu bit kiểm tra nếu dùng mã sửa lỗi Hamming để phát hiện lỗi 1 bit trong từ dữ liệu 128 bit?"
+  },
+  {
+   "chu": "magnetic disk",
+   "doc": "/mæɡˈnetɪk dɪsk/",
+   "nghia": "đĩa từ – đĩa phủ vật liệu từ tính, ghi dữ liệu bằng đầu từ",
+   "nhom": "Đĩa từ & SSD",
+   "viDu": "In terms of data storage, what is the main distinction between a solid state drive and a magnetic disk?",
+   "viDuNghia": "Về lưu trữ dữ liệu, khác biệt chính giữa ổ SSD và đĩa từ là gì?"
+  },
+  {
+   "chu": "hard disk drive",
+   "doc": "/hɑːrd dɪsk draɪv/",
+   "nghia": "ổ đĩa cứng (HDD)",
+   "nhom": "Đĩa từ & SSD",
+   "viDu": "A ______ disk is permanently mounted in the disk drive, such as the hard disk in a personal computer.",
+   "viDuNghia": "Một đĩa ______ được gắn cố định trong ổ đĩa, chẳng hạn như ổ cứng trong một máy tính cá nhân."
+  },
+  {
+   "chu": "platter",
+   "doc": "/ˈplætər/",
+   "nghia": "phiến đĩa – một đĩa tròn trong ổ cứng",
+   "nhom": "Đĩa từ & SSD",
+   "viDu": "The set of all the tracks in the same relative position on the platter is referred to as a __________.",
+   "viDuNghia": "Tập hợp tất cả các rãnh (track) ở cùng vị trí tương đối trên các mặt đĩa được gọi là __________."
+  },
+  {
+   "chu": "disk track",
+   "doc": "/dɪsk træk/",
+   "nghia": "rãnh đĩa (track) – vòng tròn đồng tâm trên mặt đĩa chứa dữ liệu",
+   "nhom": "Đĩa từ & SSD",
+   "viDu": "There are typically hundreds of sectors per track and they may be either fixed or variable length.",
+   "viDuNghia": "Thông thường có hàng trăm sector trên mỗi rãnh (track) và chúng có thể có độ dài cố định hoặc thay đổi."
+  },
+  {
+   "chu": "sector",
+   "doc": "/ˈsektər/",
+   "nghia": "cung (sector) – một đoạn của rãnh; đơn vị đọc/ghi nhỏ nhất của đĩa",
+   "nhom": "Đĩa từ & SSD",
+   "viDu": "In most contemporary systems fixed-length sectors are used, with ________ bytes being the sector size.",
+   "viDuNghia": "Trong hầu hết các hệ thống hiện đại, sector có độ dài cố định được dùng, với kích thước sector là ________ byte."
+  },
+  {
+   "chu": "read/write head",
+   "doc": "/ˌriːd ˈraɪt hed/",
+   "nghia": "đầu đọc/ghi – bộ phận đọc và ghi dữ liệu trên mặt đĩa",
+   "nhom": "Đĩa từ & SSD",
+   "viDu": "The read/write head moves across the platter to reach the right track.",
+   "viDuNghia": "Đầu đọc/ghi di chuyển trên mặt đĩa để tới đúng rãnh."
+  },
+  {
+   "chu": "intertrack gap",
+   "doc": "/ˌɪntərˈtræk ɡæp/",
+   "nghia": "khe giữa các rãnh – khoảng trống ngăn cách hai rãnh kề nhau để tránh nhiễu",
+   "nhom": "Đĩa từ & SSD",
+   "viDu": "Adjacent tracks are separated by gaps.",
+   "viDuNghia": "Các rãnh (track) kề nhau được ngăn cách bởi khoảng trống (gap)."
+  },
+  {
+   "chu": "seek time",
+   "doc": "/siːk taɪm/",
+   "nghia": "thời gian tìm – thời gian đưa đầu đọc tới đúng rãnh",
+   "nhom": "Đĩa từ & SSD",
+   "viDu": "The sum of the seek time and the rotational delay equals the ______, which is the time it takes to get into position to read or write.",
+   "viDuNghia": "Tổng của thời gian tìm kiếm (seek time) và độ trễ quay (rotational delay) bằng ______, là thời gian cần để đưa đầu đọc vào đúng vị trí để đọc hoặc ghi."
+  },
+  {
+   "chu": "rotational delay",
+   "doc": "/roʊˈteɪʃənl dɪˈleɪ/",
+   "nghia": "trễ quay (rotational latency) – thời gian chờ cung cần đọc quay tới dưới đầu đọc",
+   "nhom": "Đĩa từ & SSD",
+   "viDu": "The average rotational delay is half the time of one full rotation of the disk.",
+   "viDuNghia": "Độ trễ quay trung bình bằng một nửa thời gian đĩa quay hết một vòng."
+  },
+  {
+   "chu": "constant angular velocity",
+   "nghia": "vận tốc góc không đổi (CAV) – đĩa quay đều; rãnh ngoài chứa bằng rãnh trong nên phí chỗ",
+   "nhom": "Đĩa từ & SSD",
+   "viDu": "Scanning information at the same rate by rotating the disk at a fixed speed is known as the constant angular velocity.",
+   "viDuNghia": "Việc quét thông tin ở cùng một tốc độ bằng cách quay đĩa với tốc độ cố định được gọi là vận tốc góc không đổi (constant angular velocity)."
+  },
+  {
+   "chu": "constant linear velocity",
+   "nghia": "vận tốc dài không đổi (CLV) – tốc độ quay thay đổi theo rãnh; dùng ở đĩa quang CD",
+   "nhom": "Đĩa từ & SSD",
+   "viDu": "Constant linear velocity (CLV) is when the disk rotates more slowly for accesses near the outer edge than for the center.",
+   "viDuNghia": "Vận tốc dài không đổi (CLV) là khi đĩa quay chậm hơn khi truy cập gần rìa ngoài so với khi truy cập gần tâm."
+  },
+  {
+   "chu": "solid state drive",
+   "nghia": "ổ thể rắn (SSD) – lưu bằng flash NAND, không có bộ phận chuyển động, nhanh hơn HDD",
+   "nhom": "Đĩa từ & SSD",
+   "viDu": "In terms of performance, what is the main advantage of a solid state drive over a magnetic disk?",
+   "viDuNghia": "Về mặt hiệu năng, ưu điểm chính của ổ SSD so với đĩa từ là gì?"
+  },
+  {
+   "chu": "magnetic tape",
+   "doc": "/mæɡˈnetɪk teɪp/",
+   "nghia": "băng từ – lưu trữ truy cập tuần tự, rẻ, dùng để sao lưu",
+   "nhom": "Đĩa từ & SSD",
+   "viDu": "Magnetic tape is still widely used for archival backup mainly because ____.",
+   "viDuNghia": "Băng từ vẫn được dùng rộng rãi để sao lưu lưu trữ chủ yếu vì ____."
+  },
+  {
+   "chu": "redundant array of independent disks",
+   "nghia": "RAID – ghép nhiều đĩa thành một để tăng tốc độ và/hoặc độ an toàn dữ liệu",
+   "nhom": "RAID",
+   "viDu": "Which RAID level keeps an exact duplicate of the data on a second set of disks and uses no parity at all?",
+   "viDuNghia": "Mức RAID nào lưu một bản sao y hệt dữ liệu trên bộ đĩa thứ hai và hoàn toàn không dùng parity?"
+  },
+  {
+   "chu": "striping",
+   "doc": "/ˈstraɪpɪŋ/",
+   "nghia": "chia dải – rải dữ liệu thành các dải trên nhiều đĩa để đọc/ghi song song (RAID 0)",
+   "nhom": "RAID",
+   "viDu": "Which RAID level uses striping technique with a minimum of 3 disks and provides fault tolerance through the use of parity bit?",
+   "viDuNghia": "Mức RAID nào dùng kỹ thuật striping với tối thiểu 3 đĩa và cung cấp khả năng chịu lỗi thông qua bit chẵn lẻ (parity)?"
+  },
+  {
+   "chu": "mirroring",
+   "doc": "/ˈmɪrərɪŋ/",
+   "nghia": "soi gương – ghi một bản sao y hệt sang đĩa thứ hai (RAID 1)",
+   "nhom": "RAID",
+   "viDu": "RAID 1 uses mirroring: every disk has a copy on a second disk.",
+   "viDuNghia": "RAID 1 dùng soi gương: mỗi đĩa có một bản sao trên đĩa thứ hai."
+  },
+  {
+   "chu": "I/O module",
+   "doc": "/ˌaɪ ˈoʊ ˈmɑːdʒuːl/",
+   "nghia": "mô-đun vào/ra – khối trung gian giữa bus hệ thống và thiết bị ngoại vi",
+   "nhom": "Vào/ra (I/O)",
+   "viDu": "An I/O module receives four types of command from the processor. Which of the following is NOT one of them?",
+   "viDuNghia": "Mô-đun I/O nhận bốn loại lệnh từ bộ xử lý. Loại nào sau đây KHÔNG thuộc bốn loại đó?"
+  },
+  {
+   "chu": "programmed I/O",
+   "doc": "/ˈproʊɡræmd ˌaɪ ˈoʊ/",
+   "nghia": "I/O theo chương trình – CPU tự hỏi và chờ thiết bị xong việc; tốn thời gian CPU",
+   "nhom": "Vào/ra (I/O)",
+   "viDu": "What is the main advantage of using DMA over Programmed I/O or Interrupt-Driven I/O?",
+   "viDuNghia": "Ưu điểm chính của việc dùng DMA so với Programmed I/O hoặc Interrupt-Driven I/O là gì?"
+  },
+  {
+   "chu": "interrupt-driven I/O",
+   "doc": "/ˌɪntərʌpt ˈdrɪvn ˌaɪ ˈoʊ/",
+   "nghia": "I/O điều khiển bằng ngắt – CPU làm việc khác, thiết bị xong thì gửi ngắt báo",
+   "nhom": "Vào/ra (I/O)",
+   "viDu": "What is the main distinction between Interrupt-Driven I/O and Direct Memory Access (DMA)?",
+   "viDuNghia": "Điểm khác biệt chính giữa I/O điều khiển bằng ngắt và Truy cập bộ nhớ trực tiếp (DMA) là gì?"
+  },
+  {
+   "chu": "direct memory access",
+   "nghia": "truy cập bộ nhớ trực tiếp (DMA) – mô-đun riêng chuyển dữ liệu thẳng giữa thiết bị và bộ nhớ, không qua CPU",
+   "nhom": "Vào/ra (I/O)",
+   "viDu": "What is the purpose of direct memory access (DMA)?",
+   "viDuNghia": "Mục đích của truy cập bộ nhớ trực tiếp (DMA) là gì?"
+  },
+  {
+   "chu": "memory-mapped I/O",
+   "doc": "/ˌmeməri ˈmæpt ˌaɪ ˈoʊ/",
+   "nghia": "I/O ánh xạ bộ nhớ – thiết bị dùng chung không gian địa chỉ với bộ nhớ, đọc/ghi bằng lệnh bộ nhớ thường",
+   "nhom": "Vào/ra (I/O)",
+   "viDu": "Which statement is correct in memory-mapped I/O?",
+   "viDuNghia": "Phát biểu nào đúng với I/O ánh xạ bộ nhớ (memory-mapped I/O)?"
+  },
+  {
+   "chu": "isolated I/O",
+   "doc": "/ˈaɪsəleɪtɪd ˌaɪ ˈoʊ/",
+   "nghia": "I/O tách biệt – thiết bị có không gian địa chỉ riêng và lệnh I/O riêng",
+   "nhom": "Vào/ra (I/O)",
+   "viDu": "In isolated I/O, ____________.",
+   "viDuNghia": "Trong I/O tách biệt (isolated I/O), ____________."
+  },
+  {
+   "chu": "external device",
+   "doc": "/ɪkˈstɜːrnl dɪˈvaɪs/",
+   "nghia": "thiết bị ngoài – thiết bị nối với máy qua mô-đun I/O",
+   "nhom": "Vào/ra (I/O)",
+   "viDu": "From a structural point of view, the external devices are controlled by ___.",
+   "viDuNghia": "Xét về mặt cấu trúc, các thiết bị ngoài (external devices) được điều khiển bởi ___."
+  },
+  {
+   "chu": "human readable",
+   "doc": "/ˈhjuːmən ˈriːdəbl/",
+   "nghia": "người đọc được – loại thiết bị giao tiếp với người dùng (màn hình, máy in)",
+   "nhom": "Vào/ra (I/O)",
+   "viDu": "Printers and video display terminals are human readable devices.",
+   "viDuNghia": "Máy in và màn hình là các thiết bị người đọc được."
+  },
+  {
+   "chu": "machine readable",
+   "doc": "/məˈʃiːn ˈriːdəbl/",
+   "nghia": "máy đọc được – loại thiết bị giao tiếp với máy móc (đĩa, cảm biến)",
+   "nhom": "Vào/ra (I/O)",
+   "viDu": "Magnetic disks and sensors are machine readable devices.",
+   "viDuNghia": "Đĩa từ và cảm biến là các thiết bị máy đọc được."
+  },
+  {
+   "chu": "data transfer",
+   "doc": "/ˈdeɪtə ˈtrænsfɜːr/",
+   "nghia": "truyền dữ liệu – chuyển dữ liệu từ nơi này sang nơi khác",
+   "nhom": "Vào/ra (I/O)",
+   "viDu": "DMA is used for high-speed data transfer between a device and memory.",
+   "viDuNghia": "DMA được dùng để truyền dữ liệu tốc độ cao giữa thiết bị và bộ nhớ."
+  },
+  {
+   "chu": "buffering",
+   "doc": "/ˈbʌfərɪŋ/",
+   "nghia": "đệm dữ liệu – giữ tạm dữ liệu để bù chênh lệch tốc độ giữa CPU và thiết bị",
+   "nhom": "Vào/ra (I/O)",
+   "viDu": "Buffering lets a fast processor work with a slow peripheral device.",
+   "viDuNghia": "Đệm dữ liệu giúp bộ xử lý nhanh làm việc được với thiết bị ngoại vi chậm."
+  },
+  {
+   "chu": "polling",
+   "doc": "/ˈpoʊlɪŋ/",
+   "nghia": "hỏi vòng – CPU lần lượt hỏi từng thiết bị xem có cần phục vụ không",
+   "nhom": "Vào/ra (I/O)",
+   "viDu": "With polling, the CPU checks each device in turn to see whether it needs service.",
+   "viDuNghia": "Với hỏi vòng, CPU lần lượt kiểm tra từng thiết bị xem có cần phục vụ không."
+  },
+  {
+   "chu": "cycle stealing",
+   "doc": "/ˈsaɪkl ˈstiːlɪŋ/",
+   "nghia": "lấy trộm chu kỳ – DMA chiếm bus trong một chu kỳ để truyền dữ liệu, CPU tạm chờ",
+   "nhom": "Vào/ra (I/O)",
+   "viDu": "Cycle stealing is/are used in which concept?",
+   "viDuNghia": "Cơ chế \"đánh cắp chu kỳ\" (cycle stealing) được dùng trong khái niệm nào?"
+  },
+  {
+   "chu": "I/O channel",
+   "doc": "/ˌaɪ ˈoʊ ˈtʃænl/",
+   "nghia": "kênh I/O – mô-đun I/O đủ mạnh để tự chạy chương trình I/O",
+   "nhom": "Vào/ra (I/O)",
+   "viDu": "In which I/O technique does an I/O channel or processor manage transfer of data, thus freeing the CPU?",
+   "viDuNghia": "Trong kỹ thuật I/O nào, một kênh I/O hoặc bộ xử lý quản lý việc truyền dữ liệu, giải phóng CPU?"
+  },
+  {
+   "chu": "device controller",
+   "doc": "/dɪˈvaɪs kənˈtroʊlər/",
+   "nghia": "bộ điều khiển thiết bị – mạch điều khiển trực tiếp một thiết bị ngoại vi",
+   "nhom": "Vào/ra (I/O)",
+   "viDu": "Each device controller has registers that the operating system uses to give commands.",
+   "viDuNghia": "Mỗi bộ điều khiển thiết bị có các thanh ghi mà hệ điều hành dùng để ra lệnh."
+  },
+  {
+   "chu": "input/output",
+   "doc": "/ˈɪnpʊt ˈaʊtpʊt/",
+   "nghia": "vào/ra (I/O) – trao đổi dữ liệu giữa máy tính và thiết bị ngoại vi; ba kỹ thuật: I/O lập trình, I/O điều khiển bằng ngắt, DMA",
+   "nhom": "Vào/ra (I/O)",
+   "viDu": "An I/O device is referred to as a ______.",
+   "viDuNghia": "Một thiết bị vào/ra (I/O) được gọi là một ______."
+  }
+ ]
+}

@@ -1,0 +1,559 @@
+{
+ "ma": "nwc203c-2",
+ "nn": "en",
+ "ten": "NWC203c/NWC204 · 2. Tầng liên kết, kiểm lỗi, ARQ, LAN",
+ "moTa": "Môn Mạng máy tính (NWC203c, dùng chung cho NWC204), phần 2: đóng khung, phát hiện lỗi (parity, CRC, checksum), các giao thức ARQ và cửa sổ trượt, điều khiển truy cập đường truyền, Ethernet, LAN không dây, PPP. Từ lấy từ đề FE thật; câu ví dụ là câu hỏi thật trong đề.",
+ "bieuTuong": "cable.connector",
+ "thuTu": -973,
+ "tu": [
+  {
+   "chu": "framing",
+   "doc": "/ˈfreɪmɪŋ/",
+   "nghia": "đóng khung – đánh dấu chỗ bắt đầu và kết thúc của mỗi khung trong dòng bit",
+   "nhom": "Đóng khung & PPP",
+   "viDu": "HDLC is another data link control protocol widely in use. Its framing is based on which of the following?",
+   "viDuNghia": "HDLC là một giao thức điều khiển liên kết dữ liệu được dùng rộng rãi. Cơ chế đóng khung của nó dựa trên kỹ thuật nào?"
+  },
+  {
+   "chu": "bit stuffing",
+   "doc": "/bɪt ˈstʌfɪŋ/",
+   "nghia": "nhồi bit – chèn thêm bit 0 sau năm bit 1 liên tiếp để dữ liệu không bị nhầm với cờ",
+   "nhom": "Đóng khung & PPP",
+   "viDu": "Perform the bit stuffing procedure for the following binary sequence: 1101111111011111110101. What is the outcome?",
+   "viDuNghia": "Thực hiện thủ tục nhồi bit (bit stuffing) cho dãy nhị phân sau: 1101111111011111110101. Kết quả là gì?"
+  },
+  {
+   "chu": "byte stuffing",
+   "doc": "/baɪt ˈstʌfɪŋ/",
+   "nghia": "nhồi byte – chèn thêm byte thoát trước byte dữ liệu trùng với byte cờ",
+   "nhom": "Đóng khung & PPP",
+   "viDu": "PPP is a data link protocol for point-to-point lines in Internet. Its framing is based on which of the following? — Byte stuffing",
+   "viDuNghia": "PPP là giao thức tầng liên kết dữ liệu cho các đường điểm-điểm trên Internet. Cơ chế đóng khung của nó dựa trên kỹ thuật nào? — Chèn byte (byte stuffing)"
+  },
+  {
+   "chu": "delineation",
+   "doc": "/dɪˌlɪniˈeɪʃn/",
+   "nghia": "phân định ranh giới – xác định đâu là đầu, đâu là cuối của một khung",
+   "nhom": "Đóng khung & PPP",
+   "viDu": "GFP uses the length field and a header check for frame delineation.",
+   "viDuNghia": "GFP dùng trường độ dài và mã kiểm tra phần đầu để phân định khung."
+  },
+  {
+   "chu": "Generic Framing Procedure",
+   "nghia": "GFP – cách đóng khung dùng trường độ dài và mã kiểm lỗi phần đầu (HEC) để tự phân định khung",
+   "nhom": "Đóng khung & PPP",
+   "viDu": "In Generic Framing Procedure (GFP), which of the following sentences are correct?",
+   "viDuNghia": "Trong Generic Framing Procedure (GFP), những phát biểu nào sau đây đúng?"
+  },
+  {
+   "chu": "High-level Data Link Control",
+   "nghia": "HDLC – giao thức tầng liên kết hướng bit, dùng cờ 01111110 và nhồi bit",
+   "nhom": "Đóng khung & PPP",
+   "viDu": "Which of following statements identifies the similarity between HDLC (data link control) and Ethernet (medium access control)",
+   "viDuNghia": "Phát biểu nào sau đây chỉ ra điểm giống nhau giữa HDLC (điều khiển liên kết dữ liệu) và Ethernet (điều khiển truy nhập môi trường)?"
+  },
+  {
+   "chu": "Point-to-Point Protocol",
+   "doc": "/ˌpɔɪnt tə ˈpɔɪnt ˈproʊtəkɑːl/",
+   "nghia": "PPP – giao thức tầng liên kết cho đường nối trực tiếp hai điểm; hỗ trợ nhiều giao thức mạng",
+   "nhom": "Đóng khung & PPP",
+   "viDu": "PPP can carry packets of several network-layer protocols over one serial link.",
+   "viDuNghia": "PPP chở được gói của nhiều giao thức tầng mạng trên cùng một đường nối tiếp."
+  },
+  {
+   "chu": "Link Control Protocol",
+   "nghia": "LCP – phần của PPP lo thiết lập, cấu hình, kiểm tra và đóng đường liên kết",
+   "nhom": "Đóng khung & PPP",
+   "viDu": "The Link Control Protocol (LCP) sets up, tests and closes a PPP link.",
+   "viDuNghia": "Giao thức LCP thiết lập, kiểm tra và đóng một liên kết PPP."
+  },
+  {
+   "chu": "Challenge-Handshake Authentication Protocol",
+   "nghia": "CHAP – xác thực trong PPP: bên xác thực gửi thách đố, bên kia trả lời bằng giá trị băm với khoá bí mật",
+   "nhom": "Đóng khung & PPP",
+   "viDu": "In PPP authentication, which of the following is true for Challenge-Handshake Authentication Protocol (CHAP)?",
+   "viDuNghia": "Trong xác thực PPP, những phát biểu nào đúng về CHAP (Challenge-Handshake Authentication Protocol)?"
+  },
+  {
+   "chu": "authenticator",
+   "doc": "/ɔːˈθentɪkeɪtər/",
+   "nghia": "bên xác thực – bên kiểm tra danh tính của bên kia",
+   "nhom": "Đóng khung & PPP",
+   "viDu": "In CHAP, the authenticator sends a challenge to the other side.",
+   "viDuNghia": "Trong CHAP, bên xác thực gửi một thách đố cho bên kia."
+  },
+  {
+   "chu": "secret key",
+   "doc": "/ˈsiːkrət kiː/",
+   "nghia": "khoá bí mật – giá trị chỉ hai bên biết, dùng để xác thực/mã hoá",
+   "nhom": "Đóng khung & PPP",
+   "viDu": "Both sides compute the response using a shared secret key.",
+   "viDuNghia": "Hai bên tính câu trả lời bằng một khoá bí mật dùng chung."
+  },
+  {
+   "chu": "destination address",
+   "doc": "/ˌdestɪˈneɪʃn ˈædres/",
+   "nghia": "địa chỉ đích – địa chỉ của máy nhận",
+   "nhom": "Đóng khung & PPP",
+   "viDu": "A routing protocol sends its updates to 224.0.0.5. Which kind of IPv4 destination is that?",
+   "viDuNghia": "Một giao thức định tuyến gửi cập nhật tới 224.0.0.5. Đó là loại địa chỉ đích IPv4 nào?"
+  },
+  {
+   "chu": "source address",
+   "doc": "/sɔːrs ˈædres/",
+   "nghia": "địa chỉ nguồn – địa chỉ của máy gửi",
+   "nhom": "Đóng khung & PPP",
+   "viDu": "Every frame carries a source address and a destination address.",
+   "viDuNghia": "Mỗi khung đều mang địa chỉ nguồn và địa chỉ đích."
+  },
+  {
+   "chu": "point-to-point link",
+   "doc": "/ˌpɔɪnt tə ˈpɔɪnt lɪŋk/",
+   "nghia": "liên kết điểm – điểm: đường truyền chỉ nối đúng hai thiết bị",
+   "nhom": "Đóng khung & PPP",
+   "viDu": "A point-to-point link connects exactly two devices.",
+   "viDuNghia": "Liên kết điểm – điểm nối đúng hai thiết bị."
+  },
+  {
+   "chu": "initiator",
+   "doc": "/ɪˈnɪʃieɪtər/",
+   "nghia": "bên khởi xướng – bên mở đầu việc kết nối/xác thực",
+   "nhom": "Đóng khung & PPP",
+   "viDu": "The initiator starts the authentication by sending its ID.",
+   "viDuNghia": "Bên khởi xướng bắt đầu việc xác thực bằng cách gửi định danh của mình."
+  },
+  {
+   "chu": "frame header",
+   "doc": "/freɪm ˈhedər/",
+   "nghia": "phần đầu khung – các trường điều khiển đứng trước dữ liệu của khung",
+   "nhom": "Đóng khung & PPP",
+   "viDu": "The frame header carries the source and destination addresses.",
+   "viDuNghia": "Phần đầu khung mang địa chỉ nguồn và địa chỉ đích."
+  },
+  {
+   "chu": "payload length indicator",
+   "nghia": "trường chỉ độ dài phần tải – GFP dùng nó để biết khung dài bao nhiêu thay vì nhồi byte",
+   "nhom": "Đóng khung & PPP",
+   "viDu": "GFP uses an explicit payload length indicator in its frame header.",
+   "viDuNghia": "GFP dùng một trường chỉ độ dài phần tải ghi rõ trong phần đầu khung."
+  },
+  {
+   "chu": "bit stream",
+   "doc": "/bɪt striːm/",
+   "nghia": "dòng bit – dãy bit liên tục chạy trên đường truyền",
+   "nhom": "Đóng khung & PPP",
+   "viDu": "Which OSI layer is responsible for dividing the transmitted bit stream into frames?",
+   "viDuNghia": "Tầng OSI nào chịu trách nhiệm chia dòng bit được truyền thành các khung (frame)?"
+  },
+  {
+   "chu": "error detection",
+   "doc": "/ˈerər dɪˈtekʃn/",
+   "nghia": "phát hiện lỗi – nhận ra khung bị sai bit trong lúc truyền",
+   "nhom": "Phát hiện lỗi",
+   "viDu": "Which of the following statements are true for single-bit parity error detection?",
+   "viDuNghia": "Phát biểu nào sau đây đúng về phát hiện lỗi bằng một bit chẵn lẻ (single-bit parity)?"
+  },
+  {
+   "chu": "error control",
+   "doc": "/ˈerər kənˈtroʊl/",
+   "nghia": "điều khiển lỗi – phát hiện lỗi rồi sửa hoặc yêu cầu truyền lại",
+   "nhom": "Phát hiện lỗi",
+   "viDu": "When receiving a bad chunk, UDP? — It does not perform flow and error control",
+   "viDuNghia": "Khi nhận được một khối dữ liệu hỏng, UDP sẽ làm gì? — Nó không thực hiện điều khiển luồng và kiểm soát lỗi"
+  },
+  {
+   "chu": "bit error",
+   "doc": "/bɪt ˈerər/",
+   "nghia": "lỗi bit – một bit bị đổi từ 0 thành 1 hoặc ngược lại khi truyền",
+   "nhom": "Phát hiện lỗi",
+   "viDu": "A burst of noise can cause bit errors in several adjacent bits.",
+   "viDuNghia": "Một đợt nhiễu có thể gây lỗi bit ở nhiều bit liền nhau."
+  },
+  {
+   "chu": "parity check",
+   "doc": "/ˈpærəti tʃek/",
+   "nghia": "kiểm tra chẵn lẻ – thêm một bit để tổng số bit 1 luôn chẵn (hoặc lẻ); phát hiện được lỗi một bit",
+   "nhom": "Phát hiện lỗi",
+   "viDu": "Which of following statements are true for two-dimensional parity error detection?",
+   "viDuNghia": "Phát biểu nào đúng với phương pháp phát hiện lỗi bằng chẵn lẻ hai chiều (two-dimensional parity)?"
+  },
+  {
+   "chu": "checksum",
+   "doc": "/ˈtʃeksʌm/",
+   "nghia": "tổng kiểm – cộng các từ dữ liệu rồi gửi kèm kết quả để bên nhận kiểm lại (dùng trong IP, TCP, UDP)",
+   "nhom": "Phát hiện lỗi",
+   "viDu": "The checksum of 0000 and 0000 is ____.",
+   "viDuNghia": "Checksum của 0000 và 0000 là ____."
+  },
+  {
+   "chu": "cyclic redundancy check",
+   "nghia": "kiểm tra dư vòng (CRC) – chia dãy bit cho đa thức sinh, gửi kèm phần dư để phát hiện lỗi",
+   "nhom": "Phát hiện lỗi",
+   "viDu": "Internet protocols use check bits to detect errors, instead of using CRC polynomial. The primary reason is ____.",
+   "viDuNghia": "Các giao thức Internet dùng bit kiểm tra (checksum) để phát hiện lỗi thay vì dùng đa thức CRC. Lý do chính là ____."
+  },
+  {
+   "chu": "generator polynomial",
+   "doc": "/ˈdʒenəreɪtər ˌpɑːliˈnoʊmiəl/",
+   "nghia": "đa thức sinh – đa thức hai bên thống nhất trước, dùng làm số chia trong CRC",
+   "nhom": "Phát hiện lỗi",
+   "viDu": "What is the remainder obtained by dividing x^7 + x^5 + 1 by the generator polynomial x^3 + 1?",
+   "viDuNghia": "Phần dư khi chia x^7 + x^5 + 1 cho đa thức sinh x^3 + 1 là gì?"
+  },
+  {
+   "chu": "cyclic code",
+   "doc": "/ˈsaɪklɪk koʊd/",
+   "nghia": "mã vòng – mã mà dịch vòng một từ mã vẫn được một từ mã hợp lệ (CRC)",
+   "nhom": "Phát hiện lỗi",
+   "viDu": "The divisor in a cyclic code is normally called the __________.",
+   "viDuNghia": "Trong mã vòng (cyclic code), số chia thường được gọi là __________."
+  },
+  {
+   "chu": "megabits per second",
+   "nghia": "Mbps – đơn vị tốc độ truyền: triệu bit mỗi giây (chú ý: bit, không phải byte)",
+   "nhom": "Phát hiện lỗi",
+   "viDu": "A 300 MB file (1 MB = 10^6 bytes) takes exactly one minute to copy across a link rated at 100 Mbps. What was the average throughput?",
+   "viDuNghia": "Một tệp 300 MB (1 MB = 10^6 byte) mất đúng một phút để chép qua đường truyền danh định 100 Mbps. Thông lượng trung bình là bao nhiêu?"
+  },
+  {
+   "chu": "single-bit error",
+   "doc": "/ˌsɪŋɡl ˈbɪt ˈerər/",
+   "nghia": "lỗi một bit – chỉ một bit trong khung bị sai",
+   "nhom": "Phát hiện lỗi",
+   "viDu": "Which of following generator polynomial can detect all single bit errors in an information frame?",
+   "viDuNghia": "Đa thức sinh nào sau đây phát hiện được tất cả các lỗi một bit trong khung thông tin?"
+  },
+  {
+   "chu": "transmission error",
+   "doc": "/trænzˈmɪʃn ˈerər/",
+   "nghia": "lỗi truyền – lỗi phát sinh trên đường truyền làm sai bit",
+   "nhom": "Phát hiện lỗi",
+   "viDu": "Assume bit errors occur at random. If each bit has 50% probability to be in error by transmission, what is the probability of a four-bit frame to be in error by transmission?",
+   "viDuNghia": "Giả sử lỗi bit xảy ra ngẫu nhiên. Nếu mỗi bit có xác suất 50% bị lỗi khi truyền, xác suất một khung 4 bit bị lỗi khi truyền là bao nhiêu?"
+  },
+  {
+   "chu": "automatic repeat request",
+   "nghia": "yêu cầu lặp lại tự động (ARQ) – bên nhận báo nhận, khung lỗi/mất thì bên gửi truyền lại",
+   "nhom": "ARQ & cửa sổ trượt",
+   "viDu": "In peer-to-peer protocols, the purpose of Automatic Repeat Request is ____.",
+   "viDuNghia": "Trong giao thức giữa các thực thể ngang hàng, mục đích của ARQ (yêu cầu lặp lại tự động) là ____."
+  },
+  {
+   "chu": "Stop-and-Wait ARQ",
+   "doc": "/ˌstɑːp ən ˈweɪt ˌeɪ ɑːr ˈkjuː/",
+   "nghia": "ARQ dừng và chờ – gửi một khung rồi chờ ACK mới gửi khung kế tiếp",
+   "nhom": "ARQ & cửa sổ trượt",
+   "viDu": "What is the disadvantage of the Stop-and-Wait protocol?",
+   "viDuNghia": "Nhược điểm của giao thức Stop-and-Wait là gì?"
+  },
+  {
+   "chu": "Go-Back-N ARQ",
+   "doc": "/ˌɡoʊ bæk ˈen ˌeɪ ɑːr ˈkjuː/",
+   "nghia": "ARQ lùi N – một khung lỗi thì truyền lại khung đó và mọi khung sau nó",
+   "nhom": "ARQ & cửa sổ trượt",
+   "viDu": "In Go-Back-N ARQ, starting to transmit a new frame before the previous frame transmission is complete is called ____.",
+   "viDuNghia": "Trong Go-Back-N ARQ, việc bắt đầu truyền khung mới trước khi truyền xong khung trước được gọi là ____."
+  },
+  {
+   "chu": "Selective Repeat ARQ",
+   "nghia": "ARQ lặp có chọn lọc – chỉ truyền lại đúng khung bị lỗi; bên nhận giữ các khung đến sai thứ tự",
+   "nhom": "ARQ & cửa sổ trượt",
+   "viDu": "Given 3 bits for sequence numbers in Selective Repeat ARQ. If the sender already set the sliding window size to be 4, what is the maximum sliding window size at the receiver?",
+   "viDuNghia": "Cho 3 bit đánh số thứ tự trong Selective Repeat ARQ. Nếu bên gửi đã đặt kích thước cửa sổ trượt là 4, kích thước cửa sổ trượt tối đa ở bên nhận là bao nhiêu?"
+  },
+  {
+   "chu": "acknowledgment",
+   "doc": "/əkˈnɑːlɪdʒmənt/",
+   "nghia": "báo nhận (ACK) – thông báo bên nhận gửi lại để xác nhận đã nhận đúng",
+   "nhom": "ARQ & cửa sổ trượt",
+   "viDu": "The receiver sends an acknowledgment for every frame it receives correctly.",
+   "viDuNghia": "Bên nhận gửi báo nhận cho mỗi khung nó nhận đúng."
+  },
+  {
+   "chu": "negative acknowledgment",
+   "doc": "/ˈneɡətɪv əkˈnɑːlɪdʒmənt/",
+   "nghia": "báo nhận phủ định (NAK) – báo khung bị lỗi, yêu cầu truyền lại",
+   "nhom": "ARQ & cửa sổ trượt",
+   "viDu": "Which of the basic elements of ARQ is associated with negative acknowledgement",
+   "viDuNghia": "Thành phần cơ bản nào của ARQ gắn với báo nhận phủ định (negative acknowledgement)?"
+  },
+  {
+   "chu": "timeout",
+   "doc": "/ˈtaɪmaʊt/",
+   "nghia": "hết thời gian chờ – quá hạn mà chưa có ACK thì bên gửi truyền lại",
+   "nhom": "ARQ & cửa sổ trượt",
+   "viDu": "If no ACK arrives before the timeout, the sender retransmits the frame.",
+   "viDuNghia": "Nếu chưa có ACK trước khi hết thời gian chờ, bên gửi truyền lại khung."
+  },
+  {
+   "chu": "retransmission",
+   "doc": "/ˌriːtrænzˈmɪʃn/",
+   "nghia": "truyền lại – gửi lại khung/gói bị mất hoặc bị lỗi",
+   "nhom": "ARQ & cửa sổ trượt",
+   "viDu": "Retransmission is triggered by a timeout or by duplicate ACKs.",
+   "viDuNghia": "Việc truyền lại được kích hoạt khi hết thời gian chờ hoặc khi nhận ACK trùng lặp."
+  },
+  {
+   "chu": "sequence number",
+   "doc": "/ˈsiːkwəns ˈnʌmbər/",
+   "nghia": "số thứ tự – số đánh trên mỗi khung/đoạn để phát hiện mất, trùng và sắp lại đúng thứ tự",
+   "nhom": "ARQ & cửa sổ trượt",
+   "viDu": "Host A sends two TCP segments with 20 and 40 bytes of data. The first has sequence number 145. What is the sequence number of the second?",
+   "viDuNghia": "Host A gửi hai đoạn TCP chứa 20 và 40 byte dữ liệu. Đoạn đầu có số thứ tự 145. Số thứ tự của đoạn thứ hai là bao nhiêu?"
+  },
+  {
+   "chu": "sliding window",
+   "doc": "/ˈslaɪdɪŋ ˈwɪndoʊ/",
+   "nghia": "cửa sổ trượt – khoảng số thứ tự được phép gửi (hoặc nhận) tại một thời điểm, trượt dần khi có ACK",
+   "nhom": "ARQ & cửa sổ trượt",
+   "viDu": "Given 3 bits for sequence numbers, what is the maximum sliding window size at the receiver in Go Back 3 ARQ?",
+   "viDuNghia": "Với 3 bit dùng cho số thứ tự, kích thước cửa sổ trượt tối đa ở phía nhận trong Go-Back-N ARQ (N = 3) là bao nhiêu?"
+  },
+  {
+   "chu": "window size",
+   "doc": "/ˈwɪndoʊ saɪz/",
+   "nghia": "kích thước cửa sổ – số khung/byte tối đa được gửi khi chưa nhận ACK",
+   "nhom": "ARQ & cửa sổ trượt",
+   "viDu": "TCP header has a field called window size. What value is the value window size set to?",
+   "viDuNghia": "Header TCP có trường window size. Giá trị của trường này được đặt bằng gì?"
+  },
+  {
+   "chu": "piggybacking",
+   "doc": "/ˈpɪɡibækɪŋ/",
+   "nghia": "gửi kèm ACK – cài báo nhận vào khung dữ liệu đi chiều ngược lại thay vì gửi riêng",
+   "nhom": "ARQ & cửa sổ trượt",
+   "viDu": "Piggybacking puts the acknowledgment inside a data frame going the other way.",
+   "viDuNghia": "Gửi kèm ACK là đặt báo nhận vào trong khung dữ liệu đi chiều ngược lại."
+  },
+  {
+   "chu": "information frame",
+   "doc": "/ˌɪnfərˈmeɪʃn freɪm/",
+   "nghia": "khung thông tin – khung chở dữ liệu người dùng (khác khung báo nhận/điều khiển)",
+   "nhom": "ARQ & cửa sổ trượt",
+   "viDu": "Given an information polynomial code I(x) = x^7 + x^6 + x^1 + 1, which is its corresponding per-bit information frame?",
+   "viDuNghia": "Cho đa thức thông tin I(x) = x^7 + x^6 + x^1 + 1, khung thông tin dạng bit tương ứng là gì?"
+  },
+  {
+   "chu": "receiver",
+   "doc": "/rɪˈsiːvər/",
+   "nghia": "bên nhận",
+   "nhom": "ARQ & cửa sổ trượt",
+   "viDu": "Which TCP header field lets a slow receiver tell the sender how much data it can accept?",
+   "viDuNghia": "Trường nào trong phần đầu TCP giúp bên nhận chậm báo cho bên gửi biết nó còn nhận thêm được bao nhiêu dữ liệu?"
+  },
+  {
+   "chu": "sender",
+   "doc": "/ˈsendər/",
+   "nghia": "bên gửi",
+   "nhom": "ARQ & cửa sổ trượt",
+   "viDu": "The sender keeps a copy of each frame until it is acknowledged.",
+   "viDuNghia": "Bên gửi giữ bản sao mỗi khung cho tới khi khung được báo nhận."
+  },
+  {
+   "chu": "transmit",
+   "doc": "/trænzˈmɪt/",
+   "nghia": "truyền, phát (tín hiệu, khung) lên đường truyền",
+   "nhom": "ARQ & cửa sổ trượt",
+   "viDu": "In CSMA, a station may transmit only when it senses that the channel is idle.",
+   "viDuNghia": "Trong CSMA, trạm chỉ được phát khi nghe thấy kênh truyền đang rảnh."
+  },
+  {
+   "chu": "discard",
+   "doc": "/dɪˈskɑːrd/",
+   "nghia": "loại bỏ – huỷ khung/gói bị lỗi hoặc không dùng được",
+   "nhom": "ARQ & cửa sổ trượt",
+   "viDu": "The receiver discards any frame that arrives with errors.",
+   "viDuNghia": "Bên nhận loại bỏ mọi khung đến nơi bị lỗi."
+  },
+  {
+   "chu": "peer process",
+   "doc": "/pɪr ˈprɑːses/",
+   "nghia": "tiến trình ngang hàng – hai tiến trình cùng tầng ở hai máy trao đổi với nhau theo giao thức của tầng đó",
+   "nhom": "ARQ & cửa sổ trượt",
+   "viDu": "Peer processes at the same layer communicate by following the layer's protocol.",
+   "viDuNghia": "Các tiến trình ngang hàng cùng tầng trao đổi với nhau theo giao thức của tầng đó."
+  },
+  {
+   "chu": "flow control",
+   "doc": "/floʊ kənˈtroʊl/",
+   "nghia": "điều khiển luồng – không để bên gửi gửi nhanh hơn mức bên nhận xử lý được (cửa sổ trượt)",
+   "nhom": "ARQ & cửa sổ trượt",
+   "viDu": "What field is used to provide flow control?",
+   "viDuNghia": "Trường nào được dùng để thực hiện điều khiển luồng?"
+  },
+  {
+   "chu": "duplicate acknowledgment",
+   "doc": "/ˈduːplɪkət əkˈnɑːlɪdʒmənt/",
+   "nghia": "ACK trùng lặp – bên nhận gửi lại cùng số ACK khi nhận đoạn sai thứ tự; 3 ACK trùng ⇒ TCP truyền lại nhanh",
+   "nhom": "ARQ & cửa sổ trượt",
+   "viDu": "How many duplicate ack-numbers trigger the Fast Retransmission mode?",
+   "viDuNghia": "Bao nhiêu ACK trùng lặp sẽ kích hoạt chế độ truyền lại nhanh (Fast Retransmission)?"
+  },
+  {
+   "chu": "medium access control",
+   "nghia": "điều khiển truy cập môi trường truyền (MAC) – quy định máy nào được phát lên đường truyền dùng chung",
+   "nhom": "Truy cập đường truyền",
+   "viDu": "Polling is a scheduling approach for dynamic medium access control. Which of following statements is correct?",
+   "viDuNghia": "Polling là một cách lập lịch cho điều khiển truy nhập môi trường động. Phát biểu nào sau đây đúng?"
+  },
+  {
+   "chu": "multiple access",
+   "doc": "/ˈmʌltɪpl ˈækses/",
+   "nghia": "đa truy cập – nhiều máy dùng chung một đường truyền",
+   "nhom": "Truy cập đường truyền",
+   "viDu": "In Carrier Sense Multiple Access with Collision Detection (CSMA/CD), to continue the transmission process we use a(n) ____.",
+   "viDuNghia": "Trong CSMA/CD, để tiếp tục quá trình truyền, ta dùng ____."
+  },
+  {
+   "chu": "ALOHA",
+   "doc": "/əˈloʊhɑː/",
+   "nghia": "ALOHA – giao thức truy cập ngẫu nhiên: có dữ liệu là phát ngay, va chạm thì chờ ngẫu nhiên rồi phát lại",
+   "nhom": "Truy cập đường truyền",
+   "viDu": "Suppose that the ALOHA protocol is used to share a 56 kbps satellite channel. Suppose that frames are 1000 bits long. What is the maximum throughput of the system in number of frames per second?",
+   "viDuNghia": "Giả sử giao thức ALOHA được dùng để chia sẻ kênh vệ tinh 56 kbps. Giả sử mỗi khung dài 1000 bit. Thông lượng tối đa của hệ thống, tính theo số khung mỗi giây, là bao nhiêu?"
+  },
+  {
+   "chu": "slotted ALOHA",
+   "doc": "/ˈslɑːtɪd əˈloʊhɑː/",
+   "nghia": "ALOHA chia khe – chỉ được phát ở đầu mỗi khe thời gian, giảm va chạm so với ALOHA thuần",
+   "nhom": "Truy cập đường truyền",
+   "viDu": "In slotted ALOHA, a station may transmit only at the beginning of a time slot.",
+   "viDuNghia": "Trong ALOHA chia khe, trạm chỉ được phát ở đầu một khe thời gian."
+  },
+  {
+   "chu": "carrier sense multiple access",
+   "nghia": "đa truy cập cảm nhận sóng mang (CSMA) – nghe đường truyền trước, rảnh mới phát",
+   "nhom": "Truy cập đường truyền",
+   "viDu": "With CSMA, a station listens to the channel before it transmits.",
+   "viDuNghia": "Với CSMA, trạm nghe kênh truyền trước khi phát."
+  },
+  {
+   "chu": "collision detection",
+   "doc": "/kəˈlɪʒn dɪˈtekʃn/",
+   "nghia": "phát hiện va chạm (CSMA/CD) – vừa phát vừa nghe, thấy va chạm thì dừng ngay; dùng ở Ethernet có dây",
+   "nhom": "Truy cập đường truyền",
+   "viDu": "Consider building a CSMA/CD network running at 1Gbps over a 1-km cable. The signal speed is 200,000 km/sec. What is the minimum frame size?",
+   "viDuNghia": "Xét việc xây dựng mạng CSMA/CD chạy ở 1Gbps trên cáp dài 1 km. Tốc độ tín hiệu là 200.000 km/giây. Kích thước khung tối thiểu là bao nhiêu?"
+  },
+  {
+   "chu": "collision avoidance",
+   "doc": "/kəˈlɪʒn əˈvɔɪdəns/",
+   "nghia": "tránh va chạm (CSMA/CA) – chờ một khoảng ngẫu nhiên trước khi phát; dùng ở Wi-Fi",
+   "nhom": "Truy cập đường truyền",
+   "viDu": "Why do Wi-Fi stations use collision avoidance (CSMA/CA) rather than collision detection?",
+   "viDuNghia": "Vì sao các trạm Wi-Fi dùng tránh va chạm (CSMA/CA) thay vì phát hiện va chạm?"
+  },
+  {
+   "chu": "token passing",
+   "doc": "/ˈtoʊkən ˈpæsɪŋ/",
+   "nghia": "chuyền thẻ bài – máy nào đang giữ thẻ bài (token) mới được phát",
+   "nhom": "Truy cập đường truyền",
+   "viDu": "In a ring topology, token passing lets only the station holding the token transmit.",
+   "viDuNghia": "Trong mạng vòng, chuyền thẻ bài chỉ cho trạm đang giữ thẻ bài được phát."
+  },
+  {
+   "chu": "channelization",
+   "doc": "/ˌtʃænələˈzeɪʃn/",
+   "nghia": "phân kênh – chia sẵn đường truyền thành các kênh riêng (theo tần số, thời gian, mã)",
+   "nhom": "Truy cập đường truyền",
+   "viDu": "In media access control, which of the following statements are true for Channelization?",
+   "viDuNghia": "Trong điều khiển truy nhập môi trường, các phát biểu nào đúng với Channelization (phân kênh)?"
+  },
+  {
+   "chu": "station",
+   "doc": "/ˈsteɪʃn/",
+   "nghia": "trạm – một máy nối vào mạng LAN",
+   "nhom": "Truy cập đường truyền",
+   "viDu": "In CSMA, if a station senses the medium before trying to use it, the chance of collision can be ____.",
+   "viDuNghia": "Trong CSMA, nếu trạm nghe môi trường truyền trước khi dùng thì khả năng va chạm sẽ ____."
+  },
+  {
+   "chu": "Ethernet",
+   "doc": "/ˈiːθərnet/",
+   "nghia": "Ethernet – công nghệ mạng LAN có dây phổ biến nhất (chuẩn IEEE 802.3)",
+   "nhom": "Truy cập đường truyền",
+   "viDu": "How many bits are there in an Ethernet address?",
+   "viDuNghia": "Địa chỉ Ethernet (MAC) có bao nhiêu bit?"
+  },
+  {
+   "chu": "wireless LAN",
+   "doc": "/ˈwaɪərləs læn/",
+   "nghia": "mạng LAN không dây (WLAN, Wi-Fi) – chuẩn IEEE 802.11",
+   "nhom": "Truy cập đường truyền",
+   "viDu": "Which of the following are management services offered by the MAC sublayer in wireless LAN?",
+   "viDuNghia": "Dịch vụ quản lý nào sau đây do tầng con MAC trong mạng LAN không dây cung cấp?"
+  },
+  {
+   "chu": "interframe space",
+   "doc": "/ˈɪntərfreɪm speɪs/",
+   "nghia": "khoảng cách giữa các khung (IFS) – thời gian phải chờ trước khi phát; ngắn hơn thì ưu tiên cao hơn (SIFS, PIFS, DIFS)",
+   "nhom": "Truy cập đường truyền",
+   "viDu": "In IEEE 802.11 MAC for wireless LANs, which inter-frame space (IFS) is used for high-priority frames such as ACKs?",
+   "viDuNghia": "Trong MAC của IEEE 802.11 cho mạng LAN không dây, khoảng cách giữa các khung (IFS) nào dùng cho khung ưu tiên cao như ACK?"
+  },
+  {
+   "chu": "hidden station",
+   "doc": "/ˈhɪdn ˈsteɪʃn/",
+   "nghia": "trạm ẩn – hai trạm không nghe thấy nhau nhưng cùng phát tới một trạm thứ ba, gây va chạm",
+   "nhom": "Truy cập đường truyền",
+   "viDu": "The hidden station problem occurs when two stations cannot hear each other.",
+   "viDuNghia": "Vấn đề trạm ẩn xảy ra khi hai trạm không nghe thấy nhau."
+  },
+  {
+   "chu": "broadcast",
+   "doc": "/ˈbrɔːdkæst/",
+   "nghia": "phát quảng bá – gửi tới mọi máy trong mạng",
+   "nhom": "Truy cập đường truyền",
+   "viDu": "You have an IP address of 172.16.13.5 with a 255.255.255.128 subnet mask. What is your class of address, subnet address, and broadcast address?",
+   "viDuNghia": "Bạn có địa chỉ IP 172.16.13.5 với mặt nạ mạng con 255.255.255.128. Lớp địa chỉ, địa chỉ mạng con và địa chỉ quảng bá là gì?"
+  },
+  {
+   "chu": "link utilization",
+   "doc": "/lɪŋk ˌjuːtələˈzeɪʃn/",
+   "nghia": "hiệu suất sử dụng đường truyền – tỉ lệ thời gian đường truyền thật sự chở dữ liệu",
+   "nhom": "Truy cập đường truyền",
+   "viDu": "A larger window size improves link utilization.",
+   "viDuNghia": "Kích thước cửa sổ lớn hơn giúp tăng hiệu suất sử dụng đường truyền."
+  },
+  {
+   "chu": "preamble",
+   "doc": "/ˈpriːæmbl/",
+   "nghia": "phần mở đầu khung – dãy bit đầu khung Ethernet giúp bên nhận đồng bộ nhịp",
+   "nhom": "Truy cập đường truyền",
+   "viDu": "An Ethernet frame begins with a preamble used for synchronization.",
+   "viDuNghia": "Khung Ethernet bắt đầu bằng phần mở đầu dùng để đồng bộ."
+  },
+  {
+   "chu": "jam signal",
+   "doc": "/dʒæm ˈsɪɡnəl/",
+   "nghia": "tín hiệu nghẽn – tín hiệu phát ra khi thấy va chạm để mọi trạm cùng biết và ngừng phát",
+   "nhom": "Truy cập đường truyền",
+   "viDu": "In CSMA/CD, what happens if a node receives a jam signal?",
+   "viDuNghia": "Trong CSMA/CD, điều gì xảy ra khi một nút nhận được tín hiệu nghẽn (jam signal)?"
+  },
+  {
+   "chu": "persistent",
+   "doc": "/pərˈsɪstənt/",
+   "nghia": "kiên trì – kiểu CSMA: thấy đường truyền rảnh là phát ngay (1-persistent); non-persistent thì chờ ngẫu nhiên rồi nghe lại",
+   "nhom": "Truy cập đường truyền",
+   "viDu": "In 1-persistent CSMA, a station transmits as soon as the channel is idle.",
+   "viDuNghia": "Trong CSMA 1-persistent, trạm phát ngay khi kênh truyền rảnh."
+  },
+  {
+   "chu": "sublayer",
+   "doc": "/ˈsʌbleɪər/",
+   "nghia": "tầng con – tầng liên kết chia thành hai tầng con LLC và MAC",
+   "nhom": "Truy cập đường truyền",
+   "viDu": "Which sublayer of the data link layer adds the source and destination hardware addresses and controls access to the media?",
+   "viDuNghia": "Tầng con nào của tầng liên kết dữ liệu thêm địa chỉ phần cứng nguồn, đích và điều khiển việc truy cập môi trường truyền?"
+  },
+  {
+   "chu": "roaming",
+   "doc": "/ˈroʊmɪŋ/",
+   "nghia": "chuyển vùng – thiết bị di động chuyển từ điểm truy cập này sang điểm truy cập khác mà vẫn giữ kết nối",
+   "nhom": "Truy cập đường truyền",
+   "viDu": "Roaming lets a laptop move between access points without losing its connection.",
+   "viDuNghia": "Chuyển vùng cho phép laptop di chuyển giữa các điểm truy cập mà không mất kết nối."
+  }
+ ]
+}

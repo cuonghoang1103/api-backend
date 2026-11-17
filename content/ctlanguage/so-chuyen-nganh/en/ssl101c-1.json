@@ -1,0 +1,698 @@
+{
+ "ma": "ssl101c-1",
+ "nn": "en",
+ "ten": "SSL101c · 1. Văn hoá học thuật & nguồn tin",
+ "moTa": "Academic Skills for University Success, phần 1: đời sống đại học, liêm chính học thuật (đạo văn, gian lận), trích dẫn – tham khảo, các loại nguồn và cách đánh giá nguồn. Từ lấy từ đề FE thật; ví dụ phần lớn là câu hỏi thật trong đề. Rất hữu ích cho IELTS và viết báo cáo.",
+ "bieuTuong": "graduationcap.fill",
+ "thuTu": -986,
+ "tu": [
+  {
+   "chu": "academic culture",
+   "doc": "/ˌækəˈdemɪk ˈkʌltʃər/",
+   "nghia": "văn hoá học thuật: thái độ, giá trị và cách ứng xử chung của người học tập, làm việc ở đại học",
+   "nhom": "Đời sống đại học",
+   "viDu": "Some core values and expectations of academic culture mentioned by academics include: Choose 4 options.",
+   "viDuNghia": "Một số giá trị và kỳ vọng cốt lõi của văn hoá học thuật được học giả nhắc tới gồm: Chọn 4 đáp án."
+  },
+  {
+   "chu": "academic",
+   "doc": "/ˌækəˈdemɪk/",
+   "nghia": "(tính từ) thuộc học thuật, việc học ở đại học; (danh từ) giảng viên, nhà nghiên cứu. Mẹo: academics (số nhiều) = các nhà khoa học, không phải môn học",
+   "nhom": "Đời sống đại học",
+   "viDu": "Scholarly record is aimed at academics or students in the field.",
+   "viDuNghia": "Kho tư liệu học thuật hướng tới các nhà nghiên cứu hoặc sinh viên trong ngành."
+  },
+  {
+   "chu": "lecture",
+   "doc": "/ˈlektʃər/",
+   "nghia": "bài giảng trên lớp đông người, giảng viên nói là chính; khác tutorial (lớp nhỏ, thảo luận)",
+   "nhom": "Đời sống đại học",
+   "viDu": "To make the most out of your lectures, you should not:",
+   "viDuNghia": "Để tận dụng tối đa buổi giảng, bạn KHÔNG nên:"
+  },
+  {
+   "chu": "tutorial",
+   "doc": "/tuːˈtɔːriəl/",
+   "nghia": "buổi học nhóm nhỏ để thảo luận, làm bài tập sau bài giảng; sinh viên phải chuẩn bị và phát biểu",
+   "nhom": "Đời sống đại học",
+   "viDu": "What is the purpose of a tutorial or recitation? Check one option.",
+   "viDuNghia": "Mục đích của tutorial hoặc recitation là gì? Chọn một đáp án."
+  },
+  {
+   "chu": "tutor",
+   "doc": "/ˈtuːtər/",
+   "nghia": "trợ giảng, người hướng dẫn buổi tutorial",
+   "nhom": "Đời sống đại học",
+   "viDu": "Your tutor has given you a hypothetical scenario involving a security threat.",
+   "viDuNghia": "Trợ giảng (tutor) của bạn đã đưa ra một tình huống giả định liên quan đến mối đe doạ an ninh."
+  },
+  {
+   "chu": "seminar",
+   "doc": "/ˈsemɪnɑːr/",
+   "nghia": "buổi chuyên đề: nhóm nhỏ trình bày và thảo luận sâu một chủ đề",
+   "nhom": "Đời sống đại học",
+   "viDu": "What situations can make up university courses? — Lectures / Discussion / Tutorials / Workshop / Seminars / Assessments",
+   "viDuNghia": "Những hình thức nào có thể tạo nên các môn học ở đại học? — Bài giảng / Thảo luận / Tutorial / Workshop / Seminar / Bài đánh giá"
+  },
+  {
+   "chu": "professor",
+   "doc": "/prəˈfesər/",
+   "nghia": "giáo sư; ở Mỹ còn dùng để gọi chung giảng viên đại học",
+   "nhom": "Đời sống đại học",
+   "viDu": "Your lecturer's name is Associate Professor Di Jones.",
+   "viDuNghia": "Giảng viên của bạn tên là Phó Giáo sư Di Jones."
+  },
+  {
+   "chu": "faculty",
+   "doc": "/ˈfæklti/",
+   "nghia": "khoa trong trường đại học; (Mỹ) còn chỉ đội ngũ giảng viên",
+   "nhom": "Đời sống đại học",
+   "viDu": "He must go to the dean of the faculty and report his professor's experiment.",
+   "viDuNghia": "Cậu ấy phải đến gặp trưởng khoa và báo cáo về thí nghiệm của giáo sư mình."
+  },
+  {
+   "chu": "dean",
+   "doc": "/diːn/",
+   "nghia": "trưởng khoa, chủ nhiệm khoa",
+   "nhom": "Đời sống đại học",
+   "viDu": "The dean of the faculty decides the penalty for serious academic misconduct.",
+   "viDuNghia": "Trưởng khoa quyết định hình thức xử lý với vi phạm học thuật nghiêm trọng."
+  },
+  {
+   "chu": "curriculum",
+   "doc": "/kəˈrɪkjələm/",
+   "nghia": "chương trình học: toàn bộ môn và nội dung của một khoá/ngành (số nhiều: curricula)",
+   "nhom": "Đời sống đại học",
+   "viDu": "Design a curriculum outline with the aim of increasing interest in Science.",
+   "viDuNghia": "Thiết kế đề cương chương trình nhằm tăng hứng thú với Khoa học."
+  },
+  {
+   "chu": "discipline",
+   "doc": "/ˈdɪsəplɪn/",
+   "nghia": "ngành học, lĩnh vực học thuật (vật lý, luật, ngôn ngữ học…); nghĩa khác: kỷ luật",
+   "nhom": "Đời sống đại học",
+   "viDu": "Each academic discipline, such as biology or law, has its own way of building arguments.",
+   "viDuNghia": "Mỗi ngành học thuật, như sinh học hay luật, có cách xây dựng lập luận riêng."
+  },
+  {
+   "chu": "humanities",
+   "doc": "/hjuːˈmænətiz/",
+   "nghia": "khối ngành nhân văn (văn học, lịch sử, triết học…)",
+   "nhom": "Đời sống đại học",
+   "viDu": "Which of the following are good sources for students studying humanities field such as English Literature, Art History, Film studies?",
+   "viDuNghia": "Đâu là nguồn tốt cho sinh viên học ngành khoa học nhân văn như Văn học Anh, Lịch sử Nghệ thuật, Điện ảnh học?"
+  },
+  {
+   "chu": "social sciences",
+   "doc": "/ˌsoʊʃl ˈsaɪənsɪz/",
+   "nghia": "khoa học xã hội (xã hội học, kinh tế, chính trị học…)",
+   "nhom": "Đời sống đại học",
+   "viDu": "What is an example of a difference in argumentation in the arts and social sciences courses on the one hand, and science courses on the other?",
+   "viDuNghia": "Đâu là ví dụ về sự khác biệt trong lập luận giữa các môn khoa học xã hội/nhân văn so với các môn khoa học tự nhiên?"
+  },
+  {
+   "chu": "assessment criteria",
+   "doc": "/əˈsesmənt kraɪˈtɪriə/",
+   "nghia": "tiêu chí chấm điểm: bảng nói rõ bài sẽ được đánh giá theo những gì. Mẹo: đọc tiêu chí trước khi làm bài",
+   "nhom": "Đời sống đại học",
+   "viDu": "Which is NOT a strategy for understanding the problems? — Using key words / Assessment Criteria / Using units / Visualizing or drawing a presentation / Asking for more information",
+   "viDuNghia": "Đâu KHÔNG phải chiến lược để hiểu vấn đề? — Dùng từ khoá / Tiêu chí đánh giá / Dùng đơn vị / Hình dung hoặc vẽ minh hoạ / Hỏi thêm thông tin"
+  },
+  {
+   "chu": "submit",
+   "doc": "/səbˈmɪt/",
+   "nghia": "nộp (bài, báo cáo); danh từ: submission. Re-submission = nộp lại bài cũ",
+   "nhom": "Đời sống đại học",
+   "viDu": "He arrived at classes late and forgot to submit assignments on time.",
+   "viDuNghia": "Anh ấy đến lớp muộn và quên nộp bài tập đúng hạn."
+  },
+  {
+   "chu": "retake",
+   "doc": "/ˌriːˈteɪk/",
+   "nghia": "thi lại, học lại một môn",
+   "nhom": "Đời sống đại học",
+   "viDu": "He missed the final exam of Digital Marketing subject because of a traffic accident. He had to retake this subject.",
+   "viDuNghia": "Cậu ấy lỡ bài thi cuối kỳ môn Digital Marketing vì tai nạn giao thông. Cậu phải học lại môn này."
+  },
+  {
+   "chu": "core value",
+   "doc": "/kɔːr ˈvæljuː/",
+   "nghia": "giá trị cốt lõi: điều một cộng đồng coi là quan trọng nhất (vd trung thực, tôn trọng)",
+   "nhom": "Đời sống đại học",
+   "viDu": "Which of the following are some of the core values and expectations of academic culture mentioned by academics?",
+   "viDuNghia": "Đâu là một số giá trị cốt lõi và kỳ vọng của văn hoá học thuật được các học giả nhắc tới?"
+  },
+  {
+   "chu": "scholar",
+   "doc": "/ˈskɑːlər/",
+   "nghia": "học giả, nhà nghiên cứu chuyên sâu một lĩnh vực",
+   "nhom": "Đời sống đại học",
+   "viDu": "Scholars share new findings by publishing articles in academic journals.",
+   "viDuNghia": "Các học giả chia sẻ phát hiện mới bằng cách đăng bài trên tạp chí học thuật."
+  },
+  {
+   "chu": "scholarly",
+   "doc": "/ˈskɑːlərli/",
+   "nghia": "mang tính học thuật, do giới nghiên cứu viết cho giới nghiên cứu (scholarly journal, scholarly purpose)",
+   "nhom": "Đời sống đại học",
+   "viDu": "Scholarly record in university is all of the below EXCEPT",
+   "viDuNghia": "Kho tư liệu học thuật (scholarly record) ở đại học gồm tất cả những thứ dưới đây NGOẠI TRỪ"
+  },
+  {
+   "chu": "research",
+   "doc": "/ˈriːsɜːrtʃ/",
+   "nghia": "nghiên cứu (danh từ không đếm được và động từ). Cụm hay gặp: conduct research = tiến hành nghiên cứu",
+   "nhom": "Đời sống đại học",
+   "viDu": "What are the purposes of conducting research?",
+   "viDuNghia": "Mục đích của việc nghiên cứu là gì?"
+  },
+  {
+   "chu": "independent learning",
+   "doc": "/ˌɪndɪˈpendənt ˈlɜːrnɪŋ/",
+   "nghia": "tự học: sinh viên tự chịu trách nhiệm tìm hiểu, không chờ giảng viên giao từng việc",
+   "nhom": "Đời sống đại học",
+   "viDu": "In the course Critical thinking skills for University Success, part 1.2a Introduction to Academic Culture, what is independent learning?",
+   "viDuNghia": "Trong môn Kỹ năng tư duy phản biện cho Thành công Đại học, phần 1.2a Giới thiệu Văn hoá Học thuật, independent learning (học tập độc lập) là gì?"
+  },
+  {
+   "chu": "life-long learning",
+   "doc": "/ˌlaɪf lɔːŋ ˈlɜːrnɪŋ/",
+   "nghia": "học tập suốt đời: tiếp tục học sau khi ra trường — một giá trị của văn hoá học thuật",
+   "nhom": "Đời sống đại học",
+   "viDu": "This practice is increasingly emphasized in the context of life-long learning, in which each individual needs to actively foster their own development of knowledge and skills.",
+   "viDuNghia": "Thực hành này ngày càng được nhấn mạnh trong bối cảnh học tập suốt đời; trong đó mỗi cá nhân cần chủ động thúc đẩy phát triển kiến thức và kỹ năng của chính mình."
+  },
+  {
+   "chu": "contribution",
+   "doc": "/ˌkɑːntrɪˈbjuːʃn/",
+   "nghia": "sự đóng góp (vào bài nhóm, vào tri thức của ngành)",
+   "nhom": "Đời sống đại học",
+   "viDu": "Which of the following is an example of the contribution of information and digital literacy to the values of academic culture?",
+   "viDuNghia": "Ví dụ nào sau đây thể hiện đóng góp của năng lực thông tin và số vào các giá trị của văn hoá học thuật?"
+  },
+  {
+   "chu": "academic integrity",
+   "doc": "/ˌækəˈdemɪk ɪnˈteɡrəti/",
+   "nghia": "liêm chính học thuật: trung thực trong học tập và nghiên cứu, ghi nhận công của người khác",
+   "nhom": "Liêm chính học thuật",
+   "viDu": "Which of the following reflects academic integrity?",
+   "viDuNghia": "Điều nào sau đây thể hiện liêm chính học thuật?"
+  },
+  {
+   "chu": "academic misconduct",
+   "doc": "/ˌækəˈdemɪk ˌmɪsˈkɑːndʌkt/",
+   "nghia": "vi phạm học thuật: đạo văn, gian lận thi cử, bịa số liệu, tiếp tay cho người khác vi phạm",
+   "nhom": "Liêm chính học thuật",
+   "viDu": "Which of the following is NOT an issue of academic misconduct?",
+   "viDuNghia": "Điều nào sau đây KHÔNG phải là vấn đề vi phạm liêm chính học thuật?"
+  },
+  {
+   "chu": "misconduct",
+   "doc": "/ˌmɪsˈkɑːndʌkt/",
+   "nghia": "hành vi sai trái, vi phạm quy tắc đạo đức nghề nghiệp",
+   "nhom": "Liêm chính học thuật",
+   "viDu": "Can Jon get in trouble for academic misconduct?",
+   "viDuNghia": "Jon có thể gặp rắc rối vì vi phạm liêm chính học thuật không?"
+  },
+  {
+   "chu": "plagiarism",
+   "doc": "/ˈpleɪdʒərɪzəm/",
+   "nghia": "đạo văn: dùng lời, ý tưởng, số liệu của người khác mà không ghi nguồn. Động từ: plagiarize",
+   "nhom": "Liêm chính học thuật",
+   "viDu": "Which of the following is not an example of plagiarism?",
+   "viDuNghia": "Điều nào sau đây KHÔNG phải ví dụ đạo văn?"
+  },
+  {
+   "chu": "intentional plagiarism",
+   "doc": "/ɪnˈtenʃənl ˈpleɪdʒərɪzəm/",
+   "nghia": "đạo văn cố ý: biết mà vẫn chép hoặc mua bài của người khác",
+   "nhom": "Liêm chính học thuật",
+   "viDu": "What is the difference between unintentional and intentional plagiarism?",
+   "viDuNghia": "Khác biệt giữa đạo văn không cố ý và đạo văn cố ý là gì?"
+  },
+  {
+   "chu": "unintentional plagiarism",
+   "doc": "/ˌʌnɪnˈtenʃənl ˈpleɪdʒərɪzəm/",
+   "nghia": "đạo văn vô ý: quên ghi nguồn, diễn đạt lại quá sát bản gốc — vẫn bị tính là vi phạm",
+   "nhom": "Liêm chính học thuật",
+   "viDu": "Unintentional plagiarism is when you are not aware of your plagiarism, and intentional plagiarism is when you deliberately copy another's work",
+   "viDuNghia": "Đạo văn không cố ý là khi bạn không nhận ra mình đạo văn, còn đạo văn cố ý là khi bạn cố tình sao chép bài của người khác."
+  },
+  {
+   "chu": "self-plagiarism",
+   "doc": "/ˌself ˈpleɪdʒərɪzəm/",
+   "nghia": "tự đạo văn: nộp lại bài cũ của chính mình cho môn khác mà không xin phép",
+   "nhom": "Liêm chính học thuật",
+   "viDu": "Submitting the report you wrote last semester for a new course is self-plagiarism.",
+   "viDuNghia": "Nộp lại bản báo cáo bạn viết kỳ trước cho một môn mới là tự đạo văn."
+  },
+  {
+   "chu": "cheating",
+   "doc": "/ˈtʃiːtɪŋ/",
+   "nghia": "gian lận (trong thi cử, bài tập): mang tài liệu, chép bài, nhờ làm hộ",
+   "nhom": "Liêm chính học thuật",
+   "viDu": "Presenting someone else's ideas as your own is best defined as: — Attributing / Plagiarism / Functionalism / Cheating",
+   "viDuNghia": "Trình bày ý tưởng của người khác như của mình được định nghĩa chính xác nhất là: — Ghi nhận nguồn (Attributing) / Đạo văn (Plagiarism) / Thuyết chức năng (Functionalism) / Gian lận (Cheating)"
+  },
+  {
+   "chu": "fabrication",
+   "doc": "/ˌfæbrɪˈkeɪʃn/",
+   "nghia": "bịa đặt số liệu hoặc kết quả không hề có",
+   "nhom": "Liêm chính học thuật",
+   "viDu": "Writing down survey answers that nobody actually gave is fabrication of data.",
+   "viDuNghia": "Ghi ra những câu trả lời khảo sát mà thực tế không ai trả lời là bịa đặt số liệu."
+  },
+  {
+   "chu": "falsification",
+   "doc": "/ˌfɔːlsɪfɪˈkeɪʃn/",
+   "nghia": "làm sai lệch, sửa số liệu hay kết quả có thật cho đẹp. Khác fabrication (bịa mới hoàn toàn)",
+   "nhom": "Liêm chính học thuật",
+   "viDu": "Which of the following reflects academic integrity? — Behaving ethically and honestly / Plagiarism / Cheating / Falsification of data or results",
+   "viDuNghia": "Điều nào sau đây thể hiện liêm chính học thuật? — Hành xử có đạo đức và trung thực / Đạo văn / Gian lận / Làm giả dữ liệu hoặc kết quả"
+  },
+  {
+   "chu": "honesty",
+   "doc": "/ˈɑːnəsti/",
+   "nghia": "sự trung thực — giá trị nền của liêm chính học thuật",
+   "nhom": "Liêm chính học thuật",
+   "viDu": "Why is this a problem in academic honesty?",
+   "viDuNghia": "Vì sao đây là vấn đề về liêm chính học thuật?"
+  },
+  {
+   "chu": "wording",
+   "doc": "/ˈwɜːrdɪŋ/",
+   "nghia": "cách dùng từ, câu chữ cụ thể của một đoạn văn. Chép nguyên wording mà không ngoặc kép là đạo văn",
+   "nhom": "Liêm chính học thuật",
+   "viDu": "It is an example of plagiarism because the student has copied the wording of the original text.",
+   "viDuNghia": "Đây là một ví dụ đạo văn vì sinh viên đã chép nguyên câu chữ của văn bản gốc."
+  },
+  {
+   "chu": "original",
+   "doc": "/əˈrɪdʒənl/",
+   "nghia": "gốc, ban đầu (original text = văn bản gốc); nghĩa khác: độc đáo, do mình tự nghĩ ra",
+   "nhom": "Liêm chính học thuật",
+   "viDu": "Mohammed notices that his professor made a small error when calculating the data for the original experiment.",
+   "viDuNghia": "Mohammed nhận thấy giáo sư của mình đã tính sai một chút khi tính dữ liệu cho thí nghiệm gốc."
+  },
+  {
+   "chu": "deliberately",
+   "doc": "/dɪˈlɪbərətli/",
+   "nghia": "một cách cố ý, có chủ đích (= intentionally)",
+   "nhom": "Liêm chính học thuật",
+   "viDu": "The student deliberately copied a friend's essay and submitted it as his own.",
+   "viDuNghia": "Sinh viên đó cố ý chép bài luận của bạn rồi nộp như bài của mình."
+  },
+  {
+   "chu": "pretend",
+   "doc": "/prɪˈtend/",
+   "nghia": "giả vờ, làm ra vẻ",
+   "nhom": "Liêm chính học thuật",
+   "viDu": "Not wanting to seem unhealthy... he pretends that he made a pumpkin soup and adds that to his list.",
+   "viDuNghia": "Không muốn trông thiếu lành mạnh... anh giả vờ đã nấu súp bí ngô rồi thêm vào danh sách."
+  },
+  {
+   "chu": "common knowledge",
+   "doc": "/ˌkɑːmən ˈnɑːlɪdʒ/",
+   "nghia": "kiến thức phổ thông ai cũng biết (vd Trái Đất quay quanh Mặt Trời) — không cần ghi nguồn",
+   "nhom": "Liêm chính học thuật",
+   "viDu": "Which of the following would you NOT need to reference at university? — Your own ideas / Common knowledge / Someone else's organizing structure / Information from another source",
+   "viDuNghia": "Điều nào sau đây bạn KHÔNG cần trích dẫn ở đại học? — Ý tưởng của chính bạn / Kiến thức thông thường / Cấu trúc tổ chức của người khác / Thông tin từ nguồn khác"
+  },
+  {
+   "chu": "referencing",
+   "doc": "/ˈrefrənsɪŋ/",
+   "nghia": "việc ghi nguồn tham khảo theo một hệ thống chuẩn (APA, Harvard, Vancouver…)",
+   "nhom": "Trích dẫn & tham khảo",
+   "viDu": "What referencing system is used in the following part of an article?",
+   "viDuNghia": "Hệ thống trích dẫn nào được dùng trong đoạn trích bài báo sau?"
+  },
+  {
+   "chu": "reference list",
+   "doc": "/ˈrefrəns lɪst/",
+   "nghia": "danh sách tài liệu tham khảo cuối bài: chỉ gồm nguồn đã trích trong bài",
+   "nhom": "Trích dẫn & tham khảo",
+   "viDu": "Every source cited in your essay must appear in the reference list at the end.",
+   "viDuNghia": "Mọi nguồn được trích trong bài luận đều phải có trong danh sách tham khảo ở cuối bài."
+  },
+  {
+   "chu": "footnote",
+   "doc": "/ˈfʊtnoʊt/",
+   "nghia": "chú thích cuối trang",
+   "nhom": "Trích dẫn & tham khảo",
+   "viDu": "The author explains the term in a footnote at the bottom of the page.",
+   "viDuNghia": "Tác giả giải thích thuật ngữ ấy trong một chú thích ở cuối trang."
+  },
+  {
+   "chu": "endnote",
+   "doc": "/ˈendnoʊt/",
+   "nghia": "chú thích dồn ở cuối bài hoặc cuối chương (khác footnote ở cuối trang)",
+   "nhom": "Trích dẫn & tham khảo",
+   "viDu": "All the endnotes are collected at the end of the chapter.",
+   "viDuNghia": "Mọi chú thích được dồn về cuối chương."
+  },
+  {
+   "chu": "bibliography",
+   "doc": "/ˌbɪbliˈɑːɡrəfi/",
+   "nghia": "thư mục tài liệu: mọi nguồn đã đọc, kể cả nguồn không trích trực tiếp",
+   "nhom": "Trích dẫn & tham khảo",
+   "viDu": "Which of the following is the part which presents the bibliography you used in your essay?",
+   "viDuNghia": "Phần nào trình bày danh mục tài liệu tham khảo bạn đã dùng trong essay?"
+  },
+  {
+   "chu": "paraphrase",
+   "doc": "/ˈpærəfreɪz/",
+   "nghia": "diễn đạt lại ý của người khác bằng lời của mình — vẫn phải ghi nguồn",
+   "nhom": "Trích dẫn & tham khảo",
+   "viDu": "Which of the following is NOT a strategy for paraphrasing?",
+   "viDuNghia": "Đâu KHÔNG phải một chiến lược để diễn giải lại (paraphrase)?"
+  },
+  {
+   "chu": "quote",
+   "doc": "/kwoʊt/",
+   "nghia": "trích nguyên văn (đặt trong ngoặc kép kèm nguồn); danh từ: câu trích",
+   "nhom": "Trích dẫn & tham khảo",
+   "viDu": "Only quote directly when necessary, with quotation marks.",
+   "viDuNghia": "Chỉ trích dẫn trực tiếp khi cần thiết, kèm dấu ngoặc kép."
+  },
+  {
+   "chu": "Vancouver style",
+   "doc": "/vænˈkuːvər staɪl/",
+   "nghia": "kiểu trích dẫn Vancouver: đánh số [1], [2] theo thứ tự xuất hiện, hay dùng trong y khoa",
+   "nhom": "Trích dẫn & tham khảo",
+   "viDu": "In Vancouver style, each source gets a number in the order it first appears in the text.",
+   "viDuNghia": "Theo kiểu Vancouver, mỗi nguồn được đánh một số theo thứ tự xuất hiện lần đầu trong bài."
+  },
+  {
+   "chu": "publisher",
+   "doc": "/ˈpʌblɪʃər/",
+   "nghia": "nhà xuất bản — một thông tin cần có trong mục tham khảo",
+   "nhom": "Trích dẫn & tham khảo",
+   "viDu": "When critically evaluating a web resource, why do we need to look for the publisher?",
+   "viDuNghia": "Khi đánh giá phản biện một nguồn web, vì sao ta cần tìm nhà xuất bản (publisher)?"
+  },
+  {
+   "chu": "source",
+   "doc": "/sɔːrs/",
+   "nghia": "nguồn (tài liệu, thông tin) mà mình lấy ý hay số liệu",
+   "nhom": "Nguồn thông tin",
+   "viDu": "Which of the following is NOT secondary source?",
+   "viDuNghia": "Đâu KHÔNG phải là nguồn thứ cấp (secondary source)?"
+  },
+  {
+   "chu": "primary source",
+   "doc": "/ˈpraɪmeri sɔːrs/",
+   "nghia": "nguồn sơ cấp: tư liệu gốc, trực tiếp (dữ liệu thí nghiệm, phỏng vấn, văn bản gốc)",
+   "nhom": "Nguồn thông tin",
+   "viDu": "An interview that you record yourself is a primary source.",
+   "viDuNghia": "Một cuộc phỏng vấn do chính bạn ghi lại là nguồn sơ cấp."
+  },
+  {
+   "chu": "secondary source",
+   "doc": "/ˈsekənderi sɔːrs/",
+   "nghia": "nguồn thứ cấp: tài liệu phân tích, bình luận về nguồn sơ cấp (bài báo tổng quan, sách chuyên khảo)",
+   "nhom": "Nguồn thông tin",
+   "viDu": "Which of the following is NOT secondary source?",
+   "viDuNghia": "Đâu KHÔNG phải là nguồn thứ cấp?"
+  },
+  {
+   "chu": "tertiary source",
+   "doc": "/ˈtɜːrʃieri sɔːrs/",
+   "nghia": "nguồn cấp ba: tổng hợp lại nguồn sơ cấp và thứ cấp (bách khoa thư, sách giáo khoa, Wikipedia)",
+   "nhom": "Nguồn thông tin",
+   "viDu": "Is a first-year visual art textbook called Introduction to Art History an example of a primary source, secondary source, or tertiary source?",
+   "viDuNghia": "Một giáo trình mỹ thuật năm nhất tên \"Introduction to Art History\" là nguồn sơ cấp, thứ cấp hay nguồn cấp ba?"
+  },
+  {
+   "chu": "journal",
+   "doc": "/ˈdʒɜːrnl/",
+   "nghia": "tạp chí chuyên ngành, tạp chí khoa học; nghĩa khác: nhật ký học tập",
+   "nhom": "Nguồn thông tin",
+   "viDu": "What is the purpose of an abstract of a journal article?",
+   "viDuNghia": "Mục đích của phần tóm tắt (abstract) trong bài báo tạp chí là gì?"
+  },
+  {
+   "chu": "journal article",
+   "doc": "/ˈdʒɜːrnl ˈɑːrtɪkl/",
+   "nghia": "bài báo đăng trên tạp chí khoa học",
+   "nhom": "Nguồn thông tin",
+   "viDu": "All journal articles have one thing in common. That is:",
+   "viDuNghia": "Mọi bài báo tạp chí đều có một điểm chung. Đó là:"
+  },
+  {
+   "chu": "academic journal",
+   "doc": "/ˌækəˈdemɪk ˈdʒɜːrnl/",
+   "nghia": "tạp chí học thuật: đăng bài nghiên cứu đã được chuyên gia bình duyệt",
+   "nhom": "Nguồn thông tin",
+   "viDu": "What is an advantage of textbooks compared to academic journal articles?",
+   "viDuNghia": "Ưu điểm của sách giáo khoa so với bài báo tạp chí học thuật là gì?"
+  },
+  {
+   "chu": "peer-reviewed",
+   "doc": "/ˈpɪr rɪˌvjuːd/",
+   "nghia": "đã được bình duyệt: chuyên gia cùng ngành thẩm định trước khi đăng ⇒ nguồn đáng tin",
+   "nhom": "Nguồn thông tin",
+   "viDu": "A peer-reviewed journal such as the Canadian Journal of Chemistry is a reliable source for an academic context.",
+   "viDuNghia": "Một tạp chí có bình duyệt như Canadian Journal of Chemistry là nguồn đáng tin trong ngữ cảnh học thuật."
+  },
+  {
+   "chu": "conference proceedings",
+   "doc": "/ˈkɑːnfərəns prəˈsiːdɪŋz/",
+   "nghia": "kỷ yếu hội nghị: tập hợp các bài nghiên cứu trình bày tại một hội nghị khoa học",
+   "nhom": "Nguồn thông tin",
+   "viDu": "What type of texts you can find in the cultural record? — textbooks / novels / journal articles / conference proceedings",
+   "viDuNghia": "Loại văn bản nào có thể tìm thấy trong kho tư liệu văn hoá (cultural record)? — sách giáo khoa / tiểu thuyết / bài báo tạp chí / kỷ yếu hội nghị"
+  },
+  {
+   "chu": "literature review",
+   "doc": "/ˈlɪtrətʃər rɪˌvjuː/",
+   "nghia": "tổng quan tài liệu: phần điểm lại các nghiên cứu đã có về đề tài. Literature ở đây là tài liệu nghiên cứu, không phải văn học",
+   "nhom": "Nguồn thông tin",
+   "viDu": "Part of the research report is a literature review.",
+   "viDuNghia": "Một phần của báo cáo nghiên cứu là tổng quan tài liệu (literature review)."
+  },
+  {
+   "chu": "textbook",
+   "doc": "/ˈtekstbʊk/",
+   "nghia": "sách giáo khoa, giáo trình",
+   "nhom": "Nguồn thông tin",
+   "viDu": "Why can't we rely just on textbooks as information sources at university? Choose 2 options.",
+   "viDuNghia": "Vì sao không thể chỉ dựa vào sách giáo khoa làm nguồn thông tin ở đại học? Chọn 2 đáp án."
+  },
+  {
+   "chu": "encyclopedia",
+   "doc": "/ɪnˌsaɪkləˈpiːdiə/",
+   "nghia": "bách khoa toàn thư",
+   "nhom": "Nguồn thông tin",
+   "viDu": "Wikipedia is an online encyclopedia, so it is a tertiary source.",
+   "viDuNghia": "Wikipedia là một bách khoa thư trực tuyến nên nó là nguồn cấp ba."
+  },
+  {
+   "chu": "article",
+   "doc": "/ˈɑːrtɪkl/",
+   "nghia": "bài báo, bài viết (trên báo, tạp chí, trang web)",
+   "nhom": "Nguồn thông tin",
+   "viDu": "Refer to course 2, the RESULTS part of an academic journal article includes......",
+   "viDuNghia": "Theo khoá 2 (course 2), phần RESULTS (kết quả) của một bài báo tạp chí học thuật gồm......"
+  },
+  {
+   "chu": "scholarly record",
+   "doc": "/ˈskɑːlərli ˈrekərd/",
+   "nghia": "kho tư liệu học thuật: bài báo khoa học, luận văn, kỷ yếu, báo cáo nghiên cứu",
+   "nhom": "Nguồn thông tin",
+   "viDu": "Scholarly record in university is all of the below EXCEPT",
+   "viDuNghia": "Kho tư liệu học thuật (scholarly record) ở đại học gồm tất cả những thứ dưới đây NGOẠI TRỪ"
+  },
+  {
+   "chu": "cultural record",
+   "doc": "/ˈkʌltʃərəl ˈrekərd/",
+   "nghia": "kho tư liệu văn hoá: phim, chương trình tivi, báo chí, mạng xã hội — không phải nguồn học thuật",
+   "nhom": "Nguồn thông tin",
+   "viDu": "What type of texts you can find in the cultural record?",
+   "viDuNghia": "Loại văn bản nào có thể tìm thấy trong kho tư liệu văn hoá (cultural record)?"
+  },
+  {
+   "chu": "search engine",
+   "doc": "/ˈsɜːrtʃ ˌendʒɪn/",
+   "nghia": "công cụ tìm kiếm (Google, Bing…)",
+   "nhom": "Nguồn thông tin",
+   "viDu": "A search engine finds web pages, but it cannot tell you whether they are credible.",
+   "viDuNghia": "Công cụ tìm kiếm tìm ra trang web, nhưng không cho bạn biết chúng có đáng tin hay không."
+  },
+  {
+   "chu": "information literacy",
+   "doc": "/ˌɪnfərˈmeɪʃn ˈlɪtərəsi/",
+   "nghia": "năng lực thông tin: biết tìm, đánh giá và dùng thông tin đúng cách",
+   "nhom": "Đánh giá nguồn",
+   "viDu": "Which of the following statements is TRUE about information literacy?",
+   "viDuNghia": "Phát biểu nào sau đây ĐÚNG về năng lực thông tin (information literacy)?"
+  },
+  {
+   "chu": "digital literacy",
+   "doc": "/ˈdɪdʒɪtl ˈlɪtərəsi/",
+   "nghia": "năng lực số: dùng công cụ số để tìm, đánh giá, tạo và chia sẻ thông tin",
+   "nhom": "Đánh giá nguồn",
+   "viDu": "The following actions would need some level of digital literacy. What are they? Choose 2 options.",
+   "viDuNghia": "Các hành động sau cần một mức độ năng lực số nhất định. Đó là gì? Chọn 2 đáp án."
+  },
+  {
+   "chu": "literacy",
+   "doc": "/ˈlɪtərəsi/",
+   "nghia": "khả năng đọc viết; rộng hơn: năng lực trong một lĩnh vực (academic literacy)",
+   "nhom": "Đánh giá nguồn",
+   "viDu": "Which of the following are cultural record which is not suggested for academic literacy?",
+   "viDuNghia": "Đâu là những thứ thuộc kho tư liệu văn hoá không được khuyến nghị cho năng lực học thuật?"
+  },
+  {
+   "chu": "credibility",
+   "doc": "/ˌkredəˈbɪləti/",
+   "nghia": "độ tin cậy, sự đáng tin (của nguồn tin, của người nói)",
+   "nhom": "Đánh giá nguồn",
+   "viDu": "Which of the following criteria should not be used when we evaluate the credibility of information sources?",
+   "viDuNghia": "Tiêu chí nào sau đây KHÔNG nên dùng khi đánh giá độ tin cậy của nguồn thông tin?"
+  },
+  {
+   "chu": "credible",
+   "doc": "/ˈkredəbl/",
+   "nghia": "đáng tin cậy (= reliable, trustworthy)",
+   "nhom": "Đánh giá nguồn",
+   "viDu": "Government and university websites are usually more credible than personal blogs.",
+   "viDuNghia": "Trang web của chính phủ và trường đại học thường đáng tin hơn blog cá nhân."
+  },
+  {
+   "chu": "unreliable",
+   "doc": "/ˌʌnrɪˈlaɪəbl/",
+   "nghia": "không đáng tin cậy",
+   "nhom": "Đánh giá nguồn",
+   "viDu": "Which of the following publishers would be considered unreliable for an academic context? Check 3 options.",
+   "viDuNghia": "Nhà xuất bản nào sau đây được coi là không đáng tin cậy trong ngữ cảnh học thuật? Chọn 3 đáp án."
+  },
+  {
+   "chu": "currency",
+   "doc": "/ˈkɜːrənsi/",
+   "nghia": "tính cập nhật của nguồn (xuất bản gần đây hay đã cũ). Bẫy: ở đây KHÔNG phải tiền tệ",
+   "nhom": "Đánh giá nguồn",
+   "viDu": "Which of the following criteria should not be used when we evaluate the credibility of information sources? — Author's country of birth / Currency / Objectivity / Scholarly purpose",
+   "viDuNghia": "Tiêu chí nào sau đây KHÔNG nên dùng khi đánh giá độ tin cậy của nguồn thông tin? — Quốc gia nơi tác giả sinh ra / Tính cập nhật (Currency) / Tính khách quan / Mục đích học thuật"
+  },
+  {
+   "chu": "objectivity",
+   "doc": "/ˌɑːbdʒekˈtɪvəti/",
+   "nghia": "tính khách quan: không thiên vị, không nhằm bán hàng hay tuyên truyền",
+   "nhom": "Đánh giá nguồn",
+   "viDu": "Wikipedia is not always suitable for academic use because its objectivity is questionable.",
+   "viDuNghia": "Wikipedia không phải lúc nào cũng phù hợp cho mục đích học thuật vì tính khách quan của nó còn đáng ngờ."
+  },
+  {
+   "chu": "relevance",
+   "doc": "/ˈreləvəns/",
+   "nghia": "mức độ liên quan tới đề tài hay câu hỏi đang làm",
+   "nhom": "Đánh giá nguồn",
+   "viDu": "Check the relevance of each source to your essay question before you read it in detail.",
+   "viDuNghia": "Hãy kiểm tra mức liên quan của từng nguồn với đề bài trước khi đọc kỹ."
+  },
+  {
+   "chu": "critically",
+   "doc": "/ˈkrɪtɪkli/",
+   "nghia": "một cách phản biện: có xem xét, đặt câu hỏi, không tin ngay",
+   "nhom": "Đánh giá nguồn",
+   "viDu": "Critically evaluating the source of information that we find enables us to use this information:",
+   "viDuNghia": "Đánh giá phản biện nguồn thông tin ta tìm được giúp ta sử dụng thông tin đó:"
+  },
+  {
+   "chu": "critique",
+   "doc": "/krɪˈtiːk/",
+   "nghia": "bài/lời phê bình có phân tích; động từ: phân tích điểm mạnh yếu của một ý tưởng",
+   "nhom": "Đánh giá nguồn",
+   "viDu": "Which feature of critique can be found in the theorist's writing?",
+   "viDuNghia": "Đặc điểm nào của lối phê bình (critique) có thể thấy trong bài viết của nhà lý thuyết?"
+  },
+  {
+   "chu": "time management",
+   "doc": "/ˈtaɪm ˌmænɪdʒmənt/",
+   "nghia": "quản lý thời gian — một kỹ năng sống còn ở đại học",
+   "nhom": "Kỹ năng học",
+   "viDu": "Good time management means starting an assignment weeks before it is due.",
+   "viDuNghia": "Quản lý thời gian tốt nghĩa là bắt tay vào bài tập nhiều tuần trước hạn nộp."
+  },
+  {
+   "chu": "study skill",
+   "doc": "/ˈstʌdi skɪl/",
+   "nghia": "kỹ năng học tập (ghi chép, đọc hiểu, ôn thi…)",
+   "nhom": "Kỹ năng học",
+   "viDu": "Taking notes in lectures and revising for exams are basic study skills.",
+   "viDuNghia": "Ghi chép trong giờ giảng và ôn thi là những kỹ năng học tập cơ bản."
+  },
+  {
+   "chu": "survival skill",
+   "doc": "/sərˈvaɪvl skɪl/",
+   "nghia": "kỹ năng sinh tồn (ở đại học): quản lý thời gian, hợp tác, tư duy phản biện, kỹ năng học…",
+   "nhom": "Kỹ năng học",
+   "viDu": "Which survival skill at university does Mike's case refer to?",
+   "viDuNghia": "Trường hợp của Mike liên quan tới kỹ năng sinh tồn đại học nào?"
+  },
+  {
+   "chu": "prior knowledge",
+   "doc": "/ˈpraɪər ˈnɑːlɪdʒ/",
+   "nghia": "kiến thức đã có từ trước, làm nền để hiểu cái mới",
+   "nhom": "Kỹ năng học",
+   "viDu": "Problem which requires a lot of prior knowledge and such knowledge is domain specific and applies only to that domain is referred to as:",
+   "viDuNghia": "Vấn đề đòi hỏi nhiều kiến thức nền, mà kiến thức đó đặc thù theo lĩnh vực và chỉ áp dụng cho lĩnh vực đó, được gọi là:"
+  },
+  {
+   "chu": "assigned reading",
+   "doc": "/əˈsaɪnd ˈriːdɪŋ/",
+   "nghia": "tài liệu được giao đọc trước buổi học. Mẹo: readings (số nhiều) = các bài phải đọc",
+   "nhom": "Kỹ năng học",
+   "viDu": "Do the assigned readings before the tutorial so that you can join the discussion.",
+   "viDuNghia": "Hãy đọc tài liệu được giao trước buổi tutorial để có thể tham gia thảo luận."
+  },
+  {
+   "chu": "self-reflection",
+   "doc": "/ˌself rɪˈflekʃn/",
+   "nghia": "tự nhìn lại, tự đánh giá cách học và kết quả của mình",
+   "nhom": "Kỹ năng học",
+   "viDu": "In particular, Self-reflection is substantially essential for daily practice.",
+   "viDuNghia": "Đặc biệt, việc tự phản tư (self-reflection) là thiết yếu cho việc thực hành hàng ngày."
+  },
+  {
+   "chu": "reflect",
+   "doc": "/rɪˈflekt/",
+   "nghia": "suy ngẫm, nhìn lại (reflect on); nghĩa khác: phản ánh",
+   "nhom": "Kỹ năng học",
+   "viDu": "Which of the following is NOT reflecting academic integrity?",
+   "viDuNghia": "Điều nào sau đây KHÔNG phản ánh liêm chính học thuật?"
+  },
+  {
+   "chu": "memorize",
+   "doc": "/ˈmeməraɪz/",
+   "nghia": "học thuộc lòng, ghi nhớ",
+   "nhom": "Kỹ năng học",
+   "viDu": "Understanding an idea is more useful than memorizing information in rote form.",
+   "viDuNghia": "Hiểu một ý tưởng có ích hơn là học vẹt thông tin."
+  },
+  {
+   "chu": "habit",
+   "doc": "/ˈhæbɪt/",
+   "nghia": "thói quen (study habits = thói quen học tập; habits of mind = thói quen tư duy)",
+   "nhom": "Kỹ năng học",
+   "viDu": "Young people should be guided to develop powerful habits.",
+   "viDuNghia": "Người trẻ nên được hướng dẫn để hình thành những thói quen hiệu quả."
+  },
+  {
+   "chu": "engage",
+   "doc": "/ɪnˈɡeɪdʒ/",
+   "nghia": "tham gia tích cực (engage in a discussion, engage with the readings); thu hút sự chú ý (engage your audience = thu hút khán giả)",
+   "nhom": "Kỹ năng học",
+   "viDu": "How to engage your audience and find your own style? More than one option is correct.",
+   "viDuNghia": "Làm thế nào để thu hút khán giả và tìm ra phong cách riêng? Có nhiều hơn một đáp án đúng."
+  },
+  {
+   "chu": "administrative",
+   "doc": "/ədˈmɪnɪstreɪtɪv/",
+   "nghia": "thuộc hành chính; administrative staff = nhân viên hành chính của trường",
+   "nhom": "Kỹ năng học",
+   "viDu": "They go to the student support centre in their university, and talk to an administrative staff member about their options.",
+   "viDuNghia": "Họ đến trung tâm hỗ trợ sinh viên của trường, nói chuyện với nhân viên hành chính về các lựa chọn."
+  }
+ ]
+}

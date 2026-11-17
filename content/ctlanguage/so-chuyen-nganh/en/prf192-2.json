@@ -1,0 +1,670 @@
+{
+ "ma": "prf192-2",
+ "nn": "en",
+ "ten": "PRF192 · 2. Hàm, mảng, con trỏ, chuỗi, tệp",
+ "moTa": "PRF192/PRF193 – Cơ sở lập trình (C), phần 2: hàm và tham số, mảng, tìm kiếm – sắp xếp, con trỏ, cấp phát động, chuỗi, struct, tệp và từ hay gặp trong đề PE. Từ lấy từ đề FE/PE thật; câu ví dụ là câu hỏi thật trong đề.",
+ "bieuTuong": "function",
+ "thuTu": -994,
+ "tu": [
+  {
+   "chu": "function prototype",
+   "doc": "/ˈfʌŋkʃn ˈproʊtətaɪp/",
+   "nghia": "nguyên mẫu hàm – dòng khai báo tên, kiểu trả về và tham số của hàm, đặt trước khi gọi",
+   "nhom": "Hàm",
+   "viDu": "Which of the following header files contains the function prototypes isdigit(int) and isspace(int)?",
+   "viDuNghia": "Tệp tiêu đề nào sau đây chứa nguyên mẫu hàm isdigit(int) và isspace(int)?"
+  },
+  {
+   "chu": "function call",
+   "doc": "/ˈfʌŋkʃn kɔːl/",
+   "nghia": "lời gọi hàm – câu lệnh yêu cầu hàm chạy",
+   "nhom": "Hàm",
+   "viDu": "Which of the following is used to call a function named doFunc()?",
+   "viDuNghia": "Cách nào sau đây được dùng để gọi một hàm tên là doFunc()?"
+  },
+  {
+   "chu": "return type",
+   "doc": "/rɪˈtɜːrn taɪp/",
+   "nghia": "kiểu trả về – kiểu dữ liệu của giá trị hàm trả về (void = không trả gì)",
+   "nhom": "Hàm",
+   "viDu": "What happens when the return statement has a double expression and the function return type is int?",
+   "viDuNghia": "Điều gì xảy ra khi câu lệnh return có biểu thức kiểu double nhưng kiểu trả về của hàm là int?"
+  },
+  {
+   "chu": "pass by value",
+   "nghia": "truyền tham trị – hàm nhận BẢN SAO của đối số, sửa bản sao không ảnh hưởng biến gốc",
+   "nhom": "Hàm",
+   "viDu": "When an argument is passed by value, the function works on a copy, so the original variable does not change.",
+   "viDuNghia": "Khi đối số được truyền tham trị, hàm làm việc trên bản sao nên biến gốc không đổi."
+  },
+  {
+   "chu": "pass by reference",
+   "nghia": "truyền tham chiếu – hàm nhận địa chỉ của biến nên sửa được biến gốc",
+   "nhom": "Hàm",
+   "viDu": "To let a function change a variable of the caller, pass its address: this is pass by reference.",
+   "viDuNghia": "Muốn hàm sửa được biến của nơi gọi thì truyền địa chỉ của nó: đó là truyền tham chiếu."
+  },
+  {
+   "chu": "library function",
+   "doc": "/ˈlaɪbreri ˈfʌŋkʃn/",
+   "nghia": "hàm thư viện – hàm có sẵn, chỉ cần include tệp tiêu đề là dùng được",
+   "nhom": "Hàm",
+   "viDu": "Which library function returns a pseudo-random number in the range 0 to RAND_MAX?",
+   "viDuNghia": "Hàm thư viện nào trả về một số giả ngẫu nhiên trong khoảng 0 đến RAND_MAX?"
+  },
+  {
+   "chu": "function definition",
+   "doc": "/ˈfʌŋkʃn ˌdefɪˈnɪʃn/",
+   "nghia": "định nghĩa hàm – phần viết đầy đủ đầu hàm và thân hàm",
+   "nhom": "Hàm",
+   "viDu": "Which is the correct function definition that will run without errors?",
+   "viDuNghia": "Định nghĩa hàm nào sau đây là đúng cú pháp và chạy không lỗi?"
+  },
+  {
+   "chu": "function parameter",
+   "doc": "/ˈfʌŋkʃn pəˈræmɪtər/",
+   "nghia": "tham số của hàm – biến khai báo trong ngoặc ở đầu hàm để nhận dữ liệu",
+   "nhom": "Hàm",
+   "viDu": "Which line of code declares a function that accepts a single integer parameter and returns an integer?",
+   "viDuNghia": "Dòng mã nào khai báo một hàm nhận một tham số kiểu số nguyên và trả về một số nguyên?"
+  },
+  {
+   "chu": "void",
+   "doc": "/vɔɪd/",
+   "nghia": "void – kiểu trả về của hàm KHÔNG trả giá trị nào (void main(), void setup()); void* là con trỏ không kiểu",
+   "nhom": "Hàm",
+   "viDu": "A function whose return type is void does not return any value to the caller.",
+   "viDuNghia": "Hàm có kiểu trả về là void không trả giá trị nào về cho nơi gọi."
+  },
+  {
+   "chu": "function",
+   "doc": "/ˈfʌŋkʃn/",
+   "nghia": "(lập trình) hàm – khối lệnh có tên, nhận tham số và có thể trả giá trị · (toán) hàm số, vd f(x) = x²",
+   "nhom": "Hàm",
+   "viDu": "The strcmp() compares two strings character by character. If the strings are equal, the function returns...",
+   "viDuNghia": "Hàm strcmp() so sánh hai chuỗi từng ký tự một. Nếu hai chuỗi bằng nhau, hàm trả về..."
+  },
+  {
+   "chu": "function body",
+   "doc": "/ˈfʌŋkʃn ˈbɑːdi/",
+   "nghia": "thân hàm – phần lệnh nằm trong cặp ngoặc nhọn sau đầu hàm",
+   "nhom": "Hàm",
+   "viDu": "What is the correct order of the main components in a function? → Return type, name, parameters, function body",
+   "viDuNghia": "Thứ tự đúng của các thành phần chính trong một hàm là gì? → Kiểu trả về, tên, tham số, thân hàm"
+  },
+  {
+   "chu": "return value",
+   "doc": "/rɪˈtɜːrn ˈvæljuː/",
+   "nghia": "giá trị trả về – giá trị hàm gửi lại nơi gọi bằng lệnh return; kiểu của nó là return type (hàm void không trả gì)",
+   "nhom": "Hàm",
+   "viDu": "What does the return value of the scanf function indicate when it is used to read items from the argument list?",
+   "viDuNghia": "Giá trị trả về của hàm scanf cho biết điều gì khi nó được dùng để đọc các mục từ danh sách tham số?"
+  },
+  {
+   "chu": "one-dimensional array",
+   "doc": "/wʌn daɪˈmenʃənl əˈreɪ/",
+   "nghia": "mảng một chiều – một dãy phần tử",
+   "nhom": "Mảng, tìm kiếm & sắp xếp",
+   "viDu": "A one-dimensional array stores its elements in a single row.",
+   "viDuNghia": "Mảng một chiều lưu các phần tử thành một dãy duy nhất."
+  },
+  {
+   "chu": "two-dimensional array",
+   "doc": "/tuː daɪˈmenʃənl əˈreɪ/",
+   "nghia": "mảng hai chiều – bảng gồm hàng và cột (ma trận)",
+   "nhom": "Mảng, tìm kiếm & sắp xếp",
+   "viDu": "Which of the following is a valid code to use to declare and initialize a two-dimensional array?",
+   "viDuNghia": "Cách viết nào sau đây là hợp lệ để khai báo và khởi tạo một mảng HAI CHIỀU?"
+  },
+  {
+   "chu": "selection sort",
+   "doc": "/sɪˈlekʃn sɔːrt/",
+   "nghia": "sắp xếp chọn – mỗi lượt chọn phần tử nhỏ nhất đưa về đầu dãy",
+   "nhom": "Mảng, tìm kiếm & sắp xếp",
+   "viDu": "Consider the following array of integers: {8, 1, 2, 7, 9}. What will be the state of the array after one pass of selection sort?",
+   "viDuNghia": "Xét mảng số nguyên: {8, 1, 2, 7, 9}. Trạng thái mảng sau MỘT lượt (pass) của selection sort là gì?"
+  },
+  {
+   "chu": "ascending order",
+   "doc": "/əˈsendɪŋ ˈɔːrdər/",
+   "nghia": "thứ tự tăng dần (nhỏ đến lớn)",
+   "nhom": "Mảng, tìm kiếm & sắp xếp",
+   "viDu": "The program asks the user to enter an array of n integers. Find and print the even numbers in ascending order, space-separated on one line.",
+   "viDuNghia": "Chương trình đọc mảng n số nguyên. Tìm và in các số chẵn theo thứ tự tăng dần, cách nhau khoảng trắng trên một dòng."
+  },
+  {
+   "chu": "descending order",
+   "doc": "/dɪˈsendɪŋ ˈɔːrdər/",
+   "nghia": "thứ tự giảm dần (lớn đến nhỏ)",
+   "nhom": "Mảng, tìm kiếm & sắp xếp",
+   "viDu": "Sort and print the list of elements in descending order with odd numbers first and even numbers last.",
+   "viDuNghia": "Sắp xếp và in danh sách phần tử theo thứ tự giảm dần, số lẻ trước, số chẵn sau."
+  },
+  {
+   "chu": "sorted",
+   "doc": "/ˈsɔːrtɪd/",
+   "nghia": "đã được sắp xếp",
+   "nhom": "Mảng, tìm kiếm & sắp xếp",
+   "viDu": "Your program allows the user to enter an array of n integer numbers (n entered from STDIN). Print the even numbers sorted in ascending order, one per line.",
+   "viDuNghia": "Chương trình cho người dùng nhập mảng n số nguyên (n nhập từ STDIN). In các số chẵn đã sắp xếp tăng dần, mỗi số một dòng."
+  },
+  {
+   "chu": "unsorted",
+   "doc": "/ʌnˈsɔːrtɪd/",
+   "nghia": "chưa được sắp xếp",
+   "nhom": "Mảng, tìm kiếm & sắp xếp",
+   "viDu": "In bubble sort, after each pass, where is the largest element in the unsorted part of the array?",
+   "viDuNghia": "Trong sắp xếp nổi bọt, sau mỗi lượt, phần tử lớn nhất của phần chưa sắp xếp nằm ở đâu?"
+  },
+  {
+   "chu": "adjacent",
+   "doc": "/əˈdʒeɪsnt/",
+   "nghia": "kề nhau, liền kề (hai phần tử đứng cạnh nhau)",
+   "nhom": "Mảng, tìm kiếm & sắp xếp",
+   "viDu": "A newline character is between any two adjacent numbers.",
+   "viDuNghia": "Giữa hai số kề nhau bất kỳ có một ký tự xuống dòng."
+  },
+  {
+   "chu": "largest",
+   "doc": "/ˈlɑːrdʒɪst/",
+   "nghia": "lớn nhất (trong dãy)",
+   "nhom": "Mảng, tìm kiếm & sắp xếp",
+   "viDu": "Find the largest value in the array and print it together with its position.",
+   "viDuNghia": "Tìm giá trị lớn nhất trong mảng và in nó cùng với vị trí của nó."
+  },
+  {
+   "chu": "smallest",
+   "doc": "/ˈsmɔːlɪst/",
+   "nghia": "nhỏ nhất (trong dãy)",
+   "nhom": "Mảng, tìm kiếm & sắp xếp",
+   "viDu": "Print the smallest element of the array and the number of times it appears.",
+   "viDuNghia": "In phần tử nhỏ nhất của mảng và số lần nó xuất hiện."
+  },
+  {
+   "chu": "occurrence",
+   "doc": "/əˈkɜːrəns/",
+   "nghia": "lần xuất hiện (\"first occurrence\" = lần xuất hiện đầu tiên)",
+   "nhom": "Mảng, tìm kiếm & sắp xếp",
+   "viDu": "Which of the following functions is used to find the first occurrence of a given string in another string?",
+   "viDuNghia": "Hàm nào sau đây dùng để tìm lần xuất hiện đầu tiên của một chuỗi cho trước trong một chuỗi khác?"
+  },
+  {
+   "chu": "indices",
+   "doc": "/ˈɪndɪsiːz/",
+   "nghia": "các chỉ số – số nhiều của index",
+   "nhom": "Mảng, tìm kiếm & sắp xếp",
+   "viDu": "Print all the indices (0-based) of the specified character within the string.",
+   "viDuNghia": "In mọi chỉ số (tính từ 0) của ký tự đã cho trong chuỗi."
+  },
+  {
+   "chu": "strictly greater",
+   "doc": "/ˈstrɪktli ˈɡreɪtər/",
+   "nghia": "lớn hơn hẳn – không tính trường hợp bằng",
+   "nhom": "Mảng, tìm kiếm & sắp xếp",
+   "viDu": "Find the smallest value that is strictly greater than the minimum.",
+   "viDuNghia": "Tìm giá trị nhỏ nhất trong số các giá trị lớn hơn hẳn giá trị nhỏ nhất (min) của dãy."
+  },
+  {
+   "chu": "array size",
+   "doc": "/əˈreɪ saɪz/",
+   "nghia": "kích thước mảng – số phần tử mảng chứa được",
+   "nhom": "Mảng, tìm kiếm & sắp xếp",
+   "viDu": "In linear search, if the size of the array is n and the value does NOT exist, how many comparisons will be made?",
+   "viDuNghia": "Trong tìm kiếm tuyến tính, nếu kích thước mảng là n và giá trị KHÔNG có trong mảng thì phải so sánh bao nhiêu lần?"
+  },
+  {
+   "chu": "array element",
+   "doc": "/əˈreɪ ˈelɪmənt/",
+   "nghia": "phần tử mảng – một ô của mảng, truy cập bằng chỉ số",
+   "nhom": "Mảng, tìm kiếm & sắp xếp",
+   "viDu": "What happens when you try to access the 11th element of an array with a size of 10 in the C language?",
+   "viDuNghia": "Điều gì xảy ra khi bạn cố truy cập phần tử thứ 11 của một mảng có kích thước 10 trong ngôn ngữ C?"
+  },
+  {
+   "chu": "integer array",
+   "doc": "/ˈɪntɪdʒər əˈreɪ/",
+   "nghia": "mảng số nguyên",
+   "nhom": "Mảng, tìm kiếm & sắp xếp",
+   "viDu": "Your program allows the user to enter an integer array of n elements, then prints the sum of the even elements.",
+   "viDuNghia": "Chương trình cho người dùng nhập một mảng số nguyên gồm n phần tử, rồi in tổng các phần tử chẵn."
+  },
+  {
+   "chu": "sorting algorithm",
+   "doc": "/ˈsɔːrtɪŋ ˈælɡərɪðəm/",
+   "nghia": "thuật toán sắp xếp (nổi bọt, chọn, chèn…)",
+   "nhom": "Mảng, tìm kiếm & sắp xếp",
+   "viDu": "Which sorting algorithm repeatedly steps through the list, compares adjacent elements, and swaps them if they are in the wrong order?",
+   "viDuNghia": "Thuật toán sắp xếp nào lặp đi lặp lại việc duyệt danh sách, so sánh các phần tử KỀ NHAU và hoán đổi nếu sai thứ tự?"
+  },
+  {
+   "chu": "search algorithm",
+   "doc": "/sɜːrtʃ ˈælɡərɪðəm/",
+   "nghia": "thuật toán tìm kiếm (tuyến tính, nhị phân)",
+   "nhom": "Mảng, tìm kiếm & sắp xếp",
+   "viDu": "Linear search and binary search are two common search algorithms; binary search needs a sorted array.",
+   "viDuNghia": "Tìm kiếm tuyến tính và tìm kiếm nhị phân là hai thuật toán tìm kiếm phổ biến; tìm nhị phân cần mảng đã sắp xếp."
+  },
+  {
+   "chu": "array",
+   "doc": "/əˈreɪ/",
+   "nghia": "mảng – dãy phần tử cùng kiểu đặt liên tiếp, truy cập bằng chỉ số bắt đầu từ 0",
+   "nhom": "Mảng, tìm kiếm & sắp xếp",
+   "viDu": "What is an array in C programming?",
+   "viDuNghia": "Mảng trong lập trình C là gì?"
+  },
+  {
+   "chu": "pointer",
+   "doc": "/ˈpɔɪntər/",
+   "nghia": "con trỏ – biến chứa địa chỉ của một biến khác",
+   "nhom": "Con trỏ & bộ nhớ động",
+   "viDu": "Which of the following operators can be applied to the pointer variable(s)?",
+   "viDuNghia": "Toán tử nào sau đây có thể áp dụng cho (các) biến con trỏ?"
+  },
+  {
+   "chu": "address",
+   "doc": "/ˈædres/",
+   "nghia": "địa chỉ – số chỉ vị trí của biến trong bộ nhớ (lấy bằng &) · (mạng) địa chỉ IP/MAC định danh thiết bị · (kiến trúc máy tính) địa chỉ ô nhớ",
+   "nhom": "Con trỏ & bộ nhớ động",
+   "viDu": "In C programming, a variable is frequently used to store the address of another variable. What is the name of this variable?",
+   "viDuNghia": "Trong lập trình C, biến dùng để lưu ĐỊA CHỈ của một biến khác được gọi là gì?"
+  },
+  {
+   "chu": "memory location",
+   "doc": "/ˈmeməri loʊˈkeɪʃn/",
+   "nghia": "ô nhớ, vị trí nhớ – nơi một giá trị được lưu",
+   "nhom": "Con trỏ & bộ nhớ động",
+   "viDu": "In C programming, when declaring a variable of a type integer, the computer stores it in a numbered storage location. What is this numbered location called?",
+   "viDuNghia": "Trong lập trình C, khi khai báo một biến kiểu số nguyên, máy tính lưu trữ nó tại một vị trí bộ nhớ được đánh số. Vị trí được đánh số này gọi là gì?"
+  },
+  {
+   "chu": "point to",
+   "doc": "/pɔɪnt tuː/",
+   "nghia": "trỏ tới – con trỏ đang giữ địa chỉ của biến đó",
+   "nhom": "Con trỏ & bộ nhớ động",
+   "viDu": "strcat appends the string pointed to by str2 to the end of the string pointed to by str1.",
+   "viDuNghia": "strcat nối chuỗi mà str2 trỏ tới vào cuối chuỗi mà str1 trỏ tới."
+  },
+  {
+   "chu": "null pointer",
+   "doc": "/nʌl ˈpɔɪntər/",
+   "nghia": "con trỏ rỗng – con trỏ không trỏ tới đâu (giá trị NULL)",
+   "nhom": "Con trỏ & bộ nhớ động",
+   "viDu": "A null pointer does not point to any valid memory location.",
+   "viDuNghia": "Con trỏ rỗng không trỏ tới ô nhớ hợp lệ nào."
+  },
+  {
+   "chu": "pointer arithmetic",
+   "doc": "/ˈpɔɪntər əˈrɪθmətɪk/",
+   "nghia": "phép toán trên con trỏ – cộng 1 là nhảy sang phần tử kế tiếp (tăng đúng kích thước kiểu)",
+   "nhom": "Con trỏ & bộ nhớ động",
+   "viDu": "With pointer arithmetic, p + 1 points to the next element of the array, not to the next byte.",
+   "viDuNghia": "Với phép toán con trỏ, p + 1 trỏ tới phần tử kế tiếp của mảng chứ không phải byte kế tiếp."
+  },
+  {
+   "chu": "dynamic memory allocation",
+   "nghia": "cấp phát bộ nhớ động – xin vùng nhớ lúc chương trình đang chạy (malloc, calloc, realloc)",
+   "nhom": "Con trỏ & bộ nhớ động",
+   "viDu": "What represents dynamic memory allocation in C? → malloc() and calloc()",
+   "viDuNghia": "Đâu là cấp phát bộ nhớ động trong C? → malloc() và calloc()"
+  },
+  {
+   "chu": "reference",
+   "doc": "/ˈrefrəns/",
+   "nghia": "tham chiếu – cách truy cập gián tiếp tới một biến qua địa chỉ hoặc tên khác",
+   "nhom": "Con trỏ & bộ nhớ động",
+   "viDu": "A pointer holds a reference to a memory location.",
+   "viDuNghia": "Con trỏ giữ một tham chiếu tới một ô nhớ."
+  },
+  {
+   "chu": "pointer variable",
+   "doc": "/ˈpɔɪntər ˈveriəbl/",
+   "nghia": "biến con trỏ – biến lưu địa chỉ của biến khác",
+   "nhom": "Con trỏ & bộ nhớ động",
+   "viDu": "Choose the correct statement for declaring a pointer variable to an integer variable.",
+   "viDuNghia": "Chọn câu lệnh ĐÚNG để khai báo một biến con trỏ trỏ tới biến kiểu số nguyên."
+  },
+  {
+   "chu": "memory block",
+   "doc": "/ˈmeməri blɑːk/",
+   "nghia": "khối nhớ – một vùng byte liền nhau được cấp cho biến hoặc do malloc trả về",
+   "nhom": "Con trỏ & bộ nhớ động",
+   "viDu": "What are the sizes of the memory blocks allocated for d and e?",
+   "viDuNghia": "Kích thước của các khối bộ nhớ được cấp phát cho d và e là bao nhiêu?"
+  },
+  {
+   "chu": "deallocate",
+   "doc": "/diːˈæləkeɪt/",
+   "nghia": "giải phóng (vùng nhớ đã cấp phát động) – trong C dùng free(); quên giải phóng gây rò rỉ bộ nhớ",
+   "nhom": "Con trỏ & bộ nhớ động",
+   "viDu": "Which function in C is used to deallocate dynamically allocated memory? → free()",
+   "viDuNghia": "Hàm nào trong C dùng để giải phóng vùng nhớ đã cấp phát động? → free()"
+  },
+  {
+   "chu": "null-terminated string",
+   "doc": "/nʌl ˈtɜːrmɪneɪtɪd strɪŋ/",
+   "nghia": "chuỗi kết thúc bằng ký tự null – cách C đánh dấu hết chuỗi",
+   "nhom": "Chuỗi & ký tự",
+   "viDu": "What is the maximum number of characters you can store in arr to represent a null-terminated string?",
+   "viDuNghia": "Số ký tự tối đa có thể lưu trong arr để biểu diễn một chuỗi kết thúc bằng ký tự null là bao nhiêu?"
+  },
+  {
+   "chu": "null character",
+   "doc": "/nʌl ˈkærəktər/",
+   "nghia": "ký tự null (mã 0) – đánh dấu kết thúc chuỗi, chiếm 1 ô trong mảng",
+   "nhom": "Chuỗi & ký tự",
+   "viDu": "What is the numeric code of the NULL character?",
+   "viDuNghia": "Mã số của ký tự NULL là bao nhiêu?"
+  },
+  {
+   "chu": "character array",
+   "doc": "/ˈkærəktər əˈreɪ/",
+   "nghia": "mảng ký tự – cách C lưu một chuỗi",
+   "nhom": "Chuỗi & ký tự",
+   "viDu": "What is the maximum index of the last character in a character array declared with a size of 10?",
+   "viDuNghia": "Chỉ số lớn nhất của ký tự cuối cùng trong một mảng ký tự khai báo kích thước 10 là bao nhiêu?"
+  },
+  {
+   "chu": "compare",
+   "doc": "/kəmˈper/",
+   "nghia": "so sánh (hai chuỗi bằng strcmp, hai số)",
+   "nhom": "Chuỗi & ký tự",
+   "viDu": "The strcmp() compares two strings character by character. If the strings are equal, the function returns…",
+   "viDuNghia": "Hàm strcmp() so sánh hai chuỗi theo từng ký tự. Nếu hai chuỗi bằng nhau, hàm trả về…"
+  },
+  {
+   "chu": "copy",
+   "doc": "/ˈkɑːpi/",
+   "nghia": "sao chép (chuỗi bằng strcpy, tệp)",
+   "nhom": "Chuỗi & ký tự",
+   "viDu": "In the C language, which method is used when a function receives a copy of the argument's value, ensuring that changes inside the function do not affect the original variable?",
+   "viDuNghia": "Trong ngôn ngữ C, cách truyền tham số nào khiến hàm nhận một BẢN SAO giá trị của đối số, đảm bảo thay đổi bên trong hàm không ảnh hưởng biến gốc?"
+  },
+  {
+   "chu": "substring",
+   "doc": "/ˈsʌbstrɪŋ/",
+   "nghia": "chuỗi con – một đoạn liên tiếp nằm trong chuỗi",
+   "nhom": "Chuỗi & ký tự",
+   "viDu": "strstr returns the pointer to the first occurrence of the given substring in the main string.",
+   "viDuNghia": "strstr trả về con trỏ tới lần xuất hiện đầu tiên của chuỗi con trong chuỗi chính."
+  },
+  {
+   "chu": "lowercase",
+   "doc": "/ˈloʊərkeɪs/",
+   "nghia": "chữ thường (a–z)",
+   "nhom": "Chuỗi & ký tự",
+   "viDu": "The program allows the user to enter a string containing any characters. Find and print the number of characters that are lowercase letters.",
+   "viDuNghia": "Chương trình cho người dùng nhập một chuỗi chứa ký tự bất kỳ. Tìm và in số ký tự là chữ cái thường."
+  },
+  {
+   "chu": "letter",
+   "doc": "/ˈletər/",
+   "nghia": "chữ cái (a–z, A–Z), không gồm chữ số và ký hiệu",
+   "nhom": "Chuỗi & ký tự",
+   "viDu": "The given file Q4.c already contains statements to input data for a string. Write statements to count the number of uppercase letters in it.",
+   "viDuNghia": "File Q4.c cho sẵn đã có lệnh nhập một chuỗi. Viết lệnh đếm số chữ cái IN HOA trong chuỗi đó."
+  },
+  {
+   "chu": "whitespace",
+   "doc": "/ˈwaɪtspeɪs/",
+   "nghia": "khoảng trắng – dấu cách, tab, xuống dòng",
+   "nhom": "Chuỗi & ký tự",
+   "viDu": "Remove the extra whitespace at the beginning and at the end of the string.",
+   "viDuNghia": "Xoá các khoảng trắng thừa ở đầu và ở cuối chuỗi."
+  },
+  {
+   "chu": "reverse",
+   "doc": "/rɪˈvɜːrs/",
+   "nghia": "đảo ngược (chuỗi, mảng)",
+   "nhom": "Chuỗi & ký tự",
+   "viDu": "Print the characters of the string in reverse order.",
+   "viDuNghia": "In các ký tự của chuỗi theo thứ tự đảo ngược."
+  },
+  {
+   "chu": "replace",
+   "doc": "/rɪˈpleɪs/",
+   "nghia": "thay thế (ký tự này bằng ký tự khác)",
+   "nhom": "Chuỗi & ký tự",
+   "viDu": "Write statements to replace all characters in the string s that are not letters with the star character.",
+   "viDuNghia": "Viết các lệnh thay mọi ký tự không phải chữ cái trong chuỗi s bằng ký tự dấu sao."
+  },
+  {
+   "chu": "character string",
+   "doc": "/ˈkærəktər strɪŋ/",
+   "nghia": "chuỗi ký tự – dãy ký tự lưu trong mảng char, kết thúc bằng ký tự null",
+   "nhom": "Chuỗi & ký tự",
+   "viDu": "In C, a character string is stored in a char array and ends with the null character.",
+   "viDuNghia": "Trong C, chuỗi ký tự được lưu trong mảng char và kết thúc bằng ký tự null."
+  },
+  {
+   "chu": "structure",
+   "doc": "/ˈstrʌktʃər/",
+   "nghia": "cấu trúc (struct) – kiểu tự định nghĩa gộp nhiều biến khác kiểu thành một",
+   "nhom": "Struct & lớp C++",
+   "viDu": "Which of the following is the correct syntax for declaring a structure in C?",
+   "viDuNghia": "Cú pháp nào ĐÚNG để khai báo một cấu trúc (structure) trong C?"
+  },
+  {
+   "chu": "member",
+   "doc": "/ˈmembər/",
+   "nghia": "thành phần (thành viên) của struct",
+   "nhom": "Struct & lớp C++",
+   "viDu": "The dot operator is used to access a member of a structure variable.",
+   "viDuNghia": "Toán tử chấm dùng để truy cập một thành phần của biến cấu trúc."
+  },
+  {
+   "chu": "individual",
+   "doc": "/ˌɪndɪˈvɪdʒuəl/",
+   "nghia": "riêng lẻ, từng cái một (individual member = từng thành phần)",
+   "nhom": "Struct & lớp C++",
+   "viDu": "Simple data types represent individual, non-complex elements such as integers and characters.",
+   "viDuNghia": "Kiểu dữ liệu đơn giản biểu diễn các phần tử riêng lẻ, không phức hợp như số nguyên và ký tự."
+  },
+  {
+   "chu": "virtual function",
+   "doc": "/ˈvɜːrtʃuəl ˈfʌŋkʃn/",
+   "nghia": "(C++) hàm ảo – hàm của lớp cha mà lớp con ghi đè được, gọi qua con trỏ lớp cha vẫn chạy bản lớp con; \"= 0\" là hàm thuần ảo",
+   "nhom": "Struct & lớp C++",
+   "viDu": "Why does this code not compile? class Shape { public: virtual double area() = 0; }; int main() { Shape s; } → Shape is abstract",
+   "viDuNghia": "Vì sao đoạn mã này không biên dịch được? … → Shape là lớp trừu tượng (có hàm thuần ảo) nên không tạo đối tượng được"
+  },
+  {
+   "chu": "destructor",
+   "doc": "/dɪˈstrʌktər/",
+   "nghia": "(C++) hàm huỷ – tự chạy khi đối tượng bị huỷ, dùng để giải phóng tài nguyên; tên là dấu ~ + tên lớp",
+   "nhom": "Struct & lớp C++",
+   "viDu": "Class Text owns a char* from new[] and frees it in the destructor, but has no copy constructor. What goes wrong with Text b = a;?",
+   "viDuNghia": "Lớp Text giữ một char* cấp bằng new[] và giải phóng trong hàm huỷ, nhưng không có hàm dựng sao chép. Text b = a; gây lỗi gì?"
+  },
+  {
+   "chu": "text file",
+   "doc": "/tekst faɪl/",
+   "nghia": "tệp văn bản – lưu dữ liệu dạng ký tự, mở bằng trình soạn thảo đọc được",
+   "nhom": "Tệp",
+   "viDu": "Which function is used to open a text file?",
+   "viDuNghia": "Hàm nào dùng để mở một tệp văn bản?"
+  },
+  {
+   "chu": "binary file",
+   "doc": "/ˈbaɪneri faɪl/",
+   "nghia": "tệp nhị phân – lưu dữ liệu đúng dạng byte trong bộ nhớ",
+   "nhom": "Tệp",
+   "viDu": "What is a proper method of opening a file for writing as binary file?",
+   "viDuNghia": "Cách nào ĐÚNG để mở một tệp để GHI dưới dạng tệp nhị phân (binary)?"
+  },
+  {
+   "chu": "file pointer",
+   "doc": "/faɪl ˈpɔɪntər/",
+   "nghia": "con trỏ tệp (kiểu FILE) – dùng để thao tác với tệp đã mở",
+   "nhom": "Tệp",
+   "viDu": "File pointers used in a C program must be declared with the data type FILE *.",
+   "viDuNghia": "Con trỏ tệp dùng trong chương trình C phải được khai báo với kiểu dữ liệu FILE *."
+  },
+  {
+   "chu": "stream",
+   "doc": "/striːm/",
+   "nghia": "luồng dữ liệu – dòng byte vào/ra (tệp, bàn phím, màn hình)",
+   "nhom": "Tệp",
+   "viDu": "The function fgetc() reads the next character from an input stream.",
+   "viDuNghia": "Hàm fgetc() đọc ký tự tiếp theo từ một luồng nhập."
+  },
+  {
+   "chu": "open mode",
+   "doc": "/ˈoʊpən moʊd/",
+   "nghia": "chế độ mở tệp – r (đọc), w (ghi mới), a (ghi nối đuôi)",
+   "nhom": "Tệp",
+   "viDu": "What is the main difference between opening a file with mode \"a+\" and mode \"w+\" in C?",
+   "viDuNghia": "Khác biệt CHÍNH giữa mở tệp bằng chế độ \"a+\" và \"w+\" trong C là gì?"
+  },
+  {
+   "chu": "end of file",
+   "nghia": "hết tệp (EOF) – dấu hiệu đã đọc tới cuối tệp",
+   "nhom": "Tệp",
+   "viDu": "What function in C is used to check if the end of a file has been reached?",
+   "viDuNghia": "Hàm nào trong C dùng để kiểm tra đã đến CUỐI tệp hay chưa?"
+  },
+  {
+   "chu": "content",
+   "doc": "/ˈkɑːntent/",
+   "nghia": "nội dung (của tệp, của chuỗi)",
+   "nhom": "Tệp",
+   "viDu": "Mode \"w+\" truncates the content of an existing file, while \"a+\" preserves it.",
+   "viDuNghia": "Chế độ \"w+\" xoá nội dung của tệp đã có, còn \"a+\" thì giữ lại."
+  },
+  {
+   "chu": "successfully",
+   "doc": "/səkˈsesfəli/",
+   "nghia": "thành công (\"opened successfully\" = mở được)",
+   "nhom": "Tệp",
+   "viDu": "How can you check if a file was successfully opened for writing in C?",
+   "viDuNghia": "Làm sao kiểm tra một tệp đã được mở để GHI thành công trong C?"
+  },
+  {
+   "chu": "overwrite",
+   "doc": "/ˌoʊvərˈraɪt/",
+   "nghia": "ghi đè – nội dung mới thay nội dung cũ",
+   "nhom": "Tệp",
+   "viDu": "Opening an existing file in write mode overwrites its old content.",
+   "viDuNghia": "Mở một tệp đã có ở chế độ ghi sẽ ghi đè nội dung cũ của nó."
+  },
+  {
+   "chu": "beginning",
+   "doc": "/bɪˈɡɪnɪŋ/",
+   "nghia": "phần đầu (\"the beginning of the file\" = đầu tệp)",
+   "nhom": "Tệp",
+   "viDu": "Which of the following symbols is used to force the cursor to change its position to the beginning of the next line on the screen?",
+   "viDuNghia": "Ký hiệu nào sau đây buộc con trỏ chuyển sang đầu dòng tiếp theo trên màn hình?"
+  },
+  {
+   "chu": "file stream",
+   "doc": "/faɪl striːm/",
+   "nghia": "(C++) luồng tệp – ifstream để đọc, ofstream để ghi, fstream cả hai; mở chế độ ios::app để ghi nối đuôi",
+   "nhom": "Tệp",
+   "viDu": "In C++, ifstream and ofstream are file stream classes used to read and write files.",
+   "viDuNghia": "Trong C++, ifstream và ofstream là các lớp luồng tệp dùng để đọc và ghi tệp."
+  },
+  {
+   "chu": "accept",
+   "doc": "/əkˈsept/",
+   "nghia": "nhận (dữ liệu người dùng nhập)",
+   "nhom": "Đọc đề PE",
+   "viDu": "Write a program that accepts an array of n integers and prints all the elements that are greater than the average of the array, in the order they appear.",
+   "viDuNghia": "Viết chương trình đọc mảng n số nguyên và in ra tất cả phần tử lớn hơn trung bình cộng của mảng, theo đúng thứ tự xuất hiện."
+  },
+  {
+   "chu": "count",
+   "doc": "/kaʊnt/",
+   "nghia": "đếm; số lượng đếm được",
+   "nhom": "Đọc đề PE",
+   "viDu": "Write a program that reads three integers and prints the count of numbers that are divisible by 4.",
+   "viDuNghia": "Viết chương trình đọc ba số nguyên và in ra số lượng số chia hết cho 4."
+  },
+  {
+   "chu": "separate",
+   "doc": "/ˈsepəreɪt/",
+   "nghia": "ngăn cách (\"separated by a space\" = cách nhau bởi một dấu cách)",
+   "nhom": "Đọc đề PE",
+   "viDu": "Print all the indices of the specified character within the string, separated by a space, in the order they occur.",
+   "viDuNghia": "In mọi chỉ số của ký tự đã cho trong chuỗi, cách nhau bởi một dấu cách, theo thứ tự xuất hiện."
+  },
+  {
+   "chu": "hollow",
+   "doc": "/ˈhɑːloʊ/",
+   "nghia": "rỗng ruột (hollow square = hình vuông chỉ vẽ viền)",
+   "nhom": "Đọc đề PE",
+   "viDu": "Print a hollow square of stars with side n.",
+   "viDuNghia": "In một hình vuông rỗng ruột bằng dấu sao, cạnh n."
+  },
+  {
+   "chu": "pattern",
+   "doc": "/ˈpætərn/",
+   "nghia": "mẫu hình, hình mẫu (in tam giác sao, hình vuông…)",
+   "nhom": "Đọc đề PE",
+   "viDu": "Print a growing pattern using alphabets with n rows entered by the user.",
+   "viDuNghia": "In một hình mẫu lớn dần bằng chữ cái, với n hàng do người dùng nhập."
+  },
+  {
+   "chu": "formula",
+   "doc": "/ˈfɔːrmjələ/",
+   "nghia": "công thức",
+   "nhom": "Đọc đề PE",
+   "viDu": "Hint: F = C x 9/5 + 32 is the formula to convert Celsius to Fahrenheit.",
+   "viDuNghia": "Gợi ý: F = C x 9/5 + 32 là công thức đổi độ C sang độ F."
+  },
+  {
+   "chu": "hint",
+   "doc": "/hɪnt/",
+   "nghia": "gợi ý của đề",
+   "nhom": "Đọc đề PE",
+   "viDu": "Hint: use an array of structures to organize the data.",
+   "viDuNghia": "Gợi ý: dùng một mảng cấu trúc để tổ chức dữ liệu."
+  },
+  {
+   "chu": "rearrange",
+   "doc": "/ˌriːəˈreɪndʒ/",
+   "nghia": "sắp xếp lại vị trí",
+   "nhom": "Đọc đề PE",
+   "viDu": "Print out the maximum number that can be formed by rearranging the 3 digits of N.",
+   "viDuNghia": "In ra số lớn nhất tạo được bằng cách sắp xếp lại 3 chữ số của N."
+  },
+  {
+   "chu": "trapezoid",
+   "doc": "/ˈtræpəzɔɪd/",
+   "nghia": "hình thang",
+   "nhom": "Đọc đề PE",
+   "viDu": "Calculate the area of a trapezoid using the formula (a+b) x c / 2.",
+   "viDuNghia": "Tính diện tích hình thang theo công thức (a+b) x c / 2."
+  },
+  {
+   "chu": "pyramid",
+   "doc": "/ˈpɪrəmɪd/",
+   "nghia": "hình kim tự tháp (dạng hình in bằng ký tự)",
+   "nhom": "Đọc đề PE",
+   "viDu": "Users are required to enter an integer number to define rows of a half pyramid of alphabets.",
+   "viDuNghia": "Người dùng phải nhập một số nguyên để xác định số hàng của nửa kim tự tháp chữ cái."
+  },
+  {
+   "chu": "proper divisor",
+   "doc": "/ˈprɑːpər dɪˈvaɪzər/",
+   "nghia": "ước thực sự – ước của một số, không tính chính nó",
+   "nhom": "Đọc đề PE",
+   "viDu": "A perfect number is a number whose sum of its proper divisors equals itself, e.g. 6 = 1+2+3.",
+   "viDuNghia": "Số hoàn hảo là số có tổng các ước thực sự bằng chính nó, ví dụ 6 = 1+2+3."
+  },
+  {
+   "chu": "perfect number",
+   "doc": "/ˈpɜːrfɪkt ˈnʌmbər/",
+   "nghia": "số hoàn hảo – bằng tổng các ước thực sự của nó (6, 28…)",
+   "nhom": "Đọc đề PE",
+   "viDu": "Find and print the number of perfect numbers in the array.",
+   "viDuNghia": "Tìm và in ra số lượng số hoàn hảo trong mảng."
+  },
+  {
+   "chu": "manually",
+   "doc": "/ˈmænjuəli/",
+   "nghia": "bằng tay, thủ công – tự viết vòng lặp chứ không gọi hàm thư viện",
+   "nhom": "Đọc đề PE",
+   "viDu": "Which statements are correct when copying string s1 into s2 manually? (Choose 2 correct answers)",
+   "viDuNghia": "Phát biểu nào ĐÚNG khi sao chép chuỗi s1 sang s2 một cách THỦ CÔNG? (Chọn 2 đáp án đúng)"
+  }
+ ]
+}

@@ -1,0 +1,688 @@
+{
+ "ma": "swd392-1",
+ "nn": "en",
+ "ten": "SWD392 · 1. Mô hình hoá phần mềm với UML",
+ "moTa": "Kiến trúc và thiết kế phần mềm (SWD392) – phần 1: quy trình phát triển, mô hình use case, mô hình tĩnh và động, phân loại đối tượng, sơ đồ tương tác, máy trạng thái. Từ lấy từ đề FE thật; ví dụ là câu hỏi thật trong đề.",
+ "bieuTuong": "square.stack.3d.up.fill",
+ "thuTu": -948,
+ "tu": [
+  {
+   "chu": "software modeling",
+   "doc": "/ˈsɔːftwer ˈmɑːdəlɪŋ/",
+   "nghia": "mô hình hoá phần mềm: vẽ các mô hình (UML) mô tả hệ thống trước khi viết mã",
+   "nhom": "Quy trình & mô hình",
+   "viDu": "What is the correct definition of software modeling according to the Object Management Group (OMG)?",
+   "viDuNghia": "Theo Object Management Group (OMG), định nghĩa đúng của mô hình hoá phần mềm là gì?"
+  },
+  {
+   "chu": "software design",
+   "doc": "/ˈsɔːftwer dɪˈzaɪn/",
+   "nghia": "thiết kế phần mềm: quyết định cấu trúc và cách các phần phối hợp để đáp ứng yêu cầu",
+   "nhom": "Quy trình & mô hình",
+   "viDu": "What is the significance of State-Dependent Dynamic Interaction Models in software design?",
+   "viDuNghia": "Ý nghĩa của State-Dependent Dynamic Interaction Model trong thiết kế phần mềm là gì?"
+  },
+  {
+   "chu": "software life cycle",
+   "nghia": "vòng đời phần mềm: cách tiếp cận theo giai đoạn để phát triển phần mềm",
+   "nhom": "Quy trình & mô hình",
+   "viDu": "In the context of software life cycle processes, what does \"maintenance\" typically involve?",
+   "viDuNghia": "Trong ngữ cảnh vòng đời phần mềm, \"maintenance\" (bảo trì) thường bao gồm điều gì?"
+  },
+  {
+   "chu": "software development process",
+   "nghia": "quy trình phát triển phần mềm: các bước có thứ tự để làm ra phần mềm",
+   "nhom": "Quy trình & mô hình",
+   "viDu": "What is the primary purpose of software modeling in the software development process?",
+   "viDuNghia": "Mục đích chính của việc mô hình hóa phần mềm (software modeling) trong quy trình phát triển phần mềm là gì?"
+  },
+  {
+   "chu": "incremental development",
+   "doc": "/ˌɪŋkrəˈmentl dɪˈveləpmənt/",
+   "nghia": "phát triển gia tăng: xây hệ thống thành nhiều phần nhỏ, bổ sung dần qua từng đợt",
+   "nhom": "Quy trình & mô hình",
+   "viDu": "What is carried out during incremental software construction?",
+   "viDuNghia": "Điều gì được thực hiện trong quá trình xây dựng phần mềm tăng dần (incremental software construction)?"
+  },
+  {
+   "chu": "evolutionary prototyping",
+   "doc": "/ˌevəˈluːʃəneri ˈproʊtətaɪpɪŋ/",
+   "nghia": "làm bản mẫu tiến hoá: bản mẫu được phát triển dần thành sản phẩm thật",
+   "nhom": "Quy trình & mô hình",
+   "viDu": "What is the evolutionary prototyping approach?",
+   "viDuNghia": "Cách tiếp cận làm mẫu tiến hoá (evolutionary prototyping) là gì?"
+  },
+  {
+   "chu": "spiral model",
+   "doc": "/ˈspaɪrəl ˈmɑːdl/",
+   "nghia": "mô hình xoắn ốc: quy trình lặp, mỗi vòng đều phân tích rủi ro",
+   "nhom": "Quy trình & mô hình",
+   "viDu": "What approach does the spiral model emphasize?",
+   "viDuNghia": "Mô hình xoắn ốc (spiral model) nhấn mạnh cách tiếp cận nào?"
+  },
+  {
+   "chu": "risk-driven",
+   "doc": "/ˈrɪsk drɪvn/",
+   "nghia": "hướng rủi ro: lấy việc xử lý rủi ro làm trọng tâm của mỗi vòng lặp",
+   "nhom": "Quy trình & mô hình",
+   "viDu": "What approach does the spiral model emphasize? → Risk-driven development",
+   "viDuNghia": "Mô hình xoắn ốc (spiral model) nhấn mạnh cách tiếp cận nào? → Phát triển HƯỚNG RỦI RO (risk-driven)"
+  },
+  {
+   "chu": "Unified Software Development Process",
+   "nghia": "Quy trình phát triển phần mềm hợp nhất (USDP/RUP): hướng use case, lặp và gia tăng",
+   "nhom": "Quy trình & mô hình",
+   "viDu": "How does COMET compare the life cycle with the Unified Software Development Process?",
+   "viDuNghia": "COMET so sánh vòng đời của mình với Unified Software Development Process (quy trình phát triển hợp nhất) như thế nào?"
+  },
+  {
+   "chu": "collaborative object modeling and architectural design method",
+   "nghia": "phương pháp COMET: phương pháp phân tích – thiết kế hướng đối tượng dựa trên UML, dùng trong môn này",
+   "nhom": "Quy trình & mô hình",
+   "viDu": "In COMET-based system design, how is the quality attribute of testability primarily supported?",
+   "viDuNghia": "Trong thiết kế hệ thống dựa trên COMET, thuộc tính chất lượng testability (khả năng kiểm thử) chủ yếu được hỗ trợ như thế nào?"
+  },
+  {
+   "chu": "requirements modeling",
+   "doc": "/rɪˈkwaɪərmənts ˈmɑːdəlɪŋ/",
+   "nghia": "mô hình hoá yêu cầu: mô tả yêu cầu chức năng bằng actor và use case",
+   "nhom": "Quy trình & mô hình",
+   "viDu": "What is carried out during requirements modeling?",
+   "viDuNghia": "Điều gì được thực hiện trong quá trình requirements modeling?"
+  },
+  {
+   "chu": "analysis modeling",
+   "doc": "/əˈnæləsɪs ˈmɑːdəlɪŋ/",
+   "nghia": "mô hình hoá phân tích: dựng mô hình tĩnh và động của miền bài toán",
+   "nhom": "Quy trình & mô hình",
+   "viDu": "What is carried out during analysis modeling?",
+   "viDuNghia": "Điều gì được thực hiện trong quá trình analysis modeling?"
+  },
+  {
+   "chu": "design modeling",
+   "doc": "/dɪˈzaɪn ˈmɑːdəlɪŋ/",
+   "nghia": "mô hình hoá thiết kế: thiết kế kiến trúc phần mềm từ mô hình phân tích",
+   "nhom": "Quy trình & mô hình",
+   "viDu": "What is carried out during design modeling?",
+   "viDuNghia": "Điều gì được thực hiện trong quá trình design modeling (mô hình hóa thiết kế)?"
+  },
+  {
+   "chu": "platform-independent model",
+   "doc": "/ˌplætfɔːrm ɪndɪˈpendənt ˈmɑːdl/",
+   "nghia": "mô hình độc lập nền tảng (PIM): mô hình chưa gắn với công nghệ cụ thể nào",
+   "nhom": "Quy trình & mô hình",
+   "viDu": "What is a platform-independent model (PIM)?",
+   "viDuNghia": "Platform-independent model (PIM) là gì?"
+  },
+  {
+   "chu": "model-driven architecture",
+   "doc": "/ˈmɑːdl drɪvn ˈɑːrkɪtektʃər/",
+   "nghia": "kiến trúc hướng mô hình (MDA): dựng mô hình UML trước rồi mới sinh mã",
+   "nhom": "Quy trình & mô hình",
+   "viDu": "In model-driven architecture, UML models are built before any code is written.",
+   "viDuNghia": "Trong kiến trúc hướng mô hình, các mô hình UML được dựng trước khi viết dòng mã nào."
+  },
+  {
+   "chu": "graphical",
+   "doc": "/ˈɡræfɪkl/",
+   "nghia": "(thuộc) đồ hoạ: biểu diễn bằng hình vẽ thay vì bằng chữ",
+   "nhom": "Quy trình & mô hình",
+   "viDu": "What is a software design notation? → A graphical or textual description of the software",
+   "viDuNghia": "Ký pháp thiết kế phần mềm là gì? → Một mô tả bằng đồ hoạ hoặc bằng văn bản về phần mềm"
+  },
+  {
+   "chu": "textual description",
+   "doc": "/ˈtekstʃuəl dɪˈskrɪpʃn/",
+   "nghia": "mô tả bằng văn bản",
+   "nhom": "Quy trình & mô hình",
+   "viDu": "A use case is documented with a textual description of its main and alternative sequences.",
+   "viDuNghia": "Một use case được ghi lại bằng mô tả văn bản về luồng chính và các luồng thay thế."
+  },
+  {
+   "chu": "Unified Modeling Language",
+   "nghia": "Ngôn ngữ mô hình hoá thống nhất (UML): bộ ký hiệu chuẩn của OMG để vẽ sơ đồ phần mềm (use case, lớp, tuần tự, trạng thái…)",
+   "nhom": "Quy trình & mô hình",
+   "viDu": "What is the Unified Modeling Language?",
+   "viDuNghia": "Ngôn ngữ mô hình hoá thống nhất (UML) là gì?"
+  },
+  {
+   "chu": "design model",
+   "doc": "/dɪˈzaɪn ˈmɑːdl/",
+   "nghia": "mô hình thiết kế: mô tả GIẢI PHÁP (kiến trúc, hệ con, lớp thiết kế), xây từ mô hình phân tích (analysis model)",
+   "nhom": "Quy trình & mô hình",
+   "viDu": "Which choice was the most crucial to make while moving from the analysis model to the design model?",
+   "viDuNghia": "Quyết định nào là quan trọng nhất khi chuyển từ mô hình phân tích sang mô hình thiết kế?"
+  },
+  {
+   "chu": "object-oriented design",
+   "doc": "/ˌɑːbdʒekt ˈɔːrientɪd dɪˈzaɪn/",
+   "nghia": "thiết kế hướng đối tượng: tổ chức phần mềm thành các lớp, đối tượng với che giấu thông tin, kế thừa, đa hình",
+   "nhom": "Quy trình & mô hình",
+   "viDu": "In object-oriented design, polymorphism means that:",
+   "viDuNghia": "Trong thiết kế hướng đối tượng, đa hình (polymorphism) nghĩa là:"
+  },
+  {
+   "chu": "use case modeling",
+   "nghia": "mô hình hoá use case: mô tả yêu cầu chức năng qua actor và các use case",
+   "nhom": "Mô hình use case",
+   "viDu": "What is the main purpose of using Use Case Modeling in system development?",
+   "viDuNghia": "Mục đích chính của việc sử dụng Use Case Modeling trong phát triển hệ thống là gì?"
+  },
+  {
+   "chu": "main sequence",
+   "doc": "/meɪn ˈsiːkwəns/",
+   "nghia": "luồng chính: chuỗi tương tác thường gặp nhất giữa actor và hệ thống",
+   "nhom": "Mô hình use case",
+   "viDu": "What is an alternative sequence in a use case? → A sequence that is different from the main sequence",
+   "viDuNghia": "Alternative sequence (chuỗi thay thế) trong một use case là gì? → Một chuỗi khác với main sequence"
+  },
+  {
+   "chu": "alternative sequence",
+   "doc": "/ɔːlˈtɜːrnətɪv ˈsiːkwəns/",
+   "nghia": "luồng thay thế: nhánh rẽ khỏi luồng chính (lỗi, ngoại lệ, lựa chọn khác)",
+   "nhom": "Mô hình use case",
+   "viDu": "What is an alternative sequence in a use case?",
+   "viDuNghia": "Alternative sequence (chuỗi thay thế) trong một use case là gì?"
+  },
+  {
+   "chu": "extension point",
+   "doc": "/ɪkˈstenʃn pɔɪnt/",
+   "nghia": "điểm mở rộng: vị trí trong use case gốc nơi use case extend chen vào",
+   "nhom": "Mô hình use case",
+   "viDu": "An extension point marks the place where the extending use case is inserted.",
+   "viDuNghia": "Điểm mở rộng đánh dấu chỗ use case mở rộng được chen vào."
+  },
+  {
+   "chu": "stick figure",
+   "doc": "/stɪk ˈfɪɡjər/",
+   "nghia": "hình người que: ký hiệu vẽ actor trong sơ đồ use case",
+   "nhom": "Mô hình use case",
+   "viDu": "In UML, what symbol represents an actor in a use case diagram? → Stick figure",
+   "viDuNghia": "Trong UML, ký hiệu nào đại diện cho một actor trong use case diagram? → Hình người que (stick figure)"
+  },
+  {
+   "chu": "sequence of interactions",
+   "nghia": "chuỗi tương tác (giữa actor và hệ thống) – nội dung mà một use case mô tả",
+   "nhom": "Mô hình use case",
+   "viDu": "Which UML diagram is typically used to show the dynamic behavior of a system, including the sequence of interactions between objects or components?",
+   "viDuNghia": "Sơ đồ UML nào thường được dùng để thể hiện hành vi động của hệ thống, bao gồm trình tự tương tác giữa các đối tượng hoặc thành phần?"
+  },
+  {
+   "chu": "use case model",
+   "nghia": "mô hình use case: các actor, use case (sơ đồ + mô tả) thể hiện yêu cầu chức năng; hệ thống được xem như một hộp đen",
+   "nhom": "Mô hình use case",
+   "viDu": "In the use case model, the system is treated as a:",
+   "viDuNghia": "Trong mô hình use case, hệ thống được xem như là:"
+  },
+  {
+   "chu": "use case package",
+   "nghia": "gói use case: gom các use case liên quan thành nhóm để quản lý hệ thống lớn",
+   "nhom": "Mô hình use case",
+   "viDu": "What is a use case package?",
+   "viDuNghia": "Gói use case (use case package) là gì?"
+  },
+  {
+   "chu": "static modeling",
+   "doc": "/ˈstætɪk ˈmɑːdəlɪŋ/",
+   "nghia": "mô hình hoá tĩnh: mô tả cấu trúc – lớp, thuộc tính, quan hệ – không đổi theo thời gian",
+   "nhom": "Mô hình tĩnh",
+   "viDu": "What is the main difference between object-oriented static modeling and entity-relationship modeling?",
+   "viDuNghia": "Khác biệt chính giữa mô hình hoá tĩnh hướng đối tượng và mô hình hoá thực thể – quan hệ là gì?"
+  },
+  {
+   "chu": "generalization/specialization hierarchy",
+   "doc": "/ˌdʒenrələˈzeɪʃn ˌspeʃələˈzeɪʃn ˈhaɪərɑːrki/",
+   "nghia": "phân cấp tổng quát hoá/chuyên biệt hoá: quan hệ IS-A giữa lớp cha và lớp con",
+   "nhom": "Mô hình tĩnh",
+   "viDu": "Why is generalization/specialization hierarchy important in class modeling?",
+   "viDuNghia": "Tại sao cây phân cấp tổng quát hóa/chuyên biệt hóa (generalization/specialization) lại quan trọng trong mô hình hóa lớp?"
+  },
+  {
+   "chu": "composite class",
+   "doc": "/kəmˈpɑːzɪt klæs/",
+   "nghia": "lớp hợp thành: lớp chứa các lớp thành phần (quan hệ toàn thể – bộ phận mạnh)",
+   "nhom": "Mô hình tĩnh",
+   "viDu": "In COMET, which diagram integrates static and dynamic models for software design? → Composite class interaction diagram",
+   "viDuNghia": "Trong COMET, sơ đồ nào tích hợp mô hình tĩnh (static) và mô hình động (dynamic) cho thiết kế phần mềm? → Composite class interaction diagram"
+  },
+  {
+   "chu": "aggregate",
+   "doc": "/ˈæɡrɪɡət/",
+   "nghia": "(lớp) kết tập: gom các phần lại, phần vẫn tồn tại độc lập với toàn thể",
+   "nhom": "Mô hình tĩnh",
+   "viDu": "An aggregate class is made up of part classes that can also exist on their own.",
+   "viDuNghia": "Một lớp kết tập gồm các lớp bộ phận mà tự chúng cũng tồn tại độc lập được."
+  },
+  {
+   "chu": "whole/part relationship",
+   "doc": "/ˌhoʊl ˈpɑːrt rɪˈleɪʃnʃɪp/",
+   "nghia": "quan hệ toàn thể/bộ phận (composition, aggregation)",
+   "nhom": "Mô hình tĩnh",
+   "viDu": "What is a composition hierarchy? → A strong form of a whole/part relationship",
+   "viDuNghia": "Composition hierarchy là gì? → Một dạng mạnh của quan hệ toàn thể/bộ phận (whole/part)"
+  },
+  {
+   "chu": "stereotype",
+   "doc": "/ˈsteriətaɪp/",
+   "nghia": "khuôn mẫu (stereotype): nhãn phân loại phần tử UML, viết trong dấu guillemet (boundary, entity, control…)",
+   "nhom": "Mô hình tĩnh",
+   "viDu": "Which UML stereotype is most appropriate to represent a subsystem in a service-oriented architecture?",
+   "viDuNghia": "Stereotype UML nào phù hợp nhất để biểu diễn một subsystem trong kiến trúc hướng dịch vụ (SOA)?"
+  },
+  {
+   "chu": "system context diagram",
+   "nghia": "sơ đồ ngữ cảnh hệ thống: vẽ biên giới giữa hệ thống và các lớp bên ngoài",
+   "nhom": "Mô hình tĩnh",
+   "viDu": "How would you determine a boundary class from the system context diagram?",
+   "viDuNghia": "Làm thế nào để xác định một boundary class từ sơ đồ ngữ cảnh hệ thống?"
+  },
+  {
+   "chu": "external class",
+   "doc": "/ɪkˈstɜːrnl klæs/",
+   "nghia": "lớp bên ngoài: thứ nằm ngoài hệ thống mà hệ thống giao tiếp (người dùng, thiết bị, hệ thống khác)",
+   "nhom": "Mô hình tĩnh",
+   "viDu": "An external class models something outside the system, such as a user, a device or another system.",
+   "viDuNghia": "Lớp bên ngoài mô hình hoá thứ nằm ngoài hệ thống, như người dùng, thiết bị hay một hệ thống khác."
+  },
+  {
+   "chu": "object diagram",
+   "doc": "/ˈɑːbdʒekt ˈdaɪəɡræm/",
+   "nghia": "sơ đồ đối tượng: chụp các đối tượng cụ thể và liên kết giữa chúng tại một thời điểm",
+   "nhom": "Mô hình tĩnh",
+   "viDu": "An object diagram shows object instances and the links between them at one moment.",
+   "viDuNghia": "Sơ đồ đối tượng cho thấy các thể hiện đối tượng và liên kết giữa chúng tại một thời điểm."
+  },
+  {
+   "chu": "composition hierarchy",
+   "doc": "/ˌkɑːmpəˈzɪʃn ˈhaɪərɑːrki/",
+   "nghia": "phân cấp hợp thành: dạng mạnh của quan hệ toàn thể/bộ phận – bộ phận sống chết cùng toàn thể",
+   "nhom": "Mô hình tĩnh",
+   "viDu": "What is a composition hierarchy?",
+   "viDuNghia": "Composition hierarchy là gì?"
+  },
+  {
+   "chu": "aggregation hierarchy",
+   "doc": "/ˌæɡrɪˈɡeɪʃn ˈhaɪərɑːrki/",
+   "nghia": "phân cấp kết tập: dạng yếu của quan hệ toàn thể/bộ phận – bộ phận tồn tại độc lập được",
+   "nhom": "Mô hình tĩnh",
+   "viDu": "When mapping an aggregation hierarchy to a relational table, which of the following is NOT true?",
+   "viDuNghia": "Khi ánh xạ một cây phân cấp aggregation sang bảng quan hệ, điều nào sau đây KHÔNG đúng?"
+  },
+  {
+   "chu": "problem domain",
+   "doc": "/ˈprɑːbləm doʊˈmeɪn/",
+   "nghia": "miền bài toán: lĩnh vực thực tế mà phần mềm phải giải quyết",
+   "nhom": "Mô hình tĩnh",
+   "viDu": "What is the primary focus of the analysis model? → Understanding and analyzing the problem domain",
+   "viDuNghia": "Trọng tâm chính của analysis model (mô hình phân tích) là gì? → Hiểu và phân tích miền bài toán (problem domain)"
+  },
+  {
+   "chu": "object-oriented analysis",
+   "doc": "/ˌɑːbdʒekt ˈɔːrientɪd əˈnæləsɪs/",
+   "nghia": "phân tích hướng đối tượng: tìm các đối tượng, lớp và quan hệ trong miền bài toán",
+   "nhom": "Mô hình tĩnh",
+   "viDu": "How does the COMET methodology assist in architectural design? → By integrating object-oriented analysis with system-level design",
+   "viDuNghia": "Phương pháp COMET hỗ trợ thiết kế kiến trúc như thế nào? → Bằng cách tích hợp phân tích hướng đối tượng với thiết kế mức hệ thống"
+  },
+  {
+   "chu": "association",
+   "doc": "/əˌsoʊsiˈeɪʃn/",
+   "nghia": "quan hệ kết hợp (UML) – đường nối hai lớp có liên hệ, kèm bội số (1, *); vd Employee works in Department",
+   "nhom": "Mô hình tĩnh",
+   "viDu": "What does a one-to-many association represent in UML class diagrams?",
+   "viDuNghia": "Association một-nhiều (one-to-many) biểu diễn điều gì trong sơ đồ lớp UML?"
+  },
+  {
+   "chu": "class diagram",
+   "doc": "/klæs ˈdaɪəɡræm/",
+   "nghia": "sơ đồ lớp (UML) – các lớp, thuộc tính, phương thức và quan hệ giữa chúng",
+   "nhom": "Mô hình tĩnh",
+   "viDu": "How is public visibility depicted for a class element on a class diagram?",
+   "viDuNghia": "Tính khả kiến công khai (public visibility) của một thành phần lớp được biểu diễn như thế nào trên sơ đồ lớp?"
+  },
+  {
+   "chu": "package diagram",
+   "doc": "/ˈpækɪdʒ ˈdaɪəɡræm/",
+   "nghia": "sơ đồ gói (UML): gom lớp và phần tử thành các gói, vẽ phụ thuộc giữa các gói — là sơ đồ tĩnh",
+   "nhom": "Mô hình tĩnh",
+   "viDu": "A package diagram groups related classes into packages and shows the dependencies between them.",
+   "viDuNghia": "Sơ đồ gói gom các lớp liên quan vào từng gói và thể hiện sự phụ thuộc giữa các gói."
+  },
+  {
+   "chu": "entity class",
+   "doc": "/ˈentəti klæs/",
+   "nghia": "lớp thực thể: lớp lưu dữ liệu lâu dài của miền bài toán (Student, Order…), thường ánh xạ sang bảng CSDL",
+   "nhom": "Mô hình tĩnh",
+   "viDu": "When designing an entity class as a relational table, which of the following is NOT true?",
+   "viDuNghia": "Khi thiết kế một lớp thực thể thành bảng quan hệ, điều nào sau đây KHÔNG đúng?"
+  },
+  {
+   "chu": "association class",
+   "doc": "/əˌsoʊsiˈeɪʃn klæs/",
+   "nghia": "lớp liên kết: lớp gắn vào một association để chứa thuộc tính của chính quan hệ đó (vd Grade giữa Student và Course)",
+   "nhom": "Mô hình tĩnh",
+   "viDu": "What is an association class?",
+   "viDuNghia": "Lớp liên kết (association class) là gì?"
+  },
+  {
+   "chu": "system context class diagram",
+   "nghia": "sơ đồ lớp ngữ cảnh hệ thống: hệ thống là một khối, xung quanh là các lớp bên ngoài (người dùng, thiết bị, hệ thống khác) giao tiếp với nó",
+   "nhom": "Mô hình tĩnh",
+   "viDu": "What does the system context class diagram define?",
+   "viDuNghia": "Sơ đồ lớp ngữ cảnh hệ thống (system context class diagram) định nghĩa điều gì?"
+  },
+  {
+   "chu": "object structuring",
+   "doc": "/ˈɑːbdʒekt ˈstrʌktʃərɪŋ/",
+   "nghia": "phân loại đối tượng: xác định hệ thống cần những loại đối tượng nào (biên, thực thể, điều khiển, logic)",
+   "nhom": "Phân loại đối tượng",
+   "viDu": "Which of the following categories does NOT typically belong to Object and Class Structuring?",
+   "viDuNghia": "Danh mục nào sau đây KHÔNG thường thuộc về Object and Class Structuring?"
+  },
+  {
+   "chu": "boundary object",
+   "doc": "/ˈbaʊndri ˈɑːbdʒekt/",
+   "nghia": "đối tượng biên: giao tiếp với môi trường bên ngoài (người dùng, thiết bị, hệ thống khác)",
+   "nhom": "Phân loại đối tượng",
+   "viDu": "What is the primary purpose of determining the boundary object(s) in the state-dependent dynamic interaction modeling strategy?",
+   "viDuNghia": "Mục đích chính của việc xác định (các) boundary object trong chiến lược mô hình hóa tương tác động phụ thuộc trạng thái là gì?"
+  },
+  {
+   "chu": "entity object",
+   "doc": "/ˈentəti ˈɑːbdʒekt/",
+   "nghia": "đối tượng thực thể: gói dữ liệu, lưu thông tin lâu dài",
+   "nhom": "Phân loại đối tượng",
+   "viDu": "What is an entity object in software design?",
+   "viDuNghia": "Entity object trong thiết kế phần mềm là gì?"
+  },
+  {
+   "chu": "control object",
+   "doc": "/kənˈtroʊl ˈɑːbdʒekt/",
+   "nghia": "đối tượng điều khiển: điều phối chung một nhóm đối tượng",
+   "nhom": "Phân loại đối tượng",
+   "viDu": "How would two state-dependent control objects communicate with each other?",
+   "viDuNghia": "Hai state-dependent control object sẽ giao tiếp với nhau như thế nào?"
+  },
+  {
+   "chu": "state-dependent control object",
+   "nghia": "đối tượng điều khiển phụ thuộc trạng thái: hành vi do một máy trạng thái bên trong quyết định",
+   "nhom": "Phân loại đối tượng",
+   "viDu": "How would two state-dependent control objects communicate with each other?",
+   "viDuNghia": "Hai đối tượng điều khiển phụ thuộc trạng thái (state-dependent control object) giao tiếp với nhau bằng cách nào?"
+  },
+  {
+   "chu": "coordinator object",
+   "doc": "/koʊˈɔːrdɪneɪtər ˈɑːbdʒekt/",
+   "nghia": "đối tượng điều phối: ra quyết định điều khiển chung, không phụ thuộc trạng thái",
+   "nhom": "Phân loại đối tượng",
+   "viDu": "What is a coordinator object?",
+   "viDuNghia": "Coordinator object (đối tượng điều phối) là gì?"
+  },
+  {
+   "chu": "timer object",
+   "doc": "/ˈtaɪmər ˈɑːbdʒekt/",
+   "nghia": "đối tượng định thời: được đồng hồ kích hoạt theo chu kỳ",
+   "nhom": "Phân loại đối tượng",
+   "viDu": "A timer object is activated periodically by a timer event.",
+   "viDuNghia": "Đối tượng định thời được sự kiện của bộ định thời kích hoạt theo chu kỳ."
+  },
+  {
+   "chu": "user interaction object",
+   "nghia": "đối tượng tương tác người dùng: đối tượng biên giao tiếp với người dùng",
+   "nhom": "Phân loại đối tượng",
+   "viDu": "A user interaction object is a boundary object that interacts with a human user.",
+   "viDuNghia": "Đối tượng tương tác người dùng là một đối tượng biên giao tiếp với người dùng là con người."
+  },
+  {
+   "chu": "proxy object",
+   "doc": "/ˈprɑːksi ˈɑːbdʒekt/",
+   "nghia": "đối tượng uỷ nhiệm: đối tượng biên giao tiếp với hệ thống bên ngoài",
+   "nhom": "Phân loại đối tượng",
+   "viDu": "A proxy object hides the details of how to communicate with the external system.",
+   "viDuNghia": "Đối tượng uỷ nhiệm che chi tiết cách giao tiếp với hệ thống bên ngoài."
+  },
+  {
+   "chu": "device I/O boundary object",
+   "nghia": "đối tượng biên vào/ra thiết bị: nhận và gửi dữ liệu với thiết bị phần cứng",
+   "nhom": "Phân loại đối tượng",
+   "viDu": "A device I/O boundary object receives input from a sensor.",
+   "viDuNghia": "Đối tượng biên vào/ra thiết bị nhận đầu vào từ một cảm biến."
+  },
+  {
+   "chu": "business logic object",
+   "nghia": "đối tượng logic nghiệp vụ: gói các luật nghiệp vụ để xử lý yêu cầu của client",
+   "nhom": "Phân loại đối tượng",
+   "viDu": "Which of the following is unlikely to be encapsulated in a business logic class?",
+   "viDuNghia": "Điều nào sau đây khó có khả năng được đóng gói trong một business logic class?"
+  },
+  {
+   "chu": "application logic",
+   "doc": "/ˌæplɪˈkeɪʃn ˈlɑːdʒɪk/",
+   "nghia": "logic ứng dụng: phần xử lý riêng của ứng dụng (gồm đối tượng nghiệp vụ, thuật toán, dịch vụ)",
+   "nhom": "Phân loại đối tượng",
+   "viDu": "What are application logic classes categorized to?",
+   "viDuNghia": "Các lớp logic ứng dụng (application logic classes) được phân loại thành những lớp nào?"
+  },
+  {
+   "chu": "service object",
+   "doc": "/ˈsɜːrvɪs ˈɑːbdʒekt/",
+   "nghia": "đối tượng dịch vụ: cung cấp dịch vụ cho đối tượng khác, chỉ đáp lại yêu cầu chứ không tự khởi xướng",
+   "nhom": "Phân loại đối tượng",
+   "viDu": "A service object responds to requests from clients; it never starts a request itself.",
+   "viDuNghia": "Đối tượng dịch vụ đáp lại yêu cầu của client; nó không bao giờ tự khởi xướng yêu cầu."
+  },
+  {
+   "chu": "information hiding",
+   "doc": "/ˌɪnfərˈmeɪʃn ˈhaɪdɪŋ/",
+   "nghia": "che giấu thông tin: giấu chi tiết bên trong, chỉ lộ ra giao diện – nền tảng của thiết kế hướng đối tượng",
+   "nhom": "Phân loại đối tượng",
+   "viDu": "How does information hiding relate to the concept of encapsulation in software engineering?",
+   "viDuNghia": "Việc che giấu thông tin (information hiding) liên quan như thế nào đến khái niệm đóng gói (encapsulation) trong kỹ nghệ phần mềm?"
+  },
+  {
+   "chu": "data abstraction",
+   "doc": "/ˈdeɪtə æbˈstrækʃn/",
+   "nghia": "trừu tượng hoá dữ liệu: giấu cấu trúc dữ liệu bên trong sau các thao tác truy cập",
+   "nhom": "Phân loại đối tượng",
+   "viDu": "What is data abstraction?",
+   "viDuNghia": "Trừu tượng hóa dữ liệu (data abstraction) là gì?"
+  },
+  {
+   "chu": "externally visible",
+   "doc": "/ɪkˈstɜːrnəli ˈvɪzəbl/",
+   "nghia": "nhìn thấy được từ bên ngoài: (thao tác) lộ ra qua giao diện cho đối tượng khác gọi",
+   "nhom": "Phân loại đối tượng",
+   "viDu": "An interface specifies the externally visible operations of a class, service, or component without revealing the internal structure of the operations",
+   "viDuNghia": "Một giao diện (interface) đặc tả các thao tác nhìn thấy được từ bên ngoài của một lớp, dịch vụ hoặc thành phần mà không tiết lộ cấu trúc bên trong của các thao tác đó"
+  },
+  {
+   "chu": "internals",
+   "doc": "/ɪnˈtɜːrnlz/",
+   "nghia": "phần bên trong (chi tiết cài đặt bị giấu của lớp, thành phần)",
+   "nhom": "Phân loại đối tượng",
+   "viDu": "What is \"black box\" testing? → Testing without knowledge of the software internals",
+   "viDuNghia": "\"Black box\" testing là gì? → Kiểm thử không có kiến thức về nội bộ phần mềm"
+  },
+  {
+   "chu": "dynamic modeling",
+   "doc": "/daɪˈnæmɪk ˈmɑːdəlɪŋ/",
+   "nghia": "mô hình hoá động: mô tả hành vi – đối tượng trao đổi thông điệp và đổi trạng thái thế nào",
+   "nhom": "Mô hình động",
+   "viDu": "In Dynamic Interaction Modeling, what role does the 'alt' frame play in a Sequence Diagram?",
+   "viDuNghia": "Trong mô hình hóa tương tác động (Dynamic Interaction Modeling), khung 'alt' đóng vai trò gì trong sơ đồ tuần tự (Sequence Diagram)?"
+  },
+  {
+   "chu": "interaction diagram",
+   "doc": "/ˌɪntərˈækʃn ˈdaɪəɡræm/",
+   "nghia": "sơ đồ tương tác: tên chung của sơ đồ tuần tự và sơ đồ giao tiếp",
+   "nhom": "Mô hình động",
+   "viDu": "Which of the following interactions is NOT likely to happen on an interaction diagram?",
+   "viDuNghia": "Tương tác nào sau đây KHÔNG có khả năng xảy ra trên một interaction diagram?"
+  },
+  {
+   "chu": "communication diagram",
+   "doc": "/kəˌmjuːnɪˈkeɪʃn ˈdaɪəɡræm/",
+   "nghia": "sơ đồ giao tiếp: vẽ các đối tượng và thông điệp đánh số giữa chúng (nhấn vào tổ chức đối tượng)",
+   "nhom": "Mô hình động",
+   "viDu": "What ensures consistency between a communication diagram and a statechart when modeling state-dependent interaction scenarios?",
+   "viDuNghia": "Điều gì đảm bảo tính nhất quán giữa biểu đồ communication và statechart khi mô hình hóa các kịch bản tương tác phụ thuộc trạng thái?"
+  },
+  {
+   "chu": "message sequence",
+   "doc": "/ˈmesɪdʒ ˈsiːkwəns/",
+   "nghia": "trình tự thông điệp: thứ tự các thông điệp gửi giữa các đối tượng",
+   "nhom": "Mô hình động",
+   "viDu": "Message sequence numbers show the order of messages on a communication diagram.",
+   "viDuNghia": "Số thứ tự thông điệp cho biết trình tự các thông điệp trên sơ đồ giao tiếp."
+  },
+  {
+   "chu": "lifeline",
+   "doc": "/ˈlaɪflaɪn/",
+   "nghia": "đường đời: đường đứt nét dọc dưới mỗi đối tượng trong sơ đồ tuần tự",
+   "nhom": "Mô hình động",
+   "viDu": "On a sequence diagram, each object has a lifeline drawn as a vertical dashed line.",
+   "viDuNghia": "Trên sơ đồ tuần tự, mỗi đối tượng có một đường đời vẽ bằng nét đứt dọc."
+  },
+  {
+   "chu": "dashed line",
+   "doc": "/dæʃt laɪn/",
+   "nghia": "đường nét đứt",
+   "nhom": "Mô hình động",
+   "viDu": "A dependency is drawn as a dashed line with an arrow.",
+   "viDuNghia": "Quan hệ phụ thuộc được vẽ bằng đường nét đứt có mũi tên."
+  },
+  {
+   "chu": "arrowhead",
+   "doc": "/ˈæroʊhed/",
+   "nghia": "đầu mũi tên (hình dạng đầu mũi tên cho biết loại thông điệp, loại quan hệ)",
+   "nhom": "Mô hình động",
+   "viDu": "What is a notation for asynchronous messages (from UML1.4)? → A solid line with an arrow with a half arrowhead",
+   "viDuNghia": "Ký hiệu cho thông điệp bất đồng bộ (theo UML 1.4) là gì? → Đường liền nét với mũi tên NỬA ĐẦU (half arrowhead)"
+  },
+  {
+   "chu": "state-dependent",
+   "doc": "/ˈsteɪt dɪˌpendənt/",
+   "nghia": "phụ thuộc trạng thái: phản ứng khác nhau tuỳ đang ở trạng thái nào",
+   "nhom": "Mô hình động",
+   "viDu": "What is the purpose of State-Dependent Dynamic Interaction Modeling in software design?",
+   "viDuNghia": "Mục đích của State-Dependent Dynamic Interaction Modeling trong thiết kế phần mềm là gì?"
+  },
+  {
+   "chu": "activity diagram",
+   "doc": "/ækˈtɪvəti ˈdaɪəɡræm/",
+   "nghia": "sơ đồ hoạt động (UML) – vẽ luồng công việc: các bước, điểm rẽ nhánh, song song",
+   "nhom": "Mô hình động",
+   "viDu": "What can an activity diagram be used for in use case modeling?",
+   "viDuNghia": "Biểu đồ activity được dùng để làm gì trong mô hình hóa use case?"
+  },
+  {
+   "chu": "sequence diagram",
+   "doc": "/ˈsiːkwəns ˈdaɪəɡræm/",
+   "nghia": "sơ đồ tuần tự (UML) – thứ tự thông điệp giữa các đối tượng theo thời gian (trục dọc)",
+   "nhom": "Mô hình động",
+   "viDu": "In Dynamic Interaction Modeling, what role does the 'alt' frame play in a Sequence Diagram?",
+   "viDuNghia": "Trong mô hình hóa tương tác động (Dynamic Interaction Modeling), khung 'alt' đóng vai trò gì trong sơ đồ tuần tự (Sequence Diagram)?"
+  },
+  {
+   "chu": "state machine",
+   "doc": "/steɪt məˈʃiːn/",
+   "nghia": "máy trạng thái: mô hình gồm các trạng thái và sự chuyển giữa chúng khi có sự kiện",
+   "nhom": "Máy trạng thái",
+   "viDu": "If the same state machine is used in more than one use case, how is this modeled on interaction diagrams?",
+   "viDuNghia": "Nếu cùng một state machine được dùng trong nhiều hơn một use case, điều này được mô hình hóa như thế nào trên các interaction diagram?"
+  },
+  {
+   "chu": "statechart",
+   "doc": "/ˈsteɪttʃɑːrt/",
+   "nghia": "sơ đồ trạng thái (statechart): hình vẽ của máy trạng thái trong UML",
+   "nhom": "Máy trạng thái",
+   "viDu": "In a state transition labeled as Event [condition] / Action in a statechart, what does the condition represent?",
+   "viDuNghia": "Trong một chuyển trạng thái được ghi nhãn Event [condition] / Action trong statechart, condition (điều kiện) đại diện cho điều gì?"
+  },
+  {
+   "chu": "state transition",
+   "doc": "/steɪt trænˈzɪʃn/",
+   "nghia": "chuyển trạng thái: đổi từ trạng thái này sang trạng thái khác do một sự kiện gây ra",
+   "nhom": "Máy trạng thái",
+   "viDu": "If two actions are shown on a given state transition, which of the following is true?",
+   "viDuNghia": "Nếu hai hành động (action) được ghi trên cùng một chuyển tiếp trạng thái (state transition), điều nào sau đây đúng?"
+  },
+  {
+   "chu": "state transition table",
+   "nghia": "bảng chuyển trạng thái: bảng cho biết trạng thái kế tiếp và hành động ứng với mỗi cặp (trạng thái, sự kiện)",
+   "nhom": "Máy trạng thái",
+   "viDu": "What does a state machine class encapsulate? → A state transition table and the current state of the machine",
+   "viDuNghia": "Một state machine class đóng gói (encapsulate) điều gì? → Một state transition table và trạng thái hiện tại của máy"
+  },
+  {
+   "chu": "guard condition",
+   "doc": "/ɡɑːrd kənˈdɪʃn/",
+   "nghia": "điều kiện canh: biểu thức logic trong ngoặc vuông, phải đúng thì chuyển trạng thái mới xảy ra",
+   "nhom": "Máy trạng thái",
+   "viDu": "In a state machine diagram, what is a guard condition?",
+   "viDuNghia": "Trong sơ đồ máy trạng thái (state machine diagram), điều kiện bảo vệ (guard condition) là gì?"
+  },
+  {
+   "chu": "entry action",
+   "doc": "/ˈentri ˈækʃn/",
+   "nghia": "hành động khi vào: thực hiện mỗi lần đi vào trạng thái",
+   "nhom": "Máy trạng thái",
+   "viDu": "What is an entry action in a state machine?",
+   "viDuNghia": "Entry action trong một state machine là gì?"
+  },
+  {
+   "chu": "exit action",
+   "doc": "/ˈeksɪt ˈækʃn/",
+   "nghia": "hành động khi ra: thực hiện mỗi lần rời trạng thái",
+   "nhom": "Máy trạng thái",
+   "viDu": "When is the best time to use an exit action?",
+   "viDuNghia": "Khi nào là lúc thích hợp nhất để dùng hành động thoát (exit action)?"
+  },
+  {
+   "chu": "composite state",
+   "doc": "/kəmˈpɑːzɪt steɪt/",
+   "nghia": "trạng thái hợp thành: trạng thái chứa các trạng thái con bên trong",
+   "nhom": "Máy trạng thái",
+   "viDu": "What is a state transition out of a composite state equivalent to?",
+   "viDuNghia": "Một chuyển trạng thái đi ra khỏi một trạng thái hợp thành (composite state) tương đương với điều gì?"
+  },
+  {
+   "chu": "substate",
+   "doc": "/ˈsʌbsteɪt/",
+   "nghia": "trạng thái con: trạng thái nằm trong một trạng thái hợp thành",
+   "nhom": "Máy trạng thái",
+   "viDu": "How does a composite state relate to a substate?",
+   "viDuNghia": "Trạng thái hợp thành (composite state) liên hệ với trạng thái con (substate) như thế nào?"
+  },
+  {
+   "chu": "orthogonal state machine",
+   "nghia": "máy trạng thái trực giao: nhiều vùng trạng thái chạy song song, độc lập nhau",
+   "nhom": "Máy trạng thái",
+   "viDu": "Orthogonal state machines show different aspects of the same object that run in parallel.",
+   "viDuNghia": "Các máy trạng thái trực giao thể hiện những khía cạnh khác nhau, chạy song song, của cùng một đối tượng."
+  },
+  {
+   "chu": "internal state machine",
+   "nghia": "máy trạng thái bên trong (được che giấu trong đối tượng điều khiển phụ thuộc trạng thái)",
+   "nhom": "Máy trạng thái",
+   "viDu": "An input message to a state-dependent control object corresponds to: → An event on the internal state machine",
+   "viDuNghia": "Một thông điệp đầu vào tới đối tượng điều khiển phụ thuộc trạng thái tương ứng với: → Một sự kiện trên máy trạng thái bên trong"
+  },
+  {
+   "chu": "final state",
+   "doc": "/ˈfaɪnl steɪt/",
+   "nghia": "trạng thái kết thúc",
+   "nhom": "Máy trạng thái",
+   "viDu": "The state diagram must have a clearly defined initial state and final state.",
+   "viDuNghia": "Sơ đồ trạng thái phải có trạng thái bắt đầu và trạng thái kết thúc rõ ràng."
+  },
+  {
+   "chu": "current state",
+   "doc": "/ˈkɜːrənt steɪt/",
+   "nghia": "trạng thái hiện tại của máy trạng thái",
+   "nhom": "Máy trạng thái",
+   "viDu": "What does a state machine class encapsulate? → A state transition table and the current state of the machine",
+   "viDuNghia": "Một state machine class đóng gói (encapsulate) điều gì? → Một state transition table và trạng thái hiện tại của máy"
+  }
+ ]
+}

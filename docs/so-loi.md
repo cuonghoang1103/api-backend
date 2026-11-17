@@ -18,6 +18,13 @@ Mẫu một mục:
 
 ---
 
+### 17/11/2026 — app iOS CT Courses — chuyển trang giật/lag + giao diện "màu mè khó nhìn"
+- **Triệu chứng:** người dùng (iPhone 16 Pro Max) thấy chuyển giữa các màn đơ, không mượt; giao diện dải lam→tím, chữ tròn siêu đậm, bóng/quầng màu khắp nơi, chạm nào cũng có âm "pop".
+- **Nguyên nhân:** `NenManCTC` (ios-app `CTCoursesApp/GiaoDien/ThanhPhanCTC.swift`) vẽ hai `Circle().blur(radius: 90)` 380pt sau MỌI màn (63 màn) ⇒ lúc trượt trang cả hai màn vẽ lại vùng mờ mỗi khung hình; thêm bóng mềm ở mọi thẻ `theCTC()`, ~40 quầng màu `.shadow(color: mau…)`, khung xương `XuongCTC` chạy `repeatForever` (tới chục khối/màn), âm + rung ở mỗi lần nhấn (`KieuBamCTC`).
+- **Cách sửa:** ios-app `02753c8` — nền phẳng, thẻ viền tóc không bóng (bo ≤ 14), biểu tượng nét màu trên ô nhạt, `MauCTC` phẳng (đầu trang = khối mực, nút = một màu lam), chữ hệ thống thay `.rounded`/`.heavy` (≈650 chỗ), khung xương tĩnh, âm "Hiệu ứng" mặc định tắt + bỏ rung khi chạm; đã cài lại lên iPhone.
+- **Ảnh hưởng:** mọi màn của app CT Courses từ bản đầu (1.0.0 build 1 trên TestFlight vẫn là bản cũ tới lần đẩy kế).
+- **Bài học:** `blur` lớn làm nền toàn màn + bóng mềm trên thẻ trong danh sách là thứ đắt nhất của SwiftUI khi chuyển trang/cuộn — trang trí nền phải là màu phẳng; "đẹp" kiểm trên MÁY THẬT lúc chuyển trang, không chỉ trên ảnh chụp tĩnh.
+
 ### 17/11/2026 — Máy nhà (hạ tầng video) — dịch vụ tự khôi phục bật làn được nhưng bộ giám sát agent chết theo
 - **Triệu chứng:** sau lần mất điện thứ 3, nhật ký `~/khoi-phuc/khoi-phuc.log` báo "xong: 32 làn đang chạy" nhưng `tmux ls` trả "no server running" — giam-sat + các agent nhà không chạy.
 - **Nguyên nhân:** `vbg-khoi-phuc.service` là `Type=oneshot`; `khoi-phuc.sh` mở `tmux new-session -d` NGAY TRONG cgroup của dịch vụ ⇒ script thoát, systemd (KillMode mặc định `control-group`) giết mọi tiến trình còn lại trong cgroup, kể cả máy chủ tmux.

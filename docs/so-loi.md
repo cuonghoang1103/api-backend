@@ -929,3 +929,10 @@ Mẫu một mục:
 - **Cách sửa:** test đòi bốn bundle + kiểm `providerCho('com.cuongthai.ctcourses') === 'siwa:ctcourses'`; chạy lại `scripts/kiem-ci-truoc-push.sh` trên worktree sạch rồi mới push.
 - **Ảnh hưởng:** không ảnh hưởng người dùng (prod đã chạy bản mới); chỉ GitHub lệch production tới khi push.
 - **Bài học:** đổi một danh sách trắng thì `grep` tên hàm trong `*.test.ts` trước khi commit; `npx tsc` xanh không bắt được test so mảng cố định.
+
+### 17/11/2026 — video bài giảng (agent máy nhà soạn kịch bản) — agent vẫn viết bảng phiên âm mà làn giọng bỏ qua
+- **Triệu chứng:** báo cáo `~/agent-nha/bao-cao/prna.md` liệt kê hàng chục luật đọc mới (`get` ⇒ "ghét", `IJamesBondCar` ⇒ "ai giêm bon ca"…) xin điều phối nghe thử; các tập prna-1-0…3-0 mang bảng `[W(…), '…']` dài hàng trăm dòng.
+- **Nguyên nhân:** từ 15–16/11 giọng chính đọc CHỮ GỐC — `video-bai-giang/giong/lam-giong.mts:59` lấy `chuDocGoc(x.hien)` khi `CHU_GOC` bật (ref `el`), bỏ qua trường `doc` mà `src/khung/prna/doc.ts › apDocPrna` điền; nhưng 39 tệp `~/agent-nha/prompt-*.md` vẫn dặn "chữ Anh viết hoa đầu câu cũng phải có luật đọc".
+- **Cách sửa:** thay câu đó trong cả 39 prompt (bản cũ `*.bak-1711`) bằng lời dặn KHÔNG viết bảng phiên âm; cách viết từ Anh do điều phối đo (phương án 1, `bien-the2.py`) rồi sửa chung trong `giong/phienAmBai.ts`.
+- **Ảnh hưởng:** chỉ tốn hạn mức tuần của agent (không đổi giọng đọc); từ dính liền kiểu `IJamesBondCar` vẫn đọc nguyên khối tới khi bộ thử tên dính liền (`bt-camel`) xong.
+- **Bài học:** đổi đường đọc của làn giọng thì phải sửa luôn mọi prompt/khung đang dạy agent cách cũ — grep cụm chỉ dẫn cũ trong `~/agent-nha/prompt-*.md` ngay lúc đổi.

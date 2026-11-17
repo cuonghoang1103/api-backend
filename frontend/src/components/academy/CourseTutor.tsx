@@ -50,7 +50,7 @@ function usePhimTatGiaSu(lessonId: number, bat: boolean) {
   useEffect(() => {
     if (!bat) return undefined;
     const nghe = (e: KeyboardEvent) => {
-      if (e.ctrlKey || e.metaKey || e.altKey || e.repeat || dangGo(e.target)) return;
+      if (e.defaultPrevented || e.ctrlKey || e.metaKey || e.altKey || e.repeat || dangGo(e.target)) return;
       if (e.key !== 'a' && e.key !== 'A') return;
       e.preventDefault();
       const v = useGiaSuBaiStore.getState().video;

@@ -2,20 +2,15 @@
   "courseSlug": "elementary-japanese-1-a12",
   "sinhBoi": "scripts/phu-de-tu-video-rieng.mjs",
   "lessons": {
-    "jpd123-bang-chia-the-te": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/09-bai-7/09-04-the-te-ba-nhom-dong-tu-a82c315b.mp4","durationSec":733.9,"nguonCau":"thoigian",
+    "jpd123-bang-chia-the-te": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/09-bai-7/09-04-the-te-ba-nhom-dong-tu-a82c315b.mp4","durationSec":733.9,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":27.52,"ten":"Chào bạn · ôn nhanh bài 9.3"},
-        {"t":27.52,"den":62.65,"ten":"Rửa thành aratte?"},
-        {"t":62.65,"den":96.77,"ten":"Bước 1: nhận nhóm động từ"},
+        {"t":0,"den":96.77,"ten":"Chào bạn · ôn nhanh bài 9.3 · Rửa thành aratte?"},
         {"t":96.77,"den":172.68,"ten":"Nhóm 2 và nhóm 3: dễ nhất"},
-        {"t":172.68,"den":242.47,"ten":"Nhóm 1: i, chi, ri thành tte"},
-        {"t":242.47,"den":291.94,"ten":"Nhóm 1: mi, bi, ni thành nde"},
+        {"t":172.68,"den":291.94,"ten":"Nhóm 1: i, chi, ri thành tte · Nhóm 1: mi, bi, ni thành nde"},
         {"t":291.94,"den":369.87,"ten":"Nhóm 1: ki, gi và ngoại lệ đi"},
-        {"t":369.87,"den":399.3,"ten":"Nhóm 1: shi thành shite"},
-        {"t":399.3,"den":480.8,"ten":"Bài hát quy tắc nhóm 1"},
+        {"t":369.87,"den":480.8,"ten":"Nhóm 1: shi thành shite · Bài hát quy tắc nhóm 1"},
         {"t":480.8,"den":568.1,"ten":"Thử thách: mười động từ trộn"},
-        {"t":568.1,"den":586.64,"ten":"Bốn lỗi hay mắc"},
-        {"t":586.64,"den":675.34,"ten":"Bài tập: điền bảng thể te"},
+        {"t":568.1,"den":675.34,"ten":"Bốn lỗi hay mắc · Bài tập: điền bảng thể te"},
         {"t":675.34,"den":733.9,"ten":"Tóm tắt"}
       ],
       "cues": [
@@ -83,17 +78,13 @@
         {"t":714.6,"vi":"Giờ bạn làm ngay phần luyện chia thể te trong mục Ngữ pháp Bài 7, mười hai câu, rồi phần chia thể te trong mục Bài tập Bài 7, ba mươi câu gõ tay. Tất cả đều là quy tắc của hôm nay, sai câu nào thì hát lại đúng dòng đó nhé."}
       ]
     },
-    "jpd123-cau-hoi-so-sanh": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/08-bai-6/08-06-diem-53-56-nhat-hon-chon-mot-trong-hai-e7dfe0e6.mp4","durationSec":710.28,"nguonCau":"thoigian",
+    "jpd123-cau-hoi-so-sanh": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/08-bai-6/08-06-diem-53-56-nhat-hon-chon-mot-trong-hai-e7dfe0e6.mp4","durationSec":710.28,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":32.16,"ten":"Chào bạn · ôn nhanh bài 8.5"},
-        {"t":32.16,"den":64.02,"ten":"Hai thứ hay nhiều thứ?"},
-        {"t":64.02,"den":166.04,"ten":"Điểm 53: nhất"},
+        {"t":0,"den":166.04,"ten":"Chào bạn · ôn nhanh bài 8.5 · Hai thứ hay nhiều thứ?"},
         {"t":166.04,"den":254.39,"ten":"Hỏi đáp: thích gì nhất"},
-        {"t":254.39,"den":328.45,"ten":"Điểm 54: hơn"},
-        {"t":328.45,"den":390.58,"ten":"Điểm 55: cái nào hơn?"},
+        {"t":254.39,"den":390.58,"ten":"Điểm 54: hơn · Điểm 55: cái nào hơn?"},
         {"t":390.58,"den":481.21,"ten":"Điểm 56: cái này hơn"},
-        {"t":481.2,"den":534.17,"ten":"Hỏi đáp: chọn một trong hai"},
-        {"t":534.17,"den":655.66,"ten":"Bài tập: dạng trang 38–39"},
+        {"t":481.2,"den":655.66,"ten":"Hỏi đáp: chọn một trong hai · Bài tập: dạng trang 38–39"},
         {"t":655.66,"den":710.28,"ten":"Tóm tắt"}
       ],
       "cues": [
@@ -153,18 +144,14 @@
         {"t":690.02,"vi":"Giờ bạn làm phần chọn trợ từ đúng trong mục Bài tập Bài 6, câu bảy đến mười hai, rồi phần ghép câu cuối bài ngữ pháp, câu tám đến mười một. Xong thì mở đề luyện kiểm tra Bài 6 và 7, làm phần ngữ pháp câu năm đến tám nhé."}
       ]
     },
-    "jpd123-dem-thoi-gian": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/08-bai-6/08-05-diem-50-52-co-hen-su-kien-may-ve-4b1260be.mp4","durationSec":768.25,"nguonCau":"thoigian",
+    "jpd123-dem-thoi-gian": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/08-bai-6/08-05-diem-50-52-co-hen-su-kien-may-ve-4b1260be.mp4","durationSec":768.25,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":29.26,"ten":"Chào bạn · ôn nhanh bài 8.4"},
-        {"t":29.26,"den":59.13,"ten":"Ba nghĩa mới của arimasu"},
-        {"t":59.12,"den":126.5,"ten":"Điểm 50: có hẹn, có việc"},
+        {"t":0,"den":126.5,"ten":"Chào bạn · ôn nhanh bài 8.4 · Ba nghĩa mới của arimasu"},
         {"t":126.5,"den":204.37,"ten":"Hỏi đáp: mai có làm thêm không"},
-        {"t":204.37,"den":267.92,"ten":"Điểm 51: ở đâu có sự kiện"},
-        {"t":267.92,"den":341.78,"ten":"De hay ni?"},
+        {"t":204.37,"den":341.78,"ten":"Điểm 51: ở đâu có sự kiện · De hay ni?"},
         {"t":341.78,"den":420.17,"ten":"Hỏi đáp trước bảng thông báo"},
         {"t":420.17,"den":547.86,"ten":"Điểm 52: có mấy cái"},
-        {"t":547.85,"den":611.07,"ten":"Có vé thì rủ"},
-        {"t":611.07,"den":715.35,"ten":"Bài tập: poster, vé, trợ từ"},
+        {"t":547.85,"den":715.35,"ten":"Có vé thì rủ · Bài tập: poster, vé, trợ từ"},
         {"t":715.35,"den":768.25,"ten":"Tóm tắt"}
       ],
       "cues": [
@@ -231,17 +218,13 @@
         {"t":751.26,"vi":"Giờ bạn làm phần chọn trợ từ đúng trong mục Bài tập Bài 6, câu một đến sáu. Từ câu bảy là so sánh và hẹn, học ở các video sau. Làm thêm câu ba đến năm của phần chọn câu trả lời đúng nhé."}
       ]
     },
-    "jpd123-dong-tu-masu": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/07-bai-5/07-04-bang-chia-qua-khu-4-loai-tu-31e2ffc5.mp4","durationSec":568.17,"nguonCau":"thoigian",
+    "jpd123-dong-tu-masu": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/07-bai-5/07-04-bang-chia-qua-khu-4-loai-tu-31e2ffc5.mp4","durationSec":568.17,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":31.28,"ten":"Chào bạn · ôn nhanh bài 7.3"},
-        {"t":31.28,"den":58.58,"ten":"Đã vui nói thế nào?"},
-        {"t":58.58,"den":94.47,"ten":"Bức tranh lớn: bảng tổng"},
+        {"t":0,"den":94.47,"ten":"Chào bạn · ôn nhanh bài 7.3 · Đã vui nói thế nào?"},
         {"t":94.47,"den":189.23,"ten":"Động từ: mashita, masen deshita"},
         {"t":189.23,"den":268.56,"ten":"Tính từ đuôi -i: katta desu"},
-        {"t":268.56,"den":322.21,"ten":"Từ phá luật: tốt thành yokatta"},
-        {"t":322.21,"den":392.89,"ten":"Đuôi -na và danh từ: deshita"},
-        {"t":392.89,"den":426.54,"ten":"Ba lỗi hay mắc"},
-        {"t":426.54,"den":519.25,"ten":"Bài tập: điền bảng chia"},
+        {"t":268.56,"den":392.89,"ten":"Từ phá luật: tốt thành yokatta"},
+        {"t":392.89,"den":519.25,"ten":"Ba lỗi hay mắc · Bài tập: điền bảng chia"},
         {"t":519.25,"den":568.17,"ten":"Tóm tắt"}
       ],
       "cues": [
@@ -295,27 +278,16 @@
         {"t":553.95,"vi":"Giờ bạn làm ngay phần chia quá khứ trong mục Bài tập Bài 5, ngay dưới video. Có ba câu về muốn làm và đi để làm, thì để dành sau video ngữ pháp kế tiếp nhé."}
       ]
     },
-    "jpd123-kanji": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/07-bai-5/07-08-chu-han-lop-bai-5-6e08af31.mp4","durationSec":761.58,"nguonCau":"thoigian",
+    "jpd123-kanji": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/07-bai-5/07-08-chu-han-lop-bai-5-6e08af31.mp4","durationSec":761.58,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":31.34,"ten":"Chào bạn · ôn nhanh điểm 44–47"},
-        {"t":31.34,"den":79.7,"ten":"Ngày nghỉ: người dựa gốc cây"},
-        {"t":79.7,"den":118.71,"ten":"Chữ tiên · trước, đi trước"},
-        {"t":118.71,"den":158.49,"ten":"Chữ chu · tuần"},
-        {"t":158.49,"den":192.04,"ten":"Chữ mỗi · mỗi, hằng"},
-        {"t":192.04,"den":227.9,"ten":"Chữ ngọ · giữa trưa"},
-        {"t":227.9,"den":263.94,"ten":"Chữ hậu · sau, phía sau"},
-        {"t":263.94,"den":296.06,"ten":"Chữ kiến · nhìn, xem"},
-        {"t":296.06,"den":328.79,"ten":"Chữ thực · ăn, đồ ăn"},
-        {"t":328.79,"den":365.33,"ten":"Chữ ẩm · uống"},
-        {"t":365.33,"den":397.94,"ten":"Chữ mãi · mua"},
-        {"t":397.94,"den":438.24,"ten":"Chữ vật · đồ vật, thứ"},
-        {"t":438.24,"den":476.43,"ten":"Chữ hành · đi; dòng, hàng"},
-        {"t":476.43,"den":511.3,"ten":"Chữ hưu · nghỉ ngơi"},
-        {"t":511.3,"den":548.02,"ten":"Sáu từ cô chép trên bảng"},
-        {"t":548.02,"den":598.37,"ten":"Trò 1: đọc từ không furigana"},
+        {"t":0,"den":79.7,"ten":"Chào bạn · ôn nhanh điểm 44–47"},
+        {"t":79.7,"den":158.49,"ten":"Chữ tiên · trước, đi trước · Chữ chu · tuần"},
+        {"t":158.49,"den":263.94,"ten":"Chữ mỗi · mỗi, hằng · Chữ ngọ · giữa trưa"},
+        {"t":263.94,"den":365.33,"ten":"Chữ kiến · nhìn, xem · Chữ thực · ăn, đồ ăn"},
+        {"t":365.33,"den":476.43,"ten":"Chữ mãi · mua · Chữ vật · đồ vật, thứ"},
+        {"t":476.43,"den":598.37,"ten":"Chữ hưu · nghỉ ngơi · Sáu từ cô chép trên bảng"},
         {"t":598.37,"den":677.42,"ten":"Trò 2: chọn chữ đúng"},
-        {"t":677.42,"den":718.39,"ten":"Trò 3: đọc câu không furigana"},
-        {"t":718.39,"den":761.58,"ten":"Tóm tắt"}
+        {"t":677.42,"den":761.58,"ten":"Trò 3: đọc câu không furigana · Tóm tắt"}
       ],
       "cues": [
         {"t":5.1,"vi":"Chào bạn, đến với Bài 5 của khoá tiếng Nhật Dekiru, phần chữ Hán của lớp."},
@@ -390,16 +362,12 @@
         {"t":747.64,"vi":"Giờ bạn làm ngay bài luyện ngay dưới video: viết mười hai chữ Hán đúng thứ tự nét, rồi đọc mười hai câu không có furigana, cho chắc rồi hẵng sang bài mới nhé."}
       ]
     },
-    "jpd123-lien-tu": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/06-bai-4/06-07-diem-32-36-the-nao-va-nhung-nhi-e7b06d0c.mp4","durationSec":563.6,"nguonCau":"thoigian",
+    "jpd123-lien-tu": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/06-bai-4/06-07-diem-32-36-the-nao-va-nhung-nhi-e7b06d0c.mp4","durationSec":563.6,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":32.16,"ten":"Chào bạn · ôn nhanh điểm 28–31"},
-        {"t":32.16,"den":59.3,"ten":"Đúng ngữ pháp mà vẫn mất điểm"},
-        {"t":59.3,"den":141.46,"ten":"Điểm 32: như thế nào"},
+        {"t":0,"den":141.46,"ten":"Chào bạn · ôn nhanh điểm 28–31"},
         {"t":141.46,"den":227.03,"ten":"Điểm 33: thấy thế nào"},
-        {"t":227.03,"den":278.39,"ten":"Điểm 34: và (cùng chiều)"},
-        {"t":278.38,"den":352.14,"ten":"Điểm 35: nhưng (ngược chiều)"},
-        {"t":352.14,"den":404.41,"ten":"Điểm 36: nhỉ"},
-        {"t":404.41,"den":519.65,"ten":"Bài tập: nối câu, hỏi – đáp"},
+        {"t":227.03,"den":352.14,"ten":"Điểm 34: và (cùng chiều) · Điểm 35: nhưng (ngược chiều)"},
+        {"t":352.14,"den":519.65,"ten":"Điểm 36: nhỉ · Bài tập: nối câu, hỏi – đáp"},
         {"t":519.65,"den":563.6,"ten":"Tóm tắt"}
       ],
       "cues": [
@@ -449,17 +417,12 @@
         {"t":552.04,"vi":"Giờ bạn làm ngay bài kiểm tra nhanh ngữ pháp Bài 4 ngay dưới video, mười lăm câu trắc nghiệm, cho chắc tay rồi hẵng sang bài mới nhé."}
       ]
     },
-    "jpd123-moi-ru": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/08-bai-6/08-04-diem-48-49-ru-nhan-loi-tu-choi-d2780bee.mp4","durationSec":672.17,"nguonCau":"thoigian",
+    "jpd123-moi-ru": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/08-bai-6/08-04-diem-48-49-ru-nhan-loi-tu-choi-d2780bee.mp4","durationSec":672.17,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":30.42,"ten":"Chào bạn · ôn nhanh bài 8.3"},
-        {"t":30.42,"den":57,"ten":"Hai câu chỉ khác hai chữ"},
-        {"t":57,"den":119.33,"ten":"Điểm 48: đổi đuôi thành lời rủ"},
-        {"t":119.33,"den":166.47,"ten":"Luyện nhanh: đổi sang lời rủ"},
-        {"t":166.47,"den":232.78,"ten":"Rủ đi đâu để làm gì"},
-        {"t":232.78,"den":288.18,"ten":"Điểm 49: nhận lời và chốt"},
-        {"t":288.18,"den":364.05,"ten":"Trọn bộ: rủ, nhận lời, từ chối"},
-        {"t":364.05,"den":419.4,"ten":"Mẫu 1: nhận lời"},
-        {"t":419.4,"den":507.15,"ten":"Mẫu 2: từ chối khéo"},
+        {"t":0,"den":119.33,"ten":"Chào bạn · ôn nhanh bài 8.3 · Hai câu chỉ khác hai chữ"},
+        {"t":119.33,"den":232.78,"ten":"Luyện nhanh: đổi sang lời rủ · Rủ đi đâu để làm gì"},
+        {"t":232.78,"den":364.05,"ten":"Điểm 49: nhận lời và chốt · Trọn bộ: rủ, nhận lời, từ chối"},
+        {"t":364.05,"den":507.15,"ten":"Mẫu 1: nhận lời · Mẫu 2: từ chối khéo"},
         {"t":507.15,"den":618.86,"ten":"Bài tập: chọn, nhìn tranh rủ bạn"},
         {"t":618.86,"den":672.17,"ten":"Tóm tắt"}
       ],
@@ -516,17 +479,13 @@
         {"t":654.16,"vi":"Giờ bạn làm phần đổi dạng trong mục Bài tập Bài 6, câu một đến mười. Hai câu cuối hỏi đã làm chưa, thuộc điểm 57, để dành sau nhé. Làm thêm câu một và hai của phần chọn câu trả lời đúng."}
       ]
     },
-    "jpd123-mong-muon": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/07-bai-5/07-06-diem-39-43-thich-muon-di-de-lam-2e290692.mp4","durationSec":708.09,"nguonCau":"thoigian",
+    "jpd123-mong-muon": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/07-bai-5/07-06-diem-39-43-thich-muon-di-de-lam-2e290692.mp4","durationSec":708.09,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":29.84,"ten":"Chào bạn · ôn nhanh điểm 37–38"},
-        {"t":29.84,"den":54.72,"ten":"Kỳ nghỉ tới bạn muốn gì?"},
-        {"t":54.71,"den":150.68,"ten":"Điểm 39: thích, ghét"},
+        {"t":0,"den":150.68,"ten":"Chào bạn · ôn nhanh điểm 37–38 · Kỳ nghỉ tới bạn muốn gì?"},
         {"t":150.68,"den":227.36,"ten":"Điểm 40: muốn có"},
         {"t":227.36,"den":317.71,"ten":"Điểm 41: muốn làm"},
-        {"t":317.71,"den":391.04,"ten":"Điểm 42: đi đâu để làm gì"},
-        {"t":391.04,"den":462.49,"ten":"Điểm 43: có đi đâu không"},
-        {"t":462.49,"den":534.82,"ten":"Hỏi đáp: kỳ nghỉ đi đâu"},
-        {"t":534.81,"den":658.22,"ten":"Bài tập: hỏi – dừng – đáp"},
+        {"t":317.71,"den":462.49,"ten":"Điểm 42: đi đâu để làm gì · Điểm 43: có đi đâu không"},
+        {"t":462.49,"den":658.22,"ten":"Hỏi đáp: kỳ nghỉ đi đâu · Bài tập: hỏi – dừng – đáp"},
         {"t":658.22,"den":708.09,"ten":"Tóm tắt"}
       ],
       "cues": [
@@ -581,14 +540,11 @@
         {"t":695.68,"vi":"Giờ bạn làm ngay phần ghép câu ở cuối mục ngữ pháp Bài 5, ngay dưới video: câu một đến câu chín. Năm câu cuối để dành sau video tới nhé."}
       ]
     },
-    "jpd123-qua-khu-ly-do": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/07-bai-5/07-05-diem-37-38-da-lam-gi-the-nao-32f1ef6f.mp4","durationSec":612.6,"nguonCau":"thoigian",
+    "jpd123-qua-khu-ly-do": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/07-bai-5/07-05-diem-37-38-da-lam-gi-the-nao-32f1ef6f.mp4","durationSec":612.6,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":30.82,"ten":"Chào bạn · ôn nhanh bảng chia"},
-        {"t":30.82,"den":56.67,"ten":"Hai câu hỏi của sáng thứ Hai"},
-        {"t":56.66,"den":122.24,"ten":"Điểm 37: đã làm, đã không làm"},
+        {"t":0,"den":122.24,"ten":"Chào bạn · ôn nhanh bảng chia · Hai câu hỏi của sáng thứ Hai"},
         {"t":122.24,"den":229.3,"ten":"Hỏi: đã làm gì?"},
-        {"t":229.3,"den":297.31,"ten":"Điểm 38: thấy thế nào"},
-        {"t":297.31,"den":354.29,"ten":"Hỏi: thấy thế nào?"},
+        {"t":229.3,"den":354.29,"ten":"Điểm 38: thấy thế nào · Hỏi: thấy thế nào?"},
         {"t":354.29,"den":450.23,"ten":"Hỏi đáp trọn vẹn: leo núi"},
         {"t":450.23,"den":564.59,"ten":"Bài tập: hỏi – dừng – đáp"},
         {"t":564.59,"den":612.6,"ten":"Tóm tắt"}
@@ -639,15 +595,12 @@
         {"t":602.62,"vi":"Giờ bạn làm ngay phần chọn dạng đúng trong mục Bài tập Bài 5. Hai câu về muốn làm thì để dành sau video tới nhé."}
       ]
     },
-    "jpd123-sac-thai-hoi-thoai": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/08-bai-6/08-07-diem-57-60-da-chua-goi-y-ne-yo-d023f15d.mp4","durationSec":628.93,"nguonCau":"thoigian",
+    "jpd123-sac-thai-hoi-thoai": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/08-bai-6/08-07-diem-57-60-da-chua-goi-y-ne-yo-d023f15d.mp4","durationSec":628.93,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":32.1,"ten":"Chào bạn · ôn nhanh bài 8.6"},
-        {"t":32.1,"den":67.52,"ten":"Chưa, nói sao cho đúng?"},
-        {"t":67.52,"den":137.63,"ten":"Điểm 57: đã… chưa?"},
+        {"t":0,"den":137.63,"ten":"Chào bạn · ôn nhanh bài 8.6 · Chưa, nói sao cho đúng?"},
         {"t":137.63,"den":229.81,"ten":"Hỏi đáp: chưa thì rủ luôn"},
         {"t":229.81,"den":323.53,"ten":"Điểm 58: gợi ý — thì sao?"},
-        {"t":323.53,"den":385.9,"ten":"Điểm 59: ne — xác nhận"},
-        {"t":385.9,"den":480.5,"ten":"Điểm 60: yo — báo tin"},
+        {"t":323.53,"den":480.5,"ten":"Điểm 59: ne — xác nhận · Điểm 60: yo — báo tin"},
         {"t":480.5,"den":573.45,"ten":"Bài tập: dạng trang 38"},
         {"t":573.45,"den":628.93,"ten":"Tóm tắt"}
       ],
@@ -702,17 +655,12 @@
         {"t":608.62,"vi":"Giờ bạn làm phần kiểm tra nhanh ngữ pháp Bài 6, câu mười một đến mười bốn, và phần chọn câu trả lời đúng trong mục Bài tập, câu tám đến mười. Xong thì mở đề luyện kiểm tra Bài 6 và 7, làm phần ngữ pháp câu một và hai nhé."}
       ]
     },
-    "jpd123-teimasu": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/09-bai-7/09-07-diem-64-65-dang-lam-de-toi-giup-1561edac.mp4","durationSec":526.13,"nguonCau":"thoigian",
+    "jpd123-teimasu": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/09-bai-7/09-07-diem-64-65-dang-lam-de-toi-giup-1561edac.mp4","durationSec":526.13,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":29.44,"ten":"Chào bạn · ôn nhanh bài 9.6"},
-        {"t":29.44,"den":52.59,"ten":"Đang làm gì đấy?"},
-        {"t":52.59,"den":144.61,"ten":"Điểm 64: đang làm gì"},
-        {"t":144.61,"den":196.51,"ten":"Bữa tiệc: ai đang làm gì"},
-        {"t":196.51,"den":237.74,"ten":"Nơi làm dùng de, nơi có mặt dùng ni"},
-        {"t":237.74,"den":308.16,"ten":"Điểm 65: để tôi giúp nhé"},
-        {"t":308.16,"den":339.22,"ten":"Ba đuôi rủ và đề nghị"},
-        {"t":339.22,"den":403.86,"ten":"Thấy gì, nói gì"},
-        {"t":403.85,"den":476.97,"ten":"Bài tập: đổi dạng, chọn mẫu"},
+        {"t":0,"den":144.61,"ten":"Chào bạn · ôn nhanh bài 9.6 · Đang làm gì đấy?"},
+        {"t":144.61,"den":237.74,"ten":"Bữa tiệc: ai đang làm gì"},
+        {"t":237.74,"den":339.22,"ten":"Điểm 65: để tôi giúp nhé · Ba đuôi rủ và đề nghị"},
+        {"t":339.22,"den":476.97,"ten":"Thấy gì, nói gì · Bài tập: đổi dạng, chọn mẫu"},
         {"t":476.97,"den":526.13,"ten":"Tóm tắt"}
       ],
       "cues": [
@@ -760,17 +708,13 @@
         {"t":506.48,"vi":"Giờ bạn làm trong mục Bài tập Bài 7: phần đổi dạng câu năm đến mười một, phần dịch câu mười lăm đến mười tám, phần chọn trợ từ câu hai và mười bốn. Rồi sang mục Ngữ pháp, làm phần ghép câu từ câu một đến chín nhé."}
       ]
     },
-    "jpd123-the-te": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/09-bai-7/09-06-diem-63-66-71-nho-cach-lam-bang-gi-8a832cf7.mp4","durationSec":645.56,"nguonCau":"thoigian",
+    "jpd123-the-te": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/09-bai-7/09-06-diem-63-66-71-nho-cach-lam-bang-gi-8a832cf7.mp4","durationSec":645.56,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":29.35,"ten":"Chào bạn · ôn nhanh bài 9.5"},
-        {"t":29.35,"den":59.24,"ten":"Ba câu trong căn bếp"},
-        {"t":59.24,"den":156.16,"ten":"Điểm 63: nhờ bằng thể te"},
+        {"t":0,"den":156.16,"ten":"Chào bạn · ôn nhanh bài 9.5 · Ba câu trong căn bếp"},
         {"t":156.16,"den":232.5,"ten":"Chỉ chỗ đặt và lời mời"},
         {"t":232.5,"den":338.34,"ten":"Điểm 66: cách làm"},
-        {"t":338.34,"den":379.95,"ten":"Nhờ và đáp: nhận lời hay chỉ người khác"},
-        {"t":379.95,"den":477.15,"ten":"Điểm 71: làm bằng gì"},
-        {"t":477.15,"den":499.89,"ten":"Bốn lỗi hay gặp"},
-        {"t":499.89,"den":596.09,"ten":"Bài tập: chọn, điền, ghép câu"},
+        {"t":338.34,"den":477.15,"ten":"Nhờ và đáp: nhận lời hay chỉ người khác"},
+        {"t":477.15,"den":596.09,"ten":"Bốn lỗi hay gặp · Bài tập: chọn, điền, ghép câu"},
         {"t":596.09,"den":645.56,"ten":"Tóm tắt"}
       ],
       "cues": [
@@ -830,14 +774,11 @@
         {"t":630.08,"vi":"Giờ bạn làm trong mục Bài tập Bài 7: phần đổi dạng câu một đến bốn và mười hai đến mười bốn, phần dịch câu chín đến mười bốn, phần chọn trợ từ câu sáu đến mười nhé."}
       ]
     },
-    "jpd123-tinh-tu": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/06-bai-4/06-05-diem-24-27-ta-noi-chon-mua-muc-do-53e16156.mp4","durationSec":636.43,"nguonCau":"thoigian",
+    "jpd123-tinh-tu": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/06-bai-4/06-05-diem-24-27-ta-noi-chon-mua-muc-do-53e16156.mp4","durationSec":636.43,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":35.2,"ten":"Chào bạn · ôn nhanh bảng chia"},
-        {"t":35.2,"den":72.06,"ten":"Thành phố đẹp nói thế nào"},
-        {"t":72.06,"den":152.55,"ten":"Điểm 24: nơi chốn và đặc điểm"},
+        {"t":0,"den":152.55,"ten":"Chào bạn · ôn nhanh bảng chia · Thành phố đẹp nói thế nào"},
         {"t":152.55,"den":236.33,"ten":"Điểm 25: tính từ trước danh từ"},
-        {"t":236.33,"den":267.6,"ten":"Ba lỗi hay mắc với điểm 25"},
-        {"t":267.6,"den":366.22,"ten":"Điểm 26: thời tiết theo mùa"},
+        {"t":236.33,"den":366.22,"ten":"Ba lỗi hay mắc với điểm 25 · Điểm 26: thời tiết theo mùa"},
         {"t":366.22,"den":457.24,"ten":"Điểm 27: rất, hơi, không lắm"},
         {"t":457.24,"den":584.9,"ten":"Bài tập: ghép câu, hỏi – đáp, chọn câu đúng"},
         {"t":584.9,"den":636.43,"ten":"Tóm tắt"}
@@ -902,17 +843,12 @@
         {"t":624,"vi":"Giờ bạn làm ngay phần chọn câu đúng ngay dưới video, những câu về tính từ và mức độ. Câu nào có chữ có, chữ ở, để dành sau video tới nhé."}
       ]
     },
-    "jpd123-tinh-tu-chia-4-dang": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/06-bai-4/06-04-bang-chia-tinh-tu-i-na-8d8bd196.mp4","durationSec":467.92,"nguonCau":"thoigian",
+    "jpd123-tinh-tu-chia-4-dang": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/06-bai-4/06-04-bang-chia-tinh-tu-i-na-8d8bd196.mp4","durationSec":467.92,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":28.33,"ten":"Chào bạn · ôn nhanh bài 6.3"},
-        {"t":28.33,"den":58.3,"ten":"Một chữ sai, ngược cả nghĩa"},
-        {"t":58.3,"den":82.01,"ten":"Bức tranh lớn: hai loại, hai cách"},
+        {"t":0,"den":82.01,"ten":"Chào bạn · ôn nhanh bài 6.3 · Một chữ sai, ngược cả nghĩa"},
         {"t":82,"den":166.64,"ten":"Đuôi -i: cắt rồi gắn"},
-        {"t":166.64,"den":182.79,"ten":"Hai lỗi hay gặp với đuôi -i"},
-        {"t":182.79,"den":229.35,"ten":"Từ phá luật: tốt"},
-        {"t":229.35,"den":296.8,"ten":"Đuôi -na: giữ nguyên, gắn thêm"},
-        {"t":296.8,"den":335.37,"ten":"Bẫy: đội lốt đuôi -i"},
-        {"t":335.37,"den":426.41,"ten":"Hỏi – dừng – đáp: trả lời không"},
+        {"t":166.64,"den":296.8,"ten":"Hai lỗi hay gặp với đuôi -i · Từ phá luật: tốt"},
+        {"t":296.8,"den":426.41,"ten":"Bẫy: đội lốt đuôi -i · Hỏi – dừng – đáp: trả lời không"},
         {"t":426.41,"den":467.92,"ten":"Tóm tắt"}
       ],
       "cues": [
@@ -956,17 +892,12 @@
         {"t":455.77,"vi":"Giờ bạn làm ngay mười câu chia tính từ ở cuối trang ngữ pháp này, ngay dưới video, rồi mười hai câu chia tính từ trong mục Bài tập Bài 4 nhé."}
       ]
     },
-    "jpd123-ton-tai-dung-cu-cach-lam": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/09-bai-7/09-05-diem-61-62-o-dau-o-do-co-gi-0d552d0a.mp4","durationSec":517.43,"nguonCau":"thoigian",
+    "jpd123-ton-tai-dung-cu-cach-lam": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/09-bai-7/09-05-diem-61-62-o-dau-o-do-co-gi-0d552d0a.mp4","durationSec":517.43,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":28.12,"ten":"Chào bạn · ôn nhanh bài 9.4"},
-        {"t":28.12,"den":53.55,"ten":"Hai câu hỏi, hai trợ từ"},
-        {"t":53.55,"den":88.53,"ten":"Căn phòng: ôn từ vị trí"},
+        {"t":0,"den":88.53,"ten":"Chào bạn · ôn nhanh bài 9.4 · Hai câu hỏi, hai trợ từ"},
         {"t":88.53,"den":196.39,"ten":"Điểm 61: cái đó ở đâu"},
-        {"t":196.39,"den":229.25,"ten":"Imasu hay arimasu?"},
-        {"t":229.25,"den":323.72,"ten":"Điểm 62: ở đó có gì"},
-        {"t":323.72,"den":353.7,"ten":"So sánh 61 và 62"},
-        {"t":353.7,"den":374.14,"ten":"Bốn lỗi hay gặp"},
-        {"t":374.14,"den":458.75,"ten":"Bài tập: chọn, nhìn tranh nói câu"},
+        {"t":196.39,"den":323.72,"ten":"Imasu hay arimasu? · Điểm 62: ở đó có gì"},
+        {"t":323.72,"den":458.75,"ten":"So sánh 61 và 62 · Bốn lỗi hay gặp"},
         {"t":458.75,"den":517.43,"ten":"Tóm tắt"}
       ],
       "cues": [
@@ -1018,14 +949,11 @@
         {"t":498.11,"vi":"Giờ bạn làm trong mục Bài tập Bài 7: phần dịch câu một đến bảy, phần chọn trợ từ câu một, ba, bốn, năm và mười lăm, phần chọn câu trả lời đúng câu một và hai. Các câu còn lại thuộc điểm ngữ pháp sau, để dành nhé."}
       ]
     },
-    "jpd123-tu-chi-muc-do": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/06-bai-4/06-05-diem-24-27-ta-noi-chon-mua-muc-do-53e16156.mp4","durationSec":636.43,"nguonCau":"thoigian",
+    "jpd123-tu-chi-muc-do": {"lang":"vi","source":"r2","track":"VI","videoUrl":"https://media.cuongthai.com/videos/bai-giang/tieng-nhat-dekiru/06-bai-4/06-05-diem-24-27-ta-noi-chon-mua-muc-do-53e16156.mp4","durationSec":636.43,"nguonCau":"thoigian","nguonPhan":"canh",
       "parts": [
-        {"t":4.6,"den":35.2,"ten":"Chào bạn · ôn nhanh bảng chia"},
-        {"t":35.2,"den":72.06,"ten":"Thành phố đẹp nói thế nào"},
-        {"t":72.06,"den":152.55,"ten":"Điểm 24: nơi chốn và đặc điểm"},
+        {"t":0,"den":152.55,"ten":"Chào bạn · ôn nhanh bảng chia · Thành phố đẹp nói thế nào"},
         {"t":152.55,"den":236.33,"ten":"Điểm 25: tính từ trước danh từ"},
-        {"t":236.33,"den":267.6,"ten":"Ba lỗi hay mắc với điểm 25"},
-        {"t":267.6,"den":366.22,"ten":"Điểm 26: thời tiết theo mùa"},
+        {"t":236.33,"den":366.22,"ten":"Ba lỗi hay mắc với điểm 25 · Điểm 26: thời tiết theo mùa"},
         {"t":366.22,"den":457.24,"ten":"Điểm 27: rất, hơi, không lắm"},
         {"t":457.24,"den":584.9,"ten":"Bài tập: ghép câu, hỏi – đáp, chọn câu đúng"},
         {"t":584.9,"den":636.43,"ten":"Tóm tắt"}

@@ -122,3 +122,45 @@ export function vanTayBai(...phan: unknown[]): string {
 export function khoaCacheCoVanTay(cacheKey: string, vanTay: string): string {
   return `${cacheKey.slice(0, 30)}~${vanTay}`;
 }
+
+/** Slide người học bấm "Hỏi slide này" — bộ + số, đã kiểm ở tầng route (`docSlideHoi`). */
+export interface SlideHoi { bo: string; so: number; ten?: string }
+
+/** Đọc `slide` từ body — không tin client: bộ ≤ 24 ký tự chữ/số/_-., số 1–999, tên ≤ 160. Hỏng ⇒ `undefined`. */
+export function docSlideHoi(v: unknown): SlideHoi | undefined {
+  if (!v || typeof v !== 'object') return undefined;
+  const o = v as Record<string, unknown>;
+  const bo = String(o.bo ?? '').trim();
+  const so = Number(o.so);
+  if (!/^[\p{L}\p{N}_.-]{1,24}$/u.test(bo) || !Number.isInteger(so) || so < 1 || so > 999) return undefined;
+  const ten = typeof o.ten === 'string' ? o.ten.replace(/\s+/g, ' ').trim().slice(0, 160) : '';
+  return { bo, so, ...(ten ? { ten } : {}) };
+}
+
+/**
+ * PHẦN GIẢNG của MỘT slide trong nội dung bài (17/11/2026 — "Hỏi slide này" ngay dưới ảnh slide).
+ *
+ * Markup do `content/academy/<môn>/_slides.mjs` sinh: `<div class="anh-slide">…<p class="chu-thich">📑 <strong>BO</strong>
+ * · slide N/T — tên</p></div>` rồi tới các khối `.giang` của slide đó, cho tới `anh-slide` kế tiếp. Lấy đúng đoạn ấy
+ * (một thứ tiếng, ≤ `cap` ký tự) để gia sư có TRỌNG TÂM: cả bài vẫn được đưa, nhưng bài 60 slide thì "slide 37" là một
+ * cây kim trong 30.000 ký tự. Không tìm thấy (bài dựng kiểu khác) ⇒ chuỗi rỗng, gia sư vẫn có số + tên slide.
+ */
+export function doanSlide(html: string | null | undefined, s: SlideHoi, english: boolean, cap = 3500): string {
+  const src = String(html ?? '');
+  if (!src) return '';
+  const thoat = (x: string) => x.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const mau = new RegExp(`<strong>\\s*${thoat(s.bo)}\\s*</strong>[^<]*?slide\\s+${s.so}(?!\\d)[^<]*</p>\\s*</div>`, 'i');
+  const m = mau.exec(src);
+  let dau: number;
+  if (m) dau = m.index + m[0].length;
+  else {
+    // Đường lùi: theo `alt="BO slide N: …"` của ảnh, rồi bỏ qua tới hết khối `anh-slide`.
+    const alt = new RegExp(`<img[^>]*\\balt="${thoat(s.bo)}\\s+slide\\s+${s.so}\\s*:[^"]*"[^>]*>`, 'i').exec(src);
+    if (!alt) return '';
+    const het = src.indexOf('</div>', alt.index);
+    dau = het < 0 ? alt.index + alt[0].length : het + 6;
+  }
+  const sau = src.indexOf('<div class="anh-slide"', dau);
+  const khuc = src.slice(dau, sau < 0 ? undefined : sau);
+  return vanBanBai(khuc, english, cap);
+}

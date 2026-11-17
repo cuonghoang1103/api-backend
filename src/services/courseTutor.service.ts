@@ -20,11 +20,11 @@ import { llmComplete, checkTokenQuota, isAiAvailable, aiOffReason, circuitReopen
 import { isProEffective } from './pro.service.js';
 import { logger } from '../utils/logger.js';
 import {
-  plain, vanBanBai, quizTuDuLieuBai, vanTayBai, khoaCacheCoVanTay, TRAN_SO_CAU_QUIZ,
+  plain, vanBanBai, quizTuDuLieuBai, vanTayBai, khoaCacheCoVanTay, doanSlide, TRAN_SO_CAU_QUIZ, type SlideHoi,
 } from './courseTutor.context.js';
 import {
-  chonNguonPhuDe, docPhan, dungKhoiPhuDe, khoaCacheTheoTrack, laTrackRieng,
-  type CauBatKy, type TrackVideo,
+  chonNguonPhuDe, docPhan, dungKhoiPhuDe, khoaCacheDoan, khoaCacheTheoTrack, laTrackRieng, moc,
+  type CauBatKy, type DoanHoi, type TrackVideo,
 } from './video/phuDeRieng.js';
 
 const MAX_QUESTION = 1500;
@@ -310,11 +310,32 @@ export interface TutorAskOpts {
    * cache chip theo track — xem `khoaCacheTheoTrack`.
    */
   videoTrack?: TrackVideo;
+  /**
+   * ĐOẠN VIDEO người học chọn để hỏi (17/11/2026): "Hỏi phần này" ở mục lục dưới video, hoặc "Hỏi đoạn đang xem"
+   * (±30 s quanh chỗ đang xem). Máy chủ tự cắt đúng các câu phụ đề trong đoạn — client chỉ gửi mốc, không gửi chữ,
+   * nên không ai nhét được một bức tường chữ vào prompt. Chỉ có tác dụng khi `phongVideo` + có phụ đề.
+   */
+  doan?: DoanHoi;
+  /** Slide người học bấm "Hỏi slide này" — máy chủ trích đúng phần giảng của slide đó từ nội dung bài. */
+  slide?: SlideHoi;
 }
 
 /** Có ảnh thì cache phải đứng ngoài — xem chú thích ở `images`. */
 export function khongDungCache(opts: TutorAskOpts): boolean {
   return !!opts.images?.length;
+}
+
+/**
+ * `cacheKey` của một câu hỏi theo ĐOẠN video phải mang đúng mốc của đoạn đó (`khoaCacheDoan`). Client gửi cả hai,
+ * nên ở đây kiểm chúng KHỚP nhau: lệch (lỗi client, hay cố ý) là ghi câu trả lời về đoạn A vào khoá của đoạn B — và
+ * cache dùng chung cho mọi người. Lệch ⇒ bỏ `cacheKey` (vẫn trả lời, chỉ không đụng cache).
+ */
+export function cacheKeyHopLe(opts: Pick<TutorAskOpts, 'cacheKey' | 'doan'>): string | undefined {
+  const k = opts.cacheKey;
+  if (!k) return undefined;
+  if (!opts.doan) return k.includes('@') ? undefined : k;
+  const kieu = k.split('@')[0] ?? '';
+  return kieu && k === khoaCacheDoan(kieu, opts.doan) ? k : undefined;
 }
 
 // Dựng khối ngữ cảnh các câu quiz (đánh số) để "câu N" tra ra đúng câu.
@@ -372,6 +393,7 @@ export async function khoiPhuDe(
   lessonId: number,
   giay?: number,
   track?: TrackVideo,
+  doan?: DoanHoi,
 ): Promise<{ text: string; rieng: boolean; coPhan: boolean }> {
   /* Track VI/EN = video RIÊNG phát từ R2 ⇒ đọc `LessonOwnTranscript` và chỉ
      nó. Không truyền / YT ⇒ phụ đề YouTube y như trước (app iOS đi đường này).
@@ -388,7 +410,7 @@ export async function khoiPhuDe(
     if (!chon || chon.loai !== 'rieng') return { text: '', rieng: true, coPhan: false };
     const parts = docPhan(chon.du.parts);
     const text = dungKhoiPhuDe({
-      cues: (chon.du.cues as CauBatKy[] | null) ?? [], soCau: chon.du.soCau, giay, parts,
+      cues: (chon.du.cues as CauBatKy[] | null) ?? [], soCau: chon.du.soCau, giay, doan, parts,
       banKinhGiay: BAN_KINH_GIAY, tran: TRAN_PHU_DE, tiengViet: track === 'VI',
     });
     return { text, rieng: true, coPhan: !!text && parts.length > 0 };
@@ -399,7 +421,7 @@ export async function khoiPhuDe(
     select: { cues: true, soCau: true },
   });
   const text = dungKhoiPhuDe({
-    cues: (t?.cues as CauBatKy[] | undefined) ?? [], soCau: t?.soCau, giay,
+    cues: (t?.cues as CauBatKy[] | undefined) ?? [], soCau: t?.soCau, giay, doan,
     banKinhGiay: BAN_KINH_GIAY, tran: TRAN_PHU_DE,
   });
   return { text, rieng: false, coPhan: false };
@@ -428,6 +450,12 @@ technically correct but too wide or too plain is useless. Follow ALL of these:
     Use DEEP fills with LIGHT strokes and "color:#fff" as above — the app draws diagrams
     on a dark background, so pale pastel fills leave the text unreadable.`;
 
+/** Luật cho câu hỏi về MỘT ĐOẠN người học chọn (mục lục / "đoạn đang xem") — chung cho mọi video có phụ đề. */
+const LUAT_DOAN_HOI = `- When a block "ĐOẠN NGƯỜI HỌC ĐANG HỎI" is present, the student clicked "ask about this part" on
+  that exact segment: answer about THOSE sentences first (quote them, cite their [mm:ss]), use the
+  rest of the transcript only for links to what came before / after. Start the answer by naming the
+  segment in one short line, e.g. "**Phần [3:20 - 5:10] · Tên phần**".`;
+
 /** Phần prompt THÊM khi ở phòng học video (video CÓ phụ đề). */
 const THEM_PHONG_VIDEO = `
 
@@ -441,6 +469,7 @@ lesson and the full transcript is given above, with [mm:ss] timestamps.
   sentence of what it means — in that order.
 - If the student asks about "this part" / "đoạn này", answer about the section marked
   "ĐOẠN NGƯỜI HỌC ĐANG XEM" above.
+${LUAT_DOAN_HOI}
 - Prefer a DIAGRAM when the content is a process, an architecture, a comparison or a
   hierarchy. Use a fenced code block whose language tag is: mermaid.
 
@@ -483,8 +512,9 @@ export function themPhongVideoRieng(coPhan: boolean): string {
 YOU ARE NOW IN THE VIDEO LEARNING ROOM, WATCHING THIS COURSE'S OWN LECTURE VIDEO. The lecture is
 spoken in VIETNAMESE by the course instructor; its full transcript is given above with [mm:ss]
 timestamps (Vietnamese sentences, English technical terms kept as spoken).${coPhan ? `
-The video's REAL parts (its scenes, taken from the production script) are listed above under
-"CÁC PHẦN CỦA VIDEO" with exact start - end timestamps.` : ''}
+The video's parts (the chapter list the student sees under the player, built from the production
+script's scenes or the lecture's topic shifts) are listed above under "CÁC PHẦN CỦA VIDEO" with exact
+start - end timestamps.` : ''}
 
 - Ground every answer in what the instructor ACTUALLY SAYS. Quote the transcript (in Vietnamese,
   word for word) and cite the timestamp, e.g. "ở [3:20] thầy nói …". Never invent content that is
@@ -494,6 +524,7 @@ The video's REAL parts (its scenes, taken from the production script) are listed
 - If the student asks about "this part" / "đoạn này", answer about the section marked
   "ĐOẠN NGƯỜI HỌC ĐANG XEM" above. If they name a moment ("chỗ 3:20 em chưa hiểu"), find the cues
   around that timestamp in the full transcript and explain exactly those sentences.
+${LUAT_DOAN_HOI}
 - Prefer a DIAGRAM when the content is a process, an architecture, a comparison or a
   hierarchy. Use a fenced code block whose language tag is: mermaid.
 
@@ -599,8 +630,19 @@ export async function buildTutorCall(
   const quizBlock = buildQuizBlock(cauQuiz);
   // Phụ đề chỉ nạp khi ĐANG Ở phòng video: bài chữ không cần, mà nạp thừa
   // thì mỗi câu hỏi đắt thêm hàng nghìn token cho không.
-  const khoi = opts.phongVideo ? await khoiPhuDe(lessonId, opts.phuDeGiay, opts.videoTrack) : null;
+  const khoi = opts.phongVideo ? await khoiPhuDe(lessonId, opts.phuDeGiay, opts.videoTrack, opts.doan) : null;
   const phuDe = khoi?.text ?? '';
+  /* "Hỏi slide này": trích phần giảng của đúng slide đó làm TRỌNG TÂM (cả bài vẫn có ở trên). */
+  const slide = opts.slide;
+  const giangSlide = slide ? doanSlide(lesson.content, slide, english) : '';
+  const khoiSlide = slide
+    ? `\n\nSLIDE NGƯỜI HỌC ĐANG HỎI: bộ ${slide.bo}, slide ${slide.so}${slide.ten ? ` — ${slide.ten}` : ''}\n`
+      + (giangSlide || '(không tách được phần giảng riêng của slide này — dựa vào nội dung bài ở trên)')
+    : '';
+  /* Nhắc ngay đầu câu hỏi đoạn/slide đang nói tới — chỗ gần chỗ sinh chữ nhất, giống `nhacNgonNgu`. */
+  const nhacTrongTam = opts.doan && phuDe.includes('ĐOẠN NGƯỜI HỌC ĐANG HỎI')
+    ? `[Câu hỏi về ĐOẠN VIDEO [${moc(opts.doan.tu)} - ${moc(opts.doan.den)}]${opts.doan.ten ? ` "${opts.doan.ten}"` : ''} — xem khối ĐOẠN NGƯỜI HỌC ĐANG HỎI.]\n`
+    : slide ? `[Câu hỏi về SLIDE ${slide.so} của bộ ${slide.bo} — xem khối SLIDE NGƯỜI HỌC ĐANG HỎI.]\n` : '';
   const messages: TutorMessage[] = [
     {
       role: 'user',
@@ -608,12 +650,13 @@ export async function buildTutorCall(
         `THE LESSON\n${heading}\n${L.bai}: ${lesson.title}\n\n` +
         `${L.noiDung}\n${vanBanBai(lesson.content, english) || L.trong}` +
         notes +
+        khoiSlide +
         phuDe +
         (quizBlock ? `\n\n${quizBlock}` : ''),
     },
     { role: 'assistant', content: MOI_TRO_LY[langOf(opts.english)] },
     ...(opts.history || []).slice(-MAX_HISTORY),
-    { role: 'user', content: hoiKemAnh(nhacNgonNgu(opts.english) + question, opts.images) },
+    { role: 'user', content: hoiKemAnh(nhacNgonNgu(opts.english) + nhacTrongTam + question, opts.images) },
   ];
   /* Phòng video mà bài chưa có phụ đề (`phuDe` rỗng) dùng lời dặn RIÊNG — xem
      `THEM_PHONG_VIDEO_KHONG_PHU_DE`: lời dặn thường sẽ khiến model bịa phụ đề. */
@@ -631,8 +674,9 @@ export async function askCourseTutor(lessonId: number, opts: TutorAskOpts): Prom
 
   // Câu hỏi gợi ý (có cacheKey) → thử cache trước; HIT thì trả ngay, khỏi tốn AI.
   // `refresh` bỏ qua bước ĐỌC này nhưng vẫn đi tới bước GHI bên dưới.
-  const ck = (opts.cacheKey && !khongDungCache(opts))
-    ? await khoaCache(lessonId, khoaCacheTheoTrack(opts.cacheKey, opts.videoTrack, opts.phongVideo)) : undefined;
+  const ckGoc = cacheKeyHopLe(opts);
+  const ck = (ckGoc && !khongDungCache(opts))
+    ? await khoaCache(lessonId, khoaCacheTheoTrack(ckGoc, opts.videoTrack, opts.phongVideo)) : undefined;
   if (ck && !opts.refresh) {
     const hit = await getCachedAnswer(lessonId, ck, lang);
     if (hit) return { answer: hit, cached: true };
@@ -678,8 +722,9 @@ export async function streamCourseTutor(
   // Cache HIT: KHÔNG stream (không có delta) — route sẽ gửi thẳng khung 'done'
   // với answer + cached:true, frontend hiện ngay tức thì.
   // `refresh` bỏ qua bước ĐỌC này nhưng vẫn đi tới bước GHI bên dưới.
-  const ck = (opts.cacheKey && !khongDungCache(opts))
-    ? await khoaCache(lessonId, khoaCacheTheoTrack(opts.cacheKey, opts.videoTrack, opts.phongVideo)) : undefined;
+  const ckGoc = cacheKeyHopLe(opts);
+  const ck = (ckGoc && !khongDungCache(opts))
+    ? await khoaCache(lessonId, khoaCacheTheoTrack(ckGoc, opts.videoTrack, opts.phongVideo)) : undefined;
   if (ck && !opts.refresh) {
     const hit = await getCachedAnswer(lessonId, ck, lang);
     if (hit) return { answer: hit, cached: true };

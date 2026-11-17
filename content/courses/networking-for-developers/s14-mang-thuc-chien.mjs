@@ -11,11 +11,12 @@ import b143 from './bai/142-ssh-cong-bi-chan.mjs';
 import b144 from './bai/143-vpn.mjs';
 import b145 from './bai/144-chia-se-mang.mjs';
 import b146 from './bai/145-lan-nha.mjs';
+import b146b from './bai/145b-toc-do-mang-nha.mjs'; // 17/11: ca thật chép Mac → máy bàn 2 MB/s (cổng 10/100 + Wi-Fi 4)
 import b147 from './bai/146-lab14.mjs';
 import b148 from './bai/147-quiz-ch14.mjs';
 
 export default {
   title: 'Chapter 14 — Networking in real life: Wi-Fi, blocked networks, VPNs and tunnels|||Chương 14 — Mạng thực chiến: Wi-Fi, mạng bị chặn, VPN & đường hầm',
   description: 'Mạng bạn gặp hằng ngày: Wi-Fi trường bắt đăng nhập và đăng ký theo MAC ("địa chỉ Wi-Fi riêng" làm MAC đổi), mạng chặn trang web/game/SSH bằng DNS, SNI, cổng, UDP, phát hiện chia sẻ mạng bằng TTL — mỗi cơ chế đo trên lab "Wi-Fi trường trong một hộp", kèm góc kẻ xấu (chép MAC, Wi-Fi giả, ARP giả mạo) và cách vẫn làm việc được trong mạng bị chặn.',
-  lessons: [b141, b142, b143, b144, b145, b146, b147, b148],
+  lessons: [b141, b142, b143, b144, b145, b146, b146b, b147, b148],
 };

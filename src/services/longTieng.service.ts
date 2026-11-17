@@ -145,10 +145,14 @@ export async function docDsNhac(boDem = false): Promise<BaiNhac[]> {
 
 export async function thuVienNhac() {
   const bai = await docDsNhac();
-  return Promise.all(bai.map(async (b) => ({
-    id: b.id, ten: b.ten, tamTrang: b.tamTrang, thoiLuong: b.thoiLuong, nguon: b.nguon, giayPhep: b.giayPhep, tacGia: b.tacGia ?? null,
-    nghe: await getSignedReadUrl(b.khoa).catch(() => null),
-  })));
+  // `giay` + `nghiThu` là tên app CT Lồng Tiếng dùng (18/11); `thoiLuong` + `nghe` giữ cho trang web — cùng giá trị.
+  return Promise.all(bai.map(async (b) => {
+    const nghe = await getSignedReadUrl(b.khoa).catch(() => null);
+    return {
+      id: b.id, ten: b.ten, tamTrang: b.tamTrang, giay: b.thoiLuong, nghiThu: nghe, thoiLuong: b.thoiLuong, nghe,
+      nguon: b.nguon, giayPhep: b.giayPhep, tacGia: b.tacGia ?? null,
+    };
+  }));
 }
 
 function docKetQua(v: unknown): KetQuaLuu[] {

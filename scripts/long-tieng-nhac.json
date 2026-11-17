@@ -1,0 +1,14 @@
+{
+  "_ghiChu": "Thư viện nhạc nền CT Lồng Tiếng (18/11/2026). CHỈ nhạc CC0 1.0 (public domain — dùng/sửa/phát không cần ghi công). Mỗi bài: trang nguồn + tệp gốc trên OpenGameArt, giấy phép đã kiểm trên trang (trường License = CC0). Nạp: npx tsx scripts/long-tieng-nhac.mts [--thu]",
+  "bai": [
+    { "id": "chill-lofi", "ten": "Chill Lofi", "tamTrang": "lo-fi · piano", "tacGia": "omfgdude", "nguon": "https://opengameart.org/content/chill-lofi-inspired", "tep": "https://opengameart.org/sites/default/files/ChillLofiR_0.mp3", "giayPhep": "CC0 1.0" },
+    { "id": "lofi-jam", "ten": "Funky Hip Hop Lofi Jam", "tamTrang": "lo-fi · hip hop", "tacGia": "omfgdude", "nguon": "https://opengameart.org/content/funky-hip-hop-lofi-jam", "tep": "https://opengameart.org/sites/default/files/CVP701Jam_0.ogg", "giayPhep": "CC0 1.0" },
+    { "id": "a-day-in-night-out", "ten": "A Day In, Night Out", "tamTrang": "nhẹ nhàng · vòng lặp", "tacGia": "Tsorthan Grove", "nguon": "https://opengameart.org/content/a-day-in-night-out", "tep": "https://opengameart.org/sites/default/files/a_day_in_night_out_loop.flac", "giayPhep": "CC0 1.0" },
+    { "id": "apple-cider", "ten": "Apple Cider", "tamTrang": "ấm áp · thư giãn", "tacGia": "Zane Little Music", "nguon": "https://opengameart.org/content/apple-cider", "tep": "https://opengameart.org/sites/default/files/apple_cider.ogg", "giayPhep": "CC0 1.0" },
+    { "id": "calm-synthwave", "ten": "Calm Relax — Synthwave", "tamTrang": "công nghệ · synthwave", "tacGia": "cynicmusic", "nguon": "https://opengameart.org/content/calm-relax-1-synthwave-421k", "tep": "https://opengameart.org/sites/default/files/007_Synthwave_421k.mp3", "giayPhep": "CC0 1.0" },
+    { "id": "calm-piano", "ten": "Calm Piano — Vaporware", "tamTrang": "piano · tập trung", "tacGia": "cynicmusic", "nguon": "https://opengameart.org/content/calm-piano-1-vaporware", "tep": "https://opengameart.org/sites/default/files/003_Vaporware_2.mp3", "giayPhep": "CC0 1.0" },
+    { "id": "another-august", "ten": "Another August", "tamTrang": "êm · review công nghệ", "tacGia": "cynicmusic", "nguon": "https://opengameart.org/content/another-august", "tep": "https://opengameart.org/sites/default/files/013_Another_August_0.mp3", "giayPhep": "CC0 1.0" },
+    { "id": "chill-fever", "ten": "A Chill Fever", "tamTrang": "chill · vòng lặp", "tacGia": "Pro Sensory", "nguon": "https://opengameart.org/content/a-chill-fever-loopable", "tep": "https://opengameart.org/sites/default/files/a_chill_fever_0.mp3", "giayPhep": "CC0 1.0" },
+    { "id": "ambient-loop", "ten": "Ambient Relaxing Loop", "tamTrang": "ambient · nền nhẹ", "tacGia": "isaiah658", "nguon": "https://opengameart.org/content/ambient-relaxing-loop", "tep": "https://opengameart.org/sites/default/files/Ambient-Loop-isaiah658_0.ogg", "giayPhep": "CC0 1.0" }
+  ]
+}

@@ -17,7 +17,7 @@ Mã chết theo chủ: chủ mã mất vai ADMIN / bị khoá ⇒ 403; mã thu h
 | `GET /toi` | (thêm 18/11) kiểm mã/phiên: `{ userId, username, quaMa }` — app gọi lúc đăng nhập bằng mã |
 | `POST /jobs` `{ url?, tep?: { ten, kichThuoc, kieu }, lang: 'auto'\|'zh'\|'en', goc: 0..0.4, tenVideo?, nhip?: 'cho-giong'\|'tang-toc', nhacNen?: { loai: 'goc'\|'thu-vien'\|'tep'\|'khong', id?, amLuong?: 0..1, tep?: { ten, kichThuoc, kieu } } }` | tạo việc ⇒ `201 { job, taiLen?, taiLenNhac? }`. Có `tep` ⇒ `taiLen: { url (PUT ký sẵn R2, sống 6 giờ), het, kieu }` — **PUT phải gửi header `Content-Type` đúng bằng `kieu`** (chữ ký có kiểu). Nhạc nền `tep` ⇒ `taiLenNhac` cùng khuôn. Còn tệp chờ ⇒ `trangThai = cho_tai_len`; PUT xong (cả video lẫn nhạc) gọi `POST /jobs/:id/da-tai-len`. Có `url` ⇒ trạm tự tải. Tệp ≤ 5 GB, nhạc ≤ 300 MB. |
 | `GET /jobs` · `GET /jobs/:id` | danh sách (200 việc mới nhất) / chi tiết: `{ id, nguon: 'url'\|'tep', url, tep, tenVideo, lang, goc, nhip, nhacNen, trangThai: 'cho_tai_len'\|'cho'\|'tai'\|'lam'\|'xong'\|'loi'\|'huy', buoc, phanTram, loi, ketQua: [{ loai: 'vi'\|'vi-goc'\|'srt-vi'\|'srt-goc'\|'thong-tin', ten, kichThuoc, url }], thoiLuong, tao, xong, daTaiVe }`. `url` kết quả = GET ký sẵn 1 giờ, tải về đúng tên tiếng Việt; `null` khi đã tải về hoặc quá 7 ngày. |
-| `GET /nhac` | (thêm 18/11) thư viện nhạc nền: `[{ id, ten, tamTrang, thoiLuong, nghe (URL nghe thử ký sẵn), nguon, giayPhep, tacGia }]` |
+| `GET /nhac` | (thêm 18/11) thư viện nhạc nền: `[{ id, ten, tamTrang, giay, nghiThu, nguon, giayPhep, tacGia }]` — `giay` = độ dài (giây), `nghiThu` = URL nghe thử TUYỆT ĐỐI ký sẵn (sống ≥ 60 phút, không cần header). Có thêm `thoiLuong`/`nghe` (cùng giá trị, trang web dùng). |
 | `POST /jobs/:id/da-tai-len` | kiểm tệp đã lên kho (HEAD) ⇒ `cho`; thiếu ⇒ 409 `LT_CHUA_CO_TEP` / `LT_CHUA_CO_NHAC` |
 | `POST /jobs/:id/thu-lai` | việc lỗi ⇒ về `cho` (giữ kết quả bước đã xong ở trạm) |
 | `DELETE /jobs/:id` | huỷ / xoá việc + xoá MỌI tệp R2 của việc ⇒ `{ xoa, huy, soTep }`. Đang chạy ở trạm ⇒ đánh dấu `huy` (trạm nhận 410 ở nhịp tim kế tiếp rồi dừng); còn lại ⇒ xoá hẳn |
@@ -38,7 +38,7 @@ max 1,72× ⇒ 77/103 câu bị đọc nhanh, 4 câu vẫn trễ — chủ kênh
 một bài trong thư viện (`id` từ `GET /nhac`) · `tep` = nhạc người dùng tải lên · `khong` = không nhạc. Với `thu-vien`/`tep` (âm lượng
 mặc định 0,3): lặp/cắt cho đủ độ dài video, vào/ra dần (2 s / 3 s), tự né giọng Việt (sidechaincompress). Thư viện: tệp +
 `danh-sach.json` ở `long-tieng/nhac/` trên R2, mỗi bài ghi `nguon` (URL gốc) + `giayPhep`; chỉ nhận nhạc giấy phép cho dùng không
-ràng buộc ghi công (CC0 / Pixabay Content License) — KHÔNG dùng bài hit có bản quyền. Nạp bằng `scripts/long-tieng-nhac.mts`.
+ràng buộc ghi công (CC0 / Pixabay Content License) — KHÔNG dùng bài hit có bản quyền. Nạp bằng `npx tsx scripts/long-tieng-nhac.mts` (`--thu` = chỉ tải + kiểm, không đẩy) từ `scripts/long-tieng-nhac.json`: 9 bài CC0 1.0 trên OpenGameArt (lo-fi, piano, synthwave, ambient; 25–474 s), trang nguồn + giấy phép từng bài ghi trong tệp đó.
 
 ## 2. API trạm — `/api/v1/internal/long-tieng` (header `x-internal-token` = `INTERNAL_API_TOKEN`, như `internal.routes.ts`)
 Thiếu cấu hình / sai khoá ⇒ 404 (không lộ tuyến).

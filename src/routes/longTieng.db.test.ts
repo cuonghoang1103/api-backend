@@ -363,6 +363,8 @@ describe('CT Lồng Tiếng (HTTP + DB thật)', { skip: !RUN ? 'không có CSDL
     assert.equal(ds.status, 200);
     assert.deepEqual(ds.data.map((b: any) => b.id), ['lofi-1'], 'bài có khoá ngoài long-tieng/nhac/ bị bỏ');
     assert.ok(ds.data[0].nghe.includes('X-Amz-Signature='));
+    assert.equal(ds.data[0].giay, 120, 'tên trường app dùng');
+    assert.equal(ds.data[0].nghiThu, ds.data[0].nghe);
     assert.equal(ds.data[0].giayPhep, 'CC0 1.0');
     assert.equal((await web(thuong, 'GET', '/nhac')).status, 403);
 

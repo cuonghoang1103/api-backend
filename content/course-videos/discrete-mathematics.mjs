@@ -6,9 +6,9 @@ export default {
   courseSlug: "discrete-mathematics",
   defaultVideoTrack: "YT",
   lessons: {
-    "mad101-gioi-thieu": { yt: "p2b2Vb-cYCs", credit: "Neso Academy — Introduction to Discrete Mathematics" },
-    "mad101-1-1-logic-menh-de": { yt: "paRt4R71d8s", credit: "TrevTutor — [Discrete Mathematics] Introduction to Propositional Logic" },
-    "mad101-1-2-tuong-duong-vi-tu": { yt: "gyoqX0W-NH4", credit: "TrevTutor — PREDICATE LOGIC and QUANTIFIER NEGATION - DISCRETE MATHEMATICS" },
+    "mad101-gioi-thieu": { yt: "p2b2Vb-cYCs", credit: "Neso Academy — Introduction to Discrete Mathematics", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/discrete-mathematics/00-gioi-thieu-mon-hoc/00-01-bat-dau-tai-day-mad101-301233ea.mp4' }, defaultVideoTrack: 'VI'},
+    "mad101-1-1-logic-menh-de": { yt: "paRt4R71d8s", credit: "TrevTutor — [Discrete Mathematics] Introduction to Propositional Logic", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/discrete-mathematics/01-logic-chung-minh/01-01-logic-menh-de-14b558dd.mp4' }, defaultVideoTrack: 'VI'},
+    "mad101-1-2-tuong-duong-vi-tu": { yt: "gyoqX0W-NH4", credit: "TrevTutor — PREDICATE LOGIC and QUANTIFIER NEGATION - DISCRETE MATHEMATICS", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/discrete-mathematics/01-logic-chung-minh/01-02-tuong-duong-logic-vi-tu-ee578f45.mp4' }, defaultVideoTrack: 'VI'},
     "mad101-2-1-tap-hop": { yt: "5plFb4jrzd4", credit: "TrevTutor — [Discrete Mathematics] Introduction to Sets" },
     "mad101-2-2-ham-day": { yt: "PpA4LWPh40M", credit: "TrevTutor — [Discrete Mathematics] Injective, Surjective, Bijective Functions" },
     "mad101-3-1-big-o": { yt: "p1h-9UhpkHA", credit: "Charles Ed -- Math Computer Science Programming — Discrete Math - Growth of Functions - Big-O Notation and Big-Omega Notation" },
@@ -64,5 +64,6 @@ export default {
     "mad101-flm-b056": { yt: "Phm-6An4sAs", credit: "SawFin Mathematics — Spanning Trees - Breadth First Search (11.4.2)" },
     "mad101-flm-b057": { yt: "SfyrD-ktYew", credit: "SawFin Mathematics — Minimum Spanning Trees: Kruskal's Algorithm (11.5.2)" },
     "mad101-flm-b058": { yt: "X_rP6G9Smhw", credit: "SawFin Mathematics — Minimum Spanning Trees: Prim's Algorithm (11.5.1)" },
+    'mad101-flm-b001': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/discrete-mathematics/01-logic-chung-minh/01-00-session-1-slide-chuong-1-logic-6dac2161.mp4' }, defaultVideoTrack: 'VI' },
   },
 };

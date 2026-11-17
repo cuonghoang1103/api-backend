@@ -107,22 +107,22 @@ export default {
     /* ── Chương 12 — React 19 & concurrent ── */
     'rx-12-0-slides': { yt: 'B_2E96URooA', credit: "React Conf — Async React" },
     'rx-12-1-suspense-use': { yt: 't6MeFVF3V9I', credit: "Jack Herrington — Warning: React 19's use Hook Can Impact App Performance", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/react/12-react-19-concurrent/12-02-suspense-use-0ffcdece.mp4' }, defaultVideoTrack: 'VI'},
-    'rx-12-2-transition': { yt: 'lDukIAymutM', credit: "Academind — useTransition() vs useDeferredValue | React 18" },
-    'rx-12-3-actions': { yt: 'I3AsmAWWGEs', credit: "Callstack — Modern React Patterns: Concurrent Rendering, Actions & What’s Next | Aurora Scharff at RUC 2025" },
-    'rx-12-4-compiler-rsc': { yt: 'T-rHmWSZajc', credit: "React Conferences by GitNation — Nadia Makarevich – How React Compiler Performs on Real Code, React Advanced 2024" },
+    'rx-12-2-transition': { yt: 'lDukIAymutM', credit: "Academind — useTransition() vs useDeferredValue | React 18", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/react/12-react-19-concurrent/12-03-transition-72caea7f.mp4' }, defaultVideoTrack: 'VI'},
+    'rx-12-3-actions': { yt: 'I3AsmAWWGEs', credit: "Callstack — Modern React Patterns: Concurrent Rendering, Actions & What’s Next | Aurora Scharff at RUC 2025", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/react/12-react-19-concurrent/12-04-actions-ff53ba86.mp4' }, defaultVideoTrack: 'VI'},
+    'rx-12-4-compiler-rsc': { yt: 'T-rHmWSZajc', credit: "React Conferences by GitNation — Nadia Makarevich – How React Compiler Performs on Real Code, React Advanced 2024", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/react/12-react-19-concurrent/12-05-compiler-rsc-4ac41a25.mp4' }, defaultVideoTrack: 'VI'},
 
     /* ── Chương 13 — Mẫu thiết kế & kiến trúc ── */
     'rx-13-0-slides': { yt: 'MdvzlDIdQ0o', credit: "Cosden Solutions — Design patterns in React" },
-    'rx-13-1-compound-headless': { yt: 'N_WgBU3S9W8', credit: "Cosden Solutions — Compound Components in React (Design Patterns)" },
-    'rx-13-2-hook-styling': { yt: 'I2Bgi0Qcdvc', credit: "Cosden Solutions — Custom Hooks in React (Design Patterns)" },
+    'rx-13-1-compound-headless': { yt: 'N_WgBU3S9W8', credit: "Cosden Solutions — Compound Components in React (Design Patterns)", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/react/13-mau-thiet-ke-kien-truc/13-02-compound-headless-784bb0a5.mp4' }, defaultVideoTrack: 'VI'},
+    'rx-13-2-hook-styling': { yt: 'I2Bgi0Qcdvc', credit: "Cosden Solutions — Custom Hooks in React (Design Patterns)", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/react/13-mau-thiet-ke-kien-truc/13-03-hook-styling-04ed4abf.mp4' }, defaultVideoTrack: 'VI'},
     'rx-13-3-danh-sach-dai': { yt: 'DBdo7mmuGx4', credit: "Austin Davis — TanStack Virtual - Lightning Fast React Pages" },
     'rx-13-4-bao-mat-i18n': { yt: 'fnQdZdxYxrU', credit: "Coding Garden — XSS Explained with React and Vanilla JS Examples | Cross Site Scripting | dangerouslySetInnerHTML" },
 
     /* ── Chương 14 — Lên production ── */
-    'rx-14-1-xac-thuc': { yt: 'AcYF18oGn6Y', credit: "Cosden Solutions — Authentication in React with JWTs, Access & Refresh Tokens (Complete Tutorial)" },
-    'rx-14-2-api-that': { yt: 'XAccGbtl3Z8', credit: "Alex Hyett — Idempotency - What it is and How to Implement it" },
-    'rx-14-3-build-deploy': { yt: '9c4HLqk1ExA', credit: "Alexander Lichter — Vite Bundle Inspection made EASY" },
-    'rx-14-4-phong-van': { yt: '3BN-YHcJfOY', credit: "CoderOne — The React Interview Questions You need to Know" },
+    'rx-14-1-xac-thuc': { yt: 'AcYF18oGn6Y', credit: "Cosden Solutions — Authentication in React with JWTs, Access & Refresh Tokens (Complete Tutorial)", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/react/14-len-production/14-02-xac-thuc-e3356ccc.mp4' }, defaultVideoTrack: 'VI'},
+    'rx-14-2-api-that': { yt: 'XAccGbtl3Z8', credit: "Alex Hyett — Idempotency - What it is and How to Implement it", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/react/14-len-production/14-03-api-that-db8edc37.mp4' }, defaultVideoTrack: 'VI'},
+    'rx-14-3-build-deploy': { yt: '9c4HLqk1ExA', credit: "Alexander Lichter — Vite Bundle Inspection made EASY", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/react/14-len-production/14-04-build-deploy-41ce3559.mp4' }, defaultVideoTrack: 'VI'},
+    'rx-14-4-phong-van': { yt: '3BN-YHcJfOY', credit: "CoderOne — The React Interview Questions You need to Know", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/react/14-len-production/14-05-phong-van-af0aa288.mp4' }, defaultVideoTrack: 'VI'},
     'rx-3-4-tieng-viet': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/react/03-form/03-05-tieng-viet-f312feb5.mp4' }, defaultVideoTrack: 'VI'},
   },
 };

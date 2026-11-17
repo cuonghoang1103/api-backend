@@ -9,21 +9,21 @@ export default {
   lessons: {
     // Giới thiệu môn học
     "csi106-0-0-tai-lieu": { yt: "d86ws7mQYIg", credit: "Branch Education — How does Computer Hardware Work?  💻🛠🔬  [3D Animated Teardown]" },
-    "csi106-0-1-overview": { yt: "O5nskjZ_GoI", credit: "CrashCourse — Early Computing: Crash Course Computer Science #1" },
+    "csi106-0-1-overview": { yt: "O5nskjZ_GoI", credit: "CrashCourse — Early Computing: Crash Course Computer Science #1", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/csi106-introduction-to-computer-science/00-gioi-thieu-mon-hoc/00-01-bat-dau-tai-day-csi106-49e42648.mp4' }, defaultVideoTrack: 'VI'},
 
     // Chương 1 — Tổ chức máy tính
-    "csi106-1-0a-slides-von-neumann-cpu": { yt: "16zrEPOsIcI", credit: "Branch Education — The Engineering that Runs the Digital World 🛠️⚙️💻 How do CPUs Work?" },
-    "csi106-1-0b-slides-bo-nho-vao-ra": { yt: "7J7X7aZvMXQ", credit: "Branch Education — How does Computer Memory Work? 💻🛠" },
-    "csi106-1-1-computer-organization": { yt: "Ml3-kVYLNr8", credit: "Computerphile — Von Neumann Architecture - Computerphile" },
-    "csi106-1-2-cpu-memory-io": { yt: "SAk-6gVkio0", credit: "Computerphile — How CPU Memory & Caches Work - Computerphile" },
+    "csi106-1-0a-slides-von-neumann-cpu": { yt: "16zrEPOsIcI", credit: "Branch Education — The Engineering that Runs the Digital World 🛠️⚙️💻 How do CPUs Work?", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/csi106-introduction-to-computer-science/01-to-chuc-may-tinh/01-01-slide-von-neumann-the-he-cpu-8565325b.mp4' }, defaultVideoTrack: 'VI'},
+    "csi106-1-0b-slides-bo-nho-vao-ra": { yt: "7J7X7aZvMXQ", credit: "Branch Education — How does Computer Memory Work? 💻🛠", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/csi106-introduction-to-computer-science/01-to-chuc-may-tinh/01-02-slide-bo-nho-vao-ra-kien-truc-011030f7.mp4' }, defaultVideoTrack: 'VI'},
+    "csi106-1-1-computer-organization": { yt: "Ml3-kVYLNr8", credit: "Computerphile — Von Neumann Architecture - Computerphile", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/csi106-introduction-to-computer-science/01-to-chuc-may-tinh/01-03-to-chuc-may-tinh-von-neumann-5bf8b936.mp4' }, defaultVideoTrack: 'VI'},
+    "csi106-1-2-cpu-memory-io": { yt: "SAk-6gVkio0", credit: "Computerphile — How CPU Memory & Caches Work - Computerphile", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/csi106-introduction-to-computer-science/01-to-chuc-may-tinh/01-04-cpu-bo-nho-vao-ra-kien-truc-d7abed64.mp4' }, defaultVideoTrack: 'VI'},
 
     // Chương 2 — Hệ đếm
-    "csi106-2-0-slides-he-dem-chuyen-co-so": { yt: "FFDMzbrEXaE", credit: "The Organic Chemistry Tutor — Number Systems Introduction - Decimal, Binary, Octal & Hexadecimal" },
-    "csi106-2-1-number-systems": { yt: "M6c6Xw5mt90", credit: "Gate Smashers — Lec-2: Convert Decimal to Any Other Base(Binary, Octal, Hex etc) | Number System" },
+    "csi106-2-0-slides-he-dem-chuyen-co-so": { yt: "FFDMzbrEXaE", credit: "The Organic Chemistry Tutor — Number Systems Introduction - Decimal, Binary, Octal & Hexadecimal", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/csi106-introduction-to-computer-science/02-he-dem/02-01-slide-he-dem-chuyen-co-so-fc14734f.mp4' }, defaultVideoTrack: 'VI'},
+    "csi106-2-1-number-systems": { yt: "M6c6Xw5mt90", credit: "Gate Smashers — Lec-2: Convert Decimal to Any Other Base(Binary, Octal, Hex etc) | Number System", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/csi106-introduction-to-computer-science/02-he-dem/02-02-he-dem-chuyen-co-so-353a8c39.mp4' }, defaultVideoTrack: 'VI'},
 
     // Chương 3 — Lưu trữ & thao tác dữ liệu
-    "csi106-3-0a-slides-luu-tru-du-lieu": { yt: "1GSjbWt0c9M", credit: "CrashCourse — Representing Numbers and Letters with Binary: Crash Course Computer Science #4" },
-    "csi106-3-0b-slides-phep-logic-dich-bit": { yt: "4JgtUf5ThqY", credit: "Christopher Lum — Bit Shifting, Bit Masking, and Bit Manipulation" },
+    "csi106-3-0a-slides-luu-tru-du-lieu": { yt: "1GSjbWt0c9M", credit: "CrashCourse — Representing Numbers and Letters with Binary: Crash Course Computer Science #4", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/csi106-introduction-to-computer-science/03-luu-tru-thao-tac-du-lieu/03-01-slide-luu-tru-du-lieu-a7b7bf0e.mp4' }, defaultVideoTrack: 'VI'},
+    "csi106-3-0b-slides-phep-logic-dich-bit": { yt: "4JgtUf5ThqY", credit: "Christopher Lum — Bit Shifting, Bit Masking, and Bit Manipulation", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/csi106-introduction-to-computer-science/03-luu-tru-thao-tac-du-lieu/03-02-slide-phep-logic-dich-bit-37078d21.mp4' }, defaultVideoTrack: 'VI'},
     "csi106-3-1-storing-numbers": { yt: "PZRI1IfStY0", credit: "Computerphile — Floating Point Numbers - Computerphile" },
     "csi106-3-2-text-media-operations": { yt: "Kv1Hiv3ox8I", credit: "Branch Education — How are Images Compressed?  [46MB ↘↘ 4.07MB] JPEG In Depth" },
 

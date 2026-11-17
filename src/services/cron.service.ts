@@ -39,6 +39,20 @@ export function startCronJobs(): void {
   }
   _started = true;
 
+  // ─── CT Lồng Tiếng (18/11/2026) — MỖI GIỜ: xếp lại việc mất nhịp tim + dọn tệp R2 quá 7 ngày ───
+  // Không giữ bản sao video người khác lâu (docs/long-tieng-hop-dong.md). Trạm cũng tự xếp lại lúc /nhan,
+  // nhịp này lo trường hợp trạm tắt hẳn (không ai gọi /nhan) — việc treo `lam` hiện lại là `cho` trên trang.
+  cron.schedule('43 * * * *', async () => {
+    try {
+      const lt = await import('./longTieng.service.js');
+      const xep = await lt.xepLaiViecMatNhip();
+      const r = await lt.donDep();
+      if (xep || r.xoaViec || r.xoaTep) logger.info('cron lồng tiếng', { xepLai: xep, ...r });
+    } catch (err) {
+      logger.error('cron lồng tiếng lỗi', { error: (err as Error).message });
+    }
+  }, { timezone: 'UTC' });
+
   // ─── Tự xoá tài khoản quá 72 giờ — MỖI GIỜ (App Store 5.1.1(v)) ───
   cron.schedule('17 * * * *', async () => {
     try {

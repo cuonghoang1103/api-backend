@@ -239,6 +239,8 @@ const proRoutes = proModule.default;
 const proAdminRoutes = proModule.adminRouter;
 // Lối nội bộ cho cụm cong-llm (canh) hỏi số đã tiêu ở AI Code (14/09/2026)
 const internalRoutes = (await import(path.join(__dirname, 'routes', 'internal.routes.js'))).default;
+// CT Lồng Tiếng (18/11/2026): web/app (ADMIN · mã ctlt_) + cửa trạm máy nhà (x-internal-token) — docs/long-tieng-hop-dong.md
+const longTiengModule = await import(path.join(__dirname, 'routes', 'longTieng.routes.js'));
 // Xin key OpenCode (cổng key con LLM) — người dùng xin, admin duyệt (13/09/2026)
 const llmKeyModule = await import(path.join(__dirname, 'routes', 'llmKey.routes.js'));
 const llmKeyRoutes = llmKeyModule.default;
@@ -718,6 +720,9 @@ app.use('/api/v1/admin/pro', proAdminRoutes);
 app.use('/api/v1/wallet', walletRoutes);
 app.use('/api/v1/admin/wallet', walletAdminRoutes);
 app.use('/api/v1/admin/commerce', commerceAdminRoutes);
+// Đứng TRƯỚC '/api/v1/internal': router đó chặn mọi đường con bằng 404 khi khoá sai.
+app.use('/api/v1/internal/long-tieng', longTiengModule.noiBoRouter);
+app.use('/api/v1/long-tieng', longTiengModule.default);
 app.use('/api/v1/internal', internalRoutes);
 app.use('/api/v1/llm-keys', llmKeyRoutes);
 app.use('/api/v1/admin/llm-keys', llmKeyAdminRoutes);

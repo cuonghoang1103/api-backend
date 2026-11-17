@@ -351,7 +351,8 @@ export type LlmPurpose =
   | 'study_plan'          // /hoc-tap — soạn việc học theo môn/tuần từ mục lục Academy (JSON)
   | 'study_verify'        // /hoc-tap — chấm BẰNG CHỨNG người học nộp (chữ + ẢNH) → đạt/điểm/lỗi (JSON)
   | 'study_coach'         // /hoc-tap — diễn đạt lời cảnh báo từ tỷ lệ trượt MÃ đã tính
-  | 'creator_script';     // Content Creator (/creator) — gói quay bài giảng/vlog: kịch bản, cảnh, lời thoại, hook, Shorts
+  | 'creator_script'      // Content Creator (/creator) — gói quay bài giảng/vlog: kịch bản, cảnh, lời thoại, hook, Shorts
+  | 'long_tieng_dich';    // CT Lồng Tiếng (18/11/2026) — dịch lời video Trung/Anh sang tiếng Việt NÓI, vừa khe thời gian (JSON)
 
 const PURPOSE_MODEL: Record<LlmPurpose, string> = {
   /**
@@ -540,6 +541,11 @@ const PURPOSE_MODEL: Record<LlmPurpose, string> = {
    * Vặn: `LLM_MODEL_CREATOR_SCRIPT=…` (không cần deploy).
    */
   creator_script: 'gpt-6-sol',
+  /**
+   * CT Lồng Tiếng (18/11/2026): trạm máy nhà gửi từng lô ~40 câu (POST /internal/long-tieng/dich). Bản mẫu chạy
+   * `gpt-6-sol` thẳng trên modelapi — chủ kênh nghe thử video 13 phút: dịch tốt, đúng thuật ngữ. Giữ nguyên model đó.
+   */
+  long_tieng_dich: 'gpt-6-sol',
 
   cv_critique: 'gpt-6-sol',
   cv_writing: 'gpt-6-sol',
@@ -1477,7 +1483,7 @@ const SUY_LUAN_THEO_VIEC: Partial<Record<LlmPurpose, MucSuyLuan>> = {
   study_verify: 'high', work_agent: 'high', codelab_bulk: 'high', doc_ocr: 'high',
   // Sinh nội dung có cấu trúc (JSON/nét vẽ/đồ thị) — vừa đủ.
   language_bulk: 'medium', work_digest: 'medium', work_setup: 'medium', ve_net: 'medium', vo_viet_lai: 'medium', so_do_khoi: 'medium',
-  mach_dien: 'medium', study_plan: 'medium', study_coach: 'medium', creator_script: 'medium', cv_writing: 'medium',
+  mach_dien: 'medium', long_tieng_dich: 'medium', study_plan: 'medium', study_coach: 'medium', creator_script: 'medium', cv_writing: 'medium',
   exphub_doc: 'medium', news_bulletin: 'medium', plan_review: 'medium',
   // Máy đọc / tra cứu nhỏ / độ trễ quan trọng.
   cv_parse: 'low', han_tra: 'low',

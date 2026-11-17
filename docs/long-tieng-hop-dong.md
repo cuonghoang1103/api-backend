@@ -9,28 +9,52 @@ Bản mẫu chạy được trên Mac (đọc trước): `/Users/admin/Documents
 Chỉ tài khoản có vai ADMIN (giọng là của chủ kênh — không mở cho người khác). Kiểm vai như các tuyến admin hiện có.
 
 ## 1. API web — `/api/v1/long-tieng` (đăng nhập JWT, ADMIN) — dùng bởi trang web VÀ app
+**Mọi phản hồi (cả mục 2) bọc kiểu chung của backend: `{ success: true, data: <như bảng> }`; lỗi `{ success: false, message, code? }`** (code dạng `LT_…`).
 Xác thực app: **mã kết nối** tạo trên trang web (`POST /ma-ket-noi` ⇒ trả MỘT lần chuỗi `ctlt_…`, lưu băm; app gửi `Authorization: Bearer ctlt_…`). Thu hồi được.
+Mã chết theo chủ: chủ mã mất vai ADMIN / bị khoá ⇒ 403; mã thu hồi / sai ⇒ 401. Mã kết nối KHÔNG tạo/xem/thu hồi được mã khác (403) — chỉ JWT.
 | Tuyến | Việc |
 |---|---|
-| `POST /jobs` `{ url?, tep?: { ten, kichThuoc, kieu }, lang: 'auto'|'zh'|'en', goc: 0..0.4, tenVideo? }` | tạo việc. Có `tep` ⇒ trả kèm `taiLen: { url (PUT ký sẵn R2), het }`; app PUT xong gọi `POST /jobs/:id/da-tai-len`. Có `url` ⇒ trạm tự tải. |
-| `GET /jobs` · `GET /jobs/:id` | danh sách / chi tiết: `trangThai: 'cho_tai_len'|'cho'|'tai'|'lam'|'xong'|'loi'|'huy'`, `buoc`, `phanTram`, `loi`, `ketQua: [{ loai: 'vi'|'vi-goc'|'srt-vi'|'srt-goc'|'thong-tin', ten, kichThuoc, url (GET ký sẵn, 1 giờ) }]`, `thoiLuong`, `tao`, `xong` |
+| `GET /toi` | (thêm 18/11) kiểm mã/phiên: `{ userId, username, quaMa }` — app gọi lúc đăng nhập bằng mã |
+| `POST /jobs` `{ url?, tep?: { ten, kichThuoc, kieu }, lang: 'auto'\|'zh'\|'en', goc: 0..0.4, tenVideo?, nhip?: 'cho-giong'\|'tang-toc', nhacNen?: { loai: 'goc'\|'thu-vien'\|'tep'\|'khong', id?, amLuong?: 0..1, tep?: { ten, kichThuoc, kieu } } }` | tạo việc ⇒ `201 { job, taiLen?, taiLenNhac? }`. Có `tep` ⇒ `taiLen: { url (PUT ký sẵn R2, sống 6 giờ), het, kieu }` — **PUT phải gửi header `Content-Type` đúng bằng `kieu`** (chữ ký có kiểu). Nhạc nền `tep` ⇒ `taiLenNhac` cùng khuôn. Còn tệp chờ ⇒ `trangThai = cho_tai_len`; PUT xong (cả video lẫn nhạc) gọi `POST /jobs/:id/da-tai-len`. Có `url` ⇒ trạm tự tải. Tệp ≤ 5 GB, nhạc ≤ 300 MB. |
+| `GET /jobs` · `GET /jobs/:id` | danh sách (200 việc mới nhất) / chi tiết: `{ id, nguon: 'url'\|'tep', url, tep, tenVideo, lang, goc, nhip, nhacNen, trangThai: 'cho_tai_len'\|'cho'\|'tai'\|'lam'\|'xong'\|'loi'\|'huy', buoc, phanTram, loi, ketQua: [{ loai: 'vi'\|'vi-goc'\|'srt-vi'\|'srt-goc'\|'thong-tin', ten, kichThuoc, url }], thoiLuong, tao, xong, daTaiVe }`. `url` kết quả = GET ký sẵn 1 giờ, tải về đúng tên tiếng Việt; `null` khi đã tải về hoặc quá 7 ngày. |
+| `GET /nhac` | (thêm 18/11) thư viện nhạc nền: `[{ id, ten, tamTrang, thoiLuong, nghe (URL nghe thử ký sẵn), nguon, giayPhep, tacGia }]` |
+| `POST /jobs/:id/da-tai-len` | kiểm tệp đã lên kho (HEAD) ⇒ `cho`; thiếu ⇒ 409 `LT_CHUA_CO_TEP` / `LT_CHUA_CO_NHAC` |
 | `POST /jobs/:id/thu-lai` | việc lỗi ⇒ về `cho` (giữ kết quả bước đã xong ở trạm) |
-| `DELETE /jobs/:id` | huỷ / xoá việc + xoá MỌI tệp R2 của việc |
+| `DELETE /jobs/:id` | huỷ / xoá việc + xoá MỌI tệp R2 của việc ⇒ `{ xoa, huy, soTep }`. Đang chạy ở trạm ⇒ đánh dấu `huy` (trạm nhận 410 ở nhịp tim kế tiếp rồi dừng); còn lại ⇒ xoá hẳn |
 | `POST /jobs/:id/da-tai-ve` | app báo đã tải đủ ⇒ server xoá tệp kết quả trên R2 (không giữ bản sao video người khác lâu) |
-Tệp R2: khoá riêng tư `long-tieng/<userId>/<jobId>/…` (không công khai qua CDN). Dọn tự động: tệp quá 7 ngày ⇒ xoá (cron có sẵn của backend hoặc thêm).
+| `GET /ma-ket-noi` · `POST /ma-ket-noi { ten? }` · `DELETE /ma-ket-noi/:id` | (chỉ JWT) danh sách `{ id, ten, dau, tao, dungLanCuoi, thuHoi }` / tạo ⇒ `{ id, ma, ten, dau, tao }` (`ma` hiện MỘT lần) / thu hồi. Tối đa 20 mã còn hiệu lực. |
+
+Tệp R2: khoá riêng tư `long-tieng/<userId>/<jobId>/vao|ra/…` (jobId = UUID ngẫu nhiên; chỉ đi bằng URL ký). Dọn tự động (cron mỗi giờ,
+phút 43): chờ tải lên > 24 giờ ⇒ xoá việc; `huy` > 1 ngày ⇒ xoá dòng; kết quả `xong` chưa tải về > 7 ngày ⇒ xoá tệp (giữ dòng);
+`loi` > 7 ngày ⇒ xoá tệp vào; tệp mồ côi > 7 ngày ⇒ xoá. Tệp vào xoá ngay khi xong. `long-tieng/nhac/` (thư viện) không bao giờ bị dọn.
+
+**Nhịp đọc (`nhip`, thêm 18/11 sau lượt chạy thử):** `cho-giong` (mặc định) — câu Việt dài hơn khe thì chỉ đọc nhanh tối đa
+**1,08×**, phần còn thiếu KÉO DÀI HÌNH (đoạn video của câu đó chiếu chậm tới 2×, quá nữa thì giữ khung cuối) để hình và giọng khớp
+nhau; video ra dài hơn bản gốc, nhạc nền gốc/giọng gốc của đoạn đó kéo theo (atempo, phần giữ khung thì lặng). `tang-toc` — như bản
+mẫu: đọc nhanh tới 1,3×, video giữ nguyên độ dài. Lượt chạy thử 13 phút tiếng Trung: câu Việt dài hơn khe trung vị 1,07×, p90 1,30×,
+max 1,72× ⇒ 77/103 câu bị đọc nhanh, 4 câu vẫn trễ — chủ kênh không thích đọc nhanh.
+
+**Nhạc nền (`nhacNen`, thêm 18/11):** `goc` (mặc định, âm lượng 0,9) = nhạc/hiệu ứng gốc đã tách khỏi giọng (Demucs) · `thu-vien` =
+một bài trong thư viện (`id` từ `GET /nhac`) · `tep` = nhạc người dùng tải lên · `khong` = không nhạc. Với `thu-vien`/`tep` (âm lượng
+mặc định 0,3): lặp/cắt cho đủ độ dài video, vào/ra dần (2 s / 3 s), tự né giọng Việt (sidechaincompress). Thư viện: tệp +
+`danh-sach.json` ở `long-tieng/nhac/` trên R2, mỗi bài ghi `nguon` (URL gốc) + `giayPhep`; chỉ nhận nhạc giấy phép cho dùng không
+ràng buộc ghi công (CC0 / Pixabay Content License) — KHÔNG dùng bài hit có bản quyền. Nạp bằng `scripts/long-tieng-nhac.mts`.
 
 ## 2. API trạm — `/api/v1/internal/long-tieng` (header `x-internal-token` = `INTERNAL_API_TOKEN`, như `internal.routes.ts`)
+Thiếu cấu hình / sai khoá ⇒ 404 (không lộ tuyến).
 | Tuyến | Việc |
 |---|---|
-| `POST /nhan` | giành 1 việc `cho` (cũ nhất) ⇒ `{ job, vao?: { url GET ký sẵn } }` hoặc 204. Việc `tai/lam` không nhịp tim > 20 phút ⇒ về `cho`. |
-| `POST /:id/tien-do` `{ trangThai: 'tai'|'lam', buoc, phanTram }` | nhịp tim + tiến độ |
-| `POST /:id/len-ket-qua` `{ tep: [{ loai, ten, kichThuoc, kieu }] }` | ⇒ URL PUT ký sẵn cho từng tệp |
-| `POST /:id/xong` `{ thoiLuong, ketQua: [...] }` · `POST /:id/loi` `{ loi }` | kết thúc |
-| `POST /dich` `{ jobId, ngonNgu, cau: [{ i, giay, toiDa, src }], truoc }` | backend dịch một lô bằng `gateway.ts` (việc mới `long_tieng_dich`, model rẻ, trần chi phí sẵn có) ⇒ `{ ds: [{ i, vi }] }` |
+| `POST /nhan` | giành 1 việc `cho` (cũ nhất) ⇒ `{ job: { id, url, tep, tenVideo, lang, goc, nhip, nhacNen (+ ten bài thư viện), soLanNhan, tao }, vao?: { url GET ký sẵn }, nhac?: { url GET ký sẵn — bài thư viện hoặc tệp nhạc } }` hoặc 204. Việc `tai/lam` không nhịp tim > 20 phút ⇒ về `cho`; giành ≥ 5 lần vẫn mất nhịp ⇒ `loi`. |
+| `POST /:id/tien-do` `{ trangThai: 'tai'\|'lam', buoc, phanTram, tenVideo? }` | nhịp tim + tiến độ. **Việc đã huỷ/xoá/xếp lại ⇒ 410 `LT_VIEC_KHONG_CON` ⇒ trạm DỪNG việc đó** (mọi tuyến `/:id/*` và `/dich` đều vậy) |
+| `POST /:id/len-ket-qua` `{ tep: [{ loai, ten, kichThuoc, kieu? }] }` | ⇒ `{ tep: [{ loai, url, kieu, het }] }` URL PUT ký sẵn từng tệp (PUT với `Content-Type = kieu`; thiếu `kieu` ⇒ mặc định theo loại). Khoá theo LOẠI: `…/ra/<loai><đuôi>` |
+| `POST /:id/xong` `{ thoiLuong, ketQua: [...], tenVideo? }` · `POST /:id/loi` `{ loi }` | kết thúc. `xong` HEAD từng tệp (thiếu ⇒ 400), lấy kích thước thật, xoá tệp vào |
+| `POST /dich` `{ jobId, ngonNgu, cau: [{ i, giay, toiDa, src }] (≤ 60 câu), truoc }` | backend dịch một lô bằng `gateway.ts` (việc mới `long_tieng_dich` = `gpt-6-sol`, trần chi phí sẵn có) ⇒ `{ ds: [{ i, vi }] }`. Model bỏ sót câu ⇒ tự hỏi lại phần thiếu một lần; vẫn thiếu ⇒ 502 `LT_DICH_THIEU` (trạm thử lại lô). |
 
 ## 3. Trạm ở máy nhà (`linux-nha`, user Cuong03dx)
-- Dịch vụ systemd --user `vbg-long-tieng.service` (Restart=always), mã ở `~/long-tieng/` (đồng bộ từ repo `tools/long-tieng-tram/`).
-- Mỗi 10 s `POST /nhan`; chạy 5 bước của `lt.mts` NGAY TRÊN máy nhà: ffmpeg cục bộ; tải link bằng `yt-dlp` (YouTube có thể chặn máy nhà ⇒ thử qua máy GPU thuê nếu có, không vượt chặn — hỏng thì báo lỗi "Hãy tải video trên máy bạn rồi kéo vào app"); GPU: `LT_GPU=vast7` ⇒ ssh như bản mẫu, ngược lại GPU nhà với `flock ~/vbg-dp/.khoa-gpu` (chung khoá với dây chuyền video bài giảng). Dịch qua cổng LLM của web (khoá trong `/opt`… KHÔNG — trạm gọi `POST /api/v1/internal/long-tieng/dich` để backend dịch bằng `gateway.ts`, trạm không giữ khoá LLM).
+- Dịch vụ systemd --user `vbg-long-tieng.service` (Restart=always), mã ở `~/long-tieng/` (đồng bộ từ repo `tools/long-tieng-tram/` — cài đặt: README trong thư mục đó).
+- Mỗi 10 s `POST /nhan`; chạy 5 bước của `lt.mts` NGAY TRÊN máy nhà: ffmpeg cục bộ; tải link bằng `yt-dlp` (YouTube có thể chặn máy nhà ⇒ thử qua máy GPU thuê nếu có, không vượt chặn — hỏng thì báo lỗi "Hãy tải video trên máy bạn rồi kéo vào app"); GPU: `LT_GPU=vast7` ⇒ ssh như bản mẫu, ngược lại GPU nhà với `flock ~/video-bai-giang/.khoa-gpu` (chung khoá với dây chuyền video bài giảng — *đính chính 18/11: khoá thật nằm ở `~/video-bai-giang/`, không phải `~/vbg-dp/`; `lam-giong.mts` chạy `cd ~/video-bai-giang && flock .khoa-gpu …`*). Dịch qua cổng LLM của web (trạm gọi `POST /api/v1/internal/long-tieng/dich` để backend dịch bằng `gateway.ts`, trạm không giữ khoá LLM).
+- Mỗi bước ghi kết quả vào thư mục việc (`~/long-tieng/lam/<jobId>/`) ⇒ thử lại không làm lại bước đã xong; xong thì xoá thư mục. Nhịp tim mỗi 60 s kể cả lúc chờ GPU; nhận 410 ⇒ giết tiến trình con, dọn, quay lại hàng.
+- Chống vỡ giọng (lỗi lượt chạy thử, `docs/so-loi.md`): đoạn Whisper > 8 s tách theo dấu câu / mốc từng từ trước khi dịch; câu Việt > 130 ký tự tách ở `. ? ! ; :` rồi `,`, đọc từng mẩu, ghép với lặng 0,4 s (sau `. ? ! ; :`) / 0,18 s (sau `,`) như "nhịp C" của video bài giảng. Độ dài dịch mục tiêu 13 ký tự / giây khe (bản mẫu 15).
 - Đặt tên kết quả: `<Tên video> [VI].mp4`, `<Tên video> [VI + giọng gốc 15%].mp4`, `<Tên video>.vi.srt`, `<Tên video>.<zh|en>.srt`, `thong-tin.json` (nguồn, link, ngôn ngữ, thời lượng, số câu, phiên bản trạm, ngày).
 
 ## 4. App "CT Lồng Tiếng" (Electron, Mac/Windows/Linux) — `apps/ct-long-tieng/`

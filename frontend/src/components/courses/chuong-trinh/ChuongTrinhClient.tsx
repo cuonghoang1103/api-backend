@@ -13,7 +13,7 @@
  * Khoá mới chưa gán kỳ (`chuaXep`) luôn hiện — ở mục "Khoá mới" (lộ trình) hoặc lẫn trong hai chế độ kia.
  * Khoá mới có khung (`dangSoan`, backend `services/khoaDaSoan.ts`) mang nhãn "Đang soạn" ở mọi chế độ.
  */
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState, type ReactNode } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { ArrowRight, CheckCircle2, GraduationCap, Hourglass, Layers3, Search, Sparkles, X } from 'lucide-react';
@@ -39,9 +39,11 @@ export interface TrangThaiDau {
 
 const LUOI = 'grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3';
 
-export default function ChuongTrinhClient({ banDau, trangThaiDau }: {
+/** `daiApp`: dải tải app CT Courses (component máy chủ dựng ở page.tsx — biết app đã lên App Store chưa). */
+export default function ChuongTrinhClient({ banDau, trangThaiDau, daiApp }: {
   banDau: ChuongTrinhDaoTao | null;
   trangThaiDau: TrangThaiDau;
+  daiApp?: ReactNode;
 }) {
   const { locale } = useTranslation();
   const nn: NgonNgu = locale === 'en' ? 'en' : 'vi';
@@ -143,6 +145,9 @@ export default function ChuongTrinhClient({ banDau, trangThaiDau }: {
             </ul>
           </section>
         )}
+
+        {/* 📱 17/11/2026: người học trên web thấy app CT Courses và tải được ngay. */}
+        {daiApp}
 
         <ThanhCongCu
           c={c}

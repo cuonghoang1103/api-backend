@@ -3,6 +3,8 @@ import { getServerApiBaseUrl } from '@/lib/server-api';
 import type { ChuongTrinhDaoTao } from '@/types';
 import ChuongTrinhClient from '@/components/courses/chuong-trinh/ChuongTrinhClient';
 import { docCheDo } from '@/components/courses/chuong-trinh/chu';
+import DaiQuangBa from '@/components/appsite/DaiQuangBa';
+import { CTCOURSES_SITE } from '../ct-courses/site';
 
 /*
  * /courses — Chương trình đào tạo (15 kỳ × 5 khoá, xếp theo năm). Máy chủ Next dựng sẵn bản CÔNG KHAI (không cookie —
@@ -39,6 +41,12 @@ export default async function CoursesPage({ searchParams }: { searchParams: Reco
     <ChuongTrinhClient
       banDau={banDau}
       trangThaiDau={{ xem: docCheDo(lay('view')), q: lay('q'), level: lay('level'), category: lay('category') }}
+      daiApp={
+        <DaiQuangBa
+          site={CTCOURSES_SITE}
+          loiMoi="Học tiếp trên iPhone, iPad: video bài học, Code Lab chấm ngay, phòng thi có đồng hồ, phỏng vấn thử với AI và vở Apple Pencil — cùng tài khoản, cùng tiến độ với web."
+        />
+      }
     />
   );
 }

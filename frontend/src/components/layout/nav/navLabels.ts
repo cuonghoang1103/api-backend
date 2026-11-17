@@ -134,7 +134,7 @@ export const OPEN_PALETTE_EVENT = 'ct:open-palette';
 export const MENU_PREFIXES: Record<MenuId, string[]> = {
   learn: ['/academy', '/courses', '/roadmap', '/hoc-tap', '/exam', '/books', '/my-courses', '/certificates'],
   practice: ['/code-lab', '/algorithms', '/simulation', '/maker-lab', '/interview', '/cv', '/language'],
-  tools: ['/chat', '/voice-mini', '/ai-templates', '/ai-code', '/cli', '/llm-key', '/kiem-tra-key', '/work', '/notes', '/finance', '/music', '/games', '/toc-do-mang', '/pro', '/shop', '/download'],
+  tools: ['/chat', '/voice-mini', '/ai-templates', '/ai-code', '/cli', '/llm-key', '/kiem-tra-key', '/work', '/notes', '/finance', '/music', '/games', '/toc-do-mang', '/pro', '/shop', '/download', '/ct-courses'],
   community: ['/feed', '/tech-trends', '/forum', '/friends', '/messages', '/projects', '/repos', '/exp-hub', '/hub'],
   about: ['/about'],
 };

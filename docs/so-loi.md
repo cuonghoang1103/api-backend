@@ -18,6 +18,27 @@ Mẫu một mục:
 
 ---
 
+### 17/11/2026 — Web (nút trợ lý nổi trên trang học) — icon AI "hiện rồi biến", nhấp nháy
+- **Triệu chứng:** con robot góc phải trang học lúc có lúc không: rê chuột / AI bắt đầu trả lời thì nó biến mất một nhịp rồi hiện lại thành một hình khác; trên iPad nó ẩn suốt lúc khoá đang tải rồi mới "bật" ra từ 0; đổi trang là nó lại phóng to từ chấm.
+- **Nguyên nhân:** ba chỗ trong `frontend/src/components/chat/FloatingAIAssistant.tsx` (bản trước 17/11): (1) `{robotData ? <LottieClient/> : <img src="/robot-avatar.png"/>}` — khi Lottie JSON về, ảnh PNG bị gỡ, `LottieClient.tsx` vẽ ô `visibility:hidden` ở lần đầu rồi `next/dynamic(() => import('lottie-react'))` KHÔNG có `loading` ⇒ trả `null` tới khi chunk ~300 KB về ⇒ khoảng trống; (2) `motion.div initial={{ scale: 0, opacity: 0 }}` + `delay: 0.5` chạy lại MỖI lần nút gắn lại (ẩn/hiện theo trang); (3) trên máy cảm ứng `hiddenOnMobile` chỉ mở khi kho `bai` có giá trị — mà `CourseTutor` ghi `bai` SAU khi khoá + bài tải xong. Thêm: `useChatStore()` trần + `animate={{ y: [0,-4,0] }}` tạo object mới mỗi lần vẽ ⇒ mỗi mẩu chữ chat chảy về là vòng nhún bị khởi động lại (giật).
+- **Cách sửa:** nút là SVG CuongMini nội tuyến (`components/cuongmini/CuongMiniRobot.tsx`, chép từ robot app desktop) — không còn ảnh/Lottie để đổi; hoạt hình bằng CSS; mờ dần chỉ MỘT lần mỗi lần tải trang (`daHienLanDau`); nhận trang học theo đường dẫn `/courses/<slug>/learn` (`laTrangHoc`) thay vì chờ kho; selector riêng từng trường của `useChatStore`; trang học không bật câu mời ngẫu nhiên mỗi 6–8 s (commit `fix(trợ lý nổi)…` trên nhánh `worktree-agent-a79d0ecb8c7e3173b`).
+- **Ảnh hưởng:** mọi trang có nút trợ lý (desktop: lúc rê chuột/khi AI trả lời; iPad/điện thoại: mỗi lần mở trang học), từ 23/08/2026 (lúc Lottie chuyển sang nạp theo "tín hiệu quan tâm").
+- **Bài học:** đổi giữa hai biểu diễn (ảnh tĩnh ⇄ hoạt hình nạp động) thì PHẢI giữ bản cũ tới khi bản mới vẽ xong — `next/dynamic` không có `loading` là một khoảng trống; hình nhỏ thì vẽ bằng SVG có sẵn trong gói, khỏi nạp. Và hiện/ẩn theo một trạng thái BẤT ĐỒNG BỘ (kho do component khác ghi sau khi tải) là chớp tắt — điều kiện biết được từ URL thì đọc URL.
+
+### 17/11/2026 — Worktree agent (build frontend) — `next build` lần 2 xoá sạch `frontend/node_modules` của cây CHÍNH
+- **Triệu chứng:** lần `npm run build` thứ hai trong worktree chết ngay "Cannot find module './impl'"; `ls api-backend/frontend/node_modules | wc -l` = 0 — mọi phiên/worktree dùng chung thư mục đó vỡ theo.
+- **Nguyên nhân:** worktree để `frontend/node_modules` là SYMLINK về cây chính. Build `output: 'standalone'` tạo `.next/standalone/node_modules` cũng là symlink về thư mục THẬT; build kế tiếp dọn `.next` và ĐI THEO symlink ⇒ xoá rỗng node_modules thật (đã ghi trong memory 09/10 — vẫn dính lại).
+- **Cách sửa:** `npm ci` lại ở `api-backend/frontend` (package.json + lock trùng HEAD; 830 gói); worktree bỏ symlink, `npm ci` node_modules RIÊNG rồi mới build.
+- **Ảnh hưởng:** `frontend/node_modules` của cây chính rỗng ~2 phút (23:54–23:56); không đụng mã, không đụng git.
+- **Bài học:** worktree build Next standalone ⇒ node_modules RIÊNG, không bao giờ symlink; nếu buộc phải symlink thì `rm` (không -r) `.next/standalone/node_modules` trước lần build kế. Kiểm `ls node_modules | wc -l` trước khi nghi mã khi thấy "Cannot find module" trong gói lớn.
+
+### 17/11/2026 — Phụ đề video riêng (script sinh mục lục) — 0/78 bài có mục lục + nạp kịch bản làm nổ heap
+- **Triệu chứng:** `content/lesson-transcripts/api-design.json` "0/78 có các phần", DSA 0/114 — phòng học video và gia sư không có mục lục; sửa script để nạp kịch bản của mọi video thì `node --max-old-space-size=8192 --import tsx` vẫn chết "JavaScript heap out of memory" ở ~430 MB.
+- **Nguyên nhân:** `scripts/phu-de-tu-video-rieng.mjs` chỉ nhận id có `public/bai/<id>/thoigian.json` — video dựng trên máy thuê/máy Linux để tệp đó ở máy khác ⇒ không có cảnh nào. Còn OOM: Node ≥ 20 chạy hook nạp của tsx trên MỘT LUỒNG RIÊNG với heap mặc định nhỏ, luồng đó giữ mọi tệp đã biên dịch; `--max-old-space-size` chỉ nới heap luồng chính.
+- **Cách sửa:** dùng `CANH` của `kichban.ts` (tên cảnh + câu mở cảnh) căn mốc theo SRT khi thiếu thoigian.json; `chiaChuong` gộp cảnh thành chương 1–4 phút, không có cảnh thì chia theo câu chuyển ý; nạp kịch bản theo LÔ 120 tệp trong tiến trình con `scripts/phu-de-doc-kichban.mjs` (lô chết thì thử từng tệp) — commit `feat(phụ đề video riêng): mục lục chương cho MỌI video…`. Kết quả 2.357/2.357 video có mục lục.
+- **Ảnh hưởng:** ~1.900 video của 30+ khoá thiếu mục lục từ khi có phụ đề riêng (18/10); chỉ ảnh hưởng tính năng, không mất dữ liệu.
+- **Bài học:** "nguồn chính" ở máy khác thì tìm nguồn phụ cùng nội dung (kịch bản) trước khi bỏ cuộc; cờ heap của Node không áp cho luồng hook của loader — nạp hàng nghìn module TS thì chia lô ra tiến trình con.
+
 ### 17/11/2026 — Máy nhà (hạ tầng video) — dịch vụ tự khôi phục bật làn được nhưng bộ giám sát agent chết theo
 - **Triệu chứng:** sau lần mất điện thứ 3, nhật ký `~/khoi-phuc/khoi-phuc.log` báo "xong: 32 làn đang chạy" nhưng `tmux ls` trả "no server running" — giam-sat + các agent nhà không chạy.
 - **Nguyên nhân:** `vbg-khoi-phuc.service` là `Type=oneshot`; `khoi-phuc.sh` mở `tmux new-session -d` NGAY TRONG cgroup của dịch vụ ⇒ script thoát, systemd (KillMode mặc định `control-group`) giết mọi tiến trình còn lại trong cgroup, kể cả máy chủ tmux.

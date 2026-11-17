@@ -936,3 +936,10 @@ Mẫu một mục:
 - **Cách sửa:** thay câu đó trong cả 39 prompt (bản cũ `*.bak-1711`) bằng lời dặn KHÔNG viết bảng phiên âm; cách viết từ Anh do điều phối đo (phương án 1, `bien-the2.py`) rồi sửa chung trong `giong/phienAmBai.ts`.
 - **Ảnh hưởng:** chỉ tốn hạn mức tuần của agent (không đổi giọng đọc); từ dính liền kiểu `IJamesBondCar` vẫn đọc nguyên khối tới khi bộ thử tên dính liền (`bt-camel`) xong.
 - **Bài học:** đổi đường đọc của làn giọng thì phải sửa luôn mọi prompt/khung đang dạy agent cách cũ — grep cụm chỉ dẫn cũ trong `~/agent-nha/prompt-*.md` ngay lúc đổi.
+
+### 17/11/2026 — app iOS CT Courses (QA trước TestFlight) — đăng xuất để bảng "Tôi" đè lên màn đăng nhập
+- **Triệu chứng:** bấm Đăng xuất trong bảng Tôi ⇒ màn đăng nhập hiện ra nhưng bảng Tôi (còn "Đổi mật khẩu", "Xoá tài khoản" của phiên cũ) vẫn nằm đè lên; đăng nhập lại thì bảng bật lên lần nữa, tab/stack giữ của người trước.
+- **Nguyên nhân:** `ios-app/CuongThaiApp/CTCoursesApp/Man/ToiCTC.swift` gọi `app.logout()` TRƯỚC `dismiss()` ⇒ khung tab gắn sheet bị gỡ, `dismiss()` vô tác dụng, `DieuHuongCTC.moToi` kẹt `true`.
+- **Cách sửa:** ios-app 58712ef — đóng sheet + `moToi = false` trước, đợi 350 ms rồi mới `logout()`, thêm `DieuHuongCTC.datLai()` xoá tab/stack. Cùng commit: Ghi chú trên iPhone mở `NotesView` cũ thay vì `GhiChuCTC`, thẻ cuối hub (`LazyVGrid`) vắng khỏi cây trợ năng, tên ca kiểm Code Lab hiện nguyên chuỗi "EN|||VI", `$1 + 1 = 2$` hiện cả dấu `$`, trang tên sách dính mép.
+- **Ảnh hưởng:** chỉ bản dựng nội bộ; bắt được trước build TestFlight đầu tiên 1.0.0 (1).
+- **Bài học:** sheet gắn trên view sẽ bị gỡ theo trạng thái đăng nhập ⇒ đóng sheet trước, đổi trạng thái gốc sau; màn mới thay màn cũ phải grep MỌI lối vào (`case .ghiChu:`), không chỉ tab chính.

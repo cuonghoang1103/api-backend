@@ -6,8 +6,8 @@ export default {
   courseSlug: "internet-of-things",
   defaultVideoTrack: "YT",
   lessons: {
-    "iot102-gioi-thieu": { yt: "6mBO2vqLv38", credit: "Simplilearn — IoT | Internet of Things | What is IoT ? | How IoT Works? | IoT Explained in 6 Minutes | Simplilearn" },
-    "iot102-khai-niem": { yt: "pS_w1KG2cPw", credit: "edureka! — Internet of Things Architecture Explained | IoT Architecture Tutorial | Edureka | IoT Live - 1" },
+    "iot102-gioi-thieu": { yt: "6mBO2vqLv38", credit: "Simplilearn — IoT | Internet of Things | What is IoT ? | How IoT Works? | IoT Explained in 6 Minutes | Simplilearn", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/internet-of-things/00-gioi-thieu-mon-hoc/00-01-gioi-thieu-iot102-bd244395.mp4' }, defaultVideoTrack: 'VI'},
+    "iot102-khai-niem": { yt: "pS_w1KG2cPw", credit: "edureka! — Internet of Things Architecture Explained | IoT Architecture Tutorial | Edureka | IoT Live - 1", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/internet-of-things/01-iot-la-gi/01-01-khai-niem-kien-truc-iot-1bed4a5a.mp4' }, defaultVideoTrack: 'VI'},
     "iot102-arduino-uno": { yt: "fJWR7dBuc18", credit: "Paul McWhorter — Arduino Tutorial 1: Setting Up and Programming the Arduino for Absolute Beginners" },
     "iot102-mach-dien": { yt: "BR0t3oPiWfA", credit: "Paul McWhorter — Arduino Tutorial 9: Understanding Ohm's Law and Simple Circuit Design" },
     "iot102-digital-io": { yt: "CIrN2CaO6bo", credit: "Programming Electronics Academy — Tutorial 07: digitalRead() and the Serial Port: Arduino Course for Absolute Beginners (ReM)" },

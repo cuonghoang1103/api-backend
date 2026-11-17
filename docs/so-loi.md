@@ -18,6 +18,13 @@ Mẫu một mục:
 
 ---
 
+### 17/11/2026 — Phòng thi — đề FE trắc nghiệm ASI101 hiện thành "Tự luận", bắt viết câu trả lời bằng tiếng Anh
+- **Triệu chứng:** đề ASI101 SP26 · FE (60 câu "Choose 1 answer") hiện mỗi trang là câu Tự luận + ô "Viết câu trả lời bằng tiếng Anh", AI chấm theo tiêu chí; không có nút chọn A/B/C/D.
+- **Nguyên nhân:** `scripts/fx-de-thi-build.mjs` (lô "đề gốc" 09/11, 669 đề/198 môn) cố ý sinh MỌI trang ảnh thành `kind: 'WRITE'` vì nguồn không có đáp án dạng dữ liệu; bước chép thành trắc nghiệm (`build-fe-exam.mjs`) ghi là "nâng cấp sau" và chưa làm cho môn nào trong lô.
+- **Cách sửa:** chép 2 đề ASI101 (120 câu, song ngữ, có đáp án + giải thích; đề thi lại đối chiếu nhãn đáp án in trên ảnh) ⇒ `content/exams/ASI101-SP26-FE.mjs` + `ASI101-SP26-FE-RE.mjs` (kind FE). Cờ mới `build-fe-exam.mjs --thay-de-goc` ghi `thayDeGoc`; `fx-de-thi-build.mjs` đọc nó và sinh bản đề gốc cùng code với `isPublished: false` ⇒ seed ẩn bản cũ (giữ bài làm cũ), chạy lại script không làm nó hiện lại.
+- **Ảnh hưởng:** ASI101 đã sửa; các môn khác trong lô đề gốc vẫn còn dạng ảnh + tự luận cho tới khi được chép.
+- **Bài học:** ảnh đề thi lại của nguồn IN SẴN "Đáp án: X" + tô phương án đúng ⇒ bản trắc nghiệm KHÔNG được gắn ảnh đó (lộ đáp án lúc làm); đáp án in trên nguồn cũng có thể sai (câu 51 BSFC) ⇒ giữ đáp án đúng kỹ thuật và ghi chú lệch trong giải thích.
+
 ### 17/11/2026 — Phòng thi + Luyện cuối chương (app iOS + web) — ảnh đề không bấm phóng to được, chữ nhỏ không đọc nổi
 - **Triệu chứng:** ảnh chụp trang đề gốc (hai cột chữ in nhỏ, ví dụ ASI101 SP26-FE) co theo bề rộng điện thoại, bấm vào không có gì xảy ra ⇒ không đọc được câu hỏi (người dùng gửi ảnh chụp app; web cũng vậy).
 - **Nguyên nhân:** ios-app `Shared/PhongThi/AnhCauHoi.swift` chỉ là `KFImage` cố định (chú thích có ghi "bấm vào thì mở xem to" nhưng chưa từng làm); web `QuestionImageToggle` (`app/exam/[examId]/ExamRoomClient.tsx`, `app/exam/attempt/[attemptId]/ExamReviewClient.tsx`) + `components/academy/ChapterQuiz.tsx` là `<img>` trần.

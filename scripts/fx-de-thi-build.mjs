@@ -9,6 +9,11 @@
  *   node --env-file=.env scripts/fx-de-thi-build.mjs [--nguon <dir>] [--ma ACC101,PRF192] [--khong-day] [--dry]
  *
  * Ra: content/exams/<MÃ>-DE-GOC.mjs (một tệp/môn, nhiều đề) + content/exams/_de-goc-bao-cao.json.
+ *
+ * ĐÃ CHÉP THÀNH TRẮC NGHIỆM (17/11/2026): tệp đề trắc nghiệm nào khai `thayDeGoc: ['<code>', …]` (cạnh `course` —
+ * dựng bằng build-fe-exam.mjs --thay-de-goc) thì bản "đề gốc" cùng môn + code vẫn được sinh nhưng `isPublished: false`
+ * ⇒ seed ẩn nó đi (giữ bài làm cũ), học viên chỉ thấy bản trắc nghiệm có đáp án. Không có dòng này thì chạy lại script
+ * là bản ảnh-tự-luận hiện lại song song với bản trắc nghiệm.
  * Ảnh ⇒ R2 images/exam-questions/<MÃ>/<code>/<tên tệp> (bỏ qua tệp đã có — HEAD trước khi PUT).
  */
 import { S3Client, PutObjectCommand, HeadObjectCommand } from '@aws-sdk/client-s3';
@@ -58,6 +63,15 @@ const baoCao = { taoLuc: new Date().toISOString(), mon: {}, boQua: [] };
 // Đề đăng dưới MÃ BIẾN THỂ của cùng một môn Academy (đối chiếu tên môn 11/11/2026) ⇒ gộp vào môn đó.
 const BIEN_THE = { HOD102: 'HOD102c', IAM302t: 'IAM302', MED201c: 'MED201', RMC301m: 'RMC301' };
 const gom = {};          // mã môn Academy ⇒ đề (gộp mọi thư mục nguồn, kể cả mã biến thể)
+// mã môn ⇒ Set code đề đã có bản trắc nghiệm (đọc chữ, không import — tệp đề có thể rất lớn).
+const daThay = {};
+for (const f of fs.readdirSync(OUT).filter((x) => x.endsWith('.mjs') && !x.endsWith('-DE-GOC.mjs'))) {
+  const t = fs.readFileSync(path.join(OUT, f), 'utf8').slice(0, 4000);
+  const mt = t.match(/"?thayDeGoc"?\s*:\s*\[([^\]]*)\]/);
+  const mm = t.match(/"?courseCode"?\s*:\s*"([^"]+)"/);
+  if (!mt || !mm) continue;
+  for (const c of mt[1].match(/"([^"]+)"|'([^']+)'/g) || []) (daThay[mm[1]] ||= new Set()).add(c.slice(1, -1));
+}
 const codeTheoMon = {};
 
 // tải song song có giới hạn
@@ -116,7 +130,7 @@ for (const ma of fs.readdirSync(NGUON).sort().sort((x, y) => Number(x in BIEN_TH
       title: `${mc} — ${nhanEn}${mc !== ma ? ` (${ma})` : ''} (original paper)|||${mc} — ${nhanVi}${mc !== ma ? ` (${ma})` : ''} (đề gốc)`,
       description: `Real ${LOAI_VI[loai] ? loai : 'exam'} paper ${nhanEn}: ${n} page image(s) of the original paper.|||Đề ${LOAI_VI[loai] || 'thi'} thật ${nhanVi}: ${n} ảnh trang đề gốc.`,
       durationMinutes: loai === 'PE' ? 90 : 60, totalPoints: 10, passMark: 5, source: 'REAL',
-      shuffleQuestions: false, shuffleOptions: false, isPublished: true,
+      shuffleQuestions: false, shuffleOptions: false, isPublished: !daThay[mc]?.has(code),
       instructions: `<div class="ml-en"><p>This is a real FPTU <b>${esc(nhanEn)}</b> paper for <b>${ma}</b>, shown as the original page images (one page per question).</p><ul><li>Multiple-choice page: write the letter(s) you choose and one line of reasoning.</li><li>Practical / essay page: write your answer or solution; you may attach a photo of your work.</li><li>AI grading compares your answer with the page image; treat the score as practice feedback, not an official mark.</li></ul>${khoiKem}${khoiGhiChu}</div><div class="ml-vi"><p>Đây là đề <b>${esc(nhanVi)}</b> thật của FPTU môn <b>${ma}</b>, hiển thị nguyên ảnh trang đề gốc (mỗi trang là một câu).</p><ul><li>Trang trắc nghiệm: ghi chữ cái đáp án bạn chọn và một dòng lý do.</li><li>Trang thực hành / tự luận: viết bài làm hoặc lời giải; có thể đính kèm ảnh bài làm.</li><li>AI chấm bằng cách so bài làm với ảnh đề — điểm chỉ để luyện tập, không phải điểm chính thức.</li></ul>${khoiKem}${khoiGhiChu}</div>`,
       questions: anh.map((f, i) => ({
         kind: 'WRITE', points: diem, imageUrl: urlAnh[i],

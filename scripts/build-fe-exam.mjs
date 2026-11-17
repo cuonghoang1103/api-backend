@@ -62,6 +62,9 @@ const PASS = parseFloat(val('--pass', '4'));
 const SOURCE = val('--source', 'REAL');
 const SUBJECT = val('--instructions-subject', 'this subject');
 const KIND = val('--kind', 'FE'); // FE | PT | ME — nhãn loại đề
+// --thay-de-goc: đề này là bản trắc nghiệm của một đề "ảnh trang đề gốc" (content/exams/<MÃ>-DE-GOC.mjs, cùng code) ⇒
+// ghi `thayDeGoc` để scripts/fx-de-thi-build.mjs sinh bản ảnh-tự-luận đó với isPublished:false (17/11/2026).
+const THAY_DE_GOC = args.includes('--thay-de-goc');
 const EXAM_LABEL_EN = KIND === 'PT' ? 'Progress Test' : KIND === 'ME' ? 'Mid-term Exam' : 'Final Exam';
 const EXAM_LABEL_VI = KIND === 'PT' ? 'bài kiểm tra tiến độ (Progress Test)' : KIND === 'ME' ? 'thi giữa kỳ (Mid-term Exam)' : 'thi cuối kỳ (Final Exam)';
 
@@ -191,6 +194,7 @@ const questions = bank.map((q) => {
 
 const spec = {
   course: { courseCode: COURSE },
+  ...(THAY_DE_GOC ? { thayDeGoc: [CODE] } : {}),
   exams: [{
     // Frontend chỉ render kind 'FE' (MCQ tự chấm) và 'PE' (thực hành). PT/ME
     // vẫn là đề trắc nghiệm nên LƯU kind='FE' và phân biệt bằng code/title —

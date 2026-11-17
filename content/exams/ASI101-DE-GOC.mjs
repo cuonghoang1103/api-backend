@@ -16,7 +16,7 @@ export default {
    "source": "REAL",
    "shuffleQuestions": false,
    "shuffleOptions": false,
-   "isPublished": true,
+   "isPublished": false,
    "instructions": "<div class=\"ml-en\"><p>This is a real FPTU <b>SP26 · FE</b> paper for <b>ASI101</b>, shown as the original page images (one page per question).</p><ul><li>Multiple-choice page: write the letter(s) you choose and one line of reasoning.</li><li>Practical / essay page: write your answer or solution; you may attach a photo of your work.</li><li>AI grading compares your answer with the page image; treat the score as practice feedback, not an official mark.</li></ul></div><div class=\"ml-vi\"><p>Đây là đề <b>SP26 · FE</b> thật của FPTU môn <b>ASI101</b>, hiển thị nguyên ảnh trang đề gốc (mỗi trang là một câu).</p><ul><li>Trang trắc nghiệm: ghi chữ cái đáp án bạn chọn và một dòng lý do.</li><li>Trang thực hành / tự luận: viết bài làm hoặc lời giải; có thể đính kèm ảnh bài làm.</li><li>AI chấm bằng cách so bài làm với ảnh đề — điểm chỉ để luyện tập, không phải điểm chính thức.</li></ul></div>",
    "questions": [
     {
@@ -873,7 +873,7 @@ export default {
    "source": "REAL",
    "shuffleQuestions": false,
    "shuffleOptions": false,
-   "isPublished": true,
+   "isPublished": false,
    "instructions": "<div class=\"ml-en\"><p>This is a real FPTU <b>SP26 · FE · RE</b> paper for <b>ASI101</b>, shown as the original page images (one page per question).</p><ul><li>Multiple-choice page: write the letter(s) you choose and one line of reasoning.</li><li>Practical / essay page: write your answer or solution; you may attach a photo of your work.</li><li>AI grading compares your answer with the page image; treat the score as practice feedback, not an official mark.</li></ul></div><div class=\"ml-vi\"><p>Đây là đề <b>SP26 · FE · Thi lại</b> thật của FPTU môn <b>ASI101</b>, hiển thị nguyên ảnh trang đề gốc (mỗi trang là một câu).</p><ul><li>Trang trắc nghiệm: ghi chữ cái đáp án bạn chọn và một dòng lý do.</li><li>Trang thực hành / tự luận: viết bài làm hoặc lời giải; có thể đính kèm ảnh bài làm.</li><li>AI chấm bằng cách so bài làm với ảnh đề — điểm chỉ để luyện tập, không phải điểm chính thức.</li></ul></div>",
    "questions": [
     {

@@ -18,6 +18,13 @@ Mẫu một mục:
 
 ---
 
+### 17/11/2026 — Máy nhà (hạ tầng video) — dịch vụ tự khôi phục bật làn được nhưng bộ giám sát agent chết theo
+- **Triệu chứng:** sau lần mất điện thứ 3, nhật ký `~/khoi-phuc/khoi-phuc.log` báo "xong: 32 làn đang chạy" nhưng `tmux ls` trả "no server running" — giam-sat + các agent nhà không chạy.
+- **Nguyên nhân:** `vbg-khoi-phuc.service` là `Type=oneshot`; `khoi-phuc.sh` mở `tmux new-session -d` NGAY TRONG cgroup của dịch vụ ⇒ script thoát, systemd (KillMode mặc định `control-group`) giết mọi tiến trình còn lại trong cgroup, kể cả máy chủ tmux.
+- **Cách sửa:** thêm `KillMode=process` vào `[Service]` của `~/.config/systemd/user/vbg-khoi-phuc.service` + `daemon-reload`, bật tay `tmux new-session -d -s giam-sat …` (tệp nằm ở máy nhà, ngoài repo).
+- **Ảnh hưởng:** agent nhà (iot/swd/prna) đứng ~1 phút sau khi máy lên tới lúc bật tay; 32 làn video không bị ảnh hưởng (unit systemd riêng).
+- **Bài học:** dịch vụ oneshot khởi động tiến trình nền sống lâu (tmux, nohup, `&`) ⇒ phải `KillMode=process` hoặc `systemd-run --user --scope`; nghiệm thu dịch vụ khôi phục bằng mất điện THẬT, kiểm cả `tmux ls`, đừng chỉ đọc dòng "xong" trong log.
+
 ### 16/11/2026 — Vở iOS + backend (đợt 5a) — ảnh dán + ghi âm buổi học không bao giờ lên mây
 - **Triệu chứng:** đổi máy / cài lại app CT Courses hay CuongThai: nét vở về đủ nhưng mọi ảnh "Chụp đoạn bài vào Vở" và bản ghi âm buổi học (kèm mốc từng nét) biến mất.
 - **Nguyên nhân:** `ios-app/…/Shared/Vo/AnhDanVo.swift` (đầu tệp: "Đồng bộ: CHƯA lên máy chủ") và `GhiAmBuoiHoc.swift` chỉ ghi tệp vào `Documents/Vo/`; `DongBoVo` không đẩy chúng, backend không có chỗ chứa.

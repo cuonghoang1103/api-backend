@@ -12,6 +12,7 @@
 import { khung } from './_chung/khung.mjs';
 import s00 from './spring-boot/s00-bat-dau.mjs';
 import s01 from './spring-boot/s01-java-hien-dai-1.mjs';
+import s02 from './spring-boot/s02-java-hien-dai-2.mjs';
 
 const CHUONG = [
   ['Section 0 — Why Spring Boot', 'Mục 0 — Vì sao Spring Boot', '(đã soạn — spring-boot/s00-bat-dau.mjs)', [['bat-dau-tai-day', '-', '-', '-']]],
@@ -23,7 +24,7 @@ const CHUONG = [
     ['collections', 'Collections: choosing List, Set, Map — and equals/hashCode', 'Collections: chọn đúng List, Set, Map — và equals/hashCode', 'ArrayList vs LinkedList đo thật · HashMap bên trong (bucket, treeify) · equals/hashCode hỏng thì Set nhân đôi · TreeMap, LinkedHashMap, List.of bất biến · Câu phỏng vấn HashMap'],
     ['lab-1', 'Chapter 1 lab + interview questions', 'Lab chương 1 + câu hỏi phỏng vấn', 'Mô hình hoá LabFlow bằng record + sealed · Rubric · 5 câu phỏng vấn Java core hay gặp'],
   ]],
-  ['Chapter 2 — ⭐ Modern Java (2): streams, concurrency and the JVM', 'Chương 2 — ⭐ Java hiện đại (2): Stream, đồng thời và JVM', 'Stream/Optional, luồng, virtual thread, bộ nhớ JVM và GC — đủ để trả lời phỏng vấn và hiểu server Spring.', [
+  ['Chapter 2 — ⭐ Modern Java (2): streams, concurrency and the JVM', 'Chương 2 — ⭐ Java hiện đại (2): Stream, đồng thời và JVM', '(đã soạn — spring-boot/s02-java-hien-dai-2.mjs) Stream/Optional, luồng, virtual thread, bộ nhớ JVM và GC — đủ để trả lời phỏng vấn và hiểu server Spring.', [
     ['stream-api', 'The Stream API', 'Stream API', 'map/filter/reduce · Collectors (toList, groupingBy, toMap) · Stream lười và một lần · Khi nào vòng for dễ đọc hơn'],
     ['optional', 'Optional and null safety', 'Optional và an toàn null', 'Optional thay null ở kiểu trả về · orElseThrow trong service · Đừng dùng Optional làm field/tham số · JSpecify @Nullable của Spring 7'],
     ['thread-executor', 'Threads, ExecutorService and CompletableFuture', 'Thread, ExecutorService và CompletableFuture', 'Thread vs Runnable · Pool luồng · CompletableFuture nối việc bất đồng bộ · Pool Tomcat 200 luồng trong Spring'],
@@ -158,6 +159,7 @@ const CHUONG = [
 const sections = khung('sb', CHUONG);
 sections[0] = s00;
 sections[1] = s01;
+sections[2] = s02;
 
 export default {
   category: { slug: 'backend', name: 'Backend', icon: 'Server', sortOrder: 1 },

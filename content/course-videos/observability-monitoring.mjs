@@ -113,5 +113,6 @@ export default {
     /* ── Chương 12 — Cái gì sống sót qua phép đo ── */
     'obs-12-1-moi-con-so': { yt: '35N2buePMsg', credit: 'Merge Ready — Monitoring vs Observability: Logs, Metrics, Traces, APM, RUM & Costs', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/observability-monitoring/12-tong-ket/12-01-moi-con-so-efad8914.mp4' }, defaultVideoTrack: 'VI'},      // Monitoring vs Observability: Logs, Metrics, Traces, APM, RUM & Costs
     'obs-12-2-dung-cai-gi-truoc': { yt: 'rnnhtzIgjvQ', credit: 'IBM Technology — Simplify application monitoring with SRE Golden Signals', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/observability-monitoring/12-tong-ket/12-02-dung-cai-gi-truoc-2984280d.mp4' }, defaultVideoTrack: 'VI'},// Simplify application monitoring with SRE Golden Signals
+    'obs-0-8-bat-dau-tai-day': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/observability-monitoring/00-truoc-khi-do/00-06-bat-dau-tai-day-29c97d57.mp4' }, defaultVideoTrack: 'VI' },
   },
 };

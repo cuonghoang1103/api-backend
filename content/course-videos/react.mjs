@@ -20,20 +20,20 @@ export default {
     /* ── Mục 0 — Vì sao React ── */
     'rx-0-8-bat-dau-tai-day': { yt: '8pDqJVdNa44', credit: "CultRepo — How A Small Team of Developers Created React at Facebook | React.js: The Documentary", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/react/00-vi-sao-react/00-01-bat-dau-tai-day-react-la-gi-a3451ab3.mp4' }, defaultVideoTrack: 'VI'},
     'rx-0-9-bat-dau-khi-khong-co': { yt: 'WJ2PQe-pQJw', credit: "Academind — jQuery vs Vue, React and Angular", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/react/00-vi-sao-react/00-02-bat-dau-tai-day-khong-cau-truc-a119dbb3.mp4' }, defaultVideoTrack: 'VI'},
-    'rx-0-0-slides': { yt: 'Tn6-PIqc4UM', credit: "Fireship — React in 100 Seconds" },
+    'rx-0-0-slides': { yt: 'Tn6-PIqc4UM', credit: "Fireship — React in 100 Seconds", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/react/00-vi-sao-react/00-03-slide-muc-0-ef8fa539.mp4' }, defaultVideoTrack: 'VI'},
     'rx-0-1-cai-dat': { yt: 'RbZyQWOEmD0', credit: "dcode — How To Setup Your First React + TypeScript Project With Vite", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/react/00-vi-sao-react/00-04-cai-dat-vite-typescript-4d032dac.mp4' }, defaultVideoTrack: 'VI'},
     'rx-0-2-jsx': { yt: '6sg98ju4O-w', credit: "Codevolution — React 19 Tutorial - 6 - JSX", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/react/00-vi-sao-react/00-05-jsx-giai-thich-cho-ro-d3c0aa8d.mp4' }, defaultVideoTrack: 'VI'},
     'rx-0-3-js-cho-react': { yt: 'm55PTVUrlnA', credit: "PedroTech — All The JavaScript You Need To Know For React", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/react/00-vi-sao-react/00-06-javascript-cho-react-11759ba9.mp4' }, defaultVideoTrack: 'VI'},
 
     /* ── Chương 1 — Component và props ── */
-    'rx-1-0-slides': { yt: 'zFdDdPMyIAo', credit: "Codevolution — React 19 Tutorial - 4 - Components" },
+    'rx-1-0-slides': { yt: 'zFdDdPMyIAo', credit: "Codevolution — React 19 Tutorial - 4 - Components", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/react/01-component-va-props/01-01-slide-chuong-1-796c6025.mp4' }, defaultVideoTrack: 'VI'},
     'rx-1-1-component': { yt: 'XUwzASyHr4Q', credit: "Web Dev Simplified — This One Line Of Code Catches React Bugs For You", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/react/01-component-va-props/01-02-component-la-ham-afc26ff5.mp4' }, defaultVideoTrack: 'VI'},
     'rx-1-2-props': { yt: 'KpA6oEaCHtk', credit: "Codevolution — React TypeScript Tutorial - 3 - Typing Props", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/react/01-component-va-props/01-03-props-va-kieu-4d3afae8.mp4' }, defaultVideoTrack: 'VI'},
     'rx-1-3-danh-sach': { yt: 'fGxKOmCuH5w', credit: "Cosden Solutions — React Keys and Lists - Complete Tutorial!", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/react/01-component-va-props/01-04-danh-sach-va-key-1eadd8f7.mp4' }, defaultVideoTrack: 'VI'},
     'rx-1-4-chia-nho': { yt: 'YJPSR9dEQV8', credit: "codeSTACKr — 5 Steps to THINK in React and Easily Create a ReactJS App From Scratch! (Bonus: Tailwind CSS)" },
 
     /* ── Chương 2 — State và sự kiện ── */
-    'rx-2-0-slides': { yt: 'O6P86uwfdR0', credit: "Web Dev Simplified — Learn useState In 15 Minutes - React Hooks Explained" },
+    'rx-2-0-slides': { yt: 'O6P86uwfdR0', credit: "Web Dev Simplified — Learn useState In 15 Minutes - React Hooks Explained", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/react/02-state-va-su-kien/02-01-slide-chuong-2-d490202b.mp4' }, defaultVideoTrack: 'VI'},
     'rx-2-1-use-state': { yt: 'hjNExKVUHSw', credit: "Codevolution — React 19 Tutorial - 21 - State as a Snapshot", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/react/02-state-va-su-kien/02-02-use-state-a8c21b6f.mp4' }, defaultVideoTrack: 'VI'},
     'rx-2-2-su-kien': { yt: 'peewECGtPCI', credit: "Codevolution — React 19 Tutorial - 15 - Event Handling", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/react/02-state-va-su-kien/02-03-su-kien-b4102126.mp4' }, defaultVideoTrack: 'VI'},
     'rx-2-3-object-array': { yt: 'MCIfZlQlmSc', credit: "Codevolution — React 19 Tutorial - 24 - useState with Objects" },
@@ -54,7 +54,7 @@ export default {
     'rx-4-4-custom-hook': { yt: '6ThXsUwLWvc', credit: "Web Dev Simplified — Learn Custom Hooks In 10 Minutes", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/react/04-effect/04-05-custom-hook-98172737.mp4' }, defaultVideoTrack: 'VI'},
 
     /* ── Chương 5 — Chia sẻ state ── */
-    'rx-5-0-slides': { yt: 'MpdFj8MEuJA', credit: "Jack Herrington — Mastering React Context: Do you NEED a state manager?" },
+    'rx-5-0-slides': { yt: 'MpdFj8MEuJA', credit: "Jack Herrington — Mastering React Context: Do you NEED a state manager?", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/react/05-chia-se-state/05-01-slide-chuong-5-365067fe.mp4' }, defaultVideoTrack: 'VI'},
     'rx-5-1-context': { yt: '16yMmAJSGek', credit: "ByteGrad — This Context API Mistake Ruins Your Whole React App (All Components Re-Render)", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/react/05-chia-se-state/05-02-context-ad6166b1.mp4' }, defaultVideoTrack: 'VI'},
     'rx-5-2-reducer': { yt: 'rgp_iCVS8ys', credit: "Cosden Solutions — Learn React Hooks: useReducer - Simply Explained!" },
     'rx-5-3-zustand': { yt: '_ngCLZ5Iz-0', credit: "Cosden Solutions — Zustand - Complete Tutorial", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/react/05-chia-se-state/05-04-zustand-5a132d77.mp4' }, defaultVideoTrack: 'VI'},
@@ -62,14 +62,14 @@ export default {
     'rx-5-5-du-an': { yt: 'vKJe95pqn8E', credit: "Cosden Solutions — Build a Multi-Step Form in React Like a Pro", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/react/05-chia-se-state/05-06-du-an-f2cf8504.mp4' }, defaultVideoTrack: 'VI'},
 
     /* ── Chương 6 — Lấy dữ liệu ── */
-    'rx-6-0-slides': { yt: 'lVLz_ASqAio', credit: "Web Dev Simplified — React Query Makes Writing React Code 200% Better" },
+    'rx-6-0-slides': { yt: 'lVLz_ASqAio', credit: "Web Dev Simplified — React Query Makes Writing React Code 200% Better", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/react/06-lay-du-lieu/06-01-slide-chuong-6-795d0208.mp4' }, defaultVideoTrack: 'VI'},
     'rx-6-1-fetch': { yt: 'bGzanfKVFeU', credit: "BeJS — Goodbye, useEffect - David Khourshid", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/react/06-lay-du-lieu/06-02-fetch-41cd527c.mp4' }, defaultVideoTrack: 'VI'},
     'rx-6-2-tanstack': { yt: 'mPaCnwpFvZY', credit: "Austin Davis — TanStack Query - How to become a React Query God", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/react/06-lay-du-lieu/06-03-tanstack-a0c2a10a.mp4' }, defaultVideoTrack: 'VI'},
     'rx-6-3-mutation': { yt: 'e74rB-14-m8', credit: "PedroTech — React Query Crash Course - Learn Queries, Mutations, Caching, Optimistic Updates...", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/react/06-lay-du-lieu/06-04-mutation-26ec8cbf.mp4' }, defaultVideoTrack: 'VI'},
     'rx-6-4-loi-api': { yt: 'OQQAv8t3bfc', credit: "Cosden Solutions — Error Handling in React (Complete Tutorial)" },
 
     /* ── Chương 7 — Định tuyến và cấu trúc ── */
-    'rx-7-0-slides': { yt: 'NVuxUktUvxc', credit: "Maximilian Schwarzmüller — React Router 7 is amazing - despite it's confusing docs!" },
+    'rx-7-0-slides': { yt: 'NVuxUktUvxc', credit: "Maximilian Schwarzmüller — React Router 7 is amazing - despite it's confusing docs!", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/react/07-dinh-tuyen-va-cau-truc/07-01-slide-chuong-7-0870e689.mp4' }, defaultVideoTrack: 'VI'},
     'rx-7-1-router': { yt: 'oTIJunBa6MA', credit: "Cosden Solutions — React Router - Complete Tutorial", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/react/07-dinh-tuyen-va-cau-truc/07-02-router-af67c20d.mp4' }, defaultVideoTrack: 'VI'},
     'rx-7-2-layout': { yt: 'l8CS9AMBSIQ', credit: "Net Ninja — React Router in Depth #4 - Nested Routes & Layouts", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/react/07-dinh-tuyen-va-cau-truc/07-03-layout-043a571a.mp4' }, defaultVideoTrack: 'VI'},
     'rx-7-3-cau-truc': { yt: 'xyxrB2Aa7KE', credit: "Web Dev Simplified — This Folder Structure Makes Me 100% More Productive", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/react/07-dinh-tuyen-va-cau-truc/07-04-cau-truc-8e8023d1.mp4' }, defaultVideoTrack: 'VI'},
@@ -124,5 +124,7 @@ export default {
     'rx-14-3-build-deploy': { yt: '9c4HLqk1ExA', credit: "Alexander Lichter — Vite Bundle Inspection made EASY", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/react/14-len-production/14-04-build-deploy-41ce3559.mp4' }, defaultVideoTrack: 'VI'},
     'rx-14-4-phong-van': { yt: '3BN-YHcJfOY', credit: "CoderOne — The React Interview Questions You need to Know", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/react/14-len-production/14-05-phong-van-af0aa288.mp4' }, defaultVideoTrack: 'VI'},
     'rx-3-4-tieng-viet': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/react/03-form/03-05-tieng-viet-f312feb5.mp4' }, defaultVideoTrack: 'VI'},
+    'rx-10-0-slides': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/react/10-du-an-giua-khoa/10-02-slide-chuong-10-856e24a8.mp4' }, defaultVideoTrack: 'VI' },
+    'rx-14-0-slides': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/react/14-len-production/14-01-slide-chuong-14-303440b3.mp4' }, defaultVideoTrack: 'VI' },
   },
 };

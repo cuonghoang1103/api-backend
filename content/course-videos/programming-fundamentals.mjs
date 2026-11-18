@@ -126,7 +126,7 @@ export default {
     "prf192-n1-2-loi-kinh-dien": { yt: "LLykqRNuEwA", credit: "Dave's Garage — Don't Make These 3 Mistakes in C!  Can YOU spot the bug?", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/programming-fundamentals/11-nang-cao-1-go-loi/11-02-loi-kinh-dien-071e1ec4.mp4' }, defaultVideoTrack: 'VI'},
 
     // Ôn tập & thi
-    "prf192-on-tap-cuoi-ky": { yt: "87SH2Cn0s9A", credit: "Bro Code — C Programming Full Course for free ⚙️" },
-    "prf192-final-exam-pe": { yt: "U2K_bTN0eZ0", credit: "BillBird — C Programming Practice (Fall 2023) - 7.01 - Arrays (One Dimensional)" },
+    "prf192-on-tap-cuoi-ky": { yt: "87SH2Cn0s9A", credit: "Bro Code — C Programming Full Course for free ⚙️", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/programming-fundamentals/14-nang-cao-4-du-an-c/14-02-on-tap-cuoi-ky-933727b4.mp4' }, defaultVideoTrack: 'VI'},
+    "prf192-final-exam-pe": { yt: "U2K_bTN0eZ0", credit: "BillBird — C Programming Practice (Fall 2023) - 7.01 - Arrays (One Dimensional)", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/programming-fundamentals/15-cac-bai-thi/15-01-thi-thuc-hanh-pe-9ac5ccec.mp4' }, defaultVideoTrack: 'VI'},
   },
 };

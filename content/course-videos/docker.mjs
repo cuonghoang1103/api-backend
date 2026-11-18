@@ -60,7 +60,7 @@ export default {
     'dk-5-0-slides': { yt: 'kkpQ_UZn2uo', credit: "Docker — Supercharged Docker Build with BuildKit", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/docker/05-cache/05-01-slide-chuong-5-6879e87b.mp4' }, defaultVideoTrack: 'VI'},
     'dk-5-1-cache-quyet-dinh': { yt: 'dSpOBSRJFwg', credit: "Amigoscode — Docker Tutorial - Improve Docker builds with Caching and Layers" },
     'dk-5-2-thu-tu': { yt: 'oZ9nyCWERYc', credit: "kubucation — Proper DOCKER CACHING: Speed up your build with this optimized Dockerfile", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/docker/05-cache/05-03-thu-tu-2fdb057b.mp4' }, defaultVideoTrack: 'VI'},
-    'dk-5-3-cache-mount': { yt: '8fILYOtoesQ', credit: "Nilesh Gule — Supercharge Docker builds using Cache Mount" },
+    'dk-5-3-cache-mount': { yt: '8fILYOtoesQ', credit: "Nilesh Gule — Supercharge Docker builds using Cache Mount", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/docker/05-cache/05-04-cache-mount-377351d7.mp4' }, defaultVideoTrack: 'VI'},
     'dk-5-4-cache-ci': { yt: '77j6JFBTmTc', credit: "anthonywritescode — docker: fast CI rebuilds with --cache-from (intermediate) anthony explains #448" },
     'dk-5-5-chan-doan-dung-cham': { yt: '3B89b_gXAPU', credit: "Ardan Labs — Docker BuildKit Tutorial: Why do we need a new Docker Builder?", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/docker/05-cache/05-06-chan-doan-dung-cham-36fa5176.mp4' }, defaultVideoTrack: 'VI'},
 

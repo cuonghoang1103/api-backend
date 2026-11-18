@@ -33,10 +33,19 @@ import { DOC_DE5 } from '../../app/language/[code]/ielts/thi-may/de/doc-de5';
 import { NGHE_DE5 } from '../../app/language/[code]/ielts/thi-may/de/nghe-de5';
 import { VIET_DE5 } from '../../app/language/[code]/ielts/thi-may/de/viet-de5';
 import { NOI_DE5 } from '../../app/language/[code]/ielts/thi-may/de/noi-de5';
+import { DOC_DE7 } from '../../app/language/[code]/ielts/thi-may/de/doc-de7';
+import { NGHE_DE7 } from '../../app/language/[code]/ielts/thi-may/de/nghe-de7';
+import { VIET_DE7 } from '../../app/language/[code]/ielts/thi-may/de/viet-de7';
+import { NOI_DE7 } from '../../app/language/[code]/ielts/thi-may/de/noi-de7';
+import { DOC_DE8 } from '../../app/language/[code]/ielts/thi-may/de/doc-de8';
+import { NGHE_DE8 } from '../../app/language/[code]/ielts/thi-may/de/nghe-de8';
+import { VIET_DE8 } from '../../app/language/[code]/ielts/thi-may/de/viet-de8';
+import { NOI_DE8 } from '../../app/language/[code]/ielts/thi-may/de/noi-de8';
 import { MUC_LUC, BO_DE, deCuaBo, coDe, TEN_KY_NANG } from '../../app/language/[code]/ielts/thi-may/de/index';
 import { MANIFEST } from '../../app/language/[code]/ielts/ngay/manifest';
 import { MANIFEST as MANIFEST_T2 } from '../../app/language/[code]/ielts/tap-2/ngay/manifest';
 import { MANIFEST as MANIFEST_T3 } from '../../app/language/[code]/ielts/tap-3/ngay/manifest';
+import { MANIFEST as MANIFEST_T4 } from '../../app/language/[code]/ielts/tap-4/ngay/manifest';
 
 test('chuẩn hoá: hoa/thường, khoảng trắng, dấu câu hai đầu, phẩy nghìn, ký hiệu tiền', () => {
   assert.equal(chuanHoa('  Salt. '), 'salt');
@@ -399,6 +408,138 @@ test('Đề 5 (thi cuối Tập 3 · sau Ngày 30): phủ dạng nửa sau Tập
   for (const re of [/^Some people say that /, /^Is it a good thing that /, /^What would happen if /]) assert.ok(p3.some((c) => re.test(c)), `noi-de5 Part 3: thiếu câu dạng ${re}`);
 });
 
+test('Đề 7 Reading (doc-de7): 40 câu, đáp án + bằng chứng nguyên văn hợp lệ', () => kiemDe(DOC_DE7));
+test('Đề 7 Listening (nghe-de7): 40 câu, đáp án + bằng chứng nguyên văn hợp lệ', () => kiemDe(NGHE_DE7));
+
+test('Đề 7 (giữa Tập 4 · sau Ngày 15): dạng Tập 4 N1–15 + table/flow/short, phân bố đáp án, Writing line nhiều đường + Opinion, Speaking đủ khuôn', () => {
+  for (const de of [DOC_DE7, NGHE_DE7]) for (const g of nhomCuaDe(de)) assert.ok(BAI_ON[g.dang].length > 0, `${de.id} ${g.id}: dạng ${g.dang} chưa có bài ôn`);
+  // Reading: dạng Tập 4 Ngày 1–15 (N3 headings · N5 TFNG/YNNG · N7 MCQ một + nhiều đáp án · N15 sentence endings) + ba dạng mà
+  // Đề 5 và Đề 6 chưa có (table, flow, short) ⇒ ba đề liền nhau (5 · 6 · 7) phủ đủ 16 dạng của Reading.
+  for (const d of ['tfng', 'table', 'short', 'heading', 'flow', 'mcq2', 'ynng', 'mcq', 'match-ending'] as const) assert.ok(nhomCuaDe(DOC_DE7).some((g) => g.dang === d), `doc-de7 thiếu dạng ${d}`);
+  assert.ok(new Set(nhomCuaDe(DOC_DE7).map((g) => g.dang)).size >= 8, 'doc-de7: ≥ 8 dạng');
+  assert.equal(new Set([DOC_DE5, DOC_01, DOC_DE7].flatMap((d) => nhomCuaDe(d).map((g) => g.dang))).size, 16, 'Đề 5 + Đề 6 + Đề 7 Reading: đủ 16 dạng');
+  // Listening: form + table (N1, N9) · MCQ + plan hai tầng (N4, N9) · MCQ + matching 4 người + chọn TWO (N5, N12) · note + summary (N8, N13).
+  for (const d of ['form', 'table', 'mcq', 'map', 'match-feature', 'mcq2', 'note', 'summary'] as const) assert.ok(nhomCuaDe(NGHE_DE7).some((g) => g.dang === d), `nghe-de7 thiếu dạng ${d}`);
+  kiemPhanBo(DOC_DE7, NGHE_DE7);
+  // Độ dài passage theo mục 4.1 (~700 / 800 / 900 từ): dài dần, Passage 1 ≥ 700, Passage 3 trong khoảng 850–950 từ.
+  const soTu = DOC_DE7.phan.map((p) => p.doan.map((d) => d.s).join(' ').split(/\s+/).length);
+  assert.ok(soTu[0] >= 700, `doc-de7 Passage 1 có ${soTu[0]} từ (cần ≥ 700)`);
+  assert.ok(soTu[2] >= 850 && soTu[2] <= 950, `doc-de7 Passage 3 có ${soTu[2]} từ (cần 850–950)`);
+  assert.ok(soTu[0] <= soTu[1] && soTu[1] <= soTu[2], `doc-de7: passage dài dần (${soTu.join(' / ')})`);
+  // Matching headings: 7 đoạn A–G, 10 tiêu đề (3 tiêu đề nhiễu), mỗi tiêu đề dùng tối đa một lần; sentence endings mỗi chữ một lần.
+  assert.deepEqual(DOC_DE7.phan[1].doan.map((d) => d.nhan), ['A', 'B', 'C', 'D', 'E', 'F', 'G']);
+  assert.equal(nhomCuaDe(DOC_DE7).find((g) => g.dang === 'heading')!.hop!.ds.length, 10);
+  for (const dang of ['heading', 'match-ending'] as const) { const ds = dapAnNhom(DOC_DE7, dang); assert.equal(new Set(ds).size, ds.length, `doc-de7 ${dang}: mỗi chữ một lần`); }
+  // Chọn TWO (Reading + Listening): hai đáp án khác nhau, cùng khai ở cả hai câu.
+  const m2Doc = nhomCuaDe(DOC_DE7).find((g) => g.dang === 'mcq2')!;
+  for (const n of m2Doc.nhieu!.ns) assert.deepEqual(DOC_DE7.dapAn[n].a, ['C', 'E']);
+  const m2 = nhomCuaDe(NGHE_DE7).find((g) => g.dang === 'mcq2')!;
+  for (const n of m2.nhieu!.ns) assert.deepEqual(NGHE_DE7.dapAn[n].a, ['B', 'E']);
+  // Giọng: Part 1 Mỹ + New Zealand; Part 3 BỐN người nói bốn giọng (mục 4.2: "4 người đánh giá đồ án"); Part 4 giọng Ireland
+  // (bảng 4.2 ghi Scotland nhưng không có giọng máy Scotland ⇒ dùng `ie-*`, không giả giọng); cả đề ≥ 6 giọng.
+  const giong = (so: number) => new Set(NGHE_DE7.phan.find((p) => p.so === so)!.loi.map((l) => l.giong));
+  assert.deepEqual([...giong(1)].sort(), ['nz-nam', 'us-nu']);
+  assert.equal(new Set(NGHE_DE7.phan.find((p) => p.so === 3)!.loi.map((l) => l.ai)).size, 4, 'nghe-de7 Part 3: bốn người nói');
+  assert.equal(giong(3).size, 4, 'nghe-de7 Part 3: bốn giọng khác nhau');
+  assert.equal(nhomCuaDe(NGHE_DE7).find((g) => g.dang === 'match-feature')!.cau!.length, 4, 'nghe-de7 matching: mỗi người một câu');
+  assert.ok([...giong(4)].every((g) => g.startsWith('ie-')), 'nghe-de7 Part 4: giọng Ireland');
+  assert.ok(new Set(NGHE_DE7.phan.flatMap((p) => p.loi.map((l) => l.giong))).size >= 6, 'nghe-de7: ít nhất 6 giọng');
+  // Sơ đồ HAI tầng: mọi chữ trong hộp đều có trên hình, hình ghi rõ hai tầng, có đáp án ở cả hai tầng.
+  const map = nhomCuaDe(NGHE_DE7).find((g) => g.dang === 'map')!;
+  assert.deepEqual(map.hinh!.ve.filter((v) => v.t === 'chu').map((v) => (v as { k: string }).k).sort(), map.hop!.ds.map((o) => o.k).sort());
+  const chuTang = map.hinh!.ve.filter((v) => v.t === 'text').map((v) => (v as { s: string }).s);
+  assert.ok(chuTang.includes('GROUND FLOOR') && chuTang.includes('FIRST FLOOR'), 'nghe-de7: sơ đồ ghi hai tầng');
+  const xChu = (k: string) => (map.hinh!.ve.find((v) => v.t === 'chu' && (v as { k: string }).k === k) as { x: number }).x;
+  const tang = dapAnNhom(NGHE_DE7, 'map').map((k) => (xChu(k) < map.hinh!.w / 2 ? 0 : 1));
+  assert.ok(tang.includes(0) && tang.includes(1), 'nghe-de7: câu sơ đồ rải ở cả hai tầng');
+  // Tốc độ ~165 wpm (mục 4.2, Đề 7–9): lời thoại dày hơn Đề 5 (≥ 2.700 từ cả đề, và nhiều hơn Đề 5).
+  const tu = (de: DeNghe) => de.phan.flatMap((p) => p.loi.map((l) => l.s)).join(' ').split(/\s+/).length;
+  assert.ok(tu(NGHE_DE7) >= 2700 && tu(NGHE_DE7) > tu(NGHE_DE5), `nghe-de7: lời thoại ${tu(NGHE_DE7)} từ`);
+  // Writing: Task 1 line NHIỀU đường (≥ 4 đường, mỗi đường đủ số theo trục), Task 2 Opinion "To what extent…".
+  const fig = VIET_DE7.task[0].figure!;
+  assert.equal(fig.kind, 'line');
+  assert.ok(fig.series!.length >= 4 && fig.series!.every((c) => c.values.length === fig.categories!.length), 'viet-de7: ≥ 4 đường, đủ số theo trục');
+  for (const c of fig.series!) for (const [i, v] of c.values.entries()) assert.ok(VIET_DE7.task[0].moTaSo!.includes(`${fig.categories![i]} ${v}%`), `viet-de7: moTaSo thiếu ${c.name} ${fig.categories![i]} ${v}%`);
+  assert.match(VIET_DE7.task[1].de, /To what extent do you agree or disagree\?/);
+  kiemVietNoi(VIET_DE7, NOI_DE7);
+  // Speaking: chủ đề theo mục 4.2 (Books, Time management · Describe a rule) + Part 3 có câu nguyên nhân (T4 N15), mức độ (N11), dự đoán (N7).
+  assert.deepEqual(NOI_DE7.part1.map((c) => c.chuDe), ['Books', 'Time management']);
+  assert.match(NOI_DE7.part2.cueCard, /^Describe a rule /);
+  const p3 = NOI_DE7.part3.flatMap((c) => c.cau);
+  for (const re of [/^Why do some /, /^To what extent /, /^How do you think .+ will change in the future\?$/]) assert.ok(p3.some((c) => re.test(c)), `noi-de7 Part 3: thiếu câu dạng ${re}`);
+});
+
+test('Đề 8 Reading (doc-de8): 40 câu, đáp án + bằng chứng nguyên văn hợp lệ', () => kiemDe(DOC_DE8));
+test('Đề 8 Listening (nghe-de8): 40 câu, đáp án + bằng chứng nguyên văn hợp lệ', () => kiemDe(NGHE_DE8));
+
+test('Đề 8 (thi cuối Tập 4 · sau Ngày 30): phủ dạng nửa sau Tập 4, khó hơn Đề 7, phân bố đáp án, Writing mixed + Advantages/disadvantages, Speaking đủ khuôn', () => {
+  for (const de of [DOC_DE8, NGHE_DE8]) for (const g of nhomCuaDe(de)) assert.ok(BAI_ON[g.dang].length > 0, `${de.id} ${g.id}: dạng ${g.dang} chưa có bài ôn`);
+  // Reading: dạng nửa sau Tập 4 (N19 matching information · N23 matching features · N25 summary hộp từ + từ trong bài) + dạng chủ lực
+  // (N3 headings · N5 TFNG/YNNG · N7 MCQ · N15 sentence endings); ≥ 9 dạng. Đề 6 + Đề 7 + Đề 8 (ba đề Tập 4) phủ đủ 16 dạng.
+  for (const d of ['match-info', 'tfng', 'summary', 'heading', 'match-feature', 'summary-box', 'ynng', 'mcq', 'match-ending'] as const) assert.ok(nhomCuaDe(DOC_DE8).some((g) => g.dang === d), `doc-de8 thiếu dạng ${d}`);
+  assert.ok(new Set(nhomCuaDe(DOC_DE8).map((g) => g.dang)).size >= 9, 'doc-de8: ≥ 9 dạng');
+  assert.equal(new Set([DOC_01, DOC_DE7, DOC_DE8].flatMap((d) => nhomCuaDe(d).map((g) => g.dang))).size, 16, 'Đề 6 + Đề 7 + Đề 8 Reading: đủ 16 dạng');
+  // Listening: form + sentence (N1, N21) · MCQ + map theo la bàn (N4, N16) · MCQ + chọn TWO + matching (N5, N12, N28) · note + table (N8, N13, N20).
+  for (const d of ['form', 'sentence', 'mcq', 'map', 'mcq2', 'match-feature', 'note', 'table'] as const) assert.ok(nhomCuaDe(NGHE_DE8).some((g) => g.dang === d), `nghe-de8 thiếu dạng ${d}`);
+  kiemPhanBo(DOC_DE8, NGHE_DE8);
+  // Độ dài passage (mục 4.1, band 7.0): dài dần, mỗi passage ≥ passage cùng số của Đề 7, Passage 3 lập luận ~950 từ (900–980).
+  const soTu = (de: DeDoc) => de.phan.map((p) => p.doan.map((d) => d.s).join(' ').split(/\s+/).length);
+  const tu8 = soTu(DOC_DE8), tu7 = soTu(DOC_DE7);
+  assert.ok(tu8[2] >= 900 && tu8[2] <= 980, `doc-de8 Passage 3 có ${tu8[2]} từ (cần 900–980)`);
+  assert.ok(tu8[0] <= tu8[1] && tu8[1] <= tu8[2], `doc-de8: passage dài dần (${tu8.join(' / ')})`);
+  for (let i = 0; i < 3; i++) assert.ok(tu8[i] >= tu7[i], `doc-de8 Passage ${i + 1} (${tu8[i]} từ) phải dài ≥ Đề 7 (${tu7[i]})`);
+  // Matching information: 6 đoạn A–F ở Passage 1, mỗi câu một đoạn khác nhau; headings: 7 đoạn A–G, 10 tiêu đề, đáp án không theo
+  // thứ tự i, ii, iii…; matching features + sentence endings: mỗi chữ một lần.
+  assert.deepEqual(DOC_DE8.phan[0].doan.map((d) => d.nhan), ['A', 'B', 'C', 'D', 'E', 'F']);
+  assert.deepEqual(DOC_DE8.phan[1].doan.map((d) => d.nhan), ['A', 'B', 'C', 'D', 'E', 'F', 'G']);
+  assert.equal(nhomCuaDe(DOC_DE8).find((g) => g.dang === 'heading')!.hop!.ds.length, 10);
+  for (const dang of ['match-info', 'heading', 'match-feature', 'match-ending', 'summary-box'] as const) { const ds = dapAnNhom(DOC_DE8, dang); assert.equal(new Set(ds).size, ds.length, `doc-de8 ${dang}: mỗi chữ một lần`); }
+  const la = ['i', 'ii', 'iii', 'iv', 'v', 'vi', 'vii', 'viii', 'ix', 'x'];
+  const tieuDe = dapAnNhom(DOC_DE8, 'heading');
+  assert.ok(tieuDe.some((k, i) => k !== la[i]), 'doc-de8 headings: đáp án không được xếp i, ii, iii… theo thứ tự đoạn');
+  // Listening: chọn TWO — hai đáp án khác nhau, cùng khai ở cả hai câu.
+  const m2 = nhomCuaDe(NGHE_DE8).find((g) => g.dang === 'mcq2')!;
+  for (const n of m2.nhieu!.ns) assert.deepEqual(NGHE_DE8.dapAn[n].a, ['B', 'E']);
+  // Giọng (mục 4.2: "chuyển nhà (giọng Ireland)"): Part 1 có giọng Ireland THẬT; Part 3 sinh viên + người hướng dẫn hai giọng;
+  // Part 4 giọng New Zealand; cả đề ≥ 6 giọng.
+  const giong = (so: number) => new Set(NGHE_DE8.phan.find((p) => p.so === so)!.loi.map((l) => l.giong));
+  assert.deepEqual([...giong(1)].sort(), ['ie-nam', 'uk-nu']);
+  assert.equal(giong(3).size, 2, 'nghe-de8 Part 3: hai người nói hai giọng');
+  assert.equal(nhomCuaDe(NGHE_DE8).find((g) => g.dang === 'match-feature')!.cau!.length, 4, 'nghe-de8 matching: bốn chương');
+  assert.ok([...giong(4)].every((g) => g.startsWith('nz-')), 'nghe-de8 Part 4: giọng New Zealand');
+  assert.ok(new Set(NGHE_DE8.phan.flatMap((p) => p.loi.map((l) => l.giong))).size >= 6, 'nghe-de8: ít nhất 6 giọng');
+  // Bản đồ theo la bàn: mọi chữ trong hộp có trên hình, hình có chữ "N" (hướng bắc), 3 chữ nhiễu không phải đáp án.
+  const map = nhomCuaDe(NGHE_DE8).find((g) => g.dang === 'map')!;
+  assert.deepEqual(map.hinh!.ve.filter((v) => v.t === 'chu').map((v) => (v as { k: string }).k).sort(), map.hop!.ds.map((o) => o.k).sort());
+  assert.ok(map.hinh!.ve.some((v) => v.t === 'text' && (v as { s: string }).s === 'N'), 'nghe-de8: bản đồ có mũi tên hướng bắc');
+  assert.equal(map.hop!.ds.length - dapAnNhom(NGHE_DE8, 'map').length, 3, 'nghe-de8 map: 3 chữ nhiễu');
+  // Tốc độ ~165 wpm (Đề 7–9) nhưng đề CUỐI tập dày hơn Đề 7: lời thoại > Đề 7, Part 4 ≥ 850 từ (~5 phút).
+  const tu = (de: DeNghe) => de.phan.flatMap((p) => p.loi.map((l) => l.s)).join(' ').split(/\s+/).length;
+  assert.ok(tu(NGHE_DE8) >= 3000 && tu(NGHE_DE8) > tu(NGHE_DE7), `nghe-de8: lời thoại ${tu(NGHE_DE8)} từ (Đề 7: ${tu(NGHE_DE7)})`);
+  const p4 = NGHE_DE8.phan.find((p) => p.so === 4)!.loi.map((l) => l.s).join(' ').split(/\s+/).length;
+  assert.ok(p4 >= 850, `nghe-de8 Part 4: ${p4} từ`);
+  // Writing: Task 1 MIXED = bar (≥ 2 chuỗi, đủ số theo trục) + pie (cộng 100%), mọi số có trong moTaSo; Task 2 "outweigh".
+  const t1 = VIET_DE8.task[0];
+  assert.equal(t1.figure!.kind, 'bar');
+  assert.equal(t1.figure2!.kind, 'pie');
+  const bar = t1.figure!;
+  assert.ok(bar.series!.length >= 2 && bar.series!.every((c) => c.values.length === bar.categories!.length), 'viet-de8: cột đủ số theo trục');
+  for (const [i, cat] of bar.categories!.entries()) assert.ok(t1.moTaSo!.includes(`${cat} ${bar.series![0].name} ${bar.series![0].values[i]}, ${bar.series![1].name} ${bar.series![1].values[i]}`), `viet-de8: moTaSo thiếu số của ${cat}`);
+  assert.equal(t1.figure2!.slices!.reduce((a, b) => a + b.value, 0), 100, 'viet-de8: hình tròn cộng đủ 100%');
+  for (const sl of t1.figure2!.slices!) assert.ok(t1.moTaSo!.includes(`${sl.label} ${sl.value}%`), `viet-de8: moTaSo thiếu ${sl.label} ${sl.value}%`);
+  assert.match(VIET_DE8.task[1].de, /Do the advantages of this outweigh the disadvantages\?/);
+  kiemVietNoi(VIET_DE8, NOI_DE8);
+  // Bài mẫu cố ý giữ 2 lỗi: câu sai phải có thật trong bài mẫu (sửa bài thì sửa phân tích).
+  assert.ok(t1.mau.s.includes('had increased with 86,000') && t1.mau.s.includes('the amount of students'), 'viet-de8 Task 1: 2 lỗi soi');
+  assert.ok(VIET_DE8.task[1].mau.s.includes('an experience of work') && VIET_DE8.task[1].mau.s.includes('Despite of'), 'viet-de8 Task 2: 2 lỗi soi');
+  // Speaking: chủ đề theo mục 4.2 (Plants, Noise · Describe a piece of advice) + Part 3 có nguyên nhân (T4 N15), đạo đức (N23),
+  // giả định (N19), dự đoán (N7).
+  assert.deepEqual(NOI_DE8.part1.map((c) => c.chuDe), ['Plants', 'Noise']);
+  assert.match(NOI_DE8.part2.cueCard, /^Describe a piece of advice /);
+  const p3 = NOI_DE8.part3.flatMap((c) => c.cau);
+  for (const re of [/^Why do some /, /^Is it ever /, /^What would happen if /, /^Do you think .+ in the future\?$/]) assert.ok(p3.some((c) => re.test(c)), `noi-de8 Part 3: thiếu câu dạng ${re}`);
+});
+
 test('đề Writing 01 + mục lục khớp nội dung', () => {
   assert.equal(VIET_01.task.length, 2);
   for (const t of VIET_01.task) assert.ok(t.mau.s.split(/\s+/).length >= t.minTu, `bài mẫu Task ${t.so} đủ ${t.minTu} từ`);
@@ -409,7 +550,7 @@ test('đề Writing 01 + mục lục khớp nội dung', () => {
   for (const m of MUC_LUC) assert.ok(coDe(m.id), `${m.id}: có trong MUC_LUC thì phải có tệp đề (TEP_DE)`);
   // Dạng câu khai trên thẻ đề khớp nội dung đề thật.
   const dangThat = (de: DeDoc | DeNghe) => new Set(nhomCuaDe(de).map((g) => g.dang));
-  for (const [id, de] of [['doc-01', DOC_01], ['nghe-01', NGHE_01], ['doc-00', DOC_00], ['nghe-00', NGHE_00], ['doc-de1', DOC_DE1], ['nghe-de1', NGHE_DE1], ['doc-de2', DOC_DE2], ['nghe-de2', NGHE_DE2], ['doc-de3', DOC_DE3], ['nghe-de3', NGHE_DE3], ['doc-de4', DOC_DE4], ['nghe-de4', NGHE_DE4], ['doc-de5', DOC_DE5], ['nghe-de5', NGHE_DE5]] as const) {
+  for (const [id, de] of [['doc-01', DOC_01], ['nghe-01', NGHE_01], ['doc-00', DOC_00], ['nghe-00', NGHE_00], ['doc-de1', DOC_DE1], ['nghe-de1', NGHE_DE1], ['doc-de2', DOC_DE2], ['nghe-de2', NGHE_DE2], ['doc-de3', DOC_DE3], ['nghe-de3', NGHE_DE3], ['doc-de4', DOC_DE4], ['nghe-de4', NGHE_DE4], ['doc-de5', DOC_DE5], ['nghe-de5', NGHE_DE5], ['doc-de7', DOC_DE7], ['nghe-de7', NGHE_DE7], ['doc-de8', DOC_DE8], ['nghe-de8', NGHE_DE8]] as const) {
     const m = MUC_LUC.find((x) => x.id === id)!;
     assert.deepEqual(new Set(m.dang ?? []), dangThat(de), `${id}: MUC_LUC.dang khớp đề`);
   }
@@ -451,7 +592,14 @@ test('bộ đề: Đề 6 = nghe-01/doc-01/viet-01/noi-06, Đề 1 = bộ -de1; 
   const bo5 = BO_DE.find((b) => b.id === 'bo-05')!;
   assert.deepEqual([bo5.so, bo5.viTri, bo5.capDo, ...deCuaBo(bo5).map((d) => d.id)], [5, 'Thi cuối Tập 3 (sau Ngày 30)', 'Band 6.0', 'nghe-de5', 'doc-de5', 'viet-de5', 'noi-de5']);
   for (const d of deCuaBo(bo5)) assert.ok(coDe(d.id), `bo-05: ${d.id} phải có tệp đề`);
-  assert.deepEqual(BO_DE.map((b) => b.so), [0, 1, 2, 3, 4, 5, 6], 'bộ đề xếp theo số đề');
+  const bo7 = BO_DE.find((b) => b.id === 'bo-07')!;
+  assert.deepEqual([bo7.so, bo7.viTri, bo7.capDo, ...deCuaBo(bo7).map((d) => d.id)], [7, 'Giữa Tập 4 (sau Ngày 15)', 'Band 6.5', 'nghe-de7', 'doc-de7', 'viet-de7', 'noi-de7']);
+  for (const d of deCuaBo(bo7)) assert.ok(coDe(d.id), `bo-07: ${d.id} phải có tệp đề`);
+  const bo8 = BO_DE.find((b) => b.id === 'bo-08')!;
+  assert.deepEqual([bo8.so, bo8.viTri, bo8.capDo, ...deCuaBo(bo8).map((d) => d.id)], [8, 'Thi cuối Tập 4 (sau Ngày 30)', 'Band 7.0', 'nghe-de8', 'doc-de8', 'viet-de8', 'noi-de8']);
+  for (const d of deCuaBo(bo8)) assert.ok(coDe(d.id), `bo-08: ${d.id} phải có tệp đề`);
+  assert.equal(BO_DE.findIndex((b) => b.id === 'bo-08'), BO_DE.findIndex((b) => b.id === 'bo-07') + 1, 'bo-08 đứng ngay sau bo-07');
+  assert.deepEqual(BO_DE.map((b) => b.so), [0, 1, 2, 3, 4, 5, 6, 7, 8], 'bộ đề xếp theo số đề');
   for (const b of [bo1, bo2, bo3, bo6]) for (const d of deCuaBo(b)) assert.ok(coDe(d.id), `${b.id}: ${d.id} phải có tệp đề`);
   for (const b of BO_DE) for (const d of deCuaBo(b)) if (coDe(d.id)) assert.ok(MUC_LUC.some((m) => m.id === d.id && m.kyNang === d.kyNang), `${b.id}: ${d.id} phải có trong MUC_LUC đúng kỹ năng`);
   assert.deepEqual(Object.keys(TEN_KY_NANG).sort(), ['doc', 'nghe', 'noi', 'sangloc', 'viet']);
@@ -461,10 +609,11 @@ test('BAI_ON: mỗi id bài ôn theo dạng câu phải có thật trong ngay/ma
   const taCa = new Set(Object.values(MANIFEST).flatMap((d) => d.lessons.map((l) => l.id)));
   const taCa2 = new Set(Object.values(MANIFEST_T2).flatMap((d) => d.lessons.map((l) => l.id)));
   const taCa3 = new Set(Object.values(MANIFEST_T3).flatMap((d) => d.lessons.map((l) => l.id)));
+  const taCa4 = new Set(Object.values(MANIFEST_T4).flatMap((d) => d.lessons.map((l) => l.id)));
   for (const [dang, ids] of Object.entries(BAI_ON)) for (const id of ids) {
     const tap = tapCuaBai(id);
-    assert.ok((tap === 3 ? taCa3 : tap === 2 ? taCa2 : taCa).has(id), `BAI_ON[${dang}]: ${id} không có trong manifest Tập ${tap}`);
-    assert.equal(ngayCuaBai(id), Number(/^(?:t[23])?d(\d+)-/.exec(id)![1]));
+    assert.ok((tap === 4 ? taCa4 : tap === 3 ? taCa3 : tap === 2 ? taCa2 : taCa).has(id), `BAI_ON[${dang}]: ${id} không có trong manifest Tập ${tap}`);
+    assert.equal(ngayCuaBai(id), Number(/^(?:t[234])?d(\d+)-/.exec(id)![1]));
   }
   assert.equal(linkBai('d12-doc'), '/language/en/ielts?buoi=12&bai=d12-doc');
   // Tập 2 (12/11/2026): id `t2dN-…` ⇒ trang /tap-2; id Tập 1 không đổi nghĩa.
@@ -476,4 +625,5 @@ test('BAI_ON: mỗi id bài ôn theo dạng câu phải có thật trong ngay/ma
   assert.equal(tapCuaBai('t3d15-doc'), 3);
   assert.equal(ngayCuaBai('t3d15-doc'), 15);
   assert.equal(linkBai('t3d15-doc'), '/language/en/ielts/tap-3?buoi=15&bai=t3d15-doc');
+  assert.equal(linkBai('t4d7-doc'), '/language/en/ielts/tap-4?buoi=7&bai=t4d7-doc');
 });

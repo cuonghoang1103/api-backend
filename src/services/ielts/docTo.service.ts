@@ -43,6 +43,9 @@ export const GIONG = {
   'ca-nam': 'en-US-Wavenet-J',
   'nz-nu': 'en-AU-Wavenet-A',
   'nz-nam': 'en-AU-Wavenet-D',
+  // Giọng Ireland (18/11/2026) — IELTS Tập 4 N21, Đề 8 (L17). Google không có en-IE ⇒ dự phòng en-GB; đường chính Azure.
+  'ie-nu': 'en-GB-Wavenet-C',
+  'ie-nam': 'en-GB-Wavenet-D',
   // Khoá tiếng Nhật (Dekiru, JPD113/123) dùng chung đường này.
   'ja-nu': 'ja-JP-Wavenet-A',
   'ja-nam': 'ja-JP-Wavenet-C',
@@ -70,6 +73,8 @@ const GIONG_AZURE: Record<Giong, string> = {
   'ca-nam': 'en-CA-LiamNeural',
   'nz-nu': 'en-NZ-MollyNeural',
   'nz-nam': 'en-NZ-MitchellNeural',
+  'ie-nu': 'en-IE-EmilyNeural',
+  'ie-nam': 'en-IE-ConnorNeural',
   'ja-nu': 'ja-JP-NanamiNeural',
   'ja-nam': 'ja-JP-KeitaNeural',
   'ja2-nu': 'ja-JP-AoiNeural',

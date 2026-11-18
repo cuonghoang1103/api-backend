@@ -214,6 +214,24 @@ const SPECS: Spec[] = [
       return out;
     },
   },
+  // IELTS Tập 4 (6.0 → 7.0, 18/11/2026): ielts/tap-4/ngay/ngayN.ts export NGAY_N; mọi id phải `t4dN-…`.
+  {
+    name: 'IELTS Tập 4',
+    dir: join(LANG, 'ielts/tap-4/ngay'),
+    loader: 'index.ts',
+    prefix: 'ngay',
+    idPrefix: (n) => `t4d${n}-`,
+    written: async () => {
+      const dir = join(LANG, 'ielts/tap-4/ngay');
+      const out: Record<number, Lesson[]> = {};
+      for (const n of numbered(dir, 'ngay')) {
+        const ls: Lesson[] = (await load(join(dir, `ngay${n}.ts`)))[`NGAY_${n}`];
+        if (!Array.isArray(ls)) throw new Error(`tap-4/ngay${n}.ts không export NGAY_${n}`);
+        out[n] = ls;
+      }
+      return out;
+    },
+  },
   // Khoá JP (tiếng Nhật 0→N1) và CH (tiếng Trung 0→HSK 6), 05/10/2026: baiN.ts export BAI_N.
   ...(['jp', 'ch'] as const).map((k): Spec => ({
     name: k.toUpperCase(),

@@ -18,6 +18,7 @@ import { bandTuDiem, bandTong, dinhDangGio, BAI_ON, linkBai, ngayCuaBai, tapCuaB
 import { MANIFEST } from '../ngay/manifest';
 import { MANIFEST as MANIFEST_T2 } from '../tap-2/ngay/manifest';
 import { MANIFEST as MANIFEST_T3 } from '../tap-3/ngay/manifest';
+import { MANIFEST as MANIFEST_T4 } from '../tap-4/ngay/manifest';
 import { demTuViet } from './PhongViet';
 import { ChuDam } from './Nhom';
 import { nhanTraLoi } from './soLoiTuDe';
@@ -29,10 +30,10 @@ import s from '../chung/cdt.module.css';
 const tenBai = (id: string): string => {
   const n = ngayCuaBai(id);
   const tap = tapCuaBai(id);
-  const mf = tap === 3 ? MANIFEST_T3 : tap === 2 ? MANIFEST_T2 : MANIFEST;
+  const mf = tap === 4 ? MANIFEST_T4 : tap === 3 ? MANIFEST_T3 : tap === 2 ? MANIFEST_T2 : MANIFEST;
   return (n != null && mf[n]?.lessons.find((l) => l.id === id)?.title) || id;
 };
-/** Thứ tự học: Tập 1 → Tập 2 → Tập 3, trong mỗi tập theo ngày. */
+/** Thứ tự học: Tập 1 → 2 → 3 → 4, trong mỗi tập theo ngày. */
 const thuTuBai = (id: string): number => (tapCuaBai(id) - 1) * 1000 + (ngayCuaBai(id) ?? 0);
 
 export type KetLuot = {

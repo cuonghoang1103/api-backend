@@ -179,29 +179,29 @@ export function bandTong(b: { nghe?: number | null; doc?: number | null; viet?: 
  * Bài Tập 2 viết id `t2dN-…` (link tự sang `/ielts/tap-2`); xếp sau bài Tập 1 cùng dạng.
  */
 export const BAI_ON: Record<DangCau, string[]> = {
-  // Tập 1 trước, Tập 2 (`t2dN-…`, 13/11/2026), rồi Tập 3 (`t3dN-…`, 18/11/2026) — phiếu điểm ghi "Tập N · Ngày M".
-  note: ['d7-nghe', 'd13-nghe', 't2d4-doc', 't3d13-nghe'],
-  form: ['d7-nghe', 'd15-nghe', 't2d1-nghe', 't3d1-nghe'],
-  sentence: ['d4-doc', 't2d14-doc', 't2d19-nghe', 't3d9-doc'],
-  summary: ['d14-doc', 'd13-nghe', 't2d2-doc', 't3d25-doc'],
-  table: ['d8-doc', 't2d5-nghe', 't3d15-doc'],
-  flow: ['d6-doc', 't2d13-nghe', 't3d17-doc', 't3d17-nghe'],
-  diagram: ['d6-doc', 't2d22-doc', 't3d17-doc'],
+  // Tập 1 trước, Tập 2 (`t2dN-…`, 13/11/2026), rồi Tập 3 (`t3dN-…`) và Tập 4 (`t4dN-…`, 18/11/2026) — phiếu điểm ghi "Tập N · Ngày M".
+  note: ['d7-nghe', 'd13-nghe', 't2d4-doc', 't3d13-nghe', 't4d8-nghe'],
+  form: ['d7-nghe', 'd15-nghe', 't2d1-nghe', 't3d1-nghe', 't4d1-nghe'],
+  sentence: ['d4-doc', 't2d14-doc', 't2d19-nghe', 't3d9-doc', 't4d3-doc'],
+  summary: ['d14-doc', 'd13-nghe', 't2d2-doc', 't3d25-doc', 't4d25-doc'],
+  table: ['d8-doc', 't2d5-nghe', 't3d15-doc', 't4d13-nghe'],
+  flow: ['d6-doc', 't2d13-nghe', 't3d17-doc', 't3d17-nghe', 't4d17-doc'],
+  diagram: ['d6-doc', 't2d22-doc', 't3d17-doc', 't4d17-doc'],
   short: ['d2-doc', 't2d8-doc', 't3d7-doc'],
-  'summary-box': ['d14-doc', 't3d9-doc'],
-  mcq: ['d9-nghe', 'd11-nghe', 't2d10-doc', 't2d13-nghe', 't3d11-doc', 't3d4-nghe'],
-  mcq2: ['d11-nghe', 't2d13-nghe', 't3d13-doc', 't3d17-nghe'],
-  tfng: ['d12-doc', 't2d6-doc', 't3d3-doc'],
-  ynng: ['d12-doc', 't2d20-doc', 't3d23-doc'],
-  heading: ['t2d12-doc', 't3d5-doc'],
-  'match-info': ['t2d16-doc', 't3d19-doc'],
-  'match-feature': ['d10-doc', 't3d21-doc', 't3d8-nghe'],
-  'match-ending': ['d4-doc', 't2d18-doc', 't3d29-doc'],
-  map: ['d9-nghe', 't2d7-nghe', 't3d4-nghe', 't3d12-nghe'],
+  'summary-box': ['d14-doc', 't3d9-doc', 't4d25-doc'],
+  mcq: ['d9-nghe', 'd11-nghe', 't2d10-doc', 't2d13-nghe', 't3d11-doc', 't3d4-nghe', 't4d7-doc', 't4d4-nghe'],
+  mcq2: ['d11-nghe', 't2d13-nghe', 't3d13-doc', 't3d17-nghe', 't4d7-doc'],
+  tfng: ['d12-doc', 't2d6-doc', 't3d3-doc', 't4d5-doc'],
+  ynng: ['d12-doc', 't2d20-doc', 't3d23-doc', 't4d5-doc'],
+  heading: ['t2d12-doc', 't3d5-doc', 't4d3-doc'],
+  'match-info': ['t2d16-doc', 't3d19-doc', 't4d19-doc'],
+  'match-feature': ['d10-doc', 't3d21-doc', 't3d8-nghe', 't4d23-doc', 't4d5-nghe'],
+  'match-ending': ['d4-doc', 't2d18-doc', 't3d29-doc', 't4d15-doc'],
+  map: ['d9-nghe', 't2d7-nghe', 't3d4-nghe', 't3d12-nghe', 't4d16-nghe'],
 };
 
-/** Bài thuộc tập nào: `t2dN-…` = IELTS Tập 2 (12/11/2026, `/ielts/tap-2`); `t3dN-…` = Tập 3 (18/11/2026, `/ielts/tap-3`); còn lại (`dN-…`) = Tập 1. */
-export const tapCuaBai = (id: string): 1 | 2 | 3 => { const m = /^t([23])d\d+-/.exec(id); return m ? (Number(m[1]) as 2 | 3) : 1; };
+/** Bài thuộc tập nào: `t2dN-…` = IELTS Tập 2 (12/11/2026, `/ielts/tap-2`); `t3dN-…` = Tập 3 (18/11/2026, `/ielts/tap-3`); `t4dN-…` = Tập 4 (`/ielts/tap-4`); còn lại (`dN-…`) = Tập 1. */
+export const tapCuaBai = (id: string): 1 | 2 | 3 | 4 => { const m = /^t([234])d\d+-/.exec(id); return m ? (Number(m[1]) as 2 | 3 | 4) : 1; };
 /** `d12-doc` → ngày 12 (để dựng link `?buoi=12&bai=d12-doc`); `t2d5-nghe` → ngày 5 (của Tập 2). */
-export const ngayCuaBai = (id: string): number | null => { const m = /^(?:t[23])?d(\d+)-/.exec(id); return m ? Number(m[1]) : null; };
+export const ngayCuaBai = (id: string): number | null => { const m = /^(?:t[234])?d(\d+)-/.exec(id); return m ? Number(m[1]) : null; };
 export const linkBai = (id: string): string => `/language/en/ielts${tapCuaBai(id) === 1 ? '' : `/tap-${tapCuaBai(id)}`}?buoi=${ngayCuaBai(id) ?? 1}&bai=${id}`;

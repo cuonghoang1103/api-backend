@@ -11,11 +11,12 @@ import cs from '@/components/sach-hoc/course.module.css';
 import { IELTS } from '@/app/language/[code]/ielts/data';
 import { IELTS_T2 } from '@/app/language/[code]/ielts/tap-2/data';
 import { IELTS_T3 } from '@/app/language/[code]/ielts/tap-3/data';
+import { IELTS_T4 } from '@/app/language/[code]/ielts/tap-4/data';
 import { TheMucIelts } from './TaiLieuIelts';
 import { duongBai, layDanhMucIelts, useCoIelts, type MucIelts } from './ielts';
 import st from './taiLieuIelts.module.css';
 
-const TEN_BAI = new Map<string, string>([...IELTS.allLessons, ...IELTS_T2.allLessons, ...IELTS_T3.allLessons].map((l) => [l.id, l.title]));
+const TEN_BAI = new Map<string, string>([...IELTS.allLessons, ...IELTS_T2.allLessons, ...IELTS_T3.allLessons, ...IELTS_T4.allLessons].map((l) => [l.id, l.title]));
 
 export default function TaiLieuIeltsTong() {
   const co = useCoIelts();

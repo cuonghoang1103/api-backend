@@ -1,0 +1,893 @@
+/**
+ * IELTS Tập 4 — Ngày 15 (band 6.0 → 7.0; giữa tập; tự soạn 18/11/2026 — mọi câu ví dụ, bài đọc, câu trả lời mẫu, câu bài tập VIẾT MỚI)
+ *   Bài 1 (grammar)  Từ nối band 7: đúng liều · cấp câu vs cấp đoạn · vị trí giữa câu · nhân quả tinh (mức độ nhân quả,
+ *                    thereby / which in turn / hence / so…that / given that / in that)                    [ôn G18 G29 · VD6]
+ *                    — nối Tập 2 Ngày 17 (hai tầng nối), Tập 3 Ngày 21 (nhượng bộ + nhân quả), Tập 4 Ngày 12 (tham chiếu this / such)
+ *   Bài 2 (reading)  Matching sentence endings 2 + paraphrase nâng cao; bài đọc ~880 từ (bản đồ và điều bản đồ bỏ đi), 13 câu
+ *                    [R14 R18 VD4] — nối Tập 2 Ngày 18 (nối đuôi câu nhập môn), Tập 3 Ngày 1 · Tập 4 Ngày 3 (paraphrase 4 mức)
+ *   Bài 3 (speaking) Part 3 nguyên nhân – hệ quả, lập luận chuỗi [S06] — nối Tập 3 Ngày 15 (giả định), Tập 4 Ngày 7 (dự đoán có
+ *                    rào đón) · 🔊 pause mang nghĩa
+ *   Bài tập Ngày 15  38 câu có đáp án
+ * Đề 7 (giữa tập, band 6.5) nằm ở Online Test do phiên khác soạn — ngày này chỉ nhắc người học làm sau khi xong.
+ * Mốc lịch sử trong bài đọc (Mercator 1569, Gall, Peters 1973, Beck 1933, giờ đường sắt 1840–1880) là kiến thức phổ thông.
+ * Mọi id bắt đầu `t4d15-`.
+ */
+import type { Lesson } from '../data';
+
+export const NGAY_15: Lesson[] = [
+  /* ═══════════════════════════ BÀI 1 — NGỮ PHÁP ═══════════════════════════ */
+  {
+    id: "t4d15-ngu-phap",
+    kind: "grammar",
+    title: "Ngữ pháp: Từ nối band 7 — đúng liều, cấp câu vs cấp đoạn, nhân quả tinh",
+    goal: "Dùng từ nối như người viết band 7: ít hơn nhưng đúng chỗ, phân biệt nối trong câu – giữa hai câu – giữa hai đoạn, đặt trạng từ nối giữa câu, và nói nhân quả đúng mức độ (contribute to ≠ cause; thereby, which in turn, given that, in that) — đẩy CC và GRA lên 7.",
+    minutes: 95,
+    blocks: [
+      {
+        t: "recap",
+        title: "Bài này học gì · đẩy tiêu chí nào",
+        items: [
+          "Band 6 ở tiêu chí **CC** (mạch lạc – liên kết): dùng từ nối “máy móc hoặc sai”. Band 7: dùng ==một dải phương tiện liên kết, hợp lý==, có thể hơi thừa hoặc thiếu. Hôm nay bạn học cách **bớt đi** và **đặt đúng tầng**.",
+          "Ba tầng nối: **trong một câu** (while, so that, thereby) · **giữa hai câu** (However, Consequently) · **giữa hai đoạn** (Turning to…, A further factor is…). Dùng từ của tầng này ở tầng kia là lỗi.",
+          "Trạng từ nối không bắt buộc đứng đầu câu: **This, however, …** nghe học thuật hơn **However, this…** lặp năm lần.",
+          "**Nhân quả tinh**: chọn động từ đúng ==mức độ== (cause → lead to → contribute to → be associated with) và đúng ==chiều mũi tên== (result in ≠ result from).",
+          "Cấu trúc nhân quả band 7: **, thereby + V-ing** · **, which in turn + V** · **so + adj + that** · **given that** · **in that**.",
+          "Nối bài cũ: Tập 2 Ngày 17 (hai tầng nối) · Tập 3 Ngày 21 (although / despite / due to) · Tập 4 Ngày 12 (this + danh từ tóm tắt).",
+        ],
+      },
+      { t: "h", text: "1. Ôn 60 giây: bốn loại từ nối xét theo ngữ pháp — và dấu câu của từng loại" },
+      { t: "p", text: "Bạn đã biết **nghĩa** của các từ nối. Lỗi còn lại ở band 6 là lỗi **ngữ pháp và dấu câu**: dùng however như but, dùng despite trước mệnh đề. Bảng dưới gom lại bốn loại (ôn Tập 3 Ngày 21)." },
+      {
+        t: "table",
+        head: ["Loại", "Ví dụ", "Theo sau là", "Dấu câu"],
+        rows: [
+          ["① Liên từ đẳng lập", "and, but, so, yet, or", "mệnh đề (S + V)", "**, but** — dấu phẩy trước, không đứng đầu câu trong văn viết trang trọng"],
+          ["② Liên từ phụ thuộc", "although, whereas, because, since, so that, unless, given that", "mệnh đề (S + V)", "Mệnh đề phụ đứng trước ⇒ có phẩy. Đứng sau ⇒ thường không phẩy (trừ whereas / although)"],
+          ["③ Giới từ nối", "despite, because of, due to, owing to, as a result of, in view of", "cụm danh từ / V-ing", "Cụm đứng đầu câu ⇒ có phẩy sau cụm"],
+          ["④ Trạng từ nối", "However, Therefore, Consequently, Moreover, Nevertheless, Hence", "một CÂU mới", "**. However,** hoặc **; however,** — KHÔNG dùng dấu phẩy để nối hai câu"],
+        ],
+      },
+      {
+        t: "note",
+        title: "⚠️ Ba lỗi dấu câu người Việt hay sai với từ nối",
+        items: [
+          "~~Public transport is cheap, however many people still drive.~~ → Public transport is cheap**; however,** many people still drive. (hoặc dùng dấu chấm). Nối hai câu bằng dấu phẩy + however = lỗi **comma splice**.",
+          "~~Although fares are low, but few people use buses.~~ → bỏ **but**. Tiếng Việt nói “mặc dù… nhưng…”, tiếng Anh chỉ dùng **một** trong hai.",
+          "~~Despite the city invested heavily, congestion worsened.~~ → **Despite investing heavily** / **Despite heavy investment** / **Although the city invested heavily**.",
+        ],
+      },
+      {
+        t: "quiz", id: "t4d15-on-loai", kind: "fill",
+        title: "Khởi động — điền một từ nối cho đúng ngữ pháp (chọn trong: however · although · despite · whereas · therefore · because of)",
+        items: [
+          { q: "___ repeated warnings from scientists, emissions continued to rise.", answers: ["Despite"] },
+          { q: "Many young families are moving to cities; ___, rural schools are closing.", answers: ["therefore"] },
+          { q: "Older employees value job security, ___ younger ones tend to prioritise flexibility.", answers: ["whereas"] },
+          { q: "The scheme was popular. Its long-term cost, ___, was never properly calculated.", answers: ["however"] },
+          { q: "___ the policy was well intentioned, it had little measurable effect.", answers: ["Although"] },
+          { q: "Many small shops have closed ___ competition from online retailers.", answers: ["because of"] },
+        ],
+      },
+      { t: "h", text: "2. Đúng liều — vì sao “mỗi câu một từ nối” giữ bạn ở band 6 (ôn nhanh Ngày 12 · Viết mục 7, rồi thêm sáu cách nối)" },
+      { t: "p", text: "Nhiều người học được dạy: “càng nhiều từ nối càng mạch lạc”. Giám khảo nghĩ ngược lại. Mô tả band 6 có cụm “cohesion **may be faulty or mechanical**” — **mechanical** (máy móc) nghĩa là câu nào cũng mở bằng Firstly, Moreover, Furthermore, In addition… như một danh sách. Hãy so hai đoạn dưới." },
+      {
+        t: "sodo", kind: "compare", title: "Cùng một ý — hai cách nối",
+        cols: [
+          { title: "Máy móc (band 6)", items: ["**Firstly,** remote work saves commuting time. **Moreover,** it reduces office costs. **Furthermore,** employees are happier. **However,** it can cause isolation. **Therefore,** companies should be careful.", "5 câu — 5 trạng từ nối đầu câu. Ý đứng cạnh nhau như gạch đầu dòng."] },
+          { title: "Đúng liều (band 7)", items: ["Remote work saves employees hours of commuting each week, **which** in many firms has translated into lower office costs **as well as** higher staff satisfaction. **These gains,** **however,** come at a price: workers who rarely meet their colleagues are more likely to feel isolated.", "2 câu — 1 trạng từ nối (đặt giữa câu) + which + as well as + **These gains** (tham chiếu) + dấu hai chấm."] },
+        ],
+      },
+      {
+        t: "table",
+        caption: "Sáu cách nối KHÔNG cần trạng từ nối đầu câu",
+        head: ["Cách", "Ví dụ"],
+        rows: [
+          ["① this / these + danh từ tóm tắt (ôn Ngày 12)", "Rents have doubled. **This trend** has pushed young families out of the centre."],
+          ["② Mệnh đề quan hệ , which", "Rents have doubled, **which** has pushed young families out."],
+          ["③ Mệnh đề phân từ (ôn Ngày 5)", "Rents have doubled, **pushing** young families out."],
+          ["④ Dấu chấm phẩy / hai chấm", "The cause is simple**:** supply has not kept pace with demand."],
+          ["⑤ Lặp từ khoá hoặc dùng từ đồng nghĩa", "…**housing costs**. **Such costs** now absorb half of a typical salary."],
+          ["⑥ Trạng từ nối đặt GIỮA câu", "The policy**, however,** has had little effect."],
+        ],
+      },
+      {
+        t: "patterns",
+        rows: [
+          { formula: "S, however / therefore / moreover, V…", vi: "Trạng từ nối đứng sau chủ ngữ, giữa hai dấu phẩy — nhấn vào chủ ngữ, tránh lặp “However,” đầu câu.", examples: [{ en: "Private cars are convenient. Their environmental cost, however, is considerable.", vi: "Ô tô riêng thì tiện. Tuy nhiên, cái giá môi trường của chúng là đáng kể." }, { en: "Wages have stagnated; many graduates, therefore, postpone buying a home.", vi: "Lương dậm chân tại chỗ; vì vậy nhiều cử nhân hoãn mua nhà." }] },
+          { formula: "S + V…, though / however.", vi: "Đặt cuối câu — tự nhiên khi NÓI (Part 3); though cuối câu không dùng trong bài viết.", examples: [{ en: "It's cheaper to live outside the city. The commute is exhausting, though.", vi: "Sống ngoài thành phố thì rẻ hơn. Có điều đi lại mệt lắm." }] },
+        ],
+      },
+      {
+        t: "note",
+        title: "💡 Mẹo tự soát “liều” trong 30 giây",
+        items: [
+          "Gạch chân mọi trạng từ nối **đầu câu** trong một đoạn thân bài. Hơn **2** ⇒ thay bớt bằng sáu cách ở bảng trên.",
+          "Hai câu có quan hệ đã rõ (câu sau là ví dụ, là chi tiết của câu trước) ⇒ **không cần** từ nối.",
+          "Không mở cả ba đoạn bằng Firstly / Secondly / Finally. Dùng câu chủ đề có nội dung: **The most obvious benefit is…**, **A less visible cost is…**",
+        ],
+      },
+      { t: "rule", formula: "≤ 2 trạng từ nối đầu câu / đoạn · còn lại: this + N · , which · V-ing · ; : · S, however, V", vi: "Band 7 không nối nhiều hơn mà nối đa dạng hơn. Quan hệ đã rõ thì không cần từ nối." },
+      {
+        t: "quiz", id: "t4d15-lieu-dich", kind: "translate", grammar: "Trạng từ nối đặt giữa câu (S, however, V) · , which · this + danh từ",
+        title: "Dịch Việt → Anh — nối đúng liều (4 câu)",
+        items: [
+          { q: "Kế hoạch này tiết kiệm tiền. Tuy nhiên, tác động lâu dài của nó vẫn chưa rõ. (đặt however giữa câu)", answers: ["The plan saves money. Its long-term impact, however, remains unclear.", "This plan saves money. Its long-term impact, however, is still unclear.", "The plan saves money. Its long-term impact, however, is still unclear."], hint: "Its long-term impact, however, …" },
+          { q: "Giá nhà đã tăng gấp đôi, điều này buộc nhiều gia đình trẻ phải rời trung tâm thành phố.", answers: ["House prices have doubled, which has forced many young families to leave the city centre.", "Housing prices have doubled, which has forced many young families to leave the city centre.", "House prices have doubled, which has forced many young families out of the city centre."], hint: ", which has forced…" },
+          { q: "Ngày càng ít người đọc báo in. Xu hướng này đã khiến nhiều tờ báo địa phương đóng cửa.", answers: ["Fewer and fewer people read printed newspapers. This trend has caused many local papers to close.", "Fewer and fewer people read print newspapers. This trend has led many local newspapers to close.", "Fewer and fewer people read printed newspapers. This trend has led to the closure of many local newspapers."], hint: "This trend has…" },
+          { q: "Nguyên nhân rất đơn giản: nguồn cung không theo kịp nhu cầu.", answers: ["The cause is simple: supply has not kept pace with demand.", "The reason is simple: supply has not kept up with demand.", "The cause is simple: supply has not kept up with demand."], hint: "dấu hai chấm · keep pace with" },
+        ],
+      },
+      { t: "h", text: "3. Ba tầng nối — trong câu, giữa hai câu, giữa hai đoạn" },
+      {
+        t: "table",
+        head: ["Tầng", "Việc của nó", "Từ dùng", "Ví dụ"],
+        rows: [
+          ["Trong MỘT câu", "Gắn hai mệnh đề thành câu phức ⇒ ăn điểm GRA", "while, whereas, although, since, so that, unless, provided that, , which, V-ing", "**While** cities offer higher wages, living costs absorb most of the difference."],
+          ["Giữa HAI câu", "Cho biết câu sau quan hệ thế nào với câu trước", "However, Nevertheless, Consequently, As a result, In addition, Similarly, By contrast, Indeed, In other words", "Wages are higher in cities. **Nevertheless,** many workers save less than their rural counterparts."],
+          ["Giữa HAI đoạn", "Báo cho người đọc biết đoạn mới bàn khía cạnh nào", "Turning to…, With regard to…, A further / more serious problem is…, Despite these benefits, …, Having considered X, …", "**Despite these economic advantages,** urban life carries social costs that are harder to measure."],
+        ],
+      },
+      { t: "p", text: "Ở band 7, câu mở đoạn tốt nhất là câu **vừa nối vừa nêu ý**: nó nhắc lại ý đoạn trước bằng một cụm danh từ (these advantages, this argument) rồi mới đưa ý mới. Người đọc không cần chữ Secondly để biết đây là ý thứ hai." },
+      {
+        t: "table",
+        caption: "Tám từ nối hay bị dùng sai nghĩa hoặc sai văn phong",
+        head: ["Từ", "Nghĩa đúng — khi nào dùng", "Lỗi hay gặp"],
+        rows: [
+          ["**On the other hand**", "Đưa mặt còn lại của CÙNG một vấn đề (có sự cân nhắc).", "Dùng để thêm ý cùng chiều. Hai ý phải ngược hướng nhau."],
+          ["**On the contrary**", "Bác bỏ điều vừa nói: “không phải thế, ngược lại mới đúng”.", "Dùng thay In contrast. ~~Japan is ageing. On the contrary, Nigeria is young.~~ → **By contrast,**"],
+          ["**In contrast / By contrast**", "So hai đối tượng KHÁC nhau.", "Viết ~~In contrast with that,~~ thừa. Gọn: **By contrast, Nigeria…**"],
+          ["**Moreover / Furthermore**", "Thêm một lý lẽ CÙNG chiều và thường nặng hơn.", "Dùng cho ý không liên quan, hoặc mở mọi câu."],
+          ["**Besides**", "“Hơn nữa, mà thật ra” — văn NÓI, hơi gạt đi.", "Dùng trong bài viết thay In addition. Viết: **In addition, / What is more,**"],
+          ["**Meanwhile**", "Hai việc xảy ra CÙNG LÚC.", "Dùng như However. Đối lập ⇒ dùng **whereas / by contrast**."],
+          ["**Indeed / In fact**", "Indeed: nhấn mạnh, xác nhận ý trước. In fact: sửa lại hoặc đi xa hơn ý trước.", "Coi hai từ là một. **In fact** thường báo điều gây ngạc nhiên."],
+          ["**Hence / Thus**", "Rất trang trọng: “do đó”. Hence + cụm danh từ được: **hence the delay**.", "Dùng khi nói. Part 3 nói: **so / that's why / which is why**."],
+        ],
+      },
+      {
+        t: "note",
+        title: "⚠️ Văn viết và văn nói dùng hai bộ từ nối khác nhau",
+        items: [
+          "Viết Task 2: **Consequently, Nevertheless, In addition, By contrast, whereas, thereby**.",
+          "Nói Part 3: **so, but then again, on top of that, mind you, which is why, the thing is**. Nói “Furthermore” và “Nevertheless” liên tục nghe như đọc bài viết.",
+          "Không viết: ~~And, But, So~~ đầu câu · ~~Besides,~~ · ~~Last but not least,~~ (sáo) · ~~What's more~~ dạng rút gọn (viết **What is more,**).",
+        ],
+      },
+      { t: "rule", formula: "trong câu: while / so that / , which · giữa câu: However, / Consequently, · giữa đoạn: Despite these + N, … / Turning to + N, …", vi: "Chọn từ nối theo TẦNG trước, theo nghĩa sau. Câu mở đoạn nên nhắc ý cũ bằng cụm danh từ rồi mới nêu ý mới." },
+      {
+        t: "mcq", id: "t4d15-tang-chon", title: "Chọn từ nối đúng tầng, đúng nghĩa (6 câu)",
+        items: [
+          { q: "Scandinavian countries spend heavily on childcare. ___, the United States leaves most of the cost to parents.", options: ["On the contrary", "By contrast", "Moreover", "Meanwhile"], correct: 1, why: "So hai đối tượng khác nhau ⇒ **By contrast**. On the contrary dùng để bác bỏ câu trước; Meanwhile chỉ nói hai việc cùng lúc." },
+          { q: "The new road has not reduced congestion. ___, journey times are now longer than before.", options: ["In fact", "However", "Besides", "On the other hand"], correct: 0, why: "Câu sau đi **xa hơn** câu trước (không những không giảm mà còn tệ hơn) ⇒ **In fact**. Không có đối lập nên không dùng However." },
+          { q: "___ these environmental benefits, electric cars remain too expensive for most households.", options: ["Although", "However", "Despite", "Whereas"], correct: 2, why: "Sau chỗ trống là cụm danh từ (these environmental benefits) ⇒ giới từ **Despite**. Although / Whereas cần mệnh đề." },
+          { q: "(Task 2) Which opening sentence of a second body paragraph is the strongest at band 7?", options: ["Secondly, there are also disadvantages.", "Besides, tourism has bad sides too.", "On the other hand, I will discuss the disadvantages.", "These economic gains, however, are often outweighed by damage to the local environment."], correct: 3, why: "Câu D nhắc ý đoạn trước (**These economic gains**), đặt however giữa câu, và nêu luôn ý mới. Ba câu còn lại chỉ “báo hiệu”, không có nội dung; Besides là văn nói." },
+          { q: "Fares were cut by half; ___, passenger numbers barely changed.", options: ["therefore", "nevertheless", "moreover", "similarly"], correct: 1, why: "Giảm giá mà khách không tăng = kết quả trái mong đợi ⇒ nhượng bộ **nevertheless**." },
+          { q: "(Speaking Part 3) Which sounds most natural?", options: ["Hence, people purchase online.", "Nevertheless, it is convenient; furthermore, it is cheap.", "It's cheaper, and on top of that you don't have to leave the house.", "Thus, the phenomenon is widespread."], correct: 2, why: "Khi nói, dùng từ nối văn nói: **and on top of that**. Hence / Thus / Nevertheless / Furthermore nghe như bài viết." },
+        ],
+      },
+      { t: "h", text: "4. Nhân quả tinh (1) — chọn động từ đúng MỨC ĐỘ và đúng CHIỀU" },
+      { t: "p", text: "Band 6 viết: **Social media causes depression.** Câu này khẳng định một nguyên nhân duy nhất và chắc chắn — giám khảo coi là **khái quát quá mức** (lỗi TR). Band 7 chọn động từ theo ==mức độ mình chứng minh được==. Bảng dưới xếp từ mạnh đến yếu." },
+      {
+        t: "table",
+        head: ["Mức", "Động từ / cụm (NGUYÊN NHÂN → KẾT QUẢ)", "Ví dụ"],
+        rows: [
+          ["Trực tiếp, chắc chắn", "**cause · bring about · give rise to · trigger** (khởi phát đột ngột) **· result in · lead to**", "The closure of the factory **triggered** a wave of emigration."],
+          ["Một trong nhiều nguyên nhân", "**contribute to · play a part / a role in · be a (major) factor in · be partly responsible for**", "Cheap flights have **contributed to** the growth of mass tourism."],
+          ["Làm mạnh thêm / yếu đi", "**exacerbate · aggravate · fuel** (làm tệ thêm) **· alleviate · mitigate · curb** (làm nhẹ đi)", "Rising rents have **exacerbated** homelessness."],
+          ["Chỉ đi kèm, chưa chắc là nhân quả", "**be associated with · be linked to · be correlated with · go hand in hand with**", "Long commutes **are associated with** higher stress levels."],
+        ],
+      },
+      {
+        t: "table",
+        caption: "Chiều ngược lại: KẾT QUẢ ← NGUYÊN NHÂN",
+        head: ["Cụm", "Ví dụ"],
+        rows: [
+          ["**result from · stem from · arise from · derive from**", "Much of the opposition **stems from** fear of losing jobs."],
+          ["**be caused by · be driven by · be brought about by**", "The rise in obesity **is driven by** cheap processed food."],
+          ["**be attributed to · be attributable to · be due to · be down to** (nói)", "The fall in crime **has been attributed to** better street lighting."],
+          ["**account for** (giải thích; chiếm)", "Differences in income **account for** much of the gap in life expectancy."],
+        ],
+      },
+      {
+        t: "patterns",
+        rows: [
+          { formula: "S + tend to / can / may + V (nhân quả)", vi: "Thêm rào đón (ôn Ngày 13) để không khẳng định tuyệt đối.", examples: [{ en: "Excessive screen time can contribute to poor sleep among teenagers.", vi: "Dùng màn hình quá nhiều có thể góp phần gây thiếu ngủ ở thanh thiếu niên." }] },
+          { formula: "S + is / are + partly / largely / mainly + attributable to + N", vi: "Trạng từ mức độ cho biết nguyên nhân chiếm bao nhiêu phần.", examples: [{ en: "The decline of the high street is largely attributable to online shopping.", vi: "Sự sa sút của phố mua sắm phần lớn là do mua sắm trực tuyến." }] },
+          { formula: "N (nguyên nhân) + is a major / key / contributing factor in + N / V-ing", vi: "Danh từ factor đi với giới từ in (không phải of / to).", examples: [{ en: "Poor diet is a contributing factor in many chronic diseases.", vi: "Chế độ ăn kém là một yếu tố góp phần gây nhiều bệnh mãn tính." }] },
+        ],
+      },
+      {
+        t: "note",
+        title: "⚠️ Lỗi chiều mũi tên và giới từ — hay sai nhất",
+        items: [
+          "~~Stress results from poor health.~~ khi muốn nói “căng thẳng dẫn đến sức khoẻ kém” → Stress **results in** poor health. (**in** = ra kết quả; **from** = từ nguyên nhân)",
+          "~~lead to increase~~ / ~~contribute to reduce~~ → sau **to** ở đây là giới từ: lead **to an increase** / contribute **to reducing**.",
+          "~~The reason is because…~~ / ~~The reason of…~~ → **The reason for** N **is that** S + V.",
+          "~~be attributed by~~ → be attributed **to**. ~~cause to~~ N → **cause** N (không giới từ); **cause** sb **to** V.",
+          "**affect** (động từ) ≠ **effect** (danh từ): have an **effect on** N. ~~It effects on children.~~",
+        ],
+      },
+      { t: "rule", formula: "nguyên nhân → cause / lead to / contribute to / be associated with → kết quả · kết quả → stem from / be attributed to → nguyên nhân", vi: "Chọn động từ theo mức độ chứng minh được; thêm can / tend to / partly khi không chắc. result IN kết quả, result FROM nguyên nhân." },
+      {
+        t: "quiz", id: "t4d15-muc-do-dich", kind: "translate", grammar: "contribute to + N/V-ing · be attributed to · stem from · be associated with",
+        title: "Dịch Việt → Anh — nhân quả đúng mức độ (4 câu)",
+        items: [
+          { q: "Giao thông công cộng kém đã góp phần làm tăng số lượng xe hơi riêng.", answers: ["Poor public transport has contributed to the rise in the number of private cars.", "Poor public transport has contributed to an increase in the number of private cars.", "Poor public transport has contributed to the increase in private cars."], hint: "contribute to + danh từ" },
+          { q: "Sự sụt giảm tỉ lệ sinh phần lớn được cho là do chi phí nuôi con cao.", answers: ["The fall in the birth rate is largely attributed to the high cost of raising children.", "The decline in the birth rate has largely been attributed to the high cost of raising children.", "The fall in the birth rate is largely attributable to the high cost of raising children."], hint: "be largely attributed to" },
+          { q: "Phần lớn vấn đề bắt nguồn từ việc thiếu nhà ở giá phải chăng.", answers: ["Much of the problem stems from a lack of affordable housing.", "Much of the problem stems from the lack of affordable housing.", "Most of the problem stems from a lack of affordable housing."], hint: "stem from" },
+          { q: "Làm việc nhiều giờ có liên quan đến mức độ căng thẳng cao hơn.", answers: ["Long working hours are associated with higher levels of stress.", "Working long hours is associated with higher stress levels.", "Long working hours are linked to higher levels of stress."], hint: "be associated with / be linked to" },
+        ],
+      },
+      { t: "h", text: "5. Nhân quả tinh (2) — năm cấu trúc gắn nguyên nhân và hệ quả vào MỘT câu" },
+      {
+        t: "patterns",
+        rows: [
+          { formula: "S + V, thereby + V-ing", vi: "“qua đó” — hệ quả của hành động trước; cùng chủ ngữ. Rất học thuật, chỉ dùng khi viết.", examples: [{ en: "The city pedestrianised its centre, thereby reducing both noise and air pollution.", vi: "Thành phố biến trung tâm thành khu đi bộ, qua đó giảm cả tiếng ồn lẫn ô nhiễm không khí." }] },
+          { formula: "S + V, which in turn + V", vi: "“điều này đến lượt nó lại…” — mắt xích thứ hai của một chuỗi.", examples: [{ en: "Young people leave rural areas, which in turn makes it harder for village schools to survive.", vi: "Người trẻ rời nông thôn, điều này đến lượt nó khiến trường làng khó tồn tại hơn." }] },
+          { formula: "so + adj / adv + that + S + V · such + (a/an) + adj + N + that", vi: "Nguyên nhân là MỨC ĐỘ: “đến mức mà”.", examples: [{ en: "Housing has become so expensive that many graduates still live with their parents.", vi: "Nhà ở đắt đến mức nhiều cử nhân vẫn sống với bố mẹ." }, { en: "It was such a sudden change that few businesses were prepared.", vi: "Đó là thay đổi đột ngột đến mức ít doanh nghiệp kịp chuẩn bị." }] },
+          { formula: "Given that + S + V, … · Given + N, …", vi: "“xét rằng / vì đã biết rằng” — lấy một sự thật ai cũng công nhận làm căn cứ.", examples: [{ en: "Given that the population is ageing rapidly, spending on healthcare is bound to rise.", vi: "Xét rằng dân số đang già đi nhanh, chi tiêu cho y tế chắc chắn sẽ tăng." }] },
+          { formula: "S + V + in that + S + V", vi: "“ở chỗ là” — giải thích ĐÚNG ở khía cạnh nào; không đứng đầu câu.", examples: [{ en: "The tax is unfair in that it takes a larger share of income from the poor.", vi: "Loại thuế này bất công ở chỗ nó lấy phần thu nhập lớn hơn của người nghèo." }] },
+        ],
+      },
+      {
+        t: "table",
+        caption: "Cùng họ — dùng khi cần đổi cách nói",
+        head: ["Cụm", "Theo sau", "Ví dụ"],
+        rows: [
+          ["**on account of · in view of · in (the) light of**", "cụm danh từ", "**In view of** the falling birth rate, several schools are to merge."],
+          ["**owing to the fact that · on the grounds that**", "mệnh đề", "The plan was rejected **on the grounds that** it was too costly."],
+          ["**hence** + cụm danh từ", "không cần động từ", "Demand far exceeds supply; **hence the high prices**."],
+          ["**as a consequence · with the result that**", "câu / mệnh đề", "Funding was cut, **with the result that** two clinics closed."],
+          ["**so that** (mục đích) vs **, so** (kết quả)", "mệnh đề", "Fares were cut **so that** more people **would** use buses. (mục đích) · Fares were cut**, so** more people used buses. (kết quả)"],
+        ],
+      },
+      {
+        t: "note",
+        title: "⚠️ Cẩn thận với thereby, in that và so … that",
+        items: [
+          "~~thereby reduce~~ / ~~thereby it reduces~~ → **thereby reducing** (luôn V-ing, không có chủ ngữ mới).",
+          "Chủ ngữ ngầm của V-ing phải là chủ ngữ câu chính: ~~Prices rose, thereby buying fewer goods.~~ (giá không “mua”) → Prices rose, thereby **reducing** what households could afford.",
+          "~~very expensive that~~ → **so** expensive **that**. ~~so a big problem that~~ → **such a big** problem **that**.",
+          "~~In that the tax is unfair, …~~ — in that không mở câu. Mở câu thì dùng **Given that / Since**.",
+          "Đừng dùng quá ba cấu trúc này trong một bài; mỗi đoạn thân bài **một** chuỗi nhân quả viết kỹ là đủ.",
+        ],
+      },
+      { t: "rule", formula: "S + V, thereby + V-ing · S + V, which in turn + V · so + adj + that + S + V · Given that + S + V, S + V · S + V + in that + S + V", vi: "Năm cách đặt nguyên nhân và hệ quả vào một câu phức. thereby / in that chỉ dùng khi viết." },
+      {
+        t: "quiz", id: "t4d15-cau-truc-dich", kind: "translate", grammar: "thereby + V-ing · which in turn · so … that · given that · in that",
+        title: "Dịch Việt → Anh — nhân quả trong một câu (5 câu)",
+        items: [
+          { q: "Chính phủ tăng thuế nhiên liệu, qua đó khuyến khích người dân dùng phương tiện công cộng.", answers: ["The government raised fuel taxes, thereby encouraging people to use public transport.", "The government increased fuel tax, thereby encouraging people to use public transport.", "The government raised fuel tax, thereby encouraging people to use public transport."], hint: ", thereby encouraging…" },
+          { q: "Các cửa hàng đóng cửa, điều này đến lượt nó khiến ít người đến trung tâm thị trấn hơn.", answers: ["Shops close, which in turn means fewer people visit the town centre.", "Shops close, which in turn brings fewer people to the town centre.", "Shops close, which in turn means that fewer people come to the town centre."], hint: ", which in turn…" },
+          { q: "Chi phí trông trẻ cao đến mức nhiều bà mẹ quyết định không quay lại làm việc.", answers: ["Childcare is so expensive that many mothers decide not to return to work.", "The cost of childcare is so high that many mothers decide not to return to work.", "Childcare costs are so high that many mothers decide not to go back to work."], hint: "so + adj + that" },
+          { q: "Xét rằng tuổi thọ đang tăng, việc nâng tuổi nghỉ hưu có vẻ là điều khó tránh.", answers: ["Given that life expectancy is rising, raising the retirement age seems unavoidable.", "Given that life expectancy is increasing, raising the retirement age seems inevitable.", "Given that life expectancy is rising, an increase in the retirement age seems inevitable."], hint: "Given that + S + V" },
+          { q: "Hệ thống này không công bằng ở chỗ nó có lợi cho những người vốn đã giàu.", answers: ["The system is unfair in that it benefits those who are already wealthy.", "This system is unfair in that it favours those who are already rich.", "The system is unfair in that it favours people who are already wealthy."], hint: "in that + S + V" },
+        ],
+      },
+      { t: "h", text: "6. Dùng trong bài thi — một chuỗi nhân quả viết kỹ" },
+      { t: "p", text: "Ở Task 2, một ý “mở rộng” (TR band 7) thường chính là một **chuỗi nhân quả 3 mắt xích**. Đừng dừng ở mắt xích đầu. So hai cách viết cho ý “giá nhà cao làm tỉ lệ sinh giảm”:" },
+      {
+        t: "sodo", kind: "flow", title: "Chuỗi 3 mắt xích — mỗi mũi tên một cách nối khác nhau",
+        steps: [
+          { label: "Nguyên nhân gốc", sub: "Housing has become **so** expensive **that** couples in their twenties can rarely afford a home of their own," },
+          { label: "Mắt xích giữa", sub: "**which in turn** leads many of them to postpone having children." },
+          { label: "Hệ quả xa", sub: "**This delay** is a major factor in the falling birth rate, **thereby** accelerating the ageing of the population." },
+        ],
+        caption: "3 mắt xích · 4 phương tiện nối khác nhau (so…that · which in turn · This + N · thereby) · không có trạng từ nối đầu câu nào.",
+      },
+      {
+        t: "table",
+        head: ["Chỗ dùng", "Nên", "Tránh"],
+        rows: [
+          ["Writing Task 2", "Một chuỗi nhân quả đầy đủ mỗi đoạn; động từ có mức độ (contribute to, be linked to); however giữa câu.", "Firstly / Secondly / Thirdly + mỗi câu một However; “X causes Y” tuyệt đối."],
+          ["Writing Task 1", "**KHÔNG** giải thích nguyên nhân. Chỉ dùng từ nối so sánh / đối lập: whereas, by contrast, while, respectively.", "because, due to, as a result — bảng số không cho biết nguyên nhân."],
+          ["Speaking Part 3", "so, which means, and that in turn, that's largely down to, as a result (xem Bài 3 hôm nay).", "thereby, hence, in that, owing to the fact that."],
+          ["Reading", "Từ nối là biển chỉ đường: yet / nevertheless ⇒ ý chính ở vế sau; thereby / hence ⇒ hệ quả.", "Bỏ qua từ nối nhỏ — đáp án nối đuôi câu thường nằm ngay sau chúng (Bài 2)."],
+        ],
+      },
+      { t: "h", text: "7. Kiểm tra cuối bài (10 câu)" },
+      {
+        t: "quiz", id: "t4d15-np-viet-lai", kind: "fill",
+        title: "Viết lại — điền 1–3 từ để câu thứ hai giữ nguyên nghĩa (5 câu)",
+        items: [
+          { q: "The council widened the road. As a result, it attracted even more traffic. → The council widened the road, ___ ___ even more traffic.", answers: ["thereby attracting"] },
+          { q: "Because unemployment is high, many graduates move abroad. → Many graduates move abroad ___ ___ high unemployment. (2 từ, giới từ)", answers: ["because of", "owing to", "due to"] },
+          { q: "Poverty is one of the causes of poor school results. → Poverty is a contributing ___ ___ poor school results.", answers: ["factor in"] },
+          { q: "The exam was very hard. Only a third of candidates passed. → The exam was ___ hard that only a third of candidates passed.", answers: ["so"] },
+          { q: "People say the fall in smoking is due to higher taxes. → The fall in smoking has been ___ ___ higher taxes.", answers: ["attributed to"] },
+        ],
+      },
+      {
+        t: "mcq", id: "t4d15-np-tong-hop", title: "Chọn câu ĐÚNG (5 câu)",
+        items: [
+          { q: "Câu nào đúng dấu câu?", options: ["The scheme is cheap, however it is rarely used.", "The scheme is cheap, however, it is rarely used.", "The scheme is cheap; however, it is rarely used.", "The scheme is cheap however, it is rarely used."], correct: 2, why: "Hai câu độc lập + however ⇒ dấu chấm phẩy (hoặc chấm) trước, dấu phẩy sau. A, B là comma splice." },
+          { q: "Câu nào đúng?", options: ["Overwork often results in health problems.", "Overwork often results from health problems. (ý: làm quá sức gây bệnh)", "Overwork often leads to have health problems.", "Overwork often causes to health problems."], correct: 0, why: "Nguyên nhân → **results in** → kết quả. lead to + danh từ / V-ing; cause + tân ngữ, không có to." },
+          { q: "Câu nào dùng thereby đúng?", options: ["Taxes rose, thereby people spent less.", "The firm automated its warehouse, thereby cutting its labour costs.", "The firm automated its warehouse, thereby cut its labour costs.", "Thereby the firm cut costs, it automated its warehouse."], correct: 1, why: "thereby + **V-ing**, chủ ngữ ngầm = chủ ngữ câu chính (the firm)." },
+          { q: "Câu nào hợp với Writing Task 2 nhất?", options: ["Besides, old people are lonely.", "Last but not least, old people are lonely.", "And old people are lonely too.", "A further consequence, less often discussed, is loneliness among older people."], correct: 3, why: "D là câu chủ đề vừa nối (A further consequence) vừa nêu ý. Besides / Last but not least / And đầu câu là văn nói hoặc sáo." },
+          { q: "Câu nào nói nhân quả đúng mức độ nhất cho một bài luận band 7?", options: ["Video games cause violence.", "Video games may contribute to aggressive behaviour in some children.", "Video games are the reason of violence.", "Because of video games, so children are violent."], correct: 1, why: "may contribute to… in some children: có mức độ và rào đón. A khái quát tuyệt đối; C sai giới từ (reason **for**); D thừa so." },
+        ],
+      },
+      {
+        t: "note",
+        title: "📌 Ghi vào sổ — 3 dòng",
+        items: [
+          "Mỗi đoạn thân bài: ≤ 2 trạng từ nối đầu câu; ít nhất một lần however / therefore đặt **giữa câu**.",
+          "Mỗi đoạn: **một** chuỗi nhân quả 3 mắt xích, mỗi mắt xích nối bằng một cách khác nhau.",
+          "Không viết “X causes Y” trừ khi chắc chắn; mặc định: **can contribute to / is linked to / is largely attributable to**.",
+        ],
+      },
+    ],
+  },
+  /* ═══════════════════════════ BÀI 2 — ĐỌC ═══════════════════════════ */
+  {
+    id: "t4d15-doc",
+    kind: "reading",
+    title: "Đọc: Matching sentence endings 2 — khi mọi đuôi câu đều đúng ngữ pháp + paraphrase nâng cao",
+    goal: "Làm đúng ≥ 5/6 câu Matching sentence endings trên một bài Passage 3 (~880 từ): định vị bằng đầu câu, tự đoán đuôi trước khi nhìn danh sách, loại đuôi “đúng trong bài nhưng sai câu” và đuôi đảo nhân quả; nhận ra 7 kiểu paraphrase ở band 7.",
+    minutes: 80,
+    blocks: [
+      {
+        t: "recap",
+        title: "Bài này học gì",
+        items: [
+          "**Matching sentence endings** (nối đầu câu với đuôi câu) bạn đã học ở Tập 2 Ngày 18 với bài ~710 từ. Ở Passage 3, dạng này khó hơn ở ba chỗ: ==hầu hết đuôi đều khớp ngữ pháp==, đuôi là paraphrase mức 3–4, và có đuôi **nói ngược lại quan điểm tác giả**.",
+          "Chiến thuật mới: **tự đoán đuôi bằng lời của mình** trước khi đọc danh sách A–I — tránh bị các đuôi “nghe hợp lý” dẫn dắt.",
+          "Đuôi câu rất hay là một **nguyên nhân, mục đích hoặc hệ quả** (because…, so that…, in order to…) ⇒ từ nối bạn vừa học ở Bài 1 chính là chỗ đáp án nằm.",
+          "**Paraphrase nâng cao**: ngoài 4 mức đã học (đồng nghĩa → đổi loại từ → đổi cấu trúc → ý ẩn), hôm nay thêm: đảo chiều, phủ định kép, khái quát hoá.",
+          "Bài đọc hôm nay: một bài lập luận về bản đồ — 13 câu (6 nối đuôi + 4 Yes/No/Not Given + 3 trắc nghiệm), **20 phút**.",
+        ],
+      },
+      { t: "h", text: "1. Ôn từ Tập 2 Ngày 18 — và Passage 3 khác ở đâu" },
+      {
+        t: "table",
+        head: ["", "Tập 2 (band 5)", "Hôm nay (band 7)"],
+        rows: [
+          ["Thứ tự", "Đầu câu đi theo thứ tự bài", "Vẫn theo thứ tự bài — đây là lợi thế lớn nhất, giữ lấy"],
+          ["Ngữ pháp", "Loại được 3–4 đuôi vì sai ngữ pháp", "Đề cố ý cho 2–4 đuôi cùng khớp ngữ pháp ⇒ phải quyết bằng NGHĨA"],
+          ["Paraphrase", "Đồng nghĩa, đổi loại từ", "Đổi cấu trúc, ý ẩn, đảo chiều nhân quả"],
+          ["Đuôi bẫy", "Đuôi có từ giống bài", "Đuôi đúng với bài nhưng thuộc câu khác; đuôi là ý kiến tác giả **bác bỏ**; đuôi đảo nguyên nhân ↔ kết quả"],
+          ["Thời gian", "~1,5 phút / câu", "~1 phút / câu — vì thế phải đoán đuôi trước"],
+        ],
+      },
+      {
+        t: "sodo", kind: "flow", title: "Sáu bước cho một câu nối đuôi ở Passage 3",
+        steps: [
+          { label: "1. Đọc MỌI đầu câu trước, chưa đọc đuôi", sub: "Gạch từ khoá định vị: tên riêng, năm, thuật ngữ (Mercator, Peters, Beck…)." },
+          { label: "2. Xem đầu câu DỪNG ở đâu", sub: "Dừng sau động từ ⇒ cần tân ngữ / mệnh đề. Dừng sau một mệnh đề đủ ⇒ đuôi là lý do, mục đích, điều kiện, thời gian." },
+          { label: "3. Tìm chỗ trong bài", sub: "Theo thứ tự: câu 2 nằm sau câu 1. Đọc kỹ 2–3 câu quanh từ khoá." },
+          { label: "4. TỰ ĐOÁN đuôi bằng lời mình", sub: "Viết nhanh 3–4 chữ bên lề: “vì tiện cho thợ in”. Chưa nhìn A–I." },
+          { label: "5. Tìm đuôi cùng nghĩa với lời đoán", sub: "Khớp nghĩa trước, rồi đọc cả câu ghép xem có trôi ngữ pháp không." },
+          { label: "6. Soát đuôi còn lại", sub: "Đuôi nào “đúng với bài” nhưng nói về đoạn khác? Đuôi nào là ý tác giả bác bỏ? Loại." },
+        ],
+      },
+      { t: "rule", formula: "Đầu câu → định vị → tự đoán đuôi → khớp NGHĨA → kiểm ngữ pháp → loại đuôi “đúng nhưng sai chỗ”", vi: "Ở Passage 3 ngữ pháp chỉ loại được 1–2 đuôi. Quyết định bằng nghĩa của 2–3 câu quanh từ khoá." },
+      { t: "h", text: "2. Bốn loại đuôi bẫy ở band 7" },
+      {
+        t: "table",
+        head: ["Bẫy", "Trông thế nào", "Cách thoát"],
+        rows: [
+          ["① Đúng nhưng sai chỗ", "Đuôi nói một điều CÓ trong bài, nhưng về đối tượng khác (đuôi của câu 5 đem ghép vào câu 2).", "Hỏi: “điều này bài nói về AI / CÁI GÌ?” — phải trùng chủ ngữ của đầu câu."],
+          ["② Ý bị tác giả bác", "Bài viết: “It would be an exaggeration to claim that X.” Đuôi viết đúng X.", "Chú ý các cụm bác bỏ: it would be wrong to…, contrary to…, some critics claim…, far from…"],
+          ["③ Đảo nhân quả", "Bài: A dẫn đến B. Đuôi: “…because of B” gắn vào đầu câu nói về B.", "Vẽ mũi tên A → B bên lề; đọc lại chiều của because / so that / as a result (Bài 1)."],
+          ["④ Quá mức", "Bài: largely / tend to / some. Đuôi: entirely / always / all.", "So trạng từ mức độ và lượng từ giữa bài và đuôi."],
+        ],
+      },
+      { t: "h", text: "3. Paraphrase nâng cao — bảy kiểu phải nhận ra" },
+      { t: "p", text: "Bốn kiểu đầu bạn đã học (Tập 3 Ngày 1, Tập 4 Ngày 3). Ba kiểu cuối là mới và xuất hiện nhiều ở đuôi câu của Passage 3. Ví dụ trong bảng lấy từ chính bài đọc hôm nay — đọc bài xong hãy quay lại xem." },
+      {
+        t: "table",
+        head: ["Kiểu", "Trong bài", "Trong câu hỏi"],
+        rows: [
+          ["① Đồng nghĩa", "useless", "of no practical value"],
+          ["② Đổi loại từ", "printers **favoured** it… it was already **familiar**", "for reasons of **convenience** and **habit** (động từ / tính từ → danh từ)"],
+          ["③ Đổi cấu trúc", "a constant compass bearing **could be drawn** as a straight line (bị động)", "navigators **could represent** a fixed compass direction… (chủ động)"],
+          ["④ Ý ẩn", "has little interest in geography; needs to know… where to change", "cared more about connections than about location"],
+          ["⑤ Đảo chiều / đổi góc nhìn", "stations that are a few minutes apart on foot", "a route that takes longer than walking"],
+          ["⑥ Phủ định ↔ khẳng định", "an almost identical projection **had been published… more than a century earlier**", "it was **not new**"],
+          ["⑦ Khái quát hoá ↔ cụ thể hoá", "Africa and South America appear stretched", "distortions of its own"],
+        ],
+      },
+      {
+        t: "note",
+        title: "💡 Mẹo luyện paraphrase mỗi ngày (5 phút)",
+        items: [
+          "Sau mỗi bài đọc, chép **5 cặp** “trong bài ↔ trong câu hỏi” vào sổ, ghi số kiểu ①–⑦ bên cạnh.",
+          "Kiểu ⑥ dễ sót nhất: thấy **not uncommon** = common; **hardly mattered** = was unimportant; **failed to** = did not.",
+          "Kiểu ④ không có từ nào trùng — nếu bạn chỉ đi tìm từ giống thì sẽ chọn đúng đuôi bẫy.",
+        ],
+      },
+      { t: "h", text: "4. Khởi động — một đoạn ngắn, 3 câu (3 phút)" },
+      { t: "p", text: "**The QWERTY keyboard layout was arranged in the 1870s to stop the metal arms of early typewriters from jamming. That problem vanished with electric keyboards, and layouts that reduce finger movement have been available for decades. Yet QWERTY remains, not because it is efficient, but because millions of typists have already learnt it and no manufacturer wishes to sell a keyboard that nobody can use.**" },
+      {
+        t: "mcq", id: "t4d15-doc-khoi-dong", title: "Chọn đuôi câu đúng — chú ý: cả bốn đuôi đều khớp ngữ pháp",
+        items: [
+          { q: "(a) The QWERTY layout was originally designed …", options: ["in order to help typists work faster.", "in order to prevent a mechanical fault.", "in order to reduce the movement of the fingers.", "in order to suit electric keyboards."], correct: 1, why: "“to stop the metal arms… from jamming” = prevent a mechanical fault (kiểu ⑦ khái quát hoá). C là đặc điểm của bố cục KHÁC (bẫy đúng nhưng sai chỗ)." },
+          { q: "(b) Layouts that are easier on the fingers …", options: ["have existed for a long time.", "have recently been invented.", "have replaced QWERTY on electric keyboards.", "have proved too expensive to produce."], correct: 0, why: "“have been available for decades” = have existed for a long time. B ngược nghĩa; C, D bài không nói." },
+          { q: "(c) QWERTY has survived …", options: ["because it is the most efficient layout.", "because typewriters still jam without it.", "because manufacturers hold the patent.", "because people are reluctant to relearn how to type."], correct: 3, why: "“millions of typists have already learnt it” ⇒ ý ẩn (kiểu ④): không ai muốn học lại. A là ý bị tác giả bác: “**not** because it is efficient” (bẫy ②)." },
+        ],
+      },
+      { t: "h", text: "5. Luyện trọn bài — Reading Passage 3, Questions 1–13 (20 phút)" },
+      { t: "p", text: "Bấm giờ **20 phút**. Thứ tự gợi ý: đọc lướt 2 phút lấy ý từng đoạn → câu 1–6 (theo thứ tự bài, giúp bạn nắm cả bài) → câu 7–10 → câu 11–13." },
+      {
+        t: "passage",
+        title: "The Honest Lie: What Maps Leave Out",
+        intro: "Bài tự soạn để luyện — khoảng 880 từ, mức Passage 3.",
+        paras: [
+          { label: "A", text: "Every map is, in a strict sense, a lie. To show a city on a sheet of paper, or a planet on a screen, the mapmaker must shrink it, flatten it and, above all, leave most of it out. A map that recorded every tree, kerb and doorway would be as large and as bewildering as the territory itself, and therefore useless. The value of a map lies precisely in what it omits. What is less often recognised is that the choice of what to omit is never neutral: it reflects what the mapmaker assumes the user wants to do, and, intentionally or not, it teaches the user what matters." },
+          { label: "B", text: "The best-known example is the projection devised by the Flemish cartographer Gerardus Mercator in 1569. Mercator's problem was a practical one. Sailors needed a chart on which a constant compass bearing could be drawn as a straight line, and no existing map allowed this. His solution was to stretch the map progressively towards the poles, so that the angles a navigator measured remained true. The cost was that areas did not. On a Mercator map, Greenland looks roughly as large as Africa, although Africa is in fact about fourteen times bigger. For a ship's officer plotting a course this hardly mattered; he cared about direction, not about the relative size of landmasses he would never visit." },
+          { label: "C", text: "The difficulty arose only when the chart left the ship. During the nineteenth century, Mercator's projection was adopted for wall maps and school atlases, purposes for which it had never been designed. Generations of children thus grew up with an image of the world in which Europe and North America loomed large while the regions near the equator appeared diminished. It would be an exaggeration to claim, as some critics have, that the projection was chosen in order to flatter the imperial powers; printers favoured it largely because it filled a rectangular page neatly and was already familiar. Nevertheless, a picture seen daily in the classroom does not need a motive to have an effect." },
+          { label: "D", text: "In 1973 the German historian Arno Peters caused a stir by promoting an alternative on which every country was shown at its correct relative area. Peters presented his map as a matter of justice, and several aid organisations adopted it with enthusiasm. Professional cartographers were less impressed. They pointed out, first, that an almost identical projection had been published by a Scottish clergyman, James Gall, more than a century earlier, and secondly, that preserving area comes at the price of shape: on the Peters map, Africa and South America appear stretched, as though they had been hung out to dry. The quarrel, which was conducted with surprising bitterness, obscured the one point on which both sides might have agreed, namely that no flat map can be faithful to a sphere in every respect. To gain one kind of accuracy is to surrender another." },
+          { label: "E", text: "If Mercator shows how a distortion can outlive its purpose, the London Underground map shows how a distortion can be the purpose. Until the early 1930s, maps of the network placed each station where it actually lay, with the result that the crowded centre was almost illegible while the suburban lines trailed off across empty paper. Harry Beck, a draughtsman who had worked for the Underground, realised that a passenger travelling through tunnels has little interest in geography. What such a traveller needs to know is the order of the stations and where to change. Beck accordingly straightened the lines, restricted them to horizontals, verticals and diagonals, and spaced the stations evenly. His employers initially rejected the design as too radical, and agreed only to a small trial printing in 1933. The public took to it at once." },
+          { label: "F", text: "Beck's diagram has been imitated by transport systems all over the world, yet its success carries a penalty which is easily overlooked. Because distances on the diagram bear no relation to distances on the ground, passengers regularly make journeys by train, with a change of line, between stations that are a few minutes apart on foot. Researchers who have compared travellers' routes with the alternatives available have concluded that people tend to trust the diagram over their own experience, choosing the path that looks shorter even when the journey takes longer. A simplification that was introduced to serve the user ends, in such cases, by misleading him." },
+          { label: "G", text: "Digital mapping might be expected to have put an end to these compromises, since a screen can display any scale and any projection on demand. In reality it has merely moved the act of selection out of sight. The map on a phone is assembled afresh for each user: which businesses are labelled, which roads are emphasised and which route is recommended depend on calculations that the user cannot inspect and on commercial arrangements of which he or she is rarely aware. Two people standing on the same corner may be looking at different cities. The printed map at least lied to everyone in the same way, and its omissions, being fixed, could be noticed and debated." },
+          { label: "H", text: "None of this is an argument against maps. It is an argument for reading them as we would read any other document: by asking who made it, for whom, and what they needed to leave out." },
+        ],
+      },
+      { t: "p", text: "**Questions 1–6.** Complete each sentence with the correct ending, **A–I**, below. Write the correct letter, **A–I**. — Hoàn thành mỗi câu bằng đuôi câu đúng (có 3 đuôi thừa)." },
+      {
+        t: "table",
+        caption: "Sentence beginnings 1–6 · Endings A–I",
+        head: ["", "Đầu câu (1–6) / Đuôi câu (A–I)"],
+        rows: [
+          ["**1**", "According to the writer, a map which tried to record every detail …"],
+          ["**2**", "Mercator distorted the size of regions near the poles …"],
+          ["**3**", "The writer suggests that Mercator's projection came to be used in classrooms …"],
+          ["**4**", "Specialists objected to the map promoted by Peters …"],
+          ["**5**", "Beck redesigned the Underground map …"],
+          ["**6**", "Passengers who rely on the Underground diagram …"],
+          ["**A**", "in the belief that travellers cared more about connections than about location."],
+          ["**B**", "in order to make the colonial powers appear more important."],
+          ["**C**", "would be of no practical value to anyone."],
+          ["**D**", "on the grounds that it was neither new nor free of distortions of its own."],
+          ["**E**", "may choose a route that takes longer than walking."],
+          ["**F**", "so that navigators could represent a fixed compass direction as a straight line."],
+          ["**G**", "after measuring the true distance between every pair of stations."],
+          ["**H**", "largely for reasons of convenience and habit."],
+          ["**I**", "because it had been rejected by the organisations it was meant to help."],
+        ],
+      },
+      {
+        t: "quiz", id: "t4d15-doc-noi-duoi", kind: "fill",
+        title: "Questions 1–6 — Matching sentence endings (viết một chữ cái A–I)",
+        items: [
+          { q: "(1) According to the writer, a map which tried to record every detail …", answers: ["C"] },
+          { q: "(2) Mercator distorted the size of regions near the poles …", answers: ["F"] },
+          { q: "(3) The writer suggests that Mercator's projection came to be used in classrooms …", answers: ["H"] },
+          { q: "(4) Specialists objected to the map promoted by Peters …", answers: ["D"] },
+          { q: "(5) Beck redesigned the Underground map …", answers: ["A"] },
+          { q: "(6) Passengers who rely on the Underground diagram …", answers: ["E"] },
+        ],
+      },
+      { t: "p", text: "**Questions 7–10.** Do the following statements agree with the claims of the writer? Choose **YES** if the statement agrees with the claims of the writer, **NO** if the statement contradicts the claims of the writer, **NOT GIVEN** if it is impossible to say what the writer thinks about this." },
+      {
+        t: "mcq", id: "t4d15-doc-ynng", title: "Questions 7–10 — Yes / No / Not Given",
+        items: [
+          { q: "(7) The distortion of area on Mercator's map was a serious drawback for the sailors who used it.", options: ["YES", "NO", "NOT GIVEN"], correct: 1, why: "Đoạn **B**: “For a ship's officer plotting a course this **hardly mattered**” — ngược với a serious drawback ⇒ **NO** (kiểu ⑥ phủ định ↔ khẳng định)." },
+          { q: "(8) Critics who say the Mercator projection was selected for political reasons are overstating their case.", options: ["YES", "NO", "NOT GIVEN"], correct: 0, why: "Đoạn **C**: “It would be **an exaggeration** to claim, as some critics have, that the projection was chosen in order to flatter the imperial powers” ⇒ **YES**. exaggeration = overstating." },
+          { q: "(9) The Peters map is easier for schoolchildren to understand than the Mercator map.", options: ["YES", "NO", "NOT GIVEN"], correct: 2, why: "Đoạn **D** nói tổ chức cứu trợ dùng bản đồ Peters và giới chuyên môn chê; **không** so độ dễ hiểu với học sinh ⇒ **NOT GIVEN**. Bẫy: đoạn C có nhắc classroom." },
+          { q: "(10) The dispute between Peters and the cartographers was more hostile than might have been expected.", options: ["YES", "NO", "NOT GIVEN"], correct: 0, why: "Đoạn **D**: “The quarrel… was conducted with **surprising bitterness**” ⇒ **YES**. surprising = more than expected; bitterness = hostile." },
+        ],
+      },
+      { t: "p", text: "**Questions 11–13.** Choose the correct letter, **A, B, C or D**." },
+      {
+        t: "mcq", id: "t4d15-doc-mcq", title: "Questions 11–13 — Multiple choice",
+        items: [
+          { q: "(11) What point does the writer make about Beck's diagram in paragraph F?", options: ["It has been copied elsewhere without acknowledgement.", "Its benefits are accompanied by a cost that tends to go unnoticed.", "Passengers find it harder to read than the maps it replaced.", "It is less popular now than researchers had assumed."], correct: 1, why: "“its success carries **a penalty which is easily overlooked**” = a cost that tends to go unnoticed. A: imitated có, nhưng không nói “không xin phép”. C, D bài không nói." },
+          { q: "(12) What is the writer's main objection to digital maps in paragraph G?", options: ["They cannot display more than one projection.", "They contain more errors than printed maps.", "They are too costly for small businesses to appear on.", "The choices behind them are hidden and differ from one user to another."], correct: 3, why: "“moved the act of selection **out of sight**… assembled afresh **for each user**… calculations the user **cannot inspect**”. A ngược bài (any projection on demand); B, C không có." },
+          { q: "(13) Which of the following best summarises the writer's overall argument?", options: ["All maps involve selection, and users should be aware of the choices that have been made.", "Older maps were more honest than modern ones and should be preferred.", "Mapmakers have deliberately misled the public for political ends.", "Maps would be more useful if they left less out."], correct: 0, why: "Đoạn **A** (the choice of what to omit is never neutral) + đoạn **H** (asking who made it, for whom, and what they needed to leave out). B quá mức (đoạn G chỉ nói “at least”); C bị tác giả bác ở đoạn C; D ngược đoạn A." },
+        ],
+      },
+      { t: "h", text: "6. Soi lại câu 1–6 — đáp án nằm ở đâu, bẫy nào" },
+      {
+        t: "table",
+        head: ["Câu", "Câu chứa đáp án", "Paraphrase", "Đuôi bẫy và lý do loại"],
+        rows: [
+          ["1 — **C**", "A: “would be as large and as bewildering as the territory itself, and therefore **useless**”", "① useless → of no practical value", "E khớp ngữ pháp (a map… may choose?) nhưng vô nghĩa: bản đồ không “chọn đường”."],
+          ["2 — **F**", "B: “a chart on which a constant compass bearing could be drawn as a straight line… **so that** the angles… remained true”", "③ bị động → chủ động; bearing → direction", "**B** (in order to make the colonial powers…) khớp ngữ pháp hoàn hảo — nhưng là ý tác giả BÁC ở đoạn C, và lại nói về thế kỷ 19, không phải Mercator."],
+          ["3 — **H**", "C: “printers favoured it **largely because** it filled a rectangular page neatly and was already familiar”", "② favoured… familiar → convenience and habit", "**B** lần nữa: “It would be an exaggeration to claim…” = bẫy ②. Từ **largely** giữ nguyên ở đuôi H — dấu hiệu khớp mức độ."],
+          ["4 — **D**", "D: “an almost identical projection had been published… a century earlier” + “preserving area comes at the price of shape”", "⑥ published earlier → not new · ⑦ stretched → distortions of its own", "**I**: bài nói tổ chức cứu trợ **adopted it with enthusiasm** — ngược hẳn “rejected”."],
+          ["5 — **A**", "E: “a passenger… has little interest in geography. What such a traveller needs to know is the order of the stations and where to change”", "④ ý ẩn: where to change → connections; geography → location", "**G**: Beck làm ngược lại — bỏ khoảng cách thật, “spaced the stations evenly”."],
+          ["6 — **E**", "F: “make journeys by train… between stations that are a few minutes apart on foot”", "⑤ đổi góc nhìn: gần khi đi bộ → tàu lâu hơn đi bộ", "C (would be of no practical value) khớp ngữ pháp nhưng bài không nói hành khách “vô dụng”."],
+        ],
+      },
+      {
+        t: "note",
+        title: "⚠️ Bài học từ đuôi B — bẫy “ý bị tác giả bác”",
+        items: [
+          "Đuôi **B** khớp ngữ pháp với câu 2, 3 và 5, chứa ý **có trong bài** (flatter the imperial powers), và nghe rất “hợp lý”. Nhưng tác giả viết: **It would be an exaggeration to claim…**",
+          "Ở Passage 3, mỗi khi thấy **some critics / it is often said / contrary to / it would be wrong to** ⇒ khoanh lại: ý ngay sau đó KHÔNG phải ý tác giả.",
+          "Từ nối **Nevertheless** cuối đoạn C báo ý thật của tác giả nằm ở câu sau nó (ôn Bài 1 mục 6).",
+        ],
+      },
+      { t: "h", text: "7. Từ vựng hữu ích từ bài đọc" },
+      {
+        t: "vocab",
+        items: [
+          { w: "omit", pos: "v", ipa: "/əˈmɪt/", vi: "bỏ đi, lược bớt", ex: "The report omits any mention of the cost.", exVi: "Bản báo cáo không hề nhắc tới chi phí.", more: "n: omission /əˈmɪʃn/ · omit N **from** N · trang trọng hơn leave out" },
+          { w: "distortion", pos: "n", ipa: "/dɪˈstɔːʃn/", vi: "sự bóp méo, làm sai lệch", ex: "The figures give a distortion of the real situation.", exVi: "Các con số đưa ra một hình ảnh sai lệch về tình hình thật.", more: "v: distort the truth / the facts / the picture" },
+          { w: "devise", pos: "v", ipa: "/dɪˈvaɪz/", vi: "nghĩ ra, đặt ra (phương pháp, kế hoạch)", ex: "Engineers devised a cheaper way to store energy.", exVi: "Các kỹ sư đã nghĩ ra cách trữ năng lượng rẻ hơn.", more: "devise a **method / scheme / strategy** · ≠ device /dɪˈvaɪs/ (n, thiết bị)" },
+          { w: "outlive", pos: "v", ipa: "/ˌaʊtˈlɪv/", vi: "tồn tại lâu hơn (mục đích, người khác)", ex: "The law has outlived its usefulness.", exVi: "Đạo luật này đã hết còn hữu ích mà vẫn tồn tại.", more: "outlive its **purpose / usefulness** · tiền tố out- = hơn: outnumber, outweigh, outperform" },
+          { w: "illegible", pos: "adj", ipa: "/ɪˈledʒəbl/", vi: "không đọc nổi (chữ, hình)", ex: "His handwriting is almost illegible.", exVi: "Chữ viết tay của anh ấy gần như không đọc nổi.", more: "↔ legible · gần nghĩa **unreadable** — nhưng unreadable còn nghĩa “chán / rối tới mức không muốn đọc” (an unreadable novel), illegible chỉ nói chữ, hình khó nhìn ra" },
+          { w: "faithful to", pos: "adj", ipa: "/ˈfeɪθfl tə/", vi: "trung thành với, đúng với (bản gốc, sự thật)", ex: "The film is faithful to the novel.", exVi: "Bộ phim bám sát cuốn tiểu thuyết.", more: "remain faithful to N · n: faithfulness · adv: faithfully" },
+          { w: "bear no relation to", pos: "phr", ipa: "/beə nəʊ rɪˈleɪʃn tə/", vi: "không liên quan gì tới, không khớp gì với", ex: "The price bears no relation to the cost of production.", exVi: "Giá bán không liên quan gì tới chi phí sản xuất.", more: "bear **little / no** relation to · dùng tốt trong Task 2" },
+          { w: "at the price of", pos: "phr", ipa: "/ət ðə praɪs əv/", vi: "với cái giá là, đánh đổi bằng", ex: "Speed was achieved at the price of accuracy.", exVi: "Tốc độ đạt được phải đánh đổi bằng độ chính xác.", more: "= at the cost / expense of · come at a price (có cái giá của nó)" },
+        ],
+      },
+      {
+        t: "note",
+        title: "📌 Sau bài này — làm Đề 7",
+        items: [
+          "Hôm nay là **giữa Tập 4**. Học xong cả ba bài, hãy vào **Online Test → Đề 7** (đủ 4 kỹ năng, mức band 6.5) và làm đúng giờ, một mạch.",
+          "Mục tiêu giữa tập: Listening ≥ 27/40 · Reading ≥ 27/40 (Passage 3 ≥ 7/13).",
+          "Reading sai nhiều ở câu nối đuôi / tiêu đề ⇒ ôn bài này và Ngày 3. Sai ở TFNG / YNNG ⇒ ôn Ngày 5.",
+        ],
+      },
+    ],
+  },
+  /* ═══════════════════════════ BÀI 3 — NÓI ═══════════════════════════ */
+  {
+    id: "t4d15-noi",
+    kind: "speaking",
+    title: "Nói: Part 3 nguyên nhân – hệ quả, lập luận chuỗi · 🔊 pause mang nghĩa",
+    goal: "Trả lời câu hỏi Part 3 kiểu “Why…?” và “What effects…?” bằng một chuỗi 3 mắt xích (nguyên nhân gốc → cơ chế → hệ quả xa) trong 40–50 giây, dùng cụm nhân quả của văn NÓI, xếp hạng được nhiều nguyên nhân, và ngắt hơi đúng chỗ để người nghe theo kịp.",
+    minutes: 70,
+    blocks: [
+      {
+        t: "recap",
+        title: "Bài này học gì · đẩy tiêu chí nào",
+        items: [
+          "Part 3 hỏi **nguyên nhân** (Why do…? What has led to…?) và **hệ quả** (What effect does… have on…? What are the consequences of…?) rất thường xuyên. Band 6 nêu 2–3 nguyên nhân rời nhau; band 7 ==chọn một nguyên nhân và đi tới cùng==.",
+          "Khung **chuỗi 3 mắt xích**: nguyên nhân gốc → cơ chế (vì sao nó dẫn tới) → hệ quả xa (knock-on effect) + một câu rào đón.",
+          "Bộ cụm nhân quả của **văn nói**: that's largely down to… · which means… · and that in turn… · so you end up with… — KHÔNG dùng thereby / hence (Bài 1).",
+          "Nhiều nguyên nhân ⇒ **xếp hạng**: the main driver… · a secondary factor… · on top of that…",
+          "🔊 **Pause mang nghĩa**: ngắt trước và sau cụm chêm (, in turn,), trước ý quan trọng, sau câu hỏi tu từ — đẩy tiêu chí **P** và làm chuỗi dài dễ theo.",
+          "Nối bài cũ: Tập 3 Ngày 15 (hệ quả giả định) · Tập 4 Ngày 7 (thang chắc chắn) · Tập 4 Ngày 9 (tone units).",
+        ],
+      },
+      { t: "h", text: "1. Nhận ra câu hỏi nhân quả — và giám khảo chờ gì" },
+      {
+        t: "table",
+        head: ["Hỏi về", "Dạng câu hỏi", "Mở câu trả lời"],
+        rows: [
+          ["Nguyên nhân", "**Why** do so many young people move to big cities? · **What has led to** the decline of small shops? · **What makes** people…?", "I think it mostly comes down to… · There are a few things behind it, but the main one is…"],
+          ["Hệ quả", "**What effect** does this have on families? · **What are the consequences of**…? · **How does** tourism **affect**…?", "The most obvious effect is… · Well, the immediate impact is…, but the longer-term one is…"],
+          ["Cả hai", "**Why** is this happening, **and** is it a problem?", "Trả lời vế Why bằng chuỗi; vế hai bằng một câu đánh giá."],
+        ],
+      },
+      { t: "p", text: "Giám khảo không đếm số nguyên nhân. Họ nghe xem bạn có **phát triển** được một ý không (FC band 7: “speaks at length without noticeable effort… develops topics”). Một nguyên nhân + giải thích cơ chế + hệ quả = phát triển. Ba nguyên nhân mỗi cái một câu = liệt kê." },
+      { t: "h", text: "2. Khung chuỗi 3 mắt xích (40–50 giây)" },
+      {
+        t: "sodo", kind: "flow", title: "Why are fewer people in your country cooking at home?",
+        steps: [
+          { label: "① Nguyên nhân gốc (1 câu)", sub: "I think **it mostly comes down to** time. People in cities work long hours and then spend another hour or two commuting." },
+          { label: "② Cơ chế — vì sao nó dẫn tới (1–2 câu)", sub: "**So by the time** they get home, cooking a proper meal feels like one more job, **whereas** ordering food takes two minutes on an app." },
+          { label: "③ Hệ quả xa (1–2 câu)", sub: "**And that has a knock-on effect:** if you rarely cook, you never really learn how, **which means** the next generation grows up without those skills." },
+          { label: "④ Rào đón / giới hạn (1 câu)", sub: "**That said,** it's mainly an urban thing — in the countryside most families still cook every day." },
+        ],
+        caption: "≈ 95 từ ≈ 40 giây. Một nguyên nhân, đi tới cùng.",
+      },
+      {
+        t: "note",
+        title: "💡 Bí mắt xích thứ ba? Hỏi tiếp “rồi sao nữa?”",
+        items: [
+          "Sau mỗi câu, tự hỏi thầm **“So what?”** — câu trả lời chính là mắt xích tiếp theo.",
+          "Đổi **quy mô**: cá nhân → gia đình → xã hội (ôn bảng góc nhìn Tập 3 Ngày 6).",
+          "Đổi **thời gian**: ngay bây giờ → 10 năm nữa (ôn Ngày 7).",
+          "Dừng ở 3 mắt xích. Đi tới mắt xích thứ 5 thường thành suy diễn quá xa (“…nên kinh tế sụp đổ”).",
+        ],
+      },
+      { t: "rule", formula: "It mostly comes down to + N → So + cơ chế → And that has a knock-on effect: … which means… → That said, + giới hạn", vi: "Một nguyên nhân – ba mắt xích – một câu rào đón. Dài 40–50 giây." },
+      { t: "h", text: "3. Cụm nhân quả của văn nói — chép vào Sổ Speaking" },
+      {
+        t: "patterns",
+        rows: [
+          { formula: "It (mostly / largely) comes down to + N · It boils down to + N", vi: "“Suy cho cùng là do…” — mở câu trả lời Why.", examples: [{ en: "It largely comes down to money — rents in the centre are simply out of reach.", vi: "Phần lớn là do tiền — tiền thuê nhà ở trung tâm đơn giản là ngoài tầm với." }] },
+          { formula: "A lot of it has to do with + N / the fact that + S + V", vi: "“Phần nhiều liên quan tới…” — mềm hơn, có rào đón sẵn.", examples: [{ en: "A lot of it has to do with the fact that both parents now work full-time.", vi: "Phần nhiều là do giờ cả bố lẫn mẹ đều đi làm toàn thời gian." }] },
+          { formula: "That's (largely / partly) down to + N", vi: "“Cái đó (phần lớn / một phần) là do…” — chỉ dùng khi nói.", examples: [{ en: "Kids spend less time outdoors, and that's partly down to parents worrying about safety.", vi: "Trẻ con ít ra ngoài hơn, và điều đó một phần là do bố mẹ lo chuyện an toàn." }] },
+          { formula: "…, which means (that) + S + V · …, and that in turn + V", vi: "Nối sang mắt xích tiếp theo.", examples: [{ en: "Shops close early, which means the streets are empty by eight, and that in turn makes people feel less safe.", vi: "Cửa hàng đóng sớm, nghĩa là tám giờ phố đã vắng, và điều đó lại khiến người ta thấy kém an toàn." }] },
+          { formula: "So you end up with + N / V-ing · The upshot is (that) + S + V", vi: "Nêu kết cục cuối cùng.", examples: [{ en: "So you end up with a whole generation that can't afford to buy.", vi: "Thế là cuối cùng có cả một thế hệ không đủ tiền mua nhà." }] },
+          { formula: "It has a knock-on effect on + N · It's a vicious circle / a chain reaction", vi: "knock-on effect = hệ quả dây chuyền; vicious circle = vòng luẩn quẩn.", examples: [{ en: "It's a bit of a vicious circle: fewer passengers, so fewer buses, so even fewer passengers.", vi: "Hơi giống vòng luẩn quẩn: ít khách nên ít xe, nên lại càng ít khách." }] },
+        ],
+      },
+      {
+        t: "table",
+        caption: "Cùng một ý — viết (Bài 1) và nói (Bài 3)",
+        head: ["Viết Task 2", "Nói Part 3"],
+        rows: [
+          ["This is largely attributable to…", "That's largely down to…"],
+          ["…, thereby reducing…", "…, and that cuts down on… / which means fewer…"],
+          ["Consequently, …", "So… / As a result… / That's why…"],
+          ["…stems from…", "…comes from… / goes back to…"],
+          ["…gives rise to…", "…leads to… / you end up with…"],
+          ["Given that…", "Seeing as… / Since… / When you think that…"],
+        ],
+      },
+      {
+        t: "note",
+        title: "⚠️ Lỗi hay gặp khi nói nhân quả",
+        items: [
+          "~~The reason is because of…~~ → **The reason is that…** / **It's because…**",
+          "~~It makes people to move.~~ → It **makes** people **move**. · It **causes / leads** people **to move**.",
+          "~~It effects to young people.~~ → It **affects** young people. / It **has an effect on** young people.",
+          "Lạm dụng **because… because… because…** trong một hơi. Đổi: because → so → which means → that's why.",
+          "Nói “Hence”, “Thereby”, “Owing to” ⇒ nghe như đọc thuộc bài viết ⇒ mất tự nhiên (FC).",
+        ],
+      },
+      { t: "h", text: "4. Nhiều nguyên nhân? Xếp hạng, đừng liệt kê" },
+      { t: "p", text: "Khi thật sự có hai nguyên nhân đáng nói, hãy cho giám khảo biết **cái nào nặng hơn**. Việc xếp hạng là một dạng đánh giá — kỹ năng của band 7." },
+      {
+        t: "patterns",
+        rows: [
+          { formula: "The main / biggest driver is + N, but + N + also plays a part.", vi: "driver = động lực chính (nghĩa bóng).", examples: [{ en: "The biggest driver is probably cost, but convenience also plays a part.", vi: "Động lực lớn nhất có lẽ là chi phí, nhưng sự tiện lợi cũng góp phần." }] },
+          { formula: "Partly it's + N, but mostly / more than anything it's + N.", vi: "Đặt nguyên nhân phụ trước, nguyên nhân chính sau — ý chính rơi vào cuối câu.", examples: [{ en: "Partly it's fashion, but more than anything it's the influence of social media.", vi: "Một phần là do mốt, nhưng trên hết là ảnh hưởng của mạng xã hội." }] },
+          { formula: "On top of that, … · And then there's + N.", vi: "Thêm nguyên nhân phụ (văn nói của In addition).", examples: [{ en: "And then there's the weather — nobody wants to cycle in thirty-five degrees.", vi: "Rồi còn thời tiết nữa — chẳng ai muốn đạp xe giữa trời ba mươi lăm độ." }] },
+          { formula: "I wouldn't say it's (just) + N; it's more (that) + S + V.", vi: "Bác nguyên nhân mà người ta hay nghĩ tới, đưa nguyên nhân thật.", examples: [{ en: "I wouldn't say it's laziness; it's more that people simply don't have the time.", vi: "Tôi không cho là do lười; đúng hơn là người ta đơn giản không có thời gian." }] },
+        ],
+      },
+      { t: "rule", formula: "Partly it's + N, but more than anything it's + N → chuỗi 3 mắt xích cho nguyên nhân CHÍNH", vi: "Tối đa hai nguyên nhân: nêu cái phụ trong một câu, rồi phát triển cái chính." },
+      { t: "h", text: "5. Nghe và so — band 6 và band 7 cho cùng một câu hỏi" },
+      {
+        t: "dialogue",
+        title: "Câu trả lời band 6 (ước tính) — 59 từ, khoảng 25 giây",
+        lines: [
+          { who: "Examiner", role: "examiner", text: "Why do you think so many young people are moving from the countryside to big cities?", vi: "Theo bạn vì sao nhiều người trẻ chuyển từ nông thôn lên thành phố lớn?" },
+          { who: "Candidate", role: "candidate", text: "I think there are many reasons. First, because there are more jobs in the city. Second, because the salary is higher. Also, the city has better schools and hospitals. And young people like the city life because it is more exciting. Because of these reasons, many young people move to big cities. It causes many problems for the countryside.", vi: "Tôi nghĩ có nhiều lý do. Thứ nhất, vì thành phố có nhiều việc hơn. Thứ hai, vì lương cao hơn. Ngoài ra thành phố có trường và bệnh viện tốt hơn. Và người trẻ thích cuộc sống thành phố vì nó sôi động hơn. Vì các lý do này, nhiều người trẻ chuyển lên thành phố lớn. Nó gây nhiều vấn đề cho nông thôn." },
+        ],
+      },
+      {
+        t: "dialogue",
+        title: "Câu trả lời band 7 (ước tính) — 107 từ, khoảng 45 giây",
+        lines: [
+          { who: "Examiner", role: "examiner", text: "Why do you think so many young people are moving from the countryside to big cities?", vi: "Theo bạn vì sao nhiều người trẻ chuyển từ nông thôn lên thành phố lớn?" },
+          { who: "Candidate", role: "candidate", text: "Partly it's the lifestyle, but more than anything it comes down to work. In my country, most of the decent, well-paid jobs are concentrated in two or three cities, so if you've got a degree, staying in your home town often means doing something you're overqualified for. And that has a knock-on effect on the places they leave behind: once the young people go, the local shops and schools start to struggle, which in turn gives the next lot even less reason to stay. So it's a bit of a vicious circle, really. That said, I've noticed a few people moving back since remote work took off.", vi: "Một phần là do lối sống, nhưng trên hết là do công việc. Ở nước tôi, phần lớn việc tử tế, lương tốt tập trung ở hai ba thành phố, nên nếu có bằng đại học thì ở lại quê thường nghĩa là làm việc dưới trình độ của mình. Và điều đó gây hệ quả dây chuyền cho nơi họ rời đi: người trẻ đi rồi thì cửa hàng, trường học địa phương bắt đầu chật vật, điều này lại khiến lứa sau càng ít lý do ở lại. Nên thật ra nó hơi giống vòng luẩn quẩn. Dù vậy, tôi để ý thấy vài người đã quay về từ khi làm việc từ xa phổ biến." },
+        ],
+      },
+      {
+        t: "table",
+        head: ["Tiêu chí", "Band 6", "Band 7", "Bạn làm gì"],
+        rows: [
+          ["**FC** trôi chảy – mạch lạc", "4 lý do rời nhau, nối bằng First / Second / Also; hết ý sau 25 giây.", "1 nguyên nhân chính → cơ chế → hệ quả → vòng lặp → giới hạn; nối bằng so, once, which in turn, That said.", "Chọn 1 nguyên nhân, hỏi “So what?” ba lần."],
+          ["**LR** từ vựng", "more jobs, higher salary, many problems", "decent, well-paid jobs · concentrated in · overqualified · knock-on effect · struggle · vicious circle · took off", "Học cụm theo chức năng (mục 3), không học từ rời."],
+          ["**GRA** ngữ pháp", "Câu đơn + because lặp 4 lần.", "Câu điều kiện (if you've got…), once + mệnh đề, which in turn, hiện tại hoàn thành (I've noticed… since…).", "Mỗi câu trả lời có ít nhất một câu phức mang nhân quả."],
+          ["**P** phát âm", "Đọc đều, ngắt sau mỗi câu ngắn.", "Ngắt trước ý chính (more than anything | it comes down to work), sau cụm chêm.", "Luyện mục 7 hôm nay."],
+        ],
+      },
+      { t: "h", text: "6. Kho ý — bốn chủ đề nhân quả hay gặp" },
+      {
+        t: "table",
+        head: ["Câu hỏi", "Nguyên nhân gốc", "Cơ chế", "Hệ quả xa"],
+        rows: [
+          ["Why are people having fewer children?", "the cost of housing and childcare", "couples postpone starting a family until they feel financially secure", "an ageing population; fewer workers supporting more pensioners (từ vựng Ngày 16)"],
+          ["What effect does tourism have on local people?", "a sudden influx of visitors with money to spend", "landlords switch to short-term lets; prices in cafés and shops go up", "locals are priced out of their own neighbourhood; the place loses its character"],
+          ["Why do small shops struggle nowadays?", "online retailers can undercut them on price", "people browse in the shop, then buy on their phone", "empty high streets; fewer places for neighbours to bump into each other"],
+          ["What are the consequences of people working longer hours?", "pressure to be always available", "less time for sleep, exercise and family meals", "burnout; children seeing less of their parents"],
+        ],
+      },
+      { t: "h", text: "7. Phát âm: pause mang nghĩa — ngắt ở đâu thì câu đổi nghĩa ở đó" },
+      { t: "p", text: "**Pause** (chỗ ngắt hơi) không phải là “ngập ngừng”. Ngắt đúng chỗ giúp người nghe tách các mắt xích của chuỗi. Ngắt sai chỗ (giữa một cụm từ) mới làm mất điểm trôi chảy. Ở Ngày 9 bạn đã chia câu thành **tone units** (cụm ngữ điệu); hôm nay học **bốn chỗ ngắt có chủ ý**. Ký hiệu: **|** ngắt ngắn, **‖** ngắt dài hơn." },
+      {
+        t: "table",
+        head: ["Chỗ ngắt", "Ví dụ", "Tác dụng"],
+        rows: [
+          ["① Giữa hai mắt xích", "Rents go up, **|** so young people move out.", "Người nghe thấy rõ nguyên nhân | hệ quả."],
+          ["② Quanh cụm chêm", "That, **|** in turn, **|** pushes prices up. · The main reason, **|** I think, **|** is cost.", "Cụm chêm (in turn, I think, to be honest) luôn có ngắt hai bên."],
+          ["③ Trước ý quan trọng", "It's not laziness; **‖** it's a lack of time.", "Khoảng lặng làm ý sau nổi lên — thay cho việc nói to hơn."],
+          ["④ Sau câu hỏi tu từ", "And the result? **‖** Fewer people cook at home.", "Cho người nghe nửa giây chờ câu trả lời."],
+        ],
+      },
+      {
+        t: "note",
+        title: "⚠️ Ngắt sai chỗ — và ngắt đổi nghĩa",
+        items: [
+          "Không ngắt giữa một cụm: ~~a knock-on | effect~~ · ~~comes down | to money~~ · ~~the cost | of housing~~.",
+          "Ngắt đổi nghĩa: **I didn't move | because of the job.** (không chuyển đi — vì công việc giữ lại) ≠ **I didn't move because of the job |** (…mà vì lý do khác).",
+          "Muốn có thời gian nghĩ ⇒ ngắt ở **ranh giới cụm** và dùng cụm đệm (Well, | I suppose…), đừng “ờ…” giữa cụm.",
+        ],
+      },
+      {
+        t: "phatam",
+        id: "t4d15-phat-am",
+        title: "Luyện phát âm — pause mang nghĩa",
+        note: "Đọc mỗi câu hai lần: lần một ngắt đúng chỗ dấu phẩy / chấm phẩy / chấm hỏi, lần hai nhanh hơn nhưng vẫn giữ chỗ ngắt. Máy chấm độ chính xác từng từ và độ trôi chảy — ngắt giữa cụm sẽ kéo điểm trôi chảy xuống.",
+        items: [
+          { text: "Rents go up, so young people move out.", ipa: "rents ɡəʊ ʌp səʊ jʌŋ piːpl muːv aʊt", vi: "Tiền thuê tăng, nên người trẻ dọn đi. (ngắt sau up)" },
+          { text: "That, in turn, pushes prices up.", ipa: "ðæt ɪn tɜːn pʊʃɪz praɪsɪz ʌp", vi: "Điều đó, đến lượt nó, đẩy giá lên. (ngắt hai bên in turn)" },
+          { text: "The main reason, I think, is cost.", ipa: "ðə meɪn riːzn aɪ θɪŋk ɪz kɒst", vi: "Lý do chính, tôi nghĩ, là chi phí. (ngắt hai bên I think)" },
+          { text: "It's not laziness; it's a lack of time.", ipa: "ɪts nɒt leɪzinəs ɪts ə læk əv taɪm", vi: "Không phải do lười; mà do thiếu thời gian. (ngắt dài trước it's a lack)" },
+          { text: "And the result? Fewer people cook at home.", ipa: "ənd ðə rɪzʌlt fjuːə piːpl kʊk ət həʊm", vi: "Và kết quả? Ít người nấu ăn ở nhà hơn. (ngắt dài sau result)" },
+          { text: "Which means, in the long run, poorer health.", ipa: "wɪtʃ miːnz ɪn ðə lɒŋ rʌn pɔːrə helθ", vi: "Nghĩa là, về lâu dài, sức khoẻ kém hơn. (ngắt hai bên in the long run)" },
+        ],
+      },
+      { t: "h", text: "8. Luyện nói Part 3 — ghi âm, AI chấm" },
+      {
+        t: "quiz", id: "t4d15-noi-dien-khung", kind: "fill",
+        title: "Điền MỘT từ để hoàn thành cụm nói nhân quả (6 câu)",
+        items: [
+          { q: "I think it mostly comes ___ to cost.", answers: ["down"] },
+          { q: "Fewer buses run at night, ___ means people feel they have to drive.", answers: ["which"] },
+          { q: "That has a knock-___ effect on local businesses.", answers: ["on"] },
+          { q: "A lot of it has to ___ with the fact that both parents work.", answers: ["do"] },
+          { q: "So you ___ up with empty shops in the town centre.", answers: ["end"] },
+          { q: "It's a bit of a vicious ___: low pay, so nobody applies, so the staff who remain are overworked.", answers: ["circle", "cycle"] },
+        ],
+      },
+      {
+        t: "mcq", id: "t4d15-noi-chon", title: "Chọn câu nói tự nhiên và đúng nhất (4 câu)",
+        items: [
+          { q: "Mở câu trả lời cho “Why do people eat out more nowadays?”", options: ["Hence the phenomenon is attributable to convenience.", "There are many reasons. First, …; second, …; third, …", "I'd say it largely comes down to convenience.", "The reason is because of convenient."], correct: 2, why: "C: cụm văn nói, chọn một nguyên nhân để phát triển. A là văn viết; B báo trước một danh sách; D sai ngữ pháp." },
+          { q: "Câu nào nối mắt xích thứ hai đúng?", options: ["…, which in turn makes it harder for small shops to survive.", "…, thereby it makes harder for small shops.", "…, in turn which makes small shops harder survive.", "…, that in turn make small shops to survive harder."], correct: 0, why: "**, which in turn + V(s)**. B: thereby + V-ing và là văn viết; C, D sai trật tự / sai dạng động từ." },
+          { q: "Chỗ ngắt nào đúng?", options: ["The main | reason I think is | cost.", "The main reason, | I think, | is cost.", "The | main reason I | think is cost.", "The main reason I think | is | cost."], correct: 1, why: "Cụm chêm **I think** có ngắt hai bên; không ngắt giữa cụm danh từ the main reason." },
+          { q: "Câu nào xếp hạng hai nguyên nhân tốt nhất?", options: ["It is because of money and also because of fashion and also friends.", "Money. Fashion. Friends.", "Firstly money, secondly fashion.", "Partly it's fashion, but more than anything it's the price."], correct: 3, why: "**Partly it's…, but more than anything it's…** cho biết cái nào nặng hơn, ý chính rơi vào cuối câu." },
+        ],
+      },
+      { t: "p", text: "Ghi âm từng câu **40–50 giây**. Trước khi nói, viết ra giấy 3 từ khoá cho 3 mắt xích (vd: **rent → move out → empty schools**). Nghe lại và tự hỏi: mình có đi tới mắt xích thứ ba không? Có ngắt trước ý chính không?" },
+      {
+        t: "speak", id: "t4d15-noi-nguyen-nhan", part: "3",
+        questions: [
+          "Why do you think so many young people are moving from the countryside to big cities?",
+          "Why are fewer people cooking at home these days?",
+          "What has led to the decline of small, family-run shops in many towns?",
+          "Why do some people find it hard to save money nowadays?",
+        ],
+      },
+      {
+        t: "speak", id: "t4d15-noi-he-qua", part: "3",
+        questions: [
+          "What effect does tourism have on the people who live in popular destinations?",
+          "What are the consequences of people working longer hours than in the past?",
+          "How does the use of smartphones affect the way families spend time together?",
+          "If fewer young people stay in rural areas, what happens to those communities in the long run?",
+        ],
+      },
+      {
+        t: "note",
+        title: "📌 Tự chấm sau khi nghe lại",
+        items: [
+          "Có đủ **3 mắt xích** và 1 câu rào đón? Thiếu ⇒ nói lại, tự hỏi “So what?”.",
+          "Đếm chữ **because**: > 2 lần trong một câu trả lời ⇒ đổi sang so / which means / that's why.",
+          "Có ít nhất 2 cụm ở mục 3 (comes down to, knock-on effect, end up with…)?",
+          "Chép câu trả lời tốt nhất vào **Sổ Speaking**; hôm sau đóng vai giám khảo hỏi lại (thói quen từ Tập 3 Ngày 2).",
+        ],
+      },
+    ],
+  },
+  /* ═══════════════════════════ BÀI TẬP ═══════════════════════════ */
+  {
+    id: "t4d15-bai-tap",
+    kind: "homework",
+    title: "Bài tập Ngày 15",
+    goal: "Tự kiểm cả ngày: từ nối đúng tầng – đúng liều, nhân quả đúng mức độ và đúng chiều, nối đuôi câu với paraphrase nâng cao, cụm nói nhân quả và chỗ ngắt hơi — 38 câu có đáp án; sau đó làm Đề 7.",
+    minutes: 55,
+    blocks: [
+      {
+        t: "recap",
+        title: "Bài tập hôm nay (38 câu)",
+        items: [
+          "**I** Điền từ nối (8) · **II** Trắc nghiệm (8) · **III** Sửa lỗi (5) · **IV** Dịch (5) — ngữ pháp Bài 1.",
+          "**V** Đọc: nối đuôi câu trên đoạn mới (4 câu, 6 phút) — Bài 2.",
+          "**VI** Cụm nói nhân quả (5) · **VII** Chỗ ngắt (3) — Bài 3.",
+          "Đạt: **≥ 29/38**. Sai ≥ 3 câu ở phần I–II ⇒ đọc lại bảng ba tầng (Bài 1 mục 3) và bảng mức độ (mục 4).",
+          "Xong bài tập ⇒ làm **Đề 7** ở Online Test (giữa tập, đủ 4 kỹ năng, đúng giờ).",
+        ],
+      },
+      { t: "h", text: "I. Điền từ nối (8 câu) — ôn Bài 1 mục 1–5" },
+      {
+        t: "quiz", id: "t4d15-bt-dien", kind: "fill",
+        title: "Điền MỘT từ (chọn trong: thereby · whereas · given · despite · nevertheless · turn · that · stems)",
+        items: [
+          { q: "The city banned cars from the centre, ___ improving air quality.", answers: ["thereby"] },
+          { q: "___ a sharp rise in fares, passenger numbers held steady.", answers: ["Despite"] },
+          { q: "Northern regions are losing population, ___ the south continues to grow.", answers: ["whereas"] },
+          { q: "___ that most jobs are now in services, the decline of factory towns is hardly surprising.", answers: ["Given"] },
+          { q: "Much of the public anger ___ from a sense that the rules are not applied equally.", answers: ["stems"] },
+          { q: "Schools close, which in ___ discourages young families from moving to the village.", answers: ["turn"] },
+          { q: "The evidence was weak; the committee, ___, approved the plan.", answers: ["nevertheless"] },
+          { q: "The reform is significant in ___ it applies to private companies as well as public bodies.", answers: ["that"] },
+        ],
+      },
+      { t: "h", text: "II. Chọn đáp án đúng (8 câu) — ôn Bài 1 mục 3–5" },
+      {
+        t: "mcq", id: "t4d15-bt-chon", title: "Trắc nghiệm",
+        items: [
+          { q: "Poor housing is a major factor ___ childhood illness.", options: ["of", "to", "in", "for"], correct: 2, why: "a factor **in** N." },
+          { q: "The drop in sales has been ___ to the unusually cold summer.", options: ["attributed", "resulted", "caused", "led"], correct: 0, why: "be **attributed to** + nguyên nhân. resulted / led không dùng bị động kiểu này." },
+          { q: "Unemployment is not falling. ___, it has risen for three months in a row.", options: ["By contrast", "On the contrary", "Meanwhile", "Moreover"], correct: 1, why: "Bác bỏ ý “đang giảm” và nói điều ngược lại ⇒ **On the contrary**." },
+          { q: "Prices were raised ___ the company could cover its costs.", options: ["so as", "in order", "thereby", "so that"], correct: 3, why: "Mục đích + mệnh đề ⇒ **so that** + S + could. so as / in order phải + to V." },
+          { q: "Loneliness among older people often ___ the loss of a partner.", options: ["results in", "results from", "leads to", "gives rise to"], correct: 1, why: "Cô đơn là KẾT QUẢ, mất bạn đời là nguyên nhân ⇒ **results from**." },
+          { q: "It was ___ that the trial had to be stopped.", options: ["so a serious error", "a so serious error", "such a serious error", "such serious an error"], correct: 2, why: "**such + a/an + adj + N + that**." },
+          { q: "The scheme reduced waste. ___, it saved the council money.", options: ["In addition", "However", "On the other hand", "In contrast"], correct: 0, why: "Thêm lợi ích cùng chiều ⇒ **In addition**." },
+          { q: "Higher interest rates have ___ the difficulties faced by first-time buyers.", options: ["alleviated", "attributed", "stemmed", "exacerbated"], correct: 3, why: "Lãi suất cao làm khó khăn **tệ thêm** ⇒ exacerbated. alleviated = làm nhẹ đi (ngược nghĩa)." },
+        ],
+      },
+      { t: "h", text: "III. Sửa lỗi (5 câu) — mỗi câu có MỘT lỗi; viết lại phần sửa" },
+      {
+        t: "quiz", id: "t4d15-bt-sua-loi", kind: "fill",
+        title: "Viết từ / cụm ĐÚNG thay cho phần in đậm (câu 1: điền từ còn thiếu)",
+        items: [
+          { q: "~~Although the service is free, but few residents use it.~~ → Although the service is free, ___ residents use it. (1 từ — viết lại vế sau cho đúng)", answers: ["few"] },
+          { q: "Cheap flights have contributed to **increase** tourism. (1 từ)", answers: ["increasing"] },
+          { q: "The firm cut prices, thereby **attracted** new customers. (1 từ)", answers: ["attracting"] },
+          { q: "The reason **of** the delay is that funding was withdrawn. (1 từ)", answers: ["for"] },
+          { q: "Japan has a very old population. **On the contrary,** Nigeria's is extremely young. (2 từ)", answers: ["By contrast,", "By contrast", "In contrast,", "In contrast"] },
+        ],
+      },
+      { t: "h", text: "IV. Dịch Việt → Anh (5 câu)" },
+      {
+        t: "quiz", id: "t4d15-bt-dich", kind: "translate", grammar: "however giữa câu · contribute to · so…that · given that · which in turn",
+        title: "Dịch",
+        items: [
+          { q: "Du lịch tạo ra việc làm. Tuy nhiên, phần lớn những việc này chỉ theo mùa. (however giữa câu)", answers: ["Tourism creates jobs. Most of these jobs, however, are seasonal.", "Tourism creates jobs. Most of them, however, are only seasonal.", "Tourism creates jobs. Most of these, however, are seasonal."], hint: "Most of these jobs, however, …" },
+          { q: "Thiếu ngủ có thể góp phần gây ra kết quả học tập kém.", answers: ["Lack of sleep can contribute to poor academic performance.", "A lack of sleep can contribute to poor academic results.", "Lack of sleep may contribute to poor academic performance."], hint: "can contribute to + N" },
+          { q: "Giao thông tệ đến mức nhiều người thích làm việc ở nhà hơn.", answers: ["The traffic is so bad that many people prefer to work from home.", "Traffic is so bad that many people prefer working from home.", "The traffic is so bad that many people prefer working from home."], hint: "so bad that" },
+          { q: "Xét rằng hầu hết sinh viên đi làm thêm, thư viện nên mở cửa muộn hơn.", answers: ["Given that most students work part-time, the library should stay open later.", "Given that most students have part-time jobs, the library should open later.", "Given that most students work part-time, the library should open later."], hint: "Given that + S + V" },
+          { q: "Lương thấp khiến giáo viên bỏ nghề, điều này đến lượt nó làm sĩ số lớp tăng lên.", answers: ["Low pay causes teachers to leave the profession, which in turn increases class sizes.", "Low pay drives teachers out of the profession, which in turn increases class sizes.", "Low salaries cause teachers to leave the profession, which in turn increases class sizes."], hint: ", which in turn increases…" },
+        ],
+      },
+      { t: "h", text: "V. Đọc — nối đuôi câu (4 câu, 6 phút) — ôn Bài 2" },
+      {
+        t: "passage",
+        title: "Why Prices End in 99",
+        intro: "Đoạn tự soạn — khoảng 120 từ.",
+        paras: [
+          { text: "Prices that end in 99 are so common that most shoppers barely notice them. One popular explanation is historical. In the late nineteenth century, some shop owners are said to have set odd prices so that cashiers would have to open the till to give change, which made it harder for them to pocket the money. Whether or not this story is true, the habit has survived for a different reason. People tend to read prices from left to right and pay most attention to the first digit, so £4.99 feels much closer to £4 than to £5. Not every retailer follows the pattern, however. Luxury brands often prefer round numbers, since a price such as £200 suggests quality rather than a bargain." },
+        ],
+      },
+      {
+        t: "table",
+        caption: "Complete each sentence with the correct ending, A–F. (2 đuôi thừa)",
+        head: ["", "Đầu câu (1–4) / Đuôi câu (A–F)"],
+        rows: [
+          ["**1**", "Shoppers hardly notice prices that end in 99 …"],
+          ["**2**", "Some nineteenth-century shop owners are said to have chosen odd prices …"],
+          ["**3**", "A price of £4.99 seems much lower than £5 …"],
+          ["**4**", "Luxury brands often avoid prices that end in 99 …"],
+          ["**A**", "because buyers focus mainly on the first figure."],
+          ["**B**", "because the law required prices to be exact."],
+          ["**C**", "because such prices are everywhere."],
+          ["**D**", "because round figures make a product seem superior."],
+          ["**E**", "so that staff could not easily keep customers' money."],
+          ["**F**", "so that customers would receive less change."],
+        ],
+      },
+      {
+        t: "quiz", id: "t4d15-bt-doc", kind: "fill",
+        title: "Viết một chữ cái A–F",
+        items: [
+          { q: "(1) Shoppers hardly notice prices that end in 99 …", answers: ["C"], hint: "“**so common that** most shoppers barely notice them” — so … that (Bài 1) đổi thành because: kết quả ↔ nguyên nhân đảo chỗ, nghĩa giữ nguyên." },
+          { q: "(2) Some nineteenth-century shop owners are said to have chosen odd prices …", answers: ["E"], hint: "“so that cashiers would have to open the till… harder for them to **pocket the money**” → staff could not easily keep customers' money (ý ẩn). F nghe hợp lý nhưng bài không nói gì về tiền thối ít hơn." },
+          { q: "(3) A price of £4.99 seems much lower than £5 …", answers: ["A"], hint: "“pay most attention to the **first digit**” → focus mainly on the first figure (đồng nghĩa: digit → figure; pay attention → focus)." },
+          { q: "(4) Luxury brands often avoid prices that end in 99 …", answers: ["D"], hint: "“a price such as £200 **suggests quality rather than a bargain**” → round figures make a product seem superior (kiểu ⑦ khái quát hoá). B không có trong bài." },
+        ],
+      },
+      { t: "h", text: "VI. Cụm nói nhân quả (5 câu) — ôn Bài 3 mục 3–4" },
+      {
+        t: "quiz", id: "t4d15-bt-noi", kind: "fill",
+        title: "Điền MỘT từ",
+        items: [
+          { q: "Partly it's the weather, but more than ___ it's the cost.", answers: ["anything"] },
+          { q: "People cycle less now, and that's largely ___ to how dangerous the roads have become.", answers: ["down"] },
+          { q: "The biggest ___ is probably price, but convenience also plays a part.", answers: ["driver", "factor"] },
+          { q: "I wouldn't say it's laziness; it's ___ that people are exhausted after work.", answers: ["more"] },
+          { q: "It all ___ down to whether you can afford it.", answers: ["boils", "comes"] },
+        ],
+      },
+      { t: "h", text: "VII. Chỗ ngắt (3 câu) — ôn Bài 3 mục 7" },
+      {
+        t: "mcq", id: "t4d15-bt-phat-am", title: "Chọn cách ngắt đúng",
+        items: [
+          { q: "“That in turn pushes prices up.”", options: ["That in | turn pushes | prices up.", "That in turn pushes | prices | up.", "That, | in turn, | pushes prices up.", "That | in turn pushes prices | up."], correct: 2, why: "Cụm chêm **in turn** có ngắt hai bên; không tách pushes prices up." },
+          { q: "“It has a knock-on effect on local shops.” — KHÔNG được ngắt ở đâu?", options: ["sau “effect”", "giữa “knock-on” và “effect”", "trước “It”", "sau “shops”"], correct: 1, why: "**knock-on effect** là một cụm cố định — ngắt giữa cụm làm câu vỡ." },
+          { q: "“And the result? Fewer people cook at home.” — chỗ ngắt dài nhất nằm ở:", options: ["sau “result?”", "sau “And”", "sau “people”", "sau “cook”"], correct: 0, why: "Sau câu hỏi tu từ, ngắt dài để người nghe chờ câu trả lời." },
+        ],
+      },
+      {
+        t: "note",
+        title: "📌 Việc tiếp theo",
+        items: [
+          "Chép 5 cặp paraphrase của bài đọc hôm nay vào sổ (ghi kiểu ①–⑦).",
+          "Viết lại **một đoạn thân bài** Task 2 cũ của bạn: bỏ bớt trạng từ nối đầu câu, thêm một chuỗi nhân quả 3 mắt xích.",
+          "🖥️ Làm **Đề 7** (Online Test) — rồi ghi câu sai vào sổ lỗi theo dạng câu hỏi.",
+        ],
+      },
+    ],
+  },
+];

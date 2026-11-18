@@ -98,6 +98,7 @@ const SPECS: Spec[] = [
   // IELTS Tập 2 (band 4.0→5.0, 24 ngày, id `t2dN-…`) — app CT Language xin 12/11/2026 (docs/ct-language-app.md mục 8).
   { khoa: 'ielts-tap2', data: join(LANG, 'ielts/tap-2/data.ts'), ten: 'IELTS_T2' },
   { khoa: 'ielts-tap3', data: join(LANG, 'ielts/tap-3/data.ts'), ten: 'IELTS_T3' },
+  { khoa: 'ielts-tap4', data: join(LANG, 'ielts/tap-4/data.ts'), ten: 'IELTS_T4' },
   { khoa: 'jp', data: join(LANG, 'jp/data.ts'), ten: 'JP' },
   { khoa: 'ch', data: join(LANG, 'ch/data.ts'), ten: 'CH' },
 ];

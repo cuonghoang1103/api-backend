@@ -75,6 +75,16 @@ export const BO_TU: BoTu[] = [
     },
   },
   {
+    // IELTS Tập 4 (18/11/2026): mọi ngày tải chậm qua tap-4/ngay — chưa soạn ngày nào thì bộ rỗng (0 từ).
+    id: 'tap4', ten: 'Từ của khoá — Tập 4', mo: 'Từ vựng mọi Ngày đã soạn của IELTS Tập 4 (6.0 → 7.0)',
+    tai: async () => {
+      const [{ loadNgay }, { MANIFEST }] = await Promise.all([import('../tap-4/ngay'), import('../tap-4/ngay/manifest')]);
+      const ngay = Object.keys(MANIFEST).map(Number).sort((a, b) => a - b);
+      const ls = await Promise.all(ngay.map((n) => loadNgay(n) ?? Promise.resolve([] as Lesson[])));
+      return ls.flatMap((l) => tuTuBai(l, 'tap4'));
+    },
+  },
+  {
     id: 'nen1', ten: 'Nền tảng — chặng 1 (band 0 → 3)', mo: '300 từ đời sống cơ bản theo chủ đề',
     tai: async () => {
       const [a, b] = await Promise.all([import('@/app/tech-trends/ielts/data/stage1/vocab-a'), import('@/app/tech-trends/ielts/data/stage1/vocab-b')]);

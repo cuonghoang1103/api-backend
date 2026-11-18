@@ -62,8 +62,8 @@ describe('khopTuyenWeb', () => {
     expect(khopTuyenWeb('/ielts/luyen-them')?.thamSo).toEqual({ code: 'en' });
     expect(khopTuyenWeb('/language/en/ielts/phong-thi')?.tuyen.mau).toBe('/language/:code/ielts/phong-thi');
     expect(thuocCayWeb('/ielts/phong-thi')).toBe(true);
-    // Đợt 1 nâng cấp (07/10/2026): phòng thi máy tính, flashcard, sổ lỗi. 12/11/2026: + khoá Tập 2 (/tap-2). 18/11/2026: + Tập 3 (/tap-3).
-    for (const t of ['thi-may', 'the-tu', 'so-loi', 'tap-2', 'tap-3']) {
+    // Đợt 1 nâng cấp (07/10/2026): phòng thi máy tính, flashcard, sổ lỗi. 12/11/2026: + khoá Tập 2 (/tap-2). 18/11/2026: + Tập 3, Tập 4.
+    for (const t of ['thi-may', 'the-tu', 'so-loi', 'tap-2', 'tap-3', 'tap-4']) {
       expect(khopTuyenWeb(`/ielts/${t}`)?.thamSo).toEqual({ code: 'en' });
       expect(khopTuyenWeb(`/language/en/ielts/${t}`)?.tuyen.mau).toBe(`/language/:code/ielts/${t}`);
       expect(thuocCayWeb(`/ielts/${t}`)).toBe(true);
@@ -325,8 +325,8 @@ describe('khopTuyenWeb', () => {
     // 12/11/2026: +2 IELTS Tập 2 (/language/:code/ielts/tap-2 và /ielts/tap-2).
     // 12/11/2026: +2 🔒 Tài liệu riêng IELTS (/language/:code/ielts/tai-lieu-rieng và /ielts/tai-lieu-rieng).
     // 14/11/2026: +1 Góp ý & bổ sung khoá học (/courses/:slug/gop-y).
-    // 18/11/2026: +2 IELTS Tập 3 (/language/:code/ielts/tap-3 và /ielts/tap-3).
-    expect(thay.size).toBe(212);
+    // 18/11/2026: +2 IELTS Tập 3 (/language/:code/ielts/tap-3 và /ielts/tap-3), +2 IELTS Tập 4 (tap-4).
+    expect(thay.size).toBe(214);
   });
 });
 

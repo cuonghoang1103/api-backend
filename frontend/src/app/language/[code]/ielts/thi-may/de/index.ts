@@ -91,6 +91,28 @@ export const MUC_LUC: MucDe[] = [
   { id: 'viet-01', kyNang: 'viet', ten: 'Academic Writing — Test 1', boDe: 'Đề 6', capDo: 'Band 6 → 7.5', phut: 60, soCau: 2, moTa: 'Task 1 bar chart (commuting) · Task 2 discuss both views (university purpose)' },
   { id: 'noi-06', kyNang: 'noi', ten: 'Speaking — Test 1', boDe: 'Đề 6', capDo: 'Band 6 → 7.5', phut: 13, soCau: 3,
     moTa: 'Part 1: art · neighbours · Part 2: an important decision you made · Part 3: decisions, advice, choice and technology' },
+  // Đề 7 — giữa Tập 4 (sau Ngày 15), band 6.5 (soạn 18/11/2026).
+  { id: 'nghe-de7', kyNang: 'nghe', ten: 'Listening — Đề 7 (giữa Tập 4)', boDe: 'Đề 7', capDo: 'Band 6.5', phut: 30, soCau: 40,
+    moTa: 'Registering for a conference (US + NZ) · A new health centre & two-floor plan · Four students evaluate their project · Lecture on the reliability of memory (Irish speaker)',
+    dang: ['form', 'table', 'mcq', 'map', 'match-feature', 'mcq2', 'note', 'summary'] },
+  { id: 'doc-de7', kyNang: 'doc', ten: 'Academic Reading — Đề 7 (giữa Tập 4)', boDe: 'Đề 7', capDo: 'Band 6.5', phut: 60, soCau: 40,
+    moTa: 'Sixty-six days (how long a habit takes to form) · The man who fooled the experts (a famous art forgery) · The fear of fewer (is a falling population a disaster?)',
+    dang: ['tfng', 'table', 'short', 'heading', 'flow', 'mcq2', 'ynng', 'mcq', 'match-ending'] },
+  { id: 'viet-de7', kyNang: 'viet', ten: 'Academic Writing — Đề 7 (giữa Tập 4)', boDe: 'Đề 7', capDo: 'Band 6.5', phut: 60, soCau: 2,
+    moTa: 'Task 1: people living alone in four age groups, 1975–2025 (line graph with four lines) · Task 2: is it still necessary for schools to make students memorise facts? (opinion)' },
+  { id: 'noi-de7', kyNang: 'noi', ten: 'Speaking — Đề 7 (giữa Tập 4)', boDe: 'Đề 7', capDo: 'Band 6.5', phut: 13, soCau: 3,
+    moTa: 'Part 1: books · time management · Part 2: a rule you had to follow at school or at work · Part 3: rules for children, rules in society' },
+  // Đề 8 — thi cuối Tập 4 (sau Ngày 30), band 7.0 (soạn 18/11/2026).
+  { id: 'nghe-de8', kyNang: 'nghe', ten: 'Listening — Đề 8 (thi cuối Tập 4)', boDe: 'Đề 8', capDo: 'Band 7.0', phut: 30, soCau: 40,
+    moTa: 'Booking a removal company (Irish + UK) · A lantern festival guide & site map · A student discusses his dissertation with his supervisor · Lecture on smart cities (New Zealand speaker)',
+    dang: ['form', 'sentence', 'mcq', 'map', 'mcq2', 'match-feature', 'note', 'table'] },
+  { id: 'doc-de8', kyNang: 'doc', ten: 'Academic Reading — Đề 8 (thi cuối Tập 4)', boDe: 'Đề 8', capDo: 'Band 7.0', phut: 60, soCau: 40,
+    moTa: 'The view from above (archaeology from the air) · The long road to cheap sunlight (the solar cell) · The trouble with nudges (the limits of behavioural policy)',
+    dang: ['match-info', 'tfng', 'summary', 'heading', 'match-feature', 'summary-box', 'ynng', 'mcq', 'match-ending'] },
+  { id: 'viet-de8', kyNang: 'viet', ten: 'Academic Writing — Đề 8 (thi cuối Tập 4)', boDe: 'Đề 8', capDo: 'Band 7.0', phut: 60, soCau: 2,
+    moTa: 'Task 1: international students by region of origin, 2005 and 2025, and their subjects in 2025 (bar chart + pie chart) · Task 2: taking a year off between school and university — do the advantages outweigh the disadvantages?' },
+  { id: 'noi-de8', kyNang: 'noi', ten: 'Speaking — Đề 8 (thi cuối Tập 4)', boDe: 'Đề 8', capDo: 'Band 7.0', phut: 14, soCau: 3,
+    moTa: 'Part 1: plants · noise · Part 2: a piece of advice you received that was useful · Part 3: giving and taking advice, advice in the future' },
 ];
 
 /** id → hàm tải tệp đề (mỗi tệp một chunk). */
@@ -124,6 +146,14 @@ const TEP_DE: Record<string, () => Promise<De>> = {
   'viet-de5': () => import('./viet-de5').then((m) => m.VIET_DE5),
   'noi-de5': () => import('./noi-de5').then((m) => m.NOI_DE5),
   'noi-06': () => import('./noi-06').then((m) => m.NOI_06),
+  'nghe-de7': () => import('./nghe-de7').then((m) => m.NGHE_DE7),
+  'doc-de7': () => import('./doc-de7').then((m) => m.DOC_DE7),
+  'viet-de7': () => import('./viet-de7').then((m) => m.VIET_DE7),
+  'noi-de7': () => import('./noi-de7').then((m) => m.NOI_DE7),
+  'nghe-de8': () => import('./nghe-de8').then((m) => m.NGHE_DE8),
+  'doc-de8': () => import('./doc-de8').then((m) => m.DOC_DE8),
+  'viet-de8': () => import('./viet-de8').then((m) => m.VIET_DE8),
+  'noi-de8': () => import('./noi-de8').then((m) => m.NOI_DE8),
 };
 
 export function taiDe(id: string): Promise<De> | null {
@@ -145,6 +175,7 @@ export const THU_TU_THI: KyNang[] = ['sangloc', 'nghe', 'doc', 'viet', 'noi'];
  * Đề 2 (Tập 2 · Ngày 12) = bộ `-de2`; Đề 3 (thi cuối Tập 2) = bộ `-de3` (cùng quy ước mã như Đề 1).
  * Đề 4 (giữa Tập 3, sau Ngày 15) = bộ `-de4`; Đề 5 (thi cuối Tập 3, sau Ngày 30) = bộ `-de5`.
  * Đề 6 (đầu Tập 4) = `nghe-01` · `doc-01` · `viet-01` · `noi-06`.
+ * Đề 7 (giữa Tập 4, sau Ngày 15) = bộ `-de7`; Đề 8 (thi cuối Tập 4, sau Ngày 30) = bộ `-de8`.
  */
 export const BO_DE: BoDeDu[] = [
   {
@@ -174,6 +205,14 @@ export const BO_DE: BoDeDu[] = [
   {
     id: 'bo-06', so: 6, ten: 'Đề 6', capDo: 'Band 6.0 → 7.5', viTri: 'Đầu Tập 4 (Ngày 1)',
     nghe: 'nghe-01', doc: 'doc-01', viet: 'viet-01', noi: 'noi-06',
+  },
+  {
+    id: 'bo-07', so: 7, ten: 'Đề 7', capDo: 'Band 6.5', viTri: 'Giữa Tập 4 (sau Ngày 15)',
+    nghe: 'nghe-de7', doc: 'doc-de7', viet: 'viet-de7', noi: 'noi-de7',
+  },
+  {
+    id: 'bo-08', so: 8, ten: 'Đề 8', capDo: 'Band 7.0', viTri: 'Thi cuối Tập 4 (sau Ngày 30)',
+    nghe: 'nghe-de8', doc: 'doc-de8', viet: 'viet-de8', noi: 'noi-de8',
   },
 ];
 

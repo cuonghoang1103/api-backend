@@ -31,6 +31,8 @@ const THU_MUC = [
   'frontend/src/app/language/[code]/ielts/tap-2', // IELTS Tập 2: data.ts (Mở đầu) + tracuu.ts
   'frontend/src/app/language/[code]/ielts/tap-3/ngay', // IELTS Tập 3 (18/11/2026): ngày t3dN
   'frontend/src/app/language/[code]/ielts/tap-3', // IELTS Tập 3: data.ts (Mở đầu) + tracuu.ts
+  'frontend/src/app/language/[code]/ielts/tap-4/ngay', // IELTS Tập 4 (18/11/2026): ngày t4dN
+  'frontend/src/app/language/[code]/ielts/tap-4', // IELTS Tập 4: data.ts (Mở đầu) + tracuu.ts
 ];
 export const KHOA = (slug: string) => `hoc/hinh/${slug}.webp`;
 

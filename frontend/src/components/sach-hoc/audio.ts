@@ -149,7 +149,7 @@ function browserVoice(v?: Voice): SpeechSynthesisVoice | undefined {
   const vv = v ?? defaultVoice;
   const nam = vv.endsWith('nam');
   const lang = vv.startsWith('ja') ? 'ja' : vv.startsWith('zh') ? 'zh' : 'en';
-  const want = vv.startsWith('ja') ? 'ja-JP' : vv.startsWith('zh') ? 'zh-CN' : vv.startsWith('us') ? 'en-US' : vv.startsWith('au') ? 'en-AU' : vv.startsWith('ca') ? 'en-CA' : vv.startsWith('nz') ? 'en-NZ' : 'en-GB';
+  const want = vv.startsWith('ja') ? 'ja-JP' : vv.startsWith('zh') ? 'zh-CN' : vv.startsWith('us') ? 'en-US' : vv.startsWith('au') ? 'en-AU' : vv.startsWith('ca') ? 'en-CA' : vv.startsWith('nz') ? 'en-NZ' : vv.startsWith('ie') ? 'en-IE' : 'en-GB';
   const pool = all.filter((x) => x.lang?.replace('_', '-').startsWith(lang));
   // Giọng hệ thống không ghi giới tính — đoán theo tên quen thuộc của macOS/Windows/Chrome.
   const MALE = /(daniel|alex|fred|tom|oliver|arthur|aaron|rishi|david|mark|george|guy|ryan|otoya|hattori|ichiro|keita|male|男)/i;

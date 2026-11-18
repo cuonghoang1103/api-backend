@@ -157,3 +157,12 @@ Giống hệt Tập 2 ở mục trên, chỉ khác:
   trả lời mẫu band 5 vs band 6; Reading/Listening độ dài và độ paraphrase đúng mức Tập 3 (passage ~700–900 từ, nghe ~150 wpm).
 - **Giọng:** thêm `ca-nu` / `ca-nam` (Canada) và `nz-nu` / `nz-nam` (New Zealand) — Azure `en-CA-*` / `en-NZ-*`.
 - Dạng câu thi → bài ôn: thêm id `t3dN-…` vào `BAI_ON` (`thi-may/cham.ts`) — `linkBai` tự trỏ `/ielts/tap-3`.
+
+## Soạn Tập 4 (6.0 → 7.0, 30 ngày) — hạ tầng dựng 18/11/2026
+
+Giống hệt Tập 3 ở mục trên, chỉ khác:
+- **Nguồn sự thật:** `docs/ielts-lo-trinh-0-8.md` mục **3.4** + mục **3.6 "Tập 4"**. **Tệp:** `tap-4/…` (`IELTS_T4`, `t4-bat-dau`,
+  `CHANG_T4`, `VIDEO_BAI_T4`). **Tiến độ:** `stage: 'sach4'`, `storageKey: 'ielts-t4'`. **id:** `t4dN-`.
+- **Mức band 7:** mẫu **band 6 vs band 7** đặt cạnh nhau; passage mức Passage 3 (~850–950 từ), nghe ~160–170 wpm, bài giảng 6–10 phút.
+- **Đề:** Đề 6 (đầu tập, đã có), Đề 7 (N15, band 6.5), Đề 8 (thi cuối tập N30, band 7.0) ở `thi-may/de/`.
+- **Giọng:** thêm `ie-nu` / `ie-nam` (Ireland, Azure `en-IE-*`). Giọng Scotland không có giọng máy nào — không giả giọng.

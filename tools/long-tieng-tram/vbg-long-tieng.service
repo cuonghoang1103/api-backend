@@ -12,6 +12,8 @@ WorkingDirectory=%h/long-tieng
 # LT_TOKEN (= INTERNAL_API_TOKEN của web), LT_API, LT_GPU… — tệp quyền 600, KHÔNG đưa vào git
 EnvironmentFile=%h/long-tieng/.env
 Environment=PATH=%h/long-tieng/bin:%h/.local/bin:/usr/local/bin:/usr/bin:/bin
+# phienAmBai.ts nhập đường Mac (/Users/admin/Downloads/api-backend/...) — đổi đường như làn giọng sản xuất (giong.sh)
+Environment=NODE_OPTIONS=--import=%h/vbg-dp/dieu-phoi-linux/doi-duong.mjs
 ExecStart=%h/long-tieng/node_modules/.bin/tsx %h/long-tieng/tram.mts
 Restart=always
 RestartSec=30

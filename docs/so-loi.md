@@ -8,6 +8,13 @@
 Mẫu một mục:
 
 ```
+### 18/11/2026 — Trạm CT Lồng Tiếng — dịch vụ chết ngay khi khởi động trên máy nhà
+- **Triệu chứng:** `vbg-long-tieng.service` thoát mã 1 sau 0,4 s: `ERR_MODULE_NOT_FOUND … /Users/admin/Downloads/api-backend/src/services/makerlab/phienAm.ts imported from ~/vbg-dp/giong/phienAmBai.ts`.
+- **Nguyên nhân:** `phienAmBai.ts` (dùng chung với dây chuyền video) nhập theo đường MAC; làn giọng sản xuất chạy được nhờ `NODE_OPTIONS=--import …/dieu-phoi-linux/doi-duong.mjs` đổi đường, unit của trạm (`tools/long-tieng-tram/vbg-long-tieng.service`) thiếu dòng đó.
+- **Cách sửa:** thêm `Environment=NODE_OPTIONS=--import=%h/vbg-dp/dieu-phoi-linux/doi-duong.mjs` vào unit.
+- **Ảnh hưởng:** trạm chưa nhận việc nào; lộ ra ngay lần bật đầu tiên.
+- **Bài học:** mã chạy ở máy nhà mà nhập tệp của dây chuyền video phải mang theo bộ đổi đường y như làn sản xuất — thử bật dịch vụ thật trên máy đích, không chỉ chạy test trên Mac.
+
 ### 18/11/2026 — Máy nhà (hạ tầng video) — bộ tự soát báo "âm tục" nhầm, tập kẹt ở soát tay
 - **Triệu chứng:** csx-7-1 (và trước đó cea-asm-a) bị `soat-tha.sh` xếp SOAT-TAY lượt nào cũng vậy, không vào hàng render dù mọi câu điểm nghe ≥ 0,7.
 - **Nguyên nhân:** `~/Documents/video-bai-giang/scratchpad/dieu-phoi/soat-tha.sh` dùng `grep "địt|đìt|dịt"` trên CẢ `thoigian.json`, gồm trường `nghe`/`words` là chữ Whisper chép lại ("biên dịch" ⇒ "biên dịt") — không phải chữ giọng đọc.

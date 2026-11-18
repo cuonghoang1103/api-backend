@@ -65,7 +65,7 @@ export default {
     'tw-5-5-plugin': { yt: 'qg4MbF9SApk', credit: 'Imran Sayed - Codeytek Academy — #7 Customize the Tailwind | Theme Configuration - Tailwind CSS | Nav Nextjs | Next.js tutorial 2021' },     // #7 Customize the Tailwind | Theme Configuration - Tailwind CSS | Nav Nextjs
 
     /* ── Chương 6 — Biến CSS làm cơ chế chủ đề ── */
-    'tw-6-1-mot-lop': { yt: 'MAtaT8BZEAo', credit: 'Tailwind Labs — Theming Tailwind with CSS Variables' },       // Theming Tailwind with CSS Variables
+    'tw-6-1-mot-lop': { yt: 'MAtaT8BZEAo', credit: 'Tailwind Labs — Theming Tailwind with CSS Variables', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/tailwind-css/06-bien-css-theme/06-01-mot-lop-9966e3ea.mp4' }, defaultVideoTrack: 'VI'},       // Theming Tailwind with CSS Variables
     'tw-6-2-bay-alpha': { yt: 'gfYJvTBu_sk', credit: 'Thirus — Add Custom Colors in Tailwind CSS v4' },     // Add Custom Colors in Tailwind CSS v4
     'tw-6-3-cau-truc': { yt: 'AJL1KbKrtAA', credit: 'Muslim Helalee — Variables - Tailwind CSS for Devs in a Hurry' },      // Variables - Tailwind CSS for Devs in a Hurry
     'tw-6-4-khi-nao-khong': { yt: 'TavBrPEqkbY', credit: 'Skies Dev — How to Create Themes with Tailwind CSS' }, // How to Create Themes with Tailwind CSS
@@ -101,6 +101,6 @@ export default {
 
     /* ── Chương 11 — Cái sống sót qua đo đạc ── */
     'tw-11-1-song-qua': { yt: '9I3JQ1q4IMk', credit: 'Coder Coder — Tailwind CSS v4 for Beginners | Full Course 2026' }, // Tailwind CSS v4 for Beginners | Full Course 2026
-    'tw-0-0-start-here-1': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/tailwind-css/00-tailwind-la-gi/00-01-tailwind-la-gi-dcca7564.mp4' }, defaultVideoTrack: 'VI' },
+    'tw-0-0-start-here-1': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/tailwind-css/00-tailwind-la-gi/00-01-tailwind-la-gi-dcca7564.mp4' }, defaultVideoTrack: 'VI'},
   },
 };

@@ -143,9 +143,9 @@ export default {
 
     /* ── Chương 16 — Dự án cuối khoá: đóng gói và đưa một ứng dụng thật lên production ── */
     'dk-16-0-slides': { yt: 'lEcULR30-GM', credit: "freeCodeCamp.org — Master Full-Stack Docker & CI/CD – Build a Production-Ready Pipeline" },
-    'dk-16-1-dong-goi': { yt: 'Zgx0o8QjJk4', credit: "Bret Fisher — Docker and Node.js Best Practices from Bret Fisher at DockerCon" },
-    'dk-16-2-compose-dev-prod': { yt: 'T--X3v2pwtU', credit: "Nick Janetakis — Best Practices Around Production Ready Web Apps with Docker Compose" },
-    'dk-16-3-ci-ghcr-deploy': { yt: '-NH8Urs4ST0', credit: "Nick Janetakis — Build Git Tagged Multi-Arch Docker Images with GitHub Actions" },
+    'dk-16-1-dong-goi': { yt: 'Zgx0o8QjJk4', credit: "Bret Fisher — Docker and Node.js Best Practices from Bret Fisher at DockerCon", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/docker/16-du-an-cuoi-khoa/16-02-dong-goi-9d365c4d.mp4' }, defaultVideoTrack: 'VI'},
+    'dk-16-2-compose-dev-prod': { yt: 'T--X3v2pwtU', credit: "Nick Janetakis — Best Practices Around Production Ready Web Apps with Docker Compose", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/docker/16-du-an-cuoi-khoa/16-03-compose-dev-prod-dc3eba8b.mp4' }, defaultVideoTrack: 'VI'},
+    'dk-16-3-ci-ghcr-deploy': { yt: '-NH8Urs4ST0', credit: "Nick Janetakis — Build Git Tagged Multi-Arch Docker Images with GitHub Actions", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/docker/16-du-an-cuoi-khoa/16-04-ci-ghcr-deploy-e674829b.mp4' }, defaultVideoTrack: 'VI'},
     'dk-16-4-van-hanh-su-co': { yt: 'Kr-3WKA1_fI', credit: "Danie van der Merwe — Docker Punching Holes Through Your VPS Firewall? This Is How I Solved It" },
   },
 };

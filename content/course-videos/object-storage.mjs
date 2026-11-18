@@ -58,9 +58,9 @@ export default {
     'os-6-3-orphans': { yt: 'IVzf4gNIoTQ', credit: 'AWS Developers — Amazon S3 Data Lifecycle Management', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/object-storage/06-lifecycle/06-03-object-mo-coi-ec58d876.mp4' }, defaultVideoTrack: 'VI'},    // Amazon S3 Data Lifecycle Management
 
     /* ── Chương 7 — Quản lý chi phí ── */
-    'os-7-1-drivers': { yt: 'LVAchRqGzLw', credit: 'The Keys to AWS Optimization — The S3 Optimization Playbook | The Keys to AWS Optimization | S10 E13' },              // The S3 Optimization Playbook | The Keys to AWS Optimization | S10 E13
-    'os-7-2-thumbnail-explosion': { yt: 'Nj0Htnsbq1w', credit: 'KnoDAX — Amazon (AWS) S3 Storage Classes Tutorial | Lifecycle Rule  |  Intelligent Tiering | Glacier Storage' },  // Amazon (AWS) S3 Storage Classes Tutorial | Lifecycle Rule | Intelligent Tiering | Glacier Storage
-    'os-7-3-budgets': { yt: 'yGNXn7jOytA', credit: 'AWS Events — AWS re:Invent 2021 - Amazon S3 Lifecycle best practices to optimize your storage spend' },              // AWS re:Invent 2021 - Amazon S3 Lifecycle best practices to optimize your storage spend
+    'os-7-1-drivers': { yt: 'LVAchRqGzLw', credit: 'The Keys to AWS Optimization — The S3 Optimization Playbook | The Keys to AWS Optimization | S10 E13', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/object-storage/07-cost/07-01-cai-gi-len-hoa-don-a082d3dd.mp4' }, defaultVideoTrack: 'VI'},              // The S3 Optimization Playbook | The Keys to AWS Optimization | S10 E13
+    'os-7-2-thumbnail-explosion': { yt: 'Nj0Htnsbq1w', credit: 'KnoDAX — Amazon (AWS) S3 Storage Classes Tutorial | Lifecycle Rule  |  Intelligent Tiering | Glacier Storage', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/object-storage/07-cost/07-02-vu-no-thumbnail-6010e0bb.mp4' }, defaultVideoTrack: 'VI'},  // Amazon (AWS) S3 Storage Classes Tutorial | Lifecycle Rule | Intelligent Tiering | Glacier Storage
+    'os-7-3-budgets': { yt: 'yGNXn7jOytA', credit: 'AWS Events — AWS re:Invent 2021 - Amazon S3 Lifecycle best practices to optimize your storage spend', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/object-storage/07-cost/07-03-budget-alert-forensic-0150d535.mp4' }, defaultVideoTrack: 'VI'},              // AWS re:Invent 2021 - Amazon S3 Lifecycle best practices to optimize your storage spend
 
     /* ── Chương 8 — Di trú S3 → R2 ── */
     'os-8-1-migrator': { yt: 'O9Wlb6GX5d8', credit: 'Cloudflare Developers — Upload Large Files to R2 Object Storage using Actors' }, // Upload Large Files to R2 Object Storage using Actors
@@ -73,7 +73,7 @@ export default {
 
     /* ── Chương 10 — Cái sống sót qua đo đạc ── */
     'os-10-1-song-qua': { yt: 'JXnMXgCUpuw', credit: 'Ram N Java — Master Amazon S3 Lifecycle Policies: Slash Your Storage Costs | Essential Tips for New Users' }, // Amazon S3 Lifecycle Policies: Save Costs on Storage | Amazon S3 Lifecycle for Beginners
-    'os-0-0-bat-dau-tai-day': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/object-storage/00-object-storage-la-gi/00-01-object-storage-la-gi-e458968e.mp4' }, defaultVideoTrack: 'VI' },
-    'os-0-0b-vi-sao-quan-trong': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/object-storage/00-object-storage-la-gi/00-02-vi-sao-quan-trong-7cc493db.mp4' }, defaultVideoTrack: 'VI' },
+    'os-0-0-bat-dau-tai-day': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/object-storage/00-object-storage-la-gi/00-01-object-storage-la-gi-e458968e.mp4' }, defaultVideoTrack: 'VI'},
+    'os-0-0b-vi-sao-quan-trong': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/object-storage/00-object-storage-la-gi/00-02-vi-sao-quan-trong-7cc493db.mp4' }, defaultVideoTrack: 'VI'},
   },
 };

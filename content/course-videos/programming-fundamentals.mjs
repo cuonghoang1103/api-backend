@@ -55,13 +55,13 @@ export default {
     "prf192-9-2-string-h": { yt: "p0Dofc5J15c", credit: "Professor Hank Stalica — C-string functions: strlen, strcpy, strcat, strncpy, strncat, strcmp, strstr", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/programming-fundamentals/09-chuoi/09-04-string-h-3a35472b.mp4' }, defaultVideoTrack: 'VI'},
 
     // Chapter 10 — files
-    "prf192-10-1-file": { yt: "ZIe_j8xAkU4", credit: "Jenny's Lectures CS IT — C_119 File Handling in C - part 1 | Introduction to Files" },
-    "prf192-10-2-doc-ghi-file": { yt: "UmeGlPw8cxI", credit: "Jenny's Lectures CS IT — C_120 File Handling in C - part 2 | File Pointer and fopen() function" },
+    "prf192-10-1-file": { yt: "ZIe_j8xAkU4", credit: "Jenny's Lectures CS IT — C_119 File Handling in C - part 1 | Introduction to Files", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/programming-fundamentals/10-tep-tin/10-03-file-231faddb.mp4' }, defaultVideoTrack: 'VI'},
+    "prf192-10-2-doc-ghi-file": { yt: "UmeGlPw8cxI", credit: "Jenny's Lectures CS IT — C_120 File Handling in C - part 2 | File Pointer and fopen() function", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/programming-fundamentals/10-tep-tin/10-04-doc-ghi-file-0fdbafbc.mp4' }, defaultVideoTrack: 'VI'},
 
     // Extra chapters
-    "prf192-n2-1-stack-heap": { yt: "5OJRqkYbK-4", credit: "Alex Hyett — Stack vs Heap Memory - Simple Explanation" },
-    "prf192-n3-1-con-tro-nang-cao": { yt: "qaszuaFXRTA", credit: "Jenny's Lectures CS IT — C_101 Function Pointers in C | Pointer to Function | C Programming Tutorials" },
-    "prf192-n4-1-du-an-c": { yt: "WDXG8gpuVqg", credit: "ProgrammingKnowledge2 — How To Create A Makefile (C/C++) | Makefile Tutorial | Linux" },
+    "prf192-n2-1-stack-heap": { yt: "5OJRqkYbK-4", credit: "Alex Hyett — Stack vs Heap Memory - Simple Explanation", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/programming-fundamentals/12-nang-cao-2-stack-heap/12-01-stack-heap-1da1579f.mp4' }, defaultVideoTrack: 'VI'},
+    "prf192-n3-1-con-tro-nang-cao": { yt: "qaszuaFXRTA", credit: "Jenny's Lectures CS IT — C_101 Function Pointers in C | Pointer to Function | C Programming Tutorials", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/programming-fundamentals/13-nang-cao-3-con-tro/13-01-con-tro-nang-cao-d2cb56d0.mp4' }, defaultVideoTrack: 'VI'},
+    "prf192-n4-1-du-an-c": { yt: "WDXG8gpuVqg", credit: "ProgrammingKnowledge2 — How To Create A Makefile (C/C++) | Makefile Tutorial | Linux", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/programming-fundamentals/14-nang-cao-4-du-an-c/14-01-du-an-c-fa935d8f.mp4' }, defaultVideoTrack: 'VI'},
 
     // ───────── Bổ sung 2026-09-19 — 38 bài "Slide by slide", workshop & nâng cao ─────────
 
@@ -117,13 +117,13 @@ export default {
     "prf192-9-workshop4": { yt: "heJ56FVFrZ4", credit: "Portfolio Courses — Counting the Vowels in a String | C Programming Example", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/programming-fundamentals/09-chuoi/09-05-workshop4-52cfbfd9.mp4' }, defaultVideoTrack: 'VI'},
 
     // Chapter 10 — tệp tin
-    "prf192-10-0a-slides-tep-tin-mo-tep": { yt: "uk61sKTgpMA", credit: "CodeVault — Differences between binary and text files in C" },
+    "prf192-10-0a-slides-tep-tin-mo-tep": { yt: "uk61sKTgpMA", credit: "CodeVault — Differences between binary and text files in C", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/programming-fundamentals/10-tep-tin/10-01-slide-tep-tin-mo-tep-c57d9b3c.mp4' }, defaultVideoTrack: 'VI'},
     "prf192-10-0b-slides-doc-ghi-tep-fseek": { yt: "BQJBe4IbsvQ", credit: "Jacob Sorber — Reading and Writing Files in C, two ways (fopen vs. open)" },
-    "prf192-10-workshop5": { yt: "X-1qodkHCHo", credit: "Portfolio Courses — Read And Store Each Line Of A File Into An Array Of Strings | C Programming Example" },
+    "prf192-10-workshop5": { yt: "X-1qodkHCHo", credit: "Portfolio Courses — Read And Store Each Line Of A File Into An Array Of Strings | C Programming Example", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/programming-fundamentals/10-tep-tin/10-05-workshop5-152a4c4f.mp4' }, defaultVideoTrack: 'VI'},
 
     // Nâng cao 1 — gỡ lỗi
-    "prf192-n1-1-debug": { yt: "Dq8l1_-QgAc", credit: "Low Level — GDB is REALLY easy! Find Bugs in Your Code with Only A Few Commands" },
-    "prf192-n1-2-loi-kinh-dien": { yt: "LLykqRNuEwA", credit: "Dave's Garage — Don't Make These 3 Mistakes in C!  Can YOU spot the bug?" },
+    "prf192-n1-1-debug": { yt: "Dq8l1_-QgAc", credit: "Low Level — GDB is REALLY easy! Find Bugs in Your Code with Only A Few Commands", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/programming-fundamentals/11-nang-cao-1-go-loi/11-01-debug-415e8e00.mp4' }, defaultVideoTrack: 'VI'},
+    "prf192-n1-2-loi-kinh-dien": { yt: "LLykqRNuEwA", credit: "Dave's Garage — Don't Make These 3 Mistakes in C!  Can YOU spot the bug?", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/programming-fundamentals/11-nang-cao-1-go-loi/11-02-loi-kinh-dien-071e1ec4.mp4' }, defaultVideoTrack: 'VI'},
 
     // Ôn tập & thi
     "prf192-on-tap-cuoi-ky": { yt: "87SH2Cn0s9A", credit: "Bro Code — C Programming Full Course for free ⚙️" },

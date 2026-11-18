@@ -86,28 +86,28 @@ export default {
     "nwc204-10-3-lab-2-2-va-thi-giua-ky": { yt: "GITl4IScWQA", credit: "Tech Acad — 11.10.1 Packet Tracer - Design and Implement a VLSM Addressing Scheme", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nwc204-computer-networking/11-dia-chi-ipv4/11-03-lab-2-2-va-thi-giua-ky-f9c9d010.mp4' }, defaultVideoTrack: 'VI'},
 
     /* ── Chương 11 — Địa chỉ IPv6 (buổi 35–36) ──────────────────────────── */
-    "nwc204-11-1-cau-truc-dia-chi-ipv6": { yt: "ZNuXyOXae5U", credit: "Jeremy's IT Lab — Free CCNA | IPv6 Part 1 | Day 31 | CCNA 200-301 Complete Course" },
-    "nwc204-11-2-cau-hinh-va-chia-subnet-ipv6": { yt: "BdsIahtrWIA", credit: "Jeremy's IT Lab — Free CCNA | Configuring IPv6 (Part 1) | Day 31 Lab | CCNA 200-301 Complete Course" },
+    "nwc204-11-1-cau-truc-dia-chi-ipv6": { yt: "ZNuXyOXae5U", credit: "Jeremy's IT Lab — Free CCNA | IPv6 Part 1 | Day 31 | CCNA 200-301 Complete Course", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nwc204-computer-networking/12-dia-chi-ipv6/12-01-cau-truc-dia-chi-ipv6-a4c8607a.mp4' }, defaultVideoTrack: 'VI'},
+    "nwc204-11-2-cau-hinh-va-chia-subnet-ipv6": { yt: "BdsIahtrWIA", credit: "Jeremy's IT Lab — Free CCNA | Configuring IPv6 (Part 1) | Day 31 Lab | CCNA 200-301 Complete Course", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nwc204-computer-networking/12-dia-chi-ipv6/12-02-cau-hinh-va-chia-subnet-ipv6-553acb9b.mp4' }, defaultVideoTrack: 'VI'},
 
     /* ── Chương 16 — Dựng mạng nhỏ (buổi 54–55) ─────────────────────────── */
-    "nwc204-16-1-thiet-bi-giao-thuc-va-mo-rong-mang-nho": { yt: "lPFmQAkahxM", credit: "NetITGeeks — CCNA Module 17: Build a Small Network - Introduction to Networks (ITN)" },
+    "nwc204-16-1-thiet-bi-giao-thuc-va-mo-rong-mang-nho": { yt: "lPFmQAkahxM", credit: "NetITGeeks — CCNA Module 17: Build a Small Network - Introduction to Networks (ITN)", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nwc204-computer-networking/17-dung-mang-nho/17-01-thiet-bi-giao-thuc-va-mo-rong-mang-nho-412a84bf.mp4' }, defaultVideoTrack: 'VI'},
     "nwc204-16-2-kiem-chung-ra-lenh-va-go-loi-mang-nho": { yt: "1i3XdhC2ZAs", credit: "CBT Nuggets — Steps for Network Troubleshooting" },
 
     /* ── Chương 14 — Tầng ứng dụng (buổi 45–46) ─────────────────────────── */
-    "nwc204-14-1-tang-ung-dung-va-ngang-hang": { yt: "t-ai8JzhHuY", credit: "Jeremy's IT Lab — Free CCNA | OSI Model & TCP/IP Suite | Day 3 | CCNA 200-301 Complete Course" },
+    "nwc204-14-1-tang-ung-dung-va-ngang-hang": { yt: "t-ai8JzhHuY", credit: "Jeremy's IT Lab — Free CCNA | OSI Model & TCP/IP Suite | Day 3 | CCNA 200-301 Complete Course", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nwc204-computer-networking/15-tang-ung-dung/15-01-tang-ung-dung-va-ngang-hang-4b02420d.mp4' }, defaultVideoTrack: 'VI'},
     "nwc204-14-2-web-email-dns-dhcp-chia-se-tep": { yt: "mpQZVYPuDGU", credit: "PowerCert Animated Videos — How a DNS Server (Domain Name System) works." },
 
     /* ── Chương 15 — An ninh mạng (buổi 49–50) ──────────────────────────── */
-    "nwc204-15-1-moi-de-doa-va-cac-kieu-tan-cong": { yt: "VvFuieyTTSw", credit: "Jeremy's IT Lab — Free CCNA | Security Fundamentals | Day 48 | CCNA 200-301 Complete Course" },
+    "nwc204-15-1-moi-de-doa-va-cac-kieu-tan-cong": { yt: "VvFuieyTTSw", credit: "Jeremy's IT Lab — Free CCNA | Security Fundamentals | Day 48 | CCNA 200-301 Complete Course", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nwc204-computer-networking/16-an-ninh-mang/16-01-moi-de-doa-va-cac-kieu-tan-cong-6bb5c307.mp4' }, defaultVideoTrack: 'VI'},
     "nwc204-15-2-giam-thieu-va-lam-cung-thiet-bi": { yt: "sHN3jOJIido", credit: "Jeremy's IT Lab — Free CCNA | Port Security | Day 49 | CCNA 200-301 Complete Course" },
 
     /* ── Chương 13 — Tầng giao vận (buổi 41–42) ─────────────────────────── */
-    "nwc204-13-1-tang-giao-van-va-so-hieu-cong": { yt: "LIEACBqlntY", credit: "Jeremy's IT Lab — Free CCNA | TCP & UDP | Day 30 | CCNA 200-301 Complete Course" },
+    "nwc204-13-1-tang-giao-van-va-so-hieu-cong": { yt: "LIEACBqlntY", credit: "Jeremy's IT Lab — Free CCNA | TCP & UDP | Day 30 | CCNA 200-301 Complete Course", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nwc204-computer-networking/14-tang-giao-van/14-01-tang-giao-van-va-so-hieu-cong-8dca980d.mp4' }, defaultVideoTrack: 'VI'},
     "nwc204-13-2-bat-tay-tin-cay-va-doc-may-chu-that": { yt: "JFch3ctY6nE", credit: "Practical Networking — TCP - 12 simple ideas to explain the Transmission Control Protocol" },
 
     /* ── Chương 12 — ICMP (buổi 37–40) ──────────────────────────────────── */
-    "nwc204-12-1-thong-diep-icmp": { yt: "zesTvBZCESk", credit: "Jeremy's IT Lab — CCNP ENCOR // Internet Control Message Protocol (ICMP) // ENCOR 350-401 Complete Course" },
-    "nwc204-12-2-ping-traceroute-va-lab-2-3": { yt: "vJV-GBZ6PeM", credit: "PowerCert Animated Videos — PING and TRACERT (traceroute) networking commands" },
+    "nwc204-12-1-thong-diep-icmp": { yt: "zesTvBZCESk", credit: "Jeremy's IT Lab — CCNP ENCOR // Internet Control Message Protocol (ICMP) // ENCOR 350-401 Complete Course", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nwc204-computer-networking/13-icmp/13-01-thong-diep-icmp-260dba8e.mp4' }, defaultVideoTrack: 'VI'},
+    "nwc204-12-2-ping-traceroute-va-lab-2-3": { yt: "vJV-GBZ6PeM", credit: "PowerCert Animated Videos — PING and TRACERT (traceroute) networking commands", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nwc204-computer-networking/13-icmp/13-02-ping-traceroute-va-lab-2-3-748a477f.mp4' }, defaultVideoTrack: 'VI'},
     'nwc204-0-1-ho-so-mon': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nwc204-computer-networking/00-khung-chuong-trinh/00-01-bat-dau-tai-day-nwc204-4717fb91.mp4' }, defaultVideoTrack: 'VI'},
   },
 };

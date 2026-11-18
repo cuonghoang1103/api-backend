@@ -29,35 +29,35 @@ export default {
 
     // Chương 4 — Mạng & Internet
     "csi106-4-0-slides-mang-tcp-ip": { yt: "3kfO61Mensg", credit: "NetworkChuck — REAL LIFE example!! (TCP/IP and OSI layers) // FREE CCNA // EP 4" },
-    "csi106-4-1-networks-internet": { yt: "3QhU9jd03a0", credit: "CrashCourse — Computer Networks: Crash Course Computer Science #28" },
+    "csi106-4-1-networks-internet": { yt: "3QhU9jd03a0", credit: "CrashCourse — Computer Networks: Crash Course Computer Science #28", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/csi106-introduction-to-computer-science/04-mang-internet/04-02-mang-may-tinh-internet-e8c57314.mp4' }, defaultVideoTrack: 'VI'},
 
     // Chương 5 — Hệ điều hành
-    "csi106-5-0-slides-he-dieu-hanh": { yt: "26QPDBe-NB8", credit: "CrashCourse — Operating Systems: Crash Course Computer Science #18" },
-    "csi106-5-1-operating-system": { yt: "ZmPIxfCggFw", credit: "Core Dumped — The Question Nobody Ever Explains: Where Does the Kernel End?" },
+    "csi106-5-0-slides-he-dieu-hanh": { yt: "26QPDBe-NB8", credit: "CrashCourse — Operating Systems: Crash Course Computer Science #18", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/csi106-introduction-to-computer-science/05-he-dieu-hanh/05-01-slide-he-dieu-hanh-6b486724.mp4' }, defaultVideoTrack: 'VI'},
+    "csi106-5-1-operating-system": { yt: "ZmPIxfCggFw", credit: "Core Dumped — The Question Nobody Ever Explains: Where Does the Kernel End?", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/csi106-introduction-to-computer-science/05-he-dieu-hanh/05-02-he-dieu-hanh-thanh-phan-fe1acca1.mp4' }, defaultVideoTrack: 'VI'},
 
     // Chương 6 — Thuật toán
-    "csi106-6-0-slides-thuat-toan-tim-kiem": { yt: "HKjx3IPbrYg", credit: "Great Learning — Introduction to Programming and Algorithms | Flowcharts and Pseudocodes | Great Learning" },
-    "csi106-6-1-algorithms": { yt: "rL8X2mlNHPM", credit: "CrashCourse — Intro to Algorithms: Crash Course Computer Science #13" },
+    "csi106-6-0-slides-thuat-toan-tim-kiem": { yt: "HKjx3IPbrYg", credit: "Great Learning — Introduction to Programming and Algorithms | Flowcharts and Pseudocodes | Great Learning", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/csi106-introduction-to-computer-science/06-thuat-toan/06-01-slide-thuat-toan-tim-kiem-57c5af71.mp4' }, defaultVideoTrack: 'VI'},
+    "csi106-6-1-algorithms": { yt: "rL8X2mlNHPM", credit: "CrashCourse — Intro to Algorithms: Crash Course Computer Science #13", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/csi106-introduction-to-computer-science/06-thuat-toan/06-02-thuat-toan-cau-truc-tim-kiem-cb74bdf1.mp4' }, defaultVideoTrack: 'VI'},
 
     // Chương 7 — Lập trình
-    "csi106-7-0-slides-dich-chuong-trinh-paradigm": { yt: "4iXDDLwpq7o", credit: "MrBrownCS — How Compilers Work (The 4 Stages of Compilation)" },
-    "csi106-7-1-programming": { yt: "FYFlRFXlDj8", credit: "Daniel Blagy — Programming Paradigms (Imperative vs Declarative, Procedural, OOP, Functional)" },
+    "csi106-7-0-slides-dich-chuong-trinh-paradigm": { yt: "4iXDDLwpq7o", credit: "MrBrownCS — How Compilers Work (The 4 Stages of Compilation)", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/csi106-introduction-to-computer-science/07-lap-trinh/07-01-slide-dich-chuong-trinh-paradigm-abc92cd3.mp4' }, defaultVideoTrack: 'VI'},
+    "csi106-7-1-programming": { yt: "FYFlRFXlDj8", credit: "Daniel Blagy — Programming Paradigms (Imperative vs Declarative, Procedural, OOP, Functional)", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/csi106-introduction-to-computer-science/07-lap-trinh/07-02-lap-trinh-dich-mo-thuc-a933bd44.mp4' }, defaultVideoTrack: 'VI'},
 
     // Chương 8 — Công nghệ phần mềm
-    "csi106-8-0-slides-vong-doi-phan-mem": { yt: "SaCYkPD4_K0", credit: "AltexSoft — Software Development Life Cycle: Explained" },
-    "csi106-8-1-software-engineering": { yt: "T0TynxN77oY", credit: "Gate Smashers — Types of Testing in Software Engineering | Levels of Testing" },
+    "csi106-8-0-slides-vong-doi-phan-mem": { yt: "SaCYkPD4_K0", credit: "AltexSoft — Software Development Life Cycle: Explained", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/csi106-introduction-to-computer-science/08-cong-nghe-phan-mem/08-01-slide-vong-doi-phan-mem-ebc0ddc6.mp4' }, defaultVideoTrack: 'VI'},
+    "csi106-8-1-software-engineering": { yt: "T0TynxN77oY", credit: "Gate Smashers — Types of Testing in Software Engineering | Levels of Testing", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/csi106-introduction-to-computer-science/08-cong-nghe-phan-mem/08-02-cong-nghe-phan-mem-0b88ca5f.mp4' }, defaultVideoTrack: 'VI'},
 
     // Chương 9 — Cấu trúc dữ liệu
-    "csi106-9-0a-slides-mang-record": { yt: "njTh_OwMljA", credit: "HackerRank — Data Structures: Linked Lists" },
-    "csi106-9-0b-slides-danh-sach-lien-ket-stack-queue": { yt: "wjI1WNcIntg", credit: "HackerRank — Data Structures: Stacks and Queues" },
-    "csi106-9-1-data-structures": { yt: "DuDz6B4cqVc", credit: "CrashCourse — Data Structures: Crash Course Computer Science #14" },
+    "csi106-9-0a-slides-mang-record": { yt: "njTh_OwMljA", credit: "HackerRank — Data Structures: Linked Lists", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/csi106-introduction-to-computer-science/09-cau-truc-du-lieu/09-01-slide-mang-record-68019d2d.mp4' }, defaultVideoTrack: 'VI'},
+    "csi106-9-0b-slides-danh-sach-lien-ket-stack-queue": { yt: "wjI1WNcIntg", credit: "HackerRank — Data Structures: Stacks and Queues", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/csi106-introduction-to-computer-science/09-cau-truc-du-lieu/09-02-slide-stack-queue-cay-do-thi-70dfe90f.mp4' }, defaultVideoTrack: 'VI'},
+    "csi106-9-1-data-structures": { yt: "DuDz6B4cqVc", credit: "CrashCourse — Data Structures: Crash Course Computer Science #14", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/csi106-introduction-to-computer-science/09-cau-truc-du-lieu/09-03-cau-truc-du-lieu-adt-ada362f1.mp4' }, defaultVideoTrack: 'VI'},
 
     // Chương 10 — Cấu trúc tệp
-    "csi106-10-0-slides-cau-truc-tep": { yt: "KN8YgJnShPM", credit: "CrashCourse — Files & File Systems: Crash Course Computer Science #20" },
-    "csi106-10-1-file-structure": { yt: "YcypY-STZMU", credit: "All About GATE Exam — Ordered File Organization | Hash Based File Organization | DBMS Session 47" },
+    "csi106-10-0-slides-cau-truc-tep": { yt: "KN8YgJnShPM", credit: "CrashCourse — Files & File Systems: Crash Course Computer Science #20", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/csi106-introduction-to-computer-science/10-cau-truc-tep/10-01-slide-cau-truc-tep-56868f74.mp4' }, defaultVideoTrack: 'VI'},
+    "csi106-10-1-file-structure": { yt: "YcypY-STZMU", credit: "All About GATE Exam — Ordered File Organization | Hash Based File Organization | DBMS Session 47", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/csi106-introduction-to-computer-science/10-cau-truc-tep/10-02-cau-truc-tep-phuong-phap-truy-cap-5352265b.mp4' }, defaultVideoTrack: 'VI'},
 
     // Chương 11 — Cơ sở dữ liệu
-    "csi106-11-0a-slides-csdl-mo-hinh-quan-he": { yt: "w1E1VXSSKSA", credit: "Coursera — Relational Model Concepts - Databases and SQL for Data Science by IBM #11" },
+    "csi106-11-0a-slides-csdl-mo-hinh-quan-he": { yt: "w1E1VXSSKSA", credit: "Coursera — Relational Model Concepts - Databases and SQL for Data Science by IBM #11", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/csi106-introduction-to-computer-science/11-co-so-du-lieu/11-01-slide-csdl-mo-hinh-quan-he-900802ab.mp4' }, defaultVideoTrack: 'VI'},
     "csi106-11-0b-slides-phep-toan-quan-he-thiet-ke": { yt: "GFQaEYEc8_8", credit: "Decomplexify — Learn Database Normalization - 1NF, 2NF, 3NF, 4NF, 5NF" },
     "csi106-11-1-database": { yt: "OqjJjpjDRLc", credit: "IBM Technology — What is a Relational Database?" },
 

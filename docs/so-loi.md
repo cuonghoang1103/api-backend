@@ -8,6 +8,13 @@
 Mẫu một mục:
 
 ```
+### 18/11/2026 — Trạm CT Lồng Tiếng — việc đứng ở 12% "tách giọng" hơn nửa giờ
+- **Triệu chứng:** việc lồng tiếng đầu tiên của user dừng ở "Tách giọng gốc khỏi nhạc nền · 12%" 36 phút; trên vast7 không có tiến trình demucs, có 18 tiến trình `gpu.sh` đang chờ.
+- **Nguyên nhân:** `tools/long-tieng-tram/tram.mts` chạy bước GPU trên vast7 qua `./gpu.sh` — 4 khe khoá dùng chung với làn giọng bài giảng; vast7 chạy 8 làn giọng (v1–v8) giữ kín khe nên việc lồng tiếng xếp sau vô thời hạn.
+- **Cách sửa:** khoá riêng `flock /root/video-bai-giang/.khoa-long-tieng` (đổi được bằng `LT_KHOA_GPU`), một việc lồng tiếng một lúc, chạy song song với làn giọng; bản mẫu `~/Documents/long-tieng/lt.mts` sửa y vậy.
+- **Ảnh hưởng:** việc đầu tiên của user trễ ~40 phút; video bài giảng không ảnh hưởng.
+- **Bài học:** khoá tài nguyên dùng chung phải tính số người giành: thêm làn sản xuất (v5–v8) là lấy hết khe của mọi thứ khác dùng chung khoá đó.
+
 ### 18/11/2026 — Trạm CT Lồng Tiếng — dịch vụ chết ngay khi khởi động trên máy nhà
 - **Triệu chứng:** `vbg-long-tieng.service` thoát mã 1 sau 0,4 s: `ERR_MODULE_NOT_FOUND … /Users/admin/Downloads/api-backend/src/services/makerlab/phienAm.ts imported from ~/vbg-dp/giong/phienAmBai.ts`.
 - **Nguyên nhân:** `phienAmBai.ts` (dùng chung với dây chuyền video) nhập theo đường MAC; làn giọng sản xuất chạy được nhờ `NODE_OPTIONS=--import …/dieu-phoi-linux/doi-duong.mjs` đổi đường, unit của trạm (`tools/long-tieng-tram/vbg-long-tieng.service`) thiếu dòng đó.

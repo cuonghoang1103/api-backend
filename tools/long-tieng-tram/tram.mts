@@ -42,7 +42,10 @@ const SR = 24000;
 
 const MAY = GPU === 'vast7'
   ? {
-    ssh: process.env.LT_VAST_HOST ?? 'vast7', vbg: '/root/video-bai-giang', goc: '/root/long-tieng', khoa: './gpu.sh',
+    ssh: process.env.LT_VAST_HOST ?? 'vast7', vbg: '/root/video-bai-giang', goc: '/root/long-tieng',
+    // 18/11: KHÔNG dùng ./gpu.sh (4 khe của làn giọng bài giảng — 8 làn giọng giữ kín khe ⇒ việc lồng tiếng chờ 36 phút ở 12%).
+    // Khoá riêng: một việc lồng tiếng một lúc, chạy song song với làn giọng (GPU 24 GB thừa chỗ).
+    khoa: process.env.LT_KHOA_GPU ?? 'flock /root/video-bai-giang/.khoa-long-tieng',
     pyDemucs: process.env.LT_PY_DEMUCS ?? '/root/lt-venv/bin/python', pyWhisper: process.env.LT_PY_WHISPER ?? '/root/f5-train/.venv/bin/python',
     pyF5: process.env.LT_PY_F5 ?? '/root/f5-train/.venv/bin/python',
   }

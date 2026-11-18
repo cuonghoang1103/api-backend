@@ -25,6 +25,13 @@ Mẫu một mục:
 
 ---
 
+### 18/11/2026 — Web CT Lồng Tiếng (/long-tieng) — tiêu đề bị header che, chủ kênh không thấy ô dán link
+- **Triệu chứng:** mở `/long-tieng` thấy H1 "CT Lồng Tiếng" nằm khuất dưới thanh điều hướng cố định của site; chữ 11–12 px khó đọc trên nền tuyết mùa đông; ô dán link YouTube là một ô xám nhỏ, phải "nhìn mãi mới thấy".
+- **Nguyên nhân:** `frontend/src/app/long-tieng/page.tsx` (bản 18/11 sáng) là trang site thường dưới Navbar `fixed` nhưng không chừa khoảng trên; trang viết bằng chữ `text-xs`/`text-[11px]` và thẻ `bg-[var(--bg-card)]` mỏng, không thử trên nền theo mùa.
+- **Cách sửa:** chuyển vào khung admin `/admin/long-tieng` (Navbar site ẩn ở /admin, sidebar → Nội dung → CT Lồng Tiếng; `/long-tieng` chuyển hướng), thiết kế lại: ô link 64 px + nút "Lồng tiếng ngay", kéo thả ngay dưới, thẻ đặc, chữ ≥ 15 px, thẻ việc có Gấu pixel + 6 chặng + thời gian còn lại (`components/admin/longTieng/*`, `lib/longTiengTienDo.ts`).
+- **Ảnh hưởng:** chỉ chủ kênh (trang ADMIN), vài giờ sau khi lên.
+- **Bài học:** trang mới dưới Navbar cố định phải chụp màn hình thật trước khi giao (cả nền theo mùa); công cụ chỉ admin dùng thì đặt thẳng trong khung /admin để có sẵn header, sidebar, ⌘K.
+
 ### 18/11/2026 — App CT Lồng Tiếng (đóng gói macOS) — bản cài dựng xanh nhưng mở lên chết ngay (SIGTRAP)
 - **Triệu chứng:** `CT Lồng Tiếng.app` (dmg/zip arm64 + x64) mở là tắt, không cửa sổ, không log; báo cáo crash: `EXC_BREAKPOINT` trong `ElectronMain` → V8. Bản dev (`electron .`) cùng mã chạy bình thường.
 - **Nguyên nhân:** `productName: CT Lồng Tiếng` trong `apps/ct-long-tieng/electron-builder.yml` ⇒ tên BUNDLE + tệp chạy + các app Helper mang dấu tiếng Việt; Electron 33 chết lúc khởi động với tên đó (đo: cùng bản dựng, chỉ đổi `-c.productName="CT Long Tieng"` là chạy). Không phải do ký: ký ad-hoc `--deep` một Electron.app trần vẫn chạy.

@@ -8,6 +8,13 @@
 Mẫu một mục:
 
 ```
+### 18/11/2026 — Hạ tầng video — cầu đồng bộ Mac→máy nhà xoá slide của agent máy nhà ⇒ 111 tập render LOI
+- **Triệu chứng:** Spring Boot gần như không có video dù giọng đã xong; 111 tập render LOI trong ngày (75 tập "404 public/bai/<id>/slides/NNN.webp" — đúng các khoá twc/dkr/gha/dvp/sb mới giao agent nhà 17/11; 36 tập khác do ổ vast7 đầy 96%).
+- **Nguyên nhân:** `~/Documents/video-bai-giang/scratchpad/dong-bo-linux.sh` › `day_bai()` đẩy `public/bai/<id>/` từ Mac sang máy nhà bằng `rsync --delete`, chỉ bỏ qua tiền tố agent nhà cũ; 17/11 điều phối giao thêm twc nxj prisma sio dkr gha lxb dvp ngx obj sb dsi ivp cho agent nhà, thêm vào `day_ma` (mã) nhưng QUÊN `day_bai` ⇒ mỗi vòng Mac xoá slide agent vừa dựng.
+- **Cách sửa:** thêm các tiền tố đó vào danh sách bỏ qua của `day_bai`, khởi động lại cầu; xếp render lại 36 tập lỗi khác (dp-lam-lai.sh); giao agent bu2/sb dựng lại ảnh 75 tập (ghi id vào `~/agent-nha/lam-lai-render.txt`); `pip cache purge` trên vast7 (96% ⇒ 85%).
+- **Ảnh hưởng:** ~1 ngày render hỏng cho 5 khoá ưu tiên; tốn giờ máy thuê render rồi lỗi; Spring Boot chậm lên web.
+- **Bài học:** đổi "ai sở hữu" một tiền tố phải sửa MỌI chỗ đồng bộ (mã + public/bai + hàng) cùng lúc; kiểm hằng giờ phải đếm render LOI theo khoá, không chỉ "ok-1h".
+
 ### 18/11/2026 — Trạm CT Lồng Tiếng — việc đứng ở 12% "tách giọng" hơn nửa giờ
 - **Triệu chứng:** việc lồng tiếng đầu tiên của user dừng ở "Tách giọng gốc khỏi nhạc nền · 12%" 36 phút; trên vast7 không có tiến trình demucs, có 18 tiến trình `gpu.sh` đang chờ.
 - **Nguyên nhân:** `tools/long-tieng-tram/tram.mts` chạy bước GPU trên vast7 qua `./gpu.sh` — 4 khe khoá dùng chung với làn giọng bài giảng; vast7 chạy 8 làn giọng (v1–v8) giữ kín khe nên việc lồng tiếng xếp sau vô thời hạn.

@@ -14,6 +14,7 @@ import s00 from './spring-boot/s00-bat-dau.mjs';
 import s01 from './spring-boot/s01-java-hien-dai-1.mjs';
 import s02 from './spring-boot/s02-java-hien-dai-2.mjs';
 import s03 from './spring-boot/s03-loi-spring.mjs';
+import s04 from './spring-boot/s04-rest-controller.mjs';
 
 const CHUONG = [
   ['Section 0 — Why Spring Boot', 'Mục 0 — Vì sao Spring Boot', '(đã soạn — spring-boot/s00-bat-dau.mjs)', [['bat-dau-tai-day', '-', '-', '-']]],
@@ -44,7 +45,7 @@ const CHUONG = [
     ['profile-config', 'Profiles and type-safe configuration', 'Profile và cấu hình có kiểu', 'application-dev.yml vs application-prod.yml · @Profile · @ConfigurationProperties + validation · Bí mật qua biến môi trường'],
     ['lab-3', 'Chapter 3 lab + interview questions', 'Lab chương 3 + câu hỏi phỏng vấn', 'Truy vết vòng đời bean và proxy của LabFlow · Rubric · Câu phỏng vấn IoC/DI/AOP'],
   ]],
-  ['Chapter 4 — REST controllers', 'Chương 4 — REST controller', 'Endpoint HTTP, DTO, Jackson và đường đi của một request.', [
+  ['Chapter 4 — REST controllers', 'Chương 4 — REST controller', '(đã soạn — spring-boot/s04-rest-controller.mjs) Endpoint HTTP, DTO, Jackson và đường đi của một request.', [
     ['restcontroller', '@RestController and request mapping', '@RestController và request mapping', '@GetMapping/@PostMapping/@PutMapping/@PatchMapping/@DeleteMapping · @PathVariable, @RequestParam · ResponseEntity và mã trạng thái · So với Express'],
     ['dto', 'DTOs: why not expose entities directly', 'DTO: vì sao không trả thẳng entity', 'Entity lộ chi tiết DB · Record làm DTO · Ánh xạ tay hay MapStruct · Hợp đồng API ổn định'],
     ['requestbody', '@RequestBody, Jackson 3 and content negotiation', '@RequestBody, Jackson 3 và content negotiation', 'JSON ↔ đối tượng · Content-Type và Accept · Ngày giờ ISO-8601 và múi giờ · Tuỳ biến Jackson'],
@@ -162,6 +163,7 @@ sections[0] = s00;
 sections[1] = s01;
 sections[2] = s02;
 sections[3] = s03;
+sections[4] = s04;
 
 export default {
   category: { slug: 'backend', name: 'Backend', icon: 'Server', sortOrder: 1 },

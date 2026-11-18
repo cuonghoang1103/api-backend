@@ -294,3 +294,72 @@ export function tenKetQua(ten: string, lang: string, goc: number) {
     'thong-tin': 'thong-tin.json',
   } as const;
 }
+
+// ─── Video dài (18/11/2026): lô dịch theo ký tự, ngữ cảnh, mẫu từ điển, ổ đĩa ───
+
+/**
+ * Chia các câu (theo thứ tự) thành lô dịch: mỗi lô ≤ `toiDaCau` câu VÀ tổng chữ gốc ≤ `toiDaKyTu` (câu nào một mình
+ * đã vượt thì đứng riêng một lô). Trả CHỈ SỐ trong mảng vào. Video 3 giờ ~2–3 nghìn câu ⇒ ~60–80 lô cỡ đều nhau,
+ * không lô nào phình làm model bỏ sót đuôi.
+ */
+export function chiaLoDich(caus: ReadonlyArray<{ src: string }>, o: { toiDaCau?: number; toiDaKyTu?: number } = {}): number[][] {
+  const toiDaCau = Math.max(1, Math.min(60, o.toiDaCau ?? 40));
+  const toiDaKyTu = Math.max(200, o.toiDaKyTu ?? 2400);
+  const ra: number[][] = [];
+  let lo: number[] = [];
+  let kyTu = 0;
+  caus.forEach((c, k) => {
+    const n = c.src.length;
+    if (lo.length && (lo.length >= toiDaCau || kyTu + n > toiDaKyTu)) { ra.push(lo); lo = []; kyTu = 0; }
+    lo.push(k);
+    kyTu += n;
+  });
+  if (lo.length) ra.push(lo);
+  return ra;
+}
+
+/** ~n câu Việt đã dịch liền TRƯỚC chỉ số `truoc` (ngữ cảnh nối mạch cho lô sau). */
+export function nguCanhTruoc(caus: ReadonlyArray<{ vi?: string }>, truoc: number, n = 6): string[] {
+  const ra: string[] = [];
+  for (let k = truoc - 1; k >= 0 && ra.length < n; k--) { const v = caus[k]?.vi?.trim(); if (v) ra.unshift(v); }
+  return ra;
+}
+
+/**
+ * Mẫu GỌN của cả bản chép để soạn từ điển một lần: video ngắn ⇒ toàn bộ; video dài ⇒ câu rải ĐỀU từ đầu tới cuối
+ * (ưu tiên câu có chữ Latin / số — nơi thuật ngữ, tên sản phẩm hay nằm) tới khi đủ `toiDaKyTu`. Giữ thứ tự gốc.
+ */
+export function mauTuDien(caus: ReadonlyArray<{ src: string }>, toiDaKyTu = 12_000, toiDaCau = 300): string[] {
+  const tong = caus.reduce((s, c) => s + c.src.length, 0);
+  if (tong <= toiDaKyTu && caus.length <= toiDaCau) return caus.map((c) => c.src);
+  const coThuatNgu = (s: string) => /[A-Za-z]{2,}|\d/.test(s);
+  const nguon = caus.map((c, k) => ({ k, s: c.src })).filter((x) => x.s.trim());
+  const uuTien = nguon.filter((x) => coThuatNgu(x.s));
+  const conLai = nguon.filter((x) => !coThuatNgu(x.s));
+  const chon = new Set<number>();
+  let kyTu = 0;
+  const rai = (ds: typeof nguon) => {
+    if (!ds.length) return;
+    const can = Math.min(ds.length, toiDaCau);
+    const buoc = ds.length / can;
+    for (let j = 0; j < can && chon.size < toiDaCau; j++) {
+      const x = ds[Math.floor(j * buoc)]!;
+      if (chon.has(x.k) || kyTu + x.s.length > toiDaKyTu) continue;
+      chon.add(x.k);
+      kyTu += x.s.length;
+    }
+  };
+  rai(uuTien);
+  rai(conLai);
+  return [...chon].sort((a, b) => a - b).map((k) => caus[k]!.src);
+}
+
+/**
+ * Ổ đĩa cần (byte) cho một việc: bản sao video vào ×3 (vào + hình kéo dài + 1–2 bản ra) + âm thanh trung gian theo
+ * độ dài (wav 44,1 kHz stereo ~0,64 GB/giờ cho tách giọng, các flac/wav/raw khác ~1,6 GB/giờ) + 2 GB dự phòng.
+ * Ước lượng dè dặt — dùng để chặn sớm một việc 3 giờ trên ổ sắp đầy (thay vì chết giữa chừng ở bước ghép).
+ */
+export function dungLuongCan(giay: number, byteVideo: number): number {
+  const gio = Math.max(0, giay) / 3600;
+  return Math.round(3 * Math.max(0, byteVideo) + gio * 2.3e9 + 2e9);
+}

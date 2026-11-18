@@ -18,8 +18,7 @@ import {
   deleteObjects, getObjectText, getSignedAttachmentUrl, getSignedDownloadUrl, getSignedReadUrl, getSignedUploadUrl, headObject, listObjects,
 } from '../config/r2.js';
 import { AppError, BadRequestError, ConflictError, NotFoundError } from '../middleware/errorHandler.js';
-import { checkTokenQuota, llmComplete } from './interview/llm/index.js';
-import { tachJson } from './voVietLai.service.js';
+import { checkTokenQuota } from './interview/llm/index.js';
 import { logger } from '../utils/logger.js';
 
 // ─── Hằng số ───────────────────────────────────────────────────────────────
@@ -489,18 +488,85 @@ export async function baoLoi(id: string, body: Record<string, unknown>): Promise
 }
 
 // ─── Dịch (trạm không giữ khoá LLM) ────────────────────────────────────────
+// Chuỗi cổng (gwai → Anthropic chính hãng → modelapi) + structured outputs: `longTiengDich.ts`.
+// Video dài (1–3 giờ, 18/11): trạm soạn TỪ ĐIỂN riêng cho việc (một lượt, từ mẫu gọn của cả bản chép — `POST /tu-dien`),
+// lưu ở thư mục việc rồi gửi kèm MỌI lô; mỗi lô mang ~6 câu Việt liền trước làm ngữ cảnh; lô chia theo SỐ KÝ TỰ.
 
 export interface CauDich { i: number; giay: number; toiDa: number; src: string }
+export interface MucTuDien { goc: string; vi: string; ghiChu?: string }
 const TRAN_CAU_MOT_LO = 60;
+const TRAN_MUC_TU_DIEN = 150;
 
-export function promptDich(ngonNgu: string, cau: CauDich[], truoc: string): string {
-  const tenNgu = ngonNgu === 'zh' ? 'tiếng Trung' : ngonNgu === 'en' ? 'tiếng Anh' : `ngôn ngữ "${ngonNgu}"`;
-  return `Bạn lồng tiếng Việt cho video kiến thức kỹ thuật (${tenNgu}) để một sinh viên Việt tự học.
+const tenNgu = (ngonNgu: string) => (ngonNgu === 'zh' ? 'tiếng Trung' : ngonNgu === 'en' ? 'tiếng Anh' : `ngôn ngữ "${ngonNgu}"`);
+
+/** JSON schema câu trả lời một lô (structured outputs). */
+export const SCHEMA_DICH: Record<string, unknown> = {
+  type: 'object', additionalProperties: false, required: ['ds'],
+  properties: {
+    ds: {
+      type: 'array',
+      items: { type: 'object', additionalProperties: false, required: ['i', 'vi'], properties: { i: { type: 'integer' }, vi: { type: 'string' } } },
+    },
+  },
+};
+/** JSON schema từ điển việc. */
+export const SCHEMA_TU_DIEN: Record<string, unknown> = {
+  type: 'object', additionalProperties: false, required: ['tuDien'],
+  properties: {
+    tuDien: {
+      type: 'array',
+      items: {
+        type: 'object', additionalProperties: false, required: ['goc', 'vi'],
+        properties: { goc: { type: 'string' }, vi: { type: 'string' }, ghiChu: { type: 'string' } },
+      },
+    },
+  },
+};
+
+/** Đọc + làm sạch từ điển (từ trạm gửi lên hoặc model trả về): bỏ mục rỗng/trùng, cắt độ dài, tối đa 150 mục. THUẦN. */
+export function docTuDien(v: unknown): MucTuDien[] {
+  if (!Array.isArray(v)) return [];
+  const thay = new Set<string>();
+  const ra: MucTuDien[] = [];
+  for (const x of v) {
+    const o = (x ?? {}) as Record<string, unknown>;
+    const goc = chuoi(o.goc, 80);
+    const vi = chuoi(o.vi, 80);
+    if (!goc || !vi || thay.has(goc.toLowerCase())) continue;
+    thay.add(goc.toLowerCase());
+    const ghiChu = chuoi(o.ghiChu, 120);
+    ra.push({ goc, vi, ...(ghiChu ? { ghiChu } : {}) });
+    if (ra.length >= TRAN_MUC_TU_DIEN) break;
+  }
+  return ra;
+}
+
+/** Ngữ cảnh câu trước: chuỗi (trạm cũ) hoặc mảng câu Việt (trạm mới, ~6 câu). */
+function docTruoc(v: unknown): string {
+  if (Array.isArray(v)) return v.map((x) => chuoi(x, 400)).filter(Boolean).slice(-8).join('\n');
+  return chuoi(v, 2500);
+}
+
+export function promptDich(ngonNgu: string, cau: CauDich[], truoc: string, tuDien: MucTuDien[] = []): string {
+  const td = tuDien.length
+    ? `TỪ ĐIỂN CỦA VIDEO NÀY (bắt buộc dùng đúng cách dịch / giữ nguyên như dưới, nhất quán cả video):\n${tuDien.map((m) => `- ${m.goc} → ${m.vi}${m.ghiChu ? ` (${m.ghiChu})` : ''}`).join('\n')}\n`
+    : '';
+  return `Bạn lồng tiếng Việt cho video kiến thức kỹ thuật (${tenNgu(ngonNgu)}) để một sinh viên Việt tự học.
 Dịch MỖI câu sang tiếng Việt NÓI tự nhiên, dễ hiểu, đúng thuật ngữ. Giữ nguyên thuật ngữ/tên riêng tiếng Anh quen dùng (CPU, RAM, PCIe, chipset, BIOS, VRM, M.2, USB, API, Docker…); tên tiếng Trung của sản phẩm thì dùng tên tiếng Anh nếu biết.
 ĐỘ DÀI là bắt buộc: "toiDa" = số ký tự tối đa để đọc kịp trong "giay" giây với nhịp nói bình thường — ngắn gọn hơn bản gốc nếu cần, bỏ từ đệm, nhưng không bỏ ý chính. Không thêm giải thích.
-Ngữ cảnh câu trước: ${truoc || '(đầu video)'}
-Trả về DUY NHẤT JSON: {"ds":[{"i":số,"vi":"…"}]} đủ ${cau.length} câu.
+${td}Ngữ cảnh — các câu tiếng Việt liền trước (chỉ để nối mạch, KHÔNG dịch lại):
+${truoc || '(đầu video)'}
+Trả về DUY NHẤT JSON: {"ds":[{"i":số,"vi":"…"}]} đủ ${cau.length} câu, đúng các "i" dưới đây.
 ${JSON.stringify(cau)}`;
+}
+
+export function promptTuDien(ngonNgu: string, mau: string[]): string {
+  return `Đây là các câu rải đều trong bản chép lời một video kỹ thuật (${tenNgu(ngonNgu)}) sắp được lồng tiếng Việt cho sinh viên tự học.
+Lập TỪ ĐIỂN dùng chung cho cả video để bản dịch nhất quán: thuật ngữ chuyên ngành, tên sản phẩm/công nghệ, tên người/hãng, từ viết tắt lặp lại.
+Mỗi mục: "goc" = đúng chữ trong bản gốc; "vi" = cách nói trong bản Việt (giữ nguyên tiếng Anh nếu dân kỹ thuật Việt quen dùng — CPU, API, Docker…; tên tiếng Trung của sản phẩm ⇒ tên tiếng Anh nếu biết; tên người giữ nguyên/phiên âm chuẩn); "ghiChu" ngắn nếu cần.
+Tối đa ${TRAN_MUC_TU_DIEN} mục, ưu tiên mục xuất hiện nhiều. Không đưa từ thường.
+Trả về DUY NHẤT JSON: {"tuDien":[{"goc":"…","vi":"…"}]}
+${mau.map((c, k) => `${k + 1}. ${c}`).join('\n')}`;
 }
 
 function docCauDich(v: unknown): CauDich[] {
@@ -514,47 +580,77 @@ function docCauDich(v: unknown): CauDich[] {
   });
 }
 
-/** Một lượt gọi model cho một lô; trả map i → câu Việt (có thể thiếu câu — nơi gọi tự hỏi lại phần thiếu). */
-async function goiDich(userId: number, ngonNgu: string, cau: CauDich[], truoc: string): Promise<Map<number, string>> {
-  const kq = await llmComplete({
-    step: 'generation', feature: 'creator', purpose: 'long_tieng_dich', userId,
-    system: 'Bạn là biên dịch viên lồng tiếng. Chỉ trả về JSON đúng khuôn được yêu cầu.',
-    messages: [{ role: 'user', content: promptDich(ngonNgu, cau, truoc) }],
-    maxTokens: Math.min(12_000, 800 + cau.length * 160), timeoutMs: 150_000, maxRetries: 2,
-  });
-  const o = tachJson(kq?.text ?? '');
-  const ra = new Map<number, string>();
+const HE_THONG_DICH = 'Bạn là biên dịch viên lồng tiếng. Chỉ trả về JSON đúng khuôn được yêu cầu.';
+
+/** Một lượt dịch một lô qua chuỗi cổng; trả map i → câu Việt (có thể thiếu câu — nơi gọi tự hỏi lại phần thiếu). */
+async function goiDich(userId: number, ngonNgu: string, cau: CauDich[], truoc: string, tuDien: MucTuDien[] = [], jobId?: string): Promise<Map<number, string>> {
   const can = new Set(cau.map((c) => c.i));
-  for (const d of Array.isArray(o?.ds) ? (o!.ds as Array<Record<string, unknown>>) : []) {
-    const i = Number(d?.i);
-    const vi = chuoi(d?.vi, 2000);
-    if (can.has(i) && vi) ra.set(i, vi);
-  }
-  return ra;
+  const { goiChuoiDich } = await import('./longTiengDich.js');
+  const { ketQua } = await goiChuoiDich({
+    system: HE_THONG_DICH, user: promptDich(ngonNgu, cau, truoc, tuDien), schema: SCHEMA_DICH,
+    maxTokens: Math.min(16_000, 1200 + cau.length * 200), userId, nhan: `lo ${cau.length} câu`, jobId,
+  }, (o) => {
+    const ra = new Map<number, string>();
+    for (const d of Array.isArray(o.ds) ? (o.ds as Array<Record<string, unknown>>) : []) {
+      const i = Number(d?.i);
+      const vi = chuoi(d?.vi, 2000);
+      if (can.has(i) && vi) ra.set(i, vi);
+    }
+    return ra.size ? ra : null; // không câu nào dùng được ⇒ bậc sau
+  });
+  return ketQua;
 }
 
 let goiDichImpl = goiDich;
 /** Chỉ test dùng: thay lời gọi model (test KHÔNG BAO GIỜ gọi cổng LLM thật). */
 export const _chiDeKiemThu = { datGoiDich: (fn: typeof goiDich | null) => { goiDichImpl = fn ?? goiDich; } };
 
-export async function dich(body: Record<string, unknown>): Promise<{ ds: Array<{ i: number; vi: string }> }> {
+/**
+ * Dịch một lô. Body: `{ jobId, ngonNgu, cau, truoc (chuỗi | mảng câu Việt), tuDien?, choPhepThieu? }`.
+ * Model sót câu ⇒ hỏi lại ĐÚNG phần thiếu một lần. Vẫn thiếu: `choPhepThieu` (trạm mới) ⇒ 200 `{ ds, thieu }` để trạm chỉ
+ * gửi lại phần thiếu; không (trạm cũ) ⇒ 502 `LT_DICH_THIEU`.
+ */
+export async function dich(body: Record<string, unknown>): Promise<{ ds: Array<{ i: number; vi: string }>; thieu?: number[] }> {
   const v = await dangChayOTram(String(body.jobId ?? ''));
   const ngonNgu = chuoi(body.ngonNgu, 8) || 'auto';
   const cau = docCauDich(body.cau);
-  const truoc = chuoi(body.truoc, 1500);
+  const truoc = docTruoc(body.truoc);
+  const tuDien = docTuDien(body.tuDien);
   if (!(await checkTokenQuota(v.userId))) throw new AppError('Hết hạn mức token AI hôm nay.', 429, 'LT_HET_HAN_MUC');
 
-  const ra = await goiDichImpl(v.userId, ngonNgu, cau, truoc);
+  const ra = await goiDichImpl(v.userId, ngonNgu, cau, truoc, tuDien, v.id).catch((e) => {
+    if (body.choPhepThieu) return new Map<number, string>();
+    throw e;
+  });
   const thieu = cau.filter((c) => !ra.has(c.i));
   if (thieu.length) {
     // Model bỏ sót vài câu ⇒ hỏi lại ĐÚNG phần thiếu một lần (bản mẫu: dịch lại cả lô — tốn gấp mấy lần).
-    const bu = await goiDichImpl(v.userId, ngonNgu, thieu, truoc);
+    const bu = await goiDichImpl(v.userId, ngonNgu, thieu, truoc, tuDien, v.id).catch(() => new Map<number, string>());
     for (const [i, vi] of bu) ra.set(i, vi);
   }
   const conThieu = cau.filter((c) => !ra.has(c.i)).map((c) => c.i);
-  if (conThieu.length) throw new AppError(`Model bỏ sót ${conThieu.length} câu (${conThieu.slice(0, 8).join(', ')}) — thử lại lô này.`, 502, 'LT_DICH_THIEU');
+  if (conThieu.length && (!body.choPhepThieu || !ra.size)) {
+    throw new AppError(`Model bỏ sót ${conThieu.length} câu (${conThieu.slice(0, 8).join(', ')}) — thử lại lô này.`, 502, 'LT_DICH_THIEU');
+  }
   await prisma.longTiengViec.update({ where: { id: v.id }, data: { nhipTim: new Date() } });
-  return { ds: cau.map((c) => ({ i: c.i, vi: ra.get(c.i)! })) };
+  const ds = cau.filter((c) => ra.has(c.i)).map((c) => ({ i: c.i, vi: ra.get(c.i)! }));
+  return conThieu.length ? { ds, thieu: conThieu } : { ds };
+}
+
+/** Soạn từ điển cho việc từ mẫu câu gọn (trạm chọn rải đều cả bản chép — `mauTuDien()` ở trạm). Body `{ jobId, ngonNgu, mau: string[] }`. */
+export async function soanTuDien(body: Record<string, unknown>): Promise<{ tuDien: MucTuDien[] }> {
+  const v = await dangChayOTram(String(body.jobId ?? ''));
+  const ngonNgu = chuoi(body.ngonNgu, 8) || 'auto';
+  const mau = (Array.isArray(body.mau) ? body.mau : []).map((x) => chuoi(x, 400)).filter(Boolean).slice(0, 400);
+  if (!mau.length) throw new BadRequestError('Cần "mau" là mảng câu không rỗng.');
+  if (!(await checkTokenQuota(v.userId))) throw new AppError('Hết hạn mức token AI hôm nay.', 429, 'LT_HET_HAN_MUC');
+  const { goiChuoiDich } = await import('./longTiengDich.js');
+  const { ketQua } = await goiChuoiDich({
+    system: 'Bạn soạn từ điển thuật ngữ cho người lồng tiếng. Chỉ trả về JSON đúng khuôn được yêu cầu.',
+    user: promptTuDien(ngonNgu, mau), schema: SCHEMA_TU_DIEN, maxTokens: 8000, userId: v.userId, nhan: 'tu-dien', jobId: v.id,
+  }, (o) => (Array.isArray(o.tuDien) ? docTuDien(o.tuDien) : null));
+  await prisma.longTiengViec.update({ where: { id: v.id }, data: { nhipTim: new Date() } });
+  return { tuDien: ketQua };
 }
 
 // ─── Mã kết nối app ────────────────────────────────────────────────────────

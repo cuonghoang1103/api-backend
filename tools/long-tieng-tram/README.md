@@ -63,6 +63,9 @@ Cập nhật mã: lặp lại bước 1 rồi `systemctl --user restart vbg-long
 | `LT_YTDLP` | `yt-dlp` | đường dẫn yt-dlp |
 | `LT_WHISPER_VI_MODEL` | `medium` | model nghe lại bản đọc tiếng Việt |
 | `LT_CHU_KY_GIAY` | `10` | chu kỳ hỏi việc |
+| `LT_LO_DICH_KY_TU` | `2400` | trần ký tự gốc mỗi lô dịch (kèm trần 40 câu) |
+| `LT_O_TRONG_TOI_THIEU_GB` | `8` | ổ trống tối thiểu trước khi tải video; sau khi có video thì đo đúng theo độ dài + cỡ tệp |
+| `LT_DEMUCS_DOAN_GIAY` | `900` | (máy chạy `lt-remote.py`) video dài hơn 1,5× số này ⇒ Demucs tách từng đoạn rồi nối, khớp từng mẫu |
 
 ## Điều cần biết
 
@@ -76,4 +79,9 @@ Cập nhật mã: lặp lại bước 1 rồi `systemctl --user restart vbg-long
   video ra dài hơn bản gốc, phải mã hoá lại hình (libx264 veryfast, CPU). `tang-toc` = bản mẫu (nhanh tới 1,3×, giữ nguyên hình).
 - **Link YouTube bị chặn ở máy nhà** ⇒ (nếu `LT_GPU=vast7`) thử một lần qua vast7, không vượt chặn gì thêm; hỏng ⇒ việc lỗi với lời
   nhắn "Hãy tải video trên máy bạn rồi kéo vào app".
+- **Video dài (1–3 giờ, 18/11):** trước khi dịch soạn TỪ ĐIỂN riêng của việc một lần (`POST /tu-dien`, mẫu rải đều cả bản
+  chép — `mauTuDien`), lưu `tu-dien.json`, gửi kèm mọi lô; lô chia theo câu + ký tự (`chiaLoDich`), mỗi lô mang ~6 câu Việt liền
+  trước; thiếu câu thì chỉ gửi lại phần thiếu. Demucs tách theo đoạn 15 phút (đỡ RAM); WAV giọng Việt ghi thẳng không nối Buffer;
+  ổ không đủ (`dungLuongCan`) ⇒ việc lỗi NGAY với câu "Ổ máy nhà còn X GB… dọn bớt ổ rồi bấm Thử lại". Ưu tiên GPU KHÔNG đổi
+  (vẫn chung `flock .khoa-gpu`, video bài giảng giữ ưu tiên).
 - Thử phần thuần: `npm test` (trong thư mục này) hoặc từ repo `npx tsx --test tools/long-tieng-tram/thuatToan.test.ts`.

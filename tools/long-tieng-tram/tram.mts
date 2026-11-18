@@ -12,13 +12,13 @@
  * trước khi đọc; MỌI mẩu đọc xong được Whisper nghe lại + chấm điểm, < 0,85 hoặc độ dài vô lý ⇒ đọc lại bằng seed khác (tối đa 3 lần).
  */
 import { spawn, type ChildProcess } from 'node:child_process';
-import { existsSync, mkdirSync, readdirSync, readFileSync, renameSync, rmSync, statSync, writeFileSync, appendFileSync, copyFileSync } from 'node:fs';
+import { existsSync, mkdirSync, readdirSync, readFileSync, renameSync, rmSync, statSync, statfsSync, writeFileSync, appendFileSync, copyFileSync, openSync, writeSync, closeSync } from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 import {
   banDo, chiaDoan, datChuan, diemKhop, doDaiKhaNghi, dongSrt, gopCau, kheCau, KY_TU_MOI_GIAY, lapKeHoach, tachCauViet,
-  tenKetQua, totHon, banCanDung, type BanDoc, type Cau, type Doan,
+  tenKetQua, totHon, banCanDung, chiaLoDich, nguCanhTruoc, mauTuDien, dungLuongCan, type BanDoc, type Cau, type Doan,
 } from './thuatToan.ts';
 
 // ─── Cấu hình ──────────────────────────────────────────────────────────────
@@ -34,7 +34,10 @@ const GIONG = process.env.LT_GIONG_DIR ?? path.join(HOME, 'vbg-dp/giong');
 const YTDLP = process.env.LT_YTDLP ?? 'yt-dlp';
 const CHU_KY_MS = Number(process.env.LT_CHU_KY_GIAY ?? 10) * 1000;
 const SEEDS = [42, 7, 1234, 99]; // seed đầu + tối đa 3 lần đọc lại (cùng dãy với lam-giong.mts)
-const LO_DICH = 40;
+/** Lô dịch: ≤ 40 câu VÀ ≤ 2.400 ký tự gốc (video dài: lô đều nhau, model không bỏ sót đuôi). */
+const LO_DICH = { toiDaCau: 40, toiDaKyTu: Number(process.env.LT_LO_DICH_KY_TU ?? 2400) };
+/** Ổ trống tối thiểu trước khi tải video (chưa biết cỡ) — sau khi có video thì đo đúng bằng `dungLuongCan`. */
+const O_TRONG_TOI_THIEU = Number(process.env.LT_O_TRONG_TOI_THIEU_GB ?? 8) * 1e9;
 const SR = 24000;
 
 const MAY = GPU === 'vast7'
@@ -184,6 +187,7 @@ async function lamViec(n: NhanViec) {
   log(`▶ việc ${job.id} ${job.url ?? job.tep?.ten ?? ''} · nhịp ${job.nhip} · nhạc ${job.nhacNen.loai} · xuất ${job.banRa ?? 'ca-hai'}`);
   try {
     // ── 0. lấy video + nhạc ──
+    kiemO(LAM, O_TRONG_TOI_THIEU, 'trước khi tải video');
     const vao = await layVideo(n, LAM);
     const ten = (job.tenVideo || (existsSync(path.join(LAM, 'tieu-de.txt')) ? readFileSync(path.join(LAM, 'tieu-de.txt'), 'utf8').trim().split('\n')[0] : '') || 'video').trim();
     ctx.tenVideo = ten;
@@ -195,6 +199,8 @@ async function lamViec(n: NhanViec) {
     }
     const tongDai = await doDai(vao);
     if (!tongDai) throw new Error('Không đọc được độ dài video (tệp hỏng?)');
+    // Video dài (1–3 giờ): đo ổ NGAY, chặn sớm với câu rõ ràng thay vì chết giữa chừng ở bước ghép.
+    kiemO(LAM, dungLuongCan(tongDai, statSync(vao).size) - statSync(vao).size, `cho video ${(tongDai / 3600).toFixed(1)} giờ`);
 
     await mayChay(`mkdir -p ${q(R)}`);
     const remotePy = MAY.ssh ? `${R}/lt-remote.py` : path.join(DIR, 'lt-remote.py');
@@ -325,30 +331,56 @@ async function layVideo(n: NhanViec, LAM: string): Promise<string> {
 }
 
 // ── 3. dịch ──
+// Video dài (18/11/2026): (a) TỪ ĐIỂN riêng của việc soạn MỘT lần từ mẫu gọn của cả bản chép (`POST /tu-dien`), lưu
+// `tu-dien.json` trong thư mục việc (thử lại không soạn lại), gửi kèm MỌI lô; (b) mỗi lô mang ~6 câu Việt liền trước;
+// (c) lô chia theo số câu + SỐ KÝ TỰ; thiếu câu thì CHỈ gửi lại phần thiếu (`choPhepThieu`). Máy chủ cũ không có
+// `/tu-dien` / `choPhepThieu` ⇒ vẫn chạy (không từ điển; 502 thiếu câu ⇒ lượt sau chỉ hỏi phần thiếu).
+async function layTuDien(jobId: string, LAM: string, caus: CauVi[], lang: string): Promise<unknown[]> {
+  const f = path.join(LAM, 'tu-dien.json');
+  if (existsSync(f)) return JSON.parse(readFileSync(f, 'utf8')) as unknown[];
+  await baoTienDo('lam', 'Lập từ điển thuật ngữ', 35);
+  try {
+    const r = await api('POST', '/tu-dien', { jobId, ngonNgu: lang, mau: mauTuDien(caus) });
+    const td = Array.isArray(r?.data?.tuDien) ? (r.data.tuDien as unknown[]) : [];
+    writeFileSync(f, JSON.stringify(td));
+    log(`   từ điển: ${td.length} mục`);
+    return td;
+  } catch (e) {
+    if (e instanceof Huy) throw e;
+    log(`   không soạn được từ điển (${String((e as Error).message).slice(0, 160)}) — dịch không kèm từ điển`);
+    return [];
+  }
+}
+
 async function buocDich(jobId: string, LAM: string, caus: CauVi[], lang: string, tongDai: number) {
   const f = path.join(LAM, 'dich.json');
   const cu: Record<number, string> = existsSync(f) ? JSON.parse(readFileSync(f, 'utf8')) : {};
   for (const c of caus) if (cu[c.i]) c.vi = cu[c.i];
   if (caus.every((c) => c.vi)) return;
-  for (let k = 0; k < caus.length; k += LO_DICH) {
-    const lo = caus.slice(k, k + LO_DICH);
+  const tuDien = await layTuDien(jobId, LAM, caus, lang);
+  const cacLo = chiaLoDich(caus, LO_DICH);
+  for (const [soLo, chiSo] of cacLo.entries()) {
+    const lo = chiSo.map((k) => caus[k]!);
     if (lo.every((c) => c.vi)) continue;
-    await baoTienDo('lam', `Dịch ${k}/${caus.length} câu`, 35 + (15 * k) / caus.length);
-    const truoc = caus.slice(Math.max(0, k - 4), k).map((c) => c.vi ?? '').filter(Boolean).join(' ');
-    const cau = lo.map((c) => { const kh = kheCau(caus, c.i, tongDai); return { i: c.i, giay: +kh.toFixed(1), toiDa: Math.round(kh * KY_TU_MOI_GIAY), src: c.src }; });
+    await baoTienDo('lam', `Dịch ${chiSo[0]}/${caus.length} câu`, 35 + (15 * chiSo[0]!) / caus.length);
+    const truoc = nguCanhTruoc(caus, chiSo[0]!, 6);
     for (let lan = 0; ; lan++) {
+      const can = lo.filter((c) => !c.vi);
+      if (!can.length) break;
+      const cau = can.map((c) => { const kh = kheCau(caus, c.i, tongDai); return { i: c.i, giay: +kh.toFixed(1), toiDa: Math.round(kh * KY_TU_MOI_GIAY), src: c.src }; });
       try {
-        const r = await api('POST', '/dich', { jobId, ngonNgu: lang, cau, truoc });
+        const r = await api('POST', '/dich', { jobId, ngonNgu: lang, cau, truoc, tuDien, choPhepThieu: true });
         for (const d of r.data.ds as { i: number; vi: string }[]) { if (caus[d.i]) { caus[d.i]!.vi = d.vi; cu[d.i] = d.vi; } }
-        if (lo.some((c) => !c.vi)) throw new Error('thiếu câu');
-        break;
+        writeFileSync(f, JSON.stringify(cu));
+        const con = lo.filter((c) => !c.vi).length;
+        if (!con) break;
+        throw new Error(`còn thiếu ${con} câu`);
       } catch (e) {
-        if (e instanceof Huy || lan >= 4) throw e;
-        log(`   lô dịch ${k} lỗi (${String((e as Error).message).slice(0, 160)}) — thử lại sau 10 s`);
+        if (e instanceof Huy || lan >= 5) throw e;
+        log(`   lô dịch ${soLo + 1}/${cacLo.length} lỗi (${String((e as Error).message).slice(0, 160)}) — 10 s nữa chỉ gửi lại câu còn thiếu`);
         await ngu(10_000);
       }
     }
-    writeFileSync(f, JSON.stringify(cu));
   }
 }
 
@@ -453,7 +485,7 @@ async function buocTron(LAM: string, job: NhanViec['job'], n: NhanViec, vao: str
     srtVi.push({ a: d.batDau, b: d.batDau + p.length / SR, t: caus[d.i]!.vi ?? '' });
   }
   const tho = path.join(LAM, 'giong-vi.wav');
-  writeFileSync(tho, Buffer.concat([wavHeader(track.byteLength, SR, 1), Buffer.from(track.buffer)]));
+  ghiWav(tho, track, SR); // không Buffer.concat: video 3 giờ = ~0,5 GB PCM, concat là nhân đôi RAM
   const giongVi = path.join(LAM, 'giong-vi-norm.wav');
   await chay(`ffmpeg -nostdin -loglevel error -y -i ${q(tho)} -af loudnorm=I=-16:TP=-1.5:LRA=11 -ar 44100 -ac 2 ${q(giongVi)}`);
 
@@ -572,6 +604,24 @@ async function keoAm(src: string, doan: ReturnType<typeof chiaDoan>, ra: string,
   await chay(`ffmpeg -nostdin -loglevel error -y -f s16le -ar 44100 -ac 2 -i ${q(raw)} -c:a flac ${q(ra)}`);
   rmSync(raw, { force: true });
   return ra;
+}
+
+/** Ghi WAV mono 16-bit: đầu tệp rồi THẲNG vùng nhớ của mảng (không nối thành một Buffer mới — video dài đỡ ~0,5 GB RAM). */
+function ghiWav(f: string, pcm: Int16Array, sr: number) {
+  const fd = openSync(f, 'w');
+  try {
+    writeSync(fd, wavHeader(pcm.byteLength, sr, 1));
+    const b = Buffer.from(pcm.buffer, pcm.byteOffset, pcm.byteLength);
+    for (let o = 0; o < b.length; o += 64 << 20) writeSync(fd, b, o, Math.min(64 << 20, b.length - o));
+  } finally { closeSync(fd); }
+}
+
+/** Ổ chứa `dir` còn ≥ `can` byte trống không — thiếu ⇒ lỗi rõ ràng (việc giữ thư mục ⇒ dọn ổ rồi bấm Thử lại là chạy tiếp). */
+function kiemO(dir: string, can: number, luc: string) {
+  let trong: number;
+  try { const st = statfsSync(dir); trong = Number(st.bavail) * Number(st.bsize); } catch { return; } // không đo được ⇒ không chặn
+  if (trong >= can) return;
+  throw new Error(`Ổ máy nhà còn ${(trong / 1e9).toFixed(1)} GB trống, cần khoảng ${(can / 1e9).toFixed(1)} GB ${luc} — dọn bớt ổ rồi bấm Thử lại.`);
 }
 
 function wavHeader(bytes: number, sr: number, ch: number): Buffer {

@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import {
   banDo, chiaDoan, chuan, datChuan, demTu, diemKhop, doDaiKhaNghi, dongSrt, gopCau, kheCau, lapKeHoach, lcsTiLe, mocSrt,
-  NGHI_CAU, NGHI_PHAY, tachCauViet, tachDoanDai, tenKetQua, totHon, banCanDung, type Cau, type Tu,
+  NGHI_CAU, NGHI_PHAY, tachCauViet, tachDoanDai, tenKetQua, totHon, banCanDung, chiaLoDich, nguCanhTruoc, mauTuDien, dungLuongCan, type Cau, type Tu,
 } from './thuatToan.ts';
 
 test('tachDoanDai: đoạn 23,5 s có mốc từ ⇒ các mẩu ≤ 8 s, cắt ở dấu câu, không mất chữ (lỗi lượt chạy thử 18/11)', () => {
@@ -150,4 +150,39 @@ test('banCanDung: Xuất ra cả hai / chỉ giọng Việt / chỉ song ngữ; 
   assert.deepEqual(banCanDung('la'), [['vi', false], ['vi-goc', true]]);
   assert.deepEqual(banCanDung('vi'), [['vi', false]]);
   assert.deepEqual(banCanDung('vi-goc'), [['vi-goc', true]]);
+});
+
+test('chiaLoDich: theo SỐ CÂU và SỐ KÝ TỰ; câu quá dài đứng riêng; không mất câu', () => {
+  const caus = Array.from({ length: 10 }, (_, i) => ({ src: 'x'.repeat(i === 4 ? 900 : 100) }));
+  const lo = chiaLoDich(caus, { toiDaCau: 3, toiDaKyTu: 500 });
+  assert.deepEqual(lo, [[0, 1, 2], [3], [4], [5, 6, 7], [8, 9]]);
+  assert.deepEqual(lo.flat(), caus.map((_, i) => i));
+  const ngan = chiaLoDich(Array.from({ length: 100 }, () => ({ src: 'ab' })));
+  assert.deepEqual(ngan.map((l) => l.length), [40, 40, 20], 'mặc định 40 câu/lô');
+  assert.deepEqual(chiaLoDich([]), []);
+});
+
+test('nguCanhTruoc: ~6 câu Việt liền trước, bỏ câu chưa dịch', () => {
+  const caus = Array.from({ length: 10 }, (_, i) => ({ vi: i === 7 ? undefined : `c${i}` }));
+  assert.deepEqual(nguCanhTruoc(caus, 9), ['c2', 'c3', 'c4', 'c5', 'c6', 'c8']);
+  assert.deepEqual(nguCanhTruoc(caus, 0), []);
+  assert.deepEqual(nguCanhTruoc(caus, 3, 2), ['c1', 'c2']);
+});
+
+test('mauTuDien: ngắn ⇒ toàn bộ; dài ⇒ rải đều đầu→cuối, ưu tiên câu có thuật ngữ, trong trần ký tự, giữ thứ tự', () => {
+  assert.deepEqual(mauTuDien([{ src: 'a' }, { src: 'b' }]), ['a', 'b']);
+  // 3 giờ ~ 3000 câu ⇒ ~70k ký tự
+  const dai = Array.from({ length: 3000 }, (_, i) => ({ src: i % 10 === 0 ? `câu ${i} nói về Docker` : `câu thường ${'x'.repeat(20)}` }));
+  const m = mauTuDien(dai, 6000, 200);
+  assert.ok(m.join('').length <= 6000);
+  assert.ok(m.length <= 200 && m.length > 50, String(m.length));
+  const so = m.filter((s) => s.includes('Docker')).map((s) => Number(s.split(' ')[1]));
+  assert.ok(so.length >= m.length / 2, 'ưu tiên câu có thuật ngữ');
+  assert.ok(so[0]! < 300 && so.at(-1)! > 2600, 'rải tới cuối video, không chỉ đầu');
+  assert.deepEqual(so, [...so].sort((a, b) => a - b), 'giữ thứ tự gốc');
+});
+
+test('dungLuongCan: video 3 giờ 4 GB cần ~ 3×4 + 6,9 + 2 GB', () => {
+  assert.equal(dungLuongCan(3 * 3600, 4e9), Math.round(12e9 + 3 * 2.3e9 + 2e9));
+  assert.ok(dungLuongCan(600, 1e8) < 3e9);
 });

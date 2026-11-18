@@ -32,7 +32,7 @@ export type IdCauHoi = (typeof CAU_HOI_SAN)[number]['id'];
 const TEN_VIEC: Record<string, string> = {
   agent_code: 'AI Code (app/CLI)', agent_taitro: 'AI Code — admin tài trợ', exam_tutor: 'CuongMini trong phòng thi',
   thu_ket_noi: 'Thử kết nối', tim_web: 'Tìm web', language_tutor: 'Trò chuyện ngoại ngữ', work_setup: 'Create with CuongMini (CT Work)',
-  work_ai: 'Trợ lý CT Work', admin_thong_ke: 'AI thống kê (chính admin)',
+  work_ai: 'Trợ lý CT Work', admin_thong_ke: 'AI thống kê (chính admin)', long_tieng_dich: 'Dịch lời CT Lồng Tiếng',
 };
 const lamTron = (n: number, d = 4) => Math.round(n * 10 ** d) / 10 ** d;
 

@@ -6,12 +6,14 @@ import { api } from '@/lib/api';
 
 export type TrangThaiViec = 'cho_tai_len' | 'cho' | 'tai' | 'lam' | 'xong' | 'loi' | 'huy';
 export type LoaiNhac = 'goc' | 'thu-vien' | 'tep' | 'khong';
+/** Bản video xuất ra (thêm 18/11): cả hai · chỉ giọng Việt [VI] · chỉ song ngữ [VI + giọng gốc N%]. */
+export type BanRa = 'ca-hai' | 'vi' | 'vi-goc';
 export interface TepMoTa { ten: string; kichThuoc: number; kieu: string }
 export interface NhacNen { loai: LoaiNhac; id?: string; amLuong: number; tep?: TepMoTa }
 export interface KetQua { loai: 'vi' | 'vi-goc' | 'srt-vi' | 'srt-goc' | 'thong-tin'; ten: string; kichThuoc: number; url: string | null }
 export interface Viec {
   id: string; nguon: 'url' | 'tep'; url: string | null; tep: TepMoTa | null; tenVideo: string | null;
-  lang: string; goc: number; nhip: 'cho-giong' | 'tang-toc'; nhacNen: NhacNen;
+  lang: string; goc: number; nhip: 'cho-giong' | 'tang-toc'; banRa?: BanRa; nhacNen: NhacNen;
   trangThai: TrangThaiViec; buoc: string | null; phanTram: number; loi: string | null; ketQua: KetQua[];
   thoiLuong: number | null; tao: string; xong: string | null; daTaiVe: string | null;
 }
@@ -21,7 +23,7 @@ export interface MaKetNoi { id: number; ten: string | null; dau: string; tao: st
 
 export interface TaoViecVao {
   url?: string; tep?: TepMoTa; lang: 'auto' | 'zh' | 'en'; goc: number; tenVideo?: string;
-  nhip: 'cho-giong' | 'tang-toc'; nhacNen: { loai: LoaiNhac; id?: string; amLuong?: number; tep?: TepMoTa };
+  nhip: 'cho-giong' | 'tang-toc'; banRa?: BanRa; nhacNen: { loai: LoaiNhac; id?: string; amLuong?: number; tep?: TepMoTa };
 }
 
 const d = <T,>(p: Promise<{ data: { data: T } }>) => p.then((r) => r.data.data);

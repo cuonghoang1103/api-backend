@@ -16,7 +16,7 @@ import {
   Palette,
   Activity, AlertTriangle, BarChart3, BookOpen, Briefcase, Clapperboard, ClipboardList, Code2,
   CreditCard, Crown, Database, FileText, FlaskConical, FolderKanban, Gamepad2, Github,
-  GraduationCap, Handshake, Inbox, KeyRound, Languages, LayoutDashboard, LibraryBig, Mic, MonitorPlay,
+  GraduationCap, Handshake, Inbox, KeyRound, Languages, LayoutDashboard, LibraryBig, Mic, AudioLines, MonitorPlay,
   Music, Newspaper, Radio, Receipt, Search, Server, ShieldCheck, ShoppingBag, Sparkles, Star, Sticker,
   Tag, Ticket, TrendingUp, UserX, Users, UsersRound, Zap,
 } from 'lucide-react';
@@ -33,6 +33,8 @@ export interface AdminNavItem {
   external?: boolean;
   /** Khớp cả các đường dẫn con (vd /creator/*) khi tô mục đang mở. */
   matchPrefix?: string;
+  /** Mô tả một dòng (tooltip ở sidebar, gợi ý trong ⌘K). */
+  desc?: string;
 }
 
 export interface AdminNavGroup {
@@ -108,6 +110,7 @@ export const ADMIN_NAV: AdminNavGroup[] = [
       { label: 'Music', vi: 'Nhạc', href: '/admin/music', icon: Music, keywords: 'quản lý nhạc bài hát' },
       { label: 'Music posts', vi: 'Post nhạc', href: '/admin/music-posts', icon: Music, keywords: 'music post post nền' },
       { label: 'Voice', vi: 'Vlog & Reaction', href: '/admin/voice', icon: Radio, keywords: 'vlog reaction podcast' },
+      { label: 'Dubbing', vi: 'CT Lồng Tiếng', href: '/admin/long-tieng', icon: AudioLines, desc: 'Lồng tiếng Việt bằng giọng bạn cho video YouTube / Bilibili', keywords: 'lồng tiếng long tieng dub dubbing youtube bilibili dịch video giọng việt' },
       { label: 'Video categories', vi: 'Danh mục video', href: '/admin/video-categories', icon: Clapperboard, keywords: 'danh mục video' },
       { label: 'Games', vi: 'Trò chơi', href: '/admin/games', icon: Gamepad2, keywords: 'trò chơi' },
       { label: 'Stickers', vi: 'Nhãn dán', href: '/admin/stickers', icon: Sticker, keywords: 'nhãn dán quản lý nhãn dán' },

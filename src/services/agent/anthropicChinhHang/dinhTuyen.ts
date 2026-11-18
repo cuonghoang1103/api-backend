@@ -206,6 +206,8 @@ export async function goiVanBanChinhHang(o: {
   nhanh?: { effort: 'low' | 'medium' };
   /** 22/10/2026 (trợ lý CT Work): tool gốc — model xin đọc dữ liệu dự án bằng tool call thay vì JSON trong chữ. */
   tools?: LLMTool[];
+  /** 18/11/2026 (CT Lồng Tiếng): structured outputs — câu trả lời ép đúng JSON schema này (`output_config.format`). */
+  dinhDangJson?: Record<string, unknown>;
 }): Promise<{ text: string; biCat: boolean; usd: number; ttfbMs: number; toolCalls?: LLMToolCall[] }> {
   const body: ThanAnthropic = {
     model: o.model,
@@ -224,6 +226,9 @@ export async function goiVanBanChinhHang(o: {
   } else {
     /* Không cắt câu trả lời: thinking cũng ăn vào max_tokens ⇒ tối thiểu 16K. */
     beta = await dungThanChinhHang(body, { laAgent: false, maxTokens: Math.max(o.maxTokens, 16_000) });
+  }
+  if (o.dinhDangJson) {
+    body.output_config = { ...((body.output_config as Record<string, unknown> | undefined) ?? {}), format: { type: 'json_schema', schema: o.dinhDangJson } };
   }
   const nguCanh: NguCanhGoi = { userId: o.userId, viec: o.viec, hang: o.hang, model: o.model };
   const ctl = new AbortController();

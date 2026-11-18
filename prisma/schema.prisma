@@ -18402,6 +18402,8 @@ model LongTiengViec {
   goc       Float     @default(0.15)
   /// cho-giong (giữ nhịp đọc, kéo dài hình khi câu Việt dài hơn khe) | tang-toc (đọc nhanh tới 1,3× như bản mẫu)
   nhip      String    @default("cho-giong") @db.VarChar(16)
+  /// Bản video xuất ra (thêm 18/11): ca-hai (mặc định) | vi (chỉ giọng Việt) | vi-goc (chỉ song ngữ: Việt + giọng gốc nhỏ)
+  banRa     String    @default("ca-hai") @map("ban_ra") @db.VarChar(8)
   /// Nhạc nền: { loai: goc|thu-vien|tep|khong, id?, amLuong, tep?: { ten, kichThuoc, kieu } }
   nhacNen   Json?     @map("nhac_nen") @db.JsonB
   /// Khoá R2 của tệp nhạc người dùng tải lên (nhacNen.loai = tep; xoá khi xong)

@@ -132,6 +132,7 @@ export default function AdminSidebar({
                         href={it.href}
                         onClick={onNavigate}
                         aria-current={isActive ? 'page' : undefined}
+                        title={it.desc}
                         className="a-nav-item"
                       >
                         <span className="a-tile">

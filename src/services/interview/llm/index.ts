@@ -121,7 +121,7 @@ export type LLMStep = 'interview' | 'report' | 'generation';
  */
 export interface LLMProvider {
   name: string;
-  complete(model: string, system: string, messages: LLMMessage[], opts: { maxTokens?: number; timeoutMs?: number; ep?: LlmEndpoint; onToken?: (t: string) => void; reasoningEffort?: string | null; tools?: LLMTool[] }): Promise<LLMResult>;
+  complete(model: string, system: string, messages: LLMMessage[], opts: { maxTokens?: number; timeoutMs?: number; ep?: LlmEndpoint; onToken?: (t: string) => void; reasoningEffort?: string | null; tools?: LLMTool[]; dinhDangJson?: Record<string, unknown> }): Promise<LLMResult>;
 }
 
 // ── Pricing lives in ONE place now: src/services/llm/gateway.ts. The table
@@ -213,6 +213,8 @@ const anthropicProvider: LLMProvider = {
         body: JSON.stringify({
           model, max_tokens: maxTokens, system, messages,
           ...(opts.tools?.length ? { tools: toolAnthropic(opts.tools) } : {}),
+          // Structured outputs (18/11/2026, CT Lồng Tiếng): ép câu trả lời đúng JSON schema — KHÔNG prefill (Sonnet 5.5 từ chối).
+          ...(opts.dinhDangJson ? { output_config: { format: { type: 'json_schema', schema: opts.dinhDangJson } } } : {}),
           ...(useStream ? { stream: true } : {}),
         }),
         signal: ctrl.signal,
@@ -805,6 +807,11 @@ export async function llmComplete(opts: {
   onRestart?: () => void;
   /** 22/10/2026: tool gốc của cổng (trợ lý CT Work xin đọc). Không gửi tới máy nhà (llama.cpp). */
   tools?: LLMTool[];
+  /**
+   * 18/11/2026: JSON schema cho structured outputs — CHỈ adapter Anthropic gửi (`output_config.format`); tuyến OpenAI bỏ qua
+   * (nơi gọi vẫn phải tự kiểm JSON). Cổng không nhận tham số này ⇒ 400 ⇒ nơi gọi tự gửi lại không kèm.
+   */
+  dinhDangJson?: Record<string, unknown>;
 }): Promise<LLMResult> {
   const maxRetries = opts.maxRetries ?? (Number(process.env.LLM_MAX_RETRIES) || 3);
   let lastErr: unknown;
@@ -900,7 +907,7 @@ export async function llmComplete(opts: {
         const maxTokens = suyLuan ? tranRaCho(opts.maxTokens ?? 1500, suyLuan) : opts.maxTokens;
         if (daGoi) opts.onRestart?.();
         daGoi = true;
-        const result = await provider.complete(model, opts.system, opts.messages, { maxTokens, timeoutMs: opts.timeoutMs, ep, onToken: opts.onToken, reasoningEffort: suyLuan, ...(opts.tools?.length && !ep.local ? { tools: opts.tools } : {}) });
+        const result = await provider.complete(model, opts.system, opts.messages, { maxTokens, timeoutMs: opts.timeoutMs, ep, onToken: opts.onToken, reasoningEffort: suyLuan, ...(opts.tools?.length && !ep.local ? { tools: opts.tools } : {}), ...(opts.dinhDangJson ? { dinhDangJson: opts.dinhDangJson } : {}) });
         if (ep.label === 'cong-agent') baoRamboOk();
         /* Chạm trần độ dài — ghi WARN để CÒN LẦN RA ĐƯỢC. Trước đây không chỗ
            nào đọc `finish_reason`, nên một câu trả lời cụt giữa chừng trông y

@@ -54,8 +54,9 @@ export interface NguCanhGoi {
   /** `work_ai` (22/10/2026): trợ lý CT Work lùi sang cổng này khi rambo hỏng — trần $/ngày riêng (`services/work/aiCong.ts`). */
   /** `exam_grade` (24/10/2026): chấm bài phòng thi lùi sang cổng này khi rambo hỏng — trần $/ngày riêng (`services/exam/aiChamCong.ts`). */
   /** `robot_voice` (15/11/2026): não robot Odin (Maker Lab) — trần $/ngày riêng (`makerlab/naoChinhHang.ts`). */
+  /** `long_tieng_dich` (18/11/2026): dịch lời video CT Lồng Tiếng lùi sang cổng này khi gwai hỏng — trần $/ngày riêng (`services/longTiengDich.ts`). */
   /** `web_chat` (09/11/2026): AI Chat web/app desktop — CuongMini Pro/Pro 2/Max, trần $/ngày riêng (`services/aiChatChinhHang.ts`). */
-  viec: 'agent_code' | 'agent_taitro' | 'exam_tutor' | 'thu_ket_noi' | 'tim_web' | 'language_tutor' | 'work_setup' | 'work_ai' | 'admin_thong_ke' | 'exam_grade' | 'web_chat' | 'robot_voice';
+  viec: 'agent_code' | 'agent_taitro' | 'exam_tutor' | 'thu_ket_noi' | 'tim_web' | 'language_tutor' | 'work_setup' | 'work_ai' | 'admin_thong_ke' | 'exam_grade' | 'web_chat' | 'robot_voice' | 'long_tieng_dich';
   hang: HangChinhHang;
   model: string;
 }

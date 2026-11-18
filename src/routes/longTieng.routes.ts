@@ -87,6 +87,8 @@ noiBoRouter.post('/nhan', asyncHandler(async (_req, res) => {
   ok(res, r);
 }));
 noiBoRouter.post('/dich', asyncHandler(async (req, res) => { ok(res, await lt.dich(body(req))); }));
+// 18/11/2026: từ điển riêng của việc (video dài dịch nhất quán) — soạn MỘT lần từ mẫu gọn của cả bản chép.
+noiBoRouter.post('/tu-dien', asyncHandler(async (req, res) => { ok(res, await lt.soanTuDien(body(req))); }));
 noiBoRouter.post('/:id/tien-do', asyncHandler(async (req, res) => { ok(res, await lt.tienDo(String(req.params.id), body(req))); }));
 noiBoRouter.post('/:id/len-ket-qua', asyncHandler(async (req, res) => { ok(res, await lt.lenKetQua(String(req.params.id), body(req))); }));
 noiBoRouter.post('/:id/xong', asyncHandler(async (req, res) => { ok(res, await lt.xongViec(String(req.params.id), body(req))); }));

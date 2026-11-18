@@ -19,6 +19,7 @@ import { closeRedis } from '../config/redis.js';
 import { listObjects, putObject } from '../config/r2.js';
 import { errorHandler } from '../middleware/errorHandler.js';
 import * as lt from '../services/longTieng.service.js';
+import * as ltd from '../services/longTiengDich.js';
 
 async function coCsdl(): Promise<boolean> {
   const url = process.env.DATABASE_URL;
@@ -105,6 +106,7 @@ describe('CT Lồng Tiếng (HTTP + DB thật)', { skip: !RUN ? 'không có CSDL
     server?.close();
     if (tokenCu === undefined) delete process.env.INTERNAL_API_TOKEN; else process.env.INTERNAL_API_TOKEN = tokenCu;
     lt._chiDeKiemThu.datGoiDich(null);
+    ltd._datCongDichChoTest(null);
     await prisma.user.deleteMany({ where: { id: { in: userIds } } }).catch(() => {});
     await prisma.$disconnect().catch(() => {});
     await closeRedis().catch(() => {});
@@ -132,6 +134,28 @@ describe('CT Lồng Tiếng (HTTP + DB thật)', { skip: !RUN ? 'không có CSDL
     assert.equal((await web(admin, 'POST', '/jobs', { url: 'https://x.y/v', nhip: 'bay' })).status, 400);
     assert.equal((await web(admin, 'POST', '/jobs', { url: 'https://x.y/v', tep: { ten: 'a.mp4', kichThuoc: 1, kieu: 'video/mp4' } })).status, 400);
     assert.equal((await web(admin, 'POST', '/jobs', { tep: { ten: 'a.mp4', kichThuoc: 6 * 1024 ** 3, kieu: 'video/mp4' } })).status, 400);
+  });
+
+  it('bản xuất ra (banRa): mặc định ca-hai; vi / vi-goc lưu trên việc + trạm nhận được; sai ⇒ 400', async () => {
+    const sai = await web(admin, 'POST', '/jobs', { url: 'https://x.y/b0', banRa: 'ca-ba' });
+    assert.equal(sai.status, 400);
+    assert.equal(sai.code, 'LT_BAN_RA');
+
+    const mac = (await web(admin, 'POST', '/jobs', { url: 'https://x.y/b1' })).data.job;
+    assert.equal(mac.banRa, 'ca-hai', 'không gửi ⇒ cả hai (đúng hành vi cũ)');
+    await web(admin, 'DELETE', `/jobs/${mac.id}`);
+
+    const chiVi = (await web(admin, 'POST', '/jobs', { url: 'https://x.y/b2', banRa: 'vi' })).data.job;
+    assert.equal(chiVi.banRa, 'vi');
+    assert.equal((await web(admin, 'GET', `/jobs/${chiVi.id}`)).data.banRa, 'vi');
+    const n = await nhanDung(chiVi.id);
+    assert.equal(n.job.banRa, 'vi', 'trạm biết chỉ dựng bản giọng Việt');
+    await web(admin, 'DELETE', `/jobs/${chiVi.id}`);
+
+    const songNgu = (await web(admin, 'POST', '/jobs', { url: 'https://x.y/b3', banRa: 'vi-goc', goc: 0.25 })).data.job;
+    assert.equal(songNgu.banRa, 'vi-goc');
+    assert.equal(songNgu.goc, 0.25);
+    await web(admin, 'DELETE', `/jobs/${songNgu.id}`);
   });
 
   it('việc bằng link: tạo ⇒ trạm giành ⇒ tiến độ ⇒ đẩy kết quả ⇒ xong ⇒ tải về (URL ký) ⇒ đã tải về xoá tệp', async () => {
@@ -348,6 +372,72 @@ describe('CT Lồng Tiếng (HTTP + DB thật)', { skip: !RUN ? 'không có CSDL
     assert.equal((await tram('POST', '/dich', { jobId: id, ngonNgu: 'zh', cau: [] })).status, 400);
     assert.equal((await tram('POST', '/dich', { jobId: id, ngonNgu: 'zh', cau: Array.from({ length: 61 }, (_, i) => ({ i, giay: 1, toiDa: 10, src: 'x' })) })).status, 400);
     lt._chiDeKiemThu.datGoiDich(null);
+    await web(admin, 'DELETE', `/jobs/${id}`);
+  });
+
+  it('chuỗi cổng dịch (giả lập cổng): gwai 400 có/không format ⇒ chính hãng JSON hỏng ⇒ modelapi; trần chính hãng đọc sổ thật', async () => {
+    const id = (await web(admin, 'POST', '/jobs', { url: 'https://x.y/chuoi' })).data.job.id as string;
+    await nhanDung(id);
+    lt._chiDeKiemThu.datGoiDich(null); // đi chuỗi cổng THẬT của service, chỉ thay từng cổng
+    const goi: string[] = [];
+    const prompts: string[] = [];
+    let modelapiTra: (ids: number[]) => string = (ids) => JSON.stringify({ ds: ids.map((i) => ({ i, vi: `vi-${i}` })) });
+    ltd._datCongDichChoTest({
+      gwai: () => ({ root: 'http://gwai.invalid', key: 'k', local: false, label: 'cong-agent', giaoThuc: 'anthropic' }),
+      gwaiDangNghi: () => false,
+      goiGwai: async (_o, _ep, model, coDinhDang) => { goi.push(`gwai:${model}:${coDinhDang ? 'format' : 'tho'}`); throw Object.assign(new Error('anthropic HTTP 400'), { httpStatus: 400 }); },
+      baoGwai: () => {},
+      chinhHangSanSang: async () => true,
+      goiChinhHang: async (_o, model) => { goi.push(`chinh_hang:${model}`); return { text: 'Xin lỗi, tôi không trả JSON', model }; },
+      baoChinhHangHong: () => {},
+      goiModelapi: async (o, model) => {
+        goi.push(`modelapi:${model}`);
+        prompts.push(o.user);
+        const ids = [...o.user.matchAll(/"i":(\d+)/g)].map((m) => Number(m[1]));
+        return { text: modelapiTra(ids), model };
+      },
+    });
+    const cau = [{ i: 0, giay: 3, toiDa: 40, src: 'Docker 容器' }, { i: 1, giay: 2, toiDa: 26, src: '镜像' }];
+    const tuDien = [{ goc: '容器', vi: 'container' }, { goc: '镜像', vi: 'image' }, { goc: '', vi: 'rỗng' }];
+    const r = await tram('POST', '/dich', { jobId: id, ngonNgu: 'zh', cau, truoc: ['Câu một.', 'Câu hai.'], tuDien });
+    assert.equal(r.status, 200);
+    assert.deepEqual(r.data.ds, [{ i: 0, vi: 'vi-0' }, { i: 1, vi: 'vi-1' }]);
+    assert.deepEqual(goi, ['gwai:claude-sonnet-5-5:format', 'gwai:claude-sonnet-5-5:tho', 'chinh_hang:claude-sonnet-5-5', 'modelapi:gpt-6-sol'],
+      'đúng thứ tự: gwai (kèm format, rồi không) → chính hãng → modelapi');
+    assert.match(prompts[0]!, /容器 → container/, 'từ điển đi kèm lô');
+    assert.match(prompts[0]!, /Câu một\.\nCâu hai\./, 'ngữ cảnh câu trước');
+
+    // choPhepThieu: model sót câu 1 cả hai lượt ⇒ 200 { ds, thieu } (trạm mới chỉ gửi lại phần thiếu).
+    goi.length = 0;
+    modelapiTra = () => JSON.stringify({ ds: [{ i: 0, vi: 'chỉ câu 0' }] });
+    const t = await tram('POST', '/dich', { jobId: id, ngonNgu: 'zh', cau, choPhepThieu: true });
+    assert.equal(t.status, 200);
+    assert.deepEqual(t.data.ds, [{ i: 0, vi: 'chỉ câu 0' }]);
+    assert.deepEqual(t.data.thieu, [1]);
+    assert.equal((await tram('POST', '/dich', { jobId: id, ngonNgu: 'zh', cau })).status, 502, 'trạm cũ (không choPhepThieu) ⇒ 502 như trước');
+
+    // Từ điển: cùng chuỗi, JSON đúng khuôn tuDien.
+    modelapiTra = () => JSON.stringify({ tuDien: [{ goc: '容器', vi: 'container' }, { goc: '容器', vi: 'trùng' }] });
+    const td = await tram('POST', '/tu-dien', { jobId: id, ngonNgu: 'zh', mau: ['Docker 容器 是什么', '镜像 和 容器'] });
+    assert.equal(td.status, 200);
+    assert.deepEqual(td.data.tuDien, [{ goc: '容器', vi: 'container' }], 'bỏ mục trùng');
+    assert.equal((await tram('POST', '/tu-dien', { jobId: id, ngonNgu: 'zh', mau: [] })).status, 400);
+
+    // Trần chính hãng của việc dịch đọc sổ anthropic_usage THẬT (viec = long_tieng_dich, theo ngày giờ VN).
+    const cu = process.env.LONG_TIENG_CHINH_HANG_USD_NGAY;
+    process.env.LONG_TIENG_CHINH_HANG_USD_NGAY = '0.5';
+    const dong = await prisma.anthropicUsage.create({ data: { viec: 'long_tieng_dich', model: 'claude-sonnet-5-5', costUsd: 0.6, userId: admin.id } });
+    try {
+      assert.equal(await ltd.trongTranChinhHangDich(), false, 'đã tiêu 0,6 $ ≥ trần 0,5 $');
+      process.env.LONG_TIENG_CHINH_HANG_USD_NGAY = '1000';
+      assert.equal(await ltd.trongTranChinhHangDich(), true);
+      process.env.LONG_TIENG_CHINH_HANG_USD_NGAY = '0';
+      assert.equal(await ltd.trongTranChinhHangDich(), false, '0 = tắt bậc chính hãng');
+    } finally {
+      await prisma.anthropicUsage.delete({ where: { id: dong.id } });
+      if (cu === undefined) delete process.env.LONG_TIENG_CHINH_HANG_USD_NGAY; else process.env.LONG_TIENG_CHINH_HANG_USD_NGAY = cu;
+    }
+    ltd._datCongDichChoTest(null);
     await web(admin, 'DELETE', `/jobs/${id}`);
   });
 

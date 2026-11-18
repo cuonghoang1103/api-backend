@@ -13,6 +13,7 @@ import { khung } from './_chung/khung.mjs';
 import s00 from './spring-boot/s00-bat-dau.mjs';
 import s01 from './spring-boot/s01-java-hien-dai-1.mjs';
 import s02 from './spring-boot/s02-java-hien-dai-2.mjs';
+import s03 from './spring-boot/s03-loi-spring.mjs';
 
 const CHUONG = [
   ['Section 0 — Why Spring Boot', 'Mục 0 — Vì sao Spring Boot', '(đã soạn — spring-boot/s00-bat-dau.mjs)', [['bat-dau-tai-day', '-', '-', '-']]],
@@ -33,7 +34,7 @@ const CHUONG = [
     ['jvm-gc', 'JVM memory and garbage collection', 'Bộ nhớ JVM và thu gom rác', 'Heap, stack, metaspace · GC thế hệ, G1 vs ZGC · OutOfMemoryError tái hiện thật · -Xmx trong container · JFR và jcmd'],
     ['lab-2', 'Chapter 2 lab + interview questions', 'Lab chương 2 + câu hỏi phỏng vấn', 'Thống kê lượt đặt bằng Stream + chạy song song an toàn · Rubric · Câu phỏng vấn đồng thời và GC'],
   ]],
-  ['Chapter 3 — Spring core, from the inside', 'Chương 3 — Lõi Spring, nhìn từ bên trong', 'IoC container, dependency injection, vòng đời bean, proxy, auto-configuration và profile.', [
+  ['Chapter 3 — Spring core, from the inside', 'Chương 3 — Lõi Spring, nhìn từ bên trong', '(đã soạn — spring-boot/s03-loi-spring.mjs) IoC container, dependency injection, vòng đời bean, proxy, auto-configuration và profile.', [
     ['ioc-container', 'The IoC container and beans', 'IoC container và bean', 'Inversion of Control là gì · Tự viết một container 50 dòng · ApplicationContext · BeanDefinition'],
     ['dependency-injection', 'Dependency injection: constructor vs field', 'Dependency injection: qua constructor hay qua field', 'Constructor injection (khuyến nghị) · Field injection và vì sao khó test · Nhiều bean cùng kiểu: @Primary, @Qualifier · Vòng phụ thuộc'],
     ['stereotype', 'Stereotypes, @Configuration and @Bean', 'Annotation phân loại, @Configuration và @Bean', '@Component, @Service, @Repository, @Controller · @Bean cho class thư viện · @Configuration proxyBeanMethods'],
@@ -160,6 +161,7 @@ const sections = khung('sb', CHUONG);
 sections[0] = s00;
 sections[1] = s01;
 sections[2] = s02;
+sections[3] = s03;
 
 export default {
   category: { slug: 'backend', name: 'Backend', icon: 'Server', sortOrder: 1 },

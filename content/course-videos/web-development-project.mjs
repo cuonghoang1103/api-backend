@@ -14,5 +14,6 @@ export default {
     "wdp301-4-1-react-api": { yt: "12l6lkW6JhE", credit: "Adrian Twarog — React Axios | Tutorial for Axios with ReactJS for a REST API" },
     "wdp301-6-1-git-iterations": { yt: "Dedz4gRHezg", credit: "Max Rohowsky — Using Git & GitHub in VSCode: Branches, Pull Requests & Merges" },
     "wdp301-8-1-advanced": { yt: "aQ_2DMXSNwY", credit: "RoadsideCoder — Deploying MERN Stack App to Render - MERN Stack Chat App with Socket.IO #17 ( UPDATED )" },
+    'wdp301-cong-cu': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/web-development-project/00-gioi-thieu-do-an/00-04-cong-cu-cai-dat-6909e244.mp4' }, defaultVideoTrack: 'VI' },
   },
 };

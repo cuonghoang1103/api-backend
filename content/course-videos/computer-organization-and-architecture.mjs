@@ -30,7 +30,7 @@ export default {
     "cea201-13-1-risc-cisc": { yt: "ZW1gb3h-f9k", credit: "Gate Smashers — L-2.13: RISC vs CISC | Computer Organization & Architecture", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/computer-organization-and-architecture/13-risc/13-03-risc-vs-cisc-2501d419.mp4' }, defaultVideoTrack: 'VI'},
     "cea201-14-1-ilp-superscalar": { yt: "Ut8wY6qtie4", credit: "Tech CS&IT — Instruction Level Parallelism | ILP Techniques | Superscalar Technique | Computer Architecture", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/computer-organization-and-architecture/14-ilp-superscalar/14-03-ilp-superscalar-ce5f5d8d.mp4' }, defaultVideoTrack: 'VI'},
     "cea201-15-1-multicore": { yt: "r_ZE1XVT8Ao", credit: "Neso Academy — Cache Coherence Problem & Cache Coherency Protocols", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/computer-organization-and-architecture/15-song-song-da-nhan/15-04-multicore-87d08bcc.mp4' }, defaultVideoTrack: 'VI'},
-    "cea201-n1-1-marie": { yt: "mkXdChZ1D2Y", credit: "THE IT CHANNEL — Programming with MARIE Simulator: Take inputs, compute sum, and display result" },
+    "cea201-n1-1-marie": { yt: "mkXdChZ1D2Y", credit: "THE IT CHANNEL — Programming with MARIE Simulator: Take inputs, compute sum, and display result", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/computer-organization-and-architecture/16-hop-ngu-marie/16-03-viet-chay-marie-b81aed0a.mp4' }, defaultVideoTrack: 'VI'},
     "cea201-n2-1-branch-prediction": { yt: "nczJ58WvtYo", credit: "Computerphile — How Branch Prediction Works in CPUs - Computerphile", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/computer-organization-and-architecture/17-nang-cao-cpu-hien-dai/17-01-du-doan-nhanh-suy-doan-639cb836.mp4' }, defaultVideoTrack: 'VI'},
     "cea201-n3-1-spectre-meltdown": { yt: "I5mRwzVvFGE", credit: "Computerphile — Spectre & Meltdown - Computerphile", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/computer-organization-and-architecture/18-nang-cao-bao-mat/18-01-spectre-meltdown-gia-toi-uu-5f60cfdb.mp4' }, defaultVideoTrack: 'VI'},
 
@@ -89,8 +89,8 @@ export default {
     "cea201-asm-b-slides-trinh-dich-lien-ket-tai": { yt: "N2y6csonII4", credit: "EngMicroLectures — Compiling, assembling, and linking" },
     // Final Exam
     "cea201-final-exam-fe": { yt: "ZMSdU9DLbrU", credit: "Unify Study — Computer Organization and Architecture in One Class - Marathon |Computer Architecture Series - Day 3" },
-    'cea201-cs2-so-hoc-so-nguyen': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/computer-organization-and-architecture/19-chuyen-sau/19-02-so-hoc-so-nguyen-70fc669a.mp4' }, defaultVideoTrack: 'VI' },
-    'cea201-cs3-dau-phay-dong-ieee754': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/computer-organization-and-architecture/19-chuyen-sau/19-03-dau-phay-dong-ieee754-e5e28799.mp4' }, defaultVideoTrack: 'VI' },
-    'cea201-cs4-khoi-dieu-khien-vi-chuong-trinh': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/computer-organization-and-architecture/19-chuyen-sau/19-04-khoi-dieu-khien-vi-chuong-trinh-9987b497.mp4' }, defaultVideoTrack: 'VI' },
+    'cea201-cs2-so-hoc-so-nguyen': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/computer-organization-and-architecture/19-chuyen-sau/19-02-so-hoc-so-nguyen-70fc669a.mp4' }, defaultVideoTrack: 'VI'},
+    'cea201-cs3-dau-phay-dong-ieee754': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/computer-organization-and-architecture/19-chuyen-sau/19-03-dau-phay-dong-ieee754-e5e28799.mp4' }, defaultVideoTrack: 'VI'},
+    'cea201-cs4-khoi-dieu-khien-vi-chuong-trinh': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/computer-organization-and-architecture/19-chuyen-sau/19-04-khoi-dieu-khien-vi-chuong-trinh-9987b497.mp4' }, defaultVideoTrack: 'VI'},
   },
 };

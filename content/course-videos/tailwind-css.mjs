@@ -72,10 +72,10 @@ export default {
     'tw-6-5-di-tru': { yt: 'TFfWsOa5GfE', credit: 'Jamie Barton — Dynamic Theme Switching with CSS Variables and Tailwind' },        // Dynamic Theme Switching with CSS Variables and Tailwind
 
     /* ── Chương 7 — @layer, và cơ chế thật sự của nó ── */
-    'tw-7-1-strip-layer': { yt: '_wcuT6FPsxU', credit: 'AyyazTech — How to add @layer directive in Tailwind CSS?' }, // How to add @layer directive in Tailwind CSS?
+    'tw-7-1-strip-layer': { yt: '_wcuT6FPsxU', credit: 'AyyazTech — How to add @layer directive in Tailwind CSS?', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/tailwind-css/07-layer/07-01-strip-layer-7befc1c3.mp4' }, defaultVideoTrack: 'VI'}, // How to add @layer directive in Tailwind CSS?
     'tw-7-2-phan-loai': { yt: 'fCHxFM6r9jI', credit: 'CodeWithHarry — When to use @apply and @layer directive?: Tailwind Tutorial #11' },   // When to use @apply and @layer directive?: Tailwind Tutorial #11
-    'tw-7-3-ba-dai': { yt: 'F0k0Nhmjx8w', credit: 'Sanan Ali — Styling Base Elements in TailwindCSS v4   Layers in TailwindCSS' },      // Styling Base Elements in TailwindCSS v4 Layers in TailwindCSS
-    'tw-7-4-preflight': { yt: 'tV84IS9505c', credit: 'Code With Sasha — Tailwind CSS Preflight (Default Styles)' },   // Tailwind CSS Preflight (Default Styles)
+    'tw-7-3-ba-dai': { yt: 'F0k0Nhmjx8w', credit: 'Sanan Ali — Styling Base Elements in TailwindCSS v4   Layers in TailwindCSS', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/tailwind-css/07-layer/07-03-ba-dai-06dcfe4a.mp4' }, defaultVideoTrack: 'VI'},      // Styling Base Elements in TailwindCSS v4 Layers in TailwindCSS
+    'tw-7-4-preflight': { yt: 'tV84IS9505c', credit: 'Code With Sasha — Tailwind CSS Preflight (Default Styles)', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/tailwind-css/07-layer/07-04-preflight-371f80bf.mp4' }, defaultVideoTrack: 'VI'},   // Tailwind CSS Preflight (Default Styles)
     'tw-7-5-doc-dau-ra': { yt: 'uL1d3D5gc2w', credit: 'Sanan Ali — How to use @apply and @utility directives in TailwindCSS v4' },  // How to use @apply and @utility directives in TailwindCSS v4
 
     /* ── Chương 8 — Kích thước đầu ra, đo thật ── */
@@ -83,10 +83,10 @@ export default {
     'tw-8-2-gzip': { yt: 'bhoDwo24K5Q', credit: 'Adam Wathan — Designing with Tailwind CSS: Optimizing for Production with Purgecss' },      // Designing with Tailwind CSS: Optimizing for Production with Purgecss
     'tw-8-3-tap-trung': { yt: 'l6_fC_Xg9cI', credit: 'Code With Dary — How To Purge Your Tailwind File | Tailwind CSS Tutorial | Tailwind Tutorial | Learn Tailwind 2 CSS' }, // How To Purge Your Tailwind File | Tailwind CSS Tutorial
     'tw-8-4-glob-hong': { yt: 'VSl0xEgoTkY', credit: 'Nick Janetakis — Tailwind\'s JIT Compiler Makes Tailwind + Webpack Faster in Development' }, // Tailwind's JIT Compiler Makes Tailwind + Webpack Faster in Development
-    'tw-8-5-thu-tu': { yt: '8sViNkNm2Ao', credit: 'Tailwind Labs — Advanced PurgeCSS Features – What\'s new in Tailwind CSS' },    // Advanced PurgeCSS Features – What's new in Tailwind CSS
+    'tw-8-5-thu-tu': { yt: '8sViNkNm2Ao', credit: 'Tailwind Labs — Advanced PurgeCSS Features – What\'s new in Tailwind CSS', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/tailwind-css/08-kich-thuoc-dau-ra/08-05-thu-tu-e6c7a160.mp4' }, defaultVideoTrack: 'VI'},    // Advanced PurgeCSS Features – What's new in Tailwind CSS
 
     /* ── Chương 9 — Khả năng tiếp cận, đo thật ── */
-    'tw-9-1-tuong-phan': { yt: 'D8TPUqbhRmA', credit: 'The Accessibility Guy — How to test for Color Contrast | TPGI & WebAIM | WCAG' },  // How to test for Color Contrast | TPGI & WebAIM | WCAG
+    'tw-9-1-tuong-phan': { yt: 'D8TPUqbhRmA', credit: 'The Accessibility Guy — How to test for Color Contrast | TPGI & WebAIM | WCAG', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/tailwind-css/09-tiep-can/09-01-tuong-phan-a9ddec45.mp4' }, defaultVideoTrack: 'VI'},  // How to test for Color Contrast | TPGI & WebAIM | WCAG
     'tw-9-2-nen-toi': { yt: '34MjM67qOPM', credit: 'Accessible Web — Beyond Dark Mode: Comprehensive Color Contrast Strategies for Accessibility | Accessible Web Webinar' },     // Beyond Dark Mode: Comprehensive Color Contrast Strategies for Accessibility
     'tw-9-3-lop-ma': { yt: '0TvTblD1DWo', credit: 'WP Accessibility Day — Understanding Color and Contrast Requirements in WCAG 2' },      // Understanding Color and Contrast Requirements in WCAG 2
     'tw-9-4-focus': { yt: 'OaNNOoT5Z9k', credit: 'Envato Tuts+ — Better Focus Styles with CSS Pseudo-Class :focus-visible' },       // Better Focus Styles with CSS Pseudo-Class :focus-visible

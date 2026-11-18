@@ -49,7 +49,7 @@ export default {
     'dk-3-5-don-dia': { yt: '3Q0cVWR7RU4', credit: "TroubleChute Linux — Docker Quietly Eats Drives | Docker Prune & Cleanup Guide", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/docker/03-anh-registry/03-06-don-dia-7f6ad025.mp4' }, defaultVideoTrack: 'VI'},
 
     /* ── Chương 4 — Dockerfile, từ cơ bản tới trôi chảy ── */
-    'dk-4-0-slides': { yt: 'saSJa9YVroA', credit: "Docker — Dockerfile: From Start to Optimized (DockerCon 2023)" },
+    'dk-4-0-slides': { yt: 'saSJa9YVroA', credit: "Docker — Dockerfile: From Start to Optimized (DockerCon 2023)", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/docker/04-dockerfile/04-01-slide-chuong-4-432a0d09.mp4' }, defaultVideoTrack: 'VI'},
     'dk-4-1-dockerfile-dau-tien': { yt: 'SnSH8Ht3MIc', credit: "Techno Tim — Build YOUR OWN Dockerfile, Image, and Container - Docker Tutorial", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/docker/04-dockerfile/04-02-dockerfile-dau-tien-5d2ee647.mp4' }, defaultVideoTrack: 'VI'},
     'dk-4-2-cac-chi-thi': { yt: '1ymi24PeF3M', credit: "Cloud Champ — Dockerfile creation Tutorial - Dockerfile Instructions Explained with example!", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/docker/04-dockerfile/04-03-cac-chi-thi-52c004a3.mp4' }, defaultVideoTrack: 'VI'},
     'dk-4-3-cmd-entrypoint': { yt: 'U1P7bqVM7xM', credit: "Manuel Castellin — Docker ENTRYPOINT vs CMD With Examples - Docker Development Tips & Tricks", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/docker/04-dockerfile/04-04-cmd-entrypoint-5d9bdea8.mp4' }, defaultVideoTrack: 'VI'},
@@ -57,7 +57,7 @@ export default {
     'dk-4-5-cong-thuc': { yt: 'W8yZUCzy4SI', credit: "KodeKloud — Docker Init Explained: Your Shortcut to Effortless Containerization", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/docker/04-dockerfile/04-06-cong-thuc-088cceec.mp4' }, defaultVideoTrack: 'VI'},
 
     /* ── Chương 5 — Tầng ảnh, cache & dựng nhanh ── */
-    'dk-5-0-slides': { yt: 'kkpQ_UZn2uo', credit: "Docker — Supercharged Docker Build with BuildKit" },
+    'dk-5-0-slides': { yt: 'kkpQ_UZn2uo', credit: "Docker — Supercharged Docker Build with BuildKit", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/docker/05-cache/05-01-slide-chuong-5-6879e87b.mp4' }, defaultVideoTrack: 'VI'},
     'dk-5-1-cache-quyet-dinh': { yt: 'dSpOBSRJFwg', credit: "Amigoscode — Docker Tutorial - Improve Docker builds with Caching and Layers" },
     'dk-5-2-thu-tu': { yt: 'oZ9nyCWERYc', credit: "kubucation — Proper DOCKER CACHING: Speed up your build with this optimized Dockerfile", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/docker/05-cache/05-03-thu-tu-2fdb057b.mp4' }, defaultVideoTrack: 'VI'},
     'dk-5-3-cache-mount': { yt: '8fILYOtoesQ', credit: "Nilesh Gule — Supercharge Docker builds using Cache Mount" },
@@ -81,7 +81,7 @@ export default {
     'dk-7-5-sao-luu': { yt: 'ZEy8iFbgbPA', credit: "Christian Lempa — Migrate Docker Volumes from one Host to another // backup and restore", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/docker/07-du-lieu/07-06-sao-luu-d8575a60.mp4' }, defaultVideoTrack: 'VI'},
 
     /* ── Chương 8 — Mạng ── */
-    'dk-8-0-slides': { yt: 'k1SwXOxvMdE', credit: "XuanThuLab — D05 - Mạng | Networking trong Docker, tạo và quản lý network trong container Docker" },
+    'dk-8-0-slides': { yt: 'k1SwXOxvMdE', credit: "XuanThuLab — D05 - Mạng | Networking trong Docker, tạo và quản lý network trong container Docker", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/docker/08-mang/08-01-slide-chuong-8-563ab11b.mp4' }, defaultVideoTrack: 'VI'},
     'dk-8-1-mang-bridge': { yt: 'bKFMS5C4CG0', credit: "NetworkChuck — Docker networking is CRAZY!! (you NEED to learn it)", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/docker/08-mang/08-02-mang-bridge-f92fe76f.mp4' }, defaultVideoTrack: 'VI'},
     'dk-8-2-cong-bo-cong': { yt: 'bpWytcz4uMw', credit: "Awesome Open Source — Docker and Firewalls - Docker wants to punch holes in the local firewall, let's mitigate that issue", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/docker/08-mang/08-03-cong-bo-cong-695a2b45.mp4' }, defaultVideoTrack: 'VI'},
     'dk-8-3-goi-nhau': { yt: 'itZ_x_nDBxU', credit: "Matt Williams — Docker Networking Made Simple: Connecting Containers Like a Pro", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/docker/08-mang/08-04-goi-nhau-54560389.mp4' }, defaultVideoTrack: 'VI'},

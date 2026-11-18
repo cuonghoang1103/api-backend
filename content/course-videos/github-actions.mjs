@@ -66,7 +66,7 @@ export default {
     'ga-4-5-tu-viet': { yt: 'zQdEsIBbVjE', credit: "Mickey Gousset — Create Your First Custom GitHub Action", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/github-actions/04-action/04-06-tu-viet-4e3555af.mp4' }, defaultVideoTrack: 'VI'},
 
     /* ── Chương 5 — Cache và artifact, đo thật ── */
-    'ga-5-0-slides': { yt: 'yaN-NyTbx2w', credit: "Testing Mini Bytes — Part 8 | Reduce workflow time | Caching Maven | Caching Docker Image Layers | Github Actions" },
+    'ga-5-0-slides': { yt: 'yaN-NyTbx2w', credit: "Testing Mini Bytes — Part 8 | Reduce workflow time | Caching Maven | Caching Docker Image Layers | Github Actions", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/github-actions/05-cache-artifact/05-01-slide-chuong-5-111d6577.mp4' }, defaultVideoTrack: 'VI'},
     'ga-5-1-cache-mua-gi': { yt: 'BDQivAobxKA', credit: "CoderDave — Caching Dependencies to SPEED UP Workflows in GitHub Actions", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/github-actions/05-cache-artifact/05-02-cache-mua-gi-04231c4d.mp4' }, defaultVideoTrack: 'VI'},
     'ga-5-2-khoa-cache': { yt: 'lkn3FPRh5ps', credit: "Cameron McKenzie — Cache GitHub Actions Workflow Dependencies", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/github-actions/05-cache-artifact/05-03-khoa-cache-614cbc7c.mp4' }, defaultVideoTrack: 'VI'},
     'ga-5-3-cache-chet': { yt: '7PVUjRXUY0o', credit: "Mickey Gousset — Cache Management with GitHub actions", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/github-actions/05-cache-artifact/05-04-cache-chet-3b552d45.mp4' }, defaultVideoTrack: 'VI'},
@@ -125,7 +125,7 @@ export default {
     'ga-12-4-mau-cho-to-chuc': { yt: 'Imv7zzJmpwU', credit: "TechTrapture — Creating Starter Workflow in GitHub Actions", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/github-actions/12-tai-su-dung/12-05-mau-cho-to-chuc-6e259c36.mp4' }, defaultVideoTrack: 'VI'},
 
     /* ── Chương 13 — Runner của riêng bạn: self-hosted, container & mở rộng ── */
-    'ga-13-0-slides': { yt: '2wJU225zKOw', credit: "TechTrapture — GitHub Actions Runners: Understanding GitHub Hosted and Self hosted runners" },
+    'ga-13-0-slides': { yt: '2wJU225zKOw', credit: "TechTrapture — GitHub Actions Runners: Understanding GitHub Hosted and Self hosted runners", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/github-actions/13-runner-rieng/13-01-slide-chuong-13-ebae53e3.mp4' }, defaultVideoTrack: 'VI'},
     'ga-13-1-runner-hoat-dong': { yt: 'SASoUr9X0QA', credit: "Mickey Gousset — GitHub Actions - Self-hosted runners - Installation & Calling", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/github-actions/13-runner-rieng/13-02-runner-hoat-dong-a78deee6.mp4' }, defaultVideoTrack: 'VI'},
     'ga-13-2-tu-dung-runner': { yt: 'VNWUHX1wzN0', credit: "Coding Adda — Setting Up Self-Hosted Runner using Docker | Github Actions Series - #6", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/github-actions/13-runner-rieng/13-03-tu-dung-runner-42646793.mp4' }, defaultVideoTrack: 'VI'},
     'ga-13-3-bao-mat-self-hosted': { yt: '5P7KatZBr_I', credit: "DEFCONConference — DEF CON 32 - Grand Theft Actions Abusing Self Hosted GitHub Runners - Adnan Khan, John Stawinski", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/github-actions/13-runner-rieng/13-04-bao-mat-self-hosted-00039ae9.mp4' }, defaultVideoTrack: 'VI'},

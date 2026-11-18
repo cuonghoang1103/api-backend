@@ -91,11 +91,11 @@ export default {
 
     /* ── Chương 16 — Dựng mạng nhỏ (buổi 54–55) ─────────────────────────── */
     "nwc204-16-1-thiet-bi-giao-thuc-va-mo-rong-mang-nho": { yt: "lPFmQAkahxM", credit: "NetITGeeks — CCNA Module 17: Build a Small Network - Introduction to Networks (ITN)", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nwc204-computer-networking/17-dung-mang-nho/17-01-thiet-bi-giao-thuc-va-mo-rong-mang-nho-412a84bf.mp4' }, defaultVideoTrack: 'VI'},
-    "nwc204-16-2-kiem-chung-ra-lenh-va-go-loi-mang-nho": { yt: "1i3XdhC2ZAs", credit: "CBT Nuggets — Steps for Network Troubleshooting" },
+    "nwc204-16-2-kiem-chung-ra-lenh-va-go-loi-mang-nho": { yt: "1i3XdhC2ZAs", credit: "CBT Nuggets — Steps for Network Troubleshooting", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nwc204-computer-networking/17-dung-mang-nho/17-02-kiem-chung-ra-lenh-va-go-loi-mang-nho-3d611a73.mp4' }, defaultVideoTrack: 'VI'},
 
     /* ── Chương 14 — Tầng ứng dụng (buổi 45–46) ─────────────────────────── */
     "nwc204-14-1-tang-ung-dung-va-ngang-hang": { yt: "t-ai8JzhHuY", credit: "Jeremy's IT Lab — Free CCNA | OSI Model & TCP/IP Suite | Day 3 | CCNA 200-301 Complete Course", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nwc204-computer-networking/15-tang-ung-dung/15-01-tang-ung-dung-va-ngang-hang-4b02420d.mp4' }, defaultVideoTrack: 'VI'},
-    "nwc204-14-2-web-email-dns-dhcp-chia-se-tep": { yt: "mpQZVYPuDGU", credit: "PowerCert Animated Videos — How a DNS Server (Domain Name System) works." },
+    "nwc204-14-2-web-email-dns-dhcp-chia-se-tep": { yt: "mpQZVYPuDGU", credit: "PowerCert Animated Videos — How a DNS Server (Domain Name System) works.", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nwc204-computer-networking/15-tang-ung-dung/15-02-web-email-dns-dhcp-chia-se-tep-4195fffa.mp4' }, defaultVideoTrack: 'VI'},
 
     /* ── Chương 15 — An ninh mạng (buổi 49–50) ──────────────────────────── */
     "nwc204-15-1-moi-de-doa-va-cac-kieu-tan-cong": { yt: "VvFuieyTTSw", credit: "Jeremy's IT Lab — Free CCNA | Security Fundamentals | Day 48 | CCNA 200-301 Complete Course", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nwc204-computer-networking/16-an-ninh-mang/16-01-moi-de-doa-va-cac-kieu-tan-cong-6bb5c307.mp4' }, defaultVideoTrack: 'VI'},

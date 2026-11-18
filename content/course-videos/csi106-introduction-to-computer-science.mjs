@@ -58,14 +58,14 @@ export default {
 
     // Chương 11 — Cơ sở dữ liệu
     "csi106-11-0a-slides-csdl-mo-hinh-quan-he": { yt: "w1E1VXSSKSA", credit: "Coursera — Relational Model Concepts - Databases and SQL for Data Science by IBM #11", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/csi106-introduction-to-computer-science/11-co-so-du-lieu/11-01-slide-csdl-mo-hinh-quan-he-900802ab.mp4' }, defaultVideoTrack: 'VI'},
-    "csi106-11-0b-slides-phep-toan-quan-he-thiet-ke": { yt: "GFQaEYEc8_8", credit: "Decomplexify — Learn Database Normalization - 1NF, 2NF, 3NF, 4NF, 5NF" },
-    "csi106-11-1-database": { yt: "OqjJjpjDRLc", credit: "IBM Technology — What is a Relational Database?" },
+    "csi106-11-0b-slides-phep-toan-quan-he-thiet-ke": { yt: "GFQaEYEc8_8", credit: "Decomplexify — Learn Database Normalization - 1NF, 2NF, 3NF, 4NF, 5NF", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/csi106-introduction-to-computer-science/11-co-so-du-lieu/11-02-slide-phep-toan-thiet-ke-886c767d.mp4' }, defaultVideoTrack: 'VI'},
+    "csi106-11-1-database": { yt: "OqjJjpjDRLc", credit: "IBM Technology — What is a Relational Database?", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/csi106-introduction-to-computer-science/11-co-so-du-lieu/11-03-co-so-du-lieu-mo-hinh-quan-he-7360a915.mp4' }, defaultVideoTrack: 'VI'},
 
     // Chương 12 — An toàn & đạo đức
     "csi106-12-0-slides-an-toan-dao-duc": { yt: "bPVaOlJ6ln0", credit: "CrashCourse — Cybersecurity: Crash Course Computer Science #31" },
     "csi106-12-1-security-ethics": { yt: "jhXCTbFnK8o", credit: "CrashCourse — Cryptography: Crash Course Computer Science #33" },
 
     // Chương 13 — Nhập môn AI
-    "csi106-13-1-intro-ai": { yt: "z-EtmaFJieY", credit: "CrashCourse — Machine Learning & Artificial Intelligence: Crash Course Computer Science #34" },
+    "csi106-13-1-intro-ai": { yt: "z-EtmaFJieY", credit: "CrashCourse — Machine Learning & Artificial Intelligence: Crash Course Computer Science #34", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/csi106-introduction-to-computer-science/13-nhap-mon-ai/13-01-cai-nhin-dau-tien-ve-ai-817443a2.mp4' }, defaultVideoTrack: 'VI'},
   },
 };

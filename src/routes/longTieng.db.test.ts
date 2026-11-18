@@ -134,6 +134,28 @@ describe('CT Lồng Tiếng (HTTP + DB thật)', { skip: !RUN ? 'không có CSDL
     assert.equal((await web(admin, 'POST', '/jobs', { tep: { ten: 'a.mp4', kichThuoc: 6 * 1024 ** 3, kieu: 'video/mp4' } })).status, 400);
   });
 
+  it('bản xuất ra (banRa): mặc định ca-hai; vi / vi-goc lưu trên việc + trạm nhận được; sai ⇒ 400', async () => {
+    const sai = await web(admin, 'POST', '/jobs', { url: 'https://x.y/b0', banRa: 'ca-ba' });
+    assert.equal(sai.status, 400);
+    assert.equal(sai.code, 'LT_BAN_RA');
+
+    const mac = (await web(admin, 'POST', '/jobs', { url: 'https://x.y/b1' })).data.job;
+    assert.equal(mac.banRa, 'ca-hai', 'không gửi ⇒ cả hai (đúng hành vi cũ)');
+    await web(admin, 'DELETE', `/jobs/${mac.id}`);
+
+    const chiVi = (await web(admin, 'POST', '/jobs', { url: 'https://x.y/b2', banRa: 'vi' })).data.job;
+    assert.equal(chiVi.banRa, 'vi');
+    assert.equal((await web(admin, 'GET', `/jobs/${chiVi.id}`)).data.banRa, 'vi');
+    const n = await nhanDung(chiVi.id);
+    assert.equal(n.job.banRa, 'vi', 'trạm biết chỉ dựng bản giọng Việt');
+    await web(admin, 'DELETE', `/jobs/${chiVi.id}`);
+
+    const songNgu = (await web(admin, 'POST', '/jobs', { url: 'https://x.y/b3', banRa: 'vi-goc', goc: 0.25 })).data.job;
+    assert.equal(songNgu.banRa, 'vi-goc');
+    assert.equal(songNgu.goc, 0.25);
+    await web(admin, 'DELETE', `/jobs/${songNgu.id}`);
+  });
+
   it('việc bằng link: tạo ⇒ trạm giành ⇒ tiến độ ⇒ đẩy kết quả ⇒ xong ⇒ tải về (URL ký) ⇒ đã tải về xoá tệp', async () => {
     const t = await web(admin, 'POST', '/jobs', { url: 'https://www.bilibili.com/video/BV1xx', lang: 'zh', goc: 0.2 });
     assert.equal(t.status, 201);

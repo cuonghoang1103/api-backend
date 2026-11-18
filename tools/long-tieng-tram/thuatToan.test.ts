@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import {
   banDo, chiaDoan, chuan, datChuan, demTu, diemKhop, doDaiKhaNghi, dongSrt, gopCau, kheCau, lapKeHoach, lcsTiLe, mocSrt,
-  NGHI_CAU, NGHI_PHAY, tachCauViet, tachDoanDai, tenKetQua, totHon, type Cau, type Tu,
+  NGHI_CAU, NGHI_PHAY, tachCauViet, tachDoanDai, tenKetQua, totHon, banCanDung, type Cau, type Tu,
 } from './thuatToan.ts';
 
 test('tachDoanDai: đoạn 23,5 s có mốc từ ⇒ các mẩu ≤ 8 s, cắt ở dấu câu, không mất chữ (lỗi lượt chạy thử 18/11)', () => {
@@ -142,4 +142,12 @@ test('phụ đề + tên kết quả đúng hợp đồng', () => {
   assert.equal(t['vi-goc'], 'Bo mạch chủ B650 X670 [VI + giọng gốc 15%].mp4');
   assert.equal(t['srt-vi'], 'Bo mạch chủ B650 X670.vi.srt');
   assert.equal(t['srt-goc'], 'Bo mạch chủ B650 X670.zh.srt');
+});
+
+test('banCanDung: Xuất ra cả hai / chỉ giọng Việt / chỉ song ngữ; thiếu hoặc lạ ⇒ cả hai', () => {
+  assert.deepEqual(banCanDung('ca-hai'), [['vi', false], ['vi-goc', true]]);
+  assert.deepEqual(banCanDung(undefined), [['vi', false], ['vi-goc', true]], 'web cũ không gửi trường ⇒ như trước');
+  assert.deepEqual(banCanDung('la'), [['vi', false], ['vi-goc', true]]);
+  assert.deepEqual(banCanDung('vi'), [['vi', false]]);
+  assert.deepEqual(banCanDung('vi-goc'), [['vi-goc', true]]);
 });

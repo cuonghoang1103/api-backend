@@ -18,7 +18,7 @@ import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 import {
   banDo, chiaDoan, datChuan, diemKhop, doDaiKhaNghi, dongSrt, gopCau, kheCau, KY_TU_MOI_GIAY, lapKeHoach, tachCauViet,
-  tenKetQua, totHon, type BanDoc, type Cau, type Doan,
+  tenKetQua, totHon, banCanDung, type BanDoc, type Cau, type Doan,
 } from './thuatToan.ts';
 
 // ─── Cấu hình ──────────────────────────────────────────────────────────────
@@ -165,6 +165,8 @@ async function napPhienAm() {
 
 interface NhanViec {
   job: { id: string; url: string | null; tep: { ten: string; kichThuoc: number } | null; tenVideo: string | null; lang: string; goc: number; nhip: 'cho-giong' | 'tang-toc';
+    /** Bản video xuất ra (web cũ không gửi ⇒ cả hai). */
+    banRa?: 'ca-hai' | 'vi' | 'vi-goc';
     nhacNen: { loai: 'goc' | 'thu-vien' | 'tep' | 'khong'; amLuong: number; ten?: string; id?: string } };
   vao?: { url: string };
   nhac?: { url: string };
@@ -179,7 +181,7 @@ async function lamViec(n: NhanViec) {
   const id8 = job.id.slice(0, 8);
   ctx = { id: job.id, trangThai: 'tai', buoc: 'Trạm đã nhận việc', phanTram: 0, huy: false, con: new Set() };
   const nhip = setInterval(() => { void nhipTim(); }, 60_000);
-  log(`▶ việc ${job.id} ${job.url ?? job.tep?.ten ?? ''} · nhịp ${job.nhip} · nhạc ${job.nhacNen.loai}`);
+  log(`▶ việc ${job.id} ${job.url ?? job.tep?.ten ?? ''} · nhịp ${job.nhip} · nhạc ${job.nhacNen.loai} · xuất ${job.banRa ?? 'ca-hai'}`);
   try {
     // ── 0. lấy video + nhạc ──
     const vao = await layVideo(n, LAM);
@@ -458,6 +460,7 @@ async function buocTron(LAM: string, job: NhanViec['job'], n: NhanViec, vao: str
   // Hình: không kéo dài ⇒ giữ nguyên luồng hình; có ⇒ dựng lại từng đoạn (khớp khung) rồi nối
   let hinh = vao;
   let nenRa = nen, gocRa = giongGoc;
+  const ban = banCanDung(job.banRa);
   if (kh.cuaSo.length) {
     const doan = chiaDoan(kh.cuaSo, tongDai);
     const DV = path.join(LAM, 'doan'); rmSync(DV, { recursive: true, force: true }); mkdirSync(DV);
@@ -476,7 +479,8 @@ async function buocTron(LAM: string, job: NhanViec['job'], n: NhanViec, vao: str
     hinh = path.join(LAM, 'hinh-ra.mp4');
     await chay(`ffmpeg -nostdin -loglevel error -y -f concat -safe 0 -i ${q(path.join(DV, 'ds.txt'))} -c copy ${q(hinh)}`);
     nenRa = await keoAm(nen, doan, path.join(LAM, 'nen-ra.flac'), fps);
-    gocRa = await keoAm(giongGoc, doan, path.join(LAM, 'goc-ra.flac'), fps);
+    // Giọng gốc chỉ cần cho bản song ngữ ⇒ "chỉ giọng Việt" khỏi kéo dải này.
+    if (ban.some(([, coGoc]) => coGoc)) gocRa = await keoAm(giongGoc, doan, path.join(LAM, 'goc-ra.flac'), fps);
     rmSync(DV, { recursive: true, force: true });
   }
 
@@ -487,7 +491,7 @@ async function buocTron(LAM: string, job: NhanViec['job'], n: NhanViec, vao: str
   const RA = path.join(LAM, 'ra'); mkdirSync(RA, { recursive: true });
   const tenRa = tenKetQua(ten, lang, job.goc);
   const tep: Record<string, string> = {};
-  for (const [loai, coGoc] of [['vi', false], ['vi-goc', true]] as const) {
+  for (const [loai, coGoc] of ban) {
     const vaoAm: string[] = [`-i ${q(giongVi)}`];
     const loc: string[] = [`[1:a]apad=whole_dur=${T.toFixed(3)},volume=1[v0]`];
     const tron: string[] = [];
@@ -540,7 +544,7 @@ async function buocTron(LAM: string, job: NhanViec['job'], n: NhanViec, vao: str
     nguon: job.url ? 'url' : 'tep', link: job.url, tenVideo: ten, ngonNgu: lang,
     thoiLuongGoc: +tongDai.toFixed(3), thoiLuong: +T.toFixed(3), soCau: caus.length, soMauDoc: doc.mau.length,
     nhip: job.nhip, nhacNen: { loai: nhac.loai, ...(nhac.ten ? { ten: nhac.ten } : {}), ...(nhac.id ? { id: nhac.id } : {}), amLuong: nhac.amLuong },
-    giongGoc: job.goc, soCauDocNhanh: kh.soDocNhanh, soCauTre: kh.soTre, soChoKeoDai: kh.cuaSo.length, giayKeoDai: +kh.giayKeoDai.toFixed(2),
+    giongGoc: job.goc, banRa: job.banRa ?? 'ca-hai', soCauDocNhanh: kh.soDocNhanh, soCauTre: kh.soTre, soChoKeoDai: kh.cuaSo.length, giayKeoDai: +kh.giayKeoDai.toFixed(2),
     soCauDocLai: soDocLai, soCauDuoiNguong: soDuoi, nguongDiem: 0.85, tomTat, cau: cauTT,
   };
   const fTT = path.join(RA, 'thong-tin.json');

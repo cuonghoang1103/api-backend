@@ -274,6 +274,16 @@ export const dongSrt = (ds: { a: number; b: number; t: string }[]) =>
 /** Tên tệp kết quả an toàn trên Mac/Windows/Linux (giữ tiếng Việt, bỏ / \ : * ? " < > |). */
 export const tenAnToan = (s: string) => s.replace(/[\\/:*?"<>|\u0000-\u001f]/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 150) || 'video';
 
+/**
+ * Bản video cần dựng theo lựa chọn "Xuất ra" của việc (thêm 18/11): `[loai, coGiongGoc]`. Trường thiếu / lạ (web cũ) ⇒ cả hai.
+ * Bản không chọn thì KHÔNG dựng + KHÔNG đẩy (mỗi bản là một lượt ffmpeg trộn tiếng cả video).
+ */
+export function banCanDung(banRa: unknown): Array<readonly ['vi' | 'vi-goc', boolean]> {
+  if (banRa === 'vi') return [['vi', false]];
+  if (banRa === 'vi-goc') return [['vi-goc', true]];
+  return [['vi', false], ['vi-goc', true]];
+}
+
 export function tenKetQua(ten: string, lang: string, goc: number) {
   const t = tenAnToan(ten);
   return {

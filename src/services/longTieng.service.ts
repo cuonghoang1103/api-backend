@@ -29,6 +29,9 @@ export type TrangThai = (typeof TRANG_THAI)[number];
 export const LOAI_KET_QUA = ['vi', 'vi-goc', 'srt-vi', 'srt-goc', 'thong-tin'] as const;
 export type LoaiKetQua = (typeof LOAI_KET_QUA)[number];
 export const NHIP = ['cho-giong', 'tang-toc'] as const;
+/** Bản video xuất ra (thêm 18/11): cả hai · chỉ giọng Việt · chỉ song ngữ (Việt + giọng gốc nhỏ). Phụ đề + thong-tin luôn có. */
+export const BAN_RA = ['ca-hai', 'vi', 'vi-goc'] as const;
+export type BanRa = (typeof BAN_RA)[number];
 export const LOAI_NHAC = ['goc', 'thu-vien', 'tep', 'khong'] as const;
 export type LoaiNhac = (typeof LOAI_NHAC)[number];
 /** Nhạc thư viện: tệp + danh sách (kèm nguồn + giấy phép từng bài) ở R2 dưới tiền tố này. Cron dọn KHÔNG đụng vào. */
@@ -48,6 +51,8 @@ const HAN_VAO_GIAY = 6 * 3600;       // trạm có thể chờ GPU lâu trước
 const HAN_KET_QUA_GIAY = 3600;       // hợp đồng: URL GET kết quả sống 1 giờ
 const TRAN_MA_CON_HIEU_LUC = 20;
 const DANG_CHAY: TrangThai[] = ['tai', 'lam'];
+
+const docBanRa = (v: unknown): BanRa => ((BAN_RA as readonly string[]).includes(String(v)) ? (String(v) as BanRa) : 'ca-hai');
 
 export const thuMucViec = (userId: number, id: string) => `long-tieng/${userId}/${id}/`;
 const KIEU_HOP_LE = /^[\w.+-]+\/[\w.+-]+$/;
@@ -76,6 +81,7 @@ export interface ViecDto {
   lang: string;
   goc: number;
   nhip: string;
+  banRa: BanRa;
   nhacNen: NhacNen;
   trangThai: TrangThai;
   buoc: string | null;
@@ -177,6 +183,7 @@ async function toDto(v: Viec): Promise<ViecDto> {
     lang: v.lang,
     goc: v.goc,
     nhip: v.nhip,
+    banRa: docBanRa(v.banRa),
     nhacNen: docNhac(v.nhacNen),
     trangThai: v.trangThai as TrangThai,
     buoc: v.buoc,
@@ -247,6 +254,8 @@ export async function taoViec(userId: number, body: Record<string, unknown>): Pr
   if (!Number.isFinite(goc) || goc < 0 || goc > 0.4) throw new BadRequestError('goc (âm lượng giọng gốc) phải trong 0..0,4.', 'LT_GOC');
   const nhip = String(body.nhip ?? 'cho-giong');
   if (!(NHIP as readonly string[]).includes(nhip)) throw new BadRequestError('nhip phải là cho-giong hoặc tang-toc.', 'LT_NHIP');
+  const banRa = String(body.banRa ?? 'ca-hai');
+  if (!(BAN_RA as readonly string[]).includes(banRa)) throw new BadRequestError('banRa phải là ca-hai, vi hoặc vi-goc.', 'LT_BAN_RA');
   const tenVideo = chuoi(body.tenVideo, 300) || (tep ? tep.ten.replace(/\.[^.]{1,6}$/, '') : null);
   const nhac = await docNhacVao(body.nhacNen);
 
@@ -264,7 +273,7 @@ export async function taoViec(userId: number, body: Record<string, unknown>): Pr
 
   const v = await prisma.longTiengViec.create({
     data: {
-      id, userId, url, tep: tep ? (tep as unknown as Prisma.InputJsonValue) : Prisma.DbNull, khoaVao, tenVideo, lang, goc, nhip,
+      id, userId, url, tep: tep ? (tep as unknown as Prisma.InputJsonValue) : Prisma.DbNull, khoaVao, tenVideo, lang, goc, nhip, banRa,
       nhacNen: nhac as unknown as Prisma.InputJsonValue, khoaNhac,
       trangThai: choTaiLen ? 'cho_tai_len' : 'cho',
       buoc: choTaiLen ? 'Chờ tải tệp lên' : 'Chờ trạm nhận việc',
@@ -348,6 +357,8 @@ export async function daTaiVe(userId: number, id: string): Promise<ViecDto> {
 
 export interface ViecChoTram {
   id: string; url: string | null; tep: TepVao | null; tenVideo: string | null; lang: string; goc: number; nhip: string;
+  /** Trạm chỉ dựng + đẩy bản được chọn (trạm cũ không biết trường này ⇒ vẫn ra cả hai, vô hại). */
+  banRa: BanRa;
   nhacNen: NhacNen & { ten?: string }; soLanNhan: number; tao: string;
 }
 
@@ -382,7 +393,7 @@ export async function nhanViec(): Promise<{ job: ViecChoTram; vao?: { url: strin
     if (bai) { khoaNhac = bai.khoa; nhacNen.ten = bai.ten; } else { nhacNen.loai = 'goc'; nhacNen.amLuong = AM_LUONG_MAC_DINH.goc; }
   }
   const job: ViecChoTram = {
-    id: v.id, url: v.url, tep: docTep(v.tep), tenVideo: v.tenVideo, lang: v.lang, goc: v.goc, nhip: v.nhip, nhacNen,
+    id: v.id, url: v.url, tep: docTep(v.tep), tenVideo: v.tenVideo, lang: v.lang, goc: v.goc, nhip: v.nhip, banRa: docBanRa(v.banRa), nhacNen,
     soLanNhan: v.soLanNhan, tao: v.tao.toISOString(),
   };
   const ra: { job: ViecChoTram; vao?: { url: string }; nhac?: { url: string } } = { job };

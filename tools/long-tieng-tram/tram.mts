@@ -300,7 +300,7 @@ async function layVideo(n: NhanViec, LAM: string): Promise<string> {
   const url = n.job.url!;
   await baoTienDo('tai', 'Tải video từ link', 0);
   // 1080p là đủ học; ưu tiên mp4 H.264 + m4a ⇒ ghép không cần mã hoá lại (như máy chủ cục bộ của bản mẫu)
-  const thamSo = `--no-playlist -f 'bv*[height<=1080][ext=mp4]+ba[ext=m4a]/b[height<=1080][ext=mp4]/bv*[height<=1080]+ba/b' --merge-output-format mp4 --newline --no-part`;
+  const thamSo = `--no-playlist -f 'bv*[vcodec^=avc1][height<=1080]+ba[ext=m4a]/b[vcodec^=avc1][height<=1080]/bv*[height<=1080][ext=mp4]+ba[ext=m4a]/bv*[height<=1080]+ba/b' --merge-output-format mp4 --newline --no-part`;
   let cuoi = '';
   try {
     await chay(`${YTDLP} ${thamSo} --print-to-file '%(title)s' ${q(path.join(LAM, 'tieu-de.txt'))} -o ${q(path.join(LAM, 'vao.%(ext)s'))} ${q(url)}`, {
@@ -526,6 +526,10 @@ async function buocTron(LAM: string, job: NhanViec['job'], n: NhanViec, vao: str
   const RA = path.join(LAM, 'ra'); mkdirSync(RA, { recursive: true });
   const tenRa = tenKetQua(ten, lang, job.goc);
   const tep: Record<string, string> = {};
+  // 18/11: YouTube hay trả AV1/VP9 ⇒ QuickTime/iPad không hiện hình (user: "chỉ có âm thanh"). Không phải H.264 ⇒ mã hoá lại.
+  const coDecHinh = (await chay(`ffprobe -v error -select_streams v:0 -show_entries stream=codec_name -of csv=p=0 ${q(hinh)}`)).out.trim();
+  const maHinh = coDecHinh === 'h264' ? '-c:v copy' : '-c:v libx264 -preset veryfast -crf 20 -pix_fmt yuv420p';
+
   for (const [loai, coGoc] of ban) {
     const vaoAm: string[] = [`-i ${q(giongVi)}`];
     const loc: string[] = [`[1:a]apad=whole_dur=${T.toFixed(3)},volume=1[v0]`];
@@ -546,7 +550,7 @@ async function buocTron(LAM: string, job: NhanViec['job'], n: NhanViec, vao: str
     if (coGoc) { vaoAm.push(`-i ${q(gocRa)}`); loc.push(`[${soVao++}:a]volume=${job.goc}[g]`); tron.push('[g]'); }
     loc.push(tron.length ? `[v]${tron.join('')}amix=inputs=${1 + tron.length}:duration=first:normalize=0[a]` : '[v]anull[a]');
     const f = path.join(RA, tenRa[loai]);
-    await chay(`ffmpeg -nostdin -loglevel error -y -i ${q(hinh)} ${vaoAm.join(' ')} -filter_complex ${q(loc.join(';'))} -map 0:v -map "[a]" -c:v copy -c:a aac -b:a 192k -t ${T.toFixed(3)} -movflags +faststart ${q(f)}`);
+    await chay(`ffmpeg -nostdin -loglevel error -y -i ${q(hinh)} ${vaoAm.join(' ')} -filter_complex ${q(loc.join(';'))} -map 0:v -map "[a]" ${maHinh} -c:a aac -b:a 192k -t ${T.toFixed(3)} -movflags +faststart ${q(f)}`);
     tep[loai] = f;
   }
   const fSrtVi = path.join(RA, tenRa['srt-vi']);

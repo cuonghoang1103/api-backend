@@ -11,6 +11,7 @@
  */
 import { khung } from './_chung/khung.mjs';
 import s00 from './spring-boot/s00-bat-dau.mjs';
+import s01 from './spring-boot/s01-java-hien-dai-1.mjs';
 
 const CHUONG = [
   ['Section 0 — Why Spring Boot', 'Mục 0 — Vì sao Spring Boot', '(đã soạn — spring-boot/s00-bat-dau.mjs)', [['bat-dau-tai-day', '-', '-', '-']]],
@@ -156,6 +157,7 @@ const CHUONG = [
 
 const sections = khung('sb', CHUONG);
 sections[0] = s00;
+sections[1] = s01;
 
 export default {
   category: { slug: 'backend', name: 'Backend', icon: 'Server', sortOrder: 1 },

@@ -60,11 +60,11 @@ export default {
     "mad101-flm-b050": { yt: "qH6yxkw0u78", credit: "mycodeschool — Data structures: Introduction to Trees" },
     "mad101-flm-b053": { yt: "WLvU5EQVZqY", credit: "Techdose — Simplest Binary Tree Traversal trick for preorder inorder postorder" },
     "mad101-flm-b054": { yt: "8v6qxmcEly8", credit: "Lalitha Natraj — Tree Traversal" },
-    "mad101-flm-b055": { yt: "urjzBqwQcfg", credit: "SawFin Mathematics — Spanning Trees - Depth-First Search (11.4.1)" },
+    "mad101-flm-b055": { yt: "urjzBqwQcfg", credit: "SawFin Mathematics — Spanning Trees - Depth-First Search (11.4.1)", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/discrete-mathematics/06-dem-to-hop/06-00b-session-55-slide-chuong-7-truy-hoi-7e234bb9.mp4' }, defaultVideoTrack: 'VI'},
     "mad101-flm-b056": { yt: "Phm-6An4sAs", credit: "SawFin Mathematics — Spanning Trees - Breadth First Search (11.4.2)" },
     "mad101-flm-b057": { yt: "SfyrD-ktYew", credit: "SawFin Mathematics — Minimum Spanning Trees: Kruskal's Algorithm (11.5.2)" },
     "mad101-flm-b058": { yt: "X_rP6G9Smhw", credit: "SawFin Mathematics — Minimum Spanning Trees: Prim's Algorithm (11.5.1)" },
     'mad101-flm-b001': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/discrete-mathematics/01-logic-chung-minh/01-00-session-1-slide-chuong-1-logic-6dac2161.mp4' }, defaultVideoTrack: 'VI'},
-    'mad101-flm-slide-d04': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/discrete-mathematics/05-quy-nap-de-quy/05-00-slide-chuong-4-quy-nap-de-quy-97c0c7bb.mp4' }, defaultVideoTrack: 'VI' },
+    'mad101-flm-slide-d04': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/discrete-mathematics/05-quy-nap-de-quy/05-00-slide-chuong-4-quy-nap-de-quy-97c0c7bb.mp4' }, defaultVideoTrack: 'VI'},
   },
 };

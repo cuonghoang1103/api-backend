@@ -73,7 +73,7 @@ export default {
     'dk-6-5-quet-chuoi-cung-ung': { yt: 'Kibk6qq7ZCs', credit: "Aqua Security Open Source — Generate SBOMs with Trivy & Scan SBOMs for vulnerabilities", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/docker/06-anh-nho-an-toan/06-06-quet-chuoi-cung-ung-f84a0ca2.mp4' }, defaultVideoTrack: 'VI'},
 
     /* ── Chương 7 — Dữ liệu: volume, bind mount, tmpfs ── */
-    'dk-7-0-slides': { yt: 'aEqxUnZuh8A', credit: "Elton Stoneman — DIAMOL 05: Using Docker volumes for persistent storage" },
+    'dk-7-0-slides': { yt: 'aEqxUnZuh8A', credit: "Elton Stoneman — DIAMOL 05: Using Docker volumes for persistent storage", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/docker/07-du-lieu/07-01-slide-chuong-7-8c2734a0.mp4' }, defaultVideoTrack: 'VI'},
     'dk-7-1-ba-cach-gan': { yt: 'BJ-KwdBvbVE', credit: "Pål-Kristian Hamre — Docker Volumes Explained: Bind Mount vs Named Volume vs tmpfs", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/docker/07-du-lieu/07-02-ba-cach-gan-e64b0f8f.mp4' }, defaultVideoTrack: 'VI'},
     'dk-7-2-volume': { yt: 'r1tIdACdJeE', credit: "Network Direction — Learn Docker Storage (Volumes & Bind Mounts) | Docker Tutorial" },
     'dk-7-3-bind-mount': { yt: 'g76hYK4rTxw', credit: "Hỏi Dân IT — #8 DEV SERVER VỚI DOCKER BIND MOUNTS - LIVE RELOADING CODE | Docker Siêu Dễ Cho Beginners Từ A đến Z", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/docker/07-du-lieu/07-04-bind-mount-ed8caad2.mp4' }, defaultVideoTrack: 'VI'},

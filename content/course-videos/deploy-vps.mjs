@@ -117,11 +117,11 @@ export default {
     'deploy-11-5-nghiem-thu': { yt: 'iLVoA1DTE60', credit: 'Steve Griffith - Prof3ssorSt3v3 — Testing APIs with the cURL Command', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/deploy-vps/11-chan-doan-nghiem-thu/11-06-nghiem-thu-a3d59c3b.mp4' }, defaultVideoTrack: 'VI'},          // Testing APIs with the cURL Command
 
     /* ── Bài slide N.0 + bài mới Ch7–15 (29/09/2026) ── */
-    'deploy-7-0-slides': { yt: 'Y_erZnIhgKg', credit: "Better Stack — Bash Script BEST Practices You Need to Know, According to Google" },
-    'deploy-8-0-slides': { yt: 'Cm3-6cOwICU', credit: "Nir Lichtman — What Happens When Linux Runs Out of Memory?" },
-    'deploy-9-0-slides': { yt: 'h4Sl21AKiDg', credit: "TechWorld with Nana — How Prometheus Monitoring works | Prometheus Architecture explained" },
+    'deploy-7-0-slides': { yt: 'Y_erZnIhgKg', credit: "Better Stack — Bash Script BEST Practices You Need to Know, According to Google", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/deploy-vps/07-script-deploy/07-01-slide-chuong-7-f0a739ac.mp4' }, defaultVideoTrack: 'VI'},
+    'deploy-8-0-slides': { yt: 'Cm3-6cOwICU', credit: "Nir Lichtman — What Happens When Linux Runs Out of Memory?", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/deploy-vps/08-may-nho-oom-dia/08-01-slide-chuong-8-85f1e117.mp4' }, defaultVideoTrack: 'VI'},
+    'deploy-9-0-slides': { yt: 'h4Sl21AKiDg', credit: "TechWorld with Nana — How Prometheus Monitoring works | Prometheus Architecture explained", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/deploy-vps/09-giam-sat/09-01-slide-chuong-9-7664f003.mp4' }, defaultVideoTrack: 'VI'},
     'deploy-10-0-slides': { yt: 'S0KZ5iXTkzg', credit: "Jeff Geerling — Backups: You're doing 'em wrong!" },
-    'deploy-10-7-ra-khoi-may': { yt: 'WJzsX32qMJY', credit: "IBM Technology — 3‑2‑1 Backup Rule Explained: Protect Your Data from Disaster" },
+    'deploy-10-7-ra-khoi-may': { yt: 'WJzsX32qMJY', credit: "IBM Technology — 3‑2‑1 Backup Rule Explained: Protect Your Data from Disaster", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/deploy-vps/10-sao-luu-phuc-hoi/10-07-ra-khoi-may-4bd577c6.mp4' }, defaultVideoTrack: 'VI'},
     'deploy-11-0-slides': { yt: 'iJ_eIsA5E1U', credit: "ByteByteGo — Linux Performance Tools!" },
     'deploy-12-0-slides': { yt: 'DCJiQBag6Fs', credit: "ByteGrad — Dockerize Next.js 16 & Deploy To VPS (+ Custom Domain, SSL, CDN Cloudflare, Docker Compose)" },
     'deploy-12-1-ten-mien-dns': { yt: 'NiQTs9DbtW4', credit: "NetworkChuck — What is DNS? (and how it makes the Internet work)", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/deploy-vps/12-ten-mien-https/12-02-ten-mien-dns-f291fca7.mp4' }, defaultVideoTrack: 'VI'},

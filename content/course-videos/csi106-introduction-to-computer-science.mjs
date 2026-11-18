@@ -28,7 +28,7 @@ export default {
     "csi106-3-2-text-media-operations": { yt: "Kv1Hiv3ox8I", credit: "Branch Education — How are Images Compressed?  [46MB ↘↘ 4.07MB] JPEG In Depth", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/csi106-introduction-to-computer-science/03-luu-tru-thao-tac-du-lieu/03-04-luu-chu-media-phep-tren-du-lieu-6016e2bb.mp4' }, defaultVideoTrack: 'VI'},
 
     // Chương 4 — Mạng & Internet
-    "csi106-4-0-slides-mang-tcp-ip": { yt: "3kfO61Mensg", credit: "NetworkChuck — REAL LIFE example!! (TCP/IP and OSI layers) // FREE CCNA // EP 4" },
+    "csi106-4-0-slides-mang-tcp-ip": { yt: "3kfO61Mensg", credit: "NetworkChuck — REAL LIFE example!! (TCP/IP and OSI layers) // FREE CCNA // EP 4", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/csi106-introduction-to-computer-science/04-mang-internet/04-01-slide-mang-tcp-ip-b4860f3a.mp4' }, defaultVideoTrack: 'VI'},
     "csi106-4-1-networks-internet": { yt: "3QhU9jd03a0", credit: "CrashCourse — Computer Networks: Crash Course Computer Science #28", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/csi106-introduction-to-computer-science/04-mang-internet/04-02-mang-may-tinh-internet-e8c57314.mp4' }, defaultVideoTrack: 'VI'},
 
     // Chương 5 — Hệ điều hành

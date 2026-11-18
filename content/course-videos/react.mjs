@@ -47,7 +47,7 @@ export default {
     'rx-3-3-loi': { yt: 'u6PQ5xZAv7Q', credit: "ByteGrad — React Hook Form (+ Zod) - Complete Tutorial", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/react/03-form/03-04-loi-4b4f6a29.mp4' }, defaultVideoTrack: 'VI'},
 
     /* ── Chương 4 — Effect ── */
-    'rx-4-0-slides': { yt: '-4XpG5_Lj_o', credit: "Cosden Solutions — Learn React Hooks: useEffect - Simply Explained!" },
+    'rx-4-0-slides': { yt: '-4XpG5_Lj_o', credit: "Cosden Solutions — Learn React Hooks: useEffect - Simply Explained!", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/react/04-effect/04-01-slide-chuong-4-b8dcf24c.mp4' }, defaultVideoTrack: 'VI'},
     'rx-4-1-use-effect': { yt: 'dH6i3GurZW8', credit: "Jack Herrington — Mastering React's useEffect", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/react/04-effect/04-02-use-effect-adfde3cd.mp4' }, defaultVideoTrack: 'VI'},
     'rx-4-2-khong-can': { yt: 'V1f8MOQiHRw', credit: "Academind — You might not need useEffect() ...", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/react/04-effect/04-03-khong-can-9394d33f.mp4' }, defaultVideoTrack: 'VI'},
     'rx-4-3-vong-lap': { yt: 'hT2yWeHU37U', credit: "Jack Herrington — React 19.2 New useEffectEvent Hook: Game Changer or Gimmick?", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/react/04-effect/04-04-vong-lap-0c9f78bd.mp4' }, defaultVideoTrack: 'VI'},
@@ -77,7 +77,7 @@ export default {
     'rx-7-5-du-an': { yt: 'oUZjO00NkhY', credit: "Dave Gray — React Protected Routes | Role-Based Authorization | React Router v6", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/react/07-dinh-tuyen-va-cau-truc/07-06-du-an-7de49d96.mp4' }, defaultVideoTrack: 'VI'},
 
     /* ── Chương 8 — Hiệu năng và khả năng tiếp cận ── */
-    'rx-8-0-slides': { yt: 'uAmRtE52mYk', credit: "React Conf — Exploring React Performance" },
+    'rx-8-0-slides': { yt: 'uAmRtE52mYk', credit: "React Conf — Exploring React Performance", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/react/08-hieu-nang-va-tiep-can/08-01-slide-chuong-8-4ab59cb2.mp4' }, defaultVideoTrack: 'VI'},
     'rx-8-1-do': { yt: 'CclO4tPoebs', credit: "React Conf — Profiling with React Performance tracks", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/react/08-hieu-nang-va-tiep-can/08-02-do-4955bb35.mp4' }, defaultVideoTrack: 'VI'},
     'rx-8-2-memo': { yt: 'huBxeruVnAM', credit: "Developer Way — Mastering memoization in React - Advanced React course, Episode 5" },
     'rx-8-3-lazy': { yt: 'JU6sl_yyZqs', credit: "Web Dev Simplified — Speed Up Your React Apps With Code Splitting", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/react/08-hieu-nang-va-tiep-can/08-04-lazy-812b0aa4.mp4' }, defaultVideoTrack: 'VI'},
@@ -112,7 +112,7 @@ export default {
     'rx-12-4-compiler-rsc': { yt: 'T-rHmWSZajc', credit: "React Conferences by GitNation — Nadia Makarevich – How React Compiler Performs on Real Code, React Advanced 2024", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/react/12-react-19-concurrent/12-05-compiler-rsc-4ac41a25.mp4' }, defaultVideoTrack: 'VI'},
 
     /* ── Chương 13 — Mẫu thiết kế & kiến trúc ── */
-    'rx-13-0-slides': { yt: 'MdvzlDIdQ0o', credit: "Cosden Solutions — Design patterns in React" },
+    'rx-13-0-slides': { yt: 'MdvzlDIdQ0o', credit: "Cosden Solutions — Design patterns in React", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/react/13-mau-thiet-ke-kien-truc/13-01-slide-chuong-13-379a11b1.mp4' }, defaultVideoTrack: 'VI'},
     'rx-13-1-compound-headless': { yt: 'N_WgBU3S9W8', credit: "Cosden Solutions — Compound Components in React (Design Patterns)", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/react/13-mau-thiet-ke-kien-truc/13-02-compound-headless-784bb0a5.mp4' }, defaultVideoTrack: 'VI'},
     'rx-13-2-hook-styling': { yt: 'I2Bgi0Qcdvc', credit: "Cosden Solutions — Custom Hooks in React (Design Patterns)", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/react/13-mau-thiet-ke-kien-truc/13-03-hook-styling-04ed4abf.mp4' }, defaultVideoTrack: 'VI'},
     'rx-13-3-danh-sach-dai': { yt: 'DBdo7mmuGx4', credit: "Austin Davis — TanStack Virtual - Lightning Fast React Pages" },
@@ -124,7 +124,7 @@ export default {
     'rx-14-3-build-deploy': { yt: '9c4HLqk1ExA', credit: "Alexander Lichter — Vite Bundle Inspection made EASY", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/react/14-len-production/14-04-build-deploy-41ce3559.mp4' }, defaultVideoTrack: 'VI'},
     'rx-14-4-phong-van': { yt: '3BN-YHcJfOY', credit: "CoderOne — The React Interview Questions You need to Know", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/react/14-len-production/14-05-phong-van-af0aa288.mp4' }, defaultVideoTrack: 'VI'},
     'rx-3-4-tieng-viet': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/react/03-form/03-05-tieng-viet-f312feb5.mp4' }, defaultVideoTrack: 'VI'},
-    'rx-10-0-slides': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/react/10-du-an-giua-khoa/10-02-slide-chuong-10-856e24a8.mp4' }, defaultVideoTrack: 'VI' },
-    'rx-14-0-slides': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/react/14-len-production/14-01-slide-chuong-14-303440b3.mp4' }, defaultVideoTrack: 'VI' },
+    'rx-10-0-slides': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/react/10-du-an-giua-khoa/10-02-slide-chuong-10-856e24a8.mp4' }, defaultVideoTrack: 'VI'},
+    'rx-14-0-slides': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/react/14-len-production/14-01-slide-chuong-14-303440b3.mp4' }, defaultVideoTrack: 'VI'},
   },
 };

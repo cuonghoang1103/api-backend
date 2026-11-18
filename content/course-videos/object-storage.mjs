@@ -65,7 +65,7 @@ export default {
     /* ── Chương 8 — Di trú S3 → R2 ── */
     'os-8-1-migrator': { yt: 'O9Wlb6GX5d8', credit: 'Cloudflare Developers — Upload Large Files to R2 Object Storage using Actors', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/object-storage/08-migration/08-01-super-slurper-1371183b.mp4' }, defaultVideoTrack: 'VI'}, // Upload Large Files to R2 Object Storage using Actors
     'os-8-2-sipper': { yt: '6VHc41idHZs', credit: 'Rahul Ahire — The Ultimate S3 & Nodejs Guide | Bucket & Objects | Put Object, Pre-signed URL, Multipart Upload,etc', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/object-storage/08-migration/08-02-sipper-7490d3ad.mp4' }, defaultVideoTrack: 'VI'},   // The Ultimate S3 & Nodejs Guide | Bucket & Objects | Put Object, Pre-signed URL, Multipart Upload, etc
-    'os-8-3-verify': { yt: 'LP_KT6U73M0', credit: 'AWS Public Sector — Ten Minute Tutorial for Research: Amazon S3 Storage Classes & Lifecycle Policies' },   // Ten Minute Tutorial for Research: Amazon S3 Storage Classes & Lifecycle Policies
+    'os-8-3-verify': { yt: 'LP_KT6U73M0', credit: 'AWS Public Sector — Ten Minute Tutorial for Research: Amazon S3 Storage Classes & Lifecycle Policies', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/object-storage/08-migration/08-03-verify-552a3fc8.mp4' }, defaultVideoTrack: 'VI'},   // Ten Minute Tutorial for Research: Amazon S3 Storage Classes & Lifecycle Policies
 
     /* ── Chương 9 — Sách công thức chẩn đoán ── */
     'os-9-1-common': { yt: 'rn4qLXhMesg', credit: 'Amazon Web Services — Why am I getting an HTTP 403 Forbidden error when I try to upload files using the Amazon S3 console?' },  // Why am I getting an HTTP 403 Forbidden error when I try to upload files using the Amazon S3 console?

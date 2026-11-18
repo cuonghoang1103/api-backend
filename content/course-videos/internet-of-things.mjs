@@ -36,10 +36,11 @@ export default {
     "iot102-flm-b014": { yt: "eidD14dXW8s", credit: "freeCodeCamp.org — IoT Home Automation Project Tutorial" },
     "iot102-flm-b016": { yt: "H_X6IP1-NDc", credit: "National Institute of Standards and Technology — What is the Internet of Things (IoT) and how can we secure it?" },
     "iot102-flm-b017": { yt: "2Zc2PDXtjsI", credit: "Digi International Inc. — 5 Steps to Securing Your IoT Device in the Internet of Things" },
-    "iot102-ung-dung": { yt: "LlhmzVL5bm8", credit: "edureka! — Internet of Things (IoT) | What is IoT | How it Works | IoT Explained | Edureka" },
+    "iot102-ung-dung": { yt: "LlhmzVL5bm8", credit: "edureka! — Internet of Things (IoT) | What is IoT | How it Works | IoT Explained | Edureka", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/internet-of-things/01-iot-la-gi/01-03-ung-dung-iot-3f5b0df2.mp4' }, defaultVideoTrack: 'VI'},
     "iot102-tinh-toan-mach": { yt: "7mdc-lRrW1c", credit: "The Organic Chemistry Tutor — Series and Parallel Circuits" },
     "iot102-state-change": { yt: "3RV_HeiQK9Y", credit: "Kasper — Arduino Programming - State change Tutorial" },
     "iot102-bao-mat-de-doa": { yt: "KHDxA5J6J9Q", credit: "Cyber Gray Matter — Do IoT Devices Make Your Network Unsecure? | Security, Attacks & Best Practices | Cybersecurity" },
     "iot102-so-do-luu-do": { yt: "V2DzTSyd24A", credit: "Engineering Funda — IoT Functional Block Diagram: Logical Design, Devices, and Services" },
+    'iot102-things': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/internet-of-things/01-iot-la-gi/01-02-van-vat-thing-419a194f.mp4' }, defaultVideoTrack: 'VI' },
   },
 };

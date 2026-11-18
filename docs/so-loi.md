@@ -8,6 +8,13 @@
 Mẫu một mục:
 
 ```
+### 19/11/2026 — Máy nhà — ổ đầy vì ảnh Docker của các lượt deploy ⇒ render dừng ~1 giờ
+- **Triệu chứng:** từ 04:35 gần như không render xong tập nào (ok-1h 15 ⇒ 2) dù hàng render 142; làn render log "đĩa còn 22G — tạm chờ".
+- **Nguyên nhân:** `deploy-nha.sh` dựng ảnh ở máy nhà mỗi lượt (~5,8 GB/SHA); 18–19/11 chạy ~10 lượt ⇒ 19 cặp tag cũ + cache build 102 GB ⇒ `/` còn 22 GB < ngưỡng `DP_DIA_TOI_THIEU=25` của `dieu-phoi-linux/render.sh:78`. Bộ canh lỗi chỉ báo khi ok-1h = 0 nên không kêu.
+- **Cách sửa:** `~/bin/don-cache-docker.sh` + xoá tag ảnh cũ (giữ latest + 2 SHA mới, bản đầy đủ nằm trên GHCR) ⇒ còn 42 GB; `canh-loi.sh` thêm cảnh báo ổ < 35 GB và "ok-1h < 5 khi hàng render > 20".
+- **Ảnh hưởng:** máy thuê ngồi chờ ~1 giờ (~$0,6).
+- **Bài học:** deploy dày ⇒ phải dọn ảnh/cache sau mỗi lượt; cảnh báo phải bắt "chậm bất thường", không chỉ "bằng 0".
+
 ### 18/11/2026 — Hạ tầng video — cầu đồng bộ Mac→máy nhà xoá slide của agent máy nhà ⇒ 111 tập render LOI
 - **Triệu chứng:** Spring Boot gần như không có video dù giọng đã xong; 111 tập render LOI trong ngày (75 tập "404 public/bai/<id>/slides/NNN.webp" — đúng các khoá twc/dkr/gha/dvp/sb mới giao agent nhà 17/11; 36 tập khác do ổ vast7 đầy 96%).
 - **Nguyên nhân:** `~/Documents/video-bai-giang/scratchpad/dong-bo-linux.sh` › `day_bai()` đẩy `public/bai/<id>/` từ Mac sang máy nhà bằng `rsync --delete`, chỉ bỏ qua tiền tố agent nhà cũ; 17/11 điều phối giao thêm twc nxj prisma sio dkr gha lxb dvp ngx obj sb dsi ivp cho agent nhà, thêm vào `day_ma` (mã) nhưng QUÊN `day_bai` ⇒ mỗi vòng Mac xoá slide agent vừa dựng.

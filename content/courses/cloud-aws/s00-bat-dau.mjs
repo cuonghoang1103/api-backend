@@ -1566,6 +1566,311 @@ const QUIZ0 = [
   ], 1),
 ];
 
+/* ═════ 0.6 — Bản đồ cloud (MỚI 20/11/2026, phiên 24 — yêu cầu chủ kênh qua điều phối) ═════ */
+const OUT_06_EGRESS = out("$ node egress.mjs\nDữ liệu ra/tháng | S3 (USD) | R2 (USD)\n     50 GB      |     5.00 |    2.85\n    500 GB      |    53.00 |    2.85\n   2000 GB      |   233.00 |    2.85\n  10000 GB      |  1193.00 |    2.85");
+const MA_06_EGRESS = js(`
+// Tiền dữ liệu ra Internet mỗi tháng: S3 Singapore vs R2 (giá công khai 11/2026; lưu trữ 200 GB).
+// S3: lưu 0,025 USD/GB-tháng; 100 GB ra Internet đầu tiên miễn phí/tháng, sau đó 0,12 USD/GB (bậc đầu, Singapore).
+// R2: lưu 0,015 USD/GB-tháng (10 GB đầu miễn phí); ra Internet 0 USD.
+const LUU = 200;
+const s3 = (ra) => LUU * 0.025 + Math.max(0, ra - 100) * 0.12;
+const r2 = (ra) => Math.max(0, LUU - 10) * 0.015 + 0 * ra;
+console.log("Dữ liệu ra/tháng | S3 (USD) | R2 (USD)");
+for (const ra of [50, 500, 2000, 10000]) console.log(String(ra).padStart(7) + " GB      | " + s3(ra).toFixed(2).padStart(8) + " | " + r2(ra).toFixed(2).padStart(7));`);
+
+const BANG_TEN_EN = `
+<table>
+  <thead><tr><th>Job</th><th>AWS</th><th>Microsoft Azure</th><th>Google Cloud</th><th>Cloudflare</th><th>A rented VPS</th></tr></thead>
+  <tbody>
+    <tr><td>Virtual machine</td><td>EC2</td><td>Virtual Machines</td><td>Compute Engine</td><td>— (no VMs)</td><td>The VPS itself</td></tr>
+    <tr><td>Object storage</td><td>S3</td><td>Blob Storage</td><td>Cloud Storage</td><td>R2 (speaks the S3 API)</td><td>Folder on disk / MinIO</td></tr>
+    <tr><td>Managed PostgreSQL</td><td>RDS, Aurora</td><td>Azure Database for PostgreSQL</td><td>Cloud SQL, AlloyDB</td><td>— (D1 is SQLite)</td><td>Postgres in Docker, you run it</td></tr>
+    <tr><td>Containers</td><td>ECS, EKS, App Runner</td><td>Container Apps, AKS</td><td>Cloud Run, GKE</td><td>Containers (newer, limited)</td><td>Docker Compose</td></tr>
+    <tr><td>Functions (serverless)</td><td>Lambda</td><td>Functions</td><td>Cloud Run functions</td><td>Workers</td><td>—</td></tr>
+    <tr><td>Load balancer</td><td>ALB / NLB</td><td>Application Gateway / Load Balancer</td><td>Cloud Load Balancing</td><td>Load Balancing</td><td>Nginx / HAProxy</td></tr>
+    <tr><td>CDN</td><td>CloudFront</td><td>Front Door</td><td>Cloud CDN</td><td>The core product</td><td>— (put Cloudflare in front)</td></tr>
+    <tr><td>DNS</td><td>Route 53</td><td>Azure DNS</td><td>Cloud DNS</td><td>DNS</td><td>Registrar's DNS</td></tr>
+    <tr><td>Queues / events</td><td>SQS, SNS, EventBridge</td><td>Service Bus, Event Grid</td><td>Pub/Sub, Eventarc</td><td>Queues</td><td>Redis / RabbitMQ in Docker</td></tr>
+    <tr><td>Identity &amp; permissions</td><td>IAM</td><td>Entra ID + Azure RBAC</td><td>Cloud IAM</td><td>API tokens, Access</td><td>Linux users, SSH keys</td></tr>
+    <tr><td>Monitoring &amp; logs</td><td>CloudWatch</td><td>Azure Monitor</td><td>Cloud Monitoring / Logging</td><td>Analytics, Logpush</td><td>Your own scripts, a Telegram bot</td></tr>
+    <tr><td>Infrastructure as code</td><td>CloudFormation, CDK (+ Terraform)</td><td>Bicep / ARM (+ Terraform)</td><td>Infrastructure Manager (+ Terraform)</td><td>Terraform provider</td><td>Shell scripts, Ansible</td></tr>
+  </tbody>
+</table>`;
+const BANG_TEN_VI = `
+<table>
+  <thead><tr><th>Việc</th><th>AWS</th><th>Microsoft Azure</th><th>Google Cloud</th><th>Cloudflare</th><th>VPS thuê tháng</th></tr></thead>
+  <tbody>
+    <tr><td>Máy ảo</td><td>EC2</td><td>Virtual Machines</td><td>Compute Engine</td><td>— (không bán máy ảo)</td><td>Chính cái VPS</td></tr>
+    <tr><td>Lưu tệp (object storage)</td><td>S3</td><td>Blob Storage</td><td>Cloud Storage</td><td>R2 (nói giao thức S3)</td><td>Thư mục trên đĩa / MinIO</td></tr>
+    <tr><td>PostgreSQL được quản lý</td><td>RDS, Aurora</td><td>Azure Database for PostgreSQL</td><td>Cloud SQL, AlloyDB</td><td>— (D1 là SQLite)</td><td>Postgres trong Docker, tự vận hành</td></tr>
+    <tr><td>Container</td><td>ECS, EKS, App Runner</td><td>Container Apps, AKS</td><td>Cloud Run, GKE</td><td>Containers (mới, còn hạn chế)</td><td>Docker Compose</td></tr>
+    <tr><td>Hàm (serverless)</td><td>Lambda</td><td>Functions</td><td>Cloud Run functions</td><td>Workers</td><td>—</td></tr>
+    <tr><td>Cân bằng tải</td><td>ALB / NLB</td><td>Application Gateway / Load Balancer</td><td>Cloud Load Balancing</td><td>Load Balancing</td><td>Nginx / HAProxy</td></tr>
+    <tr><td>CDN</td><td>CloudFront</td><td>Front Door</td><td>Cloud CDN</td><td>Sản phẩm cốt lõi</td><td>— (đặt Cloudflare phía trước)</td></tr>
+    <tr><td>DNS</td><td>Route 53</td><td>Azure DNS</td><td>Cloud DNS</td><td>DNS</td><td>DNS của nhà đăng ký tên miền</td></tr>
+    <tr><td>Hàng đợi / sự kiện</td><td>SQS, SNS, EventBridge</td><td>Service Bus, Event Grid</td><td>Pub/Sub, Eventarc</td><td>Queues</td><td>Redis / RabbitMQ trong Docker</td></tr>
+    <tr><td>Danh tính &amp; quyền</td><td>IAM</td><td>Entra ID + Azure RBAC</td><td>Cloud IAM</td><td>API token, Access</td><td>User Linux, khoá SSH</td></tr>
+    <tr><td>Giám sát &amp; log</td><td>CloudWatch</td><td>Azure Monitor</td><td>Cloud Monitoring / Logging</td><td>Analytics, Logpush</td><td>Script tự viết, bot Telegram</td></tr>
+    <tr><td>Hạ tầng dạng mã</td><td>CloudFormation, CDK (+ Terraform)</td><td>Bicep / ARM (+ Terraform)</td><td>Infrastructure Manager (+ Terraform)</td><td>Provider Terraform</td><td>Shell script, Ansible</td></tr>
+  </tbody>
+</table>`;
+
+const L06_EN = `
+<div class="ml-en">
+<span class="eyebrow">Section 0 · Lesson 6</span>
+<h2>0.6 — The cloud map: AWS, Azure, Google Cloud, Cloudflare and the VPS — who is who</h2>
+<p class="lead">Before diving into AWS services, get the whole map in your head: where AWS came from, why it leads, how it differs from Microsoft Azure, Google Cloud, Cloudflare (R2, Workers, CDN) and a plain VPS — and why cuongthai.com, a real production site, chose a VPS plus R2 rather than AWS. You will leave with one table that translates any service name between providers, and with the single pricing idea that surprises every beginner: <strong>egress</strong>.</p>
+
+<h3>From a bookshop to the largest cloud — the short version</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">1990s–2003</span><span class="lz-t">An online bookshop with an infrastructure problem</span><span class="lz-d">Amazon.com grew from books into a huge store. Every new project rebuilt servers, databases and storage from scratch. Amazon forced teams to offer their work as services behind APIs — and noticed that its own plumbing could be sold to others.</span></div>
+  <div class="lz-step"><span class="lz-k">2006</span><span class="lz-t">S3, then EC2</span><span class="lz-d">Storage by the gigabyte and machines by the hour, paid with a credit card, no contract. AWS had the market almost to itself for several years.</span></div>
+  <div class="lz-step"><span class="lz-k">2008–2013</span><span class="lz-t">The others arrive</span><span class="lz-d">Google App Engine (2008), Microsoft Azure (2010), Google Compute Engine (2012–2013). Each came from a different strength: Google from search-scale infrastructure, Microsoft from Windows, Office and enterprise contracts.</span></div>
+  <div class="lz-step"><span class="lz-k">2017–2022</span><span class="lz-t">The edge players</span><span class="lz-d">Cloudflare, a CDN and security company, starts running code at its edge (Workers, 2017) and launches R2 object storage with no egress fees (generally available September 2022).</span></div>
+  <div class="lz-step"><span class="lz-k">2026</span><span class="lz-t">Today</span><span class="lz-d">The big three together hold most of the market; AI demand makes it grow faster than ever; AWS still leads, but its share is slowly shrinking.</span></div>
+</div>
+
+<h3>Market share — with a source and a date</h3>
+<table>
+  <thead><tr><th>Cloud infrastructure services, worldwide</th><th>Q2 2026</th><th>Q3 2026</th></tr></thead>
+  <tbody>
+    <tr><td>Amazon (AWS)</td><td>28%</td><td>26%</td></tr>
+    <tr><td>Microsoft (Azure)</td><td>20%</td><td>19%</td></tr>
+    <tr><td>Google Cloud</td><td>15%</td><td>16%</td></tr>
+    <tr><td>Market size per quarter</td><td>≈ 143 billion USD</td><td>≈ 168 billion USD</td></tr>
+  </tbody>
+</table>
+<p>Source: Synergy Research Group (Q2 article on its site; Q3 figures as reported by DatacenterDynamics, October 2026). Read it the right way: AWS is still the largest, Microsoft and Google grow faster, and “share” is an estimate of revenue, not of how good a product is. Other analysts publish slightly different numbers.</p>
+<p>Why AWS leads: it started years earlier, has the widest catalogue and the most regions, and — most important for you — the largest pool of documentation, courses, certifications and engineers. Job posts ask for AWS more than any other cloud, which is why this course is about AWS. The concepts (IAM, VPC, load balancers, object storage, managed databases) transfer almost one-to-one to the others.</p>
+
+<h3>Five ways to host the same app</h3>
+<table>
+  <thead><tr><th></th><th>Strong at</th><th>How it charges</th><th>Typical users</th></tr></thead>
+  <tbody>
+    <tr><td><strong>AWS</strong></td><td>Broadest catalogue, mature tooling, most regions, largest job market</td><td>Per second/hour/GB/request; egress to the Internet billed after a free allowance</td><td>Start-ups to banks; Techcombank and VPBank in Vietnam</td></tr>
+    <tr><td><strong>Azure</strong></td><td>Microsoft ecosystem: Entra ID, .NET, Windows Server, Office 365, enterprise licences</td><td>Similar model; licence discounts for Windows/SQL Server</td><td>Enterprises already on Microsoft</td></tr>
+    <tr><td><strong>Google Cloud</strong></td><td>Data and AI (BigQuery, Vertex AI), Kubernetes (GKE), global network</td><td>Similar model; automatic sustained-use discounts on some machines</td><td>Data-heavy and AI products</td></tr>
+    <tr><td><strong>Cloudflare</strong></td><td>CDN, DNS, DDoS/WAF in front of anything; Workers at the edge; R2 storage</td><td>Flat plans for the network; R2 per GB stored and per operation, <strong>no egress fee</strong></td><td>Almost every website as a front door; media-heavy sites for R2</td></tr>
+    <tr><td><strong>VPS</strong> (rented monthly)</td><td>Simple, cheap, predictable bill, full control</td><td>A fixed monthly price including a large traffic allowance</td><td>Small and medium sites, side projects — and cuongthai.com</td></tr>
+  </tbody>
+</table>
+
+<h3>Same job, different names</h3>
+<p>Keep this table — when a job ad says “Cloud Run” or “Blob Storage”, you will know which AWS lesson covers the idea.</p>
+${BANG_TEN_EN}
+
+<h3>Egress: the line on the bill nobody expects</h3>
+<p>The big clouds let data <em>in</em> for free and charge for data going <em>out</em> to the Internet (egress). For a site that serves images and videos, egress can be larger than every other line together. Cloudflare's R2 charges nothing for egress — that is its whole pitch. Here is the difference, computed with public prices (S3 Singapore: 0.025 USD/GB stored, first 100 GB out free, then 0.12 USD/GB; R2: 0.015 USD/GB stored, egress free), for 200 GB of media:</p>
+${MA_06_EGRESS}
+${OUT_06_EGRESS}
+<p>At 50 GB/month the difference is pocket money; at 10 TB/month it is about 1,190 USD vs 3 USD. (R2 also charges per operation, not included here; with a CDN in front, both bills drop.) Two more facts worth knowing: since March 2024 AWS waives egress fees when you move your data <em>out of AWS</em> for good, and the big clouds cut egress inside their own CDNs — so “egress” is a design question, not a fixed law.</p>
+
+<h3>Why cuongthai.com runs on a VPS + R2 (principles only)</h3>
+<ul>
+  <li><strong>Predictable cost at its size:</strong> one well-sized VPS runs the whole Docker stack for a fixed monthly price, with traffic included. The same shape on AWS (lesson 0.2) costs several times more, mostly in always-on items like NAT and load balancers.</li>
+  <li><strong>Media is the heavy part:</strong> lessons ship thousands of videos and images. On R2, serving them costs no egress, and the code still uses the standard AWS SDK because R2 speaks the S3 protocol (Chapter 2).</li>
+  <li><strong>Cloudflare in front:</strong> DNS, CDN and DDoS protection come from Cloudflare, so the VPS only needs to accept web traffic from the CDN.</li>
+  <li><strong>What it gives up:</strong> one machine is one failure domain — a reboot or a disk problem is downtime. Deploys are scripted carefully for exactly that reason.</li>
+  <li><strong>When it would move to AWS (or another big cloud):</strong> when one machine is no longer enough, when minutes of downtime become unacceptable (multi-AZ, Chapter 5–6), when a customer contract requires a certified cloud, or when managed services (databases, queues) save more engineering time than they cost.</li>
+</ul>
+
+<h3>What employers in Vietnam use</h3>
+<ul>
+  <li><strong>Banks and fintech</strong> have moved to the big clouds: Techcombank announced a “cloud first” strategy with AWS in September 2021, and AWS publishes a VPBank migration case study.</li>
+  <li><strong>Outsourcing companies</strong> work on the client's cloud — AWS, Azure or Google Cloud, depending on the project. Knowing one cloud deeply and the name table above is what lets you switch.</li>
+  <li><strong>Product start-ups</strong> often mix: Cloudflare in front, a VPS or a container platform behind, S3-compatible storage, and AWS for specific services.</li>
+</ul>
+
+<h3>🔓 Hacker's view: the same mistakes on every cloud</h3>
+<p>Every provider has had public-bucket leaks and stolen-key incidents (Chapter 1 and 2 show real ones on AWS). The lesson is not “cloud X is safer” — it is the <strong>shared responsibility model</strong>, which all of them use: the provider secures the data centres and the platform; you secure your accounts, keys, permissions, network rules and data. Switching provider does not move your half of the work.</p>
+
+<h3>🎤 What interviewers ask</h3>
+<ol>
+  <li><strong>Compare AWS with Azure and Google Cloud.</strong> — Same building blocks (compute, storage, databases, networking, IAM) under different names. AWS: widest catalogue and ecosystem, market leader. Azure: strongest where companies already use Microsoft (Entra ID, .NET, Windows). Google Cloud: data/AI and Kubernetes. Choice depends on the team's skills, existing contracts and specific services — not on a “best cloud”.</li>
+  <li><strong>Why is R2 cheap for egress?</strong> — Cloudflare's business is the network: it already carries traffic for its CDN and charges for plans and security, so it uses free egress to attract storage; the big clouds price egress separately. R2 still charges for storage and operations.</li>
+  <li><strong>When would you NOT use AWS?</strong> — Small, steady workloads where a VPS is cheaper and simpler; media-heavy sites where egress dominates; teams with no one to manage cloud security and cost.</li>
+</ol>
+
+<h3>🧪 Practice (15 minutes)</h3>
+<div class="callout ok"><ol>
+  <li>Pick one job ad you like. Underline every cloud service name and translate it with the table above.</li>
+  <li>Change <code>LUU</code> and the traffic values in <code>egress.mjs</code> to a project you know (a photo site, a video course). At what monthly traffic does R2 save more than 50 USD?</li>
+  <li>Write three lines: which provider you would choose for LabFlow in its first year, and why.</li>
+</ol>
+<p><strong>Pass when:</strong> your three lines mention cost, availability and the team's skills — not just “the best cloud”.</p>
+${giai('Hint: break-even for 200 GB stored', bash(`
+# S3 egress cost above R2 when: 5.00 + (ra - 100) * 0.12 - 2.85 > 50
+# ⇒ (ra - 100) * 0.12 > 47.85 ⇒ ra > ~499 GB/month
+node egress.mjs`))}
+</div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Hyperscaler</span><span class="v">The very large clouds: AWS, Azure, Google Cloud.</span></div>
+  <div class="kv"><span class="k">Egress</span><span class="v">Data leaving the provider to the Internet — usually billed per GB.</span></div>
+  <div class="kv"><span class="k">S3-compatible</span><span class="v">Storage that accepts the S3 API, so the AWS SDK works (R2, MinIO).</span></div>
+  <div class="kv"><span class="k">Edge</span><span class="v">Servers close to users (CDN points of presence); Workers run code there.</span></div>
+  <div class="kv"><span class="k">Shared responsibility</span><span class="v">Provider secures the platform; you secure what you configure and store.</span></div>
+  <div class="kv"><span class="k">Vendor lock-in</span><span class="v">How hard it is to leave a provider because of proprietary services and egress.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul>
+  <li>AWS started in 2006 and still leads (≈26% in Q3 2026); Azure and Google grow faster.</li>
+  <li>All clouds offer the same building blocks under different names — learn one deeply, map the rest.</li>
+  <li>Egress is the surprise cost; R2 removes it for storage, CDNs reduce it everywhere.</li>
+  <li>A VPS + Cloudflare + R2 is a sound choice at cuongthai.com's size; the big cloud earns its price with availability and managed services.</li>
+</ul>
+
+<h3>📚 Learn deeper</h3>
+${tl('https://cloud.google.com/docs/get-started/aws-azure-gcp-service-comparison', '🗺️', 'Google Cloud — AWS, Azure and Google Cloud service comparison', 'The official name-by-name table, kept up to date.')}
+${tl('https://learn.microsoft.com/en-us/azure/architecture/aws-professional/', '🔁', 'Microsoft — Azure for AWS professionals', 'How every AWS concept maps to Azure.')}
+
+<h3>Sources</h3>
+<ul>
+  <li>Synergy Research, Q2 2026: <a href="https://www.srgresearch.com/articles/q2-cloud-market-passes-143-billion-highest-growth-rate-in-eight-years" target="_blank" rel="noopener">srgresearch.com/articles/q2-cloud-market-passes-143-billion-highest-growth-rate-in-eight-years</a></li>
+  <li>Q3 2026 shares (Synergy, via DCD): <a href="https://www.datacenterdynamics.com/en/news/synergy-enterprise-cloud-infrastructure-spending-jumped-55-yoy-in-q3/" target="_blank" rel="noopener">datacenterdynamics.com/en/news/synergy-enterprise-cloud-infrastructure-spending-jumped-55-yoy-in-q3/</a></li>
+  <li>What is AWS: <a href="https://aws.amazon.com/what-is-aws/" target="_blank" rel="noopener">aws.amazon.com/what-is-aws/</a></li>
+  <li>R2 pricing (no egress fees): <a href="https://developers.cloudflare.com/r2/pricing/" target="_blank" rel="noopener">developers.cloudflare.com/r2/pricing/</a> · R2 generally available (09/2022): <a href="https://blog.cloudflare.com/r2-ga/" target="_blank" rel="noopener">blog.cloudflare.com/r2-ga/</a></li>
+  <li>Cloudflare Workers (2017): <a href="https://blog.cloudflare.com/introducing-cloudflare-workers/" target="_blank" rel="noopener">blog.cloudflare.com/introducing-cloudflare-workers/</a></li>
+  <li>AWS free egress when leaving (03/2024): <a href="https://aws.amazon.com/blogs/aws/free-data-transfer-out-to-internet-when-moving-out-of-aws/" target="_blank" rel="noopener">aws.amazon.com/blogs/aws/free-data-transfer-out-to-internet-when-moving-out-of-aws/</a></li>
+  <li>EC2 on-demand and data transfer pricing: <a href="https://aws.amazon.com/ec2/pricing/on-demand/" target="_blank" rel="noopener">aws.amazon.com/ec2/pricing/on-demand/</a></li>
+  <li>Azure bandwidth pricing: <a href="https://azure.microsoft.com/en-us/pricing/details/bandwidth/" target="_blank" rel="noopener">azure.microsoft.com/en-us/pricing/details/bandwidth/</a> · Google Cloud network pricing: <a href="https://cloud.google.com/vpc/network-pricing" target="_blank" rel="noopener">cloud.google.com/vpc/network-pricing</a></li>
+  <li>Free tiers: <a href="https://aws.amazon.com/free/" target="_blank" rel="noopener">aws.amazon.com/free/</a> · <a href="https://azure.microsoft.com/en-us/pricing/free-services" target="_blank" rel="noopener">azure.microsoft.com/en-us/pricing/free-services</a> · <a href="https://cloud.google.com/free" target="_blank" rel="noopener">cloud.google.com/free</a></li>
+  <li>Techcombank cloud first with AWS (09/2021): <a href="https://techcombank.com/en/information/updates/techcombank-goes-cloud-first-with-aws-to-transform-customer-experience" target="_blank" rel="noopener">techcombank.com/…/techcombank-goes-cloud-first-with-aws-to-transform-customer-experience</a> · <a href="https://aws.amazon.com/solutions/case-studies/techcombank-case-study/" target="_blank" rel="noopener">aws.amazon.com/solutions/case-studies/techcombank-case-study/</a></li>
+  <li>VPBank migration: <a href="https://aws.amazon.com/solutions/case-studies/vpbank-migration-case-study/" target="_blank" rel="noopener">aws.amazon.com/solutions/case-studies/vpbank-migration-case-study/</a></li>
+</ul>
+</div>
+`;
+
+const L06_VI = `
+<div class="ml-vi">
+<span class="eyebrow">Mục 0 · Bài 6</span>
+<h2>0.6 — Bản đồ cloud: AWS, Azure, Google Cloud, Cloudflare và VPS — ai là ai</h2>
+<p class="lead">Trước khi lặn vào từng dịch vụ AWS, hãy có cả tấm bản đồ trong đầu: AWS từ đâu ra, vì sao nó dẫn đầu, nó khác Microsoft Azure, Google Cloud, Cloudflare (R2, Workers, CDN) và một VPS bình thường ở đâu — và vì sao cuongthai.com, một web production thật, chọn VPS cộng R2 chứ không phải AWS. Bạn sẽ mang về một bảng dịch tên dịch vụ giữa các hãng, và một khái niệm giá làm mọi người mới đều giật mình: <strong>egress</strong> (dữ liệu ra).</p>
+
+<h3>Từ hiệu sách đến cloud lớn nhất — bản rút gọn</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">Thập niên 1990–2003</span><span class="lz-t">Một hiệu sách online gặp bài toán hạ tầng</span><span class="lz-d">Amazon.com lớn dần từ bán sách thành một siêu thị khổng lồ. Dự án mới nào cũng dựng lại máy chủ, CSDL, lưu trữ từ đầu. Amazon bắt các đội cung cấp công việc của mình dưới dạng dịch vụ có API — và nhận ra chính đường ống nội bộ đó bán được cho người khác.</span></div>
+  <div class="lz-step"><span class="lz-k">2006</span><span class="lz-t">S3, rồi EC2</span><span class="lz-d">Lưu trữ tính theo GB, máy tính theo giờ, trả bằng thẻ, không hợp đồng. AWS gần như một mình một chợ trong vài năm.</span></div>
+  <div class="lz-step"><span class="lz-k">2008–2013</span><span class="lz-t">Những người khác tới</span><span class="lz-d">Google App Engine (2008), Microsoft Azure (2010), Google Compute Engine (2012–2013). Mỗi hãng đến từ một thế mạnh riêng: Google từ hạ tầng cỡ công cụ tìm kiếm, Microsoft từ Windows, Office và hợp đồng doanh nghiệp.</span></div>
+  <div class="lz-step"><span class="lz-k">2017–2022</span><span class="lz-t">Những tay chơi ở edge</span><span class="lz-d">Cloudflare, một công ty CDN và bảo mật, bắt đầu chạy mã ngay tại edge (Workers, 2017) và ra mắt kho object R2 không tính phí egress (chính thức tháng 9/2022).</span></div>
+  <div class="lz-step"><span class="lz-k">2026</span><span class="lz-t">Hôm nay</span><span class="lz-d">Ba ông lớn cùng nắm phần lớn thị trường; nhu cầu AI làm thị trường tăng nhanh chưa từng có; AWS vẫn dẫn đầu nhưng thị phần đang co dần.</span></div>
+</div>
+
+<h3>Thị phần — có nguồn và có ngày tháng</h3>
+<table>
+  <thead><tr><th>Dịch vụ hạ tầng cloud, toàn cầu</th><th>Quý 2/2026</th><th>Quý 3/2026</th></tr></thead>
+  <tbody>
+    <tr><td>Amazon (AWS)</td><td>28%</td><td>26%</td></tr>
+    <tr><td>Microsoft (Azure)</td><td>20%</td><td>19%</td></tr>
+    <tr><td>Google Cloud</td><td>15%</td><td>16%</td></tr>
+    <tr><td>Quy mô thị trường mỗi quý</td><td>≈ 143 tỷ USD</td><td>≈ 168 tỷ USD</td></tr>
+  </tbody>
+</table>
+<p>Nguồn: Synergy Research Group (bài quý 2 trên trang của họ; số quý 3 do DatacenterDynamics đưa tin, tháng 10/2026). Đọc cho đúng: AWS vẫn lớn nhất, Microsoft và Google tăng nhanh hơn, và “thị phần” là ước tính doanh thu, không phải điểm chất lượng sản phẩm. Các hãng phân tích khác công bố số hơi khác.</p>
+<p>Vì sao AWS dẫn đầu: nó khởi đầu sớm hơn nhiều năm, có danh mục rộng nhất và nhiều region nhất, và — quan trọng nhất với bạn — có kho tài liệu, khoá học, chứng chỉ và kỹ sư lớn nhất. Tin tuyển dụng đòi AWS nhiều hơn mọi cloud khác, nên khoá này học AWS. Các khái niệm (IAM, VPC, cân bằng tải, object storage, CSDL được quản lý) chuyển sang hãng khác gần như một đổi một.</p>
+
+<h3>Năm cách để chạy cùng một ứng dụng</h3>
+<table>
+  <thead><tr><th></th><th>Mạnh ở</th><th>Tính tiền kiểu gì</th><th>Ai hay dùng</th></tr></thead>
+  <tbody>
+    <tr><td><strong>AWS</strong></td><td>Danh mục rộng nhất, công cụ trưởng thành, nhiều region nhất, thị trường việc làm lớn nhất</td><td>Theo giây/giờ/GB/yêu cầu; dữ liệu ra Internet tính tiền sau phần miễn phí</td><td>Từ start-up tới ngân hàng; Techcombank, VPBank ở Việt Nam</td></tr>
+    <tr><td><strong>Azure</strong></td><td>Hệ sinh thái Microsoft: Entra ID, .NET, Windows Server, Office 365, bản quyền doanh nghiệp</td><td>Mô hình tương tự; giảm giá bản quyền Windows/SQL Server</td><td>Doanh nghiệp đã dùng đồ Microsoft</td></tr>
+    <tr><td><strong>Google Cloud</strong></td><td>Dữ liệu và AI (BigQuery, Vertex AI), Kubernetes (GKE), mạng toàn cầu</td><td>Mô hình tương tự; tự giảm giá khi dùng lâu với một số loại máy</td><td>Sản phẩm nặng dữ liệu và AI</td></tr>
+    <tr><td><strong>Cloudflare</strong></td><td>CDN, DNS, chống DDoS/WAF đứng trước mọi thứ; Workers ở edge; kho R2</td><td>Gói cố định cho phần mạng; R2 tính theo GB lưu và số thao tác, <strong>không tính egress</strong></td><td>Gần như mọi web dùng làm cửa trước; web nhiều media dùng R2</td></tr>
+    <tr><td><strong>VPS</strong> (thuê tháng)</td><td>Đơn giản, rẻ, hoá đơn đoán trước được, toàn quyền</td><td>Giá cố định mỗi tháng, kèm lượng băng thông lớn</td><td>Web nhỏ và vừa, dự án cá nhân — và cuongthai.com</td></tr>
+  </tbody>
+</table>
+
+<h3>Cùng một việc, mỗi nơi một tên</h3>
+<p>Giữ bảng này — khi tin tuyển dụng ghi “Cloud Run” hay “Blob Storage”, bạn biết ngay bài AWS nào dạy ý tưởng đó.</p>
+${BANG_TEN_VI}
+
+<h3>Egress: dòng trên hoá đơn không ai ngờ tới</h3>
+<p>Các cloud lớn cho dữ liệu <em>vào</em> miễn phí và tính tiền dữ liệu <em>ra</em> Internet (egress). Với web phát ảnh và video, egress có thể lớn hơn mọi dòng khác cộng lại. R2 của Cloudflare không tính egress — đó là toàn bộ lời chào hàng của nó. Đây là chênh lệch, tính bằng giá công khai (S3 Singapore: lưu 0,025 USD/GB, 100 GB ra đầu tiên miễn phí, sau đó 0,12 USD/GB; R2: lưu 0,015 USD/GB, egress miễn phí), với 200 GB media:</p>
+${MA_06_EGRESS}
+${OUT_06_EGRESS}
+<p>Ở 50 GB/tháng chênh lệch chỉ là tiền lẻ; ở 10 TB/tháng là khoảng 1.190 USD so với 3 USD. (R2 còn tính tiền theo thao tác, chưa gộp ở đây; có CDN phía trước thì cả hai hoá đơn đều giảm.) Thêm hai điều nên biết: từ tháng 3/2024, AWS miễn phí egress khi bạn chuyển hẳn dữ liệu <em>ra khỏi AWS</em>, và các cloud lớn giảm egress khi đi qua CDN của chính họ — nên “egress” là bài toán thiết kế, không phải định luật cố định.</p>
+
+<h3>Vì sao cuongthai.com chạy VPS + R2 (chỉ nguyên tắc)</h3>
+<ul>
+  <li><strong>Chi phí đoán trước được ở quy mô hiện tại:</strong> một VPS đủ mạnh chạy cả bộ Docker với giá cố định mỗi tháng, đã gồm băng thông. Cùng hình dạng đó trên AWS (bài 0.2) đắt gấp mấy lần, chủ yếu vì các món chạy suốt như NAT và load balancer.</li>
+  <li><strong>Media mới là phần nặng:</strong> các bài học phát hàng nghìn video và ảnh. Trên R2, phục vụ chúng không tốn egress, mà mã vẫn dùng AWS SDK chuẩn vì R2 nói giao thức S3 (Chương 2).</li>
+  <li><strong>Cloudflare đứng trước:</strong> DNS, CDN và chống DDoS do Cloudflare lo, nên VPS chỉ cần nhận lưu lượng web từ CDN.</li>
+  <li><strong>Cái phải đánh đổi:</strong> một máy là một điểm hỏng — khởi động lại hay trục trặc ổ đĩa là ngừng phục vụ. Quy trình deploy được viết script cẩn thận chính vì lý do đó.</li>
+  <li><strong>Khi nào sẽ chuyển sang AWS (hoặc cloud lớn khác):</strong> khi một máy không còn đủ, khi vài phút ngừng phục vụ là không chấp nhận được (nhiều AZ, Chương 5–6), khi hợp đồng khách hàng đòi cloud có chứng nhận, hoặc khi dịch vụ được quản lý (CSDL, hàng đợi) tiết kiệm công kỹ sư nhiều hơn số tiền chúng tốn.</li>
+</ul>
+
+<h3>Nhà tuyển dụng ở Việt Nam dùng gì</h3>
+<ul>
+  <li><strong>Ngân hàng và fintech</strong> đã lên các cloud lớn: Techcombank công bố chiến lược “cloud first” cùng AWS từ tháng 9/2021, và AWS có công bố case study chuyển hệ thống của VPBank.</li>
+  <li><strong>Công ty gia công phần mềm</strong> làm trên cloud của khách hàng — AWS, Azure hay Google Cloud tuỳ dự án. Hiểu sâu một cloud cộng bảng tên ở trên là thứ giúp bạn chuyển qua lại được.</li>
+  <li><strong>Start-up làm sản phẩm</strong> hay trộn: Cloudflare đứng trước, VPS hoặc nền tảng container phía sau, kho tương thích S3, và AWS cho vài dịch vụ cụ thể.</li>
+</ul>
+
+<h3>🔓 Góc hacker: cùng những lỗi đó, trên mọi cloud</h3>
+<p>Hãng nào cũng từng có vụ lộ bucket công khai và vụ khoá bị đánh cắp (Chương 1 và 2 kể các vụ thật trên AWS). Bài học không phải “cloud X an toàn hơn” — mà là <strong>mô hình trách nhiệm chung</strong>, hãng nào cũng áp dụng: nhà cung cấp giữ an toàn cho trung tâm dữ liệu và nền tảng; bạn giữ an toàn cho tài khoản, khoá, quyền, luật mạng và dữ liệu của mình. Đổi nhà cung cấp không mang phần việc của bạn đi đâu cả.</p>
+
+<h3>🎤 Phỏng vấn viên sẽ hỏi</h3>
+<ol>
+  <li><strong>So sánh AWS với Azure và Google Cloud.</strong> — Cùng các khối xây dựng (tính toán, lưu trữ, CSDL, mạng, IAM) dưới tên khác nhau. AWS: danh mục và hệ sinh thái rộng nhất, dẫn đầu thị trường. Azure: mạnh nhất nơi công ty đã dùng Microsoft (Entra ID, .NET, Windows). Google Cloud: dữ liệu/AI và Kubernetes. Chọn theo kỹ năng của đội, hợp đồng sẵn có và dịch vụ cụ thể — không có “cloud tốt nhất”.</li>
+  <li><strong>Vì sao R2 rẻ phần egress?</strong> — Việc kinh doanh của Cloudflare là mạng: họ vốn đã chuyên chở lưu lượng cho CDN và thu tiền theo gói và bảo mật, nên dùng egress miễn phí để kéo khách lưu trữ; các cloud lớn thì tính egress riêng. R2 vẫn tính tiền lưu trữ và thao tác.</li>
+  <li><strong>Khi nào bạn KHÔNG dùng AWS?</strong> — Tải nhỏ, đều, nơi VPS rẻ và đơn giản hơn; web nặng media mà egress chiếm phần lớn; đội không có ai lo bảo mật và chi phí cloud.</li>
+</ol>
+
+<h3>🧪 Thực hành (15 phút)</h3>
+<div class="callout ok"><ol>
+  <li>Chọn một tin tuyển dụng bạn thích. Gạch dưới mọi tên dịch vụ cloud và dịch chúng bằng bảng ở trên.</li>
+  <li>Đổi <code>LUU</code> và các mức lưu lượng trong <code>egress.mjs</code> theo một dự án bạn biết (web ảnh, khoá học video). Lưu lượng mỗi tháng tới mức nào thì R2 tiết kiệm hơn 50 USD?</li>
+  <li>Viết ba dòng: năm đầu tiên bạn sẽ chọn nhà cung cấp nào cho LabFlow, và vì sao.</li>
+</ol>
+<p><strong>Đạt khi:</strong> ba dòng của bạn nhắc tới chi phí, độ sẵn sàng và kỹ năng của đội — không chỉ “cloud tốt nhất”.</p>
+${giai('Gợi ý: điểm hoà vốn với 200 GB lưu trữ', bash(`
+# Tiền S3 vượt R2 hơn 50 USD khi: 5,00 + (ra - 100) * 0,12 - 2,85 > 50
+# ⇒ (ra - 100) * 0,12 > 47,85 ⇒ ra > ~499 GB/tháng
+node egress.mjs`))}
+</div>
+
+<h3>🗂 Thuật ngữ</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Hyperscaler</span><span class="v">Các cloud cực lớn: AWS, Azure, Google Cloud.</span></div>
+  <div class="kv"><span class="k">Egress</span><span class="v">Dữ liệu từ nhà cung cấp đi ra Internet — thường tính tiền theo GB.</span></div>
+  <div class="kv"><span class="k">Tương thích S3</span><span class="v">Kho nhận API của S3, nên AWS SDK dùng được (R2, MinIO).</span></div>
+  <div class="kv"><span class="k">Edge</span><span class="v">Máy chủ ở gần người dùng (điểm hiện diện của CDN); Workers chạy mã ở đó.</span></div>
+  <div class="kv"><span class="k">Trách nhiệm chung</span><span class="v">Nhà cung cấp giữ an toàn nền tảng; bạn giữ an toàn thứ mình cấu hình và lưu.</span></div>
+  <div class="kv"><span class="k">Vendor lock-in</span><span class="v">Mức khó rời một nhà cung cấp vì dịch vụ độc quyền và phí egress.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul>
+  <li>AWS khởi đầu năm 2006 và vẫn dẫn đầu (≈26% quý 3/2026); Azure và Google tăng nhanh hơn.</li>
+  <li>Mọi cloud đều có cùng các khối xây dựng dưới tên khác nhau — học sâu một, ánh xạ phần còn lại.</li>
+  <li>Egress là khoản bất ngờ; R2 xoá nó cho phần lưu trữ, CDN giảm nó ở mọi nơi.</li>
+  <li>VPS + Cloudflare + R2 là lựa chọn hợp lý ở quy mô của cuongthai.com; cloud lớn xứng đáng với giá của nó nhờ độ sẵn sàng và dịch vụ được quản lý.</li>
+</ul>
+
+<h3>📚 Học sâu hơn</h3>
+${tl('https://cloud.google.com/docs/get-started/aws-azure-gcp-service-comparison', '🗺️', 'Google Cloud — So sánh dịch vụ AWS, Azure và Google Cloud', 'Bảng tên đối chiếu chính thức, luôn được cập nhật.')}
+${tl('https://learn.microsoft.com/en-us/azure/architecture/aws-professional/', '🔁', 'Microsoft — Azure cho người đã biết AWS', 'Từng khái niệm AWS tương ứng gì trên Azure.')}
+
+<h3>Nguồn</h3>
+<ul>
+  <li>Synergy Research, quý 2/2026: <a href="https://www.srgresearch.com/articles/q2-cloud-market-passes-143-billion-highest-growth-rate-in-eight-years" target="_blank" rel="noopener">srgresearch.com/articles/q2-cloud-market-passes-143-billion-highest-growth-rate-in-eight-years</a></li>
+  <li>Thị phần quý 3/2026 (Synergy, qua DCD): <a href="https://www.datacenterdynamics.com/en/news/synergy-enterprise-cloud-infrastructure-spending-jumped-55-yoy-in-q3/" target="_blank" rel="noopener">datacenterdynamics.com/en/news/synergy-enterprise-cloud-infrastructure-spending-jumped-55-yoy-in-q3/</a></li>
+  <li>AWS là gì: <a href="https://aws.amazon.com/what-is-aws/" target="_blank" rel="noopener">aws.amazon.com/what-is-aws/</a></li>
+  <li>Giá R2 (không phí egress): <a href="https://developers.cloudflare.com/r2/pricing/" target="_blank" rel="noopener">developers.cloudflare.com/r2/pricing/</a> · R2 chính thức (09/2022): <a href="https://blog.cloudflare.com/r2-ga/" target="_blank" rel="noopener">blog.cloudflare.com/r2-ga/</a></li>
+  <li>Cloudflare Workers (2017): <a href="https://blog.cloudflare.com/introducing-cloudflare-workers/" target="_blank" rel="noopener">blog.cloudflare.com/introducing-cloudflare-workers/</a></li>
+  <li>AWS miễn egress khi rời đi (03/2024): <a href="https://aws.amazon.com/blogs/aws/free-data-transfer-out-to-internet-when-moving-out-of-aws/" target="_blank" rel="noopener">aws.amazon.com/blogs/aws/free-data-transfer-out-to-internet-when-moving-out-of-aws/</a></li>
+  <li>Giá EC2 on-demand và truyền dữ liệu: <a href="https://aws.amazon.com/ec2/pricing/on-demand/" target="_blank" rel="noopener">aws.amazon.com/ec2/pricing/on-demand/</a></li>
+  <li>Giá băng thông Azure: <a href="https://azure.microsoft.com/en-us/pricing/details/bandwidth/" target="_blank" rel="noopener">azure.microsoft.com/en-us/pricing/details/bandwidth/</a> · Giá mạng Google Cloud: <a href="https://cloud.google.com/vpc/network-pricing" target="_blank" rel="noopener">cloud.google.com/vpc/network-pricing</a></li>
+  <li>Free tier: <a href="https://aws.amazon.com/free/" target="_blank" rel="noopener">aws.amazon.com/free/</a> · <a href="https://azure.microsoft.com/en-us/pricing/free-services" target="_blank" rel="noopener">azure.microsoft.com/en-us/pricing/free-services</a> · <a href="https://cloud.google.com/free" target="_blank" rel="noopener">cloud.google.com/free</a></li>
+  <li>Techcombank “cloud first” với AWS (09/2021): <a href="https://techcombank.com/en/information/updates/techcombank-goes-cloud-first-with-aws-to-transform-customer-experience" target="_blank" rel="noopener">techcombank.com/…/techcombank-goes-cloud-first-with-aws-to-transform-customer-experience</a> · <a href="https://aws.amazon.com/solutions/case-studies/techcombank-case-study/" target="_blank" rel="noopener">aws.amazon.com/solutions/case-studies/techcombank-case-study/</a></li>
+  <li>VPBank chuyển hệ thống: <a href="https://aws.amazon.com/solutions/case-studies/vpbank-migration-case-study/" target="_blank" rel="noopener">aws.amazon.com/solutions/case-studies/vpbank-migration-case-study/</a></li>
+</ul>
+</div>
+`;
+
 export default {
   title: 'Section 0 — What the cloud is|||Mục 0 — Cloud là gì',
   description: 'Cloud là gì và lịch sử AWS, thảm hoạ cloud có thật (khoá lộ, bucket công khai, hoá đơn), tài khoản an toàn với Budgets + MFA, cloud so với VPS bằng giá thật, region/AZ đo độ trễ từ Việt Nam, và phòng lab miễn phí LocalStack + Terraform.',
@@ -1601,6 +1906,14 @@ export default {
       isFreePreview: true,
       description: 'Bảng đối chiếu cuongthai.com ⇒ AWS, so sánh vận hành, tính tiền tháng bằng giá thật Singapore (NAT gateway đắt hơn RDS), khi nào VPS là đủ.',
       content: L02_EN + L02_VI,
+    },
+    {
+      title: '0.6 — The cloud map: AWS, Azure, Google Cloud, Cloudflare and the VPS|||0.6 — Bản đồ cloud: AWS, Azure, Google Cloud, Cloudflare và VPS',
+      slug: 'aws-0-6-ban-do-cloud',
+      type: 'LESSON',
+      isFreePreview: true,
+      description: 'Gốc ngọn AWS (hiệu sách ⇒ 2006 ⇒ dẫn đầu), thị phần có nguồn (Synergy quý 2–3/2026: AWS 26–28%, Azure 19–20%, Google 15–16%), năm cách chạy cùng một app, bảng tên dịch vụ tương đương 5 nơi, egress tính thật S3 vs R2, vì sao cuongthai.com chọn VPS + R2, nhà tuyển dụng Việt Nam dùng gì.',
+      content: L06_EN + L06_VI,
     },
     {
       title: '0.3 — Global infrastructure: regions, Availability Zones, edge locations|||0.3 — Hạ tầng toàn cầu: region, Availability Zone, edge location',

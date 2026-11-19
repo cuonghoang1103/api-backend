@@ -21,6 +21,7 @@ import s01 from './cloud-aws/s01-iam.mjs';
 import s02 from './cloud-aws/s02-s3.mjs';
 import s03 from './cloud-aws/s03-vpc.mjs';
 import s04 from './cloud-aws/s04-ec2.mjs';
+import s05 from './cloud-aws/s05-ra-internet.mjs';
 
 const CHUONG = [
   ['Section 0 — What the cloud is', 'Mục 0 — Cloud là gì', '(đã soạn — cloud-aws/s00-bat-dau.mjs)', [['bat-dau-tai-day', '-', '-', '-']]],
@@ -28,14 +29,7 @@ const CHUONG = [
   ['Chapter 2 — Storage: S3 (and the R2 you already use)', 'Chương 2 — Lưu trữ: S3 (và R2 bạn đang dùng)', '(đã soạn — cloud-aws/s02-s3.mjs)', [['s3', '-', '-', '-']]],
   ['Chapter 3 — Networking: VPC', 'Chương 3 — Mạng: VPC', '(đã soạn — cloud-aws/s03-vpc.mjs)', [['vpc-subnet', '-', '-', '-']]],
   ['Chapter 4 — Compute: EC2', 'Chương 4 — Máy chủ: EC2', '(đã soạn — cloud-aws/s04-ec2.mjs)', [['ec2', '-', '-', '-']]],
-  ['Chapter 5 — Going public: load balancers, scaling, DNS and CDN', 'Chương 5 — Ra Internet: load balancer, co giãn, DNS và CDN', 'ALB, Auto Scaling, Route 53, ACM, CloudFront — thay cho Nginx + Cloudflare của VPS.', [
-    ['alb', 'Application Load Balancer', 'Application Load Balancer', 'Listener, target group, health check · Định tuyến theo đường dẫn/host · So với Nginx reverse proxy · ALB vs NLB'],
-    ['auto-scaling', 'Auto Scaling groups', 'Auto Scaling group', 'Desired/min/max · Chính sách theo CPU/số request · Tự thay máy hỏng · Nhiều AZ · Mô phỏng tải tăng'],
-    ['route53', 'Route 53 and ACM certificates', 'Route 53 và chứng chỉ ACM', 'Hosted zone · Bản ghi A/AAAA/CNAME/alias · Chính sách định tuyến · ACM miễn phí cho ALB/CloudFront · So với DNS Cloudflare'],
-    ['cloudfront', 'CloudFront CDN', 'CDN CloudFront', 'Edge location · Cache theo header/TTL · Origin S3 có OAC · HTTPS · Huỷ cache · So với Cloudflare trước cuongthai.com'],
-    ['waf-ddos', 'WAF, Shield and DDoS on AWS', 'WAF, Shield và DDoS trên AWS', 'Shield Standard miễn phí · AWS WAF luật có sẵn · Rate limit · Vụ DDoS 2,3 Tbps AWS chặn 2020 · Hoá đơn khi bị tấn công'],
-    ['lab-5', 'Chapter 5 lab + interview questions', 'Lab chương 5 + câu hỏi phỏng vấn', 'ALB + Auto Scaling cho API LabFlow (sơ đồ + ước tính chi phí) · Rubric · Câu phỏng vấn'],
-  ]],
+  ['Chapter 5 — Going public: load balancers, scaling, DNS and CDN', 'Chương 5 — Ra Internet: load balancer, co giãn, DNS và CDN', '(đã soạn — cloud-aws/s05-ra-internet.mjs)', [['alb', '-', '-', '-']]],
   ['Chapter 6 — Databases and secrets', 'Chương 6 — Cơ sở dữ liệu và bí mật', 'RDS PostgreSQL trong subnet private, sao lưu, Multi-AZ, bản đọc; DynamoDB, ElastiCache; Secrets Manager và Parameter Store.', [
     ['rds', 'RDS for PostgreSQL', 'RDS cho PostgreSQL', 'Managed nghĩa là gì · Tạo trong subnet private · Parameter group · Kết nối từ app Node.js/Spring · So với Postgres trong Docker trên VPS'],
     ['van-hanh-rds', 'Backups, Multi-AZ and read replicas', 'Sao lưu, Multi-AZ và bản đọc', 'Backup tự động + PITR · Snapshot thủ công · Multi-AZ chuyển dự phòng · Read replica · RPO/RTO'],
@@ -122,6 +116,7 @@ sections[1] = s01;
 sections[2] = s02;
 sections[3] = s03;
 sections[4] = s04;
+sections[5] = s05;
 
 export default {
   category: { slug: 'devops', name: 'DevOps & Vận hành', icon: 'Server', sortOrder: 4 },

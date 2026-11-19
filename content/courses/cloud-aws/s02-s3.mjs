@@ -664,7 +664,7 @@ ${OUT_23_SAI}
   <li><strong>Careful — a difference with AWS.</strong> The last <code>get-object</code> by the administrator still worked on versitygw because its root account bypasses bucket policies. On AWS, <code>Deny</code> with <code>"Principal": "*"</code> also blocks <em>your own</em> users and your application role. A real policy scopes the Deny with a condition, for example:</li>
 </ul>
 ${MA_DENY_DUNG}
-<p>Even better: <strong>do not keep secret files in a bucket that has any public statement</strong>. One bucket for public media, one private bucket for everything else — that is the design the lab of this chapter asks for. And versitygw rejected <code>put-public-access-block</code> with <code>NotImplemented</code>; on AWS and LocalStack that call works and would have blocked the bad policy at the gate (<code>BlockPublicPolicy</code>).</p>
+<p>Even better: <strong>do not keep secret files in a bucket that has any public statement</strong>. One bucket for public media, one private bucket for everything else — that is the design the lab of this chapter asks for. And versitygw rejected <code>put-public-access-block</code> with <code>NotImplemented</code>; on AWS that call works and would have blocked the bad policy at the gate (<code>BlockPublicPolicy</code> ⇒ <code>PutBucketPolicy</code> rejected). LocalStack 4.12 accepts the setting (new buckets even start with all four switches on) but does <em>not</em> enforce it: a public policy still goes through without an error (tested 19/11/2026) — a local emulator is not a security test.</p>
 
 <h3>Encryption at rest and in transit</h3>
 ${OUT_23_MAHOA}
@@ -798,7 +798,7 @@ ${OUT_23_SAI}
   <li><strong>Cẩn thận — khác với AWS.</strong> Lệnh <code>get-object</code> cuối của quản trị viên vẫn chạy trên versitygw vì tài khoản root của nó bỏ qua bucket policy. Trên AWS, <code>Deny</code> với <code>"Principal": "*"</code> chặn cả user <em>của chính bạn</em> và role ứng dụng. Policy thật phải thu hẹp Deny bằng điều kiện, ví dụ:</li>
 </ul>
 ${MA_DENY_DUNG}
-<p>Tốt hơn nữa: <strong>đừng để tệp bí mật trong bucket có bất kỳ câu công khai nào</strong>. Một bucket cho media công khai, một bucket riêng tư cho mọi thứ còn lại — đó là thiết kế mà lab chương này yêu cầu. Và versitygw từ chối <code>put-public-access-block</code> với <code>NotImplemented</code>; trên AWS và LocalStack lệnh đó chạy được và đã chặn policy sai ngay từ cổng (<code>BlockPublicPolicy</code>).</p>
+<p>Tốt hơn nữa: <strong>đừng để tệp bí mật trong bucket có bất kỳ câu công khai nào</strong>. Một bucket cho media công khai, một bucket riêng tư cho mọi thứ còn lại — đó là thiết kế mà lab chương này yêu cầu. Và versitygw từ chối <code>put-public-access-block</code> với <code>NotImplemented</code>; trên AWS lệnh đó chạy được và đã chặn policy sai ngay từ cổng (<code>BlockPublicPolicy</code> ⇒ <code>PutBucketPolicy</code> bị từ chối). LocalStack 4.12 nhận cấu hình (bucket mới còn bật sẵn cả bốn công tắc) nhưng <em>không</em> thực thi: policy công khai vẫn lọt, không báo lỗi (thử 19/11/2026) — trình giả lập cục bộ không phải phép thử bảo mật.</p>
 
 <h3>Mã hoá khi lưu và khi truyền</h3>
 ${OUT_23_MAHOA}

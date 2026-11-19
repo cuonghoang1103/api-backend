@@ -68,11 +68,11 @@ export default {
     'os-8-3-verify': { yt: 'LP_KT6U73M0', credit: 'AWS Public Sector — Ten Minute Tutorial for Research: Amazon S3 Storage Classes & Lifecycle Policies', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/object-storage/08-migration/08-03-verify-552a3fc8.mp4' }, defaultVideoTrack: 'VI'},   // Ten Minute Tutorial for Research: Amazon S3 Storage Classes & Lifecycle Policies
 
     /* ── Chương 9 — Sách công thức chẩn đoán ── */
-    'os-9-1-common': { yt: 'rn4qLXhMesg', credit: 'Amazon Web Services — Why am I getting an HTTP 403 Forbidden error when I try to upload files using the Amazon S3 console?' },  // Why am I getting an HTTP 403 Forbidden error when I try to upload files using the Amazon S3 console?
-    'os-9-2-latency': { yt: 'EhkhfIGpiZE', credit: 'Backblaze — Q1 2026 Cloud Storage Performance Stats: Backblaze B2 vs. AWS S3 vs. Cloudflare R2 vs. Wasabi' },   // Q1 2026 Cloud Storage Performance Stats: Backblaze B2 vs AWS S3 vs Cloudflare R2 vs Wasabi
+    'os-9-1-common': { yt: 'rn4qLXhMesg', credit: 'Amazon Web Services — Why am I getting an HTTP 403 Forbidden error when I try to upload files using the Amazon S3 console?', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/object-storage/09-chan-doan/09-01-common-15ba262b.mp4' }, defaultVideoTrack: 'VI'},  // Why am I getting an HTTP 403 Forbidden error when I try to upload files using the Amazon S3 console?
+    'os-9-2-latency': { yt: 'EhkhfIGpiZE', credit: 'Backblaze — Q1 2026 Cloud Storage Performance Stats: Backblaze B2 vs. AWS S3 vs. Cloudflare R2 vs. Wasabi', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/object-storage/09-chan-doan/09-02-latency-24404764.mp4' }, defaultVideoTrack: 'VI'},   // Q1 2026 Cloud Storage Performance Stats: Backblaze B2 vs AWS S3 vs Cloudflare R2 vs Wasabi
 
     /* ── Chương 10 — Cái sống sót qua đo đạc ── */
-    'os-10-1-song-qua': { yt: 'JXnMXgCUpuw', credit: 'Ram N Java — Master Amazon S3 Lifecycle Policies: Slash Your Storage Costs | Essential Tips for New Users' }, // Amazon S3 Lifecycle Policies: Save Costs on Storage | Amazon S3 Lifecycle for Beginners
+    'os-10-1-song-qua': { yt: 'JXnMXgCUpuw', credit: 'Ram N Java — Master Amazon S3 Lifecycle Policies: Slash Your Storage Costs | Essential Tips for New Users', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/object-storage/10-song-qua-do-luong/10-01-song-qua-a4c88e71.mp4' }, defaultVideoTrack: 'VI'}, // Amazon S3 Lifecycle Policies: Save Costs on Storage | Amazon S3 Lifecycle for Beginners
     'os-0-0-bat-dau-tai-day': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/object-storage/00-object-storage-la-gi/00-01-object-storage-la-gi-e458968e.mp4' }, defaultVideoTrack: 'VI'},
     'os-0-0b-vi-sao-quan-trong': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/object-storage/00-object-storage-la-gi/00-02-vi-sao-quan-trong-7cc493db.mp4' }, defaultVideoTrack: 'VI'},
   },

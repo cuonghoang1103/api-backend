@@ -58,6 +58,7 @@ const KHOA = [
   ['github-actions', 'githubactions', '2088FF', 'GitHub Actions', 'CI/CD from Zero'],
   ['observability-monitoring', 'grafana', 'F46800', 'Observability', 'Logs → Metrics → Traces'],
   ['kafka', 'apachekafka', 'FFFFFF', 'Apache Kafka', 'Zero → Event Streaming'],
+  ['api-gateway', 'kong', '38BDF8', 'API Gateway', 'Kong · Zero → Production'],
   // 30/09/2026 — 25 khoá khung mới (content/courses/_KE-HOACH-KHOA-MOI-3009.md): bảo mật, vận hành, nền tảng CS, dữ liệu, sản phẩm.
   ['ddos-protection', 'cloudflare', 'F38020', 'DDoS Protection', 'Cloudflare · WAF · Rate Limiting'],
   ['incident-response', 'pagerduty', '06AC38', 'Incident Response', 'Detect → Recover → Postmortem'],

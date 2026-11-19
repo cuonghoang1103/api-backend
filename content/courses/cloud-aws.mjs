@@ -1,9 +1,145 @@
 /**
- * Cloud cơ bản (AWS) — khoá học CuongThai (Courses, GENERAL). KHUNG dựng 24/09/2026 (công khai từ 24/09 theo yêu cầu người dùng — bài chưa soạn hiện "Đang soạn"), chi tiết soạn sau.
- * ⚠️ Khi soạn chi tiết: chỉ dùng Free Tier, luôn đặt cảnh báo chi phí (Budgets) trước, dọn tài nguyên sau mỗi bài.
- * Xem _chung/khung.mjs.
+ * Cloud cơ bản (AWS) — khoá học CuongThai (Courses, GENERAL). KHUNG dựng 24/09/2026; SOẠN CHI TIẾT từ 19/11/2026 (agent aws, máy nhà)
+ * theo lộ trình đi làm Backend Node.js + Spring Boot (chốt 17/11/2026): "làm chủ AWS từ con số 0 → dự án thật → thi chứng chỉ".
+ * Mở rộng 11 → 17 mục (~107 bài): S3 lên sớm (Ch.2, kèm so sánh R2 của cuongthai.com), tách mạng/EC2/đưa ra Internet,
+ * thêm RDS + bí mật, hướng sự kiện (SQS/SNS/EventBridge), CloudWatch, Terraform cho mọi thứ, CI/CD GitHub Actions → ECR → ECS,
+ * chi phí + bảo mật (góc hacker), dự án cuối khoá LabFlow trên AWS, và hai chương luyện thi CLF-C02 / SAA-C03.
+ *
+ * ⚠️ Luật soạn: chỉ Free Tier; bài đầu tiên có tài khoản là đặt AWS Budgets + cảnh báo; mỗi lab có bước DỌN + lệnh kiểm "còn gì
+ * đang tính tiền". Demo trong bài chạy thật trên LocalStack 4.12 (community) + AWS CLI 2.41.0 + Terraform 1.17.2 (xem
+ * cloud-aws/_chung.mjs → PHIEN_BAN); dịch vụ chỉ AWS thật có (ALB, ECS, CloudFront…) ghi rõ "minh hoạ" khi không chạy được.
+ *
+ * Mục nào đã soạn thì thay phần tử khung bằng tệp chương thật (cloud-aws/sNN-*.mjs). Mục 0 GIỮ slug bài đầu
+ * (aws-0-8-bat-dau-tai-day) và cả 4 slug bài cũ. Chương 1 giữ slug bài đầu aws-1-1-khai-niem. Các chương 2–10 cũ ĐỔI CHỖ
+ * (S3 lên Ch.2, VPC xuống Ch.3, …) ⇒ seeder tạo section mới theo slug bài đầu mới; section khung cũ (aws-2-1-vpc, aws-3-1-ec2,
+ * aws-4-1-ecr, aws-5-1-lambda, aws-6-1-s3, aws-7-1-rds, aws-8-1-vi-sao, aws-9-1-cloudwatch, aws-10-1-kien-truc) cần gỡ khi
+ * deploy — ghi trong báo cáo agent aws.
  */
 import { khung } from './_chung/khung.mjs';
+import s00 from './cloud-aws/s00-bat-dau.mjs';
+import s01 from './cloud-aws/s01-iam.mjs';
+
+const CHUONG = [
+  ['Section 0 — What the cloud is', 'Mục 0 — Cloud là gì', '(đã soạn — cloud-aws/s00-bat-dau.mjs)', [['bat-dau-tai-day', '-', '-', '-']]],
+  ['Chapter 1 — Identity and access (IAM)', 'Chương 1 — Danh tính và quyền truy cập (IAM)', '(đã soạn — cloud-aws/s01-iam.mjs)', [['khai-niem', '-', '-', '-']]],
+  ['Chapter 2 — Storage: S3 (and the R2 you already use)', 'Chương 2 — Lưu trữ: S3 (và R2 bạn đang dùng)', 'Bucket, object, quyền truy cập, URL ký sẵn, phiên bản, vòng đời — và vì sao code của cuongthai.com dùng @aws-sdk/client-s3 cho Cloudflare R2.', [
+    ['s3', 'S3 buckets and objects', 'Bucket và object S3', 'Object = khoá + dữ liệu + metadata · Không có thư mục thật · Tên bucket toàn cầu · Độ bền 11 số 9 · CLI s3 vs s3api'],
+    ['r2-giao-thuc-s3', 'The S3 protocol: R2, MinIO and @aws-sdk/client-s3', 'Giao thức S3: R2, MinIO và @aws-sdk/client-s3', 'S3 API là chuẩn ngầm · Chữ ký SigV4 · Một mã chạy S3/R2/LocalStack chỉ đổi endpoint · Phí egress: S3 vs R2 · cuongthai.com dùng R2 thế nào'],
+    ['quyen', 'S3 permissions: Block Public Access, bucket policies, ACLs', 'Quyền S3: Block Public Access, bucket policy, ACL', 'Mặc định riêng tư từ 2023 · Bucket policy vs IAM policy · ACL đã tắt · Object Ownership · Mã hoá SSE-S3/SSE-KMS'],
+    ['presigned', 'Presigned URLs and direct browser uploads', 'URL ký sẵn và tải lên thẳng từ trình duyệt', 'Ký URL bằng SDK Node.js/Java · Hết hạn · CORS · Giới hạn cỡ tệp · Luồng tải ảnh LabFlow'],
+    ['phien-ban-vong-doi', 'Versioning, lifecycle and storage classes', 'Phiên bản, vòng đời và lớp lưu trữ', 'Versioning cứu tệp xoá nhầm · Delete marker · Lớp Standard/IA/Glacier/Intelligent-Tiering · Luật vòng đời · Chi phí theo GB và request'],
+    ['lo-bucket', 'Hacker’s view: public buckets that leaked millions of records', 'Góc hacker: bucket công khai làm lộ hàng triệu bản ghi', 'Verizon 2017, Accenture 2017, Pegasus 2022 · Công cụ quét tên bucket · Bucket rỗng bị tính tiền 2024 · Kiểm tra bucket của chính bạn'],
+    ['lab-2', 'Chapter 2 lab + interview questions', 'Lab chương 2 + câu hỏi phỏng vấn', 'Kho ảnh LabFlow: bucket riêng tư + URL ký sẵn + vòng đời · Rubric · Câu phỏng vấn S3'],
+  ]],
+  ['Chapter 3 — Networking: VPC', 'Chương 3 — Mạng: VPC', 'Subnet, route table, Internet/NAT gateway, security group — dựng một mạng production hợp lý.', [
+    ['vpc-subnet', 'VPC, CIDR and subnets', 'VPC, CIDR và subnet', 'VPC = mạng riêng của bạn · CIDR /16 /24 tính nhanh · Subnet nằm trong một AZ · 5 địa chỉ AWS giữ lại · Default VPC'],
+    ['route-igw', 'Route tables and the Internet gateway: public vs private', 'Bảng định tuyến và Internet gateway: public vs private', 'Subnet "public" chỉ là có route 0.0.0.0/0 → IGW · IP công khai · IPv4 tính tiền từ 2024 · Vẽ đường đi gói tin'],
+    ['security-group', 'Security groups and NACLs', 'Security group và NACL', 'Stateful vs stateless · SG tham chiếu SG · Mở cổng tối thiểu · 0.0.0.0/0 trên cổng 22/5432 · So với ufw trên VPS'],
+    ['nat-endpoint', 'NAT gateways and VPC endpoints', 'NAT gateway và VPC endpoint', 'Máy private ra Internet · NAT gateway tính tiền theo giờ + GB · Gateway endpoint S3 miễn phí · Interface endpoint'],
+    ['ket-noi', 'Connecting networks: peering, Transit Gateway, VPN', 'Nối các mạng: peering, Transit Gateway, VPN', 'VPC peering không bắc cầu · Transit Gateway · Site-to-Site VPN · Direct Connect · Câu hay ra thi'],
+    ['vao-may', 'Reaching private machines: bastion, SSM and flow logs', 'Vào máy private: bastion, SSM và flow logs', 'Bastion host · Session Manager không mở cổng 22 · VPC Flow Logs đọc ai gõ cửa · Góc hacker: quét cổng toàn Internet'],
+    ['lab-3', 'Chapter 3 lab + interview questions', 'Lab chương 3 + câu hỏi phỏng vấn', 'VPC 2 AZ, subnet public/private bằng CLI · Rubric · Câu phỏng vấn mạng cloud'],
+  ]],
+  ['Chapter 4 — Compute: EC2', 'Chương 4 — Máy chủ: EC2', 'Máy ảo trên cloud so với VPS bạn đang chạy: AMI, loại máy, khoá SSH, user data, EBS, giá.', [
+    ['ec2', 'Launching and connecting to EC2', 'Tạo và kết nối EC2', 'Loại máy t/m/c/g · AMI · Key pair · SSH hay Session Manager · Vòng đời stop/terminate'],
+    ['user-data', 'Bootstrapping with user data', 'Khởi tạo bằng user data', 'cloud-init chạy một lần · Cài Docker + chạy ứng dụng khi máy lên · Đọc log khởi tạo · Launch template'],
+    ['ebs', 'EBS volumes, snapshots and instance store', 'Ổ EBS, snapshot và instance store', 'gp3 vs io2 · Ổ sống qua máy · Snapshot tăng dần · Instance store mất khi dừng · EFS chia sẻ nhiều máy'],
+    ['imds', 'Instance metadata, IMDSv2 and the Capital One breach', 'Instance metadata, IMDSv2 và vụ Capital One', '169.254.169.254 trả gì · Khoá tạm của role qua metadata · Capital One 2019: SSRF ⇒ khoá ⇒ S3 · IMDSv2 bắt token · Cách phòng'],
+    ['gia', 'Pricing: on-demand, spot, Savings Plans, Graviton', 'Giá máy: on-demand, spot, Savings Plans, Graviton', 'Tính tiền theo giây · Spot rẻ nhưng bị thu hồi · Savings Plans/Reserved · Graviton ARM rẻ hơn · Tính chi phí tháng'],
+    ['gpu', 'GPU instances: g5/g6 vs renting a GPU box', 'Máy GPU: g5/g6 so với thuê máy GPU', 'Họ máy GPU · Service quota phải xin · Spot GPU · So với máy GPU thuê theo giờ của cuongthai.com · Tắt khi xong việc'],
+    ['lab-4', 'Chapter 4 lab + interview questions', 'Lab chương 4 + câu hỏi phỏng vấn', 'Máy chạy API LabFlow bằng user data + SG tối thiểu · Rubric · Câu phỏng vấn EC2'],
+  ]],
+  ['Chapter 5 — Going public: load balancers, scaling, DNS and CDN', 'Chương 5 — Ra Internet: load balancer, co giãn, DNS và CDN', 'ALB, Auto Scaling, Route 53, ACM, CloudFront — thay cho Nginx + Cloudflare của VPS.', [
+    ['alb', 'Application Load Balancer', 'Application Load Balancer', 'Listener, target group, health check · Định tuyến theo đường dẫn/host · So với Nginx reverse proxy · ALB vs NLB'],
+    ['auto-scaling', 'Auto Scaling groups', 'Auto Scaling group', 'Desired/min/max · Chính sách theo CPU/số request · Tự thay máy hỏng · Nhiều AZ · Mô phỏng tải tăng'],
+    ['route53', 'Route 53 and ACM certificates', 'Route 53 và chứng chỉ ACM', 'Hosted zone · Bản ghi A/AAAA/CNAME/alias · Chính sách định tuyến · ACM miễn phí cho ALB/CloudFront · So với DNS Cloudflare'],
+    ['cloudfront', 'CloudFront CDN', 'CDN CloudFront', 'Edge location · Cache theo header/TTL · Origin S3 có OAC · HTTPS · Huỷ cache · So với Cloudflare trước cuongthai.com'],
+    ['waf-ddos', 'WAF, Shield and DDoS on AWS', 'WAF, Shield và DDoS trên AWS', 'Shield Standard miễn phí · AWS WAF luật có sẵn · Rate limit · Vụ DDoS 2,3 Tbps AWS chặn 2020 · Hoá đơn khi bị tấn công'],
+    ['lab-5', 'Chapter 5 lab + interview questions', 'Lab chương 5 + câu hỏi phỏng vấn', 'ALB + Auto Scaling cho API LabFlow (sơ đồ + ước tính chi phí) · Rubric · Câu phỏng vấn'],
+  ]],
+  ['Chapter 6 — Databases and secrets', 'Chương 6 — Cơ sở dữ liệu và bí mật', 'RDS PostgreSQL trong subnet private, sao lưu, Multi-AZ, bản đọc; DynamoDB, ElastiCache; Secrets Manager và Parameter Store.', [
+    ['rds', 'RDS for PostgreSQL', 'RDS cho PostgreSQL', 'Managed nghĩa là gì · Tạo trong subnet private · Parameter group · Kết nối từ app Node.js/Spring · So với Postgres trong Docker trên VPS'],
+    ['van-hanh-rds', 'Backups, Multi-AZ and read replicas', 'Sao lưu, Multi-AZ và bản đọc', 'Backup tự động + PITR · Snapshot thủ công · Multi-AZ chuyển dự phòng · Read replica · RPO/RTO'],
+    ['bi-mat', 'Secrets Manager and Parameter Store', 'Secrets Manager và Parameter Store', 'Không để mật khẩu trong mã/ảnh · SecureString · Xoay mật khẩu tự động · Đọc bí mật từ ECS/Lambda · Giá hai dịch vụ'],
+    ['dynamodb', 'DynamoDB: key-value at any scale', 'DynamoDB: key-value ở mọi quy mô', 'Partition key/sort key · Truy vấn theo mẫu truy cập · On-demand vs provisioned · Khi nào chọn thay Postgres'],
+    ['elasticache', 'ElastiCache and choosing a database', 'ElastiCache và chọn cơ sở dữ liệu', 'Redis/Valkey managed · Bảng chọn RDS/Aurora/DynamoDB/ElastiCache · Câu hay ra thi'],
+    ['lab-6', 'Chapter 6 lab + interview questions', 'Lab chương 6 + câu hỏi phỏng vấn', 'Bí mật DB của LabFlow trong Secrets Manager + bảng DynamoDB nhật ký · Rubric · Câu phỏng vấn'],
+  ]],
+  ['Chapter 7 — Containers: ECR and ECS Fargate', 'Chương 7 — Container: ECR và ECS Fargate', 'Đẩy ảnh lên ECR, chạy trên ECS Fargate không cần quản máy, nhật ký và bí mật cho task.', [
+    ['ecr', 'ECR: your private image registry', 'ECR: kho ảnh riêng', 'Repository · docker login bằng token tạm · Quét lỗ hổng · Luật vòng đời ảnh · So với GHCR của cuongthai.com'],
+    ['ecs-khai-niem', 'ECS concepts: cluster, task definition, service', 'Khái niệm ECS: cluster, task definition, service', 'Task definition như docker-compose · Service giữ số task · Fargate vs EC2 launch type · Task role vs execution role'],
+    ['fargate', 'Running an API on Fargate behind an ALB', 'Chạy API trên Fargate sau ALB', 'awsvpc mỗi task một IP · Gắn target group · Log ra CloudWatch · Biến môi trường và bí mật · Cập nhật cuốn chiếu'],
+    ['so-sanh', 'Choosing: EC2 vs ECS vs EKS vs App Runner', 'Chọn: EC2 vs ECS vs EKS vs App Runner', 'Bảng so sánh · Chi phí điều khiển EKS · Khi nào Kubernetes đáng · Trỏ khoá Kubernetes'],
+    ['lab-7', 'Chapter 7 lab + interview questions', 'Lab chương 7 + câu hỏi phỏng vấn', 'Đóng gói API LabFlow + task definition hoàn chỉnh · Rubric · Câu phỏng vấn container'],
+  ]],
+  ['Chapter 8 — Serverless: Lambda and API Gateway', 'Chương 8 — Serverless: Lambda và API Gateway', 'Hàm chạy theo sự kiện, API HTTP trả tiền theo request, và khi nào serverless (không) hợp.', [
+    ['lambda', 'Lambda functions in Node.js', 'Hàm Lambda bằng Node.js', 'Handler, event, context · Cold start đo thật · Bộ nhớ = CPU · Giới hạn 15 phút · Gói và layer'],
+    ['api-gateway', 'HTTP APIs with API Gateway', 'API HTTP với API Gateway', 'HTTP API vs REST API · Route → Lambda · Xác thực JWT · Throttling · Chi phí theo triệu request'],
+    ['lambda-java', 'Lambda with Java/Spring and SnapStart', 'Lambda bằng Java/Spring và SnapStart', 'Cold start Java · SnapStart · Spring Cloud Function · Khi nào nên dùng Node.js thay Java'],
+    ['khi-nao', 'When serverless is (not) a good idea', 'Khi nào serverless (không) hợp', 'Tải thấp/đột biến · Vòng lặp vô hạn tốn tiền · Khoá nhà cung cấp · Tính chi phí so với Fargate'],
+    ['lab-8', 'Chapter 8 lab + interview questions', 'Lab chương 8 + câu hỏi phỏng vấn', 'API tra cứu phòng lab bằng Lambda + API Gateway · Rubric · Câu phỏng vấn serverless'],
+  ]],
+  ['Chapter 9 — Event-driven: SQS, SNS and EventBridge', 'Chương 9 — Hướng sự kiện: SQS, SNS và EventBridge', 'Hàng đợi, phát tán và lịch — tách hệ thống để chịu tải và chịu lỗi.', [
+    ['sqs', 'SQS queues: standard, FIFO and dead-letter', 'Hàng đợi SQS: standard, FIFO và dead-letter', 'Visibility timeout · Ít nhất một lần ⇒ xử lý idempotent · FIFO và nhóm · DLQ · Long polling'],
+    ['sns', 'SNS fan-out and notifications', 'SNS phát tán và thông báo', 'Topic + subscription · Fan-out SNS → nhiều SQS · Email/SMS · Lọc theo thuộc tính · So với bot Telegram'],
+    ['eventbridge', 'EventBridge: event bus and schedules', 'EventBridge: bus sự kiện và lịch', 'Luật khớp mẫu sự kiện · Scheduler thay cron · Sự kiện từ dịch vụ AWS · Nhắc lịch đặt phòng'],
+    ['s3-trigger', 'Triggers: S3 → Lambda image pipeline', 'Kích hoạt: S3 → Lambda xử lý ảnh', 'Thông báo sự kiện S3 · Lambda tạo ảnh thu nhỏ · Vòng lặp tự kích hoạt tốn tiền · Thử lại và DLQ'],
+    ['lab-9', 'Chapter 9 lab + interview questions', 'Lab chương 9 + câu hỏi phỏng vấn', 'Hàng đợi gửi thông báo đặt phòng LabFlow · Rubric · Câu phỏng vấn hệ phân tán'],
+  ]],
+  ['Chapter 10 — Observability: CloudWatch', 'Chương 10 — Quan sát: CloudWatch', 'Log, chỉ số, cảnh báo và dashboard — thay cho log + bot Telegram của VPS.', [
+    ['logs', 'CloudWatch Logs and Logs Insights', 'CloudWatch Logs và Logs Insights', 'Log group/stream · Thời gian giữ log và tiền · Truy vấn Logs Insights · Log JSON có cấu trúc'],
+    ['metrics', 'Metrics, custom metrics and dashboards', 'Chỉ số, chỉ số tự định nghĩa và dashboard', 'Namespace, dimension · Chỉ số EC2/ALB/RDS có sẵn · Đẩy chỉ số riêng · Dashboard'],
+    ['alarms', 'Alarms that matter, routed to SNS', 'Cảnh báo đáng có, gửi qua SNS', 'Ngưỡng và số chu kỳ · Cảnh báo lỗi 5xx, độ trễ, CPU, hoá đơn · SNS → email/chat · Tránh báo động giả'],
+    ['tracing', 'Tracing and auditing: X-Ray, CloudTrail, Config', 'Truy vết và kiểm toán: X-Ray, CloudTrail, Config', 'X-Ray/OpenTelemetry theo request · CloudTrail ai gọi API gì · AWS Config ghi lịch sử cấu hình · Câu thi hay nhầm'],
+    ['lab-10', 'Chapter 10 lab + interview questions', 'Lab chương 10 + câu hỏi phỏng vấn', 'Log + chỉ số + cảnh báo cho API LabFlow · Rubric · Câu phỏng vấn vận hành'],
+  ]],
+  ['Chapter 11 — Infrastructure as code with Terraform', 'Chương 11 — Hạ tầng dưới dạng mã với Terraform', 'Dựng lại bằng mã mọi thứ đã bấm tay: provider, state, biến, module; học bài bản ở khoá Infrastructure as Code.', [
+    ['vi-sao', 'Why click-ops does not scale', 'Vì sao bấm tay không mở rộng được', 'Không tái lập được · Quên dọn = hoá đơn bất ngờ · IaC là gì · Terraform vs CloudFormation vs CDK'],
+    ['terraform', 'Terraform basics on AWS: init, plan, apply, destroy', 'Terraform cơ bản trên AWS: init, plan, apply, destroy', 'Provider AWS và xác thực an toàn · Resource, data source · Đồ thị phụ thuộc · Chạy thật với LocalStack'],
+    ['bien-module', 'Variables, outputs and modules', 'Biến, output và module', 'variable/locals/output · Module VPC dùng lại · Module của cộng đồng · Môi trường dev/prod'],
+    ['state', 'State: S3 backend, locking and drift', 'State: backend S3, khoá và lệch cấu hình', 'State chứa gì (cả bí mật) · Backend S3 + khoá · Drift khi ai đó bấm tay · import'],
+    ['lab-11', 'Chapter 11 lab + interview questions', 'Lab chương 11 + câu hỏi phỏng vấn', 'VPC + S3 + DynamoDB của LabFlow bằng Terraform · Rubric · Câu phỏng vấn IaC'],
+  ]],
+  ['Chapter 12 — CI/CD: GitHub Actions → ECR → ECS', 'Chương 12 — CI/CD: GitHub Actions → ECR → ECS', 'Đẩy mã là có bản mới chạy trên AWS: OIDC, build ảnh, deploy cuốn chiếu, terraform plan trên PR.', [
+    ['pipeline', 'The pipeline: build, test, push to ECR', 'Đường ống: build, test, đẩy lên ECR', 'Workflow từng bước · OIDC thay khoá · Gắn tag theo SHA · Cache build'],
+    ['deploy-ecs', 'Deploying to ECS: rolling and blue/green', 'Deploy lên ECS: cuốn chiếu và blue/green', 'Cập nhật task definition · Circuit breaker tự quay lui · Blue/green với CodeDeploy · So với deploy-nha.sh'],
+    ['terraform-ci', 'Terraform in CI: plan on PR, apply with approval', 'Terraform trong CI: plan trên PR, apply có duyệt', 'Môi trường được bảo vệ · Bình luận plan vào PR · Khoá state · Trỏ khoá Infrastructure as Code'],
+    ['lab-12', 'Chapter 12 lab + interview questions', 'Lab chương 12 + câu hỏi phỏng vấn', 'Workflow hoàn chỉnh cho LabFlow · Rubric · Câu phỏng vấn CI/CD'],
+  ]],
+  ['Chapter 13 — Cost and security in production', 'Chương 13 — Chi phí và bảo mật khi chạy thật', 'Hiểu hoá đơn, cắt chi phí, Well-Architected, và góc hacker tổng hợp.', [
+    ['hoa-don', 'Understanding the bill: Cost Explorer and tags', 'Hiểu hoá đơn: Cost Explorer và tag', 'Cost Explorer · Tag phân bổ chi phí · Thủ phạm hay gặp: NAT, IPv4, log, snapshot · Báo cáo CUR'],
+    ['toi-uu', 'Cost optimization playbook', 'Cẩm nang tối ưu chi phí', 'Đúng cỡ máy · Tắt ngoài giờ · Spot/Savings Plans · Lớp lưu trữ S3 · Compute Optimizer · Trusted Advisor'],
+    ['well-architected', 'The Well-Architected Framework', 'Well-Architected Framework', 'Sáu trụ cột · Đánh giá kiến trúc LabFlow theo từng trụ · Câu thi hay gặp'],
+    ['bao-mat', 'Security services: KMS, GuardDuty, Security Hub, Organizations', 'Dịch vụ bảo mật: KMS, GuardDuty, Security Hub, Organizations', 'Mã hoá bằng KMS · GuardDuty phát hiện bất thường · SCP chặn cả tài khoản · Nhiều tài khoản dev/prod'],
+    ['don-dep', 'Cleaning up everything: the "what is still billing?" checklist', 'Dọn sạch mọi thứ: danh sách "còn gì đang tính tiền"', 'Lệnh kiểm từng region · Tag Editor · terraform destroy · Đóng tài khoản · Thói quen sau mỗi lab'],
+    ['lab-13', 'Chapter 13 lab + interview questions', 'Lab chương 13 + câu hỏi phỏng vấn', 'Kiểm toán chi phí + bảo mật một tài khoản mẫu · Rubric · Câu phỏng vấn'],
+  ]],
+  ['Chapter 14 — Capstone: LabFlow on AWS, production-style', 'Chương 14 — Dự án cuối khoá: LabFlow trên AWS kiểu production', 'API đặt lịch phòng lab (cùng đề Dự án 1 Node.js / Dự án 2 Spring Boot) lên AWS: VPC, ALB, ECS Fargate, RDS, S3, CloudFront, CloudWatch, Terraform, GitHub Actions.', [
+    ['kien-truc', 'Architecture and cost estimate', 'Kiến trúc và ước tính chi phí', 'Sơ đồ đầy đủ · Tính tiền tháng · So với VPS · Quyết định đánh đổi'],
+    ['mang-du-lieu', 'Network and data layer with Terraform', 'Tầng mạng và dữ liệu bằng Terraform', 'VPC 2 AZ · RDS private · S3 + CloudFront · Bí mật'],
+    ['ung-dung', 'Application layer: ECR, ECS Fargate, ALB', 'Tầng ứng dụng: ECR, ECS Fargate, ALB', 'Task definition · Service sau ALB · Health check · Migration chạy một lần'],
+    ['cicd-giam-sat', 'CI/CD and monitoring', 'CI/CD và giám sát', 'Workflow OIDC → ECR → ECS · Dashboard + cảnh báo · Diễn tập sự cố'],
+    ['bao-ve', 'Tear down, defend it in an interview, exam path', 'Dỡ bỏ, bảo vệ dự án khi phỏng vấn, lộ trình thi', 'terraform destroy + kiểm hoá đơn · Kể dự án theo STAR · Rubric chấm · Thi thực hành có giờ'],
+  ]],
+  ['Chapter 15 — Exam prep: AWS Certified Cloud Practitioner (CLF-C02)', 'Chương 15 — Luyện thi: AWS Certified Cloud Practitioner (CLF-C02)', 'Bản đồ 4 domain theo exam guide chính thức, mẹo loại đáp án, câu luyện TỰ VIẾT và đề thử.', [
+    ['ban-do', 'Exam map: the four domains and how they are weighted', 'Bản đồ đề: bốn domain và tỉ trọng', 'Cloud Concepts · Security and Compliance · Cloud Technology and Services · Billing, Pricing and Support · Cách đăng ký, giá, thời gian'],
+    ['khai-niem-bao-mat', 'Domains 1–2: cloud concepts, shared responsibility, security', 'Domain 1–2: khái niệm cloud, trách nhiệm chung, bảo mật', 'Sáu lợi ích của cloud · Well-Architected · Trách nhiệm chung · IAM, dịch vụ bảo mật · 10 câu luyện'],
+    ['dich-vu-chi-phi', 'Domains 3–4: services, pricing and support plans', 'Domain 3–4: dịch vụ, giá và gói hỗ trợ', 'Chọn dịch vụ theo tình huống · Mô hình giá · Gói Support · Organizations, Cost Explorer · 10 câu luyện'],
+    ['de-thu', 'Practice exam and elimination tricks', 'Đề thử và mẹo loại đáp án', 'Đề thử tự viết · Từ khoá trong đề · Đáp án "nghe kêu" nhưng sai · Kế hoạch ôn 2 tuần'],
+  ]],
+  ['Chapter 16 — Exam prep: Solutions Architect – Associate (SAA-C03)', 'Chương 16 — Luyện thi: Solutions Architect – Associate (SAA-C03)', 'Bốn domain thiết kế: an toàn, chịu lỗi, hiệu năng, tối ưu chi phí — câu tình huống TỰ VIẾT và đề thử.', [
+    ['ban-do', 'Exam map: four design domains', 'Bản đồ đề: bốn domain thiết kế', 'Secure 30% · Resilient 26% · High-Performing 24% · Cost-Optimized 20% · Cách đọc câu tình huống dài'],
+    ['an-toan', 'Design secure architectures', 'Thiết kế kiến trúc an toàn', 'IAM nhiều tài khoản · Mã hoá · Mạng nhiều lớp · 10 câu luyện'],
+    ['chiu-loi', 'Design resilient architectures', 'Thiết kế kiến trúc chịu lỗi', 'Multi-AZ, multi-region · Tách bằng hàng đợi · Chiến lược DR · 10 câu luyện'],
+    ['hieu-nang', 'Design high-performing architectures', 'Thiết kế kiến trúc hiệu năng cao', 'Chọn lưu trữ, CSDL, cache, CDN · Co giãn · 10 câu luyện'],
+    ['chi-phi', 'Design cost-optimized architectures', 'Thiết kế kiến trúc tối ưu chi phí', 'Chọn mô hình giá · Lớp lưu trữ · Truyền dữ liệu · 10 câu luyện'],
+    ['de-thu', 'Full practice exam and what to study next', 'Đề thử đầy đủ và học gì tiếp', 'Đề thử tự viết · Phân tích câu sai · Lộ trình sau SAA (Developer, DevOps) · Ghi chứng chỉ vào CV'],
+  ]],
+];
+
+const sections = khung('aws', CHUONG);
+sections[0] = s00;
+sections[1] = s01;
 
 export default {
   category: { slug: 'devops', name: 'DevOps & Vận hành', icon: 'Server', sortOrder: 4 },
@@ -16,78 +152,11 @@ export default {
     isFeatured: false,
     syncOrder: true,
     thumbnailUrl: 'https://media.cuongthai.com/images/course-covers/cloud-aws.png?v=1',
-    shortDescription: 'The cloud from a developer’s seat: IAM, networking (VPC), compute (EC2, containers, Lambda), storage (S3), databases (RDS), deploying a real app — and never waking up to a surprise bill.|||Cloud từ góc nhìn lập trình viên: IAM, mạng (VPC), máy chủ (EC2, container, Lambda), lưu trữ (S3), cơ sở dữ liệu (RDS), đưa một ứng dụng thật lên — và không bao giờ thức dậy với hoá đơn bất ngờ.',
-    description: 'Khoá cloud cơ bản lấy AWS làm ví dụ chính (khái niệm dùng được cho GCP/Azure). Đi từ vì sao cloud, mô hình trách nhiệm chung, tài khoản và chi phí an toàn; IAM và quyền tối thiểu; VPC, subnet, security group; EC2 so với VPS bạn đang dùng; container trên ECS/App Runner; serverless với Lambda; S3 và CDN; RDS Postgres; bí mật và cấu hình; triển khai bằng GitHub Actions với OIDC; hạ tầng dưới dạng mã (Terraform nhập môn); giám sát và chi phí; tới dự án cuối khoá đưa app đặt lịch lên AWS.',
-    whatYouLearn: 'Mở tài khoản AWS an toàn với cảnh báo chi phí; cấp quyền IAM tối thiểu; dựng mạng VPC hợp lý; chạy ứng dụng trên EC2, container và Lambda; dùng S3 và RDS; triển khai từ GitHub Actions không cần khoá bí mật dài hạn; viết Terraform cơ bản; và so sánh cloud với VPS để chọn đúng cho dự án.',
-    requirements: 'Linux cơ bản, Docker, Git. Nên học trước khoá Linux & Bash, Docker, GitHub Actions và Deploy VPS.',
-    documentsNote: 'Tài liệu chính: docs.aws.amazon.com • AWS Well-Architected Framework • aws.amazon.com/free • developer.hashicorp.com/terraform • AWS Skill Builder.',
+    shortDescription: 'AWS from zero to a real production deploy and two certifications: IAM, S3, VPC, EC2, RDS, ECS Fargate, Lambda, Terraform, CI/CD — with a budget alarm first.|||AWS từ số 0 tới deploy kiểu production và hai chứng chỉ: IAM, S3, VPC, EC2, RDS, ECS Fargate, Lambda, Terraform, CI/CD — đặt cảnh báo ngân sách trước tiên.',
+    description: 'Khoá AWS cho lập trình viên backend (Node.js/Spring Boot), học được từ con số 0. Mở tài khoản an toàn và đặt cảnh báo ngân sách trước mọi thứ; IAM và quyền tối thiểu; S3 (và vì sao R2 của cuongthai.com nói cùng giao thức); VPC, EC2, ALB, Auto Scaling, Route 53, CloudFront; RDS PostgreSQL và bí mật; ECR + ECS Fargate; Lambda + API Gateway; SQS/SNS/EventBridge; CloudWatch; Terraform cho mọi thứ; CI/CD GitHub Actions → ECR → ECS; chi phí và bảo mật qua các sự cố thật. Mọi demo chạy thật trên LocalStack + Terraform ở máy bạn; dự án cuối khoá đưa API đặt lịch phòng lab LabFlow lên AWS kiểu production; hai chương luyện thi CLF-C02 và SAA-C03 với câu luyện tự viết.',
+    whatYouLearn: 'Mở tài khoản AWS an toàn với Budgets + MFA; đọc và viết policy IAM theo quyền tối thiểu; dùng S3 và URL ký sẵn từ Node.js/Java; dựng VPC public/private; chạy ứng dụng trên EC2, ECS Fargate và Lambda; dùng RDS, Secrets Manager, SQS/SNS; quan sát bằng CloudWatch; viết Terraform và CI/CD không cần khoá dài hạn; tối ưu chi phí, nhận ra các lỗi bảo mật kinh điển; ôn thi Cloud Practitioner và Solutions Architect – Associate.',
+    requirements: 'Linux cơ bản, Docker, Git, viết được một API nhỏ (Node.js hoặc Spring Boot). Nên học trước khoá Linux & Bash, Docker, GitHub Actions và Deploy VPS.',
+    documentsNote: 'Tài liệu chính: docs.aws.amazon.com • AWS Well-Architected Framework • aws.amazon.com/free • Exam guide CLF-C02 và SAA-C03 (aws.amazon.com/certification) • developer.hashicorp.com/terraform • docs.localstack.cloud • AWS Skill Builder.',
   },
-  sections: khung('aws', [
-    ['Section 0 — What the cloud is', 'Mục 0 — Cloud là gì', 'Cloud khác VPS thế nào, và mở tài khoản an toàn.', [
-      ['bat-dau-tai-day', 'Start here (1/2) — What the cloud is, and why employers ask for it', 'Bắt đầu tại đây (1/2) — Điện toán đám mây là gì, ra đời thế nào, vì sao nhà tuyển dụng đòi', 'Cloud bằng hình ảnh đời thường · Lịch sử: AWS 2006, S3/EC2 · IaaS/PaaS/SaaS · Tin tuyển dụng ghi "biết AWS" nghĩa là gì'],
-      ['bat-dau-khi-khong-co', 'Start here (2/2) — Cloud disasters: surprise bills, public buckets, leaked keys', 'Bắt đầu tại đây (2/2) — Thảm hoạ cloud: hoá đơn bất ngờ, bucket công khai, lộ khoá', 'Sự cố thật có nguồn · Sinh viên bị tính tiền vì quên tắt máy · Lộ trình học an toàn'],
-      ['tai-khoan', 'A safe AWS account: root, MFA, budgets', 'Tài khoản AWS an toàn: root, MFA, ngân sách', 'Khoá root · MFA · Budgets + cảnh báo · Free Tier'],
-      ['cloud-vs-vps', 'Cloud vs the VPS you already run', 'Cloud so với VPS bạn đang chạy', 'Chi phí thật · Khi nào VPS là đủ · Khi nào cần cloud'],
-    ]],
-    ['Chapter 1 — Identity and access (IAM)', 'Chương 1 — Danh tính và quyền truy cập (IAM)', 'Ai được làm gì, và quyền tối thiểu.', [
-      ['khai-niem', 'Users, groups, roles and policies', 'User, group, role và policy', 'Khác nhau thế nào · Đọc một policy JSON'],
-      ['toi-thieu', 'Least privilege in practice', 'Quyền tối thiểu trong thực tế', 'Bắt đầu từ không · Access Analyzer'],
-      ['khoa', 'Access keys, CLI profiles and SSO', 'Khoá truy cập, profile CLI và SSO', 'aws configure · Không để khoá trong code'],
-      ['oidc', 'Roles for machines: OIDC from GitHub Actions', 'Role cho máy: OIDC từ GitHub Actions', 'Không cần khoá dài hạn · Trỏ khoá GitHub Actions Ch6'],
-    ]],
-    ['Chapter 2 — Networking (VPC)', 'Chương 2 — Mạng (VPC)', 'Subnet, route, security group — dựng một mạng hợp lý.', [
-      ['vpc', 'VPC, subnets and route tables', 'VPC, subnet và bảng định tuyến', 'Public vs private subnet · CIDR nhập môn'],
-      ['security-group', 'Security groups and NACLs', 'Security group và NACL', 'Mở cổng tối thiểu · So với firewall VPS'],
-      ['nat', 'Internet and NAT gateways', 'Internet gateway và NAT gateway', 'Máy private ra Internet · Chi phí NAT'],
-      ['dns', 'DNS and load balancers', 'DNS và load balancer', 'Route 53 · ALB · Chứng chỉ ACM'],
-    ]],
-    ['Chapter 3 — Compute: EC2', 'Chương 3 — Máy chủ: EC2', 'Máy ảo trên cloud, so với VPS.', [
-      ['ec2', 'Launching and connecting to EC2', 'Tạo và kết nối EC2', 'Loại máy · AMI · SSH hoặc Session Manager'],
-      ['user-data', 'Bootstrapping with user data', 'Khởi tạo bằng user data', 'Cài Docker tự động · Chạy app khi máy lên'],
-      ['luu-tru', 'EBS volumes and snapshots', 'Ổ EBS và snapshot', 'Dữ liệu sống qua máy · Sao lưu'],
-      ['chi-phi', 'Instance pricing: on-demand, spot, savings', 'Giá máy: on-demand, spot, gói tiết kiệm', 'Tính chi phí tháng · Tắt khi không dùng'],
-    ]],
-    ['Chapter 4 — Containers on AWS', 'Chương 4 — Container trên AWS', 'ECR, ECS/Fargate, App Runner.', [
-      ['ecr', 'ECR: your private image registry', 'ECR: kho ảnh riêng', 'Đẩy ảnh từ CI · So với GHCR'],
-      ['ecs', 'ECS on Fargate', 'ECS trên Fargate', 'Task, service, cluster · Không cần quản máy'],
-      ['app-runner', 'App Runner and simpler options', 'App Runner và lựa chọn đơn giản hơn', 'Từ ảnh ra URL · Khi nào đủ'],
-      ['so-sanh', 'Choosing: EC2 vs ECS vs Kubernetes (EKS)', 'Chọn: EC2 vs ECS vs Kubernetes (EKS)', 'Bảng so sánh · Trỏ khoá Kubernetes'],
-    ]],
-    ['Chapter 5 — Serverless', 'Chương 5 — Serverless', 'Lambda, API Gateway và khi nào serverless hợp lý.', [
-      ['lambda', 'Lambda functions', 'Hàm Lambda', 'Handler Node.js · Cold start · Giới hạn'],
-      ['api-gateway', 'HTTP APIs with API Gateway', 'API HTTP với API Gateway', 'Route · Xác thực · Chi phí theo request'],
-      ['su-kien', 'Event-driven: S3, SQS, EventBridge triggers', 'Hướng sự kiện: kích hoạt từ S3, SQS, EventBridge', 'Xử lý ảnh khi tải lên · Việc định kỳ'],
-      ['khi-nao', 'When serverless is (not) a good idea', 'Khi nào serverless (không) hợp', 'Tải thấp/đột biến · Khoá nhà cung cấp'],
-    ]],
-    ['Chapter 6 — Storage and CDN', 'Chương 6 — Lưu trữ và CDN', 'S3, quyền truy cập và phân phối nội dung.', [
-      ['s3', 'S3 buckets and objects', 'Bucket và object S3', 'Lớp lưu trữ · Phiên bản · Vòng đời'],
-      ['quyen', 'S3 permissions and presigned URLs', 'Quyền S3 và URL ký sẵn', 'Chặn truy cập công khai · Tải lên trực tiếp từ trình duyệt'],
-      ['cdn', 'CloudFront CDN', 'CDN CloudFront', 'Cache · HTTPS · So với Cloudflare R2 bạn đang dùng'],
-      ['sao-luu', 'Backups and data lifecycle', 'Sao lưu và vòng đời dữ liệu', 'Glacier · Khôi phục'],
-    ]],
-    ['Chapter 7 — Databases', 'Chương 7 — Cơ sở dữ liệu', 'RDS Postgres và các lựa chọn khác.', [
-      ['rds', 'RDS for PostgreSQL', 'RDS cho PostgreSQL', 'Tạo trong subnet private · Kết nối từ app'],
-      ['van-hanh', 'Backups, replicas and maintenance', 'Sao lưu, bản sao và bảo trì', 'Snapshot · Read replica · Multi-AZ'],
-      ['bi-mat', 'Secrets Manager and Parameter Store', 'Secrets Manager và Parameter Store', 'Không để mật khẩu trong code · Xoay khoá'],
-      ['khac', 'DynamoDB and ElastiCache in brief', 'DynamoDB và ElastiCache tóm tắt', 'Khi nào dùng · Chi phí'],
-    ]],
-    ['Chapter 8 — Infrastructure as code', 'Chương 8 — Hạ tầng dưới dạng mã', 'IaC vừa đủ cho AWS; học bài bản ở khoá Infrastructure as Code, kiến trúc lớn ở Cloud Architecture.', [
-      ['vi-sao', 'Why click-ops does not scale — and where to learn IaC properly', 'Vì sao bấm tay không mở rộng được — và học IaC bài bản ở đâu', 'Không tái lập được · Quên dọn, hoá đơn bất ngờ · Chương này chỉ dạy đủ để dựng app của khoá trên AWS · Terraform/Ansible bài bản → /courses/infrastructure-as-code'],
-      ['terraform', 'Just enough Terraform for this course’s AWS stack', 'Terraform vừa đủ cho hạ tầng AWS của khoá này', 'Provider AWS và thông tin xác thực an toàn · Dựng lại bằng code VPC + máy chủ đã làm tay ở Ch2–4 · plan/apply/destroy · Biến, module, state sâu → /courses/infrastructure-as-code Ch2–5'],
-      ['state', 'AWS-specific IaC notes: state on S3, CloudFormation and CDK at a glance', 'Ghi chú IaC riêng cho AWS: state trên S3, lướt qua CloudFormation và CDK', 'Backend S3 và khoá state · CloudFormation/CDK khác Terraform ở đâu · Khi nào dùng công cụ của chính AWS · Quản lý và bảo mật state → /courses/infrastructure-as-code Ch4'],
-      ['ci', 'Terraform in GitHub Actions, just enough — and what comes next', 'Terraform trong GitHub Actions vừa đủ — và học gì tiếp theo', 'plan trên PR, apply có duyệt (đủ cho dự án cuối khoá) · OIDC thay khoá truy cập dài hạn · IaC trong CI/CD và GitOps → /courses/infrastructure-as-code Ch11 · Landing zone, nhiều tài khoản, HA/DR → /courses/cloud-architecture'],
-    ]],
-    ['Chapter 9 — Observability and cost', 'Chương 9 — Quan sát và chi phí', 'CloudWatch, cảnh báo và hoá đơn.', [
-      ['cloudwatch', 'CloudWatch logs and metrics', 'Log và chỉ số CloudWatch', 'Log nhóm · Chỉ số · Dashboard'],
-      ['canh-bao', 'Alarms that matter', 'Cảnh báo đáng có', 'CPU, lỗi, độ trễ · Gửi về email/Slack'],
-      ['chi-phi', 'Understanding the bill', 'Hiểu hoá đơn', 'Cost Explorer · Tag · Thủ phạm hay gặp'],
-      ['don-dep', 'Cleaning up everything', 'Dọn sạch mọi thứ', 'Checklist dọn · terraform destroy'],
-    ]],
-    ['Chapter 10 — Capstone: the booking app on AWS', 'Chương 10 — Dự án cuối khoá: app đặt lịch trên AWS', 'Từ Terraform tới CI/CD và giám sát.', [
-      ['kien-truc', 'Architecture and cost estimate', 'Kiến trúc và ước tính chi phí', 'Sơ đồ · Tính tiền tháng · So với VPS'],
-      ['dung', 'Building it with Terraform', 'Dựng bằng Terraform', 'VPC · RDS · ECS/App Runner · S3'],
-      ['cicd', 'CI/CD with OIDC', 'CI/CD với OIDC', 'Build ảnh · Đẩy ECR · Deploy'],
-      ['tong-ket', 'Operate, tear down, and interview story', 'Vận hành, dỡ bỏ, và câu chuyện phỏng vấn', 'Giám sát · Dọn sạch · Kể dự án · Chứng chỉ Cloud Practitioner nên thi không'],
-    ]],
-  ]),
+  sections,
 };

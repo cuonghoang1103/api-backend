@@ -1476,7 +1476,7 @@ ${OUT46_BAY}
 <ul>
   <li><strong><code>.single()</code> on a missing row</strong> throws <code>EmptyResultDataAccessException</code> ⇒ 500 (check 7 of the starter). Use <code>.optional()</code> and <code>ResponseEntity.of(…)</code>.</li>
   <li><strong>Checking the lab only in GET</strong>: POST to an unknown lab hits the foreign key and gives 500 unless you check it or translate <code>DataIntegrityViolationException</code>.</li>
-  <li><strong>Forgetting the tie-breaker</strong> when sorting by <code>type</code>: each lab has 15 devices of each type, so pages overlap (lesson 4.5). The grader does not catch it; your rubric reviewer will.</li>
+  <li><strong>Forgetting the tie-breaker</strong> when sorting by <code>type</code>: lab 1 has only two types, 30 devices each — measured without <code>, id</code>: six pages of 10 returned only 48 distinct devices and 12 never appeared (lesson 4.5). The grader still prints 8/8; your rubric reviewer will catch it.</li>
 </ul>
 
 <h3>Stretch (optional)</h3>
@@ -1568,7 +1568,7 @@ ${OUT46_BAY}
 <ul>
   <li><strong><code>.single()</code> trên dòng không có</strong> ném <code>EmptyResultDataAccessException</code> ⇒ 500 (mục 7 của bản khởi đầu). Dùng <code>.optional()</code> và <code>ResponseEntity.of(…)</code>.</li>
   <li><strong>Chỉ kiểm lab ở GET</strong>: POST vào lab không tồn tại chạm khoá ngoại và cho 500, trừ khi bạn kiểm trước hoặc dịch <code>DataIntegrityViolationException</code>.</li>
-  <li><strong>Quên cột phá hoà</strong> khi sắp theo <code>type</code>: mỗi lab có 15 thiết bị cùng loại, nên các trang chồng lên nhau (bài 4.5). Bộ chấm không bắt; người chấm theo thang điểm sẽ bắt.</li>
+  <li><strong>Quên cột phá hoà</strong> khi sắp theo <code>type</code>: lab 1 chỉ có hai loại, mỗi loại 30 thiết bị — đo thật khi bỏ <code>, id</code>: sáu trang mỗi trang 10 chỉ ra 48 thiết bị khác nhau, 12 thiết bị không bao giờ xuất hiện (bài 4.5). Bộ chấm vẫn in 8/8; người chấm theo thang điểm sẽ bắt.</li>
 </ul>
 
 <h3>Nâng cao (không bắt buộc)</h3>

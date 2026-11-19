@@ -15,6 +15,7 @@ import s01 from './spring-boot/s01-java-hien-dai-1.mjs';
 import s02 from './spring-boot/s02-java-hien-dai-2.mjs';
 import s03 from './spring-boot/s03-loi-spring.mjs';
 import s04 from './spring-boot/s04-rest-controller.mjs';
+import s05 from './spring-boot/s05-validation.mjs';
 
 const CHUONG = [
   ['Section 0 — Why Spring Boot', 'Mục 0 — Vì sao Spring Boot', '(đã soạn — spring-boot/s00-bat-dau.mjs)', [['bat-dau-tai-day', '-', '-', '-']]],
@@ -53,7 +54,7 @@ const CHUONG = [
     ['thiet-ke-rest', 'REST design: status codes, pagination, idempotency', 'Thiết kế REST: mã trạng thái, phân trang, idempotency', '201 + Location, 204, 409 · Phân trang và sắp xếp · Idempotency-Key cho POST đặt lịch'],
     ['lab-4', 'Chapter 4 lab + interview questions', 'Lab chương 4 + câu hỏi phỏng vấn', 'CRUD labs/devices bằng DTO · Rubric · Câu phỏng vấn REST'],
   ]],
-  ['Chapter 5 — Validation and error handling', 'Chương 5 — Validate dữ liệu và xử lý lỗi', 'Jakarta Bean Validation và lỗi chuẩn RFC 9457 (ProblemDetail).', [
+  ['Chapter 5 — Validation and error handling', 'Chương 5 — Validate dữ liệu và xử lý lỗi', '(đã soạn — spring-boot/s05-validation.mjs) Jakarta Bean Validation và lỗi chuẩn RFC 9457 (ProblemDetail).', [
     ['bean-validation', 'Jakarta Bean Validation', 'Jakarta Bean Validation', '@NotNull, @NotBlank, @Size, @Email, @Future · @Valid trên @RequestBody · Validate lồng nhau · Validate tham số đường dẫn'],
     ['exception-handler-spring', 'Centralized error handling with ProblemDetail', 'Xử lý lỗi tập trung với ProblemDetail', '@RestControllerAdvice + @ExceptionHandler · RFC 9457 application/problem+json · Lỗi validate từng trường · Không lộ stack trace'],
     ['custom-validator', 'Custom and cross-field validators', 'Validator tuỳ biến và liên trường', '@Constraint + ConstraintValidator · Giờ kết thúc sau giờ bắt đầu · Validate cần DB thì để service'],
@@ -164,6 +165,7 @@ sections[1] = s01;
 sections[2] = s02;
 sections[3] = s03;
 sections[4] = s04;
+sections[5] = s05;
 
 export default {
   category: { slug: 'backend', name: 'Backend', icon: 'Server', sortOrder: 1 },

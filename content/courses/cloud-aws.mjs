@@ -20,21 +20,14 @@ import s00 from './cloud-aws/s00-bat-dau.mjs';
 import s01 from './cloud-aws/s01-iam.mjs';
 import s02 from './cloud-aws/s02-s3.mjs';
 import s03 from './cloud-aws/s03-vpc.mjs';
+import s04 from './cloud-aws/s04-ec2.mjs';
 
 const CHUONG = [
   ['Section 0 — What the cloud is', 'Mục 0 — Cloud là gì', '(đã soạn — cloud-aws/s00-bat-dau.mjs)', [['bat-dau-tai-day', '-', '-', '-']]],
   ['Chapter 1 — Identity and access (IAM)', 'Chương 1 — Danh tính và quyền truy cập (IAM)', '(đã soạn — cloud-aws/s01-iam.mjs)', [['khai-niem', '-', '-', '-']]],
   ['Chapter 2 — Storage: S3 (and the R2 you already use)', 'Chương 2 — Lưu trữ: S3 (và R2 bạn đang dùng)', '(đã soạn — cloud-aws/s02-s3.mjs)', [['s3', '-', '-', '-']]],
   ['Chapter 3 — Networking: VPC', 'Chương 3 — Mạng: VPC', '(đã soạn — cloud-aws/s03-vpc.mjs)', [['vpc-subnet', '-', '-', '-']]],
-  ['Chapter 4 — Compute: EC2', 'Chương 4 — Máy chủ: EC2', 'Máy ảo trên cloud so với VPS bạn đang chạy: AMI, loại máy, khoá SSH, user data, EBS, giá.', [
-    ['ec2', 'Launching and connecting to EC2', 'Tạo và kết nối EC2', 'Loại máy t/m/c/g · AMI · Key pair · SSH hay Session Manager · Vòng đời stop/terminate'],
-    ['user-data', 'Bootstrapping with user data', 'Khởi tạo bằng user data', 'cloud-init chạy một lần · Cài Docker + chạy ứng dụng khi máy lên · Đọc log khởi tạo · Launch template'],
-    ['ebs', 'EBS volumes, snapshots and instance store', 'Ổ EBS, snapshot và instance store', 'gp3 vs io2 · Ổ sống qua máy · Snapshot tăng dần · Instance store mất khi dừng · EFS chia sẻ nhiều máy'],
-    ['imds', 'Instance metadata, IMDSv2 and the Capital One breach', 'Instance metadata, IMDSv2 và vụ Capital One', '169.254.169.254 trả gì · Khoá tạm của role qua metadata · Capital One 2019: SSRF ⇒ khoá ⇒ S3 · IMDSv2 bắt token · Cách phòng'],
-    ['gia', 'Pricing: on-demand, spot, Savings Plans, Graviton', 'Giá máy: on-demand, spot, Savings Plans, Graviton', 'Tính tiền theo giây · Spot rẻ nhưng bị thu hồi · Savings Plans/Reserved · Graviton ARM rẻ hơn · Tính chi phí tháng'],
-    ['gpu', 'GPU instances: g5/g6 vs renting a GPU box', 'Máy GPU: g5/g6 so với thuê máy GPU', 'Họ máy GPU · Service quota phải xin · Spot GPU · So với máy GPU thuê theo giờ của cuongthai.com · Tắt khi xong việc'],
-    ['lab-4', 'Chapter 4 lab + interview questions', 'Lab chương 4 + câu hỏi phỏng vấn', 'Máy chạy API LabFlow bằng user data + SG tối thiểu · Rubric · Câu phỏng vấn EC2'],
-  ]],
+  ['Chapter 4 — Compute: EC2', 'Chương 4 — Máy chủ: EC2', '(đã soạn — cloud-aws/s04-ec2.mjs)', [['ec2', '-', '-', '-']]],
   ['Chapter 5 — Going public: load balancers, scaling, DNS and CDN', 'Chương 5 — Ra Internet: load balancer, co giãn, DNS và CDN', 'ALB, Auto Scaling, Route 53, ACM, CloudFront — thay cho Nginx + Cloudflare của VPS.', [
     ['alb', 'Application Load Balancer', 'Application Load Balancer', 'Listener, target group, health check · Định tuyến theo đường dẫn/host · So với Nginx reverse proxy · ALB vs NLB'],
     ['auto-scaling', 'Auto Scaling groups', 'Auto Scaling group', 'Desired/min/max · Chính sách theo CPU/số request · Tự thay máy hỏng · Nhiều AZ · Mô phỏng tải tăng'],
@@ -128,6 +121,7 @@ sections[0] = s00;
 sections[1] = s01;
 sections[2] = s02;
 sections[3] = s03;
+sections[4] = s04;
 
 export default {
   category: { slug: 'devops', name: 'DevOps & Vận hành', icon: 'Server', sortOrder: 4 },

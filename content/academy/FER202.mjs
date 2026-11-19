@@ -25,6 +25,7 @@ import ch12Extra from './fer202/ch12.mjs';
 import advExtra from './fer202/chAdv.mjs';
 import onThiPe from './fer202/onThiPe.mjs';
 import onThiFe from './fer202/onThiFe.mjs';
+import dePeFall26 from './fer202/dePeFall26.mjs';
 import chuaQuiz from './fer202/chuaQuiz.mjs';
 export default {
   semester: { code: 'FPTU_Hola5', name: 'Kỳ 5', ordinal: 7 },
@@ -3208,6 +3209,11 @@ npx create-next-app@latest my-app
       title: '📝 PE review — real exams, question by question|||📝 Ôn thi PE — làm đề thật từng câu',
       description: 'Phần TỰ THÊM: video làm trọn đề thi thực hành thật (đọc đề tiếng Anh → phân tích → setup → code từng dòng → chạy → đối chiếu rubric), mỗi kiến thức chỉ về đúng chương FER202. Gồm Đề 4 (SP26 B3), Đề 1 + Đề 3 (SP26 B5, hai paper cùng ngày thi), Đề 7 (SU25 B1) và Đề 10 (SP25 Đề số 1). Chữa đề trắc nghiệm FE ở mục riêng ngay sau.',
       lessons: onThiPe,
+    },
+    {
+      title: '📝 PE Fall26 exam — solved line by line|||📝 Đề PE Fall26 — chữa trọn đề từng dòng',
+      description: 'Phần TỰ THÊM: đề PE thật Fall 2026 (FA26 PE NO2 — Lecturer Workload & Subject Curriculum) chữa trọn trong 10 video: chạy project, đọc đề + 3 bẫy, nền JS mảng / API / React / Router / Bootstrap dùng trong bài, Câu 1 và Câu 2 từng dòng, 8 bài sửa code tại chỗ. Xem xong luyện ở Code Lab → FER202 Practice và Phòng thi → FER202.',
+      lessons: dePeFall26,
     },
     {
       title: '📝 FE review — full real exams, all 50 questions|||📝 Ôn thi FE — chữa trọn đề trắc nghiệm thật',

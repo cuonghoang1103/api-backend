@@ -22,6 +22,7 @@ import s02 from './cloud-aws/s02-s3.mjs';
 import s03 from './cloud-aws/s03-vpc.mjs';
 import s04 from './cloud-aws/s04-ec2.mjs';
 import s05 from './cloud-aws/s05-ra-internet.mjs';
+import s06 from './cloud-aws/s06-du-lieu.mjs';
 
 const CHUONG = [
   ['Section 0 — What the cloud is', 'Mục 0 — Cloud là gì', '(đã soạn — cloud-aws/s00-bat-dau.mjs)', [['bat-dau-tai-day', '-', '-', '-']]],
@@ -30,14 +31,7 @@ const CHUONG = [
   ['Chapter 3 — Networking: VPC', 'Chương 3 — Mạng: VPC', '(đã soạn — cloud-aws/s03-vpc.mjs)', [['vpc-subnet', '-', '-', '-']]],
   ['Chapter 4 — Compute: EC2', 'Chương 4 — Máy chủ: EC2', '(đã soạn — cloud-aws/s04-ec2.mjs)', [['ec2', '-', '-', '-']]],
   ['Chapter 5 — Going public: load balancers, scaling, DNS and CDN', 'Chương 5 — Ra Internet: load balancer, co giãn, DNS và CDN', '(đã soạn — cloud-aws/s05-ra-internet.mjs)', [['alb', '-', '-', '-']]],
-  ['Chapter 6 — Databases and secrets', 'Chương 6 — Cơ sở dữ liệu và bí mật', 'RDS PostgreSQL trong subnet private, sao lưu, Multi-AZ, bản đọc; DynamoDB, ElastiCache; Secrets Manager và Parameter Store.', [
-    ['rds', 'RDS for PostgreSQL', 'RDS cho PostgreSQL', 'Managed nghĩa là gì · Tạo trong subnet private · Parameter group · Kết nối từ app Node.js/Spring · So với Postgres trong Docker trên VPS'],
-    ['van-hanh-rds', 'Backups, Multi-AZ and read replicas', 'Sao lưu, Multi-AZ và bản đọc', 'Backup tự động + PITR · Snapshot thủ công · Multi-AZ chuyển dự phòng · Read replica · RPO/RTO'],
-    ['bi-mat', 'Secrets Manager and Parameter Store', 'Secrets Manager và Parameter Store', 'Không để mật khẩu trong mã/ảnh · SecureString · Xoay mật khẩu tự động · Đọc bí mật từ ECS/Lambda · Giá hai dịch vụ'],
-    ['dynamodb', 'DynamoDB: key-value at any scale', 'DynamoDB: key-value ở mọi quy mô', 'Partition key/sort key · Truy vấn theo mẫu truy cập · On-demand vs provisioned · Khi nào chọn thay Postgres'],
-    ['elasticache', 'ElastiCache and choosing a database', 'ElastiCache và chọn cơ sở dữ liệu', 'Redis/Valkey managed · Bảng chọn RDS/Aurora/DynamoDB/ElastiCache · Câu hay ra thi'],
-    ['lab-6', 'Chapter 6 lab + interview questions', 'Lab chương 6 + câu hỏi phỏng vấn', 'Bí mật DB của LabFlow trong Secrets Manager + bảng DynamoDB nhật ký · Rubric · Câu phỏng vấn'],
-  ]],
+  ['Chapter 6 — Databases and secrets', 'Chương 6 — Cơ sở dữ liệu và bí mật', '(đã soạn — cloud-aws/s06-du-lieu.mjs)', [['rds', '-', '-', '-']]],
   ['Chapter 7 — Containers: ECR and ECS Fargate', 'Chương 7 — Container: ECR và ECS Fargate', 'Đẩy ảnh lên ECR, chạy trên ECS Fargate không cần quản máy, nhật ký và bí mật cho task.', [
     ['ecr', 'ECR: your private image registry', 'ECR: kho ảnh riêng', 'Repository · docker login bằng token tạm · Quét lỗ hổng · Luật vòng đời ảnh · So với GHCR của cuongthai.com'],
     ['ecs-khai-niem', 'ECS concepts: cluster, task definition, service', 'Khái niệm ECS: cluster, task definition, service', 'Task definition như docker-compose · Service giữ số task · Fargate vs EC2 launch type · Task role vs execution role'],
@@ -117,6 +111,7 @@ sections[2] = s02;
 sections[3] = s03;
 sections[4] = s04;
 sections[5] = s05;
+sections[6] = s06;
 
 export default {
   category: { slug: 'devops', name: 'DevOps & Vận hành', icon: 'Server', sortOrder: 4 },

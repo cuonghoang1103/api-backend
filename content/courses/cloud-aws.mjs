@@ -18,19 +18,12 @@
 import { khung } from './_chung/khung.mjs';
 import s00 from './cloud-aws/s00-bat-dau.mjs';
 import s01 from './cloud-aws/s01-iam.mjs';
+import s02 from './cloud-aws/s02-s3.mjs';
 
 const CHUONG = [
   ['Section 0 — What the cloud is', 'Mục 0 — Cloud là gì', '(đã soạn — cloud-aws/s00-bat-dau.mjs)', [['bat-dau-tai-day', '-', '-', '-']]],
   ['Chapter 1 — Identity and access (IAM)', 'Chương 1 — Danh tính và quyền truy cập (IAM)', '(đã soạn — cloud-aws/s01-iam.mjs)', [['khai-niem', '-', '-', '-']]],
-  ['Chapter 2 — Storage: S3 (and the R2 you already use)', 'Chương 2 — Lưu trữ: S3 (và R2 bạn đang dùng)', 'Bucket, object, quyền truy cập, URL ký sẵn, phiên bản, vòng đời — và vì sao code của cuongthai.com dùng @aws-sdk/client-s3 cho Cloudflare R2.', [
-    ['s3', 'S3 buckets and objects', 'Bucket và object S3', 'Object = khoá + dữ liệu + metadata · Không có thư mục thật · Tên bucket toàn cầu · Độ bền 11 số 9 · CLI s3 vs s3api'],
-    ['r2-giao-thuc-s3', 'The S3 protocol: R2, MinIO and @aws-sdk/client-s3', 'Giao thức S3: R2, MinIO và @aws-sdk/client-s3', 'S3 API là chuẩn ngầm · Chữ ký SigV4 · Một mã chạy S3/R2/LocalStack chỉ đổi endpoint · Phí egress: S3 vs R2 · cuongthai.com dùng R2 thế nào'],
-    ['quyen', 'S3 permissions: Block Public Access, bucket policies, ACLs', 'Quyền S3: Block Public Access, bucket policy, ACL', 'Mặc định riêng tư từ 2023 · Bucket policy vs IAM policy · ACL đã tắt · Object Ownership · Mã hoá SSE-S3/SSE-KMS'],
-    ['presigned', 'Presigned URLs and direct browser uploads', 'URL ký sẵn và tải lên thẳng từ trình duyệt', 'Ký URL bằng SDK Node.js/Java · Hết hạn · CORS · Giới hạn cỡ tệp · Luồng tải ảnh LabFlow'],
-    ['phien-ban-vong-doi', 'Versioning, lifecycle and storage classes', 'Phiên bản, vòng đời và lớp lưu trữ', 'Versioning cứu tệp xoá nhầm · Delete marker · Lớp Standard/IA/Glacier/Intelligent-Tiering · Luật vòng đời · Chi phí theo GB và request'],
-    ['lo-bucket', 'Hacker’s view: public buckets that leaked millions of records', 'Góc hacker: bucket công khai làm lộ hàng triệu bản ghi', 'Verizon 2017, Accenture 2017, Pegasus 2022 · Công cụ quét tên bucket · Bucket rỗng bị tính tiền 2024 · Kiểm tra bucket của chính bạn'],
-    ['lab-2', 'Chapter 2 lab + interview questions', 'Lab chương 2 + câu hỏi phỏng vấn', 'Kho ảnh LabFlow: bucket riêng tư + URL ký sẵn + vòng đời · Rubric · Câu phỏng vấn S3'],
-  ]],
+  ['Chapter 2 — Storage: S3 (and the R2 you already use)', 'Chương 2 — Lưu trữ: S3 (và R2 bạn đang dùng)', '(đã soạn — cloud-aws/s02-s3.mjs)', [['s3', '-', '-', '-']]],
   ['Chapter 3 — Networking: VPC', 'Chương 3 — Mạng: VPC', 'Subnet, route table, Internet/NAT gateway, security group — dựng một mạng production hợp lý.', [
     ['vpc-subnet', 'VPC, CIDR and subnets', 'VPC, CIDR và subnet', 'VPC = mạng riêng của bạn · CIDR /16 /24 tính nhanh · Subnet nằm trong một AZ · 5 địa chỉ AWS giữ lại · Default VPC'],
     ['route-igw', 'Route tables and the Internet gateway: public vs private', 'Bảng định tuyến và Internet gateway: public vs private', 'Subnet "public" chỉ là có route 0.0.0.0/0 → IGW · IP công khai · IPv4 tính tiền từ 2024 · Vẽ đường đi gói tin'],
@@ -140,6 +133,7 @@ const CHUONG = [
 const sections = khung('aws', CHUONG);
 sections[0] = s00;
 sections[1] = s01;
+sections[2] = s02;
 
 export default {
   category: { slug: 'devops', name: 'DevOps & Vận hành', icon: 'Server', sortOrder: 4 },

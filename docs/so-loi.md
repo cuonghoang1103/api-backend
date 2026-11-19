@@ -1060,3 +1060,10 @@ Mẫu một mục:
 - **Cách sửa:** ios-app 58712ef — đóng sheet + `moToi = false` trước, đợi 350 ms rồi mới `logout()`, thêm `DieuHuongCTC.datLai()` xoá tab/stack. Cùng commit: Ghi chú trên iPhone mở `NotesView` cũ thay vì `GhiChuCTC`, thẻ cuối hub (`LazyVGrid`) vắng khỏi cây trợ năng, tên ca kiểm Code Lab hiện nguyên chuỗi "EN|||VI", `$1 + 1 = 2$` hiện cả dấu `$`, trang tên sách dính mép.
 - **Ảnh hưởng:** chỉ bản dựng nội bộ; bắt được trước build TestFlight đầu tiên 1.0.0 (1).
 - **Bài học:** sheet gắn trên view sẽ bị gỡ theo trạng thái đăng nhập ⇒ đóng sheet trước, đổi trạng thái gốc sau; màn mới thay màn cũ phải grep MỌI lối vào (`case .ghiChu:`), không chỉ tab chính.
+
+### 20/11/2026 — video bài giảng (DSA Interview) — render chết React #310 dù chụp still sạch
+- **Triệu chứng:** dsi-9-5 (và dsi-4-1) qua đủ bộ kiểm (tsc 0, still 0 tràn) nhưng render trên máy thuê LOI: "Minified React error #310" ⇒ Remotion "Target closed", exit 1.
+- **Nguyên nhân:** cảnh `ivsai` (src/bai/dsi-9-5/canh.tsx) và `vetlb` (src/bai/dsi-4-1/canh.tsx) gọi `useCurrentFrame()` ở vế sau của `&&` ⇒ số hook đổi giữa các khung; still chỉ chụp vài khung nên không lộ.
+- **Cách sửa:** lấy `const f = useCurrentFrame()` một lần ở đầu component rồi dùng `f`; quét mọi dsi-* + khung/dsi không còn chỗ khác; `dp-lam-lai.sh dsi-9-5|dsi-4-1 render`.
+- **Ảnh hưởng:** 2 tập trễ vài giờ; không lên web bản hỏng (render chết thì không có video).
+- **Bài học:** luật hook trong cảnh Remotion: KHÔNG gọi hook trong điều kiện/&&/?:/map/sau return sớm — đã thêm vào prompt agent dsi; nên có bước lint `react-hooks/rules-of-hooks` trước render cho mọi khoá.

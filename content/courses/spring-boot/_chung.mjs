@@ -78,3 +78,7 @@ export const giai = (tomTat, noiDung) => `<details><summary>${tomTat}</summary>\
 
 /** Ghi chú phiên bản đo thật dùng chung cả khoá. */
 export const PHIEN_BAN = 'Spring Boot 4.1.2 · Spring Framework 7.0.10 · Java 21.0.12.1 (Temurin) · Maven 3.9.16 · PostgreSQL 16.15 · Tomcat 11.0.27';
+
+/** JavaScript (so sánh với Express — từ Chương 4). */
+const JS_KW = new Set(('import from export default const let var function return if else for of in new await async throw try catch finally class extends this null undefined true false typeof').split(' '));
+export const js = (src) => pre('javascript', toMau(src.replace(/^\n/, ''), JS_KW, { annot: false }));

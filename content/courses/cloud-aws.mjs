@@ -23,6 +23,7 @@ import s03 from './cloud-aws/s03-vpc.mjs';
 import s04 from './cloud-aws/s04-ec2.mjs';
 import s05 from './cloud-aws/s05-ra-internet.mjs';
 import s06 from './cloud-aws/s06-du-lieu.mjs';
+import s07 from './cloud-aws/s07-container.mjs';
 
 const CHUONG = [
   ['Section 0 — What the cloud is', 'Mục 0 — Cloud là gì', '(đã soạn — cloud-aws/s00-bat-dau.mjs)', [['bat-dau-tai-day', '-', '-', '-']]],
@@ -32,13 +33,7 @@ const CHUONG = [
   ['Chapter 4 — Compute: EC2', 'Chương 4 — Máy chủ: EC2', '(đã soạn — cloud-aws/s04-ec2.mjs)', [['ec2', '-', '-', '-']]],
   ['Chapter 5 — Going public: load balancers, scaling, DNS and CDN', 'Chương 5 — Ra Internet: load balancer, co giãn, DNS và CDN', '(đã soạn — cloud-aws/s05-ra-internet.mjs)', [['alb', '-', '-', '-']]],
   ['Chapter 6 — Databases and secrets', 'Chương 6 — Cơ sở dữ liệu và bí mật', '(đã soạn — cloud-aws/s06-du-lieu.mjs)', [['rds', '-', '-', '-']]],
-  ['Chapter 7 — Containers: ECR and ECS Fargate', 'Chương 7 — Container: ECR và ECS Fargate', 'Đẩy ảnh lên ECR, chạy trên ECS Fargate không cần quản máy, nhật ký và bí mật cho task.', [
-    ['ecr', 'ECR: your private image registry', 'ECR: kho ảnh riêng', 'Repository · docker login bằng token tạm · Quét lỗ hổng · Luật vòng đời ảnh · So với GHCR của cuongthai.com'],
-    ['ecs-khai-niem', 'ECS concepts: cluster, task definition, service', 'Khái niệm ECS: cluster, task definition, service', 'Task definition như docker-compose · Service giữ số task · Fargate vs EC2 launch type · Task role vs execution role'],
-    ['fargate', 'Running an API on Fargate behind an ALB', 'Chạy API trên Fargate sau ALB', 'awsvpc mỗi task một IP · Gắn target group · Log ra CloudWatch · Biến môi trường và bí mật · Cập nhật cuốn chiếu'],
-    ['so-sanh', 'Choosing: EC2 vs ECS vs EKS vs App Runner', 'Chọn: EC2 vs ECS vs EKS vs App Runner', 'Bảng so sánh · Chi phí điều khiển EKS · Khi nào Kubernetes đáng · Trỏ khoá Kubernetes'],
-    ['lab-7', 'Chapter 7 lab + interview questions', 'Lab chương 7 + câu hỏi phỏng vấn', 'Đóng gói API LabFlow + task definition hoàn chỉnh · Rubric · Câu phỏng vấn container'],
-  ]],
+  ['Chapter 7 — Containers: ECR and ECS Fargate', 'Chương 7 — Container: ECR và ECS Fargate', '(đã soạn — cloud-aws/s07-container.mjs)', [['ecr', '-', '-', '-']]],
   ['Chapter 8 — Serverless: Lambda and API Gateway', 'Chương 8 — Serverless: Lambda và API Gateway', 'Hàm chạy theo sự kiện, API HTTP trả tiền theo request, và khi nào serverless (không) hợp.', [
     ['lambda', 'Lambda functions in Node.js', 'Hàm Lambda bằng Node.js', 'Handler, event, context · Cold start đo thật · Bộ nhớ = CPU · Giới hạn 15 phút · Gói và layer'],
     ['api-gateway', 'HTTP APIs with API Gateway', 'API HTTP với API Gateway', 'HTTP API vs REST API · Route → Lambda · Xác thực JWT · Throttling · Chi phí theo triệu request'],
@@ -112,6 +107,7 @@ sections[3] = s03;
 sections[4] = s04;
 sections[5] = s05;
 sections[6] = s06;
+sections[7] = s07;
 
 export default {
   category: { slug: 'devops', name: 'DevOps & Vận hành', icon: 'Server', sortOrder: 4 },

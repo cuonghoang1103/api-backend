@@ -19,20 +19,13 @@ import { khung } from './_chung/khung.mjs';
 import s00 from './cloud-aws/s00-bat-dau.mjs';
 import s01 from './cloud-aws/s01-iam.mjs';
 import s02 from './cloud-aws/s02-s3.mjs';
+import s03 from './cloud-aws/s03-vpc.mjs';
 
 const CHUONG = [
   ['Section 0 — What the cloud is', 'Mục 0 — Cloud là gì', '(đã soạn — cloud-aws/s00-bat-dau.mjs)', [['bat-dau-tai-day', '-', '-', '-']]],
   ['Chapter 1 — Identity and access (IAM)', 'Chương 1 — Danh tính và quyền truy cập (IAM)', '(đã soạn — cloud-aws/s01-iam.mjs)', [['khai-niem', '-', '-', '-']]],
   ['Chapter 2 — Storage: S3 (and the R2 you already use)', 'Chương 2 — Lưu trữ: S3 (và R2 bạn đang dùng)', '(đã soạn — cloud-aws/s02-s3.mjs)', [['s3', '-', '-', '-']]],
-  ['Chapter 3 — Networking: VPC', 'Chương 3 — Mạng: VPC', 'Subnet, route table, Internet/NAT gateway, security group — dựng một mạng production hợp lý.', [
-    ['vpc-subnet', 'VPC, CIDR and subnets', 'VPC, CIDR và subnet', 'VPC = mạng riêng của bạn · CIDR /16 /24 tính nhanh · Subnet nằm trong một AZ · 5 địa chỉ AWS giữ lại · Default VPC'],
-    ['route-igw', 'Route tables and the Internet gateway: public vs private', 'Bảng định tuyến và Internet gateway: public vs private', 'Subnet "public" chỉ là có route 0.0.0.0/0 → IGW · IP công khai · IPv4 tính tiền từ 2024 · Vẽ đường đi gói tin'],
-    ['security-group', 'Security groups and NACLs', 'Security group và NACL', 'Stateful vs stateless · SG tham chiếu SG · Mở cổng tối thiểu · 0.0.0.0/0 trên cổng 22/5432 · So với ufw trên VPS'],
-    ['nat-endpoint', 'NAT gateways and VPC endpoints', 'NAT gateway và VPC endpoint', 'Máy private ra Internet · NAT gateway tính tiền theo giờ + GB · Gateway endpoint S3 miễn phí · Interface endpoint'],
-    ['ket-noi', 'Connecting networks: peering, Transit Gateway, VPN', 'Nối các mạng: peering, Transit Gateway, VPN', 'VPC peering không bắc cầu · Transit Gateway · Site-to-Site VPN · Direct Connect · Câu hay ra thi'],
-    ['vao-may', 'Reaching private machines: bastion, SSM and flow logs', 'Vào máy private: bastion, SSM và flow logs', 'Bastion host · Session Manager không mở cổng 22 · VPC Flow Logs đọc ai gõ cửa · Góc hacker: quét cổng toàn Internet'],
-    ['lab-3', 'Chapter 3 lab + interview questions', 'Lab chương 3 + câu hỏi phỏng vấn', 'VPC 2 AZ, subnet public/private bằng CLI · Rubric · Câu phỏng vấn mạng cloud'],
-  ]],
+  ['Chapter 3 — Networking: VPC', 'Chương 3 — Mạng: VPC', '(đã soạn — cloud-aws/s03-vpc.mjs)', [['vpc-subnet', '-', '-', '-']]],
   ['Chapter 4 — Compute: EC2', 'Chương 4 — Máy chủ: EC2', 'Máy ảo trên cloud so với VPS bạn đang chạy: AMI, loại máy, khoá SSH, user data, EBS, giá.', [
     ['ec2', 'Launching and connecting to EC2', 'Tạo và kết nối EC2', 'Loại máy t/m/c/g · AMI · Key pair · SSH hay Session Manager · Vòng đời stop/terminate'],
     ['user-data', 'Bootstrapping with user data', 'Khởi tạo bằng user data', 'cloud-init chạy một lần · Cài Docker + chạy ứng dụng khi máy lên · Đọc log khởi tạo · Launch template'],
@@ -134,6 +127,7 @@ const sections = khung('aws', CHUONG);
 sections[0] = s00;
 sections[1] = s01;
 sections[2] = s02;
+sections[3] = s03;
 
 export default {
   category: { slug: 'devops', name: 'DevOps & Vận hành', icon: 'Server', sortOrder: 4 },

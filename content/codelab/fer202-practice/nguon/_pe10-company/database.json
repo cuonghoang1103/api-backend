@@ -1,0 +1,47 @@
+{
+  "departments": [
+    { "id": 1, "depName": "Human Resources", "managerId": 1 },
+    { "id": 2, "depName": "IT", "managerId": 2 },
+    { "id": 3, "depName": "Finance", "managerId": 7 }
+  ],
+  "employees": [
+    { "id": 1, "fullname": "An Nguyen", "gender": "Male", "birthdate": "1980-05-10", "supervisorId": null, "depId": 1, "empSalary": 22000000, "dependents": [
+      { "id": 1, "name": "Mai Nguyen", "birthdate": "1982-09-14", "relationship": "Wife" }
+    ] },
+    { "id": 2, "fullname": "Binh Tran", "gender": "Male", "birthdate": "1983-03-12", "supervisorId": null, "depId": 2, "empSalary": 25000000, "dependents": [
+      { "id": 1, "name": "Hoa Tran", "birthdate": "1985-07-20", "relationship": "Wife" },
+      { "id": 2, "name": "Nam Tran", "birthdate": "2010-01-01", "relationship": "Son" },
+      { "id": 3, "name": "Linh Tran", "birthdate": "2013-06-15", "relationship": "Daughter" },
+      { "id": 4, "name": "Ba Tran", "birthdate": "1960-02-02", "relationship": "Mother" }
+    ] },
+    { "id": 3, "fullname": "Le Chi", "gender": "Female", "birthdate": "1995-08-21", "supervisorId": 2, "depId": 2, "empSalary": 15000000, "dependents": [] },
+    { "id": 4, "fullname": "Pham Dung", "gender": "Male", "birthdate": "1992-11-03", "supervisorId": 2, "depId": 2, "empSalary": 18000000, "dependents": [
+      { "id": 1, "name": "Thu Pham", "birthdate": "1994-04-25", "relationship": "Wife" }
+    ] },
+    { "id": 5, "fullname": "Vo Hanh", "gender": "Female", "birthdate": "1998-02-17", "supervisorId": 2, "depId": 2, "empSalary": 12000000, "dependents": [] },
+    { "id": 6, "fullname": "Hoang Lan", "gender": "Female", "birthdate": "1990-12-01", "supervisorId": 1, "depId": 1, "empSalary": 14000000, "dependents": [] },
+    { "id": 7, "fullname": "Khanh Do", "gender": "Male", "birthdate": "1978-07-07", "supervisorId": null, "depId": 3, "empSalary": 30000000, "dependents": [
+      { "id": 1, "name": "Minh Do", "birthdate": "1950-10-10", "relationship": "Father" }
+    ] },
+    { "id": 8, "fullname": "Ngo Quynh", "gender": "Female", "birthdate": "1996-06-30", "supervisorId": 7, "depId": 3, "empSalary": 16000000, "dependents": [] }
+  ],
+  "projects": [
+    { "id": 1, "projectName": "HR Portal" },
+    { "id": 2, "projectName": "Website Development" },
+    { "id": 3, "projectName": "Mobile App" },
+    { "id": 4, "projectName": "Payroll System" },
+    { "id": 5, "projectName": "Data Warehouse" },
+    { "id": 6, "projectName": "Accounting Software" }
+  ],
+  "works": [
+    { "id": 1, "employeeId": 1, "projectId": 1, "workHours": 40 },
+    { "id": 2, "employeeId": 2, "projectId": 2, "workHours": 30 },
+    { "id": 3, "employeeId": 3, "projectId": 2, "workHours": 50 },
+    { "id": 4, "employeeId": 3, "projectId": 3, "workHours": 25 },
+    { "id": 5, "employeeId": 4, "projectId": 5, "workHours": 60 },
+    { "id": 6, "employeeId": 2, "projectId": 6, "workHours": 20 },
+    { "id": 7, "employeeId": 7, "projectId": 6, "workHours": 35 },
+    { "id": 8, "employeeId": 8, "projectId": 4, "workHours": 45 },
+    { "id": 9, "employeeId": 6, "projectId": 4, "workHours": 15 }
+  ]
+}

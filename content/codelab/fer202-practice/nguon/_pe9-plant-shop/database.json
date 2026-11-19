@@ -1,0 +1,11 @@
+{
+  "plants": [
+    { "id": 1, "name": "Monstera", "price": 500, "category": "Indoor", "stock": 10 },
+    { "id": 2, "name": "Cactus", "price": 200, "category": "Outdoor", "stock": 20 },
+    { "id": 3, "name": "Bonsai", "price": 1000, "category": "Decor", "stock": 5 }
+  ],
+  "orders": [
+    { "id": 1, "customerName": "Vo An Hai", "plantId": 1, "quantity": 2 },
+    { "id": 2, "customerName": "Le Hong Manh", "plantId": 2, "quantity": 1 }
+  ]
+}

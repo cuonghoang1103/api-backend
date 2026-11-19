@@ -1,0 +1,94 @@
+{
+  "sneakers": [
+    {
+      "id": "1",
+      "sneakerName": "Nike Revolution 7",
+      "brandName": "Nike Sportswear",
+      "sneakerCategory": "Running",
+      "sneakerImageUrl": "https://placehold.co/300x300/0F172A/F8FAFC?text=Nike+Revolution+7",
+      "retailPriceK": 999,
+      "isLimitedEdition": false
+    },
+    {
+      "id": "2",
+      "sneakerName": "Adidas OwnTheGame 3.0",
+      "brandName": "Adidas Performance",
+      "sneakerCategory": "Basketball",
+      "sneakerImageUrl": "https://placehold.co/300x300/B91C1C/FFFFFF?text=Adidas+OwnTheGame+3.0",
+      "retailPriceK": 949,
+      "isLimitedEdition": true
+    },
+    {
+      "id": "3",
+      "sneakerName": "New Balance 574 Core",
+      "brandName": "New Balance",
+      "sneakerCategory": "Lifestyle",
+      "sneakerImageUrl": "https://placehold.co/300x300/BAE6FD/0C4A6E?text=New+Balance+574+Core",
+      "retailPriceK": 999,
+      "isLimitedEdition": false
+    },
+    {
+      "id": "4",
+      "sneakerName": "Vans Old Skool",
+      "brandName": "Vans Skateboarding",
+      "sneakerCategory": "Skateboarding",
+      "sneakerImageUrl": "https://placehold.co/300x300/18181B/A3E635?text=Vans+Old+Skool",
+      "retailPriceK": 899,
+      "isLimitedEdition": true
+    },
+    {
+      "id": "5",
+      "sneakerName": "Puma Disperse XT 3",
+      "brandName": "Puma Training",
+      "sneakerCategory": "Training",
+      "sneakerImageUrl": "https://placehold.co/300x300/6D28D9/FFFFFF?text=Puma+Disperse+XT+3",
+      "retailPriceK": 849,
+      "isLimitedEdition": false
+    },
+    {
+      "id": "6",
+      "sneakerName": "ASICS Gel-Contend 9",
+      "brandName": "ASICS Running",
+      "sneakerCategory": "Running",
+      "sneakerImageUrl": "https://placehold.co/300x300/67E8F9/164E63?text=ASICS+Gel-Contend+9",
+      "retailPriceK": 999,
+      "isLimitedEdition": true
+    },
+    {
+      "id": "7",
+      "sneakerName": "Reebok BB 4000 II",
+      "brandName": "Reebok Classics",
+      "sneakerCategory": "Basketball",
+      "sneakerImageUrl": "https://placehold.co/300x300/FB923C/431407?text=Reebok+BB+4000+II",
+      "retailPriceK": 929,
+      "isLimitedEdition": false
+    },
+    {
+      "id": "8",
+      "sneakerName": "Converse Chuck Taylor All Star",
+      "brandName": "Converse Footwear",
+      "sneakerCategory": "Lifestyle",
+      "sneakerImageUrl": "https://placehold.co/300x300/FEF3C7/78350F?text=Converse+Chuck+Taylor",
+      "retailPriceK": 899,
+      "isLimitedEdition": false
+    },
+    {
+      "id": "9",
+      "sneakerName": "DC Court Graffik",
+      "brandName": "DC Shoes",
+      "sneakerCategory": "Skateboarding",
+      "sneakerImageUrl": "https://placehold.co/300x300/27272A/FDE047?text=DC+Court+Graffik",
+      "retailPriceK": 979,
+      "isLimitedEdition": true
+    },
+    {
+      "id": "10",
+      "sneakerName": "Charged Commit TR 4",
+      "brandName": "Under Armour",
+      "sneakerCategory": "Training",
+      "sneakerImageUrl": "https://placehold.co/300x300/1D4ED8/FFFFFF?text=Charged+Commit+TR+4",
+      "retailPriceK": 999,
+      "isLimitedEdition": false
+    }
+  ]
+}

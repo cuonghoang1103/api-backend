@@ -682,6 +682,30 @@
       "description": "Đề thi thử PE cô cho, thi 4/11/2026, soạn lại song ngữ EN/VI: React Router v6 + Navigate \"*\", axios + json-server, bộ lọc Tags/Cuisine/Meal Type bỏ trùng bằng Set, tìm \"bắt đầu bằng\" + kết hợp bộ lọc (AND), Accordion react-bootstrap sắp theo rating giảm dần + nối \"; \", form Create A New Recipe kiểm bắt buộc tên + POST /recipes + alert + điều hướng tải lại. Thang 10, chấm tự động trên trình duyệt."
     },
     {
+      "slug": "fer202-13-pe-7-attendance-system",
+      "name": "PE SP26 — Attendance System (Subject List + Bulk Attendance)",
+      "level": "ADVANCED",
+      "description": "Đề PE SP26 (cùng đề PE18 Phòng thi) dạng dự án: Câu 1 Subject List (5đ) — lưới 4 thẻ, tìm \"bắt đầu bằng\" phía client, dropdown trạng thái suy từ dữ liệu (Set) kết hợp tìm, ?status= chọn sẵn, View Attendance. Câu 2 Bulk Attendance (5đ) — useParams + ?classId=, chỉ sinh viên enrolled (bỏ dropped), radio PRESENT/ABSENT, ngày mặc định hôm nay giờ địa phương, 3 luật (tương lai · thiếu trạng thái · ngày đã có) và POST /attendances từng sinh viên. Thang 10, 41 kiểm tự động trên trình duyệt."
+    },
+    {
+      "slug": "fer202-13-pe-8-sneaker-collection",
+      "name": "PE SU26 — Sneaker Collection (mã đề 20060701)",
+      "level": "ADVANCED",
+      "description": "Đề PE SU26 mã 20060701 (cùng đề PE17 Phòng thi) dạng dự án: URL API trong .env (gõ cứng = 0 điểm), Navbar + route /se123456/…, lưới thẻ xếp sneakerName giảm dần, giá nghìn đồng → \"189,000 VND\", nhãn Limited Edition; bảng quản lý xếp id SỐ tăng dần (id chuỗi của mockapi), ảnh 70×70, xoá có confirm + thông báo + tải lại, form Add/Edit dùng chung: brand ≥ 2 từ, URL hợp lệ, giá nguyên dương ≤ 3 chữ số, switch mặc định false, select loại mặc định rỗng. Thang 10, 41 kiểm tự động."
+    },
+    {
+      "slug": "fer202-13-pe-9-plant-shop",
+      "name": "PE SP26 Block 3 — Employee List + Plant Shop",
+      "level": "ADVANCED",
+      "description": "Đề PE SP26 Block 3 (cùng đề PE4 Phòng thi) gộp một dự án: Câu 1 (4đ) danh sách nhân viên React Bootstrap + vùng chi tiết (bấm dòng hoặc View Detail, stopPropagation); Câu 2 (6đ) Plant Shop trên json-server — React Router 2 trang + navbar, CRUD cây (stock 0 hợp lệ, rỗng thì không), đơn hàng ánh xạ plantId → tên cây, 7 thông báo kiểm hợp lệ phải HIỆN khi gửi. Thang 10, 34 kiểm tự động."
+    },
+    {
+      "slug": "fer202-13-pe-10-company-management",
+      "name": "PE SP26 Block 5 — Company Management (Departments · Employees · Dependents)",
+      "level": "ADVANCED",
+      "description": "Đề PE SP26 Block 5 (cùng đề PE1 Phòng thi) dạng dự án: Câu 1 (2đ) bảng phòng ban + tên trưởng phòng tra theo managerId + nút View; Câu 2 (4đ) Accordion nhân viên của phòng (nhãn Manager khi supervisorId null), bảng dự án nối works ↔ projects, lương floor(empSalary/176 × giờ) dấu chấm kiểu Việt + tổng Projects Salary; Câu 3 (4đ) người phụ thuộc lồng trong employee, form kiểm hợp lệ (ngày sinh trước hôm nay) và PUT cả employee, giao diện cập nhật ngay. Thang 10, 28 kiểm tự động."
+    },
+    {
       "slug": "fer202-a1-1-performance",
       "name": "14.1 Performance (advanced)",
       "level": "ADVANCED",

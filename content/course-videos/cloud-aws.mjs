@@ -46,7 +46,11 @@ export default {
     'aws-7-3-fargate': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/cloud-aws/07-ecr-ecs/07-03-fargate-08453a41.mp4' }, defaultVideoTrack: 'VI'},
     'aws-7-4-so-sanh': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/cloud-aws/07-ecr-ecs/07-04-so-sanh-de0387a6.mp4' }, defaultVideoTrack: 'VI'},
     'aws-7-5-lab-7': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/cloud-aws/07-ecr-ecs/07-05-lab-7-52bdcc33.mp4' }, defaultVideoTrack: 'VI'},
-    'aws-8-2-api-gateway': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/cloud-aws/08-lambda/08-02-api-gateway-dc62cb67.mp4' }, defaultVideoTrack: 'VI' },
-    'aws-8-3-lambda-java': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/cloud-aws/08-lambda/08-03-lambda-java-bb9aac8b.mp4' }, defaultVideoTrack: 'VI' },
+    'aws-8-2-api-gateway': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/cloud-aws/08-lambda/08-02-api-gateway-dc62cb67.mp4' }, defaultVideoTrack: 'VI'},
+    'aws-8-3-lambda-java': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/cloud-aws/08-lambda/08-03-lambda-java-bb9aac8b.mp4' }, defaultVideoTrack: 'VI'},
+    'aws-8-5-lab-8': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/cloud-aws/08-lambda/08-05-lab-8-76d2b71c.mp4' }, defaultVideoTrack: 'VI' },
+    'aws-9-1-sqs': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/cloud-aws/09-su-kien/09-01-sqs-55742bf1.mp4' }, defaultVideoTrack: 'VI' },
+    'aws-9-2-sns': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/cloud-aws/09-su-kien/09-02-sns-20cf6265.mp4' }, defaultVideoTrack: 'VI' },
+    'aws-9-4-s3-trigger': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/cloud-aws/09-su-kien/09-04-s3-trigger-79f2a108.mp4' }, defaultVideoTrack: 'VI' },
   },
 };

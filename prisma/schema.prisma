@@ -1317,6 +1317,7 @@ model Lesson {
   tutorAsks      LessonTutorAsk[]
   phuDe          LessonTranscript?
   phuDeRieng     LessonOwnTranscript[]
+  lenhVideo      LessonVideoCommand[]
   videoYeuThich  VideoYeuThich[]       @relation("VideoYeuThichBaiGiang")
   gopY           CourseSuggestion[]
 
@@ -1392,6 +1393,33 @@ model LessonOwnTranscript {
 
   @@unique([lessonId, track], name: "uk_lesson_own_transcript_track", map: "uk_lesson_own_transcript_track")
   @@map("lesson_own_transcripts")
+}
+
+/// "LỆNH & CODE TRONG VIDEO" (20/11/2026) — mọi lệnh terminal + khối code HIỆN trên hình của video riêng của bài,
+/// theo thứ tự xuất hiện, kèm mốc giây + giải thích tiếng Việt. Trang học hiện thành mục thu gọn dưới "Mục lục video".
+/// Nguồn: `content/lesson-commands/<khoá>.json` (sinh bằng `scripts/lenh-video.mjs` từ `lenh.json` mà
+/// `video-bai-giang/xuat/trich-lenh.mts` trích ra), nạp mỗi deploy bằng `scripts/lenh-video-seed.mjs`.
+///
+/// Cùng luật với `LessonOwnTranscript`: `videoUrl` là URL video lúc trích — lệch URL track đang gắn ⇒ video đã thay,
+/// mốc trỏ sai chỗ ⇒ máy chủ KHÔNG trả. Bảng riêng (không thêm cột vào `lesson_own_transcripts`) để hai seed không
+/// đụng vân tay của nhau và để bài có lệnh mà chưa có phụ đề vẫn hiện được.
+/// `items` = [{ t, loai: 'lenh'|'ma', lenh?, nhac?, ra?, ma?, tep?, ngon?, giai, chiTiet?, ketQua?, ghiChu? }].
+model LessonVideoCommand {
+  id        Int      @id @default(autoincrement())
+  lessonId  Int      @map("lesson_id")
+  track     String   @default("VI") @db.VarChar(4)
+  videoUrl  String   @map("video_url") @db.Text
+  items     Json     @db.JsonB
+  soMuc     Int      @map("so_muc")
+  /// sha1 nội dung — seed chạy lại mà không đổi gì thì không ghi.
+  vanTay    String   @map("van_tay") @db.VarChar(40)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  lesson Lesson @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+
+  @@unique([lessonId, track], name: "uk_lesson_video_command_track", map: "uk_lesson_video_command_track")
+  @@map("lesson_video_commands")
 }
 
 /// Video do NGƯỜI DÙNG tự thêm (dán link hoặc chia sẻ từ app YouTube/TikTok).

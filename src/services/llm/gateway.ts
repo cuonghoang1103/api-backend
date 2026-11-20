@@ -352,7 +352,8 @@ export type LlmPurpose =
   | 'study_verify'        // /hoc-tap — chấm BẰNG CHỨNG người học nộp (chữ + ẢNH) → đạt/điểm/lỗi (JSON)
   | 'study_coach'         // /hoc-tap — diễn đạt lời cảnh báo từ tỷ lệ trượt MÃ đã tính
   | 'creator_script'      // Content Creator (/creator) — gói quay bài giảng/vlog: kịch bản, cảnh, lời thoại, hook, Shorts
-  | 'long_tieng_dich';    // CT Lồng Tiếng (18/11/2026) — dịch lời video Trung/Anh sang tiếng Việt NÓI, vừa khe thời gian (JSON)
+  | 'long_tieng_dich'     // CT Lồng Tiếng (18/11/2026) — dịch lời video Trung/Anh sang tiếng Việt NÓI, vừa khe thời gian (JSON)
+  | 'video_lenh';         // "Lệnh & code trong video" (20/11/2026) — giải thích lệnh terminal/khối code đã TRÍCH từ video (JSON, chạy lô)
 
 const PURPOSE_MODEL: Record<LlmPurpose, string> = {
   /**
@@ -546,6 +547,13 @@ const PURPOSE_MODEL: Record<LlmPurpose, string> = {
    * `gpt-6-sol` thẳng trên modelapi — chủ kênh nghe thử video 13 phút: dịch tốt, đúng thuật ngữ. Giữ nguyên model đó.
    */
   long_tieng_dich: 'gpt-6-sol',
+  /**
+   * "Lệnh & code trong video" (20/11/2026): giải thích từng lệnh/khối code mà `video-bai-giang/xuat/trich-lenh.mts` đã
+   * trích từ hình (lệnh + output thật + lời giảng quanh đó). Chạy LÔ, một lần mỗi video (`scripts/lenh-video.mjs`, có
+   * cache theo nội dung) — cùng hạng `codelab_bulk`/`language_bulk` nên cùng model. Ước 3.000 video ≈ 55–70 $ (xem đầu
+   * script). Rẻ hơn ~4× nếu cần: `LLM_MODEL_VIDEO_LENH=gpt-5.6-luna` (chậm hơn, chưa đo độ đúng cờ lệnh trên cả kho).
+   */
+  video_lenh: 'gpt-6-luna',
 
   cv_critique: 'gpt-6-sol',
   cv_writing: 'gpt-6-sol',
@@ -1212,6 +1220,7 @@ const UU_TIEN: Partial<Record<LlmPurpose, MucUuTien>> = {
   codelab_bulk: 'nen',
   exphub_doc: 'nen',
   news_bulletin: 'nen',
+  video_lenh: 'nen',
   // CT Work đợt 3C: agent BUILTIN chạy nền ⇒ qua trần MỀM như việc nền (budget.ts). KHÔNG dùng feature bulk_gen/news
   // (LLM_BACKGROUND_ENABLED=false chặn im) — feature là 'work', chỉ mức ưu tiên là 'nen'.
   work_agent: 'nen',
@@ -1484,7 +1493,7 @@ const SUY_LUAN_THEO_VIEC: Partial<Record<LlmPurpose, MucSuyLuan>> = {
   // Sinh nội dung có cấu trúc (JSON/nét vẽ/đồ thị) — vừa đủ.
   language_bulk: 'medium', work_digest: 'medium', work_setup: 'medium', ve_net: 'medium', vo_viet_lai: 'medium', so_do_khoi: 'medium',
   mach_dien: 'medium', long_tieng_dich: 'medium', study_plan: 'medium', study_coach: 'medium', creator_script: 'medium', cv_writing: 'medium',
-  exphub_doc: 'medium', news_bulletin: 'medium', plan_review: 'medium',
+  exphub_doc: 'medium', news_bulletin: 'medium', plan_review: 'medium', video_lenh: 'medium',
   // Máy đọc / tra cứu nhỏ / độ trễ quan trọng.
   cv_parse: 'low', han_tra: 'low',
   /* 19/10/2026: gia sư/trò chuyện ngoại ngữ là lượt NÓI ngắn — đo gpt-6-sol không gửi effort (cổng mặc định

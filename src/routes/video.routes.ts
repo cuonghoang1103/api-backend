@@ -172,6 +172,14 @@ router.get('/phong/:lessonId(\\d+)', param('lessonId').isInt(), validate,
     try { ok(res, await svc.phongHoc(Number(req.params.lessonId), t)); } catch (e) { next(e); }
   });
 
+// "💻 Lệnh & code trong video" dưới trình phát (20/11/2026): lệnh terminal + khối code hiện trong video riêng, mốc +
+// giải thích. `?track=VI|EN|auto`; YT/không có/URL lệch ⇒ `coLenh:false` (không 404 — trang học hỏi mỗi lần đổi bài).
+router.get('/lenh/:lessonId(\\d+)', param('lessonId').isInt(), validate,
+  async (req, res: Response<ApiResponse>, next) => {
+    const t = String(req.query.track ?? '').toLowerCase() === 'auto' ? 'auto' as const : chuanTrack(req.query.track) ?? 'auto';
+    try { ok(res, await svc.lenhVideo(Number(req.params.lessonId), t)); } catch (e) { next(e); }
+  });
+
 router.get('/phu-de/:lessonId(\\d+)', param('lessonId').isInt(), validate,
   async (req, res: Response<ApiResponse>, next) => {
     try { ok(res, await svc.phuDe(Number(req.params.lessonId))); } catch (e) { next(e); }

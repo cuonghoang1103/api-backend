@@ -657,6 +657,22 @@ PDRIENG_SEED_RC="$(printf '%s\n' "$PDRIENG_SEED_OUT" | sed -n 's/^__SEED_RC__=//
 PDRIENG_SEED_OUT="$(printf '%s\n' "$PDRIENG_SEED_OUT" | grep -v '^__SEED_RC__=')"
 report_seed "Own-video transcript seed" "seed-phu-de-rieng" "$PDRIENG_SEED_OUT" "${PDRIENG_SEED_RC:-0}" || true
 
+# ── Step 3.12b'': "💻 Lệnh & code trong video" (20/11/2026) ──────────
+# Nguồn: content/lesson-commands/<courseSlug>.json (trích từ hình video bằng
+# video-bai-giang/xuat/trich-lenh.mts + giải thích bằng `scripts/lenh-video.mjs`).
+# Bảng `lesson_video_commands`. Idempotent (upsert theo lessonId+track, vân tay
+# không đổi thì không ghi), không xoá gì, URL video lệch track đang gắn ⇒ bỏ.
+# PHẢI chạy SAU "Course video-track seed" và TRƯỚC `report_seed "IELTS seed"`
+# (mốc cắt của deploy-nha.sh).
+info "Running video-commands seed..."
+LENHV_SEED_OUT=$($DC exec -T backend sh -c '
+  node scripts/lenh-video-seed.mjs --apply 2>&1
+  echo "__SEED_RC__=$?"
+') || true
+LENHV_SEED_RC="$(printf '%s\n' "$LENHV_SEED_OUT" | sed -n 's/^__SEED_RC__=//p' | tail -1)"
+LENHV_SEED_OUT="$(printf '%s\n' "$LENHV_SEED_OUT" | grep -v '^__SEED_RC__=')"
+report_seed "Video commands seed" "seed-lenh-video" "$LENHV_SEED_OUT" "${LENHV_SEED_RC:-0}" || true
+
 # ── Step 3.12c: video giải trí đã biên tập (hoạt hình, nhạc, kỹ năng…) ──
 # Nguồn: content/phu-de/video-hay.jsonl.gz. Mỗi video đã qua 4 chốt lúc
 # chọn (thời lượng, lượt xem, TẢI ĐƯỢC phụ đề tiếng Anh thật ≥3KB) rồi mới

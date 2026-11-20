@@ -10,6 +10,7 @@ import { NotFoundError, BadRequestError } from '../../middleware/errorHandler.js
 import { transcribeWithGroq } from '../interview/voice/stt.js';
 import { NHOM_CHU_DE, NHOM_LON, NHOM_LON_CO_CON, nhomCuaKhoa, nhomLonCuaKhoa, tachTieuDe } from './nhomChuDe.js';
 import { chonNguonPhuDe, docPhan, laTrackRieng, type PhanVideo, type TrackVideo } from './phuDeRieng.js';
+import { docMucLenh, type MucLenhVideo } from './lenhVideo.js';
 import type { NnVideo } from './phuDeDaNgu.js';
 import { hinhVideoCuaToi } from './themVideo.service.js';
 
@@ -374,6 +375,29 @@ async function phongHocRieng(lessonId: number, track: 'VI' | 'EN') {
     parts,
     coPhuDe: !!r,
   };
+}
+
+/**
+ * "Lệnh & code trong video" của video RIÊNG đang phát (track VI/EN) — xem `lenhVideo.ts`.
+ *
+ * Như phụ đề riêng: chỉ trả khi URL lúc trích KHỚP URL track đang gắn ở bài (video dựng lại ⇒ mốc lệch ⇒ rỗng).
+ * YouTube không có (không phải video của mình). Không có dữ liệu ⇒ `coLenh: false` (không 404: trang học hỏi mỗi bài).
+ */
+export async function lenhVideo(lessonId: number, trackYeuCau?: TrackVideo | 'auto'): Promise<{
+  lessonId: number; videoTrack: TrackVideo; coLenh: boolean; items: MucLenhVideo[];
+}> {
+  const track = !trackYeuCau || trackYeuCau === 'auto' ? await chonTrackPhong(lessonId) : trackYeuCau;
+  if (!laTrackRieng(track)) return { lessonId, videoTrack: track, coLenh: false, items: [] };
+  const [u, r] = await Promise.all([
+    urlCacTrack(lessonId),
+    prisma.lessonVideoCommand.findUnique({
+      where: { uk_lesson_video_command_track: { lessonId, track } },
+      select: { videoUrl: true, items: true },
+    }),
+  ]);
+  const urlTrack = u ? (track === 'VI' ? u.vi : u.en) : null;
+  const items = r && urlTrack && r.videoUrl === urlTrack ? docMucLenh(r.items) : [];
+  return { lessonId, videoTrack: track, coLenh: items.length > 0, items };
 }
 
 export async function phongHoc(lessonId: number, trackYeuCau?: TrackVideo | 'auto') {

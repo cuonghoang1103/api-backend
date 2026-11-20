@@ -1,0 +1,49 @@
+/*
+ * "💻 Lệnh & code trong video" dưới trình phát (20/11/2026) — xem LenhTrongVideo.tsx.
+ * ⚠️ CHỈ biến chủ đề của web (qua `--gsb-*` của giaSu.css) — đổi sáng/tối là tự theo. KHÔNG dùng `dark:` của Tailwind.
+ */
+.lv-muc { border-top: 1px solid var(--gsb-vien); padding: 10px 12px 12px; }
+.lv-muc[data-dang='1'] { background: var(--gsb-nhan-nhat); box-shadow: inset 3px 0 0 var(--gsb-nhan); }
+.lv-dau { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 8px; margin-bottom: 6px; }
+.lv-moc {
+  flex-shrink: 0; border-radius: 6px; padding: 1px 7px; font-size: 12px; font-weight: 600;
+  font-variant-numeric: tabular-nums; color: var(--gsb-nhan); background: var(--gsb-nhan-nhat);
+}
+.lv-moc:hover { filter: brightness(1.1); text-decoration: underline; }
+.lv-nhan { font-size: 11px; font-weight: 600; padding: 1px 7px; border-radius: 999px; border: 1px solid var(--gsb-vien); color: var(--gsb-chu-2); }
+.lv-canh { min-width: 0; font-size: 12px; color: var(--gsb-chu-3); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex: 1 1 120px; }
+.lv-khoi { position: relative; border-radius: 10px; border: 1px solid var(--gsb-vien); background: var(--gsb-nen-2); }
+.lv-khoi pre {
+  margin: 0; padding: 10px 44px 10px 12px; overflow-x: auto; font-size: 13px; line-height: 1.55; color: var(--gsb-chu);
+  font-family: ui-monospace, 'JetBrains Mono', 'SF Mono', Menlo, Consolas, monospace; white-space: pre; tab-size: 4;
+}
+.lv-nhac { color: var(--gsb-chu-3); user-select: none; }
+.lv-chu-thich { color: var(--gsb-nhan); font-style: italic; opacity: 0.9; user-select: none; }
+.lv-dong-co-chu { background: color-mix(in srgb, var(--gsb-nhan) 6%, transparent); display: inline-block; min-width: 100%; }
+.lv-chep {
+  position: absolute; top: 6px; right: 6px; display: inline-flex; align-items: center; justify-content: center;
+  width: 28px; height: 28px; border-radius: 7px; border: 1px solid var(--gsb-vien); background: var(--gsb-nen); color: var(--gsb-chu-2);
+}
+.lv-chep:hover { color: var(--gsb-nhan); border-color: var(--gsb-nhan-vien); }
+.lv-giai { margin-top: 8px; font-size: 13.5px; line-height: 1.6; color: var(--gsb-chu); }
+.lv-giai code, .lv-ct code, .lv-phu code {
+  font-family: ui-monospace, 'JetBrains Mono', Menlo, Consolas, monospace; font-size: 0.92em;
+  padding: 0 4px; border-radius: 4px; background: var(--gsb-nen-2); color: var(--gsb-chu);
+}
+.lv-ct { margin-top: 6px; display: grid; grid-template-columns: minmax(0, max-content) minmax(0, 1fr); gap: 4px 10px; font-size: 13px; line-height: 1.5; }
+.lv-ct dt { min-width: 0; overflow-wrap: anywhere; }
+.lv-ct dd { margin: 0; color: var(--gsb-chu-2); min-width: 0; }
+.lv-phu { margin-top: 6px; font-size: 13px; line-height: 1.55; color: var(--gsb-chu-2); }
+.lv-phu b { color: var(--gsb-chu); font-weight: 600; }
+.lv-ra { margin-top: 6px; }
+.lv-ra summary { cursor: pointer; font-size: 12px; color: var(--gsb-chu-3); }
+.lv-ra pre {
+  margin: 4px 0 0; padding: 8px 10px; border-radius: 8px; border: 1px dashed var(--gsb-vien); overflow-x: auto;
+  font-size: 12px; line-height: 1.5; color: var(--gsb-chu-2); font-family: ui-monospace, 'JetBrains Mono', Menlo, Consolas, monospace;
+}
+@media (max-width: 640px) {
+  /* màn hẹp: chú thích xuống dòng riêng dưới dòng code (không phải cuộn ngang mới đọc được) */
+  .lv-chu-thich { display: block; white-space: normal; padding-left: 1.5em; font-size: 12px; }
+  .lv-ct { grid-template-columns: minmax(0, 1fr); }
+  .lv-ct dd { margin: -2px 0 4px 10px; }
+}

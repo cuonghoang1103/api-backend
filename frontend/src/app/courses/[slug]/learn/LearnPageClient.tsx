@@ -22,6 +22,7 @@ import { useTranslation } from '@/context/LocaleContext';
 import { loadYouTubeAPI, isYouTubeUrl } from '@/lib/youtube-player';
 import MoiVaoPhongVideo from '@/components/academy/MoiVaoPhongVideo';
 import MucLucVideo from '@/components/academy/giaSu/MucLucVideo';
+import LenhTrongVideo from '@/components/academy/giaSu/LenhTrongVideo';
 import { useNutHoiSlide } from '@/components/academy/giaSu/nutHoiSlide';
 import LuyenTapCodeLab from '@/components/courses/LuyenTapCodeLab';
 import LessonQuizPlayer, { type QuizData } from './LessonQuizPlayer';
@@ -1145,6 +1146,15 @@ export default function LearnPageClient({ slug }: LearnPageClientProps) {
                   {/* 📑 Mục lục video + "Hỏi phần này" / "Hỏi đoạn đang xem" / "Tóm tắt video" (17/11/2026). Nó cũng
                       công bố video cho gia sư ⇒ CuongMini nghe kèm phụ đề + giây đang xem ở mọi câu hỏi. */}
                   <MucLucVideo
+                    lessonId={currentLesson.id}
+                    track={activeVideo?.url ? activeTrack : null}
+                    layGiay={layGiayVideo}
+                    tua={(g) => tuaToiMoc(g, null)}
+                  />
+
+                  {/* 💻 Lệnh & code trong video (20/11/2026): mọi lệnh terminal + khối code trên hình, theo thứ tự, mốc bấm
+                      để tua, giải thích từng cờ/dòng. Chỉ video riêng VI/EN; không có dữ liệu ⇒ không vẽ gì. */}
+                  <LenhTrongVideo
                     lessonId={currentLesson.id}
                     track={activeVideo?.url ? activeTrack : null}
                     layGiay={layGiayVideo}

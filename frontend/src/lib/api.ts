@@ -6058,7 +6058,37 @@ export const videoHocApi = {
   phongHoc(lessonId: number, track: TrackPhongVideo | 'auto' = 'auto') {
     return api.get<{ data: PhuDeBai & { coPhuDe: boolean } }>(`/video-hoc/phong/${lessonId}`, { params: { track } });
   },
+  /** "💻 Lệnh & code trong video" (video riêng VI/EN) — không có/YT/URL lệch ⇒ `coLenh: false`, `items: []`. */
+  lenhVideo(lessonId: number, track: TrackPhongVideo | 'auto' = 'auto') {
+    return api.get<{ data: { lessonId: number; videoTrack: TrackPhongVideo; coLenh: boolean; items: MucLenhVideo[] } }>(
+      `/video-hoc/lenh/${lessonId}`, { params: { track } },
+    );
+  },
 };
+
+/** Một lệnh terminal / khối code HIỆN trong video bài giảng, kèm giải thích — khuôn của `src/services/video/lenhVideo.ts`. */
+export interface MucLenhVideo {
+  /** giây trong video */
+  t: number;
+  loai: 'lenh' | 'ma';
+  /** tên cảnh (phần) của video */
+  canh?: string;
+  lenh?: string;
+  nhac?: string;
+  /** vài dòng output thật trên video */
+  ra?: string[];
+  ma?: string;
+  tep?: string;
+  ngon?: string;
+  sua?: { truoc: string; sau: string }[];
+  giai: string;
+  /** từng phần của lệnh (tên lệnh, cờ, tham số) — `phan` là chuỗi con nguyên văn của lệnh */
+  chiTiet?: { phan: string; nghia: string }[];
+  ketQua?: string;
+  ghiChu?: string;
+  /** chú thích từng dòng code quan trọng (số dòng từ 1) */
+  dong?: { so: number; giai: string }[];
+}
 
 // ─── Ghi nhanh · Sổ lệnh · Sổ tay khoá · Nhập .md ──────────────
 // Backend: src/routes/ghiNhanh.routes.ts (gắn dưới /notes/ghi-nhanh).
